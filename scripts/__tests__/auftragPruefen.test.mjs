@@ -392,3 +392,50 @@ test('sammleBefehle liest auch einen Kopf, dessen Felder unter `auftrag:` hänge
   assert.equal(oben.length, 2);
   assert.equal(unten.length, 2, 'die verschachtelte Form wird übersehen');
 });
+
+// --- PB-019: der Validator muss SPERREN, nicht nur reden ------------------------------------------
+
+/**
+ * **Der Befund, der diese vier Zusagen nötig gemacht hat.** *„Der Validator **benennt** `KEIN KOPF`
+ * — aber `exit 0` ließe sechs aktive Blätter durch."* Gemessen am 01.08. am damals aktiven
+ * AUF-38-P2-Blatt: `exit 0`. **Ein Gate, das nur redet, ist keine Barriere** (R9 verlangt bei der
+ * zweiten Wiederholung eine technische Sperre, keinen dritten Vorsatz).
+ *
+ * **Die Grenze ist mit Bedacht gezogen:** ein Blatt ohne Kopf bleibt straffrei — 67 von 80 im
+ * Bestand haben keinen, und ein Werkzeug, das bei ihnen rot wird, wird abgeschaltet. Gesperrt wird
+ * nur, wo nach dem Blatt **gebaut wird** (`status: aktiv`) oder wo jemand einen Kopf geschrieben
+ * hat, der **nichts misst**.
+ */
+/** Eine Datei ohne Kopf, Inhalt frei waehlbar — der Helfer `blatt()` kann das nicht. */
+function roheDatei(name, inhalt) {
+  const pfad = join(verz, name);
+  writeFileSync(pfad, inhalt, 'utf8');
+  return pfad;
+}
+
+test('PB-019: ein altes Blatt ohne Kopf bleibt straffrei', () => {
+  const e = pruefeBlatt(roheDatei('alt.md', '# Altes Blatt\n\nNur Fliesstext, kein Kopf.\n'), verz);
+  assert.equal(e.kopf, false);
+  assert.ok(!e.aktivOhneKopf, 'ein Blatt ohne `status: aktiv` darf nicht sperren');
+  assert.match(bericht(e), /kein Fehler/);
+});
+
+test('PB-019: ein Blatt ohne Kopf, das sich `status: aktiv` nennt, sperrt', () => {
+  const e = pruefeBlatt(roheDatei('aktiv-ohne-kopf.md', '# Blatt\n\nstatus: aktiv\n\nkein Kopf.\n'), verz);
+  assert.equal(e.kopf, false);
+  assert.equal(e.aktivOhneKopf, true);
+  assert.match(bericht(e), /SPERRE.*KEIN KOPF/);
+});
+
+test('PB-019: ein Kopf ohne jeden Prüfbefehl sperrt', () => {
+  const e = pruefeBlatt(blatt('leer2.md', 'auftrag:\n  id: TEST\n  ziel: "nur Prosa"'), verz);
+  assert.deepEqual(e.eintraege, []);
+  assert.match(bericht(e), /SPERRE.*KEIN PRUEFBEFEHL/);
+});
+
+test('PB-019: ein unlesbarer Kopf sperrt immer — jemand hat einen geschrieben, und er trägt nicht', () => {
+  const e = pruefeBlatt(blatt('kaputt.md', 'auftrag:\n  id: [unbeendet'), verz);
+  assert.equal(e.kopf, false);
+  assert.ok(e.unlesbar, 'der Grund gehört in den Bericht');
+  assert.equal(e.aktivOhneKopf, true);
+});

@@ -51,7 +51,12 @@ aber noch nicht inventarisiert — vor Nutzung per Skill (Phase 2) real suchen. 
   Zustand-Store, Zod-Validierung, Commands, Geometrie, Dach; Tests unter `__tests__/*.test.ts`
   (node strip-types Runner: `test:hausplaner`).
 - Views: `resources/views/admin/hausplaner/objekt.blade.php` (persistierend, am Objekt),
-  `dachplaner.blade.php` (W1-Insel `planer/planer.js`), `studio.blade.php` (Scratch, Tools-Navi).
+  `studio.blade.php` (Scratch, Tools-Navi).
+  *KORREKTUR 01.08.2026 (Befund PB-036): hier standen `dachplaner.blade.php` und `planer/planer.js`
+  als W1-Insel. **Beide gibt es nicht mehr** — `find resources -name 'dachplaner.blade.php' -o -name
+  'planer/planer.js'` liefert null Treffer. Sie stammen aus dem Zustand VOR dem Port in
+  `resources/planner/hausplaner/`. Eine Inventur, die auf Verschwundenes zeigt, schickt jeden,
+  der wiederverwenden will, ins Leere.*
 - Build: `vite.hausplaner.config.ts`, `tsconfig.hausplaner.json`, npm-Scripts
   `build:hausplaner`/`test:hausplaner`/`tsc:hausplaner`.
 

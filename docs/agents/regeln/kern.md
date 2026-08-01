@@ -8,7 +8,8 @@
 
 # KERNREGELN — Ebene 1
 
-**Eine Seite. Diese Regeln werden IMMER geladen, von allen Rollen, vor jedem Vorgang.**
+**Eine Seite. Sie wird von allen Rollen vor jedem Vorgang gelesen — aber NACHRANGIG zum Regelwerk oben.**
+*Der frühere Satz „diese Regeln werden IMMER geladen" widersprach dem Kopf dieser Seite zehn Zeilen weiter oben (Befund PB-026). Es gilt: gelesen ja, vorrangig nein.*
 Alles Weitere steht in `regeln/<rolle>.md` (Ebene 2) und `regeln/<fach>.md` (Ebene 3).
 **Der Ledger `docs/handoff-status.md` ist Historie und Beweisarchiv — kein Regelwerk.**
 

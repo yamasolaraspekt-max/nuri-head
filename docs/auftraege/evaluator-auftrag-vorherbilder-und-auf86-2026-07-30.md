@@ -9,7 +9,10 @@ Landet sein Commit, bevor Teil A gemessen ist, ist K-01 **nicht mehr prüfbar** 
 ```yaml
 auftrag:
   id: EVAL-2026-07-30-A+B
-  status: aktiv
+  status: ruht
+   # PB-B2, 01.08.2026 - Planner. Stand bis heute: `aktiv`. 17 Blaetter trugen das,
+   # die Struktur-Zusage S-01 erwartet GENAU EINES. `ruht` heisst hier ehrlich:
+   # der Zustand ist NICHT nachgemessen. Wer das Blatt zieht, misst zuerst.
   spur: A
   heimat: ticket
   rolle: evaluator

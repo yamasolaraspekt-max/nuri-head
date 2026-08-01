@@ -65,8 +65,38 @@ anderen Ursache als „folgt dem Zeiger".*
 ```text
 Wand halb gezogen · Zeiger zur Werkzeugleiste · Fensterwerkzeug geklickt
   -> Werkzeug wechselt auf `fenster`   (der Wechsel selbst funktioniert)
-  -> Reststrich: sichtbar, bis der Zeiger die Buehne wieder betritt
 ```
+
+> ### ⚠ KORREKTUR, 31.07. ~02:4x — **diese Zeile stand hier falsch, und sie ist von mir**
+>
+> An dieser Stelle stand: *„Reststrich: sichtbar, bis der Zeiger die Bühne wieder betritt."*
+> **Das habe ich nicht geprüft, sondern angenommen** — mein eigenes Bildschirmfoto von damals
+> (`z01-5-nach-werkzeugwechsel.png`) zeigt eine **saubere Fläche**.
+>
+> **Der Planner hat die Lücke gefunden, bevor er abgenommen hat**, und die eine entscheidende
+> Messung benannt: *„War die Ursache ein altes Konva-Bild statt ein fehlendes Aufräumen, ist der
+> Fehler jetzt nur VERDECKT."* Gemessen am Bundle-Stand **vor** dem Commit (`30da5252^`,
+> vorübergehend eingespielt, danach md5-identisch zurückgestellt):
+>
+> ```text
+>                        Linien   Vorschau-Gruppen   Punkte
+> leer                     58            0           —
+> halb gezogen             59            1           1300,1400 -> 3000,1400
+> Zeiger zur Leiste        59            1           1300,1400 -> 1300,3808   (eingefroren)
+> NACH dem Leisten-Klick   57            0           —
+> ```
+>
+> **Der Leisten-Klick hat immer korrekt aufgeräumt** — im Baum *und* in den Bildpunkten. Es gab
+> nie einen Reststrich nach dem Klick.
+>
+> **Was das für Z-01 heißt:** der Fehler wird **nicht verdeckt**. Der einzige echte Mangel war die
+> eingefrorene Vorschau, solange der Zeiger draußen ist — und der ist behoben. *K-01 misst die
+> Sache: die fünf Kopien waren eine echte Dublette, nur eben nicht die Ursache dieses einen
+> Symptoms.*
+>
+> **Die Lehre ist meine:** ich habe in einem Protokoll, dessen ganzer Zweck „aufschreiben, was man
+> sieht" ist, einen Satz geschrieben, den ich nicht gesehen hatte. *Ein Bericht, der an einer
+> Stelle vermutet statt misst, macht jede andere Zeile darin fraglich.*
 
 ## Eine Beobachtung, die ich NICHT reproduzieren konnte — offengelegt
 
@@ -90,3 +120,63 @@ Vue-Hauptanwendung und zählen hier weder als Treffer noch als Freibrief.)*
 **Schlussfolgerung für den Bau:** Schritt 0 widerspricht dem Blatt **nicht**. Die Festlegung
 (Verlassen pausiert, Vorschau wird **ausgeblendet** statt eingefroren stehen gelassen, Statusleiste
 sagt es) trifft genau den beobachteten Mangel. **Gebaut wird.**
+
+---
+
+# L-01 — nach dem Bau, drei Viewports
+
+**Gefahren 31.07.2026 · Chrome headful · nach `npm run build:hausplaner`.** Gemessen wird die
+**Vorschau-Geometrie aus der Konva-Bühne** und der Hinweistext aus dem DOM — nicht das Bild.
+
+## 1440 × 900 — der Vollausbau
+
+```text
+ANKER               HTTP 200 · canvas 2 · Titel "SA-DESK - Hausplaner — Studio"
+halb gezogen        Vorschau DA: 1300,1400 -> 2800,1400   · Hinweis: keiner
+Zeiger zur Leiste   Vorschau FORT                          · Hinweis: "Zeichnung pausiert —
+                                                              zurück auf die Fläche setzt fort,
+                                                              Esc bricht ab"
+zurueck auf Flaeche Vorschau DA: 1300,1400 -> 2340,1121    · Hinweis: keiner
+```
+
+**Das ist der ganze Auftrag in vier Zeilen.** Vorher blieb die Linie beim Verlassen stehen
+(`1500,1400 -> 2930,3877`, quer über den halben Grundriss); jetzt verschwindet sie, der Zustand
+wird benannt, und die Rückkehr belebt sie **ohne Klick** — mit neuer Geometrie, also lebendig und
+nicht bloss wieder eingeblendet.
+
+## Yamas E2E-Fall, wörtlich abgefahren
+
+```text
+Wand halb gezogen · Zeiger raus zur Werkzeugleiste · Fensterwerkzeug angeklickt
+  -> Werkzeug "fenster"      aktiv
+  -> Reststrich              FORT
+  -> Hinweis                 verschwunden (kein Zug mehr, also nichts zu sagen)
+```
+
+*Vor dem Bau blieb hier der Strich sichtbar, bis der Zeiger die Bühne wieder betrat.*
+
+## 1024 × 800
+
+```text
+halb gezogen        Vorschau DA: 0,600 -> 500,600   · Hinweis: keiner
+Zeiger zur Leiste   Vorschau FORT                   · Hinweis: erscheint
+zurueck auf Flaeche Vorschau DA: 0,600 -> 300,300   · Hinweis: keiner
+E2E                 Werkzeug "fenster" · Reststrich FORT
+```
+
+## 375 × 760 — **hier sagt die Probe nichts, und das gehört gesagt**
+
+```text
+halb gezogen        Vorschau FORT   <- es kam gar kein Zug zustande
+```
+
+**Bei 375 px startet das Wand-Werkzeug keinen Zug** — es gibt also nichts zu pausieren, und die
+Zeilen darunter messen Leere. *Das ist **nicht** ein Befund dieser Scheibe:* `PB-046` hält seit
+gestern fest, dass bei 375 px acht Werkzeuge unerreichbar sind, und `AUF-91` ist das Blatt, das
+dort einen ehrlichen Hinweis anbringt. **Ich melde es als „nicht gemessen", nicht als „grün".**
+
+## Konsole
+
+```text
+Meldungen gesamt 92 · davon aus `hausplaner.js`: 0
+```

@@ -35,7 +35,11 @@ von hier nicht.** Deshalb:
 ```yaml
 scope:
   datei: config/logging.php
-  population_command: "stat -c %s storage/logs/laravel.log"
+  population_command: "wc -c < storage/logs/laravel.log"
+  # KORREKTUR 31.07. 00:16, Planner: hier stand `stat -c %s`. Das ist GNU-stat und laeuft
+  # in der Linux-VM des Planners, aber NICHT auf Yamas macOS - dort heisst es `stat -f %z`.
+  # Gemeldet vom Evaluator. Mein eigener Fehler: ich habe den Befehl dort geprueft, wo ich
+  # stehe, nicht dort, wo er laufen soll. `wc -c <` ist POSIX und laeuft auf beiden.
   ausschluesse:
     - stelle: "LOG_CHANNEL auf dem Server"
       grund: "Umgebungsvariable, die Yama setzt. Dieser Auftrag macht die VORGABE richtig; was auf Hetzner steht, entscheidet er."

@@ -1,4 +1,15 @@
+<!-- pfade-pruefen: historisch -->
+<!-- Plan von vor dem Bau; die genannten Pfade beschreiben einen vergangenen Zustand (PB-031, 01.08.2026) -->
+
 # AUF-48 — Zuschnitt: wie `HausplanerApp.tsx` zerlegt wird
+
+> **⚠ DIES IST DER PLAN VON VORHER, NICHT DER BAU — Befund PB-031, vermerkt 01.08.2026.**
+> **Sechs der hier genannten Dateinamen gibt es nicht** — `app/darstellung/`, `app/darstellung/icons.tsx`,
+> `app/geometrie/helfer.ts`, `app/HausplanerApp.ableitungen.ts`, `app/HausplanerApp.bedienung.ts`,
+> `app/flaechen/`. **Das ist kein Fehler des Baus, sondern seiner Aufzeichnung:** AUF-48 wurde in acht
+> Scheiben gebaut und hat die Dateien anders geschnitten (`app/rahmen/`, `app/ableitungen.ts`, …).
+> **Wer wissen will, wie es wirklich liegt, liest den Baum, nicht dieses Papier.** Der Zuschnitt bleibt
+> als Beleg stehen, warum so entschieden wurde — er ist Geschichte, keine Landkarte.
 
 *Planner, 30.07.2026, 06:35 CEST. **Kein Auftragsblatt, sondern der Schnitt davor.** Aus ihm
 entstehen die Scheiben-Blätter — eines nach dem anderen, nicht alle auf einmal.*

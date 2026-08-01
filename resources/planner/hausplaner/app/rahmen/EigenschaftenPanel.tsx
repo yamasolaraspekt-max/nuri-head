@@ -180,26 +180,26 @@ export function EigenschaftenPanel({
            Historie vorzutäuschen. */
         <div style={{ color: FARBEN.gedaempft, lineHeight: 1.6 }}>
           {befunde.length === 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, marginBottom: 12 }}>
+            <div className="hp-ep-befund-leer">
               <span>{BEFUNDE_LEER}</span>
               <ZustandBadge zustand="verfuegbar" />
             </div>
           ) : (
-            <ul style={{ listStyle: 'none', margin: '0 0 12px', padding: 0 }}>
+            <ul className="hp-ep-befundliste">
               {befunde.map((b) => (
-                <li key={b.id} style={{ display: 'flex', gap: 6, alignItems: 'flex-start', padding: '6px 8px', marginBottom: 6, borderRadius: 8, background: T.errSoft, border: `1px solid ${T.errBorder}`, color: T.errInk }}>
+                <li key={b.id} className="hp-ep-befund">
                   {/* Schwere als Symbol UND Text, nicht nur als Farbe (A11y). */}
-                  <span aria-hidden style={{ fontWeight: 700 }}>✋</span>
-                  <span><strong style={{ fontWeight: 700 }}>Abgelehnt</strong> – {b.text}</span>
+                  <span aria-hidden className="hp-ep-schwere-symbol">✋</span>
+                  <span><strong className="hp-ep-schwere-text">Abgelehnt</strong> – {b.text}</span>
                 </li>
               ))}
             </ul>
           )}
-          <div style={{ fontSize: 11, color: T.muted, borderTop: `1px solid ${T.hair}`, paddingTop: 8 }}>{BEFUNDE_UMFANG}</div>
+          <div className="hp-ep-umfang">{BEFUNDE_UMFANG}</div>
         </div>
       ) : aktiverTab !== 'allgemein' ? (
         <div style={{ color: FARBEN.gedaempft, lineHeight: 1.7 }}>
-          <div style={{ marginBottom: 8 }}>{PANEL_TABS.find((t) => t.id === aktiverTab)?.hinweis}</div>
+          <div className="hp-ep-hinweis">{PANEL_TABS.find((t) => t.id === aktiverTab)?.hinweis}</div>
           <ZustandBadge zustand={PANEL_TABS.find((t) => t.id === aktiverTab)?.zustand ?? 'in_entwicklung'} />
         </div>
       ) : (
@@ -209,11 +209,11 @@ export function EigenschaftenPanel({
           getestet); das Markup bleibt dünn. Darunter laufen die Einzelfelder wie bisher weiter —
           sie zeigen das PRIMÄROBJEKT, also das zuletzt gewählte. */}
       {auswahlUebersicht.gesamt > 1 && (
-        <div style={{ marginBottom: 12, padding: '8px 10px', borderRadius: 8, background: T.surface2, border: `1px solid ${T.hair}` }}>
-          <div style={{ fontWeight: 700, marginBottom: 4 }}>{auswahlUebersicht.gesamt} Objekte gewählt</div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
+        <div className="hp-ep-mehrfach">
+          <div className="hp-ep-mehrfach-zahl">{auswahlUebersicht.gesamt} Objekte gewählt</div>
+          <div className="hp-ep-typreihe">
             {auswahlUebersicht.typen.map((t) => (
-              <span key={t.typ} style={{ fontSize: 11.5, padding: '2px 7px', borderRadius: 999, background: T.brandWash, color: T.brandInk }}>
+              <span key={t.typ} className="hp-ep-typ">
                 {t.bezeichnung}
               </span>
             ))}
@@ -229,7 +229,7 @@ export function EigenschaftenPanel({
       {/* Dashboard v1 §5: Sicht (Auge) + Sperre (Schloss) je selektiertem Node → vorhandene Commands
           SET_NODES_SICHTBAR/SET_NODES_GESPERRT. Zustand als Text UND Symbol (A11y). Entsperren fragt nach. */}
       {selectedNode && (
-        <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
+        <div className="hp-ep-knopfreihe-unten">
           <button type="button" style={knopf(false)} title={selectedNode.visible === false ? 'Einblenden' : 'Ausblenden'} aria-label="Sicht umschalten"
             onClick={() => store.getState().executeCommand({ type: 'SET_NODES_SICHTBAR', nodeIds: [selectedNode.id], sichtbar: selectedNode.visible === false })}>
             {selectedNode.visible === false ? '🙈 Ausgeblendet' : '👁 Sicht'}
@@ -242,7 +242,7 @@ export function EigenschaftenPanel({
       )}
       {selectedRoof ? (
         <>
-          <div style={{ fontWeight: 700, marginBottom: 10 }}>Dach</div>
+          <div className="hp-ep-titel">Dach</div>
           <label style={panelLabel}>Dachform
             <select value={selectedRoof.roofType} onChange={(e) => aktualisiereDach({ roofType: e.target.value as RoofNode['roofType'] })} style={panelInput}>
               <option value="sattel">Satteldach</option>
@@ -276,7 +276,7 @@ export function EigenschaftenPanel({
             const fehlt = !a || !(a.length > 0) || !(a.width > 0) || (istU && (!(a.lengthB && a.lengthB > 0) || !(a.widthB && a.widthB > 0)));
             return (
               <>
-                <div style={{ fontWeight: 700, margin: '12px 0 6px' }}>Anbau / Verschneidung</div>
+                <div className="hp-ep-untertitel">Anbau / Verschneidung</div>
                 <label style={panelLabel}>Außenmaß Länge (mm)
                   <input type="number" min={0} value={a?.length ?? ''} onChange={(e) => setzeAnbau('length', Number(e.target.value))} style={panelInput} />
                 </label>
@@ -307,7 +307,7 @@ export function EigenschaftenPanel({
         </>
       ) : selectedWall ? (
         <>
-          <div style={{ fontWeight: 700, marginBottom: 10 }}>Wand</div>
+          <div className="hp-ep-titel">Wand</div>
           <label style={panelLabel}>Mauerwerk
             <select value={selectedWall.construction?.materialId ?? ''} onChange={(e) => aktualisiereWand({ construction: { ...(selectedWall.construction ?? {}), materialId: e.target.value } })} style={panelInput}>
               <option value="">— wählen —</option>
@@ -327,14 +327,14 @@ export function EigenschaftenPanel({
             <input type="number" min={1} value={Math.round(Math.hypot(selectedWall.end.x - selectedWall.start.x, selectedWall.end.y - selectedWall.start.y))} onChange={(e) => setzeWandLaenge(Math.max(1, Math.round(Number(e.target.value))))} style={panelInput} />
           </label>
           <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Länge ändern verschiebt das Wandende entlang der Achse. Bewegen: Wand im Plan ziehen.</div>
-          <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+          <div className="hp-ep-knopfreihe">
             <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
             <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
           </div>
         </>
       ) : selectedOpening ? (
         <>
-          <div style={{ fontWeight: 700, marginBottom: 10 }}>{selectedOpening.type === 'door' ? 'Tür' : selectedOpening.type === 'window' ? 'Fenster' : 'Öffnung'}</div>
+          <div className="hp-ep-titel">{selectedOpening.type === 'door' ? 'Tür' : selectedOpening.type === 'window' ? 'Fenster' : 'Öffnung'}</div>
           {(selectedOpening.type === 'window' || selectedOpening.type === 'door') && (() => {
             const istFenster = selectedOpening.type === 'window';
             const katalog = istFenster ? FENSTER_BAUARTEN : TUER_BAUARTEN;
@@ -346,16 +346,16 @@ export function EigenschaftenPanel({
               aktualisiereOeffnung({ produkt: aend });
             };
             return (
-              <div style={{ marginBottom: 12 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: T.muted, marginBottom: 6 }}>Bauart</div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, maxHeight: 220, overflowY: 'auto', paddingRight: 2 }}>
+              <div className="hp-ep-feldgruppe">
+                <div className="hp-ep-rubrik">Bauart</div>
+                <div className="hp-ep-bauartraster">
                   {katalog.map((t) => {
                     const aktivT = aktuellTyp === t.id;
                     return (
                       <button key={t.id} type="button" title={t.label} onClick={() => waehleTyp(t)}
                         style={{ display: 'grid', gap: 3, placeItems: 'center', padding: 5, borderRadius: 8, cursor: 'pointer',
                           border: `1.5px solid ${aktivT ? T.brandInk : T.controlBorder}`, background: aktivT ? T.brandWash : T.surface }}>
-                        <img src={`${ICON_BASE}icons/${istFenster ? 'fenster' : 'tuer'}/${t.datei}`} alt={t.label} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                        <img src={`${ICON_BASE}icons/${istFenster ? 'fenster' : 'tuer'}/${t.datei}`} alt={t.label} loading="lazy" className="hp-ep-bauartbild" />
                         <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : T.muted, textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
                       </button>
                     );
@@ -407,8 +407,8 @@ export function EigenschaftenPanel({
             const preis = preisFenster({ breiteMm: selectedOpening.width, hoeheMm: selectedOpening.height, profil: prof, verglasung: verg, oeffnungsArt: oa, rc });
             const setP = (aend: Partial<NonNullable<OpeningNode['produkt']>>) => aktualisiereOeffnung({ produkt: { ...prod, ...aend } });
             return (
-              <div style={{ marginTop: 12, paddingTop: 10, borderTop: `1px solid ${T.hair}` }}>
-                <div style={{ fontWeight: 700, marginBottom: 8 }}>Produkt (Fensterbau)</div>
+              <div className="hp-ep-abschnitt">
+                <div className="hp-ep-abschnitt-titel">Produkt (Fensterbau)</div>
                 <label style={panelLabel}>Profilsystem
                   <select value={prof.id} onChange={(e) => setP({ profilId: e.target.value })} style={panelInput}>
                     {PROFIL_KATALOG.map((p) => (<option key={p.id} value={p.id}>{p.name}</option>))}
@@ -446,27 +446,27 @@ export function EigenschaftenPanel({
               </div>
             );
           })()}
-          <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+          <div className="hp-ep-knopfreihe">
             <button type="button" style={{ ...knopf(false), flex: 1 }} onClick={dupliziere}>Duplizieren</button>
             <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
           </div>
         </>
       ) : selectedStair && selectedStairParams ? (
         <>
-          <div style={{ fontWeight: 700, marginBottom: 10 }}>Treppe</div>
+          <div className="hp-ep-titel">Treppe</div>
           {(() => {
             const aktuellTyp = selectedStairParams.typ;
             return (
-              <div style={{ marginBottom: 12 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', color: T.muted, marginBottom: 6 }}>Bauart</div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, maxHeight: 200, overflowY: 'auto', paddingRight: 2 }}>
+              <div className="hp-ep-feldgruppe">
+                <div className="hp-ep-rubrik">Bauart</div>
+                <div className="hp-ep-bauartraster hp-ep-bauartraster--treppe">
                   {TREPPEN_BAUARTEN.map((t) => {
                     const aktivT = aktuellTyp === t.id;
                     return (
                       <button key={t.id} type="button" title={t.label} onClick={() => aktualisiereTreppe({ typ: t.id })}
                         style={{ display: 'grid', gap: 3, placeItems: 'center', padding: 5, borderRadius: 8, cursor: 'pointer',
                           border: `1.5px solid ${aktivT ? T.brandInk : T.controlBorder}`, background: aktivT ? T.brandWash : T.surface }}>
-                        <img src={`${ICON_BASE}icons/treppe/${t.datei}`} alt={t.label} loading="lazy" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                        <img src={`${ICON_BASE}icons/treppe/${t.datei}`} alt={t.label} loading="lazy" className="hp-ep-bauartbild" />
                         <span style={{ fontSize: 8.5, lineHeight: 1.15, color: aktivT ? FARBEN.text : T.muted, textAlign: 'center', height: 20, overflow: 'hidden' }}>{t.label}</span>
                       </button>
                     );
@@ -505,13 +505,13 @@ export function EigenschaftenPanel({
             <input type="number" min={0} value={selectedStairParams.gewuenschteSteigung ?? ''} onChange={(e) => { const v = Math.round(Number(e.target.value)); aktualisiereTreppe({ gewuenschteSteigung: v > 0 ? v : undefined }); }} style={panelInput} />
           </label>
           <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Stufung wird automatisch nach DIN 18065 gerechnet. Bewegen: Treppe im Plan ziehen.</div>
-          <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+          <div className="hp-ep-knopfreihe">
             <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
           </div>
         </>
       ) : selectedObjekt ? (
         <>
-          <div style={{ fontWeight: 700, marginBottom: 10 }}>{String(selectedObjekt.parameters['objekt.label'] ?? 'Objekt')}</div>
+          <div className="hp-ep-titel">{String(selectedObjekt.parameters['objekt.label'] ?? 'Objekt')}</div>
           <label style={panelLabel}>Länge (mm)
             <input type="number" min={100} value={Number(selectedObjekt.parameters['objekt.laenge']) || 0} onChange={(e) => store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedObjekt.id, changes: { parameters: { ...selectedObjekt.parameters, 'objekt.laenge': Math.max(100, Math.round(Number(e.target.value))) } } })} style={panelInput} />
           </label>
@@ -519,7 +519,7 @@ export function EigenschaftenPanel({
             <input type="number" min={100} value={Number(selectedObjekt.parameters['objekt.hoehe']) || 0} onChange={(e) => store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: selectedObjekt.id, changes: { parameters: { ...selectedObjekt.parameters, 'objekt.hoehe': Math.max(100, Math.round(Number(e.target.value))) } } })} style={panelInput} />
           </label>
           <div style={{ fontSize: 11, color: FARBEN.gedaempft, marginTop: 8 }}>Bewegen: im Plan ziehen.</div>
-          <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+          <div className="hp-ep-knopfreihe">
             <button type="button" style={{ ...knopf(false), flex: 1, color: FARBEN.gefahr, borderColor: FARBEN.gefahr }} onClick={loescheAuswahl}>Löschen</button>
           </div>
         </>
@@ -531,11 +531,11 @@ export function EigenschaftenPanel({
               nicht eine zweite: `spiegeleGrundriss('vertikal'/'horizontal')`, `waende.length === 0`.
               Der Text weicht dem vorhandenen Icon — die Funktion bleibt, sie steht eine Zeile
               höher und nimmt dort keinen Panel-Platz weg. */}
-          <div style={{ fontSize: 11.5, marginBottom: 10 }}>Objekt anklicken (Auswahl-Werkzeug) = markieren; dann ziehen zum Bewegen, oder Duplizieren/Löschen.</div>
-          <div style={{ fontSize: 12 }}>Werkzeug: <strong style={{ color: FARBEN.text }}>{werkzeug}</strong></div>
-          <div style={{ fontSize: 12 }}>Geschoss: <strong style={{ color: FARBEN.text }}>{level.name}</strong></div>
-          <div style={{ fontSize: 12 }}>Räume: {raeume.length} · {(raeume.reduce((acc, r) => acc + r.flaecheMm2, 0) / 1_000_000).toFixed(2)} m²</div>
-          <div style={{ marginTop: 12, padding: 10, background: T.bg, border: `1px solid ${T.hair}`, borderRadius: 8, fontSize: 11.5 }}>
+          <div className="hp-ep-lesehinweis">Objekt anklicken (Auswahl-Werkzeug) = markieren; dann ziehen zum Bewegen, oder Duplizieren/Löschen.</div>
+          <div className="hp-ep-kennzahl">Werkzeug: <strong style={{ color: FARBEN.text }}>{werkzeug}</strong></div>
+          <div className="hp-ep-kennzahl">Geschoss: <strong style={{ color: FARBEN.text }}>{level.name}</strong></div>
+          <div className="hp-ep-kennzahl">Räume: {raeume.length} · {(raeume.reduce((acc, r) => acc + r.flaecheMm2, 0) / 1_000_000).toFixed(2)} m²</div>
+          <div className="hp-ep-fusskasten">
             Ein Dach auswählen zeigt hier seine Parameter. Ablauf: Wand ziehen (W) → Dach (D) über den Umriss → 3D.
           </div>
         </div>

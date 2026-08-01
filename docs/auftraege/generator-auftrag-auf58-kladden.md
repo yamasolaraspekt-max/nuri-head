@@ -59,8 +59,12 @@ Regel scharf, die uns heute Nacht den uncommitteten AUF-64-Fix gezeigt hat.
 **Eine Kladde nach dem Muster erscheint nicht mehr in `git status`, eine echte Datei mit ähnlichem
 Namen schon.** Vorzuführen an zwei Dateien:
 
-- `public/_auf99-sichtprobe.html` ⇒ **nicht** in `git status`
-- `public/auf99-sichtprobe.html` (ohne Unterstrich) ⇒ **erscheint**
+- `public/_aufNN-sichtprobe.html` ⇒ **nicht** in `git status`
+- `public/aufNN-sichtprobe.html` (ohne Unterstrich) ⇒ **erscheint**
+
+*(`NN` statt `99` seit 01.08.2026, Befund PB-031: die beiden Namen waren **Vorführbeispiele**, keine
+Dateien — und wurden von `scripts/pfade-pruefen.sh` als tote Verweise gezählt. Ein Platzhalter, der
+wie ein Pfad aussieht, erzeugt einen Fehler, den niemand beheben kann.)*
 
 **Beide Proben danach entfernen.** Die zweite ist der Teil, der zählt: sie belegt, dass das Muster
 eng ist und nicht mehr verschluckt als gemeint.

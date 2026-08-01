@@ -4,7 +4,10 @@
 auftrag:
   id: AUF-48-S2
   titel: "Die Ableitungen, die nur aus der Szene rechnen, wandern in ein eigenes Modul"
-  status: aktiv
+  status: ruht
+   # PB-B2, 01.08.2026 - Planner. Stand bis heute: `aktiv`. 17 Blaetter trugen das,
+   # die Struktur-Zusage S-01 erwartet GENAU EINES. `ruht` heisst hier ehrlich:
+   # der Zustand ist NICHT nachgemessen. Wer das Blatt zieht, misst zuerst.
   spur: B
   heimat: ticket
   rolle: generator

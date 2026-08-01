@@ -54,7 +54,20 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            /*
+             * PB-043 Teil 2 — der Stapel schreibt in den TAGES-Kanal, nicht in eine endlose Datei.
+             *
+             * Vorher stand hier `['single']`: EINE Datei ohne Boden. Gemessen waren das
+             * 229 327 818 Bytes (219 MB), in denen 2 099 Fehlermeldungen begraben lagen — ein Log,
+             * das niemand mehr oeffnet, ist kein Log.
+             *
+             * **Der billigere Weg stand elf Zeilen tiefer:** der `daily`-Kanal war vollstaendig
+             * konfiguriert (Pfad, Level, 14 Tage) und wurde von niemandem benutzt.
+             *
+             * **Geaendert wird nur die VORGABE.** `LOG_CHANNEL` kommt aus der Umgebung; was auf
+             * Hetzner steht, entscheidet Yama — von hier ist es nicht sichtbar.
+             */
+            'channels' => ['daily'],
             'ignore_exceptions' => false,
         ],
 

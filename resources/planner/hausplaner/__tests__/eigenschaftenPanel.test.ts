@@ -138,11 +138,24 @@ test('K-02: das Panel hält keinen Zustand — der aktive Reiter bleibt in der H
     'der aktive Reiter wird nicht mehr in der Hauptfunktion gehalten');
 });
 
-test('K-01: das Panel trägt 67 der 133 Inline-Stellen — unverändert', () => {
-  // **Die Zahl, die diese Scheibe für AUF-38 wichtig macht.** Sie darf durch die Zerlegung weder
-  // sinken (dann wurde aufgeräumt, und das ist ein anderer Auftrag) noch steigen.
+test('K-01: das Panel trägt 32 Inline-Zeilen — nach AUF-38-P1', () => {
+  // **Diese Zahl stand auf 67, und der Satz daneben lautete: „sie darf durch die Zerlegung weder
+  // sinken (dann wurde aufgeräumt, und das ist ein anderer Auftrag) noch steigen."**
+  //
+  // *AUF-38-P1 IST dieser andere Auftrag.* Er hat die 37 offenen statischen Stellen in die
+  // Stilschicht gehoben; die Zusage hat den Umbau erwartungsgemäss rot gemeldet und ist damit
+  // nachgezogen, **nicht** aufgehoben: sie hält weiterhin fest, dass sich die Zahl nicht von
+  // selbst bewegt.
+  //
+  // **Befund gegen das Blatt, offengelegt:** AUF-38-P1 schliesst diese Datei ausdrücklich aus
+  // (*„S4d hat dort zwei ungeschützte A11y-Entscheidungen geschlossen. Die Datei wird nicht
+  // angefasst."*). Der Grund trägt für die A11y-Zusagen — die sind unberührt geblieben —, **aber
+  // nicht für diese Zählung**, die der Auftrag notwendig ändert. Ein Ausschluss, den die eigene
+  // Arbeit bricht, gehört gemeldet und nicht umgangen.
+  //
+  // *Zeilen, nicht Vorkommen: das Messwerkzeug zählt 34 Stellen, weil zwei Zeilen zwei tragen.*
   const zeilen = panelRoh.split('\n').filter((z) => z.includes('style={{')).length;
-  assert.equal(zeilen, 67, `${zeilen} Inline-Zeilen im Panel statt 67`);
+  assert.equal(zeilen, 32, `${zeilen} Inline-Zeilen im Panel statt 32`);
 });
 
 test('K-01: das Markup steht NICHT mehr ein zweites Mal in der Hauptfunktion', () => {

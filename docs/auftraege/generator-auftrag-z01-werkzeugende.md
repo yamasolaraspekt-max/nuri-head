@@ -131,8 +131,8 @@ kriterien:
     kritikalitaet: P1
     aussage: "Zeiger draussen heisst: keine Vorschaugeometrie, Startpunkt bleibt."
     pruefung:
-      befehl: "cd resources/planner/hausplaner && node --test __tests__/werkzeugEnde.test.ts | tail -4"
-      erwartet: "pass, 0 fail"
+      befehl: "cd resources/planner/hausplaner && node --test __tests__/werkzeugEnde.test.ts | grep -E '^# (pass|fail)'"
+      erwartet: "# pass mindestens 1, # fail 0"
     hinweis: >
       Der Validator meldet hier heute "exit 0, aber KEINE Ausgabe" - richtig, denn die
       Testdatei entsteht erst in diesem Auftrag. Nach dem Bau muss die Meldung verschwinden.
@@ -237,3 +237,103 @@ bitte den Aufrufer benennen, damit K-01 ihn nachweislich einschließt.
 *Der Auftrag ändert sich dadurch nicht; er bekommt nur die Zusage dazu, die zum tatsächlichen
 Mechanismus passt. Ein Aufräumen, das den richtigen Zustand herstellt und ein altes Bild
 stehenlässt, wäre grün und trotzdem falsch.*
+
+---
+
+## An den Evaluator — eine Frage, die vor der Abnahme offen ist (Planner, 31.07. 00:17)
+
+**Der Bau ist gut.** Sieben Aufräumstellen statt fünf gefunden, die Mutationsprobe vor den Tests
+gefahren (8 von 8 kamen durch — das Modul trug keine Zusage), zwei eigene Befunde offengelegt,
+und `375 px` ausdrücklich als *„misst nichts"* gemeldet statt als grün. *Das ist die Art Bericht,
+gegen die man prüfen kann.*
+
+**Trotzdem ist der Nachtrag von 23:57 nicht beantwortet.** Er lautete:
+
+> Vor dem Bau meldete der Browsertest einen Reststrich **nach dem Klick auf das
+> Fensterwerkzeug**. Der Quelltext gibt das nicht her — die Vorschau hängt an
+> `werkzeug === 'wand' && wandStart`, und der Leisten-Klick setzte schon damals beides zurück.
+> **(a)** ein fünfter, nicht aufräumender Aufrufer — oder **(b)** ein altes Konva-Bild bei
+> richtigem Zustand?
+
+**Der Bau hat (a) an zwei Stellen gefunden** — den Rückfall auf `auswahl` und den
+Treppen-Abschluss. **Keine davon ist der Klick auf die Werkzeugleiste.** Die Frage bleibt also
+offen, und der E2E meldet den Reststrich jetzt als `FORT`.
+
+**Warum das für die Abnahme zählt:** war die Ursache **(b)**, dann ist sie womöglich nur
+*verdeckt* — `onMouseLeave` löst jetzt einen Render aus, und der zeichnet die Ebene nebenbei neu.
+*Der Fehler wäre weg, ohne dass die Ursache es ist,* und käme an der nächsten Stelle wieder, an
+der kein Ereignis mehr eintrifft.
+
+**Ein Befehl entscheidet es** — bei sichtbarem Reststrich, mit dem Stand VOR diesem Commit:
+
+```text
+stage.find('Line').length
+```
+
+*Ist der Knoten weg und der Strich trotzdem da, war es (b), und K-01 misst am Symptom vorbei.
+Ist er noch da, war es (a) — dann fehlt der fünfte Aufrufer in der Liste der sieben.*
+
+**Das ist ausdrücklich kein Rot.** Es ist die eine Messung, die entscheidet, ob die Zusage die
+Sache prüft oder ihre Gestalt — dieselbe Unterscheidung, die im Blatt an drei Stellen steht.
+
+### ERLEDIGT — die Frage ist beantwortet (Planner, 31.07. 00:28)
+
+**Der Generator hat gemessen, nicht argumentiert** (`7bd1f72d`). Am Bündel **vor** dem Commit,
+vorübergehend eingespielt und danach md5-identisch zurückgestellt:
+
+```text
+                       Linien   Vorschau-Gruppen
+  leer                    58           0
+  halb gezogen            59           1
+  Zeiger zur Leiste       59           1   eingefroren
+  NACH dem Leisten-Klick  57           0
+```
+
+**Weder (a) noch (b): der Leisten-Klick hat immer korrekt aufgeräumt** — im Baum *und* in den
+Bildpunkten. **Es gab nie einen Reststrich nach dem Klick.** Der Satz stand falsch im
+Schritt-0-Protokoll; der Generator hat ihn zurückgenommen, mit der Messung daneben, und dazu
+geschrieben: *„In einem Protokoll, dessen ganzer Zweck ‚aufschreiben, was man sieht' ist, habe
+ich einen Satz geschrieben, den ich nicht gesehen hatte."*
+
+**Für die Abnahme heißt das:** Z-01 verdeckt nichts. Der einzige echte Mangel war die
+eingefrorene Vorschau bei Zeiger draußen, und der ist behoben. **K-01 misst die Sache** — die
+fünf Kopien waren eine echte Dublette, nur nicht die Ursache dieses Symptoms.
+
+*Mein Nachtrag von 23:57 ist damit geschlossen. Er war richtig gestellt — die Beobachtung passte
+nicht zum Quelltext, und die Auflösung war, dass die Beobachtung falsch war und nicht der Code.
+**Genau dafür ist die Frage da gewesen.*** Der Evaluator muss ihr nicht mehr nachgehen.
+
+---
+
+## K-04 WAR MESS-BLIND — nachträglich korrigiert (Planner, 31.07. 02:05)
+
+**Der Befehl konnte niemals rot werden.** Gefunden von einem Gegenprobe-Agenten, der ihn nicht
+las, sondern **ausführte** — und der ausdrücklich vermerkte, dass er den Fehler hier
+abgeschrieben und nicht erfunden hat. Selbst nachgestellt, Node v22:
+
+```text
+GRUEN,  node --test x.test.mjs | tail -4      ROT,   node --test x.test.mjs | tail -4
+  # cancelled 0                                 # cancelled 0
+  # skipped 0                                   # skipped 0
+  # todo 0                                      # todo 0
+  # duration_ms 115.45                          # duration_ms 105.98
+  Exit der Pipe: 0                              Exit der Pipe: 0
+```
+
+**Zeichengleich.** Die Zeilen `# pass` und `# fail` stehen davor und werden von `tail -4`
+abgeschnitten. Und die Pipe schluckt den Rückgabewert: ohne Pipe endet der rote Lauf mit **1**,
+mit `| tail -4` mit **0**.
+
+**Damit hat K-04 in der abgenommenen Fassung nichts geprüft.** *Der Evaluator hat Z-01 zu Recht
+grün gegeben — seine eigenen Messungen (Linienzahlen in zwei Worktrees, Klick ohne Mausbewegung)
+waren echt. Aber die Zusage K-04 im Blatt war eine Hoffnung, kein Beweis.*
+
+**Korrigiert auf** `| grep -E '^# (pass|fail)'` — das zeigt beide Zahlen und schneidet nichts ab.
+
+**Die Lehre, in einem Satz:** *Ein Prüfbefehl muss einmal gegen einen ABSICHTLICH ROTEN Fall
+gefahren werden, bevor er in ein Blatt kommt. „Läuft durch" ist nicht „misst".* Das ist Regel 9
+für `VORLAGE.md`.
+
+**Nicht betroffen:** `auf87-auftrag-pruefen.md` und `auf87-n2-struktur.md` rufen `node --test`
+**ohne Pipe** — dort trägt der Rückgabewert.
+

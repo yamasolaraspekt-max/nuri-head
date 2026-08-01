@@ -235,12 +235,14 @@ Rollentrennung.**
 | PB-038 | (Historie) `fe47879c` | **P2 · SICHERHEIT** | **von mir verursacht**; Weg A ausgeführt, HEAD sauber, Klasse gedeckelt | **GESCHLOSSEN** — Yama hat gewechselt (18:02, `67903953`) | 30.07. |
 | PB-040 | `db` + Ledger | Eine gelaufene Migration lag in **0 Commits**; AUF-88-P1 fertig im Baum, kein Bericht | **P2** (Sicherung) + **blockiert die Evaluation** | **ERLEDIGT** (A: `fba60e6e` · B: Ledger 12:28) | — |
 | PB-041 | `massnahmenplan-2026-07-30.md` + `FEHLERKLASSEN.md` | M4-Zahlen, F-04-Zelle, `bestand.sh`, `VORLAGE.md` | **P2** | **ERLEDIGT** 22:49 — alle fünf Punkte nachgemessen | — |
-| PB-043 | `ChatController.php` + `config/logging.php:57` | **Teil 1 ERLEDIGT** (`fddec527`, 21:48): drei — nicht zwei — `Log::info` hängen jetzt am `?debug=1`-Schalter · **Teil 2 offen: `single` ohne Rotation, 218 MB**; ~~zwei unbedingte `Log::info` schreiben 64 086 Zeilen in ein nicht rotierendes Log | **P2** | offen | Planner |
+| PB-043 | `ChatController.php` + `config/logging.php` | **ERLEDIGT**: Teil 1 (`fddec527`) `Log::info` am `?debug=1`-Schalter · Teil 2 (`9e294323`) Stapel schreibt in `daily`, 14 Tage; ~~zwei unbedingte `Log::info` schreiben 64 086 Zeilen in ein nicht rotierendes Log | **P2** | offen | Planner |
 | PB-044 | `--env=testing` ohne `.env.testing` | Ein Schalter, der auf die Test-Umgebung zeigt, traf **stillschweigend die Arbeits-DB** | P3→**P2** (Planner) | **ERLEDIGT** 21:43 — nachgemessen | — |
 | PB-045 | mein eigener Messbefehl | `--date=format:` zeigt die Zone des Committers — **45 von 116** heutigen Commits zwei Stunden zu früh | **P3** | **ERLEDIGT** (Barriere gesetzt) | Prüfer |
 | PB-039 | `PRUEFER-BEFUNDE.md` (mein Register) | Acht Befunde hatten einen Abschnitt, aber **keine Zeile** — Ursache F-14 (`str.replace` traf nicht) | **P2** | **ERLEDIGT** (38 Zeilen = 38 IDs) | Prüfer |
 | PB-042 | (Betrieb) `git log` | **109 Commits heute, 2 davon Produktivcode, 66 von mir** — docs/Code 7:1, mein Register allein 4 265 Z. | **P2** | offen | **Yama** (Takt) |
 | PB-046 | Objekt-Planer @ **375 px** (Browser) | 8 Bedienelemente ausserhalb, kein Bildlauf; **Planner: 375 = Ankunfts-, kein Bedienziel** → AUF-91 | **P2→P3** (Begründung geprüft, sie trägt) | offen mit Ziel | Planner |
+| PB-047 | `SidebarCountController.php:16,29,162` | `$user?->name` ist ein **String**, der Parameter fordert `?int` — **464 `local.ERROR`**, die Seitenleisten-Zahlen kommen nie an | **P2** | offen | Planner |
+| PB-048 | `resources/views/**` (805 Blades) | **Vorsortierung statt Sichtprobe**: 319 Blades tragen ein Layout-Risikomerkmal, die 18 dichtesten benannt — und mein erstes Muster war zu **90 %** falsch | **Hinweis** (kein Mangel) | offen | Planner |
 
 ---
 
@@ -4795,3 +4797,162 @@ PB-042  bei Yama         — der Takt
 **Ein einziger technischer Rest.** *Die Quelle ist zu, das Fass hat noch keinen Boden.*
 
 **Ballbesitz: Planner** (PB-043 Teil 2).
+
+---
+
+## 77. Runde 294 — **PB-047 · P2: die Seitenleisten-Zahlen scheitern seit dem 07.07. — 464 Mal, und niemand hat es gesehen**
+
+**Gemessen 00:55 CEST (`date`) gegen `8b96d696`.** *Gefunden beim Nachhalten von `PB-043`: ich wollte
+wissen, **wer** die 47 036 Byte je Takt schreibt.*
+
+```text
+tail storage/logs/laravel.log
+   [2026-07-31 00:46:58] local.ERROR: SidebarCountController::countInquiryUnpublished():
+      Argument #1 ($employeeId) must be of type ?int, string given,
+      called in .../SidebarCountController.php on line 29
+
+Vorkommen in der Datei     464
+   30.07.                   57
+   31.07. (bis 00:55)       14
+erster Eintrag         07.07.2026 07:07    -> seit 24 Tagen
+```
+
+### Die Kette, Zeile für Zeile
+
+```text
+SidebarCountController.php:16    $employeeId = $user?->name;          <- users.name traegt die
+                                                                        employees.id als STRING
+                          :29    countInquiryUnpublished($employeeId)
+                          :162   private function countInquiryUnpublished(?int $employeeId = null, ...)
+                                                                     ^^^^ TypeError
+routes/web.php:440   GET /api/sidebar-counts   (auth)                <- wird von der Oberflaeche gepollt
+```
+
+**`users.name` speichert die verknüpfte `employees.id` — als Zeichenkette.** *Diese Eigenart ist
+bekannt und dokumentiert; hier trifft sie auf eine typisierte Signatur, und der Aufruf stirbt.*
+
+### Warum das mehr ist als ein Logeintrag
+
+**Der Endpunkt liefert die Zähler der Seitenleiste.** Reisst er bei `my_inquiries_unpublished`, kommt
+**die ganze JSON-Antwort nicht zustande** — nicht nur dieser eine Wert. *Die Zahlen neben den
+Menüpunkten sind für den Benutzer die Antwort auf „habe ich etwas zu tun".*
+
+> **Was ich NICHT gemessen habe:** wie sich das an der Oberfläche zeigt — ob die Zahlen fehlen,
+> veraltet stehen bleiben oder ob ein anderer Weg sie nachliefert. **Dafür müsste ich die Seitenleiste
+> im Browser ansehen, und das habe ich nicht.** *Die Schwere P2 steht deshalb auf der gemessenen
+> Kette, nicht auf einer vermuteten Wirkung.*
+
+### Und was es über PB-043 sagt
+
+**Ich habe heute Mittag geschrieben: „404 Fehlermeldungen liegen zwischen 64 086 Poll-Zeilen
+begraben."** *Hier ist einer davon — 464 Mal, seit dem 07.07., in einem Log, das niemand liest, weil es
+229 MB gross ist.* **`PB-043` war nie ein Aufräum-Befund. Er war der Grund, warum dieser hier 24 Tage
+unentdeckt blieb.**
+
+**Ballbesitz: Planner.**
+
+---
+
+## 78. Runde 435 — **PB-048: die 805 Blades vorsortiert. Und 90 % meiner ersten Messung waren Unsinn.**
+
+**Gemessen 07:5x CEST gegen `fcde5afc`.** *Umsetzung des Planner-Vorschlags von 00:42: die Fläche
+statisch vorsortieren, damit eine Instanz die dreißig riskantesten ansieht statt achthundertfünf.*
+
+### Erst die Grundgesamtheit, sauber abgegrenzt
+
+```text
+alle *.blade.php                898
+davon unter resources/views/    805     <- die Zahl des Planners
+davon ausserhalb                 93
+```
+
+*Meine „803" von gestern und seine „805" waren dieselbe Menge, verschieden abgegrenzt; 898 ist das
+Ganze. **Kein Widerspruch, nur zwei Schnitte.***
+
+### Der Fehlschlag, und er ist der Kern dieser Runde
+
+```text
+erstes Muster:  (?:min-)?width:\s*(\d{3,5})px      ->  422 Treffer >1024px
+```
+
+**Das Muster trifft auch `max-width: 1200px`** — denn `max-width` **enthält** `width`. Damit habe ich
+**Medienabfrage-Grenzen als feste Elementbreiten gezählt.**
+
+```text
+korrigiert:  (?<!-)(?:min-)?width\s*:\s*(\d{3,5})px   + Zeilen mit @media verworfen
+             ->  42 Treffer
+
+90 % meiner Treffer waren das GEGENTEIL dessen, was ich suchte:
+Belege für Anpassungsfähigkeit, gezaehlt als Beleg für Starrheit.
+```
+
+**Die Spitze der ersten Liste war `admin/dashboard/employee/mobile.blade.php`** — ich stand davor, sie
+als *„die Mobil-Ansicht ist die unbeweglichste Datei im Haus"* zu melden. **Gemessen: sie hat 25
+Medienabfragen — mehr als jede andere.** *Sie stand ganz oben, weil sie am gründlichsten gebaut ist.*
+
+> **Gefangen hat es nicht die Sorgfalt, sondern die Nachprüfung am Einzelfall:** ich habe die acht
+> Fundstellen der Spitzendatei aufgeschlagen, bevor ich sie zitiert habe. **Ohne diesen Blick wäre der
+> Befund veröffentlicht worden — und er hätte genau die Datei angeklagt, die es am besten macht.**
+
+### Das belastbare Ergebnis
+
+```text
+805 Blades · 319 mit mindestens einem Merkmal · Punktsumme 1616
+Merkmale: feste Breite >1024px (x3) · <table ohne responsive-Huelle (x2) · gar keine Medienabfrage (+4)
+
+  46  admin/email/lead.blade.php                     23 Tabellen ohne Huelle
+  21  admin/offer/configuration/offer/config         1x 1580px · 9 Tabellen
+  14  admin/energie/energiekonzept_dokument           7 Tabellen
+  14  admin/master_sets/index                         2x 1100px · 4 Tabellen
+  13  admin/planner/index                             1x 1120px · 5 Tabellen
+  12  admin/checklist/.../pvgis · admin/product/type/type   je 4 Tabellen, KEINE Medienabfrage
+  11  admin/deal/material-list  (3x bis 1550px) · brand_department · distributor_department
+  10  zehn weitere, u.a. heizkoerper/konfigurator, invoices/mahnwesen (beide ohne Medienabfrage)
+```
+
+**Das ist kein Mangelbefund, sondern eine Rangliste für die Sichtprobe.** *Ein `<table>` ohne Hülle ist
+kein Fehler — es ist ein **Verdacht**, den erst der Browser bestätigt oder ausräumt.* **Ich melde ihn
+ausdrücklich als Hinweis, nicht als Mangel.**
+
+**Ballbesitz: Planner** (ob und in welcher Reihenfolge diese 18 angesehen werden).
+
+---
+
+## 79. Runde 437 — **PB-043 vollständig erledigt. Der letzte technische Befund ist geschlossen.**
+
+**Nachgemessen 08:01 CEST gegen `9e294323`.**
+
+```text
+config/logging.php:70   'channels' => ['daily']      (war ['single'])
+config/logging.php:81   'daily' => …  :85  'days' => 14
+Commit 9e294323 (07:59)  14 Einfuegungen, 1 Loeschung — eine Zeile Wirkung, dreizehn Zeilen Begruendung
+```
+
+**Der Kommentar im Code nennt die Messung, nicht die Absicht:** *„Vorher stand hier `['single']`: EINE
+Datei ohne Boden. Gemessen waren das 229 327 818 Bytes (219 MB), in denen 2 099 Fehlermeldungen
+begraben lagen."*
+
+> **Er hat meine Zahl übernommen und weitergezählt:** ich hatte 2 054 Fehler gemeldet, er misst 2 099.
+> *Der Unterschied sind die 45, die seit meiner Messung dazugekommen sind — darunter die 14
+> Sidebar-Fehler aus `PB-047`.* **Eine Zahl, die zwischen zwei Messungen wächst, ist ein Beleg, kein
+> Widerspruch.**
+
+### Damit ist die Lage bei den Nicht-Papier-Befunden
+
+```text
+PB-038  GESCHLOSSEN   Passwort (Yama)
+PB-040  ERLEDIGT      457 Zeilen gesichert + Bericht
+PB-041  ERLEDIGT      fuenf Punkte, VORLAGE.md + bestand.sh
+PB-044  ERLEDIGT      .env.testing
+PB-043  ERLEDIGT      Teil 1 Quelle · Teil 2 Rotation
+PB-047  geschnitten   Sidebar-TypeError seit 24 Tagen — gebaut ist nichts
+PB-046  P3 mit Ziel   AUF-91 liegt, gebaut ist nichts
+PB-042  bei Yama      der Takt
+PB-048  Hinweis       18 Blades zur Sichtprobe vorsortiert
+```
+
+**Die alte Datei bleibt liegen** — `daily` schreibt ab jetzt in neue Tagesdateien, aber die 219 MB
+verschwinden nicht von selbst. *Das ist kein Mangel, sondern eine Aufräumfrage; ich melde sie als
+Beobachtung, nicht als Befund.*
+
+**Ballbesitz: keiner** — geschlossen.

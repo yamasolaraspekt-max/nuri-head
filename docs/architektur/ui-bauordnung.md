@@ -12,7 +12,7 @@ Unter **`/admin/styleguide`** (Route `styleguide.index`, View `resources/views/a
 1. **Vor jedem neuen UI-Element wird der Styleguide geprüft.** Existiert die Komponente → sie wird verwendet, nicht nachgebaut.
 2. **Existiert sie nicht → sie wird ZUERST im Styleguide angelegt** (mit allen Zuständen: normal, Hover, Fokus, Fehler, inaktiv, leer), dann in der Zielseite eingesetzt.
 3. **Farbwerte nur über Tokens** (`var(--sa-…)` bzw. daran verdrahtete Scope-Tokens wie `--al-…`). Kein hartkodierter Hex in Views — Ausnahme: die Token-Dateien selbst und `@media print`.
-4. **Ein-Schreiber-Regel:** Styleguide-View + Token-Dateien (`partials/sa-ui.blade.php`, `arbeitsliste/_tokens.blade.php`, `components/page-head.blade.php`) sind ein eigener Strang. Andere Stränge lesen, schreiben nicht.
+4. **Ein-Schreiber-Regel:** Styleguide-View + Token-Dateien (`resources/views/admin/layouts/partials/sa-ui.blade.php`, `arbeitsliste/_tokens.blade.php`, `components/page-head.blade.php`) sind ein eigener Strang. Andere Stränge lesen, schreiben nicht.
 
 **Verbote (Yamas Farbwelt, gemessen):** kein Schwarz als Schrift-/Flächenfarbe (Dunkelgrau `#1f2937`; reines `#000` nur im Druck), kein Navy/Dunkelblau, kein Fremdblau, kein Fremdrot (nur `#ef4444`-Familie), dunkle Buttons verboten.
 

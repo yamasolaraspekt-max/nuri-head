@@ -5,7 +5,10 @@
 ```yaml
 auftrag:
   id: B-01
-  status: aktiv
+  status: zurueckgestellt   # PB-027, 01.08.2026 - Planner. Das Blatt trug `aktiv`, obwohl nach
+  # ihm nie gebaut wurde und S-01 genau EIN aktives Blatt erwartet. Aktiv ist AUF-38-P2.
+  # Grund der Zuruecknahme: der Anlass von B-01 war "223 Commits ungesichert" (29.07.);
+  # dieser Anlass ist nicht mehr der von heute. Wer B-01 wieder zieht, misst zuerst neu.
   spur: B
   heimat: ticket
   ziel: "Das Werkzeug .ai-workflow/ ist versioniert, und der lokale Rueckstand liegt auf Yamas eigenen Remotes."

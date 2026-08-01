@@ -55,6 +55,9 @@ import { type PanelTabId } from './dashboard/panelTabs';
 import { EigenschaftenPanel } from './rahmen/EigenschaftenPanel';
 // AUF-48 Scheibe 4e: Statusleiste, Befehlspalette, Engine-Flaeche.
 import { FussUndUeberlagerungen } from './rahmen/FussUndUeberlagerungen';
+// AUF-91: die ehrliche Sperre unter 1024 px. Sie liest `istSchmal` — den Schalter, den es
+// seit AUF-83-T5 gibt — und haelt selbst keinen Zustand.
+import { MindestbreiteHinweis } from './rahmen/MindestbreiteHinweis';
 import { useEscapeEbene } from './dashboard/escapeStapel';
 import { ladeSchienen, speichereSchienen, SCHIENEN_STANDARD, type SchienenSeite, type SchienenZustand } from './state/schienenSpeicher';
 // AUF-48 Scheibe 1: die sieben reinen Funktionen wohnen jetzt daneben — unveraendert, nur umgezogen.
@@ -77,6 +80,8 @@ import { palettenGruppen, palettenFlach, type PaletteEintrag } from './dashboard
 import { stapel } from './dashboard/geschossStapel';
 import { usePlannerUiStore } from './state/uiState';
 import { toolNach, WORKSPACE_IMPORT } from './tools/toolRegistry';
+// Z-01: die reine Entscheidung, wann ein Werkzeug endet und wann es nur pausiert.
+import { beiWerkzeugwechsel, beiZeigerAus, beiZeigerEin, pausenText, type ZeichenZustand } from './tools/werkzeugEnde';
 // AUF-48 Scheibe 3: die reine Abbildung Taste -> Absicht.
 import { tastenAbsicht } from './tastenAbsicht';
 import { zoneTools } from './tools/toolPresentation';
@@ -235,6 +240,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const [paletteIndex, setPaletteIndex] = useState(0);
   const paletteOffenRef = useRef(false);
   const [wandStart, setWandStart] = useState<Punkt | null>(null);
+  /** Z-01: steht der Zeiger auf der Zeichenflaeche? Verlassen pausiert, es beendet nicht. */
+  const [zeigerDrinnen, setZeigerDrinnen] = useState(true);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(0.12); // px pro mm
   /**
@@ -260,6 +267,27 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const level = scene?.levels.find((l) => l.id === activeLevelId) ?? scene?.levels[0] ?? null;
   const nodes = useMemo(() => knotenImGeschoss(scene, level), [scene, level]);
   const waende = useMemo(() => waendeAus(nodes), [nodes]);
+  /** Z-01: EIN Zustand fuer Buehne und Statusleiste — zwei Quellen waeren zwei Wahrheiten. */
+  const zeichenZustand: ZeichenZustand = { wandStart, treppeStart, zeigerDrinnen };
+  /**
+   * Z-01 — **der EINE Ort, an dem ein Werkzeug endet.**
+   *
+   * Vorher stand das Aufraeumen fuenfmal abgeschrieben (zweimal hier, zweimal in der Schiene,
+   * einmal im Escape-Weg) und an einer sechsten Stelle — dem Rueckfall auf `auswahl` — fehlte es
+   * ganz. **Fuenf Kopien einer Regel sind keine Regel**, sondern fuenf Gelegenheiten, sie zu
+   * vergessen; einmal ist sie vergessen worden.
+   *
+   * **Er steht HIER und nicht weiter oben**, weil er den ECHTEN Zeichenzustand braucht. Meine
+   * erste Fassung stand bei den Settern und rief die Entscheidung mit einem Attrappen-Zustand
+   * auf — sie lieferte dasselbe Ergebnis, aber der Code sagte etwas anderes, als er tat.
+   */
+  const beendeWerkzeug = React.useCallback((neu: Werkzeug) => {
+    const nach = beiWerkzeugwechsel(zeichenZustand);
+    setWandStart(nach.wandStart);
+    setTreppeStart(nach.treppeStart);
+    setZeigerDrinnen(nach.zeigerDrinnen);
+    usePlannerUiStore.getState().setActiveTool(neu);
+  }, [zeichenZustand]);
   /** AUF-35a / Kante 4: Zählung der Auswahl je Typ — rein, getestet, nur Anzeige. */
   const auswahlUebersicht = useMemo(() => mehrfachUebersicht(selectedNodeIds, nodes), [selectedNodeIds, nodes]);
 
@@ -368,7 +396,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     if (fremderBereich) return;
     const t = toolNach(werkzeug);
     if (t && !resolveToolState(t, werkzeugKontext).enabled) {
-      usePlannerUiStore.getState().setActiveTool('auswahl');
+      // Z-01: hier fehlte das Aufraeumen ganz. Faellt ein Werkzeug im Bereich aus, blieb der
+      // halbe Zug stehen — mit einem Werkzeug, das ihn nicht mehr beenden konnte.
+      beendeWerkzeug('auswahl');
     }
   }, [werkzeugKontext, werkzeug, fremderBereich]);
   /** Dashboard v2.3: Projektbaum des aktiven Geschosses — reine Funktion, nur LESEN. */
@@ -491,9 +521,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     const tool = toolNach(id);
     if (!tool) return;
     if (tool.art === 'werkzeug') {
-      setWandStart(null);
-      setTreppeStart(null);
-      setWerkzeug(tool.id as Werkzeug);
+      beendeWerkzeug(tool.id as Werkzeug);
       return;
     }
     if (tool.id === 'loeschen') loescheAuswahl();
@@ -747,8 +775,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           parameters: params,
         },
       });
-      setTreppeStart(null);
-      setWerkzeug('auswahl');
+      // Z-01: die Treppe steht — der Zug ist fertig, nicht abgebrochen. Aufgeraeumt wird
+      // trotzdem am selben Ort: ein zweiter Weg waere ein zweiter Ort zum Vergessen.
+      beendeWerkzeug('auswahl');
       return;
     }
 
@@ -775,9 +804,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   // aber unnötige Listener-Kirchgänge, und beim Debuggen einer echten Race genau das Rauschen,
   // das eine Ursache verdeckt.
   const setzeWerkzeugZurueck = React.useCallback(() => {
-    setWandStart(null);
-    setTreppeStart(null);
-    setWerkzeug('auswahl');
+    // Z-01: derselbe Ort wie die Leiste. Der Escape-Weg wird BENUTZT, nicht ersetzt.
+    beendeWerkzeug('auswahl');
   }, []);
   useEscapeEbene('werkzeug-reset', true, setzeWerkzeugZurueck);
 
@@ -826,9 +854,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
             permissions: usePlannerUiStore.getState().rechte,
           });
           if (resolveToolState(tool, ctx).enabled) {
-            setWandStart(null);
-            setTreppeStart(null);
-            setWerkzeug(tool.id as Werkzeug);
+            beendeWerkzeug(tool.id as Werkzeug);
           }
           break;
         }
@@ -1030,9 +1056,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           railWerkzeuge={railWerkzeuge}
           werkzeug={werkzeug}
           werkzeugKontext={werkzeugKontext}
-          setWerkzeug={setWerkzeug}
-          setWandStart={setWandStart}
-          setTreppeStart={setTreppeStart}
+          beendeWerkzeug={beendeWerkzeug}
           setOffeneEngine={setOffeneEngine}
           baum={baum}
           selectedNodeIds={selectedNodeIds}
@@ -1067,6 +1091,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           setCursor={setCursor}
           wandStart={wandStart}
           treppeStart={treppeStart}
+          zeigerDrinnen={zeigerDrinnen}
+          beiZeigerAus={() => setZeigerDrinnen(beiZeigerAus(zeichenZustand).zeigerDrinnen)}
+          beiZeigerEin={() => setZeigerDrinnen(beiZeigerEin(zeichenZustand).zeigerDrinnen)}
           klick={klick}
           weltPunkt={weltPunkt}
           mitWinkelSnap={mitWinkelSnap}
@@ -1105,6 +1132,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           `rahmen/FussUndUeberlagerungen.tsx`. 124 Zeilen, zeichengleich entnommen.
           **Der Zustand der Palette bleibt HIER** (K-02), und der Escape-Weg ebenfalls: er haengt
           am Escape-Stapel weiter oben, nicht am Markup. */}
+      {/* AUF-91: liegt UEBER allem und erscheint nur unter 1024 px. Darueber rendert sie
+          `null` — kein zusaetzliches Element im Baum, nicht einmal ein verstecktes. */}
+      <MindestbreiteHinweis sichtbar={istSchmal} />
       <FussUndUeberlagerungen
         cursor={cursor}
         zoom={zoom}
@@ -1113,6 +1143,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         wandStart={wandStart}
         treppeStart={treppeStart}
         letzteAblehnung={letzteAblehnung}
+        pausenHinweis={pausenText(zeichenZustand)}
         paletteOffen={paletteOffen}
         paletteFilter={paletteFilter}
         setPaletteFilter={setPaletteFilter}

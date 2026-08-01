@@ -1,3 +1,6 @@
+<!-- pfade-pruefen: historisch -->
+<!-- Matrix mit abgekuerzten Pfaden; die genannten Pfade beschreiben einen vergangenen Zustand (PB-031, 01.08.2026) -->
+
 # Ticket-Reuse-Matrix (Planner)
 
 Vorlage + reale Startzeilen. Vor Produktivänderungen je Slice ausfüllen/aktualisieren.

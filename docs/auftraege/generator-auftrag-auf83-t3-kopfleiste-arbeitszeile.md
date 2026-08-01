@@ -10,7 +10,9 @@ von Yama am 29.07. um 08:20 freigegeben.*
 ```yaml
 auftrag:
   id: AUF-83-T3
-  status: aktiv            # entsperrt: T2 ist gebaut (45656ac1 / 86059540)
+  status: ruht            # entsperrt: T2 ist gebaut (45656ac1 / 86059540)
+   # PB-B2, 01.08.2026 - Planner: `ruht` heisst, der Zustand ist NICHT nachgemessen.
+   # Wer das Blatt zieht, misst zuerst. S-01 erwartet genau EIN aktives Blatt.
   spur: A                  # 21:40 KORRIGIERT, war B — der Evaluator hat es belegt, nicht behauptet
   nachtrag: "29.07. 21:40 — Grundgesamtheit korrigiert · Vorher-Wert-Pflicht · Spur A"
   heimat: ticket

@@ -73,9 +73,31 @@ cd /Users/yamanuri/Documents/ticket
 
 git merge-base --is-ancestor main auto/hausplaner-integration && echo "Fast-Forward moeglich"
 git rev-list --count main..auto/hausplaner-integration    # wie viel kommt dazu
-git rev-list --count auto/hausplaner-integration..main    # 0 = main hat nichts Eigenes
+git rev-list --count auto/hausplaner-integration..main    # siehe Kasten: 0 nur beim ERSTEN Mal
 git status --porcelain                                    # sauber?
 ```
+
+> **KORREKTUR nach dem zweiten Merge (31.07. 00:0x).** Die Zeile darüber erwartete ursprünglich
+> **0**. *Das gilt nur für den ersten Merge.* Gemessen beim zweiten:
+>
+> ```text
+> git rev-list --count auto/hausplaner-integration..main   ->  1
+> git log auto/hausplaner-integration..main                ->  d7052aa0, zwei Eltern
+> git merge-base --is-ancestor main auto/...               ->  NEIN
+> ```
+>
+> **`d7052aa0` ist der Merge-Commit des ersten Merges selbst.** Bei `--no-ff` entsteht er nur auf
+> `main` und wandert nie in den Zweig zurück. **Die Zahl ist also die Anzahl der bisherigen Merges,
+> nicht ein Fehler.** *Erwartet: so viele, wie schon gemergt wurde — und jeder davon muss ein
+> Merge-Commit mit zwei Eltern sein. Steht dort etwas anderes, ist auf `main` direkt gearbeitet
+> worden, und DANN wird angehalten.*
+>
+> Zugleich fällt damit das Fast-Forward weg — deshalb ist `--no-ff` in Schritt 4 keine Vorliebe,
+> sondern ab dem zweiten Merge die einzige Möglichkeit.
+>
+> *Die Anleitung war am ersten Merge geschrieben und hat ihren eigenen Sonderfall zur Regel
+> gemacht. Der Planner hat Yama daraufhin eine falsche Erwartung genannt; er hat richtig
+> angehalten und nachgefragt.*
 
 **Und die Frage, die keine Zahl beantwortet:** *trägt der Commit, auf den ich merge, ein
 Evaluator-Votum?* Wenn nein — **auf den letzten abgenommenen Stand mergen, nicht auf den Kopf.**

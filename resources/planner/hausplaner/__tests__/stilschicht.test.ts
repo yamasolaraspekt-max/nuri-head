@@ -278,16 +278,49 @@ test('K3 Scheibe 4 (Rest): jede Regel traegt genau die Werte, die vorher inline 
  * Zusagen daneben waren gruen, weil sie die acht pruefen. *Dieselbe Luecke, die das Votum zu
  * Scheibe 3 aufgedeckt hat.* Diese Zusage prueft, was uebrig ist: **jeder verbliebene Inline-Stil
  * muss dynamisch sein oder einen Rohwert ohne Token tragen.** Alles andere gehoert in die Schicht.
+ *
+ * ---
+ *
+ * **PB-010 — die Namensliste ist raus, die Eigenschaft entscheidet.** Bis heute stand hier eine
+ * handgeschriebene Alternativen-Liste:
+ *
+ * ```text
+ * /\?|navZu|offeneHubs|imExperte|navBreit|\bst\.|\bp\.|\bf\./
+ * ```
+ *
+ * **Gemessen greifen FUENF ihrer acht Alternativen an keiner einzigen Stelle** — `navZu`,
+ * `offeneHubs`, `navBreit`, `\bp\.` und `\bf\.` haben 0 Vorkommen. *(Der Evaluator hat drei
+ * gezaehlt; die beiden Praefix-Alternativen kommen dazu.)* Eine Liste, die zu vier Fuenfteln
+ * ins Leere zeigt, sieht aus wie eine Pruefung und ist eine Gewohnheit.
+ *
+ * **Der eigentliche Schaden war aber nicht der tote Teil, sondern der lebende.** Mutationsprobe
+ * gegen die alte Fassung, fuenf Mutationen:
+ *
+ * ```text
+ * gefangen  statischer Stil dazu · statischer Stil mit Token · Bezeichner navZu · alle Stellen fort
+ * BLIND     statischer Stil mit einem Fragezeichen IN EINER ZEICHENKETTE
+ * ```
+ *
+ * *`\?` stand als erste Alternative und traf jedes Fragezeichen — auch eines innerhalb von
+ * Anfuehrungszeichen. Ein voellig statischer Block galt dadurch als dynamisch.*
+ *
+ * **Gemessen wird jetzt mit DEMSELBEN Werkzeug, das die Grundgesamtheit zaehlt** — genau die
+ * Begruendung, die vier Absaetze weiter unten schon fuer Scheibe 5 steht: *„Zwei Massstaebe fuer
+ * dieselbe Sache sind der Fehler, nicht die Loesung."* `istStatisch` entwertet Zeichenketten,
+ * **bevor** es auf `?` prueft; deshalb faellt die blinde Mutation dort auf.
+ *
+ * **Das Urteil bleibt heute dasselbe** (beide Wege: 0 offene Stellen) — die Umstellung ist
+ * verhaltensneutral und aendert nur, woran die Zusage haengt.
  */
 test('Scheibe 4 (Wirkung): jeder verbliebene Inline-Stil in HausplanerStudio hat einen Grund', () => {
-  const studio = readFileSync(join(hier, '../app/HausplanerStudio.tsx'), 'utf8');
-  const bloecke = [...studio.matchAll(/style=\{\{([\s\S]*?)\}\}/g)].map((m) => m[1]!);
-  assert.ok(bloecke.length > 0, 'gar kein Inline-Stil mehr? Dann ist die Zusage stumpf geworden');
-  const dynamisch = /\?|navZu|offeneHubs|imExperte|navBreit|\bst\.|\bp\.|\bf\./;
-  const rohwert = /#[0-9a-fA-F]{3,8}\b|rgba?\(/;
-  const ohneGrund = bloecke.filter((b) => !dynamisch.test(b) && !rohwert.test(b));
-  assert.deepEqual(ohneGrund, [],
-    `Inline-Stile ohne Grund (nur Token und Literale — gehoeren in die Stilschicht):\n${ohneGrund.join('\n---\n')}`);
+  const studioPfad = join(hier, '../app/HausplanerStudio.tsx');
+  // presence-Partner nach R2: es gibt ueberhaupt noch Inline-Stellen, sonst misst die Zusage Leere.
+  const studio = readFileSync(studioPfad, 'utf8');
+  assert.ok(stilBloecke(studio).length > 0, 'gar kein Inline-Stil mehr? Dann ist die Zusage stumpf geworden');
+
+  const m = messeDatei(studioPfad);
+  assert.deepEqual(m.offen, [],
+    `offene statische Stellen (nur Token und Literale — gehoeren in die Stilschicht): Z${m.offen.join(', Z')}`);
 });
 
 test('Scheibe 4: das Namenskuerzel bleibt inline — seine Farben haben keinen Token', () => {

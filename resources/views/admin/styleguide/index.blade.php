@@ -12,6 +12,30 @@
     kein Navy, kein Fremdblau, kein Fremdrot.
 --}}
 
+{{--
+    PB-023 — die Hausplaner-Insel liegt ab hier MIT auf der Referenzfläche.
+
+    Die Insel bringt ihre eigene Stilschicht mit (`resources/planner/hausplaner/hausplaner.css`,
+    gebaut nach `public/hausplaner/hausplaner.css`). Sie wird hier geladen, weil ein Musterblock
+    ohne sie ungestyltes Markup zeigt — und ungestyltes Markup sieht im Screenshot-Diff aus wie
+    eine Komponente, die es gibt.
+
+    GEMESSEN, BEVOR SIE GELADEN WURDE (das Leck-Risiko einer fremden Stilschicht in einer
+    CRM-Seite ist der Grund, warum das hier steht und nicht nur getan wurde):
+
+        653 Zeilen, jeder Selektor beginnt mit `.hp-`  —  einzige Ausnahme: ein `:root`-Block
+        dieser `:root`-Block definiert 0 `--sa-*`  —  er kann die CRM-Tokens nicht überschreiben
+        `--hp-*` wird ausserhalb der Insel nirgends gelesen
+
+    Sie ist also gekapselt: kein Selektor dieser Datei greift auf eine Seite dieses Styleguides
+    zu, ausser wir schreiben eine `hp-`-Klasse hin. Genau das tun die Blöcke in Abschnitt 9.
+--}}
+@push('style')
+    @if (file_exists(public_path('hausplaner/hausplaner.css')))
+        <link rel="stylesheet" href="{{ asset('hausplaner/hausplaner.css') }}">
+    @endif
+@endpush
+
 @section('content')
 <style>
     /* sg = Styleguide. Gekapselt, additiv — überschreibt nichts Bestehendes. */
@@ -79,6 +103,13 @@
     .sg-x { color: #9ca3af; font-size: 16px; line-height: 1; cursor: pointer; }
 
     .sg-count { display: inline-flex; min-width: 20px; height: 20px; align-items: center; justify-content: center; border-radius: 999px; background: var(--sa-accent); color: #fff; font-size: 11px; font-weight: 700; padding: 0 6px; }
+
+    /* Hausplaner-Insel: eine begrenzte Bühne für Klassen, die in der Insel absolut liegen.
+       `.hp-mb-flaeche` und `.hp-schiene-overlay` tragen `position: absolute; inset: 0` — ohne
+       einen Vorfahren mit `position: relative` verankerten sie sich an der Seite und legten sich
+       über den Styleguide. Dieselbe Lösung wie bei `.sg-modal-stage`: statisch dargestellt. */
+    .sg-hp-buehne { position: relative; height: 250px; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; }
+    .sg-hp-flaeche { background: var(--hp-bg, #f7f8f9); border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px; }
 </style>
 
 <x-page-head title="Styleguide" sub="Lebende Komponentenbibliothek — jede UI-Grundform genau einmal, mit allen Zuständen, aus den sa-ui-Tokens. Referenzfläche für visuelle Regression." current="Styleguide" />
@@ -188,5 +219,177 @@
             </div>
         </div>
     </div>
+
+    {{-- ============================================================================================
+         9 · HAUSPLANER-INSEL (PB-023)
+
+         WARUM DIESER ABSCHNITT ECHTE `hp-`-KLASSEN TRÄGT UND KEINE NACHBAUTEN.
+
+         Der naheliegende Weg wäre gewesen, die Insel-Formen mit `sg-`-Klassen nachzubauen. Dann
+         zeigte diese Fläche eine KOPIE — und eine Kopie altert getrennt vom Original. Der
+         Screenshot-Diff bliebe grün, während sich die Insel verändert; die Referenzfläche
+         behauptete dann eine Übereinstimmung, die es nicht mehr gibt. Deshalb: dieselbe
+         Stilschicht, dieselben Klassennamen, dieselbe Verschachtelung wie im JSX.
+
+         Die Struktur jedes Blocks ist aus der laufenden Quelle abgelesen, nicht erinnert:
+           hp-ok-       app/dashboard/Kopfrahmen.tsx:197 · app/dashboard/ObjektkopfUeberlauf.tsx:78
+           hp-ep-       app/rahmen/EigenschaftenPanel.tsx:188-198
+           hp-ef-       app/EngineFlaeche.tsx:64-82
+           hp-wg-       app/dashboard/WerkzeugGruppenMenue.tsx:98
+           hp-schiene-  app/rahmen/GruppenzeileUndSchiene.tsx:271
+           hp-mb-       app/rahmen/MindestbreiteHinweis.tsx:69-85
+    ============================================================================================= --}}
+    <div class="sg-h2">9 · Hausplaner-Insel <small>Quelle: resources/planner/hausplaner/hausplaner.css — geändert wird nur dort</small></div>
+    <div class="sg-lede" style="margin-bottom:10px">
+        Die Insel ist ein gekapseltes React-Bündel mit eigener Stilschicht und eigenen
+        <span class="sg-code">--hp-</span>-Tokens. Sie liegt hier, weil eine Referenzfläche, die einen
+        ganzen Bereich auslässt, für ihn auch nicht schützt: <strong>was hier nicht liegt, fällt beim
+        Screenshot-Diff nicht auf.</strong> Die Blöcke tragen die echten Insel-Klassen — kein Nachbau.
+    </div>
+
+    {{-- Der ehrliche Vermerk. Er verschwindet, sobald die Stilschicht die Farbtokens selbst trägt;
+         eine Zusage in `HausplanerInselTest` hält beide Richtungen fest. --}}
+    <div class="sg-rule" style="background:var(--sa-warning-bg);border-color:var(--sa-warning-border)">
+        <strong>Diese Blöcke zeigen Struktur, noch nicht Farbe.</strong>
+        Die Insel setzt ihre <span class="sg-code">--hp-</span>-Tokens erst beim Start des React-Bündels
+        (<span class="sg-code">setzeTokenVariablen()</span>, gespeist aus <span class="sg-code">studioDaten.ts</span>) —
+        die Stilschicht allein führt sie nicht. Auf dieser Seite läuft das Bündel nicht, also lösen alle
+        <span class="sg-code">var(--hp-…)</span> ins Leere auf und die Flächen bleiben durchsichtig.
+        <strong>Maße, Abstände, Verschachtelung und Typografie stimmen und sind ab hier gegen Regression gesichert;
+        die Farben sind es noch nicht.</strong>
+        Die Tokens hier von Hand einzutragen wäre eine zweite Wahrheit neben
+        <span class="sg-code">studioDaten.ts</span> — das ist ausdrücklich nicht gewollt. Der Weg dorthin ist
+        <span class="sg-code">PB-024-N2</span> (Laufzeit-Auflösung).
+    </div>
+
+    <div class="sg-grid">
+        <div class="sg-card" style="flex:1 1 340px">
+            <div class="sg-card-label">Objektkopf <span class="sg-code">hp-ok-</span></div>
+            <div class="sg-hp-flaeche" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                <span class="hp-ok-name" title="Mustermann-Immobilienverwaltung Rhein-Main GmbH">Mustermann-Immobilienverwaltung Rhein-Main GmbH</span>
+                <span class="hp-ok-pille hp-ok-pille--aktuell">aktuell</span>
+                <button type="button" class="hp-ok-knopf">Übernehmen</button>
+            </div>
+            <div class="sg-hp-flaeche" style="margin-top:8px;display:flex;align-items:center;gap:8px">
+                <span class="hp-ok-pille hp-ok-pille--veraltet">veraltet</span>
+                <span class="hp-ok-pille hp-ok-pille--nie">nie übernommen</span>
+            </div>
+            <div class="sg-note">Erste Zeile mit Extremfall: der lange Name wird gekürzt, statt die Kopfzeile aufzublähen.</div>
+        </div>
+
+        <div class="sg-card" style="flex:1 1 340px">
+            <div class="sg-card-label">Befunde im Eigenschaften-Panel <span class="sg-code">hp-ep-</span></div>
+            <div class="sg-hp-flaeche">
+                <ul class="hp-ep-befundliste" style="list-style:none;margin:0;padding:0">
+                    <li class="hp-ep-befund">
+                        <span aria-hidden class="hp-ep-schwere-symbol">✋</span>
+                        <span><strong class="hp-ep-schwere-text">Abgelehnt</strong> – Wand schneidet eine tragende Achse.</span>
+                    </li>
+                    <li class="hp-ep-befund">
+                        <span aria-hidden class="hp-ep-schwere-symbol">✋</span>
+                        <span><strong class="hp-ep-schwere-text">Abgelehnt</strong> – Öffnung liegt ausserhalb der Wand.</span>
+                    </li>
+                </ul>
+                <div class="hp-ep-umfang">Geprüft wurden Topologie und Öffnungslage.</div>
+            </div>
+            <div class="sg-note">Schwere trägt Symbol <em>und</em> Text — nicht nur Farbe (A11y).</div>
+        </div>
+
+        <div class="sg-card" style="flex:1 1 340px">
+            <div class="sg-card-label">Eingabefelder <span class="sg-code">hp-ef-</span></div>
+            <div class="sg-hp-flaeche">
+                <h3 class="hp-ef-rubrik" style="margin:0 0 8px">Eingaben (2)</h3>
+                <div class="hp-ef-felder">
+                    <label class="hp-ef-feld" style="margin-bottom:10px">
+                        <span class="hp-ef-feldkopf">
+                            <span class="hp-ef-label">Wandstärke</span>
+                            <span class="hp-ef-einheit">mm</span>
+                            <span class="hp-ef-pflicht">Pflicht</span>
+                        </span>
+                        <input class="hp-ef-eingabe" value="240">
+                    </label>
+                    <label class="hp-ef-feld">
+                        <span class="hp-ef-feldkopf">
+                            <span class="hp-ef-label">Bauteil</span>
+                        </span>
+                        <select class="hp-ef-eingabe"><option>Aussenwand</option><option>Innenwand</option></select>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="sg-card" style="flex:1 1 340px">
+            <div class="sg-card-label">Gruppenzeile &amp; Wegweiser <span class="sg-code">hp-gz-</span></div>
+            <div class="sg-hp-flaeche" style="padding:0">
+                <div class="hp-gz-wegweiser">
+                    <span aria-hidden class="hp-gz-wegweiser-pfeil">→</span>
+                    <span class="hp-gz-wegweiser-satz">Wähle zuerst ein Geschoss — die Werkzeuge richten sich danach.</span>
+                </div>
+                <div class="hp-gz-gruppenkopf">
+                    <span class="hp-gz-gruppenname">Wände</span>
+                    <span class="hp-gz-gruppenzahl">6</span>
+                </div>
+                <div class="hp-gz-leerzustand">
+                    <span>In dieser Gruppe ist nichts angeheftet.</span>
+                    <span class="hp-gz-kuerzel">⌘K</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sg-card" style="flex:1 1 340px">
+            <div class="sg-card-label">Werkzeuggruppen-Menü <span class="sg-code">hp-wg-</span></div>
+            <div class="sg-hp-flaeche">
+                <div class="hp-wg-zeile">
+                    <div class="hp-wg-text">
+                        <span>Wand zeichnen</span>
+                        <span class="hp-wg-unterzeile">Zwei Punkte setzen, Esc bricht ab</span>
+                    </div>
+                    <span class="hp-wg-kuerzel">W</span>
+                </div>
+                <div class="hp-wg-zeile">
+                    <div class="hp-wg-text">
+                        <span>Treppe setzen</span>
+                        <span class="hp-wg-unterzeile">Braucht zwei Geschosse</span>
+                    </div>
+                    <span class="hp-wg-kuerzel">T</span>
+                </div>
+                <div class="hp-wg-zaehler">2 von 8 angeheftet</div>
+            </div>
+        </div>
+
+        <div class="sg-card" style="flex:1 1 340px">
+            <div class="sg-card-label">Schienenkopf &amp; Fähigkeiten <span class="sg-code">hp-schiene-</span> · <span class="sg-code">hp-fn-</span></div>
+            <div class="sg-hp-flaeche">
+                <div class="hp-schiene-kopf">
+                    <div class="hp-schiene-kopf-reiter">Eigenschaften</div>
+                    <button type="button" class="hp-schiene-schalter" aria-label="Schiene einklappen">›</button>
+                </div>
+                <div class="hp-fn-rubrik">Geometrie</div>
+                <div style="display:flex;padding:0 12px"><span class="hp-fn-label">Topologie prüfen und Abweichungen melden</span></div>
+                <div class="hp-fn-fuss">Weitere Fähigkeiten folgen mit L7.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sg-h2">9.1 · Mindestbreiten-Sperre <small>hp-mb- — statisch dargestellt, wie das Modal</small></div>
+    <div class="sg-grid"><div class="sg-card" style="flex:1 1 100%">
+        <div class="sg-hp-buehne">
+            <div class="hp-mb-flaeche" role="status">
+                <div class="hp-mb-kasten">
+                    <p class="hp-mb-titel">Der Planer braucht mehr Breite</p>
+                    <p class="hp-mb-satz">
+                        Ab 1024 px Fensterbreite ist er vollständig bedienbar. Auf schmaleren
+                        Bildschirmen liegen Werkzeuge ausserhalb des sichtbaren Bereichs — sie sind
+                        dann nicht erreichbar, auch nicht durch Scrollen.
+                    </p>
+                    <p class="hp-mb-fussnote">Eine Bedienung auf schmalen Geräten ist geplant, aber noch nicht gebaut.</p>
+                </div>
+            </div>
+        </div>
+        <div class="sg-note">
+            Die Fläche liegt in der Insel <span class="sg-code">position: absolute; inset: 0</span>. Hier hält sie eine
+            begrenzte Bühne — ohne sie verankerte sie sich an der Seite und legte sich über den Styleguide.
+        </div>
+    </div></div>
 </div>
 @endsection

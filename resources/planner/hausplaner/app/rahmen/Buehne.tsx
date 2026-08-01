@@ -39,6 +39,10 @@ import { wandLaenge, punktAufWand, wandBaender, tuerBlattGeometrie, type Punkt }
 import { treppeZuParametern, parametereZuTreppe } from '../../geometry/treppeObjekt';
 import { versetzteWand } from '../../geometry/editierGeometrie';
 import { treppe2DSymbol } from '../../geometry/treppe2D';
+// Z-01: `onMouseMove` haengt an der Buehne — draussen kam kein Ereignis mehr an, und die Vorschau
+// blieb stehen, wo der Zeiger die Flaeche zuletzt beruehrt hat (Schritt 0, gemessen). Diese
+// Entscheidung ist der Unterschied zwischen "eingefroren" und "pausiert".
+import { zeigtVorschau } from '../tools/werkzeugEnde';
 import type { UnterlageZustand } from '../state/unterlage';
 
 /** Derselbe Zugriff wie in der Hauptfunktion — ein Speicher, keine zweite Quelle. */
@@ -73,6 +77,11 @@ export interface BuehneEigenschaften {
   setCursor: (p: Punkt) => void;
   wandStart: Punkt | null;
   treppeStart: { x: number; y: number } | null;
+  /** Z-01: steht der Zeiger auf der Flaeche? Draussen wird die Vorschau AUSGEBLENDET. */
+  zeigerDrinnen: boolean;
+  /** Z-01: die Buehne MELDET nur — der Zustand wohnt in der Hauptfunktion (K-03: kein Zustand hier). */
+  beiZeigerAus: () => void;
+  beiZeigerEin: () => void;
   klick: (e: Konva.KonvaEventObject<MouseEvent>) => void;
   weltPunkt: (e: Konva.KonvaEventObject<MouseEvent>) => Punkt;
   mitWinkelSnap: (start: Punkt, p: Punkt) => Punkt;
@@ -82,7 +91,7 @@ export interface BuehneEigenschaften {
 export function Buehne({
   stageBreite, hoehe, zoom, setZoom, pan, setPan, rasterAn, rasterLinien, stageRef,
   scene, level, nodes, waende, raeume, bandVon, massElemente, selectedNodeIds, unterlage,
-  werkzeug, cursor, setCursor, wandStart, treppeStart,
+  werkzeug, cursor, setCursor, wandStart, treppeStart, zeigerDrinnen, beiZeigerAus, beiZeigerEin,
   klick, weltPunkt, mitWinkelSnap, waehleAn,
 }: BuehneEigenschaften): React.ReactElement {
   return (
@@ -93,6 +102,8 @@ export function Buehne({
       draggable={werkzeug === 'auswahl'}
       onClick={klick}
       onMouseMove={(e) => setCursor(weltPunkt(e))}
+      onMouseLeave={beiZeigerAus}
+      onMouseEnter={beiZeigerEin}
       onWheel={(e) => {
         e.evt.preventDefault();
         const faktor = e.evt.deltaY < 0 ? 1.1 : 1 / 1.1;
@@ -362,7 +373,7 @@ export function Buehne({
         })}
 
         {/* Vorschau beim Treppezeichnen */}
-        {werkzeug === 'treppe' && treppeStart && (
+        {zeigtVorschau({ wandStart, treppeStart, zeigerDrinnen }, 'treppe') && treppeStart && werkzeug === 'treppe' && (
           <Group listening={false}>
             <Line points={[treppeStart.x, treppeStart.y, mitWinkelSnap(treppeStart, cursor).x, mitWinkelSnap(treppeStart, cursor).y]} stroke={FARBEN.auswahl} strokeWidth={50} dash={[200, 120]} />
             <Circle x={treppeStart.x} y={treppeStart.y} radius={90} fill={FARBEN.auswahl} />
@@ -370,7 +381,7 @@ export function Buehne({
         )}
 
         {/* Vorschau beim Wandzeichnen */}
-        {werkzeug === 'wand' && wandStart && (
+        {zeigtVorschau({ wandStart, treppeStart, zeigerDrinnen }, 'wand') && wandStart && werkzeug === 'wand' && (
           <Group listening={false}>
             <Line points={[wandStart.x, wandStart.y, mitWinkelSnap(wandStart, cursor).x, mitWinkelSnap(wandStart, cursor).y]} stroke={FARBEN.auswahl} strokeWidth={60} dash={[200, 120]} />
             <Circle x={wandStart.x} y={wandStart.y} radius={90} fill={FARBEN.auswahl} />

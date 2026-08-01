@@ -1,6 +1,18 @@
 # Arbeitskompass — ticket
 
-**Stand:** 2026-07-21
+**Stand:** 2026-07-21 — **dieser Datumsstand ist echt und die Datei ist damit 11 Tage alt.**
+
+> **⚠ NICHT MEHR DIE LAGE — Befund PB-022, korrigiert 01.08.2026 vom Planner.**
+> **Diese Datei kannte 0 von 9 laufenden Posten**, und `CLAUDE.md` schickt trotzdem jeden Agenten hierher.
+> Das ist die gefährlichste Sorte Papier: es sieht aus wie eine Lage und ist eine Erinnerung.
+>
+> **Die laufende Lage steht in [`docs/STAND.md`](STAND.md)** — eine Seite, wird überschrieben statt
+> angehängt, jede Zahl mit dem Befehl daneben, der sie erzeugt. **Wer wissen will, woran gerade
+> gearbeitet wird, liest dort und nicht hier.**
+>
+> **Was hier weiter gilt:** die *Struktur* — welche Dokumente führend sind, wie die Ebenen zueinander
+> stehen, wo die Fahrpläne liegen. **Was hier NICHT mehr gilt:** jede Aussage über den aktuellen
+> Arbeitsstand, jede Aufgabenliste, jedes „als Nächstes".
 **Zweck:** Diese Datei beantwortet jederzeit die Fragen: *Woran arbeiten wir gerade? Wann ist es fertig? Was kommt als Nächstes? Was ist geparkt?*
 
 > **Rang/Funktion:** Dieser Arbeitskompass ist ein **Navigations- und Statusdokument**. Er verweist auf die führenden Fahrpläne, ADRs und Startblöcke. Er **ersetzt oder überstimmt keine ranghöhere Governance** (BETRIEBSORDNUNG, `CLAUDE.md`, `STRAENGE.md`, ratifizierte ADRs) und **bestimmt nicht eigenständig den Scope eines Umsetzungsslices** — das tut der freigegebene **Startblock** des aktiven Slices. Bei Widersprüchen gilt die festgelegte Quellenhierarchie.

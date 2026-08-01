@@ -8,7 +8,10 @@ sind berechtigt, beide Fehler sind meine**, und beim Nachmessen kam heraus, dass
 ```yaml
 auftrag:
   id: AUF-83-T1a
-  status: aktiv
+  status: ruht
+   # PB-B2, 01.08.2026 - Planner. Stand bis heute: `aktiv`. 17 Blaetter trugen das,
+   # die Struktur-Zusage S-01 erwartet GENAU EINES. `ruht` heisst hier ehrlich:
+   # der Zustand ist NICHT nachgemessen. Wer das Blatt zieht, misst zuerst.
   fassung: 2
   spur: A
   heimat: ticket

@@ -34,7 +34,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 // AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
-import { zerlegteApp, teil } from './_zerlegteApp';
+import { zerlegteApp, teil, ohneKommentare as strippe } from './_zerlegteApp';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 /** **Ohne Kommentare gemessen.** Die Erklärung oben nennt Bezeichner beim Namen; ein Test, der rohen
@@ -60,7 +60,11 @@ test('K-01: die drei Zeilen sind WIRKLICH ausgezogen — nicht kopiert', () => {
   // Oberfläche doppelt aus, und beide Fassungen drifteten auseinander.
   // **Diese Zusage darf NICHT die zerlegte Ansicht lesen** — die enthält den Kopfrahmen ja.
   // Sie fragt: steht es ein ZWEITES Mal in der Hauptfunktion? Also nur diese eine Datei.
-  const nurApp = teil('app/HausplanerApp.tsx');
+  // **Kommentare gefiltert, und das ist hier kein Beiwerk.** Die Zusage fragt, ob eine Marke ein
+  // ZWEITES Mal im Code steht. Liest sie die Datei roh, macht schon ein erklaerender Satz sie rot —
+  // gemessen: ein Kommentar mit `hp-az-suchen` in `HausplanerApp.tsx` genuegt.
+  // *Das ist die Klasse F-09, und diese Stelle war meine.*
+  const nurApp = strippe(teil('app/HausplanerApp.tsx'));
   for (const marke of ['Speichern (Strg+S)', 'hp-az-suchen', '<OpGruppe name="Verlauf">']) {
     assert.ok(kopf.includes(marke), `\`${marke}\` steht nicht im Kopfrahmen`);
     assert.ok(!nurApp.includes(marke), `\`${marke}\` steht noch ein zweites Mal in der Hauptfunktion`);

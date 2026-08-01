@@ -41,7 +41,7 @@ Neigung, First — jetzt durch W-1/W-2-Engine gedeckt!), **Fenster/Tür** (Bauar
 für PV/Verschattung Pflicht.
 
 ## 6. Umsetzung (eigener UI-Slice, Planner→Generator→Evaluator)
-1. **Assets stagen:** `icons/*.svg`, `tools.json` → ins Repo (z. B. `resources/planner/hausplaner/tools/`),
+1. **Assets stagen:** `icons/*.svg`, `tools.json` → ins Repo (z. B. `resources/planner/hausplaner/app/tools/` — dort liegen `werkzeugVertrag.ts` und `werkzeugPaket.ts` schon),
    Typen/Aktivierung in die UI-2-Dateien mergen.
 2. **React-Komponenten:** `ToolButton`, `ToolTooltip`, `ToolDashboard` als React nachbauen (Vue-Vorlage).
 3. **Registry-Merge:** `ToolDefinition` erweitern, 65 Tools laden, DTP-Filter, unsere Activation-Engine.

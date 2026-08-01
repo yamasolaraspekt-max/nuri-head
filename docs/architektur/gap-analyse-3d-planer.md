@@ -1,3 +1,6 @@
+<!-- pfade-pruefen: historisch -->
+<!-- Bestandsaufnahme vor dem Port; die genannten Pfade beschreiben einen vergangenen Zustand (PB-031, 01.08.2026) -->
+
 # 3D-Planer — Soll-Architektur gegen Bestand geprüft (Gap-Analyse)
 
 **Datum:** 2026-07-16 · **Rolle:** Planner (Prüfung, kein Bau) · Quellen: ticket-Code, playground-Code, deine Soll-Architektur (17 Kapitel).

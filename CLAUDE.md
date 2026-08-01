@@ -95,11 +95,18 @@ Für jeden zentralen Sachverhalt gibt es **genau eine führende Datenquelle** �
 > Planner — **verpflichtet**, zu jeder Aufgabe die **passenden Skills zu laden und anzuwenden** (Verzeichnis
 > `.claude/skills/`). 3D-Hausplaner-Arbeit → `bauplaner-3d` (Code-Landkarte + 4 Regeln: messen-vor-behaupten,
 > Docs-zuerst, kuratieren, Konzept-Vorab-Freigabe) **immer**; Fachthema → passende **Meister-Linse**
-> (Dach→`dachdeckermeister`/`zimmermannmeister`, Heizung/Sanitär→`heizung-sanitaer-meister`,
-> Energie→`energieberater`, Statik→`statiker`, Elektro→`elektromeister`, PV→`pv-planer`, TGA→`tga-planer`,
-> Bad→`bad-planer`, Küche→`kuechenplaner`, Mauerwerk→`maurer`, Fliesen→`fliesenleger`, Türen/Möbel→`schreiner`,
-> Oberflächen→`maler`, Entwurf→`architekt`, Darstellung→`technischer-zeichner`); Code →
+> (Dach→`dachdeckermeister`/`zimmermannmeister`, Statik→`statiker`, Mauerwerk→`maurer`); Code →
 > `software-architekt`/`frontend-entwickler`/`backend-entwickler`; plus `governance-zyklus` und `ux-design`.
+> **KORREKTUR 01.08.2026 (Befund PB-021, Planner).** Diese Zeile nannte bis heute **22 Meister-Linsen;
+> zwölf davon gibt es an keinem der beiden Skill-Orte** — `heizung-sanitaer-meister` · `energieberater` ·
+> `elektromeister` · `pv-planer` · `tga-planer` · `bad-planer` · `kuechenplaner` · `fliesenleger` ·
+> `schreiner` · `maler` · `architekt` · `technischer-zeichner`. *Gemessen: `ls .claude/skills` → 16 Einträge.*
+> **Eine Pflicht, die auf Nichtvorhandenes zeigt, ist keine Pflicht, sondern eine Ausrede** — sie lässt
+> jeden, der sie erfüllen will, ins Leere greifen und macht die ganze Zeile unglaubwürdig.
+> **Bis eine Linse existiert, gilt für ihr Fach:** ohne Linse arbeiten und das im Bericht sagen —
+> *„für Elektro gibt es keine Linse, die Aussagen stehen ohne Fachprüfung"* — statt eine zu laden,
+> die es nicht gibt. **Wer eine der zwölf braucht, meldet sie an Yama; Skills legt der Planner nicht an.**
+
 > **Kernregel: belegen statt behaupten** — keine Fach-/Geometrie-Aussage ohne Beleg am Code/an der Norm.
 > Der erweiterte Prozess (7 Stufen + 2 Freigabe-Tore) + Ausführungs-Ablauf: `.claude/skills/bauplaner-3d/
 > references/prozess-erweitert.md`. **Freigabe-Tor 2 (Merge nach main / Deploy ins LIVE-CRM) bleibt eine

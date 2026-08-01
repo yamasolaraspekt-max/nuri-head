@@ -287,13 +287,17 @@ export function pruefeBlatt(pfad, arbeitsverzeichnis = process.cwd()) {
   const text = readFileSync(pfad, 'utf8');
   const roh = lieseKopfRoh(text);
   if (roh === null) {
-    return { pfad, kopf: false, bloecke: 0, eintraege: [] };
+    // PB-019: ein Blatt OHNE Kopf ist weiterhin kein Fehlschlag - 67 von 80 haben keinen.
+    // ABER: nennt es sich selbst `status: aktiv`, wird nach ihm GEBAUT. Dann ist der fehlende
+    // Kopf keine Altlast, sondern eine Luecke im laufenden Betrieb - und die sperrt.
+    return { pfad, kopf: false, bloecke: 0, eintraege: [], aktivOhneKopf: /status:\s*aktiv/.test(text) };
   }
   let kopf;
   try {
     kopf = yaml.load(roh);
   } catch (fehler) {
-    return { pfad, kopf: false, unlesbar: String(fehler?.message ?? fehler), bloecke: zaehleBloecke(text), eintraege: [] };
+    // Ein UNLESBARER Kopf ist immer ein Fehlschlag: jemand hat einen geschrieben, und er traegt nicht.
+    return { pfad, kopf: false, unlesbar: String(fehler?.message ?? fehler), bloecke: zaehleBloecke(text), eintraege: [], aktivOhneKopf: true };
   }
   // K-06: ALLE Blöcke lesen. Der erste ist der Kopf; die weiteren tragen seit R19 die Messungen.
   const weitere = lieseAlleBloecke(text).slice(1).map((roh) => { try { return yaml.load(roh); } catch { return null; } });
@@ -317,7 +321,9 @@ export function pruefeBlatt(pfad, arbeitsverzeichnis = process.cwd()) {
 export function bericht(ergebnis) {
   const zeilen = [`── ${ergebnis.pfad}`];
   if (!ergebnis.kopf) {
-    zeilen.push(ergebnis.unlesbar ? `   KOPF UNLESBAR: ${ergebnis.unlesbar}` : '   KEIN KOPF (kein Fehler — aeltere Blaetter haben keinen)');
+    if (ergebnis.unlesbar) zeilen.push(`   SPERRE  KOPF UNLESBAR: ${ergebnis.unlesbar}`);
+    else if (ergebnis.aktivOhneKopf) zeilen.push('   SPERRE  KEIN KOPF, aber `status: aktiv` — nach diesem Blatt wird gebaut (PB-019)');
+    else zeilen.push('   KEIN KOPF (kein Fehler — aeltere Blaetter haben keinen)');
     return zeilen.join('\n');
   }
   if (ergebnis.bloecke > 1) {
@@ -328,7 +334,7 @@ export function bericht(ergebnis) {
     zeilen.push(`   ${('STRUKTUR ' + b.regel).padEnd(16)} ${String(b.id).padEnd(24)} ${b.text}`);
   }
   if (ergebnis.eintraege.length === 0) {
-    zeilen.push('   KEIN PRUEFBEFEHL im Kopf gefunden');
+    zeilen.push('   SPERRE  KEIN PRUEFBEFEHL im Kopf gefunden — ein Kopf ohne Befehl misst nichts (PB-019)');
   }
   for (const e of ergebnis.eintraege) {
     zeilen.push(`   ${e.stufe.padEnd(16)} ${String(e.id).padEnd(24)} ${e.hinweis}`);
@@ -362,6 +368,10 @@ if (istDirekterAufruf) {
     console.log(bericht(e));
     fehlschlaege += e.eintraege.filter((x) => x.stufe === STUFEN.FEHLSCHLAG).length;
     fehlschlaege += (e.struktur ?? []).length;
+    // PB-019 - der Befund lautete: "der Validator BENENNT `KEIN KOPF`, gibt aber exit 0; sechs
+    // aktive Blaetter kaemen so durch". Ein Gate, das nur redet, ist keine Barriere (R9).
+    if (!e.kopf && e.aktivOhneKopf) fehlschlaege += 1;
+    if (e.kopf && e.eintraege.length === 0) fehlschlaege += 1;
   }
   // S-01 gilt über die Menge, nicht je Blatt — sie kann erst am Ende beantwortet werden.
   const aktive = aktiveBlaetter(alle);

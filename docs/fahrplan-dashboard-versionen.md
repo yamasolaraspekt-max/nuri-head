@@ -61,7 +61,7 @@ Zählung über `resources/planner/hausplaner/`:
 | **UI-7** Command-Zustandsmaschine (§25) | ❌ **0 Dateien** | Zeichnen läuft über lokale Punkt-States |
 | **UI-8** Projektbrowser (§32) | ❌ **0 Dateien** | kein Szenen-Baum |
 | **UI-8b** Sichtbarkeit/Sperre (§33) | **halb** | Commands da (`SET_NODES_SICHTBAR/GESPERRT`, v1 Batch 2) — **kein Panel** |
-| **UI-9** Command-Palette (§30) | ❌ **0 Dateien** | — |
+| **UI-9** Command-Palette (§30) | ✅ **gebaut** — `app/dashboard/palette.ts` 191 Z., 2 Testdateien, 3 Konsumenten (`ableitungen.ts`, `HausplanerApp.tsx`, `FussUndUeberlagerungen.tsx`) | nachgemessen 01.08.2026, Befund PB-035 |
 | **UI-10** Prüfungscenter (§34) | **halb** | Guards da (`CommandAbgelehnt` in `applyCommand.ts`) — **kein Befund-Panel** |
 | **UI-11/12** A11y/Responsive/Performance | offen | — |
 

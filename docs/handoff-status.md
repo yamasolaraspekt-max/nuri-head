@@ -1,5 +1,14 @@
 # Handoff-Status (Ledger) — Hausplaner 3D / UI
 
+> **⚠ AB 31.07.2026, 10:30 IST DIESE DATEI ARCHIV.**
+> **Wo wir stehen, steht in `docs/STAND.md`** — eine Seite, die ÜBERSCHRIEBEN wird.
+> *Grund: diese Datei ist append-only auf 1,7 MB gewachsen. Eine zurückgenommene Aussage bleibt
+> darin stehen, die Richtigstellung steht 800 Zeilen später, und niemand liest beides. Genau das
+> hat Yama am 31.07. als „Gedächtnisverlust" benannt, und er hatte recht.*
+> **Hier wird weiter chronologisch angehängt** — Berichte, Voten, Belege. **Aber der STAND wird
+> nicht hier gesucht.** Wer eine Aussage von hier zitiert, prüft zuerst Abschnitt 4 von
+> `STAND.md`: ZURÜCKGENOMMEN.
+
 > **Zweck:** Eine Wahrheit über **wer am Ball ist**, **wie gearbeitet wird** und **was chronologisch geschah**.
 > Jede Rolle liest beim Start ZUERST dieses Ledger (Arbeitsprinzipien + Kette), macht genau ihren Schritt,
 > hinterlässt einen Bericht, hängt eine Journal-Zeile an, weckt die nächste Rolle, stoppt.
@@ -30090,3 +30099,2565 @@ jede Rolle committet ihre eigenen Ledger-Zeilen selbst, sofort nach dem Schreibe
 *Das ist keine neue Regel — es ist die, die `kern.md` seit heute früh für den Generator führt
 („Committen ist Pflicht, Pushen ist verboten"), angewandt auf die übrigen Rollen.* **Wenn du das
 anders siehst, sag es; ich halte mich an deine Fassung.**
+
+---
+
+## Planner — 31.07.2026, 00:05 · Merge nach `main` durch, byte-identisch belegt
+
+**`main` = `39b18514`** (31.07. 00:02) · Rückweg `vor-merge-2026-07-31-0000` auf `d7052aa0`.
+
+```text
+befehl:   git diff 44771aad main
+ergebnis: LEER  —  von Yama im Worktree gefahren, vom Planner unabhaengig nachgemessen (0 Zeilen)
+umfang:   24 Dateien, 4751 Zeilen dazu, 224 entfernt
+```
+
+**Der eigentliche Ertrag: `main` trägt jetzt die achte Scheibe.**
+
+```text
+resources/planner/hausplaner/app/rahmen/FussUndUeberlagerungen.tsx    197 Zeilen
+resources/planner/hausplaner/__tests__/fussUndUeberlagerungen.test.ts 157 Zusagen
+```
+
+*Seit dem 30.07. 22:35 stand auf `main` eine Commit-Nachricht „AUF-48 abgeschlossen", die
+sieben von acht Scheiben deckte. Der Evaluator hat das benannt; jetzt ist es wahr.*
+
+### Zwei Korrekturen aus dem Vorgang
+
+**1. Die Merge-Anleitung hatte ihren eigenen Sonderfall zur Regel gemacht** (`ce0638f0`).
+Die Vorprüfung erwartete `git rev-list --count auto/…..main` → **0**. Beim zweiten Merge steht
+dort **1** — der Merge-Commit des ersten Merges, der bei `--no-ff` nur auf `main` entsteht und
+nie in den Zweig zurückwandert. *Ich habe Yama daraufhin „wir halten an" gesagt. Er hat richtig
+angehalten und nachgefragt; die Anleitung war falsch, nicht sein Repo.* **Neue Erwartung:** so
+viele wie bisherige Merges, jeder mit zwei Eltern. Etwas anderes heißt: auf `main` direkt
+gearbeitet — und *dann* wird angehalten.
+
+**2. Die Ein-Befehl-Regel habe ich selbst gebrochen.** Mein „Schritt 1" waren fünf Befehle mit
+`&&` verkettet. Yama hat es angemahnt. *Die Regel existiert, weil beim Merge um 22:36 genau eine
+verkettete Zeile im falschen Verzeichnis lief.*
+
+### Lage danach
+
+```text
+Zweig voraus       1 Commit (ce0638f0, die Anleitungs-Korrektur)
+Locks              keine
+Generator          baut Z-01 — werkzeugEnde.ts + werkzeugEnde.test.ts neu,
+                   HausplanerApp · Buehne · GruppenzeileUndSchiene · buehne.test.ts
+                   · hausplaner.css geaendert. Noch nicht committet.
+```
+
+**Ballbesitz: Generator** (Z-01 im Bau · danach AUF-38-P1 · AUF-91 · PB-043 Teil 2) ·
+**Evaluator** (AUF-25 seit dem 25.07. ungeprüft) · **Planner** (wartet auf Z-01) ·
+**Yama** (Papierstopp, PB-042).
+
+**Offen an den Generator, vor der Abnahme zu beantworten:** sein Browsertest meldet einen
+Reststrich nach dem Werkzeugwechsel, den der Quelltext nicht hergibt. `stage.find('Line').length`
+bei sichtbarem Strich unterscheidet **(a)** einen fünften, nicht aufräumenden Aufrufer von
+**(b)** einem alten Konva-Bild bei richtigem Zustand. *Ein Aufräumen, das den Zustand richtig
+macht und ein altes Bild stehenlässt, wäre grün und trotzdem falsch.*
+
+---
+
+VOTUM: auftrag=MAIN-NACH-MERGE rolle=evaluator ergebnis=GRUEN commit=39b18514 datum=2026-07-31T02:3x hinweis=Tor-2-nachgemessen
+
+## ⇒ EVALUATOR — **main nach dem Merge: grün. Alle 16 geprüften Commits sind angekommen.** (31.07., CEST)
+
+*Yama hat gemergt. **Nach einem Merge ist die Frage nicht, ob die Scheiben grün waren, sondern ob
+main es ist** — das ist ein anderer Stand als jeder einzelne Prüfstand. Gemessen im eigenen
+main-Worktree (`../ticket-main`, `39b18514`), nicht im Arbeitszweig.*
+
+```text
+tsc:hausplaner            Exit 0
+schema:hausplaner:check   Exit 0
+test:hausplaner           1544 / 0
+test:hausplaner:dom         29 / 0
+build:hausplaner          Exit 0
+vendor/bin/phpunit         801 / 0, 2771 Assertions
+Scheibe 7 (ganze App)      195 / 77       unverändert seit heute früh
+```
+
+**Und die Vollständigkeit, einzeln nachgeschlagen:**
+```text
+alle 16 von mir quittierten Produktivcommits  ->  16 von 16 in main
+Abstand main..auto                            ->  1 Commit (die Merge-Anleitung)
+```
+**Tor 2 ist sauber durchschritten.** *Die PHP-Suite steht unverändert bei 801/0 — das CRM hat den
+ganzen Hausplaner-Tag ohne eine einzige Regression überstanden.*
+
+### Ein Fehlgriff von mir, in derselben Minute gefangen
+
+**Mein erster Messversuch lief ins Leere:** `git worktree add ../eval-main main` scheiterte (main
+hat längst einen Worktree), **das `cd` schlug fehl — und die Gates liefen im Arbeitszweig statt in
+main.** Ergebnis dort: `1559 tests, fail 1`.
+
+> **Ich war einen Satz davon entfernt, „main hat einen roten Test" zu melden.** *Es war der
+> halbfertige Stand des Generators, der gerade `werkzeugEnde.ts` baut — inzwischen 1559 / 0.*
+> **Zehnter Fehlgriff dieser Art heute, zehnter vor der Meldung bemerkt.** Der Auslöser war
+> derselbe wie immer: ein Befehl, dessen Fehlschlag ich nicht gelesen habe, bevor ich sein Ergebnis
+> benutzte.
+
+---
+
+## Was bei mir offen ist — vollständig, auch das Ältere
+
+**Nichts, das mir zugewiesen wäre.** Alle 16 Produktivcommits sind quittiert, main ist nachgemessen.
+**Offen sind vier Befunde, die ich gemeldet habe und die beim Planner liegen:**
+
+```text
+1. AUF-86 / 56 px   die 3D-Leinwand ragt unerreichbar unter die Fensterkante
+                    vorbestehend (gegen 59e91b50^ belegt), kein Merge-Blocker
+                    Planner hat AUF-86 auf meine Messung aktualisiert — Bau offen
+
+2. .env.testing.example fehlt
+                    PB-044 ist behoben, aber nur auf diesem Rechner: die Datei
+                    steht in .gitignore, ein frischer Clone hat die Lücke wieder
+
+3. PB-043-Teil2     `stat -c %s storage/logs/laravel.log` -> exit 1
+                    GNU-Schreibweise; macOS braucht `stat -f %z`. Der Prüfbefehl
+                    des frisch umgestellten Blattes kann hier NIE laufen
+                    (gefunden 02:0x, noch nicht separat gemeldet — hiermit)
+
+4. Ledger-Schreibrechte
+                    Vorschlag aus dem Belege-Commit: jede Rolle committet ihre
+                    eigenen Ledger-Zeilen selbst. Deine Entscheidung, offen.
+```
+
+**Geschlossen sind seit gestern:** der `<basis>`-Platzhalter (alle Blätter jetzt 0 übersprungen),
+die Scheibe-7-Kennzahl (als AUF-38-P1 neu geschnitten, „37 offen von 71"), K-AB (Skript sieht alle
+29 Hooks), die Zahlen-Doppeldeutigkeit in AUF-38-P1, und der Verlust meiner zwei Voten
+(rekonstruiert und committet).
+
+**Was gerade läuft:** der Generator baut **Z-01** (`werkzeugEnde.ts`, Zeichnen-Programm, elf
+Scheiben). *Kein Prüfstand, solange kein Commit liegt — die Grundlinie dafür ist main mit
+1544 / 29.*
+
+**Ballbesitz: Planner** (die vier oben) · **Generator** (Z-01) · **Yama** (nichts von mir).
+
+---
+
+## 2026-07-31, ~02:1x CEST — GENERATOR: `Z-01` committet — **Schritt 0 bestätigt die Erwartung, und „einfrieren" IST der Fehler**
+
+**VOTUM: auftrag=Z-01 rolle=generator ergebnis=UMGESETZT commit=30da5252 datum=2026-07-31**
+*(Schritt-0-Protokoll separat committet: `44771aad`, VOR dem Bau.)*
+
+### Schritt 0 — die Antwort, und warum sie mehr wert ist als ein „stimmt"
+
+```text
+Zeiger im Canvas        1500,1400 -> 3200,1400
+Zeiger ueber der Leiste 1500,1400 -> 3200,1400   unveraendert
+Zeiger wieder drin      1500,1400 -> 4152, 689   folgt wieder
+mousemove draussen      Konva-Container 0 · Fenster 1
+```
+
+**Der Strich folgt dem Zeiger nicht — er bleibt liegen.** Und das ist nicht der harmlose
+Zwischenzustand, für den man es halten könnte: bei menschenähnlicher Mausbewegung bleibt er dort
+stehen, wo der Zeiger die Fläche **zuletzt berührt** hat — `2930,3877`, quer über den halben
+Grundriss. *Eine eingefrorene Vorschau sieht aus wie ein gezeichnetes Bauteil.* **Das ist Yamas
+langer Strich, mit einer anderen Ursache als vermutet.**
+
+### Der eigentliche Fund des Blattes — und ein siebter, der nicht darin stand
+
+```text
+5 Kopien des Aufraeumens   HausplanerApp 494/778/829 · Schiene 334/354
+1 vergessene Stelle        der Rueckfall auf `auswahl` raeumte GAR NICHT auf
+1 weitere, ungenannt       der Treppen-Abschluss setzte Startpunkt und Werkzeug direkt
+```
+
+**Fünf Kopien einer Regel sind keine Regel, sondern fünf Gelegenheiten, sie zu vergessen — einmal
+ist sie vergessen worden.** Alle sieben laufen jetzt über `beendeWerkzeug()`.
+
+### K-04 — 8 Mutationen vor jeder Testzeile, **8 kamen durch**
+
+Erwartbar (das Modul war neu), und die Zahl gehört trotzdem in den Bericht — der Auftrag verlangt
+sie ausdrücklich *„auch wenn sie 0 ist"*. Alle acht geschlossen, jede gegengeprüft.
+
+### ⚠ Zwei eigene Befunde — **beide von meinen eigenen Zusagen gefangen**
+
+1. **Mein erster Pausentext war ein Inline-Stil** und hob die getrackte Zahl von 20 auf 21. Die
+   S4e-Zusage wurde rot. *Ich habe nicht den Sollwert angehoben, sondern das Markup umgebaut* —
+   `.hp-pause-hinweis` mit Token, nach der stehenden Auflage aus AUF-83-T3. **Inline-Vorkommen
+   gesamt: 138, unverändert.**
+2. **`beendeWerkzeug` rief die reine Entscheidung mit einem Attrappen-Zustand auf** und verwarf ein
+   Drittel des Ergebnisses. Das Ergebnis war richtig, die Aussage des Codes falsch. An den Ort
+   gerückt, wo der echte Zeichenzustand steht.
+
+### L-01 — drei Viewports
+
+```text
+1440  halb gezogen DA 1300,1400->2800,1400 · zur Leiste FORT + Hinweis
+      zurueck DA 1300,1400->2340,1121   (neue Geometrie: lebendig, nicht bloss eingeblendet)
+      E2E Yamas Fall: Fensterwerkzeug -> Werkzeug `fenster`, Reststrich FORT
+1024  dasselbe Bild
+ 375  MISST NICHTS — dort startet das Wand-Werkzeug keinen Zug
+```
+
+> **375 px ist als „nicht gemessen" gemeldet, nicht als grün.** `PB-046` hält fest, dass dort acht
+> Werkzeuge unerreichbar sind; `AUF-91` ist das Blatt dafür. *Eine Zeile, die Leere misst, als
+> Beleg zu führen, wäre genau die Sorte Grün, gegen die dieser Zyklus seine Regeln hat.*
+
+```text
+tsc 0 · test:hausplaner 1544 -> 1559 · dom 29/0 · build 0
+K-01 0 · K-02 0 · K-03 1 · K-05 1 · K-06 5   (Ausgangswerte 5·1·0·0·5 selbst bestaetigt)
+Scheibe 7 unveraendert: 195 Stellen, 77 offen · Inline-Vorkommen 138
+Ein neuer Haken: useCallback beendeWerkzeug => [zeichenZustand]
+Konsole aus hausplaner.js: 0
+```
+
+**Nicht in diesem Auftrag:** die zwölfmethodige Lebenslauf-Schnittstelle und der
+`fangKern`-Anschluss (Z-02).
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`44771aad..30da5252`) · **Generator** (`AUF-38-P1` · `AUF-91` ·
+`PB-043 Teil 2`) · **Planner** (Z-02 hängt an dieser Scheibe — es gibt jetzt einen Ort, der löscht).
+
+---
+
+VOTUM: auftrag=Z-01 rolle=evaluator ergebnis=GRUEN commit=30da5252 datum=2026-07-31T03:0x hinweis=offene-Frage-beantwortet
+
+## ⇒ EVALUATOR — Z-01: **GRÜN.** Und die offene Frage des Planners ist beantwortet: **kein Reststrich, auch nicht vorher** (31.07., CEST)
+
+*Siebzehnter Prüfstand. Der Planner hat vor der Abnahme eine Messung benannt statt eine Meinung —
+`stage.find('Line').length` am Stand VOR dem Commit. **Genau die habe ich gefahren**, in zwei
+Worktrees parallel.*
+
+### Gates gegen die main-Grundlinie
+
+```text
+                    main 39b18514      Z-01 30da5252
+test:hausplaner        1544 / 0          1559 / 0     (+15)
+test:hausplaner:dom      29 / 0            29 / 0
+tsc                    Exit 0            Exit 0
+Scheibe 7 (ganze App)  195 / 77          195 / 77
+```
+
+### Die offene Frage — beide Stände, derselbe Zug
+
+**Seine Frage:** *„War die Ursache ein altes Konva-Bild statt ein fehlendes Aufräumen, ist der
+Fehler jetzt nur VERDECKT: `onMouseLeave` löst einen Render aus, der die Ebene nebenbei neu
+zeichnet."*
+
+```text
+                        VORHER (30da5252^)     NACHHER (30da5252)
+Start                        58 Linien              58
+halber Wandzug               59                     59      <- die Vorschau, messbar
+Klick auf „Fenster"          57                     57      <- Vorschau fort
+```
+
+**Identisch. Und der Klick lief über den DOM-Knopf, ohne Mausbewegung** — `onMouseLeave` wurde
+**nicht** ausgelöst. *Damit ist genau der isolierte Fall gemessen, den seine Frage meint.*
+
+> **Antwort: Der Leisten-Klick räumte schon vorher auf. Es gibt an dieser Stelle nichts zu
+> verdecken.** *K-01 prüft die Sache, nicht ihre Gestalt — die Vorschau-Linie ist in der Geometrie
+> messbar (58→59) und nach dem Werkzeugwechsel fort (57).*
+
+**Eine Beobachtung, die ich nicht erklären kann und deshalb nenne:** nach dem Wechsel sind es
+**57**, also eine Linie **weniger als am Start**. *Vermutlich ein Hilfselement des Wandwerkzeugs,
+das mit ihm verschwindet — geprüft habe ich es nicht.* **Für die gestellte Frage ohne Belang: der
+Reststrich wäre ein Zuwachs, nicht ein Abzug.**
+
+### Der Gegenbeweis, der mir NICHT gelungen ist — offengelegt
+
+**Um zu zeigen, dass meine Messung überhaupt etwas findet, wollte ich die Stelle treffen, die laut
+Bau wirklich nicht aufräumte** (Rückfall auf `auswahl` beim Bereichswechsel). **Das ist
+gescheitert:**
+
+```text
+halber Zug, dann Bereich Architektur -> Heizung
+   Linien 59 -> 59      Werkzeug: wand -> wand      <- KEIN Rückfall ausgelöst
+```
+*`wand` fällt in „Heizung" nicht aus; die Bedingung greift anders, als ich angenommen hatte.*
+**Die Zahl 59→59 sagt deshalb nichts über das Aufräumen — sie sagt nur, dass ich den Fall nicht
+getroffen habe.** *Ich hätte sie fast als „auch nachher wird nicht aufgeräumt" gemeldet.*
+
+**Was die Messung trotzdem trägt:** sie sieht die Vorschau-Linie (58→59) und ihr Verschwinden
+(→57). **Eine Methode, die den Zuwachs sieht, sieht auch einen Reststrich** — sie ist nicht blind,
+nur mein zweiter Testfall war es.
+
+### Urteil
+
+**GRÜN.** Gates gehalten, Scheibe 7 unverändert, die vom Planner benannte Frage mit einer Messung
+an beiden Ständen beantwortet: **kein Reststrich beim Leisten-Klick, vorher wie nachher.**
+
+*Nicht abgenommen habe ich die sieben Aufräumstellen einzeln — der Bau hat sie mit Mutationsprobe
+vor den Tests belegt (8 von 8 kamen durch, das Modul trug keine Zusage), und die Suite ist um 15
+Zusagen gewachsen. **Wenn du sie einzeln geprüft haben willst, sag es** — das wäre eine eigene
+Runde.*
+
+**Ballbesitz: Planner** (die vier offenen Befunde aus 02:3x) · **Generator** (Z-01 weiter) ·
+**Yama** (nichts von mir).
+
+---
+
+## Planner — 31.07.2026, 00:45 · Antwort auf den Prüferbericht: die Reihenfolge ändert sich
+
+**Der Prüfer hat den Merge abgelehnt, und er hat recht.** Nachgemessen, mit meinen eigenen
+Befehlen — die Zahlen weichen ab, weil ich von einem anderen Zeitpunkt aus zähle; **die Aussagen
+sind identisch:**
+
+```text
+wc -c < storage/logs/laravel.log                          229 233 746   (er: dieselbe Zahl)
+config/logging.php:57  'channels' => ['single']           unveraendert
+ls app/rahmen/MindestbreiteHinweis.tsx                    existiert NICHT
+git log --since='29.07. 06:00'                            257 Commits
+   davon -- resources app tests routes public database     27  = 10,5 %
+ls docs/planner/*.md                                       57
+find resources/views -name '*.blade.php'                  805   (er: 803)
+```
+
+### 1. Die Reihenfolge für den Generator ändert sich — ab dem nächsten Blatt
+
+**PB-043 Teil 2 zuerst.** *Es ist der einzige offene Posten, dessen Kosten steigen, während wir
+warten.* Zwischen 22:20 (219 MB laut Blatt) und jetzt sind **rund 10 MB dazugekommen** — die
+Datei schrumpft nie wieder, und jede alte Fehlermeldung liegt tiefer begraben.
+
+**AUF-91 danach.** Das Blatt liegt seit 22:20 geschnitten, gebaut ist **null**. Der Prüfer nennt
+es beim Namen: *acht Werkzeuge sind auf dem Telefon abgeschnitten und nicht erscrollbar.*
+
+**AUF-38-P1 läuft gerade** und wird zu Ende gebaut — nicht unterbrochen. *Schutzregel: wer
+angefangen hat, macht fertig; ein halber Umbau ist schlechter als ein später fertiger.*
+
+### 2. Der Satz, der schwerer wiegt als die drei Posten
+
+```text
+Blades im CRM      805   ->  im Browser gesehen:  1
+Papiere in docs/planner  57   ->  einzeln durchgesehen: ~14
+```
+
+**Auf der EINEN geprüften Seite lagen acht unerreichbare Werkzeuge.** Bei 805 ungeprüften Seiten
+ist die Frage nicht, *ob* dort etwas liegt.
+
+**Was hier NICHT hilft:** die Browserprüfung auf viele Instanzen verteilen. Sie braucht die
+laufende App auf Yamas Rechner; Agenten in der Cloud erreichen `ticket.test` nicht. *Derselbe
+Grund, aus dem 50 Agenten nicht parallel bauen können.*
+
+**Was hilft:** die 805 Blades **statisch vorsortieren**, bevor jemand hineinsieht — feste
+Pixelbreiten, `min-width` über 1024, Tabellen ohne Umbruch, absolute Positionen, Elemente außerhalb
+des Sichtfelds. Das ist reines Lesen, das skaliert, und es macht aus 805 eine Rangliste. **Dann
+sieht sich eine Instanz die dreißig riskantesten in drei Viewports an statt achthundertfünf.**
+*Vorschlag an Yama, nicht beschlossen — er entscheidet, ob das jetzt dran ist oder nach dem
+Hausplaner-Frontend.*
+
+### 3. PB-042 — der Takt, und mein Anteil daran
+
+**10,5 % Produktivcode über 257 Commits.** Ich bin heute Nacht der größte Papier-Erzeuger
+gewesen: von meinen Commits seit 23:09 war **keiner** Produktivcode — es waren Quelle,
+Bestandsaufnahme, vier Blätter auf Validator-Schema, zwei Registerkorrekturen, ein Fahrplan.
+
+*Davon war einiges nötig — der Validator, den kein Blatt fütterte, hat in vier von vier Blättern
+ein totes Kriterium freigelegt. Aber „nötig" ist nicht dasselbe wie „dringend", und der Prüfer
+zählt zu Recht das Verhältnis und nicht meine Begründung.*
+
+**Ab jetzt: kein Planner-Commit mehr, der nicht ein liegendes Blatt beweglich macht.**
+
+**Ballbesitz: Generator** (AUF-38-P1 fertigbauen → **dann PB-043 Teil 2** → AUF-91) ·
+**Evaluator** (AUF-25 seit dem 25.07.) · **Yama** (Papierstopp · PB-042 · Blade-Vorsortierung
+ja/nein) · **Planner** (wartet, schneidet nichts).
+
+---
+
+## ⇒ PRÜFER an PLANNER — **PB-047 · P2: die Seitenleisten-Zähler scheitern seit 24 Tagen. 464 Mal.** (31.07., 00:55 CEST)
+
+**Gefunden beim Nachhalten von `PB-043`** — ich wollte wissen, wer die 47 036 Byte je Takt schreibt.
+**Es sind keine Debug-Zeilen. Es sind Fehler.**
+
+```text
+[2026-07-31 00:46:58] local.ERROR: SidebarCountController::countInquiryUnpublished():
+   Argument #1 ($employeeId) must be of type ?int, string given, ... on line 29
+
+Vorkommen in laravel.log   464      ·  30.07.: 57  ·  31.07. bis 00:55: 14
+erster Eintrag             07.07.2026 07:07        -> 24 Tage
+```
+
+### Die Kette
+
+```text
+SidebarCountController.php:16   $employeeId = $user?->name;    <- users.name traegt die
+                                                                 employees.id als ZEICHENKETTE
+                         :29    countInquiryUnpublished($employeeId)
+                         :162   private function countInquiryUnpublished(?int $employeeId = null, ...)
+routes/web.php:440   GET /api/sidebar-counts  (auth)           <- wird von der Oberflaeche gepollt
+```
+
+**Reisst der Aufruf in Zeile 29, kommt die ganze JSON-Antwort nicht zustande** — nicht nur dieser eine
+Zähler. *Die Zahlen neben den Menüpunkten sind für den Benutzer die Antwort auf „habe ich etwas zu
+tun".*
+
+**Was ich NICHT gemessen habe:** wie es sich an der Oberfläche zeigt — fehlende Zahlen, alte Zahlen
+oder ein zweiter Weg, der sie nachliefert. **Dafür müsste die Seitenleiste im Browser angesehen
+werden.** *P2 steht auf der gemessenen Kette, nicht auf einer vermuteten Wirkung.*
+
+### Der Zusammenhang, der mir wichtiger ist als der Befund
+
+**Ich habe um 12:12 geschrieben: „404 Fehlermeldungen liegen zwischen 64 086 Poll-Zeilen begraben."**
+*Hier ist einer davon.* **`PB-043` war nie ein Aufräum-Befund — er ist der Grund, warum dieser hier 24
+Tage niemandem aufgefallen ist.** Deine Entscheidung von 00:42, Teil 2 vorzuziehen, trifft damit
+genau: *nicht weil das Log gross ist, sondern weil ein 229-MB-Log niemand liest.*
+
+**Ballbesitz: Planner.**
+
+---
+
+## Planner — 31.07.2026, 02:10 · Die 21 Werkzeug-Spezifikationen: Ergebnis, ehrlich gerechnet
+
+**42 Agenten, 1 h 39, 0 Fehlläufe, 3,6 Mio. Token.** Je Werkzeug ein Spezifikations- und ein
+Gegenprobe-Agent, der widerlegen sollte statt zu bestätigen.
+
+```text
+21 spezifiziert   ·   3 haltbar   ·   18 wackelig
+Geschaetzter Gesamtaufwand der 21:  860 Minuten  (14,3 Stunden)
+Vollstaendig:  /tmp/.../tasks/wjdoppqrm.output  ·  journal.jsonl im Run-Verzeichnis
+```
+
+### Die drei haltbaren — sofort schneidbar, alle ohne Abhängigkeit
+
+| Werkzeug | neuer Befehl | Spur | Aufwand |
+|---|---|---|---|
+| `drehen` | `ROTATE_NODES` — Wände, Objekte, Leitungen in EINEM umkehrbaren Schritt | A | 50 Min |
+| `erkennung-bestaetigen` | `ADD_NODES` — erkannte Kandidaten als echte Knoten, ein Schritt | A | 45 Min |
+| `pv-modul` | **keiner** — `ObjectNode` mit `objectType: 'pv_module'`, Dachbezug in `parameters` | A | 35 Min |
+
+*`pv-modul` ist die beste der drei: sie braucht **keinen neuen Befehl**, nur einen additiven Wert
+in der `objectType`-Union — kein bestehender Wert wird umbenannt.*
+
+### Der Fund, der alles andere überwiegt — und er traf mein Blatt
+
+**`Z-01/K-04` konnte niemals rot werden.** `node --test … | tail -4` schneidet `# pass`/`# fail`
+ab, und die Pipe schluckt den Rückgabewert. Grüner und roter Lauf sind zeichengleich. **Das
+Kriterium ist so durch eine Abnahme gegangen.** Korrigiert (`89d563f7`), **Regel 9** in
+`VORLAGE.md`: *jeder Prüfbefehl wird einmal gegen einen Fall gefahren, der fallen MUSS.*
+
+*Der Agent hat ausdrücklich vermerkt, dass er den Fehler aus meinem Blatt **abgeschrieben und
+nicht erfunden** hat. Elf der 21 Spezifikationen tragen ihn deshalb ebenfalls — sie sind nicht
+schlechter als ihre Vorlage.*
+
+### Vier echte Erfindungen, die die Gegenprobe gefangen hat
+
+```text
+versatz      OpeningNode.oeffnung mit 'links'/'rechts'  ->  es gibt nur 'innen'|'aussen'
+versatz      editierGeometrie.versetzteWand             ->  steht nur in einem KOMMENTAR
+verlaengern  useSzeneStore                              ->  heisst usePlannerUiStore
+pv-modul     ein Zod-Spiegel der objectType-Aufzaehlung  ->  im Bestand nicht auffindbar
+```
+
+### Und ein Fehler von mir, der die Prüfung teilweise blind gemacht hat
+
+**Von 15 gemeldeten „erfundenen Wiederverwendungen" sind nur vier echte Erfindungen.** Die
+übrigen elf lauten sinngemäß *„nicht prüfbar, weil die Datei nicht im Auszug lag"* — ich hatte
+den Agenten **acht Dateien** kopiert, nicht das Verzeichnis. `geometry/wallGeometry.ts`,
+`__tests__/`, `package.json` fehlten.
+
+*Die Prüfer haben das jedes Mal offengelegt statt zu raten — das ist der richtige Umgang damit.
+Aber der Aufwand einer Gegenprobe verpufft an den Stellen, an denen sie nichts nachschlagen
+kann.* **Bei einer Wiederholung: den ganzen Baum kopieren, nicht die Dateien, die ich für
+ausreichend halte.**
+
+### Was NICHT geschieht
+
+**Keine der 21 wird jetzt zu einem Blatt.** Vier liegen unbearbeitet (AUF-38-P1 im Bau, PB-047,
+PB-043 Teil 2, AUF-91), der Generator steht seit 01:10. *Papier auf Vorrat ist genau das, was der
+Papierstopp meint.* Die drei haltbaren werden geschnitten, **wenn die vier liegenden weg sind** —
+und dann nach Regel 9, weil ihre Test-Befehle den `tail`-Fehler abgeschrieben tragen.
+
+**Ballbesitz: Generator** (AUF-38-P1 → PB-047 → PB-043 T2 → AUF-91) · **Evaluator** (AUF-25;
+**neu: K-04 war bei seiner Z-01-Abnahme blind**) · **Yama** (Papierstopp · PB-042 ·
+Blade-Vorsortierung) · **Planner** (wartet).
+
+---
+
+## 2026-07-31, ~03:4x CEST — GENERATOR: `AUF-38-P1` committet — **die Umstellung nimmt das Netz weg, und das war der Befund**
+
+**VOTUM: auftrag=AUF-38-P1 rolle=generator ergebnis=UMGESETZT commit=7a6c8112 datum=2026-07-31**
+
+```text
+K-01   Panel   71 gesamt / 37 offen  ->  34 / 0
+K-01b  global 195 gesamt / 77 offen  -> 158 / 40
+```
+
+*Beide treffen die Arithmetik des Blattes exakt.* **37 Stellen werden 22 Klassen** — fünf trugen
+denselben Abschnittstitel, vier dieselbe Knopfreihe, zwei dasselbe Bauart-Raster. *Als Inline-Stil
+war jede eine eigene Wahrheit.*
+
+### ⚠ K-05 — 8 Mutationen vor den Tests, **SIEBEN kamen durch**
+
+```text
+Klasse am falschen Element · zwei Klassen vertauscht · Regel ohne Wirkung
+Regel umbenannt (Markup zeigt ins Leere) · A11y-Symbolklasse entfernt
+Treppen-Raster verliert seine Hoehe · Abstand still veraendert
+gefangen: nur "Rohfarbe statt Token"
+```
+
+> **Das ist die Kehrseite von AUF-38, und sie gehört benannt.** Ein Inline-Stil steht im Bauteil
+> und wird von den Bauteil-Zusagen **mitgelesen**. Eine Klasse verlagert die sichtbare Wahrheit in
+> eine zweite Datei — und **zwischen beiden liegt nichts**, wenn niemand die Brücke prüft. *Ein
+> Tippfehler im Klassennamen macht ein Element ungestylt, und kein Testlauf merkt es.*
+
+`eigenschaftenPanelStil.test.ts` ist diese Brücke: **jede benutzte Klasse existiert** (und keine
+Regel ohne Nutzer) · **jede Klasse trägt die Eigenschaften ihres Inline-Stils** (Tabelle aus dem
+Stand vor dem Umbau) · **jede Klasse sitzt an ihrem Element**. Alle acht Mutationen werden gefangen.
+
+*Der Punkt gilt über dieses Blatt hinaus: **P2 und P3 werden dieselbe Lücke erzeugen**, wenn sie
+ohne solche Zusagen laufen.*
+
+### Zwei Befunde gegen das Blatt
+
+**1. Der Ausschluss `eigenschaftenPanel.test.ts` ist mit dem Auftrag nicht vereinbar.** Dort steht
+meine S4d-Zählung *„67 Inline-Zeilen"*, die AUF-38-P1 **notwendig** ändert. Ich habe genau diese
+eine Zusage nachgezogen (67 → 32); **die A11y-Zusagen sind unberührt** — im Diff dieser Datei steht
+keine Zeile mit A11y-Bezug. Alle neuen Zusagen kamen in eine **neue** Datei, damit der Ausschluss
+im Übrigen hält. *Ein Ausschluss, den die eigene Arbeit bricht, gehört gemeldet, nicht umgangen.*
+
+**2. Ich hatte zwei Stellen zu viel umgestellt.** `style={{ color: FARBEN.text }}` zählt das
+Messwerkzeug als **dynamisch** und fällt damit unter den Ausschluss (AUF-38-P3). Der Gesamtwert
+stand dadurch bei 32 statt 34. **Zurückgenommen**, samt der Klasse — eine Klasse ohne Nutzer wäre
+genau der Posten, der auf nichts zeigt.
+
+### K-04 — gemessen, nicht betrachtet
+
+```text
+vorher   panel 1077x473x239x391 · reiter 594x206x80x29 · erstesFeld 1077x473x239x32
+nachher  zeichengleich
+```
+
+*Das Vorher-Bundle wurde vorübergehend eingespielt und danach **md5-identisch** zurückgestellt.*
+
+**Gegenbeweis:** `.hp-ep-titel` `margin-bottom` 10 → 60 px, **Panel wächst 391 → 441**,
+zurückgestellt wieder 391. *Die Probe misst also, was sie zu messen behauptet.*
+
+> **Sechster Fall derselben Klasse in diesem Zyklus:** mein eigener CSS-Kommentar enthielt das Wort,
+> dessen Abwesenheit er behauptete, und machte die `stilschicht`-Zusage rot. Umformuliert.
+
+```text
+tsc 0 · test:hausplaner 1559 -> 1567 · dom 29/0 · build 0
+K-02 Rohfarben gegen main 0 · K-03 stilschicht 58/0 · K-06 eigenschaftenPanel 11/0
+```
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`7bd1f72d..7a6c8112`) · **Generator** (`AUF-91` · `PB-043 Teil 2`) ·
+**Planner** (der Ausschluss in P1 · und die Frage, ob P2/P3 dieselben Brücken-Zusagen bekommen —
+sonst wiederholt sich die Lücke dreimal).
+
+---
+
+## Planner — 31.07.2026, 08:00 · AUF-38-P1 an den Evaluator, und eine Auflage für alle weiteren Scheiben
+
+**`7a6c8112` liegt. Die Abnahme gehört dem Evaluator** (Spur A) — der Planner nimmt nicht ab.
+
+```text
+K-01   Panel   71 gesamt / 37 offen   ->   34 / 0
+K-01b  global 195 gesamt / 77 offen   ->  158 / 40
+```
+*Beide treffen die Arithmetik des Blattes auf den Punkt.*
+
+### Der Befund wiegt schwerer als die Zahl — und er trifft das ganze Programm AUF-38
+
+**K-05: acht Mutationen vor den Tests, SIEBEN kamen durch.** Klasse am falschen Element, zwei
+Klassen vertauscht, Regel ohne Wirkung, Regel umbenannt, A11y-Symbolklasse entfernt,
+Treppen-Raster ohne Höhe, Abstand still verändert. Gefangen wurde **eine**.
+
+Seine Erklärung, wörtlich sinngemäß: *ein Inline-Stil steht im Bauteil und wird von den
+Bauteil-Zusagen mitgelesen. Eine Klasse verlagert die sichtbare Wahrheit in eine zweite Datei —
+und zwischen beiden liegt nichts, wenn niemand die Brücke prüft. Ein Tippfehler im Klassennamen
+macht ein Element ungestylt, und kein Testlauf merkt es.*
+
+**Das ist die Kehrseite von AUF-38, und ich habe sie in keinem der Blätter benannt.** Er hat sie
+selbst geschlossen: `eigenschaftenPanelStil.test.ts` prüft, dass jede benutzte Klasse existiert
+(und keine Regel ohne Nutzer bleibt), dass jede Klasse die Eigenschaften ihres Inline-Stils
+trägt, und dass sie an ihrem Element sitzt. **Danach fangen alle acht.**
+
+> **AUFLAGE ab sofort, für AUF-38-P2, -P3 und jede weitere Datei:** *ein Stil-Brücken-Test nach
+> dem Muster von `eigenschaftenPanelStil.test.ts` ist Teil des Auftrags, nicht Kür.* Eine Scheibe,
+> die Inline-Stile in Klassen verlagert und die Brücke ungeprüft lässt, **verschlechtert die
+> Prüfbarkeit** — sie tauscht eine mitgelesene Wahrheit gegen eine unbewachte.
+
+### Zwei Befunde gegen mein Blatt — beide berechtigt
+
+1. **Mein Ausschluss war mit dem Auftrag unvereinbar.** Ich schrieb „`eigenschaftenPanel.test.ts`
+   wird nicht angefasst" — dort stand aber seine S4d-Zählung „67 Inline-Zeilen", die dieser
+   Auftrag notwendig ändert. Er hat **genau diese eine** Zusage nachgezogen (67 → 32) und neue
+   Zusagen in eine neue Datei gelegt, damit der Ausschluss im Übrigen hält. *Richtig gehandelt;
+   der Fehler lag im Blatt.*
+2. **Er hatte zwei Stellen zu viel umgestellt** — `style={{ color: FARBEN.text }}` zählt das
+   Messwerkzeug als **dynamisch** und fällt damit unter den Ausschluss nach AUF-38-P3.
+   Zurückgenommen, samt der Klasse. *Eine Klasse ohne Nutzer wäre der Posten, der auf nichts
+   zeigt.*
+
+### PB-048 — mein Vorschlag von 00:42 ist umgesetzt
+
+Der Prüfer hat die **805 Blades statisch vorsortiert**: **319 tragen ein Layout-Risikomerkmal**,
+die 18 dichtesten benannt — ausdrücklich als Hinweis, nicht als Mangel. *Und er hat seinen ersten
+Musterversuch selbst kassiert: er zählte `max-width` in Medienabfragen als feste Breite, 422 statt
+42 Treffer, 90 % falsch — er hätte ausgerechnet die gründlichste Datei angeklagt.* **Aus 805 ist
+eine Rangliste geworden; der Browser bestätigt oder widerlegt sie.**
+
+**Ballbesitz: Evaluator** (AUF-38-P1 · AUF-25 seit 25.07. · K-04-Blindheit) · **Generator**
+(**PB-047**, laufender CRM-Fehler → PB-043 Teil 2 → AUF-91) · **Yama** (Papierstopp · PB-042 ·
+ob die 18 dichtesten Blades jetzt in den Browser sollen) · **Planner** (die Auflage oben in
+P2/P3 einarbeiten, sobald sie geschnitten werden).
+
+---
+
+## 2026-07-31, ~04:0x CEST — GENERATOR: `PB-043 Teil 2` committet — **das Fass hat einen Boden**
+
+**VOTUM: auftrag=PB-043-TEIL2 rolle=generator ergebnis=UMGESETZT commit=9e294323 datum=2026-07-31**
+
+*Teil 1 (`fddec527`) hat die Quelle zugedreht, das Fass blieb voll. Eine Zeile schliesst es.*
+
+```text
+selbst gemessen   laravel.log  229 327 818 Bytes (219 MB) · 2 099 ERROR-Zeilen · 0 Tagesdateien
+                  `daily` vollstaendig konfiguriert — Pfad, Level, 14 Tage — UNBENUTZT
+geaendert         'stack' schreibt in ['daily'] statt ['single']
+```
+
+### K-01 — in **beide** Richtungen belegt
+
+```text
+mit der Vorgabe      laravel.log  +0   ·  laravel-2026-07-31.log entsteht, +66
+LOG_CHANNEL=single   laravel.log  +67  ·  Tagesdatei +0
+wieder mit Vorgabe   laravel.log  +0   ·  Tagesdatei +67
+```
+
+*Der Gegenbeweis ist der Punkt: eine Probe, die nur die gewünschte Richtung zeigt, misst
+möglicherweise etwas ganz anderes.*
+
+### ⚠ K-03 — eine Abweichung, gemeldet statt geglättet
+
+Das Kriterium erwartet **„unverändert"**; gemessen sind es **2099 → 2100**. **Die eine Zeile ist
+mein eigener Gegenbeweis** — `LOG_CHANNEL=single` schreibt naturgemäß in die alte Datei.
+Nachgezählt: **ERROR-Zeilen ohne meine Marke = 2099**, also exakt der Ausgangswert. *Nichts ist
+verloren; eine Zeile ist dazugekommen, und sie ist als Probe erkennbar.*
+
+### Die 219-MB-Datei bleibt liegen
+
+Löschen ist ausgeschlossen. **Verschieben wäre erlaubt, ist aber nicht nötig:** sie wächst nicht
+mehr, und ihre 2 099 Befunde bleiben dort auffindbar, wo jeder sie sucht. *Soll sie beiseite, ist
+das ein eigener Handgriff mit genanntem Ziel — kein Beifang dieses Auftrags.*
+
+```text
+K-02  'days' => 14 unveraendert — nicht heimlich hochgesetzt
+K-04  keine Log-Zeile aus dem Bestand in diesem Bericht, nur Kanalnamen und Zahlen
+php -l sauber · phpunit Feature 542 Tests / 1946 Zusagen gruen
+```
+
+**Nicht in diesem Auftrag:** was `LOG_CHANNEL` auf Hetzner sagt — Umgebungsvariable, Yamas
+Entscheidung. Geändert wurde nur die **Vorgabe**.
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`7a6c8112..9e294323`) · **Generator** (`AUF-91` — der letzte offene
+Posten meiner Spalte) · **Yama** (`LOG_CHANNEL` auf dem Server, wenn dort dasselbe gelten soll).
+
+---
+
+VOTUM: auftrag=AUF-38-P1 rolle=evaluator ergebnis=GRUEN commit=7a6c8112 datum=2026-07-31T01:1x hinweis=Bruecke-beidseitig
+
+## ⇒ EVALUATOR — AUF-38-P1: **GRÜN.** Die führende Zahl trägt, und die Stil-Brücke ist beidseitig verriegelt (31.07., CEST)
+
+*Achtzehnter Prüfstand. **Das ist der Auftrag, bei dem ich um 01:2x die eine führende Zahl
+durchgesetzt hatte** („37 offen von 71" statt „129 von 196"). Jetzt zeigt sich, ob sie trägt.*
+
+### Die zwei Zahlen des Blattes, selbst nachgemessen
+
+```text
+                       Blatt sagt        gemessen
+Panel                  71/37 -> 34/0     34 Stellen, 0 offen     ✓
+global                 195/77 -> 158/40  158 gesamt, 40 offen    ✓
+```
+**Beide treffen auf die Stelle.** *Die Arithmetik geht auf (71−37=34, 195−37=158) — und weil die
+Zahl vor dem Bau eindeutig war, misst die Abnahme jetzt dasselbe wie der Bau.* **Das war der ganze
+Zweck des Befundes.**
+
+```text
+Gates: test 1567 / 0 · dom 29 / 0 · tsc 0 · build 0
+```
+
+### Der Befund des Bauenden ist der wichtigere Teil — und er ist geschlossen
+
+Er meldet: **8 Mutationen vor den Tests, SIEBEN kamen durch.** *Begründung, und sie sitzt: **ein
+Inline-Stil steht im Bauteil und wird von den Bauteil-Zusagen mitgelesen. Eine Klasse verlagert die
+Wirkung in eine zweite Datei** — und niemand prüfte, ob die Brücke hält.*
+
+**Gegenprobe an genau dieser Brücke:**
+```text
+MUTATION: eine CSS-Regel umbenannt (.hp-ep-befund-leer -> …-tot)
+          -> das Markup zeigt ins Leere
+
+⇒ ROT (2):  "K-05: jede benutzte hp-ep-Klasse ist in der Stilschicht auch definiert"
+            "K-05: keine hp-ep-Regel ohne Nutzer — eine Klasse, die niemand trägt, ist tot"
+```
+**Beide Richtungen sind verriegelt** — Klasse ohne Regel **und** Regel ohne Nutzer. *Eine
+einseitige Prüfung hätte die Hälfte der Fälle durchgelassen.*
+
+### Sichtprobe — wirken die Klassen wirklich?
+
+*Eine Klasse kann definiert sein und trotzdem nichts tun. Deshalb `getComputedStyle` am laufenden
+Panel, nicht nur die Datei gelesen:*
+```text
+Panel sichtbar · Elemente mit hp-ep-Klasse vorhanden
+Beispielprobe: hp-ep-kennzahl -> fontSize 12px, display block   (Regel greift)
+Reiter unverändert: Allgemein · Beziehungen · Prüfungen · Historie
+Konsole aus hausplaner.js: []
+```
+**Das Panel sieht aus wie vorher.** *37 Inline-Stellen sind zu 22 Klassen geworden, ohne dass sich
+am Bild etwas ändert — genau das war die Zusage.*
+
+### Ein Beinahe-Befund von mir, gefangen
+
+**Mein Brücken-Abgleich meldete zunächst zwei tote Klassen:** `hp-eigenschaften-panel` und
+`hp-eigenschaften-tab-`. **Nachgesehen, bevor ich es schrieb:**
+```text
+Z47  const PANEL_ID = 'hp-eigenschaften-panel';
+Z48  const reiterId = (id) => `hp-eigenschaften-tab-${id}`;
+```
+**Beides sind DOM-IDs für `aria-controls`, keine Stilklassen.** *Mein `grep hp-[a-z0-9-]+` kann
+das nicht unterscheiden — die zweite endet sogar auf `-`, weil sie eine Vorlage ist.* **Zwölfter
+Fehlgriff dieser Art heute, zwölfter vor der Meldung bemerkt.**
+
+### Zur Auflage des Planners
+
+*„Ein Stil-Brücken-Test ist ab sofort Teil des Auftrags, nicht Kür."* **Aus Abnahmesicht richtig
+und für mich verwertbar:** *ich kann bei P2/P3 dieselbe Mutation fahren (Regel umbenennen) und
+erwarte dieselben zwei roten Zusagen.* **Damit ist die Prüfung für die nächsten Scheiben
+vorgezeichnet, statt jedes Mal neu erfunden zu werden.**
+
+**Ballbesitz: Generator** (P2/P3 mit Brücken-Test) · **Planner** (die drei Befunde aus 02:3x, davon
+`stat` inzwischen behoben) · **Yama** (nichts von mir).
+
+---
+
+## ⇒ PRÜFER an PLANNER, GENERATOR, EVALUATOR — **MAHNUNG 3: zwei geschnittene Auftraege, 32 bzw. 35 Stunden, gebaut null** (01.08., 09:45 CEST — `date`, nicht geschaetzt)
+
+**Ich messe seit gestern frueh dieselben drei Zahlen, und sie bewegen sich nicht.** *Das hier ist
+keine neue Pruefung — es ist dieselbe, zum siebten Mal, weil Yamas Auflage lautet: dahinter sein,
+bis der Fehler behoben ist, nicht immer wieder neu testen.*
+
+### Die drei Zahlen, mechanisch
+
+```text
+Befehl:  git log -1 --format=%ct HEAD   +   date +%s
+letzter Commit    b1da5194  31.07. 10:28   ->  23h 16min her
+PB-047 geschnitten ca0bc992 31.07. 01:00   ->  32h 45min her   gebaut: 0
+AUF-91 geschnitten 7d29a77c 30.07. 22:17   ->  35h 28min her   gebaut: 0
+MAHNUNG 2                   30.07. 21:07   ->  36h 37min her
+```
+
+### PB-047 — nachgemessen, nicht erinnert
+
+```text
+Befehl: git log -1 --date=format-local -- app/Http/Controllers/Dashboard/SidebarCountController.php
+18948032  28.06. 16:55  "Back up application code..."
+```
+**Die Datei ist seit dem 28.06. unberuehrt.** *Die Stelle steht Zeile fuer Zeile so da wie bei der
+Meldung:*
+```text
+:16   $employeeId = $user?->name;                                   // string
+:162  private function countInquiryUnpublished(?int $employeeId ...) // int erwartet
+```
+**Der Auftrag ist geschnitten, der Code ist unangetastet. Das ist kein Streit ueber Prioritaet,
+das ist ein Auftrag ohne Empfaenger.**
+
+### Was ich mir selbst nicht durchgehen lasse
+
+**Die Fehlerzahl waechst gerade nicht — und das ist kein Entlastungsbeweis.**
+```text
+Befehl: grep -c "local.ERROR" storage/logs/laravel-2026-07-31.log   -> 2
+Befehl: grep -c "countInquiryUnpublished" storage/logs/laravel-2026-07-31.log -> 0
+Die zwei Zeilen: "PB-043 Teil 2 Rotationsprobe" / "PB-043 wieder mit der Vorgabe"  — meine eigenen Proben.
+```
+**Am 31.07. hat die Anwendung null echte Fehler geschrieben, weil sie niemand benutzt hat.**
+*Wer daraus „behoben" liest, verwechselt Stille mit Gesundheit.* **Der TypeError wartet auf den
+ersten Nutzer, nicht auf eine Behebung.** *Fuer heute (`laravel-2026-08-01.log`) existiert noch
+keine Datei — auch das ist Leerlauf, kein Befund.*
+
+### Was ich von den drei Rollen erwarte
+
+**Nicht Zustimmung, sondern eine von zwei Antworten je Auftrag:** *gebaut (mit Commit) oder
+zurueckgegeben (mit Grund).* **Ein dritter Zustand — geschnitten und liegengelassen — ist der
+einzige, den ich nicht abhaken kann**, und er kostet mich seit anderthalb Tagen jeden Takt eine
+Messung, die immer dasselbe Ergebnis hat.
+
+**Ich schliesse beide erst, wenn ich die Behebung selbst nachgemessen habe** (PRUEFER-BEFUNDE
+§5b) — nicht auf Meldung, nicht auf Zusage.
+
+**Ballbesitz: Generator** (PB-047, AUF-91 bauen) · **Planner** (oder beide zurueckziehen, mit Grund).
+
+---
+
+VOTUM: auftrag=PB-043-Teil2 rolle=evaluator ergebnis=GRUEN commit=9e294323 datum=2026-08-01T09:5x hinweis=nachgeholt
+
+## ⇒ EVALUATOR — PB-043 Teil 2 nachgeholt: **GRÜN, mit Wirkungsnachweis** (01.08., CEST)
+
+*Neunzehnter Prüfstand — **und einer, den ich fast übersehen hätte.** `9e294323` ändert
+`config/logging.php`, also **CRM-Konfiguration**, nicht Insel. Ich hatte den Commit gestern nur als
+**Worktree-Basis** für AUF-38-P1 benutzt und seinen Inhalt nie geprüft. *Beim Durchsehen der
+Commit-Liste aufgefallen, nicht durch eine Zuweisung.**
+
+### Rein lesend geprüft — die Konfiguration
+
+```text
+LOG_CHANNEL (Umgebung)  stack
+stack.channels          daily        <- vorher ['single']
+logging.default         stack
+daily.days              14
+daily.path              laravel.log  -> laravel-JJJJ-MM-TT.log
+```
+**Die Änderung greift.** *Geändert wurde nur die Vorgabe im `stack`; `LOG_CHANNEL` kommt weiter aus
+der Umgebung — wer dort etwas anderes setzt, bekommt es auch.*
+
+### Und die Wirkung, nicht nur die Absicht
+
+```text
+storage/logs/
+    229 327 885  Jul 31 07:58   laravel.log            <- die alte Datei
+        132 017  Jul 31 07:59   laravel-2026-07-31.log
+         94 072  Aug  1 09:53   laravel-2026-08-01.log <- schreibt HEUTE
+
+zwei Messungen im Abstand von 2 s:
+    laravel.log  229 327 885 -> 229 327 885  (unverändert)
+```
+**Die Rotation läuft wirklich:** zwei Tagesdateien sind entstanden, die 219-MB-Datei ist seit dem
+Umbau **eingefroren**. *Das ist der Unterschied zwischen „die Konfiguration sagt daily" und „es
+schreibt tatsächlich dorthin" — und nur die zweite Aussage ist eine Abnahme.*
+
+```text
+vendor/bin/phpunit am Stand 9e294323:  801 / 0, 2771 Assertions
+```
+*Eine Änderung an `config/logging.php` ist die Stelle, an der eine Suite still kippt — sie tut es
+nicht.*
+
+### Die Beobachtung des Prüfers — bestätigt und eingeordnet
+
+*„Die alte 219-MB-Datei bleibt liegen, daily schreibt nur neue Tagesdateien."* **Stimmt, und es ist
+richtig so:** *`daily` räumt nur die eigenen Tagesdateien nach 14 Tagen ab; `laravel.log` gehört
+nicht zu seiner Reihe und wird nie angefasst.* **Kein Befund, aber ein offener Posten:** die 219 MB
+belegen weiter Platz und enthalten 2 099 Fehlermeldungen, die niemand mehr liest. *Ein Verschieben
+nach `_to_delete/` wäre ein eigener, beauftragter Schritt — **nicht meiner**, und schon gar nicht
+nebenbei.*
+
+### Urteil
+
+**GRÜN.** Konfiguration und Wirkung belegt, PHP-Suite unverändert. **Damit sind alle vier
+Produktivcode-Commits seit dem Merge geprüft** (Z-01 · AUF-38-P1 · PB-043-Teil2 · und der
+Merge-Stand selbst).
+
+**Was gerade entsteht:** `MindestbreiteHinweis.tsx` — AUF-91, die Hinweisfläche unter 1024 px aus
+der PB-046-Entscheidung. *Kein Prüfstand, solange kein Commit liegt.*
+
+**Ballbesitz: Generator** (AUF-91) · **Yama** (die 219-MB-Altdatei, falls sie weg soll) ·
+**Planner** (AUF-86/56 px · `.env.testing.example`).
+
+---
+
+## 2026-08-01, ~05:0x CEST — GENERATOR: `AUF-91` committet — **und ein Befund über die Probe selbst**
+
+**VOTUM: auftrag=AUF-91 rolle=generator ergebnis=UMGESETZT commit=154e4867 datum=2026-08-01**
+
+```text
+1440  keine Flaeche im DOM      1024  keine Flaeche im DOM
+1023  Flaeche da                 800  Flaeche da        375  Flaeche da
+```
+
+**Die Schwelle springt genau zwischen 1024 und 1023** — der Gegenbeweis, den K-01 verlangt. Über
+der Mindestbreite rendert sie `null`: *kein Element, nicht einmal ein verstecktes.*
+
+### ⚠ Befund gegen das Blatt — vor dem Bau gemessen
+
+K-02 schlägt in seiner **Begründung** `buehnenBreite.ts` als Quelle vor (*„der Schalter existiert,
+er muss nur gelesen werden"*). **Gemessen trägt diese Quelle die verlangte Schwelle nicht:**
+
+```text
+Fenster  1440 -> Behaelter 1077  ·  1100 -> 737  ·  1024 -> 661
+```
+
+*Eine Schwelle „Behälter < 1024" spränge schon bei 1100 px Fensterbreite an — genau dort, wo K-01
+„unverändert" verlangt.* **Der Schalter, der die Schwelle wirklich trägt, stand schon in der
+Datei:** `useIstSchmal()` mit `(max-width: 1023px)`, seit AUF-83-T5 in Gebrauch. *Gelesen, nicht
+verdoppelt — genau das, was „kein zweiter Messweg" meint.* **K-02 als Kriterium ist erfüllt**
+(stilschicht 58/0, kein `@media`); nur seine Begründung nannte eine Quelle, die nicht trägt.
+
+### ⚠⚠ Befund über die PROBE — und er betrifft jede künftige
+
+> **Mein erster L-01-Lauf meldete die Fläche bei KEINER Breite — auch nicht bei 375.** Ursache war
+> weder Code noch Bau, sondern das **beständige Chrome-Profil**: es lieferte ein
+> **zwischengespeichertes Bundle**. Mit `setCacheEnabled(false)` war die Fläche sofort da.
+>
+> Das Blatt warnt zu Recht *„ohne vorherigen Bau prüfst du einen Stand von vorhin"*. **Der
+> Zwischenspeicher ist ein zweiter, unbenannter Weg zu genau demselben falschen Ergebnis — und er
+> überlebt einen korrekten Bau.** *Beinahe hätte ich eine funktionierende Änderung als kaputt
+> gemeldet.*
+>
+> **Vorschlag an den Planner:** `setCacheEnabled(false)` gehört in die L-01-Auflage, neben den
+> Bau-Befehl. Ein Anker, der die richtige Seite prüft, hilft nicht, wenn die Seite alten Code trägt.
+
+### Mutationsprobe und die eigene Zusage
+
+**4 Mutationen, 4 kamen durch** (das Modul war neu) — alle geschlossen und gegengeprüft.
+*Und meine eigene K-05-Zusage aus S4e hat sofort gegriffen:* das neue Modul fehlte in der
+Teile-Liste, sie wurde rot. **Genau dafür war sie gebaut.**
+
+```text
+K-03  nennt Mindestbreite, Grund und Weg zurueck — und VERTAGT, statt abzusagen
+K-04  Zustand 0 · die Datei existiert (der Zusatz aus dem Blatt)
+keine Inline-Stelle hinzugefuegt: 158/40 unveraendert · kein @media
+tsc 0 · test:hausplaner 1567 -> 1575 · dom 29/0 · build 0
+L-01 bei 1440: Wand gezeichnet, keine Flaeche im DOM · aus hausplaner.js: 0
+```
+
+**Beobachtung, kein Befund dieses Blattes:** der **Modusschalter ragt bei 375 px weiterhin über die
+rechte Kante**. Das war Teil von PB-046 und wird von AUF-91 nicht behoben — *wer AUF-91 abnimmt,
+nimmt PB-046 nicht ab.*
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`9e294323..154e4867`) · **Generator** — *meine Spalte ist leer.*
+**Planner** (`setCacheEnabled(false)` in die L-01-Auflage · die K-02-Begründung · PB-046-Rest).
+
+---
+
+## ⇒ PRÜFER an EVALUATOR — **AUF-91 ist gebaut. Eine RUECKFRAGE zur Abnahme, kein Befund** (01.08., 10:06 CEST)
+
+**Zuerst die Zahl, auf die ich seit 35 Stunden warte:** `git log --all -- '*MindestbreiteHinweis*' | wc -l`
+→ **1** (`154e4867`, 01.08. 10:02). *Mein Zaehler steht zum ersten Mal nicht auf null.* **Ich schliesse
+deswegen nichts** — weder AUF-91 (das nimmt der Evaluator ab) noch PB-046, denn der Generator schreibt
+selbst: *„der Modusschalter ragt bei 375 px weiterhin ueber die rechte Kante … wer AUF-91 abnimmt,
+nimmt PB-046 nicht ab."* **Diese Grenze ist richtig gezogen und ich halte mich daran.**
+
+### Was ich am Code nachgemessen habe (Kette, nicht Eindruck)
+
+```text
+HausplanerApp.tsx:1137   <MindestbreiteHinweis sichtbar={istSchmal} />
+HausplanerApp.tsx:336    const istSchmal = useIstSchmal();
+HausplanerApp.tsx:146    useState(window.innerWidth < 1024)
+HausplanerApp.tsx:149    matchMedia('(max-width: 1023px)')
+MindestbreiteHinweis:54  export const MINDESTBREITE_PX = 1024;
+```
+**Eine Schwelle, eine Stelle, kein zweiter Messweg — 1023/1024 passen an allen vier Stellen zusammen.**
+*Die Flaeche deckt wirklich zu, sie schwebt nicht:* `.hp-mb-flaeche` (Z599) = `position:absolute;
+inset:0; background: var(--hp-bg)` — **deckend, nicht durchsichtig.**
+
+### Die Ruecksfrage, und warum sie eine Ruecksfrage bleibt
+
+```text
+Befehl: grep -nE 'z-index: *(40|60|70)' resources/planner/hausplaner/hausplaner.css
+:494 .hp-schiene-overlay  z-index 40   (frueher im Baum -> Sperre gewinnt, gleiche Stufe)
+:599 .hp-mb-flaeche       z-index 40   <- die Sperre
+:405 .hp-wg-menue         z-index 60
+:369 .hp-gs-menue         z-index 70
+:479 .hp-ok-menue         z-index 70
+Befehl: grep .hp-wg-leiste  -> position: relative, KEIN z-index  (= kein eigener Stapelkontext)
+Befehl: grep nach Zwischenwrapper mit z-index/transform/filter/opacity/contain  -> 0 Treffer
+Die drei Menues haengen im selben Wurzelbaum, gerendert VOR Zeile 1137.
+```
+**Statisch gelesen wuerde ein offenes Menue ueber der Sperre liegen.** *Erreichbar nur auf einem Weg:
+Menue bei ≥1024 px oeffnen, dann das Fenster schmaler ziehen — der Zustand `objektkopfMenuOffen` lebt in
+React und wird von der Groessenaenderung nicht zurueckgesetzt.*
+
+**Warum ich das NICHT als Befund schreibe:** *ich habe es nicht im Browser gesehen.* Ob ein Menue
+tatsaechlich durchschlaegt, entscheidet der gerenderte Stapelkontext, nicht meine Lesart der Datei —
+und ich habe heute schon zwoelfmal erlebt, dass ein `grep` etwas anderes bedeutet als es aussieht.
+**Ein ungemessener Verdacht ist eine Rueckfrage, kein Befund** (eigenes Raster, „Kein Befund ohne Beleg").
+
+**Der Handgriff, falls du ihn ohnehin am Browser hast** — drei Zeilen in deiner laufenden Probe:
+```js
+await seite.setViewport({width:1200,height:800});
+await seite.click('.hp-ok-knopf');                       // Menue oeffnen
+await seite.setViewport({width:800,height:800});         // schmal ziehen
+await seite.evaluate(() => document.elementFromPoint(innerWidth/2, 120)?.className);
+// erwartet: eine hp-mb-* Klasse. Kommt hp-ok-menue zurueck, schlaegt das Menue durch.
+```
+**Faellt es durch: dein Befund, nicht meiner** — du hast die Flaeche in der Hand. **Haelt es: eine
+Zeile „geprueft, haelt" genuegt mir**, dann ist die Frage erledigt und kommt nicht wieder.
+
+**Ballbesitz: Evaluator** (AUF-91-Abnahme) · **Generator** (PB-047 — 32 h, gebaut 0, unveraendert).
+
+---
+
+## 2026-08-01, ~10:3x CEST — GENERATOR: `PB-047` committet — **eine Zeile, und der Gegenbeweis kam zuerst**
+
+**VOTUM: auftrag=PB-047 rolle=generator ergebnis=UMGESETZT commit=1b0b61a5 datum=2026-08-01**
+
+`$user?->name` (Zeichenkette) → `$user?->employeeId()` (`?int`). **Die eine Wahrheit gab es die
+ganze Zeit** — mit genau diesem Schutz und einem Kommentar dazu; sie wurde hier nur nicht benutzt.
+
+### Der Gegenbeweis kam ZUERST, wie K-03 es verlangt
+
+```text
+VOR der Aenderung
+  nicht-numerischer Name  ->  HTTP 500
+     TypeError: countInquiryUnpublished(): Argument #1 ($employeeId) must be of type ?int
+  numerischer Name        ->  HTTP 200, gruen        <- die Regressionsschranke steht
+NACH der Aenderung
+  beide 200 · Testfall 4/12 gruen
+```
+
+*Der Fall im Test ist der Fall aus dem Log — Wort für Wort dieselbe Meldung. Ohne diesen Schritt
+wäre K-03 eine Hoffnung gewesen.*
+
+```text
+K-01 0 · K-02 1 · stiller Cast 0 · is_numeric 0
+Ausgangswerte (1 · 0 · 0 · 0) vorher selbst bestaetigt
+```
+
+### Die schärfere Aussage, als eigener Testfall
+
+**Ohne Mitarbeiter-id bleiben die persönlichen Zähler LEER, nicht fremd.** Der naheliegende Weg
+wäre ein stiller Zahlen-Cast gewesen — aus „Anna Beispiel" würde die `0`, und die Zähler zeigten
+die Posten des Mitarbeiters mit der id 0. ***Ein falscher Zähler ist schlimmer als ein leerer, weil
+er richtig aussieht.*** Das Blatt sagt es; der Test hält es fest.
+
+**Entdeckung gemessen:** der Testlauf erzeugt **null** neue Einträge dieses Controllers im
+Tageslog (116 → 116; die 116 stammen aus meinem eigenen Gegenbeweis).
+
+### ⚠ Zwei eigene Fehler
+
+1. **Mein erster Testlauf brach mit *„Could not verify the hashed value's configuration"*** — die
+   Factory trägt einen Hash mit Kostenfaktor 10, `phpunit.xml` erzwingt `BCRYPT_ROUNDS=4`. *Ein
+   Fehler der Testumgebung, der wie ein Fehler des Endpunkts aussieht.* Behoben, Grund im Testfall
+   vermerkt.
+2. **Siebter Fall derselben Klasse in diesem Zyklus:** mein eigener Kommentar enthielt **beide**
+   verbotenen Schreibweisen im Klartext und brach K-01, K-02 und eine eigene Zusage.
+
+> **Daraus eine Regel für mich, weil es das siebte Mal ist:** *in einer Datei, über die eine
+> Absenz-Zusage mit `grep` läuft, wird die verbotene Schreibweise nie im Klartext genannt — auch
+> nicht in dem Satz, der erklärt, warum sie verboten ist.*
+
+```text
+php artisan test: 805 bestanden, 2 783 Zusagen (801 + die vier neuen) · php -l sauber
+Rueckweg: git revert genuegt — keine Schema-, keine Datenaenderung
+```
+
+**Nicht in diesem Auftrag:** die 131 anderen Stellen (78 stille Casts, 53 rohe Zugriffe).
+*Derselbe Fehler, eigene Blätter — der Prüfer hat sie gezählt, sie sind nicht vergessen.*
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`154e4867..1b0b61a5`) · **Generator** — *Spalte leer.* · **Planner**
+(die 131 Stellen als Blätter · `setCacheEnabled(false)` in die L-01-Auflage · P2/P3-Brücken-Zusagen).
+
+---
+
+VOTUM: auftrag=AUF-91 rolle=evaluator ergebnis=GRUEN commit=154e4867 datum=2026-08-01T10:1x hinweis=Kante-abgetastet
+
+## ⇒ EVALUATOR — AUF-91: **GRÜN.** Die Schwelle sitzt auf den Pixel, und sie hat genau eine Quelle (01.08., CEST)
+
+*Zwanzigster Prüfstand. **Ein Auftrag, dessen Gegenstand eine sichtbare Aussage ist** — den kann man
+nicht am Quelltext abnehmen.*
+
+### Gates
+
+```text
+test:hausplaner 1575 / 0   ·   dom 29 / 0   ·   tsc 0
+Scheibe 7 (ganze App)  158 / 40      unverändert trotz neuer Datei
+```
+*Die neue `MindestbreiteHinweis.tsx` bringt **null** offene Inline-Stellen mit — die Auflage aus
+AUF-38-P1 ist von Anfang an eingehalten, nicht nachträglich.*
+
+### Die Kante, Pixel für Pixel abgetastet
+
+```text
+1440 px   kein Element im DOM          Bühne da
+1100 px   kein Element im DOM          Bühne da     <- der kritische Punkt, s.u.
+1025 px   kein Element im DOM          Bühne da
+1024 px   kein Element im DOM          Bühne da
+1023 px   Fläche da, sichtbar          Bühne da
+ 800 px   Fläche da, sichtbar
+ 375 px   Fläche da, sichtbar
+Konsole aus hausplaner.js: []
+```
+**Die Schwelle springt exakt zwischen 1024 und 1023.** *Und über der Grenze ist **kein** Element im
+DOM — nicht einmal ein verstecktes. Das ist der Unterschied zwischen „unsichtbar" und „nicht
+vorhanden", und K-01 verlangt das zweite.*
+
+### Der Befund des Bauenden gegen das Blatt — nachgemessen, er hat recht
+
+**Das Blatt schlug `buehnenBreite.ts` als Quelle vor** („der Schalter existiert, er muss nur
+gelesen werden"). **Der Bau hat gemessen, dass diese Quelle die Schwelle nicht trägt:** der
+Behälter ist bei 1100 px Fensterbreite schon 737 px breit — eine Schwelle „Behälter < 1024" spränge
+also **bei 1100 px** an.
+
+**Meine Messung bei genau 1100 px zeigt: kein Element.** *Hätte er die vom Blatt vorgeschlagene
+Quelle genommen, wäre dort eine Fläche erschienen — und K-01 („bei 1100 px unverändert") wäre rot.*
+**Er hat den Vorschlag geprüft statt befolgt, und das war richtig.**
+
+### Eine Quelle, nicht zwei — der Punkt, an dem so etwas sonst schiefgeht
+
+```text
+grep "1023" über app/ und hausplaner.css:
+   HausplanerApp.tsx:149   window.matchMedia('(max-width: 1023px)')     <- die EINZIGE
+MindestbreiteHinweis.tsx:  trägt die Zahl nur im Kommentar, nicht im Code
+```
+**Genau eine Schwellen-Definition im ganzen Code.** *Die Fläche liest `useIstSchmal()` — denselben
+Schalter, den AUF-83-T5 seit Tagen für das Overlay-Verhalten der Schienen benutzt.* **Keine zweite
+Wahrheit über „schmal".**
+
+### Und die Aussage selbst — der eigentliche Auftrag
+
+```text
+"Der Planer braucht mehr Breite"
+"Ab 1024 px Fensterbreite ist er vollständig bedienbar. Auf schmaleren Bildschirmen liegen
+ Werkzeuge ausserhalb des sichtbaren Bereichs — sie sind dann nicht erreichbar, auch nicht
+ durch Scrollen."
+"Öffne das Fenster breiter oder wechsle an einen grösseren Bildschirm. Die übrigen Bereiche
+ von SA-DESK funktionieren hier unverändert."
+"Eine Bedienung auf schmalen Geräten ist geplant, aber noch nicht gebaut."
+```
+**Das ist exakt, was die PB-046-Entscheidung verlangt hat:** *„375 px ist kein Bedienziel, aber ein
+Ankunftsziel — der Planer muss dort nicht bedienbar sein, er muss **sagen**, dass er es nicht ist."*
+
+**Vier Sätze, und jeder trägt:** was fehlt · warum · was zu tun ist · dass der Rest des CRM
+funktioniert · und dass es geplant, aber nicht gebaut ist. *Der letzte Satz ist der ehrlichste —
+er verspricht nichts.*
+
+### Urteil
+
+**GRÜN.** Schwelle auf den Pixel belegt, eine einzige Quelle, keine Inline-Stellen, die Aussage im
+Browser gelesen. **Damit ist PB-046 aus meiner Sicht geschlossen** — der Befund des Prüfers vom
+30.07. (acht unerreichbare Bedienelemente bei 375 px) ist nicht behoben, aber er ist **benannt**,
+und genau das war die Entscheidung.
+
+**Ballbesitz: Generator** (frei) · **Planner** (AUF-86/56 px · `.env.testing.example`) · **Yama**
+(die 219-MB-Altdatei).
+
+---
+
+## ⇒ PRÜFER an alle — **PB-047 ist zu. Nicht auf Meldung, sondern weil ich es selbst gemessen habe** (01.08., 10:22 CEST)
+
+**33 Stunden lag das Blatt, dann waren es 18 Minuten.** *Ich schreibe das nicht als Vorwurf, sondern
+als Beleg dafuer, dass Nachhalten wirkt: gemahnt 09:45, Bau begonnen 10:14, Commit `1b0b61a5` 10:18.*
+
+### Meine eigene Nachmessung, nicht die des Bauenden
+
+```text
+1) die Stelle       sed -n '14,20p' SidebarCountController.php
+   $user?->name  ->  $user?->employeeId()
+2) die Quelle       app/Models/User.php:81-84
+   public function employeeId(): ?int { return is_numeric($this->name) ? (int) $this->name : null; }
+   -> die Methode gab es SEIT JEHER. Nichts Neues gebaut, das Vorhandene gelesen.
+3) Restbestand      grep -n '\->name' SidebarCountController.php   -> 0 Treffer
+4) Testlauf VON MIR php artisan test tests/Feature/Dashboard/SidebarCountTest.php
+   4 bestanden, 12 Zusagen, EXIT 0, DB ticket_testing (phpunit.xml:28 force=true)
+```
+
+### Der Beleg, der mir mehr wert ist als der gruene Testlauf
+
+```text
+Befehl: grep -oE '^\[2026-08-01 [0-9:]+\] [a-z]+\.[A-Z]+' storage/logs/laravel-2026-08-01.log
+letzter Eintrag ueberhaupt: 10:17:19 testing.DEBUG
+Eintraege NACH dem Fix-Commit (10:18): 0
+Ebenen heute: 24 local.ERROR | 14 testing.ERROR | 17 testing.WARNING | 14 testing.INFO | 4 testing.DEBUG
+```
+**Die 24 echten `local.ERROR` enden um 10:00:59 — vor der Behebung. Die 14 `testing.ERROR` sind der
+Gegenbeweis des Generators, letzter 10:15:11 — ebenfalls vorher.** *Mein eigener Lauf um 10:19 hat
+**keine einzige Zeile** geschrieben.* **Der Endpunkt ist nicht nur gruen, er ist still.**
+
+### Was ich ausdruecklich NICHT abgeschlossen habe
+
+**Die 131 Geschwisterstellen** (78 stille Casts, 53 rohe Zugriffe), die ich gezaehlt habe — der
+Generator nennt sie im Commit selbst und laesst sie liegen. **Richtig so:** *ein Auftrag, ein Blatt.*
+Sie bleiben mein offener Bestand, nicht seiner.
+
+**Damit ist mein letzter geschnittener P2 zu.** *Offen bleiben: PB-046 (mit Ziel, AUF-91 deckt ihn
+nicht), PB-042 (bei Yama), PB-048 (Hinweis), die Papier-Befunde unter Yamas Stopp — und meine
+Rueckfrage von 10:06 an den Evaluator.*
+
+**Ballbesitz: Evaluator** (AUF-91 + PB-047 abnehmen) · **Prüfer** (nichts Blockierendes).
+
+---
+
+## ⇒ PRÜFER an EVALUATOR — **PB-046 schliesse ich mit, aber ich sage dazu, wessen Augen es gesehen haben** (01.08., 10:23 CEST)
+
+**Du schreibst: *„Damit ist PB-046 aus meiner Sicht geschlossen — nicht behoben, aber benannt, und
+genau das war die Entscheidung."* Dem stimme ich zu, und ich trage es ins Register.** *Die Entscheidung
+des Planners — 375 px ist Ankunfts-, kein Bedienziel — habe ich am 30.07. selbst geprueft und als
+tragend bezeichnet; ein Befund wird an seinem „Erledigt wenn" gemessen, nicht an meinem urspruenglichen
+Wunsch.*
+
+### Was ich selbst gemessen habe
+
+```text
+Befehl: npx tsx --test resources/planner/hausplaner/__tests__/mindestbreiteHinweis.test.ts
+8 Zusagen, 8 gruen, 0 rot   (K-01 Schwelle · K-01 kein zweiter Messweg · K-02 kein @media ·
+                             K-03 Satz/Vertagung/Ansage · K-04 kein Zustand)
+Kette am Code: :1137 sichtbar={istSchmal} -> :336 useIstSchmal -> :146/:149 1024/1023 -> :54 MINDESTBREITE_PX
+```
+
+### Und was ich NICHT selbst gesehen habe
+
+**Die Flaeche im laufenden Browser bei 375 px.** *Das haben der Generator und du gemessen, jeder
+unabhaengig, mit uebereinstimmenden Zahlen (1023 da · 1024 nicht da).* **Ich uebernehme diese Messung
+und schreibe dazu, dass sie nicht meine ist** — meine eigene Regel lautet „erst schliessen, wenn ICH
+nachgemessen habe", und wo ich davon abweiche, gehoert das ins Protokoll und nicht ins Schweigen.
+*Zwei unabhaengige Messungen derselben Zahl sind ein besserer Beleg als eine dritte von mir; aber sie
+sind eben zwei fremde.*
+
+**Was bestehen bleibt, als Beobachtung ohne Befund:** *der Modusschalter ragt bei 375 px weiterhin
+ueber die rechte Kante* — der Generator sagt es im Commit selbst. **Er ist jetzt zugedeckt, nicht
+begradigt.** Wenn L7 gebaut wird, faellt die Decke weg und der Ueberlauf ist wieder sichtbar; er
+gehoert dann in das L7-Blatt, nicht in ein neues von mir.
+
+**Offen von mir an dich: nur die Rueckfrage von 10:06** (Menue mit z-index 60/70 ueber der Sperre 40).
+*Sie stand vierzehn Minuten vor deinem Urteil im Ledger und kommt darin nicht vor.* **Kein Vorwurf —
+du warst mitten im Lauf.** *Ich mahne sie nicht; ich merke sie vor. Drei Zeilen in deiner naechsten
+Browser-Probe genuegen.*
+
+**Ballbesitz: Evaluator** (die Rueckfrage, wenn du ohnehin am Browser bist) · **Prüfer** (nichts Offenes).
+
+---
+
+VOTUM: auftrag=PB-047 rolle=evaluator ergebnis=GRUEN commit=1b0b61a5 datum=2026-08-01T10:3x hinweis=zwei-Mutationen
+
+## ⇒ EVALUATOR — PB-047: **GRÜN.** Eine Zeile Wirkung, zwei Gefahren verriegelt (01.08., CEST)
+
+*Einundzwanzigster Prüfstand. **CRM-Code, nicht Insel** — also ist die volle PHP-Suite der Maßstab,
+nicht die Gates der Insel.*
+
+```text
+$employeeId = $user?->name;          ->   $user?->employeeId();
+```
+*Eine Zeile. Der Rest des Commits sind 143 Zeilen Zusagen.*
+
+### Die Suite
+
+```text
+tests/Feature/Dashboard/SidebarCountTest.php   4 / 0, 12 Assertions
+vendor/bin/phpunit (ganze Suite)             805 / 0, 2783 Assertions   (vorher 801)
+```
+
+### Mutation 1 — fängt die Zusage den alten Zustand?
+
+```text
+zurückgedreht auf $user?->name   (genau der Stand vor dem Commit)
+⇒ 1 Error + 2 Failures
+```
+**Der Fehler aus dem Log ist wieder da** (`Argument #1 ($employeeId) must be of type ?int`) — *die
+Zusage prüft die Sache, nicht ihre Gestalt.*
+
+### Mutation 2 — die schärfere Aussage, und sie ist die wichtigere
+
+**Das Blatt benennt eine Gefahr, die naheliegender ist als der Fehler selbst:** *ein stiller
+Zahlen-Cast. Aus „Anna Beispiel" würde die **0**, und die Seitenleiste zeigte die Posten des
+Mitarbeiters mit der id 0.* **Ein falscher Zähler ist schlimmer als ein leerer — er sieht richtig
+aus.**
+
+```text
+MUTATION in User.php:
+   is_numeric($this->name) ? (int) $this->name : null    ->    (int) $this->name
+⇒ ROT: "Failed asserting that 0 is null."
+```
+**Die Zusage hält genau diese Grenze fest.** *Sie prüft nicht nur, dass es funktioniert, sondern
+dass es im Zweifel **nichts** zeigt statt etwas Fremdes.*
+
+### Reuse statt Neubau — belegt
+
+```text
+User::employeeId(): ?int   -> is_numeric($this->name) ? (int) $this->name : null
+```
+**Die Methode gab es schon.** *Der Commit hat sie nicht geschrieben, sondern gefunden und benutzt —
+„die eine Wahrheit, die es seit jeher gab" ist wörtlich zutreffend, nicht eine Formulierung.*
+**Kein zweiter Umrechnungsweg entstanden.**
+
+### Urteil
+
+**GRÜN.** Eine Zeile Wirkung, volle Suite unverändert grün, beide Gefahren per Mutation als
+verriegelt belegt — der Rückfall **und** der stille Cast.
+
+*Nicht geprüft: die Zähler im laufenden Browser. **Der Testfall geht durch den echten HTTP-Stack**
+(Request → Controller → Antwort, HTTP 200 gegen 500), das deckt den Pfad ab, den ein Nutzer nimmt.
+Eine Sichtprobe würde die Zahlen selbst zeigen — wenn du sie willst, sag es.*
+
+**Ballbesitz: Generator** (AUF-38-P2 liegt bereit, mit dem Stil-Brücken-Test als Pflichtteil) ·
+**Planner** (AUF-86/56 px · `.env.testing.example`) · **Yama** (219-MB-Altdatei).
+
+---
+
+## 2026-08-01, ~11:2x CEST — GENERATOR: `AUF-38-P2` committet — **7 von 8, dieselbe Zahl wie in P1**
+
+**VOTUM: auftrag=AUF-38-P2 rolle=generator ergebnis=UMGESETZT commit=51b05bc4 datum=2026-08-01**
+
+```text
+K-01   Datei   27 gesamt / 18 offen  ->  9 / 0
+K-01b  global 158 gesamt / 40 offen  -> 140 / 22
+K-02   Rohfarben in neuen CSS-Zeilen gegen main: 0
+```
+
+*Alle drei Ausgangswerte vorher selbst bestätigt.*
+
+### ⚠ K-06 — der Befund wiederholt sich **auf die Zahl genau**
+
+```text
+blind (7)  Klasse am falschen Element · zwei vertauscht · Regel ohne Wirkung
+           Klassenname mit Tippfehler · Regel umbenannt · Abstand still veraendert
+           A11y-Pfeilklasse entfernt
+gefangen   nur "Rohfarbe statt Token"
+```
+
+**Sieben von acht — nicht ähnlich wie in P1, sondern dieselbe Zahl.** *Das ist keine Eigenschaft
+dieser Datei, sondern der Umstellung selbst.* Die Auflage des Evaluators aus der P1-Abnahme war
+richtig, und **für P3 gilt sie ebenso, bevor jemand fragt.**
+
+### ⚠ Derselbe eigene Fehler wie in P1 — wiederholt
+
+Ich hatte **eine Stelle zu viel** umgestellt (`style` mit `FARBEN.text`, vom Messwerkzeug als
+*dynamisch* gezählt und damit Ausschluss dieses Blattes). Gesamtwert stand bei 8 statt 9.
+Zurückgenommen, Klasse entfernt, Grund in der CSS vermerkt. *In P1 waren es zwei solche Stellen,
+hier eine — der Fehler ist derselbe, und ich habe ihn wiederholt.*
+
+**Achter Fall der Kommentar-Klasse:** mein CSS-Kommentar schrieb „kein `!important`" und enthielt
+es damit; `stilschicht` wurde rot.
+
+### Eine geerbte Zusage nachgezogen, nicht geschwächt
+
+`schienenReiter/K4` prüft die Scroll-Höhe des Schienen-Abschnitts und las sie **im Inline-Stil**.
+Sie prüft dieselbe Aussage jetzt an **zwei Orten**: das Element trägt die Klasse, die Klasse trägt
+`overflow-y` und `min-height`. *Ohne den zweiten Teil wäre sie nach dem Umbau grün, obwohl der
+Abschnitt nicht mehr scrollt.*
+
+### L-01 — drei Viewports, vorher/nachher zeichengleich
+
+```text
+1440  optionszeile 253x330x1077x28 · schienenkopf 253x359x219x72
+      ersterReiter 253x359x80x29   · gruppenzeile 253x291x1077x39
+1024 · 375 ebenso — alle vier Elemente unveraendert
+Bedienung: Reiter wechseln · Schiene klappen · Bereich wechseln — unveraendert
+Konsole aus hausplaner.js: 0
+```
+
+> **Ein eigener Messfehler, offengelegt:** mein erster Vorher-Wert für die Optionszeile war
+> `1131x796` — der Selektor fiel ohne Klasse auf eine Textsuche zurück und traf den **äussersten**
+> Vorfahren, also den ganzen Planer. Mit dem innersten passenden Element sind beide Stände gleich.
+> *Ein Vergleich, bei dem die zwei Seiten verschiedene Elemente messen, beweist nichts.*
+
+```text
+K-04  alle sechs Zusagenzahlen exakt: 7 · 13 · 5 · 7 · 9 · 15
+K-05  stilschicht 58/0
+tsc 0 · test:hausplaner 1575 -> 1583 · dom 29/0 · build 0
+```
+
+**Kein Merge, kein Push.** *`docs/planner/PRUEFER-BEFUNDE.md` lag geändert im Baum — nicht meiner,
+nicht mitcommittet.*
+
+**Ballbesitz: Evaluator** (`c8295f21..51b05bc4`) · **Generator** — Spalte leer · **Planner**
+(P3 mit Brücken-Test als Pflichtteil · die 131 PB-047-Stellen · `setCacheEnabled(false)` in L-01).
+
+---
+
+## ⇒ PRÜFER an PLANNER — **Nachtrag zu PB-011/PB-012, kein neuer Befund: das Klassenregister zaehlt 2, der Bauende zaehlt 8** (01.08., 10:53 CEST)
+
+**Ich lege keinen neuen Befund an — ich lege Belege zu zweien, die seit dem 30.07. offen sind.**
+*AUF-38-P2 ist gebaut (`51b05bc4`, 10:50) und liegt beim Evaluator; das ist nicht meine Sache.
+Meine Sache ist, was in seinem Commit-Text steht.*
+
+```text
+Befehl: git log -1 --date=format-local -- docs/auftraege/FEHLERKLASSEN.md
+        daa41c8e  30.07. 23:18   -> das Register ist 11,5 Stunden alt
+Befehl: grep '^| \*\*F-09' FEHLERKLASSEN.md
+        Zaehler 2 · zuletzt 29.07. 10:22 · Barriere: —
+Im Commit von 10:50 steht woertlich: "ACHTER FALL DER KOMMENTAR-KLASSE"
+        -> Register 2, Bauender 8. Sechs Faelle sind nie eingetragen worden.
+Befehl: git log --since='2026-08-01 00:00' | 10 Commits, davon 5 mit einer
+        gemeldeten Klassenwiederholung ("achter Fall", "kamen durch", "derselbe eigene Fehler")
+```
+
+**Und eine Klasse fehlt ganz:** *„acht Mutationen gesetzt, sieben kamen durch"* — **zum zweiten Mal
+auf die Zahl genau dieselbe** (P1 und jetzt P2). `grep -ci mutation FEHLERKLASSEN.md` → **1**
+(eine Zeile, kein Eintrag). **Nach R9 verlangt die zweite Wiederholung eine technische Barriere;
+hier gibt es nicht einmal eine Zeile.**
+
+**Warum das kein Vorwurf an den Bauenden ist:** *er meldet jeden dieser Faelle selbst, unaufgefordert,
+im Commit — genau das soll er tun.* **Der Bruch liegt danach:** was gemeldet wird, kommt nicht ins
+Register, und was nicht im Register steht, bekommt keine Barriere. **Die Meldung ersetzt die
+Barriere nicht** — das ist woertlich PB-012.
+
+*Beide Befunde bleiben offen, ihr Ballbesitz bleibt beim Planner, und sie fallen unter Yamas
+Papierstopp. Ich zaehle sie, ich mahne sie nicht.*
+
+---
+
+## ⇒ GENERATOR an PLANNER — **die Zahlen zu PB-011/PB-012 liegen bei mir; hier sind sie** (01.08., 11:0x CEST)
+
+**Der Prüfer hat recht, und der Teil, der mich betrifft, ist unangenehm:** *ich* bin der, der in
+jedem Commit „achter Fall" schreibt — **und ich habe die Zahl nie ins Register getragen.** Seine
+Einordnung („die Meldung ersetzt die Barriere nicht") stimmt; aber die Daten fehlen dem Register
+nicht, weil sie niemand hat, sondern weil sie in meinen Commit-Texten liegen. **Also liefere ich
+sie, statt sie dort zu lassen.**
+
+*Ich fasse `FEHLERKLASSEN.md` nicht an — Papier, Ballbesitz Planner, Yamas Stopp. Das hier ist die
+Zuarbeit, damit ein Eintrag eine Messung ist und keine Schätzung.*
+
+### F-09 — Register sagt 2, gemessen sind es 8. Die sechs fehlenden, mit Commit
+
+```text
+3.  262de870  AUF-48-S3    Kommentar nannte navGrp/navHub/navSub -> K-02 zaehlte 1 statt 0
+4.  1406d2c6  AUF-48-S4c   Kommentar nannte die Haken-Funktion   -> K-03 zaehlte 1 statt 0
+5.  323ba4ad  M2           Kommentar nannte Pfeil und die zwei Werkzeuge -> K-03 und K-04 rot
+6.  7a6c8112  AUF-38-P1    CSS-Kommentar nannte die Medienabfrage -> stilschicht rot
+7.  1b0b61a5  PB-047       Kommentar nannte BEIDE verbotenen Schreibweisen -> K-01, K-02, eigene Zusage
+8.  51b05bc4  AUF-38-P2    CSS-Kommentar nannte den Ausrufezeichen-Vorrang -> stilschicht rot
+```
+
+**Die Barriere, die ich mir daraus selbst gegeben habe** (steht seit `1b0b61a5` im Ledger):
+*in einer Datei, über die eine Absenz-Zusage mit `grep` läuft, wird die verbotene Schreibweise nie
+im Klartext genannt — auch nicht in dem Satz, der erklärt, warum sie verboten ist.* **Sie hat beim
+achten Mal nicht getragen, weil sie eine Regel ist und kein Mechanismus.** *Das ist wörtlich PB-012,
+und diesmal an mir belegt.*
+
+### Die Klasse, die ganz fehlt — meine Zahlen über neun Aufträge
+
+```text
+AUF-48-S4a   9 von 15 kamen durch      AUF-48-S4e   8 von  8
+AUF-48-S4b   3 von  8                  Z-01         8 von  8
+AUF-48-S4c   6 von  6                  AUF-91       4 von  4
+AUF-48-S4d  12 von 15                  AUF-38-P1    7 von  8
+                                       AUF-38-P2    7 von  8
+                        ---------------------------------------
+                        64 von 88 gesetzten Mutationen kamen durch
+```
+
+**P1 und P2: siebenmal von acht, beide Male — nicht ähnlich, dieselbe Zahl.** *Das ist der Grund,
+warum der Brücken-Test in P2 Pflichtteil war, und er gehört aus demselben Grund in P3.*
+
+### Zwei technische Punkte, die ich messen konnte — für den Fall, dass geschnitten wird
+
+**PB-019 ist bestätigt, und die Ursache steht in einer Zeile:**
+
+```text
+node scripts/auftrag-pruefen.mjs <P2-Blatt>        -> exit 0
+node scripts/auftrag-pruefen.mjs <AUFTRAGSTAFEL>   -> exit 0
+   Ausgabe: "KEIN PRUEFBEFEHL im Kopf gefunden" · "0 Eintraege"
+scripts/auftrag-pruefen.mjs:379
+   process.exit(fehlschlaege > 0 ? 1 : 0)
+```
+
+*Ein Blatt **ohne** Prüfbefehle hat null Fehlschläge und endet mit 0.* **Der Fall „nichts zu prüfen
+gefunden" ist im Rückgabewert gar nicht vorgesehen** — deshalb redet das Tor und hält nichts.
+
+**PB-012** bräuchte für F-09 keinen grossen Mechanismus: eine Zusage, die je Quelldatei prüft, dass
+kein Kommentar eine Zeichenfolge enthält, die eine `doesNotMatch`-Zusage über dieselbe Datei
+verbietet. *Ob das ein Blatt wert ist, entscheidest du — ich melde nur, dass es baubar ist.*
+
+**Ballbesitz unverändert: Planner.** *Ich baue, ich behebe nicht — und meine Spalte ist leer,
+`AUF-38-P2` liegt beim Evaluator.*
+
+---
+
+## ⇒ PRÜFER an PLANNER — **fünf geprüft, vier tragen, einer war mein Fehler — und die elf, die bleiben** (01.08., 10:59 CEST)
+
+**Deine Antwort `9e76e758` (10:56) habe ich nicht geglaubt, sondern nachgemessen — jeden der fünf.**
+
+```text
+PB-020  scripts/statische-inline-stile.mjs -> 1 · scripts/auftrag-pruefen.sh -> 1   ERLEDIGT
+PB-026  kern.md Z11/Z12 aufgeloest, Befund im Text genannt                          ERLEDIGT
+PB-034  bauordnung.md §2.2 traegt 75/406 mit Messdatum 01.08.                       ERLEDIGT
+PB-035  fahrplan-dashboard-versionen.md fuehrt UI-9 als "gebaut, 191 Z., 2 Tests"   ERLEDIGT
+PB-025  find resources -name 'sa-ui*' -> admin/layouts/partials/sa-ui.blade.php      WIDERLEGT
+```
+
+**PB-025 war mein Fehler und ich schreibe ihn als solchen ins Register.** *Ich hatte
+`resources/views/partials/` geprueft; die ui-bauordnung nennt den vollen Pfad
+`resources/views/admin/layouts/partials/`. Deine Widerlegung gewinnt — genau dafuer ist der Weg
+„abgelehnt mit Grund" da, und er hat funktioniert.* **Register: 20 offen -> 15.**
+
+### Die elf, die bei dir bleiben — heute gemessen, nicht vom 30.07. abgeschrieben
+
+**Werkzeug, das du selbst schuldest:**
+```text
+PB-019  auftrag-pruefen.sh am aktiven AUF-38-P2-Blatt          -> EXIT 0   (benennt, sperrt nicht)
+PB-011  FEHLERKLASSEN.md zuletzt 30.07. 23:18 · F-09 steht 2, der Bauende meldete heute den 8. Fall
+PB-012  R9 verlangt eine technische Barriere; zusaetzlich "7 von 8 Mutationen kamen durch" heute
+        ZUM ZWEITEN MAL auf die Zahl genau -> grep -ci mutation FEHLERKLASSEN.md = 1, keine Klasse
+```
+**Papiere, die in die Irre fuehren:**
+```text
+PB-022  arbeitskompass-ticket.md zuletzt 21.07. 22:59 — 11 Tage, und CLAUDE.md schickt dorthin
+PB-021  12 von 22 Fach-Linsen fehlen an beiden Skill-Orten (namentlich im Register)
+PB-027  b01-Blatt heute weiterhin `status: aktiv`
+PB-028  evaluator-auftrag-vorherbilder-und-auf86 heute weiterhin `status: aktiv`
+PB-036  ticket-component-inventory.md:54 nennt dachplaner.blade.php + planer/planer.js -> beide 0
+PB-031  68 von 923 Code-Pfaden (Sammelposten, Papierstopp)
+```
+**Zu ergaenzen — die fehlende Regressionsflaeche:**
+```text
+PB-023  175 hp-Klassen, im Styleguide 0
+PB-024  studioDaten.ts 42 Hexwerte · var(--sa- im Insel-CSS 0
+```
+
+**Nicht deins:** PB-042 (Takt, bei Yama) · PB-029/030 (Wissensregister, Yamas Material) ·
+PB-048 (Hinweis, du entscheidest nur die Reihenfolge).
+
+**Kein einziger dieser elf sperrt einen Bau.** *Sie sperren die Verlaesslichkeit der Papiere, nach
+denen gebaut wird — deshalb melde ich sie dir und mahne sie nicht.*
+
+---
+
+VOTUM: auftrag=AUF-38-P2 rolle=evaluator ergebnis=GRUEN commit=51b05bc4 datum=2026-08-01T11:0x hinweis=Auflage-wirkt
+
+## ⇒ EVALUATOR — AUF-38-P2: **GRÜN.** Die Auflage aus P1 wirkt — und sie ist schärfer geworden, als ich sie geschrieben habe (01.08., CEST)
+
+*Zweiundzwanzigster Prüfstand. **Der erste Auftrag mit dem Stil-Brücken-Test als Pflichtteil** —
+die Auflage stammt aus meiner P1-Abnahme.*
+
+### Die drei Zahlen, selbst nachgemessen
+
+```text
+                    Blatt              gemessen
+Datei      27/18  ->  9/0              9 Stellen, 0 offen     ✓
+global    158/40  -> 140/22            140 / 22               ✓
+Rohfarben in neuen CSS-Zeilen: 0                              ✓
+Gates: test 1583 / 0 · dom 29 / 0 · tsc 0
+```
+
+### Der Brücken-Test — beide Richtungen, plus eine dritte Zusage
+
+```text
+MUTATION A: CSS-Regel umbenannt (.hp-gz-optionsfeld -> …-tot)
+  ⇒ ROT (3): "jede benutzte hp-gz-Klasse ist in der Stilschicht definiert"
+             "keine hp-gz-Regel ohne Nutzer"
+             "jede Klasse trägt die Eigenschaften, die ihr Inline-Stil trug"
+
+MUTATION B: Klasse im Markup verdreht (Tippfehler: …optionsfeldx)
+  ⇒ ROT (2): dieselben beiden Brücken-Zusagen
+```
+**Die dritte Zusage ist mehr, als meine Auflage verlangt hat.** *Ich hatte „prüft die Brücke"
+geschrieben — sie prüft zusätzlich, dass die Klasse **dieselben Eigenschaften trägt** wie der
+Inline-Stil vorher. **Das schließt den Fall „Klasse existiert, ist aber leer", den ich nicht bedacht
+hatte.***
+
+### Sichtprobe
+
+```text
+hp-gz-optionszeile   display flex · fontSize 12px · padding 5px 14px
+hp-gz-trenner        display block
+13 Werkzeuggruppen unverändert · Konsole aus hausplaner.js: []
+```
+
+### Der Befund des Bauenden — und er ist der eigentliche Ertrag
+
+*„8 Mutationen, SIEBEN kamen durch — **dieselbe Zahl wie in P1. Nicht ähnlich, dieselbe.** Das ist
+keine Eigenschaft dieser Datei, sondern der Umstellung selbst."*
+
+**Damit ist belegt, was nach P1 nur eine Vermutung war:** *jede Inline-nach-Klasse-Umstellung
+verliert die Prüfbarkeit, weil die Wirkung in eine zweite Datei wandert und die Bauteil-Zusagen
+dort nicht hinsehen.* **Zwei Dateien, dieselbe Quote — das ist eine Regel, kein Einzelfall.**
+*Für P3 gilt sie unverändert.*
+
+**Seinen wiederholten Eigenfehler** (eine Stelle zu viel umgestellt, vom Messwerkzeug als
+*dynamisch* gezählt) hat er selbst gemessen, zurückgenommen und benannt. *In P1 zwei Stellen, hier
+eine — er nennt es „derselbe Fehler, wiederholt". **Die Zahl 9/0 stimmt danach**, das habe ich
+nachgerechnet.*
+
+### Ein Fehlgriff von mir, offengelegt
+
+**Meine erste Mutation traf die falsche Datei:** ich habe `hp-gs-` mutiert (das ist
+`GeschossFlaeche`), nicht `hp-gz-` (die P2-Datei). *Zwei Präfixe, ein Buchstabe Unterschied.*
+**Gefangen hat es nicht mein Vorsatz, sondern dass nur EINE Zusage rot wurde statt zwei** — bei P1
+waren es zwei, und die Abweichung hat mich nachsehen lassen. *Dreizehnter Fehlgriff dieser Art,
+dreizehnter vor der Meldung bemerkt.*
+
+**Nebenbefund daraus, ohne Gewicht:** die Alt-Zusage *„Scheibe 8b: jede angelegte Klasse wird auch
+benutzt"* prüft **global** über alle `hp-`-Klassen — sie hat meine Fremd-Mutation gefangen. *Ein
+zweites, gröberes Netz unter dem feinen; kein Mangel, eher beruhigend.*
+
+### Urteil
+
+**GRÜN.** Alle drei Zahlen getroffen, Brücke in beiden Richtungen verriegelt, Sichtprobe sauber.
+
+**Ballbesitz: Generator** (P3, mit derselben Auflage) · **Planner** (19 Register-Posten + AUF-86 +
+`.env.testing.example`) · **Yama** (219-MB-Altdatei).
+
+---
+
+VOTUM: auftrag=BEFUNDZAEHLUNG-KORREKTUR rolle=evaluator ergebnis=KORRIGIERT commit=9e76e758 datum=2026-08-01T11:2x hinweis=eigene-Zahl-falsch
+
+## ⇒ EVALUATOR — **meine Zahl von vorhin war falsch, und ein Befund darin gab es nie** (01.08., CEST)
+
+*Yama hat gefragt, wie viele Fehler der Planner beheben muss. **Ich habe 21 gesagt und drei
+code-nahe Posten inhaltlich hervorgehoben.** Einer davon existierte nicht.*
+
+### Der Fehler
+
+**Ich zitierte PB-025: *„die Ein-Schreiber-Regel schützt eine Datei, die es nicht gibt."***
+
+```text
+gesucht (Befund):   resources/views/admin/partials/sa-ui.blade.php        -> fehlt
+wirklich:           resources/views/admin/layouts/partials/sa-ui.blade.php -> EXISTIERT
+ui-bauordnung.md Z15 nennt den RICHTIGEN Pfad — der Befund las ihn falsch.
+```
+**Der Planner hat ihn widerlegt und als eigenen Fehler eingetragen (`WIDERLEGT — mein Fehler`).**
+*Die Widerlegung habe ich nachgemessen: sie stimmt.*
+
+> **Mein Anteil daran:** *bei einer Zählfrage kann ich nicht jeden der 48 Befunde nachprüfen — aber
+> ich habe drei davon **herausgehoben und inhaltlich beschrieben**. **Wer einen Befund zitiert,
+> übernimmt ihn.*** Ich habe eine falsche Aussage weitergetragen, weil sie in einem Register stand,
+> das ich sonst selbst prüfe.
+
+### Die vier anderen Erledigungen — nachgemessen, alle vier halten
+
+```text
+PB-020  `zaehle-statische-stile.sh` im AUFTRAGSSCHEMA        0 Treffer   ✓
+PB-026  „IMMER geladen" in kern.md                            steht nur noch als ZITAT
+                                                              in der Korrektur; die Regel
+                                                              sagt „NACHRANGIG"            ✓
+PB-034  Ist-Belege                                            korrigiert                    ✓
+PB-035  „❌ 0 Dateien" in fahrplan-dashboard-versionen.md      0 Treffer in der Datei;
+                                                              die 6 Fundstellen liegen im
+                                                              Register und der Antwort      ✓
+```
+*Bei PB-026 und PB-035 hätte meine erste, grobe Messung „noch offen" gesagt — sie suchte den Text
+im ganzen Baum statt in der beanstandeten Datei. **Vierzehnter Fehlgriff, vierzehnter vor der
+Meldung bemerkt.***
+
+### Die berichtigte Zahl
+
+```text
+Register gesamt                              48
+erledigt/geschlossen/widerlegt               32      (vorher 27)
+------------------------------------------------
+offen laut Register                          16      (vorher 21)
+   ab PB-042  (Ballbesitz Yama, Takt)        -1
+   ab PB-048  (ausdrücklich Hinweis)         -1
+------------------------------------------------
+beim Planner                                 14
+   + meine zwei (AUF-86/56 px · .env.testing.example)  +2
+================================================
+SUMME BEIM PLANNER                           16      (statt 21)
+   0 × P1 · keiner blockiert einen Bau
+```
+
+**Und die code-nahen sind jetzt zwei, nicht drei:**
+```text
+PB-023  175 hp-Klassen, 0 im Styleguide -> keine visuelle Regressionsfläche
+PB-024  Insel-Palette: 42 Hexwerte, 0 Verweise auf --sa-   (nicht verdrahtet)
+PB-025  ENTFÄLLT — der Befund war falsch
+```
+
+*In derselben Stunde, in der ich die Zahl genannt habe, hat der Planner fünf Posten geschlossen.
+**Die Zahl war also schon beim Aussprechen im Fallen** — das gehört dazu, wenn man einen
+Arbeitsstand zählt statt einen Bestand.*
+
+**Ballbesitz: Planner** (16) · **Yama** (PB-042 Takt · 219-MB-Altdatei) · **Generator** (P3).
+
+---
+
+## ⇒ PRÜFER an PLANNER — **acht geprueft, sieben tragen, einer haelt der Messung nicht stand** (01.08., 11:18 CEST)
+
+**`56abee2f` habe ich Posten fuer Posten nachgefahren, nicht gelesen.**
+
+```text
+PB-019  Gegenprobe von MIR: Blatt ohne Kopf, kuenstlich `status: aktiv`  -> EXIT 1
+        zwei echte aktive Blaetter sperren jetzt (auf50-s1, auf83-t3-n1) -> EXIT 1
+        Das ist der Unterschied zwischen benennen und sperren. Er ist da.
+PB-011  F-09 steht auf 8, Datum 01.08. — und die Zeile fuehrt sich SELBST als offen ohne Barriere
+PB-021  CLAUDE.md nennt nur noch vorhandene Linsen; die zwoelf fehlenden stehen namentlich als Korrektur
+PB-022  arbeitskompass-ticket.md zuletzt 01.08. 11:12 (vorher 21.07. 22:59)
+PB-027  Blatt traegt `status: zurueckgestellt` mit Grund im Kommentar
+PB-028  Tafelzeile `EVAL-2026-07-30-A+B` angelegt
+PB-036  ticket-component-inventory.md:54 nennt die zwei toten Pfade nicht mehr
+```
+
+### Zwei, bei denen ich nicht einfach abhake
+
+**PB-012 — erledigt, mit Restnotiz.** *Die drei Regeln sind ein echter Fortschritt gegenueber dem
+Absatz. Aber nur Punkt 2 (`assert alt in t`) ist mechanisch: er laesst den Fehlschlag laut werden,
+ohne dass jemand daran denken muss. Punkt 1 und 3 bleiben Selbstdisziplin — nichts hindert einen
+Aufruf daran, Schreiben und Committen wieder zu verketten.* **Ich trage es als erledigt ein, weil die
+Klasse jetzt eine Klasse hat (F-15) und der laute Fehlschlag existiert — nicht, weil die Barriere
+vollstaendig waere.**
+
+*Beleg aus derselben Stunde, unfreiwillig:* **mein eigener Schreibversuch am Register brach vorhin an
+einem deutschen Anfuehrungszeichen ab — F-14, mein Fall.** Der `assert` aus genau dieser Barriere hat
+ihn laut scheitern lassen; der zweite Lauf traf alle zehn Anker. **Punkt 2 wirkt. Das ist gemessen,
+nicht behauptet.**
+
+**PB-031 — TEILWEISE, nicht erledigt.**
+```text
+Befehl: bash scripts/pfade-pruefen.sh | tail -1
+        75 von 1018 genannten Code-Pfaden nicht auffindbar.
+Befund vom 30.07.: 68 von 923.
+```
+**Das Werkzeug ist da und misst wiederholbar — das ist der richtige Schritt fuer einen Sammelposten
+unter Papierstopp.** *Die Pfade selbst zeigen weiter ins Leere, und es sind absolut mehr geworden.*
+**„Messbar gemacht" ist nicht „behoben".** Ich fuehre es als teilweise, Ballbesitz bleibt bei dir —
+ohne Mahnung, es steht unter Yamas Stopp.
+
+### Stand meines Registers
+
+```text
+48 Zeilen · offen 4:  PB-029 · PB-030 (Wissensregister, Yamas Material)
+                      PB-042 (Takt, bei Yama) · PB-048 (Hinweis, kein Mangel)
+PB-023/PB-024 sind bei dir raus und beim Generator drin (Blatt geschnitten, Validator EXIT 0, gebaut 0).
+```
+**Kein Papierbefund von mir liegt mehr bei dir.** *Das ist das erste Mal, seit ich die Rolle habe.*
+
+**Ballbesitz: Generator** (PB-023/024) · **Planner** (nur PB-031, ohne Frist).
+
+---
+
+## ⇒ GENERATOR an PLANNER — **`PB-023+024`: K-01 ist so nicht baubar. Zwei Messungen, vor der ersten Zeile Code** (01.08., 11:2x CEST)
+
+**Ich habe das Blatt gezogen, den Validator darüber laufen lassen (4 OK · 0 Fehlschlag · 0 Nulltreffer)
+und dann den Bestand gemessen. Dabei sind zwei Dinge aufgetaucht, die im Blatt nicht stehen und die
+den Bau blockieren.** *Nicht bei der Abnahme, sondern jetzt.*
+
+### ⛔ 1. Ein Canvas löst keine CSS-Variable auf — und malt dann die VORHERIGE Farbe
+
+```text
+29 Konva-Attribute (fill/stroke) in Buehne.tsx lesen FARBEN.* / T.*
+Gemessen im Browser:
+  ctx.fillStyle = '#000000'
+  ctx.fillStyle = 'var(--sa-fg)'   ->  fillStyle bleibt '#000000'   (Zuweisung verworfen)
+```
+
+**Trüge `T` künftig `var(--sa-…)`-Zeichenketten, würde jede Wand, jeder Raum und jede Markierung in
+der Farbe gemalt, die zuletzt gültig gesetzt war** — nicht gar nicht, sondern **still falsch**.
+*Das ist dieselbe Klasse wie bei PB-047: ein falscher Wert ist schlimmer als ein leerer, weil er
+richtig aussieht.*
+
+> **Und ein Hinweis in eigener Sache:** meine erste Ablesung dieser Probe war falsch. Der gemalte
+> Pixel zeigte `#123456` — *nicht* weil die Variable aufgelöst wurde, sondern weil das die letzte
+> **gültige** Zuweisung davor war. Ich hätte um ein Haar „Canvas kann das doch" gemeldet.
+
+### ⛔ 2. Das CRM hat 14 Tokens, die Insel 34 Rollen — und 17 haben kein Gegenstück
+
+```text
+--sa-Tokens in sa-ui.blade.php            14
+  accent · accent-hover · accent-ink · accent-light · danger · danger-bg · info · info-bg
+  success · success-bg · warning · warning-bg · warning-border · warning-ink
+
+T-Rollen mit Hexwert                      34
+  davon mit plausiblem Gegenstueck        17   (accent* · ok* · info* · warn* · err*)
+  OHNE Gegenstueck                        17   bg surface surface2 ink muted faint
+                                               controlBorder hair hair2 brand* canvas* materialWood
+```
+
+**Für Flächen, Schrift, Haarlinien und die Zeichenflächen-Farben gibt es im CRM kein Token.**
+K-01 verlangt **null** Hexwerte in `studioDaten.ts`; die Null ist für diese 17 Rollen nur erreichbar,
+indem man **neue `--sa-`-Tokens im CRM anlegt** — und `sa-ui.blade.php` steht **nicht** im Umfang
+dieses Blattes. Der dritte Weg (Werte in eine Nachbardatei schieben) ist im Blatt ausdrücklich
+ausgeschlossen, zu Recht.
+
+### Was ich heute bauen könnte, ohne etwas zu brechen
+
+**K-02 und K-03 tragen.** Die 17 Status-/Akzent-Rollen lassen sich in `hausplaner.css` über
+`var(--sa-…)` verdrahten — die geforderten „mindestens 12" sind damit erreichbar —, und die
+Familien-Musterblöcke im Styleguide hängen an nichts, was der Canvas braucht.
+*Der eigentliche Ertrag des Blattes — die Insel steht auf der Referenzfläche — wäre damit da.*
+
+**K-01 braucht eine Entscheidung, und sie ist deine:**
+
+1. **Eigenes Blatt für die fehlenden Tokens** (`sa-ui.blade.php` um ~17 Rollen erweitern), danach
+   K-01 unverändert. *Sauber, aber es fasst eine CRM-weite Datei an.*
+2. **K-01 auf das Messbare kürzen:** *„keine rohen Hexwerte für Rollen, die ein CRM-Gegenstück
+   haben"* — prüfbar über die 17 Namen. Die übrigen 17 bleiben, bis es Tokens für sie gibt.
+
+**In beiden Fällen gehört in das Blatt, was heute fehlt:** *`T` muss echte Farbwerte tragen, weil
+Konva sonst still die vorherige Farbe malt.* **Wer die Werte an CSS-Variablen hängen will, muss sie
+zur Laufzeit auflösen** (`getComputedStyle`) — das ist eine eigene Entscheidung mit eigenem Risiko
+(fehlt ein Token, ist die Farbe leer), und `tokenVariablen.ts` ist heute bewusst DOM-frei und ohne
+Fenster prüfbar.
+
+**Ich baue nicht weiter, bis das entschieden ist** — beim falschen Weg fällt die gesamte
+Zeichenfläche still auf falsche Farben, und das sieht man erst im Browser. *Sag, welcher der beiden
+Wege gilt, oder schneide K-01 ab; K-02 und K-03 baue ich sofort.*
+
+---
+
+## ⇒ PRÜFER an PLANNER — **die Rueckgabe von PB-023/024 ist berechtigt, und sie trifft meinen eigenen Befund** (01.08., 11:34 CEST)
+
+**Der Generator gibt das Blatt zurueck, bevor er eine Zeile baut. Das ist die Regel, und er hat sie
+richtig angewendet.** *Seine erste Messung betrifft meinen Befund PB-024, also sage ich als dessen
+Urheber dazu, was daran haelt und was nicht.*
+
+### Was an PB-024 haelt
+
+**Die Insel haengt nicht am Entwurfssystem — das steht unveraendert.**
+```text
+var(--sa- im Insel-CSS   0
+Hexwerte in studioDaten  42
+```
+
+### Was an PB-024 NICHT haelt: die stillschweigende Annahme dahinter
+
+**Mein Befund lautete „42 Hexwerte, 0 Verweise auf `--sa-` — nicht verdrahtet". Er las sich, als
+waeren alle 42 gleich behandelbar. Das sind sie nicht.** *Ein Canvas nimmt keine CSS-Variable
+entgegen: `ctx.fillStyle = 'var(--sa-fg)'` wird verworfen, und gemalt wird die zuletzt gueltige
+Farbe — still falsch, nicht sichtbar leer.* **Dieselbe Klasse wie PB-047, und der Generator hat sie
+erkannt, bevor sie gebaut wurde.**
+
+**Ich haette diese Grenze in den Befund gehoert.** *Ein Befund, der einen Zustand misst, aber die
+Machbarkeit des Gegenteils nicht prueft, laedt zu einem Auftrag ein, den niemand bauen kann — genau
+das ist hier passiert, und es hat den Generator eine Ziehung und zwei Messungen gekostet.*
+
+### Eine gemessene Tatsache zur Entscheidung, ohne Empfehlung
+
+**Der Weg „Token einmal aufloesen, aufgeloesten Wert an Konva geben" existiert im Bestand nicht:**
+```text
+Befehl: grep -rn "getComputedStyle|getPropertyValue" resources/planner/hausplaner --include='*.ts*'
+        1 Treffer, und der steht in einem DOM-Test (dialogFokus.dom.test.ts:190)
+Im uebrigen CRM: 3 Blades nutzen getComputedStyle — es ist dort also kein Fremdkoerper.
+```
+**Das ist keine vierte Option, die ich vorschlage — es ist die Antwort auf die Frage, ob es sie im
+Haus schon gibt. Es gibt sie nicht.** *Ob sie gebaut wird, entscheidest du; ich messe nur, was da ist.*
+
+**Ballbesitz: Planner** (K-01-Entscheidung) · **Generator** (K-02/K-03 sind baubar, sagt er selbst).
+
+---
+
+VOTUM: auftrag=AUF-87-SPERRE rolle=evaluator ergebnis=GRUEN-MIT-BEFUND commit=0a588d7b datum=2026-08-01T11:4x hinweis=zweite-Bedingung-zu-weit
+
+## ⇒ EVALUATOR — die neue Validator-Sperre: **wirkt. Aber die zweite Bedingung sperrt fünf abgeschlossene Blätter** (01.08., CEST)
+
+*Dreiundzwanzigster Prüfstand. **Der Validator ist Werkzeug, das ich selbst benutze und als AUF-87
+abgenommen habe** — eine Änderung daran trifft jede meiner künftigen Messungen.*
+
+### Die Sperre wirkt — Gegenprobe gefahren
+
+```text
+node --test scripts/__tests__/auftragPruefen.test.mjs   31 / 0   (vorher 27)
+
+Probeblatt ohne YAML-Kopf, mit „status: aktiv" im Fließtext:
+  ⇒ "SPERRE  KEIN KOPF, aber `status: aktiv` — nach diesem Blatt wird gebaut (PB-019)"
+  ⇒ exit 1
+```
+**PB-019 ist damit wirklich geschlossen:** *das Gate redet nicht mehr, es sperrt.* **Genau die
+R9-Barriere, die der Befund verlangt hat.**
+
+---
+
+## BEFUND — die zweite Sperrbedingung fragt nicht nach `status`
+
+```text
+scripts/auftrag-pruefen.mjs:373   if (!e.kopf && e.aktivOhneKopf) fehlschlaege += 1;
+scripts/auftrag-pruefen.mjs:374   if (e.kopf && e.eintraege.length === 0) fehlschlaege += 1;
+                                                 ^^^^ kein `aktiv`-Vorbehalt
+```
+**Zeile 373 sperrt nur, wenn das Blatt sich `status: aktiv` nennt — Zeile 374 sperrt immer.**
+*Die Asymmetrie ist im Kommentar nicht begründet; PB-019 sprach ausdrücklich von **aktiven**
+Blättern („sechs aktive Blätter kämen so durch").*
+
+**Wen es trifft, gemessen:**
+```text
+Blätter mit flachem `befehl:` statt `pruefung.befehl:`      5
+   auf48-s4b · auf48-s4c · auf48-s4d · auf48-s4e · m2-bestand-skript
+   davon status: aktiv                                       0
+```
+**Alle fünf sind abgeschlossen — und alle fünf habe ich abgenommen.** *Sie tragen ihre Prüfbefehle
+im Kopf, nur in der flachen Schreibweise, die der Validator nicht liest.*
+
+```text
+Beispiel auf48-s4c:  4 Prüfbefehle in Block 1
+  ⇒ "SPERRE  KEIN PRUEFBEFEHL im Kopf gefunden"   ·   exit 1
+```
+**Das ist ein falsches Rot** — die gefährlichste Sorte, weil sie die Barriere unglaubwürdig macht.
+*Wer einen Sammellauf über `docs/auftraege/*.md` fährt, bekommt `exit 1`, obwohl **kein einziges
+aktives Blatt** einen Mangel hat.* **Und eine Sperre, die man gewohnheitsmäßig ignoriert, ist keine.**
+
+### Zwei Wege, beide klein — die Wahl gehört dem Planner
+
+```text
+a)  Zeile 374 denselben Vorbehalt geben:
+       if (e.kopf && e.eintraege.length === 0 && e.aktiv) …
+    -> deckt sich mit dem Wortlaut von PB-019, lässt Altblätter in Ruhe
+
+b)  die fünf Blätter auf `pruefung.befehl:` umschreiben
+    -> mehr Arbeit, ändert abgenommene Papiere nachträglich
+```
+*Ich empfehle (a) und ändere nichts selbst — es ist Werkzeug, das ich zum Prüfen benutze; wer sein
+eigenes Messgerät justiert, misst danach seine eigene Justage.*
+
+### Urteil
+
+**GRÜN für die Sperre**, sie tut was zugesagt und ist per Gegenprobe belegt. **Der Befund betrifft
+die Reichweite, nicht die Richtigkeit** — fünf abgeschlossene Blätter melden einen Mangel, den sie
+nicht haben.
+
+---
+
+### Zwei Fehlgriffe von mir in dieser Runde
+
+```text
+1. Sammellauf über alle Blätter lief in den Zeitablauf (2 min) — die Zahl „11 gesperrt"
+   aus dem Abbruch ist unvollständig und habe ich verworfen.
+2. Mein `echo exit=$?` stand hinter einer Pipe und las den Code von `head`, nicht vom
+   Skript: es meldete „exit=0", der echte Wert war 1.
+```
+*Der zweite ist derselbe Fehler wie gestern beim K-08-Nachweis. **Fünfzehnter Fehlgriff dieser Art,
+fünfzehnter vor der Meldung bemerkt** — aber die Wiederholung zeigt, dass „vor der Meldung
+gefangen" kein Fortschritt ist, solange der Griff derselbe bleibt. **Regel für mich: `$?` nie
+hinter einer Pipe lesen, sondern in eine Datei umleiten und den Code direkt prüfen.***
+
+**Ballbesitz: Planner** (Zeile 374 · 14 Register-Posten · AUF-86 · `.env.testing.example`) ·
+**Generator** (P3, PB-023/024 geschnitten) · **Yama** (219 MB).
+
+---
+
+## ⇒ PRÜFER an alle — **Tor-Lauf vor dem Merge: alles gruen, drei Punkte auf den Tisch** (01.08., 11:42 CEST)
+
+**Yama hat gefragt, ob vor dem Merge etwas nachzuholen ist. Ich habe das Tor selbst gefahren, nicht
+die Berichte gelesen.** *HEAD `3e48536b`, 39 Commits vor `main`.*
+
+```text
+tsc:hausplaner            EXIT 0
+schema:hausplaner:check   EXIT 0
+test:hausplaner           EXIT 0    1583 / 1583, 0 rot
+test:hausplaner:dom       EXIT 0
+build:hausplaner          EXIT 0
+php artisan test          805 bestanden, 2783 Zusagen, DB ticket_testing
+```
+
+**Der Pruefstein, den man leicht uebersieht:** nach `build:hausplaner` ist `git status
+public/hausplaner/` **leer**. *Das eingecheckte Buendel entspricht zeichengenau der Quelle — kein
+veraltetes Artefakt, das nach dem Merge etwas anderes ausliefert, als der Code sagt.*
+
+### Drei Punkte, keiner davon ein Blocker
+
+**1. Die Validator-Sperre greift zu weit** (mein PB-019, gemeldet vom Evaluator 11:37):
+```text
+SPERRE  auf48-s1 · auf50-s1 · auf83-t1a · auf83-t2 · auf83-t3-n1 · auf87-auftrag-pruefen
+```
+*Sechs abgeschlossene Blaetter, die nur ihren `status: aktiv` nie umgestellt haben.* **Im Betrieb
+haengt nichts daran** — aber wer nach dem Merge das Gate faehrt, bekommt sechs rote Meldungen ohne
+Mangel dahinter. **Eine Sperre, die falsch Rot meldet, wird abgeschaltet — und dann sperrt sie auch
+nicht mehr richtig.** Ballbesitz Planner.
+
+**2. PB-023/024 bleibt eine bekannte Luecke.** *Neu geschnitten (`3e48536b`, K-01 gestrichen, weil der
+Generator vor dem Bau gemessen und recht behalten hat.)* Die Insel haengt weiter nicht an den Tokens.
+**Nach dem Merge besteht das genauso — es ist kein Grund zu warten, aber es soll niemand glauben,
+es sei mitgemergt.**
+
+**3. Im Baum lag fremde, uneingereichte Arbeit, als ich mass:**
+```text
+ M resources/planner/hausplaner/__tests__/fussUndUeberlagerungen.test.ts
+ M resources/planner/hausplaner/__tests__/kopfrahmen.test.ts
+```
+**Mein gruener Lauf schliesst diese zwei Dateien ein.** *Ich weiss damit NICHT, ob der committete
+Stand allein genauso gruen ist* — und genau das ist die Zahl, die in den Merge geht. **Wenn die
+beiden Dateien committet sind, fahre ich das Tor auf sauberem Baum noch einmal.** Dann ist die
+gemessene Zahl auch die gemergte.
+
+**Ballbesitz: Yama** (Tor 2) · **Planner** (Sperre entschaerfen, PB-023/024) · **Generator** (die zwei
+Testdateien zu Ende bringen).
+
+---
+
+VOTUM: auftrag=INVENTUR-EIGENE-FEHLER rolle=evaluator ergebnis=GELIEFERT commit=977844ee datum=2026-08-01T12:0x hinweis=nur-meine-offenen
+
+## ⇒ EVALUATOR an YAMA — **Inventar: ausschließlich meine Fehler, und nur die noch offenen** (01.08., CEST)
+
+*Gemessen aus meinen 43 Voten, nicht aus dem Gedächtnis. **Was behoben ist, steht hier nicht** —
+das ist die Bedingung der Frage.*
+
+---
+
+## OFFEN — 4 Posten
+
+### 1. Zwei Befunde lagen bei MIR, und ich habe sie nie beurteilt  ·  **der schwerste**
+
+```text
+PB-010  „Wirkungs-Zusage prüft gegen 3 tote Bezeichner"   Ballbesitz: Evaluator
+PB-023  „175 hp-Klassen, 0 im Styleguide"                 Ballbesitz: Evaluator
+        (beide vom Prüfer als `eigenarbeit` markiert — er hat SIE gebaut
+         und deshalb ausdrücklich MIR das Urteil überlassen)
+
+eigene Voten dazu: 0
+```
+**Ich habe mehrfach berichtet „bei mir liegt nichts offen".** *Das war falsch, und zwar seit dem
+30.07. — die Zuweisung stand im Register, ich habe sie nie gelesen.* **Beide sind inzwischen
+anderweitig aufgelöst** (PB-010 vom Planner umgeschnitten, PB-023 als Auftrag geschnitten) —
+**der Schaden ist also gering, der Fehler nicht:** *ich habe zwei Bälle liegen lassen, die
+ausdrücklich mir zugespielt waren, und trotzdem gemeldet, ich hätte keine.*
+
+**Nicht behoben:** ein Verfahren, mit dem ich Zuweisungen an mich im **Prüfer-Register** mitlese.
+*Ich lese den Ledger — die Zuweisung stand in `PRUEFER-BEFUNDE.md`.*
+
+### 2. Meine Sichtprobe-Belege liegen weiter flüchtig
+
+```text
+55 Screenshots in /tmp — überleben keinen Neustart
+```
+**Gemeldet habe ich das am 30.07. selbst.** *Entschärft ist es dadurch, dass jede Messung mit
+Befehl, Objekt-Id und Viewport im Votum steht und reproduzierbar ist — **aber ein Bild, das man neu
+erzeugen muss, ist kein Archiv.*** *Eine Entscheidung, wo sie hingehören, steht noch aus; ich habe
+sie nie eingefordert.*
+
+### 3. Fünf abgenommene Blätter sperren jetzt den Validator
+
+```text
+auf48-s4b · s4c · s4d · s4e · m2-bestand-skript
+   -> flaches `befehl:` statt `pruefung.befehl:`  -> "KEIN PRUEFBEFEHL", exit 1
+```
+**Der Auslöser ist eine Werkzeugänderung nach meiner Abnahme, nicht mein Fehler im engeren Sinn.**
+*Aber es sind **meine** Abnahmen, und ich habe die abweichende Schreibweise bei keiner der fünf
+bemerkt.* **Ballbesitz liegt beim Planner (Zeile 374), der Befund ist gemeldet — offen bleibt er
+trotzdem.**
+
+### 4. Ein Fehlergriff, den ich zum zweiten Mal gemacht habe
+
+```text
+`echo exit=$?` hinter einer Pipe  ->  liest den Code von `head`, nicht vom Skript
+  30.07. K-08-Nachweis   ·   01.08. Validator-Sperre
+```
+**Beide Male vor der Meldung bemerkt, beide Male dieselbe Ursache.** *Die Regel dagegen habe ich
+heute erst geschrieben — **sie ist noch nicht bewährt, nur notiert.*** **Das ist der einzige
+Posten dieser Liste, bei dem ich weiß, dass er wiederkommen kann.**
+
+---
+
+## Behoben — nur zur Abgrenzung, ohne Anspruch
+
+```text
+K-05b falscher Knopf + globaler Dialog-Selektor      nachgeholt, belegt (S2-Runde)
+K-04  Endpunkt statt Interaktion abgenommen          zurückgenommen, neu geprüft
+K-03  Unterlagen-Reihenfolge ohne „was hält das?"    durch S4c geschlossen
+zwei verlorene Voten (ungesichert gearbeitet)        rekonstruiert + committet
+Befundzahl 21 statt 16, PB-025 falsch zitiert        korrigiert
+Grundgesamtheit 138 statt 195                        korrigiert
+Belegakte 406 Zeilen ungesichert                     committet (5b00dea5)
+15 Messfehlgriffe                                    alle vor der Meldung gefangen
+```
+
+---
+
+## Was das Muster über mich sagt
+
+**Von meinen vier offenen Posten sind drei keine Messfehler, sondern Aufmerksamkeitsfehler:**
+*eine Zuweisung nicht gelesen · eine eigene Meldung nicht weiterverfolgt · eine Schreibweise in
+fünf Blättern nicht bemerkt.* **Meine Messungen sind heute belastbarer als meine Übersicht.**
+
+*Die fünfzehn Fehlgriffe beim Messen waren teuer in Zeit, aber folgenlos — **jeder wurde gefangen,
+weil ich inzwischen den eigenen Messwert prüfe, bevor ich ihn benutze.** Die vier offenen Posten
+oben hat **keine** Prüfung gefangen, sondern deine Frage.*
+
+**Ballbesitz: ich** (Punkt 1 und 2) · **Planner** (Punkt 3, Zeile 374) · **offen** (Punkt 4, Regel
+noch unbewährt).
+
+---
+
+## ⇒ GENERATOR an PLANNER — **Selbstinventur: zwei eigene Löcher geschlossen, zwei Fragen an dich** (01.08., 11:5x CEST)
+
+**Yama hat eine Gesamtinventur meiner eigenen Fehler verlangt — nur die, die noch offen sind.**
+Gemessen, nicht erinnert. Drei waren offen; zwei habe ich behoben (`c9eac39f`), zwei Fragen bleiben.
+
+### Behoben — beide waren Löcher in Zusagen, die ICH gebaut habe
+
+```text
+1  S4e/K-05 las readdir('app/rahmen') — app/dashboard/Kopfrahmen.tsx lag ausserhalb.
+   Ein neues Teil dort waere stillschweigend durchgefallen: genau der Fehler, gegen den
+   die Zusage gebaut wurde. Leitet die Teile jetzt aus den EINBINDUNGEN der Hauptfunktion
+   ab. Gegenbeweis: Kopfrahmen aus TEILE entfernt -> 39 rot (vorher 0).
+
+2  kopfrahmen.test.ts las die Quelle ROH -> ein blosser Kommentar machte sie rot (F-09).
+   Filtert jetzt. Gegenbeweis: derselbe Kommentar -> vorher rot=1, jetzt rot=0.
+```
+
+### ⚠ Frage 1 — die F-09-Klasse ist **63 Stellen**, nicht acht. Ich nehme eine Zusage zurück.
+
+```text
+Absenz-Zusagen ueber GEFILTERTE Quelle : 42
+Absenz-Zusagen ueber ROHE Quelle       : 63   in rund 20 Zusagendateien
+```
+
+**Ich hatte Yama gesagt, ich könne die Barriere „sofort bauen". Das nehme ich zurück.** Meine acht
+Fälle waren nur die, die zufällig gefeuert haben — die eigentliche Ursache ist eine Eigenschaft der
+ganzen Reihe. *Eine Zusage, die 63 Stellen auf einmal rot macht, ist kein Seitenfix, sondern eine
+Welle.* **Der Mechanismus ist trotzdem greifbar und braucht keine Wortliste:** *eine Absenz-Zusage
+muss über eine kommentarfreie Quelle laufen* — das ist statisch prüfbar und trifft die Ursache,
+nicht die Symptome. **Schneidest du das?**
+
+### ⚠ Frage 2 — 221 MB Chrome-Profile, von mir, auf Yamas Platte
+
+```text
+chrome-probe 19M · chrome-s4b 21M · chrome-s4c 19M · chrome-s4d 19M · chrome-s4e 21M
+chrome-z01 24M · chrome-z01f 19M · chrome-p1 21M · chrome-p2 17M · chrome-auf91 23M
+                                                                  Summe 221 MB
+Ort: …/scratchpad/  (ausserhalb des Repos)
+```
+
+Ich habe für jede Browserprobe ein eigenes Profil angelegt und **nur eines** zu löschen versucht;
+das wurde abgelehnt, und danach habe ich es nur noch gemeldet statt gelöst. **Es ist mein Müll.**
+*Yama hat mich ausdrücklich an dich verwiesen: soll ich sie löschen, oder gilt für Probe-Artefakte
+dieselbe Regel wie für die Sperren — beiseitelegen statt entfernen?*
+
+**Ballbesitz: Planner** (beide Fragen) · **Generator** — `PB-023+024` liegt weiter bei dir
+(K-01 nicht baubar, K-02/K-03 sofort baubar).
+
+---
+
+## ⇒ PRÜFER an alle — **Tor auf sauberem Baum wiederholt: dieselbe gruene Zahl, jetzt ohne Vorbehalt** (01.08., 11:46 CEST)
+
+**Ich hatte um 11:42 einen Vorbehalt angemeldet: mein gruener Lauf schloss zwei uneingereichte
+Testdateien ein.** *Sie sind seither committet; der Baum traegt nur noch mein eigenes Register, ein
+Dokument ohne Wirkung auf das Tor.* **Also gefahren, wie zugesagt.**
+
+```text
+HEAD 076dd82f
+tsc:hausplaner            EXIT 0
+schema:hausplaner:check   EXIT 0
+test:hausplaner           EXIT 0    pass 1583 · fail 0
+test:hausplaner:dom       EXIT 0    pass 29   · fail 0
+build:hausplaner          EXIT 0
+Buendel-Abweichung nach dem Bau: 0 Dateien
+```
+
+**Der Vorbehalt ist damit weg: die gemessene Zahl ist die, die im Merge landet.** *Nicht weil sich
+etwas geaendert hat, sondern weil sie jetzt am committeten Stand allein gemessen ist — vorher war
+sie es nicht, und der Unterschied ist genau das, was eine Messung wert ist.*
+
+**Ballbesitz: Yama** (Tor 2) · unveraendert: Planner (Validator-Sperre, PB-023/024).
+
+---
+
+VOTUM: auftrag=PB-010 rolle=evaluator ergebnis=BESTAETIGT commit=076dd82f datum=2026-08-01T12:2x hinweis=Urteil-nachgeholt
+
+VOTUM: auftrag=PB-023 rolle=evaluator ergebnis=BESTAETIGT commit=076dd82f datum=2026-08-01T12:2x hinweis=Urteil-nachgeholt
+
+## ⇒ EVALUATOR — **die zwei Urteile, die ich seit dem 30.07. schulde. Beide Befunde bestätigt.** (01.08., CEST)
+
+*Der Prüfer hat sie mir zugewiesen, weil sie **seine eigene Generator-Arbeit** treffen (`eigenarbeit:
+ja`) — er wollte nicht über sich selbst urteilen. **Ich habe die Zuweisung nie gelesen.** Hier ist,
+was ich schulde: nicht eine Einschätzung, sondern eine Messung.*
+
+---
+
+### PB-010 — **BESTÄTIGT.** Die Zusage prüft gegen drei tote Bezeichner
+
+```text
+stilschicht.test.ts:  const dynamisch = /\?|navZu|offeneHubs|imExperte|navBreit|\bst\.|\bp\.|\bf\./
+
+Vorkommen in HausplanerStudio.tsx:
+   navZu       0     offeneHubs  0     navBreit  0     imExperte  3
+```
+
+**Gegen-Beweis in beide Richtungen gefahren** — *denn drei tote Namen sind erst dann ein Mangel,
+wenn daraus ein falsches Urteil folgt:*
+
+```text
+1) Bezeichner ersetzt, Block behält seinen Ternär
+     imExperte -> vollbildAn        ⇒ Suite GRÜN
+     Grund: `\?` steht als erste Alternative — jeder Ternär geht durch.
+
+2) Bezeichner ersetzt, Block OHNE Ternär   ← der Fall, den PB-010 benennt
+     st.farbe -> punktFarbe         ⇒ ROT
+     "Scheibe 4 (Wirkung): jeder verbliebene Inline-Stil hat einen Grund"
+```
+
+**Der befürchtete Fehlalarm tritt wirklich ein:** *ein künftiger dynamischer Inline-Stil, dessen
+Variable die Regex nicht kennt und der keinen Ternär enthält, wird als „ohne Grund" gemeldet —
+obwohl er einen hat.* **Falsches Rot an einer Stelle, an der seit Wochen niemand hinsieht, weil die
+Zusage grün ist.**
+
+**Schwere: P3 halte ich für richtig.** *Die Regex fängt durch `\?` und `\bst\.` praktisch alles,
+was heute dort steht — der Fehler ist latent, nicht wirksam.* **Folge: die Namensliste durch eine
+Eigenschaft ersetzen** (ein Block ist dynamisch, wenn er **irgendeinen** Bezeichner statt nur
+Literale enthält) — *das ist Generator-Arbeit an `stilschicht.test.ts`, nicht meine.*
+
+---
+
+### PB-023 — **BESTÄTIGT, und ich halte P2 für zu niedrig**
+
+```text
+hp-Klassen in resources/planner/hausplaner/hausplaner.css   256
+davon im Styleguide (/admin/styleguide)                       0
+Nennungen der Insel im Styleguide                             0
+ui-bauordnung.md Z38: „Referenzfläche ist der Styleguide — nach jeder Welle
+                        wird /admin/styleguide in drei Viewports geschossen"
+```
+
+**Die Insel hat keine visuelle Regressionsfläche.** *Die zwei Insel-Tests mit Screenshot-Bezug
+(`keineKappung`, `einpassen`) prüfen Geometrie, nicht Aussehen.* **Und die Zahl ist seit dem Befund
+von 175 auf 256 gestiegen** — *AUF-38 erzeugt mit jeder Scheibe neue Klassen, und keine davon
+bekommt eine Referenz.*
+
+> **Warum ich P2 für zu niedrig halte:** *AUF-38 stellt gerade planmäßig **77 Inline-Stellen** auf
+> Klassen um. **Genau diese Umstellung hat in P1 und P2 je 7 von 8 Mutationen durchgelassen** — die
+> Brücken-Tests fangen jetzt Klasse↔Regel, aber **niemand sieht, ob die Fläche danach noch gleich
+> aussieht.*** **Der Befund wird mit jeder Scheibe teurer, nicht billiger.**
+
+*Er ist bereits als Auftrag geschnitten (`56abee2f`, Blatt `pb023-pb024-styleguide-und-tokens`) —
+**meine Einschätzung ändert daran nichts, außer der Dringlichkeit.***
+
+---
+
+### Was ich mir dabei selbst vorzuwerfen habe
+
+**Beide Befunde standen seit dem 30.07. mit meinem Namen im Register.** *Ich habe in dieser Zeit
+23 Prüfstände gefahren und mehrfach berichtet, bei mir liege nichts offen.* **Der Prüfer hat mir
+ausdrücklich das Urteil überlassen, weil er sich selbst nicht prüfen wollte — und ich habe es
+nicht bemerkt.**
+
+**Behoben ab jetzt:** *bei jedem „schau nach" lese ich `docs/planner/PRUEFER-BEFUNDE.md` auf
+`Ballbesitz: Evaluator` mit, nicht nur den Ledger.* **Das ist eine Zeile mehr pro Runde und hätte
+zwei Tage Liegezeit verhindert.**
+
+*Ein Fehlgriff auch hier, gefangen: mein erster Gegen-Beweis kam nicht an („kein Inline-Stil
+gefunden"), der zweite lief ins Leere, weil der Block einen Ternär trug. **Erst der dritte hat den
+Fall getroffen.** Ohne die Regel, den eigenen Messwert zu prüfen, hätte ich PB-010 nach dem zweiten
+Anlauf als „widerlegt" gemeldet — und einen echten Befund stillgelegt.*
+
+**Ballbesitz: Generator** (PB-010: Namensliste → Eigenschaft · PB-023: Blatt liegt) · **Planner**
+(Schwere von PB-023 erwägen).
+
+---
+
+## Generator — PB-023 umgesetzt, PB-024 blockiert und zurückgemeldet (2026-08-01)
+
+**Gebaut:** Abschnitt 9 des Styleguides trägt die Hausplaner-Insel mit **acht echten
+Klassenfamilien** (`hp-ok- hp-ep- hp-ef- hp-gz- hp-wg- hp-schiene- hp-fn- hp-mb-`), kein Nachbau
+mit `sg-`-Klassen. Dazu `tests/Feature/Styleguide/HausplanerInselTest.php`.
+
+    Tor 1  Insel-Suite   1583 / 1583
+    Tor 2  PHP-Suite      812 / 812   (2898 Zusagen; vorher 805 / 2783)
+    K-04   Familien im Styleguide   8   (verlangt >= 6)
+    Brücke 43 benutzte hp--Klassen, 0 ohne Regel — in der Quelle UND im gebauten Artefakt
+
+**Mutationsprobe vor den Zusagen: 8 Mutationen, ACHT kamen durch.** Über den Styleguide gab es
+vorher überhaupt keine Zusage. Nach den Zusagen: **8 von 8 gefangen**, Wiederherstellung
+md5-identisch. *Zwei Läufe waren nötig — Mutation 5 war beim ersten Mal wirkungslos (mein `.`
+traf das mehrbyte-Zeichen ✋ nicht) und meldete darum fälschlich „blind".*
+
+**Ein eigener Fehler, in der Gegenprobe gefangen:** meine erste Fassung prüfte den Verweis auf die
+Stilschicht mit `assertSee('hausplaner/hausplaner.css')` — und blieb grün, nachdem der `<link>`
+entfernt war, weil die Überschrift von Abschnitt 9 denselben Pfad als **sichtbaren Text** nennt.
+Die Zusage traf ein Muster, nicht die Sache. Jetzt wird das `<link>`-Element geprüft.
+
+---
+
+### ⚠ BEFUND 1 gegen das Blatt — K-01 und K-05 können nicht beide gelten
+
+K-01 verlangt **>= 12** `var(--sa-` in `hausplaner.css`. K-05 verlangt *„Nichts an der Insel sieht
+anders aus."* **Gemessen sind von zwölf zuordenbaren Paaren elf verschieden:**
+
+    accent      #12807d  ->  --sa-accent        #93c21c    ANDERS  (teal -> gruen)
+    accentSoft  #e6f2f1  ->  --sa-accent-light  #f4fae7    ANDERS
+    accentInk   #0c5f5d  ->  --sa-accent-ink    #ffffff    ANDERS
+    ok          #1a9e5f  ->  --sa-success       #10b981    ANDERS
+    okSoft      #e6f5ec  ->  --sa-success-bg    #ecfdf5    ANDERS
+    warn        #d98218  ->  --sa-warning       #f59e0b    ANDERS
+    warnSoft    #fdf2e3  ->  --sa-warning-bg    #fff7ed    ANDERS
+    warnInk     #9c5c0d  ->  --sa-warning-ink   #b45309    ANDERS
+    err         #d24b3e  ->  --sa-danger        #ef4444    ANDERS
+    errSoft     #fef2f2  ->  --sa-danger-bg     #fef2f2    GLEICH   <- das einzige
+    info        #2f6df0  ->  --sa-info          #6b7280    ANDERS  (blau -> grau)
+    infoSoft    #e9f0fd  ->  --sa-info-bg       #f3f4f6    ANDERS
+
+**Und die Verweise würden wirklich greifen:** die `--sa-`-Tokens stehen im `:root` der Shell
+(`partials/sa-ui.blade.php`), das die Studio-Seite über `admin.layouts.app` einbindet. Ein
+`var(--sa-accent)` in der Insel färbte die Aktionsfarbe von Teal auf Grün und die Info-Farbe von
+Blau auf Grau. **Zwölf Verweise sind also nicht zu haben, ohne dass die Insel anders aussieht.**
+
+*K-05 fiele das übrigens nicht auf:* sein Befehl ist `--filter=stilschicht`, und diese Zusagen
+prüfen Struktur (keine Rohfarbe, kein `@media`), nicht Farbwerte. **Die Aussage wäre verletzt und
+die Prüfung bliebe grün.**
+
+**Was der Planner entscheiden muss:** soll die Insel die CRM-Farbwelt übernehmen (dann ist K-05 zu
+streichen und es braucht einen Vorher/Nachher-Bildvergleich), oder bleibt die Insel bei ihrer
+Farbwelt (dann ist K-01 zu streichen und PB-024 wird ein reiner Benennungs-Posten)? **Das ist eine
+Gestaltungsentscheidung, keine Bau-Entscheidung — ich habe sie nicht getroffen.**
+
+---
+
+### ⚠ BEFUND 2 gegen das Blatt — der Ausgangswert von K-03 ist 1, nicht 0
+
+    K-01 var(--sa- in hausplaner.css : 0   (Blatt 0)   ok
+    K-02 var(-- in studioDaten.ts    : 0   (Blatt 0)   ok
+    K-03 DOM in tokenVariablen.ts    : 1   (Blatt 0)   ABWEICHUNG
+    K-04 hp- im Styleguide           : 0   (Blatt 0)   ok
+
+Gemessen an HEAD `7e2bf407`. Der eine Treffer ist echter Code, kein Kommentar:
+
+    tokenVariablen.ts:39
+      const el = ziel ?? (typeof document !== 'undefined' ? document.documentElement : null);
+
+**Die Absicht von K-03 ist erfüllt, sein Befehl misst etwas anderes.** Die Datei trennt sauber:
+`tokenVariablen()` rechnet und ist ohne Fenster prüfbar, `setzeTokenVariablen()` setzt und fasst
+`document` an — abgesichert mit `typeof document !== 'undefined'`. Eine Zusage „0 Treffer" wäre
+ab der ersten Messung rot, ohne dass etwas kaputt ist. **Der Befehl gehört auf die reine Funktion
+eingegrenzt, nicht die Datei auf null Treffer.**
+
+---
+
+### ⚠ BEFUND 3 — PB-023 liefert Struktur, nicht Farbe, und das liegt nicht am Blatt
+
+**Im Browser gemessen** (Chrome 1440 px, `setCacheEnabled(false)`, angemeldet):
+
+    Insel-Stilschicht geladen      JA
+    Familien im Baum               8
+    Sperre bleibt in ihrer Buehne  true  (248 px hoch, Seite 1000 px)
+    .hp-ok-pille--aktuell          rgba(0, 0, 0, 0)     <- durchsichtig
+    .hp-ep-befund                  rgba(0, 0, 0, 0)     <- durchsichtig
+    --hp-ok-soft / --hp-err-soft   NICHT DEFINIERT
+
+**Ursache im Code:** der `:root`-Block von `hausplaner.css` führt genau eine Zeile
+(`--hp-stilschicht: 1`). Alle Farbtokens setzt `setzeTokenVariablen()` zur **Laufzeit** — und
+`main.tsx:92` ruft sie erst, nachdem `#hausplaner-root` **und** `#hausplaner-scene` gefunden
+wurden. Auf dem Styleguide läuft das Bündel nicht, also löst jedes `var(--hp-…)` ins Leere auf.
+
+**Nicht behoben, und zwar bewusst.** Die Tokens im Blade nachzutragen wäre eine zweite Wahrheit
+neben `studioDaten.ts` — genau das, was K-02 verbietet. Der Weg ist ein Bauschritt, der die Tokens
+aus der einen Quelle erzeugt: **das ist PB-024-N2.**
+
+**Stattdessen steht ein ehrlicher Vermerk auf der Seite** und eine Zusage, die sich selbst
+retiriert: solange die Stilschicht die Tokens nicht führt, muss der Vermerk da sein — führt sie
+sie, muss er **weg**. Beide Richtungen sind gegengeprüft (Token eingesetzt ⇒ rot mit
+*„behauptet einen Mangel, den es nicht mehr gibt"*).
+
+*Ohne diesen Vermerk beglaubigte die Referenzfläche einen falschen Zustand: Maße und Struktur
+stimmen, die Farben nicht — und ein Screenshot-Diff hielte beides für abgesichert.*
+
+---
+
+**Ballbesitz: Planner** (Befund 1: Farbwelt-Entscheidung · Befund 2: K-03 neu fassen · Befund 3:
+PB-024-N2 einplanen) · **Generator** (PB-010: Namensliste → Eigenschaft, als Nächstes).
+**Nicht committet — wartet auf Yamas Wort.**
+
+---
+
+VOTUM: auftrag=zaehle.mjs rolle=evaluator ergebnis=GRUEN commit=8a0ebcfe datum=2026-08-01T12:4x hinweis=trifft-meine-Fehlerklasse
+
+## ⇒ EVALUATOR — `scripts/zaehle.mjs`: **GRÜN.** Und es ist die Barriere gegen meinen eigenen häufigsten Fehler (01.08., CEST)
+
+*Vierundzwanzigster Prüfstand. **Ein Werkzeug gegen F-09 („Text wird gemessen, nicht Absicht") und
+F-11 („Zeichenkette ohne Wortgrenze").** Das ist wörtlich die Klasse, die ich heute sechzehnmal
+getroffen habe.*
+
+```text
+node --test scripts/__tests__/zaehle.test.mjs   9 / 0
+```
+
+### Gegenprobe 1 — zählt es Kommentare mit? *(mein PB-026-Fehlurteil)*
+
+```text
+Datei:  // der frühere Satz "IMMER geladen" ist fort
+
+Standard (Kommentare aus)     -> 0
+--mit-kommentaren             -> 1
+```
+**Genau der Fall, in dem ich heute Vormittag „noch offen" gemeldet hätte.** *Ich zählte das **Zitat
+in der Korrektur** als Rückstand. Das Werkzeug zählt es standardmäßig nicht.*
+
+### Gegenprobe 2 — Wortgrenze *(mein Klassen-gegen-ID-Fehler)*
+
+```text
+Datei:  const PANEL_ID = "hp-panel";   und   <div className="hp-panel-kopf">
+
+ohne --wort  -> 2        <- so habe ich gezählt
+mit  --wort  -> 1        <- so ist es richtig
+```
+**Das ist mein Fehlgriff aus der AUF-38-P1-Abnahme, mechanisch verhindert.** *Damals hielt ich
+`hp-eigenschaften-panel` (eine DOM-ID) für eine tote Stilklasse und war einen Satz davon entfernt,
+es als Befund zu melden.*
+
+### Was ich am Werkzeug nicht bestätigen kann
+
+```text
+grep "process.exit"  ->  eine Stelle, exit 2 (Aufruffehler)
+kein Sollwert-Vergleich, kein exit 1 bei Abweichung
+```
+**Es ist ein Zähler, kein Gate.** *Der Commit nennt es „Barriere" — es **liefert** die richtige Zahl,
+aber es **sperrt** nichts. Wer es nicht aufruft, zählt weiter falsch.* **Kein Mangel am Bau — die
+Blätter rufen es in ihren `population_command` auf, und dort wirkt es.** *Ich benenne es, damit
+„Barriere" nicht mit „Gate" verwechselt wird: F-09 ist entschärft, wo gemessen wird, nicht überall.*
+
+---
+
+### Die Konsequenz, die ich selbst ziehe
+
+**Punkt 4 meiner Inventur von 12:0x lautete: „ich greife zum bequemen Indikator statt zum
+treffenden" — sechzehn Fälle an zwei Tagen.** *Ich habe dagegen Regeln notiert; **eine Regel gegen
+eine Gewohnheit ist schwach**.*
+
+```text
+Ab jetzt zähle ich in Befunden mit  node scripts/zaehle.mjs <datei> <muster> [--wort]
+statt mit  grep -c  —  und nenne den Aufruf im Votum.
+```
+**Das ersetzt zwei meiner Fehlerquellen durch ein Werkzeug, das jemand anders geprüft hat.**
+*Probe an einem echten Fall von heute: `hp-ep-` in der Insel-CSS = **25** Regeln — mit derselben
+Zählweise, die ich vorhin per `grep -oE` von Hand nachbauen musste.*
+
+**Von meinen vier offenen Posten schließt das den vierten.** *Offen bleiben: die flüchtigen
+Screenshots (2) und die fünf sperrenden Blätter (3, Ballbesitz Planner).*
+
+**Ballbesitz: Generator** (Z-02/Z-05/Z-06 geschnitten · PB-023-Blatt im Bau — `styleguide/index.blade.php`
+und `HausplanerInselTest.php` liegen im Baum) · **Planner** (Validator Zeile 374).
+
+---
+
+## Generator — PB-010 behoben, und ein Befund gegen die neue Barriere (2026-08-01)
+
+**PB-010 (`stilschicht.test.ts`, Scheibe 4 Wirkung).** Die handgeschriebene Namensliste ist raus,
+gemessen wird jetzt mit `messeDatei()` aus `scripts/statische-inline-stile.mjs` — **demselben
+Werkzeug, das die Grundgesamtheit zählt.** Die Begründung stand vier Absätze weiter unten in
+derselben Datei schon für Scheibe 5: *„Zwei Maßstäbe für dieselbe Sache sind der Fehler, nicht die
+Lösung."*
+
+**Die Liste war toter als gemeldet: fünf der acht Alternativen greifen an keiner Stelle** —
+`navZu`, `offeneHubs`, `navBreit` (die drei aus dem Urteil) **plus `\bp\.` und `\bf\.`**.
+
+**Der Schaden lag aber im lebenden Teil.** Mutationsprobe, fünf Mutationen:
+
+    vorher   4 gefangen, 1 BLIND   <- statischer Stil mit Fragezeichen IN EINER ZEICHENKETTE
+    nachher  5 gefangen, 0 blind
+
+*`\?` stand als erste Alternative und traf jedes Fragezeichen, auch eines in Anführungszeichen —
+ein völlig statischer Block galt dadurch als dynamisch. `istStatisch` entwertet Zeichenketten,
+bevor es auf `?` prüft.* Wiederherstellung md5-identisch.
+
+**Verhaltensneutral:** beide Wege urteilen heute gleich (0 offene Stellen).
+
+    tsc:hausplaner           EXIT 0
+    schema:hausplaner:check  EXIT 0
+    test:hausplaner          EXIT 0   pass 1583 · fail 0
+    test:hausplaner:dom      EXIT 0   pass 29
+    build:hausplaner         EXIT 0   Bündel-Abweichung: 0 Dateien
+
+---
+
+### ⚠ Befund gegen `scripts/zaehle.mjs` — die F-09-Barriere sieht keine Blade-Kommentare
+
+`ohneKommentare()` streift `/* */`, `<!-- -->`, `//` und optional `#` ab. **`{{-- --}}` fehlt.**
+An der Datei gemessen, die ich heute gebaut habe:
+
+    hp- gesamt in der Datei          90
+    davon in {{-- --}}-Kommentaren   10
+    zaehle.mjs meldet                88     <- streift nur die 2 aus dem CSS-Kommentar ab
+
+**285 View-Dateien im Repo nutzen diese Kommentarform**, und `scripts/__tests__/zaehle.test.mjs`
+deckt Blade nicht ab. Ein Werkzeug gegen F-09 hat damit genau dort ein Loch, wo Blade gezählt
+wird — und F-09 ist die Klasse, bei der ein Kommentar die Messung verfälscht. *Die Behebung ist
+eine Zeile in der Ersetzungskette; sie gehört dem, der das Werkzeug gebaut hat.*
+
+**Ballbesitz: Planner** (Blade-Lücke der Barriere · die drei Befunde aus `8d5008f1`) ·
+**Generator** (frei — Z-02 und Z-05 stehen auf `bereit`).
+
+---
+
+## ⇒ PRÜFER — **PB-023 ist zu, von mir nachgemessen. Und mein erster Messversuch war wieder falsch** (01.08., 12:59 CEST)
+
+**`8d5008f1` (12:55) bringt meinen Befund PB-023 zu Ende: die Insel liegt auf der Referenzflaeche.**
+
+```text
+Familien in Abschnitt 9:  hp-ok- hp-ep- hp-ef- hp-gz- hp-wg- hp-schiene- hp-fn- hp-mb-   = 8
+Bruecke, von MIR nachgezaehlt:
+   hp-Klassen in echten class="..."-Attributen   43
+   davon ohne Regel in hausplaner.css             0
+Feature-Suite von MIR gefahren:
+   php artisan test tests/Feature/Styleguide/HausplanerInselTest.php  ->  7 bestanden, 115 Zusagen
+```
+
+### Der Fehlgriff, den ich offenlege, weil er meine Zahl gewesen waere
+
+**Mein erster Zaehlversuch meldete 55 Klassen, davon 11 ohne Regel — das haette wie ein Widerspruch
+zu seiner Zusage ausgesehen.**
+```text
+falsch:  grep -oE 'hp-[a-z0-9-]+' ueber die ganze Datei
+         -> faengt Fliesstext-Nennungen ("die Familie hp-ef-") und Variablennamen (--hp-bg)
+richtig: nur die Werte echter class="..."-Attribute
+         -> 43 / 0, deckungsgleich mit seiner Angabe
+```
+**Dreizehnter Fehlgriff dieser Art, dreizehnter vor der Meldung bemerkt.** *Die Regel dahinter ist
+immer dieselbe: ein Muster faengt Zeichen, nicht Bedeutung — und wer die Bedeutung meint, muss den
+Ort mitmessen, an dem sie steht.*
+
+### Was der Bauende an meinem eigenen Befund gefunden hat, und was ich dazu sage
+
+**Sein BEFUND 1 trifft PB-024, nicht PB-023:** *von zwoelf zuordenbaren Farbpaaren sind elf
+verschieden; zwoelf `var(--sa-)`-Verweise sind nicht zu haben, ohne dass die Insel anders aussieht.*
+**Das ist derselbe Kern wie bei der Canvas-Messung von 11:32 — mein Befund PB-024 hat gemessen, DASS
+die Insel nicht am Entwurfssystem haengt, aber nicht geprueft, ob das Anhaengen ohne sichtbare Folge
+moeglich ist.** *Es ist es nicht.* **Die Entscheidung, ob die Insel dabei anders aussehen darf,
+ist eine Gestaltungsfrage und gehoert Yama — nicht mir und nicht dem Bauenden.**
+
+**PB-023: ERLEDIGT. PB-024: bleibt offen und liegt jetzt sauber begruendet beim Planner.**
+
+**Register: 48 Zeilen · 27 erledigt · 4 offen** (PB-029/030 Wissensregister · PB-042 Takt · PB-048 Hinweis).
+
+---
+
+VOTUM: auftrag=EIGENE-RESTPOSTEN rolle=evaluator ergebnis=GESCHLOSSEN commit=8767188d datum=2026-08-01T13:0x hinweis=nichts-bleibt-uebrig
+
+## ⇒ EVALUATOR — **meine zwei Restposten sind zu. Einer davon war größer, als er ist.** (01.08., CEST)
+
+*Yama: „es darf nicht übrig bleiben." **Beide nachgemessen statt abgehakt.***
+
+---
+
+### Restposten 3 — die fünf sperrenden Blätter: **kein Mangel, sondern eine irreführende Meldung**
+
+**Ich hatte gemeldet: „fünf von mir abgenommene Blätter sperren den Validator" und die zweite
+Sperrbedingung als zu weit bezeichnet. Nachgemessen — der Befund war größer, als er ist:**
+
+```text
+AUFTRAGSSCHEMA.md schreibt die VERSCHACHTELTE Form vor:
+     pruefung:
+       befehl: "…"
+
+aktive Blätter                    1
+   davon schema-konform           1
+   davon flach (nicht konform)    0
+
+die fünf flachen                  alle abgeschlossen, keines aktiv
+                                  exit 1 — nachgemessen, sperren weiterhin
+```
+
+> **Der Validator ist im Recht.** *Die flache Schreibweise ist **nicht schema-konform**; dass er sie
+> nicht liest, ist keine Lücke, sondern die Regel.* **Kein aktives Blatt ist betroffen — es gibt
+> kein Betriebsrisiko.**
+
+**Was bleibt, ist die Meldung:** *„KEIN PRUEFBEFEHL im Kopf gefunden" ist irreführend — die Befehle
+sind da, nur in der alten Form.* **Richtiger wäre „Prüfbefehle nicht schema-konform (`befehl:`
+statt `pruefung.befehl:`)".**
+
+**Damit stufe ich meinen eigenen Befund herab:** *von „die Sperre ist zu weit" auf **„die Meldung
+nennt den falschen Grund"** — P3, kosmetisch.* **Meine Empfehlung an den Planner (Zeile 374
+einschränken) ziehe ich zurück:** *sie hätte ein korrektes Verhalten aufgeweicht.* **Der Posten ist
+für mich geschlossen; was bleibt, ist ein Satz Meldungstext und gehört dem Generator.**
+
+*Das ist das zweite Mal heute, dass ein Befund von mir bei genauerem Hinsehen kleiner wurde
+(PB-025 war der erste). **Beide Male hatte ich die Norm nicht gelesen, bevor ich die Abweichung
+meldete.***
+
+---
+
+### Restposten 2 — die flüchtigen Belege: **gesichert, aber nur die, die etwas beweisen**
+
+```text
+55 Screenshots in /tmp
+   davon zu ABGESCHLOSSENEN, grünen Abnahmen         52   -> nicht archiviert
+   davon zu einem OFFENEN Befund                      3   -> gesichert
+```
+
+```text
+~/evaluator-belege/2026-08-01/
+   auf86-3d-ueberstand-1440.png        318 KB   die 56-px-Messung (offener Befund)
+   auf86-split-hoehendifferenz.png     294 KB   541 gegen 597 im Split
+   auf91-hinweisflaeche-800.png        136 KB   die Aussage unter 1024 px
+```
+
+**Warum nicht alle 55:** *jedes grüne Votum nennt Befehl, Objekt-Id, Viewport und Vorgehen — es ist
+**reproduzierbar**, und ein Bild zu einer abgeschlossenen Abnahme beweist nichts, was der Text nicht
+sagt.* **Archiviert wird, was einen offenen Befund trägt.** *Das ist eine Entscheidung, keine
+Bequemlichkeit: ein Archiv, das alles aufhebt, wird nicht gelesen.*
+
+*Ausserhalb des Repositoriums, weil Binärdateien einen Arbeitszweig aufblähen — und ausserhalb von
+`/tmp`, weil das der Punkt war.*
+
+---
+
+## Stand meiner Selbstinventur
+
+```text
+1. zwei Urteile geschuldet (PB-010 / PB-023)        GESCHLOSSEN  12:2x, beide bestätigt
+2. flüchtige Belege                                 GESCHLOSSEN  drei gesichert, Rest begründet verworfen
+3. fünf sperrende Blätter                           GESCHLOSSEN  Befund herabgestuft, Empfehlung zurückgezogen
+4. bequemer Indikator statt treffender              GESCHLOSSEN  zaehle.mjs ersetzt grep -c
+```
+**Nichts offen.** *Und zwei der vier waren am Ende kleiner als gemeldet — **das ist kein guter
+Schnitt für einen Prüfer.** Ich habe zweimal eine Abweichung gemeldet, ohne vorher die Norm zu
+lesen, gegen die sie abweicht.*
+
+> **Regel für mich, aus beiden Fällen:** *bevor ich eine Abweichung melde, lese ich die Vorschrift,
+> von der sie abweicht — Schema, Bauordnung oder Blatt. **Eine Abweichung ohne Norm ist eine
+> Meinung.***
+
+**Ballbesitz: Generator** (Meldungstext im Validator, P3 · Z-02/Z-05/Z-06 · PB-023-Blatt) ·
+**Planner** (Schwere PB-023) · **Yama** (nichts von mir).
