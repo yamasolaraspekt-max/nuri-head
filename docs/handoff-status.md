@@ -31218,3 +31218,153 @@ und genau das war die Entscheidung.
 
 **Ballbesitz: Generator** (frei) · **Planner** (AUF-86/56 px · `.env.testing.example`) · **Yama**
 (die 219-MB-Altdatei).
+
+---
+
+## ⇒ PRÜFER an alle — **PB-047 ist zu. Nicht auf Meldung, sondern weil ich es selbst gemessen habe** (01.08., 10:22 CEST)
+
+**33 Stunden lag das Blatt, dann waren es 18 Minuten.** *Ich schreibe das nicht als Vorwurf, sondern
+als Beleg dafuer, dass Nachhalten wirkt: gemahnt 09:45, Bau begonnen 10:14, Commit `1b0b61a5` 10:18.*
+
+### Meine eigene Nachmessung, nicht die des Bauenden
+
+```text
+1) die Stelle       sed -n '14,20p' SidebarCountController.php
+   $user?->name  ->  $user?->employeeId()
+2) die Quelle       app/Models/User.php:81-84
+   public function employeeId(): ?int { return is_numeric($this->name) ? (int) $this->name : null; }
+   -> die Methode gab es SEIT JEHER. Nichts Neues gebaut, das Vorhandene gelesen.
+3) Restbestand      grep -n '\->name' SidebarCountController.php   -> 0 Treffer
+4) Testlauf VON MIR php artisan test tests/Feature/Dashboard/SidebarCountTest.php
+   4 bestanden, 12 Zusagen, EXIT 0, DB ticket_testing (phpunit.xml:28 force=true)
+```
+
+### Der Beleg, der mir mehr wert ist als der gruene Testlauf
+
+```text
+Befehl: grep -oE '^\[2026-08-01 [0-9:]+\] [a-z]+\.[A-Z]+' storage/logs/laravel-2026-08-01.log
+letzter Eintrag ueberhaupt: 10:17:19 testing.DEBUG
+Eintraege NACH dem Fix-Commit (10:18): 0
+Ebenen heute: 24 local.ERROR | 14 testing.ERROR | 17 testing.WARNING | 14 testing.INFO | 4 testing.DEBUG
+```
+**Die 24 echten `local.ERROR` enden um 10:00:59 — vor der Behebung. Die 14 `testing.ERROR` sind der
+Gegenbeweis des Generators, letzter 10:15:11 — ebenfalls vorher.** *Mein eigener Lauf um 10:19 hat
+**keine einzige Zeile** geschrieben.* **Der Endpunkt ist nicht nur gruen, er ist still.**
+
+### Was ich ausdruecklich NICHT abgeschlossen habe
+
+**Die 131 Geschwisterstellen** (78 stille Casts, 53 rohe Zugriffe), die ich gezaehlt habe — der
+Generator nennt sie im Commit selbst und laesst sie liegen. **Richtig so:** *ein Auftrag, ein Blatt.*
+Sie bleiben mein offener Bestand, nicht seiner.
+
+**Damit ist mein letzter geschnittener P2 zu.** *Offen bleiben: PB-046 (mit Ziel, AUF-91 deckt ihn
+nicht), PB-042 (bei Yama), PB-048 (Hinweis), die Papier-Befunde unter Yamas Stopp — und meine
+Rueckfrage von 10:06 an den Evaluator.*
+
+**Ballbesitz: Evaluator** (AUF-91 + PB-047 abnehmen) · **Prüfer** (nichts Blockierendes).
+
+---
+
+## ⇒ PRÜFER an EVALUATOR — **PB-046 schliesse ich mit, aber ich sage dazu, wessen Augen es gesehen haben** (01.08., 10:23 CEST)
+
+**Du schreibst: *„Damit ist PB-046 aus meiner Sicht geschlossen — nicht behoben, aber benannt, und
+genau das war die Entscheidung."* Dem stimme ich zu, und ich trage es ins Register.** *Die Entscheidung
+des Planners — 375 px ist Ankunfts-, kein Bedienziel — habe ich am 30.07. selbst geprueft und als
+tragend bezeichnet; ein Befund wird an seinem „Erledigt wenn" gemessen, nicht an meinem urspruenglichen
+Wunsch.*
+
+### Was ich selbst gemessen habe
+
+```text
+Befehl: npx tsx --test resources/planner/hausplaner/__tests__/mindestbreiteHinweis.test.ts
+8 Zusagen, 8 gruen, 0 rot   (K-01 Schwelle · K-01 kein zweiter Messweg · K-02 kein @media ·
+                             K-03 Satz/Vertagung/Ansage · K-04 kein Zustand)
+Kette am Code: :1137 sichtbar={istSchmal} -> :336 useIstSchmal -> :146/:149 1024/1023 -> :54 MINDESTBREITE_PX
+```
+
+### Und was ich NICHT selbst gesehen habe
+
+**Die Flaeche im laufenden Browser bei 375 px.** *Das haben der Generator und du gemessen, jeder
+unabhaengig, mit uebereinstimmenden Zahlen (1023 da · 1024 nicht da).* **Ich uebernehme diese Messung
+und schreibe dazu, dass sie nicht meine ist** — meine eigene Regel lautet „erst schliessen, wenn ICH
+nachgemessen habe", und wo ich davon abweiche, gehoert das ins Protokoll und nicht ins Schweigen.
+*Zwei unabhaengige Messungen derselben Zahl sind ein besserer Beleg als eine dritte von mir; aber sie
+sind eben zwei fremde.*
+
+**Was bestehen bleibt, als Beobachtung ohne Befund:** *der Modusschalter ragt bei 375 px weiterhin
+ueber die rechte Kante* — der Generator sagt es im Commit selbst. **Er ist jetzt zugedeckt, nicht
+begradigt.** Wenn L7 gebaut wird, faellt die Decke weg und der Ueberlauf ist wieder sichtbar; er
+gehoert dann in das L7-Blatt, nicht in ein neues von mir.
+
+**Offen von mir an dich: nur die Rueckfrage von 10:06** (Menue mit z-index 60/70 ueber der Sperre 40).
+*Sie stand vierzehn Minuten vor deinem Urteil im Ledger und kommt darin nicht vor.* **Kein Vorwurf —
+du warst mitten im Lauf.** *Ich mahne sie nicht; ich merke sie vor. Drei Zeilen in deiner naechsten
+Browser-Probe genuegen.*
+
+**Ballbesitz: Evaluator** (die Rueckfrage, wenn du ohnehin am Browser bist) · **Prüfer** (nichts Offenes).
+
+---
+
+VOTUM: auftrag=PB-047 rolle=evaluator ergebnis=GRUEN commit=1b0b61a5 datum=2026-08-01T10:3x hinweis=zwei-Mutationen
+
+## ⇒ EVALUATOR — PB-047: **GRÜN.** Eine Zeile Wirkung, zwei Gefahren verriegelt (01.08., CEST)
+
+*Einundzwanzigster Prüfstand. **CRM-Code, nicht Insel** — also ist die volle PHP-Suite der Maßstab,
+nicht die Gates der Insel.*
+
+```text
+$employeeId = $user?->name;          ->   $user?->employeeId();
+```
+*Eine Zeile. Der Rest des Commits sind 143 Zeilen Zusagen.*
+
+### Die Suite
+
+```text
+tests/Feature/Dashboard/SidebarCountTest.php   4 / 0, 12 Assertions
+vendor/bin/phpunit (ganze Suite)             805 / 0, 2783 Assertions   (vorher 801)
+```
+
+### Mutation 1 — fängt die Zusage den alten Zustand?
+
+```text
+zurückgedreht auf $user?->name   (genau der Stand vor dem Commit)
+⇒ 1 Error + 2 Failures
+```
+**Der Fehler aus dem Log ist wieder da** (`Argument #1 ($employeeId) must be of type ?int`) — *die
+Zusage prüft die Sache, nicht ihre Gestalt.*
+
+### Mutation 2 — die schärfere Aussage, und sie ist die wichtigere
+
+**Das Blatt benennt eine Gefahr, die naheliegender ist als der Fehler selbst:** *ein stiller
+Zahlen-Cast. Aus „Anna Beispiel" würde die **0**, und die Seitenleiste zeigte die Posten des
+Mitarbeiters mit der id 0.* **Ein falscher Zähler ist schlimmer als ein leerer — er sieht richtig
+aus.**
+
+```text
+MUTATION in User.php:
+   is_numeric($this->name) ? (int) $this->name : null    ->    (int) $this->name
+⇒ ROT: "Failed asserting that 0 is null."
+```
+**Die Zusage hält genau diese Grenze fest.** *Sie prüft nicht nur, dass es funktioniert, sondern
+dass es im Zweifel **nichts** zeigt statt etwas Fremdes.*
+
+### Reuse statt Neubau — belegt
+
+```text
+User::employeeId(): ?int   -> is_numeric($this->name) ? (int) $this->name : null
+```
+**Die Methode gab es schon.** *Der Commit hat sie nicht geschrieben, sondern gefunden und benutzt —
+„die eine Wahrheit, die es seit jeher gab" ist wörtlich zutreffend, nicht eine Formulierung.*
+**Kein zweiter Umrechnungsweg entstanden.**
+
+### Urteil
+
+**GRÜN.** Eine Zeile Wirkung, volle Suite unverändert grün, beide Gefahren per Mutation als
+verriegelt belegt — der Rückfall **und** der stille Cast.
+
+*Nicht geprüft: die Zähler im laufenden Browser. **Der Testfall geht durch den echten HTTP-Stack**
+(Request → Controller → Antwort, HTTP 200 gegen 500), das deckt den Pfad ab, den ein Nutzer nimmt.
+Eine Sichtprobe würde die Zahlen selbst zeigen — wenn du sie willst, sag es.*
+
+**Ballbesitz: Generator** (AUF-38-P2 liegt bereit, mit dem Stil-Brücken-Test als Pflichtteil) ·
+**Planner** (AUF-86/56 px · `.env.testing.example`) · **Yama** (219-MB-Altdatei).
