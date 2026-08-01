@@ -166,6 +166,42 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
   // --- Globale Aktionen (§6): keine Zeichenwerkzeuge, aber Teil der Registry, damit die
   //     Activation-Engine Auswahl-/Rechte-Bedingungen datengetrieben liefert. ---
   {
+    // Z-05-N1 — **das Konturwerkzeug, jetzt erreichbar.**
+    //
+    // Z-05 hat es gebaut; der Eintrag hier fehlte, und ohne ihn gab es weder Knopf noch Kuerzel.
+    // Ein achter `art: 'werkzeug'`-Eintrag ist **keine additive Zeile**: er bewegt die Fix-Zone
+    // (7 -> 8), braucht eine Themen-Bindung, einen Vertrag und eine Praesentationsregel. Genau
+    // deshalb ist er ein eigenes Blatt geworden und nicht in Z-05 mitgelaufen.
+    //
+    // **Das Icon heisst `raum`, nicht `polygon`** — und das ist kein Geschmack, sondern N1-07.
+    // Mein erster Entwurf nahm `polygon`, weil die Datei da ist und das Bild passt. Die Zusage
+    // zaehlt aber die ZEICHENKETTE `'polygon'` in dieser Datei und kann ein Bild nicht von einer
+    // Werkzeug-id unterscheiden — sie ging sofort rot. *Die Zusage hat recht behalten, auch wenn
+    // meine Absicht harmlos war:* eine Datei, in der `'polygon'` steht, laesst sich nicht mehr
+    // per Blick von einer Wiederbelebung unterscheiden. `raum` ist ausserdem das ehrlichere Bild —
+    // eine Kontur ist der Umriss einer Flaeche. Die sechs Primitive bleiben stillgelegt.
+    //
+    // **Kein `bauteilKind`:** eine Kontur ist kein Bauteil. Sie wird zu einem, wenn Z-06 sie zur
+    // Decke macht — dort gehoert die Zuordnung hin.
+    id: 'kontur',
+    label: 'Kontur',
+    icon: 'raum',
+    art: 'werkzeug',
+    groupId: 'gebaeude',
+    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
+    supportedViews: ['2d', 'split'],
+    shortcut: 'U',
+    helpText: 'Mehrpunkt-Umriss zeichnen (L-, T-, U-Form) — Klick auf den ersten Punkt oder Enter schliesst.',
+    meaning: 'Freien Umriss aus mehreren Punkten aufnehmen.',
+    usageArea: 'Architektur — Grundlage fuer Decke und Dach.',
+    group: 'Architektur',
+    tooltip: {
+      title: 'Kontur',
+      body: 'Mehrpunkt-Umriss zeichnen. Klick auf den ersten Punkt oder Enter schliesst, Esc verwirft.',
+      usage: 'Einsatzbereich: Flaechen, die keine Rechtecke sind — L-, T- und U-Formen.',
+    },
+  },
+  {
     id: 'loeschen',
     label: 'Löschen',
     icon: 'loeschen',
@@ -219,6 +255,28 @@ const BY_SHORTCUT = new Map(
 );
 
 /** Werkzeug nach id (oder undefined). */
+/**
+ * **Die Bilanz, getrennt statt hochgezaehlt** (Z-05-N1).
+ *
+ * Bis heute stand in acht Zusagen eine nackte `110`. Waere sie auf `111` gehoben worden, haette
+ * die Zusage genau das verloren, wofuer es sie gibt: **dass ein VERSCHWUNDENES Paket-Werkzeug
+ * auffaellt.** Faellt eines raus und kommt ein eigenes dazu, bleibt die Summe gleich — eine
+ * nackte Zahl merkt das nicht, die getrennte Zaehlung schon.
+ *
+ * ```text
+ * PAKET_WERKZEUGE  = 110          Konstante, benannt, unveraendert
+ * EIGENE_WERKZEUGE = ['kontur']   Liste, waechst
+ * erwartet         = PAKET_WERKZEUGE + EIGENE_WERKZEUGE.length
+ * ```
+ */
+export const PAKET_WERKZEUGE = 110;
+
+/** Werkzeuge, die NACH dem 110er-Fachpaket dazugekommen sind. */
+export const EIGENE_WERKZEUGE = ['kontur'] as const;
+
+/** Die erwartete Gesamtzahl — eine Stelle, acht Leser. */
+export const WERKZEUGE_GESAMT = PAKET_WERKZEUGE + EIGENE_WERKZEUGE.length;
+
 export function toolNach(id: string): ToolDefinition | undefined {
   return BY_ID.get(id);
 }

@@ -27,6 +27,8 @@ import { TOOL_DEFINITIONS } from '../app/tools/toolRegistry';
 import { resolveToolState } from '../app/tools/activation';
 import { baueAktivierungsKontext } from '../app/tools/toolContext';
 import type { ObjectType } from '../app/tools/toolTypes';
+import { WERKZEUGE_GESAMT } from '../app/tools/toolRegistry';
+import { EIGENE_WERKZEUGE } from '../app/tools/toolRegistry';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 
@@ -39,7 +41,7 @@ const ALLES_DA = {
 
 // --- Der Vertrag selbst -------------------------------------------------------------------------
 test('K5: 110 Verträge, je Werkzeug genau einer, keine Dublette', () => {
-  assert.equal(WERKZEUG_VERTRAEGE.length, 110);
+  assert.equal(WERKZEUG_VERTRAEGE.length, WERKZEUGE_GESAMT);
   assert.deepEqual(doppelteVertraege(), []);
   for (const t of [...TOOL_DEFINITIONS, ...TOOL_KATALOG]) {
     assert.ok(vertrag(t.id), `${t.id} hat keinen Funktionsvertrag`);
@@ -56,7 +58,7 @@ test('K6: die Vokabulare sind so klein wie gemessen — 12 / 11 / 9', () => {
   assert.equal(v.vorbedingungen.length, 12);
   assert.equal(v.seiteneffekte.length, 11);
   assert.equal(v.familien.length, 9);
-  assert.equal(new Set(WERKZEUG_VERTRAEGE.map((x) => x.commandId)).size, 110, '110 verschiedene commandIds');
+  assert.equal(new Set(WERKZEUG_VERTRAEGE.map((x) => x.commandId)).size, WERKZEUGE_GESAMT, 'je Werkzeug eine eigene commandId');
 });
 
 test('K6: jede Vorbedingung aus den Verträgen ist zugeordnet — keine Zeile „sonstige"', () => {
@@ -64,8 +66,12 @@ test('K6: jede Vorbedingung aus den Verträgen ist zugeordnet — keine Zeile �
   assert.equal(Object.keys(VORBEDINGUNGEN).length, 12, 'die Tabelle führt genau die zwölf');
 });
 
-test('Metadaten sind mitgekommen: umkehrbar 77/33, protokollpflichtig 92/18', () => {
-  assert.equal(WERKZEUG_VERTRAEGE.filter((v) => v.umkehrbar).length, 77);
+test('Metadaten sind mitgekommen: umkehrbar 78/33, protokollpflichtig 92/19', () => {
+  // Z-05-N1: `kontur` ist umkehrbar (Esc verwirft den Zug) und NICHT protokollpflichtig
+  // (sie schreibt nichts). Deshalb waechst nur die erste Zahl. **Bewusst hart und nicht
+  // `+ EIGENE_WERKZEUGE.length`:** ob ein Werkzeug umkehrbar ist, ist eine Aussage ueber
+  // dieses Werkzeug, keine Bilanz — eine Formel wuerde hier eine Regel behaupten, die es nicht gibt.
+  assert.equal(WERKZEUG_VERTRAEGE.filter((v) => v.umkehrbar).length, 78);
   assert.equal(WERKZEUG_VERTRAEGE.filter((v) => v.protokollpflichtig).length, 92);
   assert.equal(vertraegeDerFamilie('selection').length, 4);
   assert.equal(vertrag('wand')?.commandId, 'WallCommand');

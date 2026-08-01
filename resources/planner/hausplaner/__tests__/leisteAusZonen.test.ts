@@ -21,6 +21,11 @@ import { TOOL_DEFINITIONS, werkzeugTools, shortcutKollisionen, toolNach } from '
 import { katalogTool } from '../app/tools/toolCatalog';
 // AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
 import { zerlegteApp } from './_zerlegteApp';
+import { WERKZEUGE_GESAMT } from '../app/tools/toolRegistry';
+import { EIGENE_WERKZEUGE } from '../app/tools/toolRegistry';
+
+/** Z-05-N1: die Fix-Zone waechst mit jedem eigenen Werkzeug — 7 aus dem Paket plus unsere. */
+const FIX_ZONE = 7 + EIGENE_WERKZEUGE.length;
 
 const hier = dirname(fileURLToPath(import.meta.url));
 
@@ -41,7 +46,7 @@ test('Leiste == Fix-Zone: dieselben ids in derselben Reihenfolge wie die alte Re
   const alt = werkzeugTools().map((t) => t.id);
   const neu = zoneTools('fix').map((t) => t.id);
   assert.deepEqual(neu, alt, 'A2 muss heute verhaltensneutral sein — sonst wandern Icons');
-  assert.deepEqual(neu, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe']);
+  assert.deepEqual(neu, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe', 'kontur']);
 });
 
 // --- 2) Es gibt nur noch EINE zuständige Stelle (Abnahmekriterium 5) ---------------------------
@@ -98,7 +103,7 @@ test('Auflage 1: kein Katalog-Werkzeug ist unbemerkt in die Leiste gerutscht', (
 
 // --- 5) Auflage 4 des A1-Votums: `herkunft` ist für alle 63 Regeln verriegelt ------------------
 test('Auflage 4: jede der 110 Regeln trägt eine herkunft, die der Wirklichkeit entspricht', () => {
-  assert.equal(TOOL_PRESENTATION_RULES.length, 110);
+  assert.equal(TOOL_PRESENTATION_RULES.length, WERKZEUGE_GESAMT);
   for (const r of TOOL_PRESENTATION_RULES) {
     const inRegistry = toolNach(r.toolId) !== undefined;
     const imKatalog = katalogTool(r.toolId) !== undefined;
@@ -113,13 +118,13 @@ test('Auflage 4: jede der 110 Regeln trägt eine herkunft, die der Wirklichkeit 
 });
 
 // --- 6) Die Gegenprobe muss NACH der Memoisierung weiter greifen (§8.3) ------------------------
-test('GEGENPROBE: eine fix-Regel auf versteckt ⇒ die Leiste schrumpft auf 6', () => {
+test('GEGENPROBE: eine fix-Regel auf versteckt ⇒ die Leiste schrumpft um eins', () => {
   const kopie: ToolPresentationRule[] = TOOL_PRESENTATION_RULES.map((r) =>
     r.toolId === 'dach' ? { ...r, zone: 'versteckt' as const } : r,
   );
   const fix = zoneToolsIn(kopie, 'fix').map((t) => t.id);
-  assert.equal(fix.length, 6);
+  assert.equal(fix.length, 6 + EIGENE_WERKZEUGE.length);
   assert.ok(!fix.includes('dach'));
   // echte Daten unberührt — die Gegenprobe läuft über zoneToolsIn, nicht über den memoisierten Aufruf
-  assert.equal(zoneTools('fix').length, 7);
+  assert.equal(zoneTools('fix').length, FIX_ZONE);
 });

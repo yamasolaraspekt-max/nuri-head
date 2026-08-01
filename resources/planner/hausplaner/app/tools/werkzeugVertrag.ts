@@ -802,6 +802,27 @@ export const WERKZEUG_VERTRAEGE: readonly WerkzeugVertrag[] = [
     dienstMethode: 'services.architektur.execute(\'beam\', input)',
   },
   {
+    // Z-05-N1 — **der Vertrag der Kontur, und er ist ehrlich schmal.**
+    //
+    // Z-05 schreibt ausdruecklich NICHTS in den Speicher: das Werkzeug liefert den geschlossenen
+    // Umriss an den Aufrufer, mehr nicht. Deshalb steht hier **keine** Revisionserhoehung und
+    // **kein** Autosave — die Seiteneffekte entstehen erst, wenn Z-06 aus der Kontur eine Decke
+    // macht. *Ein Vertrag, der Wirkungen verspricht, die es nicht gibt, ist schlimmer als keiner.*
+    //
+    // `umkehrbar: true` trotzdem: der laufende Zug laesst sich mit Esc verwerfen, und das ist die
+    // einzige Wirkung, die es heute gibt.
+    werkzeugId: 'kontur',
+    commandId: 'ContourCommand',
+    familie: 'create',
+    eingaben: ['points', 'activeLevelId'],
+    ergebnisse: ['contourPoints'],
+    vorbedingungen: ['project.open', 'permission.edit', 'activeLevel.exists'],
+    seiteneffekte: [],
+    umkehrbar: true,
+    protokollpflichtig: false,
+    dienstMethode: 'services.architektur.execute(\'contour\', input)',
+  },
+  {
     werkzeugId: 'wand',
     commandId: 'WallCommand',
     familie: 'create',

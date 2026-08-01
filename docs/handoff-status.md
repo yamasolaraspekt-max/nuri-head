@@ -33179,3 +33179,75 @@ Massenumbau von 27 Dateien. Sie stehen jetzt gemessen da, statt hinter einem Tim
 
 **Z-06** nennt jetzt beide Sperrbedingungen: Votum fuer Z-05 **und** Z-05-N1 gebaut.
 **An Yama unveraendert: 55 ungepushte Commits.**
+
+---
+
+## Generator — Z-05-N1 umgesetzt: das Konturwerkzeug ist erreichbar (2026-08-01)
+
+    N1-01 Registry        0 -> 1        N1-05 nackte 110    9 -> 1
+    N1-02 Thema           0 -> 1        N1-06 validation.ts 0, unveraendert
+    N1-03 Vertrag         0 -> 1        N1-07 polygon       0
+    N1-04 Praesentation   0 -> 1
+    Suite 1611 / 1611 · tsc · schema · dom 29 · build alle EXIT 0
+
+**Die Bilanz ist getrennt, nicht hochgezählt** — genau wie das Blatt es vorgibt:
+`PAKET_WERKZEUGE = 110` (Konstante) + `EIGENE_WERKZEUGE = ['kontur']` (Liste). *Fällt ein
+Paket-Werkzeug raus und kommt ein eigenes dazu, bleibt die Summe gleich — eine nackte `111` fängt
+das nicht.* Dieselbe Form auch für die Fix-Zone (`6 + EIGENE`), die Import-Rechte (`79 + EIGENE`)
+und die Fachplaner-Einträge (`22 + EIGENE`).
+
+### N1-10 Mutationsprobe — 8 Mutationen, ACHT gefangen, ohne eine einzige neue Zusage
+
+    Registry-Eintrag entfernt        16 rot     Landkarten-Eintrag entfernt      4 rot
+    Themen-Bindung entfernt           5 rot     Kuerzel U kollidiert mit W       4 rot
+    Vertrag entfernt                  3 rot     Kontur aus der Fix-Zone          7 rot
+    Praesentationsregel entfernt      7 rot     EIGENE_WERKZEUGE geleert        13 rot
+
+***Das ist das Gegenteil von P1/P2/P3.*** Dort kamen dreimal sieben von acht durch; hier fängt der
+Bestand alles. **Der Unterschied ist nicht Glück, sondern Bauweise:** der Werkzeug-Katalog führt
+Bilanzen, Themen-Vollständigkeit, Vertrags- und Landkarten-Abdeckung als Zusagen — ein neues
+Werkzeug muss durch fünf Türen, und jede meldet sich. *Die Stilschicht hat solche Türen nicht;
+darum ist F-15 dort entstanden und hier nicht.*
+
+### L-01 im Browser
+
+    1440   Leiste ["Markieren","Wand","Fenster","Tür","Dach","Decke","Treppe","Kontur"]
+           Taste U aktiviert: Kontur
+           (a) L-Form, sechs Punkte, Klick auf den ersten -> "Kontur geschlossen … Punkte"
+           (b) Acht -> bleibt offen: "… überschneidet sich selbst — zieh den letzten Punkt so,
+               dass sich keine zwei Kanten kreuzen."
+           (c) Escape mitten im Zug -> Vorschau fort (59 -> 58 Striche)
+    1024   dieselben vier Zeilen, identisches Ergebnis (35 -> 34)
+     375   Kontur in der Leiste, aber Mindestbreiten-Sperre liegt ueber dem Planer — richtig
+
+### ⚠ Zwei eigene Fehler, beide von einer Zusage gefangen
+
+1. **`kontur` stand in der Registry vor `treppe`, in der Präsentationsregel aber auf Ordnung 8.**
+   Die Fix-Zone verlangt Registry-Reihenfolge — beides muss dasselbe sagen. Registry-Eintrag ans
+   Ende gerückt.
+2. **`icon: 'polygon'`.** Die Datei ist da und das Bild passt — aber N1-07 zählt die Zeichenkette
+   `'polygon'` in dieser Datei und kann ein Bild nicht von einer Werkzeug-id unterscheiden. Sofort
+   rot. *Die Zusage hat recht behalten, auch wenn meine Absicht harmlos war:* eine Datei, in der
+   `'polygon'` steht, lässt sich nicht mehr per Blick von einer Wiederbelebung unterscheiden.
+   Jetzt `icon: 'raum'` — und das ist ohnehin das ehrlichere Bild.
+
+### ⚠ Befund gegen das Blatt — der Scope nennt vier Dateien, gebraucht wurden sechs
+
+`scope.dateien` listet Registry, Themen, Vertrag, Präsentation. **Gebraucht wurden zusätzlich:**
+
+- `app/tools/werkzeugLandkarte.ts` — der Vertrag aus N1-03 verlangt einen Landkarteneintrag
+  (*„Verträge ohne Landkarteneintrag: kontur"*). `ohne-modell`, weil die Kontur nichts schreibt.
+- **zehn Testdateien** mit fest verdrahteten Zahlen: Fix-Zone, Import-Rechte, Fachplaner-Zahl,
+  Metadaten-Bilanzen, Registry-Listen, Reihenfolge-Anker.
+
+*Das ist kein Vorwurf — es ist die Eigenschaft eines dicht bewachten Bereichs, und genau sie hat
+die Mutationsprobe so gut aussehen lassen.* **Aber ein Blatt, das vier Dateien nennt und sechzehn
+braucht, unterschätzt seine eigene Scheibe** — beim nächsten Werkzeug lohnt sich der Satz
+„und alles, was die Bilanz zählt".
+
+**Eine Zahl bleibt bewusst hart:** `umkehrbar 77 -> 78`. Ob ein Werkzeug umkehrbar ist, ist eine
+Aussage über dieses Werkzeug, keine Bilanz — eine Formel behauptete dort eine Regel, die es nicht gibt.
+
+**Ballbesitz: Evaluator** (Z-05, Z-05-N1, AUF-38-P3 ist bereits grün) · **Generator** (Z-06 ist
+jetzt frei — die Kontur lässt sich zeichnen) · **Planner** (`.hp-ok-name` ungedeckt · 200-px-Bühne
+bei 1024 · Blade-Lücke in `zaehle.mjs`).

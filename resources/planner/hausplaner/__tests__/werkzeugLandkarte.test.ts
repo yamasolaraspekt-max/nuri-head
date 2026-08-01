@@ -119,7 +119,8 @@ test('ERGEBNIS der Stufe: die Zahlen stehen fest und sind hier festgehalten', ()
   assert.deepEqual(markenZaehlung(), {
     deckt: 41,
     fehlt: 21,
-    'ohne-modell': 42,
+    // Z-05-N1: `kontur` liefert Punkte und schreibt nichts — ohne-modell 42 -> 43.
+    'ohne-modell': 43,
     stillgelegt: 6,
   });
 });

@@ -22,6 +22,7 @@ import { themaVonWerkzeug } from '../app/tools/werkzeugThemen';
 import { vertrag } from '../app/tools/werkzeugVertrag';
 // AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
 import { zerlegteApp } from './_zerlegteApp';
+import { WERKZEUGE_GESAMT } from '../app/tools/toolRegistry';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -77,5 +78,5 @@ test('die `geplant`-Mechanik bleibt erhalten — für den nächsten Knopf, der s
 });
 
 test('kein Werkzeug hat die Oberfläche verlassen — die Bilanz bleibt 110', () => {
-  assert.equal(ALLE.length, 110);
+  assert.equal(ALLE.length, WERKZEUGE_GESAMT);
 });

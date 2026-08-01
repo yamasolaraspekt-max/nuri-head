@@ -127,6 +127,10 @@ export const WERKZEUG_LANDKARTE: readonly LandkartenEintrag[] = [
   { werkzeugId: 'treppe', marke: 'deckt', begruendung: 'ADD_NODE' },
   { werkzeugId: 'tuer', marke: 'deckt', begruendung: 'ADD_NODE' },
   { werkzeugId: 'unterzug', marke: 'fehlt', begruendung: 'Ein Unterzug ist ein tragender Balken — `ObjectNode.objectType` kennt ihn nicht, und ein Träger als `furniture` zu führen wäre eine Unwahrheit im Modell. Braucht einen Typ, dann deckt ADD_NODE.' },
+  // Z-05-N1: die Kontur liefert Punkte und schreibt NICHTS — sie hat heute kein Kommando im
+  // Modell. `ohne-modell` ist die Wahrheit; `deckt` waere eine Unwahrheit, und `fehlt` hiesse,
+  // dass etwas fehlt, was es geben muesste. Mit Z-06 wird daraus ADD_NODE (ceiling).
+  { werkzeugId: 'kontur', marke: 'ohne-modell', begruendung: 'Liefert den geschlossenen Umriss an den Aufrufer; die Speicher-Wirkung kommt mit Z-06 (Decke aus Kontur).' },
   { werkzeugId: 'wand', marke: 'deckt', begruendung: 'ADD_NODE' },
   { werkzeugId: 'oeffnung', marke: 'deckt', begruendung: 'ADD_NODE' },
 

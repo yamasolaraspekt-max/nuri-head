@@ -30,6 +30,7 @@ import { umschalten } from '../app/state/angeheftet';
 import type { AktivierungsKontext } from '../app/tools/toolTypes';
 // AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
 import { zerlegteApp } from './_zerlegteApp';
+import { WERKZEUGE_GESAMT } from '../app/tools/toolRegistry';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -84,8 +85,8 @@ test('K4′: der Standard ist Architektur — dieselbe Leiste wie vor dem Umbau'
 test('K5′: Summe über alle Bereiche = 15 Themen / 110 Werkzeuge, jedes in genau einem Thema', () => {
   assert.equal(WERKZEUG_THEMEN.length, 15);
   const alle = WERKZEUG_THEMEN.flatMap((t) => t.werkzeuge);
-  assert.equal(alle.length, 110);
-  assert.equal(new Set(alle).size, 110, 'kein Werkzeug in zwei Themen');
+  assert.equal(alle.length, WERKZEUGE_GESAMT);
+  assert.equal(new Set(alle).size, WERKZEUGE_GESAMT, 'kein Werkzeug in zwei Themen');
   // jedes Thema ist erreichbar: entweder durchgängig oder an einen Bereich gebunden
   assert.deepEqual(themenOhneBereich(), [], 'ein Thema ohne Bereich wäre unerreichbar');
   // Vereinigung der fünf Bereichsansichten deckt alle 15 Themen

@@ -2,7 +2,7 @@
  * AUF-27 — die linke Schiene trägt Reiter statt drei gestapelter Blöcke.
  *
  * Geprüft wird, was der Auftrag als Abnahme benennt: **genau drei** Reiter in fester Reihenfolge
- * mit Standard `werkzeuge` (K3), **immer genau ein** sichtbarer Abschnitt (K4), **unverändert 22**
+ * mit Standard `werkzeuge` (K3), **immer genau ein** sichtbarer Abschnitt (K4), **22 aus dem Paket plus die eigenen**
  * erreichbare Fachplaner-Einträge (K5), das **wiederverwendete** Reiter-Muster aus v2.2/AUF-19 (K6)
  * und **null** sichtbare Beschriftung mit dem Wort „Fähigkeit" (K11).
  *
@@ -21,6 +21,7 @@ import { SCHIENEN_REITER, SCHIENE_STANDARD, schienenReiter, type SchienenReiterI
 import { alleFaehigkeiten } from '../app/tools/faehigkeiten';
 // AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
 import { zerlegteApp } from './_zerlegteApp';
+import { EIGENE_WERKZEUGE } from '../app/tools/toolRegistry';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 /** Siehe `leisteAusZonen.test.ts`: erklärende Kommentare dürfen den Befund nicht auslösen. */
@@ -83,8 +84,10 @@ test('K4: die Scroll-Höhe gehört dem Abschnitt, nicht der Spalte', () => {
 });
 
 // --- K5: nichts ist beim Umbau verschwunden ----------------------------------------------------
-test('K5: die Anzahl erreichbarer Fachplaner-Einträge ist unverändert 22', () => {
-  assert.equal(alleFaehigkeiten().length, 22);
+test('K5: die Fachplaner-Einträge sind vollständig — 22 aus dem Paket plus die eigenen', () => {
+  // Z-05-N1: die Zahl war 22 und ist es fuer das Paket weiterhin. Jedes eigene Werkzeug kommt
+  // dazu — getrennt gezaehlt, damit ein VERSCHWUNDENES Paket-Werkzeug weiter auffaellt.
+  assert.equal(alleFaehigkeiten().length, 22 + EIGENE_WERKZEUGE.length);
   // und sie hängen weiterhin an genau einer Stelle im Baum — dem Reiter `fachplaner`.
   assert.equal((appQuelle.match(/<FaehigkeitenNavi/g) ?? []).length, 1);
   assert.match(appQuelle, /schienenTab === 'fachplaner' && \(\s*<FaehigkeitenNavi/);

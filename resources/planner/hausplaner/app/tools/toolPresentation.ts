@@ -69,6 +69,9 @@ export const TOOL_PRESENTATION_RULES: readonly ToolPresentationRule[] = [
   { toolId: 'dach', zone: 'fix', ordnung: 5, herkunft: 'registry', begruendung: GRUND_BAU },
   { toolId: 'decke', zone: 'fix', ordnung: 6, herkunft: 'registry', begruendung: GRUND_BAU },
   { toolId: 'treppe', zone: 'fix', ordnung: 7, herkunft: 'registry', begruendung: GRUND_BAU },
+  // Z-05-N1: die Kontur steht am Ende der Fix-Zone, nicht mittendrin — die Ordnung folgt der
+  // Registry-Reihenfolge, und ein Einschub haette alle nachfolgenden Zahlen verschoben.
+  { toolId: 'kontur', zone: 'fix', ordnung: 8, herkunft: 'registry', begruendung: GRUND_BAU },
 
   // --- Registry: die 2 Sofort-Aktionen ----------------------------------------------------------
   { toolId: 'loeschen', zone: 'kontext', ordnung: 1, herkunft: 'registry', begruendung: GRUND_SOFORT },

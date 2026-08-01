@@ -27,6 +27,7 @@ import { resolveToolState } from '../app/tools/activation';
 import { TOOL_DEFINITIONS } from '../app/tools/toolRegistry';
 import { TOOL_KATALOG } from '../app/tools/toolCatalog';
 import { RECHT_BEARBEITEN, RECHT_IMPORTIEREN } from '../app/tools/vorbedingungen';
+import { EIGENE_WERKZEUGE } from '../app/tools/toolRegistry';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const wurzel = join(hier, '../../../..');
@@ -195,8 +196,11 @@ test('K7: das Import-Recht öffnet acht Werkzeuge — jetzt aus dem Nutzer, nich
   const ohne = gesperrt([RECHT_BEARBEITEN], 'import');
   const mit = gesperrt([RECHT_BEARBEITEN, RECHT_IMPORTIEREN], 'import');
   // AUF-53 maß 79 → 71, als das Recht fest gesetzt war. Dieselbe Differenz — anderer Ursprung.
-  assert.equal(ohne, 79);
-  assert.equal(mit, 71);
+  // Z-05-N1: jedes eigene Werkzeug ist im Import-Bereich ohne Recht ebenfalls gesperrt —
+  // die Zahl waechst mit, die AUSSAGE (dieselbe Differenz von acht) bleibt.
+  assert.equal(ohne, 79 + EIGENE_WERKZEUGE.length);
+  assert.equal(mit, 71 + EIGENE_WERKZEUGE.length);
+  assert.equal(ohne - mit, 8, 'das Import-Recht oeffnet nicht mehr acht Werkzeuge');
 });
 
 test('K7: 45 Werkzeuge hängen am Bearbeiten-Recht — vorher konnte das niemand verlieren', () => {
@@ -212,6 +216,6 @@ test('K7 gemessen, nicht behauptet: im Import-Bereich ändert das Bearbeiten-Rec
   // 79 = 79. Nicht weil das Recht wirkungslos wäre, sondern weil dort **ohne Auswahl** dieselben
   // Werkzeuge schon an anderen Vorbedingungen hängen. Die Zahl steht hier, damit niemand aus dem
   // Bericht schließt, das Recht wirke überall gleich — es wirkt dort, wo sonst nichts mehr sperrt.
-  assert.equal(gesperrt([], 'import'), 79);
-  assert.equal(gesperrt([RECHT_BEARBEITEN], 'import'), 79);
+  assert.equal(gesperrt([], 'import'), 79 + EIGENE_WERKZEUGE.length);
+  assert.equal(gesperrt([RECHT_BEARBEITEN], 'import'), 79 + EIGENE_WERKZEUGE.length);
 });

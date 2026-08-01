@@ -18,6 +18,7 @@ import { umschalten, ladeAngeheftet, speichereAngeheftet, ANGEHEFTET_SCHLUESSEL 
 import { TOOL_KATALOG } from '../app/tools/toolCatalog';
 import { TOOL_DEFINITIONS } from '../app/tools/toolRegistry';
 import { zoneTools } from '../app/tools/toolPresentation';
+import { WERKZEUGE_GESAMT } from '../app/tools/toolRegistry';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const angeheftetQuelle = readFileSync(join(hier, '../app/state/angeheftet.ts'), 'utf8');
@@ -28,7 +29,7 @@ const angeheftetQuelle = readFileSync(join(hier, '../app/state/angeheftet.ts'), 
 test('15 Gruppen, Summe 110 — jedes Werkzeug genau einmal', () => {
   assert.equal(WERKZEUG_GRUPPEN.length, 15);
   const summe = WERKZEUG_GRUPPEN.reduce((s, g) => s + g.werkzeuge.length, 0);
-  assert.equal(summe, 110, '101 Katalog + 9 Registry');
+  assert.equal(summe, WERKZEUGE_GESAMT, 'Paket + eigene — getrennt gezaehlt, nicht hochgezaehlt');
   assert.deepEqual(mehrfachGefuehrt(), [], 'kein Werkzeug in zwei Gruppen');
   assert.deepEqual(werkzeugeOhneGruppe(), [], 'kein Werkzeug ohne Thema — sonst unerreichbar');
 });

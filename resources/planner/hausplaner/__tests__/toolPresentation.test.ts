@@ -21,13 +21,18 @@ import {
 import { TOOL_DEFINITIONS } from '../app/tools/toolRegistry';
 import { TOOL_KATALOG } from '../app/tools/toolCatalog';
 import { faehigkeitenNach, doppelteIds } from '../app/tools/faehigkeiten';
+import { WERKZEUGE_GESAMT } from '../app/tools/toolRegistry';
+import { EIGENE_WERKZEUGE } from '../app/tools/toolRegistry';
+
+/** Z-05-N1: die Fix-Zone waechst mit jedem eigenen Werkzeug — 7 aus dem Paket plus unsere. */
+const FIX_ZONE = 7 + EIGENE_WERKZEUGE.length;
 
 // --- 1) Vollständigkeit ---------------------------------------------------------------------
 test('jede Registry- und Katalog-id hat genau eine Regel (9 + 101 = 110, keine Dublette)', () => {
   // I2: der Katalog ist seit dem Tausch das 110er-Fachpaket (vorher 54 InDesign-Einträge).
-  assert.equal(TOOL_DEFINITIONS.length, 9);
+  assert.equal(TOOL_DEFINITIONS.length, 9 + EIGENE_WERKZEUGE.length);
   assert.equal(TOOL_KATALOG.length, 101);
-  assert.equal(TOOL_PRESENTATION_RULES.length, 110);
+  assert.equal(TOOL_PRESENTATION_RULES.length, WERKZEUGE_GESAMT);
 
   const ids = TOOL_PRESENTATION_RULES.map((r) => r.toolId);
   assert.equal(new Set(ids).size, ids.length, 'keine doppelte toolId');
@@ -38,8 +43,8 @@ test('jede Registry- und Katalog-id hat genau eine Regel (9 + 101 = 110, keine D
   assert.deepEqual(regelloseWerkzeuge(), [], 'kein Werkzeug ohne Zone');
 });
 
-test('Zonen nach I4: 7 fix · 2 kontext · 101 weitere · 0 versteckt', () => {
-  assert.equal(zoneTools('fix').length, 7);
+test('Zonen nach I4: fix waechst mit den eigenen Werkzeugen · 2 kontext · 101 weitere · 0 versteckt', () => {
+  assert.equal(zoneTools('fix').length, FIX_ZONE);
   assert.equal(zoneTools('kontext').length, 2);
   // I4: alle Fach-Werkzeuge sind über ihre Kategorie-Gruppe erreichbar, also nicht mehr
   // `versteckt`. Die Zone sagt „über den Überlauf erreichbar" — sie flutet die linke Leiste NICHT;
@@ -66,7 +71,7 @@ test('GEGENPROBE: eine erfundene id in einer lokalen Regel-Kopie wird als verwai
 // --- 3) Invariante Fix-Zone (+ Rot-Gegenprobe) -----------------------------------------------
 test('Fix-Zone = genau die 7 art:werkzeug-Registry-ids in Registry-Reihenfolge', () => {
   const erwartet = TOOL_DEFINITIONS.filter((t) => t.art === 'werkzeug').map((t) => t.id);
-  assert.deepEqual(erwartet, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe']);
+  assert.deepEqual(erwartet, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe', 'kontur']);
   assert.deepEqual(zoneTools('fix').map((t) => t.id), erwartet);
 });
 
@@ -82,7 +87,7 @@ test('GEGENPROBE: wand auf versteckt gesetzt ⇒ Fix-Invariante bricht', () => {
     r.toolId === 'wand' ? { ...r, zone: 'versteckt' as const } : r,
   );
   const fix = zoneToolsIn(kopie, 'fix').map((t) => t.id);
-  assert.equal(fix.length, 6, 'die Fix-Zone hätte ein Werkzeug verloren');
+  assert.equal(fix.length, 6 + EIGENE_WERKZEUGE.length, 'die Fix-Zone hätte ein Werkzeug verloren');
   assert.ok(!fix.includes('wand'));
   assert.ok(zoneToolsIn(kopie, 'versteckt').some((t) => t.id === 'wand'));
   // echte Daten unberührt
@@ -122,7 +127,10 @@ test('Regressionsanker: faehigkeitenNach(werkzeuge) bleibt nach der Fachzuordnun
   // hart hinterlegt aus Registry-Reihenfolge + bisheriger CAD_TEILMENGE.
   // I2/AUF-28: die 15 `cad-*`-Einträge sind WEG — sie kamen aus der Zone `weitere`, und die ist
   // seit dem Katalog-Tausch leer. Übrig bleiben die echten Registry-Werkzeuge der Gruppe.
-  const vorher = ['auswahl', 'loeschen', 'duplizieren'];
+  // Z-05-N1: `kontur` reiht sich nach `auswahl` ein — die Reihenfolge folgt der Registry, und
+  // dort steht sie hinter `treppe` und vor den beiden Aktionen. **Der Anker bleibt ein Anker:**
+  // er haelt die REIHENFOLGE fest, nicht die Laenge, und genau die hat sich nicht verschoben.
+  const vorher = ['auswahl', 'kontur', 'loeschen', 'duplizieren'];
   assert.deepEqual(faehigkeitenNach('werkzeuge').map((f) => f.id), vorher);
 });
 

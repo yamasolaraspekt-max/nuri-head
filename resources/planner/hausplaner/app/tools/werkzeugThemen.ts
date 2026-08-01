@@ -131,6 +131,9 @@ export const WERKZEUG_THEMEN: readonly WerkzeugThema[] = [
     label: 'Architektur & Gebäude',
     werkzeuge: [
       'boden',
+      // Z-05-N1: die Kontur ist der Umriss eines Bauteils und gehoert damit zur Architektur —
+      // nicht zu den Zeichen-Primitiven, die stillgelegt sind.
+      'kontur',
       'dach',
       'dachfenster',
       'decke',
