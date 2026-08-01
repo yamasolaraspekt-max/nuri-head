@@ -76,6 +76,11 @@ hat den Posten geschlossen, auf den Yama seit Tagen wartete.
 
 ## 4. Was entschieden ist — gilt, bis es hier ersetzt wird
 
+> **`docs/BESCHLUSS-fehlervermeidung.md` (`2adad9e6`) steht ÜBER dieser Tabelle.** Acht Beschlüsse
+> mit Wirkstufe und Merkmal. **B8 gilt ab sofort ohne Werkzeug: ein Blatt wird nicht `bereit`,
+> bevor eine andere Rolle es gegengelesen hat** — `gegengelesen_von`, `gegengelesen_am`, `befund`.
+> Ohne diese drei Zeilen bleibt es `entwurf`. Der Planner nimmt sich davon nicht aus.
+
 | Entscheidung | Kurz |
 |---|---|
 | **Allowlist statt Textmuster** | W-01. Nicht aufzählen, was verboten ist, sondern was erlaubt ist — jedes Glied der Kette, `bash`/`sh` nur unter `scripts/` |
