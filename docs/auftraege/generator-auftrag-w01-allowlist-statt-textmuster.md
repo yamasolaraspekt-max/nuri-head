@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: W-01
-  status: aktiv   # das EINE aktive Blatt (S-01). Z-05-N1 ist abgenommen, AUF-38-P4+P5 gebaut
+  status: bereit   # Sicherheitsposten nach dem Push von 20:01. Nicht aktiv, weil der Generator gerade Z-03+Z-04 baut - W-01 ist der naechste Griff, nicht der laufende
 ```
 
 ## Warum es dieses Blatt gibt — ein realer Push, und meine Barriere hat ihn durchgelassen
