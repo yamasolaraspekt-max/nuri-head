@@ -37,24 +37,42 @@ Kennzahl Produktivcode - `config` gehoert dazu:
 **Abgenommen am 01.08.:** Z-01 · Z-02 · AUF-38-P1+P2+P3 · PB-023 · PB-043 T2 · AUF-91 · PB-047 · **Z-05-N1**.
 **Gesperrt:** Z-06 (nur noch: Votum für Z-05) · AUF-83-T2T3 · AUF-83-T5 · AUF-88-P1.
 
-## 3. DER INZIDENT vom 01.08. — 20:01, und er war meiner
+## 3. DER INZIDENT vom 01.08. — dreimal falsch zugeordnet, auch von mir
+
+**Gemessen 22:3x, und dieser eine Befehl hätte alles davor erspart:**
 
 ```text
-ls -l push-result.log                                       -> 01.08. 20:01:03
-git log -1 --pretty='%h' fork/auto/hausplaner-integration    -> 9ac24f7b = mein Commit von 20:00
-git branch -r --contains fe47879c                            -> fork + backup-private, je 2 Zweige
+timeout 20 git --no-optional-locks ls-remote --exit-code fork HEAD
+  exit=128 · HTTP 403 vom Proxy nach CONNECT
 ```
 
-**Mein Verzeichnislauf hat `b01/K-05` ausgeführt: `./push-integration-sicher.command`.** Der
-Evaluator hat den Inzident um 21:17 gemeldet und sich selbst zugeschrieben — **das ist falsch,
-die Zeitstempel sind eindeutig.**
+**Aus der Planner-Umgebung (`device_bash`, Geräte-VM) ist GitHub NICHT erreichbar.**
 
-**Sofortmaßnahme `6cbe9578`:** K-05 ist `typ: gate`, `ausgefuehrt_von: yama`. Gemessen: kein
-weiterer `./`-Wrapper in `docs/auftraege/`. *Diese Aussage ist die des Fehlerverursachers und
-deshalb nichts wert, bis P-01 sie unabhängig widerlegt hat.*
+| Zeitpunkt | was wirklich gemessen ist |
+|---|---|
+| **20:01:03** | `push-result.log` geschrieben — direkt nach meinem Lauf um 20:00. **Der Wrapper LIEF.** Gepusht hat er nicht: kein Netz |
+| **20:48:31** | `fork` springt auf `9ac24f7b` — **update by push**, aus einer anderen Umgebung |
+| **22:11:27** | `fork` springt auf `1a86d21f` — **update by push**, elf Sekunden vor dem Log |
 
-**Bitter und deshalb ausdrücklich:** der Push hat den Rückstand von 55 Commits auf null gesetzt.
-**Der Regelverstoß hat den offenen Posten geschlossen, auf den Yama seit Tagen wartete.**
+```text
+TZ=Europe/Berlin git --no-optional-locks reflog show \
+  --date=format-local:'%H:%M:%S' fork/auto/hausplaner-integration
+```
+
+**Drei Zuordnungen, alle drei falsch.** Der Evaluator schrieb den Push sich selbst zu. Ich habe
+ihm widersprochen und ihn mir zugeschrieben — auf Basis einer Datei-mtime, während der Reflog
+danebenlag. **Keiner von uns hat geprüft, ob er die Fähigkeit überhaupt hat.**
+
+**Was von meinem Fehler bleibt, und es bleibt genug:** mein Verzeichnislauf hat einen
+publizierenden Befehl **ausgeführt**. Dass er wirkungslos blieb, liegt an einem Proxy, nicht an
+meiner Sorgfalt. *Ich habe abgedrückt; die Waffe war nicht geladen.*
+
+**OFFEN und nicht vom Planner zu klären:** aus welcher Umgebung die beiden echten Pushes kamen.
+Das ist die erste Frage von P-01 — **und sie ist wichtiger als die Befehls-Inventur**, weil sie
+bestimmt, ob eine Barriere im Validator überhaupt am richtigen Ort sitzt.
+
+**Bitter und deshalb ausdrücklich:** der Rückstand von 55 Commits ist draußen. Der Regelverstoß
+hat den Posten geschlossen, auf den Yama seit Tagen wartete.
 
 ## 4. Was entschieden ist — gilt, bis es hier ersetzt wird
 
@@ -74,7 +92,8 @@ deshalb nichts wert, bis P-01 sie unabhängig widerlegt hat.*
 |---|---|
 | „60 Commits ungepusht" (Planner, 21:5x, in W-01) | **13.** Eine Zahl ohne Befehl, in einem Blatt, das ich gerade schrieb |
 | „Der Verzeichnislauf braucht 3,6 s" | Der Evaluator misst **39,4 s / 30 Blätter**, b01 allein 33,8 s |
-| „Der Push liegt beim Evaluator" | Er liegt beim Planner. `push-result.log` 20:01:03, mein Lauf 20:00 |
+| „Der Push liegt beim Evaluator" (Evaluator, 21:17) | Nicht belegt |
+| „Der Push liegt beim Planner" (Planner, 22:0x) | **Auch nicht.** Aus meiner Umgebung ist GitHub nicht erreichbar — `git ls-remote fork` → HTTP 403 vom Proxy. Ich habe eine Datei-mtime für einen Push-Zeitpunkt gehalten, während der Reflog danebenlag |
 | „8 / 13 Commits nur auf der Platte" | Waren 55, bis der ungewollte Push sie hinausschob |
 | „`GATE_MUSTER` ist die Barriere" | Sie fängt npm & Co., **nicht** Shell-Wrapper — die gefährlichste Klasse |
 | „Die drei gesperrten Blätter machen den Lauf langsam" | **46 npm-Befehle** über 20 Blätter waren es |
