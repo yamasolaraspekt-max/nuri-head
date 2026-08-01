@@ -33103,3 +33103,49 @@ Jeder Zähler hat einen Partner mit Treffer ≠ 0 (Regel A).
 **An Yama:** **48 ungepushte Commits** (`git rev-list --count fork/auto/hausplaner-integration..auto/hausplaner-integration`,
 19:37) · `docs/planner/PRUEFER-BEFUNDE.md` liegt seit 13:04 uncommittet (fremder Pfad) ·
 `git worktree prune` darf vom Mount aus **nie** laufen, dort gilt jeder Worktree als `prunable`.
+
+---
+
+## ⇒ PRÜFER an YAMA — **Tor auf dem Stand NACH dem Merge gefahren: gruen** (01.08., 19:45 CEST)
+
+**Der Merge `d8612a63` (19:01) nahm den Stand `99f38da7`. Meine Gate-Messung von 11:47 galt fuer
+genau diesen Stand — fuer die 20 Commits danach galt sie NICHT.** *Also neu gefahren, damit die
+naechste Entscheidung eine eigene Zahl hat und nicht eine geerbte.*
+
+```text
+HEAD 5bbfb80c   (20 Commits nach dem Merge: Z-02 · Z-05 · AUF-38-P3 · vier neue Barrieren)
+tsc:hausplaner            EXIT 0
+schema:hausplaner:check   EXIT 0
+test:hausplaner           EXIT 0    pass 1611 · fail 0   (11:47 waren es 1583)
+test:hausplaner:dom       EXIT 0    pass 29   · fail 0
+build:hausplaner          EXIT 0
+Buendel-Abweichung nach dem Bau: 0 Dateien
+```
+
+### Eine Zahl, die ich nachgemessen habe, weil sie aus einem Bericht stammt
+
+**Der Generator schreibt zu Z-05: „gebaut und gruen, aber in der Oberflaeche unerreichbar".**
+*Ich glaube keinem Bericht — auch keinem, der sich selbst belastet.* **Gemessen:**
+```text
+Werkzeuge in der Typ-Union (werkzeugArten.ts):  8
+davon in toolRegistry.ts:                       7   auswahl dach decke fenster treppe tuer wand
+NICHT in der Registry:                          1   kontur
+```
+**Seine Selbstauskunft stimmt auf das Werkzeug genau.** *Und das Blatt dazu liegt bereits:
+`generator-auftrag-z05-n1-werkzeug-erreichbar.md`.* **Kein Befund von mir — die Luecke ist erkannt,
+benannt und geschnitten, bevor ich sie messen konnte.** *Das ist der Zustand, den der Zyklus
+erreichen soll.*
+
+**Ballbesitz: Yama** (ob und wann ein zweiter Merge kommt) · **Generator** (Z-05-N1, Z-06) ·
+**Prüfer** (nichts Offenes ausser den vier Registerposten bei dir).
+
+**PLANNER-NACHTRAG 19:5x** — vier weitere eigene Fehler geschlossen, zwei neue Klassen eingetragen:
+`AUFTRAGSSCHEMA.md` zaehlte als zweites aktives Blatt und liess den Validator npm-Gates fahren
+(**F-16**, `52693f11`) · `L-01-anker` war beim Verschieben still aus Z-05 verschwunden, nachgetragen ·
+AUF-38-P4+P5 bekommt **K-09**: die drei Zaehlbefehle einmal ohne die `tail`-Pipe, Exitcode in den Beleg ·
+Z-05-N1 begruendet, warum N1-06/N1-07 kein `P1` tragen — S-07 kann ein P1-absence-Kriterium mit
+konstantem Zielwert nicht zulassen. **F-17** neu: ein unbekannter `typ:` verschwindet lautlos aus dem
+Bericht (Z-05 meldete 7 statt 9 Eintraege, ohne ein Wort). Beide Klassen haben **keine** Barriere,
+nur eine Regel — R9 gilt ab der zweiten Wiederholung.
+**Offen und benannt:** der Validator ist ueber die volle Schlange auf der Geraete-VM nicht in 45 s
+fahrbar (npm-Gates in AUF-83-T2T3 K-07 und AUF-88-P1); portionsweise fahren macht S-01/S-06 unbrauchbar.
