@@ -25,6 +25,7 @@ import { zerlegteApp } from './_zerlegteApp';
 const hier = dirname(fileURLToPath(import.meta.url));
 /** Siehe `leisteAusZonen.test.ts`: erklärende Kommentare dürfen den Befund nicht auslösen. */
 const ohneKommentare = (s: string): string => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+const css = readFileSync(join(hier, '../hausplaner.css'), 'utf8');
 const appQuelle = ohneKommentare(zerlegteApp());
 const naviQuelle = ohneKommentare(readFileSync(join(hier, '../app/FaehigkeitenNavi.tsx'), 'utf8'));
 
@@ -67,10 +68,18 @@ test('K4: jeder Reiter hat genau EINE Sichtbarkeitsbedingung — nie zwei, nie k
 
 test('K4: die Scroll-Höhe gehört dem Abschnitt, nicht der Spalte', () => {
   // Der Mangel war: EINE Scroll-Höhe für drei Blöcke. Deshalb scrollt jetzt der Inhaltsbereich.
+  //
+  // **AUF-38-P2: die Eigenschaften wohnen jetzt in der Stilschicht statt im Inline-Stil.** Die
+  // geprüfte Aussage ist unverändert — sie wird nur an zwei Orten geprüft statt an einem:
+  // das Element trägt die Klasse, und die Klasse trägt die Eigenschaften. *Ohne den zweiten
+  // Teil wäre die Zusage nach dem Umbau grün, obwohl der Abschnitt nicht mehr scrollt.*
   const panel = appQuelle.match(/<div\s+role="tabpanel" id=\{SCHIENE_ID\}[\s\S]*?>/);
   assert.ok(panel, 'Inhaltsbereich der Schiene nicht gefunden');
-  assert.match(panel[0], /overflowY: 'auto'/, 'der Abschnitt braucht seine eigene Scroll-Höhe');
-  assert.match(panel[0], /minHeight: 0/, 'ohne minHeight:0 wächst ein Flex-Kind statt zu scrollen');
+  assert.match(panel[0], /className="hp-gz-inhalt"/, 'der Abschnitt trägt seine Klasse nicht mehr');
+  const regel = css.match(/\.hp-gz-inhalt\s*\{([^}]*)\}/);
+  assert.ok(regel, '`.hp-gz-inhalt` fehlt in der Stilschicht — der Abschnitt bliebe ungestylt');
+  assert.match(regel[1], /overflow-y: auto/, 'der Abschnitt braucht seine eigene Scroll-Höhe');
+  assert.match(regel[1], /min-height: 0/, 'ohne min-height:0 wächst ein Flex-Kind statt zu scrollen');
 });
 
 // --- K5: nichts ist beim Umbau verschwunden ----------------------------------------------------

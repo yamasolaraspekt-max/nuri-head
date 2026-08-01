@@ -601,3 +601,53 @@
 .hp-mb-titel { margin: 0 0 10px; font-size: 15px; font-weight: 700; color: var(--hp-ink); }
 .hp-mb-satz { margin: 0 0 10px; font-size: 13px; line-height: 1.5; color: var(--hp-ink); }
 .hp-mb-fussnote { margin: 12px 0 0; font-size: 11.5px; line-height: 1.45; color: var(--hp-muted); }
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════════
+ * AUF-38-P2 — Gruppenzeile und Planer-Schiene. 18 offene statische Stellen werden 16 Klassen.
+ *
+ * Praefix `hp-gz-`. **Die zwei vorhandenen `hp-schiene-`-Klassen bleiben unberuehrt** — sie
+ * liegen bereits in der Stilschicht, und wer sie umbenennt, bewegt Stellen, die dieses Blatt
+ * nicht misst.
+ *
+ * **Jede Farbe aus `var(--hp-…)`.** Die Variablen kommen aus `T` (`app/stil/tokenVariablen.ts`),
+ * damit `studioDaten.ts` die einzige Farbwahrheit bleibt.
+ *
+ * **Weder Medienabfragen noch Ausrufezeichen-Vorrang** — Responsive ist L7 und nicht dieses Blatt.
+ *
+ * *(Beide Begriffe stehen hier bewusst nicht in ihrer Code-Schreibweise: `stilschicht.test.ts`
+ * prueft sie mit einem schlichten `doesNotMatch`, und mein erster Kommentar hat die Zusage rot
+ * gemacht — mit dem Satz, dass es die Sache nicht gibt. ACHTER Fall dieser Klasse.)*
+ * ══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* Optionszeile ueber dem Bereichswaehler */
+.hp-gz-optionsfeld { font-size: 12.5px; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--hp-control-border); }
+.hp-gz-optionszeile { flex: 0 0 auto; display: flex; align-items: center; gap: 10px; padding: 5px 14px; font-size: 12px; background: var(--hp-surface2); border-bottom: 1px solid var(--hp-hair); }
+/* `hp-gz-werkzeugname` stand hier und ist wieder fort: die Stelle traegt `FARBEN.text` und
+   gilt dem Messwerkzeug als DYNAMISCH — Ausschluss dieses Blattes, eigenes Blatt AUF-38-P3.
+   **Derselbe Fehler wie in P1**, wo ich zwei solche Stellen zu viel umgestellt hatte. */
+.hp-gz-trenner { width: 1px; height: 16px; background: var(--hp-hair); }
+
+/* Themen-Gruppenzeile */
+.hp-gz-gruppenzeile { display: flex; align-items: center; gap: 2px; padding: 3px 14px 6px; background: var(--hp-bg); border-bottom: 1px solid var(--hp-hair); flex: 0 0 auto; }
+
+/* Schiene: Inhaltsbereich und Wegweiser */
+.hp-gz-inhalt { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+.hp-gz-wegweiser { display: flex; align-items: flex-start; gap: 8px; margin: 8px 10px 4px; padding: 8px 10px; border-radius: 9px; background: var(--hp-brand-wash); border: 1px solid var(--hp-brand-ink); font-size: 12px; color: var(--hp-brand-ink); line-height: 1.35; overflow-wrap: anywhere; }
+.hp-gz-wegweiser-pfeil { flex: 0 0 auto; }
+.hp-gz-wegweiser-satz { flex: 1 1 120px; min-width: 0; }
+
+/* Schiene: Werkzeugzeilen */
+.hp-gz-werkzeugicon { width: 18px; height: 18px; display: grid; place-items: center; flex: 0 0 auto; }
+.hp-gz-werkzeuglabel { flex: 1; }
+.hp-gz-kuerzel { font-size: 10.5px; color: var(--hp-muted); border: 1px solid var(--hp-control-border); border-radius: 4px; padding: 1px 5px; }
+
+/* Schiene: Projektbrowser */
+.hp-gz-leerzustand { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 2px 12px 10px; font-size: 11.5px; color: var(--hp-muted); }
+.hp-gz-gruppe { margin-bottom: 2px; }
+.hp-gz-gruppenkopf { display: flex; align-items: center; gap: 6px; padding: 6px 12px 2px; font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--hp-muted); }
+.hp-gz-gruppenname { flex: 1; }
+.hp-gz-gruppenzahl { font-variant-numeric: tabular-nums; }
+.hp-gz-eingeklappt { padding: 0 12px 6px 20px; font-size: 11px; color: var(--hp-muted); }
+
+/* Schiene: Fuss */
+.hp-gz-fuss { padding: 10px 12px; font-size: 11px; color: var(--hp-muted); border-top: 1px solid var(--hp-canvas-grid); flex: 0 0 auto; }

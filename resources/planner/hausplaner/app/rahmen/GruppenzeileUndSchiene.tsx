@@ -99,7 +99,7 @@ function KontextOptionenLeiste({
             <select
               value={istFenster ? fensterTypWahl : tuerTypWahl}
               onChange={(e) => (istFenster ? setFensterTypWahl(e.target.value as FensterTyp) : setTuerTypWahl(e.target.value as TuerTyp))}
-              style={{ fontSize: 12.5, padding: '4px 8px', borderRadius: 8, border: `1px solid ${T.controlBorder}` }}
+              className="hp-gz-optionsfeld"
             >
               {(istFenster ? FENSTER_TYPEN : TUER_TYPEN).map((v) => (
                 <option key={v.typ} value={v.typ}>{v.label} · {v.breite}×{v.hoehe} mm</option>
@@ -125,9 +125,9 @@ function KontextOptionenLeiste({
     }
   })();
   return (
-    <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'center', gap: 10, padding: '5px 14px', fontSize: 12, background: T.surface2, borderBottom: `1px solid ${T.hair}` }}>
+    <div className="hp-gz-optionszeile">
       <span style={{ fontWeight: 700, color: FARBEN.text }}>{aktivesTool?.label ?? 'Werkzeug'}</span>
-      <span style={{ width: 1, height: 16, background: T.hair }} />
+      <span className="hp-gz-trenner" />
       {/* AUF-34 / Kante 3: Ein Bereichswechsel darf das aktive Werkzeug NICHT stillschweigend
           abwählen. Es bleibt gewählt — und sagt hier sichtbar, warum es gerade nicht greift.
           Vorher stand die Begründung nur im `title` der Leiste, also faktisch nirgends. */}
@@ -184,7 +184,7 @@ export function ArbeitsbereichZeilen({
           die Rolle und die id; ein Verweis ins Leere wäre schlimmer als kein Verweis. */}
       <div
         role="tabpanel" id={BEREICH_ID} aria-labelledby={bereichReiterId(activeWorkspace)}
-        style={{ display: 'flex', alignItems: 'center', gap: 2, padding: '3px 14px 6px', background: T.bg, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}
+        className="hp-gz-gruppenzeile"
       >
         <WerkzeugGruppenMenue
           offen={offeneGruppe}
@@ -288,21 +288,16 @@ export function PlanerSchiene({
           `aria-labelledby` nennt den gerade aktiven Reiter. */}
       <div
         role="tabpanel" id={SCHIENE_ID} aria-labelledby={schienenReiterId(schienenTab)}
-        style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}
+        className="hp-gz-inhalt"
       >
       {schienenTab === 'werkzeuge' && (<>
       {/* AUF-57: der Wegweiser an SEINEM Ort. „Wähle ein Bauteil aus" gehört dorthin, wo die
           Werkzeuge stehen — nicht in einen Balken über dem Plan. Er erscheint nur, wenn die
           Messung sagt, dass dieser Schritt wirklich etwas löst, und verschwindet danach. */}
       {wegweiser?.ort === 'schiene' && (
-        <div style={{
-          display: 'flex', alignItems: 'flex-start', gap: 8, margin: '8px 10px 4px',
-          padding: '8px 10px', borderRadius: 9, background: T.brandWash,
-          border: `1px solid ${T.brandInk}`, fontSize: 12, color: T.brandInk,
-          lineHeight: 1.35, overflowWrap: 'anywhere',
-        }}>
-          <span aria-hidden style={{ flex: '0 0 auto' }}>→</span>
-          <span style={{ flex: '1 1 120px', minWidth: 0 }}>{wegweiser.satz}</span>
+            <div className="hp-gz-wegweiser">
+          <span aria-hidden className="hp-gz-wegweiser-pfeil">→</span>
+          <span className="hp-gz-wegweiser-satz">{wegweiser.satz}</span>
         </div>
       )}
       {/* AUF-88-P1 / K-07 — der Einstieg sitzt HIER, im „Import & Nachzeichnen"-Arbeitsbereich
@@ -332,9 +327,9 @@ export function PlanerSchiene({
             aria-pressed={aktiv}
             onClick={() => { if (!zustand.enabled) return; beendeWerkzeug(tool.id as Werkzeug); }}
             style={{ ...navItem(aktiv), ...(zustand.enabled ? {} : { opacity: GESPERRT_DECKKRAFT, cursor: GESPERRT_ZEIGER }) }}>
-            <span style={{ width: 18, height: 18, display: 'grid', placeItems: 'center', flex: '0 0 auto' }}>{werkzeugIcon(tool.id)}</span>
-            <span style={{ flex: 1 }}>{tool.label}</span>
-            {tool.shortcut && <span style={{ fontSize: 10.5, color: T.muted, border: `1px solid ${T.controlBorder}`, borderRadius: 4, padding: '1px 5px' }}>{tool.shortcut}</span>}
+            <span className="hp-gz-werkzeugicon">{werkzeugIcon(tool.id)}</span>
+            <span className="hp-gz-werkzeuglabel">{tool.label}</span>
+            {tool.shortcut && <span className="hp-gz-kuerzel">{tool.shortcut}</span>}
           </button>
         );
       })}
@@ -365,22 +360,22 @@ export function PlanerSchiene({
           werden. Klick nutzt das vorhandene `selectNodes([id])` — keine zweite Auswahl-Wahrheit. */}
       {schienenTab === 'projekt' && (<>
       {baum.length === 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, padding: '2px 12px 10px', fontSize: 11.5, color: T.muted }}>
+        <div className="hp-gz-leerzustand">
           <span>{PROJEKTBAUM_LEER}</span>
           {/* Ehrlich: es fehlt eine VORAUSSETZUNG (Bauteile), nicht eine Funktion. */}
           <ZustandBadge zustand="voraussetzung" />
         </div>
       ) : (
         baum.map((gruppe) => (
-          <div key={gruppe.gruppe} style={{ marginBottom: 2 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px 2px', fontSize: 11, fontWeight: 700, letterSpacing: '.04em', color: T.muted }}>
-              <span style={{ flex: 1 }}>{gruppe.gruppe}</span>
-              <span style={{ fontVariantNumeric: 'tabular-nums' }}>{gruppe.anzahl}</span>
+          <div key={gruppe.gruppe} className="hp-gz-gruppe">
+            <div className="hp-gz-gruppenkopf">
+              <span className="hp-gz-gruppenname">{gruppe.gruppe}</span>
+              <span className="hp-gz-gruppenzahl">{gruppe.anzahl}</span>
             </div>
             {gruppe.eingeklappt ? (
               /* Kante 6: zu viele Einträge — Kopf + Anzahl statt ungebremster Liste.
                  Virtuelles Scrollen ist v6 und wird hier nicht vorweggenommen. */
-              <div style={{ padding: '0 12px 6px 20px', fontSize: 11, color: T.muted }}>
+              <div className="hp-gz-eingeklappt">
                 Zusammengeklappt – {gruppe.anzahl} Einträge. Auswahl über den Plan.
               </div>
             ) : (
@@ -424,7 +419,7 @@ export function PlanerSchiene({
           `SCHIENEN_REITER` ohnehin führt. Der lag bis heute nur im Tooltip, also faktisch
           nirgends; sichtbar gemacht statt neu erfunden. Kein zweiter Text, keine zweite
           Wahrheit. */}
-      <div style={{ padding: '10px 12px', fontSize: 11, color: T.muted, borderTop: `1px solid ${T.canvasGrid}`, flex: '0 0 auto' }}>{schienenReiter(schienenTab)?.hinweis}</div>
+      <div className="hp-gz-fuss">{schienenReiter(schienenTab)?.hinweis}</div>
       </>
       )}
     </div>
