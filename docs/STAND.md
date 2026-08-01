@@ -27,20 +27,23 @@ Kennzahl Produktivcode - `config` gehoert dazu:
 
 ## 2. Die Schlange — wer was hat
 
-> **AUTONOM-MODUS seit 01.08. 23:0x.** Yama: *„ihr sollt auch alleine arbeiten ohne meine Hilfe …
-> ihr sollt euch stark zeigen."* **Es wird nicht mehr gefragt, es wird entschieden und belegt.**
-> Bei Yama liegen genau zwei Sätze (Y1, Y2 im Beschluss) — alles andere gehört uns.
+> **NACHTSCHICHT seit 01.08. 23:2x.** Yama schläft. **Die Reihenfolge steht im Ledger unter
+> „NACHTORDNUNG" — der Generator rückt SELBST nach, wenn ein Blatt fertig ist.** Niemand wartet
+> auf den Planner. Bei Yama liegen zwei Sätze (Y1, Y2) und eine Fachfrage (Z-09: ACHSE/FLANKE).
 
 | Rolle | Was liegt bereit |
 |---|---|
-| **Generator** | **Z-03+Z-04** `aktiv` (baut) · **W-01** `bereit` (ALLOWLIST bei 3, 69 Zusagen/0 fail) · **Z-10** `bereit` |
-| **Evaluator** | **Z-05 — der EINZIGE Posten zwischen Yama und Z-06** · AUF-38-P4+P5 gebaut · W-01 abnehmen (**Planner-Befund im Blatt, vor der Abnahme lesen**) · W-02 gegenlesen |
-| **Prüfer** | **P-01** — **Teil 0 hat Vorrang**: aus welcher Umgebung kamen die Pushes · **PW-01 gegenlesen** |
-| **Planner** | B2-Blatt offen · Z-07/Z-08/Z-09 nach Z-06 |
-| **Yama** | nur noch Y1 und Y2 · die 3 PHP-Dateien · Papierstopp PB-042 |
+| **Generator** | **Z-03+Z-04** `aktiv` → dann **W-01** → **W-02** → **Z-10** → (Z-11 nach Gegenlesen) → (W-03 nach W-01) |
+| **Evaluator** | **Z-05 — VORRANG. Das Votum öffnet Z-06 und damit die Zwischendecke** · AUF-38-P4+P5 · W-01 abnehmen · Z-11 gegenlesen, falls der Prüfer belegt ist |
+| **Prüfer** | **P-01 Teil 0 zuerst** (welche Umgebung pusht?) · dann 188 Befehle gliedweise · **PW-01 und Z-11 gegenlesen** · **Feedback zum Beschluss, Frage 3** |
+| **Planner** | schläft nicht, aber blockiert nichts. Z-07/Z-08 erst wenn Z-06 steht |
+| **Yama** | Y1 · Y2 · Z-09 ACHSE oder FLANKE · die 3 PHP-Dateien |
 
-**Entwürfe nach B8** (kein `bereit` ohne Gegenlesen): **PW-01** der Bote `bacb3974` · **W-02**
-`zeile-ersetzen` `09049b23`.
+**5 baubare Blätter, S-01 hält.** Entwürfe nach B8: **PW-01** `bacb3974` · **Z-11** `5c50d451`.
+**W-02 ist seit `eb3c1546` `bereit`** — vom Evaluator gegengelesen, beide Auflagen umgesetzt.
+
+**In der Nacht gilt ohne Ausnahme:** kein Push (Y1 offen) · keine Fachentscheidung (Tor 1) ·
+kein Merge/Tag/`--force` (Tor 2) · die drei PHP-Dateien im Baum sind Yamas.
 
 **Abgenommen am 01.08.:** Z-01 · Z-02 · AUF-38-P1+P2+P3 · PB-023 · PB-043 T2 · AUF-91 · PB-047 · **Z-05-N1**.
 **Gesperrt:** Z-06 (nur noch: Votum für Z-05) · AUF-83-T2T3 · AUF-83-T5 · AUF-88-P1.
