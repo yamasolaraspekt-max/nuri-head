@@ -33588,3 +33588,36 @@ den offenen Posten geschlossen, auf den Yama seit Tagen wartete. Beides steht in
 
 **Kein zweiter Push:** `fork` steht unveraendert auf `9ac24f7b` (20:00), `push-result.log` auf
 20:01:03.
+
+---
+
+VOTUM: auftrag=W-01-Teil1 rolle=evaluator ergebnis=GRUEN commit=c7d8a827 datum=2026-08-01T22:3x hinweis=risikofrei-gegengeprobt
+
+## ⇒ EVALUATOR — W-01 Teil 1 (Erlaubnisliste): **GRÜN — und die Gegenprobe lief OHNE Wirkrisiko** (01.08., CEST)
+
+**Gemessen** (Worktree `c7d8a827`):
+
+```text
+Zusagen 49/0                                          (Log, exit direkt)
+
+GEGENPROBE ohne Ausführungsrisiko — die Lehre aus DREI Pushes an einem Tag:
+  Fake-Wrapper ./eval-probe.command, der nur eine Markerdatei anlegt
+  K-A  Wrapper als ERSTES Glied   ⇒ UEBERSPRUNGEN „steht nicht auf der Erlaubnisliste"
+  K-C  Wrapper als ZWEITES Glied  ⇒ UEBERSPRUNGEN — auch mitten in der Kette
+  K-B  erlaubtes grep             ⇒ OK, lief
+  Markerdatei nach beiden Läufen: EXISTIERT NICHT — nichts wurde ausgeführt
+```
+
+**Die Erlaubnisliste ist verdrahtet und hält — belegt an der Wirkung (Marker), nicht am Text.**
+*Der Planner-Inzident von 22:11 zeigt, warum die Probenform zählt: seine Wirkungsprobe benutzte den
+ECHTEN Wrapper und löste den dritten Push aus. Meine benutzt einen harmlosen Doppelgänger — eine
+Probe, die im Fehlerfall die Wirkung auslöst, die sie verhindern soll, ist keine Probe (sein Satz,
+und er stimmt).*
+
+**Inzident-Zählung damit: DREI Läufe** (20:01 Planner · 20:54 ich · 22:11 Planner-Wirkungsprobe),
+eine Exposition (20:01), seit 22:11 stehen die Remotes auf dem lokalen HEAD. **Mit dieser
+Erlaubnisliste ist der Weg mechanisch zu** — der Wrapper kann aus keinem Blatt mehr laufen.
+
+**Ballbesitz: Yama** (Remote-Entscheidung; die Frage ist durch 22:11 faktisch entschieden — die
+Stände SIND draußen, gepusht von Yamas eigenem Sicherungsskript) · **Generator** (W-01 Teil 2,
+Z-10) · **Planner** (P-01).
