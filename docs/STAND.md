@@ -4,59 +4,60 @@
 > Wer sie liest, weiß, wo wir stehen — ohne 1,7 MB Ledger zu lesen.
 >
 > **Warum es sie gibt** *(Yama, 31.07. 08:15)*: „euer größtes Problem ist, dass ihr
-> Gedächtnisverlust habt." Der Ledger ist append-only und auf **1 770 052 Byte** gewachsen.
-> Eine zurückgenommene Aussage bleibt dort stehen, die Richtigstellung steht 800 Zeilen später,
-> und niemand liest beides. **Hier steht nur, was JETZT gilt.**
+> Gedächtnisverlust habt."
 >
 > **Regeln für diese Datei:** eine Zeile je Sache · eine Rücknahme ERSETZT die Aussage, sie steht
 > nicht darunter · was erledigt ist, verschwindet (es steht im Ledger) · **kein Datum ohne Zahl,
 > keine Zahl ohne Befehl.**
 
-**Zuletzt geschrieben:** 31.07.2026, 10:30 · Planner
+**Zuletzt geschrieben:** 01.08.2026, 09:50 · Planner
 
 ---
 
-## 1. Wo der Bau steht
+## 1. Wo der Bau steht — gemessen 09:47 (01.08.)
 
 ```text
 main                    39b18514   byte-identisch gemergt, Evaluator: 16 von 16 Commits, alle Gates gruen
-Zweig                   9297b857   20 Commits voraus
-laravel.log             229 327 885 Byte
+Zweig                   b1da5194   21 Commits voraus   Baum: 1 Eintrag (siehe unten)   Locks: 0
+letzter Commit          31.07. 10:28  ->  23 Stunden 19 Minuten her
+letzter Produktivcode   31.07. 07:55  7a6c8112  (AUF-38-P1)
 ```
+
+**Der Bau steht seit gestern früh still.** Generator: letzter Commit 31.07. 07:59 → **25 h 48**.
+Evaluator: letzter Commit 31.07. 08:07 → **25 h 40**. **Der Prüfer läuft** — er hat um 09:45 heute
+seine dritte Mahnung geschrieben (liegt noch uncommittet in `docs/handoff-status.md`, seine Zeilen,
+nicht meine).
 
 | Sache | Zustand |
 |---|---|
-| AUF-48 (Hausplaner-Zerlegung) | **fertig**, acht Scheiben, alle abgenommen, `HausplanerApp.tsx` 2511 → 1155 |
-| Z-01 (langer Strich) | **fertig und grün**. Ein Ort beendet Werkzeuge, Canvas-Verlassen pausiert |
-| M2 (`scripts/bestand.sh`) | **fertig**, quittiert |
-| AUF-38-P1 (Panel-Stile) | **gebaut + Evaluator grün** (08:07). Panel 71/37 → 34/0, global 195/77 → 158/40 |
-| PB-043 Teil 2 (Log-Rotation) | **gebaut** (07:59), Prüfer: vollständig erledigt (08:02) |
-| PB-047 (CRM-Fehler) | **Blatt liegt, nicht gebaut.** `grep user?->name` → **1** |
-| AUF-91 (Hinweis unter 1024 px) | **Blatt liegt, nicht gebaut.** `MindestbreiteHinweis.tsx` existiert **nicht** |
+| AUF-48 · Z-01 · M2 · AUF-38-P1 · PB-043 T2 | **fertig und abgenommen** (Einzelheiten im Ledger) |
+| **PB-047** (CRM-Fehler) | **Blatt liegt seit 31.07. 01:00 — 32 h, gebaut 0.** `grep -oE 'user[?]-.name' … \| wc -l` → **1**. Die Datei ist seit 28.06. unberührt |
+| **AUF-91** (Hinweis unter 1024 px) | **Blatt liegt seit 30.07. 22:17 — 35 h, gebaut 0.** `MindestbreiteHinweis.tsx` → **NEIN** |
 
 ## 2. Wer ist am Ball
 
-- **Generator:** **PB-047** (laufender CRM-Fehler, 464 Mal seit 07.07.) → dann **AUF-91**.
-- **Evaluator:** **AUF-25** (`17c8be22`, gebaut 25.07., **sechs Tage ohne Votum**) · **Z-01/K-04 mit
-  dem korrigierten Befehl nachziehen** · AUF-86 (56 px) · fehlende `.env.testing.example`.
-- **Yama:** Papierstopp · PB-042 (Takt) · **sollen die 18 dichtesten Blades in den Browser?**
+- **Generator:** **PB-047**, dann **AUF-91**. Steht seit 25 h. **Ohne ihn geht nichts weiter.**
+- **Evaluator:** AUF-25 (`17c8be22`, gebaut 25.07., **sieben Tage ohne Votum**) · Z-01/K-04 mit dem
+  korrigierten Befehl nachziehen · AUF-86 (56 px) · fehlende `.env.testing.example`. Steht seit 25 h.
+- **Yama:** **die beiden Instanzen anstoßen** — das ist der einzige Hebel, den es gerade gibt ·
+  Papierstopp · PB-042 (Takt) · 18 dichteste Blades in den Browser?
 - **Planner:** nichts Blockierendes. Schneidet erst wieder, wenn PB-047 und AUF-91 weg sind.
+- **Prüfer:** misst weiter, schließt beide erst nach eigener Nachmessung.
 
 ## 3. Was entschieden ist — gilt, bis es hier ersetzt wird
 
 | Entscheidung | Kurz |
 |---|---|
-| **Merge gesperrt** | Bis PB-047 und AUF-91 gebaut UND abgenommen sind. Prüfer, 00:44. PB-043 T2 ist inzwischen erledigt |
-| **Merge-Vorprüfung** | `rev-list auto..main` erwartet die **Zahl der bisherigen Merges**, nicht 0. Jeder davon muss zwei Eltern haben |
+| **Merge gesperrt** | Bis PB-047 und AUF-91 gebaut UND abgenommen sind. Prüfer, 00:44 |
+| **Antwort auf die Mahnung des Prüfers** | **Ich ziehe beide Blätter NICHT zurück.** Sie sind geschnitten, validatorfest und richtig; ihnen fehlt ein Bauer, keine Begründung. Der Planner baut nicht und nimmt nicht ab — Rollentrennung |
+| **Merge-Vorprüfung** | `rev-list auto..main` erwartet die **Zahl der bisherigen Merges**, nicht 0 |
 | **Ein Befehl je Nachricht** | Bei jedem Terminal-Vorgang. Yama, 30.07. 22:52 |
-| **PB-047: kein `(int)`** | `user?->name` → `user?->employeeId()`. Ein `(int)` macht aus einem Namen still `0` — falscher Zähler statt leerer |
-| **Stil-Brücken-Test** | Jede weitere Scheibe, die Inline-Stile in Klassen verlagert, trägt ihn. Sonst kamen 7 von 8 Mutationen durch |
-| **`style={bezeichner}`** | Nicht Gegenstand von AUF-38-P1/P2. Eigenes Blatt P3, das zuerst das Messwerkzeug erweitert |
-| **21 Werkzeug-Spezifikationen** | 3 haltbar (`drehen` · `erkennung-bestaetigen` · `pv-modul`), 18 wackelig. **Werden erst geschnitten, wenn die liegenden Blätter weg sind** |
+| **PB-047: kein `(int)`** | `user?->name` → `user?->employeeId()`. Ein `(int)` macht aus einem Namen still `0` |
+| **Stil-Brücken-Test** | Jede weitere Stil-Scheibe trägt ihn. Sonst kamen 7 von 8 Mutationen durch |
+| **`style={bezeichner}`** | Nicht Gegenstand von P1/P2. Eigenes Blatt P3, das zuerst das Messwerkzeug erweitert |
+| **21 Werkzeug-Spezifikationen** | 3 haltbar (`drehen` · `erkennung-bestaetigen` · `pv-modul`), 18 wackelig. Erst schneiden, wenn die liegenden Blätter weg sind |
 
 ## 4. ZURÜCKGENOMMEN — nicht wieder aufwärmen
-
-*Wer eine dieser Aussagen irgendwo im Ledger findet: sie gilt nicht mehr.*
 
 | Aussage | Wahrheit |
 |---|---|
@@ -65,7 +66,8 @@ laravel.log             229 327 885 Byte
 | „Der Evaluator hat nichts getan" | Er hatte S4e um 22:31 abgenommen; der Reset um 22:36 fraß den Beleg |
 | „Log wächst 10 KB/Minute" | Aus zwei Punkten gerechnet. Es wächst in Schüben |
 | „Vorprüfung erwartet 0" | Nur beim ersten Merge |
-| „22 Testdateien lesen `HausplanerApp.tsx`" | 16 direkt, 29 indirekt, 35 zusammen. Die 22 galt für eine 2308-Zeilen-Datei |
+| „22 Testdateien lesen `HausplanerApp.tsx`" | 16 direkt, 29 indirekt, 35 zusammen |
+| „Die Fehlerzahl wächst nicht mehr, also ist es behoben" | Am 31.07. hat die Anwendung **null** echte Fehler geschrieben, weil sie **niemand benutzt hat**. Stille ist keine Gesundheit — der TypeError wartet auf den ersten Nutzer |
 
 ## 5. Zwei harte Regeln, die aus den Fehlern kommen
 
@@ -78,12 +80,16 @@ Prosa statt Befehl · Platzhalter ohne Dateinamen · ein Pfeil, den die Denylist
 
 **B — Keine Arbeit liegt länger als zwanzig Minuten uncommittet.**
 Der Reset am 30.07. um 22:36 fraß **zwei Rollen ihre Voten**, weil sie nur im Arbeitsbaum lagen.
-Der Generator saß am 31.07. **sieben Stunden** auf uncommittetem Stand.
 *Was nicht committet ist, existiert nur, bis jemand `reset --hard` tippt.*
 
-## 6. Der erste Eintrag: meine Fehler in der Nacht zum 31.07.
+## 6. Der Brückenausfall — 31.07. 17:40 bis 01.08. 09:47
 
-*Steht hier, weil eine Liste ehrlicher ist als eine Zusage — und weil sie das Muster zeigt.*
+**16 Stunden ohne Sicht auf das Repo** (Desktop-App zu). **Nichts verloren:** der Baum war beim
+letzten Blick um 16:40 sauber und alles committet, und er ist es heute noch. Ich habe stündlich
+einen einzigen Lesebefehl versucht und sonst nichts angefasst. *Der Unterschied zum Ausfall am
+30.07. um 23:35: damals lag eine geschriebene, nicht committete Datei auf der Platte.*
+
+## 7. Meine Fehler in der Nacht zum 31.07.
 
 ```text
  1  vier von vier Blaettern trugen ein totes Kriterium
@@ -99,5 +105,4 @@ Der Generator saß am 31.07. **sieben Stunden** auf uncommittetem Stand.
 ```
 
 **Neun von zehn hat ein anderer gefunden, nicht ich.** *Das ist der Grund, warum die
-Rollentrennung nicht Bürokratie ist — und der Grund, warum diese Seite existiert: damit derselbe
-Fehler nicht dreimal gefunden werden muss.*
+Rollentrennung nicht Bürokratie ist — und der Grund, warum diese Seite existiert.*
