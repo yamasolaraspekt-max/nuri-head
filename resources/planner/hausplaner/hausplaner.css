@@ -685,3 +685,27 @@
 .hp-fu-eintrag-grund { flex: 1; font-size: 11px; color: var(--hp-warn-ink); }
 .hp-fu-eintrag-zusatz { flex: 1; font-size: 11px; color: var(--hp-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hp-fu-eintrag-kuerzel { flex: 0 0 auto; font-size: 10.5px; color: var(--hp-muted); border: 1px solid var(--hp-control-border); border-radius: 4px; padding: 1px 5px; }
+
+/* ══════════════════════════════════════════════════════════════════════════════════════════════
+ * AUF-38-P4+P5 — der Kopfrahmen (9 offene Stellen) und die eine Zeile der Hauptansicht.
+ * **Damit ist das Programm AUF-38 zu Ende:** von 331 Inline-Stellen in 35 Dateien am 25.07.
+ * bleiben null offene statische.
+ *
+ * Die vorhandenen `hp-az-` und `hp-ok-` bleiben unberuehrt — sie liegen schon hier.
+ * ══════════════════════════════════════════════════════════════════════════════════════════════ */
+.hp-kr-trenner { width: 1px; height: 20px; background: var(--hp-hair); margin: 0 4px; }
+.hp-kr-gruppe { display: flex; align-items: center; gap: 6px; }
+.hp-kr-werkzeugzeile { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--hp-surface); border-bottom: 1px solid var(--hp-hair); }
+.hp-kr-marke { display: flex; align-items: center; gap: 9px; margin-right: 8px; }
+.hp-kr-markenname { font-size: 14px; }
+.hp-kr-fueller { flex: 1; }
+.hp-kr-objektzeile { flex: 0 0 auto; display: flex; align-items: baseline; gap: 10px; padding: 5px 14px 0; background: var(--hp-bg); }
+.hp-kr-objektzeile-inhalt { flex: 1; min-width: 0; }
+.hp-kr-bedienzeile { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--hp-bg); border-bottom: 1px solid var(--hp-hair); flex: 0 0 auto; }
+
+/* P5 — die EINE Stelle in `HausplanerApp.tsx`. **Kein achtes Praefix:** sie sitzt auf der
+ * Studio-Schale, deren Familie `hp-studio-` es schon gibt (`hp-studio-reihe` ist fast dieselbe
+ * Zeile). Der Name ist der, den der Kommentar an dieser Stelle selbst benutzt: AUF-72 nennt sie
+ * **das Massband** — die Reihe, deren Hoehe das Fenster minus der Zeilen darueber ist und die
+ * darum `overflow: hidden` traegt, damit die Messung sich nicht selbst verschieben kann. */
+.hp-studio-massband { flex: 1; position: relative; overflow: hidden; display: flex; }

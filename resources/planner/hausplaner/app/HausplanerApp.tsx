@@ -1124,7 +1124,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       {/* AUF-72: DIESE Reihe ist das Maßband. Ihre Höhe ist das Fenster minus der Zeilen darüber
           und hängt NICHT von der Bühne ab (`overflow: hidden`) — deshalb kann die Messung sich
           nicht selbst verschieben. */}
-      <div ref={inhaltRef} style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex' }}>
+      <div ref={inhaltRef} className="hp-studio-massband">
         {/* AUF-48 Scheibe 4b — **die Planer-Schiene** wohnt jetzt in
             `rahmen/GruppenzeileUndSchiene.tsx`. **Die Reihe darum bleibt HIER:** sie ist das
             Maszband aus AUF-72 und umschliesst auch Buehne, 3D-Bereich und Eigenschaften-Panel. */}

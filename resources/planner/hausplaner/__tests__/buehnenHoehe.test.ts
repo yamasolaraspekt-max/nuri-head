@@ -23,6 +23,9 @@ import { standardPan, panAus } from '../app/dashboard/pan';
 // AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
 import { zerlegteApp } from './_zerlegteApp';
 
+/** AUF-38-P5: ein Teil der Wahrheit dieser Reihe wohnt seit dem Umbau in der Stilschicht. */
+const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../hausplaner.css'), 'utf8');
+
 const hier = dirname(fileURLToPath(import.meta.url));
 const ohneKommentare = (s: string): string =>
   s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -46,10 +49,18 @@ test('K3: keine andere feste Zahl ist an ihre Stelle getreten', () => {
   assert.doesNotMatch(zeile[0], /\d{2,}/, 'eine Zahl in dieser Zeile wäre die nächste Konstante');
   // Und die Messung hängt wirklich am tragenden Element.
   assert.match(q, /const gemesseneHoehe = useGemesseneHoehe\(inhaltRef\);/);
-  // AUF-83-T5: `position: 'relative'` ist dazugekommen — die Reihe trägt jetzt den Anker für eine
-  // Schiene, die bei schmalem Fenster als Overlay darüber liegt (K-05). Dieselben drei Werte wie
-  // vorher, an derselben Stelle, nur nicht mehr die einzigen drei.
-  assert.match(q, /<div ref=\{inhaltRef\} style=\{\{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex' \}\}>/);
+  // **AUF-38-P5 hat diese Wahrheit eine Datei weiter geschoben.** Sie stand als Inline-Stil hier
+  // und steht jetzt in `hausplaner.css`. Die AUSSAGE bleibt dieselbe — dieselben vier Werte an
+  // derselben Stelle — aber sie ist jetzt nur noch **auf beiden Seiten der Bruecke** pruefbar:
+  // die Klasse sitzt am tragenden Element, und die Regel traegt die Werte. *Eine Klasse ohne
+  // Regel ist ungestyltes Markup, eine Regel ohne Traeger ist wirkungslos.*
+  assert.match(q, /<div ref=\{inhaltRef\} className="hp-studio-massband">/,
+    'die gemessene Reihe traegt ihre Klasse nicht mehr');
+  const massband = css.match(/\.hp-studio-massband\s*\{([^}]*)\}/);
+  assert.ok(massband, 'die Regel des Massbands fehlt in der Stilschicht');
+  for (const wert of ['flex: 1', "position: relative", 'overflow: hidden', 'display: flex']) {
+    assert.ok(massband[1]!.includes(wert), `dem Massband fehlt \`${wert}\``);
+  }
 });
 
 // --- K9: die Kante beim ersten Rendern ----------------------------------------------------------
@@ -145,7 +156,10 @@ test('kein Flackern: ein unveränderter Wert löst kein Rendern aus', () => {
   // Zustand nur bei echter Änderung gesetzt wird — und weil die gemessene Reihe `overflow: hidden`
   // trägt, also von der Bühne in ihr nicht wächst.
   assert.match(regel, /setHoehe\(\(alt\) => \(alt === h \? alt : h\)\)/);
-  assert.match(ohneKommentare(quelle), /overflow: 'hidden', display: 'flex' \}\}>/);
+  // AUF-38-P5: `overflow: hidden` steht jetzt in der Regel, nicht im Markup — die Aussage
+  // ("die gemessene Reihe waechst nicht von der Buehne in ihr") ist unveraendert.
+  assert.match(css, /\.hp-studio-massband\s*\{[^}]*overflow: hidden/,
+    'die gemessene Reihe traegt kein `overflow: hidden` mehr — dann kann die Messung sich selbst verschieben');
 });
 
 test('die Regel kennt weder Store noch Szene — sie misst nur', () => {

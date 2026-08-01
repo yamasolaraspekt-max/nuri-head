@@ -27,6 +27,9 @@ import type { SceneDocument, WallNode } from '../domain/scene.types';
 // AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
 import { zerlegteApp } from './_zerlegteApp';
 
+/** AUF-38-P4: der Abstand der Bedienzeile wohnt seit dem Umbau in der Stilschicht. */
+const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '../hausplaner.css'), 'utf8');
+
 enablePatches(); // ohne das Plugin gibt es keine inversen Patches — die Umkehr liefe stumm ins Leere
 
 const hier = dirname(fileURLToPath(import.meta.url));
@@ -196,17 +199,28 @@ test('K13: der Gruppenabstand ist NICHT verengt worden, um Platz für fünf Knö
   // Gemessen 26.07. im Browser, 1440 UND 1024: zwischen Gruppen 21 px, innerhalb 6 px — beides
   // unverändert gegenüber der Messung mit elf Knöpfen.
   const q = ohneKommentare(quelle);
-  const leiste = q.match(/<div style=\{\{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px'/);
-  assert.ok(leiste, 'die Werkzeugzeile trägt nicht mehr den erwarteten Abstand von 6 px');
+  // **AUF-38-P4 hat den Abstand in die Stilschicht verschoben.** Die Aussage — 6 px innerhalb
+  // der Gruppe, und niemand hat sie zum Platzschaffen verengt — ist unveraendert; sie steht nur
+  // eine Datei weiter. Geprueft wird deshalb Klasse UND Regel.
+  assert.match(q, /className="hp-kr-bedienzeile"/, 'die Bedienzeile traegt ihre Klasse nicht mehr');
+  const regel = css.match(/\.hp-kr-bedienzeile\s*\{([^}]*)\}/);
+  assert.ok(regel, 'die Regel der Bedienzeile fehlt in der Stilschicht');
+  const leiste = regel[1]!.includes('gap: 6px') && regel[1]!.includes('padding: 6px 14px') ? regel : null;
+  assert.ok(leiste, `die Werkzeugzeile trägt nicht mehr den erwarteten Abstand von 6 px:\n    ${regel[1]}`);
 
   const sep = q.match(/const opSep = \(\)[^;]*;/);
   assert.ok(sep, '`opSep` nicht gefunden');
-  assert.match(sep[0], /margin: '0 4px'/, '4 + 1 + 4 plus zweimal 6 ergibt die gemessenen 21 px');
-  assert.match(sep[0], /width: 1/);
+  // AUF-38-P4: auch der Trenner steht jetzt in der Stilschicht. **Die Rechnung bleibt die
+  // Aussage** — 4 + 1 + 4 plus zweimal 6 ergibt die im Browser gemessenen 21 px zwischen Gruppen.
+  const trenner = css.match(/\.hp-kr-trenner\s*\{([^}]*)\}/);
+  assert.ok(trenner, 'die Regel des Trenners fehlt in der Stilschicht');
+  assert.match(trenner[1]!, /margin: 0 4px/, '4 + 1 + 4 plus zweimal 6 ergibt die gemessenen 21 px');
+  assert.match(trenner[1]!, /width: 1px/);
 
   // Und die Gruppen tragen keinen eigenen, engeren Abstand, der den der Zeile unterliefe.
-  const huelle = q.match(/const OpGruppe = [\s\S]*?\);/);
-  assert.match(huelle![0], /gap: 6/, 'innerhalb einer Gruppe gilt derselbe Abstand wie in der Zeile');
+  const gruppe = css.match(/\.hp-kr-gruppe\s*\{([^}]*)\}/);
+  assert.ok(gruppe, 'die Regel der Gruppe fehlt in der Stilschicht');
+  assert.match(gruppe[1]!, /gap: 6px/, 'innerhalb einer Gruppe gilt derselbe Abstand wie in der Zeile');
 });
 
 // --- Was NICHT angefasst wurde ------------------------------------------------------------------

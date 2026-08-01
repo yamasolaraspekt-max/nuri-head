@@ -122,13 +122,13 @@ export function Kopfrahmen({
       {label ?? opIcon(icon ?? '')}
     </button>
   );
-  const opSep = (): React.ReactElement => <span style={{ width: 1, height: 20, background: T.hair, margin: '0 4px' }} />;
+  const opSep = (): React.ReactElement => <span className="hp-kr-trenner" />;
   /**
    * AUF-68 — die Gruppen der Bedienleiste. **Der Name bleibt, er wird nur unsichtbar.** Wer die
    * Zeile mit einem Vorleseprogramm bedient, behält die Gruppe als `role="group"` mit `aria-label`.
    */
   const OpGruppe = ({ name, children }: { name: string; children: React.ReactNode }): React.ReactElement => (
-    <div role="group" aria-label={name} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{children}</div>
+    <div role="group" aria-label={name} className="hp-kr-gruppe">{children}</div>
   );
 
   return (
@@ -138,11 +138,11 @@ export function Kopfrahmen({
           SELBST betrifft, ohne einen ihrer Inhalte zu verkleinern oder zu verstecken. Gemessen
           gegen `d78c2466` (R22): schliesst die letzten 1,9 px, die trotz Ueberlauf-Umbau noch
           zwischen Vorher und Nachher standen. */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', background: T.surface, borderBottom: `1px solid ${T.hair}` }}>
+      <div className="hp-kr-werkzeugzeile">
         {!imStudio && (
-          <span style={{ display: 'flex', alignItems: 'center', gap: 9, marginRight: 8 }}>
+          <span className="hp-kr-marke">
             <span style={{ width: 26, height: 26, borderRadius: 7, background: FARBEN.auswahl, display: 'grid', placeItems: 'center', color: T.ink }}>{svgWrap(<><path d="M3 11l9-7 9 7" /><path d="M5 10v10h14V10" /></>)}</span>
-            <strong style={{ fontSize: 14 }}>Hausplaner <span style={{ fontWeight: 600, color: FARBEN.gedaempft, fontSize: 11.5 }}>· Solar Aspekt</span></strong>
+            <strong className="hp-kr-markenname">Hausplaner <span style={{ fontWeight: 600, color: FARBEN.gedaempft, fontSize: 11.5 }}>· Solar Aspekt</span></strong>
           </span>
         )}
         {/* AUF-70: Rückgängig und Wiederholen sind in die Werkzeugzeile gezogen. Oben steht das
@@ -200,7 +200,7 @@ export function Kopfrahmen({
             beiden Fällen. Ihn in beide Zweige zu kopieren hätte zwei statische Inline-Stellen aus
             einer gemacht und Scheibe 7 von 78 auf 79 gehoben; die Auflage lässt sie fallen oder
             gleich bleiben, nicht steigen. */}
-        <span style={{ flex: 1 }} />
+        <span className="hp-kr-fueller" />
         {/* AUF-83-T3-N1 — **der Überlauf.** K-08 war rot: sechs Dinge in einer Reihe kosteten
             20 px, mehr als der Wegfall von `hp-bar` zurückgab. Übernehmen-Knopf, Staleness-Pille
             und Speicherstatus sind jetzt hinter EINEM Knopf, nicht drei eigene Flächen — dasselbe
@@ -243,9 +243,9 @@ export function Kopfrahmen({
           Gerendert von derselben `ReiterLeiste` wie Panel und Schiene (AUF-27): die Bereiche wählen
           aus, welcher Inhalt in der Gruppenzeile steht — genau ein Reiter-Verhalten. Ein dritter
           Mechanismus mit eigener Tastaturbedienung wäre eine zweite Wahrheit. */}
-      <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'baseline', gap: 10, padding: '5px 14px 0', background: T.bg }}>
+      <div className="hp-kr-objektzeile">
         <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', color: FARBEN.gedaempft, flex: '0 0 auto' }}>Arbeitsbereich</span>
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="hp-kr-objektzeile-inhalt">
           <ReiterLeiste
             reiter={bereichReiter}
             aktiv={activeWorkspace}
@@ -273,7 +273,7 @@ export function Kopfrahmen({
       </div>
 
       {/* Bedien-Werkzeugleiste — Icons, jedes mit Tooltip + Funktionsbeschreibung */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: T.bg, borderBottom: `1px solid ${T.hair}`, flex: '0 0 auto' }}>
+      <div className="hp-kr-bedienzeile">
         {/* AUF-68: die drei Wörter sind weg — der Name lebt als `aria-label` weiter.
             AUF-70: davor stehen jetzt Verlauf und Ansichtsmodus — eine Werkzeugzeile statt zwei.
             Rückgängig zuerst: es ist die Rettungsleine und gehört an den Anfang. Dann der
