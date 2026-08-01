@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: Z-05
-  status: bereit
+  status: aktiv   # das EINE aktive Blatt (S-01) - Z-02 ist gebaut, damit ist Z-05 dran
 ```
 
 ## Warum
