@@ -27,7 +27,10 @@ Datei. *Wer S7 gegen „120 im JSX-Block" plant, plant in Wahrheit gegen S4d.*
 
 ## Umfang dieser Scheibe
 
-**Aus `HausplanerApp.tsx` nach `resources/planner/hausplaner/app/rahmen/WerkzeugleisteUndSchiene.tsx`:**
+**Aus `HausplanerApp.tsx` nach `resources/planner/hausplaner/app/rahmen/GruppenzeileUndSchiene.tsx`:**
+*(Das Blatt nannte hier `WerkzeugleisteUndSchiene.tsx`; gebaut wurde sie als `GruppenzeileUndSchiene.tsx`.
+Nachgetragen 01.08.2026 auf Befund PB-031 — ein Auftrag, der auf einen Dateinamen zeigt, den es nie gab,
+lässt jeden Nachleser eine Umbenennung suchen, die keine war.)*
 vom Kommentar `{/* Bedien-Werkzeugleiste — Icons, jedes mit Tooltip … */}` **bis
 ausschliesslich** `<Stage`.
 
