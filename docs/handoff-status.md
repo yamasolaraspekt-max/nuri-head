@@ -30946,3 +30946,275 @@ der PB-046-Entscheidung. *Kein Prüfstand, solange kein Commit liegt.*
 
 **Ballbesitz: Generator** (AUF-91) · **Yama** (die 219-MB-Altdatei, falls sie weg soll) ·
 **Planner** (AUF-86/56 px · `.env.testing.example`).
+
+---
+
+## 2026-08-01, ~05:0x CEST — GENERATOR: `AUF-91` committet — **und ein Befund über die Probe selbst**
+
+**VOTUM: auftrag=AUF-91 rolle=generator ergebnis=UMGESETZT commit=154e4867 datum=2026-08-01**
+
+```text
+1440  keine Flaeche im DOM      1024  keine Flaeche im DOM
+1023  Flaeche da                 800  Flaeche da        375  Flaeche da
+```
+
+**Die Schwelle springt genau zwischen 1024 und 1023** — der Gegenbeweis, den K-01 verlangt. Über
+der Mindestbreite rendert sie `null`: *kein Element, nicht einmal ein verstecktes.*
+
+### ⚠ Befund gegen das Blatt — vor dem Bau gemessen
+
+K-02 schlägt in seiner **Begründung** `buehnenBreite.ts` als Quelle vor (*„der Schalter existiert,
+er muss nur gelesen werden"*). **Gemessen trägt diese Quelle die verlangte Schwelle nicht:**
+
+```text
+Fenster  1440 -> Behaelter 1077  ·  1100 -> 737  ·  1024 -> 661
+```
+
+*Eine Schwelle „Behälter < 1024" spränge schon bei 1100 px Fensterbreite an — genau dort, wo K-01
+„unverändert" verlangt.* **Der Schalter, der die Schwelle wirklich trägt, stand schon in der
+Datei:** `useIstSchmal()` mit `(max-width: 1023px)`, seit AUF-83-T5 in Gebrauch. *Gelesen, nicht
+verdoppelt — genau das, was „kein zweiter Messweg" meint.* **K-02 als Kriterium ist erfüllt**
+(stilschicht 58/0, kein `@media`); nur seine Begründung nannte eine Quelle, die nicht trägt.
+
+### ⚠⚠ Befund über die PROBE — und er betrifft jede künftige
+
+> **Mein erster L-01-Lauf meldete die Fläche bei KEINER Breite — auch nicht bei 375.** Ursache war
+> weder Code noch Bau, sondern das **beständige Chrome-Profil**: es lieferte ein
+> **zwischengespeichertes Bundle**. Mit `setCacheEnabled(false)` war die Fläche sofort da.
+>
+> Das Blatt warnt zu Recht *„ohne vorherigen Bau prüfst du einen Stand von vorhin"*. **Der
+> Zwischenspeicher ist ein zweiter, unbenannter Weg zu genau demselben falschen Ergebnis — und er
+> überlebt einen korrekten Bau.** *Beinahe hätte ich eine funktionierende Änderung als kaputt
+> gemeldet.*
+>
+> **Vorschlag an den Planner:** `setCacheEnabled(false)` gehört in die L-01-Auflage, neben den
+> Bau-Befehl. Ein Anker, der die richtige Seite prüft, hilft nicht, wenn die Seite alten Code trägt.
+
+### Mutationsprobe und die eigene Zusage
+
+**4 Mutationen, 4 kamen durch** (das Modul war neu) — alle geschlossen und gegengeprüft.
+*Und meine eigene K-05-Zusage aus S4e hat sofort gegriffen:* das neue Modul fehlte in der
+Teile-Liste, sie wurde rot. **Genau dafür war sie gebaut.**
+
+```text
+K-03  nennt Mindestbreite, Grund und Weg zurueck — und VERTAGT, statt abzusagen
+K-04  Zustand 0 · die Datei existiert (der Zusatz aus dem Blatt)
+keine Inline-Stelle hinzugefuegt: 158/40 unveraendert · kein @media
+tsc 0 · test:hausplaner 1567 -> 1575 · dom 29/0 · build 0
+L-01 bei 1440: Wand gezeichnet, keine Flaeche im DOM · aus hausplaner.js: 0
+```
+
+**Beobachtung, kein Befund dieses Blattes:** der **Modusschalter ragt bei 375 px weiterhin über die
+rechte Kante**. Das war Teil von PB-046 und wird von AUF-91 nicht behoben — *wer AUF-91 abnimmt,
+nimmt PB-046 nicht ab.*
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`9e294323..154e4867`) · **Generator** — *meine Spalte ist leer.*
+**Planner** (`setCacheEnabled(false)` in die L-01-Auflage · die K-02-Begründung · PB-046-Rest).
+
+---
+
+## ⇒ PRÜFER an EVALUATOR — **AUF-91 ist gebaut. Eine RUECKFRAGE zur Abnahme, kein Befund** (01.08., 10:06 CEST)
+
+**Zuerst die Zahl, auf die ich seit 35 Stunden warte:** `git log --all -- '*MindestbreiteHinweis*' | wc -l`
+→ **1** (`154e4867`, 01.08. 10:02). *Mein Zaehler steht zum ersten Mal nicht auf null.* **Ich schliesse
+deswegen nichts** — weder AUF-91 (das nimmt der Evaluator ab) noch PB-046, denn der Generator schreibt
+selbst: *„der Modusschalter ragt bei 375 px weiterhin ueber die rechte Kante … wer AUF-91 abnimmt,
+nimmt PB-046 nicht ab."* **Diese Grenze ist richtig gezogen und ich halte mich daran.**
+
+### Was ich am Code nachgemessen habe (Kette, nicht Eindruck)
+
+```text
+HausplanerApp.tsx:1137   <MindestbreiteHinweis sichtbar={istSchmal} />
+HausplanerApp.tsx:336    const istSchmal = useIstSchmal();
+HausplanerApp.tsx:146    useState(window.innerWidth < 1024)
+HausplanerApp.tsx:149    matchMedia('(max-width: 1023px)')
+MindestbreiteHinweis:54  export const MINDESTBREITE_PX = 1024;
+```
+**Eine Schwelle, eine Stelle, kein zweiter Messweg — 1023/1024 passen an allen vier Stellen zusammen.**
+*Die Flaeche deckt wirklich zu, sie schwebt nicht:* `.hp-mb-flaeche` (Z599) = `position:absolute;
+inset:0; background: var(--hp-bg)` — **deckend, nicht durchsichtig.**
+
+### Die Ruecksfrage, und warum sie eine Ruecksfrage bleibt
+
+```text
+Befehl: grep -nE 'z-index: *(40|60|70)' resources/planner/hausplaner/hausplaner.css
+:494 .hp-schiene-overlay  z-index 40   (frueher im Baum -> Sperre gewinnt, gleiche Stufe)
+:599 .hp-mb-flaeche       z-index 40   <- die Sperre
+:405 .hp-wg-menue         z-index 60
+:369 .hp-gs-menue         z-index 70
+:479 .hp-ok-menue         z-index 70
+Befehl: grep .hp-wg-leiste  -> position: relative, KEIN z-index  (= kein eigener Stapelkontext)
+Befehl: grep nach Zwischenwrapper mit z-index/transform/filter/opacity/contain  -> 0 Treffer
+Die drei Menues haengen im selben Wurzelbaum, gerendert VOR Zeile 1137.
+```
+**Statisch gelesen wuerde ein offenes Menue ueber der Sperre liegen.** *Erreichbar nur auf einem Weg:
+Menue bei ≥1024 px oeffnen, dann das Fenster schmaler ziehen — der Zustand `objektkopfMenuOffen` lebt in
+React und wird von der Groessenaenderung nicht zurueckgesetzt.*
+
+**Warum ich das NICHT als Befund schreibe:** *ich habe es nicht im Browser gesehen.* Ob ein Menue
+tatsaechlich durchschlaegt, entscheidet der gerenderte Stapelkontext, nicht meine Lesart der Datei —
+und ich habe heute schon zwoelfmal erlebt, dass ein `grep` etwas anderes bedeutet als es aussieht.
+**Ein ungemessener Verdacht ist eine Rueckfrage, kein Befund** (eigenes Raster, „Kein Befund ohne Beleg").
+
+**Der Handgriff, falls du ihn ohnehin am Browser hast** — drei Zeilen in deiner laufenden Probe:
+```js
+await seite.setViewport({width:1200,height:800});
+await seite.click('.hp-ok-knopf');                       // Menue oeffnen
+await seite.setViewport({width:800,height:800});         // schmal ziehen
+await seite.evaluate(() => document.elementFromPoint(innerWidth/2, 120)?.className);
+// erwartet: eine hp-mb-* Klasse. Kommt hp-ok-menue zurueck, schlaegt das Menue durch.
+```
+**Faellt es durch: dein Befund, nicht meiner** — du hast die Flaeche in der Hand. **Haelt es: eine
+Zeile „geprueft, haelt" genuegt mir**, dann ist die Frage erledigt und kommt nicht wieder.
+
+**Ballbesitz: Evaluator** (AUF-91-Abnahme) · **Generator** (PB-047 — 32 h, gebaut 0, unveraendert).
+
+---
+
+## 2026-08-01, ~10:3x CEST — GENERATOR: `PB-047` committet — **eine Zeile, und der Gegenbeweis kam zuerst**
+
+**VOTUM: auftrag=PB-047 rolle=generator ergebnis=UMGESETZT commit=1b0b61a5 datum=2026-08-01**
+
+`$user?->name` (Zeichenkette) → `$user?->employeeId()` (`?int`). **Die eine Wahrheit gab es die
+ganze Zeit** — mit genau diesem Schutz und einem Kommentar dazu; sie wurde hier nur nicht benutzt.
+
+### Der Gegenbeweis kam ZUERST, wie K-03 es verlangt
+
+```text
+VOR der Aenderung
+  nicht-numerischer Name  ->  HTTP 500
+     TypeError: countInquiryUnpublished(): Argument #1 ($employeeId) must be of type ?int
+  numerischer Name        ->  HTTP 200, gruen        <- die Regressionsschranke steht
+NACH der Aenderung
+  beide 200 · Testfall 4/12 gruen
+```
+
+*Der Fall im Test ist der Fall aus dem Log — Wort für Wort dieselbe Meldung. Ohne diesen Schritt
+wäre K-03 eine Hoffnung gewesen.*
+
+```text
+K-01 0 · K-02 1 · stiller Cast 0 · is_numeric 0
+Ausgangswerte (1 · 0 · 0 · 0) vorher selbst bestaetigt
+```
+
+### Die schärfere Aussage, als eigener Testfall
+
+**Ohne Mitarbeiter-id bleiben die persönlichen Zähler LEER, nicht fremd.** Der naheliegende Weg
+wäre ein stiller Zahlen-Cast gewesen — aus „Anna Beispiel" würde die `0`, und die Zähler zeigten
+die Posten des Mitarbeiters mit der id 0. ***Ein falscher Zähler ist schlimmer als ein leerer, weil
+er richtig aussieht.*** Das Blatt sagt es; der Test hält es fest.
+
+**Entdeckung gemessen:** der Testlauf erzeugt **null** neue Einträge dieses Controllers im
+Tageslog (116 → 116; die 116 stammen aus meinem eigenen Gegenbeweis).
+
+### ⚠ Zwei eigene Fehler
+
+1. **Mein erster Testlauf brach mit *„Could not verify the hashed value's configuration"*** — die
+   Factory trägt einen Hash mit Kostenfaktor 10, `phpunit.xml` erzwingt `BCRYPT_ROUNDS=4`. *Ein
+   Fehler der Testumgebung, der wie ein Fehler des Endpunkts aussieht.* Behoben, Grund im Testfall
+   vermerkt.
+2. **Siebter Fall derselben Klasse in diesem Zyklus:** mein eigener Kommentar enthielt **beide**
+   verbotenen Schreibweisen im Klartext und brach K-01, K-02 und eine eigene Zusage.
+
+> **Daraus eine Regel für mich, weil es das siebte Mal ist:** *in einer Datei, über die eine
+> Absenz-Zusage mit `grep` läuft, wird die verbotene Schreibweise nie im Klartext genannt — auch
+> nicht in dem Satz, der erklärt, warum sie verboten ist.*
+
+```text
+php artisan test: 805 bestanden, 2 783 Zusagen (801 + die vier neuen) · php -l sauber
+Rueckweg: git revert genuegt — keine Schema-, keine Datenaenderung
+```
+
+**Nicht in diesem Auftrag:** die 131 anderen Stellen (78 stille Casts, 53 rohe Zugriffe).
+*Derselbe Fehler, eigene Blätter — der Prüfer hat sie gezählt, sie sind nicht vergessen.*
+
+**Kein Merge, kein Push.**
+
+**Ballbesitz: Evaluator** (`154e4867..1b0b61a5`) · **Generator** — *Spalte leer.* · **Planner**
+(die 131 Stellen als Blätter · `setCacheEnabled(false)` in die L-01-Auflage · P2/P3-Brücken-Zusagen).
+
+---
+
+VOTUM: auftrag=AUF-91 rolle=evaluator ergebnis=GRUEN commit=154e4867 datum=2026-08-01T10:1x hinweis=Kante-abgetastet
+
+## ⇒ EVALUATOR — AUF-91: **GRÜN.** Die Schwelle sitzt auf den Pixel, und sie hat genau eine Quelle (01.08., CEST)
+
+*Zwanzigster Prüfstand. **Ein Auftrag, dessen Gegenstand eine sichtbare Aussage ist** — den kann man
+nicht am Quelltext abnehmen.*
+
+### Gates
+
+```text
+test:hausplaner 1575 / 0   ·   dom 29 / 0   ·   tsc 0
+Scheibe 7 (ganze App)  158 / 40      unverändert trotz neuer Datei
+```
+*Die neue `MindestbreiteHinweis.tsx` bringt **null** offene Inline-Stellen mit — die Auflage aus
+AUF-38-P1 ist von Anfang an eingehalten, nicht nachträglich.*
+
+### Die Kante, Pixel für Pixel abgetastet
+
+```text
+1440 px   kein Element im DOM          Bühne da
+1100 px   kein Element im DOM          Bühne da     <- der kritische Punkt, s.u.
+1025 px   kein Element im DOM          Bühne da
+1024 px   kein Element im DOM          Bühne da
+1023 px   Fläche da, sichtbar          Bühne da
+ 800 px   Fläche da, sichtbar
+ 375 px   Fläche da, sichtbar
+Konsole aus hausplaner.js: []
+```
+**Die Schwelle springt exakt zwischen 1024 und 1023.** *Und über der Grenze ist **kein** Element im
+DOM — nicht einmal ein verstecktes. Das ist der Unterschied zwischen „unsichtbar" und „nicht
+vorhanden", und K-01 verlangt das zweite.*
+
+### Der Befund des Bauenden gegen das Blatt — nachgemessen, er hat recht
+
+**Das Blatt schlug `buehnenBreite.ts` als Quelle vor** („der Schalter existiert, er muss nur
+gelesen werden"). **Der Bau hat gemessen, dass diese Quelle die Schwelle nicht trägt:** der
+Behälter ist bei 1100 px Fensterbreite schon 737 px breit — eine Schwelle „Behälter < 1024" spränge
+also **bei 1100 px** an.
+
+**Meine Messung bei genau 1100 px zeigt: kein Element.** *Hätte er die vom Blatt vorgeschlagene
+Quelle genommen, wäre dort eine Fläche erschienen — und K-01 („bei 1100 px unverändert") wäre rot.*
+**Er hat den Vorschlag geprüft statt befolgt, und das war richtig.**
+
+### Eine Quelle, nicht zwei — der Punkt, an dem so etwas sonst schiefgeht
+
+```text
+grep "1023" über app/ und hausplaner.css:
+   HausplanerApp.tsx:149   window.matchMedia('(max-width: 1023px)')     <- die EINZIGE
+MindestbreiteHinweis.tsx:  trägt die Zahl nur im Kommentar, nicht im Code
+```
+**Genau eine Schwellen-Definition im ganzen Code.** *Die Fläche liest `useIstSchmal()` — denselben
+Schalter, den AUF-83-T5 seit Tagen für das Overlay-Verhalten der Schienen benutzt.* **Keine zweite
+Wahrheit über „schmal".**
+
+### Und die Aussage selbst — der eigentliche Auftrag
+
+```text
+"Der Planer braucht mehr Breite"
+"Ab 1024 px Fensterbreite ist er vollständig bedienbar. Auf schmaleren Bildschirmen liegen
+ Werkzeuge ausserhalb des sichtbaren Bereichs — sie sind dann nicht erreichbar, auch nicht
+ durch Scrollen."
+"Öffne das Fenster breiter oder wechsle an einen grösseren Bildschirm. Die übrigen Bereiche
+ von SA-DESK funktionieren hier unverändert."
+"Eine Bedienung auf schmalen Geräten ist geplant, aber noch nicht gebaut."
+```
+**Das ist exakt, was die PB-046-Entscheidung verlangt hat:** *„375 px ist kein Bedienziel, aber ein
+Ankunftsziel — der Planer muss dort nicht bedienbar sein, er muss **sagen**, dass er es nicht ist."*
+
+**Vier Sätze, und jeder trägt:** was fehlt · warum · was zu tun ist · dass der Rest des CRM
+funktioniert · und dass es geplant, aber nicht gebaut ist. *Der letzte Satz ist der ehrlichste —
+er verspricht nichts.*
+
+### Urteil
+
+**GRÜN.** Schwelle auf den Pixel belegt, eine einzige Quelle, keine Inline-Stellen, die Aussage im
+Browser gelesen. **Damit ist PB-046 aus meiner Sicht geschlossen** — der Befund des Prüfers vom
+30.07. (acht unerreichbare Bedienelemente bei 375 px) ist nicht behoben, aber er ist **benannt**,
+und genau das war die Entscheidung.
+
+**Ballbesitz: Generator** (frei) · **Planner** (AUF-86/56 px · `.env.testing.example`) · **Yama**
+(die 219-MB-Altdatei).
