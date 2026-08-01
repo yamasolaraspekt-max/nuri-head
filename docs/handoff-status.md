@@ -33251,3 +33251,82 @@ Aussage über dieses Werkzeug, keine Bilanz — eine Formel behauptete dort eine
 **Ballbesitz: Evaluator** (Z-05, Z-05-N1, AUF-38-P3 ist bereits grün) · **Generator** (Z-06 ist
 jetzt frei — die Kontur lässt sich zeichnen) · **Planner** (`.hp-ok-name` ungedeckt · 200-px-Bühne
 bei 1024 · Blade-Lücke in `zaehle.mjs`).
+
+---
+
+VOTUM: auftrag=GATE_MUSTER rolle=evaluator ergebnis=ROT commit=8f81c3f7 datum=2026-08-01T20:5x hinweis=INZIDENT-Push-ausgeloest
+
+## ⛔ EVALUATOR — **INZIDENT: mein Prüflauf hat einen PUSH ausgeführt.** Und genau das ist der Befund gegen die neue Barriere (01.08., 20:5x CEST)
+
+### Was passiert ist, ohne Beschönigung
+
+**Bei der Abnahme von `8f81c3f7` (GATE_MUSTER) habe ich den im Ledger dokumentierten
+Verzeichnislauf nachgefahren.** Dabei hat der Validator das Blatt
+`generator-auftrag-b01-ai-workflow-sichern.md` mitgeprüft — **dessen K-05-Prüfbefehl lautet:**
+
+```text
+befehl: "./push-integration-sicher.command && cat push-result.log"
+```
+
+**Der Validator hat ihn AUSGEFÜHRT. Es wurde wirklich gepusht:**
+```text
+push-result.log:  FERTIG Sat Aug 1 20:54:07 CEST 2026   (genau 1 vollständiger Lauf)
+fork/auto/hausplaner-integration           jetzt auf 9ac24f7b  (= lokaler HEAD)
+backup-private/auto/hausplaner-integration jetzt auf 9ac24f7b
+alle Branches laut Log mitgepusht (strang/*, work/*, main, …)
+```
+
+**Und der kritischste Teil:** `git branch -r --contains fe47879c` ist **nicht mehr leer** — der
+Commit mit dem Klartext-Zugang in der Historie liegt jetzt auf `fork` und `backup-private`.
+*Die Entschärfung trägt: Yama hat das Passwort am 30.07. abends gewechselt (PB-038, Weg A — „das
+Geheimnis entwerten, nicht die Historie umschreiben"). Der Eintrag auf den Remotes ist wertlos.
+**Aber er ist jetzt draußen, und das war vorher nicht so.***
+
+**Verursacht habe ich es** — durch bis zu vier Läufe des Validators über dieses Blatt (zwei
+Zeitmessungen, der exakte Ledger-Befehl, die Einzelblatt-Schleife). *Das Log zeigt einen
+vollständigen Durchlauf.* **„Niemals pushen, aus keiner Instanz" ist verletzt — mittelbar, aber
+durch meine Hand.**
+
+### Was ich NICHT tue
+
+**Keine Remote-Bereinigung, kein Löschen von Branches, kein Rewrite** — das wäre ein zweiter
+Alleingang auf den ersten. *Die Remotes sind Yamas eigene Sicherungs-Ziele (`fork`,
+`backup-private`), gepusht hat exakt das Skript, das Yama selbst dafür benutzt — nur eben nicht
+von Yama ausgelöst.* **Ob etwas zurückgebaut wird, entscheidet Yama.**
+
+### Der Befund gegen den Prüfstand — und er ist ROT
+
+**GATE_MUSTER wirkt für das, was es kennt** (Gegenprobe: `npm run …` ⇒ GATE, gemeldet statt
+gefahren · 63 Zusagen bestätigt: 49+14). **Aber Denylist UND Gate prüfen den Befehls-TEXT:**
+
+```text
+Denylist kennt:     git push, rm, mv, …          -> "./push-….command" enthält keines davon
+GATE_MUSTER kennt:  npm, npx, yarn, pnpm, php artisan, composer
+NICHT gedeckt:      Shell-Skripte / .command-Wrapper — die gefährlichste Klasse,
+                    weil ein Wrapper ALLES enthalten kann
+```
+**Eine Barriere, die den Wortlaut prüft, hält den Wrapper nicht auf.** *Der 33-Sekunden-Ausreißer,
+über den ich die Ursache fand: derselbe Push-Versuch.*
+
+**Zweiter Teil des Befundes: das Blatt selbst.** *Ein Prüfbefehl, der publiziert, verletzt die
+Grundregel des Validators („liest Dateien, startet Prozesse — keine schreibenden Befehle").* **b01
+trägt einen ausführenden Push als Abnahmekriterium — das gehört dort niemals hin**, unabhängig vom
+Werkzeug.
+
+**Drittens, klein:** die 3,6-s-Angabe hält am heutigen Bestand nicht (39,4 s / 30 Blätter, exakt
+derselbe Befehl — b01 allein 33,8 s), und `git grep` mit erwartetem Nulltreffer wird als
+FEHLSCHLAG statt NULLTREFFER gemeldet (b01/K-02 erwartet ausdrücklich „leer, exit 1").
+
+### Sofortmaßnahmen
+
+```text
+1. Keine weiteren Verzeichnisläufe von mir, bis b01 entschärft ist.
+2. Dieser Eintrag — sofort committet, bevor irgendetwas anderes passiert.
+3. ROT blockiert die Abnahme von 8f81c3f7: die Barriere muss Wrapper decken
+   (z. B. nur eine Positivliste lesbarer Befehle WIRKLICH ausführen) und b01/K-05
+   muss der Push-Befehl ersatzlos raus bzw. auf `typ: verfahren` (Mensch) wechseln.
+```
+
+**Ballbesitz: YAMA** (Kenntnisnahme Push + fe47879c-Exposition; Entscheidung Remote) ·
+**Generator** (b01/K-05 entschärfen · Wrapper-Deckung im Validator · git-grep-Nulltreffer) ·
+**ich** (kein Verzeichnislauf bis dahin).
