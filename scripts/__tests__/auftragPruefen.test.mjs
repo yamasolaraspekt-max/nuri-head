@@ -17,7 +17,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   pruefeBlatt, sammleBefehle, lieseKopfRoh, lieseAlleBloecke, zaehleBloecke, verbotenesMuster,
-  bericht, strukturBefunde, aktiveBlaetter, brechendesGlied, STUFEN, DENYLIST,
+  bericht, strukturBefunde, aktiveBlaetter, baubareBlaetter, brechendesGlied, STUFEN, DENYLIST,
 } from '../auftrag-pruefen.mjs';
 
 const verz = mkdtempSync(join(tmpdir(), 'auf87-'));
@@ -438,4 +438,41 @@ test('PB-019: ein unlesbarer Kopf sperrt immer — jemand hat einen geschrieben,
   assert.equal(e.kopf, false);
   assert.ok(e.unlesbar, 'der Grund gehört in den Bericht');
   assert.equal(e.aktivOhneKopf, true);
+});
+
+
+// --- F-08: die Schlange darf nicht leerlaufen -----------------------------------------------------
+
+/**
+ * **Der Fall, der diese Zusagen nötig gemacht hat.** Am 01.08. um 11:20 hatte der Generator genau
+ * EIN Blatt. Er hat es gezogen, gemessen, und mit einem Befund zurückgegeben — *völlig richtig* —
+ * und stand danach ohne Arbeit da. **R16 verlangt seit dem 29.07. mindestens zwei baubare Aufträge;
+ * die Regel war ein Vorsatz und hat nicht getragen.**
+ */
+test('F-08: `bereit` und `aktiv` sind baubar', () => {
+  const e = [{ pfad: 'a', status: 'aktiv' }, { pfad: 'b', status: 'bereit' }];
+  assert.deepEqual(baubareBlaetter(e), ['a', 'b']);
+});
+
+test('F-08: gesperrt, ruht, erledigt und zurueckgestellt sind NICHT baubar', () => {
+  const e = [
+    { pfad: 'a', status: 'gesperrt' },
+    { pfad: 'b', status: 'ruht' },
+    { pfad: 'c', status: 'erledigt' },
+    { pfad: 'd', status: 'zurueckgestellt' },
+  ];
+  assert.deepEqual(baubareBlaetter(e), [], 'ein gesperrtes Blatt kann niemand ziehen');
+});
+
+test('F-08: `ruht` zaehlt nicht — der Zustand ist ausdruecklich NICHT nachgemessen', () => {
+  // Am 01.08. sind 15 Blaetter von `aktiv` auf `ruht` gesetzt worden, weil ihr Zustand nicht
+  // nachgemessen war. Wuerden sie als baubar zaehlen, meldete die Schlange 16 statt 1 - und
+  // die Barriere waere von Anfang an blind.
+  const e = Array.from({ length: 15 }, (_, i) => ({ pfad: `alt${i}`, status: 'ruht' }));
+  e.push({ pfad: 'echt', status: 'aktiv' });
+  assert.deepEqual(baubareBlaetter(e), ['echt']);
+});
+
+test('F-08: ein Blatt ohne Kopf hat keinen Status und ist nicht baubar', () => {
+  assert.deepEqual(baubareBlaetter([{ pfad: 'alt.md', status: null }]), []);
 });

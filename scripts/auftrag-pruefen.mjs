@@ -278,6 +278,20 @@ export function aktiveBlaetter(ergebnisse) {
 }
 
 /**
+ * **Die Barriere fuer F-08 — „Leerlauf eines Bauenden".**
+ *
+ * R16 verlangt: *mindestens zwei baubare Auftraege liegen jederzeit vor der Rolle.* Das war bis
+ * heute ein Vorsatz — und am 01.08. um 11:20 ist er gebrochen: der Generator hatte genau EIN Blatt,
+ * es kam mit einem Befund zurueck, und er stand. **Der Planner hat es selbst ausgeloest.**
+ *
+ * **Baubar heisst `aktiv` oder `bereit`.** Nicht baubar: `gesperrt` (Vorbedingung offen), `ruht`
+ * (Zustand nicht nachgemessen), `erledigt`, `zurueckgestellt`.
+ */
+export function baubareBlaetter(ergebnisse) {
+  return ergebnisse.filter((e) => e.status === 'aktiv' || e.status === 'bereit').map((e) => e.pfad);
+}
+
+/**
  * Ein ganzes Blatt prüfen.
  *
  * **Ein Blatt ohne Kopf ist kein Fehlschlag.** 67 der 80 Blätter im Bestand haben keinen — ein
@@ -382,6 +396,18 @@ if (istDirekterAufruf) {
       console.log(`\n── STRUKTUR S-01  ${aktive.length} Blaetter mit \`status: aktiv\` — erwartet genau EINES`);
       for (const p of aktive) console.log(`                  ${p}`);
       if (aktive.length > 1) fehlschlaege += 1;
+    }
+    // S-06 / F-08: die Schlange darf nicht leerlaufen. Siehe `baubareBlaetter`.
+    // (S-02 bis S-05 sind vergeben; S-03 prueft absence-Kriterien ohne Partner.)
+    const baubar = baubareBlaetter(alle);
+    if (baubar.length >= 2) {
+      console.log(`── STRUKTUR S-06  ${baubar.length} baubare Auftraege in der Schlange (R16 verlangt mindestens 2)`);
+    } else {
+      console.log(`\n── STRUKTUR S-06  NUR ${baubar.length} baubare(r) Auftrag/Auftraege — R16 verlangt mindestens 2.`);
+      console.log('                  F-08 "Leerlauf eines Bauenden", eingetreten am 01.08. um 11:20.');
+      console.log('                  Der Bauende steht, sobald dieses eine Blatt zurueckkommt.');
+      for (const p of baubar) console.log(`                  ${p}`);
+      fehlschlaege += 1;
     }
   }
   // **Der Exitcode meldet nur FEHLSCHLAG.** „Verdaechtig" und „nicht maschinell" sind Hinweise an
