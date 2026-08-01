@@ -4,7 +4,10 @@
 auftrag:
   id: AUF-48-S4a
   titel: "Der obere Rahmen des JSX wird eine eigene Komponente"
-  status: aktiv
+  status: ruht
+   # PB-B2, 01.08.2026 - Planner. Stand bis heute: `aktiv`. 17 Blaetter trugen das,
+   # die Struktur-Zusage S-01 erwartet GENAU EINES. `ruht` heisst hier ehrlich:
+   # der Zustand ist NICHT nachgemessen. Wer das Blatt zieht, misst zuerst.
   spur: B
   heimat: ticket
   rolle: generator

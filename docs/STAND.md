@@ -37,6 +37,17 @@ AUF-91  ls resources/planner/hausplaner/app/rahmen/MindestbreiteHinweis.tsx
 PB-047  grep -oE 'user[?]-.name' app/Http/Controllers/Dashboard/SidebarCountController.php | wc -l
 ```
 
+### Die Kennzahl für Produktivcode — **korrigiert 01.08.**
+
+```text
+git log -1 --date=format-local:'%d.%m. %H:%M' --pretty='%h %ad %s' \
+  -- resources app tests routes public database scripts config
+```
+
+**`config` fehlte bis heute.** `PB-043 Teil 2` lag in `config/logging.php` — **mein Wächter hätte
+die Änderung nie gesehen**, und ich hätte gemeldet, der Generator stehe still, während er baut.
+*Eine Kennzahl, die einen Ordner nicht kennt, ist keine Kennzahl, sondern eine Stichprobe.*
+
 ## 2. Wer ist am Ball
 
 - **Evaluator:** **AUF-91 abnehmen** (`154e4867`) · AUF-25 (`17c8be22`, gebaut 25.07., **sieben Tage

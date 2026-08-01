@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: PB-023+024
-  status: bereit
+  status: aktiv   # das EINE aktive Blatt (S-01), ueberarbeitet 01.08. nach der Rueckgabe des Generators
 ```
 
 ## Warum das zusammengehört

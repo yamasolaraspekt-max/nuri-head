@@ -23,7 +23,9 @@ sehe ich dort".*
 ```yaml
 auftrag:
   id: AUF-83-T1b
-  status: aktiv   # entsperrt 10:05 — T1a ist gebaut
+  status: ruht   # entsperrt 10:05 — T1a ist gebaut
+   # PB-B2, 01.08.2026 - Planner: `ruht` heisst, der Zustand ist NICHT nachgemessen.
+   # Wer das Blatt zieht, misst zuerst. S-01 erwartet genau EIN aktives Blatt.
   nachtrag: "10:28 — K-08 (Gates): ProjektlisteTest::k3 wird auf #hausplaner-root praezisiert, mit Pflicht-Gegenprobe"
   spur: A
   heimat: ticket

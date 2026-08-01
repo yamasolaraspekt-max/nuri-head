@@ -6,7 +6,10 @@ Nebenbefunde des Evaluators und ein K-07, das **nicht mehr messbar ist — durch
 ```yaml
 auftrag:
   id: AUF-83-T1a-N1
-  status: aktiv
+  status: ruht
+   # PB-B2, 01.08.2026 - Planner. Stand bis heute: `aktiv`. 17 Blaetter trugen das,
+   # die Struktur-Zusage S-01 erwartet GENAU EINES. `ruht` heisst hier ehrlich:
+   # der Zustand ist NICHT nachgemessen. Wer das Blatt zieht, misst zuerst.
   spur: A
   heimat: ticket
   ziel: >

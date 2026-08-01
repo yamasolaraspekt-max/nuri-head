@@ -12,7 +12,9 @@ freigegeben.*
 ```yaml
 auftrag:
   id: AUF-83-T2
-  status: aktiv            # entsperrt: T1b ist gebaut (a14abb53) und abgenommen
+  status: ruht            # entsperrt: T1b ist gebaut (a14abb53) und abgenommen
+   # PB-B2, 01.08.2026 - Planner: `ruht` heisst, der Zustand ist NICHT nachgemessen.
+   # Wer das Blatt zieht, misst zuerst. S-01 erwartet genau EIN aktives Blatt.
   nachtrag: "29.07. 21:20 — Umfang um objekt.blade erweitert (K-01b); der alte Ausschluss war falsch begruendet"
   spur: B
   heimat: ticket
