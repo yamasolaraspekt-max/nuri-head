@@ -6,9 +6,20 @@
 auftrag:
   id: W-02
   status: entwurf   # B8 - Werkzeug-Blatt, Gegenleser ist der Evaluator
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator
+  gegengelesen_am: "2026-08-01 23:0x"
+  befund: >
+    TRAEGT, mit zwei Auflagen. (1) Kante 5 (md5-Drift zwischen Lesen und
+    Schreiben) ist benannt, aber KEIN Kriterium verriegelt sie - bitte als
+    K-08 aufnehmen: md5 beim Lesen == md5 vor dem Schreiben, sonst Abbruch
+    ohne Schreiben. Eine benannte Kante ohne Zusage ist Prosa (S4c-Klasse).
+    (2) K-03-Grenzfall fehlt: bei von=1 gibt es keine Zeile 0, bei bis=EOF
+    keine bis+1 - das Werkzeug muss die Raender ausdruecklich als
+    'DATEIANFANG'/'DATEIENDE' zeigen statt zu schweigen; genau die
+    off-by-one-Klasse, gegen die es gebaut wird. Klein, ohne Auflage:
+    .tsx-Klammerbilanz bricht an Template-Literalen mit Backticks - als
+    bekannte Grenze in den Werkzeugkopf. Bestand nachgemessen: 69 pass,
+    14 Werkzeuge, 2 Zusagen-Dateien, K-01/K-05 laufen unter der Allowlist.
 ```
 
 ## Warum — vier Fehler derselben Klasse an einem Abend

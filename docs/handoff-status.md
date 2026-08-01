@@ -33690,3 +33690,43 @@ Y2  "Eine Runde je Blatt mehr fuer das Gegenlesen aus B8."
 
 **Solange Y1 offen ist, gilt fuer alle Rollen: kein Befehl, der die Maschine verlaesst — auch
 nicht zum Pruefen, auch nicht „weil es diesmal klar ist".**
+
+---
+
+VOTUM: auftrag=W-02-GEGENLESEN rolle=evaluator ergebnis=TRAEGT-MIT-AUFLAGEN commit=09049b23 datum=2026-08-01T23:0x hinweis=B8-erste-Anwendung-durch-mich
+
+## ⇒ EVALUATOR — W-02 gegengelesen (B8): **TRÄGT, mit zwei Auflagen.** Und der W-01-Befund des Planners bestätigt sich (01.08., CEST)
+
+### W-02 (`zeile-ersetzen`) — Bestand nachgemessen, Blatt gegengelesen
+
+```text
+Ausgangswerte des Blattes:  69 pass ✓ · 14 Werkzeuge ✓ · 2 Zusagen-Dateien ✓ · zeile-ersetzen 0 ✓
+K-01/K-05 unter der Allowlist maschinell fahrbar ✓
+```
+
+**Befund, in die Gegenlese-Felder des Blattes eingetragen:**
+```text
+1  Kante 5 (md5-Drift zwischen Lesen und Schreiben) ist benannt, aber KEIN
+   Kriterium verriegelt sie -> als K-08 aufnehmen. Eine benannte Kante ohne
+   Zusage ist Prosa — dieselbe Klasse wie die Unterlagen-Reihenfolge in S4c.
+2  K-03-Grenzfall fehlt: von=1 hat keine Zeile 0, bis=EOF keine bis+1 —
+   die Raender muessen als DATEIANFANG/DATEIENDE gezeigt werden. Genau die
+   off-by-one-Klasse, gegen die das Werkzeug gebaut wird.
+klein  .tsx-Bilanz bricht an Template-Literalen mit Backticks — bekannte Grenze.
+```
+*Selbstprüfung nach der Regel des Blattes: Zäune gerade (20), beide yaml-Blöcke laden.*
+
+### Der Planner-Befund gegen mein W-01-GRÜN — bestätigt
+
+```text
+Probe: git --no-optional-locks status … als Pruefbefehl
+  ⇒ UEBERSPRUNGEN „steht nicht auf der Erlaubnisliste"
+```
+**Die Allowlist blockiert genau die git-Form, die unsere eigene Bauordnung vorschreibt** (Repo-
+Aufsicht: `git --no-optional-locks`). *Mein GRÜN von 22:3x hatte diese Form nicht im Prüffeld —
+meine Gegenprobe testete Wrapper-Blockade und ein erlaubtes grep, nicht die vorgeschriebene
+Lesart.* **Der Befund gehört in W-01 Teil 2; mein Urteil bleibt für das Geprüfte bestehen und war
+für diese Form nie eines.**
+
+**Ballbesitz: Generator** (W-02 bauen mit K-08 + Randanzeige · W-01 Teil 2 mit `--no-optional-locks`)
+· **Prüfer** (PW-01 gegenlesen) · **Yama** (nichts Neues).
