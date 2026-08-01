@@ -64,6 +64,23 @@ Drei Zeilen im Blatt: `gegengelesen_von`, `gegengelesen_am`, `befund`. **Ohne si
 `entwurf`.** Der Planner nimmt sich davon nicht aus — dieser Beschluss ist die einzige Stelle, an
 der er über sich selbst verfügt.
 
+
+**Wer liest gegen — festgelegt, damit es nicht bei jedem Blatt neu verhandelt wird:**
+
+```text
+Planner-Blatt      ->  Pruefer.   Ist er belegt: Evaluator.
+Werkzeug-Blatt     ->  Evaluator. Er nimmt es ohnehin ab.
+Pruefer-Auftrag    ->  Planner.
+Ein Gegenleser baut NICHT, was er gegengelesen hat - sonst ist es seine eigene Arbeit.
+```
+
+**Ab wann:** B8 gilt für Blätter, die **ab dem 01.08. 22:5x** geschnitten werden. **Was heute
+schon `bereit` oder `aktiv` ist, läuft weiter** — B8 rückwirkend anzuwenden würde die Schlange
+abwürgen, und eine Regel, die den Betrieb anhält, wird umgangen statt befolgt.
+
+**Wenn kein Gegenleser verfügbar ist:** das Blatt bleibt `entwurf` und der Planner schneidet das
+nächste. **Es wird nicht ohne Gegenlesen freigegeben, auch nicht „weil es diesmal klar ist"** —
+das ist wörtlich der Satz, mit dem der Push entstanden ist.
 *Kosten: eine Runde je Blatt. Am 01.08. hätte es fünf Blattfehler gefangen, darunter das
 Kriterium, das den echten Push-Wrapper in eine Zusage schrieb.*
 
