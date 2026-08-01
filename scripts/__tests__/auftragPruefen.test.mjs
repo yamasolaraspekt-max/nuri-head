@@ -690,3 +690,16 @@ test('W-01: die Optionen-Aufloesung oeffnet KEINE Luecke — und schliesst sogar
   assert.equal(verbotenesMuster('git --no-optional-locks ' + 'push origin main'), null,
     'die Denylist faengt die Form mit Option — dann misst diese Zusage nichts');
 });
+
+test('W-01 (Nachbefund): `git ls-remote` laeuft — `git remote`, `reflog`, `config` NICHT', () => {
+  // **Der Nachbefund des Planners, angenommen und beim Eintragen verengt.** Vorgeschlagen war
+  // `git remote`; die Zwei-Wort-Granularitaet unterscheidet aber nicht zwischen `git remote -v`
+  // und `git remote add`. Dasselbe bei `git reflog expire` und jedem `git config x y`.
+  // *Drei Tueren, die niemand gemeint hat.*
+  assert.equal(nichtErlaubtesGlied('git --no-optional-locks ls-remote --exit-code fork HEAD'), null);
+  assert.equal(nichtErlaubtesGlied('git remote -v'), 'git remote', '`git remote` ist auf die Liste geraten');
+  assert.equal(nichtErlaubtesGlied('git reflog show fork/main'), 'git reflog');
+  assert.equal(nichtErlaubtesGlied('git config user.name x'), 'git config');
+  // presence-Partner nach R2 (B4): die Liste laesst ueberhaupt lesende git-Formen durch.
+  assert.equal(nichtErlaubtesGlied('git --no-optional-locks log --oneline -1'), null);
+});

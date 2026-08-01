@@ -110,6 +110,21 @@ export const ALLOWLIST = [
   // Git — ausdruecklich NUR lesend
   'git diff', 'git log', 'git grep', 'git show', 'git status', 'git rev-list',
   'git rev-parse', 'git ls-files', 'git branch', 'git cat-file', 'git blame',
+  // **Nachbefund des Planners (01.08. 23:0x) — angenommen, aber ENGER als vorgeschlagen.**
+  //
+  // Der Befund stimmt: ein rein lesender Befehl, der UEBERSPRUNGEN wird, misst nichts und sieht
+  // im Bericht trotzdem nicht rot aus. Vorgeschlagen war `git remote`.
+  //
+  // **Beim Eintragen gemessen, dass der Vorschlag zu weit greift:** die Zwei-Wort-Granularitaet
+  // unterscheidet nicht zwischen `git remote -v` und `git remote add`. Dasselbe bei `git reflog`
+  // (`expire`, `delete`) und `git config` (jedes `git config x y` SCHREIBT). Drei Tueren, die
+  // niemand gemeint hat.
+  //
+  // Aufgenommen wird deshalb nur, was gar keine schreibende Form hat: **`git ls-remote`** — und
+  // das ist ausgerechnet der Befehl, der am 01.08. drei falsche Push-Zuordnungen verhindert
+  // haette (B5). *`git remote` bleibt draussen; wer es braucht, braucht ein Gate — so hat der
+  // Planner PW-01 selbst gebaut.*
+  'git ls-remote',
 ];
 
 /**
