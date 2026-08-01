@@ -74,7 +74,17 @@ kriterien:
     typ: behavioural
     kritikalitaet: P1
     pruefung:
-      befehl: "./push-integration-sicher.command && cat push-result.log"
+      typ: gate
+      ausgefuehrt_von: yama
+      schritte: |
+        NIEMAND AUSSER YAMA FUEHRT DAS AUS. Der Befehl stand bis zum 01.08. als
+        `pruefung.befehl` hier - und ein Verzeichnislauf des Validators hat ihn am 01.08.
+        um 20:01 AUSGEFUEHRT und wirklich gepusht. Das war kein Fehlgriff eines Menschen,
+        sondern die zwangslaeufige Folge davon, dass ein PUBLIZIERENDER Befehl als
+        Abnahmekriterium in einem Blatt stand. Ein Blatt ist eine Datei, die ein Werkzeug
+        ausfuehrt; was darin steht, PASSIERT.
+        Yama fuehrt aus: ./push-integration-sicher.command
+        und legt push-result.log als Beleg daneben.
       erwartet: >
         Fuer auto/hausplaner-integration steht bei BEIDEN Remotes 'OK'.
         Danach ist 'git branch -r --contains HEAD' NICHT leer.
