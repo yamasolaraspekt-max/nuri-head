@@ -24,7 +24,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { TEILE, teil, ohneKommentare } from './_zerlegteApp';
@@ -46,14 +46,28 @@ test('K-05: JEDES Modul unter `app/rahmen/` steht in der Teile-Liste', () => {
   // ging es ums LESEN der Inhalte — eine mitwachsende Leseliste macht Zusagen zufällig grün. Hier
   // wird nichts gelesen, sondern nur **gezählt, ob die Liste vollständig ist**. Das ist der
   // Unterschied zwischen „automatisch benutzen" und „bemerken, dass etwas fehlt".
-  const imOrdner = readdirSync(join(hier, '../app/rahmen'))
-    .filter((d) => d.endsWith('.tsx'))
-    .map((d) => `app/rahmen/${d}`)
+  // **Diese Zusage hatte selbst ein Loch, und es war meins.** Sie las `readdir('app/rahmen')` —
+  // `app/dashboard/Kopfrahmen.tsx` ist aber ebenfalls ein zerlegtes Teil und stand ausserhalb
+  // ihres Blicks. Ein neues Modul dort wäre stillschweigend durchgefallen: *genau der Fehler,
+  // gegen den sie gebaut wurde.*
+  //
+  // **Ein Verzeichnis-Scan war ohnehin die falsche Frage.** In `app/` liegen Dutzende Module, die
+  // mit der Zerlegung nichts zu tun haben. Die Teile sind **das, was die Hauptfunktion einbindet** —
+  // also wird genau das gelesen, statt einen Ordner zu raten.
+  const app = teil('app/HausplanerApp.tsx');
+  const eingebunden = [...app.matchAll(/from '\.\/(rahmen\/[A-Za-z]+|dashboard\/Kopfrahmen)'/g)]
+    .map((m) => `app/${m[1]}.tsx`)
     .sort();
-  const inListe = TEILE.filter((t) => t.startsWith('app/rahmen/')).slice().sort();
-  assert.deepEqual(inListe, imOrdner,
-    'ein Modul unter `app/rahmen/` fehlt in TEILE — Absenz-Zusagen sehen es dann nicht');
-  assert.ok(imOrdner.length >= 4, `nur ${imOrdner.length} Module gefunden — die Zusage misst Leere`);
+  assert.ok(eingebunden.length >= 5,
+    `nur ${eingebunden.length} eingebundene Teile gefunden — die Zusage misst Leere`);
+  for (const t of eingebunden) {
+    assert.ok(TEILE.includes(t as typeof TEILE[number]),
+      `\`${t}\` wird von der Hauptfunktion eingebunden, fehlt aber in TEILE — Absenz-Zusagen sehen es nicht`);
+  }
+  // Und umgekehrt: kein Eintrag in TEILE, den es nicht gibt.
+  for (const t of TEILE) {
+    assert.ok(existsSync(join(hier, '..', t)), `TEILE nennt \`${t}\`, aber die Datei gibt es nicht`);
+  }
 });
 
 // --- Die acht Bindungen, die vorher niemand geprüft hat -------------------------------------------
