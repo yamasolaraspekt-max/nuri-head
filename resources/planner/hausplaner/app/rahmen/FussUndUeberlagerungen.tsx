@@ -47,6 +47,8 @@ export interface FussEigenschaften {
   pausenHinweis: string | null;
   /** Z-05: was beim Konturzeichnen in der Leiste steht — Fortschritt oder Ablehnungsgrund. */
   konturHinweis: string | null;
+  /** Z-03: WAS der Fang zuletzt gefangen hat, im Klartext. Leer heisst: nichts. */
+  fangHinweis: string;
   // --- Befehlspalette ---
   paletteOffen: boolean;
   paletteFilter: string;
@@ -65,7 +67,7 @@ export interface FussEigenschaften {
 }
 
 export function FussUndUeberlagerungen({
-  cursor, zoom, raeume, werkzeug, wandStart, treppeStart, letzteAblehnung, pausenHinweis, konturHinweis,
+  cursor, zoom, raeume, werkzeug, wandStart, treppeStart, letzteAblehnung, pausenHinweis, konturHinweis, fangHinweis,
   paletteOffen, paletteFilter, setPaletteFilter, setPaletteIndex,
   paletteGruppen, paletteListe, paletteMarkiert, schliessePalette, aktivierePaletteEintrag,
   offeneEngine, setOffeneEngine,
@@ -86,6 +88,10 @@ export function FussUndUeberlagerungen({
     {/* Z-05: derselbe Platz und dieselbe Machart wie die uebrigen Werkzeug-Hinweise darueber.
         Der Grund einer abgelehnten Kontur steht HIER und nicht in `letzteAblehnung` — die gehoert
         abgelehnten KOMMANDOS, und Z-05 fuehrt keines aus. */}
+    {/* Z-03: die Fangart steht in der Fussflaeche, nicht in einem eigenen Abzeichen — hier steht
+        die Statuszeile schon, und eine zweite Flaeche fuer dieselbe Auskunft waere eine zweite
+        Stelle, an der sie altern kann. */}
+    {fangHinweis && <span className="hp-fu-fang">⌖ {fangHinweis}</span>}
     {konturHinweis && <span className="hp-kontur-hinweis">{konturHinweis}</span>}
     {pausenHinweis && <span className="hp-pause-hinweis">{pausenHinweis}</span>}
     <span className="hp-fu-fueller" />

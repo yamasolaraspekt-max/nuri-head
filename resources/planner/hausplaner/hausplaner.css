@@ -709,3 +709,7 @@
  * **das Massband** — die Reihe, deren Hoehe das Fenster minus der Zeilen darueber ist und die
  * darum `overflow: hidden` traegt, damit die Messung sich nicht selbst verschieben kann. */
 .hp-studio-massband { flex: 1; position: relative; overflow: hidden; display: flex; }
+
+/* Z-03 — die Fangart in der Fussflaeche. Gedaempft wie die uebrigen Hinweise: sie meldet sich,
+ * ohne die Zahlen daneben zu ueberstimmen. */
+.hp-fu-fang { color: var(--hp-muted); font-variant-numeric: tabular-nums; }

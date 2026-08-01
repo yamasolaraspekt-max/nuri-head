@@ -22,7 +22,7 @@ import { erkenneRaeume } from '../geometry/roomDetection';
 import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, wandBaender, type Punkt } from '../geometry/wallGeometry';
 // Z-02: der geprüfte Fang-Kern wird angeschlossen, statt im Bauteil ein zweites Mal gerechnet.
-import { fange, toleranzAusZoom } from '../geometry/fangKern';
+import { fange, toleranzAusZoom, FANG_TEXT, type FangArt } from '../geometry/fangKern';
 // Z-05: die Konturpruefung ist reine Geometrie und wohnt dort, nicht hier.
 import { pruefeKontur, konturStatusText, KONTUR_MIN_PUNKTE, type KonturGrund } from '../geometry/kontur';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
@@ -251,6 +251,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * VERSUCH zu schliessen und muss beim naechsten Klick wieder verschwinden. Aus der Punktfolge
    * allein liesse er sich nicht lesen.
    */
+  /**
+   * Z-03 — **die Fangart, die bis heute weggeworfen wurde.** `fange()` liefert sie seit Z-02;
+   * die Insel las nur `punkt`. *Der Fang war damit stumm: er zog den Zeiger, und niemand erfuhr,
+   * worauf.*
+   */
+  const [fangArt, setFangArt] = useState<FangArt>('keiner');
   const [konturPunkte, setKonturPunkte] = useState<Punkt[]>([]);
   const [konturFehler, setKonturFehler] = useState<KonturGrund | null>(null);
   /**
@@ -662,15 +668,35 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     // **`aktiv` statt eines eigenen `if`:** ist der Fang aus, gibt der Kern den gerundeten
     // Rohpunkt zurück — genau das, was der frühere `return` am Ende tat. Eine Verzweigung
     // weniger, und die Abschaltung liegt an einer Stelle.
-    const { punkt } = fange(
+    // Z-04: die drei neuen Arten bekommen je EIGENE Operanden — ohne sie koennen sie nicht
+    // feuern, und genau darum bleibt jedes Verhalten von vor Z-04 unveraendert.
+    const mitten = waende.map((w) => ({
+      x: Math.round((w.start.x + w.end.x) / 2),
+      y: Math.round((w.start.y + w.end.y) / 2),
+    }));
+    const achsen = waende.map((w) => [w.start, w.end] as const);
+    // Der laufende Weg ist die Kontur, sobald sie zwei Punkte hat: ihre letzte Richtung wird
+    // geradlinig fortgesetzt. Beim Wandzeichnen uebernimmt das der Winkel-Fang (`mitWinkelSnap`).
+    const weg = konturPunkte.length >= 2
+      ? ([konturPunkte[konturPunkte.length - 2]!, konturPunkte[konturPunkte.length - 1]!] as const)
+      : undefined;
+
+    const { punkt, art } = fange(
       { x, y },
       kandidaten,
       {
         toleranzMm: toleranzAusZoom(zoom),
         raster: scene.settings.gridSize || 100,
+        mitten,
+        achsen,
+        weg,
         aktiv: scene.settings.snapEnabled,
       },
     );
+    // **Nur bei echter Aenderung setzen.** `weltPunkt` laeuft in Mausbewegungs-Frequenz; ein
+    // bedingungsloses `setFangArt` erzwaenge ein Rendern je Pixel. Dasselbe Muster wie in
+    // `buehnenHoehe` („kein Flackern: ein unveraenderter Wert loest kein Rendern aus").
+    setFangArt((vorher) => (vorher === art ? vorher : art));
 
     return punkt;
   }
@@ -1232,6 +1258,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         letzteAblehnung={letzteAblehnung}
         pausenHinweis={pausenText(zeichenZustand)}
         konturHinweis={werkzeug === 'kontur' ? konturStatusText(konturPunkte.length, konturFehler, letzteKontur?.length ?? null) : null}
+        fangHinweis={FANG_TEXT[fangArt]}
         paletteOffen={paletteOffen}
         paletteFilter={paletteFilter}
         setPaletteFilter={setPaletteFilter}

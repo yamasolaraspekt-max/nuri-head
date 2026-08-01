@@ -98,7 +98,10 @@ test('K-03: der Fangradius bleibt in einer bedienbaren Groessenordnung', () => {
  * die alte Wahrheit wirklich weg ist. *Eines allein heisst nichts.*
  */
 test('K-01: die Hauptansicht RUFT den Kern auf, sie importiert ihn nicht nur', () => {
-  assert.match(app, /import \{ fange, toleranzAusZoom \} from '\.\.\/geometry\/fangKern'/,
+  // Z-03 hat den Import erweitert (FANG_TEXT, FangArt). **Die Aussage ist, DASS der Kern
+  // importiert wird — nicht, mit welchem genauen Klammerinhalt.** Ein Muster, das die Liste
+  // buchstabiert, geht bei jeder Erweiterung rot, ohne dass etwas kaputt ist.
+  assert.match(app, /import \{[^}]*\bfange\b[^}]*\btoleranzAusZoom\b[^}]*\} from '\.\.\/geometry\/fangKern'/,
     'der Kern wird nicht mehr importiert');
   assert.match(app, /fange\(\s*\{ x, y \}/, 'der Kern wird importiert, aber nicht aufgerufen');
   assert.match(app, /toleranzMm: toleranzAusZoom\(zoom\)/,
@@ -126,15 +129,24 @@ test('Z-02: beide Enden jeder Wand sind Fang-Kandidaten', () => {
 });
 
 /**
- * **Die Grenze zu Z-04, und sie ist verführerisch.** `wandFangpunkte()` liegt fertig im Kern und
- * liefert Endpunkte *und Mittelpunkte*. Sie hier zu benutzen wäre eine Zeile weniger — und brächte
- * stillschweigend den Mittelpunkt-Fang mit, der eine eigene, noch nicht abgenommene Scheibe ist.
+ * **Diese Zusage hat mit Z-04 ihren Grund gewechselt, nicht ihren Wert.**
+ *
+ * Sie hiess „der Mittelpunkt-Fang aus Z-04 wird NICHT mitgebaut" — und war richtig, solange Z-04
+ * nicht gebaut war. *Jetzt IST er gebaut, und die Zusage waere grün und trotzdem eine Unwahrheit.*
+ *
+ * **Was sie weiterhin haelt:** `wandFangpunkte()` wirft Endpunkte und Mittelpunkte in EINEN Topf.
+ * Wer sie benutzt, hebelt damit die Rangfolge aus — ein Mittelpunkt waere genauso stark wie ein
+ * Endpunkt, und bei einer kurzen Wand laege beides in derselben Toleranz. Die Hauptansicht reicht
+ * die Mitten deshalb GETRENNT (`mitten:`), und genau das prüft diese Zusage.
  */
-test('Z-02 (Grenze): der Mittelpunkt-Fang aus Z-04 wird NICHT mitgebaut', () => {
+test('Z-04 (Rangfolge): Mitten werden GETRENNT gereicht, nicht mit den Endpunkten vermischt', () => {
   assert.doesNotMatch(app, /wandFangpunkte/,
-    'die Hauptansicht benutzt wandFangpunkte() — das bringt den Mittelpunkt-Fang aus Z-04 mit');
-  assert.doesNotMatch(app, /ortho:/,
-    'der Ortho-Fang wird mitgereicht — auch das ist eine andere Scheibe');
+    'die Hauptansicht benutzt wandFangpunkte() — das vermischt Endpunkte und Mitten und hebelt die Rangfolge aus');
+  assert.match(app, /mitten,/, 'die Wandmitten werden nicht mehr getrennt gereicht');
+  assert.match(app, /achsen,/, 'die Wandachsen werden nicht mehr gereicht');
+  // `ortho` bleibt ungereicht: der Winkel-Fang beim Wandzeichnen macht `mitWinkelSnap`, und zwei
+  // Stellen fuer denselben rechten Winkel waeren zwei Wahrheiten.
+  assert.doesNotMatch(app, /ortho:/, 'der Ortho-Fang wird jetzt doch gereicht — das ist eine zweite Winkel-Wahrheit');
 });
 
 /**
@@ -177,4 +189,22 @@ test('Z-02 (Durchstich): derselbe Punkt faengt weit herausgezoomt, nah herangezo
 
   const aus = fange(zeiger, kandidaten, { toleranzMm: toleranzAusZoom(0.02), raster: 100, aktiv: false });
   assert.equal(aus.art, 'keiner', 'der ausgeschaltete Fang faengt trotzdem');
+});
+
+// --- Z-03: die Fangart wird nicht mehr weggeworfen ------------------------------------------------
+
+test('Z-03: die Hauptansicht nimmt die Art entgegen und reicht sie an die Fussflaeche', () => {
+  // Mutation „Fangart wird wieder weggeworfen" kam durch — die Rueckgabe von `fange()` haette
+  // wieder nur `punkt` gelesen, und der Fang waere wieder stumm.
+  assert.match(app, /const \{ punkt, art \} = fange\(/, 'die Fangart wird wieder weggeworfen');
+  assert.match(app, /fangHinweis=\{FANG_TEXT\[fangArt\]\}/, 'die Art erreicht die Fussflaeche nicht mehr');
+  assert.doesNotMatch(app, /const \{ punkt \} = fange\(/, 'irgendwo wird die Art doch noch verworfen');
+});
+
+test('Z-03: die Art wird nur bei ECHTER Aenderung gesetzt', () => {
+  // Mutation „ohne Flacker-Schutz" kam durch. `weltPunkt` laeuft in Mausbewegungs-Frequenz; ein
+  // bedingungsloses `setFangArt` erzwaenge ein Rendern je Pixel. **Dasselbe Muster wie in
+  // `buehnenHoehe`** — dort steht es seit AUF-72 als eigene Zusage („kein Flackern").
+  assert.match(app, /setFangArt\(\(vorher\) => \(vorher === art \? vorher : art\)\)/,
+    'die Fangart wird bedingungslos gesetzt — ein Rendern je Mausbewegung');
 });
