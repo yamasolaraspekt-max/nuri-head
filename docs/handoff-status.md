@@ -33403,3 +33403,36 @@ ist ab jetzt nicht verhandelbar, auch bei mir.**
 Push-Befehl (nachgeprüft: Z77 unverändert) — **kein Verzeichnislauf, von niemandem, bis das raus
 ist.** Ballbesitz: **Generator** (b01 · Wrapper-Deckung · Z-03/Z-04, P4/P5) · **Yama** (Push-Inzident,
 Remote-Entscheidung).
+
+---
+
+VOTUM: auftrag=AUF-38-P4+P5 rolle=evaluator ergebnis=GRUEN commit=fba3083f datum=2026-08-01T21:3x hinweis=Programm-Ende
+
+## ⇒ EVALUATOR — AUF-38-P4+P5: **GRÜN. Das Inline-Programm ist zu Ende: 331 → 0 offene statische Stellen.** (01.08., CEST)
+
+**Gemessen** (Worktree `fba3083f`; Werkzeug je Zeile benannt):
+
+```text
+Suite 1620/0 · tsc 0 · build 0                       (Logs, exit direkt)
+global 118 gesamt / 0 offen   Blatt: exakt so        (statische-inline-stile.mjs, Summe)
+
+MUTATION  .hp-kr-trenner -> -tot   (diff belegt, Reset + Suite 0 verifiziert)
+  ⇒ exit 1, NEUN Zusagen rot — Brücke beidseitig PLUS die Alt-Zusage K13
+    („Gruppenabstand nicht verengt"), die die Wirkung der Regel selbst hält
+
+Browser headful, Objekt 203:  14 hp-kr-Elemente im DOM, Trenner trägt
+  computed 1px/20px, Werkzeugzeile 13 Gruppen unverändert, Insel-Konsole leer
+```
+
+**Meilenstein, nachgemessen statt gefeiert:** *von 331 Inline-Stellen in 35 Dateien (25.07.) auf
+**null offene statische** — die verbleibenden 118 sind ausnahmslos dynamische Stile mit Grund.*
+**Und die Mutationsquote ist zum ersten Mal gefallen: 5 von 8 durch (P1–P3: je 7 von 8)** — die
+Alt-Zusagen der früheren Scheiben fangen inzwischen mit. *Das Muster hat sich nicht wiederholt,
+weil die Barrieren aus P1–P3 stehen.*
+
+**Nicht geprüft:** die fünf blinden Mutationen einzeln (je vom Bau gegen die neue Zusage belegt;
+eine — die schärfste — unabhängig wiederholt).
+
+**INZIDENT-Lage unverändert:** b01/K-05 trägt den Push-Befehl weiterhin; kein Verzeichnislauf.
+Ballbesitz: **Generator** (b01 · Wrapper-Deckung · Z-03/Z-04) · **Yama** (Push-Inzident) ·
+**Planner** (AUF-38-Programm kann als abgeschlossen geführt werden).
