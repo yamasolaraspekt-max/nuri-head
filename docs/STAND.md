@@ -5,17 +5,17 @@
 > **Regeln:** eine Zeile je Sache · eine Rücknahme ERSETZT die Aussage · was erledigt ist,
 > verschwindet · **kein Datum ohne Zahl, keine Zahl ohne Befehl.**
 
-**Zuletzt geschrieben:** 01.08.2026, 19:40 · Planner
+**Zuletzt geschrieben:** 01.08.2026, 20:00 · Planner
 *(Die Vorfassung trug „19:55" — ein Zeitstempel, der 30 Minuten in der Zukunft lag. Zurückgenommen.)*
 
 ---
 
-## 1. Wo der Bau steht — gemessen 19:37
+## 1. Wo der Bau steht — gemessen 19:59
 
 ```text
 main     d8612a63   19:01 · git diff 99f38da7 main LEER · 3 Merges
-Zweig    86090de8   auto/hausplaner-integration · 18 voraus vor main · Locks 0
-UNGEPUSHT 48        <- kein Backup ausserhalb der Platte
+Zweig    8f81c3f7   auto/hausplaner-integration · 25 voraus vor main · Locks 0
+UNGEPUSHT 55        <- kein Backup ausserhalb der Platte
 
   TZ=Europe/Berlin date '+jetzt %d.%m.%Y %H:%M'
   git --no-optional-locks rev-list --count fork/auto/hausplaner-integration..auto/hausplaner-integration
@@ -40,8 +40,8 @@ Kennzahl Produktivcode - `config` gehoert dazu:
 ## 2. Wer ist am Ball
 
 - **Generator:** **Z-05-N1** — der achte Registry-Platz für `kontur`. Danach P4+P5, Z-03+Z-04.
-- **Evaluator:** **Z-05** (nur noch K-01…K-06, L-01 ist heraus) · mein Werkzeugbau vom 01.08. · AUF-25 (seit 25.07.) · AUF-86 · fehlende `.env.testing.example`.
-- **Yama:** **push (48)** · Papierstopp PB-042 · PB-048 · die 3 PHP-Dateien unten.
+- **Evaluator:** **Z-05** (nur noch K-01…K-06, L-01 ist heraus) · **PB-023 wartet seit 12:55, Z-02 seit 13:24** · mein Werkzeugbau vom 01.08. — jetzt inkl. `GATE_MUSTER`, 63 Zusagen · AUF-25 (seit 25.07.) · AUF-86 · fehlende `.env.testing.example`.
+- **Yama:** **push (55)** · Papierstopp PB-042 · PB-048 · die 3 PHP-Dateien unten.
 - **Planner:** Z-07…Z-11 und die drei Werkzeug-Blätter — **erst, wenn S-06 sie meldet.**
 
 ## 3. Was offen im Baum liegt — Regel B ist verletzt
@@ -94,9 +94,10 @@ Vier Backslashes in einem YAML-Befehl sind zwei zu viel: "\\\\{" wird zur Regex 
    statt 1 (Z-03+Z-04 K-01, 01.08. behoben).
 5 Stashes vom 07.07.-24.07. liegen unerwaehnt: git stash list
 `| tail -n` schluckt den Exitcode - auch beim Validator. Er wurde am 01.08. so gefahren.
-Der Validator ist ueber die VOLLE Schlange auf der Geraete-VM nicht in 45 s fahrbar - alte
-   Blaetter (AUF-83-T2T3 K-07, AUF-88-P1) fahren npm-Gates aus dem yaml. Portionsweise fahren,
-   dann stimmt aber S-01/S-06 nicht mehr. Offener Posten.
+Zwei head/tail-Splices sind mir heute an der Grenzzeile verrutscht (eine Zeile doppelt, eine
+   Datei syntaktisch tot). Vor jedem Splice die Grenzzeilen anzeigen. `git checkout -- <datei>`
+   REPARIERT das auf diesem Mount NICHT (unlink verboten) - der Weg ist
+   `git show HEAD:<pfad> > /tmp/x && cat /tmp/x > <pfad>`.
 `git commit --amend` laesst auf diesem Mount index.lock UND HEAD.lock liegen (01.08. 19:47
    gemessen). Beide per mv nach .git/_locks_beiseite/. Auf diesem Mount besser gar nicht amenden.
 Backticks in einer Commit-Botschaft unter DOPPELTEN Anfuehrungszeichen fuehrt die Shell aus:
@@ -109,8 +110,9 @@ Backticks in einer Commit-Botschaft unter DOPPELTEN Anfuehrungszeichen fuehrt di
 ```text
 ✅ F-01 F-02 F-03 F-04 F-05 F-06 F-07 F-08 F-08b F-09 F-11 F-12 F-13 F-14 F-15
 ⚠  F-10  Lock-Reste - auf diesem Mount NICHT behebbar (`unlink` verboten), nur gemildert
-❌ F-16  Der Validator liest ein Doku-Papier als Auftrag (AUFTRAGSSCHEMA.md). Heute nur eine
-         Regel: Doku nimmt text statt yaml und keinen Beispielwert aktiv. NEU 01.08. 19:4x
+⚠  F-16  HALB. Barriere steht: GATE_MUSTER faengt npm/npx/yarn/pnpm/php artisan/composer -
+         27 Blaetter in 3,6 s statt Timeout. Offen bleibt: ein Doku-Papier mit yaml-Block wird
+         weiter als Auftrag gelesen - dafuer heute nur eine Regel (text statt yaml).
 ❌ F-17  Ein unbekannter `typ:` verschwindet lautlos aus dem Bericht - ein Tippfehler macht
          ein P1-Kriterium unsichtbar. Heute nur eine Regel: Eintragszahl nachzaehlen. NEU
 ```
@@ -135,4 +137,4 @@ S-09    Kopf ohne `status`
 S-10    der Baum hat sich waehrend der Messung bewegt              exit 1
 ```
 
-**57 Zusagen über die beiden Werkzeuge, 0 fail.**
+**63 Zusagen über die beiden Werkzeuge, 0 fail** — `node --test scripts/__tests__/auftragPruefen.test.mjs scripts/__tests__/zaehle.test.mjs`

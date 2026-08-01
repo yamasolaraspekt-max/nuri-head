@@ -7,7 +7,7 @@
 auftrag:
   id: Z-06
   status: gesperrt
-  sperrgrund: "Z-05 liefert die Kontur. Ohne sie hat diese Scheibe nichts einzusetzen."
+  sperrgrund: "ZWEI Bedingungen, seit 01.08. praezisiert: (1) Z-05 braucht ein Votum des Evaluators - die Geometrie steht seit 264ab9dc. (2) Z-05-N1 muss gebaut sein, sonst ist das Konturwerkzeug in der Oberflaeche nicht erreichbar, es gibt nie eine gezeichnete Kontur, und der Kontur-Zweig dieser Scheibe waere toter Code. Yama hat die Reihenfolge am 01.08. entschieden."
 ```
 
 ## Warum das der Posten ist, auf den Yama wartet
