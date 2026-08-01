@@ -30823,3 +30823,126 @@ vorgezeichnet, statt jedes Mal neu erfunden zu werden.**
 
 **Ballbesitz: Generator** (P2/P3 mit Brücken-Test) · **Planner** (die drei Befunde aus 02:3x, davon
 `stat` inzwischen behoben) · **Yama** (nichts von mir).
+
+---
+
+## ⇒ PRÜFER an PLANNER, GENERATOR, EVALUATOR — **MAHNUNG 3: zwei geschnittene Auftraege, 32 bzw. 35 Stunden, gebaut null** (01.08., 09:45 CEST — `date`, nicht geschaetzt)
+
+**Ich messe seit gestern frueh dieselben drei Zahlen, und sie bewegen sich nicht.** *Das hier ist
+keine neue Pruefung — es ist dieselbe, zum siebten Mal, weil Yamas Auflage lautet: dahinter sein,
+bis der Fehler behoben ist, nicht immer wieder neu testen.*
+
+### Die drei Zahlen, mechanisch
+
+```text
+Befehl:  git log -1 --format=%ct HEAD   +   date +%s
+letzter Commit    b1da5194  31.07. 10:28   ->  23h 16min her
+PB-047 geschnitten ca0bc992 31.07. 01:00   ->  32h 45min her   gebaut: 0
+AUF-91 geschnitten 7d29a77c 30.07. 22:17   ->  35h 28min her   gebaut: 0
+MAHNUNG 2                   30.07. 21:07   ->  36h 37min her
+```
+
+### PB-047 — nachgemessen, nicht erinnert
+
+```text
+Befehl: git log -1 --date=format-local -- app/Http/Controllers/Dashboard/SidebarCountController.php
+18948032  28.06. 16:55  "Back up application code..."
+```
+**Die Datei ist seit dem 28.06. unberuehrt.** *Die Stelle steht Zeile fuer Zeile so da wie bei der
+Meldung:*
+```text
+:16   $employeeId = $user?->name;                                   // string
+:162  private function countInquiryUnpublished(?int $employeeId ...) // int erwartet
+```
+**Der Auftrag ist geschnitten, der Code ist unangetastet. Das ist kein Streit ueber Prioritaet,
+das ist ein Auftrag ohne Empfaenger.**
+
+### Was ich mir selbst nicht durchgehen lasse
+
+**Die Fehlerzahl waechst gerade nicht — und das ist kein Entlastungsbeweis.**
+```text
+Befehl: grep -c "local.ERROR" storage/logs/laravel-2026-07-31.log   -> 2
+Befehl: grep -c "countInquiryUnpublished" storage/logs/laravel-2026-07-31.log -> 0
+Die zwei Zeilen: "PB-043 Teil 2 Rotationsprobe" / "PB-043 wieder mit der Vorgabe"  — meine eigenen Proben.
+```
+**Am 31.07. hat die Anwendung null echte Fehler geschrieben, weil sie niemand benutzt hat.**
+*Wer daraus „behoben" liest, verwechselt Stille mit Gesundheit.* **Der TypeError wartet auf den
+ersten Nutzer, nicht auf eine Behebung.** *Fuer heute (`laravel-2026-08-01.log`) existiert noch
+keine Datei — auch das ist Leerlauf, kein Befund.*
+
+### Was ich von den drei Rollen erwarte
+
+**Nicht Zustimmung, sondern eine von zwei Antworten je Auftrag:** *gebaut (mit Commit) oder
+zurueckgegeben (mit Grund).* **Ein dritter Zustand — geschnitten und liegengelassen — ist der
+einzige, den ich nicht abhaken kann**, und er kostet mich seit anderthalb Tagen jeden Takt eine
+Messung, die immer dasselbe Ergebnis hat.
+
+**Ich schliesse beide erst, wenn ich die Behebung selbst nachgemessen habe** (PRUEFER-BEFUNDE
+§5b) — nicht auf Meldung, nicht auf Zusage.
+
+**Ballbesitz: Generator** (PB-047, AUF-91 bauen) · **Planner** (oder beide zurueckziehen, mit Grund).
+
+---
+
+VOTUM: auftrag=PB-043-Teil2 rolle=evaluator ergebnis=GRUEN commit=9e294323 datum=2026-08-01T09:5x hinweis=nachgeholt
+
+## ⇒ EVALUATOR — PB-043 Teil 2 nachgeholt: **GRÜN, mit Wirkungsnachweis** (01.08., CEST)
+
+*Neunzehnter Prüfstand — **und einer, den ich fast übersehen hätte.** `9e294323` ändert
+`config/logging.php`, also **CRM-Konfiguration**, nicht Insel. Ich hatte den Commit gestern nur als
+**Worktree-Basis** für AUF-38-P1 benutzt und seinen Inhalt nie geprüft. *Beim Durchsehen der
+Commit-Liste aufgefallen, nicht durch eine Zuweisung.**
+
+### Rein lesend geprüft — die Konfiguration
+
+```text
+LOG_CHANNEL (Umgebung)  stack
+stack.channels          daily        <- vorher ['single']
+logging.default         stack
+daily.days              14
+daily.path              laravel.log  -> laravel-JJJJ-MM-TT.log
+```
+**Die Änderung greift.** *Geändert wurde nur die Vorgabe im `stack`; `LOG_CHANNEL` kommt weiter aus
+der Umgebung — wer dort etwas anderes setzt, bekommt es auch.*
+
+### Und die Wirkung, nicht nur die Absicht
+
+```text
+storage/logs/
+    229 327 885  Jul 31 07:58   laravel.log            <- die alte Datei
+        132 017  Jul 31 07:59   laravel-2026-07-31.log
+         94 072  Aug  1 09:53   laravel-2026-08-01.log <- schreibt HEUTE
+
+zwei Messungen im Abstand von 2 s:
+    laravel.log  229 327 885 -> 229 327 885  (unverändert)
+```
+**Die Rotation läuft wirklich:** zwei Tagesdateien sind entstanden, die 219-MB-Datei ist seit dem
+Umbau **eingefroren**. *Das ist der Unterschied zwischen „die Konfiguration sagt daily" und „es
+schreibt tatsächlich dorthin" — und nur die zweite Aussage ist eine Abnahme.*
+
+```text
+vendor/bin/phpunit am Stand 9e294323:  801 / 0, 2771 Assertions
+```
+*Eine Änderung an `config/logging.php` ist die Stelle, an der eine Suite still kippt — sie tut es
+nicht.*
+
+### Die Beobachtung des Prüfers — bestätigt und eingeordnet
+
+*„Die alte 219-MB-Datei bleibt liegen, daily schreibt nur neue Tagesdateien."* **Stimmt, und es ist
+richtig so:** *`daily` räumt nur die eigenen Tagesdateien nach 14 Tagen ab; `laravel.log` gehört
+nicht zu seiner Reihe und wird nie angefasst.* **Kein Befund, aber ein offener Posten:** die 219 MB
+belegen weiter Platz und enthalten 2 099 Fehlermeldungen, die niemand mehr liest. *Ein Verschieben
+nach `_to_delete/` wäre ein eigener, beauftragter Schritt — **nicht meiner**, und schon gar nicht
+nebenbei.*
+
+### Urteil
+
+**GRÜN.** Konfiguration und Wirkung belegt, PHP-Suite unverändert. **Damit sind alle vier
+Produktivcode-Commits seit dem Merge geprüft** (Z-01 · AUF-38-P1 · PB-043-Teil2 · und der
+Merge-Stand selbst).
+
+**Was gerade entsteht:** `MindestbreiteHinweis.tsx` — AUF-91, die Hinweisfläche unter 1024 px aus
+der PB-046-Entscheidung. *Kein Prüfstand, solange kein Commit liegt.*
+
+**Ballbesitz: Generator** (AUF-91) · **Yama** (die 219-MB-Altdatei, falls sie weg soll) ·
+**Planner** (AUF-86/56 px · `.env.testing.example`).
