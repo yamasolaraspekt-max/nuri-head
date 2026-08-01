@@ -33621,3 +33621,72 @@ Erlaubnisliste ist der Weg mechanisch zu** — der Wrapper kann aus keinem Blatt
 **Ballbesitz: Yama** (Remote-Entscheidung; die Frage ist durch 22:11 faktisch entschieden — die
 Stände SIND draußen, gepusht von Yamas eigenem Sicherungsskript) · **Generator** (W-01 Teil 2,
 Z-10) · **Planner** (P-01).
+
+## PLANNER 01.08. 23:0x — AUTONOM-MODUS. Yama: „ihr sollt alleine arbeiten"
+
+**Die Lage ist ab jetzt ohne Yama zu fahren.** Was er entscheiden muss, steht am Ende dieses
+Eintrags als **zwei Sätze** — alles andere entscheiden wir.
+
+### Der Beschluss gilt: `docs/BESCHLUSS-fehlervermeidung.md` (`2adad9e6`)
+
+Acht Beschlüsse mit Wirkstufe. Kern: **Urteil < Vorsatz < Regel < Mechanik < Unmöglichkeit** —
+jede Klasse wandert eine Stufe nach rechts, was die Maschine verlässt bis ganz nach rechts.
+
+**B8 gilt ab sofort und betrifft JEDE Rolle:**
+
+```text
+Ein Blatt wird nicht `bereit`, bevor eine andere Rolle drei Fragen beantwortet hat:
+  1. Laeuft JEDER Befehl darin - heute, einmal, auch gegen einen roten Fall?
+  2. Misst er die WIRKUNG oder nur die Stelle, an der gebaut wird?
+  3. TUT einer von ihnen etwas - schreibt, baut, verlaesst die Maschine?
+Drei Zeilen im Kopf: gegengelesen_von, gegengelesen_am, befund. Ohne sie: `entwurf`.
+
+Planner-Blatt   -> Pruefer   (belegt: Evaluator)
+Werkzeug-Blatt  -> Evaluator
+Pruefer-Auftrag -> Planner
+Ein Gegenleser baut NICHT, was er gegengelesen hat.
+GILT AB 01.08. 22:5x. Was heute schon `bereit`/`aktiv` ist, laeuft weiter - B8 rueckwirkend
+wuerde die Schlange abwuergen, und eine Regel, die den Betrieb anhaelt, wird umgangen.
+```
+
+### Was jetzt bei wem liegt
+
+```text
+Generator   Z-03+Z-04 aktiv (baut) · W-01 bereit, ALLOWLIST steht bei 3, 69 Zusagen/0 fail
+            · Z-10 bereit (Masseingabe)
+            NEU zum Gegenlesen und dann Bauen: W-02 (zeile-ersetzen)
+Evaluator   Z-05 Votum offen  <- DAS ist der einzige Posten zwischen Yama und Z-06
+            · AUF-38-P4+P5 gebaut fba3083f (118 Stellen, NULL offene)
+            · W-01 abnehmen - MEIN BEFUND dagegen steht im Blatt, VOR der Abnahme lesen
+            · W-02 gegenlesen (Werkzeug-Blatt -> Evaluator)
+Pruefer     P-01 bereit - Teil 0 hat VORRANG: aus welcher Umgebung kamen die Pushes
+            · PW-01 gegenlesen (Planner-Blatt -> Pruefer)
+Planner     B2-Blatt (Ausfuehrungszaehler) offen · Z-07/Z-08/Z-09 nach Z-06
+```
+
+### Zwei neue Blätter, beide `entwurf` nach B8
+
+**PW-01 — der Bote** (`bacb3974`). Auf Yamas Frage „warum muss ich das machen". **Sicherungs-Push
+und Veröffentlichung werden getrennt:** der erste ist additiv und braucht keinen Rückweg, der
+zweite ist unumkehrbar und bleibt bei Yama. **Der Bote ist ein SKRIPT, kein Urteil** — er
+entscheidet nichts, er führt aus und meldet. Sieben Kriterien, alle heute gemessen und grün.
+
+**W-02 — `zeile-ersetzen`** (`09049b23`). Vier Splice-Fehler an einem Abend, vier Vorsätze halfen
+nicht. Prüfung **nach** dem Ersetzen; schlägt sie fehl, wird **gar nicht geschrieben**.
+
+### Der Befund gegen W-01, VOR der Abnahme
+
+Die gebaute Allowlist lässt `git rev-list` zu, aber **nicht** `git --no-optional-locks rev-list` —
+also genau die Form, die der Governance-Skill gegen die Lock-Reste vorschreibt. Steht ausführlich
+im W-01-Blatt. **Kein Rot gegen die Richtung, ein Befund gegen die Fassung.**
+
+### Was Yama entscheiden muss — zwei Sätze, sonst nichts
+
+```text
+Y1  "Nur meine eigene Umgebung erreicht die Remotes; keine Instanz hat Push-Zugang."
+    ERST NACH der Messung aus P-01 Teil 0 - sonst schalten wir blind etwas ab.
+Y2  "Eine Runde je Blatt mehr fuer das Gegenlesen aus B8."
+```
+
+**Solange Y1 offen ist, gilt fuer alle Rollen: kein Befehl, der die Maschine verlaesst — auch
+nicht zum Pruefen, auch nicht „weil es diesmal klar ist".**
