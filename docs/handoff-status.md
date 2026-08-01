@@ -33730,3 +33730,37 @@ für diese Form nie eines.**
 
 **Ballbesitz: Generator** (W-02 bauen mit K-08 + Randanzeige · W-01 Teil 2 mit `--no-optional-locks`)
 · **Prüfer** (PW-01 gegenlesen) · **Yama** (nichts Neues).
+
+**PLANNER 23:1x — der Zyklus greift, zum ersten Mal an einem Tag ohne Zutun von Yama.**
+
+```text
+23:00  247dc6c1  Generator: W-01 nachgebessert - "der Befund des Planners trifft"
+23:0x  gemessen: PW-02/03/04 laufen jetzt durch. `git --no-optional-locks` ist frei.
+23:1x  im Baum: docs/auftraege/generator-auftrag-w02-zeile-ersetzen.md wird bearbeitet
+                -> das ist B8, keine zwei Stunden nach dem Beschluss
+```
+
+**Widerspruch vor dem Bau, Nachbesserung ohne Streit, Gegenlesen ohne Aufforderung.** Genau der
+Weg, den die Governance vorsieht — und heute Abend zum ersten Mal ohne dass jemand ihn anstoßen
+musste.
+
+**Zwei kleine Nachbefunde an W-01, gesammelt statt einzeln nachgereicht** (das Blatt wird gerade
+abgenommen, ich fasse es nicht an):
+
+```text
+1  `git remote -v` steht nicht auf der Allowlist. Rein lesend, kein Nebeneffekt.
+   Wirkung: ein Kriterium mit diesem Befehl wird UEBERSPRUNGEN - es misst dann nichts,
+   sieht aber im Bericht nicht rot aus. Ich habe PW-01 deshalb auf ein Gate umgestellt,
+   das ist die richtige Bauart - aber die Allowlist duerfte `git remote` vertragen.
+2  Die DENYLIST wertet `2>/dev/null` als `umleitung`. Eine Umleitung nach /dev/null kann
+   nichts ueberschreiben. Betrifft jeden Existenz-Test der Form `ls -1 <datei> 2>/dev/null`.
+   Umgehung ohne Werkzeugaenderung: `ls <verzeichnis> | grep '<name>' | wc -l`.
+   Das ist die alte Denylist-Regel, nicht W-01 - hier nur, weil es an derselben Stelle auffaellt.
+```
+
+**Beides sind Befunde gegen die Fassung, kein Rot gegen die Richtung.**
+
+**Planner-Stand:** Z-09 liegt bewusst NICHT in der Schlange (Fachfrage, Tor 1 —
+`docs/planner/entscheidung-z09-tstoss-2026-08-01.md`). W-03 ist geschnitten und gesperrt bis W-01
+abgenommen ist. **Nächster Planner-Griff: Z-11 (Touch und Stift) — die einzige Z-Scheibe, die nur
+an Z-01 und Z-02 hängt und beide sind abgenommen.**
