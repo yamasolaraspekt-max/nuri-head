@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: Z-05
-  status: aktiv   # das EINE aktive Blatt (S-01) - Z-02 ist gebaut, damit ist Z-05 dran
+  status: gebaut   # 264ab9dc, 01.08. 19:09 - wartet auf das Votum des Evaluators. L-01 ist nach Z-05-N1 verschoben.
 ```
 
 ## Warum
@@ -148,26 +148,18 @@ kriterien:
         Wie viele kommen durch?
 
   - id: L-01
-    typ: presence
-    kritikalitaet: P1
-    aussage: "Browsertest an http://ticket.test - die L-Form und die Acht."
-    pruefung:
-      typ: browser
-      schritte: |
-        npm run build:hausplaner, dann /admin/hausplaner/studio, Expertenmodus.
-        (a) L-Form mit sechs Punkten zeichnen, auf den ersten Punkt klicken -> schliesst
-        (b) eine Acht zeichnen und schliessen wollen -> bleibt offen, Statusleiste nennt den Grund
-        (c) Escape mitten im Zeichnen -> nichts bleibt liegen, kein halber Strich
-        Drei Pflicht-Viewports: 1440, 1024, 375.
-
-  - id: L-01-anker
-    typ: presence
-    aussage: "Die Seite ist ueberhaupt da, bevor irgendeine Zahl abgelesen wird."
-    pruefung:
-      typ: browser
-      schritte: |
-        VOR jeder anderen Zahl: HTTP 200, querySelectorAll('canvas') mindestens 1,
-        document.title enthaelt "Hausplaner".
+    typ: verschoben
+    aussage: "Erreichbarkeit im Browser - VERSCHOBEN nach Z-05-N1."
+    verschoben_nach: docs/auftraege/generator-auftrag-z05-n1-werkzeug-erreichbar.md
+    verschoben_von: planner
+    verschoben_am: "01.08.2026"
+    grund: |
+      Der Generator hat L-01 in 264ab9dc blockiert zurueckgemeldet und den Befund gegen dieses
+      Blatt gestellt: scope.dateien nennt drei Dateien, aber L-01 verlangt, im Browser damit zu
+      zeichnen. Mit diesen drei Dateien ist das nicht erreichbar - der Registry-Eintrag braucht
+      Themen-Bindung, einen Vertrag im Katalog und veraendert die Fix-Zone. Das ist eine eigene
+      Scheibe, kein Nachtrag. Der Fehler war meiner (Planner), nicht seiner.
+      Z-05 wird auf K-01 bis K-06 abgestimmt. Die Erreichbarkeit ist Z-05-N1.
 ```
 
 ## Rückweg und Entdeckung

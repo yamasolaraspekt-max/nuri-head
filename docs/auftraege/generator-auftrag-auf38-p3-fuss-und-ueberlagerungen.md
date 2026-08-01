@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: AUF-38-P3
-  status: bereit
+  status: gebaut   # bbd4be07, 01.08. 19:21 - wartet auf das Votum des Evaluators
 ```
 
 ## Bestand — gemessen 01.08. 19:0x
