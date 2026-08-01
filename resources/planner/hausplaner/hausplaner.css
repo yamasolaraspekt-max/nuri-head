@@ -525,6 +525,11 @@
  * das gefangen, bevor es jemand anders tun musste.
  */
 .hp-pause-hinweis { font-weight: 600; color: var(--hp-warn-ink); }
+/* Z-05: der Konturhinweis. **Klasse und nicht Inline** — die Nachbarhinweise tragen noch
+ * `style={{ color: FARBEN.text }}`, aber AUF-38 baut genau die gerade ab; eine neue Inline-Stelle
+ * haette die abgenommene Zusage "20 Vorkommen, unveraendert" gebrochen und der Umstellung
+ * Nacharbeit gemacht. */
+.hp-kontur-hinweis { color: var(--hp-ink); }
 
 /* ══════════════════════════════════════════════════════════════════════════════════════════════
  * AUF-38-P1 — das Eigenschaften-Panel. 37 offene statische Inline-Stellen werden 22 Klassen.

@@ -25,6 +25,8 @@ export type AbsichtArt =
   | 'speichern'
   | 'palette-oeffnen'
   | 'werkzeug'
+  /** Z-05: Enter schliesst die laufende Kontur. WER das tut, entscheidet die Hauptfunktion. */
+  | 'kontur-schliessen'
   | 'nichts';
 
 export interface Absicht {
@@ -81,6 +83,12 @@ export function tastenAbsicht(e: TastenEreignis): Absicht {
 
   if (e.key === 'Delete' || e.key === 'Backspace') {
     return { art: 'loeschen', preventDefault: false };
+  }
+
+  // Z-05: Enter hatte bisher KEINE Bedeutung (fiel auf `nichts`). Die beiden Waechter oben halten
+  // weiterhin: in einem Eingabefeld und bei offener Palette kommt es hier gar nicht an.
+  if (e.key === 'Enter') {
+    return { art: 'kontur-schliessen', preventDefault: false };
   }
 
   const mod = e.ctrlKey || e.metaKey;

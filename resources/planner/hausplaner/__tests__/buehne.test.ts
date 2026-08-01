@@ -125,9 +125,13 @@ test('K-04 (blind gewesen): beide Vorschauen beim Zeichnen sind da', () => {
   // Vorher blieb die Vorschau stehen, wo der Zeiger die Flaeche zuletzt beruehrt hat — der
   // "lange Strich" aus Yamas Meldung. Die alte Zusage haette den Umbau nicht ueberlebt und
   // ihn auch nicht gefordert; diese fordert ihn.
-  assert.match(buehne, /zeigtVorschau\(\{ wandStart, treppeStart, zeigerDrinnen \}, 'wand'\) && wandStart && werkzeug === 'wand'/,
+  // **Z-05 hat das Zustands-Literal um `konturPunkte` erweitert.** Das Muster nennt die Felder
+  // deshalb nicht mehr einzeln in fester Reihenfolge — es prueft die AUSSAGE: die Vorschau haengt
+  // am Zeichenzustand UND am Werkzeug. *Ein Muster, das jedes neue Feld nachziehen muss, geht bei
+  // jeder Erweiterung rot, ohne dass etwas kaputt ist.*
+  assert.match(buehne, /zeigtVorschau\(\{[^}]*\bzeigerDrinnen\b[^}]*\}, 'wand'\) && wandStart && werkzeug === 'wand'/,
     'die Vorschau beim Wandzeichnen fehlt oder haengt nicht mehr am Zeiger-Zustand');
-  assert.match(buehne, /zeigtVorschau\(\{ wandStart, treppeStart, zeigerDrinnen \}, 'treppe'\) && treppeStart && werkzeug === 'treppe'/,
+  assert.match(buehne, /zeigtVorschau\(\{[^}]*\bzeigerDrinnen\b[^}]*\}, 'treppe'\) && treppeStart && werkzeug === 'treppe'/,
     'die Vorschau beim Treppezeichnen fehlt oder haengt nicht mehr am Zeiger-Zustand');
   // Und die Wand-Vorschau rastet mit — sonst zeigt sie etwas anderes als das, was entsteht.
   assert.match(buehne, /mitWinkelSnap\(wandStart, cursor\)/, 'die Vorschau folgt nicht demselben Winkel-Fang wie die Wand');

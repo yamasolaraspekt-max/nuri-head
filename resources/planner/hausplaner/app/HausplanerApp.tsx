@@ -23,6 +23,8 @@ import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, wandBaender, type Punkt } from '../geometry/wallGeometry';
 // Z-02: der geprüfte Fang-Kern wird angeschlossen, statt im Bauteil ein zweites Mal gerechnet.
 import { fange, toleranzAusZoom } from '../geometry/fangKern';
+// Z-05: die Konturpruefung ist reine Geometrie und wohnt dort, nicht hier.
+import { pruefeKontur, konturStatusText, KONTUR_MIN_PUNKTE, type KonturGrund } from '../geometry/kontur';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
 import { aufloeseAuswahlmodus, wendeAuswahlAn, klickInsLeere } from './tools/auswahlModus';
@@ -242,6 +244,29 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const [paletteIndex, setPaletteIndex] = useState(0);
   const paletteOffenRef = useRef(false);
   const [wandStart, setWandStart] = useState<Punkt | null>(null);
+  /**
+   * Z-05 — **die laufende Kontur und der Grund, warum sie nicht schliessen konnte.**
+   *
+   * *Der Fehler ist ein eigener Zustand und keine Ableitung aus den Punkten:* er entsteht beim
+   * VERSUCH zu schliessen und muss beim naechsten Klick wieder verschwinden. Aus der Punktfolge
+   * allein liesse er sich nicht lesen.
+   */
+  const [konturPunkte, setKonturPunkte] = useState<Punkt[]>([]);
+  const [konturFehler, setKonturFehler] = useState<KonturGrund | null>(null);
+  /**
+   * **Spiegel fuer den globalen Tastatur-Handler** — dasselbe Muster wie `paletteOffenRef`
+   * (Kante 8). Der Handler wird EINMAL angemeldet; ohne Spiegel laese seine Closure den Stand vom
+   * ersten Render, und Enter schloesse eine Kontur mit null Punkten.
+   */
+  const konturPunkteRef = useRef<Punkt[]>([]);
+  const werkzeugRef = useRef<Werkzeug>('auswahl');
+  /**
+   * **Die zuletzt geschlossene Kontur — das Ergebnis dieser Scheibe.**
+   *
+   * Z-05 schreibt ausdruecklich NICHTS in den Speicher. Die fertige Kontur liegt hier bereit;
+   * **wer sie verwendet, ist Z-06** (die Decke nimmt sie statt der Bounding-Box).
+   */
+  const [letzteKontur, setLetzteKontur] = useState<Punkt[] | null>(null);
   /** Z-01: steht der Zeiger auf der Zeichenflaeche? Verlassen pausiert, es beendet nicht. */
   const [zeigerDrinnen, setZeigerDrinnen] = useState(true);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
@@ -270,7 +295,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const nodes = useMemo(() => knotenImGeschoss(scene, level), [scene, level]);
   const waende = useMemo(() => waendeAus(nodes), [nodes]);
   /** Z-01: EIN Zustand fuer Buehne und Statusleiste — zwei Quellen waeren zwei Wahrheiten. */
-  const zeichenZustand: ZeichenZustand = { wandStart, treppeStart, zeigerDrinnen };
+  const zeichenZustand: ZeichenZustand = { wandStart, treppeStart, konturPunkte, zeigerDrinnen };
+  konturPunkteRef.current = konturPunkte;
+  werkzeugRef.current = werkzeug;
   /**
    * Z-01 — **der EINE Ort, an dem ein Werkzeug endet.**
    *
@@ -287,6 +314,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     const nach = beiWerkzeugwechsel(zeichenZustand);
     setWandStart(nach.wandStart);
     setTreppeStart(nach.treppeStart);
+    // Z-05: die Kontur endet HIER mit — keine achte Aufraeumstelle. Der Fehlertext geht mit,
+    // sonst bliebe eine Meldung stehen, die zu nichts mehr gehoert.
+    setKonturPunkte([...nach.konturPunkte]);
+    setKonturFehler(null);
     setZeigerDrinnen(nach.zeigerDrinnen);
     usePlannerUiStore.getState().setActiveTool(neu);
   }, [zeichenZustand]);
@@ -676,6 +707,25 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     s.selectNodes(neu.ids, neu.primaerId);
   }, [store]);
 
+  /**
+   * Z-05 — **der EINE Ort, an dem eine Kontur geschlossen wird.** Klick auf den ersten Punkt und
+   * Enter laufen beide hier durch; zwei Wege mit derselben Pruefung waeren zwei Wahrheiten.
+   *
+   * *Geprueft wird beim Schliessen, nicht beim Klicken:* eine L-Form laeuft unterwegs durch
+   * Zustaende, die fuer sich genommen entartet sind (zwei Punkte, drei auf einer Linie). Wer
+   * frueher bremst, macht die Form unzeichenbar.
+   */
+  const schliesseKontur = React.useCallback((punkte: Punkt[]): void => {
+    const urteil = pruefeKontur(punkte);
+    if (!urteil.ok) {
+      setKonturFehler(urteil.grund);   // die Kontur bleibt OFFEN und der Grund steht in der Leiste
+      return;
+    }
+    setLetzteKontur(punkte);
+    setKonturPunkte([]);
+    setKonturFehler(null);
+  }, []);
+
   function klick(e: Konva.KonvaEventObject<MouseEvent>): void {
     if (!scene || !level) {
       return;
@@ -698,6 +748,21 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         },
       });
       setWandStart(ende); // Polygonzug: weiterzeichnen ab dem Ende
+      return;
+    }
+
+    if (werkzeug === 'kontur') {
+      // Klick auf den ersten Punkt schliesst — **mit derselben Fangtoleranz wie alles andere**
+      // (`toleranzAusZoom` aus Z-02). Ein eigener Radius hier waere die zweite Fang-Wahrheit,
+      // die Z-02 gerade abgeschafft hat.
+      const erster = konturPunkte[0];
+      if (erster && konturPunkte.length >= KONTUR_MIN_PUNKTE
+        && Math.hypot(erster.x - p.x, erster.y - p.y) <= toleranzAusZoom(zoom)) {
+        schliesseKontur(konturPunkte);
+        return;
+      }
+      setKonturFehler(null); // ein neuer Punkt raeumt die alte Meldung ab
+      setKonturPunkte([...konturPunkte, p]);
       return;
     }
 
@@ -855,6 +920,13 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           break;
         case 'palette-oeffnen':
           oeffnePalette();
+          break;
+        case 'kontur-schliessen':
+          // Nur wenn wirklich ein Konturzug laeuft — sonst waere Enter eine Taste, die je nach
+          // Werkzeug etwas oder nichts tut, ohne dass man es sieht.
+          if (werkzeugRef.current === 'kontur' && konturPunkteRef.current.length > 0) {
+            schliesseKontur([...konturPunkteRef.current]);
+          }
           break;
         case 'werkzeug': {
           // UI-3: die Aktivierung wird weiterhin respektiert — sie braucht den Kontext aus den
@@ -1105,6 +1177,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           setCursor={setCursor}
           wandStart={wandStart}
           treppeStart={treppeStart}
+          konturPunkte={konturPunkte}
           zeigerDrinnen={zeigerDrinnen}
           beiZeigerAus={() => setZeigerDrinnen(beiZeigerAus(zeichenZustand).zeigerDrinnen)}
           beiZeigerEin={() => setZeigerDrinnen(beiZeigerEin(zeichenZustand).zeigerDrinnen)}
@@ -1158,6 +1231,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         treppeStart={treppeStart}
         letzteAblehnung={letzteAblehnung}
         pausenHinweis={pausenText(zeichenZustand)}
+        konturHinweis={werkzeug === 'kontur' ? konturStatusText(konturPunkte.length, konturFehler, letzteKontur?.length ?? null) : null}
         paletteOffen={paletteOffen}
         paletteFilter={paletteFilter}
         setPaletteFilter={setPaletteFilter}

@@ -45,6 +45,8 @@ export interface FussEigenschaften {
   letzteAblehnung: string | null;
   /** Z-01: der Satz, wenn ein Zug pausiert — `null`, wenn nichts zu sagen ist. */
   pausenHinweis: string | null;
+  /** Z-05: was beim Konturzeichnen in der Leiste steht — Fortschritt oder Ablehnungsgrund. */
+  konturHinweis: string | null;
   // --- Befehlspalette ---
   paletteOffen: boolean;
   paletteFilter: string;
@@ -63,7 +65,7 @@ export interface FussEigenschaften {
 }
 
 export function FussUndUeberlagerungen({
-  cursor, zoom, raeume, werkzeug, wandStart, treppeStart, letzteAblehnung, pausenHinweis,
+  cursor, zoom, raeume, werkzeug, wandStart, treppeStart, letzteAblehnung, pausenHinweis, konturHinweis,
   paletteOffen, paletteFilter, setPaletteFilter, setPaletteIndex,
   paletteGruppen, paletteListe, paletteMarkiert, schliessePalette, aktivierePaletteEintrag,
   offeneEngine, setOffeneEngine,
@@ -81,6 +83,10 @@ export function FussUndUeberlagerungen({
     {werkzeug === 'treppe' && <span style={{ color: FARBEN.text }}>{treppeStart ? 'Klick = Ende der Lauflinie (Richtung = aufwärts) · Esc bricht ab' : 'Klick setzt den Anfang der Treppen-Lauflinie'}</span>}
     {/* Z-01: der pausierte Zug wird BENANNT. Schritt 0 hat gemessen, dass die Vorschau stehen
         blieb, ohne dass irgendetwas sagte, dass die Aktion noch laeuft. */}
+    {/* Z-05: derselbe Platz und dieselbe Machart wie die uebrigen Werkzeug-Hinweise darueber.
+        Der Grund einer abgelehnten Kontur steht HIER und nicht in `letzteAblehnung` — die gehoert
+        abgelehnten KOMMANDOS, und Z-05 fuehrt keines aus. */}
+    {konturHinweis && <span className="hp-kontur-hinweis">{konturHinweis}</span>}
     {pausenHinweis && <span className="hp-pause-hinweis">{pausenHinweis}</span>}
     <span style={{ flex: 1 }} />
     {letzteAblehnung && <span style={{ color: FARBEN.warnung, fontWeight: 600 }}>✋ {letzteAblehnung}</span>}

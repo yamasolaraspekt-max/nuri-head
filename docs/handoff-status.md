@@ -32830,3 +32830,71 @@ steht.***
 
 **Ballbesitz: Generator** (Z-05/Z-06 · PB-023-Blatt) · **Planner** (Schwere PB-023) · **Yama**
 (nichts von mir).
+
+---
+
+## Generator — Z-05 gebaut, L-01 blockiert und zurückgemeldet (2026-08-01)
+
+**Gebaut:** `geometry/kontur.ts` (Selbstschnitt-Prüfung, Urteil, Statustexte), das Werkzeug
+`kontur` in der Typ-Union, der Konturzustand an der **einen** Aufräumstelle aus Z-01, Enter als
+eigene Absicht in der vorhandenen Tasten-Abbildung, die Vorschau auf der Bühne, elf neue Zusagen.
+
+    K-01 'kontur' in werkzeugArten.ts   0 -> 1
+    K-03 validation.ts gegen main       0, unveraendert (kein persistiertes Schema angefasst)
+    K-04 werkzeugEnde-Zusagen          15, unveraendert
+    K-05 Insel-Suite                 1603 / 1603   (1592 + 11)
+    tsc · schema · dom · build         EXIT 0, dom 29
+
+**K-06 Mutationsprobe — 8 Mutationen, SIEBEN kamen durch:**
+
+    BLIND (7)  Selbstschnitt liefert immer false · MIN_PUNKTE 3->2 · Flaechenpruefung aus
+               erste/letzte Kante nicht benachbart · Schliessen ohne Fangtoleranz
+               kollinearer Zweig entfernt · zugLaeuft ignoriert die Kontur
+    gefangen   Escape raeumt die Kontur nicht auf (aus Z-01)
+
+**Nach den Zusagen: 8 von 8 gefangen**, Wiederherstellung md5-identisch.
+
+**Begründete Nicht-Wiederverwendung (R5):** `istSichereKonvexeFlaeche` aus `dachAusschnitt.ts`
+lehnt Selbstschnitte zuverlässig ab — **und L-, T-, U-Formen genauso**, ausdrücklich dokumentiert.
+Das sind genau die Formen, für die es Z-05 gibt. *Wiederverwendet wird stattdessen
+`signierteFlaeche`; die Flächenformel steht weiterhin an einer Stelle.*
+
+**Zwei eigene Entscheidungen, die eine abgenommene Zusage gerettet haben:** mein erster
+Statushinweis war ein Inline-Stil und machte aus 20 Vorkommen 21 — *während AUF-38 sie gerade
+abbaut.* Jetzt eine Klasse (`hp-kontur-hinweis`). Und die geerbte Vorschau-Zusage in
+`buehne.test.ts` nannte die Felder des Zustands-Literals einzeln in fester Reihenfolge; sie prüft
+jetzt die Aussage. *Ein Muster, das jedes neue Feld nachziehen muss, geht bei jeder Erweiterung
+rot, ohne dass etwas kaputt ist.*
+
+---
+
+### ⛔ BLOCKIERT — L-01 ist nicht ausführbar, und der Grund ist keine Kleinigkeit
+
+**Das Werkzeug ist gebaut und in der Oberfläche unerreichbar.** Im Browser gemessen
+(1440 px, angemeldet, Expertenmodus):
+
+    ANKER   HTTP 200 · titel "SA-DESK - Hausplaner — Studio" · canvas 2
+    Leiste  ["Markieren","Wand","Fenster","Tür","Dach","Decke","Treppe"]
+    „Kontur" waehlbar          NEIN
+    „Wand" waehlbar (Partner)  JA      <- die Messung ist nicht leer
+    Taste U                    ohne Wirkung, "Markieren" bleibt aktiv
+
+**Ich habe den Registry-Eintrag gebaut und wieder zurückgedreht.** Gemessen mit ihm:
+
+    test:hausplaner   1588 / 1603, fail 15
+    „kontur steht in keinem Thema — im Menue unerreichbar"
+    „Fix-Zone = genau die 7 art:werkzeug-Registry-ids"
+    „kein Werkzeug hat die Oberflaeche verlassen — die Bilanz bleibt 110"
+
+Ein achtes Werkzeug braucht **Themen-Bindung, einen Vertrag im 110-Regeln-Katalog und verändert
+die Fix-Zone von sieben**. *Das ist keine additive Zeile, sondern eine eigene Scheibe.*
+`toolRegistry.ts` steht **unverändert** (`git diff` leer), die Suite ist wieder bei 1603/1603.
+
+**Befund gegen das Blatt:** `scope.dateien` nennt drei Dateien, aber **K-01 verlangt
+*„existiert in der UI-Auswahl"*** und **L-01 verlangt, damit im Browser zu zeichnen**. Beides ist
+mit diesen drei Dateien nicht erreichbar. *Der `population_command` misst nur die Typ-Union — er
+wird grün, während das Werkzeug unbenutzbar ist.* **Die Erreichbarkeit gehört als Z-05-N1
+geschnitten**, mit `toolRegistry.ts`, der Themen-Bindung und dem Katalog im Scope.
+
+**Ballbesitz: Planner** (Z-05-N1 schneiden · 200-px-Bühne bei 1024 · Blade-Lücke in `zaehle.mjs` ·
+die drei Befunde aus `8d5008f1`) · **Evaluator** (Z-02, Z-05).

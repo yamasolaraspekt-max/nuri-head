@@ -62,12 +62,19 @@ export interface ZeichenZustand {
   wandStart: StartPunkt | null;
   /** Gesetzter Anfangspunkt einer Treppen-Lauflinie, oder `null`. */
   treppeStart: StartPunkt | null;
+  /**
+   * Z-05: **die bisher gesetzten Punkte der Kontur.** Leer heisst: kein Konturzug laeuft.
+   *
+   * *Sie stehen HIER und nicht in einem eigenen Zustand, weil Z-01 genau das abgeschafft hat:
+   * sieben Aufraeumstellen wurden zu einer. Ein eigener Konturzustand waere die achte.*
+   */
+  konturPunkte: ReadonlyArray<StartPunkt>;
   /** Ist der Zeiger auf der Zeichenfläche? */
   zeigerDrinnen: boolean;
 }
 
 /** Nichts angefangen, Zeiger auf der Fläche. */
-export const ZEICHEN_LEER: ZeichenZustand = { wandStart: null, treppeStart: null, zeigerDrinnen: true };
+export const ZEICHEN_LEER: ZeichenZustand = { wandStart: null, treppeStart: null, konturPunkte: [], zeigerDrinnen: true };
 
 /**
  * **Der Werkzeugwechsel bricht ab.** Eine unbestätigte Teilaktion gehört dem alten Werkzeug; sie
@@ -78,7 +85,7 @@ export const ZEICHEN_LEER: ZeichenZustand = { wandStart: null, treppeStart: null
  * Startpunkte, sagten aber nichts über den Zeiger, und die fünfte (der Rückfall) setzte gar nichts.
  */
 export function beiWerkzeugwechsel(z: ZeichenZustand): ZeichenZustand {
-  return { wandStart: null, treppeStart: null, zeigerDrinnen: z.zeigerDrinnen };
+  return { wandStart: null, treppeStart: null, konturPunkte: [], zeigerDrinnen: z.zeigerDrinnen };
 }
 
 /**
@@ -96,7 +103,7 @@ export function beiZeigerEin(z: ZeichenZustand): ZeichenZustand {
 
 /** Läuft gerade ein Zug, der noch nicht bestätigt ist? */
 export function zugLaeuft(z: ZeichenZustand): boolean {
-  return z.wandStart !== null || z.treppeStart !== null;
+  return z.wandStart !== null || z.treppeStart !== null || z.konturPunkte.length > 0;
 }
 
 /**
@@ -106,9 +113,12 @@ export function zugLaeuft(z: ZeichenZustand): boolean {
  * *Ohne die zweite Bedingung bleibt die Linie beim Verlassen stehen — genau das, was Schritt 0
  * gemessen hat.*
  */
-export function zeigtVorschau(z: ZeichenZustand, art: 'wand' | 'treppe'): boolean {
+export function zeigtVorschau(z: ZeichenZustand, art: 'wand' | 'treppe' | 'kontur'): boolean {
   if (!z.zeigerDrinnen) return false;
-  return art === 'wand' ? z.wandStart !== null : z.treppeStart !== null;
+  if (art === 'wand') return z.wandStart !== null;
+  if (art === 'treppe') return z.treppeStart !== null;
+
+  return z.konturPunkte.length > 0;
 }
 
 /**

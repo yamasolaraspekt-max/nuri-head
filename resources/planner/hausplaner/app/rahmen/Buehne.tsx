@@ -77,6 +77,8 @@ export interface BuehneEigenschaften {
   setCursor: (p: Punkt) => void;
   wandStart: Punkt | null;
   treppeStart: { x: number; y: number } | null;
+  /** Z-05: die bisher gesetzten Konturpunkte. Leer heisst: kein Konturzug laeuft. */
+  konturPunkte: ReadonlyArray<Punkt>;
   /** Z-01: steht der Zeiger auf der Flaeche? Draussen wird die Vorschau AUSGEBLENDET. */
   zeigerDrinnen: boolean;
   /** Z-01: die Buehne MELDET nur — der Zustand wohnt in der Hauptfunktion (K-03: kein Zustand hier). */
@@ -91,7 +93,7 @@ export interface BuehneEigenschaften {
 export function Buehne({
   stageBreite, hoehe, zoom, setZoom, pan, setPan, rasterAn, rasterLinien, stageRef,
   scene, level, nodes, waende, raeume, bandVon, massElemente, selectedNodeIds, unterlage,
-  werkzeug, cursor, setCursor, wandStart, treppeStart, zeigerDrinnen, beiZeigerAus, beiZeigerEin,
+  werkzeug, cursor, setCursor, wandStart, treppeStart, konturPunkte, zeigerDrinnen, beiZeigerAus, beiZeigerEin,
   klick, weltPunkt, mitWinkelSnap, waehleAn,
 }: BuehneEigenschaften): React.ReactElement {
   return (
@@ -373,7 +375,7 @@ export function Buehne({
         })}
 
         {/* Vorschau beim Treppezeichnen */}
-        {zeigtVorschau({ wandStart, treppeStart, zeigerDrinnen }, 'treppe') && treppeStart && werkzeug === 'treppe' && (
+        {zeigtVorschau({ wandStart, treppeStart, konturPunkte, zeigerDrinnen }, 'treppe') && treppeStart && werkzeug === 'treppe' && (
           <Group listening={false}>
             <Line points={[treppeStart.x, treppeStart.y, mitWinkelSnap(treppeStart, cursor).x, mitWinkelSnap(treppeStart, cursor).y]} stroke={FARBEN.auswahl} strokeWidth={50} dash={[200, 120]} />
             <Circle x={treppeStart.x} y={treppeStart.y} radius={90} fill={FARBEN.auswahl} />
@@ -381,10 +383,28 @@ export function Buehne({
         )}
 
         {/* Vorschau beim Wandzeichnen */}
-        {zeigtVorschau({ wandStart, treppeStart, zeigerDrinnen }, 'wand') && wandStart && werkzeug === 'wand' && (
+        {zeigtVorschau({ wandStart, treppeStart, konturPunkte, zeigerDrinnen }, 'wand') && wandStart && werkzeug === 'wand' && (
           <Group listening={false}>
             <Line points={[wandStart.x, wandStart.y, mitWinkelSnap(wandStart, cursor).x, mitWinkelSnap(wandStart, cursor).y]} stroke={FARBEN.auswahl} strokeWidth={60} dash={[200, 120]} />
             <Circle x={wandStart.x} y={wandStart.y} radius={90} fill={FARBEN.auswahl} />
+          </Group>
+        )}
+
+        {/* Z-05: die Kontur ist sichtbar, WAEHREND man sie zeichnet — das ist ihr Entdeckungsweg.
+            Der erste Punkt traegt einen groesseren Ring: er ist das Ziel zum Schliessen, und ohne
+            Markierung sucht man ihn. */}
+        {zeigtVorschau({ wandStart, treppeStart, konturPunkte, zeigerDrinnen }, 'kontur') && werkzeug === 'kontur' && (
+          <Group listening={false}>
+            <Line
+              points={[...konturPunkte.flatMap((q) => [q.x, q.y]), cursor.x, cursor.y]}
+              stroke={FARBEN.auswahl}
+              strokeWidth={50}
+              dash={[200, 120]}
+            />
+            <Circle x={konturPunkte[0]!.x} y={konturPunkte[0]!.y} radius={140} stroke={FARBEN.auswahl} strokeWidth={40} />
+            {konturPunkte.slice(1).map((q, i) => (
+              <Circle key={i} x={q.x} y={q.y} radius={70} fill={FARBEN.auswahl} />
+            ))}
           </Group>
         )}
       </Layer>

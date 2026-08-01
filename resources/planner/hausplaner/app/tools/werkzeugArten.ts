@@ -9,4 +9,13 @@
  * *Umgezogen, nicht verdoppelt: es gibt weiterhin genau eine Definition, und kein Wert hat sich
  * geändert.*
  */
-export type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'decke';
+/**
+ * Z-05: **`kontur` ist der achte Wert** — ein Bauteil-Umriss, kein Zeichen-Primitiv.
+ *
+ * *Nicht `polygon`:* dieser Name gehoert zu den sechs stillgelegten Primitiven (Linie, Rechteck,
+ * Kreis …), die ausdruecklich nicht in einen Bauplaner gehoeren. Sie bleiben stillgelegt.
+ *
+ * **Diese Union ist reiner UI-Zustand.** Im Zod-Schema kommt `werkzeug` nicht vor (gemessen: 0
+ * Treffer in `domain/validation.ts`) — ein achter Wert aendert also KEIN persistiertes Schema.
+ */
+export type Werkzeug = 'auswahl' | 'wand' | 'fenster' | 'tuer' | 'dach' | 'treppe' | 'decke' | 'kontur';
