@@ -82,6 +82,45 @@ export function fange(
 }
 
 
+/**
+ * **Der Fangradius in BILDSCHIRM-Pixeln** — und das ist der ganze Befund von Z-02.
+ *
+ * Bis heute stand im Bauteil ein fester Radius von 150 **Millimetern**. Millimeter sind
+ * Weltkoordinaten; wie viel davon der Mensch am Schirm sieht, hängt am Zoom:
+ *
+ * ```text
+ * Zoom (px pro mm)   150 mm entsprechen        12 px entsprechen
+ *   0.02                   3 Bildschirmpixel        600 mm
+ *   0.12 (Standard)       18 Bildschirmpixel        100 mm
+ *   0.50                  75 Bildschirmpixel         24 mm
+ * ```
+ *
+ * *Bei 0,02 war der Fang praktisch tot — drei Pixel trifft niemand. Bei 0,5 riss er den Zeiger
+ * aus 75 Pixeln Entfernung an sich.* **Ein Radius, der sich nicht mit dem Zoom ändert, ist
+ * entweder unbrauchbar oder aufdringlich, nie beides richtig.**
+ */
+export const FANG_PX = 12;
+
+/**
+ * **Bildschirm-Pixel in Welt-Millimeter, über den Zoom.**
+ *
+ * *Warum das hier steht und nicht im Bauteil:* die Umrechnung ist der Kern der Entscheidung von
+ * Z-02, und im Rumpf einer React-Funktion wäre sie von keiner Zusage erreichbar. Hier ist sie
+ * eine reine Funktion — prüfbar, ohne den Planer zu starten.
+ *
+ * **Der Wächter gegen `zoom = 0`:** eine Division durch null ergäbe `Infinity`, und eine
+ * unendliche Toleranz fängt **jeden** Punkt auf den nächstbesten Endpunkt. Das sähe nicht nach
+ * einem Fehler aus, sondern nach einem sehr eifrigen Fang. Deshalb fällt die Funktion auf den
+ * Pixelwert zurück, statt still etwas Unsinniges zu liefern.
+ */
+export function toleranzAusZoom(zoom: number, fangPx: number = FANG_PX): number {
+  if (!(zoom > 0)) {
+    return fangPx;
+  }
+
+  return fangPx / zoom;
+}
+
 /** Eine Wandstrecke (für die Fangpunkt-Sammlung). */
 export interface WandStrecke {
   start: FangPunkt;

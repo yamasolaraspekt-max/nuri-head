@@ -21,6 +21,8 @@ import { T, FARBEN } from './studioDaten';
 import { erkenneRaeume } from '../geometry/roomDetection';
 import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, wandBaender, type Punkt } from '../geometry/wallGeometry';
+// Z-02: der geprüfte Fang-Kern wird angeschlossen, statt im Bauteil ein zweites Mal gerechnet.
+import { fange, toleranzAusZoom } from '../geometry/fangKern';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
 import { aufloeseAuswahlmodus, wendeAuswahlAn, klickInsLeere } from './tools/auswahlModus';
@@ -612,22 +614,34 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     let x = (zeiger.x - stage.x()) / zoom;
     let y = -((zeiger.y - stage.y()) / zoom);
 
-    if (scene.settings.snapEnabled) {
-      // 1) Endpunkt-Snap (150 mm Radius) hat Vorrang.
-      for (const w of waende) {
-        for (const p of [w.start, w.end]) {
-          if (Math.hypot(p.x - x, p.y - y) <= 150) {
-            return { x: p.x, y: p.y };
-          }
-        }
-      }
-      // 2) Raster-Snap.
-      const g = scene.settings.gridSize || 100;
-      x = Math.round(x / g) * g;
-      y = Math.round(y / g) * g;
+    // **Z-02: der Fang kommt aus `fangKern`, nicht mehr aus dieser Funktion.**
+    //
+    // Hier stand eine eigene Endpunkt-Schleife mit fest verdrahteten 150 mm — eine zweite
+    // Fang-Wahrheit neben dem geprüften Kern, der von nichts benutzt wurde. Jetzt entscheidet
+    // `fange()`; diese Funktion liefert nur noch die Operanden.
+    //
+    // **Nur Endpunkte als Kandidaten, ausdrücklich NICHT `wandFangpunkte()`.** Die Sammelfunktion
+    // im Kern liefert Endpunkte *und Mittelpunkte* — Mittelpunkt-Fang ist Z-04. Sie hier zu
+    // benutzen wäre bequem und brächte stillschweigend das Verhalten einer anderen Scheibe mit.
+    const kandidaten: Punkt[] = [];
+    for (const w of waende) {
+      kandidaten.push(w.start, w.end);
     }
 
-    return { x: Math.round(x), y: Math.round(y) };
+    // **`aktiv` statt eines eigenen `if`:** ist der Fang aus, gibt der Kern den gerundeten
+    // Rohpunkt zurück — genau das, was der frühere `return` am Ende tat. Eine Verzweigung
+    // weniger, und die Abschaltung liegt an einer Stelle.
+    const { punkt } = fange(
+      { x, y },
+      kandidaten,
+      {
+        toleranzMm: toleranzAusZoom(zoom),
+        raster: scene.settings.gridSize || 100,
+        aktiv: scene.settings.snapEnabled,
+      },
+    );
+
+    return punkt;
   }
 
   /** Winkel-Snap für das Wandzeichnen (angleSnap-Grad-Raster um den Startpunkt). */

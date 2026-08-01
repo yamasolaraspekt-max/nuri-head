@@ -32661,3 +32661,61 @@ lesen, gegen die sie abweicht.*
 
 **Ballbesitz: Generator** (Meldungstext im Validator, P3 · Z-02/Z-05/Z-06 · PB-023-Blatt) ·
 **Planner** (Schwere PB-023) · **Yama** (nichts von mir).
+
+---
+
+## Generator — Z-02 umgesetzt: der Fang-Kern ist angeschlossen (2026-08-01)
+
+**`weltPunkt()` ruft jetzt `fange()`.** Die eigene Endpunkt-Schleife mit fest verdrahteten 150 mm
+ist weg; die Toleranz kommt aus dem Zoom.
+
+    K-01 Importeure ausserhalb der Tests   0 -> 1
+    K-02 zweite Fang-Wahrheit              1 -> 0
+    K-04 Zusagen des Kerns                 12, unveraendert
+    K-05 Insel-Suite                       1592 / 1592   (1583 + 9 neue)
+    tsc · schema · dom · build             EXIT 0, dom 29
+
+**K-06 Mutationsprobe — 8 Mutationen, SECHS kamen durch:**
+
+    BLIND (6)  Toleranz mit dem Zoom MULTIPLIZIERT · `aktiv` ignoriert · FANG_PX 12 -> 1200
+               nur Wandanfaenge als Kandidaten · Waechter gegen zoom=0 entfernt · Raster aus
+    gefangen   y-Spiegelung gedreht · Endpunkt gewinnt nie
+
+*Die zwei gefangenen trafen Zusagen über die Zeichenfläche, nicht über den Fang. Von dem, was
+Z-02 wirklich anfasst, hielt nichts.* **Nach den neun neuen Zusagen: 8 von 8 gefangen**,
+Wiederherstellung md5-identisch.
+
+**Eine Falle im Blatt-Scope, vor dem Bau bemerkt:** `wandFangpunkte()` liegt fertig im Kern und
+wäre die bequeme Wahl — **sie liefert aber Endpunkte UND Mittelpunkte**, und Mittelpunkt-Fang ist
+ausdrücklich Z-04. Die Kandidaten werden deshalb aus den Endpunkten gebaut; eine Zusage hält die
+Grenze fest.
+
+### L-01 im Browser — drei Viewports
+
+    1440   8 px -> GEFANGEN   20 px -> nicht gefangen (+200 mm)   [zoom 0.120, Toleranz 100 mm]
+           8 px -> GEFANGEN   20 px -> nicht gefangen (+800 mm)   [zoom 0.023, Toleranz 516 mm]
+           Fang aus: nicht gefangen (+308 mm)
+    1024   dieselben vier Zeilen, identisches Ergebnis
+     375   die Mindestbreiten-Sperre (AUF-91) liegt ueber dem Planer — nichts zu bedienen,
+           und das ist das richtige Ergebnis
+
+**Gemessen wurde der gleiche BILDSCHIRM-Abstand bei verschiedenen Zoomstufen** — das ist der Kern
+von Z-02. *Mit den alten 150 mm hätte derselbe Abstand je nach Zoom mal gefangen und mal nicht: bei
+Zoom 0,02 waren 150 mm drei Bildschirmpixel.*
+
+**Vier eigene Messfehler, alle vor dem Melden gefunden:** `find('Node')` ist kein Konva-Selektor ·
+ein `.click()` aus `evaluate` aktiviert das Werkzeug nicht (kein vertrauenswürdiges Ereignis) ·
+Escape setzt das Werkzeug zurück, danach zeichnet der Klick nichts · die Ecke der Probewand war je
+nach Klickrichtung Minimum oder Maximum. *Jeder davon sah aus wie „der Fang trifft nicht".*
+
+### ⚠ Nebenbefund — bei Viewport 1024 ist die Zeichenfläche 200 px breit
+
+    Viewport 1024   Buehne cw = 200 px, ch = 446 px  (cx 473 .. 673)
+    Viewport 1440   Buehne cw = 595 px
+
+**Die Schienen nehmen bei 1024 px vier Fünftel der Breite.** Der Fang funktioniert dort messbar,
+aber 200 px sind keine Zeichenfläche. *Das ist kein Z-02-Mangel — es ist das, wofür es die
+Drei-Viewport-Pflicht gibt.* Gehört als eigener Posten aufgenommen.
+
+**Ballbesitz: Planner** (200-px-Bühne bei 1024 · Blade-Lücke in `zaehle.mjs` · die drei Befunde
+aus `8d5008f1`) · **Generator** (Z-05 steht auf `bereit`).
