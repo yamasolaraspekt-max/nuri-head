@@ -72,3 +72,45 @@ test('ohneKommentare laesst den Rest unangetastet', () => {
   assert.match(ohneKommentare(t), /b/);
   assert.doesNotMatch(ohneKommentare(t), /weg/);
 });
+
+// --- Zwei Löcher in der Barriere selbst, gefunden 01.08. 13:0x -------------------------------------
+
+/**
+ * **Zwei Stunden nachdem ich `zaehle.mjs` als Barriere gemeldet hatte, hatte sie zwei Löcher.**
+ * *Gefunden nicht durch Nachdenken, sondern durch drei Randfälle, die ich gegen die eigene Arbeit
+ * gefahren habe — auf Yamas Frage „bist du sicher, dass nichts offen ist".*
+ *
+ * **Das zweite Loch war das gefährliche:** ein `//` in einer Zeichenkette machte echten Code
+ * unsichtbar. **Ein Zähler, der zu WENIG meldet, lässt ein Kriterium „erwartet 0" grün werden,
+ * obwohl die Stelle noch dasteht** — genau der Fehler, den die Barriere verhindern sollte.
+ */
+test('Loch 1: ein unbeendeter Blockkommentar verschluckte nicht mehr, sondern zu wenig', () => {
+  const css = '.a { color: #111111; } /* unbeendet\n.b { color: #222222; }\n';
+  assert.equal(zaehle(css, '#[0-9a-f]{6}'), 1, 'nur die Farbe VOR dem offenen Kommentar zählt');
+});
+
+test('Loch 2: `//` in einer Zeichenkette ist Code, kein Kommentar', () => {
+  const ts = 'const s = "// kein Kommentar";\nconst t = 1;';
+  assert.equal(zaehle(ts, 'kein Kommentar'), 1, 'der Inhalt einer Zeichenkette bleibt stehen');
+});
+
+test('Loch 2, die andere Richtung: was WIRKLICH hinter // steht, verschwindet weiter', () => {
+  const ts = 'const s = "a"; // hier steht wegdamit\n';
+  assert.equal(zaehle(ts, 'wegdamit'), 0);
+});
+
+test('eine URL in CSS ist kein Kommentar', () => {
+  const css = 'a { background: url(http://x.test/i.png); }\n.b { color: #abcdef; }';
+  assert.equal(zaehle(css, '#[0-9a-f]{6}'), 1);
+  assert.equal(zaehle(css, 'x\\.test'), 1);
+});
+
+test('Gegenprobe an einer echten Datei: der Zähler misst nach dem Umbau dasselbe wie vorher', () => {
+  // HausplanerApp.tsx im Stand von 7e2bf407 trug GENAU EINE eigene Fang-Schleife. Die alte
+  // Fassung dieser Funktion zählte dort 1, die neue muss dasselbe zählen — sonst hätte die
+  // Reparatur der zwei Löcher ein drittes aufgerissen.
+  const quelle = 'if (Math.hypot(p.x - x, p.y - y) <= 150) { return { x: p.x, y: p.y }; }\n'
+    + '// 1) Endpunkt-Snap (150 mm Radius) hat Vorrang.';
+  assert.equal(zaehle(quelle, 'hypot\\(p\\.x - x, p\\.y - y\\)'), 1);
+  assert.equal(zaehle(quelle, '150', { wort: true }), 1, 'die 150 im Kommentar zählt nicht mit');
+});

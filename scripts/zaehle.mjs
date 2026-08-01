@@ -24,14 +24,37 @@
  */
 import { readFileSync } from 'node:fs';
 
-/** Blockkommentare, Zeilenkommentare, HTML- und Raute-Kommentare entfernen. */
+/**
+ * Blockkommentare, Zeilenkommentare, HTML- und Raute-Kommentare entfernen.
+ *
+ * **Zwei Fehler, die diese Fassung behebt — beide gefunden am 01.08. um 13:0x, zwei Stunden nachdem
+ * ich diese Datei als „Barriere" gemeldet hatte.** *Sie stehen hier, weil eine Barriere mit einem
+ * stillen Loch schlimmer ist als gar keine: sie erzeugt Vertrauen, das sie nicht trägt.*
+ *
+ * 1. **`//` in einer Zeichenkette wurde als Kommentar gelesen** — `const s = "// kein Kommentar";`
+ *    verlor seinen Inhalt. **Das ist die gefährliche Richtung: der Zähler meldet weniger, als da
+ *    ist.** Ein Kriterium „erwartet 0" wäre grün geworden, obwohl die Stelle noch dasteht.
+ *    *Behoben, indem Zeichenketten VOR dem Kommentar-Abzug maskiert und danach zurückgesetzt werden.*
+ * 2. **Ein unbeendeter `/*` blieb stehen** — dahinter wurde weitergezählt. *Behoben: ein `/*` ohne
+ *    Abschluss gilt bis zum Dateiende, so wie jeder Parser es auch sieht.*
+ */
 export function ohneKommentare(text, { raute = false } = {}) {
-  let t = text;
-  t = t.replace(/\/\*[\s\S]*?\*\//g, '');          // /* ... */   CSS, JS, TS
+  // 1) Zeichenketten wegsperren, damit ein `//` oder `/*` darin nichts anrichtet.
+  const tresor = [];
+  let t = text.replace(/(['"`])(?:\\.|(?!\1)[^\\\n])*\1/g, (treffer) => {
+    tresor.push(treffer);
+    return `\u0000${tresor.length - 1}\u0000`;
+  });
+
+  t = t.replace(/\/\*[\s\S]*?\*\//g, '');          // /* ... */   abgeschlossen
+  t = t.replace(/\/\*[\s\S]*$/, '');                // /* ...      ohne Abschluss: bis Dateiende
   t = t.replace(/<!--[\s\S]*?-->/g, '');            // <!-- ... --> HTML, Markdown
+  t = t.replace(/<!--[\s\S]*$/, '');                // <!-- ...    ohne Abschluss
   t = t.replace(/(^|[^:])\/\/[^\n]*/g, '$1');       // // ...      aber nicht in http://
   if (raute) t = t.replace(/(^|\s)#[^\n]*/gm, '$1'); // # ...      Shell, YAML
-  return t;
+
+  // 2) Zeichenketten zuruecksetzen - ihr Inhalt ist Code, kein Kommentar.
+  return t.replace(/\u0000(\d+)\u0000/g, (_, i) => tresor[Number(i)]);
 }
 
 /** Zählt, wie oft `muster` in `text` vorkommt. `wort` setzt Wortgrenzen. */
