@@ -232,3 +232,45 @@ Enden sind rot, und beide sehen von außen ruhig aus.*
 **Bis W-01 abgenommen ist, fährt niemand einen Verzeichnislauf über `docs/auftraege/`.** Der
 Evaluator hat das um 21:17 verfügt; `b01/K-05` ist seit `6cbe9578` entschärft, aber die
 strukturelle Lücke schließt erst dieses Blatt.
+
+---
+
+## BEFUND DES PLANNERS gegen die gebaute Fassung — 01.08. 23:0x, VOR der Abnahme
+
+*Widerspruch gehört vor den Bau, nicht in die Abnahme. Ich habe die Allowlist an einem frischen
+Blatt (PW-01) ausprobiert und melde, was dabei herauskam.*
+
+**Die Allowlist trifft ausgerechnet die Form, die unsere eigene Bauordnung vorschreibt.**
+
+```text
+node scripts/auftrag-pruefen.mjs docs/auftraege/bote-auftrag-pw01-sicherungs-push.md
+  UEBERSPRUNGEN  PW-02  "git" steht nicht auf der Erlaubnisliste
+                 $ git --no-optional-locks rev-list --count auto/...
+```
+
+`ALLOWLIST` führt `'git rev-list'` als Zwei-Wort-Muster. **`git --no-optional-locks rev-list`
+matcht es nicht** — die globale Option steht zwischen `git` und dem Unterbefehl.
+
+**Das ist keine Kleinigkeit:** der Governance-Skill schreibt für die Repo-Aufsicht ausdrücklich
+`git --no-optional-locks` vor, *„damit keine Locks entstehen"* — und F-10 (Lock-Reste) ist die
+eine Fehlerklasse, die auf diesem Mount nicht behebbar ist. **Die Allowlist bestraft die
+lock-sichere Form und lässt die lock-erzeugende durch.**
+
+```text
+grep -rh 'befehl: "' docs/auftraege/*.md | sed 's/.*befehl: "//' | grep -c '^git '   -> 36
+   davon mit --no-optional-locks                                                     ->  4
+   (alle vier in Blaettern von heute - die Form setzt sich gerade erst durch)
+```
+
+**Vorschlag, nicht Vorschrift** — das Muster soll globale Optionen zwischen `git` und dem
+Unterbefehl überspringen (`-c`, `-C <pfad>`, `--no-optional-locks`, `--git-dir`, `--work-tree`).
+**Wichtig dabei:** `git -c core.hooksPath=… push` darf dadurch nicht erlaubt werden — der
+Unterbefehl entscheidet, nicht die Option.
+
+**Zweiter, kleinerer Befund:** `ls -1 .git/*.lock 2>/dev/null | wc -l` wird von der **Denylist**
+als `umleitung` übersprungen. `2>/dev/null` ist eine Umleitung nach `/dev/null` und kann nichts
+überschreiben. *Das ist die alte Denylist-Regel, nicht deine — ich melde es hier, weil es an
+derselben Stelle auffällt.*
+
+**Beides ist ein Befund gegen die Fassung, kein Rot gegen die Richtung.** Die Allowlist ist der
+richtige Bau; sie ist an dieser Kante nur eine Spur zu eng.
