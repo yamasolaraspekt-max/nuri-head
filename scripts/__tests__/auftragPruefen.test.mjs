@@ -17,7 +17,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   pruefeBlatt, sammleBefehle, lieseKopfRoh, lieseAlleBloecke, zaehleBloecke, verbotenesMuster,
-  bericht, strukturBefunde, aktiveBlaetter, baubareBlaetter, brechendesGlied, STUFEN, DENYLIST,
+  bericht, strukturBefunde, aktiveBlaetter, baubareBlaetter, vergleicheErwartung, brechendesGlied, STUFEN, DENYLIST,
 } from '../auftrag-pruefen.mjs';
 
 const verz = mkdtempSync(join(tmpdir(), 'auf87-'));
@@ -475,4 +475,44 @@ test('F-08: `ruht` zaehlt nicht — der Zustand ist ausdruecklich NICHT nachgeme
 
 test('F-08: ein Blatt ohne Kopf hat keinen Status und ist nicht baubar', () => {
   assert.deepEqual(baubareBlaetter([{ pfad: 'alt.md', status: null }]), []);
+});
+
+// --- F-07 / F-04: was schon steht, wird nicht noch einmal bestellt -------------------------------
+
+/**
+ * **Der Fall:** `geometry/fangKern.ts` lag am 01.08. seit Tagen fertig da — 103 Zeilen, 12 Zusagen —
+ * **und wurde von nichts benutzt.** Beinahe hätte ich ihn ein zweites Mal bauen lassen (F-07).
+ * Und `ausgangswert` ist eine Messung vom Tag des Schreibens: **sie veraltet, ohne dass es jemand
+ * merkt** (F-04).
+ *
+ * **Die Grenze, die diese Zusagen ziehen:** eine **Wache** — ein Kriterium, dessen `ausgangswert`
+ * schon gleich `erwartet` ist — meldet KEIN „steht schon". Sie sagt ja gerade: *das ist heute so
+ * und soll so bleiben.* Ohne diese Grenze waren drei von acht Meldungen falscher Alarm.
+ */
+test('S-07: was `mindestens N` schon vor dem Bau erfuellt, ist kein Auftrag', () => {
+  const e = { id: 'K-1', stufe: STUFEN.OK, ausgabe: '3', erwartet: 'mindestens 1', ausgangswert: '0' };
+  assert.match(vergleicheErwartung(e).text, /STEHT SCHON/);
+  assert.equal(vergleicheErwartung(e).regel, 'S-07');
+});
+
+test('S-07 schweigt bei einer WACHE — Ausgangswert und Erwartung sind gleich', () => {
+  const wache = { id: 'K-2', stufe: STUFEN.OK, ausgabe: '0', erwartet: '0', ausgangswert: '0' };
+  assert.equal(vergleicheErwartung(wache), null, 'eine Wache ist kein Bauziel');
+});
+
+test('S-08: eine gebrochene Wache meldet sich — genau so fiel PB-023/K-03 auf', () => {
+  const wache = { id: 'K-3', stufe: STUFEN.OK, ausgabe: '1', erwartet: '0', ausgangswert: '0' };
+  const b = vergleicheErwartung(wache);
+  assert.equal(b.regel, 'S-08');
+  assert.match(b.text, /Blatt sagt 0, gemessen 1/);
+});
+
+test('S-08: ein veralteter Ausgangswert meldet sich', () => {
+  const e = { id: 'K-4', stufe: STUFEN.OK, ausgabe: '18', erwartet: '0', ausgangswert: '27' };
+  assert.match(vergleicheErwartung(e).text, /AUSGANGSWERT VERALTET/);
+});
+
+test('kein Alarm, wenn nichts eindeutig vergleichbar ist', () => {
+  assert.equal(vergleicheErwartung({ id: 'K-5', stufe: STUFEN.OK, ausgabe: 'gruen', erwartet: 'gruen' }), null);
+  assert.equal(vergleicheErwartung({ id: 'K-6', stufe: STUFEN.NICHT_MASCHINELL, ausgabe: null }), null);
 });

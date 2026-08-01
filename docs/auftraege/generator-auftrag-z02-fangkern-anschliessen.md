@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: Z-02
-  status: bereit
+  status: gebaut   # 8811e638, 01.08. 13:24 - wartet auf das Votum des Evaluators
 ```
 
 ## Warum das die erste Zeichnen-Scheibe nach Z-01 ist

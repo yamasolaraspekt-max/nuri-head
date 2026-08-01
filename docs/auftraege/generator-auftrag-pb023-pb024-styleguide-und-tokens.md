@@ -5,7 +5,10 @@
 ```yaml
 auftrag:
   id: PB-023+024
-  status: aktiv   # das EINE aktive Blatt (S-01), ueberarbeitet 01.08. nach der Rueckgabe des Generators
+  status: gebaut   # 8d5008f1, 01.08. 12:55 - wartet auf das Votum des Evaluators.
+  # S-07 hat es gemeldet: die Referenzflaeche traegt 55 hp-Klassen statt der geforderten 6,
+  # das Blatt stand aber noch auf `aktiv`. Ein Blatt, das seinen eigenen Bau nicht kennt,
+  # laesst die Schlange laenger aussehen, als sie ist.
 ```
 
 ## Warum das zusammengehört
@@ -119,14 +122,20 @@ kriterien:
 
   - id: K-03
     typ: absence
-    aussage: "tokenVariablen.ts bleibt DOM-frei - ohne Fenster pruefbar."
+    aussage: "tokenVariablen.ts loest KEINE Tokens zur Laufzeit auf - ohne Fenster pruefbar."
     pruefung:
-      befehl: "grep -o 'getComputedStyle\\|document\\.' resources/planner/hausplaner/app/stil/tokenVariablen.ts | wc -l"
+      befehl: "node scripts/zaehle.mjs resources/planner/hausplaner/app/stil/tokenVariablen.ts 'getComputedStyle'"
       erwartet: "0"
     ausgangswert: "0"
     gegenbeweis: |
       Die Laufzeit-Aufloesung ist der naheliegende Kurzschluss, wenn K-01 nicht weit genug traegt.
       Sie ist eine eigene Entscheidung (PB-024-N2), nicht ein Nebenweg dieses Blattes.
+      KORREKTUR 01.08. 19:0x: das Kriterium zaehlte zuerst `getComputedStyle` UND `document.`
+      und nannte als Ausgangswert 0. **Beides war falsch.** Zeile 39 der Datei greift bereits
+      auf `document.documentElement` zu - mit `typeof document !== 'undefined'` davor, also
+      genau der DOM-freie sichere Weg. Gemessen: 1, nicht 0. Der neue Validator-Vergleich
+      (S-08) hat die falsche Grundzahl gefunden, keine Minute nachdem er lief.
+      Gezaehlt wird jetzt nur noch `getComputedStyle` - das ist die echte Gefahr.
       Rotprobe des Planners: Kopie plus eine Zeile mit getComputedStyle(document.body) -> 3
       (der Befehl zaehlt beide Muster, und `document.` kommt in der Zeile zweimal vor -
       die Zahl ist also nicht 1; erwartet wird schlicht "groesser als 0" beim roten Fall).

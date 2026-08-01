@@ -121,7 +121,11 @@ export function sammleBefehle(kopf) {
     const id = k?.id ?? '(ohne id)';
     const p = k?.pruefung ?? {};
     if (typeof p.befehl === 'string' && p.befehl.trim()) {
-      gefunden.push({ id, befehl: p.befehl.trim(), typ: p.typ ?? null, ausgefuehrt_von: k?.ausgefuehrt_von ?? null });
+      // `erwartet` und `ausgangswert` reisen mit - S-07/S-08 vergleichen die Ausgabe damit.
+      gefunden.push({
+        id, befehl: p.befehl.trim(), typ: p.typ ?? null, ausgefuehrt_von: k?.ausgefuehrt_von ?? null,
+        erwartet: p.erwartet ?? null, ausgangswert: k?.ausgangswert ?? null,
+      });
     } else if (p.typ && p.typ !== 'befehl') {
       // Kein Befehl, aber eine Prüfung: der Validator darf NICHT so tun, als hätte er das geprüft.
       gefunden.push({ id, befehl: null, typ: p.typ, ausgefuehrt_von: k?.ausgefuehrt_von ?? null });
@@ -154,7 +158,10 @@ export function pruefeEintrag(eintrag, arbeitsverzeichnis) {
     if (ausgabe.trim() === '') {
       return { ...eintrag, stufe: STUFEN.VERDAECHTIG, hinweis: 'exit 0, aber KEINE Ausgabe' };
     }
-    return { ...eintrag, stufe: STUFEN.OK, hinweis: `${ausgabe.trim().split('\n').length} Zeile(n)` };
+    return {
+      ...eintrag, stufe: STUFEN.OK, ausgabe: ausgabe.trim(),
+      hinweis: `${ausgabe.trim().split('\n').length} Zeile(n)`,
+    };
   } catch (fehler) {
     const code = fehler?.status ?? '?';
     const kette = brechendesGlied(eintrag.befehl, arbeitsverzeichnis);
@@ -166,6 +173,69 @@ export function pruefeEintrag(eintrag, arbeitsverzeichnis) {
     }
     return { ...eintrag, stufe: STUFEN.FEHLSCHLAG, hinweis: `exit ${code}` };
   }
+}
+
+/**
+ * **Die Barriere fuer F-07 und die zweite Haelfte von F-04.**
+ *
+ * **F-07 — „Bestand nicht gemessen, sondern nachgebaut"** (Zaehler 5): ein Auftrag beschreibt als
+ * *zu bauen*, was schon steht. *Am 01.08. lag `geometry/fangKern.ts` seit Tagen fertig da und wurde
+ * von nichts benutzt — beinahe haette ich ihn ein zweites Mal bauen lassen.*
+ *
+ * **F-04 — „Zahl behauptet statt gemessen"** (Zaehler 5): der `ausgangswert` im Blatt ist eine
+ * Messung zum Zeitpunkt des Schreibens. **Er veraltet, und niemand merkt es** — bis die Abnahme
+ * gegen eine Zahl prueft, die nie gestimmt hat.
+ *
+ * **Was hier passiert:** die Kriterien laufen ohnehin. Ihre Ausgabe wird jetzt gegen `erwartet`
+ * und `ausgangswert` gehalten:
+ *
+ * - Ausgabe erfuellt `erwartet` **schon vor dem Bau** ⇒ `STEHT SCHON` (F-07). *Nichts zu tun,
+ *   oder das Kriterium misst das Falsche.*
+ * - Ausgabe passt nicht zum `ausgangswert` ⇒ `AUSGANGSWERT VERALTET` (F-04/F-03).
+ *
+ * **Bewusst konservativ:** verglichen wird nur, was eindeutig ist — eine nackte Zahl oder
+ * `mindestens N`. Alles andere wird stillschweigend uebergangen. *Ein Werkzeug, das bei jedem
+ * zweiten Blatt falschen Alarm gibt, wird abgeschaltet, und dann faengt es auch die echten
+ * Faelle nicht mehr.*
+ */
+export function vergleicheErwartung(eintrag) {
+  const zahl = (s) => {
+    const m = String(s ?? '').trim().match(/^-?\d+/);
+    return m ? Number(m[0]) : null;
+  };
+  const ist = zahl(eintrag.ausgabe);
+  if (ist === null || eintrag.stufe !== STUFEN.OK) return null;
+
+  const erwartetRoh = String(eintrag.erwartet ?? '').trim();
+  const mindestens = erwartetRoh.match(/^mindestens\s+(\d+)/i);
+  const nackt = /^-?\d+$/.test(erwartetRoh) ? Number(erwartetRoh) : null;
+
+  const ausgang = zahl(eintrag.ausgangswert);
+  // **Eine WACHE ist kein Bauziel.** Traegt das Blatt denselben Wert als `ausgangswert` wie als
+  // `erwartet`, sagt es ausdruecklich: "das ist heute schon so und soll so bleiben" - etwa
+  // "keine CSS-Variable in der Zeichenflaechen-Palette". S-07 darauf loszulassen hiesse, jede
+  // Wache als Fehler zu melden. Gemessen am 01.08.: drei von acht Meldungen waren genau das.
+  const istWache = ausgang !== null && (
+    (nackt !== null && ausgang === nackt) || (mindestens && ausgang >= Number(mindestens[1]))
+  );
+  if (istWache) {
+    // Eine Wache meldet kein "steht schon" - aber wenn die Messung vom eigenen Ausgangswert
+    // abweicht, ist die Wache **heute schon gebrochen** oder der Ausgangswert war nie richtig.
+    // Genau so ist am 01.08. eine falsche Grundzahl in PB-023/K-03 aufgefallen (Blatt 0, echt 1).
+    return ist === ausgang ? null
+      : { regel: 'S-08', id: eintrag.id, text: `WACHE STIMMT NICHT — Blatt sagt ${ausgang}, gemessen ${ist} (F-04)` };
+  }
+
+  if (mindestens && ist >= Number(mindestens[1])) {
+    return { regel: 'S-07', id: eintrag.id, text: `STEHT SCHON — Messung ${ist} erfuellt "${erwartetRoh}" bereits vor dem Bau (F-07)` };
+  }
+  if (nackt !== null && ist === nackt) {
+    return { regel: 'S-07', id: eintrag.id, text: `STEHT SCHON — Messung ${ist} ist bereits der Zielwert (F-07)` };
+  }
+  if (ausgang !== null && ausgang !== ist) {
+    return { regel: 'S-08', id: eintrag.id, text: `AUSGANGSWERT VERALTET — Blatt sagt ${ausgang}, gemessen ${ist} (F-04/F-03)` };
+  }
+  return null;
 }
 
 /**
@@ -324,9 +394,15 @@ export function pruefeBlatt(pfad, arbeitsverzeichnis = process.cwd()) {
   }
   const messungen = weitere.filter(Boolean).filter((b) => b.measurements || b.messungen).length;
   const auftrag = kopf?.auftrag ?? kopf ?? {};
+  const status = auftrag?.status ?? null;
+  // S-07/S-08 gelten nur, solange das Blatt noch gebaut werden SOLL. Nach dem Bau ist
+  // "erfuellt" der Normalfall - dort waere die Meldung Laerm und wuerde das Werkzeug entwerten.
+  const erwartungen = (status === 'bereit' || status === 'aktiv')
+    ? eintraege.map(vergleicheErwartung).filter(Boolean)
+    : [];
   return {
     pfad, kopf: true, bloecke: zaehleBloecke(text), eintraege,
-    status: auftrag?.status ?? null, struktur: strukturBefunde(kopf), messbloecke: messungen,
+    status, struktur: strukturBefunde(kopf), messbloecke: messungen, erwartungen,
   };
 }
 
@@ -343,6 +419,9 @@ export function bericht(ergebnis) {
   if (ergebnis.bloecke > 1) {
     zeilen.push(`   ${ergebnis.bloecke} yaml-Bloecke gelesen`
       + (ergebnis.messbloecke ? ` (davon ${ergebnis.messbloecke} mit Messungen)` : ''));
+  }
+  for (const b of ergebnis.erwartungen ?? []) {
+    zeilen.push(`   ${('SPERRE ' + b.regel).padEnd(16)} ${String(b.id).padEnd(24)} ${b.text}`);
   }
   for (const b of ergebnis.struktur ?? []) {
     zeilen.push(`   ${('STRUKTUR ' + b.regel).padEnd(16)} ${String(b.id).padEnd(24)} ${b.text}`);
@@ -382,6 +461,9 @@ if (istDirekterAufruf) {
     console.log(bericht(e));
     fehlschlaege += e.eintraege.filter((x) => x.stufe === STUFEN.FEHLSCHLAG).length;
     fehlschlaege += (e.struktur ?? []).length;
+    // S-07 "steht schon" sperrt: ein Blatt, das Vorhandenes bauen laesst, kostet einen ganzen
+    // Durchlauf. S-08 "Ausgangswert veraltet" meldet nur - die Zahl kann aus gutem Grund wandern.
+    fehlschlaege += (e.erwartungen ?? []).filter((x) => x.regel === 'S-07').length;
     // PB-019 - der Befund lautete: "der Validator BENENNT `KEIN KOPF`, gibt aber exit 0; sechs
     // aktive Blaetter kaemen so durch". Ein Gate, das nur redet, ist keine Barriere (R9).
     if (!e.kopf && e.aktivOhneKopf) fehlschlaege += 1;
