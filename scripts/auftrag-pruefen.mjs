@@ -282,8 +282,37 @@ export function brechendesGlied(befehl, arbeitsverzeichnis) {
  * **Genau diese fünf, keine sechste.** Ein Meta-System, das jede Konvention erzwingt, wird
  * abgeschaltet; diese fünf sind an echten Rückweisungen belegt.
  */
+/**
+ * **Die Barriere fuer F-03 und F-12 — „Messung aelter als der Baum".**
+ *
+ * Der Pruefende misst einen Stand, den der Bauende schon verlassen hat. *Am 30.07. hat das viermal
+ * Zeit gekostet; beim dritten Mal wurde es teuer.* **R14 verlangte bisher, dass jemand daran denkt,
+ * `git log -1` vorher und nachher zu vergleichen.** Hier tut es das Werkzeug: die Kriterien laufen
+ * ueber Sekunden bis Minuten, und wenn eine andere Rolle in dieser Zeit committet, sind alle
+ * gemessenen Zahlen von einem Baum, den es nicht mehr gibt.
+ */
+export function baumStand(arbeitsverzeichnis = process.cwd()) {
+  try {
+    return execSync('git --no-optional-locks rev-parse HEAD', {
+      cwd: arbeitsverzeichnis, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+  } catch {
+    return null;
+  }
+}
+
 export function strukturBefunde(kopf) {
   const befunde = [];
+  // **S-09 / F-08b** — „Eine Entscheidung aendert den Auftrag und steht nur in Tafel und Ledger,
+  // nicht im Blatt." Ein Kopf OHNE `status` kann diese Entscheidung gar nicht tragen: er ist von
+  // aussen nicht unterscheidbar in aktiv, gesperrt oder laengst erledigt. Am 01.08. trugen 17
+  // Blaetter `aktiv`, obwohl die meisten gebaut waren - genau dieser Fall, nur andersherum.
+  {
+    const a = kopf?.auftrag ?? kopf ?? {};
+    if (kopf && !a?.status) {
+      befunde.push({ regel: 'S-09', id: a?.id ?? '(ohne id)', text: 'Kopf ohne `status` — die Lage des Blattes steht dann nur in Tafel und Ledger (F-08b)' });
+    }
+  }
   const auftrag = kopf?.auftrag ?? kopf ?? {};
   const kriterien = kopf?.kriterien ?? auftrag?.kriterien ?? [];
   const liste = Array.isArray(kriterien) ? kriterien : [];
@@ -455,6 +484,7 @@ if (istDirekterAufruf) {
   }
   let fehlschlaege = 0;
   const alle = [];
+  const baumVorher = baumStand();
   for (const pfad of dateien) {
     const e = pruefeBlatt(pfad);
     alle.push(e);
@@ -491,6 +521,15 @@ if (istDirekterAufruf) {
       for (const p of baubar) console.log(`                  ${p}`);
       fehlschlaege += 1;
     }
+  }
+  // S-10 / F-03 + F-12: hat sich der Baum waehrend der Messung bewegt?
+  const baumNachher = baumStand();
+  if (baumVorher && baumNachher && baumVorher !== baumNachher) {
+    console.log(`\n── STRUKTUR S-10  DER BAUM HAT SICH WAEHREND DER MESSUNG BEWEGT (F-03/F-12)`);
+    console.log(`                  vorher  ${baumVorher.slice(0, 8)}`);
+    console.log(`                  nachher ${baumNachher.slice(0, 8)}`);
+    console.log('                  Jede Zahl oben stammt aus einem Baum, den es nicht mehr gibt. Noch einmal fahren.');
+    fehlschlaege += 1;
   }
   // **Der Exitcode meldet nur FEHLSCHLAG.** „Verdaechtig" und „nicht maschinell" sind Hinweise an
   // einen Menschen, keine Gruende, eine Kette abzubrechen — sonst wird das Werkzeug abgeschaltet.

@@ -17,7 +17,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   pruefeBlatt, sammleBefehle, lieseKopfRoh, lieseAlleBloecke, zaehleBloecke, verbotenesMuster,
-  bericht, strukturBefunde, aktiveBlaetter, baubareBlaetter, vergleicheErwartung, brechendesGlied, STUFEN, DENYLIST,
+  bericht, strukturBefunde, aktiveBlaetter, baubareBlaetter, vergleicheErwartung, baumStand, brechendesGlied, STUFEN, DENYLIST,
 } from '../auftrag-pruefen.mjs';
 
 const verz = mkdtempSync(join(tmpdir(), 'auf87-'));
@@ -288,9 +288,12 @@ test('N2/K-02: ein Kriterium ohne Befehl und ohne Prüftyp ⇒ Strukturbefund', 
     kriterien: [{ id: 'K-01', typ: 'presence', pruefung: {} }],
   });
   assert.ok(befunde.some((b) => b.regel === 'S-02' && b.id === 'K-01'), 'S-02 greift nicht');
-  // Mit Befehl ist es sauber:
+  // Mit Befehl ist es sauber. **S-09 wird herausgefiltert** — dieser Kopf traegt bewusst keinen
+  // `status`, und seit dem 01.08. meldet der Validator das eigenstaendig (F-08b). Die Zusage hier
+  // prueft S-02, nicht die Statuspflicht.
   assert.deepEqual(
-    strukturBefunde({ kriterien: [{ id: 'K-01', typ: 'presence', pruefung: { befehl: 'echo x' } }] }), []);
+    strukturBefunde({ kriterien: [{ id: 'K-01', typ: 'presence', pruefung: { befehl: 'echo x' } }] })
+      .filter((b) => b.regel !== 'S-09'), []);
 });
 
 test('N2/K-03: `absence` P1 ohne presence-Partner ⇒ Strukturbefund', () => {
@@ -339,7 +342,7 @@ test('N2/K-05: ein Ausschluss ohne `entschieden_von` ⇒ Strukturbefund', () => 
   assert.ok(ohneGrund.some((b) => b.regel === 'S-05' && /grund/.test(b.text)));
   // Vollständig ⇒ kein Befund.
   assert.deepEqual(
-    strukturBefunde({ scope: { ausschluesse: [{ stelle: 'x', grund: 'y', entschieden_von: 'planner' }] }, kriterien: [] }), []);
+    strukturBefunde({ scope: { ausschluesse: [{ stelle: 'x', grund: 'y', entschieden_von: 'planner' }] }, kriterien: [], auftrag: { status: 'bereit' } }), []);
 });
 
 test('N2: die Strukturbefunde stehen im Bericht — sie werden nicht still gezählt', () => {
@@ -515,4 +518,22 @@ test('S-08: ein veralteter Ausgangswert meldet sich', () => {
 test('kein Alarm, wenn nichts eindeutig vergleichbar ist', () => {
   assert.equal(vergleicheErwartung({ id: 'K-5', stufe: STUFEN.OK, ausgabe: 'gruen', erwartet: 'gruen' }), null);
   assert.equal(vergleicheErwartung({ id: 'K-6', stufe: STUFEN.NICHT_MASCHINELL, ausgabe: null }), null);
+});
+
+// --- F-08b und F-03/F-12: Statuspflicht und der wandernde Baum ------------------------------------
+
+test('S-09: ein Kopf ohne `status` wird gemeldet — die Lage stuende sonst nur in Tafel und Ledger', () => {
+  const befunde = strukturBefunde({ auftrag: { id: 'T' }, kriterien: [] });
+  assert.ok(befunde.some((b) => b.regel === 'S-09'), 'F-08b: die Entscheidung gehoert ins Blatt');
+});
+
+test('S-09 schweigt, wenn der Status dasteht', () => {
+  const befunde = strukturBefunde({ auftrag: { id: 'T', status: 'bereit' }, kriterien: [] });
+  assert.equal(befunde.filter((b) => b.regel === 'S-09').length, 0);
+});
+
+test('S-10: baumStand liefert einen SHA oder null — nie einen Fehler', () => {
+  const s = baumStand();
+  assert.ok(s === null || /^[0-9a-f]{40}$/.test(s), `unerwartet: ${s}`);
+  assert.equal(baumStand('/gibt/es/nicht'), null, 'ausserhalb eines Repos ist es null, kein Wurf');
 });
