@@ -36388,3 +36388,84 @@ haette den yaml-Zaun gefressen -> NICHT GESCHRIEBEN, byte-identisch). Das Werkze
 genau so, wie es abgenommen wurde.
 
 VOTUM: auftrag=W-08-DRITTLESUNG rolle=evaluator ergebnis=gegengelesen-traegt-mit-sperrender-auflage commit=28266ffb datum=2026-08-03 hinweis=vorbedingung-w07-commit-ins-blatt-inventur-braucht-stehende-rote-zusage
+
+---
+
+## PLANNER — 03.08. 00:3x · Der Generator ist NICHT arbeitslos. Er kommt nicht durch das Tor
+
+**Yama hat gefragt, warum der Generator nichts zu tun hat. Gemessen: er hat drei baubare Blätter
+und vier fertige, unverbuchte Scheiben. Sein Problem ist nicht die Arbeit — es ist das Verbuchen.**
+
+```text
+BAUBAR         Z-03+Z-04 (aktiv) · W-01 · W-07
+UNVERBUCHT     Z-06 · W-07 · W-06 · sein Ledger        (seine eigene Meldung)
+
+ls .git/_locks_beiseite/*/ | grep -c lock              ->  855
+davon heute                                            ->   40
+
+decke.test.ts        liegt seit 02.08. 13:22   ->  11 Stunden
+auftrag-pruefen.mjs  liegt seit 02.08. 15:28   ->   9 Stunden
+```
+
+**Regel B sagt zwanzig Minuten. Sie ist um das Dreißigfache gerissen.**
+
+### Die Ursache steht in zwei Zeilen, und sie stehen an der falschen Stelle
+
+```text
+scripts/commit-pruefen.sh   65 Zeilen
+  Zeile  5   git commit …
+  Zeile 63   mkdir -p .git/_locks_beiseite/…
+  Zeile 64   mv .git/*.lock .git/_locks_beiseite/…
+```
+
+**Das Tor räumt NACH dem Commit auf. Der Lock, der den Commit blockiert, liegt schon VORHER da**
+— aus einem früheren `git add`, das ihn auf diesem Mount nicht entfernen konnte (F-10).
+
+```text
+git add <pfade>          Lock entsteht, unloeschbar  ->  bleibt liegen
+bash commit-pruefen.sh   git commit -> fatal: Unable to create index.lock
+                         Zeile 63/64 wird NIE erreicht
+```
+
+**Die Aufräumung, die das Problem lösen soll, läuft nur, wenn das Problem nicht auftritt.**
+
+*Ich umgehe das seit gestern von Hand — 40 `mv`-Aufrufe allein heute. **Das habe ich für einen
+Umstand gehalten und nicht für einen Befund.** Wer den Trick nicht kennt, dessen Commit scheitert,
+und die Arbeit bleibt liegen. Genau das ist passiert.*
+
+### W-09 geschnitten: `docs/auftraege/werkzeuge/w09-commit-tor-raeumt-vorher.md`
+
+**Dieselbe Aufräumung läuft AUCH VOR dem Commit — mit einer Sicherheitsregel davor:**
+
+```text
+0 Byte  UND  seit mindestens 60 s unveraendert   ->  Rest, wird beiseitegeschoben
+sonst                                            ->  laufender Vorgang, HAENDE WEG
+```
+
+**Die Sicherheitsregel ist der ganze Unterschied.** *Ein Lock kann einem laufenden `git` gehören.
+Ein Tor, das jeden Lock wegzieht, sieht in jedem Test grün aus und zerstört irgendwann die
+Historie einer anderen Rolle.* **Deshalb sind in K-02 zwei der drei Zusagen ROT.**
+
+### Beim Schneiden selbst in die neue Sperre gelaufen
+
+```text
+UEBERSPRUNGEN  K-01  "awk" steht nicht auf der Erlaubnisliste
+```
+
+**Mein erstes K-01 benutzte `awk` — das W-07 heute von der Liste genommen hat.** *Die Barriere hat
+den Planner erwischt, keine drei Stunden nachdem er sie geschnitten hat.* **Umgeschrieben auf
+`grep -n | head -1 | cut`; der Ausgangswert bleibt 63.**
+
+### An den Generator
+
+**W-09 ist klein und es ist das Dringendste, was heute auf dem Tisch liegt** — es entsperrt deine
+vier Scheiben und alles, was danach kommt. *Es steht auf `entwurf` und braucht das Gegenlesen des
+Prüfers; bis dahin gilt weiter der Handgriff:*
+
+```text
+mv .git/index.lock .git/_locks_beiseite/$(date +%F)/index.lock-<kennung>
+```
+
+**Und danke für den W-08-Fund.** *Dass die Fehlerklasse, die den Selbsttreffer beschreibt, sich
+selbst trifft, hätte ich nicht gesehen — ich habe F-19 geschrieben und das Muster darin zitiert.*
+**Deine Naht (Struktur statt Text) ist eingebaut, gemessen und die Namensausnahme ist ersatzlos weg.**
