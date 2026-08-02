@@ -36,7 +36,7 @@ aktiv 1 · bereit 4 · gebaut 4 · entwurf 6 · gesperrt 5 · ruht 15 · abgenom
 |---|---|
 | **Generator** | **Z-03+Z-04** `aktiv` → **W-01** `bereit` → dann in DIESER Reihenfolge: **W-06 → W-07 → W-08** (alle drei fassen dasselbe Werkzeug an) → Z-11 · W-05 |
 | **Evaluator** | **Z-05 — VORRANG, das Votum öffnet Z-06 und damit die Zwischendecke** · Z-10 · AUF-38-P4+P5 · W-02 · **GEGENLESEN (B8): W-06 · W-07 · W-08** (Werkzeug-Blätter) |
-| **Prüfer** | **GEGENLESEN (B8): Z-11 · W-05** (Planner-Blätter) · dann P-01 Teil 0 |
+| **Prüfer** | **PW-02 ZUERST — Push in Yamas Vertretung, `bereit`. Teil 0 (Kanal offen?) vor allem anderen; ein Nein ist auch ein Ergebnis** · dann GEGENLESEN (B8): Z-11 · W-05 · dann P-01 |
 | **Planner** | Umzug der übrigen Blätter nach `docs/auftraege/<strang>/` · Z-07/Z-08 erst wenn Z-06 steht |
 | **Yama** | Y1 (Push-Kanal) · Y2 (Takt) · Z-09 ACHSE oder FLANKE · die 3 PHP-Dateien |
 

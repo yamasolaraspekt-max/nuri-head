@@ -34796,3 +34796,68 @@ git push fork auto/hausplaner-integration
 
 **Nicht `upstream`, nicht `--force`, nicht `main`.** Danach zeigt derselbe `ls-remote` von oben
 `d255a917`.
+
+---
+
+## AN DEN PRÜFER — 02.08. 13:0x · PW-02: du trägst EINMAL hinaus, in Yamas Vertretung
+
+**Yamas Wortlaut, und er ist die Freigabe:** *„ich bin aber nicht in der lage zu pushen bitte gib
+diese aufgabe den prüfer er soll nur in diesem fall mich vertreten und die aufgabe übernehmen"*
+
+**Das Blatt liegt als `docs/auftraege/pruefer-auftrag-pw02-push-in-vertretung.md`, `status: bereit`.**
+
+### Warum es `bereit` ist, obwohl B8 Gegenlesen verlangt
+
+**Die andere Rolle ist hier Yama selbst** — Tor 2 gehört ihm, und er hat es für diesen einen
+Vorgang geöffnet. *Ein Gegenlese-Zyklus zwischen Planner und Evaluator würde eine Freigabe prüfen,
+die keiner von beiden erteilen kann.* **Benannt statt umgangen, und mit K-08 befristet: die
+Vertretung erlischt mit dem Vollzug.**
+
+### TEIL 0 ZUERST, und er ist wichtiger als der Push
+
+```text
+timeout 25 git --no-optional-locks ls-remote --exit-code fork HEAD
+```
+
+**Ich habe heute die Erlaubnis bekommen und konnte trotzdem nicht** — HTTP 403 vom Proxy, zweimal
+gemessen, aus zwei Umgebungen. **Miss zuerst, ob DEIN Kanal offen ist.**
+
+**Ist er zu, ist das kein Fehlschlag dieses Auftrags, sondern sein Ergebnis** — und zugleich die
+Antwort auf P-01 Teil 0, auf die seit dem 01.08. alle warten. *Zwei Belege aus zwei Umgebungen
+sind mehr wert als ein gelungener Push.* Den Exitcode **ohne Pipe** lesen — `| tail` und `| grep`
+schlucken ihn.
+
+### Die Grenzen, und sie sind nicht verhandelbar
+
+```text
+ERLAUBT      git push fork auto/hausplaner-integration
+VERBOTEN     upstream · main · --force · --delete · Tags · -u · --all · jeder andere Zweig
+```
+
+**Schlägt der Push fehl: die Fehlermeldung wörtlich in den Ledger, KEIN zweiter Versuch mit
+anderen Schaltern.** *Wer beim zweiten Anlauf einen Schalter dazunimmt, hat die Grenze verlassen,
+bevor er es merkt.*
+
+### Danach an der QUELLE nachmessen, nicht am lokalen Zeiger
+
+```text
+git ls-remote https://github.com/yamasolaraspekt-max/nuri-head.git refs/heads/auto/hausplaner-integration
+```
+
+**Vorher steht dort `aebe57b6`** (Planner, 02.08. 12:5x, aus dem Cloud-Sandkasten gemessen — ohne
+Zugangsdaten, jederzeit wiederholbar). **Nachher muss dort dein lokaler HEAD stehen.** *Am 01.08.
+hat genau der Unterschied zwischen lokalem Zeiger und Quelle drei falsche Zuordnungen erzeugt.*
+
+**Und K-07, ausdrücklich:** der Reflog zeigt heute vier fremde `update by push` (09:15:10,
+09:23:46, 10:28:26, 12:12:28). **Schreib auf, was DEIN Vorgang bewirkt hat, und lass die vier
+anderen offen.** Ich habe mir am 01.08. einen Push zugeschrieben, den ich nicht ausgelöst habe —
+den Fehler brauchen wir kein zweites Mal.
+
+### Was hinausgeht — 13:0x
+
+```text
+6 Commits voraus · 0 zurueck (Fast-Forward moeglich) · 4 Dateien · alle .md · 0 Schluessel
+```
+
+**Kein Code, kein Schema, keine Migration.** *Der harmloseste Ausgang, den dieser Zweig je hatte —
+ein guter erster Fall für eine Vertretung.*
