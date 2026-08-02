@@ -34430,3 +34430,190 @@ Zahlen verlieren kann. Dieses hat sie nicht.*
 
 **Der Sperrgrund bleibt trotzdem stehen.** Z-05 hat kein Votum. **Ich entsperre es nicht, weil ich
 das Votum für Formsache halte** — das wäre genau die Bequemlichkeit, gegen die der Rahmen steht.
+
+---
+
+## GENERATOR · 02.08. 11:5x — Z-03+Z-04 umgesetzt, W-01 umgesetzt, drei Befunde
+
+**Zwei Blätter umgesetzt, beide unverbucht — Commits liegen bereit und warten auf Yamas Wort.**
+
+```text
+Z-03+Z-04   K-02 fehlte wirklich (Produktivseite war fertig, die Zusage nicht).
+            4 neue Zusagen, hausplaner 1641 -> 1645, 0 fail.
+            Mutationsprobe 6/8 blind -> Gegenprobe 0/10, drei Dateien md5-gleich zurueck.
+            L-01 gefahren: alle fuenf Fangarten sichtbar gefangen, 1440 + 1024,
+            375 = Mindestbreiten-Flaeche, und bei Buehnen-Zoom 0,0316.
+            Geaendert: resources/planner/hausplaner/__tests__/fussUndUeberlagerungen.test.ts
+
+W-01        War zu 6/7 schon gebaut (gestern nach dem Push), nie gefahren.
+            Neu: dritte Regelart — erlaubt ist das ZIEL, nicht das Programm.
+            `bash`/`sh` nur mit Pfad unter scripts/, ohne Aufstieg.
+            scripts/__tests__ 82 pass 0 fail. Mutationsprobe 2/8 blind -> 0/8.
+            Geaendert: scripts/auftrag-pruefen.mjs · scripts/__tests__/auftragPruefen.test.mjs
+```
+
+### BEFUND 1 — an den Planner, DRINGEND, bevor die Anker-Korrektur in 18 Blaetter geht
+
+**Der Befund von 11:36 stimmt, aber sein letzter Satz nicht.** Dort steht: *„ein Browsertest, der
+zeichnen will, muss zuerst ein Projekt öffnen."*
+
+**Muss er nicht — heute dreimal ohne Projekt gezeichnet:**
+
+```text
+Startzustand                                          canvas 0
+Klick auf Knopf „Expertenmodus“ (#hausplaner-root button, Text- oder title-Treffer), 2,4 s
+danach                                                canvas 2
+danach drei Waende gezeichnet, fuenf Fangarten gemessen
+```
+
+**Der Expertenmodus montiert die Bühne auf der Testfläche.** Kein Projekt, kein DB-Schreiben.
+*Stufe 2 ist damit ein Schritt, kein Zweig — das erspart 18 Blättern eine schwere Vorbedingung.*
+
+**Zu Stufe 1:** `#hausplaner-root` allein taugt nicht als Gesundheitszeichen — er ist auch im
+Startzustand 1083×788 gross.
+
+**KORREKTUR an mir selbst (12:0x, nach Planner-Commit 5163cac2).** Hier stand, das unterscheidende
+Merkmal sei `#hausplaner-scene` mit **0 Kindern**. **Das ist falsch, und der Planner hat es an der
+Quelle widerlegt** (`studio.blade.php:93`, `main.tsx:28`): das Element ist ein
+`<script type="application/json">` — es hat *nie* Element-Kinder. **Ich habe eine Invariante fuer
+ein Unterscheidungsmerkmal gehalten.** Mein Messwert stimmte, meine Folgerung nicht: ein Zeichen,
+das nie umschlagen kann, zeigt nichts an. *Dieselbe Klasse wie F-06 — den Wert eingefroren statt
+die Wirkung geprueft, nur diesmal an einem Wert, der von sich aus nie wandert.*
+
+**Was bleibt:** seine EXISTENZ ist das Zeichen (ohne sie montiert `main.tsx` nie), nicht seine
+Kinderzahl. So steht es jetzt in Anker v3 — richtig.
+
+### BEFUND 2 — die Erlaubnisliste haelt ihr eigenes Argument nicht ein
+
+**Drei Tueren stehen offen, gemessen an der Entscheidungsfunktion (B3):**
+
+```text
+node /tmp/fremd.mjs        ERLAUBT   beliebiges JS von jedem Pfad
+sed -i s/a/b/ datei        ERLAUBT   schreibt Quelldateien um — was B6 verbietet
+awk BEGIN{system("x")}     ERLAUBT   fuehrt JEDEN Befehl aus, die Liste ist umgangen
+```
+
+Gefunden, weil eine bestehende Zusage dem Blatt widersprach (*„bash sagt nichts ueber seine
+Wirkung"*) — das Argument ist richtig und trifft `awk`, `sed -i` und `node` staerker als `bash`.
+
+**Benutzt wird es heute nicht:** 0 Zusagen mit `awk` oder `sed -i` (Partner mit Treffer: 82 mit
+`sed` oder `grep`). **Offene Tuer, kein Einbruch.** *Nicht mitgebaut — das ist Umfangserweiterung
+ueber W-01 hinaus und gehoert als eigener Posten geschnitten.*
+
+### BEFUND 3 — `zeile-ersetzen.mjs` kann normale Quelldateien nicht schreiben
+
+```text
+pruefeInhalt(fangKern.ts UNVERAENDERT, '.ts')  ->  false
+()  auf 81   zu 87        sechs nummerierte Kommentare  // 1)  …  // 6)
+```
+
+`klammerBilanz` zaehlt Klammern ueber den ganzen Text, auch in Kommentaren, und meldet dann
+*„die Datei traegt nach der Ersetzung NICHT"* — **der Pruefer zeigt auf die Aenderung des Lesers
+statt auf sich selbst.** Tragweite: B6 verbietet `perl -pi` und nennt dieses Werkzeug als Ersatz;
+scheitert der Ersatz an gewoehnlichem Code, draengt die Regel zurueck auf das Verbotene.
+
+### An den Evaluator
+
+**Z-05 wartet weiter auf sein Votum** — der einzige Posten vor Z-06. Dazu liegen Z-03+Z-04 und
+W-01 zur Abnahme, sobald Yama die Commits freigibt.
+
+---
+
+## PLANNER — 02.08. 09:5x · Antwort auf die drei Befunde, und was daraus geworden ist
+
+### BEFUND 1 — angenommen, mit EINER Korrektur zurueck
+
+**Der Kern stimmt und ist eingebaut:** der Expertenmodus montiert die Buehne ohne Projekt.
+**Stufe 2 ist jetzt ein SCHRITT, kein Zweig** — die schwere Vorbedingung ist raus.
+Anker v3 liegt in `5163cac2`.
+
+**NICHT uebernommen: `#hausplaner-scene` mit 0 Kindern als Startzeichen.** An der Quelle
+nachgemessen, nicht am Schirm:
+
+```text
+studio.blade.php:93   <script type="application/json" id="hausplaner-scene">@json($studioScene)</script>
+main.tsx:28           const szenenElement = document.getElementById('hausplaner-scene');
+```
+
+**Das Element ist der JSON-Rumpf der Seite, kein Behaelter.** Ein `<script>` hat **nie**
+Element-Kinder — seine Kinderzahl ist im Startzustand 0 und danach auch. *Als Zeichen taugt
+seine EXISTENZ (ohne es meldet `main.tsx:102` „Mount oder Szene fehlt" und montiert nie), nicht
+seine Kinderzahl.* **So steht es jetzt im Anker, mitsamt dem Grund.**
+
+### Warum SECHS Blaetter und nicht achtzehn
+
+```text
+aktiv/entwurf/gebaut/gesperrt   6   der Anker wird gefahren  -> korrigiert
+abgenommen / ruht / KEIN-KOPF  12   Archiv                   -> nicht angefasst
+verschoben                      1   Z-05, `typ: verschoben`  -> hat gar keinen Befehl
+```
+
+**Die zwoelf sind kein Versaeumnis, sondern eine Falle mit Namen:** wer ein `ruht`-Blatt
+wiederbelebt, bekommt den alten Anker zurueck. **Der dauerhafte Riegel waere eine
+Validator-Sperre (S-11: „L-01-anker ohne Montierschritt"), nicht ein weiterer Vorsatz.**
+Noch nicht geschnitten — steht auf der Schlange, hinter W-06 und W-07.
+
+### BEFUND 2 — angenommen, als eigener Posten
+
+`node`, `sed -i`, `awk` stehen offen. **Als W-07 vorgemerkt, nicht in W-01 hineingezogen** —
+das ist Umfangserweiterung, und genau davor warnt der Befund selbst.
+
+### BEFUND 3 — angenommen und GESCHNITTEN: W-06 (`c8d82b70`)
+
+**Unabhaengig nachgemessen, nicht geglaubt:**
+
+```text
+grep -o '(' resources/planner/hausplaner/geometry/fangKern.ts | wc -l   ->  81
+grep -o ')' resources/planner/hausplaner/geometry/fangKern.ts | wc -l   ->  87
+```
+
+**Sechs ueberzaehlige `)`, alle aus `// 1)`-Kommentaren.** `docs/auftraege/werkzeuge/w06-klammerbilanz-ohne-kommentare.md`.
+Der Kern: `klammerBilanz` ruft `ohneKommentare()` aus `zaehle.mjs` — **kein zweiter
+Kommentar-Abzug.** Zweite Kante im selben Blatt: die Hilfsdatei `<pfad>.pruef-tmp` entsteht
+**neben der Quelle** und ist auf diesem Mount nicht loeschbar (F-10) — sie gehoert unter
+`os.tmpdir()`.
+
+### EIGENER FEHLER, vor dem Gegenlesen selbst gefunden
+
+**Z-11 K-06 nannte eine Funktion, die es nicht gibt:** `toleranz(art, zoom)`. Die echte Stelle
+heisst `toleranzAusZoom(zoom, fangPx = FANG_PX)`, `geometry/fangKern.ts:230`. **Korrigiert in
+`dca1d824`** — samt dem Fall, der dabei sichtbar wurde: bei `zoom = 0` gibt die Funktion `fangPx`
+zurueck, **ohne zu teilen**. Genau dort faellt ein naiv eingebauter Faktor heraus. Das ist jetzt
+eine eigene Zusage.
+
+### BEFUND an den Generator — `PAKET_WERKZEUGE` heisst zweimal etwas anderes
+
+```text
+werkzeugPaket.ts:34   export const PAKET_WERKZEUGE: readonly PaketWerkzeug[]   ->  101 Eintraege
+toolRegistry.ts:272   export const PAKET_WERKZEUGE = 110                       ->  eine Zahl
+```
+
+**Ein Name, zwei Bedeutungen, in EINEM Ordner** — und die 110 meint nicht das Paket (101),
+sondern 9 Grundeintraege + 101 Paket. **Die Bilanz stimmt heute, aber durch Zufall.** Als
+**K-10 in W-05** aufgenommen: `WERKZEUGE_GESAMT` wird gerechnet, nicht getippt.
+
+### ZUM GEGENLESEN (B8) — an den PRUEFER, drei Blaetter
+
+```text
+Z-11  docs/auftraege/generator-auftrag-z11-touch-und-stift.md
+W-05  docs/auftraege/hausplaner-3d/w05-werkzeug-anschluss.md
+W-06  docs/auftraege/werkzeuge/w06-klammerbilanz-ohne-kommentare.md
+```
+
+**Die drei B8-Fragen, unveraendert:**
+
+```text
+1  Laeuft JEDER Befehl darin?
+2  Misst er die WIRKUNG oder nur die Stelle?
+3  TUT einer von ihnen etwas?
+```
+
+**Der Validator sagt zu allen dreien: 0 Fehlschlag, 0 verdaechtig, 0 nulltreffer.** *Das
+beantwortet Frage 1 und keine der beiden anderen.* **Frage 3 ist bei W-06 die scharfe:**
+K-03 dritte Zeile („ueberzaehlige `)` NUR im Kommentar -> true") ist die einzige, die faellt,
+wenn jemand den Abzug wieder ausbaut — alle anderen kann man gruen bekommen, ohne dass das
+Werkzeug taugt.
+
+**Und die Lage dahinter:** S-06 meldet weiter **1 baubares Blatt**. *Es stockt nicht der Bau,
+es stockt die Abnahme.* Diese drei Blaetter sind der Vorrat — sie werden `bereit`, sobald sie
+gegengelesen sind, und nicht vorher.
