@@ -26,7 +26,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdtempSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
@@ -178,4 +178,96 @@ test('K-08: `ersetze` RUFT die Drift-Sperre auch auf — nicht nur, dass es sie 
     '`ersetze` fragt die Drift-Sperre nicht mehr');
   // presence-Partner nach B4: die Funktion, die aufgerufen werden soll, gibt es ueberhaupt.
   assert.match(quelle, /export function standUnveraendert\(/, 'die Sperre selbst ist verschwunden');
+});
+
+// --- W-06: der Parser statt der Zeichenzaehlung -------------------------------------------------
+//
+// **Die Mutationsprobe VOR diesen Zusagen — 8 Mutationen, 4 kamen durch:**
+//
+// ```text
+// Pruefer sagt immer ja          fail 3
+// Pruefer sagt immer nein        fail 3
+// Urteil gedreht                 fail 3
+// .mjs faellt aus dem Zweig      fail 3
+// tsx wird als ts gelesen        fail 0   <- BLIND
+// .tsx faellt aus dem Zweig      fail 0   <- BLIND
+// setParentNodes aus             fail 0   <- wirkungslos, siehe unten
+// Endung ohne Punkt im Namen     fail 0   <- wirkungslos, siehe unten
+// ```
+//
+// **Alle blinden Faelle betreffen `.tsx`** — genau die Stelle, auf die der Evaluator am 03.08.
+// gezeigt hat, unabhaengig von seiner Probe wiedergefunden.
+//
+// **Zwei der vier sind wirkungslos, nicht ungeprueft:** `setParentNodes` steuert die
+// Eltern-Zeiger im Baum, nicht die Syntax-Diagnostik; und der DATEINAME ist gleichgueltig, weil
+// `ScriptKind` ausdruecklich uebergeben wird statt aus der Endung abgeleitet zu werden. *Eine
+// Zusage dafuer waere ein Textabzug (F-06) — sie wuerde den Bau einfrieren statt eine Wirkung zu
+// pruefen. Deshalb steht hier eine Erklaerung und keine Zusage.*
+
+/** Echtes JSX, kein leerer Rumpf — der Fall, den der Evaluator ausdruecklich verlangt hat. */
+const TSX_HEIL = 'export const A = () => <div className="x">Text</div>;\n';
+const TSX_KAPUTT = 'export const A = () => <div className="x">Text</div;\n';
+
+test('W-06/K-03: alle 319 Hausplaner-Quellen tragen — gemessen mit `pruefeInhalt` SELBST', () => {
+  // **Nicht mit einem nachgebauten Zaehler.** Vorher fielen 61 von 319 durch; die Ursache war
+  // nie der Kommentar, sondern das Regex-Literal (`breiten.test.ts:51`: ein `\{`, zwei `\}`).
+  const wurzel = new URL('../../resources/planner/hausplaner/', import.meta.url);
+  const dateien = [];
+  const sammle = (verz) => {
+    for (const e of readdirSync(verz)) {
+      const p = new URL(`${e}${statSync(new URL(e, verz)).isDirectory() ? '/' : ''}`, verz);
+      if (statSync(p).isDirectory()) sammle(p);
+      else if (/\.tsx?$/.test(e)) dateien.push(p);
+    }
+  };
+  sammle(wurzel);
+
+  const durchgefallen = dateien.filter((p) => !pruefeInhalt(readFileSync(p, 'utf8'),
+    String(p).endsWith('.tsx') ? '.tsx' : '.ts'));
+  assert.ok(dateien.length > 300, `nur ${dateien.length} Dateien gefunden — die Zusage misst Leere`);
+  assert.deepEqual(durchgefallen.map((p) => String(p).split('/hausplaner/')[1]), [],
+    'diese Quellen kann das Werkzeug nicht schreiben');
+});
+
+test('W-06/K-03: und der Pruefer kann noch ABLEHNEN — drei Gegenproben, sonst ist die Null wertlos', () => {
+  // **Ein Pruefer, der alles durchlaesst, macht die Zahl oben ebenfalls zu 0.** Das ist die
+  // gefaehrliche Mutation dieser Scheibe, und sie sieht in jeder Zaehlung perfekt aus.
+  assert.equal(pruefeInhalt('const a = { x: 1;\n', '.ts'), false, 'ein offener Block kommt durch');
+
+  const echt = readFileSync(new URL('../zeile-ersetzen.mjs', import.meta.url), 'utf8');
+  assert.equal(pruefeInhalt(echt, '.mjs'), true, 'die eigene, heile Quelle wird abgelehnt');
+  const ohneKlammer = echt.replace(/\n}\n/, '\n\n');           // eine schliessende Klammer entfernt
+  assert.notEqual(ohneKlammer, echt, 'die Gegenprobe hat nichts veraendert — sie misst Leere');
+  assert.equal(pruefeInhalt(ohneKlammer, '.mjs'), false, 'eine verstuemmelte echte Datei kommt durch');
+});
+
+test('W-06/K-05: EINE Quelle fuer alle vier Endungen — heil traegt, kaputt faellt', () => {
+  // *Der `node --check`-Zweig ist weg; bliebe er stehen, gaebe es zwei Antworten auf dieselbe
+  // Frage — dieselbe Klasse wie `PAKET_WERKZEUGE` in W-05 K-10.*
+  for (const [endung, heil, kaputt] of [
+    ['.ts', 'export const a: number = 1;\n', 'export const a: number = ;\n'],
+    ['.tsx', TSX_HEIL, TSX_KAPUTT],
+    ['.mjs', "import x from 'y';\nconst a = [1, 2];\n", 'const a = [1, 2;\n'],
+    ['.js', 'const a = { b: 1 };\n', 'const a = { b: 1 ;\n'],
+  ]) {
+    assert.equal(pruefeInhalt(heil, endung), true, `${endung}: eine heile Datei wird abgelehnt`);
+    assert.equal(pruefeInhalt(kaputt, endung), false, `${endung}: eine kaputte Datei kommt durch`);
+  }
+});
+
+test('W-06/K-05: `.tsx` wird als TSX gelesen — ein Fragment, das nur dort traegt', () => {
+  // **Die Mutation „tsx wird als ts gelesen" kam blind durch.** Ein generisches Pfeilfunktions-
+  // Argument ist in `.ts` gueltig und in `.tsx` mehrdeutig — umgekehrt ist ein JSX-Element in
+  // `.ts` KEIN gueltiger Ausdruck. *Ohne diese Zusage koennte jemand ScriptKind vertauschen und
+  // saehe es an keiner Zahl.*
+  assert.equal(pruefeInhalt(TSX_HEIL, '.tsx'), true, 'echtes JSX traegt in .tsx nicht');
+  assert.equal(pruefeInhalt(TSX_HEIL, '.ts'), false, 'JSX wird in .ts durchgelassen — ScriptKind wirkt nicht');
+});
+
+test('W-06/K-04: keine Hilfsdatei mehr neben der Quelle — der Umweg ist fort, nicht gemildert', () => {
+  // Auf diesem Mount ist `unlink` verboten (F-10): die alte Hilfsdatei blieb im Arbeitsbaum
+  // liegen, auch wenn der Ersatz danach abgelehnt wurde.
+  const quelle = readFileSync(new URL('../zeile-ersetzen.mjs', import.meta.url), 'utf8');
+  assert.ok(!quelle.includes('pruef-tmp'), 'die Hilfsdatei neben der Quelle ist zurueck');
+  assert.match(quelle, /import ts from 'typescript'/, 'der Parser wird nicht mehr gefragt');
 });

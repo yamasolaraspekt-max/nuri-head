@@ -56,33 +56,57 @@
  * Auf diesem Mount scheitert beides an F-10. Geschrieben wird per Truncate-und-Schreiben
  * (`writeFileSync` auf denselben Pfad), nie ueber eine Zwischendatei mit `rename`.
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { extname } from 'node:path';
+import { extname, join } from 'node:path';
+import { tmpdir } from 'node:os';
 // Derselbe Parser, den `auftrag-pruefen.mjs` benutzt — nicht ein zweiter fuer dieselbe Frage.
 import yaml from 'js-yaml';
+// **W-06: derselbe Parser, den `tsc` selbst benutzt.** Er liegt seit jeher im Haus; der
+// Ausschlussgrund der ersten Blattfassung („kein Parser verfuegbar") war schlicht falsch.
+import ts from 'typescript';
 
 /** Was am Rand steht, wenn es dort keine Zeile mehr gibt. */
 export const RAND_ANFANG = 'DATEIANFANG';
 export const RAND_ENDE = 'DATEIENDE';
 
 /**
- * **Balancieren die Klammern und Anfuehrungszeichen?**
+ * **Traegt dieser Quelltext syntaktisch?** — EINE Quelle fuer `.ts` `.tsx` `.mjs` `.js`.
  *
- * Bewusst eine Bilanz und keine Syntaxpruefung: fuer `.ts`/`.tsx` gibt es hier keinen Parser.
- * Sie faengt genau den Fall vom 20:0x — eine verwaiste Klammer nach einem Splice.
+ * **Was hier stand und warum es weg ist.** Bis zum 03.08. zaehlte eine Klammer-Bilanz die
+ * Zeichen `{}`, `[]`, `()` ueber den ganzen Text. *Ihr Funktionsname steht hier bewusst NICHT
+ * ausgeschrieben: K-02 misst seine Abwesenheit mit `grep`, und ein Kommentar, der ihn nennt,
+ * macht die Absenz-Zusage unerfuellbar (F-09 — zweimal an einem Tag zugeschnappt).*
+ * Gemessen an 319 Hausplaner-Dateien:
+ *
+ * ```text
+ * roher Text                    61 von 319 fallen durch
+ * mit Kommentar-Abzug           59      <- der urspruengliche Fix loeste ZWEI Faelle
+ * Texte und Regex zusaetzlich   57
+ * ts.createSourceFile            0
+ * ```
+ *
+ * **Die Ursache war nie der Kommentar.** `breiten.test.ts:51` traegt
+ * `css.match(/\.hp-studio-kopf \{([^}]*)\}/)` — ein Regex-Literal mit einer oeffnenden und zwei
+ * schliessenden Klammern. Kein Kommentar, keine Zeichenkette, sondern Code. *Eine zeichenzaehlende
+ * Bilanz misst Haeufigkeit und nennt es Syntax; auf echtem TypeScript ist sie grundsaetzlich
+ * unzuverlaessig, und Regex-Literale sind von Divisionen ohne Parser nicht sicher trennbar.*
+ *
+ * **Nebengewinn, der mehr wert ist als die Zahl:** die alte Fassung meldete *„die Datei traegt
+ * nach der Ersetzung NICHT"* und zeigte damit auf die Aenderung des Lesers statt auf sich selbst.
+ * Der Parser liefert `'}' expected.` mit Position — der Unterschied zwischen einer Sperre, die
+ * anklagt, und einer, die hilft.
+ *
+ * **`parseDiagnostics` ist intern, aber genau die Liste, die `tsc` fuer SYNTAXfehler fuehrt** —
+ * keine Typpruefung: ein unbekannter Name ist hier kein Fehlschlag, eine fehlende Klammer schon.
  */
-function klammerBilanz(text) {
-  const paare = [['{', '}'], ['[', ']'], ['(', ')']];
-  for (const [auf, zu] of paare) {
-    const a = text.split(auf).length - 1;
-    const z = text.split(zu).length - 1;
-    if (a !== z) {
-      return false;
-    }
-  }
+function traegtSyntaktisch(text, endung) {
+  const art = endung === '.tsx'
+    ? ts.ScriptKind.TSX
+    : endung === '.ts' ? ts.ScriptKind.TS : ts.ScriptKind.JS;
+  const quelle = ts.createSourceFile(`pruefling${endung}`, text, ts.ScriptTarget.Latest, true, art);
 
-  return true;
+  return (quelle.parseDiagnostics ?? []).length === 0;
 }
 
 /** Sind die ```-Zaeune paarig? **Fehler 22:1x: ein Splice liess einen offenen Zaun zurueck.** */
@@ -118,43 +142,40 @@ function yamlLaedt(text) {
  * Entscheidung, nie den Ausfuehrer.* Am 01.08. um 22:11 ist genau diese Trennung einmal gefehlt,
  * und die Probe hat ausgeloest, was sie verhindern sollte.
  */
-export function pruefeInhalt(text, endung, hilfsPfad = null) {
+export function pruefeInhalt(text, endung) {
   if (typeof text !== 'string' || text.length === 0) {
     return false;
   }
   const e = String(endung).toLowerCase();
 
-  // **Die Hilfsdatei behaelt die ENDUNG des Ziels.** Mein erster Entwurf schrieb nach
-  // `<pfad>.pruef-tmp` — und `node --check` liest eine unbekannte Endung als CommonJS. Damit
-  // scheiterte JEDE gueltige ESM-Datei an meiner eigenen Pruefung, und das Werkzeug haette nie
-  // etwas geschrieben. *Die Zusage „eine heile Ersetzung wird sehr wohl geschrieben" hat es
-  // gefunden — der presence-Partner, nicht der rote Fall.*
-  if (e === '.mjs' || e === '.js') {
-    if (!hilfsPfad) {
-      return klammerBilanz(text); // ohne Datei kein `node --check` — dann wenigstens die Bilanz
-    }
-    try {
-      writeFileSync(hilfsPfad, text);
-      execFileSync(process.execPath, ['--check', hilfsPfad], { stdio: 'ignore' });
-
-      return true;
-    } catch {
-      return false;
-    }
-  }
-  if (e === '.ts' || e === '.tsx') {
-    return klammerBilanz(text);
+  // **W-06: EIN Zweig fuer alle vier Endungen — und der `node --check`-Umweg faellt mit weg.**
+  //
+  // Bliebe er als zweiter Weg stehen, gaebe es wieder zwei Antworten auf dieselbe Frage
+  // (dieselbe Klasse wie `PAKET_WERKZEUGE` in W-05 K-10). Er brauchte ausserdem eine Hilfsdatei
+  // NEBEN der Quelle — und auf diesem Mount ist `unlink` verboten (F-10), sie blieb also liegen,
+  // auch wenn der Ersatz danach abgelehnt wurde. *Der Parser braucht keine Datei; damit ist die
+  // Kante nicht gemildert, sondern fort.*
+  //
+  // `ScriptKind` wird AUSDRUECKLICH uebergeben statt aus der Endung abgeleitet — so haelt es das
+  // Nachbarwerkzeug `hook-abhaengigkeiten.mjs`, und der Evaluator hat am 03.08. darauf gezeigt,
+  // dass die Ableitung fuer `.tsx` mit echtem JSX ungeprobt war.
+  if (e === '.ts' || e === '.tsx' || e === '.mjs' || e === '.js') {
+    return traegtSyntaktisch(text, e);
   }
   if (e === '.md') {
     return zaeuneGerade(text) && yamlLaedt(text);
   }
+  // **`.sh` braucht weiterhin eine Datei — `bash -n` liest nicht von der Standardeingabe.**
+  // Sie entsteht jetzt aber im SYSTEM-Temp und nicht mehr neben der Quelle. *Das war der Kern
+  // von F-10: auf diesem Mount ist `unlink` verboten, die Hilfsdatei blieb im Arbeitsbaum liegen
+  // — auch dann, wenn der Ersatz anschliessend abgelehnt wurde.* Ein Rest im Systemtemp stoert
+  // niemanden; einer neben der Quelle landet im naechsten `git status`.
   if (e === '.sh') {
-    if (!hilfsPfad) {
-      return true;
-    }
+    const verz = mkdtempSync(join(tmpdir(), 'zeile-ersetzen-'));
+    const ziel = join(verz, 'pruefling.sh');
     try {
-      writeFileSync(hilfsPfad, text);
-      execFileSync('bash', ['-n', hilfsPfad], { stdio: 'ignore' });
+      writeFileSync(ziel, text);
+      execFileSync('bash', ['-n', ziel], { stdio: 'ignore' });
 
       return true;
     } catch {
@@ -213,7 +234,9 @@ export function ersetze(pfad, von, bis, neu, { pruefen = true } = {}) {
 
   const neuText = [...zeilen.slice(0, von - 1), ...String(neu).split('\n'), ...zeilen.slice(bis)].join('\n');
 
-  if (pruefen && !pruefeInhalt(neuText, extname(pfad), `${pfad}.pruef-tmp${extname(pfad)}`)) {
+  // **Kein dritter Parameter mehr.** Die Entscheidungsfunktion besorgt sich, was sie braucht —
+  // und fuer die vier Quellcode-Endungen braucht sie gar nichts.
+  if (pruefen && !pruefeInhalt(neuText, extname(pfad))) {
     return { ok: false, grund: 'die Datei traegt nach der Ersetzung NICHT — nicht geschrieben', geschrieben: false };
   }
   // **Drift-Sperre (K-08):** zwischen Lesen und Schreiben kann eine andere Instanz geschrieben
