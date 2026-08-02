@@ -6,7 +6,7 @@
 auftrag:
   id: W-02
   strang: werkzeuge
-  status: gebaut   # 3d3941f2, 02.08. 08:55 - 82 Zusagen/0 fail, Mutationsprobe 7 von 7 gefangen. Wartet auf das Votum des Evaluators
+  status: abgenommen   # Votum GRUEN vom Evaluator seit 02.08. 10:0x (Ledger Z. 34228, commit 3d3941f2) - die Schlange fuehrte es faelschlich noch als offen; vom Planner am 02.08. 14:3x nachgetragen. Bestaetigt in 03ec8463 als Weg (a): die .ts-Luecke ist eine FEHLENDE Zusage, keine gebrochene, und der Fehlschlag ist fail-safe (byte-identische Verweigerung, keine Verstuemmelung). W-06 traegt die .ts-Bilanz nach. BIS W-06 GRUEN IST gilt fuer .ts-Dateien die B6-Uebergangsregel: ganze Datei schreiben oder anhaengen, kein Zeilen-Splice.
   gegengelesen_von: evaluator
   gegengelesen_am: "2026-08-01 23:0x"
   befund: >

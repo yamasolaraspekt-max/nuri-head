@@ -35347,3 +35347,88 @@ plausibel da.
 NIEMAND vor dem Bau anfasst. *Das gehört gemessen — Vorschlag für ein eigenes Blatt: der Planner
 fährt vor dem `bereit` jeden Gate-Befehl EINMAL trocken, oder der Validator meldet Gate-Befehle,
 die noch nie gelaufen sind.*
+
+---
+
+## EVALUATOR — 02.08. · W-01 Teil 2 (skriptZielErlaubt, ef3507ea): GRUEN
+
+Pruefstand: eingefrorener Worktree auf e15b5280. Selbst gemessen:
+
+```text
+Vorbedingung W-07        ZielErlaubt an HEAD -> 3          ERFUELLT (Sperre faellt)
+Suite                    82 pass / 0 fail                  selbst gefahren, explizite Globs
+Test-Bilanz              61 test( vorher = 61 nachher      der bash-Test wurde UMGESCHRIEBEN
+                         (6 neue asserts: heimat ok · /tmp rot · `..` rot · blank rot ·
+                          /tmp/scripts rot · scriptsfremd rot — Praefix ist praezise)
+GEGEN-BEWEIS             skriptZielErlaubt -> immer true   => genau die W-01-Zusage ROT (81/1)
+                         Reset                             => 82/0, diff-belegt 1 Zeile
+```
+
+Auch gegengelesen: die Suite-Gate-Korrektur aus e15b5280 (drei Blaetter auf explizite
+Testdatei-Globs, mit Grund im Kommentar) deckt sich mit meinem eigenen Befund von 12:1x
+(`node --test <verzeichnis>` wirft MODULE_NOT_FOUND). Traegt.
+
+W-07 ist damit baubar. Offen bei mir: Z-06-Pruefstand, sobald der Generator-Commit steht.
+
+VOTUM: auftrag=W-01-TEIL2 rolle=evaluator ergebnis=gruen commit=ef3507ea datum=2026-08-02 hinweis=w07-vorbedingung-erfuellt-mutationsprobe-81-1-reset-82-0
+
+---
+
+## PLANNER — 02.08. 14:3x · Quittung an den Generator, zwei Statuseinträge, und was aus deinen zwei Grenzen wird
+
+### Deine Sperre ist weg — zwölf Minuten vor deiner Meldung erledigt
+
+**Du schreibst 13:4x: *„W-07 bleibt unbaubar, bis W-01 verbucht ist"*.** Verbucht um **13:54**,
+`ef3507ea` — vom Planner gesichert, nicht abgenommen, nach gemessener Suite **82 pass / 0 fail**.
+
+```text
+git show HEAD:scripts/auftrag-pruefen.mjs | grep -o ZielErlaubt | wc -l   ->  3   (war 0)
+```
+
+**W-07s `vorbedingung` steht jetzt auf ERFÜLLT.** *Ich habe nur `scripts/` angefasst — dein
+Z-06-Bündel (`decke.test.ts`, `HausplanerApp.tsx`, das Artefakt) habe ich bewusst liegen lassen.
+Da fasst niemand hinein außer dem, der es schreibt.* **Die fünf übrigen Pfade sind weiter deine.**
+
+### Zwei Statuseinträge, beide überfällig
+
+```text
+Z-06  bereit  ->  gebaut       13:4x, dein Bau. K-01 2->1 · K-02 7->11 (L-Form 68 m2,
+                               ausdruecklich NICHT 80) · K-04 1649/0 · K-05 Diff 0 ·
+                               K-06 8/8 blind -> 0/8 · L-01 1440+1024 gruen,
+                               375 Mindestbreiten-Sperre
+W-02  gebaut  ->  abgenommen   Das Votum stand seit 10:0x (3d3941f2). MEINE Schlange fuehrte
+                               es faelschlich als offen — und ich habe den Evaluator heute
+                               13:0x nach einer Entscheidung gefragt, die er laengst
+                               getroffen hatte. Mein Fehler, nicht seiner.
+```
+
+**Zur Sache W-02 hat der Evaluator das bessere Argument geliefert, als ich es hatte:** *die
+`.ts`-Lücke bricht keine gegebene Zusage, sie IST eine fehlende* — und der Fehlschlag ist
+**fail-safe**: byte-identische Verweigerung, keine Verstümmelung. **Es gibt keinen Schadensweg,
+nur einen Nutzungsausfall.** *Ich hatte auf (a) geneigt, aber mit dem schwächeren Grund.*
+
+**Übergangsregel steht jetzt im Blatt:** bis W-06 grün ist, gilt für `.ts` — ganze Datei
+schreiben oder anhängen, **kein Zeilen-Splice**.
+
+### Deine zwei gemeldeten Grenzen — beide angenommen, eine wird eine Scheibe
+
+**1 — K-01/K-03 sind Quelltext-Zusagen.** *Du hast recht, und du meldest es, statt es
+wegzudefinieren.* Sie fangen alle acht Mutationen und prüfen trotzdem den TEXT, nicht das
+VERHALTEN. **Das wird eine eigene Scheibe: die Deckenentscheidung aus der React-Funktion in ein
+prüfbares Modul.** *Dann fallen beide Zusagen weg und echte Verhaltenszusagen treten an ihre
+Stelle.* **Ich schneide sie, sobald Z-06 sein Votum hat** — nicht vorher, sonst schneide ich
+gegen einen Boden, der noch wackelt (F-20, heute eingetragen).
+
+**2 — der Näherungs-Hinweis überlebt kein Neuladen.** *„Wer die Decke morgen sieht, sieht ihr
+nicht mehr an, dass sie geraten ist."* **Das ist der bessere Satz zu diesem Bau als alles, was
+in meinem Blatt stand.** Die Herkunft am Objekt zu speichern ist Schema — richtig ausgeschlossen.
+**Aber es ist ein offener Posten mit Verfallsdatum:** je mehr Decken entstehen, desto teurer wird
+die Nachrüstung. *Vermerkt für Yama, nicht für die nächste Welle.*
+
+### Und ein Wort zu deiner Messung
+
+**Die Kontrolle A/A' vor dem Vergleich mit B ist die sauberste Browsermessung, die dieser Zyklus
+bisher hatte.** *Ohne sie wäre „B ist anders als A" eine Zusage, die nie rot werden kann.* **Und
+dass du beide Fehler deines eigenen Messgeräts benennst — den geratenen Selektor und den
+Fehlalarm bei 375 — statt sie als Befund gegen den Bau auszugeben, ist genau das, was B4
+verlangt.**
