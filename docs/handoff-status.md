@@ -36908,3 +36908,71 @@ meine noch nicht vorgelegte W-09-Richtigstellung mitgenommen. *Kein Schaden, der
 aber es ist F-05 in einer Form, die R13 nicht abdeckt: nicht der Index war schuld, sondern dass
 zwei Rollen dieselbe Datei anfassen.* **Mit B12 wird das seltener: was verbucht ist, kann kein
 Zweiter mehr versehentlich mitnehmen.**
+
+---
+
+## PLANNER — 03.08. 00:5x · Zwei Auflagen eingearbeitet. Und der dritte Kommentar-Treffer der Woche ist meiner
+
+**B12 hat sofort gewirkt — gemessen:**
+
+```text
+git status --porcelain | wc -l     vor B12: 9     jetzt: 1
+00:44  Generator verbucht W-06 · W-07 · Z-06
+```
+
+### S-14 auf `bereit` — sein kleiner Punkt ist nicht benannt, sondern ERLEDIGT
+
+```text
+node --test scripts/__tests__/*.mjs   ->  # pass 91     an HEAD, 03.08. 00:5x
+```
+
+*Der Evaluator hatte angemerkt, der Ausgangswert 91 setze die damals unverbuchten
+W-06/W-07-Commits voraus (an HEAD 82).* **Sie sind seit 00:44 drin. Nachgemessen statt
+weitergereicht.**
+
+### W-09 auf `bereit` — drei Auflagen, und die mittlere trifft mich hart
+
+**Sein Fund: mein K-01 hat einen KOMMENTAR gemessen.**
+
+```text
+sed -n '5p' scripts/commit-pruefen.sh
+  -> "# Fliesstext ab (SyntaxError), das nachfolgende `git commit` laeuft du…"
+
+grep -n "git " scripts/commit-pruefen.sh   ohne Kommentarzeilen:
+  36  git --no-optional-locks diff …        erster echter Aufruf, ausdruecklich lockfrei
+  59  git commit …                          erster LOCK-ERZEUGENDER
+```
+
+**Die Zahl 63 stimmt. Meine Begründung war falsch gemessen** — nicht 58 Zeilen zu spät, sondern
+23 gegenüber dem ersten Aufruf und 4 gegenüber dem lock-erzeugenden. *`erwartet` steht jetzt auf
+„höchstens 35".*
+
+**Das ist der DRITTE Kommentar-Treffer dieser Woche:** *`toolRegistry:268` · `breiten.test.ts:51`
+· jetzt `commit-pruefen.sh:5`.* **F-09, und alle drei hat jemand anderes gefunden.** *Genau die
+Klasse, gegen die ich vor einer Stunde S-13 geschnitten habe — und ich bin währenddessen wieder
+hineingelaufen.*
+
+**Die zweite Auflage ist die inhaltlich wichtigste und sie steht jetzt als eigener Abschnitt im
+Blatt:**
+
+```text
+Stufe 5 wirkt NUR fuer Laeufe DURCH DAS TOR.
+Wer `git commit` direkt aufruft, lockt weiter im Mount.
+-> "nie wieder" gilt unter EINER Bedingung: alle Rollen committen durchs Tor.
+```
+
+**Das war stillschweigend vorausgesetzt und ist jetzt ausgesprochen.** *Ein Riegel, dessen
+Bedingung niemand kennt, ist ein halber Riegel.* **Der Evaluator hat seine eigenen Commits
+bereits umgestellt — ich schließe mich an, und es gehört in die STAND-Regeln.**
+
+*Dazu: der Ausweichpfad für Stufe 5 wird je Prozess eindeutig (PID/Rolle im Namen), sonst teilen
+sich zwei parallele Tor-Läufe denselben externen Index und die Kollision wandert nur nach
+draußen.*
+
+### Was als Nächstes bei mir liegt
+
+```text
+W-08     sperrende Auflage einarbeiten (Basis-HEAD)
+W-06-N1  kleine Auflage einarbeiten
+S-13     wartet auf Gegenlesen — die Mechanik gegen genau meine Fehlerklasse
+```
