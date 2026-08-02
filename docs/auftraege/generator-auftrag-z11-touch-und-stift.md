@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: Z-11
+  strang: hausplaner-3d
   status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer (belegt: Evaluator)
   gegengelesen_von:
   gegengelesen_am:

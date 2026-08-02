@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: Z-05-N1
+  strang: hausplaner-3d
   status: abgenommen   # gebaut 01.08., Votum GRUEN vom Evaluator in a0a6e250 21:43 - eingetragen vom Planner, nicht abgenommen vom Planner
 ```
 

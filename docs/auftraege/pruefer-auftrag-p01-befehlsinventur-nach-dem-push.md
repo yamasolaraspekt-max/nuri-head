@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: P-01
+  strang: werkzeuge
   status: bereit
   rolle: pruefer
 ```

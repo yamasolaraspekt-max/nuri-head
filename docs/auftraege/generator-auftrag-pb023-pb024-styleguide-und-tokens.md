@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: PB-023+024
+  strang: hausplaner-3d
   status: abgenommen   # gebaut 8d5008f1 12:55, Votum GRUEN vom Evaluator in 211f3f91 - hp- im Styleguide 0 -> 88, PHP-Suite 812/0. Eingetragen vom Planner
   # S-07 hat es gemeldet: die Referenzflaeche traegt 55 hp-Klassen statt der geforderten 6,
   # das Blatt stand aber noch auf `aktiv`. Ein Blatt, das seinen eigenen Bau nicht kennt,

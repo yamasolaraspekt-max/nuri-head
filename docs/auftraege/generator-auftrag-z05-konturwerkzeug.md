@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: Z-05
+  strang: hausplaner-3d
   status: gebaut   # 264ab9dc, 01.08. 19:09 - wartet auf das Votum des Evaluators. L-01 ist nach Z-05-N1 verschoben.
 ```
 

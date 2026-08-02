@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: W-04
+  strang: werkzeuge
   status: entwurf   # B8 - Werkzeug-Blatt, Gegenleser ist der Evaluator
   gegengelesen_von:
   gegengelesen_am:

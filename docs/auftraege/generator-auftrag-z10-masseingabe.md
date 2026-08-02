@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: Z-10
+  strang: hausplaner-3d
   status: gebaut   # c9af2243, 02.08. 09:20 - Suite 1641/1641, tsc 0, Inline-Stellen unveraendert. Wartet auf das Votum des Evaluators
 ```
 

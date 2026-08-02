@@ -13,6 +13,7 @@ schon steht.*
 ```yaml
 auftrag:
   id: AUF-88-P1
+  strang: hausplaner-3d
   status: gesperrt
   sperrgrund: >
     Wartet auf den BAU von AUF-83-T3 und AUF-83-T5. Grund: §17 des Master-Prompts verlangt

@@ -6,6 +6,7 @@
 ```yaml
 auftrag:
   id: Z-03+Z-04
+  strang: hausplaner-3d
   status: aktiv   # das EINE aktive Blatt - der Generator baut, der Baum zeigt fangKern.ts und zwei Fang-Zusagen geaendert (gemessen 01.08. 22:0x). S-07 meldet deshalb STEHT SCHON; bei einem Blatt in Arbeit ist das die richtige Meldung, keine Sperre
 ```
 

@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: W-02
+  strang: werkzeuge
   status: gebaut   # 3d3941f2, 02.08. 08:55 - 82 Zusagen/0 fail, Mutationsprobe 7 von 7 gefangen. Wartet auf das Votum des Evaluators
   gegengelesen_von: evaluator
   gegengelesen_am: "2026-08-01 23:0x"

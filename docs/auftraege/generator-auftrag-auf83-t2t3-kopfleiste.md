@@ -39,6 +39,7 @@ Grundlage: `docs/planner/bestandsaufnahme-studio-rahmen-2026-07-29.md`.*
 ```yaml
 auftrag:
   id: AUF-83-T2T3
+  strang: hausplaner-3d
   status: gesperrt
   sperrgrund: "wartet auf Yamas Freigabe des Entwurfs (entwurf-studio-kopfleiste-2026-07-29.html)"
   spur: B

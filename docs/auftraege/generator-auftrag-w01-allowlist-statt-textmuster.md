@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: W-01
+  strang: werkzeuge
   status: bereit   # Sicherheitsposten nach dem Push von 20:01. Nicht aktiv, weil der Generator gerade Z-03+Z-04 baut - W-01 ist der naechste Griff, nicht der laufende
 ```
 

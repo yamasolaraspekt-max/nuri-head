@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: W-03
+  strang: werkzeuge
   status: gesperrt
   sperrgrund: "W-01 arbeitet gerade an scripts/auftrag-pruefen.mjs. Zwei Blaetter an derselben Datei sind Beifang mit Ansage (F-05). Wird `entwurf`, sobald W-01 abgenommen ist - dann Gegenlesen durch den Evaluator (B8)."
   gegengelesen_von:

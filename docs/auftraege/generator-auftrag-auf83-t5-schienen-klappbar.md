@@ -18,6 +18,7 @@ Escape schließt das oberste, Zustand pro Nutzer und Workspace".***
 ```yaml
 auftrag:
   id: AUF-83-T5
+  strang: hausplaner-3d
   status: gesperrt
   sperrgrund: >
     Wartet auf den BAU von AUF-83-T3 und auf die eingetragene K-08-Messung (Vorher- UND

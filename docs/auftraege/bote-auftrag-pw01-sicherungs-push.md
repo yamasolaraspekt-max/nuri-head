@@ -5,6 +5,7 @@
 ```yaml
 auftrag:
   id: PW-01
+  strang: werkzeuge
   status: entwurf   # B8: ohne Gegenlesen wird kein Blatt `bereit`. Dies ist die ERSTE Anwendung
   rolle: bote
   gegengelesen_von:
