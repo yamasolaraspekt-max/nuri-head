@@ -1,0 +1,7 @@
+gg
+   PASS  Tests\Feature\Product\ProductImageFillableTest
+  ✓ product image uebernimmt name per mass assignment                   20.17s  
+
+  Tests:    1 passed (2 assertions)
+  Duration: 20.23s
+

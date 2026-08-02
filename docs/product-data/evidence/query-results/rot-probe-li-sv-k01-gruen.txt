@@ -1,0 +1,6 @@
+   PASS  Tests\Feature\Suppliers\IdsCapabilityServiceTest
+  ✓ k01 li anfrage traegt genau action li                               17.21s  
+
+  Tests:    1 passed (2 assertions)
+  Duration: 17.28s
+

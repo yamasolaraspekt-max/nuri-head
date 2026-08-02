@@ -184,3 +184,62 @@ in diesen Ledger, wir bauen. *Genau so hat es heute früh zweimal funktioniert.*
 
 **Sonst gilt für uns ab sofort:** Rolle **und** Strang in der ersten Zeile, `strang: hausplaner-3d`
 in jedem neuen Kopf, kein Griff in `docs/product-data/**`, `app/**`, `routes/**`.
+
+---
+
+## 5 · Wiederaufnahme 02./03.08. — Messwerte da, drei Aufträge umgesetzt und abgenommen
+
+> Rollenfolge dieses Durchgangs, angesagt: erst Mess-Ausführung (Yama-Posten in Vertretung),
+> dann **Generator** (keine der Auftrags-Instanzen), Abnahme durch **getrennte Evaluator-Instanz**.
+
+### Messwerte (die zwei offenen Yama-Posten)
+
+| Posten | Ergebnis | Befehl/Beleg |
+|---|---|---|
+| `ergebnis-2026-08.txt` | liegt vor, **92 Zeilen, mysql exit 0**, alle 10 Abschnitte | Commit `307b486e` · Lauf via Laravel-Config (Passwort nie sichtbar) |
+| Testsuite-Baseline | **812 passed / 2898 assertions**, 50,58 s | `php artisan test`, 02.08. |
+
+**Dublettenzahl für Schritt 3 (der Planner-Blocker):** 3a=0 · 3b=0 (**alle 94 Artikel ohne EAN**)
+· 3c=**4** (brand 79: standard/komfort/premium/eco je 2×) · 3d=0 · 3e=0.
+Weitere Kernzahlen: `stamm_weicht_ab` **82/88** (§3.2 belegt) · 61 Artikel ohne Lieferantenpreis ·
+`measures` leer (0 Zeilen, 94× `ohne_einheit`) · Status einheitlich `active` (§3.5-Erwartung „drei
+Wertwelten" im lokalen Bestand **nicht** bestätigt) · Abschnitt 10 lief fehlerfrei ⇒ **M-A produktiv
+gezogen**; `imported_from`: 24× wberechnung, 70× NULL; `verifikations_status` durchgängig NULL.
+
+### Generator — umgesetzt (uncommittet, Scheiben liegen zur Freigabe)
+
+| Auftrag | Änderung | Rot-Probe |
+|---|---|---|
+| AUF-P1-S2-c | `config/services.php` erster `fusion_forms`-Block gestrichen; grep-Count 1; tinker-Vergleich `IDENTISCH-UND-GESETZT` (ohne Wertanzeige) | — (FusionWebhookTest 2 passed) |
+| AUF-P1-S2-d3 | `SupplierConnectorService.php:1351` `'title'`→`'name'`; neuer Test `ProductImageFillableTest` | rot/grün, Rohausgaben `evidence/query-results/rot-probe-d3-*.txt` |
+| AUF-IDS-LI-SV | `app/Services/Suppliers/Ids/` (Dienst+DTO) · additive Migration `2026_08_02_150000` (2× nullable) · `config/ids.php` (Schalter `IDS_CAPABILITIES_AKTIV`) · 2 additive Casts am Model · Einhäng-Block in `test()` **vor** dem Suchtest · 20 Tests (15 Kanten + K-01..K-06) | K-01 rot/grün, Rohausgaben `evidence/query-results/rot-probe-li-sv-k01-*.txt` |
+
+### Evaluator (getrennte Instanz) — Urteil
+
+**GRÜN × 3** am Mess-HEAD `3f811207`. Suite **833 passed / 2966 assertions**, zweimal gemessen,
+Delta geht exakt auf (+21 Tests = 20+1, +68 Assertions = 66+2). Eigene Rot-Proben beide bestanden,
+Baum byte-genau zurückgesetzt. Befund `test_k03`-Assertion nachgeschärft (Generator, danach
+`1 passed (10 assertions)`).
+
+**Offen geblieben:**
+
+| # | Was | Bei wem |
+|---|---|---|
+| 1 | K-07 Migration-Rollback-Probe — `migrate:rollback` per Berechtigung gesperrt; `down()` gelesen, plausibel | Yama (Freigabe oder selbst ausführen) |
+| 2 | Streu-Output „gg" vor jeder Testausgabe (vergessenes echo im Test-Bootstrap, nicht aus diesen Aufträgen) | melden → Verursacher-Strang |
+| 3 | Kante 11 wörtlich („nicht in den Speicher laden"): umgesetzt als Content-Length-Prüfung + `strlen`-Kappe — verhindert Parsen, nicht Puffern | benannt, bewusst so |
+
+### Ballbesitz jetzt
+
+| Rolle | Was |
+|---|---|
+| **Yama** | Commit-Freigabe für die 4 Scheiben (unten) · K-07-Entscheid · Push |
+| **Planner** | **entblockt** — Schritt 3 kann mit der Dublettenzahl weiterarbeiten |
+| **Generator/Evaluator** | fertig für diese Runde |
+
+### Commit-Scheiben (vorbereitet, NICHT gesetzt — Commits nur auf Yamas Wort)
+
+1. `config/services.php` — AUF-P1-S2-c
+2. `app/Services/Suppliers/SupplierConnectorService.php` + `tests/Feature/Product/ProductImageFillableTest.php` — AUF-P1-S2-d3
+3. `app/Services/Suppliers/Ids/` + `config/ids.php` + `database/migrations/2026_08_02_150000_*` + `app/Models/SupplierConnection.php` + `app/Services/Suppliers/SupplierConnectionTestService.php` + `tests/Feature/Suppliers/IdsCapabilityServiceTest.php` — AUF-IDS-LI-SV
+4. `docs/product-data/evidence/query-results/*.txt` + dieser Ledger-Abschnitt — Belege

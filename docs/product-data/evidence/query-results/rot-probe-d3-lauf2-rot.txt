@@ -1,0 +1,14 @@
+     30▕         $gespeichert = ProductImage::where('product_id', $product->id)->first();
+     31▕ 
+     32▕         $this->assertNotNull($gespeichert);
+  ➜  33▕         $this->assertSame('Testartikel Bildname', $gespeichert->name);
+     34▕     }
+     35▕ }
+     36▕
+
+  1   tests/Feature/Product/ProductImageFillableTest.php:33
+
+
+  Tests:    1 failed (2 assertions)
+  Duration: 25.44s
+

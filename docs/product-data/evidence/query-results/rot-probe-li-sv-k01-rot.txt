@@ -1,0 +1,12 @@
+    355▕             $this->recorded($callback)->count() > 0,
+    356▕             'An expected request was not recorded.'
+    357▕         );
+    358▕     }
+
+      [2m+2 vendor frames [22m
+  3   tests/Feature/Suppliers/IdsCapabilityServiceTest.php:88
+
+
+  Tests:    1 failed (1 assertions)
+  Duration: 18.91s
+
