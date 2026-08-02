@@ -34985,3 +34985,70 @@ Damit faellt der letzte Sperrgrund von Z-06 (fa3364f7: Bedingung 2 seit a0a6e250
 Bedingung 1 war dieses Votum). **Ballbesitz: Generator (Z-06 Zwischendecke).**
 
 VOTUM: auftrag=Z-05 rolle=evaluator ergebnis=gruen commit=8b3868b1 datum=2026-08-02 hinweis=z06-entsperrt-filter-flag-wird-ignoriert-dateilauf-genutzt
+
+---
+
+## AN DEN EVALUATOR — 02.08. 13:4x · Alle VIER wartenden Blätter vorgemessen. Und einer widerspricht sich
+
+**Vier Blätter stehen auf `gebaut` und warten auf dein Votum. Ich habe jede Zahl gefahren, die
+ohne npm messbar ist** — damit du nicht viermal bei null anfängst. **Kein Votum von mir, nur die
+Messwerte.**
+
+```text
+BLATT              KRITERIUM                              GEMESSEN   ERWARTET
+Z-05   K-01  kontur in werkzeugArten.ts                        1      >=1        ✔
+       K-03  validation.ts geaendert                           0        0        ✔
+       K-02  geometry/kontur.ts + __tests__/kontur.test.ts   beide   vorhanden   ✔
+             (5 von 5 verlangten Faellen, plus 6 weitere)
+
+Z-10   K-01  masseingabe in tastenAbsicht.ts                  10      >=1        ✔
+       K-02  punktAusLaenge in geometry/                       1      >=1        ✔
+       K-03  bemassung.ts + masskette.ts geaendert             0        0        ✔
+       K-04  validation.ts geaendert                           0        0        ✔
+
+AUF-38 K-01  Kopfrahmen.tsx                            7 / 0 offen   7 / 0       ✔
+P4+P5  K-02  HausplanerApp.tsx                         3 / 0 offen   3 / 0       ✔
+       K-03  gesamt                                  118 / 0 offen  118 / 0      ✔
+       K-04  neue Rohfarben im CSS-Diff                        0        0        ✔
+
+W-02   K-01  scripts/zeile-ersetzen.mjs vorhanden              1        1        ✔
+       K-07  unlinkSync/renameSync im Werkzeug                 0        0        ✔
+```
+
+**Alle vierzehn messbaren Stellen treffen ihr `erwartet`.** *Die npm-Gates und die
+Verhaltensprüfungen bleiben deine — der Planner fährt keine Gates, und wer misst, votiert nicht.*
+
+### ABER: W-02 nicht abnehmen, ohne den Prüfer-Befund von heute zu kennen
+
+**Die Zahlen von W-02 sind grün. Seine Wirkung ist es nicht.**
+
+```text
+Pruefer, 02.08.:  pruefeInhalt(fangKern.ts UNVERAENDERT, '.ts')  ->  false
+Planner nachgemessen:
+  grep -o '(' …/geometry/fangKern.ts | wc -l   ->  81
+  grep -o ')' …/geometry/fangKern.ts | wc -l   ->  87      sechs davon in `// 1)`-Kommentaren
+```
+
+**`zeile-ersetzen` kann gewöhnliche `.ts`-Dateien gar nicht schreiben** — und B6 benennt genau
+dieses Werkzeug als Ersatz für das verbotene `perl -pi`. *Ein grünes Votum auf W-02 würde ein
+Werkzeug abnehmen, von dem seit heute belegt ist, dass es an seiner Kernaufgabe scheitert.*
+
+**Kein Urteil von mir, sondern die zwei Wege, die ich sehe** — du entscheidest:
+
+```text
+(a) Votum MIT AUFLAGE: gruen fuer das, was W-02 versprochen hat (Splice-Sperre, Grenzzeilen,
+    Drift-Sperre - alles belegt), mit W-06 als benannter Nacharbeit. Dann ist W-02 raus aus
+    der Schlange und W-06 traegt den Rest.
+(b) Votum WARTET auf W-06. Dann bleibt W-02 in der Schlange, und die Schlange ist ohnehin
+    der Engpass.
+```
+
+*Ich neige zu (a), weil W-02 die vier Splice-Fehler vom 01.08. nachweislich verhindert und die
+`.ts`-Lücke eine ANDERE Zusage ist als die, die W-02 gegeben hat. Aber das ist ein Urteil, und
+Urteile sind Stufe 1 — es ist deins, nicht meins.*
+
+### Nebenbefund
+
+**AUF-38 steht bei `118 Stellen / 0 offen`** — exakt der Wert, den Z-11 K-08 als Obergrenze nennt
+(*„höchstens 118, Stand fba3083f"*). **Die beiden Blätter sind konsistent**, und ein Bau an Z-11
+kann diese Zahl nicht unbemerkt anheben.
