@@ -34730,3 +34730,69 @@ durchrutscht** — wer S-10 wieder aufnimmt, legt zuerst die drei Fixtures an od
 Verzeichnis.
 
 **Meine drei neuen Blätter im selben Lauf: 0 Fehlschlag, 0 verdächtig, 0 Nulltreffer.**
+
+---
+
+## PLANNER — 02.08. 12:5x · Push-Versuch mit Yamas Erlaubnis: GEMESSEN, nicht gelungen
+
+**Yama hat den Push ausdrücklich erlaubt.** Ich habe beide Wege gemessen, die mir offenstehen.
+**Keiner trägt** — und diesmal steht das VOR der Behauptung, nicht danach.
+
+```text
+WEG 1 - Geraete-VM (device_bash), dort liegt das Repo mit den Commits
+  timeout 25 git --no-optional-locks ls-remote --exit-code fork HEAD
+    -> fatal: unable to access … Received HTTP code 403 from proxy after CONNECT
+  Unveraendert gegenueber dem 01.08. Kein Netz zu GitHub, auch nicht mit Erlaubnis.
+
+WEG 2 - Cloud-Sandkasten (der zweite Bash dieser Sitzung)
+  git ls-remote https://github.com/…/nuri-head.git   ->  LIEST, oeffentlich, ohne Zugangsdaten
+  git clone --depth 1 …                              ->  gelingt (675 MB)
+  git push --dry-run …                               ->  fatal: could not read Username for
+                                                          'https://github.com'
+  Lesen ja, Schreiben nein. Zugangsdaten gibt es hier keine - und ich trage keine ein.
+```
+
+**Die Erlaubnis war nie das Hindernis. Die Fähigkeit ist es** — genau der Unterschied, den der
+Inzident vom 01.08. gekostet hat (*„dürfen ≠ können"*).
+
+### DAFÜR eine neue Fähigkeit, und sie schließt genau die Lücke von gestern
+
+**Der Cloud-Sandkasten kann den ECHTEN Stand auf GitHub lesen — ohne Zugangsdaten, jederzeit:**
+
+```text
+git ls-remote https://github.com/yamasolaraspekt-max/nuri-head.git refs/heads/auto/hausplaner-integration
+  ->  aebe57b6f168d0e649360eeb68087f628472da47      (gemessen 02.08. 12:5x)
+```
+
+**Der 01.08. hat drei falsche Push-Zuordnungen gekostet, weil niemand die Quelle selbst gefragt
+hat** — der Evaluator schrieb den Push sich zu, ich ihm widersprochen und mir, beides aus
+Datei-mtime und Reflog. **Diese eine Zeile hätte alle drei erspart.** *Sie gehört in P-01 Teil 0,
+und sie ist der erste Befehl, der die Frage „ist es draußen?" beantwortet, statt sie zu schätzen.*
+
+### Was gerade wirklich draußen ist
+
+```text
+auf GitHub                aebe57b6   (echte Messung, nicht der lokale Remote-Zeiger)
+lokal noch nicht draussen 4 Commits:
+  6ea45e05  W-08 geschnitten
+  d1cecdcf  Gegenlese-Verteilung nach B8
+  d82c2821  F-18 und F-19 als Klassen
+  d255a917  Befund S-10
+```
+
+**Und eine Beobachtung, ausdrücklich OHNE Zuordnung:** der Reflog zeigt heute vier `update by
+push` (09:15:10, 09:23:46, 10:28:26, **12:12:28**). Der letzte trug `aebe57b6` hinaus — meinen
+eigenen W-07-Commit von 12:12. **Aus welcher Umgebung, weiß ich nicht, und ich rate es diesmal
+nicht.** *Es pusht etwas in unregelmäßigen Abständen; die vier Commits gehen vermutlich beim
+nächsten Mal von selbst mit.* Wer es ist, klärt P-01 Teil 0 — und jetzt mit dem Befehl von oben
+statt mit mtimes.
+
+### Für VS Code auf dem Mac — zwei Zeilen, mehr ist es nicht
+
+```text
+cd ~/Documents/ticket
+git push fork auto/hausplaner-integration
+```
+
+**Nicht `upstream`, nicht `--force`, nicht `main`.** Danach zeigt derselbe `ls-remote` von oben
+`d255a917`.
