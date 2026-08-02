@@ -100,14 +100,64 @@ export const RAND_ENDE = 'DATEIENDE';
  * **`parseDiagnostics` ist intern, aber genau die Liste, die `tsc` fuer SYNTAXfehler fuehrt** —
  * keine Typpruefung: ein unbekannter Name ist hier kein Fehlschlag, eine fehlende Klammer schon.
  */
-function traegtSyntaktisch(text, endung) {
+export function traegtSyntaktisch(text, endung, parser = ts) {
   const art = endung === '.tsx'
     ? ts.ScriptKind.TSX
     : endung === '.ts' ? ts.ScriptKind.TS : ts.ScriptKind.JS;
-  const quelle = ts.createSourceFile(`pruefling${endung}`, text, ts.ScriptTarget.Latest, true, art);
+  // **Der Parser ist ein Parameter, kein fester Bezug.** `ts.createSourceFile` traegt in der
+  // Bibliothek nur einen Getter und laesst sich von aussen nicht ersetzen — ohne diesen
+  // Einstieg waere der Waechter unten *unpruefbar*, und eine Sperre, die man nicht rot bekommt,
+  // ist keine (B4). *Im Betrieb steht hier immer `ts`; nur die Gegenprobe reicht etwas anderes.*
+  const quelle = parser.createSourceFile(`pruefling${endung}`, text, ts.ScriptTarget.Latest, true, art);
+  const diagnose = quelle.parseDiagnostics;
 
-  return (quelle.parseDiagnostics ?? []).length === 0;
+  // **W-06-N1 — FEHLT die Diagnose, ist das ein FEHLSCHLAG und kein Freibrief.**
+  //
+  // Die erste Fassung nahm die Diagnose mit einem Null-Zusammenfall entgegen und fragte danach
+  // ihre Laenge. *Der Ausdruck steht hier bewusst NICHT ausgeschrieben: K-01 misst seine
+  // Abwesenheit mit `grep`, und ein Kommentar, der ihn zitiert, macht die Absenz-Zusage
+  // unerfuellbar — F-09, zum VIERTEN Mal in dieser Woche.* Faellt die Eigenschaft bei einem
+  // TypeScript-Update weg, liefert der Zusammenfall eine leere Liste — und die Sperre sagt zu
+  // ALLEM ja. *Sie stirbt still und sieht weiter gruen aus: schlimmer als die Klammer-Bilanz
+  // davor, die zu viel sperrte und deshalb sofort auffiel.*
+  //
+  // **Der Unterschied, auf den es ankommt:** eine LEERE Liste ist ein echtes Ergebnis („keine
+  // Fehler gefunden") und muss durchgehen. KEINE Liste ist gar kein Ergebnis. Wer beide gleich
+  // behandelt, hat das Problem nur umgedreht.
+  if (!Array.isArray(diagnose)) {
+    return false;
+  }
+
+  return diagnose.length === 0;
 }
+
+/**
+ * **SELBSTPROBE — merkt das Werkzeug, wenn sein eigener Parser blind wird?**
+ *
+ * `parseDiagnostics` ist eine INTERNE Eigenschaft von TypeScript. Ein Update darf sie aendern,
+ * ohne dass das als Bruch gilt. Die Absicherung oben faengt den Fall, dass sie ganz verschwindet
+ * — **nicht** den, dass sie bleibt und nichts mehr meldet.
+ *
+ * Deshalb parst das Werkzeug beim Start einen Schnipsel mit BEKANNTEM Syntaxfehler. Findet der
+ * Parser ihn nicht, arbeitet das Werkzeug nicht weiter, sondern bricht ab und sagt warum.
+ *
+ * *Derselbe Gedanke wie die Kontrolle A/A' im Z-06-Browsertest: erst weil der bekannte Fehlerfall
+ * rot wird, bedeutet ein gruenes Urteil ueberhaupt etwas.*
+ */
+export function selbstprobe(parser = ts) {
+  const kaputt = 'const a = { x: 1;\n';
+  if (traegtSyntaktisch(kaputt, '.ts', parser)) {
+    throw new Error(
+      'SELBSTPROBE GESCHEITERT: der TypeScript-Parser meldet einen bekannten Syntaxfehler NICHT '
+      + '(`const a = { x: 1;`). `parseDiagnostics` ist intern und kann sich mit jedem Update '
+      + 'aendern. Es wird NICHTS geschrieben, solange die Pruefung nicht beweisbar wirkt.',
+    );
+  }
+
+  return true;
+}
+
+selbstprobe();
 
 /** Sind die ```-Zaeune paarig? **Fehler 22:1x: ein Splice liess einen offenen Zaun zurueck.** */
 function zaeuneGerade(text) {

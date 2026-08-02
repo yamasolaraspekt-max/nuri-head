@@ -30,7 +30,11 @@ import { readFileSync, writeFileSync, mkdtempSync, readdirSync, statSync } from 
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { createHash } from 'node:crypto';
-import { pruefeInhalt, grenzZeilen, ersetze, standUnveraendert, RAND_ANFANG, RAND_ENDE } from '../zeile-ersetzen.mjs';
+import { pruefeInhalt, grenzZeilen, ersetze, standUnveraendert, RAND_ANFANG, RAND_ENDE,
+  selbstprobe, traegtSyntaktisch } from '../zeile-ersetzen.mjs';
+// W-06-N1: die Gegenproben reichen einen blinden Parser HINEIN, statt die Bibliothek zu
+// ueberschreiben — `ts.createSourceFile` traegt nur einen Getter und laesst sich nicht ersetzen.
+import { ohneKommentare } from '../zaehle.mjs';
 
 const verz = mkdtempSync(join(tmpdir(), 'w02-'));
 const md5 = (p) => createHash('md5').update(readFileSync(p)).digest('hex');
@@ -270,4 +274,58 @@ test('W-06/K-04: keine Hilfsdatei mehr neben der Quelle — der Umweg ist fort, 
   const quelle = readFileSync(new URL('../zeile-ersetzen.mjs', import.meta.url), 'utf8');
   assert.ok(!quelle.includes('pruef-tmp'), 'die Hilfsdatei neben der Quelle ist zurueck');
   assert.match(quelle, /import ts from 'typescript'/, 'der Parser wird nicht mehr gefragt');
+});
+
+// --- W-06-N1: der Parser faellt nicht offen -----------------------------------------------------
+//
+// **Die Mutationsprobe VOR diesen Zusagen — 8 Mutationen, 3 kamen durch:**
+//
+// ```text
+// Waechter weg (fail-open zurueck)   fail 0   <- BLIND
+// Selbstprobe wirft nicht mehr       fail 0   <- BLIND
+// Selbstprobe wird nie aufgerufen    fail 0   <- BLIND
+// Waechter dreht sich um             fail 7
+// leere Liste faellt jetzt auch durch fail 7
+// alles traegt                       fail 1
+// Selbstprobe prueft heilen Text     fail 1
+// Selbstprobe-Bedingung gedreht      fail 1
+// ```
+//
+// **Alle drei blinden oeffnen den Riegel wieder** — und keine davon sperrt zu viel. *Das ist die
+// Klasse dieser Scheibe: eine Sperre, die still stirbt, sieht in jeder Zahl gut aus.*
+
+test('W-06-N1/K-02: FEHLT die Diagnose, faellt die Datei durch — leere Liste traegt weiter', () => {
+  // **Die zweite Zeile ist die Gegenprobe.** Eine leere Liste ist ein ECHTES Ergebnis („keine
+  // Fehler gefunden"); wer beide Faelle gleich behandelt, hat das Problem nur umgedreht.
+  //
+  // Geprueft wird an der ENTSCHEIDUNG, nicht am Quelltext: `createSourceFile` wird kurz durch
+  // eine Fassung ersetzt, die kein `parseDiagnostics` liefert.
+  const ohneDiagnose = { createSourceFile: () => ({}) };
+  const leereDiagnose = { createSourceFile: () => ({ parseDiagnostics: [] }) };
+
+  assert.equal(traegtSyntaktisch('const a = 1;\n', '.ts', ohneDiagnose), false,
+    'ohne Diagnose wird alles durchgelassen — der fail-open ist zurueck');
+  assert.equal(traegtSyntaktisch('const a = 1;\n', '.ts', leereDiagnose), true,
+    'eine leere Diagnose wird faelschlich als Fehler gelesen');
+  // presence-Partner (B4): am ECHTEN Parser trennt dieselbe Funktion heil von kaputt.
+  assert.equal(pruefeInhalt('const a = 1;\n', '.ts'), true);
+  assert.equal(pruefeInhalt('const a = { x: 1;\n', '.ts'), false);
+});
+
+test('W-06-N1/K-04: die Selbstprobe schlaegt an, wenn der Parser blind wird', () => {
+  // *Derselbe Gedanke wie die Kontrolle A/A' im Z-06-Browsertest: erst weil der bekannte
+  // Fehlerfall rot wird, bedeutet ein gruenes Urteil ueberhaupt etwas.*
+  assert.equal(selbstprobe(), true, 'die Selbstprobe traegt am heilen Parser nicht');
+
+  // DIE ROTE GEGENPROBE: ein Parser, der nichts mehr meldet.
+  const blind = { createSourceFile: () => ({ parseDiagnostics: [] }) };
+  assert.throws(() => selbstprobe(blind), /SELBSTPROBE GESCHEITERT/,
+    'ein blinder Parser wird nicht bemerkt — das Werkzeug schriebe weiter');
+});
+
+test('W-06-N1/K-04: die Selbstprobe wird beim Laden AUSGEFUEHRT, nicht nur definiert', () => {
+  // **Die Mutation „Selbstprobe wird nie aufgerufen" kam blind durch.** Eine Pruefung, die
+  // dasteht und nie laeuft, ist Prosa mit Klammern (B9).
+  const quelle = ohneKommentare(readFileSync(new URL('../zeile-ersetzen.mjs', import.meta.url), 'utf8'));
+  assert.match(quelle, /^selbstprobe\(\);$/m, 'die Selbstprobe wird nirgends aufgerufen');
 });
