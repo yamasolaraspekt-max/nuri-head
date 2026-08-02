@@ -1,0 +1,15 @@
+<Warenkorb xsi:schemaLocation="http://www.itek.de/Shop-Anbindung/Warenkorb/ warenkorb_empfangen_2_5.xsd">
+<WarenkorbInfo>
+<Date>2009-10-29</Date>
+<Time>17:00:29</Time>
+<RueckgabeKZ>Warenkorbrückgabe</RueckgabeKZ>
+<Version>2.5</Version>
+</WarenkorbInfo>
+<Order>
+<OrderItem>
+<ArtNo>4711</ArtNo>
+<Qty>50.00</Qty>
+<QU>MTR</QU>
+</OrderItem>
+</Order>
+</Warenkorb>

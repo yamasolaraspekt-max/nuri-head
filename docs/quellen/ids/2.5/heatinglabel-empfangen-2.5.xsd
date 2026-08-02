@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.itek.de/Shop-Anbindung/Heatinglabel/" xmlns="http://www.itek.de/Shop-Anbindung/Heatinglabel/" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="Heatinglabel">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="PackageFunction" type="typePackageFunction"/>
+							<xs:element name="PackageType" type="typePackageType"/>
+							<xs:element name="LoadProfile" type="typeLoadProfile" minOccurs="0"/>
+							<xs:element name="ModeOfUse" type="typeModeOfUse" minOccurs="0"/>
+							<xs:element name="PackageSupplier" type="tgNormalizedString35"/>
+							<xs:element name="SolarDeviceUsage" type="typeSolarDeviceUsage" minOccurs="0"/>
+							<xs:element name="PDF" maxOccurs="3">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="PDFName" type="tgNormalizedString80"/>
+										<xs:element name="PDFData" type="xs:base64Binary"/>
+										<xs:element name="PDFType" type="typePDFType"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Position" maxOccurs="10000">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SupplierID" type="tgNormalizedString80"/>
+							<xs:element name="Productnumber" type="tgNormalizedString80"/>
+							<xs:element name="GTIN" type="tgNormalizedString13" minOccurs="0"/>
+							<xs:element name="ConstructionFrom" type="xs:date" minOccurs="0"/>
+							<xs:element name="ConstructionTo" type="xs:date" minOccurs="0"/>
+							<xs:element name="Shorttext" type="tgNormalizedString81" minOccurs="0"/>
+							<xs:element name="QTY" type="typeQTY" minOccurs="0"/>
+							<xs:element name="RefItems" type="typeRefItems" minOccurs="0"/>
+							<xs:element name="Producttype" type="typeProducttype" minOccurs="0"/>
+							<xs:element name="Status" type="typeStatus"/>
+							<xs:element name="PDF" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="PDFName" type="tgNormalizedString80"/>
+										<xs:element name="PDFData" type="xs:base64Binary"/>
+										<xs:element name="PDFType" type="typePositionPDFType"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="typeRefItems">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:sequence minOccurs="0">
+				<xs:element name="Customer" type="tgNormalizedString35">
+					<xs:annotation>
+						<xs:documentation>Positionsnummer des Handwerkers</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CustomerSubNo" type="tgNormalizedString35" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Unterpositionsnummer des Handwerkers</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+			<xs:sequence minOccurs="0">
+				<xs:element name="Supplier" type="tgNormalizedString35">
+					<xs:annotation>
+						<xs:documentation>Positionsnummer des Großhändlers</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SupplierSubNo" type="tgNormalizedString35" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Unterpositionsnummer des Großhändlers</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="typePackageFunction">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="warmwater"/>
+			<xs:enumeration value="heating"/>
+			<xs:enumeration value="combination"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typePackageType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="heating-boiler"/>
+			<xs:enumeration value="heating-cogeneration"/>
+			<xs:enumeration value="heating-heatpump"/>
+			<xs:enumeration value="heating-lowtemp-heatpump"/>
+			<xs:enumeration value="heating-solidfuel-boiler"/>
+			<xs:enumeration value="heating-solidfuel-cogeneration"/>
+			<xs:enumeration value="combination-boiler"/>
+			<xs:enumeration value="combination-heatpump"/>
+			<xs:enumeration value="combination-solidfuel-boiler"/>
+			<xs:enumeration value="combination-solidfuel-cogeneration"/>
+			<xs:enumeration value="warmwater-conventional"/>
+			<xs:enumeration value="warmwater-heatpump"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typeLoadProfile">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="M"/>
+			<xs:enumeration value="L"/>
+			<xs:enumeration value="XL"/>
+			<xs:enumeration value="XXL"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typeModeOfUse">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="Indoor"/>
+			<xs:enumeration value="Outdoor"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typeSolarDeviceUsage">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="both"/>
+			<xs:enumeration value="water"/>
+			<xs:enumeration value="heating"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tgNormalizedString80">
+		<xs:restriction base="xs:normalizedString">
+			<xs:maxLength value="80"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tgNormalizedString13">
+		<xs:restriction base="xs:normalizedString">
+			<xs:maxLength value="13"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tgNormalizedString35">
+		<xs:annotation>
+			<xs:documentation>Einzeilige Zeichenkette der max. Länge 35</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:normalizedString">
+			<xs:maxLength value="35"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tgNormalizedString81">
+		<xs:restriction base="xs:normalizedString">
+			<xs:maxLength value="81"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typeQTY">
+		<xs:restriction base="xs:positiveInteger"/>
+	</xs:simpleType>
+	<xs:simpleType name="typeProducttype">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="RHG-HK"/>
+			<xs:enumeration value="RHG-KWK"/>
+			<xs:enumeration value="RHG-WP"/>
+			<xs:enumeration value="N-WP"/>
+			<xs:enumeration value="KHG-HK"/>
+			<xs:enumeration value="KHG-WP"/>
+			<xs:enumeration value="K-WWB"/>
+			<xs:enumeration value="S-WWB"/>
+			<xs:enumeration value="WWB-WP"/>
+			<xs:enumeration value="WWS"/>
+			<xs:enumeration value="TR"/>
+			<xs:enumeration value="SR"/>
+			<xs:enumeration value="TSR"/>
+			<xs:enumeration value="SE"/>
+			<xs:enumeration value="KO"/>
+			<xs:enumeration value="PSO"/>
+			<xs:enumeration value="SOLG"/>
+            <xs:enumeration value="VBA-RHG-TR-S"/>
+            <xs:enumeration value="VBA-KHG-TR-S"/>
+            <xs:enumeration value="VBA-WWB-S"/>
+			<xs:enumeration value="WRL"/>
+			<xs:enumeration value="FBS-HK"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typeStatus">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="NotUsed"/>
+			<xs:enumeration value="NotFound"/>
+			<xs:enumeration value="Used"/>
+			<xs:enumeration value="New"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typePDFType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="PackageLabelAndFiche"/>
+			<xs:enumeration value="Articlelist"/>
+			<xs:enumeration value="PrimaryProductLabel"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="typePositionPDFType">
+		<xs:restriction base="xs:NMTOKEN">
+			<xs:enumeration value="PositionProductLabel"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

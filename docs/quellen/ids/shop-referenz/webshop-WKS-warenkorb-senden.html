@@ -1,0 +1,33 @@
+<HTML><HEAD><META http-equiv="Content-Type" content="text/html; charset=utf-8"></HEAD><BODY>
+
+<FORM action="http://www.GH-server.de/webshop.htm" method="post" name="start" enctype="multipart/form-data">
+<INPUT type="hidden" name="kndnr" value="@kundennr@"/>
+<INPUT type="hidden" name="name_kunde" value="@username@"/>
+<INPUT type="hidden" name="pw_kunde" value="@password@"/>
+<INPUT type="hidden" name="version" value="2.0"/>
+<INPUT type="hidden" name="action" value="WKS"/>
+<textarea name="warenkorb" cols="150" rows="50">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;Warenkorb xmlns=&quot;http://www.itek.de/Shop-Anbindung/Warenkorb/&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://www.itek.de/Shop-Anbindung/Warenkorb/ http://www.itek.de/Shop-Anbindung/Warenkorb/warenkorb_senden.xsd&quot;&gt;
+	&lt;WarenkorbInfo&gt;
+		&lt;Date&gt;2011-05-10&lt;/Date&gt;
+		&lt;Time&gt;12:20:00&lt;/Time&gt;
+		&lt;Version&gt;2.0&lt;/Version&gt;
+	&lt;/WarenkorbInfo&gt;
+	&lt;Order&gt;
+		&lt;OrderInfo&gt;
+			&lt;ModeOfShipment&gt;Abholung&lt;/ModeOfShipment&gt;
+			&lt;Cur&gt;EUR&lt;/Cur&gt;
+		&lt;/OrderInfo&gt;
+		&lt;OrderItem&gt;
+			&lt;ArtNo&gt;@Artikelnummer@&lt;/ArtNo&gt;
+			&lt;Qty&gt;1&lt;/Qty&gt;
+			&lt;QU&gt;PCE&lt;/QU&gt;
+		&lt;/OrderItem&gt;
+	&lt;/Order&gt;
+&lt;/Warenkorb&gt;
+</textarea>
+
+<INPUT type=submit value="Zum Übertragen bitte hier klicken"/>
+</FORM>
+</BODY></HTML>
