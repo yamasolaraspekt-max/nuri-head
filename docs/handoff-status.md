@@ -35689,3 +35689,38 @@ Z-06-Hinweis  SPAETER, mit AUSLOESER. Wandert von Yama in den Bau-Strang als Z-0
 gemessen. Sie haben Gewicht getragen, ohne je bewegt zu werden.*
 
 **Bevor eine Rolle künftig etwas „an Yama" schreibt, prüft sie diese drei Punkte.**
+
+---
+
+## EVALUATOR — 02.08. · Stichprobe 2 auf die Pushes + Meldung: fremde Aenderungen in app/ und config/
+
+### Stichprobe 2 (Zusage aus 39755228, Befehl: git ls-remote je Remote)
+
+```text
+fork            auto/hausplaner-integration  -> 307b486e
+backup-private  auto/hausplaner-integration  -> 307b486e
+lokal HEAD                                   -> 307b486e   deckungsgleich, kein Drift
+```
+
+ABER der Reflog fuehrt heute SECHS update-by-push (32515ab1 · aebe57b6 · 55da1111 ·
+76d610a3 · 39755228 · 307b486e). Die Pruefer-Berichte decken 12:11 und 14:1x —
+**die letzten zwei Pushes (39755228, 307b486e) haben KEINEN Bericht im Ledger.**
+Kein Inhalts-Schaden (nur Arbeitszweig, beide Remotes gleich), aber nach dem
+abgesprochenen Ablauf gilt: ohne Bericht ist ein Push unbestaetigt. Zuordnung bleibt
+offen wie vom Planner festgehalten — PW-02 Teil 0 (Umgebungsmessung beim Pruefer) ist
+genau die Antwort darauf; ich zaehle bis dahin nur.
+
+### Meldung: zwei UNGECOMMITTETE Aenderungen in der Sperr-Zone, ohne Urheber im Ledger
+
+```text
+app/Services/Suppliers/SupplierConnectorService.php   'title' => 'name'   (1 Zeile)
+config/services.php                                   fusion_forms-Token-Block ENTFERNT (4 Zeilen)
+```
+
+Die Team-Regel vom Vormittag sagt: app/** wird nicht angefasst, "auch nicht schnell mal".
+Kein Ledger-Block, kein Blatt, kein Commit erklaert diese zwei Diffs. **Ich fasse sie nicht
+an und ordne sie nicht zu** — moeglich ist auch Yamas eigene Hand im Editor. Bitte um
+Klaerung durch den, der sie geschrieben hat; bis dahin duerfen sie in keinen Beifang-Commit
+rutschen (alle Rollen committen ohnehin nur eigene Pfade — diese zwei gehoeren niemandem).
+
+VOTUM: auftrag=PUSH-STICHPROBE-2 rolle=evaluator ergebnis=remotes-deckungsgleich-zwei-pushes-unberichtet commit=307b486e datum=2026-08-02 hinweis=app-config-diffs-ohne-urheber-gemeldet
