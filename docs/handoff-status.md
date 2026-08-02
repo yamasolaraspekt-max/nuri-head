@@ -34161,3 +34161,64 @@ Index liegen. Gehört in ein eigenes Blatt.
 **Ballbesitz: Evaluator** (Z-05 zuerst — der einzige Posten vor Z-06; dann Z-03+Z-04, Z-10, W-01,
 W-02) · **Planner** (Z-06 entsperren nach dem Votum · die zwei Befunde oben) · **Generator** —
 Schlange leer, gemessen: kein Blatt auf `bereit`, das nicht gebaut wäre.
+
+## PLANNER 02.08. 09:3x — ZWEI TEAMS. Die Grenze war schon da, wir haben sie nur nicht gesehen
+
+**`docs/ZWEI-TEAMS.md` (`f07134ee`) gilt ab sofort.** Yama richtet ein zweites vollständiges Team
+ein (Planner, Generator, Evaluator, Prüfer). **Die Domänengrenze musste ich nicht erfinden — sie
+war messbar da:**
+
+```text
+git log --since='2026-08-01 20:00' --name-only | Verzeichnisse zaehlen
+  31  resources/planner/hausplaner/**     <- Team HAUSPLANER (wir)
+git show --stat 0a92d5fa
+  docs/product-data/15-auftrag-li-sv.md   <- Team BESCHAFFUNG (der zweite Planner)
+```
+
+**Zwei Teams arbeiten seit gestern parallel, und keines wusste vom anderen.** `docs/product-data/`
+— in der Übergabe vom 01.08. als *„von keiner der drei Rollen angekündigt"* geführt — ist deren
+Arbeitsverzeichnis. **Das ist die Erklärung für einen offenen Posten, den ich seit gestern früh
+mitgeschleppt habe.**
+
+**Und ein Indiz, das ich als Indiz kennzeichne und nicht als Feststellung:** die drei
+uncommitteten PHP-Dateien (`DatanormController`, `ProductImage`, `routes/web.php`) liegen exakt in
+der Beschaffungs-Domäne — Datanorm und Produktbilder sind nicht Hausplaner. Yama hat sie als seine
+bestätigt. **Der zweite Planner soll das bestätigen oder verwerfen; ich behaupte es nicht.**
+
+### Was in ZWEI-TEAMS.md steht
+
+```text
+Schreib-Heimat je Team        Code, Auftraege, Planner-Papiere, Lage, Ledger - getrennt
+SECHS gemeinsame Dateien      Beschluss, Fehlerklassen, die vier Werkzeuge.
+                              Sie duerfen NICHT doppelt existieren - sonst driften die
+                              Regeln auseinander und keine Pruefung ist mehr belastbar.
+                              Heimat: wer sie angelegt hat = Team Hausplaner.
+                              Team Beschaffung MELDET statt zu schreiben - genau so hat
+                              der Generator gestern `git --no-optional-locks` gemeldet.
+Ausnahme                      FEHLERKLASSEN.md darf jedes Team ergaenzen. Eine Klasse, die
+                              man erst melden muss, wird nicht eingetragen. Nur anhaengen.
+S-01 gilt JE TEAM             jedes Team uebergibt dem Validator nur seine eigenen Blaetter,
+                              sonst sperrt S-01 falsch.
+```
+
+### Der Worktree-Vorschlag — mit seiner Falle DAVOR, nicht danach
+
+**Ein eigener `git worktree` je Team gibt jedem einen eigenen Index und HEAD.** Heute um 09:22–09:24
+lagen **vier gleichzeitige Locks** (`index.lock` mit 879 KB — ein echter laufender Vorgang), und der
+HEAD hat sich gestern zweimal unter einer laufenden Messung bewegt. **Worktrees lösen genau das.**
+
+**Aber:** `git worktree list` meldet vom Mount aus **jeden** Worktree als `prunable`, weil die
+`/Users/...`-Pfade aus der Geräte-VM nicht auflösen. Ein `git worktree prune` von dort meldet sie
+**alle** ab, auch `ticket-main`. **Ein neuer Worktree macht diese Falle größer, nicht kleiner.**
+
+**`git worktree add` ist eine Struktur-Änderung am Repo und gehört Yama, nicht dem Planner.**
+
+### Drei Fragen an das zweite Team — Antwort in EUREN Ledger, nicht an mich
+
+```text
+1  Stimmt die Domaenengrenze, oder fasst ihr Pfade an, die bei uns stehen?
+2  Gehoeren euch die drei uncommitteten PHP-Dateien?
+3  Gilt der Beschluss B1-B9 auch bei euch - oder trifft er eure Fehlerklassen nicht?
+   WIDERSPRUCH IST ERWUENSCHT. Unser Evaluator hat B2 als zu stark entlarvt, und das
+   war der wertvollste Beitrag des ganzen Abends.
+```
