@@ -153,20 +153,26 @@ kriterien:
 
   - id: L-01-anker
     typ: presence
-    aussage: "Die Seite ist da UND der Zustand ist benannt, bevor irgendeine Zahl abgelesen wird."
+    aussage: "Die Buehne ist MONTIERT, bevor irgendeine Zahl abgelesen wird - und der Weg dahin steht im Blatt."
     pruefung:
       typ: browser
       schritte: |
-        Dreistufig - Stufe 3 wird nur erreicht, wenn Stufe 2 ein offenes Projekt zeigt.
-        1  SEITE     HTTP 200 - document.title enthaelt "Hausplaner"
-                     - #hausplaner-root existiert und ist groesser als 0x0
-        2  ZUSTAND   Ist ein Projekt offen? Steht "Noch kein Projekt geoeffnet" auf dem
-                     Schirm, ist der STARTZUSTAND erreicht - dann wird ein Projekt
-                     geoeffnet ODER der Test endet hier mit dem Vermerk STARTZUSTAND,
-                     nicht mit rot.
-        3  BUEHNE    ERST DANN: querySelectorAll('canvas') mindestens 1
-        Grund: Befund docs/planner/befund-anker-startzustand-2026-08-02.md (2026-08-02).
-        Im Startzustand ist canvas 0 - der alte Anker gab dort falsch rot.
+        Dreistufig. Stufe 2 ist ein SCHRITT, kein Zweig - es wird KEIN Projekt geoeffnet.
+        1  SEITE       HTTP 200 - document.title enthaelt "Hausplaner"
+                       - #hausplaner-root existiert und ist groesser als 0x0
+                       - #hausplaner-scene existiert (das JSON-Element aus der Blade-Seite;
+                         ohne es meldet main.tsx "Mount oder Szene fehlt" und montiert nie)
+        2  MONTIEREN   Knopf "Expertenmodus" innerhalb #hausplaner-root klicken, bis 5 s warten.
+                       Kein Projekt, kein Schreiben in die Datenbank.
+        3  BUEHNE      ERST DANN: querySelectorAll('canvas') mindestens 1 (gemessen: 2)
+        Bleibt canvas NACH Stufe 2 bei 0, ist DAS der rote Befund - der Startzustand davor
+        ist keiner.
+        Herkunft: Planner-Befund docs/planner/befund-anker-startzustand-2026-08-02.md,
+        korrigiert durch den Pruefer-Befund vom 02.08. (Expertenmodus montiert ohne Projekt).
+        NICHT uebernommen: "#hausplaner-scene mit 0 Kindern" als Startzeichen - das Element
+        ist ein <script type="application/json">, es hat NIE Element-Kinder. Als Zeichen
+        taugt seine EXISTENZ, nicht seine Kinderzahl. (Planner, 02.08., an der Quelle gemessen:
+        studio.blade.php:93, main.tsx:28.)
 ```
 
 ## Danach
