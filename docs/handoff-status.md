@@ -34617,3 +34617,90 @@ Werkzeug taugt.
 **Und die Lage dahinter:** S-06 meldet weiter **1 baubares Blatt**. *Es stockt nicht der Bau,
 es stockt die Abnahme.* Diese drei Blaetter sind der Vorrat — sie werden `bereit`, sobald sie
 gegengelesen sind, und nicht vorher.
+
+---
+
+## PLANNER — 02.08. 12:4x · Drei Werkzeug-Blätter nachgeschoben, und die Gegenlese-Verteilung korrigiert
+
+### Korrektur an meinem eigenen Auftrag von 09:5x
+
+**Ich hatte alle drei Blätter dem Prüfer zugewiesen. Das widerspricht B8.** Dort steht die
+Zuordnung nach Art des Blattes, und sie steht dort, damit keine Rolle zum Nadelöhr wird:
+
+```text
+Planner-Blatt   -> Pruefer
+Werkzeug-Blatt  -> Evaluator
+Pruefer-Auftrag -> Planner
+```
+
+**Neu verteilt, und damit trägt es zwei Schultern statt einer:**
+
+| Blatt | Strang | Gegenleser |
+|---|---|---|
+| **Z-11** `generator-auftrag-z11-touch-und-stift.md` | hausplaner-3d | **Prüfer** |
+| **W-05** `hausplaner-3d/w05-werkzeug-anschluss.md` | hausplaner-3d | **Prüfer** |
+| **W-06** `werkzeuge/w06-klammerbilanz-ohne-kommentare.md` | werkzeuge | **Evaluator** |
+| **W-07** `werkzeuge/w07-erlaubnisliste-ziel-statt-programm.md` | werkzeuge | **Evaluator** |
+| **W-08** `werkzeuge/w08-anker-an-einer-stelle.md` | werkzeuge | **Evaluator** |
+
+### W-07 (`aebe57b6`) — Befund 2 des Prüfers, geschnitten
+
+**Gemessen, bevor entschieden wurde — 229 `befehl:`-Zeilen im ganzen Ordner:**
+
+```text
+`node scripts/…`                                         37   bleibt erlaubt
+`node --test scripts/__tests__/…`                        11   bleibt erlaubt
+`cd resources/… && node --test __tests__/…`               1   FAELLT DURCH - und das ist Absicht
+`sed …` als Pipe-Filter                                   3   bleibt erlaubt
+`sed -i`                                                  0
+`awk`                                                     0   -> fliegt von der Liste
+```
+
+**`awk` steht auf der Erlaubnisliste und wird von keinem einzigen Kriterium benutzt.** Ein
+Programm, das niemand braucht und `system()` kann, ist reine Angriffsfläche. **Raus, nicht rein.**
+
+**Der Kern ist EIN Satz, der im Werkzeug schon steht** (`auftrag-pruefen.mjs:256`): *erlaubt ist
+nicht das Programm, sondern das Ziel.* Für `bash`/`sh` ist er gebaut, für `node` nicht.
+`skriptZielErlaubt` bekommt genau eine Änderung — das erste Nicht-Flag-Wort statt `woerter[1]`,
+damit `node --test scripts/…` weiter trägt und `node -e "…"` durchfällt. **Kein zweiter
+Zielprüfer** (K-05).
+
+**Das eine Kriterium, das dabei fällt, ist Teil des Blattes und keine Nacharbeit:** der
+`cd`-Testlauf wird `typ: gate`, wie die anderen Testläufe. **Der Befehl bleibt lesbar stehen** —
+wer ihn löscht, hat die Zusage verloren statt sie verlagert.
+
+### W-08 (`6ea45e05`) — warum es das überhaupt gibt
+
+**Heute habe ich denselben Anker-Block ZWÖLFMAL bearbeitet:** sechs Blätter für v2, dieselben
+sechs für v3. **Zwölf Zeilennummern-Ersetzungen für zwei Erkenntnisse** — jede eine Gelegenheit
+für genau den Splice-Fehler, gegen den W-02 gebaut wurde.
+
+**Der Anker zieht in `docs/auftraege/ANKER-BROWSER.md`, die Blätter tragen drei Zeilen Verweis.**
+Dieselbe Rechnung wie W-05: **wandern statt verdoppeln.**
+
+**Und S-11 hält ihn dort** — sonst wäre es ein Vorsatz, und Vorsätze haben heute zweimal nicht
+getragen (R9). **S-11 greift nur bei `aktiv · bereit · gebaut · entwurf · gesperrt`.** *Nicht aus
+Nachsicht gegenüber dem Archiv, sondern weil das der einzige Weg ist, auf dem ein alter Anker
+zurückkommt: wer ein `ruht`-Blatt auf `bereit` setzt, fällt in derselben Sekunde in S-11.*
+
+**Beim Schneiden gefunden, vorher von niemandem gesehen:**
+
+```text
+generator-auftrag-pb023-pb024-styleguide-und-tokens.md
+  faehrt Browser-Zahlen und hat GAR KEINEN Anker    (13 Blaetter mit `typ: browser`, 12 mit Anker)
+```
+
+### An den GENERATOR — der Vorrat ist gefüllt, aber er ist verschlossen
+
+**W-06, W-07 und W-08 hängen alle am selben Werkzeug** (`auftrag-pruefen.mjs` bzw.
+`zeile-ersetzen.mjs`) **und dürfen nicht gleichzeitig laufen.** Reihenfolge, mit Grund:
+
+```text
+1  W-06   zuerst, weil `zeile-ersetzen` heute keine .ts-Datei schreiben kann - und
+          W-07 und W-08 aendern beide .mjs-Dateien. Ohne W-06 baut man sie mit dem
+          Werkzeug, das B6 verbietet.
+2  W-07   dann, weil es die Erlaubnisliste anfasst. W-08 fuegt einen typ hinzu, kein Glied.
+3  W-08   zuletzt - es zieht die Blaetter um, und dabei soll die Liste schon stehen.
+```
+
+**Vorher liegt weiter Z-03+Z-04 (`aktiv`) und W-01 (`bereit`).**
