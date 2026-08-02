@@ -35739,3 +35739,136 @@ im Baum — **niemand sammelt sie in einen Commit ein** (eigene Pfade stagen, wi
 Yama die Connectoren aktiviert.
 
 VOTUM: auftrag=MELDUNG-APP-CONFIG rolle=evaluator ergebnis=geschlossen-yamas-connector-arbeit commit=dc98736a datum=2026-08-02 hinweis=stillgelegt-aktivierung-spaeter-nicht-einsammeln
+
+---
+
+## GENERATOR · 02.08. 14:5x — WIDERSPRUCH VOR DEM BAU zu W-06: der Fix loest 2 von 61 Faellen
+
+**W-06 steht seit 14:40 auf `bereit` und ist mein naechster Griff. Ich baue es nicht so.**
+*Widerspruch vor dem Bau, nicht in der Abnahme — derselbe Weg, der bei Z-05 funktioniert hat.*
+
+### Vorabmessung mit GENAU der Funktion, die K-01/K-02 vorschreiben
+
+```text
+319 .ts/.tsx-Dateien im Hausplaner
+
+heute (roher Text)                 61 fallen durch
+MIT `ohneKommentare` aus zaehle.mjs 59 fallen durch   <- der vorgeschriebene Fix
+zusaetzlich Texte + Regex maskiert  57 fallen durch   <- nicht im Blatt, hilft auch kaum
+```
+
+**Der Fix befreit ZWEI Dateien.** Ein Bau nach Blatt waere gruen gegen K-01, K-02 und K-03 —
+und liesse **59 Dateien unschreibbar**, waehrend das Blatt sagt, das Werkzeug sei repariert.
+*Das ist die Gestalt, vor der F-06 warnt: die Zusage misst die Stelle, nicht die Wirkung.*
+
+### Die Ursache ist nicht der Kommentar — sie ist das Regex-Literal
+
+```text
+resources/planner/hausplaner/__tests__/breiten.test.ts:51
+  const kopf = css.match(/\.hp-studio-kopf \{([^}]*)\}/);
+                                          \{   [^}]  \}
+                                           1 auf · 2 zu   ->  +1
+```
+
+**Kein Kommentar, keine Zeichenkette — Code.** `ohneKommentare` setzt Zeichenketten am Ende
+ausdruecklich zurueck (`zaehle.mjs:56`, *„ihr Inhalt ist Code, kein Kommentar"*) — richtig fuers
+Zaehlen von Vorkommen, falsch fuer eine Klammerbilanz. Und Regex-Literale sind von Divisionen
+**ohne Parser nicht sicher unterscheidbar**; genau deshalb bringt auch die schaerfere Fassung nur
+57 statt 59.
+
+*Meine eigene Meldung von 13:1x war hier zu kurz: ich nannte Zeichenketten als Ursache. Sie sind
+ein Teil. Der groessere Teil ist, dass **eine zeichenzaehlende Bilanz auf echtem TypeScript
+grundsaetzlich nicht zuverlaessig ist** — sie misst Haeufigkeit und nennt es Syntax.*
+
+### Der Ausweg liegt im Repo und braucht keine vierte Heuristik
+
+**`node_modules/typescript` ist vorhanden.** `ts.createSourceFile(pfad, text, ZielVersion, true)`
+liefert Syntax-Diagnostik; *„traegt diese Datei?"* wird damit **beantwortet statt geschaetzt** —
+fuer `.ts`, `.tsx`, `.mjs` und `.js` aus EINER Quelle statt aus vier Naeherungen.
+*Der `node --check`-Zweig fuer `.mjs/.js` koennte bleiben oder mit wegfallen; das ist eine
+Entscheidung des Blattes, nicht meine.*
+
+**Ballbesitz: Planner** — W-06 neu schneiden oder meinen Vorschlag verwerfen. **Ich warte, ich
+baue nicht am Blatt vorbei.** *Die Reihenfolge W-06 → W-07 → W-08 steht; ich kann in der
+Zwischenzeit W-07 vorziehen, wenn du das freigibst — seine Vorbedingung steht seit `ef3507ea`.*
+
+---
+
+## PLANNER — 02.08. 15:3x · YAMA HAT ENTSCHIEDEN: B10. Und die Reihenfolge dreht sich
+
+**Ich hatte den Näherungs-Hinweis als Notiz behandelt. Yama hat widersprochen, und er hat recht:**
+*es ist kein kosmetischer Hinweis, sondern ein Persistenz- und Vertrauensproblem.*
+
+### B10 steht im Beschluss — Stufe 4, für alle Rollen
+
+```text
+Automatisch erzeugte oder geschaetzte Geometrie darf ihren Unsicherheits-
+und Herkunftsstatus durch Speichern, Laden, Export oder Sitzungswechsel
+nicht verlieren.
+```
+
+**Und die Folge daraus, die Yama ausdrücklich benennt:** *solange die Kontur nicht bestätigt ist,
+darf sie für Dach, Mengen, Statik oder jeden anderen Folgeprozess **nicht** als verlässliche
+Grundlage dienen.*
+
+### DIE REIHENFOLGE DREHT SICH — und der Grund steht im Code
+
+```text
+grep -rn "polygon: gebaeudeUmriss()" resources/planner/hausplaner/
+  ->  HausplanerApp.tsx:945    roofType: 'sattel' …     DAS DACH
+```
+
+**Z-06 hat die Decke von der Bounding-Box befreit. Beim Dach steht sie noch — und Z-07/Z-08 sind
+geschnitten, aber nicht gebaut.** *Wer das Dach baut, bevor B10 steht, baut denselben Bestand ein
+zweites Mal ein.* **Z-07 und Z-08 sind damit zurückgestellt, bis Z-06-N1 grün ist.**
+
+*Das ist keine Vorsicht, sondern die billigere Reihenfolge: heute ein Feld — morgen ein Feld plus
+zwei Wanderungen.*
+
+### Z-06-N1 ist geschnitten: `docs/auftraege/hausplaner-3d/z06n1-herkunft-und-freigabe.md`
+
+**Gemessen, bevor entschieden wurde — drei Dinge machen die Scheibe billig:**
+
+```text
+migriereSzene v1 -> v2 existiert, ausdruecklich "REIN ADDITIV und MINIMAL"   Muster da
+z.enum([...])  etabliert (zoneType, oeffnungsArt, …)                         Muster da
+Mengenermittlung liest die Decke HEUTE NICHT (geometry/ kennt kein ceiling)  Sperre billig
+```
+
+**Die Sperre für Folgeprozesse kostet heute nichts. Sie kostet, sobald das Dach dranhängt.**
+
+**Zwei Felder, nicht eines** — und das ist die Kernentscheidung des Blattes:
+
+```text
+herkunft   manuell · abgeleitet · erkannt · geschaetzt      eine TATSACHE
+freigabe   vorschlag · zu_pruefen · bestaetigt · abgelehnt  ein URTEIL
+```
+
+*Ein kombiniertes Feld müsste bei jeder Bestätigung die Herkunft mitschreiben — und dann geht die
+Tatsache verloren, sobald jemand zustimmt. Genau das soll B10 verhindern.*
+
+**Die Sperre ist eine FUNKTION, kein Kommentar:** `istFreigegeben()` / `verlangeFreigabe()`.
+*Ein „bitte vorher prüfen" ist Stufe 3 und hat in diesem Projekt zweimal nicht getragen.*
+
+**Die scharfe Zusage ist K-06 zweite Zeile:** *die Migration setzt Bestandsdecken auf
+`zu_pruefen`, **nicht** auf `bestaetigt`.* **Wer den Bestand grün stempelt, macht die Migration
+grün und B10 wirkungslos — und niemand sieht es, weil der Bestand „ja schon immer da war".**
+
+**Ehrlich benannt im Rückweg:** *sobald eine Datei als v3 abgelegt ist, ist der Rückweg eine
+Rückmigration und keine Rücknahme.* **Das ist die teuerste Scheibe seit Wochen** — und genau
+deshalb steht sie vor Z-07/Z-08.
+
+### Was NICHT in diesem Blatt ist, mit Grund
+
+```text
+Z-06-N2   die sichtbare Kennzeichnung nach dem Laden - braucht diese Felder, nicht umgekehrt
+Z-06-N3   der Bestaetigungs-Knopf und "Aenderung setzt die Freigabe zurueck"
+          -> die Regel gehoert dorthin, wo bestaetigt wird. Heute gibt es keinen Weg,
+             etwas zu bestaetigen - deshalb steht alles ehrlich auf `vorschlag`.
+Protokoll ein vollstaendiges Ereignisprotokoll. Zwei Felder (freigabe_am, freigabe_von)
+          decken Yamas "wann und durch wen" ab; Historie laesst die Datei wachsen und
+          wirft eine Aufraeumfrage auf, die niemand beantwortet hat.
+```
+
+**Der Preflight ist sauber: 6 OK · 0 Fehlschlag · 0 verdächtig.** Das Blatt steht auf `entwurf`
+und braucht nach B8 das Gegenlesen des **Prüfers** (Planner-Blatt).
