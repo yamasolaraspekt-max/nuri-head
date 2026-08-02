@@ -6,7 +6,7 @@
 auftrag:
   id: W-08
   strang: werkzeuge
-  status: entwurf   # ZURUECKGESETZT von `bereit` 03.08.: die MESSMETHODE von K-05 hat sich geaendert (Textmuster -> Struktur), und mit ihr kommt ein neues Werkzeug (scripts/anker-inventur.mjs) in den Umfang. Das ist eine neue Entscheidung, kein Nachtrag - es braucht ein neues Gegenlesen. Gegenleser: Evaluator (Werkzeug-Blatt).
+  status: bereit   # B8 ERFUELLT: gegengelesen vom Evaluator 03.08. (TRAEGT MIT SPERRENDER AUFLAGE UND EINER KLEINEN), beide eingearbeitet 03.08. 01:0x. SPERREND war die Basis: scope-Datei scripts/auftrag-pruefen.mjs trug die unverbuchte W-07-Arbeit. ERLEDIGT, nicht nur benannt - der Generator hat W-07 um 00:44 verbucht; nachgemessen an HEAD: awk von der Liste -> 0, ZielErlaubt -> 4, Suite -> 91 pass. K-08-Ausgangswert von 82 auf 91 korrigiert. KLEIN: K-08b neu - die Inventur bekommt DREI stehende Zusagen, damit "meldet immer 0" nicht als Erfolg durchgeht. Eingetragen vom Planner.
   gegengelesen_von: evaluator   # DRITTES Gegenlesen 03.08. - neue Messmethode + neues Werkzeug im Umfang (die zwei frueheren Befunde stehen im Verlauf, 8b3868b1 und f4f0c89d-Delta)
   gegengelesen_am: 2026-08-03
   befund: >
@@ -271,7 +271,33 @@ kriterien:
     pruefung:
       typ: gate
       schritte: "node --test scripts/__tests__/*.mjs"   # NICHT das Verzeichnis: `node --test <verz>/` wirft auf Node 22 MODULE_NOT_FOUND (gemessen 02.08. 14:2x)
-      erwartet: "0 fail. Ausgangswert 82 pass / 0 fail (Evaluator, 02.08.)."
+      erwartet: "0 fail. Ausgangswert 91 pass / 0 fail — vom Planner AN HEAD nachgemessen 03.08. 01:0x (`node --test scripts/__tests__/*.mjs`). Die 82 des Evaluators galten VOR dem W-07-Commit; der Generator hat W-07 um 00:44 verbucht, und damit ist die Zahl 91."
+
+  - id: K-08b
+    typ: behavioural
+    kritikalitaet: P1
+    aussage: "Die Inventur hat eine STEHENDE rote Zusage - 'meldet immer 0' geht nicht als Erfolg durch."
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: gate
+      schritte: |
+        AUFLAGE des Evaluators (03.08.), angenommen: die Mutationsprobe aus K-09 ist EINMALIG.
+        Eine Zusage steht DAUERHAFT. Ohne sie faellt niemandem auf, wenn die Inventur
+        eines Tages nur noch Nullen liefert - und Nullen sehen im Bericht wie Erfolg aus.
+
+            Fixture: ein Blatt mit AUSGESCHRIEBENEM L-01-anker im ```yaml-Block
+              -> anker-inventur zaehlt dort GENAU 1 ausgeschrieben
+            Fixture: dasselbe Blatt mit `typ: verweis`
+              -> zaehlt 0 ausgeschrieben, 1 verweis
+            Fixture: ein Blatt, das den Anker nur ZITIERT (```text-Block)
+              -> zaehlt 0 - das ist die Traeger/Zitat-Naht, dauerhaft verriegelt
+
+        Die dritte Zeile ist die eigentliche Zusage dieses Blattes: sie faellt, wenn
+        jemand die Inventur je wieder auf ein Textmuster umstellt.
+        Die Fixtures liegen bei den Blaettern, NICHT unter tests/fixtures/auftraege/ -
+        dieses Verzeichnis existiert nicht (S-10 zeigt seit dem 02.08. darauf ins Leere,
+        gemessen im Schlusslauf 12:5x). Wer es hier neu erfindet, baut F-20 nach.
+      erwartet: "drei Zusagen, alle drei dauerhaft"
 
   - id: K-09
     typ: behavioural

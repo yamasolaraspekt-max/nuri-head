@@ -37019,3 +37019,50 @@ VOTUM: auftrag=Z-06 rolle=evaluator ergebnis=gruen commit=20bbfcc2 datum=2026-08
 VOTUM: auftrag=Z-03+Z-04 rolle=evaluator ergebnis=gesamt-gruen commit=20bbfcc2 datum=2026-08-03 hinweis=teil2-k02-klartexte-gemessen-teil1-stand
 VOTUM: auftrag=W-07 rolle=evaluator ergebnis=gruen commit=60f6344b datum=2026-08-03 hinweis=zwoelf-faelle-selbst-mutationsprobe-60-2
 VOTUM: auftrag=W-06 rolle=evaluator ergebnis=gruen commit=408c2d21 datum=2026-08-03 hinweis=319-auf-0-selbst-n1-traegt-fail-open-nacharbeit
+
+### Nachtrag 01:0x — W-08 und W-06-N1 auf `bereit`. Die Werkzeugkette steht
+
+**W-08, sperrende Auflage: ERLEDIGT statt benannt.**
+
+```text
+git show HEAD:scripts/auftrag-pruefen.mjs | grep -c "'awk'"        ->  0
+git show HEAD:… | grep -o "ZielErlaubt" | wc -l                    ->  4
+node --test scripts/__tests__/*.mjs                                ->  91 pass
+```
+
+*Der Evaluator hatte die Basis-Lücke gemeldet: die scope-Datei trug die unverbuchte
+W-07-Arbeit.* **Der Generator hat W-07 um 00:44 verbucht — die Vorbedingung ist damit weg, und
+K-08s Ausgangswert steht auf 91 statt 82.**
+
+**Seine kleine Auflage ist als eigenes Kriterium eingebaut: K-08b.**
+
+```text
+Fixture mit AUSGESCHRIEBENEM Anker im yaml-Block  ->  Inventur zaehlt 1
+Fixture mit `typ: verweis`                        ->  0 ausgeschrieben, 1 verweis
+Fixture, das den Anker nur ZITIERT (```text)      ->  0
+```
+
+*Sein Punkt trifft: die Mutationsprobe aus K-09 ist einmalig, eine Zusage steht dauerhaft.*
+**Ohne sie fällt niemandem auf, wenn die Inventur eines Tages nur noch Nullen liefert — und
+Nullen sehen im Bericht wie Erfolg aus.** *Die dritte Zeile ist die eigentliche: sie fällt, wenn
+jemand die Inventur je wieder auf ein Textmuster umstellt.*
+
+**Und ausdrücklich im Blatt:** die Fixtures liegen bei den Blättern, **nicht** unter
+`tests/fixtures/auftraege/` — *dieses Verzeichnis existiert nicht, S-10 zeigt seit dem 02.08.
+darauf ins Leere. Wer es hier neu erfindet, baut F-20 nach.*
+
+**W-06-N1, kleine Auflage: eingearbeitet.** *`scope.dateien` nannte `resources/../scripts/…` —
+ein Pfad mit `..`, den die frisch gebaute W-07-Zielprüfung in jedem `befehl` abweisen würde.*
+**Normalisiert.** *Ein hübscher Fall: meine eigene neue Sperre hätte mein eigenes Blatt gefangen —
+zum zweiten Mal heute, nach dem `awk`-Kriterium in W-09.*
+
+### Der Stand der Werkzeugkette
+
+```text
+bereit    W-01 · W-07 · W-06-N1 · W-08 · W-09 · S-14
+gebaut    W-06 (wartet auf Votum) · Z-06 · Z-10 · AUF-38-P4+P5
+entwurf   S-13 (wartet auf Gegenlesen — die Mechanik gegen meine eigene Fehlerklasse)
+```
+
+**S-01 meldet 0 aktive Blätter** — der Generator hat Z-03+Z-04 mit verbucht. *Das ist keine
+Sperre, sondern die Meldung, dass er zwischen zwei Griffen steht.*

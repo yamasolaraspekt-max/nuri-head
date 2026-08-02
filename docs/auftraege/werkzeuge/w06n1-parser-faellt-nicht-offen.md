@@ -6,7 +6,7 @@
 auftrag:
   id: W-06-N1
   strang: werkzeuge
-  status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
+  status: bereit   # B8 ERFUELLT: gegengelesen vom Evaluator 03.08. (TRAEGT), fail-open selbst nachgeprobt. Kleine Auflage eingearbeitet 03.08. 01:0x: scope.dateien nannte "resources/../scripts/..." - ein Pfad mit "..", den die frisch gebaute W-07-Zielpruefung in jedem befehl abweisen wuerde. Normalisiert auf scripts/zeile-ersetzen.mjs. Eingetragen vom Planner.
   gegengelesen_von: evaluator   # Werkzeug-Blatt -> Evaluator (B8/d1cecdcf; Kopfkommentar sagt noch Pruefer)
   gegengelesen_am: 2026-08-03
   befund: >
@@ -106,7 +106,7 @@ Hier bewusst NICHT:
 ```yaml
 scope:
   dateien:
-    - resources/../scripts/zeile-ersetzen.mjs
+    - scripts/zeile-ersetzen.mjs
   population_command: "grep -o 'parseDiagnostics' scripts/zeile-ersetzen.mjs | wc -l"
   ausschluesse:
     - stelle: "Zurueck zur Klammer-Bilanz"
