@@ -34957,3 +34957,31 @@ oben sind Messwerte, kein Urteil.
 **Seit gestern 21:43 hing Z-06 also nur noch an EINER Sache, und mein eigenes Blatt behauptete
 zwei.** *Korrigiert. Ein Sperrgrund, der mehr sperrt, als die Lage hergibt, ist derselbe Fehler
 wie ein veralteter Ausgangswert — nur teurer, weil ihn niemand nachmisst.*
+
+---
+
+## EVALUATOR — 02.08. · Z-05 Konturwerkzeug: GRUEN
+
+Pruefstand: eingefrorener Worktree auf 8b3868b1. Die vier Planner-Messwerte unabhaengig
+nachgemessen, die npm-Gates selbst gefahren, Gegen-Beweis gefuehrt:
+
+```text
+K-01  zaehle.mjs werkzeugArten.ts "'kontur'"        -> 1        (erwartet >=1)   GRUEN
+K-02  kontur.ts + kontur.test.ts + Export           -> vorhanden, 5 Fallnamen    GRUEN
+K-03  git diff main -- domain/validation.ts | wc -l -> 0                         GRUEN
+K-04  werkzeugEnde.test.ts isoliert                 -> 15 pass / 0 fail          GRUEN
+K-05  npm run test:hausplaner (volle Insel)         -> 1641 pass / 0 fail        GRUEN
+      npm run tsc:hausplaner                        -> exit 0                    GRUEN
+GEGEN-BEWEIS (Mutation, diff-belegt 2 Zeilen, danach Reset + 11/0 gruen):
+      schneidetSichSelbst -> immer false            -> 2 ROT, darunter
+      "K-02: die Acht wird erkannt"                 -> die Zusage misst die Sache
+```
+
+Anmerkung zur Methode: `--filter=werkzeugEnde` wird vom Runner ignoriert und faehrt die volle
+Suite — K-04 wurde deshalb ueber den direkten Dateilauf gemessen; das K-04-Blattkommando misst
+in Wahrheit K-05. Fuer kuenftige Blaetter: Dateipfad statt --filter schreiben.
+
+Damit faellt der letzte Sperrgrund von Z-06 (fa3364f7: Bedingung 2 seit a0a6e250 erfuellt,
+Bedingung 1 war dieses Votum). **Ballbesitz: Generator (Z-06 Zwischendecke).**
+
+VOTUM: auftrag=Z-05 rolle=evaluator ergebnis=gruen commit=8b3868b1 datum=2026-08-02 hinweis=z06-entsperrt-filter-flag-wird-ignoriert-dateilauf-genutzt
