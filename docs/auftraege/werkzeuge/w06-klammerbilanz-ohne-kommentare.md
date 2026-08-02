@@ -1,89 +1,115 @@
-# W-06 — `zeile-ersetzen` prüft TypeScript gegen den CODE, nicht gegen die Kommentare
+# W-06 — `zeile-ersetzen` FRAGT den TypeScript-Parser, statt Zeichen zu zählen
 
-**Spur A** · **Heimat: ticket** · **Basis: HEAD beim Ziehen** · *Geschnitten 02.08. 12:0x*
+**Spur A** · **Heimat: ticket** · **Basis: HEAD beim Ziehen** · *Geschnitten 02.08. 11:5x · NEU GESCHNITTEN 16:0x nach dem Widerspruch des Generators*
 
 ```yaml
 auftrag:
   id: W-06
   strang: werkzeuge
-  status: bereit   # B8 ERFUELLT: Werkzeug-Blatt, gegengelesen vom Evaluator 02.08. (8b3868b1, Befund TRAEGT), Auflage eingearbeitet in f4f0c89d, Delta-Gegenlesung sauber in 03ec8463 - kein neuer Durchgang noetig. Eingetragen vom Planner 02.08. 15:1x.
-  gegengelesen_von: evaluator   # nach d1cecdcf: Werkzeug-Blatt -> Evaluator (Kopfkommentar oben sagt noch Pruefer)
-  gegengelesen_am: 2026-08-02
-  befund: >
-    TRAEGT. Alle Ausgangswerte unabhaengig nachgemessen und exakt (Worktree auf d255a917):
-    fangKern 81 auf/87 zu, davon 6 in nummerierten Kommentaren; ohneKommentare zaehle.mjs:41
-    mit raute=false; K-01 0/Partner 3; K-02 0/Partner 1; K-04 1/Partner 5, zweiter
-    pruef-tmp-Treffer Z.128 ist Kommentar; Suite 82 pass/0 fail. Preflight 4 OK/0 Fehlschlag,
-    beide yaml-Bloecke gelesen. EINE kleine Auflage: K-02 zaehlt auch eine blosse
-    Kommentar-Erwaehnung von 'zaehle.mjs' als Import — der Generator soll die Importzeile
-    (import ... from './zaehle.mjs') belegen; K-03 Zeile 3 bleibt der tragende Beweis.
-    B8-Fragen: alle Maschinen-Befehle laufen, messen Wirkung (Partner + Ausgangswerte),
-    keiner mutiert.
+  status: entwurf   # ZURUECKGESETZT von `bereit` auf `entwurf` am 02.08. 16:0x. Die ENTSCHEIDUNG hat sich geaendert, nicht nur eine Auflage - das erste Gegenlesen des Evaluators (8b3868b1) galt einem anderen Blatt. Es braucht ein neues.
+  gegengelesen_von:
+  gegengelesen_am:
+  befund:
+  ruecknahme: "Der Planner nimmt die Entscheidung der ersten Fassung ZURUECK. Sie lautete: die Bilanz ehrlich machen, aber nicht zur Syntaxpruefung. Der Generator hat VOR dem Bau gemessen, dass sie damit 2 von 61 Faellen loest - und der Ausschlussgrund, ein Parser zoege eine Abhaengigkeit in ein abhaengigkeitsfreies Werkzeug, war schlicht falsch."
 ```
 
-## Warum — eine Mechanik, die nicht trägt, ist schlimmer als keine
+## Der Widerspruch des Generators — und er trifft
 
-**B6 hat `perl -pi` verboten und `zeile-ersetzen` als Ersatz benannt.** Der Prüfer hat am 02.08.
-gemessen, dass der Ersatz **gewöhnliche Quelldateien nicht schreiben kann**. Vom Planner
-unabhängig nachgemessen:
+**Er hat W-06 nicht gebaut, sondern vorher gemessen. Mit genau der Funktion, die mein Blatt
+vorschrieb:**
 
 ```text
-grep -o '(' resources/planner/hausplaner/geometry/fangKern.ts | wc -l   ->  81
-grep -o ')' resources/planner/hausplaner/geometry/fangKern.ts | wc -l   ->  87
+319 .ts/.tsx-Dateien im Hausplaner
+heute (roher Text)                    61 fallen durch
+MIT `ohneKommentare` — mein Fix       59 fallen durch
+zusaetzlich Texte + Regex maskiert    57 fallen durch
 ```
 
-**Sechs überzählige `)` — alle aus nummerierten Kommentaren (`// 1)` … `// 6)`).** `klammerBilanz`
-zählt über den **ganzen Text**, also auch über Kommentare und Zeichenketten. Ergebnis:
-`pruefeInhalt(fangKern.ts UNVERÄNDERT, '.ts')` → `false`. **Das Werkzeug zeigt auf die Änderung
-des Lesers statt auf sich selbst.**
-
-**Die Tragweite ist keine Bequemlichkeit, sondern die Wirkhierarchie:** *Regel < Mechanik*. Eine
-Mechanik, die am gewöhnlichen Fall scheitert, drängt den Benutzer zurück auf das, was die Regel
-verboten hat — und dann trägt weder das eine noch das andere.
-
-## Die Entscheidung — der Kommentar-Abzug existiert bereits, er wird nicht zweimal gebaut
+**Vom Planner unabhängig nachgemessen (02.08. 16:0x, eigenes Programm):**
 
 ```text
-scripts/zaehle.mjs:41   export function ohneKommentare(text, { raute = false })
+Dateien gesamt       319
+heute FALLEN DURCH    61
+mit dem PARSER         0
 ```
 
-**`klammerBilanz` ruft ihn auf, statt einen zweiten zu bekommen.** *Zwei Antworten auf die Frage
-„was ist hier Kommentar?" sind eine zweite Wahrheit — dieselbe Klasse wie der doppelte Name
-`PAKET_WERKZEUGE` in W-05.*
+**Mein Fix hätte ZWEI Dateien befreit und 59 unschreibbar gelassen — während das Blatt sagt, das
+Werkzeug sei repariert.** *Grün gegen K-01, K-02 und K-03, und die Wirkung wäre ausgeblieben.
+Genau die Gestalt, vor der F-06 warnt: die Zusage misst die Stelle, nicht die Wirkung.*
 
-**Nebengewinn, ausdrücklich nicht das Ziel:** `ohneKommentare` maskiert Zeichenketten, bevor es
-Kommentare abzieht (sein eigener Fehler 1, dort behoben). **Damit fällt zugleich die bekannte
-Backtick-Grenze weg**, die der Evaluator am 01.08. benannt hat — Template-Literale sind
-Zeichenketten. *Das ist ein Nebengewinn und keine Zusage: wer ihn zur Zusage macht, verspricht
-eine Syntaxprüfung, die es weiterhin nicht ist.*
-
-## Die zweite Kante — die Hilfsdatei entsteht am falschen Ort
+## Die Ursache war nicht der Kommentar
 
 ```text
-scripts/zeile-ersetzen.mjs   `${pfad}.pruef-tmp${extname(pfad)}`     2 Treffer
+__tests__/breiten.test.ts:51
+  const kopf = css.match(/\.hp-studio-kopf \{([^}]*)\}/);
+                                          \{   [^}]  \}     1 auf · 2 zu
 ```
 
-**Die Prüfdatei entsteht NEBEN der Quelle, im Arbeitsbaum.** Auf diesem Mount ist `unlink`
-verboten (F-10) — sie **bleibt liegen und lässt sich nicht entfernen**. Und sie entsteht, *bevor*
-die Drift-Sperre greift: auch ein abgelehnter Ersatz hinterlässt sie. **Sie gehört unter
-`os.tmpdir()`**, mit der Endung des Ziels (der Grund für die Endung steht schon im Kopf des
-Werkzeugs und bleibt gültig).
+**Kein Kommentar, keine Zeichenkette — Code.** *Und `ohneKommentare` setzt Zeichenketten am Ende
+ausdrücklich zurück (`zaehle.mjs:56`, „ihr Inhalt ist Code, kein Kommentar") — richtig fürs Zählen
+von Vorkommen, falsch für eine Klammerbilanz.*
+
+**Der Satz des Generators, der die ganze erste Fassung erledigt:** *eine zeichenzählende Bilanz
+ist auf echtem TypeScript grundsätzlich nicht zuverlässig — **sie misst Häufigkeit und nennt es
+Syntax**.*
+
+## Mein Ausschlussgrund war falsch, und zwar doppelt
+
+**Die erste Fassung schloss einen Parser aus mit der Begründung, er *„zöge eine Abhängigkeit in
+ein bisher abhängigkeitsfreies Werkzeug"*. Gemessen:**
+
+```text
+node_modules/typescript          vorhanden, Version 5.9.3
+package.json                     typescript ist GELISTET
+scripts/hook-abhaengigkeiten.mjs:70   benutzt ts.createSourceFile BEREITS
+```
+
+**Die Abhängigkeit ist da, sie ist erklärt, und ein Werkzeug im selben Ordner benutzt genau
+diesen Aufruf schon.** *Ich habe einen Preis behauptet, ohne ihn zu messen — dieselbe Klasse wie
+die „vier Stellen" im Werkzeug-Bauplan und die „60 ungepushten Commits". Der dritte Fall
+derselben Art in zwei Tagen.*
+
+## Die neue Entscheidung
+
+```text
+pruefeInhalt fragt fuer .ts .tsx .mjs .js DEN PARSER:
+  ts.createSourceFile(pfad, text, ts.ScriptTarget.Latest, true).parseDiagnostics.length === 0
+
+EINE Quelle statt vier Naeherungen. Keine Klammerbilanz, kein `ohneKommentare`,
+kein Hilfsdatei-Umweg fuer `node --check`.
+```
+
+**Selbst gemessen, bevor das hier stand:**
+
+```text
+fangKern.ts        (faellt heute durch)   ->  TRAEGT
+breiten.test.ts    (das Regex-Beispiel)   ->  TRAEGT
+zeile-ersetzen.mjs                        ->  TRAEGT
+`const a = { x: 1;`                       ->  ERKANNT
+```
+
+**`node --check` für `.mjs`/`.js` fällt damit weg.** *Das ist eine Entscheidung dieses Blattes und
+keine Nebenwirkung:* der Parser beantwortet dieselbe Frage ohne Hilfsdatei — **und damit
+verschwindet zugleich die zweite Kante der ersten Fassung**, die Prüfdatei neben der Quelle, die
+auf diesem Mount nicht löschbar war (F-10). *Zwei Probleme, eine Entfernung.*
 
 ## Nahtstellen
 
 ```text
 Hier wird geschrieben:
-  scripts/zeile-ersetzen.mjs      klammerBilanz + der Pfad der Hilfsdatei
-  scripts/__tests__/…             die Zusagen dazu
+  scripts/zeile-ersetzen.mjs      pruefeInhalt + der Wegfall von klammerBilanz und Hilfsdatei
+  scripts/__tests__/zeileErsetzen.test.mjs    die Zusagen dazu
 
 Hier bewusst NICHT:
-  scripts/zaehle.mjs              wird nur GERUFEN. Wer ihn hier anfasst, aendert
-                                  gleichzeitig die Grundlage von AUF-38 und W-01.
-  Ein echter TypeScript-Parser    Waere die ehrliche Loesung und ist eine eigene
-                                  Entscheidung: sie zoege tsc oder ein Paket in ein
-                                  Werkzeug, das heute ohne Abhaengigkeit laeuft.
-                                  W-06 macht die BILANZ ehrlich, es macht sie nicht
-                                  zur Syntaxpruefung.
+  scripts/zaehle.mjs              `ohneKommentare` bleibt, wie es ist - es ZAEHLT VORKOMMEN,
+                                  und dafuer ist es richtig. Es war nur die falsche Antwort
+                                  auf eine Syntaxfrage.
+  scripts/hook-abhaengigkeiten.mjs   benutzt den Parser bereits. Nicht anfassen - es ist der
+                                  BELEG, dass das Muster im Haus ist, nicht sein Gegenstand.
+  Typpruefung (tsc)               `parseDiagnostics` ist SYNTAX. Ob die Typen stimmen, ist
+                                  eine andere Frage und gehoert ins Gate des Generators.
+                                  Wer das hier hineinzieht, macht aus einem Schreib-Riegel
+                                  einen Compiler.
 ```
 
 ## Kriterien
@@ -92,97 +118,95 @@ Hier bewusst NICHT:
 scope:
   dateien:
     - scripts/zeile-ersetzen.mjs
-  population_command: "grep -o 'klammerBilanz' scripts/zeile-ersetzen.mjs | wc -l"
+  population_command: "grep -o 'pruefeInhalt' scripts/zeile-ersetzen.mjs | wc -l"
   ausschluesse:
     - stelle: "scripts/zaehle.mjs"
-      grund: "Wird nur gerufen. Eine Aenderung dort trifft AUF-38 und W-01 mit."
+      grund: "`ohneKommentare` ZAEHLT VORKOMMEN und ist dafuer richtig. Es war die falsche Antwort auf eine Syntaxfrage, kein falsches Werkzeug."
       entschieden_von: planner
-    - stelle: "Ein echter TypeScript-Parser"
-      grund: "Zoege eine Abhaengigkeit in ein bisher abhaengigkeitsfreies Werkzeug. Eigene Entscheidung."
+    - stelle: "scripts/hook-abhaengigkeiten.mjs"
+      grund: "Benutzt den Parser bereits - es ist der Beleg, dass das Muster im Haus ist, nicht der Gegenstand dieser Scheibe."
+      entschieden_von: planner
+    - stelle: "Typpruefung (tsc)"
+      grund: "parseDiagnostics ist SYNTAX. Typen gehoeren ins Gate des Generators. Sonst wird aus einem Schreib-Riegel ein Compiler."
       entschieden_von: planner
 
 kriterien:
   - id: K-01
     typ: presence
     kritikalitaet: P1
-    aussage: "Die Bilanz benutzt den vorhandenen Kommentar-Abzug."
+    aussage: "Das Werkzeug fragt den Parser."
     pruefung:
-      befehl: "grep -o 'ohneKommentare' scripts/zeile-ersetzen.mjs | wc -l"
+      befehl: "grep -o 'typescript' scripts/zeile-ersetzen.mjs | wc -l"
       erwartet: "mindestens 1"
-    ausgangswert: "0 (gemessen 02.08. 12:0x; Partner 'klammerBilanz' -> 3, die Messung ist nicht leer)"
+    ausgangswert: "0 (gemessen 02.08. 16:0x; Partner 'js-yaml' -> 1, die Messung ist nicht leer)"
 
   - id: K-02
-    typ: presence
+    typ: absence
     kritikalitaet: P1
-    aussage: "Der Abzug wird aus zaehle.mjs IMPORTIERT und nicht nachgebaut - belegt an der IMPORTZEILE."
+    aussage: "Die Klammerbilanz ist WEG, nicht nur umgangen."
     pruefung:
-      befehl: "grep -o \"from './zaehle.mjs'\" scripts/zeile-ersetzen.mjs | wc -l"
-      erwartet: "mindestens 1"
-    ausgangswert: "0 (gemessen 02.08. 14:0x; Partner \"from 'js-yaml'\" -> 1, die Messung ist nicht leer)"
+      befehl: "grep -o 'klammerBilanz' scripts/zeile-ersetzen.mjs | wc -l"
+      erwartet: "0"
+    ausgangswert: "3"
     gegenbeweis: |
-      AUFLAGE des Evaluators (02.08., B8-Gegenlesung), uebernommen: das erste Muster war das
-      blosse Wort `zaehle.mjs`. Das haette auch eine ERWAEHNUNG im Kommentar gezaehlt - ein
-      Satz wie "wir koennten zaehle.mjs rufen" haette das Kriterium gruen gemacht, ohne dass
-      ein einziger Aufruf existiert. Gemessen wird jetzt die IMPORTZEILE.
-      Zweite Korrektur des Planners, noch vor dem Gegenlesen: der allererste Entwurf mass
-      `replace(/` und behauptete Ausgangswert 0 - nachgemessen ist es 1 (`.replace(/\n$/, '')`
-      am Ende des Werkzeugs). Das Kriterium waere von Anfang an rot und nie erfuellbar gewesen.
-      Steht hier nach dem Bau 0, obwohl K-01 gruen ist, hat jemand `ohneKommentare` im
-      Werkzeug NACHGEBAUT statt es zu rufen. Dann gibt es zwei Antworten auf die Frage
-      "was ist Kommentar?", und die zweite driftet, sobald die erste dazulernt - und sie
-      lernt dazu: `ohneKommentare` hat seinen Zeichenketten-Fehler bereits einmal korrigiert.
-      DER TRAGENDE BEWEIS bleibt K-03 Zeile 3 (ueberzaehlige `)` NUR im Kommentar -> true) -
-      diese Zusage faellt, wenn der Abzug ausgebaut wird, und sie laesst sich nicht
-      gruen tippen.
+      Bleibt sie als toter Zweig stehen, findet sie der naechste Leser und haelt sie fuer
+      eine gueltige Pruefung - sie SIEHT ja aus wie eine. Eine Naeherung, die niemand mehr
+      ruft, ist keine Sicherheit, sondern eine Falle mit Halbwertszeit.
 
   - id: K-03
     typ: behavioural
     kritikalitaet: P1
-    aussage: "Eine UNVERAENDERTE echte Quelldatei traegt - und eine echt kaputte nicht."
+    aussage: "DIE WIRKUNG, und sie ist die ganze Scheibe: 61 unschreibbare Dateien werden 0."
     ausgefuehrt_von: generator
     pruefung:
       typ: gate
       schritte: |
-        B3 - gegen die Entscheidungsfunktion `pruefeInhalt`, nicht ueber die Kommandozeile:
-          pruefeInhalt(<Inhalt von geometry/fangKern.ts>, '.ts')            -> true
-            (heute false; 81 auf zu 87 zu, sechs davon in `// 1)`-Kommentaren)
-          pruefeInhalt(<derselbe Inhalt, eine `}` im CODE entfernt>, '.ts') -> false
-          pruefeInhalt(<Inhalt mit einer ueberzaehligen `)` NUR im Kommentar>, '.ts') -> true
-        Die dritte Zeile ist die eigentliche Zusage: sie faellt, wenn jemand den Abzug
-        wieder ausbaut, und sie faellt NICHT, wenn er nur die Zahl anpasst.
-      erwartet: "drei Zusagen, davon eine ROTE"
+        Ueber ALLE .ts/.tsx im Hausplaner, mit `pruefeInhalt` selbst - nicht mit einem
+        nachgebauten Zaehler:
+          319 Dateien geprueft
+          VORHER   61 fallen durch   (gemessen 02.08. 16:0x, Planner und Generator getrennt)
+          NACHHER   0 fallen durch
+        UND die ROTE Gegenprobe, sonst misst die Zusage nur, dass etwas immer true sagt:
+          `const a = { x: 1;`                       -> faellt durch
+          eine echte Datei mit entfernter `}`       -> faellt durch
+          dieselbe Datei unveraendert               -> traegt
+        Die drei Gegenproben sind die eigentliche Zusage. Ein Pruefer, der alles durchlaesst,
+        macht die erste Zahl ebenfalls zu 0.
+      erwartet: "vier Zusagen, davon drei Gegenproben, eine davon ROT"
 
   - id: K-04
     typ: absence
     kritikalitaet: P1
-    aussage: "Die Hilfsdatei entsteht nicht mehr im Arbeitsbaum."
+    aussage: "Keine Hilfsdatei mehr - das Problem verschwindet mit dem Umweg, den es brauchte."
     pruefung:
-      befehl: "grep -o 'pfad}.pruef-tmp' scripts/zeile-ersetzen.mjs | wc -l"
+      befehl: "grep -o 'pruef-tmp' scripts/zeile-ersetzen.mjs | wc -l"
       erwartet: "0"
-    ausgangswert: "1 (gemessen 02.08. 12:1x mit genau diesem Befehl; der zweite Treffer von 'pruef-tmp' steht im Kopfkommentar und ist kein Pfad. Partner 'writeFileSync' -> 5, die Messung ist nicht leer)"
+    ausgangswert: "2 (davon 1 im Kopfkommentar, 1 als Pfad - beide fallen weg)"
     gegenbeweis: |
-      Auf diesem Mount ist `unlink` verboten (F-10). Eine Hilfsdatei neben der Quelle bleibt
-      liegen, taucht in `git status` auf und laesst sich nicht entfernen - und sie entsteht
-      HEUTE sogar dann, wenn der Ersatz anschliessend abgelehnt wird.
+      Auf diesem Mount ist `unlink` verboten (F-10). Die Hilfsdatei entstand NEBEN der Quelle
+      und blieb liegen - auch dann, wenn der Ersatz anschliessend abgelehnt wurde. Der Parser
+      braucht keine Datei; damit ist die Kante nicht gemildert, sondern fort.
 
   - id: K-05
     typ: behavioural
     kritikalitaet: P1
-    aussage: "Die Hilfsdatei landet unter dem Systemtemp und behaelt die Endung des Ziels."
+    aussage: "EINE Quelle fuer alle vier Endungen."
     ausgefuehrt_von: generator
     pruefung:
       typ: gate
       schritte: |
-        Der Grund fuer die ENDUNG steht im Kopf des Werkzeugs und bleibt gueltig: `node --check`
-        liest eine unbekannte Endung als CommonJS, und dann scheitert jede gueltige ESM-Datei.
-          Pfad der Hilfsdatei beginnt mit os.tmpdir()
-          Pfad der Hilfsdatei endet auf die Endung des Ziels
-          nach einem ABGELEHNTEN Ersatz liegt neben der Quelle KEINE neue Datei
-        Die dritte Zeile ist die rote: sie ist heute verletzt.
-      erwartet: "drei Zusagen, davon eine ROTE"
+        `.ts` `.tsx` `.mjs` `.js` laufen durch DENSELBEN Zweig:
+          eine heile Datei jeder Endung   -> traegt
+          eine kaputte Datei jeder Endung -> faellt
+          und: `.mjs` braucht KEINE Hilfsdatei mehr (K-04 misst die Stelle, hier die Wirkung)
+        Der `node --check`-Zweig faellt weg. Bleibt er als zweiter Weg stehen, gibt es
+        wieder zwei Antworten auf dieselbe Frage - dieselbe Klasse wie `PAKET_WERKZEUGE`
+        in W-05 K-10 und wie der doppelte Kommentar-Abzug in der ERSTEN Fassung dieses Blattes.
+      erwartet: "acht Zusagen plus die Wegfall-Zusage"
 
   - id: K-06
     typ: behavioural
+    kritikalitaet: P1
     aussage: "Der Fehler vom 01.08. 20:0x bleibt gefangen."
     ausgefuehrt_von: generator
     pruefung:
@@ -190,7 +214,7 @@ kriterien:
       schritte: |
         Der Anlass des Werkzeugs war eine verwaiste Klammer NACH einem Splice in
         auftrag-pruefen.mjs. Diese Zusage bleibt und muss GRUEN bleiben, ohne angepasst
-        zu werden. Wird sie angefasst, um gruen zu werden, ist der Abzug zu gierig.
+        zu werden. Wird sie angefasst, um gruen zu werden, ist der neue Pruefer zu lasch.
       erwartet: "gruen, Zusage unveraendert"
 
   - id: K-07
@@ -199,7 +223,7 @@ kriterien:
     ausgefuehrt_von: generator
     pruefung:
       typ: gate
-      schritte: "node --test scripts/__tests__/*.mjs"   # NICHT das Verzeichnis: `node --test <verz>/` wirft auf Node 22 MODULE_NOT_FOUND (gemessen 02.08. 14:2x)
+      schritte: "node --test scripts/__tests__/*.mjs"   # NICHT das Verzeichnis: `node --test <verz>/` wirft auf Node 22 MODULE_NOT_FOUND
       erwartet: "0 fail. Ausgangswert 82 pass / 0 fail (Evaluator, 02.08.). Danach mehr oder gleich, nie weniger."
 
   - id: K-08
@@ -208,10 +232,12 @@ kriterien:
     pruefung:
       typ: verfahren
       schritte: |
-        Mindestens 6 Mutationen: Abzug ausgebaut (roher Text wie heute) · Abzug auch auf
-        Zeichenketten angewandt (Code in Strings verschwindet) · nur `{}` geprueft, `()` nicht ·
-        Bilanz gibt immer true zurueck · Hilfsdatei wieder neben die Quelle · Hilfsdatei ohne
-        Endung. Wie viele kommen durch?
+        Mindestens 7 Mutationen: parseDiagnostics ignoriert (immer true) · nur `.ts` geprueft,
+        `.tsx` faellt zurueck auf die Bilanz · Klammerbilanz als Rueckfall stehen gelassen ·
+        Diagnostik-Laenge mit `>= 0` statt `=== 0` verglichen · `setParentNodes` false und
+        daraus falsche Schluesse · Hilfsdatei aus Gewohnheit wieder angelegt · Typfehler
+        als Syntaxfehler gewertet (dann faellt gueltiger Code durch).
+        Wie viele kommen durch?
 
   - id: L-01
     typ: presence
@@ -219,34 +245,40 @@ kriterien:
     pruefung:
       typ: verfahren
       schritte: |
-        Ausdruecklich benannt statt weggelassen: W-06 aendert ein Kommandozeilen-Werkzeug.
-        Der Beleg ist die Suite aus K-07 plus die drei Zusagen aus K-03, nicht ein Schirm.
+        Ausdruecklich benannt statt weggelassen. Der Beleg ist K-03 ueber 319 Dateien
+        plus die Suite aus K-07, nicht ein Schirm.
 ```
 
 ## Kantenliste — jede Zeile mit Zusage oder Grund (B9)
 
 ```text
-1  Der Abzug frisst Code, der wie ein Kommentar aussieht.              -> K-03 dritte Zeile, K-08
-2  Ein zweiter Kommentar-Abzug wird nachgebaut.                        -> K-02
-3  Die Hilfsdatei bleibt im Arbeitsbaum liegen und ist nicht loeschbar.-> K-04, K-05
-4  Die Hilfsdatei verliert ihre Endung -> `node --check` liest CommonJS
-   und JEDE gueltige ESM-Datei faellt durch.                           -> K-05 zweite Zeile
-5  Die Bilanz wird fuer eine Syntaxpruefung gehalten.
-   OHNE ZUSAGE, mit Grund: sie ist und bleibt eine Bilanz. Der Kopf des Werkzeugs sagt das
-   bereits; W-06 macht sie ehrlich, nicht vollstaendig. Ein echter Parser ist eine eigene
-   Entscheidung und steht als Ausschluss im Blatt.
-6  `ohneKommentare` behandelt `#` nur mit `--raute`. Fuer `.ts` ist das richtig -
-   dort ist `#` ein privates Feld, kein Kommentar.
-   OHNE ZUSAGE, mit Grund: der Vorgabewert ist bereits `raute = false`, und genau der
-   wird gebraucht. Eine Zusage darueber waere eine Zusage ueber zaehle.mjs, das hier
-   ausgeschlossen ist.
+1  Der Pruefer laesst alles durch, und die 61 werden nur deshalb 0.     -> K-03 Gegenproben
+2  Die Klammerbilanz bleibt als toter Zweig liegen.                     -> K-02
+3  Zwei Wege fuer dieselbe Frage (`node --check` bleibt daneben).       -> K-05
+4  Die Hilfsdatei wird aus Gewohnheit wieder angelegt.                  -> K-04, K-08
+5  Typfehler werden als Syntaxfehler gewertet - dann faellt gueltiger
+   Code durch und das Werkzeug schreibt gar nichts mehr.                -> K-08, Ausschluss
+6  Der Parser ist langsamer als eine Zeichenzaehlung.
+   OHNE ZUSAGE, mit Grund: es geht um EINE Datei je Aufruf, nicht um 319 im Lauf.
+   Die 319 laufen nur EINMAL, in K-03. Eine Laufzeitzusage waere hier eine Zahl ohne
+   Schmerz - und die haben wir genug.
+7  `typescript` verschwindet eines Tages aus den Abhaengigkeiten.
+   OHNE ZUSAGE, mit Grund: es steht in package.json und wird von `hook-abhaengigkeiten.mjs`
+   und vom Gate `tsc:hausplaner` gebraucht. Faellt es, faellt vorher anderes lauter.
 ```
 
 ## Rückweg und Entdeckung
 
-**Rückweg:** eine Datei, ein Aufruf, ein Pfad. Kein Datenpfad, kein Schema. **Der Commit lässt
-sich zurückdrehen** — und der Zustand davor ist der heutige, in dem das Werkzeug `.ts` ablehnt.
+**Rückweg:** eine Datei, ein Zweig weniger, ein Import mehr. **Der Zustand davor ist der heutige** —
+61 unschreibbare Dateien und eine Regel, die auf ein Werkzeug zeigt, das ihr nicht folgen kann.
 
-**Entdeckung:** K-03 dritte Zeile. **Wenn jemand den Abzug zu gierig macht, verschwindet Code aus
-der Bilanz und eine wirklich kaputte Datei geht durch** — das sieht wie ein Erfolg aus und ist der
-gefährlichere Fall von beiden.
+**Entdeckung:** K-03 erste Zahl **ohne** die Gegenproben. *Wenn jemand den Prüfer lasch macht,
+werden die 61 ebenfalls zu 0 — und das sieht in jedem Bericht wie ein Erfolg aus.* **Deshalb ist
+die rote Gegenprobe hier nicht Beiwerk, sondern die eigentliche Zusage.**
+
+## Was daraus für den Zyklus folgt
+
+**Der Generator hat VOR dem Bau widersprochen, gemessen, und gewartet statt gebaut.** *Das ist der
+zweite Fall an einem Tag — bei Z-05 hat derselbe Weg funktioniert.* **Beide Male hat der
+Widerspruch ein Blatt des Planners korrigiert, und beide Male war der Fehler dieselbe Klasse: ein
+Preis oder eine Wirkung BEHAUPTET statt gemessen.**

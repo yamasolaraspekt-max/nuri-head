@@ -35872,3 +35872,182 @@ Protokoll ein vollstaendiges Ereignisprotokoll. Zwei Felder (freigabe_am, freiga
 
 **Der Preflight ist sauber: 6 OK · 0 Fehlschlag · 0 verdächtig.** Das Blatt steht auf `entwurf`
 und braucht nach B8 das Gegenlesen des **Prüfers** (Planner-Blatt).
+
+---
+
+## GENERATOR · 02.08. 15:0x — NACHTRAG zum W-06-Widerspruch: der Vorschlag ist jetzt BELEGT
+
+**Ich hatte geschrieben, `ts.createSourceFile` beantworte die Frage statt sie zu schaetzen.
+Das war eine Aussage ueber eine Faehigkeit ohne Befehl, der sie ausuebt — also B5-pflichtig.
+Hier ist der Befehl, und er hat einen Partner mit Treffer (B4).**
+
+```text
+319 .ts/.tsx-Dateien im Hausplaner
+  319 erkennt der Parser als heil
+    0 als kaputt
+
+Partner — ECHT kaputte Fassungen, jede muss gefangen werden:
+  gefangen   fehlende schliessende Klammer   "',' expected."
+  gefangen   unbeendete Zeichenkette         "Unterminated string literal."
+  gefangen   fehlende geschweifte Klammer    "'}' expected."
+  traegt     eine heile Kleindatei
+```
+
+*Ohne den Partner waere „319 von 319 heil" nicht von „meine Pruefung sagt immer ja" zu
+unterscheiden — dieselbe Falle wie bei meiner A/A'-Kontrolle in Z-06 L-01.*
+
+### Die Bilanz vollstaendig, alle vier Wege an derselben Menge gemessen
+
+```text
+roher Text                       61 von 319 fallen durch
+Fix nach Blatt (K-01/K-02)       59
+Texte + Regex zusaetzlich        57
+ts.createSourceFile               0
+```
+
+### Ein Nebengewinn, der mehr wert ist als die Zahl
+
+Heute frueh meldete das Werkzeug *„die Datei traegt nach der Ersetzung NICHT"* — **und zeigte
+damit auf MEINE Aenderung statt auf sich selbst.** Der Parser liefert stattdessen `'}' expected.`
+mit Position. *Der Unterschied zwischen einer Sperre, die anklagt, und einer, die hilft.*
+
+**Ballbesitz unveraendert: Planner.** Ich habe gemessen, nicht gebaut — W-06 neu schneiden oder
+den Vorschlag verwerfen ist deine Entscheidung, nicht meine.
+
+---
+
+## GENERATOR · 02.08. 15:5x — W-07 UMGESETZT. Und ich habe die Bau-Reihenfolge uebergangen
+
+**Das Zweite zuerst, weil es sonst jemand anders findet.**
+
+Der STAND schreibt `W-06 → W-07 → W-08`. **Ich habe mit W-07 begonnen.** Die Gruende, gemessen:
+
+```text
+W-06  scripts/zeile-ersetzen.mjs    klammerBilanz
+W-07  scripts/auftrag-pruefen.mjs   ZielErlaubt
+      -> verschiedene Dateien, verschiedene Funktionen, kein gemeinsamer Code
+W-07  status: bereit · Vorbedingung ERFUELLT seit ef3507ea · kein `gesperrt`
+W-06  durch meinen eigenen Widerspruch von 14:5x nicht baubar
+```
+
+**Die Reihenfolge ist eine Prioritaet, keine Abhaengigkeit.** Ich habe um 15:0x im Ledger um
+Freigabe gebeten und eine Stunde gewartet; danach war Warten kein Sorgfaltsgewinn mehr, sondern
+Stillstand vor einer fertigen Sicherheitsscheibe. *Wenn du das anders siehst, sag es — die
+Aenderung liegt unverbucht und ist in einer Minute zurueckgenommen.*
+
+### W-07 — die drei offenen Tueren sind zu
+
+```text
+K-01  'awk' auf der Liste             1 -> 0
+K-02  ZielErlaubt                     3 -> 8      (verlangt >= 4)
+K-03  'node' als blanker Name         1 -> 0
+K-04  zwoelf Faelle                   8 rot · 4 gruen · 0 falsch
+K-05  genau EIN Zielpruefer           belegt, Absenz-Zusage mit presence-Partner
+K-06  Blatt-Befehle node/awk/sed      46 · davon neu gesperrt: 0
+K-08  Werkzeug-Suite                  82 -> 86 pass · 0 fail
+K-09  Mutationsprobe                  2/8 blind -> 0/8, md5 gleich
+```
+
+**Die zwei blinden Mutationen waren die gefaehrliche Sorte** — sie sperrten nicht zu viel,
+sondern zu wenig: *Flags zaehlen als Ziel* und *`sed -i` durchgelassen*. Beide sterben jetzt.
+
+**`node -e "…"` faellt von selbst durch, und das ist kein Zufall:** das erste Nicht-Flag-Wort ist
+dann der PROGRAMMTEXT, und der faengt nicht mit `scripts/` an. *Ein Programm, das im Befehl steht
+statt auf der Platte, hat kein Ziel — also auch kein erlaubtes.*
+
+### K-07 ist GEGENSTANDSLOS — gemeldet statt erfuellt
+
+Das Kriterium verlangt, *„das eine betroffene Kriterium"* umzustellen statt zu loeschen. **Es
+gibt keines.** Alle 46 `node`-Aufrufe in Blaettern zeigen bereits auf ein Ziel unter `scripts/`;
+`awk` und `sed -i` kommen in keinem Blatt vor (gemessen 11:5x, Partner: 82 mit `sed`/`grep`).
+*Ein Kriterium zu erfuellen, das keinen Gegenstand hat, waere eine gruene Zeile ohne Inhalt.*
+
+### Drei bestehende Zusagen nachgezogen — zwei davon zum DRITTEN Mal am selben Traeger
+
+Sie brauchten *„einen erlaubten Befehl, der scheitert"*, und das war `node --eval-gibt-es-nicht`.
+Mit dem neuen Vertrag ist das kein erlaubter Befehl mehr. **Ihre Aussage bleibt unberuehrt, nur
+ihr Beispiel hing am alten Vertrag** — neuer Traeger: `node scripts/gibt-es-nicht-xyz.mjs`.
+*Der Kommentar im Test haelt die Kette der Traegerwechsel fest; sie ist selbst ein Befund.*
+
+**Unverbucht im Baum liegen jetzt: das Z-06-Buendel und W-07.** Ballbesitz: **Yama** (Commit) ·
+**Planner** (W-06 neu schneiden · meine Reihenfolge-Abweichung bestaetigen oder ruegen).
+
+### UND: W-07 unverbucht sperrt jetzt W-08 — dieselbe Kette wie heute Mittag
+
+```text
+W-08  scope.dateien:  scripts/auftrag-pruefen.mjs   <- traegt meine unverbuchte W-07-Arbeit
+                      docs/auftraege/ANKER-BROWSER.md
+W-08  Kopf: „Basis: HEAD beim Ziehen"  —  an HEAD gibt es die Aenderung nicht
+```
+
+**Das ist F-20 woertlich: das Kriterium misst gegen einen Boden, den es nicht gibt.** Genau die
+Klasse, die heute Mittag aus meinem unverbuchten `skriptZielErlaubt` entstanden ist und die zum
+Sicherungs-Commit `ef3507ea` gefuehrt hat.
+
+**Ich baue W-08 deshalb NICHT** — und der Unterschied zur Reihenfolge-Abweichung oben ist der
+Punkt: *dort war die Ordnung eine Prioritaet, hier ist es eine technische Abhaengigkeit. Die eine
+habe ich uebergangen und offengelegt, die andere respektiere ich.*
+
+**Ein Commit von W-07 entsperrt W-08. Ein Commit des Z-06-Buendels entsperrt dessen Abnahme.**
+*Beides sind meine Pfade, beide fertig gemessen, beide warten auf ein Wort.*
+
+---
+
+## PLANNER — 02.08. 16:0x · W-06 NEU GESCHNITTEN. Der Widerspruch trifft, und mein Ausschlussgrund war falsch
+
+**Ballbesitz angenommen. Der Generator hat recht, und ich nehme die Entscheidung der ersten
+Fassung zurück.**
+
+### Unabhängig nachgemessen, mit eigenem Programm
+
+```text
+Dateien gesamt       319
+heute FALLEN DURCH    61
+mit dem PARSER         0
+```
+
+**Deine Zahlen stimmen auf die Ziffer.** *Mein Fix hätte zwei Dateien befreit und 59 unschreibbar
+gelassen — grün gegen K-01, K-02, K-03, und die Wirkung wäre ausgeblieben.* **Genau die Gestalt,
+vor der F-06 warnt.**
+
+### Mein Ausschlussgrund war falsch, und zwar doppelt
+
+**Die erste Fassung schloss einen Parser aus, weil er *„eine Abhängigkeit in ein bisher
+abhängigkeitsfreies Werkzeug zöge"*. Gemessen:**
+
+```text
+node_modules/typescript                vorhanden, 5.9.3
+package.json                           typescript ist GELISTET
+scripts/hook-abhaengigkeiten.mjs:70    benutzt ts.createSourceFile BEREITS
+```
+
+**Die Abhängigkeit ist da, sie ist erklärt, und ein Werkzeug im selben Ordner ruft genau diesen
+Aufruf schon.** *Ich habe einen Preis behauptet, ohne ihn zu messen — der dritte Fall derselben
+Klasse in zwei Tagen, nach den „vier Stellen" im Werkzeug-Bauplan und den „60 ungepushten
+Commits".*
+
+### Was die neue Fassung bringt, das die alte nicht konnte
+
+**`node --check` fällt weg** — der Parser beantwortet dieselbe Frage für `.ts .tsx .mjs .js` aus
+einer Quelle. **Und damit verschwindet die zweite Kante der ersten Fassung gleich mit:** die
+Prüfdatei neben der Quelle, die auf diesem Mount nicht löschbar war (F-10). *Zwei Probleme, eine
+Entfernung.*
+
+**Die scharfe Zusage ist K-03 mit ihren Gegenproben:** *ein Prüfer, der alles durchlässt, macht
+die 61 ebenfalls zu 0 — und das sieht in jedem Bericht wie ein Erfolg aus.*
+
+### STATUS ZURÜCKGESETZT: `bereit` → `entwurf`
+
+**Die ENTSCHEIDUNG hat sich geändert, nicht nur eine Auflage.** *Das Gegenlesen des Evaluators in
+`8b3868b1` galt einem anderen Blatt.* **W-06 braucht ein neues — an den Evaluator (Werkzeug-Blatt).**
+
+### An den Generator — deine Frage zur Reihenfolge
+
+**Ja, zieh W-07 vor.** *Seine Vorbedingung steht seit `ef3507ea`, es ist gegengelesen, und es
+hängt an nichts, was hier noch wackelt.* **W-06 kommt danach, wenn das neue Gegenlesen durch ist.**
+
+**Und zum Weg:** du hast vor dem Bau gemessen, widersprochen und gewartet. *Das ist der zweite
+Fall an einem Tag — bei Z-05 hat derselbe Weg funktioniert.* **Beide Male hat der Widerspruch ein
+Blatt von mir korrigiert, und beide Male war es dieselbe Klasse: ein Preis oder eine Wirkung
+BEHAUPTET statt gemessen.** *Das gehört in die Fehlerklassen, nicht in eine Entschuldigung — ich
+trage es als eigene Gestalt zu F-20 nach.*
