@@ -119,6 +119,10 @@ Ein `ausgangswert`, der schon dem Ziel entspricht, ist ein totes Kriterium - und
    FALSCH gemessen ist, ist ein unerfuellbares. Beides am 02.08. je einmal passiert (W-06 K-02,
    K-04), beides vor dem Gegenlesen selbst gefunden. `zeile-ersetzen` faengt das NICHT.
 Die Geraete-VM laeuft in UTC, git meldet Europe/Berlin - zwei Stunden Unterschied.
+Die CLOUD-Shell behaelt ihr Arbeitsverzeichnis zwischen den Aufrufen, die GERAETE-Shell nicht.
+   Am 02.08. lief `rm -rf pushtest` deshalb INNERHALB von pushtest und loeschte nichts - ich
+   habe das Aufraeumen gemeldet, bevor es stattgefunden hatte. 675 MB blieben liegen, und ein
+   Wegwerf-Commit `t@t` blieb sichtbar, bis ein Haken ihn meldete. Loeschen immer absolut.
    Immer `TZ=Europe/Berlin` + `--date=format-local:`.
 ```
 
