@@ -6,7 +6,7 @@
 auftrag:
   id: W-06
   strang: werkzeuge
-  status: entwurf   # ZURUECKGESETZT von `bereit` auf `entwurf` am 02.08. 16:0x. Die ENTSCHEIDUNG hat sich geaendert, nicht nur eine Auflage - das erste Gegenlesen des Evaluators (8b3868b1) galt einem anderen Blatt. Es braucht ein neues.
+  status: bereit   # B8 ERFUELLT, zweites Gegenlesen: Evaluator 03.08. - Befund TRAEGT, Parser-Kern selbst geprobt (fangKern.ts und breiten.test.ts angenommen, `const a = { x: 1;` mit benannter Diagnose abgewiesen). Keine Auflagen, zwei kleine Punkte eingearbeitet. Eingetragen vom Planner.
   gegengelesen_von: evaluator   # zweites Gegenlesen - neue Entscheidung, neues Blatt (Kopf sagt es selbst)
   gegengelesen_am: 2026-08-03
   befund: >
@@ -54,7 +54,7 @@ Genau die Gestalt, vor der F-06 warnt: die Zusage misst die Stelle, nicht die Wi
 ## Die Ursache war nicht der Kommentar
 
 ```text
-__tests__/breiten.test.ts:51
+__tests__/breiten.test.ts:63   (Zeilenverweis vom Evaluator korrigiert, stand vorher :51)
   const kopf = css.match(/\.hp-studio-kopf \{([^}]*)\}/);
                                           \{   [^}]  \}     1 auf · 2 zu
 ```
@@ -213,11 +213,20 @@ kriterien:
           eine heile Datei jeder Endung   -> traegt
           eine kaputte Datei jeder Endung -> faellt
           und: `.mjs` braucht KEINE Hilfsdatei mehr (K-04 misst die Stelle, hier die Wirkung)
+
+        PUNKT DES EVALUATORS (03.08., keine Auflage, hier trotzdem verriegelt):
+        `hook-abhaengigkeiten.mjs` uebergibt `ScriptKind.TSX` AUSDRUECKLICH, waehrend dieses
+        Rezept auf die Ableitung aus der Endung baut. Er hat geprobt, dass sie traegt -
+        aber geprobt hat er es nicht mit echtem JSX. Deshalb:
+          die `.tsx`-Faelle werden mit ECHTEM JSX-Inhalt gefahren (ein Element mit Attribut
+          und Kind, kein leerer Rumpf), heil UND kaputt.
+        Traegt die Endungs-Ableitung dort nicht, wird ScriptKind explizit uebergeben -
+        wie im Nachbarwerkzeug. Das ist dann eine Zeile und keine neue Entscheidung.
+
         Der `node --check`-Zweig faellt weg. Bleibt er als zweiter Weg stehen, gibt es
         wieder zwei Antworten auf dieselbe Frage - dieselbe Klasse wie `PAKET_WERKZEUGE`
         in W-05 K-10 und wie der doppelte Kommentar-Abzug in der ERSTEN Fassung dieses Blattes.
-      erwartet: "acht Zusagen plus die Wegfall-Zusage"
-
+      erwartet: "acht Zusagen, die .tsx-Faelle mit echtem JSX, plus die Wegfall-Zusage"
   - id: K-06
     typ: behavioural
     kritikalitaet: P1
