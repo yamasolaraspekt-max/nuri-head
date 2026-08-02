@@ -180,7 +180,18 @@ S-09    Kopf ohne `status`
 S-10    der Baum hat sich waehrend der Messung bewegt              exit 1
 ```
 
-**Die zwei harten Regeln bleiben:**
+**Die harten Regeln:**
 
 **A — Kein Blatt geht raus, bevor jeder Befehl darin einmal gelaufen ist.**
-**B — Keine Arbeit liegt länger als zwanzig Minuten uncommittet.**
+
+**B — ZURÜCKGENOMMEN am 03.08. Sie lautete: *„Keine Arbeit liegt länger als zwanzig Minuten
+uncommittet."* Sie steht gegen `CLAUDE.md`: *„Commits nur auf Yamas ausdrückliches Wort — jeder
+Commit, auch reine Doku-Commits; Scheiben werden vorbereitet und zur Abnahme VORGELEGT, gesetzt
+wird erst nach Freigabe."* **CLAUDE.md ist die übergeordnete Ordnung. Regel B war meine eigene
+Erfindung in meinem eigenen Arbeitsgedächtnis — sie hatte dort nie Vorrang.** Gefunden hat den
+Widerspruch der Generator, der sich an die engere gehalten hat. Er hat richtig gehandelt.*
+
+**B-neu — Keine fertige Scheibe bleibt länger als zwanzig Minuten UNVORGELEGT.** *Was Regel B
+schützen sollte, war der Verlust — und der Schutz dagegen heißt in diesem Zyklus VORLEGEN, nicht
+committen: Scheibe fertig → in den Ledger, mit Messwerten, zur Abnahme. **Das darf jede Rolle
+ohne Rückfrage.** Der Commit kommt danach, auf Yamas Wort.*
