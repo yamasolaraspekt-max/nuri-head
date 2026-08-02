@@ -35176,3 +35176,102 @@ NICHT GESCHRIEBEN: die Datei traegt nach der Ersetzung NICHT — nicht geschrieb
 zwischen Regel und Mechanik, und heute hat er sich bezahlt gemacht.
 
 **Alle drei Blätter nach der Einarbeitung: 0 Fehlschlag, 0 verdächtig, 0 Nulltreffer.**
+
+---
+
+## GENERATOR · 02.08. 13:4x — Z-06 UMGESETZT. Die Zwischendecke nimmt die gezeichnete Kontur
+
+**Der Posten, auf den Yama seit Tagen wartet.** Nicht abgenommen — das ist Evaluatorenwort.
+
+```text
+K-01  polygon: gebaeudeUmriss()      2 -> 1     nur noch das Dach (Z-08, unangetastet)
+K-02  decke.test.ts                  7 -> 11    L-Form 68 m², ausdruecklich NICHT 80
+K-04  npm run test:hausplaner        1649 pass · 0 fail
+K-05  validation.ts-Diff             0          Waechter haelt, kein Schema angefasst
+K-06  Mutationsprobe                 8/8 blind -> 0/8, md5 gleich zurueck
+L-01  1440 / 1024                    Kontrolle gruen · Wirkung gruen
+      375                            Mindestbreiten-Sperre — richtiges Ergebnis
+```
+
+Der Bau ist eine Zeile Entscheidung und ein Satz:
+
+```text
+const ausKontur = letzteKontur !== null && letzteKontur.length >= KONTUR_MIN_PUNKTE;
+polygon: ausKontur ? letzteKontur : gebaeudeUmriss()
+ohne Kontur:  „Decke als Näherung aus dem Gebäude-Umriss — für eine exakte Decke
+               zuerst eine Kontur zeichnen"
+```
+
+### Wie L-01 gemessen wurde — und warum die Kontrolle der Kern ist
+
+**Die Decke wird NUR in 3D gezeichnet.** Im 2D-Konva-Baum aendert „Decke anlegen" nichts, und der
+Szenen-Store haengt nicht am `window`. Der eingebaute Ausgang `window.__hausplanerSnapshot3d()`
+(Flag `?capture=1`, gebaut fuer genau diesen Zweck) liefert ein **PNG, keine Geometrie** — *die
+Flaeche ist im Browser nicht als Zahl lesbar.* Sie steht als Zahl in K-02.
+
+Gemessen wurde deshalb die WIRKUNG, mit einer Kontrolle davor (B4):
+
+```text
+A    gleiche Waende, OHNE Kontur   md5 71e6b272c0f4   100250 Zeichen
+A'   gleiche Waende, OHNE Kontur   md5 71e6b272c0f4   100250     <- byte-gleich
+B    gleiche Waende, MIT Kontur    md5 46c4359a0f4a   103226     <- verschieden
+```
+
+**Erst weil A und A' byte-gleich sind, BEDEUTET der Unterschied zu B etwas.** Ohne die Kontrolle
+waere „B ist anders als A" eine Zusage, die nie rot werden kann. *Und der Hinweis faellt in beide
+Richtungen richtig: ohne Kontur steht er, mit Kontur schweigt er — im Browser der Gegenbeweis zu
+Mutation M4.*
+
+### Zwei Fehler MEINES Messgeraets, benannt statt wegdefiniert
+
+```text
+(1) Hinweis-Selektor geraten (`.hp-fu-kontur`) statt am Quelltext abgelesen
+    -> der Rueckfall gab den halben Seitentext zurueck. Richtig ist `.hp-kontur-hinweis`
+       (FussUndUeberlagerungen.tsx:101).
+(2) Bei 375 urteilte die Probe „Wirkung: NEIN" — ueber eine Flaeche, die gar nicht bedienbar
+    ist. Nachgemessen liegt dort `.hp-mb-flaeche`. **Das war ein Fehlalarm meiner Probe, kein
+    Befund gegen den Bau.**
+```
+
+### ZWEI GRENZEN, die ich melde statt sie stillschweigend zu loesen
+
+**1 — K-01 und K-03 sind Quelltext-Zusagen, und das ist eine Schwaeche.** Die Entscheidung lebt in
+der React-Funktion; `scope.dateien` nennt genau EINE Produktivdatei, also kann sie nicht in ein
+pruefbares Modul wandern. Sie fangen alle acht Mutationen, aber sie pruefen den TEXT, nicht das
+VERHALTEN. **Die Extraktion in eine reine Funktion ist eine eigene Scheibe wert** — dann fallen
+beide Zusagen weg und echte Verhaltenszusagen treten an ihre Stelle.
+
+**2 — der Näherungs-Hinweis gilt nur fuer diese Sitzung.** Nach einem Neuladen steht die
+genaeherte Decke ohne Vermerk da. Dauerhaft waere er nur, wenn die Herkunft am Objekt gespeichert
+wuerde — das ist Schema und damit K-05, ausdruecklich ausserhalb dieser Scheibe. *Wer die Decke
+morgen sieht, sieht ihr nicht mehr an, dass sie geraten ist.*
+
+### An Yama — die Kette ist laenger geworden
+
+**Sechs eigene Pfade liegen jetzt unverbucht im Baum** (Z-03/Z-04 · W-01 · Z-06 + Buendel).
+`skriptZielErlaubt` existiert weiterhin nur dort — **W-07 bleibt unbaubar, bis W-01 verbucht ist**
+(sperrende B8-Auflage des Evaluators, von mir nachgemessen: 0 an HEAD, 3 im Arbeitsbaum).
+
+---
+
+## EVALUATOR — 02.08. · Antwort auf die W-02-Frage des Planners: Weg (a), und das Votum steht schon
+
+Zur Sache: **Mein W-02-BAU-Votum GRUEN existiert seit heute 10:0x** (Ledger Z. 34228, commit
+3d3941f2) — die Schlange fuehrte es noch als offen. Es bleibt richtig, aus zwei Gruenden:
+
+1. **Die .ts-Luecke bricht keine gegebene Zusage, sie IST eine fehlende.** W-02 hat Splice-Sperre,
+   Grenzzeilen, Drift-Sperre und das fail-safe NICHT-GESCHRIEBEN versprochen — alles belegt und
+   durch den Pruefer-Befund unberuehrt. Die Klammerbilanz ueber rohen Text hatte ich am 01.08.
+   selbst als Grenze benannt (Backticks); der Kommentar-Fall ist dieselbe Klasse, breiter.
+2. **Der Fehlschlag ist fail-safe:** das Werkzeug verweigert byte-identisch, es verstuemmelt
+   nicht. Es gibt keinen Schadenweg, nur einen Nutzungs-Ausfall fuer .ts — und der ist als
+   W-06 geschnitten und von mir gegengelesen.
+
+Also Weg (a): W-02 ist raus aus der Schlange, W-06 traegt die .ts-Bilanz. **Bis W-06 gruen ist,
+gilt fuer .ts-Dateien die B6-Uebergangsregel weiter: ganze Datei schreiben oder anhaengen.**
+
+Delta-Gegenlesung f4f0c89d: alle drei Auflagen exakt eingearbeitet (Importzeile · Vorbedingung
+sperrend mit beiden Ausgangswerten · Selbsttreffer-Ausnahme). Die drei Blaetter bleiben bei
+ihren Befunden, kein neuer Durchgang noetig.
+
+VOTUM: auftrag=W-02-ENTSCHEIDUNG rolle=evaluator ergebnis=weg-a-votum-steht commit=f4f0c89d datum=2026-08-02 hinweis=ts-luecke-ist-fehlende-nicht-gebrochene-zusage-fail-safe-w06-traegt-rest
