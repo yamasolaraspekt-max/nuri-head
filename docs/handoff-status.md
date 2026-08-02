@@ -33970,3 +33970,59 @@ gestagte Arbeit — was im Index liegt und nicht committet ist, existiert nur, b
 
 **Sonst ist der Baum sauber:** Locks 0 · 5 baubare Blätter · S-01 hält · 28 ungepusht (Y1 offen,
 also bleibt es so) · 5 Stashes vom 07.–24.07., unverändert.
+
+# ═══ MORGENLAGE 02.08. 09:0x — die Nacht war still, und das ist mein Fehler ═══
+
+```text
+git --no-optional-locks rev-list --count --since='2026-08-01 23:25' HEAD   ->  1
+TZ=Europe/Berlin git log -3 --date=format-local:'%d.%m. %H:%M'
+   02.08. 08:55  3d3941f2  W-02: zeile-ersetzen gebaut
+   01.08. 23:24  e0199564  (mein letzter)
+```
+
+**Zwischen 23:24 und 08:55 liegt nichts.** Ich habe gestern Abend eine Nachtordnung geschrieben,
+die davon ausging, dass die Rollen durcharbeiten. **Yama hat gesagt, sie DÜRFEN — ich habe daraus
+gemacht, dass sie KÖNNEN.** Eine Instanz läuft nur, solange jemand sie startet.
+
+**Das ist B5 in eigener Sache: keine Aussage über eine Fähigkeit ohne einen Befehl, der sie
+ausübt.** Dieselbe Klasse wie der Push, keine zwölf Stunden später. Die Nachtordnung selbst bleibt
+richtig und brauchbar — sie ist jetzt eine **Morgen**ordnung.
+
+## Was der Generator geliefert hat — und es ist stark
+
+**W-02 gebaut** (`3d3941f2`), 82 Zusagen / 0 fail (vorher 69). **Mutationsprobe: 6 von 6 kamen
+durch** — das Werkzeug war neu, also war nichts gedeckt. Nach den Zusagen 7 von 7 gefangen.
+
+**Drei eigene Messfehler, alle VOR dem Melden gefunden.** Der schärfste:
+
+> *„Sechs gleiche Zahlen sind die Signatur eines defekten Messgeräts, nicht die eines guten
+> Ergebnisses."*
+
+**Und eine Zusage, die ihren Namen nicht verdient hatte:** seine erste K-08 hieß Drift-Sperre und
+prüfte die Drift nicht — die Mutation „Drift-Sperre entfernt" kam durch und blieb grün. **B9 in
+eigener Sache**, von ihm selbst gefunden. Sein Satz dazu:
+
+> *„Genau diese Klasse — Mechanismus gebaut, Aufruf vergessen — hat um 22:11 veröffentlicht."*
+
+**Das Werkzeug ist im Einsatz:** der Statuswechsel von W-02 auf `gebaut` (`153fc46c`) lief mit
+`zeile-ersetzen` selbst. Es zeigt `vor / von / bis / nach` — genau die vier Zeilen, an denen ich
+gestern viermal danebengelegen habe.
+
+## Sein Befund gegen `commit-pruefen.sh` — bestätigt, gehört in ein Blatt
+
+> *„Es fährt `git commit -- <pfade>` und scheitert damit an NEUEN Dateien (pathspec did not
+> match). Wer ein neues Werkzeug baut, muss vorher von Hand stagen — genau dann, wenn 19 fremde
+> Dateien im Index liegen und ein Fehlgriff teuer wäre."*
+
+**Ich bestätige das aus eigener Erfahrung:** mir ist es gestern um 19:35 genauso gegangen, ich habe
+`git add <pfad>` von Hand nachgeschoben und es als Kleinigkeit abgetan. **Es ist keine.** Der
+Moment, in dem man von Hand stagen muss, ist genau der Moment mit dem größten Beifang-Risiko.
+**Wird als W-04 geschnitten.**
+
+## Stand 02.08. 09:0x
+
+```text
+Zweig 153fc46c · Locks 0 · 82 Zusagen/0 fail · 5 baubar · 30 ungepusht
+17 fremde Dateien liegen WEITERHIN gestagt im Index - unveraendert seit gestern 23:2x
+Z-05 hat WEITERHIN kein Votum  <- der Posten, der die Zwischendecke oeffnet
+```
