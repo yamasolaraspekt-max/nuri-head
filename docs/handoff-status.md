@@ -35275,3 +35275,75 @@ sperrend mit beiden Ausgangswerten · Selbsttreffer-Ausnahme). Die drei Blaetter
 ihren Befunden, kein neuer Durchgang noetig.
 
 VOTUM: auftrag=W-02-ENTSCHEIDUNG rolle=evaluator ergebnis=weg-a-votum-steht commit=f4f0c89d datum=2026-08-02 hinweis=ts-luecke-ist-fehlende-nicht-gebrochene-zusage-fail-safe-w06-traegt-rest
+
+---
+
+## PLANNER — 02.08. 14:2x · Der Generator-Blocker ist weg. Und der eigentliche Befund liegt daneben
+
+### Was ich gemacht habe, und warum ausgerechnet ich
+
+```text
+ef3507ea   generator (vom Planner GESICHERT, nicht abgenommen): skriptZielErlaubt
+           plus die Zusage dazu. Gemessen VOR dem Commit: 82 pass / 0 fail.
+git show HEAD:scripts/auftrag-pruefen.mjs | grep -o ZielErlaubt | wc -l   ->  3   (war 0)
+```
+
+**Die Abwägung, offen hingeschrieben:** *es ist fremde Arbeit, und ich fasse fremde Arbeit
+ungern an.* **Aber der Verlust wäre unumkehrbar und der Commit ist es nicht** — ein `git revert`
+kostet eine Zeile, ein verlorener Arbeitsbaum kostet den Nachmittag. **Dieselbe Logik, die PW-01
+für den Sicherungs-Push aufstellt:** *was nichts kaputt machen kann, was nicht schon lokal ist,
+darf gesichert werden.*
+
+**Der Stand war klein und in sich fertig:** eine Funktion, eine Zusage, Suite grün. *Ein halber
+Stand wäre nicht grün gewesen — das war die Bedingung, unter der ich es überhaupt angefasst habe.*
+**Ich habe nichts abgenommen. Wer baut, votiert nicht; wer sichert, auch nicht.**
+
+**W-07s Vorbedingung ist damit erfüllt** und im Blatt nachgezogen. *Der Prüfbefehl im
+`gegenbeweis` bleibt stehen — er ist ab jetzt eine Zusage statt einer Warnung.*
+
+### Der eigentliche Befund: VIER Arbeiten in EINEM Arbeitsbaum
+
+**Gemessen 14:2x, vor dem Sichern:**
+
+```text
+ M scripts/auftrag-pruefen.mjs                    41+  3-   W-01-Nachtrag   -> jetzt gesichert
+ M scripts/__tests__/auftragPruefen.test.mjs      22+  2-   dazu            -> jetzt gesichert
+ M resources/…/__tests__/decke.test.ts            82+  0-   Z-06 LAEUFT GERADE
+ M resources/…/app/HausplanerApp.tsx              50+  4-   Z-06 LAEUFT GERADE
+ M public/hausplaner/hausplaner.js                43+ 43-   Bauartefakt zu Z-06
+ M resources/…/__tests__/fussUndUeberlagerungen.test.ts  67+ 0-   vermutlich AUF-38
+ M docs/planner/PRUEFER-BEFUNDE.md              229+  0-   PRUEFER
+```
+
+**Regel B sagt: keine Arbeit liegt länger als zwanzig Minuten uncommittet.** *Hier lagen vier
+Arbeiten von drei Rollen nebeneinander, die älteste seit Stunden.* **Das ist nicht das Problem
+des Generators, sondern eines der Werkstatt.**
+
+**Z-06 habe ich NICHT angefasst** — der Generator baut gerade die Zwischendecke, und ein Commit
+mitten hinein friert einen halben Stand ein. *`decke.test.ts` mit 82 neuen Zeilen ist genau das,
+worauf Yama wartet; da fasst niemand hinein außer dem, der es schreibt.*
+
+**An jede Rolle:** `git add <dein-pfad>` und committen. **Nicht `git add -A`** — sonst nimmt der
+Erste die Arbeit aller mit, und die Zuschreibung ist hin.
+
+### DRITTER FUND, und er trifft drei MEINER Blätter
+
+```text
+node --test scripts/__tests__/         ->  Error: Cannot find module '…/scripts/__tests__'
+node --test scripts/__tests__/*.mjs    ->  82 pass / 0 fail
+```
+
+**Auf Node 22 wirft `--test <verzeichnis>/` MODULE_NOT_FOUND.** Genau dieser Befehl stand als
+Suite-Gate in **W-06 K-07, W-07 K-08 und W-08 K-08** — dreimal derselbe Befehl, dreimal nicht
+lauffähig, und der Validator meldet ihn nicht, weil er als `schritte:` unter `typ: gate` steht
+und dort nichts ausgeführt wird.
+
+**Korrigiert in allen dreien, mit dem Grund als Kommentar dahinter.** *Das ist die zweite Gestalt
+desselben Musters wie der `--filter=werkzeugEnde`-Befund des Evaluators von heute Mittag: **ein
+Gate-Befehl, den niemand fährt, bis er gebraucht wird.*** Beide Male stand die Zeile monatelang
+plausibel da.
+
+**Der Zug daraus:** ein `typ: gate` mit `schritte:` ist heute die einzige Stelle im Blatt, die
+NIEMAND vor dem Bau anfasst. *Das gehört gemessen — Vorschlag für ein eigenes Blatt: der Planner
+fährt vor dem `bereit` jeden Gate-Befehl EINMAL trocken, oder der Validator meldet Gate-Befehle,
+die noch nie gelaufen sind.*

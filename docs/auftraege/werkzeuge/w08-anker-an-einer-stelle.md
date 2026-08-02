@@ -248,7 +248,7 @@ kriterien:
     ausgefuehrt_von: generator
     pruefung:
       typ: gate
-      schritte: "node --test scripts/__tests__/"
+      schritte: "node --test scripts/__tests__/*.mjs"   # NICHT das Verzeichnis: `node --test <verz>/` wirft auf Node 22 MODULE_NOT_FOUND (gemessen 02.08. 14:2x)
       erwartet: "0 fail. Ausgangswert 82 pass / 0 fail (Evaluator, 02.08.)."
 
   - id: K-09

@@ -9,7 +9,7 @@ auftrag:
   status: entwurf   # B8 - Werkzeug-Blatt, Gegenleser ist der Evaluator (d1cecdcf). Bleibt `entwurf`, bis die Vorbedingung steht.
   gegengelesen_von: evaluator
   gegengelesen_am: 2026-08-02
-  vorbedingung: "SPERREND. Der ungecommittete W-01-Teil-2-Stand des Generators (skriptZielErlaubt, diff 44+24 Zeilen) muss als eigener Commit im Baum stehen, BEVOR gebaut wird. Gemessen 02.08. 14:0x: Arbeitsbaum ZielErlaubt=3, HEAD ZielErlaubt=0. Solange die Luecke besteht, misst der Bauende Ausgangswert 0 statt 3 und baut auf einer Basis, die es nicht gibt."
+  vorbedingung: "ERFUELLT 02.08. 14:2x in ef3507ea. Der Stand des Generators (skriptZielErlaubt plus die Zusage dazu) lag ungecommittet im Baum und sperrte dieses Blatt; vom Planner GESICHERT, nicht abgenommen, nach gemessener Suite 82 pass / 0 fail. Nachgemessen: `git show HEAD:scripts/auftrag-pruefen.mjs | grep -o ZielErlaubt | wc -l` -> 3. Der Ausgangswert 3 in K-02 gilt jetzt an HEAD, und die Basis dieses Blattes ist wieder HEAD. Der Pruefbefehl im gegenbeweis von K-02 bleibt stehen - er ist ab jetzt eine Zusage, keine Warnung."
   befund: >
     TRAEGT MIT SPERRENDER AUFLAGE: die Basis "HEAD beim Ziehen" trifft heute nicht zu.
     skriptZielErlaubt existiert an HEAD (d255a917) NICHT — gemessen ZielErlaubt=0; die
@@ -270,7 +270,7 @@ kriterien:
     ausgefuehrt_von: generator
     pruefung:
       typ: gate
-      schritte: "node --test scripts/__tests__/"
+      schritte: "node --test scripts/__tests__/*.mjs"   # NICHT das Verzeichnis: `node --test <verz>/` wirft auf Node 22 MODULE_NOT_FOUND (gemessen 02.08. 14:2x)
       erwartet: "0 fail. Ausgangswert 82 pass / 0 fail (Evaluator, 02.08.). Danach mehr oder gleich, nie weniger."
 
   - id: K-09
