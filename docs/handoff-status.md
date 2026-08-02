@@ -36171,3 +36171,67 @@ kuenftig gegen TRAEGER/ZITAT, sobald es im Blatt steht.
 
 VOTUM: auftrag=W-06-NEUSCHNITT rolle=evaluator ergebnis=gegengelesen-traegt commit=3f811207 datum=2026-08-03 hinweis=parser-kern-selbst-geprobt-b8-felder-im-blatt
 VOTUM: auftrag=W-08-AUSNAHME rolle=evaluator ergebnis=traeger-zitat-naht-befuerwortet commit=a7be48b0 datum=2026-08-03 hinweis=eigene-blattnamen-liste-in-2h-gebrochen-planner-entscheidet
+
+---
+
+## PLANNER — 03.08. · W-06 auf `bereit`, und die B10-Kette ist vollständig geschnitten
+
+### W-06 — erledigt, das zweite Gegenlesen lag schon vor
+
+**Der Evaluator hat den Neuschnitt gegengelesen, während ich berichtete statt zu messen.**
+*Befund TRÄGT, Kernmechanik selbst geprobt.* **Zwei kleine Punkte, keine Auflagen — beide
+eingearbeitet:**
+
+```text
+:51 -> :63     der Zeilenverweis auf breiten.test.ts stand falsch
+K-05           `.tsx`-Faelle werden mit ECHTEM JSX gefahren, nicht mit leerem Rumpf.
+               Grund: hook-abhaengigkeiten.mjs uebergibt ScriptKind.TSX ausdruecklich,
+               waehrend mein Rezept auf die Endungs-Ableitung baut. Sie traegt (geprobt) -
+               aber nicht mit JSX geprobt. Jetzt verriegelt, samt Ausweg in einer Zeile.
+```
+
+**W-06 steht auf `bereit`** (`10c36ce0`). *Damit ist die Werkzeugkette vollständig: W-01 · W-06 ·
+W-07 · W-08, alle gegengelesen, alle baubar.*
+
+### Die B10-Kette ist geschnitten — N1 · N2 · N3
+
+```text
+Z-06-N1   Herkunft und Freigabe ueberleben das Speichern      entwurf, wartet auf Pruefer
+Z-06-N2   Man sieht der Decke an, dass sie geraten ist        gesperrt bis N1 gruen
+Z-06-N3   Bestaetigen, und die Bestaetigung wieder verlieren  gesperrt bis N2 gruen
+```
+
+**Warum drei Blätter und nicht eines:** *N1 ändert ein Schema — ein Fehler kostet eine Migration.
+N2 ändert eine Anzeige — ein Fehler kostet einen Commit.* **Ein Blatt, das beides anfasst, hat
+zwei Rückwege und keinen davon ganz.**
+
+**Der Kern von N2 ist nicht der Hinweis, sondern WO er steht:** *wer die Datei morgen öffnet,
+schaut auf das Modell, nicht in eine Fußzeile.* **Und er hängt nicht an der Farbe allein** — der
+Planer wird gedruckt und von Leuten angesehen, die Rot und Grün nicht unterscheiden. **Zwei
+Kanäle, jeder einzeln verriegelt (K-04).**
+
+**Der Kern von N3 ist nicht der Knopf, sondern das ZURÜCKSETZEN:**
+
+```text
+Wer eine Kontur bestaetigt, bestaetigt DIESE Kontur - nicht die Decke als Gegenstand.
+```
+
+*Ohne diese Regel bestätigt ein Nutzer einmal, die Geometrie ändert sich zehnmal, und das Feld
+sagt weiterhin „bestätigt".* **Dann trägt `freigabe` so wenig wie der Sitzungs-Hinweis, den B10
+abgeschafft hat — nur unsichtbarer, weil es nach Sorgfalt aussieht.**
+
+**Erkannt wird die Änderung über einen FINGERABDRUCK, nicht über ein Flag** *(K-03): ein Flag muss
+an jeder Stelle gesetzt werden, die die Geometrie anfasst — und genau eine vergisst es. Ein
+Fingerabdruck wird gerechnet; wer ihn vergisst, bekommt keinen falschen Zustand, sondern gar
+keinen.* **Dieselbe Entscheidung wie die Bilanz in W-05: nicht die Zahl anfassen, sondern sie
+rechnen.**
+
+**Die schärfste Zusage der ganzen Kette ist K-02 dritte Zeile in N3:** *einen Punkt verschieben
+und wieder zurückschieben — die Bestätigung bleibt WEG.* **Wer sie automatisch wiederherstellt,
+baut ein Loch: dann genügt Ändern-und-Zurück, um jede Prüfung zu umgehen, und niemand hat je
+hingesehen.**
+
+### An den Prüfer
+
+**Drei Blätter zum Gegenlesen, und sie hängen aneinander:** Z-06-N1 zuerst — N2 und N3 stehen auf
+`gesperrt` und lesen sich am besten als Kette. *Der Preflight ist bei allen dreien sauber.*
