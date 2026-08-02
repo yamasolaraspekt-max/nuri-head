@@ -213,12 +213,37 @@ function gitUnterbefehl(woerter) {
   return woerter[i] ?? '';
 }
 
+/** Die einzige Heimat, aus der ein Skript aufgerufen werden darf. */
+const SKRIPT_HEIMAT = 'scripts/';
+
+/**
+ * **Darf dieser `bash`-Aufruf laufen?** Entschieden wird am ZIELPFAD, nicht am Programmnamen.
+ *
+ * **Warum es diese dritte Regelart gibt.** Die Liste kannte bisher Ein-Wort-Eintraege (`grep`)
+ * und Wortpaare (`git log`). `bash` passt in keine von beiden: als Wort waere es eine Tuer zu
+ * allem, als Paar muesste jedes Skript einzeln eingetragen werden. **Gemessen, was die Sperre
+ * ohne diese Regel kostet:** vier Zusagen in drei Blaettern (`m2-bestand-skript`,
+ * `auf87-n2-struktur` zweimal, `auf87-auftrag-pruefen`) rufen `bash scripts/…` — alle vier
+ * wurden UEBERSPRUNGEN und sahen im Bericht trotzdem nicht rot aus. *Genau der Fall, den der
+ * Planner bei `git ls-remote` beschrieben hat: eine Messung, die nichts misst und gruen wirkt.*
+ *
+ * **Was weiterhin durchfaellt:** jeder Pfad ausserhalb von `scripts/` (`bash /tmp/fremd.sh`),
+ * und jeder Aufstieg daraus (`scripts/../…`). *Ohne die zweite Haelfte waere die erste eine
+ * Einladung — `scripts/../` erfuellt den Praefix und zeigt trotzdem irgendwohin.*
+ */
+function skriptZielErlaubt(woerter) {
+  const ziel = woerter[1] ?? '';
+
+  return ziel.startsWith(SKRIPT_HEIMAT) && !ziel.includes('..');
+}
+
 /**
  * **Das erste Glied, das NICHT auf der Erlaubnisliste steht** — oder `null`, wenn alle erlaubt sind.
  *
- * Geprueft wird das fuehrende Wort, bei `git` das Wortpaar aus `git` und seinem Unterbefehl.
- * *Ein Glied, das mit `./` oder `bash` beginnt, faellt durch, ohne dass jemand seinen Inhalt
- * kennen muesste — und genau das ist der Punkt.*
+ * Geprueft wird das fuehrende Wort, bei `git` das Wortpaar aus `git` und seinem Unterbefehl,
+ * bei `bash`/`sh` der ZIELPFAD (siehe `skriptZielErlaubt`).
+ * *Ein Glied, das mit `./` beginnt, faellt durch, ohne dass jemand seinen Inhalt kennen
+ * muesste — und genau das ist der Punkt.*
  */
 export function nichtErlaubtesGlied(befehl) {
   for (const glied of befehlsGlieder(befehl)) {
@@ -227,6 +252,19 @@ export function nichtErlaubtesGlied(befehl) {
     const eins = woerter[0] ?? '';
     const istGit = eins === 'git';
     const zwei = istGit ? `git ${gitUnterbefehl(woerter)}` : woerter.slice(0, 2).join(' ');
+
+    // **Vor der Liste, weil die Liste diesen Fall nicht ausdruecken kann.** `bash` steht dort
+    // nicht und soll dort auch nicht stehen — erlaubt ist nicht das Programm, sondern das Ziel.
+    if (eins === 'bash' || eins === 'sh') {
+      if (skriptZielErlaubt(woerter)) {
+        continue;
+      }
+
+      // Die Meldung nennt den PFAD, nicht nur `bash`. *Ein „nicht erlaubt: bash" schickt den
+      // naechsten Leser suchen, obwohl der Grund im zweiten Wort steht.*
+      return `${eins} ${woerter[1] ?? ''}`.trim();
+    }
+
     if (ALLOWLIST.includes(zwei) || ALLOWLIST.includes(eins)) {
       continue;
     }

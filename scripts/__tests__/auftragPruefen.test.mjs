@@ -631,10 +631,30 @@ test('W-01: JEDES Glied einer Kette wird geprueft, nicht nur das erste', () => {
   assert.equal(nichtErlaubtesGlied("grep -rh 'x' docs | sed 's/a/b/' | sort | uniq -c"), null);
 });
 
-test('W-01: `bash` steht NICHT auf der Liste — sonst darf jedes Skript wieder alles', () => {
+test('W-01: `bash` steht NICHT auf der Liste — erlaubt ist das ZIEL, nicht das Programm', () => {
   // Mutation „bash auf die Liste" kam durch. **Sie macht die ganze Liste wertlos**, weil der
   // Text `bash irgendwas.sh` genauso wenig ueber seine Wirkung sagt wie `./irgendwas.sh`.
-  assert.equal(nichtErlaubtesGlied('bash scripts/tu-was-xyz.sh'), 'bash');
+  //
+  // **02.08. — diese Zusage stand gegen W-01-03 des Blattes**, das `bash scripts/pfade-pruefen.sh`
+  // ausdruecklich erlaubt verlangt. Gemessen, was die Sperre kostete: vier Zusagen in drei
+  // Blaettern wurden UEBERSPRUNGEN und sahen im Bericht nicht rot aus.
+  //
+  // **Aufgeloest, ohne die Sorge fallen zu lassen:** `bash` bleibt vom Programmnamen her
+  // gesperrt — erlaubt wird ein ZIELPFAD unter `scripts/`. Die drei folgenden Zeilen halten
+  // fest, dass die Tuer genau so breit ist und keinen Finger breiter.
+  assert.equal(nichtErlaubtesGlied('bash scripts/tu-was-xyz.sh'), null, 'ein Skript aus der Heimat faellt durch');
+  assert.equal(nichtErlaubtesGlied('bash /tmp/fremd-xyz.sh'), 'bash /tmp/fremd-xyz.sh', 'ein fremder Pfad wird erlaubt');
+  assert.equal(nichtErlaubtesGlied('sh scripts/../../tmp/fremd-xyz.sh'), 'sh scripts/../../tmp/fremd-xyz.sh',
+    'der Aufstieg aus der Heimat wird erlaubt — der Praefix allein ist keine Sperre');
+  assert.equal(nichtErlaubtesGlied('bash'), 'bash', 'ein blankes `bash` ohne Ziel faellt durch');
+  // **Die zwei Mutationen, die die vier Zeilen oben NICHT gefangen haben** — beide derselbe
+  // Fehler: der Praefix ist nicht verankert. *Ein Pfad, der `scripts/` ENTHAELT, und ein Name,
+  // der mit `script` ANFAENGT, sind keine Heimat.* Ohne diese zwei Zeilen sieht die Regel in
+  // jeder anderen Zusage richtig aus und laesst trotzdem jeden fremden Ordner durch.
+  assert.equal(nichtErlaubtesGlied('bash /tmp/scripts/fremd-xyz.sh'), 'bash /tmp/scripts/fremd-xyz.sh',
+    'ein Pfad, der `scripts/` nur ENTHAELT, wird erlaubt — der Praefix ist nicht verankert');
+  assert.equal(nichtErlaubtesGlied('bash scriptsfremd/tu-was-xyz.sh'), 'bash scriptsfremd/tu-was-xyz.sh',
+    'ein Ordner, der mit `script` beginnt, gilt als Heimat — der Schraegstrich fehlt in der Pruefung');
   assert.ok(!ALLOWLIST.includes('bash'), '`bash` ist auf die Erlaubnisliste geraten');
   assert.ok(!ALLOWLIST.includes('sh'), '`sh` ist auf die Erlaubnisliste geraten');
   assert.ok(!ALLOWLIST.includes('git'), 'ein blankes `git` waere die Luecke fuer die schreibenden Unterbefehle');
