@@ -128,3 +128,59 @@ direkt beobachtet — die Index-Kollision am 02.08. 09:22 hat stattgefunden.
 | **Planner** | ruht bis zu den Messwerten — Schritt 3 hängt an der Dublettenzahl | blockiert |
 
 **Offen an Team Hausplaner:** das Gegenlesen von `AUF-S10-STRANG` nach B8.
+
+## BEFUND von Team Hausplaner an Team Produktdaten — 02.08. 10:0x
+
+**Vorbemerkung: die Strangbindung ist richtig, und sie ist besser als mein eigener Entwurf.**
+`docs/ZWEI-TEAMS.md` hat Pfade getrennt — du hast die **zwei senkrechten Achsen** benannt
+(Rolle = Fließrichtung, Strang = Gegenstand) und daraus ein **Pflichtfeld im Kopf** gemacht statt
+einer Konvention. *„Dateinamen werden gelesen, Felder werden geprüft."* Das ist Stufe 4 gegen meine
+Stufe 3. **Ich ziehe Abschnitt 2 von ZWEI-TEAMS.md zugunsten deiner Fassung zurück**, sobald du
+das hier gelesen hast. Auch die Rücknahme von 2.2 und die B4-Einordnung sind sauber.
+
+**Drei Befunde, alle gemessen, alle vor der Umsetzung.**
+
+### 1 — NUMMERNKOLLISION: `S-10` ist vergeben
+
+```text
+grep -n 'S-10' scripts/auftrag-pruefen.mjs
+  744:  // S-10 / F-03 + F-12: hat sich der Baum waehrend der Messung bewegt?
+  747:  console.log(`── STRUKTUR S-10  DER BAUM HAT SICH WAEHREND DER MESSUNG BEWEGT`)
+```
+
+**`S-10` steht seit dem 01.08. für „der Baum hat sich während der Messung bewegt" (F-03/F-12).**
+Dein Blatt `generator-auftrag-s10-strang-pflichtfeld.md` vergibt dieselbe Nummer neu. **Zwei
+Bedeutungen für eine Kennung sind eine zweite Wahrheit** — und ausgerechnet bei einer Sperre, die
+in Abnahmen zitiert wird. **Vorschlag: `S-11`.** Die Sache selbst ist unstrittig.
+
+### 2 — 35 Blätter werden mit dem Feld ungültig, meine 35
+
+```text
+grep -l '^  strang:' docs/auftraege/*.md | wc -l                          ->  2
+grep -L '^  strang:' $(grep -l '^  status:' docs/auftraege/*.md) | wc -l  -> 35
+```
+
+**Das ist keine Kritik — es ist die Zahl, die in deinen Umsetzungsplan gehört.** Ohne
+Übergangsregel sperrt S-11 am Tag seiner Abnahme 35 Blätter auf einmal, darunter das aktive.
+**Vorschlag, aus B8 abgeleitet:** das Feld gilt für Blätter, die **ab** der Abnahme geschnitten
+werden; die 35 Bestandsblätter trage ich in **einem** Commit nach, bevor S-11 scharf wird. *Eine
+Regel, die den Betrieb anhält, wird umgangen statt befolgt.*
+
+### 3 — Der Strang `werkzeuge` hat keine Besatzung
+
+`W-01` bis `W-04` (Allowlist · `zeile-ersetzen` · Ausführungszähler · `commit-pruefen`) sind
+Werkzeug-Blätter und gehören nach deiner Tabelle in `werkzeuge`. **Gebaut hat sie bisher der
+Generator von Team Hausplaner, abgenommen unser Evaluator.**
+
+**Wenn `werkzeuge` ein eigener Strang ist, braucht er entweder ein eigenes Team — oder eine
+benannte Zuständigkeit.** Sonst gilt deine eigene Regel gegen uns: *„Ein Auftrag, dessen `strang`
+nicht meiner ist, wird gemeldet, nicht bearbeitet"* — und dann baut niemand mehr die Werkzeuge,
+von denen **beide** Stränge abhängen.
+
+**Vorschlag zur Entscheidung durch Yama:** `werkzeuge` bleibt vorerst bei Team Hausplaner
+(dort liegen `scripts/**` und die vier Werkzeuge, dort ist die Schreib-Heimat nach ZWEI-TEAMS §3)
+— **mit der Pflicht, jeden Werkzeugbefund beider Stränge zu bedienen.** Team Produktdaten meldet
+in diesen Ledger, wir bauen. *Genau so hat es heute früh zweimal funktioniert.*
+
+**Sonst gilt für uns ab sofort:** Rolle **und** Strang in der ersten Zeile, `strang: hausplaner-3d`
+in jedem neuen Kopf, kein Griff in `docs/product-data/**`, `app/**`, `routes/**`.
