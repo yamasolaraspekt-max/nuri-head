@@ -7,9 +7,18 @@ auftrag:
   id: W-06
   strang: werkzeuge
   status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # nach d1cecdcf: Werkzeug-Blatt -> Evaluator (Kopfkommentar oben sagt noch Pruefer)
+  gegengelesen_am: 2026-08-02
+  befund: >
+    TRAEGT. Alle Ausgangswerte unabhaengig nachgemessen und exakt (Worktree auf d255a917):
+    fangKern 81 auf/87 zu, davon 6 in nummerierten Kommentaren; ohneKommentare zaehle.mjs:41
+    mit raute=false; K-01 0/Partner 3; K-02 0/Partner 1; K-04 1/Partner 5, zweiter
+    pruef-tmp-Treffer Z.128 ist Kommentar; Suite 82 pass/0 fail. Preflight 4 OK/0 Fehlschlag,
+    beide yaml-Bloecke gelesen. EINE kleine Auflage: K-02 zaehlt auch eine blosse
+    Kommentar-Erwaehnung von 'zaehle.mjs' als Import — der Generator soll die Importzeile
+    (import ... from './zaehle.mjs') belegen; K-03 Zeile 3 bleibt der tragende Beweis.
+    B8-Fragen: alle Maschinen-Befehle laufen, messen Wirkung (Partner + Ausgangswerte),
+    keiner mutiert.
 ```
 
 ## Warum — eine Mechanik, die nicht trägt, ist schlimmer als keine

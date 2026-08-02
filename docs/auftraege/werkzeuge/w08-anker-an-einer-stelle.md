@@ -7,9 +7,20 @@ auftrag:
   id: W-08
   strang: werkzeuge
   status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # nach d1cecdcf: Werkzeug-Blatt -> Evaluator (Kopfkommentar oben sagt noch Pruefer)
+  gegengelesen_am: 2026-08-02
+  befund: >
+    TRAEGT MIT AUFLAGE AN DER MESSMETHODE: die rohen grep-Zaehlungen zaehlen ZITATE mit.
+    W-08 selbst und w05-werkzeug-anschluss enthalten 'L-01-anker', '2  MONTIEREN' und
+    'typ: browser' als woertlich zitierte Suchmuster — gemessen heute 20/7/14 statt
+    19/6/13 (der +1 ist dieses Blatt). Damit ist das K-05-Soll "0 Blaetter mit MONTIEREN"
+    per rohem grep UNERREICHBAR; der Generator braucht eine benannte Ausnahme
+    (Zitat-Blaetter ausschliessen oder Muster auf den Stufe-3-Kontext praezisieren),
+    sonst wird das Soll passend gemacht statt gemessen. Bestaetigt: K-01 Ausgangswert 0
+    (keine ANKER-Datei), K-02 0 mit Partner S-10=2, pb023-pb024 ist exakt das eine
+    Browser-Blatt ohne Anker (comm-Probe). Preflight 3 OK/0 Fehlschlag. B8-Fragen:
+    Maschinen-Befehle laufen, K-03 misst Wirkung mit 3 roten UND 3 gruenen Zusagen,
+    keiner mutiert.
 ```
 
 ## Warum — heute habe ich denselben Block ZWÖLFMAL bearbeitet

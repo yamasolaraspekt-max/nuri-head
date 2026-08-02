@@ -7,9 +7,19 @@ auftrag:
   id: W-07
   strang: werkzeuge
   status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # nach d1cecdcf: Werkzeug-Blatt -> Evaluator (Kopfkommentar oben sagt noch Pruefer)
+  gegengelesen_am: 2026-08-02
+  befund: >
+    TRAEGT MIT SPERRENDER AUFLAGE: die Basis "HEAD beim Ziehen" trifft heute nicht zu.
+    skriptZielErlaubt existiert an HEAD (d255a917) NICHT — gemessen ZielErlaubt=0; die
+    Funktion liegt nur UNGECOMMITTET im Arbeitsbaum (diff 44+24 Zeilen, der W-01-Teil-2-
+    Stand des Generators), dort ZielErlaubt=3 wie im Blatt. VOR dem Bau muss dieser Stand
+    als eigener Commit gesetzt sein, sonst misst der Bauende K-02-Ausgangswert 0 statt 3
+    und der Zeilenverweis (:256, real :257 im Arbeitsbaum) zeigt ins Leere. Klein:
+    befehl-Zeilen inzwischen 235 statt 229 (Drift durch neue Blaetter), node-Zaehlung 49
+    bestaetigt, awk/sed/node je 1x blank auf der Liste bestaetigt, cd-Testlauf-Traeger
+    ist genau z01-werkzeugende. B8-Fragen: Maschinen-Befehle laufen (Preflight 4 OK/0
+    Fehlschlag), K-04 misst Wirkung mit 8 roten UND 4 gruenen Zusagen, keiner mutiert.
 ```
 
 ## Warum — das Argument steht schon im Werkzeug, es gilt nur für zwei Programme
