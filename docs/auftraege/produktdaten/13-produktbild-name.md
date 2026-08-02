@@ -1,4 +1,62 @@
-# 13 · Auftrag AUF-P1-S2-d3 — Bildname geht im Lieferantenimport verloren
+# 13 · AUF-P1-S2-d3 — Bildname geht im Lieferantenimport verloren
+
+```yaml
+auftrag:
+  id: AUF-P1-S2-d3
+  strang: produktdaten
+  status: bereit
+  spur: A
+  heimat: ticket
+  ziel: "SupplierConnectorService.php:1351 uebergibt 'name' statt 'title' an ProductImage,
+         und ein Test belegt das per Mass Assignment."
+  nicht_ziel: "Kein Backfill des Altbestands. Keine Vereinheitlichung des fehlenden Fallbacks.
+               Keine Aenderung an products.product_image."
+
+scope:
+  population_command: "grep -c \"'title'\" app/Services/Suppliers/SupplierConnectorService.php"
+  pfade:
+    - app/Services/Suppliers/SupplierConnectorService.php
+    - tests/Feature/Product/ProductImageFillableTest.php
+  ausschluesse: []
+
+kriterien:
+  - id: K-01
+    aussage: "Im ProductImage-Block steht kein 'title' mehr."
+    typ: absence
+    kritikalitaet: P1
+    pruefung:
+      befehl: "grep -n \"'title'\" app/Services/Suppliers/SupplierConnectorService.php"
+      erwartet: "kein Treffer im ProductImage-Block (Zeile ~1345-1355)"
+    beleg: rohausgabe
+
+  - id: K-02
+    aussage: "Ein ProductImage laesst sich per Mass Assignment mit 'name' anlegen und zurueklesen."
+    typ: presence
+    kritikalitaet: P1
+    pruefung:
+      typ: manual
+      schritte: "php artisan test --filter=ProductImageFillable"
+      erwartet: "gruen; name kommt zurueck"
+    beleg: testausgabe
+    ausgefuehrt_von: generator      # php laeuft nur auf Yamas Rechner
+
+  - id: K-03
+    aussage: "Der Test kann rot werden."
+    typ: adversarial
+    kritikalitaet: P1
+    pruefung:
+      typ: manual
+      schritte: "im Test probeweise 'title' statt 'name' uebergeben"
+      erwartet: "derselbe Test faellt; Rohausgabe BEIDER Laeufe vorlegen"
+    beleg: rohausgabe-beider-laeufe
+    ausgefuehrt_von: generator
+
+selbstnachweis:
+  preflight: "./scripts/auftrag-pruefen.sh docs/auftraege/produktdaten/13-produktbild-name.md"
+  gegenprobe: "siehe K-03 — ein Test, der nicht rot werden kann, prueft nichts."
+```
+
+---
 
 > **Rolle:** Planner · **Stand:** 01.08.2026, Nacht · **Heimat-App:** `ticket` · **Spur:** A
 > **Ersetzt** den Auftrag `AUF-P1-S2-d2` aus `planner-auftraege-paket1-schritt2-nachbesserung.md`.

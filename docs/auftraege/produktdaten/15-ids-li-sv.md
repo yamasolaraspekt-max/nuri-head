@@ -1,4 +1,109 @@
-# 15 · Auftrag AUF-IDS-LI-SV — Shop fragen statt raten
+# 15 · AUF-IDS-LI-SV — Shop fragen statt raten
+
+```yaml
+auftrag:
+  id: AUF-IDS-LI-SV
+  strang: produktdaten
+  status: bereit
+  spur: A
+  heimat: ticket
+  ziel: "IdsCapabilityService fragt LI und SV normkonform ab und legt den Befund in
+         supplier_connections.capabilities ab; eingehaengt vor den vorhandenen Suchtest."
+  nicht_ziel: "Keine Oberflaeche. Keine Abloesung von normalizeParamsForTest. Keine
+               automatische Versionswahl. Keine der uebrigen fuenf IDS-Aktionen."
+
+scope:
+  population_command: "grep -c 'searchterm' app/Services/Suppliers/SupplierConnectionTestService.php"
+  pfade:
+    - app/Services/Suppliers/Ids/IdsCapabilityService.php
+    - app/Services/Suppliers/SupplierConnectionTestService.php
+    - tests/Feature/Suppliers/IdsCapabilityServiceTest.php
+  ausschluesse: []
+
+kriterien:
+  - id: K-01
+    aussage: "Die LI-Anfrage traegt GENAU einen Parameter: action=LI."
+    typ: adversarial
+    kritikalitaet: P1
+    pruefung:
+      typ: manual
+      schritte: "Http::fake, Request abfangen, Parameterliste pruefen"
+      erwartet: "['action' => 'LI'] und sonst nichts; Test wird rot, wenn man username ergaenzt"
+    beleg: testausgabe
+    ausgefuehrt_von: generator
+
+  - id: K-02
+    aussage: "Die SV-Anfrage traegt genau action=SV."
+    typ: adversarial
+    kritikalitaet: P1
+    pruefung:
+      typ: manual
+      schritte: "wie K-01 mit SV"
+      erwartet: "['action' => 'SV'] und sonst nichts"
+    beleg: testausgabe
+    ausgefuehrt_von: generator
+
+  - id: K-03
+    aussage: "Die Normbeispiele aus IDS 2.5 §5.6 und §5.7 werden korrekt gelesen."
+    typ: presence
+    kritikalitaet: P1
+    pruefung:
+      typ: manual
+      schritte: "die beiden XML-Bloecke woertlich als Fixture, Werte vergleichen"
+      erwartet: "drei Boolesche Werte bzw. sechs Versionen"
+    beleg: testausgabe
+    ausgefuehrt_von: generator
+
+  - id: K-04
+    aussage: "Alle 15 Kantenfaelle haben je einen benannten Test."
+    typ: coverage
+    kritikalitaet: P1
+    pruefung:
+      typ: manual
+      schritte: "Testnamen gegen die Kantenliste im Fliesstext abgleichen"
+      erwartet: "15 von 15, keine Luecke"
+    beleg: zaehlausgabe
+    ausgefuehrt_von: generator
+
+  - id: K-05
+    aussage: "Kein Zugangsdatum erscheint im Log, auch nicht im Fehlerfall."
+    typ: adversarial
+    kritikalitaet: P1
+    pruefung:
+      typ: manual
+      schritte: "Passwort-Fixture in der gesamten Testausgabe suchen, auch im Timeout-Fall"
+      erwartet: "null Treffer"
+    beleg: rohausgabe
+    ausgefuehrt_von: generator
+
+  - id: K-06
+    aussage: "Der Schalter traegt: bei aktiv=false verhaelt sich test() byte-gleich wie vorher."
+    typ: behavioural
+    kritikalitaet: P1
+    pruefung:
+      typ: manual
+      schritte: "Suite mit ids.capabilities.aktiv=false"
+      erwartet: "gruen, test() unveraendert"
+    beleg: testausgabe
+    ausgefuehrt_von: generator
+
+  - id: K-07
+    aussage: "Die Migration ist umkehrbar."
+    typ: behavioural
+    kritikalitaet: P1
+    pruefung:
+      typ: manual
+      schritte: "migrate, dann migrate:rollback, SHOW COLUMNS vorher/nachher"
+      erwartet: "spaltengleich"
+    beleg: rohausgabe-beider-laeufe
+    ausgefuehrt_von: generator
+
+selbstnachweis:
+  preflight: "./scripts/auftrag-pruefen.sh docs/auftraege/produktdaten/15-ids-li-sv.md"
+  gegenprobe: "in K-01 probeweise username mitsenden — der Test muss fallen."
+```
+
+---
 
 > **Rolle:** Planner · **Stand:** 02.08.2026 · **Heimat-App:** `ticket` · **Spur:** A
 > **Beauftragt von:** Yama, 02.08.2026 (kein selbst erfundener Posten)
