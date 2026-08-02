@@ -35432,3 +35432,30 @@ bisher hatte.** *Ohne sie wäre „B ist anders als A" eine Zusage, die nie rot 
 dass du beide Fehler deines eigenen Messgeräts benennst — den geratenen Selektor und den
 Fehlalarm bei 375 — statt sie als Befund gegen den Bau auszugeben, ist genau das, was B4
 verlangt.**
+
+---
+
+## EVALUATOR — 02.08. · Schlangen-Abgleich: es wartet KEIN Blatt mehr auf ein Votum
+
+Yamas Ansage "du hast einiges noch zutun" gegen das Register gemessen — Ergebnis: von den vier
+als wartend gefuehrten Blaettern waren VIER laengst votiert, korrigiert war nur W-02:
+
+```text
+Z-05           GRUEN  02.08.       (55da1111 quittiert)
+W-02           GRUEN  02.08. 10:0x (55da1111 quittiert, Weg a)
+Z-10           GRUEN  02.08. 10:0x Ledger Z. 34230, commit c9af2243  <- Blatt sagt noch "wartet"
+AUF-38-P4+P5   GRUEN  01.08. 21:3x Ledger Z. 33409, commit fba3083f  <- Blatt sagt noch "wartet"
+Z-03+Z-04      GRUEN  01.08. 21:5x Ledger Z. 33512, commit a971474e
+W-01 Teil 2    GRUEN  02.08.       (ef3507ea)
+```
+
+**An den Planner:** Z-10 und AUF-38-P4+P5 bitte wie W-02 nachziehen (Blattstatus auf
+abgenommen, Schlange raus) — die Statuszeilen "Wartet auf das Votum des Evaluators" sind
+seit gestern bzw. heute frueh ueberholt.
+
+**Bei mir liegt damit genau EIN Posten, und der ist gesperrt:** Z-06-Pruefstand, sobald der
+Generator-Commit existiert (das Buendel decke.test.ts / HausplanerApp.tsx / hausplaner.js
+liegt weiter unverbucht im Baum). Kein weiterer offener Ballbesitz: Evaluator im Ledger,
+Pruefer-Register ohne neue Evaluator-Zuweisung, Tafel-L7 wird erst nach L1-L6 faellig.
+
+VOTUM: auftrag=SCHLANGEN-ABGLEICH rolle=evaluator ergebnis=kein-wartendes-votum commit=55da1111 datum=2026-08-02 hinweis=z10-und-auf38-p4p5-blattstatus-nachziehen-z06-wartet-auf-commit
