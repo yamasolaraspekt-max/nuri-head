@@ -34,10 +34,10 @@ aktiv 1 · bereit 4 · gebaut 4 · entwurf 6 · gesperrt 5 · ruht 15 · abgenom
 
 | Rolle | Was liegt bereit |
 |---|---|
-| **Generator** | **Z-03+Z-04** `aktiv` → **W-01** `bereit` → (Z-11 · W-05 · W-06 nach Gegenlesen) |
-| **Evaluator** | **Z-05 — VORRANG, das Votum öffnet Z-06 und damit die Zwischendecke** · Z-10 · AUF-38-P4+P5 · W-02 |
-| **Prüfer** | **GEGENLESEN (B8): Z-11 · W-05 · W-06** — das ist der Engpass · dann P-01 Teil 0 |
-| **Planner** | W-07 (Erlaubnislücken node/`sed -i`/awk) · S-11 (Anker-Sperre) · Umzug der Blätter nach `docs/auftraege/<strang>/` |
+| **Generator** | **Z-03+Z-04** `aktiv` → **W-01** `bereit` → dann in DIESER Reihenfolge: **W-06 → W-07 → W-08** (alle drei fassen dasselbe Werkzeug an) → Z-11 · W-05 |
+| **Evaluator** | **Z-05 — VORRANG, das Votum öffnet Z-06 und damit die Zwischendecke** · Z-10 · AUF-38-P4+P5 · W-02 · **GEGENLESEN (B8): W-06 · W-07 · W-08** (Werkzeug-Blätter) |
+| **Prüfer** | **GEGENLESEN (B8): Z-11 · W-05** (Planner-Blätter) · dann P-01 Teil 0 |
+| **Planner** | Umzug der übrigen Blätter nach `docs/auftraege/<strang>/` · Z-07/Z-08 erst wenn Z-06 steht |
 | **Yama** | Y1 (Push-Kanal) · Y2 (Takt) · Z-09 ACHSE oder FLANKE · die 3 PHP-Dateien |
 
 **Gebaut, wartet auf Votum:** Z-05 · Z-10 · W-02 · AUF-38-P4+P5.
@@ -63,6 +63,14 @@ dca1d824  W-05 K-10: `PAKET_WERKZEUGE` ist zweimal deklariert - werkzeugPaket.ts
 c8d82b70  W-06 geschnitten: `klammerBilanz` zaehlt ueber Kommentare mit - fangKern.ts hat
           81 `(` zu 87 `)`, alle sechs aus `// 1)`-Kommentaren. Das Werkzeug, das B6 als
           Ersatz fuer `perl -pi` benennt, kann .ts gar nicht schreiben.
+aebe57b6  W-07 geschnitten: die Erlaubnisliste fragt bei `node`, `sed` und `awk` wieder
+          das PROGRAMM statt das ZIEL - ihr eigenes Argument, fuer drei Eintraege nicht
+          eingehalten. `awk` hat 0 Verwendungen und fliegt raus. Ein Kriterium faellt
+          dabei bewusst (`cd … && node --test __tests__/…`) und wird zum Gate.
+6ea45e05  W-08 geschnitten: der Anker zieht nach docs/auftraege/ANKER-BROWSER.md, die
+          Blaetter tragen drei Zeilen Verweis. S-11 haelt ihn dort - und greift nur bei
+          aktiv/bereit/gebaut/entwurf/gesperrt, also genau am Uebergang aus dem Archiv.
+          Dabei gefunden: pb023-pb024 faehrt Browser-Zahlen ganz OHNE Anker.
 ```
 
 ## 4. Was entschieden ist — gilt, bis es hier ersetzt wird
@@ -123,8 +131,10 @@ Die Geraete-VM laeuft in UTC, git meldet Europe/Berlin - zwei Stunden Unterschie
          = Rest, alles andere = laufender Vorgang.
 ⚠  F-16  GATE_MUSTER faengt npm & Co., aber KEINE Shell-Wrapper. Barriere ist W-01, `bereit`.
 ❌ F-17  Ein unbekannter `typ:` verschwindet lautlos aus dem Bericht.
-❌ NEU   Die Erlaubnisliste laesst `node <beliebig>`, `sed -i` und `awk system()` durch
-         (Pruefer, 02.08.). Barriere waere W-07 - noch nicht geschnitten.
+⚠  F-18  Die Erlaubnisliste laesst `node <beliebig>`, `node -e`, `sed -i` und `awk system()`
+         durch (Pruefer, 02.08.). Barriere ist W-07, geschnitten, noch nicht gebaut.
+⚠  F-19  Ein Anker, der in 18 Blaetter kopiert ist, wird bei jeder Korrektur nur zur
+         Haelfte erreicht - heute zweimal passiert. Barriere ist W-08 (S-11), geschnitten.
 ```
 
 ## 8. Was der Validator selbst sperrt
