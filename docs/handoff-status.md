@@ -34704,3 +34704,29 @@ generator-auftrag-pb023-pb024-styleguide-und-tokens.md
 ```
 
 **Vorher liegt weiter Z-03+Z-04 (`aktiv`) und W-01 (`bereit`).**
+
+### BEFUND beim Schlusslauf — S-10 hat drei Kriterien, die nicht laufen können
+
+**Gemessen 02.08. 12:5x, `node scripts/auftrag-pruefen.mjs docs/auftraege/werkzeuge/*.md`:**
+
+```text
+docs/auftraege/werkzeuge/s10-strang-pflichtfeld.md
+  FEHLSCHLAG  K-01  node scripts/auftrag-pruefen.mjs tests/fixtures/auftraege/ohne-strang.md
+  FEHLSCHLAG  K-02  node scripts/auftrag-pruefen.mjs tests/fixtures/auftraege/strang-unbekannt.md
+  FEHLSCHLAG  K-03  node scripts/auftrag-pruefen.mjs tests/fixtures/auftraege/strang-gueltig.md
+
+ls tests/fixtures/           ->  building-model · geometrie-bestand-2026-07-14.json
+ls tests/fixtures/auftraege/ ->  existiert nicht
+```
+
+**Drei P1-Kriterien zeigen auf ein Verzeichnis, das es nicht gibt.** *Das ist genau die Falle, die
+schon im STAND steht: `zaehle.mjs <datei>` wirft ENOENT, solange die Datei nicht existiert — ein
+Kriterium für eine NEUE Datei muss über das VERZEICHNIS messen.* **Hier ist es dieselbe Klasse mit
+einem anderen Werkzeug.**
+
+**Nicht angefasst:** S-10 gehört zum Strang des anderen Planners, der seine Arbeit gestoppt hat.
+`status: entwurf`, es blockiert nichts. **Gemeldet, damit es nicht als „lief schon immer rot"
+durchrutscht** — wer S-10 wieder aufnimmt, legt zuerst die drei Fixtures an oder misst über das
+Verzeichnis.
+
+**Meine drei neuen Blätter im selben Lauf: 0 Fehlschlag, 0 verdächtig, 0 Nulltreffer.**
