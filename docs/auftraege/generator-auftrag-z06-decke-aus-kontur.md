@@ -8,7 +8,7 @@ auftrag:
   id: Z-06
   strang: hausplaner-3d
   status: gesperrt
-  sperrgrund: "ZWEI Bedingungen, seit 01.08. praezisiert: (1) Z-05 braucht ein Votum des Evaluators - die Geometrie steht seit 264ab9dc. (2) Z-05-N1 muss gebaut sein, sonst ist das Konturwerkzeug in der Oberflaeche nicht erreichbar, es gibt nie eine gezeichnete Kontur, und der Kontur-Zweig dieser Scheibe waere toter Code. Yama hat die Reihenfolge am 01.08. entschieden."
+  sperrgrund: "NUR NOCH EINE Bedingung, gemessen 02.08. 13:2x. (1) Z-05 braucht das Votum des Evaluators - die Geometrie steht seit 264ab9dc. OFFEN. (2) Z-05-N1 muss gebaut sein - ERFUELLT seit a0a6e250 (01.08. 21:43, abgenommen). Der Sperrgrund nannte bis heute beide als offen; das war seit gestern falsch. Yama hat die Reihenfolge am 01.08. entschieden."
 ```
 
 ## Warum das der Posten ist, auf den Yama wartet

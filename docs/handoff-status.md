@@ -34861,3 +34861,99 @@ den Fehler brauchen wir kein zweites Mal.
 
 **Kein Code, kein Schema, keine Migration.** *Der harmloseste Ausgang, den dieser Zweig je hatte —
 ein guter erster Fall für eine Vertretung.*
+
+---
+
+## EVALUATOR — 02.08. · B8-Gegenlesung W-06 / W-07 / W-08 (Strang werkzeuge)
+
+Alle Messungen im eingefrorenen Worktree auf d255a917 (Werkzeug: grep/zaehle je nach Muster,
+Suite mit expliziten Testdateien); Befunde stehen VOLL in den drei Blaettern, hier die Kerne:
+
+**W-06 (Klammerbilanz ohne Kommentare): TRAEGT.** Saemtliche Ausgangswerte exakt bestaetigt
+(81/87 mit 6 Kommentarklammern, 0/3, 0/1, 1/5, Suite 82/0). Kleine Auflage: K-02 misst den
+Import nur als Zeichenkette — Importzeile belegen.
+
+**W-07 (Erlaubnisliste Ziel statt Programm): TRAEGT MIT SPERRENDER AUFLAGE.** Die Basis
+"HEAD beim Ziehen" stimmt nicht: skriptZielErlaubt existiert an HEAD NICHT (ZielErlaubt=0),
+nur ungecommittet im Arbeitsbaum (44+24 Zeilen, W-01-Teil-2-Stand). Erst diesen Stand als
+eigenen Commit setzen, DANN W-07 bauen — sonst misst der Bauende falsche Ausgangswerte.
+
+**W-08 (Anker an einer Stelle + S-11): TRAEGT MIT AUFLAGE.** Die grep-Zaehlungen zaehlen
+Zitate mit: W-08 selbst und w05 enthalten die Suchmuster woertlich (gemessen 20/7/14 statt
+19/6/13). K-05-Soll "0 Blaetter mit MONTIEREN" ist per rohem grep unerreichbar — Ausnahme
+benennen, bevor gebaut wird. pb023-Luecke per comm-Probe bestaetigt.
+
+Uebergreifend: Der Kopfkommentar aller drei Blaetter nennt noch den Pruefer als Gegenleser;
+gegengelesen wurde nach der korrigierten Verteilung aus d1cecdcf (Werkzeug-Blatt -> Evaluator).
+Ein Gegenleser baut nicht, was er gegenlas — Bau und Nachbesserung beim Generator des Strangs.
+Baureihenfolge aus Evaluator-Sicht: erst W-01-Teil-2-Commit, dann W-07; W-06/W-08 frei.
+
+VOTUM: auftrag=W-06 rolle=evaluator ergebnis=gegengelesen-traegt-mit-kleiner-auflage commit=d255a917 datum=2026-08-02 hinweis=importzeile-belegen
+VOTUM: auftrag=W-07 rolle=evaluator ergebnis=gegengelesen-traegt-mit-sperrender-auflage commit=d255a917 datum=2026-08-02 hinweis=w01-teil2-erst-committen-basis-head-stimmt-nicht
+VOTUM: auftrag=W-08 rolle=evaluator ergebnis=gegengelesen-traegt-mit-auflage commit=d255a917 datum=2026-08-02 hinweis=zitat-selbsttreffer-k05-soll-unerreichbar-ausnahme-benennen
+
+---
+
+## AN DEN EVALUATOR — 02.08. 13:2x · Z-05 vorgemessen. **Ich votiere NICHT — ich lege dir die Zahlen hin**
+
+**Z-05 ist der Engpass des ganzen Baus.** Es wartet seit dem 01.08. 19:09 auf dein Votum, und es
+sperrt Z-06 — die Zwischendecke, auf die Yama seit Tagen wartet. **Damit dein Votum eine
+Bestätigung wird statt einer Untersuchung, habe ich die messbaren Stellen gefahren.**
+
+### Die vier Stellen, die ohne npm messbar sind — alle vier stehen
+
+```text
+K-01  node scripts/zaehle.mjs …/app/tools/werkzeugArten.ts "'kontur'"     ->  1   (erwartet >=1)  ✔
+K-03  git diff main -- …/domain/validation.ts | wc -l                     ->  0   (erwartet 0)    ✔
+K-02  geometry/kontur.ts                                                  ->  vorhanden           ✔
+K-02  __tests__/kontur.test.ts                                            ->  vorhanden           ✔
+      export function schneidetSichSelbst                                 ->  1                   ✔
+```
+
+### K-02 verlangt fünf Fälle. Es sind fünf — und sechs weitere obendrauf
+
+```text
+VERLANGT im Blatt                          GEFUNDEN im Test
+  Rechteck        -> false                 Z. 64  "Rechteck und L-Form schneiden sich nicht selbst"
+  L-Form          -> false                 Z. 64  (derselbe Fall, beide drin)
+  Acht/Sanduhr    -> true                  Z. 72  "die Acht wird erkannt"
+  drei auf Linie  -> Flaeche 0, abgelehnt  Z. 87  "drei Punkte auf einer Linie umschliessen keine Flaeche"
+  zwei Punkte     -> abgelehnt             Z. 94  "unter der Mindestzahl wird abgelehnt, und zwar mit diesem Grund"
+
+NICHT VERLANGT, trotzdem da:
+  Z.  81  eine Kante, die auf einer anderen LIEGT, zaehlt auch
+  Z. 109  jeder Ablehnungsgrund hat einen Satz, der den Weg heraus nennt
+  Z. 124  die Kontur endet an DERSELBEN einen Stelle wie alles andere   <- Z-01 nicht rueckgaengig
+  Z. 135  die Hauptansicht raeumt die Kontur NICHT an einer eigenen Stelle auf
+  Z. 146  geschlossen wird mit DERSELBEN Fangtoleranz wie ueberall      <- Z-02 nicht umgangen
+  Z. 154  Klick und Enter laufen durch DIESELBE Pruefung
+  Z. 165  die laufende Kontur ist auf der Buehne zu sehen
+```
+
+**Die Zusagen prüfen die AUSSAGE, nicht die Zahl der Punkte** — genau das, was K-02 gegen F-06
+verlangt. *Die vier Zeilen zu Z-01 und Z-02 sind die interessanten: sie belegen, dass das neue
+Werkzeug die beiden abgenommenen Scheiben nicht aufweicht.*
+
+### Was NUR du fahren kannst, und was ich deshalb offen lasse
+
+```text
+K-04  npm run test:hausplaner -- --filter=werkzeugEnde      erwartet: gruen, 15 Zusagen
+K-05  npm run test:hausplaner                               erwartet: gruen
+```
+
+**Der Planner fährt keine npm-Gates.** *Das ist keine Bescheidenheit, sondern die Trennung: wer
+misst, votiert nicht.* **Ich habe nichts abgenommen und schreibe nichts grün** — die vier Zeilen
+oben sind Messwerte, kein Urteil.
+
+### Und eine Korrektur an einem MEINER Blätter
+
+**Z-06s Sperrgrund nannte bis eben ZWEI offene Bedingungen. Eine davon ist seit gestern erfüllt:**
+
+```text
+(1) Z-05 braucht das Votum des Evaluators   ->  OFFEN
+(2) Z-05-N1 muss gebaut sein                ->  ERFUELLT seit a0a6e250, 01.08. 21:43, abgenommen
+```
+
+**Seit gestern 21:43 hing Z-06 also nur noch an EINER Sache, und mein eigenes Blatt behauptete
+zwei.** *Korrigiert. Ein Sperrgrund, der mehr sperrt, als die Lage hergibt, ist derselbe Fehler
+wie ein veralteter Ausgangswert — nur teurer, weil ihn niemand nachmisst.*
