@@ -65,8 +65,19 @@ fi
 # ── STUFE 4 ──────────────────────────────────────────────────────────────────────────────────
 # Waehlerisch aufraeumen, VOR dem ersten git-Aufruf. Ein Lock mit Inhalt oder ein frischer
 # gehoert einem laufenden Vorgang — dann bricht das Tor ab und NENNT den Grund.
+#
+# **NACHTRAG 03.08. — die Locks liegen an DREI Orten, nicht an einem.** Beim Blaetter-Umzug am
+# eigenen Leib gemessen:
+#
+#   .git/index.lock                 von `git add`     — war gefangen
+#   .git/HEAD.lock                  von `git commit`  — war gefangen
+#   .git/refs/heads/<zweig>.lock    von `git commit`  — WAR NICHT GEFANGEN
+#
+# **Der dritte hat den Umzug dreimal hintereinander blockiert.** `.git/*.lock` ist ein Muster
+# OHNE TIEFE. *Und er entsteht beim `commit` selbst, also am spaetesten moeglichen Punkt: wer ihn
+# nicht wegraeumt, hat den Commit gebaut und verliert ihn im letzten Schritt.*
 BEISEITE=".git/_locks_beiseite/$(date +%F)"
-for lock in .git/*.lock; do
+for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/null); do
   [ -e "$lock" ] || continue
   GROESSE=$(wc -c < "$lock" | tr -d ' ')
   ALTER=$(( $(date +%s) - $(stat -f %m "$lock") ))
@@ -118,6 +129,11 @@ git --no-optional-locks log -1 --pretty='%h %s'
 # NACHSORGE (K-04): was der Commit selbst hinterlaesst, kommt im SELBEN Aufruf beiseite —
 # F-10, hier laesst es sich nicht loeschen. **Die Vorsorge oben ersetzt sie nicht:** die eine
 # raeumt weg, was VORHER dalag, die andere, was DURCH diesen Lauf entstand.
+#
+# **Auch hier REKURSIV** — der Ref-Lock unter `.git/refs/heads/` entsteht erst beim `commit`,
+# also nach der Vorsorge. Genau ihn hat die alte Fassung nie gesehen.
 mkdir -p .git/_locks_beiseite/"$(date +%F)" 2>/dev/null
-mv .git/*.lock .git/_locks_beiseite/"$(date +%F)"/ 2>/dev/null
+for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/null); do
+  mv "$lock" .git/_locks_beiseite/"$(date +%F)"/ 2>/dev/null
+done
 exit 0

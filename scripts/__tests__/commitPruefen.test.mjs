@@ -120,6 +120,24 @@ test('W-09/K-02 ROT: ein FRISCHER Lock bricht ab — Alter allein entscheidet ni
   assert.equal(existsSync(join(verz, '.git', 'index.lock')), true, 'der frische Lock wurde weggezogen');
 });
 
+test('W-09/K-02: ein Lock IN DER TIEFE wird auch gefunden — `*.lock` ist ein Muster ohne Tiefe', () => {
+  // **NACHTRAG 03.08., am eigenen Leib gemessen:** `.git/refs/heads/<zweig>.lock` hat den
+  // Blaetter-Umzug DREIMAL blockiert. Er entsteht beim `commit` selbst, also am spaetesten
+  // moeglichen Punkt — *wer ihn nicht wegraeumt, hat den Commit gebaut und verliert ihn im
+  // letzten Schritt.*
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const zweig = execFileSync('git', ['branch', '--show-current'], { cwd: verz, encoding: 'utf8' }).trim();
+  const tief = join(verz, '.git', 'refs', 'heads', `${zweig}.lock`);
+  writeFileSync(tief, '');
+  const alt = new Date(Date.now() - 300 * 1000);
+  utimesSync(tief, alt, alt);
+
+  const r = tor(verz, 'Probe: Lock in der Tiefe', 'anfang.txt');
+  assert.equal(r.code, 0, `der Ref-Lock blockiert den Commit weiterhin:\n${r.text}`);
+  assert.equal(existsSync(tief), false, 'der Ref-Lock liegt noch da — die Suche hat keine Tiefe');
+});
+
 test('W-09/K-03: der Abbruch NENNT Dateiname, Groesse und Alter', () => {
   // *Ein „Abbruch" ohne Grund schickt den naechsten Leser suchen — dieselbe Auflage wie bei der
   // Erlaubnisliste in W-01.*
