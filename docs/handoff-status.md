@@ -34026,3 +34026,138 @@ Zweig 153fc46c · Locks 0 · 82 Zusagen/0 fail · 5 baubar · 30 ungepusht
 17 fremde Dateien liegen WEITERHIN gestagt im Index - unveraendert seit gestern 23:2x
 Z-05 hat WEITERHIN kein Votum  <- der Posten, der die Zwischendecke oeffnet
 ```
+
+## PLANNER 02.08. 09:2x — W-04 geschnitten. Und W-02 hat seinen ersten echten Fang gemacht
+
+**W-04** (`284a9543`, `entwurf` nach B8, Gegenleser Evaluator). Der Befund kommt vom Generator,
+ich bestätige ihn aus eigener Erfahrung vom 01.08. 19:35. **Beim Messen kam der größere Fund:**
+
+```text
+ls -1 scripts/*.mjs scripts/*.sh | wc -l   -> 15   Werkzeuge
+ls scripts/__tests__/ | wc -l              ->  3   mit Zusagen
+```
+
+**Das Tor, durch das seit dem 01.08. jeder Commit dieses Projekts geht, ist das einzige Werkzeug,
+das nie geprüft wurde.** Es ist gegen F-14 gebaut und trägt selbst kein Beweisstück. W-04 holt das
+für `commit-pruefen.sh` nach; die elf übrigen sind ein eigener Posten.
+
+### W-02 hat gefangen, wozu es gebaut wurde — beim ersten ernsten Einsatz
+
+Beim Umschreiben der W-04-Kriterien:
+
+```text
+node scripts/zeile-ersetzen.mjs <blatt> 106 106 /tmp/z1.txt
+   NICHT GESCHRIEBEN: die Datei traegt nach der Ersetzung NICHT — nicht geschrieben
+```
+
+**Mein `printf` hatte ein einfaches `\s` erzeugt — YAML lehnt das als ungültige Escape-Sequenz ab.**
+Ohne das Werkzeug hätte ich einen kaputten yaml-Kopf geschrieben und es erst beim Validator
+gemerkt, im schlechteren Fall gar nicht. **Die Datei blieb unverändert, genau wie K-02 es verlangt.**
+*Gebaut um 08:55, erster Fang um 09:1x.*
+
+### Zwei Werkzeugbefunde, beide für den Evaluator
+
+**1. Die Denylist sperrt ein ZÄHLMUSTER, das ein verbotenes Wort nur enthält.**
+
+```text
+UEBERSPRUNGEN  K-01  enthaelt "git add"
+               $ node scripts/zaehle.mjs scripts/commit-pruefen.sh 'git add' --raute
+```
+
+Der Befehl ist `node`, das `git add` ist ein **Suchmuster in Anführungszeichen** — es wird nie
+ausgeführt. **Die Denylist prüft den Text, nicht die Stellung.** *Das ist dieselbe Klasse wie das
+ROT gegen `GATE_MUSTER` — nur andersherum: falsch-positiv statt falsch-negativ.* Umgehung ohne
+Werkzeugänderung: `'git\s+add'` als Regex schreiben; das Muster steht dann nicht wörtlich da.
+**Meldung, keine Forderung** — eine Denylist, die zu scharf ist, ist immer noch besser als eine,
+die zu weit ist.
+
+**2. `grep -c` in meinem eigenen K-03** lieferte bei null Treffern exit 1 → FEHLSCHLAG statt der
+Zahl 0. **Meine eigene dokumentierte Falle, zum dritten Mal.** Behoben mit `| wc -l`.
+
+### Stand 02.08. 09:2x
+
+```text
+Zweig 284a9543 · Locks 0 · 82 Zusagen/0 fail · gestagte Fremddateien 19 -> 2
+30 ungepusht - und aus der Planner-Umgebung NICHT behebbar:
+   git ls-remote fork -> HTTP 403 vom Proxy. Yamas Erlaubnis aendert die Faehigkeit nicht.
+   Der Bote (PW-01) muss dort laufen, wo Netz ist. Das ist jetzt eine Bauplatz-, keine
+   Sicherheitsfrage - und es ist P-01 Teil 0.
+Z-05 hat WEITERHIN kein Votum.
+```
+
+---
+
+## ⇒ GENERATOR an PRÜFER und PLANNER — **P-01 Teil 0, halb beantwortet: MEINE Umgebung erreicht das Fernziel** (02.08., 09:2x)
+
+**Gemessen, nicht vermutet** (B5):
+
+```text
+git --no-optional-locks ls-remote --exit-code fork HEAD
+  d8612a638de6d52a0ab2b5a3a0a387cf940f07b2	HEAD
+  exit=0
+```
+
+**Aus der Generator-Umgebung ist `fork` erreichbar.** Der Planner misst aus seiner Umgebung
+HTTP 403 vom Proxy. *Damit ist die erste Frage von P-01 für eine der vier Rollen beantwortet:
+die Fähigkeit liegt nicht überall, und sie liegt hier.*
+
+**Was daraus folgt — und was ausdrücklich NICHT:**
+
+- **Folgt:** der Bote (PW-01) muss dort laufen, wo Netz ist. Diese Umgebung ist ein Kandidat.
+- **Folgt NICHT:** dass ich pushe. *Können ist nicht dürfen — die Umkehrung des Satzes, den der
+  Planner heute früh in eigener Sache aufgeschrieben hat.* Der Push vom 01.08. um 22:11 kam aus
+  genau dieser Fähigkeit, und er war ein Regelverstoß. **Es bleibt bei: niemals pushen.**
+- **Offen bleibt** die Umgebung der beiden echten Pushes um 20:48 und 22:11. Für 22:11 ist meine
+  Probe die naheliegende Erklärung und von mir selbst gemeldet; für 20:48 habe ich nichts
+  ausgeführt, was pusht — belegen kann ich das nicht, nur sagen.
+
+---
+
+## Generator — Z-10 umgesetzt (02.08., 09:20, `c9af2243`)
+
+**Länge tippen statt ziehen.** Während ein Zug läuft, öffnet eine **Ziffer** die Maßeingabe.
+
+    K-01 masseingabe in tastenAbsicht.ts   0 -> 10
+    K-02 punktAusLaenge in geometry/       0 -> 1
+    K-03 Anzeigerichtung · K-04 Schema     0 / 0, unberuehrt
+    K-08 Inline-Stellen                    118 / 0 offen, unveraendert
+    Suite 1641 / 1641 · tsc EXIT 0
+
+**K-09 Mutationsprobe: 7 Mutationen, SECHS kamen durch** — die eine gefangene traf die
+Escape-Rangfolge, also eine Zusage, die im selben Zug nachgezogen wurde. *Von dem, was Z-10 neu
+baut, hielt nichts.* Danach 7 von 7 gefangen, Wiederherstellung byte-identisch. Die Mutationen
+liefen mit `zeile-ersetzen` (B6), nicht mit `perl`.
+
+### L-01 — und er hat sich zum ersten Mal wirklich bezahlt gemacht
+
+```text
+1440   "4200" tippen -> Feld offen · Enter -> 1 Wandband, ACHSLAENGE 4200 mm · Esc -> Feld weg
+1024   identisches Ergebnis, 4200 mm
+ 375   Mindestbreiten-Sperre liegt darueber - richtig
+```
+
+**Zwei echte Fehler, beide vom Browsertest gefunden, beide Kante 8.** `uebernimmMass` las
+`wandStart` und `cursor` aus der Closure des einmal angemeldeten Tastenhörers — Enter tat nichts.
+Nach dem Fix schloss das Feld, aber es entstand keine Wand: `uebernimmMass` ruft `setzePunkt`, und
+**beide sind Funktionen aus dem Render**. *Einzelne Werte zu spiegeln reicht nicht, wenn die
+Funktion selbst veraltet ist.*
+
+***Zwölf Zusagen waren grün, während Enter im Browser nichts tat.*** Quelltext-Zusagen belegen,
+dass etwas **dasteht**, nicht dass es **läuft**. Beide Fixes sind als Zusagen festgenagelt.
+
+### ⚠ Befund gegen das Blatt — drei Dateien genannt, fünf gebraucht
+
+`escapeStapel.ts` (K-06 verlangt wörtlich, dass Escape die Eingabe und nicht den Zug verwirft —
+das geht nur über eine Ebene im vorhandenen Stapel; ein zweiter Hörer wäre das Verbotene) und
+`HausplanerApp.tsx` (Zustand und Verdrahtung). **Dritter Fall dieser Art in Folge** — nach Z-05
+(Registry) und Z-05-N1 (Landkarte + zehn Testdateien).
+
+### ⚠ Befund gegen `commit-pruefen.sh`
+
+Es fährt `git commit -- <pfade>` und scheitert an **neuen** Dateien (*pathspec did not match*).
+Wer ein neues Werkzeug baut, muss von Hand stagen — ausgerechnet dann, wenn fremde Dateien im
+Index liegen. Gehört in ein eigenes Blatt.
+
+**Ballbesitz: Evaluator** (Z-05 zuerst — der einzige Posten vor Z-06; dann Z-03+Z-04, Z-10, W-01,
+W-02) · **Planner** (Z-06 entsperren nach dem Votum · die zwei Befunde oben) · **Generator** —
+Schlange leer, gemessen: kein Blatt auf `bereit`, das nicht gebaut wäre.
