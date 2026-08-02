@@ -5,44 +5,45 @@
 > **Regeln:** eine Zeile je Sache · eine Rücknahme ERSETZT die Aussage · was erledigt ist,
 > verschwindet · **kein Datum ohne Zahl, keine Zahl ohne Befehl.**
 
-**Zuletzt geschrieben:** 02.08.2026, 12:0x · Planner
+**Zuletzt geschrieben:** 02.08.2026, 14:1x · Planner
 
 ---
 
-## 1. Wo der Bau steht — gemessen 11:59
+## 1. Wo der Bau steht — gemessen 14:1x
 
 ```text
-HEAD      8dedfe6d   02.08. 11:59   auto/hausplaner-integration
-UNGEPUSHT 8          fork..auto/hausplaner-integration
-VOR MAIN  101        main..auto/hausplaner-integration
+HEAD      f4f0c89d   02.08. 13:22   auto/hausplaner-integration
+UNGEPUSHT 13         fork..auto/hausplaner-integration     <- PW-02 liegt beim Pruefer
+VOR MAIN  116        main..auto/hausplaner-integration
 
   TZ=Europe/Berlin git --no-optional-locks log -1 --date=format-local:'%d.%m. %H:%M' --pretty='%h %ad %s'
   git --no-optional-locks rev-list --count fork/auto/hausplaner-integration..auto/hausplaner-integration
   git --no-optional-locks rev-list --count main..auto/hausplaner-integration
 ```
 
-**Blätter nach Status — `grep -rh '^  status:' docs/auftraege/ | sed 's/#.*//' | sort | uniq -c`:**
+**Blätter nach Status:**
 
 ```text
-aktiv 1 · bereit 4 · gebaut 4 · entwurf 6 · gesperrt 5 · ruht 15 · abgenommen 4 · zurueckgestellt 1
+aktiv 1 · bereit 6 · gebaut 3 · entwurf 8 · gesperrt 4 · ruht 15 · abgenommen 5 · zurueckgestellt 1
 ```
 
-**S-06 zählt je LAUF, nicht global** — im Strang `hausplaner-3d` ist die Zahl **0 baubar**.
-*Es stockt nicht der Bau, es stockt die Abnahme.*
+**S-06 ist erfüllt: 7 baubare Blätter** (vormittags war es 1). *Der Stau hat sich um 12:40
+gelöst — das Votum auf Z-05 hat Z-06 entsperrt.*
 
 ## 2. Die Schlange — wer was hat
 
 | Rolle | Was liegt bereit |
 |---|---|
-| **Generator** | **Z-03+Z-04** `aktiv` → **W-01** `bereit` → dann in DIESER Reihenfolge: **W-06 → W-07 → W-08** (alle drei fassen dasselbe Werkzeug an) → Z-11 · W-05 |
-| **Evaluator** | **Z-05 — VORRANG, das Votum öffnet Z-06 und damit die Zwischendecke** · Z-10 · AUF-38-P4+P5 · W-02 · **GEGENLESEN (B8): W-06 · W-07 · W-08** (Werkzeug-Blätter) |
+| **Generator** | **Z-06 — DIE ZWISCHENDECKE, seit 12:4x frei. Das ist Yamas Posten** · Z-03+Z-04 `aktiv` · W-01 · dann **W-06 → W-07 → W-08** in dieser Reihenfolge. **UND: der eigene `skriptZielErlaubt`-Stand liegt ungecommittet im Baum — er sperrt W-07 und ist bei jedem `checkout` weg** |
+| **Evaluator** | heute schon: W-02 · Z-10 · S-10 · W-06/07/08 gegengelesen · **Z-05 grün**. Offen: AUF-38-P4+P5 · und W-02 nicht abnehmen, ohne den `.ts`-Befund zu kennen (zwei Wege im Ledger) |
 | **Prüfer** | **PW-02 ZUERST — Push in Yamas Vertretung, `bereit`. Teil 0 (Kanal offen?) vor allem anderen; ein Nein ist auch ein Ergebnis** · dann GEGENLESEN (B8): Z-11 · W-05 · dann P-01 |
-| **Planner** | Umzug der übrigen Blätter nach `docs/auftraege/<strang>/` · Z-07/Z-08 erst wenn Z-06 steht |
+| **Planner** | Umzug der übrigen Blätter nach `docs/auftraege/<strang>/` · **Z-07/Z-08 schneiden, sobald Z-06 GEBAUT ist** (nicht schon, weil `bereit`) |
 | **Yama** | Y1 (Push-Kanal) · Y2 (Takt) · Z-09 ACHSE oder FLANKE · die 3 PHP-Dateien |
 
-**Gebaut, wartet auf Votum:** Z-05 · Z-10 · W-02 · AUF-38-P4+P5.
-**Abgenommen:** Z-01 · Z-02 · Z-05-N1 · AUF-38-P1+P2+P3 · AUF-91 · PB-023 · PB-043 T2 · PB-047.
-**Gesperrt:** Z-06 (nur noch: Votum für Z-05) · AUF-83-T2T3 · AUF-83-T5 · AUF-88-P1.
+**Gebaut, wartet auf Votum:** Z-10 · W-02 · AUF-38-P4+P5 — **alle drei vom Planner vorgemessen,
+14 von 14 messbaren Stellen treffen ihr `erwartet`** (`f45c28a5`).
+**Abgenommen:** Z-01 · Z-02 · **Z-05** · Z-05-N1 · AUF-38-P1+P2+P3 · AUF-91 · PB-023 · PB-043 T2 · PB-047.
+**Gesperrt:** AUF-83-T2T3 · AUF-83-T5 · AUF-88-P1. **Z-06 nicht mehr.**
 
 **Ohne Ausnahme:** kein Push (Y1 offen) · keine Fachentscheidung (Tor 1) · kein Merge/Tag/`--force`
 (Tor 2) · die drei PHP-Dateien im Baum sind Yamas.
@@ -71,6 +72,22 @@ aebe57b6  W-07 geschnitten: die Erlaubnisliste fragt bei `node`, `sed` und `awk`
           Blaetter tragen drei Zeilen Verweis. S-11 haelt ihn dort - und greift nur bei
           aktiv/bereit/gebaut/entwurf/gesperrt, also genau am Uebergang aus dem Archiv.
           Dabei gefunden: pb023-pb024 faehrt Browser-Zahlen ganz OHNE Anker.
+44817747  EVALUATOR: Z-05 GRUEN - K-01..K-05 plus tsc, Insel 1641/0, und ein GEGENBEWEIS
+          per Mutation (schneidetSichSelbst -> immer false, 2 Zusagen ROT). Damit faellt
+          der letzte Sperrgrund von Z-06.
+d52b92b1  Z-05 abgenommen eingetragen, Z-06 ENTSPERRT. Die Zwischendecke ist baubar.
+          Methodenbefund des Evaluators: `--filter=werkzeugEnde` wird vom Runner IGNORIERT
+          und faehrt die volle Suite. Kuenftige Blaetter schreiben den Dateipfad.
+f4f0c89d  Drei B8-Auflagen eingearbeitet. Zwei trafen echte Fehler von mir:
+            W-07  Kopf sagte "Basis: HEAD", gemessen war der ARBEITSBAUM. skriptZielErlaubt
+                  gibt es an HEAD nicht (0 statt 3). Jetzt `vorbedingung:` im Kopf, SPERREND.
+            W-08  meine grep-Zaehlung trifft das Blatt SELBST (7 statt 6). Benannte Ausnahme
+                  fuer genau ein Blatt - bei K-01/K-02 hatte ich die Falle vermieden, bei
+                  K-05 uebersehen.
+            W-06  mass das blosse Wort `zaehle.mjs` - eine Kommentar-Erwaehnung haette
+                  gereicht. Misst jetzt die Importzeile.
+          NEBENBEI: W-02 hat seinen zweiten echten Fang gemacht - mein Ersatzblock haette
+          einen ```-Zaun offen gelassen, das Werkzeug hat NICHT geschrieben.
 ```
 
 ## 4. Was entschieden ist — gilt, bis es hier ersetzt wird
@@ -139,6 +156,15 @@ Die CLOUD-Shell behaelt ihr Arbeitsverzeichnis zwischen den Aufrufen, die GERAET
          durch (Pruefer, 02.08.). Barriere ist W-07, geschnitten, noch nicht gebaut.
 ⚠  F-19  Ein Anker, der in 18 Blaetter kopiert ist, wird bei jeder Korrektur nur zur
          Haelfte erreicht - heute zweimal passiert. Barriere ist W-08 (S-11), geschnitten.
+❌ F-20  Das Kriterium misst gegen einen BODEN, den es nicht gibt - nicht der Wert ist
+         veraltet, die Grundlage fehlt. W-07 (Kopf sagt HEAD, gemessen war der Arbeitsbaum)
+         und S-10 (Fixtures existieren nicht). Heute nur eine Regel: `vorbedingung:` im
+         Kopf plus Pruefbefehl im gegenbeweis. Barriere waere S-12: jeden `ausgangswert`
+         gegen HEAD UND Arbeitsbaum messen, Abweichung ist eine Meldung.
+❌ F-21  Das Blatt trifft SICH SELBST - ein Kriterium sucht ein Muster, das im eigenen
+         Blatt zitiert steht. W-08 K-05 (7 statt 6, Soll unerreichbar) und W-01-02
+         (nannte den echten Push-Wrapper). Regel: ueber das VERZEICHNIS messen oder eine
+         BENANNTE Ausnahme - nie eine stille Filterung. R9 beim naechsten Mal.
 ```
 
 ## 8. Was der Validator selbst sperrt
