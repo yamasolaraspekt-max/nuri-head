@@ -220,12 +220,20 @@ kriterien:
 
   - id: L-01-anker
     typ: presence
-    aussage: "Die Seite ist ueberhaupt da, bevor irgendeine Zahl abgelesen wird."
+    aussage: "Die Seite ist da UND der Zustand ist benannt, bevor irgendeine Zahl abgelesen wird."
     pruefung:
       typ: browser
       schritte: |
-        VOR jeder anderen Zahl: HTTP 200, querySelectorAll('canvas') mindestens 1,
-        document.title enthaelt "Hausplaner".
+        Dreistufig - Stufe 3 wird nur erreicht, wenn Stufe 2 ein offenes Projekt zeigt.
+        1  SEITE     HTTP 200 - document.title enthaelt "Hausplaner"
+                     - #hausplaner-root existiert und ist groesser als 0x0
+        2  ZUSTAND   Ist ein Projekt offen? Steht "Noch kein Projekt geoeffnet" auf dem
+                     Schirm, ist der STARTZUSTAND erreicht - dann wird ein Projekt
+                     geoeffnet ODER der Test endet hier mit dem Vermerk STARTZUSTAND,
+                     nicht mit rot.
+        3  BUEHNE    ERST DANN: querySelectorAll('canvas') mindestens 1
+        Grund: Befund docs/planner/befund-anker-startzustand-2026-08-02.md (2026-08-02).
+        Im Startzustand ist canvas 0 - der alte Anker gab dort falsch rot.
 ```
 
 ## Kantenliste — wo das erfahrungsgemäß bricht
