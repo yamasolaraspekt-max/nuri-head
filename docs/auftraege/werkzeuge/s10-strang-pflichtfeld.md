@@ -7,9 +7,20 @@ auftrag:
   status: entwurf                   # B8: bleibt entwurf bis gegengelesen
   spur: B
   heimat: ticket
-  gegengelesen_von:                 # Werkzeug-Blatt -> Evaluator (BESCHLUSS B8)
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator       # Werkzeug-Blatt -> Evaluator (BESCHLUSS B8)
+  gegengelesen_am: 2026-08-02
+  befund: >
+    TRAEGT mit 3 Auflagen. (1) K-01/K-02: exit != 0 ist dort das SOLL-Ergebnis — der Runner
+    meldet sie nach dem Bau dauerhaft als FEHLSCHLAG (gemessen: NULLTREFFER-Stufe greift nur
+    bei grep-Ketten, nicht bei node-exit). Kennzeichnung noetig oder Wrapper-Test, der bei
+    Erfolg exit 0 liefert. (2) K-04 vs Kante 6 widersprechen sich: population_command zaehlt
+    nur die drei Strang-Ordner (heute 0), Kante 6 verspricht "131 Bestandsblaetter werden rot"
+    — gemessen liegen 110 Blaetter ohne strang im WURZEL-Verzeichnis, das der Befehl nicht
+    scannt. Grundgesamtheit des K-04-Laufs benennen und population_command daran ausrichten.
+    (3) Gegenprobe und K-06 mutieren Auftragsdateien — nur im Wegwerf-Worktree oder als
+    Fixture ausfuehren, nie im geteilten Baum (B6). Drei B8-Fragen: alle Maschinen-Befehle
+    laufen (node allowlisted, K-01..K-03 exit 1 heute = fehlende Fixtures, Soll-Lieferung);
+    K-03 absence hat Presence-Partner K-01/K-02; kein maschineller Befehl mutiert.
   ziel: "scripts/auftrag-pruefen.mjs meldet jedes Auftragsblatt, dessen yaml-Kopf kein gueltiges
          Feld `strang` traegt, als Strukturbefund S-10."
   nicht_ziel: "Keine Aenderung an S-01 bis S-09. Keine Aenderung an Mess- oder Erwartungsbloecken.
