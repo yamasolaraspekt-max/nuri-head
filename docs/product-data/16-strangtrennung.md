@@ -4,6 +4,66 @@
 > **Anlass:** Yamas Befund, dass Generator, Evaluator und Prüfer aus zwei Richtungen Aufträge
 > für zwei verschiedene Bereiche bekommen.
 > **Legende:** BELEGT · BEWERTUNG · ANNAHME · OFFEN
+> **KORRIGIERT 02.08.2026, 09:5x — siehe Abschnitt 0.**
+
+---
+
+## 0 · ZURÜCKGENOMMEN: Abschnitt 2.2 und die Empfehlung `git worktree prune`
+
+**Team Hausplaner hat einen Fehler in diesem Papier gefunden. Er trifft, und er ist gefährlich.**
+
+### Was hier falsch stand
+
+Abschnitt 2.2 schloss aus `git worktree list`, sechs von sieben Worktrees seien `prunable`,
+also seien die Strang-Verzeichnisse verschwunden und die Trennung nach `BETRIEBSORDNUNG` §1.3
+„verfallen".
+
+**Das ist falsch. Die Verzeichnisse existieren alle.** Gegenmessung mit einem **anderen** Gerät:
+
+```
+device_list_dir /Users/yamanuri/Documents
+ -> ticket · ticket-g1b-0 · ticket-main · ticket-strang-accounting
+    ticket-strang-C · ticket-strang-energie · ticket-strang-formulare
+```
+
+`prunable` war ein **Artefakt der Sicht**: aus der Geräte-VM ist nur
+`/Users/yamanuri/Documents/ticket` eingehängt. Die Geschwisterverzeichnisse lösen von dort nicht
+auf, also meldet git sie als abwesend. Das sagt etwas über meinen Blickwinkel, nichts über Yamas
+Platte.
+
+### Die gefährliche Folge
+
+Abschnitt 4, Stufe 3 empfahl:
+
+```bash
+git worktree prune      # <- DIESE ZEILE NICHT AUSFÜHREN
+```
+
+**Aus dem Mount ausgeführt hätte dieser Befehl alle sechs Worktrees abgemeldet — auch
+`ticket-main`.** Der Hinweis stammt von Team Hausplaner, nicht von mir. Er ist hiermit gestrichen.
+
+### Was von Abschnitt 2.2 übrig bleibt — und weiterhin gilt
+
+Nicht *„die Worktrees sind weg"*, sondern: **beide Ströme arbeiten derzeit im selben Worktree**
+(`/Users/yamanuri/Documents/ticket`, Branch `auto/hausplaner-integration`). Das ist direkt
+beobachtet, nicht erschlossen — die Commits beider Teams liegen auf diesem Branch, und die
+Index-Kollision um 09:22 hat stattgefunden. Die vorhandenen Strang-Worktrees werden von diesen
+zwei Strömen schlicht **nicht benutzt**.
+
+Der Befund aus Abschnitt 1 (Rolle modelliert, Strang nicht) und die Belege 2.1, 2.3 und 2.4
+bleiben davon **unberührt**.
+
+### Warum der Fehler entstand — er hat einen Namen
+
+`docs/BESCHLUSS-fehlervermeidung.md` **B4**:
+
+> Jedes Messgerät braucht einen Partner mit Treffer, bevor sein Ergebnis zählt. „Nicht gefunden"
+> gilt erst, wenn dasselbe Gerät woanders etwas findet.
+
+Genau das fehlte. Ich hatte **ein** Gerät (`git worktree list`), das sechsmal „weg" sagte, und
+keinen Partner, der belegt, dass dieses Gerät von hier aus überhaupt sehen kann. **Dieselbe Klasse
+hat mich am 01.08. beim IDS-PDF getroffen** (`file` meldete 8 Seiten, `pdfinfo` 39). Zweimal
+dieselbe Klasse — nach R9 ist das keine Ermahnung mehr wert, sondern eine Barriere.
 
 ---
 
@@ -169,13 +229,14 @@ Neu füllen mit den heutigen Strängen und den heutigen Dateien — mindestens:
 
 ### Stufe 3 · Strukturell, wenn Stufe 1 und 2 nicht reichen
 
-**Getrennte Worktrees wiederherstellen**, wie §1.3 es ohnehin vorschreibt:
+**Getrennte Worktrees benutzen**, wie §1.3 es ohnehin vorschreibt. Sie existieren bereits (§0).
 
-```bash
-git worktree prune                          # die sechs toten Eintraege raeumen
-git worktree add ../ticket-strang-produktdaten -b strang/produktdaten
-git worktree add ../ticket-strang-hausplaner -b strang/hausplaner-3d
-```
+> **`git worktree prune` NICHT ausführen — schon gar nicht aus einer Cloud-Instanz.** Von dort
+> erscheinen alle Worktrees als abwesend; der Befehl würde sie sämtlich abmelden, auch
+> `ticket-main`. Befund von Team Hausplaner, 02.08.
+>
+> **`git worktree add` ist eine Strukturänderung am Repo und gehört Yama, nicht dem Planner.**
+> Ebenfalls deren Befund, und er trifft.
 
 Damit hat jeder Strang **einen eigenen Index** — die Kollision aus §3 ist physisch unmöglich,
 nicht nur verboten. Der Preis: zwei Verzeichnisse mehr, und ein Koordinator muss die Branches

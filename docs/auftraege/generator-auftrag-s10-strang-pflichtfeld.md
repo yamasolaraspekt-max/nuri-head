@@ -4,9 +4,12 @@
 auftrag:
   id: AUF-S10-STRANG
   strang: werkzeuge
-  status: bereit
+  status: entwurf                   # B8: bleibt entwurf bis gegengelesen
   spur: B
   heimat: ticket
+  gegengelesen_von:                 # Werkzeug-Blatt -> Evaluator (BESCHLUSS B8)
+  gegengelesen_am:
+  befund:
   ziel: "scripts/auftrag-pruefen.mjs meldet jedes Auftragsblatt, dessen yaml-Kopf kein gueltiges
          Feld `strang` traegt, als Strukturbefund S-10."
   nicht_ziel: "Keine Aenderung an S-01 bis S-09. Keine Aenderung an Mess- oder Erwartungsbloecken.
