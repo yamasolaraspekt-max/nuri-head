@@ -32,10 +32,6 @@ return [
     ],
 
     'fusion_forms' => [
-        'token' => env('FUSION_FORMS_TOKEN'),
-    ],
-
-    'fusion_forms' => [
         'token' => env('FUSION_WEBHOOK_TOKEN'),
     ],
 
