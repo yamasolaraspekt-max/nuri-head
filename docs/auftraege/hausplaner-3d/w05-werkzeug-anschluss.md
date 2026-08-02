@@ -80,6 +80,12 @@ sie berechnen.*
 `ROH_GEHOBEN` in `__tests__/elevationTokens.test.ts` (5 Treffer). *Zwei Bedeutungen für einen
 Namen sind eine zweite Wahrheit; gemessen, bevor der Name gewählt wurde.*
 
+**Und genau diese zweite Wahrheit steckt schon drin — gemessen am 02.08.:** `PAKET_WERKZEUGE`
+heisst zweimal etwas anderes. In `werkzeugPaket.ts:34` ist es die **Liste** (101 Eintraege), in
+`toolRegistry.ts:272` die **Zahl 110**. *Und die 110 ist nicht das Paket — sie ist 9 Grundeintraege
+plus 101 Paket.* **Die Bilanzgleichung stimmt heute, aber sie stimmt durch Zufall.** Nimmt jemand
+ein Werkzeug aus dem Paket, bleibt die getippte 110 stehen und die Gleichung kippt lautlos.
+**Das raeumt K-10 auf — bevor die Hebeliste sich auf diese Gleichung stuetzt.**
 **Die sieben festen `101` und vier festen `9` werden auf die abgeleiteten Ausdrücke umgestellt** —
 `TOOL_KATALOG.length` und `TOOL_DEFINITIONS.length` selbst, nicht ihre heutigen Zahlen.
 
@@ -232,6 +238,35 @@ kriterien:
       schritte: "npm run test:hausplaner"
       erwartet: "0 fail. Ausgangswert 1641/1641 (02.08. 09:20). Danach mehr oder gleich, nie weniger."
 
+  - id: K-10
+    typ: presence
+    kritikalitaet: P1
+    aussage: "Der Name PAKET_WERKZEUGE hat nur noch EINE Bedeutung, und die Gesamtzahl wird gerechnet statt behauptet."
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: gate
+      schritte: |
+        BEFUND des Planners, 02.08. - gemessen, nicht erinnert:
+          werkzeugPaket.ts:34  export const PAKET_WERKZEUGE: readonly PaketWerkzeug[]  -> 101 Eintraege
+          toolRegistry.ts:272  export const PAKET_WERKZEUGE = 110                      -> eine Zahl
+        EIN Name, ZWEI Bedeutungen, in EINEM Ordner. Und die 110 meint nicht das Paket (das
+        sind 101), sondern 9 Grundeintraege + 101 Paket. Die Bilanz stimmt heute, aber sie
+        stimmt durch Zufall und nicht durch Rechnung - nachlesen kann sie niemand, weil der
+        Name etwas anderes sagt als der Wert. Genau dieselbe Klasse wie AUS_PAKET_GEHOBEN
+        gegen GEHOBEN, nur schon eingebaut.
+
+        Zu tun - die ZAHL in toolRegistry.ts wird umbenannt und abgeleitet:
+          GRUNDEINTRAEGE   = 9    benannt, mit einem Satz, warum genau 9
+          WERKZEUGE_GESAMT = GRUNDEINTRAEGE + PAKET_WERKZEUGE.length + EIGENE_WERKZEUGE.length
+                                              ^ die LISTE aus werkzeugPaket.ts
+        Danach gibt es den Namen PAKET_WERKZEUGE nur noch einmal, und zwar als Liste.
+
+        Zusagen:
+          WERKZEUGE_GESAMT ist heute 111 - aber gerechnet, nicht getippt. Der Beweis:
+            eine Zeile aus der Paket-Liste nehmen -> WERKZEUGE_GESAMT sinkt um 1.
+            Heute bliebe die feste 110 stehen und die Bilanz kippte still. DAS ist der Fehler.
+          Zaehlung ueber app/tools/: genau EINE Deklaration von PAKET_WERKZEUGE.
+      erwartet: "eine Deklaration, WERKZEUGE_GESAMT gerechnet, K-04 weiterhin gruen"
   - id: K-09
     typ: behavioural
     aussage: "Die Mutationsprobe kommt VOR den Zusagen."
@@ -296,6 +331,9 @@ kriterien:
    OHNE ZUSAGE, mit Grund: `geometry/masskette.ts` gibt reine Werte zurueck und ruft nichts.
    Ob eine Masskette PERSISTIERT werden soll, ist eine eigene Entscheidung und eine eigene
    Scheibe - hier wird nur angezeigt.
+9  `PAKET_WERKZEUGE` ist zweimal deklariert - einmal Liste, einmal Zahl. Die Bilanz
+   stuetzt sich auf die getippte Zahl und kippt lautlos, sobald das Paket waechst
+   oder schrumpft.                                                     -> K-10
 ```
 
 ## Rückweg und Entdeckung

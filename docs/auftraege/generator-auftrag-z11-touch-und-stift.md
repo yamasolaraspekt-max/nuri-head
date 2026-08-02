@@ -52,7 +52,9 @@ Z-01 die sieben Aufräumstellen zu einer gemacht hat.
       pointerType 'mouse'        Faktor 1
       pointerType 'touch'        Faktor 2   (Daumenkuppe statt Pixel)
       pointerType 'pen'          Faktor 1   (der Stift ist genauer als der Finger)
-   Der Faktor sitzt an der EINEN Stelle, an der die Toleranz schon berechnet wird.
+   Der Faktor sitzt an der EINEN Stelle, an der die Toleranz schon berechnet wird:
+   `toleranzAusZoom(zoom, fangPx = FANG_PX)` in `geometry/fangKern.ts:230` - sie bekommt
+   einen dritten Parameter mit Vorgabewert 'mouse', keinen Zwilling daneben.
 
 2  VORSCHAU OHNE HOVER. Maus hat einen Zeiger, der schwebt; ein Finger nicht. Was heute
    `onMouseMove` ohne gedrueckte Taste zeigt (Fangpunkt, Vorschaulinie), erscheint bei
@@ -177,17 +179,32 @@ kriterien:
   - id: K-06
     typ: behavioural
     kritikalitaet: P1
-    aussage: "Der Faktor je Eingabetyp ist gegen die Rechnung geprueft, nicht gegen das Gefuehl."
+    aussage: "Der Faktor je Eingabetyp haengt an toleranzAusZoom() und ist gegen die Rechnung geprueft, nicht gegen das Gefuehl."
     ausgefuehrt_von: generator
     pruefung:
       typ: gate
       schritte: |
+        KORREKTUR 02.08. (Planner): der erste Entwurf nannte eine Funktion `toleranz(art, zoom)`,
+        die es nicht gibt. Die EINE Stelle heisst `toleranzAusZoom(zoom, fangPx = FANG_PX)` und
+        steht in geometry/fangKern.ts, Zeile 230. Gemessen, nicht erinnert.
+
+        Sie bekommt einen DRITTEN Parameter mit Vorgabewert - keinen Zwilling daneben:
+          toleranzAusZoom(zoom, fangPx, zeigerArt = 'mouse')
+
         Reine Rechnung, ohne Browser:
-          toleranz('mouse', zoom) == toleranz(undefined, zoom)   Rueckfall = Maus
-          toleranz('touch', zoom) == 2 * toleranz('mouse', zoom)
-          toleranz('pen',   zoom) == toleranz('mouse', zoom)
-          bei JEDEM Zoom, auch 0,02 - Z-02 hat gezeigt, dass genau dort feste Werte kippen
-      erwartet: "gruen, ueber mindestens drei Zoomstufen"
+          toleranzAusZoom(zoom)                     == toleranzAusZoom(zoom, FANG_PX, 'mouse')
+          toleranzAusZoom(zoom, FANG_PX, 'touch')   == 2 * toleranzAusZoom(zoom, FANG_PX, 'mouse')
+          toleranzAusZoom(zoom, FANG_PX, 'pen')     ==     toleranzAusZoom(zoom, FANG_PX, 'mouse')
+          ueber mindestens drei Zoomstufen, darunter 0,02.
+
+        UND der Waechter: bei zoom = 0 gibt die Funktion heute `fangPx` ZURUECK, ohne zu teilen.
+        Genau dort faellt ein naiv eingebauter Faktor (fangPx / zoom * faktor) heraus.
+          toleranzAusZoom(0, FANG_PX, 'touch')      == 2 * FANG_PX
+        Ist das nicht so, fangt der Finger ausgerechnet im kaputten Zoomfall so fein wie die Maus.
+
+        Der VORGABEWERT ist zugleich der Beweis fuer K-07: jeder heutige Aufrufer ruft weiter
+        zweistellig auf und bleibt gruen, OHNE angefasst zu werden.
+      erwartet: "gruen ueber drei Zoomstufen plus zoom = 0; kein bestehender Aufrufer geaendert"
 
   - id: K-07
     typ: behavioural
