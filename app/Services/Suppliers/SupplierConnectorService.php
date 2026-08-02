@@ -1348,7 +1348,7 @@ class SupplierConnectorService
                     'image' => $filename,
                 ],
                 [
-                    'title' => $product->product,
+                    'name' => $product->product,
                 ]
             );
         } catch (\Throwable $exception) {
