@@ -251,13 +251,8 @@ kriterien:
         Messung kaputt und nicht das Werkzeug.
 
   - id: L-01-anker
-    typ: presence
-    aussage: "Die Seite ist ueberhaupt da, bevor irgendeine Zahl abgelesen wird."
-    pruefung:
-      typ: browser
-      schritte: |
-        VOR jeder anderen Zahl: HTTP 200, querySelectorAll('canvas') mindestens 1,
-        document.title enthaelt "Hausplaner".
+    typ: verweis
+    quelle: docs/auftraege/ANKER-BROWSER.md
 ```
 
 ## Kantenliste — wo das erfahrungsgemaess bricht

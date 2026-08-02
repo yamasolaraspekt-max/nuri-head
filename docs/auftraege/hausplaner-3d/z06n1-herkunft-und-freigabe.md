@@ -299,19 +299,8 @@ kriterien:
         Erst weil die Kontrolle anders ausfaellt, bedeutet das Ergebnis etwas.
 
   - id: L-01-anker
-    typ: presence
-    aussage: "Die Buehne ist MONTIERT, bevor irgendeine Zahl abgelesen wird."
-    pruefung:
-      typ: browser
-      schritte: |
-        Dreistufig. Stufe 2 ist ein SCHRITT, kein Zweig - es wird KEIN Projekt geoeffnet.
-        1  SEITE       HTTP 200 - document.title enthaelt "Hausplaner"
-                       - #hausplaner-root existiert und ist groesser als 0x0
-                       - #hausplaner-scene existiert (das JSON-Element aus der Blade-Seite)
-        2  MONTIEREN   Knopf "Expertenmodus" innerhalb #hausplaner-root klicken, bis 5 s warten.
-        3  BUEHNE      ERST DANN: querySelectorAll('canvas') mindestens 1
-        Herkunft: docs/planner/befund-anker-startzustand-2026-08-02.md, korrigiert durch den
-        Pruefer-Befund vom 02.08.
+    typ: verweis
+    quelle: docs/auftraege/ANKER-BROWSER.md
 ```
 
 ## Kantenliste — jede Zeile mit Zusage oder Grund (B9)

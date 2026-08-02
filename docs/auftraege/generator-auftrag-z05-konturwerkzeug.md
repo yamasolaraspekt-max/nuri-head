@@ -163,15 +163,8 @@ kriterien:
       Z-05 wird auf K-01 bis K-06 abgestimmt. Die Erreichbarkeit ist Z-05-N1.
 
   - id: L-01-anker
-    typ: verschoben
-    aussage: "Ankermessung vor jeder Browser-Zahl - VERSCHOBEN nach Z-05-N1."
-    verschoben_nach: docs/auftraege/generator-auftrag-z05-n1-werkzeug-erreichbar.md
-    verschoben_von: planner
-    verschoben_am: "01.08.2026"
-    grund: |
-      Der Anker gehoert zu L-01 und ist mit ihm gegangen. Ich habe ihn beim Verschieben zuerst
-      still geloescht statt ihn zu benennen - hier nachgetragen, damit kein Kriterium ohne
-      Eintrag aus einem Blatt verschwindet.
+    typ: verweis
+    quelle: docs/auftraege/ANKER-BROWSER.md
 ```
 
 ## Rückweg und Entdeckung

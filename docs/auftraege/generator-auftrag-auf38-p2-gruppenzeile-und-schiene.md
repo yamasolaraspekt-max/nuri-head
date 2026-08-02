@@ -203,13 +203,8 @@ kriterien:
       Bleiben die Werte gleich, misst die Probe nicht, was sie zu messen behauptet.
 
   - id: L-01-anker
-    typ: presence
-    aussage: "Die Seite ist ueberhaupt da, bevor irgendeine Zahl abgelesen wird."
-    pruefung:
-      typ: browser
-      schritte: |
-        VOR jeder anderen Zahl: HTTP 200, querySelectorAll('canvas') mindestens 1,
-        document.title enthaelt "Hausplaner". Auch melden, wenn alles gut aussah.
+    typ: verweis
+    quelle: docs/auftraege/ANKER-BROWSER.md
 ```
 
 ## Rueckweg und Entdeckung

@@ -175,6 +175,12 @@ kriterien:
         (ctx.fillStyle bzw. Pixelprobe). Sie muss dieselbe sein wie vorher.
         Das ist die Probe gegen den Befund des Generators: eine still falsche Farbe
         sieht richtig aus, solange man nicht misst.
+
+  # W-08 K-06: dieses Blatt fuhr Browser-Zahlen OHNE jeden Anker — gefunden beim Schneiden
+  # von W-08, nicht vorher. Es bekommt den Verweis wie die anderen sechzehn.
+  - id: L-01-anker
+    typ: verweis
+    quelle: docs/auftraege/ANKER-BROWSER.md
 ```
 
 ## Rückweg
