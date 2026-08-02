@@ -7,8 +7,7 @@
 auftrag:
   id: Z-06
   strang: hausplaner-3d
-  status: gesperrt
-  sperrgrund: "NUR NOCH EINE Bedingung, gemessen 02.08. 13:2x. (1) Z-05 braucht das Votum des Evaluators - die Geometrie steht seit 264ab9dc. OFFEN. (2) Z-05-N1 muss gebaut sein - ERFUELLT seit a0a6e250 (01.08. 21:43, abgenommen). Der Sperrgrund nannte bis heute beide als offen; das war seit gestern falsch. Yama hat die Reihenfolge am 01.08. entschieden."
+  status: bereit   # ENTSPERRT 02.08. 12:4x. Beide Bedingungen erfuellt: (1) Z-05 hat sein Votum GRUEN vom Evaluator in 44817747 - K-01..K-05 plus tsc, Gegenbeweis per Mutation. (2) Z-05-N1 gebaut und abgenommen seit a0a6e250, 01.08. 21:43. Eingetragen vom Planner. DIES IST DIE ZWISCHENDECKE - der Posten, auf den Yama seit Tagen wartet.
 ```
 
 ## Warum das der Posten ist, auf den Yama wartet

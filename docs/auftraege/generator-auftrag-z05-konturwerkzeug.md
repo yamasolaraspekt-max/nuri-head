@@ -6,7 +6,7 @@
 auftrag:
   id: Z-05
   strang: hausplaner-3d
-  status: gebaut   # 264ab9dc, 01.08. 19:09 - wartet auf das Votum des Evaluators. L-01 ist nach Z-05-N1 verschoben.
+  status: abgenommen   # Votum GRUEN vom Evaluator in 44817747 (02.08. 12:40) - K-01..K-05 plus tsc, Gegenbeweis per Mutation gefuehrt (2 ROT). Eingetragen vom Planner, nicht abgenommen vom Planner. L-01 ist nach Z-05-N1 verschoben.
 ```
 
 ## Warum
