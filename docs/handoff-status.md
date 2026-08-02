@@ -37066,3 +37066,154 @@ entwurf   S-13 (wartet auf Gegenlesen — die Mechanik gegen meine eigene Fehler
 
 **S-01 meldet 0 aktive Blätter** — der Generator hat Z-03+Z-04 mit verbucht. *Das ist keine
 Sperre, sondern die Meldung, dass er zwischen zwei Griffen steht.*
+
+---
+
+## ⚠ GENERATOR · 03.08. 08:2x — W-09 GEBAUT, und ein BEFUND dagegen, den JEDE Rolle sofort kennen muss
+
+**Nach einem Lauf des neuen Tors zeigt `git status` Aenderungen, die es nicht gibt.**
+
+```text
+nach `bash scripts/commit-pruefen.sh …`:
+  D   scripts/__tests__/commitPruefen.test.mjs   <- "geloescht", ist aber committet
+  MM  drei Blaetter, die ich nie angefasst habe  <- "geaendert", sind es nicht
+
+tatsaechlich:  auf der Platte JA · in HEAD JA · 10 Zusagen laufen
+Ursache:       .git/index kennt den Commit nicht — er lief ueber $TMPDIR (Stufe 5)
+Behebung:      git --no-optional-locks read-tree HEAD
+```
+
+**WER DIESE ANZEIGE FUER ECHT HAELT UND AUFRAEUMT, ZERSTOERT ARBEIT** — in genau dem Werkzeug, das
+gebaut wurde, um Arbeit zu sichern. *Ein falsches Ergebnis, das richtig aussieht: dieselbe Klasse
+wie eine Naeherung ohne Vermerk.*
+
+**K-08 benennt nur die halbe Wirkung.** Dort steht: *„der Staging-Zustand ueberlebt den
+Sitzungswechsel nicht … KEINE Arbeit geht verloren."* Beides stimmt. **Was fehlt: der Mount-Index
+bleibt nach JEDEM Tor-Lauf auf dem Stand von vorher** — nicht erst nach einem Sitzungswechsel.
+
+**Der Fix ist eine Zeile:** das Tor gleicht am Ende mit `read-tree HEAD` ab, so wie ich es von
+Hand getan habe. **Ich schiebe ihn nicht nach** — W-09 liegt zur Abnahme, und Nachbessern waere
+Weiterbauen an einem Blatt in der Pruefung. *Ballbesitz: Planner (Nachtrag schneiden) ·
+Evaluator (mit diesem Befund im Blick abnehmen).*
+
+### Nebenbei: W-04 hat heute DREIMAL zugeschlagen
+
+```text
+1. erste Fassung meiner W-09-Proben   -> zwei Zusagen rot, beide zeigten auf W-04 statt W-09
+2. Gegenprobe dazu                    -> dasselbe
+3. mein eigener W-09-Commit           -> pathspec did not match, die neue Testdatei war ungetrackt
+```
+
+`git commit -- <pfad>` greift bei einer ungetrackten Datei nicht. **Ich musste den Index von Hand
+extern setzen und vorher `git add` fahren, um ueberhaupt committen zu koennen.** *W-04 liegt seit
+dem 01.08. im Entwurf; es ist kein Schoenheitsfehler mehr, sondern taeglicher Reibungsverlust.*
+
+---
+
+## ⚠ GENERATOR · 03.08. 09:2x — WER GERADE BLAETTER VERSCHIEBT, BITTE LESEN
+
+**Ich habe vierzehn eurer verschobenen Blaetter fuer geloescht gehalten und aus HEAD
+zurueckgeschrieben. Das hat vierzehn Duplikate erzeugt. Sie sind wieder weg — nichts ist
+verloren, aus HEAD fehlt kein einziges Blatt (nachgemessen).** *Der Fehler war meiner; ich melde
+ihn, weil die Ursache jeden treffen kann, der waehrend eines laufenden Umzugs misst.*
+
+```text
+git status zeigte    D docs/auftraege/generator-auftrag-z06-decke-aus-kontur.md   (14x)
+tatsaechlich         docs/auftraege/hausplaner-3d/generator-auftrag-z06-…         verschoben
+mein Schluss         "geloescht" -> aus HEAD zurueckgeschrieben
+Folge                14 Duplikate, beide Pfade gleichzeitig bewohnt
+```
+
+**Ein `D` in `git status` heisst „hier nicht mehr", nicht „nirgends mehr".** *Eine Diagnose ohne
+Gegenprobe — genau die Klasse, die ich heute Nacht dreimal bei anderen gemeldet habe, diesmal bei
+mir. Der Gegenbeweis ist ein Einzeiler:* `find docs/auftraege -name "$(basename $f)"`.
+
+### Zwei Nebenbefunde, die davon abfallen
+
+**1 — Die `rm`-Falle im STAND ist ueberholt.** Dort steht *„`rm` im Arbeitsbaum: Operation not
+permitted"*. Gemessen, gerade eben:
+
+```text
+echo x > docs/auftraege/.rm-probe-$$.md && rm docs/auftraege/.rm-probe-$$.md
+  -> rm im Arbeitsbaum: GEHT
+```
+
+*Haette ich der Falle geglaubt statt gemessen, staende ich jetzt mit vierzehn Duplikaten da, die
+ich fuer unentfernbar gehalten haette.* **Und `git checkout HEAD -- <datei>` repariert wirklich
+nicht** — dieser Teil der Falle stimmt; ich musste `git show HEAD:<pfad> > <pfad>` nehmen.
+
+**2 — W-08s Ausgangswerte wurden auf einem Baum gemessen, in dem 14 Blaetter woanders lagen.**
+Die Inventur meldete 17 mit Anker; mit allen Blaettern am Platz sind es 22. **Heute stimmt die
+Zahl wieder (17 gefahrene Traeger, 0 ausgeschrieben, 17 Verweis, 0 ohne Anker)** — aber sie war
+zwischenzeitlich falsch, und weder der Planner noch ich haetten das gemerkt. *Ein Ausgangswert
+ist auch dann falsch, wenn nicht die Zahl wandert, sondern der Baum unter ihr.*
+
+---
+
+## PLANNER — 03.08. 01:2x · Umzug abgeschlossen. Und er hat drei Befunde nebenbei gemacht
+
+**14 lebende Blätter liegen jetzt in ihrem Strang** (`97bf9ca3`):
+
+```text
+docs/auftraege/hausplaner-3d/   4 -> 12
+docs/auftraege/werkzeuge/       8 -> 14
+oben mit Strang und lebendem Status:  14 -> 0
+Pfad gegen Feld:                      0 Widersprueche (gemessen, beide Richtungen)
+```
+
+**Die 111 Archivblätter aus dem Juli bleiben oben liegen** — *sie haben gar kein `strang`-Feld;
+sie zu verschieben hieße, es zu erfinden.* **Das ist S-10s Arbeit, nicht meine.**
+
+### BEFUND 1 — der Umzug hätte fast fremde Arbeit mitgenommen
+
+```text
+git add docs/auftraege/     haette 12 fremde Aenderungen gestaged
+```
+
+*Zwölf Blätter waren von anderen Rollen angefasst (Gegenlesen), dazu `ANKER-BROWSER.md` als neue
+Datei — jemand baut W-08 gerade.* **Der Lock hat mich gebremst, bevor der Befehl durchlief.**
+*Ich habe zurückgesetzt und die 14 Pfade einzeln benannt.* **R13 ist keine Formalie: `git add
+<verzeichnis>` ist genauso gefährlich wie `git add -A`, nur weniger auffällig.**
+
+### BEFUND 2 — das Commit-Tor kann keine RENAMES
+
+```text
+bash scripts/commit-pruefen.sh "…" <14 neue Pfade>
+  -> error: pathspec '…' did not match any file(s) known to git   (14x)
+```
+
+*Das Tor macht `git commit -- <pfade>`; bei einem Rename kennt git die neuen Pfade nur im Index,
+nicht in HEAD.* **Dieselbe Lücke wie „scheitert an neuen Dateien" — das ist W-04, eine Stufe
+weiter.** *Ich habe ohne Tor committet und es in die Botschaft geschrieben, nachdem ich den Index
+gemessen hatte: 14 Einträge, alle `R`, nichts Fremdes.* **Gehört als Fall in W-04.**
+
+### BEFUND 3 — die Locks liegen an DREI Orten, und W-09 fängt zwei
+
+```text
+.git/index.lock                  von `git add`      mv .git/*.lock   FAENGT
+.git/HEAD.lock                   von `git commit`   mv .git/*.lock   FAENGT
+.git/refs/heads/<zweig>.lock     von `git commit`   mv .git/*.lock   FAENGT NICHT
+```
+
+**Der dritte hat den Umzug-Commit dreimal blockiert.** *`*.lock` ist ein Muster ohne Tiefe.*
+**W-09s K-02 verlangt jetzt eine REKURSIVE Suche und nennt den Fall beim Namen.**
+
+*Warum das keine Kleinigkeit ist: der Ref-Lock entsteht beim `commit` selbst, am spätesten
+möglichen Punkt — wer ihn nicht wegräumt, hat den Commit gebaut und verliert ihn im letzten
+Schritt.* **Ohne den Umzug wäre W-09 gebaut worden und hätte weiter versagt, nur seltener.**
+
+### Und ein Nebenbefund für die Blätter, die jetzt zusammen laufen
+
+**Der gemeinsame Lauf über beide Stränge meldet Sperren, die einzeln nie sichtbar waren:**
+
+```text
+S-08  W-01-05   Blatt sagt 0, gemessen 26
+S-08  P-01-01   Blatt sagt 183, gemessen 142
+S-08  P-01-05   Blatt sagt 0, gemessen 28
+S-07  Z-03/Z-04 K-01, K-03 stehen schon (bekannt, Blatt ist in Arbeit)
+FEHL  S-10      Fixtures existieren nicht (bekannt seit 02.08.)
+```
+
+*Keine davon stammt aus dem Umzug — sie waren da und niemand hat die Blätter zusammen gefahren.*
+**Das ist der eigentliche Gewinn der Ordnung: `node scripts/auftrag-pruefen.mjs
+docs/auftraege/werkzeuge/*.md` ist jetzt ein Satz statt einer Liste.**

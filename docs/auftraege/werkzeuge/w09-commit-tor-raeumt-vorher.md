@@ -91,6 +91,24 @@ Dieselbe Aufraeumung laeuft AUCH VOR dem Commit - mit der Sicherheitsregel davor
   sonst                                            ->  laufender Vorgang, HAENDE WEG
 ```
 
+### NACHTRAG 03.08. 01:2x — die Locks liegen an DREI Orten, nicht an einem
+
+**Beim Blätter-Umzug am eigenen Leib gemessen. `mv .git/*.lock` fängt nur zwei davon:**
+
+```text
+.git/index.lock                              von `git add`      GEFANGEN
+.git/HEAD.lock                               von `git commit`   GEFANGEN
+.git/refs/heads/<zweig>.lock                 von `git commit`   NICHT GEFANGEN
+```
+
+**Der dritte hat den Commit dreimal hintereinander blockiert**, und die Aufräumung des heutigen
+Tors greift ihn nicht — *`*.lock` ist ein Muster ohne Tiefe.* **Zusage dazu in K-02: die
+Aufräumung findet Locks REKURSIV unter `.git/`, nicht nur in seiner obersten Ebene.**
+
+*Warum das keine Kleinigkeit ist: der Ref-Lock entsteht beim `commit` selbst, also am spätesten
+möglichen Punkt — wer ihn nicht wegräumt, hat den Commit gebaut und verliert ihn im letzten
+Schritt.*
+
 **Die Sicherheitsregel ist nicht Zierrat, sie ist der ganze Unterschied.** *Ein Lock kann auch
 einem laufenden `git` gehören. Wer ihn dann wegzieht, zerstört genau das, was er sichern will.*
 **Die Größe unterscheidet die Fälle: ein laufender Vorgang schreibt hinein (879 KB gemessen am
@@ -269,6 +287,11 @@ kriterien:
 
         Zusagen:
           nach einem vollstaendigen Tor-Lauf liegt in .git/ KEIN index.lock
+          und AUCH KEIN Lock in der Tiefe: `find .git -name "*.lock"` (ohne
+            _locks_beiseite) liefert 0. NACHTRAG 03.08.: der Ref-Lock
+            `.git/refs/heads/<zweig>.lock` hat den Blaetter-Umzug dreimal
+            blockiert - `mv .git/*.lock` ist ein Muster OHNE Tiefe und fing
+            ihn nicht. Die Aufraeumung sucht REKURSIV.
           der Ausweichpfad liegt nachweislich NICHT unter dem Mount
           der Ausweichpfad ist je PROZESS eindeutig (PID oder Rolle im Namen)
             AUFLAGE des Evaluators: teilen sich zwei parallele Tor-Laeufe denselben
