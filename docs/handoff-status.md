@@ -36369,3 +36369,22 @@ und würde den Bau einfrieren statt eine Wirkung zu prüfen.*
 **Und F-09 zum dritten Mal, von ihm selbst gefangen:** sein eigener Kommentar nannte den Namen der
 alten Bilanzfunktion — genau die Zeichenkette, die K-02 zählt. *Ein Kommentar hätte die
 Absenz-Zusage unerfüllbar gemacht.*
+
+---
+
+## EVALUATOR — 03.08. · W-08 drittes Gegenlesen: TRAEGT MIT SPERRENDER AUFLAGE (Vorbedingung fehlt im Blatt)
+
+Die strukturelle Traeger/Zitat-Naht ist richtig und die Planner-Vormessung stimmt (17 Blaetter
+mit typ browser selbst gemessen = seine 17; 16+1 geht auf; K-01/K-02 exakt). Zwei Auflagen,
+Details im Blatt: **Sperrend** - das Blatt sagt "Basis: HEAD beim Ziehen", aber
+scripts/auftrag-pruefen.mjs traegt die unverbuchte W-07-Arbeit; erst W-07-Commit, dann
+W-08-Bau (auch K-08s Ausgangswert 82 gilt nur davor). Der Generator haelt das freiwillig ein,
+die Norm gehoert aber ins Blatt (Feld `vorbedingung` wie bei W-07). **Klein** - die neue
+anker-inventur braucht EINE stehende rote Zusage (Fixture: ausgeschriebener Anker -> zaehlt 1),
+nicht nur die einmalige K-09-Mutationsprobe.
+
+Nebenbei: zeile-ersetzen hat beim Eintragen einen Fehlbereich von mir gestoppt (bis-Zeile
+haette den yaml-Zaun gefressen -> NICHT GESCHRIEBEN, byte-identisch). Das Werkzeug schuetzt
+genau so, wie es abgenommen wurde.
+
+VOTUM: auftrag=W-08-DRITTLESUNG rolle=evaluator ergebnis=gegengelesen-traegt-mit-sperrender-auflage commit=28266ffb datum=2026-08-03 hinweis=vorbedingung-w07-commit-ins-blatt-inventur-braucht-stehende-rote-zusage

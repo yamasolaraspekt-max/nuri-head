@@ -7,20 +7,24 @@ auftrag:
   id: W-08
   strang: werkzeuge
   status: entwurf   # ZURUECKGESETZT von `bereit` 03.08.: die MESSMETHODE von K-05 hat sich geaendert (Textmuster -> Struktur), und mit ihr kommt ein neues Werkzeug (scripts/anker-inventur.mjs) in den Umfang. Das ist eine neue Entscheidung, kein Nachtrag - es braucht ein neues Gegenlesen. Gegenleser: Evaluator (Werkzeug-Blatt).
-  gegengelesen_von: evaluator   # nach d1cecdcf: Werkzeug-Blatt -> Evaluator (Kopfkommentar oben sagt noch Pruefer)
-  gegengelesen_am: 2026-08-02
+  gegengelesen_von: evaluator   # DRITTES Gegenlesen 03.08. - neue Messmethode + neues Werkzeug im Umfang (die zwei frueheren Befunde stehen im Verlauf, 8b3868b1 und f4f0c89d-Delta)
+  gegengelesen_am: 2026-08-03
   befund: >
-    TRAEGT MIT AUFLAGE AN DER MESSMETHODE: die rohen grep-Zaehlungen zaehlen ZITATE mit.
-    W-08 selbst und w05-werkzeug-anschluss enthalten 'L-01-anker', '2  MONTIEREN' und
-    'typ: browser' als woertlich zitierte Suchmuster — gemessen heute 20/7/14 statt
-    19/6/13 (der +1 ist dieses Blatt). Damit ist das K-05-Soll "0 Blaetter mit MONTIEREN"
-    per rohem grep UNERREICHBAR; der Generator braucht eine benannte Ausnahme
-    (Zitat-Blaetter ausschliessen oder Muster auf den Stufe-3-Kontext praezisieren),
-    sonst wird das Soll passend gemacht statt gemessen. Bestaetigt: K-01 Ausgangswert 0
-    (keine ANKER-Datei), K-02 0 mit Partner S-10=2, pb023-pb024 ist exakt das eine
-    Browser-Blatt ohne Anker (comm-Probe). Preflight 3 OK/0 Fehlschlag. B8-Fragen:
-    Maschinen-Befehle laufen, K-03 misst Wirkung mit 3 roten UND 3 gruenen Zusagen,
-    keiner mutiert.
+    TRAEGT MIT SPERRENDER AUFLAGE UND EINER KLEINEN. Sperrend: das Blatt sagt "Basis: HEAD
+    beim Ziehen", aber scope-Datei scripts/auftrag-pruefen.mjs traegt die UNVERBUCHTE
+    W-07-Arbeit - exakt die Klasse, die W-07 selbst als Feld `vorbedingung` bekommen hat.
+    Erst W-07 committen, dann W-08 bauen; auch K-08s Ausgangswert (82) gilt nur vor dem
+    W-07-Commit (danach 86, vom Generator gemessen). Der Generator haelt die Reihenfolge
+    bereits freiwillig ein - die Norm ist aber das Blatt, nicht sein Gedaechtnis.
+    Klein: die Inventur braucht EINE stehende rote Zusage (Fixture mit ausgeschriebenem
+    Anker im yaml-Block -> Inventur zaehlt 1), damit "Inventur meldet immer 0" nicht als
+    Erfolg durchgeht - die K-09-Mutationsprobe ist einmalig, eine Zusage steht dauerhaft.
+    Selbst gemessen (Worktree 28266ffb): 17 Blaetter mit typ browser = exakt die 17 der
+    Planner-Vormessung (16 ausgeschrieben + 1 ohne = konsistent, Verweis-Soll 17 geht auf);
+    K-01 Ausgangswert 0, K-02 0 mit Partner S-10=2. Die strukturelle Traeger/Zitat-Naht
+    ist die richtige - mein eigener Namenslisten-Vorschlag ist zu Recht als Ausschluss
+    verewigt. B8-Fragen: Maschinen-Befehle laufen, K-03/K-05 messen Wirkung mit roten UND
+    gruenen Zusagen, kein maschineller Befehl mutiert.
 ```
 
 ## Warum — heute habe ich denselben Block ZWÖLFMAL bearbeitet
