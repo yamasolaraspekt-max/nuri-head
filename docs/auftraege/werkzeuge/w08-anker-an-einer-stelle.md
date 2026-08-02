@@ -6,7 +6,7 @@
 auftrag:
   id: W-08
   strang: werkzeuge
-  status: bereit   # B8 ERFUELLT: Werkzeug-Blatt, gegengelesen vom Evaluator 02.08. (8b3868b1, Befund TRAEGT), Auflage eingearbeitet in f4f0c89d, Delta-Gegenlesung sauber in 03ec8463 - kein neuer Durchgang noetig. Eingetragen vom Planner 02.08. 15:1x.
+  status: entwurf   # ZURUECKGESETZT von `bereit` 03.08.: die MESSMETHODE von K-05 hat sich geaendert (Textmuster -> Struktur), und mit ihr kommt ein neues Werkzeug (scripts/anker-inventur.mjs) in den Umfang. Das ist eine neue Entscheidung, kein Nachtrag - es braucht ein neues Gegenlesen. Gegenleser: Evaluator (Werkzeug-Blatt).
   gegengelesen_von: evaluator   # nach d1cecdcf: Werkzeug-Blatt -> Evaluator (Kopfkommentar oben sagt noch Pruefer)
   gegengelesen_am: 2026-08-02
   befund: >
@@ -114,14 +114,18 @@ Hier bewusst NICHT:
 scope:
   dateien:
     - scripts/auftrag-pruefen.mjs
+    - scripts/anker-inventur.mjs
     - docs/auftraege/ANKER-BROWSER.md
   population_command: "ls docs/auftraege | grep ANKER | wc -l"
   ausschluesse:
-    - stelle: "Die 12 Archiv-Blaetter (ruht, abgenommen, ohne Kopf)"
-      grund: "Sie werden beim Wiederbeleben von S-11 gefangen. Die Sperre sitzt am Uebergang, nicht am Ruhezustand."
-      entschieden_von: planner
     - stelle: "Der Inhalt des Ankers"
       grund: "v3 ist vom Pruefer gegengelesen. W-08 verschiebt ihn, es aendert ihn nicht."
+      entschieden_von: planner
+    - stelle: "Ein eigener YAML-Parser fuer die Inventur"
+      grund: "anker-inventur.mjs benutzt js-yaml, denselben Parser wie auftrag-pruefen.mjs und zeile-ersetzen.mjs. Zwei Antworten auf 'was steht in diesem Block' waeren dieselbe Klasse wie der doppelte Kommentar-Abzug in W-06 und der doppelte Name in W-05 K-10."
+      entschieden_von: planner
+    - stelle: "Eine Blattnamen-Ausnahme in K-05"
+      grund: "ZWEIMAL versucht, zweimal binnen Stunden gebrochen (Zitat in W-08 selbst, dann Zitat in FEHLERKLASSEN.md). Die Naht ist strukturell, nicht textlich - wer wieder eine Namensliste braucht, hat die falsche Naht gewaehlt."
       entschieden_von: planner
 
 kriterien:
@@ -183,38 +187,52 @@ kriterien:
   - id: K-05
     typ: behavioural
     kritikalitaet: P1
-    aussage: "Die sechs gefahrenen Blaetter tragen den Verweis, und der Anker steht danach nur noch einmal ausgeschrieben."
+    aussage: "Jedes gefahrene Blatt traegt den VERWEIS, und der Anker steht danach nur noch einmal ausgeschrieben - STRUKTURELL gemessen, nicht ueber ein Textmuster."
     ausgefuehrt_von: generator
     pruefung:
       typ: gate
       schritte: |
-        AUFLAGE des Evaluators (02.08.), uebernommen und nachgemessen: eine rohe Zaehlung
-        trifft dieses Blatt SELBST. W-08 zitiert "2  MONTIEREN" als Suchmuster, und ein
-        Zitat sieht fuer grep aus wie ein Anker.
+        ZWEITE KORREKTUR, 03.08. — der Generator hat NICHT gebaut und hatte recht.
+        Die Namensausnahme aus der ersten Korrektur hielt keine zwei Stunden:
 
-            grep -rl "2  MONTIEREN" docs/auftraege/ | wc -l   ->  7   (02.08. 14:0x)
-              davon echte Ankertraeger                        ->  6
-              davon Zitat                                     ->  1   NUR w08-anker-an-einer-stelle
+            Ausgangswert im Blatt   6
+            gemessen 03.08.         8
+            neu dazu:  FEHLERKLASSEN.md   <- ZITAT in der Beschreibung von F-19
+                       z06n1-…            <- echter Traeger
 
-        Nachgemessen: der Selbsttreffer ist GENAU EIN Blatt - dieses. w05-werkzeug-anschluss
-        steht in der Liste, weil es den Anker wirklich TRAEGT; nach dem Umzug faellt es von
-        selbst heraus. Deshalb eine benannte Ausnahme fuer ein Blatt statt eines
-        praezisierten Musters, das beim naechsten Zitat wieder bricht:
+        **Die Fehlerklasse, die den Selbsttreffer beschreibt, trifft sich selbst.**
+        Und die Auflage des Evaluators sagt ausdruecklich: die Ausnahme wird nicht
+        erweitert, sondern das Muster praezisiert. Beides zusammen heisst: das TEXTMUSTER
+        ist die falsche Naht - jede Liste waechst mit dem naechsten Zitat.
 
-            grep -rl "2  MONTIEREN" docs/auftraege/ | grep -v 'w08-anker-an-einer-stelle' | wc -l
-              heute   ->  6
-              danach  ->  0
+        DIE NEUE NAHT — nicht der TEXT, sondern die STRUKTUR:
+        Ein Zitat steht in Fliesstext oder in einem ```text-Block. Ein Anker ist ein
+        KRITERIUM in einem ```yaml-Block. Das ist maschinell trennbar und kann per
+        Definition kein Zitat treffen.
+
+            scripts/anker-inventur.mjs   NEU, Teil dieser Scheibe
+              liest die ```yaml-Bloecke (derselbe Parser wie auftrag-pruefen.mjs)
+              und zaehlt je Blatt: L-01-anker ausgeschrieben · als verweis · gar nicht
+
+        Vom Planner mit genau dieser Logik vorgemessen (03.08.):
+
+            Blaetter mit Anker oder Browser-Kriterium   17
+            Anker AUSGESCHRIEBEN                        16      -> danach 0
+            Anker als VERWEIS                            0      -> danach 17
+            Browser OHNE Anker                           1      -> danach 0  (K-06)
+
+        Die Zahlen sind hoeher als in der ersten Fassung (16 statt 6), weil sie zum
+        ersten Mal ALLE Blaetter zaehlen statt nur die mit dem heutigen Wortlaut -
+        Archiv eingeschlossen. Das ist kein Mehraufwand: ein Archivblatt bekommt
+        denselben Dreizeiler.
 
         Und die Gegenrichtung, damit nicht einfach alles verschwindet:
-            ls docs/auftraege | grep ANKER | wc -l                        ->  1
-            grep -c "MONTIEREN" docs/auftraege/ANKER-BROWSER.md           ->  mindestens 1
+            ls docs/auftraege | grep ANKER | wc -l                  ->  1
+            die Ankerdatei enthaelt die drei Stufen                 ->  ja
 
-        Steht die erste Zahl danach bei 6, ist der Verweis eingebaut und der Block liegen
-        geblieben - dann gibt es zwei Wahrheiten statt einer. Steht sie bei 0 und die
-        Ankerdatei fehlt, ist der Anker weg statt umgezogen.
-        DIE AUSNAHME WIRD BENANNT, NICHT STILL GEFILTERT: wer sie erweitert, schreibt den
-        Blattnamen und den Grund dazu - sonst wird das Soll passend gemacht statt gemessen.
-      erwartet: "6 -> 0 ohne dieses Blatt, 1 Ankerdatei mit MONTIEREN darin"
+        KEINE AUSNAHME MEHR, KEINE NAMENSLISTE. Wer eine braucht, hat die falsche
+        Naht gewaehlt - das ist die Lehre aus zwei Korrekturen an derselben Zusage.
+      erwartet: "ausgeschrieben 16 -> 0, verweis 0 -> 17, eine Ankerdatei; ohne jede Blattnamen-Ausnahme"
 
   - id: K-06
     typ: presence

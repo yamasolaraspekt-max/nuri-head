@@ -6,7 +6,7 @@
 auftrag:
   id: W-06
   strang: werkzeuge
-  status: bereit   # B8 ERFUELLT, zweites Gegenlesen: Evaluator 03.08. - Befund TRAEGT, Parser-Kern selbst geprobt (fangKern.ts und breiten.test.ts angenommen, `const a = { x: 1;` mit benannter Diagnose abgewiesen). Keine Auflagen, zwei kleine Punkte eingearbeitet. Eingetragen vom Planner.
+  status: gebaut   # UMGESETZT vom Generator 03.08. 06:2x. K-01 typescript 0->1 - K-02 Klammer-Bilanz 3->0 (weg, nicht umgangen) - K-03 pruefeInhalt ueber 319 Quellen 61->0 plus DREI Gegenproben - K-04 Hilfsdatei 2->0 - K-05 eine Quelle, vier Endungen, .tsx mit echtem JSX - K-07 Suite 86->91 pass/0 fail - K-08 Mutationsprobe 4/8 blind -> 2/8, die zwei Rest-Mutationen als WIRKUNGSLOS belegt statt behauptet (B5). Wartet auf das Votum des Evaluators. Eingetragen vom Planner.
   gegengelesen_von: evaluator   # zweites Gegenlesen - neue Entscheidung, neues Blatt (Kopf sagt es selbst)
   gegengelesen_am: 2026-08-03
   befund: >

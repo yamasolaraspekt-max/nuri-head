@@ -36235,3 +36235,137 @@ hingesehen.**
 
 **Drei Blätter zum Gegenlesen, und sie hängen aneinander:** Z-06-N1 zuerst — N2 und N3 stehen auf
 `gesperrt` und lesen sich am besten als Kette. *Der Preflight ist bei allen dreien sauber.*
+
+---
+
+## GENERATOR · 03.08. 06:2x — W-06 UMGESETZT. Die 61 unschreibbaren Dateien sind 0
+
+```text
+K-01  typescript im Werkzeug           0 -> 1
+K-02  Klammer-Bilanz                   3 -> 0     weg, nicht umgangen
+K-03  pruefeInhalt ueber 319 Quellen  61 -> 0     plus DREI Gegenproben
+K-04  Hilfsdatei neben der Quelle      2 -> 0
+K-05  EINE Quelle, vier Endungen       heil traegt · kaputt faellt · .tsx mit echtem JSX
+K-07  Werkzeug-Suite                  86 -> 91 pass · 0 fail
+K-08  Mutationsprobe                   4/8 blind -> 2/8, md5 gleich
+```
+
+**Die Null allein waere wertlos** — ein Pruefer, der alles durchlaesst, erzeugt sie genauso. Neben
+ihr stehen deshalb drei Gegenproben: ein offener Block faellt, die eigene heile Quelle traegt,
+dieselbe Quelle mit entfernter Klammer faellt.
+
+### Die vier blinden Mutationen betrafen ALLE `.tsx` — dein Punkt, unabhaengig wiedergefunden
+
+```text
+tsx wird als ts gelesen        fail 0   <- BLIND, jetzt fail 3
+.tsx faellt aus dem Zweig      fail 0   <- BLIND, jetzt fail 1
+setParentNodes aus             fail 0   <- wirkungslos
+Endung ohne Punkt im Namen     fail 0   <- wirkungslos
+```
+
+**Die letzten zwei sind wirkungslos, nicht ungeprueft — und das ist belegt, nicht behauptet (B5):**
+
+```text
+ts.createSourceFile(name, text, Latest, setParentNodes, ScriptKind)
+  .tsx JSX   Urteil true  | ohne setParentNodes true  | ohne Endung im Namen true
+  .ts  offen Urteil false | ohne setParentNodes false | ohne Endung im Namen false
+  .mjs heil  Urteil true  | ohne setParentNodes true  | ohne Endung im Namen true
+  -> 3 von 3: das Urteil aendert sich NICHT.
+```
+
+*Der Dateiname ist gleichgueltig, weil `ScriptKind` ausdruecklich uebergeben wird — so wie du es
+fuer `hook-abhaengigkeiten.mjs` verlangt hast. **Eine Zusage dafuer waere ein Textabzug (F-06):
+sie wuerde den Bau einfrieren statt eine Wirkung zu pruefen.** Im Test steht deshalb eine
+Erklaerung und keine Zusage.*
+
+### Zwei Fallen unterwegs, beide alte Bekannte
+
+**F-09, zum dritten Mal:** mein eigener Kommentar nannte den Namen der alten Bilanzfunktion — und
+K-02 zaehlt genau diese Zeichenkette. *Ein Kommentar haette die Absenz-Zusage unerfuellbar
+gemacht.* Er sagt jetzt „Klammer-Bilanz" und erklaert gleich mit, warum er den Namen meidet.
+
+**F-10:** der `.sh`-Zweig braucht weiter eine Datei, `bash -n` liest nicht von der Standardeingabe.
+Sie entsteht jetzt im **System-Temp** statt neben der Quelle. *Auf diesem Mount ist `unlink`
+verboten — die alte Hilfsdatei blieb im Arbeitsbaum liegen, auch wenn der Ersatz danach abgelehnt
+wurde.* Der dritte Parameter von `pruefeInhalt` ist damit ersatzlos fort.
+
+**Unverbucht liegen jetzt vier eigene Scheiben: Z-06 · W-07 · W-06 · dieser Ledger.**
+**W-08 bleibt blockiert** (K-05-Ausgangswert 6 gegen gemessene 8).
+
+---
+
+## PLANNER — 03.08. · W-08 neu genäht: nicht der TEXT, sondern die STRUKTUR. Und W-06 eingetragen
+
+### Der Fund des Generators trifft mich zweimal
+
+**Er hat W-08 nicht gebaut, weil der Ausgangswert um zwei danebenliegt. Nachgemessen — er hat
+recht, und der Grund ist bitter komisch:**
+
+```text
+neu dazu:  FEHLERKLASSEN.md              <- ZITAT in der Beschreibung von F-19
+           z06n1-herkunft-und-freigabe   <- echter Traeger
+```
+
+**Die Fehlerklasse, die den Selbsttreffer beschreibt, trifft sich selbst.** *Ich habe F-19
+geschrieben, das Muster darin zitiert, und damit die Zusage gebrochen, die F-19 erklärt.*
+
+**Und er zitiert die Auflage des Evaluators gegen mich, zu Recht:** *„wer sie erweitert, schreibt
+den Blattnamen und den Grund dazu — sonst wird das Soll passend gemacht statt gemessen."*
+**Die Ausnahme hielt keine zwei Stunden.**
+
+### Die neue Naht — sein Vorschlag, gemessen und übernommen
+
+**Ein Zitat steht in Fließtext. Ein Anker ist ein KRITERIUM in einem ```yaml-Block.** *Das ist
+maschinell trennbar und kann per Definition kein Zitat treffen.*
+
+```text
+scripts/anker-inventur.mjs   NEU, Teil der Scheibe
+  liest die ```yaml-Bloecke mit js-yaml — DEMSELBEN Parser wie auftrag-pruefen.mjs
+  und zaehlt je Blatt: L-01-anker ausgeschrieben · als verweis · gar nicht
+```
+
+**Mit genau dieser Logik vorgemessen (03.08.):**
+
+```text
+Blaetter mit Anker oder Browser-Kriterium   17
+Anker AUSGESCHRIEBEN                        16   -> danach 0
+Anker als VERWEIS                            0   -> danach 17
+Browser OHNE Anker                           1   -> danach 0
+```
+
+**Die Zahlen sind höher als vorher (16 statt 6), weil sie zum ersten Mal ALLE Blätter zählen** —
+Archiv eingeschlossen. *Kein Mehraufwand: ein Archivblatt bekommt denselben Dreizeiler.*
+
+**Die Blattnamen-Ausnahme fällt ersatzlos weg** und steht jetzt als Ausschluss im Blatt:
+*zweimal versucht, zweimal binnen Stunden gebrochen.* **Wer wieder eine Namensliste braucht, hat
+die falsche Naht gewählt.**
+
+**W-08 geht zurück auf `entwurf`** — neue Messmethode, neues Werkzeug im Umfang, also neues
+Gegenlesen (Evaluator).
+
+### W-06 auf `gebaut` — die 61 sind 0
+
+```text
+K-01  typescript im Werkzeug        0 -> 1
+K-02  Klammer-Bilanz                3 -> 0     weg, nicht umgangen
+K-03  ueber 319 Quellen            61 -> 0     plus DREI Gegenproben
+K-04  Hilfsdatei neben der Quelle   2 -> 0
+K-07  Werkzeug-Suite               86 -> 91 pass · 0 fail
+K-08  Mutationsprobe              4/8 blind -> 2/8, Rest als WIRKUNGSLOS BELEGT
+```
+
+**Zwei Dinge daran sind bemerkenswert und gehören benannt:**
+
+*Die vier blinden Mutationen betrafen ALLE `.tsx`* — **genau der Punkt, den der Evaluator ohne
+Auflage angemerkt hatte und den ich in K-05 verriegelt habe.** Der Generator hat ihn unabhängig
+wiedergefunden, bevor er das Blatt gelesen hatte.
+
+*Und die zwei übrigen Mutationen hat er nicht wegdefiniert, sondern als **wirkungslos belegt*** —
+eine Tabelle über drei Endungen, jeweils mit und ohne den Parameter. **Das ist B5 in Reinform: er
+hätte „ist egal" schreiben können und hat stattdessen gemessen.** *Seine Begründung, warum daraus
+keine Zusage wird, ist ebenfalls richtig: eine Zusage über `ScriptKind` wäre ein Textabzug (F-06)
+und würde den Bau einfrieren statt eine Wirkung zu prüfen.*
+
+**Und F-09 zum dritten Mal, von ihm selbst gefangen:** sein eigener Kommentar nannte den Namen der
+alten Bilanzfunktion — genau die Zeichenkette, die K-02 zählt. *Ein Kommentar hätte die
+Absenz-Zusage unerfüllbar gemacht.*
