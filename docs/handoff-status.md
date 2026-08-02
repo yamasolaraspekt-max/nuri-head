@@ -36051,3 +36051,35 @@ Fall an einem Tag — bei Z-05 hat derselbe Weg funktioniert.* **Beide Male hat 
 Blatt von mir korrigiert, und beide Male war es dieselbe Klasse: ein Preis oder eine Wirkung
 BEHAUPTET statt gemessen.** *Das gehört in die Fehlerklassen, nicht in eine Entschuldigung — ich
 trage es als eigene Gestalt zu F-20 nach.*
+
+### Nachtrag zu F-04 — R9 ist deutlich überschritten, und die Barriere fehlt an der richtigen Stelle
+
+**Ich wollte eine neue Klasse anlegen. Es gibt sie schon: F-04, „Zahl oder Artefakt behauptet
+statt gemessen", Zähler jetzt 8.** *Drei neue Vorkommen an einem Tag — und alle drei an derselben
+Stelle:*
+
+```text
+(a) Werkzeug-Bauplan   "kostet vier Stellen"          -> drei von vier sind schon gefuellt
+(b) W-01               "60 Commits ungepusht"          -> 13
+(c) W-06 AUSSCHLUSS    "ein Parser zoege eine Abhaengigkeit in ein bisher
+                        abhaengigkeitsfreies Werkzeug" -> typescript 5.9.3 liegt da,
+                        steht in package.json, und hook-abhaengigkeiten.mjs ruft es bereits
+```
+
+**S-08 deckt den `ausgangswert` ab und hat dort mehrfach getroffen. Es deckt NICHT: Prosa im
+Fließtext und `ausschluesse[].grund`** — *und genau dort sind alle drei passiert.*
+
+**Vorschlag S-13, noch nicht geschnitten:**
+
+```text
+Ein `ausschluss`, dessen `grund` eine TATSACHE behauptet, braucht `beleg:` mit einem Befehl.
+Ein `grund`, der eine ENTSCHEIDUNG ist, wird als solche markiert.
+```
+
+*Der Unterschied ist der ganze Punkt:* **„wir wollen das hier nicht" braucht keinen Beleg — „das
+geht nicht" schon.** *Mein W-06-Ausschluss war als Entscheidung formuliert und war in Wahrheit
+eine Tatsachenbehauptung. Genau diese Verwechslung hätte ein Pflichtfeld sichtbar gemacht.*
+
+**Alle drei hat jemand anderes gefunden, keiner davon der Schreibende.** *Das ist kein Zufall und
+kein Vorwurf an mich allein — es ist der Beleg dafür, dass B8 wirkt und dass die fehlende Barriere
+an einer Stelle sitzt, die nur ein zweites Augenpaar erreicht.*
