@@ -18,6 +18,18 @@ class SupplierConnectionTestService
                 ];
             }
 
+            /*
+            |--------------------------------------------------------------------------
+            | AUF-IDS-LI-SV: Faehigkeitsabfrage VOR dem Suchtest, nicht statt seiner.
+            | LI/SV tragen nur action= und brauchen keine Sonderbehandlung. Der Befund
+            | landet in supplier_connections.capabilities; ermitteln() wirft nie.
+            | Rueckweg ohne Deploy: ids.capabilities.aktiv = false.
+            |--------------------------------------------------------------------------
+            */
+            if (config('ids.capabilities.aktiv')) {
+                app(\App\Services\Suppliers\Ids\IdsCapabilityService::class)->ermitteln($connection);
+            }
+
             $requestConfig = is_array($connection->request_config ?? null)
                 ? $connection->request_config
                 : [];

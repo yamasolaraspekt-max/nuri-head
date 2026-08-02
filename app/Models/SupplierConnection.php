@@ -42,6 +42,9 @@ class SupplierConnection extends Model
         'request_config' => 'array',
         'import_config' => 'array',
 
+        'capabilities' => 'array',
+        'capabilities_checked_at' => 'datetime',
+
         'last_tested_at' => 'datetime',
         'is_active' => 'boolean',
     ];
