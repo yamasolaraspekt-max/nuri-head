@@ -49,6 +49,15 @@ Alle Stränge **autonom**. **Pflicht-Stopps als Wartepunkte auf Yama entfallen.*
 - Rahmen-Wechsel laufender Mandanten NICHT im Scope (nur GJ-Wechsel; dokumentierte Nicht-Übernahme).
 
 ## TEIL 3 — ROLLEN
+
+### 3.0 STRANGBINDUNG (ab 02.08.2026, gilt für JEDE Rolle)
+**Eine Instanz ist nie nur eine Rolle, sondern immer Rolle *und* Strang.** Nicht „Generator", sondern **„Generator im Strang `produktdaten`"**. Rolle und Strang sind zwei senkrecht zueinander stehende Achsen: die Rolle sagt, wo im Fluss du stehst, der Strang sagt, woran. Bis heute war nur die erste modelliert — ein Generator war ein *globaler* Generator und sah alle Blätter aus allen Strängen, ohne Merkmal, welche ihn angehen.
+**Erste Handlung jeder Instanz:** Rolle **und** Strang ansagen, bevor irgendetwas gelesen oder gebaut wird. Wer seinen Strang nicht kennt, fragt Yama — er nimmt ihn nicht an.
+**Die Regel:** Ein Auftrag, dessen `strang` nicht meiner ist, wird **gemeldet, nicht bearbeitet** — auch nicht „schnell nebenbei", auch nicht, wenn er trivial aussieht, auch nicht, wenn ich gerade Zeit habe. Fremder Strang = fremder Scope (§3.1 „Darf nicht: fremde Scopes berühren").
+**Erlaubte Werte:** `hausplaner-3d` · `produktdaten` · `werkzeuge` (Definition in `docs/auftraege/AUFTRAGSSCHEMA.md` §1a). Neue Stränge vergibt nur Yama.
+**Warum das nötig war — belegt am 02.08.:** Zwei Stränge arbeiteten im selben Worktree. Um 09:22 lag beim Stagen die Datei des einen Strangs neben der des anderen in **einem** Index; nur ein `git commit -- <pfad>` verhinderte den Beifang. Um 09:15 und 09:23 maßen zwei Instanzen unabhängig denselben Befund (Push scheitert aus der Cloud mit HTTP 403).
+**Was die Strangbindung NICHT ersetzt:** die Rollentrennung. Beide sind nötig — die Rollentrennung verhindert, dass jemand seine eigene Arbeit abnimmt, die Strangbindung, dass jemand fremde Arbeit anfängt.
+
 ### 3.1 BAUER (eine Instanz je Strang, eigener Worktree)
 Baut den dispatchten Backlog-Posten — nicht mehr, nicht weniger.
 **Darf:** Code/Migr./Seeder/Tests im eigenen Scope+Worktree schreiben+lokal/Test ausführen · neue Weichen im Rahmen der Vollmacht (VOR Bau in `docs/entscheidungen.md`) · zwingende Folge-Posten ins eigene Backlog (mit Entscheidungs-Beleg) · committen **NUR nach Prüfer-FREIGABE** (atomar, explizite Pfade, eigener Branch) · Abweichung nur offen deklariert → Eskalation, Bau wartet.

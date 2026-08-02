@@ -35,6 +35,7 @@ alles danach ist Erlaeuterung. **Was nicht im Block steht, ist kein Auftrag, son
 ```text
 auftrag:
   id: AUF-38-S4                     # eindeutig, referenzierbar im Votum
+  strang: hausplaner-3d             # PFLICHT ab 02.08.2026 — erlaubte Werte in Abschnitt 1a
   status: <einer der Werte>         # aktiv | bereit | gebaut | abgenommen | gesperrt | ruht | zurueckgestellt | erledigt
                                     # Kein Beispielwert: PB-019 sucht `status:` + `aktiv` als
                                     # reinen TEXT ueber die ganze Datei, nicht im yaml-Kopf.
@@ -96,6 +97,38 @@ selbstnachweis:                     # der Generator fuellt das vor der Uebergabe
   preflight: "./scripts/auftrag-pruefen.sh docs/auftraege/<blatt>.md"
   gegenprobe: "eine Stelle zurueckdrehen, Test muss rot werden"
 ```
+
+## 1a. Das Feld `strang` — Pflicht ab 02.08.2026
+
+**Warum es dazukam.** Rolle und Strang sind zwei senkrecht zueinander stehende Achsen. Planner,
+Generator, Evaluator und Pruefer beschreiben eine *Fliessrichtung*. „3D-Hausplaner" und
+„Produktdaten" beschreiben einen *Gegenstand*. Bis zum 02.08. war nur die erste Achse modelliert
+— ein Generator war ein **globaler** Generator und sah 131 Blaetter aus allen Straengen in einem
+Verzeichnis, ohne ein Merkmal, an dem er erkennt, welche ihn angehen. `heimat: ticket`
+unterscheidet nichts, weil die Antwort immer `ticket` lautet.
+
+**Erlaubte Werte — abschliessend. Ein neuer Wert wird von Yama vergeben, nicht erfunden:**
+
+| Wert | Gegenstand |
+|---|---|
+| `hausplaner-3d` | Planer, Studio, Geometrie, Szene, Werkzeugleiste, Dashboard-Flaechen |
+| `produktdaten` | Artikelidentitaet, Preise, IDS, Open Masterdata, DATANORM, Lieferanten |
+| `werkzeuge` | Validatoren, `commit-pruefen`, `auftrag-pruefen`, Gates, Messskripte |
+
+**Die Regel:**
+
+> Jeder `auftrag`-Kopf traegt `strang`. Ein Blatt ohne `strang` oder mit einem Wert ausserhalb
+> der Tabelle ist **kein gueltiger Auftrag**.
+
+**Warum als Feld und nicht als Konvention im Dateinamen:** Dateinamen werden gelesen, Felder
+werden geprueft. Genau das ist die Begruendung, aus der dieses Schema ueberhaupt entstanden ist
+(Abschnitt 0) — Prosa in einem langen Dokument aendert Verhalten nicht.
+
+**Durchsetzung:** `scripts/auftrag-pruefen.mjs` bekommt dafuer die Strukturregel **S-10**
+(eigener Auftrag an den Strang `werkzeuge`, 02.08.2026). Bis S-10 steht, ist das Feld
+verbindlich, aber unbewacht — und damit nach der Logik dieses Papiers noch keine Barriere.
+
+---
 
 ## 2. Die Prueftypen
 
