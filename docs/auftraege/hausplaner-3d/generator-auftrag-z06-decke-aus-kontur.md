@@ -149,27 +149,8 @@ kriterien:
       sieht keinen Unterschied zu vorher - dort ist die Bounding-Box zufaellig richtig.
 
   - id: L-01-anker
-    typ: presence
-    aussage: "Die Buehne ist MONTIERT, bevor irgendeine Zahl abgelesen wird - und der Weg dahin steht im Blatt."
-    pruefung:
-      typ: browser
-      schritte: |
-        Dreistufig. Stufe 2 ist ein SCHRITT, kein Zweig - es wird KEIN Projekt geoeffnet.
-        1  SEITE       HTTP 200 - document.title enthaelt "Hausplaner"
-                       - #hausplaner-root existiert und ist groesser als 0x0
-                       - #hausplaner-scene existiert (das JSON-Element aus der Blade-Seite;
-                         ohne es meldet main.tsx "Mount oder Szene fehlt" und montiert nie)
-        2  MONTIEREN   Knopf "Expertenmodus" innerhalb #hausplaner-root klicken, bis 5 s warten.
-                       Kein Projekt, kein Schreiben in die Datenbank.
-        3  BUEHNE      ERST DANN: querySelectorAll('canvas') mindestens 1 (gemessen: 2)
-        Bleibt canvas NACH Stufe 2 bei 0, ist DAS der rote Befund - der Startzustand davor
-        ist keiner.
-        Herkunft: Planner-Befund docs/planner/befund-anker-startzustand-2026-08-02.md,
-        korrigiert durch den Pruefer-Befund vom 02.08. (Expertenmodus montiert ohne Projekt).
-        NICHT uebernommen: "#hausplaner-scene mit 0 Kindern" als Startzeichen - das Element
-        ist ein <script type="application/json">, es hat NIE Element-Kinder. Als Zeichen
-        taugt seine EXISTENZ, nicht seine Kinderzahl. (Planner, 02.08., an der Quelle gemessen:
-        studio.blade.php:93, main.tsx:28.)
+    typ: verweis
+    quelle: docs/auftraege/ANKER-BROWSER.md
 ```
 
 ## Rückweg und Entdeckung

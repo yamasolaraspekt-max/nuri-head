@@ -19,7 +19,7 @@ auftrag:
 fehlschlug."* **Beim Messen stellt sich heraus: er meldet es bereits.**
 
 ```text
-node scripts/auftrag-pruefen.mjs docs/auftraege/generator-auftrag-z10-masseingabe.md | tail -1
+node scripts/auftrag-pruefen.mjs docs/auftraege/hausplaner-3d/generator-auftrag-z10-masseingabe.md | tail -1
    ── 12 Eintrag/Eintraege: 5 OK · 0 verdaechtig · 0 Fehlschlag · 0 nulltreffer
                             · 0 uebersprungen · 7 nicht maschinell
 ```

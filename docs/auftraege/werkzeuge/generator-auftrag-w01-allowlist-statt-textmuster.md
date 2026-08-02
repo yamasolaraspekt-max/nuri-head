@@ -244,7 +244,7 @@ Blatt (PW-01) ausprobiert und melde, was dabei herauskam.*
 **Die Allowlist trifft ausgerechnet die Form, die unsere eigene Bauordnung vorschreibt.**
 
 ```text
-node scripts/auftrag-pruefen.mjs docs/auftraege/bote-auftrag-pw01-sicherungs-push.md
+node scripts/auftrag-pruefen.mjs docs/auftraege/werkzeuge/bote-auftrag-pw01-sicherungs-push.md
   UEBERSPRUNGEN  PW-02  "git" steht nicht auf der Erlaubnisliste
                  $ git --no-optional-locks rev-list --count auto/...
 ```
