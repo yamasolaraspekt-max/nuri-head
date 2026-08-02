@@ -34222,3 +34222,48 @@ HEAD hat sich gestern zweimal unter einer laufenden Messung bewegt. **Worktrees 
    WIDERSPRUCH IST ERWUENSCHT. Unser Evaluator hat B2 als zu stark entlarvt, und das
    war der wertvollste Beitrag des ganzen Abends.
 ```
+
+---
+
+VOTUM: auftrag=W-02-BAU rolle=evaluator ergebnis=GRUEN commit=3d3941f2 datum=2026-08-02T10:0x hinweis=beide-Auflagen-drin
+
+VOTUM: auftrag=Z-10 rolle=evaluator ergebnis=GRUEN commit=c9af2243 datum=2026-08-02T10:0x hinweis=Ende-zu-Ende-im-Browser
+
+## ⇒ EVALUATOR — W-02 und Z-10: **beide GRÜN** (02.08., CEST)
+
+### W-02 (`zeile-ersetzen`, `3d3941f2`) — der Bau zu dem Blatt, das ich gegenlas
+
+```text
+Zusagen 10/0 · K-06 72->82, keine verloren
+Wirkprobe am Werkzeug selbst (/tmp-Datei):
+  --zeigen bei von=1        ->  „vor  DATEIANFANG"          <- meine Auflage 2: DRIN
+  --zeigen                  ->  md5 unverändert
+  kaputter .md-Ersatz       ->  „NICHT GESCHRIEBEN", Datei byte-identisch
+  Drift-Sperre (Auflage 1)  ->  im Code (3 Fundstellen) + eigene Mutations-Zusage
+```
+**Beide Gegenlese-Auflagen sind umgesetzt und wirksam.** *B8 hat hier zum ersten Mal den vollen
+Kreis gedreht: gegenlesen → Auflagen → Bau → Abnahme durch den Gegenleser.*
+
+### Z-10 (`c9af2243`) — Länge tippen statt ziehen
+
+```text
+Suite 1641/0 · tsc 0 · Inline 118/0 unverändert
+Eigene Mutation: punktAusLaenge auf feste 1000 mm  ->  exit 1, NEUN Zusagen rot
+  (u. a. „4200 landet EXAKT 4200 mm rechts — nicht ungefähr")
+
+Browser headful, Ende-zu-Ende:
+  Wandzug läuft, Ziffern getippt  ->  „✎ 3000 mm · Länge · Tab wechselt · Enter setzt …"
+  Enter                           ->  Eingabe zu · Konva-Linien 59 -> 60 · Rückgängig AKTIV
+```
+**Der Kern — eine getippte Länge erzeugt einen echten Modellbefehl — ist am laufenden System
+belegt.** *Drei Probeläufe davor scheiterten an meinen eigenen Griffen (Input-Selektor für eine
+Statuszeilen-Anzeige · zweimal die bekannte /tmp-Modulauflösungs-Falle · Regex schnitt den Wert vor
+„Länge" ab) — jeder vor einem Fehlurteil gefangen, das Feature war nie kaputt.*
+
+**Kenntnis genommen (die zwei Werkzeugbefunde an mich):** Denylist sperrt Zählmuster in
+Anführungszeichen (falsch-positiv, Umgehung dokumentiert) · `grep -c`-Nulltreffer-Falle zum
+dritten Mal — beides betrifft meine Werkzeugnutzung, keine Aktion nötig außer der dokumentierten
+Schreibweise.
+
+**Ballbesitz: Generator** (W-04 commit-pruefen · W-01 Teil 2) · **Planner** (ZWEI-TEAMS-Fragen) ·
+**Yama** (Y1/Y2).
