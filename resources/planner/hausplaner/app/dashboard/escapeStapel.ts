@@ -26,11 +26,19 @@
  */
 import { useEffect } from 'react';
 
-/** Die Ebenen, die um Escape konkurrieren — wörtlich Yamas Rangfolge, höchste zuerst. */
-export type EscapeEbenenArt = 'palette' | 'dialog' | 'menue' | 'schiene' | 'werkzeug-reset';
+/**
+ * Die Ebenen, die um Escape konkurrieren — wörtlich Yamas Rangfolge, höchste zuerst.
+ *
+ * **Z-10 fügt `masseingabe` ein, und zwar ÜBER `werkzeug-reset`.** Das Blatt verlangt es
+ * wörtlich: *„Escape verwirft die Eingabe, NICHT den Zug"*. Läge die Maßeingabe unterhalb, räumte
+ * derselbe Tastendruck den ganzen Zeichenzug ab — man tippt sich bei einer falschen Ziffer aus
+ * der halben Wand heraus. *Ein zweiter Escape-Hörer daneben wäre die Alternative gewesen und
+ * genau das, was Z-01 und AUF-83-T5 abgeschafft haben.*
+ */
+export type EscapeEbenenArt = 'palette' | 'dialog' | 'menue' | 'schiene' | 'masseingabe' | 'werkzeug-reset';
 
 /** Rangfolge als Daten. Index = Rang; kleinerer Index gewinnt. */
-export const RANGFOLGE: readonly EscapeEbenenArt[] = ['palette', 'dialog', 'menue', 'schiene', 'werkzeug-reset'];
+export const RANGFOLGE: readonly EscapeEbenenArt[] = ['palette', 'dialog', 'menue', 'schiene', 'masseingabe', 'werkzeug-reset'];
 
 function rang(art: EscapeEbenenArt): number {
   const i = RANGFOLGE.indexOf(art);

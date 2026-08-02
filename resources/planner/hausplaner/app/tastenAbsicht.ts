@@ -27,12 +27,25 @@ export type AbsichtArt =
   | 'werkzeug'
   /** Z-05: Enter schliesst die laufende Kontur. WER das tut, entscheidet die Hauptfunktion. */
   | 'kontur-schliessen'
+  /**
+   * Z-10: **eine Ziffer waehrend eines laufenden Zugs oeffnet die Masseingabe** — kein Knopf,
+   * kein Menue. *Wer ein Geschoss baut, hat Masse im Kopf und tippt sie.*
+   */
+  | 'masseingabe-oeffnen'
+  /** Z-10: eine weitere Ziffer landet im gerade gemeinten Feld. */
+  | 'masseingabe-ziffer'
+  /** Z-10: Tab wechselt zwischen Laenge und Winkel. */
+  | 'masseingabe-feld'
+  /** Z-10: Enter setzt den Punkt — Richtung aus dem Zeiger, Laenge aus dem Feld. */
+  | 'masseingabe-uebernehmen'
   | 'nichts';
 
 export interface Absicht {
   art: AbsichtArt;
   /** Nur bei `werkzeug`: die id aus der Registry. */
   werkzeugId?: string;
+  /** Nur bei den beiden Ziffern-Absichten: die getippte Ziffer. */
+  ziffer?: string;
   /**
    * Soll das Ereignis unterdrückt werden?
    *
@@ -52,6 +65,16 @@ export interface TastenEreignis {
   zielIstEingabe: boolean;
   /** Ist die Befehlspalette offen? */
   paletteOffen: boolean;
+  /**
+   * Z-10: **Laeuft gerade ein Zeichenzug** (Wand, Kontur) mit einem Ausgangspunkt?
+   *
+   * *Ohne dieses Feld koennte die Abbildung nicht entscheiden, ob eine Ziffer die Masseingabe
+   * oeffnet oder ein Werkzeug-Kuerzel ist* — und die Entscheidung wanderte in die Hauptfunktion,
+   * also an eine zweite Stelle. Z-01 hat die Tastenabbildung ausdruecklich auf EINE gelegt.
+   */
+  zugLaeuft?: boolean;
+  /** Z-10: Ist die Masseingabe bereits offen? Dann gehen Ziffern und Tab an sie. */
+  masseingabeOffen?: boolean;
 }
 
 const IGNORIEREN: Absicht = { art: 'ignorieren', preventDefault: false };
@@ -83,6 +106,27 @@ export function tastenAbsicht(e: TastenEreignis): Absicht {
 
   if (e.key === 'Delete' || e.key === 'Backspace') {
     return { art: 'loeschen', preventDefault: false };
+  }
+
+  // ── Z-10: die Masseingabe. **Sie steht VOR Enter und vor den Werkzeug-Kuerzeln**, sonst
+  // schluege „4" das Werkzeug-Kuerzel und Enter das Kontur-Schliessen. *Die Reihenfolge ist die
+  // Aussage: solange eine Masseingabe offen ist, gehoeren Ziffern, Tab und Enter ihr.*
+  const istZiffer = e.key.length === 1 && e.key >= '0' && e.key <= '9';
+  if (e.masseingabeOffen) {
+    if (istZiffer) {
+      return { art: 'masseingabe-ziffer', ziffer: e.key, preventDefault: false };
+    }
+    if (e.key === 'Tab') {
+      // `preventDefault`, sonst wandert der Fokus aus der Flaeche — und der Zug waere weg.
+      return { art: 'masseingabe-feld', preventDefault: true };
+    }
+    if (e.key === 'Enter') {
+      return { art: 'masseingabe-uebernehmen', preventDefault: false };
+    }
+  } else if (istZiffer && e.zugLaeuft) {
+    // **Nur waehrend eines laufenden Zugs.** Ohne Ausgangspunkt gibt es keine Richtung, und eine
+    // Laenge ohne Richtung ist kein Punkt — dann bleibt die Ziffer ein Werkzeug-Kuerzel.
+    return { art: 'masseingabe-oeffnen', ziffer: e.key, preventDefault: false };
   }
 
   // Z-05: Enter hatte bisher KEINE Bedeutung (fiel auf `nichts`). Die beiden Waechter oben halten

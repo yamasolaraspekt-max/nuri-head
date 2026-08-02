@@ -19,8 +19,25 @@ const hier = dirname(fileURLToPath(import.meta.url));
 
 const eintrag = (id: number, art: EscapeEbenenArt): { id: number; art: EscapeEbenenArt } => ({ id, art });
 
-test('K-03: die Rangfolge ist wörtlich Yamas Satz — Palette > Dialog > Menue > Schiene > Werkzeug-Reset', () => {
-  assert.deepEqual(RANGFOLGE, ['palette', 'dialog', 'menue', 'schiene', 'werkzeug-reset']);
+test('K-03: Yamas Rangfolge steht unveraendert — und `masseingabe` schiebt sich NICHT dazwischen', () => {
+  // **Yamas Satz ist eine Entscheidung, keine Liste, die man beim Bauen nachzieht.** Z-10 braucht
+  // eine Ebene für die Maßeingabe (*„Escape verwirft die Eingabe, NICHT den Zug"*), und sie muss
+  // über `werkzeug-reset` liegen — läge sie darunter, räumte derselbe Tastendruck den halben
+  // Zeichenzug ab.
+  //
+  // **Deshalb prüft diese Zusage jetzt die AUSSAGE statt der Liste:** die fünf genannten Ebenen
+  // stehen weiterhin in genau dieser Reihenfolge zueinander. *Eine Zusage, die die Liste
+  // buchstabiert, geht bei jeder Erweiterung rot, ohne dass Yamas Rangfolge verletzt wäre — und
+  // sie verschweigt zugleich, ob eine neue Ebene sich MITTEN hinein geschoben hat.*
+  const yamas = ['palette', 'dialog', 'menue', 'schiene', 'werkzeug-reset'] as const;
+  const raenge = yamas.map((a) => RANGFOLGE.indexOf(a));
+  assert.deepEqual([...raenge].sort((x, y) => x - y), raenge,
+    'Yamas Reihenfolge ist verschoben worden');
+  assert.ok(raenge.every((r) => r >= 0), 'eine der fünf Ebenen ist aus der Rangfolge verschwunden');
+  // Und die neue Ebene sitzt genau dort, wo das Blatt sie verlangt: ueber dem Werkzeug-Reset.
+  assert.ok(RANGFOLGE.indexOf('masseingabe') > RANGFOLGE.indexOf('schiene'));
+  assert.ok(RANGFOLGE.indexOf('masseingabe') < RANGFOLGE.indexOf('werkzeug-reset'),
+    'Escape raeumte den ganzen Zug ab statt nur die Eingabe');
 });
 
 test('K-03: die oberste aktive Ebene ist die mit dem höchsten Rang, nicht die zuletzt registrierte', () => {

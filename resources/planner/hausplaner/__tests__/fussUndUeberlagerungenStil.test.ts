@@ -52,10 +52,10 @@ test('K-03: jede benutzte `hp-fu-`-Klasse ist in der Stilschicht definiert', () 
   // Die Mutationen „Klassenname mit Tippfehler" und „Regel umbenannt" kamen beide durch.
   // Ein ungestyltes Element sieht im Testlauf aus wie ein gestyltes — nur im Browser nicht.
   const benutzt = benutzteKlassen();
-  // **13, nicht mehr 12:** Z-03 hat `hp-fu-fang` ergaenzt — die Fangart in der Fussflaeche.
+  // **14, nicht mehr 13:** Z-03 hat `hp-fu-fang` ergaenzt, Z-10 jetzt `hp-fu-mass`.
   // *Die Zahl waechst hier BEWUSST mit; sie haelt fest, dass keine Klasse still verschwindet,
   // nicht dass nie eine dazukommt.* Wer eine ergaenzt, zieht sie mit und sagt es im Commit.
-  assert.equal(benutzt.length, 13, `${benutzt.length} Klassen benutzt statt 13 — die Umstellung ist unvollstaendig oder ausgeufert`);
+  assert.equal(benutzt.length, 14, `${benutzt.length} Klassen benutzt statt 14 — die Umstellung ist unvollstaendig oder ausgeufert`);
   for (const k of benutzt) {
     assert.ok(regel(k) !== null, `\`.${k}\` wird benutzt, steht aber in keiner Regel — das Element bleibt ungestylt`);
   }
@@ -63,7 +63,7 @@ test('K-03: jede benutzte `hp-fu-`-Klasse ist in der Stilschicht definiert', () 
 
 test('K-03: keine `hp-fu-`-Regel ohne Nutzer', () => {
   const definiert = [...css.matchAll(/^\.(hp-fu-[a-z0-9-]+)\s*\{/gm)].map((m) => m[1]!);
-  assert.equal(definiert.length, 13, `${definiert.length} Regeln gefunden statt 13`);
+  assert.equal(definiert.length, 14, `${definiert.length} Regeln gefunden statt 14`);
   const benutzt = new Set(benutzteKlassen());
   for (const k of definiert) {
     assert.ok(benutzt.has(k), `\`.${k}\` ist definiert, wird aber nirgends benutzt`);

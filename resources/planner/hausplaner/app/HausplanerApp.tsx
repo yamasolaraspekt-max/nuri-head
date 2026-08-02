@@ -85,7 +85,11 @@ import { stapel } from './dashboard/geschossStapel';
 import { usePlannerUiStore } from './state/uiState';
 import { toolNach, WORKSPACE_IMPORT } from './tools/toolRegistry';
 // Z-01: die reine Entscheidung, wann ein Werkzeug endet und wann es nur pausiert.
-import { beiWerkzeugwechsel, beiZeigerAus, beiZeigerEin, pausenText, type ZeichenZustand } from './tools/werkzeugEnde';
+import { beiWerkzeugwechsel, beiZeigerAus, beiZeigerEin, pausenText, zugLaeuft, type ZeichenZustand } from './tools/werkzeugEnde';
+// Z-10: die Rechnung wohnt in der Geometrie, die Bedienung hier.
+import {
+  punktAusLaenge, oeffneMit, tippe, wechsleFeld, massEingabeText, type MassEingabe,
+} from '../geometry/masseingabe';
 // AUF-48 Scheibe 3: die reine Abbildung Taste -> Absicht.
 import { tastenAbsicht } from './tastenAbsicht';
 import { zoneTools } from './tools/toolPresentation';
@@ -267,6 +271,33 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const konturPunkteRef = useRef<Punkt[]>([]);
   const werkzeugRef = useRef<Werkzeug>('auswahl');
   /**
+   * Z-10 — **die laufende Maßeingabe.** `null` heisst: sie ist zu. *Das ist NICHT dasselbe wie
+   * ein leeres Feld* — eine offene Eingabe mit leerem Feld wartet auf Ziffern.
+   */
+  const [massEingabe, setMassEingabe] = useState<MassEingabe | null>(null);
+  /** Spiegel fuer den globalen Tastatur-Handler — dasselbe Muster wie `paletteOffenRef` (Kante 8). */
+  const massEingabeRef = useRef<MassEingabe | null>(null);
+  const zugLaeuftRef = useRef(false);
+  /**
+   * **Und die beiden Operanden der Übernahme — aus demselben Grund.**
+   *
+   * *Der Browsertest hat es gefunden, keine Zusage:* Enter erzeugte keine Wand, und die Eingabe
+   * blieb offen. `uebernimmMass` las `wandStart` und `cursor` aus der Closure des einmal
+   * angemeldeten Tastenhörers — also den Stand vom ersten Render, und der ist `null`.
+   * **Ich hatte Kante 8 für `konturPunkte` und `werkzeug` bedacht und für diese beiden nicht.**
+   */
+  const wandStartRef = useRef<Punkt | null>(null);
+  const cursorRef = useRef<Punkt>({ x: 0, y: 0 });
+  /**
+   * **Und die Übernahme selbst als Spiegel — der Fehler ging eine Ebene tiefer weiter.**
+   *
+   * *Nach dem ersten Fix schloss das Feld, aber es entstand keine Wand.* `uebernimmMass` ruft
+   * `setzePunkt`, und BEIDE sind Funktionen aus dem Render. Der Tastenhörer hielt die vom ersten:
+   * `setzePunkt` sah `wandStart = null` und setzte nur wieder den Anfang, statt die Wand zu
+   * bauen. **Einzelne Werte zu spiegeln reicht nicht, wenn die Funktion selbst veraltet ist.**
+   */
+  const uebernimmMassRef = useRef<() => void>(() => {});
+  /**
    * **Die zuletzt geschlossene Kontur — das Ergebnis dieser Scheibe.**
    *
    * Z-05 schreibt ausdruecklich NICHTS in den Speicher. Die fertige Kontur liegt hier bereit;
@@ -304,6 +335,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const zeichenZustand: ZeichenZustand = { wandStart, treppeStart, konturPunkte, zeigerDrinnen };
   konturPunkteRef.current = konturPunkte;
   werkzeugRef.current = werkzeug;
+  // Z-10: „laeuft ein Zug" kommt aus DERSELBEN Entscheidung wie ueberall — `zugLaeuft` aus
+  // `werkzeugEnde` (Z-01). Eine eigene Bedingung hier waere die zweite Wahrheit ueber dieselbe Frage.
+  zugLaeuftRef.current = zugLaeuft(zeichenZustand);
+  massEingabeRef.current = massEingabe;
+  wandStartRef.current = wandStart;
+  cursorRef.current = cursor;
   /**
    * Z-01 — **der EINE Ort, an dem ein Werkzeug endet.**
    *
@@ -752,11 +789,55 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     setKonturFehler(null);
   }, []);
 
+  /**
+   * Z-10 — **Enter setzt den Punkt: Richtung aus dem Zeiger, Länge aus dem Feld.**
+   *
+   * *Der Ausgangspunkt ist derselbe, den auch die Vorschau benutzt* — beim Wandzeichnen
+   * `wandStart`, beim Konturzug der zuletzt gesetzte Punkt. Gäbe es hier eine eigene Quelle,
+   * spränge die fertige Wand woanders hin als der Strich, den man vorher gesehen hat.
+   *
+   * **Lehnt die Rechnung ab, bleibt die Eingabe OFFEN.** Wer sich vertippt, korrigiert die Ziffer
+   * — ein stiller Abbruch nähme ihm die halbe Wand mit.
+   */
+  function uebernimmMass(): void {
+    const e = massEingabeRef.current;
+    if (!e) {
+      return;
+    }
+    const start = werkzeugRef.current === 'kontur'
+      ? konturPunkteRef.current[konturPunkteRef.current.length - 1] ?? null
+      : wandStartRef.current;
+    if (!start) {
+      return;
+    }
+    const winkel = e.winkel === '' ? undefined : Number(e.winkel);
+    const ziel = punktAusLaenge(start, cursorRef.current, Number(e.laenge), winkel);
+    if (!ziel) {
+      return; // Eingabe bleibt offen — die Ziffer laesst sich korrigieren
+    }
+    setMassEingabe(null);
+    setzePunkt(ziel);
+  }
+
+  /**
+   * Z-10 — **der Klick liefert nur noch den Punkt; was damit geschieht, steht in `setzePunkt`.**
+   *
+   * *Die Trennung ist der ganze Grund:* die Maßeingabe setzt denselben Punkt, nur kommt er aus
+   * einem Feld statt aus der Maus. Ohne sie hätte ich die Werkzeug-Zweige ein zweites Mal
+   * abgeschrieben — und die zweite Kopie wäre beim nächsten Werkzeug vergessen worden.
+   */
   function klick(e: Konva.KonvaEventObject<MouseEvent>): void {
+    setzePunkt(weltPunkt(e), e.evt);
+  }
+
+  // **Der Spiegel wird bei JEDEM Render nachgefuehrt** — sonst zeigte er wieder auf die Fassung
+  // vom ersten, und wir haetten den Fehler nur verschoben.
+  uebernimmMassRef.current = uebernimmMass;
+
+  function setzePunkt(p: Punkt, evt?: MouseEvent): void {
     if (!scene || !level) {
       return;
     }
-    const p = weltPunkt(e);
 
     if (werkzeug === 'wand') {
       if (!wandStart) {
@@ -889,8 +970,13 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     // Auswahl: Klick auf leere Fläche (Nodes stoppen die Propagation).
     // Kante 5: MIT Modifikator bleibt die Auswahl stehen — sonst verliert man beim Danebentreffen
     // die ganze Mehrfachauswahl.
+    // **Nur bei einem echten Klick.** Eine Maßeingabe klickt nie ins Leere — sie hat kein
+    // Ereignis und darf die Auswahl deshalb auch nicht anfassen.
+    if (!evt) {
+      return;
+    }
     const s = store.getState();
-    const neu = klickInsLeere({ ids: s.selectedNodeIds, primaerId: s.primaerId }, e.evt);
+    const neu = klickInsLeere({ ids: s.selectedNodeIds, primaerId: s.primaerId }, evt);
     if (neu !== undefined && (neu.ids !== s.selectedNodeIds || neu.primaerId !== s.primaerId)) {
       s.selectNodes(neu.ids, neu.primaerId);
     }
@@ -912,6 +998,15 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     // Z-01: derselbe Ort wie die Leiste. Der Escape-Weg wird BENUTZT, nicht ersetzt.
     beendeWerkzeug('auswahl');
   }, []);
+  /**
+   * Z-10 — **Escape verwirft die EINGABE, nicht den Zug.**
+   *
+   * Die Ebene steht über `werkzeug-reset`; solange eine Maßeingabe offen ist, gewinnt sie. *Läge
+   * sie darunter, räumte dieselbe Taste den ganzen Zeichenzug ab — man tippte sich bei einer
+   * falschen Ziffer aus der halben Wand heraus.* Der Zug läuft weiter, nur das Feld ist weg.
+   */
+  const verwirfMassEingabe = React.useCallback(() => setMassEingabe(null), []);
+  useEscapeEbene('masseingabe', massEingabe !== null, verwirfMassEingabe);
   useEscapeEbene('werkzeug-reset', true, setzeWerkzeugZurueck);
 
   useEffect(() => {
@@ -924,6 +1019,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         metaKey: e.metaKey,
         zielIstEingabe: (e.target as HTMLElement)?.tagName === 'INPUT',
         paletteOffen: paletteOffenRef.current,
+        // Z-10: beide Spiegel, aus demselben Grund wie `paletteOffenRef` (Kante 8) — der Handler
+        // wird EINMAL angemeldet, seine Closure laese sonst den Stand vom ersten Render.
+        zugLaeuft: zugLaeuftRef.current,
+        masseingabeOffen: massEingabeRef.current !== null,
       });
       if (absicht.preventDefault) {
         e.preventDefault();
@@ -946,6 +1045,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           break;
         case 'palette-oeffnen':
           oeffnePalette();
+          break;
+        // ── Z-10: die Maßeingabe. **Alle vier Fälle laufen über EINEN Zustand** — wer sie auf
+        // mehrere Setter verteilt, hat vier Orte, an denen die Eingabe hängenbleiben kann.
+        case 'masseingabe-oeffnen':
+          setMassEingabe(oeffneMit(absicht.ziffer!));
+          break;
+        case 'masseingabe-ziffer':
+          setMassEingabe((e) => (e ? tippe(e, absicht.ziffer!) : e));
+          break;
+        case 'masseingabe-feld':
+          setMassEingabe((e) => (e ? wechsleFeld(e) : e));
+          break;
+        case 'masseingabe-uebernehmen':
+          uebernimmMassRef.current();
           break;
         case 'kontur-schliessen':
           // Nur wenn wirklich ein Konturzug laeuft — sonst waere Enter eine Taste, die je nach
@@ -1259,6 +1372,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         pausenHinweis={pausenText(zeichenZustand)}
         konturHinweis={werkzeug === 'kontur' ? konturStatusText(konturPunkte.length, konturFehler, letzteKontur?.length ?? null) : null}
         fangHinweis={FANG_TEXT[fangArt]}
+        massHinweis={massEingabeText(massEingabe)}
         paletteOffen={paletteOffen}
         paletteFilter={paletteFilter}
         setPaletteFilter={setPaletteFilter}

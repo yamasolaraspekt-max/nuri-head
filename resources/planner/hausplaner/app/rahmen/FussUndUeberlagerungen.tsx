@@ -49,6 +49,8 @@ export interface FussEigenschaften {
   konturHinweis: string | null;
   /** Z-03: WAS der Fang zuletzt gefangen hat, im Klartext. Leer heisst: nichts. */
   fangHinweis: string;
+  /** Z-10: die laufende Masseingabe im Klartext. Leer heisst: es laeuft keine. */
+  massHinweis: string;
   // --- Befehlspalette ---
   paletteOffen: boolean;
   paletteFilter: string;
@@ -67,7 +69,7 @@ export interface FussEigenschaften {
 }
 
 export function FussUndUeberlagerungen({
-  cursor, zoom, raeume, werkzeug, wandStart, treppeStart, letzteAblehnung, pausenHinweis, konturHinweis, fangHinweis,
+  cursor, zoom, raeume, werkzeug, wandStart, treppeStart, letzteAblehnung, pausenHinweis, konturHinweis, fangHinweis, massHinweis,
   paletteOffen, paletteFilter, setPaletteFilter, setPaletteIndex,
   paletteGruppen, paletteListe, paletteMarkiert, schliessePalette, aktivierePaletteEintrag,
   offeneEngine, setOffeneEngine,
@@ -91,6 +93,10 @@ export function FussUndUeberlagerungen({
     {/* Z-03: die Fangart steht in der Fussflaeche, nicht in einem eigenen Abzeichen — hier steht
         die Statuszeile schon, und eine zweite Flaeche fuer dieselbe Auskunft waere eine zweite
         Stelle, an der sie altern kann. */}
+    {/* Z-10: die Masseingabe steht VOR dem Fang — sie ist der aktive Vorgang, der Fang nur die
+        Auskunft daneben. Klasse statt Inline-Stil: AUF-38 ist bei NULL offenen Stellen zu Ende
+        gegangen, und ein neuer Inline-Stil machte das rueckgaengig (K-08). */}
+    {massHinweis && <span className="hp-fu-mass">✎ {massHinweis}</span>}
     {fangHinweis && <span className="hp-fu-fang">⌖ {fangHinweis}</span>}
     {konturHinweis && <span className="hp-kontur-hinweis">{konturHinweis}</span>}
     {pausenHinweis && <span className="hp-pause-hinweis">{pausenHinweis}</span>}

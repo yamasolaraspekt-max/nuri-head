@@ -191,9 +191,21 @@ test('K-06: der bestehende Escape-Weg wird benutzt, nicht ein zweiter gebaut', (
   const zurueck = app.match(/const setzeWerkzeugZurueck = React\.useCallback\(\(\) => \{[\s\S]{0,300}?\}/);
   assert.ok(zurueck, '`setzeWerkzeugZurueck` wurde nicht gefunden — die Zusage misst Leere');
   assert.match(zurueck[0], /beendeWerkzeug\('auswahl'\)/, 'der Escape-Weg räumt wieder selbst auf');
-  // Und die Rangfolge aus AUF-83-T5 bleibt bei vier Ebenen (plus die Import-Zeile).
-  assert.equal((app.match(/useEscapeEbene/g) ?? []).length, 5,
-    'die Zahl der Escape-Ebenen hat sich geändert — eine fünfte wäre die zweite Wahrheit');
+  // **Die Aussage ist nicht „vier Ebenen", sondern „EIN Escape-Weg".** Z-10 hat eine fünfte
+  // hinzugefügt (`masseingabe`) — und genau richtig, denn die Alternative wäre ein zweiter
+  // Tastenhörer gewesen, also das, was diese Zusage verhindern soll.
+  //
+  // *Eine feste Zahl hätte hier das Falsche geschützt: sie geht bei jeder neuen Ebene rot und
+  // bleibt grün, wenn jemand daneben einen eigenen `keydown`-Hörer baut.* Geprüft wird deshalb,
+  // dass ALLE Escape-Behandlung über `useEscapeEbene` läuft und kein zweiter Hörer daneben steht.
+  assert.ok((app.match(/useEscapeEbene/g) ?? []).length >= 5,
+    'die Escape-Ebenen sind weniger geworden — eine Ebene ist verschwunden');
+  // **GENAU EINER, nicht null.** Mein erster Entwurf verbot jeden `keydown`-Hörer — und die
+  // Hauptansicht hat einen, den richtigen: er führt `tastenAbsicht` aus. *Eine Zusage, die den
+  // legitimen Weg verbietet, ist sofort rot und sagt nichts über den Fehler, den sie meint.*
+  // Der Fehler ist der ZWEITE Hörer.
+  assert.equal((app.match(/addEventListener\('keydown'/g) ?? []).length, 1,
+    'nicht mehr genau ein Tastenhörer — ein zweiter wäre die zweite Wahrheit über dieselbe Taste');
 });
 
 test('K-03: die Bühne meldet das Verlassen — und entscheidet es nicht selbst', () => {

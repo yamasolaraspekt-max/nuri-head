@@ -713,3 +713,7 @@
 /* Z-03 — die Fangart in der Fussflaeche. Gedaempft wie die uebrigen Hinweise: sie meldet sich,
  * ohne die Zahlen daneben zu ueberstimmen. */
 .hp-fu-fang { color: var(--hp-muted); font-variant-numeric: tabular-nums; }
+
+/* Z-10 — die laufende Masseingabe in der Fussflaeche. Hervorgehoben, nicht gedaempft: sie ist
+ * der aktive Vorgang, waehrend die Nachbarn nur Auskunft geben. */
+.hp-fu-mass { color: var(--hp-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
