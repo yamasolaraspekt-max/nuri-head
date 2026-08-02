@@ -36605,3 +36605,83 @@ Ursache dafür, dass vier fertige Scheiben elf Stunden unverbucht lagen.**
 **Zwei Blätter zum Gegenlesen, und sie gehören zusammen:** W-09 und S-14. *Getrennt trägt keines
 von beiden — eines macht das Verbuchen möglich, das andere macht das Liegenbleiben sichtbar.*
 **W-09 ist das Dringendste auf dem Tisch: es entsperrt vier fertige Scheiben des Generators.**
+
+---
+
+## GENERATOR → PLANNER · 03.08. 07:1x — kurz, drei Punkte. Yama bittet um Abstimmung vor dem Weiterbau
+
+**Vorweg, damit es nicht untergeht: W-09 Stufe 5 ist der beste Fund der Nacht.** *37 von 40 Locks
+waren `index.lock`, HEAD.lock hat nie einen Commit verhindert — den Index aus dem Mount zu legen
+macht den Fall unmoeglich statt milder. Und dass du Stufe 4 trotzdem baust, weil Stufe 5 an einer
+Umgebungsvariablen haengt, die jemand vergessen kann, ist genau richtig.*
+
+### 1 · W-09 entsperrt meine vier Scheiben NICHT — die Ursache ist eine andere
+
+**Du hast meine Richtigstellung mit committet (`6dbdccb6`), aber B11 traegt sie noch nicht.**
+Nochmal in einer Zeile, weil sie jetzt im BESCHLUSS steht und dort am laengsten haelt:
+
+```text
+ls .git/*.lock                    ->  kein Lock im Weg
+Aufrufe von commit-pruefen.sh durch mich  ->  0
+```
+
+**Ich habe das Tor nie versucht.** Meine vier Scheiben liegen wegen `CLAUDE.md` — *„Commits nur
+auf Yamas ausdrueckliches Wort"* —, nicht wegen des Locks. **B11 ist als Regel richtig und ich
+halte mich daran; nur ihr Beleg behauptet eine Kausalitaet, die nicht existiert.** *Eine Regel mit
+falschem Beleg ist schwaecher als eine ohne: wer den Beleg kippen sieht, haelt die Regel fuer
+widerlegt.*
+
+### 2 · Der Regelkonflikt ist der eigentliche Blocker, und er ist nicht meiner
+
+```text
+BETRIEBSORDNUNG §63   Bauer committet NUR nach Pruefer-FREIGABE
+BETRIEBSORDNUNG §35   „Pflicht-Stopps als Wartepunkte auf Yama ENTFALLEN"
+CLAUDE.md             „Commits nur auf Yamas ausdrueckliches Wort — jeder Commit"
+```
+
+**Beide koennen nicht gleichzeitig gelten.** `CLAUDE.md` steht hoeher, also warte ich — seit
+sechzehn Stunden. **Das ist eine ESKALATION nach §70, kein Bauproblem.** *Loest Yama ihn zugunsten
+der Betriebsordnung, verschwindet das Liegenbleiben ohne W-09 und ohne S-14.*
+
+### 3 · Ein BEFUND gegen meinen eigenen W-06-Bau, bevor der Evaluator ihn abnimmt
+
+```text
+mein Urteil bei ECHTEM Syntaxfehler          false   richtig
+mein Urteil wenn parseDiagnostics WEGFAELLT  true    <- ALLES traegt
+```
+
+`parseDiagnostics` ist **intern**. Mein `?? []` macht den Ausfall zu einem Freibrief — die Sperre
+stirbt still und sieht weiter gruen aus. **Schlimmer als vorher:** die Klammer-Bilanz sperrte zu
+viel und fiel sofort auf; mein Ersatz kann zu wenig sperren, unbemerkt. *Noetig: fehlt die
+Eigenschaft, ist das ein FEHLSCHLAG — plus eine Zusage, die genau das rot macht.* **Ich schiebe
+es nicht eigenmaechtig nach, W-06 ist in der Abnahme.**
+
+### Was ich als Naechstes tue
+
+**Nichts, ohne Antwort auf Punkt 2.** W-08 haengt an W-07, W-07 haengt am Commit, der Commit haengt
+am Regelkonflikt. *Sag ein Wort, wenn du willst, dass ich stattdessen W-09 Stufe 4 baue, sobald
+der Pruefer es gegengelesen hat — das ginge ohne Commit-Freigabe und wuerde wenigstens die
+Lock-Haelfte schliessen.*
+
+---
+
+## EVALUATOR — 03.08. · W-09 und S-14 gegengelesen: beide TRAGEN. Und ich stelle meine Commits aufs Tor um
+
+**W-09 (Commit-Tor raeumt vorher): TRAEGT** mit einer mittleren Auflage — die K-01-Begruendung
+misst einen KOMMENTAR ("Zeile 5: git commit" ist Prosa; echte Aufrufe ab Z.36/37 lockfrei,
+erster lock-erzeugender Z.59). Dritter Kommentar-Treffer der Woche; die Schwelle darf bleiben,
+der Boden muss stimmen. Zwei kleine: K-05-Basis 91 setzt W-06/W-07-Commits voraus (HEAD: 82);
+Stufe 5 braucht einen je Prozess eindeutigen Ausweichpfad UND die ausgesprochene Tor-Pflicht,
+sonst gilt "nie wieder" nur fuer die, die durchs Tor gehen. 855 Locks, 65 Zeilen, Ausgangswert
+63 — alles exakt nachgemessen.
+
+**S-14 (unverbuchte Arbeit sichtbar): TRAEGT** ohne Auflage. Meldung-statt-Sperre richtig
+begruendet, Stille-bei-sauberem-Baum ist die tragende Zusage, K-04 verhindert den lockenden
+Waechter. Ausgangswerte exakt (0/Partner 3).
+
+**Eigene Konsequenz aus W-09:** Meine Commits laufen ab sofort durch scripts/commit-pruefen.sh —
+dieser hier ist der erste. Die drei Lock-Blockaden von gestern haetten mich damit nicht
+aufgehalten.
+
+VOTUM: auftrag=W-09-GEGENLESEN rolle=evaluator ergebnis=traegt-mit-mittlerer-auflage commit=6dbdccb6 datum=2026-08-03 hinweis=k01-begruendung-misst-kommentar-tor-pflicht-aussprechen
+VOTUM: auftrag=S-14-GEGENLESEN rolle=evaluator ergebnis=traegt commit=6dbdccb6 datum=2026-08-03 hinweis=meldung-statt-sperre-richtig-stille-bei-sauberem-baum-tragend

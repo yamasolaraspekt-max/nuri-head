@@ -7,27 +7,58 @@ auftrag:
   id: W-09
   strang: werkzeuge
   status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # Werkzeug-Blatt -> Evaluator (B8/d1cecdcf; Kopfkommentar sagt noch Pruefer)
+  gegengelesen_am: 2026-08-03
+  befund: >
+    TRAEGT MIT EINER MITTLEREN UND ZWEI KLEINEN AUFLAGEN. Nachgemessen: 855 Locks exakt,
+    Skript 65 Zeilen, Aufraeumung bei 63/64, K-01-Ausgangswert 63, Sicherheitsregel und
+    Kantenliste decken die gefaehrlichen Faelle. MITTEL: die Begruendung von K-01 misst
+    einen KOMMENTAR - "Zeile 5: git commit" ist Prosa (Kopfkommentar); echte git-Aufrufe
+    stehen ab Zeile 36/37 (ausdruecklich lockfrei via --no-optional-locks), der erste
+    lock-erzeugende ist Zeile 59. Das erwartet "hoechstens 4" darf als einfache Invariante
+    bleiben, aber die Begruendung muss den echten Boden nennen - dritter Kommentar-Treffer
+    der Woche (toolRegistry:268, breiten.test.ts:51, jetzt commit-pruefen.sh:5). KLEIN 1:
+    K-05-Ausgangswert 91 setzt die unverbuchten W-06/W-07-Commits voraus (an HEAD gemessen:
+    82) - Reihenfolge benennen. KLEIN 2: Stufe 5 braucht einen je Prozess EINDEUTIGEN
+    Ausweichpfad (PID/Rolle im Namen), sonst teilen sich zwei parallele Tor-Laeufe denselben
+    externen Index und die Kollision wandert nur nach draussen; und Stufe 5 wirkt nur fuer
+    Laeufe DURCHS Tor - direkte git-Aufrufe locken weiter im Mount. Wenn "nie wieder" gelten
+    soll, gehoert die Tor-Pflicht fuer alle Rollen ausgesprochen; ich stelle meine eigenen
+    Commits ab sofort auf commit-pruefen.sh um. B8-Fragen: Befehle laufen, K-02/K-07 messen
+    Wirkung mit roten Gegenproben, kein maschineller Befehl mutiert.
 ```
 
-## Warum — 855 Locks und elf Stunden unverbuchte Arbeit haben dieselbe Ursache
+## Warum — ein echter Baufehler im Tor. NICHT zwei Probleme in einem
 
-**Gemessen 03.08. 00:2x:**
+**RICHTIGSTELLUNG 03.08., auf den Befund des Generators.** *Die erste Fassung dieses Blattes
+behauptete: „855 Locks und elf Stunden unverbuchte Arbeit haben dieselbe Ursache" und „der
+Generator meldet vier fertige Scheiben, die er nicht loswird". **Beides zusammen war falsch.***
 
 ```text
-ls .git/_locks_beiseite/*/ | grep -c lock                     ->  855
-davon heute                                                   ->   40
-
-Alter der fertig gebauten, unverbuchten Arbeit:
-  resources/…/__tests__/decke.test.ts      02.08. 13:22   ->  11 Stunden
-  scripts/auftrag-pruefen.mjs              02.08. 15:28   ->   9 Stunden
+Aufrufe von commit-pruefen.sh durch den Generator   ->  0     (er hat gemessen)
+ls .git/*.lock bei ihm                             ->  kein Lock im Weg
 ```
 
-**Regel B sagt: keine Arbeit liegt länger als zwanzig Minuten uncommittet. Sie ist um das
-Dreißigfache gerissen** — und der Generator meldet vier fertige Scheiben im Baum, die er nicht
-loswird.
+**Nicht das Werkzeug hat ihn gehindert, sondern die Regel:** `CLAUDE.md` — *„Commits nur auf
+Yamas ausdrückliches Wort."* **Ich habe eine Aussage über seine Fähigkeit gemacht, ohne einen
+Befehl, der sie ausübt — B5, und diesmal von mir über ihn.** *Derselbe Fehler, den ich am 01.08.
+beim Push erlebt habe, aus der anderen Richtung.*
+
+**Was bleibt, ist ein echter und gemessener Baufehler:**
+
+```text
+ls .git/_locks_beiseite/*/ | grep -c lock          ->  855
+davon heute                                        ->   40, alle vom PLANNER
+```
+
+*Der Planner ruft das Tor ständig, und bei ihm blockiert der Lock tatsächlich — vierzig
+`mv`-Aufrufe von Hand an einem Tag.* **Das Tor räumt NACH dem Commit auf, während der
+blockierende Lock schon VORHER daliegt. Dieser Fehler steht für sich und braucht keine zweite
+Begründung.**
+
+*Die elf Stunden unverbuchter Arbeit haben eine ANDERE Ursache — den Regelkonflikt, und der ist
+seit 03.08. aufgelöst (siehe STAND, Regel B zurückgenommen). Wer zwei Probleme als eines
+behandelt, baut die Lösung für das falsche.*
 
 ## Die Ursache steht in zwei Zeilen, und sie stehen an der falschen Stelle
 

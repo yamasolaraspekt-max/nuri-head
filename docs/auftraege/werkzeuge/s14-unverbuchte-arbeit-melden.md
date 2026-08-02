@@ -7,9 +7,19 @@ auftrag:
   id: S-14
   strang: werkzeuge
   status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # Werkzeug-Blatt -> Evaluator (B8/d1cecdcf; Kopfkommentar sagt noch Pruefer)
+  gegengelesen_am: 2026-08-03
+  befund: >
+    TRAEGT. Ausgangswerte exakt (S-14 0, Partner S-06 3, an HEAD gemessen). Die Entscheidung
+    Meldung-statt-Sperre ist richtig begruendet (F-02), das Alter als Traeger der Meldung
+    und die Stille bei sauberem Baum (K-02 dritte Zeile) sind genau die Zusagen, die den
+    Waechter vor dem Ueberlesen schuetzen; K-04 verhindert die Pointe des lockenden
+    Waechters. EIN kleiner Punkt, keine Auflage: K-05-Ausgangswert 91 gilt erst nach den
+    W-06/W-07-Commits (an HEAD 82) - dieselbe Reihenfolge-Notiz wie bei W-09. Und eine
+    halbe Notiz: bei UNGETRACKTEN Verzeichnissen zeigt porcelain nur den Ordner - das
+    Alter ist dann das des Ordners, nicht der aeltesten Datei darin; fuer den Zweck
+    (sichtbar machen) reicht das. B8-Fragen: Befehle laufen, K-02/K-03/K-04 messen
+    Wirkung inkl. der tragenden Negativ-Zusagen, kein maschineller Befehl mutiert.
   fachentscheidung: "Yama, 03.08.: 'sorg dafuer dass dieses problem nie wieder passiert'. W-09 macht das Scheitern unmoeglich; S-14 macht das Liegenbleiben SICHTBAR. Ohne das zweite ist 'nie wieder' ein Vorsatz."
 ```
 
