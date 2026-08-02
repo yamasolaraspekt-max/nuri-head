@@ -12,13 +12,15 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
+import { ohneKommentare } from '../zaehle.mjs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
   pruefeBlatt, sammleBefehle, lieseKopfRoh, lieseAlleBloecke, zaehleBloecke, verbotenesMuster,
   bericht, strukturBefunde, aktiveBlaetter, baubareBlaetter, vergleicheErwartung, baumStand, brechendesGlied, STUFEN, DENYLIST,
-  gateMuster, pruefeEintrag, GATE_MUSTER, nichtErlaubtesGlied, befehlsGlieder, ALLOWLIST } from '../auftrag-pruefen.mjs';
+  gateMuster, pruefeEintrag, GATE_MUSTER, nichtErlaubtesGlied, befehlsGlieder, ALLOWLIST,
+  skriptZielErlaubt } from '../auftrag-pruefen.mjs';
 
 const verz = mkdtempSync(join(tmpdir(), 'auf87-'));
 process.on('exit', () => { try { rmSync(verz, { recursive: true, force: true }); } catch { /* egal */ } });
@@ -86,7 +88,7 @@ test('K-02: exit != 0 ⇒ FEHLSCHLAG, mit K-id, Befehl und Exitcode', () => {
 
   // Der echte Fehlschlag: ein ERLAUBTER Befehl, der scheitert.
   const q = blatt('k02b.md', ['auftrag:', '  id: TEST', 'kriterien:',
-    KRIT('K-06', 'node --eval-gibt-es-nicht')].join('\n'));
+    KRIT('K-06', 'node scripts/gibt-es-nicht-xyz.mjs')].join('\n'));
   const t2 = pruefeBlatt(q, verz).eintraege[0];
   assert.equal(t2.stufe, STUFEN.FEHLSCHLAG);
   assert.match(t2.hinweis, /exit \d/, 'der Exitcode fehlt in der Meldung');
@@ -261,8 +263,15 @@ test('N2/K-07 (Grenze): `exit 127` bleibt FEHLSCHLAG — die Unterscheidung ist 
   // *Erst gebaut, dann daran gescheitert, dann gemerkt.*)
   // W-01: `false` steht nicht auf der Erlaubnisliste. Ein nicht-suchender, ERLAUBTER Befehl mit
   // exit != 0 ist `node --eval-gibt-es-nicht` — die Aussage bleibt, der Traeger wechselt.
+  //
+  // **W-07, dritter Traegerwechsel derselben Zusage.** `node` steht nicht mehr als blanker Name
+  // auf der Liste; erlaubt ist sein ZIEL. `--eval-gibt-es-nicht` ist ein Flag, also gibt es kein
+  // Ziel — der Befehl wird uebersprungen statt ausgefuehrt. *Die Aussage der Zusage („nicht
+  // suchend + exit != 0 ⇒ FEHLSCHLAG") ist davon unberuehrt; nur ihr Beispiel war an den alten
+  // Vertrag gebunden.* Neuer Traeger: ein Ziel UNTER `scripts/`, das es nicht gibt — erlaubt,
+  // nicht suchend, exit 1.
   const q = blatt('n2k07d.md', ['auftrag:', '  id: TEST', 'kriterien:',
-    KRIT('K-01', 'node --eval-gibt-es-nicht')].join('\n'));
+    KRIT('K-01', 'node scripts/gibt-es-nicht-xyz.mjs')].join('\n'));
   assert.equal(pruefeBlatt(q, verz).eintraege[0].stufe, STUFEN.FEHLSCHLAG);
 });
 
@@ -646,7 +655,9 @@ test('W-01: `bash` steht NICHT auf der Liste — erlaubt ist das ZIEL, nicht das
   assert.equal(nichtErlaubtesGlied('bash /tmp/fremd-xyz.sh'), 'bash /tmp/fremd-xyz.sh', 'ein fremder Pfad wird erlaubt');
   assert.equal(nichtErlaubtesGlied('sh scripts/../../tmp/fremd-xyz.sh'), 'sh scripts/../../tmp/fremd-xyz.sh',
     'der Aufstieg aus der Heimat wird erlaubt — der Praefix allein ist keine Sperre');
-  assert.equal(nichtErlaubtesGlied('bash'), 'bash', 'ein blankes `bash` ohne Ziel faellt durch');
+  // W-07: die Meldung nennt jetzt ausdruecklich, WAS fehlt. *„nicht erlaubt: bash" liess offen,
+  // ob der Pfad falsch war oder ganz fehlte — „(ohne Ziel)" sagt es.*
+  assert.equal(nichtErlaubtesGlied('bash'), 'bash (ohne Ziel)', 'ein blankes `bash` ohne Ziel faellt durch');
   // **Die zwei Mutationen, die die vier Zeilen oben NICHT gefangen haben** — beide derselbe
   // Fehler: der Praefix ist nicht verankert. *Ein Pfad, der `scripts/` ENTHAELT, und ein Name,
   // der mit `script` ANFAENGT, sind keine Heimat.* Ohne diese zwei Zeilen sieht die Regel in
@@ -722,4 +733,69 @@ test('W-01 (Nachbefund): `git ls-remote` laeuft — `git remote`, `reflog`, `con
   assert.equal(nichtErlaubtesGlied('git config user.name x'), 'git config');
   // presence-Partner nach R2 (B4): die Liste laesst ueberhaupt lesende git-Formen durch.
   assert.equal(nichtErlaubtesGlied('git --no-optional-locks log --oneline -1'), null);
+});
+
+// --- W-07: erlaubt ist das ZIEL, nicht das Programm ---------------------------------------------
+//
+// **Die Mutationsprobe VOR diesen Zusagen — 8 Mutationen, 2 kamen durch:**
+//
+// ```text
+// node faellt aus dem Zielpruefer     fail 3
+// Aufstiegs-Sperre entfernt           fail 1
+// Praefix wird zu "enthaelt"          fail 1
+// Ziel immer erlaubt                  fail 1
+// Flags zaehlen als Ziel              fail 0   <- BLIND
+// fehlendes Ziel wird erlaubt         fail 1
+// sed -i wird durchgelassen           fail 0   <- BLIND
+// nur -i, nicht --in-place/-ni        fail 1
+// ```
+//
+// *Die zwei blinden sind genau die, die K-04 und K-05 abdecken sollen — und beide sind die
+// gefaehrliche Sorte: sie sperren nicht ZU VIEL, sondern zu wenig.*
+
+test('W-07/K-04: die vier offenen Tueren sind zu — an der ENTSCHEIDUNGSFUNKTION geprueft (B3)', () => {
+  // **Nicht ueber `pruefeEintrag`.** Der fuehrt aus; genau diese Verwechslung hat am 01.08. um
+  // 20:01 wirklich gepusht. Gefragt wird, wer ENTSCHEIDET.
+  for (const befehl of [
+    'node /tmp/fremd-xyz.mjs',                 // beliebiges JS von jedem Pfad
+    'node -e "console.log(1)"',                // das Programm steht IM Befehl
+    'node',                                    // kein Ziel
+    'node scripts/../../tmp/x-xyz.mjs',        // Aufstieg aus der Heimat
+    "sed -i 's/a/b/' datei",
+    "sed --in-place 's/a/b/' datei",
+    "sed -ni 's/a/b/p' datei",                 // zusammengezogene Kurzflags
+    'awk \'BEGIN{system("x")}\'',              // hebt die ganze Liste auf
+  ]) {
+    assert.notEqual(nichtErlaubtesGlied(befehl), null, `\`${befehl}\` kommt durch`);
+  }
+});
+
+test('W-07/K-04: und alles, was heute laeuft, laeuft weiter — die eigentliche Zusage', () => {
+  // **Eine Sperre, die alles sperrt, ist keine Sperre, sondern ein Stillstand.** Ohne diese vier
+  // waere die schaerfste Fassung die, die gar nichts mehr ausfuehrt — und sie saehe in jeder
+  // Sperr-Zusage perfekt aus.
+  for (const befehl of [
+    'node scripts/zaehle.mjs datei muster',
+    'node --test scripts/__tests__/x.test.mjs',   // Flag VOR dem Ziel
+    "sed 's/a/b/'",                               // Filter, kein -i
+    'bash scripts/commit-pruefen.sh Botschaft pfad',
+  ]) {
+    assert.equal(nichtErlaubtesGlied(befehl), null, `\`${befehl}\` wird gesperrt`);
+  }
+});
+
+test('W-07/K-05: es gibt EINEN Zielpruefer, nicht zwei', () => {
+  // *Wer fuer `node` eine zweite Funktion anlegt, hat zwei Antworten auf dieselbe Frage — und die
+  // zweite driftet. Dieselbe Klasse wie W-06 K-02.*
+  assert.equal(skriptZielErlaubt(['node', '--test', 'scripts/__tests__/x.mjs']), true);
+  assert.equal(skriptZielErlaubt(['bash', 'scripts/commit-pruefen.sh']), true);
+  assert.equal(skriptZielErlaubt(['node', '-e', 'console.log(1)']), false);
+});
+
+test('W-07/K-05: genau EINE Funktion beantwortet die Zielfrage — keine zweite daneben', () => {
+  // **Absenz-Zusage mit presence-Partner (B4):** `skriptZielErlaubt` muss es geben (sonst misst
+  // die Zaehlung Leere), und es darf keine zweite Zielpruefer-Funktion daneben stehen.
+  const quelle = ohneKommentare(readFileSync(new URL('../auftrag-pruefen.mjs', import.meta.url), 'utf8'));
+  const pruefer = [...quelle.matchAll(/function\s+(\w*ZielErlaubt\w*)\s*\(/g)].map((m) => m[1]);
+  assert.deepEqual(pruefer, ['skriptZielErlaubt'], `Zielpruefer gefunden: ${pruefer.join(', ') || '(keiner)'}`);
 });

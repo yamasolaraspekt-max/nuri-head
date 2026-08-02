@@ -105,7 +105,16 @@ export const GATE_MUSTER = ['npm run', 'npx', 'yarn', 'pnpm', 'php artisan', 'co
  */
 export const ALLOWLIST = [
   // Lesen und Zaehlen
-  'grep', 'node', 'ls', 'head', 'tail', 'find', 'wc', 'cat', 'sed', 'awk',
+  //
+  // **W-07: `node` und `awk` sind hier RAUS.** Sie standen als blanke Namen auf der Liste und
+  // machten damit genau das, was die Liste verhindern soll:
+  //   `node /tmp/fremd.mjs`      beliebiges JS von jedem Pfad
+  //   `node -e "…"`              das Programm steht IM Befehl, nicht einmal auf der Platte
+  //   `awk 'BEGIN{system("x")}'` fuehrt jeden Befehl aus — die ganze Liste umgangen
+  // *`bash` fiel durch und `node -e` nicht — dabei sagt `node -e` noch weniger ueber seine
+  // Wirkung.* `node` kommt ueber `skriptZielErlaubt` zurueck, `awk` gar nicht: es hat keine
+  // harmlose Form, `system()` gehoert zur Sprache. **0 Verwendungen in Blaettern, 1 offene Tuer.**
+  'grep', 'ls', 'head', 'tail', 'find', 'wc', 'cat', 'sed',
   'sort', 'uniq', 'tr', 'cut', 'printf', 'echo', 'basename', 'dirname', 'stat', 'md5',
   // Git — ausdruecklich NUR lesend
   'git diff', 'git log', 'git grep', 'git show', 'git status', 'git rev-list',
@@ -216,6 +225,39 @@ function gitUnterbefehl(woerter) {
 /** Die einzige Heimat, aus der ein Skript aufgerufen werden darf. */
 const SKRIPT_HEIMAT = 'scripts/';
 
+/** Programme, die nicht selbst wirken, sondern ausfuehren, WAS man ihnen gibt. */
+const SKRIPT_PROGRAMME = ['bash', 'sh', 'node'];
+
+/**
+ * **Das erste Wort, das kein Flag ist** — das Ziel eines Interpreter-Aufrufs.
+ *
+ * *Starr `woerter[1]` zu nehmen war die erste Fassung; sie sperrte `bash -x scripts/ok.sh`, weil
+ * sie `-x` fuer den Pfad hielt.* Leere Zeichenkette, wenn es kein solches Wort gibt — `node`
+ * allein hat kein Ziel und bekommt keins geschenkt.
+ */
+function ersteZielWort(woerter) {
+  for (let i = 1; i < woerter.length; i += 1) {
+    if (!woerter[i].startsWith('-')) {
+      return woerter[i];
+    }
+  }
+
+  return '';
+}
+
+/**
+ * **Schreibt dieser `sed`-Aufruf die Datei um?** `sed` bleibt auf der Liste — als Filter ist es
+ * genau das Werkzeug, das ein Blatt braucht. **Mit `-i` ist es kein Filter mehr, sondern eine
+ * Zeichenketten-Chirurgie an einer Quelldatei — das, was B6 verbietet.**
+ *
+ * *Drei Schreibweisen, alle gemessen: `-i` · `--in-place` · `-ni` (zusammengezogen). Meine erste
+ * Meldung nannte nur die erste — der Planner fand die anderen beiden.*
+ */
+function sedSchreibt(woerter) {
+  return woerter.slice(1).some((w) => w === '--in-place' || w.startsWith('--in-place=')
+    || (/^-[a-zA-Z]*i/.test(w)));
+}
+
 /**
  * **Darf dieser `bash`-Aufruf laufen?** Entschieden wird am ZIELPFAD, nicht am Programmnamen.
  *
@@ -230,9 +272,23 @@ const SKRIPT_HEIMAT = 'scripts/';
  * **Was weiterhin durchfaellt:** jeder Pfad ausserhalb von `scripts/` (`bash /tmp/fremd.sh`),
  * und jeder Aufstieg daraus (`scripts/../…`). *Ohne die zweite Haelfte waere die erste eine
  * Einladung — `scripts/../` erfuellt den Praefix und zeigt trotzdem irgendwohin.*
+ *
+ * ---
+ *
+ * **W-07: derselbe Pruefer bedient jetzt auch `node`. EINER, nicht zwei.** *Wer dafuer eine
+ * zweite Funktion anlegt, hat zwei Antworten auf dieselbe Frage — und die zweite driftet.*
+ *
+ * **Und er liest das erste NICHT-Flag-Wort statt starr `woerter[1]`.** Die alte Fassung sperrte
+ * `bash -x scripts/ok.sh`, weil sie `-x` fuer das Ziel hielt — die richtige Richtung des Irrtums,
+ * aber falsch. Mit dem ersten Nicht-Flag-Wort traegt sie auch `node --test scripts/…`.
+ *
+ * **`node -e "…"` faellt dabei von selbst durch, und das ist kein Zufall:** das erste Nicht-Flag-
+ * Wort ist dann der PROGRAMMTEXT, und der faengt nicht mit `scripts/` an. *Ein Programm, das im
+ * Befehl steht statt auf der Platte, hat kein Ziel — also auch kein erlaubtes.* Ebenso `node`
+ * ohne Argument: kein Ziel, kein Durchlass.
  */
-function skriptZielErlaubt(woerter) {
-  const ziel = woerter[1] ?? '';
+export function skriptZielErlaubt(woerter) {
+  const ziel = ersteZielWort(woerter);
 
   return ziel.startsWith(SKRIPT_HEIMAT) && !ziel.includes('..');
 }
@@ -253,16 +309,23 @@ export function nichtErlaubtesGlied(befehl) {
     const istGit = eins === 'git';
     const zwei = istGit ? `git ${gitUnterbefehl(woerter)}` : woerter.slice(0, 2).join(' ');
 
-    // **Vor der Liste, weil die Liste diesen Fall nicht ausdruecken kann.** `bash` steht dort
-    // nicht und soll dort auch nicht stehen — erlaubt ist nicht das Programm, sondern das Ziel.
-    if (eins === 'bash' || eins === 'sh') {
+    // **Vor der Liste, weil die Liste diesen Fall nicht ausdruecken kann.** `bash`, `sh` und
+    // `node` stehen dort nicht und sollen dort auch nicht stehen — erlaubt ist nicht das
+    // Programm, sondern das Ziel.
+    if (SKRIPT_PROGRAMME.includes(eins)) {
       if (skriptZielErlaubt(woerter)) {
         continue;
       }
 
-      // Die Meldung nennt den PFAD, nicht nur `bash`. *Ein „nicht erlaubt: bash" schickt den
-      // naechsten Leser suchen, obwohl der Grund im zweiten Wort steht.*
-      return `${eins} ${woerter[1] ?? ''}`.trim();
+      // Die Meldung nennt das ZIEL, nicht nur das Programm. *Ein „nicht erlaubt: node" schickt
+      // den naechsten Leser suchen, obwohl der Grund im Argument steht.*
+      return `${eins} ${ersteZielWort(woerter) || '(ohne Ziel)'}`.trim();
+    }
+
+    // **`sed` bleibt erlaubt — aber nur als Filter.** Mit `-i` schreibt es die Datei um; das ist
+    // keine Messung mehr, sondern ein Eingriff, und der gehoert nicht in ein Abnahmekriterium.
+    if (eins === 'sed' && sedSchreibt(woerter)) {
+      return 'sed -i';
     }
 
     if (ALLOWLIST.includes(zwei) || ALLOWLIST.includes(eins)) {
