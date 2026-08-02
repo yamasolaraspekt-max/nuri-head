@@ -5,152 +5,127 @@
 > **Regeln:** eine Zeile je Sache · eine Rücknahme ERSETZT die Aussage · was erledigt ist,
 > verschwindet · **kein Datum ohne Zahl, keine Zahl ohne Befehl.**
 
-**Zuletzt geschrieben:** 01.08.2026, 22:10 · Planner
+**Zuletzt geschrieben:** 02.08.2026, 12:0x · Planner
 
 ---
 
-## 1. Wo der Bau steht — gemessen 22:09
+## 1. Wo der Bau steht — gemessen 11:59
 
 ```text
-main     d8612a63   19:01 · git diff 99f38da7 main LEER · 3 Merges
-Zweig    9f203c81   auto/hausplaner-integration · 40 voraus vor main · Locks 0
-UNGEPUSHT 13        <- der Rueckstand ist NICHT abgearbeitet worden, sondern durch den
-                       ungewollten Push von 20:01 auf null gefallen. Siehe Abschnitt 3.
+HEAD      8dedfe6d   02.08. 11:59   auto/hausplaner-integration
+UNGEPUSHT 8          fork..auto/hausplaner-integration
+VOR MAIN  101        main..auto/hausplaner-integration
 
+  TZ=Europe/Berlin git --no-optional-locks log -1 --date=format-local:'%d.%m. %H:%M' --pretty='%h %ad %s'
   git --no-optional-locks rev-list --count fork/auto/hausplaner-integration..auto/hausplaner-integration
   git --no-optional-locks rev-list --count main..auto/hausplaner-integration
-
-Kennzahl Produktivcode - `config` gehoert dazu:
-  git log -1 --date=format-local:'%d.%m. %H:%M' --pretty='%h %ad %s' \
-    -- resources app tests routes public database scripts config
 ```
+
+**Blätter nach Status — `grep -rh '^  status:' docs/auftraege/ | sed 's/#.*//' | sort | uniq -c`:**
+
+```text
+aktiv 1 · bereit 4 · gebaut 4 · entwurf 6 · gesperrt 5 · ruht 15 · abgenommen 4 · zurueckgestellt 1
+```
+
+**S-06 zählt je LAUF, nicht global** — im Strang `hausplaner-3d` ist die Zahl **0 baubar**.
+*Es stockt nicht der Bau, es stockt die Abnahme.*
 
 ## 2. Die Schlange — wer was hat
 
-> **NACHTSCHICHT seit 01.08. 23:2x.** Yama schläft. **Die Reihenfolge steht im Ledger unter
-> „NACHTORDNUNG" — der Generator rückt SELBST nach, wenn ein Blatt fertig ist.** Niemand wartet
-> auf den Planner. Bei Yama liegen zwei Sätze (Y1, Y2) und eine Fachfrage (Z-09: ACHSE/FLANKE).
-
 | Rolle | Was liegt bereit |
 |---|---|
-| **Generator** | **Z-03+Z-04** `aktiv` → dann **W-01** → **W-02** → **Z-10** → (Z-11 nach Gegenlesen) → (W-03 nach W-01) |
-| **Evaluator** | **Z-05 — VORRANG. Das Votum öffnet Z-06 und damit die Zwischendecke** · AUF-38-P4+P5 · W-01 abnehmen · Z-11 gegenlesen, falls der Prüfer belegt ist |
-| **Prüfer** | **P-01 Teil 0 zuerst** (welche Umgebung pusht?) · dann 188 Befehle gliedweise · **PW-01 und Z-11 gegenlesen** · **Feedback zum Beschluss, Frage 3** |
-| **Planner** | schläft nicht, aber blockiert nichts. Z-07/Z-08 erst wenn Z-06 steht |
-| **Yama** | Y1 · Y2 · Z-09 ACHSE oder FLANKE · die 3 PHP-Dateien |
+| **Generator** | **Z-03+Z-04** `aktiv` → **W-01** `bereit` → (Z-11 · W-05 · W-06 nach Gegenlesen) |
+| **Evaluator** | **Z-05 — VORRANG, das Votum öffnet Z-06 und damit die Zwischendecke** · Z-10 · AUF-38-P4+P5 · W-02 |
+| **Prüfer** | **GEGENLESEN (B8): Z-11 · W-05 · W-06** — das ist der Engpass · dann P-01 Teil 0 |
+| **Planner** | W-07 (Erlaubnislücken node/`sed -i`/awk) · S-11 (Anker-Sperre) · Umzug der Blätter nach `docs/auftraege/<strang>/` |
+| **Yama** | Y1 (Push-Kanal) · Y2 (Takt) · Z-09 ACHSE oder FLANKE · die 3 PHP-Dateien |
 
-**5 baubare Blätter, S-01 hält.** Entwürfe nach B8: **PW-01** `bacb3974` · **Z-11** `5c50d451`.
-**W-02 ist seit `eb3c1546` `bereit`** — vom Evaluator gegengelesen, beide Auflagen umgesetzt.
-
-**In der Nacht gilt ohne Ausnahme:** kein Push (Y1 offen) · keine Fachentscheidung (Tor 1) ·
-kein Merge/Tag/`--force` (Tor 2) · die drei PHP-Dateien im Baum sind Yamas.
-
-**Abgenommen am 01.08.:** Z-01 · Z-02 · AUF-38-P1+P2+P3 · PB-023 · PB-043 T2 · AUF-91 · PB-047 · **Z-05-N1**.
+**Gebaut, wartet auf Votum:** Z-05 · Z-10 · W-02 · AUF-38-P4+P5.
+**Abgenommen:** Z-01 · Z-02 · Z-05-N1 · AUF-38-P1+P2+P3 · AUF-91 · PB-023 · PB-043 T2 · PB-047.
 **Gesperrt:** Z-06 (nur noch: Votum für Z-05) · AUF-83-T2T3 · AUF-83-T5 · AUF-88-P1.
 
-## 3. DER INZIDENT vom 01.08. — dreimal falsch zugeordnet, auch von mir
+**Ohne Ausnahme:** kein Push (Y1 offen) · keine Fachentscheidung (Tor 1) · kein Merge/Tag/`--force`
+(Tor 2) · die drei PHP-Dateien im Baum sind Yamas.
 
-**Gemessen 22:3x, und dieser eine Befehl hätte alles davor erspart:**
-
-```text
-timeout 20 git --no-optional-locks ls-remote --exit-code fork HEAD
-  exit=128 · HTTP 403 vom Proxy nach CONNECT
-```
-
-**Aus der Planner-Umgebung (`device_bash`, Geräte-VM) ist GitHub NICHT erreichbar.**
-
-| Zeitpunkt | was wirklich gemessen ist |
-|---|---|
-| **20:01:03** | `push-result.log` geschrieben — direkt nach meinem Lauf um 20:00. **Der Wrapper LIEF.** Gepusht hat er nicht: kein Netz |
-| **20:48:31** | `fork` springt auf `9ac24f7b` — **update by push**, aus einer anderen Umgebung |
-| **22:11:27** | `fork` springt auf `1a86d21f` — **update by push**, elf Sekunden vor dem Log |
+## 3. Was am 02.08. entschieden wurde
 
 ```text
-TZ=Europe/Berlin git --no-optional-locks reflog show \
-  --date=format-local:'%H:%M:%S' fork/auto/hausplaner-integration
+5163cac2  L-01-Anker v3 in 6 Blaettern. Stufe 2 = Expertenmodus KLICKEN (Pruefer-Befund),
+          kein Projekt oeffnen. Startzustand ist kein roter Befund.
+          NICHT uebernommen: `#hausplaner-scene mit 0 Kindern` - das Element ist ein
+          <script type="application/json"> und hat NIE Element-Kinder (studio.blade.php:93).
+dca1d824  Z-11 K-06 nannte `toleranz(art, zoom)` - gibt es nicht. Echt: `toleranzAusZoom(zoom,
+          fangPx = FANG_PX)`, fangKern.ts:230. Dabei gefunden: bei zoom = 0 gibt sie fangPx
+          zurueck OHNE zu teilen - dort faellt ein naiv eingebauter Faktor heraus.
+dca1d824  W-05 K-10: `PAKET_WERKZEUGE` ist zweimal deklariert - werkzeugPaket.ts:34 als LISTE
+          (101 Eintraege), toolRegistry.ts:272 als ZAHL 110. Die 110 ist nicht das Paket,
+          sondern 9 Grundeintraege + 101. Die Bilanz stimmt heute durch Zufall.
+c8d82b70  W-06 geschnitten: `klammerBilanz` zaehlt ueber Kommentare mit - fangKern.ts hat
+          81 `(` zu 87 `)`, alle sechs aus `// 1)`-Kommentaren. Das Werkzeug, das B6 als
+          Ersatz fuer `perl -pi` benennt, kann .ts gar nicht schreiben.
 ```
-
-**Drei Zuordnungen, alle drei falsch.** Der Evaluator schrieb den Push sich selbst zu. Ich habe
-ihm widersprochen und ihn mir zugeschrieben — auf Basis einer Datei-mtime, während der Reflog
-danebenlag. **Keiner von uns hat geprüft, ob er die Fähigkeit überhaupt hat.**
-
-**Was von meinem Fehler bleibt, und es bleibt genug:** mein Verzeichnislauf hat einen
-publizierenden Befehl **ausgeführt**. Dass er wirkungslos blieb, liegt an einem Proxy, nicht an
-meiner Sorgfalt. *Ich habe abgedrückt; die Waffe war nicht geladen.*
-
-**OFFEN und nicht vom Planner zu klären:** aus welcher Umgebung die beiden echten Pushes kamen.
-Das ist die erste Frage von P-01 — **und sie ist wichtiger als die Befehls-Inventur**, weil sie
-bestimmt, ob eine Barriere im Validator überhaupt am richtigen Ort sitzt.
-
-**Bitter und deshalb ausdrücklich:** der Rückstand von 55 Commits ist draußen. Der Regelverstoß
-hat den Posten geschlossen, auf den Yama seit Tagen wartete.
 
 ## 4. Was entschieden ist — gilt, bis es hier ersetzt wird
 
-> **`docs/BESCHLUSS-fehlervermeidung.md` (`2adad9e6`) steht ÜBER dieser Tabelle.** Acht Beschlüsse
-> mit Wirkstufe und Merkmal. **B8 gilt ab sofort ohne Werkzeug: ein Blatt wird nicht `bereit`,
-> bevor eine andere Rolle es gegengelesen hat** — `gegengelesen_von`, `gegengelesen_am`, `befund`.
-> Ohne diese drei Zeilen bleibt es `entwurf`. Der Planner nimmt sich davon nicht aus.
+> **`docs/BESCHLUSS-fehlervermeidung.md` steht ÜBER dieser Tabelle.** **B8 gilt ohne Werkzeug:
+> ein Blatt wird nicht `bereit`, bevor eine andere Rolle es gegengelesen hat** —
+> `gegengelesen_von`, `gegengelesen_am`, `befund`. **Der Planner nimmt sich davon nicht aus.**
 
 | Entscheidung | Kurz |
 |---|---|
-| **Allowlist statt Textmuster** | W-01. Nicht aufzählen, was verboten ist, sondern was erlaubt ist — jedes Glied der Kette, `bash`/`sh` nur unter `scripts/` |
-| **Publizierende Befehle nie in ein Blatt** | Ein Blatt ist eine Datei, die ein Werkzeug ausführt. Was darin steht, PASSIERT |
-| **Bilanz getrennt, nicht hochgezählt** | `PAKET 110 + EIGENE.length`. Vom Evaluator in `a0a6e250` bestätigt: fängt auch den Zuwachs-Fall |
-| **Z-05-N1 vor Z-06** | Yama, 01.08. Ohne Erreichbarkeit gäbe es nie eine gezeichnete Kontur |
+| **Allowlist statt Textmuster** | W-01. Nicht aufzählen, was verboten ist, sondern was erlaubt ist |
+| **Publizierende Befehle nie in ein Blatt** | Was darin steht, PASSIERT |
+| **Zahlen rechnen, nicht tippen** | `PAKET + EIGENE.length`; W-05 K-10 zieht das jetzt gerade |
+| **Ein Kommentar-Abzug, nicht zwei** | W-06 ruft `ohneKommentare()` aus `zaehle.mjs` |
 | **Ein Befehl je Nachricht** | Bei jedem Terminal-Vorgang. Yama, 30.07. 22:52 |
-| **`studioDaten.ts` behält echte Farbwerte** | Konva löst keine CSS-Variable auf |
-| **Commits über `scripts/commit-pruefen.sh`** | Prüft Existenz, Änderung und Syntax vor dem Commit (F-14) |
+| **Commits über `scripts/commit-pruefen.sh`** | Prüft Existenz, Änderung und Syntax vor dem Commit |
 
 ## 5. ZURÜCKGENOMMEN — nicht wieder aufwärmen
 
 | Aussage | Wahrheit |
 |---|---|
-| „60 Commits ungepusht" (Planner, 21:5x, in W-01) | **13.** Eine Zahl ohne Befehl, in einem Blatt, das ich gerade schrieb |
-| „Der Verzeichnislauf braucht 3,6 s" | Der Evaluator misst **39,4 s / 30 Blätter**, b01 allein 33,8 s |
-| „Der Push liegt beim Evaluator" (Evaluator, 21:17) | Nicht belegt |
-| „Der Push liegt beim Planner" (Planner, 22:0x) | **Auch nicht.** Aus meiner Umgebung ist GitHub nicht erreichbar — `git ls-remote fork` → HTTP 403 vom Proxy. Ich habe eine Datei-mtime für einen Push-Zeitpunkt gehalten, während der Reflog danebenlag |
-| „8 / 13 Commits nur auf der Platte" | Waren 55, bis der ungewollte Push sie hinausschob |
-| „`GATE_MUSTER` ist die Barriere" | Sie fängt npm & Co., **nicht** Shell-Wrapper — die gefährlichste Klasse |
-| „Die drei gesperrten Blätter machen den Lauf langsam" | **46 npm-Befehle** über 20 Blätter waren es |
-| „Der Wächter läuft nicht mehr" | Er läuft. Er hatte einen Commit übersprungen |
+| „60 Commits ungepusht" | **13** damals, **8** heute — eine Zahl ohne Befehl |
+| „Der Verzeichnislauf braucht 3,6 s" | **39,4 s / 30 Blätter** (Evaluator) |
+| „Der Push liegt beim Evaluator" / „beim Planner" | **Beides nicht belegt.** Aus der Planner-Umgebung ist GitHub nicht erreichbar (`git ls-remote fork` → HTTP 403 vom Proxy) |
+| „Ein Werkzeug erreichbar machen kostet vier Stellen" | **Drei von vier sind schon da**, nur die Registry fehlt (W-05) |
+| „Im Startzustand ist canvas 0, also muss ein Projekt geöffnet werden" | **Nein** — der Expertenmodus montiert die Bühne ohne Projekt (Prüfer, 02.08.) |
+| „`#hausplaner-scene` mit 0 Kindern zeigt den Startzustand" | **Nein** — ein `<script>`-Element hat nie Element-Kinder. Es taugt nur als EXISTENZ-Zeichen |
 
-## 6. Fallen — die vier neuen von heute Abend
+## 6. Fallen
 
 ```text
 Ein `OK` im Validator-Bericht heisst: der Befehl LIEF. Wer nur nach FEHLSCHLAG filtert, sieht
-   nicht, was ausgefuehrt wurde. Genau so ist mir der Push durchgegangen.
-git worktree list meldet vom Mount aus JEDEN Worktree als `prunable` - auch ../ticket-main.
-   `git worktree prune` von hier aus meldet den Merge-Worktree ab. NIE von hier ausfuehren.
-head/tail-Splices: DREIMAL heute an der Grenzzeile verrutscht. Vor jedem Splice die Grenzen
-   anzeigen. `git checkout -- <datei>` repariert auf diesem Mount NICHT (unlink verboten):
+   nicht, was ausgefuehrt wurde.
+`| tail -n` schluckt den Exitcode - auch beim Validator.
+`grep -c` liefert exit 1 bei NULL Treffern. In Kriterien immer `grep -o … | wc -l`.
+`2>/dev/null` gilt der Denylist als Umleitung. Ersatz: `ls <verz> | grep <name> | wc -l`.
+git worktree list meldet vom Mount aus JEDEN Worktree als `prunable`. NIE prunen.
+`git checkout -- <datei>` repariert auf diesem Mount NICHT (unlink verboten):
    `git show HEAD:<pfad> > /tmp/x && cat /tmp/x > <pfad>`.
-`git commit --amend` laesst index.lock UND HEAD.lock liegen. Auf diesem Mount nicht amenden.
+`git commit --amend` laesst index.lock UND HEAD.lock liegen. Nicht amenden.
 Backticks in einer Commit-Botschaft unter DOPPELTEN Anfuehrungszeichen fuehrt die Shell aus.
 `zaehle.mjs <datei>` wirft ENOENT, solange die Datei nicht existiert - ein Kriterium fuer eine
-   NEUE Datei muss ueber das VERZEICHNIS messen, sonst kann es vor dem Bau nicht laufen.
+   NEUE Datei muss ueber das VERZEICHNIS messen.
 S-07 feuert nur bei `kritikalitaet: P1`.
-`| tail -n` schluckt den Exitcode - auch beim Validator.
+Ein `ausgangswert`, der schon dem Ziel entspricht, ist ein totes Kriterium - und einer, der
+   FALSCH gemessen ist, ist ein unerfuellbares. Beides am 02.08. je einmal passiert (W-06 K-02,
+   K-04), beides vor dem Gegenlesen selbst gefunden. `zeile-ersetzen` faengt das NICHT.
+Die Geraete-VM laeuft in UTC, git meldet Europe/Berlin - zwei Stunden Unterschied.
+   Immer `TZ=Europe/Berlin` + `--date=format-local:`.
 ```
 
-## 7. Die Fehlerklassen — 15 von 18 haben eine Barriere
+## 7. Fehlerklassen
 
 ```text
-✅ F-01 F-02 F-03 F-04 F-05 F-06 F-07 F-08 F-08b F-09 F-11 F-12 F-13 F-14 F-15
-⚠  F-10  Lock-Reste - auf diesem Mount NICHT behebbar (`unlink` verboten), nur gemildert
-⚠  F-16  HALB. GATE_MUSTER faengt npm & Co., aber KEINE Shell-Wrapper - ROT vom Evaluator.
-         Die Barriere ist W-01 (Allowlist), geschnitten, noch nicht gebaut.
+✅ F-01…F-09 F-11…F-15 haben eine Barriere
+⚠  F-10  Lock-Reste - auf diesem Mount NICHT behebbar (`unlink` verboten), nur gemildert.
+         Beiseite unter .git/_locks_beiseite/<datum>/. Regel: 0 Byte + Minuten unveraendert
+         = Rest, alles andere = laufender Vorgang.
+⚠  F-16  GATE_MUSTER faengt npm & Co., aber KEINE Shell-Wrapper. Barriere ist W-01, `bereit`.
 ❌ F-17  Ein unbekannter `typ:` verschwindet lautlos aus dem Bericht.
+❌ NEU   Die Erlaubnisliste laesst `node <beliebig>`, `sed -i` und `awk system()` durch
+         (Pruefer, 02.08.). Barriere waere W-07 - noch nicht geschnitten.
 ```
-
-**Die zwei harten Regeln bleiben:**
-
-**A — Kein Blatt geht raus, bevor jeder Befehl darin einmal gelaufen ist.** *Z-10 trug beim ersten
-Schnitt ein Kriterium, das vor dem Bau gar nicht laufen konnte — der Validator hat es sofort
-gefangen.*
-
-**B — Keine Arbeit liegt länger als zwanzig Minuten uncommittet.** *`PRUEFER-BEFUNDE.md` liegt seit
-13:04 im Baum — neun Stunden. P-01-06 misst das.*
 
 ## 8. Was der Validator selbst sperrt
 
@@ -158,11 +133,14 @@ gefangen.*
 PB-019  Kopf fehlt oder misst nichts, Blatt aber `status: aktiv`   exit 1
 S-01    genau EIN aktives Blatt            -> heute: Z-03+Z-04
 S-04    coverage ohne population_command und ohne eigenen Befehl
-S-06    weniger als zwei baubare Blaetter                          exit 1  -> heute: 3
-S-07    ein Kriterium ist schon vor dem Bau erfuellt (nur bei P1)   exit 1
+S-06    weniger als zwei baubare Blaetter (je LAUF)                exit 1
+S-07    ein Kriterium ist schon vor dem Bau erfuellt (nur bei P1)  exit 1
 S-08    Ausgangswert weicht von der Messung ab                     Meldung
 S-09    Kopf ohne `status`
 S-10    der Baum hat sich waehrend der Messung bewegt              exit 1
 ```
 
-**63 Zusagen über die beiden Werkzeuge, 0 fail** — `node --test scripts/__tests__/auftragPruefen.test.mjs scripts/__tests__/zaehle.test.mjs`
+**Die zwei harten Regeln bleiben:**
+
+**A — Kein Blatt geht raus, bevor jeder Befehl darin einmal gelaufen ist.**
+**B — Keine Arbeit liegt länger als zwanzig Minuten uncommittet.**
