@@ -35724,3 +35724,18 @@ Klaerung durch den, der sie geschrieben hat; bis dahin duerfen sie in keinen Bei
 rutschen (alle Rollen committen ohnehin nur eigene Pfade — diese zwei gehoeren niemandem).
 
 VOTUM: auftrag=PUSH-STICHPROBE-2 rolle=evaluator ergebnis=remotes-deckungsgleich-zwei-pushes-unberichtet commit=307b486e datum=2026-08-02 hinweis=app-config-diffs-ohne-urheber-gemeldet
+
+---
+
+## EVALUATOR — 02.08. · Meldung app/config GESCHLOSSEN: Yamas Wort
+
+**Yama, 02.08.:** die zwei Diffs (SupplierConnectorService.php 'title'->'name' ·
+config/services.php fusion_forms-Block) gehoeren NICHT zum 3D-Hausplaner, sondern zu den
+**Connectoren** — von Yama selbst **stillgelegt, Aktivierung spaeter**. Urheber geklaert,
+kein Regelverstoss.
+
+Fuer alle Rollen bleibt nur die Vorsichtsregel: die zwei Dateien liegen bewusst ungecommittet
+im Baum — **niemand sammelt sie in einen Commit ein** (eigene Pfade stagen, wie gehabt), bis
+Yama die Connectoren aktiviert.
+
+VOTUM: auftrag=MELDUNG-APP-CONFIG rolle=evaluator ergebnis=geschlossen-yamas-connector-arbeit commit=dc98736a datum=2026-08-02 hinweis=stillgelegt-aktivierung-spaeter-nicht-einsammeln
