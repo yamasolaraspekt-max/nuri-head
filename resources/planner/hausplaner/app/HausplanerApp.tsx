@@ -304,6 +304,21 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * **wer sie verwendet, ist Z-06** (die Decke nimmt sie statt der Bounding-Box).
    */
   const [letzteKontur, setLetzteKontur] = useState<Punkt[] | null>(null);
+  /**
+   * **Z-06 — wurde die zuletzt angelegte Decke aus dem Umriss GENÄHERT?**
+   *
+   * `null` = noch keine Decke in dieser Sitzung angelegt · `true` = Näherung aus der Bounding-Box
+   * · `false` = exakt aus der gezeichneten Kontur.
+   *
+   * *Der Wert entsteht dort, wo die Entscheidung fällt — beim Anlegen.* Ihn nachträglich aus dem
+   * Polygon zu erraten ginge nicht: die Decke eines rechteckigen Hauses hat aus Kontur dieselben
+   * vier Punkte wie aus der Bounding-Box, und dort wäre „Näherung" schlicht falsch.
+   *
+   * **Grenze, ausdrücklich:** der Hinweis gilt für die Decke DIESER Sitzung. Nach einem Neuladen
+   * steht die genäherte Decke ohne Vermerk da. *Das dauerhaft zu lösen hiesse, die Herkunft am
+   * Objekt zu speichern — das ist Schema und damit K-05, ausdrücklich ausserhalb dieser Scheibe.*
+   */
+  const [deckeNaeherung, setDeckeNaeherung] = useState<boolean | null>(null);
   /** Z-01: steht der Zeiger auf der Zeichenflaeche? Verlassen pausiert, es beendet nicht. */
   const [zeigerDrinnen, setZeigerDrinnen] = useState(true);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
@@ -410,6 +425,23 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   }, [activeWorkspace]);
   /** AUF-83-T5 / K-05: unter 1024 px legt sich eine offene Schiene über die Bühne. */
   const istSchmal = useIstSchmal();
+
+  /**
+   * **Z-06 — der eine Hinweistext der Fussleiste.**
+   *
+   * Die Scheibe nennt genau EINE Produktivdatei im Scope; eine eigene Prop haette
+   * `FussUndUeberlagerungen.tsx` mitgezogen. Der Kanal ist deshalb der vorhandene — *wichtiger
+   * als die Benennung der Prop ist, dass der Satz beim Benutzer ankommt, und die Leiste hat
+   * genau eine Hinweiszeile.*
+   *
+   * **Der Konturtext hat Vorrang, solange das Konturwerkzeug läuft:** wer gerade zeichnet,
+   * braucht die Rückmeldung zu seinem Zug, nicht die zur zuletzt angelegten Decke.
+   */
+  const fussHinweis: string | null = werkzeug === 'kontur'
+    ? konturStatusText(konturPunkte.length, konturFehler, letzteKontur?.length ?? null)
+    : deckeNaeherung === true
+      ? 'Decke als Näherung aus dem Gebäude-Umriss — für eine exakte Decke zuerst eine Kontur zeichnen'
+      : null;
   /**
    * AUF-83-T5 / K-03 — eine offene Schiene ist nur dann eine „Ebene", wenn sie gerade als
    * Overlay liegt (schmales Fenster). Verdrängend (≥1024 px) ist sie normales, dauerhaftes
@@ -920,17 +952,31 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     }
 
     if (werkzeug === 'decke') {
-      // Feature A: eine Decke je Geschoss über den Gebäude-Umriss; Treppen-Durchbrüche setzt der Command
-      // (aus Grundriss). Ein bereits vorhandene Decke lehnt der Command ab (Meldung in der Statusleiste).
+      // Feature A: eine Decke je Geschoss; Treppen-Durchbrüche setzt der Command (aus Grundriss).
+      // Eine bereits vorhandene Decke lehnt der Command ab (Meldung in der Statusleiste).
+      //
+      // **Z-06 — die gezeichnete Kontur schlägt den Umriss.** Bei einem Rechteck stimmt die
+      // Bounding-Box zufällig; bei L-, T- und U-Form ist sie falsch, und zwar STILL: die Decke
+      // erscheint, sie ragt nur über den Grundriss hinaus. *Ein falsches Ergebnis, das richtig
+      // aussieht.*
+      //
+      // **Kein Zwang zum Konturzeichnen.** Wer schnell ein Geschoss stapeln will, soll nicht erst
+      // sechs Punkte klicken müssen — für den rechteckigen Fall ist der Umriss richtig. **Aber
+      // niemand darf glauben, er habe eine exakte Decke, wenn er eine Näherung hat**, deshalb der
+      // Hinweis unten.
+      //
+      // *Das Dach (`ADD_ROOF`, gleiche Datei) bleibt ausdrücklich unangetastet — das ist Z-08.*
       const jetzt = new Date().toISOString();
+      const ausKontur = letzteKontur !== null && letzteKontur.length >= KONTUR_MIN_PUNKTE;
       store.getState().executeCommand({
         type: 'ADD_CEILING',
         ceiling: {
           id: uuid(), type: 'ceiling', levelId: level.id, visible: true, locked: false, tags: [],
           createdAt: jetzt, updatedAt: jetzt,
-          polygon: gebaeudeUmriss(), dickeMm: level.floorThickness,
+          polygon: ausKontur ? letzteKontur : gebaeudeUmriss(), dickeMm: level.floorThickness,
         },
       });
+      setDeckeNaeherung(!ausKontur);
       setWerkzeug('auswahl');
 
       return;
@@ -1370,7 +1416,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
         treppeStart={treppeStart}
         letzteAblehnung={letzteAblehnung}
         pausenHinweis={pausenText(zeichenZustand)}
-        konturHinweis={werkzeug === 'kontur' ? konturStatusText(konturPunkte.length, konturFehler, letzteKontur?.length ?? null) : null}
+        konturHinweis={fussHinweis}
         fangHinweis={FANG_TEXT[fangArt]}
         massHinweis={massEingabeText(massEingabe)}
         paletteOffen={paletteOffen}

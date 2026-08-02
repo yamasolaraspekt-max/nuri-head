@@ -28,6 +28,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { TEILE, teil, ohneKommentare } from './_zerlegteApp';
+import { FANG_TEXT, type FangArt } from '../geometry/fangKern';
 
 /** Die Stilschicht — seit AUF-38-P3 traegt sie einen Teil der Wahrheit dieser Datei. */
 const css = teil('hausplaner.css');
@@ -185,4 +186,70 @@ test('K-01: die Scheibe trägt 8 Inline-Vorkommen — 12 sind nach AUF-38-P3 Kla
   // insgesamt, davon 0 offen"*). Die verbliebenen acht sind DYNAMISCH und ausserhalb des Blattes.
   const vorkommen = (fussRoh.match(/style=\{\{/g) ?? []).length;
   assert.equal(vorkommen, 8, `${vorkommen} Inline-Vorkommen statt 8`);
+});
+
+// --- Z-03 / K-02: die Fussflaeche zeigt die Fangart im Klartext ----------------------------------
+//
+// **Die Mutationsprobe VOR dieser Zusage — 8 Mutationen, 6 kamen durch:**
+//
+// ```text
+// mittelpunkt zeigt „Endpunkt“        keine Zusage rot
+// achse zeigt „Raster“                keine Zusage rot
+// verlaengerung zeigt „Wandflucht“    keine Zusage rot
+// endpunkt zeigt „Wandmitte“          keine Zusage rot
+// raster zeigt „Endpunkt“             keine Zusage rot
+// ortho zeigt „Raster“                keine Zusage rot
+// keiner redet dauernd „kein Fang“    fail 1   (fangKern.test.ts hatte den Partner)
+// Fussflaeche friert auf endpunkt ein fail 1   (fangAnschluss.test.ts hatte den Partner)
+// ```
+//
+// **Warum sechs blind waren:** die vorhandene Zusage lautete `FANG_TEXT[art].length >= 5`. Sie
+// prueft, DASS ein Text da ist — nicht, dass es der RICHTIGE ist. *Ein Fang, der „Endpunkt“ meldet
+// und in Wahrheit die Wandmitte gegriffen hat, ist schlimmer als gar keine Meldung: er macht aus
+// einer Unsicherheit eine falsche Gewissheit.* Das ist F-06 in Reinform.
+
+/**
+ * **Begriffs-Anker statt eingefrorener Zeichenketten.**
+ *
+ * Die Zusage bindet jede Fangart an den BEGRIFF, den sie benennen muss — nicht an ihren heutigen
+ * Wortlaut. „Wandmitte“ darf zu „Mitte der Wand“ werden, ohne dass die Zusage bricht; sie bricht,
+ * sobald die Mitte als Endpunkt ausgegeben wird. *Genau das ist der Unterschied zwischen einer
+ * Zuordnungs-Zusage und einem Textabzug.*
+ */
+const BEGRIFF: Record<Exclude<FangArt, 'keiner'>, RegExp> = {
+  endpunkt: /\bendpunkt\b/i,
+  mittelpunkt: /mitte/i,
+  achse: /flucht|achse/i,
+  verlaengerung: /verläng|verlaeng/i,
+  ortho: /winkel|ortho/i,
+  raster: /raster/i,
+};
+
+test('Z-03/K-02: jede Fangart nennt ihren eigenen Begriff — keine zeigt den einer anderen', () => {
+  for (const [art, muster] of Object.entries(BEGRIFF)) {
+    const text = FANG_TEXT[art as FangArt];
+    assert.match(text, muster, `\`${art}\` meldet „${text}“ — das ist nicht der Begriff dieser Fangart`);
+  }
+});
+
+test('Z-03/K-02: die Begriffs-Tabelle deckt JEDE Fangart ab — eine neue rutscht nicht durch', () => {
+  // **Ohne diese Haelfte waere die Zusage oben eine mitwachsende Leseliste:** wer eine siebte
+  // Fangart ergaenzt und in `BEGRIFF` vergisst, bekommt keine rote Zusage, sondern Stille.
+  const arten = Object.keys(FANG_TEXT).filter((a) => a !== 'keiner').sort();
+  assert.deepEqual(arten, Object.keys(BEGRIFF).sort(),
+    'FANG_TEXT und die Begriffs-Tabelle sind auseinandergelaufen — eine Fangart ist ungeprueft');
+});
+
+test('Z-03/K-02: zwei Fangarten teilen sich nie denselben Klartext — sonst stirbt der Tausch leise', () => {
+  // **Der Fall, den die Begriffs-Anker allein nicht faengt:** zwei Arten vertauschen. Beide Texte
+  // existieren weiter, beide sind lesbar — nur zeigen sie aufeinander. Die Doppelung faengt es.
+  const texte = Object.entries(FANG_TEXT).filter(([a]) => a !== 'keiner').map(([, t]) => t);
+  assert.equal(new Set(texte).size, texte.length, `zwei Fangarten melden denselben Text: ${texte.join(' · ')}`);
+});
+
+test('Z-03/K-02: die Fussflaeche zeigt den Hinweis NUR, wenn wirklich gefangen wurde', () => {
+  // Der Partner zur leeren Zeichenkette bei `keiner`: eine Statuszeile, die dauernd „kein Fang“
+  // sagt, ist Rauschen. Die Kurzschluss-Bedingung ist die Stelle, an der das durchgesetzt wird.
+  assert.match(fuss, /\{fangHinweis && <span className="hp-fu-fang">/,
+    'der Fang-Hinweis haengt nicht mehr an einer Kurzschluss-Bedingung — er steht dann dauerhaft da');
 });

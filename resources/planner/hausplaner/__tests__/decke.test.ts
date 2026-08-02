@@ -8,6 +8,8 @@ import { applyCommand } from '../commands/applyCommand';
 import { sceneDocumentSchema } from '../domain/validation';
 import { deckenNettoFlaecheM2, naechsteEtageElevationMm } from '../renderers/three-d/deckenMesh';
 import { treppeZuParametern } from '../geometry/treppeObjekt';
+import { polygonFlaecheM2 } from '../geometry/polygonFlaeche';
+import { teil, ohneKommentare } from './_zerlegteApp';
 import type { SceneDocument, CeilingNode, ObjectNode, Level } from '../domain/scene.types';
 
 const ISO = '2026-07-23T00:00:00.000Z';
@@ -86,4 +88,84 @@ test('Etagen-Stapel: nächste Elevation = Elevation + Wandhöhe + Deckendicke (e
   assert.equal(naechsteEtageElevationMm(LEVEL, decke()), 0 + 2500 + 200);
   // ohne Decke: Rückfall auf floorThickness (kein Rateswert der Höhe)
   assert.equal(naechsteEtageElevationMm(LEVEL, undefined), 0 + 2500 + 200);
+});
+
+// --- Z-06: die Decke nimmt die gezeichnete Kontur ------------------------------------------------
+//
+// **Die Mutationsprobe VOR diesen Zusagen — 8 Mutationen, 8 kamen durch:**
+//
+// ```text
+// Kontur wird ignoriert              keine Zusage rot
+// Kontur und Umriss vertauscht       keine Zusage rot
+// Umlaufsinn gedreht                 keine Zusage rot
+// Hinweis auch MIT Kontur            keine Zusage rot
+// Hinweis NIE                        keine Zusage rot
+// Mindestpunktzahl faellt weg        keine Zusage rot
+// Hinweis an null statt true         keine Zusage rot
+// Decke nimmt nur den ersten Punkt   keine Zusage rot
+// ```
+//
+// **Acht von acht, bei 1645 gruenen Zusagen.** Kein Zufall: die Klasse dieser Scheibe ist
+// *„falsch, aber sieht richtig aus"*. In jedem der acht Faelle ERSCHEINT eine Decke — sie hat
+// nur die falsche Flaeche, und die sieht im Bild niemand. *Genau deshalb prueft K-02 die
+// FLAECHE und nicht die Punktliste: eine Punktliste friert den gebauten Zustand ein (F-06),
+// die Flaeche prueft die Aussage.*
+
+/** L-Form 10×8 m mit ausgespartem Eck 3×4 m ⇒ 80 − 12 = 68 m². */
+const L_KONTUR = [
+  { x: 0, y: 0 }, { x: 10000, y: 0 }, { x: 10000, y: 4000 },
+  { x: 7000, y: 4000 }, { x: 7000, y: 8000 }, { x: 0, y: 8000 },
+];
+
+test('Z-06/K-02: die Decke einer L-Form hat 68 m² — NICHT die 80 des umschliessenden Rechtecks', () => {
+  const doc = baseDoc();
+  applyCommand(doc, { type: 'ADD_CEILING', ceiling: decke({ polygon: L_KONTUR }) }, ISO);
+  const gebaut = doc.ceilings?.[0];
+  assert.ok(gebaut, 'keine Decke angelegt — die Zusage wuerde Leere messen');
+
+  const flaeche = polygonFlaecheM2(gebaut.polygon) / 1e6; // polygonFlaecheM2 rechnet in mm²
+  assert.equal(Math.round(flaeche), 68, `Deckenflaeche ${flaeche.toFixed(1)} m² statt 68`);
+  assert.notEqual(Math.round(flaeche), 80, 'die Decke traegt die Flaeche der Bounding-Box');
+});
+
+test('Z-06/K-02: der Umlaufsinn aendert die Flaeche nicht — sonst haengt sie an der Klickrichtung', () => {
+  // **Die Mutation „Umlaufsinn gedreht" kam durch.** Wer eine L-Form gegen den Uhrzeigersinn
+  // klickt, bekommt eine negative signierte Flaeche; ohne Betrag waere die Decke dann 0 oder
+  // negativ gross. *Der Fehler haenge damit an der Reihenfolge der Klicks — unauffindbar.*
+  const rueckwaerts = [...L_KONTUR].reverse();
+  assert.equal(
+    Math.round(polygonFlaecheM2(rueckwaerts) / 1e6),
+    Math.round(polygonFlaecheM2(L_KONTUR) / 1e6),
+    'die Flaeche haengt am Umlaufsinn',
+  );
+});
+
+test('Z-06/K-01: die Insel nimmt die Kontur — und nur das Dach behaelt den Umriss bedingungslos', () => {
+  // **Quelltext-Zusage, und das ist hier eine Schwaeche, keine Wahl.** Die Entscheidung lebt in
+  // der React-Funktion; der Scope dieser Scheibe nennt genau EINE Produktivdatei, also kann sie
+  // nicht in ein pruefbares Modul wandern. *Gemeldet an den Planner: die Extraktion in eine
+  // reine Funktion ist eine eigene Scheibe wert — dann faellt diese Zusage weg und eine echte
+  // Verhaltenszusage tritt an ihre Stelle.*
+  const app = ohneKommentare(teil('app/HausplanerApp.tsx'));
+
+  assert.match(app, /polygon: ausKontur \? letzteKontur : gebaeudeUmriss\(\)/,
+    'die Decke nimmt die Kontur nicht mehr — oder nimmt sie verdreht');
+  assert.match(app, /const ausKontur = letzteKontur !== null && letzteKontur\.length >= KONTUR_MIN_PUNKTE/,
+    'die Bedingung fuer „aus Kontur" ist veraendert — eine Kontur mit zwei Punkten waere eine Decke');
+  const umriss = (app.match(/polygon: gebaeudeUmriss\(\)/g) ?? []).length;
+  assert.equal(umriss, 1, `${umriss} bedingungslose Umriss-Decken statt einer (das Dach, Z-08)`);
+});
+
+test('Z-06/K-03: ohne Kontur meldet die Fussleiste eine Naeherung — mit Kontur schweigt sie', () => {
+  // Die drei Hinweis-Mutationen (immer / nie / auch bei `null`) kamen alle durch. **Ein Hinweis,
+  // der immer steht, ist so wertlos wie keiner** — er trennt die Naeherung nicht von der exakten
+  // Decke, und genau das ist der heutige Fehler mit besserem Gewissen.
+  const app = ohneKommentare(teil('app/HausplanerApp.tsx'));
+
+  assert.match(app, /setDeckeNaeherung\(!ausKontur\)/,
+    'der Melder haengt nicht mehr an der Entscheidung — er meldet immer oder nie');
+  assert.match(app, /: deckeNaeherung === true\n/,
+    'der Hinweis prueft nicht mehr auf `true` — bei `null` (noch keine Decke) staende er schon da');
+  assert.match(app, /Näherung aus dem Gebäude-Umriss/,
+    'der Hinweistext ist weg — K-03 verlangt Text, kein Symbol allein');
 });
