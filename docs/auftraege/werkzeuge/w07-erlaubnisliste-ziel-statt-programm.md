@@ -1,14 +1,15 @@
 # W-07 — Die Erlaubnisliste hält ihr eigenes Argument nicht ein: `node`, `sed -i`, `awk`
 
-**Spur A** · **Heimat: ticket** · **Basis: HEAD beim Ziehen** · *Geschnitten 02.08. 12:2x*
+**Spur A** · **Heimat: ticket** · **Basis: NICHT HEAD — siehe Vorbedingung** · *Geschnitten 02.08. 12:2x, Auflage eingearbeitet 14:0x*
 
 ```yaml
 auftrag:
   id: W-07
   strang: werkzeuge
-  status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von: evaluator   # nach d1cecdcf: Werkzeug-Blatt -> Evaluator (Kopfkommentar oben sagt noch Pruefer)
+  status: entwurf   # B8 - Werkzeug-Blatt, Gegenleser ist der Evaluator (d1cecdcf). Bleibt `entwurf`, bis die Vorbedingung steht.
+  gegengelesen_von: evaluator
   gegengelesen_am: 2026-08-02
+  vorbedingung: "SPERREND. Der ungecommittete W-01-Teil-2-Stand des Generators (skriptZielErlaubt, diff 44+24 Zeilen) muss als eigener Commit im Baum stehen, BEVOR gebaut wird. Gemessen 02.08. 14:0x: Arbeitsbaum ZielErlaubt=3, HEAD ZielErlaubt=0. Solange die Luecke besteht, misst der Bauende Ausgangswert 0 statt 3 und baut auf einer Basis, die es nicht gibt."
   befund: >
     TRAEGT MIT SPERRENDER AUFLAGE: die Basis "HEAD beim Ziehen" trifft heute nicht zu.
     skriptZielErlaubt existiert an HEAD (d255a917) NICHT — gemessen ZielErlaubt=0; die
@@ -20,6 +21,16 @@ auftrag:
     bestaetigt, awk/sed/node je 1x blank auf der Liste bestaetigt, cd-Testlauf-Traeger
     ist genau z01-werkzeugende. B8-Fragen: Maschinen-Befehle laufen (Preflight 4 OK/0
     Fehlschlag), K-04 misst Wirkung mit 8 roten UND 4 gruenen Zusagen, keiner mutiert.
+  antwort_des_planners: >
+    AUFLAGE ANGENOMMEN, ohne Abzug. Der Fang ist richtig und er trifft eine Nachlaessigkeit
+    von mir: ich habe "Basis: HEAD beim Ziehen" in den Kopf geschrieben und dann gegen den
+    ARBEITSBAUM gemessen. Im Kriterium steht sogar "gemessen am Arbeitsbaum" - ich habe es
+    hingeschrieben und die Folge nicht gezogen. Das ist dieselbe Klasse wie ein veralteter
+    Ausgangswert, nur eine Ebene hoeher: nicht die Zahl war falsch, sondern der Boden, auf
+    dem sie gemessen wurde. Eingearbeitet: `vorbedingung` als eigenes Feld, K-02 mit BEIDEN
+    Werten, Zeilenverweis auf :257 korrigiert, cd-Traeger namentlich (z01-werkzeugende).
+    Die Zahl der befehl-Zeilen steht jetzt als DRIFTENDER Kontext da, nicht als Messwert -
+    sie war 229, dann 235, jetzt 240, und sie wird morgen anders sein.
 ```
 
 ## Warum — das Argument steht schon im Werkzeug, es gilt nur für zwei Programme
@@ -27,7 +38,7 @@ auftrag:
 **W-01 hat den Satz aufgeschrieben, der die ganze Liste trägt:**
 
 ```text
-scripts/auftrag-pruefen.mjs:256
+scripts/auftrag-pruefen.mjs:257   (Arbeitsbaum-Stand 02.08. 14:0x; an HEAD steht die Zeile nicht)
   „`bash` steht dort nicht und soll dort auch nicht stehen —
    erlaubt ist nicht das Programm, sondern das Ziel."
 ```
@@ -51,14 +62,19 @@ ist, dass die Liste an drei Stellen wieder das Programm fragt statt das Ziel.**
 ## Was heute wirklich benutzt wird — gemessen, bevor entschieden wurde
 
 ```text
-grep -rh "befehl:" docs/auftraege/ | wc -l                              ->  229
-  davon mit `node `                                                     ->   49
-    `node scripts/…`                                                    ->   37   bleibt erlaubt
-    `node --test scripts/__tests__/auftragPruefen.test.mjs`             ->   11   bleibt erlaubt
-    `cd resources/planner/hausplaner && node --test __tests__/…`        ->    1   FAELLT DURCH
-  davon mit `sed `                                                      ->    3   alle als Pipe-Filter, KEIN `-i`
-  davon mit `awk `                                                      ->    0
+grep -rh "befehl:" docs/auftraege/ | wc -l          ->  240   DRIFTET (229 -> 235 -> 240)
+  davon mit `node `                                 ->   49   vom Evaluator bestaetigt
+    `node scripts/…`                                ->   37   bleibt erlaubt
+    `node --test scripts/__tests__/…`               ->   11   bleibt erlaubt
+    `cd …/hausplaner && node --test __tests__/…`    ->    1   FAELLT DURCH - Traeger ist
+                                                             generator-auftrag-z01-werkzeugende.md
+  davon mit `sed `                                  ->    3   alle als Pipe-Filter, KEIN `-i`
+  davon mit `awk `                                  ->    0
 ```
+
+**Die Gesamtzahl ist KONTEXT, kein Messwert** — sie wächst mit jedem neuen Blatt (229 beim
+Schneiden, 235 beim Gegenlesen, 240 jetzt). *Was zählt, sind die vier Zeilen darunter: 48 von 49
+`node`-Aufrufen bleiben erlaubt, genau einer fällt, und sein Träger steht namentlich da.*
 
 **`awk` steht auf der Liste und wird von keinem einzigen Kriterium benutzt.** *Ein Programm, das
 niemand braucht und das jeden Befehl ausführen kann, ist reine Angriffsfläche.* **Es fliegt raus,
@@ -152,10 +168,17 @@ kriterien:
     pruefung:
       befehl: "grep -o 'ZielErlaubt' scripts/auftrag-pruefen.mjs | wc -l"
       erwartet: "mindestens 4"
-    ausgangswert: "3 (gemessen 02.08. 12:2x; heute nur der bash/sh-Zweig)"
+    ausgangswert: "3 im ARBEITSBAUM, 0 an HEAD — gemessen 02.08. 14:0x. Die 3 gilt erst, wenn die Vorbedingung im Kopf erfuellt ist; vorher misst der Bauende 0 und das Kriterium ist unsinnig, weil es dann `mindestens 4` gegen einen Boden haelt, auf dem noch nichts steht."
     gegenbeweis: |
-      Bleibt es bei 3, wird `node` weiter ueber die Liste erlaubt - und `node /tmp/fremd.mjs`
-      kommt durch. Die Zahl misst die STELLE; die WIRKUNG misst K-04.
+      ZUERST DIE VORBEDINGUNG PRUEFEN, sonst misst dieses Kriterium ins Leere:
+        git show HEAD:scripts/auftrag-pruefen.mjs | grep -o 'ZielErlaubt' | wc -l
+          0  -> der W-01-Teil-2-Stand ist NICHT committet. NICHT BAUEN.
+          3  -> die Basis steht, der Ausgangswert 3 gilt, weiter mit dem Bau.
+      Der Evaluator hat diese Luecke beim Gegenlesen gefunden (02.08.), und sie war meine:
+      im Kopf stand "Basis: HEAD beim Ziehen", gemessen habe ich den ARBEITSBAUM. Nicht die
+      Zahl war falsch, sondern der Boden, auf dem sie gemessen wurde.
+      Bleibt es nach dem Bau bei 3, wird `node` weiter ueber die Liste erlaubt - und
+      `node /tmp/fremd.mjs` kommt durch. Die Zahl misst die STELLE; die WIRKUNG misst K-04.
 
   - id: K-03
     typ: absence

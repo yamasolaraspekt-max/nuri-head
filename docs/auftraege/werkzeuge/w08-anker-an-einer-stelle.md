@@ -37,10 +37,21 @@ für genau den Splice-Fehler, gegen den W-02 gebaut wurde.* **Und zwölf weitere
 ALTEN Anker weiter**, weil sie `ruht`, `abgenommen` oder ohne Kopf sind:
 
 ```text
-grep -rl "L-01-anker" docs/auftraege/ | wc -l           ->  19
-grep -rl "2  MONTIEREN" docs/auftraege/ | wc -l         ->   6   auf dem Stand von heute
-grep -rl "typ: browser" docs/auftraege/ | wc -l         ->  13
+grep -rl "L-01-anker" docs/auftraege/ | wc -l           ->  20      19 Traeger + DIESES Blatt
+grep -rl "2  MONTIEREN" docs/auftraege/ | wc -l         ->   7       6 Traeger + DIESES Blatt
+grep -rl "typ: browser" docs/auftraege/ | wc -l         ->  14      13 Traeger + DIESES Blatt
+                                                    (gemessen 02.08. 14:0x)
 ```
+
+**Die drei Zahlen tragen jede ein `+1`, und das ist keine Ungenauigkeit, sondern der Befund
+selbst:** *dieses Blatt zitiert alle drei Suchmuster wörtlich, und für `grep` sieht ein Zitat
+aus wie ein Anker.* **Der Evaluator hat das beim Gegenlesen gefunden** — mein K-05 hatte ein
+Soll gefordert, das per rohem `grep` unerreichbar war. **Korrigiert in K-05, mit benannter
+Ausnahme statt stiller Filterung.**
+
+*Ich hatte diesen Selbsttreffer bei K-01 und K-02 bewusst vermieden — dort messe ich über das
+Verzeichnis und über den Validator, gerade damit das Blatt sich nicht selbst trifft. Bei K-05
+habe ich es übersehen. Dieselbe Falle, im selben Blatt, zweimal anders behandelt.*
 
 **Und eine Lücke, die vorher niemand gesehen hat** — ein Blatt fährt Browser-Zahlen ganz ohne
 Anker:
@@ -177,14 +188,33 @@ kriterien:
     pruefung:
       typ: gate
       schritte: |
-        Nach dem Umzug, ueber den ganzen Ordner gemessen:
-          Blaetter mit ausgeschriebenem Anker in Stufe 3 ("BUEHNE")  ->  12 (nur Archiv,
-            und alle mit dem ALTEN Wortlaut - kein einziges mit "MONTIEREN")
-          docs/auftraege/ANKER-BROWSER.md enthaelt "MONTIEREN"       ->  1
-        Heute: 6 Blaetter mit "MONTIEREN". Danach: 0 Blaetter, 1 Ankerdatei.
-        Steht die Zahl danach bei 6, ist der Verweis eingebaut und der Block liegen
-        geblieben - dann gibt es zwei Wahrheiten statt einer.
-      erwartet: "0 Blaetter mit MONTIEREN, 1 Ankerdatei"
+        AUFLAGE des Evaluators (02.08.), uebernommen und nachgemessen: eine rohe Zaehlung
+        trifft dieses Blatt SELBST. W-08 zitiert "2  MONTIEREN" als Suchmuster, und ein
+        Zitat sieht fuer grep aus wie ein Anker.
+
+            grep -rl "2  MONTIEREN" docs/auftraege/ | wc -l   ->  7   (02.08. 14:0x)
+              davon echte Ankertraeger                        ->  6
+              davon Zitat                                     ->  1   NUR w08-anker-an-einer-stelle
+
+        Nachgemessen: der Selbsttreffer ist GENAU EIN Blatt - dieses. w05-werkzeug-anschluss
+        steht in der Liste, weil es den Anker wirklich TRAEGT; nach dem Umzug faellt es von
+        selbst heraus. Deshalb eine benannte Ausnahme fuer ein Blatt statt eines
+        praezisierten Musters, das beim naechsten Zitat wieder bricht:
+
+            grep -rl "2  MONTIEREN" docs/auftraege/ | grep -v 'w08-anker-an-einer-stelle' | wc -l
+              heute   ->  6
+              danach  ->  0
+
+        Und die Gegenrichtung, damit nicht einfach alles verschwindet:
+            ls docs/auftraege | grep ANKER | wc -l                        ->  1
+            grep -c "MONTIEREN" docs/auftraege/ANKER-BROWSER.md           ->  mindestens 1
+
+        Steht die erste Zahl danach bei 6, ist der Verweis eingebaut und der Block liegen
+        geblieben - dann gibt es zwei Wahrheiten statt einer. Steht sie bei 0 und die
+        Ankerdatei fehlt, ist der Anker weg statt umgezogen.
+        DIE AUSNAHME WIRD BENANNT, NICHT STILL GEFILTERT: wer sie erweitert, schreibt den
+        Blattnamen und den Grund dazu - sonst wird das Soll passend gemacht statt gemessen.
+      erwartet: "6 -> 0 ohne dieses Blatt, 1 Ankerdatei mit MONTIEREN darin"
 
   - id: K-06
     typ: presence

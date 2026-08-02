@@ -114,20 +114,26 @@ kriterien:
   - id: K-02
     typ: presence
     kritikalitaet: P1
-    aussage: "Der Abzug wird aus zaehle.mjs IMPORTIERT und nicht nachgebaut."
+    aussage: "Der Abzug wird aus zaehle.mjs IMPORTIERT und nicht nachgebaut - belegt an der IMPORTZEILE."
     pruefung:
-      befehl: "grep -o 'zaehle.mjs' scripts/zeile-ersetzen.mjs | wc -l"
+      befehl: "grep -o \"from './zaehle.mjs'\" scripts/zeile-ersetzen.mjs | wc -l"
       erwartet: "mindestens 1"
-    ausgangswert: "0 (gemessen 02.08. 12:0x; Partner 'js-yaml' -> 1, die Messung ist nicht leer)"
+    ausgangswert: "0 (gemessen 02.08. 14:0x; Partner \"from 'js-yaml'\" -> 1, die Messung ist nicht leer)"
     gegenbeweis: |
-      KORREKTUR des Planners, noch vor dem Gegenlesen: der erste Entwurf mass hier
-      `replace(/` und behauptete Ausgangswert 0. Nachgemessen sind es 1 (die Zeile
-      `.replace(/\n$/, '')` am Ende des Werkzeugs) - das Kriterium waere von Anfang an
-      rot und nie erfuellbar gewesen. F-07 in der anderen Richtung.
+      AUFLAGE des Evaluators (02.08., B8-Gegenlesung), uebernommen: das erste Muster war das
+      blosse Wort `zaehle.mjs`. Das haette auch eine ERWAEHNUNG im Kommentar gezaehlt - ein
+      Satz wie "wir koennten zaehle.mjs rufen" haette das Kriterium gruen gemacht, ohne dass
+      ein einziger Aufruf existiert. Gemessen wird jetzt die IMPORTZEILE.
+      Zweite Korrektur des Planners, noch vor dem Gegenlesen: der allererste Entwurf mass
+      `replace(/` und behauptete Ausgangswert 0 - nachgemessen ist es 1 (`.replace(/\n$/, '')`
+      am Ende des Werkzeugs). Das Kriterium waere von Anfang an rot und nie erfuellbar gewesen.
       Steht hier nach dem Bau 0, obwohl K-01 gruen ist, hat jemand `ohneKommentare` im
       Werkzeug NACHGEBAUT statt es zu rufen. Dann gibt es zwei Antworten auf die Frage
       "was ist Kommentar?", und die zweite driftet, sobald die erste dazulernt - und sie
       lernt dazu: `ohneKommentare` hat seinen Zeichenketten-Fehler bereits einmal korrigiert.
+      DER TRAGENDE BEWEIS bleibt K-03 Zeile 3 (ueberzaehlige `)` NUR im Kommentar -> true) -
+      diese Zusage faellt, wenn der Abzug ausgebaut wird, und sie laesst sich nicht
+      gruen tippen.
 
   - id: K-03
     typ: behavioural

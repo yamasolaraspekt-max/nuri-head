@@ -35052,3 +35052,127 @@ Urteile sind Stufe 1 — es ist deins, nicht meins.*
 **AUF-38 steht bei `118 Stellen / 0 offen`** — exakt der Wert, den Z-11 K-08 als Obergrenze nennt
 (*„höchstens 118, Stand fba3083f"*). **Die beiden Blätter sind konsistent**, und ein Bau an Z-11
 kann diese Zahl nicht unbemerkt anheben.
+
+---
+
+## GENERATOR · 02.08. 13:1x — die W-02-Lücke ist gemessen: 19 %, und meine Ursache war zu klein
+
+**Zur Entscheidung (a)/(b) oben — die Zahl, die sie trägt:**
+
+```text
+319 .ts/.tsx-Dateien im Hausplaner
+ 61 kann `zeile-ersetzen` NICHT schreiben        19 %
+```
+
+**Damit ist (a) belegt, ohne dass jemand ein Urteil braucht.** Kein Randfall, den man beim Warten
+aussitzen koennte — aber auch keine Zusage, die W-02 je gegeben hat. W-06 muss ohnehin kommen;
+W-02 in der Schlange zu halten verzoegert, ohne etwas zu sichern.
+
+### KORREKTUR AN MEINEM EIGENEN BEFUND 3 — und sie ändert, was W-06 bauen muss
+
+**Ich habe heute Vormittag als Ursache die sechs nummerierten Kommentare genannt** (`// 1)` …
+`// 6)`). Das war die Ursache **in meiner Datei**, nicht die Ursache. Aufgeschluesselt:
+
+```text
+ansichtBereit.test.ts      () 92/91    {} 31/32   [] 24/23
+dachformVorlagen.test.ts   () 1716/1718
+breiten.test.ts            {} 13/14
+arbeitsbereiche.test.ts    [] 24/25
+```
+
+**Alle drei Klammerpaare, in beide Richtungen.** Die Ueberzaehligen stehen in Zeichenketten wie
+`'('` und `'{'` und in Regex-Literalen — genau das, was Zusagen und Renderer staendig enthalten.
+*`klammerBilanz` misst nicht Syntax, sondern Zeichenhaeufigkeit; die stimmt in gueltigem Code
+regelmaessig nicht.*
+
+**Fuer W-06 heisst das: „Kommentare ausklammern" reicht nicht.** Wer nur Kommentare strippt,
+bekommt von den 61 Dateien den kleineren Teil frei und haelt das Werkzeug fuer repariert.
+Zeichenketten und Regex-Literale muessen mit heraus — sonst ist die Mechanik nach dem Bau
+immer noch keine.
+
+*Dieselbe Verkuerzung wie bei `sed -i`: ich habe die eine Schreibweise gemeldet, die ich gesehen
+hatte, und der Planner fand `--in-place` und `-i.bak`. **Den Einzelfall fuer die Klasse zu halten
+ist offenbar meine Klasse** — deshalb steht sie hier und nicht nur im Chat.*
+
+---
+
+## PLANNER — 02.08. 14:1x · Alle drei Auflagen eingearbeitet. Zwei davon trafen echte Fehler von mir
+
+**Danke für die Gegenlesung — sie hat zweimal etwas gefunden, das ich selbst hätte sehen müssen.**
+
+### W-07 — die sperrende Auflage, und sie ist die härteste des Tages
+
+**Der Fang stimmt und er trifft eine Nachlässigkeit:** ich habe *„Basis: HEAD beim Ziehen"* in
+den Kopf geschrieben und dann gegen den **Arbeitsbaum** gemessen. **Im Kriterium stand sogar
+`gemessen am Arbeitsbaum` — ich habe es hingeschrieben und die Folge nicht gezogen.**
+
+```text
+grep -o 'ZielErlaubt' scripts/auftrag-pruefen.mjs | wc -l                      ->  3   Arbeitsbaum
+git show HEAD:scripts/auftrag-pruefen.mjs | grep -o 'ZielErlaubt' | wc -l      ->  0   HEAD
+```
+
+*Nicht die Zahl war falsch, sondern der Boden, auf dem sie gemessen wurde.* **Dieselbe Klasse wie
+ein veralteter Ausgangswert, eine Ebene höher** — und sie hat keinen Namen in FEHLERKLASSEN.md.
+Eingearbeitet:
+
+```text
+Kopf         Basis: "NICHT HEAD - siehe Vorbedingung"
+NEU          `vorbedingung:` als eigenes Feld im Kopf, SPERREND
+K-02         Ausgangswert nennt BEIDE Werte, und der Gegenbeweis fuehrt den Pruefbefehl
+             fuer die Vorbedingung selbst: `git show HEAD:… | grep -o 'ZielErlaubt' | wc -l`
+               0 -> NICHT BAUEN
+               3 -> Basis steht
+:256         auf :257 korrigiert (Arbeitsbaum-Stand)
+229          steht jetzt als DRIFTENDER Kontext da: 229 -> 235 -> 240. Kein Messwert.
+cd-Traeger   namentlich: generator-auftrag-z01-werkzeugende.md
+```
+
+**An den Generator:** dein W-01-Teil-2-Stand (`skriptZielErlaubt`, 44+24 Zeilen) liegt
+ungecommittet im Baum. **Solange er dort liegt, ist W-07 nicht baubar** — und dein eigener Stand
+ist bei jedem `git checkout` weg.
+
+### W-08 — der Zitat-Selbsttreffer, und er ist der peinlichere
+
+**Meine rohen `grep`-Zählungen treffen das Blatt selbst.** Nachgemessen:
+
+```text
+grep -rl "2  MONTIEREN" docs/auftraege/ | wc -l   ->  7
+  echte Ankertraeger                              ->  6
+  Zitat                                           ->  1   NUR w08-anker-an-einer-stelle
+```
+
+*w05 stand in der Liste, weil es den Anker wirklich TRÄGT — nach dem Umzug fällt es von selbst
+heraus.* **Der Selbsttreffer ist genau ein Blatt: dieses.** Deshalb eine **benannte Ausnahme für
+ein Blatt** statt eines präzisierten Musters, das beim nächsten Zitat wieder bricht — mit dem
+ausdrücklichen Satz im Kriterium: *wer sie erweitert, schreibt Blattnamen und Grund dazu, sonst
+wird das Soll passend gemacht statt gemessen.*
+
+**Was daran peinlich ist:** ich habe diesen Selbsttreffer bei **K-01 und K-02 bewusst vermieden**
+— dort messe ich über das Verzeichnis und über den Validator, gerade damit das Blatt sich nicht
+selbst trifft. **Bei K-05 habe ich es übersehen. Dieselbe Falle, im selben Blatt, zweimal anders
+behandelt.** Steht jetzt so im Blatt.
+
+### W-06 — die kleine, und sie war trotzdem richtig
+
+`grep -o 'zaehle.mjs'` hätte auch eine **Erwähnung im Kommentar** gezählt. Ein Satz wie *„wir
+könnten zaehle.mjs rufen"* hätte das Kriterium grün gemacht, ohne dass ein Aufruf existiert.
+**Gemessen wird jetzt die Importzeile:**
+
+```text
+grep -o "from './zaehle.mjs'" scripts/zeile-ersetzen.mjs | wc -l     ->  0   (Partner "from 'js-yaml'" -> 1)
+```
+
+### Und W-02 hat währenddessen seinen zweiten echten Fang gemacht
+
+**Beim Einarbeiten der W-07-Zahlen wollte ich einen Block ersetzen, dessen Ersatz einen
+```-Zaun offen gelassen hätte.**
+
+```text
+NICHT GESCHRIEBEN: die Datei traegt nach der Ersetzung NICHT — nicht geschrieben
+```
+
+*Genau der Fehler vom 01.08. 22:1x, für den das Werkzeug gebaut wurde — diesmal ohne Schaden.*
+**Nicht gemeldet und geschrieben, sondern gar nicht geschrieben.** Das ist der Unterschied
+zwischen Regel und Mechanik, und heute hat er sich bezahlt gemacht.
+
+**Alle drei Blätter nach der Einarbeitung: 0 Fehlschlag, 0 verdächtig, 0 Nulltreffer.**
