@@ -36976,3 +36976,46 @@ W-08     sperrende Auflage einarbeiten (Basis-HEAD)
 W-06-N1  kleine Auflage einarbeiten
 S-13     wartet auf Gegenlesen — die Mechanik gegen genau meine Fehlerklasse
 ```
+
+---
+
+## EVALUATOR — 03.08. · Der Stapel ist abgenommen: Z-06 GRUEN · Z-03+Z-04 GESAMT GRUEN · W-07 GRUEN · W-06 GRUEN
+
+Pruefstand: eingefrorener Worktree auf 408c2d21 (enthaelt alle drei Commits). Jede Zahl
+selbst gemessen, jeder Kern mit eigenem Gegen-Beweis:
+
+```text
+WERKZEUG-SUITE           91 pass / 0 fail            exakt wie gemeldet
+W-07  K-01/K-02/K-03     awk 0 · node-blank 0 · ZielErlaubt 4 (>=4)
+      K-04               alle ZWOELF Faelle an nichtErlaubtesGlied selbst gefahren:
+                         8 rot, 4 gruen, 0 Abweichung
+      GEGEN-BEWEIS       ersteZielWort -> woerter[1]: GENAU K-04+K-05 rot (60/2), Reset 62/0
+W-06  K-01/K-02/K-04     typescript 1 · klammerBilanz 0 · pruef-tmp 0
+      K-03               319 Dateien mit pruefeInhalt selbst: 0 Durchfaller; Schnipsel
+                         FAELLT, fangKern ohne letzte } FAELLT, unveraendert TRAEGT
+      GEGEN-BEWEIS       pruefeInhalt -> immer true: 8 Zusagen rot (7/8), Reset 15/0
+Z-06  Suite              1649 pass / 0 fail · tsc 0
+      K-02               decke.test 11 Zusagen, L-Form 68 statt 80
+      GEGEN-BEWEIS       polygon -> immer gebaeudeUmriss: Z-06/K-01 rot (1648/1), Reset 1649/0
+      L-01 selbst        Anker v3 woertlich gefahren: Expertenmodus montiert, canvas 2,
+                         Snapshot-Funktion da, A/A' BYTE-GLEICH, 0 hausplaner.js-Fehler.
+                         Die Kontur-B-Differenz (md5 71e6.. vs 46c4..) bleibt die
+                         dokumentierte Generator-Messung - benannt, nicht selbst wiederholt
+                         (braeuchte praeparierten Wandbestand).
+Z-03+Z-04 Teil 2         K-02-Klartexte jetzt im Test (7 Treffer mittelpunkt/wandmitte/
+                         verlaengerung), Suite deckt sie - Teil 1 stand, GESAMT damit GRUEN.
+```
+
+Zwei eigene Messgeraete-Fehler unterwegs, beide gefangen: ein geratener Mutations-Anker
+(0 Treffer, Quelltext dann gelesen) und ein Regex, das die letzte } nicht traf (Datei endet
+auf };) - die Probe lief erst nach Korrektur, kein Urteil stand je darauf.
+
+W-06-Hinweis: der fail-open-Riegel (?? [] in Zeile 109) ist im Bau ENTHALTEN - W-06-N1 ist
+dafuer geschnitten und gegengelesen; GRUEN hier folgt dem W-02-Praezedenzfall (gegebene
+Zusagen erfuellt, benannte Nacharbeit traegt den Rest). W-08 ist jetzt baubar (W-07
+committet); die delete-Probe faehrt in der W-06-N1-Abnahme als Pflichtteil.
+
+VOTUM: auftrag=Z-06 rolle=evaluator ergebnis=gruen commit=20bbfcc2 datum=2026-08-03 hinweis=mutation-an-der-entscheidung-plus-anker-v3-selbst-gefahren
+VOTUM: auftrag=Z-03+Z-04 rolle=evaluator ergebnis=gesamt-gruen commit=20bbfcc2 datum=2026-08-03 hinweis=teil2-k02-klartexte-gemessen-teil1-stand
+VOTUM: auftrag=W-07 rolle=evaluator ergebnis=gruen commit=60f6344b datum=2026-08-03 hinweis=zwoelf-faelle-selbst-mutationsprobe-60-2
+VOTUM: auftrag=W-06 rolle=evaluator ergebnis=gruen commit=408c2d21 datum=2026-08-03 hinweis=319-auf-0-selbst-n1-traegt-fail-open-nacharbeit
