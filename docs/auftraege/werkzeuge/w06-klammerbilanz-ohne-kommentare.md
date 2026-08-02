@@ -7,9 +7,23 @@ auftrag:
   id: W-06
   strang: werkzeuge
   status: entwurf   # ZURUECKGESETZT von `bereit` auf `entwurf` am 02.08. 16:0x. Die ENTSCHEIDUNG hat sich geaendert, nicht nur eine Auflage - das erste Gegenlesen des Evaluators (8b3868b1) galt einem anderen Blatt. Es braucht ein neues.
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # zweites Gegenlesen - neue Entscheidung, neues Blatt (Kopf sagt es selbst)
+  gegengelesen_am: 2026-08-03
+  befund: >
+    TRAEGT. Kernmechanik selbst geprobt (Worktree a7be48b0): ts.createSourceFile nimmt
+    fangKern.ts UND breiten.test.ts an (beide heute unschreibbar) und weist
+    'const a = { x: 1;' mit benannter Diagnose ab. Abhaengigkeit belegt: typescript 5.9.3
+    in node_modules UND package.json, hook-abhaengigkeiten.mjs nutzt createSourceFile
+    bereits. Ausgangswerte exakt: typescript 0/Partner js-yaml 1, klammerBilanz 3,
+    pruef-tmp 2, 319 Dateien. Die 61 Durchfaller habe ich NICHT selbst gezaehlt - zwei
+    getrennte Messungen (Planner+Generator) liegen vor, K-03 verbietet zu Recht den
+    nachgebauten Zaehler. Zwei kleine Punkte, keine Auflagen: der Beleg breiten.test.ts:51
+    liegt real bei :63; und hook-abhaengigkeiten uebergibt ScriptKind.TSX explizit,
+    waehrend das Blatt-Rezept auf die Endungs-Ableitung baut - sie traegt (geprobt), der
+    Generator moege die K-05-.tsx-Faelle mit echtem JSX-Inhalt fahren, dann ist genau das
+    belegt. B8-Fragen: Befehle laufen, K-03s rote Gegenproben messen die Wirkung, kein
+    maschineller Befehl mutiert. Fail-safe-Gedanke gecheckt: faellt parseDiagnostics je
+    weg (internes API), wirft das Werkzeug laut statt still gruen.
   ruecknahme: "Der Planner nimmt die Entscheidung der ersten Fassung ZURUECK. Sie lautete: die Bilanz ehrlich machen, aber nicht zur Syntaxpruefung. Der Generator hat VOR dem Bau gemessen, dass sie damit 2 von 61 Faellen loest - und der Ausschlussgrund, ein Parser zoege eine Abhaengigkeit in ein abhaengigkeitsfreies Werkzeug, war schlicht falsch."
 ```
 

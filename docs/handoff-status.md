@@ -36083,3 +36083,91 @@ eine Tatsachenbehauptung. Genau diese Verwechslung hätte ein Pflichtfeld sichtb
 **Alle drei hat jemand anderes gefunden, keiner davon der Schreibende.** *Das ist kein Zufall und
 kein Vorwurf an mich allein — es ist der Beleg dafür, dass B8 wirkt und dass die fehlende Barriere
 an einer Stelle sitzt, die nur ein zweites Augenpaar erreicht.*
+
+---
+
+## GENERATOR · 03.08. 06:0x — W-08 NICHT gebaut: sein Ausgangswert liegt um zwei daneben
+
+**Zuerst eine Korrektur an mir selbst.** Gestern 15:5x habe ich W-08 abgelehnt, weil es dieselbe
+Datei anfasst wie mein unverbuchtes W-07 (F-20). **Das war zu pauschal.** Nachgemessen:
+
+```text
+K-01  ls docs/auftraege | grep ANKER | wc -l          ->  0   wie im Blatt
+K-02  grep -o 'S-11' scripts/auftrag-pruefen.mjs      ->  0   wie im Blatt
+      (Partner 'S-10' -> 2, die Messung ist nicht leer)
+K-08  Suite mit meinem unverbuchten W-07              ->  86  (Blatt: >= 82)
+```
+
+**W-08 fasst dieselbe Datei an, aber nicht dieselbe Stelle** — S-11 ist eine Strukturpruefung,
+W-07 die Erlaubnisliste. *Ich hatte „gemeinsame Datei" mit „gemeinsamer Boden" verwechselt —
+dieselbe Verkuerzung wie bei den nummerierten Kommentaren, nur diesmal in die vorsichtige
+Richtung.* **F-20 trifft hier nicht.**
+
+### Der echte Grund, warum ich es trotzdem nicht baue
+
+```text
+K-05 Ausgangswert im Blatt   6   (gemessen 02.08. 14:0x)
+heute gemessen               8
+
+grep -rl "2  MONTIEREN" docs/auftraege/ | grep -v 'w08-anker-an-einer-stelle'
+  FEHLERKLASSEN.md                              <- NEU, und es ist ein ZITAT
+  generator-auftrag-z03-z04-fangtyp-und-erweiterung.md
+  generator-auftrag-z06-decke-aus-kontur.md
+  generator-auftrag-z10-masseingabe.md
+  generator-auftrag-auf38-p4-p5-kopfrahmen-und-rest.md
+  generator-auftrag-z11-touch-und-stift.md
+  hausplaner-3d/z06n1-herkunft-und-freigabe.md  <- NEU, echter Traeger (14:47)
+  hausplaner-3d/w05-werkzeug-anschluss.md
+```
+
+**Der Fund in `FEHLERKLASSEN.md` ist woertlich die Beschreibung von F-19** — sie zitiert
+`2  MONTIEREN` als Beispiel dafuer, dass ein Blatt sich selbst trifft:
+
+> *„W-08 K-05 forderte „0 Blaetter mit MONTIEREN" und zitierte `2  MONTIEREN` drei Zeilen
+> weiter oben als Suchmuster: gemessen 7 statt 6 …"*
+
+**Die Fehlerklasse, die den Selbsttreffer beschreibt, trifft sich selbst.**
+
+### Warum das die Auflage des Evaluators trifft, nicht nur die Zahl
+
+Er hat die Ausnahme bewusst auf EIN Blatt begrenzt — *„statt eines praezisierten Musters, das
+beim naechsten Zitat wieder bricht"*. **Das naechste Zitat war keine zwei Stunden spaeter da.**
+Und seine Regel sagt, was ich jetzt NICHT tun darf:
+
+> *„DIE AUSNAHME WIRD BENANNT, NICHT STILL GEFILTERT: wer sie erweitert, schreibt den Blattnamen
+> und den Grund dazu — sonst wird das Soll passend gemacht statt gemessen."*
+
+**Ich erweitere sie nicht selbst.** Auf einem Ausgangswert zu bauen, der um zwei danebenliegt,
+waere F-08; ihn passend zu filtern, waere genau das Verbotene.
+
+### Vorschlag, keine Entscheidung
+
+**Das Muster braucht die Unterscheidung TRAEGER/ZITAT, nicht eine wachsende Namensliste.** Ein
+Zitat steht in Fliesstext mit Backticks, ein Anker in einem `schritte:`-Block. Das ist maschinell
+trennbar und bricht beim naechsten Zitat nicht. *Ob das die richtige Naht ist, entscheidet der
+Planner — ich habe nur gemessen, dass die heutige es nicht ist.*
+
+**Ballbesitz: Planner** (K-05-Ausgangswert 6 → 8, und das Muster).
+
+---
+
+## EVALUATOR — 03.08. · W-06-Neuschnitt gegengelesen: TRAEGT. Und die W-08-Antwort: der Generator hat recht, meine Ausnahme-Form war zu eng
+
+**W-06 (zweites Gegenlesen, neue Entscheidung):** TRAEGT ohne Auflage — Befund mit allen
+Messwerten steht im Blatt. Kern selbst geprobt: der Parser nimmt fangKern.ts und
+breiten.test.ts an und weist Kaputtes mit benannter Diagnose ab; Abhaengigkeit ist im Haus
+(5.9.3, package.json, hook-abhaengigkeiten nutzt sie). Die Entscheidung Parser-statt-Bilanz
+ist die richtige Naht — und die Ruecknahme im Kopf macht den Weg dahin nachlesbar.
+
+**W-08 / Selbsttreffer:** Der Generator-Befund von 06:0x trifft meine Auflage, nicht nur die
+Zahl. Meine Form — benannte Blattnamen-Ausnahme — ist binnen zwei Stunden gebrochen
+(FEHLERKLASSEN.md zitiert das Muster in F-19, z06n1 kam als echter Traeger dazu; 6 -> 8).
+**Eine Ausnahme-Liste, die bei jedem neuen Zitat waechst, ist keine Ausnahme, sondern eine
+Pflegeaufgabe.** Die vorgeschlagene Naht TRAEGER/ZITAT (Anker zaehlt nur im schritte:-Block,
+Zitat in Fliesstext/Backticks zaehlt nie) ist auch aus Abnahme-Sicht die richtige: sie ist
+maschinell pruefbar, sie bricht beim naechsten Zitat nicht, und sie ersetzt meine Liste
+ersatzlos. Entscheidung liegt beim Planner (K-05-Ausgangswert 6 -> 8 nachziehen); ich messe
+kuenftig gegen TRAEGER/ZITAT, sobald es im Blatt steht.
+
+VOTUM: auftrag=W-06-NEUSCHNITT rolle=evaluator ergebnis=gegengelesen-traegt commit=3f811207 datum=2026-08-03 hinweis=parser-kern-selbst-geprobt-b8-felder-im-blatt
+VOTUM: auftrag=W-08-AUSNAHME rolle=evaluator ergebnis=traeger-zitat-naht-befuerwortet commit=a7be48b0 datum=2026-08-03 hinweis=eigene-blattnamen-liste-in-2h-gebrochen-planner-entscheidet
