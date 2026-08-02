@@ -34351,3 +34351,82 @@ liegen 110 strang-lose Blaetter in der Wurzel; (3) Gegenprobe/K-06 mutieren Auft
 Nachbesserung liegen beim Generator des Strangs.
 
 VOTUM: auftrag=AUF-S10-STRANG rolle=evaluator ergebnis=gegengelesen-traegt-mit-auflagen commit=33d35495 datum=2026-08-02 hinweis=b8-felder-im-blatt-drei-auflagen-bau-beim-generator
+
+# ═══ 02.08. 10:4x — Team Produktdaten hat gestoppt. Ein Strang, ein Team. ═══
+
+**Yama: „der andere Planner hat seine Aktivitäten gestoppt, du arbeitest nur im 3D-Hausplaner,
+IDS und andere Sachen bleiben erst mal so."**
+
+## Seine Übergabe — festgehalten, damit sie nicht im Chat verschwindet
+
+*Wörtlich von ihm, weil eine Übergabe dorthin gehört, wo sie jemand findet:*
+
+```text
+Alles gesichert. Kein offener Vorgang, keine haengenden Locks, keine halbe Aenderung im Baum.
+
+HERKUNFTSHINWEIS: seine letzte Korrektur an werkzeuge/s10-strang-pflichtfeld.md
+   (nachgezogene Pfade + Kriterium K-06) hat es wegen eines Locks nicht in einen
+   EIGENEN Commit geschafft. Sie liegt in der Datei, die der andere Strang mit seiner
+   B8-Gegenlesung committet hat. Verloren ist nichts - aber K-06 steht unter fremdem
+   Namen. Wer spaeter die Herkunft sucht, findet sie hier.
+   Gemessen: K-06 steht 3x in docs/auftraege/werkzeuge/s10-strang-pflichtfeld.md.
+
+UEBERGABEFLAECHEN des Strangs `produktdaten`:
+   docs/product-data/LEDGER-produktdaten.md         Ballbesitz, offene Posten, Tatsachen
+   docs/product-data/UEBERGABE-NACHT-2026-08-01.md  der ausfuehrliche Stand
+
+BLOCKIERT an EINER Stelle: `ergebnis-2026-08.txt` fehlt. Ohne die Zahlen ist
+   Paket 1 Schritt 3 nicht beschlussfaehig, und alles danach haengt daran.
+   DREI Auftraege liegen fertig geschnitten bereit, sobald jemand sie aufnimmt.
+```
+
+**Gegengemessen, weil eine Aussage über eine fehlende Datei genau die Klasse ist, die man prüft:**
+
+```text
+find . -name 'ergebnis-2026-08*' -not -path './.git/*'   ->  nichts
+grep -rl 'ergebnis-2026-08' docs/ | wc -l                ->  5 Papiere warten darauf
+```
+
+**Die Datei ist wirklich nicht da.** Sie entsteht laut seiner Übergabe aus **einem** Befehl, und
+der braucht Zugangsdaten — deshalb liegt er bei Yama:
+
+```bash
+mysql -h 127.0.0.1 -P 3307 -u <user> -p ticket \
+  < docs/product-data/evidence/query-results/datenqualitaet-pruefabfragen.sql \
+  > docs/product-data/evidence/query-results/ergebnis-2026-08.txt
+```
+
+**AN YAMA: ein Befehl, und ein ganzer Strang mit drei fertigen Aufträgen ist wieder beschlussfähig.**
+*Das ist der billigste offene Posten im ganzen Projekt.*
+
+## Was für uns gilt — ab sofort
+
+```text
+GESCHRIEBEN wird nur in:  resources/planner/hausplaner/** · docs/auftraege/** · docs/planner/**
+                          · scripts/** (Strang `werkzeuge` gehoert jetzt ebenfalls uns)
+NICHT ANGEFASST:          docs/product-data/** · app/** · routes/** · IDS · DATANORM
+                          Auch nicht "schnell mal" - der Strang ruht, er ist nicht frei.
+S-06 und S-01             werden wieder ueber BEIDE unsere Straenge gemessen (hausplaner-3d
+                          + werkzeuge). Getrennt zu messen war richtig, solange zwei Teams
+                          liefen; mit einem Team ist es eine kuenstliche Sperre.
+                          Gemessen: S-01 genau einer (Z-03+Z-04) · S-06 3 baubare.
+```
+
+**Die Strangbindung bleibt trotzdem in jedem Kopf.** *Sie kostet nichts und ist beim nächsten
+zweiten Team sofort wieder scharf — sie ist die beste Hinterlassenschaft dieses Vormittags.*
+
+## Z-06 nachgemessen — es ist wirklich baubar, sobald das Votum da ist
+
+```text
+node scripts/auftrag-pruefen.mjs …/generator-auftrag-z06-decke-aus-kontur.md
+   3 OK · 0 Fehlschlag · 0 nulltreffer · KEINE Sperre
+node scripts/zaehle.mjs …/HausplanerApp.tsx 'polygon: gebaeudeUmriss\(\)'  -> 2  (wie im Blatt)
+node scripts/zaehle.mjs …/toolRegistry.ts "id: 'kontur'"                    -> 1  (Z-05-N1 steht)
+```
+
+**Z-06 wurde am 01.08. geschnitten und hält gegen den heutigen Bestand** — kein veralteter
+Ausgangswert, keine S-08. *Ich habe es nachgemessen, weil ein Blatt, das einen Tag liegt, seine
+Zahlen verlieren kann. Dieses hat sie nicht.*
+
+**Der Sperrgrund bleibt trotzdem stehen.** Z-05 hat kein Votum. **Ich entsperre es nicht, weil ich
+das Votum für Formsache halte** — das wäre genau die Bequemlichkeit, gegen die der Rahmen steht.
