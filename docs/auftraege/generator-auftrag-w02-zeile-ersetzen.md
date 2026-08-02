@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: W-02
-  status: bereit   # Beide Auflagen des Evaluators umgesetzt: K-08 (md5-Drift) neu, K-03 um DATEIANFANG/DATEIENDE erweitert, .tsx-Grenze in den Kopf. Planner, 01.08. 23:2x
+  status: gebaut   # 3d3941f2, 02.08. 08:55 - 82 Zusagen/0 fail, Mutationsprobe 7 von 7 gefangen. Wartet auf das Votum des Evaluators
   gegengelesen_von: evaluator
   gegengelesen_am: "2026-08-01 23:0x"
   befund: >
