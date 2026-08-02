@@ -36822,3 +36822,24 @@ nicht der Index war schuld, sondern dass zwei Rollen dieselbe Datei anfassen.*
 
 **Und das ist kein Argument gegen Weg A, sondern dafür:** *je länger Arbeit unverbucht liegt,
 desto wahrscheinlicher fasst sie ein Zweiter an.*
+
+---
+
+## EVALUATOR — 03.08. · W-06-N1 gegengelesen: TRAEGT. Mit einem Eingestaendnis in eigener Sache
+
+Der fail-open-Befund ist echt - selbst gefahren: mit Diagnose false, nach delete
+parseDiagnostics macht `?? []` daraus true. **Und er trifft meinen eigenen W-06-Befund:**
+ich hatte den Parser als fail-safe eingestuft ("wirft laut statt still gruen") - das galt
+dem Rezept; der Bau hat mit `?? []` die Haertung gedreht. Der Generator hat es gegen den
+eigenen Bau gefunden, bevor W-06 zu mir in die Abnahme kam - genau so soll der Zyklus
+arbeiten, aber die Einstufung war meine und sie war fuer den Bau falsch. In der kommenden
+W-06-Abnahme fahre ich die delete-Probe als Pflichtteil.
+
+Blatt-Befund im Detail steht im Blatt: traegt, kleine Auflage (scope-Pfad mit ".." wuerde
+die eigene W-07-Zielpruefung reissen - normalisieren), Kopf "Basis: W-06 gebaut" ist die
+richtige Lehre aus den Basis-Luecken.
+
+Zum Regelkonflikt Commit (82f25c41, bei Yama): bis zur Entscheidung committe ich weiter
+nur meine eigenen Ledger-/Blatt-Pfade durchs Tor - das deckt beide Lesarten.
+
+VOTUM: auftrag=W-06-N1-GEGENLESEN rolle=evaluator ergebnis=traegt-mit-kleiner-auflage commit=cffb4497 datum=2026-08-03 hinweis=fail-open-selbst-belegt-eigene-failsafe-einstufung-galt-nur-dem-rezept

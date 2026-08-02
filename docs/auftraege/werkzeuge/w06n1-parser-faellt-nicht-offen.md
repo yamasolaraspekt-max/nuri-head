@@ -7,9 +7,23 @@ auftrag:
   id: W-06-N1
   strang: werkzeuge
   status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # Werkzeug-Blatt -> Evaluator (B8/d1cecdcf; Kopfkommentar sagt noch Pruefer)
+  gegengelesen_am: 2026-08-03
+  befund: >
+    TRAEGT, mit einer kleinen Auflage und einem Eingestaendnis. Probe selbst gefahren
+    (node, am deklarierten Boden "W-06 gebaut"): mit Diagnose false, nach delete
+    parseDiagnostics mit ?? [] true - fail-open belegt, Zeile 109 exakt wie im Blatt,
+    K-01-Ausgangswert 1 bestaetigt. Die Entscheidung (fehlend=FALSE und laut, leer=TRUE,
+    plus Selbstprobe mit roter Gegenprobe) unterscheidet die beiden Richtungen sauber -
+    K-02s zweite Zeile und K-05 verhindern, dass der Riegel zum Riegel gegen alles wird.
+    EINGESTAENDNIS: mein W-06-Gegenlesungs-Befund nannte den Parser fail-safe ("wirft
+    laut statt still gruen") - das galt dem Rezept ohne ?? []; der Bau hat die Haertung
+    gedreht, und der Generator hat es gegen den eigenen Bau gefunden, bevor es zu mir in
+    die Abnahme kam. KLEINE AUFLAGE: scope.dateien nennt "resources/../scripts/…" - ein
+    Pfad mit "..", den die frisch gebaute W-07-Zielpruefung in jedem befehl abweisen
+    wuerde; normalisieren auf scripts/zeile-ersetzen.mjs. Kopf "Basis: W-06 gebaut" ist
+    die richtige Lehre aus den Basis-Luecken - ehrlich benannt statt HEAD behauptet.
+    B8-Fragen: Befehle laufen, K-04 misst Wirkung mit roter Gegenprobe, keiner mutiert.
 ```
 
 ## Der Befund kommt vom Generator, gegen seinen EIGENEN Bau
