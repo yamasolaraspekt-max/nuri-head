@@ -5,7 +5,7 @@
 ```yaml
 auftrag:
   id: Z-10
-  status: bereit
+  status: gebaut   # c9af2243, 02.08. 09:20 - Suite 1641/1641, tsc 0, Inline-Stellen unveraendert. Wartet auf das Votum des Evaluators
 ```
 
 ## Warum das jetzt geht und warum es zählt
