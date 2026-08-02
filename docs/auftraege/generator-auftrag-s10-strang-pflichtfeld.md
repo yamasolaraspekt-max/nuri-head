@@ -1,6 +1,6 @@
 # S-10 · Strukturregel „Strang" im Auftragsvalidator
 
-```text
+```yaml
 auftrag:
   id: AUF-S10-STRANG
   strang: werkzeuge
