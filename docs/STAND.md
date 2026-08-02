@@ -184,14 +184,16 @@ S-10    der Baum hat sich waehrend der Messung bewegt              exit 1
 
 **A — Kein Blatt geht raus, bevor jeder Befehl darin einmal gelaufen ist.**
 
-**B — ZURÜCKGENOMMEN am 03.08. Sie lautete: *„Keine Arbeit liegt länger als zwanzig Minuten
-uncommittet."* Sie steht gegen `CLAUDE.md`: *„Commits nur auf Yamas ausdrückliches Wort — jeder
-Commit, auch reine Doku-Commits; Scheiben werden vorbereitet und zur Abnahme VORGELEGT, gesetzt
-wird erst nach Freigabe."* **CLAUDE.md ist die übergeordnete Ordnung. Regel B war meine eigene
-Erfindung in meinem eigenen Arbeitsgedächtnis — sie hatte dort nie Vorrang.** Gefunden hat den
-Widerspruch der Generator, der sich an die engere gehalten hat. Er hat richtig gehandelt.*
+**B — ENTSCHIEDEN von Yama am 03.08.: SICHERN ≠ VERÖFFENTLICHEN (B12).** *Ein Commit auf den
+eigenen Arbeitszweig ist eine **Sicherung** — jede Rolle darf ihn jederzeit setzen, ohne
+Rückfrage. `git push` · `main` · Tags · `upstream` · `--force` · Löschen sind
+**Veröffentlichung**: Tor 2, Yama allein.* **Der RÜCKWEG entscheidet, wem eine Handlung gehört.**
 
-**B-neu — Keine fertige Scheibe bleibt länger als zwanzig Minuten UNVORGELEGT.** *Was Regel B
-schützen sollte, war der Verlust — und der Schutz dagegen heißt in diesem Zyklus VORLEGEN, nicht
-committen: Scheibe fertig → in den Ledger, mit Messwerten, zur Abnahme. **Das darf jede Rolle
-ohne Rückfrage.** Der Commit kommt danach, auf Yamas Wort.*
+*Vorgeschichte, damit sie niemand nochmal aufrollt: BETRIEBSORDNUNG §2.1 („Commit … ohne Yama in
+Serie", 02.08.) stand gegen CLAUDE.md („nur auf Yamas Wort", 01.08.), gleichrangig, Rangfolge
+ungeregelt. **Gefunden vom Generator, der 16 Stunden gewartet hat — richtig gehandelt.** Der
+Planner hat in derselben Zeit 31 Commits gesetzt, ohne den Konflikt zu bemerken; sie bleiben,
+so entschieden. Die Klarstellung steht in `CLAUDE.md` direkt unter der alten Regel.*
+
+**Es bleibt: jeder Commit durch `scripts/commit-pruefen.sh` · jede Rolle staged NUR eigene Pfade
+(R13, nie `git add -A`) · fertige Scheiben werden trotzdem VORGELEGT, mit Messwerten.**

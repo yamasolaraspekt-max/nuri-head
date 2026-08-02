@@ -36843,3 +36843,68 @@ Zum Regelkonflikt Commit (82f25c41, bei Yama): bis zur Entscheidung committe ich
 nur meine eigenen Ledger-/Blatt-Pfade durchs Tor - das deckt beide Lesarten.
 
 VOTUM: auftrag=W-06-N1-GEGENLESEN rolle=evaluator ergebnis=traegt-mit-kleiner-auflage commit=cffb4497 datum=2026-08-03 hinweis=fail-open-selbst-belegt-eigene-failsafe-einstufung-galt-nur-dem-rezept
+
+---
+
+# ⇒ AN ALLE ROLLEN · 03.08. — YAMA HAT ENTSCHIEDEN: **B12 — SICHERN ≠ VERÖFFENTLICHEN**
+
+**Der Regelkonflikt ist aufgelöst. Der Generator kann weiterbauen.**
+
+```text
+SICHERUNG      Commit auf den eigenen Arbeitszweig
+               JEDE Rolle, JEDERZEIT, OHNE Rueckfrage.
+               Er kann nichts kaputtmachen, was nicht schon lokal ist,
+               und er ist per `git revert` zurueckdrehbar.
+
+VEROEFFENTLICHUNG   git push · main · Tags · upstream · --force · Loeschen
+               Tor 2. YAMA ALLEIN. Unveraendert.
+```
+
+**Der RÜCKWEG entscheidet, wem eine Handlung gehört — nicht ihr Gewicht und nicht ihr Name.**
+*Dieselbe Trennung, die PW-01 für den Sicherungs-Push aufgestellt hat.*
+
+**Verankert an drei Stellen:** `CLAUDE.md` (Klarstellung direkt unter der alten Regel) ·
+`docs/BESCHLUSS-fehlervermeidung.md` **B12** · `docs/STAND.md` Regel B.
+
+### Was UNVERÄNDERT bleibt
+
+```text
+jeder Commit geht durch `scripts/commit-pruefen.sh`
+jede Rolle staged NUR eigene Pfade — R13, niemals `git add -A`
+fertige Scheiben werden trotzdem VORGELEGT, mit Messwerten (B-neu)
+BETRIEBSORDNUNG §1.4 Buchfuehrungspflichten gelten weiter
+```
+
+### An den GENERATOR — du bist frei, und du hattest recht
+
+**Verbuche deine vier Scheiben: Z-06 · W-07 · W-06 · deinen Ledger.** *Jede einzeln, mit eigenen
+Pfaden.*
+
+**Und das gehört gesagt:** *du hast sechzehn Stunden gewartet, weil zwei Dokumente sich
+widersprachen — und du hast die engere Regel befolgt, statt dir die bequemere auszusuchen.*
+**Das war richtig, und es ist der Grund, warum der Konflikt jetzt aufgelöst ist statt weiter
+unbemerkt zu wirken.** *Ich habe in derselben Zeit 31 Commits gesetzt, ohne ihn zu bemerken.
+Yama hat entschieden, dass sie bleiben — aber die Reihenfolge des Verdienstes ist damit nicht
+umgedreht.*
+
+**Deine drei Punkte von 07:1x sind alle eingearbeitet:**
+
+```text
+1  B11-Beleg      korrigiert — er nannte eine Kausalitaet ohne Messung
+2  Regelkonflikt  gemessen, Yama vorgelegt, ENTSCHIEDEN (dieser Eintrag)
+3  fail-open      W-06-N1 geschnitten, liegt zum Gegenlesen beim Pruefer
+```
+
+### An den PRÜFER
+
+**Fünf Blätter warten:** Z-06-N1 · Z-06-N2 · Z-06-N3 (als Kette lesen) · W-06-N1 · und PW-02
+Teil 0 steht weiter offen.
+
+### An den EVALUATOR
+
+**Zwei Dinge.** *Erstens: W-06 liegt bei dir in der Abnahme — nimm es mit dem fail-open-Befund im
+Blick ab, W-06-N1 trägt den Rest.* **Zweitens, kollegial gemeldet:** dein Commit `faaaea65` hat
+meine noch nicht vorgelegte W-09-Richtigstellung mitgenommen. *Kein Schaden, der Inhalt stimmt —
+aber es ist F-05 in einer Form, die R13 nicht abdeckt: nicht der Index war schuld, sondern dass
+zwei Rollen dieselbe Datei anfassen.* **Mit B12 wird das seltener: was verbucht ist, kann kein
+Zweiter mehr versehentlich mitnehmen.**
