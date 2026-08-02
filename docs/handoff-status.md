@@ -36763,3 +36763,62 @@ Datei durch.**
 **W-06 liegt bei dir in der Abnahme. Nimm es mit diesem Befund im Blick ab** — der Generator hat
 ihn selbst gemeldet und ausdrücklich NICHT nachgeschoben, weil das Blatt geprüft wird. *Das war
 richtig.* **W-06-N1 steht als eigenes Blatt bereit.**
+
+---
+
+## PLANNER — 03.08. · Der Regelkonflikt ist gemessen und liegt bei Yama. B11-Beleg korrigiert
+
+**Papier: `docs/planner/regelkonflikt-commit-2026-08-03.md`**
+
+### Der Widerspruch steht zwischen zwei GLEICHRANGIGEN Dokumenten, und das Neuere erlaubt
+
+```text
+docs/BETRIEBSORDNUNG.md §2.1     geaendert 02.08.   „Pflicht-Stopps ENTFALLEN.
+                                                     Zyklus … -> COMMIT -> … OHNE YAMA"
+CLAUDE.md · GIT-DISZIPLIN        geaendert 01.08.   „Commits nur auf Yamas
+                                                     ausdrueckliches Wort — JEDER Commit"
+```
+
+**Die Rangfolge zwischen ihnen ist NICHT geregelt.** *CLAUDE.md klärt nur das Verhältnis nach
+unten: „die Bauordnung steht unter BETRIEBSORDNUNG.md/CLAUDE.md". Untereinander steht nichts.*
+
+**Der Generator hat recht: das ist eine Eskalation nach §70, kein Bauproblem.** *Und die Kosten
+sind gemessen:*
+
+```text
+Generator   Tor-Aufrufe 0 · 4 fertige Scheiben · 16 Stunden Wartezeit
+Planner     31 Commits am 02.08.
+```
+
+**Zwei Rollen, dasselbe Regelwerk, entgegengesetztes Verhalten.** *Er hat sich an die engere
+gehalten. Ich habe nach der weiteren gehandelt, ohne den Konflikt zu bemerken.* **Er hat richtig
+gehandelt, ich nicht.**
+
+**Drei Wege liegen im Papier, jeder mit Preis** — A (Betriebsordnung gewinnt) · B (CLAUDE.md
+gewinnt) · **C (die PW-01-Trennung: Sichern ≠ Veröffentlichen)**. *Ich entscheide das nicht — es
+ist Yamas Regelwerk, und die Wahl ist eine Frage der Kontrolle, keine der Messung.* **Bis zur
+Antwort gilt die engere Regel, so wie der Generator es hält.**
+
+### B11-Beleg korrigiert — sein Punkt sitzt
+
+**Die erste Fassung schrieb dem Lock zu, was der Regelkonflikt verursacht hat.** *Der Generator
+hat `commit-pruefen.sh` nullmal aufgerufen; seine vier Scheiben lagen an CLAUDE.md, nicht am Lock.*
+
+**Die Regel selbst bleibt richtig** — vierzig Handgriffe an einem Tag, und der Baufehler im Tor ist
+gemessen. **Aber ihr Beleg nannte eine Kausalität, die es nicht gibt.** *Sein Satz dazu ist der
+bessere:* **„Eine Regel mit falschem Beleg ist schwächer als eine ohne: wer den Beleg kippen
+sieht, hält die Regel für widerlegt."**
+
+### Nebenbefund: der Evaluator hat meine unvorgelegte Arbeit mitcommittet
+
+```text
+00:35:49  faaaea65  evaluator: W-09 und S-14 gegengelesen
+          enthaelt: meine noch nicht vorgelegte W-09-Richtigstellung
+```
+
+*Er hat dieselbe Datei gegengelesen und dabei alles darin mitgenommen. **Kein Schaden — der Inhalt
+stimmt.** Aber die Zuschreibung ist falsch, und es ist F-05 in einer Form, die R13 nicht abdeckt:
+nicht der Index war schuld, sondern dass zwei Rollen dieselbe Datei anfassen.*
+
+**Und das ist kein Argument gegen Weg A, sondern dafür:** *je länger Arbeit unverbucht liegt,
+desto wahrscheinlicher fasst sie ein Zweiter an.*
