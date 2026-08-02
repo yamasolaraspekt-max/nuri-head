@@ -24,7 +24,7 @@
  * Er repariert nichts. Findet er in einem alten Blatt einen toten Befehl, sagt er es — **sonst
  * wäre der erste Lauf ein Massenumbau von 80 Dateien.**
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import yaml from 'js-yaml';
 
@@ -422,6 +422,17 @@ export function sammleBefehle(kopf) {
     } else if (p.typ && p.typ !== 'befehl') {
       // Kein Befehl, aber eine Prüfung: der Validator darf NICHT so tun, als hätte er das geprüft.
       gefunden.push({ id, befehl: null, typ: p.typ, ausgefuehrt_von: k?.ausgefuehrt_von ?? null });
+    } else if (k?.typ === 'verweis') {
+      // **W-08 K-04 / F-17 — der Sammler ist das Nadelöhr, nicht die Bewertung.**
+      //
+      // Ein `verweis` traegt sein `typ` am KRITERIUM und hat gar keine `pruefung`. Die beiden
+      // Zweige oben fragen `pruefung.typ` — der Eintrag fiel damit lautlos heraus, und im Bericht
+      // stand eine Zahl, die ihn nicht enthielt.
+      //
+      // *Gefunden beim Bau von W-08: meine erste Zusage prueft `pruefeEintrag` und war gruen,
+      // waehrend der volle Lauf den Eintrag verschluckte. Dieselbe Klasse wie B3 — wer eine
+      // Sperre prueft, muss die Stelle fragen, die WIRKLICH entscheidet, nicht die dahinter.*
+      gefunden.push({ id, befehl: null, typ: 'verweis', quelle: k?.quelle ?? null });
     }
   }
   return gefunden;
@@ -439,6 +450,19 @@ export function gateMuster(befehl) {
 
 /** Einen einzelnen Eintrag bewerten — ohne zu werfen. */
 export function pruefeEintrag(eintrag, arbeitsverzeichnis) {
+  // **W-08 K-04 / F-17 — `typ: verweis` nennt SEINE QUELLE, und ob es sie gibt.**
+  //
+  // Ohne diesen Zweig steht im Bericht nur `typ: verweis` — nicht von einem unausfuehrbaren
+  // Kriterium zu unterscheiden. *Ein neuer `typ`, den niemand meldet, macht aus einem Anker eine
+  // Leerstelle, die wie Zustimmung aussieht: genau die Gestalt von F-17.*
+  if (eintrag.typ === 'verweis') {
+    const da = eintrag.quelle && existsSync(eintrag.quelle);
+
+    return {
+      ...eintrag, stufe: STUFEN.NICHT_MASCHINELL,
+      hinweis: `typ: verweis -> ${eintrag.quelle ?? '(ohne quelle)'}${da ? '' : '  ← QUELLE FEHLT'}`,
+    };
+  }
   if (!eintrag.befehl) {
     return {
       ...eintrag, stufe: STUFEN.NICHT_MASCHINELL,
@@ -636,6 +660,38 @@ export function strukturBefunde(kopf) {
   const auftrag = kopf?.auftrag ?? kopf ?? {};
   const kriterien = kopf?.kriterien ?? auftrag?.kriterien ?? [];
   const liste = Array.isArray(kriterien) ? kriterien : [];
+
+  // **S-11 / F-19** — „Eine Wahrheit, N-mal getippt." Der Browser-Anker stand ausgeschrieben in
+  // 16 Blaettern und war an EINEM Tag zweimal falsch; jede Korrektur kostete sechs Ersetzungen
+  // und erreichte trotzdem nur die Haelfte der Traeger.
+  //
+  // **Die Sperre sitzt am UEBERGANG, nicht am Ruhezustand.** Sie greift nur bei den Staenden,
+  // deren Anker wirklich gefahren wird — ein `ruht`-Blatt kann nicht schaden, solange es Archiv
+  // bleibt. *Wer es auf `bereit` setzt, faellt in derselben Sekunde hier hinein: genau der eine
+  // Weg, auf dem ein alter Anker zurueckkommt.*
+  {
+    const GEFAHREN = ['aktiv', 'bereit', 'gebaut', 'entwurf', 'gesperrt'];
+    const stand = String(auftrag?.status ?? '').trim();
+    const id = auftrag?.id ?? '(ohne id)';
+    if (GEFAHREN.includes(stand)) {
+      const browser = liste.some((k) => k?.pruefung?.typ === 'browser' || k?.typ === 'browser');
+      const anker = liste.filter((k) => String(k?.id ?? '').toLowerCase().includes('anker'));
+      if (browser && anker.length === 0) {
+        befunde.push({ regel: 'S-11', id, text: 'faehrt Browser-Zahlen, traegt aber KEINEN `L-01-anker` — die Buehne wird gemessen, ohne dass jemand sagt, wann es sie gibt (F-19)' });
+      }
+      for (const k of anker) {
+        if (k?.typ === 'verweis') {
+          // Ein Verweis auf eine Quelle, die es nicht gibt, ist schlimmer als eine Kopie: er
+          // sieht aufgeraeumt aus und zeigt ins Leere.
+          if (!k?.quelle || !existsSync(k.quelle)) {
+            befunde.push({ regel: 'S-11', id, text: `\`${k?.id}\` verweist auf \`${k?.quelle ?? '(ohne quelle)'}\` — die Quelle gibt es nicht` });
+          }
+        } else {
+          befunde.push({ regel: 'S-11', id, text: `\`${k?.id}\` steht AUSGESCHRIEBEN im Blatt — die Kopie ist es, die driftet. Ersetzen durch \`typ: verweis\` + \`quelle: docs/auftraege/ANKER-BROWSER.md\` (F-19)` });
+        }
+      }
+    }
+  }
 
   // S-02: jedes Kriterium hat typ UND einen Befehl — oder ist manuell MIT Begründung.
   for (const k of liste) {

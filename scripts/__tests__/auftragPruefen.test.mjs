@@ -799,3 +799,90 @@ test('W-07/K-05: genau EINE Funktion beantwortet die Zielfrage — keine zweite 
   const pruefer = [...quelle.matchAll(/function\s+(\w*ZielErlaubt\w*)\s*\(/g)].map((m) => m[1]);
   assert.deepEqual(pruefer, ['skriptZielErlaubt'], `Zielpruefer gefunden: ${pruefer.join(', ') || '(keiner)'}`);
 });
+
+// --- W-08: S-11 — der Anker steht an EINER Stelle ------------------------------------------------
+//
+// **Die Mutationsprobe VOR diesen Zusagen: 8 von 8 blind, per Konstruktion.**
+// `grep -c 'S-11' scripts/__tests__/auftragPruefen.test.mjs -> 0` — vor diesem Bau uebte KEINE
+// der 104 Zusagen die neue Sperre aus. *Eine Probe gegen null Abdeckung misst nichts; deshalb
+// steht hier die Abdeckungs-Messung statt einer Scheinzahl.*
+//
+// **Die drei GRUENEN sind die eigentliche Zusage.** Eine Sperre, die auch das Archiv rot faerbt,
+// zwingt zu einem Massenumbau, den W-08 gerade vermeiden soll — und wird dann abgeschaltet.
+
+/** Ein Blattkopf, wie `pruefeBlatt` ihn an `strukturBefunde` reicht. */
+const kopfMit = (status, kriterien) => ({ auftrag: { id: 'PROBE', status }, kriterien });
+const BROWSER = { id: 'L-01', typ: 'presence', pruefung: { typ: 'browser', schritte: 'x' } };
+const s11 = (kopf) => strukturBefunde(kopf).filter((b) => b.regel === 'S-11');
+
+test('W-08/S-11 ROT: `bereit` mit Browser-Kriterium und OHNE Anker', () => {
+  const b = s11(kopfMit('bereit', [BROWSER]));
+  assert.equal(b.length, 1, 'ein Blatt misst die Buehne, ohne zu sagen wann es sie gibt');
+  assert.match(b[0].text, /KEINEN `L-01-anker`/);
+});
+
+test('W-08/S-11 ROT: ein Verweis auf eine Quelle, die es NICHT gibt', () => {
+  // *Schlimmer als eine Kopie: er sieht aufgeraeumt aus und zeigt ins Leere.*
+  const b = s11(kopfMit('aktiv', [BROWSER,
+    { id: 'L-01-anker', typ: 'verweis', quelle: 'docs/auftraege/GIBT-ES-NICHT.md' }]));
+  assert.equal(b.length, 1, 'ein toter Verweis kommt durch');
+  assert.match(b[0].text, /die Quelle gibt es nicht/);
+});
+
+test('W-08/S-11 ROT: ein AUSGESCHRIEBENER Anker in einem gefahrenen Blatt', () => {
+  const b = s11(kopfMit('entwurf', [BROWSER,
+    { id: 'L-01-anker', typ: 'presence', pruefung: { typ: 'browser', schritte: 'drei Stufen …' } }]));
+  assert.equal(b.length, 1, 'die Kopie kommt durch — und sie ist es, die driftet');
+  assert.match(b[0].text, /AUSGESCHRIEBEN/);
+});
+
+test('W-08/S-11 still: ein `ruht`-Blatt mit ausgeschriebenem Anker bleibt unberuehrt', () => {
+  // **Die Sperre sitzt am UEBERGANG, nicht am Ruhezustand.** Ein Archivblatt kann nicht schaden,
+  // solange es Archiv bleibt — wer es auf `bereit` setzt, faellt in derselben Sekunde hinein.
+  assert.deepEqual(s11(kopfMit('ruht', [BROWSER,
+    { id: 'L-01-anker', typ: 'presence', pruefung: { typ: 'browser', schritte: 'alte Fassung' } }])), []);
+});
+
+test('W-08/S-11 still: ein Verweis auf die vorhandene Quelle', () => {
+  assert.deepEqual(s11(kopfMit('bereit', [BROWSER,
+    { id: 'L-01-anker', typ: 'verweis', quelle: 'docs/auftraege/ANKER-BROWSER.md' }])), []);
+});
+
+test('W-08/S-11 still: ein Blatt GANZ OHNE Browser-Kriterium braucht keinen Anker', () => {
+  assert.deepEqual(s11(kopfMit('bereit', [{ id: 'K-01', typ: 'presence', pruefung: { befehl: 'echo x' } }])), []);
+});
+
+test('W-08/K-04: `typ: verweis` erscheint im Bericht MIT seiner Quelle — F-17 geschlossen', () => {
+  // **F-17:** ein unbekannter `typ` faellt lautlos aus dem Bericht. `verweis` ist NEU — wer ihn
+  // einfuehrt, ohne ihn zu melden, macht aus einem Anker eine Leerstelle, die wie Zustimmung
+  // aussieht. *Ohne diese Zusage stuende dort nur „typ: verweis", nicht unterscheidbar von einem
+  // Kriterium, das niemand ausfuehren kann.*
+  const da = pruefeEintrag({ id: 'L-01-anker', typ: 'verweis', quelle: 'docs/auftraege/ANKER-BROWSER.md' }, verz);
+  assert.match(da.hinweis, /ANKER-BROWSER\.md/, 'die Quelle steht nicht im Bericht');
+  assert.ok(!/QUELLE FEHLT/.test(da.hinweis), 'eine vorhandene Quelle wird als fehlend gemeldet');
+
+  const weg = pruefeEintrag({ id: 'L-01-anker', typ: 'verweis', quelle: 'docs/auftraege/GIBT-ES-NICHT.md' }, verz);
+  assert.match(weg.hinweis, /QUELLE FEHLT/, 'ein toter Verweis sieht aus wie ein guter');
+});
+
+test('W-08/K-04: die Zeilensumme steigt um 1, nicht um 0 — beim SAMMLER, nicht erst bei der Bewertung', () => {
+  // **Die schaerfere der beiden Zeilen:** sie faellt auch dann, wenn der Eintrag zwar bewertet,
+  // aber gar nicht erst eingesammelt wird. *Genau so ist Z-05 am 01.08. mit 7 statt 9 Eintraegen
+  // durchgelaufen, ohne ein Wort dazu.*
+  //
+  // **Gefunden beim Bau von W-08, und es ist die Lehre von B3:** meine erste Fassung fragte
+  // `pruefeEintrag` — die Bewertung — und war gruen, waehrend der volle Lauf den Eintrag
+  // verschluckte. `sammleBefehle` liest `pruefung.typ`; ein Verweis traegt sein `typ` am
+  // KRITERIUM und hat gar keine `pruefung`. **Wer eine Sperre prueft, muss die Stelle fragen,
+  // die WIRKLICH entscheidet — hier das Nadeloehr davor, nicht die Bewertung dahinter.**
+  const ohne = { auftrag: { id: 'P' }, kriterien: [{ id: 'K-01', pruefung: { befehl: 'echo x' } }] };
+  const mit = { auftrag: { id: 'P' }, kriterien: [...ohne.kriterien,
+    { id: 'L-01-anker', typ: 'verweis', quelle: 'docs/auftraege/ANKER-BROWSER.md' }] };
+
+  assert.equal(sammleBefehle(mit).length - sammleBefehle(ohne).length, 1,
+    'der Sammler verschluckt den Verweis — im Bericht steht dann eine Zahl ohne ihn (F-17)');
+  const eingesammelt = sammleBefehle(mit).find((e) => e.id === 'L-01-anker');
+  assert.ok(eingesammelt, 'der Verweis kommt gar nicht erst an');
+  assert.equal(eingesammelt.quelle, 'docs/auftraege/ANKER-BROWSER.md',
+    'die Quelle reist nicht mit — der Bericht koennte sie dann nicht nennen');
+});
