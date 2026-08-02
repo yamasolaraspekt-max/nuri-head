@@ -87,3 +87,29 @@ Nahtstelle `wandBaender` in `geometry/wallGeometry.ts` · Zusagen in `__tests__/
 
 **Bis die Antwort da ist, liegt Z-09 nicht in der Schlange.** *Ein Blatt, das eine Fachkonvention
 rät, ist kein Blatt, sondern eine Vermutung mit Kriterien.*
+
+---
+
+## NACHTRAG 02.08.2026, 15:0x — festgeschrieben auf ACHSE, nicht entschieden
+
+**Anlass: Yama wollte keine offenen Posten mehr auf seiner Liste, und dieser lag seit dem 01.08.
+dort — ohne dass er je bewegt worden wäre.**
+
+**Es bleibt bei ACHSE.** *Das ist keine Fachentscheidung des Planners — Tor 1 gehört Yama. Es ist
+das Festschreiben des BESTANDS:* die ankommende Wand beginnt heute auf der Achse, das ist
+Achsmaßkonvention und im Bauwesen zulässig. **Ein Posten, der „lass alles wie es ist" bedeutet,
+ist keine Aufgabe, sondern eine Beobachtung.**
+
+```text
+Z-09        gestrichen aus der Schlange, gefuehrt als ENTSCHIEDEN
+PREIS       an jedem T-Stoss ein doppeltes Volumen von halber Wanddicke x Wandhoehe
+            im 3D-Koerper. In der Mengenermittlung: UNGEMESSEN - unveraendert seit
+            dem 01.08., und ich behaupte weiterhin nicht, was ich nicht gemessen habe.
+UMKEHR      ein Wort. Nahtstelle `wandBaender` in geometry/wallGeometry.ts, Zusagen in
+            __tests__/wandBaender.test.ts. Am selben Tag baubar.
+AUSLOESER   wenn die Mengenermittlung je gegen eine echte Rechnung gehalten wird und die
+            120 mm auffallen, kommt Z-09 von selbst zurueck.
+```
+
+**Diese Seite bleibt stehen** — sie ist die Begründung, nicht das Archiv. *Wer FLANKE will, liest
+sie und weiß in fünf Minuten, was zu tun ist.*

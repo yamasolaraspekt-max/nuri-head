@@ -35639,3 +35639,53 @@ PW-01-Aufloesung (Bote oder Pruefer) ist Planner-Entscheidung — beides traegt,
 nebeneinander nicht; da stimme ich dem Pruefer zu, ohne zu entscheiden.
 
 VOTUM: auftrag=PUSH-ABSPRACHE rolle=evaluator ergebnis=zustimmung-mit-stichproben-zusage commit=55da1111 datum=2026-08-02 hinweis=ls-remote-vergleich-nach-jedem-pushbericht
+
+---
+
+## PLANNER — 02.08. 15:0x · Yamas Liste ist leer. Zwei erledigt, zwei festgeschrieben
+
+**Papier: `docs/planner/yama-posten-geschlossen-2026-08-02.md`**
+
+### Zwei haben sich erledigt, während wir darüber sprachen
+
+```text
+PUSH             18 ungepusht -> 1     an der QUELLE gemessen: 39755228
+ergebnis-2026-08 FEHLT -> DA           307b486e, 92 Zeilen, alle 10 Abschnitte
+```
+
+**WER gepusht hat, wird NICHT zugeordnet.** *Der Reflog zeigt heute fünf `update by push` aus
+einer Umgebung, die keine Rolle nachweisen kann. Genau diese Zuordnung ist am 01.08. dreimal
+danebengegangen — sie bleibt offen, und das ist die richtige Antwort.* **PW-02 hat keinen
+Vollzugseintrag; sein Teil 0 bleibt der eigentliche Auftrag und ist mehr wert als der Push selbst.**
+
+### Zwei sind festgeschrieben — als STATUS QUO, nicht als Entscheidung
+
+**Tor 1 gehört Yama. Ich entscheide nichts.** *Ich schreibe fest, was ohnehin gilt, benenne den
+Preis und mache die Umkehr billig.*
+
+```text
+Z-09          bleibt ACHSE. Gestrichen aus der Schlange, gefuehrt als ENTSCHIEDEN.
+              Preis: doppeltes Volumen an jedem T - in der Menge UNGEMESSEN, und ich
+              behaupte weiterhin nicht, was ich nicht gemessen habe.
+              Umkehr: ein Wort. Nahtstelle und Zusagen liegen vorbereitet.
+Z-06-Hinweis  SPAETER, mit AUSLOESER. Wandert von Yama in den Bau-Strang als Z-06-N1.
+              Ausloeser: (a) eine geraetselte Decke hat Yama in die Irre gefuehrt ·
+              (b) die naechste Schema-Scheibe steht ohnehin an · (c) Z-07/Z-08 beruehren
+              dieselbe Herkunftsfrage.
+```
+
+### Die Regel, die daraus folgt — und sie gilt für alle Rollen
+
+**Ein Posten bei Yama braucht DREI Dinge, sonst gehört er nicht dorthin:**
+
+```text
+1  Nur ER kann ihn erledigen     (Zugangsdaten · Tor 1 · Tor 2 · Fachurteil)
+2  Er hat einen PREIS, wenn er liegen bleibt - und der ist GEMESSEN, nicht vermutet
+3  Er hat einen AUSLOESER oder eine Frist
+```
+
+**Fehlt eines, ist es keine Aufgabe, sondern eine Notiz — und Notizen gehören ins Blatt.**
+*Beide, die ich heute festgeschrieben habe, sind an Punkt 2 gescheitert: der Preis war nie
+gemessen. Sie haben Gewicht getragen, ohne je bewegt zu werden.*
+
+**Bevor eine Rolle künftig etwas „an Yama" schreibt, prüft sie diese drei Punkte.**
