@@ -20,7 +20,7 @@ import {
   pruefeBlatt, sammleBefehle, lieseKopfRoh, lieseAlleBloecke, zaehleBloecke, verbotenesMuster,
   bericht, strukturBefunde, aktiveBlaetter, baubareBlaetter, vergleicheErwartung, baumStand, brechendesGlied, STUFEN, DENYLIST,
   gateMuster, pruefeEintrag, GATE_MUSTER, nichtErlaubtesGlied, befehlsGlieder, ALLOWLIST,
-  skriptZielErlaubt } from '../auftrag-pruefen.mjs';
+  skriptZielErlaubt, unverbuchteArbeit } from '../auftrag-pruefen.mjs';
 
 const verz = mkdtempSync(join(tmpdir(), 'auf87-'));
 process.on('exit', () => { try { rmSync(verz, { recursive: true, force: true }); } catch { /* egal */ } });
@@ -850,6 +850,53 @@ test('W-08/S-11 still: ein Verweis auf die vorhandene Quelle', () => {
 
 test('W-08/S-11 still: ein Blatt GANZ OHNE Browser-Kriterium braucht keinen Anker', () => {
   assert.deepEqual(s11(kopfMit('bereit', [{ id: 'K-01', typ: 'presence', pruefung: { befehl: 'echo x' } }])), []);
+});
+
+// --- S-14: unverbuchte Arbeit mit ihrem ALTER --------------------------------------------------
+//
+// *Am 02.08. lagen vier fertig gebaute Scheiben elf Stunden im Baum. Die Zahl allein haette
+// nichts gesagt — drei geaenderte Dateien sind waehrend der Arbeit normal, drei Dateien seit elf
+// Stunden sind es nicht.* **Das Alter ist die Aussage.**
+
+test('S-14/K-02: die Meldung nennt ZAHL und ALTER', () => {
+  const j = Date.parse('2026-08-03T12:00:00Z');
+  const drei = unverbuchteArbeit([{ mtime: j - 11 * 3.6e6 }, { mtime: j - 1e6 }, { mtime: j }], j);
+  assert.match(drei, /^3 Datei/, 'die Zahl fehlt');
+  assert.match(drei, /aelteste seit 11 h/, 'das Alter fehlt — und es ist die eigentliche Aussage');
+});
+
+test('S-14/K-02: frische Arbeit wird genannt, aber ohne Dringlichkeit', () => {
+  const j = Date.parse('2026-08-03T12:00:00Z');
+  const eine = unverbuchteArbeit([{ mtime: j - 120_000 }], j);
+  assert.match(eine, /1 Datei/);
+  assert.match(eine, /2 min/, 'Minuten werden als Stunden gerundet — dann klingt alles dringend');
+});
+
+test('S-14/K-02: bei SAUBEREM Baum schweigt der Waechter — die tragende Zusage', () => {
+  // **Ein Waechter, der auch bei sauberem Baum spricht, wird nach drei Tagen ueberlesen.**
+  // *Sie faellt, wenn jemand die Meldung bedingungslos ausgibt.*
+  assert.equal(unverbuchteArbeit([]), null);
+  assert.equal(unverbuchteArbeit(null), null);
+});
+
+test('S-14/K-04: der Waechter misst mit `--no-optional-locks` — er hinterlaesst keinen Lock', () => {
+  // *`git status` ohne die Form schreibt den Index neu — auf diesem Mount heisst das: ein
+  // weiterer Lock, der liegen bleibt. Ein Waechter gegen liegengebliebene Arbeit, der selbst
+  // Locks hinterlaesst, waere eine Pointe, die uns niemand abnimmt.*
+  const quelle = ohneKommentare(readFileSync(new URL('../auftrag-pruefen.mjs', import.meta.url), 'utf8'));
+  const stelle = quelle.match(/export function geaenderteDateien[\s\S]*?\n}/)?.[0] ?? '';
+  assert.ok(stelle, 'die Sammelfunktion gibt es gar nicht');
+  assert.match(stelle, /git --no-optional-locks status --porcelain/,
+    'der Waechter misst mit einer Form, die den Index neu schreibt');
+});
+
+test('S-14/K-03: die Meldung setzt den Exitcode NICHT', () => {
+  // **Wer hier sperrt, hindert den Bauenden daran, seine eigene Arbeit zu pruefen** — und der
+  // committet dann seltener, nicht oefter. *Genau das Gegenteil des Zwecks.*
+  const quelle = ohneKommentare(readFileSync(new URL('../auftrag-pruefen.mjs', import.meta.url), 'utf8'));
+  const nachS14 = quelle.slice(quelle.indexOf('S-14  '));
+  assert.ok(!/fehlschlaege \+= 1/.test(nachS14),
+    'S-14 erhoeht die Fehlschlaege — dann sperrt eine Erinnerung den Lauf');
 });
 
 test('W-08/K-04: `typ: verweis` erscheint im Bericht MIT seiner Quelle — F-17 geschlossen', () => {

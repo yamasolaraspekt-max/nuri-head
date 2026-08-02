@@ -24,7 +24,7 @@
  * Er repariert nichts. Findet er in einem alten Blatt einen toten Befehl, sagt er es — **sonst
  * wäre der erste Lauf ein Massenumbau von 80 Dateien.**
  */
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, statSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import yaml from 'js-yaml';
 
@@ -645,6 +645,52 @@ export function baumStand(arbeitsverzeichnis = process.cwd()) {
   }
 }
 
+/**
+ * **S-14 — unverbuchte Arbeit MIT IHREM ALTER melden.**
+ *
+ * *Am 02.08. lagen vier fertig gebaute Scheiben elf Stunden im Baum. Niemand hat es gemeldet,
+ * weil niemand danach gefragt hat — die Zahl allein haette auch nichts gesagt: drei geaenderte
+ * Dateien sind waehrend der Arbeit normal, drei Dateien seit elf Stunden sind es nicht.*
+ *
+ * **Das Alter ist die Aussage, nicht die Zahl.**
+ *
+ * Getrennt vom Bildschirm, damit sie pruefbar ist (B3): sie bekommt die Liste und liefert einen
+ * Satz oder `null`. Wer bei sauberem Baum spricht, wird nach drei Tagen ueberlesen.
+ */
+export function geaenderteDateien(arbeitsverzeichnis = process.cwd()) {
+  // **`--no-optional-locks` ist hier keine Gewohnheit, sondern die Zusage K-04.** `git status`
+  // ohne sie schreibt den Index neu — auf diesem Mount heisst das: ein weiterer Lock, der liegen
+  // bleibt. *Ein Waechter gegen liegengebliebene Arbeit, der selbst Locks hinterlaesst, waere
+  // eine Pointe, die uns niemand abnimmt.*
+  try {
+    const roh = execSync('git --no-optional-locks status --porcelain', {
+      cwd: arbeitsverzeichnis, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
+    });
+
+    return roh.split('\n')
+      .filter((z) => z.trim() && !z.startsWith('??'))
+      .map((z) => z.slice(3).trim())
+      .map((p) => {
+        try { return { pfad: p, mtime: statSync(`${arbeitsverzeichnis}/${p}`).mtimeMs }; } catch { return null; }
+      })
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+export function unverbuchteArbeit(dateien, jetzt = Date.now()) {
+  if (!Array.isArray(dateien) || dateien.length === 0) {
+    return null;
+  }
+  const aeltestes = Math.min(...dateien.map((d) => d.mtime ?? jetzt));
+  const stunden = Math.floor((jetzt - aeltestes) / 3_600_000);
+  const minuten = Math.floor((jetzt - aeltestes) / 60_000);
+  const alter = stunden >= 1 ? `${stunden} h` : `${minuten} min`;
+
+  return `${dateien.length} Datei(en) unverbucht — aelteste seit ${alter}`;
+}
+
 export function strukturBefunde(kopf) {
   const befunde = [];
   // **S-09 / F-08b** — „Eine Entscheidung aendert den Auftrag und steht nur in Tafel und Ledger,
@@ -906,6 +952,17 @@ if (istDirekterAufruf) {
     console.log(`                  nachher ${baumNachher.slice(0, 8)}`);
     console.log('                  Jede Zahl oben stammt aus einem Baum, den es nicht mehr gibt. Noch einmal fahren.');
     fehlschlaege += 1;
+  }
+  // S-14: unverbuchte Arbeit MIT ihrem Alter. **Ohne Einfluss auf den Exitcode** — wer hier
+  // sperrt, hindert den Bauenden daran, seine eigene Arbeit zu pruefen, und der committet dann
+  // seltener statt oefter. *Genau das Gegenteil des Zwecks.*
+  {
+    const satz = unverbuchteArbeit(geaenderteDateien());
+    if (satz) {
+      console.log(`\n── STRUKTUR S-14  ${satz}`);
+      console.log('                  Kein Fehlschlag — eine Erinnerung. Ein Commit auf den eigenen');
+      console.log('                  Arbeitszweig ist eine SICHERUNG und braucht niemanden (B12).');
+    }
   }
   // **Der Exitcode meldet nur FEHLSCHLAG.** „Verdaechtig" und „nicht maschinell" sind Hinweise an
   // einen Menschen, keine Gruende, eine Kette abzubrechen — sonst wird das Werkzeug abgeschaltet.
