@@ -68,6 +68,44 @@ einem laufenden `git` gehören. Wer ihn dann wegzieht, zerstört genau das, was 
 *Warum nicht `rm`: auf diesem Mount ist `unlink` verboten. `mv` ist der einzige Weg, und er ist
 zugleich der bessere — nichts geht verloren, alles ist nachlesbar.*
 
+## Yamas Auflage: „nie wieder" — und was das in der Wirkhierarchie heißt
+
+**Wortlaut, 03.08.: *„sorg dafür dass dieses problem nie wieder passiert"*.** *„Nie wieder" ist
+Stufe 5 — Unmöglichkeit —, nicht Stufe 4. Gemessen, wie weit die Wurzel erreichbar ist:*
+
+```text
+rm im Arbeitsbaum       Operation not permitted
+rm in .git/             Operation not permitted
+rm AUSSERHALB des Mounts  GEHT
+
+GIT_INDEX_FILE=<pfad ausserhalb>  +  git status
+  Lock im Mount danach       0        <- der Lock entsteht GAR NICHT MEHR im Mount
+  Lock am Ausweichort        1        <- und dort ist er loeschbar
+```
+
+**Der Index-Lock ist der, der blockiert: 37 von 40 Locks heute waren `index.lock`, nur 3 waren
+`HEAD.lock` — und HEAD.lock hat nie einen Commit verhindert.** *Wird der Index aus dem Mount
+gelegt, kann der blockierende Fall nicht mehr eintreten. Das ist keine Milderung mehr, das ist
+Stufe 5.*
+
+**Deshalb hat dieses Blatt ZWEI Stufen, und die Reihenfolge ist Absicht:**
+
+```text
+STUFE 4  Das Tor raeumt vorher auf.  PFLICHT, wirkt sofort, kein Risiko.        K-01…K-04
+STUFE 5  Der Index liegt ausserhalb des Mounts. WIRKT AN DER WURZEL.            K-07
+         PREIS, ehrlich benannt: der Index ueberlebt den Sitzungswechsel nicht.
+         Verloren geht dabei KEINE Arbeit - der Arbeitsbaum bleibt, und `git status`
+         baut den Index neu auf. Verloren geht der STAGING-Zustand: was jemand
+         schon `git add`-ed hatte, muss er erneut stagen.
+         Das ist zumutbar, weil in diesem Projekt ohnehin mit ausdruecklichen
+         Pfaden committet wird (R13) - niemand baut einen Index ueber Stunden auf.
+```
+
+*Warum Stufe 4 trotzdem gebaut wird, obwohl Stufe 5 stärker ist:* **Stufe 5 hängt an einer
+Umgebungsvariablen, die jede Rolle in jeder Sitzung gesetzt haben muss. Vergisst sie einer, ist
+er wieder im alten Zustand — und dann trägt Stufe 4.** *Zwei Riegel, von denen der äußere nichts
+kostet.*
+
 ## Nahtstellen
 
 ```text
@@ -167,6 +205,51 @@ kriterien:
       typ: gate
       schritte: "node --test scripts/__tests__/*.mjs"
       erwartet: "0 fail. Ausgangswert 91 pass / 0 fail (Generator, 03.08. nach W-06)."
+
+  - id: K-07
+    typ: behavioural
+    kritikalitaet: P1
+    aussage: "STUFE 5 - der Index-Lock kann im Mount gar nicht mehr entstehen."
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: gate
+      schritte: |
+        Das Tor setzt `GIT_INDEX_FILE` auf einen Pfad AUSSERHALB des Mounts, falls die
+        Variable nicht schon gesetzt ist, und legt den Index dort an.
+        Vom Planner vorgemessen (03.08. 00:3x), mit genau diesem Weg:
+            GIT_INDEX_FILE=<ausserhalb> git status
+              Lock im Mount        0
+              Lock am Ausweichort  1   und dort ist `rm` erlaubt
+
+        Zusagen:
+          nach einem vollstaendigen Tor-Lauf liegt in .git/ KEIN index.lock
+          der Ausweichpfad liegt nachweislich NICHT unter dem Mount
+          fehlt der Ausweichort (erster Lauf), wird er angelegt - kein Abbruch
+          ist GIT_INDEX_FILE bereits von aussen gesetzt, wird sie NICHT ueberschrieben
+
+        DIE ROTE GEGENPROBE, und sie ist die wichtigste:
+          derselbe Lauf OHNE die Variable  ->  ein index.lock bleibt in .git/ liegen
+        Ohne sie misst die Zusage nur, dass irgendwo kein Lock ist.
+
+        Die vierte Zeile ist die stille Falle: wer die Variable hart setzt, zieht einem
+        Aufrufer den Index unter den Fuessen weg, der bewusst einen eigenen benutzt.
+      erwartet: "fuenf Zusagen, davon eine ROTE"
+
+  - id: K-08
+    typ: presence
+    kritikalitaet: P1
+    aussage: "Der PREIS von Stufe 5 steht im Werkzeug, nicht nur im Blatt."
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: gate
+      schritte: |
+        Im Kopf von commit-pruefen.sh steht in Klartext, was der verlegte Index kostet:
+        der STAGING-Zustand ueberlebt den Sitzungswechsel nicht; wer `git add`-ed hatte,
+        muss erneut stagen. KEINE Arbeit geht verloren - der Arbeitsbaum bleibt.
+        Ein Werkzeug, das eine Umgebung veraendert, ohne den Preis zu nennen, ist eine
+        Ueberraschung mit Halbwertszeit - dieselbe Klasse wie eine Naeherung ohne Vermerk
+        (B10) und wie ein toter Zweig, der aussieht wie eine Pruefung (W-06 K-02).
+      erwartet: "der Preis steht im Kopf, in Klartext"
 
   - id: K-06
     typ: behavioural

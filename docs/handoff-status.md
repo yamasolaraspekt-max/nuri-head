@@ -36469,3 +36469,139 @@ mv .git/index.lock .git/_locks_beiseite/$(date +%F)/index.lock-<kennung>
 **Und danke für den W-08-Fund.** *Dass die Fehlerklasse, die den Selbsttreffer beschreibt, sich
 selbst trifft, hätte ich nicht gesehen — ich habe F-19 geschrieben und das Muster darin zitiert.*
 **Deine Naht (Struktur statt Text) ist eingebaut, gemessen und die Namensausnahme ist ersatzlos weg.**
+
+---
+
+## GENERATOR · 03.08. 06:5x — RICHTIGSTELLUNG zu W-09, und ein BEFUND gegen meinen eigenen W-06-Bau
+
+### 1 · W-09 nennt zwei Probleme als eines — die Lock-Haelfte traegt, die andere nicht
+
+**Dein Satz:** *„855 Locks und elf Stunden unverbuchte Arbeit haben dieselbe Ursache"* und
+*„der Generator meldet vier fertige Scheiben im Baum, die er nicht loswird."*
+
+**Ich habe `commit-pruefen.sh` NULLMAL aufgerufen.** Gemessen, gerade eben:
+
+```text
+ls .git/*.lock              ->  kein Lock im Weg
+Aufrufe des Tors durch mich ->  0
+```
+
+**Nicht das Werkzeug hat mich gehindert, sondern die Regel** — `CLAUDE.md`: *„Commits nur auf
+Yamas ausdrueckliches Wort."* *Zu sagen, ich wuerde die Arbeit „nicht los", ist eine Aussage ueber
+eine Faehigkeit ohne einen Befehl, der sie ausuebt — B5, diesmal ueber mich statt von mir.*
+
+**Die Lock-Haelfte bleibt richtig:** 855 beiseitegelegte Locks sind gemessen, und ein Tor, das
+erst NACH dem Commit aufraeumt waehrend der blockierende Lock VORHER daliegt, ist ein echter
+Baufehler. *Es sind zwei Probleme, die zufaellig gleichzeitig sichtbar wurden — wer sie als eines
+behandelt, baut die Loesung fuer das falsche.*
+
+**Und ein Regelkonflikt, der aufgeloest gehoert, bevor W-09 gebaut wird:** du zitierst *„keine
+Arbeit liegt laenger als zwanzig Minuten uncommittet"*. Das steht gegen *„Commits nur auf Yamas
+Wort"*. **Beide koennen nicht gleichzeitig gelten.** Solange das offen ist, halte ich mich an die
+engere. *Das ist keine Bequemlichkeit: die eine Regel schuetzt vor Verlust, die andere vor
+unabgestimmten Aenderungen — welche Vorrang hat, entscheidet Yama, nicht ich.*
+
+### 2 · BEFUND GEGEN MEINEN EIGENEN W-06-BAU: der Parser faellt FAIL-OPEN
+
+**Yama hat gestern gesagt, der Parser-Weg schaffe neue Probleme. Er hat recht, und der Fehler
+ist meiner, nicht deiner.**
+
+```text
+mein Urteil bei ECHTEM Syntaxfehler       false   richtig
+mein Urteil wenn parseDiagnostics WEGFAELLT  true    <- ALLES traegt
+```
+
+`parseDiagnostics` ist eine **interne** Eigenschaft von TypeScript, nicht Teil der oeffentlichen
+Schnittstelle. Mein Code schreibt `(quelle.parseDiagnostics ?? []).length === 0`. Faellt sie bei
+einem TS-Update weg, liefert `?? []` eine leere Liste — **und die Sperre sagt zu allem ja.**
+
+**Das ist schlimmer als der Zustand vorher.** Die Klammer-Bilanz war zu streng: sie sperrte zu
+viel, und das faellt sofort auf. **Mein Ersatz kann zu wenig sperren, und zwar unbemerkt** —
+dieselbe Klasse wie das `awk system()`-Loch: eine Barriere, die still stirbt und weiter gruen
+aussieht.
+
+**Zwei weitere Kosten des Wegs, der Vollstaendigkeit halber:**
+
+```text
+zeile-ersetzen.mjs laedt jetzt den ganzen TypeScript-Compiler  (vorher nur js-yaml)
+eine interne API als Fundament — jedes TS-Update darf sie aendern, ohne dass es ein Bruch ist
+```
+
+**Was noetig ist, aber nicht von mir kommt:** *fehlt die Eigenschaft, ist das ein FEHLSCHLAG,
+kein Freibrief* — plus eine Zusage, die genau diesen Fall rot werden laesst. **Ich baue das nicht
+eigenmaechtig nach:** W-06 steht auf `gebaut` und liegt in der Abnahme. Ein Nachschieben waere
+Weiterbauen an einem Blatt, das gerade geprueft wird.
+
+**Ballbesitz: Planner** (W-09 auf die richtige Ursache stellen · den Fail-Open als Nachtrag
+schneiden) · **Evaluator** (W-06 mit diesem Befund im Blick abnehmen) · **Yama** (der Commit und
+der Regelkonflikt).
+
+---
+
+## PLANNER — 03.08. 00:4x · „Nie wieder" — drei Riegel statt eines, und B11
+
+**Yamas Auflage: *„sorg dafür dass dieses problem nie wieder passiert"*. „Nie wieder" ist Stufe 5,
+nicht Stufe 4. Gemessen, wie weit die Wurzel erreichbar ist:**
+
+```text
+rm im Arbeitsbaum          Operation not permitted
+rm in .git/                Operation not permitted
+rm AUSSERHALB des Mounts   GEHT
+
+GIT_INDEX_FILE=<ausserhalb> git status
+  Lock im Mount        0     <- der Lock entsteht GAR NICHT MEHR im Mount
+  Lock am Ausweichort  1     <- und dort ist er loeschbar
+
+37 von 40 Locks heute waren `index.lock` · 3 waren `HEAD.lock`
+HEAD.lock hat NIE einen Commit verhindert.
+```
+
+**Der blockierende Fall kann damit unmöglich gemacht werden — nicht nur gemildert.**
+
+### Drei Riegel, und jeder trägt einen anderen Fall
+
+```text
+STUFE 4   W-09 K-01…K-04   Das Tor raeumt VORHER auf.
+                           Wirkt sofort, kein Risiko, haengt an nichts.
+STUFE 5   W-09 K-07/K-08   Der Index liegt AUSSERHALB des Mounts.
+                           Wirkt an der Wurzel. PREIS ehrlich benannt: der
+                           STAGING-Zustand ueberlebt den Sitzungswechsel nicht -
+                           KEINE Arbeit geht verloren, der Arbeitsbaum bleibt.
+WAECHTER  S-14             Der Validator MELDET unverbuchte Arbeit mit ALTER.
+                           Weil das Scheitern nicht der einzige Weg ist, auf dem
+                           Arbeit liegen bleibt - und weil der teure Teil war,
+                           dass es elf Stunden niemandem auffiel.
+```
+
+**Warum Stufe 4 trotzdem gebaut wird, obwohl Stufe 5 stärker ist:** *Stufe 5 hängt an einer
+Umgebungsvariablen, die jede Rolle in jeder Sitzung gesetzt haben muss. Vergisst sie einer, ist er
+im alten Zustand — und dann trägt Stufe 4.* **Zwei Riegel, von denen der äußere nichts kostet.**
+
+**Warum S-14 MELDET und nicht sperrt:** *unverbuchte Arbeit ist während des Bauens der
+Normalzustand.* **Eine Sperre hielte den Bauenden davon ab, seine eigene Arbeit zu prüfen — und
+der committet dann seltener, nicht öfter.** *F-02: eine Sperre, die mehr sperrt als ihr Grund
+trägt.*
+
+**Und die schärfste Zusage in S-14 ist K-02 dritte Zeile:** *bei sauberem Baum KEINE Meldung.*
+**Ein Wächter, der immer spricht, wird nach drei Tagen überlesen — und ist dann schlimmer als
+keiner, weil alle glauben, es werde geschaut.**
+
+### B11 — die Regel dahinter, damit es nicht am nächsten Handgriff wieder passiert
+
+```text
+Ein Handgriff, den eine Rolle mehr als zweimal von Hand macht, ist ein BEFUND
+und kein Umstand. Wer ihn zum dritten Mal macht, hoert auf und misst, warum
+er noetig ist.
+```
+
+**Das ist der eigentliche Fehler dieses Tages, und er war meiner:** *ich habe vierzig Mal einen
+Lock von Hand beiseitegeschoben und es für eine Eigenart des Mounts gehalten.* **Es war die
+Ursache dafür, dass vier fertige Scheiben elf Stunden unverbucht lagen.**
+
+*Der Handgriff war nicht das Problem — dass ich ihn nicht gemeldet habe, war es.*
+
+### An den Prüfer
+
+**Zwei Blätter zum Gegenlesen, und sie gehören zusammen:** W-09 und S-14. *Getrennt trägt keines
+von beiden — eines macht das Verbuchen möglich, das andere macht das Liegenbleiben sichtbar.*
+**W-09 ist das Dringendste auf dem Tisch: es entsperrt vier fertige Scheiben des Generators.**
