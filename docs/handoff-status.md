@@ -34267,3 +34267,87 @@ Schreibweise.
 
 **Ballbesitz: Generator** (W-04 commit-pruefen · W-01 Teil 2) · **Planner** (ZWEI-TEAMS-Fragen) ·
 **Yama** (Y1/Y2).
+
+## PLANNER 02.08. 10:3x — W-05 geschnitten · Strangfeld gesetzt · und die Strangtrennung zeigt sofort, was sie zeigen soll
+
+### W-05 — der Hebel (`b0e62c09`, `docs/auftraege/hausplaner-3d/`)
+
+**Beim Messen hat sich mein eigener Bauplan von 10:2x korrigiert.** Ich hatte „vier Stellen"
+geschrieben — von Z-05-N1 übernommen, ohne es für Paket-Werkzeuge nachzumessen:
+
+```text
+Werkzeug            Registry  Themen  Vertrag  Praesentation
+alle acht Klasse A         0       1        1              1
+```
+
+**Drei von vier sind schon da.** Z-05-N1 war teuer, weil `kontur` ein EIGENES Werkzeug war.
+**Der eigentliche Widerstand ist eine Zusage, kein Code:** `TOOL_KATALOG` ist ungefiltert, ein
+gehobenes Werkzeug wäre doppelt (7 feste `101`, 4 feste `9` in den Zusagen). **Lösung: eine
+Hebeliste, aus der sich Registry UND Katalog ableiten — das Werkzeug wandert, statt sich zu
+verdoppeln.** Der Hebel gilt erst, wenn das **zweite** Werkzeug nur Daten ändert (K-06).
+
+### Strangfeld in allen 20 aktiven Blättern (`7fc70264`)
+
+```text
+13  strang: hausplaner-3d      12  werkzeuge (W-01…W-04, PW-01, P-01, B-01)
+```
+
+Gesetzt mit `zeile-ersetzen`, jedes einzeln geprüft, keins stillschweigend geschrieben. Die 15
+**ruhenden** Blätter bleiben ohne Feld — sie sind Archiv und sollen nicht mitgemessen werden.
+
+### DER BEFUND, auf den es ankommt
+
+**Getrennt gemessen sperrt S-06 sofort:**
+
+```text
+auftrag-pruefen.mjs $(grep -l 'strang: hausplaner-3d' …)
+   ── S-01  genau ein aktiver Auftrag: Z-03+Z-04
+   ── S-06  NUR 1 baubare(r) Auftrag — R16 verlangt mindestens 2.
+```
+
+**Im Strang `hausplaner-3d` ist genau EIN baubares Blatt.** Alles andere ist gebaut, gesperrt oder
+Entwurf. **Vorher zählte der Validator über alle Blätter zusammen — die Werkzeug-Blätter haben die
+leere Hausplaner-Schlange kaschiert.**
+
+**Und der Grund ist nicht, dass zu wenig geplant wurde:**
+
+```text
+Z-11   entwurf   -> wartet auf Gegenlesen (Pruefer)
+W-05   entwurf   -> wartet auf Gegenlesen (Pruefer)
+Z-06   gesperrt  -> wartet auf das Votum fuer Z-05 (Evaluator)
+```
+
+**Nicht der Bau stockt, sondern die Abnahme.** Drei Blätter liegen fertig und hängen an zwei
+Rollen. *Das ist genau die Sichtbarkeit, für die die Strangbindung gebaut wurde — Dank an Team
+Produktdaten, sie greift schon am ersten Tag.*
+
+### Zwei S-08 in meinen eigenen Blättern, gemeldet statt versteckt
+
+```text
+P-01-01  Blatt sagt 183, gemessen 199   die Zahl der Befehle waechst mit jedem Blatt
+W-01-05 · P-01-05  sagen 0, gemessen 1  „keine Aenderung in docs/auftraege" - es gibt gerade eine
+```
+
+**Beide sind wandernde Zähler, kein Blattfehler** — P-01 sagt das selbst („DIE ZAHL WANDERT MIT
+JEDEM NEUEN BLATT"). Der Prüfer misst zum Zeitpunkt seines Laufs, nicht gegen meine Zahl.
+
+---
+
+## Evaluator — Strang-Ansage + B8-Gegenlesung S-10 (02.08.2026)
+
+**Strangbindung:** Diese Instanz laeuft ab jetzt als **Evaluator im Strang `werkzeuge`**
+(Yama-Zuteilung 02.08., auf meine Rueckfrage; der Strang war laut Planner-Befund a9f00bc0 ohne
+Besatzung). Hausplaner-3d-Pruefstaende uebernehme ich nicht mehr, bis Yama anderes ansagt —
+das neue Blatt `hausplaner-3d/w05-werkzeug-anschluss.md` (02.08. 10:18) gehoert dem Evaluator
+jenes Strangs.
+
+**B8-Gegenlesung `werkzeuge/s10-strang-pflichtfeld.md`:** Felder eingetragen (via
+`zeile-ersetzen`, Vorschau + Schreiblauf, Blatt danach unveraendert 7 Validator-Eintraege).
+Befund TRAEGT mit 3 Auflagen — Details im Blatt selbst: (1) K-01/K-02 haben exit!=0 als
+Soll und bleiben im Runner dauerhaft FEHLSCHLAG, Kennzeichnung noetig; (2) K-04-erwartet
+widerspricht Kante 6: population_command scannt nur die Strang-Ordner (heute 0), gemessen
+liegen 110 strang-lose Blaetter in der Wurzel; (3) Gegenprobe/K-06 mutieren Auftragsdateien
+— nur Wegwerf-Worktree/Fixture (B6). Ein Gegenleser baut nicht, was er gegenlas: Bau und
+Nachbesserung liegen beim Generator des Strangs.
+
+VOTUM: auftrag=AUF-S10-STRANG rolle=evaluator ergebnis=gegengelesen-traegt-mit-auflagen commit=33d35495 datum=2026-08-02 hinweis=b8-felder-im-blatt-drei-auflagen-bau-beim-generator
