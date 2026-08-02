@@ -1,0 +1,92 @@
+abschnitt
+=== 1 · MENGENGERUEST ===
+tabelle	zeilen
+products	94
+brands	50
+distributors	9
+distributor_prices	88
+product_images	0
+product_documents	0
+article_groups	15
+sub_article_groups	0
+measures	0
+inventories	15
+supplier_connections	0
+supplier_article_map	0
+supplier_import_logs	0
+imported_ids_items	0
+abschnitt
+=== 2 · VOLLSTAENDIGKEIT ARTIKELSTAMM ===
+artikel_gesamt	ohne_artikelnummer	ohne_ean	ohne_hersteller	ohne_warengruppe	ohne_einheit	ohne_beschreibung	ohne_jede_identitaet
+94	50	94	0	0	94	0	50
+abschnitt
+=== 3 · DUBLETTEN JE IDENTITAETSBEGRIFF ===
+pruefung
+3a · nach normalisierter Artikelnummer
+pruefung
+3b · nach EAN
+pruefung
+3c · nach Hersteller + Modell
+brand_id	modell	n
+79	standard	2
+79	komfort	2
+79	premium	2
+79	eco	2
+pruefung
+3d · nach Produktname
+pruefung
+3e · KERNFRAGE: gleiche EAN, verschiedene Hersteller (echter Konflikt)
+abschnitt
+=== 4 · GTIN/EAN-PLAUSIBILITAET ===
+mit_ean	falsche_laenge	enthaelt_nicht_ziffern	nur_nullen
+0	NULL	NULL	NULL
+abschnitt
+=== 5 · PREISQUALITAET ===
+preiszeilen	artikel_mit_preis	lieferanten	ohne_jeden_preis	ohne_ek	ohne_vk	ohne_preisdatum	aelter_als_180_tage	ek_null_oder_negativ	ek_groesser_vk
+88	33	9	0	0	0	0	0	0	0
+pruefung
+Artikel ohne jeden Lieferantenpreis
+artikel_ohne_preis
+61
+pruefung
+Preiswiderspruch Stamm vs. Lieferantenpreis (vier Ablageorte, §3.2)
+stamm_weicht_ab
+82
+abschnitt
+=== 6 · EINHEITEN ===
+pruefung
+Freitext-Dubletten (Stk / Stueck / STK / ST)
+abschnitt
+=== 7 · MEDIEN UND DOKUMENTE ===
+artikel	artikel_mit_bild	artikel_mit_dokument	bilder_gesamt	dokumente_gesamt
+94	0	0	0	0
+pruefung
+Doppelte Bilder (kein Unique, kein Hash — §3.4)
+pruefung
+Verwaiste Medien
+bilder_ohne_artikel
+0
+dokumente_ohne_artikel
+0
+abschnitt
+=== 8 · STATUSWERTE (Beleg fuer §3.5) ===
+status	n
+active	94
+status	n
+active	88
+abschnitt
+=== 9 · TECHNISCHE MERKMALE JE GERAETETYP ===
+tabelle	zeilen	artikel
+product_heat_pump_specs	19	19
+product_pv_module_specs	15	15
+inverters	13	13
+batteries	2	2
+pruefung
+Doppelbeschreibung durch zwei Generationen (§3.3)
+wechselrichter_in_beiden_generationen
+0
+abschnitt
+=== 10 · HERKUNFT UND PRUEFSTAND ===
+imported_from	verifikations_status	n
+NULL	NULL	70
+wberechnung	NULL	24
