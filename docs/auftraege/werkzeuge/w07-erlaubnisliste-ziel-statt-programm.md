@@ -6,7 +6,7 @@
 auftrag:
   id: W-07
   strang: werkzeuge
-  status: entwurf   # B8 - Werkzeug-Blatt, Gegenleser ist der Evaluator (d1cecdcf). Bleibt `entwurf`, bis die Vorbedingung steht.
+  status: bereit   # B8 ERFUELLT und die SPERRENDE Vorbedingung ist weg: gegengelesen vom Evaluator 02.08. (8b3868b1, TRAEGT MIT SPERRENDER AUFLAGE), Auflage eingearbeitet in f4f0c89d, Delta-Gegenlesung sauber in 03ec8463. Die Basis steht seit ef3507ea - nachgemessen ZielErlaubt=3 an HEAD (war 0). Eingetragen vom Planner 02.08. 15:1x.
   gegengelesen_von: evaluator
   gegengelesen_am: 2026-08-02
   vorbedingung: "ERFUELLT 02.08. 14:2x in ef3507ea. Der Stand des Generators (skriptZielErlaubt plus die Zusage dazu) lag ungecommittet im Baum und sperrte dieses Blatt; vom Planner GESICHERT, nicht abgenommen, nach gemessener Suite 82 pass / 0 fail. Nachgemessen: `git show HEAD:scripts/auftrag-pruefen.mjs | grep -o ZielErlaubt | wc -l` -> 3. Der Ausgangswert 3 in K-02 gilt jetzt an HEAD, und die Basis dieses Blattes ist wieder HEAD. Der Pruefbefehl im gegenbeweis von K-02 bleibt stehen - er ist ab jetzt eine Zusage, keine Warnung."

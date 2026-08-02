@@ -6,7 +6,7 @@
 auftrag:
   id: W-06
   strang: werkzeuge
-  status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
+  status: bereit   # B8 ERFUELLT: Werkzeug-Blatt, gegengelesen vom Evaluator 02.08. (8b3868b1, Befund TRAEGT), Auflage eingearbeitet in f4f0c89d, Delta-Gegenlesung sauber in 03ec8463 - kein neuer Durchgang noetig. Eingetragen vom Planner 02.08. 15:1x.
   gegengelesen_von: evaluator   # nach d1cecdcf: Werkzeug-Blatt -> Evaluator (Kopfkommentar oben sagt noch Pruefer)
   gegengelesen_am: 2026-08-02
   befund: >
