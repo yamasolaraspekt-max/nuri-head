@@ -37443,3 +37443,65 @@ keine Vorschrift: die Schlange vor dem Committen gegen die VOTUM-Zeilen im Ledge
 oder einem S-15-Schnitt (dann Gegenlesen).
 
 VOTUM: auftrag=SCHLANGEN-ABGLEICH-2 rolle=evaluator ergebnis=alle-neun-voten-stehen commit=3da947c8 datum=2026-08-03 hinweis=zweiter-veralteter-stand-grep-vorschlag-an-planner
+
+---
+
+## PLANNER — 03.08. 02:0x · Yamas zwei Fragen, und beide Antworten sind unbequem
+
+### 1 · „Warum ist die Klasse nicht erledigt?" — weil ich viermal umgangen habe
+
+```text
+02.08.  toolRegistry.ts:268    Kommentar mitgezaehlt          Evaluator fand es
+02.08.  breiten.test.ts:51     Beleg zeigte auf Kommentar     Evaluator fand es
+03.08.  commit-pruefen.sh:5    K-01 mass Kommentar            Evaluator fand es
+03.08.  commit-pruefen.sh:5    zweiter Versuch, derselbe      Planner fand es
+```
+
+**Viermal war meine Reaktion: einen Filter in das EINE Kriterium einbauen.** *Das ist Stufe 1 —
+ein Urteil im Einzelfall. Es hat viermal funktioniert und die Klasse kein einziges Mal berührt.*
+
+**Und die Mechanik liegt seit dem 01.08. im Haus:** `zaehle.mjs` zählt kommentarfrei, maskiert
+Zeichenketten, ist gebaut und abgenommen. **Gemessen, wie oft sie benutzt wird:**
+
+```text
+Kriterien mit rohem `grep` ueber .ts/.tsx/.mjs/.js/.sh   ->  21
+davon mit `grep -n` (der teuerste Fall)                  ->   3
+Kriterien, die `zaehle.mjs` benutzen                     ->  10
+```
+
+**21 offene Stellen derselben Klasse.** *Jede kann morgen einen Kommentar treffen — und einen
+unfertigen Bau als fertig melden.*
+
+**S-15 geschnitten:** der Validator MELDET ein Kriterium, das `grep` auf eine Code-Datei anwendet,
+ohne über `zaehle.mjs` zu gehen — **mit dem Ersatzbefehl in der Meldung**, sonst ist es eine Rüge
+statt einer Hilfe.
+
+**Was S-15 nicht kann, und das steht im Blatt:** *`grep -n` für ZEILENNUMMERN löst `zaehle.mjs`
+nicht ab — es zählt Vorkommen.* **Für den teuersten Fall fehlt das Werkzeug noch.** S-15 meldet
+die drei Fälle trotzdem: *die Meldung IST der Punkt, weil sie sichtbar macht, dass drei Kriterien
+auf etwas messen, das niemand kommentarfrei messen kann.*
+
+### 2 · „Warum hat der Generator keine Arbeit?" — weil ich zu langsam schneide
+
+**Das ist F-08, „Leerlauf eines Bauenden", und diesmal ist es meiner.**
+
+```text
+GEBAUT, wartet auf Votum   9 Blaetter
+BAUBAR fuer den Generator  1 (W-01) — der Rest sind Pruefer-Auftraege und der ruhende Strang
+ENTWURF, wartet auf Gegenlesen  8
+```
+
+**Er hat heute Nacht schneller gebaut, als ich schneiden und der Evaluator abnehmen konnte.**
+
+**Aber die ehrliche Ursache ist nicht der Vorrat, sondern das GEGENLESEN:** *acht Blätter liegen
+im Entwurf, jedes braucht eine andere Rolle, bevor es baubar wird.* **Mehr schneiden verlängert
+nur die Warteschlange beim Prüfer.**
+
+**Der eine Hebel, der beides löst, ist W-05** — *acht Paket-Werkzeuge in die Leiste, danach ist
+jedes weitere eine Zeile.* **Es liegt seit dem 02.08. beim Prüfer.** Und Z-06-N1 ist der andere:
+es sperrt N2, N3 und über B10 das ganze Dach.
+
+**Was ich daraus ziehe:** *ich habe heute den Vorrat für den Generator zweimal aufgebraucht, ohne
+es zu bemerken — beim ersten Mal hat Yama gefragt, beim zweiten wieder.* **Das gehört gemessen,
+nicht erinnert: S-06 zählt baubare Blätter, aber niemand liest es, solange keiner fragt.**
+*Vorschlag für später: S-06 meldet auch, WIE LANGE die Zahl schon unter zwei liegt.*
