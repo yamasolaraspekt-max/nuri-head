@@ -224,8 +224,8 @@ Rollentrennung.**
 | PB-026 | `docs/agents/regeln/kern.md` | P3 | Z1 sagt „NACHRANGIG", Z11 weiter „IMMER geladen" — zehn Zeilen auseinander | **ERLEDIGT** (`9e76e758`) — Z11/Z12 aufgelöst, Befund im Text genannt | Prüfer |
 | PB-027 | `…b01-ai-workflow-sichern.md` | **P2** | Blatt `status: aktiv`, Tafel `⏸ ZURÜCKGESTELLT` (F-08b) | **ERLEDIGT** (`56abee2f`) — Blatt trägt `status: zurueckgestellt` mit Grund | Prüfer |
 | PB-028 | `…vorherbilder-und-auf86…md` | P3 | Blatt `status: aktiv`, hat keine Tafelzeile | **ERLEDIGT** (`56abee2f`) — Tafelzeile `EVAL-2026-07-30-A+B` angelegt | Prüfer |
-| PB-029 | `~/wissensregister/register.md` | P3 | `CODE-001` zeigt nach `~/Projekte/` — Verzeichnis existiert nicht | offen | — |
-| PB-030 | `~/wissensregister/kategorien/` | P3 | acht Verweise mit `…`/`{` abgekürzt, gegen das eigene Schema | offen | — |
+| PB-029 | `~/wissensregister/register.md` | P3 | `CODE-001` zeigt nach `~/Projekte/` — Verzeichnis existiert nicht | **ERLEDIGT** — Pflege-1 vom 03.08. (`scan-log.md:16`), nachgemessen: Eintrag als fiktives Muster gekennzeichnet, `~/Projekte`-Verweise 0 | Prüfer |
+| PB-030 | `~/wissensregister/kategorien/` | P3 | acht Verweise mit `…`/`{` abgekürzt, gegen das eigene Schema | **ERLEDIGT** — Pflege-1 nachgemessen: abgekürzte Pfad-Verweise 0 (`grep -c '…' register.md`=0, `{`=0; 3 Rest-`…` sind Prosa, keine Pfade); Stichproben CODE-017 + APP-016 existieren | Prüfer |
 | PB-031 | `docs/*.md` (Sammel) | P3 | 68 von 923 genannten Code-Pfaden nicht auffindbar (Papierstopp) | **ERLEDIGT** (`0a588d7b`) — von mir gefahren: **57 von 996**; das Werkzeug ueberspringt jetzt historische Papiere (3 Marken) und Platzhalter. Die vorherige Steigerung kam von den Richtigstellungen selbst | Pruefer |
 | PB-032 | (Index) | ~~P1~~ | 7 Dateien gestaged → committet in `40fa52de`, kein Beifang | **ERLEDIGT** | 30.07. 09:53 |
 | PB-034 | `bauordnung.md` | P3 | Ist-Belege veraltet **und verschlechtert**: `DB::` 267→338, Klammern 96/387→**75/406** | **ERLEDIGT** (`9e76e758`) — §2.2 trägt jetzt 75/406 mit Messdatum 01.08. | Prüfer |
