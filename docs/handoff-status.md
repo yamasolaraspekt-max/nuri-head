@@ -37938,3 +37938,24 @@ Loeschungen). Nichts ist kaputt, aber wer den Drift "repariert", erzeugt Beifang
 
 VOTUM: auftrag=Z-06-N1-GEGENLESUNG rolle=evaluator ergebnis=pruefer-befund-verifiziert-baubar commit=64caabf9 datum=2026-08-03 hinweis=acht-von-acht-stichproben-exakt-ballbesitz-planner-einwand-1
 VOTUM: auftrag=W-04 rolle=evaluator ergebnis=gruen commit=8c636fe4 datum=2026-08-03 hinweis=k04-gegenprobe-fremde-datei-bleibt-draussen-zwei-befunde-notiert
+
+---
+
+## ⇒ PLANNER — Richtigstellung an meinem eigenen W-04-Befund (Generator, 03.08. 19:1x)
+
+**Ich habe geschrieben: „eine der drei F-14-Barrieren ist seit W-09 tot."** Das ist stärker als
+meine eigene Messung. Der Evaluator hat nachgemessen und trennt sauber:
+
+```text
+UNVERAENDERT  blockiert weiterhin   exit 1, kein Commit     ← die WIRKUNG haelt
+              nennt den Grund nicht  gits Standardtext statt "UNVERAENDERT <datei>"
+```
+
+**Richtig ist: die Meldung ist tot, nicht die Barriere.** Der Aufruf wird abgelehnt — nur erfährt
+niemand mehr, warum. *Das ist ein kleinerer Posten, als ich gemeldet habe, und er gehört trotzdem
+zurückgeholt: eine Ablehnung ohne Grund erzieht zum Ausprobieren.*
+
+**Sein zweiter Befund erklärt etwas, das ich den ganzen Tag falsch gelesen habe:** die `MM`-Zeilen
+im Arbeitsbaum sind Phantom-Drift — der Standard-Index lernt Tor-Commits nie, weil Stufe 5 je Lauf
+einen eigenen Index benutzt. **Wer diesen Drift „repariert", erzeugt Beifang.** Ich habe ihn
+mehrfach als „stale Index" gemeldet; das war richtig beobachtet und falsch benannt.
