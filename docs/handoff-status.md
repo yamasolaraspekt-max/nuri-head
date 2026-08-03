@@ -37583,3 +37583,65 @@ und zaehle exakt. Die Klasse waren meine vier Funde — die Mechanik dagegen geh
 
 VOTUM: auftrag=W-04-GEGENLESEN rolle=evaluator ergebnis=traegt-mit-nachzug-auflage commit=e19a6b17 datum=2026-08-03 hinweis=31h-verzug-meiner-k03-steht-schon-bestand-ueberholt
 VOTUM: auftrag=S-15-GEGENLESEN rolle=evaluator ergebnis=traegt-mit-auflage commit=ba275c23 datum=2026-08-03 hinweis=fall-6-mechanisch-kaputt-entwurfs-scan-jetzt-teil-jeder-rundschau
+
+---
+
+# ⇒ AN ALLE ROLLEN · 03.08. — **B13: WERKZEUGSTOPP.** Yamas Entscheidung, und die Messung dahinter
+
+**Yama: *„wir kommen nicht voran, so geht es nicht weiter."* Ich habe gemessen, statt zu
+widersprechen — und die Zahlen geben ihm recht:**
+
+```text
+Commits seit 02.08.
+  am PRODUKT   (resources/planner/hausplaner)    ->   2
+  an der WERKSTATT (scripts/)                    ->  10
+  nur PAPIER   (docs/)                           ->  85
+
+Blaetter
+  Werkzeug (W-* / S-*)   15
+  Produkt  (Z-* / AUF-*) 12
+```
+
+**Verhältnis Papier zu Produkt: 42 zu 1.** *Wir haben an der Werkstatt gebaut und über das Bauen
+geschrieben. **Der Haupttreiber war ich.***
+
+## Was ab sofort gilt
+
+```text
+Der Strang `werkzeuge` RUHT, bis das Geschoss steht.
+Kein neues W-/S-Blatt wird geschnitten.
+Die SECHS gebauten werden noch abgenommen - danach Schlussstrich.
+Werkzeugbefunde werden im Ledger NOTIERT, nicht geschnitten.
+  Ausnahme: sie blockieren einen laufenden Produkt-Bau. Dann Spur B, kleinstmoeglich,
+  und der Grund steht im Blatt.
+Der Planner misst sich an PRODUKT-Fortschritt, nicht an Blaettern.
+```
+
+**Ausdrücklich NICHT betroffen:** *W-05 (acht Paket-Werkzeuge in die Leiste) liegt im Strang
+`hausplaner-3d` — es ist **Produkt**, nicht Werkstatt, und läuft weiter.*
+
+**Was mit S-13 und S-15 passiert:** *sie bleiben als Entwurf liegen, ungelesen.* **Sie sind
+richtig und sie warten** — der Befund dahinter ist im Ledger notiert, und wenn das Geschoss steht,
+liegen sie fertig geschnitten da. *Das ist kein Verlust, sondern die Reihenfolge.*
+
+## Die Kette zum Ziel — jeder Schritt hängt am vorigen
+
+```text
+1  Z-06 VOTUM                Evaluator     die Zwischendecke
+2  Z-06-N1 gegenlesen        Pruefer       Herkunft + Freigabe, Schema v3
+3  Z-06-N1 bauen             Generator
+4  Z-06-N2 · Z-06-N3         Kennzeichnung, Bestaetigen
+5  Z-07/Z-08 schneiden       Planner       DAS DACH - erst wenn N1 gebaut ist
+6  Z-11 · W-05               Touch, Werkzeuge in die Leiste
+```
+
+**Yama hat auch die zweite Weiche entschieden: B10 ZUERST, dann das Dach.** *Kostet drei Blätter
+Vorlauf — aber das Dach erbt die Felder, statt sie später nachgerüstet zu bekommen. Seine eigene
+Regel, konsequent angewandt.*
+
+## Was ich daraus für mich ziehe
+
+**Ich habe heute elf Papiere über den Prozess geschrieben und ein Blatt über das Produkt.** *Jedes
+einzelne war für sich richtig begründet — und in der Summe war es die falsche Arbeit.* **Kein
+Vorsatz hilft dagegen; B13 ist eine Regel mit einer Messung dahinter, und die Messung wiederhole
+ich, bevor ich das nächste Mal etwas schneide.**

@@ -34,11 +34,11 @@ gelöst — das Votum auf Z-05 hat Z-06 entsperrt.*
 
 | Rolle | Was liegt bereit |
 |---|---|
-| **Generator** | **Z-06 — DIE ZWISCHENDECKE, seit 12:4x frei. Das ist Yamas Posten** · Z-03+Z-04 `aktiv` · W-01 · dann **W-06 → W-07 → W-08** in dieser Reihenfolge. **UND: der eigene `skriptZielErlaubt`-Stand liegt ungecommittet im Baum — er sperrt W-07 und ist bei jedem `checkout` weg** |
-| **Evaluator** | heute schon: W-02 · Z-10 · S-10 · W-06/07/08 gegengelesen · **Z-05 grün**. Offen: AUF-38-P4+P5 · und W-02 nicht abnehmen, ohne den `.ts`-Befund zu kennen (zwei Wege im Ledger) |
-| **Prüfer** | **PW-02 ZUERST — Push in Yamas Vertretung, `bereit`. Teil 0 (Kanal offen?) vor allem anderen; ein Nein ist auch ein Ergebnis** · dann GEGENLESEN (B8): Z-11 · W-05 · dann P-01 |
-| **Planner** | Umzug der übrigen Blätter nach `docs/auftraege/<strang>/` · **Z-07/Z-08 schneiden** (Z-06 ist gebaut) · Z-06-N1 nach Auslöser |
-| **Yama** | **NICHTS.** Alle vier Posten zu — zwei erledigt (Push abgeflossen, `ergebnis-2026-08.txt` da), zwei festgeschrieben: `docs/planner/yama-posten-geschlossen-2026-08-02.md`. Tor 2 bleibt seins, ist aber Zuständigkeit und kein Posten |
+| **Generator** | **NUR NOCH HAUSPLANER (B13).** Z-03+Z-04 `aktiv` zu Ende · dann **Z-06-N1**, sobald der Prüfer es freigibt · dann N2 · N3 · dann das Dach. **W-01 ist der LETZTE Werkzeug-Bau** — danach ruht der Strang |
+| **Evaluator** | **Z-06 ZUERST — die Zwischendecke, sie sperrt alles Weitere.** Dann die sechs gebauten Werkzeug-Blätter abnehmen (W-06 · W-06-N1 · W-07 · W-08 · W-09 · S-14) — *das ist der Schlussstrich unter den Werkzeugstrang.* Dann Z-10 · AUF-38-P4+P5 |
+| **Prüfer** | **Z-06-N1 ZUERST — es sperrt N2, N3 und über B10 das ganze Dach.** Dann Z-11 · W-05 (beide Hausplaner). **S-13 und S-15 NICHT gegenlesen** — sie ruhen mit dem Strang |
+| **Planner** | **Z-07/Z-08 schneiden, sobald Z-06-N1 gebaut ist.** Sonst nichts Neues: kein W-/S-Blatt mehr (B13). Werkzeugbefunde werden notiert, nicht geschnitten |
+| **Yama** | **NICHTS.** Tor 2 bleibt seins, ist aber Zuständigkeit und kein Posten |
 
 **Gebaut, wartet auf Votum:** Z-10 · W-02 · AUF-38-P4+P5 — **alle drei vom Planner vorgemessen,
 14 von 14 messbaren Stellen treffen ihr `erwartet`** (`f45c28a5`).
