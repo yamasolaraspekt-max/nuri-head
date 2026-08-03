@@ -38730,3 +38730,74 @@ YAMA      EIN Befehl, dann kann jede Rolle wieder PHP messen (reine Testflaeche,
           DB_DATABASE=ticket_testing php artisan migrate:fresh --force
 PRUEFER   unveraendert: Z-07 + Z-11(v2) gegenlesen.
 ```
+
+---
+
+## EVALUATOR — 03.08. · N1-Revotum: BLEIBT ROT. Zwei Gruende — und der zweite ist neu
+
+Ball angenommen. Was messbar war, ist gemessen; was blockiert ist, steht als blockiert da.
+
+### GRUND 1 — der Insel-Riegel, unveraendert offen
+
+*Zur Klarstellung an den Planner: "die durchgekommene Mutation mit zwei Zusagen geschlossen"
+betrifft die Mutation des GENERATORS, nicht meine.* Gemessen:
+
+```text
+git log -- __tests__/herkunftUndFreigabe.test.ts   -> letzter Commit 6d93fc97 (der Bau selbst)
+Die drei asserts (Z. 223-225) betreffen weiterhin NUR geometrieHerkunft.
+`freigabe: 'bestaetigt'` hinter den Spread            -> 1667 pass / 0 fail, kommt DURCH
+```
+
+### GRUND 2 — NEU: das ausgelieferte Bundle ist v2, Quelle und Server sind v3
+
+**Die dritte Naht, die niemand geprueft hat. `public/hausplaner/hausplaner.js` ist GETRACKT
+und wird mitgemergt:**
+
+```text
+Bundle  public/hausplaner/hausplaner.js   schemaVersion:3 -> 0 Treffer · :2 -> 4 Treffer
+                                          geometrieHerkunft -> 0 Treffer
+Quelle  domain/validation.ts              geometrieHerkunft -> 6 Treffer, literal(3)
+Server  Request in:3 · JSON-Schema const 3
+
+Artefakt-Stand  20bbfcc2  03.08. 00:44   <- VOR N1
+Quelle-Stand    6d93fc97  03.08. 09:00   <- N1
+```
+
+**Nach einem Merge in diesem Zustand ist Speichern im Browser fuer JEDEN Nutzer kaputt:** das
+alte Bundle sendet `schema_version: 2`, der nachgebesserte Server verlangt `in:3` — 422, bis
+jemand `npm run build:hausplaner` faehrt UND das Artefakt committet.
+
+*Der Planner hat das als Messhinweis an mich behandelt ("sonst falsches ROT") — das stimmt fuer
+meine Sichtprobe. Aber das Artefakt ist versioniert; der Hinweis loest mein Messproblem und
+nicht den Repo-Zustand.* **Kein Gate prueft, ob das Bundle zur Quelle passt** — `build:hausplaner`
+BAUT, es VERGLEICHT nicht. Werkzeugbefund, notiert (B13).
+
+### Was ich NICHT messen konnte, und warum
+
+```text
+Die drei PHP-Tests + Sichtprobe objekt.blade  -> BLOCKIERT
+```
+`ticket_testing` hat keine `migrations`-Tabelle mehr. **Der Generator hat die Ursache gefunden
+und sie entlastet mich nur zur Haelfte:** die DB ist GETEILT, sein Produktdaten-Lauf und mein
+Worktree-Lauf liefen gleichzeitig, Deadlock beim Schema-Aufbau. *Der Worktree trennt den Baum,
+nicht die Datenbank.* **Meine "17 kaputten Tests" von heute Mittag waren zu einem Teil genau
+das — falsche Rote aus einer Kollision. Die Ruecknahme war richtig und ist jetzt auch erklaert.**
+
+Seine Messung der zwei Nutzlast-Tests (**15 passed / 37 Zusicherungen**, vorher 2 failed)
+uebernehme ich NICHT als Beleg — *wer baut, votet nicht.* Sie steht als seine Angabe da, bis
+ich sie selbst fahren kann.
+
+```text
+AN YAMA — zwei Zeilen, und die PHP-Seite lebt wieder fuer alle Rollen:
+  DB_DATABASE=ticket_testing php artisan migrate:fresh --force
+  (vorher geprueft: users 0 · leads 0 · lead_alternative_adds 0 — reine Testflaeche)
+Und eine Regel, die daraus folgt: ticket_testing vertraegt KEINE zwei gleichzeitigen Laeufe.
+Wer phpunit faehrt, sagt es im Ledger an — oder jede Rolle bekommt eine eigene Test-DB.
+```
+
+### Urteil
+
+**Z-06-N1: ROT.** Grund 1 ist eine Zeile, Grund 2 ein Build plus Commit. **Nicht mergen, bis
+das Bundle zur Quelle passt** — sonst ist der erste Nutzer nach dem Merge der Entdecker.
+
+VOTUM: auftrag=Z-06-N1-REVOTUM rolle=evaluator ergebnis=ROT commit=3b40419b datum=2026-08-03 hinweis=insel-riegel-offen-plus-getracktes-bundle-noch-v2-gegen-server-v3-php-seite-blockiert-durch-geteilte-testdb
