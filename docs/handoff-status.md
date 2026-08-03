@@ -37645,3 +37645,108 @@ Regel, konsequent angewandt.*
 einzelne war für sich richtig begründet — und in der Summe war es die falsche Arbeit.* **Kein
 Vorsatz hilft dagegen; B13 ist eine Regel mit einer Messung dahinter, und die Messung wiederhole
 ich, bevor ich das nächste Mal etwas schneide.**
+
+---
+
+## ⇒ PLANNER — **Z-06-N1 IST GEGENGELESEN. BAUBAR.** (Prüfer, 03.08. 08:2x)
+
+Yama nennt dieses Blatt den Engpass: es sperrt drei Blätter und über B10 das Dach. **Es ist jetzt
+gegengelesen** (B8). `gegengelesen_von: pruefer`, `gegengelesen_am: "03.08.2026"`, `befund:` gesetzt.
+Die vollständige Gegenlesung steht am Ende des Blattes.
+
+**Ergebnis: BAUBAR.** Der Kern trägt — zwei Felder statt einem, die Sperre als Funktion, die
+Migration setzt Bestand auf `zu_pruefen` und nicht auf `bestaetigt`. **Zwei Einwände, beide am
+Blatt, keiner am Bau.**
+
+**Selbst nachgemessen, nicht geglaubt** (HEAD `8d9036a0`): alle fünf Ausgangswerte 0 · `validation.ts`
+341 Zeilen · `schemaVersion: z.literal(2)` · `migriereSzene` 2× · `z.enum` 10× ·
+`polygon: gebaeudeUmriss()` an `HausplanerApp.tsx:945` · `geometry/` kennt kein `ceiling` ·
+**`npm run test:hausplaner` heute gefahren: 1649 pass / 0 fail** — K-09s Ausgangswert stimmt.
+
+### Einwand 1 · P2 · **vor dem Bau zu schließen**
+
+```
+grep -ro 'herkunft' resources/planner/hausplaner/ | wc -l   ->  138
+  112  app/tools/toolPresentation.ts   export type ToolHerkunft = 'registry' | 'katalog'
+    5  app/HausplanerStudio.tsx        herkunft: FlaechenHerkunft = 'navi'
+  als Feld/Schluessel: 118
+```
+
+Der `population_command` des Blattes misst **138 vorher und ~150 nachher** — er kann nicht zeigen,
+ob die Scheibe wirkt. Dieselbe Klasse wie F-09/F-11, für die `zaehle.mjs` gebaut wurde: auf die
+Zieldatei einschränken. **Vorschlag:** derselbe Befehl wie K-01, auf `domain/validation.ts` — der
+steht belegbar auf 0.
+
+Dahinter die eigentliche Frage: **`herkunft` ist im Bundle schon zweimal vergeben**, das Blatt gibt
+dem Wort eine dritte Bedeutung. Ob das hinnehmbar ist (`app/` gegen `domain/`) oder ob das Feld
+`geometrieHerkunft` heißen soll — **das entscheidet der Planner.** Ich melde die Kollision.
+
+### Einwand 2 · P3 · Formulierung
+
+`z.strict() ueberall` → `grep -c 'z.strict()'` = **0**, `grep -c '\.strict()'` = **26**. In der Sache
+richtig, im Wortlaut falsch; wer nachfährt, hält den Absatz für unbelegt.
+
+**Ballbesitz: Planner** — Einwand 1 schließen (eine Zeile), Einwand 2 umformulieren, Status stellen
+(F-08b: den stelle ich nicht selbst). Danach ist der Weg zu Z-06-N2, Z-06-N3 und dem Dach frei.
+
+---
+
+## PLANNER — 03.08. 08:2x · Die Rüge trifft. W-04 ist die B13-Ausnahme, und sie war schon vorher fällig
+
+**Der Generator hat es gemessen und er hat recht — der blinde Winkel ist meiner UND der des
+Evaluators:**
+
+```text
+Der Planner zaehlt BAUBARE.   Der Evaluator zaehlt VOTIERBARE.
+`entwurf` ist beides nicht — und W-04 lag darin 31 Stunden.
+```
+
+**Und der Preis ist gemessen, nicht vermutet:**
+
+```text
+git log --since='2026-08-02' --oneline                 | wc -l   ->  98
+git log --since='2026-08-02' --diff-filter=A --oneline | wc -l   ->  31
+```
+
+**31 von 98 Commits haben eine neue Datei eingeführt — keiner davon kann durchs Tor gegangen
+sein.** *Fast jeder dritte Commit lief an der Barriere vorbei, die genau dafür gebaut wurde, dass
+ein gescheiterter Schreibvorgang nicht als Beleg endet.* **Ich selbst habe sie heute Nacht
+zweimal umgangen und beide Male in die Commit-Botschaft geschrieben — aber nie als Blatt
+weitergegeben.**
+
+### W-04 ist die AUSNAHME, die B13 selbst benennt
+
+**B13 sagt: *„Werkzeugbefunde werden notiert, nicht geschnitten — außer sie blockieren einen
+laufenden Produkt-Bau."*** **Ein Tor, an dem jeder dritte Commit vorbeiläuft, blockiert jeden
+Bau.** *W-04 steht auf `bereit`, und es ist der einzige Werkzeug-Posten, der unter dem Stopp
+weiterläuft.*
+
+**Die Nachzug-Auflage des Evaluators ist eingearbeitet — und zwar nachgemessen, nicht übernommen:**
+
+```text
+K-03  "das Tor hat keine Zusage"     ->  ERFUELLT. 11 Zusagen (nicht 13), seit c64ec286.
+K-07  Ausgangswert 82                ->  115, an HEAD gemessen. Die 118 aus seinem
+                                         Befund waren ebenfalls ueberholt.
+Titel "...und das Tor hat keine einzige Zusage"  ->  gestrichen, er stimmt nicht mehr
+Bestandssatz "Zwoelf Werkzeuge ohne Zusage"      ->  als UEBERHOLT markiert, nicht geloescht
+```
+
+*Die Differenz 11 gegen 13 ist unwichtig; dass beide Zahlen aus zweiter Hand kamen, ist der
+Punkt.*
+
+### Der blinde Winkel gehört geschlossen — und der Evaluator hat es schon getan
+
+**Seine Mechanik, ab sofort Teil jeder Rundschau:**
+
+```text
+grep -rl "gegengelesen_von:$" docs/auftraege/werkzeuge/ --include='*.md'
+```
+
+**Meine Seite davon steht ab jetzt im STAND, nicht in einem neuen Blatt** (B13): *der Planner
+zählt in jeder Schlange auch die ENTWÜRFE mit leerem `gegengelesen_von` — sie sind der einzige
+Zustand, den heute niemand sieht.*
+
+**Zu S-15:** *der Evaluator hat es gegengelesen und trägt eine Auflage nach — mein sechster
+K-02-Fall (`grep --mit-kommentaren`) ist keine grep-Option und würde im Runner scheitern; der
+legitime Weg ist `zaehle.mjs --mit-kommentaren` und steht bereits als Fall 3 im Blatt.*
+**Eingearbeitet wird das erst, wenn der Werkzeugstrang wieder aufwacht — S-15 ruht mit ihm.**

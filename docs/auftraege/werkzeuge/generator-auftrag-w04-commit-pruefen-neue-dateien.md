@@ -1,4 +1,4 @@
-# W-04 — `commit-pruefen.sh` scheitert an neuen Dateien, und das Tor hat keine einzige Zusage
+# W-04 — `commit-pruefen.sh` scheitert an neuen Dateien
 
 **Spur A** · **Heimat: ticket** · **Basis: HEAD beim Ziehen** · *Geschnitten 02.08. 09:1x*
 
@@ -6,7 +6,7 @@
 auftrag:
   id: W-04
   strang: werkzeuge
-  status: entwurf   # B8 - Werkzeug-Blatt, Gegenleser ist der Evaluator
+  status: bereit   # B8 ERFUELLT: gegengelesen vom Evaluator 03.08. (TRAEGT IM KERN, MIT NACHZUG-AUFLAGE), Auflage eingearbeitet 08:2x - K-03 als ERFUELLT markiert (11 Zusagen nachgezaehlt, nicht 13), K-07-Basis 82 -> 115 an HEAD gemessen, Titel und Bestandssatz entschaerft. AUSNAHME ZU B13, ausdruecklich: der Werkzeugstrang ruht, ABER dieses Blatt blockiert JEDEN Bau - 31 von 98 Commits der letzten zwei Tage sind am Tor vorbeigelaufen, weil es neue Dateien nicht kann. Genau der Fall, den B13 als Ausnahme benennt. Eingetragen vom Planner.
   gegengelesen_von: evaluator   # 31 Stunden zu spaet - der Verzug ist meiner, Begruendung im Ledger
   gegengelesen_am: 2026-08-03
   befund: >
@@ -45,7 +45,7 @@ ls -1 scripts/*.mjs scripts/*.sh | wc -l   -> 15   Werkzeuge
 ls scripts/__tests__/ | wc -l              ->  3   mit Zusagen
 ```
 
-**Zwölf Werkzeuge haben keine einzige Zusage — darunter `commit-pruefen.sh` selbst.**
+**Zwölf Werkzeuge hatten keine einzige Zusage.** *ÜBERHOLT 03.08.: `commit-pruefen.sh` hat seit `c64ec286` eigene Zusagen — 11 Stück, vom Planner nachgezählt. Der Satz galt am 02.08. 09:22 und ist der Grund, warum dieses Blatt entstand; er gilt für das Tor nicht mehr.*
 
 *Das Tor, durch das seit dem 01.08. jeder Commit dieses Projekts geht, ist das einzige Werkzeug,
 das nie geprüft wurde.* **Es ist gegen F-14 gebaut worden und trägt selbst kein einziges
@@ -153,11 +153,11 @@ kriterien:
   - id: K-03
     typ: presence
     kritikalitaet: P1
-    aussage: "Die ersten Zusagen fuer dieses Tor existieren ueberhaupt."
+    aussage: "ERFUELLT VOR DEM BAU - die Zusagen fuer dieses Tor existieren bereits."
     pruefung:
       befehl: "ls scripts/__tests__/ | grep commitPruefen | wc -l"
       erwartet: "1"
-    ausgangswert: "0 - 15 Werkzeuge, 3 Zusagen-Dateien. Das Tor, durch das jeder Commit geht, hat keine"
+    ausgangswert: "1 - ERFUELLT. NACHZUG 03.08. 08:2x auf die Auflage des Evaluators: das Blatt ist vom W-09-Bau ueberholt worden. `commitPruefen.test.mjs` existiert seit c64ec286. Vom Planner nachgemessen: 11 Zusagen (`grep -cE '^(test|it)\\(' scripts/__tests__/commitPruefen.test.mjs`), nicht 13 wie im Befund - die Differenz ist nicht wichtig, die Erfuellung ist es. Das Kriterium bleibt als WAECHTER stehen: faellt die Datei je weg, meldet es sich."
 
   - id: K-04
     typ: behavioural
@@ -210,7 +210,7 @@ kriterien:
     pruefung:
       typ: gate
       schritte: "node --test scripts/__tests__/auftragPruefen.test.mjs scripts/__tests__/zaehle.test.mjs scripts/__tests__/zeileErsetzen.test.mjs"
-      erwartet: "0 fail. Ausgangswert 82 pass (02.08. 09:0x). Danach mehr, nie weniger. Dateien EINZELN nennen, nicht das Verzeichnis - ein Verzeichnis laeuft als EIN fehlschlagender Test (Generator-Befund vom 02.08.)."
+      erwartet: "0 fail. Ausgangswert 115 pass — vom Planner AN HEAD nachgemessen 03.08. 08:2x (`node --test scripts/__tests__/*.mjs`). Die 82 stammten vom 02.08. 09:0x, die 118 aus dem Evaluator-Befund; beide sind ueberholt. Danach mehr, nie weniger."
 
   - id: K-08
     typ: behavioural
