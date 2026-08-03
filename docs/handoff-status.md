@@ -39980,3 +39980,48 @@ BAUREIHENFOLGE, und sie ist nicht verhandelbar:
   3  Z-11        Touch und Stift
   Der Tor-lsof-Fix (776ce7e6) kommt DANACH - er sichert Zuege ab, er baut kein Geschoss.
 ```
+
+---
+
+## EVALUATOR — 03.08. 23:2x · N3 hebt das Schema auf v4 — die Kette dahin ist im Blatt NICHT vorhanden (Beitrag vor dem Bau)
+
+```text
+KEINE GEGENLESUNG - N3 liegt beim Pruefer (B8). Das hier ist die Erfahrung aus N1, die er
+nicht haben kann: dort haben genau diese Naehte DREI ROT-Runden gekostet. Ich habe sie
+gemessen, bevor derselbe Weg zweimal gegangen wird.
+
+N3 schreibt (Blattzeile 52): "domain/validation.ts  das Feld geometrieFingerabdruck
+(Schema v3 -> v4, ADDITIV)". Der Scope nennt DREI Insel-Dateien. Das Blatt erwaehnt
+NICHTS aus der Server-Kette - gezaehlt, alles 0 Treffer:
+  scene-document 0 · SpeichereHausplanerDokument 0 · StelleSnapshotWieder 0 ·
+  SCHEMA_VERSION 0 · schema_version 0 · migriereSzene 0 · hausplaner.js 0
+
+GEGEN-BEWEIS statt Behauptung - echtes v3-Bestandsdokument aus der Arbeits-DB durch den
+ECHTEN Server-Validator (SceneDocumentValidator::fehler), nur gelesen, nichts geschrieben:
+  KONTROLLE  v3 original           -> DURCH                      (0 Fehler)
+  (a)        schemaVersion=4       -> ABGEWIESEN  "The data must match the const value"
+  (b)        v3 + Fingerabdruck    -> ABGEWIESEN  "Additional object properties are not allowed"
+  (c)        v4 + Fingerabdruck    -> ABGEWIESEN  (beides)
+Ein N3-Dokument ist also in JEDER Zwischenstufe unspeicherbar, bis die Kette mitgeht.
+
+WAS MITWANDERN MUSS (gemessen an HEAD 204f4127):
+  1  app/Domain/Hausplaner/Models/HausplanerDocument.php:27   const SCHEMA_VERSION = 3 -> 4
+     GUTE NACHRICHT: Request ('in:'.SCHEMA_VERSION) und StelleSnapshotWieder haengen an
+     dieser EINEN Konstante - das ist die N1-Nachbesserung, die ich abgenommen habe.
+     Sie wandern automatisch mit. Zwei der vier N1-Naehte sind dauerhaft entschaerft.
+  2  resources/planner/hausplaner/domain/scene-document-v2.schema.json
+     Z.18 "const": 3 steht HART, nicht als Konstante. Der Server liest genau diese Datei
+     (SceneDocumentValidator::SCHEMA_PATH). ZUSAETZLICH: ceilings und roofs haben beide
+     additionalProperties:false - geometrieFingerabdruck muss dort EINGETRAGEN werden,
+     sonst faellt es auch bei richtiger Version durch (Beweis b).
+  3  migriereSzene kennt heute v1/v2 -> v3. Braucht v3 -> v4. BESTAND in der Arbeits-DB
+     gezaehlt: 14x v1, 1x v2, 2x v3 = 17 Dokumente. Ohne Migrationspfad laedt keines mehr.
+  4  public/hausplaner/hausplaner.js - getracktes Build-Artefakt. War ROT-Grund 3 bei N1.
+
+WAS SCHON DA IST, damit niemand doppelt baut: freigabeAm und freigabeVon stehen BEREITS
+im JSON-Schema bei ceilings UND roofs (aus dem N1-Bau). K-04 braucht dafuer kein Feld.
+
+An den Planner: 1-4 gehoeren in den N3-Scope, sonst ist das Blatt beim Bau unerfuellbar.
+An den Pruefer: das ist Zuarbeit zu deiner Gegenlesung, kein Vorgriff - der Befund gehoert dir.
+Probe liegt in scratchpad/nahtprobe.php, ist wiederholbar.
+```
