@@ -39283,3 +39283,69 @@ BALL     GENERATOR: W-05 ist jetzt OHNE Kreis baubar - Hebeliste, GEHOBENE_TOOLS
          EVALUATOR: diesen Umzug gegenmessen (Mac: Vollsuite; die Evaluator-Zusage aus
          edd268e4 - Insel laedt, ARBEITSBEREICHE lesbar - baut der Generator mit W-05).
 ```
+
+---
+
+## EVALUATOR — 03.08. · N1: K-N2 GEMESSEN UND GRUEN. Die Latte ist bis auf L-01 abgeraeumt
+
+**Die Test-DB traegt wieder** (614 Migrationen, `lead_alternative_adds` vorhanden). Bahn vorher
+auf Fremdlaeufe geprueft — frei. Eigener Lauf, Pruefstand 951ae4c4:
+
+```text
+phpunit HausplanerSpeichernNutzlastTest + UebernahmeKnopfTest
+  -> OK (23 tests, 104 assertions)   exit 0        <- BEIDE Dateien gruen
+Insel-Suite   1667 pass / 0 fail          tsc 0
+```
+
+**Damit ist K-N2 gemessen, nicht geschlossen: gemessen.** *Die drei Tests, die N1 rot gemacht
+hatte, laufen alle wieder.*
+
+### Stand der Abnahme-Latte
+
+```text
+K-N1 / Server-Naht        GRUEN   Request in:3 und JSON-Schema const 3, selbst gelesen
+K-N2 / die drei Tests     GRUEN   23/104 selbst gefahren
+K-N3 / Insel-Riegel       GRUEN   beide Mutationen fallen (1666/1), Basis 1667/0
+K-N4 / v3-Bundle          GRUEN   Artefakt-Commit 789de20f traegt schemaVersion:3
+L-01 / Sichtprobe         NICHT GEPRUEFT — siehe unten
+```
+
+### L-01: was ich versucht habe, und wo es haengt
+
+*Damit der Naechste dort ansetzt statt neu anzufangen:*
+
+```text
+Testdaten in ticket_testing angelegt   User 9001 · Objekt 9102 (new_leads + lead_alternative_adds)
+Frisches Bundle gebaut                 schemaVersion:3 -> 3 Treffer
+Server auf der TEST-DB gestartet       DB_DATABASE=ticket_testing, Port 8871
+Objektseite geoeffnet                  -> Umleitung auf /login, Canvas 0, keine Speichern-URL
+Diagnose (Session-Treiber/Rechte)      -> Aufruf abgelehnt; NICHT umgangen
+```
+**Der Login greift in der Test-DB nicht.** *Ursache unbelegt — ich vermute Session-Tabelle oder
+Rechte-Eintraege, aber eine Vermutung ist kein Befund, und den Diagnoseweg habe ich nicht
+erzwungen.* Die Testdaten liegen weiter in `ticket_testing` (IDs 9001/9101/9102) und
+verschwinden beim naechsten RefreshDatabase.
+
+### Wieviel von L-01 ist anderweitig gedeckt — und wieviel nicht
+
+```text
+GEDECKT   Serialisieren + Parsen + Migration     K-05/K-06, von mir mutationsbelegt
+GEDECKT   Store -> PUT -> DB -> zurueck          HausplanerSpeichernNutzlastTest, gruen:
+                                                  "gueltige Dachszene wird VOLLSTAENDIG
+                                                   persistiert", assertSame(3, schema_version)
+NICHT     der Browser-Store selbst beim NEULADEN — verliert er die Felder zwischen
+GEDECKT   Markup und Store, faengt es heute nichts. Das ist der Rest von L-01.
+```
+
+### Urteil
+
+**Vier von vier Nachbesserungs-Kriterien GRUEN, alle selbst gemessen. Offen ist allein die
+Sichtprobe — und ihr Kern ist zu grossen Teilen anderweitig belegt.**
+
+*Ich schreibe N1 trotzdem nicht gruen: L-01 ist P1, und "grossenteils gedeckt" ist kein Lauf.*
+**Zwei Wege, beide gehoeren Yama oder dem Planner, nicht mir:** entweder jemand macht die
+Anmeldung in der Test-DB moeglich (dann fahre ich L-01 in zehn Minuten), oder L-01 wird
+ausdruecklich auf das reduziert, was ohne Anmeldung messbar ist — dann steht im Blatt, was
+NICHT geprueft wurde, statt dass es unbemerkt fehlt.
+
+VOTUM: auftrag=Z-06-N1-KN2 rolle=evaluator ergebnis=vier-von-vier-gruen-l01-offen commit=951ae4c4 datum=2026-08-03 hinweis=23-tests-104-zusicherungen-selbst-gefahren-l01-scheitert-am-login-in-der-testdb-nicht-am-bau
