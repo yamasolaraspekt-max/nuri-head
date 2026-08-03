@@ -18,6 +18,9 @@ use App\Models\ProductType;
 use App\Models\DistributorDepartment;
 use App\Models\SubArticleGroup;
 use App\Models\DistributorPrice;
+use App\Services\Product\Identity\IdentityMatch;
+use App\Services\Product\Identity\ProductIdentity;
+use App\Services\Product\Identity\ProductIdentityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -1020,6 +1023,76 @@ class ProductController extends Controller
                     ], 200);
                 }
 
+                if (config('produkt.identitaet.aktiv')) {
+                    // AUF-P1-S4 §8 Zeile 7: resolve(); ein Stufe-5-Treffer wird dem
+                    // Anwender als Rückfrage angezeigt, nicht stillschweigend übernommen.
+                    $dienst = app(ProductIdentityService::class);
+
+                    $identitaet = new ProductIdentity(
+                        gtin: $request->input('ean'),
+                        manufacturerArticleNo: $request->input('article_no'),
+                        brandId: $request->input('brand_id') ? (int) $request->input('brand_id') : null,
+                        model: $request->input('model'),
+                        name: $request->input('product'),
+                        channel: 'ui:produkt-anlage',
+                    );
+
+                    $match = $dienst->resolve($identitaet);
+
+                    if ($match->ergebnis === IdentityMatch::KONFLIKT) {
+                        DB::rollBack();
+
+                        return response()->json([
+                            'error' => 'Identitätskonflikt — nicht angelegt: ' . $match->begruendung,
+                        ], 409);
+                    }
+
+                    if ($match->ergebnis === IdentityMatch::AUTOMATISCH) {
+                        DB::commit();
+
+                        return response()->json([
+                            'message' => 'Produkt existiert bereits.',
+                            'product_id' => $match->product->id,
+                        ], 200);
+                    }
+
+                    if ($match->ergebnis === IdentityMatch::VORSCHLAG) {
+                        DB::rollBack();
+                        $dienst->vorschlagSpeichern($identitaet, $match);
+
+                        return response()->json([
+                            'message' => 'Möglicherweise vorhandener Artikel (#' . $match->product->id
+                                . ') — bitte prüfen, nicht automatisch übernommen.',
+                            'requires_confirmation' => true,
+                            'product_id' => $match->product->id,
+                        ], 409);
+                    }
+
+                    // NEU: anlegen über den Identitätsdienst, Historie wie bisher.
+                    $payload['status'] = 'Published';
+
+                    $product = $dienst->createFrom($identitaet, $payload);
+                    $product->created_by = $employeeId;
+                    $product->updated_by = $employeeId;
+                    $product->save();
+
+                    $this->recordProductHistory(
+                        $product->id,
+                        'created',
+                        [],
+                        $this->getProductHistorySnapshot($product),
+                        $employeeId
+                    );
+
+                    DB::commit();
+
+                    return response()->json([
+                        'message' => 'Produkt erstellt.',
+                        'product_id' => $product->id,
+                    ], 200);
+                }
+
+                // Alt-Verhalten, byte-gleich (Kante 15).
                 $existing = Product::query()
                     ->where('product', $request->input('product'))
                     ->where('model', $request->input('model'))
@@ -1037,7 +1110,7 @@ class ProductController extends Controller
 
                 $payload['status'] = 'Published';
 
-                $product = new Product();
+                $product = app(ProductIdentityService::class)->newLegacy();
                 $this->saveProductWithHistory($product, $payload, 'created');
 
                 DB::commit();
@@ -1314,10 +1387,25 @@ class ProductController extends Controller
                 'price.*.availability' => 'nullable|string',
             ]);
 
-            $product = Product::updateOrCreate(
-                ['id' => $request->product_id],
-                $request->only('product', 'model', 'brand_id')
-            );
+            // AUF-P1-S4 §8 Zeile 8: Aktualisierungspfad, kein Auflösungspfad —
+            // schlüsselt auf den Primärschlüssel und wird verriegelt: ohne id
+            // kein stilles Anlegen mehr (bei aktivem Schalter).
+            $product = $request->product_id ? Product::find($request->product_id) : null;
+
+            if ($product) {
+                $product->fill($request->only('product', 'model', 'brand_id'))->save();
+            } elseif (config('produkt.identitaet.aktiv')) {
+                DB::rollBack();
+
+                return response()->json([
+                    'error' => 'Produkt-ID fehlt — dieser Pfad aktualisiert nur, er legt keine Produkte mehr an.',
+                ], 422);
+            } else {
+                // Alt-Verhalten, byte-gleich (Kante 15): updateOrCreate legte ohne Treffer neu an.
+                $product = app(ProductIdentityService::class)->createLegacy(
+                    $request->only('product', 'model', 'brand_id')
+                );
+            }
 
             $old = $this->getProductHistorySnapshot($product);
 
