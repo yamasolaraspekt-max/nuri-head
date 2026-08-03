@@ -7,41 +7,89 @@ use App\Models\Distributor;
 use App\Models\DistributorPrice;
 use App\Models\Product;
 use App\Models\SupplierConnection;
+use App\Services\Product\Identity\IdentityMatch;
+use App\Services\Product\Identity\IdentityVorschlagOffen;
+use App\Services\Product\Identity\ProductIdentity;
+use App\Services\Product\Identity\ProductIdentityService;
 use Illuminate\Support\Facades\DB;
 
 class SupplierProductImportService
 {
     public function importMappedItem(SupplierConnection $connection, array $mappedData, array $rawItem = []): Product
     {
-        return DB::transaction(function () use ($connection, $mappedData, $rawItem) {
-            $productData = $mappedData['products'] ?? [];
-            $brandData = $mappedData['brands'] ?? [];
-            $distributorData = $mappedData['distributors'] ?? [];
-            $priceData = $mappedData['distributor_prices'] ?? [];
+        try {
+            return DB::transaction(function () use ($connection, $mappedData, $rawItem) {
+                $productData = $mappedData['products'] ?? [];
+                $brandData = $mappedData['brands'] ?? [];
+                $distributorData = $mappedData['distributors'] ?? [];
+                $priceData = $mappedData['distributor_prices'] ?? [];
 
-            $this->fallbackFromRawItem($productData, $brandData, $priceData, $rawItem);
+                $this->fallbackFromRawItem($productData, $brandData, $priceData, $rawItem);
 
-            $distributor = $this->resolveDistributor($connection, $distributorData);
-            $brand = $this->resolveBrand($brandData);
+                $distributor = $this->resolveDistributor($connection, $distributorData);
+                $brand = $this->resolveBrand($brandData);
 
-            if ($brand) {
-                $productData['brand_id'] = $brand->id;
-            }
+                if ($brand) {
+                    $productData['brand_id'] = $brand->id;
+                }
 
-            $product = $this->resolveProduct($productData, $priceData, $distributor);
+                if (config('produkt.identitaet.aktiv')) {
+                    // AUF-P1-S4 §8 Zeile 1: die eigene 3-Stufen-Leiter ist in den
+                    // ProductIdentityService gewandert (sie war das Vorbild).
+                    $identitaet = new ProductIdentity(
+                        gtin: $productData['ean'] ?? null,
+                        manufacturerArticleNo: $productData['article_no'] ?? null,
+                        brandId: $productData['brand_id'] ?? null,
+                        supplierArticleNo: $priceData['article_no'] ?? null,
+                        distributorId: $distributor->id,
+                        model: $productData['model'] ?? null,
+                        name: $productData['product'] ?? null,
+                        channel: 'supplier:' . ($connection->supplier_key ?? 'unbekannt'),
+                    );
 
-            if (!$product) {
-                $product = Product::create(
-                    $this->prepareProductCreateData($productData, $priceData)
-                );
-            } else {
-                $this->updateProductIfAllowed($connection, $product, $productData);
-            }
+                    $dienst = app(ProductIdentityService::class);
+                    $match = $dienst->resolve($identitaet);
 
-            $this->upsertDistributorPrice($connection, $distributor, $product, $priceData);
+                    if ($match->ergebnis === IdentityMatch::KONFLIKT) {
+                        throw new \RuntimeException('Identitätskonflikt — kein Import: ' . $match->begruendung);
+                    }
 
-            return $product;
-        });
+                    if ($match->ergebnis === IdentityMatch::VORSCHLAG) {
+                        // Vorschlag wird AUSSERHALB der Transaktion gesichert (siehe catch).
+                        throw new IdentityVorschlagOffen($identitaet, $match);
+                    }
+
+                    if ($match->ergebnis === IdentityMatch::AUTOMATISCH) {
+                        $product = $match->product;
+                        $this->updateProductIfAllowed($connection, $product, $productData);
+                    } else {
+                        $product = $dienst->createFrom(
+                            $identitaet,
+                            $this->prepareProductCreateData($productData, $priceData)
+                        );
+                    }
+                } else {
+                    // Alt-Verhalten, byte-gleich (Kante 15).
+                    $product = $this->resolveProduct($productData, $priceData, $distributor);
+
+                    if (!$product) {
+                        $product = app(ProductIdentityService::class)->createLegacy(
+                            $this->prepareProductCreateData($productData, $priceData)
+                        );
+                    } else {
+                        $this->updateProductIfAllowed($connection, $product, $productData);
+                    }
+                }
+
+                $this->upsertDistributorPrice($connection, $distributor, $product, $priceData);
+
+                return $product;
+            });
+        } catch (IdentityVorschlagOffen $vorschlag) {
+            app(ProductIdentityService::class)->vorschlagSpeichern($vorschlag->identity, $vorschlag->match);
+
+            throw new \RuntimeException($vorschlag->getMessage(), 0, $vorschlag);
+        }
     }
 
     private function fallbackFromRawItem(
