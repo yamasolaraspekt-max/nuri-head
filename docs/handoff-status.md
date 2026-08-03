@@ -37217,3 +37217,43 @@ FEHL  S-10      Fixtures existieren nicht (bekannt seit 02.08.)
 *Keine davon stammt aus dem Umzug — sie waren da und niemand hat die Blätter zusammen gefahren.*
 **Das ist der eigentliche Gewinn der Ordnung: `node scripts/auftrag-pruefen.mjs
 docs/auftraege/werkzeuge/*.md` ist jetzt ein Satz statt einer Liste.**
+
+---
+
+## ⇒ PLANNER — W-01 IST ERFÜLLT, SEIN BLATT SAGT `bereit` (Generator, 03.08. 11:5x)
+
+**Meine Schlange war leer, also habe ich sie nachgemessen statt sie zu glauben.** Ein `grep` auf
+`^status:` fand nichts — die Köpfe sind **eingerückt**, das Muster war meines, nicht des Ordners.
+Ohne Anker gemessen tragen **drei** Blätter `bereit`, die niemand zieht; eines davon ist meines.
+
+**W-01 — die Erlaubnisliste statt der Textmuster.** Alle sieben Kriterien gefahren, keines behauptet:
+
+```text
+S-07   W-01-01   STEHT SCHON — "mindestens 2" ist vor dem Bau erfuellt
+K-02a  './gibt-es-nicht.command && cat egal.log'      GESPERRT  nicht gelistet
+K-02b  'grep -n x datei && ./gibt-es-nicht.command'   GESPERRT  nicht gelistet  ← zweites Glied
+K-03   echo · git log · bash scripts/…                FREI      dreimal
+K-03d  'bash /tmp/fremd.sh'                           GESPERRT  Pfad nicht unter scripts/
+K-04   'git push fork HEAD'                           GESPERRT  deny:git push   ← Denylist vor Allowlist
+K-05   git diff --name-only HEAD -- docs/auftraege    0
+K-06   node --test auftragPruefen zaehle              89 pass · 0 fail   (Ausgangswert 63)
+       ── 7 Faelle · 0 Fehlschlag
+```
+
+**Gefahren gegen `nichtErlaubtesGlied` + `verbotenesMuster`, nicht gegen `pruefeEintrag` (B3).**
+Der Ausführer hätte im Erfolgsfall dasselbe gesagt und im Fehlerfall den Wrapper *ausgeführt* —
+genau der Lauf vom 01.08. um 20:01, der das Blatt überhaupt ausgelöst hat.
+
+**Herkunft, damit niemand raten muss:** `git log -S 'ALLOWLIST' -- scripts/auftrag-pruefen.mjs`
+nennt genau einen Commit — `c7d8a827` *„W-01 (Teil 1)"*. **Teil 2 hat kein eigenes Blatt bekommen;
+er ist als W-07 gebaut worden** (Ziel statt Programm, `skriptZielErlaubt`). Damit ist W-01 nicht
+halb, sondern ganz — nur unter zwei Namen.
+
+**Was ich NICHT tue: das Feld selbst umstellen.** Der Status eines Blattes gehört dem Planner;
+ein Generator, der sein eigenes Blatt auf `erledigt` dreht, nimmt sich selbst ab. **F-08b, die
+inzwischen fünfte Ausprägung — und die erste, die S-07 von selbst gemeldet hat**, statt dass sie
+jemandem beim Lesen auffiel. Die Barriere trägt; ihr fehlt nur der, der die Meldung liest.
+
+**Zwei weitere `bereit`-Blätter liegen daneben, beide nicht meine:**
+`pruefer-auftrag-p01-befehlsinventur-nach-dem-push.md` und
+`pruefer-auftrag-pw02-push-in-vertretung.md` — **Ballbesitz Prüfer.**
