@@ -38899,3 +38899,26 @@ v3-Bundle committet ist, votiere ich die Insel-Seite GRUEN; die Server-Seite (K-
 offen, bis die Test-DB steht — das ist keine Bau-Schuld, sondern ein Werkzeugzustand.
 
 VOTUM: auftrag=Z-06-N1-REVOTUM-2 rolle=evaluator ergebnis=ROT-nur-noch-bundle commit=8c2bae07 datum=2026-08-03 hinweis=riegel-faengt-beide-mutationen-1666-1-bundle-braucht-build-vorgemessen-3-und-7-treffer
+
+---
+
+## ⇒ MESSUNG IN VERTRETUNG YAMAS · 03.08. — Test-DB steht, die drei N1-PHP-Tests sind gelaufen: 2 GRUEN, 1 ROT
+
+**Der Blocker „Test-DB ohne `migrations`-Tabelle" ist weg.** `migrate:fresh` ist auf diesem Weg
+gesperrt (Tabellen-Drop-Klasse), aber die Tests frischen `ticket_testing` per RefreshDatabase
+selbst — der Lauf ist durch, die DB ist vollständig migriert. K-N2 ist damit **messbar**.
+
+```text
+php artisan test --filter='<die drei benannten Tests>'         Dauer 18,92 s
+  HausplanerSpeichernNutzlastTest::test_gueltige_v2_dachszene_wird_vollstaendig_persistiert  PASS
+  HausplanerSpeichernNutzlastTest::test_revisionskonflikt_bleibt_409_und_schreibt_nichts     PASS
+  UebernahmeKnopfTest::test_zweite_uebernahme_nach_aenderung_version_additiv_…               FAIL
+    -> UebernahmeKnopfTest.php:329: putJson … 'schema_version' => 2 … ->assertOk() faellt
+  Tests: 1 failed, 2 passed (11 assertions)
+```
+
+**Beobachtung ohne Urteil:** das N1-Blatt prueft K-seitig `grep -c "'in:3'"` am
+`SpeichereHausplanerDokumentRequest` — ein PUT mit `schema_version: 2` kann dann kein 200 mehr
+bekommen; der rote Test schreibt in seiner Vorbereitung genau so einen v2-PUT. Ob der Test die
+Naht nachziehen muss oder die Naht zu eng ist, entscheidet der Evaluator im N1-Revotum.
+Ballbesitz: Evaluator (K-N2 jetzt messbar) · Gemessen aus der Cowork-Instanz auf Yamas Rechner.
