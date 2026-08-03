@@ -294,7 +294,9 @@ kriterien:
     pruefung:
       typ: browser
       schritte: |
-        npm run build:hausplaner, dann /admin/hausplaner/studio, angemeldet, Expertenmodus.
+        npm run build:hausplaner, dann die OBJEKT-Flaeche (objekt.blade - die Flaeche MIT
+        data-speichern-url, Zeile 157; studio speichert NICHT: "No-Op", studio.blade:3,
+        gemessen 03.08.). Angemeldet, Expertenmodus. Braucht ein Objekt in ticket_testing.
         (a) Waende zeichnen, Decke anlegen OHNE Kontur
         (b) speichern
         (c) SEITE NEU LADEN
@@ -415,3 +417,49 @@ Rückweg ist ehrlich benannt („sobald eine Datei als v3 abgelegt ist, ist der 
 Rückmigration"). **Das ist die Sorte Blatt, die man bauen kann.**
 
 **Ballbesitz: Planner** — Einwand 1 schließen (eine Zeile), Einwand 2 umformulieren, Status stellen.
+
+## Nachbesserung nach ROT — Planner-Entscheidung (03.08.)
+
+**Scope:** die zwei Server-Naehte (`SpeichereHausplanerDokumentRequest` `in:…` und
+`scene-document-v2.schema.json` `const`) gehoeren zur N1-NAHT — derselbe Bau hat beide
+gezogen, dieselbe Nachbesserung schliesst sie. KEIN neues Blatt.
+
+**Die Weiche: v3-only am Server — BESTAETIGT** (`in:3` + `const 3`, wie im Baum begonnen):
+ein v2,3-toleranter Server wuerde Dokumente OHNE geometrieHerkunft/freigabe persistieren,
+nachdem v3 sie zur Pflicht macht — genau der stille Statusverlust, den B10 verbietet.
+**Preis, benannt:** ein VOR dem Deploy geoeffneter Tab sendet v2 und bekommt einen LAUTEN
+422 (kein stiller Verlust; Neuladen hebt auf v3, der Revisionskonflikt-Schutz 409 besteht).
+
+```yaml
+kriterien_nachbesserung:
+  - id: K-N1
+    typ: presence
+    kritikalitaet: P1
+    aussage: "Beide Naehte nehmen DIESELBE Version an: 3."
+    pruefung:
+      befehl: "grep -c \"'in:3'\" app/Http/Requests/Hausplaner/SpeichereHausplanerDokumentRequest.php"
+      erwartet: "1"
+    ausgangswert: "0 in HEAD ('in:2'); der Arbeitsbaum traegt bereits 'in:3' - unverbucht, 23-Zeilen-Diff"
+  - id: K-N2
+    typ: gate
+    kritikalitaet: P1
+    aussage: "Die DREI durch N1 rot gewordenen Tests sind gruen - NUR die drei sind die Latte (17 Bestandsrote = eigener Posten, nicht diese Naht)."
+    pruefung:
+      typ: gate
+      ausgefuehrt_von: generator
+      schritte: |
+        HausplanerSpeichernNutzlastTest::test_gueltige_v2_dachszene_wird_vollstaendig_persistiert
+        HausplanerSpeichernNutzlastTest::test_revisionskonflikt_bleibt_409_und_schreibt_nichts
+        UebernahmeKnopfTest::test_zweite_uebernahme_nach_aenderung_version_additiv_altversion_unveraendert
+  - id: K-N3
+    typ: presence
+    kritikalitaet: P2
+    aussage: "Die Persistenz-Flaeche steht im ANKER (objekt.blade) - L-01 oben ist umgeschrieben, N2/N3/Z-07 erben."
+    pruefung:
+      befehl: "grep -c 'objekt.blade' docs/auftraege/ANKER-BROWSER.md"
+      erwartet: "mindestens 1"
+    ausgangswert: "0 vor dieser Nachbesserung"
+```
+
+B14: der Generator setzt nach der Nachbesserung erneut `gebaut` und VERBUCHT die laufende
+Arbeit (der Request-Diff ist heute unverbucht im Baum); der Evaluator votet erneut.

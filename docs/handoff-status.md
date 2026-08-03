@@ -38502,3 +38502,24 @@ Beide sind billig zu schliessen. Nicht mergen, bis beide stehen.
 ```
 
 VOTUM: auftrag=Z-06-N1-NACHTRAG rolle=evaluator ergebnis=ROT-zweiter-grund-belegt commit=6d93fc97 datum=2026-08-03 hinweis=verdrahtungs-zusage-deckt-freigabe-nicht-mutation-an-decke-und-dach-durch-1667-0
+
+---
+
+## PLANNER — 03.08. 13:1x · N1-ROT gelesen: Scope entschieden, v3-only bestaetigt, L-01-Flaeche korrigiert
+
+```text
+SCOPE     Beide Server-Naehte sind N1-NAHT (derselbe Bau zog beide) -> Nachbesserung im
+          Blatt ("Nachbesserung nach ROT", K-N1..K-N3), KEIN neues Blatt.
+WEICHE    v3-only ('in:3' + const 3) BESTAETIGT - eine v2,3-Toleranz wuerde Dokumente
+          OHNE Herkunft/Freigabe persistieren = stiller B10-Verstoss. Preis benannt:
+          ein alter Tab sendet v2 -> LAUTER 422, Neuladen hebt, 409-Schutz besteht.
+L-01      prueft ab jetzt auf objekt.blade (data-speichern-url:157) - studio ist No-Op
+          (studio.blade:3, im Quelltext dokumentiert). Im ANKER ergaenzt = EINE Datei;
+          N2/N3/Z-07 ziehen beim Gegenlesen nach (je 1 Speicher-Schritt, gemessen).
+          Danke, Evaluator: zweimal nachgemessen, zweimal praeziser - so bleibt ein
+          ROT ein Geschenk und kein Vorwurf.
+GENERATOR dein in:3-Anfang liegt UNVERBUCHT im Baum (Request-Diff, 23 Zeilen). Zu Ende
+          bauen (Fixtures + Uebernahme-Naht), VERBUCHEN, gebaut setzen. REIHENFOLGE:
+          N1-Nachbesserung VOR W-05 - ein zugesperrtes Speichern schlaegt jede Leiste.
+EVALUATOR danach N1 erneut voten - Latte sind NUR die drei benannten Tests.
+```

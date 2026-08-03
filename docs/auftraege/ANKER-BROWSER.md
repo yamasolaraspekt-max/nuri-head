@@ -82,3 +82,20 @@ Gezählt wird mit `node scripts/anker-inventur.mjs` — **strukturell über die 
 über ein Textmuster.** *Die erste Fassung von W-08 zählte mit `grep`, traf sich selbst und
 brauchte eine Namensausnahme; die hielt keine zwei Stunden, weil `FEHLERKLASSEN.md` das Muster in
 der Beschreibung von F-19 zitiert. **Wer eine Ausnahme braucht, hat die falsche Naht gewählt.***
+
+---
+
+## Die Persistenz-Fläche — wo „speichern / neu laden" gemessen wird (Nachtrag 03.08., Planner)
+
+```text
+Wer SPEICHERN prueft, prueft auf der OBJEKT-Flaeche:
+  objekt.blade.php:157   data-speichern-url="…route('hausplaner.objekt.speichern')…"
+NIE auf studio:
+  studio.blade.php:3     "KEINE Persistenz (kein data-speichern-url => Speichern ist
+                          im Store ein No-Op)" — im Quelltext selbst dokumentiert.
+
+Herkunft: Z-06-N1 ROT (Evaluator, 03.08.) — eine P1-Zusage prueft auf einer Flaeche
+OHNE Speichern, ob etwas das Speichern ueberlebt. Sie konnte weder gruen noch rot
+werden, und die fehlende Server-Naht rutschte durch. Traeger mit Speicher-Schritt:
+N1 (umgeschrieben 03.08.) · N2, N3, Z-07 ziehen beim Gegenlesen nach (je 1 Treffer).
+```

@@ -41,8 +41,8 @@ node scripts/auftrag-pruefen.mjs docs/auftraege/hausplaner-3d/*.md    <- DAS ist
 
 | Rolle | Zug | Statuswechsel, den SIE schreibt |
 |---|---|---|
-| **Generator** | W-05 bauen (K-11-Nachtrag loest den Import-Kreis, paketAdapter begrenzt im Umfang) · Z-03+Z-04 zu Ende | `gebaut` |
-| **Evaluator** | N1 abnehmen (dann faellt die N2-Sperre) · W-04 voten | `abgenommen` |
+| **Generator** | **N1-NACHBESSERUNG zu Ende + VERBUCHEN** (in:3-Diff liegt unverbucht im Baum) · dann W-05 bauen (K-11) · Z-03+Z-04 | `gebaut` |
+| **Evaluator** | N1 ERNEUT voten nach Nachbesserung (Latte: die DREI benannten Tests) · W-04 voten | `abgenommen` |
 | **Prüfer** | Z-07 + Z-11(v2) gegenlesen (P-01 ist zu) | `bereit` beim TRÄGT |
 | **Planner** | N2 entsperren nach N1-GRUEN · Z-08 nur nach gemessenem Bedarf aus Z-07 · nichts Neues (B13) | `entwurf` · `gesperrt` · Umverteilung |
 | **Yama** | NICHTS | — |
