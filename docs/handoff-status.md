@@ -38261,3 +38261,87 @@ Umfangserweiterung, entscheidest du — ich erweitere keinen Umfang eigenmächti
 **Die Alternative ohne fremde Datei trägt nicht:** man könnte die gehobenen Werkzeuge im Katalog
 lassen und die Bilanz um einen dritten Summanden erweitern — dann stünden sie aber weiterhin
 nicht in `werkzeuge()` und damit **nicht in der Leiste**, was der ganze Zweck von W-05 ist.
+
+---
+
+## ⇒ PLANNER — **P-01 IST ERLEDIGT UND COMMITTET** (Prüfer, 03.08. 09:3x) · `c055ea9b`, gepusht
+
+Auf Yamas Wort. Voller Befund in `docs/planner/PRUEFER-BEFUNDE.md` § P-01-Abschluss. Kurzfassung:
+**222 Befehle · 386 Glieder · LESEND 272 · GATE 112 · SCHREIBEND 0 · PUBLIZIEREND 0 · WRAPPER 0.**
+Eigener Suchweg (Wirkung statt Text, drei Richtungen inkl. aller von Blättern gerufenen Skripte und
+des Executors selbst): **kein zweiter Befehl verlässt die Maschine.** P-01-01…06 alle erfüllt,
+repariert wurde nichts. Drei Abfälle: **(1)** S4c trägt Prosa im `befehl:`-Feld (P3, Planner) ·
+**(2)** `push-integration-sicher.command` existiert noch ausführbar im Wurzelverzeichnis (Hinweis,
+Yama) · **(3)** PB-055-Ursache korrigiert: es ist der **Stufe-5-Wegwerf-Index des Commit-Tors** —
+das Tor ist sauber, scharf bleibt der Weg **am Tor vorbei** (nackter `git commit`); R9-Barriere
+dagegen gehört dem Planner. Das Blatt P-01 kann auf `abgenommen`/zu — Status stellt der Zuständige.
+
+---
+
+## EVALUATOR — 03.08. · Z-06-N1: **ROT.** Der Bau ist gut — er bricht das Speichern am Objekt
+
+**Der Bau selbst traegt.** Alles Messbare gruen, drei eigene Mutationen gefangen. **Und trotzdem
+ROT, weil eine Naht fehlt, die die Insel-Suite nicht sehen kann.**
+
+### Der sperrende Befund — mit Kontrolle davor (B4)
+
+```text
+VOR N1  (5df61a37)  phpunit HausplanerSpeichernNutzlastTest  ->  OK (13 tests)      exit 0
+NACH N1 (6d93fc97)  derselbe Test                            ->  2 FAILURES         exit 1
+  test_gueltige_v2_dachszene_wird_vollstaendig_persistiert   Erwartet 200, kam 422
+  test_revisionskonflikt_bleibt_409_und_schreibt_nichts      Erwartet 409, kam 422
+
+URSACHE, an beiden Enden gelesen:
+  hausplanerStore.ts:186                 schema_version: scene.schemaVersion   -> nach N1: 3
+  SpeichereHausplanerDokumentRequest:24  'schema_version' => [... 'in:2']      -> lehnt 3 ab
+```
+
+**Die Insel hebt auf v3, der Server steht auf v2. Jeder Speicherversuch am Objekt endet in 422.**
+*Die Hausplaner-Suite (1667/0) kann das nicht fangen — sie kennt den Server nicht.*
+
+### Warum es niemandem aufgefallen ist — L-01 zeigt auf die falsche Flaeche
+
+```text
+L-01 verlangt   "/admin/hausplaner/studio ... (b) speichern (c) SEITE NEU LADEN"
+studio.blade    "KEINE Persistenz (kein data-speichern-url ⇒ Speichern ist im Store ein No-Op)"
+```
+
+**Eine P1-Zusage, die auf einer Flaeche ohne Speichern prueft, ob etwas das Speichern ueberlebt.**
+*Sie kann weder gruen noch rot werden — deshalb hat der Generator sie zu Recht nicht berichtet,
+und deshalb ist die fehlende Naht durchgerutscht.* Die persistente Flaeche ist `objekt.blade`.
+
+### Was am Bau GRUEN ist — damit die Nachbesserung klein bleibt
+
+```text
+K-01 geometrieHerkunft 7 · K-02 freigabe 7 · K-03 literal(3), literal(2) weg · K-04 freigabe.ts
+K-10 kein persistiertes Literal entfernt (0)      Suite 1667/0 (+18)      tsc 0
+EIGENE MUTATIONEN, jede diff-belegt, Reset je verifiziert (1667/0):
+  Migration setzt 'bestaetigt' statt 'zu_pruefen'  -> K-06 UND K-05 fallen
+  Felder .optional()                               -> faellt am Schema-Gate; mit
+                                                      mitgezogenem Schema faellt K-05 ROT
+  istFreigegeben gibt immer true                   -> K-07 dreifach rot, darunter
+                                                      "unbekannter fuenfter Wert" (fail-close)
+```
+
+*Die zehnte Zusage des Generators — die App RUFT die Domaenen-Regel, statt sie erneut zu
+treffen — ist der Grund, warum die Mutationen ueberhaupt fangbar wurden. Gut gebaut.*
+
+### Was zu tun ist
+
+```text
+1  Server auf v3: 'in:2' -> 'in:2,3' (Bestand v2 muss weiter speicherbar bleiben) plus die
+   Fixtures des Nutzlast-Tests. Liegt in app/ und damit AUSSERHALB des N1-Scope -> eigener
+   kleiner Posten oder Nachbesserungs-Commit, Entscheidung des Planners.
+2  L-01 auf die persistente Flaeche umschreiben (objekt.blade), sonst wiederholt sich das
+   bei N2, N3 und beim Dach.
+3  NICHT MERGEN, bis 1 steht. Auf dem Arbeitszweig ist es harmlos; im CRM waere "Speichern
+   geht nicht mehr" der teuerste denkbare Fehler.
+```
+
+**Nicht geprueft und ehrlich benannt:** der volle Browser-Roundtrip (zeichnen, speichern, neu
+laden, Datenstand ablesen). Er braucht ein Objekt in `ticket_testing`; ein Anlauf dorthin wurde
+abgelehnt, und ich habe ihn nicht umgangen. Die Kette Serialisieren/Parsen/Migrieren ist
+stattdessen ueber K-05/K-06 mit Mutationsbeleg gedeckt — der DB-Umweg selbst reicht das JSON
+unveraendert durch (Controller speichert `$request->scene()` als Ganzes, gelesen).
+
+VOTUM: auftrag=Z-06-N1 rolle=evaluator ergebnis=ROT commit=6d93fc97 datum=2026-08-03 hinweis=insel-v3-server-in-2-speichern-endet-422-kontrolle-vor-n1-gruen-l01-zeigt-auf-flaeche-ohne-persistenz
