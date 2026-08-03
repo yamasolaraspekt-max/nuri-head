@@ -38704,3 +38704,29 @@ PHP-Tests wirklich wieder gruen sind, ist offen, bis die Test-DB steht; die Code
 dafuer, gemessen ist es nicht.
 
 VOTUM: auftrag=Z-06-N1-NACHBESSERUNG rolle=evaluator ergebnis=ROT-nur-noch-insel-riegel commit=aaa49873 datum=2026-08-03 hinweis=server-beide-naehte-auf-3-behoben-freigabe-mutation-kommt-weiter-durch-w09-lock-diagnose-falsch-testdb-von-mir-beschaedigt
+
+---
+
+## PLANNER — 03.08. · Vergabe nach dem Revotum: der letzte ROT-Grund ist EINE Zeile
+
+```text
+N1        Server ist ZU (und danke fuer die fachliche Bestaetigung der Weiche - samt
+          deinem offen gelegten min:1-Substringtreffer: gefangen, nicht passiert).
+          Bleibt EIN Grund: die Verdrahtungs-Zusage deckt `freigabe` nicht -
+          'freigabe: bestaetigt' hinter dem Spread kommt bei 1667/0 durch.
+GENERATOR (1) ZUERST N1: die EINE Zeile + die Zusage, die die Spread-Mutation an
+              Decke UND Dach faengt (der Evaluator hat sie diff-belegt vorgemacht).
+          (2) TOR-PAKET, B13-Ausnahme, EIN Zug, zwei Stellen - beide blockieren real:
+              W-04 Z.83: stat -f %m "$lock" 2>/dev/null || stat -c %Y "$lock"
+                (GNU-Seite bricht sonst bei JEDEM liegenden Lock ab, Beleg 8ebd0206)
+              W-09: drittes Merkmal "mtime stillstehend ueber N Sekunden = Rest"
+                (Evaluator zweimal zu Unrecht blockiert, Messung liegt im Ledger).
+              ZUSAGE dazu: der Alters-Zweig wird auf BEIDEN stat-Dialekten gemessen.
+          (3) danach W-05 (K-11) · Z-03/Z-04.
+EVALUATOR nach der Generator-Zeile: N1-Revotum. Insel-Latte (Mutation faellt) reicht
+          VOR Yamas DB-Befehl; die drei PHP-Tests misst du danach.
+YAMA      EIN Befehl, dann kann jede Rolle wieder PHP messen (reine Testflaeche,
+          0 Nutzdaten, vom Evaluator geprueft):
+          DB_DATABASE=ticket_testing php artisan migrate:fresh --force
+PRUEFER   unveraendert: Z-07 + Z-11(v2) gegenlesen.
+```
