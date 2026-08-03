@@ -39115,3 +39115,58 @@ AN YAMA - der EINE Befehl, der heute drei Messungen gekostet hat:
   (destruktiv, darum deiner. Vom Evaluator vorher belegt: users 0, leads 0 - Testflaeche.)
   Danach: Evaluator faehrt K-N2 -> N1 gruen -> ich entsperre N2 in derselben Minute.
 ```
+
+---
+
+## EVALUATOR — 03.08. · DIE VIERTE NAHT: der Snapshot-Rückweg umgeht Validator UND Versions-Nachführung
+
+Suche über die ganze Codebasis nach Stellen, die die Schemaversion kennen (vier Suchweisen,
+Widerlegungsrunde). **Ein Fund hat die Widerlegung überstanden — selbst nachgemessen:**
+
+```text
+app/Domain/Hausplaner/Actions/StelleSnapshotWieder.php:38-43
+  $aktuell->update(['scene_json' => $scene, 'revision' => …, 'checksum' => …, 'updated_by' => …]);
+  schema_version in der Datei          -> 0 Treffer
+  SceneDocumentValidator in der Datei  -> 0 Treffer
+
+Zum Vergleich der normale Speicherweg:
+app/Domain/Hausplaner/Actions/SpeichereHausplanerDokument.php:39
+  'schema_version' => (int) ($scene['schemaVersion'] ?? …)   // "Spalte folgt der Szene"
+```
+
+**Die Kopplung, die der Bau ausdrücklich herstellt, wird auf dem Rückweg gebrochen.** Wer nach
+einem v3-Speichern einen älteren Snapshot zurückholt, bekommt eine v2-Szene in ein Dokument,
+dessen Spalte weiter 3 sagt — und `objekt.blade.php:173` zeigt dem Nutzer „Schema v3" über
+einem v2-Inhalt. *Zusätzlich landet eine Szene in der Datenbank, die das eigene JSON-Schema
+ablehnen würde, ohne dass eine Schranke sie gesehen hat.*
+
+### Schwere ehrlich eingeordnet — und dabei ein eigener Fehlgriff
+
+```text
+Route registriert    routes/web.php:5005, middleware permission:Hausplaner,update   JA
+Von der Insel gerufen                                                               NEIN
+```
+
+**Mein erster Messwert war falsch:** `grep -o wiederherstellen` fand 1 Treffer im Bundle und 2
+in der Quelle — ich hielt das für einen Aufruf. **Nachgesehen sind es deutsche PROSA-Treffer:**
+ein Kommentar in `uiState.ts:86` und der Tooltip *„Standardmaßstab wiederherstellen"* in
+`Kopfrahmen.tsx:298`. *Kommentar-Treffer, diesmal bei mir — dieselbe Klasse, die ich diese
+Woche viermal bei anderen gemeldet habe.* **Der Skeptiker hatte recht, ich lag daneben.**
+
+**Damit: kein akuter Nutzerschaden, aber eine scharfe Route ohne Schranke** — sie ist
+registriert und berechtigt, und der Knopf ist erkennbar geplant. *Der Befund gehört geschlossen,
+BEVOR die Oberfläche ihn erreichbar macht — danach wäre es ein stiller Datenfehler, den kein
+Test bemerkt.*
+
+**Erledigt-Kriterium:** `StelleSnapshotWieder` führt die Spalte nach wie `SpeichereHausplanerDokument:39`
+UND schickt die zurückgespielte Szene durch den `SceneDocumentValidator` (oder migriert sie
+serverseitig). *Klein am Rand: der Kommentar dort sagt noch „(v1/v2)".*
+
+### Was die Suche AUSDRÜCKLICH nicht gefunden hat
+
+*Widerlegt und damit kein Befund:* `ErstelleLeeresSzenenDokument` (schreibt v1 — geht durch
+`migriereSzene`, vorgesehener Eingang der Leiter, älter als N1) · `objekt.blade.php:112`
+(liest nur `nodes`, kennt keine Version) · weitere Kandidaten. **Von den bekannten drei Nähten
+plus dieser vierten ist damit die Suche erschöpft, soweit vier Suchweisen reichen.**
+
+VOTUM: auftrag=Z-06-N1-VIERTE-NAHT rolle=evaluator ergebnis=befund-bestaetigt-nicht-akut commit=789de20f datum=2026-08-03 hinweis=snapshot-rueckweg-ohne-validator-und-ohne-spalten-nachfuehrung-route-registriert-aber-ohne-knopf
