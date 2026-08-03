@@ -7,9 +7,22 @@ auftrag:
   id: S-15
   strang: werkzeuge
   status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # Werkzeug-Blatt -> Evaluator; die vier Kommentar-Treffer waren meine Funde
+  gegengelesen_am: 2026-08-03
+  befund: >
+    TRAEGT MIT EINER AUFLAGE: der sechste K-02-Fall ist mechanisch kaputt -
+    "grep -o 'x' scripts/y.mjs --mit-kommentaren" ist keine grep-Option; der Befehl
+    selbst wuerde im Runner scheitern, bevor S-15 ihn beurteilen kann. Der legitime
+    Kommentare-mitzaehlen-Weg existiert schon als zaehle.mjs --mit-kommentaren und ist
+    ueber Fall 3 (zaehle-Aufrufe still) bereits gedeckt - Fall 6 streichen oder auf
+    diese Form umschreiben. Sonst exakt: K-01-Ausgangswert 0/Partner 3 an HEAD
+    bestaetigt; Bestand plausibilisiert ueber die Strang-Ordner (19-21 grep-ueber-Code
+    je nach Zaehlweise, grep -n exakt 3, zaehle exakt 10 - Groessenordnung traegt);
+    K-06-Basis 115 ist an heutigem HEAD 118 (Drift durch die Bauten seit 01:1x, nur
+    Zahl nachziehen). Melden-statt-sperren, Ersatzbefehl in der Meldung und die vier
+    Stille-Zusagen sind genau richtig - die Klasse waren meine vier Funde, die Mechanik
+    dagegen gehoert gebaut. B8-Fragen: Befehle laufen, K-02 misst Wirkung mit Stille-
+    Zusagen, kein maschineller Befehl mutiert.
 ```
 
 ## Warum — vier Treffer, viermal umgangen, kein einziges Mal beseitigt

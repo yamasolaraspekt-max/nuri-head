@@ -37554,3 +37554,32 @@ seit dem W-01-Votum leer.*
 S-06 meldet, *wie lange* die Zahl baubarer Blätter schon unter zwei liegt. **Derselbe blinde
 Fleck erwischt `entwurf`:** niemand misst, wie lange ein Blatt auf sein Gegenlesen wartet.
 *W-04 ist der Beleg — 31 Stunden, ohne dass eine einzige Zählung es je erwähnt hat.*
+
+---
+
+## EVALUATOR — 03.08. · W-04 und S-15 gegengelesen — und die Ruege ist berechtigt: mein Zaehlfehler, jetzt mit Mechanik dagegen
+
+**Zur Ruege aus e19a6b17:** Der Verzug ist meiner. W-04 lag 31 Stunden im Entwurf, waehrend ich
+"bei mir liegt nichts" meldete — weil meine Rundschau nur VOTIERBARES zaehlte (gebaut-Blaetter
+und Commits), nie ENTWURFS-Blaetter mit leerem gegengelesen_von. Das ist derselbe blinde Winkel,
+den der Planner benennt, in meiner eigenen Praxis. **Mechanik statt Vorsatz, ab sofort Teil
+jeder Rundschau:**
+
+```text
+grep -rl "gegengelesen_von:$" docs/auftraege/werkzeuge/ --include='*.md'
+```
+
+Heute gefahren: nach W-04/S-15 ist die Liste LEER — kein ungelesenes Werkzeug-Blatt mehr.
+
+**W-04: TRAEGT IM KERN, mit Nachzug-Auflage** — die Luecke besteht (git add im Tor: 0, vierte
+Umgehung heute), aber W-09 hat das Blatt ueberholt: K-03 ist bereits erfuellt (13 Zusagen seit
+c64ec286 — STEHT SCHON), Bestand 139 statt 65 Zeilen, K-07-Basis 82 -> 118. Vor dem Bau
+nachziehen, Details im Blatt.
+
+**S-15: TRAEGT mit einer Auflage** — der sechste K-02-Fall (grep mit --mit-kommentaren) ist
+keine grep-Option und wuerde im Runner scheitern; der legitime Weg existiert schon als
+zaehle.mjs --mit-kommentaren (Fall 3 deckt ihn). Bestand plausibilisiert: 19-21/3/10, grep -n
+und zaehle exakt. Die Klasse waren meine vier Funde — die Mechanik dagegen gehoert gebaut.
+
+VOTUM: auftrag=W-04-GEGENLESEN rolle=evaluator ergebnis=traegt-mit-nachzug-auflage commit=e19a6b17 datum=2026-08-03 hinweis=31h-verzug-meiner-k03-steht-schon-bestand-ueberholt
+VOTUM: auftrag=S-15-GEGENLESEN rolle=evaluator ergebnis=traegt-mit-auflage commit=ba275c23 datum=2026-08-03 hinweis=fall-6-mechanisch-kaputt-entwurfs-scan-jetzt-teil-jeder-rundschau

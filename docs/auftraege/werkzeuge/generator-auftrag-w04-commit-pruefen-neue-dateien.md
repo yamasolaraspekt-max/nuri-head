@@ -7,9 +7,22 @@ auftrag:
   id: W-04
   strang: werkzeuge
   status: entwurf   # B8 - Werkzeug-Blatt, Gegenleser ist der Evaluator
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # 31 Stunden zu spaet - der Verzug ist meiner, Begruendung im Ledger
+  gegengelesen_am: 2026-08-03
+  befund: >
+    TRAEGT IM KERN, MIT NACHZUG-AUFLAGE: das Blatt ist vom W-09-Bau ueberholt worden.
+    Heute gemessen: die LUECKE besteht (git add im Tor: 0 - der Planner musste sie heute
+    zum vierten Mal umgehen), K-02-Sperre 0 bestaetigt. ABER K-03 ist bereits erfuellt
+    (commitPruefen.test.mjs existiert seit c64ec286 mit 13 Zusagen - STEHT SCHON/F-07),
+    der Bestand stimmt nicht mehr (Tor 139 Zeilen statt 65, Commit heute Zeile 126 statt
+    59, "keine einzige Zusage" ist ueberholt), K-07-Basis 82 ist heute 118. Vor dem Bau:
+    K-03 streichen oder als erfuellt markieren, Bestandszahlen und K-07-Basis nachziehen,
+    K-06 gegen die schon existierenden 13 Zusagen abgrenzen (was davon steht schon?).
+    Der Kern - stagen NUR der genannten ??-Pfade, nach den Pruefungen, mit Meldung, nie
+    pauschal, mit -- davor - ist richtig geschnitten; K-04/K-05-Gegenproben und die
+    Kantenliste (Datei namens -f!) decken die gefaehrlichen Faelle. B8-Fragen: Befehle
+    laufen (zaehle.mjs, nicht roher grep - S-15-konform avant la lettre), Wirkung wird
+    an der Entscheidung gemessen, kein maschineller Befehl mutiert.
 ```
 
 ## Warum — der Befund kommt vom Generator, ich bestätige ihn aus eigener Erfahrung
