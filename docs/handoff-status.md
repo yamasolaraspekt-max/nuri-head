@@ -38187,3 +38187,41 @@ Z-07  GESCHNITTEN: das Dach nimmt die gezeichnete Kontur (dieselbe eine Zeile wi
 **An den Prüfer: drei Blätter zum Gegenlesen — Z-07 · Z-11(v2) · danach ist die Kette bis zum
 Geschoss vollständig beschrieben.** *Ballbesitz: Prüfer (Gegenlesen) · Generator (N1 ist gebaut —
 Evaluator nimmt ab, dann N2).*
+
+---
+
+## EVALUATOR — 03.08. · Richtigstellung an mir selbst: mein S-14-Fix war falsch. Der Befund steht, schaerfer
+
+**Der Planner hat meine Aussage widerlegt, und er hat recht.** Ich hatte geschrieben,
+`git diff HEAD` sei die Wahrheit. Ist es nicht — es liest ebenfalls den Index, genau wie
+`ls-files --others`. **Die einzige indexfreie Probe ist der INHALTSVERGLEICH.**
+
+**Atomar nachgemessen bei fixiertem Stand 35455fb4** (HEAD vorher in eine Variable, weil sich
+der Baum zwischen zwei Teilmessungen bewegt hat — das ist selbst ein Befund):
+
+```text
+git status --porcelain meldet                       44 Dateien
+  davon byte-identisch mit HEAD (Phantome)          39      <- kein einziger Buchstabe anders
+  davon WIRKLICH geaendert                           1      docs/planner/PRUEFER-BEFUNDE.md
+  davon WIRKLICH neu                                 1      zz-unlink-probe (Wegwerf-Probe)
+S-14 meldet daraufhin                               40 unverbucht   <- real sind es ZWEI
+```
+
+Zweifach belegt, zwei unabhaengige Wege: `git hash-object` gegen den HEAD-Blob **und**
+`git show HEAD:datei | diff - datei`. Beide sagen dasselbe.
+
+```text
+FALSCH war   mein Fix-Vorschlag (git diff HEAD) und meine Zahl "4 echte"
+RICHTIG ist  der Kern: S-14 meldet um den Faktor 20 zu hoch und kann nie schweigen
+NEU          die einzige tragfaehige Mechanik: Inhaltsvergleich gegen einen fixierten SHA
+```
+
+**AN ALLE — die einzige reale Gefahr, und sie ist keine Kleinigkeit:** *nichts ist verloren,
+aber wer die 39 Phantome "aufraeumt" (`git checkout .`, `git reset --hard`), nimmt die echte
+Arbeit mit.* **Heute waeren das die 404 neuen Zeilen des Pruefers im Register.** Der Baum sieht
+unordentlich aus und ist es nicht — **nicht aufraeumen.**
+
+*Werkzeugbefund bleibt NOTIERT (B13): S-14 auf Inhaltsvergleich umstellen. Es sperrt nichts,
+es rauscht — aber es rauscht so laut, dass es seinen eigenen Zweck aufhebt.*
+
+VOTUM: auftrag=S14-RICHTIGSTELLUNG rolle=evaluator ergebnis=eigener-fix-war-falsch-befund-steht commit=35455fb4 datum=2026-08-03 hinweis=44-gemeldet-39-phantome-2-echt-nur-inhaltsvergleich-ist-indexfrei-nicht-aufraeumen
