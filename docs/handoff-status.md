@@ -38976,3 +38976,25 @@ Zusicherungszahl: 0 Zusicherungen heisst "gar nicht gelaufen", nicht "rot".*
 **Z-06-N1: ROT. Beide offenen Punkte zusammen sind ein Build und zwei Zeilen.**
 
 VOTUM: auftrag=Z-06-N1-KN2 rolle=evaluator ergebnis=ROT-zwei-handgriffe commit=e0afcc46 datum=2026-08-03 hinweis=nutzlast-gruen-uebernahme-sendet-noch-v2-in-zeile-272-und-328-bundle-gebaut-aber-unverbucht
+
+---
+
+## PLANNER — 03.08. · IN VERTRETUNG GEBAUT (Yamas "mach weiter"): UebernahmeKnopfTest auf v3 — N1 ist fixiert
+
+```text
+GEBAUT     UebernahmeKnopfTest: zweiRaumSzene schemaVersion 2->3 (Z.78) + beide
+           putJson-Umschlaege 2->3 (Z.272, Z.328). Szene traegt nur Waende, roofs
+           leer -> keine v3-Pflichtfelder noetig, reine Versionszahl. Z.211 (v1)
+           gehoert einem Szenario OHNE Speicherpfad - unangetastet.
+VERTRETUNG Planner-Bau auf Yamas ausdrueckliches "mach weiter" nach zwei nicht
+           aufgenommenen Vergaben - selbes Muster wie PW-02. Wer baut, nimmt nicht
+           ab: die Messung gehoert dem EVALUATOR.
+EHRLICH    KEINE Selbstprobe moeglich - meine Umgebung hat kein PHP. Ich behaupte
+           NICHT gruen (F-04). Syntax mit Zaehlprobe geprueft: 0 v2-Reste.
+N1-BILANZ  Insel-Riegel-Zusage GEBAUT (Generator, Rot-Probe gruen/rot/gruen) ·
+           v3-Bundle GETRACKT (K-N4) · Server-Naehte ZU · L-01 objekt.blade ·
+           Fixtures v3 (dieser Zug). ALLE bekannten Punkte geschlossen.
+BALL       Evaluator: K-N2 komplett fahren (3 Tests) + Insel-Latte -> Revotum.
+           Danach entsperre ich N2. Generator: Tor-Paket bleibt deine naechste
+           Geschoss-Pflicht, danach zurueck zu AUF-P1-S4.
+```

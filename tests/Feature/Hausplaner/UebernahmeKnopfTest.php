@@ -75,7 +75,7 @@ class UebernahmeKnopfTest extends TestCase
         return [
             'id' => "doc-{$alt}",
             'projectId' => $alt,
-            'schemaVersion' => 2,
+            'schemaVersion' => 3,
             'units' => 'mm',
             'revision' => 1,
             'settings' => ['gridSize' => 100, 'snapEnabled' => true, 'angleSnap' => 15],
@@ -269,7 +269,7 @@ class UebernahmeKnopfTest extends TestCase
         $geaendert = $this->zweiRaumSzene($alt);
         $geaendert['nodes'][6] = $this->wall('mid', 6000, 0, 6000, 5000);
         $this->actingAs($u)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
-            'base_revision' => 1, 'schema_version' => 2, 'scene' => $geaendert,
+            'base_revision' => 1, 'schema_version' => 3, 'scene' => $geaendert,
         ])->assertOk();
 
         // **Ein Fund, den die alte Anzeige verdeckt hat:** `szene_revision` fuehrt hier die
@@ -325,7 +325,7 @@ class UebernahmeKnopfTest extends TestCase
         $geaendert = $this->zweiRaumSzene($alt);
         $geaendert['nodes'][6] = $this->wall('mid', 6000, 0, 6000, 5000);
         $this->actingAs($u)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
-            'base_revision' => 1, 'schema_version' => 2, 'scene' => $geaendert,
+            'base_revision' => 1, 'schema_version' => 3, 'scene' => $geaendert,
         ])->assertOk();
 
         $res = $this->actingAs($u)->post("/admin/hausplaner/objekt/{$alt}/uebernehmen");
