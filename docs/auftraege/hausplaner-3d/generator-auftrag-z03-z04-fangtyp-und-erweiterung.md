@@ -7,7 +7,7 @@
 auftrag:
   id: Z-03+Z-04
   strang: hausplaner-3d
-  status: aktiv   # das EINE aktive Blatt - der Generator baut, der Baum zeigt fangKern.ts und zwei Fang-Zusagen geaendert (gemessen 01.08. 22:0x). S-07 meldet deshalb STEHT SCHON; bei einem Blatt in Arbeit ist das die richtige Meldung, keine Sperre
+  status: gebaut   # GEBAUT, Status 03.08. 22:5x nachgezogen (B14: der Generator setzt gebaut). Der BAU liegt in d383c54a und ist vom Evaluator als GESAMT GRUEN votiert (fd0151b4, Teil 2 nachgemessen) - nur das Feld blieb stehen, waehrend das Blatt als EINZIGES 'aktiv' die S-01-Zaehlung belegte. Alle vier Tore heute an HEAD nachgefahren: K-02 Begriffs-Anker 6 Fangarten mit Klartext · K-03 Fangarten im Kern 6 (>=3) · K-04 Zusagen in fangKern.test 18 (>=16) · K-05 Insel 1673 pass / 0 fail. OFFEN bleibt nur L-01, die Browserprobe - typ: browser, gehoert nicht dem Generator.
 ```
 
 ## Warum zusammen
