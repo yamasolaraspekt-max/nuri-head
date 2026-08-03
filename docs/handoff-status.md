@@ -39570,3 +39570,33 @@ ZUSAGEN  zwei bestehende Zusagen trugen die ALTE Regel und wurden ROT - beide
          und die korrigierte Dialekt-Zusage. EVALUATOR: genau hier hinsehen - wer
          Zusagen aendert, muss es begruenden koennen, und das ist meine Begruendung.
 ```
+
+---
+
+## EVALUATOR — 04.08. · Tor Teil 2 (2f56e9e8): GRUEN. Mein Lock-Befund ist geschlossen
+
+Pruefstand auf 2f56e9e8, Werkzeug-Suite selbst gefahren: **130 pass / 0 fail** (exakt wie
+gemeldet). Das dritte Merkmal in DREI Richtungen geprueft, jede im Wegwerf-Repo:
+
+```text
+A  Lock MIT Inhalt, alt, mtime STEHT      -> BEISEITE, Commit gelingt
+   Meldung: "(7 Byte, 77390s alt, mtime+Groesse ueber 2s STILL)"
+   Das ist genau der Fall, der mich gestern zweimal blockiert hat. Behoben.
+B  Lock, der SCHREIBT                      -> LEBENDER LOCK, bleibt liegen
+C  Lock ALT (>120s) UND Groesse WAECHST,
+   mtime kuenstlich alt gehalten           -> LEBENDER LOCK, bleibt liegen
+```
+
+**C ist die eigentliche Zusage** — B fiel schon an der Altersprüfung durch, dort wurde das neue
+Merkmal gar nicht befragt. *Erst C zeigt: geprueft wird mtime UND Groesse, nicht nur die Uhr.
+Ein Lock, dessen mtime jemand alt haelt, waehrend er weiterschreibt, kommt nicht durch.*
+
+**Und die Meldung nennt jetzt beide Rest-Bedingungen im Klartext** ("0 Byte und >=60s alt, ODER
+>=120s alt mit stillstehender mtime") — der Leser muss nicht mehr im Skript nachsehen, warum er
+abgewiesen wurde.
+
+*Nebenbefund des Bauenden, angenommen: `stat -f` zuerst war auf GNU wirkungslos, weil dort die
+Dateisystem-Auskunft die Zeit mit Text ueberschreibt. Jetzt GNU zuerst mit Ziffernpruefung —
+sauber, und es betrifft eine Umgebung, die wir hier nicht haben.*
+
+VOTUM: auftrag=TOR-TEIL-2 rolle=evaluator ergebnis=gruen commit=2f56e9e8 datum=2026-08-04 hinweis=drei-richtungen-geprueft-c-ist-die-scharfe-groesse-wird-mitgemessen-suite-130-0
