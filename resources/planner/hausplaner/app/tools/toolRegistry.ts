@@ -10,19 +10,21 @@
 import type { ToolDefinition } from './toolTypes';
 
 /**
- * Bekannte Arbeitsbereiche.
+ * Bekannte Arbeitsbereiche — die Ids wohnen seit 03.08.2026 in `workspaceIds.ts`.
  *
- * Bis AUF-34 gab es hier **genau einen** Wert — die Ebene `activeWorkspace` existierte im Code
- * (`state/uiState.ts:23`), wurde aber nie benutzt. Seit AUF-34 tragen die fünf Bereiche aus Yamas
- * Entwurf die Werkzeugleiste; welches Thema zu welchem Bereich gehört, steht **an einer Stelle**:
- * `dashboard/arbeitsbereiche.ts`. Hier stehen nur die ids, damit Registry, Adapter und Oberfläche
- * dieselbe Zeichenkette benutzen und niemand `'heizung'` irgendwo neu tippt.
+ * *Sie standen hier, bis W-05 zeigte, dass dieser Ort einen Import-Kreis erzwingt
+ * (toolRegistry -> paketAdapter -> arbeitsbereiche -> hierher). Die Re-Ausfuhr bleibt,
+ * damit bestehende Aufrufer unveraendert weiterlesen; NEUE Traeger nehmen `workspaceIds`
+ * direkt — und `dashboard/arbeitsbereiche.ts` MUSS es, sonst kehrt der Kreis zurueck.*
  */
-export const WORKSPACE_IMPORT = 'import';
-export const WORKSPACE_ARCHITEKTUR = 'architektur';
-export const WORKSPACE_BAUPHYSIK = 'bauphysik';
-export const WORKSPACE_HEIZUNG = 'heizung';
-export const WORKSPACE_ELEKTRO_PV = 'elektro-pv';
+export {
+  WORKSPACE_IMPORT, WORKSPACE_ARCHITEKTUR, WORKSPACE_BAUPHYSIK,
+  WORKSPACE_HEIZUNG, WORKSPACE_ELEKTRO_PV,
+} from './workspaceIds';
+import {
+  WORKSPACE_ARCHITEKTUR, WORKSPACE_BAUPHYSIK,
+  WORKSPACE_HEIZUNG, WORKSPACE_ELEKTRO_PV, WORKSPACE_IMPORT,
+} from './workspaceIds';
 
 /** Alle transformierbaren Objekttypen (für globale Transform-/Lösch-Werkzeuge). */
 const AUSWAEHLBAR = ['wall', 'window', 'door', 'opening', 'zone', 'object', 'route', 'roof'] as const;

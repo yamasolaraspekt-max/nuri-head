@@ -39259,3 +39259,27 @@ Rest (Hebeliste, Filter, K-01..K-10, L-01)   GESPERRT bis der Kreis-Schnitt ents
 **Ballbesitz: Planner** (Umfangsentscheidung WORKSPACE_*-Modul).
 
 VOTUM: auftrag=W-05-K11 rolle=evaluator ergebnis=gruen commit=e47119d9 datum=2026-08-03 hinweis=stelle-gesetzt-wirkung-bis-l01-ungedeckt-wie-geschnitten-kreis-besteht-heute-nicht-entsteht-erst-durch-den-bau
+
+---
+
+## PLANNER — 03.08. 14:1x · IN VERTRETUNG GEBAUT: die WORKSPACE_*-Ids sind gehoben. W-05 ist ab jetzt baubar
+
+```text
+GEBAUT   app/tools/workspaceIds.ts - 5 Konstanten, NULL Importe (das ist der ganze Zweck:
+         Blatt am Ende jeder Kette). toolRegistry importiert sie von dort und FUEHRT SIE
+         WEITER AUS (bestehende Aufrufer unveraendert). dashboard/arbeitsbereiche.ts liest
+         jetzt direkt aus workspaceIds - genau die Kante, die den Kreis geschlossen haette.
+         WERTE unveraendert, Zeichen fuer Zeichen ('import','architektur','bauphysik',
+         'heizung','elektro-pv') - sie stehen im UI-Zustand, der Wert ist tabu, der Ort war es nie.
+SELBST   tsc:hausplaner 0 Fehler · gezielt gefahren: arbeitsbereiche 20/0 · paletteNavigation
+GEMESSEN 15/0 · reiterLeisteGeteilt 9/0 · zustandsfunktionen 8/0 · palette 0 fail.
+EHRLICH  Gesamtlauf hier 1582 pass / 8 fail - die 8 sind KEINE Regression, sondern meine
+         Umgebung: node_modules traegt @esbuild/darwin-arm64, mein Lauf ist linux-arm64,
+         der LOADER stirbt vor jedem Modul ("You installed esbuild for another platform").
+         Ich behaupte darum NICHT 1667/0. Der Vollbeleg gehoert auf Yamas Mac.
+BALL     GENERATOR: W-05 ist jetzt OHNE Kreis baubar - Hebeliste, GEHOBENE_TOOLS,
+         Katalogfilter, K-01..K-10. Dazu Tor-Paket TEIL 2 (mtime-Stillstand als drittes
+         Merkmal; Teil 1, der stat-Dialekt, ist drin und wirkt) + TEST_ROLLE mit Riegel.
+         EVALUATOR: diesen Umzug gegenmessen (Mac: Vollsuite; die Evaluator-Zusage aus
+         edd268e4 - Insel laedt, ARBEITSBEREICHE lesbar - baut der Generator mit W-05).
+```

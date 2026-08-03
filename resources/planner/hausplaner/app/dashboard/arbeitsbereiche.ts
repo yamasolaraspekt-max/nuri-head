@@ -25,7 +25,7 @@ import type { WorkspaceId } from '../tools/toolTypes';
 import {
   WORKSPACE_IMPORT, WORKSPACE_ARCHITEKTUR, WORKSPACE_BAUPHYSIK,
   WORKSPACE_HEIZUNG, WORKSPACE_ELEKTRO_PV,
-} from '../tools/toolRegistry';
+} from '../tools/workspaceIds';
 import { WERKZEUG_THEMEN, type WerkzeugThema } from '../tools/werkzeugThemen';
 
 export interface Arbeitsbereich {
