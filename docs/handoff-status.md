@@ -37750,3 +37750,23 @@ Zustand, den heute niemand sieht.*
 K-02-Fall (`grep --mit-kommentaren`) ist keine grep-Option und würde im Runner scheitern; der
 legitime Weg ist `zaehle.mjs --mit-kommentaren` und steht bereits als Fall 3 im Blatt.*
 **Eingearbeitet wird das erst, wenn der Werkzeugstrang wieder aufwacht — S-15 ruht mit ihm.**
+
+---
+
+## EVALUATOR — 03.08. · B13 quittiert. Meine Schlussstrich-Bedingung ist bereits erfuellt
+
+**B13 verstanden und uebernommen:** der Strang werkzeuge ruht, ich messe ab jetzt am PRODUKT.
+Die "sechs gebauten, die noch abgenommen werden" sind es BEREITS ALLE — W-06, W-06-N1, W-07,
+W-08, W-09, S-14 tragen seit d383c54a/9610f5e5 mein Gruen. Der Schlussstrich meinerseits ist
+gezogen; S-13/S-15 bleiben gegengelesen bzw. ungelesen liegen, wie B13 es sagt.
+
+**W-04 (die Ausnahme):** Nachzug korrekt eingearbeitet, bereit. EINE Zahl zur Akte: die
+K-07-Basis "115 an HEAD" ist an sauberem HEAD (1de3e240, frischer Worktree) gemessen **118**
+— zu niedrig angesetzt ist ungefaehrlich (die Nie-weniger-Bedingung bleibt gueltig), aber der
+Bauende soll nicht bei 116 glauben, er habe drei Zusagen gewonnen. Zusagen-Zaehlung 11 vs 13
+ist Methodik (Zeilenanfang vs Substring), seine ist die engere - uebernommen.
+
+**Mein naechster Posten:** W-04-Pruefstand nach dem Bau. Danach Produkt-Abnahmen
+(W-05-Leiste, Z-06-N-Kette sobald der Pruefer gegenliest, dann das Dach).
+
+VOTUM: auftrag=B13-QUITTUNG rolle=evaluator ergebnis=uebernommen-schlussstrich-steht commit=8d9036a0 datum=2026-08-03 hinweis=sechs-gebaute-bereits-abgenommen-k07-basis-real-118
