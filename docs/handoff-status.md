@@ -39170,3 +39170,39 @@ serverseitig). *Klein am Rand: der Kommentar dort sagt noch „(v1/v2)".*
 plus dieser vierten ist damit die Suche erschöpft, soweit vier Suchweisen reichen.**
 
 VOTUM: auftrag=Z-06-N1-VIERTE-NAHT rolle=evaluator ergebnis=befund-bestaetigt-nicht-akut commit=789de20f datum=2026-08-03 hinweis=snapshot-rueckweg-ohne-validator-und-ohne-spalten-nachfuehrung-route-registriert-aber-ohne-knopf
+
+---
+
+## ⇒ GENERATOR + EVALUATOR — 03.08. 14:0x · BEIDE SCHNITTE ENTSCHIEDEN. Ihr habt auf mich gewartet, nicht umgekehrt
+
+```text
+GENERATOR - W-05: die dritte Kante WIRD GEHOBEN. Umfangsentscheidung, gemessen:
+  Die fuenf WORKSPACE_*-Konstanten wandern aus toolRegistry.ts in ein EIGENES,
+  importfreies Modul (app/tools/workspaceIds.ts). Gemessen: 5 Konstanten, 6 Traeger
+  (toolRegistry 12x, arbeitsbereiche 8x, palette.test 4x, uiState 2x,
+  GruppenzeileUndSchiene 2x, HausplanerApp 1x, paketAdapter 1x). Reiner Umzug -
+  KEIN Wert aendert sich ('import','architektur','bauphysik','heizung','elektro-pv'
+  bleiben Zeichen fuer Zeichen; sie stehen in UI-Zustand, darum ist der Wert tabu,
+  der ORT nicht). Danach ist arbeitsbereiche ein Blatt ohne Rueckkante und der Kreis
+  ist strukturell weg - nicht umgangen.
+  ZUSAGE dazu (P1): ein Test, der die Insel laedt und ARBEITSBEREICHE liest, faellt
+  mit dem alten Import-Weg und traegt mit dem neuen. Ohne sie waere es Glueck.
+  Danach W-05 zu Ende (Hebeliste, Katalogfilter, K-01..K-11).
+  Dein Zurueckbauen war richtig: zwei Dateien byte-gleich, 1667/0 und 129/0 belegt.
+
+GENERATOR - VIERTE NAHT: als K-N5 im N1-Blatt (nicht als eigenes Blatt - dieselbe
+  Familie, derselbe Rueckweg). StelleSnapshotWieder fuehrt die Spalte nach wie
+  SpeichereHausplanerDokument:39 UND schickt die Szene durch den Validator.
+  JETZT bauen, nicht spaeter: nach dem Knopf waere es ein stiller Datenfehler.
+
+EVALUATOR - deine Arbeit haengt NICHT an der Test-DB. Die letzte ungemessene
+  P1-Zusage von N1 ist L-01: der Browser-Rundlauf auf objekt.blade (ticket.test,
+  Entwicklungs-DB - ticket_testing wird dafuer NICHT gebraucht). Zeichnen, speichern,
+  NEU LADEN, Datenstand ablesen, samt Kontrolle mit manueller Kontur. Damit ist N1
+  bis auf K-N2 (Yamas Befehl) vollstaendig gemessen.
+  Deinen Prosa-Fehlgriff hast du selbst gefunden und benannt, bevor ihn jemand suchte -
+  genau so soll es laufen.
+
+PRUEFER - unveraendert offen: Z-07 + Z-11(v2) gegenlesen. Das ist der einzige Weg,
+  auf dem das Dach in die Schlange kommt.
+```

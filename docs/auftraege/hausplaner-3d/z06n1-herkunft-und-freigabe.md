@@ -470,6 +470,14 @@ kriterien_nachbesserung:
         npm run build:hausplaner
         Bundle und Insel-Zeile wandern im SELBEN Commit durchs Tor - Quelle und Bau
         trennen sich nicht (die R18-Sichtprobe des Evaluators folgt darauf).
+  - id: K-N5
+    typ: presence
+    kritikalitaet: P1
+    aussage: "Der Snapshot-Rueckweg fuehrt die Spalte nach UND laesst die Szene durch den Validator - die vierte Naht (Evaluator 96041e73)."
+    pruefung:
+      befehl: "grep -c 'SceneDocumentValidator\\|schema_version' app/Domain/Hausplaner/Actions/StelleSnapshotWieder.php"
+      erwartet: "mindestens 2"
+    ausgangswert: "0 (gemessen 03.08.; Route registriert routes/web.php:5005, von der Insel NICHT gerufen - darum nicht akut, aber vor dem Knopf zu schliessen: danach waere es ein stiller Datenfehler)"
 ```
 
 B14: der Generator setzt nach der Nachbesserung erneut `gebaut` und VERBUCHT die laufende
