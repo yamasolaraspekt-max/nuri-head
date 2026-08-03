@@ -39206,3 +39206,56 @@ EVALUATOR - deine Arbeit haengt NICHT an der Test-DB. Die letzte ungemessene
 PRUEFER - unveraendert offen: Z-07 + Z-11(v2) gegenlesen. Das ist der einzige Weg,
   auf dem das Dach in die Schlange kommt.
 ```
+
+---
+
+## EVALUATOR — 03.08. · W-05/K-11: GRUEN. Und eine Praezisierung am Kreis, die den Schnitt betrifft
+
+### K-11 — erfuellt, selbst gemessen (Pruefstand e47119d9)
+
+```text
+'const REGISTRY_KUERZEL = new Set'   -> 0        (Ausgangswert 1)   ERFUELLT
+registryKuerzel() faul + gemerkt     -> ??=-Muster, einmalige Berechnung, belegt am Code
+Insel-Suite    1667 pass / 0 fail        Werkzeug-Suite  129 pass / 0 fail        tsc 0
+```
+*Alle drei Zahlen des Generators exakt bestaetigt.* **Kein Filter, kein Eingriff ins Paket —
+der Ausschluss des Blattes ist unberuehrt.**
+
+**Mutationsprobe, und das Ergebnis ist KEIN Befund:** die faule Berechnung zurueck auf
+Modulebene -> Suite bleibt 1667/0, die Mutation kommt durch. *Das ist erwartbar und im Blatt
+so vorgesehen: K-11 ist ein `presence`-Kriterium und sagt selbst "Die WIRKUNG — Modul laedt,
+Leiste steht — misst L-01."* **Die Stelle ist gesetzt, die Wirkung ist bis L-01 ungedeckt —
+so geschnitten, nicht uebersehen.**
+
+### PRAEZISIERUNG: der Kreis besteht HEUTE nicht — er entsteht durch den Bau
+
+Der Bericht liest sich, als sei der Dreier-Kreis Bestand. **Am HEAD ist er es nicht:**
+
+```text
+toolRegistry   importiert NUR  './toolTypes'      <- keine ausgehende Kante zurueck
+paketAdapter   importiert      '../dashboard/arbeitsbereiche' · './toolRegistry' · 5 weitere
+arbeitsbereiche importiert     '../tools/toolRegistry' · toolTypes · werkzeugThemen
+
+Der einzige Treffer "arbeitsbereiche" in toolRegistry.ts steht in Zeile 18 — im KOMMENTAR.
+```
+
+**Ein Kreis braucht eine Kante AUS toolRegistry heraus. Die gibt es heute nicht.** Er entsteht
+erst, wenn `toolRegistry` fuer die Hebeliste `paketAdapter` importiert — dann
+`toolRegistry -> paketAdapter -> arbeitsbereiche -> toolRegistry`. *Der Generator hat das im
+Bauzustand richtig gemessen; ich stelle nur klar, dass es kein Bestandsproblem ist, damit der
+Planner nicht die falsche Sache repariert.*
+
+**Fuer den Schnitt heisst das:** die WORKSPACE_*-Konstanten in ein eigenes Modul zu heben ist
+nicht die Reparatur eines kaputten Bestands, sondern die VORBEDINGUNG dafuer, dass W-05
+ueberhaupt baubar wird. *Sieben Nutzer, gemessen vom Generator — ich habe die Zahl nicht
+nachgezaehlt und uebernehme sie nicht.*
+
+### Stand von W-05
+
+```text
+K-11              GRUEN, abgenommen
+Rest (Hebeliste, Filter, K-01..K-10, L-01)   GESPERRT bis der Kreis-Schnitt entschieden ist
+```
+**Ballbesitz: Planner** (Umfangsentscheidung WORKSPACE_*-Modul).
+
+VOTUM: auftrag=W-05-K11 rolle=evaluator ergebnis=gruen commit=e47119d9 datum=2026-08-03 hinweis=stelle-gesetzt-wirkung-bis-l01-ungedeckt-wie-geschnitten-kreis-besteht-heute-nicht-entsteht-erst-durch-den-bau
