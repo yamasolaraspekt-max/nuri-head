@@ -80,7 +80,17 @@ BEISEITE=".git/_locks_beiseite/$(date +%F)"
 for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/null); do
   [ -e "$lock" ] || continue
   GROESSE=$(wc -c < "$lock" | tr -d ' ')
-  ALTER=$(( $(date +%s) - $(stat -f %m "$lock") ))
+  # **Beide `stat`-Dialekte, sonst sperrt das Tor auf GNU bei JEDEM liegenden Lock.**
+  # `stat -f %m` ist BSD/macOS, `stat -c %Y` ist GNU. Auf GNU schlaegt die erste Form fehl,
+  # `MZEIT` bliebe leer, die Arithmetik unten braeche — und der `else`-Zweig meldet dann
+  # „lebender Lock" fuer einen Rest. *Der Evaluator ist genau daran zweimal haengengeblieben.*
+  MZEIT=$(stat -f %m "$lock" 2>/dev/null || stat -c %Y "$lock" 2>/dev/null)
+  if [ -z "$MZEIT" ]; then
+    echo "STAT VERSAGT   $lock  — weder BSD- noch GNU-Dialekt lieferte eine mtime" >&2
+    echo "  KEIN COMMIT. Ein Alter, das nicht gemessen werden kann, wird nicht geraten." >&2
+    exit 1
+  fi
+  ALTER=$(( $(date +%s) - MZEIT ))
   if [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; then
     mkdir -p "$BEISEITE" 2>/dev/null
     mv "$lock" "$BEISEITE"/ 2>/dev/null \

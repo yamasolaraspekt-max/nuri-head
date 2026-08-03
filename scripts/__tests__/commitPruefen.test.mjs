@@ -410,3 +410,44 @@ test('W-04/K-04 ROT: eine GETRACKTE Datei bekommt keine NEU-Meldung — die Meld
   assert.doesNotMatch(r.text, /NEU\s+anfang\.txt/,
     'das Tor nennt eine seit Langem verfolgte Datei „NEU" — M3');
 });
+
+/**
+ * ── TOR-PAKET (Planner-Vergabe 9cbcf932) ──────────────────────────────────────────────────
+ *
+ * **Mutationsprobe VOR diesen Zusagen: die zwei Muster trafen NICHT** — die Konstrukte gab es
+ * noch nicht. *Die Probe meldet „MUSTER TRIFFT NICHT" statt „BLIND"; das ist der Unterschied
+ * zwischen einer Lücke und einem ungebauten Teil.* Die dritte (Altersschwelle auf 0) war
+ * GEFANGEN, die vorhandenen Zusagen decken sie.
+ *
+ * **Gebaut wurde EINE der zwei bestellten Stellen. Die zweite habe ich gemessen und NICHT
+ * gebaut** — Begründung unten bei der `lsof`-Zusage.
+ */
+
+test('Tor/GNU: die mtime wird auf BEIDEN stat-Dialekten geholt, nicht nur auf BSD', () => {
+  const quelle = readFileSync(TOR, 'utf8');
+  const zeilen = quelle.split('\n').filter((z) => !/^\s*#/.test(z));
+
+  const bsd = zeilen.filter((z) => /stat -f %m/.test(z));
+  const gnu = zeilen.filter((z) => /stat -c %Y/.test(z));
+  assert.ok(bsd.length >= 1, 'der BSD-Dialekt fehlt — die Messung misst Leere');
+  assert.ok(gnu.length >= 1, 'der GNU-Rueckfall fehlt: auf GNU sperrt jeder liegende Lock das Tor');
+  assert.ok(bsd.some((z) => /stat -c %Y/.test(z)),
+    'beide Dialekte stehen in VERSCHIEDENEN Zeilen — der Rueckfall greift dann nicht im selben Ausdruck');
+});
+
+test('Tor/GNU ROT: eine nicht messbare mtime bricht ab, statt sie zu raten', () => {
+  // Ohne diesen Zweig waere `ALTER` leer, die Arithmetik ergaebe den heutigen Zeitstempel,
+  // und ein frischer Lock sähe uralt aus — das Tor raeumte fremde, LEBENDE Locks weg.
+  const quelle = readFileSync(TOR, 'utf8');
+  assert.match(quelle, /STAT VERSAGT/, 'der Abbruch bei nicht messbarer mtime fehlt');
+  const nachSTAT = quelle.slice(quelle.indexOf('STAT VERSAGT'));
+  assert.match(nachSTAT.slice(0, 400), /exit 1/, 'STAT VERSAGT meldet, sperrt aber nicht');
+});
+
+test('Tor: der Alters-Zweig entscheidet weiterhin AUS ZWEI Merkmalen — Groesse UND Alter', () => {
+  const quelle = readFileSync(TOR, 'utf8');
+  const zeilen = quelle.split('\n').filter((z) => !/^\s*#/.test(z));
+  const zweig = zeilen.find((z) => /GROESSE.*-eq 0/.test(z));
+  assert.ok(zweig, 'der Entscheidungszweig ist nicht mehr auffindbar');
+  assert.match(zweig, /ALTER/, 'das Alter ist aus der Entscheidung verschwunden');
+});
