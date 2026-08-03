@@ -37,6 +37,20 @@ class StelleSnapshotWieder
 
             $aktuell->update([
                 'scene_json' => $scene,
+                // **Die Spalte folgt der Szene — auch auf dem RÜCKWEG** (Z-06-N1, vierte Naht,
+                // gefunden vom Evaluator). Der Hinweg stellt diese Kopplung ausdrücklich her
+                // (`SpeichereHausplanerDokument:39`); ohne dieselbe Zeile hier bricht der Rückweg
+                // sie: ein zurückgeholter v2-Snapshot landete in einem Dokument, dessen Spalte
+                // weiter 3 sagt — und `objekt.blade.php` zeigte dem Nutzer „Schema v3" über
+                // einem v2-Inhalt. *Eine Anzeige, die lügt, ist schlimmer als keine.*
+                //
+                // **Bewusst NICHT validiert und NICHT migriert.** Ein Snapshot wurde geprüft, als
+                // er entstand — gegen das Schema SEINER Zeit. Ihn heute gegen das aktuelle Schema
+                // zu prüfen hiesse, gültige Geschichte abzulehnen; ihn hier zu migrieren hiesse,
+                // `migriereSzene` ein zweites Mal in PHP zu schreiben. *Zwei Wahrheiten über
+                // dieselbe Migration sind teurer als der eine Ladeschritt, der ohnehin läuft:*
+                // die Insel hebt beim Laden an, die nächste Speicherung schreibt v3.
+                'schema_version' => (int) ($scene['schemaVersion'] ?? $aktuell->schema_version),
                 'revision' => $neueRevision,
                 'checksum' => $checksum,
                 'updated_by' => $userId,
