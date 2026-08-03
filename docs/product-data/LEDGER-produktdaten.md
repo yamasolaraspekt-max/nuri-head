@@ -243,3 +243,21 @@ Baum byte-genau zurückgesetzt. Befund `test_k03`-Assertion nachgeschärft (Gene
 2. `app/Services/Suppliers/SupplierConnectorService.php` + `tests/Feature/Product/ProductImageFillableTest.php` — AUF-P1-S2-d3
 3. `app/Services/Suppliers/Ids/` + `config/ids.php` + `database/migrations/2026_08_02_150000_*` + `app/Models/SupplierConnection.php` + `app/Services/Suppliers/SupplierConnectionTestService.php` + `tests/Feature/Suppliers/IdsCapabilityServiceTest.php` — AUF-IDS-LI-SV
 4. `docs/product-data/evidence/query-results/*.txt` + dieser Ledger-Abschnitt — Belege
+
+*(Nachtrag 03.08.: alle vier gesetzt — `6c9373c9` · `853c1ca8` · `89dca0c4` · `8ef1ac32` — und gepusht. Migration auf Arbeits-DB `ticket` gezogen; Beifang dabei: zwei fremde additive create-Migrationen liefen mit, Entscheid bei Yama.)*
+
+---
+
+## 6 · Schritt 3 geschlossen, Schritt 4 geschnitten (03.08., Freigabe Yama)
+
+- **Schritt 3 (Identität) ist zu:** Messwerte stehen in `11-identitaetsspezifikation-…md` **§14** —
+  Dubletten 3a/3d/3e = 0, 3c = 4, alle 94 ohne EAN, Sentinel-Baseline 0, `sku` 44/94.
+  **Neuer Befund: `brands.type='manufacturer'` = 0 von 50** → Leiterstufe 2 greift im Bestand
+  nie, Kante 14 ist Regelfall; Marken-Typisierung = Paket 2, eigener Posten, kein Beifang.
+  E1–E6/F3 gelten (Yama-Freigabe 03.08., kein Widerspruch).
+- **Auftragsblatt:** `docs/auftraege/produktdaten/17-identitaet-schritt4.md` (AUF-P1-S4),
+  Status `entwurf` — bindet die Spezifikation, dupliziert sie nicht. Bau in 5 Stufen,
+  eine Umstellung je Commit-Scheibe.
+- **Ballbesitz:** Evaluator produktdaten (Gegenlesen nach B8) → dann Generator (nicht die
+  Blatt-/Spez-Instanzen). Offen bei Yama weiterhin: K-07 (LI-SV-Rollback-Probe), E4a (Weg D,
+  vor Schritt 5), ITEK-Posten.

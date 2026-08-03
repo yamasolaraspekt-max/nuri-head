@@ -449,3 +449,37 @@ PLANNER 2026-08-01 · Paket 1 Schritt 4 · Spur A · Heimat ticket · SPEZIFIZIE
   16 Kantenfaelle, 6 Abnahmekriterien, 4 Entdeckungssignale.
   Ballbesitz: Generator - NICHT dieselbe Instanz, die diese Spezifikation geschrieben hat.
 ```
+
+---
+
+## 14 · Nachtrag 2026-08-03 — die Messwerte sind da, Schritt 3 ist geschlossen
+
+> **Rolle:** Planner (andere Instanz als der Verfasser oben) · **Freigabe:** Yama, 03.08.
+> („weiter mit planner schritt 3"), kein Widerspruch gegen E1–E6/F3 — die Entscheidungen gelten.
+
+**Aus `ergebnis-2026-08.txt` (Commit `307b486e`) und Nachmessung 03.08.:**
+
+| Messwert | Zahl | Befehl/Quelle |
+|---|---|---|
+| Dubletten 3a (normalisierte `article_no`) | **0** | `ergebnis-2026-08.txt` §3 |
+| Dubletten 3b/3e (EAN) | **leer — alle 94 Artikel ohne EAN** | ebd. §2/§3 |
+| Dubletten 3c (`brand_id`+`model`) | **4** (Marke 79: standard/komfort/premium/eco je 2×) | ebd. §3 |
+| Sentinel `'Not filled'`/`'-'`/`'n/a'`/`'0'` in `article_no` | **0** | tinker-Count 03.08. |
+| Artikel mit gefülltem `sku` | **44 / 94** | tinker-Count 03.08. |
+| **`brands.type = 'manufacturer'`** | **0 von 50** | tinker-Count 03.08. |
+
+**Konsequenzen — drei, keine ändert die Entscheidungen:**
+
+1. **Stufe 2 greift im heutigen Bestand nie** (0 Hersteller-Marken). Kante 14 ist damit der
+   **Regelfall**, nicht der Sonderfall: die Leiter fällt bestandsseitig auf Stufe 3/5/NEU durch.
+   Das ist kein Blocker (genau dafür ist das Durchfallen gebaut), aber Entdeckungssignal 1
+   (`identity_rung IS NULL` bzw. niedrige Stufen) wird anfangs hoch stehen. **Das Typisieren der
+   50 Bestandsmarken ist Bestandsdaten-Arbeit → Paket 2, eigener beauftragter Posten, kein Beifang
+   von Schritt 4.**
+2. **Der `unique` auf `gtin_normalized` bleibt eigener Vorgang.** Zwar 0 GTIN-Konflikte gemessen —
+   aber bei 0 vorhandenen GTINs ist das eine leere Aussage, kein Freibrief.
+3. **Signal-Baselines stehen:** Zwilling-Query (Signal 3) = 0 · Sentinel (Signal 4) = 0. Jede
+   Abweichung nach oben ist ab jetzt ein Befund.
+
+**Auftragsblatt für Schritt 4:** `docs/auftraege/produktdaten/17-identitaet-schritt4.md`
+(Status `entwurf`, braucht Gegenlesen nach B8, dann Generator).
