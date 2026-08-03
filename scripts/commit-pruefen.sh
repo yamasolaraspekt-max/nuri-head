@@ -123,6 +123,36 @@ if [ "$FEHLER" -ne 0 ]; then
   exit 1
 fi
 
+# ── W-04 ────────────────────────────────────────────────────────────────────────────────────
+# Das Tor konnte keine NEUE Datei verbuchen: `git commit -- <pfad>` kennt nichts, was nie im
+# Index war. Gemessen am 03.08.: **31 von 98 Commits** dieser zwei Tage fuehrten mindestens eine
+# neue Datei ein — keiner von ihnen kann durch dieses Tor gegangen sein. *Eine Barriere, die man
+# fuer jede dritte Aenderung umgehen muss, erzieht zum Umgehen.*
+#
+# Gestagt werden AUSSCHLIESSLICH die Pfade aus der Argumentliste, einzeln, jeder mit `--` davor
+# (sonst liest git eine Datei namens `-f` als Schalter). **Nie `-A`, nie `.`, nie ein Muster** —
+# das Pauschale sammelt die ungesicherte Arbeit der anderen Instanzen ein (R13).
+#
+# Die Stelle ist so wichtig wie die Sache: **erst NACH dem Fehler-Riegel.** Stagen ist eine
+# Aenderung am Index; ein abgelehnter Aufruf darf keinen halb gefuellten zuruecklassen, den der
+# naechste Commit einer anderen Rolle mitnimmt.
+# **„Neu" wird gegen HEAD entschieden, NICHT gegen den Index — und das ist keine Vorliebe.**
+# Stufe 5 legt fuer jeden Lauf einen FRISCHEN, leeren Index ausserhalb des Mounts an. Gegen einen
+# leeren Index sieht JEDE Datei ungetrackt aus, auch eine seit Wochen verfolgte:
+#
+#   GIT_INDEX_FILE=<frisch> git status --porcelain -- datei.txt   ->  "D  datei.txt" UND "?? datei.txt"
+#   GIT_INDEX_FILE=<frisch> git ls-tree --name-only HEAD -- datei.txt  ->  "datei.txt"
+#
+# *Der Index sagt „geloescht und unbekannt", HEAD sagt die Wahrheit.* Wer hier `^??` liest, stagt
+# den ganzen Baum und nennt Bestand „NEU".
+for p in "$@"; do
+  if [ -n "$(git --no-optional-locks ls-tree --name-only HEAD -- "$p" 2>/dev/null)" ]; then
+    continue
+  fi
+  git add -- "$p" || { echo "STAGEN GESCHEITERT  $p" >&2; exit 1; }
+  echo "NEU        $p  — ungetrackt, einzeln gestagt"
+done
+
 git commit -q -m "$BOTSCHAFT" -- "$@" || exit 1
 git --no-optional-locks log -1 --pretty='%h %s'
 

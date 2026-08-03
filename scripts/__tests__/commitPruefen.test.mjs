@@ -224,3 +224,189 @@ test('W-09/K-04: die Nachsorge am Ende bleibt — sie ersetzt die Vorsorge nicht
   const stellen = [...quelle.matchAll(/_locks_beiseite/g)].length;
   assert.ok(stellen >= 2, `nur ${stellen} Stelle(n) — Vorsorge ODER Nachsorge fehlt`);
 });
+
+/**
+ * ── W-04 ──────────────────────────────────────────────────────────────────────────────────
+ *
+ * **Die Mutationsprobe VOR diesen Zusagen: 6 von 6 blind.**
+ *
+ * ```text
+ * BLIND   M1 git add -A statt der Pfadliste
+ * BLIND   M2 stagen VOR der Pruefung
+ * BLIND   M3 auch getrackte Pfade nochmal stagen
+ * BLIND   M4 die Meldung weglassen
+ * BLIND   M5 bei Fehlschlag trotzdem stagen
+ * BLIND   M6 `--` vor dem Pfad weglassen
+ * ```
+ *
+ * *Alle sechs kommen an den elf W-09-Zusagen vorbei — die messen Locks und Index-Ort, nicht das
+ * Stagen.* **Das ist kein Vorwurf an W-09: eine Zusage kann nur fangen, was es beim Schreiben
+ * schon gab.** Es ist der Grund, warum die Probe VOR die Zusagen gehoert und nicht danach.
+ *
+ * **M1 und M5 sind die beiden, die wirklich weh taeten.** M1 sammelt die ungesicherte Arbeit
+ * aller anderen Instanzen ein (R13, F-05) — am 01.08. lagen 19 fremde Dateien im Index. M5
+ * hinterlaesst nach einem ABGELEHNTEN Aufruf einen halb gefuellten Index, den der naechste
+ * Commit einer fremden Rolle stillschweigend mitnimmt. *Beide sind unsichtbar, bis sie fremde
+ * Arbeit verbucht haben.*
+ */
+
+test('W-04/K-04: eine NEUE Datei wird verbucht — der Fall, an dem das Tor bisher scheiterte', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'neu.txt'), 'frisch\n');
+
+  const r = tor(verz, 'W-04 Probe', 'neu.txt');
+  assert.equal(r.code, 0, `Tor abgebrochen: ${r.text}`);
+
+  const drin = execFileSync('git', ['show', '--name-only', '--format=', 'HEAD'],
+    { cwd: verz, encoding: 'utf8' });
+  assert.match(drin, /neu\.txt/, 'die neue Datei steht nicht im Commit');
+  assert.match(r.text, /NEU\s+neu\.txt/, 'das Stagen geschah STILL — M4 (ein stiller Nebeneffekt am Tor)');
+});
+
+test('W-04/K-04 ROT: ein Pfad, der NICHT genannt wurde, bleibt draussen — das ist die eigentliche Zusage', () => {
+  // Ohne diese Zusage belegt K-04 nur, dass ueberhaupt etwas passiert. **Sie faengt M1 und M3.**
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'genannt.txt'), 'a\n');
+  writeFileSync(join(verz, 'FREMD.txt'), 'die Arbeit einer anderen Instanz\n');
+
+  const r = tor(verz, 'nur die genannte', 'genannt.txt');
+  assert.equal(r.code, 0, `Tor abgebrochen: ${r.text}`);
+
+  const drin = execFileSync('git', ['show', '--name-only', '--format=', 'HEAD'],
+    { cwd: verz, encoding: 'utf8' });
+  assert.match(drin, /genannt\.txt/);
+  assert.doesNotMatch(drin, /FREMD\.txt/, 'FREMD.txt wurde mitverbucht — M1/M3, Beifang am Tor');
+
+  const lage = execFileSync('git', ['status', '--porcelain', '--', 'FREMD.txt'],
+    { cwd: verz, encoding: 'utf8' });
+  assert.match(lage, /^\?\?/, `FREMD.txt liegt im Index statt unberuehrt: ${lage.trim()}`);
+});
+
+test('W-04/K-05: eine abgelehnte Pruefung hinterlaesst KEINEN halb gefuellten Index', () => {
+  // **Faengt M2 und M5.** Der naechste Commit einer fremden Rolle nimmt einen solchen Index mit,
+  // ohne es zu merken — der Schaden faellt woanders an als der Fehler.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'heil.txt'), 'in Ordnung\n');
+  writeFileSync(join(verz, 'kaputt.md'), '```yaml\nnicht: [ zu\n```\n');
+
+  const r = tor(verz, 'sollte abbrechen', 'heil.txt', 'kaputt.md');
+  assert.notEqual(r.code, 0, 'das Tor hat trotz kaputtem YAML-Kopf committet');
+
+  const gestagt = execFileSync('git', ['diff', '--cached', '--name-only'],
+    { cwd: verz, encoding: 'utf8' }).trim();
+  assert.equal(gestagt, '', `der abgelehnte Lauf hat gestagt: ${gestagt}`);
+});
+
+test('W-04/K-02: kein pauschales Stagen im Werkzeug — nicht -A, nicht Punkt, nicht Muster', () => {
+  // **Faengt M1 am Text statt an der Wirkung.** Beides gehoert her: die Wirkungsprobe oben
+  // braucht einen fremden Pfad im Baum, die Textprobe greift auch dann, wenn keiner daliegt.
+  const quelle = readFileSync(TOR, 'utf8');
+  const zeilen = quelle.split('\n').filter((z) => !/^\s*#/.test(z));
+  const pauschal = zeilen.filter((z) => /git\s+add\s+(-A|--all|\.\s*$|\*)/.test(z));
+  assert.deepEqual(pauschal, [], `pauschales Stagen im Tor: ${pauschal.join(' | ')}`);
+
+  const benannt = zeilen.filter((z) => /git\s+add\s+--\s/.test(z));
+  assert.ok(benannt.length >= 1, 'gar kein `git add --` im Tor — die Messung misst Leere');
+});
+
+test('W-04/Kante-4: der Pfad steht hinter `--`, damit eine Datei namens `-f` kein Schalter wird', () => {
+  // **Faengt M6.** Der Fall ist selten und der Schaden gross: git liest die Datei als Option.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, '-f'), 'heisst wie ein Schalter\n');
+
+  const r = tor(verz, 'Datei heisst -f', '-f');
+  assert.equal(r.code, 0, `Tor an der Schalter-Datei gescheitert: ${r.text}`);
+
+  const drin = execFileSync('git', ['show', '--name-only', '--format=', 'HEAD'],
+    { cwd: verz, encoding: 'utf8' });
+  assert.match(drin, /-f/, 'die Datei `-f` steht nicht im Commit');
+});
+
+test('W-04/K-06: die vorhandenen Pruefungen, zum ersten Mal festgenagelt', () => {
+  // Bestand, nicht Aenderung. Sechs Faelle, die das Tor seit dem 01.08. koennen soll und die
+  // bis heute keine einzige Zusage hatte.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'leer.txt'), '');
+  writeFileSync(join(verz, 'kaputt.mjs'), 'const a = {;\n');
+  writeFileSync(join(verz, 'kaputt2.md'), '```yaml\nnicht: [ zu\n```\n');
+  writeFileSync(join(verz, 'heil2.txt'), 'geaendert\n');
+
+  assert.notEqual(tor(verz, 'fehlt', 'gibt-es-nicht.txt').code, 0, 'fehlende Datei');
+  assert.notEqual(tor(verz, 'leer', 'leer.txt').code, 0, 'leere Datei');
+  assert.notEqual(tor(verz, 'unveraendert', 'anfang.txt').code, 0, 'unveraenderte Datei');
+  assert.notEqual(tor(verz, 'syntax', 'kaputt.mjs').code, 0, '.mjs mit Syntaxfehler');
+  assert.notEqual(tor(verz, 'yaml', 'kaputt2.md').code, 0, '.md mit kaputtem yaml-Kopf');
+
+  const gut = tor(verz, 'alles heil', 'heil2.txt');
+  assert.equal(gut.code, 0, `der heile Fall wurde abgelehnt: ${gut.text}`);
+});
+
+/**
+ * ── NACHTRAG zur Gegenprobe: M3 und M5 ueberlebten die erste Fassung, und der Grund ist lehrreich
+ *
+ * **M5 (bei Fehlschlag trotzdem stagen) ist mit einer Index-Beobachtung NICHT zu fangen — weil
+ * W-09 Stufe 5 den Schaden bereits unmoeglich macht.** Selbst nachgestellt:
+ *
+ * ```text
+ * Wegwerf-Repo, Tor mit eingebauter M5-Mutation, abgelehnter Lauf:
+ *   exit                       1
+ *   git diff --cached          LEER          <- .git/index ist unberuehrt
+ *   $TMPDIR/ticket-index/      index.<pid>   <- DORT liegt das Gestagte, und es stirbt mit dem Prozess
+ * ```
+ *
+ * *Der halb gefuellte Index, vor dem K-05 warnt, kann eine fremde Rolle gar nicht mehr erreichen:
+ * jeder Lauf hat seinen eigenen Index ausserhalb des Mounts.* **Zwei Scheiben greifen ineinander,
+ * ohne dass es jemand geplant hat.**
+ *
+ * **Daraus folgt aber nicht, dass die Stelle egal ist — sondern dass sie STRUKTURELL geprueft
+ * gehoert.** Eine Zusage, die eine Wirkung misst, die ein anderes Bauteil ohnehin garantiert,
+ * ist gruen aus dem falschen Grund (F-06). *Deshalb steht unten die Reihenfolge selbst, gemessen
+ * wie W-09/K-01: relativ, nicht als Zeilennummer.* **Faellt Stufe 5 je weg, haelt diese Zusage
+ * weiter — die andere haette dann nie gewarnt.**
+ *
+ * **M3 (auch getrackte Pfade stagen) ist in der WIRKUNG folgenlos** — `git commit -- <pfad>`
+ * verbucht ohnehin den Arbeitsbaum-Stand. *Was M3 kaputtmacht, ist die MELDUNG:* das Tor sagt
+ * dann „NEU" zu einer Datei, die es seit Wochen gibt. **Eine Meldung, die luegt, ist schlimmer
+ * als keine** — sie wird beim Lesen geglaubt.
+ */
+
+test('W-04/K-05 STRUKTUR: das Stagen steht HINTER dem Fehler-Riegel — relativ gemessen', () => {
+  const zeilen = readFileSync(TOR, 'utf8').split('\n');
+  const nr = (treffer) => zeilen.findIndex(treffer) + 1;
+
+  const riegel = nr((z) => /^if \[ "\$FEHLER" -ne 0 \]/.test(z));
+  assert.ok(riegel > 0, 'der Fehler-Riegel steht nicht mehr im Werkzeug');
+
+  // **Nicht „das ERSTE Stagen kommt danach", sondern „VORHER kommt gar keins".** Die erste
+  // Fassung fragte `riegel < erstesStagen` — und blieb blind, als die Mutation ein ZWEITES
+  // `git add` in den Fehlerzweig setzte: das erste stand ja weiterhin hinten. *Eine Zusage, die
+  // den ersten Treffer prueft, sagt nichts ueber den zweiten.*
+  const stagenZeilen = zeilen
+    .map((z, i) => [i + 1, z])
+    .filter(([, z]) => !/^\s*#/.test(z) && /git\s+add\s/.test(z));
+  assert.ok(stagenZeilen.length >= 1, 'kein `git add` gefunden — die Zusage misst Leere');
+
+  const davor = stagenZeilen.filter(([n]) => n < riegel);
+  assert.deepEqual(davor, [],
+    `vor dem Fehler-Riegel (Zeile ${riegel}) wird gestagt: ${davor.map(([n, z]) => `${n}: ${z.trim()}`).join(' | ')}`);
+
+  // **Und der Zweig SELBST ist der gefaehrliche Ort, nicht nur alles davor.** Zweiter Anlauf:
+  // die vorige Fassung mass „vor Zeile des Riegels" — die Mutation setzte das Stagen INS `then`,
+  // also dahinter, und kam durch. *Der Abbruchzweig ist genau der Pfad, auf dem nichts mehr
+  // passieren darf: der Aufruf ist bereits abgelehnt.*
+  const zweigEnde = zeilen.findIndex((z, i) => i >= riegel && /^fi$/.test(z)) + 1;
+  assert.ok(zweigEnde > riegel, 'das Ende des Fehlerzweigs ist nicht auffindbar — die Zusage misst Leere');
+  const imZweig = stagenZeilen.filter(([n]) => n > riegel && n <= zweigEnde);
+  assert.deepEqual(imZweig, [],
+    `im Abbruchzweig (Zeile ${riegel}–${zweigEnde}) wird gestagt: ${imZweig.map(([n, z]) => `${n}: ${z.trim()}`).join(' | ')}`);
+});
+
+test('W-04/K-04 ROT: eine GETRACKTE Datei bekommt keine NEU-Meldung — die Meldung darf nicht luegen', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+
+  const r = tor(verz, 'nur geaendert, nicht neu', 'anfang.txt');
+  assert.equal(r.code, 0, `Tor abgebrochen: ${r.text}`);
+  assert.doesNotMatch(r.text, /NEU\s+anfang\.txt/,
+    'das Tor nennt eine seit Langem verfolgte Datei „NEU" — M3');
+});
