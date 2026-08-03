@@ -309,3 +309,19 @@ GENERATOR 2026-08-03 · AUF-P1-S4 AUFLAGE A2 umgesetzt · Spur A · Heimat ticke
   zurueckgesetzt (diff HEAD = 0), wieder gruen. Rohausgaben rot-probe-s4-a2-{1-gruen,2-rot,3-gruen}.txt.
   Identity-Suite danach 30 passed / 110 assertions. Ballbesitz: Evaluator (A2-Nachpruefung).
 ```
+
+```
+EVALUATOR 2026-08-03 · AUF-P1-S4 AUFLAGE A2 nachgeprueft · Urteil: A2 ERFUELLT
+  Eigene Rot-Probe am SCHAERFEREN Fall: zehnter createLegacy-Aufruf in BEKANNTER Datei
+  (ProductController:1113, Erwartung 2->3) -> rot mit vollstaendiger Fundstellenliste,
+  byte-genau zurueck (diff HEAD leer), wieder gruen (2 passed). Bau-Entscheidung
+  Datei+Trefferzahl traegt: faengt neue Stellen in bekannten UND neuen Dateien; Restgrenze
+  (Kommentar-Zaehlung = falscher Alarm, nie Luecke) benannt und akzeptiert.
+  WARNBEFUND aufgeloest: im Standard-Index lag eine veraltete Fassung des Verriegelungstests
+  gestaged (39 Deletions = der ganze A2-Zensus; pauschaler Commit haette A2 still entfernt).
+  Koordinator hat den einen Index-Eintrag per git reset -- <datei> auf HEAD ausgerichtet,
+  Arbeitsbaum unangetastet (byte-gleich HEAD vorher wie nachher), cached-Diff danach leer.
+  GESAMTSTAND AUF-P1-S4: GRUEN MIT AUFLAGEN, A2 erfuellt.
+  Offen: A1 (Vorschlags-Sichtflaeche + 409-Handling VOR Schalter-Aktivierung, Planner) ·
+  K-06 (Rollback-Probe, Yama) · finale Freigabe (Yama). Schalter steht auf Default false.
+```
