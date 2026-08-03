@@ -18,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { zoneTools, zoneToolsIn, praesentation, TOOL_PRESENTATION_RULES, type ToolPresentationRule } from '../app/tools/toolPresentation';
 import { TOOL_DEFINITIONS, werkzeugTools, shortcutKollisionen, toolNach } from '../app/tools/toolRegistry';
+import { AUS_PAKET_GEHOBEN } from '../app/tools/toolRegistry';
 import { katalogTool } from '../app/tools/toolCatalog';
 // AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
 import { zerlegteApp } from './_zerlegteApp';
@@ -45,7 +46,17 @@ const ableitungenQuelle = ohneKommentare(readFileSync(join(hier, '../app/ableitu
 test('Leiste == Fix-Zone: dieselben ids in derselben Reihenfolge wie die alte Registry-Quelle', () => {
   const alt = werkzeugTools().map((t) => t.id);
   const neu = zoneTools('fix').map((t) => t.id);
-  assert.deepEqual(neu, alt, 'A2 muss heute verhaltensneutral sein — sonst wandern Icons');
+
+  // **W-05: die Gleichsetzung „Leiste == Fix-Zone" gilt nicht mehr uneingeschraenkt.**
+  // Die zwei gehobenen Werkzeuge sind Registry-Werkzeuge (`werkzeugTools()`), erscheinen aber
+  // nach ihrer Praesentationsregel in der Zone `weitere` — sie sind ERREICHBAR, nicht fest
+  // angeheftet. *Die Zusage, um die es hier geht, bleibt: fuer alles Uebrige ist A2 weiterhin
+  // verhaltensneutral, kein Icon wandert.*
+  assert.deepEqual(
+    neu,
+    alt.filter((id) => !(AUS_PAKET_GEHOBEN as readonly string[]).includes(id)),
+    'A2 muss fuer die nicht gehobenen Werkzeuge verhaltensneutral sein — sonst wandern Icons',
+  );
   assert.deepEqual(neu, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe', 'kontur']);
 });
 

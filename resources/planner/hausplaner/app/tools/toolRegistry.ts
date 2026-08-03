@@ -165,6 +165,48 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     tooltip: { title: 'Treppe', body: 'Treppe zwischen Ebenen parametrisch erzeugen.', usage: 'Einsatzbereich: Erschließung und Schnittplanung.' },
   },
 
+  // --- W-05: aus dem Paket in die Leiste GEHOBEN ------------------------------------------
+  //
+  // **Von Hand eingetragen, nicht aus dem Paket abgeleitet — und das ist Absicht.**
+  // Eine Ableitung braeuchte `import { PAKET_ALS_TOOLS } from './paketAdapter'`, und genau die
+  // Kante schliesst einen Kreis: `paketAdapter` liest `TOOL_DEFINITIONS` und wertet
+  // `PAKET_ALS_TOOLS` auf Modulebene aus (gefahren: `ReferenceError: Cannot access
+  // 'TOOL_DEFINITIONS' before initialization`, paketAdapter:53). *Diese Datei importiert
+  // deshalb NICHTS ausser Typen — sie ist das Blatt, an dem keine Kette zurueckfuehrt.*
+  //
+  // **Der Preis, offen benannt:** `label`, `icon` und `variante` stehen jetzt zweimal — hier
+  // und im Paket. Dagegen steht eine Zusage, die die beiden Seiten FELD FUER FELD vergleicht
+  // und rot wird, sobald sie auseinanderlaufen. *Der Test darf beide importieren; er ist ein
+  // Blatt, kein Modul im Kreis.* So kostet die Doppelung Konsistenz nichts.
+  {
+    id: 'bemassen',
+    label: 'Bemaßen',
+    icon: 'bemassen',
+    art: 'werkzeug',
+    groupId: 'messen',
+    supportedWorkspaces: [],
+    supportedViews: ['2d', 'split'],
+    helpText: 'Persistente technische Maßlinie erzeugen — zwei Punkte klicken.',
+    meaning: 'Persistente technische Maßlinie erzeugen.',
+    usageArea: '2D, Schnitt, Fassade.',
+    group: 'Messen',
+    tooltip: { title: 'Bemaßen', body: 'Persistente technische Maßlinie erzeugen.', usage: 'Einsatzbereich: 2D, Schnitt, Fassade.' },
+  },
+  {
+    id: 'flaeche-messen',
+    label: 'Fläche messen',
+    icon: 'flaeche-messen',
+    art: 'werkzeug',
+    groupId: 'messen',
+    supportedWorkspaces: [],
+    supportedViews: ['2d', 'split'],
+    helpText: 'Geschlossene Fläche ermitteln — Punkte klicken, letzter Punkt schliesst.',
+    meaning: 'Geschlossene Fläche ermitteln.',
+    usageArea: 'Räume, Fassaden, Dächer.',
+    group: 'Messen',
+    tooltip: { title: 'Fläche messen', body: 'Geschlossene Fläche ermitteln.', usage: 'Einsatzbereich: Räume, Fassaden, Dächer.' },
+  },
+
   // --- Globale Aktionen (§6): keine Zeichenwerkzeuge, aber Teil der Registry, damit die
   //     Activation-Engine Auswahl-/Rechte-Bedingungen datengetrieben liefert. ---
   {
@@ -272,6 +314,22 @@ const BY_SHORTCUT = new Map(
  * ```
  */
 export const PAKET_WERKZEUGE = 110;
+
+/**
+ * **W-05 — die Hebeliste: REINE IDS, keine Definitionen.**
+ *
+ * `toolCatalog` importiert sie und laesst genau diese Werkzeuge weg; die Definitionen selbst
+ * stehen oben in `GRUND_WERKZEUGE`. *Die Kante `toolCatalog -> toolRegistry` ist neu, aber
+ * einseitig: diese Datei importiert `toolCatalog` nicht.*
+ *
+ * **Die Summe bleibt konstant, weil ein Werkzeug WANDERT statt sich zu verdoppeln** — dieselbe
+ * Rechnung wie `PAKET + EIGENE.length` aus Z-05-N1: nicht die Zahl anfassen, sondern sie rechnen.
+ *
+ * **Warum `AUS_PAKET_GEHOBEN` und nicht `GEHOBEN`:** `GEHOBEN` ist vergeben (`schattenGehoben`,
+ * `ROH_GEHOBEN` in `__tests__/elevationTokens.test.ts`). *Zwei Bedeutungen fuer einen Namen sind
+ * eine zweite Wahrheit — gemessen, bevor der Name gewaehlt wurde.*
+ */
+export const AUS_PAKET_GEHOBEN = ['bemassen', 'flaeche-messen'] as const;
 
 /** Werkzeuge, die NACH dem 110er-Fachpaket dazugekommen sind. */
 export const EIGENE_WERKZEUGE = ['kontur'] as const;

@@ -16,9 +16,21 @@
  */
 import type { ToolDefinition } from './toolTypes';
 import { PAKET_ALS_TOOLS } from './paketAdapter';
+import { AUS_PAKET_GEHOBEN } from './toolRegistry';
 
-/** Die 110 Fach-Werkzeuge in Paket-Reihenfolge (nach Kategorie gruppiert). */
-export const TOOL_KATALOG: readonly ToolDefinition[] = PAKET_ALS_TOOLS;
+/**
+ * Die Fach-Werkzeuge in Paket-Reihenfolge — **ohne die, die in die Leiste gehoben sind.**
+ *
+ * W-05: gefiltert wird HIER, nicht an der Quelle. `paketAdapter` liefert das Paket weiterhin
+ * vollstaendig — sonst verloere `verworfeneKuerzel()` seine Grundgesamtheit und meldete ploetzlich
+ * weniger Konflikte, weil ein Werkzeug fehlt statt weil es keinen Konflikt gibt.
+ *
+ * **Die Bilanz bleibt konstant:** was hier herausfaellt, steht in `TOOL_DEFINITIONS`.
+ * *Ein Werkzeug wandert, es verdoppelt sich nicht.*
+ */
+export const TOOL_KATALOG: readonly ToolDefinition[] = PAKET_ALS_TOOLS.filter(
+  (t) => !(AUS_PAKET_GEHOBEN as readonly string[]).includes(t.id),
+);
 
 export function katalogTool(id: string): ToolDefinition | undefined {
   return TOOL_KATALOG.find((t) => t.id === id);

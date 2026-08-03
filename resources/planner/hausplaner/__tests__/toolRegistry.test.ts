@@ -4,6 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  AUS_PAKET_GEHOBEN,
   TOOL_DEFINITIONS,
   toolNach,
   toolFuerShortcut,
@@ -44,7 +45,19 @@ test('jedes Werkzeug hat Label, Icon, Art und Hilfetext', () => {
 
 test('werkzeugTools = genau die modus-schaltenden Werkzeuge der Leiste (UI-3)', () => {
   const ids = werkzeugTools().map((t) => t.id);
-  assert.deepEqual(ids, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe', 'kontur']);
+  // **W-05: die zwei gehobenen Werkzeuge stehen jetzt in der Leiste — das ist der Zweck.**
+  // Die Liste bleibt AUSGESCHRIEBEN und wird nicht aus der Registry abgeleitet: eine Zusage, die
+  // ihre Erwartung aus dem Pruefling holt, ist immer gruen. *Was hier steht, ist Yamas Leiste —
+  // sie soll sich nur aendern, wenn jemand sie aendern WOLLTE.*
+  assert.deepEqual(ids, [
+    'auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe',
+    'bemassen', 'flaeche-messen',   // <- W-05
+    'kontur',
+  ]);
+  // Und die Verbindung zur Hebeliste, damit beide nicht auseinanderlaufen koennen:
+  for (const id of AUS_PAKET_GEHOBEN) {
+    assert.ok(ids.includes(id), `${id} ist gehoben, steht aber nicht in der Leiste`);
+  }
   // Aktionen (Löschen/Duplizieren) gehören NICHT in die Werkzeugleiste
   assert.ok(!ids.includes('loeschen') && !ids.includes('duplizieren'));
 });

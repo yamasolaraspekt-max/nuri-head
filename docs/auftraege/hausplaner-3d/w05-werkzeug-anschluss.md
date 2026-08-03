@@ -6,7 +6,7 @@
 auftrag:
   id: W-05
   strang: hausplaner-3d
-  status: bereit   # Evaluator-Gegenlesung 03.08. (TRAEGT IM KERN, sperrende Auflage + zwei kleine): alle drei eingearbeitet 09:2x - K-03 scharfes Muster ", 101[),]" (6 echte statt 7 roher Treffer), Prosa auf SECHS+EINE korrigiert, K-08-Basis dynamisch statt 1641. K-10 vom Evaluator BESTAETIGT (Bilanz stimmt heute durch Zufall). Status vom Einarbeiter der sperrenden Auflage (B14-Randfall wie N1). Gegenlesen war Evaluator statt Pruefer - zu Ende gelesen nach angefangener Messung, dokumentiert.
+  status: gebaut   # GEBAUT 03.08. 22:5x (B14). Naht in der GEDREHTEN Fassung: toolRegistry importiert paketAdapter NIE, zwei Handeintraege + Ids-Liste, Konsistenz sichert ein Test. Messungen: K-01 0->20 · K-02 0->3 · K-03 6->0 · K-11 1->0 · Bilanz 12+99=111=WERKZEUGE_GESAMT · Suite 1667->1673 pass/0 fail · tsc 0. Mutationsprobe 4/4 blind, danach 4/4 gefangen (die vierte brauchte eine Zusage, die NICHT ueber die Hebeliste laeuft - sie waere mit ihr geschrumpft). ABWEICHUNG, gemessen und gemeldet: toolPresentation.ts steht als Ausschluss ('traegt die acht bereits'), aber die zwei Regeln fuehrten herkunft: 'katalog' - und im Katalog stehen sie nach dem Heben nicht mehr. ZWEI Woerter geaendert (katalog->registry), Zone unveraendert. Offen: L-01 Browserprobe.
   gegengelesen_von: evaluator   # umverteilt 03.08.; der Pruefer ist inzwischen wieder aktiv, ab dem naechsten Planner-Blatt gilt d1cecdcf
   gegengelesen_am: 2026-08-03
   befund: >

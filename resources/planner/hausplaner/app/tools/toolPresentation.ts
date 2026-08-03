@@ -60,6 +60,13 @@ const GRUND_PAKET = 'Fach-Werkzeug — über seine Kategorie-Gruppe in der obere
  * 9 Registry-ids + 54 Katalog-ids = 63 Regeln. Welche CAD-Werkzeuge ein Bauplaner wirklich in der
  * Leiste braucht, entscheidet Yama (Fach-Freigabe) — A1 baut nur den Mechanismus.
  */
+// **W-05: `bemassen` und `flaeche-messen` sind ab jetzt `herkunft: 'registry'`.**
+//
+// *Nicht kosmetisch:* eine Zusage in `leisteAusZonen.test.ts` prueft, dass jede als `katalog`
+// gefuehrte Regel auch im `TOOL_KATALOG` steht — und die beiden stehen dort nicht mehr, sie sind
+// in die Registry gehoben. Die Regel htte sonst behauptet, ein Werkzeug komme aus einem Katalog,
+// der es nicht kennt. **Die ZONE bleibt `weitere`** — wo sie erscheinen, hat W-05 nicht
+// entschieden; nur WOHER sie kommen, hat sich geaendert.
 export const TOOL_PRESENTATION_RULES: readonly ToolPresentationRule[] = [
   // --- Registry: die 7 modus-schaltenden Bau-Werkzeuge (Reihenfolge = Registry-Reihenfolge) ------
   { toolId: 'auswahl', zone: 'fix', ordnung: 1, herkunft: 'registry', begruendung: GRUND_BAU },
@@ -125,9 +132,9 @@ export const TOOL_PRESENTATION_RULES: readonly ToolPresentationRule[] = [
   { toolId: 'raster', zone: 'weitere', ordnung: 42, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'fang', zone: 'weitere', ordnung: 43, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'distanz-messen', zone: 'weitere', ordnung: 44, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
-  { toolId: 'bemassen', zone: 'weitere', ordnung: 45, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
+  { toolId: 'bemassen', zone: 'weitere', ordnung: 45, herkunft: 'registry', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'winkel-messen', zone: 'weitere', ordnung: 46, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
-  { toolId: 'flaeche-messen', zone: 'weitere', ordnung: 47, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
+  { toolId: 'flaeche-messen', zone: 'weitere', ordnung: 47, herkunft: 'registry', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'volumen-messen', zone: 'weitere', ordnung: 48, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'datei-importieren', zone: 'weitere', ordnung: 49, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'primary', anheftbar: true },
   { toolId: 'bild-importieren', zone: 'weitere', ordnung: 50, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },

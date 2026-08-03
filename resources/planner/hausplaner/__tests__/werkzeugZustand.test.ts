@@ -12,6 +12,7 @@ import {
   ANZEIGE_ZEICHEN, ANZEIGE_TEXT, type WerkzeugAnzeige, type ZustandKontext,
 } from '../app/tools/werkzeugZustand';
 import { toolNach } from '../app/tools/toolRegistry';
+import { PAKET_ALS_TOOLS } from '../app/tools/paketAdapter';
 import { katalogTool } from '../app/tools/toolCatalog';
 import { TOOL_PRESENTATION_RULES } from '../app/tools/toolPresentation';
 
@@ -72,7 +73,7 @@ test('Pflichtwerkzeuge lassen sich nicht anheften — ein Stern ohne Wirkung wä
 test('Paket-Werkzeuge sind anheftbar — canPin kommt aus dem Paket, nicht aus einer Annahme', () => {
   assert.equal(darfAngeheftetWerden('gaube'), true);
   const mitFlag = TOOL_PRESENTATION_RULES.filter((r) => r.anheftbar === true).length;
-  assert.equal(mitFlag, 101, 'alle 101 Paket-Regeln tragen das Flag aus dem Paket');
+  assert.equal(mitFlag, PAKET_ALS_TOOLS.length, 'alle Paket-Regeln tragen das Flag aus dem Paket');
 });
 
 test('die fünf primary-Werkzeuge des Pakets sind Pflichtwerkzeuge', () => {

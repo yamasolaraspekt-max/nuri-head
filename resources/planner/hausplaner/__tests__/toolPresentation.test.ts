@@ -19,6 +19,8 @@ import {
   type ToolPresentationRule,
 } from '../app/tools/toolPresentation';
 import { TOOL_DEFINITIONS } from '../app/tools/toolRegistry';
+import { AUS_PAKET_GEHOBEN } from '../app/tools/toolRegistry';
+import { PAKET_ALS_TOOLS } from '../app/tools/paketAdapter';
 import { TOOL_KATALOG } from '../app/tools/toolCatalog';
 import { faehigkeitenNach, doppelteIds } from '../app/tools/faehigkeiten';
 import { WERKZEUGE_GESAMT } from '../app/tools/toolRegistry';
@@ -28,10 +30,15 @@ import { EIGENE_WERKZEUGE } from '../app/tools/toolRegistry';
 const FIX_ZONE = 7 + EIGENE_WERKZEUGE.length;
 
 // --- 1) Vollständigkeit ---------------------------------------------------------------------
-test('jede Registry- und Katalog-id hat genau eine Regel (9 + 101 = 110, keine Dublette)', () => {
+test('jede Registry- und Katalog-id hat genau eine Regel — gerechnet, nicht getippt', () => {
   // I2: der Katalog ist seit dem Tausch das 110er-Fachpaket (vorher 54 InDesign-Einträge).
-  assert.equal(TOOL_DEFINITIONS.length, 9 + EIGENE_WERKZEUGE.length);
-  assert.equal(TOOL_KATALOG.length, 101);
+  // **W-05/K-03: beide festen Zahlen sind weg.** Die 9 war der Grundbestand, die 101 der
+  // Katalog — beide wanderten bei JEDEM gehobenen Werkzeug. *Was hier zaehlt, ist die Bilanz:
+  // was aus dem Katalog faellt, steht in der Registry, und die Summe bleibt.*
+  assert.equal(TOOL_DEFINITIONS.length, 9 + EIGENE_WERKZEUGE.length + AUS_PAKET_GEHOBEN.length);
+  assert.equal(TOOL_KATALOG.length, PAKET_ALS_TOOLS.length - AUS_PAKET_GEHOBEN.length);
+  assert.equal(TOOL_DEFINITIONS.length + TOOL_KATALOG.length, WERKZEUGE_GESAMT,
+    'die Bilanz ist gekippt: ein Werkzeug hat sich verdoppelt oder ist verschwunden');
   assert.equal(TOOL_PRESENTATION_RULES.length, WERKZEUGE_GESAMT);
 
   const ids = TOOL_PRESENTATION_RULES.map((r) => r.toolId);
@@ -49,7 +56,8 @@ test('Zonen nach I4: fix waechst mit den eigenen Werkzeugen · 2 kontext · 101 
   // I4: alle Fach-Werkzeuge sind über ihre Kategorie-Gruppe erreichbar, also nicht mehr
   // `versteckt`. Die Zone sagt „über den Überlauf erreichbar" — sie flutet die linke Leiste NICHT;
   // dort stehen weiter nur `fix` und persönlich Angeheftetes.
-  assert.equal(zoneTools('weitere').length, 101);
+  // W-05/K-03: gegen das Paket gerechnet — die Zone zeigt alle Paket-Werkzeuge.
+  assert.equal(zoneTools('weitere').length, PAKET_ALS_TOOLS.length);
   assert.equal(zoneTools('versteckt').length, 0, 'kein Werkzeug bleibt unerreichbar');
 });
 
@@ -65,14 +73,29 @@ test('GEGENPROBE: eine erfundene id in einer lokalen Regel-Kopie wird als verwai
   ];
   assert.deepEqual(verwaisteRegelnIn(kopie), ['gibt-es-nicht']);
   // und sie taucht NICHT in der Zone auf (auslassen statt werfen)
-  assert.equal(zoneToolsIn(kopie, 'weitere').length, 101);
+  assert.equal(zoneToolsIn(kopie, 'weitere').length, PAKET_ALS_TOOLS.length);
 });
 
 // --- 3) Invariante Fix-Zone (+ Rot-Gegenprobe) -----------------------------------------------
-test('Fix-Zone = genau die 7 art:werkzeug-Registry-ids in Registry-Reihenfolge', () => {
+test('Fix-Zone = genau die art:werkzeug-Registry-ids in Registry-Reihenfolge', () => {
   const erwartet = TOOL_DEFINITIONS.filter((t) => t.art === 'werkzeug').map((t) => t.id);
-  assert.deepEqual(erwartet, ['auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe', 'kontur']);
-  assert.deepEqual(zoneTools('fix').map((t) => t.id), erwartet);
+  assert.deepEqual(erwartet, [
+    'auswahl', 'wand', 'fenster', 'tuer', 'dach', 'decke', 'treppe',
+    'bemassen', 'flaeche-messen',   // <- W-05, gehoben
+    'kontur',
+  ]);
+
+  // **W-05: „in der Registry" heisst nicht mehr automatisch „in der Fix-Zone".**
+  // Die zwei gehobenen Werkzeuge behalten ihre Praesentationsregel (`zone: 'weitere'`,
+  // `herkunft: 'katalog'`) — gemessen, nicht angenommen. Das Blatt schliesst `toolPresentation`
+  // ausdruecklich aus („traegt die acht bereits"), also ist das der gewollte Zustand: sie sind
+  // ERREICHBAR, nicht fest angeheftet. *Die alte Gleichsetzung Registry == Fix-Zone galt nur,
+  // solange die Registry ausschliesslich Fix-Werkzeuge kannte.*
+  const inFix = new Set(zoneTools('fix').map((t) => t.id));
+  assert.deepEqual([...inFix], erwartet.filter((id) => !(AUS_PAKET_GEHOBEN as readonly string[]).includes(id)));
+  for (const id of AUS_PAKET_GEHOBEN) {
+    assert.equal(inFix.has(id), false, `${id} sitzt in der Fix-Zone, obwohl seine Regel 'weitere' sagt`);
+  }
 });
 
 test('keine Registry-id liegt in der versteckten Zone', () => {
@@ -104,10 +127,16 @@ test('die DTP-Reste sind aus den Regeln verschwunden — nicht nur versteckt', (
     assert.ok(!alle.includes(id), `${id} ist ein DTP-Rest und darf in keiner Zone mehr auftauchen`);
   }
   const erreichbar = zoneTools('weitere').map((t) => t.id);
-  assert.equal(erreichbar.length, 101);
-  // kein Datenverlust: jedes erreichbare Werkzeug steht auch im Katalog
+  // **W-05/K-03: die feste 101 ist auch hier weg.** Die Zone 'weitere' zeigt weiterhin ALLE
+  // Paket-Werkzeuge — auch die gehobenen, die ihre Regel behalten. *Gezaehlt wird deshalb gegen
+  // das Paket, nicht gegen eine Zahl, die beim naechsten Heben falsch wird.*
+  assert.equal(erreichbar.length, PAKET_ALS_TOOLS.length);
+  // kein Datenverlust: jedes erreichbare Werkzeug steht auch im Katalog ODER ist gehoben
   for (const id of erreichbar) {
-    assert.ok(TOOL_KATALOG.some((t) => t.id === id), `${id} bleibt als Katalog-Eintrag erhalten`);
+    const imKatalog = TOOL_KATALOG.some((t) => t.id === id);
+    const gehoben = (AUS_PAKET_GEHOBEN as readonly string[]).includes(id);
+    assert.ok(imKatalog || gehoben,
+      `${id} ist weder im Katalog noch gehoben — hier geht wirklich etwas verloren`);
   }
 });
 
@@ -130,8 +159,20 @@ test('Regressionsanker: faehigkeitenNach(werkzeuge) bleibt nach der Fachzuordnun
   // Z-05-N1: `kontur` reiht sich nach `auswahl` ein — die Reihenfolge folgt der Registry, und
   // dort steht sie hinter `treppe` und vor den beiden Aktionen. **Der Anker bleibt ein Anker:**
   // er haelt die REIHENFOLGE fest, nicht die Laenge, und genau die hat sich nicht verschoben.
-  const vorher = ['auswahl', 'kontur', 'loeschen', 'duplizieren'];
-  assert.deepEqual(faehigkeitenNach('werkzeuge').map((f) => f.id), vorher);
+  // **W-05: die zwei gehobenen Werkzeuge reihen sich nach `auswahl` ein** — Registry-Reihenfolge,
+  // gemessen und nicht geraten. *Der Anker bleibt ein Anker:* er haelt fest, dass sich die
+  // BESTEHENDEN vier nicht gegeneinander verschieben; dass zwei dazukommen, ist der Zweck der
+  // Scheibe und kein Bruch.
+  const vorher = ['auswahl', 'bemassen', 'flaeche-messen', 'kontur', 'loeschen', 'duplizieren'];
+  const ist = faehigkeitenNach('werkzeuge').map((f) => f.id);
+  assert.deepEqual(ist, vorher);
+
+  // Die eigentliche Ankerzusage, unabhaengig von der Laenge: die vier Alten stehen weiterhin in
+  // ihrer alten Ordnung zueinander.
+  assert.deepEqual(
+    ist.filter((id) => !(AUS_PAKET_GEHOBEN as readonly string[]).includes(id)),
+    ['auswahl', 'kontur', 'loeschen', 'duplizieren'],
+  );
 });
 
 // --- 6) Konsolidierungs-Schutz ----------------------------------------------------------------

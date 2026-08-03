@@ -22,6 +22,7 @@ import { alleFaehigkeiten } from '../app/tools/faehigkeiten';
 // AUF-48: die Hauptansicht ist zerlegt — diese Zusage liest ALLE ihre Teile.
 import { zerlegteApp } from './_zerlegteApp';
 import { EIGENE_WERKZEUGE } from '../app/tools/toolRegistry';
+import { AUS_PAKET_GEHOBEN } from '../app/tools/toolRegistry';
 
 const hier = dirname(fileURLToPath(import.meta.url));
 /** Siehe `leisteAusZonen.test.ts`: erklärende Kommentare dürfen den Befund nicht auslösen. */
@@ -87,7 +88,14 @@ test('K4: die Scroll-Höhe gehört dem Abschnitt, nicht der Spalte', () => {
 test('K5: die Fachplaner-Einträge sind vollständig — 22 aus dem Paket plus die eigenen', () => {
   // Z-05-N1: die Zahl war 22 und ist es fuer das Paket weiterhin. Jedes eigene Werkzeug kommt
   // dazu — getrennt gezaehlt, damit ein VERSCHWUNDENES Paket-Werkzeug weiter auffaellt.
-  assert.equal(alleFaehigkeiten().length, 22 + EIGENE_WERKZEUGE.length);
+  //
+  // **W-05: die gehobenen kommen ebenfalls dazu, und zwar GETRENNT.** Drei Summanden statt zwei,
+  // damit die Zusage weiterhin sagt, WELCHE Gruppe sich veraendert hat. *Eine Gesamtzahl haette
+  // gedeckt, dass ein Paket-Werkzeug verschwindet, waehrend ein gehobenes dazukommt.*
+  assert.equal(
+    alleFaehigkeiten().length,
+    22 + EIGENE_WERKZEUGE.length + AUS_PAKET_GEHOBEN.length,
+  );
   // und sie hängen weiterhin an genau einer Stelle im Baum — dem Reiter `fachplaner`.
   assert.equal((appQuelle.match(/<FaehigkeitenNavi/g) ?? []).length, 1);
   assert.match(appQuelle, /schienenTab === 'fachplaner' && \(\s*<FaehigkeitenNavi/);

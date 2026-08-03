@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { TOOL_KATALOG, katalogTool } from '../app/tools/toolCatalog';
+import { PAKET_ALS_TOOLS } from '../app/tools/paketAdapter';
+import { AUS_PAKET_GEHOBEN } from '../app/tools/toolRegistry';
 import {
   FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_GESCHOSS_DA, FAEHIGKEIT_WAND_DA,
   FAEHIGKEIT_ANSICHT_BEREIT, RECHT_BEARBEITEN,
@@ -19,11 +21,21 @@ import { baueAktivierungsKontext } from '../app/tools/toolContext';
 
 const DTP_RESTE = ['page', 'type', 'eyedropper', 'pen', 'rectangle-frame', 'swatches-panel', 'preflight', 'pages-panel', 'note', 'object-style'];
 
-test('Katalog: 101 Fach-Werkzeuge — 110 Paket minus 9 zusammengeführte', () => {
+test('Katalog: das Paket MINUS die gehobenen — gerechnet, nicht getippt', () => {
   // AUF-31 Weg 1: neun Paket-Werkzeuge waren dieselben wie neun Registry-Werkzeuge
   // (select/wall/door/window/stairs/roof/slab/duplicate/delete). Sie stehen jetzt EINMAL,
   // nämlich in der Registry — 110 eindeutige Werkzeuge bleiben es trotzdem.
-  assert.equal(TOOL_KATALOG.length, 101);
+  //
+  // **W-05/K-03: die feste 101 ist weg.** Sie stand hier und an fünf weiteren Stellen und wäre
+  // bei JEDEM gehobenen Werkzeug einzeln nachzuziehen gewesen — genau die Reparatur je Werkzeug,
+  // die W-05 beenden soll. *Die Zusage misst jetzt die BEZIEHUNG: was aus dem Paket fällt, steht
+  // in der Registry.* Sie hält damit auch beim dritten und achten Werkzeug.
+  assert.equal(TOOL_KATALOG.length, PAKET_ALS_TOOLS.length - AUS_PAKET_GEHOBEN.length);
+
+  // Und die Gegenrichtung, sonst wäre die Gleichung mit einem leeren Katalog auch erfüllt:
+  for (const id of AUS_PAKET_GEHOBEN) {
+    assert.equal(katalogTool(id), undefined, `${id} ist gehoben und darf nicht mehr im Katalog stehen`);
+  }
 });
 
 test('die DTP-Reste sind aus dem Katalog verschwunden — das war der Zweck des Tauschs', () => {
