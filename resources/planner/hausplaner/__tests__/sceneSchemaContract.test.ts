@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { sceneDocumentSchema, validateSceneIntegrity } from '../domain/validation';
+import { migriereSzene, sceneDocumentSchema, validateSceneIntegrity } from '../domain/validation';
 
 const JETZT = '2026-07-19T00:00:00.000Z';
 
@@ -29,8 +29,16 @@ function szene(): Record<string, any> {
   };
 }
 
+/**
+ * **Z-06-N1: die Migration gehört in den Ladepfad, den diese Zusage misst.**
+ *
+ * Die Zusage heißt „über DENSELBEN Ladepfad ladbar" — und der Ladepfad in `main.tsx` ruft
+ * `migriereSzene` VOR dem Parsen (Z. 73). Bis heute stand hier nur der Parse; das fiel nicht auf,
+ * solange die Fixture-Version zufällig die aktuelle war. *Mit v3 fällt es auf, und die Zusage
+ * misst danach mehr als vorher, nicht weniger.*
+ */
 function parseUndPruefe(scene: Record<string, any>): boolean {
-  const geparst = sceneDocumentSchema.safeParse(scene);
+  const geparst = sceneDocumentSchema.safeParse(migriereSzene(scene));
   return geparst.success && validateSceneIntegrity(geparst.data).length === 0;
 }
 

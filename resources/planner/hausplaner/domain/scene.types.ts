@@ -13,7 +13,9 @@
 
 import type { RoofShape } from './roofShape';
 
-export const SCHEMA_VERSION = 2 as const;
+// v3 (Z-06-N1): Herkunft und Freigabe an Decke und Dach, beide PFLICHT. Die Anhebung ist der
+// Grund, warum eine v2-Datei nicht stillschweigend als v3 durchgeht — siehe migriereSzene.
+export const SCHEMA_VERSION = 3 as const;
 
 // ---------------------------------------------------------------- Dokument
 
@@ -290,7 +292,27 @@ export interface RoofAnbauMasse {
   widthB?: number;           // mm — Anbau-Breite (nur l/t)
 }
 
-export interface RoofNode extends BaseNode {
+/**
+ * Z-06-N1 (B10) — woher die Geometrie kommt, und ob jemand sie bestätigt hat.
+ *
+ * Zwei getrennte Fragen und deshalb zwei Felder: `manuell` heißt nicht automatisch `bestaetigt`
+ * (jemand kann eine gezeichnete Kontur ablehnen), und `abgeleitet` heißt nicht `abgelehnt`.
+ * *Ein Feld für beides hätte den Fall „geraten, aber geprüft und in Ordnung" nicht ausdrücken
+ * können — und genau den braucht Z-06-N3.*
+ */
+export type GeometrieHerkunft = 'manuell' | 'abgeleitet' | 'erkannt' | 'geschaetzt';
+export type Freigabe = 'bestaetigt' | 'vorschlag' | 'zu_pruefen' | 'abgelehnt';
+
+/** Die vier Felder, die Decke und Dach gemeinsam tragen. PFLICHT — siehe validation.ts. */
+export interface MitHerkunft {
+  geometrieHerkunft: GeometrieHerkunft;
+  freigabe: Freigabe;
+  /** ISO-Zeitpunkt des letzten Freigabe-WECHSELS — nicht des letzten Speicherns. */
+  freigabeAm?: string;
+  freigabeVon?: string;
+}
+
+export interface RoofNode extends BaseNode, MitHerkunft {
   type: 'roof';
 
   /** Traufkontur in mm (Default = Gebäude-Umriss des Levels). */
@@ -323,7 +345,7 @@ export interface CeilingOeffnung {
  * `oeffnungen`. `schichten` (Fußbodenaufbau) bleibt in Feature A leer — Feature B füllt/rechnet.
  * Eigene Sammlung `SceneDocument.ceilings` (Muster roofs) ⇒ Node-Union unberührt.
  */
-export interface CeilingNode extends BaseNode {
+export interface CeilingNode extends BaseNode, MitHerkunft {
   type: 'ceiling';
   /** Umriss in mm (Default = Gebäude-Umriss/Raumerkennung des Levels). */
   polygon: Array<{ x: number; y: number }>;

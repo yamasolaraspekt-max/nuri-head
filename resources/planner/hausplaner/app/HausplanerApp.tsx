@@ -25,6 +25,7 @@ import { wandLaenge, wandBaender, type Punkt } from '../geometry/wallGeometry';
 import { fange, toleranzAusZoom, FANG_TEXT, type FangArt } from '../geometry/fangKern';
 // Z-05: die Konturpruefung ist reine Geometrie und wohnt dort, nicht hier.
 import { pruefeKontur, konturStatusText, KONTUR_MIN_PUNKTE, type KonturGrund } from '../geometry/kontur';
+import { herkunftFuerNeueDecke, HERKUNFT_NEUES_DACH } from '../geometry/freigabe';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
 import { aufloeseAuswahlmodus, wendeAuswahlAn, klickInsLeere } from './tools/auswahlModus';
@@ -944,6 +945,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           createdAt: jetzt, updatedAt: jetzt,
           polygon: gebaeudeUmriss(), roofType: 'sattel', neigungGrad: 35, firstAzimutGrad: 0,
           ueberstandMm: 500, traufhoeheMm: level.elevation + level.defaultWallHeight,
+          // Z-06-N1 (B10): der Status kommt aus der Domäne, nicht aus diesem Klick-Handler.
+          ...HERKUNFT_NEUES_DACH,
         },
       });
       setWerkzeug('auswahl');
@@ -974,6 +977,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           id: uuid(), type: 'ceiling', levelId: level.id, visible: true, locked: false, tags: [],
           createdAt: jetzt, updatedAt: jetzt,
           polygon: ausKontur ? letzteKontur : gebaeudeUmriss(), dickeMm: level.floorThickness,
+          // Z-06-N1 (B10): **derselbe Wert, der den Hinweis steuert, entscheidet den Status** —
+          // aber die Entscheidung selbst wohnt in `geometry/freigabe.ts` und ist dort direkt
+          // prüfbar. *Als Ausdruck an dieser Stelle war sie es nicht: drei Mutationen kamen durch.*
+          ...herkunftFuerNeueDecke(ausKontur),
         },
       });
       setDeckeNaeherung(!ausKontur);

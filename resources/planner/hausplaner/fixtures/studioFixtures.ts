@@ -71,13 +71,14 @@ function deckeTreppe(): SceneDocument {
     id: 'ceiling-1', type: 'ceiling', levelId: EG.id,
     visible: true, locked: false, tags: [], createdAt: ISO, updatedAt: ISO,
     polygon: RECHTECK_UMRISS, dickeMm: 200,
+    geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
     // Treppenauge: Rechteck um die Lauflinie (2000..5000) ± laufbreite/2 (1500..2500).
     oeffnungen: [{ polygon: [{ x: 2000, y: 1500 }, { x: 5000, y: 1500 }, { x: 5000, y: 2500 }, { x: 2000, y: 2500 }] }],
   };
   return {
     id: 'fixture-decke-treppe',
     projectId: 1,
-    schemaVersion: 2,
+    schemaVersion: 3,
     revision: 1,
     units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
@@ -99,9 +100,10 @@ function uDach(): SceneDocument {
     id: 'roof-u', type: 'roof', levelId: EG.id, visible: true, locked: false, tags: [], createdAt: ISO, updatedAt: ISO,
     polygon: U_UMRISS, roofType: 'u-shape', neigungGrad: 35, firstAzimutGrad: 270, ueberstandMm: 500, traufhoeheMm: 2800,
     anbau: { length: 12000, width: 10000, lengthB: 5000, widthB: 4000 },
+    geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
   };
   return {
-    id: 'fixture-u-dach', projectId: 1, schemaVersion: 2, revision: 1, units: 'mm',
+    id: 'fixture-u-dach', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [EG], nodes: umrissZuWaenden(U_UMRISS, EG.id), materials: [], roofs: [dach],
     metadata: { createdAt: ISO, updatedAt: ISO },

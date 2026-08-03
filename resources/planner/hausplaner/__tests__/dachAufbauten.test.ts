@@ -17,7 +17,7 @@ function baseDoc(): SceneDocument {
   return {
     id: 'doc-1',
     projectId: 1,
-    schemaVersion: 2,
+    schemaVersion: 3,
     revision: 1,
     units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
@@ -29,6 +29,7 @@ function baseDoc(): SceneDocument {
       createdAt: ISO, updatedAt: ISO,
       polygon: [{ x: 0, y: 0 }, { x: 10000, y: 0 }, { x: 10000, y: 8000 }, { x: 0, y: 8000 }],
       roofType: 'sattel', neigungGrad: 35, firstAzimutGrad: 90, ueberstandMm: 400, traufhoeheMm: 6000,
+      geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
     }],
     metadata: { createdAt: ISO, updatedAt: ISO },
   };

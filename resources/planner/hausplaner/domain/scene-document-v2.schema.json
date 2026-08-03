@@ -15,7 +15,7 @@
     },
     "schemaVersion": {
       "type": "number",
-      "const": 2
+      "const": 3
     },
     "revision": {
       "type": "integer",
@@ -820,6 +820,18 @@
               "width"
             ],
             "additionalProperties": false
+          },
+          "geometrieHerkunft": {
+            "$ref": "#/$defs/__schema13"
+          },
+          "freigabe": {
+            "$ref": "#/$defs/__schema14"
+          },
+          "freigabeAm": {
+            "$ref": "#/$defs/__schema15"
+          },
+          "freigabeVon": {
+            "$ref": "#/$defs/__schema16"
           }
         },
         "required": [
@@ -836,7 +848,9 @@
           "neigungGrad",
           "firstAzimutGrad",
           "ueberstandMm",
-          "traufhoeheMm"
+          "traufhoeheMm",
+          "geometrieHerkunft",
+          "freigabe"
         ],
         "additionalProperties": false
       }
@@ -920,6 +934,18 @@
               ],
               "additionalProperties": false
             }
+          },
+          "geometrieHerkunft": {
+            "$ref": "#/$defs/__schema13"
+          },
+          "freigabe": {
+            "$ref": "#/$defs/__schema14"
+          },
+          "freigabeAm": {
+            "$ref": "#/$defs/__schema15"
+          },
+          "freigabeVon": {
+            "$ref": "#/$defs/__schema16"
           }
         },
         "required": [
@@ -932,7 +958,9 @@
           "updatedAt",
           "type",
           "polygon",
-          "dickeMm"
+          "dickeMm",
+          "geometrieHerkunft",
+          "freigabe"
         ],
         "additionalProperties": false
       }
@@ -1049,6 +1077,30 @@
         "z"
       ],
       "additionalProperties": false
+    },
+    "__schema13": {
+      "type": "string",
+      "enum": [
+        "manuell",
+        "abgeleitet",
+        "erkannt",
+        "geschaetzt"
+      ]
+    },
+    "__schema14": {
+      "type": "string",
+      "enum": [
+        "bestaetigt",
+        "vorschlag",
+        "zu_pruefen",
+        "abgelehnt"
+      ]
+    },
+    "__schema15": {
+      "type": "string"
+    },
+    "__schema16": {
+      "type": "string"
     }
   }
 }

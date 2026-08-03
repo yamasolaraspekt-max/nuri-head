@@ -18,7 +18,7 @@ const UMRISS = [{ x: 0, y: 0 }, { x: 10000, y: 0 }, { x: 10000, y: 8000 }, { x: 
 
 function baseDoc(): SceneDocument {
   return {
-    id: 'd', projectId: 1, schemaVersion: 2, revision: 1, units: 'mm',
+    id: 'd', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [LEVEL], nodes: [], materials: [], roofs: [], metadata: { createdAt: ISO, updatedAt: ISO },
   };
@@ -26,7 +26,9 @@ function baseDoc(): SceneDocument {
 function decke(over: Partial<CeilingNode> = {}): CeilingNode {
   return {
     id: 'c1', type: 'ceiling', levelId: 'l1', visible: true, locked: false, tags: [],
-    createdAt: ISO, updatedAt: ISO, polygon: UMRISS, dickeMm: 200, ...over,
+    createdAt: ISO, updatedAt: ISO, polygon: UMRISS, dickeMm: 200,
+    // Z-06-N1: Pflichtfelder ab v3. `over` steht danach, damit eine Zusage sie überschreiben kann.
+    geometrieHerkunft: 'manuell', freigabe: 'bestaetigt', ...over,
   };
 }
 function treppe(): ObjectNode {

@@ -19,7 +19,7 @@ function leereSzene(): SceneDocument {
   return {
     id: 'doc-test',
     projectId: 1,
-    schemaVersion: 2,
+    schemaVersion: 3,
     revision: 1,
     units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
@@ -52,6 +52,9 @@ function dach(id = 'r1', levelId = 'eg'): RoofNode {
     firstAzimutGrad: 90,
     ueberstandMm: 500,
     traufhoeheMm: 2500,
+    // Z-06-N1: Pflichtfelder ab v3. Testgeometrie ist von Hand gesetzt ⇒ manuell/bestaetigt.
+    geometrieHerkunft: 'manuell',
+    freigabe: 'bestaetigt',
   };
 }
 
@@ -69,7 +72,11 @@ function fuehreAus(scene: SceneDocument, command: HausplanerCommand) {
 
 // ---- Migration v1 → v2 (▲D1, Kante 4) ----
 
-test('Migration v1→v2: setzt schemaVersion 2 + roofs [], sonst UNVERÄNDERT', () => {
+// **Z-06-N1: aus v1→v2 wird v1→v3.** Die Zusage prüfte, dass die Migration auf 2 hebt; das Ziel
+// ist jetzt 3. *Die tragende Aussage bleibt Wort für Wort dieselbe — „sonst UNVERÄNDERT" — und
+// sie wird unten um die zwei neuen Felder ERWEITERT, nicht ersetzt.* Kein Vergleich ist
+// weggefallen; die Liste der byte-gleichen Felder steht vollständig wie zuvor.
+test('Migration v1→v3: setzt schemaVersion 3 + roofs [], sonst UNVERÄNDERT', () => {
   const v1 = {
     id: 'doc-v1',
     projectId: 7,
@@ -85,7 +92,7 @@ test('Migration v1→v2: setzt schemaVersion 2 + roofs [], sonst UNVERÄNDERT', 
 
   const m = migriereSzene(v1) as Record<string, unknown>;
 
-  assert.equal(m.schemaVersion, 2);
+  assert.equal(m.schemaVersion, 3);
   assert.deepEqual(m.roofs, []);
   // Kein stilles Umschreiben von Bestand: alle anderen Felder byte-gleich.
   assert.equal(m.id, v1.id);
@@ -101,7 +108,49 @@ test('Migration v1→v2: setzt schemaVersion 2 + roofs [], sonst UNVERÄNDERT', 
   assert.equal(v1.schemaVersion, 1);
 });
 
-test('v1 wird vom v2-Schema abgelehnt, nach Migration akzeptiert (Lade-Verweigerung ohne Migration)', () => {
+test('Z-06-N1/K-06: die Migration setzt Bestand auf `zu_pruefen`, NICHT auf `bestaetigt`', () => {
+  // **Die schärfste Zusage dieses Blattes.** Wer Bestandsgeometrie auf `bestaetigt` migriert,
+  // macht die Migration grün und B10 im selben Zug wirkungslos: ab dann sieht jede geerbte
+  // Näherung aus wie eine, auf die jemand geschaut hat. *Ein Status, den niemand vergeben hat,
+  // ist kein Status.*
+  const v2 = {
+    ...leereSzene(),
+    schemaVersion: 2, // ← eine ALTE Datei; genau darum geht es
+    ceilings: [{ id: 'c1', type: 'ceiling', levelId: 'eg', visible: true, locked: false, tags: [],
+      createdAt: JETZT, updatedAt: JETZT,
+      polygon: [{ x: 0, y: 0 }, { x: 5000, y: 0 }, { x: 5000, y: 4000 }], dickeMm: 200 }],
+    // **Ohne die zwei Felder — sonst prüft die Zusage ihre eigene Vorgabe.** Der Helfer `dach()`
+    // trägt sie seit heute; beim ersten Anlauf stand hier `{ ...dach() }` und die Zusage fiel mit
+    // `bestaetigt` statt `zu_pruefen`. *Sie hatte recht: ein Bestands-Test braucht Bestand.*
+    roofs: [(({ geometrieHerkunft, freigabe, ...rest }) => rest)(dach())],
+  } as Record<string, unknown>;
+
+  const m = migriereSzene(v2) as Record<string, any>;
+
+  assert.equal(m.ceilings[0].freigabe, 'zu_pruefen');
+  assert.equal(m.ceilings[0].geometrieHerkunft, 'abgeleitet');
+  assert.notEqual(m.ceilings[0].freigabe, 'bestaetigt');
+  assert.equal(m.roofs[0].freigabe, 'zu_pruefen');
+  // Additiv: die vorhandenen Felder der Bestandsdecke bleiben unangetastet.
+  assert.equal(m.ceilings[0].dickeMm, 200);
+  assert.equal(m.ceilings[0].id, 'c1');
+});
+
+test('Z-06-N1/K-06 ROT: ein bereits gesetzter Status wird von der Migration NICHT überschrieben', () => {
+  // Ohne diese Zusage wäre `zu_pruefen` ein Bulldozer: ein bestätigtes Dach verlöre beim nächsten
+  // Laden seine Freigabe — dieselbe Klasse von Verlust, gegen die B10 überhaupt geschrieben wurde.
+  const v2 = {
+    ...leereSzene(),
+    schemaVersion: 2, // ← eine ALTE Datei, die den Status aber schon trägt
+    roofs: [{ ...dach(), geometrieHerkunft: 'manuell', freigabe: 'bestaetigt' }],
+  } as Record<string, unknown>;
+
+  const m = migriereSzene(v2) as Record<string, any>;
+  assert.equal(m.roofs[0].freigabe, 'bestaetigt');
+  assert.equal(m.roofs[0].geometrieHerkunft, 'manuell');
+});
+
+test('v1 wird vom v3-Schema abgelehnt, nach Migration akzeptiert (Lade-Verweigerung ohne Migration)', () => {
   const v1 = { ...leereSzene(), schemaVersion: 1 } as Record<string, unknown>;
   delete v1.roofs;
 

@@ -35,7 +35,7 @@ test('Studio-Scratch-Szene mit positiver projectId migriert von v1 nach v2 und v
   }
 
   assert.equal(ergebnis.data.projectId, 999999999);
-  assert.equal(ergebnis.data.schemaVersion, 2);
+  assert.equal(ergebnis.data.schemaVersion, 3); // Z-06-N1: Migrationsziel, war 2
   assert.deepEqual(ergebnis.data.roofs, []);
 });
 

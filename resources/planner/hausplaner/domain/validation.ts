@@ -209,6 +209,32 @@ export const anbauMasseSchema = z
   })
   .strict();
 
+/**
+ * Z-06-N1 (B10) — **Herkunft und Freigabe, als PFLICHTFELDER.**
+ *
+ * B10, Yamas Wortlaut: *geschätzte Geometrie darf ihren Status durch Speichern, Laden, Export
+ * oder Sitzungswechsel nicht verlieren.* Ein `.optional()`-Feld verliert ihn beim ersten
+ * Dokument, das es weglässt — und sieht danach aus wie bestätigte Geometrie.
+ *
+ * **Der Name ist `geometrieHerkunft`, nicht `herkunft`** — Einwand des Prüfers, angenommen:
+ * `herkunft` ist im Bundle bereits zweimal vergeben (`ToolHerkunft`, `FlaechenHerkunft`,
+ * 138 rohe Treffer) und bekäme hier eine dritte Bedeutung. *Ein Name, eine Bedeutung.*
+ *
+ * **Die Deklaration steht VOR Dach und Decke, nicht dazwischen.** Beim ersten Anlauf stand sie
+ * zwischen beiden — das Dach benutzte sie dann neun Zeilen vor ihrer Deklaration. *Ein Modul
+ * wird von oben nach unten ausgewertet; ein `const` ist keine Funktion.*
+ */
+export const geometrieHerkunftSchema = z.enum(['manuell', 'abgeleitet', 'erkannt', 'geschaetzt']);
+export const freigabeSchema = z.enum(['bestaetigt', 'vorschlag', 'zu_pruefen', 'abgelehnt']);
+
+/** Die vier Felder, die Decke UND Dach gemeinsam tragen — eine Wahrheit, zwei Einbauorte. */
+const herkunftsFelder = {
+  geometrieHerkunft: geometrieHerkunftSchema,
+  freigabe: freigabeSchema,
+  freigabeAm: z.string().optional(),
+  freigabeVon: z.string().optional(),
+};
+
 // Dach (D-a, ▲D1): eigenes Schema, NICHT Teil der Node-Union (roofs[] ist eine eigene Sammlung).
 // neigungGrad in [0, 89]: 0 = flach; < 90, damit cos > 0 (sichererCos, Kante 2).
 export const roofNodeSchema = z
@@ -227,6 +253,9 @@ export const roofNodeSchema = z
     aufbauten: z.array(aufbauSchema).optional(),
     // W-3b 2a-2: OPTIONAL ⇒ rechteckige Formen + Bestand ohne anbau bleiben gültig (kein 422).
     anbau: anbauMasseSchema.optional(),
+    // Z-06-N1: dieselben vier Felder wie die Decke. Das Dach ist der Folgeprozess, den B10
+    // ausdrücklich nennt — es darf nicht auf einer Decke aufsetzen, deren Status es nicht kennt.
+    ...herkunftsFelder,
   })
   .strict();
 
@@ -240,6 +269,7 @@ export const ceilingNodeSchema = z
     dickeMm: mmPos,
     oeffnungen: z.array(ceilingOeffnungSchema).optional(),
     schichten: z.array(z.object({ materialId: z.string().optional(), dickeMm: mmPos }).strict()).optional(),
+    ...herkunftsFelder,
   })
   .strict();
 
@@ -247,7 +277,11 @@ export const sceneDocumentSchema = z
   .object({
     id: z.string().min(1),
     projectId: z.number().int().positive(),
-    schemaVersion: z.literal(2), // v2 (D-a: roofs[]); v1 wird per migriereSzene angehoben (s. u.)
+    // v3 (Z-06-N1: geometrieHerkunft + freigabe an Decke und Dach); v1/v2 werden per migriereSzene
+    // angehoben (s. u.). **Die Anhebung ist nicht Kosmetik:** bliebe sie bei 2, laedt ein Dokument
+    // OHNE die neuen Felder als gueltig — und eine Bestandsdecke haette keinen Herkunftsstatus,
+    // saehe aber aus wie eine mit. Genau der Zustand, den B10 verbietet, nur unsichtbarer.
+    schemaVersion: z.literal(3),
     revision: z.number().int().positive(),
     units: z.literal('mm'),
     settings: z
@@ -276,17 +310,44 @@ export function migriereSzene(roh: unknown): unknown {
     return roh;
   }
   const o = roh as Record<string, unknown>;
-  const mitSammlungen = (): Record<string, unknown> => ({
-    ...o,
-    schemaVersion: 2,
-    roofs: Array.isArray(o.roofs) ? o.roofs : [],
-    ceilings: Array.isArray(o.ceilings) ? o.ceilings : [], // Feature A: additiv, Bestand → [] (kein 422)
+  const mitSammlungen = (q: Record<string, unknown>): Record<string, unknown> => ({
+    ...q,
+    roofs: Array.isArray(q.roofs) ? q.roofs : [],
+    ceilings: Array.isArray(q.ceilings) ? q.ceilings : [], // Feature A: additiv, Bestand → [] (kein 422)
   });
-  if (o.schemaVersion === 1) {
-    return mitSammlungen();
+
+  /**
+   * Z-06-N1 — v2 → v3: die vier Felder kommen DAZU, nichts wird umgeschrieben.
+   *
+   * **`zu_pruefen`, nicht `bestaetigt`** — das ist die tragende Zeile dieser Migration.
+   * Bestandsgeometrie ist nicht geprüft, sie ist alt. Wer sie auf `bestaetigt` setzt, macht die
+   * Migration grün und B10 im selben Zug wirkungslos: ab dann sieht jede geerbte Näherung aus wie
+   * eine, auf die jemand geschaut hat. *Ein Status, den niemand vergeben hat, ist kein Status.*
+   *
+   * `geometrieHerkunft: 'abgeleitet'` ist die ehrliche Auskunft über Bestand: woher die Decke
+   * kam, weiss heute niemand mehr — `manuell` wäre geraten, `geschaetzt` wäre ein Vorwurf.
+   */
+  const mitHerkunft = (liste: unknown): unknown =>
+    Array.isArray(liste)
+      ? liste.map((e) =>
+          e && typeof e === 'object' && !Array.isArray(e)
+            ? { geometrieHerkunft: 'abgeleitet', freigabe: 'zu_pruefen', ...(e as Record<string, unknown>) }
+            : e,
+        )
+      : liste;
+
+  const aufV3 = (q: Record<string, unknown>): Record<string, unknown> => ({
+    ...q,
+    schemaVersion: 3,
+    ceilings: mitHerkunft(q.ceilings),
+    roofs: mitHerkunft(q.roofs),
+  });
+
+  if (o.schemaVersion === 1 || o.schemaVersion === 2) {
+    return aufV3(mitSammlungen(o));
   }
-  if (o.schemaVersion === 2 && (!Array.isArray(o.roofs) || !Array.isArray(o.ceilings))) {
-    return mitSammlungen();
+  if (o.schemaVersion === 3 && (!Array.isArray(o.roofs) || !Array.isArray(o.ceilings))) {
+    return mitSammlungen(o);
   }
 
   return roh;

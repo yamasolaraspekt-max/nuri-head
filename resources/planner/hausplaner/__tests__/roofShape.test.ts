@@ -15,7 +15,7 @@ const ISO = '2026-07-23T00:00:00.000Z';
 
 function docMit(shape: RoofShape): SceneDocument {
   return {
-    id: 'doc-1', projectId: 1, schemaVersion: 2, revision: 1, units: 'mm',
+    id: 'doc-1', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [{ id: 'l1', name: 'DG', elevation: 0, defaultWallHeight: 2500, floorThickness: 200, sortOrder: 0 }],
     nodes: [], materials: [],
@@ -24,6 +24,7 @@ function docMit(shape: RoofShape): SceneDocument {
       createdAt: ISO, updatedAt: ISO,
       polygon: [{ x: 0, y: 0 }, { x: 10000, y: 0 }, { x: 10000, y: 8000 }, { x: 0, y: 8000 }],
       roofType: shape, neigungGrad: 35, firstAzimutGrad: 90, ueberstandMm: 400, traufhoeheMm: 6000,
+      geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
     }],
     metadata: { createdAt: ISO, updatedAt: ISO },
   };

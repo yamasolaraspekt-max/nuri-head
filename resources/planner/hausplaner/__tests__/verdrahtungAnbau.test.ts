@@ -17,12 +17,13 @@ function roof(roofType: RoofShape, anbau?: RoofAnbauMasse): RoofNode {
     id: 'r1', type: 'roof', levelId: 'l1', visible: true, locked: false, tags: [], createdAt: ISO, updatedAt: ISO,
     polygon: [{ x: 0, y: 0 }, { x: 12000, y: 0 }, { x: 12000, y: 8000 }, { x: 0, y: 8000 }],
     roofType, neigungGrad: 35, firstAzimutGrad: 0, ueberstandMm: 500, traufhoeheMm: 6000,
+    geometrieHerkunft: 'manuell', freigabe: 'bestaetigt',
     ...(anbau ? { anbau } : {}),
   };
 }
 function doc(r: RoofNode): SceneDocument {
   return {
-    id: 'd', projectId: 1, schemaVersion: 2, revision: 1, units: 'mm',
+    id: 'd', projectId: 1, schemaVersion: 3, revision: 1, units: 'mm',
     settings: { gridSize: 100, snapEnabled: true, angleSnap: 15 },
     levels: [{ id: 'l1', name: 'DG', elevation: 0, defaultWallHeight: 2500, floorThickness: 200, sortOrder: 0 }],
     nodes: [], materials: [], roofs: [r], metadata: { createdAt: ISO, updatedAt: ISO },
