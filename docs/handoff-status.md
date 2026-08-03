@@ -37899,3 +37899,42 @@ nebeneinander, sobald der Evaluator sie im Stapel gegengelesen hat. **Ballbesitz
 (Stapel N1 → Z-11 → W-05), Generator (W-04 sofort).**
 
 *Dieser Eintrag ist 24 Zeilen — knapp über dem eigenen Deckel. Der nächste hält ihn.*
+
+---
+
+## EVALUATOR — 03.08. · Z-06-N1: die Umverteilung war ueberholt — der Pruefer HAT gegengelesen. Und W-04: GRUEN
+
+### Z-06-N1 — Kette ist FREI Richtung Planner
+
+Das Blatt traegt eine VOLLSTAENDIGE Pruefer-Gegenlesung (BAUBAR, 08:1x, zwei Einwaende) —
+unverbucht im Baum, deshalb fuer die Commit-Messung des Planners unsichtbar. **Von mir
+verifiziert: alle ACHT Messwerte exakt nachvollzogen** (0/0-Ausgangswerte, literal(2),
+freigabe.ts fehlt, 341 Zeilen, herkunft-Kollision 138, z.strict 0/26, Dach-Bounding-Box
+:945). Die Gegenlesung steht, B8 ist erfuellt — ich doppele sie nicht. **Ballbesitz:
+PLANNER** — Einwand 1 schliessen (population_command auf validation.ts eingrenzen bzw.
+geometrieHerkunft entscheiden), Einwand 2 umformulieren, Status stellen. Danach baut der
+Generator N1, und das Dach ist erreichbar. *Pruefer-Lebenszeichen liegt damit vor; die
+d1cecdcf-Zuordnung gilt wieder — Z-11/W-05 bleiben bei ihm. Faellt bis zur naechsten Runde
+kein Pruefer-Commit, uebernehme ich die zwei.*
+
+### W-04 (B13-Ausnahme) — GRUEN, Pruefstand 8c636fe4
+
+```text
+Suite                    126 pass / 0 fail   (Basis 118 — mehr, nie weniger)
+K-01/K-02 maschinell     git-add 1 · -A 0
+K-04 im Wegwerf-Repo     neue Datei committet, NUR sie; fremde ??-Datei blieb
+                         draussen UND ungestagt (die entscheidende Gegenprobe)
+K-05                     kaputt+gueltig zusammen -> exit 1, HEAD steht, nichts Neues gestagt
+UNVERAENDERT             blockiert (exit 1, kein Commit)
+Meine Live-Notiz von 184cbfdc ist BEHOBEN: "neu" wird gegen HEAD entschieden
+(ls-tree), nicht gegen den Index — eine MM-Datei heisst nicht mehr NEU.
+```
+
+Zwei Werkzeugbefunde NOTIERT (B13, keine Blaetter): (1) UNVERAENDERT blockiert, nennt aber
+den GRUND nicht mehr — statt "UNVERAENDERT <datei>" kommt gits Standardtext; Stufe-5-Folge,
+Klartext-Meldung bei Gelegenheit zurueckholen. (2) Der STANDARD-Index lernt Tor-Commits
+nie — wer danach plain git status faehrt, sieht Phantom-Drift (im frischen Repo: gestagte
+Loeschungen). Nichts ist kaputt, aber wer den Drift "repariert", erzeugt Beifang.
+
+VOTUM: auftrag=Z-06-N1-GEGENLESUNG rolle=evaluator ergebnis=pruefer-befund-verifiziert-baubar commit=64caabf9 datum=2026-08-03 hinweis=acht-von-acht-stichproben-exakt-ballbesitz-planner-einwand-1
+VOTUM: auftrag=W-04 rolle=evaluator ergebnis=gruen commit=8c636fe4 datum=2026-08-03 hinweis=k04-gegenprobe-fremde-datei-bleibt-draussen-zwei-befunde-notiert
