@@ -40125,3 +40125,39 @@ Stille, nur ein Bauteil weniger. **Die Schranke funktioniert; sie wird nur nicht
 *Ich entscheide nicht, ob das Dach die Kontur beim Anlegen ablehnt oder sie nimmt und sichtbar
 „nicht darstellbar" meldet — beides sind Entscheidungen. Aber welche auch kommt: `bestaetigt` auf
 einem Bauteil, das nicht existiert, verletzt B10 unmittelbar, und das ist unabhängig von der Wahl.*
+
+---
+
+## EVALUATOR — 03.08. 23:4x · Nachtrag zu meinem eigenen Z-07-Votum: ein Beleg darin belegt nichts
+
+```text
+Ich habe im Leerlauf die DECKE nachgeprueft - meine eigene Z-06-Abnahme, weil der Z-07-Befund
+die Frage aufwarf, ob die Insel L-Formen generell nicht darstellt. Zwei Ergebnisse, eines
+davon gegen mich.
+
+(1) Z-06 HAELT. Die Decke behandelt L und Rechteck GLEICH:
+      L-Decke (6 Punkte, frisches Objekt 140)       -> 3D: blasse Flaeche
+      Rechteck-Decke (4 Punkte, frisches Objekt 139)-> 3D: blasse Flaeche, GLEICHES Bild
+    Code deckt sich: szene.ts:452ff rendert die Decke ueber THREE.Shape/ShapeGeometry - das
+    trianguliert beliebige Polygone. Es gibt keine Rechteckigkeits-Pruefung fuer Decken
+    (gesucht, 0 Treffer). Der Z-07-Befund ist SPEZIFISCH fuers Dach, nicht allgemein.
+    Ohne die Kontrolle haette ich "auch die Decke ist unsichtbar" gemeldet - sie ist nur blass.
+
+(2) KORREKTUR AN MEINEM VOTUM 26747678. Dort steht als Beleg:
+      "3D-Ansicht: LEER. Wortlaut im Bild: 'Leere Szene - im 2D-Modus Waende zeichnen'"
+    Der Wortlaut ist KEIN Beleg. Er steht auch im Rechteck-Screenshot, in dem das Dach
+    deutlich sichtbar ist - der Hinweis haengt an den WAENDEN, nicht am Inhalt. Ich habe ihn
+    zitiert, weil er meine Aussage stuetzte, und nicht geprueft, ob er sie tragen kann.
+
+    DAS URTEIL AENDERT SICH NICHT: Es steht auf dem Bildvergleich (Rechteck-Dach sichtbar,
+    L-Dach nicht) und auf der direkt befragten Geometrie (L-Form wirft, Rechteck 1 Flaeche
+    80.0 m2) - beide unabhaengig vom Hinweistext. Aber ein Beleg, der bei beiden Ausgaengen
+    gleich aussieht, gehoert aus der Begruendung raus, nicht hinein.
+
+NEBENBEFUND, klein und nicht Z-07 anzulasten: der Hinweis "Leere Szene" erscheint, waehrend
+ein Dach oder eine Decke gerendert ist. Er fragt nach Waenden und antwortet ueber die Szene.
+Kein Auftrag von mir - gehoert dem Planner, wenn er ihn will.
+
+IN DER ARBEITS-DB entstanden (additiv, nicht geloescht): hausplaner_documents zu 139 und 140.
+Damit sind es fuenf aus dieser Runde: 139, 140, 141, 142, 143.
+```
