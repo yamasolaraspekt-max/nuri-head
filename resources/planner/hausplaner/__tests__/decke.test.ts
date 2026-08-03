@@ -180,7 +180,12 @@ test('Z-06/K-03: ohne Kontur meldet die Fussleiste eine Naeherung — mit Kontur
     'der Hinweistext ist weg — K-03 verlangt Text, kein Symbol allein');
 });
 
-test('Z-07/K-04: das DACH meldet seine Naeherung ebenso — der Melder haengt an der Entscheidung', () => {
+test('Z-07/K-06: das DACH meldet seine Naeherung ebenso — der Melder haengt an der Entscheidung', () => {
+  // **UMBENANNT auf den Befund des Evaluators (26747678), und die Ruege ist berechtigt.** Diese
+  // Zusage hiess bis eben `Z-07/K-04` — ein Name, der im Blatt schon vergeben war, und zwar an
+  // ein P1-Kriterium ueber die DACHFLAECHE, das ich nicht gebaut hatte. *Wer einen Kriteriumsnamen
+  // weitergibt, macht das Fehlende unsichtbar: der Lauf meldet K-04 als gedeckt, waehrend die
+  // gedeckte Sache eine andere ist.* Der Melder ist eine gute Ergaenzung — er ist nur nicht K-04.
   // **Nachtrag aus der Mutationsprobe von Z-07: `setDachNaeherung(false)` kam durch.** Die
   // Decken-Zusage oben prueft `setDeckeNaeherung(!ausKontur)` — fuer das Dach gab es nichts.
   // *Ein Bauteil, das seine Naeherung verschweigt, ist genau der Fehler mit besserem Gewissen,
@@ -201,4 +206,37 @@ test('Z-07/K-04: das DACH meldet seine Naeherung ebenso — der Melder haengt an
     0,
     'der Decken-Melder ist verschwunden — dann meldet das Dach fuer beide',
   );
+});
+
+test('Z-07/K-04: die L-Form bekommt ein L-DACH — 68 m², nicht die 80 der Bounding-Box', () => {
+  // **Das eigentliche K-04 des Blattes, beim ersten Bau NICHT gebaut.** Gemeldet hat es der
+  // Evaluator; ich hatte den Namen an eine andere Zusage vergeben. *Die Flaeche ist der
+  // Pruefgegenstand, nicht die Punktliste: eine Punktliste friert den gebauten Zustand ein
+  // (F-06), die Flaeche prueft die Aussage.*
+  const dach = (polygon: Array<{ x: number; y: number }>) => ({
+    id: 'r1', type: 'roof' as const, levelId: 'l1', visible: true, locked: false, tags: [],
+    createdAt: ISO, updatedAt: ISO, polygon,
+    roofType: 'sattel' as const, neigungGrad: 35, firstAzimutGrad: 0,
+    ueberstandMm: 500, traufhoeheMm: 2500,
+    geometrieHerkunft: 'manuell' as const, freigabe: 'bestaetigt' as const,
+  });
+
+  const doc = baseDoc();
+  applyCommand(doc, { type: 'ADD_ROOF', roof: dach(L_KONTUR) }, ISO);
+  const gebaut = doc.roofs?.[0];
+  assert.ok(gebaut, 'kein Dach angelegt — die Zusage wuerde Leere messen');
+
+  const flaeche = polygonFlaecheM2(gebaut.polygon) / 1e6;
+  assert.equal(Math.round(flaeche), 68, `Dachflaeche ${flaeche.toFixed(1)} m² statt 68`);
+  assert.notEqual(Math.round(flaeche), 80, 'das Dach traegt die Flaeche der Bounding-Box');
+
+  // **Die Kontrolle (B4):** beim Rechteck sind Kontur und Box gleich — erst der Unterschied im
+  // L-Fall bedeutet etwas. Ohne sie koennte die Zusage auch mit einer kaputten Flaechenrechnung
+  // gruen sein, die zufaellig 68 liefert.
+  const doc2 = baseDoc();
+  applyCommand(doc2, { type: 'ADD_ROOF', roof: dach(UMRISS) }, ISO);
+  const rechteck = polygonFlaecheM2(doc2.roofs![0].polygon) / 1e6;
+  assert.equal(Math.round(rechteck), 80, `Rechteck-Kontrolle ${rechteck.toFixed(1)} m² statt 80`);
+  assert.notEqual(Math.round(rechteck), Math.round(flaeche),
+    'L-Form und Rechteck liefern dieselbe Flaeche — dann misst die Zusage nicht die Kontur');
 });

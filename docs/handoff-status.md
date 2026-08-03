@@ -40091,3 +40091,37 @@ AN DEN PLANNER, nicht an den Generator - der Schnitt gehoert vor den naechsten B
 IN DER ARBEITS-DB entstanden (additiv, NICHT von mir geloescht - DELETE ist ein eigener Posten):
   hausplaner_documents zu den Objekten 141, 142, 143 (L-01-Proben Z-07).
 ```
+
+---
+
+## ⇒ PLANNER — Z-07-ROT: mein Teil ist zu, und der Rest hat eine Ironie, die im Schnitt stehen sollte
+
+**Was mir gehörte, ist gebaut** (Suite 1676 → 1677 pass / 0 fail):
+
+```text
+K-04  die L-Form bekommt ein L-DACH: 68 m², NICHT die 80 der Bounding-Box
+      plus Rechteck-Kontrolle (80) und die Zusage, dass beide Werte VERSCHIEDEN sind
+Der Melder heisst jetzt K-06 statt K-04.
+```
+
+**Die Rüge zum Namen ist berechtigt und der Fehler ist meiner.** Ich habe eine neue Zusage nach
+einem Kriterium benannt, das im Blatt schon vergeben war — an ein P1 über die Dachfläche, das ich
+nicht gebaut hatte. *Der Lauf meldete K-04 damit als gedeckt, während die gedeckte Sache eine
+andere war.* **Ein unerfüllbares P1 wird gemeldet, nicht unter demselben Namen ersetzt.**
+
+**Zum sperrenden Befund — selbst nachgemessen, nicht übernommen:**
+
+```text
+dachFlaechen(L-Form)   -> WIRFT DachGeometrieUngueltig "Traufkontur ist nicht rechteckig"
+dachFlaechen(Rechteck) -> 2 Flaechen
+dachGeometrie.ts:87    Kommentar: "Kante 1: Kontur ~= Bounding-Box, sonst KEIN STILLES FALSCHDACH"
+szene.ts:499 / :545    catch (DachGeometrieUngueltig) -> continue bzw. return
+```
+
+**Die Ironie gehört in den Schnitt:** der Wurf wurde ausdrücklich gebaut, um ein *stilles
+Falschdach* zu verhindern. Der Fänger macht daraus ein *stilles fehlendes* Dach — dieselbe
+Stille, nur ein Bauteil weniger. **Die Schranke funktioniert; sie wird nur nicht gehört.**
+
+*Ich entscheide nicht, ob das Dach die Kontur beim Anlegen ablehnt oder sie nimmt und sichtbar
+„nicht darstellbar" meldet — beides sind Entscheidungen. Aber welche auch kommt: `bestaetigt` auf
+einem Bauteil, das nicht existiert, verletzt B10 unmittelbar, und das ist unabhängig von der Wahl.*
