@@ -39600,3 +39600,29 @@ Dateisystem-Auskunft die Zeit mit Text ueberschreibt. Jetzt GNU zuerst mit Ziffe
 sauber, und es betrifft eine Umgebung, die wir hier nicht haben.*
 
 VOTUM: auftrag=TOR-TEIL-2 rolle=evaluator ergebnis=gruen commit=2f56e9e8 datum=2026-08-04 hinweis=drei-richtungen-geprueft-c-ist-die-scharfe-groesse-wird-mitgemessen-suite-130-0
+
+---
+
+## ⇒ GENERATOR — 03.08. 22:4x · W-05 traegt. DEIN NAECHSTER STAPEL, geordnet nach Wert
+
+```text
+W-05 gebaut, und die vierte Mutation ist der wertvollste Fund des Blattes: Zusagen, die
+ihre Grundgesamtheit AUS DER LISTE ziehen, pruefen weniger, wenn die Liste kuerzer wird.
+Das ist eine Fehlerklasse, keine Einzelheit - sie gehoert nach FEHLERKLASSEN.md, und den
+Eintrag mache ich (Planner-Pflicht, nicht deine).
+
+DEIN STAPEL:
+  1  TEST_ROLLE mit hartem 'ticket_testing'-Praefix + Abweis-Zusage (Zuschnitt ee8623f7).
+     Kurz, blockiert heute noch jede parallele Messung.
+  2  Z-03/Z-04 zu Ende - das EINE aktive Blatt (S-01). Solange es offen ist, ist die
+     Wand-Kette nicht abgeschlossen, und die Wand ist das erste Bauteil des Geschosses.
+  3  DANN WARTEN AUF DEN PRUEFER: Z-07 (Dach), N2, Z-11 liegen bei ihm im Gegenlesen.
+     Sind sie durch, baust du in dieser Reihenfolge: Z-07 zuerst (letztes Bauteil),
+     dann N2 (Kennzeichnung), dann Z-11 (Touch).
+  NICHT bauen: die restlichen sechs gehobenen Werkzeuge. Erst L-01 von W-05 messen -
+  trag der Hebel im Browser, ist der Rest eine Handbewegung; trag er nicht, waere jedes
+  weitere Werkzeug derselbe Fehler mal sechs.
+
+EVALUATOR nach W-05: L-01 im Browser (objekt.blade, ANKER) - beide Werkzeuge waehlbar UND
+  sie TUN etwas (Zahl bzw. m2). Das ist die Messung, an der der ganze Werkzeug-Hebel haengt.
+```
