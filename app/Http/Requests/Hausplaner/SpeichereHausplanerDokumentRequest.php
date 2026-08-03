@@ -21,7 +21,29 @@ class SpeichereHausplanerDokumentRequest extends FormRequest
     {
         return [
             'base_revision' => ['required', 'integer', 'min:1'],
-            'schema_version' => ['required', 'integer', 'in:2'],
+            // Z-06-N1: die Insel hebt auf v3 (geometrieHerkunft/freigabe an Decke und Dach).
+            //
+            // **`in:3`, nicht `in:2,3` — und der erste Versuch war der zweite.** Die Regel ist
+            // nicht die einzige Schranke: `SceneDocumentValidator` prüft die Szene gegen das AUS
+            // ZOD ERZEUGTE Schema (`scene-document-v2.schema.json`), und das verlangt seit dem
+            // N1-Bau v3 samt Pflichtfeldern. *Eine Regel, die 2 durchlässt, während der Validator
+            // dahinter 2 ablehnt, verschiebt den Fehler nur eine Ebene tiefer und macht aus einer
+            // klaren Versionsmeldung eine Schema-Fehlerliste.* Zwei Schranken, eine Wahrheit.
+            //
+            // **Der Ladepfad bleibt unberührt:** der Validator hängt AUSSCHLIESSLICH am Speichern
+            // (gemessen: eine Fundstelle, `withValidator`). Abgelegte v1-/v2-Dokumente werden
+            // weiterhin unverändert ausgeliefert und von der Insel beim Laden migriert.
+            //
+            // ⚠ **OFFEN, und es gehört nicht in diese Datei:** `public/hausplaner/` trägt noch
+            // den v2-Bau. Bis `npm run build:hausplaner` gelaufen ist, schickt die ausgelieferte
+            // Seite eine 2 und bekommt 422. *Das war schon vor dieser Zeile so — die Regel
+            // verursacht es nicht, sie benennt es nur ehrlich.*
+            //
+            // Gefunden hat die Lücke der Evaluator: die Insel-Suite (1667/0) kennt den Server
+            // nicht, und die Sichtprobe des Blattes zeigte auf `studio.blade` — eine Fläche
+            // OHNE Persistenz. *Eine P1-Zusage, die auf einer Fläche ohne Speichern prüft, ob
+            // etwas das Speichern überlebt, kann weder grün noch rot werden.*
+            'schema_version' => ['required', 'integer', 'in:3'],
             'scene' => ['required', 'array'],
         ];
     }

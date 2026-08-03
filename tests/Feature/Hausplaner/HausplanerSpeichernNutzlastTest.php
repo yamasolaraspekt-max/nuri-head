@@ -30,7 +30,10 @@ class HausplanerSpeichernNutzlastTest extends TestCase
         $scene['revision'] = $revision;
         DB::table('hausplaner_documents')->insert([
             'alternative_id' => $alt,
-            'schema_version' => 2,
+            // Z-06-N1: Spalte und Szene tragen dieselbe Version. Ein Fixture, dessen Spalte 2
+            // sagt und dessen `scene_json` 3 ist, widerspricht sich selbst — und der Widerspruch
+            // wandert in jede Zusage, die darauf aufsetzt.
+            'schema_version' => 3,
             'revision' => $revision,
             'scene_json' => json_encode($scene),
             'checksum' => 'checksum-vorher',
@@ -64,7 +67,7 @@ class HausplanerSpeichernNutzlastTest extends TestCase
         return [
             'id' => "doc-{$alt}",
             'projectId' => $alt,
-            'schemaVersion' => 2,
+            'schemaVersion' => 3,
             'revision' => 1,
             'units' => 'mm',
             'settings' => ['gridSize' => 100, 'snapEnabled' => true, 'angleSnap' => 15],
@@ -85,6 +88,9 @@ class HausplanerSpeichernNutzlastTest extends TestCase
                 'firstAzimutGrad' => 90,
                 'ueberstandMm' => 500,
                 'traufhoeheMm' => 2500,
+                // Z-06-N1 (B10): Pflichtfelder ab v3. Testgeometrie ist gesetzt, nicht geraten.
+                'geometrieHerkunft' => 'manuell',
+                'freigabe' => 'bestaetigt',
             ]],
             'metadata' => ['createdAt' => '2026-07-19T00:00:00.000Z', 'updatedAt' => '2026-07-19T00:00:00.000Z'],
         ];
@@ -102,7 +108,7 @@ class HausplanerSpeichernNutzlastTest extends TestCase
     }
 
     /** @param array<string, mixed> $scene */
-    private function speichere(int $alt, array $scene, int $baseRevision = 1, int $schemaVersion = 2)
+    private function speichere(int $alt, array $scene, int $baseRevision = 1, int $schemaVersion = 3)
     {
         return $this->actingAs($this->user())->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
             'base_revision' => $baseRevision,
@@ -136,7 +142,12 @@ class HausplanerSpeichernNutzlastTest extends TestCase
         $erwartet['revision'] = 2;
 
         $this->assertEquals($erwartet, $gespeichert, 'Die validierte Szene muss vollständig und unbeschnitten persistiert werden.');
-        $this->assertSame(2, (int) $doc['schema_version']);
+        // Z-06-N1: die Spalte FOLGT der Szene (`SpeichereHausplanerDokument:39`), und die Szene
+        // ist seit dem N1-Bau v3. Die Zusage misst weiterhin dasselbe — dass Spalte und Szene
+        // nicht auseinanderlaufen —, nur gegen die Version, die heute gilt.
+        $this->assertSame(3, (int) $doc['schema_version']);
+        $this->assertSame((int) $gespeichert['schemaVersion'], (int) $doc['schema_version'],
+            'Spalte und Szene müssen dieselbe Schema-Version tragen.');
         $this->assertSame(2, (int) $doc['revision']);
         $this->assertSame($antwort->json('checksum'), $doc['checksum']);
     }
@@ -223,5 +234,35 @@ class HausplanerSpeichernNutzlastTest extends TestCase
         $this->speichere($alt, $scene, 1)->assertStatus(409)->assertJson(['aktuelle_revision' => 2]);
 
         $this->assertSame($vorher, $this->dokumentZeile($alt), '409 darf scene_json, Revision und Checksum nicht verändern.');
+    }
+
+    /**
+     * Z-06-N1 — **die Versions-Schranke selbst, nicht nur ihre Wirkung nebenbei.**
+     *
+     * Die Mutationsprobe hat es gezeigt: `in:3` auf `in:2,3` gedreht liess alle dreizehn Zusagen
+     * gruen. *Keine einzige bewachte die Regel — sie profitierten nur davon, dass die Nutzlast
+     * zufaellig v3 war.* Ohne diese Zusage kann die Schranke lautlos aufgehen.
+     */
+    public function test_v2_nutzlast_wird_mit_versions_fehler_abgewiesen(): void
+    {
+        $alt = $this->objekt(600);
+        $scene = $this->v2SzeneMitDach($alt);
+        $scene['schemaVersion'] = 2;
+        unset($scene['roofs'][0]['geometrieHerkunft'], $scene['roofs'][0]['freigabe']);
+
+        $antwort = $this->speichere($alt, $scene, 1, 2);
+
+        $antwort->assertStatus(422);
+        $antwort->assertJsonValidationErrors('schema_version');
+    }
+
+    /** Und die Umkehrung: eine v3-Nutzlast mit v2-Huelle faellt ebenfalls, nicht nur die Huelle. */
+    public function test_huelle_und_szene_muessen_dieselbe_version_tragen(): void
+    {
+        $alt = $this->objekt(610);
+
+        $this->speichere($alt, $this->v2SzeneMitDach($alt), 1, 2)
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('schema_version');
     }
 }
