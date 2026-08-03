@@ -4,7 +4,7 @@
 auftrag:
   id: AUF-P1-A1
   strang: produktdaten
-  status: entwurf          # v2 nach sperrendem B8-Gegenlesen; braucht erneutes Gegenlesen von E-A1-2
+  status: bereit           # v2-Gegenlesen: TRAEGT MIT AUFLAGE; Auflage (volle widerspruch()-Pruefung) eingearbeitet
   spur: A
   heimat: ticket
   anlass: "Evaluator-Auflage A1 aus der AUF-P1-S4-Abnahme (Ledger §6, adeec867): niemand ausser
@@ -22,8 +22,14 @@ auftrag:
   vorbedingung: "AUF-P1-S4 GRUEN MIT AUFLAGEN + A2 erfuellt (Ledger §6). Stand gepusht."
   spezifikation: "11-identitaetsspezifikation-…md §4 (Abbruch nach oben), §5 (Normalisierung),
                   §6/§7, E1. Dieses Blatt ergaenzt UI- und Wirkungs-Entscheidungen."
-  gegengelesen_von: null   # v1-Urteil: TRAEGT NICHT (sperrend) — v2 braucht neues Gegenlesen
-  gegengelesen_am: null
+  gegengelesen_von: evaluator   # v1: TRAEGT NICHT (3 Sperrpunkte) -> v2: TRAEGT MIT AUFLAGE
+  gegengelesen_am: 2026-08-03
+  befund: >
+    v2 gegen Leiter-Code und §14 gemessen: Fuell-Liste traegt, Automatik-Aussage wahr
+    (gtin -> Stufe 1; article_no nur Stufe-5-Vorschlag, brands manufacturer 0/50 bestaetigt),
+    beide 409-Formen deckungsgleich mit Pfad 7, Preflight selbst gefahren EXIT=0.
+    Auflage eingearbeitet: Confirm-Widerspruchspruefung = volle widerspruch()-Logik
+    (gtin UND Stufe-2-Paar), Wiederverwendung statt neuem Check.
 
 scope:
   population_command: "grep -rn 'product_identity_suggestions' app/ resources/ routes/ --include='*.php' --include='*.blade.php' | wc -l"
@@ -61,8 +67,10 @@ entscheidungen:
            keine weiteren Felder. EHRLICHE Automatik-Aussage: nur die GTIN-Fuellung laesst den
            naechsten Import automatisch treffen (Stufe 1). article_no verbessert heute nur den
            Stufe-5-Vorschlag (Stufe 2 braucht brand_id type=manufacturer — im Bestand 0/50, §14).
-           VOR dem Fuellen laeuft die WIDERSPRUCHSPRUEFUNG erneut (Abbruch nach oben, §4):
-           incoming.gtin gesetzt UND Ziel-Artikel-gtin gesetzt UND verschieden -> Bestaetigung
+           VOR dem Fuellen laeuft die WIDERSPRUCHSPRUEFUNG erneut (Abbruch nach oben, §4) —
+           und zwar als WIEDERVERWENDUNG der VOLLEN vorhandenen widerspruch()-Logik des
+           Service (gtin-Kante UND Stufe-2-Paar brand_id+article_no), KEIN neuer
+           Nur-gtin-Check (Gegenlese-Auflage v2): jeder Widerspruch -> Bestaetigung
            VERWEIGERT mit sichtbarem Konflikt (Status bleibt offen). Alles in EINER neuen
            Service-Methode uebernehmeBestaetigten() — keine zweite Wahrheit im Controller.
            'verwerfen' = status->verworfen + decided_by, sonst nichts."
