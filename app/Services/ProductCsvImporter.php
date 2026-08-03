@@ -5,6 +5,9 @@ namespace App\Services;
 use App\Models\DistributorPrice;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Services\Product\Identity\IdentityMatch;
+use App\Services\Product\Identity\ProductIdentity;
+use App\Services\Product\Identity\ProductIdentityService;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -317,48 +320,117 @@ class ProductCsvImporter
             ];
         }
 
-        $existing = null;
+        if (config('produkt.identitaet.aktiv')) {
+            // AUF-P1-S4 §8 Zeile 6: resolve(); die Herstellernummer wandert von
+            // model nach manufacturerArticleNo (E6) — model ist eine Bezeichnung,
+            // keine Nummer. Mit Lieferantenkontext ist die artikelnummer die
+            // Lieferantennummer (sie landet heute schon in distributor_prices).
+            $dienst = app(ProductIdentityService::class);
 
-        if ($articleNo) {
-            $existing = Product::where('article_no', $articleNo)->first();
-        }
+            $identitaet = new ProductIdentity(
+                gtin: $ean,
+                manufacturerArticleNo: $manufacturerNo ?: $articleNo,
+                brandId: $brandId,
+                supplierArticleNo: $distributorId ? $articleNo : null,
+                distributorId: $distributorId,
+                name: $productName,
+                channel: 'import:csv',
+            );
 
-        if (!$existing && $manufacturerNo && $productName) {
-            $existing = Product::where('model', $manufacturerNo)
-                ->where('product', $productName)
-                ->first();
-        }
+            $match = $dienst->resolve($identitaet);
 
-        // ONLY columns that really exist in your products migration
-        $payload = [
-            'brand_id' => $brandId,
-            'ean' => $ean,
-            'product' => $productName ?: 'Produkt ' . $rowNumber,
-            'model' => $manufacturerNo,
-            'category' => $this->clean($row['category'] ?? 'Produkt') ?: 'Produkt',
-            'roof_type' => 'none',
-            'color' => $this->clean($row['color'] ?? null),
-            'price_unit' => $this->clean($row['price_unit'] ?? null),
-            'package_unit' => $this->clean($row['package_unit'] ?? null),
-            'short_description' => $description,
-            'status' => 'Published',
-        ];
+            if ($match->ergebnis === IdentityMatch::KONFLIKT
+                || $match->ergebnis === IdentityMatch::VORSCHLAG) {
+                if ($match->ergebnis === IdentityMatch::VORSCHLAG) {
+                    $dienst->vorschlagSpeichern($identitaet, $match);
+                }
 
-        if ($existing) {
-            $existing->fill($payload);
-
-            if (!$existing->article_no && $articleNo) {
-                $existing->article_no = $articleNo;
+                // Zeile wird nicht importiert — ein Mensch entscheidet (E1).
+                return [
+                    'product_id' => null,
+                    'created' => false,
+                    'updated' => false,
+                    'image_downloaded' => false,
+                    'price_created' => false,
+                ];
             }
 
-            $existing->save();
-            $product = $existing;
-            $wasCreated = false;
+            $payload = [
+                'brand_id' => $brandId,
+                'ean' => $ean,
+                'product' => $productName ?: 'Produkt ' . $rowNumber,
+                'model' => null,   // E6: keine Herstellernummer in model
+                'category' => $this->clean($row['category'] ?? 'Produkt') ?: 'Produkt',
+                'roof_type' => 'none',
+                'color' => $this->clean($row['color'] ?? null),
+                'price_unit' => $this->clean($row['price_unit'] ?? null),
+                'package_unit' => $this->clean($row['package_unit'] ?? null),
+                'short_description' => $description,
+                'status' => 'Published',
+            ];
+
+            if ($match->ergebnis === IdentityMatch::AUTOMATISCH) {
+                $existing = $match->product;
+                $existing->fill($payload);
+
+                $norm = $dienst->normalize($identitaet);
+
+                if (!$existing->article_no && $norm->manufacturerArticleNo) {
+                    $existing->article_no = $norm->manufacturerArticleNo;
+                }
+
+                $existing->save();
+                $product = $existing;
+                $wasCreated = false;
+            } else {
+                $product = $dienst->createFrom($identitaet, $payload);
+                $wasCreated = true;
+            }
         } else {
-            $product = Product::create(array_merge($payload, [
-                'article_no' => $articleNo,
-            ]));
-            $wasCreated = true;
+            // Alt-Verhalten, byte-gleich (Kante 15).
+            $existing = null;
+
+            if ($articleNo) {
+                $existing = Product::where('article_no', $articleNo)->first();
+            }
+
+            if (!$existing && $manufacturerNo && $productName) {
+                $existing = Product::where('model', $manufacturerNo)
+                    ->where('product', $productName)
+                    ->first();
+            }
+
+            // ONLY columns that really exist in your products migration
+            $payload = [
+                'brand_id' => $brandId,
+                'ean' => $ean,
+                'product' => $productName ?: 'Produkt ' . $rowNumber,
+                'model' => $manufacturerNo,
+                'category' => $this->clean($row['category'] ?? 'Produkt') ?: 'Produkt',
+                'roof_type' => 'none',
+                'color' => $this->clean($row['color'] ?? null),
+                'price_unit' => $this->clean($row['price_unit'] ?? null),
+                'package_unit' => $this->clean($row['package_unit'] ?? null),
+                'short_description' => $description,
+                'status' => 'Published',
+            ];
+
+            if ($existing) {
+                $existing->fill($payload);
+
+                if (!$existing->article_no && $articleNo) {
+                    $existing->article_no = $articleNo;
+                }
+
+                $existing->save();
+                $product = $existing;
+                $wasCreated = false;
+            } else {
+                $product = app(ProductIdentityService::class)->createLegacy(array_merge($payload, [
+                    'article_no' => $articleNo,
+                ]));
+                $wasCreated = true;
+            }
         }
 
         $imageDownloaded = false;
