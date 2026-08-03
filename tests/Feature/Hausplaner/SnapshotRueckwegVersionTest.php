@@ -108,6 +108,45 @@ class SnapshotRueckwegVersionTest extends TestCase
         );
     }
 
+    public function test_rueckweg_prueft_eine_AKTUELLE_szene_gegen_das_schema(): void
+    {
+        // K-N5, zweiter Teil: was die heutige Version traegt, wird geprueft — ein kaputter
+        // v3-Snapshot darf nicht zurueckgeschrieben werden.
+        [$alt, ] = $this->aufbau(740);
+        $dokId = (int) DB::table('hausplaner_documents')->where('alternative_id', $alt)->value('id');
+        $kaputt = $this->szene($alt, 3, 3);
+        $kaputt['roofs'][0]['neigungGrad'] = 95;          // ausserhalb [0,89]
+        $snapId = DB::table('hausplaner_snapshots')->insertGetId([
+            'hausplaner_document_id' => $dokId, 'revision' => 3,
+            'scene_json' => json_encode($kaputt), 'label' => 'kaputt', 'reason' => 'manuell',
+            'created_by' => null, 'created_at' => now(), 'updated_at' => now(),
+        ]);
+
+        $vorher = (array) DB::table('hausplaner_documents')->where('alternative_id', $alt)->first();
+
+        $this->actingAs($this->user())
+            ->postJson("/admin/hausplaner/objekt/{$alt}/snapshots/{$snapId}/wiederherstellen")
+            ->assertStatus(500);
+
+        $this->assertSame($vorher, (array) DB::table('hausplaner_documents')->where('alternative_id', $alt)->first(),
+            'ein abgelehnter Rueckweg darf das Dokument nicht veraendert haben');
+    }
+
+    public function test_ein_ALTER_snapshot_bleibt_wiederherstellbar(): void
+    {
+        // **Die Gegenprobe zur Prueflogik, und der Grund fuer die Versions-Bedingung.**
+        // Gemessen: ein echter v2-Snapshot erzeugt gegen das heutige Schema 2 Fehler. Wuerde der
+        // Rueckweg unbedingt pruefen, waere jede Geschichte vor der Anhebung dauerhaft tot.
+        [$alt, $snapId] = $this->aufbau(760);
+
+        $this->actingAs($this->user())
+            ->postJson("/admin/hausplaner/objekt/{$alt}/snapshots/{$snapId}/wiederherstellen")
+            ->assertOk();
+
+        $doc = (array) DB::table('hausplaner_documents')->where('alternative_id', $alt)->first();
+        $this->assertSame(2, (int) $doc['schema_version']);
+    }
+
     public function test_rueckweg_auf_gleiche_version_laesst_die_spalte_stehen(): void
     {
         // Die Umkehrung: ein v3-Snapshot in ein v3-Dokument darf nichts verstellen.

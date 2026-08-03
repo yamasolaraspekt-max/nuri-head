@@ -43,7 +43,7 @@ class SpeichereHausplanerDokumentRequest extends FormRequest
             // nicht, und die Sichtprobe des Blattes zeigte auf `studio.blade` — eine Fläche
             // OHNE Persistenz. *Eine P1-Zusage, die auf einer Fläche ohne Speichern prüft, ob
             // etwas das Speichern überlebt, kann weder grün noch rot werden.*
-            'schema_version' => ['required', 'integer', 'in:3'],
+            'schema_version' => ['required', 'integer', 'in:'.HausplanerDocument::SCHEMA_VERSION],
             'scene' => ['required', 'array'],
         ];
     }

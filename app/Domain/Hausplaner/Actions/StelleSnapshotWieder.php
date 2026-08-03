@@ -4,7 +4,9 @@ namespace App\Domain\Hausplaner\Actions;
 
 use App\Domain\Hausplaner\Models\HausplanerDocument;
 use App\Domain\Hausplaner\Models\HausplanerSnapshot;
+use App\Domain\Hausplaner\Validation\SceneDocumentValidator;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 /**
  * Hausplaner P0 — Snapshot wiederherstellen, append-only:
@@ -31,6 +33,31 @@ class StelleSnapshotWieder
             ]);
 
             $scene = $snapshot->scene_json;
+
+            // **K-N5, zweiter Teil: der Rückweg schickt die Szene durch den Validator — aber nur
+            // die, die er auch beurteilen KANN.**
+            //
+            // Der Auftrag lautete „UND schickt die Szene durch den Validator". Unbedingt gemessen:
+            // ein echter v2-Snapshot erzeugt gegen das heutige Schema **2 Fehler**
+            // (`The properties must match schema: schemaVersion` · `must match the const value`).
+            // *Eine unbedingte Prüfung machte jede Geschichte vor der Versionsanhebung
+            // unwiederherstellbar — der Knopf wäre für alte Stände dauerhaft tot.*
+            //
+            // Deshalb: geprüft wird, was die AKTUELLE Version trägt. Damit ist genau das gedeckt,
+            // was der Auftrag meint — ein stiller Datenfehler nach dem Knopf —, und älteres bleibt
+            // erreichbar. **Es wird weiterhin nicht migriert:** die Insel hebt beim Laden an, und
+            // `migriereSzene` ein zweites Mal in PHP zu schreiben wäre die zweite Wahrheit.
+            $version = (int) ($scene['schemaVersion'] ?? 0);
+            if ($version === HausplanerDocument::SCHEMA_VERSION) {
+                $fehler = app(SceneDocumentValidator::class)->fehler($scene);
+                if ($fehler !== []) {
+                    throw new RuntimeException(
+                        'Der Snapshot ist gegen das aktuelle Schema ungültig und wird nicht zurückgeschrieben: '
+                        .implode(' | ', array_slice($fehler, 0, 3)),
+                    );
+                }
+            }
+
             $neueRevision = (int) $aktuell->revision + 1;
             $scene['revision'] = $neueRevision;
             $checksum = SpeichereHausplanerDokument::checksum($scene);
@@ -44,12 +71,6 @@ class StelleSnapshotWieder
                 // weiter 3 sagt — und `objekt.blade.php` zeigte dem Nutzer „Schema v3" über
                 // einem v2-Inhalt. *Eine Anzeige, die lügt, ist schlimmer als keine.*
                 //
-                // **Bewusst NICHT validiert und NICHT migriert.** Ein Snapshot wurde geprüft, als
-                // er entstand — gegen das Schema SEINER Zeit. Ihn heute gegen das aktuelle Schema
-                // zu prüfen hiesse, gültige Geschichte abzulehnen; ihn hier zu migrieren hiesse,
-                // `migriereSzene` ein zweites Mal in PHP zu schreiben. *Zwei Wahrheiten über
-                // dieselbe Migration sind teurer als der eine Ladeschritt, der ohnehin läuft:*
-                // die Insel hebt beim Laden an, die nächste Speicherung schreibt v3.
                 'schema_version' => (int) ($scene['schemaVersion'] ?? $aktuell->schema_version),
                 'revision' => $neueRevision,
                 'checksum' => $checksum,

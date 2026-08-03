@@ -15,6 +15,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class HausplanerDocument extends Model
 {
+    /**
+     * Die aktuelle Schema-Version — **eine Stelle in PHP, mehrere Leser.**
+     *
+     * Vor Z-06-N1/K-N5 stand die 3 als Zeichenkette in der Request-Regel (`in:3`) und wurde beim
+     * Rueckweg gar nicht gekannt. *Eine Version, die an zwei Orten getippt wird, laeuft beim
+     * naechsten Anheben auseinander — und zwar still, weil beide fuer sich gruen bleiben.*
+     * Die TypeScript-Seite fuehrt dieselbe Zahl in `domain/scene.types.ts` (`SCHEMA_VERSION`);
+     * die zwei Sprachen koennen sich keine Konstante teilen, aber je Sprache genuegt eine.
+     */
+    public const SCHEMA_VERSION = 3;
+
     protected $table = 'hausplaner_documents';
 
     protected $fillable = [
