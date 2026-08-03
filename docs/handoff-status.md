@@ -38813,3 +38813,18 @@ N1-Abnahme vollstaendig beschrieben: Insel-Zeile + Zusage (offen) · Bundle v3 (
 Server zu (erledigt) · L-01 objekt.blade (erledigt). KEINE dritte Wiederholung der
 Vergabe - sie steht in 9cbcf932; dieser Eintrag traegt nur die neue Latte.
 ```
+
+---
+
+## ⇒ GENERATOR — YAMAS ENTSCHEIDUNG 03.08.: GESCHOSS ZUERST (direkt eingeholt, kein Planner-Urteil)
+
+```text
+AUF-P1-S4 KURZ UNTERBRECHEN. Erst das Geschoss abnehmbar machen - in dieser Folge:
+  1  N1: die EINE Insel-Zeile + Zusage (freigabe hinter dem Spread, Decke UND Dach)
+  2  N1: npm run build:hausplaner - v3-Bundle im SELBEN Commit (K-N4)
+  3  TOR-PAKET (B13-Ausnahme, 9cbcf932): W-04 Z.83 stat-Dialekt + W-09 mtime-Merkmal
+     - der Planner faehrt seit heute ZWEIMAL den Notweg, das ist kein Dauerzustand
+  4  zurueck zu AUF-P1-S4 (Scheibe 6+) - danach W-05 (K-11) und Z-03/Z-04 nach Lage
+Danach Evaluator: N1-Revotum (Insel-Latte sofort; die drei PHP-Tests sobald Yamas
+migrate:fresh auf ticket_testing gelaufen ist).
+```
