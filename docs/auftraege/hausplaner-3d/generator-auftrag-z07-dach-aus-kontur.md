@@ -112,15 +112,44 @@ kriterien:
   - id: K-04
     typ: behavioural
     kritikalitaet: P1
-    aussage: "Die L-Form bekommt ein L-Dach - gemessen an der Flaeche, nicht am Eindruck."
+    aussage: "Eine NICHT-rechteckige Kontur bekommt KEIN Dach - sie bekommt eine Absage, die der Nutzer liest."
     ausgefuehrt_von: generator
     pruefung:
       typ: gate
       schritte: |
-        Wie Z-06 K-02: L-Form-Kontur (6 Punkte, 68 m2) -> Dach-Grundflaeche 68 m2,
-        ausdruecklich NICHT die 80 der Bounding-Box. Rechteck als Kontrolle: dort sind
-        Kontur und Box gleich - erst der Unterschied im L-Fall bedeutet etwas (B4).
-      erwartet: "L-Fall 68, Rechteck-Kontrolle gleich, Box-Wert als ROTE Gegenprobe"
+        NEU GESCHNITTEN 03.08. 23:3x durch den Planner, nachdem der Evaluator die alte
+        Fassung als UNERFUELLBAR belegt hat. Der alte Wortlaut verlangte "die L-Form
+        bekommt ein L-Dach, 68 m2 statt 80". Das kann V1 nicht: `dachGeometrie.ts:87`
+        wirft `DachGeometrieUngueltig` fuer jede Kontur, die nicht ihrer Bounding-Box
+        entspricht - eine Schranke, die es VOR diesem Blatt schon gab und die ich beim
+        Schneiden nicht gemessen habe. Das ist mein Fehler, keine Bauschuld (F-04:
+        Machbarkeit behauptet statt gemessen).
+        (a) L-Kontur zeichnen, Dach anlegen -> KEIN Dach-Objekt entsteht. Der Nutzer
+            bekommt eine sichtbare, lesbare Absage mit Grund ("V1: nur rechteckige
+            Grundrisse"). Gemessen an der Szene: roofs-Anzahl UNVERAENDERT.
+        (b) Rechteck-Kontur zeichnen -> Dach entsteht und folgt der KONTUR, nicht der
+            Bounding-Box aller Waende. DAS ist der gelieferte Wert dieses Blattes.
+        (c) B10: bei (a) wird NICHTS geschrieben - kein Objekt, kein Status, und ganz
+            besonders kein 'bestaetigt'. Ein Status auf einem Bauteil, das nicht
+            existiert, ist die schaerfste Form des Herkunftsverlusts.
+      erwartet: "(a) roofs unveraendert + sichtbare Absage · (b) Dach folgt der Kontur · (c) kein Schreibvorgang bei (a)"
+
+  - id: K-04b
+    typ: behavioural
+    kritikalitaet: P1
+    aussage: "Der Faenger im Renderer schweigt nicht mehr - ein Bestandsdach, das die Schranke wirft, wird SICHTBAR gemeldet."
+    ausgefuehrt_von: generator
+    pruefung:
+      typ: gate
+      schritte: |
+        Der Evaluator hat die Ironie gemessen und sie gehoert in den Schnitt:
+        `dachGeometrie.ts:87` sagt woertlich "sonst kein stilles Falschdach" - und
+        `szene.ts:499/:545` fangen den Wurf mit `continue` bzw. `return`. Der Wurf
+        verhindert ein stilles FALSCHES Dach, der Faenger macht daraus ein stilles
+        FEHLENDES. Die Schranke funktioniert, sie wird nur nicht gehoert.
+        Ein v2-Bestandsdokument kann ein solches Dach heute schon tragen (die Absage
+        aus K-04 wirkt erst beim ANLEGEN). Darum: der Faenger meldet, statt zu schlucken.
+      erwartet: "ein Dokument mit nicht-rechteckigem Dach zeigt einen lesbaren Hinweis statt einer leeren Stelle"
 
   - id: K-05
     typ: behavioural

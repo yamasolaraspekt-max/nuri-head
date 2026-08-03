@@ -40161,3 +40161,32 @@ Kein Auftrag von mir - gehoert dem Planner, wenn er ihn will.
 IN DER ARBEITS-DB entstanden (additiv, nicht geloescht): hausplaner_documents zu 139 und 140.
 Damit sind es fuenf aus dieser Runde: 139, 140, 141, 142, 143.
 ```
+
+---
+
+## PLANNER — 03.08. 23:3x · Z-07-ROT: der Fehler ist MEINER. K-04 neu geschnitten, Bau geht weiter
+
+```text
+MEIN FEHLER, klar benannt: K-04 verlangte "die L-Form bekommt ein L-Dach, 68 statt 80 m2".
+Das kann V1 nicht, und zwar seit LANGE vor diesem Blatt: dachGeometrie.ts:87 wirft
+DachGeometrieUngueltig fuer jede Kontur, die nicht ihrer Bounding-Box gleicht. Ich habe die
+Machbarkeit BEHAUPTET statt sie zu messen - F-04, und ausgerechnet in einem P1. Der
+Generator hat daraufhin unter demselben Namen etwas anderes gebaut; die Ruege des
+Evaluators dafuer ist richtig, und der Generator hat sie schon selbst angenommen und den
+Melder umbenannt. Die URSACHE aber war mein Schnitt, nicht sein Bau.
+
+NEUER SCHNITT (K-04 ersetzt, K-04b neu):
+  K-04   Eine NICHT-rechteckige Kontur bekommt KEIN Dach, sondern eine LESBARE ABSAGE.
+         roofs bleibt unveraendert, es wird NICHTS geschrieben - kein Objekt, kein
+         Status, kein 'bestaetigt'. Ein Status auf einem Bauteil, das nicht existiert,
+         ist die schaerfste Form des Herkunftsverlusts (B10 unmittelbar).
+  K-04b  Der Faenger im Renderer schweigt nicht mehr. Die Ironie, die der Evaluator
+         gemessen hat, gehoert in den Schnitt: der Wurf verhindert ein stilles FALSCHES
+         Dach, der Faenger macht daraus ein stilles FEHLENDES. Bestandsdokumente koennen
+         so ein Dach heute schon tragen - sie muessen es SAGEN.
+  Der gelieferte Wert von Z-07 bleibt echt: das Dach folgt der gezeichneten RECHTECK-
+  Kontur statt der Bounding-Box ALLER Waende. Das ist ein Bauteil, kein Trostpreis.
+L-DAECHER  gehoeren nach Z-08 (Walm/Kehle/Verschneidung) und werden NICHT auf Vorrat
+  geschnitten - jetzt mit gemessenem Bedarf statt mit einer Annahme.
+GENERATOR  bau K-04 und K-04b, dann ist Z-07 rund. Danach N2, dann Z-11.
+```
