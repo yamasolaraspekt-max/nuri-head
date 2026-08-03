@@ -6,7 +6,7 @@
 auftrag:
   id: AUF-38-P4+P5
   strang: hausplaner-3d
-  status: gebaut   # fba3083f, 01.08. 21:31 - 118 Stellen, NULL offene. Wartet auf das Votum des Evaluators
+  status: abgenommen   # Votum GRUEN vom Evaluator (01.08. 21:3x, fba3083f, Ledger Z. 33409). Eingetragen vom Planner 03.08. - das Votum stand seit VORGESTERN, mein Eintrag fehlte.
 ```
 
 ## Warum P4 und P5 in EINEM Blatt

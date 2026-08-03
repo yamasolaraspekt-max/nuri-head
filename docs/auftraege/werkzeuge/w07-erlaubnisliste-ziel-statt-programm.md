@@ -6,7 +6,7 @@
 auftrag:
   id: W-07
   strang: werkzeuge
-  status: bereit   # B8 ERFUELLT und die SPERRENDE Vorbedingung ist weg: gegengelesen vom Evaluator 02.08. (8b3868b1, TRAEGT MIT SPERRENDER AUFLAGE), Auflage eingearbeitet in f4f0c89d, Delta-Gegenlesung sauber in 03ec8463. Die Basis steht seit ef3507ea - nachgemessen ZielErlaubt=3 an HEAD (war 0). Eingetragen vom Planner 02.08. 15:1x.
+  status: abgenommen   # Votum GRUEN vom Evaluator in 60f6344b (03.08.) - zwoelf Faelle, eigene Mutationsprobe. B13-SCHLUSSSTRICH: der Werkzeugstrang ruht ab hier. Eingetragen vom Planner.
   gegengelesen_von: evaluator
   gegengelesen_am: 2026-08-02
   vorbedingung: "ERFUELLT 02.08. 14:2x in ef3507ea. Der Stand des Generators (skriptZielErlaubt plus die Zusage dazu) lag ungecommittet im Baum und sperrte dieses Blatt; vom Planner GESICHERT, nicht abgenommen, nach gemessener Suite 82 pass / 0 fail. Nachgemessen: `git show HEAD:scripts/auftrag-pruefen.mjs | grep -o ZielErlaubt | wc -l` -> 3. Der Ausgangswert 3 in K-02 gilt jetzt an HEAD, und die Basis dieses Blattes ist wieder HEAD. Der Pruefbefehl im gegenbeweis von K-02 bleibt stehen - er ist ab jetzt eine Zusage, keine Warnung."
@@ -183,14 +183,17 @@ kriterien:
   - id: K-03
     typ: absence
     kritikalitaet: P1
-    aussage: "node steht nicht mehr als blanker Name auf der Liste."
+    aussage: "node steht nicht mehr als blanker Name in der ERLAUBNISLISTE."
     pruefung:
-      befehl: "grep -o \"'node'\" scripts/auftrag-pruefen.mjs | wc -l"
+      befehl: "sed -n '/^export const ALLOWLIST/,/^];/p' scripts/auftrag-pruefen.mjs | grep -o \"'node'\" | wc -l"
       erwartet: "0"
-    ausgangswert: "1"
+    ausgangswert: "1 vor dem Bau. KORREKTUR 03.08. 01:4x: das erste Muster war `grep -o \"'node'\"` ueber die GANZE Datei - es trifft auch `SKRIPT_PROGRAMME = ['bash', 'sh', 'node']` in Zeile 246, also genau die neue Zielpruefungs-Liste, die dieses Blatt EINBAUT. Nach dem Bau haette es 1 gemessen und das Blatt faelschlich als unfertig gemeldet. Gemessen wird jetzt NUR der ALLOWLIST-Block; Partner in demselben Block: 'grep' -> 1, die Messung ist nicht leer."
     gegenbeweis: |
-      Bleibt der blanke Eintrag stehen, greift der neue Zielzweig nie - `ALLOWLIST.includes(eins)`
-      trifft vorher. Zwei Wege in dieselbe Entscheidung, und der aeltere gewinnt.
+      Bleibt der blanke Eintrag in der ERLAUBNISLISTE stehen, greift der neue Zielzweig nie -
+      `ALLOWLIST.includes(eins)` trifft vorher. Zwei Wege in dieselbe Entscheidung, und der
+      aeltere gewinnt.
+      Der Eintrag in `SKRIPT_PROGRAMME` ist das GEGENTEIL und muss dableiben: dort steht `node`
+      NEBEN `bash` und `sh`, weil es ab jetzt ueber sein ZIEL geprueft wird.
 
   - id: K-04
     typ: behavioural

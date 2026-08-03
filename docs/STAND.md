@@ -34,11 +34,11 @@ gelöst — das Votum auf Z-05 hat Z-06 entsperrt.*
 
 | Rolle | Was liegt bereit |
 |---|---|
-| **Generator** | **NUR NOCH HAUSPLANER (B13).** Z-03+Z-04 `aktiv` zu Ende · dann **Z-06-N1**, sobald der Prüfer es freigibt · dann N2 · N3 · dann das Dach. **W-01 ist der LETZTE Werkzeug-Bau** — danach ruht der Strang |
-| **Evaluator** | **Z-06 ZUERST — die Zwischendecke, sie sperrt alles Weitere.** Dann die sechs gebauten Werkzeug-Blätter abnehmen (W-06 · W-06-N1 · W-07 · W-08 · W-09 · S-14) — *das ist der Schlussstrich unter den Werkzeugstrang.* Dann Z-10 · AUF-38-P4+P5 |
-| **Prüfer** | **Z-06-N1 ZUERST — es sperrt N2, N3 und über B10 das ganze Dach.** Dann Z-11 · W-05 (beide Hausplaner). **S-13 und S-15 NICHT gegenlesen** — sie ruhen mit dem Strang |
-| **Planner** | **Z-07/Z-08 schneiden, sobald Z-06-N1 gebaut ist.** Sonst nichts Neues: kein W-/S-Blatt mehr (B13). Werkzeugbefunde werden notiert, nicht geschnitten |
-| **Yama** | **NICHTS.** Tor 2 bleibt seins, ist aber Zuständigkeit und kein Posten |
+| **Generator** | **W-04 bauen (`bereit`, die B13-Ausnahme — jeder dritte Commit läuft am Tor vorbei)** · Z-03+Z-04 `aktiv` zu Ende · dann **Z-06-N1**, sobald der Evaluator es gegengelesen hat |
+| **Evaluator** | **GEGENLESEN (B8, umverteilt): Z-06-N1 → dann Z-11 · W-05.** N1 ist der Schlüssel — es sperrt N2, N3 und über B10 das Dach. Alle Voten sind eingetragen, nichts wartet mehr auf dich |
+| **Prüfer** | **ABWESEND, gemessen: null Voten im Ledger, kein Commit seit 01.08. 23:00.** Seine drei Blätter sind zum Evaluator umverteilt. PRUEFER-BEFUNDE.md liegt verändert und unverbucht im Baum — NICHT anfassen, Urheber unklar. Meldet er sich, gilt d1cecdcf wieder |
+| **Planner** | **Z-07/Z-08 schneiden, sobald Z-06-N1 gebaut ist.** Sonst nichts Neues (B13) |
+| **Yama** | **NICHTS. Die ZWISCHENDECKE ist abgenommen** (Z-06, Votum 20bbfcc2) — dein Posten seit Tagen, jetzt fertig |
 
 **Gebaut, wartet auf Votum:** Z-10 · W-02 · AUF-38-P4+P5 — **alle drei vom Planner vorgemessen,
 14 von 14 messbaren Stellen treffen ihr `erwartet`** (`f45c28a5`).

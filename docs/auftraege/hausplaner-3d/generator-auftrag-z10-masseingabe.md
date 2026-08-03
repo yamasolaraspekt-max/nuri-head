@@ -6,7 +6,7 @@
 auftrag:
   id: Z-10
   strang: hausplaner-3d
-  status: gebaut   # c9af2243, 02.08. 09:20 - Suite 1641/1641, tsc 0, Inline-Stellen unveraendert. Wartet auf das Votum des Evaluators
+  status: abgenommen   # Votum GRUEN vom Evaluator (02.08. 10:0x, Ende-zu-Ende, Ledger Z. 34230). Eingetragen vom Planner 03.08. - das Votum stand seit gestern, mein Eintrag fehlte.
 ```
 
 ## Warum das jetzt geht und warum es zählt

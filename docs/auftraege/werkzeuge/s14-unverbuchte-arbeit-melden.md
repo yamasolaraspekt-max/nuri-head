@@ -6,7 +6,7 @@
 auftrag:
   id: S-14
   strang: werkzeuge
-  status: bereit   # B8 ERFUELLT: gegengelesen vom Evaluator 03.08., Befund TRAEGT ohne Auflage. Sein kleiner Punkt ist erledigt: K-05-Ausgangswert 91 gilt jetzt AN HEAD - nachgemessen 03.08. 00:5x mit `node --test scripts/__tests__/*.mjs` -> 91 pass (die W-06/W-07-Commits sind seit 00:44 drin). Eingetragen vom Planner.
+  status: abgenommen   # Votum GRUEN vom Evaluator in a2e8a4ca (03.08.) - schweigt sauber, meldet 31h. B13-SCHLUSSSTRICH: der Werkzeugstrang ruht ab hier. Eingetragen vom Planner.
   gegengelesen_von: evaluator   # Werkzeug-Blatt -> Evaluator (B8/d1cecdcf; Kopfkommentar sagt noch Pruefer)
   gegengelesen_am: 2026-08-03
   befund: >

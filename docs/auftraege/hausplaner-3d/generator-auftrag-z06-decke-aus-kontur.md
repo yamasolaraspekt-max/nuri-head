@@ -7,7 +7,7 @@
 auftrag:
   id: Z-06
   strang: hausplaner-3d
-  status: gebaut   # UMGESETZT vom Generator 02.08. 13:4x. K-01 polygon:gebaeudeUmriss() 2->1 (nur noch das Dach, Z-08 unangetastet) - K-02 decke.test.ts 7->11, L-Form 68 m2 und ausdruecklich NICHT 80 - K-04 Insel 1649 pass/0 fail - K-05 validation.ts-Diff 0 - K-06 Mutationsprobe 8/8 blind -> 0/8 - L-01 bei 1440 und 1024 Kontrolle UND Wirkung gruen, bei 375 greift die Mindestbreiten-Sperre (richtiges Ergebnis). Wartet auf das Votum des Evaluators. Eingetragen vom Planner.
+  status: abgenommen   # Votum GRUEN vom Evaluator in 20bbfcc2 (03.08., Mutation an der Entscheidung gefuehrt). DIE ZWISCHENDECKE STEHT. Eingetragen vom Planner.
 ```
 
 ## Warum das der Posten ist, auf den Yama wartet

@@ -6,10 +6,10 @@
 auftrag:
   id: Z-06-N1
   strang: hausplaner-3d
-  status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  status: entwurf   # B8 - Planner-Blatt. GEGENLESER UMVERTEILT 03.08. 08:3x: Pruefer -> EVALUATOR. Gemessen, nicht geurteilt: der Pruefer hat NULL Voten im ganzen Ledger und seit 01.08. 23:00 keinen Commit; dieses Blatt sperrt N2, N3 und ueber B10 das Dach - die ganze Kette zum Geschoss. B8 verlangt eine ANDERE Rolle als den Schreiber, keine bestimmte; der Evaluator hat mit neun Voten heute frueh die Kapazitaet belegt. Die d1cecdcf-Zuordnung (Planner-Blatt -> Pruefer) gilt wieder, sobald der Pruefer ein Lebenszeichen setzt.
+  gegengelesen_von: pruefer
+  gegengelesen_am: "03.08.2026"
+  befund: "BAUBAR. Alle fuenf Ausgangswerte selbst nachgemessen (0/0/0/0), Boden bestaetigt, K-09-Basis 1649 pass/0 fail heute gefahren. ZWEI EINWAENDE, beide am Blatt und nicht am Bau: (1) P2 - der population_command misst HEUTE SCHON 138, weil `herkunft` im Bundle bereits zweimal vergeben ist (ToolHerkunft, FlaechenHerkunft, 118 Feldtreffer); er kann nie zeigen, ob die Scheibe wirkt, und der Name bekaeme eine dritte Bedeutung. (2) P3 - 'z.strict() ueberall' hat 0 Treffer im Wortlaut (26 als '.strict()'). Einwand 1 ist vor dem Bau zu schliessen, Einwand 2 ist eine Formulierung. Status stellt der Planner (F-08b)."
   fachentscheidung: "Yama, 02.08. — B10. Wortlaut: 'Automatisch erzeugte oder geschaetzte Geometrie darf ihren Unsicherheits- und Herkunftsstatus durch Speichern, Laden, Export oder Sitzungswechsel nicht verlieren.' Nicht kosmetisch, sondern ein Persistenz- und Vertrauensproblem."
 ```
 
@@ -338,3 +338,74 @@ alles grün und B10 wirkungslos** — und niemand sieht es, weil der Bestand ja 
 
 **Z-06-N2** (sichtbare Kennzeichnung nach dem Laden) · **Z-06-N3** (Bestätigungs-Knopf, Rücksetzen
 bei Änderung) · **dann erst Z-07/Z-08** (Dach).
+
+---
+
+## Gegenlesung (Prüfer, 03.08.2026) — B8
+
+**Ergebnis: BAUBAR.** Zwei Einwände, beide am Blatt und nicht am Bau. Der Kern des Blattes — zwei
+Felder statt einem, die Sperre als Funktion, die Migration setzt Bestand NICHT auf `bestaetigt` —
+trägt und ist gut begründet. **Ich habe nichts geändert außer diesem Abschnitt und dem `befund`-Feld.**
+
+### Selbst nachgemessen (HEAD `8d9036a0`, 03.08. 08:1x) — nicht geglaubt
+
+```text
+grep -o 'herkunft' …/domain/validation.ts | wc -l                 -> 0     Blatt: 0    ✓
+grep -o 'freigabe' …/domain/validation.ts | wc -l                 -> 0     Blatt: 0    ✓
+grep -o 'schemaVersion: z.literal(3)' … | wc -l                   -> 0     Blatt: 0    ✓
+   heute vorhanden: schemaVersion: z.literal(2)                            Blatt: 2    ✓
+ls …/geometry/ | grep freigabe | wc -l                            -> 0     Blatt: 0    ✓
+wc -l …/domain/validation.ts                                      -> 341   Blatt: 341  ✓
+grep -c migriereSzene / z.enum                                    -> 2 / 10            ✓
+grep -rn "polygon: gebaeudeUmriss()" …                            -> HausplanerApp.tsx:945  ✓
+grep -rn 'ceiling' …/geometry/                                    -> 0 Treffer         ✓
+   (die einzige Fundstelle bei -i ist wandFlaeche.ts:178, ein Kommentar,
+    der CeilingNode ausdruecklich AUSSCHLIESST — die Aussage des Blattes stimmt)
+npm run test:hausplaner                                           -> 1649 pass / 0 fail
+   K-09 nennt 1649 als Ausgangswert. Heute gefahren, er stimmt. (Im Ledger stehen
+    daneben 5x die Zahl 1641 — die aeltere Basis. Das Blatt hat die richtige genommen.)
+```
+
+### Einwand 1 · **P2 · der `population_command` kann nicht zeigen, ob die Scheibe wirkt**
+
+```text
+befehl: grep -ro 'herkunft' resources/planner/hausplaner/ | wc -l
+   -> 138        (das Blatt fuehrt ihn als Populationsmass fuer eine Sache, die es noch nicht gibt)
+
+wo:  112  app/tools/toolPresentation.ts       export type ToolHerkunft = 'registry' | 'katalog'
+       5  app/HausplanerStudio.tsx            herkunft: FlaechenHerkunft = 'navi'
+       3  app/dashboard/fachFlaechen.ts  ·  3  app/FachFlaeche.tsx  ·  Tests, CSS …
+   als Feld/Schluessel (nicht Prosa): 118
+```
+
+**`herkunft` ist im Bundle bereits zweimal vergeben** — Werkzeug-Herkunft und Flächen-Herkunft. Das
+Blatt gibt demselben Wort eine **dritte** Bedeutung, diesmal in der Domäne. Zwei Folgen:
+
+1. **Der Befehl misst 138 vorher und ~150 nachher.** Er kann nicht zeigen, ob die Scheibe wirkt.
+   Das ist dieselbe Klasse wie F-09/F-11, für die `scripts/zaehle.mjs` gebaut wurde: **auf die
+   Zieldatei einschränken**, sonst zählt man das Haus statt das Zimmer. Vorschlag:
+   `grep -o 'herkunft' resources/planner/hausplaner/domain/validation.ts | wc -l` — derselbe
+   Befehl, den K-01 schon fährt, und er steht heute belegbar auf 0.
+2. **Ein Name für drei Sachen** (L3). Ob das hinnehmbar ist — verschiedene Schichten, `app/` gegen
+   `domain/` — oder ob das Feld `geometrieHerkunft` heißen soll, **entscheidet der Planner.** Ich
+   melde die Kollision, ich löse sie nicht.
+
+### Einwand 2 · **P3 · „`z.strict()` überall" hat null Treffer**
+
+```text
+grep -c 'z.strict()'  …/domain/validation.ts   -> 0
+grep -c '\.strict()'  …/domain/validation.ts   -> 26
+```
+
+In der Sache richtig, im Wortlaut falsch. Wer die Zeile nachfährt, bekommt 0 und hält den ganzen
+Absatz für unbelegt. Eine Formulierung, kein Baumangel — aber S-13 gilt auch für Begründungen.
+
+### Was ich ausdrücklich NICHT beanstande
+
+**K-06 zweite Zeile** („Bestand bekommt `zu_pruefen`, nicht `bestaetigt`") und **K-05 rote
+Gegenprobe** sind die zwei Zusagen, an denen dieses Blatt hängt, und beide sind scharf formuliert.
+Die Kantenliste nennt neun Kanten mit Zusage und zwei ohne — **mit Grund**, was zulässig ist. Der
+Rückweg ist ehrlich benannt („sobald eine Datei als v3 abgelegt ist, ist der Rückweg eine
+Rückmigration"). **Das ist die Sorte Blatt, die man bauen kann.**
+
+**Ballbesitz: Planner** — Einwand 1 schließen (eine Zeile), Einwand 2 umformulieren, Status stellen.

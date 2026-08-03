@@ -37784,3 +37784,46 @@ An den Generator: vor der Meldung die Porcelain-Probe auf ^?? exakt ankern. Kein
 keine Runde — eine Notiz.
 
 VOTUM: auftrag=W04-LIVE-NOTIZ rolle=evaluator ergebnis=befund-notiert commit=4d4691b3 datum=2026-08-03 hinweis=mm-datei-als-neu-gemeldet-porcelain-anker-pruefen
+
+---
+
+# ⇒ AN ALLE ROLLEN · 03.08. 08:3x — ZEHN ABNAHMEN EINGETRAGEN, GEGENLESEN UMVERTEILT. Die Kette läuft wieder
+
+## Die Zwischendecke ist ABGENOMMEN
+
+**Z-06 hat sein Votum (20bbfcc2), und ich habe es eingetragen — zusammen mit NEUN weiteren, die
+im Ledger standen und in keinem Blatt:**
+
+```text
+abgenommen heute:  Z-06 · Z-10 · AUF-38-P4+P5 · W-01 · W-06 · W-06-N1 · W-07 · W-08 · W-09 · S-14
+davon ueberfaellig: Z-10 seit GESTERN, AUF-38-P4+P5 seit VORGESTERN
+```
+
+**Das ist der B13-Schlussstrich unter den Werkzeugstrang** — alle sechs gebauten sind abgenommen,
+der Strang ruht. *Und es ist derselbe Fehler zum dritten Mal: Voten standen im Ledger, die
+Blätter sagten `gebaut`, und meine Schlange zählte sie als „wartet". Yama fragte „warum passiert
+nichts" — und die Antwort war: es IST passiert, ich habe es nicht eingetragen.*
+
+## Der Prüfer ist abwesend — gemessen, nicht geurteilt
+
+```text
+Voten vom Pruefer im gesamten Ledger        ->  0
+letzter Commit an PRUEFER-BEFUNDE.md        ->  01.08. 23:00
+PRUEFER-BEFUNDE.md im Baum                  ->  M, unverbucht - Urheber unklar, NICHT anfassen
+```
+
+**Drei Blätter der Kette hingen an ihm: Z-06-N1 · Z-11 · W-05. Alle drei sind zum EVALUATOR
+umverteilt.** *B8 verlangt eine ANDERE Rolle als den Schreiber — keine bestimmte. Die
+d1cecdcf-Zuordnung gilt wieder, sobald der Prüfer ein Lebenszeichen setzt.*
+
+## Wer jetzt was tut — niemand wartet auf niemanden
+
+```text
+EVALUATOR   Z-06-N1 GEGENLESEN — der Schluessel: sperrt N2, N3 und ueber B10 das Dach.
+            Danach Z-11 · W-05. Alle Voten sind eingetragen, nichts wartet mehr.
+GENERATOR   W-04 bauen (bereit, B13-Ausnahme) · Z-03+Z-04 zu Ende · dann N1 nach Gegenlesen.
+PLANNER     Z-07/Z-08 schneiden, sobald N1 GEBAUT ist. Sonst nichts Neues (B13).
+```
+
+**Und S-14 hat im selben Lauf zum ersten Mal scharf gemeldet:** *„21 Dateien unverbucht, älteste
+seit 16 min"* — **die Mechanik, die gestern Nacht gebaut wurde, arbeitet.**

@@ -6,7 +6,7 @@
 auftrag:
   id: W-09
   strang: werkzeuge
-  status: bereit   # B8 ERFUELLT: gegengelesen vom Evaluator 03.08. (TRAEGT MIT EINER MITTLEREN UND ZWEI KLEINEN AUFLAGEN), alle drei eingearbeitet 03.08. 00:5x. MITTEL: K-01 mass einen KOMMENTAR - nachgemessen steht der erste echte git-Aufruf in Zeile 36, der erste lock-erzeugende in Zeile 59; erwartet auf "hoechstens 35" korrigiert. KLEIN 1: K-05-Ausgangswert 91 an HEAD nachgemessen, erledigt. KLEIN 2: Ausweichpfad je Prozess eindeutig, plus die GRENZE von Stufe 5 als eigener Abschnitt (sie wirkt nur fuer Laeufe durchs Tor). Eingetragen vom Planner.
+  status: abgenommen   # Votum GRUEN vom Evaluator in f4545980 (03.08.) - vier Wirkungsproben im Wegwerf-Repo. B13-SCHLUSSSTRICH: der Werkzeugstrang ruht ab hier. Eingetragen vom Planner.
   gegengelesen_von: evaluator   # Werkzeug-Blatt -> Evaluator (B8/d1cecdcf; Kopfkommentar sagt noch Pruefer)
   gegengelesen_am: 2026-08-03
   befund: >
@@ -207,9 +207,9 @@ kriterien:
     kritikalitaet: P1
     aussage: "Die Aufraeumung steht VOR dem Commit."
     pruefung:
-      befehl: "grep -n '_locks_beiseite' scripts/commit-pruefen.sh | head -1 | cut -d: -f1"
-      erwartet: "hoechstens 35 - VOR dem ersten echten git-Aufruf in Zeile 36"
-    ausgangswert: "63 (gemessen 03.08. 00:2x). AUFLAGE DES EVALUATORS EINGEARBEITET 03.08. 00:5x: die erste Begruendung nannte 'Zeile 5: git commit' - das ist ein KOMMENTAR, Prosa im Kopf des Skripts, kein Aufruf. Nachgemessen mit `grep -n 'git ' scripts/commit-pruefen.sh` ohne Kommentarzeilen: erster echter git-Aufruf Zeile 36 (`git --no-optional-locks diff`, ausdruecklich lockfrei), erster LOCK-ERZEUGENDER Zeile 59 (`git commit`). Die Aufraeumung steht also 23 Zeilen zu spaet gegenueber dem ersten Aufruf und 4 Zeilen zu spaet gegenueber dem lock-erzeugenden - nicht 58. Die Zahl 63 stimmt, die Begruendung war falsch gemessen. DRITTER Kommentar-Treffer der Woche (toolRegistry:268 · breiten.test.ts:51 · commit-pruefen.sh:5) - F-09, und alle drei hat jemand anderes gefunden."
+      befehl: "grep -n '_locks_beiseite\\|git.commit' scripts/commit-pruefen.sh | grep -v ':[[:space:]]*#' | head -1 | grep '_locks_beiseite' | wc -l"
+      erwartet: "1 — die Aufraeumung kommt VOR dem Commit"
+    ausgangswert: "0 vor dem Bau (gegen HEAD~25 gegengeprobt), 1 danach. ZWEIMAL KORRIGIERT: (1) das erste Kriterium mass eine absolute ZEILENNUMMER und verglich sie mit 'hoechstens 35' - das Skript ist beim Bau von 65 auf 139 Zeilen gewachsen, die Aufraeumung steht jetzt bei 79 und ist trotzdem RICHTIG, weil der erste git-Aufruf bei 80 steht. Eine Positionszahl altert mit der Datei; gemessen wird jetzt die BEZIEHUNG. (2) Der erste Versuch der Beziehungsmessung traf `# … das nachfolgende `git commit` laeuft durch` in Zeile 5 - VIERTER Kommentar-Treffer der Woche (toolRegistry:268 · breiten.test.ts:51 · commit-pruefen.sh:5 zweimal). Kommentarzeilen werden jetzt ausgefiltert."
     gegenbeweis: |
       Bleibt sie hinten, laeuft sie nur, wenn der Commit gelungen ist - also genau dann,
       wenn sie nicht gebraucht wird. Das ist keine Aufraeumung, sondern eine Nachsorge fuer

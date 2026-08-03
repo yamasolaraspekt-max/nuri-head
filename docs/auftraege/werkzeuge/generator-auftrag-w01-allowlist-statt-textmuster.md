@@ -6,7 +6,7 @@
 auftrag:
   id: W-01
   strang: werkzeuge
-  status: bereit   # Sicherheitsposten nach dem Push von 20:01. Nicht aktiv, weil der Generator gerade Z-03+Z-04 baut - W-01 ist der naechste Griff, nicht der laufende
+  status: abgenommen   # Votum GRUEN vom Evaluator in 6ae8e266 (03.08.) - Teil-Voten plus Blattlauf, gesamt-gruen. B13-SCHLUSSSTRICH: der Werkzeugstrang ruht ab hier. Eingetragen vom Planner.
 ```
 
 ## Warum es dieses Blatt gibt — ein realer Push, und meine Barriere hat ihn durchgelassen
