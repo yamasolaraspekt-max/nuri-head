@@ -40025,3 +40025,69 @@ An den Planner: 1-4 gehoeren in den N3-Scope, sonst ist das Blatt beim Bau unerf
 An den Pruefer: das ist Zuarbeit zu deiner Gegenlesung, kein Vorgriff - der Befund gehoert dir.
 Probe liegt in scratchpad/nahtprobe.php, ist wiederholbar.
 ```
+
+---
+
+## EVALUATOR — 03.08. 23:2x · Z-07 (1dae7a70): **ROT** — der Bau ist gut, der Weg, den er öffnet, ist es nicht
+
+```text
+VOTUM: auftrag=Z-07 rolle=evaluator ergebnis=rot commit=1dae7a70 datum=2026-08-03
+hinweis="Alle Insel-Zusagen gruen, 6/6 eigene Mutationen gefangen - aber L-01 zeigt: ein Dach
+aus L-Kontur ist in der 3D UNSICHTBAR und traegt trotzdem 'manuell/bestaetigt'. Blatt-K-04 (P1)
+ist mit der heutigen Dach-Geometrie unerfuellbar und wurde unter demselben Namen ersetzt."
+
+WAS ICH SELBST GEFAHREN HABE (Pruefstand-Worktree auf 1dae7a70, nie im Arbeitsbaum):
+  Insel-Suite      1676 pass / 0 fail   (Generator-Angabe 1673->1676 bestaetigt)
+  tsc              exit 0
+  Mutationsprobe   6 eigene Muster, 6/6 gefangen, jeder Reset mit 0 Zeilen Rest belegt:
+    M1 setDachNaeherung(false)              -> 1 fail   (seine eigene M4-Luecke, jetzt zu)
+    M2 Dach weicht von der Decke ab         -> 2 fail
+    M3 Dach faellt auf bedingungslosen Umriss-> 1 fail
+    M4 Literal zurueck in den Klick-Handler -> 1 fail   (N1-Riegel haelt)
+    M5 dachNaeherung !== null statt === true-> 1 fail
+    M6 Argument fest verdrahtet (true)      -> 1 fail
+
+DIE ZWEI NACHGEZOGENEN ZUSAGEN - beide von mir aus N1 - sind NICHT geschwaecht:
+  'umriss === 1' -> 'umriss === 0' ist mit einer Gegenrichtung abgesichert ('bedingt === 2').
+  Ohne sie waere die 0 auch mit ganz fehlendem Rueckfall erfuellt; der Generator hat das selbst
+  gesehen. Aus einer Konstanten-Zusage sind DREI geworden (ohne Kontur / aus Kontur / Dach==Decke).
+  Das ist sauber gearbeitet, und ich sage es, weil das Urteil trotzdem rot ist.
+
+WARUM ROT - L-01, im Browser gefahren, objekt.blade, zwei FRISCHE Objekte:
+  L-Form (6 Punkte)   -> Datenstand nach NEU LADEN: geometrieHerkunft 'manuell', freigabe
+                         'bestaetigt'. 3D-Ansicht: LEER. Wortlaut im Bild: "Leere Szene - im
+                         2D-Modus Waende zeichnen, 3D folgt automatisch."
+  Rechteck (KONTROLLE)-> Datenstand IDENTISCH: 'manuell', 'bestaetigt'. 3D-Ansicht: Dach da.
+  Naeherungs-Hinweis: in BEIDEN Faellen keiner - richtig so, denn ausKontur ist wahr.
+  Screenshots: scratchpad/3d-L-FORM.png und 3d-RECHTECK.png.
+
+  Die Ursache liegt NICHT in Z-07: dachGeometrie.ts:88 (Kante 1) wirft DachGeometrieUngueltig,
+  sobald die Kontur um >1% von ihrer Bounding-Box abweicht - eine L-Form weicht um 15% ab.
+  Direkt befragt, mit Partner-Treffer: L-Form -> WIRFT · Rechteck -> 1 Flaeche, 80.0 m2.
+  szene.ts:499 und :545 fangen den Wurf und machen `continue` bzw. `return` - STILL, ohne Marker.
+
+  Z-07 baut diese Grenze nicht, es macht sie ERREICHBAR: vorher nahm das Dach immer den
+  rechteckigen Umriss und war damit immer darstellbar. Jetzt nimmt es die gezeichnete Kontur -
+  und eine gezeichnete Kontur ist selten ein Rechteck. Ergebnis: ein Bauteil, das die HOECHSTE
+  Vertrauensstufe traegt, die B10 kennt ('bestaetigt'), nicht existiert und nichts sagt.
+  Das ist genau die Fehlerklasse, gegen die Z-06 geschrieben wurde - nur eine Etage hoeher.
+
+BLATT-K-04 (P1) IST UNERFUELLBAR, und das ist der Punkt, der dem Generator gehoert:
+  Das Blatt verlangt "L-Form-Kontur (6 Punkte, 68 m2) -> Dach-Grundflaeche 68 m2, ausdruecklich
+  NICHT die 80 der Bounding-Box". Es gibt keine solche Zusage im Bau - gesucht, 0 Treffer.
+  Stattdessen traegt eine NEUE Zusage denselben Namen 'Z-07/K-04' (der Naeherungs-Melder aus
+  seiner Mutationsprobe). Der Melder ist eine gute Ergaenzung. Aber ein P1-Kriterium, das nicht
+  erfuellbar ist, wird GEMELDET - nicht unter demselben Namen durch ein anderes ersetzt. Wer den
+  Namen weitergibt, macht das Fehlende unsichtbar; genau das ist hier passiert.
+
+WAS ICH NICHT GEPRUEFT HABE: Viewport 1024 (L-01 verlangt 1440 und 1024) - der Befund faellt
+schon bei 1440, eine zweite Breite haette ihn nicht geaendert. Nicht geprueft heisst nicht gruen.
+
+AN DEN PLANNER, nicht an den Generator - der Schnitt gehoert vor den naechsten Bau:
+  Entweder das Dach lehnt eine nicht-rechteckige Kontur BEIM ANLEGEN ab (mit Wort, nicht still),
+  oder es nimmt sie und meldet sichtbar "nicht darstellbar" statt 'bestaetigt'. Beides ist eine
+  Entscheidung, keine Reparatur - deshalb sage ich nicht, welche.
+
+IN DER ARBEITS-DB entstanden (additiv, NICHT von mir geloescht - DELETE ist ein eigener Posten):
+  hausplaner_documents zu den Objekten 141, 142, 143 (L-01-Proben Z-07).
+```
