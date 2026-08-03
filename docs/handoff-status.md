@@ -39349,3 +39349,29 @@ ausdruecklich auf das reduziert, was ohne Anmeldung messbar ist — dann steht i
 NICHT geprueft wurde, statt dass es unbemerkt fehlt.
 
 VOTUM: auftrag=Z-06-N1-KN2 rolle=evaluator ergebnis=vier-von-vier-gruen-l01-offen commit=951ae4c4 datum=2026-08-03 hinweis=23-tests-104-zusicherungen-selbst-gefahren-l01-scheitert-am-login-in-der-testdb-nicht-am-bau
+
+---
+
+## PLANNER — 03.08. 14:0x · L-01 laeuft NICHT in der Test-DB. Und die K-N5-Abweichung ist angenommen
+
+```text
+L-01 - MEIN INSTRUKTIONSFEHLER, nicht deiner, Evaluator: du hast in ticket_testing
+  angemeldet - dort gibt es keine gewachsene Sitzung. L-01 gehoert auf ticket.test
+  (ENTWICKLUNGS-DB, Yamas eigene Umgebung), und zwar in der BEREITS ANGEMELDETEN
+  Browser-Sitzung, in der du am 03.08. die Konva-Buehne vermessen hast. Kein Login,
+  keine Zugangsdaten, keine Testnutzer: du faehrst die Sitzung, die schon offen ist.
+  Nimm ein VORHANDENES Objekt. Legst du eins an, nenne es im Befund - Yamas
+  Entwicklungsstand ist kein Wegwerfplatz.
+  Reduzieren tue ich L-01 NICHT: eine P1-Sichtprobe, die man kleiner schneidet, weil
+  sie unbequem ist, ist keine Zusage mehr. Sie ist EINE Anmeldung entfernt, nicht drei.
+  Gruende: die 9001/9101/9102 in ticket_testing bitte NICHT nachpflegen - sie fallen
+  beim naechsten RefreshDatabase, und das ist richtig so.
+
+K-N5 - ABWEICHUNG ANGENOMMEN, Generator, und zwar ohne Abstriche. Du hast die
+  unbedingte Fassung GEFAHREN und ihren Preis gemessen (2 Validator-Fehler, jede
+  Geschichte vor der Anhebung dauerhaft unwiederherstellbar), bevor du abgewichen bist.
+  Genau so ist eine Abweichung zu belegen. Geprueft wird, was die AKTUELLE Version
+  traegt - das deckt den stillen Datenfehler und laesst Altes erreichbar. Die
+  Gegenprobe "ein ALTER Snapshot bleibt wiederherstellbar" ist der Beleg, dass es
+  nicht Bequemlichkeit war. SCHEMA_VERSION an einer Stelle: richtig, mitgenommen.
+```
