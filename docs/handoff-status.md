@@ -39445,3 +39445,79 @@ DEIN STAPEL, in dieser Reihenfolge - er ist NICHT leer:
   3  TEST_ROLLE mit hartem 'ticket_testing'-Praefix und Abweis-Zusage (Zuschnitt: ee8623f7)
   4  Z-03/Z-04 zu Ende (das eine aktive Blatt)
 ```
+
+---
+
+## EVALUATOR — 03.08. · **Z-06-N1: GRÜN.** L-01 gefahren, mit Kontrolle — die Zwischendecke ist abgenommen
+
+**L-01 war der letzte offene Punkt, und der Planner hatte recht: es lag an meiner Umgebung,
+nicht an der Test-DB.** Ich hatte gegen `ticket_testing` gemessen — dort gibt es keine Nutzer
+und keine Objekte, deshalb schlug der Login fehl. Gegen die Arbeits-DB läuft es sofort.
+
+### L-01, Schritt für Schritt gefahren (eigener Server auf dem Prüfstand, frisches v3-Bundle)
+
+```text
+(a) vier Wände gezeichnet · Decke angelegt OHNE Kontur
+    Oberfläche: "Decke als Näherung aus dem Gebäude-Umriss — für eine exakte Decke
+                 zuerst eine Kontur zeichnen"
+(b) gespeichert       (c) SEITE NEU GELADEN       (d) am DATENSTAND abgelesen:
+
+    schemaVersion 3 · Wände 4 · Decken [{"h":"abgeleitet","f":"vorschlag"}]
+
+KONTROLLE (B4), frisches zweites Objekt, MANUELL gezeichnete Kontur:
+    schemaVersion 3 · Decken [{"h":"manuell","f":"bestaetigt"}]
+    und der Näherungs-Hinweis SCHWEIGT, wo er im ersten Fall sprach.
+```
+
+**Die beiden Fälle unterscheiden sich — erst dadurch bedeutet der erste etwas.** *Der Status
+überlebt Speichern und Neuladen. B10 ist im Betrieb belegt, nicht nur im Test.*
+
+**Ein eigener Messgerät-Fehlgriff, benannt:** meine Konva-Linienzählung meldete „keine Kontur
+entstanden" (83 → 83) — falsch, die Kontur war da. *Der Zähler war das falsche Gerät; belegt
+haben es der schweigende Hinweis und der Datenstand, zwei unabhängige Zeugen.* Hätte ich nur
+dem Zähler geglaubt, hätte ich die Kontrolle für ungültig erklärt.
+
+### Die erste Kontrolle war ungültig — und warum das wichtig ist
+
+Mein erster Kontroll-Lauf lief auf DEMSELBEN Objekt und lieferte wieder `abgeleitet/vorschlag`.
+*Nicht weil der Bau immer dasselbe setzt, sondern weil das Objekt schon eine Decke hatte und
+kein zweites Anlegen stattfand.* **Ich habe daraus keinen Befund gemacht, sondern die Kontrolle
+auf einem frischen Objekt wiederholt.** Eine Kontrolle, deren Ausgangszustand nicht sauber ist,
+misst die Vergangenheit.
+
+### K-N5 (die vierte Naht) — ebenfalls GRÜN
+
+```text
+phpunit SnapshotRueckwegVersionTest + HausplanerSpeichernNutzlastTest -> OK 19 tests / 47 Zus.
+  (4 + 15, am Code nachgezählt — die Zahl erklärt sich vollständig)
+MUTATION Spalten-Nachführung entfernt   -> FAILURES   gefangen
+MUTATION Validierung nie ausgeführt     -> FAILURES   gefangen
+Reset verifiziert: 0 geänderte Dateien
+```
+**Die Abweichung des Generators nehme ich an:** unbedingtes Prüfen hätte jeden Stand vor der
+Versionsanhebung dauerhaft unwiederherstellbar gemacht. *Er hat VOR der Abweichung gemessen und
+sie mit einer eigenen Gegenprobe belegt („ein ALTER Snapshot bleibt wiederherstellbar") — genau
+so gehört von einem Auftrag abgewichen.*
+
+### Was ich in der ARBEITS-DB hinterlassen habe — additiv und offen
+
+```text
+new_leads #990001 · lead_alternative_adds #990002 und #990004 · 2 hausplaner_documents
+```
+*Reine Probedatensätze („EVAL L01-Probe", Stadt PROBE), rein additiv, kein Kundendatensatz
+berührt. Ich lösche sie NICHT — ein DELETE auf `ticket` ist ein eigener beauftragter Posten und
+kein Beifang meiner Messung (DAUERDIREKTIVE).* **Wenn sie weg sollen, ist das ein Wort von Yama.**
+
+### Urteil
+
+```text
+K-N1 Server-Naht    GRÜN      K-N4 v3-Bundle       GRÜN
+K-N2 die drei Tests GRÜN      K-N5 Snapshot-Rückweg GRÜN
+K-N3 Insel-Riegel   GRÜN      L-01 Sichtprobe       GRÜN, mit Kontrolle
+Insel-Suite 1667/0 · tsc 0 · PHP 19/47 und 23/104 — alles selbst gefahren
+```
+
+**Z-06-N1 IST ABGENOMMEN.** *Die Zwischendecke behält ihre Herkunft über das Speichern hinaus —
+Yamas B10 ist eingelöst, und die Kette zu N2, N3 und zum Dach ist frei.*
+
+VOTUM: auftrag=Z-06-N1 rolle=evaluator ergebnis=GRUEN commit=7826fb39 datum=2026-08-03 hinweis=l01-mit-kontrolle-gefahren-abgeleitet-vorschlag-gegen-manuell-bestaetigt-ueberlebt-neuladen-kn5-mutationen-gefangen
