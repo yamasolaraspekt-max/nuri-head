@@ -222,6 +222,15 @@ test('K-05 Verdrahtung: die App RUFT die Entscheidung, statt sie erneut zu treff
 
   assert.match(code, /herkunftFuerNeueDecke\(ausKontur\)/, 'die Decke entscheidet wieder selbst');
   assert.match(code, /\.\.\.HERKUNFT_NEUES_DACH/, 'das Dach entscheidet wieder selbst');
-  assert.doesNotMatch(code, /geometrieHerkunft:\s*'(manuell|abgeleitet)'/,
-    'ein Herkunfts-Literal steht wieder direkt im Klick-Handler');
+
+  // **BEIDE Felder, nicht nur eines.** Die erste Fassung verbot nur ein `geometrieHerkunft`-
+  // Literal — der Evaluator hat diff-belegt vorgeführt, dass `freigabe: 'bestaetigt'` HINTER dem
+  // Spread bei 1667/0 durchkommt. *Ein Spread lässt sich von rechts überschreiben; wer nur den
+  // linken Teil bewacht, bewacht die Form und nicht die Wirkung.* Selbst nachgestellt, bevor
+  // diese Zeile stand: 1667 pass / 0 fail mit eingebauter Mutation.
+  for (const feld of ['geometrieHerkunft', 'freigabe'] as const) {
+    const literal = new RegExp(`${feld}:\\s*'[a-z_]+'`);
+    assert.doesNotMatch(code, literal,
+      `ein ${feld}-Literal steht wieder direkt im Klick-Handler — der Spread wird überschrieben`);
+  }
 });
