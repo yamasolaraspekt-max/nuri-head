@@ -4,7 +4,7 @@
 auftrag:
   id: AUF-P1-S4
   strang: produktdaten
-  status: entwurf          # B8: braucht Gegenlesen, bevor es auf bereit geht
+  status: bereit           # B8-Gegenlesen 03.08.: TRAEGT MIT AUFLAGE, Auflage eingearbeitet
   spur: A
   heimat: ticket
   anlass: "Neun Schreibpfade mit acht Identitaetsbegriffen auf products (Zensus 11-…md §1);
@@ -14,14 +14,20 @@ auftrag:
          setzen. Schalter produkt.identitaet.aktiv, Default false."
   nicht_ziel: "Kein unique-Constraint. Keine Bestandsbereinigung, kein Backfill, kein
                Marken-Typisieren (Paket 2). Keine Trennung Hersteller/Marke (E2). Keine
-               Stilllegung Weg A/D (Schritt 5). Keine Preislogik (Paket 3). Siehe 11-…md §12."
+               Stilllegung Weg A/D (Schritt 5). Keine Preislogik (Paket 3). Keine Aenderung
+               an offer_product_lists.sku (Paket 2, Posten 0). Siehe 11-…md §12."
   vorbedingung: "Stand gepusht (Remote = einzige Kopie ausserhalb der Maschine). Baseline
                  der Suite notieren (Stand 03.08.: 833 passed / 2966 assertions)."
   spezifikation: "docs/product-data/11-identitaetsspezifikation-paket1-schritt3-4.md ist die
                   fuehrende Spezifikation (§4-§12 + Nachtrag §14). Dieses Blatt DUPLIZIERT sie
                   nicht - es bindet sie."
-  gegengelesen_von: null   # offen - Evaluator des Strangs produktdaten
-  gegengelesen_am: null
+  gegengelesen_von: evaluator   # getrennte Instanz; Urteil TRAEGT MIT AUFLAGE
+  gegengelesen_am: 2026-08-03
+  befund: >
+    Zensus 9/9 heute unveraendert bestaetigt (gleiche Stellen, gleiche Zeilen ausser
+    SupplierConnectorService §2.1: heute :654 statt :657). Kanten 7/8 und §2.1 am Code
+    nachgeprueft, wahr. §14-Messwert brands manufacturer 0/50 unabhaengig nachgemessen.
+    Auflage (eingearbeitet): sechster §12-Ausschluss offer_product_lists.sku ins nicht_ziel.
 
 scope:
   population_command: "grep -rn 'Product::firstOrCreate\\|Product::updateOrCreate\\|Product::create\\|new Product(' app/ database/ --include=*.php | grep -v 'ProductImage\\|ProductPrice\\|ProductMedia' | wc -l"
