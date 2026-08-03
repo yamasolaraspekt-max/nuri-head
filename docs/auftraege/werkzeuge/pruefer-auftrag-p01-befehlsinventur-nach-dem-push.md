@@ -6,7 +6,9 @@
 auftrag:
   id: P-01
   strang: werkzeuge
-  status: bereit
+  status: erledigt   # B14: Ereignis "ausgefuehrt" ist meins. Beleg: Commit c055ea9b (03.08.),
+                     # Abschluss in PRUEFER-BEFUNDE.md - 222 Befehle / 386 Glieder / 0 publizierend,
+                     # P-01-01..06 alle erfuellt, Teil 0 als PB-049 am 02.08.
   rolle: pruefer
 ```
 

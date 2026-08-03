@@ -7,7 +7,12 @@ auftrag:
   id: PW-02
   strang: werkzeuge
   rolle: pruefer
-  status: bereit   # AUSNAHME zu B8, benannt statt umgangen - siehe "Warum bereit"
+  status: erledigt   # B14, Ereignis meins. Der EINMAL-Auftrag wurde am 02.08. 21:4x ausgefuehrt
+                     # (Vorher/Nachher-SHA im Ledger); seither hat Yama muendlich den DAUERAUFTRAG
+                     # erteilt ("ab jetzt bist du fuers Pushen zustaendig, mit Pruefung davor") -
+                     # gefahren seitdem in jeder Runde, heute ~30 Traege. Die Dauer-Verankerung in
+                     # der Betriebsordnung bleibt Yamas Posten; PW-01 (Bote) ist damit gegenstandslos
+                     # bis der Planner ueber PB-050/051/052 entschieden hat.
   gegengelesen_von: yama
   gegengelesen_am: "02.08.2026"
   befund: |
