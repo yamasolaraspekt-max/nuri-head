@@ -6,7 +6,7 @@
 auftrag:
   id: Z-06-N2
   strang: hausplaner-3d
-  status: entwurf   # ENTSPERRT 03.08. durch den Planner: Z-06-N1 ist GRUEN abgenommen (Evaluator a4f16920, sechs Kriterien plus L-01 mit Kontrolle). Die Felder geometrieHerkunft und freigabe sind persistiert und ueberleben das Neuladen - N2 hat ab jetzt etwas zu LESEN. Naechster Zug: Gegenlesen durch den Pruefer (B8), dann Bau.
+  status: bereit   # BEREIT 03.08. 23:0x (B14, Planner): der sperrende Pruefer-Einwand ist GESCHLOSSEN - K-01 und population_command messen nicht mehr `app/` weit (dort standen nach dem N1-Bau schon 2 Treffer, das Kriterium waere vor dem Bau gruen gewesen), sondern die ZWEI Zieldateien FussUndUeberlagerungen.tsx und renderers/three-d/szene.ts, beide vom Planner nachgemessen: 0 und 0. Baureihenfolge: NACH Z-07.
   sperrgrund: ""    # aufgehoben 03.08. - die Bedingung ("N1 GRUEN") ist eingetreten und gemessen, nicht angenommen
   gegengelesen_von: pruefer
   gegengelesen_am: "2026-08-03"
@@ -85,7 +85,7 @@ scope:
     - resources/planner/hausplaner/app/rahmen/FussUndUeberlagerungen.tsx
     - resources/planner/hausplaner/renderers/three-d/szene.ts
     - resources/planner/hausplaner/hausplaner.css
-  population_command: "grep -ro 'freigabe' resources/planner/hausplaner/app/ | wc -l"
+  population_command: "grep -ro 'freigabe' resources/planner/hausplaner/app/rahmen/FussUndUeberlagerungen.tsx resources/planner/hausplaner/renderers/three-d/szene.ts | wc -l"
   ausschluesse:
     - stelle: "domain/validation.ts"
       grund: "Das ist Z-06-N1. N2 liest die Felder, es erzeugt sie nicht."
@@ -103,9 +103,9 @@ kriterien:
     kritikalitaet: P1
     aussage: "Die Anzeige liest das persistierte Feld."
     pruefung:
-      befehl: "grep -ro 'freigabe' resources/planner/hausplaner/app/ | wc -l"
+      befehl: "grep -ro 'freigabe' resources/planner/hausplaner/app/rahmen/FussUndUeberlagerungen.tsx resources/planner/hausplaner/renderers/three-d/szene.ts | wc -l"
       erwartet: "mindestens 1"
-    ausgangswert: "0 (gemessen 03.08.; Partner 'konturHinweis' -> mehrfach, die Messung ist nicht leer)"
+    ausgangswert: "0 (Planner 03.08. 23:0x auf den sperrenden Pruefer-Einwand: das alte Muster mass `app/` WEIT und stand nach dem N1-Bau schon bei 2 - K-01 waere GRUEN VOR DEM BAU gewesen und haette die Wirkung nicht zeigen koennen. Jetzt auf die ZWEI Zieldateien eingeschraenkt, beide heute selbst nachgemessen: 0 und 0. Partner 'konturHinweis' -> 3 in derselben Datei, die Messung ist nicht leer.)"
 
   - id: K-02
     typ: absence

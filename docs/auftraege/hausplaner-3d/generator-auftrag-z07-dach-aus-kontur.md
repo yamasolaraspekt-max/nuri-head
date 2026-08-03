@@ -6,7 +6,7 @@
 auftrag:
   id: Z-07
   strang: hausplaner-3d
-  status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
+  status: bereit   # BEREIT 03.08. 23:0x (B14, Planner): Pruefer-Gegenlesung BAUBAR ohne Einwand, alle Ausgangswerte an HEAD 14079a93 selbst nachgemessen. BAUREIHENFOLGE: DIESES BLATT ZUERST - es ist das letzte fehlende Bauteil des Geschosses.
   gegengelesen_von: pruefer
   gegengelesen_am: "2026-08-03"
   befund: "BAUBAR, KEIN sperrender Einwand. Alle Ausgangswerte an HEAD 14079a93 selbst nachgemessen: K-01 herkunftFuerNeuesDach 0 (Partner Decke inzwischen 2, Blatt nannte 1 - gedriftet, nicht falsch), K-02 HERKUNFT_NEUES_DACH 1 (freigabe.ts:97), gebaeudeUmriss in App 3, renderers/ 0 Treffer (Ausschluss-Begruendung bestaetigt), Vorbild-Zahl 68 in decke.test.ts 3x vorhanden. Validator 3 OK / 0 Fehlschlag. Eine NOTIZ ohne Sperrwirkung: der Partner-Ausgangswert 1 stammt vom 09:3x-Schnitt und ist heute 2 - der Bauende misst seine Basis ohnehin selbst (F-20/K-05). Status stellt der Planner (B14)."
