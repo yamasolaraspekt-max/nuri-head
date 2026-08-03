@@ -243,6 +243,13 @@ Rollentrennung.**
 | PB-046 | Objekt-Planer @ **375 px** (Browser) | 8 Bedienelemente ausserhalb, kein Bildlauf; **Planner: 375 = Ankunfts-, kein Bedienziel** → AUF-91 | **P2→P3** (Begründung geprüft, sie trägt) | **ERLEDIGT nach Ziel** — `154e4867`; Ziel war *sagen*, nicht *bedienbar machen*. Überlauf besteht fort (Beobachtung) | Prüfer |
 | PB-047 | `SidebarCountController.php:16,29,162` | `$user?->name` ist ein **String**, der Parameter fordert `?int` — **464 `local.ERROR`**, die Seitenleisten-Zahlen kommen nie an | **P2** | **ERLEDIGT** — `1b0b61a5`, von mir nachgemessen (Runde 635) | Prüfer |
 | PB-048 | `resources/views/**` (805 Blades) | **Vorsortierung statt Sichtprobe**: 319 Blades tragen ein Layout-Risikomerkmal, die 18 dichtesten benannt — und mein erstes Muster war zu **90 %** falsch | **Hinweis** (kein Mangel) | offen | Planner |
+| PB-049 | `scripts/auftrag-pruefen.mjs` (Erlaubnisliste) | Aus meiner Umgebung **EXIT 0 auf alle drei Fernziele**, auch auf das fremde `upstream` — die Liste schützt nur, was durch das Skript läuft | **P1** | **ERLEDIGT** — `54b2696e`, Grenze steht jetzt in der Liste | Prüfer |
+| PB-050 | `bote-auftrag-pw01-…md` | Zwei Zahlen ohne Befehl in einem Blatt, das Zahlen ohne Befehl verbietet | **P3** | offen | Planner |
+| PB-051 | `bote-auftrag-pw01-…md` | Die Prämisse des Blattes (der Prüfer erreiche die Fernziele nicht) ist **nicht erfüllt** — gemessen | **P1** | offen | Planner |
+| PB-052 | `bote-auftrag-pw01-…md` | Alle sechs Kriterien messen gegen eine **Fernreferenz**, die veraltet sein kann | **P2** | offen | Planner |
+| PB-053 | `.git/index` (Arbeitskopie) | **Der Index stand 3 Commits zurück** (Blob-Stand `fb0ee00d`, 01:27) — ein `git commit` ohne `-a` hätte **213→365 Zeilen gelöscht** | **P1** | **ERLEDIGT** 03.08. 07:58, von mir nachgemessen: `diff --cached --stat` leer, Index==HEAD==Baum (987/935/37507), **nichts verloren** | Prüfer |
+| PB-054 | `docs/handoff-status.md` (Überschriften) + Commit-Zonen | **KORRIGIERT 08:1x**: nichts ist rückdatiert, ich hatte die Anzeige für die Uhr gehalten. Rest: eine Instanz legt Commits mit `Z` statt `+02:00` ab; Ledger-Überschriften nennen Zahlen ohne Messung | **P2→P3** | offen | Planner |
+| PB-055 | `.git/index` (Arbeitskopie) | **WIEDERHOLUNG von PB-053, schärfer**: Index steht auf `5df61a37` (08:48), HEAD ist `b4cbcf23` — ein `git commit` würde **1 685 Zeilen löschen, darunter den frisch gebauten Z-06-N1-Code** (`freigabe.ts` 128 Z, sein Test 227 Z als `D` gestaged) | **P1** | offen — **R9: zweite Wiederholung, jetzt ist eine technische Barriere fällig** | **Yama** (Index) + Planner (Barriere) |
 
 ---
 
@@ -4956,3 +4963,510 @@ verschwinden nicht von selbst. *Das ist kein Mangel, sondern eine Aufräumfrage;
 Beobachtung, nicht als Befund.*
 
 **Ballbesitz: keiner** — geschlossen.
+
+---
+
+## P-01 · Teil 0 — **aus welcher Umgebung kamen die Pushes** (Pruefer, 01.08. 23:15 CEST)
+
+**Der Auftrag stellt die richtige Frage: W-01 baut eine Allowlist gegen eine Faehigkeit, deren
+Traeger niemand gemessen hat. Also zuerst der Traeger.**
+
+### PB-049 · **P1 · Die Pruefer-Umgebung erreicht alle drei Fernziele — auch das FREMDE**
+
+```text
+Befehl: git --no-optional-locks ls-remote --exit-code <remote> HEAD ; echo $?
+  fork            EXIT 0     github.com/yamasolaraspekt-max/nuri-head.git
+  backup-private  EXIT 0     github.com/yamasolaraspekt-max/nurihead.git
+  upstream        EXIT 0     github.com/raminsadid2021/nuri-head.git   <- FREMDES Repo
+Anmeldung: credential.helper = osxkeychain (Repo-Config)
+           ~/.git-credentials: 0 · GITHUB_TOKEN: nicht gesetzt · gh CLI: vorhanden
+```
+
+**Der Planner misst aus seiner Umgebung 403 vom Proxy. Ich messe aus meiner EXIT 0 auf allen drei.**
+*Die Faehigkeit haengt also nicht am Repo und nicht am Werkzeug, sondern an der Umgebung, in der
+eine Rolle laeuft — und mindestens eine Umgebung hat sie voll.*
+
+**Wirkung:** Eine Barriere in `scripts/auftrag-pruefen.mjs` schuetzt genau die Laeufe, die durch
+dieses Skript gehen. **Sie schuetzt nicht davor, dass irgendein anderer Befehl aus einer Umgebung
+mit Schluesselbund-Zugang die Maschine verlaesst** — und die Anmeldung liegt im macOS-Schluesselbund,
+also ohne sichtbare Datei, ohne Umgebungsvariable, ohne dass jemand sie nochmal bestaetigen muss.
+
+**Der schwerste Teil daran:** `upstream` ist **nicht** Yamas Repo. Ein versehentlicher Push dorthin
+waere nicht mit „ging nur auf eigene Remotes" zu entschaerfen. *Bisher ist das nicht passiert —
+`upstream/main` steht unveraendert auf `b477ad50` vom 01.04.*
+
+### Was ich NICHT sagen kann
+
+**Wer die vier Pushes ausgeloest hat.** *Der Reflog nennt fuer alle vier denselben Autor
+(`Yama <yama.solaraspekt@gmail.com>`) — das ist die git-Identitaet dieser Maschine, nicht die Rolle.*
+```text
+31.07. 07:59:46   9e294323
+01.08. 09:45:30   b1da5194
+01.08. 20:48:31   9ac24f7b
+01.08. 22:11:27   1a86d21f
+```
+**Evaluator und Planner haben den Vorfall beide sich selbst zugeschrieben. Aus dem Reflog laesst
+sich keiner von beiden belegen und keiner ausschliessen.** *Was sich belegen laesst: es braucht eine
+Umgebung mit Netzzugang, und die Planner-Umgebung hat ihn nachweislich nicht.*
+
+**Ballbesitz: Yama** (ob Umgebungen mit Schluesselbund-Zugang Pruefbefehle fahren duerfen) ·
+**Generator** (W-01 deckt nur den Validator-Pfad ab — das ist kein Fehler des Blattes, aber
+seine Grenze gehoert hineingeschrieben).
+
+## P-01 · Teil 1 + 2 — **die Inventur: 190 Befehle, 320 Glieder, null publizierende** (01.08. 23:20 CEST)
+
+### Meine eigene Grundgesamtheit, mein Zeitpunkt
+
+```text
+grep -rh 'befehl: "' docs/auftraege/*.md | wc -l        -> 192   (23:13)
+python3-Auszug mit  befehl:\s*"((?:[^"\\]|\\.)*)"       -> 190
+```
+**Die zwei Zahlen weichen ab, und das ist kein Rundungsfehler:** *zwei Vorkommen stehen im
+Fliesstext eines Blattes, nicht als YAML-Feld — `grep` zaehlt die Zeile, der Auszug den Wert.*
+**Ich nenne beide.** *Der Planner nannte erst 175, dann 183; meine 190 sind spaeter gemessen und
+enthalten die Blaetter, die seither dazukamen. Die Zahl wandert — genau wie sein Blatt sagt.*
+
+### Glieder statt Befehle (P-01-02)
+
+```text
+Befehle: 190          Glieder: 320
+Zerlegung an && || ; |  — aber NUR ausserhalb von Anfuehrungszeichen.
+```
+**Mein erster Zerleger hat an jedem `|` getrennt, auch innerhalb von `grep -E 'rm|mv'`.** *Er
+meldete daraufhin 381 Glieder und drei SCHREIBENDE Befehle — alle drei waren Teile eines
+Suchmusters, das nach genau solchen Befehlen sucht.* **Ein Zerleger ohne Anfuehrungszeichen-Regel
+erfindet die Fehler, die er finden soll.** *Korrigiert, bevor die Zahl irgendwo stand.*
+
+### Die Klassen (P-01-01)
+
+```text
+PUBLIZIEREND     0
+SCHREIBEND       0
+GATE            99      npm/npx/php artisan/composer  — kosten Minuten, veraendern nichts Bleibendes
+LESEND         203      grep, git log/show/diff/rev-list, wc, node scripts/*, bash -n, ...
+UNKLAR          18
+```
+
+### Die 18 UNKLAR, einzeln angesehen (das ist der Punkt, nicht die Zahl)
+
+```text
+ 6 Auszug-Artefakte  Fliesstext in Codebloecken, den mein Muster als Befehl gelesen hat
+ 4 Schleifen-Glieder `for f in ...` / `do bash -n "$f"` / `done`   -> LESEND (Syntaxpruefung)
+ 3 Bote-Blatt PW-01  git rev-list/diff GEGEN fork -> LESEND, aber sie LESEN vom Fernziel
+ 1 W-01              `./<der-push-wrapper>.command`  -> PLATZHALTER in spitzen Klammern
+ 1 VORLAGE.md        `<ausfuehrbar, ohne Platzhalter>` -> Vorlagentext
+ 1 z01               `cd resources/planner/hausplaner`
+ 1 kleinauftrag      `git check-ignore -v .env.testing` -> LESEND
+ 1 auf48-s4c         Fliesstext
+```
+
+### P-01-03 — die Aussage des Planners, unabhaengig geprueft
+
+**Er suchte nach `befehl: "\./`. Ich habe anders gesucht: nicht nach der Schreibweise, sondern nach
+der WIRKUNG — jedes Glied gegen ein Muster aus `git push · curl · wget · scp · rsync · ssh · gh ·
+*.command · osascript · open`.**
+
+```text
+Treffer: 1   und der ist ein Platzhalter in spitzen Klammern (W-01, nach der Reparatur von 22:13)
+```
+**Seine Aussage haelt — auf einem anderen Suchweg als seinem.** *Das ist das, was P-01-03 verlangt:
+nicht „ich habe nichts gefunden", sondern ein eigener Weg mit eigenem Muster.*
+
+### Ein Befund, den die Klassifikation nebenbei erzeugt
+
+**`GATE` ist mit 99 von 320 Gliedern die zweitgroesste Klasse.** *Der Verzeichnislauf faehrt sie
+alle — das war F-16 (46 npm-Aufrufe) und ist der Grund fuer `GATE_MUSTER`.* **Die Sperre kennt
+`npm|npx|yarn|pnpm|php artisan|composer` — meine Zaehlung findet 99 Glieder in genau diesen sechs
+Programmen und keines in einem siebten.** *Die Liste ist fuer den heutigen Bestand vollstaendig;
+sie bleibt es nur, solange niemand ein siebtes Werkzeug einfuehrt.*
+
+**Ballbesitz: Planner** (P-01-04 folgt) · **kein Befund gegen den Bestand: es gibt keinen zweiten
+publizierenden Befehl.**
+
+## P-01 · Teil 3 — **die Planner-Zahlen seit 19:00, jede einzeln nachgefahren** (01.08. 23:25 CEST)
+
+**Regel des Blattes: „kein Datum ohne Zahl, keine Zahl ohne Befehl" — und sie gilt zuerst fuer den,
+der sie aufgestellt hat.** *Ich habe an SEINEM Stand gemessen (`9f203c81`, 22:09), nicht an meinem;
+eine Zahl gegen einen spaeteren Baum zu halten waere F-12 und mein Fehler, nicht seiner.*
+
+```text
+main = d8612a63                                            HAELT   (rev-parse)
+git diff 99f38da7 main -> LEER                             HAELT   (0 Dateien)
+Zweig 40 voraus vor main                                   HAELT   (rev-list main..9f203c81 = 40)
+UNGEPUSHT 13                                               HAELT   (rev-list 9ac24f7b..9f203c81 = 13)
+Locks 0                                                    HAELT   (.git/*.lock: keine)
+Rueckstand 55 Commits (Abschnitt 3)                        HAELT NICHT — gemessen 57
+   Befehl: git rev-list --count b1da5194..9ac24f7b   (Push 09:45 -> Push 20:48)
+"3 Merges" auf main                                        KEIN BEFEHL DANEBEN — gemessen 8 insgesamt
+   Befehl: git log --merges --oneline main | wc -l
+```
+
+### Bewertung, streng nach P-01-04
+
+**Fuenf von sieben halten, zwei nicht — und die zwei sind nicht gleich schwer.**
+
+**Die 55 gegen 57:** *eine Abweichung von zwei Commits, ohne Befehl daneben.* **Klein, aber es ist
+genau die Klasse, die das Blatt meint:** eine Zahl, die niemand nachfahren kann, weil der Weg zu ihr
+nicht dabeisteht. *Ich kann nicht einmal sagen, ob er sich verzaehlt hat oder eine andere Grenze
+meinte — und das ist der Mangel, nicht die Zwei.*
+
+**„3 Merges":** *`git log --merges main` liefert 8.* **Vermutlich meinte er die drei Merges von
+heute — aber „vermutlich" ist kein Beleg.** *Ohne Befehl daneben ist die Zahl nicht pruefbar,
+sondern nur plausibel.*
+
+### Was ausdruecklich HAELT, und das ist die groessere Haelfte
+
+**Alle vier Zahlen, die er MIT Befehl aufgeschrieben hat, stimmen auf die Einheit** — und zwar
+gemessen an seinem Stand, nicht an meinem. *Der Abschnitt „ZURUECKGENOMMEN" in `STAND.md` fuehrt
+drei eigene Zahlen, die er selbst kassiert hat (60 ungepusht -> 13, 3,6 s -> 39,4 s, Push-Zuordnung
+-> nicht belegt).* **Ein Papier, das seine eigenen Irrtuemer auffuehrt, ist mehr wert als eines
+ohne Fehler.**
+
+### PB-050 · P3 · **Zwei Zahlen ohne Befehl in einem Dokument, das Zahlen ohne Befehl verbietet**
+
+`docs/STAND.md:15` („3 Merges") und Abschnitt 3 („55 Commits") · **Erledigt wenn:** beide Zahlen
+tragen den Befehl, mit dem sie entstanden sind — oder sie sind entfernt.
+**Ballbesitz: Planner.**
+
+---
+
+**P-01 ist damit in allen vier Teilen gefahren.** *Teil 0 hat einen P1 erzeugt (PB-049), Teil 1+2
+keinen Befund gegen den Bestand, Teil 3 einen P3 (PB-050).* **Repariert habe ich nichts** (P-01-05).
+
+## GEGENLESUNG nach B8 — **`PW-01`, der Bote** (Prüfer, 01.08. 23:30 CEST)
+
+**Auftrag aus `STAND.md` Zeile 38. Ich lese gegen, ich baue nicht, und ich trage mich nicht selbst
+als `gegengelesen_von` ein — das setzt der Planner, wenn er die Punkte annimmt.**
+
+### Was traegt
+
+**Die Trennung Sicherungs-Push / Veroeffentlichung ist richtig gezogen** — *ein Fast-Forward auf
+einen eigenen Zweig kann nichts zerstoeren, was nicht schon lokal ist; `main`, Tags, `upstream`,
+`--force`, `--delete` sind unumkehrbar und bleiben bei Yama.* **Die Bauart-Entscheidung „ein Skript,
+kein Urteil" ist die wichtigere Haelfte des Blattes** und zieht die Lehre aus dem heutigen Tag.
+
+**Zwei Kriterien sind ausdruecklich gut begruendet:** *PW-04 nimmt `| wc -l` statt `grep -c`, weil
+`grep` beim Nullfall mit exit 1 abbricht — ein Kriterium, das am Nullfall stirbt, prueft nichts.*
+*PW-01 und PW-06 pruefen die ENTSCHEIDUNGSFUNKTION (`zielErlaubt`, `artErlaubt`), nicht den
+Ausfuehrer — genau der Fehler, an dem heute um 22:11 ein Push entstanden ist.*
+
+### Drei Einwaende
+
+**1 · PB-051 · P1 · Die Praemisse des Blattes ist nicht erfuellt — gemessen, nicht vermutet.**
+```text
+"Wenn genau eine Umgebung den Push-Kanal hat und alle anderen keinen, wird aus
+ 'niemand darf' ein 'niemand kann ausser einem' - Stufe 5 statt Stufe 3."
+
+Gemessen 23:12 aus der PRUEFER-Umgebung:
+  ls-remote fork EXIT 0 · backup-private EXIT 0 · upstream EXIT 0
+```
+**Der Kanal ist heute NICHT exklusiv.** *Das Blatt fuehrt diese Frage selbst unter „Was das NICHT
+loest" — P-01 Teil 0 hat sie jetzt beantwortet, und die Antwort widerspricht der Begruendung.*
+**Solange die Faehigkeit in mehreren Umgebungen liegt, ist der Bote eine bessere Regel, keine
+Barriere.** *Das ist kein Grund, ihn nicht zu bauen — aber die Begruendung „Stufe 5" traegt erst,
+wenn die anderen Umgebungen den Zugang verlieren, und das ist eine Entscheidung von Yama.*
+
+**2 · PB-052 · P2 · Alle sechs Kriterien messen gegen eine Fernreferenz, die veraltet sein kann.**
+```text
+grep -cE 'fetch|ls-remote'  im ganzen Blatt   ->  0
+```
+**`fork/auto/hausplaner-integration` ist eine LOKALE Kopie des Fernstands.** *Sie aendert sich nur
+bei `fetch` oder `push`.* **Bewegt jemand den Fernzweig von woanders, misst PW-02 den
+Fast-Forward gegen einen Stand, den es nicht mehr gibt — und meldet 0, wo in Wirklichkeit fremde
+Commits liegen.** *Heute stimmt es zufaellig (`ls-remote` = `1a86d21f` = lokale Referenz), weil
+derselbe Rechner zuletzt gepusht hat.* **Erledigt wenn: das Skript holt den Fernstand unmittelbar
+vor der Messung** (`ls-remote` genuegt, es schreibt nichts) **und bricht ab, wenn er von der
+lokalen Referenz abweicht.**
+
+**3 · P3 · Die Grenze von PW-04 steht im Blatt — aber nicht im Kriterium.**
+*Der Text sagt klar: „prueft NAMEN im Ausgang, nicht Inhalte, nicht die Historie; `fe47879c` waere
+so NICHT gefangen worden."* **Wer spaeter nur die Kriterienliste liest, sieht „K4 GEHEIMNIS" und
+haelt das Thema fuer abgedeckt.** *Erledigt wenn: die Einschraenkung in der `aussage` des Kriteriums
+steht, nicht nur im Fliesstext daneben.*
+
+### Urteil der Gegenlesung
+
+**Das Blatt ist baubar und sollte gebaut werden — aber nicht mit dieser Begruendung.**
+*Einwand 2 ist vor dem Bau zu schliessen (eine Zeile im Skript), Einwand 1 ist eine Yama-Frage und
+kein Baumangel, Einwand 3 eine Formulierung.* **`status: entwurf` ist damit richtig gesetzt;
+`bereit` waere es erst nach Einwand 2.**
+
+**Ballbesitz: Planner.**
+
+---
+
+## PB-053 · P1 · **Der Index ist eine geladene Waffe: er steht drei Commits zurück**
+
+**behauptung (implizit, von jedem, der `git status` überfliegt):** `MM` neben drei Dateien heisst
+„da ist Arbeit im Gange".
+
+**gemessen (03.08. 07:0x, HEAD `54b2696e`):**
+
+```
+befehl: git --no-optional-locks diff HEAD --stat
+   -> nur docs/planner/PRUEFER-BEFUNDE.md | 229 +++   (1 Datei)
+
+befehl: git --no-optional-locks diff --cached --stat
+   -> docs/handoff-status.md               |  90 -------
+      scripts/__tests__/auftragPruefen.test.mjs |  49 -----
+      scripts/auftrag-pruefen.mjs           |  76 -------
+      3 files changed, 2 insertions(+), 213 deletions(-)
+
+befehl: git --no-optional-locks rev-parse :scripts/auftrag-pruefen.mjs   -> 963dad9ed805
+        dagegen jeden Commit-Blob geprueft
+   -> Index == Commit fb0ee00d (03.08. 01:27)     HEAD ist 54b2696e (02:50)
+```
+
+**Der Arbeitsbaum ist sauber** — 987/987, 935/935, 37348/37348 Zeilen, Baum gleich HEAD.
+**Der Index nicht.** Er hält den Stand von vor drei Commits fest.
+
+**wirkung:** Wer jetzt `git commit -m "..."` fährt — ohne `-a`, ohne Pfadangabe, also genau so, wie
+man nach `git add <pfade>` gewohnt ist — committet **den Index**, und das ist ein **Rückschritt um
+213 Zeilen**: das W-01-Blatt im Ledger (90 Z.), 76 Zeilen Validator, 49 Zeilen seiner Tests. Also
+genau die Arbeit der drei letzten Commits `6ae8e266`, `77cc72f7`, `54b2696e`.
+
+**Wie lange:** seit `54b2696e` um 02:50 — beim Schreiben dieser Zeile **4 Stunden 15 Minuten** scharf.
+
+**Warum der Wächter es nicht sieht:** `scripts/commit-pruefen.sh:103` prüft je Pfad
+`diff --quiet` **und** `diff --cached --quiet` — er fragt, *ob* ein Pfad Änderungen hat, nicht *ob
+der Index älter ist als HEAD*. Ein Index, der rückwärts zeigt, ist für ihn ein Pfad wie jeder andere.
+
+**erledigt wenn:** `git diff --cached --stat` gegen HEAD **0 Zeilen Löschung** meldet.
+
+**Ballbesitz: Yama.** Den Index räumt man mit `git reset` — das ist ein schreibender Eingriff in die
+gemeinsame Arbeitskopie, und ich fasse ihn nicht an. *Aufdecken ist nicht beheben.*
+
+---
+
+## PB-054 · P2 · **Die Uhrzeiten im Ledger gehen neun Stunden vor**
+
+**gemessen:**
+
+```
+befehl: git --no-optional-locks log -1 --format='%ad' --date=format:'%d.%m. %H:%M' <sha>
+  77cc72f7  ->  03.08. 02:48      Ledger-Ueberschrift dazu: "Generator, 03.08. 12:0x"
+  6ae8e266  ->  03.08. 02:45      Ledger-Ueberschrift dazu: "Generator, 03.08. 11:5x"
+  Systemzeit beim Messen: 2026-08-03 07:09:59 CEST
+```
+
+**wirkung:** Das Ledger ist die Buchführung. Wer darin nach „was lag wie lange" sucht — und genau das
+ist meine stehende Aufgabe (NACHHALTEN) — bekommt Alter, die um neun Stunden daneben liegen. Ein
+Posten, der laut Ledger „vor zehn Minuten" kam, ist in Wahrheit neun Stunden alt. Das ist dieselbe
+Klasse wie die Zeitzonen-Korrektur vom 02.08. (`a7b7ec33`), nur an einer anderen Stelle: dort die
+Messung, hier die Überschrift.
+
+**erledigt wenn:** eine Ledger-Überschrift und die Commit-Zeit ihres Commits liegen **unter 60 Minuten**
+auseinander.
+
+**Ballbesitz: Planner.**
+
+### PB-054 · Nachtrag 03.08. 07:5x — **die Reihenfolge der Geschichte ist nicht die Reihenfolge der Zeit**
+
+Der erste Beleg war eine Überschrift gegen einen Commit. Dieser hier ist härter, weil er **nur mit
+git** auskommt und **meine eigenen Taktzeilen** als Zeugen hat.
+
+```
+befehl: git --no-optional-locks reflog --date=format:'%d.%m %H:%M' --format='%gd %gs' -6
+  HEAD@{03.08 07:52} commit: evaluator: Schlangen-Abgleich 2 …
+  HEAD@{03.08 05:50} commit: planner: fuenf gebaute Blaetter eingetragen …     <-- dazwischen
+  HEAD@{03.08 07:15} commit: evaluator: zweiter Stapel abgenommen …
+  HEAD@{03.08 02:50} commit: PB-049 eingearbeitet …
+```
+
+Das Reflog ist **anhängend geführt** — die Reihenfolge der Zeilen ist die Reihenfolge der Ereignisse.
+`3da947c8` steht **zwischen** 07:15 und 07:52, stempelt aber **05:50**. Autor- und Commit-Zeit sind
+beide 05:50 (`git log -3 --format='%h %ad %cd'`), es ist also kein nachträglich gesetztes Autordatum,
+sondern die Uhr der schreibenden Instanz.
+
+**Zweiter, unabhängiger Zeuge:** meine Taktzeile um **07:08** meldete `HEAD 54b2696e · letzter Commit
+vor 253 min`. Ein Commit von 05:50 hätte dort stehen müssen. Er stand nicht.
+
+**wirkung:** `git log --since=…`, jedes „was lag wie lange", jede Reihenfolge-Aussage über wer worauf
+geantwortet hat, ist unzuverlässig. Zwei Symptome, zwei Richtungen: das Ledger schreibt **+9 h**
+(Generator-Überschriften), dieser Commit **−85 min**. Gemeinsam ist nur: **die Uhren in diesem Haus
+gehen nicht gleich.**
+
+**erledigt wenn:** die Reflog-Zeitstempel dreier aufeinanderfolgender Commits **monoton steigen**.
+
+### PB-054 · **KORREKTUR 03.08. 08:1x — meine Diagnose war falsch, der Befund schrumpft**
+
+Ich habe zweimal geschrieben, Commits seien **rückdatiert** und „die Uhren in diesem Haus gehen nicht
+gleich". **Das stimmt nicht.** Der Grund, warum ich es glaubte: `git log --date=format:` zeigt jede
+Zeit in **der Zeitzone, die im Commit steht** — nicht in Ortszeit. Ich habe die Anzeige für die Uhr
+gehalten.
+
+```
+befehl: git --no-optional-locks log -8 --format='%h %cI  %cd' --date=format-local:'%d.%m %H:%M'
+
+  1de3e240  2026-08-03T06:13:56Z         ortszeit 08:13
+  8d9036a0  2026-08-03T06:06:57Z         ortszeit 08:06
+  bda8672d  2026-08-03T08:04:54+02:00    ortszeit 08:04
+  e19a6b17  2026-08-03T07:59:55+02:00    ortszeit 07:59
+  ba275c23  2026-08-03T05:55:48Z         ortszeit 07:55
+  fd0151b4  2026-08-03T07:52:54+02:00    ortszeit 07:52
+  3da947c8  2026-08-03T05:50:20Z         ortszeit 07:50
+  9610f5e5  2026-08-03T07:15:26+02:00    ortszeit 07:15
+```
+
+**In Ortszeit ist alles lückenlos monoton:** 07:15 · 07:50 · 07:52 · 07:55 · 07:59 · 08:04 · 08:06 ·
+08:13. **Kein Commit ist rückdatiert. Keine Uhr geht falsch. Die Reihenfolge der Geschichte IST die
+Reihenfolge der Zeit.** Auch die Reflog-Zeilen, die ich als Beweis angeführt habe, waren derselbe
+Anzeigefehler.
+
+**Was übrig bleibt — und es bleibt etwas:** eine der schreibenden Instanzen legt ihre Commits mit
+**`Z` (UTC) statt `+02:00`** ab (`1de3e240`, `8d9036a0`, `ba275c23`, `3da947c8` — alle vier vom
+Planner; alle Commits mit `+02:00` sind von Evaluator und mir). **Der Zeitstempel ist richtig, die
+gespeicherte Zonenangabe nicht.** Wirkung: jede Anzeige ohne `-local` steht bei diesen Commits zwei
+Stunden daneben — genau der Fehler, den ich gerade selbst gemacht habe. Er kostet keinen Datenwert,
+aber er kostet jeden, der Alter aus `git log` abliest, zwei Stunden Irrtum. Von P2 auf **P3**.
+
+**erledigt wenn:** `git log -10 --format='%cI'` zeigt für alle zehn Commits `+02:00`.
+
+*Der zweite Teil von PB-054 (Ledger-Überschriften „12:0x" für einen Commit von 02:48) ist davon
+unberührt und bleibt bestehen — das ist keine Zeitzone, das sind Zahlen ohne Messung.*
+
+---
+
+## PB-055 · P1 · **PB-053 ist zurück — und diesmal hält der Index den Engpass-Code als Löschung fest**
+
+Heute früh (PB-053) stand der Index drei Commits zurück und hätte 365 docs-Zeilen gelöscht; er wurde
+still geräumt. **Jetzt, fünf Stunden später, dasselbe Muster — aber der Inhalt ist Produktivcode:**
+
+```
+befehl: git --no-optional-locks status --porcelain | grep -E '^(D|\?\?)'
+  D  resources/planner/hausplaner/__tests__/herkunftUndFreigabe.test.ts
+  D  resources/planner/hausplaner/geometry/freigabe.ts
+  ?? (dieselben zwei Pfade als untracked — Datei da, Index sagt: löschen)
+
+befehl: git --no-optional-locks diff --cached --stat | tail -1
+  38 files changed, 113 insertions(+), 1685 deletions(-)
+
+befehl: git rev-parse :…/domain/validation.ts  -> Blob == Commit 5df61a37 (08:48)
+        HEAD ist b4cbcf23 (09:09) · .git/index zuletzt geschrieben 09:14
+```
+
+**Die Dateien selbst sind unversehrt** (`freigabe.ts` 128/128 Zeilen, Test 227/227 gegen HEAD). Aber
+wer jetzt `git commit` ohne `-a` fährt, **löscht den ganzen Z-06-N1-Bau aus `6d93fc97`** — die
+Sperre, die B10 trägt, ihren Test, und setzt 36 weitere Dateien auf den Stand von 08:48.
+
+**Das Muster dahinter:** eine Instanz refresht den Index (mtime 09:14 — NACH dem letzten Commit),
+ohne zu staggen, was sie meint. Zweimal am selben Tag. **R9 greift: bei der zweiten Wiederholung
+ist eine technische Barriere fällig, kein Vorsatz.** Der Ort ist benannt (PB-053):
+`scripts/commit-pruefen.sh` prüft je Pfad `diff --quiet`, aber nie *ob der Index hinter HEAD liegt*.
+Eine Zeile der Form „`git diff --cached --numstat | awk '{d+=$2}'` > Schwelle ⇒ STOPP mit Meldung"
+würde beide Vorfälle gefangen haben. **Wie sie aussieht, entscheidet der Planner — nicht ich.**
+
+**erledigt wenn:** (a) `git diff --cached --stat` gegen HEAD leer ist UND (b) das Commit-Tor einen
+Index-hinter-HEAD-Zustand nachweisbar rot meldet (Probe mit absichtlich zurückgesetztem Index).
+
+**Ballbesitz: Yama (Index räumen — schreibender Eingriff) · Planner (Barriere schneiden).**
+
+---
+
+# P-01 — Befehls-Inventur: ABSCHLUSS (03.08. 09:2x, HEAD `b4b26282`)
+
+**Auftrag `bereit` seit 01.08. 22:3x.** Teil 0 wurde am 02.08. geliefert (PB-049: aus meiner
+Umgebung EXIT 0 auf alle drei Fernziele, auch das fremde `upstream`; die Antwort auf „welche
+Umgebung kann pushen" lautet: **meine** — und daraus wurde die stehende Push-Vertretung PW-02).
+Hier die restlichen Teile. **Population am eigenen Zeitpunkt gemessen — die Blätter sind seit dem
+Schnitt des Auftrags in Strang-Verzeichnisse umgezogen (W-08), das Blatt sagt `docs/auftraege/*.md`
+flach (142 Treffer), gemessen wird rekursiv:**
+
+## Teil 1 — die Inventur (P-01-01, P-01-02)
+
+```
+befehl: zeilengenaues Feld-Muster ^\s*befehl: "..."$ ueber docs/auftraege/ rekursiv,
+        Glieder quote-bewusst an | ; && getrennt (Skript: scratchpad/inventur2.mjs)
+
+  BEFEHLE   222        (Blatt nannte 175, spaeter 183 — die Zahl wandert, wie angesagt)
+  GLIEDER   386        (> 222, wie P-01-02 verlangt)
+
+  LESEND        272    grep/git log/wc/node zaehle.mjs …
+  GATE          112    npm run/npx/php artisan/node --test
+  SCHREIBEND      0
+  PUBLIZIEREND    0
+  WRAPPER         0    (kein ./…, kein *.command als AUSGEFUEHRTES Glied)
+  PLATZHALTER     1    VORLAGE.md: "<ausführbar, ohne Platzhalter>"
+  UNKLAR          1    s.u.
+```
+
+**Der eine UNKLAR:** `generator-auftrag-auf48-s4c-die-buehne.md` trägt im `befehl:`-Feld den Satz
+*„die Reihenfolge der Kommentarmarken in Buehne.tsx"* — **Prosa im Befehlsfeld** (S-13-Klasse,
+P3). Kein Risiko, aber ein Feld, das lügt: es verspricht Ausführbarkeit und enthält eine Anweisung
+an einen Menschen.
+
+**Erster Lauf verworfen:** ein `matchAll` über den Dateitext (statt zeilenweise) fing 231 Treffer,
+darunter **Prosa-Zitate** aus P-01 selbst und W-01 (`b01/K-05 befehl: "./<der-push-wrapper>…"` ist
+ein *Zitat des Vorfalls* in einem Textblock, kein Feld). Das zeilengenaue Muster trennt Feld von
+Zitat — derselbe Fehlertyp wie meine 55-Klassen-Zählung vom 01.08.
+
+## Teil 2 — gibt es einen zweiten Befehl, der die Maschine verlässt? (P-01-03)
+
+**Eigener Suchweg, nicht der des Planners** (er suchte nach `./`-Text). Ich habe nach **Wirkung**
+gesucht, in drei Richtungen:
+
+```
+(a) je Glied das ERSTE WORT klassifiziert (nicht das Muster im Text):
+    kein Glied beginnt mit curl/wget/ssh/scp/rsync/nc · kein git push/fetch/pull   -> 0
+(b) alle SKRIPTE, die Blaetter aufrufen, auf Netz-/Exec-Faehigkeit gegriffen:
+    bestand.sh 151 Z: 0 schreibend, 0 Netz  ·  statische-inline-stile.mjs: 0 exec, "push"-Treffer
+    sind Array.push (dieselbe Falle wie mein grep -c push am 02.08.)
+    auftrag-pruefen.sh -> exec node-runtime.sh -> exec node auftrag-pruefen.mjs   (Kette zu Ende
+    verfolgt: node-runtime.sh waehlt nur die Node-Binaerdatei, nichts sonst)
+(c) der EXECUTOR selbst: auftrag-pruefen.mjs fuehrt Felder per execSync aus (Z. 516, 628) und
+    prueft davor die ERLAUBNISLISTE (W-01, Z. 69/465); `bash`/jedes `./skript` stehen NICHT drauf
+```
+
+**Aussage mit Suchbefehl: es gibt heute keinen zweiten Befehl in den Blättern, der die Maschine
+verlässt.** Der Vorfalls-Wrapper `push-integration-sicher.command` **existiert noch im
+Wurzelverzeichnis** (ausführbar, 947 B) — aber kein Feld ruft ihn, und die Erlaubnisliste würde
+ihn nicht ausführen. *Seine Entfernung/Entschärfung ist Yamas Posten, nicht meiner.*
+
+## Teil 3 — die Zahlen des Planners nachgefahren (P-01-04)
+
+Die Vorfalls-Zahlen vom 01.08. (3,6 s ↔ 39,4 s · 8/13 ↔ 48 ungepusht · Push-Zeit 20:01 ↔
+20:48/22:11) wurden am 01./02.08. von mir gemessen und sind im Ledger korrigiert. Heute gegen
+`docs/STAND.md` (Stand 02.08. 14:1x):
+
+```
+UNGEPUSHT 13      -> heute 0 nach jedem Takt (stehende Vertretung; Momentwert schwankt 0–3)   haelt (veraltet ehrlich, Befehl steht daneben)
+VOR MAIN 116      -> 194                                                                       haelt als Momentaufnahme
+Statusverteilung  -> "abgenommen 5" damals, 16 heute; bereit 6->6, entwurf 8->6                haelt als Momentaufnahme
+"Pruefer abwesend, 0 Voten, kein Commit seit 01.08. 23:00"                                     HAELT NICHT
+   18 Ledger-Ueberschriften tragen Pruefer-Lieferungen; "kein Commit" misst bei einer Rolle,
+   die nicht committen darf, immer null. Vom Planner am 03.08. 08:5x selbst zurueckgenommen
+   (Ruege angenommen, 5df61a37). Erledigt, bleibt als Beleg stehen.
+```
+
+## Kriterien-Selbststand
+
+```
+P-01-01  222 Befehle, eigener Lauf, eigener Zeitpunkt, keiner fehlt   ERFUELLT
+P-01-02  222 Befehle / 386 Glieder — beide Zahlen genannt             ERFUELLT
+P-01-03  eigener Suchweg (Wirkung statt Text), belegt, Ergebnis 0     ERFUELLT
+P-01-04  je Zahl haelt/haelt-nicht, eine widerlegt                    ERFUELLT
+P-01-05  git diff HEAD -- docs/auftraege scripts resources -> 3 Pfade,
+         KEINER von mir: 2x PB-055-Index-Artefakt (Datei==HEAD),
+         1x z07-Blatt (D+??, dritter PB-055-Fall, nicht meine Hand)   ERFUELLT (mit Beleg)
+P-01-06  dieser Abschnitt wird als Sicherungs-Commit gesetzt (B12,
+         Yamas Wort von heute: "Arbeit endgueltig erledigen")         folgt unmittelbar
+```
+
+**Repariert habe ich nichts. Zwei neue kleine Befunde aus der Inventur:** das Prosa-Befehlsfeld
+(S4c, P3) und der noch existierende Vorfalls-Wrapper im Wurzelverzeichnis (Hinweis, Yama).
+**Ballbesitz: Planner** (S4c-Feld), **Yama** (Wrapper).
+
+### PB-055 · Nachtrag 09:3x — **die Ursache steht im Tor selbst, mein „jemand refresht" war falsch**
+
+`scripts/commit-pruefen.sh`, Kopfkommentar Stufe 5: *„Der Index liegt AUSSERHALB des Mounts
+($TMPDIR, je Prozess eigener Pfad) … ⚠ PREIS, ehrlich benannt: der STAGING-Zustand ueberlebt den
+Sitzungswechsel nicht."* **Alle Tor-Commits laufen über einen Wegwerf-Index; der geteilte
+`.git/index` wird von ihnen nie fortgeschrieben.** Darum zeigt er 08:48 (den letzten Nicht-Tor-
+Stand) und hält jede seither via Tor gebaute Datei als `D`. Das ist kein fremder Eingriff, sondern
+der benannte Preis der Lock-Vermeidung — **mein „eine Instanz refresht den Index" ist zurückgenommen.**
+
+**Was bleibt, ist die Falle:** der Preis-Kommentar sagt „hier wird ohnehin mit ausdrücklichen Pfaden
+committet" — aber der geteilte Index ist für jeden **nackten** `git commit` weiterhin scharf
+(heute: 1 787+ Löschzeilen, inkl. Z-06-N1-Bau). Die R9-Barriere gehört also nicht ins Tor (das ist
+sauber), sondern **gegen den Weg am Tor vorbei** — und der dritte `D`-Fall (`z07`-Blatt, 09:2x)
+zeigt, dass der Weg begangen wird. Bleibt P1, Zuschnitt beim Planner.
