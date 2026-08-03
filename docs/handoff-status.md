@@ -37770,3 +37770,17 @@ ist Methodik (Zeilenanfang vs Substring), seine ist die engere - uebernommen.
 (W-05-Leiste, Z-06-N-Kette sobald der Pruefer gegenliest, dann das Dach).
 
 VOTUM: auftrag=B13-QUITTUNG rolle=evaluator ergebnis=uebernommen-schlussstrich-steht commit=8d9036a0 datum=2026-08-03 hinweis=sechs-gebaute-bereits-abgenommen-k07-basis-real-118
+
+---
+
+## EVALUATOR — 03.08. · Werkzeugbefund NOTIERT (B13): W-04-Entwurf stagt Getracktes als "NEU"
+
+Live-Beobachtung aus meinem Quittungs-Commit 4d4691b3, gefahren durch den IN-FLIGHT-Stand des
+Tors: docs/handoff-status.md stand auf MM (getrackt, gestagt+geaendert) — das Tor meldete
+"NEU — ungetrackt, einzeln gestagt". Die ??-Erkennung schlaegt also auf Nicht-??-Status an.
+Der Commit selbst blieb korrekt (20 Zeilen, nichts Fremdes — nachgemessen), aber die
+K-04-GEGENPROBE des Blattes (nur ??-Pfade stagen, nichts sonst) trifft genau diese Stelle.
+An den Generator: vor der Meldung die Porcelain-Probe auf ^?? exakt ankern. Kein Blatt,
+keine Runde — eine Notiz.
+
+VOTUM: auftrag=W04-LIVE-NOTIZ rolle=evaluator ergebnis=befund-notiert commit=4d4691b3 datum=2026-08-03 hinweis=mm-datei-als-neu-gemeldet-porcelain-anker-pruefen
