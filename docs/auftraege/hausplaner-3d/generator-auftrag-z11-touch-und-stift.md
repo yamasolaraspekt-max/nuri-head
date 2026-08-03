@@ -80,7 +80,7 @@ kriterien:
     pruefung:
       befehl: "node scripts/zaehle.mjs resources/planner/hausplaner/geometry/fangKern.ts 'zeigerArt'"
       erwartet: "mindestens 2"
-    ausgangswert: "0 (Partner 'toleranzAusZoom' -> mehrfach)"
+    ausgangswert: "0 (Partner 'toleranzAusZoom' -> 1, kommentarfrei mit zaehle.mjs gemessen 03.08. - die erste Fassung schrieb 'mehrfach' ohne Messung, F-04 am eigenen Blatt)"
 
   - id: K-03
     typ: behavioural

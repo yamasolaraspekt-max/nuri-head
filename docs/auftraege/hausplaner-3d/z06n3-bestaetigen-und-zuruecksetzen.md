@@ -49,7 +49,7 @@ Entscheidung wie bei der Bilanz in W-05: nicht die Zahl anfassen, sondern sie re
 
 ```text
 Hier wird geschrieben:
-  domain/validation.ts        das Fingerabdruck-Feld (Schema v3 -> v4, ADDITIV)
+  domain/validation.ts        das Feld geometrieFingerabdruck (Schema v3 -> v4, ADDITIV; Name analog geometrieHerkunft, insel-weit kollisionsfrei)
   geometry/freigabe.ts        bildeFingerabdruck() + pruefeFingerabdruck()
   app/…                       der Bestaetigungs-Knopf und sein Ort
   commands/applyCommand.ts    jede Geometrie-Aenderung laeuft hier durch
@@ -75,7 +75,7 @@ scope:
     - resources/planner/hausplaner/geometry/freigabe.ts
     - resources/planner/hausplaner/domain/validation.ts
     - resources/planner/hausplaner/commands/applyCommand.ts
-  population_command: "grep -ro 'fingerabdruck' resources/planner/hausplaner/ | wc -l"
+  population_command: "grep -ro 'geometrieFingerabdruck' resources/planner/hausplaner/ | wc -l"
   ausschluesse:
     - stelle: "Eine Freigabe-Historie"
       grund: "freigabe_am und freigabe_von decken 'wann und durch wen' ab. Historie ist eine eigene Entscheidung (Dateigroesse, Aufraeumfrage)."
@@ -91,9 +91,9 @@ kriterien:
   - id: K-01
     typ: presence
     kritikalitaet: P1
-    aussage: "Der Fingerabdruck existiert."
+    aussage: "Das Feld geometrieFingerabdruck existiert."
     pruefung:
-      befehl: "grep -ro 'fingerabdruck' resources/planner/hausplaner/ | wc -l"
+      befehl: "grep -ro 'geometrieFingerabdruck' resources/planner/hausplaner/ | wc -l"
       erwartet: "mindestens 2"
     ausgangswert: "0 (gemessen 03.08.; bewusst ueber das VERZEICHNIS, weil geometry/freigabe.ts vor N1 nicht existiert; Partner 'schneidetSichSelbst' -> 2, die Messung ist nicht leer)"
 

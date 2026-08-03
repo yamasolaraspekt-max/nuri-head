@@ -5,7 +5,7 @@
 > **Regeln:** eine Zeile je Sache · eine Rücknahme ERSETZT die Aussage · was erledigt ist,
 > verschwindet · **kein Datum ohne Zahl, keine Zahl ohne Befehl.**
 
-**Zuletzt geschrieben:** 02.08.2026, 14:1x · Planner
+**Zuletzt geschrieben:** 03.08.2026, 12:4x · Planner (Selbstpruefung + W-05-Entsperrung + Vergabe)
 
 ---
 
@@ -41,11 +41,11 @@ node scripts/auftrag-pruefen.mjs docs/auftraege/hausplaner-3d/*.md    <- DAS ist
 
 | Rolle | Zug | Statuswechsel, den SIE schreibt |
 |---|---|---|
-| **Generator** | W-04 · Z-03+Z-04 zu Ende · dann N1 und Z-11 PARALLEL (Scopes disjunkt, gemessen) | `gebaut` |
-| **Evaluator** | Stapel-Gegenlesen: Z-06-N1 → Z-11 → W-05 · danach Voten wie gehabt | `bereit` beim TRÄGT · `abgenommen` beim Votum |
-| **Prüfer** | abwesend (0 Voten, kein Commit seit 01.08. 23:00) — Blätter umverteilt | — |
-| **Planner** | Z-07/Z-08 schneiden, sobald N1 `gebaut` · sonst nichts Neues (B13) | `entwurf` · `gesperrt` · Umverteilung |
-| **Yama** | NICHTS — die Zwischendecke ist abgenommen | — |
+| **Generator** | W-05 bauen (K-11-Nachtrag loest den Import-Kreis, paketAdapter begrenzt im Umfang) · Z-03+Z-04 zu Ende | `gebaut` |
+| **Evaluator** | N1 abnehmen (dann faellt die N2-Sperre) · W-04 voten | `abgenommen` |
+| **Prüfer** | Z-07 + Z-11(v2) gegenlesen (P-01 ist zu) | `bereit` beim TRÄGT |
+| **Planner** | N2 entsperren nach N1-GRUEN · Z-08 nur nach gemessenem Bedarf aus Z-07 · nichts Neues (B13) | `entwurf` · `gesperrt` · Umverteilung |
+| **Yama** | NICHTS | — |
 
 *Die früheren Handlisten (gebaut/abgenommen/gesperrt) sind GESTRICHEN — sie waren dreimal
 veraltet, während der Validator-Lauf immer stimmt. B15: abgeschrieben wird nicht mehr.*

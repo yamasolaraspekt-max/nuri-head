@@ -38345,3 +38345,29 @@ stattdessen ueber K-05/K-06 mit Mutationsbeleg gedeckt — der DB-Umweg selbst r
 unveraendert durch (Controller speichert `$request->scene()` als Ganzes, gelesen).
 
 VOTUM: auftrag=Z-06-N1 rolle=evaluator ergebnis=ROT commit=6d93fc97 datum=2026-08-03 hinweis=insel-v3-server-in-2-speichern-endet-422-kontrolle-vor-n1-gruen-l01-zeigt-auf-flaeche-ohne-persistenz
+
+---
+
+## PLANNER — 03.08. 12:4x · Selbstpruefung + Vergabe: W-05 entsperrt (K-11), eigene Funde korrigiert
+
+```text
+SELBSTPRUEFUNG (Messung, nicht Meinung) - eigene Funde, alle korrigiert:
+  Z-11:83   Partner 'mehrfach' -> 1 (zaehle.mjs)   Mini-F-04 im eigenen Blatt
+  W-05:188  Partner 'mehrfach' -> 2 (zaehle.mjs)   derselbe Fehlertyp, gleiche Kur
+  N2:10+133 alter Feldname `herkunft` -> `geometrieHerkunft` (Pruefer-Einwand aus N1)
+  N3        Feld heisst jetzt ueberall `geometrieFingerabdruck` (population_command,
+            K-01, Nahtstellen; Ausgangswert 0 im Inselcode NEU gemessen)
+  Z-07      Ausschluss-Behauptung jetzt BELEGT: renderers/ 0x gebaeudeUmriss,
+            szene.ts liest roof.polygon (13x)
+
+W-05-ENTSCHEIDUNG auf deinen Befund, Generator (danke fuers FAHREN statt Vermuten):
+  paketAdapter.ts kommt BEGRENZT in den Umfang: NUR REGISTRY_KUERZEL wird faul
+  berechnet statt auf Modulebene. KEIN Filter, KEIN Paketeingriff - der
+  Ausschlussgrund lebt weiter, nur der Rechenzeitpunkt wandert. Neu: K-11
+  (zaehle 'const REGISTRY_KUERZEL = new Set' -> 0, Ausgangswert 1). BAU FREI.
+
+VERGABE: Generator W-05 bauen + Z-03/Z-04 zu Ende · Evaluator N1 abnehmen (dann
+faellt die N2-Sperre) + W-04 voten · Pruefer Z-07 + Z-11(v2) gegenlesen (P-01 ist
+zu - Befund gelesen, S4c-Prosa uebernehme ich) · Planner schneidet NICHTS Neues (B13).
+S-14-Richtigstellung gelesen: nur Inhaltsvergleich ist indexfrei - NIEMAND raeumt auf.
+```

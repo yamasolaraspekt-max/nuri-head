@@ -7,7 +7,7 @@ auftrag:
   id: Z-06-N2
   strang: hausplaner-3d
   status: gesperrt
-  sperrgrund: "Z-06-N1 muss GRUEN sein. Ohne die persistierten Felder `herkunft` und `freigabe` gibt es nichts zu kennzeichnen - die Kennzeichnung LIEST sie, sie erzeugt sie nicht. Wer N2 vor N1 baut, kennzeichnet einen Zustand aus dem Arbeitsspeicher und baut damit genau den Fehler nach, den B10 abstellt."
+  sperrgrund: "Z-06-N1 muss GRUEN sein. Ohne die persistierten Felder `geometrieHerkunft` und `freigabe` gibt es nichts zu kennzeichnen - die Kennzeichnung LIEST sie, sie erzeugt sie nicht. Wer N2 vor N1 baut, kennzeichnet einen Zustand aus dem Arbeitsspeicher und baut damit genau den Fehler nach, den B10 abstellt."
   gegengelesen_von:
   gegengelesen_am:
   befund:
@@ -130,7 +130,7 @@ kriterien:
           freigabe 'abgelehnt'   -> Kennzeichnung AN
           freigabe 'bestaetigt'  -> Kennzeichnung AUS
         Und die Herkunft steht im Text, nicht nur ein Ausrufezeichen:
-          herkunft 'abgeleitet' -> der Text NENNT sie ("aus dem Grundriss abgeleitet")
+          geometrieHerkunft 'abgeleitet' -> der Text NENNT sie ("aus dem Grundriss abgeleitet")
         Die letzte Zeile ist die scharfe: ein blosses Warnzeichen sagt "irgendwas stimmt
         nicht" und laesst den Leser raten. B10 verlangt den HERKUNFTSSTATUS, nicht ein Gefuehl.
       erwartet: "fuenf Zusagen, davon eine ROTE (bestaetigt -> AUS)"

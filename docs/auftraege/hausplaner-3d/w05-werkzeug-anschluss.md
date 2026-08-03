@@ -137,10 +137,17 @@ Das zweite darf NUR Daten veraendern: eine Zeile in AUS_PAKET_GEHOBEN und einen
 Hier wird geschrieben:
   app/tools/toolRegistry.ts        AUS_PAKET_GEHOBEN + die zwei Eintraege
   app/tools/toolCatalog.ts         der Filter gegen AUS_PAKET_GEHOBEN
+  app/tools/paketAdapter.ts        NACHTRAG 03.08. (Planner, nach Generator-Befund
+                                   b4b26282): NUR die faule Berechnung von
+                                   REGISTRY_KUERZEL - toolRegistry holt jetzt die zwei
+                                   fertigen Definitionen aus paketAdapter, und die
+                                   Modulebenen-Zeile schloss den Kreis (gefahren:
+                                   ReferenceError arbeitsbereiche.ts:69). KEIN Filter,
+                                   KEINE Paketaenderung -> K-11.
   __tests__/…                      die 11 festen Zahlen auf abgeleitete umstellen
 
 Hier bewusst NICHT:
-  app/tools/paketAdapter.ts        das Paket bleibt vollstaendig. Gefiltert wird beim
+  paketAdapter.ts: FILTERN         das Paket bleibt vollstaendig. Gefiltert wird beim
                                    KATALOG, nicht an der Quelle - sonst verliert
                                    `verworfeneKuerzel()` seine Grundgesamtheit.
   werkzeugThemen · werkzeugVertrag · toolPresentation
@@ -156,10 +163,11 @@ scope:
   dateien:
     - resources/planner/hausplaner/app/tools/toolRegistry.ts
     - resources/planner/hausplaner/app/tools/toolCatalog.ts
+    - resources/planner/hausplaner/app/tools/paketAdapter.ts
   population_command: "grep -ro 'AUS_PAKET_GEHOBEN' resources/planner/hausplaner/ | wc -l"
   ausschluesse:
-    - stelle: "paketAdapter.ts"
-      grund: "Das Paket bleibt vollstaendig; gefiltert wird beim Katalog. Sonst verliert verworfeneKuerzel() seine Grundgesamtheit."
+    - stelle: "paketAdapter.ts: Filtern oder Paketaenderung"
+      grund: "Das Paket bleibt vollstaendig; gefiltert wird beim Katalog. Sonst verliert verworfeneKuerzel() seine Grundgesamtheit. NACHTRAG 03.08. (Planner): die FAULE Berechnung von REGISTRY_KUERZEL ist ausdruecklich IM Umfang (K-11) - sie filtert nichts, sie loest den Import-Kreis, den der Generator gefahren belegt hat."
       entschieden_von: planner
     - stelle: "werkzeugThemen, werkzeugVertrag, toolPresentation"
       grund: "Tragen alle acht bereits - gemessen. Nichts zu tun."
@@ -185,7 +193,7 @@ kriterien:
     pruefung:
       befehl: "node scripts/zaehle.mjs resources/planner/hausplaner/app/tools/toolRegistry.ts \"'bemassen'\""
       erwartet: "mindestens 1"
-    ausgangswert: "0 (Partner: dieselbe Datei, 'wand' -> mehrfach)"
+    ausgangswert: "0 (Partner: dieselbe Datei, 'wand' -> 2, kommentarfrei mit zaehle.mjs gemessen 03.08. - vorher stand hier 'mehrfach' ohne Messung)"
 
   - id: K-03
     typ: absence
@@ -308,6 +316,15 @@ kriterien:
         Filter an der Quelle statt am Katalog.
         Wie viele kommen durch?
 
+  - id: K-11
+    typ: presence
+    kritikalitaet: P1
+    aussage: "Der Import-Kreis ist aufgeloest: REGISTRY_KUERZEL wird FAUL berechnet, nicht mehr auf Modulebene."
+    pruefung:
+      befehl: "node scripts/zaehle.mjs resources/planner/hausplaner/app/tools/paketAdapter.ts 'const REGISTRY_KUERZEL = new Set'"
+      erwartet: "0"
+    ausgangswert: "1 (gemessen 03.08. nach Generator-Befund b4b26282: Probe-Import lief in ReferenceError arbeitsbereiche.ts:69 - die Modulebenen-Zeile ist genau die, die den Kreis schliesst. Die WIRKUNG - Modul laedt, Leiste steht - misst L-01.)"
+
   - id: L-01
     typ: presence
     kritikalitaet: P1
@@ -338,6 +355,7 @@ kriterien:
 4  Kuerzel-Kollision mit einem bestehenden Werkzeug.                   -> K-07
 5  Gefiltert wird an der Quelle (paketAdapter) statt am Katalog -
    dann verliert `verworfeneKuerzel()` seine Grundgesamtheit.          -> Ausschluss + K-09
+   (die FAULE Auswertung von REGISTRY_KUERZEL ist KEIN Filtern - Nachtrag 03.08. -> K-11)
 6  Das zweite Werkzeug braucht doch Code.                              -> K-06, und DAS ist rot
 7  Das gehobene Werkzeug erscheint in der Leiste, tut aber nichts -
    die Geometrie ist da, die Verdrahtung fehlt.
