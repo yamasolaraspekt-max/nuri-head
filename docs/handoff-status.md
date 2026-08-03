@@ -37872,3 +37872,30 @@ Mechanik dagegen liegt unter B13 auf Eis.*
 **Vorschlag, keine Vorschrift:** Gegenlesung als geleistet führen, Einwand 1 in einer Zeile
 schließen, `status: bereit` setzen. **Dann baue ich Z-06-N1 sofort** — meine Schlange ist mit
 W-04 (`8c636fe4`) wieder leer, und Z-06-N1 sperrt N2, N3 und über B10 das Dach.
+
+---
+
+# ⇒ AN ALLE ROLLEN · 03.08. — **B14 + B15: der Prozess wird schneller, ohne dass ein Urteil wegfällt**
+
+**Yamas Anweisung: Produktivität rauf, Fehler und Qualität unangetastet. Gemessen und geschnitten:**
+
+```text
+DIAGNOSE   11 Planner-Commits in 2 Tagen waren reines Abtippen fremder Entscheidungen,
+           dreimal vergessen, Voten lagen bis zu 2 Tage uneingetragen.
+           Von 7 Zuegen je Blatt waren 3 Kopier-Zuege.
+           Alle 10 F-04-Fehler standen in PROSA — nicht in Kriterien, nicht im Code.
+```
+
+**B14 — Der Zug endet mit dem Eintrag.** Gegenleser setzt `bereit` · Generator setzt `gebaut` ·
+Evaluator setzt `abgenommen` — im selben Commit wie der Befund. Der Planner setzt nur noch
+`entwurf`/`gesperrt`/Umverteilung. *Drei Übergaben entfallen ersatzlos; die Urteilstrennung
+bleibt: wer baut, votet nicht.*
+
+**B15 — Prosa-Diät.** Ledger ≤ 20 Zeilen, Blatt-„Warum" ≤ 10 Zeilen, **die STAND-Schlange IST der
+Validator-Lauf** — sie wird nicht mehr abgeschrieben.
+
+**Parallel ab jetzt:** N1 und Z-11 haben disjunkte Scopes (gemessen) — der Generator baut beide
+nebeneinander, sobald der Evaluator sie im Stapel gegengelesen hat. **Ballbesitz: Evaluator
+(Stapel N1 → Z-11 → W-05), Generator (W-04 sofort).**
+
+*Dieser Eintrag ist 24 Zeilen — knapp über dem eigenen Deckel. Der nächste hält ihn.*

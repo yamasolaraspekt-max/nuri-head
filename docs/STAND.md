@@ -30,20 +30,25 @@ aktiv 1 · bereit 6 · gebaut 3 · entwurf 8 · gesperrt 4 · ruht 15 · abgenom
 **S-06 ist erfüllt: 7 baubare Blätter** (vormittags war es 1). *Der Stau hat sich um 12:40
 gelöst — das Votum auf Z-05 hat Z-06 entsperrt.*
 
-## 2. Die Schlange — wer was hat
+## 2. Die Schlange — sie wird GEMESSEN, nicht gepflegt (B15)
 
-| Rolle | Was liegt bereit |
-|---|---|
-| **Generator** | **W-04 bauen (`bereit`, die B13-Ausnahme — jeder dritte Commit läuft am Tor vorbei)** · Z-03+Z-04 `aktiv` zu Ende · dann **Z-06-N1**, sobald der Evaluator es gegengelesen hat |
-| **Evaluator** | **GEGENLESEN (B8, umverteilt): Z-06-N1 → dann Z-11 · W-05.** N1 ist der Schlüssel — es sperrt N2, N3 und über B10 das Dach. Alle Voten sind eingetragen, nichts wartet mehr auf dich |
-| **Prüfer** | **ABWESEND, gemessen: null Voten im Ledger, kein Commit seit 01.08. 23:00.** Seine drei Blätter sind zum Evaluator umverteilt. PRUEFER-BEFUNDE.md liegt verändert und unverbucht im Baum — NICHT anfassen, Urheber unklar. Meldet er sich, gilt d1cecdcf wieder |
-| **Planner** | **Z-07/Z-08 schneiden, sobald Z-06-N1 gebaut ist.** Sonst nichts Neues (B13) |
-| **Yama** | **NICHTS. Die ZWISCHENDECKE ist abgenommen** (Z-06, Votum 20bbfcc2) — dein Posten seit Tagen, jetzt fertig |
+```text
+node scripts/auftrag-pruefen.mjs docs/auftraege/hausplaner-3d/*.md    <- DAS ist die Schlange
+  S-01 zeigt das aktive Blatt · S-06 die baubaren · S-14 das Unverbuchte mit Alter
+```
 
-**Gebaut, wartet auf Votum:** Z-10 · W-02 · AUF-38-P4+P5 — **alle drei vom Planner vorgemessen,
-14 von 14 messbaren Stellen treffen ihr `erwartet`** (`f45c28a5`).
-**Abgenommen:** Z-01 · Z-02 · **Z-05** · Z-05-N1 · AUF-38-P1+P2+P3 · AUF-91 · PB-023 · PB-043 T2 · PB-047.
-**Gesperrt:** AUF-83-T2T3 · AUF-83-T5 · AUF-88-P1. **Z-06 nicht mehr.**
+**Zuständigkeiten (B14: den Statuswechsel schreibt, wer das Ereignis erzeugt):**
+
+| Rolle | Zug | Statuswechsel, den SIE schreibt |
+|---|---|---|
+| **Generator** | W-04 · Z-03+Z-04 zu Ende · dann N1 und Z-11 PARALLEL (Scopes disjunkt, gemessen) | `gebaut` |
+| **Evaluator** | Stapel-Gegenlesen: Z-06-N1 → Z-11 → W-05 · danach Voten wie gehabt | `bereit` beim TRÄGT · `abgenommen` beim Votum |
+| **Prüfer** | abwesend (0 Voten, kein Commit seit 01.08. 23:00) — Blätter umverteilt | — |
+| **Planner** | Z-07/Z-08 schneiden, sobald N1 `gebaut` · sonst nichts Neues (B13) | `entwurf` · `gesperrt` · Umverteilung |
+| **Yama** | NICHTS — die Zwischendecke ist abgenommen | — |
+
+*Die früheren Handlisten (gebaut/abgenommen/gesperrt) sind GESTRICHEN — sie waren dreimal
+veraltet, während der Validator-Lauf immer stimmt. B15: abgeschrieben wird nicht mehr.*
 
 **Ohne Ausnahme:** kein Push (Y1 offen) · keine Fachentscheidung (Tor 1) · kein Merge/Tag/`--force`
 (Tor 2) · die drei PHP-Dateien im Baum sind Yamas.
