@@ -11,6 +11,9 @@ use App\Models\Measure;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\SubArticleGroup as SubArticle;
+use App\Services\Product\Identity\IdentityMatch;
+use App\Services\Product\Identity\ProductIdentity;
+use App\Services\Product\Identity\ProductIdentityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -125,32 +128,88 @@ class ProductImportController extends Controller
                         continue;
                     }
 
-                    $product = null;
+                    if (config('produkt.identitaet.aktiv')) {
+                        // AUF-P1-S4 §8 Zeile 5: resolve() — der Namensvergleich
+                        // (article_no -> Produktname) ist ersatzlos gestrichen.
+                        $dienst = app(ProductIdentityService::class);
 
-                    if ($articleNo !== '') {
-                        $product = Product::where('article_no', $articleNo)->first();
+                        $identitaet = new ProductIdentity(
+                            manufacturerArticleNo: $articleNo !== '' ? $articleNo : null,
+                            brandId: $defaultBrandId ? (int) $defaultBrandId : null,
+                            distributorId: $defaultDistributorId ? (int) $defaultDistributorId : null,
+                            name: $productName !== '' ? $productName : null,
+                            channel: 'import:produkt-csv',
+                        );
+
+                        $match = $dienst->resolve($identitaet);
+
+                        if ($match->ergebnis === IdentityMatch::KONFLIKT) {
+                            throw new \RuntimeException('Identitätskonflikt — Zeile übersprungen: ' . $match->begruendung);
+                        }
+
+                        if ($match->ergebnis === IdentityMatch::VORSCHLAG) {
+                            $dienst->vorschlagSpeichern($identitaet, $match);
+
+                            throw new \RuntimeException(
+                                'Identität nicht eindeutig — Vorschlag zur Prüfung angelegt (Artikel #'
+                                . $match->product->id . '), Zeile nicht importiert.'
+                            );
+                        }
+
+                        $product = $match->product;
+                        $isNew = false;
+
+                        if (! $product) {
+                            $product = $dienst->createFrom($identitaet, [
+                                'product' => $productName ?: 'Unbenanntes Produkt',
+                                'brand_id' => $defaultBrandId ?: null,
+                                'article_group' => $defaultArticleGroupId ?: null,
+                                'sub_article' => $defaultSubArticleId ?: null,
+                                'measure_unit' => $defaultMeasureUnitId ?: null,
+                                'status' => 'active',
+                                'category' => 'Produkt',
+                                'roof_type' => 'none',
+                            ]);
+                            $isNew = true;
+                        } else {
+                            $product->product = $productName ?: ($product->product ?: 'Unbenanntes Produkt');
+                            $product->brand_id = $defaultBrandId ?: $product->brand_id;
+                            $product->article_group = $defaultArticleGroupId ?: $product->article_group;
+                            $product->sub_article = $defaultSubArticleId ?: $product->sub_article;
+                            $product->measure_unit = $defaultMeasureUnitId ?: $product->measure_unit;
+                            $product->status = $product->status ?: 'active';
+                            $product->category = $product->category ?: 'Produkt';
+                            $product->roof_type = $product->roof_type ?: 'none';
+                        }
+                    } else {
+                        // Alt-Verhalten, byte-gleich (Kante 15).
+                        $product = null;
+
+                        if ($articleNo !== '') {
+                            $product = Product::where('article_no', $articleNo)->first();
+                        }
+
+                        if (! $product && $productName !== '') {
+                            $product = Product::where('product', $productName)->first();
+                        }
+
+                        $isNew = false;
+
+                        if (! $product) {
+                            $product = app(ProductIdentityService::class)->newLegacy();
+                            $isNew = true;
+                        }
+
+                        $product->article_no = $articleNo ?: $product->article_no;
+                        $product->product = $productName ?: ($product->product ?: 'Unbenanntes Produkt');
+                        $product->brand_id = $defaultBrandId ?: $product->brand_id;
+                        $product->article_group = $defaultArticleGroupId ?: $product->article_group;
+                        $product->sub_article = $defaultSubArticleId ?: $product->sub_article;
+                        $product->measure_unit = $defaultMeasureUnitId ?: $product->measure_unit;
+                        $product->status = $product->status ?: 'active';
+                        $product->category = $product->category ?: 'Produkt';
+                        $product->roof_type = $product->roof_type ?: 'none';
                     }
-
-                    if (! $product && $productName !== '') {
-                        $product = Product::where('product', $productName)->first();
-                    }
-
-                    $isNew = false;
-
-                    if (! $product) {
-                        $product = new Product();
-                        $isNew = true;
-                    }
-
-                    $product->article_no = $articleNo ?: $product->article_no;
-                    $product->product = $productName ?: ($product->product ?: 'Unbenanntes Produkt');
-                    $product->brand_id = $defaultBrandId ?: $product->brand_id;
-                    $product->article_group = $defaultArticleGroupId ?: $product->article_group;
-                    $product->sub_article = $defaultSubArticleId ?: $product->sub_article;
-                    $product->measure_unit = $defaultMeasureUnitId ?: $product->measure_unit;
-                    $product->status = $product->status ?: 'active';
-                    $product->category = $product->category ?: 'Produkt';
-                    $product->roof_type = $product->roof_type ?: 'none';
 
                     if ($priceValue !== null && $priceTarget === 'retail_price') {
                         $product->retail_price = $priceValue;
