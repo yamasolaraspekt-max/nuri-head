@@ -6,8 +6,8 @@
 auftrag:
   id: Z-06-N2
   strang: hausplaner-3d
-  status: gesperrt
-  sperrgrund: "Z-06-N1 muss GRUEN sein. Ohne die persistierten Felder `geometrieHerkunft` und `freigabe` gibt es nichts zu kennzeichnen - die Kennzeichnung LIEST sie, sie erzeugt sie nicht. Wer N2 vor N1 baut, kennzeichnet einen Zustand aus dem Arbeitsspeicher und baut damit genau den Fehler nach, den B10 abstellt."
+  status: entwurf   # ENTSPERRT 03.08. durch den Planner: Z-06-N1 ist GRUEN abgenommen (Evaluator a4f16920, sechs Kriterien plus L-01 mit Kontrolle). Die Felder geometrieHerkunft und freigabe sind persistiert und ueberleben das Neuladen - N2 hat ab jetzt etwas zu LESEN. Naechster Zug: Gegenlesen durch den Pruefer (B8), dann Bau.
+  sperrgrund: ""    # aufgehoben 03.08. - die Bedingung ("N1 GRUEN") ist eingetreten und gemessen, nicht angenommen
   gegengelesen_von:
   gegengelesen_am:
   befund:

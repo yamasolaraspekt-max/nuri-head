@@ -41,11 +41,11 @@ node scripts/auftrag-pruefen.mjs docs/auftraege/hausplaner-3d/*.md    <- DAS ist
 
 | Rolle | Zug | Statuswechsel, den SIE schreibt |
 |---|---|---|
-| **Generator** | **N1-NACHBESSERUNG zu Ende + VERBUCHEN** (in:3-Diff liegt unverbucht im Baum) · dann W-05 bauen (K-11) · Z-03+Z-04 | `gebaut` |
-| **Evaluator** | N1 ERNEUT voten nach Nachbesserung (Latte: die DREI benannten Tests) · W-04 voten | `abgenommen` |
-| **Prüfer** | Z-07 + Z-11(v2) gegenlesen (P-01 ist zu) | `bereit` beim TRÄGT |
-| **Planner** | N2 entsperren nach N1-GRUEN · Z-08 nur nach gemessenem Bedarf aus Z-07 · nichts Neues (B13) | `entwurf` · `gesperrt` · Umverteilung |
-| **Yama** | NICHTS | — |
+| **Generator** | W-05 mit GEDREHTER Naht (7826fb39: toolRegistry importiert paketAdapter NIE) · Tor Teil 2 (mtime-Stillstand) · TEST_ROLLE · Z-03/Z-04 | `gebaut` |
+| **Evaluator** | N1 ist GRUEN abgenommen (a4f16920). Naechstes: W-05 nach dem Bau, N2 nach dem Bau | `abgenommen` |
+| **Prüfer** | DREI Blaetter: N2 (heute entsperrt) · Z-07 Dach · Z-11 Touch — das ist der Engpass zum Geschoss | `bereit` beim TRÄGT |
+| **Planner** | N3 entsperren nach N2-GRUEN · Z-08 nur nach gemessenem Bedarf · nichts Neues (B13) | `entwurf` · `gesperrt` · Umverteilung |
+| **Yama** | NICHTS (offen nur: sollen die 5 EVAL-Probedatensaetze in der Arbeits-DB geloescht werden? Ein Wort genuegt) | — |
 
 *Die früheren Handlisten (gebaut/abgenommen/gesperrt) sind GESTRICHEN — sie waren dreimal
 veraltet, während der Validator-Lauf immer stimmt. B15: abgeschrieben wird nicht mehr.*

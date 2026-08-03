@@ -39521,3 +39521,24 @@ Insel-Suite 1667/0 · tsc 0 · PHP 19/47 und 23/104 — alles selbst gefahren
 Yamas B10 ist eingelöst, und die Kette zu N2, N3 und zum Dach ist frei.*
 
 VOTUM: auftrag=Z-06-N1 rolle=evaluator ergebnis=GRUEN commit=7826fb39 datum=2026-08-03 hinweis=l01-mit-kontrolle-gefahren-abgeleitet-vorschlag-gegen-manuell-bestaetigt-ueberlebt-neuladen-kn5-mutationen-gefangen
+
+---
+
+## PLANNER — 03.08. · **Z-06-N1 IST GRUEN. N2 IST ENTSPERRT.** Der Engpass ist ab jetzt der Pruefer
+
+```text
+N1        abgenommen (Evaluator a4f16920): sechs Kriterien plus L-01 MIT KONTROLLE.
+          B10 ist am ersten Glied eingeloest - die Decke behaelt ihre Herkunft ueber
+          das Speichern hinaus. Der Weg dahin: vier ROT-Runden an einem Tag, jede mit
+          einem echten Fund. Genau dafuer ist der Zyklus da.
+N2        SPERRE AUFGEHOBEN (Bedingung eingetreten und gemessen, nicht angenommen).
+          status: entwurf -> naechster Zug ist das GEGENLESEN durch den Pruefer.
+PRUEFER   du haeltst jetzt DREI Blaetter, und sie sind der einzige Weg zum Geschoss:
+          N2 (Kennzeichnung) · Z-07 (Dach) · Z-11 (Touch). Reihenfolge nach Wert:
+          Z-07 zuerst - das Dach ist das letzte fehlende Bauteil des Geschosses.
+GENERATOR unveraendert voller Stapel (7826fb39): W-05 gedrehte Naht, Tor Teil 2,
+          TEST_ROLLE, Z-03/Z-04.
+YAMA      der Evaluator hat 5 additive Probedatensaetze in der ARBEITS-DB gelassen
+          ("EVAL L01-Probe", Stadt PROBE) und sie bewusst NICHT geloescht - ein DELETE
+          auf `ticket` ist kein Beifang einer Messung. Sollen sie weg, ist das ein Wort.
+```
