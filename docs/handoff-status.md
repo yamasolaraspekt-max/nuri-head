@@ -38371,3 +38371,77 @@ faellt die N2-Sperre) + W-04 voten · Pruefer Z-07 + Z-11(v2) gegenlesen (P-01 i
 zu - Befund gelesen, S4c-Prosa uebernehme ich) · Planner schneidet NICHTS Neues (B13).
 S-14-Richtigstellung gelesen: nur Inhaltsvergleich ist indexfrei - NIEMAND raeumt auf.
 ```
+
+---
+
+## PRÜFER — **PB-042 (b) vollzogen: erster Register-Kipp** (03.08. 12:2x) · `13111b95`, beide Fernziele
+
+Auf Yamas „weiter machen" und die PB-042-Entscheidung (`18f7d1dc`): `PRUEFER-BEFUNDE.md`
+**5 473 → 554 Zeilen vorn** (Registertabelle vollständig, 55 Zeilen, plus die Abschnitte der
+offenen Befunde) · **4 933 Zeilen** nach `PRUEFER-BEFUNDE-ARCHIV-2026-07.md`. Zeilenbilanz per
+`assert` vor dem Schreiben geprüft (554+4933+Hinweiszeilen = Quelle+Köpfe), **nichts gelöscht, nur
+verschoben**, Original in der Git-Historie. PB-042 in der Tabelle gestempelt: **ERLEDIGT**.
+Hinweis für Leser: die Prosa der offenen PB-051/PB-052 steht im Archiv (sie lag innerhalb der
+PW-01-Gegenlesung); die Tabellenzeilen vorn bleiben die führende Liste.
+
+**Weiter offen und nachgehalten:** Z-06-N1-**ROT** (Insel v3 ↔ Server v2 → 422) — jetzt **> 2,5 h**
+ohne Generator-Antwort · PB-055-Barriere (Planner) · PB-050/051/052 (Planner) · PB-048 (Planner).
+
+---
+
+## EVALUATOR — 03.08. · Z-06-N1 bleibt ROT, aber die URSACHE war bei mir falsch. Und eine Zahl nehme ich zurueck
+
+### Richtigstellung 1 — der Server steht NICHT auf v2. Er widerspricht sich selbst
+
+Ich hatte geschrieben: *"die Insel hebt auf v3, der Server steht auf v2"*. **Falsch gelesen.**
+Der Generator HAT das Server-Schema mitgezogen. Beide Naehte nebeneinander, am N1-Stand:
+
+```text
+SpeichereHausplanerDokumentRequest:24   'schema_version' => [... 'in:2']     nur v2
+scene-document-v2.schema.json (Server)  "schemaVersion": { "const": 3 }      nur v3
+
+v2 senden  -> Request laesst durch, JSON-Schema lehnt ab   (im Test belegt: 422,
+              "The data must match the const value")
+v3 senden  -> Request lehnt ab                              (am Code belegt)
+```
+
+**Es gibt keine Version, die beide Naehte passiert. Speichern ist in BEIDE Richtungen zu.**
+*Das ist schlimmer als mein erster Befund und praeziser: es fehlt nicht eine Anhebung, es fehlt
+die Abstimmung zweier Naehte, die derselbe Bau in verschiedene Richtungen gezogen hat.*
+
+### Richtigstellung 2 — meine Zahl "17 kaputte Tests" nehme ich zurueck
+
+**Mein erster Suite-Lauf hatte keine gueltige Kontrolle.** Die Test-DB war nach dem Lauf ohne
+`migrations`-Tabelle, der Vergleichslauf lief ins Leere (59 ERRORS). *Zahlen aus einem Lauf ohne
+Kontrolle sind keine Messwerte.* Nach Herstellen der DB und zweitem Lauf, Listen verglichen:
+
+```text
+rot VOR N1   17     rot NACH N1   17     <- die Suite war SCHON VORHER rot
+NEU rot durch N1 — genau DREI:
+  HausplanerSpeichernNutzlastTest::test_gueltige_v2_dachszene_wird_vollstaendig_persistiert
+  HausplanerSpeichernNutzlastTest::test_revisionskonflikt_bleibt_409_und_schreibt_nichts
+  UebernahmeKnopfTest::test_zweite_uebernahme_nach_aenderung_version_additiv_altversion_unveraendert
+```
+
+**Der dritte ist neu und wichtig: auch die UEBERNAHME in die Auslegung ist betroffen** — nicht
+nur das Speichern. *Drei Tests, nicht siebzehn. Der Befund traegt, die Zahl trug nicht.*
+
+**Und ausdruecklich NICHT behauptet:** drei Tests sind "vorher rot, nachher gruen"
+(DachplanerRedirect 2x, HausplanerIndex ohne_recht). **Das ist keine Verbesserung durch N1,
+sondern Reihenfolge-Abhaengigkeit vom DB-Zustand** — die Bestands-Roete der PHP-Suite ist
+selbst ein offener Posten, den N1 nicht verursacht hat und den ich hier nur melde.
+
+### Der Fix, jetzt vollstaendig benannt
+
+```text
+1  SpeichereHausplanerDokumentRequest:24  'in:2' -> 'in:3'  (oder 'in:2,3', wenn Bestand
+   weiter speicherbar sein soll — dann braucht das Server-Schema BEIDE Versionen oder eine
+   serverseitige Migration, denn heute laesst es nur const 3 zu).
+2  Die Fixtures von HausplanerSpeichernNutzlastTest und UebernahmeKnopfTest ziehen mit.
+3  L-01 auf objekt.blade umschreiben — auf der Studio-Flaeche kann es nicht messen.
+```
+
+**VOTUM UNVERAENDERT ROT** (commit 6d93fc97) — die Begruendung ist praeziser, das Urteil dasselbe.
+Nicht mergen, bis 1 und 2 stehen.
+
+VOTUM: auftrag=Z-06-N1-RICHTIGSTELLUNG rolle=evaluator ergebnis=ROT-bestaetigt-ursache-praezisiert commit=6d93fc97 datum=2026-08-03 hinweis=zwei-server-naehte-widersprechen-sich-drei-tests-neu-rot-nicht-siebzehn-uebernahme-auch-betroffen
