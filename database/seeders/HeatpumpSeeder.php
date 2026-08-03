@@ -9,6 +9,9 @@ use App\Models\Product;
 use App\Models\Brand;
 use App\Models\Distributor;
 use App\Models\DistributorPrice;
+use App\Services\Product\Identity\IdentityMatch;
+use App\Services\Product\Identity\ProductIdentity;
+use App\Services\Product\Identity\ProductIdentityService;
 
 class HeatpumpSeeder extends Seeder
 {
@@ -83,9 +86,58 @@ class HeatpumpSeeder extends Seeder
             );
 
             // 3) Product
-            $product = Product::updateOrCreate(
-                ['sku' => $item['sku']],
-                [
+            if (config('produkt.identitaet.aktiv')) {
+                // AUF-P1-S4 §8 Zeile 9: resolve() über die Leiter (Hersteller+Nummer
+                // bzw. Lieferant+Nummer) — die sku-Schlüsselung entfällt.
+                $dienst = app(ProductIdentityService::class);
+
+                $identitaet = new ProductIdentity(
+                    manufacturerArticleNo: $item['sku'],
+                    brandId: $brand->id,
+                    supplierArticleNo: $item['sku'],
+                    distributorId: $distributor->id,
+                    name: $item['name'],
+                    channel: 'seed:heatpump',
+                );
+
+                $match = $dienst->resolve($identitaet);
+
+                if ($match->ergebnis === IdentityMatch::KONFLIKT) {
+                    throw new \RuntimeException('HeatpumpSeeder: Identitätskonflikt — ' . $match->begruendung);
+                }
+
+                $felder = [
+                    'product' => $item['name'],
+                    'category' => $item['kategorie'],
+                    'heatpump_type' => $item['typ'],
+                    'construction_type' => $item['bauart'],
+                    'refrigerant' => $item['kaeltemittel'],
+                    'phase_count' => $item['phasen'],
+                    'scop' => $item['scop'],
+                    'noise_level_db' => $item['schall_db'],
+                    'retail_price' => $item['preis'],
+                    'purchase_price' => $item['kosten'],
+                    'vat_percent' => $item['mwst'],
+                    'brand_id' => $brand->id,
+                    'status' => 'active',
+                ];
+
+                if ($match->ergebnis === IdentityMatch::VORSCHLAG) {
+                    // Kein automatischer Import auf Textvergleich (E1) — Vorschlag steht, Posten übersprungen.
+                    $dienst->vorschlagSpeichern($identitaet, $match);
+                    continue;
+                }
+
+                if ($match->ergebnis === IdentityMatch::AUTOMATISCH) {
+                    $product = $match->product;
+                    $product->fill($felder);
+                    $product->save();
+                } else {
+                    $product = $dienst->createFrom($identitaet, $felder);
+                }
+            } else {
+                // Alt-Verhalten, byte-gleich (Kante 15): updateOrCreate auf sku.
+                $werte = [
                     'article_no' => $item['sku'],
                     'product' => $item['name'],
                     'category' => $item['kategorie'],
@@ -100,8 +152,19 @@ class HeatpumpSeeder extends Seeder
                     'vat_percent' => $item['mwst'],
                     'brand_id' => $brand->id,
                     'status' => 'active',
-                ]
-            );
+                ];
+
+                $product = Product::where('sku', $item['sku'])->first();
+
+                if ($product) {
+                    $product->fill($werte);
+                    $product->save();
+                } else {
+                    $product = app(ProductIdentityService::class)->createLegacy(
+                        ['sku' => $item['sku']] + $werte
+                    );
+                }
+            }
 
             // 4) Distributor Price
             DistributorPrice::updateOrCreate(
