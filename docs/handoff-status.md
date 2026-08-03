@@ -39656,3 +39656,54 @@ Stillstand) schätzen, ob jemand da ist; `lsof` fragt.
 
 **Ich baue es nicht ungefragt** — der Schnitt gehört dem Planner, und die heutige Fassung ist ein
 Fortschritt gegenüber gestern. *Aber die Meldung sollte sagen, was sie ist: eine Vermutung.*
+
+---
+
+## EVALUATOR — 04.08. · Der Restfall ist ECHT, selbst nachgestellt. Und er trifft meine Abnahme
+
+**Selbst gefahren im Wegwerf-Repo, mit dem heutigen Tor:**
+
+```text
+: > .git/index.lock ; touch -t (alt)        0 Byte, 77785s alt
+( exec 9<> .git/index.lock ; sleep 25 ) &   ein Prozess HAELT sie offen, schreibt aber nicht
+lsof .git/index.lock                        -> 1 Halter
+bash scripts/commit-pruefen.sh ...          -> BEISEITE, Commit gelingt
+                                            -> der laufende Vorgang verliert seinen Lock
+```
+
+**Das ist woertlich der Fall, gegen den W-09 geschrieben wurde** — sein eigener Text sagt: *"Ein
+Lock kann auch einem laufenden `git` gehoeren. Wer ihn dann wegzieht, zerstoert genau das, was
+er sichern will."*
+
+### Die Einordnung, und sie faellt auf mich zurueck
+
+**Die Luecke ist NICHT durch Teil 2 entstanden.** Sie steckt in der Grundregel von Stufe 4
+("0 Byte UND >=60s"), die ich bei der W-09-Abnahme durchgewinkt habe. Teil 2 hat sie weder
+geschlossen noch verschlimmert — mein GRUEN fuer Teil 2 bleibt richtig fuer das, was Teil 2
+BAUT (drei Richtungen geprueft, C war die scharfe).
+
+**Was ich falsch gemacht habe: ich habe die drei Merkmale geprueft, statt zu fragen, ob die
+Merkmale die richtige FRAGE stellen.** Groesse, Alter und Stillstand sind Indizien. Die Frage
+ist: *haelt jemand die Datei offen?* — und darauf gibt es eine Auskunft, keine Schaetzung.
+
+**Und das ist das Bittere: ich hatte `lsof` gestern selbst in der Hand.** Als das Tor mich
+blockierte, habe ich damit belegt, dass mein Lock TOT war ("offen haelt ihn nur Spotlight,
+lesend"). Ich habe das Werkzeug benutzt, um EINEN Fall zu entscheiden — und nicht gesehen, dass
+es die ganze Heuristik ersetzt. *Wer ein Messgeraet benutzt und nicht merkt, dass es die Regel
+schlagen koennte, hat gemessen statt nachgedacht.*
+
+### Zur Sache: lsof ist Stufe 5, die drei Merkmale sind Stufe 4
+
+```text
+Merkmale  Groesse · Alter · Stillstand   -> Indizien, treffen den Regelfall, irren am Rand
+lsof      "wer haelt diese Datei offen"  -> Auskunft des Betriebssystems, kein Raten
+```
+*Der Pruefer hat recht: das trennt beide Faelle exakt.* **Zwei Dinge, die vor dem Schnitt
+gemessen gehoeren und die ich NICHT gemessen habe:** ob `lsof` in dieser Umgebung ohne
+Sonderrechte laeuft (bei mir tat es das, an einer Datei im eigenen Baum), und was es kostet,
+wenn es fehlt oder haengt — ein Tor, das auf ein externes Werkzeug wartet, ist ein neuer
+Blocker. **Fallback-Verhalten benennen, nicht voraussetzen.**
+
+**Schnitt gehoert dem Planner** — ich habe den Befund bestaetigt, nicht die Loesung entschieden.
+
+VOTUM: auftrag=TOR-RESTFALL rolle=evaluator ergebnis=befund-bestaetigt-eigene-abnahme-zu-flach commit=2c120f93 datum=2026-08-04 hinweis=gehaltener-stiller-lock-wird-weggezogen-lsof-ist-die-auskunft-luecke-stammt-aus-w09-stufe-4
