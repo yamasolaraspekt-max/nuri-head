@@ -7,9 +7,38 @@ auftrag:
   id: W-05
   strang: hausplaner-3d
   status: entwurf   # B8 - Planner-Blatt. GEGENLESER UMVERTEILT 03.08. 08:3x: Pruefer -> EVALUATOR. Gemessen, nicht geurteilt: der Pruefer hat NULL Voten im ganzen Ledger und seit 01.08. 23:00 keinen Commit; dieses Blatt sperrt N2, N3 und ueber B10 das Dach - die ganze Kette zum Geschoss. B8 verlangt eine ANDERE Rolle als den Schreiber, keine bestimmte; der Evaluator hat mit neun Voten heute frueh die Kapazitaet belegt. Die d1cecdcf-Zuordnung (Planner-Blatt -> Pruefer) gilt wieder, sobald der Pruefer ein Lebenszeichen setzt.
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # umverteilt 03.08.; der Pruefer ist inzwischen wieder aktiv, ab dem naechsten Planner-Blatt gilt d1cecdcf
+  gegengelesen_am: 2026-08-03
+  befund: >
+    TRAEGT IM KERN, MIT EINER SPERRENDEN UND ZWEI KLEINEN AUFLAGEN. Die Entscheidung -
+    eine Hebeliste, Registry und Katalog leiten sich daraus ab, das Werkzeug WANDERT statt
+    sich zu verdoppeln - ist richtig, und K-06 (das zweite Werkzeug darf nur Daten aendern)
+    ist die scharfe Zusage, an der sich der Hebel messen laesst. Bestaetigt: Hebeliste 0
+    mit Partner EIGENE_WERKZEUGE 20; bemassen in der Registry 0; die acht Paket-Werkzeuge
+    stehen in Themen, Vertrag und Praesentation je 1, nur die Registry fehlt.
+    K-10 ist berechtigt und kein F-07: WERKZEUGE_GESAMT existiert zwar schon
+    (toolRegistry.ts:278), rechnet aber mit der GETIPPTEN 110 - die Bilanz stimmt heute
+    tatsaechlich durch Zufall.
+    SPERREND, K-03: das Kriterium ist im eigenen Scope nicht erfuellbar. Der Befehl
+    grep -rn ', 101' liefert 7 Zeilen, aber eine davon ist bemassung.test.ts:32 - die
+    Fenster-Masskette 240, 1880, 1010, 2870, 240; das Muster trifft die ZIFFERNFOLGE in
+    1010, nicht die Katalogzahl. Echte Katalogzahlen sind SECHS. Auf die geforderte 0 kaeme
+    der Bauende nur, indem er eine Masszusage aendert, die ausserhalb von scope.dateien
+    liegt. Vor dem Bau: Muster praezisieren (zum Beispiel auf TOOL_KATALOG.length, 101 oder
+    auf die zonen-Zusagen) und Ausgangswert auf 6 stellen.
+    KLEIN 1: die Umfangs-Rechnung ist ueberzeichnet. grep -rn '9 + EIGENE_WERKZEUGE' liefert
+    4 Zeilen, aber DREI davon sind 79 + EIGENE_WERKZEUGE.length in rechte.test.ts 201, 219,
+    220 - die 9 ist dort die Endziffer von 79. Echt traegt nur toolPresentation.test.ts:33
+    die feste 9. Statt der behaupteten ELF Stellen sind es SIEBEN. Das aendert den Bau nicht,
+    aber der Satz begruendet den Umfang der Scheibe.
+    KLEIN 2: K-08-Ausgangswert 1641 ist ueberholt - an sauberem HEAD selbst gefahren 1649
+    pass, 0 fail. Nach unten falsch ist ungefaehrlich, aber wer bei 1645 landet, haelt einen
+    Verlust fuer einen Gewinn.
+    PROSA: der Satz TOOL_KATALOG sei "alle 110 Paket-Werkzeuge" stimmt nicht - die Liste hat
+    101 Eintraege und TOOL_KATALOG damit ebenfalls 101; die 110 ist die getippte Zahl aus
+    toolRegistry, die K-10 gerade aufraeumt.
+    B8-Fragen: Befehle laufen, K-04 und K-06 messen die Wirkung mit roter Gegenprobe,
+    kein maschineller Befehl mutiert.
 ```
 
 ## Warum — und eine Korrektur an meinem eigenen Bauplan von vor einer Stunde

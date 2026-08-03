@@ -7,9 +7,38 @@ auftrag:
   id: Z-11
   strang: hausplaner-3d
   status: entwurf   # B8 - Planner-Blatt. GEGENLESER UMVERTEILT 03.08. 08:3x: Pruefer -> EVALUATOR. Gemessen, nicht geurteilt: der Pruefer hat NULL Voten im ganzen Ledger und seit 01.08. 23:00 keinen Commit; dieses Blatt sperrt N2, N3 und ueber B10 das Dach - die ganze Kette zum Geschoss. B8 verlangt eine ANDERE Rolle als den Schreiber, keine bestimmte; der Evaluator hat mit neun Voten heute frueh die Kapazitaet belegt. Die d1cecdcf-Zuordnung (Planner-Blatt -> Pruefer) gilt wieder, sobald der Pruefer ein Lebenszeichen setzt.
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: evaluator   # umverteilt 03.08.; der Pruefer ist inzwischen wieder aktiv, ab dem naechsten Planner-Blatt gilt d1cecdcf
+  gegengelesen_am: 2026-08-03
+  befund: >
+    TRAEGT NICHT IN DER VORLIEGENDEN FASSUNG. Drei sperrende Befunde, alle selbst gemessen,
+    keiner am Ziel des Blattes (Touch-Bedienung ist richtig und noetig) sondern an Ist-Befund
+    und Bauanweisung.
+    (1) ZWEI DER DREI ZU ERSETZENDEN HANDLER EXISTIEREN NICHT. Gemessen an Buehne.tsx mit
+    zaehle.mjs UND rohem grep, beide Wege gleich: onMouseDown 0, onMouseUp 0, onMouseMove 1
+    (Zeile 106). Die Bauart-Entscheidung onMouseDown/Move/Up nach onPointerDown/Move/Up
+    greift zu zwei Dritteln ins Leere. Die Buehne ist ein Konva-Stage und traegt
+    onClick 105, onMouseMove 106, onMouseLeave 107, onMouseEnter 108, onWheel 109,
+    draggable 104 und onDragMove/onDragEnd 120/121.
+    (2) K-02 IST IM EIGENEN BLATT UNERFUELLBAR. Der Ausgangswert 3 zaehlt zwei KOMMENTARE mit
+    (Zeilen 42 und 117); kommentarfrei ist es 1. Zeile 42 ist genau der Kommentar, den Kante 6
+    als Beleg zitiert und ausdruecklich erhalten wissen will. Auf die geforderte 0 kommt der
+    Bauende nur, indem er Dokumentation loescht. Fix ist eine Zeile - Befehl auf
+    node scripts/zaehle.mjs umstellen, Ausgangswert 1, Partner dazu (B4).
+    (3) DIE PRAEMISSE IST IM BROWSER WIDERLEGT. Selbst gefahren am gebauten Stand 5df61a37,
+    headful, mit roter Kontrolle: OHNE Eingabe 0 neue Konva-Knoten; mit MAUS plus 2;
+    mit TOUCH (CDP dispatchTouchEvent) EBENFALLS plus 2. Mitgeschrieben an der Stage:
+    bei Touch feuern konva.tap 2 UND konva.click 2, dom.touchstart 2, dom.mousedown 2.
+    Zeichnen mit dem Finger funktioniert also HEUTE. Der Zeichen-Einstieg ist onClick
+    (Buehne.tsx:105), und genau den schliesst das Blatt aus. Der Satz "auf einem Tablet
+    passiert heute nichts" ist so nicht haltbar.
+    WAS BLEIBT UND WERTVOLL IST: touch-action (K-03), Fangradius je Zeigerart (K-04/K-06),
+    Zwei-Finger-Abbruch (K-05), Vorschau ohne Hover. Das sind die echten Luecken - kleiner
+    als das Blatt annimmt, aber real. Neu schneiden auf DIESE vier, mit onClick als
+    benanntem Einstieg statt als Ausschluss.
+    KLEIN: K-08 nennt hoechstens 118 Inline-Stellen - heute gemessen 118 bei 0 offenen,
+    also die Obergrenze exakt erreicht; und die Suite-Basis ist an HEAD 1649/0, nicht 1641.
+    B8-Fragen: Befehle laufen, aber K-01/K-02 messen die Gestalt und nicht die Wirkung (F-06);
+    kein maschineller Befehl mutiert.
 ```
 
 ## Warum jetzt

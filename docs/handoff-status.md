@@ -37999,3 +37999,66 @@ ohne `diff HEAD`-Unterschied wird nicht „repariert".
 
 *Ballbesitz unverändert: Generator (N1 bauen) · Prüfer (Z-11 · W-05) · Planner (wartet auf
 „N1 gebaut" → Dach schneiden).*
+
+---
+
+## EVALUATOR — 03.08. · Z-11 und W-05 gegengelesen. Z-11 traegt NICHT: seine Praemisse ist im Browser widerlegt
+
+Gegenlesung mit fuenf getrennten Pruef-Linsen plus Widerlegungsrunde gefahren; JEDER Befund
+unten von mir selbst nachgemessen, bevor er hier steht (die Linsen finden, ich unterschreibe).
+
+### Z-11 (Touch und Stift) — ROT in dieser Fassung, das ZIEL bleibt richtig
+
+```text
+(1) ZWEI DER DREI HANDLER GIBT ES NICHT
+    Buehne.tsx  onMouseDown 0 · onMouseUp 0 · onMouseMove 1     (zaehle.mjs UND grep, gleich)
+    Die Buehne ist ein Konva-Stage: onClick 105 · onMouseMove 106 · onMouseLeave 107
+    onMouseEnter 108 · onWheel 109 · draggable 104 · onDragMove/End 120/121
+
+(2) K-02 IST IM EIGENEN BLATT UNERFUELLBAR
+    Ausgangswert 3 = 1 Code + 2 KOMMENTARE (Zeilen 42 und 117)
+    Zeile 42 ist genau der Kommentar, den Kante 6 als Beleg zitiert und erhalten will.
+    Auf 0 kommt man nur durch Loeschen von Dokumentation. Fix: zaehle.mjs statt grep.
+
+(3) DIE PRAEMISSE IST WIDERLEGT — selbst im Browser gemessen, Stand 5df61a37, headful
+    KONTROLLE ohne Eingabe   0 neue Konva-Knoten     <- erst dadurch bedeutet der Rest etwas
+    MAUS   zwei Klicks       +2 Knoten   konva.click 2 · tap 0 · mousedown 2
+    TOUCH  zwei CDP-Tipps    +2 Knoten   konva.click 2 · tap 2 · touchstart 2 · mousedown 2
+    ZEICHNEN MIT DEM FINGER FUNKTIONIERT HEUTE. Der Einstieg ist onClick (Buehne.tsx:105) -
+    und genau den fuehrt das Blatt als AUSSCHLUSS. "Auf einem Tablet passiert heute nichts"
+    ist nicht haltbar.
+```
+
+**Was das bedeutet, und es ist kein Nein zur Sache:** das Blatt wuerde zwei Handler ersetzen,
+die es nicht gibt, den echten Zeichen-Einstieg unberuehrt lassen und dabei die Kompatibilitaets-
+Kette gefaehrden, die heute traegt — waehrend K-01 und K-02 gruen stuenden. Genau der stille
+Fall, den die Entdeckungs-Zeile des Blattes selbst beschreibt. **Die echten Luecken sind
+kleiner und real: touch-action, Fangradius je Zeigerart, Zwei-Finger-Abbruch, Vorschau ohne
+Hover.** Auf diese vier neu schneiden, mit `onClick` als benanntem Einstieg.
+
+### W-05 (Werkzeug-Anschluss) — TRAEGT IM KERN, eine sperrende Auflage
+
+```text
+SPERREND  K-03 ist im eigenen Scope nicht erfuellbar: ', 101' liefert 7 Zeilen, aber eine ist
+          bemassung.test.ts:32 — die Masskette [240, 1880, 1010, 2870, 240]. Das Muster trifft
+          die ZIFFERNFOLGE in 1010. Echte Katalogzahlen: SECHS. Die 0 verlangt eine Aenderung
+          ausserhalb von scope.dateien.
+KLEIN 1   '9 + EIGENE_WERKZEUGE' -> 4 Zeilen, drei davon sind `79 + EIGENE_WERKZEUGE.length`
+          (rechte.test.ts 201/219/220) — die 9 ist die Endziffer von 79. Echt: EINE.
+          Statt eL F Stellen sind es SIEBEN.
+KLEIN 2   K-08-Basis 1641 ueberholt — an sauberem HEAD selbst gefahren: 1649 pass / 0 fail.
+BESTAETIGT K-10 ist berechtigt: WERKZEUGE_GESAMT existiert (toolRegistry:278), rechnet aber
+          mit der getippten 110. Die Bilanz stimmt heute wirklich nur durch Zufall.
+```
+
+**Dreimal dieselbe Klasse an einem Tag** (roher grep trifft Kommentar, Ziffernfolge, fremde
+Zusage). Genau dafuer liegt S-15 geschnitten und gegengelesen bereit — es ruht nach B13. Das
+ist die richtige Reihenfolge, aber der Befund gehoert notiert: der Werkzeugstopp kostet hier
+sichtbar Genauigkeit.
+
+**Zur Zuordnung:** der Pruefer ist wieder aktiv (Z-06-N1-Gegenlesung eingearbeitet, seine
+Ruege angenommen). Ich habe diese zwei zu Ende gelesen, weil die Messungen liefen; **ab dem
+naechsten Planner-Blatt gilt wieder d1cecdcf.**
+
+VOTUM: auftrag=Z-11-GEGENLESEN rolle=evaluator ergebnis=traegt-nicht-neu-schneiden commit=5df61a37 datum=2026-08-03 hinweis=praemisse-im-browser-widerlegt-touch-zeichnet-heute-onclick-ist-der-einstieg
+VOTUM: auftrag=W-05-GEGENLESEN rolle=evaluator ergebnis=traegt-mit-sperrender-auflage commit=5df61a37 datum=2026-08-03 hinweis=k03-im-eigenen-scope-unerfuellbar-ziffernfolge-1010-echte-zahl-sechs
