@@ -6,7 +6,7 @@
 auftrag:
   id: Z-06-N1
   strang: hausplaner-3d
-  status: entwurf   # B8 - Planner-Blatt. GEGENLESER UMVERTEILT 03.08. 08:3x: Pruefer -> EVALUATOR. Gemessen, nicht geurteilt: der Pruefer hat NULL Voten im ganzen Ledger und seit 01.08. 23:00 keinen Commit; dieses Blatt sperrt N2, N3 und ueber B10 das Dach - die ganze Kette zum Geschoss. B8 verlangt eine ANDERE Rolle als den Schreiber, keine bestimmte; der Evaluator hat mit neun Voten heute frueh die Kapazitaet belegt. Die d1cecdcf-Zuordnung (Planner-Blatt -> Pruefer) gilt wieder, sobald der Pruefer ein Lebenszeichen setzt.
+  status: bereit   # Pruefer-Gegenlesung 03.08. 08:2x: BAUBAR mit zwei Einwaenden, beide eingearbeitet 08:5x. Einwand 1 (P2, sperrend): Feld heisst jetzt geometrieHerkunft - das rohe Wort war zweimal vergeben (138 Treffer), der neue Name hat 0, der population_command misst damit die WIRKUNG. Einwand 2 (P3): ".strict() an 26 Stellen" statt des wortlaut-falschen "z.strict() ueberall". Status auf bereit gestellt vom Planner als Einarbeiter der sperrenden Auflage (B14-Randfall: das Ereignis "Auflage geschlossen" ist meins). N2/N3-Folge: der Fingerabdruck in N3 heisst dann geometrieFingerabdruck - dort nachziehen, wenn N3 gegengelesen wird.
   gegengelesen_von: pruefer
   gegengelesen_am: "03.08.2026"
   befund: "BAUBAR. Alle fuenf Ausgangswerte selbst nachgemessen (0/0/0/0), Boden bestaetigt, K-09-Basis 1649 pass/0 fail heute gefahren. ZWEI EINWAENDE, beide am Blatt und nicht am Bau: (1) P2 - der population_command misst HEUTE SCHON 138, weil `herkunft` im Bundle bereits zweimal vergeben ist (ToolHerkunft, FlaechenHerkunft, 118 Feldtreffer); er kann nie zeigen, ob die Scheibe wirkt, und der Name bekaeme eine dritte Bedeutung. (2) P3 - 'z.strict() ueberall' hat 0 Treffer im Wortlaut (26 als '.strict()'). Einwand 1 ist vor dem Bau zu schliessen, Einwand 2 ist eine Formulierung. Status stellt der Planner (F-08b)."
@@ -33,7 +33,7 @@ Wanderungen.*
 ## Was der Boden hergibt — gemessen, bevor entschieden wurde
 
 ```text
-domain/validation.ts        341 Zeilen · z.strict() ueberall · schemaVersion: z.literal(2)
+domain/validation.ts        341 Zeilen · .strict() an 26 Stellen (Einwand 2 des Pruefers: "z.strict()" hatte 0 Treffer im Wortlaut) · schemaVersion: z.literal(2)
 migriereSzene               v1 -> v2 existiert, ausdruecklich "REIN ADDITIV und MINIMAL"
 z.enum([...])               etabliertes Muster (zoneType, oeffnungsArt, oeffnungsRichtung …)
 ceilings[]                  eigene Sammlung, NICHT Teil der Node-Union
@@ -47,16 +47,22 @@ hängt.**
 
 ## Die Entscheidung — Herkunft und Freigabe sind ZWEI Felder, nicht eines
 
-```text
-herkunft   'manuell'      der Nutzer hat die Kontur gezeichnet
-           'abgeleitet'   aus dem Grundriss abgeleitet (heute: gebaeudeUmriss)
-           'erkannt'      automatisch erkannt
-           'geschaetzt'   geraten
+**Das Feld heißt `geometrieHerkunft`, nicht `herkunft` — Einwand 1 des Prüfers, angenommen:**
+*das Wort ist im Bundle zweimal vergeben (`ToolHerkunft`, `FlaechenHerkunft`, 138 rohe Treffer)
+und bekäme eine dritte Bedeutung. Dieselbe Klasse wie `PAKET_WERKZEUGE` in W-05 K-10: ein Name,
+eine Bedeutung.* **`geometrieHerkunft` hat heute 0 Treffer in der ganzen Insel (gemessen) — damit
+misst der population_command die WIRKUNG statt der Kollision.**
 
-freigabe   'vorschlag'    entstanden, nicht angesehen
-           'zu_pruefen'   dem Nutzer gezeigt, noch nicht entschieden
-           'bestaetigt'   der Nutzer hat zugestimmt
-           'abgelehnt'    der Nutzer hat widersprochen
+```text
+geometrieHerkunft   'manuell'      der Nutzer hat die Kontur gezeichnet
+                    'abgeleitet'   aus dem Grundriss abgeleitet (heute: gebaeudeUmriss)
+                    'erkannt'      automatisch erkannt
+                    'geschaetzt'   geraten
+
+freigabe            'vorschlag'    entstanden, nicht angesehen
+                    'zu_pruefen'   dem Nutzer gezeigt, noch nicht entschieden
+                    'bestaetigt'   der Nutzer hat zugestimmt
+                    'abgelehnt'    der Nutzer hat widersprochen
 ```
 
 **Warum zwei und nicht ein kombiniertes Feld:** *sie ändern sich zu verschiedenen Zeiten und aus
@@ -65,8 +71,8 @@ neu entsteht. Die Freigabe ist ein Urteil und ändert sich, wenn ein Mensch hins
 kombiniertes Feld müsste bei jeder Bestätigung die Herkunft mitschreiben — und dann geht die
 Tatsache verloren, sobald jemand zustimmt. *Genau das soll B10 verhindern.*
 
-**`herkunft: 'manuell'` bekommt `freigabe: 'bestaetigt'` beim Entstehen** — wer selbst zeichnet,
-hat bestätigt. *Alles andere beginnt bei `vorschlag`.*
+**`geometrieHerkunft: 'manuell'` bekommt `freigabe: 'bestaetigt'` beim Entstehen** — wer selbst
+zeichnet, hat bestätigt. *Alles andere beginnt bei `vorschlag`.*
 
 ## Die Sperre — und sie ist der Kern des Blattes
 
@@ -99,7 +105,7 @@ Hier wird geschrieben:
   domain/validation.ts             die zwei enums, vier Felder, schemaVersion 2 -> 3
                                    und migriereSzene v2 -> v3
   domain/scene.types.ts            die Typen dazu
-  app/HausplanerApp.tsx            Decke UND Dach setzen herkunft/freigabe beim Anlegen
+  app/HausplanerApp.tsx            Decke UND Dach setzen geometrieHerkunft/freigabe beim Anlegen
   geometry/freigabe.ts             NEU: istFreigegeben() + verlangeFreigabe()
 
 Hier bewusst NICHT:
@@ -123,7 +129,7 @@ scope:
     - resources/planner/hausplaner/domain/scene.types.ts
     - resources/planner/hausplaner/app/HausplanerApp.tsx
     - resources/planner/hausplaner/geometry/freigabe.ts
-  population_command: "grep -ro 'herkunft' resources/planner/hausplaner/ | wc -l"
+  population_command: "grep -ro 'geometrieHerkunft' resources/planner/hausplaner/ | wc -l"
   ausschluesse:
     - stelle: "Die sichtbare Kennzeichnung nach dem Laden"
       grund: "Z-06-N2. Braucht diese Felder, nicht umgekehrt. Schema und Oberflaeche in einem Blatt sind zwei Blaetter in einem Umschlag."
@@ -142,11 +148,11 @@ kriterien:
   - id: K-01
     typ: presence
     kritikalitaet: P1
-    aussage: "Die Herkunft steht im Schema."
+    aussage: "Die Geometrie-Herkunft steht im Schema - unter ihrem EINDEUTIGEN Namen."
     pruefung:
-      befehl: "grep -o 'herkunft' resources/planner/hausplaner/domain/validation.ts | wc -l"
-      erwartet: "mindestens 1"
-    ausgangswert: "0 (gemessen 02.08. 15:2x; Partner 'zoneType' -> mehrfach, die Messung ist nicht leer)"
+      befehl: "grep -ro 'geometrieHerkunft' resources/planner/hausplaner/ | wc -l"
+      erwartet: "mindestens 2 (Schema + Setzstelle)"
+    ausgangswert: "0 insel-weit (gemessen 03.08. 08:5x nach der Umbenennung auf Einwand 1 des Pruefers; das rohe Wort 'herkunft' traf 138 Fremdstellen. Partner 'zoneType' -> mehrfach, die Messung ist nicht leer)"
 
   - id: K-02
     typ: presence
@@ -188,9 +194,9 @@ kriterien:
       typ: gate
       schritte: |
         B3 - gegen die Entscheidungsfunktion, nicht ueber den Schirm:
-          Decke ohne Kontur anlegen        -> herkunft 'abgeleitet', freigabe 'vorschlag'
+          Decke ohne Kontur anlegen        -> geometrieHerkunft 'abgeleitet', freigabe 'vorschlag'
           Szene serialisieren, parsen      -> BEIDE Werte unveraendert
-          dasselbe fuer 'manuell'          -> herkunft 'manuell', freigabe 'bestaetigt'
+          dasselbe fuer 'manuell'          -> geometrieHerkunft 'manuell', freigabe 'bestaetigt'
           dasselbe fuer das DACH           -> gleiche Werte, gleicher Weg
         UND die rote Gegenprobe:
           ein Dokument OHNE die neuen Felder, schemaVersion 3  -> wird ABGELEHNT
@@ -211,7 +217,7 @@ kriterien:
         fortgesetzt, nicht neu erfunden:
           eine v2-Szene mit Waenden, Decken, Daechern, Zonen  -> nach der Migration
             sind ALLE Sammlungen zeichengleich, nur die vier neuen Felder kommen dazu
-          eine v2-Decke bekommt herkunft 'abgeleitet' + freigabe 'zu_pruefen'
+          eine v2-Decke bekommt geometrieHerkunft 'abgeleitet' + freigabe 'zu_pruefen'
             NICHT 'bestaetigt' - der Bestand ist nicht geprueft, nur alt
         Die zweite Zeile ist die scharfe: wer Bestandsdaten auf 'bestaetigt' setzt, macht
         die Migration gruen und B10 wirkungslos.
@@ -276,7 +282,7 @@ kriterien:
       typ: verfahren
       schritte: |
         Mindestens 9 Mutationen: Felder `.optional()` gemacht · schemaVersion nicht angehoben ·
-        Migration setzt Bestand auf 'bestaetigt' · herkunft beim Speichern ueberschrieben ·
+        Migration setzt Bestand auf 'bestaetigt' · geometrieHerkunft beim Speichern ueberschrieben ·
         freigabe beim Laden auf Vorgabe zurueckgesetzt · istFreigegeben gibt immer true ·
         Ablehnung ohne Grund · Zeitstempel bei jedem Speichern · Dach setzt die Felder nicht.
         Wie viele kommen durch?
@@ -292,10 +298,10 @@ kriterien:
         (a) Waende zeichnen, Decke anlegen OHNE Kontur
         (b) speichern
         (c) SEITE NEU LADEN
-        (d) die Decke traegt weiterhin herkunft 'abgeleitet' und freigabe 'vorschlag'
+        (d) die Decke traegt weiterhin geometrieHerkunft 'abgeleitet' und freigabe 'vorschlag'
             - abgelesen am Datenstand, nicht am Bildschirm (die Kennzeichnung ist Z-06-N2)
         KONTROLLE davor (B4): dieselbe Folge mit einer MANUELL gezeichneten Kontur
-            -> herkunft 'manuell', freigabe 'bestaetigt'
+            -> geometrieHerkunft 'manuell', freigabe 'bestaetigt'
         Erst weil die Kontrolle anders ausfaellt, bedeutet das Ergebnis etwas.
 
   - id: L-01-anker

@@ -37959,3 +37959,23 @@ zurückgeholt: eine Ablehnung ohne Grund erzieht zum Ausprobieren.*
 im Arbeitsbaum sind Phantom-Drift — der Standard-Index lernt Tor-Commits nie, weil Stufe 5 je Lauf
 einen eigenen Index benutzt. **Wer diesen Drift „repariert", erzeugt Beifang.** Ich habe ihn
 mehrfach als „stale Index" gemeldet; das war richtig beobachtet und falsch benannt.
+
+---
+
+## PLANNER — 03.08. 08:5x · N1 ist BEREIT. Beide Prüfer-Einwände eingearbeitet, Rückgabe der Umverteilung
+
+```text
+Einwand 1  Feld heisst jetzt `geometrieHerkunft` — 'herkunft' war zweimal vergeben (138 rohe
+           Treffer), der neue Name hat 0 insel-weit. Der population_command misst damit die
+           WIRKUNG statt der Kollision. Dieselbe Klasse wie W-05 K-10: ein Name, eine Bedeutung.
+Einwand 2  ".strict() an 26 Stellen" statt "z.strict() ueberall".
+Status     bereit — gestellt vom Einarbeiter der sperrenden Auflage (B14-Randfall, benannt).
+Folge      N3s Fingerabdruck heisst dann geometrieFingerabdruck; wird dort nachgezogen.
+```
+
+**Der Prüfer ist zurück — die Umverteilung von 08:3x ist damit ZURÜCKGENOMMEN, wie angekündigt:**
+Z-11 und W-05 liest wieder der Prüfer (d1cecdcf). *Wer von beiden schon angefangen hat, liest zu
+Ende und sagt es — doppelt gelesen ist erlaubt, doppelt gebaut nicht.*
+
+**GENERATOR: N1 ist baubar — und Z-11, sobald es gegengelesen ist, parallel dazu** (Scopes
+disjunkt). *Ballbesitz: Generator (N1) · Prüfer (Z-11, W-05).*
