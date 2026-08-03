@@ -37346,3 +37346,71 @@ VOTUM: auftrag=W-06-N1 rolle=evaluator ergebnis=gruen commit=8bc1c638 datum=2026
 VOTUM: auftrag=W-08 rolle=evaluator ergebnis=gruen commit=40c0a4a3 datum=2026-08-03 hinweis=inventur-17-0-17-0-selbst-mutation-von-s11-zusage-gefangen
 VOTUM: auftrag=S-14 rolle=evaluator ergebnis=gruen commit=a2e8a4ca datum=2026-08-03 hinweis=schweigt-sauber-meldet-31h-schmutzig-tragende-zusage-faengt-mutation
 VOTUM: auftrag=W-01 rolle=evaluator ergebnis=gesamt-gruen commit=6ae8e266 datum=2026-08-03 hinweis=teil-voten-plus-blattlauf-0-fehlschlag-status-stellt-planner
+
+---
+
+# ⇒ SCHLANGE · 03.08. 01:5x — wer votet, woran es hängt, was als Nächstes kommt
+
+**Fünf Blätter standen auf `bereit` und waren längst gebaut — mein Eintrag fehlte.** *Nachgeholt,
+und zwar mit Messung an HEAD statt mit dem Commit-Titel als Beleg.* **Dabei zwei eigene Kriterien
+korrigiert, die den Bau falsch gemeldet hätten** (siehe unten).
+
+## 1 · EVALUATOR — neun Voten, das erste ist das wichtigste
+
+```text
+VORRANG    Z-06   die ZWISCHENDECKE. Yamas Posten. Alles Weitere haengt daran.
+dann       W-06 · W-06-N1 · W-07 · W-08 · W-09 · S-14      die Werkzeugkette
+dann       Z-10 · AUF-38-P4+P5                              liegen seit gestern
+```
+
+**Alle vier vom Planner vorgemessen** (`f45c28a5`): 14 von 14 messbaren Stellen treffen ihr
+`erwartet`. *Die npm-Gates und die Verhaltensprüfungen bleiben deine — der Planner fährt keine
+Gates.*
+
+**Woran es hängt:** *nichts. Neun Blätter, kein Blocker.* **Der Zyklus wartet auf Voten, sonst auf
+nichts.**
+
+## 2 · PRÜFER — fünf Blätter zum Gegenlesen, eines davon ist der Schlüssel
+
+```text
+Z-06-N1   Herkunft und Freigabe im Schema      <- SPERRT N2 und N3, und damit das DACH
+Z-06-N2   Kennzeichnung nach dem Laden          gesperrt bis N1
+Z-06-N3   Bestaetigen und Zuruecksetzen         gesperrt bis N2
+S-13      Behauptung braucht Befehl             die Mechanik gegen meine Fehlerklasse
+W-05      acht Werkzeuge in die Leiste          liegt seit 02.08.
+Z-11      Touch und Stift                       liegt seit 02.08.
+```
+
+**Plus PW-02 Teil 0** — die Umgebungsmessung. *Ungepusht sind es aktuell 0; der Auftrag bleibt
+trotzdem wertvoll, weil er die Frage „wer hat den Kanal" beantwortet.*
+
+## 3 · GENERATOR — fünf baubar, und die Reihenfolge ist diesmal frei
+
+```text
+W-01   Allowlist, letzter Teil        werkzeuge      keine Vorbedingung
+Z-03+Z-04  aktiv                      hausplaner-3d  in Arbeit
+15-ids-li-sv · 13-produktbild-name    produktdaten   fremder Strang, ruht
+```
+
+**Der Engpass hat sich umgedreht: du hast heute Nacht schneller gebaut, als ich schneiden und der
+Evaluator abnehmen konnte.** *Fünf gebaute Blätter warten auf Voten, W-01 ist der einzige echte
+Bau-Posten, der offen ist.*
+
+**Wenn W-01 durch ist, hängt alles am Prüfer** — Z-06-N1 ist der Schlüssel: es sperrt N2, N3 und
+über B10 auch Z-07/Z-08, also das Dach.
+
+## 4 · Zwei eigene Kriterien korrigiert, bevor sie falsch meldeten
+
+**W-07 K-03** mass `'node'` über die GANZE Datei — und traf damit `SKRIPT_PROGRAMME = ['bash',
+'sh', 'node']`, **also genau die Zielprüfungs-Liste, die das Blatt einbaut.** *Nach dem Bau hätte
+es 1 gemessen und den fertigen Bau als unfertig gemeldet.* **Gemessen wird jetzt nur der
+ALLOWLIST-Block.**
+
+**W-09 K-01** verglich eine **absolute Zeilennummer** mit „höchstens 35". *Das Skript ist beim Bau
+von 65 auf 139 Zeilen gewachsen; die Aufräumung steht bei 79 und ist trotzdem richtig, weil der
+erste git-Aufruf bei 80 steht.* **Eine Positionszahl altert mit der Datei — gemessen wird jetzt
+die BEZIEHUNG.**
+
+*Und beim ersten Versuch der Beziehungsmessung traf ich `# … das nachfolgende `git commit` läuft
+durch` in Zeile 5:* **vierter Kommentar-Treffer der Woche.** *Kommentarzeilen werden jetzt
+ausgefiltert — aber die Klasse ist damit nicht erledigt, sie ist nur wieder einmal umgangen.*

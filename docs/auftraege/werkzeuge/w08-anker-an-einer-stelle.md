@@ -6,7 +6,7 @@
 auftrag:
   id: W-08
   strang: werkzeuge
-  status: bereit   # B8 ERFUELLT: gegengelesen vom Evaluator 03.08. (TRAEGT MIT SPERRENDER AUFLAGE UND EINER KLEINEN), beide eingearbeitet 03.08. 01:0x. SPERREND war die Basis: scope-Datei scripts/auftrag-pruefen.mjs trug die unverbuchte W-07-Arbeit. ERLEDIGT, nicht nur benannt - der Generator hat W-07 um 00:44 verbucht; nachgemessen an HEAD: awk von der Liste -> 0, ZielErlaubt -> 4, Suite -> 91 pass. K-08-Ausgangswert von 82 auf 91 korrigiert. KLEIN: K-08b neu - die Inventur bekommt DREI stehende Zusagen, damit "meldet immer 0" nicht als Erfolg durchgeht. Eingetragen vom Planner.
+  status: gebaut   # UMGESETZT vom Generator 03.08. Nacht. Nachgemessen an HEAD 01:4x: docs/auftraege/ANKER-BROWSER.md existiert (1), S-11 im Validator (4 Treffer). Wartet auf das Votum des Evaluators. Eingetragen vom Planner.
   gegengelesen_von: evaluator   # DRITTES Gegenlesen 03.08. - neue Messmethode + neues Werkzeug im Umfang (die zwei frueheren Befunde stehen im Verlauf, 8b3868b1 und f4f0c89d-Delta)
   gegengelesen_am: 2026-08-03
   befund: >
