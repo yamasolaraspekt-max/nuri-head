@@ -154,8 +154,16 @@ test('Z-06/K-01: die Insel nimmt die Kontur — und nur das Dach behaelt den Umr
     'die Decke nimmt die Kontur nicht mehr — oder nimmt sie verdreht');
   assert.match(app, /const ausKontur = letzteKontur !== null && letzteKontur\.length >= KONTUR_MIN_PUNKTE/,
     'die Bedingung fuer „aus Kontur" ist veraendert — eine Kontur mit zwei Punkten waere eine Decke');
+  // **Z-07 hat diese Zahl auf 0 gedreht, und das ist der Fortschritt.** Bis heute stand hier
+  // eine 1: das Dach nahm den Umriss bedingungslos, und diese Zusage hielt fest, dass es
+  // GENAU EINE solche Stelle gibt. *Jetzt gibt es keine mehr — Decke UND Dach fragen dieselbe
+  // Bedingung.* Die Zusage bleibt scharf: sie verbietet ab jetzt jeden bedingungslosen Umriss.
   const umriss = (app.match(/polygon: gebaeudeUmriss\(\)/g) ?? []).length;
-  assert.equal(umriss, 1, `${umriss} bedingungslose Umriss-Decken statt einer (das Dach, Z-08)`);
+  assert.equal(umriss, 0, `${umriss} Bauteil(e) nehmen den Umriss bedingungslos — seit Z-07 keines mehr`);
+
+  // Und die Gegenrichtung, sonst waere die 0 auch mit gaenzlich fehlendem Umriss-Rueckfall erfuellt:
+  const bedingt = (app.match(/polygon: ausKontur \? letzteKontur : gebaeudeUmriss\(\)/g) ?? []).length;
+  assert.equal(bedingt, 2, `${bedingt} bedingte Umriss-Bauteile statt zwei (Decke und Dach)`);
 });
 
 test('Z-06/K-03: ohne Kontur meldet die Fussleiste eine Naeherung — mit Kontur schweigt sie', () => {
@@ -170,4 +178,27 @@ test('Z-06/K-03: ohne Kontur meldet die Fussleiste eine Naeherung — mit Kontur
     'der Hinweis prueft nicht mehr auf `true` — bei `null` (noch keine Decke) staende er schon da');
   assert.match(app, /Näherung aus dem Gebäude-Umriss/,
     'der Hinweistext ist weg — K-03 verlangt Text, kein Symbol allein');
+});
+
+test('Z-07/K-04: das DACH meldet seine Naeherung ebenso — der Melder haengt an der Entscheidung', () => {
+  // **Nachtrag aus der Mutationsprobe von Z-07: `setDachNaeherung(false)` kam durch.** Die
+  // Decken-Zusage oben prueft `setDeckeNaeherung(!ausKontur)` — fuer das Dach gab es nichts.
+  // *Ein Bauteil, das seine Naeherung verschweigt, ist genau der Fehler mit besserem Gewissen,
+  // gegen den Z-06 geschrieben wurde — nur eine Etage hoeher.*
+  const app = ohneKommentare(teil('app/HausplanerApp.tsx'));
+
+  assert.match(app, /setDachNaeherung\(!ausKontur\)/,
+    'der Dach-Melder haengt nicht mehr an der Entscheidung — er meldet immer oder nie');
+  assert.match(app, /: dachNaeherung === true\n/,
+    'der Dach-Hinweis prueft nicht auf `true` — bei `null` (noch kein Dach) staende er schon da');
+  assert.match(app, /Dach als Näherung aus dem Gebäude-Umriss/,
+    'der Hinweistext fuers Dach ist weg');
+
+  // Und die Trennung: Decke und Dach fuehren GETRENNTE Melder. Ein gemeinsamer haette gezeigt,
+  // was zuletzt angelegt wurde — nicht, was gerade gilt.
+  assert.notEqual(
+    (app.match(/setDeckeNaeherung/g) ?? []).length,
+    0,
+    'der Decken-Melder ist verschwunden — dann meldet das Dach fuer beide',
+  );
 });

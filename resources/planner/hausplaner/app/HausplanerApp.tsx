@@ -25,7 +25,7 @@ import { wandLaenge, wandBaender, type Punkt } from '../geometry/wallGeometry';
 import { fange, toleranzAusZoom, FANG_TEXT, type FangArt } from '../geometry/fangKern';
 // Z-05: die Konturpruefung ist reine Geometrie und wohnt dort, nicht hier.
 import { pruefeKontur, konturStatusText, KONTUR_MIN_PUNKTE, type KonturGrund } from '../geometry/kontur';
-import { herkunftFuerNeueDecke, HERKUNFT_NEUES_DACH } from '../geometry/freigabe';
+import { herkunftFuerNeueDecke, herkunftFuerNeuesDach } from '../geometry/freigabe';
 import { TUER_TYPEN, FENSTER_TYPEN, tuerTyp, fensterTyp, type TuerTyp, type FensterTyp } from '../geometry/oeffnungsTypen';
 import { DreiDBereich } from './DreiDBereich';
 import { aufloeseAuswahlmodus, wendeAuswahlAn, klickInsLeere } from './tools/auswahlModus';
@@ -320,6 +320,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    * Objekt zu speichern — das ist Schema und damit K-05, ausdrücklich ausserhalb dieser Scheibe.*
    */
   const [deckeNaeherung, setDeckeNaeherung] = useState<boolean | null>(null);
+  // Z-07: dasselbe fuer das Dach. Getrennt gefuehrt, nicht zusammengelegt — wer eine Decke aus
+  // Kontur und danach ein Dach aus dem Umriss anlegt, soll den Hinweis zum DACH sehen.
+  const [dachNaeherung, setDachNaeherung] = useState<boolean | null>(null);
   /** Z-01: steht der Zeiger auf der Zeichenflaeche? Verlassen pausiert, es beendet nicht. */
   const [zeigerDrinnen, setZeigerDrinnen] = useState(true);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
@@ -440,9 +443,11 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    */
   const fussHinweis: string | null = werkzeug === 'kontur'
     ? konturStatusText(konturPunkte.length, konturFehler, letzteKontur?.length ?? null)
-    : deckeNaeherung === true
-      ? 'Decke als Näherung aus dem Gebäude-Umriss — für eine exakte Decke zuerst eine Kontur zeichnen'
-      : null;
+    : dachNaeherung === true
+      ? 'Dach als Näherung aus dem Gebäude-Umriss — für ein exaktes Dach zuerst eine Kontur zeichnen'
+      : deckeNaeherung === true
+        ? 'Decke als Näherung aus dem Gebäude-Umriss — für eine exakte Decke zuerst eine Kontur zeichnen'
+        : null;
   /**
    * AUF-83-T5 / K-03 — eine offene Schiene ist nur dann eine „Ebene", wenn sie gerade als
    * Overlay liegt (schmales Fenster). Verdrängend (≥1024 px) ist sie normales, dauerhaftes
@@ -935,20 +940,32 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     }
 
     if (werkzeug === 'dach') {
-      // D-c: ein Dach je Geschoss (▲D1). Default-Kontur = Gebäude-Umriss, Sattel 35°, Überstand 500 mm.
-      // Ein bereits vorhandenes Dach lehnt der Command ab (Meldung erscheint in der Statusleiste).
+      // D-c: ein Dach je Geschoss (▲D1). Sattel 35°, Überstand 500 mm.
+      //
+      // **Z-07 — die gezeichnete Kontur schlägt den Umriss, wie bei der Decke.** Bis heute nahm
+      // das Dach IMMER die Bounding-Box des Grundrisses. Bei einem Rechteck stimmt sie zufällig;
+      // bei L-, T- und U-Form ist sie falsch, und zwar STILL: das Dach erscheint, es ragt nur
+      // über den Grundriss hinaus. *Ein falsches Ergebnis, das richtig aussieht* — dieselbe
+      // Klasse wie bei der Decke, nur eine Etage höher und damit sichtbarer.
+      //
+      // **Kein Zwang zum Konturzeichnen:** ohne Kontur bleibt der Umriss, und der Fußhinweis
+      // sagt, dass es eine Näherung ist. *Wer schnell stapeln will, soll nicht sechs Punkte
+      // klicken müssen — aber niemand darf glauben, er habe ein exaktes Dach, wenn er es nicht hat.*
       const jetzt = new Date().toISOString();
+      const ausKontur = letzteKontur !== null && letzteKontur.length >= KONTUR_MIN_PUNKTE;
       store.getState().executeCommand({
         type: 'ADD_ROOF',
         roof: {
           id: uuid(), type: 'roof', levelId: level.id, visible: true, locked: false, tags: [],
           createdAt: jetzt, updatedAt: jetzt,
-          polygon: gebaeudeUmriss(), roofType: 'sattel', neigungGrad: 35, firstAzimutGrad: 0,
+          polygon: ausKontur ? letzteKontur : gebaeudeUmriss(),
+          roofType: 'sattel', neigungGrad: 35, firstAzimutGrad: 0,
           ueberstandMm: 500, traufhoeheMm: level.elevation + level.defaultWallHeight,
           // Z-06-N1 (B10): der Status kommt aus der Domäne, nicht aus diesem Klick-Handler.
-          ...HERKUNFT_NEUES_DACH,
+          ...herkunftFuerNeuesDach(ausKontur),
         },
       });
+      setDachNaeherung(!ausKontur);
       setWerkzeug('auswahl');
 
       return;

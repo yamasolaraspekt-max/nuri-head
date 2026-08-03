@@ -30,7 +30,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { migriereSzene, sceneDocumentSchema } from '../domain/validation';
 import { readFileSync } from 'node:fs';
-import { FreigabeFehlt, HERKUNFT_NEUES_DACH, herkunftFuerNeueDecke, istFreigegeben, setzeFreigabe, verlangeFreigabe } from '../geometry/freigabe';
+import { FreigabeFehlt, herkunftFuerNeueDecke, herkunftFuerNeuesDach, istFreigegeben, setzeFreigabe, verlangeFreigabe } from '../geometry/freigabe';
 import type { Freigabe } from '../geometry/freigabe';
 
 const ISO = '2026-08-03T00:00:00.000Z';
@@ -208,9 +208,27 @@ test('K-05 Setzstelle: die beiden Zweige sind VERSCHIEDEN — sonst entscheidet 
   assert.notDeepEqual(herkunftFuerNeueDecke(true), herkunftFuerNeueDecke(false));
 });
 
-test('K-05 Setzstelle: das neue Dach ist abgeleitet und Vorschlag', () => {
-  assert.deepEqual(HERKUNFT_NEUES_DACH, { geometrieHerkunft: 'abgeleitet', freigabe: 'vorschlag' });
-  assert.equal(istFreigegeben(HERKUNFT_NEUES_DACH as never), false);
+test('K-05 Setzstelle: das Dach OHNE Kontur ist abgeleitet und Vorschlag', () => {
+  // **Z-07: aus der Konstante ist eine Funktion geworden.** Bis dahin gab es fuer das Dach nur
+  // einen Weg — den Umriss —, und eine Verzweigung mit einem erreichbaren Zweig waere eine Luege
+  // ueber den Code gewesen. *Z-07 baut den zweiten Weg, also entscheidet ab jetzt eine Bedingung.*
+  assert.deepEqual(herkunftFuerNeuesDach(false), { geometrieHerkunft: 'abgeleitet', freigabe: 'vorschlag' });
+  assert.equal(istFreigegeben(herkunftFuerNeuesDach(false) as never), false);
+});
+
+test('K-05 Setzstelle ROT: das Dach AUS KONTUR ist manuell und bestaetigt', () => {
+  assert.deepEqual(herkunftFuerNeuesDach(true), { geometrieHerkunft: 'manuell', freigabe: 'bestaetigt' });
+  assert.notDeepEqual(herkunftFuerNeuesDach(true), herkunftFuerNeuesDach(false));
+});
+
+test('Z-07: Dach und Decke beantworten dieselbe Frage GLEICH — zwei Bauteile, eine Regel', () => {
+  // *Zwei Bauteile mit derselben Regel duerfen nicht zwei Regeln haben.* Laufen sie auseinander,
+  // heisst dieselbe Kontur beim Dach etwas anderes als bei der Decke — und niemand sieht es an,
+  // weil beide fuer sich plausibel bleiben.
+  for (const ausKontur of [true, false]) {
+    assert.deepEqual(herkunftFuerNeuesDach(ausKontur), herkunftFuerNeueDecke(ausKontur),
+      `Dach und Decke antworten bei ausKontur=${ausKontur} verschieden`);
+  }
 });
 
 test('K-05 Verdrahtung: die App RUFT die Entscheidung, statt sie erneut zu treffen', () => {
@@ -221,7 +239,7 @@ test('K-05 Verdrahtung: die App RUFT die Entscheidung, statt sie erneut zu treff
   const code = quelle.split('\n').filter((z) => !/^\s*(\/\/|\*|\/\*)/.test(z)).join('\n');
 
   assert.match(code, /herkunftFuerNeueDecke\(ausKontur\)/, 'die Decke entscheidet wieder selbst');
-  assert.match(code, /\.\.\.HERKUNFT_NEUES_DACH/, 'das Dach entscheidet wieder selbst');
+  assert.match(code, /herkunftFuerNeuesDach\(ausKontur\)/, 'das Dach entscheidet wieder selbst');
 
   // **BEIDE Felder, nicht nur eines.** Die erste Fassung verbot nur ein `geometrieHerkunft`-
   // Literal — der Evaluator hat diff-belegt vorgeführt, dass `freigabe: 'bestaetigt'` HINTER dem

@@ -89,15 +89,22 @@ export function herkunftFuerNeueDecke(ausKontur: boolean): Pick<MitFreigabe, 'ge
 }
 
 /**
- * Das Dach entsteht ausnahmslos aus dem Gebäude-Umriss (`ADD_ROOF`, Default-Kontur) — es gibt
- * heute keinen Weg, es aus einer gezeichneten Kontur zu erzeugen. Deshalb eine Konstante und
- * keine Verzweigung: *eine Verzweigung mit nur einem erreichbaren Zweig ist eine Lüge über den
- * Code.* Kommt der zweite Weg (Z-08), wird hieraus eine Funktion wie oben.
+ * **Welchen Status bekommt ein FRISCH ANGELEGTES Dach?** — Z-07.
+ *
+ * Bis heute stand hier eine Konstante mit der Begründung *„es gibt keinen Weg, das Dach aus einer
+ * gezeichneten Kontur zu erzeugen"*. **Z-07 baut genau diesen Weg**, und damit wird aus der
+ * Konstante eine Funktion. *Die Konstante fällt weg, sie bleibt nicht daneben stehen:* zwei
+ * Antworten auf „woher kommt das Dach" sind eine zweite Wahrheit, und der nächste Aufrufer nimmt
+ * die falsche.
+ *
+ * Zeichengleich mit `herkunftFuerNeueDecke` — dieselbe Frage am anderen Bauteil, deshalb dieselbe
+ * Form. *Zwei Bauteile mit derselben Regel dürfen nicht zwei Regeln haben.*
  */
-export const HERKUNFT_NEUES_DACH: Pick<MitFreigabe, 'geometrieHerkunft' | 'freigabe'> = {
-  geometrieHerkunft: 'abgeleitet',
-  freigabe: 'vorschlag',
-};
+export function herkunftFuerNeuesDach(ausKontur: boolean): Pick<MitFreigabe, 'geometrieHerkunft' | 'freigabe'> {
+  return ausKontur
+    ? { geometrieHerkunft: 'manuell', freigabe: 'bestaetigt' }
+    : { geometrieHerkunft: 'abgeleitet', freigabe: 'vorschlag' };
+}
 
 /**
  * Setzt die Freigabe und stempelt — **nur wenn sich der Wert wirklich ändert.**
