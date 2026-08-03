@@ -8,6 +8,10 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\SupplierConnection;
 use App\Models\SupplierImportLog;
+use App\Services\Product\Identity\IdentityMatch;
+use App\Services\Product\Identity\IdentityVorschlagOffen;
+use App\Services\Product\Identity\ProductIdentity;
+use App\Services\Product\Identity\ProductIdentityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -466,6 +470,19 @@ class SupplierConnectorService
                         'error' => $mapperException->getMessage(),
                     ]);
                 }
+            } catch (IdentityVorschlagOffen $vorschlag) {
+                // AUF-P1-S4: Stufe-5-Vorschlag NACH dem Rollback sichern (E1) —
+                // die Zeile gilt als nicht importiert, ein Mensch entscheidet.
+                app(ProductIdentityService::class)->vorschlagSpeichern($vorschlag->identity, $vorschlag->match);
+
+                $failed++;
+
+                $errors[] = [
+                    'index' => $index + 1,
+                    'error' => $vorschlag->getMessage(),
+                    'row' => $row,
+                    'raw_item' => $rawItems[$index] ?? null,
+                ];
             } catch (\Throwable $exception) {
                 $failed++;
 
@@ -579,7 +596,8 @@ class SupplierConnectorService
             $measureUnit,
             $shortDescription !== '' ? $shortDescription : null,
             $vatPercent,
-            $updatePriceOnlyIfExists
+            $updatePriceOnlyIfExists,
+            $distributor
         );
 
         /** @var Product $product */
@@ -638,8 +656,79 @@ class SupplierConnectorService
         ?string $measureUnit,
         ?string $shortDescription,
         ?float $vatPercent,
-        bool $updatePriceOnlyIfExists = true
+        bool $updatePriceOnlyIfExists = true,
+        ?Distributor $distributor = null
     ): array {
+        if (config('produkt.identitaet.aktiv')) {
+            // AUF-P1-S4 §8 Zeile 2: resolve() MIT Lieferantenbezug — der fehlende
+            // distributor_id-Filter (§2.1, Preis am falschen Artikel) ist damit behoben.
+            $dienst = app(ProductIdentityService::class);
+
+            $identitaet = new ProductIdentity(
+                gtin: $ean,
+                manufacturerArticleNo: $manufacturerArticleNo,
+                brandId: $brandId,
+                supplierArticleNo: $distributorArticleNo,
+                distributorId: $distributor?->id,
+                name: $productTitle,
+                channel: 'supplier:reviewed',
+            );
+
+            $match = $dienst->resolve($identitaet);
+
+            if ($match->ergebnis === IdentityMatch::KONFLIKT) {
+                throw new \RuntimeException('Identitätskonflikt — kein Import: ' . $match->begruendung);
+            }
+
+            if ($match->ergebnis === IdentityMatch::VORSCHLAG) {
+                throw new IdentityVorschlagOffen($identitaet, $match);
+            }
+
+            $product = $match->product;   // AUTOMATISCH: Treffer · NEU: null
+
+            if ($product && $updatePriceOnlyIfExists) {
+                return [
+                    'product' => $product,
+                    'was_existing_product' => true,
+                    'price_only' => true,
+                ];
+            }
+
+            $idNorm = $dienst->normalize($identitaet);
+
+            $data = [
+                'article_no' => $idNorm->manufacturerArticleNo,   // normalisiert, Sentinel => null (kein 'Not filled' mehr)
+                'sku' => $idNorm->supplierArticleNo,
+                'ean' => $ean ?: null,
+                'brand_id' => $brandId,
+                'article_group' => $articleGroupId,
+                'sub_article' => $subArticleGroupId,
+                'product' => $productTitle,
+                'category' => 'product',
+                'measure_unit' => $this->normalizeMeasureUnitForProduct($measureUnit),
+                'vat_percent' => $vatPercent ?? 19,
+                'short_description' => $shortDescription,
+                'status' => 1,
+            ];
+
+            if ($product) {
+                $product->update(array_filter($data, fn ($value) => $value !== null && $value !== ''));
+
+                return [
+                    'product' => $product->fresh(),
+                    'was_existing_product' => true,
+                    'price_only' => false,
+                ];
+            }
+
+            return [
+                'product' => $dienst->createFrom($identitaet, $data),
+                'was_existing_product' => false,
+                'price_only' => false,
+            ];
+        }
+
+        // Alt-Verhalten, byte-gleich (Kante 15).
         $product = null;
 
         if ($ean) {
@@ -696,7 +785,7 @@ class SupplierConnectorService
         }
 
         return [
-            'product' => Product::create($data),
+            'product' => app(ProductIdentityService::class)->createLegacy($data),
             'was_existing_product' => false,
             'price_only' => false,
         ];
