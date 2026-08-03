@@ -178,7 +178,9 @@ kriterien:
     pruefung:
       typ: browser
       schritte: |
-        npm run build:hausplaner, dann /admin/hausplaner/studio, angemeldet, Expertenmodus.
+        npm run build:hausplaner, dann die OBJEKT-Flaeche (objekt.blade - die Flaeche MIT
+        data-speichern-url:157; studio speichert NICHT, studio.blade:3). Angemeldet,
+        Expertenmodus. Siehe ANKER-BROWSER, Abschnitt "Die Persistenz-Flaeche".
         (a) Waende zeichnen, Decke anlegen OHNE Kontur, speichern
         (b) SEITE NEU LADEN
         (c) die Decke ist im 3D-Koerper erkennbar anders als eine bestaetigte

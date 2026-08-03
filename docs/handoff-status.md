@@ -39087,3 +39087,31 @@ ungemessen. *Ich schreibe kein Gruen auf einen Code-Blick; K-N2 verlangt einen L
 Sobald die Test-DB steht, ist es ein Lauf von zwei Minuten.
 
 VOTUM: auftrag=Z-06-N1-STAND rolle=evaluator ergebnis=insel-gruen-server-ungemessen commit=789de20f datum=2026-08-03 hinweis=alle-drei-gruende-im-code-zu-abnahme-haengt-an-zerstoerter-testdb-migrate-fresh-bei-yama
+
+---
+
+## PLANNER — 03.08. 13:5x · ZUSCHNITT Test-DB (angefordert) + L-01-Flaeche in N2/N3/Z-07 nachgezogen
+
+```text
+ERLEDIGT (dieser Zug, ohne Wartezeit): N2:181, N3:192, Z-07:150 tragen jetzt die
+PERSISTENZ-Flaeche objekt.blade statt studio. Damit ist die N1-Lehre in ALLEN
+Nachfolgern verbaut, bevor sie dort Schaden anrichtet - nicht erst beim Gegenlesen.
+
+ZUSCHNITT TEST-DB (Evaluator hat ihn angefordert, er gehoert mir):
+  ENTSCHEIDUNG: je Rolle eine eigene DB. ABER NICHT ueber DB_DATABASE - phpunit.xml:28
+  traegt force="true", und ein Entfernen von force waere GEFAEHRLICH: eine in der Shell
+  gesetzte DB_DATABASE wuerde dann durchschlagen, RefreshDatabase auf die Produktions-DB.
+  Das ist der teuerste denkbare Fehler, und er waere still.
+  STATT DESSEN, mit Riegel: eine Variable TEST_ROLLE (evaluator|generator|planner).
+  Der Boot-Punkt bildet daraus 'ticket_testing_<rolle>' und WEIST AB, was nicht mit
+  'ticket_testing' beginnt - hartes Praefix, kein Vertrauen in die Umgebung.
+  ZUSAGE dazu (P1): TEST_ROLLE='../produktion' oder 'ticket' -> Lauf bricht ab, DB
+  unangetastet. Ohne diese Gegenprobe ist die Bequemlichkeit die Falle.
+  Nicht auf Vorrat: Belegungs-Absprache im Ledger reicht bis dahin.
+  BAU: Generator, ZUSAMMEN mit Tor-Paket Teil 2 (B13-Ausnahme, blockiert Messungen).
+
+AN YAMA - der EINE Befehl, der heute drei Messungen gekostet hat:
+  DB_DATABASE=ticket_testing php artisan migrate:fresh --force
+  (destruktiv, darum deiner. Vom Evaluator vorher belegt: users 0, leads 0 - Testflaeche.)
+  Danach: Evaluator faehrt K-N2 -> N1 gruen -> ich entsperre N2 in derselben Minute.
+```

@@ -148,6 +148,8 @@ kriterien:
     pruefung:
       typ: browser
       schritte: |
+        FLAECHE: objekt.blade (data-speichern-url:157) - NICHT studio, das speichert
+        nicht (studio.blade:3). Siehe ANKER-BROWSER, "Die Persistenz-Flaeche".
         (a) L-Kontur zeichnen, Dach anlegen -> die Traufe folgt dem L, nicht der Box
         (b) Dach OHNE Kontur -> Naeherungs-Vermerk sichtbar (Wortlaut Dach)
         (c) speichern, NEU LADEN -> Status bleibt (B10; Kennzeichnung im Modell ist N2,
