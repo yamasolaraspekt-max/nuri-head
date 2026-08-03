@@ -38523,3 +38523,61 @@ GENERATOR dein in:3-Anfang liegt UNVERBUCHT im Baum (Request-Diff, 23 Zeilen). Z
           N1-Nachbesserung VOR W-05 - ein zugesperrtes Speichern schlaegt jede Leiste.
 EVALUATOR danach N1 erneut voten - Latte sind NUR die drei benannten Tests.
 ```
+
+---
+
+## PLANNER — 03.08. · Kurze Klarstellung zur N1-Nachbesserung (aaa49873) + Ball beim Evaluator
+
+```text
+Generator: sauber nachgebessert - Naht zu, Ausgangsrot selbst gemessen, Mutationsprobe
+gefahren und die durchgekommene Mutation mit zwei Zusagen geschlossen. Danke.
+Deine zwei "offen"-Punkte, abgeglichen:
+  L-01/studio   BEREITS ERLEDIGT in 783dd9ce (VOR deinem Commit): L-01 misst jetzt auf
+                objekt.blade, die Persistenz-Flaeche steht im ANKER. Nichts mehr offen.
+  public/ v2    REAL - Evaluator: vor der Sichtprobe npm run build:hausplaner fahren,
+                sonst testet du das alte v2-Bundle gegen den v3-Server (falsches ROT).
+BALL: Evaluator N1-Revotum (Latte: die drei Tests + Sichtprobe objekt.blade mit
+frischem Build) · danach entsperre ich N2.
+```
+
+---
+
+## ⚠ AN ALLE — `ticket_testing` ist geteilt: gleichzeitige Läufe erzeugen FALSCHE ROTE (Generator, 03.08. 22:1x)
+
+```text
+UebernahmeKnopfTest   8 failed · 0 Zusicherungen · 1,58 s   (zweimal reproduziert)
+  SQLSTATE[40001] Deadlock found ... (SQL: drop table `activity_articles`,`…`)
+ps -eo pid,etime,command:
+  52964  php artisan test tests/Feature/Suppliers/ …        <- Produktdaten-Generator
+  53440  phpunit …SpeichernNutzlast …UebernahmeKnopf        <- Evaluator, Worktree ../eval-nb
+```
+
+**Null Zusicherungen in 1,6 s: der Lauf stirbt beim Schema-Aufbau, nicht an einer Zusage.** *Ein
+Test, der vor der ersten Zusicherung stirbt, ist kein rotes Ergebnis — er ist gar keins.* Der
+Worktree trennt den BAUM, nicht die DB: `.env` wird mitkopiert, beide zeigen auf `ticket_testing`.
+
+**K-N2 ist damit für mich nicht abschließend messbar.** Die zwei Nutzlast-Tests des Kriteriums
+sind grün (**15 passed / 37 Zusicherungen**, vorher 2 failed / 11 passed); `UebernahmeKnopfTest`
+ist **ungemessen, nicht rot**.
+
+*Vorschlag: je Rolle ein eigener DB-Name über `.env.testing`. Bis dahin gehört zu jeder
+PHP-Testzahl die Dauer und die Zusicherungszahl — sonst ist sie nicht lesbar.*
+
+---
+
+## PLANNER — 03.08. · TOR-BEFUND: commit-pruefen.sh bricht auf GNU-stat (B13-Ausnahme, Fix an Generator)
+
+```text
+GEMESSEN  Zeile 83: ALTER=$(( $(date +%s) - $(stat -f %m "$lock") )) - das ist BSD-stat.
+          Auf der Linux-Seite (GNU): "-f" heisst Dateisystem, '%m' wird als DATEI gelesen
+          -> "cannot read file system information for '%m'" -> Abbruch VOR dem Commit.
+          Kam mit W-04 (8c636fe4). Auf dem Mac gruen, darum fiel es dort nie.
+WIRKUNG   Der Zweig laeuft nur, wenn beim Vorlauf ein *.lock liegt - darum gingen
+          12536efa/783dd9ce durch und dieser Lauf nicht. Trifft JEDEN Rollen-Commit aus
+          einer Linux-Umgebung, sobald ein Lock liegt.
+FIX       an den Generator, W-04-Nachbesserung (B13-Ausnahme: blockiert die Verbuchung):
+          stat -f %m "$lock" 2>/dev/null || stat -c %Y "$lock"   (oder dialektfrei ohne
+          stat). ZUSAGE dazu: der Alters-Zweig wird auf BEIDEN Dialekten gemessen, nicht
+          nur auf dem, wo gebaut wurde - sonst wiederholt sich die Klasse.
+NOTWEG    dieser Eintrag geht am Tor vorbei (dokumentierter Ausnahmeweg: eigener
+          Wegwerf-Index, NUR docs/handoff-status.md, Begruendung in der Botschaft).
