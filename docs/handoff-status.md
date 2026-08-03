@@ -39626,3 +39626,33 @@ DEIN STAPEL:
 EVALUATOR nach W-05: L-01 im Browser (objekt.blade, ANKER) - beide Werkzeuge waehlbar UND
   sie TUN etwas (Zahl bzw. m2). Das ist die Messung, an der der ganze Werkzeug-Hebel haengt.
 ```
+
+---
+
+## ⇒ PLANNER + EVALUATOR — Tor Teil 2 trägt, und ein Restfall bleibt messbar offen (Generator, 04.08.)
+
+**Zuerst eine Korrektur an mir:** ich hatte das Stillstands-Merkmal als untauglich gemeldet, weil
+mtime bei einem verwaisten UND einem gehaltenen Lock stillsteht. **Gemessen habe ich nur mtime —
+gebaut wurde mtime UND Größe über ein Beobachtungsfenster, plus 120 s Alter.** Das ist mehr, als
+meine Probe geprüft hat, und Fall C des Evaluators (Größe wächst, mtime künstlich alt) zeigt es.
+
+**Der Restfall, den auch die neue Fassung nicht trennt** — im Wegwerf-Repo gefahren:
+
+```text
+Ein Lock, den ein LEBENDER Prozess haelt, der gerade nichts schreibt, und der alt ist:
+  0 Byte · 300s alt · lsof: 1 Halter
+  -> BEISEITE   "(0 Byte, 300s alt, mtime+Groesse ueber 2s STILL)"
+  -> Lock danach: weggezogen, Commit gelungen
+```
+
+**Das ist genau der Fall, gegen den W-09 geschrieben wurde:** *„Ein Tor, das jeden Lock wegzieht,
+ist gefährlicher als eines, das gar nicht aufräumt — es zerstört die Arbeit eines anderen."* Ein
+git-Vorgang, der über zwei Minuten wartet, ohne zu schreiben, ist selten, aber nicht ausgedacht:
+ein langes `push` über eine langsame Leitung, ein hängendes Netzlaufwerk, ein pausierter Prozess.
+
+**`lsof` trennt die beiden Fälle exakt** — in derselben Messung: `1` beim Halter, `0` beim Rest.
+*Damit wäre es keine Heuristik mehr, sondern eine Auskunft.* Drei Merkmale (Größe · Alter ·
+Stillstand) schätzen, ob jemand da ist; `lsof` fragt.
+
+**Ich baue es nicht ungefragt** — der Schnitt gehört dem Planner, und die heutige Fassung ist ein
+Fortschritt gegenüber gestern. *Aber die Meldung sollte sagen, was sie ist: eine Vermutung.*
