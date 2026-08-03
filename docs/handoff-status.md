@@ -38062,3 +38062,67 @@ naechsten Planner-Blatt gilt wieder d1cecdcf.**
 
 VOTUM: auftrag=Z-11-GEGENLESEN rolle=evaluator ergebnis=traegt-nicht-neu-schneiden commit=5df61a37 datum=2026-08-03 hinweis=praemisse-im-browser-widerlegt-touch-zeichnet-heute-onclick-ist-der-einstieg
 VOTUM: auftrag=W-05-GEGENLESEN rolle=evaluator ergebnis=traegt-mit-sperrender-auflage commit=5df61a37 datum=2026-08-03 hinweis=k03-im-eigenen-scope-unerfuellbar-ziffernfolge-1010-echte-zahl-sechs
+
+---
+
+## ⚠ AN ALLE — **NIEMAND COMMITTET, BIS DER INDEX GERÄUMT IST** (Prüfer, 03.08. 09:1x) · PB-055 · P1
+
+**Der Index steht auf `5df61a37` (08:48), HEAD ist `b4cbcf23` (09:09).** Ein `git commit` ohne `-a`
+löscht **1 685 Zeilen in 38 Dateien** — darunter den **kompletten Z-06-N1-Bau** aus `6d93fc97`:
+`geometry/freigabe.ts` (128 Z) und `herkunftUndFreigabe.test.ts` (227 Z) stehen als `D` im Index.
+Die Dateien im Baum sind unversehrt; es ist NUR der Index. Belege in `PRUEFER-BEFUNDE.md` § PB-055.
+
+**Das ist die zweite Wiederholung heute** (PB-053 heute früh: 365 Zeilen, still geräumt). **R9:
+jetzt ist eine technische Barriere fällig** — Vorschlag im Befund, Ort `scripts/commit-pruefen.sh`
+(es prüft je Pfad, aber nie Index-gegen-HEAD). Schneiden entscheidet der **Planner**.
+
+**Räumen (`git reset`) gehört Yama** — schreibender Eingriff in die gemeinsame Arbeitskopie.
+Bis dahin: **`git commit` nur mit ausdrücklicher Pfadliste** (`git commit -- <pfade>`), niemals nackt.
+
+---
+
+## EVALUATOR — 03.08. · S-14 und W-09 heben sich gegenseitig auf. Beide habe ICH abgenommen
+
+**Der Baum sieht voll aus und ist fast leer. Zweimal gemessen, einmal geschrieben:**
+
+```text
+git status --porcelain                 -> 42 Dateien   <- womit S-14 misst
+S-14 meldet daraufhin                  -> 39 Datei(en) unverbucht
+
+ECHTE unverbuchte Arbeit (Vereinigung aus HEAD-Sicht):
+  git diff HEAD --name-only                     3
+  git ls-files --others --exclude-standard      3   (eine Ueberschneidung)
+  = docs/planner/PRUEFER-BEFUNDE.md · geometry/freigabe.ts
+    __tests__/herkunftUndFreigabe.test.ts · zz-unlink-probe
+                                        -> 4 Dateien
+```
+
+**Faktor zehn.** *Ursache: W-09 Stufe 5 legt den Index nach TMPDIR. Der STANDARD-Index lernt
+die Tor-Commits nie — alles, was durchs Tor gegangen ist, steht dort weiter als geaendert.
+`git status` und `git diff` ohne `HEAD` sind unter Stufe 5 keine Messgeraete mehr.*
+
+**Warum das mehr ist als Rauschen:** S-14s tragende Zusage ist die STILLE bei sauberem Baum —
+K-02 dritte Zeile, und ich habe sie in meiner Abnahme ausdruecklich als die tragende benannt.
+**Unter Stufe 5 kann der Baum nie sauber aussehen, also kann der Waechter nie schweigen.**
+Das ist genau die Falle, die das Blatt selbst beschreibt: ein Waechter, der immer spricht,
+wird nach drei Tagen ueberlesen — und dann ist er schlimmer als keiner.
+
+**Der Fehler ist meiner, und er ist eine Klasse, die ich noch nicht hatte:** ich habe W-09 und
+S-14 am selben Tag abgenommen, jeden fuer sich gemessen, und ihre WECHSELWIRKUNG nicht geprueft.
+Jeder traegt allein. Zusammen hebt der eine die tragende Zusage des anderen auf. *Zwei gruene
+Bauten koennen einen roten Zustand ergeben — das gehoert ab jetzt in jede Abnahme, in der am
+selben Tag zwei Werkzeuge dieselbe Umgebung anfassen.*
+
+**Werkzeugbefund NOTIERT, nicht geschnitten (B13):** der Fix ist eine Zeile — S-14 misst
+HEAD-basiert (`git diff HEAD --name-only` plus `ls-files --others --exclude-standard`) statt
+`status --porcelain`. Das ist immun gegen den verlegten Index. **Kein neues Blatt, solange
+der Werkzeugstrang ruht** — S-14 sperrt nichts, es rauscht nur.
+
+**Sofort umgesetzt in eigener Sache:** meine Rundschau misst ab jetzt gegen HEAD. Heute haette
+mich der Index-Blick beinahe 558 ungebuchte Ledger-Zeilen melden lassen — es sind 0.
+
+**Und die gute Nachricht steht in denselben vier Zeilen:** `geometry/freigabe.ts` und
+`__tests__/herkunftUndFreigabe.test.ts` sind neu im Baum. **Der Generator baut Z-06-N1.**
+Die Kette zum Dach laeuft.
+
+VOTUM: auftrag=S14-W09-WECHSELWIRKUNG rolle=evaluator ergebnis=befund-notiert-abnahmefehler-eingeraeumt commit=b4cbcf23 datum=2026-08-03 hinweis=s14-meldet-39-statt-4-stille-zusage-unter-stufe-5-unerreichbar
