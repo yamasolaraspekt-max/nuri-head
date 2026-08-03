@@ -15,6 +15,9 @@ use App\Models\ArticleGroup;
 use App\Models\SubArticleGroup;
 use App\Models\Brand;
 use App\Models\Measure;
+use App\Services\Product\Identity\IdentityMatch;
+use App\Services\Product\Identity\ProductIdentity;
+use App\Services\Product\Identity\ProductIdentityService;
 
 class IdsController extends Controller
 {
@@ -85,22 +88,66 @@ class IdsController extends Controller
      */
     protected function autoPromoteItem(ImportedIdsItem $item): void
     {
-        // 1) Product
-        $product = Product::firstOrCreate(
-            ['article_no' => $item->article_no],
-            [
-                'ean'               => $item->ean,
+        if (config('produkt.identitaet.aktiv')) {
+            // AUF-P1-S4 §8 Zeile 3: resolve() mit supplierArticleNo — die GC-Online-
+            // Nummer ist eine Lieferantennummer, KEINE Herstellernummer. Der Pfad
+            // entfällt mit Schritt 5; bis dahin läuft er über die Leiter.
+            $distributor = Distributor::firstOrCreate(
+                ['name' => 'GC Online'],
+                ['status' => 'Published']
+            );
+
+            $dienst = app(ProductIdentityService::class);
+
+            $identitaet = new ProductIdentity(
+                gtin: $item->ean,
+                supplierArticleNo: $item->article_no,
+                distributorId: $distributor->id,
+                name: $item->short_text ?: $item->article_no,
+                channel: 'ids:gconline',
+            );
+
+            $match = $dienst->resolve($identitaet);
+
+            if ($match->ergebnis === IdentityMatch::KONFLIKT) {
+                Log::warning('IDS autoPromote: Identitätskonflikt — kein Import', [
+                    'item_id' => $item->id,
+                    'grund' => $match->begruendung,
+                ]);
+                return;
+            }
+
+            if ($match->ergebnis === IdentityMatch::VORSCHLAG) {
+                $dienst->vorschlagSpeichern($identitaet, $match);
+                Log::info('IDS autoPromote: Stufe-5-Vorschlag angelegt — kein automatischer Import', [
+                    'item_id' => $item->id,
+                    'grund' => $match->begruendung,
+                ]);
+                return;
+            }
+
+            $product = $match->product ?? $dienst->createFrom($identitaet, [
                 'product'           => $item->short_text ?: $item->article_no,
                 'short_description' => $item->long_text,
                 'status'            => 'Published',
-            ]
-        );
+            ]);
+        } else {
+            // Alt-Verhalten, byte-gleich (Kante 15): firstOrCreate auf article_no.
+            $product = Product::where('article_no', $item->article_no)->first()
+                ?: app(ProductIdentityService::class)->createLegacy([
+                    'article_no'        => $item->article_no,
+                    'ean'               => $item->ean,
+                    'product'           => $item->short_text ?: $item->article_no,
+                    'short_description' => $item->long_text,
+                    'status'            => 'Published',
+                ]);
 
-        // 2) Distributor "GC Online"
-        $distributor = Distributor::firstOrCreate(
-            ['name' => 'GC Online'],
-            ['status' => 'Published']
-        );
+            // 2) Distributor "GC Online"
+            $distributor = Distributor::firstOrCreate(
+                ['name' => 'GC Online'],
+                ['status' => 'Published']
+            );
+        }
 
         // 3) Distributor price
         DistributorPrice::updateOrCreate(
