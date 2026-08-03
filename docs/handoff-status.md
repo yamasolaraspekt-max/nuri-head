@@ -38225,3 +38225,39 @@ unordentlich aus und ist es nicht — **nicht aufraeumen.**
 es rauscht — aber es rauscht so laut, dass es seinen eigenen Zweck aufhebt.*
 
 VOTUM: auftrag=S14-RICHTIGSTELLUNG rolle=evaluator ergebnis=eigener-fix-war-falsch-befund-steht commit=35455fb4 datum=2026-08-03 hinweis=44-gemeldet-39-phantome-2-echt-nur-inhaltsvergleich-ist-indexfrei-nicht-aufraeumen
+
+---
+
+## ⇒ PLANNER — W-05 ist so nicht baubar: die Nahtstelle baut einen Import-Zyklus (Generator, 03.08. 21:0x)
+
+**Ausgangswerte alle vier bestätigt** (`AUS_PAKET_GEHOBEN` 0 · `'bemassen'` 0 · feste `101` 6 ·
+Partner `EIGENE_WERKZEUGE` 20). Die Bilanz stimmt wie beschrieben: **10 + 101 = 111**, und die
+getippte `110` ist wirklich `9 + 101` — K-10 hat recht.
+
+**Aber die Nahtstelle *„`toolRegistry.ts` bekommt `AUS_PAKET_GEHOBEN` + die zwei Einträge"* geht
+nicht, weil der Import bereits andersherum läuft:**
+
+```text
+paketAdapter.ts:28   import { TOOL_DEFINITIONS } from './toolRegistry';
+                     -> REGISTRY_KUERZEL, Zeile 35-37, auf MODULEBENE berechnet
+```
+
+Damit die zwei Werkzeuge in `TOOL_DEFINITIONS` landen, müsste `toolRegistry` die fertigen
+`ToolDefinition`s aus `paketAdapter` holen — **das schließt den Kreis.** Nicht vermutet, gefahren:
+
+```text
+Probe-Import gesetzt, Modul geladen:
+  ReferenceError: Cannot access 'WORKSPACE_IMPORT' before initialization
+    at app/dashboard/arbeitsbereiche.ts:69
+Datei danach: identisch mit HEAD (diff gegen HEAD-Blob, nicht gegen den Index)
+```
+
+**Warum ich es nicht selbst löse:** die Auflösung ist eine Zeile in `paketAdapter.ts` —
+`REGISTRY_KUERZEL` faul statt auf Modulebene berechnen. Die Datei steht als **Ausschluss** im
+Blatt. *Der Ausschlussgrund lautet „das Paket bleibt vollständig, gefiltert wird beim Katalog";
+eine faule Auswertung filtert nichts.* **Ob das noch der Ausschluss ist oder schon eine
+Umfangserweiterung, entscheidest du — ich erweitere keinen Umfang eigenmächtig.**
+
+**Die Alternative ohne fremde Datei trägt nicht:** man könnte die gehobenen Werkzeuge im Katalog
+lassen und die Bilanz um einen dritten Summanden erweitern — dann stünden sie aber weiterhin
+nicht in `werkzeuge()` und damit **nicht in der Leiste**, was der ganze Zweck von W-05 ist.
