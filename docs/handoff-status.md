@@ -39707,3 +39707,72 @@ Blocker. **Fallback-Verhalten benennen, nicht voraussetzen.**
 **Schnitt gehoert dem Planner** — ich habe den Befund bestaetigt, nicht die Loesung entschieden.
 
 VOTUM: auftrag=TOR-RESTFALL rolle=evaluator ergebnis=befund-bestaetigt-eigene-abnahme-zu-flach commit=2c120f93 datum=2026-08-04 hinweis=gehaltener-stiller-lock-wird-weggezogen-lsof-ist-die-auskunft-luecke-stammt-aus-w09-stufe-4
+
+---
+
+## ⇒ GENERATOR (+ Yama) — **PB-056-Nachmessung: der Schalter trägt, aber die Tür ist zu** (Prüfer, 03.08. 22:4x)
+
+`2de8793c` (TEST_ROLLE) selbst nachgemessen, dreistufig:
+
+```
+1  Unit-Suite TestDatenbankTest                  -> 11 passed / 17 assertions   TRAEGT
+2  Rollen-DBs vorhanden? information_schema      -> ticket_testing 451 · alle vier
+                                                    ticket_testing_<rolle>: 0 Tabellen
+3  DIE erledigt-wenn-Probe — zwei Laeufe GLEICHZEITIG:
+     TEST_ROLLE=pruefer php artisan test --filter=UebernahmeKnopfTest
+        -> 8 failed / 0 assertions · SQLSTATE[HY000] [1044] Access denied for user
+           'ticket_user'@'127.0.0.1' to database 'ticket_testing_pruefer'
+     ohne TEST_ROLLE (ticket_testing)            -> 8 passed / 67                UNGESTOERT
+```
+
+**Zwei Aussagen, sauber getrennt:** **(a)** Die Isolation wirkt schon jetzt — der Basis-Lauf blieb
+zum ersten Mal von einem Parallel-Lauf **ungestört** (vorher: 8 failed durch fremdes
+`migrate:fresh`). **(b)** Der Rollen-Pfad selbst ist **noch nicht benutzbar**: `ticket_user` hat
+**keine Rechte** auf `ticket_testing_pruefer/…` — die DBs existieren (0 Tabellen), aber der Nutzer
+darf nicht hinein. `RefreshDatabase` kann dort nichts migrieren.
+
+**Was fehlt, ist kein Code, sondern ein GRANT** — und MySQL-Rechte vergibt hier **Yama** (root-PW
+liegt bei ihm, `mysql-lokal-infra`): `GRANT ALL ON \`ticket_testing_pruefer\`.* TO 'ticket_user'@'127.0.0.1';`
+für alle vier Rollen-DBs (bzw. ein Muster-Grant `ticket_testing_%`). **PB-056 bleibt offen** bis die
+Probe aus Schritt 3 zweimal grün läuft — dann schließe ich sie selbst nach.
+
+---
+
+## EVALUATOR — 04.08. · TEST_ROLLE (2de8793c): GRUEN. Der geteilte Schreibtisch ist entschaerft
+
+Das ist die Antwort auf meinen Befund von gestern (eine Test-DB, drei Rollen, drei zerstoerte
+Messungen). Pruefstand auf 2de8793c:
+
+```text
+Riegel-Zusagen                        OK 11 tests / 17 assertions   selbst gefahren
+Riegel direkt befragt, OHNE Boot (gefahrlos — keine DB-Verbindung noetig):
+  ''                -> ticket_testing              Bestand unveraendert, niemand muss etwas tun
+  'generator'       -> ticket_testing_generator
+  'evaluator'       -> ticket_testing_evaluator
+  'ticket'          -> ABGEWIESEN                  <- der Angriff auf die Arbeits-DB
+  'ticket_testing'  -> ABGEWIESEN
+  '../ticket'       -> ABGEWIESEN
+  'generator; DROP' -> ABGEWIESEN
+  'GENERATOR'       -> ABGEWIESEN                  Grossschreibung zaehlt nicht als bekannt
+GEGEN-BEWEIS: ersten Riegel ausgebaut (diff-belegt, Reset verifiziert)
+  'ticket' kaeme dann als ticket_testing_ticket durch — ABER die Zusagen gehen ROT (11/1),
+  und die drei anderen Angriffe faengt der zweite Riegel weiterhin.
+  => Beide Riegel tragen unabhaengig, und die Zusage merkt es, wenn einer faellt.
+```
+
+**Der Bau ist an der richtigen Stelle:** die Entscheidung ist eine pruefbare Funktion, kein
+Zweig im Boot-Punkt — deshalb konnte ich sie gefahrlos befragen, ohne eine Datenbank anzufassen.
+*Genau das ist der Unterschied zwischen einer Regel und einer Mechanik.*
+
+**Eigener Fehlgriff, gefangen:** ich habe `TEST_ROLLE=ticket` zuerst gegen die UNIT-Zusagen
+gefahren und exit 0 bekommen — und beinahe einen Widerspruch zum Generator gemeldet. Der
+Unit-Test bootet keine Datenbank; der Riegel greift im Boot. *Der richtige Weg waere ein
+Feature-Test gewesen — den habe ich NICHT gefahren, weil ein fehlgehender Riegel dort die
+Arbeits-DB mit 72 Objekten migriert haette. Die Funktion direkt zu befragen misst dasselbe
+und riskiert nichts.*
+
+**Fuer meine eigene Arbeit ab jetzt: `TEST_ROLLE=evaluator` vor jedem phpunit-Lauf.** Damit
+faellt die Fremdlauf-Sperre nicht weg, aber sie schuetzt nur noch vor gleichzeitigen Laeufen
+DERSELBEN Rolle.
+
+VOTUM: auftrag=TEST_ROLLE rolle=evaluator ergebnis=gruen commit=2de8793c datum=2026-08-04 hinweis=acht-gefaehrliche-werte-direkt-befragt-beide-riegel-tragen-unabhaengig-zusage-faengt-den-ausbau
