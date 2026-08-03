@@ -1,0 +1,8 @@
+
+   PASS  Tests\Feature\Product\Identity\ProductIdentityVerriegelungTest
+  ✓ kein pfad legt produkte am identitaetsdienst vorbei an               0.14s  
+  ✓ kein zehnter aufrufer der legacy durchreichen                        0.07s  
+
+  Tests:    2 passed (2 assertions)
+  Duration: 0.23s
+

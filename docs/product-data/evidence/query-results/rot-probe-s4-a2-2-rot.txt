@@ -1,0 +1,46 @@
+
+   FAIL  Tests\Feature\Product\Identity\ProductIdentityVerriegelungTest
+  ✓ kein pfad legt produkte am identitaetsdienst vorbei an               0.12s  
+  ⨯ kein zehnter aufrufer der legacy durchreichen                        0.07s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Product\Identity\ProductIdentityVerriegelungTest >…    
+  createLegacy/newLegacy dürfen NUR in den 9 bekannten Alt-Zweigen stehen.
+Aktuelle Fundstellen:
+app/Http/Controllers/Product/IDS/gconline/IdsController.php:137: ?: app(ProductIdentityService::class)->createLegacy([
+app/Http/Controllers/Product/IDS/gconline/IdsController.php:343: ?: app(ProductIdentityService::class)->createLegacy(
+app/Http/Controllers/Product/ProductController.php:1113: $product = app(ProductIdentityService::class)->newLegacy();
+app/Http/Controllers/Product/ProductController.php:1405: $product = app(ProductIdentityService::class)->createLegacy(
+app/Http/Controllers/Product/ProductImportController.php:199: $product = app(ProductIdentityService::class)->newLegacy();
+app/Services/ProductCsvImporter.php:429: $product = app(ProductIdentityService::class)->createLegacy(array_merge($payload, [
+app/Services/Suppliers/SupplierConnectionTestService.php:294: app(\App\Services\Product\Identity\ProductIdentityService::class)->createLegacy([]);   // ROT-PROBE A2 — wird sofort zurueckgesetzt
+app/Services/Suppliers/SupplierConnectorService.php:788: 'product' => app(ProductIdentityService::class)->createLegacy($data),
+app/Services/Suppliers/SupplierProductImportService.php:76: $product = app(ProductIdentityService::class)->createLegacy(
+database/seeders/HeatpumpSeeder.php:163: $product = app(ProductIdentityService::class)->createLegacy(
+Failed asserting that two arrays are identical.
+       'app/Http/Controllers/Product/ProductController.php' => 2,
+       'app/Http/Controllers/Product/ProductImportController.php' => 1,
+       'app/Services/ProductCsvImporter.php' => 1,
+  +    'app/Services/Suppliers/SupplierConnectionTestService.php' => 1,
+       'app/Services/Suppliers/SupplierConnectorService.php' => 1,
+       'app/Services/Suppliers/SupplierProductImportService.php' => 1,
+       'database/seeders/HeatpumpSeeder.php' => 1,
+   ]
+  
+
+  at tests/Feature/Product/Identity/ProductIdentityVerriegelungTest.php:64
+     60▕             'app/Services/Suppliers/SupplierProductImportService.php' => 1,       // Pfad 1
+     61▕             'database/seeders/HeatpumpSeeder.php' => 1,                           // Pfad 9
+     62▕         ];
+     63▕ 
+  ➜  64▕         $this->assertSame($erwartet, $jeDatei,
+     65▕             "createLegacy/newLegacy dürfen NUR in den 9 bekannten Alt-Zweigen stehen.\n"
+     66▕             . "Aktuelle Fundstellen:\n" . implode("\n", $treffer));
+     67▕     }
+     68▕
+
+  1   tests/Feature/Product/Identity/ProductIdentityVerriegelungTest.php:64
+
+
+  Tests:    1 failed, 1 passed (2 assertions)
+  Duration: 0.22s
+

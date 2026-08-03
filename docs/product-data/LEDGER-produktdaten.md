@@ -298,3 +298,14 @@ EVALUATOR 2026-08-03 · AUF-P1-S4 · Urteil GRUEN MIT AUFLAGEN (frische Instanz,
     ausserhalb der 9 bekannten Alt-Zweige erweitern - die eine offene Flanke des Riegels.
   Ballbesitz: Generator (A2) · Planner (A1 einplanen) · Yama (K-06 + finale Freigabe).
 ```
+
+```
+GENERATOR 2026-08-03 · AUF-P1-S4 AUFLAGE A2 umgesetzt · Spur A · Heimat ticket
+  Zweiter Zensus im Verriegelungstest: grep createLegacy|newLegacy ueber app/ + database/seeders
+  (Ausnahme Service), Erwartung fixiert auf Datei-Ebene = die 9 Alt-Zweige in 7 Dateien
+  (IdsController 2 · ProductController 2 · ProductImportController 1 · ProductCsvImporter 1 ·
+  SupplierConnectorService 1 · SupplierProductImportService 1 · HeatpumpSeeder 1).
+  Rot-Probe: zehnter createLegacy-Aufruf (SupplierConnectionTestService) -> rot MIT Fundstelle,
+  zurueckgesetzt (diff HEAD = 0), wieder gruen. Rohausgaben rot-probe-s4-a2-{1-gruen,2-rot,3-gruen}.txt.
+  Identity-Suite danach 30 passed / 110 assertions. Ballbesitz: Evaluator (A2-Nachpruefung).
+```

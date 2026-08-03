@@ -28,6 +28,45 @@ class ProductIdentityVerriegelungTest extends TestCase
     }
 
     /**
+     * AUFLAGE A2 (Evaluator-Abnahme 03.08.): zweiter Zensus. createLegacy()/newLegacy()
+     * sind reine Durchreichen für die aktiv=false-Zweige der NEUN umgestellten Pfade —
+     * ein zehnter Aufrufer wäre ein neuer Schreibpfad am Identitätsdienst vorbei, den
+     * der erste Riegel (Product::create-Grep) nicht sieht. Die Erwartungsliste ist auf
+     * Datei-Ebene fixiert (Datei => Trefferzahl), damit Zeilenverschiebungen durch
+     * fremde Edits nicht falsch alarmieren; jede NEUE Stelle wird rot mit Fundstelle.
+     */
+    public function test_kein_zehnter_aufrufer_der_legacy_durchreichen(): void
+    {
+        $treffer = $this->grepProjekt(
+            'createLegacy|newLegacy',
+            verzeichnisse: ['app', 'database/seeders'],
+            ausnahmen: ['app/Services/Product/Identity/ProductIdentityService.php'],
+        );
+
+        $jeDatei = [];
+        foreach ($treffer as $zeile) {
+            $datei = explode(':', $zeile, 2)[0];
+            $jeDatei[$datei] = ($jeDatei[$datei] ?? 0) + 1;
+        }
+        ksort($jeDatei);
+
+        // Die 9 bekannten Alt-Zweige (§8-Umstellungstabelle), Stand der Umsetzung:
+        $erwartet = [
+            'app/Http/Controllers/Product/IDS/gconline/IdsController.php' => 2,   // Pfad 3 + 4
+            'app/Http/Controllers/Product/ProductController.php' => 2,            // Pfad 7 + 8
+            'app/Http/Controllers/Product/ProductImportController.php' => 1,      // Pfad 5
+            'app/Services/ProductCsvImporter.php' => 1,                           // Pfad 6
+            'app/Services/Suppliers/SupplierConnectorService.php' => 1,           // Pfad 2
+            'app/Services/Suppliers/SupplierProductImportService.php' => 1,       // Pfad 1
+            'database/seeders/HeatpumpSeeder.php' => 1,                           // Pfad 9
+        ];
+
+        $this->assertSame($erwartet, $jeDatei,
+            "createLegacy/newLegacy dürfen NUR in den 9 bekannten Alt-Zweigen stehen.\n"
+            . "Aktuelle Fundstellen:\n" . implode("\n", $treffer));
+    }
+
+    /**
      * Zeilenweiser Grep über das Projekt. Liefert "pfad:zeile: inhalt" je Treffer.
      *
      * @param  string  $muster         PCRE-Muster ohne Delimiter
