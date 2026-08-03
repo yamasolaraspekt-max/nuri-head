@@ -137,6 +137,12 @@ Backticks in einer Commit-Botschaft unter DOPPELTEN Anfuehrungszeichen fuehrt di
 `zaehle.mjs <datei>` wirft ENOENT, solange die Datei nicht existiert - ein Kriterium fuer eine
    NEUE Datei muss ueber das VERZEICHNIS messen.
 S-07 feuert nur bei `kritikalitaet: P1`.
+`MM` im git status ist seit W-09 Stufe 5 oft PHANTOM-DRIFT: der Standard-Index lernt
+   Tor-Commits nie (jeder Lauf hat seinen eigenen Index). NICHT "reparieren" - wer den
+   Drift glattzieht, erzeugt Beifang. Echte Aenderung von Phantom unterscheiden:
+   `git --no-optional-locks diff HEAD -- <datei>` (leer = Phantom).
+Wer Rollen-Leistung an COMMITS misst, misst Buchfuehrung, nicht Arbeit - der Pruefer
+   arbeitet in Dateien und verbucht selten. Erst `git diff HEAD`, dann urteilen.
 Ein `ausgangswert`, der schon dem Ziel entspricht, ist ein totes Kriterium - und einer, der
    FALSCH gemessen ist, ist ein unerfuellbares. Beides am 02.08. je einmal passiert (W-06 K-02,
    K-04), beides vor dem Gegenlesen selbst gefunden. `zeile-ersetzen` faengt das NICHT.
