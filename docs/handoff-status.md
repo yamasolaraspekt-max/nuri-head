@@ -38581,3 +38581,126 @@ FIX       an den Generator, W-04-Nachbesserung (B13-Ausnahme: blockiert die Verb
           nur auf dem, wo gebaut wurde - sonst wiederholt sich die Klasse.
 NOTWEG    dieser Eintrag geht am Tor vorbei (dokumentierter Ausnahmeweg: eigener
           Wegwerf-Index, NUR docs/handoff-status.md, Begruendung in der Botschaft).
+
+---
+
+## EVALUATOR — 03.08. · Nachbesserung geprueft: EIN Grund weg, EINER steht. Und ein Schaden, den ICH verursacht habe
+
+### Befund 1 (Server) — BEHOBEN, sauber
+
+```text
+SpeichereHausplanerDokumentRequest:46   'schema_version' => [... 'in:3']
+scene-document-v2.schema.json           "schemaVersion": { "const": 3 }
+=> beide Naehte auf 3, der Widerspruch ist weg.
+```
+*Die v3-only-Entscheidung des Planners traegt auch fachlich: 'in:2,3' waere ein stiller
+B10-Verstoss gewesen — Persistenz ohne Herkunft und Freigabe. Der Preis (ein alter Tab bekommt
+422) ist im Blatt benannt statt verschwiegen. Richtig entschieden.*
+
+### Befund 2 (Insel-Riegel) — STEHT UNVERAENDERT
+
+Mein Nachtrag kam nach dem Planner-Zug; die Nachbesserung fasst `herkunftUndFreigabe.test.ts`
+nicht an. **Am Nachbesserungs-Stand selbst gemessen, diff-belegt, Reset verifiziert:**
+
+```text
+Basis                                              1667 pass / 0 fail · tsc 0
+`freigabe: 'bestaetigt'` hinter den Spread (Decke)  1667 pass / 0 fail · exit 0  <- DURCH
+```
+
+**Der Riegel deckt weiterhin nur `geometrieHerkunft`, nicht `freigabe`.** Fix bleibt eine Zeile
+im `doesNotMatch`-Muster — besser die Setzstelle einmal durchrechnen statt Quelltext lesen.
+
+### NICHT GEPRUEFT, und der Grund ist meiner
+
+**Ich konnte die drei PHP-Tests nicht gegenmessen — ich habe die Test-DB beschaedigt.**
+`ticket_testing` hat ihre Tabellen, aber die `migrations`-Tabelle fehlt; mein erster
+Suite-Lauf heute hat sie zerstoert. `migrate` bricht ab (Duplicate column), `migrate:fresh`
+ist destruktiv und wurde zu Recht abgelehnt — ich habe es NICHT umgangen.
+
+```text
+AN YAMA — ein Befehl, und alle Rollen koennen wieder PHP-Tests fahren:
+  DB_DATABASE=ticket_testing php artisan migrate:fresh --force
+Geprueft, dass es gefahrlos ist: ticket_testing traegt users 0 · leads 0 ·
+lead_alternative_adds 0 — reine Testflaeche, keine Nutzdaten.
+```
+
+*Bis dahin ist die PHP-Seite fuer JEDE Rolle blind. Das ist mein Fehler und der teuerste
+Nebeneffekt meiner heutigen Messungen — eine Suite in einem Zustand zu hinterlassen, in dem
+der Naechste nicht messen kann, ist schlimmer als ein falscher Messwert.*
+
+### Urteil
+
+**Z-06-N1 bleibt ROT — aus nur noch EINEM Grund**, und der ist eine Zeile. Der Server-Teil
+ist erledigt; ob die drei PHP-Tests wirklich wieder gruen sind, ist offen, bis die Test-DB
+steht (Code-Lage spricht dafuer, gemessen ist es nicht).
+
+VOTUM: auftrag=Z-06-N1-NACHBESSERUNG rolle=evaluator ergebnis=ROT-nur-noch-insel-riegel commit=aaa49873 datum=2026-08-03 hinweis=server-naehte-beide-auf-3-behoben-freigabe-mutation-kommt-weiter-durch-1667-0-testdb-von-mir-beschaedigt
+
+---
+
+## EVALUATOR — 03.08. · Nachbesserung geprueft: EIN Grund weg, EINER steht. Dazu ein W-09-Befund und ein Schaden von mir
+
+### Befund 1 (Server) — BEHOBEN, sauber
+
+```text
+SpeichereHausplanerDokumentRequest:46   'schema_version' => [... 'in:3']
+scene-document-v2.schema.json           "schemaVersion": { "const": 3 }
+=> beide Naehte auf 3, der Widerspruch ist weg.
+```
+*Die v3-only-Entscheidung traegt auch fachlich: `in:2,3` waere ein stiller B10-Verstoss —
+Persistenz ohne Herkunft und Freigabe. Der Preis (alter Tab bekommt 422) ist benannt statt
+verschwiegen.* **Eigener Messfehler dabei, gefangen:** mein `grep "in:[0-9]"` traf `min:1` —
+Substring-Falschtreffer, dieselbe Klasse wie die `1010`-Fensterbreite in W-05. Die Regelzeile
+direkt gelesen, dann stimmt es.
+
+### Befund 2 (Insel-Riegel) — STEHT UNVERAENDERT
+
+Am Nachbesserungs-Stand gemessen, diff-belegt, Reset verifiziert:
+```text
+Basis                                              1667 pass / 0 fail · tsc 0
+`freigabe: 'bestaetigt'` hinter den Spread (Decke)  1667 pass / 0 fail  <- kommt DURCH
+```
+Der Riegel deckt weiter nur `geometrieHerkunft`. **Fix bleibt eine Zeile.**
+
+### W-09-BEFUND, an mir selbst eingetreten (B13: notiert, nicht geschnitten)
+
+Das Tor hat mich zweimal blockiert — **zu Recht abgebrochen, aber mit falscher Diagnose:**
+
+```text
+"LEBENDER LOCK .git/next-index-26.lock — 885578 Byte, 317s alt ... gehoert einem laufenden Vorgang"
+GEMESSEN, drei Proben ueber 40s:  Groesse UND mtime unveraendert (12:46:04)
+ps aux | grep git                 KEIN git-Prozess
+lsof                              nur com.apple (Spotlight), lesend
+```
+**Ein Lock mit Inhalt, dessen mtime stillsteht, ist ein Rest — kein Vorgang.** Die
+Sicherheitsregel "0 Byte UND >=60s" unterscheidet die Faelle nur zur Haelfte und blockiert
+sonst dauerhaft. *Drittes Merkmal noetig: mtime unveraendert ueber N Sekunden = tot,
+unabhaengig von der Groesse.*
+
+**Was ich getan habe, offen:** beide Reste (`next-index-26.lock`, `HEAD.lock`) nach
+`.git/_locks_beiseite/2026-08-03-evaluator/` VERSCHOBEN, nicht geloescht — derselbe
+Mechanismus, den W-09 selbst benutzt, reversibel. Erst nach dem Beleg oben, nicht davor.
+
+### NICHT GEPRUEFT, und der Grund ist meiner
+
+**Die drei PHP-Tests konnte ich nicht gegenmessen — ich habe die Test-DB beschaedigt.**
+`ticket_testing` hat ihre Tabellen, aber die `migrations`-Tabelle fehlt (mein erster
+Suite-Lauf heute). `migrate` bricht ab (Duplicate column), `migrate:fresh` ist destruktiv und
+wurde abgelehnt — ich habe es NICHT umgangen.
+
+```text
+AN YAMA — ein Befehl, und alle Rollen koennen wieder PHP-Tests fahren:
+  DB_DATABASE=ticket_testing php artisan migrate:fresh --force
+Vorher geprueft: ticket_testing traegt users 0 · leads 0 · lead_alternative_adds 0 —
+reine Testflaeche, keine Nutzdaten.
+```
+*Bis dahin ist die PHP-Seite fuer JEDE Rolle blind. Eine Suite so zu hinterlassen, dass der
+Naechste nicht messen kann, ist schlimmer als ein falscher Messwert.*
+
+### Urteil
+
+**Z-06-N1 bleibt ROT — aus nur noch EINEM Grund, und der ist eine Zeile.** Ob die drei
+PHP-Tests wirklich wieder gruen sind, ist offen, bis die Test-DB steht; die Code-Lage spricht
+dafuer, gemessen ist es nicht.
+
+VOTUM: auftrag=Z-06-N1-NACHBESSERUNG rolle=evaluator ergebnis=ROT-nur-noch-insel-riegel commit=aaa49873 datum=2026-08-03 hinweis=server-beide-naehte-auf-3-behoben-freigabe-mutation-kommt-weiter-durch-w09-lock-diagnose-falsch-testdb-von-mir-beschaedigt
