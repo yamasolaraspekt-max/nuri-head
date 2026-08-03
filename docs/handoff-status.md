@@ -38922,3 +38922,57 @@ php artisan test --filter='<die drei benannten Tests>'         Dauer 18,92 s
 bekommen; der rote Test schreibt in seiner Vorbereitung genau so einen v2-PUT. Ob der Test die
 Naht nachziehen muss oder die Naht zu eng ist, entscheidet der Evaluator im N1-Revotum.
 Ballbesitz: Evaluator (K-N2 jetzt messbar) · Gemessen aus der Cowork-Instanz auf Yamas Rechner.
+
+---
+
+## EVALUATOR — 03.08. · K-N2 selbst gemessen: Nutzlast GRUEN, Uebernahme ROT — zwei Fixture-Zeilen
+
+**Ballbesitz angenommen. Ich uebernehme die Zahlen des Generators nicht — wer misst, votet nicht.**
+Eigener Lauf, Worktree auf e0afcc46:
+
+```text
+HausplanerSpeichernNutzlastTest      alle gruen   <- die zwei ROT-Tests von heute frueh sind zu
+UebernahmeKnopfTest::test_zweite_uebernahme_nach_aenderung_...   422
+  "The selected schema version is invalid."
+```
+
+**Am Code gegengelesen, damit der Befund nicht an der DB haengt:**
+
+```text
+Nutzlast-Test  Z. 36   'schema_version' => 3    · Z.148 assertSame(3, ...)   NACHGEZOGEN
+Uebernahme     Z. 272  'schema_version' => 2                                 NICHT nachgezogen
+               Z. 328  'schema_version' => 2                                 NICHT nachgezogen
+Server         Z. 46   'schema_version' => [... 'in:3']
+```
+
+**Zwei Zeilen. Der Test ist die letzte Stelle, die noch v2 sendet.** *Kein Bau-Mangel, eine
+vergessene Fixture — aber sie steht in K-N2 und haelt die Abnahme auf.*
+
+### Zwei eigene Fehlgriffe, beide gefangen, keiner gemeldet als Befund
+
+```text
+1  Mein Pruefstand hatte public/build nicht — ein Test starb an
+   ViteManifestNotFoundException. Das haette ich als zweiten roten Test gemeldet,
+   waere ich nicht dem Fehlertext nachgegangen. Es ist MEIN Aufbaufehler.
+2  Der Wiederholungslauf starb mit 23 ERRORS / 0 Zusicherungen an
+   "Table ticket_testing.customer_notes doesn't exist" — die Test-DB baut sich nicht
+   sauber auf. Ein Lauf mit null Zusicherungen ist kein Ergebnis; gemeldet ist der
+   ERSTE Lauf (23 Tests, 70 Zusicherungen).
+```
+
+**AN ALLE: `ticket_testing` ist weiterhin instabil.** RefreshDatabase hat sie zwar migriert,
+aber der zweite Lauf bricht in der Migrationskette ab. *Wer PHP-Tests faehrt, prueft die
+Zusicherungszahl: 0 Zusicherungen heisst "gar nicht gelaufen", nicht "rot".*
+
+### Stand der drei ROT-Gruende
+
+```text
+1  Insel-Riegel      GESCHLOSSEN   selbst nachgemessen: beide Mutationen fallen (1666/1)
+2  Bundle v2         OFFEN         im Arbeitsbaum gebaut (schemaVersion:3 -> 3 Treffer),
+                                   aber NICHT committet — Artefakt-Commit steht auf 20bbfcc2
+3  Uebernahme-Test   OFFEN (neu)   zwei Fixture-Zeilen auf 3
+```
+
+**Z-06-N1: ROT. Beide offenen Punkte zusammen sind ein Build und zwei Zeilen.**
+
+VOTUM: auftrag=Z-06-N1-KN2 rolle=evaluator ergebnis=ROT-zwei-handgriffe commit=e0afcc46 datum=2026-08-03 hinweis=nutzlast-gruen-uebernahme-sendet-noch-v2-in-zeile-272-und-328-bundle-gebaut-aber-unverbucht
