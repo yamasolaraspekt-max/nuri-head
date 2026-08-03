@@ -38445,3 +38445,60 @@ selbst ein offener Posten, den N1 nicht verursacht hat und den ich hier nur meld
 Nicht mergen, bis 1 und 2 stehen.
 
 VOTUM: auftrag=Z-06-N1-RICHTIGSTELLUNG rolle=evaluator ergebnis=ROT-bestaetigt-ursache-praezisiert commit=6d93fc97 datum=2026-08-03 hinweis=zwei-server-naehte-widersprechen-sich-drei-tests-neu-rot-nicht-siebzehn-uebernahme-auch-betroffen
+
+---
+
+## EVALUATOR — 03.08. · Nachtrag zu Z-06-N1: ein ZWEITER Grund fuer ROT, und er sitzt in der Insel
+
+Adversarische Gegenlesung des Baus gefahren (sechs Linsen, Widerlegungsrunde). **Ehrlich vorweg:
+die Widerlegungsrunde ist grossenteils ausgefallen** (sechs von dreizehn Laeufen mit API-Fehler
+oder Stillstand). **Nur EIN Befund hat die Widerlegung ueberstanden; dreizehn weitere sind
+UNGEPRUEFT und stehen hier ausdruecklich NICHT als Befund.** Was unten steht, habe ich selbst
+gemessen — nichts davon ist uebernommen.
+
+### Der Riegel deckt die Herkunft, aber nicht die Freigabe
+
+Der Bau hat die Entscheidung aus dem Klick-Handler in die Domaene geholt — richtig, und die
+zehnte Zusage haelt fest, dass die App sie RUFT. **Sie haelt nur die halbe Sache.**
+
+```text
+Die Zusage (herkunftUndFreigabe.test.ts:216) prueft DREI Muster am Quelltext:
+  match  /herkunftFuerNeueDecke\(ausKontur\)/        Spread der Decke vorhanden
+  match  /\.\.\.HERKUNFT_NEUES_DACH/                 Spread des Dachs vorhanden
+  doesNotMatch /geometrieHerkunft:\s*'(manuell|abgeleitet)'/   kein Herkunfts-Literal
+Ueber `freigabe:` steht dort NICHTS.
+
+EIGENE MUTATIONEN, jede diff-belegt, Reset je verifiziert (0 geaenderte Dateien):
+  Spread ERSETZEN am Dach                          -> GEFANGEN   1666 pass / 1 fail
+  Spread STEHEN LASSEN, `freigabe: 'bestaetigt'`
+    dahinter angehaengt — an der DECKE             -> DURCH      1667 pass / 0 fail
+    dieselbe Zeile am DACH                         -> DURCH      1667 pass / 0 fail
+```
+
+**Jede neu angelegte Decke und jedes neue Dach waeren als `bestaetigt` geboren — und keine der
+1667 Zusagen sagt ein Wort.** `istFreigegeben` gaebe dann unbesehene Naeherungs-Geometrie an
+Dach, Mengen und Statik heraus. *Das ist genau der Zustand, den B10 verbietet, nur an der
+Setzstelle statt an der Ladestelle — und die Zusage sagt in ihrem eigenen Kommentar, dass sie
+ihn verhindern soll.*
+
+**Der heutige Bau ist richtig** (`grep geometrieHerkunft HausplanerApp.tsx` -> 0 Literale).
+Beanstandet ist der Riegel, nicht der Zustand. **Fix ist eine Zeile:** das Verbot um
+`freigabe:` erweitern — besser die Setzstelle einmal wirklich durchrechnen statt Quelltext zu
+lesen (F-06: die Zusage prueft die Gestalt, nicht die Wirkung).
+
+### Eine Feststellung, ausdruecklich KEIN Mangel
+
+`setzeFreigabe` hat NULL Produktiv-Aufrufer — gemessen: Definition plus zwei Testaufrufe, sonst
+nichts. K-08 misst damit Vorrat, keine Wirkung. **Das ist folgerichtig und kein Fehler:** es gibt
+heute keinen Weg, eine Freigabe zu WECHSELN — das ist Z-06-N3 und ausdruecklich ausgeschlossen.
+*Gehoert benannt, damit niemand K-08 fuer einen Betriebsnachweis haelt.*
+
+### ROT-Begruendung damit vollstaendig
+
+```text
+(1) Server  zwei Naehte widersprechen sich, Speichern in beide Richtungen zu   [belegt]
+(2) Insel   der Riegel deckt `freigabe:` nicht — M5 kehrt ungemeldet zurueck   [belegt]
+Beide sind billig zu schliessen. Nicht mergen, bis beide stehen.
+```
+
+VOTUM: auftrag=Z-06-N1-NACHTRAG rolle=evaluator ergebnis=ROT-zweiter-grund-belegt commit=6d93fc97 datum=2026-08-03 hinweis=verdrahtungs-zusage-deckt-freigabe-nicht-mutation-an-decke-und-dach-durch-1667-0
