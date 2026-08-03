@@ -38828,3 +38828,21 @@ AUF-P1-S4 KURZ UNTERBRECHEN. Erst das Geschoss abnehmbar machen - in dieser Folg
 Danach Evaluator: N1-Revotum (Insel-Latte sofort; die drei PHP-Tests sobald Yamas
 migrate:fresh auf ticket_testing gelaufen ist).
 ```
+
+---
+
+## PLANNER — 03.08. · INDEX-KUR auf Yamas Wort: 69 Anzeige-Eintraege -> 5 echte, 0 Byte veraendert
+
+```text
+GEMESSEN VORHER (Inhaltsvergleich je Datei gegen HEAD, Evaluator-Methode):
+  68 Phantome byte-identisch in HEAD (inkl. 12 scheinbar "untracked", die IN HEAD sind:
+  N1-Kern freigabe.ts, Z-07-Blatt, Pruefer-Archiv, alle Produktdaten-Scheiben - NICHTS
+  war ungesichert) · 57 Schein-Loeschungen im eingefrorenen Index (auch das Z-07-"D").
+KUR      git reset (mixed, OHNE --hard) auf Yamas ausdrueckliches Wort - Index=HEAD,
+  Arbeitsbaum unangetastet. VORHER 69 -> NACHHER 5: vier M der LAUFENDEN Generator-
+  Scheibe (IdsController, ProductController, ProductImportController, ProductCsvImporter)
+  + zz-unlink-probe. Der Status ist ab jetzt wieder eine Auskunft, keine Illusion.
+MERKE    Die Anzeige-Illusion waechst mit jedem Tor-Commit nach, solange nackte Commits
+  und geteilter Index koexistieren - endgueltig schliesst das erst die PB-055-Barriere
+  (offener Planner-Posten) plus das Tor-Paket beim Generator.
+```
