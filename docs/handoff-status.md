@@ -38846,3 +38846,56 @@ MERKE    Die Anzeige-Illusion waechst mit jedem Tor-Commit nach, solange nackte 
   und geteilter Index koexistieren - endgueltig schliesst das erst die PB-055-Barriere
   (offener Planner-Posten) plus das Tor-Paket beim Generator.
 ```
+
+---
+
+## EVALUATOR — 03.08. · N1: Grund 1 GESCHLOSSEN, Grund 2 offen. Ein Build trennt uns von GRUEN
+
+### Grund 1 (Insel-Riegel) — sauber zu, selbst nachgemessen
+
+Die nachgezogene Zusage verbietet jetzt JEDES Literal fuer BEIDE Felder. Am Stand 8c2bae07,
+diff-belegt, Reset verifiziert:
+
+```text
+Basis (ist sie zu scharf?)                          1667 pass / 0 fail   nein, traegt
+`freigabe: 'bestaetigt'` hinter den Spread, DECKE    1666 / 1  GEFANGEN   (vorher: 1667/0 durch)
+dieselbe Zeile am DACH                               1666 / 1  GEFANGEN   (vorher: 1667/0 durch)
+```
+
+*Und der Kommentar im Test benennt die Lehre praeziser als mein Befund es tat: "Ein Spread
+laesst sich von rechts ueberschreiben; wer nur den linken Teil bewacht, bewacht die Form und
+nicht die Wirkung."* **So gehoert eine Auflage geschlossen.**
+
+### Grund 2 (getracktes Bundle) — steht, ist aber nur ein Handgriff
+
+```text
+Artefakt-Commit public/hausplaner/hausplaner.js   20bbfcc2  03.08. 00:44   UNVERAENDERT
+im Bundle: schemaVersion:3 -> 0   ·   geometrieHerkunft -> 0
+```
+
+**Im Wegwerf-Baum vorgemessen, damit niemand raten muss, ob es reicht:**
+
+```text
+npm run build:hausplaner   exit 0
+danach im Bundle: schemaVersion:3 -> 3   ·   geometrieHerkunft -> 7
+```
+
+**Ein Build plus Commit des Artefakts, und K-N4 ist erfuellt.** *Meine Aenderung ist mit dem
+Wegwerf-Baum verschwunden — das Artefakt gehoert dem Generator, nicht mir.*
+
+### Weiterhin BLOCKIERT, unveraendert
+
+```text
+Die drei PHP-Tests + Sichtprobe objekt.blade   -> Test-DB ohne `migrations`-Tabelle
+```
+*Direkter mysql-Zugang habe ich nicht (Access denied ohne Passwort — das haelt Yama, richtig so).*
+Der eine Befehl steht in meinem vorigen Eintrag. **Bis dahin bleibt die PHP-Seite fuer jede
+Rolle blind, und K-N2 ist nicht abnehmbar — auch nicht von mir.**
+
+### Urteil
+
+**Z-06-N1: ROT, aber nur noch aus EINEM Grund, und der ist ein Handgriff.** Sobald das
+v3-Bundle committet ist, votiere ich die Insel-Seite GRUEN; die Server-Seite (K-N2) bleibt
+offen, bis die Test-DB steht — das ist keine Bau-Schuld, sondern ein Werkzeugzustand.
+
+VOTUM: auftrag=Z-06-N1-REVOTUM-2 rolle=evaluator ergebnis=ROT-nur-noch-bundle commit=8c2bae07 datum=2026-08-03 hinweis=riegel-faengt-beide-mutationen-1666-1-bundle-braucht-build-vorgemessen-3-und-7-treffer
