@@ -37307,3 +37307,42 @@ nicht Sperre, wie S-14.
 **Ich schneide das Blatt nicht selbst und stelle kein `status:` um** — beides gehört dir.
 **F-08b steht damit bei sieben Ausprägungen** und ist die einzige Fehlerklasse, deren Barriere
 nachweislich trägt und trotzdem regelmäßig danebengreift.
+
+---
+
+## EVALUATOR — 03.08. · Zweiter Stapel abgenommen: W-09 · W-06-N1 · W-08 · S-14 GRUEN, W-01 GESAMT GRUEN
+
+Pruefstand: Worktree auf 54b2696e. Suite selbst: 118 pass / 0 fail (exakt wie gemeldet).
+
+```text
+W-09    Wegwerf-Repo, Tor hineinkopiert, VIER Wirkungsproben selbst gefahren:
+          alter 0-Byte-Lock          -> BEISEITE mit Name/Groesse/Alter, Commit GELINGT
+          Lock mit Inhalt            -> ABBRUCH, benannt, Lock bleibt
+          frischer 0-Byte-Lock       -> ABBRUCH (Sicherheitsregel greift beidseitig)
+          Ref-Lock in der TIEFE      -> rekursiv beiseite, .git danach lockfrei
+        Stufe 5 belegt: TMPDIR/ticket-index/index.<pid> entsteht, Variable-Respekt im Code.
+        BEFUND an den Planner: K-01-erwartet "hoechstens 35" ist vom Wachstum ueberholt
+        (Aufraeumung real Zeile 79, erster echter git-Aufruf 103, lock-erzeugend 126 -
+        Wirkung ERFUELLT, Zahl gerissen). Anker relativ formulieren, nicht absolut.
+W-06-N1 delete-Probe als Pflichtteil gefahren: Diagnose FEHLT -> fail-close; LEER -> gruen;
+        blinder Parser -> Selbstprobe WIRFT laut mit Klartext ("Es wird NICHTS geschrieben").
+W-08    anker-inventur selbst: 17 / ausgeschrieben 0 / verweis 17 / browser-ohne 0 - exakt.
+        Mutation S-11-Fall-1 stumm -> genau die S-11-ROT-Zusage faellt (74/1), Reset gruen.
+W-14/S-14  Wirkung live: sauberer Worktree SCHWEIGT, schmutziger Hauptbaum meldet
+        "4 Datei(en) unverbucht - aelteste seit 31 h". Mutation spricht-immer -> genau
+        die tragende Schweige-Zusage faellt (74/1), Reset gruen.
+PB-049  Grenztext steht in der Liste (Z.108-111), zur Kenntnis - kein eigenes Blatt.
+W-01    GESAMT: Blatt-Lauf 3 OK / 0 Fehlschlag; meine Teil-Voten (Allowlist-Wirkprobe,
+        GATE_MUSTER, Teil 2 skriptZielErlaubt) decken die Kette - der Sieben-Tore-Lauf
+        des Generators ist damit unabhaengig unterlegt.
+```
+
+Vier eigene Messgeraete-Fehlgriffe unterwegs, alle vor dem Urteil gefangen (touch leert
+nicht, Zukunfts-mtime, falsche Funktion fuer den Parser-Parameter, $$-Expansion) - kein
+Urteil stand je darauf.
+
+VOTUM: auftrag=W-09 rolle=evaluator ergebnis=gruen commit=f4545980 datum=2026-08-03 hinweis=vier-wirkungsproben-im-wegwerf-repo-k01-zahl-vom-wachstum-ueberholt
+VOTUM: auftrag=W-06-N1 rolle=evaluator ergebnis=gruen commit=8bc1c638 datum=2026-08-03 hinweis=delete-probe-fail-close-selbstprobe-wirft-laut
+VOTUM: auftrag=W-08 rolle=evaluator ergebnis=gruen commit=40c0a4a3 datum=2026-08-03 hinweis=inventur-17-0-17-0-selbst-mutation-von-s11-zusage-gefangen
+VOTUM: auftrag=S-14 rolle=evaluator ergebnis=gruen commit=a2e8a4ca datum=2026-08-03 hinweis=schweigt-sauber-meldet-31h-schmutzig-tragende-zusage-faengt-mutation
+VOTUM: auftrag=W-01 rolle=evaluator ergebnis=gesamt-gruen commit=6ae8e266 datum=2026-08-03 hinweis=teil-voten-plus-blattlauf-0-fehlschlag-status-stellt-planner
