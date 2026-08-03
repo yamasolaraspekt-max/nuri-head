@@ -136,19 +136,15 @@ final class ProductIdentityService
             }
         }
 
-        // b) (product, model, brand_id) — der Dreifach-Textschlüssel des manuellen Wegs (§2.2)
-        if ($id->name !== null) {
-            $query = Product::query()->where('product', $id->name);
-
-            $id->model === null
-                ? $query->whereNull('model')
-                : $query->where('model', $id->model);
-
-            $id->brandId === null
-                ? $query->whereNull('brand_id')
-                : $query->where('brand_id', $id->brandId);
-
-            $product = $query->first();
+        // b) (product, model, brand_id) — der Dreifach-Textschlüssel des manuellen Wegs (§2.2).
+        // Alle DREI Werte müssen eingehend gesetzt sein: Name + leeres Modell + leere
+        // Marke wäre faktisch der Produktname allein, und der gilt NIE (§4, Kante 11).
+        if ($id->name !== null && $id->model !== null && $id->brandId !== null) {
+            $product = Product::query()
+                ->where('product', $id->name)
+                ->where('model', $id->model)
+                ->where('brand_id', $id->brandId)
+                ->first();
 
             if ($product) {
                 if ($grund = $this->widerspruch($product, $id, 5)) {
