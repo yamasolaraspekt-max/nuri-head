@@ -276,3 +276,25 @@ GENERATOR 2026-08-03 · AUF-P1-S4 umgesetzt · Spur A · Heimat ticket · Zweig 
   IdentityVorschlagOffen als 4. Datei, Stufe-5b strikt dreiwertig (Kante 11), VORSCHLAG bricht
   Import-Pfade ab (Zeile uebersprungen, Vorschlag gesichert). Ballbesitz: Evaluator (Abnahme).
 ```
+
+```
+EVALUATOR 2026-08-03 · AUF-P1-S4 · Urteil GRUEN MIT AUFLAGEN (frische Instanz, alles selbst gemessen)
+  K-01 GRUEN: Verriegelung selbst gefahren + EIGENE Rot-Probe an anderer Stelle
+    (DatabaseSeeder:15, gruen/rot/gruen, byte-genau zurueckgesetzt, diff gegen HEAD leer);
+    Zensus-Grep: Product-Anlage nur noch in ProductIdentityService.
+  K-02 GRUEN (Doppelimport = 1 Artikel) · K-03 GRUEN (16/16 Kanten benannt + inhaltlich
+    stichprobiert; Normalisierung §5 inkl. GS1-Mod10 und fuehrender Nullen am Code verifiziert)
+  K-04 GRUEN: alle 9 Pfad-Diffs einzeln gegengelesen, Alt-Zweige als else byte-gleich erhalten,
+    createLegacy/newLegacy-Zensus exakt 9 = die 9 Alt-Zweige.
+  K-05 GRUEN: Suite ZWEIMAL voll selbst: 864 pass / 0 fail / 3082 assertions (an e250ba88 und
+    70768ec0); die 2 Hausplaner-Roten des Generator-Laufs sind seit e250ba88 behoben.
+  K-06 OFFEN (rollback gesperrt; down() gelesen, spiegelbildlich zu up(), plausibel) -> Yama.
+  Die 7 Bau-Abweichungen: alle zulaessig (Begruendungen im Abnahmebericht); Nr. 7 (Scheiben 7-12
+    gemeinsam getestet) hinnehmbar, als Muster nicht wiederholen.
+  AUFLAGE A1 (Planner, VOR Schalter-Aktivierung): Sicht-/Entscheidungsflaeche fuer
+    product_identity_suggestions (offen->bestaetigt/verworfen, decided_by) + Frontend-Handhabung
+    des 409/requires_confirmation. Heute fasst niemand ausser dem Service die Tabelle an.
+  AUFLAGE A2 (Generator, klein): Verriegelungstest um Zensus auf createLegacy|newLegacy
+    ausserhalb der 9 bekannten Alt-Zweige erweitern - die eine offene Flanke des Riegels.
+  Ballbesitz: Generator (A2) · Planner (A1 einplanen) · Yama (K-06 + finale Freigabe).
+```
