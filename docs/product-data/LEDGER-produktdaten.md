@@ -261,3 +261,18 @@ Baum byte-genau zurückgesetzt. Befund `test_k03`-Assertion nachgeschärft (Gene
 - **Ballbesitz:** Evaluator produktdaten (Gegenlesen nach B8) → dann Generator (nicht die
   Blatt-/Spez-Instanzen). Offen bei Yama weiterhin: K-07 (LI-SV-Rollback-Probe), E4a (Weg D,
   vor Schritt 5), ITEK-Posten.
+
+```
+GENERATOR 2026-08-03 · AUF-P1-S4 umgesetzt · Spur A · Heimat ticket · Zweig auto/hausplaner-integration
+  Service + Wertobjekte + Schalter (f1ed503e) · Migration §7 (8f9266f5) · 16 Kanten + Normalisierung
+  (76a40fd0) · 9 Pfade umgestellt: Pfad1 3b40419b, Pfad2 cd6e7a9f (§2.1 behoben), Pfad3 e97d5032,
+  Pfad4 a4716e5d, Pfad5 b180561d, Pfad6 485ed558 (E6), Pfad7+8 9f824ec8 (eine Datei, ein Commit —
+  Abweichung vom Ein-Pfad-je-Scheibe), Pfad9 f73cbd0f · Verriegelung + K-02/K-04-Tests (87a39587).
+  Suite: Baseline 829 pass/4 fail/2941 (NICHT 833/2966 aus dem Blatt; 4 fail = Hausplaner-Parallelteam)
+  -> nachher 862 pass/2 fail/3063; beide fail Hausplaner, produktdaten 0 rot. Verriegelungs-Grep:
+  nur noch ProductIdentityService. Rot-Probe K-01 gruen/rot/gruen, Rohausgaben in
+  evidence/query-results/rot-probe-s4-*.txt. K-06 OFFEN (rollback gesperrt, down() geschrieben).
+  Abweichungen im Generator-Bericht: createLegacy/newLegacy-Durchreiche (K-01+K-04 sonst unvereinbar),
+  IdentityVorschlagOffen als 4. Datei, Stufe-5b strikt dreiwertig (Kante 11), VORSCHLAG bricht
+  Import-Pfade ab (Zeile uebersprungen, Vorschlag gesichert). Ballbesitz: Evaluator (Abnahme).
+```

@@ -1,0 +1,31 @@
+
+   FAIL  Tests\Feature\Product\Identity\ProductIdentityVerriegelungTest
+  ⨯ kein pfad legt produkte am identitaetsdienst vorbei an               0.13s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Product\Identity\ProductIdentityVerriegelungTest >…    
+  Diese Stellen legen Produkte an, ohne durch ProductIdentityService zu gehen:
+app/Http/Controllers/Product/IDS/gconline/IdsController.php:415: \App\Models\Product::create([]);   // ROT-PROBE K-01 — wird sofort zurueckgesetzt
+Failed asserting that two arrays are identical.
+  -Array &0 []
+  +Array &0 [
+  +    0 => 'app/Http/Controllers/Product/IDS/gconline/IdsController.php:415: \App\Models\Product::create([]);   // ROT-PROBE K-01 — wird sofort zurueckgesetzt',
+  +]
+  
+
+  at tests/Feature/Product/Identity/ProductIdentityVerriegelungTest.php:25
+     21▕             verzeichnisse: ['app', 'database/seeders'],
+     22▕             ausnahmen: ['app/Services/Product/Identity/ProductIdentityService.php'],
+     23▕         );
+     24▕ 
+  ➜  25▕         $this->assertSame([], $treffer,
+     26▕             "Diese Stellen legen Produkte an, ohne durch ProductIdentityService zu gehen:\n"
+     27▕             . implode("\n", $treffer));
+     28▕     }
+     29▕
+
+  1   tests/Feature/Product/Identity/ProductIdentityVerriegelungTest.php:25
+
+
+  Tests:    1 failed (1 assertions)
+  Duration: 0.15s
+

@@ -1,0 +1,8 @@
+gg
+   PASS  Tests\Feature\Product\Identity\ProductIdentityPfadSchalterTest
+  ✓ k02 dieselbe datei zweimal durch pfad 1 erzeugt einen artikel       19.04s  
+  ✓ k04 aktiv false erzeugt die zeile des alt codes inklusive sentinel   0.04s  
+
+  Tests:    2 passed (14 assertions)
+  Duration: 19.10s
+

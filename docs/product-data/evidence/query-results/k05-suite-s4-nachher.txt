@@ -1,0 +1,1190 @@
+
+   PASS  Tests\Unit\Auslegung\WpAuslegungsketteServiceTest
+  ✓ ranking reihenfolge und gate a                                       0.07s  
+  ✓ label und verbindlich                                                0.02s  
+  ✓ nibe gekennzeichnet nicht geboostet                                  0.02s  
+  ✓ invest und verfuegbarkeit quelle fehlt                               0.02s  
+  ✓ config gate a ist load bearing                                       0.02s  
+  ✓ gewicht ist load bearing                                             0.02s  
+  ✓ g gates fehlende operanden                                           0.02s  
+  ✓ keine kandidaten kein leeres fertig                                  0.02s  
+  ✓ ranking determinismus                                                0.02s  
+
+   PASS  Tests\Unit\Auslegung\WpCostingServiceTest
+  ✓ standardausgabe                                                      0.03s  
+  ✓ fehlender preis investition null
+  ✓ warmwasser an vs aus ueber stromverbrauch
+  ✓ rundungsgrenze bleibt beim aufrufer
+  ✓ foerderdeckel relevante kostengroesse ungedeckelt
+  ✓ geraete unabhaengig und deterministisch
+
+   PASS  Tests\Unit\BuildingModel\BuildingModelSchemaContractTest
+  ✓ schema ist gueltiges json mit version und defs                       0.02s  
+  ✓ hoehendatum ist okff eg null                                         0.02s  
+  ✓ millimeter integer vertrag im schema                                 0.02s  
+  ✓ azimut vertrag 0 bis 360                                             0.02s  
+  ✓ cad a1 wandreferenz und fixkante im schema                           0.02s  
+  ✓ cad a3 oeffnung stationbasiert und wandgebunden                      0.02s  
+  ✓ cad a5 raum boundary referenziert waende                             0.02s  
+  ✓ enums und stabile ids                                                0.02s  
+  ✓ multi gebaeude und geschoss werden getragen                          0.02s  
+
+   PASS  Tests\Unit\BuildingModel\BuildingModelTopologieParityTest
+  ✓ gueltiger ring wird von beiden akzeptiert                            0.05s  
+  ✓ toleranzgrenzfall wird von beiden abgelehnt                          0.02s  
+
+   PASS  Tests\Unit\BuildingModel\CanonicalBuildingModelValidatorTest
+  ✓ gueltige fixtures sind valide with data set " rechteck / vier achsw… 0.03s  
+  ✓ gueltige fixtures sind valide with data set " wandreferenz inner"    0.02s  
+  ✓ gueltige fixtures sind valide with data set " wandreferenz outer"    0.02s  
+  ✓ gueltige fixtures sind valide with data set " polylinienwand + öffn… 0.02s  
+  ✓ gueltige fixtures sind valide with data set "zwei geschosse untersc… 0.02s  
+  ✓ gueltige fixtures sind valide with data set " l- raum boundary über… 0.02s  
+  ✓ gueltige fixtures sind valide with data set "öffnung rohbau + ferti… 0.02s  
+  ✓ gueltige fixtures sind valide with data set "schräger bestandsraum"  0.02s  
+  ✓ gueltige fixtures sind valide with data set "unbekannter nordbezug…  0.02s  
+  ✓ gueltige fixtures sind valide with data set " scanvorschlag draft"   0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set " w… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set "un… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set "en… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set " s… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set "öf… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set "öf… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set "öf… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set "üb… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set " b… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set " b… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set "fa… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set " b… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set "wi… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set " m… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set " t… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set " s… 0.02s  
+  ✓ ungueltige fixtures liefern erwarteten fehlercode with data set "un… 0.02s  
+  ✓ unbekannter nordbezug wird nicht still zu null winkel                0.02s  
+  ✓ fehlervertrag enthaelt code path message severity                    0.02s  
+
+   PASS  Tests\Unit\BuildingModel\OpeningHeightContractTest
+  ✓ gueltige bruestung und rohbauhoehe ist valide                        0.10s  
+  ✓ lintel stimmt mit rohbauoberkante ueberein                           0.02s  
+  ✓ sturzkonflikt wird erkannt                                           0.02s  
+  ✓ oeffnung ueber wandoberkante wird abgelehnt                          0.02s  
+  ✓ fertigmass groesser als rohbaumass wird abgelehnt                    0.02s  
+  ✓ profilwand wird nicht still uniform akzeptiert                       0.02s  
+
+   PASS  Tests\Unit\Energie\BatterySpecMappingTest
+  ✓ maps full row with correct values and types                          0.02s  
+  ✓ nullable columns stay null
+  ✓ missing keys default to null
+  ✓ accepts stdclass row
+  ✓ is instance of contract
+
+   PASS  Tests\Unit\Energie\HeatPumpKennlinieMappingTest
+  ✓ maps full row with correct values and types
+  ✓ leistungskurve json decodes to array with level keys
+  ✓ invalid json becomes null
+  ✓ null and empty kurve become null
+  ✓ spalten fallback row leistungskurve null semantik set
+  ✓ nullable numeric and label columns stay null
+  ✓ already decoded array is passed through
+  ✓ accepts stdclass row
+  ✓ is instance of contract
+
+   PASS  Tests\Unit\Energie\InverterSizingServiceTest
+  ✓ effective tk vmpp is conservative fallback
+  ✓ spannungsfenster reference
+  ✓ two stage string fuse
+  ✓ netzregeln single phase schieflast
+  ✓ netzregeln flag na schutz and 14a
+  ✓ temperatur bereich
+  ✓ batterie kompatibilitaet
+  ✓ evaluate konfiguration returns ui shape with rich rules
+
+   PASS  Tests\Unit\Energie\InverterSpecMappingTest
+  ✓ maps full row with correct values and types
+  ✓ wirkungsgrad euro pct is always null
+  ✓ nullable columns stay null
+  ✓ phasen string numeric becomes int
+  ✓ phasen non numeric stays string
+  ✓ booleans from tinyint zero
+  ✓ accepts stdclass row
+  ✓ is instance of contract
+
+   PASS  Tests\Unit\Energie\ModuleSpecMappingTest
+  ✓ maps full row with correct values and types
+  ✓ nullable columns stay null
+  ✓ required int from numeric string
+  ✓ accepts stdclass row
+  ✓ is instance of contract
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true
+
+   PASS  Tests\Unit\Form\FormSchemaValidatorTest
+  ✓ gueltiges v2 schema ist fehlerfrei
+  ✓ fehlender und ungueltiger key
+  ✓ doppelter key wird erkannt
+  ✓ unbekannter typ
+  ✓ auswahltyp ohne optionen und optionen bei nichtauswahl
+  ✓ min groesser max
+  ✓ visible if shape und referenz
+  ✓ calculation nur bei calculation typ und formel pflicht
+  ✓ ungueltige enums
+  ✓ validate formula prueft kopfversion
+  ✓ leeres oder nichtarray fields
+
+   PASS  Tests\Unit\Form\FormulaEvaluationServiceTest
+  ✓ flaeche rechnet laenge mal breite
+  ✓ volumen und grundrechenarten
+  ✓ sum aggregiert wiederholzeilen
+  ✓ sum mehrere argumente
+  ✓ menge reicht ersten wert durch
+  ✓ unaeres minus
+  ✓ einheit wird in zieleinheit umgerechnet
+  ✓ dimensionsfremde einheit nutzt rohwert mit warnung
+  ✓ rundung kaufmaennisch auf ab
+  ✓ division durch null liefert keine zahl
+  ✓ fehlender pflichtoperand ist unvollstaendig mit fehlliste
+  ✓ operand mit nullwert ist unvollstaendig
+  ✓ annahme operand ist ungeprueft und nicht verbindlich
+  ✓ operand mit ungeprueftem status ist nicht verbindlich
+  ✓ operand mit freigegebenem status ist verbindlich
+  ✓ berechneter operand mit ungepruefter kette vererbt
+  ✓ min max ist nur warnung kein abbruch
+  ✓ ueberlange formel wird abgelehnt
+  ✓ zu tiefe klammerung wird abgelehnt
+  ✓ leere formel ist unvollstaendig
+  ✓ injection wird geparst und abgelehnt with data set #0
+  ✓ injection wird geparst und abgelehnt with data set #1
+  ✓ injection wird geparst und abgelehnt with data set #2
+  ✓ injection wird geparst und abgelehnt with data set #3
+  ✓ injection wird geparst und abgelehnt with data set #4
+  ✓ injection wird geparst und abgelehnt with data set #5
+  ✓ injection wird geparst und abgelehnt with data set #6
+  ✓ injection wird geparst und abgelehnt with data set #7
+  ✓ injection wird geparst und abgelehnt with data set #8
+  ✓ injection wird geparst und abgelehnt with data set #9
+  ✓ injection wird geparst und abgelehnt with data set #10
+  ✓ injection wird geparst und abgelehnt with data set #11
+  ✓ injection wird geparst und abgelehnt with data set #12
+  ✓ injection wird geparst und abgelehnt with data set #13
+  ✓ injection wird geparst und abgelehnt with data set #14
+  ✓ injection wird geparst und abgelehnt with data set #15
+  ✓ injection wird geparst und abgelehnt with data set #16
+  ✓ injection wird geparst und abgelehnt with data set #17
+  ✓ injection wird geparst und abgelehnt with data set #18
+  ✓ injection wird geparst und abgelehnt with data set #19
+  ✓ unbekannter bezeichner landet in fehlliste nie als code
+  ✓ unbekannter bezeichner der wie operand aussieht bleibt datenreferenz
+
+   PASS  Tests\Unit\Form\UnitConversionServiceTest
+  ✓ laenge umrechnung
+  ✓ gleiche einheit unveraendert
+  ✓ einheitenlos unveraendert
+  ✓ dimensionsfremd liefert null
+  ✓ dimension und kompatibilitaet
+  ✓ normalize trim und kleinschreibung
+
+   PASS  Tests\Unit\Form\VisibleIfServiceTest
+  ✓ null bedingung ist immer sichtbar
+  ✓ vergleichsoperatoren
+  ✓ in und not in
+  ✓ numerischer operator bei nichtnumerischem wert versteckt
+  ✓ sichtbare felder je antwortstand
+  ✓ kaskade verbirgt kind unter unsichtbarem elternteil
+  ✓ unsichtbares pflichtfeld blockt nicht
+  ✓ alpine ausdruck
+
+   PASS  Tests\Unit\Geometrie\SzeneProjektionServiceTest
+  ✓ ein raum rechteck vier aussenwaende korrekte azimute                 0.02s  
+  ✓ oeffnung wird der wirtswand zugeordnet                               0.02s  
+  ✓ ausgabe fuettert aus geometrie ohne formatbruch                      0.02s  
+  ✓ zwei raeume geteilte wand ist innen                                  0.02s  
+  ✓ schmetterling ergibt keine raeume                                    0.02s  
+  ✓ offener wandzug ergibt keine raeume                                  0.02s  
+
+   PASS  Tests\Unit\Geometrie\TopologieGateTest
+  ✓ gueltiges quadrat besteht                                            0.04s  
+  ✓ orientierung ist kein blocker                                        0.02s  
+  ✓ regel1 zu wenig punkte                                               0.02s  
+  ✓ regel3 grenzwerte min segment                                        0.02s  
+  ✓ regel4 bowtie selbstschnitt                                          0.02s  
+  ✓ regel5 selbstberuehrung                                              0.02s  
+  ✓ regel6 kollinear degeneriert                                         0.02s  
+  ✓ regel6 grenzwerte min flaeche                                        0.02s  
+  ✓ regel7 oeffnung groesser wand                                        0.02s  
+  ✓ regel7 gleichheit ist zulaessig                                      0.02s  
+  ✓ fassade liefert gleiche flaeche wie mirror                           0.02s  
+  ✓ fassade wirft bei ungueltig                                          0.02s  
+  ✓ fuzz kontrollierte ablehnung                                         0.02s  
+  ✓ mutation gate ist load bearing                                       0.02s  
+
+   PASS  Tests\Unit\Heizkoerper\HydraulicServiceTest
+  ✓ volumenstrom kv und voreinstellung                                   0.06s  
+  ✓ abgleich summiert volumenstrom                                       0.02s  
+
+   PASS  Tests\Unit\Heizkoerper\RadiatorPerformanceServiceTest
+  ✓ normpunkt liefert normleistung                                       0.03s  
+  ✓ q real faellt bei niedrigem vorlauf                                  0.02s  
+  ✓ leistungstabelle sinkt mit vorlauftemperatur                         0.02s  
+  ✓ status ampel                                                         0.02s  
+  ✓ min vorlauftemperatur                                                0.02s  
+
+   PASS  Tests\Unit\Heizlast\BivalenzServiceTest
+  ✓ berechnet bivalenz jaz und stromaufteilung mit ticket services       0.02s  
+
+   PASS  Tests\Unit\Heizlast\FoerderungServiceTest
+  ✓ self occupier old oil efficient 30plus5plus20
+  ✓ income bonus capped at 70
+  ✓ costs capped at eligible ceiling
+  ✓ functioning gas under 20y has no climate bonus
+  ✓ rented unit gets no climate or income bonus
+  ✓ eligible cost ceiling scales with units
+  ✓ envelope measure base 15 percent
+  ✓ envelope measure isfp adds 5 percent and raises ceiling
+
+   PASS  Tests\Unit\Heizlast\FussbodenheizungServiceTest
+  ✓ spezifische leistung und geometrie
+  ✓ min vorlauftemperatur ist niedrig
+  ✓ oberflaechengrenze begrenzt die leistung
+  ✓ groesserer verlegeabstand senkt die leistung
+  ✓ randzone erhoeht leistung und liefert detail
+  ✓ randzone ermoeglicht deckung an der kapazitaetsgrenze
+  ✓ randzone breite ist auf einen meter begrenzt
+  ✓ randzone ohne aussenwand bleibt einzonig
+
+   PASS  Tests\Unit\Heizlast\GeometrieAbleitungReferenzTest
+  ✓ shoelace rechteck 5x6 ist 30 qm                                      0.02s  
+  ✓ shoelace trapez ist 15 qm                                            0.02s  
+  ✓ bruttowand und fenster separat                                       0.02s  
+  ✓ raumkopf aus geometrie                                               0.02s  
+
+   PASS  Tests\Unit\Heizlast\GeometrieAbleitungTest
+  ✓ p1 rechteck 5x5 ist 25 qm                                            0.03s  
+  ✓ p4 l form ist 42 qm                                                  0.02s  
+  ✓ p2 wandflaeche 5x3 ist 15 qm                                         0.03s  
+  ✓ i2 8 referenz ist diskriminierend                                    0.03s  
+
+   PASS  Tests\Unit\Heizlast\GeometrieAbleitungUWertDatenlageTest
+  ✓ unbelegte wand wird als fehlt markiert ohne erfundenen u wert        0.03s  
+  ✓ belegte wand bleibt a ohne fehlt marker                              0.02s  
+
+   PASS  Tests\Unit\Heizlast\GeometrieBelastbarkeitLueckenTest
+  ✓ p6 selbstschneidendes polygon wird abgelehnt                         0.03s  
+  ✓ p7 entartetes polygon wird abgelehnt                                 0.02s  
+  ✓ p8 falsche einheit meter wird abgelehnt                              0.02s  
+
+   PASS  Tests\Unit\Heizlast\HeizlastRechnerReferenzTest
+  ✓ p5 raumvolumen ueber h v                                             0.03s  
+  ✓ p5 volumen linear in hoehe                                           0.02s  
+
+   PASS  Tests\Unit\Heizlast\HoehenkorrekturServiceTest
+  ✓ keine korrektur unter 200 m differenz                                0.01s  
+  ✓ hoeher gelegenes gebaeude wird kaelter
+  ✓ tiefer gelegenes gebaeude wird waermer
+  ✓ genau 200 m loest korrektur aus
+  ✓ ohne standorthoehe keine korrektur
+  ✓ ohne bezugshoehe keine korrektur
+  ✓ ergebnis wird auf eine nachkommastelle gerundet
+
+   PASS  Tests\Unit\Heizlast\KlimaBinServiceTest
+  ✓ bins decken ein jahr ab
+  ✓ saisongewichte summieren je bin zu eins
+  ✓ kalte bins sind winterlastig
+  ✓ plz mapping trennt klimazonen
+
+   PASS  Tests\Unit\Heizlast\RaumHuelleServiceTest
+  ✓ p3 wandoeffnung 30 minus 6 ist 24 qm                                 0.02s  
+  ✓ p3 zwei fenster additiv ist 20 qm                                    0.02s  
+  ✓ oeffnung groesser wand wird vom gate abgelehnt                       0.02s  
+
+   PASS  Tests\Unit\Heizlast\WpKennlinieKurveTest
+  ✓ fallback trifft nenn stuetzpunkte w35                                0.01s  
+  ✓ fallback vorlauf w55 senkt leistung und cop
+  ✓ cop steigt mit aussentemperatur
+  ✓ temperatur interpolation zwischen stuetzpunkten
+  ✓ buderus wlw7 nenn a minus7 datenblatt korrekt
+  ✓ unter einsatzgrenze keine leistung
+
+   PASS  Tests\Unit\Heizlast\WpKennlinieServiceTest
+  ✓ stuetzpunkte werden bei w35 exakt getroffen
+  ✓ cop steigt mit aussentemperatur
+  ✓ hoeherer vorlauf senkt cop
+  ✓ unter einsatzgrenze keine leistung
+
+   PASS  Tests\Unit\Offer\CatalogPriceGuardTest
+  ✓ component mit manipuliertem payload wird auf katalog korrigiert      0.02s  
+  ✓ component mit passendem preis ist verifiziert                        0.02s  
+  ✓ component ohne katalog treffer wird markiert ohne null preis         0.02s  
+  ✓ position ohne anker wird manuell markiert preis unveraendert         0.02s  
+  ✓ note knoten bekommt keinen marker                                    0.02s  
+  ✓ verschachtelte komponente in subitems wird korrigiert                0.02s  
+  ✓ b1 price unit value wird fuer component auf 1 normalisiert           0.02s  
+  ✓ b1 verifiziert nur bei vollstaendig serverseitiger formel            0.02s  
+  ✓ b1 cost price unit value wird normalisiert                           0.02s  
+  ✓ flag logik liegt im controller guard selbst ist immer aktiv          0.02s  
+
+   PASS  Tests\Unit\RoofAreaEstimatorStillgelegtTest
+  ✓ estimate wirft immer                                                 0.05s  
+  ✓ estimate wirft auch ohne daten                                       0.02s  
+
+   PASS  Tests\Feature\Accounting\AuswertungenTest
+  ✓ ustva kennzahlen stimmen zifferngenau                                0.05s  
+  ✓ bwa ergebnis stimmt                                                  0.03s  
+  ✓ susa salden stimmen                                                  0.03s  
+  ✓ zeitraum grenzt korrekt ab                                           0.04s  
+
+   PASS  Tests\Feature\Accounting\DatevExtfExportTest
+  ✓ kopfzeile ist extf buchungsstapel v13                                0.04s  
+  ✓ ausgangsrechnung wird sternfoermig zerlegt                           0.03s  
+  ✓ eingangsrechnung pivot auf kreditor                                  0.03s  
+  ✓ konformitaets pruefer ist gruen                                      0.03s  
+  ✓ konformitaets pruefer erkennt kaputte datei                          0.03s  
+
+   PASS  Tests\Feature\Accounting\EingangsBelegflussTest
+  ✓ bucht wareneingang und vorsteuer an kreditor                         0.07s  
+  ✓ ist idempotent ueber kreditor und belegnummer                        0.05s  
+  ✓ kann festgeschrieben werden und erscheint in ustva vorsteuer         0.05s  
+
+   PASS  Tests\Feature\Accounting\GobdBuchungsEngineTest
+  ✓ festgeschriebener buchungssatz ist unveraenderlich                   0.03s  
+  ✓ nummernkreis ist lueckenlos und fortlaufend                          0.03s  
+  ✓ maker checker verbietet selbstfestschreibung                         0.03s  
+  ✓ storno erzeugt gegenbuchung und laesst original unveraendert         0.03s  
+
+   PASS  Tests\Feature\Accounting\JunkStornoTest
+  ✓ junk storniert offene und markiert bezahlte rechnungen               0.11s  
+  ✓ junk ist idempotent                                                  0.04s  
+  ✓ junk ohne rechnungen laeuft durch                                    0.04s  
+  ✓ junk rollt bei fehler mitten in der transaktion alles zurueck        0.05s  
+  ✓ junk gibt warnung bei bezahlter rechnung und keine ohne              0.06s  
+  ✓ junk mit mehreren bezahlten rechnungen storniert alle und warnt sum… 0.04s  
+
+   PASS  Tests\Feature\Accounting\KontenrahmenSeederTest
+  ✓ seedt kontenrahmen konten steuern und sammeldebitor mapping          0.08s  
+  ✓ ist idempotent kein duplikat bei zweitem lauf                        0.06s  
+  ✓ alle mapping keys verweisen auf existierende konten                  0.04s  
+  ✓ marker teardown raeumt restlos                                       0.05s  
+  ✓ belegkette bleibt unberuehrt                                         0.06s  
+
+   PASS  Tests\Feature\Accounting\PositionsSplitTest
+  ✓ gemischte saetze splitten auf erloeskonten summe gleich kopf         0.06s  
+  ✓ kategorie mapping routet auf eigenes erloeskonto                     0.04s  
+  ✓ ohne positionen faellt auf kopfbuchung zurueck                       0.04s  
+  ✓ cent differenz wird auf groesste gruppe reconcilet                   0.04s  
+gg
+   PASS  Tests\Feature\Anforderungsprofil\AnforderungsprofilKlimaPlzLookupTest
+  ✓ norm aussentemp wird aus klima plz ausgelesen                       17.30s  
+
+   PASS  Tests\Feature\Anforderungsprofil\AnforderungsprofilTest
+  ✓ anlegen mit werten traegt datenlage je wert                          0.04s  
+  ✓ verankerung whitelist lehnt fremden typ ab                           0.03s  
+  ✓ verankerbar id muss existieren                                       0.02s  
+  ✓ wert unbekannter schluessel wirft                                    0.03s  
+  ✓ wert ungueltige datenlage wirft                                      0.03s  
+  ✓ wert num pflicht wirft                                               0.03s  
+  ✓ versionieren kopiert werte append only                               0.03s  
+  ✓ neue version auf stale basis wird als konflikt abgelehnt             0.03s  
+  ✓ neue version auf aktuellem kopf bildet lineare kette                 0.03s  
+  ✓ ein aktiv invariante je verankerung                                  0.03s  
+  ✓ ein aktiv haelt bei doppelaufruf                                     0.03s  
+
+   PASS  Tests\Feature\Arbeitsliste\ArbeitslisteResilienceTest
+  ✓ eine kategorie query wirft am echten stack isoliert bleibt der rest  0.07s  
+
+   PASS  Tests\Feature\Arbeitsliste\ArbeitslisteTest
+  ✓ daten zustand rendert mit drei sektions ueberschriften               0.06s  
+  ✓ mit fixtures erscheinen pills mit text und betrag                    0.06s  
+  ✓ einzeln leere sektion zeigt leise inline zeile                       0.06s  
+  ✓ leer zustand genau ein positiver status block                        0.06s  
+  ✓ gesamtausfall globaler alert keine sektionen                         0.04s  
+  ✓ teilausfall nur diese sektion faellt rest rendert                    0.05s  
+
+   PASS  Tests\Feature\BuildingModel\BuildingModelVersionImmutabilityTest
+  ✓ neue version anlegbar                                                0.04s  
+  ✓ update wird abgelehnt                                                0.03s  
+  ✓ delete wird abgelehnt                                                0.02s  
+  ✓ neue revision statt update                                           0.03s  
+  ✓ tabelle ist additiv ohne softdelete ohne updated at                  0.03s  
+
+   PASS  Tests\Feature\BuildingModel\BuildingModelVersionStoreTest
+  ✓ gueltiger payload wird als derived only gespeichert                  0.03s  
+  ✓ ungueltiger payload wird nicht gespeichert                           0.02s  
+  ✓ idempotenz gleicher schluessel und hash liefert dieselbe zeile       0.03s  
+  ✓ gleicher schluessel anderer payload ist konflikt                     0.03s  
+  ✓ store veraendert keine fremde tabelle                                0.03s  
+
+   PASS  Tests\Feature\Catalog\FoxEssLongiTeardownTest
+  ✓ teardown marker basiert schont fremde marke und products             0.07s  
+  ✓ teardown entfernt marke nur wenn keine fremden dranhaengen           0.04s  
+
+   PASS  Tests\Feature\Catalog\WberechnungImportTest
+  ✓ zeilen soll 19 wp 5 pv                                               0.05s  
+  ✓ buderus wlw7 a minus7 cop angekommen                                 0.04s  
+  ✓ nibe 14 16 echte varianten                                           0.04s  
+  ✓ kurve semantik und leistungskurve null                               0.04s  
+  ✓ einheiten kw plausibel                                               0.04s  
+  ✓ dedup skip vorhandenes modell                                        0.04s  
+  ✓ idempotenz zweiter lauf keine duplikate                              0.04s  
+  ✓ rueckbau via marker bestand unberuehrt                               0.05s  
+
+   PASS  Tests\Feature\Customer\GebaeudeSucheScopeTest
+  ✓ leerer begriff filtert nicht                                         0.03s  
+  ✓ nur whitespace filtert nicht                                         0.03s  
+  ✓ treffer ueber strasse                                                0.03s  
+  ✓ treffer ueber postleitzahl                                           0.03s  
+  ✓ treffer ueber stadt                                                  0.03s  
+  ✓ treffer ueber objektname                                             0.03s  
+  ✓ treffer ueber lead relation                                          0.03s  
+  ✓ kein treffer gibt leere menge                                        0.03s  
+
+   PASS  Tests\Feature\Dashboard\SidebarCountTest
+  ✓ konto mit nicht numerischem namen bekommt zaehler statt fehler       0.09s  
+  ✓ ohne mitarbeiter id bleiben die persoenlichen zaehler leer statt fr… 0.06s  
+  ✓ konto mit numerischem namen zaehlt unveraendert                      0.06s  
+  ✓ der controller rechnet die mitarbeiter id nicht selbst aus           0.02s  
+
+   PASS  Tests\Feature\DealMeasurement\PriceNullableTest
+  ✓ preisspalten nehmen null an                                          0.03s  
+  ✓ bestandspreise unberuehrt                                            0.02s  
+  ✓ material row mapper ist null sicher                                  0.03s  
+  ✓ uebernahme schreibt null preis                                       0.05s  
+
+   PASS  Tests\Feature\Energie\EnergiekonzeptWpCharakterisierungTest
+  ✓ wp teil gleiche kernwerte wie wp auslegung                           0.03s  
+  ✓ wp index ohne geraet liefert null wp teil                            0.03s  
+  ✓ nur wp aktiv sanierung und pv null gesamt spiegelt wp                0.03s  
+
+   PASS  Tests\Feature\Energie\HeizlastCharakterisierungTest
+  ✓ heizlast ergebnis und wp matchblock                                  0.03s  
+  ✓ transient kein projekt persistiert                                   0.03s  
+  ✓ fehlende pflichtfelder werfen validierungsfehler                     0.03s  
+
+   PASS  Tests\Feature\Energie\WpAuslegungCharakterisierungTest
+  ✓ normalfall pinnt rechenkette und rundung                             0.03s  
+  ✓ warmwasser ohne wp senkt stromverbrauch                              0.03s  
+  ✓ foerderung ohne klimabonus bei heizungsart keine                     0.03s  
+  ✓ foerderung mit effizienz und einkommensbonus                         0.03s  
+  ✓ fehlender preis investition null                                     0.03s  
+  ✓ wp index ohne geraet liefert fehler ohne ergebnis                    0.03s  
+  ✓ unvollstaendige eingabe wirft validierungsfehler                     0.03s  
+  ✓ dokument liefert dieselbe rechenwahrheit wie rechenseite             0.03s  
+  ✓ niedriger heizbedarf skaliert q heiz und strom                       0.03s  
+  ✓ hoher heizbedarf skaliert q heiz und strom                           0.03s  
+  ✓ warmwasserbedarf skaliert mit personen                               0.03s  
+  ✓ verbrauchsmethode erzeugt plausi block                               0.03s  
+  ✓ foerderdeckel begrenzt foerderfaehige kosten                         0.03s  
+  ✓ geraetewahl aendert nur anzeige nicht die zahlen                     0.03s  
+  ✓ dokument bei investition null                                        0.03s  
+
+   PASS  Tests\Feature\ExampleTest
+  ✓ root redirects when unauthenticated                                  0.03s  
+
+   PASS  Tests\Feature\FollowUp\FollowUpRaceTest
+  ✓ zwei sync erzeugen genau einen task                                  0.03s  
+  ✓ db constraint blockt rohes duplikat                                  0.03s  
+  ✓ race catch faengt live kollision ab                                  0.03s  
+  ✓ soft geloeschtes followup wird wiederhergestellt statt 500           0.03s  
+  ✓ null quellen koexistieren                                            0.02s  
+
+   PASS  Tests\Feature\Form\ChecklistRenderV1V2Test
+  ✓ v1 formular rendert weiter mit csv options                           0.03s  
+  ✓ v2 wp pilot rendert mit multiselect und typen                        0.03s  
+  ✓ reload zeigt gespeicherte werte inkl multiselect                     0.03s  
+  ✓ unbekannter typ faellt auf text zurueck ohne crash                   0.03s  
+  ✓ save checklist persistiert werte inkl multiselect                    0.04s  
+  ✓ save checklist v1 ueber name identity                                0.04s  
+
+   PASS  Tests\Feature\Form\FormulaEvaluateEndpointTest
+  ✓ berechnet flaeche serverseitig ohne client eval                      0.03s  
+  ✓ unsichtbare calculation wird nicht berechnet                         0.03s  
+  ✓ sichtbares pflichtfeld wird als fehlend gemeldet                     0.03s  
+  ✓ schema verstoss liefert 422                                          0.03s  
+
+   PASS  Tests\Feature\Form\SmartroutingServiceTest
+  ✓ spezifischere regel gewinnt vor wildcard                             0.03s  
+  ✓ gesetzter anker muss exakt treffen                                   0.03s  
+  ✓ gleichstand entscheidet prioritaet                                   0.03s  
+  ✓ kein treffer liefert leere liste und hinweis                         0.02s  
+  ✓ inaktive regel wird ignoriert                                        0.03s  
+
+   PASS  Tests\Feature\Form\WpProduktFormularPilotTest
+  ✓ seeder erzeugt genau eine wp product formula zeile                   0.03s  
+  ✓ felder sind v2 schema valide                                         0.03s  
+  ✓ 18 felder mit eindeutigen key gleich name slugs                      0.03s  
+  ✓ seeder ist idempotent                                                0.03s  
+  ✓ import haertung schreibt nichts bei ungueltigem schema               0.03s  
+
+   PASS  Tests\Feature\FusionWebhookTest
+  ✓ webhook returns entries with valid token                             0.04s  
+  ✓ webhook rejects invalid token                                        0.02s  
+
+   PASS  Tests\Feature\Geometrie\BestandScanTest
+  ✓ synthetische bestandsfixture wird nicht abgelehnt                    0.02s  
+
+   PASS  Tests\Feature\Geometrie\GeometrieSchreibpfadWaechterTest
+  ✓ nur ingestion punkt persistiert geometrie                            0.05s  
+  ✓ flaechenfunktionen nur bekannte aufrufer                             0.08s  
+
+   PASS  Tests\Feature\Geometrie\GrundrissGateHttpTest
+  ✓ vorschau lehnt ungueltiges polygon ab                                0.04s  
+  ✓ speichern lehnt ab und persistiert nichts                            0.03s  
+  ✓ unauthentifiziert wird abgelehnt                                     0.04s  
+  ✓ gueltige geometrie wird vom gate nicht abgelehnt                     0.04s  
+
+   PASS  Tests\Feature\Geometrie\GrundrissProfilPersistenzTest
+  ✓ objektgebundener save erzeugt neue aktive version                    0.07s  
+  ✓ objektlose persistenz wird abgelehnt                                 0.03s  
+  ✓ topologie gate bleibt pflicht                                        0.05s  
+  ✓ aktiver pfad schreibt keine raum geometrien                          0.04s  
+  ✓ aequivalenz abgeleitete werte stimmen                                0.05s  
+
+   PASS  Tests\Feature\Geometrie\GrundrissReferenzTest
+  ✓ geometrie raum ist aequivalent zum maskenraum                        0.03s  
+  ✓ vorschau rechteck ist 30 qm mit positiver heizlast                   0.04s  
+  ✓ fenster u wert wirkt richtungsrichtig auf phi hl                     0.06s  
+  ✓ offset einer oeffnung aendert phi hl nicht                           0.05s  
+  ✓ freihand polygon startecke egal aequivalent                          0.06s  
+  ✓ schreibe in projekt persistiert ueber engine pfad                    0.04s  
+
+   PASS  Tests\Feature\Hausplaner\BladeKompiliertTest
+  ✓ blade kompiliert zu gueltigem php with data set "index.blade.php"    0.03s  
+  ✓ blade kompiliert zu gueltigem php with data set "objekt.blade.php"   0.02s  
+  ✓ blade kompiliert zu gueltigem php with data set "studio.blade.php"   0.02s  
+  ✓ objekt blade mischt die beiden php formen nicht                      0.02s  
+  ✓ der bekannte fehlerfall wird wirklich erkannt                        0.02s  
+
+   PASS  Tests\Feature\Hausplaner\DachplanerRedirectTest
+  ✓ alte dachplaner url leitet auf studio um                             0.03s  
+  ✓ gast wird zum login geleitet                                         0.03s  
+
+   PASS  Tests\Feature\Hausplaner\HausplanerIndexTest
+  ✓ index ohne recht wird 403                                            0.05s  
+  ✓ index admin listet                                                   0.05s  
+  ✓ index q filtert treffer und nichttreffer                             0.05s  
+  ✓ index q filtert ueber lead relation                                  0.04s  
+  ✓ index zeilenlink zeigt auf objekt seite                              0.05s  
+
+   PASS  Tests\Feature\Hausplaner\HausplanerRechteTest
+  ✓ ohne angemeldeten nutzer bleibt die liste leer                       0.02s  
+  ✓ admin bekommt genau die vier bekannten rechte                        0.02s  
+  ✓ wer nichts darf bekommt nichts                                       0.03s  
+  ✓ es werden keine unbekannten aktionen erfunden                        0.03s  
+  ✓ die objekt seite traegt data rechte im markup                        0.05s  
+  ✓ die objekt seite laedt und ist kein parse error                      0.04s  
+
+   PASS  Tests\Feature\Hausplaner\HausplanerSpeichernNutzlastTest
+  ✓ gueltige v2 dachszene wird vollstaendig persistiert                  0.06s  
+  ✓ unbekanntes zukunftsfeld ohne schemawechsel wird abgelehnt           0.03s  
+  ✓ float millimeter wird abgelehnt                                      0.03s  
+  ✓ unbekannter node typ wird abgelehnt                                  0.03s  
+  ✓ nullwand wird abgelehnt                                              0.03s  
+  ✓ verwaiste oeffnung wird abgelehnt                                    0.03s  
+  ✓ ueberstehende oeffnung wird abgelehnt                                0.03s  
+  ✓ fremde project id wird abgelehnt                                     0.03s  
+  ✓ huellen und szenen version duerfen nicht abweichen                   0.03s  
+  ✓ huellen und szenen revision duerfen nicht abweichen                  0.03s  
+  ✓ dokument id darf nicht gewechselt werden                             0.03s  
+  ✓ uebergrosse szene wird ohne mutation abgelehnt                       0.21s  
+  ✓ revisionskonflikt bleibt 409 und schreibt nichts                     0.04s  
+  ✓ v2 nutzlast wird mit versions fehler abgewiesen                      0.03s  
+  ✓ huelle und szene muessen dieselbe version tragen                     0.03s  
+
+   PASS  Tests\Feature\Hausplaner\HausplanerStudioTest
+  ✓ studio liefert gueltige persistenzfreie scratch szene                0.05s  
+
+   PASS  Tests\Feature\Hausplaner\KonfiguratorPaketeTest
+  ✓ k5 fremde pakete erscheinen nicht in der liste                       0.04s  
+  ✓ k5 ein fremdes paket ist nicht abrufbar                              0.05s  
+  ✓ das eigene paket ist abrufbar                                        0.04s  
+  ✓ k7 die abfrage ist bereits auf den besitzer eingeschraenkt           0.04s  
+  ✓ k6 ohne read recht keine liste                                       0.03s  
+  ✓ k6 ohne add recht kein speichern                                     0.04s  
+  ✓ k8 dreissig pakete ergeben 25 und 5                                  0.04s  
+  ✓ k9 ein paket ohne gebaeude laesst sich speichern und abrufen         0.04s  
+  ✓ k3 die migration ist idempotent                                      0.04s  
+  ✓ k2 die migration faesst keine bestandstabelle an                     0.03s  
+
+   PASS  Tests\Feature\Hausplaner\ProjektlisteTest
+  ✓ k1 die studio flaeche bekommt die liste nicht                        0.05s  
+  ✓ k1 die studio vorlage kennt den feldnamen nicht                      0.02s  
+  ✓ k1 die studio route traegt weiterhin nur auth                        0.02s  
+  ✓ k2 ohne hausplaner recht kein zugriff auf die objekt seite           0.04s  
+  ✓ k3 das buendel traegt genau die fuenf noetigen felder und keine kun… 0.04s  
+  ✓ auf66 jeder eintrag zeigt auf sein eigenes objekt                    0.05s  
+  ✓ k4 eine abfrage und hart begrenzt auch bei dreitausend objekten      0.22s  
+  ✓ die objekt seite traegt die liste                                    0.06s  
+  ✓ ohne objekte ist die liste leer nicht erfunden                       0.04s  
+  ✓ k5 kein php block im blade                                           0.03s  
+
+   FAIL  Tests\Feature\Hausplaner\UebernahmeKnopfTest
+  ✓ ohne schreibrecht 403 und keine seiteneffekte                        0.04s  
+  ✓ unbekanntes objekt 404                                               0.03s  
+  ✓ uebernahme erzeugt genau eine version dokument byte unveraendert     0.05s  
+  ✓ doppel submit idempotent keine doppel version                        0.04s  
+  ✓ keine szene 422 und nichts geschrieben                               0.04s  
+  ✓ kein raum meldung und keine version                                  0.04s  
+  ⨯ staleness kippt nie aktuell veraltet                                 0.09s  
+  ⨯ zweite uebernahme nach aenderung version additiv altversion unverae… 0.04s  
+
+   PASS  Tests\Feature\Hausplaner\UebernehmeSzeneInAuslegungTest
+  ✓ uebernahme schreibt neue aktive version mit 2 raeumen                0.04s  
+  ✓ zweite uebernahme gleiche szene keine neue version                   0.04s  
+  ✓ keine szene schreibt nichts                                          0.03s  
+  ✓ szene ohne raum schreibt nichts                                      0.03s  
+
+   PASS  Tests\Feature\Heizkoerper\CompatibilityServiceTest
+  ✓ rule 1 ventil hk liefert einsatz und kopf                            0.04s  
+  ✓ rule 2 kompakt hk liefert ventil kopf ruecklauf                      0.04s  
+  ✓ rule 3 einrohr ohne taugliche armatur sperrt                         0.04s  
+  ✓ rule 3 einrohr mit tauglicher armatur erlaubt                        0.04s  
+  ✓ rule 4 voreinstellbar bevorzugt                                      0.04s  
+  ✓ rule 5 voreinstellstufe gleich hydraulic service                     0.04s  
+  ✓ rule 5 ohne heizlast kein stufe hinweis                              0.04s  
+  ✓ rule 6 altnorm kopf austauschempfehlung                              0.05s  
+  ✓ datenqualitaet regel kandidaten bei leerer kompatibilitaet           0.04s  
+  ✓ datenqualitaet serien praezise mit fixture                           0.04s  
+
+   PASS  Tests\Feature\Heizkoerper\HeizkoerperEndpointTest
+  ✓ berechnen durchstich 663                                             0.03s  
+  ✓ kompatibilitaet datenqualitaet regel kandidaten                      0.05s  
+  ✓ flag off liefert 404 ohne hk query                                   0.03s  
+  ✓ berechnen validierung 422                                            0.03s  
+
+   PASS  Tests\Feature\Heizkoerper\HeizkoerperKonfiguratorViewTest
+  ✓ konfigurator rendert mit alpine wurzel und csrf                      0.06s  
+  ✓ konfigurator 404 bei flag off                                        0.03s  
+  ✓ stueckliste sektion und datenlage label                              0.05s  
+
+   PASS  Tests\Feature\Heizkoerper\HeizkoerperUebernahmeTest
+  ✓ uebernahme schreibt provenance je spalte                             0.06s  
+  ✓ replace per raum idempotent                                          0.06s  
+  ✓ replace laesst fremdzeilen und andere raeume ueberleben              0.05s  
+  ✓ integration material liste zeigt hk und labor filter intakt          0.05s  
+  ✓ flag off 404                                                         0.05s  
+  ✓ completed measurement 423                                            0.05s  
+  ✓ ohne deal measurement id 422                                         0.05s  
+  ✓ leerer positionssatz 422                                             0.05s  
+
+   PASS  Tests\Feature\Heizkoerper\RadiatorCatalogAdapterTest
+  ✓ derives q norm w from spec length and count                          0.03s  
+  ✓ adapter output feeds performance service                             0.03s  
+
+   PASS  Tests\Feature\Heizlast\AnforderungsprofilHeizlastAdapterTest
+  ✓ byte beweis wohnzimmer wortgetreu                                    0.04s  
+  ✓ mapping phi hl ist kw nicht w                                        0.04s  
+  ✓ rueckschreibung datenlage und parameter                              0.04s  
+  ✓ rueckschreibung erzeugt keine neue version                           0.04s  
+  ✓ gate verweigert ohne geometrie                                       0.03s  
+  ✓ gate verweigert ohne norm aussentemp                                 0.03s  
+  ✓ ergebnis hinweis bei ungepruefter u wert datenlage                   0.04s  
+  ✓ geometrie wird bei neuer version mitkopiert                          0.04s  
+
+   PASS  Tests\Feature\Heizlast\ReferenzKatalogSeederTest
+  ✓ zeilen soll                                                          0.30s  
+  ✓ schichten material id remapped gueltig                               0.27s  
+  ✓ verifikations status je zeile                                        0.26s  
+  ✓ stichprobe werte                                                     0.27s  
+  ✓ idempotenz                                                           0.26s  
+  ✓ rueckbau                                                             0.30s  
+
+   PASS  Tests\Feature\Invoice\InvoiceDeletionGuardTest
+  ✓ draft ohne nummer ist loeschbar                                      0.04s  
+  ✓ rechnung mit nummer ist nicht loeschbar                              0.03s  
+  ✓ sent rechnung ist nicht loeschbar                                    0.03s  
+  ✓ bezahlte rechnung ist nicht loeschbar                                0.03s  
+  ✓ controller liefert 422 fuer finale rechnung                          0.03s  
+  ✓ datei finaler rechnung wird nicht physisch geloescht                 0.04s  
+  ✓ kunden softdelete mit rechnung bleibt erlaubt                        0.07s  
+  ✓ kunden force delete mit rechnung wird blockiert                      0.03s  
+  ✓ db verhindert hard delete kaskade auf kunden mit rechnung            0.09s  
+
+   PASS  Tests\Feature\Invoice\InvoiceDueDateDerivationTest
+  ✓ leitet due date ab wenn leer                                         0.03s  
+  ✓ gutschrift und stornorechnung ohne zahlungsziel                      0.03s  
+  ✓ explizites due date wird nie ueberschrieben                          0.03s  
+  ✓ update aendert bestehendes due date nicht                            0.04s  
+  ✓ invoice controller store leitet ab                                   0.06s  
+  ✓ canvas pfad leitet identisch ab                                      0.03s  
+  ✓ ohne issue date keine ableitung                                      0.02s  
+
+   PASS  Tests\Feature\Invoice\InvoiceNumberServiceTest
+  ✓ draft bekommt keine nummer                                           0.04s  
+  ✓ finalisierung erzeugt genau eine nummer und format                   0.04s  
+  ✓ nummernvergabe ist idempotent                                        0.04s  
+  ✓ sequenz zaehlt hoch                                                  0.03s  
+  ✓ sent zu draft ist gesperrt                                           0.03s  
+  ✓ mehrere null drafts erlaubt                                          0.03s  
+  ✓ unique schutz bei vergebenen nummern                                 0.03s  
+  ✓ reservierung und speichern atomar                                    0.03s  
+  ✓ startwert ignoriert fremdformate                                     0.03s  
+  ✓ keine legacy makeinvoiceno                                           0.03s  
+  ✓ seeder ohne eigene nummernlogik                                      0.03s  
+  ✓ service reserve nur fuer ausgestellte                                0.03s  
+
+   PASS  Tests\Feature\Invoice\InvoicePaidDerivationTest
+  ✓ paid gleich total ist bezahlt                                        0.03s  
+  ✓ teilzahlung ist nicht bezahlt                                        0.03s  
+  ✓ ueberzahlung ist bezahlt                                             0.03s  
+  ✓ total null ist bezahlt                                               0.03s  
+  ✓ decimal exaktheit                                                    0.03s  
+  ✓ typ gate gutschrift und storno                                       0.03s  
+  ✓ scope paid ist echtes sql                                            0.03s  
+  ✓ ispaid delegiert auf isfullypaid                                     0.03s  
+
+   PASS  Tests\Feature\Kanban\LeadStageAngebotTaskTest
+  ✓ move nach offer erzeugt genau eine angebots aufgabe                  0.12s  
+  ✓ upsert offer lead offer bleibt eine zeile                            0.16s  
+  ✓ move nach deal erzeugt keine angebots aufgabe                        0.07s  
+  ✓ re save innerhalb offer triggert nicht                               0.07s  
+  ✓ task fehler beschaedigt move nicht und wird geloggt                  0.08s  
+
+   PASS  Tests\Feature\Maintenance\SeedOrphanCleanupTest
+  ✓ cleanup ist praezise und reversibel                                  0.08s  
+
+   PASS  Tests\Feature\Offer\AuslegungVorschlagPreviewTest
+  ✓ wp mit profil liefert vorschlagsstruktur                             0.03s  
+  ✓ alle positionen ohne preis und ohne component id                     0.03s  
+  ✓ wp geraet nutzt heizlast datenlage                                   0.03s  
+  ✓ fehlender operand wird als aufgabe markiert                          0.03s  
+  ✓ ohne profil kein 500 sondern hinweis                                 0.03s  
+  ✓ non wp keine vorschau                                                0.03s  
+  ✓ katalog hinweis meldet wp set                                        0.03s  
+  ✓ service schreibt nichts                                              0.04s  
+  ✓ panel route rendert read only                                        0.04s  
+  ✓ panel route auth geschuetzt                                          0.04s  
+
+   PASS  Tests\Feature\Offer\HeizlastBelastbarkeitsGateTest
+  ✓ klassifizierer stufen                                                0.03s  
+  ✓ belastbare heizlast zaehlt technische auslegung voll                 0.04s  
+  ✓ geschaetzte heizlast reduziert technische auslegung nicht voll       0.04s  
+  ✓ berechnet mit unsicheren eingaben ist nur eingeschraenkt             0.04s  
+  ✓ fehlende heizlast bleibt offen                                       0.04s  
+  ✓ vorschau laeuft bei vorlaeufig aber unverbindlich                    0.04s  
+  ✓ vorschau belastbar ist verbindlich                                   0.04s  
+  ✓ match ranking unverbindlich wenn nicht belastbar                     0.03s  
+  ✓ klassifizierer schreibt nichts                                       0.05s  
+
+   PASS  Tests\Feature\Offer\KonfigurationsprojektSichtTest
+  ✓ objekt aggregiert wp und pv                                          0.05s  
+  ✓ wp belastbarkeit wird durchgereicht                                  0.04s  
+  ✓ pv ist verdrahtet false ohne belastbarkeit und ohne fehler           0.04s  
+  ✓ preisfaehigkeit getrennt und omd offen                               0.05s  
+  ✓ objekt ohne module sauber                                            0.03s  
+  ✓ nicht existentes objekt nicht anwendbar                              0.03s  
+  ✓ dto ist pii arm                                                      0.04s  
+  ✓ service schreibt nichts                                              0.04s  
+  ✓ route auth geschuetzt                                                0.03s  
+  ✓ route non numeric 404                                                0.05s  
+  ✓ route rendert                                                        0.05s  
+
+   PASS  Tests\Feature\Offer\ObjectProfileTabBlockTest
+  ✓ tabblock und drei routen vorhanden                                   0.03s  
+  ✓ wp gate umschliesst block                                            0.02s  
+  ✓ lazy reife auto andere erst bei klick                                0.03s  
+  ✓ read only kein formular kein alpine                                  0.03s  
+  ✓ drei routen registriert                                              0.03s  
+
+   PASS  Tests\Feature\Offer\OfferCatalogPricingTest
+  ✓ apply zieht katalogpreis aus db und verwirft payload                 0.03s  
+  ✓ apply markiert freitextposition als manuell                          0.03s  
+  ✓ save document persistiert katalogpreis nicht manipulierten payload   0.05s  
+  ✓ b1 price unit value manipulation wird neutralisiert                  0.04s  
+  ✓ flag aus laesst payload preis unveraendert                           0.04s  
+
+   PASS  Tests\Feature\Offer\OfferReadinessGateTest
+  ✓ gate non wp gibt null                                                0.03s  
+  ✓ gate kein lpl gibt null                                              0.03s  
+  ✓ gate wp mit blocker gibt verletzung                                  0.04s  
+  ✓ gate wp ohne blocker gibt null                                       0.04s  
+  ✓ pfad1 wizard blockiert wp kein offer                                 0.05s  
+  ✓ pfad1 wizard reif erstellt offer                                     0.10s  
+  ✓ pfad2 offercontroller blockiert wp kein offer                        0.05s  
+  ✓ pfad2 offercontroller reif erstellt offer                            0.06s  
+  ✓ pfad3 offerscontroller blockiert wp kein offer                       0.05s  
+  ✓ pfad3 offerscontroller reif erstellt offer                           0.05s  
+  ✓ non wp wird durchgelassen                                            0.06s  
+  ✓ kein lpl wird durchgelassen                                          0.05s  
+  ✓ fehlerantwort enthaelt keine pii                                     0.05s  
+  ✓ auto sync ueberspringt wp blocker erstellt reif und nonwp            0.08s  
+  ✓ savedocument blockiert wp kein offer                                 0.04s  
+  ✓ pfad3 alternative null blockiert ueber kundenaufloesung              0.05s  
+  ✓ savedocument aktualisiert bestehendes wp angebot ohne gate block     0.05s  
+
+   PASS  Tests\Feature\Offer\OfferReadinessServiceTest
+  ✓ ohne pflichtdaten ist blockiert und niedrig                          0.04s  
+  ✓ mit kerndaten hoeher aber noch nicht angebotsfaehig                  0.04s  
+  ✓ formular ausfuellen erhoeht prozent                                  0.05s  
+  ✓ alle pflicht erfuellt ist angebotsfaehig und 100                     0.05s  
+  ✓ prozent ist deterministisch                                          0.04s  
+  ✓ keine persistenz von reife                                           0.04s  
+
+   PASS  Tests\Feature\Offer\UseTemplateGateTest
+  ✓ wp ohne objekt wird abgewiesen                                       0.04s  
+  ✓ wp mit objekt und blocker wird abgewiesen                            0.05s  
+  ✓ wp reif verwendet vorlage                                            0.06s  
+  ✓ non wp wird durchgelassen                                            0.05s  
+  ✓ wp ohne lpl wird durchgelassen                                       0.05s  
+  ✓ fehlerantwort enthaelt keine pii                                     0.05s  
+  ✓ ohne folder name kein 500 und fallback name                          0.05s  
+  ✓ mit folder name wird exakt uebernommen                               0.05s  
+  ✓ h2 null wird nicht als invalid abgewiesen                            0.04s  
+  ✓ h2 gueltiges eigenes objekt wird genutzt                             0.06s  
+  ✓ h2 nicht existente alternative id wird abgewiesen                    0.04s  
+  ✓ h2 fremde alternative id wird abgewiesen                             0.04s  
+  ✓ h3 nonwp ohne objekt wird abgewiesen                                 0.04s  
+  ✓ h3 nonwp mit gueltigem objekt wird angelegt                          0.05s  
+
+   PASS  Tests\Feature\Offer\WpAngebotsWorkflowCockpitTest
+  ✓ cockpit liefert 5 schritte und getrennte prozente                    0.06s  
+  ✓ gesamt ohne preis hoechstens 85                                      0.05s  
+  ✓ wp ohne daten zeigt offene aufgaben kein fehler                      0.04s  
+  ✓ non wp nicht anwendbar                                               0.03s  
+  ✓ service schreibt nichts                                              0.05s  
+  ✓ route auth geschuetzt                                                0.04s  
+  ✓ route non numeric 404                                                0.05s  
+  ✓ route rendert cockpit                                                0.06s  
+  ✓ cockpit dto enthaelt keine pii                                       0.06s  
+
+   PASS  Tests\Feature\Offer\WpAngebotsreifeBatchTest
+  ✓ batch liefert status fuer gueltige ids                               0.06s  
+  ✓ leere und kaputte ids geben leeres array                             0.04s  
+  ✓ cap greift bei ueber 100 ids                                         0.08s  
+  ✓ array form ids wird numerisch gefiltert und gecappt                  0.08s  
+  ✓ gast wird abgewiesen                                                 0.04s  
+  ✓ batch enthaelt keine pii                                             0.05s  
+  ✓ kanban view hat filter badge und wp gating                           0.03s  
+
+   PASS  Tests\Feature\Offer\WpAngebotsreifeEmbedTest
+  ✓ partial endpoint liefert nur das panel                               0.05s  
+  ✓ partial gast und nicht numerisch abgewiesen                          0.05s  
+  ✓ objektprofil bettet panel nur fuer wp ein                            0.03s  
+
+   PASS  Tests\Feature\Offer\WpAngebotsreifePanelTest
+  ✓ panel rendert fuer blockierten vorgang                               0.05s  
+  ✓ panel zeigt angebotsfaehig wenn alle erfuellt                        0.05s  
+  ✓ json endpoint liefert dto                                            0.05s  
+  ✓ gast ohne auth wird abgewiesen                                       0.04s  
+  ✓ nicht numerische id wird als 404 abgewiesen                          0.05s  
+
+   PASS  Tests\Feature\Offer\WpKatalogMatchingPreviewTest
+  ✓ disjunkte populationen schnittmenge null                             0.03s  
+  ✓ kuratierter match wird als eindeutig erkannt                         0.04s  
+  ✓ konflikt bei falscher artikelgruppe                                  0.04s  
+  ✓ keine anker felder in der ausgabe                                    0.03s  
+  ✓ service schreibt nichts                                              0.04s  
+  ✓ non wp nicht anwendbar                                               0.03s  
+  ✓ alle wp sets werden gelesen und schnittmenge ueber alle              0.04s  
+  ✓ ist zustand bleibt null bei nur set2                                 0.03s  
+  ✓ set herkunft marker basiert                                          0.04s  
+  ✓ panel route rendert read only                                        0.04s  
+  ✓ panel route auth geschuetzt                                          0.04s  
+
+   PASS  Tests\Feature\PlanUploadTest
+  ✓ eine umbenannte datei wird abgelehnt und liegt nicht auf der platte  0.05s  
+  ✓ eine echte pdf signatur wird angenommen                              0.04s  
+  ✓ ein bild mit pdf endung wird abgelehnt                               0.04s  
+  ✓ dwg und dxf haben keine verlaessliche signatur und werden ueber die… 0.03s  
+  ✓ ein nutzer mit hausplaner update darf das projekt zuweisen           0.05s  
+  ✓ ein nutzer ohne hausplaner update darf kein projekt zuweisen         0.03s  
+  ✓ ein upload ohne projektbezug bleibt moeglich ganz ohne grant         0.05s  
+  ✓ ein unbekanntes projekt wird abgelehnt                               0.03s  
+  ✓ der massstab wird gespeichert und nur vom besitzer                   0.06s  
+  ✓ ein massstab von null oder darunter wird abgelehnt                   0.04s  
+  ✓ ohne konfigurierten import dienst bleibt die klassifikation gracefu… 0.05s  
+  ✓ ein unbekannter dateityp wird als fehler klassifiziert ohne absturz  0.03s  
+
+   PASS  Tests\Feature\Planner\PlannerApiContractTest
+  ✓ token valid login returns token                                      0.06s  
+  ✓ token wrong password returns 422                                     0.04s  
+  ✓ token missing fields returns 422                                     0.03s  
+  ✓ me with token returns ok                                             0.07s  
+  ✓ me without token is 401                                              0.03s  
+  ✓ logout deletes current token                                         0.07s  
+  ✓ my work returns assigned item                                        0.10s  
+  ✓ my work without employee is 403                                      0.03s  
+  ✓ my work without token is 401                                         0.03s  
+  ✓ complete report marks item done                                      0.05s  
+  ✓ complete report empty without skip is 422                            0.03s  
+  ✓ complete report empty with skip marks done                           0.05s  
+  ✓ complete report unassigned item is 404                               0.04s  
+  ✓ complete report without token is 401                                 0.03s  
+
+   PASS  Tests\Feature\Product\Identity\ProductIdentityKantenTest
+  ✓ kante 01 fuehrende null 0815 und 815 sind zwei artikel               0.03s  
+  ✓ kante 02 gtin in 8 12 13 14 stellen ist ein artikel                  0.03s  
+  ✓ kante 03 gtin mit falscher pruefziffer gilt als nicht vorhanden lei… 0.03s  
+  ✓ kante 04 gleiche gtin verschiedene brand id ist konflikt ohne schre… 0.03s  
+  ✓ kante 05 derselbe artikel bei zwei lieferanten ein produkt zwei pre… 0.03s  
+  ✓ kante 06 zwei lieferanten gleiche sku verschiedene artikel bleiben…  0.03s  
+  ✓ kante 07 artikel ohne hersteller stufe 2 uebersprungen nicht abgebr… 0.03s  
+  ✓ kante 08 not filled gilt als leer und wird nicht geschrieben         0.03s  
+  ✓ kante 09 fuehrendes leerzeichen trifft denselben artikel             0.03s  
+  ✓ kante 10 nachlaufendes leerzeichen trifft denselben artikel          0.03s  
+  ✓ kante 11 identischer name verschiedene nummern wird nie zusammengef… 0.03s  
+  ✓ kante 12 dieselbe datei zweimal importiert ergibt einen artikel      0.03s  
+  ✓ kante 13 umlaute und sz im herstellernamen treffen denselben artike… 0.03s  
+  ✓ kante 14 brand typ brand stufe 2 greift nicht leiter faellt auf stu… 0.03s  
+  ✓ kante 15 schalter ist per default aus                                0.03s  
+  ✓ kante 16 stufe 5 treffer erzeugt vorschlagszeile ohne products schr… 0.03s  
+  ✓ abbruch nach oben stufe 3 treffer mit widersprechender gtin ist kon… 0.03s  
+
+   PASS  Tests\Feature\Product\Identity\ProductIdentityNormalisierungTest
+  ✓ gtin wird in allen stellenzahlen auf 14 stellen gefuellt             0.03s  
+  ✓ gtin nicht ziffern werden entfernt                                   0.03s  
+  ✓ gtin mit falscher pruefziffer gilt als nicht vorhanden               0.03s  
+  ✓ gtin leer null oder nur nullen gilt als nicht vorhanden              0.03s  
+  ✓ artikelnummer trim mehrfachleerzeichen und grossbuchstaben           0.03s  
+  ✓ artikelnummer fuehrende nullen bleiben                               0.03s  
+  ✓ sentinel werte gelten als leer                                       0.03s  
+  ✓ text trim und mehrfachleerzeichen schreibweise bleibt erhalten       0.03s  
+  ✓ normalize liefert neue identitaet mit allen regeln                   0.03s  
+
+   PASS  Tests\Feature\Product\Identity\ProductIdentityPfadSchalterTest
+  ✓ k02 dieselbe datei zweimal durch pfad 1 erzeugt einen artikel        0.05s  
+  ✓ k04 aktiv false erzeugt die zeile des alt codes inklusive sentinel   0.04s  
+
+   PASS  Tests\Feature\Product\Identity\ProductIdentityVerriegelungTest
+  ✓ kein pfad legt produkte am identitaetsdienst vorbei an               0.09s  
+
+   PASS  Tests\Feature\Product\ProductImageFillableTest
+  ✓ product image uebernimmt name per mass assignment                    0.03s  
+
+   PASS  Tests\Feature\Security\BelegketteDeleteGateTest
+  ✓ nicht berechtigter kann belegkette nicht loeschen                    0.04s  
+  ✓ admin passiert das gate                                              0.25s  
+
+   PASS  Tests\Feature\Security\BulkDeleteAdminGateTest
+  ✓ nicht admin kann nicht massenloeschen                                0.04s  
+  ✓ admin passiert das gate                                              0.04s  
+
+   PASS  Tests\Feature\Security\CustomerPermissionGateTest
+  ✓ ohne customer grant kein belegketten zugriff                         0.04s  
+  ✓ mit customer delete grant durchgelassen                              0.03s  
+  ✓ admin bypass                                                         0.03s  
+  ✓ customer rest ohne grant geblockt                                    0.03s  
+
+   PASS  Tests\Feature\Security\DealMeasurementAbilitiesTest
+  ✓ assign deal zustaendiger ersteller admin ok techniker uebergang      0.04s  
+  ✓ unlock engster kreis uebergang                                       0.04s  
+  ✓ delete ersteller deal zustaendiger admin                             0.04s  
+  ✓ image loesch anker                                                   0.04s  
+  ✓ unlock endpunkt nicht completed 409                                  0.04s  
+  ✓ complete durch techniker bleibt erlaubt                              0.05s  
+
+   PASS  Tests\Feature\Security\DealMeasurementOfferAnchorTest
+  ✓ deal anker gate matrix                                               0.04s  
+  ✓ w0 offer ebene zustaendiger erlaubt                                  0.03s  
+  ✓ w0 offer ebene unbeteiligter 403                                     0.04s  
+  ✓ w0 kein deal deny und gezaehlt                                       0.03s  
+  ✓ storenote enforcement                                                0.05s  
+  ✓ image upload enforcement                                             0.04s  
+
+   PASS  Tests\Feature\Security\DealMeasurementPolicyTest
+  ✓ ersteller techniker und deal zustaendiger duerfen                    0.05s  
+  ✓ unbeteiligter employee deny                                          0.03s  
+  ✓ portal ohne employee kontext hart deny                               0.03s  
+  ✓ super admin darf                                                     0.03s  
+  ✓ waise weiches deny wird erlaubt und gezaehlt                         0.03s  
+  ✓ waise hartes deny bei flag                                           0.03s  
+  ✓ backfill setzt created by aus deal employee                          0.04s  
+  ✓ endpunkt enforcement unbeteiligter 403                               0.05s  
+
+   PASS  Tests\Feature\Security\HrMutationsAdminGateTest
+  ✓ nicht admin wird bei hr mutationen geblockt                          0.05s  
+  ✓ admin wird nicht durch das gate geblockt                             0.03s  
+
+   PASS  Tests\Feature\Security\HrPermissionGateTest
+  ✓ ohne employee grant kein hr zugriff                                  0.04s  
+  ✓ mit employee delete grant durchgelassen                              0.04s  
+  ✓ admin bypass                                                         0.03s  
+  ✓ department position ohne grant geblockt                              0.03s  
+
+   PASS  Tests\Feature\Security\PersonalNoteOwnerGateTest
+  ✓ fremder kann notiz nicht aendern oder loeschen                       0.04s  
+  ✓ eigentuemer darf                                                     0.03s  
+
+   PASS  Tests\Feature\Security\PersonalTaskOwnerGateTest
+  ✓ fremder kann aufgabe nicht loeschen                                  0.04s  
+  ✓ ersteller darf                                                       0.04s  
+  ✓ admin bypass                                                         0.04s  
+
+   PASS  Tests\Feature\Security\ProductPermissionGateTest
+  ✓ ohne product grant kein katalog zugriff                              0.04s  
+  ✓ mit product delete grant durchgelassen                               0.16s  
+  ✓ admin bypass                                                         0.18s  
+
+   PASS  Tests\Feature\Security\TicketFinancePermissionGateTest
+  ✓ ohne grant geblockt                                                  0.03s  
+  ✓ mit problem grant durch                                              0.04s  
+  ✓ admin bypass                                                         0.04s  
+
+   PASS  Tests\Feature\Security\UngatedWriteRoutesAuthTest
+  ✓ interne routen sind jetzt hinter auth                                0.03s  
+  ✓ kiosk und webhook bleiben oeffentlich                                0.03s  
+  ✓ eingeloggt kein login redirect                                       0.16s  
+
+   PASS  Tests\Feature\Security\UpdatePasswordGateTest
+  ✓ nicht admin kann fremdes passwort nicht setzen                       0.04s  
+  ✓ admin darf passwort setzen                                           0.05s  
+
+   PASS  Tests\Feature\Spec\SpecCommitTest
+  ✓ commit schreibt volle herkunftskette                                 0.04s  
+  ✓ idempotenz zweiter commit skippt                                     0.04s  
+  ✓ update felddiff                                                      0.06s  
+  ✓ downgrade schutz ohne flag bestand unberuehrt                        0.04s  
+  ✓ downgrade mit flag statuswechsel                                     0.05s  
+  ✓ batch rueckbau isoliert                                              0.06s  
+  ✓ rollback lehnt update batch ab                                       0.04s  
+  ✓ ablehnung schreibt nichts                                            0.03s  
+  ✓ command commit und rollback e2e                                      0.05s  
+
+   PASS  Tests\Feature\Spec\SpecImportTest
+  ✓ valide wp keine fehler                                               0.03s  
+  ✓ valide pv keine fehler                                               0.03s  
+  ✓ v5 identitaet modell fehlt                                           0.03s  
+  ✓ v2 heizleistung in watt statt kw abgelehnt                           0.03s  
+  ✓ v6 unbekanntes feld abgelehnt                                        0.03s  
+  ✓ v1 betriebspunkt nur paarweise                                       0.03s  
+  ✓ v4 kurve semantik pflicht bei spalten                                0.03s  
+  ✓ v7 datenblatt referenz pflicht                                       0.03s  
+  ✓ v7 verifikations status ungueltig                                    0.03s  
+  ✓ pflicht alternativ ohne stuetzpunkte und kurve                       0.03s  
+  ✓ dryrun dedup geskippt                                                0.03s  
+  ✓ command dry run kein write                                           0.03s  
+  ✓ command abgelehnt gibt exit 1                                        0.03s  
+
+   PASS  Tests\Feature\Styleguide\HausplanerInselTest
+  ✓ die seite laedt die stilschicht der insel                            0.07s  
+  ✓ jede benutzte insel klasse hat eine regel in quelle und bau          0.02s  
+  ✓ die flaeche zeigt die benannten familien                             0.02s  
+  ✓ die drei zustaende des objektkopfs tragen ihre eigene beschriftung   0.03s  
+  ✓ symbol und pfeil bleiben mit ihrer klasse stehen                     0.03s  
+  ✓ der vermerk zur fehlenden farbe steht genau solange er stimmt        0.03s  
+  ✓ absolut liegende insel flaechen stehen in einer begrenzten buehne    0.03s  
+
+   PASS  Tests\Feature\Suppliers\IdsCapabilityServiceTest
+  ✓ k01 li anfrage traegt genau action li                                0.05s  
+  ✓ k02 sv anfrage traegt genau action sv                                0.03s  
+  ✓ k03 normbeispiele werden korrekt gelesen und abgelegt                0.04s  
+  ✓ kante01 html statt xml ergibt befund ohne throw                      0.04s  
+  ✓ kante02 404 ist abwesenheit kein fehler                              0.04s  
+  ✓ kante03 fehlerseite mit status 200                                   0.04s  
+  ✓ kante04 bom und latin1 werden gelesen                                0.04s  
+  ✓ kante05 fehlendes element laesst die anderen gelten                  0.04s  
+  ✓ kante06 nicht normkonforme werte werden nicht geraten                0.03s  
+  ✓ kante07 leere versionsliste ist gueltig                              0.03s  
+  ✓ kante08 unbekannte version wird aufgenommen und gekennzeichnet       0.03s  
+  ✓ kante09 timeout ergibt leeren befund und laesst status unveraendert  0.04s  
+  ✓ kante10 redirect auf login seite                                     0.04s  
+  ✓ kante11 uebergrosse antwort wird abgebrochen                         0.04s  
+  ✓ kante12 inaktive verbindung wird nicht angefragt                     0.04s  
+  ✓ kante13 fremder connector typ wird nicht angefragt                   0.04s  
+  ✓ kante14 parallele abfrage wird serialisiert                          4.87s  
+  ✓ kante15 zugangsdaten erscheinen nie im log                           0.05s  
+  ✓ k06 schalter aus verhaelt sich wie vorher                            0.04s  
+  ✓ verbindungspruefung fragt faehigkeiten vor dem suchtest ab           0.03s  
+
+   PASS  Tests\Feature\Suppliers\IdsMapperHookTest
+  ✓ 1 happy ids creates map and price                                    0.12s  
+  ✓ 2 oci channel maps too                                               0.04s  
+  ✓ 3 mapper throws import survives                                      0.05s  
+  ✓ 4 unknown connector type is noop                                     0.05s  
+  ✓ 5 product without brand skips and counts                             0.05s  
+
+   PASS  Tests\Feature\Suppliers\IdsMapperTest
+  ✓ a maps row field by field                                            0.04s  
+  ✓ b idempotent updates same row                                        0.04s  
+  ✓ c empty image url is null                                            0.03s  
+  ✓ d missing hersteller skips and counts                                0.03s  
+  ✓ e null product skips and counts                                      0.03s  
+  ✓ f stub mappers return null no side effects                           0.04s  
+  ✓ g decimal precision                                                  0.04s  
+
+   PASS  Tests\Feature\Suppliers\OmdClientTest
+  ✓ auth mode username                                                   0.04s  
+  ✓ auth mode customer number                                            0.04s  
+  ✓ auth mode combined tab byte exact                                    0.04s  
+  ✓ token is cached no second token request                              0.04s  
+  ✓ 401 forgets reauths and retries exactly once                         0.04s  
+  ✓ lookup by supplier pid                                               0.04s  
+  ✓ lookup by manufacturer data                                          0.04s  
+  ✓ lookup by gtin                                                       0.04s  
+  ✓ missing datapackage is null no throw                                 0.04s  
+  ✓ timeout and invalid json log failed                                  0.04s  
+  ✓ no credentials leak into logs                                        0.04s  
+
+   PASS  Tests\Feature\VideoCall\VideoCallTest
+  ✓ customer call without chatgroup creates call but no message          0.06s  
+  ✓ customer call with chatgroup writes message into that group          0.04s  
+  ✓ guest route without valid signature is forbidden                     0.06s  
+  ✓ guest route with valid signature renders                             0.04s  
+  ✓ routes abort when feature disabled                                   0.05s  
+  ✓ unauthenticated cannot create call                                   0.03s  
+  ✓ invite mail failure does not 500 and keeps sent at null              0.06s  
+  ✓ show view renders for authenticated user                             0.03s  
+  ✓ internal direct call writes message to peer chat                     0.05s  
+  ✓ internal group call writes message to group                          0.03s  
+  ✓ guest route for internal call is not found                           0.06s  
+
+   PASS  Tests\Feature\WaermepumpeKomplettloesungSeederTest
+  ✓ seeder bindet wp phasen an product id 2                              0.07s  
+  ✓ fehlende wp gruppe wirft klaren fehler                               0.04s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Hausplaner\UebernahmeKnopfTest > staleness kippt ni…   
+  Expected response status code [200] but received 422.
+Failed asserting that 422 is identical to 200.
+
+The following errors occurred during the last request:
+
+{
+    "message": "The selected schema version is invalid.",
+    "errors": {
+        "schema_version": [
+            "The selected schema version is invalid."
+        ]
+    }
+}
+
+  at tests/Feature/Hausplaner/UebernahmeKnopfTest.php:273
+    269▕         $geaendert = $this->zweiRaumSzene($alt);
+    270▕         $geaendert['nodes'][6] = $this->wall('mid', 6000, 0, 6000, 5000);
+    271▕         $this->actingAs($u)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
+    272▕             'base_revision' => 1, 'schema_version' => 2, 'scene' => $geaendert,
+  ➜ 273▕         ])->assertOk();
+    274▕ 
+    275▕         // **Ein Fund, den die alte Anzeige verdeckt hat:** `szene_revision` fuehrt hier die
+    276▕         // AKTUELLE Szenen-Revision (2), nicht die uebernommene (1). Der veraltet-Zweig des Blades
+    277▕         // zeigte gar keine Zahl, deshalb ist es nie aufgefallen. **Die Kopfleiste zeigt sie
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Hausplaner\UebernahmeKnopfTest > zweite uebernahme…    
+  Expected response status code [200] but received 422.
+Failed asserting that 422 is identical to 200.
+
+The following errors occurred during the last request:
+
+{
+    "message": "The selected schema version is invalid.",
+    "errors": {
+        "schema_version": [
+            "The selected schema version is invalid."
+        ]
+    }
+}
+
+  at tests/Feature/Hausplaner/UebernahmeKnopfTest.php:329
+    325▕         $geaendert = $this->zweiRaumSzene($alt);
+    326▕         $geaendert['nodes'][6] = $this->wall('mid', 6000, 0, 6000, 5000);
+    327▕         $this->actingAs($u)->putJson("/admin/hausplaner/objekt/{$alt}/dokument", [
+    328▕             'base_revision' => 1, 'schema_version' => 2, 'scene' => $geaendert,
+  ➜ 329▕         ])->assertOk();
+    330▕ 
+    331▕         $res = $this->actingAs($u)->post("/admin/hausplaner/objekt/{$alt}/uebernehmen");
+    332▕         $res->assertRedirect(route('hausplaner.objekt.seite', $alt));
+    333▕         $this->assertStringContainsString('Version 2', session('hausplaner_uebernahme')['text']);
+
+
+  Tests:    2 failed, 862 passed (3063 assertions)
+  Duration: 51.47s
+
