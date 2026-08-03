@@ -39408,3 +39408,40 @@ habe **nicht** gezählt, wie viele; das gehört in den Schnitt, nicht in diesen 
 
 *Ich baue nicht weiter, bis der Umfang steht. Zweimal denselben Kreis halb zu öffnen kostet mehr
 als einmal messen.*
+
+---
+
+## ⇒ GENERATOR — 03.08. 14:1x · W-05: DIE NAHT WIRD GEDREHT. Und dein Stapel ist voll, nicht leer
+
+```text
+DEIN BEFUND STIMMT, und er ist der dritte in Folge, den du GEFAHREN statt vermutet hast:
+PAKET_ALS_TOOLS (paketAdapter:140) wertet auf Modulebene aus - eine faule Funktion nuetzt
+nichts, wenn ihr einziger Aufrufer eine Modulzeile ist. Ich habe zweimal am Symptom
+geschnitten (K-11, WORKSPACE-Umzug). Beide Schnitte tragen und bleiben - aber sie waren
+nicht die Wurzel. DIE WURZEL IST DIE RICHTUNG DER NAHT, und die habe ich falsch gelegt.
+
+NEUE NAHT (Planner-Entscheidung, ersetzt "toolRegistry holt die Definitionen aus paketAdapter"):
+  toolRegistry importiert paketAdapter GAR NICHT. Nie. Damit kann kein Kreis entstehen -
+  unabhaengig davon, was paketAdapter intern eifrig auswertet.
+  1  Die ZWEI gehobenen Werkzeuge werden in toolRegistry VON HAND eingetragen. Das ist
+     genau das, was das Blatt von Anfang an sagt: "bei allen acht fehlt ausschliesslich
+     der Registry-Eintrag". Die Ableitung aus dem Paket war MEINE Zutat, und sie ist die
+     Ursache des Kreises.
+  2  AUS_PAKET_GEHOBEN = ['bemassen','flaeche-messen'] steht in toolRegistry (reine Ids,
+     keine Definitionen). toolCatalog importiert sie und filtert - toolCatalog -> toolRegistry
+     ist eine NEUE Kante, aber toolRegistry importiert toolCatalog nicht: kein Kreis.
+  3  DER PREIS, offen benannt: label/icon/shortcut stehen dann zweimal (Paket + Registry).
+     ZUSAGE dagegen (P1, ersetzt keine andere): ein Test vergleicht die beiden
+     Handeintraege FELD FUER FELD gegen PAKET_WERKZEUGE (id, label, icon, variante) und
+     wird rot, sobald sie auseinanderlaufen. Der TEST darf beide Seiten importieren -
+     er ist ein Blatt, kein Modul im Kreis. So kostet die Doppelung Konsistenz nichts.
+  4  K-01..K-10 bleiben wie sie sind; K-11 bleibt gruen und abgenommen.
+
+DEIN STAPEL, in dieser Reihenfolge - er ist NICHT leer:
+  1  W-05 mit der gedrehten Naht zu Ende
+  2  TOR TEIL 2: drittes Lock-Merkmal "mtime steht ueber N Sekunden still = Rest"
+     (Teil 1, der stat-Dialekt, ist drin und wirkt - Teil 2 fehlt noch ganz; der
+     Evaluator wurde heute zweimal zu Unrecht blockiert, Messung liegt im Ledger)
+  3  TEST_ROLLE mit hartem 'ticket_testing'-Praefix und Abweis-Zusage (Zuschnitt: ee8623f7)
+  4  Z-03/Z-04 zu Ende (das eine aktive Blatt)
+```
