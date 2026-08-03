@@ -6,7 +6,7 @@
 auftrag:
   id: W-05
   strang: hausplaner-3d
-  status: entwurf   # B8 - Planner-Blatt. GEGENLESER UMVERTEILT 03.08. 08:3x: Pruefer -> EVALUATOR. Gemessen, nicht geurteilt: der Pruefer hat NULL Voten im ganzen Ledger und seit 01.08. 23:00 keinen Commit; dieses Blatt sperrt N2, N3 und ueber B10 das Dach - die ganze Kette zum Geschoss. B8 verlangt eine ANDERE Rolle als den Schreiber, keine bestimmte; der Evaluator hat mit neun Voten heute frueh die Kapazitaet belegt. Die d1cecdcf-Zuordnung (Planner-Blatt -> Pruefer) gilt wieder, sobald der Pruefer ein Lebenszeichen setzt.
+  status: bereit   # Evaluator-Gegenlesung 03.08. (TRAEGT IM KERN, sperrende Auflage + zwei kleine): alle drei eingearbeitet 09:2x - K-03 scharfes Muster ", 101[),]" (6 echte statt 7 roher Treffer), Prosa auf SECHS+EINE korrigiert, K-08-Basis dynamisch statt 1641. K-10 vom Evaluator BESTAETIGT (Bilanz stimmt heute durch Zufall). Status vom Einarbeiter der sperrenden Auflage (B14-Randfall wie N1). Gegenlesen war Evaluator statt Pruefer - zu Ende gelesen nach angefangener Messung, dokumentiert.
   gegengelesen_von: evaluator   # umverteilt 03.08.; der Pruefer ist inzwischen wieder aktiv, ab dem naechsten Planner-Blatt gilt d1cecdcf
   gegengelesen_am: 2026-08-03
   befund: >
@@ -79,11 +79,11 @@ der Registry wäre danach **zweimal** da: einmal als Registry-Eintrag, einmal im
 Dubletten-Zusage geht rot, und zwar zu Recht.**
 
 ```text
-grep -rn ', 101' resources/planner/hausplaner/__tests__/*.ts | wc -l              -> 7
+grep -rnE ", 101[),]" resources/planner/hausplaner/__tests__/*.ts | wc -l               ->  6   (der 7. rohe Treffer ist die Ziffernfolge 1010 in einer Masskette)
 grep -rn '9 + EIGENE_WERKZEUGE' resources/planner/hausplaner/__tests__/*.ts       -> 4
 ```
 
-**Sieben Zusagen tragen die feste 101, vier die feste 9.** Ohne diese Scheibe zahlt jedes einzelne
+**SECHS Zusagen tragen die feste 101, EINE die reine 9** (die "vier" waren drei 79er-Endziffern — Evaluator-Befund, nachgemessen). **Sieben feste Stellen** zahlt jedes Werkzeug erneut — genau der Massenumbau, den W-05 verhindern soll.
 Werkzeug diese elf Stellen erneut — genau der Massenumbau, den W-05 verhindern soll.
 
 ## Die Entscheidung
@@ -192,9 +192,9 @@ kriterien:
     kritikalitaet: P1
     aussage: "Keine feste 101 mehr in den Zusagen - die Katalogzahl wird abgeleitet."
     pruefung:
-      befehl: "grep -rn ', 101' resources/planner/hausplaner/__tests__/ | wc -l"
+      befehl: "grep -rnE ', 101[),]' resources/planner/hausplaner/__tests__/ | wc -l"
       erwartet: "0"
-    ausgangswert: "7"
+    ausgangswert: "6 (SPERRENDE AUFLAGE des Evaluators eingearbeitet 03.08.: das rohe Muster ', 101' traf 7 - der siebte war die ZIFFERNFOLGE 1010 in der Masskette bemassung.test.ts:32, ausserhalb von scope.dateien und nie erreichbar. Das scharfe Muster trifft genau die 6 echten Katalogzahlen; nachgemessen)"
     gegenbeweis: |
       Bleibt eine feste 101 stehen, geht sie beim naechsten gehobenen Werkzeug rot - und der
       Hebel kostet dann wieder eine Zusagen-Reparatur je Werkzeug. Genau das soll W-05 beenden.
@@ -265,7 +265,7 @@ kriterien:
     pruefung:
       typ: gate
       schritte: "npm run test:hausplaner"
-      erwartet: "0 fail. Ausgangswert 1641/1641 (02.08. 09:20). Danach mehr oder gleich, nie weniger."
+      erwartet: "0 fail. Basis misst der Bauende VOR dem Zug an sauberem HEAD und benennt sie (Evaluator 03.08.: 1649/0 - die 1641 des ersten Schnitts war ueberholt, F-20-Lehre). Danach mehr oder gleich, nie weniger."
 
   - id: K-10
     typ: presence

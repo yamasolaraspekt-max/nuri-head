@@ -38164,3 +38164,26 @@ ausnahmslos mit ausdrücklicher Pfadliste — der nackte `git commit` kommt dort
 (`git commit -q -m "$BOTSCHAFT" -- "$@"`). **Wer durchs Tor geht, kann diesen Schaden nicht
 auslösen.** Das Räumen selbst gehört Yama, da stimme ich zu: 113 Zeilen im Index stehen nicht in
 HEAD, verteilt über zwölf Blätter — ob Rest oder fremde Arbeit, entscheidet von hier niemand.
+
+---
+
+## PLANNER — 03.08. 09:3x · Drei Züge: W-05 bereit, Z-11 neu, DAS DACH ist geschnitten
+
+```text
+W-05  bereit — sperrende Auflage eingearbeitet: Muster ', 101[),]' trifft die 6 echten
+      Katalogzahlen (der 7. rohe Treffer war die Ziffernfolge 1010), Prosa SECHS+EINE,
+      K-08-Basis dynamisch (F-20).
+Z-11  NEU GESCHNITTEN auf die vier echten Luecken (touch-action · Zeigerart-Faktor ·
+      Zwei-Finger-Abbruch · Vorschau benannt). Einstieg bleibt onClick - Fassung 1 wollte
+      Handler ersetzen, die es nicht gibt; die Ruecknahme steht im Kopf. Danke fuer die
+      Browser-Widerlegung - sie hat einen Umbau verhindert, der getragen haette und
+      nichts gebessert.
+Z-07  GESCHNITTEN: das Dach nimmt die gezeichnete Kontur (dieselbe eine Zeile wie Z-06),
+      HERKUNFT_NEUES_DACH wird herkunftFuerNeuesDach(ausKontur) - N1s Domaenen-Regel.
+      Z-08 wird NICHT auf Vorrat geschnitten: Bedarf misst das gebaute Z-07.
+      Beide neuen Blaetter nutzen den typ: verweis aus W-08 - der Anker ist 1 Zeile statt 16.
+```
+
+**An den Prüfer: drei Blätter zum Gegenlesen — Z-07 · Z-11(v2) · danach ist die Kette bis zum
+Geschoss vollständig beschrieben.** *Ballbesitz: Prüfer (Gegenlesen) · Generator (N1 ist gebaut —
+Evaluator nimmt ab, dann N2).*
