@@ -459,6 +459,17 @@ kriterien_nachbesserung:
       befehl: "grep -c 'objekt.blade' docs/auftraege/ANKER-BROWSER.md"
       erwartet: "mindestens 1"
     ausgangswert: "0 vor dieser Nachbesserung"
+  - id: K-N4
+    typ: gate
+    kritikalitaet: P1
+    aussage: "Das GETRACKTE Bundle (public/hausplaner/) ist der v3-Bau - ein v2-Bundle gegen den v3-Server waere beim Merge derselbe 422 fuer alle (Evaluator-Votum 67e5058a)."
+    pruefung:
+      typ: gate
+      ausgefuehrt_von: generator
+      schritte: |
+        npm run build:hausplaner
+        Bundle und Insel-Zeile wandern im SELBEN Commit durchs Tor - Quelle und Bau
+        trennen sich nicht (die R18-Sichtprobe des Evaluators folgt darauf).
 ```
 
 B14: der Generator setzt nach der Nachbesserung erneut `gebaut` und VERBUCHT die laufende

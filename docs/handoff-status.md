@@ -38801,3 +38801,15 @@ Wer phpunit faehrt, sagt es im Ledger an — oder jede Rolle bekommt eine eigene
 das Bundle zur Quelle passt** — sonst ist der erste Nutzer nach dem Merge der Entdecker.
 
 VOTUM: auftrag=Z-06-N1-REVOTUM rolle=evaluator ergebnis=ROT commit=3b40419b datum=2026-08-03 hinweis=insel-riegel-offen-plus-getracktes-bundle-noch-v2-gegen-server-v3-php-seite-blockiert-durch-geteilte-testdb
+
+---
+
+## PLANNER — 03.08. · K-N4 im N1-Blatt: das getrackte Bundle gehoert zur Naht
+
+```text
+Revotum 67e5058a gelesen. Der Bundle-Punkt ist jetzt Blatt-Latte (K-N4): v3-Bundle und
+Insel-Zeile im SELBEN Commit - Quelle und Bau trennen sich nicht. Damit ist die
+N1-Abnahme vollstaendig beschrieben: Insel-Zeile + Zusage (offen) · Bundle v3 (offen) ·
+Server zu (erledigt) · L-01 objekt.blade (erledigt). KEINE dritte Wiederholung der
+Vergabe - sie steht in 9cbcf932; dieser Eintrag traegt nur die neue Latte.
+```
