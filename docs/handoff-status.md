@@ -39805,3 +39805,53 @@ ZUSAGEN (P1, beide noetig - eine allein ist eine halbe Regel):
       NICHT geraeumt, das Tor blockiert. Die Kruecke darf nicht zur Hintertuer werden.
 BAU: Generator, im Anschluss an TEST_ROLLE. Klein, aber es sichert alle anderen Zuege ab.
 ```
+
+---
+
+## ⇒ PLANNER — **RÜCKSTAND ABGEARBEITET: Z-07, Z-11(v2) und Z-06-N2 sind gegengelesen** (Prüfer, 03.08. 22:5x)
+
+Auf Yamas Wort („extrem in Rückstand") die drei wartenden B8-Gegenlesungen geliefert, jede mit
+selbst nachgemessenen Ausgangswerten an HEAD `14079a93`:
+
+**Z-07 (Dach aus Kontur) — BAUBAR, kein sperrender Einwand.** K-01 0 ✓ · K-02 1 (`freigabe.ts:97`) ✓
+· renderers/ 0 `gebaeudeUmriss` (Ausschluss bestätigt) ✓ · Vorbild-68 in `decke.test.ts` ✓.
+Notiz ohne Sperrwirkung: Partner-Wert Decke ist 1→2 gedriftet (der Bauende misst seine Basis
+selbst, F-20).
+
+**Z-11 v2 (Touch) — BAUBAR, KEIN Einwand.** Alle vier Ausgangswerte EXAKT getroffen (0/18/0/1),
+alle Rücknahme-Behauptungen am Code bestätigt (Signatur `fangKern.ts:230` ohne Zeigerart, `onClick`
+`Buehne.tsx:105`, onMouseDown/Up 0, zoom=0-Wächter gibt `fangPx` ohne Division). Die zweite Fassung
+ist das Gegenteil der ersten: jede Prämisse gemessen.
+
+**Z-06-N2 (Kennzeichnung) — BAUBAR mit EINEM sperrenden Einwand (P2), N1-Einwand-1-Klasse:**
+K-01/population messen `grep -ro 'freigabe' app/` mit Ausgangswert 0 — **heute schon 2** (Import
+:28 + Kommentar :981 aus dem N1-Bau). K-01 ist grün vor dem Bau. **Ersatz gemessen:** `freigabe`
+in `FussUndUeberlagerungen.tsx` = 0 und `szene.ts` = 0 — auf die Zieldateien einschränken. Alles
+andere hält (konturHinweis :101, css:532, `FARBEN.warnung` :104, K-02-Basis 118/0 heute gefahren).
+
+**Ballbesitz: Planner** — N2-Einwand schließen (eine Zeile), Status aller drei stellen (B14).
+Offen bei mir danach: `18-a1-vorschlags-sichtflaeche.md` (produktdaten, `gegengelesen_von: null`) —
+nächster Takt.
+
+---
+
+## ⇒ PRÜFER — 03.08. 22:5x · DU BIST DER ENGPASS ZUM GESCHOSS. Drei Blaetter, Reihenfolge vorgegeben
+
+```text
+Danke fuer PB-055 (a) - das Register ist nachgezogen. ABER: dein eigener Rueckstand ist
+ab jetzt nachrangig. Gemessen: du hast heute 2 Commits, die anderen drei Rollen 117.
+Nicht als Vorwurf - als Lagebild: an dir haengt das letzte Bauteil des Geschosses.
+
+DREI BLAETTER, in DIESER Reihenfolge (B8, Planner-Blaetter gehen an dich):
+  1  Z-07 DACH   das letzte fehlende Bauteil. Wenn es gebaut und abgenommen ist, steht
+                 Yamas Geschoss: Waende, Zwischendecke, Dach. Alles andere ist Zugabe.
+  2  N2          Kennzeichnung - seit heute entsperrt (N1 ist GRUEN abgenommen).
+  3  Z-11        Touch und Stift.
+Alle drei tragen den korrigierten L-01-Anker (Persistenz-Flaeche objekt.blade) - die
+N1-Lehre ist eingearbeitet, du liest sie nicht mehr gegen die falsche Flaeche.
+
+WENN du eines nicht binnen einer Stunde aufnimmst, gebe ich es dem Evaluator zum
+Gegenlesen (er hat W-05 und Z-06-N1 gegengelesen, die Rollentrennung bleibt gewahrt -
+er baut keines davon). Das ist keine Drohung, das ist die Vertretungsregel, die wir
+heute schon zweimal gebraucht haben. Sag Bescheid, wenn du dran bist - dann warte ich.
+```
