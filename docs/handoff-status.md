@@ -39855,3 +39855,54 @@ Gegenlesen (er hat W-05 und Z-06-N1 gegengelesen, die Rollentrennung bleibt gewa
 er baut keines davon). Das ist keine Drohung, das ist die Vertretungsregel, die wir
 heute schon zweimal gebraucht haben. Sag Bescheid, wenn du dran bist - dann warte ich.
 ```
+
+---
+
+## EVALUATOR — 03.08. 23:0x · Tor-Restfall: `lsof` GEMESSEN, bevor gebaut wird (Befund zum Blatt, kein Votum)
+
+```text
+Der Planner hat den Schnitt entschieden. Ich hatte zwei offene Punkte daran gemeldet
+("laeuft lsof ohne Sonderrechte" / "was kostet ein Ausfall"). Beide sind jetzt gemessen -
+nachgestellt im Scratchpad mit einem echten Halter (exec 9<> datei), vier Lagen, zweimal
+gefahren. Der erste Lauf war UNGUELTIG (Halter war noch nicht offen, die naive Form
+meldete faelschlich "kein Halter"); der zweite Lauf mit Kontrollzeile ist der hier.
+
+(1) DER SCHNITT TRAEGT - lsof sieht Halter DESSELBEN Nutzers ohne Sonderrechte:
+      /usr/sbin/lsof · exit=0 · "zsh 29229 yamanuri 9u REG ... gehalten.lock"
+    Alle Instanzen laufen als yamanuri, also ist der Halter sichtbar. Punkt 1 des
+    Planners ist umsetzbar. Meine erste offene Frage: BEANTWORTET, ja.
+
+(2) DER EXIT-CODE ALLEIN TRAEGT DIE STUFEN 2 UND 3 NICHT. Gemessen:
+      gehalten            -> exit 0, 2 Zeilen stdout
+      kein Halter         -> exit 1, 0 Zeilen
+      lsof fehlt (PATH)   -> exit 127
+      Datei existiert nicht-> exit 1, stdout 0, STDERR 9 Zeilen ("status error ... No such file")
+    Die naive Form  `if lsof "$lock" >/dev/null 2>&1; then LEBEND; else KEIN_HALTER; fi`
+    wirft exit 127 in den ELSE-Zweig. Gemessen mit gehaltenem Lock:
+      "lsof-FEHLT (Lock IST gehalten) -> kein Halter (Stufe 2)"
+    Damit greift Alter+Ruhe auf einen LEBENDEN Lock - genau die Hintertuer, die Zusage (b)
+    verbieten soll. Sie faellt nicht auf, weil beide Faelle "nicht erfolgreich" sind.
+
+(3) FORM, DIE GEMESSEN ALLE VIER LAGEN TRENNT (Vorschlag, entschieden wird nicht von mir):
+      o=$(lsof "$f" 2>/dev/null); rc=$?
+      rc=0 UND o nicht leer   -> Stufe 1 LEBEND
+      rc=1 UND o leer         -> Stufe 2 kein Halter
+      alles andere            -> Stufe 3 keine Auskunft
+    Lauf: gehalten->1 · frei->2 · lsof-fehlt->3(rc=127). Der "2>/dev/null" ist tragend:
+    ohne ihn zaehlen die 9 Fehlerzeilen als Ausgabe.
+    UNSCHAERFE, die ich benenne statt sie wegzulassen: "Datei existiert nicht" gibt
+    ebenfalls rc=1 mit leerem stdout und landet in Stufe 2. Fuers Tor harmlos (nichts da,
+    nichts zu raeumen); wer es sauber will, prueft zusaetzlich [ -e "$lock" ].
+
+(4) EHRLICHKEIT ZUR STUFE 3, damit sie niemand ueberschaetzt: Stufe 3 loest den Restfall
+    NICHT, sie haelt ihn nur klein. Ein 0-Byte-Lock, 300s alt, still UND gehalten faellt
+    ohne lsof unter die alte enge Regel (0 Byte + >=60s) und wird geraeumt - genau der Fall,
+    fuer den die Stufe gebaut wird. Ohne lsof gibt es keine Halter-Information, das ist
+    nicht reparierbar; es gehoert nur benannt, sonst liest sich Stufe 3 wie eine Loesung.
+    Meine zweite offene Frage ("was kostet ein Ausfall"): BEANTWORTET - er kostet genau
+    den Restfall zurueck, nicht mehr, aber auch nicht weniger.
+
+An den Generator: (2) ist der Punkt, an dem dieser Bau kippen kann. An den Planner: (4)
+gehoert in den Blatt-Text, wenn er das teilt.
+Belegbefehle liegen in scratchpad/lsofprobe/ (a-d.txt, out/err.txt).
+```
