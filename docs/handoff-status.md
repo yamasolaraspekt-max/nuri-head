@@ -38998,3 +38998,92 @@ BALL       Evaluator: K-N2 komplett fahren (3 Tests) + Insel-Latte -> Revotum.
            Danach entsperre ich N2. Generator: Tor-Paket bleibt deine naechste
            Geschoss-Pflicht, danach zurueck zu AUF-P1-S4.
 ```
+
+---
+
+## ⇒ EVALUATOR (+ alle) — **K-N2 GEMESSEN: 8/8 GRÜN. Und ein neuer Befund: die Test-DB ist ein geteilter Schreibtisch** (Prüfer, 03.08. 13:5x)
+
+**Messung für das N1-Revotum** (der Planner hat kein PHP, ich habe gemessen — das VOTUM bleibt beim
+Evaluator):
+
+```
+php artisan test --filter=UebernahmeKnopfTest        (phpunit erzwingt ticket_testing)
+  -> Tests: 8 passed (67 assertions)
+Bundle: schemaVersion:3 -> 3 Treffer, getrackt UND Baum==HEAD (0 diff-Zeilen)
+Fixture: Z.78 schemaVersion 3 · putJson Z.272+Z.328 schema_version 3 · Z.211 (v1) unangetastet
+```
+
+**Damit sind alle drei ROT-Gründe nach meiner Messung baulich zu:** Riegel (vom Evaluator selbst
+bestätigt) · Bundle v3 getrackt · Übernahme-Test grün.
+
+### PB-056 · P2 · **Zwei Rollen fahren phpunit gleichzeitig gegen DIESELBE ticket_testing — und schießen sich gegenseitig rot**
+
+Mein erster Lauf um 13:4x: **8 failed, 0 assertions** — `Table 'ticket_testing.migrations' doesn't
+exist`. Gleichzeitig gemessen:
+
+```
+ps -> PID 74214: php ./vendor/bin/phpunit tests/Feature/Hausplaner/HausplanerSpeichernNutzlastTest.php …
+      (ANDERE Sitzung, lief parallel)
+Tabellenzahl ticket_testing im 5-s-Abstand: 397 -> 451   (migrate:fresh eines Fremdlaufs mittendrin)
+Nach Ende des Fremdlaufs derselbe Test: 8 passed / 67 assertions
+```
+
+`RefreshDatabase` macht `migrate:fresh` — **wer parallel läuft, reißt dem anderen die Tabellen unterm
+Test weg.** Jedes ROT aus einem Parallel-Fenster ist wertlos (F-04-Klasse: unechte Messung), und
+vermutlich war auch der „Test-DB-Blocker" von 13:32 (`3c827689`) genau diese Kollision.
+**erledigt wenn:** zwei gleichzeitige `php artisan test`-Läufe sich nachweislich nicht mehr
+beeinflussen (Lock/Queue ODER je Läufer eigene DB `ticket_testing_<n>`). **Zuschnitt: Planner.**
+
+---
+
+## EVALUATOR — 03.08. · Alle drei ROT-Gruende im CODE geschlossen. Die Abnahme haengt jetzt NUR noch an der Test-DB
+
+```text
+1  Insel-Riegel     GESCHLOSSEN & GEMESSEN   beide Mutationen fallen (1666/1), Basis 1667/0
+2  Bundle v2        GESCHLOSSEN & GEMESSEN   Artefakt-Commit 789de20f traegt schemaVersion:3
+3  Uebernahme-Test  im CODE geschlossen      Z. 272 und 328 senden jetzt 3 (vorher 2)
+                    NICHT GEMESSEN           die Test-DB laesst es nicht zu
+```
+*Die zwei verbliebenen `schema_version => 2` im Repo liegen in Form-Tests
+(ChecklistRenderV1V2, Smartrouting) — das ist `ProductFormula.schema_version`, ein anderes
+Schema. Gegengeprueft, nicht betroffen.*
+
+### Der Blocker ist strukturell, nicht mehr fachlich
+
+**Drei Laeufe, drei Male kein Ergebnis — und jedes Mal eine andere fehlende Tabelle:**
+
+```text
+Lauf 1  15 Errors   fremder Lauf lief parallel (php artisan test --filter=UebernahmeKnopfTest)
+Lauf 2  11 Errors   "Table ticket_testing.lead_alternative_adds doesn't exist"
+frueher 23 Errors   "Table ticket_testing.customer_notes doesn't exist"
+```
+
+**Die Ursache ist immer dieselbe:** `migrations` ist mit den wirklichen Tabellen nicht mehr
+einig. Laravel haelt eine create-Migration fuer erledigt, ueberspringt sie, und die spaetere
+`alter table` findet nichts. *Ein Lauf mit 11 Errors und 78 Zusicherungen ist kein rotes
+Ergebnis — er ist gar keins.*
+
+**Mein eigener Fehlgriff dabei, benannt:** ich habe vor Lauf 1 auf Parallellaeufe geprueft,
+den Treffer aber nur PROTOKOLLIERT statt den Lauf abzubrechen. *Eine Pruefung, die nicht
+sperrt, ist eine Notiz.* Lauf 2 lief mit echter Sperre — und starb an der DB, nicht am Nachbarn.
+
+```text
+AN YAMA — zwei Dinge, und beide sind deine:
+  (a) DB_DATABASE=ticket_testing php artisan migrate:fresh --force
+      (mir verweigert, zu Recht — destruktiv. Vorher belegt: users 0 · leads 0 ·
+       lead_alternative_adds 0, reine Testflaeche.)
+  (b) Die Entscheidung dahinter: EINE geteilte Test-DB fuer mehrere Rollen traegt nicht.
+      Zwei Wege — je Rolle eine eigene DB (ticket_testing_evaluator, _generator, _planner),
+      oder eine angesagte Belegung im Ledger. Heute hat es DREI Messungen gekostet.
+```
+
+### Votum, so weit es traegt
+
+**INSEL-SEITE: GRUEN** — Riegel und Bundle selbst gemessen, Suite 1667/0, tsc 0.
+**SERVER-SEITE (K-N2): NICHT ABNEHMBAR** — der Code stimmt nachweislich, die Wirkung ist
+ungemessen. *Ich schreibe kein Gruen auf einen Code-Blick; K-N2 verlangt einen Lauf.*
+
+**Z-06-N1 bleibt damit formal ROT — aber aus einem Werkzeugzustand, nicht aus einem Baumangel.**
+Sobald die Test-DB steht, ist es ein Lauf von zwei Minuten.
+
+VOTUM: auftrag=Z-06-N1-STAND rolle=evaluator ergebnis=insel-gruen-server-ungemessen commit=789de20f datum=2026-08-03 hinweis=alle-drei-gruende-im-code-zu-abnahme-haengt-an-zerstoerter-testdb-migrate-fresh-bei-yama
