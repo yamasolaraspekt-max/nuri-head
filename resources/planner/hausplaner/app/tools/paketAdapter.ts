@@ -31,10 +31,30 @@ import { bereichVonThema } from '../dashboard/arbeitsbereiche';
 import { vertrag } from './werkzeugVertrag';
 import { regelnFuer } from './vorbedingungen';
 
-/** Kürzel, die die bestehende Registry bereits belegt (klein geschrieben). */
-const REGISTRY_KUERZEL = new Set(
-  TOOL_DEFINITIONS.map((t) => t.shortcut?.toLowerCase()).filter((s): s is string => Boolean(s)),
-);
+/**
+ * Kürzel, die die bestehende Registry bereits belegt (klein geschrieben) — **FAUL berechnet.**
+ *
+ * Bis W-05 stand hier ein `new Set(...)` auf Modulebene. Das war solange harmlos, wie der Import
+ * nur in eine Richtung lief. **Sobald `toolRegistry` seinerseits die gehobenen Paket-Werkzeuge
+ * von hier holt, ist der Kreis geschlossen** — und ein Modul-Kreis wird nicht bunt, sondern still:
+ * die zuerst geladene Seite sieht die andere als `undefined`.
+ *
+ * *Gefahren, nicht vermutet (Generator, 03.08.): Probe-Import gesetzt, Modul geladen →
+ * `ReferenceError: Cannot access 'WORKSPACE_IMPORT' before initialization`.*
+ *
+ * Faul heißt: erst beim ERSTEN Aufruf, und dann einmal gemerkt. Zu diesem Zeitpunkt sind beide
+ * Module fertig ausgewertet. **Es filtert nichts und ändert das Paket nicht** — der Ausschluss
+ * dieses Blattes bleibt unberührt (Planner-Nachtrag zu K-11).
+ */
+let registryKuerzelGemerkt: Set<string> | null = null;
+
+function registryKuerzel(): Set<string> {
+  registryKuerzelGemerkt ??= new Set(
+    TOOL_DEFINITIONS.map((t) => t.shortcut?.toLowerCase()).filter((s): s is string => Boolean(s)),
+  );
+
+  return registryKuerzelGemerkt;
+}
 
 /** Kürzel, die im Paket selbst mehrfach vorkommen. */
 const PAKET_DOPPELT = ((): Set<string> => {
@@ -51,7 +71,7 @@ const PAKET_DOPPELT = ((): Set<string> => {
 export function kuerzelFrei(shortcut: string | undefined): boolean {
   if (!shortcut) return false;
   const k = shortcut.toLowerCase();
-  return !REGISTRY_KUERZEL.has(k) && !PAKET_DOPPELT.has(k);
+  return !registryKuerzel().has(k) && !PAKET_DOPPELT.has(k);
 }
 
 /**
@@ -131,7 +151,7 @@ export function verworfeneKuerzel(): Array<{ id: string; shortcut: string; grund
     raus.push({
       id: w.id,
       shortcut: w.shortcut,
-      grund: REGISTRY_KUERZEL.has(k)
+      grund: registryKuerzel().has(k)
         ? 'bereits von einem Registry-Werkzeug belegt'
         : 'im Paket doppelt vergeben',
     });
