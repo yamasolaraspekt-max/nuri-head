@@ -270,32 +270,80 @@ class IdsController extends Controller
         }
         // ----------------------------------------------------
 
-        $product = Product::firstOrCreate(
-            [
-                'article_no' => $item->article_no,
-            ],
-            [
-                'ean'               => $item->ean ?? null,
-                'product'           => \Illuminate\Support\Str::limit($productName, 255),
-                'model'             => null,
-                'category'          => 'Produkt',
-                'roof_type'         => 'none',
-                'color'             => null,
+        $neueFelder = [
+            'ean'               => $item->ean ?? null,
+            'product'           => \Illuminate\Support\Str::limit($productName, 255),
+            'model'             => null,
+            'category'          => 'Produkt',
+            'roof_type'         => 'none',
+            'color'             => null,
 
-                // price_unit: free text for display
-                'price_unit'        => $measureText,
+            // price_unit: free text for display
+            'price_unit'        => $measureText,
 
-                'package_unit'      => null,
-                'short_description' => $item->long_text ?? $item->short_text,
-                'status'            => 'Published',
-                'brand_id'          => $validated['brand_id'],
+            'package_unit'      => null,
+            'short_description' => $item->long_text ?? $item->short_text,
+            'status'            => 'Published',
+            'brand_id'          => $validated['brand_id'],
 
-                // FK IDs (int) for groups + measure
-                'article_group' => $validated['article_group_id'],
-                'sub_article'   => $validated['sub_article_group_id'] ?? null,
-                'measure_unit'  => $measureId, 
-            ]
-        );
+            // FK IDs (int) for groups + measure
+            'article_group' => $validated['article_group_id'],
+            'sub_article'   => $validated['sub_article_group_id'] ?? null,
+            'measure_unit'  => $measureId,
+        ];
+
+        if (config('produkt.identitaet.aktiv')) {
+            // AUF-P1-S4 §8 Zeile 4 (wie Zeile 3): resolve() mit supplierArticleNo —
+            // die IDS-Nummer ist eine Lieferantennummer, keine Herstellernummer.
+            $dienst = app(ProductIdentityService::class);
+
+            $identitaet = new ProductIdentity(
+                gtin: $item->ean ?? null,
+                brandId: (int) $validated['brand_id'],
+                supplierArticleNo: $item->article_no,
+                distributorId: $distributor->id,
+                name: $productName,
+                channel: 'ids:gconline',
+            );
+
+            $match = $dienst->resolve($identitaet);
+
+            if ($match->ergebnis === IdentityMatch::KONFLIKT) {
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Identitätskonflikt — nicht angelegt: ' . $match->begruendung,
+                    ], 409);
+                }
+
+                return redirect()->route('ids.search.form')
+                    ->with('error', 'Identitätskonflikt — nicht angelegt: ' . $match->begruendung);
+            }
+
+            if ($match->ergebnis === IdentityMatch::VORSCHLAG) {
+                $dienst->vorschlagSpeichern($identitaet, $match);
+
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Möglicherweise vorhandener Artikel (#' . $match->product->id
+                            . ') — Vorschlag zur Prüfung angelegt, nicht automatisch übernommen.',
+                        'product_id' => $match->product->id,
+                    ], 409);
+                }
+
+                return redirect()->route('ids.search.form')
+                    ->with('error', 'Möglicherweise vorhandener Artikel — Vorschlag zur Prüfung angelegt.');
+            }
+
+            $product = $match->product ?? $dienst->createFrom($identitaet, $neueFelder);
+        } else {
+            // Alt-Verhalten, byte-gleich (Kante 15): firstOrCreate auf article_no.
+            $product = Product::where('article_no', $item->article_no)->first()
+                ?: app(ProductIdentityService::class)->createLegacy(
+                    ['article_no' => $item->article_no] + $neueFelder
+                );
+        }
 
         // If product existed: update metadata
         $product->fill([
