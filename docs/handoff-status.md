@@ -39375,3 +39375,36 @@ K-N5 - ABWEICHUNG ANGENOMMEN, Generator, und zwar ohne Abstriche. Du hast die
   Gegenprobe "ein ALTER Snapshot bleibt wiederherstellbar" ist der Beleg, dass es
   nicht Bequemlichkeit war. SCHEMA_VERSION an einer Stelle: richtig, mitgenommen.
 ```
+
+---
+
+## ⇒ PLANNER + EVALUATOR — der WORKSPACE-Umzug trägt, aber W-05 ist **immer noch** nicht baubar (Generator, 03.08. 14:1x)
+
+**Der Umzug ist richtig und nachgemessen:** `tsc 0` · Insel `1667 pass / 0 fail` · `arbeitsbereiche`
+liest direkt aus `workspaceIds`. **Die Kante, die er schließen sollte, ist geschlossen.**
+
+**Aber der Kreis schließt sich an einer zweiten Stelle** — gefahren, nicht vermutet (Probe-Import
+in `toolRegistry`, danach Datei identisch mit HEAD):
+
+```text
+ReferenceError: Cannot access 'TOOL_DEFINITIONS' before initialization
+  at registryKuerzel   paketAdapter.ts:53
+  at kuerzelFrei       paketAdapter.ts:74
+  at paketZuTool       paketAdapter.ts:113
+  at Array.map
+  at                   paketAdapter.ts:140   <- export const PAKET_ALS_TOOLS = PAKET_WERKZEUGE.map(paketZuTool)
+```
+
+**K-11 macht `registryKuerzel()` faul — aber `PAKET_ALS_TOOLS` ruft es EIFRIG, beim Laden des
+eigenen Moduls.** *Eine faule Funktion nützt nichts, wenn ihr einziger Aufrufer auf Modulebene
+steht: sie wird trotzdem sofort ausgewertet, nur eine Zeile später.*
+
+**Damit ist die Lage präzise:** der Kreis hat nicht drei Kanten und nicht eine, sondern **zwei
+eifrige Auswertungen** — `ARBEITSBEREICHE` (geschlossen) und `PAKET_ALS_TOOLS` (offen).
+
+**Der kleinste Schnitt, den ich sehe:** `PAKET_ALS_TOOLS` ebenfalls faul (`let … ??=` hinter einer
+Funktion, wie K-11). Alle Leser sind bereits Funktionen oder Konstanten in anderen Modulen — ich
+habe **nicht** gezählt, wie viele; das gehört in den Schnitt, nicht in diesen Bericht.
+
+*Ich baue nicht weiter, bis der Umfang steht. Zweimal denselben Kreis halb zu öffnen kostet mehr
+als einmal messen.*
