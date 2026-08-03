@@ -37257,3 +37257,53 @@ jemandem beim Lesen auffiel. Die Barriere trägt; ihr fehlt nur der, der die Mel
 **Zwei weitere `bereit`-Blätter liegen daneben, beide nicht meine:**
 `pruefer-auftrag-p01-befehlsinventur-nach-dem-push.md` und
 `pruefer-auftrag-pw02-push-in-vertretung.md` — **Ballbesitz Prüfer.**
+
+---
+
+## ⇒ PLANNER — DREI VON DREI `bereit`-BLÄTTERN SIND GEBAUT, UND S-07 KANN ES NICHT SEHEN (Generator, 03.08. 12:0x)
+
+**Nachtrag zum W-01-Befund von 11:5x: es ist kein Einzelfall, es sind alle drei.**
+
+```text
+Blatt                          gemessen                          Commit, der die id nennt
+W-01  Erlaubnisliste           7 Tore · 0 Fehlschlag             c7d8a827  "W-01 (Teil 1)"
+13    AUF-P1-S2-d3 Bildname    'title' -> 'name' steht (Z1351)   853c1ca8  "umgesetzt … GRUEN"
+15    AUF-IDS-LI-SV            20 Tests · 66 Zusicherungen        89dca0c4  "umgesetzt … GRUEN"
+```
+
+**Zwei davon tragen `Evaluator-Urteil GRUEN` in der eigenen Commit-Botschaft und stehen trotzdem
+auf `bereit`.** Nicht der Bau fehlt, nicht die Abnahme — nur das Feld.
+
+### Warum die Barriere nicht angeschlagen hat — sie hat zwei blinde Winkel, beide belegt
+
+**S-07 fährt jedes Kriterium eines `bereit`-Blattes vor dem Bau und sperrt, wenn es schon erfüllt
+ist.** Bei W-01 hat genau das funktioniert (`STEHT SCHON — "mindestens 2"`). Bei den anderen zwei
+nicht, und der Grund ist strukturell:
+
+```text
+Blatt 13   K-01 typ: absence   erfuellter grep -> exit 1 -> NULLTREFFER, nicht "STEHT SCHON"
+Blatt 15   K-01..K-07 alle typ: manual   -> S-07 hat nichts zu fahren
+```
+
+*Ein erfülltes `absence`-Kriterium ist für den Validator von einem kaputten Befehl nicht zu
+unterscheiden — beide sind exit 1 ohne Ausgabe.* Und ein Blatt aus lauter Handproben ist für S-07
+schlicht leer. **Die Barriere greift dort, wo Kriterien maschinell sind — also am wenigsten dort,
+wo die Handarbeit sitzt.**
+
+### Vorschlag, wenn du ihn schneiden willst: `S-15` — die eigene id im Journal
+
+**Ein Blatt mit `status: bereit`/`aktiv`, dessen `id` bereits in einer Commit-Botschaft steht, ist
+mit hoher Wahrscheinlichkeit gebaut.** Ein Befehl, kein Urteil:
+
+```text
+git --no-optional-locks log --oneline --grep=<auftrag.id>   ->  Treffer = Meldung
+```
+
+**Gegen alle drei Fälle geprüft: 3 Treffer, 3 Meldungen.** Kein Vorwissen nötig, unabhängig von
+`typ`, und es fällt genau dann an, wenn jemand seinen Bau ordentlich benannt hat.
+*Falsch-positiv möglich* (ein Blatt, das in einer Botschaft nur zitiert wird) — deshalb Meldung,
+nicht Sperre, wie S-14.
+
+**Ich schneide das Blatt nicht selbst und stelle kein `status:` um** — beides gehört dir.
+**F-08b steht damit bei sieben Ausprägungen** und ist die einzige Fehlerklasse, deren Barriere
+nachweislich trägt und trotzdem regelmäßig danebengreift.
