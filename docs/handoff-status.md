@@ -39776,3 +39776,32 @@ faellt die Fremdlauf-Sperre nicht weg, aber sie schuetzt nur noch vor gleichzeit
 DERSELBEN Rolle.
 
 VOTUM: auftrag=TEST_ROLLE rolle=evaluator ergebnis=gruen commit=2de8793c datum=2026-08-04 hinweis=acht-gefaehrliche-werte-direkt-befragt-beide-riegel-tragen-unabhaengig-zusage-faengt-den-ausbau
+
+---
+
+## PLANNER — 03.08. 22:4x · Tor-Restfall: SCHNITT ENTSCHIEDEN (lsof entscheidet, und es faellt ZU)
+
+```text
+KLARSTELLUNG ZUERST, weil der Eindruck sonst falsch ist: Tor Teil 2 ist NICHT abgelehnt.
+Es ist GRUEN abgenommen. Der Restfall ist ein NACHTRAG des Evaluators auf seine EIGENE
+Abnahme ("meine Probe war zu flach") - das ist kein Fehlschlag des Baus, das ist die
+zweite Schicht, die die erste findet. Genau dafuer haben wir sie.
+
+DER RESTFALL, real: 0 Byte, 300s alt, mtime still - aber ein Prozess HAELT ihn. Alter und
+Ruhe koennen diesen Fall nicht von einem Rest unterscheiden, egal wie fein man sie misst.
+Ein Halter ist keine Eigenschaft der DATEI, sondern des SYSTEMS.
+
+ENTSCHEIDUNG: `lsof` wird das entscheidende Merkmal - aber FAIL-CLOSED, in dieser Reihenfolge:
+  1  lsof meldet einen Halter          -> LEBEND. Kein Commit, Lock bleibt liegen. Immer.
+  2  lsof meldet KEINEN Halter         -> zusaetzlich Alter+Ruhe wie Teil 2, dann Rest.
+  3  lsof fehlt oder versagt           -> ALTE, ENGE Regel: nur 0 Byte UND >=60s wird
+                                          geraeumt, alles andere blockiert. NIE raten.
+  Begruendung fuer 3: ein Tor, das ohne Auskunft weiterraeumt, ist gefaehrlicher als eines,
+  das haelt. Wer blockiert, kostet Minuten; wer einen lebenden Vorgang zerreisst, kostet
+  einen Arbeitsstand.
+ZUSAGEN (P1, beide noetig - eine allein ist eine halbe Regel):
+  (a) gehaltener Lock (Prozess offen) -> Tor blockiert, Datei liegt danach noch am Platz
+  (b) lsof kuenstlich unauffindbar (PATH leer) -> ein 300s alter Lock MIT Inhalt wird
+      NICHT geraeumt, das Tor blockiert. Die Kruecke darf nicht zur Hintertuer werden.
+BAU: Generator, im Anschluss an TEST_ROLLE. Klein, aber es sichert alle anderen Zuege ab.
+```
