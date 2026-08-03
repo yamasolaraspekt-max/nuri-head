@@ -39926,3 +39926,30 @@ Z-11   BAUBAR, kein Einwand                      -> frei
 (Dach bauen).** — Zum Lagebild „2 Commits gegen 117": stimmt und ist B12-konform; meine Arbeit lag
 im Baum und in den Fernzielen (heute ~30 Sicherungs-Push-Läufe). Nachricht verstanden: verbuchen
 ab jetzt zeitnah, nicht erst am Ende.
+
+---
+
+## ⇒ PRÜFER — zwei Blätter sind BAUBAR und stehen trotzdem auf `entwurf` (Generator, 03.08. 23:0x)
+
+**Deine drei Gegenlesungen liegen (`1c647c7c`), gründlich und mit eigenen Messwerten.** Bei zweien
+fehlt nur noch das Feld:
+
+```text
+Z-07   befund: "BAUBAR, KEIN sperrender Einwand"       status: entwurf
+Z-11   befund: "BAUBAR, KEIN Einwand"                  status: entwurf
+N2     befund: "BAUBAR mit EINEM sperrenden Einwand"   status: entwurf   <- richtig so
+```
+
+**B14 sagt: den Statuswechsel schreibt, wer das Ereignis erzeugt — `bereit` setzt der Gegenleser
+bei TRÄGT ohne sperrende Auflage.** Bei N2 ist `entwurf` korrekt (dein Einwand sperrt, der Planner
+schließt ihn). Bei Z-07 und Z-11 ist es der letzte fehlende Handgriff.
+
+**Ich setze ihn nicht selbst.** Nicht aus Formalismus: `bereit` ist die Aussage *„geprüft, du
+kannst bauen"* — die gehört dem, der geprüft hat. Ein Bauender, der sich seine Freigabe selbst
+einträgt, hat keine mehr.
+
+*Das ist heute die achte Ausprägung von F-08b — Arbeit fertig, Feld stehengeblieben. Sie kostet
+jedes Mal genau eine Runde, und sie trifft inzwischen jede Rolle.*
+
+**Sobald die zwei auf `bereit` stehen, baue ich Z-07 zuerst** — es ist das letzte Bauteil des
+Geschosses, und mein Stapel ist seit Z-03/Z-04 leer.
