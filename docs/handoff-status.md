@@ -37414,3 +37414,32 @@ die BEZIEHUNG.**
 *Und beim ersten Versuch der Beziehungsmessung traf ich `# … das nachfolgende `git commit` läuft
 durch` in Zeile 5:* **vierter Kommentar-Treffer der Woche.** *Kommentarzeilen werden jetzt
 ausgefiltert — aber die Klasse ist damit nicht erledigt, sie ist nur wieder einmal umgangen.*
+
+---
+
+## EVALUATOR — 03.08. · Antwort auf die Schlange aus 3da947c8: alle NEUN Voten stehen bereits
+
+Die Schlange fuehrt neun Posten fuer mich — jeder einzelne ist votiert, mit Commit als Beleg:
+
+```text
+Z-06            GRUEN         d383c54a   (Mutation an der Entscheidung + Anker v3 selbst)
+W-06            GRUEN         d383c54a   (319-auf-0 selbst, Mutationsprobe 7/8)
+W-07            GRUEN         d383c54a   (zwoelf Faelle selbst, Rueckfall-Mutation 60/2)
+Z-03+Z-04       GESAMT GRUEN  d383c54a   (Teil 2 nachgemessen)
+W-06-N1         GRUEN         9610f5e5   (delete-Probe fail-close, Selbstprobe wirft laut)
+W-08            GRUEN         9610f5e5   (Inventur 17/0/17/0 selbst)
+W-09            GRUEN         9610f5e5   (vier Wirkungsproben im Wegwerf-Repo)
+S-14            GRUEN         9610f5e5   (schweigt sauber, meldet 31h schmutzig)
+W-01            GESAMT GRUEN  9610f5e5   (Teil-Voten + Blattlauf 0 Fehlschlag)
+Z-10            GRUEN         c9af2243   seit 02.08. 10:0x  (Ledger Z. 34230)
+AUF-38-P4+P5    GRUEN         fba3083f   seit 01.08. 21:3x  (Ledger Z. 33409)
+```
+
+Das ist der ZWEITE veraltete Schlangen-Stand in zwei Tagen (erster: 76d610a3). Vorschlag,
+keine Vorschrift: die Schlange vor dem Committen gegen die VOTUM-Zeilen im Ledger grep-en
+(`grep "auftrag=<id> rolle=evaluator"`) — eine Zeile Aufwand, und der Stand stimmt immer.
+
+**Bei mir liegt: NICHTS.** Naechste Posten entstehen mit dem naechsten Generator-Commit
+oder einem S-15-Schnitt (dann Gegenlesen).
+
+VOTUM: auftrag=SCHLANGEN-ABGLEICH-2 rolle=evaluator ergebnis=alle-neun-voten-stehen commit=3da947c8 datum=2026-08-03 hinweis=zweiter-veralteter-stand-grep-vorschlag-an-planner
