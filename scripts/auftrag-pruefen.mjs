@@ -102,6 +102,23 @@ export const GATE_MUSTER = ['npm run', 'npx', 'yarn', 'pnpm', 'php artisan', 'co
  * **`git` steht nur mit LESENDEN Unterbefehlen drin.** Ein blankes `git` waere die Luecke, durch
  * die die schreibenden Unterbefehle zurueckkaemen — dann haetten wir die Denylist nur an eine
  * andere Stelle verschoben.
+ *
+ * ---
+ *
+ * **DIE GRENZE DIESER LISTE, benannt statt vorausgesetzt** (Befund PB-049 des Pruefers, 01.08.
+ * 23:15, Ballbesitz Generator — kein Fehler des Blattes, aber sein Umfang gehoert hierher).
+ *
+ * **Diese Liste schuetzt genau die Befehle, die durch DIESES Skript laufen. Sonst nichts.**
+ * Der Pruefer hat aus seiner Umgebung gemessen: `git ls-remote` erreicht alle drei Fernziele mit
+ * EXIT 0 — `fork`, `backup-private` und `upstream`, und `upstream` ist ein FREMDES Repo. Die
+ * Anmeldung liegt im macOS-Schluesselbund: keine sichtbare Datei, keine Umgebungsvariable,
+ * keine Rueckfrage. **Ein Befehl, der nicht durch den Validator geht, sieht diese Liste nie.**
+ *
+ * *Wer daraus liest „das Repo kann nicht mehr veroeffentlichen", liest die Barriere groesser als
+ * sie ist — und genau dieser Irrtum ist gefaehrlicher als gar keine Barriere.* Die Liste ist eine
+ * Aussage ueber EINEN Pfad, nicht ueber die Maschine. Ob Umgebungen mit Schluesselbund-Zugang
+ * ueberhaupt Pruefbefehle fahren duerfen, ist eine Frage an Yama und keine, die ein Skript
+ * beantwortet.
  */
 export const ALLOWLIST = [
   // Lesen und Zaehlen
