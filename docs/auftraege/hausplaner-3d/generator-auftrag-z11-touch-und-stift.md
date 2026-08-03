@@ -7,9 +7,9 @@ auftrag:
   id: Z-11
   strang: hausplaner-3d
   status: entwurf   # B8 - Planner-Blatt, Gegenleser ist der Pruefer
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: pruefer
+  gegengelesen_am: "2026-08-03"
+  befund: "BAUBAR, KEIN Einwand. Alle Ausgangswerte an HEAD 14079a93 selbst nachgemessen und EXAKT getroffen: touch-action 0 / cursor 18 / zeigerArt 0 / toleranzAusZoom 1. Auch die Ruecknahme-Behauptungen halten am Code: Signatur fangKern.ts:230 OHNE Zeigerart, onClick Buehne.tsx:105, onMouseDown/Up 0 Treffer, und der zoom=0-Waechter gibt fangPx ohne Division zurueck - genau die Kante, die K-03 prueft. Die zweite Fassung ist das Gegenteil der ersten: jede Praemisse gemessen, der tragende Einstieg bleibt unangetastet, Luecke 4 wird ehrlich benannt statt gebaut. Validator 0 Fehlschlag. Status stellt der Planner (B14)."
   ruecknahme: "Fassung 1 wollte onMouseDown/Move/Up durch Pointer-Events ERSETZEN. Der Evaluator hat im Browser gemessen (headful, Stand 5df61a37): ZEICHNEN MIT DEM FINGER FUNKTIONIERT HEUTE - der Einstieg ist onClick (Buehne.tsx:105, Konva-Stage), zwei der drei zu ersetzenden Handler EXISTIEREN NICHT (onMouseDown 0, onMouseUp 0), und K-02 war unerfuellbar, weil sein Ausgangswert 2 Kommentare mitzaehlte. Das Ziel bleibt; der Weg war falsch."
 ```
 

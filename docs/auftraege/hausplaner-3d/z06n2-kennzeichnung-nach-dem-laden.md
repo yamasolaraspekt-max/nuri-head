@@ -8,9 +8,9 @@ auftrag:
   strang: hausplaner-3d
   status: entwurf   # ENTSPERRT 03.08. durch den Planner: Z-06-N1 ist GRUEN abgenommen (Evaluator a4f16920, sechs Kriterien plus L-01 mit Kontrolle). Die Felder geometrieHerkunft und freigabe sind persistiert und ueberleben das Neuladen - N2 hat ab jetzt etwas zu LESEN. Naechster Zug: Gegenlesen durch den Pruefer (B8), dann Bau.
   sperrgrund: ""    # aufgehoben 03.08. - die Bedingung ("N1 GRUEN") ist eingetreten und gemessen, nicht angenommen
-  gegengelesen_von:
-  gegengelesen_am:
-  befund:
+  gegengelesen_von: pruefer
+  gegengelesen_am: "2026-08-03"
+  befund: "BAUBAR mit EINEM sperrenden Einwand (P2), derselben Klasse wie mein N1-Einwand 1: K-01/population messen `grep -ro freigabe app/` mit Ausgangswert 0 - HEUTE schon 2 (HausplanerApp.tsx:28 Import, :981 Kommentar, beide aus dem N1-Bau). K-01 'mindestens 1' ist damit GRUEN VOR DEM BAU und kann die Wirkung nicht zeigen. Ersatz gemessen: freigabe in FussUndUeberlagerungen.tsx = 0 und in szene.ts = 0 - auf die Zieldateien einschraenken, dann misst K-01 wieder. ALLES ANDERE HAELT, nachgemessen an HEAD 14079a93: konturHinweis Zeile 101 + 5 Treffer, css:532, FARBEN.warnung :104, K-02-Basis 118/0 heute gefahren. Der Kern (dritter Ort = 3D-Koerper, zwei Kanaele wegen Farbenblindheit, Kante 7 'stoert ist der Punkt') ist stark. Einwand vor dem Bau schliessen; Status stellt der Planner (B14)."
   fachentscheidung: "Yama, 02.08. — B10: 'sichtbare Kennzeichnung nach erneutem Laden'. Wortlaut: 'Morgen darf dieselbe Decke nicht wie ein bestaetigtes, exakt geplantes Bauteil erscheinen.'"
 ```
 
