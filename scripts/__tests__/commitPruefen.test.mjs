@@ -98,16 +98,33 @@ test('W-09/K-02: ein liegengebliebener 0-Byte-Lock verhindert den Commit NICHT m
   assert.equal(beiseiteGelegt(verz), 1, 'der Rest wurde nicht beiseitegelegt');
 });
 
-test('W-09/K-02 ROT: ein Lock mit INHALT bricht ab — und bleibt liegen', () => {
+test('W-09/K-02 ROT: ein FRISCHER Lock mit INHALT bricht ab — und bleibt liegen', () => {
   // **Ein Tor, das jeden Lock wegzieht, ist gefaehrlicher als eines, das gar nicht aufraeumt:**
   // es zerstoert den laufenden Vorgang eines anderen.
+  // *Seit Tor Teil 2 (03.08.) entscheidet nicht mehr die GROESSE allein, sondern die RUHE:
+  // ein Lock unter 120s gilt als lebend, ganz gleich was drinsteht.*
   const verz = wegwerfRepo();
   writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
-  lockSetzen(verz, 'ein laufender Vorgang\n', 300);
+  lockSetzen(verz, 'ein laufender Vorgang\n', 5);
 
   const r = tor(verz, 'Probe: lebender Lock', 'anfang.txt');
   assert.notEqual(r.code, 0, 'das Tor committet ueber einen fremden Vorgang hinweg');
   assert.equal(existsSync(join(verz, '.git', 'index.lock')), true, 'der fremde Lock wurde weggezogen');
+});
+
+test('Tor Teil 2: ein ALTER Lock MIT Inhalt, dessen mtime stillsteht, ist ein Rest', () => {
+  // *Der Evaluator wurde am 03.08. ZWEIMAL von einem 317s alten 885-kB-Lock blockiert und hat
+  // dreifach belegt, dass nichts mehr lief (Groesse und mtime ueber 40s unveraendert, kein
+  // git-Prozess, `lsof` nur lesend). Die alte Regel "0 Byte UND >=60s" konnte ihn nicht
+  // erkennen — sie trennte die Faelle nur zur Haelfte.*
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  lockSetzen(verz, 'Rest eines abgestuerzten Laufs\n', 300);
+
+  const r = tor(verz, 'Probe: stillstehender Rest', 'anfang.txt');
+  assert.equal(r.code, 0, 'ein nachweislich toter Lock sperrt das Tor weiterhin');
+  assert.equal(existsSync(join(verz, '.git', 'index.lock')), false, 'der Rest liegt noch am alten Ort');
+  assert.ok(beiseiteGelegt(verz) >= 1, 'der Rest wurde geloescht statt beiseitegelegt');
 });
 
 test('W-09/K-02 ROT: ein FRISCHER Lock bricht ab — Alter allein entscheidet nicht', () => {
@@ -423,16 +440,23 @@ test('W-04/K-04 ROT: eine GETRACKTE Datei bekommt keine NEU-Meldung — die Meld
  * gebaut** — Begründung unten bei der `lsof`-Zusage.
  */
 
-test('Tor/GNU: die mtime wird auf BEIDEN stat-Dialekten geholt, nicht nur auf BSD', () => {
+test('Tor/GNU: GNU zuerst, BSD als Rueckfall — und die mtime muss aus ZIFFERN bestehen', () => {
+  // *Die erste Fassung (Tor Teil 1) verlangte beide Dialekte in EINER Zeile:
+  // `stat -f %m … || stat -c %Y …`. Am 03.08. gefahren und widerlegt: GNU-`stat -f` ist die
+  // DATEISYSTEM-Auskunft, sie ignoriert `%m`, schreibt einen mehrzeiligen Block auf STDOUT
+  // ("File: … Blocks: …") — der `||`-Zweig wird nie erreicht, MZEIT traegt Text, und die
+  // Arithmetik stirbt mit "File: unbound variable". Genau der Abbruch, den Teil 1 beheben
+  // sollte, blieb also bestehen. Die Reihenfolge ist deshalb Teil der Zusage, nicht Geschmack.*
   const quelle = readFileSync(TOR, 'utf8');
   const zeilen = quelle.split('\n').filter((z) => !/^\s*#/.test(z));
 
-  const bsd = zeilen.filter((z) => /stat -f %m/.test(z));
-  const gnu = zeilen.filter((z) => /stat -c %Y/.test(z));
-  assert.ok(bsd.length >= 1, 'der BSD-Dialekt fehlt — die Messung misst Leere');
-  assert.ok(gnu.length >= 1, 'der GNU-Rueckfall fehlt: auf GNU sperrt jeder liegende Lock das Tor');
-  assert.ok(bsd.some((z) => /stat -c %Y/.test(z)),
-    'beide Dialekte stehen in VERSCHIEDENEN Zeilen — der Rueckfall greift dann nicht im selben Ausdruck');
+  const gnu = zeilen.findIndex((z) => /MZEIT=\$\(stat -c %Y/.test(z));
+  const bsd = zeilen.findIndex((z) => /MZEIT=\$\(stat -f %m/.test(z));
+  assert.ok(gnu >= 0, 'der GNU-Dialekt fehlt — auf Linux sperrt dann jeder liegende Lock das Tor');
+  assert.ok(bsd >= 0, 'der BSD-Rueckfall fehlt — auf macOS bliebe die mtime ungemessen');
+  assert.ok(gnu < bsd, 'BSD steht vor GNU: auf Linux gewinnt dann die Dateisystem-Auskunft');
+  assert.ok(zeilen.some((z) => /\*\[!0-9\]\*/.test(z)),
+    'die Ziffernpruefung fehlt — Text aus dem falschen Dialekt liefe ungeprueft in die Arithmetik');
 });
 
 test('Tor/GNU ROT: eine nicht messbare mtime bricht ab, statt sie zu raten', () => {

@@ -80,25 +80,47 @@ BEISEITE=".git/_locks_beiseite/$(date +%F)"
 for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/null); do
   [ -e "$lock" ] || continue
   GROESSE=$(wc -c < "$lock" | tr -d ' ')
-  # **Beide `stat`-Dialekte, sonst sperrt das Tor auf GNU bei JEDEM liegenden Lock.**
-  # `stat -f %m` ist BSD/macOS, `stat -c %Y` ist GNU. Auf GNU schlaegt die erste Form fehl,
-  # `MZEIT` bliebe leer, die Arithmetik unten braeche — und der `else`-Zweig meldet dann
-  # „lebender Lock" fuer einen Rest. *Der Evaluator ist genau daran zweimal haengengeblieben.*
-  MZEIT=$(stat -f %m "$lock" 2>/dev/null || stat -c %Y "$lock" 2>/dev/null)
+  # **Beide `stat`-Dialekte — und die Reihenfolge ist NICHT beliebig.**
+  # *Erste Fassung (Teil 1) probierte `stat -f %m` zuerst mit `|| stat -c %Y`. Das traegt nicht:
+  # GNU-`stat -f` ist DATEISYSTEM-Auskunft, es beachtet `%m` nicht, schreibt einen ganzen Block
+  # auf STDOUT ("File: ... Blocks: ...") und der `||`-Zweig wird nie erreicht. `MZEIT` enthielt
+  # danach Text, und die Arithmetik starb mit "File: unbound variable" — genau der Abbruch, den
+  # Teil 1 beheben sollte. GEMESSEN 03.08. am Prueflauf, nicht vermutet.*
+  # Darum: GNU zuerst, BSD als Rueckfall, und BEIDE Ergebnisse muessen ZIFFERN sein.
+  MZEIT=$(stat -c %Y "$lock" 2>/dev/null)
+  case "$MZEIT" in ''|*[!0-9]*) MZEIT=$(stat -f %m "$lock" 2>/dev/null) ;; esac
+  case "$MZEIT" in ''|*[!0-9]*) MZEIT='' ;; esac
   if [ -z "$MZEIT" ]; then
     echo "STAT VERSAGT   $lock  — weder BSD- noch GNU-Dialekt lieferte eine mtime" >&2
     echo "  KEIN COMMIT. Ein Alter, das nicht gemessen werden kann, wird nicht geraten." >&2
     exit 1
   fi
   ALTER=$(( $(date +%s) - MZEIT ))
-  if [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; then
+  # **Drittes Merkmal (Tor Teil 2, 03.08.): STILLSTAND.** *Die Regel "0 Byte UND >=60s" trennt
+  # die Faelle nur zur Haelfte. Ein Lock MIT Inhalt, dessen mtime stillsteht, ist ebenso ein
+  # Rest — der Evaluator hat es dreifach belegt (Groesse und mtime ueber 40s unveraendert,
+  # kein git-Prozess in `ps`, `lsof` nur lesend) und wurde trotzdem zweimal blockiert.*
+  # **Ein laufender Vorgang schreibt. Wer 120s nicht schreibt, laeuft nicht mehr.**
+  # Gemessen wird die RUHE selbst, nicht geraten: zwei Proben im Abstand von 2 Sekunden.
+  STILL=0
+  if [ "$ALTER" -ge 120 ]; then
+    PROBE1=$(wc -c < "$lock" 2>/dev/null | tr -d ' ')
+    sleep 2
+    PROBE2=$(wc -c < "$lock" 2>/dev/null | tr -d ' ')
+    MZEIT2=$(stat -c %Y "$lock" 2>/dev/null)
+    case "$MZEIT2" in ""|*[!0-9]*) MZEIT2=$(stat -f %m "$lock" 2>/dev/null) ;; esac
+    if [ "$PROBE1" = "$PROBE2" ] && [ "$MZEIT" = "$MZEIT2" ]; then STILL=1; fi
+  fi
+  if { [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; } || [ "$STILL" -eq 1 ]; then
     mkdir -p "$BEISEITE" 2>/dev/null
+    GRUND="0 Byte, ${ALTER}s alt"
+    [ "$STILL" -eq 1 ] && GRUND="${GROESSE} Byte, ${ALTER}s alt, mtime+Groesse ueber 2s STILL"
     mv "$lock" "$BEISEITE"/ 2>/dev/null \
-      && echo "BEISEITE   $lock  (0 Byte, ${ALTER}s alt) -> $BEISEITE/"
+      && echo "BEISEITE   $lock  ($GRUND) -> $BEISEITE/"
   else
     echo "LEBENDER LOCK  $lock  —  ${GROESSE} Byte, ${ALTER}s alt" >&2
-    echo "  0 Byte UND mindestens 60s alt waere ein Rest; dieser gehoert einem laufenden Vorgang." >&2
-    echo "  KEIN COMMIT — und der Lock bleibt liegen, er wird nicht weggezogen." >&2
+    echo "  Rest waere: 0 Byte und >=60s alt, ODER >=120s alt mit stillstehender mtime." >&2
+    echo "  Dieser schreibt noch oder ist zu jung. KEIN COMMIT — der Lock bleibt liegen." >&2
     exit 1
   fi
 done

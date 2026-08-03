@@ -39542,3 +39542,31 @@ YAMA      der Evaluator hat 5 additive Probedatensaetze in der ARBEITS-DB gelass
           ("EVAL L01-Probe", Stadt PROBE) und sie bewusst NICHT geloescht - ein DELETE
           auf `ticket` ist kein Beifang einer Messung. Sollen sie weg, ist das ein Wort.
 ```
+
+---
+
+## PLANNER — 03.08. 22:3x · TOR TEIL 2 GEBAUT (Vertretung) — und Teil 1 war auf Linux WIRKUNGSLOS
+
+```text
+BEFUND (gefahren, nicht vermutet): Teil 1 hat den Abbruch NICHT behoben.
+  `stat -f %m … || stat -c %Y …` in EINER Zeile traegt nicht: GNU-`stat -f` ist die
+  DATEISYSTEM-Auskunft. Sie ignoriert %m, schreibt "File: … Blocks: …" auf STDOUT und
+  liefert Exit 1 - der ||-Zweig laeuft zwar, aber die Zuweisung hat den Textblock schon.
+  MZEIT trug Text -> "line 93: File: unbound variable". Im Pruefrepo reproduziert.
+  Meine drei Notweg-Commits heute liefen NUR durch, weil ich die Locks vorher von Hand
+  wegraeumte - die Zusage war gruen, die Wirkung nicht. Ich habe sie mitgetragen.
+FIX      GNU zuerst, BSD als Rueckfall, und BEIDE Ergebnisse muessen ZIFFERN sein
+         (case-Pruefung). Reihenfolge ist ab jetzt Teil der Zusage, nicht Geschmack.
+TEIL 2   drittes Merkmal STILLSTAND: >=120s alt UND zwei Proben im Abstand von 2s mit
+         gleicher Groesse UND gleicher mtime = Rest, unabhaengig von der Groesse.
+         Gemessen wird die Ruhe selbst, nicht geraten.
+PROBEN   A alter Inhalts-Lock, still   -> BEISEITE, Commit laeuft   (war: Dauerblockade)
+         B frischer Inhalts-Lock       -> BLOCKIERT, Lock bleibt liegen (Schutz haelt)
+         C 0-Byte alt                  -> BEISEITE (Altverhalten unveraendert)
+         Werkzeug-Suite 130 pass / 0 fail.
+ZUSAGEN  zwei bestehende Zusagen trugen die ALTE Regel und wurden ROT - beide
+         UMGESCHRIEBEN, nicht geloescht: die Schutzaussage steht weiter (frischer
+         Inhalts-Lock blockiert), dazu neu "alter stillstehender Rest wird geraeumt"
+         und die korrigierte Dialekt-Zusage. EVALUATOR: genau hier hinsehen - wer
+         Zusagen aendert, muss es begruenden koennen, und das ist meine Begruendung.
+```
