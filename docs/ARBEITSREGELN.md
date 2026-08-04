@@ -1,6 +1,6 @@
 # Verbindliche Arbeitsregeln
 
-**Version:** 1.2
+**Version:** 1.3
 **Gültig seit:** 04.08.2026
 **Autorität:** Yama
 **Geltung:** gesamtes Repository, alle Menschen, Agenten, Rollen, Worktrees und Arbeitszweige
@@ -74,6 +74,12 @@ Zusätzliche Blockzustände:
 - `RELEASE_BLOCKED`: der abgenommene Stand ist nicht sicher oder nicht reproduzierbar
   veröffentlichbar.
 
+Beim Eintritt in `ENV_BLOCKED`, `DECISION_BLOCKED` oder `RELEASE_BLOCKED` wird der vorherige
+Prüfzustand als `fortsetzung_zustand` gespeichert. Eine Rückkehr ist nur nach dokumentierter
+Beseitigung des Blockers, durch dieselbe verantwortliche Rolle und ohne verdeckte Inhaltsänderung
+zulässig. `SPEC_BLOCKED` und `NACHBESSERN` erfordern dagegen einen neuen Plan beziehungsweise
+Inhalts-Commit.
+
 `CODE_FERTIG` bedeutet ausschließlich, dass der Generator seinen Bau und seine Eigenprüfung
 abgeschlossen hat. Es bedeutet nicht, dass die Aufgabe abgenommen, mergebar oder veröffentlichbar
 ist.
@@ -116,6 +122,11 @@ Evaluator gewesen sein.
 
 Nur Yama genehmigt Veröffentlichung: Push, Merge nach `main`, Tags, Deployments, produktive
 Datenoperationen, Force-Operationen und endgültige Löschung fachlicher Daten.
+
+Ein genehmigter Push auf einen Arbeits- oder PR-Prüfbranch ist ausschließlich Transport zur
+Prüfung und setzt den Auftrag noch nicht auf `VEROEFFENTLICHT`. Dieser Zustand beginnt erst mit
+der Integration in den ausdrücklich freigegebenen Zielbranch oder mit dem ausdrücklich benannten
+Deployment. Push und Zielintegration bleiben getrennte Freigaben.
 
 ## 5. Definition of Ready
 
@@ -238,18 +249,21 @@ sie für den Auftrag erforderlich ist.
 ## 10. Release-Prüfung
 
 `ABGENOMMEN` ist noch keine Veröffentlichungserlaubnis. Der Evaluator prüft immer einen
-unveränderlichen **Inhalts-Commit**. Sein nachträgliches Votum wird in einem eigenen
-**Statusnachweis-Commit** festgehalten. Dieser Statusnachweis darf ausschließlich
-`docs/AKTUELLER_AUFTRAG.yaml` ändern; jede weitere Datei sowie jede Produkt-, Regel-, Plan- oder
-Teständerung ist darin verboten. Dadurch muss kein Commit seine eigene, vor der Erzeugung noch
-unbekannte SHA enthalten.
+unveränderlichen **Inhalts-Commit**. Danach wird jede Entscheidung als eigener
+**Statusübergang-Commit** festgehalten. Ein Statusübergang darf ausschließlich
+`docs/AKTUELLER_AUFTRAG.yaml` ändern, enthält genau einen erlaubten Zustandswechsel und verweist auf
+seinen unmittelbaren Vorgänger. Jede weitere Datei sowie jede Produkt-, Regel-, Plan- oder
+Teständerung ist darin verboten. Der aktuelle Statuscommit enthält nicht seine eigene, vor seiner
+Erzeugung unbekannte SHA; Git selbst ist die Wahrheit über den aktuellen Commit.
 
 Vor `RELEASE_FREI` prüft der Release-Prüfer unabhängig:
 
-- Evaluator-Votum, `pruef_sha` und `release_sha` nennen denselben Inhalts-Commit,
-- der Statusnachweis-Commit ist genau ein direkter Nachfolger des geprüften Inhalts-Commits,
-- der Diff zwischen Inhalts-Commit und Statusnachweis enthält keine Produkt-, Regel-, Plan- oder
-  Teständerung,
+- Evaluator-Votum, `inhalt_sha`, `pruef_sha` und `release_sha` nennen denselben Inhalts-Commit,
+- die lückenlose Statuskette beginnt direkt beim geprüften Inhalts-Commit und jeder weitere
+  Statusübergang ist direkter Nachfolger des vorherigen Statuscommits,
+- jeder Statusdiff ändert ausschließlich `docs/AKTUELLER_AUFTRAG.yaml` und genau einen erlaubten
+  Zustand,
+- der letzte Status vor dem Merge lautet `RELEASE_FREI`,
 - Merge-Ziel und Release-Diff enthalten ausschließlich freigegebene Änderungen,
 - alle erforderlichen CI- und Qualitätstore laufen auf dem Release-Kandidaten erneut grün,
 - Bundle und sonstige Artefakte sind frisch und reproduzierbar,
@@ -259,6 +273,21 @@ Vor `RELEASE_FREI` prüft der Release-Prüfer unabhängig:
 - Sicherheits-, Rechte-, Mandanten- und Datenschutzgrenzen bleiben erhalten,
 - Smoke-Test und betriebliche Nachprüfung sind vorbereitet,
 - es gibt keine offenen P0/P1-Befunde.
+
+Für Pull Requests gilt zusätzlich:
+
+- erlaubt ist ausschließlich ein normaler Merge-Commit; Squash- und Rebase-Merge sind verboten,
+- der erste Parent des Merge-Commits ist exakt die vom Release-Prüfer festgeschriebene
+  `merge_basis_sha`,
+- der zweite Parent ist exakt der durch Git und die commitgebundene Release-Prüfung ausgewiesene
+  PR-Head im Zustand `RELEASE_FREI`,
+- bewegt sich der Basisbranch nach der Release-Prüfung, wird der Merge `RELEASE_BLOCKED` und der
+  vollständige Release-Diff gegen die neue, gesondert festgeschriebene `merge_basis_sha` erneut
+  geprüft,
+- unmittelbar nach dem Merge wird dessen SHA in einem Statusübergang auf dem Zielbranch
+  festgehalten; erst dieser Übergang darf `VEROEFFENTLICHT` setzen,
+- nach Merge oder Push werden Zielbranch und Remote-SHA erneut gelesen und gegen den freigegebenen
+  Stand geprüft.
 
 Nur nach `RELEASE_FREI` darf Yama die Veröffentlichung genehmigen. Nach der Veröffentlichung wird
 der reale Zielstand geprüft: Version/Commit, Migrationen, zentrale Smoke-Tests, Logs und
@@ -334,7 +363,11 @@ Release-Prüfer:
 ```yaml
 auftrag: ID
 inhalt_sha: SHA
-status_commit: SHA
+status_commit: SHA # exakter geprüfter PR-Head
+merge_ziel: branch
+merge_basis_sha: SHA
+merge_verfahren: merge_commit
+merge_sha: SHA|null
 votum: RELEASE_FREI|RELEASE_BLOCKED|ENV_BLOCKED|DECISION_BLOCKED
 ci: pass|fail
 artefakte_reproduzierbar: true|false
@@ -454,8 +487,12 @@ Die Datei nennt immer mindestens:
 - fortlaufende `planner_laufnummer` und daraus abgeleitete `zehnergruppe`,
 - Auftrag sowie Pfad und SHA-256 des freigegebenen Plans,
 - Zustand und Ballbesitzer,
-- Basis-, Prüf- und Release-SHA, soweit vorhanden; `pruef_sha` und `release_sha` bezeichnen den
-  geprüften Inhalts-Commit, nicht den späteren Statusnachweis-Commit,
+- `inhalt_sha`, Vorgänger-Commit, vorherigen und neuen Zustand,
+- Basis-, Prüf-, Release-, Merge-Basis- und Merge-SHA, soweit vorhanden; `basis_sha` bleibt die
+  ursprüngliche Plan-/Inhaltsbasis, `merge_basis_sha` ist der gesondert geprüfte Zielbranch-Stand,
+  und `pruef_sha` sowie `release_sha` bezeichnen den geprüften Inhalts-Commit,
+- Merge-Ziel und Merge-Verfahren,
+- verantwortliche Rolle und unveränderlichen Beleg der Entscheidung,
 - letztes Votum, offene Akzeptanz und nächsten konkreten Schritt,
 - Prozessquittung der zuletzt übernehmenden Rolle.
 
@@ -472,14 +509,48 @@ Kontextverlust dürfen weder Planner-Laufnummer noch Zehnergruppe zurücksetzen.
 ab `BEREIT` unverändert; jede fachliche Änderung an Scope oder Kriterien führt zurück zu Planner
 und Plan-Prüfer und erzeugt einen neuen Plan-Hash.
 
-Nach der unabhängigen Abnahme erstellt die dafür autorisierte schreibende Rolle genau einen
-Statusnachweis-Commit als direkten Kind-Commit des Inhalts-Commits. Er setzt Zustand,
-Ballbesitzer, `pruef_sha`, vorgesehenen `release_sha`,
-Votum, offene Akzeptanz und nächsten Schritt. Dieser Commit wird nicht erneut als Inhaltsänderung
-bewertet; der Release-Prüfer verifiziert stattdessen seine erlaubte Pfadmenge, seine Elternkette,
-die Hashes und die wortgetreue Übernahme des unabhängigen Votums. Jede darüber hinausgehende
-Datei, Zwischenstufe oder weitere Änderung erzeugt einen neuen Inhalts-Commit und braucht eine
-neue Evaluator-Abnahme.
+Nach der unabhängigen Abnahme erstellt oder bestätigt die jeweils verantwortliche Rolle genau einen
+Statusübergang-Commit. Er setzt Vorgänger-Commit, alten und neuen Zustand, Ballbesitzer,
+`inhalt_sha`, Prüf-/Release-SHA, gegebenenfalls `fortsetzung_zustand`, Votum, Beleg, offene
+Akzeptanz und nächsten Schritt. Der nächste
+Statusübergang muss sein direkter Kind-Commit sein. Der Prüfer verifiziert Pfadmenge, Elternkette,
+Hashes, Rollenverantwortung und Votum. Statuscommits werden nicht als Inhaltsänderung bewertet.
+
+Die SHA des aktuellen Statuscommits wird niemals in diesem Commit selbst gespeichert. Sie wird aus
+Git beziehungsweise dem commitgebundenen GitHub-Votum gelesen. Dasselbe gilt für die Remote-SHA
+nach dem Push: Sie muss dem lokalen Statuscommit entsprechen und wird von außen verglichen, nicht
+selbstreferenziell in denselben Commit geschrieben.
+
+Die einzige erlaubte Unterbrechung der direkten Status-Elternkette ist der vorab freigegebene
+Merge-Commit. Er muss die in Abschnitt 10 festgelegten zwei exakten Parents besitzen. Der unmittelbar
+folgende Statuscommit ist direkter Kind-Commit dieses Merge-Commits, übernimmt den Zustand
+`RELEASE_FREI` vom freigegebenen zweiten Parent und darf als einzigen Übergang
+`RELEASE_FREI → VEROEFFENTLICHT` dokumentieren.
+
+Erlaubte Übergänge und Eigentümer:
+
+| Von | Nach | Verantwortlich |
+|---|---|---|
+| `ABNAHME` | `ABGENOMMEN`, `NACHBESSERN`, `SPEC_BLOCKED`, `ENV_BLOCKED` oder `DECISION_BLOCKED` | Evaluator |
+| `ABGENOMMEN` | `RELEASE_PRUEFUNG` | Release-Prüfer |
+| `RELEASE_PRUEFUNG` | `RELEASE_FREI`, `RELEASE_BLOCKED`, `ENV_BLOCKED` oder `DECISION_BLOCKED` | Release-Prüfer |
+| `RELEASE_FREI` | `VEROEFFENTLICHT` oder `RELEASE_BLOCKED` | Yama beziehungsweise ausdrücklich beauftragte Veröffentlichungsrolle |
+| `VEROEFFENTLICHT` | `BETRIEBSBESTAETIGT` oder `RELEASE_BLOCKED` | Release-Prüfer als unabhängige Betriebsprüfung |
+| `ENV_BLOCKED` | gespeicherter `fortsetzung_zustand` | dieselbe prüfende Rolle wie vor der Blockade |
+| `DECISION_BLOCKED` | gespeicherter `fortsetzung_zustand` | dieselbe prüfende Rolle nach Yamas dokumentierter Entscheidung |
+| `RELEASE_BLOCKED` | `RELEASE_PRUEFUNG` | Release-Prüfer, nur ohne Inhaltsänderung und mit behobenem Release-Blocker |
+
+Ein Statuscommit darf keinen zweiten Übergang bündeln. Ein neuer Inhalts-Commit beendet die
+Statuskette, setzt den Auftrag auf `ABNAHME` zurück und benötigt eine neue Evaluator-Abnahme. Jede
+weitere Datei, ein nicht erlaubter Übergang, eine falsche Rolle, eine Lücke in der Elternkette oder
+ein geänderter Inhalts-SHA ist P1 und blockiert Release beziehungsweise Merge.
+
+Bei `ENV_BLOCKED` und `DECISION_BLOCKED` muss `fortsetzung_zustand` einem für die verantwortliche
+Rolle gültigen Prüfzustand entsprechen. Verändert die Behebung Scope, Kriterien, Regeln, Tests oder
+Produktinhalt, ist die Rückkehr als Statuscommit verboten; dann gilt ausschließlich der neue
+Inhalts-Commit mit neuer Abnahme. Bei bewegter Mergebasis setzt der Release-Prüfer zunächst
+`RELEASE_BLOCKED`, danach mit aktualisierter `merge_basis_sha` wieder `RELEASE_PRUEFUNG` und führt
+die vollständige Release-Prüfung erneut aus.
 
 Für alle produktiven Aufträge sind versionierte Rollen-Skills mit Pfad, Version und SHA-256 in der
 Prozessquittung Pflicht. Solange diese Skills noch nicht eingerichtet und unabhängig geprüft sind,
