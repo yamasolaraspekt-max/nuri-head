@@ -21,11 +21,13 @@ pruef_sha: ""
 release_sha: ""
 letztes_votum: "plan-pruefer 04.08.: DoR §5 geprueft, ENTWURF bleibt. Bestaetigt: Basis gueltig (Insel-Drift 0), Ist-Beleg wortgleich, A-01-1/-3/-4/-5 wirksam rot, Z-07-Code bleibt als Ist-Zustand. A-01-6 GEGENGEPRUEFT und angenommen (zwei unabhaengige Messungen: Evaluator 3545321a + Planner-Tabelle; Kante-1-Logik ist flaechenbasiert und damit zwischenpunkt-unempfindlich, am Code gelesen). Vier Nachtraege offen, dann BEREIT."
 offene_akzeptanz:
-  - "Nachtrag 2: A-01-2 ist an der Basis bereits GRUEN (Z-07-Bau) — ausdruecklich als KONTROLLE/must_preserve kennzeichnen und von der Zeile 'jedes P1 wirksam rot' ausnehmen, sonst widerspricht das Blatt sich selbst"
-  - "Nachtrag 3: A-01-4 Fixture-Weg benennen — __tests__/fixtures/ existiert nicht (gemessen); Vorschlag: v3-Szenen-JSON mit L-Dach + Seed-Weg fuer objekt.blade in ticket_testing"
-  - "Nachtrag 4: Pruefbefehle/Testnamen fuer A-01-1..5 (A-01-6 hat einen)"
-  - "Nachtrag 5: benanntes Test-Objekt + Login-Weg fuer die Browserabnahme (§5 Testdaten)"
-naechster_schritt: "Planner traegt die vier Nachtraege ein, dann erneute DoR-Pruefung -> BEREIT"
+  - "ALLE VIER NACHTRAEGE EINGETRAGEN 04.08. 23:4x (Planner). Erneute DoR-Pruefung steht aus."
+naechster_schritt: "Plan-Pruefer prueft die vier Nachtraege und setzt BEREIT oder gibt SPEC_BLOCKED zurueck"
+nachtraege_erledigt:
+  - "N2 A-01-2 ist jetzt ausdruecklich must_preserve-KONTROLLE und von der Rot-Pflicht AUSGENOMMEN. Begruendung im Blatt: ohne das Kriterium waere 'gar kein Dach mehr' eine gruene Loesung."
+  - "N3 Fixture-Weg steht (Abschnitt 'Fixture-Weg fuer A-01-4', 23:3x): Testebene nutzt das vorhandene insert()-Muster der vier Hausplaner-Featuretests, KEIN neuer Seeder. Browserebene erzeugt das Dokument VOR dem Bau. Die REIHENFOLGE ist Teil des Auftrags."
+  - "N4 Pruefbefehl und Testname je Kriterium A-01-1..6 eingetragen; A-01-3 ausdruecklich als Browser-Nachweis ohne Unit-Befehl gekennzeichnet (ein console.error erfuellt es NICHT)."
+  - "N5 Flaeche objekt.blade (traegt data-speichern-url:157, studio speichert nicht), Rolle is_admin ueber User::factory, Viewports 1440/1024/375. Das Test-OBJEKT wird bewusst NICHT festgeschrieben - der Bauende legt eines an und nennt die id im Bericht."
 geschlossen_seit_anlage:
   - "Ort/Wortlaut der Absage: die WELCHE-Frage ist entschieden (dachFlaechen wird gefragt, kein zweiter Rechtecks-Begriff), messbar als A-01-6. Der WORTLAUT bleibt bewusst offen - er gehört in die Browserabnahme (§8)."
   - "Doppelführung Z-07 / A-01: A-01 führt. §16 kennt nur eine Statuswahrheit, und das ist diese Seite."

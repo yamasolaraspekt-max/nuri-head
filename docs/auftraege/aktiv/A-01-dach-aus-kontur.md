@@ -87,7 +87,19 @@ heute steht (Ausschnitt-Logik), und wird nicht angefasst.
 
 ## Akzeptanzkriterien
 
-Jedes P1 ist an Basis 16d5bbde **wirksam rot** — der Plan-Pruefer bestaetigt das, bevor gebaut wird.
+**Jedes P1 ist an Basis 16d5bbde wirksam rot — MIT EINER benannten Ausnahme.**
+
+**A-01-2 ist an der Basis bereits GRUEN.** Der Z-07-Vorlauf hat die Kontur-Uebernahme schon gebaut
+(`HausplanerApp.tsx:961`), also entsteht das Rechteck-Dach heute korrekt. *Der Plan-Pruefer hat das
+gemessen und den Selbstwiderspruch gemeldet: §5 verlangt gleichzeitig „jedes P1 wirksam rot" und
+„kein Kriterium ist bereits erfuellt" — beides zusammen wuerde A-01-2 verbieten.*
+
+> **A-01-2 ist kein Bau-Kriterium, sondern eine `must_preserve`-KONTROLLE.**
+> Es wird nicht rot erwartet. Es haelt fest, dass die Absage aus A-01-1 den **funktionierenden**
+> Fall nicht mitreisst — ohne es waere „gar kein Dach mehr" eine gruene Loesung.
+
+**Von der Rot-Pflicht ausgenommen: A-01-2.** Alle uebrigen P1 sind an der Basis wirksam rot, und
+der Plan-Pruefer bestaetigt das vor dem Bau.
 
 **A-01-1 (P1, negativ):** Nicht-rechteckige Kontur -> **kein Dach-Objekt**. Die Anzahl der Dächer in der Szene bleibt unverändert, es wird kein Status geschrieben, insbesondere kein `bestaetigt`.
 
@@ -149,6 +161,46 @@ BROWSEREBENE  Das Dokument wird VOR dem Bau ueber die Oberflaeche erzeugt
 
 *Das ist dieselbe Klasse wie ein Vorher-Wert, den niemand festgehalten hat — nur teurer, weil
 hier nicht eine Zahl fehlt, sondern ein Zustand, den es danach nirgends mehr gibt.*
+
+## Pruefbefehle je Kriterium (Nachtrag 4) und Testdaten (Nachtrag 5)
+
+**§5 verlangt beides ausdruecklich; A-01-6 hatte einen Befehl, die uebrigen nicht.**
+
+```text
+A-01-1  node --test resources/planner/hausplaner/__tests__/dachAusKontur.test.ts
+        Testname: "A-01-1: L-Kontur erzeugt KEIN Dach-Objekt und keinen Status"
+        misst: roofs.length vorher == nachher · kein 'bestaetigt' geschrieben
+A-01-2  dieselbe Datei · "A-01-2 KONTROLLE: Rechteck-Kontur erzeugt ein Dach mit DIESER Kontur"
+        misst: polygon === gezeichnete Kontur, NICHT gebaeudeUmriss()   (must_preserve)
+A-01-3  Browserabnahme, kein Unit-Befehl. Sichtbarkeitsnachweis: Screenshot + Wortlaut
+        im Bericht. Ein console.error allein erfuellt A-01-3 NICHT.
+A-01-4  php artisan test tests/Feature/Hausplaner/DachBestandsdokumentTest.php
+        Testname: "A-01-4: Bestandsdokument mit L-Dach laedt und meldet"
+        Fixture nach dem Weg oben (insert()-Muster, ticket_testing)
+A-01-5  Mutationsprobe, kein fester Befehl - Verfahren: je Mutation die Suite fahren,
+        Datei danach md5-identisch wiederherstellen, Ergebnis im Bericht als Tabelle
+A-01-6  node --test .../dachAusKontur.test.ts
+        Testname: "A-01-6: Rechteck MIT Zwischenpunkt erzeugt ein Dach"
+        misst: Anlege-Entscheidung == dachFlaechen()-Verhalten fuer dieselbe Kontur
+```
+
+**Die Testdatei `__tests__/dachAusKontur.test.ts` existiert noch nicht** — sie entsteht mit dem
+Bau. *Der Name steht hier, damit Bericht und Abnahme denselben Ort meinen.*
+
+### Testdaten, Rolle und Browserpfad (Nachtrag 5)
+
+```text
+Flaeche      /admin/hausplaner/objekt/{objekt}   -> objekt.blade.php
+             Grund: sie traegt data-speichern-url (:157). studio.blade speichert NICHT (:3),
+             eine Sichtprobe dort kann Persistenz nicht zeigen.
+Rolle        ein Benutzer mit is_admin=1; im Test ueber User::factory()->create(['is_admin'=>1]),
+             wie in den vier vorhandenen Hausplaner-Featuretests.
+Objekt       NICHT ein bestehendes aus der Arbeits-DB benennen. Der Bauende legt ein eigenes an
+             und nennt dessen alternative_id im Bericht.
+             *Ein Blatt, das eine gewachsene Objekt-Id festschreibt, ist beim naechsten Lauf
+             falsch - und niemand merkt es, weil die Id ja existiert.*
+Viewports    1440 · 1024 · 375   (§8)
+```
 
 ## Qualitätstor (ARBEITSREGELN §8)
 
