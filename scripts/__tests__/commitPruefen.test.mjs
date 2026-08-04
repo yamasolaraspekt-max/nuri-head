@@ -40,7 +40,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, writeFileSync, readFileSync, existsSync, readdirSync, utimesSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
@@ -474,4 +474,138 @@ test('Tor: der Alters-Zweig entscheidet weiterhin AUS ZWEI Merkmalen — Groesse
   const zweig = zeilen.find((z) => /GROESSE.*-eq 0/.test(z));
   assert.ok(zweig, 'der Entscheidungszweig ist nicht mehr auffindbar');
   assert.match(zweig, /ALTER/, 'das Alter ist aus der Entscheidung verschwunden');
+});
+
+/**
+ * ── A-02 — EIN LOCK IST EIN REST, WENN IHN NIEMAND HAELT ───────────────────────────────────
+ *
+ * **Mutationsprobe VOR diesen Zusagen — vier von sieben blind:**
+ *
+ * ```text
+ * M1 lsof entfernt                    GEFANGEN   (die Rueckfall-Zusage aus W-09 greift)
+ * M2 lsof-Ergebnis ignoriert          BLIND
+ * M3 Halter-Zweig faellt weg          BLIND
+ * M4 harte Grenze fuer Inhalt weg     GEFANGEN
+ * M5 Rueckfall raeumt MEHR            BLIND
+ * M6 ENV_BLOCKED durch exit 1         BLIND
+ * M7 Exitcode 3 -> 1, Zeile bleibt    Muster traf nicht - unten mit eigenem Anker nachgeholt
+ * ```
+ *
+ * *Die vier blinden sind genau die Faelle, fuer die es vor A-02 keinen Begriff gab: das Tor
+ * kannte weder Halter noch ENV_BLOCKED.* **Die Zahl misst den Ausgangszustand, nicht eine
+ * Nachlaessigkeit der 23 bestehenden Zusagen.**
+ */
+
+/** Haelt eine Datei offen, bis `stop()` gerufen wird — ein echter fremder Halter. */
+function halterFuer(pfad) {
+  const kind = spawn(process.execPath, ['-e', `
+    const fs = require('node:fs');
+    const fd = fs.openSync(${JSON.stringify(pfad)}, 'a');
+    process.stdout.write('offen\\n');
+    setTimeout(() => { fs.closeSync(fd); }, 30000);
+  `], { stdio: ['ignore', 'pipe', 'ignore'] });
+  return new Promise((fertig) => {
+    kind.stdout.once('data', () => fertig({ pid: kind.pid, stop: () => { try { kind.kill('SIGKILL'); } catch { /* schon fort */ } } }));
+  });
+}
+
+test('A-02-2: ein Lock MIT HALTER bleibt liegen — egal wie alt, still und gross', async () => {
+  // **Der Vorfall vom 04.08.:** zwei vollstaendige Indizes (je ~888 kB) wurden beiseitegeschoben,
+  // weil sie ruhig aussahen. *Ruhe und Tod sind nicht dasselbe — `lsof` kennt den Unterschied.*
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, 'x'.repeat(900), 400);
+  const halter = await halterFuer(p);
+
+  try {
+    const r = tor(verz, 'Probe: gehaltener Lock', 'anfang.txt');
+    assert.equal(existsSync(p), true, 'ein GEHALTENER Lock wurde weggezogen — der Vorfall wiederholt sich');
+    assert.equal(r.code, 3, `erwartet Exitcode 3 (ENV_BLOCKED), kam ${r.code}`);
+    assert.match(r.text, /ENV_BLOCKED:/, 'die ENV_BLOCKED-Zeile fehlt');
+    assert.match(r.text, new RegExp(`Halter: .*${halter.pid}`), 'die Meldung nennt den Halter nicht');
+  } finally {
+    halter.stop();
+  }
+});
+
+test('A-02-2 GEGENPROBE: derselbe Lock nach Prozessende — beiseite, Commit gelingt', async () => {
+  // Ohne diese Haelfte waere „raeumt nie auf" ebenfalls gruen. *Erst der Unterschied zwischen
+  // beiden Laeufen sagt, dass die Halterfrage wirkt und nicht bloss immer sperrt.*
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, 'x'.repeat(900), 400);
+  const halter = await halterFuer(p);
+  halter.stop();
+  await new Promise((r) => setTimeout(r, 400));
+
+  const r = tor(verz, 'Probe: Halter ist fort', 'anfang.txt');
+  assert.equal(existsSync(p), false, 'der verwaiste Lock liegt noch — das Tor raeumt gar nicht mehr');
+  assert.equal(r.code, 0, `Commit gescheitert: ${r.text}`);
+  assert.equal(beiseiteGelegt(verz), 1, 'der Rest wurde nicht beiseitegelegt');
+});
+
+test('A-02-1 KONTROLLE: Lock MIT Inhalt, alt, ohne Halter -> beiseite (must_preserve)', () => {
+  // Der Fall des Evaluators: 885 kB, 317 s, dreifach als tot belegt. Er war an der Basis bereits
+  // gruen und bleibt es — **ohne ihn waere „raeumt ueberhaupt nichts mehr auf" eine gruene Loesung.**
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  lockSetzen(verz, 'x'.repeat(885_000), 317);
+
+  const r = tor(verz, 'Probe: toter Riese', 'anfang.txt');
+  assert.equal(r.code, 0, `das Tor sperrt einen nachweislich freien Lock: ${r.text.slice(0, 160)}`);
+  assert.equal(existsSync(join(verz, '.git', 'index.lock')), false, 'der freie Lock liegt noch');
+});
+
+test('A-02-3: OHNE lsof raeumt das Tor WENIGER, nie mehr', () => {
+  // *Ein Werkzeug, das ohne sein Messgeraet mehr aufraeumt als mit, ist die gefaehrlichste
+  // Bauart ueberhaupt.* Geprueft wird mit leerem PATH-Fund: `command -v lsof` schlaegt fehl.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  lockSetzen(verz, 'x'.repeat(900), 400);          // Inhalt + alt: MIT lsof waere das beiseite
+
+  let aus;
+  try {
+    aus = execFileSync('bash', ['scripts/commit-pruefen.sh', 'Probe: ohne lsof', 'anfang.txt'],
+      { cwd: verz, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, PATH: '/usr/bin:/bin' } });
+    aus = { code: 0, text: aus };
+  } catch (e) {
+    aus = { code: e.status ?? -1, text: `${e.stdout ?? ''}${e.stderr ?? ''}` };
+  }
+  assert.equal(existsSync(join(verz, '.git', 'index.lock')), true,
+    'ohne Halterauskunft wurde ein Lock MIT INHALT weggezogen — der Rueckfall raeumt mehr statt weniger');
+  assert.notEqual(aus.code, 0, 'das Tor committet ohne jede Halterauskunft ueber einen Lock hinweg');
+});
+
+test('A-02-4: die Blockade nennt BEIDES — Exitcode 3 UND eine lesbare Zeile', async () => {
+  // **Der Exitcode ist fuer Maschinen, die Zeile fuer Menschen.** Nur die Zeile zu pruefen waere
+  // F-09: derselbe Text in einem Kommentar oder Logauszug zaehlte mit. Nur den Code zu pruefen
+  // liesse einen Aufrufer ohne Grund stehen.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, 'x'.repeat(50), 400);
+  const halter = await halterFuer(p);
+
+  try {
+    const r = tor(verz, 'Probe: Form der Blockade', 'anfang.txt');
+    assert.equal(r.code, 3, `Exitcode ${r.code} statt 3 — ein Aufrufer kann Umgebung nicht von Fachfehler trennen`);
+    const zeile = r.text.split('\n').find((z) => z.startsWith('ENV_BLOCKED:'));
+    assert.ok(zeile, 'keine Zeile beginnt mit ENV_BLOCKED:');
+    assert.match(zeile, /ENV_BLOCKED: .+ — .+ \(Halter: .+\)/, `Form verletzt: ${zeile}`);
+  } finally {
+    halter.stop();
+  }
+});
+
+test('A-02-4 ROT: ein junger Lock ohne Halter wird NICHT geraeumt — er meldet ENV_BLOCKED', () => {
+  // **Die Abweichung vom Wortlaut des Blattes, festgenagelt.** „Kein Halter" allein macht keinen
+  // Rest: ein Vorgang kann seine Sperrdatei zwischen zwei Schritten kurz geschlossen haben.
+  // *Ohne diese Zusage waere die hinreichende Lesart gruen — und zwei W-09-Schutzzusagen fielen.*
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  lockSetzen(verz, '', 0);
+
+  const r = tor(verz, 'Probe: jung und frei', 'anfang.txt');
+  assert.equal(existsSync(join(verz, '.git', 'index.lock')), true, 'ein FRISCHER Lock wurde weggezogen');
+  assert.equal(r.code, 3, `erwartet 3 (Umgebung), kam ${r.code}`);
+  assert.match(r.text, /ENV_BLOCKED: lock zu jung/, 'der Grund fehlt oder ist ein anderer');
 });

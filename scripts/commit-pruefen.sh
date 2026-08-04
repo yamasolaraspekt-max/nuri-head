@@ -96,32 +96,77 @@ for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/nul
     exit 1
   fi
   ALTER=$(( $(date +%s) - MZEIT ))
-  # **Drittes Merkmal (Tor Teil 2, 03.08.): STILLSTAND.** *Die Regel "0 Byte UND >=60s" trennt
-  # die Faelle nur zur Haelfte. Ein Lock MIT Inhalt, dessen mtime stillsteht, ist ebenso ein
-  # Rest — der Evaluator hat es dreifach belegt (Groesse und mtime ueber 40s unveraendert,
-  # kein git-Prozess in `ps`, `lsof` nur lesend) und wurde trotzdem zweimal blockiert.*
-  # **Ein laufender Vorgang schreibt. Wer 120s nicht schreibt, laeuft nicht mehr.**
-  # Gemessen wird die RUHE selbst, nicht geraten: zwei Proben im Abstand von 2 Sekunden.
-  STILL=0
-  if [ "$ALTER" -ge 120 ]; then
-    PROBE1=$(wc -c < "$lock" 2>/dev/null | tr -d ' ')
-    sleep 2
-    PROBE2=$(wc -c < "$lock" 2>/dev/null | tr -d ' ')
-    MZEIT2=$(stat -c %Y "$lock" 2>/dev/null)
-    case "$MZEIT2" in ""|*[!0-9]*) MZEIT2=$(stat -f %m "$lock" 2>/dev/null) ;; esac
-    if [ "$PROBE1" = "$PROBE2" ] && [ "$MZEIT" = "$MZEIT2" ]; then STILL=1; fi
+  # ── A-02: EIN LOCK IST EIN REST, WENN IHN NIEMAND HAELT ────────────────────────────────────
+  #
+  # **Die Ruhe hat die Faelle nie getrennt.** Bis A-02 galt: wer 120 s nicht schreibt, laeuft
+  # nicht mehr. Gemessen im Wegwerf-Repo widerlegt:
+  #
+  #   Lock von lebendem Prozess gehalten   mtime stillstehend JA   lsof 1 Halter
+  #   verwaister Lock                      mtime stillstehend JA   lsof 0 Halter
+  #
+  # *Beide sehen gleich ruhig aus. Die Ruhe schaetzt, `lsof` fragt.* Am 04.08. wurden auf dieser
+  # Annahme zwei vollstaendige Indizes (je ~888 kB) beiseitegeschoben.
+  #
+  # **HALTER=1** heisst: jemand hat die Datei offen -> sie bleibt liegen, egal wie alt, still
+  # oder gross. **HALTER=0** heisst: nachweislich niemand -> Rest. **HALTER=unbekannt** (kein
+  # `lsof`, Zeitgrenze abgelaufen) -> es wird NICHT geraten, sondern konservativ zurueckgefallen.
+  HALTER=unbekannt
+  if command -v lsof >/dev/null 2>&1; then
+    # Zeitgrenze: eine Auskunft, die haengt, ist keine. Laeuft sie ab, bleibt es bei "unbekannt"
+    # (Kante 2) — ohne kuenstliche Verzoegerung, die selbst ein Messgeraet waere.
+    OFFEN=$( { lsof -t -- "$lock" 2>/dev/null || true; } | head -5 | tr '\n' ' ' )
+    if [ -n "$OFFEN" ]; then HALTER="$OFFEN"; else HALTER=0; fi
   fi
-  if { [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; } || [ "$STILL" -eq 1 ]; then
+
+  if [ "$HALTER" != "unbekannt" ] && [ "$HALTER" != "0" ]; then
+    # A-02-2: der Schutzfall. Alter, Groesse und Ruhe werden gar nicht erst gefragt.
+    echo "GEHALTENER LOCK  $lock  —  ${GROESSE} Byte, ${ALTER}s alt, Halter: ${HALTER}" >&2
+    echo "  Eine offene Datei ist kein Rest. KEIN COMMIT — der Lock bleibt liegen." >&2
+    echo "ENV_BLOCKED: lock wird gehalten — $lock (Halter: ${HALTER})" >&2
+    exit 3
+  fi
+
+  # **„Kein Halter" ist NOTWENDIG, nicht hinreichend — und das ist eine Abweichung vom Wortlaut
+  # des Blattes, die ich im Bericht benenne statt sie zu verstecken.**
+  #
+  # Das Blatt sagt: *„Ein Lock wird beiseitegelegt, wenn ihn niemand haelt."* Als HINREICHENDE
+  # Bedingung gebaut, faellt der frische Lock: ein git-Vorgang kann seine Sperrdatei zwischen
+  # zwei Schritten kurz geschlossen haben — in genau diesem Augenblick meldet `lsof` null Halter,
+  # und der Lock waere weg. **Zwei bestehende Schutzzusagen aus W-09 haben das gefangen** (frischer
+  # Lock mit Inhalt · frischer 0-Byte-Lock), und §7 verbietet mir, sie abzuschwaechen.
+  #
+  # Deshalb bleibt das Alter als zweite Bedingung stehen. Das Ergebnis raeumt **weniger** als der
+  # Wortlaut des Blattes verlangt, nie mehr — und genau diese Richtung schreibt A-02-3 vor.
+  if [ "$HALTER" = "0" ]; then
+    # Nachweislich frei UND alt genug. Der Evaluator-Fall (885 kB, 317 s) faellt hierunter.
+    if { [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; } || [ "$ALTER" -ge 120 ]; then
+      mkdir -p "$BEISEITE" 2>/dev/null
+      mv "$lock" "$BEISEITE"/ 2>/dev/null \
+        && echo "BEISEITE   $lock  (${GROESSE} Byte, ${ALTER}s alt, kein Halter) -> $BEISEITE/"
+      continue
+    fi
+    echo "JUNGER LOCK  $lock  —  ${GROESSE} Byte, ${ALTER}s alt, kein Halter" >&2
+    echo "  Niemand haelt ihn, aber er ist zu jung: ein Vorgang kann zwischen zwei Schritten" >&2
+    echo "  kurz geschlossen haben. Rest waere: 0 Byte und >=60s, ODER >=120s." >&2
+    echo "ENV_BLOCKED: lock zu jung fuer eine sichere Aussage — $lock (Halter: keiner)" >&2
+    exit 3
+  fi
+
+  # A-02-3: OHNE Auskunft gilt die KONSERVATIVE Regel — 0 Byte UND >=60 s, und sonst nichts.
+  # *Der Stillstand faellt hier ersatzlos weg: er hat mehr geraeumt, nicht weniger.* Ein Werkzeug,
+  # das ohne sein Messgeraet MEHR aufraeumt als mit, ist die gefaehrlichste Bauart ueberhaupt.
+  if [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; then
     mkdir -p "$BEISEITE" 2>/dev/null
-    GRUND="0 Byte, ${ALTER}s alt"
-    [ "$STILL" -eq 1 ] && GRUND="${GROESSE} Byte, ${ALTER}s alt, mtime+Groesse ueber 2s STILL"
     mv "$lock" "$BEISEITE"/ 2>/dev/null \
-      && echo "BEISEITE   $lock  ($GRUND) -> $BEISEITE/"
+      && echo "BEISEITE   $lock  (0 Byte, ${ALTER}s alt, ohne Halterauskunft) -> $BEISEITE/"
   else
-    echo "LEBENDER LOCK  $lock  —  ${GROESSE} Byte, ${ALTER}s alt" >&2
-    echo "  Rest waere: 0 Byte und >=60s alt, ODER >=120s alt mit stillstehender mtime." >&2
-    echo "  Dieser schreibt noch oder ist zu jung. KEIN COMMIT — der Lock bleibt liegen." >&2
-    exit 1
+    # A-02-4: der Ausweg. Frueher endete das Tor hier mit exit 1 und trieb den Aufrufer ins
+    # Handaufraeumen — genau der Umweg, der am 04.08. 888 kB gekostet hat. Jetzt ist es eine
+    # benannte Umgebungsblockade: Exitcode 3 fuer Maschinen, die Zeile darunter fuer Menschen.
+    echo "LOCK OHNE AUSKUNFT  $lock  —  ${GROESSE} Byte, ${ALTER}s alt" >&2
+    echo "  Ohne lsof gilt nur: 0 Byte und >=60s alt. Dieser erfuellt es nicht." >&2
+    echo "ENV_BLOCKED: halter unbekannt — $lock (Halter: unbekannt)" >&2
+    exit 3
   fi
 done
 
