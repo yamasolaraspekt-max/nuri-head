@@ -14,12 +14,14 @@ Statusseiten werden nicht fortgeschrieben, um den aktuellen Zustand zu bestimmen
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage"
 datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 16d5bbde
-pruef_sha: ""
+pruef_sha: "586ec68a"
+pruef_branch: "work/a01-generator"
 release_sha: ""
 letztes_votum: "plan-pruefer 04.08. 23:5x (3. Runde): BEREIT. Die drei korrigierten Pruefbefehle selbst geprobt — die Runner-Form laeuft (decke.test.ts sauber, gleiche Form wie Planner-Messung 13/0), das blanke node --test faellt belegt. Alle 15 §5-Punkte erfuellt; A-01-2 als benannte must_preserve-Ausnahme von der Rot-Pflicht."
+ballwechsel_bestaetigt: "plan-pruefer 05.08.: CODE_FERTIG-Meldepflichten geprueft — Basis 16d5bbde + Pruef-SHA 586ec68a (existiert, eigener Branch work/a01-generator nach §6) gemeldet, §11-Bericht im Blatt (75 Zeilen: sechs Kriterien mit Beleg, Mutationsprobe, drei Viewports), Fixture VOR dem Bau im Repo (a01-bestandsdokument-l-dach.json — Reihenfolge hielt), eine offene Akzeptanz ehrlich gemeldet (375px zeigt Bestandshinweis statt Absage). Ball beim EVALUATOR (§9) — ich nehme NICHT ab. Hinweis fuer die Abnahme: der Spannen-Diff Basis..Pruef enthaelt auch die A-02-Arbeit (gemeinsame Historie) — Scope-Sauberkeit am exakten Commit pruefen."
 offene_akzeptanz:
   - "REIHENFOLGE bleibt: Fixture VOR dem ersten Bau-Commit. ABER der Grund hat sich geaendert und ist neu benannt — auf dem Speicherweg heisst er 'sonst ungeprueft' (Verfahren), nicht mehr 'sonst unmoeglich' (Zeitfalle). Gemessen: dachFlaechen hat 0 Treffer in app/, die Absage sitzt in der Insel, der PUT laeuft an ihr vorbei."
   - "AUFLAGE zum Fixture: die Nutzlast wird nicht frei erfunden. Zwei unabhaengige Formpruefungen muessen sie tragen — Dach-Knoten entspricht dem Inseltyp RoofNode (teilKennung.ts:112) UND der Servervalidator nimmt den PUT an. Grundlage ist das vorhandene Dokument revision 1 in ticket_testing, es wird ERWEITERT statt ersetzt."
@@ -78,17 +80,18 @@ sie nicht als stille Weiterreichung erscheint.
 auftrag: A-03
 titel: "Browser-Buehne: der sichere Aufruf wird erzwungen, der lautlose wird laut"
 datei: docs/auftraege/aktiv/A-03-browser-buehne-testdatenbank.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 89d69c13
+pruef_sha: "26e378a5"
 anlass: "§15-Befund des Generators, 05.08. 00:08: 'php artisan serve' setzt DB_DATABASE fuer den Kindprozess aktiv auf false (ServeCommand.php:179, 13 passthroughVariables, 0 davon DB_). Die Buehne lief gegen die ARBEITS-Datenbank ticket. Der einzige Schutz war ein fehlender Testbenutzer — 'Glueck, nicht Vorsicht' (seine Worte)."
+ballwechsel_bestaetigt: "plan-pruefer 05.08.: CODE_FERTIG-Meldepflichten geprueft — Basis 89d69c13 + Pruef-SHA 26e378a5 gemeldet, Scope selbst gemessen: EXAKT die zwei Blatt-Dateien + der A-03-6-Zeiger im Anker (+12), nichts ausserhalb. §11-Bericht mit Mutationsprobe 5/5 und einer ehrlich benannten Abweichung (Blatt-Behauptung zum Anker-Textstand war unpraezise — der Generator hat den Zeiger gebaut und die Abweichung gemeldet statt geschluckt; Bewertung beim Evaluator). Ball beim EVALUATOR (§9)."
 gemessen: "Kind-Umgebung mit env -i nachgebildet: 'DB_DATABASE=... serve' -> ticket (falsch) · 'APP_ENV=testing serve' -> ticket_testing (richtig) · ELTERNPROZESS antwortet in BEIDEN Faellen richtig und taeuscht damit jede naive Probe."
 besonderheit: "Es wird KEIN Durchreichen gebaut. Ein tragfaehiger Aufruf existiert bereits (APP_ENV steht in der Durchreich-Liste). Gebaut wird nur der Riegel darum: der falsche Aufruf ist heute LAUTLOS."
 letztes_votum: "plan-pruefer 05.08. 00:2x (1. DoR-Runde A-03): ENTWURF bleibt, ZWEI Restpunkte. P2 SCHARF GEPRUEFT, Ergebnis: BAUEN IST GERECHTFERTIGT — die Papier-Regel existierte (CLAUDE.md/§15) und hat den Vorfall NICHT verhindert; die FEHLERKLASSEN-Bilanz ist eindeutig (Barrieren stoppten Wiederholungen sofort, Vorsaetze nicht); Reuse-Pruefung selbst gefahren: KEIN bestehender Serve-Wrapper in scripts/, package.json oder ANKER-BROWSER (0 Treffer). Vendor-Behauptung woertlich bestaetigt (13 Eintraege selbst gezaehlt, 0 DB_, :179 mappt auf false, APP_ENV in der Liste). NICHT NOTWENDIG waere hier das falsche Votum."
-offene_akzeptanz:
-  - "Rest 1 (die Konsequenz aus P2): der Riegel braucht seine VERANKERUNG — ANKER-BROWSER.md schreibt heute KEINEN Startweg vor (gemessen 0 Treffer). Ohne eine Zeile dort, die scripts/browser-buehne.sh zum EINEN benannten Weg macht, ist der Riegel ein Werkzeug, das niemand aufgerufen bekommt — dieselbe Papier-Falle, nur eine Ebene hoeher. Scope um die Anker-Zeile erweitern (oder begruendet ausschliessen)."
-  - "Rest 2 (Testnamen-Liste, Empfehlung): NUR ticket_testing. wberechnung_mysql_test gehoert einer ANDEREN App — eine ticket-Buehne auf fremder Test-DB waere zwar harmlos, aber sinnlos erlaubt; die Liste bleibt minimal und waechst additiv mit Eintrag."
-naechster_schritt: "Planner traegt Rest 1+2 ein, dann setzt der Plan-Pruefer BEREIT (Warteschlange hinter A-01/A-02)"
+offene_akzeptanz: []
+bereit_gesetzt: "plan-pruefer 05.08. 00:3x (2. Runde): beide Restpunkte GEGENGEMESSEN erfuellt — Anker-Regel steht woertlich (Z.54/55 samt Messtabelle), A-03-6 traegt den Skript-Zeiger wirksam rot (Ausgangswert 0 selbst nachgezaehlt); Namensliste exakt ticket_testing, Verwerfung des Zweitvorschlags belegt richtig (fremde App, WB_DB). Die zwei selbst geschlossenen Luecken sind echte Verschaerfungen."
+naechster_schritt: "WARTESCHLANGE: Generator zieht A-03 nach A-01 (IN_ARBEIT) und A-02 (beim Evaluator)"
 ```
 
 ---
@@ -114,6 +117,10 @@ derselben Zeit einen Browser gefahren, eine Datenbank geprüft, drei Hindernisse
 4  Baum still, Auftrag mit Marke liegt     ARBEIT IM BROWSER     melden — und weiter warten
    ↳ Messen an der Oberflaeche schreibt NULL Dateien in den Baum. Ein stiller Baum
      ist bei einem Auftrag mit Browseranteil der NORMALFALL, nicht das Warnzeichen.
+   ↳ NACHTRAG 01:5x — die Spur gibt es doch, sie liegt nur woanders:
+       storage/framework/sessions/   bewegt sich, solange eine Buehne bedient wird
+       ps -eo command | grep 'php -S\|artisan serve'   nennt Weg UND Datenbank
+     Damit ist Ursache 4 nicht mehr 'unentscheidbar', sondern MESSBAR.
 ```
 
 > **Was mich davor bewahrt hat, falsch zu liegen, war nicht die Messung — die war in allen vier
@@ -121,6 +128,59 @@ derselben Zeit einen Browser gefahren, eine Datenbank geprüft, drei Hindernisse
 > in „untätig" übersetzt, hätte ich einem arbeitenden Generator ein zweites Blatt hinterhergeworfen.
 > *Genau der Fehler, den §8b Zeile 2 verbietet — und er wäre mir hier passiert, weil eine vierte
 > Ursache fehlte, die keiner aufgeschrieben hatte.*
+
+---
+
+## ⚠ Planner-Befund an den Evaluator (05.08. 01:5x) — A-03 deckt die Tür ab, die niemand benutzt
+
+**Kein Eingriff:** A-03 liegt beim Evaluator. Ich ändere das Blatt nicht, während er es hält —
+ich melde. **Der Befund ist ein Spezifikationsfehler von mir, kein Baufehler.**
+
+### Gemessen, an der JETZT laufenden Bühne
+
+```text
+ps -eo command  ->  cd /Users/yamanuri/Documents/ticket-a01/public
+                    && DB_DATABASE=ticket_testing exec php -S 127.0.0.1:8099 …/server.php
+ps eww -p <pid>  ->  DB_DATABASE=ticket_testing        gesetzt und WIRKSAM
+```
+
+**Diese Bühne ist sicher.** Bei `php -S` gibt es keine Filterung — die Variable kommt an.
+*Der laufende Vorgang ist NICHT gefährdet, und dieser Befund ist keine Warnung an ihn.*
+
+### Der Fehler im Auftrag
+
+```text
+A-03 umschliesst     artisan serve      (exec env APP_ENV=testing php artisan serve)
+tatsaechlich genutzt php -S             Generator 00:08, Evaluator 01:54 - beide
+ANKER-BROWSER nennt  php -S             0-mal
+
+und die ungeschuetzte Nachbarform:
+  DB_DATABASE=ticket_testing php -S …   sicher     ticket_testing
+  php -S …                              UNSICHER   faellt auf .env -> ticket
+                                        Unterschied: ein Praefix. Kein Riegel dazwischen.
+```
+
+> **A-03 baut einen Riegel an die Tür, die keiner nimmt.** Der `php -S`-Weg bleibt offen, und
+> seine sichere und seine unsichere Fassung unterscheiden sich um ein Präfix.
+
+### Warum das mir gehört und nicht dem Bauenden
+
+**Der Generator hat es mir am 00:08 wörtlich geschrieben:** *„Tragfähig ist `php -S`, gestartet
+AUS `public/` heraus (Laravels Router nimmt `getcwd()`)."* **Ich habe diesen Bericht gelesen,
+daraus zitiert — und trotzdem `artisan serve` vorgeschrieben.** Ich habe die Form gewählt, die ich
+gemessen hatte, statt der, die benutzt wird.
+
+*Das ist dieselbe Klasse wie [PROZESSPRUEFUNG-01](PROZESSPRUEFUNG-01.md): die Regel sieht
+vollständig aus und läuft neben der Praxis her.* **Zweite Ausprägung, keine 40 Minuten später.**
+
+### Was ich vorschlage — und was der Evaluator entscheidet
+
+**A-03 kann `ABGENOMMEN` werden:** Das Blatt verlangte einen Riegel um `artisan serve`, und den
+gibt es nachweislich. **Ob die Lücke `NACHBESSERN` rechtfertigt, ist seine Entscheidung, nicht
+meine** — ich habe hier den Interessenkonflikt, weil die Lücke aus meinem Auftrag stammt.
+
+**Meine Empfehlung: abnehmen und A-04 schneiden.** *Einen laufenden Auftrag nachträglich zu
+verbreitern, weil der Planner zu eng geschnitten hat, bestraft den Bauenden für meinen Fehler.*
 
 ---
 
