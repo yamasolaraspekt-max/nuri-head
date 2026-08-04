@@ -40276,3 +40276,47 @@ Zwischenpunkt ueberhaupt stehen laesst oder ihn auf die Ecke zieht. Der DATENWEG
 das habe ich belegt; die Bedienbarkeit im Browser habe ich nicht gemessen. Ein Bau, der die
 richtige Pruefung nimmt, braucht diese Frage auch nicht.
 ```
+
+---
+
+# ⚠ AN ALLE — **44 DATEIEN WAREN AUS DEM ARBEITSBAUM VERSCHWUNDEN, darunter das ganze Regelwerk** (Planner, 04.08.)
+
+**Gefunden beim Versuch, ein eigenes Blatt zu prüfen** — `scripts/auftrag-pruefen.mjs` war weg.
+Die Suche danach ergab:
+
+```text
+git status --porcelain | grep '^.D '   ->  44 Dateien
+  docs/BETRIEBSORDNUNG.md              12208 B   <- das oberste Dokument
+  docs/BESCHLUSS-fehlervermeidung.md   13058 B   <- B1 bis B15
+  docs/agents/**                       13 Dateien, u.a. 00-REGELWERK (22 kB), 06-laufzeiten (42 kB)
+  docs/auftraege/AUFTRAGSSCHEMA.md · FEHLERKLASSEN.md · ANKER-BROWSER.md
+  docs/rueckfall-archiv-regeln.md       2894 B   <- die Regel gegen genau das, mit gelöscht
+  scripts/auftrag-pruefen.mjs + .sh + __tests__ + anker-inventur.mjs
+  .ai-workflow/**                      14 Dateien (Rollen, Vorlagen, Skripte)
+```
+
+**Kein Commit hat sie entfernt** — sie standen unverändert in HEAD, nur der Arbeitsbaum war leer.
+*Zweite Spalte `D`, nicht erste: eine echte Löschung im Baum, kein Phantom-Drift.*
+
+## Wiederhergestellt, verlustfrei
+
+```text
+44 von 44 aus HEAD zurueckgeschrieben   -> `git status | grep '^.D '` == 0
+Stichprobe byte-identisch:  BETRIEBSORDNUNG · BESCHLUSS · 00-zyklus · FEHLERKLASSEN · rueckfall-archiv
+Werkzeug-Suite  128/130 -> 130 pass / 0 fail
+```
+
+*Die zwei roten Zusagen waren `W-08/S-11` und `W-08/K-04` — beide prüfen einen Verweis auf
+`ANKER-BROWSER.md`. **Sie haben den Vorfall gemeldet, bevor ein Mensch ihn bemerkt hat.** Genau
+dafür ist ein Verweis-Kriterium da, und heute hat es sich das erste Mal ausgezahlt.*
+
+## Was ich NICHT weiß, und niemand sollte es erfinden
+
+**Wer oder was gelöscht hat.** Nachträglich nicht feststellbar — kein Commit, kein Reflog-Eintrag,
+und der Zeitpunkt liegt zwischen meiner letzten Validator-Nutzung (23:0x) und jetzt.
+*Ein `git checkout` eines fremden Standes, ein Worktree-Vorgang, ein Skript — alles möglich.*
+
+**Ballbesitz Yama:** ob das untersucht wird, entscheidest du. **Für den Betrieb ist es geheilt.**
+Und eine Lehre steht schon fest: `.git/_locks_beiseite/2026-08-04/` enthält zwei 888-kB-Indizes
+von 22:45 und 22:47 — *ein Zusammenhang ist nicht belegt, aber die Uhrzeiten liegen nah beieinander,
+und das gehört in dieselbe Untersuchung.*
