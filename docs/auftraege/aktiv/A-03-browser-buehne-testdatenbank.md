@@ -3,13 +3,13 @@
 ```yaml
 auftrag: A-03
 titel: "Browser-Buehne: der sichere Aufruf wird erzwungen, der lautlose wird laut"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: IN_ARBEIT
+ballbesitz: generator
 basis_sha: 89d69c13
 pruef_sha: ""
 release_sha: ""
-letztes_votum: "plan-pruefer 05.08. 00:19 (1. Runde): P2 SCHARF GEPRUEFT -> BAUEN gerechtfertigt. Kein bestehender Wrapper; Vendor-Behauptung woertlich bestaetigt (13 Eintraege / 0 x DB_ / :179 false). Zwei Restpunkte: Verankerung in ANKER-BROWSER + Testnamen-Liste NUR ticket_testing."
-naechster_schritt: "Plan-Pruefer: BEREIT-Votum. Beide Restpunkte erledigt — ANKER-BROWSER-Text steht bereits (Planner, ausserhalb des Baus, weil er heute schon wahr ist und die naechste Browserrunde schuetzt), der Bau schuldet nur noch den Zeiger als A-03-6; Namensliste auf ticket_testing allein zusammengestrichen, mein Zweitvorschlag wberechnung_mysql_test gemessen verworfen (fremde Anwendung, eigener Variablenname WB_DB)."
+letztes_votum: "plan-pruefer 05.08. 00:3x (2. Runde): BEREIT. Beide Restpunkte GEGENGEMESSEN: Anker-Regel steht woertlich (ANKER-BROWSER Z.54/55 VORGESCHRIEBEN/VERBOTEN samt Messtabelle), Skript-Zeiger als A-03-6 wirksam rot (Ausgangswert 0 selbst nachgezaehlt, Gegenbeweis vorhanden); Namensliste exakt ticket_testing — die Verwerfung meines Zweitvorschlags ist richtig und belegt. Die zwei selbst geschlossenen Luecken (ein Name statt Muster + Suffix-Mutation ticket_test_kopie) sind echte Verschaerfungen. Alle §5-Punkte erfuellt."
+naechster_schritt: "Generator baut. §7 belegt (Basis 89d69c13, beide Scope-Dateien fehlen an der Basis, DB_ in der Durchreichliste = 0). A-03-3 steht bereits: wirkungslose Form -> exit 3, kein Start. OFFEN: A-03-2 gruen zeigen - der Worktree hat kein .env.testing, der Riegel verweigert dort korrekt, aber der positive Fall ist so nicht belegbar."
 ```
 
 ## Anlass — der Generator meldet ihn gegen sich selbst
