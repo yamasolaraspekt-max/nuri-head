@@ -166,11 +166,30 @@ hier nicht eine Zahl fehlt, sondern ein Zustand, den es danach nirgends mehr gib
 
 **§5 verlangt beides ausdruecklich; A-01-6 hatte einen Befehl, die uebrigen nicht.**
 
+**KORRIGIERT 04.08. 23:4x auf den Befund des Plan-Pruefers.** Meine erste Fassung nannte fuer
+A-01-1/-2/-6 ein blankes `node --test <datei>.ts`. **Er hat es geprobt, ich danach auch:**
+
 ```text
-A-01-1  node --test resources/planner/hausplaner/__tests__/dachAusKontur.test.ts
+node --test .../decke.test.ts                          -> 'test failed', 0 Zusagen gelaufen
+<runner> --import test-register.mjs --test <dieselbe>  -> 13 pass / 0 fail
+```
+
+*Die Insel ist TypeScript und braucht den Loader — ohne ihn stirbt der Lauf vor der ersten Zusage.
+Ein Bau, der A-01 korrekt umsetzt, waere an meinem Befehl gescheitert (F-20: Befehl auf einem Boden
+gemessen, den es nicht gibt). Ich bin heute als Generator selbst darueber gestolpert und habe es
+trotzdem ins Blatt geschrieben.*
+
+```text
+RUNNER  ./scripts/node-runtime.sh --experimental-strip-types \
+          --import ./resources/planner/hausplaner/test-register.mjs --test <datei>
+        Das Qualitaetstor faehrt ohnehin `npm run test:hausplaner` (ganze Suite + Schema-Check);
+        der Einzelaufruf oben ist fuer die schnelle Rueckmeldung waehrend des Baus.
+
+A-01-1  <RUNNER> resources/planner/hausplaner/__tests__/dachAusKontur.test.ts
         Testname: "A-01-1: L-Kontur erzeugt KEIN Dach-Objekt und keinen Status"
         misst: roofs.length vorher == nachher · kein 'bestaetigt' geschrieben
-A-01-2  dieselbe Datei · "A-01-2 KONTROLLE: Rechteck-Kontur erzeugt ein Dach mit DIESER Kontur"
+A-01-2  <RUNNER> dieselbe Datei
+        Testname: "A-01-2 KONTROLLE: Rechteck-Kontur erzeugt ein Dach mit DIESER Kontur"
         misst: polygon === gezeichnete Kontur, NICHT gebaeudeUmriss()   (must_preserve)
 A-01-3  Browserabnahme, kein Unit-Befehl. Sichtbarkeitsnachweis: Screenshot + Wortlaut
         im Bericht. Ein console.error allein erfuellt A-01-3 NICHT.
@@ -179,7 +198,7 @@ A-01-4  php artisan test tests/Feature/Hausplaner/DachBestandsdokumentTest.php
         Fixture nach dem Weg oben (insert()-Muster, ticket_testing)
 A-01-5  Mutationsprobe, kein fester Befehl - Verfahren: je Mutation die Suite fahren,
         Datei danach md5-identisch wiederherstellen, Ergebnis im Bericht als Tabelle
-A-01-6  node --test .../dachAusKontur.test.ts
+A-01-6  <RUNNER> dieselbe Datei
         Testname: "A-01-6: Rechteck MIT Zwischenpunkt erzeugt ein Dach"
         misst: Anlege-Entscheidung == dachFlaechen()-Verhalten fuer dieselbe Kontur
 ```
