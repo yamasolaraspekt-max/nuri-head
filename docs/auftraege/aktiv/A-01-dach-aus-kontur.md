@@ -181,3 +181,19 @@ ballbesitz_danach: planner
 
 *Rollenansage: geprüft als Plan-Prüfer (nicht Planner dieses Blatts, nicht Bauender).
 Messbefehle im Bericht; nichts am Produktivcode verändert.*
+
+### Vorabmessungen des Plan-Prüfers zu Nachtrag 3 und 5 (04.08., Zusatz)
+
+**Nachtrag 3 — der Fixture-Weg ist MACHBAR, gemessen:** Das Server-Schema
+(`domain/scene-document-v2.schema.json`) beschränkt `roofs[].polygon` nur auf
+`minItems: 3` Punkte — **keine Rechtecks-Bedingung**; auch
+`SpeichereHausplanerDokumentRequest` prüft kein Dach-Polygon (grep roof/polygon: 0 Treffer).
+Ein Dokument mit L-Dach passiert also Server und Persistenz und erzeugt exakt den Altfall,
+den A-01-4 melden soll. *Der Fixture-Weg scheitert an nichts Vorhandenem.*
+
+**Nachtrag 5 — ein reproduzierbares Muster existiert bereits:**
+`tests/Feature/Hausplaner/UebernahmeKnopfTest::objekt(seed)` legt Customer+Objekt
+deterministisch an (Seed-700-Muster) — für die PHP-Seite direkt wiederverwendbar.
+Für die Browser-Probe fehlt nur die Benennung: dasselbe Seed-Muster einmal gegen
+`ticket_testing` ausführen + Admin-Login auf `objekt.blade`. Beides gehört als je ein
+Satz ins Blatt, dann ist §5 „Testdaten benannt" erfüllt.
