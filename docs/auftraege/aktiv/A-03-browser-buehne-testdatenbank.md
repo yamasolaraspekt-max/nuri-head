@@ -102,8 +102,9 @@ scripts/__tests__/browserBuehne.test.mjs   die Zusagen
 **Die Datei existiert an der Basis nicht** — alle P1 sind damit trivial rot. *Das ist ehrlich, aber
 schwach; die Kraft steckt in A-03-2 und A-03-3, die auch bei vorhandener Datei rot waeren.*
 
-**A-03-1 (P1):** Die Buehne startet nur, wenn die aufgeloeste Datenbank ein benannter Testname ist.
-Andernfalls **startet sie nicht** und nennt den gefundenen Namen.
+**A-03-1 (P1):** Die Buehne startet nur, wenn die aufgeloeste Datenbank **genau `ticket_testing`**
+ist. Andernfalls **startet sie nicht** und nennt den gefundenen Namen.
+*Ein Name, kein Muster — die Begruendung steht unter „Offene Punkte".*
 
 **A-03-2 (P1, der Kern):** Der Nachweis wird **am Kindprozess** gefuehrt, nicht am Elternprozess.
 Gegenprobe im selben Test: eine Fassung, die den Elternprozess fragt, muss **durchfallen**, obwohl
@@ -121,7 +122,8 @@ komplett" eine gruene Loesung.*
 
 **A-03-5 (P1, Mutationsprobe):** Mindestens fuenf Mutationen fallen: Testnamen-Pruefung entfernt ·
 Pruefung auf den Elternprozess umgestellt · Warnung bei `DB_DATABASE` entfernt · Abbruch in eine
-blosse Warnung verwandelt · Testnamen-Muster so geweitet, dass `ticket` durchkommt.
+blosse Warnung verwandelt · Vergleich von `=== ticket_testing` auf ein Suffix-Muster
+(`*_test*`) aufgeweicht, sodass `ticket_test_kopie` durchkommt.
 
 **A-03-6 (P1, gegen die Papier-Falle eine Ebene hoeher):** `docs/auftraege/ANKER-BROWSER.md`
 **nennt das Skript als den Weg auf die Buehne.** Ein Skript, das niemand kennt, ersetzt keine Regel.
@@ -147,6 +149,9 @@ A-03-1/-2/-3/-4   node --test scripts/__tests__/browserBuehne.test.mjs
                   (reines .mjs wie commitPruefen.test.mjs, KEIN TypeScript-Loader)
 A-03-5            je Mutation die Suite fahren, Datei md5-identisch wiederherstellen,
                   Ergebnis als Tabelle im Bericht
+A-03-6            grep -c 'scripts/browser-buehne.sh' docs/auftraege/ANKER-BROWSER.md
+                  erwartet >= 1 NACH dem Bau · an der Basis 0 (selbst gemessen, deshalb
+                  wirksam rot) · Gegenbeweis: Zeiger entfernen -> Zusage faellt
 ```
 
 ## Kantenliste
