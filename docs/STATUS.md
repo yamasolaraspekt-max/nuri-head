@@ -15,16 +15,17 @@ auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage"
 datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner
 basis_sha: 16d5bbde
 pruef_sha: ""
 release_sha: ""
-letztes_votum: ""
+letztes_votum: "plan-pruefer 04.08.: DoR §5 geprueft, ENTWURF bleibt. Bestaetigt: Basis gueltig (Insel-Drift 0), Ist-Beleg wortgleich, A-01-1/-3/-4/-5 wirksam rot, Z-07-Code bleibt als Ist-Zustand. A-01-6 GEGENGEPRUEFT und angenommen (zwei unabhaengige Messungen: Evaluator 3545321a + Planner-Tabelle; Kante-1-Logik ist flaechenbasiert und damit zwischenpunkt-unempfindlich, am Code gelesen). Vier Nachtraege offen, dann BEREIT."
 offene_akzeptanz:
-  - "Definition of Ready ist noch nicht bestätigt (§5)"
-  - "A-01-4 braucht ein Bestandsdokument mit nicht-rechteckigem Dach - Fixture-Weg offen"
-  - "A-01-6 ist neu (04.08. 23:2x) und vom Plan-Prüfer noch nicht gegengeprüft"
-naechster_schritt: "Plan-Prüfer prüft die Definition of Ready und setzt BEREIT oder gibt SPEC_BLOCKED zurück"
+  - "Nachtrag 2: A-01-2 ist an der Basis bereits GRUEN (Z-07-Bau) — ausdruecklich als KONTROLLE/must_preserve kennzeichnen und von der Zeile 'jedes P1 wirksam rot' ausnehmen, sonst widerspricht das Blatt sich selbst"
+  - "Nachtrag 3: A-01-4 Fixture-Weg benennen — __tests__/fixtures/ existiert nicht (gemessen); Vorschlag: v3-Szenen-JSON mit L-Dach + Seed-Weg fuer objekt.blade in ticket_testing"
+  - "Nachtrag 4: Pruefbefehle/Testnamen fuer A-01-1..5 (A-01-6 hat einen)"
+  - "Nachtrag 5: benanntes Test-Objekt + Login-Weg fuer die Browserabnahme (§5 Testdaten)"
+naechster_schritt: "Planner traegt die vier Nachtraege ein, dann erneute DoR-Pruefung -> BEREIT"
 geschlossen_seit_anlage:
   - "Ort/Wortlaut der Absage: die WELCHE-Frage ist entschieden (dachFlaechen wird gefragt, kein zweiter Rechtecks-Begriff), messbar als A-01-6. Der WORTLAUT bleibt bewusst offen - er gehört in die Browserabnahme (§8)."
   - "Doppelführung Z-07 / A-01: A-01 führt. §16 kennt nur eine Statuswahrheit, und das ist diese Seite."
