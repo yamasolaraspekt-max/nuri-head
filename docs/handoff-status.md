@@ -40409,3 +40409,177 @@ Die UNTERSUCHUNG     Ballbesitz Yama. Falls sie laeuft, ist das hier der Beitrag
 
 *Gemeldet von der Instanz, die seit 23:0x ausschliesslich Bestandsaufnahme und Fortschritt
 darstellt - kein Schnitt, keine Entscheidung, keine Umsetzung.*
+
+---
+
+## ⇒ PLAN REVIEWER — Votum zu Blatt 1 der Übergabe (Z-07) · 04.08.
+
+VOTUM: auftrag=Z-07 rolle=plan-reviewer ergebnis=PLANUNGSBLOCKIERT commit=15e0a094 datum=2026-08-04 hinweis=doppelfuehrung-mit-A-01-und-absage-frage-nicht-festgenagelt
+
+**Je Prüfung eine Zeile, Rohausgabe dahinter:**
+
+```text
+P1 Bestand      GEMESSEN. K-01 heute 2 (Blatt-Ausgangswert 0, erster Bau steht), K-02 heute 0
+                (Ausgangswert 1). Befehle: node scripts/zaehle.mjs …'herkunftFuerNeuesDach' -> 2 ·
+                …'HERKUNFT_NEUES_DACH' -> 0. dachGeometrie Kante-1 (Flaechenvergleich 1%-Toleranz,
+                wirft DachGeometrieUngueltig) und szene.ts-Faenger :499 continue / :545 return
+                bestehen woertlich wie behauptet.
+P2 Notwendig    K-04/K-04b JA (Faenger schluckt nachweislich still). ABER: K-01/K-02/K-03 sind
+                am HEAD BEREITS ERFUELLT — in einem bereit-Blatt. Wer es zieht, bekommt drei
+                gruene P1-Kriterien geschenkt. NEBENBEFUND an den Werkzeug-Strang: Validator-Lauf
+                exit 0 mit 3 OK — die S-07-Sperre (bereits erfuellt) hat NICHT angeschlagen.
+P3 Konflikt     SPERREND, zweifach. (a) DOPPELFUEHRUNG: dieselbe Arbeit existiert als Z-07
+                K-04/K-04b (bereit, altes Schema) UND als A-01 (ENTWURF, docs/STATUS.md =
+                erklaerte einzige Statuswahrheit, Ballbesitz plan-pruefer, offene Akzeptanzen
+                inkl. Fixture-Weg und Absage-Wortlaut). Zwei Blaetter, zwei Regime, ein
+                Gegenstand — welches gilt, ist nirgends entschieden. (b) Der Evaluator-Befund
+                3545321a steht NICHT im Blatt: zwei Rechteckigkeits-Pruefungen widersprechen
+                sich beim Rechteck MIT kollinearem Zwischenpunkt (istAchsenRechteck
+                dachAusschnitt.ts:72 -> false · Kante-1-Flaechenvergleich -> durch; Fall
+                erreichbar). K-04 legt NICHT fest, welche Frage die Absage stellt.
+P4 Pruefbar     K-04 hat dadurch ein Loch: ein Bau mit istAchsenRechteck-Absage besteht alle
+                drei K-04-Zusagen (L-Form rot, glattes Rechteck gruen) und weist trotzdem
+                Zwischenpunkt-Rechtecke ab, die der Renderer klaglos rendert — falsche Absage,
+                von keinem Kriterium gefangen. Fehlender Testfall: Rechteck mit Zwischenpunkt
+                -> Dach ENTSTEHT. Uebrige Kriterien tragen (K-02 absence hat presence-Partner
+                K-01, Mutationsprobe da, Browser-Anker per Verweis).
+P5 Scope        Gemischtes Blatt: 3 Kriterien gebaut+abgenommen, 2 ungebaut — nach R5 waere der
+                Neuschnitt ein eigenes, kleines Blatt (genau das ist A-01). Ausschluesse haben
+                Grund + entschieden_von.
+P6 Frische      Ausgangswerte vom 09:3x-Schnitt sind ueberholt (K-01 0->2, Partner-Drift im
+                Pruefer-Befund selbst vermerkt); nach R19 waere vor dem Ziehen neu zu messen.
+P7 Selbstwid.   Die gefaehrlichste Annahme des Blatts: "die Absage ist eindeutig definierbar" —
+                widerlegt durch (b). Vollstaendig unnoetige Arbeit: KEINE gefunden — aber die
+                Haelfte des Blatts ist bereits erledigt und nur die A-01-Haelfte ist offen.
+```
+
+**Reparaturweg (eine Entscheidung, kein Umbau):** Der Planner (oder Yama) benennt EIN führendes
+Blatt für die Absage-Arbeit — nach STATUS.md-Logik ist das A-01 — und trägt dort zwei Dinge nach:
+**(1)** die Festlegung „die Absage stellt DIESELBE Frage wie der Renderer (Kante-1-Logik,
+wiederverwendet — kein zweiter Rechtecks-Begriff)" samt Testfall *Zwischenpunkt-Rechteck → Dach
+entsteht*; **(2)** Z-07 wird auf den gebauten Teil (K-01–K-03, abgenommen) abgeschlossen statt
+`bereit` gehalten. Danach prüfe ich A-01s Definition of Ready sofort.
+
+*Rollenansage: Ich habe für dieses Votum ausschließlich gelesen und gemessen, nichts gebaut,
+nichts committet (Rollenblatt §1/§4). Die Blätter 2–4 der Übergabe (Z-06-N2, Z-11, W-10) folgen.*
+
+---
+
+## ⇒ PLAN REVIEWER — Voten zu den Blättern 2–4 der Übergabe · 04.08.
+
+VOTUM: auftrag=Z-06-N2 rolle=plan-reviewer ergebnis=PLANUNGSREIF commit=15e0a094 datum=2026-08-04 hinweis=sperr-einwand-belegt-geschlossen-zwei-notizen
+
+```text
+P1  GEMESSEN, alles exakt: population/K-01 auf den zwei Zieldateien -> 0 (Behauptung 0) ·
+    Partner konturHinweis -> 3 · Anker :101/:104/css:532 woertlich · K-02-Werkzeug selbst
+    gefahren: 118 Stellen / 0 offen (Behauptung 118/0).
+P2  NOETIG: Felder existieren (N1 gruen), Anzeige liest sie nirgends (0 Treffer belegt).
+P3  Keine verriegelnde Zusage auf der alten Sitzungs-Quelle (grep konturHinweis __tests__ -> 0
+    Dateien). Ueberschneidung nur szene.ts mit Z-07-K-04b/A-01 — die Baureihenfolge "NACH Z-07"
+    steht im Blatt; da Z-07 PLANUNGSBLOCKIERT ist, erbt N2 die Wartezeit. Entscheidet der
+    Planner die Reihenfolge neu, ist die Datei-Ueberschneidung der einzige Punkt.
+P4  Kriterien tragen: K-03 mit ROTER Zeile (bestaetigt->AUS) + Herkunft-im-Klartext, K-04
+    zwei Kanaele einzeln, L-01 mit Kontrolle. NOTIZ (nicht sperrend): K-01 misst mit ROHEM
+    grep (Substring, Kommentare zaehlen mit — F-09/F-11-Klasse); das Hausmittel zaehle.mjs
+    --wort existiert und Z-11 benutzt es bereits. Ein Wort im Befehl, dann ist die Falle zu.
+P5  Scope 3 Dateien, Ausschluesse mit Grund+entschieden_von, N1/N3/Dach sauber abgegrenzt.
+P6  Ausgangswerte heute neu gemessen — identisch. Frisch.
+P7  Unnoetige Arbeit: keine. Der dritte Ort (3D-Koerper) ist der Kern von B10.
+```
+
+VOTUM: auftrag=Z-11 rolle=plan-reviewer ergebnis=PLANUNGSREIF commit=15e0a094 datum=2026-08-04 hinweis=alle-praemissen-exakt-reihenfolge-koennte-vorgezogen-werden
+
+```text
+P1  GEMESSEN, alles exakt (zaehle.mjs): touch-action 0 · zeigerArt 0 · toleranzAusZoom 1 ·
+    cursor 18 · Signatur ohne Zeigerart + zoom=0-Waechter woertlich am Code · Einstieg
+    onClick Buehne.tsx:105 · onMouseDown/Up 0 · Z-01-Aufraeumstelle (werkzeugEnde) existiert
+    in allen drei Nahtstellen-Dateien.
+P2  NOETIG: vier Luecken real, Luecke 4 ehrlich BENANNT statt gebaut (vorbildlich).
+P3  Keine Kollision: Scope (css, fangKern, Buehne) ist DISJUNKT zu Z-07 und N2. Die
+    Baureihenfolge "NACH Z-07 und N2" ist daher fachlich nicht zwingend — Z-11 koennte
+    VORGEZOGEN werden, waehrend Z-07 blockiert ist. Entscheidung Planner.
+P4  Kriterien mit zaehle.mjs (kommentarfest), K-03 prueft die Rechnung inkl. der zoom=0-Kante,
+    K-04 mit ROTER Zeile, L-01 mit Kontrolle UND Partnermessung Maus. Traegt.
+P5  Minimal, Vorgabewert 'mouse' = kein Aufrufer angefasst. P6 frisch (heute identisch).
+P7  Die Lehre der v1 steht im Kopf (Praemisse im Browser widerlegt -> im Browser gemessen).
+```
+
+VOTUM: auftrag=W-10 rolle=plan-reviewer ergebnis=PLANUNGSREIF commit=15e0a094 datum=2026-08-04 hinweis=anlass-ehrlich-korrigiert-zeilenanker-gedriftet-b8-gegenlesen-bleibt
+
+```text
+P1  GEMESSEN: lsof-Zensus 0 (Partner stat 5, exakt) · K-02-Muster 1x vorhanden · K-06b-Satz
+    1x an :105 woertlich · Evaluator-Fall-Kommentar :116 vorhanden · lsof unter /usr/sbin.
+    DRIFT: die ||-Bedingung liegt NICHT mehr auf Zeile 35 (Datei seit W-09 gewachsen) —
+    Muster stimmt, Anker nicht. Vor dem Bau nachziehen (F-20-Geist).
+P2  NOETIG: der 22:47-Vorfall ist belegt (zwei 888-kB-Indizes als "Rest" weggezogen), und die
+    Selbstanzeige 15e0a094 zeigt dieselbe Klasse von Hand. Die Korrektur des eigenen Anlasses
+    ("zerstoert" -> "entscheidet ohne Auskunft") ist genau die Sorte Ehrlichkeit, die F-04
+    verlangt.
+P3  VORBILDLICH GELOEST: K-06 schuetzt die abgenommene Evaluator-Zusage ausdruecklich
+    (gleicher Test, gleiches Ergebnis, andere Begruendung — und das Verbot, die Zusage
+    anzupassen). B13-Ausnahme benannt.
+P4  K-02 (grep aufs Muster) ist Gestalt — aber K-03/K-05 tragen die Wirkung dahinter
+    (Inhalt-Lock bleibt liegen, Rueckfall raeumt WENIGER ohne Messgeraet). Kante 2 ohne
+    Zusage mit Grund. Traegt.
+P5/P6  Zwei Dateien, Stufe-4/5-Ausschluss begruendet; Ausgangswerte heute exakt bestaetigt.
+P7  Unnoetig ist hier nichts — aber das Blatt verlangt selbst noch das B8-Gegenlesen durch
+    den EVALUATOR (er kennt die Tor-Teil-2-Messreihe); mein Votum ersetzt das nicht, es
+    kommt davor. status bleibt entwurf, bis er gegengelesen hat.
+```
+
+**Damit ist die Übergabe vollständig beantwortet:** 1× PLANUNGSBLOCKIERT (Z-07: Doppelführung
+mit A-01 + Absage-Frage nicht festgenagelt) · 3× PLANUNGSREIF (N2 mit Notiz, Z-11 mit
+Vorzieh-Option, W-10 mit Anker-Drift und ausstehendem B8-Gegenlesen). Auf die ausdrückliche
+Frage nach VOLLSTAENDIG UNNOETIGER Arbeit: in den vier Blättern keine gefunden — aber die
+halbe Z-07 ist bereits gebaut und abgenommen, nur die A-01-Hälfte ist offen. Ballbesitz:
+Planner (Z-07/A-01-Entscheidung, Reihenfolge) · Evaluator (W-10-Gegenlesen) · danach ich
+(A-01 Definition of Ready, sobald das führende Blatt benannt ist).
+
+---
+
+# ⚠ SELBSTKORREKTUR DES PLANNERS — **ich habe unter aufgehobenen Regeln gearbeitet** (04.08. 23:1x)
+
+**`docs/ARBEITSREGELN.md` §1, gültig seit heute, Autorität Yama:**
+
+> *„Alle früheren Prozessfassungen sind mit Inkrafttreten dieser Version vollständig aufgehoben.
+> Das gilt insbesondere für frühere Betriebsordnungen, Rollenregelwerke, Agentenzyklen …
+> Alte Regelverweise in solchen Dokumenten sind ungültig und werden nicht befolgt."*
+
+**Was ich Yama vor zwanzig Minuten bestätigt habe, war die aufgehobene Fassung** — BETRIEBSORDNUNG,
+00-REGELWERK (R1–R22), kern.md (K1–K12), 01-planner.md, plan-reviewer.md. *Ich habe sie sorgfältig
+gelesen und sorgfältig das Falsche gelernt.*
+
+## Was daraus folgt — meine heutigen Züge, ehrlich eingeordnet
+
+```text
+Z-07 auf `bereit` gesetzt       UNGUELTIG. §17: alte Statuswerte werden nicht automatisch
+                                uebernommen. Und §3 kennt kein `bereit` neben `BEREIT` als
+                                Zustand eines neu eingeordneten Auftrags.
+Z-03/Z-04 auf `gebaut`          dito. `gebaut` ist kein Zustand nach §3.
+W-10 geschnitten                im ALTEN Schema. Der Plan-Pruefer hat es gesagt, bevor ich
+                                es wusste. Nach §5/§17 neu einzuordnen oder zu verwerfen.
+Validator als Beleg benutzt     §16: "Alte Auftragsvalidatoren und deren Statusschema sind
+                                aufgehoben." Mein W-10-Blattlauf ist KEIN Nachweis.
+Uebergabe an "Plan Reviewer"    Rolle heisst jetzt Plan-PRUEFER (§4) und hat andere Pflichten:
+                                die 15 Punkte der Definition of Ready (§5).
+B12/B13/B14/B15 zitiert         aufgehoben (§1).
+```
+
+## Was ab jetzt gilt — und wer wo steht
+
+```text
+DER EINE AKTIVE AUFTRAG   A-01 "Dach aus Kontur - lesbare Absage"
+                          zustand ENTWURF · ballbesitz plan-pruefer · basis 16d5bbde
+                          Quelle: docs/STATUS.md (§16, die eine Statuswahrheit)
+IN_ARBEIT                 KEINER. §3 erlaubt hoechstens einen.
+MEIN NAECHSTER SCHRITT    A-01 auf die Definition of Ready bringen - nicht Z-07 wiederbeleben.
+```
+
+**Die Doppelführung, die der Plan-Prüfer gemeldet hat, ist damit entschieden: A-01 führt, Z-07
+ist Historie.** *Nicht weil ich es abwäge, sondern weil §16 nur eine Statuswahrheit kennt und
+STATUS.md sie ist.*
+
+**Und der fachliche Kern seines Befunds bleibt offen und gehört in A-01:** es gibt ZWEI
+Rechteckigkeits-Prüfungen (`istAchsenRechteck` dachAusschnitt.ts:72 · Kante-1-Flächenvergleich),
+die sich beim Rechteck mit kollinearem Zwischenpunkt widersprechen. **Welche Frage die Absage
+stellt, ist nicht festgelegt** — das ist ein SPEC-Mangel, und der gehört mir (§4).
