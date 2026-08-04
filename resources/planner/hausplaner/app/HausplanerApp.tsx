@@ -23,6 +23,10 @@ import { bemassung } from '../geometry/bemassung';
 import { wandLaenge, wandBaender, type Punkt } from '../geometry/wallGeometry';
 // Z-02: der geprüfte Fang-Kern wird angeschlossen, statt im Bauteil ein zweites Mal gerechnet.
 import { fange, toleranzAusZoom, FANG_TEXT, type FangArt } from '../geometry/fangKern';
+// **A-01: die Entscheidung kommt aus `geometry/`, nicht aus `app/tools/teilKennung.ts`.**
+// Dort steht eine gleichnamige Funktion `dachFlaechen`, die Teil-Kennungen liest und NIE wirft.
+// *Wer sie importiert, baut eine Absage, die nie abgesagt — und alle Kriterien blieben gruen.*
+import { dachFlaechen, DachGeometrieUngueltig } from '../geometry/dachGeometrie';
 // Z-05: die Konturpruefung ist reine Geometrie und wohnt dort, nicht hier.
 import { pruefeKontur, konturStatusText, KONTUR_MIN_PUNKTE, type KonturGrund } from '../geometry/kontur';
 import { herkunftFuerNeueDecke, herkunftFuerNeuesDach } from '../geometry/freigabe';
@@ -323,6 +327,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   // Z-07: dasselbe fuer das Dach. Getrennt gefuehrt, nicht zusammengelegt — wer eine Decke aus
   // Kontur und danach ein Dach aus dem Umriss anlegt, soll den Hinweis zum DACH sehen.
   const [dachNaeherung, setDachNaeherung] = useState<boolean | null>(null);
+  // A-01: der Grund, warum ein Dach NICHT entstanden ist. `null` = es gab keine Absage.
+  const [dachAbsage, setDachAbsage] = useState<string | null>(null);
   /** Z-01: steht der Zeiger auf der Zeichenflaeche? Verlassen pausiert, es beendet nicht. */
   const [zeigerDrinnen, setZeigerDrinnen] = useState(true);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
@@ -443,7 +449,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    */
   const fussHinweis: string | null = werkzeug === 'kontur'
     ? konturStatusText(konturPunkte.length, konturFehler, letzteKontur?.length ?? null)
-    : dachNaeherung === true
+    : dachAbsage !== null
+      ? dachAbsage
+      : dachNaeherung === true
       ? 'Dach als Näherung aus dem Gebäude-Umriss — für ein exaktes Dach zuerst eine Kontur zeichnen'
       : deckeNaeherung === true
         ? 'Decke als Näherung aus dem Gebäude-Umriss — für eine exakte Decke zuerst eine Kontur zeichnen'
@@ -953,18 +961,42 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       // klicken müssen — aber niemand darf glauben, er habe ein exaktes Dach, wenn er es nicht hat.*
       const jetzt = new Date().toISOString();
       const ausKontur = letzteKontur !== null && letzteKontur.length >= KONTUR_MIN_PUNKTE;
-      store.getState().executeCommand({
-        type: 'ADD_ROOF',
-        roof: {
-          id: uuid(), type: 'roof', levelId: level.id, visible: true, locked: false, tags: [],
-          createdAt: jetzt, updatedAt: jetzt,
-          polygon: ausKontur ? letzteKontur : gebaeudeUmriss(),
-          roofType: 'sattel', neigungGrad: 35, firstAzimutGrad: 0,
-          ueberstandMm: 500, traufhoeheMm: level.elevation + level.defaultWallHeight,
-          // Z-06-N1 (B10): der Status kommt aus der Domäne, nicht aus diesem Klick-Handler.
-          ...herkunftFuerNeuesDach(ausKontur),
-        },
-      });
+      const dach = {
+        id: uuid(), type: 'roof' as const, levelId: level.id, visible: true, locked: false, tags: [],
+        createdAt: jetzt, updatedAt: jetzt,
+        polygon: ausKontur ? letzteKontur : gebaeudeUmriss(),
+        roofType: 'sattel' as const, neigungGrad: 35, firstAzimutGrad: 0,
+        ueberstandMm: 500, traufhoeheMm: level.elevation + level.defaultWallHeight,
+        // Z-06-N1 (B10): der Status kommt aus der Domäne, nicht aus diesem Klick-Handler.
+        ...herkunftFuerNeuesDach(ausKontur),
+      };
+
+      // **A-01 — dieselbe Frage stellen, die der Renderer später stellt.**
+      //
+      // Bis heute wurde das Dach angelegt und erst beim Zeichnen verworfen: `dachGeometrie.ts`
+      // wirft bei nicht-rechteckiger Kontur, und beide Fänger in `szene.ts` schlucken den Wurf
+      // (`continue` / `return`). Ergebnis war ein Bauteil mit dem Status `bestaetigt` — der
+      // höchsten Vertrauensstufe, die B10 kennt —, **das in keiner Ansicht existiert.**
+      //
+      // *Die Schranke war nie das Problem; sie wurde nur nicht gehört.* Deshalb wird sie hier
+      // GEFRAGT statt nachgebaut: kein zweiter Rechtecks-Begriff, keine kopierte Toleranz.
+      // `istAchsenRechteck` aus `dachAusschnitt.ts` wäre der falsche Zeuge — es weist ein
+      // Rechteck mit kollinearem Zwischenpunkt ab, das der Renderer klaglos zeichnet.
+      try {
+        dachFlaechen(dach);
+      } catch (fehler) {
+        if (fehler instanceof DachGeometrieUngueltig) {
+          // KEIN Objekt, KEIN Status, keine Änderung an der Szene — nur ein lesbarer Grund.
+          setDachAbsage(fehler.message);
+          setWerkzeug('auswahl');
+
+          return;
+        }
+        throw fehler;
+      }
+
+      setDachAbsage(null);
+      store.getState().executeCommand({ type: 'ADD_ROOF', roof: dach });
       setDachNaeherung(!ausKontur);
       setWerkzeug('auswahl');
 
