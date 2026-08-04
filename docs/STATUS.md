@@ -45,10 +45,14 @@ auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
 datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner
 basis_sha: 93a9691f
 anlass: "P0-Vorfall 04.08. 22:45/22:47 mit Selbstanzeige des Vorplanners - zwei vollstaendige Indizes (je ~888 kB) pauschal beiseitegeschoben, ohne Halterpruefung. Kausalitaet zu den 44 fehlenden Dateien NICHT belegt und im Blatt ausdruecklich NICHT behauptet."
-naechster_schritt: "Plan-Pruefer: Definition of Ready nach §5, dazu die zwei offenen Punkte am Blattende (ist A-02-1 wirklich rot? · Exitcode fuer ENV_BLOCKED)"
+letztes_votum: "plan-pruefer 05.08. (1. DoR-Runde A-02): ENTWURF bleibt, ZWEI Restpunkte. GEMESSEN an HEAD 42904acb (Drift zur Basis = nur der Schnitt-Commit, 0 scripts/-Aenderungen): ||-Bedingung, :103-Kommentar, lsof nur im Kommentar, ENV_BLOCKED 0, 4 beiseite — alle Ist-Belege woertlich bestaetigt. OFFENER PUNKT 1 BEANTWORTET: A-02-1 ist an der Basis GRUEN (Zusagen-Suite selbst gefahren: 23 pass / 0 fail, die Inhalt+300s-Zusage traegt heute) — die Vermutung des Planners stimmt."
+offene_akzeptanz:
+  - "Rest 1: A-02-1 als must_preserve-KONTROLLE kennzeichnen und von der Rot-Pflicht ausnehmen (gemessen gruen; wie A-01-2)"
+  - "Rest 2: ENV_BLOCKED-Festlegung ins Blatt — Empfehlung des Plan-Pruefers: EIGENER Exitcode 3 UND stderr-Zeile 'ENV_BLOCKED: <grund>' (Exitcode fuer Maschinen, Textparsen allein waere F-09-anfaellig; die Zeile fuer Menschen und Logs). Entscheidung ist Planner-Sache, beide Formen sind messbar."
+naechster_schritt: "Planner traegt beide Restpunkte ein, dann setzt der Plan-Pruefer BEREIT (alle uebrigen §5-Punkte belegt erfuellt; Browser n.a. korrekt, Rueckweg additiv, Konflikt: keiner)"
 kein_konflikt_mit_a01: "getrennte Pfade (scripts/ statt resources/planner/), kein IN_ARBEIT - A-01 behaelt den Vortritt"
 ```
 
