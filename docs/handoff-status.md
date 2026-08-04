@@ -40320,3 +40320,46 @@ und der Zeitpunkt liegt zwischen meiner letzten Validator-Nutzung (23:0x) und je
 Und eine Lehre steht schon fest: `.git/_locks_beiseite/2026-08-04/` enthält zwei 888-kB-Indizes
 von 22:45 und 22:47 — *ein Zusammenhang ist nicht belegt, aber die Uhrzeiten liegen nah beieinander,
 und das gehört in dieselbe Untersuchung.*
+
+---
+
+# ⇒ PLAN REVIEWER — **ÜBERGABE: fünf Blätter zur Prüfung, geordnet** (Planner, 04.08. 23:0x)
+
+**Kette:** `Planner → PLAN REVIEWER → Generator → Evaluator`. **Ich habe sie bisher übersprungen —
+das ist der Grund für diese Übergabe.** *Yama hat es gefragt, nicht ich es gemerkt.*
+
+## Ballbesitz-Uhr — gemessen, nicht erinnert
+
+```text
+LEERLAUF-PROBE  jüngste Änderung 22:55 (meine Wiederherstellung, KEIN Bau) · jetzt 23:03
+                -> Baum still seit 8 min. Aber: DREI Aufträge mit Marke liegen (§8b Zeile 2)
+                -> Befund: der Bauende wartet NICHT auf Papier. R16 ist erfüllt.
+
+BAUBAR      hausplaner-3d   Z-07 · Z-11 · Z-06-N2
+            produktdaten    4 Blätter (fremder Strang, eigene Instanz)
+GEBAUT      Z-03/Z-04 · W-05 · Z-06-N1 · W-04      warten auf Votum -> Evaluator
+ENTWURF     W-10 (neu) · S-13 · S-15 · S-10 · PW-01
+```
+
+## Was ich dir vorlege — und in welcher Reihenfolge
+
+| # | Blatt | Warum diese Stelle | Besonderheit für dich |
+|---|---|---|---|
+| **1** | **Z-07** (Dach aus Kontur) | letztes Bauteil des Geschosses; K-04 neu geschnitten, K-04b neu | **⚠ MEIN EIGENER BAU.** Ich habe ihn als Generator gebaut und heute als Planner auf `bereit` zurückgesetzt. **Lies das mit Argwohn.** |
+| **2** | **Z-06-N2** (Kennzeichnung) | N1 ist grün votiert, N2 damit entsperrt | Prüfer meldete **einen sperrenden Einwand** (K-01 misst app-weit) — ist er geschlossen? |
+| **3** | **Z-11** (Touch/Stift) | unabhängig, v2-Fassung | v1 wurde vom Evaluator **im Browser widerlegt**. Trägt v2 die neue Prämisse? |
+| **4** | **W-10** (Lock-Halter) | B13-Ausnahme: das Commit-Tor entscheidet ohne Auskunft | **Frisch von mir, ungeprüft.** Zwei Ausgangswerte hatte ich falsch und selbst korrigiert. |
+
+## Die vier Fragen, die ich dir ausdrücklich stelle
+
+```text
+P2  Ist Z-07/K-04b ueberhaupt noetig - oder loest der Renderer das Problem schon anders?
+P3  Verriegeln abgenommene Zusagen die Flaechen von N2 und Z-11?
+P7-8  Welche Arbeit in diesen vier Blaettern ist VOLLSTAENDIG unnoetig?
+     *NICHT NOTWENDIG ist dein wertvollstes Votum - ich erwarte es ausdruecklich.*
+```
+
+**Was ich NICHT tue:** die Prüfung selbst übernehmen. *Ein Planner, der seinen eigenen Plan
+prüft, hat keinen Reviewer — er hat einen zweiten Namen für sich selbst (K12).*
+
+**Startprompt für die Instanz:** `docs/agents/regeln/plan-reviewer.md` §6, wörtlich.
