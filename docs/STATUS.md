@@ -19,10 +19,10 @@ ballbesitz: planner
 basis_sha: 16d5bbde
 pruef_sha: ""
 release_sha: ""
-letztes_votum: "plan-pruefer 04.08.: DoR §5 geprueft, ENTWURF bleibt. Bestaetigt: Basis gueltig (Insel-Drift 0), Ist-Beleg wortgleich, A-01-1/-3/-4/-5 wirksam rot, Z-07-Code bleibt als Ist-Zustand. A-01-6 GEGENGEPRUEFT und angenommen (zwei unabhaengige Messungen: Evaluator 3545321a + Planner-Tabelle; Kante-1-Logik ist flaechenbasiert und damit zwischenpunkt-unempfindlich, am Code gelesen). Vier Nachtraege offen, dann BEREIT."
+letztes_votum: "plan-pruefer 04.08. (2. DoR-Runde): drei von vier Nachtraegen ERFUELLT und gegengemessen (N2 Kontrolle-Ausnahme sauber; N3 insert-Muster real: SnapshotRueckwegVersionTest:67, Seeder 0; N5 is_admin-Factory woertlich in UebernahmeKnopfTest:97, Objekt-Nichtfestschreibung akzeptiert). EIN Rest: N4-Pruefbefehle A-01-1/-2/-6 nennen 'node --test <datei>.ts' — SELBST GEPROBT, faellt sofort: die Insel-Suite laeuft nur ueber scripts/node-runtime.sh --experimental-strip-types --import test-register.mjs (package.json:10). Ein korrekt gebauter A-01 wuerde an den drei Befehlen scheitern (F-20-Klasse: Befehl auf Boden gemessen, den es nicht gibt)."
 offene_akzeptanz:
-  - "ALLE VIER NACHTRAEGE EINGETRAGEN 04.08. 23:4x (Planner). Erneute DoR-Pruefung steht aus."
-naechster_schritt: "Plan-Pruefer prueft die vier Nachtraege und setzt BEREIT oder gibt SPEC_BLOCKED zurueck"
+  - "EINZIGER Rest vor BEREIT: die drei Pruefbefehle A-01-1/-2/-6 auf den echten Runner umstellen — entweder 'npm run test:hausplaner' + Testname oder der volle node-runtime.sh-Aufruf mit der Testdatei. Eine Zeile, dreimal."
+naechster_schritt: "Planner korrigiert die drei Befehle, dann setzt der Plan-Pruefer BEREIT (alle uebrigen §5-Punkte sind belegt erfuellt)"
 nachtraege_erledigt:
   - "N2 A-01-2 ist jetzt ausdruecklich must_preserve-KONTROLLE und von der Rot-Pflicht AUSGENOMMEN. Begruendung im Blatt: ohne das Kriterium waere 'gar kein Dach mehr' eine gruene Loesung."
   - "N3 Fixture-Weg steht (Abschnitt 'Fixture-Weg fuer A-01-4', 23:3x): Testebene nutzt das vorhandene insert()-Muster der vier Hausplaner-Featuretests, KEIN neuer Seeder. Browserebene erzeugt das Dokument VOR dem Bau. Die REIHENFOLGE ist Teil des Auftrags."
