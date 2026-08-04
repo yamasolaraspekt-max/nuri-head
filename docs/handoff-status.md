@@ -1,4 +1,9 @@
-# Handoff-Status (Ledger) — Hausplaner 3D / UI
+# Handoff-Status (historisches Ledger) — Hausplaner 3D / UI
+
+> **NICHT MEHR VERBINDLICH SEIT 04.08.2026.** Dieses Ledger bleibt ausschließlich als Beweis- und
+> Entscheidungsverlauf erhalten. Es ist keine Status- oder Prozessquelle. Verbindlich ist nur
+> [`docs/ARBEITSREGELN.md`](ARBEITSREGELN.md); alte Regelverweise und Rollenübergaben in diesem
+> Ledger sind aufgehoben.
 
 > **⚠ AB 31.07.2026, 10:30 IST DIESE DATEI ARCHIV.**
 > **Wo wir stehen, steht in `docs/STAND.md`** — eine Seite, die ÜBERSCHRIEBEN wird.
@@ -40190,3 +40195,41 @@ L-DAECHER  gehoeren nach Z-08 (Walm/Kehle/Verschneidung) und werden NICHT auf Vo
   geschnitten - jetzt mit gemessenem Bedarf statt mit einer Annahme.
 GENERATOR  bau K-04 und K-04b, dann ist Z-07 rund. Danach N2, dann Z-11.
 ```
+
+---
+
+# ⇒ AN ALLE ROLLEN — **ROLLENWECHSEL: diese Instanz ist ab jetzt PLANNER** (Yama, 04.08.)
+
+**Yamas Wort, wörtlich: „du bist ab jetzt der planner".** Ab sofort schneide ich, ich baue nicht
+mehr. Wer bisher meine Bau-Meldungen las, bekommt ab jetzt Blätter und Entscheidungen.
+
+## Der Interessenkonflikt, bevor ihn jemand anders findet
+
+**Ich war bis eben der Generator und habe heute gebaut:** W-04 · W-05 · W-09-Nachtrag · S-14 ·
+Z-03/Z-04 · Z-06-N1 (samt vier Nähten) · Z-07 · TEST_ROLLE · Tor-Paket Teil 1. **Vier davon
+warten noch auf ihr Votum.**
+
+**Was ich deshalb NICHT tue, und zwar dauerhaft:**
+
+```text
+kein `abgenommen` auf irgendein Blatt          -> gehoert dem Evaluator (B14), erst recht auf meine
+kein Kriterium, das einen MEINER Bauten        -> das waere Selbstabnahme durch die Hintertuer:
+   nachtraeglich passend macht                    nicht der Bau wird gerechtfertigt, sondern die Latte gesenkt
+kein Rueckbau eigener Befunde                  -> was ich als Generator gemeldet habe, steht
+```
+
+*Wer sehen will, ob ich mich daran halte: jeder Schnitt, der eines meiner `gebaut`-Blätter
+berührt, gehört mit Argwohn gelesen. Das ist keine Höflichkeit, das ist die Prüfanleitung.*
+
+## Erster Zug: Z-07 zurück auf `bereit` — mein eigener Bau, für unvollständig erklärt
+
+```text
+Blatt stand auf `gebaut` (mein Eintrag von 23:1x als Generator)
+Nach dem ROT-Votum wurden K-04 UMGESCHNITTEN und K-04b NEU ergaenzt - beide P1, beide UNGEBAUT
+-> `gebaut` waere die gefaehrlichste Form von F-08b: der Evaluator liest das FELD, nicht die
+   Kriterien, und nimmt einen halben Umfang ab.
+```
+
+**Der Neuschnitt ist das Ereignis, und den erzeugt der Planner — deshalb ist dieser Wechsel
+meiner (B14).** *Der Bau selbst bleibt gültig und ist handwerklich bestätigt; er deckt nur die
+neue Latte nicht.*
