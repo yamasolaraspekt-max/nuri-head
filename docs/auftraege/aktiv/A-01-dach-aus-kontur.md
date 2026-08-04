@@ -4,12 +4,12 @@
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage statt eines unsichtbaren Objekts"
 zustand: BEREIT
-ballbesitz: generator
+ballbesitz: planner
 basis_sha: 16d5bbde
 pruef_sha: ""
 release_sha: ""
 letztes_votum: "plan-pruefer 04.08. 23:5x: DoR §5 VOLLSTAENDIG — BEREIT. Dritte Runde: die drei korrigierten Pruefbefehle selbst geprobt (Runner-Form laeuft, decke.test.ts sauber durch; blankes node --test faellt belegt). Alle 15 Punkte erfuellt, A-01-2-Ausnahme benannt (must_preserve-Kontrolle). REIHENFOLGE BINDEND: Browser-Fixture VOR dem ersten Bau-Commit (der Bau zerstoert sonst seinen eigenen Pruefstand)."
-naechster_schritt: "Generator: Readiness bestaetigen (§7), DANN ZUERST das Browser-Fixture erzeugen und ablegen, erst danach bauen"
+naechster_schritt: "Planner: EINE Frage beantworten (Abschnitt Rueckfrage des Generators) - genuegt fuer das A-01-4-Fixture die echte Speicher-Route, oder ist das Zeichnen mit der Maus Teil des Pruefgegenstands? §7 ist vollstaendig belegt, kein Produktivcode angefasst."
 ```
 
 ## Herkunft und Einordnung
@@ -312,3 +312,52 @@ deterministisch an (Seed-700-Muster) — für die PHP-Seite direkt wiederverwend
 Für die Browser-Probe fehlt nur die Benennung: dasselbe Seed-Muster einmal gegen
 `ticket_testing` ausführen + Admin-Login auf `objekt.blade`. Beides gehört als je ein
 Satz ins Blatt, dann ist §5 „Testdaten benannt" erfüllt.
+
+---
+
+## Rückfrage des Generators an den Planner (05.08., vor dem ersten Bau-Commit)
+
+**Ich habe nichts am Produktivcode angefasst.** §7-Eingangsprüfung ist vollständig belegt; die
+Frage betrifft ausschließlich den vorgeschriebenen **Weg** zum Fixture, nicht seinen Zweck.
+
+### Was steht
+
+```text
+Umgebung   Port 8099 · ticket_testing · Assets 200 · Login traegt · Objekt 903 angelegt
+Anker      SEITE 200 · MONTIEREN · BUEHNE canvas 2, Konva-Stages 1
+Werkzeuge  Kontur = Knopf "Kontur (U)", Dach = "Dach (D)"; Klick-Ankunft belegt
+           (3 Konva-Klicks, korrekte Punkte, Fussleiste zaehlt "3 Punkte ... Enter schliesst")
+Dokument   revision 1 in ticket_testing — aber roofs 0
+```
+
+### Drei Hindernisse, gefunden und abgeräumt — eines davon gehört nicht nur zu A-01
+
+```text
+1  `php artisan serve` reicht DB_DATABASE NICHT an den Serverprozess durch (ps eww: nicht
+   gesetzt). Die Oberflaeche lief gegen die ARBEITS-Datenbank. Dass mein Login scheiterte —
+   der Testbenutzer existiert nur in ticket_testing — hat den Schreibzugriff verhindert.
+   *Das war Glueck, nicht Vorsicht, und es ist ein §15-Befund unabhaengig von A-01.*
+   Tragfaehig ist `php -S`, gestartet AUS public/ heraus (Laravels Router nimmt getcwd()).
+2  Herauszoomen aendert die SKALA, nicht den NULLPUNKT der Buehne. Beides muss gerechnet werden.
+3  Das Tastenkuerzel wechselt das Werkzeug nicht (Fokus liegt nicht auf der Buehne).
+   Der Knopf tut es: aria-pressed false -> true, gemessen.
+```
+
+### Die Frage
+
+**Das Blatt schreibt für die Browserebene vor: „L-Kontur zeichnen → Dach anlegen → speichern".**
+Nach drei Anläufen steht die Kontur über die Oberfläche noch nicht; die Fußleiste meldet
+stattdessen *„Ablauf: Wand ziehen (W) → Dach (D) über den Umriss → 3D"* — **Verdacht, noch nicht
+gemessen:** die Oberfläche verlangt vor dem Dach einen Umriss aus Wänden, und dann ist der
+Fixture-Weg länger als das Blatt ihn beschreibt.
+
+> **Genügt für A-01-4 ein Dokument, das über die ECHTE Speicher-Route entsteht** (PUT auf
+> `data-speichern-url`, mit L-Dach in der Nutzlast) — also durch Servervalidator, Schema und
+> Persistenz —, **oder ist das Zeichnen mit der Maus Teil des Prüfgegenstands?**
+
+*Beides ist vertretbar, und die Entscheidung ändert den Aufwand erheblich. Ich entscheide sie
+nicht selbst: Der Weg steht im Blatt, und §7 verbietet mir, ihn stillschweigend zu ersetzen.*
+
+**Mein Vorschlag, falls er hilft:** die Speicher-Route genügt für das FIXTURE (A-01-4 prüft, dass
+ein *Bestandsdokument* gemeldet wird — wie es entstand, ist für die Meldung ohne Belang), und das
+Zeichnen bleibt Prüfgegenstand der **Browserabnahme von A-01-3**, wo es hingehört.
