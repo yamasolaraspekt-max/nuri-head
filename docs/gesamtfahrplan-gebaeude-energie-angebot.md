@@ -66,8 +66,10 @@ Die vorgeschlagene 0–15-Struktur wird übernommen und um **Kapitel 16 (Projekt
 ### Kapitel 0 — Governance, Arbeitsweise, Rückfall, Commit-/Push-Regeln
 - **Ziel:** Arbeitsregeln durchsetzen: Drei-Rollen-Zyklus (Planner→Generator→Evaluator getrennt), Evaluator strikt read-only, Archiv+Manifest, kein Löschen ohne Freigabe, **kein Push ohne ausdrückliches Yama-„Push frei"**, path-scoped Commits.
 - **Warum nötig:** Verhindert genau die Fehler der Vergangenheit (Evaluator committete/pushte autonom). Bindet jede Instanz.
-- **Führende Wahrheit:** `docs/BETRIEBSORDNUNG.md` > CLAUDE.md > `docs/architektur/bauordnung.md` > `docs/agents/*`.
-- **ticket-Bausteine:** `docs/agents/00-04`, `docs/BETRIEBSORDNUNG.md`, `docs/rueckfall-archiv-regeln`, `_archiv/*`.
+- **Führende Prozesswahrheit:** `docs/ARBEITSREGELN.md`; fachliche Leitplanken folgen deren
+  Quellenhierarchie.
+- **Historische Prozessbausteine:** frühere Agenten-, Betriebs- und Rückfallregeln sind aufgehoben;
+  fachliche Belege in `_archiv/*` bleiben Kontext.
 - **pg/wb:** —
 - **Wiederverwendet:** vollständig (Bestand). **Nicht übernommen:** — **Offene Lücken:** keine strukturellen.
 - **Backend/Frontend:** — · **Testpfad:** — · **Browser-Prüfpfad:** —

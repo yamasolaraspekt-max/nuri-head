@@ -1,4 +1,8 @@
-# Arbeitskompass — ticket
+# Arbeitskompass — historischer Navigationsstand
+
+> **NICHT MEHR VERBINDLICH SEIT 04.08.2026.** Fachliche Verweise bleiben als Kontext erhalten.
+> Priorität, Ballbesitz und Prozess werden ausschließlich nach
+> [`docs/ARBEITSREGELN.md`](ARBEITSREGELN.md) bestimmt.
 
 **Stand:** 2026-07-21 — **dieser Datumsstand ist echt und die Datei ist damit 11 Tage alt.**
 
