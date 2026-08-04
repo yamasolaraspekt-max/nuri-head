@@ -6,33 +6,33 @@ zehnergruppe: 1
 auftrag: "GOVERNANCE-BOOTSTRAP-2026-08-04"
 plan_pfad: "docs/ARBEITSREGELN.md"
 plan_sha256: "8e094b136f86ab2bdc581d7b838e0b52680e04f37ed8f3bf9d80f5d73f916766"
-zustand: "ABNAHME"
-ballbesitzer: "Evaluator"
+zustand: "ABGENOMMEN"
+ballbesitzer: "Release-Pruefer"
 basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"
-inhalt_sha: null
-vorgaenger_commit: "0adc044c4294af1c87141c6cd24d54c0dc2b6c80"
-status_von: "RELEASE_PRUEFUNG"
-status_nach: "ABNAHME"
+inhalt_sha: "973a8ddd8b9be36f4c974716e0bc282a0b364ed7"
+vorgaenger_commit: "973a8ddd8b9be36f4c974716e0bc282a0b364ed7"
+status_von: "ABNAHME"
+status_nach: "ABGENOMMEN"
 fortsetzung_zustand: null
-pruef_sha: null
-release_sha: null
+pruef_sha: "973a8ddd8b9be36f4c974716e0bc282a0b364ed7"
+release_sha: "973a8ddd8b9be36f4c974716e0bc282a0b364ed7"
 merge_ziel: "auto/hausplaner-integration"
 merge_basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"
 merge_verfahren: "merge_commit"
 merge_sha: null
-entscheidung_von: "Planner"
-entscheidungsbeleg: "PR-Pruefung: Statuskette und Mergeverfahren fuer Governance v1.3 korrigieren"
-letztes_votum: "PRECOMMIT_FREIGABE"
+entscheidung_von: "Evaluator"
+entscheidungsbeleg: "Inhalts-Commit 973a8ddd8b9be36f4c974716e0bc282a0b364ed7 unabhaengig ABGENOMMEN; keine P0/P1"
+letztes_votum: "ABGENOMMEN"
 offene_akzeptanz:
-  - "Unabhaengige Abnahme des Governance-v1.3-Inhalts-Commits"
-  - "Statusuebergaenge bis RELEASE_FREI"
+  - "Statusuebergang zu RELEASE_PRUEFUNG"
+  - "Unabhaengige Release-Pruefung"
   - "Push und erneute PR-Pruefung"
-naechster_schritt: "Governance-v1.3-Inhalts-Commit unabhaengig abnehmen"
+naechster_schritt: "Release-Pruefer uebernimmt und setzt nach Kettenpruefung RELEASE_PRUEFUNG"
 rollen_skills:
   status: "AUSSTEHEND"
   sperre: "Vor dem naechsten produktiven Auftrag einrichten und unabhaengig pruefen"
 prozessquittung:
-  rolle: "Planner"
+  rolle: "Evaluator"
   zeitpunkt: "2026-08-04"
   gelesen:
     claude: "CLAUDE.md"
@@ -40,4 +40,4 @@ prozessquittung:
     arbeitsregeln_sha256: "8e094b136f86ab2bdc581d7b838e0b52680e04f37ed8f3bf9d80f5d73f916766"
     plan_sha256: "8e094b136f86ab2bdc581d7b838e0b52680e04f37ed8f3bf9d80f5d73f916766"
     basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"
-    inhalt_sha: null
+    inhalt_sha: "973a8ddd8b9be36f4c974716e0bc282a0b364ed7"
