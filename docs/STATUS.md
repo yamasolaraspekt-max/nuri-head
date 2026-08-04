@@ -44,8 +44,8 @@ geschlossen_seit_anlage:
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
 datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: 93a9691f
 anlass: "P0-Vorfall 04.08. 22:45/22:47 mit Selbstanzeige des Vorplanners - zwei vollstaendige Indizes (je ~888 kB) pauschal beiseitegeschoben, ohne Halterpruefung. Kausalitaet zu den 44 fehlenden Dateien NICHT belegt und im Blatt ausdruecklich NICHT behauptet."
 letztes_votum: "plan-pruefer 05.08. (1. DoR-Runde A-02): ENTWURF bleibt, ZWEI Restpunkte. GEMESSEN an HEAD 42904acb (Drift zur Basis = nur der Schnitt-Commit, 0 scripts/-Aenderungen): ||-Bedingung, :103-Kommentar, lsof nur im Kommentar, ENV_BLOCKED 0, 4 beiseite — alle Ist-Belege woertlich bestaetigt. OFFENER PUNKT 1 BEANTWORTET: A-02-1 ist an der Basis GRUEN (Zusagen-Suite selbst gefahren: 23 pass / 0 fail, die Inhalt+300s-Zusage traegt heute) — die Vermutung des Planners stimmt."
@@ -54,7 +54,7 @@ erledigt_05_08:
   - "Rest 1 EINGETRAGEN: A-02-1 ist jetzt must_preserve-KONTROLLE, ausdruecklich von der Rot-Pflicht ausgenommen. Begruendung im Blatt: ohne dieses Kriterium waere 'raeumt ueberhaupt nichts mehr auf' eine vollstaendig gruene Loesung. Gleiche Bauart wie A-01-2."
   - "Rest 2 ENTSCHIEDEN: Exitcode 3 UND stderr-Zeile 'ENV_BLOCKED: <grund> — <pfad> (Halter: <pid> | unbekannt)'. Beides ist Zusage, der Test prueft beides. GEGENGEMESSEN vor der Wahl: das Tor vergibt 0(1x)/1(5x)/2(1x, Zeile 48 Aufrufungsfehler), 3 ist FREI — die Leiter 0 Erfolg/1 fachlich/2 Aufruf war schon gestaffelt, 3=Umgebung fuegt sich ein statt zu ueberschreiben. Textparsen allein verworfen: F-09."
   - "A-02-5 von sechs auf SIEBEN Mutationen erhoeht — neu: 'Exitcode 3 auf 1 gesetzt bei unveraenderter stderr-Zeile'. Ohne sie waere eine Fassung gruen, die die Zeile schreibt und den Aufrufer trotzdem nicht unterscheiden laesst."
-naechster_schritt: "Plan-Pruefer: BEREIT-Votum. Beide Restpunkte sind eingetragen, alle uebrigen §5-Punkte hat er in der 1. Runde belegt bestaetigt."
+naechster_schritt: "BEREIT gesetzt (plan-pruefer 05.08. 00:1x, Exitcode-Staffel gegengemessen: 0 1x/1 5x/2 1x, 3 frei). WARTESCHLANGE hinter A-01 — Generator zieht erst nach A-01-Abnahme (§3)."
 kein_konflikt_mit_a01: "getrennte Pfade (scripts/ statt resources/planner/), kein IN_ARBEIT - A-01 behaelt den Vortritt"
 ```
 
