@@ -30,23 +30,38 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 |---|---|---|---|---|---|
 | **1** | **A-01** Dach aus Kontur | 04.08. 23:0x | **zurückgewiesen** (PLANUNGSBLOCKIERT) | **3** | Doppelführung mit Z-07 · SPEC: zwei Rechtecks-Begriffe · drei Prüfbefehle auf falschem Runner |
 
-| **2** | **A-02** Lock: Halter statt Ruhe | 04.08. 23:5x | *laeuft* | – | aus dem P0-Vorfall mit Selbstanzeige · §13 Ursachenpruefung ausgeloest (3. Wiederholung der Klasse) |
+| **2** | **A-02** Lock: Halter statt Ruhe | 04.08. 23:5x | **zurückgewiesen** (2 Restpunkte) | **2** | A-02-1 an der Basis grün (gemessen 23/0, jetzt must_preserve) · ENV_BLOCKED-Form fehlte, Exitcode-Staffel vor der Wahl gegengemessen (3 frei) |
 
-| **3** | **A-03** Browser-Bühne auf Testdatenbank | 05.08. 00:2x | *läuft* | – | aus dem §15-Befund des Generators (A-01-Vorbereitung) · Schutzgrenze `CLAUDE.md` getroffen · Besonderheit: tragfähiger Aufruf existiert bereits, P2 ausdrücklich zur scharfen Prüfung gestellt |
+| **3** | **A-03** Browser-Bühne auf Testdatenbank | 05.08. 00:2x | **zurückgewiesen** (2 Restpunkte) | **2** | P2 scharf: BAUEN gerechtfertigt (Papier-Regel hatte den Vorfall nicht verhindert) · Verankerung in ANKER-BROWSER fehlte (Papier-Falle eine Ebene höher) · Namensliste auf exakt ticket_testing |
 
 **Stand: 3 von 10.**
 
-### Was in Gruppe 1 schon zu messen ist (§13-Kennzahlen)
+> ### §13-Prozessprüfung ausgelöst bei 3, nicht bei 10
+>
+> **Sofort-Auslöser „übersehene Daten-/Sicherheitskante" ist eingetreten** — in A-01. Der Auftrag
+> nannte `ticket_testing` dreimal und traf trotzdem daneben: er sagte, **wohin geseedet wird**,
+> nicht, **wogegen der Server läuft**. Bericht: [PROZESSPRUEFUNG-01.md](PROZESSPRUEFUNG-01.md).
+> **Der Vorgang bleibt Teil der Gruppe**, der Zähler wird nicht zurückgesetzt.
+
+### Was in Gruppe 1 schon zu messen ist (§13-Kennzahlen) — nachgeführt 05.08. (Plan-Prüfer)
 
 ```text
-beim ersten Plan-Review BEREIT              0 von 1
-zurueckgewiesen / blockiert                 1 von 1
-Spezifikationsfehler, vom Plan-Pruefer      3  (Doppelfuehrung · Rechtecks-Begriff · Runner)
-Spezifikationsfehler, vom Evaluator         - (noch kein Bau)
-Kriterien bereits gruen vor dem Bau         1  (A-01-2, jetzt als Kontrolle gekennzeichnet)
+beim ersten Plan-Review BEREIT              0 von 3
+zurueckgewiesen / blockiert                 3 von 3   (A-01 PLANUNGSBLOCKIERT · A-02 2 Rest · A-03 2 Rest)
+Runden bis BEREIT                           3 · 2 · 2
+Spezifikationsfehler, vom Plan-Pruefer      6  (A-01: Doppelfuehrung · Rechtecks-Begriff · Runner ·
+                                                A-02: gruenes P1 + fehlende ENV_BLOCKED-Form ·
+                                                A-03: fehlende Verankerung)
+Spezifikationsfehler, vom Evaluator         - (Abnahmen laufen)
+Kriterien bereits gruen vor dem Bau         2  (A-01-2 · A-02-1, beide jetzt must_preserve-Kontrollen)
 unerfuellbare Kriterien                     1  (alter Z-07-P1: L-Dach, von der Domaene verweigert)
-Nachbesserungsrunden im Plan                3
+Nachbesserungsrunden im Plan                A-01: 2 · A-02: 1 · A-03: 1
 ```
+
+**Das Muster nach drei Aufträgen, offen benannt:** Kein Blatt war beim ersten Review BEREIT —
+aber jede Rückweisung wurde in EINER Runde geschlossen, und zwei der sechs Planner-Fehler hat der
+Planner inzwischen selbst gefunden, bevor ich sie fand. Die Kette wird schneller, nicht lascher.
+*(Fortschreibung: Evaluator-Spalten nach den Voten zu 6bc38d7d und 586ec68a.)*
 
 **Drei von drei Spezifikationsfehlern hat der Plan-Prüfer gefunden, keiner der Generator.**
 *Das ist genau der Zweck der Rolle — und zugleich die ehrlichste Zahl über die Planungsqualität
