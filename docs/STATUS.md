@@ -38,6 +38,27 @@ geschlossen_seit_anlage:
 
 ---
 
+## In Planprüfung
+
+```yaml
+auftrag: A-02
+titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
+datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+basis_sha: 93a9691f
+anlass: "P0-Vorfall 04.08. 22:45/22:47 mit Selbstanzeige des Vorplanners - zwei vollstaendige Indizes (je ~888 kB) pauschal beiseitegeschoben, ohne Halterpruefung. Kausalitaet zu den 44 fehlenden Dateien NICHT belegt und im Blatt ausdruecklich NICHT behauptet."
+naechster_schritt: "Plan-Pruefer: Definition of Ready nach §5, dazu die zwei offenen Punkte am Blattende (ist A-02-1 wirklich rot? · Exitcode fuer ENV_BLOCKED)"
+kein_konflikt_mit_a01: "getrennte Pfade (scripts/ statt resources/planner/), kein IN_ARBEIT - A-01 behaelt den Vortritt"
+```
+
+**Warum der Planner ihn schneidet und nicht der Verursacher:** er hat es selbst abgelehnt —
+*„ein Verursacher, der seine eigene Barriere schneidet, wäre genau der Interessenkonflikt, den die
+Rollentrennung verhindern soll."* Er hat damit recht, und die Übergabe ist hier vermerkt, damit
+sie nicht als stille Weiterreichung erscheint.
+
+---
+
 ## Was aus dem Bestand übernommen wurde — und was nicht
 
 Nach §17 werden alte Statuswerte **nicht** automatisch übernommen. Der fachliche Code bleibt, die

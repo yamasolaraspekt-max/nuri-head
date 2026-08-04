@@ -30,7 +30,9 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 |---|---|---|---|---|---|
 | **1** | **A-01** Dach aus Kontur | 04.08. 23:0x | **zurückgewiesen** (PLANUNGSBLOCKIERT) | **3** | Doppelführung mit Z-07 · SPEC: zwei Rechtecks-Begriffe · drei Prüfbefehle auf falschem Runner |
 
-**Stand: 1 von 10.**
+| **2** | **A-02** Lock: Halter statt Ruhe | 04.08. 23:5x | *laeuft* | – | aus dem P0-Vorfall mit Selbstanzeige · §13 Ursachenpruefung ausgeloest (3. Wiederholung der Klasse) |
+
+**Stand: 2 von 10.**
 
 ### Was in Gruppe 1 schon zu messen ist (§13-Kennzahlen)
 
