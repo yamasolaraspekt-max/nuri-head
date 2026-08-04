@@ -32,7 +32,9 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 
 | **2** | **A-02** Lock: Halter statt Ruhe | 04.08. 23:5x | *laeuft* | – | aus dem P0-Vorfall mit Selbstanzeige · §13 Ursachenpruefung ausgeloest (3. Wiederholung der Klasse) |
 
-**Stand: 2 von 10.**
+| **3** | **A-03** Browser-Bühne auf Testdatenbank | 05.08. 00:2x | *läuft* | – | aus dem §15-Befund des Generators (A-01-Vorbereitung) · Schutzgrenze `CLAUDE.md` getroffen · Besonderheit: tragfähiger Aufruf existiert bereits, P2 ausdrücklich zur scharfen Prüfung gestellt |
+
+**Stand: 3 von 10.**
 
 ### Was in Gruppe 1 schon zu messen ist (§13-Kennzahlen)
 

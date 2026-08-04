@@ -70,6 +70,23 @@ sie nicht als stille Weiterreichung erscheint.
 
 ---
 
+## In Planprüfung — A-03
+
+```yaml
+auftrag: A-03
+titel: "Browser-Buehne: der sichere Aufruf wird erzwungen, der lautlose wird laut"
+datei: docs/auftraege/aktiv/A-03-browser-buehne-testdatenbank.md
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+basis_sha: 89d69c13
+anlass: "§15-Befund des Generators, 05.08. 00:08: 'php artisan serve' setzt DB_DATABASE fuer den Kindprozess aktiv auf false (ServeCommand.php:179, 13 passthroughVariables, 0 davon DB_). Die Buehne lief gegen die ARBEITS-Datenbank ticket. Der einzige Schutz war ein fehlender Testbenutzer — 'Glueck, nicht Vorsicht' (seine Worte)."
+gemessen: "Kind-Umgebung mit env -i nachgebildet: 'DB_DATABASE=... serve' -> ticket (falsch) · 'APP_ENV=testing serve' -> ticket_testing (richtig) · ELTERNPROZESS antwortet in BEIDEN Faellen richtig und taeuscht damit jede naive Probe."
+besonderheit: "Es wird KEIN Durchreichen gebaut. Ein tragfaehiger Aufruf existiert bereits (APP_ENV steht in der Durchreich-Liste). Gebaut wird nur der Riegel darum: der falsche Aufruf ist heute LAUTLOS."
+naechster_schritt: "Plan-Pruefer: DoR §5, und P2 ausdruecklich scharf — NICHT NOTWENDIG ist ein zulaessiges Votum, wenn der Riegel den Bau nicht wert ist. Zweiter offener Punkt: die Liste erlaubter Testnamen (Vorschlag: ticket_testing + wberechnung_mysql_test)."
+```
+
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
