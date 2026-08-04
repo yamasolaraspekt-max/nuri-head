@@ -45,14 +45,16 @@ auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
 datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
 zustand: ENTWURF
-ballbesitz: planner
+ballbesitz: plan-pruefer
 basis_sha: 93a9691f
 anlass: "P0-Vorfall 04.08. 22:45/22:47 mit Selbstanzeige des Vorplanners - zwei vollstaendige Indizes (je ~888 kB) pauschal beiseitegeschoben, ohne Halterpruefung. Kausalitaet zu den 44 fehlenden Dateien NICHT belegt und im Blatt ausdruecklich NICHT behauptet."
 letztes_votum: "plan-pruefer 05.08. (1. DoR-Runde A-02): ENTWURF bleibt, ZWEI Restpunkte. GEMESSEN an HEAD 42904acb (Drift zur Basis = nur der Schnitt-Commit, 0 scripts/-Aenderungen): ||-Bedingung, :103-Kommentar, lsof nur im Kommentar, ENV_BLOCKED 0, 4 beiseite — alle Ist-Belege woertlich bestaetigt. OFFENER PUNKT 1 BEANTWORTET: A-02-1 ist an der Basis GRUEN (Zusagen-Suite selbst gefahren: 23 pass / 0 fail, die Inhalt+300s-Zusage traegt heute) — die Vermutung des Planners stimmt."
-offene_akzeptanz:
-  - "Rest 1: A-02-1 als must_preserve-KONTROLLE kennzeichnen und von der Rot-Pflicht ausnehmen (gemessen gruen; wie A-01-2)"
-  - "Rest 2: ENV_BLOCKED-Festlegung ins Blatt — Empfehlung des Plan-Pruefers: EIGENER Exitcode 3 UND stderr-Zeile 'ENV_BLOCKED: <grund>' (Exitcode fuer Maschinen, Textparsen allein waere F-09-anfaellig; die Zeile fuer Menschen und Logs). Entscheidung ist Planner-Sache, beide Formen sind messbar."
-naechster_schritt: "Planner traegt beide Restpunkte ein, dann setzt der Plan-Pruefer BEREIT (alle uebrigen §5-Punkte belegt erfuellt; Browser n.a. korrekt, Rueckweg additiv, Konflikt: keiner)"
+offene_akzeptanz: []
+erledigt_05_08:
+  - "Rest 1 EINGETRAGEN: A-02-1 ist jetzt must_preserve-KONTROLLE, ausdruecklich von der Rot-Pflicht ausgenommen. Begruendung im Blatt: ohne dieses Kriterium waere 'raeumt ueberhaupt nichts mehr auf' eine vollstaendig gruene Loesung. Gleiche Bauart wie A-01-2."
+  - "Rest 2 ENTSCHIEDEN: Exitcode 3 UND stderr-Zeile 'ENV_BLOCKED: <grund> — <pfad> (Halter: <pid> | unbekannt)'. Beides ist Zusage, der Test prueft beides. GEGENGEMESSEN vor der Wahl: das Tor vergibt 0(1x)/1(5x)/2(1x, Zeile 48 Aufrufungsfehler), 3 ist FREI — die Leiter 0 Erfolg/1 fachlich/2 Aufruf war schon gestaffelt, 3=Umgebung fuegt sich ein statt zu ueberschreiben. Textparsen allein verworfen: F-09."
+  - "A-02-5 von sechs auf SIEBEN Mutationen erhoeht — neu: 'Exitcode 3 auf 1 gesetzt bei unveraenderter stderr-Zeile'. Ohne sie waere eine Fassung gruen, die die Zeile schreibt und den Aufrufer trotzdem nicht unterscheiden laesst."
+naechster_schritt: "Plan-Pruefer: BEREIT-Votum. Beide Restpunkte sind eingetragen, alle uebrigen §5-Punkte hat er in der 1. Runde belegt bestaetigt."
 kein_konflikt_mit_a01: "getrennte Pfade (scripts/ statt resources/planner/), kein IN_ARBEIT - A-01 behaelt den Vortritt"
 ```
 
@@ -60,6 +62,22 @@ kein_konflikt_mit_a01: "getrennte Pfade (scripts/ statt resources/planner/), kei
 *„ein Verursacher, der seine eigene Barriere schneidet, wäre genau der Interessenkonflikt, den die
 Rollentrennung verhindern soll."* Er hat damit recht, und die Übergabe ist hier vermerkt, damit
 sie nicht als stille Weiterreichung erscheint.
+
+---
+
+## Ballbesitz-Uhr — Stand 05.08. 00:0x
+
+| Rolle | Gegenstand | seit | läuft oder still |
+|---|---|---|---|
+| **Generator** | A-01, `BEREIT` | 04.08. 23:46 | **still, 17 min** — 0 Dateien in `resources/ scripts/ app/ tests/` seit dem Ballwechsel |
+| Plan-Prüfer | A-02, 2. DoR-Runde | 05.08. 00:0x | Ball gerade übergeben |
+| Planner | — | — | frei, arbeitet an der Vorbereitung von A-03 |
+
+**Der Generator-Befund ist gemeldet, nicht gedeutet.** Nach §8b hat ein stiller Baum mit
+liegendem, markiertem Auftrag mehrere mögliche Ursachen — Instanz nicht gestartet, blockiert, oder
+mitten im Lesen. *Es ist Mitternacht; die naheliegendste ist die harmloseste.* **Verboten wäre nur,
+daraus „vermutlich ein Baulauf" zu machen** — und ebenso, ihm ein zweites Blatt hinterherzuwerfen.
+Er behält A-01; die Meldung wiederholt sich, bis sich etwas bewegt.
 
 ---
 

@@ -90,9 +90,18 @@ scripts/__tests__/commitPruefen.test.mjs   die Zusagen
 
 **Jedes P1 ist an Basis 93a9691f wirksam rot** — der Plan-Pruefer bestaetigt das vor dem Bau.
 
-**A-02-1 (P1):** Ein Lock **mit Inhalt**, alt und still, **ohne Halter** -> beiseite, Commit
-gelingt. *Das ist der Fall des Evaluators (317 s, 885 kB, dreifach als tot belegt) — er muss
-weiter funktionieren, sonst ist A-02 eine Ruecknahme statt einer Verbesserung.*
+**A-02-1 (`must_preserve`-KONTROLLE — von der Rot-Pflicht nach §5 AUSGENOMMEN):** Ein Lock **mit
+Inhalt**, alt und still, **ohne Halter** -> beiseite, Commit gelingt. *Das ist der Fall des
+Evaluators (317 s, 885 kB, dreifach als tot belegt).*
+
+> **Warum ausgenommen statt gestrichen.** Der Plan-Pruefer hat an der Basis nachgemessen: dieser
+> Fall ist heute **gruen** (Zusagen-Suite selbst gefahren, **23 pass / 0 fail**). Ein bereits
+> erfuelltes Kriterium ist nach §5 normalerweise keines — dieses bleibt, weil es der **Gegenhalter
+> zu A-02-2** ist.
+>
+> **Ohne A-02-1 waere „raeumt ueberhaupt nichts mehr auf" eine vollstaendig gruene Loesung.**
+> Gleiche Bauart wie A-01-2. *Meine Vermutung beim Schneiden war richtig — aber sie war eine
+> Vermutung, und gemessen hat sie der Pruefer, nicht ich.*
 
 **A-02-2 (P1, der Vorfall):** Ein Lock **mit Halter** -> bleibt liegen, **egal wie alt, egal wie
 still, egal wie gross**. Gegenprobe im selben Test: derselbe Lock nach Prozessende -> beiseite.
@@ -102,14 +111,46 @@ still, egal wie gross**. Gegenprobe im selben Test: derselbe Lock nach Prozessen
 (`0 Byte UND >= 60 s`) und raeumt **weniger**, nie mehr. *Ein Werkzeug, das ohne sein Messgeraet
 mehr aufraeumt als mit, ist die gefaehrlichste Bauart ueberhaupt.*
 
-**A-02-4 (P1, der Ausweg):** Bleibt ein Lock liegen, meldet das Tor `ENV_BLOCKED` samt Grund und
-Halter-Auskunft und endet mit einem Exitcode, der sich von einem fachlichen Fehlschlag
-unterscheidet. *Der Aufrufer soll melden koennen, ohne zu raten — genau das hat der Vorplanner
-sich vorgenommen, und er braucht dafuer ein Werkzeug, das die Klasse ausspricht.*
+**A-02-4 (P1, der Ausweg):** Bleibt ein Lock liegen, endet das Tor mit **Exitcode 3** und schreibt
+nach **stderr** genau eine Zeile der Form:
 
-**A-02-5 (P1, Mutationsprobe):** Mindestens sechs Mutationen fallen, darunter: lsof entfernt ·
+```text
+ENV_BLOCKED: <grund> — <pfad> (Halter: <pid/prozess> | unbekannt)
+```
+
+**Beides ist Zusage, nicht nur eines.** Der Test prüft den Exitcode **und** die Zeile.
+
+### DECISION — die Form von ENV_BLOCKED
+
+**Exitcode 3, zusätzlich zur Textzeile.** *Gemessen an `93a9691f`, bevor ich die Zahl gewählt habe:*
+
+```text
+exit 0    1x   Erfolg
+exit 1    5x   fachlicher Fehlschlag (Botschaft fehlt · Lock blockiert · Stagen · Commit)
+exit 2    1x   Aufrufungsfehler, Zeile 48 (zu wenige Argumente)
+exit 3    0x   FREI
+```
+
+Die Leiter ist bereits gestaffelt — **0 Erfolg · 1 fachlich · 2 Aufruf**. `3 = Umgebung` fügt sich
+ein, statt eine Bedeutung zu überschreiben, und spiegelt die Blockklassen aus §3.
+
+**Warum nicht die Textzeile allein**, wie es einfacher wäre: ein Aufrufer müsste sie parsen, und
+**das ist F-09** — Text wird gemessen, nicht Absicht. Dieselbe Zeile in einem Beispiel, einem
+Kommentar oder einem Logauszug zählt mit. *Genau so hat die Votumszeile am ersten Tag drei
+Datensätze gemeldet, wo zwei waren — im Mechanismus, der das verhindern sollte.*
+**Der Exitcode ist für Maschinen, die Zeile für Menschen.**
+
+*Die Empfehlung kam vom Plan-Prüfer; die Zahl habe ich gegen den Bestand geprüft, statt sie zu
+übernehmen.*
+
+**A-02-5 (P1, Mutationsprobe):** Mindestens **sieben** Mutationen fallen: lsof entfernt ·
 lsof-Ergebnis ignoriert · `||` wieder eingesetzt · harte Grenze fuer Inhalt entfernt · Rueckfall
-raeumt mehr statt weniger · ENV_BLOCKED durch normalen Abbruch ersetzt.
+raeumt mehr statt weniger · ENV_BLOCKED durch normalen Abbruch ersetzt · **Exitcode 3 auf 1
+gesetzt bei unveraenderter stderr-Zeile**.
+
+*Die siebte ist neu und gehoert zur Entscheidung oben: sie ist der Beweis, dass A-02-4 wirklich
+**beide** Haelften zusagt. Ohne sie waere eine Fassung gruen, die die Zeile schreibt und den
+Aufrufer trotzdem nicht unterscheiden laesst — also genau die Fassung, gegen die entschieden wurde.*
 
 ## Pruefbefehle
 
@@ -150,11 +191,20 @@ Browserabnahme    NICHT ANWENDBAR - keine sichtbare Aenderung am Produkt.
 Ein Commit ohne Datenmigration; `git revert` stellt die alte Regel her. **Beiseitegelegte Locks
 werden nie geloescht, nur verschoben** — ein Rueckbau verliert nichts.
 
-## Offene Punkte fuer den Plan-Pruefer
+## Offene Punkte — beide geschlossen, 05.08. 00:0x
 
-1. **Ist A-02-1 an der Basis wirklich rot?** Der Fall des Evaluators funktioniert heute — moeglicher\-
-   weise ist das Kriterium eine `must_preserve`-Kontrolle wie A-01-2 und gehoert von der
-   Rot-Pflicht ausgenommen. *Ich vermute es, habe es aber nicht gemessen und schreibe es deshalb
-   nicht als Tatsache.*
-2. **Exitcode fuer `ENV_BLOCKED`**: ein eigener Wert (z. B. 3) oder Text auf stderr? Beides ist
-   messbar; die Wahl beruehrt jeden Aufrufer und gehoert vor den Bau.
+**Der Plan-Prüfer hat in der 1. DoR-Runde alle Ist-Belege wörtlich an HEAD `42904acb` bestätigt**
+(Drift zur Basis: 0 Änderungen in `scripts/`). Zwei Restpunkte kamen zurück, beide sind erledigt:
+
+| # | Frage | Antwort | wer hat gemessen |
+|---|---|---|---|
+| **1** | Ist A-02-1 an der Basis rot? | **Nein — grün.** Zusagen-Suite **23 pass / 0 fail**. Jetzt `must_preserve`-KONTROLLE, von der Rot-Pflicht ausgenommen | **Plan-Prüfer** (ich hatte nur vermutet) |
+| **2** | Form von `ENV_BLOCKED` | **Exitcode 3 UND stderr-Zeile.** `3` ist im Tor frei; die Leiter 0/1/2 war bereits gestaffelt | **Planner** (Empfehlung kam vom Prüfer, die Zahl habe ich gegen den Bestand geprüft) |
+
+> **Was Punkt 1 über die Rollentrennung sagt.** Ich habe die Vermutung *als Vermutung* ins Blatt
+> geschrieben, statt sie als Tatsache zu setzen — und der Prüfer hat sie in einem Lauf entschieden.
+> **Hätte ich sie als Tatsache geschrieben, wäre sie ungeprüft in den Bau gegangen**, weil sie
+> zufällig stimmte. Die Kennzeichnung war wertvoller als die Richtigkeit.
+
+**Damit sind alle 15 Punkte aus §5 adressiert.** Ball zurück an den Plan-Prüfer für das
+`BEREIT`-Votum.
