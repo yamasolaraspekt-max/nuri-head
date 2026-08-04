@@ -40233,3 +40233,46 @@ Nach dem ROT-Votum wurden K-04 UMGESCHNITTEN und K-04b NEU ergaenzt - beide P1, 
 **Der Neuschnitt ist das Ereignis, und den erzeugt der Planner — deshalb ist dieser Wechsel
 meiner (B14).** *Der Bau selbst bleibt gültig und ist handwerklich bestätigt; er deckt nur die
 neue Latte nicht.*
+
+---
+
+## EVALUATOR — 04.08. 00:0x · Vor dem K-04-Bau: die Insel hat ZWEI Rechteckigkeits-Pruefungen, und sie widersprechen sich
+
+```text
+K-04 (neu) verlangt: "eine NICHT-rechteckige Kontur bekommt KEIN Dach, sondern eine lesbare
+Absage". Dafuer braucht der Bau eine Pruefung "ist das rechteckig". Es gibt zwei - und sie
+antworten NICHT gleich. Gemessen am Pruefstand 1dae7a70, beide Funktionen direkt befragt:
+
+  Fall                          | istAchsenRechteck | Kante-1 (dachGeometrie)
+  Rechteck 4 Punkte             | true              | DURCH
+  Rechteck 5 Pkt (Zwischenpunkt)| false             | DURCH      <<< UNEINIG
+  L-Form 6 Punkte               | false             | WIRFT
+
+KONTROLLE (B4): bei 4-Punkte-Rechteck und bei L-Form sind beide EINIG. Nur der
+Zwischenpunkt-Fall trennt sie - der Unterschied ist also echt und nicht Rauschen.
+
+WARUM sie auseinanderlaufen:
+  dachAusschnitt.ts:72  istAchsenRechteck -> erste Zeile: `if (poly.length !== 4) return false`
+                        Ein Rechteck mit einem Punkt MITTEN auf einer Kante ist fuer sie
+                        kein Rechteck, obwohl es geometrisch eines ist.
+  dachGeometrie.ts:88   Kante 1 -> vergleicht nur Flaeche gegen Bounding-Box (1% Toleranz).
+                        Der Zwischenpunkt aendert die Flaeche nicht, also kommt er durch.
+
+DER FALL IST ERREICHBAR, nicht theoretisch - gemessen:
+  pruefeKontur(5 Punkte mit Zwischenpunkt) -> ok=true   (Kontrolle: 4 Punkte -> ok=true)
+  schliesseKontur speichert `punkte` unveraendert; in geometry/kontur.ts steht keine
+  Vereinfachung kollinearer Punkte (gesucht: kollinear/vereinfach/simplif -> nur Kommentare).
+  Wer beim Zeichnen einen Punkt auf einer geraden Wand setzt, hat diese Kontur.
+
+FOLGE FUER DEN BAU (an den Generator, vor dem Zug):
+  Nimmt K-04 `istAchsenRechteck` als Absage-Pruefung, bekommt der Nutzer eine Absage fuer ein
+  Dach, das die Geometrie ohne Weiteres bauen wuerde - eine Absage, die nicht stimmt.
+  Nimmt er Kante 1 (oder ruft die Geometrie und faengt den Wurf), sagt die App dasselbe,
+  was sie tut. Die Absage muss DIESELBE Frage stellen wie der Renderer, sonst ist K-04b
+  (der Faenger soll melden) gegen einen Faenger gerichtet, der etwas anderes prueft.
+
+NICHT GEPRUEFT, damit es niemand als gemessen liest: ob der Fang beim Zeichnen einen
+Zwischenpunkt ueberhaupt stehen laesst oder ihn auf die Ecke zieht. Der DATENWEG ist frei -
+das habe ich belegt; die Bedienbarkeit im Browser habe ich nicht gemessen. Ein Bau, der die
+richtige Pruefung nimmt, braucht diese Frage auch nicht.
+```
