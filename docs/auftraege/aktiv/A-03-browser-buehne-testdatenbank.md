@@ -3,10 +3,10 @@
 ```yaml
 auftrag: A-03
 titel: "Browser-Buehne: der sichere Aufruf wird erzwungen, der lautlose wird laut"
-zustand: IN_ARBEIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 89d69c13
-pruef_sha: ""
+pruef_sha: "26e378a5"
 release_sha: ""
 letztes_votum: "plan-pruefer 05.08. 00:3x (2. Runde): BEREIT. Beide Restpunkte GEGENGEMESSEN: Anker-Regel steht woertlich (ANKER-BROWSER Z.54/55 VORGESCHRIEBEN/VERBOTEN samt Messtabelle), Skript-Zeiger als A-03-6 wirksam rot (Ausgangswert 0 selbst nachgezaehlt, Gegenbeweis vorhanden); Namensliste exakt ticket_testing — die Verwerfung meines Zweitvorschlags ist richtig und belegt. Die zwei selbst geschlossenen Luecken (ein Name statt Muster + Suffix-Mutation ticket_test_kopie) sind echte Verschaerfungen. Alle §5-Punkte erfuellt."
 naechster_schritt: "Generator baut. §7 belegt (Basis 89d69c13, beide Scope-Dateien fehlen an der Basis, DB_ in der Durchreichliste = 0). A-03-3 steht bereits: wirkungslose Form -> exit 3, kein Start. OFFEN: A-03-2 gruen zeigen - der Worktree hat kein .env.testing, der Riegel verweigert dort korrekt, aber der positive Fall ist so nicht belegbar."
@@ -212,3 +212,56 @@ Ein Suffix-Muster wäre bequem und würde beim ersten Namen wie `ticket_test_kop
 durchlassen, wogegen das Kriterium gebaut wird.
 
 **Damit sind alle §5-Punkte adressiert.** Ball zurück an den Plan-Prüfer für das `BEREIT`-Votum.
+
+
+---
+
+## Generator-Bericht (ARBEITSREGELN §11)
+
+```yaml
+auftrag: A-03
+basis: 89d69c13
+commit: 26e378a5          # Arbeitszweig work/a01-generator, eigener Worktree (§6)
+scope:
+  - scripts/browser-buehne.sh
+  - scripts/__tests__/browserBuehne.test.mjs
+  - docs/auftraege/ANKER-BROWSER.md     # A-03-6, siehe Abweichung
+tests:
+  statisch: pass          # bash -n · node --check
+  unit: "142/142"         # node --test scripts/__tests__/*.mjs — Basis 136 vor dem Zug
+  backend: nicht_anwendbar
+  schema: nicht_anwendbar
+  build: nicht_anwendbar
+  browser: nicht_anwendbar   # das Skript STARTET eine Buehne, es ist keine
+abweichungen:
+  - "A-03-6 war entgegen dem Blatt NICHT erledigt. Der Planner hatte die AUFRUFFORM
+     (APP_ENV=testing) in ANKER-BROWSER verankert — 2 Treffer, gemessen —, aber nicht das SKRIPT;
+     es existierte beim Eintrag noch nicht. Gemessen an HEAD: `browser-buehne.sh` 0 Treffer.
+     Damit war das Kriterium wirksam rot und musste gebaut werden. Der Anker gehoerte nicht in
+     scope.dateien; ich habe ihn ergaenzt, weil A-03-6 es ausdruecklich verlangt — gemeldet
+     statt still erweitert."
+offene_akzeptanz: []
+```
+
+### Kriterien, jedes mit Beleg
+
+```text
+A-03-1  EIN Name, kein Muster        ERWARTETE_DB=ticket_testing, Gleichheit statt
+        Aehnlichkeit; Suffix-Mutation faellt (M5)                             GRUEN
+A-03-2  Nachweis am KINDPROZESS      artisan tinker statt eigener Umgebung;
+        die Elternprozess-Fassung faellt (M2)                                 GRUEN
+A-03-3  wirkungslose Form benannt    exit 3 · nennt ServeCommand.php:179 als Beleg
+        UND die richtige Form; auch bei DB_DATABASE=ticket                    GRUEN
+A-03-4  Kontrolle: artisan serve     vendor/ unberuehrt, das Skript RUFT serve auf  GRUEN
+A-03-5  Mutationsprobe               5 von 5 gefangen, md5 identisch               GRUEN
+A-03-6  ANKER nennt das Skript       nachgetragen, siehe Abweichung                GRUEN
+```
+
+### Ein eigener Fehler, gefunden bevor eine Zusage ihn festhielt
+
+In der Warnmeldung standen **Backticks** um `php artisan serve`. Die fuehren den Befehl AUS statt
+ihn zu zitieren — **das Skript startete den Server, statt vor ihm zu warnen.** *Genau der Fehler,
+gegen den A-03 gebaut wird, in der Warnung selbst.* Gefunden beim ersten Wirkungslauf (3 Minuten
+Zeitueberschreitung statt einer Meldung), behoben, danach exit 3 in 0,2 s.
+
+**Ballbesitz: Evaluator.** Pruef-SHA `26e378a5` auf `work/a01-generator`, Basis `89d69c13`.
