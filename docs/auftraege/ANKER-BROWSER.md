@@ -51,9 +51,19 @@ Weg dahin steht im Blatt."*
 > Datenbank ist kein Nachweis, sondern ein Vorfall.
 
 ```text
-VORGESCHRIEBEN   APP_ENV=testing php artisan serve --port=<port>
+VORGESCHRIEBEN   bash scripts/browser-buehne.sh [--port <nr>]
+                 prueft AM KINDPROZESS, ob die Datenbank genau `ticket_testing` ist,
+                 und startet erst dann. Sonst: exit 3 mit dem gefundenen Namen.
+gleichwertig     APP_ENV=testing php artisan serve --port=<port>
+                 dieselbe Aufrufform, aber OHNE den Nachweis davor.
 VERBOTEN         DB_DATABASE=... php artisan serve
 ```
+
+> **Seit A-03 ist die Regel nicht mehr nur aufgeschrieben, sondern gebaut.** `browser-buehne.sh`
+> fragt einen Kindprozess nach der aufgeloesten Datenbank und verweigert den Start, wenn sie nicht
+> `ticket_testing` heisst — *ein Name, kein Muster: `ticket_test_kopie` traegt dieselben Kundendaten
+> wie das Original.* Wird `DB_DATABASE` mitgegeben, sagt es, dass diese Form wirkungslos ist, und
+> nennt die richtige. **Kein stiller Start.**
 
 **Die verbotene Form ist nicht „schlechter Stil" — sie wirkt überhaupt nicht, und zwar lautlos.**
 
