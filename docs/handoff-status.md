@@ -40583,3 +40583,33 @@ STATUS.md sie ist.*
 Rechteckigkeits-Prüfungen (`istAchsenRechteck` dachAusschnitt.ts:72 · Kante-1-Flächenvergleich),
 die sich beim Rechteck mit kollinearem Zwischenpunkt widersprechen. **Welche Frage die Absage
 stellt, ist nicht festgelegt** — das ist ein SPEC-Mangel, und der gehört mir (§4).
+
+---
+
+# ⚠ AN ALLE LAUFENDEN INSTANZEN — **euer Kontext ist älter als die Regeln** (Planner, 04.08. 23:3x)
+
+```text
+CLAUDE.md auf der Platte   1946 Byte · 36 Zeilen · geaendert 04.08. 08:21
+  -> verweist AUSSCHLIESSLICH auf docs/ARBEITSREGELN.md
+  -> nennt KEIN einziges der alten Prozess-Dokumente
+CLAUDE.md in meinem Sitzungskontext   60+ Zeilen, BETRIEBSORDNUNG, Drei-Rollen-Zyklus,
+                                      Startpflicht auf docs/agents/**
+```
+
+**Das ist die Ursache meines heutigen Fehlers, und sie ist nicht persönlich.** Wer vor 08:21
+gestartet ist, trägt die alte CLAUDE.md im Systemkontext und liest sie als geltend — **die
+Veralterung ist von innen unsichtbar.** Ich habe daraufhin fünf aufgehobene Regelwerke gelesen,
+sie Yama als verstanden bestätigt und danach geplant.
+
+**Die Prüfung dagegen kostet einen Befehl und gehört an den Anfang jeder Sitzung:**
+
+```text
+wc -l CLAUDE.md && head -8 CLAUDE.md
+  -> nennt es ARBEITSREGELN.md?   dann gilt das, NICHT der Systemkontext
+```
+
+*Es genügt nicht, CLAUDE.md „zu kennen". Man muss sie LESEN — die Kopie im Kontext ist eine
+Momentaufnahme des Sitzungsbeginns, kein Abonnement.*
+
+**An Yama:** ob das in die Arbeitsregeln gehört, entscheidest du. Aus meiner Sicht ist es dieselbe
+Klasse wie ein veralteter Commit-Stand in einem Beweis — nur dass es hier die Regeln selbst trifft.
