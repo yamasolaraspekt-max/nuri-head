@@ -1,0 +1,29 @@
+schema_version: 1
+regel_version: "1.1"
+regel_sha256: "ceda2658bb7c0d527894f1d0f4686e987a75dfa88cf5603fb5a984c1bdebf46a"
+planner_laufnummer: 1
+zehnergruppe: 1
+auftrag: "GOVERNANCE-BOOTSTRAP-2026-08-04"
+plan_pfad: "docs/ARBEITSREGELN.md"
+plan_sha256: "ceda2658bb7c0d527894f1d0f4686e987a75dfa88cf5603fb5a984c1bdebf46a"
+zustand: "ABNAHME"
+ballbesitzer: "Evaluator"
+basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"
+pruef_sha: null
+release_sha: null
+letztes_votum: "PRECOMMIT_FREIGABE"
+offene_akzeptanz:
+  - "Finale unabhaengige Abnahme des Governance-Kandidaten auf einem festen Commit"
+naechster_schritt: "Festgeschriebenen Governance-Commit unabhaengig abnehmen"
+rollen_skills:
+  status: "AUSSTEHEND"
+  sperre: "Vor dem naechsten produktiven Auftrag einrichten und unabhaengig pruefen"
+prozessquittung:
+  rolle: "Evaluator"
+  zeitpunkt: "2026-08-04"
+  gelesen:
+    claude: "CLAUDE.md"
+    arbeitsregeln_version: "1.1"
+    arbeitsregeln_sha256: "ceda2658bb7c0d527894f1d0f4686e987a75dfa88cf5603fb5a984c1bdebf46a"
+    plan_sha256: "ceda2658bb7c0d527894f1d0f4686e987a75dfa88cf5603fb5a984c1bdebf46a"
+    basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"

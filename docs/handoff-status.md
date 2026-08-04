@@ -1,4 +1,9 @@
-# Handoff-Status (Ledger) — Hausplaner 3D / UI
+# Handoff-Status (historisches Ledger) — Hausplaner 3D / UI
+
+> **NICHT MEHR VERBINDLICH SEIT 04.08.2026.** Dieses Ledger bleibt ausschließlich als Beweis- und
+> Entscheidungsverlauf erhalten. Es ist keine Status- oder Prozessquelle. Verbindlich ist nur
+> [`docs/ARBEITSREGELN.md`](ARBEITSREGELN.md); alte Regelverweise und Rollenübergaben in diesem
+> Ledger sind aufgehoben.
 
 > **⚠ AB 31.07.2026, 10:30 IST DIESE DATEI ARCHIV.**
 > **Wo wir stehen, steht in `docs/STAND.md`** — eine Seite, die ÜBERSCHRIEBEN wird.
