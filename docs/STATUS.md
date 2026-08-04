@@ -14,16 +14,16 @@ Statusseiten werden nicht fortgeschrieben, um den aktuellen Zustand zu bestimmen
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage"
 datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: 16d5bbde
 pruef_sha: ""
 release_sha: ""
-letztes_votum: "plan-pruefer 04.08. (2. DoR-Runde): drei von vier Nachtraegen ERFUELLT und gegengemessen (N2 Kontrolle-Ausnahme sauber; N3 insert-Muster real: SnapshotRueckwegVersionTest:67, Seeder 0; N5 is_admin-Factory woertlich in UebernahmeKnopfTest:97, Objekt-Nichtfestschreibung akzeptiert). EIN Rest: N4-Pruefbefehle A-01-1/-2/-6 nennen 'node --test <datei>.ts' — SELBST GEPROBT, faellt sofort: die Insel-Suite laeuft nur ueber scripts/node-runtime.sh --experimental-strip-types --import test-register.mjs (package.json:10). Ein korrekt gebauter A-01 wuerde an den drei Befehlen scheitern (F-20-Klasse: Befehl auf Boden gemessen, den es nicht gibt)."
+letztes_votum: "plan-pruefer 04.08. 23:5x (3. Runde): BEREIT. Die drei korrigierten Pruefbefehle selbst geprobt — die Runner-Form laeuft (decke.test.ts sauber, gleiche Form wie Planner-Messung 13/0), das blanke node --test faellt belegt. Alle 15 §5-Punkte erfuellt; A-01-2 als benannte must_preserve-Ausnahme von der Rot-Pflicht."
 offene_akzeptanz:
-  - "KEINE offene Zulieferung des Planners mehr. Die drei Pruefbefehle sind auf den echten Runner umgestellt (04.08. 23:4x) - Plan-Pruefer bestaetigt oder gibt zurueck."
-ballwechsel: "planner -> plan-pruefer, 04.08. 23:4x"
-naechster_schritt: "Plan-Pruefer prueft die drei korrigierten Befehle und setzt BEREIT oder gibt SPEC_BLOCKED zurueck"
+  - "BINDENDE REIHENFOLGE fuer den Generator: Browser-Fixture (L-Dach-Dokument + scene_json im Repo) VOR dem ersten Bau-Commit — der Bau zerstoert sonst seinen eigenen Pruefstand (Blatt, Abschnitt Fixture-Weg)."
+ballwechsel: "plan-pruefer -> generator, 04.08. 23:5x"
+naechster_schritt: "Generator: Readiness-Bestaetigung nach §7, dann Fixture, dann Bau; Meldung CODE_FERTIG mit Basis- und Bau-SHA"
 nachtraege_erledigt:
   - "N2 A-01-2 ist jetzt ausdruecklich must_preserve-KONTROLLE und von der Rot-Pflicht AUSGENOMMEN. Begruendung im Blatt: ohne das Kriterium waere 'gar kein Dach mehr' eine gruene Loesung."
   - "N3 Fixture-Weg steht (Abschnitt 'Fixture-Weg fuer A-01-4', 23:3x): Testebene nutzt das vorhandene insert()-Muster der vier Hausplaner-Featuretests, KEIN neuer Seeder. Browserebene erzeugt das Dokument VOR dem Bau. Die REIHENFOLGE ist Teil des Auftrags."

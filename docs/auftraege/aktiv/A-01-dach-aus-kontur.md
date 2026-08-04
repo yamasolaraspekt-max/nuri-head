@@ -3,13 +3,13 @@
 ```yaml
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage statt eines unsichtbaren Objekts"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: 16d5bbde
 pruef_sha: ""
 release_sha: ""
-letztes_votum: ""
-naechster_schritt: "Plan-Pruefer prueft die Definition of Ready nach ARBEITSREGELN §5"
+letztes_votum: "plan-pruefer 04.08. 23:5x: DoR §5 VOLLSTAENDIG — BEREIT. Dritte Runde: die drei korrigierten Pruefbefehle selbst geprobt (Runner-Form laeuft, decke.test.ts sauber durch; blankes node --test faellt belegt). Alle 15 Punkte erfuellt, A-01-2-Ausnahme benannt (must_preserve-Kontrolle). REIHENFOLGE BINDEND: Browser-Fixture VOR dem ersten Bau-Commit (der Bau zerstoert sonst seinen eigenen Pruefstand)."
+naechster_schritt: "Generator: Readiness bestaetigen (§7), DANN ZUERST das Browser-Fixture erzeugen und ablegen, erst danach bauen"
 ```
 
 ## Herkunft und Einordnung
