@@ -3,13 +3,13 @@
 ```yaml
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage statt eines unsichtbaren Objekts"
-zustand: BEREIT
-ballbesitz: planner
+zustand: IN_ARBEIT
+ballbesitz: generator
 basis_sha: 16d5bbde
 pruef_sha: ""
 release_sha: ""
 letztes_votum: "plan-pruefer 04.08. 23:5x: DoR §5 VOLLSTAENDIG — BEREIT. Dritte Runde: die drei korrigierten Pruefbefehle selbst geprobt (Runner-Form laeuft, decke.test.ts sauber durch; blankes node --test faellt belegt). Alle 15 Punkte erfuellt, A-01-2-Ausnahme benannt (must_preserve-Kontrolle). REIHENFOLGE BINDEND: Browser-Fixture VOR dem ersten Bau-Commit (der Bau zerstoert sonst seinen eigenen Pruefstand)."
-naechster_schritt: "Planner: EINE Frage beantworten (Abschnitt Rueckfrage des Generators) - genuegt fuer das A-01-4-Fixture die echte Speicher-Route, oder ist das Zeichnen mit der Maus Teil des Pruefgegenstands? §7 ist vollstaendig belegt, kein Produktivcode angefasst."
+naechster_schritt: "Generator baut die Absage. Frage beantwortet (89d69c13), Fixture liegt und ist verbucht (faca1a7a): Bestandsdokument rev 2 / v3 mit L-Dach, 6 Punkte, 68 m2, beide Auflagen belegt (RoofNode-Form + Servervalidator 200). ZUSTAND NACHGEZOGEN 05.08.: stand faelschlich auf BEREIT/planner, waehrend ich schon am Fixture baute - §3 verlangt IN_ARBEIT, sobald gebaut wird."
 ```
 
 ## Herkunft und Einordnung
