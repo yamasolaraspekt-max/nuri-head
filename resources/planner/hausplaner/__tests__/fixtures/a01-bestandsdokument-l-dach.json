@@ -1,0 +1,74 @@
+{
+    "id": "d0a0566c-3ee6-4ffa-9562-a306a5980a1e",
+    "nodes": [],
+    "roofs": [
+        {
+            "id": "a01-l-dach",
+            "tags": [],
+            "type": "roof",
+            "locked": false,
+            "levelId": "level-eg",
+            "polygon": [
+                {
+                    "x": 0,
+                    "y": 0
+                },
+                {
+                    "x": 10000,
+                    "y": 0
+                },
+                {
+                    "x": 10000,
+                    "y": 4000
+                },
+                {
+                    "x": 7000,
+                    "y": 4000
+                },
+                {
+                    "x": 7000,
+                    "y": 8000
+                },
+                {
+                    "x": 0,
+                    "y": 8000
+                }
+            ],
+            "visible": true,
+            "freigabe": "bestaetigt",
+            "roofType": "sattel",
+            "createdAt": "2026-08-04T22:22:44.533Z",
+            "updatedAt": "2026-08-04T22:22:44.533Z",
+            "neigungGrad": 35,
+            "traufhoeheMm": 2500,
+            "ueberstandMm": 500,
+            "firstAzimutGrad": 0,
+            "geometrieHerkunft": "manuell"
+        }
+    ],
+    "units": "mm",
+    "levels": [
+        {
+            "id": "level-eg",
+            "name": "Erdgeschoss",
+            "elevation": 0,
+            "sortOrder": 0,
+            "floorThickness": 200,
+            "defaultWallHeight": 2500
+        }
+    ],
+    "ceilings": [],
+    "metadata": {
+        "createdAt": "2026-08-04T23:54:51+02:00",
+        "updatedAt": "2026-08-04T23:54:51+02:00"
+    },
+    "revision": 2,
+    "settings": {
+        "gridSize": 100,
+        "angleSnap": 15,
+        "snapEnabled": true
+    },
+    "materials": [],
+    "projectId": 903,
+    "schemaVersion": 3
+}
