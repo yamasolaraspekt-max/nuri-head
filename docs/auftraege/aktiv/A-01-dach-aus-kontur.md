@@ -106,6 +106,50 @@ die der Renderer zeichnen wuerde.* **Gemeldet vom Plan-Pruefer, am Code bestaeti
 Pruefbefehl: die Anlege-Entscheidung mit dieser Kontur gegen `dachFlaechen` — beide muessen
 dasselbe sagen.
 
+## Festlegung des Planners — der Fixture-Weg fuer A-01-4 (04.08. 23:3x)
+
+**Offener Punkt 2 ist damit geschlossen.** Gemessen, was es schon gibt (§2 Wiederverwendung):
+
+```text
+grep -rln 'hausplaner_documents' database/ tests/ app/Console
+  tests/Feature/Hausplaner/HausplanerSpeichernNutzlastTest.php
+  tests/Feature/Hausplaner/UebernahmeKnopfTest.php
+  tests/Feature/Hausplaner/UebernehmeSzeneInAuslegungTest.php
+  tests/Feature/Hausplaner/SnapshotRueckwegVersionTest.php
+  -> vier Testdateien legen Dokumente per DB::table(...)->insert() an
+Seeder mit Hausplaner-Bezug: KEINER
+```
+
+### DECISION — zwei Ebenen, ein Weg je Ebene
+
+```text
+TESTEBENE     Das vorhandene Muster wird wiederverwendet, nicht neu erfunden:
+              DB::table('hausplaner_documents')->insert() mit L-Kontur im scene_json,
+              wie in SnapshotRueckwegVersionTest. Laeuft gegen ticket_testing (§15),
+              reproduzierbar, kein Handgriff. KEIN neuer Seeder.
+BROWSEREBENE  Das Dokument wird VOR dem Bau ueber die Oberflaeche erzeugt
+              (L-Kontur zeichnen -> Dach anlegen -> speichern) und sein scene_json
+              als Datei im Repo abgelegt.
+```
+
+### ⚠ Das Zeitkritische, das bisher in keinem Blatt stand
+
+> **Nach dem Bau von A-01 laesst sich dieses Fixture nicht mehr herstellen.**
+> Die Absage ist genau die Funktion, die das Anlegen verhindert. Wer erst baut und dann das
+> Bestandsdokument sucht, hat A-01-4 dauerhaft unpruefbar gemacht — **der Bau zerstoert seinen
+> eigenen Pruefstand.**
+
+**Deshalb ist die Reihenfolge Teil des Auftrags, nicht Geschmackssache:**
+
+```text
+1  Fixture erzeugen und als Datei ablegen   VOR dem ersten Bau-Commit
+2  Ablage als Beleg im Bericht nennen       Pfad + Kontur-Punkte
+3  erst danach die Absage bauen
+```
+
+*Das ist dieselbe Klasse wie ein Vorher-Wert, den niemand festgehalten hat — nur teurer, weil
+hier nicht eine Zahl fehlt, sondern ein Zustand, den es danach nirgends mehr gibt.*
+
 ## Qualitätstor (ARBEITSREGELN §8)
 
 Sichtbare Änderung **und** Datenwirkung — beide Zusatzblöcke gelten:
@@ -127,7 +171,7 @@ Die Änderung ist additiv (eine Prüfung vor dem Anlegen, zwei Meldungen statt z
 ## Offene Punkte für den Plan-Prüfer
 
 1. **GESCHLOSSEN 04.08. 23:2x durch den Planner.** Die WELCHE-Frage ist entschieden (Abschnitt Festlegung: `dachFlaechen` wird gefragt) und als A-01-6 messbar gemacht. **Der WORTLAUT bleibt offen und ist Absicht** — er gehoert zur sichtbaren Wirkung und wird in der Browserabnahme (§8) beurteilt, nicht vorab diktiert.
-2. **A-01-4 braucht ein Bestandsdokument** mit nicht-rechteckigem Dach. Existiert keines, muss der Weg zu einem reproduzierbaren Fixture benannt werden, bevor der Auftrag `BEREIT` wird.
+2. **GESCHLOSSEN 04.08. 23:3x durch den Planner.** Zwei Ebenen, ein Weg je Ebene (Abschnitt Fixture-Weg): Testebene nutzt das vorhandene insert()-Muster, Browserebene erzeugt das Dokument VOR dem Bau und legt es als Datei ab. **Die Reihenfolge ist Teil des Auftrags** — nach dem Bau ist das Fixture nicht mehr herstellbar.
 3. Der Z-07-Code aus dem Vorlauf liegt bereits im Zweig (`herkunftFuerNeuesDach`, 2 Stellen in der App). Der Plan-Prüfer entscheidet, ob er als Ist-Zustand stehen bleibt oder ob A-01 auf einer Basis ohne ihn geschnitten wird.
 
 ---
