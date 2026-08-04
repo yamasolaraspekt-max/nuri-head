@@ -1,6 +1,6 @@
 # Verbindliche Arbeitsregeln
 
-**Version:** 1.1
+**Version:** 1.2
 **Gültig seit:** 04.08.2026
 **Autorität:** Yama
 **Geltung:** gesamtes Repository, alle Menschen, Agenten, Rollen, Worktrees und Arbeitszweige
@@ -237,10 +237,19 @@ sie für den Auftrag erforderlich ist.
 
 ## 10. Release-Prüfung
 
-`ABGENOMMEN` ist noch keine Veröffentlichungserlaubnis. Vor `RELEASE_FREI` prüft der
-Release-Prüfer unabhängig:
+`ABGENOMMEN` ist noch keine Veröffentlichungserlaubnis. Der Evaluator prüft immer einen
+unveränderlichen **Inhalts-Commit**. Sein nachträgliches Votum wird in einem eigenen
+**Statusnachweis-Commit** festgehalten. Dieser Statusnachweis darf ausschließlich
+`docs/AKTUELLER_AUFTRAG.yaml` ändern; jede weitere Datei sowie jede Produkt-, Regel-, Plan- oder
+Teständerung ist darin verboten. Dadurch muss kein Commit seine eigene, vor der Erzeugung noch
+unbekannte SHA enthalten.
 
-- Evaluator-Votum und Release-Kandidat zeigen auf denselben Commit,
+Vor `RELEASE_FREI` prüft der Release-Prüfer unabhängig:
+
+- Evaluator-Votum, `pruef_sha` und `release_sha` nennen denselben Inhalts-Commit,
+- der Statusnachweis-Commit ist genau ein direkter Nachfolger des geprüften Inhalts-Commits,
+- der Diff zwischen Inhalts-Commit und Statusnachweis enthält keine Produkt-, Regel-, Plan- oder
+  Teständerung,
 - Merge-Ziel und Release-Diff enthalten ausschließlich freigegebene Änderungen,
 - alle erforderlichen CI- und Qualitätstore laufen auf dem Release-Kandidaten erneut grün,
 - Bundle und sonstige Artefakte sind frisch und reproduzierbar,
@@ -324,8 +333,8 @@ Release-Prüfer:
 
 ```yaml
 auftrag: ID
-abnahme_commit: SHA
-release_commit: SHA
+inhalt_sha: SHA
+status_commit: SHA
 votum: RELEASE_FREI|RELEASE_BLOCKED|ENV_BLOCKED|DECISION_BLOCKED
 ci: pass|fail
 artefakte_reproduzierbar: true|false
@@ -445,7 +454,8 @@ Die Datei nennt immer mindestens:
 - fortlaufende `planner_laufnummer` und daraus abgeleitete `zehnergruppe`,
 - Auftrag sowie Pfad und SHA-256 des freigegebenen Plans,
 - Zustand und Ballbesitzer,
-- Basis-, Prüf- und Release-SHA, soweit vorhanden,
+- Basis-, Prüf- und Release-SHA, soweit vorhanden; `pruef_sha` und `release_sha` bezeichnen den
+  geprüften Inhalts-Commit, nicht den späteren Statusnachweis-Commit,
 - letztes Votum, offene Akzeptanz und nächsten konkreten Schritt,
 - Prozessquittung der zuletzt übernehmenden Rolle.
 
@@ -461,6 +471,15 @@ Rolle prüft die Fortschreibung, bevor sie arbeitet. Sitzung, Monat, Branch, Wor
 Kontextverlust dürfen weder Planner-Laufnummer noch Zehnergruppe zurücksetzen. Der Plan-Hash bleibt
 ab `BEREIT` unverändert; jede fachliche Änderung an Scope oder Kriterien führt zurück zu Planner
 und Plan-Prüfer und erzeugt einen neuen Plan-Hash.
+
+Nach der unabhängigen Abnahme erstellt die dafür autorisierte schreibende Rolle genau einen
+Statusnachweis-Commit als direkten Kind-Commit des Inhalts-Commits. Er setzt Zustand,
+Ballbesitzer, `pruef_sha`, vorgesehenen `release_sha`,
+Votum, offene Akzeptanz und nächsten Schritt. Dieser Commit wird nicht erneut als Inhaltsänderung
+bewertet; der Release-Prüfer verifiziert stattdessen seine erlaubte Pfadmenge, seine Elternkette,
+die Hashes und die wortgetreue Übernahme des unabhängigen Votums. Jede darüber hinausgehende
+Datei, Zwischenstufe oder weitere Änderung erzeugt einen neuen Inhalts-Commit und braucht eine
+neue Evaluator-Abnahme.
 
 Für alle produktiven Aufträge sind versionierte Rollen-Skills mit Pfad, Version und SHA-256 in der
 Prozessquittung Pflicht. Solange diese Skills noch nicht eingerichtet und unabhängig geprüft sind,
