@@ -23,8 +23,11 @@ letztes_votum: ""
 offene_akzeptanz:
   - "Definition of Ready ist noch nicht bestätigt (§5)"
   - "A-01-4 braucht ein Bestandsdokument mit nicht-rechteckigem Dach - Fixture-Weg offen"
-  - "Ort und Wortlaut der Absage sind nicht festgelegt - Plan-Prüfer entscheidet, ob das messbar bleibt"
+  - "A-01-6 ist neu (04.08. 23:2x) und vom Plan-Prüfer noch nicht gegengeprüft"
 naechster_schritt: "Plan-Prüfer prüft die Definition of Ready und setzt BEREIT oder gibt SPEC_BLOCKED zurück"
+geschlossen_seit_anlage:
+  - "Ort/Wortlaut der Absage: die WELCHE-Frage ist entschieden (dachFlaechen wird gefragt, kein zweiter Rechtecks-Begriff), messbar als A-01-6. Der WORTLAUT bleibt bewusst offen - er gehört in die Browserabnahme (§8)."
+  - "Doppelführung Z-07 / A-01: A-01 führt. §16 kennt nur eine Statuswahrheit, und das ist diese Seite."
 ```
 
 `IN_ARBEIT` ist derzeit **kein** Auftrag. Nach §3 darf es höchstens einen geben.
