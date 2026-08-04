@@ -6,16 +6,16 @@ zehnergruppe: 1
 auftrag: "GOVERNANCE-BOOTSTRAP-2026-08-04"
 plan_pfad: "docs/ARBEITSREGELN.md"
 plan_sha256: "08023ef7e47d5c9d5c9f7ed490775e4293d65495eee42433d7af65657b98390c"
-zustand: "ABNAHME"
-ballbesitzer: "Evaluator"
+zustand: "RELEASE_PRUEFUNG"
+ballbesitzer: "Release-Pruefer"
 basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"
-pruef_sha: null
-release_sha: null
-letztes_votum: "PRECOMMIT_FREIGABE"
+pruef_sha: "4c40a13b16443ae38e5787c9cb8e98848c650f05"
+release_sha: "4c40a13b16443ae38e5787c9cb8e98848c650f05"
+letztes_votum: "ABGENOMMEN"
 offene_akzeptanz:
-  - "Unabhaengige Abnahme des korrigierten Governance-Inhalts-Commits"
-  - "Statusnachweis-Commit nach erfolgreicher Abnahme"
-naechster_schritt: "Governance-v1.2-Inhalts-Commit unabhaengig abnehmen"
+  - "Unabhaengige Release-Pruefung des Inhalts- und Statusnachweis-Commits"
+  - "Push und Verifikation des Remote-SHA"
+naechster_schritt: "Direkten Statusnachweis-Commit erstellen und unabhaengige Release-Pruefung durchfuehren"
 rollen_skills:
   status: "AUSSTEHEND"
   sperre: "Vor dem naechsten produktiven Auftrag einrichten und unabhaengig pruefen"
@@ -28,3 +28,4 @@ prozessquittung:
     arbeitsregeln_sha256: "08023ef7e47d5c9d5c9f7ed490775e4293d65495eee42433d7af65657b98390c"
     plan_sha256: "08023ef7e47d5c9d5c9f7ed490775e4293d65495eee42433d7af65657b98390c"
     basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"
+    inhalt_sha: "4c40a13b16443ae38e5787c9cb8e98848c650f05"
