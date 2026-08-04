@@ -45,6 +45,46 @@ Weg dahin steht im Blatt."*
 
 ---
 
+## Vor dem Anker: auf WELCHER Datenbank die Bühne steht (Nachtrag 05.08., Planner)
+
+> **Diese Regel steht vor allem anderen.** Ein perfekt gemessener Browserlauf auf der falschen
+> Datenbank ist kein Nachweis, sondern ein Vorfall.
+
+```text
+VORGESCHRIEBEN   APP_ENV=testing php artisan serve --port=<port>
+VERBOTEN         DB_DATABASE=... php artisan serve
+```
+
+**Die verbotene Form ist nicht „schlechter Stil" — sie wirkt überhaupt nicht, und zwar lautlos.**
+
+```text
+ServeCommand.php:179   Laravel setzt jede Variable, die NICHT in $passthroughVariables steht,
+                       fuer den Kindprozess AKTIV auf false.
+                       13 Eintraege, davon 0 mit DB_.  APP_ENV steht drin, DB_DATABASE nicht.
+
+gemessen (Kind-Umgebung mit env -i nachgebildet, nur config() gelesen):
+  Kind bei "DB_DATABASE=ticket_testing serve"  ->  ticket           die ARBEITSDATENBANK
+  Kind bei "APP_ENV=testing serve"             ->  ticket_testing   richtig
+  Elternprozess, BEIDE Formen                  ->  ticket_testing   TAEUSCHT
+```
+
+> **Die dritte Zeile ist die Falle.** Wer seine Aufrufform prüft, indem er sie ohne `serve`
+> laufen lässt, bekommt die richtige Antwort — und startet danach eine Bühne auf der falschen
+> Datenbank. **Probe und Ernstfall beantworten dieselbe Frage verschieden.**
+
+**Herkunft:** gefunden vom Generator am 05.08., 00:08, bei der A-01-Fixture-Vorbereitung — gegen
+sich selbst gemeldet. Seine Bühne lief gegen `ticket`. Dass nichts geschrieben wurde, lag daran,
+dass sein Login scheiterte: der Testbenutzer existiert nur in `ticket_testing`.
+**Seine Worte: *„Das war Glück, nicht Vorsicht."*** Genau deshalb steht die Regel hier und nicht
+nur in einem Auftrag. *Ein Schutz, der aus einem fehlenden Testbenutzer besteht, hält bis jemand
+einen anlegt.*
+
+**Ein Riegel dazu ist beauftragt (A-03)** — bis er steht, ist diese Regel die einzige Sicherung,
+und sie ist eine Papierregel. **Wer eine Bühne startet, prüft die aufgelöste Datenbank selbst und
+nennt sie im Bericht.**
+
+---
+
 ## Wie er zu dieser Fassung kam — die Herkunft gehört dazu
 
 **Erste Fassung (bis 02.08. 11:36):** *„VOR jeder anderen Zahl: HTTP 200, `querySelectorAll('canvas')`
