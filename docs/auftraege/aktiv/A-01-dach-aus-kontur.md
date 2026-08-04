@@ -3,10 +3,10 @@
 ```yaml
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage statt eines unsichtbaren Objekts"
-zustand: IN_ARBEIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 16d5bbde
-pruef_sha: ""
+pruef_sha: "586ec68a"
 release_sha: ""
 letztes_votum: "plan-pruefer 04.08. 23:5x: DoR §5 VOLLSTAENDIG — BEREIT. Dritte Runde: die drei korrigierten Pruefbefehle selbst geprobt (Runner-Form laeuft, decke.test.ts sauber durch; blankes node --test faellt belegt). Alle 15 Punkte erfuellt, A-01-2-Ausnahme benannt (must_preserve-Kontrolle). REIHENFOLGE BINDEND: Browser-Fixture VOR dem ersten Bau-Commit (der Bau zerstoert sonst seinen eigenen Pruefstand)."
 naechster_schritt: "Generator baut die Absage. Frage beantwortet (89d69c13), Fixture liegt und ist verbucht (faca1a7a): Bestandsdokument rev 2 / v3 mit L-Dach, 6 Punkte, 68 m2, beide Auflagen belegt (RoofNode-Form + Servervalidator 200). ZUSTAND NACHGEZOGEN 05.08.: stand faelschlich auf BEREIT/planner, waehrend ich schon am Fixture baute - §3 verlangt IN_ARBEIT, sobald gebaut wird."
@@ -436,3 +436,75 @@ Browserabnahme — sie ändern den Auftrag nicht.
 der Grund, warum daraus ein Auftrag wird und keine Notiz.*
 
 **Ballbesitz: Generator. Der Bau ist frei.**
+
+
+---
+
+## Generator-Bericht (ARBEITSREGELN §11)
+
+```yaml
+auftrag: A-01
+basis: 16d5bbde
+commit: 586ec68a          # Arbeitszweig work/a01-generator, eigener Worktree (§6)
+scope:
+  - resources/planner/hausplaner/app/HausplanerApp.tsx
+  - resources/planner/hausplaner/__tests__/dachAusKontur.test.ts
+  - resources/planner/hausplaner/__tests__/fixtures/a01-bestandsdokument-l-dach.json   # faca1a7a
+  - public/hausplaner/hausplaner.js                                                    # frischer Bau
+tests:
+  statisch: pass          # tsc 0
+  unit: "1685/1685"       # Insel-Suite, Basis 1677 vor dem Zug
+  backend: nicht_anwendbar
+  schema: pass
+  build: pass             # npm run build:hausplaner, Bundle traegt die Absage
+  browser: pass           # 1440 · 1024 · 375 gegen ticket_testing, Port 8099
+abweichungen: []
+offene_akzeptanz:
+  - "375 px zeigt statt der Absage den BESTANDSHINWEIS des Planers ('Ab 1024 px vollstaendig
+     bedienbar'). Keine A-01-Regression - eine vorhandene Produkteigenschaft. Gemeldet, nicht
+     gedeutet: ob der Planer auf 375 px ueberhaupt bedienbar sein soll, ist keine Frage dieses
+     Auftrags."
+```
+
+### Kriterien, jedes mit Beleg
+
+```text
+A-01-1  L-Kontur -> kein Objekt, kein Status            Zusage gruen · im Browser belegt:
+        nach der Absage roofs unveraendert (1 = das Fixture)                        GRUEN
+A-01-2  Rechteck -> Dach mit DIESER Kontur (Kontrolle)                              GRUEN
+A-01-3  der Grund ist LESBAR                            im Bild, 1440 und 1024:
+        "Traufkontur ist nicht rechteckig — V1 unterstuetzt nur rechteckige
+         Grundrisse (kein stilles Falschdach)"                                      GRUEN
+A-01-4  Bestandsdokument mit L-Dach                     gegen das echte Fixture
+        (rev 2, v3, 6 Punkte, bestaetigt, wirft)                                    GRUEN
+A-01-5  Mutationsprobe                                  1 blind vorher, 5/5 danach  GRUEN
+A-01-6  Rechteck MIT Zwischenpunkt -> Dach ENTSTEHT                                 GRUEN
+```
+
+### Mutationsprobe
+
+```text
+                                        vorher    danach
+M1 Absage entfernt (Wurf geschluckt)    GEFANGEN  GEFANGEN
+M2 Status trotz Absage (return weg)     GEFANGEN  GEFANGEN
+M3 falscher Import (teilKennung)        GEFANGEN  GEFANGEN
+M4 Rechteck mitgesperrt                 BLIND     GEFANGEN
+M5 Absage ohne Grund                    GEFANGEN  GEFANGEN
+```
+
+**M4 ist der Fund der Probe.** Alle Verhaltenszusagen fragen `dachFlaechen` DIREKT — sie merken
+nicht, wenn der Klick-Handler die Antwort gar nicht mehr einholt und selbst wirft. *Dann entstuende
+nie wieder ein Dach, und die Suite bliebe vollstaendig gruen.* Ergaenzt als eigene Zusage.
+
+### Ein Befund fuer die Abnahme, der im Blatt nicht steht
+
+```text
+geometry/dachGeometrie.ts:105   dachFlaechen(roof: RoofNode): DachFlaeche[]   WIRFT
+app/tools/teilKennung.ts:112    dachFlaechen(dach: RoofNode & {flaechen?})    wirft NIE
+```
+
+**Zwei exportierte Funktionen desselben Namens.** A-01 schreibt vor, *„dieselbe Funktion zu fragen,
+die spaeter zeichnet"* — wer den falschen Import zieht, erfuellt jede Verhaltenszusage und baut
+trotzdem eine Absage, die nie absagt. Deshalb prueft eine eigene Zusage den Import selbst.
+
+**Ballbesitz: Evaluator.** Pruef-SHA `586ec68a` auf `work/a01-generator`, Basis `16d5bbde`.
