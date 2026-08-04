@@ -6,7 +6,7 @@
 auftrag:
   id: Z-06-N2
   strang: hausplaner-3d
-  status: bereit   # BEREIT 03.08. 23:0x (B14, Planner): der sperrende Pruefer-Einwand ist GESCHLOSSEN - K-01 und population_command messen nicht mehr `app/` weit (dort standen nach dem N1-Bau schon 2 Treffer, das Kriterium waere vor dem Bau gruen gewesen), sondern die ZWEI Zieldateien FussUndUeberlagerungen.tsx und renderers/three-d/szene.ts, beide vom Planner nachgemessen: 0 und 0. Baureihenfolge: NACH Z-07.
+  status: HISTORIE   # AUFGEHOBEN nach ARBEITSREGELN §17 (Planner, 04.08. 23:5x). Alte Statuswerte werden NICHT uebernommen; dieses Blatt ist fachlicher Nachweis, kein Prozessstand. Der eine gueltige Arbeitsstand steht in docs/STATUS.md (§16). VORHERIGE MARKE: bereit
   sperrgrund: ""    # aufgehoben 03.08. - die Bedingung ("N1 GRUEN") ist eingetreten und gemessen, nicht angenommen
   gegengelesen_von: pruefer
   gegengelesen_am: "2026-08-03"

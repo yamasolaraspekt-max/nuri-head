@@ -6,7 +6,7 @@
 auftrag:
   id: Z-11
   strang: hausplaner-3d
-  status: bereit   # BEREIT 03.08. 23:0x (B14, Planner): Pruefer-Gegenlesung BAUBAR ohne Einwand, alle Praemissen am Code bestaetigt. Baureihenfolge: NACH Z-07 und N2.
+  status: HISTORIE   # AUFGEHOBEN nach ARBEITSREGELN §17 (Planner, 04.08. 23:5x). Alte Statuswerte werden NICHT uebernommen; dieses Blatt ist fachlicher Nachweis, kein Prozessstand. Der eine gueltige Arbeitsstand steht in docs/STATUS.md (§16). VORHERIGE MARKE: bereit
   gegengelesen_von: pruefer
   gegengelesen_am: "2026-08-03"
   befund: "BAUBAR, KEIN Einwand. Alle Ausgangswerte an HEAD 14079a93 selbst nachgemessen und EXAKT getroffen: touch-action 0 / cursor 18 / zeigerArt 0 / toleranzAusZoom 1. Auch die Ruecknahme-Behauptungen halten am Code: Signatur fangKern.ts:230 OHNE Zeigerart, onClick Buehne.tsx:105, onMouseDown/Up 0 Treffer, und der zoom=0-Waechter gibt fangPx ohne Division zurueck - genau die Kante, die K-03 prueft. Die zweite Fassung ist das Gegenteil der ersten: jede Praemisse gemessen, der tragende Einstieg bleibt unangetastet, Luecke 4 wird ehrlich benannt statt gebaut. Validator 0 Fehlschlag. Status stellt der Planner (B14)."

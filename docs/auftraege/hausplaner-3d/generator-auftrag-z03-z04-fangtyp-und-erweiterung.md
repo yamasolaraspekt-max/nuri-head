@@ -7,7 +7,7 @@
 auftrag:
   id: Z-03+Z-04
   strang: hausplaner-3d
-  status: gebaut   # GEBAUT, Status 03.08. 22:5x nachgezogen (B14: der Generator setzt gebaut). Der BAU liegt in d383c54a und ist vom Evaluator als GESAMT GRUEN votiert (fd0151b4, Teil 2 nachgemessen) - nur das Feld blieb stehen, waehrend das Blatt als EINZIGES 'aktiv' die S-01-Zaehlung belegte. Alle vier Tore heute an HEAD nachgefahren: K-02 Begriffs-Anker 6 Fangarten mit Klartext · K-03 Fangarten im Kern 6 (>=3) · K-04 Zusagen in fangKern.test 18 (>=16) · K-05 Insel 1673 pass / 0 fail. OFFEN bleibt nur L-01, die Browserprobe - typ: browser, gehoert nicht dem Generator.
+  status: HISTORIE   # AUFGEHOBEN nach ARBEITSREGELN §17 (Planner, 04.08. 23:5x). Alte Statuswerte werden NICHT uebernommen; dieses Blatt ist fachlicher Nachweis, kein Prozessstand. Der eine gueltige Arbeitsstand steht in docs/STATUS.md (§16). VORHERIGE MARKE: gebaut
 ```
 
 ## Warum zusammen

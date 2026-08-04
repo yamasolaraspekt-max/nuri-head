@@ -4,7 +4,7 @@
 auftrag:
   id: AUF-P1-S4
   strang: produktdaten
-  status: bereit           # B8-Gegenlesen 03.08.: TRAEGT MIT AUFLAGE, Auflage eingearbeitet
+  status: HISTORIE   # AUFGEHOBEN nach ARBEITSREGELN §17 (Planner, 04.08. 23:5x). Alte Statuswerte werden NICHT uebernommen; dieses Blatt ist fachlicher Nachweis, kein Prozessstand. Der eine gueltige Arbeitsstand steht in docs/STATUS.md (§16). VORHERIGE MARKE: bereit
   spur: A
   heimat: ticket
   anlass: "Neun Schreibpfade mit acht Identitaetsbegriffen auf products (Zensus 11-…md §1);

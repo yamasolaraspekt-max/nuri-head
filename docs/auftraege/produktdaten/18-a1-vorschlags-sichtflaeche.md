@@ -4,7 +4,7 @@
 auftrag:
   id: AUF-P1-A1
   strang: produktdaten
-  status: bereit           # v2-Gegenlesen: TRAEGT MIT AUFLAGE; Auflage (volle widerspruch()-Pruefung) eingearbeitet
+  status: HISTORIE   # AUFGEHOBEN nach ARBEITSREGELN §17 (Planner, 04.08. 23:5x). Alte Statuswerte werden NICHT uebernommen; dieses Blatt ist fachlicher Nachweis, kein Prozessstand. Der eine gueltige Arbeitsstand steht in docs/STATUS.md (§16). VORHERIGE MARKE: bereit
   spur: A
   heimat: ticket
   anlass: "Evaluator-Auflage A1 aus der AUF-P1-S4-Abnahme (Ledger §6, adeec867): niemand ausser

@@ -6,7 +6,7 @@
 auftrag:
   id: W-04
   strang: werkzeuge
-  status: gebaut   # GEBAUT 03.08. 08:25, commit 8c636fe4 - erster Statuswechsel nach B14 (der Generator setzt gebaut, nachgetragen 08:3x weil B14 vier Minuten nach dem Bau kam). Mutationsprobe 6/6 blind vor den Zusagen, 6/6 gefangen danach, md5 identisch wiederhergestellt. Suite 107 -> 126 pass / 0 fail. ZWEI BEFUNDE fuer den Evaluator: (1) 'neu' wird gegen HEAD entschieden, nicht gegen den Index - Stufe 5 legt je Lauf einen leeren Index an, gegen den sieht JEDE Datei ungetrackt aus; (2) FOLGEBEFUND ausserhalb des Blattes: dieselbe Ursache hat die vorhandene UNVERAENDERT-Pruefung stillgelegt, im Wegwerf-Repo gemessen - gemeldet, nicht gebaut, weil das Blatt sie ausschliesst.
+  status: HISTORIE   # AUFGEHOBEN nach ARBEITSREGELN §17 (Planner, 04.08. 23:5x). Alte Statuswerte werden NICHT uebernommen; dieses Blatt ist fachlicher Nachweis, kein Prozessstand. Der eine gueltige Arbeitsstand steht in docs/STATUS.md (§16). VORHERIGE MARKE: gebaut
   # VORHER: bereit   # B8 ERFUELLT: gegengelesen vom Evaluator 03.08. (TRAEGT IM KERN, MIT NACHZUG-AUFLAGE), Auflage eingearbeitet 08:2x - K-03 als ERFUELLT markiert (11 Zusagen nachgezaehlt, nicht 13), K-07-Basis 82 -> 115 an HEAD gemessen, Titel und Bestandssatz entschaerft. AUSNAHME ZU B13, ausdruecklich: der Werkzeugstrang ruht, ABER dieses Blatt blockiert JEDEN Bau - 31 von 98 Commits der letzten zwei Tage sind am Tor vorbeigelaufen, weil es neue Dateien nicht kann. Genau der Fall, den B13 als Ausnahme benennt. Eingetragen vom Planner.
   gegengelesen_von: evaluator   # 31 Stunden zu spaet - der Verzug ist meiner, Begruendung im Ledger
   gegengelesen_am: 2026-08-03

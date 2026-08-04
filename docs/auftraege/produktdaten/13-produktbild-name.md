@@ -4,7 +4,7 @@
 auftrag:
   id: AUF-P1-S2-d3
   strang: produktdaten
-  status: bereit
+  status: HISTORIE   # AUFGEHOBEN nach ARBEITSREGELN §17 (Planner, 04.08. 23:5x). Alte Statuswerte werden NICHT uebernommen; dieses Blatt ist fachlicher Nachweis, kein Prozessstand. Der eine gueltige Arbeitsstand steht in docs/STATUS.md (§16). VORHERIGE MARKE: bereit
   spur: A
   heimat: ticket
   ziel: "SupplierConnectorService.php:1351 uebergibt 'name' statt 'title' an ProductImage,
