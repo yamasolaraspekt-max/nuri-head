@@ -3,10 +3,10 @@
 ```yaml
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
-zustand: BEREIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 93a9691f
-pruef_sha: ""
+pruef_sha: "6bc38d7d"
 release_sha: ""
 letztes_votum: "plan-pruefer 05.08. 00:1x (2. Runde): BEREIT. Beide Restpunkte eingetragen und GEGENGEMESSEN: A-02-1 als must_preserve-Kontrolle (Suite 23/0 aus Runde 1) · Exitcode-Staffel selbst nachgezaehlt (exit 0 1x / exit 1 5x / exit 2 1x an Z.48 — 3 IST FREI, die Wahl fuegt sich ein) · siebte Mutation scharf (Exitcode 3->1 bei unveraenderter stderr-Zeile MUSS fallen). Alle §5-Punkte belegt."
 naechster_schritt: "WARTESCHLANGE hinter A-01 (§3: nur ein IN_ARBEIT; A-01 behaelt den Vortritt). Generator zieht A-02 erst nach A-01-Abnahme: Readiness §7, dann Bau"
@@ -208,3 +208,64 @@ werden nie geloescht, nur verschoben** — ein Rueckbau verliert nichts.
 
 **Damit sind alle 15 Punkte aus §5 adressiert.** Ball zurück an den Plan-Prüfer für das
 `BEREIT`-Votum.
+
+
+---
+
+## Generator-Bericht (ARBEITSREGELN §11)
+
+```yaml
+auftrag: A-02
+basis: 93a9691f
+commit: 6bc38d7d
+scope:
+  - scripts/commit-pruefen.sh
+  - scripts/__tests__/commitPruefen.test.mjs
+tests:
+  statisch: pass          # bash -n · node --check
+  unit: "136/136"         # node --test scripts/__tests__/*.mjs — Basis 130 vor dem Zug
+  backend: nicht_anwendbar
+  schema: nicht_anwendbar
+  build: nicht_anwendbar
+  browser: nicht_anwendbar   # keine sichtbare Aenderung am Produkt (Blatt, Abschnitt Auswirkungen)
+abweichungen:
+  - "A-02 formuliert 'kein Halter' als HINREICHENDE Bedingung. So gebaut fielen ZWEI bestehende
+     W-09-Schutzzusagen (frischer Lock mit Inhalt · frischer 0-Byte-Lock): ein Vorgang kann seine
+     Sperrdatei zwischen zwei Schritten kurz geschlossen haben, und genau dann meldet lsof null
+     Halter. §7 verbietet das Abschwaechen bestehender Tests. Gebaut ist deshalb NOTWENDIG statt
+     hinreichend — kein Halter UND alt genug. Das raeumt WENIGER als der Wortlaut verlangt, und
+     genau diese Richtung schreibt A-02-3 vor. Als eigene Zusage festgenagelt
+     ('A-02-4 ROT: ein junger Lock ohne Halter wird NICHT geraeumt')."
+offene_akzeptanz: []
+```
+
+### Kriterien, jedes mit Beleg
+
+```text
+A-02-1  Kontrolle: 885 kB, 317 s, kein Halter          -> beiseite, exit 0        GRUEN
+A-02-2  Lock MIT Halter (900 B, 400 s, still)          -> liegt, exit 3,
+        ENV_BLOCKED-Zeile nennt die PID                                           GRUEN
+        Gegenprobe: derselbe Lock nach Prozessende     -> beiseite, exit 0        GRUEN
+A-02-3  ohne lsof (PATH=/usr/bin:/bin), Lock mit Inhalt -> liegt (raeumt WENIGER) GRUEN
+A-02-4  Exitcode 3 UND Form der Zeile geprueft                                    GRUEN
+A-02-5  sieben Mutationen: 4 blind vorher, 7/7 gefangen nachher, md5 identisch    GRUEN
+```
+
+### Mutationsprobe
+
+```text
+                                     vor den Zusagen   danach
+M1 lsof entfernt                     GEFANGEN          GEFANGEN
+M2 lsof-Ergebnis ignoriert           BLIND             GEFANGEN
+M3 Halter-Zweig faellt weg           BLIND             GEFANGEN
+M4 harte Grenze fuer Inhalt weg      GEFANGEN          GEFANGEN
+M5 Rueckfall raeumt MEHR             BLIND             GEFANGEN
+M6 ENV_BLOCKED durch exit 1          BLIND             GEFANGEN
+M7 Exitcode 3 -> 1, Zeile bleibt     Muster traf nicht GEFANGEN
+```
+
+*Die vier blinden sind die Faelle, fuer die es vor A-02 keinen Begriff gab — das Tor kannte weder
+Halter noch ENV_BLOCKED. Die Zahl misst den Ausgangszustand, nicht eine Nachlaessigkeit der
+bestehenden Zusagen.*
+
+**Ballbesitz: Evaluator.** Pruef-SHA `6bc38d7d`, Basis `93a9691f`.
