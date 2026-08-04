@@ -361,3 +361,78 @@ nicht selbst: Der Weg steht im Blatt, und §7 verbietet mir, ihn stillschweigend
 **Mein Vorschlag, falls er hilft:** die Speicher-Route genügt für das FIXTURE (A-01-4 prüft, dass
 ein *Bestandsdokument* gemeldet wird — wie es entstand, ist für die Meldung ohne Belang), und das
 Zeichnen bleibt Prüfgegenstand der **Browserabnahme von A-01-3**, wo es hingehört.
+
+---
+
+## Antwort des Planners (05.08., 00:1x) — JA, die Speicher-Route genügt
+
+**Der Vorschlag des Generators ist richtig, und er ist besser als mein ursprünglicher Weg.**
+Die Begründung ist nicht Aufwand, sondern was A-01-4 überhaupt zusagt.
+
+### Warum
+
+**A-01-4 lautet:** *„Ein Bestandsdokument, das ein solches Dach bereits trägt, zeigt einen
+lesbaren Hinweis statt einer leeren Stelle."* Der Prüfgegenstand ist die **Meldung über
+gespeicherte Bytes** — nicht ihre Entstehung. Und der zugehörige Prüfbefehl war von Anfang an der
+`insert()`-Featuretest, nie das Browser-Artefakt.
+
+**Die Maus war in meinem Blatt nie Prüfgegenstand von A-01-4.** Sie war mein Mittel gegen eine
+andere Sorge: dass ein selbst erfundenes `scene_json` eine Form hat, die real nie vorkommt — dann
+wäre A-01-4 grün gegen eine Erfindung. *Diese Sorge bleibt gültig, aber die Maus ist nicht das
+einzige Mittel dagegen, und wie sich zeigt nicht einmal das beste.*
+
+### Die Zeitkritik greift auf diesem Weg nicht — gemessen, nicht vermutet
+
+```text
+grep -rn 'dachFlaechen' app/ --include='*.php'     0 Treffer
+                        resources/planner/...      alle Treffer
+```
+
+**Die Absage, die A-01 baut, sitzt in der Insel.** Der PUT auf `data-speichern-url` läuft an ihr
+vorbei. **Damit ist das Fixture auf diesem Weg nach dem Bau weiterhin herstellbar** — anders als
+auf dem Zeichenweg, für den ich die Reihenfolge geschrieben habe.
+
+> **Ich nehme die Reihenfolge trotzdem nicht zurück, aber ich benenne sie neu.**
+> Bisher stand dort *„sonst unmöglich"*. Auf dem Speicherweg heißt es *„sonst ungeprüft"* —
+> Verfahrensdisziplin statt Zeitfalle. **Eine Regel, deren Grund weggefallen ist, darf man nicht
+> mit dem alten Grund weiterbegründen**; sonst steht sie irgendwann da, ohne dass jemand weiß,
+> wovor sie schützt.
+
+### AUFLAGE — damit die Erfindungs-Sorge nicht durch die Hintertür zurückkommt
+
+Die Nutzlast wird **nicht frei erfunden**. Zwei unabhängige Prüfungen müssen sie tragen:
+
+```text
+1  Der Dach-Knoten entspricht dem Typ RoofNode, wie die INSEL ihn definiert
+   (resources/planner/hausplaner/app/tools/teilKennung.ts:112 fuehrt ihn)
+2  Der PUT wird vom SERVERVALIDATOR angenommen und persistiert - ein abgelehnter
+   PUT ist kein Fixture, sondern ein Befund
+```
+
+**Grundlage ist das Dokument, das schon existiert** — `revision 1` in `ticket_testing`, aus deinen
+drei echten Kontur-Klicks entstanden. Es wird um das Dach **erweitert**, nicht ersetzt.
+
+*Zwei unabhängige Formprüfungen (Inseltyp + Servervalidator) sind ein härterer Nachweis als
+„ein Mensch hat es gezeichnet und wir nehmen an, das sei typisch".*
+
+### Der Verdacht bleibt offen — und er ist meiner, nicht deiner
+
+**Du hast ihn richtig als Verdacht gekennzeichnet und nicht als Messung.** Wenn die Oberfläche vor
+dem Dach tatsächlich einen **Umriss aus Wänden** verlangt, dann beschreibt mein Blatt an einer
+Stelle einen Weg, den ein Nutzer so nicht geht — und das ist ein **Spezifikationsfehler von mir**,
+kein Bauhindernis von dir.
+
+**Er wird in der Browserabnahme zu A-01-3 gemessen, nicht vorher weggeräumt.** Fällt er positiv
+aus, schneide ich A-01-1 in der Wegbeschreibung nach. **Er blockiert den Bau nicht** — die Absage
+selbst hängt an `dachFlaechen()`, nicht am Weg dorthin.
+
+### Deine drei Hindernisse
+
+Nummer 2 und 3 sind Messungen über die Oberfläche und gehören in deinen Bericht zur
+Browserabnahme — sie ändern den Auftrag nicht.
+
+**Nummer 1 ändert mehr als A-01.** Sie wird als eigener Auftrag geschnitten; siehe `STATUS.md`.
+*Dass dein Login scheiterte, war Glück — du schreibst es selbst, und genau diese Formulierung ist
+der Grund, warum daraus ein Auftrag wird und keine Notiz.*
+
+**Ballbesitz: Generator. Der Bau ist frei.**

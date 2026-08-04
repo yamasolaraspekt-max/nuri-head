@@ -21,9 +21,14 @@ pruef_sha: ""
 release_sha: ""
 letztes_votum: "plan-pruefer 04.08. 23:5x (3. Runde): BEREIT. Die drei korrigierten Pruefbefehle selbst geprobt — die Runner-Form laeuft (decke.test.ts sauber, gleiche Form wie Planner-Messung 13/0), das blanke node --test faellt belegt. Alle 15 §5-Punkte erfuellt; A-01-2 als benannte must_preserve-Ausnahme von der Rot-Pflicht."
 offene_akzeptanz:
-  - "BINDENDE REIHENFOLGE fuer den Generator: Browser-Fixture (L-Dach-Dokument + scene_json im Repo) VOR dem ersten Bau-Commit — der Bau zerstoert sonst seinen eigenen Pruefstand (Blatt, Abschnitt Fixture-Weg)."
-ballwechsel: "plan-pruefer -> generator, 04.08. 23:5x"
-naechster_schritt: "Generator: Readiness-Bestaetigung nach §7, dann Fixture, dann Bau; Meldung CODE_FERTIG mit Basis- und Bau-SHA"
+  - "REIHENFOLGE bleibt: Fixture VOR dem ersten Bau-Commit. ABER der Grund hat sich geaendert und ist neu benannt — auf dem Speicherweg heisst er 'sonst ungeprueft' (Verfahren), nicht mehr 'sonst unmoeglich' (Zeitfalle). Gemessen: dachFlaechen hat 0 Treffer in app/, die Absage sitzt in der Insel, der PUT laeuft an ihr vorbei."
+  - "AUFLAGE zum Fixture: die Nutzlast wird nicht frei erfunden. Zwei unabhaengige Formpruefungen muessen sie tragen — Dach-Knoten entspricht dem Inseltyp RoofNode (teilKennung.ts:112) UND der Servervalidator nimmt den PUT an. Grundlage ist das vorhandene Dokument revision 1 in ticket_testing, es wird ERWEITERT statt ersetzt."
+ballwechsel: "generator -> planner 05.08. 00:08 (Rueckfrage) · planner -> generator 05.08. 00:1x (beantwortet)"
+naechster_schritt: "Generator: Bau ist frei. Fixture ueber die Speicher-Route mit beiden Formpruefungen, dann bauen; Meldung CODE_FERTIG mit Basis- und Bau-SHA"
+rueckfrage_beantwortet:
+  - "FRAGE des Generators (00:08): genuegt fuers A-01-4-Fixture die echte Speicher-Route, oder ist das Zeichnen mit der Maus Teil des Pruefgegenstands?"
+  - "ANTWORT (00:1x): JA, die Speicher-Route genuegt. A-01-4 sagt die MELDUNG ueber gespeicherte Bytes zu, nicht ihre Entstehung — und der Pruefbefehl war von Anfang an der insert()-Featuretest, nie das Browser-Artefakt. Die Maus war mein Mittel gegen eine andere Sorge (erfundenes scene_json), und die Auflage oben deckt sie besser ab: zwei unabhaengige Formpruefungen schlagen 'ein Mensch hat es gezeichnet und wir nehmen an, das sei typisch'."
+  - "SEIN VERDACHT (Oberflaeche verlangt vor dem Dach einen Wand-Umriss) ist NICHT abgetan: er wird in der Browserabnahme zu A-01-3 gemessen. Faellt er positiv aus, ist das ein SPEZIFIKATIONSFEHLER DES PLANNERS in der Wegbeschreibung von A-01-1, und ich schneide nach. Er blockiert den Bau nicht — die Absage haengt an dachFlaechen(), nicht am Weg dorthin."
 nachtraege_erledigt:
   - "N2 A-01-2 ist jetzt ausdruecklich must_preserve-KONTROLLE und von der Rot-Pflicht AUSGENOMMEN. Begruendung im Blatt: ohne das Kriterium waere 'gar kein Dach mehr' eine gruene Loesung."
   - "N3 Fixture-Weg steht (Abschnitt 'Fixture-Weg fuer A-01-4', 23:3x): Testebene nutzt das vorhandene insert()-Muster der vier Hausplaner-Featuretests, KEIN neuer Seeder. Browserebene erzeugt das Dokument VOR dem Bau. Die REIHENFOLGE ist Teil des Auftrags."
@@ -69,15 +74,30 @@ sie nicht als stille Weiterreichung erscheint.
 
 | Rolle | Gegenstand | seit | läuft oder still |
 |---|---|---|---|
-| **Generator** | A-01, `BEREIT` | 04.08. 23:46 | **still, 17 min** — 0 Dateien in `resources/ scripts/ app/ tests/` seit dem Ballwechsel |
-| Plan-Prüfer | A-02, 2. DoR-Runde | 05.08. 00:0x | Ball gerade übergeben |
-| Planner | — | — | frei, arbeitet an der Vorbereitung von A-03 |
+| **Generator** | A-01, Bau frei | 05.08. 00:1x | **läuft** — Rückfrage gestellt und beantwortet |
+| Plan-Prüfer | A-02 auf `BEREIT`, Warteschlange | 05.08. 00:1x | frei |
+| Planner | A-03 aus dem §15-Befund | 05.08. 00:1x | läuft |
 
-**Der Generator-Befund ist gemeldet, nicht gedeutet.** Nach §8b hat ein stiller Baum mit
-liegendem, markiertem Auftrag mehrere mögliche Ursachen — Instanz nicht gestartet, blockiert, oder
-mitten im Lesen. *Es ist Mitternacht; die naheliegendste ist die harmloseste.* **Verboten wäre nur,
-daraus „vermutlich ein Baulauf" zu machen** — und ebenso, ihm ein zweites Blatt hinterherzuwerfen.
-Er behält A-01; die Meldung wiederholt sich, bis sich etwas bewegt.
+### Die VIERTE Ursache für einen stillen Baum — heute belegt
+
+**Ich hatte um 00:0x notiert: Generator still, 17 min, 0 Dateien.** Die Messung stimmte. Er hat in
+derselben Zeit einen Browser gefahren, eine Datenbank geprüft, drei Hindernisse gefunden und um
+00:08 eine Rückfrage committet.
+
+```text
+1  Baum still, kein Auftrag mit Marke      Leerlauf              Auftrag schneiden
+2  Baum still, Auftrag mit Marke liegt     blockiert/wartet      melden, kein zweites Blatt
+3  Baum still, halbfertige Dateien         Lauf abgebrochen      messen, nichts anfassen
+4  Baum still, Auftrag mit Marke liegt     ARBEIT IM BROWSER     melden — und weiter warten
+   ↳ Messen an der Oberflaeche schreibt NULL Dateien in den Baum. Ein stiller Baum
+     ist bei einem Auftrag mit Browseranteil der NORMALFALL, nicht das Warnzeichen.
+```
+
+> **Was mich davor bewahrt hat, falsch zu liegen, war nicht die Messung — die war in allen vier
+> Fällen dieselbe.** Es war, dass ich sie **gemeldet und nicht gedeutet** habe. Hätte ich „still"
+> in „untätig" übersetzt, hätte ich einem arbeitenden Generator ein zweites Blatt hinterhergeworfen.
+> *Genau der Fehler, den §8b Zeile 2 verbietet — und er wäre mir hier passiert, weil eine vierte
+> Ursache fehlte, die keiner aufgeschrieben hatte.*
 
 ---
 
