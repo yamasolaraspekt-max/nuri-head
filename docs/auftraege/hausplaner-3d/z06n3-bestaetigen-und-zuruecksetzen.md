@@ -48,11 +48,30 @@ Entscheidung wie bei der Bilanz in W-05: nicht die Zahl anfassen, sondern sie re
 ## Nahtstellen
 
 ```text
-Hier wird geschrieben:
   domain/validation.ts        das Feld geometrieFingerabdruck (Schema v3 -> v4, ADDITIV; Name analog geometrieHerkunft, insel-weit kollisionsfrei)
   geometry/freigabe.ts        bildeFingerabdruck() + pruefeFingerabdruck()
   app/…                       der Bestaetigungs-Knopf und sein Ort
   commands/applyCommand.ts    jede Geometrie-Aenderung laeuft hier durch
+
+  DIE SERVER-KETTE — vom Evaluator VOR dem Bau gemessen (04aaea8d), nicht vermutet.
+  *Er hat ein echtes v3-Bestandsdokument durch den ECHTEN Validator geschickt: v4 abgewiesen,
+  v3+Fingerabdruck abgewiesen, beides zusammen abgewiesen, die Kontrolle (v3 pur) durch.
+  Ein N3-Dokument ist in JEDER Zwischenstufe unspeicherbar, bis diese vier Stellen mitgehen.
+  Bei N1 haben genau sie DREI ROT-Runden gekostet — hier stehen sie vorher im Blatt:*
+  Models/HausplanerDocument.php    const SCHEMA_VERSION 3 -> 4. EINE Zeile: Request-Regel
+                                   und Snapshot-Rueckweg haengen seit der N1-Nachbesserung
+                                   an dieser Konstante und wandern automatisch mit.
+  domain/scene-document-v2.schema.json
+                                   Z.18 "const": 3 steht HART (der Server liest genau diese
+                                   Datei). ZUSAETZLICH: ceilings UND roofs tragen
+                                   additionalProperties:false — ohne Eintrag faellt das Feld
+                                   auch bei richtiger Version durch. freigabeAm/freigabeVon
+                                   stehen dort BEREITS (N1-Bau) — nicht doppelt bauen.
+  migriereSzene                    kennt v1/v2 -> v3, braucht v3 -> v4. Bestand in der
+                                   Arbeits-DB gezaehlt: 14x v1, 1x v2, 2x v3 = 17 Dokumente.
+                                   Ohne Migrationspfad laedt KEINES mehr.
+  public/hausplaner/hausplaner.js  getracktes Build-Artefakt, im SELBEN Commit (war
+                                   ROT-Grund 3 bei N1 — dieselbe Falle zweimal waere Absicht).
 
 Hier bewusst NICHT:
   Eine Freigabe-Historie      Zwei Felder (freigabe_am, freigabe_von) decken Yamas
