@@ -77,12 +77,16 @@ auftrag: A-03
 titel: "Browser-Buehne: der sichere Aufruf wird erzwungen, der lautlose wird laut"
 datei: docs/auftraege/aktiv/A-03-browser-buehne-testdatenbank.md
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner
 basis_sha: 89d69c13
 anlass: "§15-Befund des Generators, 05.08. 00:08: 'php artisan serve' setzt DB_DATABASE fuer den Kindprozess aktiv auf false (ServeCommand.php:179, 13 passthroughVariables, 0 davon DB_). Die Buehne lief gegen die ARBEITS-Datenbank ticket. Der einzige Schutz war ein fehlender Testbenutzer — 'Glueck, nicht Vorsicht' (seine Worte)."
 gemessen: "Kind-Umgebung mit env -i nachgebildet: 'DB_DATABASE=... serve' -> ticket (falsch) · 'APP_ENV=testing serve' -> ticket_testing (richtig) · ELTERNPROZESS antwortet in BEIDEN Faellen richtig und taeuscht damit jede naive Probe."
 besonderheit: "Es wird KEIN Durchreichen gebaut. Ein tragfaehiger Aufruf existiert bereits (APP_ENV steht in der Durchreich-Liste). Gebaut wird nur der Riegel darum: der falsche Aufruf ist heute LAUTLOS."
-naechster_schritt: "Plan-Pruefer: DoR §5, und P2 ausdruecklich scharf — NICHT NOTWENDIG ist ein zulaessiges Votum, wenn der Riegel den Bau nicht wert ist. Zweiter offener Punkt: die Liste erlaubter Testnamen (Vorschlag: ticket_testing + wberechnung_mysql_test)."
+letztes_votum: "plan-pruefer 05.08. 00:2x (1. DoR-Runde A-03): ENTWURF bleibt, ZWEI Restpunkte. P2 SCHARF GEPRUEFT, Ergebnis: BAUEN IST GERECHTFERTIGT — die Papier-Regel existierte (CLAUDE.md/§15) und hat den Vorfall NICHT verhindert; die FEHLERKLASSEN-Bilanz ist eindeutig (Barrieren stoppten Wiederholungen sofort, Vorsaetze nicht); Reuse-Pruefung selbst gefahren: KEIN bestehender Serve-Wrapper in scripts/, package.json oder ANKER-BROWSER (0 Treffer). Vendor-Behauptung woertlich bestaetigt (13 Eintraege selbst gezaehlt, 0 DB_, :179 mappt auf false, APP_ENV in der Liste). NICHT NOTWENDIG waere hier das falsche Votum."
+offene_akzeptanz:
+  - "Rest 1 (die Konsequenz aus P2): der Riegel braucht seine VERANKERUNG — ANKER-BROWSER.md schreibt heute KEINEN Startweg vor (gemessen 0 Treffer). Ohne eine Zeile dort, die scripts/browser-buehne.sh zum EINEN benannten Weg macht, ist der Riegel ein Werkzeug, das niemand aufgerufen bekommt — dieselbe Papier-Falle, nur eine Ebene hoeher. Scope um die Anker-Zeile erweitern (oder begruendet ausschliessen)."
+  - "Rest 2 (Testnamen-Liste, Empfehlung): NUR ticket_testing. wberechnung_mysql_test gehoert einer ANDEREN App — eine ticket-Buehne auf fremder Test-DB waere zwar harmlos, aber sinnlos erlaubt; die Liste bleibt minimal und waechst additiv mit Eintrag."
+naechster_schritt: "Planner traegt Rest 1+2 ein, dann setzt der Plan-Pruefer BEREIT (Warteschlange hinter A-01/A-02)"
 ```
 
 ---
