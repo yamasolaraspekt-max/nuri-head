@@ -145,3 +145,78 @@ NICHT FREIGEGEBEN      mit Liste; die Fassungen bleiben Entwurf, ich schneide ne
   Regeln binden ab Freigabe **jede** Rolle, auch dich, und sie sind schwerer zurückzunehmen als ein
   Auftrag. *Ein durchgewinkter Auftrag kostet einen Tag. Eine durchgewinkte Regel kostet, bis sie
   jemandem auffällt.*
+
+---
+
+# VOTUM des Plan-Prüfers — 05.08.
+
+```yaml
+pruefauftrag: P-01
+votum: FREIGEGEBEN MIT AUFLAGE      # 1.1 + 1.2.1 sind ab sofort verbindlich; vier benannte Stellen bessert der Planner nach
+gabelung: "1.2.1 FUEHRT (Inhalt) — die ZWEIG-Zusammenfuehrung (fork enthaelt den governance-Merge, wir nicht; 42 vs 10 Commits) bleibt ausdruecklich bei Yama: das ist Topologie, nicht Fassungsinhalt"
+gemessen_an: 90ebba40
+```
+
+**P-01-1 Widerspruchsfreiheit — ERGÄNZUNG mit einer Konsistenz-Lücke** (fällt mit P-01-8 zusammen):
+§12.1 schickt einen GEBAUTEN Auftrag nach `SPEC_BLOCKED`, §3 definiert den Zustand als „vor dem
+Bau nicht machbar". Im Verhalten kein Widerspruch (beide heißen „Spezifikation muss neu"), im
+Definitionstext schon. → **Auflage A1.**
+
+**P-01-2 Prüfbarkeit — JA für acht von neun.** §3-Auslöser messbar (Zustand vs. erste Scope-Änderung),
+die drei §5-Punkte checklistenfähig mit Befehl, 12.1–12.4 mechanisch bzw. am Commit ablesbar.
+Die Kommentar-Regel (§7) hat keinen automatischen Trigger, aber eine prüfbare Aussage je Fundstelle
+— der A-02-Fall wurde genau so gemessen. Akzeptiert mit Anmerkung, keine Auflage.
+
+**P-01-3 Herkunft — ALLE NEUN BELEGT, keine erfunden.** Ich habe jede gegen die Commits/Vorfälle
+geprüft, die ich größtenteils selbst vermessen habe: §3 (67b22c76 + 8643d0ce, zweimal nachgetragen)
+· Testdaten/Prozess (PROZESSPRUEFUNG-01, mein eigener Miss) · vorhanden+in Gebrauch (A-03-Messung
+meiner Instanz; „timeout fehlt" von meiner Generator-Instanz unabhängig bestätigt) · Kommentar-Fall
+(Evaluator-P1 + meine Gegenmessung Z.112/115 vs. Code) · 12.1 (0b3d6a10) · 12.2 (die von mir
+gefundene Zwei-Zweige-Reparatur) · 12.3 (5,1s/20s-Rohausgaben) · 12.4 (A-01 fünf Grüne) ·
+12.5 (das A-03-Votum meiner Instanz).
+
+**P-01-4 Machtprüfung — KEINE unzulässige Verschiebung.** §12.5 entlastet den BAUENDEN, nicht den
+Planner: der SPEC-Befund bleibt verbucht, erzeugt einen Pflicht-Folgeauftrag, wird in der Abnahme
+ausdrücklich genannt und zählt in der §13-Statistik gegen den Planner. Der Verdacht war richtig
+gestellt und hält der Prüfung nicht stand.
+
+**P-01-5 Gabelung — 1.2.1 FÜHRT (Inhalt).** Messbare Gründe: `STATUS.md` trägt die vier laufenden
+Aufträge real (AKTUELLER_AUFTRAG.yaml: 0 Verwendungen auf diesem Zweig); 1.3 führt §5 mit 15
+Punkten — ihm fehlen die vier 1.1-Regeln, deren Vorfälle gemessen sind; ein Statusträger-Wechsel
+mitten in vier Aufträgen kostet einen Übergangsplan ohne fachlichen Gewinn. **ABER 1.3 trägt drei
+erntewürdige Stücke,** die als Nachtrag in unsere Linie gehören (Planner schneidet): (a) „Push =
+Transport, nicht VERÖFFENTLICHT" — deckt sich mit gelebter Praxis und v1.2-Vertretung, (b)
+Statuscommits mit genau EINEM Zustandswechsel, (c) der benannte Statusträger als Regel → A3.
+**Die Zweig-Zusammenführung selbst (fork-Divergenz) ist Yamas Entscheidung — Topologie, nicht Text.**
+
+**P-01-6 Kausalität — Verdacht BESTÄTIGT, aber enger als befürchtet.** Die vier 1.1-Regeln und
+12.1/12.2 hätten ihre Vorfälle verhindert (JA). **12.3/12.4/12.5 sind kodifizierte Praxis** — sie
+beschreiben, was die Rollen in derselben Nacht bereits richtig taten. Das macht sie nicht wertlos,
+aber die §19-Überschrift „Der Fall" liest sich als „erzwungen durch". → **Auflage A4** (Ehrlichkeit
+der Tabelle: „verhindert künftig" vs. „bestätigt durch Praxis" trennen).
+
+**P-01-7 Plausibilität — der Mangel ist ECHT, am realen Fall belegt:** A-04-6 schreibt den (neuen)
+Bühnen-Wächter als Pflichtschritt vor — nach Wortlaut „vorhanden UND in Gebrauch" wäre das Blatt
+nie BEREIT-fähig. Der vorgeschlagene Halbsatz trägt. → **Auflage A2.** §12.4-Browserausnahme:
+scharf genug (Entscheider ist der Evaluator am sichtbaren Verhalten); Anmerkung, keine Auflage.
+
+**P-01-8 Konsistenz — zwei bestätigte Lücken:** `SPEC_BLOCKED`-Doppelbedeutung (→ A1) und der in
+§16 unbenannte Statusträger (→ A3).
+
+## Die vier Auflagen (Planner bessert nach, keine Umformulierung durch mich)
+
+```text
+A1  §3: die SPEC_BLOCKED-Definition um die Nach-Bau-Lage erweitern ODER eigener Zustand —
+    eine Lage je Zustandsname (loest P-01-1 und P-01-8a zusammen)
+A2  §5 „in Gebrauch": Halbsatz — gilt fuer VORHANDENE Formen; ein neu gebautes Werkzeug
+    braucht stattdessen einen benannten Erstnutzer (loest P-01-7)
+A3  §16: den Statustraeger NAMENTLICH benennen (STATUS.md, solange 1.2.1 fuehrt) und die
+    1.3-Ernte als Nachtrag schneiden: Push=Transport-Begriff · Ein-Zustandswechsel-Statuscommits
+A4  §19: „Der Fall"-Spalte trennt „haette verhindert" von „bestaetigt durch Praxis"
+    (betrifft 12.3/12.4/12.5)
+```
+
+**Mit dieser Freigabe sind 1.1 und 1.2.1 verbindlich** (Yamas Weisung macht das Votum zum Akt).
+Die Auflagen ändern daran nichts — sie sind Nachbesserungen am verbindlichen Text, keine
+aufschiebende Bedingung. *Geprüft mit denselben Zähnen wie jedes Blatt; die Regeln haben
+standgehalten, wo sie aus Messungen kamen, und gewackelt, wo sie Praxis beschrieben.*
