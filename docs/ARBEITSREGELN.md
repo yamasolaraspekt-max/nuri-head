@@ -1,7 +1,7 @@
 # Verbindliche Arbeitsregeln
 
-**Version:** 1.2.1  
-**Gültig seit:** 04.08.2026 · **Fassung 1.1 seit:** 05.08.2026 · **Fassung 1.2 seit:** 05.08.2026 · **1.2.1 seit:** 05.08.2026  
+**Version:** 1.2.2  
+**Gültig seit:** 04.08.2026 · **Fassung 1.1 seit:** 05.08.2026 · **Fassung 1.2 seit:** 05.08.2026 · **1.2.1 seit:** 05.08.2026 · **1.2.2 seit:** 05.08.2026  
 **Autorität:** Yama  
 **Geltung:** gesamtes Repository, alle Menschen, Agenten, Rollen, Worktrees und Arbeitszweige
 
@@ -68,7 +68,11 @@ ENTWURF
 
 Zusätzliche Blockzustände:
 
-- `SPEC_BLOCKED`: Auftrag ist widersprüchlich, unvollständig oder nicht machbar.
+- `SPEC_BLOCKED`: **die Spezifikation ist ungültig und muss neu geschnitten werden, bevor
+  (weiter) gebaut wird.** Das ist **eine** Lage, erreichbar auf zwei Wegen: vor dem Bau erkannt
+  (widersprüchlich, unvollständig, nicht machbar) oder **nach dem Bau** erkannt, weil sich das
+  Verlangte als falsch erwiesen hat (§12.1). *Der Weg ändert nichts am Zustand — in beiden Fällen
+  liegt der Ball beim Planner, und der Bau ruht.*
 - `ENV_BLOCKED`: Umgebung verhindert eine gültige Prüfung.
 - `DECISION_BLOCKED`: eine ausdrücklich Yama vorbehaltene Entscheidung fehlt.
 - `RELEASE_BLOCKED`: der abgenommene Stand ist nicht sicher oder nicht reproduzierbar
@@ -161,7 +165,11 @@ Ein Auftrag darf nur `BEREIT` werden, wenn der Plan-Prüfer alle folgenden Punkt
   wohin die Testdaten gehen **und** wogegen der ausführende Prozess läuft — samt dem Befehl, der
   Letzteres beweist,
 - jede vorgeschriebene Aufrufform, jedes Werkzeug und jeder Befehl ist auf der Zielmaschine
-  **vorhanden** und dort **tatsächlich in Gebrauch** — beides gemessen, nicht angenommen,
+  **vorhanden** und dort **tatsächlich in Gebrauch** — beides gemessen, nicht angenommen.
+  **„In Gebrauch" gilt für VORHANDENE Formen.** Schreibt der Auftrag ein **neu zu bauendes**
+  Werkzeug vor, tritt an die Stelle ein **benannter Erstnutzer**: welche Rolle es ab wann in
+  welchem Ablauf benutzt. *Sonst wäre kein Auftrag BEREIT-fähig, der etwas Neues vorschreibt —
+  belegt an A-04-6,*
 - jede Anforderung ist entweder ein **Kriterium** oder ein ausdrückliches **Nicht-Ziel**; einen
   dritten Zustand gibt es nicht,
 - Rückweg bei riskanten Änderungen ist beschrieben.
@@ -497,6 +505,23 @@ nicht aus alten Erzähltexten. Ein Validator darf erst wieder als Autorität ver
 ausdrücklich gegen diese Version der Arbeitsregeln gebaut und unabhängig geprüft wurde. Alte
 Auftragsvalidatoren und deren Statusschema sind aufgehoben.
 
+**Der Statusträger ist `docs/STATUS.md`** — namentlich, solange Fassung 1.2.1 führt. *Er war
+bisher nur als „kompakter Auftragsdatensatz" umschrieben; alle Rollen benutzten längst diese Datei.
+Eine Regel, die den Träger nicht benennt, wird durch die Praxis ersetzt statt befolgt.*
+
+**Aus Fassung 1.3 des `governance`-Zweigs übernommen (Ernte, P-01-5):**
+
+- **Ein Push ist Transport zur Prüfung, keine Veröffentlichung.** `VEROEFFENTLICHT` beginnt erst
+  mit der Integration in den freigegebenen Zielbranch oder dem ausdrücklich benannten Deployment.
+  Push und Zielintegration sind **zwei getrennte Freigaben**.
+- **Ein Statuscommit vermischt sich nicht mit Produktivcode.** Er nennt den Zustandswechsel in der
+  Botschaft und ändert **keine** Produkt-, Test- oder Regeldatei.
+
+  > *Abgeschwächt gegenüber 1.3, die je Statuscommit **genau einen** Zustandswechsel und sonst
+  > nichts verlangt. Grund: in dieser Nacht trug fast jeder Commit Blattänderung und Zustand
+  > zugleich; die strengere Form wäre nach §5-Maßstab **nicht plausibel** und würde umgangen.
+  > **Der Plan-Prüfer darf widersprechen** — dann gilt die strenge Form.*
+
 Ein gültiger Status nennt mindestens:
 
 - Auftrag,
@@ -576,15 +601,44 @@ wann kommt die Aufgabe zurück zur Abnahme und welche Kriterien gelten."* §12 h
 und den Pflichtstopp — von den vier Fragen war eine halb beantwortet. **§12.1 bis §12.5 schließen
 die Lücke.** Jede Regel hat einen Fall von heute Nacht:
 
-| Regel | Der Fall |
+| Regel | Der Fall — *„hätte verhindert"* oder *„bestätigt durch Praxis"* |
 |---|---|
 | **12.1** Ball folgt der Klasse, gemischte Befunde werden geteilt | A-01: `CODE` beim Generator, aber der Prüfbefehl war unerfüllbar — der `SPEC`-Teil gehörte dem Planner und musste **zuerst** weg |
 | **12.2** Reparatur läuft auf der Linie des Baus | A-02: zwei Fassungen derselben Reparatur (`ca5f80e4` / `6953198a`) auf zwei Zweigen, die beim Merge kollidieren |
-| **12.3** Zwei-Richtungs-Probe je Befund | A-02: die Wieder-Abnahme trug den Rot-Beleg (hängendes `lsof` → 5,1 s) — deshalb war sie belastbar |
-| **12.4** alle Kriterien, gestaffelt tief | A-01: fünf von sechs waren grün; ohne Wiederholung wüsste niemand, ob sie es nach der Reparatur noch sind |
-| **12.5** abgenommen trotz `SPEC`-Befund | A-03: erfüllte seinen Auftrag vollständig; falsch war der Auftrag. `NACHBESSERN` hätte den Bauenden für meinen Fehler haften lassen |
+| **12.3** Zwei-Richtungs-Probe je Befund | *bestätigt durch Praxis* — A-02: die Wieder-Abnahme trug den Rot-Beleg (hängendes `lsof` → 5,1 s) und war deshalb belastbar |
+| **12.4** alle Kriterien, gestaffelt tief | *bestätigt durch Praxis* — A-01: fünf von sechs waren grün; ohne Wiederholung wüsste niemand, ob sie es nach der Reparatur noch sind |
+| **12.5** abgenommen trotz `SPEC`-Befund | *bestätigt durch Praxis* — A-03: erfüllte seinen Auftrag vollständig; falsch war der Auftrag. Der Evaluator handelte so, **bevor** es die Regel gab |
 
 **Nummer 1.2.1 statt 1.3:** Der Zweig `governance/arbeitsregeln-v1.1-20260804` führt bereits eine
 **eigene 1.3**. Zwei verschiedene 1.3 wären schlimmer als die Gabelung selbst. Siehe
 [`BEFUND-ZWEI-REGELWERKE.md`](BEFUND-ZWEI-REGELWERKE.md) — **die Fassungsfrage ist weiterhin offen
 und gehört Yama.**
+
+### Fassung 1.2.2 — 05.08.2026, die vier Auflagen aus P-01
+
+**Der Plan-Prüfer hat 1.1 und 1.2.1 `FREIGEGEBEN MIT AUFLAGE`** (gemessen an `90ebba40`). Damit
+sind sie **verbindlich**; die Auflagen sind Nachbesserung am geltenden Text, keine aufschiebende
+Bedingung. **Alle vier sind hiermit erledigt:**
+
+| Auflage | Erledigung |
+|---|---|
+| **A1** | §3: `SPEC_BLOCKED` ist **eine** Lage („Spezifikation muss neu, bevor weitergebaut wird") mit zwei Erkennungswegen — kein neuer Zustand, weil der Ball in beiden Fällen beim Planner liegt |
+| **A2** | §5: „in Gebrauch" gilt für **vorhandene** Formen; ein neu zu bauendes Werkzeug braucht einen **benannten Erstnutzer**. Belegt an A-04-6, das sonst nie `BEREIT` werden könnte |
+| **A3** | §16: `docs/STATUS.md` **namentlich** benannt · 1.3-Ernte übernommen (Push = Transport · Statuscommit ohne Produktivcode) |
+| **A4** | §19: die Fall-Spalte trennt jetzt *„hätte verhindert"* von *„bestätigt durch Praxis"* — 12.3/12.4/12.5 sind kodifizierte Praxis, nicht erzwungene Lehren |
+
+**Zwei Ergebnisse seiner Prüfung, die gegen mich liefen und die ich hier festhalte:**
+
+- **Kausalität:** mein Verdacht gegen §12.5 war richtig — **und traf auch 12.3 und 12.4.** Drei
+  von neun Regeln beschreiben, statt zu verhindern.
+- **Machtprüfung:** mein Verdacht war **falsch**. §12.5 entlastet den Bauenden, nicht mich: der
+  `SPEC`-Befund bleibt verbucht, erzwingt einen Folgeauftrag und zählt in §13 **gegen den Planner**.
+
+**Eine Abweichung von der Auflage habe ich ausdrücklich gemacht:** die 1.3-Regel „genau ein
+Zustandswechsel je Statuscommit" ist **abgeschwächt** übernommen. *Nach meinem eigenen §5-Maßstab
+wäre die strenge Form nicht plausibel — in dieser Nacht trug fast jeder Commit Blatt und Zustand
+zugleich. Der Plan-Prüfer darf widersprechen; dann gilt die strenge Form.*
+
+**Nicht erledigt und ausdrücklich offen:** die **Zweig-Zusammenführung** (`fork` enthält den
+governance-Merge, wir nicht — 42 gegen 10 Commits). *Das ist Topologie, nicht Fassungsinhalt, und
+sie gehört Yama.*

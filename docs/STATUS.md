@@ -213,6 +213,33 @@ nichts an der Grenze** — §15 verbietet Testdaten in der Arbeits-DB unabhängi
 [`A-06`](auftraege/aktiv/A-06-probedaten-arbeits-db.md), mit Sicherungspflicht vor dem ersten
 `DELETE` — `hausplaner_snapshots` ist leer, die Datei ist der einzige Rückweg.
 
+### 9. ✅ P-01 FREIGEGEBEN MIT AUFLAGE — 1.1 und 1.2.1 sind VERBINDLICH
+
+**Der Plan-Prüfer hat geprüft und freigegeben** (gemessen an `90ebba40`). **Yamas Weisung macht
+sein Votum zum Akt** — die Fassungen gelten ab sofort, die Auflagen waren Nachbesserung am
+geltenden Text, keine aufschiebende Bedingung. **Alle vier sind erledigt (Fassung 1.2.2):**
+
+```text
+A1  §3   SPEC_BLOCKED ist EINE Lage mit zwei Erkennungswegen - kein neuer Zustand
+A2  §5   "in Gebrauch" gilt fuer VORHANDENE Formen; neues Werkzeug -> benannter Erstnutzer
+A3  §16  docs/STATUS.md NAMENTLICH benannt · 1.3-Ernte: Push=Transport · Statuscommit
+         ohne Produktivcode (abgeschwaecht, Begruendung im Aenderungsverzeichnis)
+A4  §19  Fall-Spalte trennt "haette verhindert" von "bestaetigt durch Praxis"
+```
+
+**Zwei Ergebnisse, die gegen mich liefen:**
+
+- **Kausalität:** mein Verdacht gegen §12.5 war richtig — **und traf auch 12.3 und 12.4.**
+  Drei von neun Regeln beschreiben, statt zu verhindern.
+- **Machtprüfung:** mein Verdacht war **falsch**. §12.5 entlastet den Bauenden, nicht mich —
+  der `SPEC`-Befund bleibt verbucht, erzwingt einen Folgeauftrag und zählt in §13 **gegen den
+  Planner**. *Der Verdacht war richtig gestellt und hält der Prüfung nicht stand.*
+
+**Gabelung: 1.2.1 FÜHRT inhaltlich** (gemessen: `AKTUELLER_AUFTRAG.yaml` hat 0 Verwendungen hier,
+1.3 fehlen die vier 1.1-Regeln, ein Trägerwechsel mitten in vier Aufträgen kostet ohne Gewinn).
+**Die Zweig-Zusammenführung bleibt bei Yama** — `fork` enthält den governance-Merge, wir nicht,
+42 gegen 10 Commits. *Topologie, nicht Fassungsinhalt.*
+
 ### Kenntnisnahme — jede Rolle trägt sich mit ihrem nächsten Commit ein
 
 | Rolle | gelesen | SHA der Bestätigung |
