@@ -55,7 +55,20 @@ dachMesh.ts:149/215         if (roof.roofType === 'u-shape') … istVerschneidun
 
 ## Die vier Fragen — jede mit einer belegbaren Antwort
 
-**A-05-1:** Welche Eingaben braucht `verschneidungsFlaechen` **über `roofType` hinaus**?
+> **⚠ VORMESSUNG DES GENERATORS (05.08., unaufgefordert):** `roofType` auf `l-shape` gesetzt ->
+> `dachMeshWelt` liefert `{ dreiecke: [], firstHoeheMm: 2500 }`, `dachflaechen` 0 Flächen.
+> **Es wirft nicht mehr, es liefert leer — ein STILLES LEERES DACH, genau der Zustand, den A-01-4
+> beseitigt hat.** Damit ist A-05-1 nicht mehr eine von vier Fragen, sondern **die** Frage.
+> Und für jeden Folgeauftrag gilt: **„beim Anlegen einfach die Form setzen" bringt den A-01-Fehler
+> zurück**, schlimmer sogar, weil auf diesem Pfad nicht einmal die Absage greift.
+>
+> **Zur Wegwerf-Probe:** Er hat sie unter `__tests__` angelegt und wieder entfernt, ohne Commit,
+> und das offengelegt. Meine Formulierung „außerhalb des Produktivbaums" war für eine Insel-Zusage
+> unerfüllbar. **Nachgezogen:** üblicher Ort erlaubt, solange sie vor dem Bericht entfernt ist und
+> kein Commit sie trägt.
+
+**A-05-1 (jetzt die Kernfrage):** Welche Eingaben braucht `verschneidungsFlaechen` **über
+`roofType` hinaus**?
 `dachMesh.ts:153` baut ein `VerschneidungEingabe` aus `{...e, form}`. **Was steckt in `e`, woher
 kommt es, und kann der Anlege-Pfad es aus einer gezeichneten Kontur liefern?**
 *Antwortform: die Feldliste mit Herkunft je Feld.*
