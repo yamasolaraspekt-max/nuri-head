@@ -1,7 +1,7 @@
 # Verbindliche Arbeitsregeln
 
-**Version:** 1.2  
-**Gültig seit:** 04.08.2026 · **Fassung 1.1 seit:** 05.08.2026 · **Fassung 1.2 seit:** 05.08.2026  
+**Version:** 1.2.1  
+**Gültig seit:** 04.08.2026 · **Fassung 1.1 seit:** 05.08.2026 · **Fassung 1.2 seit:** 05.08.2026 · **1.2.1 seit:** 05.08.2026  
 **Autorität:** Yama  
 **Geltung:** gesamtes Repository, alle Menschen, Agenten, Rollen, Worktrees und Arbeitszweige
 
@@ -360,6 +360,66 @@ Nach der zweiten roten Runde derselben Aufgabe gilt Pflichtstopp:
 4. neue Basis und neue Kriterien,
 5. erneute Plan-Prüfung.
 
+### 12.1 Wer den Ball bekommt
+
+| Klasse | Ball | Zustand | Bemerkung |
+|---|---|---|---|
+| `CODE` | Generator | `NACHBESSERN` | |
+| `SPEC` | **Planner** | `SPEC_BLOCKED` | **nicht** `NACHBESSERN` — der Zustand richtet sich an den Bauenden, und ihn trifft kein Vorwurf |
+| `UMGEBUNG` | Rolle, deren Umgebung es ist | `ENV_BLOCKED` | erzeugt **kein** fachliches Rot |
+| `BEWEIS` | Generator | `NACHBESSERN` | der Code darf unverändert bleiben; geschuldet ist der Nachweis |
+| `REGRESSION` | Generator | `NACHBESSERN` | immer P0 |
+
+**Ein Befund mit CODE- und SPEC-Anteil wird geteilt, nicht gemittelt.** Beide Teile bekommen eine
+eigene Klasse und einen eigenen Ball. **Der SPEC-Teil wird zuerst behoben** — sonst arbeitet der
+Bauende gegen ein Kriterium, das er nicht erfüllen kann.
+
+### 12.2 Wie die Nachbesserung läuft
+
+- **Sie läuft auf der Linie des Baus**, nie auf einem anderen Zweig. *Zwei Zweige erzeugen zwei
+  Fassungen derselben Reparatur, die beim Merge auf denselben Zeilen kollidieren.*
+- **Der Umfang ist der Befund**, nichts sonst. Keine Nebenreparaturen, auch keine offensichtlichen.
+- **Der Bauende ändert kein Kriterium und fügt keines hinzu.** Braucht die Reparatur ein neues,
+  geht sie an den Planner zurück (§7).
+- **Tests dürfen wachsen, nie schrumpfen.** Eine Reparatur, die eine Zusage abschwächt, ist
+  abzulehnen, auch wenn der Befund verschwindet.
+
+### 12.3 Rückweg zur Abnahme
+
+Die Aufgabe geht auf `CODE_FERTIG` zurück — **kein eigener Zustand für Nachbesserungen.** Die
+Meldung nennt zusätzlich zu §11:
+
+- die neue Prüf-SHA **auf der Linie des Baus**,
+- je Befund: was geändert wurde,
+- **je Befund die Zwei-Richtungs-Probe:** dieselbe Probe war vorher rot und ist nachher grün, beide
+  Richtungen selbst gemessen. *Eine Reparatur ohne den vorherigen Rot-Beleg ist eine Behauptung.*
+
+### 12.4 Welche Kriterien bei der Wieder-Abnahme gelten
+
+**Alle — aber nicht alle gleich tief.**
+
+```text
+das rote Kriterium        volle Pruefung samt eigener Gegenprobe des Evaluators
+die vorher gruenen        Pruefbefehle erneut fahren (sie sind Befehle, das kostet wenig)
+die Mutationsprobe        IMMER erneut - eine Reparatur kann sie stumpf machen
+die Browserabnahme        nur erneut, wenn die Reparatur sichtbares Verhalten beruehrt
+```
+
+> **Warum nicht nur das rote Kriterium.** Eine Reparatur ist eine Änderung, und Änderungen brechen
+> Nachbarn. Die grünen Kriterien sind ausführbare Befehle — sie erneut zu fahren kostet Minuten,
+> sie zu überspringen kostet eine Regression, die niemand sucht.
+
+### 12.5 Abgenommen trotz Befund
+
+**Ein `SPEC`-Befund blockiert die Abnahme nicht**, wenn der Bau den Auftrag erfüllt, wie er
+geschnitten war. Er wird als Befund verbucht und erzeugt einen **neuen Auftrag**.
+
+> *Sonst haftet der Bauende für einen Fehler des Planners — und `NACHBESSERN` wäre an die falsche
+> Rolle adressiert. Der Auftrag war erfüllt; falsch war, was verlangt wurde.*
+
+**Die Abnahme nennt den Befund ausdrücklich**, mit Klasse, Schwere und dem Auftrag, der daraus
+entsteht. **Ein verschwiegener Befund ist keine Abnahme, sondern eine Unterschrift auf Verdacht.**
+
 ## 13. Pflichtprüfung nach jeweils zehn Aufgaben
 
 Die Qualität von Planner, Plan-Prüfer, Generator, Evaluator und Release-Prüfer wird **nicht nach
@@ -508,3 +568,23 @@ Planner formuliert und von Yama beauftragt; die Belege stehen in
 > eine **Handlung** oder eine **Messung auf der Zielmaschine**, nicht an eine Formulierung.
 
 *Fassung 1.0 vom 04.08.2026 bleibt unverändert gültig; 1.1 ergänzt, streicht nichts.*
+
+### Fassung 1.2.1 — 05.08.2026, auf Yamas Frage nach dem roten Weg
+
+**Yamas Frage:** *„es muss auch ein Regel geben wer bekommt die Aufgabe, wie ist die Nachbesserung,
+wann kommt die Aufgabe zurück zur Abnahme und welche Kriterien gelten."* §12 hatte die **Klassen**
+und den Pflichtstopp — von den vier Fragen war eine halb beantwortet. **§12.1 bis §12.5 schließen
+die Lücke.** Jede Regel hat einen Fall von heute Nacht:
+
+| Regel | Der Fall |
+|---|---|
+| **12.1** Ball folgt der Klasse, gemischte Befunde werden geteilt | A-01: `CODE` beim Generator, aber der Prüfbefehl war unerfüllbar — der `SPEC`-Teil gehörte dem Planner und musste **zuerst** weg |
+| **12.2** Reparatur läuft auf der Linie des Baus | A-02: zwei Fassungen derselben Reparatur (`ca5f80e4` / `6953198a`) auf zwei Zweigen, die beim Merge kollidieren |
+| **12.3** Zwei-Richtungs-Probe je Befund | A-02: die Wieder-Abnahme trug den Rot-Beleg (hängendes `lsof` → 5,1 s) — deshalb war sie belastbar |
+| **12.4** alle Kriterien, gestaffelt tief | A-01: fünf von sechs waren grün; ohne Wiederholung wüsste niemand, ob sie es nach der Reparatur noch sind |
+| **12.5** abgenommen trotz `SPEC`-Befund | A-03: erfüllte seinen Auftrag vollständig; falsch war der Auftrag. `NACHBESSERN` hätte den Bauenden für meinen Fehler haften lassen |
+
+**Nummer 1.2.1 statt 1.3:** Der Zweig `governance/arbeitsregeln-v1.1-20260804` führt bereits eine
+**eigene 1.3**. Zwei verschiedene 1.3 wären schlimmer als die Gabelung selbst. Siehe
+[`BEFUND-ZWEI-REGELWERKE.md`](BEFUND-ZWEI-REGELWERKE.md) — **die Fassungsfrage ist weiterhin offen
+und gehört Yama.**
