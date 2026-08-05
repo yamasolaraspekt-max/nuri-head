@@ -5,7 +5,8 @@
 `docs/cutover-wb-abschlussbilanz.md` (2026-07-05), `database/data/wberechnung_import.php`,
 ticket-Ist `app/Services/{Heizlast,Energie,Klima}/*` + `routes/web.php` + `resources/views/admin/energie/*`
 (live 2026-07-11), wberechnung-App `/Users/yamanuri/Herd/wberechnung` (read-only).
-**Geltung:** `docs/rueckfall-archiv-regeln.md` ist verbindlich (kein Löschen/Überschreiben ohne Rückfallpfad).
+**Geltung:** `docs/ARBEITSREGELN.md` ist verbindlich; insbesondere gelten der kleine Scope und ein
+geprüfter Rückweg bei riskanten Änderungen.
 
 > **Ein-Satz-Befund:** Der wberechnung-**Energie-Rechenkern ist seit dem 05.07. weitgehend nach ticket
 > transplantiert UND verdrahtet** (eigener `/admin/energie/*`-Bereich mit Controllern, Views, PDF-Ausgaben) —

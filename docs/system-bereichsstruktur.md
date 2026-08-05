@@ -5,7 +5,8 @@
 **Leitprinzip (Yama, 2026-07-11):** Zahl der Bereiche ist flexibel (darf steigen/sinken) — **entscheidend ist, dass die Themen sauber zusammengeführt sind** (eine Datenwahrheit / ein Workflow-Abschnitt je Bereich, keine künstlichen Nähte, keine Sammeltöpfe).
 
 **Quellen (firsthand):** `docs/system-inventur.md` (führende Wahrheiten §10, Doppelwahrheiten §11, unverdrahtete Bausteine §12, Prozessbrüche §13) · `-nachsuche.md` + `-nachsuche-3.md` · `docs/playground-uebernahme-inventur.md` · `docs/wberechnung-uebernahme-inventur.md` · `docs/system-kapitelplan.md` (Kapitel A–N) · Live-Code 2026-07-11.
-**Geltung:** `docs/rueckfall-archiv-regeln.md` verbindlich (kein Löschen/Überschreiben ohne Rückfallpfad).
+**Geltung:** `docs/ARBEITSREGELN.md` ist verbindlich; insbesondere gelten der kleine Scope und ein
+geprüfter Rückweg bei riskanten Änderungen.
 
 ---
 
