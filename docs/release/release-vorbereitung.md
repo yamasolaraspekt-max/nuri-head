@@ -153,3 +153,38 @@ ausgefuehrte_vertretung:
   - "Push fork:           5a7a341a -> 2b1ef24a (FF, exit 0)"
   - "Push backup-private: 5a7a341a -> 2b1ef24a (FF, exit 0)"
 ```
+
+---
+
+## Protokoll: Sammel-Release nach main (05.08.)
+
+```yaml
+vorgang: sammel-release-main
+datum: 2026-08-05
+rolle: release-pruefer (Vertretung nach Regelwerk 1.4.1)
+kandidat: c908d3f0f7da2f6613ba285e920404f133cc1266
+enthaelt: [A-01 (94b58aaf), A-02 (6953198a), A-03 (26e378a5), Auflagen-Revert ba4dc4b0]
+grundtor:
+  ort: getrennter Pruef-Checkout ticket-release-pruefung (§6)
+  tsc_hausplaner: clean
+  test_hausplaner: 1689/1689
+  bundle: BYTE-GLEICH gegen getracktes Artefakt
+  bash_n: OK
+  skript_tests: 36/36
+  php_artisan_test: "880 passed (3110 assertions), 51s"
+  erster_lauf: "26 failed — Klasse UMGEBUNG: ViteManifestNotFoundException, public/build/
+    fehlte im frisch bestueckten Checkout (gitignored). Nach cp -R aus dem Hauptcheckout
+    880/880. KEINE Regression. Lehre: Checkout-Bestueckung umfasst node_modules, vendor,
+    .env, .env.testing UND public/build."
+geheimnisse: "diff d8612a63..c908d3f0 (367 Commits): nur Test-Fixtures (User::factory,
+  PASSWORT_FIXTURE), keine .env-Dateien, kein _to_delete"
+ff_bedingung: "fork/main und backup-private/main standen beide auf d8612a63, Vorfahr des
+  Kandidaten (merge-base --is-ancestor) — reiner Fast-Forward, kein Force"
+ausfuehrung:
+  - "push fork  c908d3f0 -> main   d8612a63..c908d3f0  exit 0"
+  - "push backup-private c908d3f0 -> main  d8612a63..c908d3f0  exit 0"
+  - "lokaler main-Ref NICHT nachgefuehrt (Berechtigung abgelehnt) — Remotes tragen die Wahrheit"
+statuswahrheit: "A-01/A-02/A-03 auf VEROEFFENTLICHT gesetzt, Antwort auf die
+  Evaluator-Nachverfolgung in STATUS.md — im selben Commit wie dieses Protokoll"
+naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama"
+```

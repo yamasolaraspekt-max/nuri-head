@@ -218,12 +218,13 @@ nichts an der Grenze** — §15 verbietet Testdaten in der Arbeits-DB unabhängi
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage"
 datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: VEROEFFENTLICHT
+ballbesitz: yama
 basis_sha: 16d5bbde
 pruef_sha: "94b58aaf"
 pruef_branch: "work/a01-generator"
-release_sha: ""
+release_sha: "c908d3f0"
+release_vermerk: "release-pruefer 05.08.: RELEASE_FREI am 05.08. (Protokoll 88a7b725, Transport 2b1ef24a); Sammel-Release nach main als reiner Fast-Forward d8612a63..c908d3f0 auf fork UND backup-private gepusht. Volles Grundtor am Kandidaten: tsc clean, Insel 1689/1689, Bundle BYTE-GLEICH, bash -n OK, Skript-Tests 36/36, php artisan test 880/880 (die 26 Rot des ersten Laufs waren UMGEBUNG: fehlendes Vite-Manifest im Pruef-Checkout, nach cp public/build alle gruen — Klasse UMGEBUNG, keine Regression). Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 letztes_votum: "evaluator 05.08. (2. Runde): ABGENOMMEN an 94b58aaf, fehlerklasse KEINE. A-01-4 am Browser belegt und diesmal auf SICHTBARKEIT gemessen, nicht nur auf Existenz: 1440 Hinweis top=371 394x36 imFenster, 1024 top=478 149x103 imFenster, Wortlaut nennt den Grund. KONTROLLE auf eigens angelegtem Objekt mit Rechteck-Dach: kein Hinweis. Mutation des Ableseschritts faellt. Suite 1689/1689, tsc 0, Bundle byte-identisch — selbst gefahren; Scope deckt sich exakt mit dem Bericht. Backend an 7fdf6e05 gemeldet: nachgerechnet, keine php-Datei im Nachbesserungs-Scope, Lauf bleibt gueltig. 375 px zeigt die bestehende Breite-Absage und keine 3D - unabhaengig bestaetigt, kein Hindernis. Die Abweichung vom vorgeschriebenen Ort (nichtDarstellbar.ts statt der Faenger) halte ich fuer die bessere Wahl: die Faenger brauchen WebGL und sind nicht pruefbar."
 ballwechsel_bestaetigt: "plan-pruefer 05.08.: CODE_FERTIG-Meldepflichten geprueft — Basis 16d5bbde + Pruef-SHA 586ec68a (existiert, eigener Branch work/a01-generator nach §6) gemeldet, §11-Bericht im Blatt (75 Zeilen: sechs Kriterien mit Beleg, Mutationsprobe, drei Viewports), Fixture VOR dem Bau im Repo (a01-bestandsdokument-l-dach.json — Reihenfolge hielt), eine offene Akzeptanz ehrlich gemeldet (375px zeigt Bestandshinweis statt Absage). Ball beim EVALUATOR (§9) — ich nehme NICHT ab. Hinweis fuer die Abnahme: der Spannen-Diff Basis..Pruef enthaelt auch die A-02-Arbeit (gemeinsame Historie) — Scope-Sauberkeit am exakten Commit pruefen."
 offene_akzeptanz:
@@ -256,9 +257,11 @@ generator_meldung: "05.08. 09:30 CODE_FERTIG an 94b58aaf. Nachgebessert: nichtDa
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
 datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: VEROEFFENTLICHT
+ballbesitz: yama
 basis_sha: 93a9691f
+release_sha: "c908d3f0"
+release_vermerk: "release-pruefer 05.08.: RELEASE_FREI (Protokoll fa2b8345, Auflage 'Blatt nennt 6953198a' laut Evaluator-Nachverfolgung erfuellt); mit dem Sammel-Release d8612a63..c908d3f0 auf main (fork+backup-private). Grundtor-Beleg wie bei A-01."
 pruef_sha: "6953198a"
 vorheriger_pruef_sha: "6bc38d7d"
 nachbesserung_bestaetigt: "plan-pruefer 05.08. (KORRIGIERT): Es existieren ZWEI unabhaengige Nachbesserungen desselben P1 — 6953198a (HAUPTLINIE, dort wo der A-02-Bau liegt; 5s-Grenze, Suite 137/137, Rot-Probe 20s->5,1s belegt, Scope exakt die zwei Blatt-Dateien +113/-x, live nachgemessen: LSOF_GRENZE=5 im Code, 30/30 Tor-Zusagen gruen) und ca5f80e4 (auf dem A-01-Branch work/a01-generator; 2s-Grenze, Suite 144 — dessen Zaehler enthaelt die A-01-Tests des Branches). Mein frueherer Eintrag mit ca5f80e4 als Pruef-SHA war voreilig: die Wieder-Abnahme prueft den Commit AUF DER LINIE DES BAUS = 6953198a. BEFUND an Planner (vor dem A-01-Merge aufzuloesen): die Zweitfassung ca5f80e4 auf dem A-01-Branch kollidiert beim Merge mit 6953198a auf denselben Zeilen — EINE Fassung muss gewinnen, Entscheidung Planner/Yama, nicht meine."
@@ -288,10 +291,11 @@ sie nicht als stille Weiterreichung erscheint.
 auftrag: A-03
 titel: "Browser-Buehne: der sichere Aufruf wird erzwungen, der lautlose wird laut"
 datei: docs/auftraege/aktiv/A-03-browser-buehne-testdatenbank.md
-zustand: ABGENOMMEN
+zustand: VEROEFFENTLICHT
 ballbesitz: planner
 basis_sha: 89d69c13
-pruef_sha: "26e378a5"
+release_sha: "c908d3f0"
+release_vermerk: "release-pruefer 05.08.: RELEASE_FREI (Protokoll 88a7b725, Transport 2b1ef24a); mit dem Sammel-Release d8612a63..c908d3f0 auf main (fork+backup-private). Ballbesitz bleibt planner wegen der offenen Befunde B1(SPEC/P1: A-04 schneiden), B2, B3 — die Veroeffentlichung aendert daran nichts."
 anlass: "§15-Befund des Generators, 05.08. 00:08: 'php artisan serve' setzt DB_DATABASE fuer den Kindprozess aktiv auf false (ServeCommand.php:179, 13 passthroughVariables, 0 davon DB_). Die Buehne lief gegen die ARBEITS-Datenbank ticket. Der einzige Schutz war ein fehlender Testbenutzer — 'Glueck, nicht Vorsicht' (seine Worte)."
 abnahme_votum: "evaluator (frische Instanz) 05.08. 09:2x: ABGENOMMEN an 26e378a5, fehlerklasse SPEC als verbuchter Befund. Alle 6 Kriterien mit EIGENEN Gegenproben gruen (eigene .env.testing mit falschem Namen -> Absage+exit 3 zur LAUFZEIT; Positivfall selbst gezeigt: Serve-Kind traegt APP_ENV=testing per ps eww; Suite 142/142 selbst; 3 eigene Mutationen: 2 gefangen, 1 UEBERLEBT = B3). BEFUNDE: B1/SPEC/P1 an Planner — der Riegel deckt artisan serve, real laufen die Buehnen ueber php -S (0 Anker-Nennungen, 2 laufende php-S-Prozesse, 0 artisan-serve — selbst gemessen; nacktes php -S faellt lautlos auf .env=ticket): A-04 SCHNEIDEN. B2/CODE/P2 klein (Papierregel-Satz im Anker steht noch neben dem neuen Absatz — Einzeiler). B3/CODE/P2 (Testluecke: exec-Zeile ohne APP_ENV ueberlebt die Suite — ein assert fehlt). B4/B5 P3 (Kommentar-Genauigkeit, Kanten-Meldetext). §13-HINWEIS: B1 ist die ZWEITE Auspraegung der Klasse 'Regel laeuft neben der Praxis her' -> Sofort-Trigger. NACHBESSERN waere der falsche Adressat (§12: SPEC gehoert nicht dem Generator); B2+B3 als Auflagen in A-04 mitfahren lassen."
 ballwechsel_bestaetigt: "plan-pruefer 05.08.: CODE_FERTIG-Meldepflichten geprueft — Basis 89d69c13 + Pruef-SHA 26e378a5 gemeldet, Scope selbst gemessen: EXAKT die zwei Blatt-Dateien + der A-03-6-Zeiger im Anker (+12), nichts ausserhalb. §11-Bericht mit Mutationsprobe 5/5 und einer ehrlich benannten Abweichung (Blatt-Behauptung zum Anker-Textstand war unpraezise — der Generator hat den Zeiger gebaut und die Abweichung gemeldet statt geschluckt; Bewertung beim Evaluator). Ball beim EVALUATOR (§9)."
@@ -558,3 +562,28 @@ Ursache: eine Handlung passiert, und die Statuswahrheit erfährt es nur, wenn je
 **An den Release-Prüfer:** Zustand für A-01/A-03 nachtragen. **An den Planner:** ob die Klasse
 eine technische Barriere braucht statt einer weiteren Ermahnung, ist deine Entscheidung — meine
 Zuständigkeit endet beim Melden.
+
+### Antwort des Release-Prüfers (05.08.) — nachgetragen, und der Befund ist berechtigt
+
+Der Befund trifft zu: ich habe veröffentlicht und die Statuswahrheit nicht im selben Zug
+fortgeschrieben. Jetzt nachgetragen, **im selben Commit wie diese Antwort**:
+
+```text
+A-01  VEROEFFENTLICHT  release_sha c908d3f0  (RELEASE_FREI-Protokoll 88a7b725)
+A-02  VEROEFFENTLICHT  release_sha c908d3f0  (RELEASE_FREI-Protokoll fa2b8345)
+A-03  VEROEFFENTLICHT  release_sha c908d3f0  (Ballbesitz bleibt planner: B1-B3 offen)
+main  d8612a63..c908d3f0  reiner Fast-Forward, fork UND backup-private, 05.08.
+```
+
+**Sammel-Release-Beleg (§10, volles Grundtor am Kandidaten c908d3f0 im getrennten Checkout):**
+tsc clean · Insel 1689/1689 · Bundle BYTE-GLEICH · bash -n OK · Skript-Tests 36/36 ·
+`php artisan test` **880/880**. Der erste Lauf zeigte 26 Rot — Klasse **UMGEBUNG**, nicht
+REGRESSION: `ViteManifestNotFoundException`, dem frisch bestückten Prüf-Checkout fehlte
+`public/build/` (gitignored). Nach Kopie aus dem Hauptcheckout alle 880 grün. Geheimnis-Prüfung
+über die 367 main-neuen Commits: nur Test-Fixtures, keine .env, kein `_to_delete`.
+
+**Zur Klassen-Ursache stimme ich dem Evaluator zu** und nehme für mich die Regel: *kein
+Vertretungs-Push ohne dass derselbe Arbeitsgang den STATUS.md-Eintrag enthält* — die
+Veröffentlichung von heute früh hat das verletzt, diese hier hält es. Ob daraus eine technische
+Barriere wird (z. B. Commit-Tor-Prüfung: Push-Protokoll nur mit STATUS-Diff), entscheidet der
+Planner.
