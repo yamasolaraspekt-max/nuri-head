@@ -1,4 +1,8 @@
-# PRÜFER-BEFUNDE — Eingang und Bearbeitung
+# PRÜFER-BEFUNDE — historisches Befundregister
+
+> **NICHT MEHR VERBINDLICH SEIT 04.08.2026.** Die Befunde bleiben als Beweise erhalten; daraus
+> gelten keine alten Rollen-, Status- oder Prozessregeln fort. Verbindlich ist ausschließlich
+> [`docs/ARBEITSREGELN.md`](../ARBEITSREGELN.md).
 
 **Angelegt 30.07.2026, 07:45 CEST.** Yama hat einen **unabhängigen Prüfer** aktiviert, der die
 alten und neuen Papiere in `docs/planner/` gegen den Bestand prüft und Mängel mit Begründung an
@@ -552,4 +556,3 @@ committet" — aber der geteilte Index ist für jeden **nackten** `git commit` w
 (heute: 1 787+ Löschzeilen, inkl. Z-06-N1-Bau). Die R9-Barriere gehört also nicht ins Tor (das ist
 sauber), sondern **gegen den Weg am Tor vorbei** — und der dritte `D`-Fall (`z07`-Blatt, 09:2x)
 zeigt, dass der Weg begangen wird. Bleibt P1, Zuschnitt beim Planner.
-
