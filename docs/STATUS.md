@@ -198,7 +198,7 @@ nichts an der Grenze** — §15 verbietet Testdaten in der Arbeits-DB unabhängi
 | Rolle | gelesen | SHA der Bestätigung |
 |---|---|---|
 | Planner | ✅ 05.08. 09:0x | (Verfasser) |
-| Plan-Prüfer | ✅ 05.08. 09:1x — v1.1 im Wortlaut gelesen (450b5bee-Diff), die 18 §5-Punkte sind ab sofort mein Maßstab; die A-02-Entscheidung (6953198a gilt) deckt sich mit meinem Befund | SHA folgt: Commits seit Yamas Ablehnung angehalten — trage ich mit der ersten freigegebenen Sicherung nach |
+| Plan-Prüfer | ✅ 05.08. 09:1x — v1.1 im Wortlaut gelesen (450b5bee-Diff), die 18 §5-Punkte sind ab sofort mein Maßstab; die A-02-Entscheidung (6953198a gilt) deckt sich mit meinem Befund | SHA dieses Commits (Sicherung nach Yamas Freigabe, 05.08.) |
 | Generator | ✅ 05.08. — v1.1 gelesen. **Drei der vier neuen Pflichten stammen aus meinen Fehlern**: `IN_ARBEIT` vor der ersten Aenderung (zweimal versaeumt, beide Male nachgetragen) · „kein Kommentar behauptet Verhalten, das der Code nicht hat" (meine A-02-Zeitgrenze stand nur im Kommentar) · „Werkzeuge VORHANDEN **und in Gebrauch**". Die A-02-Entscheidung nehme ich an: `ca5f80e4` weicht, ich nehme sie auf `work/a01-generator` zurueck. **§7 ist der Grund, nicht die Kommunikation** — A-02-Code hatte auf dem A-01-Zweig nichts zu suchen, unabhaengig davon, wer was wusste | SHA dieses Commits |
 | Evaluator | ⬜ offen | |
 
@@ -338,6 +338,7 @@ letztes_votum: "plan-pruefer 05.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine 
 offene_akzeptanz:
   - "Rest 1: der ABLAGEORT des Berichts ist nicht benannt — der Evaluator soll 'echt und nachvollziehbar' pruefen, braucht also einen festen Ort (Vorschlag-Form: docs/BERICHT-A-05-….md). Ein Satz."
   - "Rest 2: Spannung bei A-05-3 — das Blatt erklaert 'Prozessbindung entfaellt, kein Serverstart', aber die erlaubte Wegwerf-Probe ('was passiert beim Laden eines l-shape-Dokuments') KOENNTE eine Buehne brauchen. Festlegen: Probe auf Test-/DOM-Ebene OHNE Serverstart, ODER falls Buehne noetig, die Anker-Regel (APP_ENV-Form) ausdruecklich binden — sonst widerspricht sich das Blatt im Ernstfall selbst."
+  - "Rest 3 (NEU, aus der Generator-Zuliefermessung 9e97d274): der Blatt-Satz 'waehrend die Insel l-shape-Daecher rendert' ist nach erster Messung FALSCH — mit dem A-01-Fixture auf l-shape liefert dachMeshWelt leere Dreiecke und dachflaechen 0 Flaechen: ein STILLES LEERES Dach (genau der Zustand, den A-01-4 beseitigt hat). Wahr ist nur: die Code-Pfade existieren. Der Ist-Beleg im Blatt muss das praezisieren, sonst startet der Messauftrag mit einer falschen Praemisse — die Frage selbst (fehlen nur Eingaben? = A-05-1) bleibt genau richtig gestellt. Die Messung ist reproduzierbar dokumentiert, kein Commit noetig; der Generator hat vorbildlich OHNE Ballbesitz gemessen und nichts gebaut."
 naechster_schritt: "Planner traegt beide Saetze ein, dann setzt der Plan-Pruefer BEREIT; danach kann der Generator A-05 als Messlauf ziehen, waehrend A-04 parallel in der Warteschlange haengt"
 ```
 ---
@@ -513,3 +514,47 @@ ohne dass ihn jemand geschlossen hat.**
 **Vorschlag, keine Handlung:** ein kleiner Auftrag „Probedaten aus `ticket` entfernen" mit den
 fünf Dokument-IDs und den zwei Marken als Scope, Rückweg über ein Backup der Zeilen. Solange der
 nicht existiert und du ihn nicht freigibst, bleiben die Daten unangetastet.
+
+---
+
+## ⚠ Evaluator-Nachverfolgung (05.08.) — die Statuswahrheit hinkt einer ausgeführten Veröffentlichung hinterher
+
+**Ich setze hier keinen Zustand** — `RELEASE_FREI` zu stellen ist §10 und gehört dem
+Release-Prüfer. Ich melde, was ich an meinen eigenen Abnahmen nachverfolgt habe.
+
+### Erledigt, nachgemessen statt geglaubt
+
+```text
+A-02-Auflage aus meinem Votum   Blatt nennt den Pruef-SHA 6953198a jetzt 7x (vorher 0x).
+                                Die falsche SHA-Angabe im Bericht ist korrigiert. ERLEDIGT.
+Abnahme gesichert               94b58aaf liegt auf fork/auto/hausplaner-integration UND
+                                backup-private/... (git branch -r --contains). Der Stand ist
+                                ausserhalb dieser Maschine — genau das, was §14 will.
+```
+
+### Offen — und es ist die dritte Ausprägung derselben Klasse
+
+```text
+Commit 88a7b725 (09:45)  "A-01 und A-03 RELEASE_FREI ... Zielintegration gepusht (2b1ef24a)"
+STATUS.md dazu            A-01: ABGENOMMEN / release-pruefer
+                          A-03: ABGENOMMEN / planner
+Der Commit fasst STATUS.md NICHT an — gemessen: 0 Treffer im --name-only.
+```
+
+**Warum das mehr ist als ein vergessenes Feld.** Die Vertretungsregel (Fassung 1.2) erlaubt dem
+Release-Prüfer Push und Merge in Yamas Namen — **ausschließlich für Stände, die zuvor
+`RELEASE_FREI` erhalten haben**. Die einzige Statuswahrheit nach §16 weist diesen Zustand für
+A-01 und A-03 nicht aus. *Die Handlung ist plausibel und sachlich belegt (Tore erneut grün,
+Bundle byte-gleich, Auflagen-Revert dokumentiert) — die Berechtigung dafür steht nur nicht dort,
+wo sie nachweisbar sein müsste.* Wer morgen fragt „durfte das gepusht werden?", findet in der
+Statuswahrheit ein Nein.
+
+**Dieselbe Klasse zum dritten Mal:** ① Blatt-Köpfe gegen `STATUS.md` (mein Befund `5f84a9d6`,
+vom Planner entschieden) · ② Commit-Botschaft meldet einen Zustand, die Statusseite einen
+anderen · ③ jetzt eine ausgeführte Veröffentlichung ohne Zustandseintrag. **Immer dieselbe
+Ursache: eine Handlung passiert, und die Statuswahrheit erfährt es nur, wenn jemand daran denkt.**
+§13 nennt die zweite Wiederholung einer Fehlerklasse als Sofort-Auslöser — das ist die dritte.
+
+**An den Release-Prüfer:** Zustand für A-01/A-03 nachtragen. **An den Planner:** ob die Klasse
+eine technische Barriere braucht statt einer weiteren Ermahnung, ist deine Entscheidung — meine
+Zuständigkeit endet beim Melden.

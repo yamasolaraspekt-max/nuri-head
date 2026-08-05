@@ -104,3 +104,55 @@ härten" — ist wertvoll und gehört gelesen, bevor der nächste Dach-Auftrag g
 **Ich habe in A-01 einen zweiten Rechtecks-Begriff vermieden und dabei einen zweiten DACH-BEGRIFF
 übersehen.** Die Sorgfalt galt der Stelle, auf die ich schaute. *Die Wiederverwendungsprüfung ist
 kein Nebenpunkt von §5 — sie ist der Punkt, der bestimmt, ob der Auftrag überhaupt der richtige ist.*
+
+---
+
+## KORREKTUR (05.08., nach der Messung des Generators) — mein Satz war zu stark
+
+**Er hat ungefragt gemessen und mir widersprochen.** Mit dem A-01-Fixture auf `l-shape` umgestellt:
+
+```text
+dachMeshWelt(dach)   ->  { dreiecke: [], firstHoeheMm: 2500 }
+dachflaechen(dach)   ->  0 Flaechen
+```
+
+**Es wirft nicht mehr — es liefert leer.**
+
+### Was daran falsch war
+
+Ich schrieb im Titel *„die Insel kann L-Dächer schon"* und im Text *„während die Insel
+`l-shape`-Dächer rendert"*. **Beides ist zu stark.** Belegt war nur, dass `dachMesh.ts` den
+**Typ behandelt** — nicht, dass daraus Geometrie entsteht.
+
+> **Ich habe aus „der Code kennt den Fall" geschlossen „der Code beherrscht den Fall".**
+> Das ist derselbe Sprung, den ich bei A-01 mit dem Prüfbefehl gemacht habe: die Gestalt gesehen
+> und die Wirkung angenommen.
+
+### Was die Messung NICHT belegt — und das ist seine eigene Einschränkung
+
+**Sie zeigt nicht, dass die Insel es nicht kann.** Wahrscheinlicher fehlen die Eingaben, die
+`verschneidungsFlaechen` über `roofType` hinaus braucht — **und das ist wörtlich A-05-1.**
+*Die Messung entwertet A-05 nicht, sie schärft es: die erste Frage ist jetzt die einzige, die zählt.*
+
+### Und ein Fund, der wichtiger ist als meine Korrektur
+
+> **Ein Dach mit `roofType: 'l-shape'` erzeugt heute ein STILLES LEERES DACH** — genau den
+> Zustand, den A-01-4 gerade beseitigt hat.
+
+**Damit ist die naheliegendste „Lösung" ausgeschlossen:** wer beim Anlegen einfach die Form setzt,
+**bringt den Fehler zurück, den A-01 zwei Runden lang geschlossen hat.** *Er bringt ihn sogar
+schlimmer zurück, weil dann nicht einmal mehr eine Absage kommt — die Schranke in
+`dachGeometrie.ts:87` ist auf diesem Pfad nicht beteiligt.*
+
+**Das gehört als Warnung in jeden Auftrag, der aus A-05 folgt.**
+
+### Zur Herkunft der Messung
+
+Er hat eine Wegwerf-Zusage unter `__tests__` angelegt und wieder entfernt, **kein Commit dahinter,
+nur der reproduzierbare Aufruf** — und das offengelegt, statt es zu verschweigen.
+
+**A-05 schreibt „Wegwerf-Proben außerhalb des Produktivbaums" vor.** *Für eine Insel-Zusage gibt es
+praktisch keinen anderen Ort als `__tests__`; die Formulierung ist eine Plausibilitätslücke in
+meinem Blatt, keine Regelverletzung von ihm.* **Ich ziehe sie nach:** erlaubt ist eine
+Wegwerf-Zusage am üblichen Ort, solange sie **vor dem Bericht wieder entfernt** ist und **kein
+Commit** sie trägt — beides hat er eingehalten.
