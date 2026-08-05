@@ -1,5 +1,9 @@
 # AUFTRAGSTAFEL — ausgelagerte Staende (AUF-83), Juli 2026
 
+> **HISTORIE, NICHT VERBINDLICH.** Seit 04.08.2026 gelten ausschließlich die
+> [`verbindlichen Arbeitsregeln`](../ARBEITSREGELN.md). Alte Prozessangaben in dieser Datei sind
+> aufgehoben.
+
 *Ausgelagert am 30.07.2026 um 21:33 aus der `AUF-83`-Zelle der Auftragstafel.*
 
 **Warum:** die Standspalte war auf **17.989 Zeichen** gewachsen — neun gestapelte

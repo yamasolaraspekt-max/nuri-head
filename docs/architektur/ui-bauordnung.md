@@ -1,6 +1,7 @@
 # UI-Bauordnung — Styleguide-Pflicht, Echtdaten-Prüfung, visuelle Regression
 
-**Stand:** 2026-07-16 · Erweiterung der Bauordnung (steht UNTER BETRIEBSORDNUNG.md/CLAUDE.md; bei Konflikt gelten diese).
+**Stand:** 2026-07-16 · Fachliche Erweiterung der Bauordnung auf Rang 4 unter
+`docs/ARBEITSREGELN.md`; bei einem Prozesskonflikt gelten die Arbeitsregeln.
 **Gilt für:** jede Instanz, die in ticket UI baut oder ändert (Generator wie Evaluator).
 
 ---

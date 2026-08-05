@@ -66,4 +66,4 @@ Keine allgemeine BIM-Autorensoftware, keine Tragwerks-/Genehmigungsplanung, kein
 
 ---
 
-*Verweise: `docs/configuration/bedarfsgefuehrte-konfiguration-und-auslegung.md`, `docs/configuration/anforderungs-und-lueckenmatrix.md`, `docs/configuration/modul-und-abhaengigkeitsmatrix.md`, `docs/configuration/umsetzungsfahrplan.md`, `docs/configuration/vollstaendigkeitsbericht.md`. Bindet BETRIEBSORDNUNG.md/CLAUDE.md; bei Konflikt gelten diese.*
+*Verweise: `docs/configuration/bedarfsgefuehrte-konfiguration-und-auslegung.md`, `docs/configuration/anforderungs-und-lueckenmatrix.md`, `docs/configuration/modul-und-abhaengigkeitsmatrix.md`, `docs/configuration/umsetzungsfahrplan.md`, `docs/configuration/vollstaendigkeitsbericht.md`. Prozessual untergeordnet unter `docs/ARBEITSREGELN.md`; der fachliche ADR-Inhalt bleibt erhalten.*

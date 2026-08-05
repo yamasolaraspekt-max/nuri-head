@@ -2,7 +2,8 @@
 
 **Stand:** 2026-07-12 · **read-only Planungs-Startblock** · **kein Bau/Import/Refactor/Migration/Kopieren.**
 **Zweck:** Prüfen und planen, wie die vorhandenen **playground-Formularinhalte für WP und PV** in die **bestehende ticket-Formular-Engine / `product_formulas`** überführt werden — **ohne** das playground-`dynamic_forms`-System als zweite Wahrheit. **Nur Startblock; die Analyse/Konzept-Runde folgt erst nach Yama-Freigabe.**
-**Geltung:** CLAUDE.md (KAPITEL-STARTBLOCK-PFLICHT, agents/05 Pflicht-Fachagenten für Auslegungs-Wizards), `rueckfall-archiv-regeln.md`, Ziel-Wahrheiten Bereich 2 (Anker=Anforderungsprofil, Positionen=`offer_details.sections`, Preis=P1-a).
+**Geltung:** `docs/ARBEITSREGELN.md` sowie die fachlichen Ziel-Wahrheiten Bereich 2
+(Anker=Anforderungsprofil, Positionen=`offer_details.sections`, Preis=P1-a).
 
 ---
 
@@ -69,7 +70,10 @@
 - **Wo droht Doppelwahrheit** (Formularwert vs. Anforderungsprofil vs. Auslegungs-Rechenkern vs. Katalog/P1-a)?
 
 ## 8. Regeln (bindend)
-ticket-Engine bleibt **führend** · playground liefert **nur** Inhalt/Felder/Mapping-Ideen · **kein** `dynamic_forms`-System · **keine** React-SPA · **keine** zweite Angebotsstruktur · **kein** Import aller 21 Formulare · **nur WP/PV zuerst** · kein Code/Import/Refactor/Migration · Rückfallregel (`rueckfall-archiv-regeln.md`) gilt für jeden späteren Bau.
+ticket-Engine bleibt **führend** · playground liefert **nur** Inhalt/Felder/Mapping-Ideen · **kein**
+`dynamic_forms`-System · **keine** React-SPA · **keine** zweite Angebotsstruktur · **kein** Import
+aller 21 Formulare · **nur WP/PV zuerst** · kein Code/Import/Refactor/Migration · für jeden späteren
+Bau gilt der Rückweg aus `docs/ARBEITSREGELN.md`.
 
 ## 9. Risiken (vorab benannt)
 - **Zweite Formularwelt** (playground-System statt nur Inhalt) → Mitigation: nur Feld-Definitionen ins ticket-Schema mappen.
