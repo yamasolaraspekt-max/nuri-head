@@ -3,8 +3,8 @@
 ```yaml
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: IN_ARBEIT
+ballbesitz: generator
 basis_sha: 93a9691f
 pruef_sha: "6bc38d7d"
 release_sha: ""
@@ -146,11 +146,64 @@ Datensätze gemeldet, wo zwei waren — im Mechanismus, der das verhindern sollt
 **A-02-5 (P1, Mutationsprobe):** Mindestens **sieben** Mutationen fallen: lsof entfernt ·
 lsof-Ergebnis ignoriert · `||` wieder eingesetzt · harte Grenze fuer Inhalt entfernt · Rueckfall
 raeumt mehr statt weniger · ENV_BLOCKED durch normalen Abbruch ersetzt · **Exitcode 3 auf 1
-gesetzt bei unveraenderter stderr-Zeile**.
+gesetzt bei unveraenderter stderr-Zeile** · **Zeitgrenze entfernt** (A-02-6 muss dann fallen).
 
 *Die siebte ist neu und gehoert zur Entscheidung oben: sie ist der Beweis, dass A-02-4 wirklich
 **beide** Haelften zusagt. Ohne sie waere eine Fassung gruen, die die Zeile schreibt und den
 Aufrufer trotzdem nicht unterscheiden laesst — also genau die Fassung, gegen die entschieden wurde.*
+
+**A-02-6 (P1, NEU 05.08. — die Zeitgrenze wird eine Zusage):** Haengt `lsof`, **kehrt das Tor
+innerhalb einer im Code benannten Grenze zurueck**, behandelt den Halter als **unbekannt**, laesst
+den Lock **liegen** und meldet `ENV_BLOCKED` mit Exitcode 3.
+**Kontrolle im selben Test:** dieselbe Lage mit echtem `lsof` -> Auskunft kommt zurueck, normales
+Verhalten. *Ohne die Kontrolle waere "haengt immer" auch gruen.*
+
+```text
+an der Basis wirksam rot   der Evaluator hat es gemessen: lsof durch ein haengendes
+                           Skript ersetzt -> das Tor lief nach 8 s noch und musste
+                           abgebrochen werden. Kontrolle mit echtem lsof: kam zurueck,
+                           exit 0, Commit gelungen. Der Unterschied lag allein an lsof.
+UMSETZUNGS-SCHRANKE        `timeout` und `gtimeout` FEHLEN BEIDE auf dieser Maschine
+                           (selbst gemessen). Der Weg ist dem Bauenden freigestellt,
+                           aber er kann sich auf keines von beiden stuetzen.
+```
+
+## DECISION — warum ich meine eigene Festlegung zuruecknehme
+
+**Ich hatte die Zeitgrenze ausdruecklich `OHNE ZUSAGE` gestellt.** Begruendung damals: *„eine
+kuenstliche Verzoegerung waere ein eigenes Messgeraet."*
+
+**Der Evaluator hat das widerlegt, indem er es einfach gemacht hat** — `lsof` durch ein haengendes
+Skript ersetzt, Kontrolllauf mit dem echten daneben. **Das ist ein Stub, kein Messgeraet.** Meine
+Sorge galt einer Schwierigkeit, die es nicht gibt.
+
+> ### Der eigentliche Fehler war die Formulierung, nicht die Entscheidung
+>
+> Ich schrieb **„OHNE ZUSAGE ... Am Code zu belegen."** **Das widerspricht sich.** Etwas, das am
+> Code zu belegen ist, aber keine Zusage traegt, kann nichts zum Fallen bringen — **es kann nur
+> ein Kommentar werden.**
+>
+> **Und genau das ist passiert.** Der Bauende hat meinen Satz woertlich in Zeile 115/116
+> uebernommen (*„ohne kuenstliche Verzoegerung, die selbst ein Messgeraet waere"*) und eine Grenze
+> **beschrieben**, die er nicht gebaut hat. *Er hat meine Widerspruechlichkeit korrekt auf die
+> einzige Weise aufgeloest, die sie zuliess.*
+
+**Warum die Grenze sein muss, sachlich:**
+
+```text
+1  Vor A-02 hatte der Lock-Pfad KEINE externe Abhaengigkeit. A-02 hat eine eingefuehrt -
+   in den einzigen Commit-Weg aller Rollen.
+2  Ein haengendes Tor fuehrt zum Handaufraeumen. Das ist der Vorfall, gegen den A-02 gebaut
+   wurde. Die Heilung wuerde die Krankheit zurueckbringen.
+3  Die Richtung steht schon fest (A-02-3): im Zweifel WENIGER raeumen. Ablaufende Grenze
+   = "Halter unbekannt" = liegen lassen. Kein neuer Begriff, nur derselbe konsequent.
+```
+
+**Kein Scope-Zuwachs:** Der Evaluator hat den Mangel bereits als P1 festgestellt und die
+Sachentscheidung ausdruecklich mir ueberlassen (*„NICHT Gegenstand des Befundes ist, OB eine
+Zeitgrenze gebaut wird — das entscheidet der Planner"*). **A-02-6 erweitert die Nachbesserung
+nicht, es macht messbar, was sie ohnehin verlangt.** Ohne das Kriterium waere „Kommentare
+geloescht" eine gruene Reparatur — und das Tor haengt weiter.
 
 ## Pruefbefehle
 
@@ -159,6 +212,10 @@ A-02-1/-2/-3/-4   node --test scripts/__tests__/commitPruefen.test.mjs
                   (reines .mjs, KEIN TypeScript-Loader noetig - im Unterschied zur Insel)
 A-02-5            Verfahren: je Mutation die Suite fahren, Datei md5-identisch wiederherstellen,
                   Ergebnis als Tabelle im Bericht
+A-02-6            node --test scripts/__tests__/commitPruefen.test.mjs
+                  Verfahren: lsof im PATH durch ein haengendes Stub-Skript ersetzen,
+                  Tor aufrufen, Rueckkehr + exit 3 + ENV_BLOCKED-Zeile pruefen;
+                  Kontrolllauf mit echtem lsof im selben Test
 Gesamttor         node --test scripts/__tests__/*.mjs      Basis misst der Bauende vor dem Zug
 ```
 
@@ -166,10 +223,11 @@ Gesamttor         node --test scripts/__tests__/*.mjs      Basis misst der Bauen
 
 ```text
 1  lsof nicht installiert                    -> A-02-3, konservativer Rueckfall
-2  lsof antwortet langsam (Netzlaufwerk)     -> Zeitgrenze; laeuft sie ab, gilt "Halter unbekannt"
-                                                = LIEGT + ENV_BLOCKED. OHNE ZUSAGE, mit Grund:
-                                                eine kuenstliche Verzoegerung waere ein eigenes
-                                                Messgeraet. Am Code zu belegen.
+2  lsof antwortet langsam oder haengt        -> Zeitgrenze; laeuft sie ab, gilt "Halter unbekannt"
+                                                = LIEGT + ENV_BLOCKED.
+                                                MIT ZUSAGE seit 05.08.: siehe A-02-6.
+                                                Meine urspruengliche Fassung "OHNE ZUSAGE" ist
+                                                zurueckgenommen - Begruendung unten.
 3  Halter ist ein fremder Prozess            -> A-02-2, der Schutzfall
 4  Halter ist der eigene Lauf                -> kommt nicht vor: Stufe 4 laeuft VOR dem ersten
                                                 git-Aufruf dieses Laufs
