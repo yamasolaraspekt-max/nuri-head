@@ -143,7 +143,32 @@ Lückenliste. **Auch „nur die Formzuweisung" ist eine zulässige Antwort — m
 gegen Insel, playground-Archiv und Referenzordner. Bei A-01 bis A-04 fehlte sie — das war der
 Befund.*
 
-**A-01 bleibt unangetastet**, bis der Bericht liegt. *Ob sein Nicht-Ziel fällt, entscheide ich mit
+**A-01 bleibt unangetastet**, bis der Bericht liegt.
+
+> **MESSUNG DES GENERATORS zu A-05, gefahren bevor das Blatt lag — sie widerspricht einem Satz
+> darin.** Das Blatt sagt *„während die Insel `l-shape`-Dächer rendert"*. Mit dem A-01-Fixture
+> (6-Punkt-L-Kontur, `roofType` auf `l-shape` umgestellt) rendert sie **nichts**:
+>
+> ```text
+> dachMeshWelt(Bestandsdach, roofType='l-shape')   {"dreiecke":[],"firstHoeheMm":2500}
+> dachflaechen(dasselbe)                           0 Flaechen
+> dasselbe mit roofType='sattel'                   DachGeometrieUngueltig (die A-01-Absage)
+> ```
+>
+> **Sie wirft nur nicht mehr.** Ein stilles leeres Dach ist schlechter als eine Absage — genau der
+> Zustand, den A-01-4 beseitigt hat.
+>
+> **Was das NICHT belegt:** dass die Insel es nicht kann. Wahrscheinlicher fehlen dem Fixture die
+> Eingaben, die `verschneidungsFlaechen` über `roofType` hinaus braucht — *und das ist wörtlich
+> A-05-1*. Die Messung beantwortet die Frage nicht, sie schärft sie: **„Renderer könnte, bekommt
+> es nie" ist zu optimistisch, solange niemand gemessen hat, was er mit `l-shape` tatsächlich
+> ausgibt.**
+>
+> **Herkunft, offen gesagt:** gefahren in einer Wegwerf-Zusage unter `__tests__/`, die ich wieder
+> entfernt habe — es gibt dafür **keinen Commit**, nur den reproduzierbaren Aufruf oben. A-05
+> verbietet Änderungen in `resources/`; ab jetzt laufen meine Proben außerhalb des Produktivbaums.
+> *Wer den Befund verwenden will, misst ihn im Rahmen von A-05 selbst nach.*
+ *Ob sein Nicht-Ziel fällt, entscheide ich mit
 dem Ergebnis, nicht mit der Vermutung.*
 
 ### 8. ⚠ ENTSCHEIDUNG YAMA — A-06: sieben Fremdzeilen in der Arbeits-DB
@@ -297,6 +322,24 @@ offene_akzeptanz:
 naechster_schritt: "Planner traegt die zwei Restpunkte + Zweigkorrektur ein, dann setzt der Plan-Pruefer BEREIT"
 ```
 
+---
+
+## In Planprüfung — A-05
+
+```yaml
+auftrag: A-05
+titel: "MESSAUFTRAG (kein Produktivbau): welche Luecke bleibt zwischen einer L-Kontur und einem l-shape-Dach"
+datei: docs/auftraege/aktiv/A-05-messung-l-kontur-l-dach.md
+zustand: ENTWURF
+ballbesitz: planner
+basis_sha: 42c0320f
+claim: "plan-pruefer 05.08.: Ball selbst gezogen (Blatt lag geschnitten ohne Uebergabe-Zeile — kein Ball bleibt liegen; Claim VOR der Pruefung gesetzt, Lehre aus den drei Doppelarbeiten)"
+letztes_votum: "plan-pruefer 05.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine Restpunkte. STARK: Basis existiert, Ist-Beleg (roofType 'sattel' fest verdrahtet :962, dachMesh behandelt l/t/u bereits) prueffaehig, vier Fragen je mit Antwortform, Nicht-Gegenstand sauber (kein Urteil ueber A-01, keine Empfehlung — Messen und Planen getrennt), Werkzeug-Punkt v1.1 erfuellt, §16-konform ohne Statuskopf. Trivial-Rot der Kriterien ist bei einem Messauftrag ehrlich benannt."
+offene_akzeptanz:
+  - "Rest 1: der ABLAGEORT des Berichts ist nicht benannt — der Evaluator soll 'echt und nachvollziehbar' pruefen, braucht also einen festen Ort (Vorschlag-Form: docs/BERICHT-A-05-….md). Ein Satz."
+  - "Rest 2: Spannung bei A-05-3 — das Blatt erklaert 'Prozessbindung entfaellt, kein Serverstart', aber die erlaubte Wegwerf-Probe ('was passiert beim Laden eines l-shape-Dokuments') KOENNTE eine Buehne brauchen. Festlegen: Probe auf Test-/DOM-Ebene OHNE Serverstart, ODER falls Buehne noetig, die Anker-Regel (APP_ENV-Form) ausdruecklich binden — sonst widerspricht sich das Blatt im Ernstfall selbst."
+naechster_schritt: "Planner traegt beide Saetze ein, dann setzt der Plan-Pruefer BEREIT; danach kann der Generator A-05 als Messlauf ziehen, waehrend A-04 parallel in der Warteschlange haengt"
+```
 ---
 
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
