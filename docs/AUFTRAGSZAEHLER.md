@@ -34,7 +34,10 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 
 | **3** | **A-03** Browser-Bühne auf Testdatenbank | 05.08. 00:2x | **zurückgewiesen** (2 Restpunkte) | **2** | P2 scharf: BAUEN gerechtfertigt (Papier-Regel hatte den Vorfall nicht verhindert) · Verankerung in ANKER-BROWSER fehlte (Papier-Falle eine Ebene höher) · Namensliste auf exakt ticket_testing |
 
-**Stand: 3 von 10.**
+| **4** | **A-04** Bühnen-Wächter (Zustand statt Aufrufform) | 05.08. 08:58 | *läuft* | – | aus B1/SPEC/P1 der A-03-Abnahme · mein Spezifikationsfehler |
+| **5** | **A-05** MESSAUFTRAG L-Kontur → L-Dach | 05.08. 09:3x | *läuft* | – | aus Yamas Frage nach playground/PV-Dachplaner · erstes Blatt MIT Wiederverwendungsprüfung · kein Produktivbau |
+
+**Stand: 5 von 10.**
 
 > ### §13-Prozessprüfung ausgelöst bei 3, nicht bei 10
 >

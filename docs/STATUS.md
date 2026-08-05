@@ -122,6 +122,30 @@ Eigenschaftenpanel und Renderer-Anbindung, für genau die Dächer, die A-01 als 
 **Form** gesetzt wird, statt eine Absage zu bauen. **A-01 läuft weiter** — der A-01-4-Mangel ist
 davon unabhängig echt. Details: [`BEFUND-ZWEI-DACHPFADE.md`](BEFUND-ZWEI-DACHPFADE.md).
 
+### 7. A-05 geschnitten — MESSAUFTRAG, kein Bau
+
+**Die Hypothese aus dem Dachpfad-Befund ist in ihrem Kern keine mehr.** Gemessen:
+
+```text
+app/HausplanerApp.tsx:962   roofType: 'sattel'   FEST VERDRAHTET beim Anlegen
+dachMesh.ts:149/215         behandelt u-shape · l-shape · t-shape bereits
+
+-> Der Anlege-Pfad setzt IMMER 'sattel', egal welche Kontur gezeichnet wurde.
+   Der Renderer koennte 'l-shape' - er bekommt es nie.
+```
+
+**Offen bleibt, was darüber hinaus fehlt.** A-05 misst genau das, in vier Fragen, **ohne eine
+Zeile Produktivcode**: welche Eingaben `verschneidungsFlaechen` braucht · ob `lTBauGueltig`
+Erkenner oder Validierer ist · was heute mit einem `l-shape`-Dokument passiert · und die
+Lückenliste. **Auch „nur die Formzuweisung" ist eine zulässige Antwort — mit Beleg.**
+
+*Zum ersten Mal trägt ein Blatt eine ausdrückliche **Wiederverwendungsprüfung** mit Belegbefehlen
+gegen Insel, playground-Archiv und Referenzordner. Bei A-01 bis A-04 fehlte sie — das war der
+Befund.*
+
+**A-01 bleibt unangetastet**, bis der Bericht liegt. *Ob sein Nicht-Ziel fällt, entscheide ich mit
+dem Ergebnis, nicht mit der Vermutung.*
+
 ### Kenntnisnahme — jede Rolle trägt sich mit ihrem nächsten Commit ein
 
 | Rolle | gelesen | SHA der Bestätigung |
