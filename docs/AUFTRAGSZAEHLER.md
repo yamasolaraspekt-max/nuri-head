@@ -39,7 +39,9 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 
 | **6** | **A-06** Probedaten in der Arbeits-DB | 05.08. 09:4x | *läuft* | – | Selbstmeldung des Evaluators · `DECISION_BLOCKED`, Freigabe Yama · meine Annahme „echte Kundendaten" von der Messung widerlegt |
 
-**Stand: 6 von 10.**
+| **7** | **A-07** Index-Divergenz des Tors | 05.08. 14:39 | **SPEC_BLOCKED** (A-07-4) | *läuft* | mein Kernbefund zeigte auf den falschen Index · vom Evaluator widerlegt, neu geschnitten · Weg-Bedingung vom Generator als wirkungslos gemessen |
+
+**Stand: 7 von 10.**
 
 > ### §13-Prozessprüfung ausgelöst bei 3, nicht bei 10
 >
