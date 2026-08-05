@@ -1,4 +1,9 @@
-# STAND — das Arbeitsgedächtnis
+# STAND — historischer Arbeitsstand
+
+> **NICHT MEHR VERBINDLICH SEIT 04.08.2026.** Diese Datei bleibt als fachlicher und
+> chronologischer Nachweis erhalten. Aktuelle Prozessregeln stehen ausschließlich in
+> [`docs/ARBEITSREGELN.md`](ARBEITSREGELN.md). Aus alten Status-, Rollen- und Regelangaben in
+> dieser Datei entsteht keine Handlungsanweisung.
 
 > **Diese Seite wird ÜBERSCHRIEBEN, nicht angehängt.** Sie ist eine Seite lang und bleibt es.
 >

@@ -1,8 +1,8 @@
 # Verbindliche Arbeitsregeln
 
-**Version:** 1.2  
-**Gültig seit:** 04.08.2026 · **Fassung 1.1 seit:** 05.08.2026 · **Fassung 1.2 seit:** 05.08.2026  
-**Autorität:** Yama  
+**Version:** 1.4
+**Gültig seit:** 04.08.2026 · **Fassung 1.4 seit:** 05.08.2026
+**Autorität:** Yama
 **Geltung:** gesamtes Repository, alle Menschen, Agenten, Rollen, Worktrees und Arbeitszweige
 
 ## 1. Alle früheren Prozessregeln sind aufgehoben
@@ -74,6 +74,12 @@ Zusätzliche Blockzustände:
 - `RELEASE_BLOCKED`: der abgenommene Stand ist nicht sicher oder nicht reproduzierbar
   veröffentlichbar.
 
+Beim Eintritt in `ENV_BLOCKED`, `DECISION_BLOCKED` oder `RELEASE_BLOCKED` wird der vorherige
+Prüfzustand als `fortsetzung_zustand` gespeichert. Eine Rückkehr ist nur nach dokumentierter
+Beseitigung des Blockers, durch dieselbe verantwortliche Rolle und ohne verdeckte Inhaltsänderung
+zulässig. `SPEC_BLOCKED` und `NACHBESSERN` erfordern dagegen einen neuen Plan beziehungsweise
+Inhalts-Commit.
+
 `CODE_FERTIG` bedeutet ausschließlich, dass der Generator seinen Bau und seine Eigenprüfung
 abgeschlossen hat. Es bedeutet nicht, dass die Aufgabe abgenommen, mergebar oder veröffentlichbar
 ist.
@@ -81,14 +87,6 @@ ist.
 Es darf gleichzeitig höchstens einen Auftrag im Zustand `IN_ARBEIT` geben. Prüfungen eines
 festgeschriebenen Commits dürfen parallel laufen, wenn sie keinen gemeinsamen veränderlichen
 Zustand benutzen.
-
-`IN_ARBEIT` wird gesetzt, **bevor die erste Datei im Scope geändert wird** — nicht danach und nicht
-rückwirkend. **Ein Zustandsübergang, der an keine Handlung gebunden ist, findet nicht statt**, und
-die Regel „höchstens ein Auftrag `IN_ARBEIT`" bleibt dann wirkungslos.
-
-*Gemessen (05.08.): Bei A-01 und A-03 stand der Auftrag auf `BEREIT`, während bereits gebaut wurde.
-Beide Male hat der Generator es selbst bemerkt — nachträglich. Zweimal dieselbe Klasse, ohne dass
-jemand nachlässig war: der Übergang hatte keinen Auslöser.*
 
 ## 4. Rollen und Verantwortungen
 
@@ -125,19 +123,25 @@ Evaluator gewesen sein.
 Nur Yama genehmigt Veröffentlichung: Push, Merge nach `main`, Tags, Deployments, produktive
 Datenoperationen, Force-Operationen und endgültige Löschung fachlicher Daten.
 
-**Vertretungsregel (Fassung 1.2, auf Yamas mündliche Weisung vom 05.08.2026):** Yama wird bei der
+Ein genehmigter Push auf einen Arbeits- oder PR-Prüfbranch ist ausschließlich Transport zur
+Prüfung und setzt den Auftrag noch nicht auf `VEROEFFENTLICHT`. Dieser Zustand beginnt erst mit
+der Integration in den ausdrücklich freigegebenen Zielbranch oder mit dem ausdrücklich benannten
+Deployment. Push und Zielintegration bleiben getrennte Freigaben.
+
+**Vertretungsregel (Fassung 1.4, auf Yamas mündliche Weisung vom 05.08.2026):** Yama wird bei der
 Veröffentlichung **ständig durch den Release-Prüfer vertreten**. Der Release-Prüfer genehmigt und
 führt in Yamas Namen ohne Einzelrückfrage aus: Push von Arbeitszweigen, Merge nach `main`, Tags und
 Deployments in Nicht-Produktionsumgebungen — **ausschließlich** für Stände, die zuvor das Votum
-`RELEASE_FREI` nach §10/§11 erhalten haben. Sicherungs-Pushes von Arbeitszweigen auf Yamas eigene
-Fernziele (`fork`, `backup-private`) sind Datensicherung und laufen als stehende Aufgabe des
-Release-Prüfers mit den Prüfungen aus §14.
+`RELEASE_FREI` nach den Release-Regeln dieses Dokuments erhalten haben. Sicherungs-Pushes von
+Arbeitszweigen auf Yamas eigene Fernziele (`fork`, `backup-private`) sind Datensicherung und laufen
+als stehende Aufgabe des Release-Prüfers (Prüfungen davor: keine aktiven Locks, Fast-Forward je
+Ziel, keine Geheimnisse im Ausgang, nur die eigenen Fernziele — niemals `upstream`, niemals Force).
 
 **Bei Yama persönlich verbleiben — von der Vertretung ausgenommen:** Veränderungen an
 Produktionssystemen (Hetzner), produktive Datenoperationen, Force-Operationen und die endgültige
-Löschung fachlicher Daten. Jede in Vertretung ausgeführte Veröffentlichung wird mit Auftrag,
-Commit und Vorher-/Nachher-Stand je Ziel protokolliert. Yama kann die Vertretung jederzeit
-formlos widerrufen.
+Löschung fachlicher Daten. Jede in Vertretung ausgeführte Veröffentlichung wird mit Auftrag, Commit
+und Vorher-/Nachher-Stand je Ziel protokolliert. Yama kann die Vertretung jederzeit formlos
+widerrufen.
 
 ## 5. Definition of Ready
 
@@ -157,13 +161,6 @@ Ein Auftrag darf nur `BEREIT` werden, wenn der Plan-Prüfer alle folgenden Punkt
 - jeder Prüfbefehl wurde auf Syntax und Aussagekraft geprüft,
 - erforderliche Testdaten, Benutzerrolle, Route und Browserpfad sind benannt,
 - Auswirkungen auf API, Server, Schema, Migration, Bestandsdaten und Bundle sind bewertet,
-- führt der Auftrag eine Oberfläche oder einen Serverprozess aus, ist **getrennt** benannt:
-  wohin die Testdaten gehen **und** wogegen der ausführende Prozess läuft — samt dem Befehl, der
-  Letzteres beweist,
-- jede vorgeschriebene Aufrufform, jedes Werkzeug und jeder Befehl ist auf der Zielmaschine
-  **vorhanden** und dort **tatsächlich in Gebrauch** — beides gemessen, nicht angenommen,
-- jede Anforderung ist entweder ein **Kriterium** oder ein ausdrückliches **Nicht-Ziel**; einen
-  dritten Zustand gibt es nicht,
 - Rückweg bei riskanten Änderungen ist beschrieben.
 
 Fehlt ein Punkt, bleibt der Auftrag `ENTWURF` oder wird `SPEC_BLOCKED`.
@@ -189,7 +186,6 @@ Testinfrastruktur verursachter Lauf ist `ENV_BLOCKED` und kein Produktfehler.
 
 Vor der ersten Änderung bestätigt der Generator:
 
-- der Auftrag steht auf `IN_ARBEIT` (§3),
 - Basis-SHA stimmt,
 - Scope ist frei von fremden Änderungen,
 - Auftrag ist machbar,
@@ -204,7 +200,6 @@ Während des Baus gelten:
 - keine zweite Implementierung einer vorhandenen Funktion,
 - keine Abschwächung bestehender Tests,
 - neue Logik wird mit einer wirksamen Negativ- oder Mutationsprobe abgesichert,
-- **kein Kommentar behauptet ein Verhalten, das der Code nicht hat**,
 - fachfremde Änderungen bleiben unangetastet.
 
 Wird eine Voraussetzung falsch, stoppt der Generator und meldet die passende Blockklasse.
@@ -268,10 +263,22 @@ sie für den Auftrag erforderlich ist.
 
 ## 10. Release-Prüfung
 
-`ABGENOMMEN` ist noch keine Veröffentlichungserlaubnis. Vor `RELEASE_FREI` prüft der
-Release-Prüfer unabhängig:
+`ABGENOMMEN` ist noch keine Veröffentlichungserlaubnis. Der Evaluator prüft immer einen
+unveränderlichen **Inhalts-Commit**. Danach wird jede Entscheidung als eigener
+**Statusübergang-Commit** festgehalten. Ein Statusübergang darf ausschließlich
+`docs/AKTUELLER_AUFTRAG.yaml` ändern, enthält genau einen erlaubten Zustandswechsel und verweist auf
+seinen unmittelbaren Vorgänger. Jede weitere Datei sowie jede Produkt-, Regel-, Plan- oder
+Teständerung ist darin verboten. Der aktuelle Statuscommit enthält nicht seine eigene, vor seiner
+Erzeugung unbekannte SHA; Git selbst ist die Wahrheit über den aktuellen Commit.
 
-- Evaluator-Votum und Release-Kandidat zeigen auf denselben Commit,
+Vor `RELEASE_FREI` prüft der Release-Prüfer unabhängig:
+
+- Evaluator-Votum, `inhalt_sha`, `pruef_sha` und `release_sha` nennen denselben Inhalts-Commit,
+- die lückenlose Statuskette beginnt direkt beim geprüften Inhalts-Commit und jeder weitere
+  Statusübergang ist direkter Nachfolger des vorherigen Statuscommits,
+- jeder Statusdiff ändert ausschließlich `docs/AKTUELLER_AUFTRAG.yaml` und genau einen erlaubten
+  Zustand,
+- der letzte Status vor dem Merge lautet `RELEASE_FREI`,
 - Merge-Ziel und Release-Diff enthalten ausschließlich freigegebene Änderungen,
 - alle erforderlichen CI- und Qualitätstore laufen auf dem Release-Kandidaten erneut grün,
 - Bundle und sonstige Artefakte sind frisch und reproduzierbar,
@@ -282,6 +289,21 @@ Release-Prüfer unabhängig:
 - Smoke-Test und betriebliche Nachprüfung sind vorbereitet,
 - es gibt keine offenen P0/P1-Befunde.
 
+Für Pull Requests gilt zusätzlich:
+
+- erlaubt ist ausschließlich ein normaler Merge-Commit; Squash- und Rebase-Merge sind verboten,
+- der erste Parent des Merge-Commits ist exakt die vom Release-Prüfer festgeschriebene
+  `merge_basis_sha`,
+- der zweite Parent ist exakt der durch Git und die commitgebundene Release-Prüfung ausgewiesene
+  PR-Head im Zustand `RELEASE_FREI`,
+- bewegt sich der Basisbranch nach der Release-Prüfung, wird der Merge `RELEASE_BLOCKED` und der
+  vollständige Release-Diff gegen die neue, gesondert festgeschriebene `merge_basis_sha` erneut
+  geprüft,
+- unmittelbar nach dem Merge wird dessen SHA in einem Statusübergang auf dem Zielbranch
+  festgehalten; erst dieser Übergang darf `VEROEFFENTLICHT` setzen,
+- nach Merge oder Push werden Zielbranch und Remote-SHA erneut gelesen und gegen den freigegebenen
+  Stand geprüft.
+
 Nur nach `RELEASE_FREI` darf Yama die Veröffentlichung genehmigen. Nach der Veröffentlichung wird
 der reale Zielstand geprüft: Version/Commit, Migrationen, zentrale Smoke-Tests, Logs und
 Fehlerindikatoren. Erst danach lautet der Zustand `BETRIEBSBESTAETIGT`. Ein fehlgeschlagener
@@ -291,6 +313,35 @@ Release- oder Smoke-Test führt zu `RELEASE_BLOCKED` und dem vorbereiteten Rück
 
 Berichte werden nicht als fortlaufende Erzählung geführt. Pro Auftrag gibt es einen kompakten,
 maschinenlesbaren Stand.
+
+Planner:
+
+```yaml
+auftrag: ID
+basis: SHA
+plan_pfad: "..."
+plan_sha256: "..."
+ziel: "..."
+nicht_ziele: []
+scope: []
+akzeptanzfaelle: []
+risiken: []
+votum: ENTWURF|SPEC_BLOCKED|DECISION_BLOCKED
+```
+
+Plan-Prüfer:
+
+```yaml
+auftrag: ID
+basis: SHA
+plan_sha256: "..."
+votum: BEREIT|ENTWURF|SPEC_BLOCKED|ENV_BLOCKED|DECISION_BLOCKED
+machbarkeit: pass|fail|offen
+rote_ausgangslage: pass|fail|offen
+definition_of_ready: pass|fail
+blocker: []
+befunde: []
+```
 
 Generator:
 
@@ -326,8 +377,12 @@ Release-Prüfer:
 
 ```yaml
 auftrag: ID
-abnahme_commit: SHA
-release_commit: SHA
+inhalt_sha: SHA
+status_commit: SHA # exakter geprüfter PR-Head
+merge_ziel: branch
+merge_basis_sha: SHA
+merge_verfahren: merge_commit
+merge_sha: SHA|null
 votum: RELEASE_FREI|RELEASE_BLOCKED|ENV_BLOCKED|DECISION_BLOCKED
 ci: pass|fail
 artefakte_reproduzierbar: true|false
@@ -362,8 +417,9 @@ Nach der zweiten roten Runde derselben Aufgabe gilt Pflichtstopp:
 
 ## 13. Pflichtprüfung nach jeweils zehn Aufgaben
 
-Die Qualität von Planner, Plan-Prüfer, Generator, Evaluator und Release-Prüfer wird **nicht nach
-Zeiträumen** bewertet. Es gibt keine monatliche oder kalendarische Qualitätsprüfung.
+Die Qualität von Planner, Plan-Prüfer, Generator, Evaluator, Release-Prüfer und des
+Veröffentlichungs-/Entscheidungsschnitts bei Yama wird **nicht nach Zeiträumen** bewertet. Es gibt
+keine monatliche oder kalendarische Qualitätsprüfung.
 
 Nach jeweils zehn fortlaufend nummerierten Planner-Aufträgen ist vor Aufgabe elf eine verbindliche
 Prozess- und Skill-Prüfung durchzuführen. Ein Auftrag zählt, sobald der Planner ihn dem Plan-Prüfer
@@ -385,6 +441,7 @@ Für jede Zehnergruppe werden mindestens gemessen:
 - vom Evaluator übersehene Fehler und falsche rote Voten,
 - Unterschiede zwischen Abnahme-Commit und Release-Kandidat,
 - fehlgeschlagene Builds, Migrationen, Releases, Smoke-Tests oder Rückwege,
+- verspätete, widersprüchliche oder am falschen Commit erteilte Veröffentlichungsentscheidungen,
 - Fehler, die erst nach Veröffentlichung gefunden wurden.
 
 Die Prüfung endet mit genau einer Entscheidung:
@@ -395,6 +452,7 @@ Die Prüfung endet mit genau einer Entscheidung:
 - Generator-Skill nachschärfen,
 - Evaluator-Skill nachschärfen,
 - Release-Skill nachschärfen,
+- Veröffentlichungs- oder Entscheidungsschnitt mit Yama präzisieren,
 - technische Barriere ergänzen,
 - Prozessregel präzisieren.
 
@@ -415,8 +473,7 @@ seiner laufenden Zehnergruppe.
 - Lokale Sicherungscommits bleiben klein, thematisch und rückgängig machbar.
 - Commit und Push sind getrennte Vorgänge.
 - Kein Push, kein Merge nach `main`, kein Tag, kein Deploy und kein Force ohne ausdrückliche
-  Freigabe von Yama **oder seines ständigen Vertreters nach §4 (Release-Prüfer, nur nach
-  `RELEASE_FREI`; Ausnahmen der Vertretungsregel bleiben bei Yama)**.
+  Freigabe von Yama.
 - Kein destruktives Bereinigen eines fremden oder unklaren Arbeitsbaums.
 
 ## 15. Daten- und Sicherheitsgrenzen
@@ -432,22 +489,87 @@ seiner laufenden Zehnergruppe.
 
 ## 16. Statusführung
 
-Der aktuelle Stand wird aus Git, einem kompakten Auftragsdatensatz und dem Evaluator-Votum erzeugt,
-nicht aus alten Erzähltexten. Ein Validator darf erst wieder als Autorität verwendet werden, wenn er
-ausdrücklich gegen diese Version der Arbeitsregeln gebaut und unabhängig geprüft wurde. Alte
-Auftragsvalidatoren und deren Statusschema sind aufgehoben.
+Die einzige manuell geführte Statuswahrheit ist
+[`docs/AKTUELLER_AUFTRAG.yaml`](AKTUELLER_AUFTRAG.yaml). Der aktuelle Stand wird aus diesem
+getrackten Datensatz, dem darin festgeschriebenen Git-Stand und dem letzten unabhängigen Votum
+erzeugt, nicht aus alten Erzähltexten. Ein Validator darf erst wieder als Autorität verwendet
+werden, wenn er ausdrücklich gegen diese Version der Arbeitsregeln gebaut und unabhängig geprüft
+wurde. Alte Auftragsvalidatoren und deren Statusschema sind aufgehoben.
 
-Ein gültiger Status nennt mindestens:
+Die Datei nennt immer mindestens:
 
-- Auftrag,
-- Zustand,
-- Ballbesitzer,
-- Basis-SHA,
-- Prüf-SHA,
-- Release-SHA, sobald vorhanden,
-- letztes Votum,
-- offene Akzeptanz,
-- nächsten konkreten Schritt.
+- `regel_version` und SHA-256 von `docs/ARBEITSREGELN.md`,
+- fortlaufende `planner_laufnummer` und daraus abgeleitete `zehnergruppe`,
+- Auftrag sowie Pfad und SHA-256 des freigegebenen Plans,
+- Zustand und Ballbesitzer,
+- `inhalt_sha`, Vorgänger-Commit, vorherigen und neuen Zustand,
+- Basis-, Prüf-, Release-, Merge-Basis- und Merge-SHA, soweit vorhanden; `basis_sha` bleibt die
+  ursprüngliche Plan-/Inhaltsbasis, `merge_basis_sha` ist der gesondert geprüfte Zielbranch-Stand,
+  und `pruef_sha` sowie `release_sha` bezeichnen den geprüften Inhalts-Commit,
+- Merge-Ziel und Merge-Verfahren,
+- verantwortliche Rolle und unveränderlichen Beleg der Entscheidung,
+- letztes Votum, offene Akzeptanz und nächsten konkreten Schritt,
+- Prozessquittung der zuletzt übernehmenden Rolle.
+
+Vor jedem Start, Wiederanlauf, Rollenwechsel und nach jeder Kontextkürzung liest die übernehmende
+Rolle in dieser Reihenfolge `CLAUDE.md`, diese Arbeitsregeln, das Statusartefakt und den dort
+benannten Plan. Sie vergleicht Regelversion, Regel-Hash, Plan-Hash und Basis-SHA. Die
+Prozessquittung nennt Rolle, gelesene Versionen/Hashes und Zeitpunkt. Fehlt eine Angabe oder stimmt
+sie nicht, findet keine fachliche Arbeit statt; der Vorgang wird passend blockiert.
+
+Der abgebende Ballbesitzer schreibt jede gültige Zustandsänderung zusammen mit neuem
+Ballbesitzer, Votum, offenen Punkten und nächstem Schritt in genau diese Datei. Die übernehmende
+Rolle prüft die Fortschreibung, bevor sie arbeitet. Sitzung, Monat, Branch, Worktree oder
+Kontextverlust dürfen weder Planner-Laufnummer noch Zehnergruppe zurücksetzen. Der Plan-Hash bleibt
+ab `BEREIT` unverändert; jede fachliche Änderung an Scope oder Kriterien führt zurück zu Planner
+und Plan-Prüfer und erzeugt einen neuen Plan-Hash.
+
+Nach der unabhängigen Abnahme erstellt oder bestätigt die jeweils verantwortliche Rolle genau einen
+Statusübergang-Commit. Er setzt Vorgänger-Commit, alten und neuen Zustand, Ballbesitzer,
+`inhalt_sha`, Prüf-/Release-SHA, gegebenenfalls `fortsetzung_zustand`, Votum, Beleg, offene
+Akzeptanz und nächsten Schritt. Der nächste
+Statusübergang muss sein direkter Kind-Commit sein. Der Prüfer verifiziert Pfadmenge, Elternkette,
+Hashes, Rollenverantwortung und Votum. Statuscommits werden nicht als Inhaltsänderung bewertet.
+
+Die SHA des aktuellen Statuscommits wird niemals in diesem Commit selbst gespeichert. Sie wird aus
+Git beziehungsweise dem commitgebundenen GitHub-Votum gelesen. Dasselbe gilt für die Remote-SHA
+nach dem Push: Sie muss dem lokalen Statuscommit entsprechen und wird von außen verglichen, nicht
+selbstreferenziell in denselben Commit geschrieben.
+
+Die einzige erlaubte Unterbrechung der direkten Status-Elternkette ist der vorab freigegebene
+Merge-Commit. Er muss die in Abschnitt 10 festgelegten zwei exakten Parents besitzen. Der unmittelbar
+folgende Statuscommit ist direkter Kind-Commit dieses Merge-Commits, übernimmt den Zustand
+`RELEASE_FREI` vom freigegebenen zweiten Parent und darf als einzigen Übergang
+`RELEASE_FREI → VEROEFFENTLICHT` dokumentieren.
+
+Erlaubte Übergänge und Eigentümer:
+
+| Von | Nach | Verantwortlich |
+|---|---|---|
+| `ABNAHME` | `ABGENOMMEN`, `NACHBESSERN`, `SPEC_BLOCKED`, `ENV_BLOCKED` oder `DECISION_BLOCKED` | Evaluator |
+| `ABGENOMMEN` | `RELEASE_PRUEFUNG` | Release-Prüfer |
+| `RELEASE_PRUEFUNG` | `RELEASE_FREI`, `RELEASE_BLOCKED`, `ENV_BLOCKED` oder `DECISION_BLOCKED` | Release-Prüfer |
+| `RELEASE_FREI` | `VEROEFFENTLICHT` oder `RELEASE_BLOCKED` | Yama beziehungsweise ausdrücklich beauftragte Veröffentlichungsrolle |
+| `VEROEFFENTLICHT` | `BETRIEBSBESTAETIGT` oder `RELEASE_BLOCKED` | Release-Prüfer als unabhängige Betriebsprüfung |
+| `ENV_BLOCKED` | gespeicherter `fortsetzung_zustand` | dieselbe prüfende Rolle wie vor der Blockade |
+| `DECISION_BLOCKED` | gespeicherter `fortsetzung_zustand` | dieselbe prüfende Rolle nach Yamas dokumentierter Entscheidung |
+| `RELEASE_BLOCKED` | `RELEASE_PRUEFUNG` | Release-Prüfer, nur ohne Inhaltsänderung und mit behobenem Release-Blocker |
+
+Ein Statuscommit darf keinen zweiten Übergang bündeln. Ein neuer Inhalts-Commit beendet die
+Statuskette, setzt den Auftrag auf `ABNAHME` zurück und benötigt eine neue Evaluator-Abnahme. Jede
+weitere Datei, ein nicht erlaubter Übergang, eine falsche Rolle, eine Lücke in der Elternkette oder
+ein geänderter Inhalts-SHA ist P1 und blockiert Release beziehungsweise Merge.
+
+Bei `ENV_BLOCKED` und `DECISION_BLOCKED` muss `fortsetzung_zustand` einem für die verantwortliche
+Rolle gültigen Prüfzustand entsprechen. Verändert die Behebung Scope, Kriterien, Regeln, Tests oder
+Produktinhalt, ist die Rückkehr als Statuscommit verboten; dann gilt ausschließlich der neue
+Inhalts-Commit mit neuer Abnahme. Bei bewegter Mergebasis setzt der Release-Prüfer zunächst
+`RELEASE_BLOCKED`, danach mit aktualisierter `merge_basis_sha` wieder `RELEASE_PRUEFUNG` und führt
+die vollständige Release-Prüfung erneut aus.
+
+Für alle produktiven Aufträge sind versionierte Rollen-Skills mit Pfad, Version und SHA-256 in der
+Prozessquittung Pflicht. Solange diese Skills noch nicht eingerichtet und unabhängig geprüft sind,
+darf nach dem Governance-Bootstrap kein Produktauftrag `BEREIT` erreichen.
 
 Es gibt keine zweite manuelle Statuswahrheit. Historische Ledgers werden nicht fortgeschrieben, um
 den aktuellen Zustand zu bestimmen.
@@ -483,28 +605,3 @@ Unzulässig sind insbesondere:
 - Veröffentlichung ohne Yamas Freigabe.
 
 Diese Regeln gelten ab sofort. Frühere Prozessregeln werden weder zitiert noch wieder aktiviert.
-
-## 19. Änderungsverzeichnis
-
-### Fassung 1.1 — 05.08.2026, auf ausdrückliche Anweisung Yamas
-
-Vier Regeln, jede aus einem **gemessenen** Vorfall der Nacht vom 04. auf den 05.08. Sie sind vom
-Planner formuliert und von Yama beauftragt; die Belege stehen in
-[`PROZESSPRUEFUNG-01.md`](PROZESSPRUEFUNG-01.md) und in den Auftragsblättern A-01 bis A-03.
-
-| § | Regel | Der Vorfall, der sie erzwungen hat |
-|---|---|---|
-| **3** | `IN_ARBEIT` wird vor der ersten Scope-Änderung gesetzt | A-01 und A-03 wurden gebaut, während sie auf `BEREIT` standen. Zweimal dieselbe Klasse |
-| **5** | Testdaten-Ziel **und** Prozessbindung getrennt benennen | A-01 nannte `ticket_testing` **dreimal** und traf daneben: geseedet wurde dorthin, bedient wurde aus `ticket` |
-| **5** | Vorgeschriebene Formen müssen vorhanden **und in Gebrauch** sein | A-03 baute den Riegel um `artisan serve`; benutzt wurde `php -S`. Für A-02 wurde `timeout` erwogen — es fehlt auf dieser Maschine |
-| **5 / 7** | Kriterium oder Nicht-Ziel, kein dritter Zustand · kein Kommentar über nicht vorhandenes Verhalten | A-02s Kantenliste sagte „OHNE ZUSAGE … am Code zu belegen". Der Bauende löste den Widerspruch als **Kommentar** auf, der eine nicht gebaute Zeitgrenze behauptete |
-
-> **Was diese vier verbindet.** Keine entstand aus Nachlässigkeit. Jede entstand, weil eine Regel
-> **vollständig aussah und neben der Praxis herlief** — ein genannter Datenbankname ohne
-> Prozessbindung, ein Riegel an der ungenutzten Tür, eine Anforderung ohne Zusage.
->
-> **Papier findet Papierfehler.** Diese drei wurden erst sichtbar, als etwas lief: an der bedienten
-> Bühne, am hängenden Tor, am Zustand während des Bauens. Deshalb binden alle vier neuen Regeln an
-> eine **Handlung** oder eine **Messung auf der Zielmaschine**, nicht an eine Formulierung.
-
-*Fassung 1.0 vom 04.08.2026 bleibt unverändert gültig; 1.1 ergänzt, streicht nichts.*
