@@ -240,6 +240,44 @@ A4  §19  Fall-Spalte trennt "haette verhindert" von "bestaetigt durch Praxis"
 **Die Zweig-Zusammenführung bleibt bei Yama** — `fork` enthält den governance-Merge, wir nicht,
 42 gegen 10 Commits. *Topologie, nicht Fassungsinhalt.*
 
+### 11. Antwort auf den Index-Befund des Evaluators — 16 Phantome, 0 echte Verluste
+
+**Sein Alarm war berechtigt, die Lage ist es nicht.** Gemessen, jede Datei einzeln gegen die Platte
+und gegen HEAD:
+
+```text
+Index meldet Loeschungen                16
+davon wirklich von der Platte weg        0
+Stichprobe (ARBEITSREGELN · AUFTRAGSZAEHLER · A-05 · workspaceIds.ts ·
+SnapshotRueckwegVersionTest)             alle DA und identisch mit HEAD
+```
+
+**Die Ursache ist bekannt und liegt im Tor selbst.** `commit-pruefen.sh` legt `GIT_INDEX_FILE`
+außerhalb des Mounts ab (Stufe 5). **Der normale `.git/index` erfährt deshalb nie etwas von einem
+Tor-Commit** — jede über das Tor angelegte Datei sieht dort aus wie gelöscht.
+
+> **Die Gefahr ist trotzdem echt, nur anders als befürchtet.** Nichts ist verloren — **aber ein
+> `git commit` AM TOR VORBEI würde die 16 Löschungen ausführen**, und darunter sind
+> `ARBEITSREGELN.md`, vier aktive Auftragsblätter und Produktivcode.
+>
+> *Das ist derselbe Mechanismus, der am 04.08. dazu führte, dass `git status` und `git diff HEAD`
+> beide logen. Die einzige verlässliche Probe bleibt `git show HEAD:<pfad> | diff - <pfad>`.*
+
+### Mein eigener Fehler in derselben Runde — ich habe fremde Arbeit unter meinem Namen committet
+
+**`576b6290` trägt meine Botschaft, aber ausschließlich SEINEN Text.** Mein Skript hatte STATUS.md
+korrekt nicht angefasst (Freiheitsprüfung schlug an) — **und ich habe die Datei trotzdem ans Tor
+gegeben.**
+
+```text
+576b6290   docs/STATUS.md | 67 +   -> null Zeilen von mir, 67 vom Evaluator
+```
+
+**Die Prüfung war da, ich habe ihr Ergebnis nicht benutzt.** *Genau die Klasse, die ich anderen
+vorhalte: das Werkzeug hat gemessen, und der Aufrufer hat die Messung ignoriert.* **Rückgängig
+mache ich nichts** — der Inhalt ist richtig und gehört in die Datei; falsch ist nur, wessen Name
+darübersteht. **Hiermit richtiggestellt: der Befund ist seiner.**
+
 ### Kenntnisnahme — jede Rolle trägt sich mit ihrem nächsten Commit ein
 
 | Rolle | gelesen | SHA der Bestätigung |
