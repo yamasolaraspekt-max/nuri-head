@@ -1,7 +1,9 @@
 # BAU-ORDNUNG — verbindliche Regeln für jeden künftigen Agenten
 
 > **Herkunft:** Abgeleitet aus dem Code-Audit CODE-AUDIT-01 (`docs/audit/code-audit.md`, Teil 2.1 GUT + 2.2 SCHLECHT). Die GUTEN Zonen (FK-Kanban-Hook, Test-Harness, FollowUpCreator, Marker-Seeder, Registry, Migration-`down()`, Rechte-Fundament, saubere Services) sind der **Hausmaßstab**. Die SCHLECHTEN Muster (ungegate Routen, God-Table, Stage-Duplikat mit Fold-Divergenz, Status-Zoo, Inline-JS, Zombie `customers`) sind die **Fehler, die nicht neu entstehen dürfen**.
-> **Verhältnis zur Governance:** Diese Bau-Ordnung ist der **Wie-baue-ich-Leitfaden**. Sie steht UNTER `docs/BETRIEBSORDNUNG.md` und den Dauerdirektiven in `CLAUDE.md` (Daten-/Ketten-Schutz, „Eine Wahrheit je Sachverhalt", Weichen). Bei Konflikt gilt die Betriebsordnung/CLAUDE.md. Referenzierbar aus `CLAUDE.md`.
+> **Verhältnis zur Governance:** Diese Bau-Ordnung ist ein fachlicher **Wie-baue-ich-Leitfaden**
+> auf Rang 4 der Hierarchie in `docs/ARBEITSREGELN.md`. Bei einem Prozesskonflikt gelten die
+> verbindlichen Arbeitsregeln; der fachliche Inhalt dieser Bau-Ordnung bleibt darunter erhalten.
 > Jede Regel nennt in Klammern den Audit-Beleg, aus dem sie stammt.
 
 ---
