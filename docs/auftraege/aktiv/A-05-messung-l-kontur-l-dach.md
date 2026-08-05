@@ -16,7 +16,9 @@ status_steht_in: docs/STATUS.md   # §16: EINE Statuswahrheit. Hier steht keine 
 Bericht liegt. Der Evaluator prüft, ob die Messungen echt und nachvollziehbar sind — nicht, ob
 etwas funktioniert.
 
-**Erlaubt:** lesen · vorhandene Tests fahren · Wegwerf-Proben außerhalb des Produktivbaums.
+**Erlaubt:** lesen · vorhandene Tests fahren · **eine Wegwerf-Zusage am üblichen Ort**
+(`resources/planner/hausplaner/__tests__/`), solange sie **vor dem Bericht wieder entfernt** ist
+und **kein Commit** sie trägt.
 **Verboten:** jede Änderung in `resources/`, `app/`, `tests/`.
 
 ## Anlass
@@ -80,7 +82,7 @@ das die Form einer Kontur erkennt?**
 
 **A-05-3:** Was passiert **heute**, wenn ein Dokument mit `roofType: 'l-shape'` geladen wird —
 rendert es, oder fehlt mehr? *Antwortform: vorhandene Zusagen fahren; falls keine passt, eine
-Wegwerf-Probe außerhalb des Produktivbaums.*
+Wegwerf-Zusage nach der Erlaubt-Liste oben — am üblichen Ort, vor dem Bericht entfernt, ohne Commit.*
 
 **A-05-4:** **Die Lückenliste.** Was genau fehlt zwischen „Nutzer zeichnet L-Kontur" und
 „`l-shape`-Dach steht"? *Antwortform: nummerierte Liste, je Punkt eine Fundstelle. Auch die
@@ -111,3 +113,25 @@ Werkzeuge auf der Zielmaschine    npm run test:hausplaner - vorhanden und in Geb
 ## Rückweg
 
 Es entsteht nur ein Bericht. **Nichts zurückzunehmen.**
+
+---
+
+## Nachtrag 05.08. — der Generator hat den Restwiderspruch gefunden, bevor er den Auftrag hatte
+
+**Er hat den Entwurf ungefragt gegengelesen und gemeldet:** meine Korrektur zur Wegwerf-Probe stand
+nur im **Erläuterungskasten** (Z. 66/67). **Die verbindliche Erlaubt-Liste und die Antwortform von
+A-05-3 trugen unverändert den alten, unerfüllbaren Wortlaut.**
+
+> **Seine Begründung ist die richtige:** *„Die Korrektur steht in der Erläuterung, die Regel selbst
+> ist unverändert — und §7 verbietet mir, einen vorgeschriebenen Weg still zu ersetzen."*
+
+**Beide Stellen sind jetzt geändert, nicht nur erklärt.**
+
+**Das ist derselbe Fehlertyp wie bei A-01**, und er benennt ihn auch so: dort war die
+Unerfüllbarkeit des Prüfbefehls ebenfalls erst **nach** dem Bau benannt — zwei Runden Kosten.
+*Diesmal ist es vor der Zuteilung aufgefallen, weil er ein Blatt gelesen hat, das ihm noch gar
+nicht gehörte.*
+
+> **Für mich die Lehre:** Eine Korrektur, die nur im Fließtext steht, ist keine Korrektur.
+> **Was verbindlich ist, muss dort geändert werden, wo es verbindlich steht** — sonst hat ein Blatt
+> zwei Wahrheiten, und der Bauende muss die falsche befolgen.
