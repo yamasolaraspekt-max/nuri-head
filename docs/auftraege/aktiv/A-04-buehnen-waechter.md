@@ -57,6 +57,48 @@ scripts/buehnen-waechter.sh                der Detektor
 scripts/__tests__/buehnenWaechter.test.mjs die Zusagen
 ```
 
+## Wiederverwendungsprüfung (§5, Fassung 1.2.2) — nachgetragen 05.08.
+
+**Dieses Blatt hat den Mangel bewiesen, der zu Auflage A2 führte, und trug selbst keine Prüfung.**
+*Nachgeholt, bevor der Plan-Prüfer es beanstanden muss.*
+
+```text
+scripts/browser-buehne.sh (A-03-Bau 26e378a5, liegt auf tmp-a03)
+  :31  ERWARTETE_DB=ticket_testing              <- der erlaubte Name, als Konstante
+  :60  GEFUNDENE_DB=$(APP_ENV=testing php artisan tinker --execute='echo config(...)')
+                                                <- die Aufloesungs-Logik, fertig
+scripts/commit-pruefen.sh                       Vorbild fuer Prozess-Auskunft (lsof)
+Skripte mit `ps -eo`                            KEINES - das bringt A-04 neu
+docs/_playground-archiv/                        nichts Vergleichbares (0 Treffer)
+```
+
+> ### Der kritische Fund: `ERWARTETE_DB` darf es nur EINMAL geben
+>
+> **Definiert A-04 seinen eigenen erlaubten Datenbanknamen, gibt es zwei Wahrheiten darüber,
+> welche Datenbank zulässig ist — und sie werden auseinanderlaufen.** *Genau die zweite Wahrheit,
+> gegen die A-01 geschnitten wurde.*
+>
+> **Zusage: A-04 nimmt den Namen aus `browser-buehne.sh`, statt ihn zu wiederholen.**
+> **ABHÄNGIGKEIT:** `browser-buehne.sh` liegt auf `tmp-a03` und ist auf diesem Zweig **nicht
+> vorhanden**. *A-04 kann erst gebaut werden, wenn A-03 hier liegt — das ist eine harte
+> Reihenfolge, keine Empfehlung.*
+
+## Benannter Erstnutzer (§5, Fassung 1.2.2) — der Punkt, den dieses Blatt erzwungen hat
+
+**`buehnen-waechter.sh` ist neu und kann nicht „in Gebrauch" sein.** Nach der neuen Fassung tritt
+der Erstnutzer an diese Stelle:
+
+```text
+WER      der Evaluator
+WANN     vor JEDER Browserabnahme nach §9, beginnend mit der ersten nach dem A-04-Bau
+WOZU     er stellt fest, gegen welche Datenbank die Buehne laeuft, BEVOR er misst
+BELEG    der Waechter-Aufruf samt Ausgabe gehoert in seinen Abnahmebericht
+```
+
+*Der Evaluator und nicht der Generator: **er** hat am 05.08. um 01:54 eine Bühne gefahren, und
+**seine** Messung wäre wertlos gewesen, wenn sie auf der falschen Datenbank gelaufen wäre. Der
+Erstnutzer ist die Rolle mit dem größten eigenen Interesse.*
+
 ## Akzeptanzkriterien
 
 **Die Dateien existieren an der Basis nicht** — alle P1 sind trivial rot. *Die Kraft steckt in

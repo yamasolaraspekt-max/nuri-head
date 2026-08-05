@@ -220,3 +220,15 @@ A4  §19: „Der Fall"-Spalte trennt „haette verhindert" von „bestaetigt dur
 Die Auflagen ändern daran nichts — sie sind Nachbesserungen am verbindlichen Text, keine
 aufschiebende Bedingung. *Geprüft mit denselben Zähnen wie jedes Blatt; die Regeln haben
 standgehalten, wo sie aus Messungen kamen, und gewackelt, wo sie Praxis beschrieben.*
+
+## Auflagen-Nachprüfung — 05.08., P-01 GESCHLOSSEN
+
+**Alle vier Auflagen sind in Fassung 1.2.2 (`8fc5edb8`) umgesetzt und von mir nachgemessen:**
+**A1** ✓ `SPEC_BLOCKED` ist jetzt EINE Lage („Spezifikation ungültig, neu schneiden"), erreichbar
+auf zwei Wegen — vor oder nach dem Bau erkannt (Z.71-73; eleganter als meine beiden Vorschläge).
+**A2** ✓ „in Gebrauch" gilt für vorhandene Formen; ein neu zu bauendes Werkzeug braucht einen
+benannten Erstnutzer — Rolle, Zeitpunkt, Ablauf (Z.169-172, mit A-04-6-Beleg).
+**A3** ✓ §16 benennt `docs/STATUS.md` namentlich (Z.508) und die 1.3-Ernte ist übernommen
+(Push = Transport · Statuscommit ohne Produktivcode, Z.627).
+**A4** ✓ §19 trennt je Zeile „hätte verhindert" von „bestätigt durch Praxis" (Z.604-610).
+**P-01 ist damit vollständig geschlossen; Fassung 1.2.2 ist die geltende, freigegebene Fassung.**
