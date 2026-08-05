@@ -37,7 +37,9 @@ schützt.** Klasse `SPEC`, Ball war beim Planner — hier ist der Neuschnitt.
 ```text
 liegengebliebene Tor-Indizes   1736 Dateien, 8,5 MB
 aeltester .. neuester          index.28196 .. index.65336
-Standard-Index                 6994 Eintraege, davon 17 Phantom-Loeschungen
+Standard-Index                 6994 Eintraege, 60 divergent, davon 17 Phantom-Loeschungen
+                               (der 17. ist das A-07-Blatt selbst - der Anlass-Absatz oben
+                                zaehlt den aelteren Evaluator-Stand von 16)
 ```
 
 **Ursache laut Evaluator, an `commit-pruefen.sh:57-62`:** `GIT_INDEX_FILE=index.$$` wird **nie
@@ -105,12 +107,30 @@ Phantom-Fund gemeldet, und ich hätte danach geschnitten.***
 
 ## Akzeptanzkriterien (Entwurf, abhängig von der Wegentscheidung)
 
-**A-07-1 (P1):** Nach einem Tor-Commit meldet `git diff --cached --diff-filter=D` **0** Phantome —
-oder das Tor hat die Divergenz mit Zahl und Pfaden gemeldet.
+**A-07-1a (P1, der Regelfall):** Existiert **kein** Index-Blob, der in keinem Commit vorkommt,
+gleicht das Tor nach erfolgreichem Commit den Standard-Index an HEAD an.
+**Nachweis:** `git diff --cached --diff-filter=D` meldet danach **0**.
+*Rot an der Basis: heute **17** Phantom-Löschungen (selbst gemessen, 05.08.).*
 
-**A-07-2 (P1, Gegenprobe):** Liegt im Standard-Index echte gestagete Arbeit, wird sie **nicht**
-verworfen. *Ohne dieses Kriterium wäre „Index immer plattmachen" grün — und das wäre schlimmer als
-der Fehler.*
+**A-07-1b (P1, der Kippfall):** Existiert **ein solcher Blob**, lässt das Tor den Index
+**unangetastet** und meldet **Zahl und Pfade**.
+*Das ODER aus dem ersten Schnitt ist damit aufgelöst — es hätte sich mit jedem der beiden Wege
+grün rechnen lassen.*
+
+**A-07-2 (P1, Gegenprobe zu A-07-1b):** Echte gestagete Arbeit wird **nicht** verworfen.
+
+**Herstellung, damit die Probe den echten Index nicht gefährdet** (Form des Plan-Prüfers,
+übernommen):
+
+```text
+im Wegwerf-Repo, das commitPruefen.test.mjs ohnehin baut:
+  1  Datei anlegen, `git add` -> der Blob liegt in der Objektdatenbank,
+     aber in KEINEM Commit  = genau die Lage aus A-07-1b
+  2  Tor laufen lassen
+  3  Zusage: der Index ist UNVERAENDERT, und die Meldung nennt Zahl und Pfad
+```
+
+*Ohne dieses Kriterium wäre „Index immer plattmachen" grün — und das wäre schlimmer als der Fehler.*
 
 **A-07-3 (`must_preserve`):** Der ausgelagerte Index (Stufe 5) bleibt unverändert. *Er ist die
 Lösung eines anderen Problems und wird nicht mitrepariert.*
@@ -120,6 +140,25 @@ verwaister Index** zurück: das Tor räumt seinen eigenen `index.$$` am Ende weg
 initialisiert ihn am Anfang, statt einen vorgefundenen zu erben.
 **Gegenprobe im selben Test:** ein absichtlich vorgelegter Fremd-Index unter demselben Pfad darf
 den Lauf **nicht** beeinflussen.
+
+> ### Rest 1 des Plan-Prüfers ist beantwortet — der Fundort ist belegt
+>
+> Seine Fundort-Probe auf der Halde **wurde abgebrochen und ist nie gelaufen**. Ich habe sie
+> gefahren, alle 1738 Indizes einzeln:
+>
+> ```text
+> for f in $TMPDIR/ticket-index/index.*; do
+>   GIT_INDEX_FILE=$f git ls-files --stage | grep -q 8fd24e1c && treffer++
+> done
+>   durchsucht 1738 · TREFFER 116
+>   Eintrag:  100644 8fd24e1c54250c64f06e78ab815c85364af6e3e6 0    -f
+> ```
+>
+> **Seine Zahl 116 ist exakt bestätigt.** Das tote Objekt liegt auf der Stufe-5-Halde, nicht in
+> `.git/index` — *und dass 116 Indizes denselben kaputten Eintrag tragen, IST der Beweis für die
+> PID-Erbschaft: ein einzelner Fehlgriff hat sich über 116 Läufe fortgepflanzt.*
+>
+> **Rot-Beleg für A-07-4, heute wirksam:** `ls $TMPDIR/ticket-index | wc -l` → **1738 > 0.**
 
 **A-07-5 (P1, Bestandsaufräumung, EINMALIG):** Die 1736 liegengebliebenen Dateien werden
 **beiseitegelegt, nicht gelöscht** (`_to_delete/`-Muster wie bei Locks), mit Zahl und Pfad im
