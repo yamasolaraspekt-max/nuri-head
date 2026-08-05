@@ -462,6 +462,27 @@ naechster_schritt: "Planner traegt beide Saetze ein, dann setzt der Plan-Pruefer
 ```
 ---
 
+## In Planprüfung — A-07
+
+```yaml
+auftrag: A-07
+titel: "Der Nebenzustand des Commit-Tors: .git/index divergiert unbemerkt und traegt ein totes Objekt"
+datei: docs/auftraege/aktiv/A-07-index-divergenz.md
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+basis_sha: 8967e2c4
+claim: "plan-pruefer 05.08. 15:xx: Ball gezogen — Blatt geschnitten ohne Uebergabe-Zeile, und die Weg-Frage ist ausdruecklich an mich gerichtet. Claim VOR der Pruefung gesetzt."
+letztes_votum: "plan-pruefer 05.08. (1. DoR-Runde): ENTWURF bleibt, die WEG-FRAGE ist entschieden, VIER Restpunkte. GEMESSEN: Basis 8967e2c4 existiert · Standard-Index traegt 6994 Eintraege, davon 60 DIVERGENT (Generator-Zahl bestaetigt; sein Wortlaut 'alle 60 Eintraege des Standard-Index' meint die divergenten, nicht den Index) · Phantom-Loeschungen heute 17, nicht 16 (der 17. ist das A-07-Blatt selbst — der Anlass-Absatz zaehlt den aelteren Evaluator-Stand, konsistent, aber nachziehen) · A-07-1-Rot wirksam (17 > 0) · A-07-3 must_preserve korrekt deklariert (Stufe 5 ist geloeste fremde Sache) · Wiederverwendung, Erstnutzer, Rueckweg vorhanden (1.2.2 erfuellt). BEFUND ZUR ROT-PFLICHT: A-07-4 ist am benannten Objekt NICHT reproduzierbar — 8fd24e1c liegt NICHT im Standard-Index (ls-files 0 Treffer), kein Pfad beginnt mit '-', diff --cached laeuft fehlerfrei durch. Der invalid-object-Fehler trat beim TOR-Commit auf; Verdacht: ein liegengebliebener Stufe-5-Wegwerf-Index unter TMPDIR/ticket-index (PID-Wiederverwendung auf der Halde), nicht .git/index. Meine Fundort-Probe auf der Halde wurde abgebrochen und ist NICHT gelaufen — der Fundort ist offen, nicht widerlegt."
+weg_entscheidung: "WEG A in der MESSBAREN Fassung des Generators (1839d2e3): das Tor gleicht den Standard-Index nach erfolgreichem Commit an HEAD an, SOLANGE kein Index-Blob existiert, der in keinem Commit vorkommt — sonst MELDEN mit Zahl und Pfaden statt anfassen. Begruendung: die urspruengliche Bedingung 'nichts gestaget' griffe NIE (permanent 60 divergente Eintraege, gemessen — Weg A waere faktisch Weg B), und reines Melden (Weg B) erzeugt Dauermeldungen, die weggelesen werden. A-07-2 als P1-Gegenprobe sichert genau den Kippfall."
+offene_akzeptanz:
+  - "Rest 1 (Rot-Pflicht, A-07-4): das tote Objekt ist am Standard-Index nicht nachweisbar — Fundort klaeren (Verdacht: Stufe-5-Halde TMPDIR/ticket-index) und einen Beweisbefehl ins Blatt, der das Rot HEUTE zeigt. Sonst A-07-4 streichen oder auf den echten Fundort umformulieren; ein Kriterium ohne wirksames Rot verletzt §5."
+  - "Rest 2 (§5-Block fehlt): Auswirkungen-Abschnitt wie bei A-05 — Testdaten-Ziel, Prozessbindung, Werkzeuge auf der Zielmaschine. Auch wenn alles 'KEINE/entfaellt' lautet, muss es dastehen, sonst wird die Frage beim Abhaken nie gestellt."
+  - "Rest 3 (A-07-2 ohne Weg): wie wird 'echte gestagete Arbeit' fuer die Gegenprobe HERGESTELLT und GEMESSEN, ohne den echten Index zu gefaehrden? Vorschlag-Form: Wegwerf-Index mit einem Blob, der in keinem Commit vorkommt, in der Testumgebung der Suite."
+  - "Rest 4 (A-07-1 schaerfen): nach der Weg-Entscheidung das ODER aufloesen — das Kriterium nennt jetzt beide Wege gleichzeitig und waere mit jedem von beiden gruen."
+naechster_schritt: "Planner traegt die vier Punkte ein (die Weg-Frage ist beantwortet und faellt nicht zurueck), dann setzt der Plan-Pruefer BEREIT"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
