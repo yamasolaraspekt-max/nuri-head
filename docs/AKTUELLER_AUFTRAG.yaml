@@ -1,0 +1,41 @@
+schema_version: 3
+regel_version: "1.3"
+regel_sha256: "8e094b136f86ab2bdc581d7b838e0b52680e04f37ed8f3bf9d80f5d73f916766"
+planner_laufnummer: 1
+zehnergruppe: 1
+auftrag: "GOVERNANCE-BOOTSTRAP-2026-08-04"
+plan_pfad: "docs/ARBEITSREGELN.md"
+plan_sha256: "8e094b136f86ab2bdc581d7b838e0b52680e04f37ed8f3bf9d80f5d73f916766"
+zustand: "BETRIEBSBESTAETIGT"
+ballbesitzer: "Yama"
+basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"
+inhalt_sha: "973a8ddd8b9be36f4c974716e0bc282a0b364ed7"
+vorgaenger_commit: "255f9467b069e1bef71bdda14615e8d0a41777d7"
+status_von: "VEROEFFENTLICHT"
+status_nach: "BETRIEBSBESTAETIGT"
+fortsetzung_zustand: null
+pruef_sha: "973a8ddd8b9be36f4c974716e0bc282a0b364ed7"
+release_sha: "973a8ddd8b9be36f4c974716e0bc282a0b364ed7"
+merge_ziel: "auto/hausplaner-integration"
+merge_basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"
+merge_verfahren: "merge_commit"
+merge_sha: "64d3c17ac6040529fea7025ace5370f7e0c9403f"
+entscheidung_von: "Release-Pruefer"
+entscheidungsbeleg: "Unabhaengige Betriebspruefung auf Remote-Statuscommit 255f9467b069e1bef71bdda14615e8d0a41777d7 bestanden; Merge-Parents, Merge-Baum, Statuskette, Regelhash und Zielbranch stimmen; keine P0/P1"
+letztes_votum: "BETRIEBSBESTAETIGT"
+offene_akzeptanz:
+  - "Versionierte Rollen-Skills vor dem naechsten produktiven Auftrag einrichten und pruefen"
+naechster_schritt: "Versionierte Rollen-Skills fuer Planner, Plan-Pruefer, Generator, Evaluator und Release-Pruefer erstellen und unabhaengig pruefen"
+rollen_skills:
+  status: "AUSSTEHEND"
+  sperre: "Vor dem naechsten produktiven Auftrag einrichten und unabhaengig pruefen"
+prozessquittung:
+  rolle: "Release-Pruefer"
+  zeitpunkt: "2026-08-04"
+  gelesen:
+    claude: "CLAUDE.md"
+    arbeitsregeln_version: "1.3"
+    arbeitsregeln_sha256: "8e094b136f86ab2bdc581d7b838e0b52680e04f37ed8f3bf9d80f5d73f916766"
+    plan_sha256: "8e094b136f86ab2bdc581d7b838e0b52680e04f37ed8f3bf9d80f5d73f916766"
+    basis_sha: "edcc383136c120cfaf156851cfed1180afad7060"
+    inhalt_sha: "973a8ddd8b9be36f4c974716e0bc282a0b364ed7"

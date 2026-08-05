@@ -1,5 +1,9 @@
 # ⇒ AUFTRAGSTAFEL — ARCHIV (abgeschlossene Posten)
 
+> **HISTORIE, NICHT VERBINDLICH.** Seit 04.08.2026 gelten ausschließlich die
+> [`verbindlichen Arbeitsregeln`](../ARBEITSREGELN.md). Alte Prozessangaben in diesem Archiv sind
+> aufgehoben.
+
 **Angelegt:** 25.07.2026 · **Vom:** Planner · **Anlass:** Yama, 25.07.: *„mach das"* — die Tafel war auf
 39 Zeilen gewachsen und der eine aktive Posten darin nicht mehr auffindbar.
 
