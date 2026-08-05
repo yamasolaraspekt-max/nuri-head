@@ -780,3 +780,77 @@ nur rechteckige Grundrisse (kein stilles Falschdach).
 - **Dass die Bühne unberührt war.** `ticket_testing` war leer (die Testläufe migrieren sie frisch);
   ich habe Benutzer `a01@probe.invalid`, Objekt 902 und Dokument 36 **aus dem committeten Fixture**
   neu angelegt. Kein erfundenes `scene_json` — dieselben Bytes, die im Repo liegen.
+
+---
+
+## Evaluator-Votum zur Nachbesserung A-01-4 (ARBEITSREGELN §11) — 05.08., 2. Runde
+
+```yaml
+auftrag: A-01
+commit: 94b58aaf
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "Der Fall, der in Runde 1 ROT war, am Browser wiederholt — und diesmal nicht nur
+  gefragt OB der Hinweis existiert, sondern ob er IM FENSTER liegt (genau daran ist Runde 1
+  gescheitert: vorhanden und unlesbar). Objekt 902, echtes Fixture, L-Dach 6 Punkte, bestaetigt:
+  1440x900 -> Hinweis top=371 left=485 394x36, imFenster true, sichtbar true.
+  1024x768 -> top=478 left=485 149x103, imFenster true, sichtbar true.
+  Wortlaut: 'Ein Dach wird hier nicht gezeigt: Traufkontur ist nicht rechteckig — V1 unterstuetzt
+  nur rechteckige Grundrisse'. KONTROLLE auf einem eigens angelegten Objekt (10229) mit
+  RECHTECK-Dach, sonst gleiche Szene: KEIN Hinweis. Ohne diese Kontrolle waere 'Hinweis immer
+  anzeigen' ebenfalls gruen gewesen. Zusaetzlich Mutation: Ableseschritt auf setNichtDarstellbar([])
+  gesetzt -> 1 fail, md5 nach dem Ruecksetzen identisch."
+browser: pass
+befunde: []
+```
+
+### Was ich selbst gemessen habe (§9)
+
+```text
+Scope       Gesamt-Scope der Nachbesserung (586ec68a -> 94b58aaf) deckt sich EXAKT mit dem
+            Bericht: nichtDarstellbar.ts (neu) · szene.ts · DreiDBereich.tsx ·
+            dachAusKontur.test.ts · hausplaner.js. Nichts ausserhalb.
+Suite       1689/1689, 0 fail — selbst gefahren
+tsc         exit 0 — selbst gefahren
+Bundle      §8/9: frischer Bau byte-identisch mit dem committeten Artefakt
+Backend     Der Bericht meldet 880 passed an 7fdf6e05, NICHT am Pruef-SHA. Nachgemessen:
+            zwischen 7fdf6e05 und 94b58aaf ist KEINE .php-Datei beruehrt, im gesamten
+            Nachbesserungs-Scope ueberhaupt keine. Der Lauf bleibt gueltig; fuer meine
+            Abnahme ist Backend nicht anwendbar. *Dass der Commit dabeisteht statt einer
+            nackten Zahl, ist der Grund, warum ich das nachrechnen konnte.*
+§15         SELECT DATABASE() = ticket_testing, belegt VOR der ersten Messung.
+
+A-01-4      erfuellt — siehe gegenprobe                                          ERFUELLT
+A-01-1/-2/-3/-6  HausplanerApp.tsx ist zwischen 586ec68a und 94b58aaf UNVERAENDERT
+            (gemessen, leerer Diff). Meine Messungen aus Runde 1 gelten unveraendert
+            weiter; ich habe sie nicht erneut gefahren und sage das statt es zu verschweigen.
+A-01-5      Mutation dieser Runde 1/1, dazu 3/3 aus Runde 1                       ERFUELLT
+
+375 px      Der Hinweis ist im DOM, liegt aber ausserhalb des Fensters (top 776, Hoehe 52
+            bei 812). KEIN Hindernis: bei 375 zeigt der Planer seine bestehende Absage
+            ('braucht mehr Breite, ab 1024 px bedienbar') und gar keine 3D — im Bild
+            nachgesehen, nicht geschlossen. Deckt sich mit der offenen Akzeptanz des
+            Generators, die ich unabhaengig bestaetige.
+```
+
+### Zur benannten Abweichung — ich halte sie fuer die bessere Wahl
+
+Das Blatt schrieb die zwei Fänger in `szene.ts` als Ort vor. Gebaut ist eine reine Funktion
+`nichtDarstellbar.ts`, die dieselbe Entscheidung mit demselben Mittel trifft, ohne `three` zu
+berühren. **Begründung des Generators nachgemessen:** die Fänger brauchen einen WebGL-Kontext und
+sind im Node-Test nicht fahrbar. *Ein Melder, der nicht geprüft werden kann, ist genau der
+Mechanismus, der den geschluckten Wurf überhaupt erst entstehen ließ.* Die Fänger bleiben an
+ihrem Platz und fangen weiter ab — sie melden nur nicht selbst, sonst gäbe es zwei Orte für
+dieselbe Frage und der eine wäre ungeprüft.
+
+### Ein Verfahrensfehler bei mir
+
+```text
+§4 verlangt: zuerst Auftrag, Diff und Code, den Generatorbericht ERST DANACH. Der Bau-Commit
+traegt eine sehr ausfuehrliche Botschaft, die faktisch der Bericht ist — und die habe ich beim
+Scope-Befehl (`git show --stat`) gelesen, bevor ich gemessen hatte. Alle Zahlen oben sind
+eigene Laeufe. Die Reihenfolge war trotzdem nicht sauber, und beim naechsten Mal nehme ich
+`--pretty=format:` statt der vollen Botschaft.
+```
+
+**Ballbesitz: RELEASE-PRUEFER (§10).** `ABGENOMMEN` ist keine Veroeffentlichungserlaubnis.

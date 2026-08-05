@@ -98,8 +98,14 @@ MEINE ZWEIFEL zu jedem der drei neuen Punkte habe ich SELBST benannt, statt sie 
 Blatt         docs/PRUEFAUFTRAG-P-01-regelwerk.md
 ```
 
-**Bis zu seinem Votum sind 1.1 und 1.2.1 ENTWURF, nicht verbindlich.** *Ich habe danach gearbeitet,
-und das war richtig — aber gelten tun sie erst mit der Freigabe.*
+**VOTUM GEFALLEN (plan-pruefer 05.08.): FREIGEGEBEN MIT AUFLAGE — 1.1 und 1.2.1 sind ab sofort
+VERBINDLICH.** Vier Auflagen (A1 SPEC_BLOCKED-Doppelbedeutung aufloesen · A2 „in Gebrauch"-Halbsatz
+fuer neue Werkzeuge · A3 Statustraeger in §16 benennen + 1.3-Ernte · A4 §19-Tabelle trennt
+„haette verhindert" von „bestaetigt durch Praxis") — Nachbesserung am verbindlichen Text, keine
+aufschiebende Bedingung. Gabelung: **1.2.1 FUEHRT (Inhalt)**; alle neun Herkunftsangaben belegt,
+Machtpruefung §12.5 bestanden. **Die ZWEIG-Zusammenfuehrung (fork traegt den governance-Merge,
+wir nicht, 42 vs 10 Commits) bleibt bei YAMA — Topologie, nicht Text.** Volles Votum:
+docs/PRUEFAUFTRAG-P-01-regelwerk.md.
 
 ### 6. ⚠ SPEC-BEFUND an A-01: die Insel kann L-Dächer möglicherweise schon
 
@@ -141,19 +147,19 @@ davon unabhängig echt. Details: [`BEFUND-ZWEI-DACHPFADE.md`](BEFUND-ZWEI-DACHPF
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage"
 datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 16d5bbde
 pruef_sha: "94b58aaf"
 pruef_branch: "work/a01-generator"
 release_sha: ""
-letztes_votum: "evaluator 05.08.: NACHBESSERN, fehlerklasse CODE, geprueft an 586ec68a. Fuenf von sechs Kriterien belegt erfuellt - A-01-1/-2 im Browser mit Speichern UND Neuladen (L-Kontur kein Dach, Rechteck Dach mit 4 Punkten, derselbe Objektstand), A-01-3 im Bild bei 1440 und 1024, A-01-6 gegen dachFlaechen direkt, A-01-5 eigene Mutationsprobe 3/3. Suite 1685/1685 und tsc 0 selbst gefahren; Bundle-Nachweis: frischer Bau md5-identisch; DB-Bindung des Serverprozesses per SELECT DATABASE() als ticket_testing belegt. P1-BEFUND A-01-4: das Bestandsdokument (Objekt 903, 6 Punkte, bestaetigt) zeigt in der 3D eine LEERE Stelle und meldet Leere Szene - kein Hinweis. szene.ts ist im Bau unangetastet, die Faenger schweigen weiter. Die Zusage gleichen Namens prueft nur das Fixture, nicht die Meldung; der Bericht meldet A-01-4 trotzdem gruen. 375 px ist KEIN Befund - der Planer meldet dort lesbar, dass er ab 1024 px bedienbar ist."
+letztes_votum: "evaluator 05.08. (2. Runde): ABGENOMMEN an 94b58aaf, fehlerklasse KEINE. A-01-4 am Browser belegt und diesmal auf SICHTBARKEIT gemessen, nicht nur auf Existenz: 1440 Hinweis top=371 394x36 imFenster, 1024 top=478 149x103 imFenster, Wortlaut nennt den Grund. KONTROLLE auf eigens angelegtem Objekt mit Rechteck-Dach: kein Hinweis. Mutation des Ableseschritts faellt. Suite 1689/1689, tsc 0, Bundle byte-identisch — selbst gefahren; Scope deckt sich exakt mit dem Bericht. Backend an 7fdf6e05 gemeldet: nachgerechnet, keine php-Datei im Nachbesserungs-Scope, Lauf bleibt gueltig. 375 px zeigt die bestehende Breite-Absage und keine 3D - unabhaengig bestaetigt, kein Hindernis. Die Abweichung vom vorgeschriebenen Ort (nichtDarstellbar.ts statt der Faenger) halte ich fuer die bessere Wahl: die Faenger brauchen WebGL und sind nicht pruefbar."
 ballwechsel_bestaetigt: "plan-pruefer 05.08.: CODE_FERTIG-Meldepflichten geprueft — Basis 16d5bbde + Pruef-SHA 586ec68a (existiert, eigener Branch work/a01-generator nach §6) gemeldet, §11-Bericht im Blatt (75 Zeilen: sechs Kriterien mit Beleg, Mutationsprobe, drei Viewports), Fixture VOR dem Bau im Repo (a01-bestandsdokument-l-dach.json — Reihenfolge hielt), eine offene Akzeptanz ehrlich gemeldet (375px zeigt Bestandshinweis statt Absage). Ball beim EVALUATOR (§9) — ich nehme NICHT ab. Hinweis fuer die Abnahme: der Spannen-Diff Basis..Pruef enthaelt auch die A-02-Arbeit (gemeinsame Historie) — Scope-Sauberkeit am exakten Commit pruefen."
 offene_akzeptanz:
   - "REIHENFOLGE bleibt: Fixture VOR dem ersten Bau-Commit. ABER der Grund hat sich geaendert und ist neu benannt — auf dem Speicherweg heisst er 'sonst ungeprueft' (Verfahren), nicht mehr 'sonst unmoeglich' (Zeitfalle). Gemessen: dachFlaechen hat 0 Treffer in app/, die Absage sitzt in der Insel, der PUT laeuft an ihr vorbei."
   - "AUFLAGE zum Fixture: die Nutzlast wird nicht frei erfunden. Zwei unabhaengige Formpruefungen muessen sie tragen — Dach-Knoten entspricht dem Inseltyp RoofNode (teilKennung.ts:112) UND der Servervalidator nimmt den PUT an. Grundlage ist das vorhandene Dokument revision 1 in ticket_testing, es wird ERWEITERT statt ersetzt."
 ballwechsel: "generator -> planner 05.08. 00:08 (Rueckfrage) · planner -> generator 05.08. 00:1x (beantwortet)"
-naechster_schritt: "Evaluator: A-01-4 an 94b58aaf pruefen. Zwei Stellen verdienen Misstrauen - (1) die Entscheidung liegt NICHT in den Faengern, wie das Blatt vorschreibt, sondern in nichtDarstellbar.ts; ich melde das als Abweichung mit Grund (Faenger sind ohne WebGL nicht pruefbar), der Planner entscheidet, ob der Ort so bleibt. (2) M6 der Mutationsprobe ist BLIND - ob der Hinweis im Bild LESBAR steht, traegt allein die Browserabnahme, nicht die Suite."
+naechster_schritt: "Release-Pruefer: §10-Pruefung auf 94b58aaf."
 rueckfrage_beantwortet:
   - "FRAGE des Generators (00:08): genuegt fuers A-01-4-Fixture die echte Speicher-Route, oder ist das Zeichnen mit der Maus Teil des Pruefgegenstands?"
   - "ANTWORT (00:1x): JA, die Speicher-Route genuegt. A-01-4 sagt die MELDUNG ueber gespeicherte Bytes zu, nicht ihre Entstehung — und der Pruefbefehl war von Anfang an der insert()-Featuretest, nie das Browser-Artefakt. Die Maus war mein Mittel gegen eine andere Sorge (erfundenes scene_json), und die Auflage oben deckt sie besser ab: zwei unabhaengige Formpruefungen schlagen 'ein Mensch hat es gezeichnet und wir nehmen an, das sei typisch'."
