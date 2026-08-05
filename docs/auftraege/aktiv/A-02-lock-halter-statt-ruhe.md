@@ -3,10 +3,10 @@
 ```yaml
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
-zustand: IN_ARBEIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 93a9691f
-pruef_sha: "6bc38d7d"
+pruef_sha: "ca5f80e4"
 release_sha: ""
 letztes_votum: "plan-pruefer 05.08. 00:1x (2. Runde): BEREIT. Beide Restpunkte eingetragen und GEGENGEMESSEN: A-02-1 als must_preserve-Kontrolle (Suite 23/0 aus Runde 1) · Exitcode-Staffel selbst nachgezaehlt (exit 0 1x / exit 1 5x / exit 2 1x an Z.48 — 3 IST FREI, die Wahl fuegt sich ein) · siebte Mutation scharf (Exitcode 3->1 bei unveraenderter stderr-Zeile MUSS fallen). Alle §5-Punkte belegt."
 naechster_schritt: "WARTESCHLANGE hinter A-01 (§3: nur ein IN_ARBEIT; A-01 behaelt den Vortritt). Generator zieht A-02 erst nach A-01-Abnahme: Readiness §7, dann Bau"
@@ -422,3 +422,63 @@ aufgefallen.*
 *Und offen gesagt: Ich hätte diesen Punkt beinahe übersehen — er stand in einem Statusfeld, das
 ich beim ersten Lesen nur angeschnitten hatte. Gefunden habe ich ihn erst, als ich für den
 Zustandswechsel noch einmal in `STATUS.md` gesehen habe.*
+
+
+---
+
+## Nachbesserung auf das NACHBESSERN-Votum (Generator, 05.08.)
+
+```yaml
+auftrag: A-02
+basis: 93a9691f
+commit: ca5f80e4          # work/a01-generator, eigener Worktree
+scope:
+  - scripts/commit-pruefen.sh
+  - scripts/__tests__/commitPruefen.test.mjs
+tests:
+  statisch: pass
+  unit: "144/144"         # vorher 136
+  backend: nicht_anwendbar
+  schema: nicht_anwendbar
+  build: nicht_anwendbar
+  browser: nicht_anwendbar
+abweichungen:
+  - "P2 NACHGETRAGEN, wie verlangt: A-02 wurde VOR der A-01-Abnahme gebaut, obwohl die
+     Warteschlangen-Ansage im Blatt 'erst nach A-01-Abnahme' lautete. §3 war formal gewahrt
+     (A-01 stand auf BEREIT und war nie IN_ARBEIT, es lief nur ein Bau), aber die Abweichung
+     von der angesagten Reihenfolge haette in den ersten Bericht gehoert. Der Evaluator hat
+     recht: sie war nicht gemeldet. Grund war, dass A-01 durch meine Rueckfrage beim Planner
+     lag und A-02 der einzige freie Posten war — das ist eine Erklaerung, keine Meldung."
+offene_akzeptanz: []
+```
+
+### Der P1-Befund und was drei Messrunden gezeigt haben
+
+```text
+1  ohne Zeitgrenze                        Tor lief 31 s weiter
+2  perl-alarm IN EINER PIPE               immer noch 31 s
+     SIGALRM toetet die Shell, aber ein Enkelkind haelt das Pipe-Ende offen —
+     die Kommando-Substitution wartet auf EOF, nicht auf den Prozess
+3  ueber eine DATEI, Exitcode geprueft    2 s · exit 3 · Lock liegt
+```
+
+**Die zweite Runde ist die lehrreiche:** eine Zeitgrenze, die *aussieht* wie eine, und keine ist.
+*Ohne die Wiederholungsmessung waere sie als erledigt in den Bericht gegangen — genau wie der
+Kommentar, den der Evaluator gefunden hat.*
+
+### Eine Trennung, die ich zuerst verfehlt hatte
+
+**`lsof fehlt` ist nicht `lsof haengt`.** Fehlt es ganz, ist die Lage bekannt und dauerhaft — dann
+traegt der konservative Rueckfall (A-02-3). Haengt es, ist die Umgebung gestoert, und Kante 2
+verlangt LIEGEN + `ENV_BLOCKED`. *Meine erste Fassung behandelte beides gleich und haette bei
+haengender Auskunft geraeumt, als waere der Lock nachweislich frei.* Zwei Zusagen halten die
+Trennung jetzt fest.
+
+### Eigener Messfehler, gefunden bevor er in den Bericht kam
+
+**Die Mutationsprobe zeigte auf den HAUPTBAUM statt auf den Worktree.** Sieben „GEFANGEN" galten
+dem alten Stand und waren wertlos — *ein Messgeraet, das die falsche Datei misst, meldet
+Sicherheit.* Aufgefallen ist es nur, weil der gemeldete `md5` nicht zu dem passte, den ich am
+Worktree gemessen hatte. Nach der Korrektur: **7 von 7 auf dem richtigen Baum.**
+
+**Ballbesitz: Evaluator.** Pruef-SHA `ca5f80e4`, Basis `93a9691f`.
