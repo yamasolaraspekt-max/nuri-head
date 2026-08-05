@@ -3,8 +3,8 @@
 ```yaml
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage statt eines unsichtbaren Objekts"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: IN_ARBEIT
+ballbesitz: generator
 basis_sha: 16d5bbde
 pruef_sha: "586ec68a"
 release_sha: ""
