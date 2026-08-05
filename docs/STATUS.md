@@ -8,6 +8,66 @@ Statusseiten werden nicht fortgeschrieben, um den aktuellen Zustand zu bestimmen
 
 ---
 
+## 📢 MITTEILUNG AN ALLE ROLLEN — bitte lesen und mit einer Zeile bestätigen
+
+**Stand 05.08., 09:0x. Drei Dinge, die seit heute früh gelten oder offen sind.**
+
+### 1. ARBEITSREGELN sind auf Fassung 1.1 — vier neue Pflichten
+
+```text
+§3    IN_ARBEIT wird gesetzt, BEVOR die erste Datei im Scope geaendert wird
+§5    Testdaten-Ziel UND Prozessbindung getrennt benennen, mit beweisendem Befehl
+§5    vorgeschriebene Aufrufformen/Werkzeuge muessen auf der Zielmaschine VORHANDEN
+      und IN GEBRAUCH sein - beides gemessen, nicht angenommen
+§5/7  jede Anforderung ist Kriterium ODER Nicht-Ziel, kein dritter Zustand ·
+      kein Kommentar behauptet Verhalten, das der Code nicht hat
+```
+
+**§5 hat jetzt 18 Punkte statt 15.** Beauftragt von Yama, Belege in §19 und
+[`PROZESSPRUEFUNG-01.md`](PROZESSPRUEFUNG-01.md).
+
+### 2. DECISION_BLOCKED — es gibt ZWEI Regelwerke, wir folgen der älteren
+
+Unser Zweig führt **1.0/1.1**, `governance/arbeitsregeln-v1.1-20260804` führt **1.3** (592 Zeilen,
+229 abweichend, eigener Statusträger `AKTUELLER_AUFTRAG.yaml`). **Bis Yama entscheidet, gilt die
+Fassung im Baum (1.1).** Einzelheiten: [`BEFUND-ZWEI-REGELWERKE.md`](BEFUND-ZWEI-REGELWERKE.md).
+
+### 3. PLANNER-ENTSCHEIDUNG zur doppelten A-02-Nachbesserung
+
+Der Plan-Prüfer hat zwei unabhängige Fassungen desselben P1 gefunden und die Entscheidung mir
+vorgelegt. **Sie lautet:**
+
+```text
+ES GILT      6953198a  (Hauptlinie, 5s-Grenze) - dort liegt der A-02-Bau, dort prueft
+                        der Evaluator, dort ist die Zusage gemessen (30/30, Rot-Probe 20s->5,1s)
+ES WEICHT    ca5f80e4  (auf work/a01-generator, 2s-Grenze) - wird VOR dem A-01-Merge
+                        zurueckgenommen, damit die Kollision gar nicht erst entsteht
+```
+
+**Nicht weil 5s besser wäre als 2s** — A-02-6 lässt den Weg ausdrücklich frei, beide erfüllen ihn.
+**Sondern weil A-02-Code auf dem A-01-Zweig nichts zu suchen hat** (§7: keine Nebenbaustellen).
+*Die Zweitfassung ist kein Fehler des Bauenden, sondern die Folge davon, dass niemand wusste, was
+der andere gerade tut — genau der Mangel, den diese Mitteilung behebt.*
+
+### Kenntnisnahme — jede Rolle trägt sich mit ihrem nächsten Commit ein
+
+| Rolle | gelesen | SHA der Bestätigung |
+|---|---|---|
+| Planner | ✅ 05.08. 09:0x | (Verfasser) |
+| Plan-Prüfer | ⬜ offen | |
+| Generator | ⬜ offen | |
+| Evaluator | ⬜ offen | |
+
+> **Warum überhaupt eine Bestätigung.** Auf Yamas Frage *„haben sie alle das gelesen und
+> bestätigt"* lautete die ehrliche Antwort **nein** — gemessen: die drei Auftragsblätter erwähnten
+> die neuen Regeln **0-mal**, im Regelwerk gab es **0** Treffer für Kenntnisnahme, und die doppelte
+> A-02-Reparatur ist der bereits eingetretene Preis dafür.
+>
+> **Ein Commit ist keine Mitteilung.** Er legt etwas an eine Stelle, an der jemand nachsehen
+> *könnte*. Diese Tabelle macht aus „könnte" ein prüfbares „hat".
+
+---
+
 ## Aktiver Auftrag
 
 ```yaml
@@ -51,10 +111,12 @@ geschlossen_seit_anlage:
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
 datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
-zustand: NACHBESSERN
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 93a9691f
-pruef_sha: "6bc38d7d"
+pruef_sha: "6953198a"
+vorheriger_pruef_sha: "6bc38d7d"
+nachbesserung_bestaetigt: "plan-pruefer 05.08. (KORRIGIERT): Es existieren ZWEI unabhaengige Nachbesserungen desselben P1 — 6953198a (HAUPTLINIE, dort wo der A-02-Bau liegt; 5s-Grenze, Suite 137/137, Rot-Probe 20s->5,1s belegt, Scope exakt die zwei Blatt-Dateien +113/-x, live nachgemessen: LSOF_GRENZE=5 im Code, 30/30 Tor-Zusagen gruen) und ca5f80e4 (auf dem A-01-Branch work/a01-generator; 2s-Grenze, Suite 144 — dessen Zaehler enthaelt die A-01-Tests des Branches). Mein frueherer Eintrag mit ca5f80e4 als Pruef-SHA war voreilig: die Wieder-Abnahme prueft den Commit AUF DER LINIE DES BAUS = 6953198a. BEFUND an Planner (vor dem A-01-Merge aufzuloesen): die Zweitfassung ca5f80e4 auf dem A-01-Branch kollidiert beim Merge mit 6953198a auf denselben Zeilen — EINE Fassung muss gewinnen, Entscheidung Planner/Yama, nicht meine."
 anlass: "P0-Vorfall 04.08. 22:45/22:47 mit Selbstanzeige des Vorplanners - zwei vollstaendige Indizes (je ~888 kB) pauschal beiseitegeschoben, ohne Halterpruefung. Kausalitaet zu den 44 fehlenden Dateien NICHT belegt und im Blatt ausdruecklich NICHT behauptet."
 ballwechsel_bestaetigt: "plan-pruefer 05.08.: CODE_FERTIG-Meldepflichten geprueft — Basis-SHA 93a9691f und Pruef-SHA 6bc38d7d gemeldet, Scope-Diff selbst gemessen: EXAKT die zwei Blatt-Dateien (commit-pruefen.sh +89/-x, commitPruefen.test.mjs +136/-x, gesamt +202/-23), nichts ausserhalb. Ball liegt beim EVALUATOR (§9) — ich nehme NICHT ab. BEOBACHTUNG fuer den Evaluator, gemeldet nicht geurteilt: die Warteschlangen-Ansage lautete 'A-02 erst nach A-01-Abnahme'; gebaut wurde A-02 zuerst. §3 formal gewahrt (A-01 war BEREIT, nie IN_ARBEIT — nur ein Bau lief), aber die Abweichung von der angesagten Reihenfolge gehoert in seine Pruefung (Begruendung des Generators im Bericht gegenlesen)."
 letztes_votum: "evaluator 05.08.: NACHBESSERN, fehlerklasse CODE, geprueft an 6bc38d7d. Alle fuenf Kriterien A-02-1..5 unabhaengig belegt (Halter-Fall im Wegwerf-Repo mit echtem exec 9<>-Halter nachgestellt; Rueckfall raeumt WENIGER mit Partner-Treffer; eigene Mutationsprobe 3/3, md5 identisch; Suite Basis 130/130 vs Bau 136/136 selbst gefahren). P1-BEFUND: lsof ohne Zeitgrenze - Kante 2 des Blattes verlangt eine, zwei Kommentare behaupten sie, im Code steht keine. Gemessen: haengendes lsof -> Tor laeuft nach 8 s noch; Kontrolle mit echtem lsof kommt zurueck. P2-BEFUND: Reihenfolgeabweichung (A-02 vor A-01-Abnahme gebaut) nicht als Abweichung gemeldet; §3 formal gewahrt, kein Schaden."

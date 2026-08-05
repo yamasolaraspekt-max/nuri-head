@@ -12,6 +12,12 @@ letztes_votum: "plan-pruefer 04.08. 23:5x: DoR §5 VOLLSTAENDIG — BEREIT. Drit
 naechster_schritt: "Generator baut die Absage. Frage beantwortet (89d69c13), Fixture liegt und ist verbucht (faca1a7a): Bestandsdokument rev 2 / v3 mit L-Dach, 6 Punkte, 68 m2, beide Auflagen belegt (RoofNode-Form + Servervalidator 200). ZUSTAND NACHGEZOGEN 05.08.: stand faelschlich auf BEREIT/planner, waehrend ich schon am Fixture baute - §3 verlangt IN_ARBEIT, sobald gebaut wird."
 ```
 
+
+> **📢 Fassung 1.1 der ARBEITSREGELN gilt seit 05.08. (vier neue Pflichten, §5 jetzt 18 Punkte).**
+> Mitteilung und Kenntnisnahme-Tabelle stehen oben in [`STATUS.md`](../../STATUS.md).
+> Es ist zugleich `DECISION_BLOCKED` offen: zwei Regelwerke, wir folgen der älteren — siehe
+> [`BEFUND-ZWEI-REGELWERKE.md`](../../BEFUND-ZWEI-REGELWERKE.md).
+
 ## Herkunft und Einordnung
 
 Neu eingeordnet nach `docs/ARBEITSREGELN.md` §17. **Der Vorlaeufer `generator-auftrag-z07-dach-aus-kontur.md` ist fachlicher Nachweis, kein Prozessstand** — seine alten Statuswerte (`bereit`, `gebaut`) sind aufgehoben und werden nicht uebernommen.

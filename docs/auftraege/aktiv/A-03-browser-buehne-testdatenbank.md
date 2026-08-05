@@ -12,6 +12,12 @@ letztes_votum: "plan-pruefer 05.08. 00:3x (2. Runde): BEREIT. Beide Restpunkte G
 naechster_schritt: "Generator baut. §7 belegt (Basis 89d69c13, beide Scope-Dateien fehlen an der Basis, DB_ in der Durchreichliste = 0). A-03-3 steht bereits: wirkungslose Form -> exit 3, kein Start. OFFEN: A-03-2 gruen zeigen - der Worktree hat kein .env.testing, der Riegel verweigert dort korrekt, aber der positive Fall ist so nicht belegbar."
 ```
 
+
+> **📢 Fassung 1.1 der ARBEITSREGELN gilt seit 05.08. (vier neue Pflichten, §5 jetzt 18 Punkte).**
+> Mitteilung und Kenntnisnahme-Tabelle stehen oben in [`STATUS.md`](../../STATUS.md).
+> Es ist zugleich `DECISION_BLOCKED` offen: zwei Regelwerke, wir folgen der älteren — siehe
+> [`BEFUND-ZWEI-REGELWERKE.md`](../../BEFUND-ZWEI-REGELWERKE.md).
+
 ## Anlass — der Generator meldet ihn gegen sich selbst
 
 **05.08., 00:08.** Der Generator bereitete das A-01-Fixture vor und schrieb im Bericht:

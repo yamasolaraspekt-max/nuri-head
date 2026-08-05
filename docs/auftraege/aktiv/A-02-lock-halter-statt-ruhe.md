@@ -12,6 +12,12 @@ letztes_votum: "plan-pruefer 05.08. 00:1x (2. Runde): BEREIT. Beide Restpunkte e
 naechster_schritt: "WARTESCHLANGE hinter A-01 (§3: nur ein IN_ARBEIT; A-01 behaelt den Vortritt). Generator zieht A-02 erst nach A-01-Abnahme: Readiness §7, dann Bau"
 ```
 
+
+> **📢 Fassung 1.1 der ARBEITSREGELN gilt seit 05.08. (vier neue Pflichten, §5 jetzt 18 Punkte).**
+> Mitteilung und Kenntnisnahme-Tabelle stehen oben in [`STATUS.md`](../../STATUS.md).
+> Es ist zugleich `DECISION_BLOCKED` offen: zwei Regelwerke, wir folgen der älteren — siehe
+> [`BEFUND-ZWEI-REGELWERKE.md`](../../BEFUND-ZWEI-REGELWERKE.md).
+
 ## Anlass — ein Vorfall mit Selbstanzeige, nicht eine Idee
 
 **04.08., 22:45 und 22:47.** Zwei vollstaendige Git-Indizes wurden beiseitegeschoben
