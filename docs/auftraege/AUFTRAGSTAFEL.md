@@ -1,4 +1,8 @@
-# ⇒ AUFTRAGSTAFEL — der Abholplatz für Generator, Evaluator und Repo-Aufsicht
+# AUFTRAGSTAFEL — historischer Auftragsbestand
+
+> **NICHT MEHR VERBINDLICH SEIT 04.08.2026.** Fachliche Inhalte und Belege bleiben erhalten;
+> Status, Reihenfolge, Rollen- und Prozessregeln dieser Datei sind aufgehoben. Neue Arbeit wird
+> ausschließlich nach [`docs/ARBEITSREGELN.md`](../ARBEITSREGELN.md) eingeordnet und freigegeben.
 
 **Angelegt:** 25.07.2026 · **Vom:** Planner · **Anlass:** Yama, 25.07.: *„so kannst du für den
 generator aufgaben hinterlegen dass er sich holen kann, ausserdem habe ich fest gestellt dass der

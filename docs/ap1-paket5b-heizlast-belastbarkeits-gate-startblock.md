@@ -148,7 +148,7 @@ Keine Preislogik · keine Kataloglogik · kein Angebots-Schreibpfad · keine UI-
 ## 13. Rückfallpfad
 
 - Änderungen sind **additiv** an bestehenden Services (kein Löschen, kein Schema). Rückfall = Revert der 1–3 berührten Dateien (path-scoped), da kein Migration/Datenstand berührt wird.
-- Vor Bau: betroffene Dateien notieren; `docs/rueckfall-archiv-regeln.md` gilt (nichts überschreiben/löschen).
+- Vor Bau: betroffene Dateien und Rückweg nach `docs/ARBEITSREGELN.md` festschreiben.
 
 ## 14. Stop-Kriterium
 
