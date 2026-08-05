@@ -112,10 +112,51 @@ for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/nul
   # `lsof`, Zeitgrenze abgelaufen) -> es wird NICHT geraten, sondern konservativ zurueckgefallen.
   HALTER=unbekannt
   if command -v lsof >/dev/null 2>&1; then
-    # Zeitgrenze: eine Auskunft, die haengt, ist keine. Laeuft sie ab, bleibt es bei "unbekannt"
-    # (Kante 2) — ohne kuenstliche Verzoegerung, die selbst ein Messgeraet waere.
-    OFFEN=$( { lsof -t -- "$lock" 2>/dev/null || true; } | head -5 | tr '\n' ' ' )
-    if [ -n "$OFFEN" ]; then HALTER="$OFFEN"; else HALTER=0; fi
+    # **ZEITGRENZE — Kante 2, nachgetragen auf den Evaluator-Befund vom 05.08.**
+    #
+    # *Bis dahin behaupteten zwei Kommentare eine Zeitgrenze, und der Aufruf hatte keine.* Gemessen
+    # hat er es so: ein haengendes `lsof` liess das Tor nach 8 s noch laufen. **Ein Kommentar, der
+    # etwas zusagt, was der Code nicht tut, ist schlimmer als gar keiner** — er beendet die Suche
+    # an genau der Stelle, an der sie anfangen muesste.
+    #
+    # `macOS` und viele Minimal-Systeme haben kein `timeout(1)`; `perl -e alarm` ist ueberall da,
+    # wo dieses Repo laeuft. Faellt auch das aus, bleibt es bei "unbekannt" — nie beim Raten.
+    # **Ueber eine DATEI, nicht ueber eine Pipe.** Erste Fassung schrieb in eine
+    # Kommando-Substitution und lief trotz Alarm 31 s: `perl`s SIGALRM toetet die Shell, aber
+    # ein Enkelkind haelt das Pipe-Ende offen, und die Substitution wartet auf EOF — nicht auf
+    # den Prozess. *Gemessen, nicht ueberlegt: haengendes lsof -> 31 s. Genau der Fall, den die
+    # Zeitgrenze verhindern sollte, mit eingebauter Zeitgrenze.*
+    AUSKUNFT=$(mktemp)
+    if command -v perl >/dev/null 2>&1; then
+      perl -e 'alarm shift; exec @ARGV' 2 lsof -t -- "$lock" > "$AUSKUNFT" 2>/dev/null
+      LSOF_CODE=$?
+    else
+      lsof -t -- "$lock" > "$AUSKUNFT" 2>/dev/null
+      LSOF_CODE=$?
+    fi
+    OFFEN=$(head -5 "$AUSKUNFT" | tr '\n' ' ')
+    rm -f "$AUSKUNFT"
+
+    # **Leer heisst nicht dasselbe wie stumm.** `lsof` gibt 1 zurueck, wenn es niemanden findet —
+    # das ist eine ANTWORT. Ein durch SIGALRM abgebrochener Lauf gibt 142 (128+14) — das ist
+    # KEINE. *Kante 2 verlangt genau diese Unterscheidung: laeuft die Zeitgrenze ab, gilt
+    # „Halter unbekannt", nicht „kein Halter".* Die erste Fassung setzte beides auf 0 und haette
+    # bei einem haengenden `lsof` geraeumt, als waere der Lock nachweislich frei.
+    if [ -n "$OFFEN" ]; then
+      HALTER="$OFFEN"
+    elif [ "$LSOF_CODE" -ge 128 ]; then
+      # **Zeitueberschreitung ist NICHT dasselbe wie „kein lsof" — Kante 2 gegen A-02-3.**
+      # Fehlt `lsof` ganz, ist die Lage bekannt und dauerhaft: dann traegt der konservative
+      # Rueckfall (A-02-3). Haengt `lsof`, ist die Umgebung gestoert — *ein Netzlaufwerk, das
+      # nicht antwortet, sagt nichts ueber diesen Lock.* Kante 2 verlangt hier LIEGEN + Meldung,
+      # und nicht denselben Rueckfall.
+      echo "AUSKUNFT HAENGT   $lock  —  lsof lief in die Zeitgrenze (2 s, exit ${LSOF_CODE})" >&2
+      echo "  Eine gestoerte Umgebung sagt nichts ueber diesen Lock. Es wird nicht geraten." >&2
+      echo "ENV_BLOCKED: halterauskunft haengt — $lock (Halter: unbekannt)" >&2
+      exit 3
+    else
+      HALTER=0                  # geantwortet, und zwar mit "niemand"
+    fi
   fi
 
   if [ "$HALTER" != "unbekannt" ] && [ "$HALTER" != "0" ]; then
