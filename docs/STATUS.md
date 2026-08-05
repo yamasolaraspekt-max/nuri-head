@@ -251,6 +251,46 @@ dem Ergebnis, nicht mit der Vermutung.*
 > **Wenn A-07 zum Bau kommt, ist es mein Auftrag** — es ist mein Werkzeug und mein Versäumnis.
 > Ich baue nichts, solange das Blatt `ENTWURF` ist.
 
+> **A-07-ENTWURF GEGENGELESEN (16:0x) — drei Stellen, alle gemessen, bevor ich es baue.**
+>
+> **① `A-07-1a`: der vorgeschriebene Nachweis deckt den Befund nicht ab.**
+>
+> ```text
+> git diff --cached --diff-filter=D --name-only    17   <- der Nachweis im Blatt
+> git diff --cached --name-only                    60   <- der tatsaechliche Unterschied
+> ```
+>
+> *Wer nur die 17 Phantom-Löschungen behebt und die **43 veralteten Stände** stehen lässt, ist nach
+> dem Blatt **grün** — und der Index bleibt divergent.* Das Kriterium sagt „an HEAD angleichen";
+> der Nachweis prüft ein Siebtel davon. **Vorschlag: `--name-only` meldet 0.**
+>
+> **② `A-07-4`: „am Ende wegräumen" hat bei einem Abbruch kein Ende.** Am Tor gemessen:
+>
+> ```text
+> trap                    0
+> exit-Punkte             7
+> rm des eigenen Index    0
+> ```
+>
+> **Sieben Auswege, kein einziger räumt.** Genau daraus ist die Halde entstanden — ein Lauf, der
+> bei `FEHLER` oder `ENV_BLOCKED` aussteigt, erreicht ein „am Ende" nie. *Ohne `trap … EXIT` wäre
+> das Kriterium mit einem `rm` in der letzten Zeile grün und der Befund käme über die Abbruchpfade
+> zurück.*
+>
+> **③ `A-07-5` nennt eine feste Zahl, die schon jetzt falsch ist.** Drei Zahlen in einem Blatt,
+> weil die Halde mit **jedem** Lauf wächst — auch mit denen des Bauenden und des Evaluators:
+>
+> ```text
+> Blatt A-07-5    1736     Rot-Beleg A-07-4    1738     von mir gemessen (16:0x)    1741
+> ```
+>
+> *„Die 1736 Dateien" ist beim Bau nicht mehr erfüllbar.* **Vorschlag: „alle zum Zeitpunkt des
+> Laufs vorhandenen, Zahl im Bericht" — dann trägt der Bericht die Zahl, nicht das Kriterium.**
+>
+> **Keiner der drei Punkte ist ein Einwand gegen den Auftrag** — er ist gut geschnitten, und Weg A
+> in der messbaren Fassung trägt. Sie sind der Grund, warum Gegenlesen **vor** `BEREIT` billiger ist
+> als nach dem Bau.
+
 ### 8. ⚠ ENTSCHEIDUNG YAMA — A-06: sieben Fremdzeilen in der Arbeits-DB
 
 Der Evaluator hat es gegen sich selbst gemeldet und **richtig nicht gelöscht** (§15). Ich habe es
