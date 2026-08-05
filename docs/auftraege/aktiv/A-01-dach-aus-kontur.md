@@ -641,3 +641,142 @@ Inseltest (b). *Der Teil, den er gebaut hat, war nicht falsch — er war nur nic
 **Für die Nachbesserung heißt das:** `szene.ts:498` und `:544` sind die Stellen, die Fänger sollen
 melden statt zu schlucken, und (b) ist der Nachweis. **Das ist keine Scope-Erweiterung** — der
 Scope nannte `szene.ts` von Anfang an (*„die zwei Fänger melden statt zu schlucken"*).
+
+---
+
+## Generator-Bericht zur Nachbesserung A-01-4 (ARBEITSREGELN §11) — 05.08., 09:30
+
+```yaml
+auftrag: A-01 (Nachbesserung A-01-4)
+basis: 16d5bbde
+commit: 94b58aaf
+zweig: work/a01-generator
+baum: /Users/yamanuri/Documents/ticket-a01   # §6, eigener Arbeitsbaum
+scope:
+  - resources/planner/hausplaner/renderers/three-d/nichtDarstellbar.ts   # NEU
+  - resources/planner/hausplaner/renderers/three-d/szene.ts
+  - resources/planner/hausplaner/app/DreiDBereich.tsx
+  - resources/planner/hausplaner/__tests__/dachAusKontur.test.ts
+  - public/hausplaner/hausplaner.js                                      # Bundle, frisch gebaut
+tests:
+  - befehl: npm run test:hausplaner
+    ergebnis: "1689 pass / 0 fail"
+    commit: 94b58aaf
+  - befehl: php artisan test --testsuite=Unit,Feature
+    ergebnis: "880 passed (3110 assertions), 51.69s"
+    commit: 7fdf6e05
+  - befehl: npm run tsc:hausplaner
+    ergebnis: "0 Fehler"
+    commit: 94b58aaf
+  - befehl: npm run build:hausplaner
+    ergebnis: "built in 1.19s — public/hausplaner/hausplaner.js im Commit"
+    commit: 94b58aaf
+abweichungen:
+  - "Der Ort der Entscheidung ist ein anderer als im Blatt: nicht die zwei Faenger in szene.ts,
+     sondern eine reine Funktion nichtDarstellbar.ts, die sie beide speisen. GRUND siehe unten.
+     Die Faenger sind unveraendert an ihrem Platz und fangen weiter ab."
+offene_akzeptanz:
+  - "375 px: der Planer zeigt dort seine BESTEHENDE Absage (Der Planer braucht mehr Breite, ab
+     1024 px bedienbar) und keine 3D. Der Hinweis ist dort im DOM, aber nicht im Bild. Das ist
+     dieselbe offene Akzeptanz wie im ersten Bericht, unveraendert."
+```
+
+### Warum die Entscheidung NICHT in den Fängern liegt
+
+Das Blatt schreibt `szene.ts:498` und `:544` vor — *die Fänger sollen melden statt zu schlucken*.
+Genau so habe ich zuerst gebaut. **Dann habe ich versucht, es zu prüfen, und es ging nicht:**
+
+```text
+Faenger in szene.ts    -> braucht HausplanerDreiDSzene -> braucht three + WebGL-Kontext
+                       -> im Node-Test nicht zu fahren
+dachMesh.ts            -> zieht KEIN three (gemessen: 6 Importe, alle Domaene/Geometrie)
+```
+
+**Was nicht prüfbar ist, wird still wieder kaputt — und genau so ist der geschluckte Wurf
+entstanden.** Deshalb trifft `nichtDarstellbareDaecher()` dieselbe Entscheidung mit demselben
+Mittel (`dachMeshWelt`), ohne `three` zu berühren. Die Fänger bleiben, denn der Wurf muss
+abgefangen werden — sie **melden aber nicht mehr selbst**, sonst gäbe es zwei Orte für dieselbe
+Frage, und der eine wäre ungeprüft. *Dieselbe Trennung wie bei `commit-pruefen.sh` und
+`browser-buehne.sh`: die Entscheidungsfunktion ist prüfbar, der Ausführer nicht.*
+
+Ich melde das als Abweichung, nicht als Selbstverständlichkeit. **Wenn der Planner den Ort anders
+will, schneidet er nach — ich habe ihn nicht still ersetzt, ich benenne ihn.**
+
+### Die beiden Befehle des Planners, beide gefahren
+
+| Befehl | Gegenstand | Ergebnis |
+|---|---|---|
+| (a) `php artisan test` | das Fixture | 880/0 — Bestandsdokument trägt 6-Punkt-Kontur, rev 2 |
+| (b) `npm run test:hausplaner` | **die Meldung** | 1689/0 — vier neue Zusagen, siehe unten |
+
+### Die neuen Zusagen — was jede misst
+
+| Zusage | Gegenstand |
+|---|---|
+| `A-01-4 (Wirkung)` | Das echte Fixture geht durch `nichtDarstellbareDaecher` → **genau ein** Befund, mit Grund |
+| `A-01-4 GEGENPROBE` | Ein Rechteck wird **nicht** gemeldet — sonst wäre „alles melden" grün |
+| `A-01-4 EIN ORT` | `szene.ts` holt die Liste aus der Funktion und **kein Fänger pusht mehr selbst** |
+| `A-01-4 OBERFLAECHE` | `DreiDBereich` fragt, zeigt bedingt, nennt den Grund, ist `role="status"` |
+
+### Mutationsprobe (§7) — 5 von 6 gefangen
+
+```text
+M1 meldet nie etwas                    GEFANGEN
+M2 meldet ALLES                        GEFANGEN
+M3 Grund faellt weg                    GEFANGEN
+M4 Szene holt die Liste nicht          GEFANGEN
+M5 Faenger entscheidet wieder selbst   GEFANGEN
+M6 Meldung wird nicht angezeigt        BLIND  -> deckt die Browserabnahme, nicht der Test
+Wiederherstellung md5: szene 035c0656… · DreiDBereich (danach weiter geaendert) · nichtDarstellbar 6df22be8…
+```
+
+**M6 bleibt blind, und das steht so im Zusagentext.** Eine React-Komponente mit `three` ist im
+Node-Test nicht zu fahren; die Quelltext-Zusage deckt nur, dass die Verbindung nicht still
+entfernt wird. *Ob der Hinweis im Bild lesbar steht, belegt allein der Browser.*
+
+### Browserabnahme (§8) — und was sie gefunden hat
+
+**Bühne:** `bash scripts/browser-buehne.sh --port 8123`, Datenbank am Kindprozess geprüft:
+`ticket_testing`. Objekt 902, Dokument 36, aus dem committeten Fixture (6-Punkt-L-Kontur).
+
+> **Der A-03-Riegel hat beim ersten Start GEGRIFFEN** — `FALSCHE DATENBANK: der Kindprozess steht
+> auf 'ticket'` (im Arbeitsbaum fehlte `.env.testing`, weil ein Worktree ungetrackte Dateien nicht
+> mitbringt). Ohne ihn wäre die Bühne auf der Arbeitsdatenbank gestartet. *Er tut, wofür er gebaut
+> ist.*
+
+**Drei Fehler, die alle drei meine waren und die KEIN grüner Inseltest zeigt:**
+
+```text
+1  mein Ableseeffekt stand VOR dem Effekt, der die Szene anlegt
+   -> szeneRef war null, Abhaengigkeiten aenderten sich nie wieder -> Liste blieb leer
+   -> abgelesen wird jetzt IN uebernehmen(), direkt nach aktualisiere()
+2  Meldung unten am Leinwandrand -> in ALLEN drei Breiten ausserhalb des Fensters
+   gemessen: 1440 top 892 bei 900 · 1024 474-812 bei 768 · 375 694-813 bei 812
+   -> jetzt oben
+3  right: 140 (Abstand zum Fit-Knopf, der UNTEN rechts sitzt) -> bei 1024 ein Kasten von
+   25 px Breite, ein Wort je Zeile, 337 px hoch, quer ueber der Leinwand
+   -> right: 12, maxWidth 52ch
+```
+
+**Nach dem Richten gemessen** (`getBoundingClientRect`, nach `scrollIntoView`):
+
+| Breite | Höhe des Hinweises | im Fenster | Befund |
+|---|---|---|---|
+| 1440 | 36 px | ja | lesbar über der Leinwand |
+| 1024 | 103 px | ja | lesbar über der Leinwand |
+| 375 | 52 px | nein | der Planer zeigt dort seine bestehende Breiten-Absage, keine 3D |
+
+Der angezeigte Text, wörtlich aus dem DOM in allen drei Breiten:
+
+```text
+Ein Dach wird hier nicht gezeigt: Traufkontur ist nicht rechteckig — V1 unterstuetzt
+nur rechteckige Grundrisse (kein stilles Falschdach).
+```
+
+### Was ich NICHT behaupte
+
+- **Dass A-01 damit abgenommen ist.** Das ist §9 und nicht meine Rolle.
+- **Dass 375 px geklärt ist.** Es bleibt dieselbe offene Akzeptanz wie vorher.
+- **Dass die Bühne unberührt war.** `ticket_testing` war leer (die Testläufe migrieren sie frisch);
+  ich habe Benutzer `a01@probe.invalid`, Objekt 902 und Dokument 36 **aus dem committeten Fixture**
+  neu angelegt. Kein erfundenes `scene_json` — dieselben Bytes, die im Repo liegen.

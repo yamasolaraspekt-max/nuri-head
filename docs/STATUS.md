@@ -126,10 +126,10 @@ und das war richtig — aber gelten tun sie erst mit der Freigabe.*
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage"
 datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
-zustand: NACHBESSERN
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 16d5bbde
-pruef_sha: "586ec68a"
+pruef_sha: "94b58aaf"
 pruef_branch: "work/a01-generator"
 release_sha: ""
 letztes_votum: "evaluator 05.08.: NACHBESSERN, fehlerklasse CODE, geprueft an 586ec68a. Fuenf von sechs Kriterien belegt erfuellt - A-01-1/-2 im Browser mit Speichern UND Neuladen (L-Kontur kein Dach, Rechteck Dach mit 4 Punkten, derselbe Objektstand), A-01-3 im Bild bei 1440 und 1024, A-01-6 gegen dachFlaechen direkt, A-01-5 eigene Mutationsprobe 3/3. Suite 1685/1685 und tsc 0 selbst gefahren; Bundle-Nachweis: frischer Bau md5-identisch; DB-Bindung des Serverprozesses per SELECT DATABASE() als ticket_testing belegt. P1-BEFUND A-01-4: das Bestandsdokument (Objekt 903, 6 Punkte, bestaetigt) zeigt in der 3D eine LEERE Stelle und meldet Leere Szene - kein Hinweis. szene.ts ist im Bau unangetastet, die Faenger schweigen weiter. Die Zusage gleichen Namens prueft nur das Fixture, nicht die Meldung; der Bericht meldet A-01-4 trotzdem gruen. 375 px ist KEIN Befund - der Planer meldet dort lesbar, dass er ab 1024 px bedienbar ist."
@@ -138,7 +138,7 @@ offene_akzeptanz:
   - "REIHENFOLGE bleibt: Fixture VOR dem ersten Bau-Commit. ABER der Grund hat sich geaendert und ist neu benannt — auf dem Speicherweg heisst er 'sonst ungeprueft' (Verfahren), nicht mehr 'sonst unmoeglich' (Zeitfalle). Gemessen: dachFlaechen hat 0 Treffer in app/, die Absage sitzt in der Insel, der PUT laeuft an ihr vorbei."
   - "AUFLAGE zum Fixture: die Nutzlast wird nicht frei erfunden. Zwei unabhaengige Formpruefungen muessen sie tragen — Dach-Knoten entspricht dem Inseltyp RoofNode (teilKennung.ts:112) UND der Servervalidator nimmt den PUT an. Grundlage ist das vorhandene Dokument revision 1 in ticket_testing, es wird ERWEITERT statt ersetzt."
 ballwechsel: "generator -> planner 05.08. 00:08 (Rueckfrage) · planner -> generator 05.08. 00:1x (beantwortet)"
-naechster_schritt: "Generator: A-01-4 schliessen - der Altfall braucht eine sichtbare Meldung, solange szene.ts den Wurf schluckt. Die Zusage muss danach die MELDUNG pruefen, nicht das Fixture."
+naechster_schritt: "Evaluator: A-01-4 an 94b58aaf pruefen. Zwei Stellen verdienen Misstrauen - (1) die Entscheidung liegt NICHT in den Faengern, wie das Blatt vorschreibt, sondern in nichtDarstellbar.ts; ich melde das als Abweichung mit Grund (Faenger sind ohne WebGL nicht pruefbar), der Planner entscheidet, ob der Ort so bleibt. (2) M6 der Mutationsprobe ist BLIND - ob der Hinweis im Bild LESBAR steht, traegt allein die Browserabnahme, nicht die Suite."
 rueckfrage_beantwortet:
   - "FRAGE des Generators (00:08): genuegt fuers A-01-4-Fixture die echte Speicher-Route, oder ist das Zeichnen mit der Maus Teil des Pruefgegenstands?"
   - "ANTWORT (00:1x): JA, die Speicher-Route genuegt. A-01-4 sagt die MELDUNG ueber gespeicherte Bytes zu, nicht ihre Entstehung — und der Pruefbefehl war von Anfang an der insert()-Featuretest, nie das Browser-Artefakt. Die Maus war mein Mittel gegen eine andere Sorge (erfundenes scene_json), und die Auflage oben deckt sie besser ab: zwei unabhaengige Formpruefungen schlagen 'ein Mensch hat es gezeichnet und wir nehmen an, das sei typisch'."
@@ -151,6 +151,7 @@ nachtraege_erledigt:
 geschlossen_seit_anlage:
   - "Ort/Wortlaut der Absage: die WELCHE-Frage ist entschieden (dachFlaechen wird gefragt, kein zweiter Rechtecks-Begriff), messbar als A-01-6. Der WORTLAUT bleibt bewusst offen - er gehört in die Browserabnahme (§8)."
   - "Doppelführung Z-07 / A-01: A-01 führt. §16 kennt nur eine Statuswahrheit, und das ist diese Seite."
+generator_meldung: "05.08. 09:30 CODE_FERTIG an 94b58aaf. Nachgebessert: nichtDarstellbar.ts (NEU, pruefbar ohne WebGL), szene.ts holt die Liste dort, beide Faenger entscheiden nicht mehr selbst, DreiDBereich liest NACH dem Zeichnen ab. Vier neue Zusagen, Mutation 5/6. Insel 1689/0, Server 880/0, tsc 0, Bundle frisch. Browser 1440/1024 lesbar (h=36/103), 375 zeigt die bestehende Breiten-Absage. DREI Fehler fand erst der Browser, alle meine: Effektreihenfolge (szeneRef null), Meldung ausserhalb des Fensters, right:140 quetschte sie bei 1024 auf 25px. Bericht im Blatt, 130 Zeilen."
 ```
 
 `IN_ARBEIT` ist derzeit **kein** Auftrag. Nach §3 darf es höchstens einen geben.
