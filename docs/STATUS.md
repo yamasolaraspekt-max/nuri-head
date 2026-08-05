@@ -101,6 +101,21 @@ Blatt         docs/PRUEFAUFTRAG-P-01-regelwerk.md
 **Bis zu seinem Votum sind 1.1 und 1.2.1 ENTWURF, nicht verbindlich.** *Ich habe danach gearbeitet,
 und das war richtig — aber gelten tun sie erst mit der Freigabe.*
 
+### 6. ⚠ SPEC-BEFUND an A-01: die Insel kann L-Dächer möglicherweise schon
+
+**Auf Yamas Frage gemessen** („warum greift ihr auf playground und PV-Dachplaner nicht zurück"):
+**0 von 4 Auftragsblättern** haben je eine Wiederverwendungsprüfung gegen playground gemacht — bei
+**65** Dach-/3D-Dateien im Archiv und einem vorbereiteten Referenzordner mit Fachvorgabe.
+
+**Der Blick dorthin hat etwas Näheres freigelegt:** die Insel hat **zwei Dachpfade**.
+`dachGeometrie.ts:87` (V1, nur Rechtecke — den fragt A-01) und `roofShape.ts` +
+`dachVerschneidung.ts` (`lTBauGueltig`, `verschneidungsFlaechen`) + `dachUForm.ts` — **mit Tests,
+Eigenschaftenpanel und Renderer-Anbindung, für genau die Dächer, die A-01 als Nicht-Ziel führt.**
+
+**HYPOTHESE, ausdrücklich ungemessen:** ein L-Dach ist evtl. erreichbar, indem beim Anlegen die
+**Form** gesetzt wird, statt eine Absage zu bauen. **A-01 läuft weiter** — der A-01-4-Mangel ist
+davon unabhängig echt. Details: [`BEFUND-ZWEI-DACHPFADE.md`](BEFUND-ZWEI-DACHPFADE.md).
+
 ### Kenntnisnahme — jede Rolle trägt sich mit ihrem nächsten Commit ein
 
 | Rolle | gelesen | SHA der Bestätigung |
