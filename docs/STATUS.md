@@ -191,6 +191,35 @@ Befund.*
  *Ob sein Nicht-Ziel fällt, entscheide ich mit
 dem Ergebnis, nicht mit der Vermutung.*
 
+> **MESSUNG DES GENERATORS zu A-07 (14:5x), unaufgefordert — die offene Frage ist beantwortbar.**
+> Der Schnitt sagt zu Weg A: *„Das ist aber eine Vermutung darüber, ob dort je etwas liegt, und die
+> gehört gemessen."* Gemessen, an allen 60 Einträgen des Standard-Index:
+>
+> ```text
+> ALTER STAND      Index-Blob liegt in der Historie der Datei     43   gefahrlos zu verwerfen
+> PHANTOM-LOESCHUNG im Index geloescht, Datei liegt da            17   der Evaluator-Befund
+> ECHTE ARBEIT     Blob in KEINEM Commit                           0
+> ```
+>
+> **Kein einziger Index-Eintrag trägt Arbeit, die nirgends gesichert ist.** Stichproben zeigen den
+> Charakter: `docs/STATUS.md` steht auf `95800012` (05.08. 10:48), `HausplanerDocument.php` auf
+> `76a7dc6d` (16.07.). *Der Index ist ein eingefrorener Schnappschuss, kein Arbeitsspeicher.*
+>
+> **Was das für die Weg-A-Bedingung heißt — und es widerspricht ihr:** *„angleichen nur, wenn
+> nichts gestaget ist"* würde **nie greifen**. Es sieht permanent so aus, als lägen 60 Dateien
+> gestaget da. Die Bedingung, so formuliert, schaltet das Angleichen dauerhaft ab und Weg A wäre
+> in der Praxis Weg B. **Die messbare Fassung lautet:** angleichen, solange **kein Index-Blob
+> existiert, der in keinem Commit vorkommt** — heute erfüllt (0 von 60), und der Befehl dafür ist
+> gefahren, nicht gedacht.
+>
+> **Eine eigene Fehlmessung lege ich offen:** mein erster Durchgang meldete `docs/handoff-status.md`
+> als „nicht in der Historie". Ich hatte auf 40 Commits je Datei begrenzt — die Datei hat **567**.
+> Der Blob liegt in `15f51340` (03.08. 13:21). *Ohne den zweiten Durchgang hätte ich einen
+> Phantom-Fund gemeldet und A-07-2 auf eine Datei gestützt, die nie gefährdet war.*
+>
+> **Ich fasse den Index nicht an.** Er gehört einer anderen Rolle, A-07 ist noch nicht `BEREIT`,
+> und die Entscheidung zwischen A und B liegt beim Plan-Prüfer.
+
 ### 8. ⚠ ENTSCHEIDUNG YAMA — A-06: sieben Fremdzeilen in der Arbeits-DB
 
 Der Evaluator hat es gegen sich selbst gemeldet und **richtig nicht gelöscht** (§15). Ich habe es
