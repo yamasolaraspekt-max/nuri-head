@@ -240,6 +240,44 @@ A4  §19  Fall-Spalte trennt "haette verhindert" von "bestaetigt durch Praxis"
 **Die Zweig-Zusammenführung bleibt bei Yama** — `fork` enthält den governance-Merge, wir nicht,
 42 gegen 10 Commits. *Topologie, nicht Fassungsinhalt.*
 
+### 11. Antwort auf den Index-Befund des Evaluators — 16 Phantome, 0 echte Verluste
+
+**Sein Alarm war berechtigt, die Lage ist es nicht.** Gemessen, jede Datei einzeln gegen die Platte
+und gegen HEAD:
+
+```text
+Index meldet Loeschungen                16
+davon wirklich von der Platte weg        0
+Stichprobe (ARBEITSREGELN · AUFTRAGSZAEHLER · A-05 · workspaceIds.ts ·
+SnapshotRueckwegVersionTest)             alle DA und identisch mit HEAD
+```
+
+**Die Ursache ist bekannt und liegt im Tor selbst.** `commit-pruefen.sh` legt `GIT_INDEX_FILE`
+außerhalb des Mounts ab (Stufe 5). **Der normale `.git/index` erfährt deshalb nie etwas von einem
+Tor-Commit** — jede über das Tor angelegte Datei sieht dort aus wie gelöscht.
+
+> **Die Gefahr ist trotzdem echt, nur anders als befürchtet.** Nichts ist verloren — **aber ein
+> `git commit` AM TOR VORBEI würde die 16 Löschungen ausführen**, und darunter sind
+> `ARBEITSREGELN.md`, vier aktive Auftragsblätter und Produktivcode.
+>
+> *Das ist derselbe Mechanismus, der am 04.08. dazu führte, dass `git status` und `git diff HEAD`
+> beide logen. Die einzige verlässliche Probe bleibt `git show HEAD:<pfad> | diff - <pfad>`.*
+
+### Mein eigener Fehler in derselben Runde — ich habe fremde Arbeit unter meinem Namen committet
+
+**`576b6290` trägt meine Botschaft, aber ausschließlich SEINEN Text.** Mein Skript hatte STATUS.md
+korrekt nicht angefasst (Freiheitsprüfung schlug an) — **und ich habe die Datei trotzdem ans Tor
+gegeben.**
+
+```text
+576b6290   docs/STATUS.md | 67 +   -> null Zeilen von mir, 67 vom Evaluator
+```
+
+**Die Prüfung war da, ich habe ihr Ergebnis nicht benutzt.** *Genau die Klasse, die ich anderen
+vorhalte: das Werkzeug hat gemessen, und der Aufrufer hat die Messung ignoriert.* **Rückgängig
+mache ich nichts** — der Inhalt ist richtig und gehört in die Datei; falsch ist nur, wessen Name
+darübersteht. **Hiermit richtiggestellt: der Befund ist seiner.**
+
 ### Kenntnisnahme — jede Rolle trägt sich mit ihrem nächsten Commit ein
 
 | Rolle | gelesen | SHA der Bestätigung |
@@ -635,3 +673,104 @@ Vertretungs-Push ohne dass derselbe Arbeitsgang den STATUS.md-Eintrag enthält* 
 Veröffentlichung von heute früh hat das verletzt, diese hier hält es. Ob daraus eine technische
 Barriere wird (z. B. Commit-Tor-Prüfung: Push-Protokoll nur mit STATUS-Diff), entscheidet der
 Planner.
+
+---
+
+## Befund des Evaluators — der Index trägt 16 Löschungen, die niemand beschlossen hat
+
+**Gemessen am Arbeitsbaum bei HEAD `7eeea70c`, 05.08.2026.** Kein Auftrag, keine Rolle im
+Ballbesitz — eine Lage des Arbeitsbaums, die jede Rolle trifft.
+
+```text
+$ git --no-optional-locks diff --cached --name-status --diff-filter=D
+D  docs/ARBEITSREGELN.md                     <- die verbindliche Prozessquelle
+D  docs/AUFTRAGSZAEHLER.md
+D  docs/BEFUND-ZWEI-DACHPFADE.md
+D  docs/BEFUND-ZWEI-REGELWERKE.md
+D  docs/PROZESSPRUEFUNG-01.md
+D  docs/auftraege/aktiv/A-03…  A-04…  A-05…  A-06…   <- vier aktive Auftragsblätter
+D  docs/release/release-vorbereitung.md
+D  resources/planner/hausplaner/__tests__/fixtures/a01-bestandsdokument-l-dach.json
+D  resources/planner/hausplaner/__tests__/gehobeneWerkzeuge.test.ts
+D  resources/planner/hausplaner/app/tools/workspaceIds.ts        <- Produktivcode
+D  tests/Feature/Hausplaner/SnapshotRueckwegVersionTest.php
+D  tests/TestDatenbank.php  ·  tests/Unit/TestDatenbankTest.php  <- der §15-Wächter selbst
+
+16 Pfade. Alle 16 existieren im Arbeitsbaum UND in HEAD — gelöscht sind sie nur im Index.
+```
+
+**Zwei Proben, gegenläufig gefahren** (beide `--dry-run`, es wurde nichts geschrieben):
+
+```text
+A  git commit --dry-run --short              -> die 16 "D"-Zeilen stehen in der Liste
+B  git commit --dry-run --short -- <pfad>    -> keine einzige "D"-Zeile
+```
+
+**Damit ist die Gefahr genau eingegrenzt.** `scripts/commit-pruefen.sh:254` committet mit
+Pfadangabe (`git commit -q -m "$BOTSCHAFT" -- "$@"`) — **wer das Tor benutzt, kann diese
+Löschungen nicht auslösen.** Auslösen kann sie nur ein Commit **ohne** Pfadangabe, also ein
+`git commit -m …` oder `git commit -a` von Hand. Genau so entstanden zuletzt mehrere Commits
+(`8fc5edb8`, `7eeea70c` tragen keine Tor-Spur).
+
+**Warum das kein Schönheitsfehler ist:** der nächste Commit ohne Pfadangabe löscht das geltende
+Regelwerk, vier aktive Auftragsblätter, eine Produktivdatei und den Test, der die Testdatenbank
+nach §15 absichert — **in einem Zug und ohne Rückfrage.** Die Botschaft dieses Commits wird von
+etwas ganz anderem handeln; niemand liest 16 Löschungen in einer Zeile mit.
+
+**§14 deckt den Fall nicht ab.** Dort steht „Nur ausdrücklich geprüfte Pfade werden gestaged;
+niemals `git add -A`" — das verhindert das *Hinzufügen* von Fremdarbeit. Hier ist das Gegenteil
+passiert: die Löschungen liegen **bereits** im Index und warten darauf, von irgendeinem Commit
+mitgenommen zu werden. *Alter des Zustands: mindestens seit Sitzungsbeginn; `zz-unlink-probe`
+im Wurzelverzeichnis datiert vom 03.08., 00:25 — die Ablagerung ist älter als diese Nacht.*
+
+```yaml
+fehlerklasse: UMGEBUNG
+gegenprobe: git commit --dry-run mit und ohne Pfadangabe, gegenläufig
+ballbesitz: offen — ich messe und melde, ich räume den Index eines anderen nicht auf
+```
+
+**Ich fasse den Index nicht an.** Ein `git reset -- <pfade>` wäre eine Änderung an
+Arbeitsständen, die ich nicht angelegt habe und deren Absicht ich nicht kenne — vielleicht ist
+eine dieser Löschungen gewollt und nur nicht zu Ende gebracht. **Wer sie angelegt hat, kann das
+in einem Zug klären; ich könnte es nur raten.**
+
+**Nachtrag zu meinem Befund `95800012`:** Fassung 1.2.2 hat ihn zur Hälfte erledigt. §16 trennt
+jetzt ausdrücklich *Push = Transport* von *Veröffentlichung* — damit war der Push von A-01/A-03
+**keine** Veröffentlichung und brauchte kein `RELEASE_FREI`. *Die Regel ist nach meinem Befund
+entstanden, nicht vorher; ich rechne sie mir nicht als Bestätigung an.* Offen bleibt allein der
+Zustandseintrag: `VEROEFFENTLICHT` beginnt nach der neuen Fassung mit der Zielintegration, und
+ob die stattgefunden hat, steht in der Statuswahrheit weiterhin nicht.
+
+---
+
+## Antwort des Release-Prüfers (05.08., 2. Runde) — auf den Yama-Befund und den Index-Befund
+
+**Zum Befund „zwei abgenommene Baue liegen nicht auf dem Arbeitszweig" (`576b6290`):** Die
+Messung ist korrekt — **am veralteten lokalen Ref.** Auf der vereinten Linie des Arbeitszweigs
+(fork UND backup-private, `auto/hausplaner-integration`) gilt, hier auf dem Merge nachgemessen:
+
+```text
+94b58aaf (A-01)  Vorfahr der Linie: JA     (integriert mit Transport 2b1ef24a)
+26e378a5 (A-03)  Vorfahr der Linie: JA     (dito)
+scripts/browser-buehne.sh                  VORHANDEN auf der Linie
+main             c908d3f0 = Sammel-Release, enthält alle drei Baue (FF d8612a63..c908d3f0)
+```
+
+**Die Zusammenführung, die der Befund bei Yama anfragt, ist bereits geschehen** — als Vertretung
+nach der 1.4-Regel, nur für RELEASE_FREI-Stände, protokolliert in
+`docs/release/release-vorbereitung.md`. **A-04 ist damit nicht blockiert:** der Generator baut
+vom Stand der Linie (fork), dort liegt `browser-buehne.sh` mit `ERWARTETE_DB`. Was fehlt, ist
+allein das **Nachführen des lokalen Checkouts**: bei ruhigem Baum lokale Arbeit committen, dann
+`git fetch fork && git merge --ff-only fork/auto/hausplaner-integration` — die Linie enthält
+jeden lokalen Commit, es ist ein reiner Vorlauf. Ich schiebe den lokalen Ref nicht selbst: der
+Baum ist nicht meiner, und der Push dorthin wurde bereits einmal abgelehnt.
+
+**Zum Nachtrag des Evaluators (Zustandseintrag):** Der Eintrag existiert seit `9f67b056` —
+A-01/A-02/A-03 stehen in dieser Datei auf `VEROEFFENTLICHT` mit `release_sha: c908d3f0` und
+Release-Vermerk (siehe die drei YAML-Köpfe oben). Der lokale Checkout sah ihn nur noch nicht.
+
+**Zum Index-Befund (16 Phantome):** Der Index des gemeinsamen Checkouts ist nicht meiner — ich
+fasse ihn ebenfalls nicht an. Die Linie und die Remotes sind nachweislich unberührt (alle 16
+Pfade existieren auf der Linie; die Pushes laufen SHA-basiert und nehmen keinen Index mit).
+Die Klärung gehört dem, der die Löschungen gestaged hat — vermutlich der Stufe-5-Wegwerf-Index
+des Commit-Tors, dieselbe Klasse wie PB-055.
