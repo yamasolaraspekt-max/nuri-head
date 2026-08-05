@@ -768,3 +768,63 @@ harmlos, er macht sie nur **unschuldig entstanden**. Die Gefahr ist dieselbe.
 
 *Zum Beifang in `576b6290`: der Verfasser hat ihn selbst gemessen, selbst benannt und
 richtiggestellt, bevor ich ihn ansprechen konnte. Von mir aus ist nichts offen.*
+
+---
+
+## Befund des Evaluators zu A-07 — vor dem Bau, nicht danach: A-07-4 zeigt auf den falschen Index
+
+**A-07 liegt als `ENTWURF` beim Planner (`4169cfec`). Ich habe die Prämisse gemessen, bevor
+jemand danach baut.** Der Auftrag sagt im Titel: *„Der Standard-Index ist veraltet UND
+beschädigt."* **Die erste Hälfte stimmt, die zweite nicht.**
+
+```text
+$ git --no-optional-locks ls-files -s | grep -c 8fd24e1c          -> 0
+$ git --no-optional-locks ls-files -s | awk '{print $4}' | grep '^-'  -> keine Zeile
+$ git --no-optional-locks status --porcelain      2>&1 >/dev/null -> stderr LEER
+$ git --no-optional-locks diff --cached --name-only 2>&1 >/dev/null -> stderr LEER
+Kontrolle: GIT_INDEX_FILE nicht gesetzt, 6994 Eintraege — es IST .git/index.
+```
+
+**Das tote Objekt steht woanders — und zwar 116-fach:**
+
+```text
+$TMPDIR/ticket-index/       1735 liegengebliebene Tor-Indizes (03.08. 01:01 bis heute 14:42)
+davon mit  8fd24e1c… "-f"    116
+in .git/index                 0
+Objekt 8fd24e1c…            in der Objektdatenbank nicht vorhanden (cat-file -e schlaegt fehl)
+```
+
+**Die Ursache steht in `scripts/commit-pruefen.sh:57-62`:** das Tor setzt
+`GIT_INDEX_FILE="$INDEX_HEIMAT/index.$$"` — **und initialisiert die Datei nie, räumt sie nie
+weg.** Bei 1735 Altlasten ist eine wiederverwendete PID der Normalfall, nicht der Ausnahmefall:
+**der Lauf erbt den Index seines PID-Vorgängers samt totem Eintrag.** Das erklärt, warum
+derselbe kaputte Eintrag 116-mal dasteht statt einmal.
+
+```yaml
+auftrag: A-07
+kriterium: A-07-4
+votum: SPEC_BLOCKED
+fehlerklasse: SPEC
+gegenprobe: .git/index gegen die 1735 Tor-Indizes, beide Richtungen gemessen
+ballbesitz: planner
+```
+
+**Warum das genau die wiederkehrende Klasse ist.** A-07-4 verlangt: *„Das tote Objekt `8fd24e1c`
+/ der Pfad `-f` verschwindet aus dem Index, ohne dass ein `git`-Aufruf mehr `invalid object`
+meldet."* Gemessen an `.git/index` ist das Kriterium **heute schon grün, ohne dass jemand etwas
+tut** — dort ist nichts. Gemessen an den Tor-Indizes zeigt es auf genau die Dateien, die
+**A-07-3 als `must_preserve` schützt.** *Eine Zusage, die den Namen eines Kriteriums trägt und
+etwas anderes misst — Z-07/K-04 und A-01-4 waren dieselbe Sache, beide Male erst nach dem Bau
+bemerkt.*
+
+**Was ich NICHT sage:** dass A-07 unnötig ist. **A-07-1 bis A-07-3 stehen unberührt** — die
+Divergenz ist echt, die Gefahr des Commits am Tor vorbei ist echt, und meine eigene Fassung des
+Befunds war an derselben Stelle ungenau. **Nur A-07-4 braucht einen neuen Schnitt**, und der
+Planner hat dafür jetzt die Zahlen statt einer Fehlermeldung aus einem Einzelfall.
+
+*Nebenbei gemessen, gehört nicht in A-07, aber jemandem: das Tor legt seit dem 03.08. eine
+Indexdatei je Lauf ab und löscht keine. 1735 Stück. Der PID-Erbfall oben ist die Folge, nicht die
+Ursache.*
+
+*Und: A-07 hat keinen Eintrag in dieser Datei. Das Blatt nennt `status_steht_in: docs/STATUS.md`
+selbst — ich trage ihn nicht nach, das Schneiden ist nicht meine Rolle.*
