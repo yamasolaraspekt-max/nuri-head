@@ -39,7 +39,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, readFileSync, existsSync, readdirSync, utimesSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, utimesSync } from 'node:fs';
 import { execFileSync, spawn } from 'node:child_process';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -608,4 +608,43 @@ test('A-02-4 ROT: ein junger Lock ohne Halter wird NICHT geraeumt — er meldet 
   assert.equal(existsSync(join(verz, '.git', 'index.lock')), true, 'ein FRISCHER Lock wurde weggezogen');
   assert.equal(r.code, 3, `erwartet 3 (Umgebung), kam ${r.code}`);
   assert.match(r.text, /ENV_BLOCKED: lock zu jung/, 'der Grund fehlt oder ist ein anderer');
+});
+
+test('A-02 Kante 2: ein HAENGENDES lsof laesst das Tor NICHT haengen — Zeitgrenze, dann Halter unbekannt', () => {
+  // **Der Nachbesserungs-Befund (Evaluator, 05.08.):** die Zeitgrenze stand zweimal im Kommentar
+  // und nullmal im Code. Ein lsof, das haengt (toter Mount, Netzlaufwerk), liess das ganze Tor
+  // stumm haengen — und ein haengendes Tor treibt genau in das Handaufraeumen zurueck, gegen das
+  // A-02 gebaut wurde. *Kante 2 des Blattes: laeuft die Grenze ab, gilt "Halter unbekannt"
+  // = der Lock LIEGT + ENV_BLOCKED — derselbe Pfad wie ohne lsof, keine eigene Semantik.*
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, 'x'.repeat(900), 400); // Inhalt + alt: MIT Auskunft waere das beiseite
+
+  // Ein Fake-lsof im PATH, das nur schlaeft. `exec`, damit der Waechter-KILL die richtige PID
+  // trifft und kein Waisenprozess uebrig bleibt.
+  const fake = join(verz, 'fake-bin');
+  mkdirSync(fake);
+  writeFileSync(join(fake, 'lsof'), '#!/bin/sh\nexec sleep 30\n', { mode: 0o755 });
+
+  const start = Date.now();
+  let r;
+  try {
+    const aus = execFileSync('bash', ['scripts/commit-pruefen.sh', 'Probe: haengendes lsof', 'anfang.txt'],
+      { cwd: verz, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
+        env: { ...process.env, PATH: `${fake}:${process.env.PATH}` },
+        timeout: 20_000, killSignal: 'SIGKILL' });          // Notbremse des PRUEFSTANDS, nicht der Zusage
+    r = { code: 0, text: aus };
+  } catch (e) {
+    r = { code: e.status ?? -1, text: `${e.stdout ?? ''}${e.stderr ?? ''}` };
+  }
+  const dauer = Date.now() - start;
+
+  // Binnen der Grenze zurueck: 5 s Grenze + Luft fuer einen belasteten Pruefstand. Ohne Grenze
+  // laeuft das Tor in die 20-s-Notbremse, der Exitcode ist dann -1 statt 3 — die Zusage faellt.
+  assert.ok(dauer < 15_000, `das Tor brauchte ${dauer} ms — die Zeitgrenze wirkt nicht`);
+  assert.equal(existsSync(p), true, 'bei unbeantworteter Halterfrage wurde der Lock trotzdem weggezogen');
+  assert.equal(r.code, 3, `erwartet Exitcode 3 (ENV_BLOCKED), kam ${r.code}`);
+  const zeile = r.text.split('\n').find((z) => z.startsWith('ENV_BLOCKED:'));
+  assert.ok(zeile, 'keine Zeile beginnt mit ENV_BLOCKED:');
+  assert.match(zeile, /ENV_BLOCKED: .+ — .+ \(Halter: unbekannt\)/, `Form verletzt: ${zeile}`);
 });

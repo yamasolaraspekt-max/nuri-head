@@ -112,10 +112,31 @@ for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/nul
   # `lsof`, Zeitgrenze abgelaufen) -> es wird NICHT geraten, sondern konservativ zurueckgefallen.
   HALTER=unbekannt
   if command -v lsof >/dev/null 2>&1; then
-    # Zeitgrenze: eine Auskunft, die haengt, ist keine. Laeuft sie ab, bleibt es bei "unbekannt"
-    # (Kante 2) — ohne kuenstliche Verzoegerung, die selbst ein Messgeraet waere.
-    OFFEN=$( { lsof -t -- "$lock" 2>/dev/null || true; } | head -5 | tr '\n' ' ' )
-    if [ -n "$OFFEN" ]; then HALTER="$OFFEN"; else HALTER=0; fi
+    # Zeitgrenze — jetzt ECHT gebaut (A-02-Nachbesserung, Evaluator-Befund 05.08.): die alte
+    # Fassung BEHAUPTETE die Grenze nur im Kommentar; ein haengendes lsof (toter Mount,
+    # Netzlaufwerk) liess das ganze Tor stumm haengen. macOS hat kein GNU-`timeout`, deshalb
+    # portabel: lsof laeuft im Hintergrund (Ausgabe in eine Datei, NICHT in die Pipe — ein
+    # Waisenprozess darf dem Aufrufer nicht die Ausgabekanaele offenhalten), ein Waechter
+    # setzt nach Ablauf KILL, `wait` liefert den Ausgang. Endet lsof durch Signal (>=128),
+    # gilt Kante 2: "Halter unbekannt" — derselbe konservative Pfad wie ohne lsof,
+    # KEINE eigene Semantik.
+    LSOF_GRENZE=5
+    LSOF_AUS="${TMPDIR:-/tmp}/tor-lsof-auskunft.$$"
+    lsof -t -- "$lock" >"$LSOF_AUS" 2>/dev/null &
+    LSOF_PID=$!
+    ( sleep "$LSOF_GRENZE"; kill -9 "$LSOF_PID" 2>/dev/null ) >/dev/null 2>&1 &
+    WAECHTER_PID=$!
+    wait "$LSOF_PID" 2>/dev/null
+    LSOF_ENDE=$?
+    kill -9 "$WAECHTER_PID" 2>/dev/null
+    wait "$WAECHTER_PID" 2>/dev/null
+    if [ "$LSOF_ENDE" -ge 128 ]; then
+      echo "LSOF-ZEITGRENZE  ${LSOF_GRENZE}s abgelaufen fuer $lock — eine Auskunft, die haengt, ist keine. Halter bleibt unbekannt" >&2
+    else
+      OFFEN=$(head -5 "$LSOF_AUS" 2>/dev/null | tr '\n' ' ')
+      if [ -n "$OFFEN" ]; then HALTER="$OFFEN"; else HALTER=0; fi
+    fi
+    rm -f "$LSOF_AUS" 2>/dev/null
   fi
 
   if [ "$HALTER" != "unbekannt" ] && [ "$HALTER" != "0" ]; then
