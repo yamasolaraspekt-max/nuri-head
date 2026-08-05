@@ -123,3 +123,33 @@ geloescht: "Transaktion: 7 hausplaner_documents + 2 lead_alternative_adds, exakt
 verifiziert: "0 Reste · Bestand unberuehrt: Objekte 139-143 5/5 vorhanden, Objekt 203 vorhanden"
 ticket_testing: "ausdruecklich NICHT angefasst (904/905 sind dort unkritisch, Evaluator-Einordnung)"
 ```
+
+## A-01 + A-03 · 05.08.2026
+
+```yaml
+auftrag: A-01 (Dach aus Kontur - lesbare Absage)
+abnahme_commit: 94b58aaf   # evaluator 2. Runde, fehlerklasse KEINE, Sichtbarkeit am Browser gemessen
+release_commit: 2b1ef24a   # Arbeitszweig, Zielintegration per Merge
+votum: RELEASE_FREI        # Transport-Umfang (fork + backup-private); main = Sammel-Release
+ci: pass                   # lokales Tor am Abnahme-Commit, getrennter Checkout:
+                           # tsc clean · Insel 1689/1689 · Auflagen-Revert ba4dc4b0 auf der Linie belegt
+artefakte_reproduzierbar: true   # Bundle am Abnahme-Commit BYTE-GLEICH neu gebaut (98d27e80…)
+migration: nicht_anwendbar
+rueckweg: pass             # Insel-Commits, revertierbar, kein Schema
+befunde: []
+---
+auftrag: A-03 (Browser-Buehne nur auf ticket_testing)
+abnahme_commit: 26e378a5   # evaluator (frische Instanz), fehlerklasse SPEC als verbuchter Beitrag
+release_commit: 2b1ef24a
+votum: RELEASE_FREI        # Transport-Umfang
+ci: pass                   # bash -n OK · browserBuehne 6/6 — der eine Erstlauf-Fail war MEINE
+                           # Umgebung (vendor fehlte im Checkout), nach Kopie 6/6; klasse UMGEBUNG
+artefakte_reproduzierbar: nicht_anwendbar
+migration: nicht_anwendbar
+rueckweg: pass
+befunde: []
+ausgefuehrte_vertretung:
+  - "Zielintegration work/a01-generator (94b58aaf, enthaelt 26e378a5 + Auflagen-Revert) -> Arbeitszweig"
+  - "Push fork:           5a7a341a -> 2b1ef24a (FF, exit 0)"
+  - "Push backup-private: 5a7a341a -> 2b1ef24a (FF, exit 0)"
+```
