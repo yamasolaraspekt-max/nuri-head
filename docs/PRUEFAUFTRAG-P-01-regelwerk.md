@@ -2,7 +2,7 @@
 
 ```yaml
 pruefauftrag: P-01
-gegenstand: "ARBEITSREGELN Fassung 1.1 und 1.2.1 — Inhalt pruefen, freigeben, und die offene Gabelung zu 1.3 beurteilen"
+gegenstand: "ARBEITSREGELN Fassung 1.1 und 1.2.1 — Inhalt pruefen, freigeben, Gabelung zu 1.3 beurteilen. Kriterien: Widerspruchsfreiheit · Pruefbarkeit · Herkunft · Machtpruefung · Gabelung · KAUSALITAET · PLAUSIBILITAET · KONSISTENZ (die letzten drei auf Yamas Weisung 05.08.)"
 vorgelegt_von: planner
 ballbesitz: plan-pruefer
 grundlage: "Yamas Weisung 05.08.: 'lass doch von plan pruefer die fassung pruefen und freigeben, dann wird das verbindlich'"
@@ -74,6 +74,59 @@ dort 1.3       592 Zeilen   §5: 15 Punkte   Statustraeger: docs/AKTUELLER_AUFTR
 **Deine Aufgabe hier ist ein Votum mit Messung, keine Ausführung.** *Fällt es auf 1.3, ist der
 Statusträger ein anderer — das ändert die tägliche Arbeit aller Rollen mitten in vier laufenden
 Aufträgen und braucht einen Übergangsplan. Den schneide ich, du entscheidest ihn nicht mit.*
+
+## Drei zusätzliche Kriterien (Yama, 05.08.) — und wo ich selbst Zweifel habe
+
+**Yama verlangt: Kausalität, Plausibilität, Konsistenz.** Sie sind schärfer als meine fünf Punkte,
+und ich nenne zu jedem die Stelle, an der ich meine **eigene** Regel für gefährdet halte. *Nicht um
+sie zu retten — um dir die Suche zu ersparen und dir zu zeigen, dass ich sie kenne.*
+
+### P-01-6 — KAUSALITÄT
+
+**Nicht: „gab es den Vorfall?" (das ist P-01-3), sondern: HÄTTE DIE REGEL IHN VERHINDERT?**
+Je Regel eine Antwort, und die Antwort darf `NEIN` sein.
+
+> **Mein Verdacht gegen mich: §12.5.** Sie hält fest, was der Evaluator bei A-03 **ohnehin schon
+> getan hat**, bevor es die Regel gab. Sie hat also nichts verhindert — sie beschreibt.
+> *Beschreibende Regeln sind nicht wertlos, aber sie gehören nicht in eine Tabelle, die
+> „erzwungen durch" überschrieben ist. Prüfe, ob ich Beschreibung als Ursache verkauft habe.*
+
+### P-01-7 — PLAUSIBILITÄT
+
+**Ist die Regel im Alltag lebbar, oder wird sie umgangen?** *A-02 hat gezeigt, dass eine unlebbare
+Regel nicht befolgt, sondern umgangen wird — und der Umweg gefährlicher ist als der Fall, gegen den
+die Regel gebaut wurde.*
+
+> **Mein Verdacht gegen mich: der §5-Punkt „vorhanden UND in Gebrauch".**
+> Für ein **neues** Werkzeug ist er unerfüllbar — was neu ist, ist per Definition noch nicht in
+> Gebrauch. Nach dem Wortlaut könnte kein Auftrag je ein neues Werkzeug vorschreiben.
+> **Ich halte das für einen echten Mangel, nicht für eine Spitzfindigkeit.** *Wenn du ihn
+> bestätigst, gehört ein Halbsatz hinein: „in Gebrauch" gilt für **vorhandene** Formen; ein neu
+> gebautes Werkzeug muss stattdessen einen benannten Erstnutzer haben.*
+>
+> Zweiter Verdacht: **§12.4 „alle Kriterien erneut"** — plausibel, solange Kriterien Befehle sind.
+> Sobald eines eine Browserabnahme ist, kostet jede Nachbesserungsrunde eine volle Browserrunde.
+> Der Absatz nimmt das aus, aber prüfe, ob die Ausnahme scharf genug formuliert ist.
+
+### P-01-8 — KONSISTENZ
+
+**Widerspruchsfreiheit (P-01-1) plus Begriffstreue:** heißt dieselbe Sache überall gleich, und wird
+derselbe Begriff nie für zwei Dinge benutzt?
+
+> **Mein Verdacht gegen mich: `SPEC_BLOCKED` trägt jetzt zwei Bedeutungen.**
+> §3 definiert ihn als *„Auftrag ist widersprüchlich, unvollständig oder nicht machbar"* — das ist
+> ein Auftrag **vor** dem Bau. §12.1 schickt jetzt auch einen **gebauten** Auftrag dorthin, dessen
+> Spezifikation sich im Nachhinein als falsch erwies. **Das sind zwei verschiedene Lagen im selben
+> Zustand.**
+>
+> *Ein Zustand, der „noch nicht baubar" und „gebaut, aber falsch verlangt" zugleich bedeutet, sagt
+> beim Lesen nichts mehr. Möglicherweise braucht es einen eigenen Zustand — oder §3 muss die zweite
+> Bedeutung ausdrücklich aufnehmen. Das ist deine Entscheidung, nicht meine Vorwegnahme.*
+
+**Zusätzlich zur Konsistenz nach außen:** stimmt das Regelwerk mit dem überein, was tatsächlich
+geschieht? *`docs/STATUS.md` ist in §16 **nicht benannt**, wird aber von allen Rollen als
+Statuswahrheit benutzt. Entweder benennt §16 sie, oder wir benutzen etwas, das die Regeln nicht
+kennen. Diese Frage hängt an der Gabelung (P-01-5).*
 
 ## Dein Votum
 

@@ -88,8 +88,13 @@ das verbindlich."* **Damit ist nicht meine Niederschrift der Akt, sondern seine 
 ```text
 GEGENSTAND    1.1 (vier Regeln) und 1.2.1 (fuenf Abschnitte §12.1-12.5)
 NICHT DABEI   1.2 - Yamas eigene Weisung, von ihm committet, steht nicht zur Disposition
-FUENF PUNKTE  Widerspruchsfreiheit · Pruefbarkeit · Herkunft (alle neun, nicht Stichprobe) ·
-              MACHTPRUEFUNG gegen mich selbst · die Gabelung 1.2.1 gegen 1.3
+ACHT PUNKTE   Widerspruchsfreiheit · Pruefbarkeit · Herkunft (alle neun, nicht Stichprobe) ·
+              MACHTPRUEFUNG gegen mich selbst · Gabelung 1.2.1 gegen 1.3 ·
+              KAUSALITAET · PLAUSIBILITAET · KONSISTENZ  (Yama, 05.08.)
+MEINE ZWEIFEL zu jedem der drei neuen Punkte habe ich SELBST benannt, statt sie ihn
+              suchen zu lassen: §12.5 beschreibt statt zu verhindern (Kausalitaet) ·
+              "in Gebrauch" ist fuer NEUE Werkzeuge unerfuellbar (Plausibilitaet) ·
+              SPEC_BLOCKED traegt jetzt ZWEI Bedeutungen (Konsistenz)
 Blatt         docs/PRUEFAUFTRAG-P-01-regelwerk.md
 ```
 
