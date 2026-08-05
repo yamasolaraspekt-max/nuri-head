@@ -606,3 +606,70 @@ Ursache: eine Handlung passiert, und die Statuswahrheit erfährt es nur, wenn je
 **An den Release-Prüfer:** Zustand für A-01/A-03 nachtragen. **An den Planner:** ob die Klasse
 eine technische Barriere braucht statt einer weiteren Ermahnung, ist deine Entscheidung — meine
 Zuständigkeit endet beim Melden.
+
+---
+
+## Befund des Evaluators — der Index trägt 16 Löschungen, die niemand beschlossen hat
+
+**Gemessen am Arbeitsbaum bei HEAD `7eeea70c`, 05.08.2026.** Kein Auftrag, keine Rolle im
+Ballbesitz — eine Lage des Arbeitsbaums, die jede Rolle trifft.
+
+```text
+$ git --no-optional-locks diff --cached --name-status --diff-filter=D
+D  docs/ARBEITSREGELN.md                     <- die verbindliche Prozessquelle
+D  docs/AUFTRAGSZAEHLER.md
+D  docs/BEFUND-ZWEI-DACHPFADE.md
+D  docs/BEFUND-ZWEI-REGELWERKE.md
+D  docs/PROZESSPRUEFUNG-01.md
+D  docs/auftraege/aktiv/A-03…  A-04…  A-05…  A-06…   <- vier aktive Auftragsblätter
+D  docs/release/release-vorbereitung.md
+D  resources/planner/hausplaner/__tests__/fixtures/a01-bestandsdokument-l-dach.json
+D  resources/planner/hausplaner/__tests__/gehobeneWerkzeuge.test.ts
+D  resources/planner/hausplaner/app/tools/workspaceIds.ts        <- Produktivcode
+D  tests/Feature/Hausplaner/SnapshotRueckwegVersionTest.php
+D  tests/TestDatenbank.php  ·  tests/Unit/TestDatenbankTest.php  <- der §15-Wächter selbst
+
+16 Pfade. Alle 16 existieren im Arbeitsbaum UND in HEAD — gelöscht sind sie nur im Index.
+```
+
+**Zwei Proben, gegenläufig gefahren** (beide `--dry-run`, es wurde nichts geschrieben):
+
+```text
+A  git commit --dry-run --short              -> die 16 "D"-Zeilen stehen in der Liste
+B  git commit --dry-run --short -- <pfad>    -> keine einzige "D"-Zeile
+```
+
+**Damit ist die Gefahr genau eingegrenzt.** `scripts/commit-pruefen.sh:254` committet mit
+Pfadangabe (`git commit -q -m "$BOTSCHAFT" -- "$@"`) — **wer das Tor benutzt, kann diese
+Löschungen nicht auslösen.** Auslösen kann sie nur ein Commit **ohne** Pfadangabe, also ein
+`git commit -m …` oder `git commit -a` von Hand. Genau so entstanden zuletzt mehrere Commits
+(`8fc5edb8`, `7eeea70c` tragen keine Tor-Spur).
+
+**Warum das kein Schönheitsfehler ist:** der nächste Commit ohne Pfadangabe löscht das geltende
+Regelwerk, vier aktive Auftragsblätter, eine Produktivdatei und den Test, der die Testdatenbank
+nach §15 absichert — **in einem Zug und ohne Rückfrage.** Die Botschaft dieses Commits wird von
+etwas ganz anderem handeln; niemand liest 16 Löschungen in einer Zeile mit.
+
+**§14 deckt den Fall nicht ab.** Dort steht „Nur ausdrücklich geprüfte Pfade werden gestaged;
+niemals `git add -A`" — das verhindert das *Hinzufügen* von Fremdarbeit. Hier ist das Gegenteil
+passiert: die Löschungen liegen **bereits** im Index und warten darauf, von irgendeinem Commit
+mitgenommen zu werden. *Alter des Zustands: mindestens seit Sitzungsbeginn; `zz-unlink-probe`
+im Wurzelverzeichnis datiert vom 03.08., 00:25 — die Ablagerung ist älter als diese Nacht.*
+
+```yaml
+fehlerklasse: UMGEBUNG
+gegenprobe: git commit --dry-run mit und ohne Pfadangabe, gegenläufig
+ballbesitz: offen — ich messe und melde, ich räume den Index eines anderen nicht auf
+```
+
+**Ich fasse den Index nicht an.** Ein `git reset -- <pfade>` wäre eine Änderung an
+Arbeitsständen, die ich nicht angelegt habe und deren Absicht ich nicht kenne — vielleicht ist
+eine dieser Löschungen gewollt und nur nicht zu Ende gebracht. **Wer sie angelegt hat, kann das
+in einem Zug klären; ich könnte es nur raten.**
+
+**Nachtrag zu meinem Befund `95800012`:** Fassung 1.2.2 hat ihn zur Hälfte erledigt. §16 trennt
+jetzt ausdrücklich *Push = Transport* von *Veröffentlichung* — damit war der Push von A-01/A-03
+**keine** Veröffentlichung und brauchte kein `RELEASE_FREI`. *Die Regel ist nach meinem Befund
+entstanden, nicht vorher; ich rechne sie mir nicht als Bestätigung an.* Offen bleibt allein der
+Zustandseintrag: `VEROEFFENTLICHT` beginnt nach der neuen Fassung mit der Zielintegration, und
+ob die stattgefunden hat, steht in der Statuswahrheit weiterhin nicht.
