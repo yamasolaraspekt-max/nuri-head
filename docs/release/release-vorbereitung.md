@@ -107,3 +107,19 @@ offen:
      ruhig ist (76 unverbuchte Eintraege, ARBEITSREGELN.md im Wegwerf-Index-Zustand)"
   - "zwei Statustraeger (STATUS.md / AKTUELLER_AUFTRAG.yaml) — Zusammenfuehrung = Planner"
 ```
+
+## DB-Bereinigung in Yamas Auftrag · 05.08.2026 (mündliche Freigabe: „die Sache mit der DB übernimmst du")
+
+```yaml
+anlass: "Evaluator-Meldung in STATUS.md (13c65f6f): L-01-Probedaten vom 03.08. in der ARBEITS-DB ticket"
+gemessen_vor_loeschung:
+  - "hausplaner_documents 20-24 (alternative_id 139-143, 03.08. 23:11-23:26) — Probe-Zeichnungen auf ECHTEN Objekten"
+  - "ZUSAETZLICH GEFUNDEN: hausplaner_documents 18,19 auf den Marken-Objekten selbst"
+  - "lead_alternative_adds 990002, 990004 (lead 990001, 03.08. 14:1x, leere Namen) — die '2 von 3 Marken'"
+  - "lead 990001: existiert nicht mehr (war die dritte Marke)"
+rueckweg: "_to_delete/db-backup-probedaten-2026-08-05/zeilen.json · 27 201 B · 7 Dokumente + 2 Adds
+           vollstaendig (inkl. scene_json) — NUR LOKAL, nicht in Git (Datenschutz)"
+geloescht: "Transaktion: 7 hausplaner_documents + 2 lead_alternative_adds, exakt per ID"
+verifiziert: "0 Reste · Bestand unberuehrt: Objekte 139-143 5/5 vorhanden, Objekt 203 vorhanden"
+ticket_testing: "ausdruecklich NICHT angefasst (904/905 sind dort unkritisch, Evaluator-Einordnung)"
+```
