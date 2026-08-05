@@ -3,13 +3,8 @@
 ```yaml
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
-zustand: ABGENOMMEN   # angeglichen an STATUS.md (§16) durch den Evaluator, 05.08.
-ballbesitz: release-pruefer
 basis_sha: 93a9691f
-pruef_sha: "ca5f80e4"
-release_sha: ""
-letztes_votum: "plan-pruefer 05.08. 00:1x (2. Runde): BEREIT. Beide Restpunkte eingetragen und GEGENGEMESSEN: A-02-1 als must_preserve-Kontrolle (Suite 23/0 aus Runde 1) · Exitcode-Staffel selbst nachgezaehlt (exit 0 1x / exit 1 5x / exit 2 1x an Z.48 — 3 IST FREI, die Wahl fuegt sich ein) · siebte Mutation scharf (Exitcode 3->1 bei unveraenderter stderr-Zeile MUSS fallen). Alle §5-Punkte belegt."
-naechster_schritt: "WARTESCHLANGE hinter A-01 (§3: nur ein IN_ARBEIT; A-01 behaelt den Vortritt). Generator zieht A-02 erst nach A-01-Abnahme: Readiness §7, dann Bau"
+status_steht_in: docs/STATUS.md   # §16: EINE Statuswahrheit. Hier steht keine zweite.
 ```
 
 

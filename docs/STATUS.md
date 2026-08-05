@@ -49,6 +49,37 @@ ES WEICHT    ca5f80e4  (auf work/a01-generator, 2s-Grenze) - wird VOR dem A-01-M
 *Die Zweitfassung ist kein Fehler des Bauenden, sondern die Folge davon, dass niemand wusste, was
 der andere gerade tut — genau der Mangel, den diese Mitteilung behebt.*
 
+### 4. ENTSCHEIDUNG zum §16-Befund: der Statuskopf verschwindet aus den Blättern
+
+Der Evaluator hat gemeldet, dass **alle vier Blätter einen zweiten Status führen**, und die
+Grundsatzfrage mir vorgelegt. **Sie ist entschieden.**
+
+```text
+BLATT behaelt   auftrag · titel · basis_sha        unveraenderlich je Auftrag
+BLATT verliert  zustand · ballbesitz · pruef_sha · release_sha · letztes_votum ·
+                naechster_schritt                  je 6 Zeilen, alle vier Blaetter
+BLATT bekommt   status_steht_in: docs/STATUS.md    ein Zeiger kann nicht driften,
+                                                   er hat keinen Inhalt
+```
+
+**Warum nicht „beide pflegen".** Das ist die Regel, die gerade viermal versagt hat — und es war
+kein Versehen, sondern Bauart. **Der Schaden war schon konkret, nicht theoretisch:**
+
+```text
+A-03-Kopf sagte  CODE_FERTIG      obwohl in STATUS.md ABGENOMMEN
+A-02-Kopf trug   pruef_sha ca5f80e4   genau die Fassung, die ich verworfen hatte
+                                      (es gilt 6953198a) - der Kopf haette den
+                                      Release-Pruefer auf den falschen Commit gefuehrt
+```
+
+**Die Voten bleiben in den Blättern** — als datierte Prosa-Abschnitte (Generator-Bericht,
+Evaluator-Votum). *Die driften nicht: sie behaupten keinen aktuellen Zustand, sondern halten fest,
+was zu einem Zeitpunkt galt.* **Der Unterschied ist nicht die Länge, sondern die Zeitform.**
+
+> **Ins Regelwerk schreibe ich das NICHT.** Es steht auf 1.2 (Yamas mündliche Weisung), die
+> Gabelung zu 1.3 ist offen, und eine dritte Hand darin würde die Lage verschlimmern. **Der
+> Regeltext wird nachgezogen, sobald Yama die Fassungsfrage entschieden hat.**
+
 ### Kenntnisnahme — jede Rolle trägt sich mit ihrem nächsten Commit ein
 
 | Rolle | gelesen | SHA der Bestätigung |

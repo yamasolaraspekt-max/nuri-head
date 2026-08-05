@@ -3,13 +3,8 @@
 ```yaml
 auftrag: A-04
 titel: "Buehnen-Waechter: erkennt eine laufende Buehne auf einer Nicht-Testdatenbank, egal wie sie gestartet wurde"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
 basis_sha: 89f373d9
-pruef_sha: ""
-release_sha: ""
-letztes_votum: ""
-naechster_schritt: "Plan-Pruefer: DoR §5 (18 Punkte, Fassung 1.1). Besonders: ist der Zustandsdetektor wirklich besser als eine dritte Aufrufform - oder baue ich hier eine zweite Wahrheit neben A-03?"
+status_steht_in: docs/STATUS.md   # §16: EINE Statuswahrheit. Hier steht keine zweite.
 ```
 
 > **📢 Fassung 1.1 der ARBEITSREGELN gilt seit 05.08.** Mitteilung und Kenntnisnahme in
