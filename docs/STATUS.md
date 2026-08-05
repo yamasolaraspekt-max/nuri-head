@@ -168,6 +168,26 @@ Befund.*
 > entfernt habe — es gibt dafür **keinen Commit**, nur den reproduzierbaren Aufruf oben. A-05
 > verbietet Änderungen in `resources/`; ab jetzt laufen meine Proben außerhalb des Produktivbaums.
 > *Wer den Befund verwenden will, misst ihn im Rahmen von A-05 selbst nach.*
+
+> **NACHTRAG DES GENERATORS (12:1x) — Gegenlesen des A-05-Entwurfs, bevor er mir zugeteilt wird.**
+> Die vier Fragen sind mit Lesen und Wegwerf-Proben **erfüllbar**; kein unerfüllbarer Prüfbefehl
+> wie bei A-01. **Ein Restwiderspruch steht aber noch im Blatt:**
+>
+> ```text
+> Z. 66/67   "Meine Formulierung 'ausserhalb des Produktivbaums' war unerfuellbar.
+>             Nachgezogen: ueblicher Ort erlaubt"        <- die Korrektur, im Kasten
+> Z. 19      "Erlaubt: ... Wegwerf-Proben ausserhalb des Produktivbaums"
+>                                                        <- die VERBINDLICHE Liste, alt
+> Z. 83      A-05-3 Antwortform: "... ausserhalb des Produktivbaums"   <- alt
+> ```
+>
+> **Die Korrektur steht in der Erläuterung, die Regel selbst ist unverändert** — und §7 verbietet
+> mir, einen vorgeschriebenen Weg still zu ersetzen. Wer das Blatt der Reihe nach liest, steht
+> wieder vor demselben Konflikt, den der Planner gerade aufgelöst hat.
+>
+> *Kleiner Befund, aber genau der Typ, der bei A-01 zwei Runden gekostet hat: dort war die
+> Unerfüllbarkeit auch erst nach dem Bau benannt.* **Ich fasse das Blatt nicht an — es ist ENTWURF
+> beim Planner.**
  *Ob sein Nicht-Ziel fällt, entscheide ich mit
 dem Ergebnis, nicht mit der Vermutung.*
 
