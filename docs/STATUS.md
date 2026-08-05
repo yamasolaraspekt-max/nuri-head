@@ -286,7 +286,7 @@ darübersteht. **Hiermit richtiggestellt: der Befund ist seiner.**
 | Plan-Prüfer | ✅ 05.08. 09:1x — v1.1 im Wortlaut gelesen (450b5bee-Diff), die 18 §5-Punkte sind ab sofort mein Maßstab; die A-02-Entscheidung (6953198a gilt) deckt sich mit meinem Befund | SHA dieses Commits (Sicherung nach Yamas Freigabe, 05.08.) |
 | Generator | ✅ 05.08. — v1.1 gelesen. **Drei der vier neuen Pflichten stammen aus meinen Fehlern**: `IN_ARBEIT` vor der ersten Aenderung (zweimal versaeumt, beide Male nachgetragen) · „kein Kommentar behauptet Verhalten, das der Code nicht hat" (meine A-02-Zeitgrenze stand nur im Kommentar) · „Werkzeuge VORHANDEN **und in Gebrauch**". Die A-02-Entscheidung nehme ich an: `ca5f80e4` weicht, ich nehme sie auf `work/a01-generator` zurueck. **§7 ist der Grund, nicht die Kommunikation** — A-02-Code hatte auf dem A-01-Zweig nichts zu suchen, unabhaengig davon, wer was wusste | SHA dieses Commits |
 | Generator (1.2.2) | ✅ 05.08. 13:3x — **1.2.1 und 1.2.2 im Diff-Wortlaut gelesen** (`450b5bee..8fc5edb8`, 154 neue Zeilen). Was mich trifft, in der Reihenfolge der Wirkung: **§12.2** „Reparatur auf der Linie des Baus" ist wörtlich mein A-02-Fehler — `ca5f80e4` lag auf dem A-01-Zweig, und genau die zwei Fassungen wären beim Merge kollidiert. **§12.3 Zwei-Richtungs-Probe**: bei A-01-4 habe ich sie gefahren (erste Mutationsprobe **3 BLIND** = der Rot-Beleg, dass die alte Zusage nichts misst; zweite **5/6 GEFANGEN**), aber **nicht als solche benannt** — ab jetzt steht sie je Befund ausdrücklich im Bericht, nicht nur zufällig darin. **§12.1**: `SPEC` gehört dem Planner. Bei A-01 habe ich den unerfüllbaren Prüfbefehl mitgetragen, statt ihn als fremden Anteil zu melden — das war zu viel Demut, nicht zu wenig. **§12.4**: Mutationsprobe bei jeder Wieder-Abnahme erneut, auch wenn sie eben grün war. **§16/A3** habe ich an meinen eigenen Commits nachgemessen: `7fdf6e05`/`94b58aaf` tragen nur Produktivcode ohne Zustandswechsel, `90ebba40`/`9e97d274`/`a4de38f2` nur Status und Blatt ohne Produktiv-, Test- oder Regeldatei — **kein Verstoß gegen die neue Trennung** | SHA dieses Commits |
-| Evaluator | ⬜ offen | |
+| Evaluator | ✅ 05.08. 14:0x — **1.2.1 und 1.2.2 im Diff-Wortlaut gelesen** (`7c7d38f6`, `8fc5edb8`). Was meine Rolle ändert: **§12.1** — `SPEC` bekommt `SPEC_BLOCKED` und geht an den Planner, **nicht** `NACHBESSERN`; bei A-01 habe ich den gemischten Befund als ein Rot an den Bauenden gegeben, statt ihn zu teilen und den SPEC-Teil vorzuziehen. **§12.3** — je Befund gehört der **Rot-Beleg** in meinen Bericht; ohne ihn nehme ich eine Reparatur nicht mehr ab. **§12.4** — die Mutationsprobe fahre ich bei jeder Wieder-Abnahme erneut, auch bei eben grünen Kriterien. **§12.5** — ein `SPEC`-Befund blockiert die Abnahme nicht, muss aber ausdrücklich mit Klasse, Schwere und Folgeauftrag in der Abnahme stehen. **§16/A3 an meinen eigenen sieben Commits nachgemessen** (`4f849606`, `89f373d9`, `ee5a07ec`, `5f84a9d6`, `13c65f6f`, `42c0320f`, `95800012`): ausschließlich `docs/STATUS.md` und Auftragsblätter, **keine Produktiv-, Test- oder Regeldatei** — kein Verstoß gegen die neue Trennung | SHA dieses Commits |
 
 > **Warum überhaupt eine Bestätigung.** Auf Yamas Frage *„haben sie alle das gelesen und
 > bestätigt"* lautete die ehrliche Antwort **nein** — gemessen: die drei Auftragsblätter erwähnten
@@ -711,3 +711,31 @@ jetzt ausdrücklich *Push = Transport* von *Veröffentlichung* — damit war der
 entstanden, nicht vorher; ich rechne sie mir nicht als Bestätigung an.* Offen bleibt allein der
 Zustandseintrag: `VEROEFFENTLICHT` beginnt nach der neuen Fassung mit der Zielintegration, und
 ob die stattgefunden hat, steht in der Statuswahrheit weiterhin nicht.
+
+---
+
+## Nachtrag des Evaluators zum eigenen Index-Befund — die Ursache lag im Tor, nicht in einer Hand
+
+**Die Antwort (Abschnitt 11) ist richtig, und ich habe sie nicht geglaubt, sondern nachgemessen.**
+
+```text
+$ GIT_INDEX_FILE=<scratch>/probe.index git read-tree HEAD
+$ GIT_INDEX_FILE=<scratch>/probe.index git diff --cached --diff-filter=D | wc -l
+0                       <- frischer Index aus HEAD: KEINE Loeschung
+$ git --no-optional-locks diff --cached --diff-filter=D | wc -l
+16                      <- der liegengebliebene .git/index: alle 16
+Kontrolle: .git/index mtime vorher und nachher gleich (Aug 5 13:47) - nichts angefasst.
+```
+
+**Ursache belegt an `scripts/commit-pruefen.sh:58-62`:** das Tor setzt `GIT_INDEX_FILE` auf
+`$TMPDIR/ticket-index/index.$$`. Jeder Tor-Commit läuft an `.git/index` **vorbei**; was seither
+neu dazukam, sieht dort für immer aus wie gelöscht. **Kein Mensch hat diese 16 Löschungen
+gestaged** — meine Formulierung „die niemand beschlossen hat" traf zufällig zu, meine Vermutung
+dahinter („vielleicht ist eine gewollt") war falsch. *Richtiggestellt.*
+
+**Was unverändert gilt — und das ist der Teil, der zählt:** ein `git commit` **ohne Pfadangabe**
+benutzt `.git/index` und würde die 16 Löschungen ausführen. Der Phantom-Charakter macht sie nicht
+harmlos, er macht sie nur **unschuldig entstanden**. Die Gefahr ist dieselbe.
+
+*Zum Beifang in `576b6290`: der Verfasser hat ihn selbst gemessen, selbst benannt und
+richtiggestellt, bevor ich ihn ansprechen konnte. Von mir aus ist nichts offen.*
