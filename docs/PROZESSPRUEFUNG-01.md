@@ -65,7 +65,31 @@ den Fehler selbst gemacht hätte — weil sie als einzige die Sache **laufen** l
 
 ---
 
-## Vorschlag an Yama — ein Punkt für die Definition of Ready (§5)
+## ✅ ERLEDIGT — Yama hat beauftragt, die Lücken als Regelwerk zu schreiben (05.08.)
+
+**Aus dem Vorschlag ist Fassung 1.1 geworden.** Nach §1 Rangfolge 1 steht Yamas ausdrückliche
+Anweisung über dem Dokument — damit war die Änderung gedeckt. **Sie steht IM Regelwerk, nicht
+daneben:** ein zweites Regeldokument wäre genau die zweite Wahrheit, die §1 abgeschafft hat.
+
+```text
+§3      IN_ARBEIT wird vor der ersten Scope-Aenderung gesetzt
+§5      Testdaten-Ziel UND Prozessbindung getrennt benennen, mit beweisendem Befehl
+§5      vorgeschriebene Formen muessen vorhanden UND in Gebrauch sein - beides gemessen
+§5      Kriterium oder Nicht-Ziel, kein dritter Zustand
+§7      der Auftrag steht auf IN_ARBEIT · kein Kommentar ueber nicht vorhandenes Verhalten
+```
+
+**§5 ist von 15 auf 18 Punkte gewachsen**, §19 Änderungsverzeichnis führt jede Regel auf den
+Vorfall zurück, der sie erzwungen hat. **Fassung 1.0 bleibt unverändert gültig — 1.1 ergänzt,
+streicht nichts.**
+
+*Aus zwei der vier Regeln ist inzwischen mehr geworden als aus diesem Bericht: die `php -S`-Lücke
+und die widersprüchliche „OHNE ZUSAGE"-Formulierung sind erst NACH diesem Text aufgetreten. Der
+Bericht hat den Anlass geliefert, nicht den vollen Inhalt.*
+
+---
+
+## Der ursprüngliche Vorschlag — zur Nachvollziehbarkeit erhalten
 
 **Ich ändere `ARBEITSREGELN.md` nicht selbst.** Nach §1 steht das Dokument über mir; ein Planner,
 der die Regeln nachschärft, an denen er gemessen wird, ist der Interessenkonflikt, den die
