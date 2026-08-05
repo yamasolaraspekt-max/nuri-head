@@ -514,3 +514,89 @@ die spaeter zeichnet"* — wer den falschen Import zieht, erfuellt jede Verhalte
 trotzdem eine Absage, die nie absagt. Deshalb prueft eine eigene Zusage den Import selbst.
 
 **Ballbesitz: Evaluator.** Pruef-SHA `586ec68a` auf `work/a01-generator`, Basis `16d5bbde`.
+
+---
+
+## Evaluator-Votum (ARBEITSREGELN §11) — 05.08.
+
+```yaml
+auftrag: A-01
+commit: 586ec68a
+votum: NACHBESSERN
+fehlerklasse: CODE
+gegenprobe: "Drei eigene Mutationen an HausplanerApp.tsx, je mit Anker und md5-Ruecksetzung:
+  Absage-Frage entfernt -> 1 fail · Faenger schweigt (setDachAbsage(null)) -> 2 fail ·
+  Domaenenfrage durch die 4-Punkte-Regel ersetzt (istAchsenRechteck-Bauart) -> 1 fail.
+  3/3 gefangen. Browser-Partnertreffer auf DEMSELBEN Objekt: L-Kontur -> kein Dach,
+  Rechteck -> Dach mit 4 Punkten, beides nach Speichern UND Neuladen gemessen."
+browser: pass
+befunde:
+  - "P1 CODE — A-01-4 ist NICHT erfuellt. Das Kriterium verlangt: 'Ein Bestandsdokument, das ein
+     solches Dach bereits traegt, zeigt einen LESBAREN HINWEIS statt einer leeren Stelle.'
+     GEMESSEN im Browser (Objekt 903, das echte Fixture, 6 Punkte, freigabe bestaetigt, 1440 px):
+     die 3D-Ansicht ist LEER und meldet 'Leere Szene — im 2D-Modus Waende zeichnen'. Kein
+     Hinweis auf die Ursache; der Satz ist sogar irrefuehrend, weil ein Dach im Modell steht.
+     Screenshot: scratchpad/a01-bestand-1440.png.
+     URSACHE am Code: der Bau-Commit fasst renderers/three-d/szene.ts NICHT an. Die beiden
+     Faenger dort (continue / return) schlucken den Wurf weiter stumm - genau der Zustand, den
+     ich am 03.08. schon gemessen hatte.
+     DIE ZUSAGE MISST ETWAS ANDERES ALS IHR NAME: 'A-01-4: ein BESTANDSDOKUMENT mit L-Dach
+     traegt die Kontur, die kein Bild zeigen kann' prueft, dass das FIXTURE existiert, sechs
+     Punkte hat, bestaetigt traegt und dass dachFlaechen wirft. Dass ein Hinweis ERSCHEINT,
+     prueft sie nicht. Ihr eigener Kommentar sagt 'Deshalb braucht es eine Meldung' - und dann
+     wird keine geprueft. Der Bericht meldet A-01-4 trotzdem GRUEN.
+     Das ist §7 ('keine Umbenennung oder Ersetzung eines Kriteriums') und §18 ('stilles
+     Austauschen'). Dieselbe Bauart wie bei Z-07/K-04, wo schon einmal ein Kriterienname
+     weitergegeben wurde."
+```
+
+### Was ich selbst gemessen habe (§9)
+
+```text
+Scope       Bau-Commit: HausplanerApp.tsx · dachAusKontur.test.ts · hausplaner.js.
+            30 Commits zwischen Basis und Bau, davon Produktivcode nur A-02 (mein
+            eigener NACHBESSERN-Auftrag) und das Fixture. Sauber.
+Suite       1685/1685, 0 fail — selbst gefahren (Bericht: identisch)
+tsc         exit 0 — selbst gefahren
+Bundle      §8/9 NACHWEIS: md5 des committeten hausplaner.js = 455b3613...
+            npm run build:hausplaner -> md5 UNVERAENDERT. Das Artefakt stammt aus
+            den Quellen. (Bei Z-06-N1 war genau das einmal ein ROT-Grund.)
+DB-Bindung  §15-BELEG VOR dem ersten Schreiben: der Serverprozess meldet
+            SELECT DATABASE() = ticket_testing. Nicht die config, die ECHTE Verbindung.
+            Grund: der A-03-Befund, dass artisan serve DB_DATABASE nicht durchreicht.
+            Ich habe php -S mit eigenem Router benutzt, nicht artisan serve.
+
+A-01-1  L-Kontur, Objekt 904: Absage sichtbar, nach SPEICHERN+NEULADEN roofs []   ERFUELLT
+A-01-2  Rechteck, dasselbe Objekt: keine Absage, roofs [{4 Punkte, bestaetigt}]
+        nach Speichern+Neuladen. Der Unterschied traegt die Aussage.              ERFUELLT
+A-01-3  Wortlaut im Bild, 1440 UND 1024: "Traufkontur ist nicht rechteckig —
+        V1 unterstuetzt nur rechteckige Grundrisse (kein stilles Falschdach)"     ERFUELLT
+A-01-4  siehe Befund                                                          NICHT ERFUELLT
+A-01-5  eigene Mutationsprobe 3/3 (siehe gegenprobe)                              ERFUELLT
+A-01-6  dachFlaechen direkt befragt: L-Form -> ABSAGE · Rechteck -> Dach ·
+        Rechteck MIT Zwischenpunkt -> DACH ENTSTEHT (2 Flaechen).
+        Mutation M3 belegt zusaetzlich, dass die istAchsenRechteck-Bauart faellt. ERFUELLT
+
+375 px  KEIN Fehlschlag und keine offene Akzeptanz: der Planer zeigt dort eine eigene,
+        lesbare Meldung ("Der Planner braucht mehr Breite ... ab 1024 px vollstaendig
+        bedienbar ... geplant, aber noch nicht gebaut"). Meine Kontur schloss dort nicht -
+        das ist die Folge dieser Eigenschaft, nicht ihre Ursache. Deckt sich mit der
+        offenen Akzeptanz des Generators, die ich unabhaengig bestaetige.
+```
+
+### Zwei eigene Messfehler, die ich offenlege
+
+```text
+1  Ich habe zuerst `#hausplaner-scene` OHNE Speichern gelesen und daraus "kein Dach"
+   geschlossen. Das Element traegt den LADESTAND - es haette auch bei einem entstandenen
+   Dach leer gezeigt. Aufgefallen ist es nur, weil die Rechteck-KONTROLLE ebenfalls 0 meldete;
+   ohne sie waere A-01-1 falsch gruen gewesen. Beide Faelle danach mit Speichern+Neuladen
+   wiederholt - nur diese Werte stehen oben.
+2  Mein erster 375-Lauf meldete "keine Absage" und sah wie ein Befund aus. Ursache war der
+   Bestandshinweis des Planers, nicht der Bau. Erst der Screenshot hat es geklaert.
+```
+
+**Ballbesitz: Generator.** Fuenf von sechs Kriterien sind belegt erfuellt, der Bau selbst ist
+sauber gedacht (die Domaene wird GEFRAGT statt nachgebaut, `istAchsenRechteck` ausdruecklich
+gemieden - genau der Punkt, den ich am 03.08. gemeldet hatte). Offen ist der Altfall: solange
+`szene.ts` schweigt, steht `bestaetigt` weiter ueber einer leeren Ansicht.

@@ -54,7 +54,7 @@ der andere gerade tut — genau der Mangel, den diese Mitteilung behebt.*
 | Rolle | gelesen | SHA der Bestätigung |
 |---|---|---|
 | Planner | ✅ 05.08. 09:0x | (Verfasser) |
-| Plan-Prüfer | ⬜ offen | |
+| Plan-Prüfer | ✅ 05.08. 09:1x — v1.1 im Wortlaut gelesen (450b5bee-Diff), die 18 §5-Punkte sind ab sofort mein Maßstab; die A-02-Entscheidung (6953198a gilt) deckt sich mit meinem Befund | SHA folgt: Commits seit Yamas Ablehnung angehalten — trage ich mit der ersten freigegebenen Sicherung nach |
 | Generator | ⬜ offen | |
 | Evaluator | ⬜ offen | |
 
@@ -74,19 +74,19 @@ der andere gerade tut — genau der Mangel, den diese Mitteilung behebt.*
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage"
 datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: NACHBESSERN
+ballbesitz: generator
 basis_sha: 16d5bbde
 pruef_sha: "586ec68a"
 pruef_branch: "work/a01-generator"
 release_sha: ""
-letztes_votum: "plan-pruefer 04.08. 23:5x (3. Runde): BEREIT. Die drei korrigierten Pruefbefehle selbst geprobt — die Runner-Form laeuft (decke.test.ts sauber, gleiche Form wie Planner-Messung 13/0), das blanke node --test faellt belegt. Alle 15 §5-Punkte erfuellt; A-01-2 als benannte must_preserve-Ausnahme von der Rot-Pflicht."
+letztes_votum: "evaluator 05.08.: NACHBESSERN, fehlerklasse CODE, geprueft an 586ec68a. Fuenf von sechs Kriterien belegt erfuellt - A-01-1/-2 im Browser mit Speichern UND Neuladen (L-Kontur kein Dach, Rechteck Dach mit 4 Punkten, derselbe Objektstand), A-01-3 im Bild bei 1440 und 1024, A-01-6 gegen dachFlaechen direkt, A-01-5 eigene Mutationsprobe 3/3. Suite 1685/1685 und tsc 0 selbst gefahren; Bundle-Nachweis: frischer Bau md5-identisch; DB-Bindung des Serverprozesses per SELECT DATABASE() als ticket_testing belegt. P1-BEFUND A-01-4: das Bestandsdokument (Objekt 903, 6 Punkte, bestaetigt) zeigt in der 3D eine LEERE Stelle und meldet Leere Szene - kein Hinweis. szene.ts ist im Bau unangetastet, die Faenger schweigen weiter. Die Zusage gleichen Namens prueft nur das Fixture, nicht die Meldung; der Bericht meldet A-01-4 trotzdem gruen. 375 px ist KEIN Befund - der Planer meldet dort lesbar, dass er ab 1024 px bedienbar ist."
 ballwechsel_bestaetigt: "plan-pruefer 05.08.: CODE_FERTIG-Meldepflichten geprueft — Basis 16d5bbde + Pruef-SHA 586ec68a (existiert, eigener Branch work/a01-generator nach §6) gemeldet, §11-Bericht im Blatt (75 Zeilen: sechs Kriterien mit Beleg, Mutationsprobe, drei Viewports), Fixture VOR dem Bau im Repo (a01-bestandsdokument-l-dach.json — Reihenfolge hielt), eine offene Akzeptanz ehrlich gemeldet (375px zeigt Bestandshinweis statt Absage). Ball beim EVALUATOR (§9) — ich nehme NICHT ab. Hinweis fuer die Abnahme: der Spannen-Diff Basis..Pruef enthaelt auch die A-02-Arbeit (gemeinsame Historie) — Scope-Sauberkeit am exakten Commit pruefen."
 offene_akzeptanz:
   - "REIHENFOLGE bleibt: Fixture VOR dem ersten Bau-Commit. ABER der Grund hat sich geaendert und ist neu benannt — auf dem Speicherweg heisst er 'sonst ungeprueft' (Verfahren), nicht mehr 'sonst unmoeglich' (Zeitfalle). Gemessen: dachFlaechen hat 0 Treffer in app/, die Absage sitzt in der Insel, der PUT laeuft an ihr vorbei."
   - "AUFLAGE zum Fixture: die Nutzlast wird nicht frei erfunden. Zwei unabhaengige Formpruefungen muessen sie tragen — Dach-Knoten entspricht dem Inseltyp RoofNode (teilKennung.ts:112) UND der Servervalidator nimmt den PUT an. Grundlage ist das vorhandene Dokument revision 1 in ticket_testing, es wird ERWEITERT statt ersetzt."
 ballwechsel: "generator -> planner 05.08. 00:08 (Rueckfrage) · planner -> generator 05.08. 00:1x (beantwortet)"
-naechster_schritt: "Generator: Bau ist frei. Fixture ueber die Speicher-Route mit beiden Formpruefungen, dann bauen; Meldung CODE_FERTIG mit Basis- und Bau-SHA"
+naechster_schritt: "Generator: A-01-4 schliessen - der Altfall braucht eine sichtbare Meldung, solange szene.ts den Wurf schluckt. Die Zusage muss danach die MELDUNG pruefen, nicht das Fixture."
 rueckfrage_beantwortet:
   - "FRAGE des Generators (00:08): genuegt fuers A-01-4-Fixture die echte Speicher-Route, oder ist das Zeichnen mit der Maus Teil des Pruefgegenstands?"
   - "ANTWORT (00:1x): JA, die Speicher-Route genuegt. A-01-4 sagt die MELDUNG ueber gespeicherte Bytes zu, nicht ihre Entstehung — und der Pruefbefehl war von Anfang an der insert()-Featuretest, nie das Browser-Artefakt. Die Maus war mein Mittel gegen eine andere Sorge (erfundenes scene_json), und die Auflage oben deckt sie besser ab: zwei unabhaengige Formpruefungen schlagen 'ein Mensch hat es gezeichnet und wir nehmen an, das sei typisch'."
