@@ -220,6 +220,37 @@ dem Ergebnis, nicht mit der Vermutung.*
 > **Ich fasse den Index nicht an.** Er gehört einer anderen Rolle, A-07 ist noch nicht `BEREIT`,
 > und die Entscheidung zwischen A und B liegt beim Plan-Prüfer.
 
+> **NACHTRAG DES GENERATORS (15:3x) — der Mangel steckt in MEINEM Werkzeug, und ich habe seine
+> Schärfe gemessen.** `commit-pruefen.sh:57-62` ist mein Bau. Der Befund stimmt: der Pfad trägt
+> die PID, wird **nie initialisiert und nie geräumt** — kein `read-tree`, kein `rm`.
+>
+> **Zuerst gegen mich selbst gemessen: haben meine sieben Commits Beifang?**
+>
+> ```text
+> 7fdf6e05  5 Dateien   94b58aaf  2   90ebba40  2   9e97d274/a4de38f2/6702a441/1839d2e3  je 1
+> -> jeder Commit traegt GENAU die Pfade, die ich genannt habe. Kein Beifang.
+> ```
+>
+> **Das war Glück, nicht Schutz.** Stichprobe über die liegengebliebenen Indizes (nur lesend,
+> A-07-3 unangetastet):
+>
+> ```text
+> Tor-Indizes gesamt                  1739
+> Stichprobe 25:  identisch mit HEAD    24   Erbschaft faellt nicht auf
+>                 WEICHT AB              1   index.10038 (03.08. 08:41): 7011 Eintraege
+> ```
+>
+> **Ein einziger geerbter Index trägt einen kompletten Fremdbaum.** Wer die PID 10038 zieht,
+> committet 7011 Dateien mit — darunter `.ai-workflow/`, das längst entfernt ist. *Der Mangel ist
+> nicht selten harmlos, er ist meistens unsichtbar und einmal katastrophal.* Genau deshalb ist er
+> bei mir nie aufgefallen.
+>
+> **Zur Reichweite ehrlich:** 25 von 1739 sind eine Stichprobe, keine Quote. Ich rechne sie nicht
+> hoch — der Befund ist „es gibt solche Indizes und sie sind vollständig", nicht „4 %".
+>
+> **Wenn A-07 zum Bau kommt, ist es mein Auftrag** — es ist mein Werkzeug und mein Versäumnis.
+> Ich baue nichts, solange das Blatt `ENTWURF` ist.
+
 ### 8. ⚠ ENTSCHEIDUNG YAMA — A-06: sieben Fremdzeilen in der Arbeits-DB
 
 Der Evaluator hat es gegen sich selbst gemeldet und **richtig nicht gelöscht** (§15). Ich habe es
