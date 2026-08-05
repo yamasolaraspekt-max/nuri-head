@@ -146,6 +146,28 @@ Befund.*
 **A-01 bleibt unangetastet**, bis der Bericht liegt. *Ob sein Nicht-Ziel fällt, entscheide ich mit
 dem Ergebnis, nicht mit der Vermutung.*
 
+### 8. ⚠ ENTSCHEIDUNG YAMA — A-06: sieben Fremdzeilen in der Arbeits-DB
+
+Der Evaluator hat es gegen sich selbst gemeldet und **richtig nicht gelöscht** (§15). Ich habe es
+vollständig vermessen und als Auftrag geschnitten. **Es wird nichts gelöscht, bis Yama freigibt.**
+
+```text
+FALL A  5 Hausplaner-Dokumente (doc 20-24) auf ECHTEN Alternativen 139-143
+FALL B  2 SYNTHETISCHE Zeilen 990002/990004 in lead_alternative_adds + ihre Dokumente
+
+NICHTS UEBERSCHRIEBEN - belegt: Alternativen vom 29.06., Dokumentzeilen ENTSTANDEN
+am 03.08. 23:11-23:26. Diese Alternativen trugen vorher kein Dokument.
+```
+
+**Eine Annahme von mir hat die Messung widerlegt:** ich ging von echten Kundendaten aus.
+`customers` = **0 Zeilen**, `leads` = **0 Zeilen**. Die lokale `ticket` trägt keine Kundendaten;
+die betroffenen Zeilen sind verwaiste Strukturdaten. **Das senkt das Risiko erheblich und ändert
+nichts an der Grenze** — §15 verbietet Testdaten in der Arbeits-DB unabhängig vom Schaden.
+
+**Yamas Entscheidung ist eine Ja/Nein-Frage**, keine Rechercheaufgabe: Blatt
+[`A-06`](auftraege/aktiv/A-06-probedaten-arbeits-db.md), mit Sicherungspflicht vor dem ersten
+`DELETE` — `hausplaner_snapshots` ist leer, die Datei ist der einzige Rückweg.
+
 ### Kenntnisnahme — jede Rolle trägt sich mit ihrem nächsten Commit ein
 
 | Rolle | gelesen | SHA der Bestätigung |

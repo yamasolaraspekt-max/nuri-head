@@ -37,7 +37,9 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 | **4** | **A-04** Bühnen-Wächter (Zustand statt Aufrufform) | 05.08. 08:58 | *läuft* | – | aus B1/SPEC/P1 der A-03-Abnahme · mein Spezifikationsfehler |
 | **5** | **A-05** MESSAUFTRAG L-Kontur → L-Dach | 05.08. 09:3x | *läuft* | – | aus Yamas Frage nach playground/PV-Dachplaner · erstes Blatt MIT Wiederverwendungsprüfung · kein Produktivbau |
 
-**Stand: 5 von 10.**
+| **6** | **A-06** Probedaten in der Arbeits-DB | 05.08. 09:4x | *läuft* | – | Selbstmeldung des Evaluators · `DECISION_BLOCKED`, Freigabe Yama · meine Annahme „echte Kundendaten" von der Messung widerlegt |
+
+**Stand: 6 von 10.**
 
 > ### §13-Prozessprüfung ausgelöst bei 3, nicht bei 10
 >
