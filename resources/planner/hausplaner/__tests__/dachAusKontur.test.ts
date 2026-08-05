@@ -42,6 +42,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { dachFlaechen, DachGeometrieUngueltig } from '../geometry/dachGeometrie';
+import { nichtDarstellbareDaecher } from '../renderers/three-d/nichtDarstellbar';
 import { readFileSync } from 'node:fs';
 import { teil, ohneKommentare } from './_zerlegteApp';
 import type { RoofNode } from '../domain/scene.types';
@@ -189,4 +190,60 @@ test('A-01-4: ein BESTANDSDOKUMENT mit L-Dach traegt die Kontur, die kein Bild z
   // Meldung — sonst steht `bestaetigt` ueber einer leeren Ansicht.
   assert.throws(() => dachFlaechen(bestand), DachGeometrieUngueltig,
     'das Bestandsdach ist darstellbar — dann ist es nicht der Fall, den A-01-4 meint');
+});
+
+test('A-01-4 (Wirkung): der Renderer MELDET das Bestandsdach — an genau einer Stelle', () => {
+  // **Der Evaluator-Befund, der diese Zusage erzwungen hat:** die Zusage darueber prueft nur das
+  // Fixture. Sie war gruen, waehrend `szene.ts` unangetastet war und die 3D eine leere Stelle
+  // zeigte. *Eine Zusage, die die Eingabe prueft statt die Wirkung, misst den eigenen Aufbau.*
+  const roh = readFileSync(new URL('./fixtures/a01-bestandsdokument-l-dach.json', import.meta.url), 'utf8');
+  const doc = JSON.parse(roh) as { roofs: RoofNode[] };
+
+  const gemeldet = nichtDarstellbareDaecher(doc.roofs);
+
+  assert.equal(gemeldet.length, 1, 'das Bestandsdach wird nicht gemeldet — die leere Stelle bleibt unerklaert');
+  assert.equal(gemeldet[0].nodeId, doc.roofs[0].id, 'gemeldet wird ein anderer Knoten');
+  assert.ok(gemeldet[0].grund.length > 0, 'die Meldung traegt keinen Grund — dann steht dort nur, DASS etwas fehlt');
+});
+
+test('A-01-4 GEGENPROBE: ein rechteckiges Dach wird NICHT gemeldet', () => {
+  // Ohne diese Gegenprobe waere `return daecher.map(...)` — *alles melden* — eine gruene Loesung,
+  // und jede 3D-Ansicht truege einen Hinweis ueber einem einwandfrei gezeichneten Dach.
+  const roh = readFileSync(new URL('./fixtures/a01-bestandsdokument-l-dach.json', import.meta.url), 'utf8');
+  const doc = JSON.parse(roh) as { roofs: RoofNode[] };
+
+  const rechteck: RoofNode = {
+    ...doc.roofs[0],
+    id: 'kontrolle-rechteck',
+    polygon: [{ x: 0, y: 0 }, { x: 8000, y: 0 }, { x: 8000, y: 6000 }, { x: 0, y: 6000 }],
+  };
+
+  assert.deepEqual(nichtDarstellbareDaecher([rechteck]), [],
+    'ein rechteckiges Dach wird gemeldet — dann meldet die Funktion nicht den Fall, sondern alles');
+});
+
+test('A-01-4 EIN ORT: die Faenger in szene.ts entscheiden NICHT selbst', () => {
+  // *Zwei Orte, die dieselbe Frage beantworten, laufen auseinander* — und der eine waere ein
+  // Faenger im Renderer, der ohne WebGL nicht zu fahren und damit nicht zu pruefen ist. Genau so
+  // ist der geschluckte Wurf ueberhaupt entstanden.
+  const szene = readFileSync(new URL('../renderers/three-d/szene.ts', import.meta.url), 'utf8');
+  const code = szene.split('\n').filter((z) => !/^\s*(\/\/|\*|\/\*)/.test(z.trim())).join('\n');
+
+  assert.match(code, /this\.nichtGezeichnet = nichtDarstellbareDaecher\(/,
+    'die Szene holt die Liste nicht aus der pruefbaren Funktion');
+  assert.doesNotMatch(code, /nichtGezeichnet\.push\(/,
+    'ein Faenger entscheidet wieder selbst, was gemeldet wird — zweite Wahrheit, und die ungeprueft');
+});
+
+test('A-01-4 OBERFLAECHE: die Meldung erreicht den 3D-Bereich', () => {
+  // **Grenze dieser Zusage, offen gesagt:** sie liest Quelltext. Ob der Hinweis im Bild wirklich
+  // LESBAR steht, belegt allein die Browserabnahme — eine React-Komponente mit `three` ist im
+  // Node-Test nicht zu fahren. Sie deckt den Fall, den ein Test decken kann: *dass die Verbindung
+  // still wieder entfernt wird.*
+  const bereich = readFileSync(new URL('../app/DreiDBereich.tsx', import.meta.url), 'utf8');
+
+  assert.match(bereich, /nichtDarstellbar\(\)/, 'der Bereich fragt die Szene nicht nach nicht darstellbaren Daechern');
+  assert.match(bereich, /nichtDarstellbar\.length > 0 &&/, 'die Meldung wird nicht mehr abhaengig vom Befund gezeigt');
+  assert.match(bereich, /nichtDarstellbar\[0\]\.grund/, 'der Grund wird nicht angezeigt — dann steht dort nur, DASS etwas fehlt');
+  assert.match(bereich, /role="status"/, 'die Meldung ist fuer Screenreader nicht als Statusmeldung ausgezeichnet');
 });

@@ -33,6 +33,7 @@ import { treppe3DKoerper } from '../../geometry/treppe3D';
 import { parametereZuTreppe } from '../../geometry/treppeObjekt';
 import { erkenneRaeume } from '../../geometry/roomDetection';
 import { dachMeshWelt, dachflaechen, type DachFlaeche } from './dachMesh';
+import { nichtDarstellbareDaecher, type NichtDarstellbar } from './nichtDarstellbar';
 import { flaecheZuFrame, aufbauKoerper, type AufbauFrame } from './dachAufbautenMesh';
 import { DachGeometrieUngueltig } from '../../geometry/dachGeometrie';
 
@@ -102,7 +103,27 @@ export class HausplanerDreiDSzene implements RendererAdapter {
   private readonly beobachter: ResizeObserver;
 
   /** Referenz aufs unveränderliche Store-Dokument (KEINE Kopie — eine Wahrheit bleibt der Store). */
+  /**
+   * **A-01-4: was der Renderer NICHT zeichnen konnte — und warum.**
+   *
+   * Bis A-01 schluckten beide Faenger den `DachGeometrieUngueltig`-Wurf (`continue` / `return`).
+   * *Die Geometrie wirft ausdruecklich, um „kein stilles Falschdach" zu verhindern — der Faenger
+   * machte daraus ein stilles FEHLENDES Dach.* Ein Bestandsdokument mit L-Dach zeigte eine leere
+   * Stelle, waehrend das Objekt `freigabe: 'bestaetigt'` trug.
+   *
+   * Gesammelt wird je Aktualisierung neu; gelesen wird ueber `nichtDarstellbar()`.
+   */
+  private nichtGezeichnet: NichtDarstellbar[] = [];
+
   private dokument: SceneDocument | null = null;
+
+  /**
+   * Was in der zuletzt gezeichneten Szene nicht darstellbar war — leer, wenn alles gezeichnet
+   * wurde. *Eine Auskunft, kein Ereignis: die Oberflaeche fragt, wenn sie fragen will.*
+   */
+  public nichtDarstellbar(): ReadonlyArray<NichtDarstellbar> {
+    return this.nichtGezeichnet;
+  }
   private aktivesLevelId: string | null = null;
   private ausgewaehlt = new Set<string>();
   private rafId = 0;
@@ -216,6 +237,11 @@ export class HausplanerDreiDSzene implements RendererAdapter {
     this.dokument = dokument;
     this.aktivesLevelId = aktivesLevelId;
     this.ausgewaehlt = new Set(ausgewaehlteIds);
+    // A-01-4: je Zeichnung neu bestimmen. *Sonst bliebe ein Hinweis stehen, nachdem der Nutzer
+    // das Dach geloescht hat — eine Meldung, die laenger lebt als ihr Anlass, ist eine Luege.*
+    // Die Entscheidung faellt in `nichtDarstellbar.ts` — pruefbar ohne WebGL. Die Faenger unten
+    // fangen den Wurf weiterhin ab, aber sie ENTSCHEIDEN nicht, was gemeldet wird.
+    this.nichtGezeichnet = nichtDarstellbareDaecher(dokument.roofs ?? []);
     this.baueInhalt();
   }
 
@@ -497,6 +523,9 @@ export class HausplanerDreiDSzene implements RendererAdapter {
         }
       } catch (fehler) {
         if (fehler instanceof DachGeometrieUngueltig) {
+          // A-01-4: der Knoten wird nicht gezeichnet — *er ist nicht darstellbar, daran aendert
+          // nichts etwas*. Gemeldet hat ihn bereits `nichtDarstellbareDaecher` beim Einstieg in
+          // `aktualisiere`; hier wird nur uebersprungen, nicht entschieden.
           continue;
         }
         throw fehler;
@@ -543,6 +572,10 @@ export class HausplanerDreiDSzene implements RendererAdapter {
       bauplan = dachMeshWelt(dach);
     } catch (fehler) {
       if (fehler instanceof DachGeometrieUngueltig) {
+        // A-01-4, zweiter Faenger. Auch er entscheidet nicht: gemeldet wurde beim Einstieg in
+        // `aktualisiere`, und zwar mit derselben Frage an dieselbe Stelle (`dachMeshWelt`).
+        // *Zwei Orte, die dieselbe Frage beantworten, koennen auseinanderlaufen — einer davon
+        // waere ungeprueft, weil ein Faenger im Renderer ohne WebGL nicht zu fahren ist.*
         return;
       }
       throw fehler;
