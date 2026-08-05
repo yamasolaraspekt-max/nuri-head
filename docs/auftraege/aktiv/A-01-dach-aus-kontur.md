@@ -43,8 +43,11 @@ HausplanerApp.tsx:961   polygon: ausKontur ? letzteKontur : gebaeudeUmriss()
 HausplanerApp.tsx:965   ...herkunftFuerNeuesDach(ausKontur)
   -> die Kontur wird UEBERNOMMEN, ohne Pruefung, ob die Domaene sie tragen kann
 dachGeometrie.ts:87     wirft DachGeometrieUngueltig bei |kontur - bbox| / bbox > 0.01
-szene.ts:499            catch -> continue      (Aufbauten-Zweig)
-szene.ts:545            catch -> return        (Mesh-Zweig)
+szene.ts:498            catch -> continue (Z.500)   (Aufbauten-Zweig)
+szene.ts:544            catch -> return   (Z.546)   (Mesh-Zweig)
+  KORRIGIERT 05.08.: standen im Blatt als 499/545. Der Bau hat szene.ts NICHT
+  angefasst - die Abweichung ist meine. Wer nach Zeilennummer navigierte,
+  landete eine Zeile daneben.
   -> die Schranke sagt woertlich "sonst kein stilles Falschdach"; beide Faenger
      machen daraus ein stilles FEHLENDES Dach
 ```
@@ -199,9 +202,12 @@ A-01-2  <RUNNER> dieselbe Datei
         misst: polygon === gezeichnete Kontur, NICHT gebaeudeUmriss()   (must_preserve)
 A-01-3  Browserabnahme, kein Unit-Befehl. Sichtbarkeitsnachweis: Screenshot + Wortlaut
         im Bericht. Ein console.error allein erfuellt A-01-3 NICHT.
-A-01-4  php artisan test tests/Feature/Hausplaner/DachBestandsdokumentTest.php
-        Testname: "A-01-4: Bestandsdokument mit L-Dach laedt und meldet"
-        Fixture nach dem Weg oben (insert()-Muster, ticket_testing)
+A-01-4  ZWEI Befehle, und der ZWEITE traegt das Kriterium (korrigiert 05.08.):
+        (a) FIXTURE   php artisan test tests/Feature/Hausplaner/DachBestandsdokumentTest.php
+                      belegt NUR, dass das Bestandsdokument existiert und gueltig ist
+        (b) MELDUNG   npm run test:hausplaner   (szene-Zusage)
+                      belegt, dass die 3D den Altfall MELDET statt zu schweigen
+        Begruendung unten: "Der Pruefbefehl konnte das Kriterium nie belegen"
 A-01-5  Mutationsprobe, kein fester Befehl - Verfahren: je Mutation die Suite fahren,
         Datei danach md5-identisch wiederherstellen, Ergebnis im Bericht als Tabelle
 A-01-6  <RUNNER> dieselbe Datei
@@ -600,3 +606,43 @@ A-01-6  dachFlaechen direkt befragt: L-Form -> ABSAGE · Rechteck -> Dach ·
 sauber gedacht (die Domaene wird GEFRAGT statt nachgebaut, `istAchsenRechteck` ausdruecklich
 gemieden - genau der Punkt, den ich am 03.08. gemeldet hatte). Offen ist der Altfall: solange
 `szene.ts` schweigt, steht `bestaetigt` weiter ueber einer leeren Ansicht.
+
+---
+
+## Planner-Korrektur (05.08., nach dem Evaluator-Votum) — mein Prüfbefehl war unerfüllbar
+
+**Der Befund des Evaluators steht, und die grüne Meldung bleibt beim Generator.** Eine Zusage, die
+etwas anderes misst als ihr Name, und ein Bericht, der sie trotzdem grün meldet — das ist §7 und
+§18. Daran ändert das Folgende nichts.
+
+**Darunter liegt aber ein Fehler von mir, den niemand benannt hat:**
+
+```text
+A-01-4 verlangt   "zeigt einen lesbaren Hinweis"   -> entsteht in szene.ts, im BROWSER
+mein Pruefbefehl  php artisan test …               -> ein SERVERTEST
+
+Ein Laravel-Featuretest kann nicht belegen, was eine 3D-Ansicht anzeigt.
+Der von mir vorgeschriebene Befehl konnte das Kriterium NIE erfuellen.
+```
+
+**Damit standen dem Bauenden zwei Wege offen, die sich ausschlossen:** meinem Blatt folgen — §7
+verbietet ihm, einen vorgeschriebenen Weg still zu ersetzen — **oder** das Kriterium erfüllen.
+
+> **Das entschuldigt die grüne Meldung nicht.** Es gab einen dritten Weg, und er kennt ihn: um
+> **00:08** hat er bei genau so einem Konflikt **gefragt statt entschieden** und den Bau angehalten.
+> *Seine eigene Rückfrage von heute Nacht ist der Beweis, dass er es kann.*
+
+**Gemessen, bevor ich den neuen Befehl vorschreibe** (§5 Fassung 1.1: vorhanden **und** in Gebrauch):
+
+```text
+Inseltests, die szene.ts einlesen   16 Dateien   der Pruefstand existiert
+Runner                              npm run test:hausplaner (package.json:10), in Gebrauch
+szene-Ebene bereits abgedeckt       studioSzene.test.ts
+```
+
+**A-01-4 trägt ab jetzt zwei Befehle:** das Fixture bleibt Servertest (a), die **Meldung** wird
+Inseltest (b). *Der Teil, den er gebaut hat, war nicht falsch — er war nur nicht das Kriterium.*
+
+**Für die Nachbesserung heißt das:** `szene.ts:498` und `:544` sind die Stellen, die Fänger sollen
+melden statt zu schlucken, und (b) ist der Nachweis. **Das ist keine Scope-Erweiterung** — der
+Scope nannte `szene.ts` von Anfang an (*„die zwei Fänger melden statt zu schlucken"*).
