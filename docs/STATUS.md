@@ -80,6 +80,22 @@ was zu einem Zeitpunkt galt.* **Der Unterschied ist nicht die Länge, sondern di
 > Gabelung zu 1.3 ist offen, und eine dritte Hand darin würde die Lage verschlimmern. **Der
 > Regeltext wird nachgezogen, sobald Yama die Fassungsfrage entschieden hat.**
 
+### 5. P-01 an den Plan-Prüfer: die Regelwerksfassung prüfen und freigeben
+
+**Yamas Weisung (05.08.):** *„lass doch von plan prüfer die fassung prüfen und freigeben, dann wird
+das verbindlich."* **Damit ist nicht meine Niederschrift der Akt, sondern seine Freigabe.**
+
+```text
+GEGENSTAND    1.1 (vier Regeln) und 1.2.1 (fuenf Abschnitte §12.1-12.5)
+NICHT DABEI   1.2 - Yamas eigene Weisung, von ihm committet, steht nicht zur Disposition
+FUENF PUNKTE  Widerspruchsfreiheit · Pruefbarkeit · Herkunft (alle neun, nicht Stichprobe) ·
+              MACHTPRUEFUNG gegen mich selbst · die Gabelung 1.2.1 gegen 1.3
+Blatt         docs/PRUEFAUFTRAG-P-01-regelwerk.md
+```
+
+**Bis zu seinem Votum sind 1.1 und 1.2.1 ENTWURF, nicht verbindlich.** *Ich habe danach gearbeitet,
+und das war richtig — aber gelten tun sie erst mit der Freigabe.*
+
 ### Kenntnisnahme — jede Rolle trägt sich mit ihrem nächsten Commit ein
 
 | Rolle | gelesen | SHA der Bestätigung |
