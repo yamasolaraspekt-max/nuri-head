@@ -1,7 +1,7 @@
 # Verbindliche Arbeitsregeln
 
-**Version:** 1.1  
-**Gültig seit:** 04.08.2026 · **Fassung 1.1 seit:** 05.08.2026  
+**Version:** 1.2  
+**Gültig seit:** 04.08.2026 · **Fassung 1.1 seit:** 05.08.2026 · **Fassung 1.2 seit:** 05.08.2026  
 **Autorität:** Yama  
 **Geltung:** gesamtes Repository, alle Menschen, Agenten, Rollen, Worktrees und Arbeitszweige
 
@@ -124,6 +124,20 @@ Evaluator gewesen sein.
 
 Nur Yama genehmigt Veröffentlichung: Push, Merge nach `main`, Tags, Deployments, produktive
 Datenoperationen, Force-Operationen und endgültige Löschung fachlicher Daten.
+
+**Vertretungsregel (Fassung 1.2, auf Yamas mündliche Weisung vom 05.08.2026):** Yama wird bei der
+Veröffentlichung **ständig durch den Release-Prüfer vertreten**. Der Release-Prüfer genehmigt und
+führt in Yamas Namen ohne Einzelrückfrage aus: Push von Arbeitszweigen, Merge nach `main`, Tags und
+Deployments in Nicht-Produktionsumgebungen — **ausschließlich** für Stände, die zuvor das Votum
+`RELEASE_FREI` nach §10/§11 erhalten haben. Sicherungs-Pushes von Arbeitszweigen auf Yamas eigene
+Fernziele (`fork`, `backup-private`) sind Datensicherung und laufen als stehende Aufgabe des
+Release-Prüfers mit den Prüfungen aus §14.
+
+**Bei Yama persönlich verbleiben — von der Vertretung ausgenommen:** Veränderungen an
+Produktionssystemen (Hetzner), produktive Datenoperationen, Force-Operationen und die endgültige
+Löschung fachlicher Daten. Jede in Vertretung ausgeführte Veröffentlichung wird mit Auftrag,
+Commit und Vorher-/Nachher-Stand je Ziel protokolliert. Yama kann die Vertretung jederzeit
+formlos widerrufen.
 
 ## 5. Definition of Ready
 
@@ -401,7 +415,8 @@ seiner laufenden Zehnergruppe.
 - Lokale Sicherungscommits bleiben klein, thematisch und rückgängig machbar.
 - Commit und Push sind getrennte Vorgänge.
 - Kein Push, kein Merge nach `main`, kein Tag, kein Deploy und kein Force ohne ausdrückliche
-  Freigabe von Yama.
+  Freigabe von Yama **oder seines ständigen Vertreters nach §4 (Release-Prüfer, nur nach
+  `RELEASE_FREI`; Ausnahmen der Vertretungsregel bleiben bei Yama)**.
 - Kein destruktives Bereinigen eines fremden oder unklaren Arbeitsbaums.
 
 ## 15. Daten- und Sicherheitsgrenzen
