@@ -488,3 +488,64 @@ Sicherheit.* Aufgefallen ist es nur, weil der gemeldete `md5` nicht zu dem passt
 Worktree gemessen hatte. Nach der Korrektur: **7 von 7 auf dem richtigen Baum.**
 
 **Ballbesitz: Evaluator.** Pruef-SHA `ca5f80e4`, Basis `93a9691f`.
+
+---
+
+## Evaluator-Votum zur Nachbesserung (ARBEITSREGELN §11) — 05.08., 2. Runde
+
+```yaml
+auftrag: A-02
+commit: 6953198a
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "Die Probe, die in Runde 1 ROT war, an 6953198a wiederholt: lsof durch ein
+  haengendes Skript ersetzt (sleep 300) -> Tor kommt nach 5,1 s zurueck, exit 3, Lock LIEGT,
+  Zeile 'LSOF-ZEITGRENZE 5s abgelaufen'. KONTROLLE mit echtem lsof: 0,3 s, exit 0, Commit
+  gelungen. Zusaetzlich Mutation: Wartezeit des Waechters auf 900 s gesetzt -> die neue Zusage
+  faellt (1 fail), md5 nach dem Ruecksetzen identisch. Und REGRESSION geprueft: Lock MIT
+  echtem Halter -> liegt, exit 3; derselbe Lock ohne Halter, 900 Byte, 2400 s -> beiseite,
+  exit 0. Der Umbau hat den Schutzfall nicht beschaedigt."
+browser: nicht_anwendbar
+befunde:
+  - "P2 BEWEIS (kein Abnahmehindernis): der Nachbesserungs-Bericht im Blatt nennt
+     `commit: ca5f80e4`. Der zu pruefende Stand ist laut STATUS.md `6953198a`. Das Blatt nennt
+     6953198a NULL Mal, ca5f80e4 dreimal — gezaehlt, nicht geschaetzt. Die beiden Commits sind
+     inhaltlich VERSCHIEDEN (49 insertions / 94 deletions an den zwei Scope-Dateien): der Bericht
+     beschreibt einen Testaufbau mit `perl alarm` und `fake-bin`, den es in 6953198a nicht mehr
+     gibt. Wer den Bericht liest und den Code aufschlaegt, findet etwas anderes.
+     §18 verbietet 'Berichte mit veralteten SHAs'. Ich habe auf dem Stand geprueft, den §16 als
+     Statuswahrheit fuehrt (6953198a) — die SUBSTANZ des Berichts stimmt mit dem ueberein, was
+     ich gemessen habe, nur die SHA-Angabe zeigt auf den Vorgaenger. Deshalb P2 und nicht P1:
+     nachzutragen ist eine Zeile, nicht ein Bau."
+```
+
+### Was ich selbst gemessen habe (§9)
+
+```text
+Scope       Bau-Commit 6953198a aendert GENAU die zwei Scope-Dateien. Sauber.
+Suite       137/137, 0 fail (Runde 1: 136) — selbst gefahren
+statisch    bash -n pass — selbst gefahren
+A-02-1..5   unveraendert erfuellt; der Halter-Fall und seine Gegenprobe neu gemessen,
+            weil der Code an dieser Stelle umgebaut wurde (Regression ausgeschlossen)
+Kante 2     AUS DER KANTE OHNE ZUSAGE IST EIN KRITERIUM MIT ZUSAGE GEWORDEN:
+            'A-02 Kante 2: ein HAENGENDES lsof laesst das Tor NICHT haengen'.
+            Genau das verlangt die neue Regel §5/§7 der Fassung 1.1 — die aus diesem
+            Befund entstanden ist. Der Widerspruch 'OHNE ZUSAGE ... am Code zu belegen'
+            ist damit aufgeloest, und zwar in Richtung Zusage.
+P2 Runde 1  Die Reihenfolgeabweichung ist nachgetragen (Blatt Z.452-455). Erledigt.
+```
+
+### Ein eigener Messfehler, den ich offenlege
+
+```text
+Meine erste Regressionsprobe meldete "ohne Halter -> exit 3, Lock liegt" und sah wie ein
+Rueckschritt aus. Ursache: ich hatte das Alter zwischen den beiden Laeufen nicht neu gesetzt,
+und `git commit` legt zwischendurch einen frischen index.lock an — der ist zu jung und
+blockiert korrekt. Sauber wiederholt (900 Byte, 2400 s, kein Halter) ergibt exit 0 und
+BEISEITE. Nur dieser Wert steht oben.
+```
+
+**Ballbesitz: RELEASE-PRUEFER (§10).** `ABGENOMMEN` ist keine Veroeffentlichungserlaubnis — der
+Release-Pruefer prueft eigenstaendig, bevor Yama entscheidet. **Auflage fuer ihn:** der P2 oben,
+die SHA-Angabe im Bericht, ist vor `RELEASE_FREI` zu korrigieren; ein Release-Kandidat und ein
+Bericht, die auf verschiedene Commits zeigen, sind genau der Fall, den §10 abfangen soll.
