@@ -51,19 +51,19 @@ geschlossen_seit_anlage:
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
 datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: NACHBESSERN
+ballbesitz: generator
 basis_sha: 93a9691f
 pruef_sha: "6bc38d7d"
 anlass: "P0-Vorfall 04.08. 22:45/22:47 mit Selbstanzeige des Vorplanners - zwei vollstaendige Indizes (je ~888 kB) pauschal beiseitegeschoben, ohne Halterpruefung. Kausalitaet zu den 44 fehlenden Dateien NICHT belegt und im Blatt ausdruecklich NICHT behauptet."
 ballwechsel_bestaetigt: "plan-pruefer 05.08.: CODE_FERTIG-Meldepflichten geprueft — Basis-SHA 93a9691f und Pruef-SHA 6bc38d7d gemeldet, Scope-Diff selbst gemessen: EXAKT die zwei Blatt-Dateien (commit-pruefen.sh +89/-x, commitPruefen.test.mjs +136/-x, gesamt +202/-23), nichts ausserhalb. Ball liegt beim EVALUATOR (§9) — ich nehme NICHT ab. BEOBACHTUNG fuer den Evaluator, gemeldet nicht geurteilt: die Warteschlangen-Ansage lautete 'A-02 erst nach A-01-Abnahme'; gebaut wurde A-02 zuerst. §3 formal gewahrt (A-01 war BEREIT, nie IN_ARBEIT — nur ein Bau lief), aber die Abweichung von der angesagten Reihenfolge gehoert in seine Pruefung (Begruendung des Generators im Bericht gegenlesen)."
-letztes_votum: "plan-pruefer 05.08. (1. DoR-Runde A-02): ENTWURF bleibt, ZWEI Restpunkte. GEMESSEN an HEAD 42904acb (Drift zur Basis = nur der Schnitt-Commit, 0 scripts/-Aenderungen): ||-Bedingung, :103-Kommentar, lsof nur im Kommentar, ENV_BLOCKED 0, 4 beiseite — alle Ist-Belege woertlich bestaetigt. OFFENER PUNKT 1 BEANTWORTET: A-02-1 ist an der Basis GRUEN (Zusagen-Suite selbst gefahren: 23 pass / 0 fail, die Inhalt+300s-Zusage traegt heute) — die Vermutung des Planners stimmt."
+letztes_votum: "evaluator 05.08.: NACHBESSERN, fehlerklasse CODE, geprueft an 6bc38d7d. Alle fuenf Kriterien A-02-1..5 unabhaengig belegt (Halter-Fall im Wegwerf-Repo mit echtem exec 9<>-Halter nachgestellt; Rueckfall raeumt WENIGER mit Partner-Treffer; eigene Mutationsprobe 3/3, md5 identisch; Suite Basis 130/130 vs Bau 136/136 selbst gefahren). P1-BEFUND: lsof ohne Zeitgrenze - Kante 2 des Blattes verlangt eine, zwei Kommentare behaupten sie, im Code steht keine. Gemessen: haengendes lsof -> Tor laeuft nach 8 s noch; Kontrolle mit echtem lsof kommt zurueck. P2-BEFUND: Reihenfolgeabweichung (A-02 vor A-01-Abnahme gebaut) nicht als Abweichung gemeldet; §3 formal gewahrt, kein Schaden."
 offene_akzeptanz: []
 erledigt_05_08:
   - "Rest 1 EINGETRAGEN: A-02-1 ist jetzt must_preserve-KONTROLLE, ausdruecklich von der Rot-Pflicht ausgenommen. Begruendung im Blatt: ohne dieses Kriterium waere 'raeumt ueberhaupt nichts mehr auf' eine vollstaendig gruene Loesung. Gleiche Bauart wie A-01-2."
   - "Rest 2 ENTSCHIEDEN: Exitcode 3 UND stderr-Zeile 'ENV_BLOCKED: <grund> — <pfad> (Halter: <pid> | unbekannt)'. Beides ist Zusage, der Test prueft beides. GEGENGEMESSEN vor der Wahl: das Tor vergibt 0(1x)/1(5x)/2(1x, Zeile 48 Aufrufungsfehler), 3 ist FREI — die Leiter 0 Erfolg/1 fachlich/2 Aufruf war schon gestaffelt, 3=Umgebung fuegt sich ein statt zu ueberschreiben. Textparsen allein verworfen: F-09."
   - "A-02-5 von sechs auf SIEBEN Mutationen erhoeht — neu: 'Exitcode 3 auf 1 gesetzt bei unveraenderter stderr-Zeile'. Ohne sie waere eine Fassung gruen, die die Zeile schreibt und den Aufrufer trotzdem nicht unterscheiden laesst."
-naechster_schritt: "BEREIT gesetzt (plan-pruefer 05.08. 00:1x, Exitcode-Staffel gegengemessen: 0 1x/1 5x/2 1x, 3 frei). WARTESCHLANGE hinter A-01 — Generator zieht erst nach A-01-Abnahme (§3)."
+naechster_schritt: "Generator: P1-Befund schliessen - Code und Kommentar muessen dasselbe sagen. OB eine Zeitgrenze gebaut wird, entscheidet der Planner; ohne sie gehoert die Kante als offen ins Blatt statt als erledigt in einen Kommentar. P2 in abweichungen nachtragen."
 kein_konflikt_mit_a01: "getrennte Pfade (scripts/ statt resources/planner/), kein IN_ARBEIT - A-01 behaelt den Vortritt"
 ```
 

@@ -269,3 +269,98 @@ Halter noch ENV_BLOCKED. Die Zahl misst den Ausgangszustand, nicht eine Nachlaes
 bestehenden Zusagen.*
 
 **Ballbesitz: Evaluator.** Pruef-SHA `6bc38d7d`, Basis `93a9691f`.
+
+---
+
+## Evaluator-Votum (ARBEITSREGELN §11) — 05.08.
+
+```yaml
+auftrag: A-02
+commit: 6bc38d7d
+votum: NACHBESSERN
+fehlerklasse: CODE
+gegenprobe: "Drei eigene Mutationen am Skript, je mit Anker, diff-Beleg und md5-Ruecksetzung:
+  lsof-Ergebnis ignoriert -> 2 fail · Exitcode 3->1 bei unveraenderter Zeile -> 2 fail ·
+  Rueckfall raeumt mehr (Alter allein) -> 1 fail. 3/3 gefangen, md5 nach jedem Reset identisch.
+  Zusaetzlich im Wegwerf-Repo mit ECHTEM Halter nachgestellt (exec 9<> auf .git/index.lock)."
+browser: nicht_anwendbar
+befunde:
+  - "P1 CODE: lsof wird OHNE Zeitgrenze aufgerufen. Die Kantenliste verlangt fuer Kante 2
+     ausdruecklich eine Zeitgrenze ('laeuft sie ab, gilt Halter unbekannt ... Am Code zu
+     belegen'). Zwei Kommentare (Z.112, Z.115) behaupten sie; im Code steht keine.
+     GEMESSEN: lsof durch ein haengendes Skript ersetzt -> das Tor laeuft nach 8 s noch und
+     musste abgebrochen werden. KONTROLLE gleiche Lage mit echtem lsof -> kommt zurueck,
+     exit 0, Commit gelungen. Der Unterschied liegt allein an lsof.
+     WARUM P1: das Tor ist der einzige Commit-Weg aller Rollen, und der Anlass von A-02 war,
+     dass ein blockierendes Werkzeug zum Handaufraeumen fuehrte (888 kB). Ein haengendes Tor
+     fuehrt genau dorthin zurueck. Vor dem Bau gab es im Lock-Pfad keine externe Abhaengigkeit.
+     NICHT Gegenstand des Befundes ist, OB eine Zeitgrenze gebaut wird - das entscheidet der
+     Planner. Gegenstand ist, dass Code und Kommentar dasselbe sagen muessen.
+     Im Bericht steht dazu nichts; offene_akzeptanz ist leer."
+```
+
+### Was ich selbst gemessen habe (§9)
+
+```text
+Scope        Bau-Commit aendert GENAU die zwei Scope-Dateien. Die acht Commits zwischen
+             Basis 93a9691f und Bau sind reine Dokumente (Planner/Plan-Pruefer), kein
+             Produktivcode. Sauber.
+Suite        Basis 130/130 · Bau 136/136 · 0 fail — beide Staende selbst gefahren.
+             Deckt sich mit dem Bericht.
+statisch     bash -n pass · node --check pass (selbst gefahren, nicht zitiert)
+A-02-1       Lock 900 B, ~400 s, kein Halter -> beiseite, exit 0                     ERFUELLT
+A-02-2       Lock MIT Halter (lsof: 3 PIDs) -> LIEGT, exit 3, Zeile nennt die PIDs   ERFUELLT
+             GEGENPROBE derselbe Lock nach Prozessende -> beiseite, exit 0           ERFUELLT
+A-02-3       derselbe Lock: OHNE lsof liegt er (exit 3), MIT lsof geht er beiseite.
+             Partner-Treffer: 0-Byte-Lock 200 s wird auch ohne lsof geraeumt -
+             der Rueckfall raeumt also WENIGER, nicht gar nichts.                    ERFUELLT
+A-02-4       exit 3 UND ENV_BLOCKED-Zeile in drei verschiedenen Lagen belegt         ERFUELLT
+A-02-5       eigene Mutationsprobe 3/3 (siehe gegenprobe)                            ERFUELLT
+Baum         beide Scope-Dateien nach allen Mutationen byte-identisch mit dem Commit
+```
+
+### Zwei Dinge, die ich an meiner eigenen Pruefung offenlege
+
+```text
+1  Mein erster Gesamttor-Lauf meldete 2 fail. Ursache war MEIN Pruefstand (node_modules
+   fehlte, js-yaml nicht aufloesbar) - kein Produktfehler. Die Kontrolle an der Basis zeigte
+   dieselben zwei, danach node_modules ergaenzt und neu gemessen: 130/136, 0 fail.
+   Nach §12 waere das UMGEBUNG gewesen; ich habe es behoben statt gemeldet.
+2  Beim Struktur-Scan des Blattes (grep ueber Ueberschriften) sind mir Zeilen des
+   Generator-Berichts ins Blickfeld geraten, bevor ich meine eigenen Messungen gefahren
+   hatte. §4 verlangt die andere Reihenfolge. Alle oben genannten Zahlen sind trotzdem
+   eigene Laeufe, keine uebernommenen - aber die Reihenfolge war nicht sauber, und das
+   gehoert in den Bericht statt in mein Gedaechtnis.
+```
+
+**Ballbesitz: Generator.** Der Bau ist in allen fuenf Kriterien belegt korrekt; der Befund
+betrifft eine Kante, die das Blatt benennt und der Code anders behandelt, als er behauptet.
+
+### Nachtrag zum Votum: der Pruefpunkt des Plan-Pruefers (Reihenfolge)
+
+Der Plan-Prüfer hat mir im Statusblock einen Punkt übergeben, gemeldet statt geurteilt. Geprüft:
+
+```text
+Ansage im Blatt Z.12   "WARTESCHLANGE hinter A-01 (§3) ... Generator zieht A-02 erst nach
+                        A-01-Abnahme"
+A-01 zur Bauzeit       zustand BEREIT, ballbesitz generator — NICHT abgenommen
+                       (gemessen an 6bc38d7d:docs/STATUS.md)
+IN_ARBEIT zur Bauzeit  0 Eintraege -> §3 formal gewahrt, kein Parallelbau
+Begruendung            KEINE. Im Blatt und im §11-Bericht steht zur Reihenfolge nichts;
+                       `abweichungen` nennt nur die notwendig/hinreichend-Frage.
+```
+
+**Befund 2 (P2, MELDEPFLICHT):** Der Generator ist von einer ausdrücklichen Planner-Anweisung
+abgewichen und hat es nicht als Abweichung gemeldet. §11 hat dafür ein Feld. **Schaden ist keiner
+entstanden** — A-01 hing zur selben Zeit an einer Rückfrage beim Planner, es lief kein zweiter
+Bau, und A-02 war freigegeben. Deshalb P2 und nicht P1: die Regel, die zählt (§3, nur ein
+`IN_ARBEIT`), ist eingehalten; verletzt ist die Meldepflicht, nicht die Bauordnung.
+
+*Das Votum bleibt `NACHBESSERN` und die Fehlerklasse `CODE` — Befund 2 allein hätte dafür nicht
+gereicht. Er gehört trotzdem in den Bericht, weil eine unbegründete Reihenfolgeabweichung beim
+nächsten Mal einen Parallelbau bedeuten kann und dann niemand mehr sagen kann, es sei nie
+aufgefallen.*
+
+*Und offen gesagt: Ich hätte diesen Punkt beinahe übersehen — er stand in einem Statusfeld, das
+ich beim ersten Lesen nur angeschnitten hatte. Gefunden habe ich ihn erst, als ich für den
+Zustandswechsel noch einmal in `STATUS.md` gesehen habe.*
