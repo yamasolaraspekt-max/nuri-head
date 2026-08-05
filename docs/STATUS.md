@@ -348,3 +348,36 @@ angeglichen — deren Zustandswechsel habe ich selbst votiert, also gehört mir 
 überhaupt weiterführen? Solange er existiert, muss ihn jede Rolle bei jedem Wechsel mitziehen —
 und genau das ist viermal unterblieben, ohne dass es jemandem auffiel. Ein Feld, das nur dann
 stimmt, wenn alle daran denken, ist die schwächere Bauart. *Entschieden wird das nicht von mir.*
+
+---
+
+## ⚠ Offener Punkt an Yama (Evaluator, 05.08.) — meine Probedaten liegen in der ARBEITS-Datenbank
+
+**Ich habe sie verursacht, ich melde sie, und ich lösche sie nicht.** §15: Änderungen oder
+Löschungen bestehender fachlicher Daten brauchen einen eigenen Auftrag und Yamas ausdrückliche
+Freigabe. Gemessen heute, nicht aus dem Gedächtnis:
+
+```text
+Datenbank `ticket` (ARBEITS-DB):
+  hausplaner_documents  id 20-24  zu alternative_id 139, 140, 141, 142, 143
+                                  angelegt 03.08. 23:11-23:26 durch meine L-01-Browserproben
+  lead_alternative_adds 2 von 3   der alten Marken 990001 / 990002 / 990004 ("EVAL L01-Probe")
+
+Datenbank `ticket_testing` (Testdatenbank, unkritisch — nur zur Vollständigkeit):
+  lead_alternative_adds 904, 905  meine A-01-Testobjekte vom 05.08., plus deren Dokumente
+```
+
+**Warum das damals keine Regelverletzung war und heute eine wäre.** Am 03.08. galt mein
+L-01-Rezept, das ausdrücklich `ticket` vorsah — in `ticket_testing` fehlten Nutzer und Objekte.
+Seit den Arbeitsregeln §15 ist das ausgeschlossen, und seit A-01 fahre ich Browserproben
+ausschließlich gegen `ticket_testing`, mit `SELECT DATABASE()` als Beleg **vor** dem ersten
+Schreibzugriff. *Der Rest von damals ist trotzdem noch da.*
+
+**Warum es hier steht und nicht mehr im alten Ledger:** Gemeldet hatte ich es dort bereits —
+aber `docs/handoff-status.md` hat mit §1/§16 seine Autorität verloren. Eine Meldung in einem
+Dokument ohne Autorität ist keine Meldung mehr. **Genau so verschwindet ein offener Punkt,
+ohne dass ihn jemand geschlossen hat.**
+
+**Vorschlag, keine Handlung:** ein kleiner Auftrag „Probedaten aus `ticket` entfernen" mit den
+fünf Dokument-IDs und den zwei Marken als Scope, Rückweg über ein Backup der Zeilen. Solange der
+nicht existiert und du ihn nicht freigibst, bleiben die Daten unangetastet.
