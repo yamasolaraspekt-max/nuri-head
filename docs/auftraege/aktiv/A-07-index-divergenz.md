@@ -173,3 +173,52 @@ zusätzlicher Handgriff wäre genau die Umgehung, die A-02 zu verhindern versuch
 
 Eine Änderung an einem Skript, `git revert` genügt. **Der Arbeitsbaum wird nicht angefasst** —
 `read-tree` schreibt nur den Index.
+
+---
+
+## Zulieferung des Generators und meine Gegenprobe (05.08., 15:48 / 19:5x)
+
+**Sein Fund steht und ist alarmierend.** Stichprobe über **25 von 1739** liegengebliebenen
+Tor-Indizes: 24 identisch mit HEAD — *die Erbschaft fällt nicht auf* —, **einer weicht ab und trägt
+7011 Einträge, einen kompletten Fremdbaum samt des längst entfernten `.ai-workflow`.**
+*Er hat ausdrücklich nicht hochgerechnet: 25 von 1739 sind eine Stichprobe, keine Quote.*
+
+**Seine Folgerung habe ich geprüft statt übernommen:** *„Wer diese PID zieht, committet 7011
+Dateien mit."*
+
+### Gemessen im Wegwerf-Repo — beide Richtungen
+
+```text
+FALL 1  Index traegt eine FREMDE gestagete Datei, Tor-Form `git commit -- a.txt`
+        -> Commit enthaelt NUR a.txt · fremd.txt im Commit-Baum: 0 Treffer
+
+FALL 2  Index traegt eine geerbte LOESCHUNG von b.txt (Datei liegt auf der Platte),
+        Tor-Form `git add -- a.txt ; git commit -- a.txt`
+        -> b.txt bleibt im Commit-Baum (1 Treffer) UND auf der Platte
+```
+
+> ### Die Folgerung trägt nicht — und der Grund verdient einen Namen
+>
+> **`git commit -- <pfade>` baut den Commit aus HEAD plus den genannten Pfaden. Der Index wird für
+> den Inhalt nicht herangezogen.** Deshalb schlägt ein vergifteter Index **in keiner der beiden
+> Richtungen** durch.
+>
+> **Das `-- "$@"` in `commit-pruefen.sh:188` ist der Grund, warum aus 1739 verwaisten Indizes noch
+> kein Schaden entstanden ist.** *Es stand nie als Schutzmaßnahme im Blatt; es wirkt seit Monaten,
+> und niemand hat es dafür in Anspruch genommen.*
+
+### Was trotzdem echt bleibt — die Schwere sinkt, sie verschwindet nicht
+
+```text
+1  ein Commit AM TOR VORBEI zieht den Index heran -> dort ist die Katastrophe moeglich
+2  git status und git diff HEAD luegen -> am 04.08. hat genau das zum Handraeumen gefuehrt
+3  1739 Dateien, 8,5 MB, unbegrenzt wachsend
+4  116 Indizes tragen ein totes Objekt -> `invalid object`-Rauschen bei jedem Treffer
+```
+
+**A-07 bleibt in vollem Umfang.** *Geändert hat sich nur, wovor es schützt: nicht vor einem
+verseuchten Tor-Commit — den verhindert die Commit-Form —, sondern vor jedem Weg daran vorbei und
+vor Diagnosewerkzeugen, die lügen.*
+
+**Und die Zuordnung stimmt diesmal, weil ich sie gemessen habe.** *Beim ersten Schnitt hatte ich
+sie geraten und lag falsch. Dieselbe Prüfung auf seine Aussage anzuwenden war das Mindeste.*
