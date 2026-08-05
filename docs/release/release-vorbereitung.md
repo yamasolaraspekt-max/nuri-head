@@ -73,3 +73,37 @@ S7  Logs: keine neuen ERROR-Eintraege in den ersten Minuten
 Abbruchweg: Rollback auf vorherigen Release-SHA + php artisan migrate:rollback --step=<n>
             (beide Migrationen tragen down(); Bestandsdaten additiv, kein Datenverlust)
 ```
+
+---
+
+# Release-Protokoll (Vertretung nach ARBEITSREGELN 1.4)
+
+## A-02 — Lock-Halter statt Ruhe · 05.08.2026
+
+```yaml
+auftrag: A-02
+abnahme_commit: 6953198a
+release_commit: 7358de65   # Arbeitszweig-Stand, enthaelt 6953198a + Governance-Linie v1.4
+votum: RELEASE_FREI        # Umfang: TRANSPORT auf fork + backup-private (v1.3/§ Yama: Push ist
+                           # Transport, nicht VEROEFFENTLICHT). Zielintegration main = Sammel-
+                           # Release, ausdruecklich offen.
+ci: pass                   # kein CI vorhanden (Blocker B2) — lokales Tor am Abnahme-Commit im
+                           # getrennten Checkout erneut gefahren: bash -n OK · node --test
+                           # commitPruefen 30/30 pass · Scope exakt 2 A-02-Pfade
+artefakte_reproduzierbar: true   # nicht anwendbar fuer A-02 (kein Bundle beruehrt); Kette selbst
+                                 # am 05.08. byte-gleich belegt (789de20f)
+migration: nicht_anwendbar
+rueckweg: pass             # ein Commit, revertierbar; keine Persistenz
+smoke_test_plan: "nicht anwendbar (Werkzeug-Aenderung ohne Laufzeitwirkung in der App)"
+befunde:
+  - "AUFLAGE (Planner-Entscheid uebernommen): Zweitfassung ca5f80e4 auf work/a01-generator wird
+     VOR dem A-01-Merge zurueckgenommen (§7 keine Nebenbaustellen)"
+ausgefuehrte_vertretung:
+  - "Push fork:            a4e2bd58 -> 7358de65 (FF, exit 0)"
+  - "Push backup-private:  a4e2bd58 -> 7358de65 (FF, exit 0)"
+  - "davor: Governance-Merge a4e2bd58 (v1.3 Yama-veroeffentlicht + Vertretungsregel als 1.4)"
+offen:
+  - "lokaler Zweig-Ref steht auf e30c7197 — Fast-Forward auf 7358de65 sobald der gemeinsame Baum
+     ruhig ist (76 unverbuchte Eintraege, ARBEITSREGELN.md im Wegwerf-Index-Zustand)"
+  - "zwei Statustraeger (STATUS.md / AKTUELLER_AUFTRAG.yaml) — Zusammenfuehrung = Planner"
+```
