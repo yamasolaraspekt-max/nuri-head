@@ -16,10 +16,17 @@ import { useHausplanerStore } from '../store/hausplanerStore';
 import { HausplanerDreiDSzene } from '../renderers/three-d/szene';
 import { T } from './studioDaten';
 
-/** Der Stil der Nicht-darstellbar-Meldung — als Konstante, damit kein statischer Inline-Block
+/** Der Stil der Nicht-darstellbar-Meldung — OBEN, nicht unten.
+ *  *Am Browser gemessen:* unten am Leinwandrand lag die Meldung in allen drei Breiten
+ *  ausserhalb des Fensters (1440: top 892 bei 900 Fensterhoehe; 1024: 474-812 bei 768;
+ *  375: 694-813 bei 812). Vorhanden und unlesbar ist so gut wie nicht vorhanden.
+ *  Der Rest: — als Konstante, damit kein statischer Inline-Block
  *  entsteht (Stilschicht-Zusage Scheibe 8c). Farben ausschliesslich ueber Tokens. */
 const MELDUNG_STIL: React.CSSProperties = {
-  position: 'absolute', left: 12, bottom: 12, right: 140, padding: '8px 12px',
+  position: 'absolute', left: 12, top: 12, right: 12, maxWidth: '52ch',
+  // *Am Browser gemessen:* mit `right: 140` (Abstand zum Fit-Knopf) blieb bei 1024 px im
+  // schmalen 3D-Bereich ein Kasten von 25 px Breite — ein Wort je Zeile, 337 px hoch, ueber
+  // der Leinwand. Der Knopf sitzt UNTEN rechts; oben braucht die Meldung ihm nicht auszuweichen. padding: '8px 12px',
             fontSize: 12, lineHeight: 1.4, borderRadius: 8,
             border: `1px solid ${T.warn}`, background: T.warnSoft, color: T.warnInk,
 };
@@ -42,13 +49,15 @@ export function DreiDBereich({ sichtbar }: { sichtbar: boolean }): React.ReactEl
    * A-01 entsteht ein solches Dach nicht mehr — *aber gespeicherte gibt es, und sie tragen
    * `freigabe: 'bestaetigt'` ueber einer leeren Ansicht.*
    *
-   * Abgeleitet aus dem Renderer nach jeder Zeichnung, kein eigener Zustand: `scene` und
-   * `activeLevelId` sind die Ausloeser, weil genau sie eine Neuzeichnung erzwingen.
+   * Abgelesen **in** `uebernehmen`, direkt nach `aktualisiere` — nicht in einem eigenen Effekt.
+   *
+   * **Am Browser gemessen, nicht vermutet:** ein eigener `useEffect` ueber `[scene, activeLevelId]`
+   * stand VOR dem Effekt, der die Szene ueberhaupt anlegt. Beim ersten Durchlauf war `szeneRef`
+   * noch `null`, danach lief er nie wieder — das Bestandsdokument mit L-Dach zeigte weiterhin eine
+   * leere Stelle, *waehrend die Insel-Zusagen gruen waren*. Genau der Fall, den ein gruener
+   * Inseltest nicht faengt.
    */
   const [nichtDarstellbar, setNichtDarstellbar] = useState<ReadonlyArray<{ nodeId: string; grund: string }>>([]);
-  useEffect(() => {
-    setNichtDarstellbar(szeneRef.current?.nichtDarstellbar() ?? []);
-  }, [scene, activeLevelId]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -65,6 +74,8 @@ export function DreiDBereich({ sichtbar }: { sichtbar: boolean }): React.ReactEl
       const s = useHausplanerStore.getState();
       if (s.scene && s.activeLevelId) {
         szene.aktualisiere(s.scene, s.activeLevelId, s.selectedNodeIds);
+        // Nach der Zeichnung, aus derselben Quelle: was konnte nicht gezeichnet werden?
+        setNichtDarstellbar(szene.nichtDarstellbar());
       }
     };
     uebernehmen();
