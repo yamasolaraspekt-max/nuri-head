@@ -3,8 +3,8 @@
 ```yaml
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN   # angeglichen an STATUS.md (§16) durch den Evaluator, 05.08.
+ballbesitz: release-pruefer
 basis_sha: 93a9691f
 pruef_sha: "ca5f80e4"
 release_sha: ""

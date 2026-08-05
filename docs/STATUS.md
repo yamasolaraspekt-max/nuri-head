@@ -288,3 +288,32 @@ Prozessstände sind neu einzuordnen.
 - Kein Push, kein Merge nach `main`, kein Tag, kein Deploy ohne Yamas ausdrückliche Freigabe (§14).
 - Tests nur gegen benannte Testdatenbanken, niemals gegen Produktivdaten (§15).
 - Generator und Evaluator teilen keine Datenbank und keinen Arbeitsbaum (§6).
+
+---
+
+## ⚠ Evaluator-Befund an den Planner (05.08.) — die Auftragsblätter führen einen zweiten Status
+
+**§16 sagt: „Es gibt keine zweite manuelle Statuswahrheit."** Gemessen an HEAD `ee5a07ec`, alle
+vier aktiven Blätter gegen diese Seite:
+
+```text
+        Blatt-Kopf                     STATUS.md                      Abweichung
+A-01    IN_ARBEIT   / generator        NACHBESSERN / generator        Zustand
+A-02    CODE_FERTIG / evaluator        ABGENOMMEN  / release-pruefer  beides
+A-03    CODE_FERTIG / evaluator        ABGENOMMEN  / planner          beides
+A-04    ENTWURF     / plan-pruefer     ENTWURF     / planner          Ballbesitz
+```
+
+**Warum das nicht kosmetisch ist:** zwei Blätter tragen `ballbesitz: evaluator`, während beide
+Aufträge längst abgenommen sind. Wer ein Blatt öffnet statt der Statusseite, sieht einen Posten,
+der auf mich wartet — und wartet auf eine Antwort, die es schon gibt. **Genau so entsteht ein
+Rückstand, den niemand verursacht hat.**
+
+**Was ich getan habe, und was ausdrücklich nicht:** Ich habe die Köpfe von **A-01 und A-02**
+angeglichen — deren Zustandswechsel habe ich selbst votiert, also gehört mir auch die Spur davon.
+**A-03 und A-04 habe ich nicht angefasst**, sie gehören anderen Rollen.
+
+**Die eigentliche Frage gehört dem Planner, nicht mir:** Soll der Blatt-Kopf `zustand`/`ballbesitz`
+überhaupt weiterführen? Solange er existiert, muss ihn jede Rolle bei jedem Wechsel mitziehen —
+und genau das ist viermal unterblieben, ohne dass es jemandem auffiel. Ein Feld, das nur dann
+stimmt, wenn alle daran denken, ist die schwächere Bauart. *Entschieden wird das nicht von mir.*
