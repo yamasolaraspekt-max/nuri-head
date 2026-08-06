@@ -202,6 +202,63 @@ gegen die A-02 geschnitten wurde.*
 nächsten Commit**, ohne eigenen Aufruf. *Die Änderung wirkt im vorhandenen Werkzeug; ein
 zusätzlicher Handgriff wäre genau die Umgehung, die A-02 zu verhindern versucht.*
 
+## Auswirkungen (§5) — Rest 2 aus der 1. Runde, nie erledigt
+
+```text
+API · Server · Schema · Migration · Bestandsdaten · Bundle        KEINE
+Produktivcode                     scripts/commit-pruefen.sh + scripts/__tests__/commitPruefen.test.mjs
+Testdaten-Ziel                    KEINES
+Prozessbindung                    ENTFAELLT - kein Serverstart, keine Datenbank;
+                                  alle Proben laufen im Wegwerf-Repo der Suite
+Werkzeuge auf der Zielmaschine    node-Testsuite (30 vorhandene Zusagen) - vorhanden UND
+                                  in Gebrauch · `trap` ist Bash-Bordmittel, nichts Neues
+```
+
+> **Der Plan-Prüfer hat den eigenen Fehler zuerst genannt:** in Runde 2 hat er *„alle vier
+> Restpunkte erledigt"* bestätigt — **dieser hier war nie erledigt.** *Ich hatte ihn still durch
+> etwas anderes ersetzt, und es fiel erst in der BEREIT-Prüfung auf.* **§18 nennt genau das:
+> stilles Austauschen. Der Fehler ist meiner, das Durchwinken seiner — beide stehen jetzt da.**
+
+## Nachtrag 06.08. — die Ist-Belege sind historisch geworden
+
+**Jemand hat den Standard-Index angeglichen, ohne es zu melden.** Selbst nachgemessen:
+
+```text
+                          im Blatt (05.08.)     heute gemessen
+Phantom-Loeschungen              17                    1
+Divergenz gesamt                 60                    3
+Halde                          1736                 1749   (waechst weiter)
+```
+
+**Damit taugen feste Zahlen endgültig nicht als Rot** — was der Plan-Prüfer und der Generator
+bereits verlangt hatten. *Das Rot von A-07-1a ist die **wachsende** Divergenz je Tor-Commit, nicht
+ein Stand.*
+
+> ### Und der Beleg dafür entstand beim Schreiben dieses Blatts
+>
+> ```text
+> $ git diff --cached --name-status
+> D  docs/BEFUND-A02-LSOF-AUF-VIRTUALISIERTEM-MOUNT.md   <- vor Minuten committet
+> M  docs/STATUS.md
+> M  docs/auftraege/aktiv/A-07-index-divergenz.md
+> ```
+>
+> **Eine Datei, die ich soeben über das Tor angelegt habe, gilt im Standard-Index bereits wieder
+> als gelöscht.** *Der Mechanismus ist nicht historisch — er erzeugt bei jedem einzelnen
+> Tor-Commit ein neues Phantom. Das ist das Rot, und es ist in einem Befehl vorführbar.*
+
+## Noch eine Zahl, die nicht trug — die letzte
+
+```text
+Dateien in HEAD                7012
+Standard-Index heute           7011   (= HEAD minus das eine Phantom)
+groesster index.gen*           6963
+```
+
+**Der „komplette Fremdbaum" ist dieses Repository**, in einem etwas älteren Stand. *Weder fremd
+noch 7011. Zusammen mit `.ai-workflow` — das nie entfernt war — bleibt von der Schreckensdeutung
+nichts übrig; von den drei echten Mängeln bleibt alles.*
+
 ## Rückweg
 
 Eine Änderung an einem Skript, `git revert` genügt. **Der Arbeitsbaum wird nicht angefasst** —
