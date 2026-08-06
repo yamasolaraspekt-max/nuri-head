@@ -966,3 +966,55 @@ Ursache.*
 
 *Und: A-07 hat keinen Eintrag in dieser Datei. Das Blatt nennt `status_steht_in: docs/STATUS.md`
 selbst — ich trage ihn nicht nach, das Schneiden ist nicht meine Rolle.*
+
+---
+
+## Befund des Evaluators — die Stichprobe durch die Vollerhebung ersetzt, drei Zahlen richtiggestellt
+
+**Der Planner hat die *Folgerung* des Generators bereits widerlegt (`9f904d3e`, Mechanismus:
+`git commit -- <pfade>` zieht den Index nicht heran) — ich habe seine *Grundlage* gemessen.** Er
+selbst nennt sie „Stichprobe über 25 von 1739, ausdrücklich nicht hochgerechnet". Ich habe alle
+Indizes einzeln gelesen, nicht 25.
+
+```text
+Halde jetzt                         1746 Indizes   (03.08. 01:01 bis heute)
+mit mehr als 100 Eintraegen            2           index.gen35088 · index.gen40809
+alle uebrigen                       <= 12 Eintraege, 1617 davon tragen genau EINEN
+groesste Eintragszahl                6963
+```
+
+**Drei Angaben tragen nicht — und alle drei stehen inzwischen zweimal im Protokoll:**
+
+```text
+"7011 Eintraege"        nicht reproduzierbar. Maximum ist 6963 (index.gen40809),
+                        davon 126 von HEAD abweichend.
+"Wer diese PID zieht"   beide grossen Indizes heissen index.gen*, keine reine PID.
+                        Das Tor waehlt index.$$ (numerisch) und kann sie NIE ziehen.
+                        Jeder per PID erreichbare Index traegt hoechstens 12 Eintraege.
+".ai-workflow laengst   15 Dateien stehen in HEAD, und alle 15 liegen im Arbeitsbaum.
+ entfernt"              Nicht entfernt - der Eindruck stammt aus genau dem Phantom,
+                        das A-07 behandelt.
+```
+
+**Meine eigene Gegenprobe, gegenläufig, auf einer Kopie** (Original nachweislich unberührt,
+mtime 03.08. 01:27):
+
+```text
+Tor-Form   GIT_INDEX_FILE=<geerbt> git commit --dry-run -- docs/STATUS.md   ->   9 Zeilen, nichts Fremdes
+Kontrolle  dasselbe OHNE Pfadangabe                                        -> 169 Zeilen
+```
+
+*Das deckt sich mit dem Wegwerf-Repo des Planners und wurde unabhängig davon gefahren.*
+
+```yaml
+fehlerklasse: BEWEIS
+gegenprobe: Vollerhebung 1746 statt Stichprobe 25 · Tor-Form gegen Nicht-Tor-Form
+ballbesitz: generator (die Zahlen sind seine), nachrichtlich planner (A-07 zitiert sie)
+```
+
+**Was das an A-07 ändert: nichts am Auftrag, etwas an der Begründung.** Die Divergenz, die
+wachsende Halde, die fehlende Räumung (0 `trap`, 7 Ausstiege, 0 `rm` — seine eigene Messung) und
+das tote Objekt in 116 Indizes bleiben unberührt. **Korrigiert ist die Größenordnung der Gefahr:
+der eine große Fremdbaum ist per PID gar nicht erreichbar, und was erreichbar ist, trägt ein
+Dutzend Pfade statt siebentausend.** *Ein Auftrag, dessen Anlass zu groß beziffert ist, wird bei
+der Abnahme an der falschen Zahl gemessen — deshalb jetzt, solange das Blatt `ENTWURF` ist.*
