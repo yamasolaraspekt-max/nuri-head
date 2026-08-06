@@ -211,10 +211,38 @@ Eine Änderung an einem Skript, `git revert` genügt. **Der Arbeitsbaum wird nic
 
 ## Zulieferung des Generators und meine Gegenprobe (05.08., 15:48 / 19:5x)
 
-**Sein Fund steht und ist alarmierend.** Stichprobe über **25 von 1739** liegengebliebenen
-Tor-Indizes: 24 identisch mit HEAD — *die Erbschaft fällt nicht auf* —, **einer weicht ab und trägt
-7011 Einträge, einen kompletten Fremdbaum samt des längst entfernten `.ai-workflow`.**
-*Er hat ausdrücklich nicht hochgerechnet: 25 von 1739 sind eine Stichprobe, keine Quote.*
+**Sein Fund war eine Stichprobe — 25 von 1739 —, und er hat das ausdrücklich gesagt.** Er meldete
+einen Index mit *„7011 Einträgen, einem kompletten Fremdbaum samt des längst entfernten
+`.ai-workflow`"*.
+
+> ### ⚠ KORRIGIERT (06.08.): Der Evaluator hat vollerhoben. Drei Zahlen tragen nicht — und ich habe sie übernommen.
+>
+> **Alle 1746 Halden-Indizes einzeln gelesen. Selbst nachgemessen, unabhängig:**
+>
+> ```text
+> per PID erreichbar (index.<zahl>)   1744 Stueck · groesster traegt  16 Eintraege
+> index.gen*  - per index.$$ NIE erreichbar        groesster traegt 6963 Eintraege
+>
+> .ai-workflow in HEAD          15 Dateien
+> .ai-workflow im Arbeitsbaum   15 Dateien      -> NICHT entfernt
+> ```
+>
+> **Der katastrophale Index heißt `index.gen*` und ist über `index.$$` nicht benennbar** — PIDs
+> sind Zahlen. *Das Szenario „wer diese PID zieht" kann für ihn gar nicht eintreten.* Jeder
+> tatsächlich erreichbare Index trägt eine zweistellige Zahl von Einträgen.
+>
+> **Und `.ai-workflow` war nie entfernt.** Der Eindruck stammt aus **genau dem Phantom, das A-07
+> behandelt** — *der Beleg des Befunds war von dem Fehler verseucht, den der Befund beschreibt.*
+>
+> **Mein Anteil:** Ich habe seine **Folgerung** geprüft (schlägt ein vergifteter Index durchs Tor?
+> — nein, gemessen) **und seine Prämissen nicht.** Die 7011 und das „längst entfernt" habe ich als
+> gesichert in mein Blatt geschrieben. *Eine halbe Prüfung, die wie eine ganze aussah.*
+>
+> *Kleine Abweichung, ehrlich benannt: er misst als PID-Maximum 12, ich messe 16 — die Halde wächst
+> weiter. Am Strukturbefund ändert das nichts, beide liegen weit unter 100.*
+
+**A-07 bleibt in vollem Umfang.** *Korrigiert ist allein die **Größenordnung der Gefahr** — und das
+zum richtigen Zeitpunkt, solange das Blatt `ENTWURF` ist.* **Seine Klasse: `BEWEIS`.**
 
 **Seine Folgerung habe ich geprüft statt übernommen:** *„Wer diese PID zieht, committet 7011
 Dateien mit."*

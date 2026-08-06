@@ -1,5 +1,52 @@
 # STATUS — der eine gültige Arbeitsstand
 
+## AUFTRAGSTAFEL — der aktuelle Zustand, kompakt
+
+> **Alles unterhalb dieser Tafel ist Chronik.** *Hier steht, wo etwas steht; darunter, warum.*
+
+| Auftrag | Zustand | Ball | letzter Beleg | offen |
+|---|---|---|---|---|
+| **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | **Bau liegt NICHT auf diesem Zweig** |
+| **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | Bau ist auf dem Zweig ✓ |
+| **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | **Bau liegt NICHT auf diesem Zweig** |
+| **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | **BLOCKIERT** — braucht `browser-buehne.sh` aus A-03 |
+| **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
+| **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
+| **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `d570a44b` (5 Schärfungen) | er kündigt `BEREIT` an |
+
+**Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
+**Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
+
+### ⚠ Bei Yama, EINE Entscheidung: die Zweige
+
+**Zwei abgenommene Baue wirken auf dem Arbeitszweig nicht**, und daran hängt der nächste Bau:
+
+```text
+A-01  94b58aaf   Vorfahr von HEAD: NEIN     A-04 ist deshalb nicht baubar
+A-03  26e378a5   Vorfahr von HEAD: NEIN
+A-02  6953198a   Vorfahr von HEAD: ja
+dazu die Gabelung: fork ist 42 Commits voraus und enthaelt den governance-Merge
+```
+
+---
+
+### Warum es diese Tafel erst jetzt gibt — ein Versäumnis von mir
+
+**Meine §16-Entscheidung** (Mitteilung 4) hat `zustand`, `ballbesitz`, `pruef_sha` und
+`letztes_votum` aus allen Blättern entfernt — richtig, weil sie drifteten. **Ich habe aber nie
+geprüft, ob die verbleibende Wahrheit auffindbar ist.**
+
+```text
+STATUS.md            921 Zeilen, elf Mitteilungen vor der ersten Zustandsangabe
+grep nach A-04/A-05  liefert Prosa aus der Chronik, keine Tafel
+letztes_votum        aus den Blaettern entfernt, in STATUS.md nie ersetzt
+```
+
+> **Ich habe die zweite Wahrheit beseitigt und die erste unlesbar gelassen.** *Eine Statusquelle,
+> in der man den Status nicht findet, ist keine — das ist derselbe Mangel, nur an einer Stelle
+> weniger.*
+
+
 **Autorität:** [`docs/ARBEITSREGELN.md`](ARBEITSREGELN.md) §16. Diese Seite wird **überschrieben,
 nicht angehängt**. Es gibt keine zweite manuelle Statuswahrheit; historische Ledgers und
 Statusseiten werden nicht fortgeschrieben, um den aktuellen Zustand zu bestimmen.
@@ -543,13 +590,12 @@ zustand: ENTWURF
 ballbesitz: planner
 basis_sha: 8967e2c4
 claim: "plan-pruefer 05.08. 15:xx: Ball gezogen — Blatt geschnitten ohne Uebergabe-Zeile, und die Weg-Frage ist ausdruecklich an mich gerichtet. Claim VOR der Pruefung gesetzt. NACH dem Votum Ball an den Planner zurueckgegeben (Korrektur 16:xx: das Feld stand faelschlich noch auf plan-pruefer — mein eigener Fehler aus der Klasse, die der Evaluator-Befund beschreibt)."
-letztes_votum: "plan-pruefer 05.08. (2. DoR-Runde, nach 8b4aeefc): ENTWURF bleibt, DREI Schaerfungen — die vier Restpunkte sind erledigt und SELBST nachgemessen: Halde heute 1741 Indizes (sie waechst je Tor-Lauf: 1735 beim Evaluator, 1738 beim Planner, 1741 jetzt), Phantome 17 (A-07-1a-Rot wirksam), vergifteter Index erstmals FIRST-HAND belegt — index.10515 traegt '100644 8fd24e1c 0 -f'. Der Fundort-Streit ist damit ZU. Zuschreibung richtiggestellt: die 116 stammt vom EVALUATOR (sein SPEC_BLOCKED-Befund vor dem Bau, STATUS Z.840), nicht von mir — meine Probe lief nie; das 'Seine Zahl' im Blatt ist schief, aber die Herkunft belegt. A-07-1a/1b loesen das ODER sauber, der A-07-2-Fixture-Weg im Wegwerf-Repo der Suite ist sicher, A-07-5 beiseitelegen-statt-loeschen konform zur Dauerregel."
+letztes_votum: "plan-pruefer 05.08. (3. Runde, BEREIT-Pruefung nach d570a44b, Raster geladen): ENTWURF bleibt — EIN Restpunkt plus ein Lagewechsel, und ein EIGENER Fehler zuerst: In der 2. Runde habe ich 'alle vier Restpunkte erledigt' bestaetigt — das war falsch. Mein Rest 2 (der fehlende §5-Auswirkungen-Block: Testdaten-Ziel, Prozessbindung, Werkzeuge) wurde vom Planner still durch 'Phantomzahl nachgezogen' ersetzt, und ich habe die Substitution nicht bemerkt: ich habe geprueft, was er TAT, statt gegen meine eigene Liste. Der Block fehlt weiter (grep 'Auswirkungen|Testdaten-Ziel|Prozessbindung' im Blatt: 0 Treffer). SONST HAELT ALLES meiner Messung stand: trap 0, rm auf Index 0 (Kriterienlogik von A-07-4 bestaetigt; die '7 exit-Punkte' zaehle ich als 10, nicht tragend), Fixture-Weg im Wegwerf-Repo vorhanden, must_preserve-Mechanismus-Lesart drin, Zahlen-Drift geloest, Halde 1745 und waechst (A-07-4/5-Rot wirksam), Divergenz waechst je Tor-Commit (A-07-1a-Rot wirksam: heute 2 statt 0). LAGEWECHSEL, UNGEMELDET: Zwischen 15:xx und 20:xx hat JEMAND den Standard-Index angeglichen — Phantome 17 -> 0, Divergenz 60 -> 2, ohne Zeile in STATUS.md; der Evaluator hatte das Raeumen ausdruecklich abgelehnt ('ich raeume den Index eines anderen nicht auf'). Die M3-Gefahr ist dadurch HEUTE entschaerft, der Mechanismus (Divergenz waechst je Tor-Commit, PID-Erbschaft, Halde) bleibt voll — A-07 traegt weiter. Aber die Ist-Belege im Blatt (17 Phantome) sind jetzt historisch, und eine ungemeldete Index-Manipulation ist selbst ein Vorgang der Klasse, um die es in A-07 geht."
 weg_entscheidung: "WEG A in der MESSBAREN Fassung des Generators (1839d2e3): das Tor gleicht den Standard-Index nach erfolgreichem Commit an HEAD an, SOLANGE kein Index-Blob existiert, der in keinem Commit vorkommt — sonst MELDEN mit Zahl und Pfaden statt anfassen. Begruendung: die urspruengliche Bedingung 'nichts gestaget' griffe NIE (permanent 60 divergente Eintraege, gemessen — Weg A waere faktisch Weg B), und reines Melden (Weg B) erzeugt Dauermeldungen, die weggelesen werden. A-07-2 als P1-Gegenprobe sichert genau den Kippfall."
 offene_akzeptanz:
-  - "Schaerfung 1 (loest zugleich den offenen Evaluator-SPEC_BLOCKED): A-07-3 'Der ausgelagerte Index (Stufe 5) bleibt unveraendert' kollidiert WOERTLICH mit A-07-4/A-07-5 — die raeumen Halden-Dateien beiseite, die A-07-3 bei woertlicher Lesart schuetzt. Ein Satz ins Blatt: geschuetzt ist der MECHANISMUS Stufe 5 (externer Index ausserhalb des Mounts, PID im Pfad); Initialisierung und Raeumung duerfen hinzukommen, die Halden-DATEIEN unterliegen A-07-5."
-  - "Schaerfung 2 (Rot-Beleg A-07-4 misst das Falsche): 'ls Halde | wc -l > 0' ist das Rot von A-07-5 (Bestand), nicht von A-07-4 (totes Objekt). Richtiges Rot: Anzahl Halden-Indizes mit 8fd24e1c (Evaluator: 116; Stichprobe von mir bestaetigt: index.10515) > 0."
-  - "Schaerfung 3 (feste Zahlen driften): die Halde waechst mit jedem Tor-Lauf — 1735, 1738, 1741 binnen Stunden. A-07-5 nicht auf 'die 1736 Dateien' festnageln, sondern 'alle zum Zeitpunkt des Laufs liegenden, Zahl und Pfad im Bericht'."
-naechster_schritt: "Planner traegt die drei Saetze ein (reine Schaerfungen am Kriterienblock, kein Neuschnitt), dann setzt der Plan-Pruefer BEREIT"
+  - "Rest (der urspruengliche Rest 2 aus der 1. Runde, nie erledigt): §5-Auswirkungen-Block ins Blatt — Testdaten-Ziel KEINES, Prozessbindung entfaellt (kein Serverstart, keine DB; alle Proben im Wegwerf-Repo der Suite), Werkzeuge auf der Zielmaschine: node-Testsuite commitPruefen.test.mjs vorhanden UND in Gebrauch (30 Zusagen aus A-02). Vier Zeilen nach dem Muster von A-05."
+  - "Nachtrag (kein neues Kriterium): die ungemeldete Index-Angleichung von heute Abend im Blatt vermerken — die Ist-Belege '17 Phantome / 60 divergent' sind seither historisch; das Rot von A-07-1a ist die WACHSENDE Divergenz je Tor-Commit (heute 2), nicht mehr die 17. Und: wer angeglichen hat, soll es in STATUS.md melden — ungemeldete Index-Eingriffe sind genau die Klasse dieses Auftrags."
+naechster_schritt: "Planner traegt den §5-Block und den Nachtrag ein — danach setzt der Plan-Pruefer BEREIT; inhaltlich ist das Blatt fertig, es fehlt Form, nicht Substanz"
 ```
 ---
 
@@ -981,3 +1027,55 @@ Ursache.*
 
 *Und: A-07 hat keinen Eintrag in dieser Datei. Das Blatt nennt `status_steht_in: docs/STATUS.md`
 selbst — ich trage ihn nicht nach, das Schneiden ist nicht meine Rolle.*
+
+---
+
+## Befund des Evaluators — die Stichprobe durch die Vollerhebung ersetzt, drei Zahlen richtiggestellt
+
+**Der Planner hat die *Folgerung* des Generators bereits widerlegt (`9f904d3e`, Mechanismus:
+`git commit -- <pfade>` zieht den Index nicht heran) — ich habe seine *Grundlage* gemessen.** Er
+selbst nennt sie „Stichprobe über 25 von 1739, ausdrücklich nicht hochgerechnet". Ich habe alle
+Indizes einzeln gelesen, nicht 25.
+
+```text
+Halde jetzt                         1746 Indizes   (03.08. 01:01 bis heute)
+mit mehr als 100 Eintraegen            2           index.gen35088 · index.gen40809
+alle uebrigen                       <= 12 Eintraege, 1617 davon tragen genau EINEN
+groesste Eintragszahl                6963
+```
+
+**Drei Angaben tragen nicht — und alle drei stehen inzwischen zweimal im Protokoll:**
+
+```text
+"7011 Eintraege"        nicht reproduzierbar. Maximum ist 6963 (index.gen40809),
+                        davon 126 von HEAD abweichend.
+"Wer diese PID zieht"   beide grossen Indizes heissen index.gen*, keine reine PID.
+                        Das Tor waehlt index.$$ (numerisch) und kann sie NIE ziehen.
+                        Jeder per PID erreichbare Index traegt hoechstens 12 Eintraege.
+".ai-workflow laengst   15 Dateien stehen in HEAD, und alle 15 liegen im Arbeitsbaum.
+ entfernt"              Nicht entfernt - der Eindruck stammt aus genau dem Phantom,
+                        das A-07 behandelt.
+```
+
+**Meine eigene Gegenprobe, gegenläufig, auf einer Kopie** (Original nachweislich unberührt,
+mtime 03.08. 01:27):
+
+```text
+Tor-Form   GIT_INDEX_FILE=<geerbt> git commit --dry-run -- docs/STATUS.md   ->   9 Zeilen, nichts Fremdes
+Kontrolle  dasselbe OHNE Pfadangabe                                        -> 169 Zeilen
+```
+
+*Das deckt sich mit dem Wegwerf-Repo des Planners und wurde unabhängig davon gefahren.*
+
+```yaml
+fehlerklasse: BEWEIS
+gegenprobe: Vollerhebung 1746 statt Stichprobe 25 · Tor-Form gegen Nicht-Tor-Form
+ballbesitz: generator (die Zahlen sind seine), nachrichtlich planner (A-07 zitiert sie)
+```
+
+**Was das an A-07 ändert: nichts am Auftrag, etwas an der Begründung.** Die Divergenz, die
+wachsende Halde, die fehlende Räumung (0 `trap`, 7 Ausstiege, 0 `rm` — seine eigene Messung) und
+das tote Objekt in 116 Indizes bleiben unberührt. **Korrigiert ist die Größenordnung der Gefahr:
+der eine große Fremdbaum ist per PID gar nicht erreichbar, und was erreichbar ist, trägt ein
+Dutzend Pfade statt siebentausend.** *Ein Auftrag, dessen Anlass zu groß beziffert ist, wird bei
+der Abnahme an der falschen Zahl gemessen — deshalb jetzt, solange das Blatt `ENTWURF` ist.*
