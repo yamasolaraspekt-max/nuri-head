@@ -109,8 +109,15 @@ Phantom-Fund gemeldet, und ich hätte danach geschnitten.***
 
 **A-07-1a (P1, der Regelfall):** Existiert **kein** Index-Blob, der in keinem Commit vorkommt,
 gleicht das Tor nach erfolgreichem Commit den Standard-Index an HEAD an.
-**Nachweis:** `git diff --cached --diff-filter=D` meldet danach **0**.
-*Rot an der Basis: heute **17** Phantom-Löschungen (selbst gemessen, 05.08.).*
+**Nachweis:** `git diff --cached --name-only` meldet danach **0**.
+
+> **Schärfung des Generators — der erste Nachweis deckte den Befund nicht ab:**
+> ```text
+> --diff-filter=D   17   nur die Phantom-Loeschungen
+> --name-only       60   ALLE divergenten Eintraege
+> ```
+> *Wer nur die 17 behebt und die **43 veralteten Stände** stehen lässt, ist nach dem Blatt grün —
+> und der Index bleibt divergent.* **Beide Zahlen selbst nachgemessen.**
 
 **A-07-1b (P1, der Kippfall):** Existiert **ein solcher Blob**, lässt das Tor den Index
 **unangetastet** und meldet **Zahl und Pfade**.
@@ -132,12 +139,34 @@ im Wegwerf-Repo, das commitPruefen.test.mjs ohnehin baut:
 
 *Ohne dieses Kriterium wäre „Index immer plattmachen" grün — und das wäre schlimmer als der Fehler.*
 
-**A-07-3 (`must_preserve`):** Der ausgelagerte Index (Stufe 5) bleibt unverändert. *Er ist die
+**A-07-3 (`must_preserve`, MECHANISMUS-Lesart — Schärfung 1):** Der **Mechanismus** der Stufe 5
+bleibt unverändert: jeder Lauf arbeitet weiterhin auf einem **eigenen, ausgelagerten** Index.
+**Nicht geschützt sind die liegengebliebenen DATEIEN** — die sind der Mangel, nicht die Lösung.
+
+> *Wörtlich gelesen kollidierte das Kriterium mit A-07-4 und A-07-5, die genau diese Dateien
+> wegräumen. Der Plan-Prüfer hat den Widerspruch gefunden; er löst zugleich den offenen
+> `SPEC_BLOCKED` des Evaluators.*
+
+<!-- alte Fassung: --> *Der ausgelagerte Index ist die
 Lösung eines anderen Problems und wird nicht mitrepariert.*
 
-**A-07-4 (P1, NEU geschnitten — der alte war unbrauchbar):** Nach einem Tor-Lauf bleibt **kein
-verwaister Index** zurück: das Tor räumt seinen eigenen `index.$$` am Ende weg **und**
-initialisiert ihn am Anfang, statt einen vorgefundenen zu erben.
+**A-07-4 (P1, Schärfungen 2 und G2):** Das Tor **initialisiert** seinen Index am Anfang und räumt
+ihn über ein **`trap … EXIT`** weg — **nicht „am Ende"**.
+
+> ### Warum `trap` und nicht „am Ende" — gemessen, nicht gemeint
+>
+> ```text
+> trap im Tor          0
+> exit-Punkte          7      Z.48 · 96 · 147 · 173 · 190 · 221 · 267
+> rm auf den Index     0
+> ```
+>
+> **Sieben Auswege, keiner räumt.** *Nur `exit 0` in Z.267 ist überhaupt „am Ende"; die sechs
+> Abbruchpfade — `FEHLER`, `ENV_BLOCKED` — erreichen es nie.* **Genau daraus ist die Halde
+> entstanden.**
+>
+> **Ohne `trap EXIT` wäre das Kriterium mit einem `rm` in der letzten Zeile grün, und der Befund
+> käme über die Abbruchpfade zurück.** *Der Generator hat es gemessen, ich habe es nachgemessen.*
 **Gegenprobe im selben Test:** ein absichtlich vorgelegter Fremd-Index unter demselben Pfad darf
 den Lauf **nicht** beeinflussen.
 
@@ -158,9 +187,13 @@ den Lauf **nicht** beeinflussen.
 > `.git/index` — *und dass 116 Indizes denselben kaputten Eintrag tragen, IST der Beweis für die
 > PID-Erbschaft: ein einzelner Fehlgriff hat sich über 116 Läufe fortgepflanzt.*
 >
-> **Rot-Beleg für A-07-4, heute wirksam:** `ls $TMPDIR/ticket-index | wc -l` → **1738 > 0.**
+> **Rot-Beleg — Schärfung 2, weil der alte das Falsche maß:** `ls … | wc -l` ist das Rot von
+> **A-07-5** (Bestand), nicht von A-07-4. **A-07-4 misst das WACHSTUM je Lauf.**
+> *Belegt an vier Zeitpunkten desselben Tages: **1735 → 1738 → 1741 → 1744** — drei davon sind
+> während dieser Sitzung dazugekommen.*
 
-**A-07-5 (P1, Bestandsaufräumung, EINMALIG):** Die 1736 liegengebliebenen Dateien werden
+**A-07-5 (P1, Bestandsaufräumung, EINMALIG):** Die **zum Zeitpunkt des Laufs vorhandenen** liegengebliebenen Dateien werden — **Zahl in den
+Bericht, nicht ins Kriterium**, sie wächst mit jedem Tor-Lauf, auch mit denen der Prüfer —
 **beiseitegelegt, nicht gelöscht** (`_to_delete/`-Muster wie bei Locks), mit Zahl und Pfad im
 Bericht. *Sie sind fremder Zustand aus 1736 Läufen — ein `rm -rf` darauf wäre genau die Handlung,
 gegen die A-02 geschnitten wurde.*
