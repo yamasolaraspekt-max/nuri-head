@@ -1,115 +1,36 @@
-# CLAUDE.md — ticket CRM (Projekt-Governance)
+# CLAUDE.md — ticket CRM
 
-> Modul-/Bereichs-Regeln für dieses Repository. Additiv gepflegt.
+## Einzige verbindliche Prozessquelle
 
-> **⛔ OBERSTES DOKUMENT: [`docs/BETRIEBSORDNUNG.md`](docs/BETRIEBSORDNUNG.md)** — autonomer Mehrstrang-Betrieb (Rollen BAUER/PRÜFER/KOORDINATOR, Gates G1–G9, Vollmacht + Restgrenze, FiBu-Sondergates). Bindet JEDE Instanz; bei Konflikt mit einem Auftragstext gilt die Betriebsordnung. Ändert nur Yama.
+Für jede Arbeit in diesem Repository gilt ausschließlich:
 
-> **⛔ BAU-ORDNUNG (verbindlich): Vor jedem Produktiv-Commit: Selbstprüfung gegen [`docs/architektur/bauordnung.md`](docs/architektur/bauordnung.md) §5 (die 10 Fragen).** Die Bauordnung (Schichten-/Daten-/Sicherheits-/Bau-Prozess-Regeln, abgeleitet aus dem Code-Audit) ist verbindlich und steht **unter** BETRIEBSORDNUNG.md/CLAUDE.md — bei Konflikt gelten diese. Jeder Agent liest sie bei jedem Start.
+**[`docs/ARBEITSREGELN.md`](docs/ARBEITSREGELN.md)**
 
-> **📍 „LIVE"/„PRODUKTION" = LOKALE DEV-DB (Yama-Klarstellung 2026-07-08).** Im laufenden Programm meint „live" die **lokale** DB (`ticket`/`ticket_testing`) auf Yamas Rechner — dort ist freies Arbeiten erlaubt (Migrationen, Seeder, Daten-Bereinigung inkl. UPDATE/DELETE als beauftragter Posten). **Hetzner-Produktion (3000 Kunden) wird NICHT angefasst** — erst am separaten Deploy-Tag, den Yama auslöst. Die „Produktion off-limits"-Regel gilt weiterhin **NUR für Hetzner**. *(Die DAUERDIREKTIVE unten schützt die ticket-Datenintegrität auch lokal: destruktive Schritte bleiben eigene, beauftragte, belegte Posten — kein Beifang.)*
+Alle älteren Prozess-, Rollen-, Übergabe-, Status- und Freigaberegeln sind aufgehoben. Alte
+Aufträge, Abnahmen, Ledgers und Statusseiten dürfen als fachliche Belege gelesen werden, besitzen
+aber keine Prozessautorität. Widersprüchliche Altverweise werden ignoriert.
 
-> **## Optimierungs-Arbeitsmodus: Drei-Rollen-Zyklus (Standard, ab 2026-07-09).** Für JEDEN Optimierungs-/Verbesserungs-Auftrag am CRM/ERP gilt der Drei-Rollen-Zyklus **PLANNER → GENERATOR → EVALUATOR** aus [`docs/agents/00-zyklus.md`](docs/agents/00-zyklus.md) als verbindlicher Standard-Arbeitsmodus. Bindend: getrennte Instanzen (**Generator ≠ Evaluator zwingend**), jede Übergabe schriftlich mit Belegen, Evaluator-Veto (kein Commit ohne Freigabe), **Yama ist finaler Freigeber vor jedem Produktiv-Commit**. Der Zyklus setzt BETRIEBSORDNUNG.md + bauordnung.md DURCH und hebt sie nicht auf; bei Konflikt gilt Betriebsordnung/CLAUDE.md. *(Dringende Sicherheits-P0/P1-Fixes dürfen Yama-direkt laufen; der Zyklus ist der Standard für reguläre Optimierungs-Posten.)*
+## Fachliche Schutzgrenzen
 
-> **⛔ GIT- & TEST-DB-DISZIPLIN (stehende Regeln, verankert 2026-07-20).** Drei Dauerregeln, repo-weit bindend für JEDE Instanz und JEDE Rolle: **(1) Commits nur auf Yamas ausdrückliches Wort** — jeder Commit, auch reine Doku-/Konserven-Commits; Scheiben werden vorbereitet und zur Abnahme vorgelegt, gesetzt wird erst nach Freigabe. **(2) Niemals pushen** — kein `git push` aus irgendeiner Instanz, auch nicht nach grüner Abnahme; pushen macht ausschließlich Yama. **(3) Tests & DB-Messungen ausschließlich gegen `ticket_testing`** (phpunit erzwingt es; BCRYPT_ROUNDS=4) — kein Test, Seed oder Mess-/Probe-Query gegen die Arbeits-DB `ticket`; Schreiben auf `ticket` nur als beauftragter Arbeits-Posten (Live-Klarstellung oben), nie als Test-Beifang. *(Ergänzt DAUERDIREKTIVE + Drei-Rollen-Zyklus, ersetzt nichts.)*
+Diese fachlichen Grenzen bleiben unabhängig vom ersetzten Prozess bestehen:
 
-> **✅ KLARSTELLUNG ZU REGEL (1) — YAMAS ENTSCHEIDUNG VOM 2026-08-03.** *Anlass: die Betriebsordnung §2.1 („Pflicht-Stopps entfallen · Zyklus … → **Commit** → … ohne Yama in Serie", geändert 02.08.) stand gegen Regel (1) unten („Commits nur auf Yamas ausdrückliches Wort", 01.08.). **Beide sind gleichrangig, die Rangfolge zwischen ihnen war nicht geregelt** — gefunden vom Generator, der deshalb 16 Stunden gewartet hat. Er hat richtig gehandelt.* **Yama hat entschieden: es gilt die Trennung SICHERN ≠ VERÖFFENTLICHEN.** — **(a) SICHERUNG: ein Commit auf den eigenen Arbeitszweig ist jederzeit erlaubt, ohne Rückfrage, von jeder Rolle.** Er kann nichts kaputtmachen, was nicht schon lokal ist, und er ist per `git revert` zurückdrehbar. *Regel (1) unten gilt damit **nicht** für Arbeitszweig-Commits — weder hier noch in ihrer Wiederholung weiter unten.* — **(b) VERÖFFENTLICHUNG bleibt Tor 2 und damit Yama allein: `git push` (Regel 2 unten gilt unverändert) · `main` · Tags · `upstream` · jedes `--force` · jedes Löschen.** *Dieselbe Trennung, die PW-01 für den Sicherungs-Push aufgestellt hat: der Rückweg entscheidet, wem die Handlung gehört.* — **(c) Was bleibt: jeder Commit geht durch `scripts/commit-pruefen.sh`, jede Rolle staged NUR eigene Pfade (R13, niemals `git add -A`), und die Buchführungspflichten aus BETRIEBSORDNUNG §1.4 gelten unverändert.**
-> **⛔ ROLLEN vs. PRODUKT — P/G/E sind NUR Entwickler-Rollen (V3-Klarstellung 2026-07-20).** „Planner / Generator / Evaluator" bezeichnen ausschließlich die drei getrennten Entwickler-Rollen des Zyklus (Bau der Software). Sie sind **keine** Funktionen des Hausplaner-Produkts: die App bekommt **keine** Navigation/Tabs/Module „Planen/Generieren/Bewerten", keine KI-Grundriss-Generierung, keine automatische Design-Benotung, keine `PlanningPackage`/`GenerationJob`/`EvaluationReport`-Objekte im Gebäudemodell. Das Produkt bleibt ein **manueller Profi-Planer** (fachliche Arbeitsbereiche: Grundriss, 3D, Split, Wandansicht, TGA, Elektro, Schema, PV, Prüfung, Rendering, Dokumente). Der „Generator" ist die code-bauende Instanz, der „Evaluator" die prüfende — nicht Produktfeatures. Generative KI-Vorschläge sind **außer Scope**, bis sie separat als eigenes Feature geplant werden (nicht automatisch wegen des Drei-Agenten-Modells). Produktname bleibt **„Hausplaner"** (nicht umbenennen). Referenz: `docs/zielbild-gebaeudeplaner.md`.
+- Bestehende Produktdaten werden nicht als Nebenwirkung verändert oder gelöscht.
+- Tests und Test-Seeds laufen nur gegen eindeutig benannte Testdatenbanken, niemals gegen
+  Produktivdaten.
+- Hetzner-/Produktionssysteme werden nur auf Yamas ausdrücklichen Auftrag verändert.
+- Die bestehende Belegkette Angebot → Auftrag → Rechnung bleibt führend; neue Funktionen docken an,
+  statt eine zweite Wahrheit aufzubauen.
+- Bei Strukturkonflikten wird vorhandener Ticket-Code kontrolliert erweitert oder adaptiert, nicht
+  durch parallele Systeme ersetzt.
+- Vor Neuentwicklung werden vorhandene Services, Modelle, Komponenten, Routen, Tests und das
+  Designsystem geprüft und möglichst wiederverwendet.
+- Fach-, Rechts-, Geld-, Datenschutz-, Authentifizierungs- und Datenbankentscheidungen werden nicht
+  still automatisiert. Fehlende Operanden führen zu Rückfrage oder einem ausdrücklich bestätigten
+  Vorschlag.
+- React/TypeScript bleibt auf die Hausplaner-Insel begrenzt; der übrige CRM-Bestand wird nicht ohne
+  eigenen Architekturentscheid umgestellt.
+- UI-Arbeit verwendet vorhandene Styleguide-Komponenten und Tokens und benötigt eine reale
+  Browserabnahme gemäß Arbeitsregeln.
 
-> **⛔ CLAUDE-CODE-STARTPFLICHT: Agenten sofort aktivieren (dauerhaft, ab 2026-07-10).** Bei JEDER neuen Claude-Code-Arbeit in diesem Repository gilt automatisch [`docs/agents/04-claude-code-startanweisung.md`](docs/agents/04-claude-code-startanweisung.md). Claude Code muss vor fachlicher Arbeit die Agenten-Unterlagen `docs/agents/00-zyklus.md`, `01-planner.md`, `02-generator.md`, `03-evaluator.md` sowie die Fundament-Dokumente lesen/anwenden. Der Standardmodus ist **Planner zuerst**: keine Umsetzung ohne Bestandsaufnahme, Ist-Belege, Konzept und Arbeitspakete. Wenn Claude Code echte Subagent-/Task-Werkzeuge bereitstellt, werden Planner/Generator/Evaluator als getrennte Instanzen genutzt; wenn nicht, werden die Rollen streng sequenziell im Hauptthread simuliert und jede Rollenübergabe schriftlich protokolliert. Reserve-Skills werden nur bei Bedarf aktiviert.
-
-> **🎯 PFLICHT-FACHAGENTEN für Produkt/Frontend/Workflow/Architektur (dauerhaft, ab 2026-07-10).** Bei Aufgaben zu Frontend, Design, Layout, UX, Wizard, App-Konzept, Workflow, Prozess oder Architektur gilt zusätzlich [`docs/agents/05-fachagenten-produkt-architektur-frontend.md`](docs/agents/05-fachagenten-produkt-architektur-frontend.md). Claude Code muss dann die Perspektiven **Konzeption-Agent**, **Workflow-Agent**, **Architektur-Agent** und **Frontend-Design-Agent** in Planner und Evaluator explizit abarbeiten. Für Wärmepumpen-Auslegung und andere Energie-/Auslegungs-Wizards sind alle vier Fachagenten Pflicht; UI-Änderungen brauchen Browser-/Screenshot-Prüfung, außer es handelt sich nur um Dokumentation. **Diese Regel gilt nicht rückwirkend als Auftrag, bereits abgeschlossene Slices erneut umzubauen** — sie bindet neue sichtbare Änderungen.
-
-> **🎨 STYLEGUIDE-PFLICHT + VISUELLE REGRESSION (dauerhaft, ab 2026-07-16).** Für JEDES UI-Element gilt [`docs/architektur/ui-bauordnung.md`](docs/architektur/ui-bauordnung.md): **Vor jedem neuen UI-Element `/admin/styleguide` prüfen. Existiert die Komponente, wird sie verwendet. Existiert sie nicht, wird sie ZUERST dort angelegt, dann eingesetzt.** Farbwerte nur über sa-ui-Tokens (kein Hex in Views außer Token-Dateien + `@media print`). Abnahme nur mit Echtdaten-Extremfällen in 3 Viewports (1440/1024/375); der Styleguide ist die Referenzfläche der visuellen Regression (Screenshot-Diff je Welle). Styleguide + Token-Dateien sind ein eigener Strang (Ein-Schreiber-Regel).
-
-> **⛔ REACT-SCOPE (Yama-Freigabe 2026-07-16).** React/TypeScript ist erlaubt AUSSCHLIESSLICH als gekapseltes **Hausplaner-Insel-Bundle** (`public/planer/` als gebautes Artefakt; Quellheimat playground `src/planer` bis zum Quell-Port nach `resources/js/hausplaner/`). Analog zur Alpine-Zwei-Scope-Regel: kein React-Wildwuchs im übrigen CRM (Blade/jQuery bleibt). Der 3D-Planer unterliegt den **AP-4-Gates** (`docs/ap4-geometrie-3d-gebaeudemodell-validierung.md`): bis Topologie-Validierung, Referenztests in ticket, versionierter Persistenz am Objekt und belastbarer Azimut-Quelle ist er Prototyp — Werte informativ, keine führende Wahrheit, keine Persistenz. Architektur-Rahmen: `docs/architektur/gap-analyse-3d-planer.md`.
-
-> **🧭 ARBEITSKOMPASS / FAHRPLAN-PFLICHT (dauerhaft, ab 2026-07-10).** Bei jeder größeren Aufgabe zuerst [`docs/arbeitskompass-ticket.md`](docs/arbeitskompass-ticket.md) prüfen und die Aufgabe dort einordnen: aktueller Fokus, nächster Schritt, Blocker oder Parkplatz. Diese Datei hält fest, woran gerade gearbeitet wird, wann ein Fokus fertig ist und was als Nächstes kommt. Keine neue große Baustelle ohne Eintrag oder bewusste Yama-Entscheidung. **Rang/Funktion:** Der Arbeitskompass dient ausschließlich der **Navigation, Priorisierung und Statusübersicht** und verweist auf die führenden Fahrpläne, ADRs und Startblöcke. Er **ersetzt oder überstimmt weder** BETRIEBSORDNUNG, `CLAUDE.md`, `STRAENGE.md`, ratifizierte ADRs **noch den freigegebenen Startblock eines aktiven Slices**. Bei Widersprüchen gilt die festgelegte Quellenhierarchie; der **aktive Startblock bestimmt den konkreten Slice-Scope**. Der Arbeitskompass ist keine eigenständige fachliche Wahrheit.
-
-> **📚 WISSENS-REGISTER (ab 2026-07-09).** Vor neuen Aufgaben zuerst `~/wissensregister/register.md` + `ideensammlung.md` nach Themen-Tags durchsuchen — dort liegt Yamas gesichtetes Material (CRM/ERP/Energie-Prototypen, Fachdaten, Norm-Referenzen, Ideen) als **Verweis-Index** (keine Kopien, außerhalb Git aus Datenschutz). Passende Einträge → Originaldatei bei Bedarf voll lesen; so fließt vorhandenes Wissen/Code in neue Arbeit ein statt neu erfunden zu werden. Der **Planner-Agent** nutzt `ideensammlung.md` als Input-Quelle. **SENSIBEL** markierte Einträge (Kundendaten/Förder-/Geschäfts-/Credential-Dateien) nur referenzieren, **nie Inhalt zitieren/kopieren**. Aktualisieren: „Wissens-Register aktualisieren" (inkrementell via `scan-log.md`).
-
-> **⛔ AUTOMATISIERUNGS-PRINZIP (dauerhaft, ab 2026-07-09).** „Sinnvoll automatisiert" ≠ „maximal automatisiert". Jede Automatisierung, die eine **Fach-/Rechtsentscheidung** dem Menschen abnimmt, folgt dem **Operanden-Gate**: **kein erfundener Wert — bei Unsicherheit/fehlenden Operanden wird gefragt oder markiert (Vorschlag + Bestätigung), nie stillschweigend weitergerechnet** (wie in der Formular-Calc-Engine + Anforderungsprofilen). Drei Klassen bei jedem Automatisierungs-Vorschlag benennen: **(a)** soll automatisiert sein (sicher ableitbar, spart Arbeit) · **(b)** darf NICHT voll automatisiert sein (Fach-/Rechtsentscheidung → nur Vorschlag+Bestätigung) · **(c)** ist automatisiert, aber falsch/riskant → korrigieren. Bindet Planner/Generator/Evaluator + jeden Optimierungs-Posten.
-
-> **⛔ SYSTEMWEITE OPTIMIERUNGS-REIHENFOLGE (dauerhaft, ab 2026-07-11).** Für JEDE größere Domäne gilt die Reihenfolge: **① konzeptionell optimieren → ② Workflow bestimmen → ③ vorhandene Bausteine verknüpfen → ④ erst dann automatisieren**. Keine Automatisierung vor Konzept + Workflow + Verknüpfungsplan. Keine Parallelberechnung, keine zweite Wahrheit, kein UI-Flicken über falscher Fachlogik. Vor dem Bauen muss Claude Code belegen: Welche vorhandenen Services/Daten/Controller gibt es? Was wird wiederverwendet? Wo ist die führende Wahrheit? Welche Operanden fehlen? Was darf automatisch laufen und was braucht Vorschlag + Bestätigung? Diese Regel gilt systemweit, besonders für Angebot/Auslegung/WP, CRM, Auftrag, Beschaffung, Disposition, Montage, Abnahme, FiBu und Controlling. **Konkret — Ist-Beleg aus dem CODE, nicht aus dem Papier:** vor dem Anlegen einer Klasse/Datei/Route/Migration zuerst `git log --oneline` und `grep` nach Klassenname bzw. Feature im echten Code fahren. Specs, Startblöcke und Planungs-Docs können der Umsetzung **hinterherhinken** — bei Widerspruch gilt der **Code als Wahrheit**, nicht das Dokument. (Lehre 2026-07-17: ein bereits gebautes und verdrahtetes Modul — `App\Services\Geometrie\TopologieGate` — wurde nach veralteter Spec beinahe ein zweites Mal gebaut und hätte die reichere Fassung überschrieben.)
-
-> **📘 KAPITEL-FAHRPLAN FÜR OPTIMIERUNGEN:** Die konkrete Schrittfolge steht in [`docs/systemoptimierung-fahrplan.md`](docs/systemoptimierung-fahrplan.md): Inventur → kritische Bewertung → Optimierungsvorschlag → Ziel-Fahrplan → Verknüpfung → Workflow → Automatisierung → Umsetzungspakete → Prüfung/Abnahme. Claude Code muss bei jeder größeren Domäne sagen, bei welchem Kapitel er startet, wo die Runde endet und welches Ergebnisdokument entsteht.
-
-> **⛔ KAPITEL-STARTBLOCK-PFLICHT:** Vor JEDEM Kapitel aus `docs/systemoptimierung-fahrplan.md` muss Claude Code zuerst einen Startblock liefern: Domäne, Kapitel, Startpunkt, Ziel, Analyseumfang, konkret zu lesende Dateien/Services/Datenquellen, Nicht-Ziele, Vorgehensweise Schritt für Schritt, Ergebnisdokument, Stop-Kriterium und ob Yama-Abnahme erforderlich ist. Ohne diesen Startblock keine Analyse, keine Umsetzung und keine Automatisierung.
-
-> **⛔ GIT- & TEST-DB-DISZIPLIN (stehende Regeln, verankert 2026-07-19).** Drei bislang nur in Auftragstexten mitgeführte Dauerregeln, jetzt repo-weit bindend für JEDE Instanz und JEDE Rolle: **(1) Commits nur auf Yamas ausdrückliches Wort** — gilt für jeden Commit, auch reine Doku-/Konserven-Commits; Scheiben werden vorbereitet und zur Abnahme vorgelegt, gesetzt wird erst nach Freigabe. **(2) Niemals pushen** — kein `git push` aus irgendeiner Instanz, auch nicht nach grüner Abnahme; pushen macht ausschließlich Yama (z. B. `push-alle-repos.command`). **(3) Tests und DB-Messungen ausschließlich gegen `ticket_testing`** — phpunit erzwingt `DB_DATABASE=ticket_testing` (BCRYPT_ROUNDS=4); kein Test, Test-Seed oder Mess-/Probe-Query gegen die Arbeits-DB `ticket`. Schreiben auf `ticket` nur als beauftragter Arbeits-Posten gemäß Live-Klarstellung oben, nie als Test-Beifang. *(Ergänzt die DAUERDIREKTIVE (DB nur additiv) und den Drei-Rollen-Zyklus — ersetzt nichts.)*
-
-## ⛔ DAUERDIREKTIVE: DATEN- UND KETTEN-SCHUTZ (ab 2026-07-05, strang-übergreifend & dauerhaft)
-
-**Bindet JEDE Instanz und JEDEN playground→ticket-Schritt (Migration · Seeder · Import · Cut-over · FiBu).**
-
-1. **TICKET-DATEN SIND UNANTASTBAR.** Kein Transplantations-Schritt darf **bestehende ticket-Zeilen ändern oder löschen**. Erlaubt sind **nur additive** Operationen: neue Tabellen · neue Spalten (**nullable oder mit Default**) · neue Zeilen. **Jeder UPDATE/DELETE auf Bestandsdaten ist ein eigener, explizit von Yama zu beauftragender Posten — niemals Beifang** eines Transplantats.
-
-2. **DIE BELEGKETTE IST GESETZT — FiBu DOCKT AN, BAUT NICHT UM.** Bestehende Kette in ticket:
-   **Angebot** (aus Sets, Sets aus Artikeln) → **Auftrag** → **Rechnung(en)** [`invoices` = führende Schiene, Yama-Entscheidung 2026-07-05] · daneben **Bestelllisten** (aus Auftrag/Angebot).
-   Die playground-FiBu hängt sich **ausschließlich an die festgeschriebene Rechnung** (Buchungssatz-Erzeugung). Angebots-, Set-, Artikel-, Auftrags- und Bestelllisten-Strukturen werden von der FiBu **NICHT verändert, NICHT dupliziert, NICHT durch playground-Äquivalente ersetzt.**
-
-3. **KONFLIKT-REGEL:** Bei Struktur-Konflikt passt sich **immer der playground-Code dem ticket-Schema an — nie umgekehrt.** Kollision löst sich per **Adapter (bevorzugt)** oder **additiver Spalte** (nie destruktiv). Auch für die Kette zu prüfen: Teilrechnungen je Auftrag · Positions-Ebene für Erlöskonten-Split · Leistungszeitraum-Herkunft aus der Kette.
-
-*(Verankert auch in `docs/STRAENGE.md`. Bezug: `invoices`-Schienen-Entscheidung + `docs/accounting/`.)*
-
-## Eine Wahrheit je Sachverhalt
-
-Für jeden zentralen Sachverhalt gibt es **genau eine führende Datenquelle** — keine zweite, auch nicht übergangsweise. Parallel-Strukturen werden **additiv zusammengeführt**, nie doppelt produktiv gehalten. Neue Quellen dürfen eine bestehende nicht duplizieren; bei Bedarf wird die alte belegt stillgelegt (Trail erhalten, Drop als eigener Posten).
-
-- **Umsatz → `invoices`** (einzige Wahrheit): **`docs/accounting/umsatzdefinition.md`** (Dauerregel). `deal_invoices` stillgelegt, Drop ausstehend.
-- **Status/Phasen → `lead_stages`** · **Katalog → ticket-Artikel-DB** (EIN Katalog). *(weitere Beispiele additiv ergänzen)*
-
-## Heizkörper-Modul (Bereich „Energie & Auslegung")
-
-- **Alpine.js ist erlaubt AUSSCHLIESSLICH in zwei Scopes** (Yama-Entscheidung 2026-07-06): **(1)** die
-  `heizkoerper.*`-Views unter `resources/views/admin/heizkoerper/**`; **(2)** das **Formular-Rendering**
-  des Strangs `formulare` (dynamische Sichtbarkeit `visible_if`, Feld-Renderer/Preview der
-  `ProductFormula`-Checklisten-Formulare). **Nirgends sonst** im CRM. Begründung Scope 2: reaktive
-  Sichtbarkeit ist genau Alpines Fall; ein jQuery-Nachbau wäre mehr Code bei geringerer Wartbarkeit.
-  **Grenze:** kein Alpine-Wildwuchs außerhalb dieser zwei Scopes. Der übrige Bestand nutzt jQuery +
-  Bootstrap/Vuexy. **Die bestehende Aufnahme-CRUD `radiator.config.*` (`RadiatorInstallationController`)
-  bleibt unangetastet** (jQuery, kein Alpine-Umbau) — M4-a nutzt sie per Reuse für die Heizkörper-Aufnahme.
-
-- **DO NOT DOCK `radiators`:** Das Alt-Model `app/Models/Radiator.php` (Tabelle `radiators`,
-  Route `product.inveter.store`) ist eine **Wechselrichter-Altlast** — **NICHT** für Heizkörper
-  verwenden, **nicht** umbenennen. Die Heizkörper-Domäne läuft ausschließlich über
-  `App\Models\RadiatorSpec` / `App\Models\RadiatorInstallation` und
-  `App\Services\Heizkoerper\*` (`RadiatorPerformanceService`, `HydraulicService`,
-  `RadiatorCatalogAdapter`, `CompatibilityService`).
-
-
-## Existing-Code-First und Ticket-Wiederverwendung
-
-- Der bestehende Ticket-Bereich enthält umfangreichen produktiven Code und ist eine primäre Wiederverwendungsquelle.
-- Bei jeder neuen Planner-, CAD-, UI-, Workflow-, Dokument-, Aufgaben-, Freigabe- oder Projektfunktion zuerst den vorhandenen Ticket-Code untersuchen.
-- Nicht bei null beginnen, wenn eine geeignete Komponente, ein Service, ein Workflow, ein Datenmodell, ein Testmuster oder eine UI-Struktur bereits existiert.
-- Vor jeder Neuentwicklung eine Reuse-Prüfung durchführen (Skill `ticket-code-reuse`).
-- Wiederverwendung ist gegenüber Kopieren zu bevorzugen.
-- Gemeinsame Logik bei Bedarf kontrolliert in ein gemeinsames Modul extrahieren.
-- Keine zweite parallele Implementierung bestehender Ticket-Funktionen aufbauen.
-- Bestehende Ticket-Funktionen dürfen nicht unkontrolliert auf Planner-Bedürfnisse umgebaut werden.
-- Erweiterungen müssen rückwärtskompatibel bleiben und bestehende Ticket-Tests berücksichtigen.
-- Jede bewusste Nicht-Wiederverwendung vorhandenen Codes muss begründet werden (Klasse R5).
-- Keine neue UI-Komponente erstellen, bevor geprüft wurde, ob das Ticket-Designsystem (`resources/views/admin/styleguide/index.blade.php`, CSS-Tokens `--sa-*`) oder vorhandene Ticket-Komponenten genutzt werden können.
-- Keine neue Status-, Aufgaben-, Kommentar-, Datei-, Freigabe-, Historien- oder Benachrichtigungslogik erstellen, wenn diese bereits im Ticket-System vorhanden ist.
-
-> **🧠 SKILL-PFLICHT FÜR ALLE ROLLEN (dauerhaft, ab 2026-07-23).** Generator und Evaluator sind — wie der
-> Planner — **verpflichtet**, zu jeder Aufgabe die **passenden Skills zu laden und anzuwenden** (Verzeichnis
-> `.claude/skills/`). 3D-Hausplaner-Arbeit → `bauplaner-3d` (Code-Landkarte + 4 Regeln: messen-vor-behaupten,
-> Docs-zuerst, kuratieren, Konzept-Vorab-Freigabe) **immer**; Fachthema → passende **Meister-Linse**
-> (Dach→`dachdeckermeister`/`zimmermannmeister`, Statik→`statiker`, Mauerwerk→`maurer`); Code →
-> `software-architekt`/`frontend-entwickler`/`backend-entwickler`; plus `governance-zyklus` und `ux-design`.
-> **KORREKTUR 01.08.2026 (Befund PB-021, Planner).** Diese Zeile nannte bis heute **22 Meister-Linsen;
-> zwölf davon gibt es an keinem der beiden Skill-Orte** — `heizung-sanitaer-meister` · `energieberater` ·
-> `elektromeister` · `pv-planer` · `tga-planer` · `bad-planer` · `kuechenplaner` · `fliesenleger` ·
-> `schreiner` · `maler` · `architekt` · `technischer-zeichner`. *Gemessen: `ls .claude/skills` → 16 Einträge.*
-> **Eine Pflicht, die auf Nichtvorhandenes zeigt, ist keine Pflicht, sondern eine Ausrede** — sie lässt
-> jeden, der sie erfüllen will, ins Leere greifen und macht die ganze Zeile unglaubwürdig.
-> **Bis eine Linse existiert, gilt für ihr Fach:** ohne Linse arbeiten und das im Bericht sagen —
-> *„für Elektro gibt es keine Linse, die Aussagen stehen ohne Fachprüfung"* — statt eine zu laden,
-> die es nicht gibt. **Wer eine der zwölf braucht, meldet sie an Yama; Skills legt der Planner nicht an.**
-
-> **Kernregel: belegen statt behaupten** — keine Fach-/Geometrie-Aussage ohne Beleg am Code/an der Norm.
-> Der erweiterte Prozess (7 Stufen + 2 Freigabe-Tore) + Ausführungs-Ablauf: `.claude/skills/bauplaner-3d/
-> references/prozess-erweitert.md`. **Freigabe-Tor 2 (Merge nach main / Deploy ins LIVE-CRM) bleibt eine
-> bewusste Yama-Entscheidung** — Autonomie gilt für den ganzen Bau-/Prüf-Zyklus bis dorthin, nicht für den
-> irreversiblen Produktiv-Schritt.
+Fachliche Architektur- und Produktspezifikationen bleiben gültig, soweit sie keine alten
+Prozessregeln enthalten. Prozessverweise in ihnen werden durch `docs/ARBEITSREGELN.md` ersetzt.
