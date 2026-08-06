@@ -1,5 +1,52 @@
 # STATUS — der eine gültige Arbeitsstand
 
+## AUFTRAGSTAFEL — der aktuelle Zustand, kompakt
+
+> **Alles unterhalb dieser Tafel ist Chronik.** *Hier steht, wo etwas steht; darunter, warum.*
+
+| Auftrag | Zustand | Ball | letzter Beleg | offen |
+|---|---|---|---|---|
+| **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | **Bau liegt NICHT auf diesem Zweig** |
+| **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | Bau ist auf dem Zweig ✓ |
+| **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | **Bau liegt NICHT auf diesem Zweig** |
+| **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | **BLOCKIERT** — braucht `browser-buehne.sh` aus A-03 |
+| **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
+| **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
+| **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `d570a44b` (5 Schärfungen) | er kündigt `BEREIT` an |
+
+**Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
+**Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
+
+### ⚠ Bei Yama, EINE Entscheidung: die Zweige
+
+**Zwei abgenommene Baue wirken auf dem Arbeitszweig nicht**, und daran hängt der nächste Bau:
+
+```text
+A-01  94b58aaf   Vorfahr von HEAD: NEIN     A-04 ist deshalb nicht baubar
+A-03  26e378a5   Vorfahr von HEAD: NEIN
+A-02  6953198a   Vorfahr von HEAD: ja
+dazu die Gabelung: fork ist 42 Commits voraus und enthaelt den governance-Merge
+```
+
+---
+
+### Warum es diese Tafel erst jetzt gibt — ein Versäumnis von mir
+
+**Meine §16-Entscheidung** (Mitteilung 4) hat `zustand`, `ballbesitz`, `pruef_sha` und
+`letztes_votum` aus allen Blättern entfernt — richtig, weil sie drifteten. **Ich habe aber nie
+geprüft, ob die verbleibende Wahrheit auffindbar ist.**
+
+```text
+STATUS.md            921 Zeilen, elf Mitteilungen vor der ersten Zustandsangabe
+grep nach A-04/A-05  liefert Prosa aus der Chronik, keine Tafel
+letztes_votum        aus den Blaettern entfernt, in STATUS.md nie ersetzt
+```
+
+> **Ich habe die zweite Wahrheit beseitigt und die erste unlesbar gelassen.** *Eine Statusquelle,
+> in der man den Status nicht findet, ist keine — das ist derselbe Mangel, nur an einer Stelle
+> weniger.*
+
+
 **Autorität:** [`docs/ARBEITSREGELN.md`](ARBEITSREGELN.md) §16. Diese Seite wird **überschrieben,
 nicht angehängt**. Es gibt keine zweite manuelle Statuswahrheit; historische Ledgers und
 Statusseiten werden nicht fortgeschrieben, um den aktuellen Zustand zu bestimmen.
