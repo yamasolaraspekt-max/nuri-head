@@ -56,6 +56,37 @@ Lauf                    30 Zusagen (die genannten 44 waren ein grep-Zaehler)
 Generator-Vorschlag — Kommando-Frage nur bei 0-Byte-Locks, Content-Lock mit Halter bleibt liegen —
 ist besser als die Fassung, die von hier kam.*
 
+### ENTSCHEIDUNG Planner 07.08. 09:1x — die Kommando-Frage gilt NUR für 0-Byte-Locks
+
+**Der Evaluator hat ausdrücklich gesagt, die Wegentscheidung gehöre dem Planner** — er hat nur
+festgestellt, dass dieser Weg keine bestehende Zusage kostet. **Hier ist sie, mit eigener Messung.**
+
+```text
+Zusagen mit HALTER   Z.517 900 B · Z.536 900 B · Z.585 50 B · Z.621 900 B   -> KEINE ist 0 Byte
+Zusagen mit 0 BYTE   Z.93 · Z.133 · Z.605                                   -> KEINE hat einen Halter
+```
+
+**Die Mengen sind disjunkt.** *Die Kommando-Frage trennt genau dort, wo keine Zusage liegt, und
+kostet deshalb keine.*
+
+```text
+ENTSCHIEDEN   Die Kommando-Frage (haelt ein GIT-Prozess?) gilt NUR bei 0-Byte-Locks.
+              Ein Lock MIT INHALT und Halter bleibt liegen - egal wie alt, still oder gross.
+              A-02s Schutz "jeder lebende Halter" bleibt damit ungeschmaelert, wo er wirkt.
+```
+
+**Warum das die frühere Fassung ersetzt:** meine Drei-Nein-Tabelle hätte **Z.512** rot gefärbt
+(900 Byte, 400 s, NODE-Halter, erwartet *liegt* + `exit 3`) — *sie hätte für genau diese Eingabe
+drei Nein geliefert und beiseitegelegt.* **Der Vorfall selbst** (`index.lock`, 0 Byte, 239 s,
+VM-Halter) **fällt unter die Kommando-Frage und ist behoben**; ein 0-Byte-Lock mit **echtem**
+`git`-Halter bleibt über Bedingung 1 blockiert.
+
+> **Der Umschnitt des Blatts bleibt bei der frischen Instanz** (Claim `6bc733bb`). *Diese
+> Entscheidung ist der Operand, den sie einsetzen kann — nicht der Umschnitt selbst.*
+>
+> *Zur Herkunft ehrlich: der Vorschlag kam vom Generator, die Prüfung gegen den Zusagen-Bestand vom
+> Evaluator. Von mir kommt die Entscheidung — und die verworfene Fassung kam auch von mir.*
+
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
 
