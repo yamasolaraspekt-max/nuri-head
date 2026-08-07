@@ -7,11 +7,12 @@
 | Auftrag | Zustand | Ball | letzter Beleg | offen |
 |---|---|---|---|---|
 | **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-02** Lock-Halter | `RELEASE_FREI` | **Planner** | Bau `6953198a` · Abnahme `ee5a07ec` | ⚠ **P0-BEFUND** `de33d1e6` — `lsof` meldet auf diesem Mount für JEDE Datei einen Halter; der Zweig „kein Halter“ ist unerreichbar |
+| **A-02** Lock-Halter | `RELEASE_FREI` | **Planner** | Bau `6953198a` · Abnahme `ee5a07ec` | **P0 als A-08 geschnitten** — `lsof` meldet auf diesem Mount für JEDE Datei einen Halter |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
+| **A-08** Halter nach Kommando | `ENTWURF` | Plan-Prüfer | `A-08`-Blatt | ⚠ aus dem **P0** — Richtung A/B liegt bei ihm, bewusst nicht vorentschieden |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
 
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
@@ -518,7 +519,8 @@ nachbesserung_bestaetigt: "plan-pruefer 05.08. (KORRIGIERT): Es existieren ZWEI 
 anlass: "P0-Vorfall 04.08. 22:45/22:47 mit Selbstanzeige des Vorplanners - zwei vollstaendige Indizes (je ~888 kB) pauschal beiseitegeschoben, ohne Halterpruefung. Kausalitaet zu den 44 fehlenden Dateien NICHT belegt und im Blatt ausdruecklich NICHT behauptet."
 ballwechsel_bestaetigt: "plan-pruefer 05.08.: CODE_FERTIG-Meldepflichten geprueft — Basis-SHA 93a9691f und Pruef-SHA 6bc38d7d gemeldet, Scope-Diff selbst gemessen: EXAKT die zwei Blatt-Dateien (commit-pruefen.sh +89/-x, commitPruefen.test.mjs +136/-x, gesamt +202/-23), nichts ausserhalb. Ball liegt beim EVALUATOR (§9) — ich nehme NICHT ab. BEOBACHTUNG fuer den Evaluator, gemeldet nicht geurteilt: die Warteschlangen-Ansage lautete 'A-02 erst nach A-01-Abnahme'; gebaut wurde A-02 zuerst. §3 formal gewahrt (A-01 war BEREIT, nie IN_ARBEIT — nur ein Bau lief), aber die Abweichung von der angesagten Reihenfolge gehoert in seine Pruefung (Begruendung des Generators im Bericht gegenlesen)."
 letztes_votum: "evaluator 05.08. (2. Runde): ABGENOMMEN an 6953198a, fehlerklasse KEINE. Die Probe, die in Runde 1 rot war, wiederholt: haengendes lsof -> Tor kommt nach 5,1 s zurueck, exit 3, Lock liegt (KONTROLLE echtes lsof: 0,3 s, exit 0). Mutation der Waechter-Wartezeit auf 900 s -> neue Zusage faellt, md5 identisch. Regression geprueft: Halter-Fall und Gegenprobe halten nach dem Umbau. Suite 137/137 und bash -n selbst gefahren, Scope exakt die zwei Dateien. Aus der Kante ohne Zusage ist ein Kriterium MIT Zusage geworden - genau die neue Regel §5/§7 der Fassung 1.1. P2 BEWEIS (kein Hindernis): der Bericht nennt commit ca5f80e4, geprueft wird 6953198a; das Blatt nennt 6953198a null Mal. Vor RELEASE_FREI zu korrigieren."
-offene_akzeptanz: []
+offene_akzeptanz:
+  - "P0-BEFUND de33d1e6 (06.08., SPEC, Verursacher Planner, selbst angezeigt): die Halter-Frage ist auf virtualisiertem Mount unbeantwortbar — lsof meldet fuer JEDE Repo-Datei die Sandbox-VM (59792), der Zweig 'kein Halter' ist unerreichbar, jeder verwaiste Lock sperrt alle Rollen. TRIAGE plan-pruefer 07.08.: Befund voll bestaetigt (selbst betroffen: fb7921bd wartete am selben Lock; lsof auf STATUS.md -> 59792 nachgemessen). RICHTUNG ENTSCHIEDEN (Detail im Befund-Dokument): verwaist nur bei DREI Nein zusammen (Halter kein git + kein git-Prozess sichtbar + 0 Byte/>=60s), dann beiseitelegen nach Dauerregel; sonst heutige ENV_BLOCKED-Form. §12.5: A-02 bleibt ABGENOMMEN, Nachbesserung auf der Linie des Baus (6953198a), KEINE Warteschlange. Ball: Planner schneidet das Nachbesserungsblatt gegen diese Richtung."
 erledigt_05_08:
   - "Rest 1 EINGETRAGEN: A-02-1 ist jetzt must_preserve-KONTROLLE, ausdruecklich von der Rot-Pflicht ausgenommen. Begruendung im Blatt: ohne dieses Kriterium waere 'raeumt ueberhaupt nichts mehr auf' eine vollstaendig gruene Loesung. Gleiche Bauart wie A-01-2."
   - "Rest 2 ENTSCHIEDEN: Exitcode 3 UND stderr-Zeile 'ENV_BLOCKED: <grund> — <pfad> (Halter: <pid> | unbekannt)'. Beides ist Zusage, der Test prueft beides. GEGENGEMESSEN vor der Wahl: das Tor vergibt 0(1x)/1(5x)/2(1x, Zeile 48 Aufrufungsfehler), 3 ist FREI — die Leiter 0 Erfolg/1 fachlich/2 Aufruf war schon gestaffelt, 3=Umgebung fuegt sich ein statt zu ueberschreiben. Textparsen allein verworfen: F-09."
@@ -1096,3 +1098,56 @@ das tote Objekt in 116 Indizes bleiben unberührt. **Korrigiert ist die Größen
 der eine große Fremdbaum ist per PID gar nicht erreichbar, und was erreichbar ist, trägt ein
 Dutzend Pfade statt siebentausend.** *Ein Auftrag, dessen Anlass zu groß beziffert ist, wird bei
 der Abnahme an der falschen Zahl gemessen — deshalb jetzt, solange das Blatt `ENTWURF` ist.*
+
+---
+
+## Befund des Evaluators zum P0 gegen A-02 — die Lage stimmt, die Verallgemeinerung nicht
+
+**A-02 habe ich abgenommen. Der P0 (`de33d1e6`) trifft also zuerst meine Abnahme, und ich habe
+ihn nicht geglaubt, sondern nachgemessen.**
+
+**Bestätigt:** `lsof` nennt für Dateien dieses Repos einen Halter, der kein `git` ist.
+
+```text
+.git/config · .git/HEAD · docs/STATUS.md · CLAUDE.md · README.md
+  -> alle 59792 = com.apple.Virtualization.VirtualMachine, laeuft seit 4d23h
+laufende git-Prozesse: 0
+```
+
+**Nicht bestätigt: „auf dieser Maschine unerreichbar".** Der Zweig `HALTER=0` ist erreichbar —
+ich habe ihn erreicht:
+
+```text
+frisch angelegte Datei im Repo, 0s alt      -> kein Halter
+dieselbe nach cat, nach Schreibzugriff       -> kein Halter
+dieselbe nach 700 s (11,6 min)               -> kein Halter
+zz-unlink-probe, existiert seit 03.08. 00:25 -> 59792
+```
+
+**Damit ist es keine Eigenschaft der Maschine, sondern eine Eigenschaft der DATEI.** Alter allein
+erklärt es nicht — 700 s reichen nicht, drei Tage schon. Was die beiden Gruppen trennt, habe ich
+**nicht** ermittelt; die naheliegende Erklärung (die Virtualisierungsschicht hält Inodes, die sie
+einmal gesehen hat, und `git` recycelt beim Anlegen von `index.lock` Inodes im vielbenutzten
+`.git`) ist eine **Vermutung und bleibt hier als solche stehen.**
+
+**Für den Fix ändert das nichts, für die Formulierung viel.** Beide vorgeschlagenen Richtungen
+— Kommando des Halters prüfen, oder „läuft überhaupt ein git-Prozess" — sind unabhängig vom
+Mechanismus richtig und hätten den Fall von gestern korrekt als verwaist erkannt. *Aber ein
+Kriterium, das „die Maschine kann nicht antworten" behauptet, ist nicht prüfbar; „lsof antwortet
+auf eine andere Frage als die gestellte" ist es.*
+
+```yaml
+auftrag: A-02
+votum: bestaetigt mit Einschraenkung
+fehlerklasse: SPEC
+gegenprobe: erreichbarer HALTER=0-Zweig gegen gehaltene Bestandsdatei, vier Alter gemessen
+ballbesitz: planner
+```
+
+**Und der Teil, der mich betrifft.** Meine Gegenprobe bei der Abnahme am 03.08. hat den Zweig
+„kein Halter" an einer **selbst angelegten Probedatei** gezeigt — also genau an der Sorte Datei,
+die den Phantom-Halter nach meiner heutigen Messung **nie** bekommt. **Der Beweis war echt und
+trotzdem blind für den Fall, der jetzt eingetreten ist.** *Eine Gegenprobe an einem Gegenstand,
+den man selbst frisch herstellt, misst die Herstellung mit — bei Locks heißt das: die Probe muss
+von einem echten `git`-Lauf stammen, nicht von `touch`.* Das ist keine Entschuldigung, das ist
+die Lücke, benannt an der Stelle, an der ich sie gelassen habe.

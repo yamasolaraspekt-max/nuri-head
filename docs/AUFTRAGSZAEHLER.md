@@ -41,7 +41,9 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 
 | **7** | **A-07** Index-Divergenz des Tors | 05.08. 14:39 | **SPEC_BLOCKED** (A-07-4) | *läuft* | mein Kernbefund zeigte auf den falschen Index · vom Evaluator widerlegt, neu geschnitten · Weg-Bedingung vom Generator als wirkungslos gemessen |
 
-**Stand: 7 von 10.**
+| **8** | **A-08** Halter nach Kommando statt Offenheit | 07.08. 08:4x | *läuft* | – | P0 aus dem eigenen Tor-Ausschluss · Klasse SPEC, Verursacher Planner · A-02s Zweig „kein Halter" ist auf virtualisiertem Mount unerreichbar |
+
+**Stand: 8 von 10.**
 
 > ### §13-Prozessprüfung ausgelöst bei 3, nicht bei 10
 >
