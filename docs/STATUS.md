@@ -1398,3 +1398,56 @@ kriterium: "Drei-Nein-Tabelle/A-08-1/Kantenzeile GEGEN A-08-3(korrigiert)/A-08-9
 gegenprobe: "Suite selbst gefahren 30/30 · Tabelle auf die Eingaben von Z.512/579 angewandt · Z.163 und Z.142-148 gelesen"
 ballbesitz: planner
 ```
+
+---
+
+## Evaluator zu A-08 — der Ausweg des Generators trägt: alle 30 Zusagen bleiben grün, gemessen
+
+**A-08 liegt `SPEC_BLOCKED` beim Planner. Der dritte Fund (`f5098c40`) ist richtig — ich habe die
+Zusage nachgelesen, die er nennt:**
+
+```text
+Z.512  test('A-02-2: ein Lock MIT HALTER bleibt liegen — egal wie alt, still und gross')
+         lockSetzen(verz, 'x'.repeat(900), 400)  +  halterFuer(p)   <- NODE-Halter
+         assert existsSync(p) === true · r.code === 3
+```
+
+**Unter der Drei-Nein-Tabelle ergibt genau diese Eingabe drei Nein** (kein git-Halter · kein
+git-Prozess im Wegwerf-Repo · 400 s ≥ 120 s) **→ beiseite → rot.** Sein Befund steht.
+
+**Was er als „Ausweg, Vorschlag" formuliert hat, ist nicht gemessen worden — das habe ich
+nachgeholt.** Vorschlag: *die Kommando-Frage ersetzt die Halter-Blockade **nur bei
+0-Byte-Locks**.* Dafür zählt allein, wie sich Größe und Halter über alle Zusagen verteilen:
+
+```text
+ZUSAGEN MIT HALTER            Groesse      Alter   erwartet
+  A-02-2                      900 B        400 s   liegt + exit 3
+  A-02-2 GEGENPROBE           900 B        400 s   beiseite + code 0   (Halter beendet)
+  A-02-4                       50 B        400 s   exit 3
+  -> KEINE EINZIGE ist 0 Byte. Die Halter-Blockade bliebe fuer alle drei zustaendig.
+
+ZUSAGEN MIT 0 BYTE            Halter?      Alter   erwartet
+  W-09/K-02 (Z.93)            kein         300 s   code 0 (beiseite)
+  W-09/K-02 ROT (Z.133)       kein           0 s   Abbruch
+  A-02-4 ROT (Z.605)          kein           0 s   exit 3
+  -> KEINE EINZIGE hat einen Halter. Die Kommando-Frage aendert an ihnen nichts.
+
+DER VORFALL                   .git/index.lock, 0 Byte, 239 s, VM-Halter
+  -> 0 Byte  =>  Kommando-Frage  =>  kein git  =>  beiseite. Behoben.
+```
+
+**Die beiden Mengen sind disjunkt.** *Der Vorschlag trennt genau dort, wo heute keine Zusage
+liegt — deshalb kostet er keine.* **Und die Sicherheit bleibt:** ein 0-Byte-Lock mit einem
+**echten** `git`-Halter fällt weiterhin über Bedingung 1 in die Blockade.
+
+```yaml
+auftrag: A-08
+befund: dritter Fund des Generators BESTAETIGT (Zusage Z.512 gelesen, Eingabe nachgerechnet)
+zusatz: sein Ausweg ist tragfaehig — die Mengen "mit Halter" und "0 Byte" sind disjunkt
+gegenprobe: alle sechs einschlaegigen Zusagen einzeln nach Groesse/Halter/Alter ausgezaehlt
+ballbesitz: planner
+```
+
+**Ich entscheide nicht, welcher Weg genommen wird** — das ist die Wegfrage und gehört dem Planner.
+*Ich stelle nur fest, dass dieser eine Weg keine bestehende Zusage kostet, und das war vorher
+unbekannt: der Generator hat ihn vorgeschlagen, ohne die anderen fünf Zusagen dagegenzuhalten.*
