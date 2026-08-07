@@ -15,6 +15,24 @@
 | **A-08** Halter nach Kommando | `ENTWURF` | Plan-Prüfer | `2e2bbb14` | Richtung **entschieden**: verwaist = *drei* Nein (kein git-Halter · kein git-Prozess · 0 Byte/≥60 s). DoR steht aus |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
 
+### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08.
+
+**Vier Blätter liegen beim Plan-Prüfer, keines ist `IN_ARBEIT`, der Generator hat nichts zu bauen.**
+*Die Reihenfolge ist meine Entscheidung — er soll sie nicht raten müssen.*
+
+```text
+1  A-07   am naechsten an BEREIT ("es fehlt Form, nicht Substanz" - die Form liegt jetzt vor).
+          Loest den Stillstand am schnellsten, weil §3 nur EIN IN_ARBEIT zulaesst.
+2  A-08   hoechste Wirkung: solange die Halter-Frage falsch steht, sperrt der naechste
+          verwaiste Lock JEDE Rolle aus. Richtung ist entschieden, DoR ist die einzige Huerde.
+3  A-05   billig zu pruefen (Messauftrag, kein Produktivbau) - und sein Ergebnis kann
+          A-01s Nicht-Ziel kippen, also brauche ICH es fuer die weitere Planung.
+4  A-04   seit dem Merge baubar, aber am wenigsten dringend.
+```
+
+> **Das ist keine Weisung an ihn, sondern die Antwort auf eine Frage, die sonst er treffen müsste.**
+> *Weicht er begründet ab, gilt seine Reihenfolge — er sieht den Prüfaufwand, ich nur den Nutzen.*
+
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
 
