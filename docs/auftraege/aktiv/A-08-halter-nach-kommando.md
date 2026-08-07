@@ -28,12 +28,26 @@ lsof -t README.md     -> 59792        laufende git-Prozesse: 0
 ps -p 59792 -o comm=  -> /System/Library/Frameworks/Virtualization.framework/…/XPCService
 ```
 
-> **Die Virtualisierungsschicht hält den gesamten Mount offen.** *Damit meldet `lsof` für jede
-> Datei einen Halter, und A-02s Zweig „kein Halter" ist auf dieser Maschine **unerreichbar**.*
+> ### KORRIGIERT (07.08.) — meine Verallgemeinerung trug nicht
 >
-> **Wirkung:** jeder verwaiste Lock erzeugt `ENV_BLOCKED` statt Beiseitelegen — **jeder Commit
-> jeder Rolle blockiert**, bis jemand von Hand eingreift. *Genau das Handräumen, gegen das die
-> Regeln geschrieben sind.*
+> **Ich schrieb: „auf dieser Maschine unerreichbar."** Der Evaluator hat den Zweig `HALTER=0`
+> **erreicht**. Selbst nachgemessen:
+>
+> ```text
+> frisch angelegte Datei im Repo      KEIN Halter   (auch nach cat, auch nach 700 s)
+> README.md                           59792
+> zz-unlink-probe (vom 03.08.)        59792
+> .git/index.lock (gestern 18:06)     59792
+> ```
+>
+> **Es ist eine Eigenschaft der DATEI, nicht der Maschine.** *Was die beiden Gruppen trennt, hat
+> er **nicht** ermittelt, und ich auch nicht — Alter allein erklärt es nicht (der Lock war fünf
+> Minuten alt und meldete einen Halter).* **Die Ursache bleibt ausdrücklich offen.**
+>
+> **Für den Fix ändert das nichts, für die Formulierung viel:**
+> *„die Maschine kann nicht antworten" ist nicht prüfbar — **„`lsof` antwortet auf eine andere
+> Frage als die gestellte" schon.*** Das Kriterium darf nicht von einer unerklärten Erscheinung
+> abhängen.
 
 ## Die Ironie, die im Blatt stehen soll
 
@@ -54,28 +68,36 @@ ps -p <pid> -o comm=                            Bordmittel, in der Messung oben 
 docs/_playground-archiv/                        nichts Vergleichbares
 ```
 
-## Die Richtung — **dem Plan-Prüfer vorgelegt, nicht vorentschieden**
+## Die Richtung ist ENTSCHIEDEN (Plan-Prüfer, 07.08.) — und keine meiner beiden war es
+
+**Ich hatte A oder B vorgelegt. Er nimmt keine von beiden allein:**
 
 ```text
-WEG A   Kommando des Halters pruefen: nur ein Prozess, dessen Kommando `git` ist,
-        gilt als Halter.       Genau · aber eine weitere Prozessabfrage je Lock
-WEG B   Laeuft ueberhaupt ein git-Prozess? Wenn nein, ist JEDER Lock verwaist.
-        Billig und hier eindeutig (0) · aber grob bei parallelen Repos auf derselben Maschine
+A allein   Kommando des Halters pruefen   -> SPIEGELT den Fehler
+B allein   laeuft ueberhaupt ein git-Prozess?  -> ungemessene ZUORDNUNG
+
+ENTSCHIEDEN:  verwaist = DREI Nein zusammen
+              1  kein Halter mit git-Kommando
+              2  kein git-Prozess laeuft
+              3  Lock ist 0 Byte UND mindestens 60 s alt
+              -> dann beiseitelegen nach Yamas Dauerregel; sonst ENV_BLOCKED wie heute
 ```
 
-*Beide hätten heute korrekt „verwaist" gesagt. **Meine Neigung ist A**, weil B bei mehreren
-Repositories auf derselben Maschine einen fremden `git`-Lauf als Halter dieses Locks zählt — aber
-das ist eine Vermutung über die Arbeitsweise, und die gehört gemessen, nicht geglaubt.*
+*Beide meiner Formen hatten je eine halbe Antwort. **Drei unabhängige Nein sind belastbarer als ein
+besseres Ja** — und die dritte Bedingung braucht `lsof` gar nicht.*
+
+**§12.5 angewandt:** **A-02 bleibt `ABGENOMMEN`.** Die Nachbesserung setzt auf `6953198a` auf,
+**keine Warteschlange.**
 
 ## Akzeptanzkriterien
 
-**A-08-1 (P1):** Hält **kein Prozess mit `git`-Kommando** den Lock, wird er als **verwaist**
-behandelt — beiseitegelegt nach der bestehenden Regel, **nie gelöscht**.
+**A-08-1 (P1):** Ein Lock gilt genau dann als **verwaist**, wenn **alle drei** zutreffen:
+kein Halter mit `git`-Kommando · kein laufender `git`-Prozess · 0 Byte und ≥ 60 s alt.
+Dann wird er **beiseitegelegt, nie gelöscht**.
 *Rot heute: derselbe Fall endet in `ENV_BLOCKED`.*
 
-**A-08-2 (P1, Gegenprobe):** Hält ein **echter `git`-Prozess** den Lock, bleibt es bei
-`ENV_BLOCKED` und `exit 3`. *Ohne dieses Kriterium wäre „alles ist verwaist" grün — und das wäre
-schlimmer als die Blockade.*
+**A-08-2 (P1, Gegenprobe):** Fehlt **eine** der drei Bedingungen, bleibt es bei `ENV_BLOCKED` und
+`exit 3`. *Ohne dieses Kriterium wäre „alles ist verwaist" grün — schlimmer als die Blockade.*
 
 **A-08-3 (`must_preserve`):** **Alle A-02-Zusagen bleiben grün**, insbesondere die Zeitgrenze
 (hängendes `lsof` → Abbruch statt Warten) und die `ENV_BLOCKED`-Meldeform mit Exitcode 3 und
@@ -83,6 +105,13 @@ Halter-Angabe. *§7: keine Abschwächung bestehender Tests.*
 
 **A-08-4 (P2):** Die Meldung nennt bei `ENV_BLOCKED` **das Kommando** des Halters, nicht nur die
 PID. *`Halter: 59792` sagt niemandem etwas; `Halter: 59792 (XPCService)` beendet die Suche sofort.*
+
+**A-08-5 (P1, Form der Probe — aus dem Selbstbefund des Evaluators):** Die Lock-Probe in der
+Testsuite **entsteht aus einem echten `git`-Lauf**, nicht aus `touch` oder `printf`.
+
+> **Seine Gegenprobe vom 03.08. lief an einer selbst angelegten Datei** — *genau der Sorte, die den
+> Phantom-Halter nie bekommt.* **Der Beweis war echt und trotzdem blind für diesen Fall.**
+> *Eine Probe, die den Gegenstand selbst herstellt, prüft ihre eigene Herstellung mit.*
 
 ## Auswirkungen (§5)
 
