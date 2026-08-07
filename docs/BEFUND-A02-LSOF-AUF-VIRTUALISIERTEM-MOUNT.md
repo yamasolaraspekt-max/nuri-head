@@ -79,3 +79,54 @@ widersprochen — und das ist der Grund, warum dieser Befund existiert statt ein
 
 **Das ist kein Blatt für die Warteschlange.** *Solange die Frage falsch gestellt ist, sperrt der
 nächste verwaiste Lock wieder alle aus — und A-02 ist bereits `RELEASE_FREI`.*
+
+---
+
+## RICHTUNGS-ENTSCHEIDUNG des Plan-Prüfers (07.08.) — keine der beiden Formen allein
+
+**Vorab die Nachmessung — der Befund hält vollständig:** PID 59792 ist die Virtualization-VM
+(selbst gemessen, schon gestern beim eigenen Aussperren), `lsof -t -- docs/STATUS.md` → ebenfalls
+59792 (die VM hält wirklich JEDE Repo-Datei), der Lock ist beiseitegelegt und weg. **Mein eigener
+Commit fb7921bd war der zweite Betroffene desselben Locks — ich habe den Befund am eigenen Leib,
+nicht nur auf dem Papier.**
+
+**Beide vorgeschlagenen Formen haben allein eine Fehlrichtung:**
+
+```text
+FORM A allein (Halter-Kommando pruefen):
+  Auf dieser Maschine ist der Halter IMMER die VM — auch waehrend ein git AKTIV
+  arbeitet. Form A allein erklaerte damit JEDEN gehaltenen Lock fuer verwaist:
+  der heutige Fehler, gespiegelt. Beiseitelegen mitten im fremden Commit.
+
+FORM B allein (laeuft irgendein git-Prozess):
+  Auf einer Maschine mit mehreren parallelen Rollen ist 'irgendwo laeuft git'
+  haeufig — dauerhaft falsches GEHALTEN droht. Und ob ein git IN der Sandbox-VM
+  im Host-ps ueberhaupt sichtbar ist, ist UNGEMESSEN — dieselbe Klasse
+  ungeprüfter Zuordnung, aus der dieser Befund stammt.
+```
+
+**ENTSCHIEDEN — verwaist braucht DREI Nein zusammen, sonst gilt die heutige Vorsicht:**
+
+```text
+1  Halter-Kommando ist kein git          (Form A)
+2  kein git-Prozess sichtbar             (Form B, billig zuerst)
+3  die bestehende A-02-Grenze haelt      (0 Byte UND Alter >= 60s)
+   -> sie deckt genau den Fall, den weder A noch B sehen KANN: ein lebendiges
+      git haelt den Lock nur Sekunden; was nach 60 Sekunden noch haelt und
+      nicht sichtbar ist, ist kein arbeitendes git.
+
+ALLE DREI nein  -> beiseitelegen nach Dauerregel (NIE loeschen, Zielpfad in
+                   der Meldung), Commit laeuft weiter
+SONST           -> heutige Form: ENV_BLOCKED mit Halter-Angabe, exit 3
+```
+
+**Rot-Pflicht der Nachbesserung, heute wirksam:** ein 0-Byte-Lock, 61 s alt, ohne git-Halter →
+das Tor sagt heute `exit 3` (gemessen, zweimal). Soll: beiseitelegen und weiterfahren.
+**Gegenprobe:** ein frischer Lock (< 60 s) bleibt liegen → `ENV_BLOCKED` wie heute.
+
+**Klassifizierung nach §12.5:** A-02 bleibt `ABGENOMMEN`/`RELEASE_FREI` — der SPEC-Befund wirkt
+nicht rückwirkend. Klasse SPEC · Schwere P0 · Verursacher-Rolle Planner (Kriterienformulierung,
+von ihm selbst angezeigt) · **Nachbesserung auf der Linie des Baus (§12.2): auf `6953198a`**,
+Bau durch den Generator, **keine Warteschlange** (P0-Begründung ist gemessen, nicht behauptet).
+Der Handgriff des Planners — Lock beiseitegelegt entgegen dem eigenen Werkzeug — war durch Yamas
+Dauerregel gedeckt und offengelegt: **gebilligt.**
