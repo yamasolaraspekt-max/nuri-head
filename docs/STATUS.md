@@ -12,7 +12,7 @@
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-08** Halter nach Kommando | **`BEREIT`** | **Generator** | `1dcdc32e` · Claim `0372320c` | beide `SPEC_BLOCKED` des Evaluators **erledigt und gegengeprüft** (`17d191aa`) — Bau läuft an |
+| **A-08** Halter nach Kommando | **`SPEC_BLOCKED`** | **Planner** | Generator 07.08. 09:1x, VOR dem Bau | **dritter Fund derselben Klasse, am HALTER-Pfad statt am Stillstandspfad**: die Drei-Nein-Tabelle färbt die Zusagen `A-02-2`/`A-02-4` (Nicht-git-Halter ⇒ LIEGT) rot, A-08-3/-9 verlangen sie grün, das Nicht-Ziel verbietet ihre Anpassung. **Nicht gebaut, kein IN_ARBEIT** — Messung im Generator-Abschnitt am Seitenende |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
@@ -635,15 +635,16 @@ naechster_schritt: "Planner traegt den §5-Block und den Nachtrag ein — danach
 ```
 ---
 
-## BEREIT — A-08 (P0, keine Warteschlange)
+## SPEC_BLOCKED — A-08 (P0 bleibt; der Bau ruht, Ball beim Planner)
 
 ```yaml
 auftrag: A-08
 titel: "Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt - statt ob irgendwer die Datei offen hat"
 datei: docs/auftraege/aktiv/A-08-halter-nach-kommando.md   # Traegerblatt
 nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidung + Kriterien
-zustand: BEREIT
-ballbesitz: generator
+zustand: SPEC_BLOCKED
+ballbesitz: planner
+generator_meldung: "07.08. 09:1x, VOR der ersten Scope-Aenderung (§7-Vorpruefung 'Auftrag ist machbar' gescheitert): Die Korrekturen ffaddb4b/1dcdc32e loesen die zwei gemeldeten Widersprueche am STILLSTANDSPFAD wirklich — selbst nachgeprueft (Bedingung 3 zitiert das Mass, Zeile 163 traegt den Doppelpfad, Suite 30/30 selbst gefahren). Der Katalog bleibt trotzdem unerfuellbar, an einer Stelle, die noch niemand gemeldet hat: die Zusagen 'A-02-2' (commitPruefen.test.mjs:512 — Lock 900 B, 400 s, gehalten von einem NODE-Prozess, erwartet: LIEGT + exit 3 + Halter-PID) und 'A-02-4' (Z.579 — 50 B, 400 s, node-Halter, erwartet: exit 3 + ENV_BLOCKED-Zeile) haben einen NICHT-git-Halter — nach Bedingung 1 exakt dieselbe Klasse wie die VM. Die Drei-Nein-Tabelle liefert fuer genau diese Eingabe drei Nein (kein git-Halter, kein Repo-git-Prozess, 400 s >= 120 s = Mass erfuellt) -> beiseitelegen -> beide Zusagen ROT. A-08-3 (korrigiert) und A-08-9 verlangen ALLE A-02-Zusagen gruen; das Nicht-Ziel 'Keine Aenderung an A-02-2/-3/-4/-6' verbietet zugleich, die Tests auf git-Halter umzustellen. Wer die Tabelle baut, faellt an A-08-3/-9; wer die Zusagen schuetzt (Nicht-git-Halter schuetzt Locks MIT Inhalt weiterhin), verletzt den Wortlaut von A-08-1 und die neue Kantenzeile 'dasselbe [VM haelt], 800 kB, 300 s still -> beiseite'. Diese Entscheidung gehoert nicht mir (3392400f, woertlich). KEIN Bau, KEIN IN_ARBEIT, Scope unberuehrt. Voller Beleg im Abschnitt 'SPEC_BLOCKED des Generators zu A-08' am Ende dieser Seite."
 basis_sha: d377683a   # Rot-Messungen an der aktuellen Linie; Reparatur-Linie 6953198a (§12.2), Vorfahr — kein Widerspruch
 prioritaet: "P0 — keine Warteschlange (Begruendung gemessen: der naechste verwaiste Lock sperrt wieder alle Rollen)"
 letztes_votum: "plan-pruefer 07.08. (1. DoR-Runde, BEREIT beim ersten Review): alle 18 Punkte belegt, JEDE Rot-Lage selbst gemessen: A-08-1 exit 3 zweimal (eigener Vorfall fb7921bd) · A-08-4 ps -o comm= liefert den VOLLEN Pfad (/bin/zsh gemessen — ein '=git'-Vergleich hielte /usr/bin/git fuer fremd) · A-08-7 'lsof trennt sie exakt' steht woertlich im A-02-Blatt · A-08-8 die Suite stellt ALLE Locks per writeFileSync her (lockSetzen, Z.74-80), keine Zusage aus echtem git-Lauf · A-08-5/6 Zusagen existieren nicht (Rot als fehlende Zusage) · must_preserve A-08-2/-3 an der Basis gruen und korrekt deklariert (frischer Lock und Lock mit Inhalt bleiben heute liegen). Zahlen-Drift notiert, nicht tragend: Suite traegt 44 Zusagen, die Blaetter sagen 30."
@@ -1291,3 +1292,87 @@ ballbesitz: generator (unveraendert - A-08 bleibt BEREIT)
 
 *Von mir liegt gegen A-08 nichts mehr offen. Der Bau kann laufen; ich prüfe ihn, wenn er als
 `CODE_FERTIG` zurückkommt.*
+
+---
+
+## SPEC_BLOCKED des Generators zu A-08 — dritter Fund derselben Klasse, am HALTER-Pfad statt am Stillstandspfad
+
+**Ich habe den Bau nicht begonnen: kein `IN_ARBEIT`, keine Scope-Datei angefasst.** §7 verlangt vor
+der ersten Änderung die Bestätigung „Auftrag ist machbar" — sie gelingt nicht. Gemessen an
+`17d191aa` (Blätter) und am Arbeitsbaum; Suite selbst gefahren.
+
+**Was ich zuerst bestätige, weil es die Vorarbeit würdigt:** die Korrekturen `ffaddb4b`/`1dcdc32e`
+lösen die zwei gemeldeten Widersprüche am **Stillstandspfad** wirklich — selbst nachgeprüft:
+Bedingung 3 zitiert jetzt das Maß statt es nachzubauen, `commit-pruefen.sh:163` trägt den
+Doppelpfad wörtlich, die beiden benannten Zusagen existieren und sind grün
+(`node --test scripts/__tests__/commitPruefen.test.mjs` → `tests 30 · pass 30 · fail 0`, selbst
+gefahren). **Der Katalog bleibt trotzdem unerfüllbar — an einer Stelle, die noch niemand gemeldet
+hat.**
+
+### Die Messung
+
+```text
+Suite, heute gruen (30/30):
+  'A-02-2: ein Lock MIT HALTER bleibt liegen — egal wie alt, still und gross'
+     commitPruefen.test.mjs:512   Lock 900 B, 400 s alt, gehalten von einem NODE-Prozess
+                                  (halterFuer, Z.500-510: spawn(process.execPath, …))
+     erwartet: Lock LIEGT + exit 3 + ENV_BLOCKED-Zeile + Halter-PID in der Meldung
+  'A-02-4: die Blockade nennt BEIDES — Exitcode 3 UND eine lesbare Zeile'
+     commitPruefen.test.mjs:579   Lock 50 B, 400 s, NODE-Halter — erwartet exit 3 + Zeile
+
+Drei-Nein-Tabelle (Nachtrag, Fassung ffaddb4b) auf exakt diese Eingabe:
+  1  Halter-Kommando ist kein git          node ist keins, kein git-*     -> NEIN
+  2  kein git-Prozess dieses Repos         keiner laeuft im Probelauf     -> NEIN
+  3  Alters-/Groessenmass erfuellt         400 s >= 120 s (Zeile 163)     -> NEIN (erfuellt)
+  ALLE DREI nein  ->  beiseitelegen, Commit laeuft weiter  ->  BEIDE Zusagen ROT
+```
+
+**Der Halter der beiden Tests ist ein node-Prozess — nach Bedingung 1 exakt dieselbe Klasse wie
+die VM: ein Nicht-git-Halter.** Der Evaluator hat in `17d191aa` die zwei **Stillstandspfad**-Zusagen
+gegengeprüft (`Tor Teil 2`, `A-02-1 KONTROLLE` — beide **ohne** Halter); die zwei
+**Halter**-Zusagen prüft die Tabelle in die Gegenrichtung, und niemand hat sie bisher gegen die
+Entscheidung gehalten.
+
+### Warum das kein Baufehler werden darf, sondern eine Schnittfrage ist
+
+Drei Festlegungen des Katalogs, von denen je zwei die dritte ausschließen:
+
+```text
+1  A-08-1 (Wortlaut) + Kantenzeile 'dasselbe [VM haelt], 800 kB, 300 s still -> beiseite':
+   ein NICHT-git-Halter schuetzt nicht - das Mass entscheidet.
+2  A-08-3 (korrigiert) + A-08-9: ALLE heute gruenen A-02-Zusagen bleiben gruen -
+   einschliesslich 'A-02-2'/'A-02-4', deren Zusage lautet: Nicht-git-Halter => LIEGT.
+3  Nicht-Ziel 'Keine Aenderung an A-02-2/-3/-4/-6': die Tests duerfen nicht auf
+   git-Halter umgestellt werden (dazu §7: keine Abschwaechung bestehender Tests).
+```
+
+Wer **1** baut, färbt **2** rot. Wer **2** baut (Nicht-git-Halter schützt Locks **mit Inhalt**
+weiterhin), verletzt den Wortlaut von A-08-1 und die neue Kantenzeile — ein Lock, der das Maß über
+den 120-s-Zweig erfüllt und irgendeinen Halter hat, bliebe liegen; auf dieser Maschine hält die VM
+fast jede ältere Repo-Datei. Wer die Tests anpasst, verletzt **3**. *Sachlich dahinter: heute
+schützt die EXISTENZ eines Halters, künftig nur sein KOMMANDO — was aus den zwei Zusagen wird, die
+die alte Frage kodieren, hat der Katalog nicht entschieden. Diese Entscheidung gehört nicht mir
+(`3392400f`, wörtlich: „der Generator müsste entscheiden, und diese Entscheidung gehört nicht
+ihm").*
+
+**Nebenbefund für den Schnitt:** die Kantenzeile begründet ihr „beiseite" mit *„Stillstandspfad des
+Tors, HEUTE gruen"* — für einen **gehaltenen** Lock trifft das nicht zu: heute erreicht er den
+Stillstandspfad nie (`commit-pruefen.sh:142-148` blockt vorher mit `GEHALTENER LOCK`). Die zwei
+grünen Stillstandspfad-Zusagen laufen **ohne** Halter. Die Zeile beschreibt also eine
+Verhaltens**änderung** als Bestandserhalt.
+
+**Sichtbarer Ausweg, ausdrücklich Vorschlag und nicht Entscheidung:** die Kommando-Frage ersetzt
+die Halter-Blockade nur dort, wo der Lock **0 Byte** trägt (der Vorfalls-Fall); ein Lock **mit
+Inhalt und Halter** bleibt liegen wie heute. Das erfüllte A-08-1 im konkreten Fall, A-08-2/-3/-9
+und die Nicht-Ziele — verlangt aber, den A-08-1-Wortlaut und die Kantenzeile zu ändern: Planner.
+
+```yaml
+auftrag: A-08
+basis: d377683a (laut Blatt) - gemessen an 17d191aa, Suite 30/30
+commit: keiner - nicht gebaut, kein IN_ARBEIT gesetzt (§3 bindet ihn an die erste Scope-Aenderung)
+votum: SPEC_BLOCKED
+fehlerklasse: SPEC
+kriterium: "Drei-Nein-Tabelle/A-08-1/Kantenzeile GEGEN A-08-3(korrigiert)/A-08-9 GEGEN Nicht-Ziel A-02-2/-4"
+gegenprobe: "Suite selbst gefahren 30/30 · Tabelle auf die Eingaben von Z.512/579 angewandt · Z.163 und Z.142-148 gelesen"
+ballbesitz: planner
+```
