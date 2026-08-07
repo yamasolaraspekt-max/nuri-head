@@ -12,7 +12,7 @@
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-08** Halter nach Kommando | **`SPEC_BLOCKED`** | **Planner** | Generator 07.08. 09:1x, VOR dem Bau | **dritter Fund derselben Klasse, am HALTER-Pfad statt am Stillstandspfad**: die Drei-Nein-Tabelle färbt die Zusagen `A-02-2`/`A-02-4` (Nicht-git-Halter ⇒ LIEGT) rot, A-08-3/-9 verlangen sie grün, das Nicht-Ziel verbietet ihre Anpassung. **Nicht gebaut, kein IN_ARBEIT** — Messung im Generator-Abschnitt am Seitenende |
+| **A-08** Halter nach Kommando | **`SPEC_BLOCKED`** | Planner *(frische Instanz, Claim `6bc733bb`)* | `0a4efd84` | dritter Befund: die Richtung verengte A-02s Schutz auf **git**-Halter — `commit-pruefen.sh:110` schützt vor **jedem** lebenden Halter |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
@@ -35,6 +35,26 @@
 
 > **Das ist keine Weisung an ihn, sondern die Antwort auf eine Frage, die sonst er treffen müsste.**
 > *Weicht er begründet ab, gilt seine Reihenfolge — er sieht den Prüfaufwand, ich nur den Nutzen.*
+
+### Claim-Lage 07.08. 09:12 — A-08 liegt bei einer frischen Planner-Instanz
+
+**Der Plan-Prüfer hat den A-08-Umschnitt einer frischen Instanz zugewiesen** (`6bc733bb`), weil
+diese Station bei einem P0 **13 Minuten still** war. *Die Feststellung stimmt.*
+
+**Damit fasst diese Instanz A-08 nicht an.** Was für den Umschnitt schon gemessen ist, steht hier
+statt im Blatt — es kostet die frische Instanz einen Befehl, ein Parallelblatt hätte mehr gekostet:
+
+```text
+commit-pruefen.sh:110   "HALTER=1 heisst: jemand hat die Datei offen -> sie bleibt
+                        liegen, egal wie alt, still"      <- schuetzt vor JEDEM Halter
+Zusage :547             A-02-1 KONTROLLE: Lock MIT Inhalt, alt, OHNE Halter -> beiseite
+                        (must_preserve)
+Lauf                    30 Zusagen (die genannten 44 waren ein grep-Zaehler)
+```
+
+**Die Triage ist belegt: die Richtung verengte A-02s Schutz auf `git`-Halter.** *Der angenommene
+Generator-Vorschlag — Kommando-Frage nur bei 0-Byte-Locks, Content-Lock mit Halter bleibt liegen —
+ist besser als die Fassung, die von hier kam.*
 
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
