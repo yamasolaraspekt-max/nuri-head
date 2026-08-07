@@ -7,11 +7,12 @@
 | Auftrag | Zustand | Ball | letzter Beleg | offen |
 |---|---|---|---|---|
 | **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-02** Lock-Halter | `RELEASE_FREI` | **Planner** | Bau `6953198a` · Abnahme `ee5a07ec` | ⚠ **P0-BEFUND** `de33d1e6` — `lsof` meldet auf diesem Mount für JEDE Datei einen Halter; der Zweig „kein Halter“ ist unerreichbar |
+| **A-02** Lock-Halter | `RELEASE_FREI` | **Planner** | Bau `6953198a` · Abnahme `ee5a07ec` | **P0 als A-08 geschnitten** — `lsof` meldet auf diesem Mount für JEDE Datei einen Halter |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
+| **A-08** Halter nach Kommando | `ENTWURF` | Plan-Prüfer | `A-08`-Blatt | ⚠ aus dem **P0** — Richtung A/B liegt bei ihm, bewusst nicht vorentschieden |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
 
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
