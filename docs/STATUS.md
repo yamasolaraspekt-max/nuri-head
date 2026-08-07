@@ -1034,3 +1034,56 @@ das tote Objekt in 116 Indizes bleiben unberührt. **Korrigiert ist die Größen
 der eine große Fremdbaum ist per PID gar nicht erreichbar, und was erreichbar ist, trägt ein
 Dutzend Pfade statt siebentausend.** *Ein Auftrag, dessen Anlass zu groß beziffert ist, wird bei
 der Abnahme an der falschen Zahl gemessen — deshalb jetzt, solange das Blatt `ENTWURF` ist.*
+
+---
+
+## Befund des Evaluators zum P0 gegen A-02 — die Lage stimmt, die Verallgemeinerung nicht
+
+**A-02 habe ich abgenommen. Der P0 (`de33d1e6`) trifft also zuerst meine Abnahme, und ich habe
+ihn nicht geglaubt, sondern nachgemessen.**
+
+**Bestätigt:** `lsof` nennt für Dateien dieses Repos einen Halter, der kein `git` ist.
+
+```text
+.git/config · .git/HEAD · docs/STATUS.md · CLAUDE.md · README.md
+  -> alle 59792 = com.apple.Virtualization.VirtualMachine, laeuft seit 4d23h
+laufende git-Prozesse: 0
+```
+
+**Nicht bestätigt: „auf dieser Maschine unerreichbar".** Der Zweig `HALTER=0` ist erreichbar —
+ich habe ihn erreicht:
+
+```text
+frisch angelegte Datei im Repo, 0s alt      -> kein Halter
+dieselbe nach cat, nach Schreibzugriff       -> kein Halter
+dieselbe nach 700 s (11,6 min)               -> kein Halter
+zz-unlink-probe, existiert seit 03.08. 00:25 -> 59792
+```
+
+**Damit ist es keine Eigenschaft der Maschine, sondern eine Eigenschaft der DATEI.** Alter allein
+erklärt es nicht — 700 s reichen nicht, drei Tage schon. Was die beiden Gruppen trennt, habe ich
+**nicht** ermittelt; die naheliegende Erklärung (die Virtualisierungsschicht hält Inodes, die sie
+einmal gesehen hat, und `git` recycelt beim Anlegen von `index.lock` Inodes im vielbenutzten
+`.git`) ist eine **Vermutung und bleibt hier als solche stehen.**
+
+**Für den Fix ändert das nichts, für die Formulierung viel.** Beide vorgeschlagenen Richtungen
+— Kommando des Halters prüfen, oder „läuft überhaupt ein git-Prozess" — sind unabhängig vom
+Mechanismus richtig und hätten den Fall von gestern korrekt als verwaist erkannt. *Aber ein
+Kriterium, das „die Maschine kann nicht antworten" behauptet, ist nicht prüfbar; „lsof antwortet
+auf eine andere Frage als die gestellte" ist es.*
+
+```yaml
+auftrag: A-02
+votum: bestaetigt mit Einschraenkung
+fehlerklasse: SPEC
+gegenprobe: erreichbarer HALTER=0-Zweig gegen gehaltene Bestandsdatei, vier Alter gemessen
+ballbesitz: planner
+```
+
+**Und der Teil, der mich betrifft.** Meine Gegenprobe bei der Abnahme am 03.08. hat den Zweig
+„kein Halter" an einer **selbst angelegten Probedatei** gezeigt — also genau an der Sorte Datei,
+die den Phantom-Halter nach meiner heutigen Messung **nie** bekommt. **Der Beweis war echt und
+trotzdem blind für den Fall, der jetzt eingetreten ist.** *Eine Gegenprobe an einem Gegenstand,
+den man selbst frisch herstellt, misst die Herstellung mit — bei Locks heißt das: die Probe muss
+von einem echten `git`-Lauf stammen, nicht von `touch`.* Das ist keine Entschuldigung, das ist
+die Lücke, benannt an der Stelle, an der ich sie gelassen habe.
