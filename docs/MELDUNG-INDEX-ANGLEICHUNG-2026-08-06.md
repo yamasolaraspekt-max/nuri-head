@@ -126,10 +126,59 @@ staged gesamt                   22
 > Praktische Folge fuer jede Rolle bis A-07 gebaut ist: **vor dem Commit den eigenen Index pruefen
 > und ausschliesslich selbst geschriebene Pfade stagen** — nie `-A`, nie `.`.
 
+## NACHTRAG 2 — der Mechanismus, gemessen: die Divergenz waechst durch fehlerfreie Arbeit
+
+*Nicht Teil meiner Bringschuld, sondern beim Nachmessen des eigenen Commits aufgefallen. Gehoert
+fachlich zu A-07 und steht hier, weil A-07 gerade von anderen Rollen bearbeitet wird.*
+
+**Beobachtung:** Unmittelbar nach meinem Commit `cb0ccf56` waren **meine eigenen zwei Dateien**
+Phantom-Loeschungen — gleichzeitig `D ` im Index und `??` untracked. Die Phantome stiegen von 7 auf
+9, staged von 22 auf 24: exakt +2.
+
+**Vollerhebung ueber alle 9 Phantome — wann kam jede Datei NEU in die Linie:**
+
+```text
+BEFUND-A02-LSOF-AUF-VIRTUALISIERTEM-MOUNT.md    de33d1e6   06.08. 18:12
+MELDUNG-INDEX-ANGLEICHUNG-2026-08-06.md         cb0ccf56   07.08. 08:48   <- mein Commit
+A-08-NACHTRAG-drei-nein.md                      cb0ccf56   07.08. 08:48   <- mein Commit
+A-08-halter-nach-kommando.md                    99b53a9d   07.08. 08:39
+w10-lock-halter-statt-vermutung.md              db3f7cbd   06.08. 18:18
+dachAusKontur.test.ts                           586ec68a   05.08. 00:42
+nichtDarstellbar.ts                             7fdf6e05   05.08. 09:10
+browserBuehne.test.mjs                          26e378a5   05.08. 01:00
+browser-buehne.sh                               26e378a5   05.08. 01:00
+```
+
+**Neun von neun sind Dateien, die NEU hinzukamen. Keine einzige ist eine echte Loeschung.**
+
+**Der Mechanismus:** Der Standard-Index steht auf einem alten Stand. Fuer git bedeutet „in `HEAD`
+vorhanden, im Index nicht" = *zum Loeschen vorgemerkt*. Jeder Commit, der eine neue Datei bringt,
+erzeugt damit automatisch ein weiteres Phantom.
+
+> **Das ist die eigentliche Schaerfe von A-07, und sie steht bisher in keinem Blatt.** Die
+> Begruendung lief bisher ueber die Halde und ihre Groesse. Aber:
+>
+> **Der Schaden entsteht nicht durch Fehlverhalten, sondern durch fehlerfreie Arbeit.** Es genuegt,
+> dass irgendeine Rolle irgendwo eine neue Datei committet — sauber, mit benannten Pfaden, ohne
+> `-A`. Die Divergenz waechst monoton mit der Produktivitaet des Teams. Sie kann nicht auslaufen,
+> solange gearbeitet wird, und keine Sorgfalt einer einzelnen Rolle verhindert sie.
+>
+> **Und die Auswahl der Betroffenen ist bitter:** auf der Loeschliste stehen derzeit **beide
+> A-08-Blaetter**, der P0-Befund, diese Meldung und `browser-buehne.sh` — also genau die Papiere,
+> die den Schaden beheben sollen. Ein einziges `git add -A` einer beliebigen Rolle entfernt sie
+> aus der Linie.
+
+**Was das fuer A-07 bedeutet — Vorschlag, keine Entscheidung:** Rot-Lagen, die sich auf feste
+Haldenzahlen stuetzen, driften (das ist bekannt und im Blatt vermerkt). Diese Messung driftet nicht,
+sie ist ein **Mechanismus mit Vorhersage**: *committe eine neue Datei, und die Zahl der Phantome
+steigt um genau eins.* Als Rot-Lage ist das reproduzierbar, unabhaengig vom Haldenstand und in
+zwei Befehlen pruefbar. Ob A-07 das aufnimmt, entscheidet der Plan-Pruefer, nicht ich.
+
 ```yaml
 fehlerklasse: PROZESS
 verursacher: planner
 ballbesitz: planner (diese Meldung), danach plan-pruefer (Kenntnisnahme)
 folge: keine Aenderung an A-07 noetig, aber Kenntnis noetig
 gebilligt: der Lock-Handgriff (d4308d35) — offen war die fehlende Meldung
+nachtrag_2: Vollerhebung 9/9 — Divergenz waechst durch fehlerfreie Arbeit, Vorschlag an A-07
 ```

@@ -12,10 +12,13 @@
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-08** Halter nach Kommando | `ENTWURF` | Plan-Prüfer | `2e2bbb14` | Richtung **entschieden**: verwaist = *drei* Nein (kein git-Halter · kein git-Prozess · 0 Byte/≥60 s). DoR steht aus |
+| **A-08** Halter nach Kommando | **`SPEC_BLOCKED`** | **Planner** | Generator 07.08. 09:1x, VOR dem Bau | **dritter Fund derselben Klasse, am HALTER-Pfad statt am Stillstandspfad**: die Drei-Nein-Tabelle färbt die Zusagen `A-02-2`/`A-02-4` (Nicht-git-Halter ⇒ LIEGT) rot, A-08-3/-9 verlangen sie grün, das Nicht-Ziel verbietet ihre Anpassung. **Nicht gebaut, kein IN_ARBEIT** — Messung im Generator-Abschnitt am Seitenende |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
 
-### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08.
+### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
+
+> **A-08 hat die Gruppe verlassen:** `BEREIT` beim ersten Review, danach zwei `SPEC_BLOCKED` des
+> Evaluators — beide vor dem Bau gefunden und erledigt. **Verbleibende Reihenfolge: A-07 → A-05 → A-04.**
 
 **Vier Blätter liegen beim Plan-Prüfer, keines ist `IN_ARBEIT`, der Generator hat nichts zu bauen.**
 *Die Reihenfolge ist meine Entscheidung — er soll sie nicht raten müssen.*
@@ -636,22 +639,25 @@ naechster_schritt: "Planner traegt den §5-Block und den Nachtrag ein — danach
 ```
 ---
 
-## BEREIT — A-08 (P0, keine Warteschlange)
+## SPEC_BLOCKED — A-08 (P0 bleibt; der Bau ruht, Ball beim Planner)
 
 ```yaml
 auftrag: A-08
 titel: "Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt - statt ob irgendwer die Datei offen hat"
 datei: docs/auftraege/aktiv/A-08-halter-nach-kommando.md   # Traegerblatt
 nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidung + Kriterien
-zustand: BEREIT
-ballbesitz: generator
+zustand: SPEC_BLOCKED
+ballbesitz: planner
+generator_meldung: "07.08. 09:1x, VOR der ersten Scope-Aenderung (§7-Vorpruefung 'Auftrag ist machbar' gescheitert): Die Korrekturen ffaddb4b/1dcdc32e loesen die zwei gemeldeten Widersprueche am STILLSTANDSPFAD wirklich — selbst nachgeprueft (Bedingung 3 zitiert das Mass, Zeile 163 traegt den Doppelpfad, Suite 30/30 selbst gefahren). Der Katalog bleibt trotzdem unerfuellbar, an einer Stelle, die noch niemand gemeldet hat: die Zusagen 'A-02-2' (commitPruefen.test.mjs:512 — Lock 900 B, 400 s, gehalten von einem NODE-Prozess, erwartet: LIEGT + exit 3 + Halter-PID) und 'A-02-4' (Z.579 — 50 B, 400 s, node-Halter, erwartet: exit 3 + ENV_BLOCKED-Zeile) haben einen NICHT-git-Halter — nach Bedingung 1 exakt dieselbe Klasse wie die VM. Die Drei-Nein-Tabelle liefert fuer genau diese Eingabe drei Nein (kein git-Halter, kein Repo-git-Prozess, 400 s >= 120 s = Mass erfuellt) -> beiseitelegen -> beide Zusagen ROT. A-08-3 (korrigiert) und A-08-9 verlangen ALLE A-02-Zusagen gruen; das Nicht-Ziel 'Keine Aenderung an A-02-2/-3/-4/-6' verbietet zugleich, die Tests auf git-Halter umzustellen. Wer die Tabelle baut, faellt an A-08-3/-9; wer die Zusagen schuetzt (Nicht-git-Halter schuetzt Locks MIT Inhalt weiterhin), verletzt den Wortlaut von A-08-1 und die neue Kantenzeile 'dasselbe [VM haelt], 800 kB, 300 s still -> beiseite'. Diese Entscheidung gehoert nicht mir (3392400f, woertlich). KEIN Bau, KEIN IN_ARBEIT, Scope unberuehrt. Voller Beleg im Abschnitt 'SPEC_BLOCKED des Generators zu A-08' am Ende dieser Seite."
 basis_sha: d377683a   # Rot-Messungen an der aktuellen Linie; Reparatur-Linie 6953198a (§12.2), Vorfahr — kein Widerspruch
 prioritaet: "P0 — keine Warteschlange (Begruendung gemessen: der naechste verwaiste Lock sperrt wieder alle Rollen)"
 letztes_votum: "plan-pruefer 07.08. (1. DoR-Runde, BEREIT beim ersten Review): alle 18 Punkte belegt, JEDE Rot-Lage selbst gemessen: A-08-1 exit 3 zweimal (eigener Vorfall fb7921bd) · A-08-4 ps -o comm= liefert den VOLLEN Pfad (/bin/zsh gemessen — ein '=git'-Vergleich hielte /usr/bin/git fuer fremd) · A-08-7 'lsof trennt sie exakt' steht woertlich im A-02-Blatt · A-08-8 die Suite stellt ALLE Locks per writeFileSync her (lockSetzen, Z.74-80), keine Zusage aus echtem git-Lauf · A-08-5/6 Zusagen existieren nicht (Rot als fehlende Zusage) · must_preserve A-08-2/-3 an der Basis gruen und korrekt deklariert (frischer Lock und Lock mit Inhalt bleiben heute liegen). Zahlen-Drift notiert, nicht tragend: Suite traegt 44 Zusagen, die Blaetter sagen 30."
 verbindliche_lesart: "ZWEI Dokumente, EIN Katalog — es gilt der Kriterienkatalog des NACHTRAGS A-08-1..A-08-8, ergaenzt um zwei Kriterien des Traegerblatts: dessen 'A-08-3' (alle A-02-Zusagen bleiben gruen, insb. Zeitgrenze und ENV_BLOCKED-Form) wird als A-08-9 (must_preserve) gefuehrt, dessen 'A-08-4' (Meldung nennt das KOMMANDO des Halters, nicht nur die PID) als A-08-10 (P2). Traegerblatt-Kriterien 1/2/5 sind durch Nachtrag 1/2/3/8 vollstaendig abgedeckt und zaehlen nicht doppelt. Der Bericht des Generators nummeriert nach dieser Lesart."
 konfliktpruefung: "Von mir ergaenzt — fehlte in BEIDEN Dokumenten: A-07 (ENTWURF) aendert dieselben zwei Dateien (commit-pruefen.sh, commitPruefen.test.mjs). REIHENFOLGE FESTGELEGT: A-08 baut zuerst; A-07 wird erst nach A-08-CODE_FERTIG bereit und misst dann neu. Keine zweite ca5f80e4-Lage. Die Doppelfuehrung der zwei A-08-Dateien hat der Planner selbst angezeigt und aufgeloest (Traegerblatt fuehrt) — sauber."
 claim: "plan-pruefer 07.08.: Generator-Station leer bei P0 — FRISCHE Generator-Instanz wird gestartet (Claim VOR dem Start, Lehre aus den drei Doppelarbeiten). Ich baue NICHT selbst; die Instanz ist rollenrein Generator."
-naechster_schritt: "Generator zieht A-08 (P0 vor allem anderen), setzt IN_ARBEIT VOR der ersten Scope-Aenderung (§3), baut auf der aktuellen Linie, Bericht nach §11 mit der Nummerierung der verbindlichen Lesart"
+spec_blocked_triage: "plan-pruefer 07.08. (nach f5098c40): BEFUND BESTAETIGT, an den Testzeilen selbst nachgemessen — A-02-2 (Z.512) verlangt woertlich 'ein Lock MIT HALTER bleibt liegen — egal wie alt, still und gross', der Halter ist ein NODE-Prozess; meine Bedingung 1 ('kein git-Halter') stuft genau diesen legitimen lebenden Halter als Phantom ein. DER KERN IST MEIN ANTEIL: A-02 schuetzt JEDEN lebenden Halter, meine Richtung d4308d35 hat das auf git-Halter verengt — die VM-Phantom-Frage mit der Halter-Frage beantwortet statt sie zu trennen. Und meine BEREIT-Runde hat die Drei-Nein-Tabelle NICHT gegen den Zusagen-Bestand simuliert, nur die Rot-Lagen gemessen — Lehre: must_preserve heisst kuenftig 'Tabelle gegen ALLE bestehenden Zusagen durchspielen', nicht 'an der Basis gruen'. ZWEITER EIGENFEHLER: meine 'Suite traegt 44 Zusagen' war ein grep-Zaehler, der Lauf traegt 30 — der Lauf schlaegt den grep. RICHTUNGS-KORREKTUR fuer den Neuschnitt (Planner entscheidet den Schnitt): der GENERATOR-VORSCHLAG ist als Minimum RICHTIG und von mir angenommen — die Kommando-Frage ersetzt die Halter-Blockade NUR bei 0-Byte-Locks; ein Lock MIT Inhalt und Halter bleibt liegen wie heute. Das erfuellt den Vorfalls-Fall (06.08., 0 Byte), laesst ALLE A-02-Zusagen gruen und braucht keine VM-Sonderbehandlung. EHRLICHE GRENZE: die 03.08.-Klasse (Content-Lock, verwaist, phantom-gehalten) bleibt damit ENV_BLOCKED und wird von Hand nach Dauerregel geraeumt — konservatives Scheitern, kein Datenverlust; wer sie automatisch will, braucht eine Phantom-Erkennung (z. B. Kontrollprobe: haelt dieselbe PID auch eine unbeteiligte Referenzdatei wie .git/config, ist sie Mount-Rauschen) — die haengt aber an der UNERKLAERTEN Dateigruppen-Trennung und gehoert, wenn ueberhaupt, in ein eigenes Blatt mit eigener Messung, nicht als Beifang in A-08."
+claim_umschnitt: "plan-pruefer 07.08. 09:1x: Planner-Station 13+ min still bei P0, keine ungesicherte Arbeit (content-diff beider Dateien gegen HEAD leer, MM/D sind Stale-Index-Phantome) — FRISCHE Planner-Instanz wird fuer den Umschnitt gestartet. Claim VOR dem Start. Ich schneide NICHT selbst; die DoR-Pruefung des Umschnitts bleibt bei mir."
+naechster_schritt: "Planner schneidet A-08-1 und die Kantenzeile auf die 0-Byte-Fassung um (Generator-Vorschlag, vom Plan-Pruefer angenommen); danach erneute DoR-Runde — diesmal MIT Tabellen-Simulation gegen alle 30 Zusagen"
 ```
 ---
 
@@ -1298,3 +1304,139 @@ ballbesitz: planner
 **Ich baue nicht und entscheide nicht, welcher der beiden Vorfälle schwerer wiegt.** *Aber
 solange beide Fassungen `must_preserve` heißen, ist jede Abnahme von A-08 vorherbestimmt: sie
 wird an der Zusage gemessen, die der Bauende zufällig gewählt hat.*
+
+---
+
+## Evaluator — meine beiden `SPEC_BLOCKED` gegen A-08 sind erledigt, gegengeprüft statt geglaubt
+
+**Gemessen an `1dcdc32e`.** Der Planner hat beide Fassungen geschlossen (`ffaddb4b`, `1dcdc32e`);
+ich habe die Auflösung in beide Richtungen nachgeprüft, wie §12.3 es für jeden Befund verlangt.
+
+```text
+VORHER (rot)   Traegerblatt A-08-1   "0 Byte und >= 60 s alt"
+               Nachtrag  A-08-3      "Lock mit Inhalt bleibt liegen, egal wie alt"
+               -> zwei Zusagen mit must_preserve, entgegengesetzt
+
+NACHHER        Traegerblatt A-08-1   "das BESTEHENDE Alters-/Groessenmass des Tors ist
+                                      erfuellt - unveraendert, beide Pfade"
+               Nachtrag  A-08-3      nennt die beiden Zusagen JETZT BEIM NAMEN und schreibt
+                                      "Doppelpfad in commit-pruefen.sh:163 wird nicht angetastet"
+```
+
+**Beim Namen genannt heißt prüfbar — deshalb habe ich beide Seiten selbst nachgesehen:**
+
+```text
+$ sed -n '163p' scripts/commit-pruefen.sh
+    if { [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; } || [ "$ALTER" -ge 120 ]; then
+                                                          ^^^^^^^^^^^^^^^^^^^^^ der Pfad,
+                                                          den A-08-1 vorher entfernt haette
+
+$ node --test scripts/__tests__/commitPruefen.test.mjs
+  ✔ Tor Teil 2: ein ALTER Lock MIT Inhalt, dessen mtime stillsteht, ist ein Rest
+  ✔ A-02-1 KONTROLLE: Lock MIT Inhalt, alt, ohne Halter -> beiseite (must_preserve)
+  tests 30 · pass 30 · fail 0
+```
+
+**Die Zeilennummer im Blatt trifft die Zeile im Tor**, und die zwei zitierten Testnamen existieren
+wörtlich so in der Suite. *Ein Verweis, der ins Leere zeigt, wäre derselbe Fehler in neuer Form —
+deshalb die Probe.*
+
+**Der sachliche Punkt ist ebenfalls aufgelöst, und zwar richtig:** der Planner trennt jetzt den
+Vorfall vom 04.08. (`887 796 B` / `888 008 B`) als **pauschales Räumen von Hand am Tor vorbei**
+vom Stillstandspfad des Tors, der ihn nie berührt hat. *Das war der Kern — nicht die Dateigröße,
+sondern wer geräumt hat.* **Damit tragen die zwei Vorfälle keine gegensätzliche Lehre mehr.**
+
+```yaml
+auftrag: A-08
+befunde: ec051a1c (A-08-1 gegen A-08-3) · 3392400f (Nachtrag-A-08-3)
+votum: beide ERLEDIGT
+gegenprobe: Zeile 163 gelesen · Suite gefahren 30/30 · beide Testnamen woertlich gefunden
+ballbesitz: generator (unveraendert - A-08 bleibt BEREIT)
+```
+
+*Von mir liegt gegen A-08 nichts mehr offen. Der Bau kann laufen; ich prüfe ihn, wenn er als
+`CODE_FERTIG` zurückkommt.*
+
+---
+
+## SPEC_BLOCKED des Generators zu A-08 — dritter Fund derselben Klasse, am HALTER-Pfad statt am Stillstandspfad
+
+**Ich habe den Bau nicht begonnen: kein `IN_ARBEIT`, keine Scope-Datei angefasst.** §7 verlangt vor
+der ersten Änderung die Bestätigung „Auftrag ist machbar" — sie gelingt nicht. Gemessen an
+`17d191aa` (Blätter) und am Arbeitsbaum; Suite selbst gefahren.
+
+**Was ich zuerst bestätige, weil es die Vorarbeit würdigt:** die Korrekturen `ffaddb4b`/`1dcdc32e`
+lösen die zwei gemeldeten Widersprüche am **Stillstandspfad** wirklich — selbst nachgeprüft:
+Bedingung 3 zitiert jetzt das Maß statt es nachzubauen, `commit-pruefen.sh:163` trägt den
+Doppelpfad wörtlich, die beiden benannten Zusagen existieren und sind grün
+(`node --test scripts/__tests__/commitPruefen.test.mjs` → `tests 30 · pass 30 · fail 0`, selbst
+gefahren). **Der Katalog bleibt trotzdem unerfüllbar — an einer Stelle, die noch niemand gemeldet
+hat.**
+
+### Die Messung
+
+```text
+Suite, heute gruen (30/30):
+  'A-02-2: ein Lock MIT HALTER bleibt liegen — egal wie alt, still und gross'
+     commitPruefen.test.mjs:512   Lock 900 B, 400 s alt, gehalten von einem NODE-Prozess
+                                  (halterFuer, Z.500-510: spawn(process.execPath, …))
+     erwartet: Lock LIEGT + exit 3 + ENV_BLOCKED-Zeile + Halter-PID in der Meldung
+  'A-02-4: die Blockade nennt BEIDES — Exitcode 3 UND eine lesbare Zeile'
+     commitPruefen.test.mjs:579   Lock 50 B, 400 s, NODE-Halter — erwartet exit 3 + Zeile
+
+Drei-Nein-Tabelle (Nachtrag, Fassung ffaddb4b) auf exakt diese Eingabe:
+  1  Halter-Kommando ist kein git          node ist keins, kein git-*     -> NEIN
+  2  kein git-Prozess dieses Repos         keiner laeuft im Probelauf     -> NEIN
+  3  Alters-/Groessenmass erfuellt         400 s >= 120 s (Zeile 163)     -> NEIN (erfuellt)
+  ALLE DREI nein  ->  beiseitelegen, Commit laeuft weiter  ->  BEIDE Zusagen ROT
+```
+
+**Der Halter der beiden Tests ist ein node-Prozess — nach Bedingung 1 exakt dieselbe Klasse wie
+die VM: ein Nicht-git-Halter.** Der Evaluator hat in `17d191aa` die zwei **Stillstandspfad**-Zusagen
+gegengeprüft (`Tor Teil 2`, `A-02-1 KONTROLLE` — beide **ohne** Halter); die zwei
+**Halter**-Zusagen prüft die Tabelle in die Gegenrichtung, und niemand hat sie bisher gegen die
+Entscheidung gehalten.
+
+### Warum das kein Baufehler werden darf, sondern eine Schnittfrage ist
+
+Drei Festlegungen des Katalogs, von denen je zwei die dritte ausschließen:
+
+```text
+1  A-08-1 (Wortlaut) + Kantenzeile 'dasselbe [VM haelt], 800 kB, 300 s still -> beiseite':
+   ein NICHT-git-Halter schuetzt nicht - das Mass entscheidet.
+2  A-08-3 (korrigiert) + A-08-9: ALLE heute gruenen A-02-Zusagen bleiben gruen -
+   einschliesslich 'A-02-2'/'A-02-4', deren Zusage lautet: Nicht-git-Halter => LIEGT.
+3  Nicht-Ziel 'Keine Aenderung an A-02-2/-3/-4/-6': die Tests duerfen nicht auf
+   git-Halter umgestellt werden (dazu §7: keine Abschwaechung bestehender Tests).
+```
+
+Wer **1** baut, färbt **2** rot. Wer **2** baut (Nicht-git-Halter schützt Locks **mit Inhalt**
+weiterhin), verletzt den Wortlaut von A-08-1 und die neue Kantenzeile — ein Lock, der das Maß über
+den 120-s-Zweig erfüllt und irgendeinen Halter hat, bliebe liegen; auf dieser Maschine hält die VM
+fast jede ältere Repo-Datei. Wer die Tests anpasst, verletzt **3**. *Sachlich dahinter: heute
+schützt die EXISTENZ eines Halters, künftig nur sein KOMMANDO — was aus den zwei Zusagen wird, die
+die alte Frage kodieren, hat der Katalog nicht entschieden. Diese Entscheidung gehört nicht mir
+(`3392400f`, wörtlich: „der Generator müsste entscheiden, und diese Entscheidung gehört nicht
+ihm").*
+
+**Nebenbefund für den Schnitt:** die Kantenzeile begründet ihr „beiseite" mit *„Stillstandspfad des
+Tors, HEUTE gruen"* — für einen **gehaltenen** Lock trifft das nicht zu: heute erreicht er den
+Stillstandspfad nie (`commit-pruefen.sh:142-148` blockt vorher mit `GEHALTENER LOCK`). Die zwei
+grünen Stillstandspfad-Zusagen laufen **ohne** Halter. Die Zeile beschreibt also eine
+Verhaltens**änderung** als Bestandserhalt.
+
+**Sichtbarer Ausweg, ausdrücklich Vorschlag und nicht Entscheidung:** die Kommando-Frage ersetzt
+die Halter-Blockade nur dort, wo der Lock **0 Byte** trägt (der Vorfalls-Fall); ein Lock **mit
+Inhalt und Halter** bleibt liegen wie heute. Das erfüllte A-08-1 im konkreten Fall, A-08-2/-3/-9
+und die Nicht-Ziele — verlangt aber, den A-08-1-Wortlaut und die Kantenzeile zu ändern: Planner.
+
+```yaml
+auftrag: A-08
+basis: d377683a (laut Blatt) - gemessen an 17d191aa, Suite 30/30
+commit: keiner - nicht gebaut, kein IN_ARBEIT gesetzt (§3 bindet ihn an die erste Scope-Aenderung)
+votum: SPEC_BLOCKED
+fehlerklasse: SPEC
+kriterium: "Drei-Nein-Tabelle/A-08-1/Kantenzeile GEGEN A-08-3(korrigiert)/A-08-9 GEGEN Nicht-Ziel A-02-2/-4"
+gegenprobe: "Suite selbst gefahren 30/30 · Tabelle auf die Eingaben von Z.512/579 angewandt · Z.163 und Z.142-148 gelesen"
+ballbesitz: planner
+```

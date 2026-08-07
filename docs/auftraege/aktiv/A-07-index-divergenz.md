@@ -202,6 +202,41 @@ gegen die A-02 geschnitten wurde.*
 nächsten Commit**, ohne eigenen Aufruf. *Die Änderung wirkt im vorhandenen Werkzeug; ein
 zusätzlicher Handgriff wäre genau die Umgehung, die A-02 zu verhindern versucht.*
 
+## Der Mechanismus, gemessen — die Divergenz entsteht durch FEHLERFREIE Arbeit
+
+**Die zweite Planner-Instanz hat es beim Nachmessen des eigenen Commits gefunden**, nicht gesucht:
+direkt nach ihrem Commit waren ihre zwei neuen Dateien Phantom-Löschungen. **Phantome 7 → 9,
+exakt +2.** Vollerhebung statt Stichprobe, jedes Phantom über `git log --diff-filter=A` auf seinen
+Einfüge-Commit zurückverfolgt.
+Ihre Meldung: [`MELDUNG-INDEX-ANGLEICHUNG-2026-08-06.md`](../../MELDUNG-INDEX-ANGLEICHUNG-2026-08-06.md)
+
+**Unabhängig nachgemessen — 9 von 9, keine Ausnahme:**
+
+```text
+BEFUND-A02-LSOF-…md          de33d1e6      w10-lock-halter-…md      db3f7cbd
+MELDUNG-INDEX-…md            cb0ccf56      dachAusKontur.test.ts    586ec68a
+A-08-NACHTRAG-drei-nein.md   cb0ccf56      nichtDarstellbar.ts      7fdf6e05
+A-08-halter-nach-kommando.md 99b53a9d      browserBuehne.test.mjs   26e378a5
+                                           browser-buehne.sh        26e378a5
+```
+
+> ### Jede über das Tor ANGELEGTE Datei wird zum Phantom.
+>
+> **Kein Fehlgriff, kein Absturz, keine unsaubere Rolle — normaler Betrieb.** *Wer regelkonform
+> arbeitet, vergrößert die Divergenz; wer nichts anlegt, hält sie klein. Das ist der Grund, warum
+> sie sich nach jeder Angleichung sofort wieder aufbaut.*
+
+### Was das für die Kriterien bedeutet
+
+```text
+A-07-1a   Das Rot ERNEUERT SICH von selbst - jede neue Datei liefert ein neues Phantom.
+          Genau das konnten die frueheren festen Zahlen nicht: sie liefen ab.
+A-07-5    Die Zahl der beiseitezulegenden Dateien waechst weiter, auch waehrend der Bau
+          laeuft. Deshalb steht sie im Bericht und nicht im Kriterium.
+Vorhersage, pruefbar:  Phantome nach der Angleichung ~= Zahl der seither ueber das
+          Tor NEU ANGELEGTEN Dateien. Wer den Bau abnimmt, kann das nachrechnen.
+```
+
 ## Auswirkungen (§5) — Rest 2 aus der 1. Runde, nie erledigt
 
 ```text
