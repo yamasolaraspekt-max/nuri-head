@@ -1107,3 +1107,58 @@ trotzdem blind für den Fall, der jetzt eingetreten ist.** *Eine Gegenprobe an e
 den man selbst frisch herstellt, misst die Herstellung mit — bei Locks heißt das: die Probe muss
 von einem echten `git`-Lauf stammen, nicht von `touch`.* Das ist keine Entschuldigung, das ist
 die Lücke, benannt an der Stelle, an der ich sie gelassen habe.
+
+---
+
+## Befund des Evaluators zu A-08 — vor dem Bau: A-08-1 und A-08-3 widersprechen sich
+
+**A-08 liegt als Entwurf. Ich habe die Kriterien gegen den Bestand gemessen, bevor jemand danach
+baut** — an `cb0ccf56`, Suite selbst gefahren.
+
+**A-08-1 sagt:** verwaist ist ein Lock nur, wenn u. a. gilt **„0 Byte und ≥ 60 s alt"**.
+**A-08-3 sagt:** **alle** A-02-Zusagen bleiben grün. **Beides zusammen geht nicht.**
+
+```text
+$ node --test scripts/__tests__/commitPruefen.test.mjs
+  ...
+  ✔ Tor Teil 2: ein ALTER Lock MIT Inhalt, dessen mtime stillsteht, ist ein Rest
+  ✔ A-02-1 KONTROLLE: Lock MIT Inhalt, alt, ohne Halter -> beiseite (must_preserve)
+  tests 30 · pass 30 · fail 0
+```
+
+**Zwei grüne Zusagen hängen am zweiten Alterspfad**, den das Tor heute führt
+(`scripts/commit-pruefen.sh`: `{ 0 Byte && ≥60s } ODER ≥120s`) — **eine davon trägt das Wort
+`must_preserve` im Namen.** Sie setzt einen Lock **mit Inhalt**, 300 s alt, und erwartet
+`code 0` samt Beiseitelegen. *Wer A-08-1 wörtlich baut, nimmt den `≥120s`-Pfad heraus und färbt
+genau diese beiden rot — nach A-08-3 wäre der Bau damit gescheitert, nach A-08-1 richtig.*
+
+**Die Herkunft macht es schlimmer, nicht besser:** dieser Pfad ist aus meiner eigenen Blockade
+vom 03.08. entstanden (317 s alt, 885 kB, dreifach belegt, dass nichts mehr lief). Der
+Testkommentar sagt wörtlich: *„Die alte Regel ‚0 Byte UND ≥60s' konnte ihn nicht erkennen — sie
+trennte die Fälle nur zur Hälfte."* **A-08-1 schreibt genau diese alte Regel wieder hin.**
+
+```yaml
+auftrag: A-08
+kriterium: A-08-1 gegen A-08-3
+votum: SPEC_BLOCKED
+fehlerklasse: SPEC
+gegenprobe: Suite selbst gefahren (30/30 gruen) - die beiden Zusagen benannt, die fallen wuerden
+ballbesitz: planner
+```
+
+**Vorschlag, nicht Entscheidung:** die dritte Bedingung lautet nicht „0 Byte und ≥ 60 s", sondern
+**„das Alters-/Größenmaß des Tors ist erfüllt"** — dann bleibt der bestehende Doppelpfad
+unberührt und die Drei-Nein-Regel setzt nur die beiden neuen Bedingungen davor.
+
+### Zweiter Punkt, ausdrücklich als offene Frage und NICHT als Befund
+
+**A-08-1 Nr. 2 sagt „kein laufender `git`-Prozess" — ohne Bezug auf dieses Repository.** Nach dem
+Wortlaut zählt ein `git`-Lauf in einem *fremden* Verzeichnis mit und blockiert hier.
+
+```text
+ps -eo pid,command | awk '$2 ~ /\/git$|^git$/'   ->  0 · 0 · 0   (drei Messungen)
+```
+
+**Meine Messung stützt die Sorge NICHT** — dreimal null. *Ich melde sie trotzdem, weil der Bau
+den Bezug festlegen muss und der Wortlaut ihn offenlässt; ob eng oder weit, gehört ins Blatt und
+nicht in die Umsetzung.* **Das ist eine Frage an den Planner, kein Mangel.**
