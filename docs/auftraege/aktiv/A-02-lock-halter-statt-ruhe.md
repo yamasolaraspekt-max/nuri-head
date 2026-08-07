@@ -66,6 +66,26 @@ verwaister Lock                      lsof -> 0 Halter    mtime stillstehend: JA
 -> die Ruhe trennt die Faelle NICHT. lsof trennt sie exakt.
 ```
 
+> ### ⚠ RICHTIGSTELLUNG (07.08., A-08-7) — der letzte Satz ist widerlegt
+>
+> **„lsof trennt sie exakt" gilt hier nicht.** Die Messung oben ist **fuer ihren Ort richtig**
+> (Wegwerf-Repo) und war **auf den echten Arbeitsbaum nicht uebertragbar**: auf dem
+> virtualisierten Mount meldet `lsof` die Virtualization-VM als Halter fuer Dateien, an denen
+> nachweislich nichts arbeitet (`.git/HEAD`, `.git/config`, `README.md` — PID 59792, seit Tagen,
+> kein git). Am 06.08. hat genau das einen 0-Byte-`index.lock` (239 s) in `exit 3` getrieben und
+> zwei Rollen ausgesperrt.
+>
+> **Der Fehlertyp:** `lsof` beantwortet *„hat jemand die Datei offen"*, nicht *„arbeitet gerade
+> git daran"*. Die erste Frage kann auf diesem Mount nie „nein" sagen — eine Frage, die nie
+> „nein" sagen kann, ist keine Pruefung, sondern eine Blockade.
+>
+> **Belege und Folge:** P0-Befund `de33d1e6` · Evaluator-Messung `d377683a` · behoben durch
+> **A-08** ([`A-08-halter-nach-kommando.md`](A-08-halter-nach-kommando.md) mit fuehrendem
+> Nachtrag [`A-08-NACHTRAG-drei-nein.md`](A-08-NACHTRAG-drei-nein.md)): bei **0-Byte-Locks**
+> stellt das Tor seither die **Kommando-Frage** (drei Nein: kein git-Halter, kein git-Prozess
+> dieses Repos, Altersmass erfuellt). Fuer Locks **mit Inhalt** bleibt die Halter-Frage dieses
+> Blattes unveraendert in Kraft — dort schuetzt die EXISTENZ eines lebenden Halters.
+
 ## Ziel und Nutzen
 
 Ein Lock wird beiseitegelegt, **wenn ihn niemand haelt** — und wenn das nicht feststellbar ist,
