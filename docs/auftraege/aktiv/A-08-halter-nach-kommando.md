@@ -79,7 +79,8 @@ B allein   laeuft ueberhaupt ein git-Prozess?  -> ungemessene ZUORDNUNG
 ENTSCHIEDEN:  verwaist = DREI Nein zusammen
               1  kein Halter mit git-Kommando
               2  kein git-Prozess laeuft
-              3  Lock ist 0 Byte UND mindestens 60 s alt
+              3  das Alters-/Groessenmass des Tors ist erfuellt  (NICHT neu formuliert -
+                 commit-pruefen.sh:163 fuehrt einen DOPPELPFAD, siehe A-08-1)
               -> dann beiseitelegen nach Yamas Dauerregel; sonst ENV_BLOCKED wie heute
 ```
 
@@ -91,10 +92,46 @@ besseres Ja** — und die dritte Bedingung braucht `lsof` gar nicht.*
 
 ## Akzeptanzkriterien
 
-**A-08-1 (P1):** Ein Lock gilt genau dann als **verwaist**, wenn **alle drei** zutreffen:
-kein Halter mit `git`-Kommando · kein laufender `git`-Prozess · 0 Byte und ≥ 60 s alt.
-Dann wird er **beiseitegelegt, nie gelöscht**.
-*Rot heute: derselbe Fall endet in `ENV_BLOCKED`.*
+**A-08-1 (P1, KORRIGIERT 07.08. — die dritte Bedingung war ein Rückschritt):** Ein Lock gilt genau
+dann als **verwaist**, wenn **alle drei** zutreffen:
+
+```text
+1  kein Halter mit `git`-Kommando
+2  kein laufender `git`-Prozess
+3  das BESTEHENDE Alters-/Groessenmass des Tors ist erfuellt - unveraendert, beide Pfade
+```
+
+Dann wird er **beiseitegelegt, nie gelöscht**. *Rot heute: derselbe Fall endet in `ENV_BLOCKED`.*
+
+> ### Warum die dritte Bedingung nicht mehr ausgeschrieben wird
+>
+> **Ich hatte „0 Byte und ≥ 60 s alt" hineingeschrieben** — die Kurzform aus der
+> Richtungsentscheidung, **ohne im Tor nachzusehen, was dort steht.** Der Evaluator hat den
+> Widerspruch **vor dem Bau** gemeldet. Selbst nachgemessen:
+>
+> ```text
+> commit-pruefen.sh:25    "nur ein 0-Byte-Lock, aelter als 60 s, wird beiseitegelegt"
+> commit-pruefen.sh:101   "Bis A-02 galt: wer 120 s nicht schreibt, laeuft…"  <- ZWEITER Pfad
+> Zusagen :122 / :163     Locks MIT INHALT, 300 s alt, Erwartung: beiseitelegen
+>                         eine davon traegt `must_preserve` im Namen
+> ```
+>
+> **Wer A-08-1 wörtlich baut, nimmt den 120-s-Pfad heraus und färbt beide Zusagen rot** — *nach
+> A-08-3 gescheitert, nach A-08-1 richtig.* **Zwei meiner eigenen Kriterien hätten einander
+> widersprochen.**
+>
+> **Und die Herkunft verschärft es:** der zweite Pfad stammt aus der Blockade des Evaluators vom
+> 03.08. (317 s, 885 kB), und der Testkommentar sagt wörtlich, dass die alte Regel
+> „0 Byte UND ≥ 60 s" **genau diesen Fall nicht erkennen konnte.** *Ich hatte die alte Regel
+> wieder hingeschrieben.*
+>
+> *Dritter Fall derselben Klasse: eine Formulierung übernommen, den Gegenstand nicht gemessen.*
+
+**A-08-6 (Bezug, ausdrücklich als NICHT-Befund vermerkt):** „Kein laufender `git`-Prozess" nennt
+**keinen Bezug auf dieses Repository** — ein `git`-Lauf in einem fremden Repo derselben Maschine
+zählt mit. *Der Evaluator hat es dreimal gemessen, je **0**; die Sorge ist **nicht** gestützt.*
+**Deshalb steht sie im Blatt und nicht in der Umsetzung** — wer später einen Fehlalarm sieht, findet
+hier die bekannte Grenze, statt sie neu zu suchen.
 
 **A-08-2 (P1, Gegenprobe):** Fehlt **eine** der drei Bedingungen, bleibt es bei `ENV_BLOCKED` und
 `exit 3`. *Ohne dieses Kriterium wäre „alles ist verwaist" grün — schlimmer als die Blockade.*

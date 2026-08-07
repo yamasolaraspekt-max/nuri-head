@@ -84,14 +84,39 @@ von `touch`.** Das gilt auch fuer die Tests dieses Auftrags.*
 ## DECISION — drei Nein, UND-verknuepft (entschieden in `d4308d35`)
 
 ```text
-1  Halter-Kommando ist kein git            (Form A)
-2  kein git-Prozess sichtbar               (Form B, billig zuerst)
-3  0 Byte UND Alter >= 60 s                (die bestehende A-02-Grenze bleibt)
+1  Halter-Kommando ist kein git                 (Form A — NEU)
+2  kein git-Prozess DIESES Repositoriums        (Form B — NEU, billig zuerst)
+3  das Alters-/Groessenmass des Tors ist erfuellt   (BESTEHEND, unveraendert uebernommen)
 
 ALLE DREI nein  ->  beiseitelegen nach Dauerregel (NIE loeschen, Zielpfad in der
                     Meldung), Commit laeuft weiter
 SONST           ->  ENV_BLOCKED mit Halter-Angabe, exit 3 — die heutige Form
 ```
+
+> **⚠ KORREKTUR 07.08. nach `ec051a1c` (`SPEC_BLOCKED`, Ballbesitz Planner) — zwei Punkte.**
+>
+> **(1) Bedingung 3 zitiert das Tor, sie formuliert es nicht neu.** Meine erste Fassung schrieb
+> „0 Byte UND Alter >= 60 s". Das Tor fuehrt aber seit `2f56e9e8` einen **Doppelpfad**
+> (`commit-pruefen.sh:163`):
+>
+> ```text
+> if { [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; } || [ "$ALTER" -ge 120 ]; then
+> ```
+>
+> Der zweite Zweig (Stillstand: `>=120 s` plus zwei ruhige Proben) stammt aus der Blockade des
+> Evaluators vom 03.08. — 317 s alt, 885 kB, dreifach als tot belegt. **Zwei gruene Zusagen haengen
+> daran, eine davon traegt `must_preserve` im Namen.** Wer meine erste Fassung woertlich baut,
+> nimmt den `>=120 s`-Zweig heraus und faerbt genau diese beiden rot. Der Testkommentar sagt
+> woertlich: *„Die alte Regel ‚0 Byte UND >=60s' konnte ihn nicht erkennen — sie trennte die
+> Faelle nur zur Haelfte."* **Ich hatte genau diese alte Regel wieder hingeschrieben.**
+>
+> **A-08 aendert die dritte Bedingung nicht.** Sie bleibt, was das Tor heute misst — beide Zweige.
+> Die Drei-Nein-Regel setzt ausschliesslich die **zwei neuen** Bedingungen davor.
+>
+> **(2) Bedingung 2 braucht den Repo-Bezug.** „Kein laufender git-Prozess" ohne Bezug haette einen
+> git-Lauf in einem **fremden** Verzeichnis mitgezaehlt und hier blockiert. Gemeint sind
+> git-Prozesse, die auf **dieses** Repositorium arbeiten. *Der Evaluator hat das ausdruecklich als
+> offene Frage und nicht als Befund gemeldet — die Praezisierung kostet nichts und schliesst sie.*
 
 **Warum keine der Formen allein genuegt:**
 
@@ -104,8 +129,9 @@ FORM B allein   Bei mehreren parallelen Rollen ist „irgendwo laeuft git" haeuf
                 falsches GEHALTEN. Und die Sichtbarkeit von git in der Sandbox-VM ist
                 ungemessen — dieselbe Klasse ungepruefter Zuordnung, aus der dieser Befund stammt.
 BEDINGUNG 3     deckt genau den Fall, den weder A noch B sehen KANN: ein lebendiges git haelt
-                den Lock Sekunden. Was nach 60 s noch haelt und nirgends sichtbar ist, ist kein
-                arbeitendes git.
+                den Lock Sekunden. Was das Alters-/Groessenmass des Tors reisst und dabei
+                nirgends sichtbar ist, ist kein arbeitendes git.
+                Dieses Mass wird von A-08 NICHT neu formuliert, sondern uebernommen.
 ```
 
 ## Nicht-Ziele
@@ -131,16 +157,24 @@ docs/auftraege/aktiv/A-02-...md            Zeile 61-66 richtigstellen (A-08-7)
 **Jedes P1 ist an `6953198a` wirksam rot** — der Plan-Pruefer bestaetigt das vor dem Bau. *Die
 Rot-Lage zu A-08-1 hat er bereits gemessen (zweimal `exit 3`); die uebrigen nicht ich.*
 
-**A-08-1 (P1, der Vorfall):** Ein Lock mit **0 Byte, 61 s alt, ohne git-Halter, ohne sichtbaren
-git-Prozess** wird beiseitegelegt, der Commit laeuft weiter. *Rot an der Basis: heute `exit 3`,
+**A-08-1 (P1, der Vorfall):** Ein Lock, der **das bestehende Alters-/Groessenmass des Tors erfuellt**
+(konkret: 0 Byte, 61 s alt) und **weder einen git-Halter noch einen git-Prozess dieses Repositoriums
+aufweist**, wird beiseitegelegt; der Commit laeuft weiter. *Rot an der Basis: heute `exit 3`,
 zweimal gemessen.*
 
 **A-08-2 (`must_preserve`, Gegenhalter Zeit):** Ein **frischer** Lock (< 60 s) bleibt liegen ->
 `ENV_BLOCKED`, `exit 3`. *Ohne dieses Kriterium waere „legt immer beiseite" gruen.*
 
-**A-08-3 (`must_preserve`, Gegenhalter Inhalt):** Ein Lock **mit Inhalt** (> 0 Byte) bleibt liegen —
-**egal wie alt, egal ob ein git-Halter sichtbar ist**. *Das ist der Vorfall vom 04.08.: 887 796 B
-und 888 008 B, beide beiseitegeschoben. Diese Bedingung allein haette ihn verhindert.*
+**A-08-3 (`must_preserve`, Gegenhalter Bestand — KORRIGIERT 07.08.):** **Alle heute gruenen
+A-02-Zusagen bleiben gruen**, ausdruecklich einschliesslich der beiden am Stillstandspfad
+(`>= 120 s`): *„Tor Teil 2: ein ALTER Lock MIT Inhalt, dessen mtime stillsteht, ist ein Rest"* und
+*„A-02-1 KONTROLLE: Lock MIT Inhalt, alt, ohne Halter -> beiseite (`must_preserve`)"*. Der
+Doppelpfad in `commit-pruefen.sh:163` wird **nicht angetastet**.
+
+> *Meine erste Fassung sagte hier „ein Lock mit Inhalt bleibt liegen, egal wie alt" und haette
+> genau diese zwei Zusagen rot gefaerbt. Der Vorfall vom 04.08. (887 796 B / 888 008 B) war
+> **pauschales Raeumen von Hand am Tor vorbei** — er ist kein Argument gegen den Stillstandspfad
+> des Tors, das ihn nie beruehrt hat. Ich hatte beides verwechselt.*
 
 **A-08-4 (P1, die gefaehrliche Richtung in Form A):** Die Halter-Pruefung vergleicht den
 **Basenamen** des Kommandos und erkennt `git-*`-Unterprozesse (z. B. `git-remote-https`). *Rot an
@@ -173,10 +207,14 @@ Fall.*
 
 ```text
 VM haelt die Datei, kein git sichtbar, 0 Byte, 61 s   -> beiseite            (der Fall von heute)
-dasselbe, aber Lock 30 s alt                          -> liegen lassen       (A-08-2)
-dasselbe, aber Lock 800 kB gross                      -> liegen lassen       (A-08-3)
+dasselbe, aber Lock 30 s alt                          -> liegen lassen       (Mass nicht erfuellt)
+dasselbe, 800 kB, 300 s still                         -> beiseite            (Stillstandspfad des
+                                                                              Tors, HEUTE gruen -
+                                                                              A-08 aendert das NICHT)
+dasselbe, 800 kB, 90 s alt                            -> liegen lassen       (weder Zweig erfuellt)
 git-Halter sichtbar, Lock alt und leer                -> liegen lassen       (Form A greift)
-git-Prozess sichtbar, kein Halter, Lock alt und leer  -> liegen lassen       (Form B greift)
+git-Prozess dieses Repos, kein Halter, Lock alt/leer  -> liegen lassen       (Form B greift)
+git-Prozess in einem FREMDEN Verzeichnis              -> irrelevant          (Repo-Bezug, s. o.)
 mehrere Halter, EINER davon git                       -> liegen lassen       (konservativ)
 PID zwischen lsof und ps wiederverwendet              -> im Zweifel gehalten
 lsof haengt                                           -> A-02-6 unveraendert (Zeitgrenze)
@@ -210,6 +248,13 @@ und der Vorgang gehoert sofort zurueck an den Planner. *Dasselbe Signal, an dem 
    Doppelfuehrung, dieselbe Klasse, die der Plan-Pruefer schon an A-01 beanstandet hat
    (Doppelfuehrung mit Z-07). Ein `ls docs/auftraege/aktiv/` vor dem Schreiben haette
    gereicht. Aufgeloest durch Umbenennung in diesen Nachtrag; das aeltere Blatt traegt.
+5  Die dritte Bedingung NEU FORMULIERT statt das Tor zu zitieren ("0 Byte UND >=60s")
+   und in A-08-3 "Lock mit Inhalt bleibt liegen, egal wie alt" geschrieben. Beides
+   haette zwei heute gruene Zusagen rot gefaerbt, eine davon `must_preserve`. Gemeldet
+   vom Evaluator (ec051a1c, SPEC_BLOCKED) VOR dem Bau; oben korrigiert.
+   Der Fehlertyp ist derselbe wie in Punkt 3 und wie der Anlass des ganzen Blattes:
+   eine plausible Regel aufgeschrieben, ohne sie am Bestand zu messen. Zwei Zeilen
+   `grep` in commit-pruefen.sh haetten es gezeigt.
 ```
 
 ```yaml
