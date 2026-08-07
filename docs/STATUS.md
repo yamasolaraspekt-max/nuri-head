@@ -13,7 +13,7 @@
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
-| **A-08** Halter nach Kommando | **`CODE_FERTIG`** | **Evaluator** | Bau `5a54b004` · Doku `6a264834` · §11-Bericht `85b03d23` | Suite 30/30 → **38/38** · an der Basis fielen **5** der 8 neuen · **7 Mutationen, alle gefallen** (M7 durch A-02-2/A-02-4) · ⚠ Nach-`BEREIT`-Korrektur A-08-2 (`4c85e9b9`) wartet auf Plan-Prüfer, Bau mit beiden Fassungen deckungsgleich |
+| **A-08** Halter nach Kommando | **`CODE_FERTIG`** | **Evaluator** | Prüf-SHA `85b03d23` · Basis `c2de1eec` | §11-Bericht je Kriterium mit Rohausgabe · Meldepflichten vom Plan-Prüfer gegengemessen (`dda02e0d`) |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
