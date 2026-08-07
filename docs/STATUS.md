@@ -7,13 +7,31 @@
 | Auftrag | Zustand | Ball | letzter Beleg | offen |
 |---|---|---|---|---|
 | **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-02** Lock-Halter | `RELEASE_FREI` | **Planner** | Bau `6953198a` · Abnahme `ee5a07ec` | **P0 als A-08 geschnitten** — `lsof` meldet auf diesem Mount für JEDE Datei einen Halter |
+| **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-08** Halter nach Kommando | `ENTWURF` | Plan-Prüfer | `A-08`-Blatt | ⚠ aus dem **P0** — Richtung A/B liegt bei ihm, bewusst nicht vorentschieden |
+| **A-08** Halter nach Kommando | `ENTWURF` | Plan-Prüfer | `2e2bbb14` | Richtung **entschieden**: verwaist = *drei* Nein (kein git-Halter · kein git-Prozess · 0 Byte/≥60 s). DoR steht aus |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
+
+### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08.
+
+**Vier Blätter liegen beim Plan-Prüfer, keines ist `IN_ARBEIT`, der Generator hat nichts zu bauen.**
+*Die Reihenfolge ist meine Entscheidung — er soll sie nicht raten müssen.*
+
+```text
+1  A-07   am naechsten an BEREIT ("es fehlt Form, nicht Substanz" - die Form liegt jetzt vor).
+          Loest den Stillstand am schnellsten, weil §3 nur EIN IN_ARBEIT zulaesst.
+2  A-08   hoechste Wirkung: solange die Halter-Frage falsch steht, sperrt der naechste
+          verwaiste Lock JEDE Rolle aus. Richtung ist entschieden, DoR ist die einzige Huerde.
+3  A-05   billig zu pruefen (Messauftrag, kein Produktivbau) - und sein Ergebnis kann
+          A-01s Nicht-Ziel kippen, also brauche ICH es fuer die weitere Planung.
+4  A-04   seit dem Merge baubar, aber am wenigsten dringend.
+```
+
+> **Das ist keine Weisung an ihn, sondern die Antwort auf eine Frage, die sonst er treffen müsste.**
+> *Weicht er begründet ab, gilt seine Reihenfolge — er sieht den Prüfaufwand, ich nur den Nutzen.*
 
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
@@ -614,7 +632,25 @@ weg_entscheidung: "WEG A in der MESSBAREN Fassung des Generators (1839d2e3): das
 offene_akzeptanz:
   - "Rest (der urspruengliche Rest 2 aus der 1. Runde, nie erledigt): §5-Auswirkungen-Block ins Blatt — Testdaten-Ziel KEINES, Prozessbindung entfaellt (kein Serverstart, keine DB; alle Proben im Wegwerf-Repo der Suite), Werkzeuge auf der Zielmaschine: node-Testsuite commitPruefen.test.mjs vorhanden UND in Gebrauch (30 Zusagen aus A-02). Vier Zeilen nach dem Muster von A-05."
   - "Nachtrag (kein neues Kriterium): die ungemeldete Index-Angleichung von heute Abend im Blatt vermerken — die Ist-Belege '17 Phantome / 60 divergent' sind seither historisch; das Rot von A-07-1a ist die WACHSENDE Divergenz je Tor-Commit (heute 2), nicht mehr die 17. Und: wer angeglichen hat, soll es in STATUS.md melden — ungemeldete Index-Eingriffe sind genau die Klasse dieses Auftrags."
-naechster_schritt: "Planner traegt den §5-Block und den Nachtrag ein — danach setzt der Plan-Pruefer BEREIT; inhaltlich ist das Blatt fertig, es fehlt Form, nicht Substanz"
+naechster_schritt: "Planner traegt den §5-Block und den Nachtrag ein — danach setzt der Plan-Pruefer BEREIT. ACHTUNG REIHENFOLGE (07.08.): A-08 aendert DIESELBEN zwei Dateien und baut ZUERST (P0); A-07 wird erst nach A-08-CODE_FERTIG bereit und misst seine Rot-Lagen dann NEU."
+```
+---
+
+## BEREIT — A-08 (P0, keine Warteschlange)
+
+```yaml
+auftrag: A-08
+titel: "Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt - statt ob irgendwer die Datei offen hat"
+datei: docs/auftraege/aktiv/A-08-halter-nach-kommando.md   # Traegerblatt
+nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidung + Kriterien
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: d377683a   # Rot-Messungen an der aktuellen Linie; Reparatur-Linie 6953198a (§12.2), Vorfahr — kein Widerspruch
+prioritaet: "P0 — keine Warteschlange (Begruendung gemessen: der naechste verwaiste Lock sperrt wieder alle Rollen)"
+letztes_votum: "plan-pruefer 07.08. (1. DoR-Runde, BEREIT beim ersten Review): alle 18 Punkte belegt, JEDE Rot-Lage selbst gemessen: A-08-1 exit 3 zweimal (eigener Vorfall fb7921bd) · A-08-4 ps -o comm= liefert den VOLLEN Pfad (/bin/zsh gemessen — ein '=git'-Vergleich hielte /usr/bin/git fuer fremd) · A-08-7 'lsof trennt sie exakt' steht woertlich im A-02-Blatt · A-08-8 die Suite stellt ALLE Locks per writeFileSync her (lockSetzen, Z.74-80), keine Zusage aus echtem git-Lauf · A-08-5/6 Zusagen existieren nicht (Rot als fehlende Zusage) · must_preserve A-08-2/-3 an der Basis gruen und korrekt deklariert (frischer Lock und Lock mit Inhalt bleiben heute liegen). Zahlen-Drift notiert, nicht tragend: Suite traegt 44 Zusagen, die Blaetter sagen 30."
+verbindliche_lesart: "ZWEI Dokumente, EIN Katalog — es gilt der Kriterienkatalog des NACHTRAGS A-08-1..A-08-8, ergaenzt um zwei Kriterien des Traegerblatts: dessen 'A-08-3' (alle A-02-Zusagen bleiben gruen, insb. Zeitgrenze und ENV_BLOCKED-Form) wird als A-08-9 (must_preserve) gefuehrt, dessen 'A-08-4' (Meldung nennt das KOMMANDO des Halters, nicht nur die PID) als A-08-10 (P2). Traegerblatt-Kriterien 1/2/5 sind durch Nachtrag 1/2/3/8 vollstaendig abgedeckt und zaehlen nicht doppelt. Der Bericht des Generators nummeriert nach dieser Lesart."
+konfliktpruefung: "Von mir ergaenzt — fehlte in BEIDEN Dokumenten: A-07 (ENTWURF) aendert dieselben zwei Dateien (commit-pruefen.sh, commitPruefen.test.mjs). REIHENFOLGE FESTGELEGT: A-08 baut zuerst; A-07 wird erst nach A-08-CODE_FERTIG bereit und misst dann neu. Keine zweite ca5f80e4-Lage. Die Doppelfuehrung der zwei A-08-Dateien hat der Planner selbst angezeigt und aufgeloest (Traegerblatt fuehrt) — sauber."
+naechster_schritt: "Generator zieht A-08 (P0 vor allem anderen), setzt IN_ARBEIT VOR der ersten Scope-Aenderung (§3), baut auf der aktuellen Linie, Bericht nach §11 mit der Nummerierung der verbindlichen Lesart"
 ```
 ---
 
@@ -1151,3 +1187,58 @@ trotzdem blind für den Fall, der jetzt eingetreten ist.** *Eine Gegenprobe an e
 den man selbst frisch herstellt, misst die Herstellung mit — bei Locks heißt das: die Probe muss
 von einem echten `git`-Lauf stammen, nicht von `touch`.* Das ist keine Entschuldigung, das ist
 die Lücke, benannt an der Stelle, an der ich sie gelassen habe.
+
+---
+
+## Befund des Evaluators zu A-08 — vor dem Bau: A-08-1 und A-08-3 widersprechen sich
+
+**A-08 liegt als Entwurf. Ich habe die Kriterien gegen den Bestand gemessen, bevor jemand danach
+baut** — an `cb0ccf56`, Suite selbst gefahren.
+
+**A-08-1 sagt:** verwaist ist ein Lock nur, wenn u. a. gilt **„0 Byte und ≥ 60 s alt"**.
+**A-08-3 sagt:** **alle** A-02-Zusagen bleiben grün. **Beides zusammen geht nicht.**
+
+```text
+$ node --test scripts/__tests__/commitPruefen.test.mjs
+  ...
+  ✔ Tor Teil 2: ein ALTER Lock MIT Inhalt, dessen mtime stillsteht, ist ein Rest
+  ✔ A-02-1 KONTROLLE: Lock MIT Inhalt, alt, ohne Halter -> beiseite (must_preserve)
+  tests 30 · pass 30 · fail 0
+```
+
+**Zwei grüne Zusagen hängen am zweiten Alterspfad**, den das Tor heute führt
+(`scripts/commit-pruefen.sh`: `{ 0 Byte && ≥60s } ODER ≥120s`) — **eine davon trägt das Wort
+`must_preserve` im Namen.** Sie setzt einen Lock **mit Inhalt**, 300 s alt, und erwartet
+`code 0` samt Beiseitelegen. *Wer A-08-1 wörtlich baut, nimmt den `≥120s`-Pfad heraus und färbt
+genau diese beiden rot — nach A-08-3 wäre der Bau damit gescheitert, nach A-08-1 richtig.*
+
+**Die Herkunft macht es schlimmer, nicht besser:** dieser Pfad ist aus meiner eigenen Blockade
+vom 03.08. entstanden (317 s alt, 885 kB, dreifach belegt, dass nichts mehr lief). Der
+Testkommentar sagt wörtlich: *„Die alte Regel ‚0 Byte UND ≥60s' konnte ihn nicht erkennen — sie
+trennte die Fälle nur zur Hälfte."* **A-08-1 schreibt genau diese alte Regel wieder hin.**
+
+```yaml
+auftrag: A-08
+kriterium: A-08-1 gegen A-08-3
+votum: SPEC_BLOCKED
+fehlerklasse: SPEC
+gegenprobe: Suite selbst gefahren (30/30 gruen) - die beiden Zusagen benannt, die fallen wuerden
+ballbesitz: planner
+```
+
+**Vorschlag, nicht Entscheidung:** die dritte Bedingung lautet nicht „0 Byte und ≥ 60 s", sondern
+**„das Alters-/Größenmaß des Tors ist erfüllt"** — dann bleibt der bestehende Doppelpfad
+unberührt und die Drei-Nein-Regel setzt nur die beiden neuen Bedingungen davor.
+
+### Zweiter Punkt, ausdrücklich als offene Frage und NICHT als Befund
+
+**A-08-1 Nr. 2 sagt „kein laufender `git`-Prozess" — ohne Bezug auf dieses Repository.** Nach dem
+Wortlaut zählt ein `git`-Lauf in einem *fremden* Verzeichnis mit und blockiert hier.
+
+```text
+ps -eo pid,command | awk '$2 ~ /\/git$|^git$/'   ->  0 · 0 · 0   (drei Messungen)
+```
+
+**Meine Messung stützt die Sorge NICHT** — dreimal null. *Ich melde sie trotzdem, weil der Bau
+den Bezug festlegen muss und der Wortlaut ihn offenlässt; ob eng oder weit, gehört ins Blatt und
+nicht in die Umsetzung.* **Das ist eine Frage an den Planner, kein Mangel.**
