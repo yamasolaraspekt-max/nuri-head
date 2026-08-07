@@ -1181,3 +1181,58 @@ ps -eo pid,command | awk '$2 ~ /\/git$|^git$/'   ->  0 · 0 · 0   (drei Messung
 **Meine Messung stützt die Sorge NICHT** — dreimal null. *Ich melde sie trotzdem, weil der Bau
 den Bezug festlegen muss und der Wortlaut ihn offenlässt; ob eng oder weit, gehört ins Blatt und
 nicht in die Umsetzung.* **Das ist eine Frage an den Planner, kein Mangel.**
+
+---
+
+## Nachtrag des Evaluators zu A-08 — der Widerspruch ist mit `BEREIT` nicht kleiner geworden, sondern doppelt
+
+**A-08 steht auf `BEREIT` beim Generator (`a3d373b2`). Mein `SPEC_BLOCKED` von vorhin steht
+unverändert im Blatt** — die Kriterienzeile ist wörtlich dieselbe geblieben. **Und die verbindliche
+Lesart des Plan-Prüfers (Nachtrag-Katalog 1–8 + Trägerblatt als 9/10) fügt eine zweite,
+schärfere Fassung desselben Widerspruchs hinzu:**
+
+```text
+NACHTRAG A-08-3  (must_preserve, Gegenhalter Inhalt)
+  "Ein Lock MIT INHALT (> 0 Byte) bleibt liegen — egal wie alt,
+   egal ob ein git-Halter sichtbar ist."
+
+BESTAND  scripts/__tests__/commitPruefen.test.mjs, heute gruen, selbst gefahren
+  test('Tor Teil 2: ein ALTER Lock MIT Inhalt, dessen mtime stillsteht, ist ein Rest')
+     lockSetzen(verz, 'Rest eines abgestuerzten Laufs\n', 300);
+     assert.equal(r.code, 0, ...)        <- erwartet BEISEITE
+  test('A-02-1 KONTROLLE: Lock MIT Inhalt, alt, ohne Halter -> beiseite (must_preserve)')
+
+TRAEGERBLATT A-08-3  "Alle A-02-Zusagen bleiben gruen."
+```
+
+**Zwei Kriterien tragen beide das Wort `must_preserve` und verlangen für denselben Lock das
+Gegenteil.** *Der Generator kann nicht beides bauen; er wird sich für eine Seite entscheiden
+müssen, und diese Entscheidung gehört nicht ihm.*
+
+**Der sachliche Kern ist kein Formfehler, sondern zwei echte Vorfälle mit entgegengesetzter
+Lehre:**
+
+```text
+03.08.  885 kB, 317 s alt, mtime still, kein git-Prozess   -> musste WEG,
+        sonst blockiert das Tor endlos          (daraus entstand der >=120s-Pfad)
+04.08.  888 kB beiseitegeschoben, obwohl LEBEND -> durfte NICHT weg
+        (daraus entsteht jetzt "Inhalt bleibt immer liegen")
+```
+
+**Beide Male gleich groß, gegensätzliche Folgerung — die Größe trennt die Fälle nicht.** *Was sie
+trennt, ist die Ruhe: die vorhandene Zusage misst den Stillstand der `mtime`, die neue Fassung
+wirft ihn weg und ersetzt ihn durch „Inhalt ⇒ liegen lassen".* **Damit kehrt der Zustand vom
+03.08. zurück, und zwar als Zusage statt als Versehen.**
+
+```yaml
+auftrag: A-08
+kriterium: Nachtrag-A-08-3 gegen Traegerblatt-A-08-3 (und gegen A-08-1)
+votum: SPEC_BLOCKED
+fehlerklasse: SPEC
+gegenprobe: Suite selbst gefahren, 30/30 gruen - die zwei Zusagen benannt und zitiert
+ballbesitz: planner
+```
+
+**Ich baue nicht und entscheide nicht, welcher der beiden Vorfälle schwerer wiegt.** *Aber
+solange beide Fassungen `must_preserve` heißen, ist jede Abnahme von A-08 vorherbestimmt: sie
+wird an der Zusage gemessen, die der Bauende zufällig gewählt hat.*
