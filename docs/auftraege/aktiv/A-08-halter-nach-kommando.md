@@ -76,12 +76,19 @@ docs/_playground-archiv/                        nichts Vergleichbares
 A allein   Kommando des Halters pruefen   -> SPIEGELT den Fehler
 B allein   laeuft ueberhaupt ein git-Prozess?  -> ungemessene ZUORDNUNG
 
-ENTSCHIEDEN:  verwaist = DREI Nein zusammen
+ENTSCHIEDEN:  verwaist = DREI Nein zusammen — und NUR bei 0-BYTE-Locks (Umschnitt 07.08.)
               1  kein Halter mit git-Kommando
-              2  kein git-Prozess laeuft
-              3  das Alters-/Groessenmass des Tors ist erfuellt  (NICHT neu formuliert -
+              2  kein git-Prozess DIESES Repositoriums laeuft
+              3  das Altersmass des Tors ist erfuellt  (NICHT neu formuliert -
                  commit-pruefen.sh:163 fuehrt einen DOPPELPFAD, siehe A-08-1)
               -> dann beiseitelegen nach Yamas Dauerregel; sonst ENV_BLOCKED wie heute
+
+UMSCHNITT (07.08., f5098c40 -> 0a4efd84): die Kommando-Frage ersetzt die Halter-Blockade
+              NUR bei 0-Byte-Locks. Ein Lock MIT Inhalt (> 0 Byte) und Halter bleibt liegen
+              wie heute, egal welches Kommando der Halter traegt. Sonst faerbte die Tabelle
+              die Zusagen A-02-2 (commitPruefen.test.mjs:512) und A-02-4 (Z.579) rot:
+              A-02 schuetzt dort die EXISTENZ eines lebenden Halters, nicht sein Kommando —
+              der Generator hat das VOR dem Bau gemessen, der Plan-Pruefer bestaetigt.
 ```
 
 *Beide meiner Formen hatten je eine halbe Antwort. **Drei unabhängige Nein sind belastbarer als ein
@@ -92,16 +99,25 @@ besseres Ja** — und die dritte Bedingung braucht `lsof` gar nicht.*
 
 ## Akzeptanzkriterien
 
-**A-08-1 (P1, KORRIGIERT 07.08. — die dritte Bedingung war ein Rückschritt):** Ein Lock gilt genau
-dann als **verwaist**, wenn **alle drei** zutreffen:
+**A-08-1 (P1, ZWEIMAL KORRIGIERT 07.08. — zuletzt Umschnitt auf die 0-Byte-Fassung):** Ein
+**0-Byte-Lock** gilt genau dann als **verwaist**, wenn **alle drei** zutreffen:
 
 ```text
+0  VORAB: der Lock ist 0 Byte gross — nur dann stellt sich die Kommando-Frage ueberhaupt
 1  kein Halter mit `git`-Kommando
-2  kein laufender `git`-Prozess
-3  das BESTEHENDE Alters-/Groessenmass des Tors ist erfuellt - unveraendert, beide Pfade
+2  kein laufender `git`-Prozess DIESES Repositoriums
+3  das BESTEHENDE Altersmass des Tors ist erfuellt (fuer 0 Byte: >= 60 s, commit-pruefen.sh:163)
 ```
 
-Dann wird er **beiseitegelegt, nie gelöscht**. *Rot heute: derselbe Fall endet in `ENV_BLOCKED`.*
+Dann wird er **beiseitegelegt, nie gelöscht** — die Meldung nennt Zielpfad, Größe und Alter; der
+Commit läuft weiter. Ein Lock **mit Inhalt (> 0 Byte) und Halter bleibt liegen wie heute**,
+unabhängig vom Kommando des Halters. *Rot heute: der Vorfall vom 06.08. (0 Byte, 239 s,
+VM-Halter) endet in `ENV_BLOCKED`, zweimal gemessen.*
+
+> **Führender Wortlaut ist Nachtrag-A-08-1** (verbindliche Lesart des Plan-Prüfers: EIN Katalog).
+> Dieser Absatz trägt dieselbe Fassung; bei Abweichung gilt der Nachtrag. *Die Doppelfassungs-Falle
+> ist in diesem Auftrag zweimal passiert (`3392400f`, `1dcdc32e`) — deshalb steht die Rangfolge
+> hier ausdrücklich.*
 
 > ### Warum die dritte Bedingung nicht mehr ausgeschrieben wird
 >
@@ -149,6 +165,20 @@ Testsuite **entsteht aus einem echten `git`-Lauf**, nicht aus `touch` oder `prin
 > **Seine Gegenprobe vom 03.08. lief an einer selbst angelegten Datei** — *genau der Sorte, die den
 > Phantom-Halter nie bekommt.* **Der Beweis war echt und trotzdem blind für diesen Fall.**
 > *Eine Probe, die den Gegenstand selbst herstellt, prüft ihre eigene Herstellung mit.*
+
+## Ehrliche Grenze — was dieser Auftrag AUSDRÜCKLICH nicht löst
+
+**Die 03.08.-Klasse bleibt Handräumung:** ein Lock **mit Inhalt**, tatsächlich verwaist, aber vom
+Phantom-Halter des virtualisierten Mounts als „offen" gemeldet (die Sorte `zz-unlink-probe`: seit
+dem 03.08. hält PID 59792 sie, obwohl nichts daran arbeitet), endet weiterhin in `ENV_BLOCKED`
+mit `exit 3` und wird **von Hand nach Yamas Dauerregel geräumt** — nie gelöscht, Original
+erhalten. *Das ist konservatives Scheitern ohne Datenverlust, kein Mangel des Baus.*
+
+Wer diese Klasse automatisch geräumt haben will, braucht eine **Phantom-Erkennung** (z. B. die
+Kontrollprobe aus der Triage `0a4efd84`: hält dieselbe PID auch eine unbeteiligte Referenzdatei
+wie `.git/config`, ist sie Mount-Rauschen). Die hängt an der **unerklärten** Trennung der zwei
+Dateigruppen (Nachtrag, „NICHT ERMITTELT") und gehört in ein **eigenes Blatt mit eigener
+Messung** — nicht als Beifang in A-08.
 
 ## Auswirkungen (§5)
 
