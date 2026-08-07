@@ -79,7 +79,8 @@ B allein   laeuft ueberhaupt ein git-Prozess?  -> ungemessene ZUORDNUNG
 ENTSCHIEDEN:  verwaist = DREI Nein zusammen
               1  kein Halter mit git-Kommando
               2  kein git-Prozess laeuft
-              3  Lock ist 0 Byte UND mindestens 60 s alt
+              3  das Alters-/Groessenmass des Tors ist erfuellt  (NICHT neu formuliert -
+                 commit-pruefen.sh:163 fuehrt einen DOPPELPFAD, siehe A-08-1)
               -> dann beiseitelegen nach Yamas Dauerregel; sonst ENV_BLOCKED wie heute
 ```
 
