@@ -41,7 +41,7 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 
 | **7** | **A-07** Index-Divergenz des Tors | 05.08. 14:39 | **SPEC_BLOCKED** (A-07-4) | *läuft* | mein Kernbefund zeigte auf den falschen Index · vom Evaluator widerlegt, neu geschnitten · Weg-Bedingung vom Generator als wirkungslos gemessen |
 
-| **8** | **A-08** Halter nach Kommando statt Offenheit | 07.08. 08:4x | **BEREIT** (a3d373b2) | **1** | P0 aus dem eigenen Tor-Ausschluss · Klasse SPEC, Verursacher Planner · **ERSTES BEREIT beim ersten Review der Gruppe** — alle Rot-Lagen selbst gemessen; Doppelführung (zwei A-08-Dateien) vom Planner selbst angezeigt, Lesart im Votum zusammengeführt; Konfliktprüfung gegen A-07 (gleiche Dateien) von mir ergänzt: A-08 baut zuerst |
+| **8** | **A-08** Halter nach Kommando statt Offenheit | 07.08. 08:4x | **BEREIT** (a3d373b2) | **2** | P0 aus dem eigenen Tor-Ausschluss · Klasse SPEC, Verursacher Planner · **ERSTES BEREIT beim ersten Review der Gruppe** — alle Rot-Lagen selbst gemessen; Doppelführung (zwei A-08-Dateien) vom Planner selbst angezeigt, Lesart im Votum zusammengeführt; Konfliktprüfung gegen A-07 (gleiche Dateien) von mir ergänzt: A-08 baut zuerst |
 
 **Stand: 8 von 10.**
 

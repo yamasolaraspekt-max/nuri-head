@@ -6,7 +6,7 @@ gehoert_zu: docs/auftraege/aktiv/A-08-halter-nach-kommando.md
 traegerblatt_bleibt: JA   # dessen §5-Block, Wiederverwendungspruefung und Erstnutzer-Angabe gelten
 liefert: die getroffene Richtungsentscheidung + drei fehlende Kriterien
 basis_sha: 6953198a       # §12.2: Nachbesserung auf der Linie des Baus
-anlass: de33d1e6 (P0-Befund) · d377683a (Evaluator) · d4308d35 (Richtungsentscheidung)
+anlass: de33d1e6 (P0-Befund) · d377683a (Evaluator) · d4308d35 (Richtungsentscheidung) · f5098c40 (SPEC_BLOCKED Generator) · 0a4efd84 (Triage Plan-Pruefer)
 ballbesitz: plan-pruefer (Zusammenfuehrung + BEREIT), danach generator
 ```
 
@@ -81,16 +81,22 @@ genau der Sorte, die den Phantom-Halter nie bekommt. Der Evaluator hat denselben
 seiner Probe vom 03.08. benannt. **Eine Lock-Probe muss von einem echten git-Lauf stammen, nicht
 von `touch`.** Das gilt auch fuer die Tests dieses Auftrags.*
 
-## DECISION — drei Nein, UND-verknuepft (entschieden in `d4308d35`)
+## DECISION — drei Nein, UND-verknuepft, NUR bei 0-Byte-Locks (entschieden in `d4308d35`, eingeschraenkt im Umschnitt 07.08.)
 
 ```text
+GILT NUR FUER 0-BYTE-LOCKS — bei Inhalt > 0 Byte stellt sich die Kommando-Frage NICHT (Korrektur 3):
 1  Halter-Kommando ist kein git                 (Form A — NEU)
 2  kein git-Prozess DIESES Repositoriums        (Form B — NEU, billig zuerst)
-3  das Alters-/Groessenmass des Tors ist erfuellt   (BESTEHEND, unveraendert uebernommen)
+3  das Altersmass des Tors ist erfuellt         (BESTEHEND, unveraendert uebernommen;
+                                                 fuer 0 Byte heisst es: >= 60 s, Z.163)
 
-ALLE DREI nein  ->  beiseitelegen nach Dauerregel (NIE loeschen, Zielpfad in der
-                    Meldung), Commit laeuft weiter
-SONST           ->  ENV_BLOCKED mit Halter-Angabe, exit 3 — die heutige Form
+ALLE DREI nein UND Lock = 0 Byte   ->  beiseitelegen nach Dauerregel (NIE loeschen,
+                                       Zielpfad + Groesse + Alter in der Meldung),
+                                       Commit laeuft weiter
+Lock MIT Inhalt (> 0 Byte) + Halter -> bleibt liegen wie HEUTE (commit-pruefen.sh:142-148),
+                                       egal welches Kommando der Halter traegt —
+                                       ENV_BLOCKED, exit 3
+SONST                              ->  heutiges Verhalten unveraendert (Z.161-191)
 ```
 
 > **⚠ KORREKTUR 07.08. nach `ec051a1c` (`SPEC_BLOCKED`, Ballbesitz Planner) — zwei Punkte.**
@@ -117,6 +123,24 @@ SONST           ->  ENV_BLOCKED mit Halter-Angabe, exit 3 — die heutige Form
 > git-Lauf in einem **fremden** Verzeichnis mitgezaehlt und hier blockiert. Gemeint sind
 > git-Prozesse, die auf **dieses** Repositorium arbeiten. *Der Evaluator hat das ausdruecklich als
 > offene Frage und nicht als Befund gemeldet — die Praezisierung kostet nichts und schliesst sie.*
+
+> **⚠ KORREKTUR 3 — UMSCHNITT 07.08. nach `f5098c40` (SPEC_BLOCKED des Generators, dritter Fund
+> derselben Klasse) und `0a4efd84` (Triage des Plan-Pruefers): die Kommando-Frage ersetzt die
+> Halter-Blockade NUR bei 0-Byte-Locks.**
+>
+> Die Drei-Nein-Tabelle **ohne Groessen-Schranke** faerbt zwei heute gruene Zusagen rot, vom
+> Generator gefunden und von mir an den Testzeilen nachgemessen: `A-02-2`
+> (`commitPruefen.test.mjs:512` — Lock 900 B, 400 s, NODE-Halter, erwartet LIEGT + `exit 3` +
+> Halter-PID) und `A-02-4` (Z.579 — 50 B, 400 s, NODE-Halter, erwartet `exit 3` +
+> `ENV_BLOCKED`-Zeile). Beide kodieren den Kern von A-02: **die EXISTENZ eines lebenden Halters
+> schuetzt einen Lock MIT Inhalt** — meine Richtung `d4308d35` hatte das auf **git**-Halter
+> verengt und damit genau den Schutz aufgeloest, den A-02 gebaut hat.
+>
+> Deshalb: **bei Inhalt > 0 Byte bleibt die heutige Blockade unveraendert** (`commit-pruefen.sh:
+> 142-148`). Die Kommando-Frage greift nur dort, wo kein Inhalt auf dem Spiel steht — der
+> Vorfalls-Fall vom 06.08. war **0 Byte**. *Die Klasse „Content-Lock, verwaist, phantom-gehalten"
+> bleibt damit bewusst `ENV_BLOCKED` mit Handraeumung nach Yamas Dauerregel — ehrliche Grenze,
+> siehe Traegerblatt.*
 
 **Warum keine der Formen allein genuegt:**
 
@@ -157,10 +181,13 @@ docs/auftraege/aktiv/A-02-...md            Zeile 61-66 richtigstellen (A-08-7)
 **Jedes P1 ist an `6953198a` wirksam rot** — der Plan-Pruefer bestaetigt das vor dem Bau. *Die
 Rot-Lage zu A-08-1 hat er bereits gemessen (zweimal `exit 3`); die uebrigen nicht ich.*
 
-**A-08-1 (P1, der Vorfall):** Ein Lock, der **das bestehende Alters-/Groessenmass des Tors erfuellt**
-(konkret: 0 Byte, 61 s alt) und **weder einen git-Halter noch einen git-Prozess dieses Repositoriums
-aufweist**, wird beiseitegelegt; der Commit laeuft weiter. *Rot an der Basis: heute `exit 3`,
-zweimal gemessen.*
+**A-08-1 (P1, der Vorfall — 0-BYTE-FASSUNG, Umschnitt 07.08., FUEHRENDER WORTLAUT):** Ein
+**0-Byte-Lock**, der **das bestehende Altersmass des Tors erfuellt** (fuer 0 Byte: >= 60 s,
+`commit-pruefen.sh:163`) und **weder einen git-Halter noch einen git-Prozess dieses Repositoriums
+aufweist**, wird **beiseitegelegt, nie geloescht** — die Meldung nennt Zielpfad, Groesse und
+Alter; der Commit laeuft weiter. Ein Lock **MIT Inhalt (> 0 Byte) und Halter bleibt liegen wie
+heute** — unabhaengig vom Kommando des Halters. *Rot an der Basis: der Vorfall vom 06.08.
+(0 Byte, 239 s, VM-Halter) endet heute in `exit 3`, zweimal gemessen.*
 
 **A-08-2 (`must_preserve`, Gegenhalter Zeit):** Ein **frischer** Lock (< 60 s) bleibt liegen ->
 `ENV_BLOCKED`, `exit 3`. *Ohne dieses Kriterium waere „legt immer beiseite" gruen.*
@@ -169,7 +196,9 @@ zweimal gemessen.*
 A-02-Zusagen bleiben gruen**, ausdruecklich einschliesslich der beiden am Stillstandspfad
 (`>= 120 s`): *„Tor Teil 2: ein ALTER Lock MIT Inhalt, dessen mtime stillsteht, ist ein Rest"* und
 *„A-02-1 KONTROLLE: Lock MIT Inhalt, alt, ohne Halter -> beiseite (`must_preserve`)"*. Der
-Doppelpfad in `commit-pruefen.sh:163` wird **nicht angetastet**.
+Doppelpfad in `commit-pruefen.sh:163` wird **nicht angetastet**. **Nach dem Umschnitt schliesst
+das ausdruecklich `A-02-2` (Z.512) und `A-02-4` (Z.579) ein** — die Simulationstabelle unten
+spielt die 0-Byte-Fassung gegen alle 30 Zusagen durch; erst sie macht dieses Kriterium erfuellbar.
 
 > *Meine erste Fassung sagte hier „ein Lock mit Inhalt bleibt liegen, egal wie alt" und haette
 > genau diese zwei Zusagen rot gefaerbt. Der Vorfall vom 04.08. (887 796 B / 888 008 B) war
@@ -185,10 +214,12 @@ haelt `/usr/bin/git` fuer einen Nicht-git-Prozess.*
 Kommando ermitteln**, waehrend die PID existiert, gilt der Halter als **unbekannt** -> Lock bleibt
 liegen, `ENV_BLOCKED: ... (Halter: unbekannt)`.
 
-**A-08-6 (P1, Mutationsprobe — die toedliche zuerst):** Mindestens **sechs** Mutationen fallen:
+**A-08-6 (P1, Mutationsprobe — die toedliche zuerst):** Mindestens **sieben** Mutationen fallen:
 **die drei Bedingungen mit `||` statt `&&` verknuepft** · Kommando-Pruefung entfernt · deren
 Ergebnis ignoriert · Basename durch Pfad-Gleichheit ersetzt · `git-*` nicht erkannt · unbekannter
-Halter als „nicht gehalten" gewertet.
+Halter als „nicht gehalten" gewertet · **die 0-Byte-Schranke entfernt (Kommando-Frage auch bei
+Locks MIT Inhalt)** — diese letzte faellt bereits durch die bestehenden Zusagen `A-02-2` (Z.512)
+und `A-02-4` (Z.579); *sie ist exakt der Fall aus `f5098c40` und darf nie wieder stumm gruen sein.*
 
 > *`&&` -> `||` ist die eine Mutation, die alle drei Schutzbedingungen gleichzeitig entwertet und
 > dabei jeden Einzeltest gruen laesst, der nur einen Zweig prueft. Sie gehoert an den Anfang der
@@ -203,23 +234,76 @@ widerlegte Messung als Grundlage stehen laesst, erzeugt den naechsten Fehler and
 Gegenproben (03.08. Evaluator, 06.08. Planner) waren echt und trotzdem blind fuer genau diesen
 Fall.*
 
-## Kantenliste
+## Kantenliste (UMGESCHNITTEN 07.08. — jede Zeile traegt ihre Lage: IST = heutiges Verhalten unveraendert · SOLL = Aenderung durch A-08)
+
+> *Der Generator hat in `f5098c40` als Nebenbefund gemeldet, dass die alte dritte Zeile eine
+> Verhaltens**aenderung** als Bestandserhalt beschrieb: ein **gehaltener** Lock erreicht den
+> Stillstandspfad heute nie — `commit-pruefen.sh:142-148` blockt vorher mit `GEHALTENER LOCK`;
+> die zwei gruenen Stillstandspfad-Zusagen (Z.115, Z.547) laufen **ohne** Halter. Selbst
+> nachgelesen und hier behoben: unter der 0-Byte-Fassung bleibt dieser Fall die heutige Blockade.*
 
 ```text
-VM haelt die Datei, kein git sichtbar, 0 Byte, 61 s   -> beiseite            (der Fall von heute)
-dasselbe, aber Lock 30 s alt                          -> liegen lassen       (Mass nicht erfuellt)
-dasselbe, 800 kB, 300 s still                         -> beiseite            (Stillstandspfad des
-                                                                              Tors, HEUTE gruen -
-                                                                              A-08 aendert das NICHT)
-dasselbe, 800 kB, 90 s alt                            -> liegen lassen       (weder Zweig erfuellt)
-git-Halter sichtbar, Lock alt und leer                -> liegen lassen       (Form A greift)
-git-Prozess dieses Repos, kein Halter, Lock alt/leer  -> liegen lassen       (Form B greift)
+VM haelt die Datei, kein git sichtbar, 0 Byte, 61 s   -> beiseite            (SOLL — der Vorfall
+                                                                              06.08.; heute exit 3)
+dasselbe, aber Lock 30 s alt                          -> liegen lassen       (IST=SOLL: Bedingung 3
+                                                                              fehlt, < 60 s)
+dasselbe, 800 kB, 300 s still                         -> liegen lassen       (IST=SOLL: Inhalt +
+                                                                              Halter = Blockade
+                                                                              Z.142-148; die
+                                                                              03.08.-Klasse —
+                                                                              ehrliche Grenze,
+                                                                              Handraeumung)
+dasselbe, 800 kB, 90 s alt                            -> liegen lassen       (IST=SOLL: Inhalt +
+                                                                              Halter, Z.142-148 —
+                                                                              der Alterszweig wird
+                                                                              gar nicht erreicht)
+git-Halter sichtbar, Lock alt und leer                -> liegen lassen       (IST=SOLL: Form A
+                                                                              greift — Bedingung 1
+                                                                              nicht erfuellt)
+git-Prozess dieses Repos, kein Halter, Lock alt/leer  -> liegen lassen       (SOLL — Form B; HEUTE
+                                                                              legte Z.161-167 ohne
+                                                                              Prozess-Frage beiseite)
 git-Prozess in einem FREMDEN Verzeichnis              -> irrelevant          (Repo-Bezug, s. o.)
-mehrere Halter, EINER davon git                       -> liegen lassen       (konservativ)
+mehrere Halter, EINER davon git, Lock 0 Byte          -> liegen lassen       (konservativ)
+Halter-PID existiert, Kommando nicht ermittelbar      -> liegen lassen       (A-08-5, konservativ)
+nicht-git-Halter, Lock MIT Inhalt, beliebig alt       -> liegen lassen       (IST=SOLL: A-02-2/
+                                                                              A-02-4, Z.512/579 —
+                                                                              der Kern des Umschnitts)
 PID zwischen lsof und ps wiederverwendet              -> im Zweifel gehalten
 lsof haengt                                           -> A-02-6 unveraendert (Zeitgrenze)
 lsof fehlt                                            -> A-02-3 unveraendert (konservativer Rueckfall)
 ```
+
+## Simulation der 0-Byte-Fassung gegen den Zusagen-Bestand (30 Zusagen, selbst gefahren: 30/30)
+
+*Vom Planner am 07.08. je Zusage am Testcode nachgemessen — Eingaben aus den
+`lockSetzen`-Aufrufen der Suite, Zeilennummern aus `scripts/__tests__/commitPruefen.test.mjs`,
+Tor-Zeilen aus `scripts/commit-pruefen.sh`. Der Plan-Pruefer vollzieht diese Tabelle in der
+DoR-Runde nach — die BEREIT-Runde vom Vormittag hatte genau diese Simulation ausgelassen
+(Triage `0a4efd84`).*
+
+| Zusage (Zeile) | Eingabe | Verhalten unter der 0-Byte-Fassung | Ergebnis |
+|---|---|---|---|
+| A-02-2 (Z.512) | 900 B, 400 s, NODE-Halter | Inhalt > 0 + Halter -> Blockade wie heute (Z.142-148): LIEGT, exit 3, Halter-PID | **gruen** — unter der Fassung OHNE Schranke ROT (der Fund aus `f5098c40`) |
+| A-02-2 GEGENPROBE (Z.531) | 900 B, 400 s, Halter beendet | HALTER=0-Pfad unveraendert (Z.161-167): 400 >= 120 -> beiseite, exit 0 | gruen |
+| A-02-1 KONTROLLE (Z.547, must_preserve) | 885 kB, 317 s, kein Halter | HALTER=0-Pfad unveraendert: 317 >= 120 -> beiseite, exit 0 | gruen |
+| A-02-3 (Z.559) | 900 B, 400 s, lsof FEHLT | unbekannt-Pfad unveraendert (Z.176-191): Lock liegt, exit != 0 | gruen |
+| A-02-4 (Z.579) | 50 B, 400 s, NODE-Halter | Inhalt > 0 + Halter -> Blockade wie heute: exit 3 + ENV_BLOCKED-Zeile | **gruen** — ohne Schranke ROT (zweiter Fund aus `f5098c40`) |
+| A-02-4 ROT (Z.599) | 0 B, 0 s, kein Halter | 0-Byte-Pfad: Bedingung 3 fehlt (0 < 60) -> liegt, exit 3 „zu jung" | gruen |
+| A-02 Kante 2 (Z.613) | 900 B, 400 s, lsof HAENGT | Zeitgrenze + unbekannt-Pfad unveraendert: liegt, exit 3, „Halter: unbekannt" | gruen |
+| W-09/K-02 (Z.90) | 0 B, 300 s, kein Halter | drei Nein erfuellt (kein Repo-git zum Pruefzeitpunkt — die Aufraeumung steht VOR dem ersten git-Aufruf, W-09/K-01 Z.221) -> beiseite, exit 0, wie heute | gruen |
+| W-09/K-02 ROT (Z.101) | 22 B, 5 s, kein Halter | Inhalt-Pfad unveraendert: junger Lock, liegt, exit != 0 | gruen |
+| Tor Teil 2 (Z.115, Stillstandspfad) | 31 B, 300 s, kein Halter | HALTER=0-Pfad unveraendert: 300 >= 120 -> beiseite, exit 0 | gruen |
+| W-09/K-02 ROT (Z.130) | 0 B, 0 s, kein Halter | Bedingung 3 fehlt: liegt, exit != 0 | gruen |
+| W-09/K-02 Tiefe (Z.140) | Ref-Lock 0 B, 300 s, kein Halter | Suche unveraendert; drei Nein -> beiseite, exit 0 | gruen |
+| W-09/K-03 (Z.158) | 14 B, 300 s, kein Halter | HALTER=0-Pfad: BEISEITE-Meldung nennt Name, Groesse, Alter (Tor Z.166) | gruen |
+| uebrige 17 Zusagen (W-09/K-07 · K-08 · K-01 · K-04 · sieben W-04 · zwei Tor/GNU · Alters-Zweig Z.471) | Stufe-4/5-, Staging-, stat- und Strukturlogik | vom Umschnitt unberuehrt — er aendert nur den Halter-Zweig (Z.142-148, Schranke GROESSE=0) und stellt die Prozess-Frage am 0-Byte-Pfad | gruen |
+
+**Einzige Verhaltensaenderungen gegenueber heute, beide von keiner Zusage belegt und beide in
+Richtung „raeumt weniger, nie mehr" bzw. „raeumt den Vorfalls-Fall":** (1) 0-Byte-Lock mit
+nicht-git-Halter, Mass erfuellt, kein Repo-git -> beiseite statt `exit 3` — die Rot-Lage von
+A-08-1. (2) 0-Byte-Lock ohne Halter, Mass erfuellt, aber ein git-Prozess dieses Repos laeuft ->
+liegen lassen statt beiseite — konservativer als heute, Richtung von A-02-3.
 
 ## Rueckweg und Entdeckung
 
@@ -255,6 +339,14 @@ und der Vorgang gehoert sofort zurueck an den Planner. *Dasselbe Signal, an dem 
    Der Fehlertyp ist derselbe wie in Punkt 3 und wie der Anlass des ganzen Blattes:
    eine plausible Regel aufgeschrieben, ohne sie am Bestand zu messen. Zwei Zeilen
    `grep` in commit-pruefen.sh haetten es gezeigt.
+6  Die Drei-Nein-Frage OHNE Groessen-Schranke auf den Halter-Pfad gestellt und die
+   Tabelle nie gegen den Zusagen-BESTAND simuliert, nur die Rot-Lagen gemessen. A-02
+   schuetzt bei Locks MIT Inhalt die EXISTENZ eines lebenden Halters (A-02-2/A-02-4,
+   Z.512/579); meine Fassung fragte nur noch nach dem KOMMANDO und haette beide rot
+   gefaerbt. Gemeldet vom Generator (f5098c40) VOR dem Bau — dritter Fund derselben
+   Klasse, am Halter-Pfad statt am Stillstandspfad —, Triage 0a4efd84. Aufgeloest
+   durch die 0-Byte-Schranke (Umschnitt oben) und kuenftig durch die Pflicht-Tabelle:
+   jede Regelaenderung am Tor wird VOR der DoR-Runde gegen alle Zusagen durchgespielt.
 ```
 
 ```yaml
