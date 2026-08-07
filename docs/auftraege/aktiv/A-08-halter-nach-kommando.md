@@ -100,7 +100,7 @@ besseres Ja** — und die dritte Bedingung braucht `lsof` gar nicht.*
 ## Akzeptanzkriterien
 
 **A-08-1 (P1, ZWEIMAL KORRIGIERT 07.08. — zuletzt Umschnitt auf die 0-Byte-Fassung):** Ein
-**0-Byte-Lock** gilt genau dann als **verwaist**, wenn **alle drei** zutreffen:
+**0-Byte-Lock** gilt genau dann als **verwaist**, wenn **VORAB und alle drei** zutreffen:
 
 ```text
 0  VORAB: der Lock ist 0 Byte gross — nur dann stellt sich die Kommando-Frage ueberhaupt
@@ -149,8 +149,34 @@ zählt mit. *Der Evaluator hat es dreimal gemessen, je **0**; die Sorge ist **ni
 **Deshalb steht sie im Blatt und nicht in der Umsetzung** — wer später einen Fehlalarm sieht, findet
 hier die bekannte Grenze, statt sie neu zu suchen.
 
-**A-08-2 (P1, Gegenprobe):** Fehlt **eine** der drei Bedingungen, bleibt es bei `ENV_BLOCKED` und
-`exit 3`. *Ohne dieses Kriterium wäre „alles ist verwaist" grün — schlimmer als die Blockade.*
+**A-08-2 (P1, Gegenprobe — KORRIGIERT 07.08. nach dem Umschnitt):**
+
+```text
+Lock ist 0 Byte   und eine der Bedingungen 1-3 fehlt   -> ENV_BLOCKED, exit 3
+Lock ist > 0 Byte                                      -> das Tor entscheidet UNVERAENDERT
+                                                          wie bisher (A-02-Logik). A-08 aendert
+                                                          daran nichts.
+```
+
+*Ohne die erste Zeile wäre „alles ist verwaist" grün — schlimmer als die Blockade.*
+
+> ### Warum die zweite Zeile dazugehört — ein Widerspruch in meinem eigenen Kriterienpaar
+>
+> **Die alte Fassung lautete unbeschränkt** *„fehlt eine der drei Bedingungen → `ENV_BLOCKED`"*.
+> **Gegen den Zusagen-Bestand gehalten:**
+>
+> ```text
+> Zusage :547 (must_preserve)   Lock MIT Inhalt (885 kB), alt (317 s), OHNE Halter
+>                               -> beiseite. Heute gruen, an der Basis schon.
+> ```
+>
+> **Für diesen Fall verlangte A-08-2 wörtlich `ENV_BLOCKED` — A-08-3 wäre gebrochen.** *Und liest
+> man das `VORAB` nicht als eine der Bedingungen mit, fällt der Fall durch **beide** Kriterien und
+> ist ungeregelt.* **Beide Lesarten waren defekt: die eine widersprüchlich, die andere lückenhaft.**
+>
+> *Dazu eine Unsauberkeit, die den Streit erst ermöglichte: A-08-1 sagte „alle **drei**" und listete
+> **vier** Punkte. Ein Kriterium, dessen Zählung nicht stimmt, lässt sich in zwei Richtungen lesen —
+> und der Bauende müsste wählen.*
 
 **A-08-3 (`must_preserve`):** **Alle A-02-Zusagen bleiben grün**, insbesondere die Zeitgrenze
 (hängendes `lsof` → Abbruch statt Warten) und die `ENV_BLOCKED`-Meldeform mit Exitcode 3 und
