@@ -1236,3 +1236,55 @@ ballbesitz: planner
 **Ich baue nicht und entscheide nicht, welcher der beiden Vorfälle schwerer wiegt.** *Aber
 solange beide Fassungen `must_preserve` heißen, ist jede Abnahme von A-08 vorherbestimmt: sie
 wird an der Zusage gemessen, die der Bauende zufällig gewählt hat.*
+
+---
+
+## Evaluator — meine beiden `SPEC_BLOCKED` gegen A-08 sind erledigt, gegengeprüft statt geglaubt
+
+**Gemessen an `1dcdc32e`.** Der Planner hat beide Fassungen geschlossen (`ffaddb4b`, `1dcdc32e`);
+ich habe die Auflösung in beide Richtungen nachgeprüft, wie §12.3 es für jeden Befund verlangt.
+
+```text
+VORHER (rot)   Traegerblatt A-08-1   "0 Byte und >= 60 s alt"
+               Nachtrag  A-08-3      "Lock mit Inhalt bleibt liegen, egal wie alt"
+               -> zwei Zusagen mit must_preserve, entgegengesetzt
+
+NACHHER        Traegerblatt A-08-1   "das BESTEHENDE Alters-/Groessenmass des Tors ist
+                                      erfuellt - unveraendert, beide Pfade"
+               Nachtrag  A-08-3      nennt die beiden Zusagen JETZT BEIM NAMEN und schreibt
+                                      "Doppelpfad in commit-pruefen.sh:163 wird nicht angetastet"
+```
+
+**Beim Namen genannt heißt prüfbar — deshalb habe ich beide Seiten selbst nachgesehen:**
+
+```text
+$ sed -n '163p' scripts/commit-pruefen.sh
+    if { [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; } || [ "$ALTER" -ge 120 ]; then
+                                                          ^^^^^^^^^^^^^^^^^^^^^ der Pfad,
+                                                          den A-08-1 vorher entfernt haette
+
+$ node --test scripts/__tests__/commitPruefen.test.mjs
+  ✔ Tor Teil 2: ein ALTER Lock MIT Inhalt, dessen mtime stillsteht, ist ein Rest
+  ✔ A-02-1 KONTROLLE: Lock MIT Inhalt, alt, ohne Halter -> beiseite (must_preserve)
+  tests 30 · pass 30 · fail 0
+```
+
+**Die Zeilennummer im Blatt trifft die Zeile im Tor**, und die zwei zitierten Testnamen existieren
+wörtlich so in der Suite. *Ein Verweis, der ins Leere zeigt, wäre derselbe Fehler in neuer Form —
+deshalb die Probe.*
+
+**Der sachliche Punkt ist ebenfalls aufgelöst, und zwar richtig:** der Planner trennt jetzt den
+Vorfall vom 04.08. (`887 796 B` / `888 008 B`) als **pauschales Räumen von Hand am Tor vorbei**
+vom Stillstandspfad des Tors, der ihn nie berührt hat. *Das war der Kern — nicht die Dateigröße,
+sondern wer geräumt hat.* **Damit tragen die zwei Vorfälle keine gegensätzliche Lehre mehr.**
+
+```yaml
+auftrag: A-08
+befunde: ec051a1c (A-08-1 gegen A-08-3) · 3392400f (Nachtrag-A-08-3)
+votum: beide ERLEDIGT
+gegenprobe: Zeile 163 gelesen · Suite gefahren 30/30 · beide Testnamen woertlich gefunden
+ballbesitz: generator (unveraendert - A-08 bleibt BEREIT)
+```
+
+*Von mir liegt gegen A-08 nichts mehr offen. Der Bau kann laufen; ich prüfe ihn, wenn er als
+`CODE_FERTIG` zurückkommt.*
