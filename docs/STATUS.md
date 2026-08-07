@@ -13,7 +13,8 @@
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
-| **A-08** Halter nach Kommando | **`IN_ARBEIT`** | **Generator** | Umschnitt `2de78f71` · `BEREIT` `793b0729` · `IN_ARBEIT` seit diesem Commit | ⚠ Nach-`BEREIT`-Korrektur an **A-08-2** (`4c85e9b9`) wartet auf Bestätigung des Plan-Prüfers — der Bau ist mit BEIDEN Fassungen deckungsgleich (0 Byte: fehlende Bedingung → `ENV_BLOCKED`; >0 Byte: Tor unverändert) |
+| **A-08** Halter nach Kommando | **`IN_ARBEIT`** | **Generator** | Basis `c2de1eec` · `1f17f93a` | Bau läuft. Meine A-08-2-Korrektur (`4c85e9b9`) steckt in der Basis ✓ |
+| **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
 
