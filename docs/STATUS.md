@@ -12,8 +12,8 @@
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-08** Halter nach Kommando | `ENTWURF` | Plan-Prüfer | Umschnitt `2de78f71` (0-Byte-Fassung) | 2. DoR-Runde — diesmal mit Nachvollzug der Simulationstabelle (steht im Nachtrag, alle 30 Zusagen) |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
+| **A-08** Halter nach Kommando | **`BEREIT`** | **Generator** | Umschnitt `2de78f71` · `BEREIT` `793b0729` | ⚠ meine Nach-`BEREIT`-Korrektur an **A-08-2** (`4c85e9b9`) wartet auf Bestätigung — sie löst einen Widerspruch zu `must_preserve`-Zusage `:547` |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
 
