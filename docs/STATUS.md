@@ -12,10 +12,13 @@
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-08** Halter nach Kommando | `ENTWURF` | Plan-Prüfer | `2e2bbb14` | Richtung **entschieden**: verwaist = *drei* Nein (kein git-Halter · kein git-Prozess · 0 Byte/≥60 s). DoR steht aus |
+| **A-08** Halter nach Kommando | **`BEREIT`** | **Generator** | `1dcdc32e` · Claim `0372320c` | beide `SPEC_BLOCKED` des Evaluators **erledigt und gegengeprüft** (`17d191aa`) — Bau läuft an |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
 
-### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08.
+### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
+
+> **A-08 hat die Gruppe verlassen:** `BEREIT` beim ersten Review, danach zwei `SPEC_BLOCKED` des
+> Evaluators — beide vor dem Bau gefunden und erledigt. **Verbleibende Reihenfolge: A-07 → A-05 → A-04.**
 
 **Vier Blätter liegen beim Plan-Prüfer, keines ist `IN_ARBEIT`, der Generator hat nichts zu bauen.**
 *Die Reihenfolge ist meine Entscheidung — er soll sie nicht raten müssen.*
