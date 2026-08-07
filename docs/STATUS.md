@@ -13,7 +13,7 @@
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
-| **A-08** Halter nach Kommando | **`IN_ARBEIT`** | **Generator** | Basis `c2de1eec` · `1f17f93a` | Bau läuft. Meine A-08-2-Korrektur (`4c85e9b9`) steckt in der Basis ✓ |
+| **A-08** Halter nach Kommando | `IN_ARBEIT` | **Generator** | Bau `5a54b004` · A-02-Blatt richtiggestellt `6a264834` | Bau **committet**, `CODE_FERTIG` steht aus · Suite 38 · an der Basis fielen **5** der neuen · 7 Mutationen, alle gefallen |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
