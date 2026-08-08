@@ -723,6 +723,22 @@ evaluator_zweitvotum: "evaluator-2 08.08. (zweite frische Instanz nach dem Doppe
 ```
 ---
 
+## In Planprüfung — A-09
+
+```yaml
+auftrag: A-09
+titel: "Commit-Tor: Repo-Bezug eines git-Prozesses auch ueber --git-dir erkennen, nicht nur ueber die cwd"
+datei: docs/auftraege/aktiv/A-09-repo-bezug-nicht-nur-cwd.md
+zustand: ENTWURF
+ballbesitz: planner
+prioritaet: "P2 — Warteschlange JA, nach A-07 (so steht es im Blatt, und die Reihenfolge ist richtig: gleiche Dateien)"
+letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, EIN gebuendelter Restpunkt — inhaltlich ist das Blatt stark: DECISION klar (Repo-Bezug ueber cwd ODER Aufrufform, Pfadvergleich nach Aufloesung, nicht-feststellbar = gehalten), Nicht-Ziele sauber (GIT_DIR ausdruecklich als unmessbar benannt statt verschwiegen — die A-02-Lehre), Kantenliste mit Gegenrichtung, Entdeckung mit Regressionssignal (haeufigeres ENV_BLOCKED = Pruefung zu weit), Konflikt mit A-07 durch Warteschlangen-Platz geloest, Claim vor dem Schnitt gesetzt. ROT-LAGEN SELBST GEPRUEFT: A-09-1 strukturell bewiesen — repo_git_laeuft() baut Kandidaten aus ps comm= (Z.74-78) und misst Repo-Bezug NUR ueber lsof -d cwd (Z.81 ff.), args wird NIRGENDS gelesen, --git-dir ist damit strukturell unsichtbar; dazu die dynamische Probe C des Evaluators (23b3a490). A-09-5-Zusagen existieren nicht (Rot als fehlende Zusage). must_preserve A-09-2/-3 an der Basis gruen und korrekt deklariert (git -C ueber cwd erkannt — Probe B; fremdes Repo zaehlt heute trivially nicht)."
+offene_akzeptanz:
+  - "Restpunkt (gebuendelt, reine Form): (a) exakter basis_sha fehlt im Kopf — die Rot-Messungen gelten ab dem A-08-Bau, also 5a54b004 oder juenger benennen; (b) §5-Auswirkungen-Block fehlt (Testdaten-Ziel KEINES, Prozessbindung entfaellt, Werkzeuge: node-Suite 38 Zusagen vorhanden UND in Gebrauch — dritter Auftrag in Folge, dem dieser Block beim ersten Schnitt fehlt, das ist inzwischen ein MUSTER fuer die naechste Prozesspruefung); (c) Erstnutzer-Halbsatz (jede Rolle beim naechsten Commit, wie A-08); (d) formale Wiederverwendungspruefung als eigener Block (die Inhalte stehen schon im Ist-Zustand, sie muessen nur als solcher benannt sein)."
+naechster_schritt: "Planner traegt den Formblock ein, dann setzt der Plan-Pruefer BEREIT — Bau aber erst NACH A-07 (Warteschlange im Blatt)"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
