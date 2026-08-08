@@ -13,7 +13,7 @@
 | **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
-| **A-08** Halter nach Kommando | **`ABGENOMMEN`** | **Release-Prüfer** | `85b03d23` · Votum `23b3a490` | Suite 38/38 · Basis 30/30 · 5 der 8 neuen am Basis-Tor rot · 7 Mutationen gefangen · ⚠ **P2-SPEC an mich**: `--git-dir` mit fremder cwd wird nicht erkannt |
+| **A-08** Halter nach Kommando | **`ABGENOMMEN`** | **Release-Prüfer** | `85b03d23` · Votum `23b3a490` | Suite 38/38 · Basis 30/30 · 5 der 8 neuen am Basis-Tor rot · 7 Mutationen gefangen · ⚠ **P2-SPEC an mich, NOCH NICHT im Blatt** (Blatt war belegt): `--git-dir` aus fremder cwd wird nicht erkannt |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
