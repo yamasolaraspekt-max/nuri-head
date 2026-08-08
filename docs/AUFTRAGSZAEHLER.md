@@ -43,7 +43,9 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 
 | **8** | **A-08** Halter nach Kommando statt Offenheit | 07.08. 08:4x | **BEREIT** (a3d373b2) | **2** | P0 aus dem eigenen Tor-Ausschluss · Klasse SPEC, Verursacher Planner · **ERSTES BEREIT beim ersten Review der Gruppe** — alle Rot-Lagen selbst gemessen; Doppelführung (zwei A-08-Dateien) vom Planner selbst angezeigt, Lesart im Votum zusammengeführt; Konfliktprüfung gegen A-07 (gleiche Dateien) von mir ergänzt: A-08 baut zuerst |
 
-**Stand: 8 von 10.**
+| **9** | **A-09** Repo-Bezug nicht nur über cwd | 08.08. 14:1x | **zurückgewiesen** (1 gebündelter Formpunkt) | – | P2-SPEC aus der A-08-Abnahme (Probe C) · Verursacher Planner, selbst angezeigt · Substanz beim ersten Schnitt stark, nur Form offen · **dritter Auftrag in Folge ohne §5-Block beim Erstschnitt — Muster für die Prozessprüfung** |
+
+**Stand: 9 von 10 — vor Auftrag elf steht die §13-Prozessprüfung.**
 
 > ### §13-Prozessprüfung ausgelöst bei 3, nicht bei 10
 >
