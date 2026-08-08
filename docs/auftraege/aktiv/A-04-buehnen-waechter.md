@@ -63,7 +63,7 @@ scripts/__tests__/buehnenWaechter.test.mjs die Zusagen
 *Nachgeholt, bevor der Plan-Prüfer es beanstanden muss.*
 
 ```text
-scripts/browser-buehne.sh (A-03-Bau 26e378a5, liegt auf tmp-a03)
+scripts/browser-buehne.sh (A-03-Bau 26e378a5) - liegt seit dem Merge 27a61da9 AUF DEM ZWEIG
   :31  ERWARTETE_DB=ticket_testing              <- der erlaubte Name, als Konstante
   :60  GEFUNDENE_DB=$(APP_ENV=testing php artisan tinker --execute='echo config(...)')
                                                 <- die Aufloesungs-Logik, fertig
@@ -217,7 +217,8 @@ dieser Auftrag.** Die zwei kleinen fahren hier mit, weil sie dieselbe Fläche be
 Skript gebaut ist.
 
 > **Ich habe ihn NICHT sofort behoben, und das ist Absicht.** Gemessen auf diesem Zweig:
-> `grep -c 'browser-buehne' ANKER-BROWSER.md` = **0** — A-03s Bau liegt auf `tmp-a03` und ist hier
+> `grep -c 'browser-buehne' ANKER-BROWSER.md` = **2** *(selbst gemessen 08.08.; im Blatt stand **0**, das war der Stand vor dem Merge
+> `27a61da9`)* — A-03s Bau liegt seit dem Merge auf dem Arbeitszweig und ist hier
 > nicht gemergt. **Der Satz ist auf DIESEM Zweig noch wahr.** Ihn jetzt zu streichen hieße, auf ein
 > Skript zu verweisen, das von hier aus nicht existiert.
 >
