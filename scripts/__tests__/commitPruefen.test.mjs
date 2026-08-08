@@ -39,7 +39,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, utimesSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, utimesSync, symlinkSync, statSync } from 'node:fs';
 import { execFileSync, spawn } from 'node:child_process';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -647,4 +647,238 @@ test('A-02 Kante 2: ein HAENGENDES lsof laesst das Tor NICHT haengen — Zeitgre
   const zeile = r.text.split('\n').find((z) => z.startsWith('ENV_BLOCKED:'));
   assert.ok(zeile, 'keine Zeile beginnt mit ENV_BLOCKED:');
   assert.match(zeile, /ENV_BLOCKED: .+ — .+ \(Halter: unbekannt\)/, `Form verletzt: ${zeile}`);
+});
+
+/**
+ * ── A-08 — DIE HALTER-FRAGE FRAGT NACH DEM KOMMANDO, NUR BEI 0-BYTE-LOCKS ──────────────────
+ *
+ * **Der Vorfall vom 06.08.:** ein 0-Byte-`index.lock`, 239 s alt, "gehalten" von der
+ * Virtualization-VM (kein git, seit Tagen laufend) — das Tor sperrte JEDE Rolle aus.
+ * `lsof` beantwortet "hat jemand die Datei offen", nicht "arbeitet gerade git daran".
+ *
+ * **Die Drei-Nein-Regel (Nachtrag A-08, 0-Byte-Fassung):** verwaist ist ein 0-BYTE-Lock erst,
+ * wenn (1) kein Halter ein git-Kommando traegt, (2) kein git-Prozess DIESES Repositoriums
+ * laeuft und (3) das bestehende Altersmass des Tors erfuellt ist. Ein Lock MIT Inhalt und
+ * Halter bleibt liegen wie bisher — egal welches Kommando (A-02-2/A-02-4 schuetzen das).
+ *
+ * **Zur Herkunft der Halter in diesen Proben:** `halterFuer` (node, kein git-Kommando) fuer
+ * den Vorfalls-Fall; `halterMitKommando` (Symlink auf node unter git-Namen — `ps -o comm=`
+ * zeigt den SYMLINK-Pfad, selbst gemessen) fuer die git-Faelle; und fuer A-08-8 ein ECHTER
+ * git-Prozess, dessen eigener `index.lock` die Probe ist.
+ */
+
+/** Wie `halterFuer`, aber das Kommando des Halters traegt einen waehlbaren Basenamen —
+ *  ein Symlink auf node: `ps -o comm=` liefert den Symlink-Pfad (gemessen 07.08.). */
+function halterMitKommando(pfad, name) {
+  const heim = mkdtempSync(join(tmpdir(), 'a08-kommando-'));
+  const werkzeug = join(heim, name);
+  symlinkSync(process.execPath, werkzeug);
+  const kind = spawn(werkzeug, ['-e', `
+    const fs = require('node:fs');
+    const fd = fs.openSync(${JSON.stringify(pfad)}, 'a');
+    process.stdout.write('offen\\n');
+    setTimeout(() => { fs.closeSync(fd); }, 30000);
+  `], { stdio: ['ignore', 'pipe', 'ignore'] });
+  return new Promise((fertig) => {
+    kind.stdout.once('data', () => fertig({ pid: kind.pid, stop: () => { try { kind.kill('SIGKILL'); } catch { /* schon fort */ } } }));
+  });
+}
+
+const kurzWarten = (ms) => new Promise((r) => setTimeout(r, ms));
+
+test('A-08-1: der Vorfall — 0-Byte-Lock, alt, NICHT-git-Halter, kein Repo-git -> beiseite, Commit laeuft', async () => {
+  // **Genau die Lage vom 06.08.** (dort war der Halter die VM, hier ein node-Prozess —
+  // beide tragen kein git-Kommando): 0 Byte, aelter als das Mass, lebender Halter.
+  // Vor A-08 endete das in exit 3; jetzt liefern drei Nein den Rest.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 239);
+  const halter = await halterFuer(p);
+
+  try {
+    const r = tor(verz, 'Probe: Vorfall 06.08.', 'anfang.txt');
+    assert.equal(r.code, 0, `das Tor blockiert den Vorfalls-Fall weiterhin:\n${r.text}`);
+    assert.equal(existsSync(p), false, 'der verwaiste 0-Byte-Lock liegt noch am alten Ort');
+    assert.equal(beiseiteGelegt(verz), 1, 'der Lock wurde geloescht statt beiseitegelegt');
+    // A-08-1: die Meldung nennt Zielpfad, Groesse und Alter.
+    const zeile = r.text.split('\n').find((z) => z.startsWith('BEISEITE'));
+    assert.ok(zeile, 'keine BEISEITE-Zeile in der Ausgabe');
+    assert.match(zeile, /_locks_beiseite/, 'die Meldung nennt den Zielpfad nicht');
+    assert.match(zeile, /\b0 Byte\b/, 'die Meldung nennt die Groesse nicht');
+    assert.match(zeile, /\b\d+s alt\b/, 'die Meldung nennt das Alter nicht');
+  } finally {
+    halter.stop();
+  }
+});
+
+test('A-08-2: derselbe Halter, aber der Lock ist FRISCH (< 60 s) -> liegt, ENV_BLOCKED, exit 3', async () => {
+  // **Gegenhalter Zeit:** ohne dieses Kriterium waere "legt immer beiseite" gruen.
+  // Bedingung 3 (das Altersmass des Tors) fehlt — zwei Nein sind kein Rest.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 30);
+  const halter = await halterFuer(p);
+
+  try {
+    const r = tor(verz, 'Probe: frischer 0-Byte-Lock mit Halter', 'anfang.txt');
+    assert.equal(existsSync(p), true, 'ein FRISCHER gehaltener Lock wurde weggezogen');
+    assert.equal(r.code, 3, `erwartet Exitcode 3 (ENV_BLOCKED), kam ${r.code}`);
+    assert.match(r.text, /ENV_BLOCKED:/, 'die ENV_BLOCKED-Zeile fehlt');
+  } finally {
+    halter.stop();
+  }
+});
+
+test('A-08-4: ein Halter mit git-KOMMANDO (voller Pfad) schuetzt einen alten 0-Byte-Lock', async () => {
+  // **Die gefaehrliche Richtung in Form A:** `ps -o comm=` liefert hier VOLLE Pfade —
+  // ein Vergleich auf `= "git"` hielte /usr/bin/git fuer einen Nicht-git-Prozess und
+  // zoege einem ARBEITENDEN git den Lock weg. Verglichen werden muss der Basename.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const halter = await halterMitKommando(p, 'git');
+
+  try {
+    const r = tor(verz, 'Probe: git-Halter', 'anfang.txt');
+    assert.equal(existsSync(p), true, 'ein von "git" gehaltener 0-Byte-Lock wurde weggezogen');
+    assert.equal(r.code, 3, `erwartet Exitcode 3 (ENV_BLOCKED), kam ${r.code}`);
+    assert.match(r.text, /\(git\)/, 'die Meldung nennt das Kommando des Halters nicht');
+  } finally {
+    halter.stop();
+  }
+});
+
+test('A-08-4 git-*: ein git-remote-https-Halter zaehlt als git — Unterprozesse schuetzen auch', async () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const halter = await halterMitKommando(p, 'git-remote-https');
+
+  try {
+    const r = tor(verz, 'Probe: git-Unterprozess', 'anfang.txt');
+    assert.equal(existsSync(p), true, 'ein von git-remote-https gehaltener Lock wurde weggezogen');
+    assert.equal(r.code, 3, `erwartet Exitcode 3 (ENV_BLOCKED), kam ${r.code}`);
+  } finally {
+    halter.stop();
+  }
+});
+
+test('A-08-5: Halter-PID existiert, Kommando nicht ermittelbar -> Halter UNBEKANNT, Lock liegt', async () => {
+  // **Unklarheit bleibt konservativ.** Ein fake-`ps` im PATH, das nichts liefert, stellt
+  // die Lage "PID existiert, aber `ps` kann sie nicht erklaeren" nach — geraten wird nicht.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const halter = await halterFuer(p);
+
+  const fake = join(verz, 'fake-bin');
+  mkdirSync(fake);
+  writeFileSync(join(fake, 'ps'), '#!/bin/sh\nexit 1\n', { mode: 0o755 });
+
+  try {
+    let r;
+    try {
+      const aus = execFileSync('bash', ['scripts/commit-pruefen.sh', 'Probe: ps ohne Antwort', 'anfang.txt'],
+        { cwd: verz, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
+          env: { ...process.env, PATH: `${fake}:${process.env.PATH}` } });
+      r = { code: 0, text: aus };
+    } catch (e) {
+      r = { code: e.status ?? -1, text: `${e.stdout ?? ''}${e.stderr ?? ''}` };
+    }
+    assert.equal(existsSync(p), true, 'ein Lock mit UNBEKANNTEM Halter wurde weggezogen');
+    assert.equal(r.code, 3, `erwartet Exitcode 3 (ENV_BLOCKED), kam ${r.code}`);
+    const zeile = r.text.split('\n').find((z) => z.startsWith('ENV_BLOCKED:'));
+    assert.ok(zeile, 'keine Zeile beginnt mit ENV_BLOCKED:');
+    assert.match(zeile, /\(Halter: unbekannt\)/, `der Halter wird nicht als unbekannt benannt: ${zeile}`);
+  } finally {
+    halter.stop();
+  }
+});
+
+test('A-08-8 PROBENHERKUNFT: der Lock stammt aus einem ECHTEN git-Lauf — unterbrochenes git, kein touch', async () => {
+  // **Ausdruecklich benannt (A-08-8):** dieser `index.lock` wird NICHT per writeFileSync
+  // hergestellt, sondern von git selbst. `git update-index --index-info` nimmt den Lock
+  // beim Start und haelt ihn, solange stdin offen ist (selbst gemessen 07.08.: 0 Byte,
+  // Halter = die git-PID). SIGKILL mitten im Lauf laesst ihn liegen — exakt die Entstehung
+  // eines verwaisten Locks. *Beide fruehere Gegenproben (03.08., 06.08.) waren echt und
+  // trotzdem blind fuer diesen Fall, weil ihre Probedateien per Umleitung entstanden.*
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = join(verz, '.git', 'index.lock');
+
+  const gitLauf = spawn('git', ['update-index', '--index-info'], { cwd: verz, stdio: ['pipe', 'ignore', 'ignore'] });
+  for (let i = 0; i < 100 && !existsSync(p); i++) await kurzWarten(50);
+  assert.equal(existsSync(p), true, 'git hat keinen index.lock hinterlassen — die Probe traegt nicht');
+  assert.equal(statSync(p).size, 0, 'der echte git-Lock ist nicht 0 Byte — die 0-Byte-Fassung braeuchte eine andere Probe');
+
+  // Waehrend git ihn haelt: das Tor MUSS blocken (Bedingung 1, echter git-Halter).
+  const rGehalten = tor(verz, 'Probe: git haelt seinen Lock', 'anfang.txt');
+  assert.equal(rGehalten.code, 3, `ein von ECHTEM git gehaltener Lock blockt nicht: ${rGehalten.text}`);
+  assert.equal(existsSync(p), true, 'der Lock eines arbeitenden git wurde weggezogen');
+
+  // Der git-Lauf stirbt mitten im Lock — der Rest bleibt liegen.
+  gitLauf.kill('SIGKILL');
+  await new Promise((fertig) => gitLauf.once('exit', fertig));
+  await kurzWarten(200);
+  assert.equal(existsSync(p), true, 'der Lock verschwand mit dem Prozess — kein Rest entstanden');
+
+  // Altern (nur die mtime — der Lock selbst bleibt das git-Artefakt), dann drei Nein.
+  const alt = new Date(Date.now() - 300 * 1000);
+  utimesSync(p, alt, alt);
+  const r = tor(verz, 'Probe: echter git-Rest', 'anfang.txt');
+  assert.equal(r.code, 0, `der echte git-Rest sperrt das Tor weiterhin:\n${r.text}`);
+  assert.equal(existsSync(p), false, 'der echte git-Rest liegt noch am alten Ort');
+  assert.ok(beiseiteGelegt(verz) >= 1, 'der echte git-Rest wurde geloescht statt beiseitegelegt');
+});
+
+test('A-08 Form B: ein laufender git-Prozess DIESES Repos schuetzt einen alten 0-Byte-Lock ohne Halter', async () => {
+  // **Bedingung 2, beide Richtungen in einem Lauf.** `git cat-file --batch` arbeitet im
+  // Wegwerf-Repo (cwd = Repo-Wurzel), haelt aber KEINEN index.lock — vor A-08 haette der
+  // HALTER=0-Pfad den Lock ohne Prozess-Frage beiseitegelegt.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+
+  const gitLauf = spawn('git', ['cat-file', '--batch'], { cwd: verz, stdio: ['pipe', 'ignore', 'ignore'] });
+  let comm = '';
+  for (let i = 0; i < 100; i++) {
+    try {
+      comm = execFileSync('ps', ['-p', String(gitLauf.pid), '-o', 'comm='], { encoding: 'utf8' }).trim();
+      if (comm.split('/').pop() === 'git') break;
+    } catch { /* noch nicht da */ }
+    await kurzWarten(50);
+  }
+  assert.equal(comm.split('/').pop(), 'git', `der Probe-Prozess traegt kein git-Kommando: ${comm}`);
+
+  try {
+    const rLebend = tor(verz, 'Probe: Repo-git laeuft', 'anfang.txt');
+    assert.equal(rLebend.code, 3, `trotz laufendem Repo-git wurde nicht geblockt: ${rLebend.text}`);
+    assert.equal(existsSync(p), true, 'der Lock wurde trotz laufendem Repo-git weggezogen');
+  } finally {
+    gitLauf.kill('SIGKILL');
+  }
+  await new Promise((fertig) => gitLauf.once('exit', fertig));
+  await kurzWarten(200);
+
+  const rFrei = tor(verz, 'Probe: Repo-git ist fort', 'anfang.txt');
+  assert.equal(rFrei.code, 0, `nach dem Ende des Repo-git blockt das Tor weiterhin:\n${rFrei.text}`);
+  assert.equal(existsSync(p), false, 'der Rest liegt noch, obwohl kein git mehr laeuft');
+});
+
+test('A-08-10: die Blockade-Meldung nennt das KOMMANDO des Halters, nicht nur die PID', async () => {
+  // *"Halter: 59792" sagt niemandem etwas; "Halter: 59792 (XPCService)" beendet die Suche
+  // sofort.* Geprueft am unveraenderten Schutzpfad (Lock MIT Inhalt + Halter).
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, 'x'.repeat(900), 400);
+  const halter = await halterFuer(p);
+
+  try {
+    const r = tor(verz, 'Probe: Kommando in der Meldung', 'anfang.txt');
+    assert.equal(r.code, 3, `erwartet Exitcode 3, kam ${r.code}`);
+    assert.match(r.text, new RegExp(`Halter: ${halter.pid} \\(node\\)`),
+      `die Meldung nennt das Kommando des Halters nicht: ${r.text.split('\n').find((z) => z.includes('Halter:'))}`);
+  } finally {
+    halter.stop();
+  }
 });

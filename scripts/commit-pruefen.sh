@@ -62,6 +62,49 @@ if [ -z "${GIT_INDEX_FILE:-}" ]; then
   export GIT_INDEX_FILE
 fi
 
+# ── A-08 FORM B: LAEUFT EIN GIT-PROZESS *DIESES* REPOSITORIUMS? ─────────────────────────────
+# Bedingung 2 der Drei-Nein-Regel (Nachtrag A-08, DECISION). Billig zuerst: erst die
+# Prozessliste (`ps`, haengt nicht), dann NUR fuer echte git-Kandidaten die cwd-Frage an
+# `lsof` — mit derselben Zeitgrenze wie die Halter-Frage. Der Repo-Bezug ist Pflicht
+# (Korrektur 2 im Nachtrag): ein git-Lauf in einem FREMDEN Verzeichnis zaehlt nicht.
+# Nicht Ermittelbares zaehlt als JA — im Zweifel gehalten, geraten wird nicht.
+# Rueckgabe 0 = ja (oder nicht auszuschliessen), 1 = nachweislich keiner.
+REPO_WURZEL="$(pwd -P)"
+repo_git_laeuft() {
+  KANDIDATEN=$(ps -axo pid=,comm= 2>/dev/null | awk '{
+    pid=$1; comm=$2; for (i = 3; i <= NF; i++) comm = comm" "$i;
+    n = split(comm, teile, "/"); base = teile[n];
+    if (base == "git" || base ~ /^git-/) print pid
+  }')
+  [ -z "$KANDIDATEN" ] && return 1
+  for GPID in $KANDIDATEN; do
+    CWD_AUS="${TMPDIR:-/tmp}/tor-cwd-auskunft.$$"
+    lsof -a -p "$GPID" -d cwd -Fn >"$CWD_AUS" 2>/dev/null &
+    CWD_LSOF_PID=$!
+    ( sleep "${LSOF_GRENZE:-5}"; kill -9 "$CWD_LSOF_PID" 2>/dev/null ) >/dev/null 2>&1 &
+    CWD_WAECHTER_PID=$!
+    wait "$CWD_LSOF_PID" 2>/dev/null
+    CWD_ENDE=$?
+    kill -9 "$CWD_WAECHTER_PID" 2>/dev/null
+    wait "$CWD_WAECHTER_PID" 2>/dev/null
+    GCWD=$(sed -n 's/^n//p' "$CWD_AUS" 2>/dev/null | head -1)
+    rm -f "$CWD_AUS" 2>/dev/null
+    if [ "$CWD_ENDE" -ge 128 ]; then
+      return 0
+    fi
+    if [ -z "$GCWD" ]; then
+      # Prozess evtl. zwischen `ps` und `lsof` beendet. Existiert er noch, ist sein
+      # Arbeitsverzeichnis unbekannt -> im Zweifel: er koennte hier arbeiten.
+      if ps -p "$GPID" >/dev/null 2>&1; then return 0; fi
+      continue
+    fi
+    case "$GCWD" in
+      "$REPO_WURZEL"|"$REPO_WURZEL"/*) return 0 ;;
+    esac
+  done
+  return 1
+}
+
 # ── STUFE 4 ──────────────────────────────────────────────────────────────────────────────────
 # Waehlerisch aufraeumen, VOR dem ersten git-Aufruf. Ein Lock mit Inhalt oder ein frischer
 # gehoert einem laufenden Vorgang — dann bricht das Tor ab und NENNT den Grund.
@@ -107,9 +150,13 @@ for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/nul
   # *Beide sehen gleich ruhig aus. Die Ruhe schaetzt, `lsof` fragt.* Am 04.08. wurden auf dieser
   # Annahme zwei vollstaendige Indizes (je ~888 kB) beiseitegeschoben.
   #
-  # **HALTER=1** heisst: jemand hat die Datei offen -> sie bleibt liegen, egal wie alt, still
-  # oder gross. **HALTER=0** heisst: nachweislich niemand -> Rest. **HALTER=unbekannt** (kein
-  # `lsof`, Zeitgrenze abgelaufen) -> es wird NICHT geraten, sondern konservativ zurueckgefallen.
+  # **HALTER=1** heisst: jemand hat die Datei offen. Ein Lock MIT INHALT bleibt dann liegen,
+  # egal wie alt, still oder gross. Ein 0-BYTE-Lock stellt seit A-08 zusaetzlich die
+  # KOMMANDO-Frage (unten): `lsof` beantwortet nur "hat jemand die Datei offen", nicht
+  # "arbeitet gerade git daran" — auf dem virtualisierten Mount sagt die Offenheits-Frage
+  # nie nein (Vorfall 06.08.: die VM "haelt" .git/HEAD seit Tagen). **HALTER=0** heisst:
+  # nachweislich niemand -> Rest. **HALTER=unbekannt** (kein `lsof`, Zeitgrenze
+  # abgelaufen) -> es wird NICHT geraten, sondern konservativ zurueckgefallen.
   HALTER=unbekannt
   if command -v lsof >/dev/null 2>&1; then
     # Zeitgrenze — jetzt ECHT gebaut (A-02-Nachbesserung, Evaluator-Befund 05.08.): die alte
@@ -140,10 +187,82 @@ for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/nul
   fi
 
   if [ "$HALTER" != "unbekannt" ] && [ "$HALTER" != "0" ]; then
-    # A-02-2: der Schutzfall. Alter, Groesse und Ruhe werden gar nicht erst gefragt.
-    echo "GEHALTENER LOCK  $lock  —  ${GROESSE} Byte, ${ALTER}s alt, Halter: ${HALTER}" >&2
-    echo "  Eine offene Datei ist kein Rest. KEIN COMMIT — der Lock bleibt liegen." >&2
-    echo "ENV_BLOCKED: lock wird gehalten — $lock (Halter: ${HALTER})" >&2
+    # ── A-08: DIE HALTER-FRAGE FRAGT NACH DEM KOMMANDO — NUR BEI 0-BYTE-LOCKS ──────────────
+    #
+    # Entschieden im Nachtrag (d4308d35, Umschnitt 07.08.): verwaist ist ein 0-BYTE-Lock
+    # erst nach DREI Nein — (1) kein Halter mit git-Kommando, (2) kein git-Prozess DIESES
+    # Repositoriums, (3) das BESTEHENDE Altersmass des Tors ist erfuellt. Ein Lock MIT
+    # INHALT (> 0 Byte) und Halter bleibt liegen wie bisher, egal welches Kommando der
+    # Halter traegt — A-02 schuetzt dort die EXISTENZ eines lebenden Halters.
+    #
+    # Das Kommando wird fuer JEDEN Halter erhoben: bei 0 Byte fuer die Entscheidung, sonst
+    # fuer die Meldung (A-08-10: "Halter: 59792" sagt niemandem etwas, "Halter: 59792
+    # (XPCService)" beendet die Suche sofort).
+    HALTER_ANZEIGE=""
+    GIT_HALTER=nein
+    HALTER_OHNE_KOMMANDO=nein
+    for HPID in $HALTER; do
+      HKOMMANDO=$(ps -p "$HPID" -o comm= 2>/dev/null | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+      if [ -z "$HKOMMANDO" ]; then
+        # A-08-5 / PID-Wiederverwendung: Kommando nicht ermittelbar -> Halter UNBEKANNT.
+        # Ob die PID noch existiert oder zwischen lsof und ps verschwand: im Zweifel gehalten.
+        HALTER_OHNE_KOMMANDO=ja
+        HALTER_ANZEIGE="${HALTER_ANZEIGE}${HALTER_ANZEIGE:+ }${HPID} (Kommando nicht ermittelbar)"
+        continue
+      fi
+      # A-08-4: `ps -o comm=` liefert hier VOLLE Pfade (gemessen: /bin/zsh) — verglichen
+      # wird der Basename; `git-*` faengt Unterprozesse wie git-remote-https.
+      HBASE=${HKOMMANDO##*/}
+      case "$HBASE" in
+        git|git-*) GIT_HALTER=ja ;;
+      esac
+      HALTER_ANZEIGE="${HALTER_ANZEIGE}${HALTER_ANZEIGE:+ }${HPID} (${HBASE})"
+    done
+
+    if [ "$GROESSE" -gt 0 ]; then
+      # A-02-2: der Schutzfall, UNVERAENDERT. Alter, Ruhe und Kommando werden nicht gefragt.
+      echo "GEHALTENER LOCK  $lock  —  ${GROESSE} Byte, ${ALTER}s alt, Halter: ${HALTER_ANZEIGE}" >&2
+      echo "  Eine offene Datei ist kein Rest. KEIN COMMIT — der Lock bleibt liegen." >&2
+      echo "ENV_BLOCKED: lock wird gehalten — $lock (Halter: ${HALTER_ANZEIGE})" >&2
+      exit 3
+    fi
+
+    if [ "$HALTER_OHNE_KOMMANDO" = "ja" ]; then
+      # A-08-5: Unklarheit bleibt konservativ.
+      echo "GEHALTENER LOCK  $lock  —  ${GROESSE} Byte, ${ALTER}s alt, Halter: ${HALTER_ANZEIGE}" >&2
+      echo "  Zu mindestens einer Halter-PID ist kein Kommando ermittelbar. Unbekanntes wird" >&2
+      echo "  nicht geraeumt. KEIN COMMIT — der Lock bleibt liegen." >&2
+      echo "ENV_BLOCKED: halter-kommando nicht ermittelbar — $lock (Halter: unbekannt)" >&2
+      exit 3
+    fi
+
+    KEIN_GIT_HALTER=ja
+    [ "$GIT_HALTER" = "ja" ] && KEIN_GIT_HALTER=nein
+    KEIN_REPO_GIT=ja
+    repo_git_laeuft && KEIN_REPO_GIT=nein
+    # Bedingung 3 ZITIERT das Altersmass des Tors (Doppelpfad wie im HALTER=0-Zweig unten),
+    # sie formuliert es nicht neu — fuer 0 Byte heisst es: >= 60 s.
+    MASS_ERFUELLT=nein
+    if { [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; } || [ "$ALTER" -ge 120 ]; then
+      MASS_ERFUELLT=ja
+    fi
+
+    if [ "$KEIN_GIT_HALTER" = "ja" ] && [ "$KEIN_REPO_GIT" = "ja" ] && [ "$MASS_ERFUELLT" = "ja" ]; then
+      # Drei Nein UND 0 Byte -> Rest. Beiseitelegen nach Dauerregel, NIE loeschen — die
+      # Meldung nennt Zielpfad, Groesse und Alter (A-08-1).
+      mkdir -p "$BEISEITE" 2>/dev/null
+      mv "$lock" "$BEISEITE"/ 2>/dev/null \
+        && echo "BEISEITE   $lock  (${GROESSE} Byte, ${ALTER}s alt, Halter ohne git-Kommando: ${HALTER_ANZEIGE}, kein git-Prozess dieses Repos) -> $BEISEITE/"
+      continue
+    fi
+
+    # Mindestens ein Nein fehlt -> der Lock bleibt liegen, und die Meldung sagt warum.
+    echo "GEHALTENER LOCK  $lock  —  ${GROESSE} Byte, ${ALTER}s alt, Halter: ${HALTER_ANZEIGE}" >&2
+    [ "$KEIN_GIT_HALTER" = "nein" ] && echo "  Ein Halter traegt ein git-Kommando — hier arbeitet git." >&2
+    [ "$KEIN_REPO_GIT" = "nein" ] && echo "  Ein git-Prozess dieses Repositoriums laeuft oder ist nicht auszuschliessen." >&2
+    [ "$MASS_ERFUELLT" = "nein" ] && echo "  Der Lock ist juenger als das Altersmass des Tors." >&2
+    echo "  KEIN COMMIT — der Lock bleibt liegen." >&2
+    echo "ENV_BLOCKED: lock wird gehalten — $lock (Halter: ${HALTER_ANZEIGE})" >&2
     exit 3
   fi
 
@@ -161,6 +280,17 @@ for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/nul
   if [ "$HALTER" = "0" ]; then
     # Nachweislich frei UND alt genug. Der Evaluator-Fall (885 kB, 317 s) faellt hierunter.
     if { [ "$GROESSE" -eq 0 ] && [ "$ALTER" -ge 60 ]; } || [ "$ALTER" -ge 120 ]; then
+      # A-08 Form B, NUR fuer 0-Byte-Locks: auch ohne sichtbaren Halter bleibt ein 0-Byte-
+      # Lock liegen, solange ein git-Prozess DIESES Repositoriums laeuft — ein lebendiges
+      # git kann seine Sperrdatei zwischen zwei Schritten kurz geschlossen haben. Locks
+      # MIT Inhalt entscheidet weiterhin allein der Stillstandspfad (A-02, unveraendert).
+      if [ "$GROESSE" -eq 0 ] && repo_git_laeuft; then
+        echo "LOCK BEI LAUFENDEM GIT  $lock  —  ${GROESSE} Byte, ${ALTER}s alt, kein Halter" >&2
+        echo "  Ein git-Prozess dieses Repositoriums laeuft oder ist nicht auszuschliessen:" >&2
+        echo "  der Lock koennte ihm gehoeren. KEIN COMMIT — der Lock bleibt liegen." >&2
+        echo "ENV_BLOCKED: git-prozess dieses repos laeuft — $lock (Halter: keiner sichtbar)" >&2
+        exit 3
+      fi
       mkdir -p "$BEISEITE" 2>/dev/null
       mv "$lock" "$BEISEITE"/ 2>/dev/null \
         && echo "BEISEITE   $lock  (${GROESSE} Byte, ${ALTER}s alt, kein Halter) -> $BEISEITE/"
