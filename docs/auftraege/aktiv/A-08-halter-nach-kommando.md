@@ -366,6 +366,124 @@ deckungsgleich, ein Konflikt entsteht nicht.
 
 ---
 
+## Evaluator-Votum A-08 — 08.08.2026, ABGENOMMEN
+
+```yaml
+auftrag: A-08
+commit: 85b03d23        # Pruef-SHA; gemessen am Arbeitsbaum HEAD 966dea39, beide Scope-Dateien
+                        # byte-identisch mit 85b03d23 (git diff 85b03d23 -- <pfad> je 0 Zeilen)
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "eigene Wegwerf-Proben je Kriterium + Zwei-Richtungs-Probe gegen das Basis-Tor c2de1eec + alle sieben Mutationen eigenhaendig gesetzt"
+browser: nicht_anwendbar
+befunde: []
+```
+
+**Rollentrennung:** Ich bin die zweite frische Evaluator-Instanz (Claim 966dea39, die erste starb
+zweimal ohne Spuren). Ich habe zuerst Auftrag, Diff (`git diff c2de1eec 85b03d23 — 427 Zeilen`)
+und Code gelesen, alle Messungen selbst gefahren und den Generatorbericht erst danach abgeglichen.
+Zwischen 85b03d23 und HEAD liegen nur Status-/Tafel-Commits (e491626d, dda02e0d, 18f61d1d,
+966dea39); Scope-Diff `git diff --name-only c2de1eec 85b03d23` selbst gemessen: exakt die fuenf
+Blatt-Dateien. Statisch: `bash -n` SYNTAX-OK, `node --check` CHECK-OK.
+
+### Suite, selbst gefahren (Baseline-Paar)
+
+```text
+Basis c2de1eec (nur A-08-Zusagen, Basis-Tor eingesetzt):  ℹ tests 8   ℹ pass 3   ℹ fail 5
+  rot an der Basis: A-08-1 · A-08-4 · A-08-5 · A-08 Form B · A-08-10
+  gewollt gruen (Gegenhalter/Erhaltung): A-08-2 · A-08-4 git-* · A-08-8
+Pruef-SHA 85b03d23 (voller Lauf):                          ℹ tests 38  ℹ pass 38  ℹ fail 0
+```
+
+Deckt sich mit dem Generatorbericht — von mir gemessen, nicht uebernommen.
+
+### Je Kriterium (verbindliche Lesart: Nachtrag 1–8 + Traegerblatt als 9/10)
+
+**A-08-1 — GRUEN.** Eigene Wegwerf-Probe (0-Byte-Lock, 239 s, lebender node-Halter, kein
+Repo-git) am aktuellen Tor:
+
+```text
+exit=0
+BEISEITE   .git/index.lock  (0 Byte, 240s alt, Halter ohne git-Kommando: 15771 (node),
+           kein git-Prozess dieses Repos) -> .git/_locks_beiseite/2026-08-08/
+lock-liegt-noch=nein · Datei liegt in .git/_locks_beiseite/2026-08-08/index.lock (NIE geloescht)
+```
+
+Zielpfad, Groesse und Alter stehen in der Meldung; der Commit lief weiter (exit 0).
+**Zwei-Richtungs-Probe:** dieselbe Lage gegen das Basis-Tor (`git show c2de1eec:` in
+Wegwerf-Kopie): `exit=3`, `GEHALTENER LOCK … Halter: 15841` — rot an der Basis, gruen am Bau.
+**Realfall-Beleg (zitiert, ersetzt keine Messung):** das umgebaute Tor hat am 08.08. im
+Wildbetrieb einen echten 0-Byte-Lock beiseitegelegt — `.git/_locks_beiseite/2026-08-08/index.lock`
+(0 Byte, mtime 07.08. 16:58) liegt erhalten vor.
+
+**A-08-2 — GRUEN.** Eigene Probe: 0 Byte, 30 s, lebender Halter → `exit=3`, Lock liegt, Meldung
+`Der Lock ist juenger als das Altersmass des Tors.` + `ENV_BLOCKED: lock wird gehalten — … (Halter:
+15889 (node))`. Gegen-Beweis in der Gegenrichtung: Mutation M1 laesst genau diese Zusage fallen.
+
+**A-08-3 / A-08-9 (must_preserve) — GRUEN.** Alle 30 Bestandszusagen im eigenen Lauf gruen,
+namentlich die acht A-02-/Stillstandspfad-Zusagen: `Tor Teil 2` (Z.115) · `A-02-2` (Z.512) ·
+`A-02-2 GEGENPROBE` · `A-02-1 KONTROLLE` (Z.547, must_preserve) · `A-02-3` · `A-02-4` (Z.579) ·
+`A-02-4 ROT` · `A-02 Kante 2` (haengendes lsof: 5081 ms statt Haengen — Zeitgrenze wirkt).
+Eigene Probe der A-02-2-Klasse: Lock 900 B, 400 s, node-Halter → `exit=3`, Lock liegt. Der
+Doppelpfad Z.163 ist laut Diff unangetastet (Bedingung 3 zitiert ihn, das Original steht im
+HALTER=0-Zweig). ENV_BLOCKED-Form mit Exitcode 3 und Halter-Angabe: von den Proben oben belegt.
+
+**A-08-4 — GRUEN.** Code: `HBASE=${HKOMMANDO##*/}` + `case git|git-*`. Eigene Proben:
+Halter `git` als Symlink (ps liefert den VOLLEN Pfad `…/fakebin/git`) → `exit=3`, `Ein Halter
+traegt ein git-Kommando`; Suite-Zusage `git-remote-https` gruen. **Gegenfall selbst gemessen:**
+Halter mit Kommando `gitarre` (0 Byte, 300 s) zaehlt NICHT als git → beiseite, `exit=0`, Meldung
+`Halter ohne git-Kommando: 16001 (gitarre)` — die Muster sind exakt, kein Praefix-Befund.
+Kante `mehrere Halter, EINER git` (node+git gleichzeitig): `exit=3`, Lock liegt.
+
+**A-08-5 — GRUEN.** Eigene Probe: lebender Halter + stummes fake-`ps` im PATH → `exit=3`, Lock
+liegt, Zeile `ENV_BLOCKED: halter-kommando nicht ermittelbar — .git/index.lock (Halter: unbekannt)`.
+
+**A-08-6 — GRUEN, alle sieben Mutationen EIGENHAENDIG gesetzt** (md5 vorher = nachher =
+`7c71f5ba2daac3601ae9b1ee6fa4a912`, nach jeder Probe wiederhergestellt, Endzustand
+`git diff 85b03d23 — 0 Zeilen`, finaler Lauf 38/38):
+
+```text
+M1 && -> ||                        tests 38  pass 35  fail 3   A-08-2 · A-08-4 · A-08-4 git-*
+M2 case erkennt nie git            tests 38  pass 36  fail 2   A-08-4 · A-08-4 git-*
+M3 Ergebnis ignoriert              tests 38  pass 36  fail 2   A-08-4 · A-08-4 git-*
+M4 Basename -> Pfad-Gleichheit     tests 38  pass 35  fail 3   A-08-4 · git-* · A-08-10
+M5 git-* nicht erkannt             tests 38  pass 37  fail 1   A-08-4 git-*
+M6 unbekannt = nicht gehalten      tests 38  pass 37  fail 1   A-08-5
+M7 0-Byte-Schranke entfernt        tests 38  pass 35  fail 3   A-02-2 · A-02-4 · A-08-10
+```
+
+M7 faellt exakt durch die bestehenden Zusagen `A-02-2` und `A-02-4` — der `f5098c40`-Fall ist
+nicht stumm gruen. *Meine M2/M3-Fassungen weichen in der Bauart von denen des Generators ab
+(seine fielen mit 4 bzw. 2 Zusagen, meine mit 2) — die Mutationsklasse faellt in beiden
+Fassungen; kein Befund.*
+
+**A-08-7 — GRUEN.** Die Richtigstellung steht im A-02-Blatt direkt unter der widerlegten Messung
+(„‚lsof trennt sie exakt' gilt hier nicht", Fehlertyp benannt, Verweise auf `de33d1e6`,
+`d377683a`, A-08); das Original bleibt lesbar stehen.
+
+**A-08-8 — GRUEN.** Am Testcode geprueft (Z.165–199 des Diffs): der Lock stammt aus
+`git update-index --index-info` (git schreibt `index.lock` selbst), `statSync(p).size === 0`
+asserted, Blockade am LEBENDEN echten git-Halter vor dem SIGKILL asserted, Name und Kommentar
+benennen die Herkunft („unterbrochenes git, kein touch"). Kein `writeFileSync` mit Etikett.
+
+**A-08-10 (P2) — GRUEN.** Eigene Probe am unveraenderten Schutzpfad (900 B + Halter):
+`ENV_BLOCKED: lock wird gehalten — .git/index.lock (Halter: 15947 (node))` — das Kommando steht
+in der Meldung. An der Basis rot (selbst gemessen: `Halter: 15841` ohne Kommando; `✖ A-08-10`
+im Basis-Lauf). Der Realfall vom 08.08. traegt dieselbe neue Meldeform.
+
+**Kanten, stichprobenartig:** mehrere Halter/einer git → liegt (Probe oben) · `lsof` fehlt
+(PATH ohne lsof, Lock 900 B/400 s) → `exit=3`, `Ohne lsof gilt nur: 0 Byte und >=60s alt` — der
+konservative A-02-3-Rueckfall unveraendert · haengendes lsof → Zeitgrenze (Suite, 5,1 s).
+
+**Gesamturteil: ABGENOMMEN.** Alle zehn Kriterien gruen, keine offene P0/P1-Abweichung, keine
+Regression (Baseline 30/30-Bestand vollstaendig im 38/38-Lauf enthalten), Mutationsprobe
+vollstaendig erneut gefahren (§12.4), Browserabnahme nicht anwendbar (kein sichtbares Verhalten).
+Keine neuen SPEC-Befunde; die frueheren SPEC-Runden (`ec051a1c`, `3392400f`, `f5098c40`) sind im
+Blatt aufgeloest und der Bau erfuellt den Auftrag, wie er nach dem Umschnitt geschnitten war.
+Ball beim Release-Pruefer.
+
+---
+
 ## Evaluator-Votum (§11) — 08.08.2026
 
 ```yaml
