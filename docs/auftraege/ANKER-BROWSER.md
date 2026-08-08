@@ -89,7 +89,8 @@ dass sein Login scheiterte: der Testbenutzer existiert nur in `ticket_testing`.
 nur in einem Auftrag. *Ein Schutz, der aus einem fehlenden Testbenutzer besteht, hält bis jemand
 einen anlegt.*
 
-**Ein Riegel dazu ist beauftragt (A-03)** — bis er steht, ist diese Regel die einzige Sicherung,
+**Der Riegel steht (A-03).** `scripts/browser-buehne.sh` liegt seit dem Merge `27a61da9` auf dem
+Arbeitszweig — die Papierregel ist damit **nicht mehr die einzige Sicherung**,
 und sie ist eine Papierregel. **Wer eine Bühne startet, prüft die aufgelöste Datenbank selbst und
 nennt sie im Bericht.**
 

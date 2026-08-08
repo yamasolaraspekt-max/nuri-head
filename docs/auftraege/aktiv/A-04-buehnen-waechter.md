@@ -216,14 +216,14 @@ dieser Auftrag.** Die zwei kleinen fahren hier mit, weil sie dieselbe Fläche be
 `ANKER-BROWSER.md:82` sagt noch *„bis er steht, ist diese Regel die einzige Sicherung"*, obwohl das
 Skript gebaut ist.
 
-> **Ich habe ihn NICHT sofort behoben, und das ist Absicht.** Gemessen auf diesem Zweig:
-> `grep -c 'browser-buehne' ANKER-BROWSER.md` = **2** *(selbst gemessen 08.08.; im Blatt stand **0**, das war der Stand vor dem Merge
-> `27a61da9`)* — A-03s Bau liegt seit dem Merge auf dem Arbeitszweig und ist hier
-> nicht gemergt. **Der Satz ist auf DIESEM Zweig noch wahr.** Ihn jetzt zu streichen hieße, auf ein
-> Skript zu verweisen, das von hier aus nicht existiert.
+> **GESCHLOSSEN 08.08.** Die Bedingung lautete *„B2 wird mit dem A-03-Merge geschlossen, nicht
+> davor"* — **der Merge `27a61da9` ist da.** `scripts/browser-buehne.sh` liegt auf dem Arbeitszweig
+> (`grep -c 'browser-buehne' ANKER-BROWSER.md` = **2**, selbst gemessen), und der veraltete Satz im
+> Anker (`Z.92`) ist mit diesem Commit nachgezogen.
 >
-> **Auflage:** B2 wird mit dem A-03-Merge geschlossen, nicht davor. *Wer eine Aussage korrigiert,
-> bevor der Zustand eintritt, den sie beschreibt, baut den nächsten Widerspruch.*
+> *Mein erster Nachzug war **halb**: ich habe die Zahl ersetzt und das Satzende stehen lassen —
+> „liegt seit dem Merge auf dem Arbeitszweig UND ist hier nicht gemergt". Ein Widerspruch in einer
+> Zeile, in genau der Korrektur, die einen Widerspruch beheben sollte.*
 
 **B3 (CODE/P2) — Testlücke in A-03s Suite:** die `exec`-Zeile ohne `APP_ENV` überlebt die
 Mutationsprobe, ein `assert` fehlt. **Auflage:** wird im Zuge von A-04 mitgeschlossen; der Bauende
