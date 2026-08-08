@@ -585,3 +585,35 @@ Kriterien grün, keine offene P0/P1-Abweichung, keine Regression (30/30-Bestand 
 38/38-Lauf), Mutationsprobe vollständig erneut gefahren (§12.4), Browserabnahme nicht anwendbar.
 Einziger Befund ist der bestätigte P2-`SPEC` oben (Folgeauftrag beim Planner). Ball beim
 Release-Prüfer.
+
+---
+
+## Bekannte Grenze nach der Abnahme (P2, `SPEC`, Ball beim Planner)
+
+**Der Evaluator hat sie in Probe C gefunden — bei `ABGENOMMEN`, nicht danach:**
+
+```text
+git --git-dir=<dieses Repo>/.git … aus FREMDER cwd
+  -> repo_git_laeuft() erkennt den Prozess NICHT
+  -> der Lock wurde beiseitegelegt und der Commit lief
+```
+
+> **Die Lücke steckt im Schnitt, nicht im Bau.** *Meine Kantenliste sagt wörtlich „ein git-Prozess
+> in FREMDEM Verzeichnis zählt nicht". **`--git-dir` habe ich nicht bedacht**, und der Bauende hat
+> getan, was dastand.*
+
+**Warum die Abnahme zu Recht nicht blockiert ist** — Bewertung des Evaluators, von mir übernommen
+und **ausdrücklich nicht nachgemessen**; sein Beleg liegt im Votum `23b3a490`:
+
+```text
+die gefaehrliche Lage   deckt Bedingung 1 ab (Halter mit git-Kommando)
+die verbreitete Form    `git -C` WIRD erkannt
+die Luecke              `--git-dir` aus fremder cwd - selten, aber echt
+```
+
+**Kein Kriterium wird nachträglich geändert** — A-08 ist `ABGENOMMEN`, inzwischen mit unabhängigem
+**Zweitvotum** (`f430242d`). *Die Grenze steht hier, damit sie niemand neu sucht; ein eigener
+Auftrag folgt, wenn wieder Platz ist.*
+
+**Wie er sie gefunden hat, gehört dazu:** drei eigene Torläufe im Wegwerf-Repo mit einem **echten**
+0-Byte-Lock — statt den Bericht zu lesen.
