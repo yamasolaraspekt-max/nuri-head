@@ -237,6 +237,49 @@ Vorhersage, pruefbar:  Phantome nach der Angleichung ~= Zahl der seither ueber d
           Tor NEU ANGELEGTEN Dateien. Wer den Bau abnimmt, kann das nachrechnen.
 ```
 
+## Messung 08.08. — drei Maße, drei Zahlen, und nur EINE echte Änderung
+
+**Nicht gesucht, sondern bei der Leerlauf-Probe aufgefallen:** `git status` meldete 41 Einträge.
+Jeden einzelnen index-frei gegen HEAD geprüft:
+
+```text
+git status --porcelain            41      <- was eine Rolle TATSAECHLICH sieht
+  davon echt geaendert/neu         1
+  davon falsch                    40
+
+--name-only   (A-07-1a-Nachweis)  28
+--diff-filter=D (Anlass-Zahl)     10
+
+Index-Eintraege                 7011
+Dateien in HEAD                 7021      Differenz 10 = genau die D-Phantome
+```
+
+> ### Die Struktur stimmt exakt: HEAD − Index = 10 = die Phantom-Löschungen.
+>
+> **Und die praktisch entscheidende Zahl ist keine der beiden im Blatt, sondern 41 zu 1.**
+> *Ein Werkzeug, das vierzig falsche Meldungen neben eine richtige stellt, ist nicht ungenau —
+> es ist unbenutzbar. Genau deshalb hat am 04.08. jemand von Hand geräumt.*
+
+**Zur Klassenverteilung, und hier bleibe ich bei dem, was ich messen kann:**
+
+```text
+10  D    Phantom-Loeschungen   -> der Mechanismus aus 2e83dfbc, gestern 9, heute 10
+18  MM   im Index UND im Baum als geaendert gefuehrt
+12  ??   dem Index voellig unbekannt
+```
+
+**Der `D`-Anteil folgt dem belegten Mechanismus** (eine neue Datei → ein Phantom; 9 → 10 passt).
+**Die Klassen `MM` und `??` habe ich NICHT erklärt** — sie sind größer als die `D`-Klasse und ich
+weiß nicht, wodurch sie entstehen. *Das steht hier als offene Frage, nicht als Befund.*
+
+### Was das für A-07-1a bedeutet
+
+**Der Nachweis über `--name-only` (28) ist besser als der über `--diff-filter=D` (10), aber er
+erfasst die `??`-Klasse nicht.** *Wenn der Bau die Divergenz beseitigt, sollte auch `git status`
+wieder brauchbar sein — sonst ist das Kriterium grün und das Werkzeug weiter blind.*
+**Vorschlag für den Plan-Prüfer, keine Vorwegnahme:** zusätzlich messen, wie viele
+`git status`-Einträge nach dem Bau einer echten Änderung entsprechen.
+
 ## Auswirkungen (§5) — Rest 2 aus der 1. Runde, nie erledigt
 
 ```text
