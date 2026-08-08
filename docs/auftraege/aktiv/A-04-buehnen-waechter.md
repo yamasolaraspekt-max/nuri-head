@@ -78,10 +78,10 @@ docs/_playground-archiv/                        nichts Vergleichbares (0 Treffer
 > welche Datenbank zulässig ist — und sie werden auseinanderlaufen.** *Genau die zweite Wahrheit,
 > gegen die A-01 geschnitten wurde.*
 >
-> **Zusage: A-04 nimmt den Namen aus `browser-buehne.sh`, statt ihn zu wiederholen.**
-> **ABHÄNGIGKEIT:** `browser-buehne.sh` liegt auf `tmp-a03` und ist auf diesem Zweig **nicht
-> vorhanden**. *A-04 kann erst gebaut werden, wenn A-03 hier liegt — das ist eine harte
-> Reihenfolge, keine Empfehlung.*
+> **ZWEIGKORREKTUR 08.08.: die Abhängigkeit ist AUFGELÖST.** `browser-buehne.sh` liegt seit dem
+> Merge `27a61da9` auf dem Arbeitszweig — selbst nachgemessen. *Der frühere Satz „A-04 kann erst
+> gebaut werden, wenn A-03 hier liegt" ist damit überholt und stand hier eine Runde zu lange:
+> die Auftragstafel war nachgezogen, das Blatt nicht.*
 
 ## Benannter Erstnutzer (§5, Fassung 1.2.2) — der Punkt, den dieses Blatt erzwungen hat
 
@@ -98,6 +98,41 @@ BELEG    der Waechter-Aufruf samt Ausgabe gehoert in seinen Abnahmebericht
 *Der Evaluator und nicht der Generator: **er** hat am 05.08. um 01:54 eine Bühne gefahren, und
 **seine** Messung wäre wertlos gewesen, wenn sie auf der falschen Datenbank gelaufen wäre. Der
 Erstnutzer ist die Rolle mit dem größten eigenen Interesse.*
+
+## Restpunkte des Plan-Prüfers, erledigt 08.08.
+
+### Rest 1 — der erlaubte Name: BEWUSSTE Duplikation mit Drift-Zusage
+
+**Gemessen, bevor ich entscheide:** `ticket_testing` steht heute in **17 Dateien** —
+`browser-buehne.sh`, zwei MySQL-Prüfskripte, `tests/TestDatenbank.php` und zwölf Feature-Tests.
+
+> **Damit trägt die Vorgabe „gemeinsame Quelle" nicht.** *Eine Namensdatei nur für A-04 wäre der
+> **achtzehnte** Ort, nicht der erste. Und `tests/TestDatenbank.php` — die PHP-seitige Wahrheit —
+> kann keine Shell-Datei sourcen.*
+
+```text
+ENTSCHIEDEN   bewusste Duplikation zwischen browser-buehne.sh und buehnen-waechter.sh
+              PLUS eine Zusage, die Drift zwischen beiden faengt:
+              beide Skripte muessen denselben Namen nennen, sonst faellt sie.
+NICHT         eine gemeinsame Namensdatei einfuehren - das waere ein eigener Auftrag
+              ueber alle 17 Fundstellen und nicht Gegenstand von A-04.
+```
+
+*Die 17 Fundstellen sind ein eigener Befund. Ich schneide ihn hier **nicht** mit — Scope-Erweiterung
+im laufenden Blatt ist genau das, was §7 verbietet.*
+
+### Rest 2 — der Fixture-Weg für A-04-2 (§15-Kante)
+
+**Der „unsichere" Testfall darf keine real an `ticket` gebundene Bühne erzeugen.**
+
+```text
+Wegwerf-Verzeichnis mit EIGENER .env, Datenbankname frei erfunden (kein echter Name)
+Der Detektor liest PROZESS und ENV - niemals die echte Arbeits-DB-Bindung
+Kein Zugriff auf ticket, kein Zugriff auf ticket_testing
+```
+
+*So bleibt der Test aussagekräftig, ohne dass eine Probe je an einer echten Datenbank hängt —
+die Kante, an der A-03 geschnitten wurde.*
 
 ## Akzeptanzkriterien
 
