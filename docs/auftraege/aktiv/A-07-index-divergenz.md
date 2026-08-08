@@ -3,7 +3,7 @@
 ```yaml
 auftrag: A-07
 titel: "Der Nebenzustand des Commit-Tors: .git/index divergiert unbemerkt und traegt ein totes Objekt"
-basis_sha: 8967e2c4
+basis_sha: ff549b88   # nachgezogen 08.08. auf die Post-A-08-Linie (war 8967e2c4)
 status_steht_in: docs/STATUS.md   # §16: EINE Statuswahrheit. Hier steht keine zweite.
 ```
 
@@ -110,6 +110,24 @@ Phantom-Fund gemeldet, und ich hätte danach geschnitten.***
 **A-07-1a (P1, der Regelfall):** Existiert **kein** Index-Blob, der in keinem Commit vorkommt,
 gleicht das Tor nach erfolgreichem Commit den Standard-Index an HEAD an.
 **Nachweis:** `git diff --cached --name-only` meldet danach **0**.
+
+**UND (Rest B, Zusatz-Nachweis — vom Plan-Prüfer angenommen):** `git status` ist danach wieder
+brauchbar. **Stichprobenform:** mindestens **zehn** `git status`-Einträge, jeder **index-frei**
+gegen HEAD geprüft (`git show HEAD:<p> | diff - <p>`) — **alle** müssen einer echten Änderung
+entsprechen.
+
+> *Ohne diesen Satz wäre A-07-1a grün, während das Werkzeug weiter blind ist. **Heute entsprechen
+> 46 Meldungen genau EINER echten Änderung.***
+
+**Ist-Belege, datiert (Rest A) — selbst gemessen, deckungsgleich mit dem Plan-Prüfer:**
+
+```text
+08.08. 14:2x   --name-only  32   ·  git status  46   ·  Halde  2506
+07.08. 18:0x   --name-only  28   ·  git status  41   ·  Halde  1749
+```
+
+*Die Halde ist binnen eines Tages um **757** Dateien gewachsen. **Genau deshalb steht keine feste
+Zahl im Kriterium, sondern nur im Bericht.***
 
 > **Schärfung des Generators — der erste Nachweis deckte den Befund nicht ab:**
 > ```text
