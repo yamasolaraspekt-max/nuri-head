@@ -45,7 +45,9 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 
 | **9** | **A-09** Repo-Bezug nicht nur über cwd | 08.08. 14:1x | **zurückgewiesen** (1 gebündelter Formpunkt) | – | P2-SPEC aus der A-08-Abnahme (Probe C) · Verursacher Planner, selbst angezeigt · Substanz beim ersten Schnitt stark, nur Form offen · **dritter Auftrag in Folge ohne §5-Block beim Erstschnitt — Muster für die Prozessprüfung** |
 
-**Stand: 9 von 10 — vor Auftrag elf steht die §13-Prozessprüfung.**
+| **10** | **A-10** Melder am leeren Ergebnis | 08.08. 14:5x | *läuft* | – | SPEC-Folgebefund aus der A-05-Abnahme (§12.5) · Sichtkette als A-10-4 mit aufgenommen |
+
+**Stand: 10 von 10 — die §13-PROZESSPRÜFUNG IST FÄLLIG.** *Vom Planner selbst angestoßen, nicht abgewartet.*
 
 > ### §13-Prozessprüfung ausgelöst bei 3, nicht bei 10
 >
