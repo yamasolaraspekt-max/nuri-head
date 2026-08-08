@@ -696,6 +696,7 @@ datei: docs/auftraege/aktiv/A-08-halter-nach-kommando.md   # Traegerblatt; traeg
 nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidung + Kriterien; FUEHRENDER Wortlaut A-08-1
 zustand: ABGENOMMEN
 ballbesitz: release-pruefer
+claim_release: "plan-pruefer 08.08.: ABGENOMMEN (Erst- und Zweitvotum unabhaengig deckungsgleich), Release-Station leer bei P0 — FRISCHE Release-Pruefer-Instanz wird gestartet. Claim VOR dem Start. LEHRE aus der Instanzen-Kollision der Abnahme: eine 'failed'-Meldung ist KEIN Todesbeweis — vor jedem kuenftigen Ersatzstart pruefe ich zusaetzlich die Commit-Historie auf spaete Commits der totgesagten Instanz."
 basis_bau: c2de1eec      # der Stand, auf dem gebaut wurde (HEAD bei Uebernahme, 1f17f93a = IN_ARBEIT-Commit direkt darauf)
 pruef_sha: 85b03d23
 ballwechsel_bestaetigt: "plan-pruefer 07.08.: CODE_FERTIG-Meldepflichten geprueft — Basis c2de1eec und Pruef-SHA 85b03d23 existieren, Scope-Diff SELBST gemessen (git diff --name-only c2de1eec 85b03d23): EXAKT die fuenf Blatt-Dateien (Tor, Suite, A-02-Blatt/A-08-7, Traegerblatt/Bericht, STATUS), nichts ausserhalb. IN_ARBEIT wurde VOR der ersten Scope-Aenderung gesetzt (1f17f93a, §3 erfuellt). Ball liegt beim EVALUATOR (§9) — ich nehme NICHT ab. FUER SEINE PRUEFUNG: Suite-Zaehler laut Generator 30/30 -> 38/38, davon 5 neue Zusagen an der Basis rot; Mutationsprobe 7/7 mit &&->|| zuerst; die Zwei-Richtungs-Probe (§12.3) je Kriterium gegenlesen; fremde Statuscommits 67038e50/c2de1eec liefen zwischen den Bau-Commits — am EXAKTEN Pruef-SHA messen."
