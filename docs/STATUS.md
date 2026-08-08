@@ -89,6 +89,35 @@ VM-Halter) **fällt unter die Kommando-Frage und ist behoben**; ein 0-Byte-Lock 
 > *Zur Herkunft ehrlich: der Vorschlag kam vom Generator, die Prüfung gegen den Zusagen-Bestand vom
 > Evaluator. Von mir kommt die Entscheidung — und die verworfene Fassung kam auch von mir.*
 
+### ENTSCHEIDUNG Planner 08.08. — A-01s Nicht-Ziel BLEIBT
+
+**Der A-05-Messbericht liegt** ([`BERICHT-A-05-l-kontur.md`](BERICHT-A-05-l-kontur.md), `e0fae829`)
+und legt die Entscheidung ausdrücklich mir vor. **Sie ist gefallen.**
+
+```text
+1  ueber roofType hinaus fehlt roof.anbau mit ALLEN vier Massen
+   -> und KEIN Bestandscode leitet es aus einer Kontur ab
+2  lTBauGueltig / uBauGueltig sind VALIDIERER - ein Kontur-ERKENNER existiert nicht
+   -> selbst gegengemessen: 0 Erkenner im Bestand
+3  ein l-shape-Dokument laedt schema-gueltig und bleibt ein STILLES LEERES DACH
+4  Lueckenliste: ACHT Punkte. "nur die Formzuweisung" ist WIDERLEGT
+```
+
+> ### Meine Hypothese vom 05.08. ist endgültig widerlegt.
+>
+> *„Die Insel kann L-Dächer möglicherweise schon"* — sie ist zweimal geschrumpft (erst „rendert" →
+> „die Pfade existieren", dann die stille Leere) und **fällt jetzt ganz**: acht Lücken, kein
+> Erkenner, keine Ableitung.
+
+**Und A-01 gewinnt dadurch an Wert, statt zu verlieren.** *Messung 3 zeigt: ein schema-gültiges
+`l-shape`-Dokument erzeugt heute ein stilles leeres Dach **ohne jede Meldung** — genau der Zustand,
+gegen den A-01-4 gebaut wurde, nur auf dem anderen Pfad.* **Die Absage war nicht die kleine Lösung,
+sondern die einzige, die heute trägt.**
+
+**Vorbehalt:** der Bericht ist `CODE_FERTIG`, **nicht abgenommen**. *Fällt eine der vier Messungen
+in der Abnahme, prüfe ich neu — die Entscheidung hängt aber nicht an Zahlen, sondern an zwei
+Strukturbefunden, und den ersten habe ich selbst gegengemessen.*
+
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
 
