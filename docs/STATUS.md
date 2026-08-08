@@ -10,7 +10,7 @@
 | **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
-| **A-05** Messauftrag L-Kontur | **`BEREIT`** | **Generator** | `b8d66a6c` · Votum `1fc99005` | drei Restpunkte erledigt · A-05-3 ohne Serverstart |
+| **A-05** Messauftrag L-Kontur | **`CODE_FERTIG`** | **Evaluator** | Bericht `docs/BERICHT-A-05-l-kontur.md` · Mess-SHA `4da0e84c` | Evaluator prüft „echt und nachvollziehbar" (Blatt-Maßstab) |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
 | **A-09** Repo-Bezug über `--git-dir` | `ENTWURF` | Plan-Prüfer | Folgeauftrag zu A-08 (§12.5) | P2 · **geclaimt von der zweiten Planner-Instanz** · Formblock offen · Bau erst NACH A-07 |
@@ -659,8 +659,9 @@ naechster_schritt: "Planner zieht die zwei Merge-ueberholten Stellen nach, dann 
 auftrag: A-05
 titel: "MESSAUFTRAG (kein Produktivbau): welche Luecke bleibt zwischen einer L-Kontur und einem l-shape-Dach"
 datei: docs/auftraege/aktiv/A-05-messung-l-kontur-l-dach.md
-zustand: IN_ARBEIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
+code_fertig: "generator 08.08.: BERICHT LIEGT — docs/BERICHT-A-05-l-kontur.md, Mess-SHA 4da0e84c (HEAD wanderte waehrend des Laufs auf f3faf111, nur A-04-Blatt; alle acht gemessenen Quelldateien per content-diff byte-identisch zu 4da0e84c). Alle vier Fragen in der verlangten Antwortform, je mit Fundstelle Datei:Zeile und Rohausgabe. Suite 1689/1689 selbst gefahren; Wegwerf-Probe zzA05wegwerf.test.ts (10/10) VOR dem Bericht restlos entfernt, kein Commit traegt sie (ls-Beleg im Bericht); resources/ content-sauber (die MM/??-Phantome sind die A-07-Index-Klasse, Arbeitsbaum byte-identisch). CODE_FERTIG heisst hier: Bericht liegt — kein gruen, keine Selbstabnahme. Offener Punkt im Bericht: Sichtkette (Buehne) nach Rest-2 NICHT geprueft, als Rueckfrage an den Planner notiert statt Buehnenstart"
 in_arbeit_gesetzt: "generator 08.08.: VOR der ersten Messung gesetzt (§3). Kein anderer Auftrag IN_ARBEIT (grep 'zustand: IN_ARBEIT' vor diesem Edit: 0 Treffer). Scope-Kontrolle: docs/STATUS.md content-gleich HEAD; die MM/??-Eintraege unter resources/ sind Index-Phantome (A-07-Klasse), Arbeitsbaum byte-identisch zu HEAD 1fc99005."
 beifang_richtigstellung: "plan-pruefer 08.08.: Der IN_ARBEIT-Wechsel oben (samt Tafelzeile) stammt vom MESSLAUF-GENERATOR, wurde aber von MEINEM Commit c2feffd4 (A-04-Votum) mitgenommen — zwei Rollen editierten STATUS.md gleichzeitig, Pfad-Commit schuetzt im GETEILTEN File nicht. Mein Beifang-Zaehler zeigte 7 und ich habe VOR der Pruefung committet statt danach — mein Fehler, Klasse wie 4307987b/7c2958fd. Inhalt ist korrekt und bleibt; nur die Urheberschaft war falsch verbucht. Kuenftig: bei Zaehler > 0 wird ERST gelesen, DANN committet."
 basis_sha: 42c0320f
