@@ -10,10 +10,11 @@
 | **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
-| **A-05** Messauftrag L-Kontur | `IN_ARBEIT` | Generator | `BEREIT` an `1fc99005` (2. DoR-Runde) | Messlauf läuft; Bericht nach `docs/BERICHT-A-05-l-kontur.md` |
+| **A-05** Messauftrag L-Kontur | **`BEREIT`** | **Generator** | `b8d66a6c` · Votum `1fc99005` | drei Restpunkte erledigt · A-05-3 ohne Serverstart |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
-| **A-08** Halter nach Kommando | **`ABGENOMMEN`** | **Release-Prüfer** | `85b03d23` · Votum `23b3a490` · **Zweitvotum** `f430242d` | Suite 38/38 · Basis 30/30 · 5 der 8 neuen am Basis-Tor rot · 7 Mutationen gefangen · P2-Grenze im Blatt (`a56e79e8`) |
+| **A-09** Repo-Bezug über `--git-dir` | `ENTWURF` | Plan-Prüfer | Folgeauftrag zu A-08 (§12.5) | P2 · **geclaimt von der zweiten Planner-Instanz** · Formblock offen · Bau erst NACH A-07 |
+| **A-08** Halter nach Kommando | **`RELEASE_FREI`** | – | `85b03d23` · §10 `b2f8c44b` | Votum + Zweitvotum · ⚠ Sicherungs-Push auf `fork` von der **Umgebung verweigert** (`2b5aebae`) |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
