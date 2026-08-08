@@ -228,3 +228,133 @@ tests 10 · pass 10 · fail 0
 - **Keine Empfehlung, was gebaut werden soll.** Die Lückenliste misst, sie plant nicht; auch
   Punkt 7 und 8 sind Messfeststellungen ohne Bau-Vorschlag.
 - **Keine Aussage über Walm/Krüppelwalm.**
+
+---
+
+## Evaluator-Votum A-05 — 2026-08-08
+
+```yaml
+auftrag: A-05
+commit: e0fae829          # geprüfter CODE_FERTIG-Commit (trägt exakt Bericht + STATUS, selbst gemessen)
+mess_sha: 4da0e84c        # alle NEUN zitierten Quelldateien (die acht des Berichts + validation.ts)
+                          # per content-diff byte-identisch — selbst gefahren, Ausgabe unten
+pruef_head: bd1383c8      # HEAD wanderte während der Prüfung 99e09e04 → bd1383c8 (nur docs/STATUS.md,
+                          # Planner-Entscheidung zu A-01); kein gemessener Code bewegt
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "eigene Wegwerf-Zusage zzEvalA05probe.test.ts (12 Zusagen, 12/12 pass, Suite-Runner
+  aus package.json:10) — reproduziert JEDE Kernzahl des Berichts, plus eigene Gegenprobe E4b:
+  der A-01-4-Melder SCHLÄGT beim Wurf-Pfad an (sattel + L-Kontur → 1 Meldung), die Stille bei
+  l-shape ist also spezifisch die Leer-ohne-Wurf-Lücke, kein kaputter Melder. Probe VOR diesem
+  Votum restlos entfernt, kein Commit trägt sie (git log --all -- '*zzEval*' leer)."
+browser: nicht_anwendbar   # Messauftrag, Rest-2-Entscheidung des Blatts: Test-Ebene ohne Bühne
+befunde:
+  - "SPEC-Folgebefund (blockiert die Abnahme nach §12.5 NICHT): stilles leeres Dach läuft am
+    A-01-4-Melder vorbei — Details unten"
+```
+
+### Je Frage: Urteil Form + Substanz
+
+**A-05-1 — Form ERFÜLLT, Substanz BESTÄTIGT.** Verlangt war die Feldliste mit Herkunft je Feld;
+der Bericht liefert alle zehn `VerschneidungEingabe`-Felder mit Bau-Ort, Modell-Herkunft und
+Anlege-Pfad-Spalte. Stichprobe selbst geöffnet und wörtlich verglichen (Arbeitsbaum =
+byte-identisch zu `4da0e84c`, s. u.): `dachVerschneidung.ts:22–29` (genau diese zehn Felder),
+`dachMesh.ts:76–92` (`anbauZuEingabe`, Tor Z. 78: alle vier Maße `> 0`, sonst `null`),
+`dachMesh.ts:153` (form-Ternary), `dachMesh.ts:54` (`SPARREN_HOEHE_CM = 20`),
+`scene.types.ts:289–292` (`RoofAnbauMasse`), `scene.types.ts:322/324/326/327` (Skalare),
+`HausplanerApp.tsx:964–972` (Anlege-Objekt ohne `anbau`, `roofType: 'sattel'` fest Z. 968) —
+**alle Zitate treffen zeilengenau.** Die grep-Behauptungen reproduziert:
+`dachformVorlagen`-Konsument außerhalb Tests ist nur `dachMesh.ts:13 import type`
+(zweiter Treffer `roofShape.ts:3` ist ein Kommentar, kein Konsument).
+
+**A-05-2 — Form ERFÜLLT, Substanz BESTÄTIGT.** Signatur + Aufruf + Ergebnis liegen vor;
+Signaturen selbst gelesen (`lTBauGueltig` `dachVerschneidung.ts:158`, nimmt Maße, kein Polygon).
+Gegenprobe selbst gefahren (Rohausgabe):
+
+```text
+E5 lTBauGueltig(L-Maße) = true
+E6 lTBauGueltig (dieselben Maße, Kontur egal — die Signatur KENNT keine) = true
+E7 lTBauGueltig(widthB:9 >= width:8) = false
+```
+
+→ **Validierer, kein Erkenner** — bestätigt. Erkenner-Suche selbst reproduziert: einzige
+`erkenne*`-Funktion der Insel ist `erkenneRaeume` (`roomDetection.ts:82`), konsumiert in
+`szene.ts:34/357`, `ableitungen.ts:33/61–62` — Fundstellen des Berichts exakt; keine Dachform-
+Erkennung im Bestand.
+
+**A-05-3 — Form ERFÜLLT, Substanz BESTÄTIGT (Kern-Reproduktion).** Wegwerf-Probe selbst
+nachgebaut (üblicher Ort `__tests__`, Suite-Runner, danach restlos entfernt) — alle drei Teile:
+
+```text
+E1 safeParse.success = true                                  (lädt ohne 422)
+E2 dachMeshWelt = {"dreiecke":[],"firstHoeheMm":2500}        (reproduziert)
+E3 dachflaechen.length = 0                                   (reproduziert)
+E4 nichtDarstellbareDaecher = []                             (KEINE Meldung — reproduziert)
+E4b EIGENE Gegenprobe: sattel + L-Kontur → 1 Meldung
+    ["Traufkontur ist nicht rechteckig — …"]                 (der Melder FUNKTIONIERT auf dem
+                                                              Wurf-Pfad; die Stille bei l-shape
+                                                              ist die Leer-ohne-Wurf-Lücke)
+```
+
+Die zitierten vorhandenen Zusagen selbst geöffnet: `verdrahtungAnbau.test.ts:44–48` (l-shape MIT
+vier Maßen), `:50–54` (Ohne-Maße nur u-shape), `verschneidungRender.test.ts:62` (l-shape mit
+Maßen) — wie behauptet deckt keine den Fall „l-shape ohne anbau + echte L-Kontur".
+
+**A-05-4 — Form ERFÜLLT, Substanz BESTÄTIGT.** Nummerierte Liste, jeder der acht Punkte mit
+Fundstelle. Kernpunkt „nur Formzuweisung widerlegt" selbst gemessen: `dachGeometrie.ts:107`
+gelesen (`dachFlaechen` prüft für JEDE Form zuerst `pruefeRechteckigeKontur`; der Default-Zweig
+Z. 148–151 liefert `[]` für l/t/u) und der Wurf reproduziert:
+
+```text
+E8 dachFlaechen(l-shape + L-Kontur) wirft DachGeometrieUngueltig:
+   "Traufkontur ist nicht rechteckig — V1 unterstützt nur rechteckige Grundrisse (kein stilles Falschdach)."
+E9 l-shape MIT allen vier Maßen: dreiecke = 10, firstHoeheMm = 5482
+E10 L-Kontur vs. Rechteck, gleiche Maße: 10/10 Dreiecke · 5482/5482 · erster Eckpunkt
+    {"x":4000,"y":10500,"z":5481.7877550532885} BEIDE — Berichtswert bis zur letzten Stelle
+E11 anbau nur {length,width}: dreiecke = [] (Panel-Zusage ≠ Torbedingung, Panel Z.276/300 vs. dachMesh Z.78)
+```
+
+`EigenschaftenPanel.tsx:271–275/276/286–295/296–302` selbst gelesen — Punkt 7 trifft wörtlich.
+
+### Wächter / Grenzen-Kontrolle (Rohausgaben)
+
+```text
+Suite selbst gefahren (npm run test:hausplaner):  tests 1689 · pass 1689 · fail 0
+  (Generator-Behauptung 1689/1689 = MEINE Zahl; Insel-Suite, so benannt)
+Eigene Probe (Suite-Runner, Einzeldatei):         tests 12 · pass 12 · fail 0 — danach entfernt
+Content-diff der 9 Quelldateien gegen 4da0e84c:   IDENTISCH alle neun (inkl. validation.ts)
+resources/app/tests gegen HEAD:                   alle git-status-Einträge unter resources/ sind
+  byte-identisch zu HEAD (A-07-Index-Phantome; `git diff HEAD` zeigt D-Paare nur wegen des
+  Index) — der Generator hat NICHTS in resources/, app/, tests/ hinterlassen
+Wegwerf-Probe in Commits:                          git log --all -- '*zzA05*' '*wegwerf*' → leer
+Commit e0fae829:                                   exakt 2 Dateien (Bericht 230 Z. + STATUS.md)
+Messfenster 4da0e84c..e0fae829:                    nur docs/-Commits, kein Code
+Bühne/Serverstart:                                 keine Browser-/Server-Artefakte im Fenster;
+  der Bericht enthält KEINE Behauptung, die eine Bühne gebraucht hätte — alle Werte auf
+  Test-Ebene reproduzierbar (von mir reproduziert); Sichtkette korrekt als offen deklariert
+```
+
+### Folgebefund (§12.5 — blockiert diese Abnahme NICHT)
+
+**SPEC-Folgebefund, Klasse `SPEC`, Schwere P2:** Der A-01-4-Melder `nichtDarstellbareDaecher`
+fängt nur Würfe (`nichtDarstellbar.ts:42–48`); der Leer-ohne-Wurf-Pfad (`l-shape`/Verschneidungs-
+form ohne `anbau` → `dachMesh.ts:78/144` liefert still leer) läuft an ihm vorbei — **ein stilles
+leeres Dach lädt gültig und wird nirgends gemeldet** (Proben E1–E4; E4b belegt, dass der Melder
+auf dem Wurf-Pfad funktioniert, die Lücke also spezifisch ist). Das ist eine Lücke im ZUSCHNITT
+von A-01-4 (der Melder wurde gegen den Wurf-Fall geschnitten), kein Fehler des A-05-Baus — A-05
+sollte genau solche Lücken finden und hat sie gefunden. Schwere P2, weil der Anlege-Pfad heute
+gar kein `l-shape` erzeugt (Z. 968 fest `'sattel'`): der Fall entsteht nur durch von Hand/extern
+erzeugte Dokumente oder das Panel — real aber sofort relevant, sobald ein Folgeauftrag die
+Formzuweisung baut. **Ball: Planner** (Auftrag schneiden oder ausdrücklich verwerfen).
+
+*Randnotiz:* Der Planner hat mit `bd1383c8` („A-01s Nicht-Ziel BLEIBT") bereits vor dieser
+Abnahme mit dem Bericht entschieden. Das ändert am Votum nichts, gehört aber benannt: die
+Entscheidung stand auf einem noch nicht abgenommenen Bericht — sie hält, weil der Bericht hält.
+
+### Gesamturteil: **ABGENOMMEN**
+
+Alle vier Antwortformen exakt geliefert, jede von mir reproduzierte Kernzahl identisch (bis zur
+15. Nachkommastelle des E10-Eckpunkts), Fundstellen-Stichprobe 10+ Zitate zeilengenau, Grenzen
+eingehalten (nichts in `resources/app/tests`, keine Bühne, keine Probe in einem Commit). Die
+Messungen sind **echt und nachvollziehbar**. Ball: Planner (Messauftrag — kein Release; der
+Folgebefund oben wartet auf seinen Schnitt).
