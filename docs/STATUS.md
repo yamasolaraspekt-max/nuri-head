@@ -10,7 +10,7 @@
 | **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
-| **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
+| **A-05** Messauftrag L-Kontur | `IN_ARBEIT` | Generator | `BEREIT` an `1fc99005` (2. DoR-Runde) | Messlauf läuft; Bericht nach `docs/BERICHT-A-05-l-kontur.md` |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
 | **A-08** Halter nach Kommando | **`ABGENOMMEN`** | **Release-Prüfer** | `85b03d23` · Votum `23b3a490` · **Zweitvotum** `f430242d` | Suite 38/38 · Basis 30/30 · 5 der 8 neuen am Basis-Tor rot · 7 Mutationen gefangen · P2-Grenze im Blatt (`a56e79e8`) |
@@ -644,19 +644,23 @@ offene_akzeptanz:
   - "Rest 1 (F-19-Klasse, eine Wahrheit zweimal getippt): der erlaubte Name ticket_testing lebt nach A-04 an ZWEI Orten (browser-buehne.sh Namensliste + buehnen-waechter.sh Vergleich). Festlegung ins Blatt: gemeinsame Quelle (z. B. eine gesourcte Namensdatei) ODER bewusste Duplikation mit Begruendung UND einer Zusage, die Drift zwischen beiden faengt."
   - "Rest 2 (§15-Kante am A-04-2-Fixture): der 'unsichere' Testfall darf KEINE real an ticket gebundene Buehne erzeugen — Fixture-Weg ins Blatt: Wegwerf-Verzeichnis mit eigener .env (Fantasiename), der Detektor liest Prozess/Env, nie die echte Arbeits-DB-Bindung."
   - "Korrektur: B2-Absatz nennt tmp-a03 — gemessen liegt 26e378a5 auf work/a01-generator; der Merge-Bezug der Auflage muss den richtigen Zweig nennen."
-naechster_schritt: "Planner traegt die zwei Restpunkte + Zweigkorrektur ein, dann setzt der Plan-Pruefer BEREIT"
+votum_2_runde: "plan-pruefer 08.08. (2. Runde nach d5855056): ENTWURF bleibt, EIN kleiner Rest — sonst alles erledigt und selbst geprueft: Merge 27a61da9 verifiziert (browser-buehne.sh in HEAD, Wiederverwendungspruefung ZEILENGENAU bestaetigt — :31 ERWARTETE_DB, :60 Aufloesung, exakt wie im Blatt), Drift-Zusage sauber (und KEINE echte Abweichung von meiner Vorgabe: 'bewusste Duplikation mit Begruendung UND Drift-Zusage' war deren zweiter Zweig; die 17-Fundstellen-Messung des Planners traegt die Begruendung, und dass er die 17 als eigenen Befund NICHT mitschneidet, ist §7 wie im Lehrbuch), Fixture-Weg mit Wegwerf-.env und erfundenem Namen ✓, §5-Block ✓ (Z.197 f.). DER REST: zwei Blatt-Stellen sind vom Merge ueberholt und tragen heute FALSCHE Aussagen — Z.66 'liegt auf tmp-a03' (liegt in HEAD) und der B2-Block Z.214-226 'grep browser-buehne im Anker = 0, hier nicht gemergt' (heute: 2 Treffer, gemergt — der Anker wurde bereits nachgezogen). Genau die Zeitbomben-Klasse aus A-09: ein Bauender befolgt das Blatt woertlich. B2s eigene Bedingung ('wird mit dem A-03-Merge geschlossen') ist eingetreten — der Planner belegt die Schliessung oder nimmt B2 in den A-04-Bau auf."
+offene_akzeptanz_2:
+  - "Rest: die zwei vom Merge ueberholten Stellen nachziehen (Z.66 Zweigvermerk historisch markieren; B2-Block Z.214-226 aktualisieren und B2 entweder mit Beleg schliessen — Anker traegt browser-buehne heute 2x — oder ausdruecklich in den A-04-Bau aufnehmen). Danach BEREIT ohne weitere Runde."
+naechster_schritt: "Planner zieht die zwei Merge-ueberholten Stellen nach, dann setzt der Plan-Pruefer BEREIT — A-04 ist danach baubar (Blockade seit 27a61da9 aufgehoben)"
 ```
 
 ---
 
-## In Planprüfung — A-05
+## In Arbeit — A-05 (Messlauf)
 
 ```yaml
 auftrag: A-05
 titel: "MESSAUFTRAG (kein Produktivbau): welche Luecke bleibt zwischen einer L-Kontur und einem l-shape-Dach"
 datei: docs/auftraege/aktiv/A-05-messung-l-kontur-l-dach.md
-zustand: BEREIT
+zustand: IN_ARBEIT
 ballbesitz: generator
+in_arbeit_gesetzt: "generator 08.08.: VOR der ersten Messung gesetzt (§3). Kein anderer Auftrag IN_ARBEIT (grep 'zustand: IN_ARBEIT' vor diesem Edit: 0 Treffer). Scope-Kontrolle: docs/STATUS.md content-gleich HEAD; die MM/??-Eintraege unter resources/ sind Index-Phantome (A-07-Klasse), Arbeitsbaum byte-identisch zu HEAD 1fc99005."
 basis_sha: 42c0320f
 claim: "plan-pruefer 05.08.: Ball selbst gezogen (Blatt lag geschnitten ohne Uebergabe-Zeile — kein Ball bleibt liegen; Claim VOR der Pruefung gesetzt, Lehre aus den drei Doppelarbeiten)"
 letztes_votum: "plan-pruefer 05.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine Restpunkte. STARK: Basis existiert, Ist-Beleg (roofType 'sattel' fest verdrahtet :962, dachMesh behandelt l/t/u bereits) prueffaehig, vier Fragen je mit Antwortform, Nicht-Gegenstand sauber (kein Urteil ueber A-01, keine Empfehlung — Messen und Planen getrennt), Werkzeug-Punkt v1.1 erfuellt, §16-konform ohne Statuskopf. Trivial-Rot der Kriterien ist bei einem Messauftrag ehrlich benannt."
