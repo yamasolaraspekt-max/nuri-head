@@ -617,3 +617,120 @@ Auftrag folgt, wenn wieder Platz ist.*
 
 **Wie er sie gefunden hat, gehört dazu:** drei eigene Torläufe im Wegwerf-Repo mit einem **echten**
 0-Byte-Lock — statt den Bericht zu lesen.
+
+---
+
+## Release-Prüfung A-08 (§10) — 08.08.2026, RELEASE_FREI
+
+```yaml
+auftrag: A-08
+abnahme_commit: 85b03d23      # beide Voten (23b3a490 + f430242d) zeigen auf diesen Commit
+release_commit: 76bb1992      # Branch-Spitze zum Pruefzeitpunkt; scripts/ content-identisch mit 85b03d23
+votum: RELEASE_FREI
+ci: pass                      # Suite am HEAD selbst gefahren: tests 38, pass 38, fail 0
+artefakte_reproduzierbar: true  # kein Bundle beruehrt; die zwei Skripte SIND das Artefakt, byte-identisch mit dem Pruef-SHA
+migration: nicht_anwendbar
+rueckweg: pass                # git revert 5a54b004 genuegt — nur 2 Skriptdateien, kein Datenpfad
+smoke_test_plan: "bereits im Wildbetrieb eingetreten: 18 Commits seit dem Bau liefen durchs umgebaute Tor, ein echter 0-Byte-Lock wurde beiseitegelegt (Beleg unten)"
+befunde:
+  - "P2 SPEC (--git-dir + fremde cwd) — kein Release-Hindernis nach §12.5; Folgeauftrag A-09 existiert und traegt ihn"
+```
+
+**Rollenreinheit:** Ich bin ausschließlich Release-Prüfer — nicht Generator, nicht Evaluator,
+nicht Plan-Prüfer. Ich habe nichts gebaut und nichts abgenommen; alle Zahlen unten sind eigene
+Läufe am Arbeitsbaum (Zweig `auto/hausplaner-integration`, HEAD `76bb1992`).
+
+### 1. Votum und Release-Kandidat zeigen auf denselben Commit — GRÜN
+
+Erstvotum `23b3a490` und Zweitvotum `f430242d` nennen beide `commit: 85b03d23`. Der
+Release-Kandidat ist derselbe Stand: beide Scope-Dateien am HEAD **content-identisch** mit
+`85b03d23` (die `MM`-Einträge im `git status` sind die bekannten Stale-Index-Phantome des
+virtualisierten Mounts):
+
+```text
+git show 85b03d23:scripts/commit-pruefen.sh              | diff - <datei>  -> IDENTISCH  (md5 7c71f5ba2daac3601ae9b1ee6fa4a912)
+git show 85b03d23:scripts/__tests__/commitPruefen.test.mjs | diff - <datei> -> IDENTISCH  (md5 8fa352075c9238ec8b98dbae28a2fc4a)
+git diff 85b03d23 76bb1992 -- scripts/   -> 0 Zeilen
+```
+
+### 2. Qualitätstor am Release-Kandidaten erneut grün — GRÜN, selbst gefahren
+
+```text
+node --test scripts/__tests__/commitPruefen.test.mjs   (am HEAD 76bb1992)
+ℹ tests 38   ℹ pass 38   ℹ fail 0   ℹ duration_ms 12757
+```
+
+### 3. Vollständigkeit der Zustandskette — GRÜN, jeder Übergang in der Historie belegt
+
+```text
+793b0729  BEREIT (Plan-Pruefer, 2. Runde)          — Vorfahr von 1f17f93a: ja
+1f17f93a  IN_ARBEIT (Generator)                    — Vorfahr des Baus 5a54b004: ja
+          git log c2de1eec..1f17f93a -- scripts/   -> 0 Commits: KEINE Scope-Aenderung vor IN_ARBEIT
+5a54b004  der Bau (erste und einzige Scope-Aenderung an den Skripten)
+6a264834  A-08-7-Doku · 85b03d23 §11-Bericht (Pruef-SHA)
+e491626d  CODE_FERTIG                              — Vorfahr von 23b3a490: ja
+23b3a490  ABGENOMMEN (Erstvotum)                   — Vorfahr von f430242d: ja
+f430242d  ABGENOMMEN (Zweitvotum, unabhaengig)
+```
+
+### 4. Scope-Reinheit — GRÜN
+
+```text
+git diff --name-only c2de1eec 85b03d23:
+  docs/STATUS.md
+  docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
+  docs/auftraege/aktiv/A-08-halter-nach-kommando.md
+  scripts/__tests__/commitPruefen.test.mjs
+  scripts/commit-pruefen.sh
+```
+
+Exakt die fünf Blatt-Dateien; **keine Produktivcode-Datei außerhalb des Blatts** (kein
+`app/`, `resources/`, `public/`, keine Migration, kein Bundle).
+
+### 5. Beifang-Kontrolle — GRÜN
+
+`4307987b` (trug fremde Arbeit, Richtigstellung `7c2958fd`) berührte nur `docs/STATUS.md` +
+Trägerblatt; `7c2958fd` nur `docs/STATUS.md`. Zwischen `e491626d` und `76bb1992` berührt
+**kein Commit** `scripts/` (`git log e491626d..76bb1992 -- scripts/` → 0), content-diff von
+`scripts/` gegen `85b03d23` → 0 Zeilen. Kein Produktivcode unbemerkt verändert.
+
+### 6. Rückweg — GRÜN, am Diff verifiziert
+
+`git show --stat 5a54b004`: genau `scripts/commit-pruefen.sh` (+144/−8) und
+`scripts/__tests__/commitPruefen.test.mjs` (+236). Keine Migration, keine Datenänderung,
+kein Zustand außerhalb des Repos — `git revert 5a54b004` genügt als Rückweg.
+(`6a264834`/`85b03d23` sind reine Doku und hängen an nichts.)
+
+### 7. P2-SPEC-Befund und Folgeauftrag — GRÜN (Vermerk nach §12.5)
+
+Der Befund (git-Prozess dieses Repos mit `--git-dir` und fremder cwd wird von
+`repo_git_laeuft()` nicht erkannt) ist nach §12.5 **kein Release-Hindernis**: der Bau folgt
+der Kantenliste wörtlich, die Lücke sitzt im Schnitt (Klasse `SPEC`, Verursacher Planner).
+**`docs/auftraege/aktiv/A-09-repo-bezug-nicht-nur-cwd.md` existiert** und trägt den Befund
+als A-09-1 (P1, Anlass `23b3a490`, Rot-Lage = Probe C des Evaluators), samt Kantenliste und
+Nicht-Zielen. Der Vermerk steht hiermit ausdrücklich im Release-Vermerk.
+
+### 8. Wildbetriebs-Beleg — das Tor arbeitet bereits richtig im Ernstfall
+
+```text
+.git/_locks_beiseite/2026-08-08/index.lock   0 Byte, mtime 07.08. 16:58
+Verzeichnis 2026-08-08/ angelegt 08.08. 13:58 — zeitgleich mit Commit 966dea39 (08.08. 13:58)
+danach ohne Aussperrung committet: f430242d (08.08. 14:19) · 76bb1992 (08.08. 14:21)
+git log 5a54b004..76bb1992 | wc -l  ->  18 Commits liefen durchs umgebaute Tor
+```
+
+Das umgebaute Tor hat am 08.08. einen echten 0-Byte-VM-Halter-Lock nach Dauerregel
+beiseitegelegt (nie gelöscht, Original liegt) und die Arbeit lief weiter — exakt der
+Vorfalls-Fall vom 06.08., diesmal ohne Blockade.
+
+### Übrige §10-Punkte
+
+Konfiguration/Umgebungsvariablen/Abhängigkeiten: keine neuen — `ps` und `lsof` sind
+Bordmittel, `lsof`-fehlt-Rückfall besteht als Zusage (A-02-3, grün im 38/38-Lauf).
+Sicherheits-, Rechte-, Mandanten- und Datenschutzgrenzen: nicht berührt (kein Endpunkt,
+keine DB, kein Server). Bundle: nicht berührt. Offene P0/P1: **keine** — der einzige
+offene Befund ist der P2 oben.
+
+**Urteil: RELEASE_FREI.** Die main-Veröffentlichung bleibt bei Yama (§14). Nach
+v1.2-Vertretungsregel folgt ein Sicherungs-Push des Zweigs `auto/hausplaner-integration`
+auf den fork-Remote (nie main, nie Tags, nie force); das Ergebnis steht in `docs/STATUS.md`.

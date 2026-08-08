@@ -691,15 +691,15 @@ naechster_schritt: "Planner traegt Rest A und B ein (reine Nachzuege, die Entsch
 ```
 ---
 
-## A-08 — ABGENOMMEN an 85b03d23 (Ball beim Release-Pruefer; P2-SPEC-Folgeauftrag: A-09)
+## A-08 — RELEASE_FREI an 85b03d23 (Ball bei Yama: main-Veroeffentlichung; P2-SPEC-Folgeauftrag: A-09)
 
 ```yaml
 auftrag: A-08
 titel: "Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt - statt ob irgendwer die Datei offen hat"
 datei: docs/auftraege/aktiv/A-08-halter-nach-kommando.md   # Traegerblatt; traegt den §11-Generator-Bericht
 nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidung + Kriterien; FUEHRENDER Wortlaut A-08-1
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama
 claim_release: "plan-pruefer 08.08.: ABGENOMMEN (Erst- und Zweitvotum unabhaengig deckungsgleich), Release-Station leer bei P0 — FRISCHE Release-Pruefer-Instanz wird gestartet. Claim VOR dem Start. LEHRE aus der Instanzen-Kollision der Abnahme: eine 'failed'-Meldung ist KEIN Todesbeweis — vor jedem kuenftigen Ersatzstart pruefe ich zusaetzlich die Commit-Historie auf spaete Commits der totgesagten Instanz."
 basis_bau: c2de1eec      # der Stand, auf dem gebaut wurde (HEAD bei Uebernahme, 1f17f93a = IN_ARBEIT-Commit direkt darauf)
 pruef_sha: 85b03d23
@@ -724,7 +724,7 @@ claim_abnahme: "plan-pruefer 07.08.: CODE_FERTIG liegt, Evaluator-Station leer b
 naechster_schritt: "ERLEDIGT (85b03d23) — Generator hat in der 0-Byte-Fassung gebaut, Katalog Nachtrag 1-8 + 9/10, IN_ARBEIT war VOR der ersten Scope-Aenderung gesetzt (1f17f93a), §11-Bericht im Traegerblatt. Jetzt: Evaluator, siehe naechster_schritt_evaluator oben"
 evaluator_votum: "evaluator 08.08.: ABGENOMMEN an 85b03d23. Selbst gefahren: Suite 38/38, Basis 30/30, neue Zusagen gegen das Basis-Tor 5 von 8 rot, sieben eigene Mutationen alle gefangen (md5 zurueckgesetzt), drei eigene Torlaeufe im Wegwerf-Repo. EIN Befund, P2, Klasse SPEC, Ball beim Planner: ein git-Prozess DIESES Repos mit --git-dir und fremder cwd wird von repo_git_laeuft() nicht erkannt (Probe C: Lock beiseitegelegt, Commit lief). Blockiert nicht - der Bau folgt der Kantenliste des Blattes genau, die Luecke steckt im Schnitt; die gefaehrliche Lage deckt Bedingung 1 ab (Probe B), und git -C wird erkannt. Offengelegt: die Ausgabe von git worktree add zeigte mir die Betreffzeile des Pruef-SHA vor der Messung."
 evaluator_zweitvotum: "evaluator-2 08.08. (zweite frische Instanz nach dem Doppel-Absterbe-Claim 966dea39, Kollision offengelegt): ABGENOMMEN an 85b03d23 — unabhaengige Zweitbestaetigung, VOR Kenntnis des Erstvotums gemessen. Selbst gefahren: Suite 38/38 (Scope-Dateien byte-identisch mit 85b03d23, md5 7c71f5ba), A-08-Zusagen gegen das Basis-Tor 8/3/5 (rot: A-08-1/-4/-5/Form B/-10), eigene Wegwerf-Proben je Kriterium inkl. Zwei-Richtungs-Probe A-08-1 (Basis exit 3 -> Bau exit 0 + BEISEITE mit Zielpfad/Groesse/Alter), Gegenfall gitarre zaehlt NICHT als git, alle SIEBEN Mutationen eigenhaendig gesetzt und gefangen (M7 exakt durch A-02-2/A-02-4), Endzustand byte-identisch. Den P2-SPEC-Befund des Erstvotums (--git-dir + fremde cwd) selbst REPRODUZIERT (exit 0 + BEISEITE; git -C korrekt exit 3) — bestaetigt, kein neuer Befund. Realfall-Beleg zitiert: .git/_locks_beiseite/2026-08-08/index.lock (0 Byte, Original erhalten). Zweitvotum am Ende des Traegerblatts; meine versehentlich von 4307987b mitcommittete Erstfassung dort durch die gekennzeichnete Zweitfassung ersetzt."
-```
+release_vermerk: "release-pruefer 08.08.: RELEASE_FREI an 85b03d23 (Release-Kandidat 76bb1992, scripts/ content-identisch; die danach gelandeten Doku-Commits ae6c6dca/d41db6a2/ff549b88 beruehren den Scope nicht — nachgemessen, 0 Zeilen). §10 selbst gefahren: Suite am HEAD 38/38; Kette 793b0729 BEREIT -> 1f17f93a IN_ARBEIT (VOR erster Scope-Aenderung, 0 Scope-Commits davor) -> 5a54b004 Bau -> e491626d CODE_FERTIG -> 23b3a490 + f430242d ABGENOMMEN, jede Stufe Vorfahr der naechsten; Scope-Diff c2de1eec..85b03d23 exakt die fuenf Blatt-Dateien, kein Produktivcode ausserhalb; Beifang-Kontrolle 4307987b/7c2958fd nur Doku, git log e491626d..76bb1992 -- scripts/ = 0; Rueckweg: git revert 5a54b004 genuegt (nur 2 Skriptdateien, keine Migration/Daten); Wildbetrieb: 0-Byte-VM-Lock am 08.08. 13:58 beiseitegelegt (_locks_beiseite/2026-08-08/, Original liegt), danach 18 Commits ohne Aussperrung durchs Tor. VERMERK nach §12.5: P2-SPEC (--git-dir + fremde cwd) ist KEIN Release-Hindernis, Folgeauftrag A-09 existiert und traegt ihn (A-09-1). Ball bei Yama: main-Veroeffentlichung ist seine. Sicherungs-Push auf fork folgt unmittelbar nach diesem Commit (nur auto/hausplaner-integration, nie main/Tags/force); Ergebnis als push_vermerk-Zeile nachgetragen — eine Verweigerung waere ENV-Hinweis, kein Abbruch."
 ---
 
 ## In Planprüfung — A-09
