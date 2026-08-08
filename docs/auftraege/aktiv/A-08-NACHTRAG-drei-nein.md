@@ -263,7 +263,12 @@ git-Halter sichtbar, Lock alt und leer                -> liegen lassen       (IS
 git-Prozess dieses Repos, kein Halter, Lock alt/leer  -> liegen lassen       (SOLL — Form B; HEUTE
                                                                               legte Z.161-167 ohne
                                                                               Prozess-Frage beiseite)
-git-Prozess in einem FREMDEN Verzeichnis              -> irrelevant          (Repo-Bezug, s. o.)
+git-Prozess auf einem FREMDEN REPOSITORIUM            -> irrelevant          (Repo-Bezug, s. o.)
+   ⚠ RICHTIGGESTELLT 08.08. — hier stand "in einem FREMDEN VERZEICHNIS". Das verwechselt
+   "fremde cwd" mit "fremdem Repo": `git --git-dir=<dieses .git>` mit fremder cwd arbeitet
+   auf DIESEM Repo und wurde nach dem alten Wortlaut uebersehen. Der Generator hat die Zeile
+   korrekt befolgt, der Evaluator hat es in der Abnahme gemessen (23b3a490, Probe C).
+   Klasse SPEC, Verursacher Planner, laeuft als A-09 — A-08 bleibt ABGENOMMEN (§12.5).
 mehrere Halter, EINER davon git, Lock 0 Byte          -> liegen lassen       (konservativ)
 Halter-PID existiert, Kommando nicht ermittelbar      -> liegen lassen       (A-08-5, konservativ)
 nicht-git-Halter, Lock MIT Inhalt, beliebig alt       -> liegen lassen       (IST=SOLL: A-02-2/
