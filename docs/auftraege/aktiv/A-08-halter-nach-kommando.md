@@ -363,3 +363,90 @@ auf die Bestaetigung des Plan-Pruefers; der Bau ist mit alter UND korrigierter F
 deckungsgleich, ein Konflikt entsteht nicht.
 
 **Meldung: CODE_FERTIG.** Ich nehme nicht ab — Ball beim Evaluator.
+
+---
+
+## Evaluator-Votum (§11) — 08.08.2026
+
+```yaml
+auftrag: A-08
+commit: 85b03d23          # Pruef-SHA; Bau 5a54b004, A-08-7-Doku 6a264834, Basis c2de1eec
+votum: ABGENOMMEN
+fehlerklasse: SPEC        # nur der eine P2-Befund unten; kein CODE-Befund
+gegenprobe: sieben eigene Mutationen · Rot-Lauf gegen das Basis-Tor · drei eigene Torlaeufe
+browser: nicht_anwendbar  # Shell-Werkzeug, keine sichtbare Wirkung
+datenbank: nicht_anwendbar # §15: der Auftrag beruehrt keine Datenbank, kein Seed, kein Server
+befunde:
+  - "P2 SPEC: ein git-Prozess DIESES Repos mit --git-dir und fremder cwd wird nicht erkannt"
+```
+
+### Prüfstand
+
+Frischer Worktree auf `85b03d23`, `node_modules` per `cp -al`; zweiter Worktree auf der Basis
+`c2de1eec` als Kontrolle. **Scope-Diff des Bau-Commits** (nicht `Basis..HEAD`):
+
+```text
+5a54b004   scripts/commit-pruefen.sh  +144/-8 · scripts/__tests__/commitPruefen.test.mjs  +236
+6a264834   docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md  +20
+85b03d23   docs/auftraege/aktiv/A-08-halter-nach-kommando.md   +139
+```
+
+*Kein fremder Pfad, kein Bundle, keine Migration.* **§14 eingehalten.**
+
+### Selbst gefahren, nicht übernommen
+
+```text
+Suite Pruefstand   tests 38  pass 38  fail 0
+Suite Basis        tests 30  pass 30  fail 0        <- alle 30 Bestandszusagen halten (A-08-9)
+NEUE Zusagen GEGEN das Basis-Tor:  tests 38  pass 33  fail 5
+  gefallen: A-08-1 · A-08-4 · A-08-5 · A-08 Form B · A-08-10
+```
+
+**Sieben Mutationen, je mit Anker (Treffer genau 1×), volle Suite, danach `md5` zurückgesetzt:**
+
+```text
+M1 && -> ||                     fail 3   GEFANGEN
+M2 Kommando-Pruefung entfernt   fail 4   GEFANGEN
+M3 Ergebnis ignoriert           fail 2   GEFANGEN
+M4 Basename -> Pfad-Gleichheit  fail 3   GEFANGEN
+M5 git-* nicht erkannt          fail 1   GEFANGEN
+M6 unbekannt = nicht gehalten   fail 1   GEFANGEN
+M7 0-Byte-Schranke entfernt     fail 3   GEFANGEN — faellt durch A-02-2 und A-02-4
+md5 vor und nach jeder Probe identisch.
+```
+
+**Drei eigene Torläufe im Wegwerf-Repo** (Tor hineinkopiert, echter Lock, 0 Byte, 240 s):
+
+```text
+A  kein git-Prozess                 -> BEISEITE + Commit          (die Wirkung)
+B  git -C <repo>, cwd fremd gestartet -> ENV_BLOCKED, Lock liegt  (git chdirt selbst)
+C  git --git-dir=<repo>/.git, cwd fremd -> BEISEITE + Commit      <- der Befund
+```
+
+### Der eine Befund — P2, `SPEC`, Ball beim Planner
+
+**Probe C ist reproduzierbar:** ein `git`-Prozess, der **an diesem Repository arbeitet**, aber
+über `--git-dir` statt `-C` gestartet wurde, behält seine fremde `cwd` — und
+`repo_git_laeuft()` erkennt ihn nicht. Der Lock wurde beiseitegelegt und der Commit lief.
+
+**Warum es dennoch keine Abnahme blockiert:**
+
+- **A-08-1 verlangt „kein git-Prozess dieses Repositoriums"** — die **Kantenliste** des Blattes
+  legt dafür `cwd` gegen `REPO_WURZEL` fest und schreibt: *„git-Prozess in FREMDEM Verzeichnis
+  zählt nicht."* **Der Bau folgt dem Blatt genau.** *Die Zeile verwechselt „fremdes Verzeichnis"
+  mit „fremdes Repository" — das ist eine Lücke im Schnitt, nicht im Bau (§12.1 → Planner).*
+- **Die gefährliche Lage deckt Bedingung 1 ab:** ein arbeitendes `git` **hält** seinen
+  `index.lock` offen, und dann greift der git-Halter-Zweig — in Probe B genau so gemessen.
+  Für einen Fehlgriff müssten zusammentreffen: `--git-dir` **und** fremde `cwd` **und** ein
+  0-Byte-Lock **älter als 60 s**, den dieses `git` **nicht offen hält**.
+- **`git -C`, die verbreitete Form, wird erkannt** (Probe B) — auch die, die ich selbst benutze.
+
+### Offengelegt
+
+- **§4-Reihenfolge:** die Ausgabe von `git worktree add` hat mir die **Betreffzeile** von
+  `85b03d23` gezeigt (`Suite 30/30 -> 38/38, Rot-Lage 5/8, sieben Mutationen`), **bevor** ich
+  gemessen hatte. *Alle Zahlen oben sind trotzdem eigene Läufe; die Übereinstimmung ist das
+  Ergebnis, nicht die Quelle.* Beim nächsten Mal `worktree add` mit unterdrückter Ausgabe.
+- **A-08-2, A-08-4 `git-*` und A-08-8 sind an der Basis grün** — kein wirksames Rot. *Das ist
+  richtig so und im Blatt als Erhaltungsrichtung deklariert; ich nenne es, weil „5 von 8 rot"
+  sonst wie ein Mangel aussieht.*
