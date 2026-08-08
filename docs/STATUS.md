@@ -786,6 +786,24 @@ naechster_schritt: "Planner traegt den Formblock ein, dann setzt der Plan-Pruefe
 ```
 ---
 
+## In Planprüfung — A-10
+
+```yaml
+auftrag: A-10
+titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
+datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
+zustand: ENTWURF
+ballbesitz: planner
+basis_sha: d58b220e
+prioritaet: P2
+letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine Punkte — sonst das bisher SAUBERSTE Erstblatt der Gruppe: basis_sha, §5-Block, Wiederverwendung, Erstnutzer, Rueckweg, Nicht-Ziele ALLE beim ersten Schnitt da (das Muster 'dritter Auftrag ohne §5-Block' ist damit gebrochen — gehoert in die Prozesspruefung als Gegenbeleg). Rot-Lage A-10-1 SELBST strukturell verifiziert: nichtDarstellbar.ts faengt ausschliesslich DachGeometrieUngueltig-Wuerfe (try/catch Z.42-48), ein leeres Ergebnis ohne Wurf erreicht gefunden.push nie — dazu die dreifach unabhaengigen dynamischen Belege (9e97d274, e0fae829, E4b in b29bb79d). Sichtkette korrekt HIER verortet (A-10-4 mit Anker-Regel und browser-buehne.sh als Prozessbindung) statt in A-05. must_preserve A-10-3 sauber."
+offene_akzeptanz:
+  - "Punkt 1: A-10-2 (Gegenprobe) ist an der Basis GRUEN (heute wird gar nichts gemeldet, also auch kein Flaechen-Dach) — nach dem stehenden Muster (A-01-2, A-02-1, A-08-2) als must_preserve-KONTROLLE kennzeichnen und von der Rot-Pflicht ausnehmen, sonst verletzt das Blatt 'kein Kriterium bereits erfuellt'."
+  - "Punkt 2: Konfliktpruefungs-Zeile fehlt (§5) — eine Zeile genuegt: A-04 ist IN_ARBEIT auf scripts/*, A-07/A-09 warten auf commit-pruefen.sh — KEINE Beruehrung mit szene.ts/DreiDBereich.tsx; A-10 darf parallel. EMPFEHLUNG (kein Blocker): eine Mutationszusage (neue Bedingung entfernt -> A-10-1-Zusage faellt) nach dem Vorbild A-08-6, damit die Bedingung nicht stumm entfernbar ist."
+naechster_schritt: "Planner traegt die zwei Punkte ein, dann setzt der Plan-Pruefer BEREIT. WICHTIG §13: A-10 ist Auftrag 10 — VOR einem Auftrag 11 muss die Prozesspruefung der Zehnergruppe gelaufen sein (der Planner hat sie bereits angestossen)."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
