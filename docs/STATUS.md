@@ -687,7 +687,7 @@ naechster_schritt: "Planner traegt den §5-Block und den Nachtrag ein — danach
 ```
 ---
 
-## A-08 — CODE_FERTIG in der 0-Byte-Fassung (Ball beim Evaluator)
+## A-08 — ABGENOMMEN an 85b03d23 (Ball beim Release-Pruefer; P2-SPEC-Folgeauftrag: A-09)
 
 ```yaml
 auftrag: A-08
@@ -718,6 +718,7 @@ claim_bau: "plan-pruefer 07.08.: BEREIT gesetzt, Generator-Station wird SOFORT m
 claim_abnahme: "plan-pruefer 07.08.: CODE_FERTIG liegt, Evaluator-Station leer bei P0 — FRISCHE Evaluator-Instanz wird gestartet. Claim VOR dem Start. Ich nehme NICHT selbst ab (§4/§9); die Instanz ist rollenrein Evaluator. NACHTRAG 08.08.: die erste Instanz ist ZWEIMAL abgestorben (API-Abbruch, dann 600s-Stall) OHNE Spuren — beide Male gemessen: Tor/Suite byte-identisch mit 85b03d23, keine Commits, kein Lock, keine Mutationsreste. ZWEITE frische Instanz gestartet, gleicher Auftrag."
 naechster_schritt: "ERLEDIGT (85b03d23) — Generator hat in der 0-Byte-Fassung gebaut, Katalog Nachtrag 1-8 + 9/10, IN_ARBEIT war VOR der ersten Scope-Aenderung gesetzt (1f17f93a), §11-Bericht im Traegerblatt. Jetzt: Evaluator, siehe naechster_schritt_evaluator oben"
 evaluator_votum: "evaluator 08.08.: ABGENOMMEN an 85b03d23. Selbst gefahren: Suite 38/38, Basis 30/30, neue Zusagen gegen das Basis-Tor 5 von 8 rot, sieben eigene Mutationen alle gefangen (md5 zurueckgesetzt), drei eigene Torlaeufe im Wegwerf-Repo. EIN Befund, P2, Klasse SPEC, Ball beim Planner: ein git-Prozess DIESES Repos mit --git-dir und fremder cwd wird von repo_git_laeuft() nicht erkannt (Probe C: Lock beiseitegelegt, Commit lief). Blockiert nicht - der Bau folgt der Kantenliste des Blattes genau, die Luecke steckt im Schnitt; die gefaehrliche Lage deckt Bedingung 1 ab (Probe B), und git -C wird erkannt. Offengelegt: die Ausgabe von git worktree add zeigte mir die Betreffzeile des Pruef-SHA vor der Messung."
+evaluator_zweitvotum: "evaluator-2 08.08. (zweite frische Instanz nach dem Doppel-Absterbe-Claim 966dea39, Kollision offengelegt): ABGENOMMEN an 85b03d23 — unabhaengige Zweitbestaetigung, VOR Kenntnis des Erstvotums gemessen. Selbst gefahren: Suite 38/38 (Scope-Dateien byte-identisch mit 85b03d23, md5 7c71f5ba), A-08-Zusagen gegen das Basis-Tor 8/3/5 (rot: A-08-1/-4/-5/Form B/-10), eigene Wegwerf-Proben je Kriterium inkl. Zwei-Richtungs-Probe A-08-1 (Basis exit 3 -> Bau exit 0 + BEISEITE mit Zielpfad/Groesse/Alter), Gegenfall gitarre zaehlt NICHT als git, alle SIEBEN Mutationen eigenhaendig gesetzt und gefangen (M7 exakt durch A-02-2/A-02-4), Endzustand byte-identisch. Den P2-SPEC-Befund des Erstvotums (--git-dir + fremde cwd) selbst REPRODUZIERT (exit 0 + BEISEITE; git -C korrekt exit 3) — bestaetigt, kein neuer Befund. Realfall-Beleg zitiert: .git/_locks_beiseite/2026-08-08/index.lock (0 Byte, Original erhalten). Zweitvotum am Ende des Traegerblatts; meine versehentlich von 4307987b mitcommittete Erstfassung dort durch die gekennzeichnete Zweitfassung ersetzt."
 ```
 ---
 
