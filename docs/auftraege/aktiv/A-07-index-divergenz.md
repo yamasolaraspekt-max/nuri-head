@@ -112,12 +112,39 @@ gleicht das Tor nach erfolgreichem Commit den Standard-Index an HEAD an.
 **Nachweis:** `git diff --cached --name-only` meldet danach **0**.
 
 **UND (Rest B, Zusatz-Nachweis — vom Plan-Prüfer angenommen):** `git status` ist danach wieder
-brauchbar. **Stichprobenform:** mindestens **zehn** `git status`-Einträge, jeder **index-frei**
-gegen HEAD geprüft (`git show HEAD:<p> | diff - <p>`) — **alle** müssen einer echten Änderung
-entsprechen.
+brauchbar. **Alle** gemeldeten Einträge müssen einer echten Änderung entsprechen.
 
-> *Ohne diesen Satz wäre A-07-1a grün, während das Werkzeug weiter blind ist. **Heute entsprechen
-> 46 Meldungen genau EINER echten Änderung.***
+**Stichprobenform — KORRIGIERT 10.08. 19:0x, zwei Schritte und der erste ist Pflicht:**
+
+```text
+SCHRITT 1  ist der Pfad ueberhaupt getrackt?     git ls-files --error-unmatch <p>
+             NICHT getrackt (?? in git status)  ->  zaehlt als ECHT. Fertig, kein Schritt 2.
+             getrackt                           ->  Schritt 2
+SCHRITT 2  index-freier Inhaltsvergleich         git show "HEAD:<p>" | diff - <p>
+             Unterschied  -> echte Aenderung
+             identisch    -> Phantom (Befund)
+```
+
+> **⚠ Schritt 1 fehlte in meiner ersten Fassung, und das Kriterium war dadurch defekt.** Beim ersten
+> Lauf nach dem Bau hat es **einen Fehlalarm gegen einen fehlerfreien Bau** erzeugt — gemeldet in
+> `55317e1e`, nachgemessen: `zz-unlink-probe` liegt weder im Index (`ls-files` 0) noch in HEAD
+> (`ls-tree` 0), ist also **untracked** und leer.
+>
+> **Der Konstruktionsfehler:** `git show "HEAD:<p>"` liefert für einen Pfad, der **nicht in HEAD**
+> ist, keine Ausgabe. `diff -` gegen eine leere Datei meldet dann *identisch* — und identisch war in
+> meiner Fassung die Definition von „Phantom". **Eine untracked Datei ist aber das genaue Gegenteil
+> eines Phantoms:** das Phantom ist „in HEAD, im Index als gelöscht"; untracked ist „nirgends
+> geführt, auf der Platte vorhanden". Mein Vergleich konnte die beiden nicht unterscheiden, weil er
+> nur eine Frage stellte.
+>
+> **Ergebnis mit der korrigierten Form:** beide verbleibenden `git status`-Einträge sind **echt**
+> (zwei untracked Dateien). A-07s Zusatz-Nachweis **besteht**.
+>
+> *Das ist kein Bau-Mangel, sondern ein Mangel meines Kriteriums — und er hätte einen fehlerfreien
+> Bau rot gefärbt. Gefunden wurde er nur, weil vor der Meldung gemessen wurde statt behauptet.*
+
+> *Ohne diesen Zusatz-Nachweis wäre A-07-1a grün, während das Werkzeug weiter blind ist. **Vor dem
+> Bau entsprachen 46 Meldungen genau EINER echten Änderung.***
 
 **Ist-Belege, datiert (Rest A) — selbst gemessen, deckungsgleich mit dem Plan-Prüfer:**
 
