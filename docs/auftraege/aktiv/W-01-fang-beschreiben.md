@@ -1,0 +1,225 @@
+# W-01 Stufe 1 — Raster und Fang BESCHREIBEN, nicht bauen
+
+```yaml
+auftrag: "W-01/1"
+werkzeug: "W-01 Raster und Fang"
+stufe: "1 von 2 — BESCHRIEBEN (die sieben Blaetter). Stufe 2 GEBAUT folgt als eigener Auftrag."
+titel: "Die sieben Blaetter von W-01 aus dem VORHANDENEN fangKern.ts ableiten"
+spur: A
+heimat_app: ticket
+status: ENTWURF
+status_steht_in: docs/STATUS.md
+basis_sha: 32f83a6f
+prioritaet: P1
+anlass: "Yamas Auftrag 10.08. — Gruppe aus dem Register schneiden, nicht aus dem Fehlerbuch"
+ballbesitz: "plan-pruefer (DoR), danach generator"
+claim: "planner 10.08. — Claim VOR dem Schnitt. Kein W-Blatt lag als Auftrag vor (ls docs/auftraege/aktiv/ = nur A-xx)."
+```
+
+## Der Anlass — und die Drift, die er beendet
+
+**Elf Aufträge (A-01…A-11) haben ausnahmslos den Bestand repariert, abgesichert und den Prozess
+geordnet. Keiner hat ein Werkzeug aus dem Register gebaut.** Die Werkstatt ist in Ordnung, und sie
+steht leer. Dieses Blatt ist der erste Auftrag aus dem **Register** statt aus einem Befund.
+
+**Warum W-01 zuerst — das Register begründet es selbst, und die Begründung trägt:**
+
+> *„Ohne verlässlichen Fang ist jede Wand ungenau, und jede Ungenauigkeit vererbt sich nach oben —
+> bis das Dach nicht mehr schließt. Ein wackliger Fang ist kein Schönheitsfehler, er ist ein
+> Fundamentfehler."*
+
+## Ist-Zustand — SELBST GEMESSEN, und er ändert die Natur des Auftrags
+
+**Die Anbindungsmessung nach Yamas Punkt 4 („anbinden vor bauen"), gefahren vor dem Schnitt:**
+
+```text
+GEFUNDEN IM REPO
+resources/planner/hausplaner/geometry/fangKern.ts        276 Zeilen
+  export type FangArt                  die Fangarten
+  export interface FangPunkt           Punkt mit Art
+  export interface FangOptionen        Konfiguration
+  export interface FangErgebnis        Rueckgabe MIT Art (nicht nur Koordinate)
+  export function lotAufGerade()       Lotfusspunkt   (F-003-Familie)
+  export function fange()              die Hauptfunktion
+  export const FANG_PX = 12            Toleranz in Bildschirmpixeln
+  export function toleranzAusZoom()    zoomabhaengige Toleranz  (F-040/F-041-Familie)
+  export interface WandStrecke         Eingabeform
+  export function wandFangpunkte()     Fangpunkte aus Waenden ableiten
+  export const FANG_TEXT               Beschriftung je Fangart
+Zusagen dazu                                             3 Testdateien
+
+NICHT GEFUNDEN
+Werkzeug in der Registry (toolRegistry.ts)               0 Treffer auf fang/raster/snap
+Eintrag im Werkbank-Register                             W-01 steht auf LEER
+Fundstelle im Register-Abschnitt "Was schon im Repo"     fangKern.ts NICHT genannt
+```
+
+> ### Damit ist W-01 kein Bauauftrag, sondern ein Anschlussauftrag
+>
+> **Die Rechenschicht ist gebaut** — mit Typen, Toleranzmodell, Zoom-Abhängigkeit und
+> Beschriftung. **Die Werkzeugschicht fehlt**, und die Werkbank weiß von der Rechenschicht nichts:
+> der Register-Abschnitt *„Was schon im Repo existiert"* nennt **drei** Fundstellen, alle für W-07.
+> `fangKern.ts` steht dort nicht.
+>
+> *Wer W-01 ohne diese Messung als Bauauftrag geschnitten hätte, hätte 276 Zeilen mit Tests danebengelegt.
+> **Das ist genau der Neubau-neben-Bestand, den Yamas Punkt 4 verbietet** — und er wäre hier fast
+> passiert, weil das Register die Fundstelle nicht kennt.*
+
+## DECISION — die sieben Blätter werden AUS DEM CODE abgeleitet
+
+```text
+Quelle der Beschreibung   fangKern.ts + seine drei Zusagen. NICHT die Vorlage ausfuellen,
+                          sondern den vorhandenen Bau lesen und beschreiben.
+3-FORMELN                 nur F-NUMMERN. Zu pruefen und einzutragen: welche der 24 Formeln
+                          fangKern tatsaechlich benutzt (Kandidaten: F-001 Abstand,
+                          F-003 Lotfusspunkt, F-040/F-041 Raster). Findet sich eine
+                          benutzte Rechnung NICHT in der Sammlung, wird sie GEMELDET,
+                          nicht ins Blatt geschrieben.
+5-CODE/LIESMICH           die Zeile lautet "angebunden aus geometry/fangKern.ts",
+                          mit Export-Liste und Zeilennummern. NICHT "neu gebaut".
+7-GRENZEN                 die Pflichtfrage: was tut der Fang, wenn er NICHT kann?
+                          Am Code zu messen: was liefert fange() ohne Treffer?
+                          Stilles Nichts ist verboten (A-10-Lehre).
+```
+
+**Kein Code wird angefasst.** *Stufe 1 ist die Abnahme des Denkens; sie fällt billiger auf als der
+Bau — Yamas Punkt 7.3.*
+
+## Nicht-Ziele
+
+- **Kein Werkzeug in der Registry.** Das ist Stufe 2 (`GEBAUT`) und ein eigener Auftrag.
+- **Keine Änderung an `fangKern.ts`** und an keiner seiner Zusagen.
+- **Keine Formel in das Blatt abschreiben.** Nur F-Nummern — die Regel steht im Blatt selbst und
+  hat einen Grund: *eine Formel an zwei Orten wird an einem korrigiert und am anderen vergessen.*
+- **Keine Aussage über Raster-Darstellung.** Ob ein sichtbares Raster gezeichnet wird, ist eine
+  Renderer-Frage und steht in W-12/Schicht 4, nicht hier.
+
+## Scope
+
+```text
+docs/rollenkette/werkbank/02-WERKZEUGE/W-01-raster-und-fang/1-ZWECK.md
+                                                            2-FUNKTION.md
+                                                            3-FORMELN.md
+                                                            4-BEDIENUNG.md
+                                                            5-CODE/LIESMICH.md
+                                                            6-PRUEFUNG.md
+                                                            7-GRENZEN.md
+docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md   Reifegrad W-01 LEER -> BESCHRIEBEN
+                                                     + fangKern.ts im Abschnitt "Was schon
+                                                       im Repo existiert" nachtragen
+```
+
+*Ausdrücklich NICHT im Scope: `resources/**` — kein Produktivcode, keine Zusage, keine Registry.*
+
+## Wiederverwendungsprüfung (§5)
+
+```text
+fangKern.ts                    VORHANDEN, 276 Zeilen — Quelle der Beschreibung, unangetastet
+seine 3 Zusagen                VORHANDEN — Quelle fuer 6-PRUEFUNG (was ist schon zugesagt?)
+FORMELSAMMLUNG.md              24 Formeln, F-001/F-003/F-040/F-041 sind die Kandidaten
+W-07-Blaetter                  das EINZIGE BESCHRIEBENE Werkzeug — Muster fuer Form und Tiefe
+02-WERKZEUGE/_VORLAGE/         die 7 Blattvorlagen — Struktur, nicht Inhalt
+```
+
+**Nichts wird neu erfunden.** *Form kommt aus dem Muster W-07, Inhalt aus `fangKern.ts`, Formeln aus
+der Sammlung.*
+
+## Auswirkungen (§5)
+
+```text
+API · Server · Schema · Migration · Bestandsdaten · Bundle     KEINE
+Produktivcode                                                  KEINER — reine Doku-Stufe
+Testdaten-Ziel                                                 KEINES
+Prozessbindung                                                 ENTFAELLT (kein Serverstart, keine DB)
+Werkzeuge                                                      grep/Editor. Die Insel-Suite
+                                                               (1689 Zusagen) MUSS unveraendert
+                                                               gruen bleiben — sie wird nicht
+                                                               beruehrt, das ist die Kontrolle
+```
+
+**Erstnutzer:** *der Generator von W-01 Stufe 2 — er baut das Werkzeug gegen diese Beschreibung.
+Und der Plan-Prüfer jedes weiteren W-Auftrags, der `W-01` als Vorbild nimmt.*
+
+## Akzeptanzkriterien
+
+**Die Rot-Lage dieser Stufe ist ZÄHLBAR, nicht behauptet:** die Blätter tragen heute
+Vorlagen-Platzhalter. Der Plan-Prüfer bestätigt das vor dem Bau mit einem `grep`.
+
+**W-01/1-1 (P1, kein Platzhalter mehr):** In keinem der sieben Blätter steht noch ein
+Vorlagen-Platzhalter. *Rot heute messbar:*
+
+```text
+grep -rcE 'F-0xx|<Name>|<In EINEM Satz|<Zwischenergebnis>|ja / nein — weil' \
+     docs/rollenkette/werkbank/02-WERKZEUGE/W-01-raster-und-fang/
+-> heute > 0 (Probe: 3-FORMELN.md traegt "F-0xx" und "ja / nein — weil …")
+-> Soll: 0
+```
+
+**W-01/1-2 (P1, `3-FORMELN` nennt nur Nummern):** Das Blatt enthält **keine ausgeschriebene
+Formel** — kein `=`, kein `atan2`, kein `sqrt` als Rechnung. Nur F-Nummern mit Verwendungszweck und
+Grenzfall-Spalte. *Rot heute: die Tabelle ist leer und trägt `F-0xx`.*
+
+**W-01/1-3 (P1, die Formeln sind GEPRÜFT, nicht geraten):** Jede genannte F-Nummer ist im Code
+belegt — Zeilennummer in `fangKern.ts`, wo sie angewandt wird. Eine Rechnung, die im Code steht und
+in der Sammlung **fehlt**, wird als Befund gemeldet und **nicht** ins Blatt geschrieben.
+*Sonst entstehen Formeln zweiter Ordnung, die niemand pflegt.*
+
+**W-01/1-4 (P1, `7-GRENZEN` beantwortet die Pflichtfrage):** Das Blatt sagt, **was der Fang tut,
+wenn er nicht kann** — am Code gemessen, mit Fundstelle. *Rot heute: das Blatt ist Vorlage. **Das ist
+die A-10-Lehre: der teuerste Fehler des Projekts war ein `catch { continue; }`, das eine korrekte
+Absage schluckte.** Ein Werkzeug ohne beantwortete Grenzfrage darf nicht `BESCHRIEBEN` heißen.*
+
+**W-01/1-5 (P1, `5-CODE` sagt die Wahrheit über die Herkunft):** Die Zeile lautet **„angebunden
+aus `geometry/fangKern.ts`"** mit Export-Liste und Zeilennummern — nicht „neu gebaut".
+*Yamas Punkt 4: „neu gebaut" ohne vorherige Suche ist ein Befund, kein Fortschritt.*
+
+**W-01/1-6 (`must_preserve`):** `resources/**` bleibt **byte-identisch**, und die Insel-Suite
+bleibt bei **1689/1689**. *Nachweis: `git diff --stat` auf `resources/` ist leer. Ohne dieses
+Kriterium wäre „ich baue nebenbei das Werkzeug mit" grün — und Stufe 1 wäre keine eigene Stufe.*
+
+**W-01/1-7 (P1, das Register wird mitgeführt):** `REGISTER.md` trägt W-01 als `BESCHRIEBEN` **und**
+`fangKern.ts` im Abschnitt *„Was schon im Repo existiert"*. *Yamas Punkt 7.4: sonst haben wir in
+einer Woche wieder zwei Wahrheiten. **Heute fehlt die Fundstelle dort — das ist der Grund, warum
+dieser Auftrag beinahe als Neubau geschnitten worden wäre.***
+
+## Kantenliste
+
+```text
+fange() ohne Treffer                   -> was kommt zurueck? MESSEN, dann in 7-GRENZEN
+Zoom sehr klein / sehr gross           -> toleranzAusZoom-Grenzen in 7-GRENZEN
+FangArt, die es im Code gibt, aber
+  in 4-BEDIENUNG nicht erklaerbar ist  -> melden, nicht erfinden
+Rechnung im Code ohne F-Nummer         -> BEFUND (W-01/1-3), nicht ins Blatt
+F-Nummer in der Sammlung, die fangKern
+  NICHT benutzt                        -> nicht nennen; 3-FORMELN ist keine Wunschliste
+Raster-DARSTELLUNG                     -> gehoert nicht hierher (Nicht-Ziel)
+```
+
+## Rückweg und Entdeckung
+
+**Rückweg:** Sieben Doku-Dateien und eine Registerzeile — `git revert` genügt. Kein Code, keine
+Daten, kein Zustand außerhalb des Repos.
+
+**Entdeckung:** Der Zweck ist ein Blatt, gegen das Stufe 2 gebaut werden kann. Das Signal ist
+deshalb der **erste Bauversuch**: muss der Generator von Stufe 2 im Code nachsehen, was in
+`2-FUNKTION` oder `7-GRENZEN` hätte stehen müssen, war die Beschreibung unzureichend — dann zurück
+an den Planner. *Eine Beschreibung, die man beim Bauen umgehen muss, ist keine.*
+
+## Konfliktprüfung (§5)
+
+```text
+A-10   IN_ARBEIT   renderers/three-d/szene.ts + app/DreiDBereich.tsx    KEINE Beruehrung
+A-09   ENTWURF     scripts/commit-pruefen.sh                            KEINE Beruehrung
+A-11   ENTWURF     scripts/commit-pruefen.sh                            KEINE Beruehrung
+W-01/1 DIESES      docs/rollenkette/werkbank/**                         disjunkt zu allen
+
+§3-SCHRANKE: A-10 ist derzeit IN_ARBEIT. Dieses Blatt geht NICHT vor A-10s Abschluss in
+IN_ARBEIT — Dateifreiheit ist NICHT Ablauffreiheit (§3 Z.85, Lehre vom 10.08.).
+```
+
+```yaml
+fehlerklasse: keine (Erstauftrag aus dem Register)
+prioritaet: P1
+warteschlange: "nach A-10; W-01/1 vor W-01/2 vor W-02/1"
+naechster_schritt: "Plan-Pruefer prueft DoR. Yama entscheidet ueber die Freigabe der Gruppe."
+```
