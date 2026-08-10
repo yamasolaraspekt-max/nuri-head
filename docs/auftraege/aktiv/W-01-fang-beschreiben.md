@@ -481,3 +481,88 @@ eigener_mangel_ausserhalb_des_befunds:
 
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum, Runde 2 (§11/§12.3) — 10.08.2026
+
+```yaml
+auftrag: W-01/1
+commit: 5823ada0          # Nachbesserung; Runde 1 war 04f78b73
+votum: ABGENOMMEN
+fehlerklasse: KEINE       # beide Befunde behoben; der SPEC-Rest gehoert dem Planner
+gegenprobe: "Zwei-Richtungs-Probe je Befund · alle 15 Zeilenangaben einzeln im Code geoeffnet ·
+  die zwei §3-Befehle selbst nachgefahren"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Befund 1 — behoben, und besser als verlangt
+
+```text
+VORHER (04f78b73)   0 Zeilenangaben in allen sieben Blaettern, Funktionsnamen statt Nummern
+NACHHER (5823ada0)  15 Zeilenangaben, ALLE von mir einzeln im Code geoeffnet:
+
+   96  export function lotAufGerade(...)        <- F-003 Definition
+  122  if (d <= opt.toleranzMm && ...)          <- F-001, eine von vier Anwendungen
+  128  return { ..., art: 'endpunkt' }          F-041 Rangfolge, Glied 1
+  137  if (d <= opt.toleranzMm && d < mAbstand) F-001
+  143  return { ..., art: 'mittelpunkt' }       Glied 2
+  152  const fuss = lotAufGerade(p, a, b)       F-003 angewandt (achse)
+  157  if (d <= opt.toleranzMm && d < aAbstand) F-001
+  163  return { ..., art: 'achse' }             Glied 3
+  169  const fuss = lotAufGerade(p, opt.weg…)   F-003 angewandt (verlaengerung)
+  170  if (fuss && Math.hypot(…) <= …)          F-001
+  171  return { ..., art: 'verlaengerung' }     Glied 4
+  182  return { ..., art: 'ortho' }             Glied 5a
+  185  return { ..., art: 'ortho' }             Glied 5b
+  192  return { punkt: { x: Math.round(p.x/r)*r … } }   F-040 UND Glied 6
+  195  return { ..., art: 'keiner' }            Glied 7
+Datei hat 276 Zeilen — keine Angabe laeuft ins Leere, jede trifft, was sie behauptet.
+```
+
+**Die Rangfolge als Zeilenkette statt als einzelne Zeile ist die bessere Antwort**, nicht die
+bequemere: *sie steht im Code nirgends als Tabelle, sondern als Reihenfolge der Rückgaben — wer
+zuerst zurückgibt, gewinnt. Genau das zeigt die Kette, und ein einzelner Zeilenverweis hätte es
+verdeckt.*
+
+### Befund 2 — behoben, mit Befehl und Ausgabe
+
+```text
+VORHER (b41f9177)   0 Befehlszeilen, 0 Ausgabewerte — Prosa statt Beleg
+NACHHER (51fab811)  $ grep -cE '^\| \*\*[AW]-[0-9]+.*`IN_ARBEIT`' docs/STATUS.md
+                      0
+                    $ grep -c '^zustand: IN_ARBEIT' docs/STATUS.md
+                      0
+                    "beide 0 -> frei. Nach dem Setzen je 1, Gegenprobe gefahren."
+```
+
+**Beide Orte, beide Befehle, beide Ausgaben — und die Gegenprobe nach dem Setzen.** *Ich habe die
+zwei Befehle selbst nachgefahren; sie liefern heute wieder je `0`, weil W-01/1 inzwischen
+`CODE_FERTIG` ist.* **Damit ist die Zusage nicht nur erfüllt, sondern nachvollziehbar.**
+
+### §12.4 — die vorher grünen Kriterien erneut, nicht nur die roten
+
+```text
+-1  alle vier Platzhalter-Muster am neuen Stand      0
+-6  resources/** zwischen Basis und Nachbesserung    unveraendert (diff leer)
+-7  Register traegt W-01                             5 Treffer
+    Insel-Suite                                      1692/1692
+```
+
+### Was NICHT erledigt ist — und warum es die Abnahme trotzdem nicht hält
+
+**`W-01/1-6` verlangt im Blatt weiter wörtlich `1689/1689`** (Z. 135 und Z. 177), gemessen sind
+**1692/1692**. *Der Planner hat das anerkannt (`7c3408e2`) und die Zahl bewusst nicht angefasst —
+sie ist `SPEC` und gehört ihm (§12.1).*
+
+> **§12.5 ist genau dieser Fall:** *„Ein `SPEC`-Befund blockiert die Abnahme nicht, wenn der Bau
+> den Auftrag erfüllt, wie er geschnitten war."* **Der Bauende kann eine Zahl nicht erfüllen, die
+> schon bei der Blatt-Erstellung überholt war** — `dbb7ff66` (A-10) ist Vorfahr der Basis
+> `32f83a6f`. *Ihn dafür auf `NACHBESSERN` zu setzen, hieße ihn für einen Schnittfehler haften zu
+> lassen.* **Der Befund bleibt verbucht und erzeugt einen Folgeauftrag beim Planner.**
+
+*Der Bauende hat in derselben Runde einen dritten Beifang-Fall selbst gemessen und offengelegt
+(`58342f47` nahm fremde Zeilen aus `docs/STATUS.md` mit) und daraus B5 abgeleitet: Pfadprüfung
+schützt nicht vor fremdem Inhalt in geteilten Dateien. **Das habe ich nicht gefunden, er selbst.***
