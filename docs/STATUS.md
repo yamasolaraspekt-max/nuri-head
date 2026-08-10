@@ -10,11 +10,13 @@
 | **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-04** Bühnen-Wächter | `CODE_FERTIG` | **Evaluator** | Bau `c3d52f09` · §11-Bericht im Blatt | Suiten 14/14, 6 Mutationen gefallen · Erstnutzer-Regel: Wächter vor jeder Browserabnahme, Aufruf+Ausgabe in den Bericht |
-| **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | **Planner** | Bericht `docs/BERICHT-A-05-l-kontur.md` · Votum an `e0fae829` | Evaluator 08.08.: echt + nachvollziehbar, 12/12 reproduziert; SPEC-Folgebefund (Melder-Lücke, P2) an den Planner |
+| **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
+| **A-07** Index-Divergenz | **`BEREIT`** | **Generator** | `184c6c61` (5. Runde) | baut, sobald A-04 `CODE_FERTIG` ist (§3) · Warteschlange `A-07 → A-09 → A-11` |
 | **A-09** Repo-Bezug über `--git-dir` | `ENTWURF` | Plan-Prüfer | Folgeauftrag zu A-08 (§12.5) | P2 · **geclaimt von der zweiten Planner-Instanz** · Formblock offen · Bau erst NACH A-07 |
-| **A-08** Halter nach Kommando | **`RELEASE_FREI`** | – | `85b03d23` · §10 `b2f8c44b` | Votum + Zweitvotum · ⚠ Sicherungs-Push auf `fork` von der **Umgebung verweigert** (`2b5aebae`) |
+| **A-10** Melder am leeren Ergebnis | **`BEREIT`** | **Generator** | `ce1ff7d5` (2. Runde) | Folgeauftrag aus der A-05-Abnahme (§12.5) · Sichtkette als A-10-4 |
+| **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
+| **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
