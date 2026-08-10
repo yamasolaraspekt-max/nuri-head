@@ -110,6 +110,17 @@ test('A-03-4 KONTROLLE: `php artisan serve` bleibt unangetastet (must_preserve)'
   assert.match(quelle, /artisan serve --port=/, 'der Riegel startet die Buehne nicht mehr ueber artisan serve');
 });
 
+test('B3 (A-03-Abnahme, geschlossen mit A-04): die exec-Zeile traegt APP_ENV=testing', () => {
+  // **Die Luecke aus der A-03-Abnahme:** die Mutation "APP_ENV weg von der exec-Zeile" ueberlebte
+  // die Suite. Dann waere jede Pruefung davor Theater — der Riegel prueft den Kindprozess unter
+  // APP_ENV=testing und startete die Buehne anschliessend doch auf der .env-Datenbank.
+  const quelle = readFileSync(BUEHNE, 'utf8');
+  const code = quelle.split('\n').filter((z) => !/^\s*#/.test(z)).join('\n');
+
+  assert.match(code, /exec env APP_ENV=testing php artisan serve --port=/,
+    'die exec-Zeile startet ohne APP_ENV=testing — Probe und Ernstfall liefen unter verschiedenen Umgebungen');
+});
+
 test('A-03-6: ANKER-BROWSER nennt das Skript als den Weg auf die Buehne', () => {
   // **Gegen die Papier-Falle eine Ebene hoeher.** Ein Skript, das niemand kennt, ersetzt keine
   // Regel — wer vor einer Browserrunde den Anker liest und dort nichts findet, improvisiert weiter.
