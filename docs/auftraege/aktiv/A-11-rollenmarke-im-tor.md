@@ -122,24 +122,51 @@ A-04    IN_ARBEIT    andere Datei: scripts/buehnen-waechter.sh — KEINE Beruehr
    Genau das schreibt die DECISION vor.
 ```
 
-**REIHENFOLGE — Planner-Entscheidung, wie schon fuer A-08/A-07:**
+**REIHENFOLGE — gilt: `A-07 → A-09 → A-11`** (entschieden in `e3d7b2c8` von der ersten
+Planner-Instanz).
 
 ```text
-1  A-07   P0-Rest, groesster Eingriff (trap + Angleich), Schaden waechst mit JEDEM Tor-Lauf
-2  A-11   klein und zonenrein, stoppt einen LAUFENDEN Schaden: jeder unmarkierte Commit
-          bleibt dauerhaft ununterscheidbar, das ist nicht nachholbar
-3  A-09   P2, seltene Luecke, kleinste Wirkung
+1  A-07   P0-Rest, groesster Eingriff (trap + Angleich)
+2  A-09   P2, kleine Funktionsaenderung in repo_git_laeuft()
+3  A-11   DIESES — zuletzt, und das ist richtig so
 ```
 
-> **Nachrangig ist A-11 nur gegenueber A-07, nicht gegenueber A-09** — und zwar aus einem Grund, der
-> beim Abwaegen leicht untergeht: **A-07s Schaden ist reparierbar, A-11s nicht.** Ein divergenter
-> Index laesst sich angleichen, eine Halde raeumen. Ein Commit, der ohne Marke geschrieben wurde,
-> ist fuer immer ununterscheidbar — das ist Befund 0. Jeder Tag ohne A-11 vergroessert eine Menge,
-> die niemand mehr aufloesen kann.
+> **⚠ KORRIGIERT — meine erste Fassung stellte A-11 vor A-09, und die Begruendung war falsch.**
 >
-> *Weil A-11 auf Z.46–52 begrenzt ist, waere ein **paralleler** Bau zu A-07 technisch moeglich. Ob
-> parallel gebaut wird, entscheidet der Plan-Pruefer — ich lege die Reihenfolge fest, nicht die
-> Gleichzeitigkeit.*
+> Ich hatte argumentiert: *„A-07s Schaden ist reparierbar, A-11s nicht — jeder Tag ohne A-11
+> vergroessert eine Menge, die niemand mehr aufloest."* Die erste Planner-Instanz hat dagegen
+> gesetzt: **„A-11s Nutzen beginnt erst mit der naechsten Zehnergruppe, und die kann nicht
+> beginnen, solange der Zaehler auf 10 steht — frueher bauen bringt nichts frueher."**
+>
+> **Selbst nachgemessen statt uebernommen** (`docs/AUFTRAGSZAEHLER.md`):
+>
+> ```text
+> Z.50   "Stand: 10 von 10 — die §13-PROZESSPRUEFUNG IST FAELLIG"
+> Z.74   "Zaehler-Reset: steht aus. §13 laesst die neue Zehnergruppe erst nach
+>         Umsetzung beginnen"
+> ```
+>
+> **Ihr Argument traegt, meines nicht.** Mein Satz war formal richtig — unmarkierte Commits bleiben
+> ununterscheidbar — aber er ging am **Zweck** vorbei: die laufende Gruppe ist bereits als
+> ununterscheidbar abgeschrieben (`229ad0be`: *„rueckwirkend repariert B4 nichts, die 64 Commits
+> dieser Gruppe bleiben ununterscheidbar"*). Der Nutzen der Marke ist die Zaehlbarkeit der
+> **naechsten** Gruppe, und die beginnt vor der Prozesspruefung nicht.
+>
+> **Der Denkfehler, benannt:** Ich habe „Schaden waechst" gegen „Schaden reparierbar" abgewogen,
+> **ohne zu pruefen, ob der Schaden im relevanten Zeitfenster ueberhaupt zaehlt.** Zwei Zeilen im
+> Auftragszaehler haetten es gezeigt — dieselbe Unterlassung wie bei meiner Kantenzeile in A-08
+> (dort: zwei Zeilen `grep` im Tor) und bei meinem Push-Alarm (dort: ein `git fetch`).
+>
+> Ihre weiteren zwei Gruende, die ich uebernehme: **Maengel vor Faehigkeit bei geteilter Datei** —
+> A-07 und A-09 beheben Defekte, A-11 fuegt eine Faehigkeit hinzu. Und A-11 aendert als einziges die
+> **Meldeform** des Tors und trifft zuletzt einen Stand, in dem die anderen beiden abgenommen sind.
+
+**Zur Doppelentscheidung selbst — ein Beleg fuer P-02, nicht nur eine Panne:** Zwei
+Planner-Instanzen haben dieselbe Reihenfolgefrage binnen **drei Minuten** verschieden entschieden
+(ich 18:42, sie 18:45). Beide hielten sich fuer zustaendig, und beide waren es: der Claim liegt auf
+dem *Blatt*, die Reihenfolge *ueber Blaetter hinweg* ist Planner-Sache — nur sagt das nicht, welche
+Planner-Instanz. **Es gilt ihre Fassung, weil sie besser begruendet ist, nicht weil sie spaeter kam.**
+*Das gehoert in P-02 (parallele Instanzen derselben Rolle) als gemessener Fall.*
 
 ## Akzeptanzkriterien
 
@@ -230,5 +257,5 @@ Dauerkontrolle in einem.*
 fehlerklasse: SPEC
 verursacher: prozess (kein Bau-Fehler — die Marke war nie spezifiziert)
 prioritaet: P1
-warteschlange: nach A-07, vor A-09
+warteschlange: A-07 -> A-09 -> A-11 (korrigiert nach e3d7b2c8; meine erste Fassung war falsch begruendet)
 ```
