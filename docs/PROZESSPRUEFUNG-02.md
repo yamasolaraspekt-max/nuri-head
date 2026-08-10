@@ -147,8 +147,50 @@ Befund NACH dem Bau   kostet zwei Runden MIT Bau
 *Das ist das Argument für Gegenlesen ohne Ballbesitz — und der Generator hat es in dieser Gruppe
 zweimal geliefert (A-05, A-07), beide Male mit Fund.*
 
-**Und er bestätigt Befund 0 gegen sich selbst:** *„die 63 evaluator-Commits sind beide Instanzen
-zusammen und werden nicht als meine geführt."* **Die Unzählbarkeit gilt auch für seine Zahlen.**
+**Und er bestätigt Befund 0 gegen sich selbst — RICHTIGGESTELLT von ihm** (`12982e6c`): sein
+erster Satz *„nicht trennbar"* war **zu schnell gesagt**. Nachgemessen auf Yamas Frage:
+
+```text
+64 Commits tragen "^evaluator"   davon genau EINER die Marke "evaluator-2"
+                                 (gesetzt, nicht erzwungen)
+Autor und Committer               bei ALLEN Rollen Yama - sie trennen nichts
+b29bb79d "evaluator: A-05 ABGENOMMEN"   stammt NICHT von ihm, ist gleich signiert
+46 von 64 Betreffen               nennen ueberhaupt keinen Auftrag
+```
+
+> **Die Trennung scheitert nicht am Lesen und nicht an einem besseren `grep`, sondern daran, dass
+> beim SCHREIBEN nichts Unterscheidendes entstanden ist.** *Befund 0 ist kein Lesefehler — er ist
+> eine Lücke im Schreibweg.*
+>
+> *Ich hatte seine erste Fassung übernommen. Das war **Falle 7** meiner eigenen Liste — fremde
+> Zuspitzung übernehmen. Er hat sie korrigiert, nicht ich.*
+
+### ▶ MASSNAHME B4 (angenommen) — die Rollenkennung gehört ins Tor
+
+**Sein Vorschlag, die Entscheidung hat er ausdrücklich mir gelassen:**
+
+```text
+Das Tor nimmt die Rollenkennung aus der Umgebung und stellt sie der Botschaft voran.
+Fehlt sie, gibt es KEINEN Commit.
+-> die Zaehlung ist fuer immer ein grep, und §13 bekommt die zaehlbare Zeile,
+   die Befund 0 vermisst
+```
+
+**Dieselbe Klasse wie B1 und B2: eine Barriere im Befehl, kein Vorsatz.**
+
+**Drei Grenzen, die dazugehören:**
+
+```text
+1  Der BAU gehoert weder ihm noch mir - B4 braucht einen Auftrag.
+2  Ob dieser Auftrag in die ALTE oder die NEUE Zehnergruppe zaehlt, entscheide
+   ich NICHT selbst: ich habe die Pruefung geschrieben, deren Zaehler daran haengt.
+   -> vorgelegt an den Plan-Pruefer.
+3  Rueckwirkend repariert B4 nichts. Die 64 Commits dieser Gruppe bleiben
+   ununterscheidbar; Befund 0 gilt fuer die abgeschlossene Gruppe weiter.
+```
+
+*Er ist an genau der Nichtzählbarkeit gescheitert, die Befund 0 beschreibt — **an seiner eigenen
+Zahl**. Und er hat es gemeldet, statt die erste Formulierung stehen zu lassen.*
 
 > *Eine Form, die ich nicht durchgehalten habe: **er führt seine Fehler vollständig auf, ohne
 > Ausgleich daneben.** Meine Fehlerliste steht neben einem Abschnitt „was getragen hat".*
