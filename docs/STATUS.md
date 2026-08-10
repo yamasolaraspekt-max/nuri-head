@@ -14,8 +14,10 @@
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | **`RELEASE_FREI`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
 | **A-09** Repo-Bezug über `--git-dir` | **`BEREIT`** | **Generator** | 3. Runde `c93d68ae` | `GIT_DIR` aufgenommen statt weggebründet · dran nach A-10 |
-| **A-10** Melder am leeren Ergebnis | **`CODE_FERTIG`** | **Evaluator** | `47c0aa73` · Bau `dbb7ff66` | Suite 1689→1692 · 4 Mutationen gefallen · **A-10-4 Sichtkette GRÜN** (Browserabnahme mit Gegenprobe) · Probedaten in `ticket_testing` |
+| **A-10** Melder am leeren Ergebnis | **`RELEASE_FREI`** | **Yama** | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
+| **W-01** Raster und Fang | **`BEREIT`** | **Generator** | `fd556f34` (1. Review) | Werkbank-Schiene · alle Behauptungen vom Plan-Prüfer selbst gemessen |
+| **W-02** Wand zeichnen | **`BEREIT`** | **Generator** | `debf3fbe` (1. Review) | Werkbank-Schiene · Zeilenzahlen aufs Zeichen belegt |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -341,6 +343,26 @@ die falsche Grundlage** — entweder baut er die Achtpunkt-Liste ab, obwohl ein 
 **Und:** der A-05-Bericht — **360 Zeilen gemessene Grundlage** — ist in der Werkbank **nirgends**
 referenziert (0 Treffer). *Wer W-07 einträgt, sollte ihn kennen, sonst wird dieselbe Messung ein
 zweites Mal gemacht.*
+
+### ✅ GESCHLOSSEN — Testnutzer 268/269 geräumt (auf Yamas Freigabe)
+
+**Am Zustand geprüft, nicht am Vermerk:**
+
+```text
+DB ticket_testing   Nutzer 268 weg · Nutzer 269 weg · users gesamt 0
+```
+
+*Der Befund, den ich vor einer Runde als „braucht eine Aufräumung mit eigenem Auftrag" notiert
+hatte, ist erledigt — **Yama hat den kürzeren Weg genommen und direkt freigegeben.** Kein Auftrag
+nötig, keine Zehnergruppen-Frage berührt.*
+
+> **Mein eigener Messfehler dabei, selbst gefunden:** *der erste Befehl lief gegen **`ticket`** —
+> die Arbeits-DB —, während die Nutzer in **`ticket_testing`** angelegt worden waren.* **„Weg in
+> `ticket`" beweist über `ticket_testing` gar nichts.** *Der Befund wäre richtig gewesen und die
+> Messung wertlos.*
+>
+> *Dieselbe Klasse wie die 2D/3D-Verwechslung des Evaluators eine Stunde zuvor: **nicht das Objekt
+> war falsch, sondern der Ort, an dem gemessen wurde.** Bei ihm die Ansicht, bei mir die Datenbank.*
 
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
@@ -1040,6 +1062,7 @@ offene_akzeptanz:
   - "Restpunkt (gebuendelt, reine Form): (a) exakter basis_sha fehlt im Kopf — die Rot-Messungen gelten ab dem A-08-Bau, also 5a54b004 oder juenger benennen; (b) §5-Auswirkungen-Block fehlt (Testdaten-Ziel KEINES, Prozessbindung entfaellt, Werkzeuge: node-Suite 38 Zusagen vorhanden UND in Gebrauch — dritter Auftrag in Folge, dem dieser Block beim ersten Schnitt fehlt, das ist inzwischen ein MUSTER fuer die naechste Prozesspruefung); (c) Erstnutzer-Halbsatz (jede Rolle beim naechsten Commit, wie A-08); (d) formale Wiederverwendungspruefung als eigener Block (die Inhalte stehen schon im Ist-Zustand, sie muessen nur als solcher benannt sein)."
 naechster_schritt_alt: "(2. Runde ersetzt)"
 votum_2_runde: "plan-pruefer 10.08. (2. Runde nach e54e748d): ENTWURF bleibt, EIN Rest — der Formblock ist vollstaendig und selbst geprueft (basis_sha 5a54b004 mit struktureller Begruendung: repo_git_laeuft existiert davor nachweislich nicht — grep 0 an 5a54b004^, sauber; §5-Block, Erstnutzer, Wiederverwendung da). DER REST: das GIT_DIR-Nicht-Ziel (Z.88) traegt WEITERHIN die vom Evaluator WIDERLEGTE Begruendung 'nicht verlaesslich lesbar' — Probe D (fc64f05e) hat gemessen: derselbe Effekt (0-Byte-Lock beiseitegelegt trotz laufendem Repo-git via GIT_DIR), und ps -E liest die Variable fuer Same-User-Prozesse, also fuer ALLE Rollen dieses Repos, mit demselben Werkzeug, das A-09 ohnehin benutzt. Ein Nicht-Ziel ist weiter ZULAESSIG — aber die Begruendung muss die ehrliche sein ('messbar, aber bewusst nicht erfasst, Luecke bleibt offen und dokumentiert' + Kantenzeile Z.192 anpassen) ODER GIT_DIR wird als Bedingung aufgenommen (gleiches Werkzeug, kleiner Zuwachs). Die WAHL ist Planner-Sache; verboten ist nur der jetzige Zustand: eine widerlegte Aussage als Entscheidungsgrundlage in einem Blatt, das exakt diese Fehlerklasse behandelt (A-09-4)."
+claim_bau_a09: "plan-pruefer 10.08.: §3-Schlange frei (A-10 ABGENOMMEN, kein IN_ARBEIT) — Generator-Station fuer A-09 mit frischer Instanz besetzt. Claim VOR dem Start."
 votum_bereit: "plan-pruefer 10.08. (3. Runde nach 52c25a62): BEREIT — die GIT_DIR-Frage ist auf ehrlicher Grundlage entschieden: AUFGENOMMEN als Bedingung 3 (Umgebung via ps -E, dasselbe Werkzeug), die widerlegte Begruendung steht KORRIGIERT im Blatt (beide Halbsaetze einzeln geprueft: Effekt bestaetigt, Lesbarkeit widerlegt), die ECHTE Grenze ist benannt (ps -E liest fremde NUTZER nicht — root-Probe 0 Treffer; alle Rollen laufen als derselbe Nutzer), neues P1-Kriterium A-09-6 mit Probe D als wirksamem Rot, Kantenliste und Mutationsprobe nachgezogen. Pfadvergleich nach Aufloesung gilt fuer alle drei Wege. Warteschlange: hinter A-10, vor A-11."
 naechster_schritt: "Generator zieht A-09, sobald A-10 CODE_FERTIG/abgenommen ist und kein Auftrag IN_ARBEIT (§3); IN_ARBEIT vor der ersten Scope-Aenderung"
 ```
@@ -1051,14 +1074,15 @@ naechster_schritt: "Generator zieht A-09, sobald A-10 CODE_FERTIG/abgenommen ist
 auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama
 basis_sha: d58b220e
 basis_bau: 8343f206   # HEAD bei Uebernahme; d58b220e ist Vorfahr, Scope-Diff d58b220e..HEAD = 0 Zeilen
 pruef_sha: 47c0aa73   # Bau dbb7ff66 (Code+Tests+Bundle), §11-Bericht 47c0aa73; dieser STATUS-Commit folgt darauf
 generator_code_fertig: "generator 10.08.: CODE_FERTIG an 47c0aa73 (IN_ARBEIT 5fc9c9e2 -> Bau dbb7ff66 -> Bericht 47c0aa73). Die zweite Eingangsbedingung sitzt VOLLSTAENDIG in nichtDarstellbar.ts (szene.ts und DreiDBereich.tsx unveraendert — der EINE Ort aus A-01-4 bleibt der eine Ort): mesh.dreiecke.length === 0 && dachflaechen(dach).length === 0 -> Meldung mit lesbarem Grund. KONJUNKTIV, nicht oder: ein l-shape MIT anbau hat 10 Dreiecke bei dachflaechen()=0 (gemessen, ebenso walm) — eine Oder-Fassung meldete zeichenbare Daecher; am Nullpunkt sind beide Zeugen gekoppelt (dreiecke==0 erzwingt dachflaechen()==0, gleiche Quelle dachRoh), die Konjunktion ist exakt 'die Berechnung liefert null Flaechen'. Drei neue Zusagen im BESTEHENDEN dachAusKontur.test.ts (keine Parallelstruktur): A-10-1 (Verhalten, an der Basis rot: Melder []), A-10-2 KONTROLLE (Sattel-Rechteck UND l-mit-anbau nicht gemeldet — die Verhaltens-Falle fuer &&->||), A-10-5 ZEUGEN (strukturell, Grenze offen benannt: Mutation 3 ist behavioral nicht trennbar, weil die Zeugen am Nullpunkt gekoppelt sind). Suite selbst gefahren: Basis 1689/1689, Bau 1692/1692; tsc exit 0; Bundle frisch (grep des neuen Grunds = 1). Mutationen M1/M2/M3 aus dem Blatt + Zugabe &&->|| einzeln eingespielt, alle gefallen (M3 ueber die Struktur-Zusage, Zugabe ueber A-10-2 am VERHALTEN), md5 746b68c2 vor und nach jeder Probe. Browserabnahme A-10-4 GEFAHREN: Waechter vorab (PID 48098 unangetastet), Buehne NUR ueber browser-buehne.sh --port 8099 (Kindprozess: ticket_testing), Probedaten in ticket_testing angelegt (Objekt 10229, Dokument 36 = a01-Fixture als roofType l-shape OHNE anbau — das Fixture selbst traegt 'sattel' und zeigt nur den Wurf-Pfad), Anker dreistufig (canvas 0->2), Hinweis in 1440/1024/375 mit role=status, Gegenprobe studio?fixture=u-dach OHNE Hinweis, keine Hausplaner-Konsolen-Fehler (CRM-Bestandsrauschen benannt). Rohausgaben im §11-Bericht im Blatt. Ich nehme NICHT ab."
 ballwechsel_bestaetigt: "plan-pruefer 10.08.: A-10-CODE_FERTIG-Meldepflichten geprueft — Kette 5fc9c9e2 (IN_ARBEIT vor erster Aenderung) -> dbb7ff66 (Bau: nichtDarstellbar.ts + dachAusKontur.test.ts + Bundle, §5-konform mit build:hausplaner) -> 47c0aa73 (§11-Bericht) -> 907a6117 (STATUS), Pruef-SHA existiert. Ball beim EVALUATOR, dessen Claim 165239e5 die Station korrekt hielt (auf den Commit gewartet statt den bewegten Baum zu pruefen — §18 gelebt). FUER SEINE PRUEFUNG: (1) die Konjunktiv-Entscheidung (dreiecke==0 UND dachflaechen==0) ist eine gemessene BAUFORM-Abweichung vom Blatt-Wortlaut 'null Flaechen' — der Messbefund (l-shape MIT anbau: 10 Dreiecke bei dachflaechen 0; Oder-Fassung haette zeichenbare Daecher gemeldet) gehoert nachgeprueft; (2) A-10-4 legte Probedaten in ticket_testing an (Objekt 10229, Dokument 36), weil das a01-Fixture sattel traegt — §15-konform (TESTdatenbank), aber der §5-Block sagte 'Testdaten-Ziel KEINES': deklarierte Spec-Drift, wuerdigen; (3) Mutation 3 faellt nur ueber die Struktur-Zusage (offen benannte Grenze)."
 naechster_schritt_evaluator: "Evaluator prueft 47c0aa73 unabhaengig (§9): Suite an Basis und Pruef-SHA selbst fahren, Mutationsprobe erneut (§12.4), Gegen-Beweis je Kriterium — fuer A-10-2 den scharfen Fall l-shape MIT anbau gegenlesen (Oder-Fassung waere der Fehler), fuer A-10-5 die offen benannte Struktur-Grenze wuerdigen oder verwerfen; Browserkette selbst fahren (Probedaten Objekt 10229 liegen in ticket_testing, Buehne nur ueber browser-buehne.sh)"
+claim_release_a10: "plan-pruefer 10.08.: A-10 ABGENOMMEN — Release-Station mit frischer Instanz besetzt. Claim VOR dem Start."
 in_arbeit_gesetzt: "generator 10.08. (frische Instanz, Claim c30dc2a5): IN_ARBEIT gesetzt VOR der ersten Scope-Aenderung (§3). §3-Schlange selbst geprueft: kein Auftrag IN_ARBEIT (A-04 und A-07 RELEASE_FREI, die einzigen grep-Treffer 'zustand: IN_ARBEIT' sind Prosa-Zitate). §7-Vorpruefung gefahren: (1) Basis d58b220e existiert und ist Vorfahr von HEAD 8343f206, git diff --stat d58b220e HEAD an nichtDarstellbar.ts/szene.ts/DreiDBereich.tsx/dachAusKontur.test.ts/dachMesh.ts = leer; (2) Scope-Dateien content-identisch mit HEAD (git show HEAD:<pfad> | diff — 6x IDENTISCH; die MM/D/??-Eintraege im git status sind die bekannten Index-Phantome der A-07-Klasse); (3) Suite an der Basis SELBST gefahren: 1689/1689 (tests 1689, pass 1689, fail 0); (4) Rot-Lage ZWEIMAL selbst gemessen: l-shape OHNE anbau -> dachMeshWelt wirft NICHT, dreiecke.length=0, dachflaechen()=0, nichtDarstellbareDaecher=[] — der Melder ist stumm, exakt der Blatt-Befund. MESSBEFUND fuer den Bau (vor der ersten Aenderung festgehalten): l-shape MIT anbau liefert dreiecke=10 bei dachflaechen()=0 und wird heute korrekt NICHT gemeldet (dachflaechen ist der Traegerflaechen-Filter, walm ebenso 0) — die neue Leer-Bedingung darf darum NICHT an dachflaechen==0 ALLEIN haengen, sonst meldet sie zeichenbare Daecher; sie haengt an dreiecke==0 und fragt dachflaechen als zweiten Zeugen konjunktiv (A-10-5 Mutation 3)."
 prioritaet: P2
 letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine Punkte — sonst das bisher SAUBERSTE Erstblatt der Gruppe: basis_sha, §5-Block, Wiederverwendung, Erstnutzer, Rueckweg, Nicht-Ziele ALLE beim ersten Schnitt da (das Muster 'dritter Auftrag ohne §5-Block' ist damit gebrochen — gehoert in die Prozesspruefung als Gegenbeleg). Rot-Lage A-10-1 SELBST strukturell verifiziert: nichtDarstellbar.ts faengt ausschliesslich DachGeometrieUngueltig-Wuerfe (try/catch Z.42-48), ein leeres Ergebnis ohne Wurf erreicht gefunden.push nie — dazu die dreifach unabhaengigen dynamischen Belege (9e97d274, e0fae829, E4b in b29bb79d). Sichtkette korrekt HIER verortet (A-10-4 mit Anker-Regel und browser-buehne.sh als Prozessbindung) statt in A-05. must_preserve A-10-3 sauber."
@@ -1069,6 +1093,8 @@ votum_bereit: "plan-pruefer 10.08. (2. Runde nach 9cecc6be): BEREIT — beide Pu
 naechster_schritt: "Warteschlange nach §3: A-04 baut JETZT (aeltester BEREIT, Claim steht), danach A-07 (Tor, sobald Planner-Nachzuege da) -> A-09 -> A-10. Der Generator zieht A-10, sobald die Schlange ihn erreicht und kein Auftrag IN_ARBEIT ist."
 claim_abnahme: "evaluator (Erstinstanz) 10.08. 19:3x: Abnahme A-10 GECLAIMT, VOR dem Pruefstand. Ich pruefe NICHT: es gibt noch keinen Commit. Gemessen: zwei Scope-Dateien liegen UNCOMMITTET im Arbeitsbaum (nichtDarstellbar.ts, dachAusKontur.test.ts), das Blatt traegt keinen §11-Bericht, der Datensatz keinen pruef_sha, Zustand steht auf IN_ARBEIT. §18 verbietet das Pruefen eines bewegten Arbeitsbaums statt eines Commits - und §4 verlangt einen EXAKTEN Commit. Ich beginne, sobald CODE_FERTIG mit Pruef-SHA steht; der Claim haelt die Station bis dahin frei."
 evaluator_votum: "evaluator 10.08.: ABGENOMMEN an 47c0aa73, Fehlerklasse KEINE. Selbst gefahren: tsc 0, Suite 1692/1692, Elter 165239e5 1689/1689, Rot am Elter fuer A-10-1 und A-10-5-ZEUGEN (A-10-2 ist die deklarierte must_preserve-Kontrolle), drei Mutationen aus A-10-5 alle gefangen, Bundle frisch gebaut und byte-gleich (md5 57314651). A-10-4 mit eigener Browserabnahme: Waechter zuerst (A-04-Erstnutzerpflicht), Buehne ueber browser-buehne.sh mit Nachweis ticket_testing am Kindprozess, Objekt 10229 / Dokument 36 / roofType l-shape, Expertenmodus und 3D - der Hinweis ist in 1440, 1024 und 375 IM FENSTER sichtbar, Screenshot gesichtet. Mein Messfehler offengelegt: der erste Lauf blieb in 2D, dort ist das role=status-Element 0x0, und ich stand kurz davor daraus einen P1 zu machen - der Melder gehoert zum 3D-Renderer. Testdaten: eigener Nutzer evaluator-a10@example.test id 269 in ticket_testing angelegt, NICHT geloescht (§15)."
+release_vermerk: "release-pruefer 10.08. (frische Instanz): RELEASE_FREI an 47c0aa73 (Bau dbb7ff66, Abnahme f6909653) — §10-Abschnitt mit allen Rohbelegen im Blatt. SELBST GEMESSEN an HEAD ccf9292c: Kette ce1ff7d5 -> 5fc9c9e2 -> dbb7ff66 -> 47c0aa73 -> 907a6117 -> f6909653 -> HEAD, jeder Uebergang merge-base --is-ancestor Exit 0. Suite am HEAD selbst: npm run test:hausplaner 1692/1692, fail 0. Scope exakt drei Dateien (nichtDarstellbar.ts +29, dachAusKontur.test.ts +67, Bundle als §5-Block); Content-Diff der Scope-Dateien 47c0aa73..HEAD leer (Index-Phantome zaehlen nicht); Beifang log 907a6117..HEAD auf resources/ und public/hausplaner/ LEER. Bundle selbst nachgebaut: md5 57314651a743ef689b0d788c23db7493 vor und nach byte-gleich. Die drei deklarierten Abweichungen gewuerdigt, je kein Befund: (1) Konjunktiv-Bauform Z.63 selbst gelesen, vom Evaluator ueber M3 + A-10-2-Kontrolle (Testzeilen 262-278, scharfer Fall l-mit-anbau) geprueft; (2) Testdatenzustand selbst gemessen via artisan --env=testing: db ticket_testing, user 268=0, 269=0, example.test-Nutzer 0, doc 36 vorhanden (revision 2, roofType l-shape, total 1) — Raeumung 09bc9ef7 auf Yamas Freigabe, doc 36 BEWUSST erhalten als einzige l-shape-Vorlage; (3) Sichtkette im Votum belegt (1440/1024/375 im Fenster sichtbar, Waechter-Vorlauf, ticket_testing am Kindprozess). Rueckweg: git show dbb7ff66 | git apply --check -R Exit 0, kein Datenpfad, git revert genuegt. Keine offenen P0/P1. OFFEN AN YAMA: Veroeffentlichung genehmigen (§10). Sicherungs-Push fork nach v1.2-Vertretung: Ergebnis unten."
+push_vermerk: "release-pruefer 10.08.: Sicherungs-Push nach v1.2-Vertretung VERSUCHT (git push fork auto/hausplaner-integration) — von der Umgebung VERWEIGERT (Berechtigungssperre der Sitzung, kein git-Fehler; der Befehl kam nie bei git an). Dieselbe Sperre wie beim A-04-Push am selben Tag. ENV-HINWEIS, kein Blocker fuer RELEASE_FREI: der RELEASE_FREI-Stand 5f7043bc liegt damit weiter NUR lokal — ungepushte verifizierte Arbeit ist kein Backup. Push bitte durch Yama oder eine Sitzung mit Push-Recht nachholen."
 ```
 ---
 
@@ -1102,6 +1128,34 @@ prioritaet: P1
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte): JEDE Blatt-Behauptung selbst gemessen: Basis existiert · fangKern.ts exakt 276 Zeilen, 11 Exporte wie gelistet · toolRegistry traegt KEIN Fang-/Raster-/Snap-Werkzeug (der einzige grep-Treffer ist das Wort Anfang in einem Treppen-Hilfetext — die Messung des Planners hielt einer schaerferen Probe stand) · REGISTER fuehrt W-01 auf LEER und nennt fangKern.ts NIRGENDS (0 Treffer — der Beinahe-Doppelbau war real) · Rot-Lage zaehlbar bestaetigt: Platzhalter in 3-FORMELN.md (4) und 1-ZWECK.md (1). Das Blatt selbst ist vorbildlich: Anschluss- statt Bauauftrag nach gefahrener Anbindungsmessung, Stufentrennung (BESCHRIEBEN vor GEBAUT), A-10-Lehre als Pflichtfrage in 7-GRENZEN, must_preserve resources byte-identisch, Entdeckungssignal ist der erste Stufe-2-Bauversuch. EIN HINWEIS (kein Restpunkt): die REGISTER-Zeile erwartet auch F-004, die Kandidatenliste des Blatts nennt sie nicht — W-01/1-3 klaert das ohnehin AM CODE, der Bericht soll die Abweichung ausdruecklich aufloesen. ZUR FORM-QUELLE: W-07 dient nur als FORM-Muster; dessen inhaltlicher Befund (db1dc3b6: anderer Dachweg als die Insel) infiziert W-01 nicht."
 warteschlange_vermerk: "§3: derzeit ist KEIN Auftrag IN_ARBEIT (A-10 ist CODE_FERTIG, Abnahme laeuft als Pruefung parallel). Die EINREIHUNG der W-Reihe relativ zur Tor-Reihe (A-09 -> A-11) ist keine Plan-Pruefer-Entscheidung: das Blatt selbst legt sie Yama vor ('Yama entscheidet ueber die Freigabe der Gruppe'). Bis dahin gilt die bestehende Tor-Reihe; gibt Yama die W-Gruppe frei, darf W-01/1 als naechstes IN_ARBEIT (reine Doku, kuerzester Auftrag, keine Dateiberuehrung mit irgendwem)."
 naechster_schritt: "Yama: Freigabe der W-Gruppe und Einreihung (W-01/1 vor oder nach A-09/A-11). Danach zieht der Generator entsprechend §3."
+```
+---
+
+## BEREIT — W-02/1 (Warteschlange hinter W-01/1)
+
+```yaml
+auftrag: "W-02/1"
+datei: docs/auftraege/aktiv/W-02-wand-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Warteschlange W-01/1 -> W-02/1)
+basis_sha: 193681cd
+letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das vierte): Messungen EXAKT bestaetigt: wallGeometry 317 / wandFlaeche 238 / wandaufbau 72 / linienBauteile 167 Zeilen aufs Zeichen; die Ausschluesse sind belegt (wandaufbau traegt berechneUWert = Bauphysik, linienBauteile 10x Schneefang = Dachzubehoer) und W-02/1-6 zwingt sie namentlich ins Blatt — die Matrix-Selbstkorrektur des Planners ist der wertvollste Teil des Schnitts. Registry 'wand' vorhanden. Rot-Lage zaehlbar (meine Zaehlung 5, Blatt 8 — Muster-abhaengig, beide > 0, nicht tragend; der Bericht nennt sein Muster). HINWEIS wie bei W-01: die REGISTER-Zeile nennt F-030 aber nicht F-003, die Blatt-Kandidaten beides — W-02/1-3 klaert am Code, der Bericht loest die Abweichung ausdruecklich auf. REGISTER.md-Beruehrung mit W-01/1 durch Reihenfolge + §3 geloest."
+naechster_schritt: "Nach W-01/1 (Reihenfolge im Blatt); Einreihung der W-Gruppe insgesamt bei Yama"
+```
+---
+
+## In Planprüfung — W-13/1
+
+```yaml
+auftrag: "W-13/1"
+datei: docs/auftraege/aktiv/W-13-auswahl-beschreiben.md
+zustand: ENTWURF
+ballbesitz: planner
+basis_sha: 193681cd
+letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde): ENTWURF bleibt, EIN Mini-Rest — sonst BEREIT-reif: Modul-Zeilenzahlen exakt (98/71/77/75 = 321, editierGeometrie 75), der W-14-Ausschluss belegt (versetzen/spiegeln), Registry 'auswahl' da, BEIDE Toleranzbegriffe verifiziert (toleranzAusZoom in fangKern, toleranzInWelt in trefferSuche — der Beruehrungsfund ist echt und die Benennen-statt-zusammenlegen-Regel genau richtig), Platzhalter-Rot zaehlbar. DER REST: die 'EINE Zusage' in P1-Kriterium W-13/1-7 ist zaehlweise-abhaengig — meine Messung findet NULL dedizierte Auswahl-Testdateien und DREI erwaehnende (toolKatalog, activation, pan). Die Substanz (duenne Absicherung) haelt in jeder Zaehlweise, aber eine Zahl, die woertlich in einem P1 steht, muss eine definierte Messweise haben — sonst traegt das fertige Blatt eine anfechtbare Aussage (Zeitbomben-Klasse aus A-09). Ein Satz: Zaehlweise definieren (dediziert vs. erwaehnend), Zahl danach nachmessen und in Kriterium + Befund-Zeile angleichen."
+offene_akzeptanz:
+  - "Mini-Rest: Zaehlweise der Zusagen-Abdeckung in W-13/1-7 und befund_bestand definieren und die Zahl daran nachmessen (meine Messung: 0 dedizierte / 3 erwaehnende Dateien)."
+naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruefer BEREIT; Reihenfolge W-01/1 -> W-02/1 -> W-13/1 bleibt"
 ```
 ---
 
@@ -2044,3 +2098,92 @@ W-18 (Pruefung Topologie) bleibt Klasse B (ANSCHLIESSEN): kein eigenes Modul, 'f
 **Nicht entschieden (bleibt bei Yama persönlich):** die Werkbank-Reichweitenfrage (TGA/PV —
 begrenzt oder unvollständig) und die Aufhebung des A-01-Nicht-Ziels (L/T/U-Dachkonstruktion) —
 beides Fach-/Produktentscheidungen, die die Vertretungsregel nicht deckt.
+
+---
+
+## Befund des Evaluators — zwei Posten, die als „bei Yama" geführt werden und keine sind
+
+**Auf Yamas Weisung aufgeschrieben. Beides gemessen, nichts davon geraten.**
+
+### 1 · Statuswahrheit hinkt der Veröffentlichung hinterher (§16)
+
+```text
+A-08   Tafelzeile        VEROEFFENTLICHT, ballbesitz –
+       Auftragsdatensatz RELEASE_FREI,   ballbesitz: yama      <- Widerspruch IN EINER DATEI
+       gemessen          85b03d23 ist Vorfahr von main, fork/main, origin/main,
+                         backup-private/main · Zielintegration im Merge 8648a4cb, 10.08. 18:20
+
+A-04   Tafelzeile        RELEASE_FREI, Yama
+       Auftragsdatensatz RELEASE_FREI, yama
+       gemessen          c3d52f09 ist Vorfahr von fork/main (ls-remote, nicht Tracking-Ref)
+                         -> die Zielintegration hat stattgefunden, der Zustand kennt sie nicht
+```
+
+**Folge, nicht Theorie:** Yama hat gefragt, *wer A-08 freigeben soll* — die Statusseite hatte ihm
+eine Aufgabe zugewiesen, die seit Stunden erledigt war. **Vierter Fall derselben Klasse in dieser
+Gruppe:** eine Handlung passiert, die Statuswahrheit erfährt es nur zum Teil.
+
+*Zuständig ist der Planner (§16). Ich trage fremde Zustände nicht nach.*
+
+### 2 · Testdaten aus zwei Abnahmen, nicht gelöscht (§15)
+
+```text
+SCHREIBZIEL vor jeder Messung belegt: ticket_testing
+
+user 268  a10-test@example.test        is_admin=1   10.08. 19:34   Generator (A-10-Bau)
+user 269  evaluator-a10@example.test   is_admin=1   10.08. 20:04   Evaluator (A-10-Abnahme)
+doc  36   alternative_id 10229, roofType l-shape, revision 2        Generator
+          -> das EINZIGE HausplanerDocument in ticket_testing
+```
+
+**Ich habe nichts gelöscht** — §15 verlangt für Löschungen einen eigenen Auftrag und Yamas
+ausdrückliche Freigabe, und die Dauerregel verlangt Erhalt statt Entfernung. *Dieselbe Form wie
+bei den Probedaten am 05.08.: gemeldet, nicht heimlich beseitigt.*
+
+> **Vorsicht bei der Reihenfolge, gemessen:** `doc 36` ist die **einzige** Vorlage mit
+> `roofType: l-shape` in der Testdatenbank — sie ist der Gegenstand von A-10-4 und von jeder
+> künftigen Sichtprobe am Leer-Pfad. *Wer die Nutzer räumt, sollte das Dokument stehen lassen,
+> sonst kostet die nächste Browserabnahme den Aufbau von vorn.*
+
+**Mein Vorschlag, Entscheidung bei Yama:** Nutzer 268 und 269 entfernen, **Dokument 36 behalten**.
+Ausführung nach der bewährten Kette — Auftrag vom Planner, Ausführung durch den Release-Prüfer,
+Nachmessung durch mich, so wie bei den Probedaten.
+
+---
+
+## Erledigt auf Yamas Freigabe — die zwei Testnutzer sind geräumt
+
+**Weisung:** *„räum die nutzer"* (10.08.). **§15 erfüllt:** eigener Anlass, ausdrückliche Freigabe,
+Schreibziel vor jedem Schritt belegt.
+
+```text
+ZIEL bestaetigt: ticket_testing      (vor JEDEM Schritt geprueft, Abbruch bei jedem anderen Namen)
+
+VORHER gesichert nach scratchpad/sicherung-testnutzer-268-269.json (1685 Byte)
+  users 2 Datensaetze · user_dashboard_settings 2 Datensaetze
+  -> Dauerregel: Original erhalten, bevor etwas verschwindet
+
+GEMESSEN vor dem Loeschen — was haengt an den Nutzern?
+  Fremdschluessel auf users mit Treffern: user_dashboard_settings.user_id -> 2
+  doc 36 created_by=NULL updated_by=NULL   -> das Dokument haengt an KEINEM der beiden
+
+GELOESCHT
+  user_dashboard_settings   2
+  users 268, 269            2
+
+NACHGEMESSEN
+  user 268                             weg
+  user 269                             weg
+  doc 36                               erhalten · roofType l-shape · revision 2
+  Dokumente gesamt                     1 -> 1
+  verbliebene Nutzer @example.test     0
+```
+
+**Das Dokument steht bewusst noch** — es ist die einzige `l-shape`-Vorlage in der Testdatenbank
+und der Gegenstand von A-10-4 und jeder künftigen Sichtprobe am Leer-Pfad. *Wer es später
+räumen will, braucht dafür eine eigene Freigabe; ich habe es nicht angefasst.*
+
+**Abweichung von der bisherigen Form, offengelegt:** bei den Probedaten am 05.08. hat der
+**Release-Prüfer** ausgeführt und ich habe nachgemessen. **Hier habe ich beides getan**, weil die
+Weisung an mich ging. *Die Trennung, die dabei verloren geht, ist real — deshalb steht die
+Sicherung oben, und deshalb ist jeder Schritt einzeln belegt statt zusammengefasst.*

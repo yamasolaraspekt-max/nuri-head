@@ -52,13 +52,41 @@ geometry/editierGeometrie.ts           75 Zeilen
 > selben Dokument — sie zu schreiben hat nicht gereicht, erst die Messung je Werkzeug hat es
 > gefunden.*
 
-## Der zweite Befund — die Absicherung ist dünn
+## Der zweite Befund — die Absicherung ist dünn, mit DEFINIERTER Messweise
+
+> **⚠ KORRIGIERT nach dem DoR-Rest des Plan-Prüfers (`debf3fbe`).** Hier stand *„nur EINE
+> Testdatei"* gegen *„SIEBEN bei W-02"* und *„DREI bei W-01"* — **drei Zahlen aus zwei verschiedenen
+> Methoden.** Er hat es beanstandet: *„zählweise-abhängig, Zahl braucht definierte Messweise."*
+> Er hat recht, und der Fehler war schlimmer als „unscharf":
+>
+> **Meine „eine Zusage" war `editierGeometrie.test.ts` — die Zusage des Moduls, das ich im selben
+> Blatt als Nicht-Gegenstand ausgeschlossen habe.** Derselbe Namensfilter
+> (`grep -icE 'auswahl|treffer|editier'`), derselbe Fehler wie in der Anschlussmatrix.
+
+**Die Messweise, ab hier verbindlich für alle W-Blätter:**
 
 ```text
-321 Zeilen Auswahl-Logik  ·  18 Exporte  ·  aber nur EINE Testdatei
-Vergleich: W-02 hat 555 Zeilen und SIEBEN Zusagen
-           W-01 hat 276 Zeilen und DREI Zusagen
+DEDIZIERT    Testdatei, deren Name mit einem Modulnamen des Werkzeugs beginnt
+             ls __tests__/ | grep -icE '^(<modul1>|<modul2>)\.'
+ERWAEHNEND   Testdatei, die ein Modul des Werkzeugs IMPORTIERT
+             grep -rlE "from '.*(<modul1>|<modul2>)'" __tests__/ | wc -l
 ```
+
+**Alle drei Werkzeuge mit dieser einen Messweise gemessen:**
+
+```text
+            dediziert   erwaehnend
+W-01              1          3        fangKern.test.ts + 2 weitere
+W-02              2          7        wallGeometry.test.ts, wandFlaeche.test.ts + 5
+W-13              0          2        markieren.test.ts, teilKennung.test.ts
+```
+
+**Der Befund hält und ist jetzt belegt:** W-13 ist das einzige der drei **ohne eine einzige
+dedizierte Zusage** — 321 Zeilen und 18 Exporte, für die keine Testdatei zuständig ist.
+
+*Anmerkung zur Genauigkeit der 7 bei W-02: darunter ist `typprobe-wandFlaeche.tsprobe`, keine
+Testdatei im engeren Sinn. Streng gezählt sind es 6. Ich nenne beide Zahlen, statt eine zu wählen —
+für den Vergleich mit W-13 (0 dediziert) ist der Unterschied ohne Belang.*
 
 **Das ist kein Mangel dieses Auftrags, aber es gehört ins Blatt** — `6-PRUEFUNG` kann sich hier
 nicht auf vorhandene Zusagen stützen wie bei W-01 und W-02. *Wer W-13 Stufe 2 baut, baut auf einer
@@ -146,9 +174,11 @@ Exportliste.
 Nicht-Gegenstand benannt, mit Verweis auf W-14.** *Ohne dieses Kriterium ordnet der nächste Leser es
 wieder zu — meine Matrix hat es getan.*
 
-**W-13/1-7 (P1, die dünne Absicherung ist benannt):** `6-PRUEFUNG` sagt ausdrücklich, dass 321
-Zeilen von **einer** Zusage abgedeckt sind, im Vergleich zu 7 bei W-02 und 3 bei W-01. *Eine
-Beschreibung, die eine dünne Grundlage verschweigt, lässt Stufe 2 in eine Falle laufen.*
+**W-13/1-7 (P1, die dünne Absicherung ist benannt — mit Messweise):** `6-PRUEFUNG` sagt
+ausdrücklich, dass W-13 **null dedizierte Zusagen** hat (W-01: 1, W-02: 2) und **zwei erwähnende**
+(W-01: 3, W-02: 7) — **nach der im Blatt definierten Messweise**, die im Text mitsteht, damit die
+Zahl nachrechenbar ist. *Eine Beschreibung, die eine dünne Grundlage verschweigt, lässt Stufe 2 in
+eine Falle laufen — und eine Zahl ohne Messweise ist keine Zahl.*
 
 **W-13/1-8 (`must_preserve`):** `resources/**` byte-identisch, Insel-Suite unverändert grün.
 

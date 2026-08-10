@@ -322,3 +322,78 @@ zusammen mit dem Generator-Nutzer (id 268) in eine Aufräumung mit eigenem Auftr
 **Prüfstand:** `node_modules` **und** `vendor` verlinkt, Prüfstand mit `-q` angelegt und
 Scope-Diff mit `--pretty=format:''` — die beiden Barrieren aus der §13-Prüfung, damit mir der
 Bericht nicht vor der Messung vor Augen steht.
+
+---
+
+## Release-Prüfung A-10 (§10) — 10.08.2026
+
+```yaml
+auftrag: A-10
+abnahme_commit: f6909653   # Evaluator-Votum; geprüft wurde 47c0aa73 (Bau dbb7ff66)
+release_commit: ccf9292c   # HEAD bei dieser Prüfung
+votum: RELEASE_FREI
+ci: pass                   # npm run test:hausplaner am HEAD: 1692/1692, fail 0
+artefakte_reproduzierbar: true   # md5 57314651a743ef689b0d788c23db7493 vor UND nach eigenem build:hausplaner
+migration: nicht_anwendbar
+rueckweg: pass             # git show dbb7ff66 | git apply --check -R -> exit 0; kein Datenpfad
+smoke_test_plan: "Nach Veröffentlichung: Objekt mit l-shape-Dokument (Vorlage: doc 36 in ticket_testing)
+  im 3D-Modus öffnen — Hinweis 'liefert keine einzige Fläche' sichtbar; Gegenprobe u-dach ohne Hinweis;
+  Suite npm run test:hausplaner am Zielstand."
+befunde: []
+```
+
+### Prüfpunkte, je selbst gemessen an HEAD `ccf9292c`
+
+**1. Kette** — jeder Übergang `git merge-base --is-ancestor`, Exit je 0:
+
+```text
+ce1ff7d5 (BEREIT) -> 5fc9c9e2 (IN_ARBEIT) -> dbb7ff66 (Bau) -> 47c0aa73 (§11-Bericht/Prüf-SHA)
+-> 907a6117 (CODE_FERTIG) -> f6909653 (ABGENOMMEN) -> HEAD ccf9292c        6/6 Exit 0
+```
+
+**2. Insel-Suite am HEAD selbst** — `npm run test:hausplaner` (Runner aus package.json:10):
+
+```text
+tests 1692   pass 1692   fail 0   cancelled 0   duration_ms 2200.517
+```
+
+**3. Scope** — `git show dbb7ff66 --stat`: exakt drei Dateien — `nichtDarstellbar.ts` (+29),
+`dachAusKontur.test.ts` (+67), `public/hausplaner/hausplaner.js` (Bundle, §5-Block). Content-Diff
+der drei Scope-Dateien `47c0aa73..HEAD`: **leer** (`git diff --quiet` Exit 0 — die bekannten
+Index-Phantome zählen nicht, der Inhalt zählt). Beifang: `git log 907a6117..HEAD -- resources/
+public/hausplaner/` ist **leer**.
+
+**4. Bundle frisch und reproduzierbar** — selbst nachgebaut:
+
+```text
+md5 vor   57314651a743ef689b0d788c23db7493
+npm run build:hausplaner   "built in 1.22s"
+md5 nach  57314651a743ef689b0d788c23db7493    BYTE-GLEICH (identisch mit dem Evaluator-Wert)
+```
+
+**5. Die drei deklarierten Abweichungen, gewürdigt:**
+
+- **(1) Konjunktiv-Bauform** (`dreiecke==0 && dachflaechen==0`, nichtDarstellbar.ts Z. 63, selbst
+  gelesen): **vom Evaluator geprüft** — M3 (Verengung auf `dreiecke` allein) fiel an der
+  ZEUGEN-Zusage; die Gegenrichtung `&&`→`||` ist am VERHALTEN durch A-10-2 gedeckt (Testzeilen
+  262–278: der scharfe Fall l-shape MIT anbau, 10 Dreiecke bei `dachflaechen()=0`), und A-10-2 hat
+  der Evaluator am Prüfstand grün und am Elter korrekt grün (must_preserve-Kontrolle) gemessen.
+  Kein Befund.
+- **(2) Testdaten in ticket_testing** — Zustand selbst gemessen (artisan, `--env=testing`, DB-Name
+  am Aufruf belegt): `{"db":"ticket_testing","user268":0,"user269":0,"example_test_users":0,
+  "doc36":1}` und doc 36 mit `revision: 2`, `roofType: l-shape`, `total_docs: 1`. Die Räumung
+  268/269 lief auf Yamas Freigabe (`09bc9ef7`, nach der Abnahme, berührt nur STATUS.md); **doc 36
+  steht BEWUSST** — einzige l-shape-Vorlage, Gegenstand von A-10-4 und des Smoke-Plans; Räumung
+  bräuchte eigene Freigabe. Kein Befund.
+- **(3) Sichtkette §12.4** — **im Votum belegt**: `browser: 1440/1024/375 — Hinweis in ALLEN drei
+  Breiten im Fenster sichtbar`, dazu der A-10-4-Abschnitt mit Wächter-Vorlauf (A-04-Erstnutzer),
+  `ticket_testing` am Kindprozess, Sichtbarkeitsmessung im Viewport statt Existenzprüfung und dem
+  offengelegten 2D/3D-Messfehler. Kein Befund.
+
+**6. Rückweg** — der Diff `dbb7ff66` enthält nur Quelldatei + Test + Bundle, **keinen Datenpfad**
+(keine Migration, kein DB-Schreibcode); `git show dbb7ff66 -- resources/ public/ | git apply
+--check -R` → Exit 0: ein `git revert dbb7ff66` genügt und wendet sauber an, da keine spätere
+Änderung die Scope-Dateien berührt hat.
+
+**Urteil: `RELEASE_FREI`** — keine offenen P0/P1, Ball bei Yama für die Veröffentlichung.
+Sicherungs-Push `fork` nach v1.2-Vertretung: Ergebnis im STATUS-Vermerk.
