@@ -1579,3 +1579,65 @@ ballbesitz: planner
 **Ich entscheide nicht, welcher Weg genommen wird** — das ist die Wegfrage und gehört dem Planner.
 *Ich stelle nur fest, dass dieser eine Weg keine bestehende Zusage kostet, und das war vorher
 unbekannt: der Generator hat ihn vorgeschlagen, ohne die anderen fünf Zusagen dagegenzuhalten.*
+
+---
+
+## Befund des Evaluators zu A-09 — das Nicht-Ziel `GIT_DIR` steht auf einer widerlegten Begründung
+
+**A-09 ist `ENTWURF` beim Planner. Der Auftrag greift meinen P2 richtig auf** — A-09-1 bis
+A-09-5 treffen genau die Lage aus Probe C. **Eine Zeile habe ich nachgemessen, weil sie eine
+Messaussage enthält:**
+
+```text
+Blatt Z.85-88:  "Nicht-Ziel: die Umgebungsvariable GIT_DIR. Sie kann denselben Effekt haben,
+                 ist aber in der Umgebung eines FREMDEN Prozesses auf macOS nicht
+                 verlaesslich lesbar."
+```
+
+**Probe D, gefahren wie Probe C, nur mit `GIT_DIR` statt `--git-dir`:**
+
+```text
+( sleep 40 | GIT_DIR=<repo>/.git git hash-object --stdin ) &   cwd: scratchpad (fremd)
+Lock: 0 Byte, 242 s
+-> BEISEITE   .git/index.lock ... -> _locks_beiseite/2026-08-10/
+-> Commit lief
+```
+
+**Derselbe Effekt, dieselbe Lage wie Probe C.** *Das bestätigt den Halbsatz „kann denselben
+Effekt haben".*
+
+**Der zweite Halbsatz trägt nicht:**
+
+```text
+ps -p <pid> -o command=     ->  zeigt KEIN --git-dir      (erwartet, es steht in der Umgebung)
+ps -E -p <pid> -o command=  ->  GIT_DIR=/…/pr9/.git
+                                GIT_WORK_TREE=/…/pr9
+Pfad aufgeloest             ->  identisch mit dem Repo-.git
+```
+
+**`ps -E` liest die Umgebung eines fremden Prozesses auf dieser Maschine** — mit demselben
+Werkzeug, das A-09 ohnehin benutzt (`ps`), und mit absolut auflösbarem Pfad.
+
+**Die Grenze, die es wirklich gibt, ist eine andere — auch die gemessen:**
+
+```text
+ps -E auf einen root-Prozess (PID 1)   -> 0 Treffer   (fremder Nutzer: nicht lesbar)
+ps -E auf einen eigenen Prozess         -> lesbar
+alle Rollen dieses Repos laufen als     -> yamanuri (gemessen an laufenden Tor-/Suite-Prozessen)
+```
+
+*„Nicht verlässlich lesbar" stimmt **nutzerübergreifend** und stimmt **nicht** für den Fall, um
+den es hier geht: gleicher Nutzer, gleiche Maschine.*
+
+```yaml
+auftrag: A-09
+fehlerklasse: SPEC
+befund: "Nicht-Ziel GIT_DIR ruht auf einer Begruendung, die fuer den einschlaegigen Fall widerlegt ist"
+gegenprobe: Probe D (Effekt) gegen ps -E (Lesbarkeit) gegen root-PID (die echte Grenze)
+ballbesitz: planner
+```
+
+**Ein Nicht-Ziel ist nach §5 zulässig, und ich verlange keins.** *Aber es ist mit „nicht messbar"
+begründet, und das ist es im einschlägigen Fall nicht — bleibt es stehen, bleibt eine Lücke
+derselben Form offen, die A-09 gerade schließt.* **Ob das die Mühe wert ist, entscheidet der
+Planner; er sollte es nur nicht in dem Glauben entscheiden, es ginge nicht.**
