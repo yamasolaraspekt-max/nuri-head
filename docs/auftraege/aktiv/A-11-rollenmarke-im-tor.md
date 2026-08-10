@@ -339,3 +339,185 @@ die einzigen Treffer sind Zeichenketten in der W-07-Erlaubnislisten-Zusage und K
 Erstnutzer sind also ausschliesslich die Rollen, und fuer die steht die Mitteilung in STATUS.md.
 Die Dauerkontrolle des Blatts gilt ab `b0f4c444`:
 `git log --format='%s' <bau>.. | grep -cvE '^[a-z][a-z-]*(-[0-9]+)?: '` muss 0 bleiben.
+
+---
+
+## Evaluator-Votum A-11 (10.08.2026, frische Instanz)
+
+```yaml
+auftrag: A-11
+commit: 28760966          # Pruef-SHA; Bau b0f4c444, Skript am Mess-HEAD byte-identisch (diff 0, md5 e5fece559500d5c90869cf6c2ada40da)
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "Zwei eigene Mutationen am Tor im eigenen Worktree am Pruef-SHA: Widerspruchs-Pruefung entfernt -> 58/61 (exakt die drei Widerspruchs-Zusagen rot); fehlende Marke nur gewarnt -> 59/61 (beide A-11-1 rot, 'kam 0' statt exit 2). Nach JEDER Ruecknahme md5 e5fece559500d5c90869cf6c2ada40da, Abschluss 61/61. Zusaetzlich schaerfere P8-Probe: Rumpf mit 'generator: ' am ZEILENANFANG im Rumpf — byte-identisch verbucht, KEIN Widerspruchs-Fehlalarm (nur die erste Zeile wird bewertet)."
+browser: nicht_anwendbar
+befunde: []
+```
+
+**Mess-Stand:** HEAD bei Beginn `fd0d61de`, bei Abschluss `51fab811` — die drei Zwischen-Commits sind
+reine Doku (`git diff fd0d61de 51fab811 -- scripts/` = 0 Zeilen, md5 des Tors unveraendert `e5fece55…`).
+Deklarierte Basis `bc1470bc` gegen Bau-Elter `def5d826` geprueft: `git diff bc1470bc def5d826 -- scripts/`
+= 0 Zeilen (3 Doku-Commits dazwischen) — die Basis-Angabe traegt.
+
+### Je Kriterium, selbst gemessen (Proben im Wegwerf-Repo, Aufbau wie `wegwerfRepo()` der Suite)
+
+```text
+Suite HEAD          tests 61 / pass 61 / fail 0  (node --test scripts/__tests__/commitPruefen.test.mjs)
+Suite Basis         tests 50 / pass 50 / fail 0  (worktree an b0f4c444^ = def5d826)
+Statik              bash -n exit 0 · node --check exit 0
+
+A-11-1  ERFUELLT    ohne TICKET_ROLLE: exit=2, commits=1 (kein Commit), stderr nennt TICKET_ROLLE
+                    UND die Form ^[a-z][a-z-]*(-[0-9]+)?$ woertlich; Marke '   ' (nur Leerzeichen)
+                    identisch: exit=2, commits=1
+A-11-2  ERFUELLT    Marke evaluator, Botschaft 'Anbau ohne Praefix' -> Betreff 'evaluator: Anbau ohne Praefix'
+A-11-3  ERFUELLT    'evaluator: schon markiert' bei Marke evaluator -> %B per od geprueft:
+                    'e v a l u a t o r :   s c h o n   m a r k i e r t \n' — byte-identisch, kein Stapeln
+A-11-4  ERFUELLT    'evaluator: fremde Feder' bei Marke generator -> exit=2, commits=1, stderr:
+                    "WIDERSPRUCH: … 'evaluator' … TICKET_ROLLE='generator'"; Kante Instanznummer:
+                    'evaluator-2: …' gegen evaluator -> exit=2 (WIDERSPRUCH nennt beide)
+A-11-5  ERFUELLT    'Planner' / '2evaluator' / 'evaluator:' -> je exit=2, commits=1;
+                    'evaluator-2' GUELTIG -> 'evaluator-2: Zweitinstanz am Werk'
+A-11-6  ERFUELLT    61 = 50 Bestand + 11 neu; Namensvergleich der test('…')-Zeilen Basis vs. HEAD:
+                    comm -23 = 0 (kein Bestandstest entfernt/umbenannt/abgeschwaecht). Zonen:
+                    Bau-Diff am Tor ist EIN Einfuege-Hunk an der Botschaft-Annahme (@@ -49,6 +49,41),
+                    A-07-Angleich/A-08-Kette/A-09-Wege content-unangetastet; HEAD-Skript = Bau-Skript
+A-11-7  ERFUELLT    zwei EIGENE Mutationen (s. gegenprobe), davon die verlangte Widerspruchs-Ruecknahme;
+                    Fail-Bilder decken die Generator-Tabelle M2/M4 (fail 2 bzw. fail 3)
+A-11-8  ERFUELLT    Mehrzeiler mit markenaehnlicher eingerueckter UND unmarkiert-linksbuendiger
+                    'generator: '-Rumpfzeile: %B == 'evaluator: <botschaft>\n' per cmp byte-identisch,
+                    kein Widerspruchs-Abbruch — schaerfer als die Suite-Zusage
+Kante 'A-07: …'     ERFUELLT -> 'evaluator: A-07: Auftrag, keine Rolle'
+
+Entdeckungs-grep    git log --format='%s' b0f4c444.. | grep -cvE '^[a-z][a-z-]*(-[0-9]+)?: '  ->  0
+                    (5, spaeter 8 Commits seit dem Bau, alle markiert)
+```
+
+### Realtest, nachvollzogen — mit einer ehrlichen Grenze
+
+Die Marke an `b0f4c444` (`%B` beginnt `generator: A-11 gebaut: …`) ist **rueckwirkend nicht
+unabhaengig beweisbar**: A-11-3 laesst ein selbst getipptes Praefix absichtlich byte-identisch
+stehen, ein nachtraeglicher Beobachter kann „vom Tor gesetzt" und „selbst getippt" nicht
+unterscheiden. Der Bericht ist konsistent (Botschaftstext im Blatt ohne Praefix, Betreff mit),
+mehr gibt die Vergangenheit nicht her. **Der lebende Realtest ist dieser Votum-Commit selbst:**
+er geht ohne Praefix mit `TICKET_ROLLE=evaluator` ins Tor — die Marke am Betreff stammt vom Tor.
+
+### Die fuenf deklarierten Abweichungen, je gewuerdigt
+
+```text
+1 Marken-Definition '<marke>: '   GEDECKT. Deckungsgleich mit dem Entdeckungs-grep, mechanisch statt
+                                  Rollen-Liste. RANDNOTIZ (kein P0/P1): jedes form-echte Praefix gilt
+                                  als Marke — Praefix-Zensus der Historie: 129x 'docs: ', 2x 'test: ',
+                                  1x 'fix: ' u. a. Eine kuenftige Botschaft 'docs: …' bei anderer
+                                  TICKET_ROLLE faellt als WIDERSPRUCH (Richtung Blockade, sichtbar,
+                                  durch Umformulieren behebbar — kein stilles Loch). Ob 'docs' u. ae.
+                                  zulaessige Marken sein sollen, waere eine Planner-Entscheidung.
+2 Trimm-Bewertung vs. Verbuchung  GEDECKT. '  evaluator: …' mit Marke evaluator bliebe byte-identisch
+                                  und zaehlte im Entdeckungs-grep als unmarkiert — FEHLALARM-Richtung
+                                  (grep > 0 ohne echte Umgehung), kein stilles Loch. A-11-3 verlangt
+                                  byte-identisch; Glaetten waere unbestellt. Dokumentierte Unschaerfe.
+3 zentrale Suite-Umgebung         GEDECKT. Eine Zeile process.env.TICKET_ROLLE='probe' im Testkopf,
+                                  am Diff verifiziert; kein Bestandstest angefasst (comm-Beleg oben).
+4 §3-Wartezeit auf W-02/1         GEDECKT. ffd06c1a (21:13, IN_ARBEIT) liegt nach 58342f47
+                                  (W-02/1 CODE_FERTIG); Kette vom Plan-Pruefer bestaetigt.
+5 Beifang-Offenlegung 7f592b20    GEGENGELESEN. 7f592b20 (release-pruefer, 21:03) traegt die
+                                  A-11-Tafelzeile ENTWURF->IN_ARBEIT, ffd06c1a (21:13) setzte den
+                                  Datensatz erst danach — die Zeile lief dem Zustand voraus, genau
+                                  wie deklariert. Kein Schaden im Pruefgegenstand.
+```
+
+**Gesamturteil: ABGENOMMEN.** Alle acht Kriterien selbst nachgemessen, jede Gegenprobe ueberstanden,
+keine offene P0/P1-Abweichung, Bestand 50/50 unversehrt im 61/61-Lauf. Ball beim Release-Pruefer (§10).
+
+---
+
+## Release-Pruefung A-11 (§10) — 10.08.2026, frische Instanz
+
+```yaml
+auftrag: A-11
+abnahme_commit: efe38d1d      # Evaluator-Votum ABGENOMMEN, Fehlerklasse KEINE
+release_commit: 28760966      # Pruef-SHA; Bau b0f4c444, Tor am HEAD byte-identisch (md5 e5fece559500d5c90869cf6c2ada40da)
+votum: RELEASE_FREI
+ci: pass                      # Suite selbst am HEAD: 61/61 · bash -n exit 0 · node --check exit 0
+artefakte_reproduzierbar: true # kein Build-Artefakt; das Artefakt IST das Skript, HEAD = Bau (diff 0)
+migration: nicht_anwendbar    # reine Skript-/Testaenderung, kein Datenpfad, kein Schema
+rueckweg: pass                # git show b0f4c444 | git apply --check -R exit 0; siehe Wuerdigung unten
+smoke_test_plan: "Realtest am lebenden Tor: die beiden Abschluss-Commits dieser Pruefung gehen OHNE Praefix mit TICKET_ROLLE=release-pruefer ins Tor und muessen markiert herauskommen; Dauerkontrolle git log --format='%s' b0f4c444.. | grep -cvE '^[a-z][a-z-]*(-[0-9]+)?: ' muss 0 bleiben"
+befunde: []
+```
+
+### Alles selbst gemessen, Rohausgaben
+
+**Kette** — sechsmal `git merge-base --is-ancestor`, je exit 0 (HEAD bei Beginn `5823ada0`):
+
+```text
+1dee4771 (BEREIT)      -> ffd06c1a (IN_ARBEIT)   exit=0
+ffd06c1a (IN_ARBEIT)   -> b0f4c444 (Bau)         exit=0
+b0f4c444 (Bau)         -> 28760966 (Pruef-SHA)   exit=0
+28760966 (Pruef-SHA)   -> 63c83a53 (CODE_FERTIG) exit=0
+63c83a53 (CODE_FERTIG) -> efe38d1d (ABGENOMMEN)  exit=0
+efe38d1d (ABGENOMMEN)  -> HEAD 5823ada0          exit=0
+```
+
+**Qualitaetstore am HEAD, selbst gefahren:**
+
+```text
+node --test scripts/__tests__/commitPruefen.test.mjs   tests 61 / pass 61 / fail 0
+bash -n scripts/commit-pruefen.sh                      exit 0
+node --check scripts/__tests__/commitPruefen.test.mjs  exit 0
+```
+
+**Release-Diff nur Freigegebenes** — Drift seit Bau und Scope:
+
+```text
+git log --oneline b0f4c444..HEAD -- scripts/           0 Commits (11 Commits seit Bau, keiner an scripts/)
+git diff b0f4c444 HEAD -- scripts/commit-pruefen.sh    0 Zeilen
+md5 scripts/commit-pruefen.sh                          e5fece559500d5c90869cf6c2ada40da (= Bau-Stand)
+git show b0f4c444 --stat                               exakt 2 Dateien, 165 insertions(+), 0 deletions
+git show b0f4c444 -- scripts/commit-pruefen.sh         EIN Hunk: @@ -49,6 +49,41 @@ — direkt nach
+                                                       `BOTSCHAFT="$1"; shift` (Z.51), also an der
+                                                       Botschaft-Annahme; Commit-Aufruf und
+                                                       A-07/A-08/A-09-Zonen unangetastet
+```
+
+**Rueckweg, geprueft und gewuerdigt:**
+
+```text
+git show b0f4c444 | git apply --check -R               exit 0 — Commit sauber zurueckdrehbar
+```
+
+Die Blatt-Aussage haelt und verdient die Wuerdigung: der Rueckweg ist hier sogar **ohne Revert eine
+Zuweisung** — `TICKET_ROLLE` setzen genuegt, um die Sperre im Notfall zu ueberbruecken. Der Rueckweg
+ist damit doppelt vorhanden (Zuweisung sofort, Revert vollstaendig), kein Datenpfad, keine Migration.
+
+**Entdeckungs-grep als Dauerkontrolle:**
+
+```text
+git log --format='%s' b0f4c444.. | grep -cvE '^[a-z][a-z-]*(-[0-9]+)?: '   0   (11 Commits, alle markiert)
+```
+
+**Mitteilungs-Pflicht (Auflage aus dem BEREIT-Votum):** Die Mitteilung an alle Rollen steht als
+eigener Abschnitt direkt unter der Tafel (`docs/STATUS.md` Z.24 ff.) und nennt **Variable**
+(`TICKET_ROLLE`), **Form** (`^[a-z][a-z-]*(-[0-9]+)?$`) und **Beispiel**
+(`TICKET_ROLLE=evaluator bash scripts/commit-pruefen.sh "Botschaft" pfad`) — per grep bestaetigt.
+
+**Realtest:** Die ehrliche Grenze des Evaluators gilt fort — rueckwirkend ist die Marke an
+`b0f4c444` nicht beweisbar. Der lebende Beweis setzt sich fort: die Abschluss-Commits DIESER
+Pruefung (dieses Blatt und der STATUS-Vermerk) gehen ohne Praefix mit `TICKET_ROLLE=release-pruefer`
+ins Tor; die Marke `release-pruefer: ` am Betreff stammt vom Tor. Ergebnis im STATUS-Vermerk.
+
+### Die zwei Evaluator-Randnotizen — ins Protokoll uebernommen (kein P0/P1)
+
+1. **Form-echte Nicht-Rollen-Praefixe** (`docs: `, `fix: `, `test: ` — Zensus der Historie: 129x/1x/2x)
+   fallen kuenftig bei anderer `TICKET_ROLLE` als **WIDERSPRUCH**. Richtung Blockade, sichtbar, durch
+   Umformulieren behebbar — kein stilles Loch. **Offene Planner-Entscheidung:** ob solche Praefixe
+   zulaessige Marken werden sollen oder verboten bleiben.
+2. **Trimm-Unschaerfe des Entdeckungs-greps:** eine fuehrend-eingerueckte, korrekt markierte Zeile
+   (`  evaluator: …`) wird byte-identisch verbucht und zaehlt im grep als unmarkiert —
+   **Fehlalarm-Richtung** (grep > 0 ohne echte Umgehung), kein stilles Loch. Dokumentierte
+   Unschaerfe der Dauerkontrolle, kein Handlungsbedarf vor Release.
+
+**Urteil: RELEASE_FREI an `28760966`.** Kette geschlossen, Tore am HEAD selbst gruen gefahren,
+Release-Diff enthaelt ausschliesslich den freigegebenen Bau, Rueckweg doppelt belegt, keine offenen
+P0/P1-Befunde. Nach v1.2-Vertretung folgt der Sicherungs-Push (`git push fork
+auto/hausplaner-integration`); das Ergebnis wird im STATUS-Datensatz verbucht. **Ball bei Yama:
+main-Veroeffentlichung.**

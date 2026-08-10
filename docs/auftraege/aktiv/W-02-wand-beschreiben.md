@@ -268,3 +268,75 @@ nicht_gemessen:
 
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum (§11) — 10.08.2026
+
+```yaml
+auftrag: W-02/1
+commit: 801e2daa          # Bau; Basis 193681cd
+votum: NACHBESSERN
+fehlerklasse: BEWEIS
+gegenprobe: "jedes Kriterium am Bau-Stand gemessen · alle neun Fundstellen einzeln im Code nachgeschlagen"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde:
+  - "P1 BEWEIS · W-02/1-9: der IN_ARBEIT-Commit 35e90eb8 traegt weder Befehl noch Ausgabe
+     noch die zwei Ortsangaben — wortgleicher Ausfall wie W-01/1-8. ZWEITE Wiederholung
+     derselben Klasse, §13-Sofortausloeser."
+```
+
+### Was hält — und der Bau ist deutlich besser als W-01
+
+```text
+W-02/1-1  ERFUELLT  alle vier Platzhalter-Muster am Bau-Stand: 0
+W-02/1-3  ERFUELLT  UND NACHGESCHLAGEN — 14 Zeilenangaben im Blatt, neun eindeutige
+                    einzeln im Code geoeffnet, jede trifft eine tragende Zeile:
+                      wallGeometry.ts:13   export function wandLaenge(...)
+                      wallGeometry.ts:37   export function azimutDerNormalen(...)
+                      wallGeometry.ts:53   export function istGanzzahlig(...)
+                      wallGeometry.ts:153  export function wandBaender(...)
+                      wallGeometry.ts:159  if (!dir) {              <- der Grenzfall
+                      wandFlaeche.ts:38/77/84/96  Bezugsmass · MeldungArt · Meldung · Ergebnis
+                    KEINE zeigt ins Leere, KEINE ueberschreitet die Dateilaenge
+W-02/1-4  ERFUELLT  7-GRENZEN beantwortet die Frage am Code, je mit Fundstelle
+W-02/1-5  ERFUELLT  "Angebunden aus zwei vorhandenen Dateien"
+W-02/1-6  ERFUELLT  beide Ausschluesse (wandaufbau.ts, linienBauteile.ts) stehen im Blatt
+W-02/1-7  ERFUELLT  resources/** byte-identisch · Suite 1692/1692
+W-02/1-8  ERFUELLT  Register: W-02 BESCHRIEBEN, beide Fundstellen im Bestandsabschnitt
+```
+
+> **Zwei Lehren aus W-01 sind hier sichtbar angewandt**, und das gehört gesagt: `W-02/1-7` nennt
+> *„Insel-Suite unverändert grün"* **ohne feste Zahl** — damit kann sich `W-01/1-6` (1689 gegen
+> 1692) nicht wiederholen. Und `W-02/1-3` verlangt **Zeilennummern**, wo `W-01/1-3` sie zwar
+> forderte, aber keine geliefert bekam. *Beides hat der Bauende selbst im `IN_ARBEIT`-Commit
+> angekündigt und eingehalten.*
+
+### Der eine Befund — P1, `BEWEIS`, und er ist der zweite seiner Art
+
+```text
+Kriterium W-02/1-9   "Befehl MIT AUSGABE … an beiden Orten geprueft (Tafelzeile UND
+                      ^zustand:-Feld), im SELBEN Commit, der IN_ARBEIT setzt"
+gemessen an 35e90eb8  Befehlszeilen (grep -c…)   0
+                      Ortsangabe Tafelzeile      0
+                      Ortsangabe Zustandsfeld    0
+                      stattdessen: "A-09 ist abgenommen, nichts stand auf IN_ARBEIT"
+                      und "§3-Schranke IM SELBEN SKRIPT geprueft"
+```
+
+**Dasselbe Bild wie `b41f9177` bei W-01/1-8: das Verfahren ist besser, der Beleg fehlt.** *Das
+Kriterium ist wörtlich gegen genau diesen Satz geschnitten — das Blatt führt `7dcbeba9` als
+Rot-Lage, weil dort „Nichts stand auf IN_ARBEIT" ohne Befehl und Ausgabe stand.*
+
+> **§13, Sofort-Klausel:** *„die zweite Wiederholung derselben Fehlerklasse löst die Skill- und
+> Ursachenprüfung **sofort** aus."* **Dies ist die zweite.** *Ich löse sie nicht aus — das ist
+> nicht meine Rolle —, aber ich benenne sie, weil die Prozessprüfung-02 genau daran gescheitert
+> ist: der Zähler lief weiter, und niemand hat die zweite Bedingung geprüft.*
+
+### Zum Prüfgegenstand, offengelegt
+
+**Während meiner Messung liegt eine uncommittete Änderung an `3-FORMELN.md` im Baum** (41 Zeilen,
+kein Commit seit `801e2daa` hat die Datei angefasst). *Mein Votum misst den **Bau-Commit**, nicht
+den Baum — und mein Befund hängt ohnehin am `IN_ARBEIT`-Commit, nicht am Blatt.* **Ich habe die
+Datei nicht angefasst und sie nicht in diesen Commit genommen.**

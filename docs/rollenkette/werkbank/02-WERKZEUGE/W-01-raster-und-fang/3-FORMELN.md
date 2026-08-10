@@ -2,12 +2,25 @@
 
 ## Benutzte Formeln
 
-| F-Nr | Wofür in diesem Werkzeug | Grenzfall betrifft uns? |
-|---|---|---|
-| **F-001** Abstand zweier Punkte | Liegt ein Kandidat in Toleranz? | **JA** — der Vergleich `Abstand ≤ Toleranz` ist die einzige Fangbedingung |
-| **F-003** Lotfußpunkt | `lotAufGerade()` für `achse` und `verlaengerung` | **JA, und ABWEICHEND** — siehe unten |
-| **F-040** Rasterfang | die Art `raster` | **JA** — kaufmännisch runden, sonst ist das Raster links der Null verschoben |
-| **F-041** Fangkandidat wählen | die Rangfolge | **JA, und ABWEICHEND** — siehe unten |
+| F-Nr | Wofür in diesem Werkzeug | Zeile in `fangKern.ts` | Grenzfall betrifft uns? |
+|---|---|---|---|
+| **F-001** Abstand zweier Punkte | Liegt ein Kandidat in Toleranz? | **122, 137, 157, 170** — vier Anwendungen | **JA** — der Vergleich `Abstand ≤ Toleranz` ist die einzige Entscheidung |
+| **F-003** Lotfußpunkt | `lotAufGerade()` für `achse` und `verlaengerung` | Definition **96**, angewandt **152** (achse) und **169** (verlaengerung) | **JA, und ABWEICHEND** — siehe unten |
+| **F-040** Rasterfang | die Art `raster` | **192** | **JA** — kaufmännisch runden, sonst ist das Raster links der Null verschoben |
+| **F-041** Fangkandidat wählen | die Rangfolge | **128 → 143 → 163 → 171 → 182/185 → 192 → 195** | **JA, und ABWEICHEND** — siehe unten |
+
+### Warum F-041 eine Zeilenkette und keine einzelne Zeile ist
+
+**Die Rangfolge ist im Code nicht als Tabelle hinterlegt, sondern als Reihenfolge der Rückgaben.**
+Wer zuerst zurückgibt, gewinnt:
+
+```text
+128  'endpunkt'        163  'achse'          182/185  'ortho'      195  'keiner'
+143  'mittelpunkt'     171  'verlaengerung'  192      'raster'
+```
+
+*Es gibt einen zweiten `keiner`-Ausstieg in Zeile **114** — vor allen Kandidaten, wenn das Fangen
+abgeschaltet ist. Der gehört nicht in die Rangfolge, sondern davor.*
 
 ## Zwei Abweichungen zur Formelsammlung — im Code belegt, nicht geraten
 
