@@ -512,3 +512,81 @@ befunde:
 
 **Urteil: `RELEASE_FREI`.** Veröffentlichung genehmigt Yama (§10); nach v1.2-Vertretung folgt
 ein Sicherungs-Push (`git push fork auto/hausplaner-integration`) — Ergebnis im STATUS-Vermerk.
+
+---
+
+## ZWEITVOTUM des Evaluators (10.08.2026) — unabhängig gefahren, bevor das Erstvotum vorlag
+
+```yaml
+auftrag: A-04
+commit: c3d52f09
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "frischer Worktree auf dem Pruef-SHA + Elter-Worktree als Kontrolle · alle FUENF
+  Mutationen aus A-04-5 · die B3-Mutation aus meinem eigenen A-03-Befund · zwei echte php -S-
+  Buehnen ausserhalb der Suite"
+browser: nicht_anwendbar
+befunde:
+  - "P3/BEWEIS: der im Blatt gefuehrte basis_sha 89f373d9 taugt fuer EINE der vier Scope-Dateien
+    nicht als Kontrolle — scripts/__tests__/browserBuehne.test.mjs existiert dort nicht.
+    Tragfaehig ist der Elter des Baus, 331cd125."
+```
+
+**Beide Voten sind unabhängig entstanden** — ich hatte den Prüfstand aufgebaut und gemessen,
+bevor das Erstvotum committet war; die Übereinstimmung ist deshalb ein Ergebnis, keine Übernahme.
+*Der Claim-Mechanismus hat hier nicht gegriffen: A-04 fiel auf `ballbesitz: evaluator`, und zwei
+Instanzen haben ihn genommen. Das ist der Vorfall, nicht das Votum.*
+
+### Was ich zusätzlich gemessen habe
+
+```text
+A-04-5 verlangt MINDESTENS FUENF Mutationen — alle fuenf selbst gefahren,
+Anker je genau 1x, md5 vor und nach identisch:
+
+  M1 Erkennung auf EINE Startform verengt        fail 3   GEFANGEN
+  M2 Vergleich auf Suffix aufgeweicht            fail 1   GEFANGEN
+  M3 Exitcode 3 auf 0 (Befund-Ausgang)           fail 2   GEFANGEN
+  M4 Meldung ohne Datenbanknamen                 fail 1   GEFANGEN
+  M5 Prozesssuche auf den eigenen Baum verengt   fail 3   GEFANGEN
+
+Zusaetzlich die Mutation aus MEINEM A-03-Befund, deren Ueberleben B3 ueberhaupt ausgeloest hat:
+  "APP_ENV weg von der exec-Zeile"               fail 1   GEFANGEN — und zwar genau durch B3
+```
+
+**Damit ist die Lücke aus der A-03-Abnahme nachweislich zu**, nicht nur behauptet.
+
+```text
+Suiten selbst gefahren   Waechter 7/7 · browserBuehne 7/7 · Elter 331cd125: 6/6
+Statik                   bash -n SYNTAX-OK · node --check OK
+A-04-6                   grep 'buehnen-waechter' ANKER-BROWSER: Basis 0 -> Pruefstand 1
+```
+
+**Eigene Gegenprobe außerhalb der Suite** — zwei echte `php -S`-Bühnen mit Fantasienamen,
+kein Laravel, keine Datenbankverbindung (§15):
+
+```text
+DB_DATABASE=zz_evaluator_fantasie php -S …   -> BUEHNE FALSCH,   Name in der Meldung
+php -S … (ohne Angabe)                       -> BUEHNE UNSICHER, "UNBEKANNT"
+beide Proben leben nach dem Lauf             -> A-04-4 haelt
+Kontrolle, Waechter allein aufgerufen        -> 1 reale fremde Buehne, ticket_testing, exit 0
+```
+
+*Der Wächter hat dabei eine **verwaiste Bühne aus einem fremden Worktree** gefunden
+(`ticket-a01`, Port 65535) und korrekt als `OK` eingestuft — er wirkt nicht nur in der Suite.*
+
+### Mein eigener Messfehler, offengelegt
+
+**Ich hatte `vendor/` im Prüfstand vergessen.** Dadurch fiel `A-03-4 KONTROLLE (must_preserve)`
+an der ersten Messung — *und ich war einen Schritt davon entfernt, meinen eigenen Aufbau als
+Regression zu melden.* Mit `vendor` verlinkt: 7/7, am Elter ebenso 6/6.
+
+> **Dieselbe Klasse wie mein `node_modules`-Fehler vom 03.08.** Das Prüfstand-Rezept nennt beide
+> Schritte; ich habe einen ausgelassen und es erst durch die Kontrolle am Elter bemerkt.
+> *Genau deshalb gehört zu jedem Rot die Kontrolle — sonst hätte ich hier eine Regression
+> gemeldet, die es nie gab.*
+
+### Zum P3 des Erstvotums
+
+**Bestätigt und derselben Klasse zugeordnet:** die `D`/`??`/`MM`-Einträge der vier Scope-Dateien
+sind die bekannten Stale-Index-Phantome (A-07). *Der Inhalt ist identisch, gemessen über
+`git show <sha>:<pfad> | diff -` — die verlässliche Probe, nicht `git status`.*
