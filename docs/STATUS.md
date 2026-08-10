@@ -14,7 +14,7 @@
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | **`RELEASE_FREI`** | **Yama** | `c512f931` · Votum `fc5a3daa` · §10 im Blatt (10.08.) | release_vermerk: §10 alle Punkte grün — Kette 6× is-ancestor OK · 42/42 am HEAD selbst · Scope content-identisch (0 Zeilen Diff) + exakt 2 Dateien · Beifang leer · Revert-Probe OK · Halden-Rückweg `_to_delete/2026-08-10-A-07-5` = **2589**, 0 gelöscht · offene P2/P3 aus den Voten verbucht (kein P0/P1) |
 | **A-09** Repo-Bezug über `--git-dir` | `ENTWURF` | Plan-Prüfer | Formblock `e54e748d` | **dran nach A-07** · geclaimt (zweite Instanz) |
-| **A-10** Melder am leeren Ergebnis | **`BEREIT`** | **Generator** | `ce1ff7d5` (2. Runde) | Folgeauftrag aus der A-05-Abnahme (§12.5) · Sichtkette als A-10-4 |
+| **A-10** Melder am leeren Ergebnis | **`IN_ARBEIT`** | **Generator** | `ce1ff7d5` (2. Runde) · IN_ARBEIT 10.08. | Folgeauftrag aus der A-05-Abnahme (§12.5) · Sichtkette als A-10-4 |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
@@ -1006,9 +1006,11 @@ naechster_schritt: "Planner entscheidet die GIT_DIR-Frage auf ehrlicher Grundlag
 auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
-zustand: BEREIT
-ballbesitz: generator (Warteschlange)
+zustand: IN_ARBEIT
+ballbesitz: generator
 basis_sha: d58b220e
+basis_bau: 8343f206   # HEAD bei Uebernahme; d58b220e ist Vorfahr, Scope-Diff d58b220e..HEAD = 0 Zeilen
+in_arbeit_gesetzt: "generator 10.08. (frische Instanz, Claim c30dc2a5): IN_ARBEIT gesetzt VOR der ersten Scope-Aenderung (§3). §3-Schlange selbst geprueft: kein Auftrag IN_ARBEIT (A-04 und A-07 RELEASE_FREI, die einzigen grep-Treffer 'zustand: IN_ARBEIT' sind Prosa-Zitate). §7-Vorpruefung gefahren: (1) Basis d58b220e existiert und ist Vorfahr von HEAD 8343f206, git diff --stat d58b220e HEAD an nichtDarstellbar.ts/szene.ts/DreiDBereich.tsx/dachAusKontur.test.ts/dachMesh.ts = leer; (2) Scope-Dateien content-identisch mit HEAD (git show HEAD:<pfad> | diff — 6x IDENTISCH; die MM/D/??-Eintraege im git status sind die bekannten Index-Phantome der A-07-Klasse); (3) Suite an der Basis SELBST gefahren: 1689/1689 (tests 1689, pass 1689, fail 0); (4) Rot-Lage ZWEIMAL selbst gemessen: l-shape OHNE anbau -> dachMeshWelt wirft NICHT, dreiecke.length=0, dachflaechen()=0, nichtDarstellbareDaecher=[] — der Melder ist stumm, exakt der Blatt-Befund. MESSBEFUND fuer den Bau (vor der ersten Aenderung festgehalten): l-shape MIT anbau liefert dreiecke=10 bei dachflaechen()=0 und wird heute korrekt NICHT gemeldet (dachflaechen ist der Traegerflaechen-Filter, walm ebenso 0) — die neue Leer-Bedingung darf darum NICHT an dachflaechen==0 ALLEIN haengen, sonst meldet sie zeichenbare Daecher; sie haengt an dreiecke==0 und fragt dachflaechen als zweiten Zeugen konjunktiv (A-10-5 Mutation 3)."
 prioritaet: P2
 letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine Punkte — sonst das bisher SAUBERSTE Erstblatt der Gruppe: basis_sha, §5-Block, Wiederverwendung, Erstnutzer, Rueckweg, Nicht-Ziele ALLE beim ersten Schnitt da (das Muster 'dritter Auftrag ohne §5-Block' ist damit gebrochen — gehoert in die Prozesspruefung als Gegenbeleg). Rot-Lage A-10-1 SELBST strukturell verifiziert: nichtDarstellbar.ts faengt ausschliesslich DachGeometrieUngueltig-Wuerfe (try/catch Z.42-48), ein leeres Ergebnis ohne Wurf erreicht gefunden.push nie — dazu die dreifach unabhaengigen dynamischen Belege (9e97d274, e0fae829, E4b in b29bb79d). Sichtkette korrekt HIER verortet (A-10-4 mit Anker-Regel und browser-buehne.sh als Prozessbindung) statt in A-05. must_preserve A-10-3 sauber."
 offene_akzeptanz:
