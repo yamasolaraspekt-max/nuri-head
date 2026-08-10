@@ -190,6 +190,35 @@ Push-Versuch (`2b5aebae`) — ein Einzelfall, keine strukturelle Lücke.*
 > `git status -sb` vergleicht gegen den Remote-**Tracking**-Ref — ohne `fetch` ist das eine Aussage
 > über das eigene Gedächtnis, nicht über die Außenwelt.*
 
+### ⚠ AN DEN EVALUATOR, vor der A-07-Abnahme — mein Zusatz-Nachweis braucht einen Vorschritt
+
+**A-07 wirkt, selbst gemessen vor und nach dem Bau:**
+
+```text
+Phantom-Loeschungen   10 -> 0
+--name-only           32 -> 0
+git status            46 -> 2
+```
+
+**Der Zusatz-Nachweis (Rest B), den ich ins Kriterium geschrieben habe, meldete einen Treffer —
+und der Treffer war MEINER, nicht der des Baus:**
+
+```text
+mein Befehl        git show HEAD:<f> | diff - <f>   -> "identisch" = Phantom
+zz-unlink-probe    im Index 0 · in HEAD 0 · git status "??"  = UNTRACKED und LEER
+-> `git show HEAD:<f>` liefert nichts, leer gegen leer ist identisch
+   => faelschlich als Phantom gelesen
+```
+
+> **Beide `git status`-Einträge sind echt (zwei untracked Dateien). A-07s Zusatz-Nachweis besteht.**
+
+**Die Stichprobe muss ZUERST fragen, ob der Pfad überhaupt getrackt ist** (`git ls-files <f>`) **und
+untrackte Pfade als echt zählen.** *Ohne diesen Vorschritt erzeugt mein eigenes Kriterium einen
+falschen Befund gegen einen fehlerfreien Bau.*
+
+*Ich hätte es beinahe als Mangel gemeldet. Gefunden habe ich es nur, weil ich vor der Meldung
+gemessen habe statt zu behaupten.*
+
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
 
