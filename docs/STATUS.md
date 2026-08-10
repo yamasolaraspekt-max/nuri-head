@@ -14,7 +14,7 @@
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | **`RELEASE_FREI`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
 | **A-09** Repo-Bezug über `--git-dir` | **`BEREIT`** | **Generator** | 3. Runde `c93d68ae` | `GIT_DIR` aufgenommen statt weggebründet · dran nach A-10 |
-| **A-10** Melder am leeren Ergebnis | **`ABGENOMMEN`** | **Release-Prüfer** | `47c0aa73` · Votum `f6909653` | Fehlerklasse **KEINE** · 1692/1692 · Bundle byte-gleich · **A-10-4 mit eigener Browserabnahme, Sichtbarkeit im Viewport in 1440/1024/375** |
+| **A-10** Melder am leeren Ergebnis | **`RELEASE_FREI`** | **Yama** | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
 | **W-01** Raster und Fang | **`BEREIT`** | **Generator** | `fd556f34` (1. Review) | Werkbank-Schiene · alle Behauptungen vom Plan-Prüfer selbst gemessen |
 | **W-02** Wand zeichnen | **`BEREIT`** | **Generator** | `debf3fbe` (1. Review) | Werkbank-Schiene · Zeilenzahlen aufs Zeichen belegt |
@@ -1062,8 +1062,8 @@ naechster_schritt: "Generator zieht A-09, sobald A-10 CODE_FERTIG/abgenommen ist
 auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama
 basis_sha: d58b220e
 basis_bau: 8343f206   # HEAD bei Uebernahme; d58b220e ist Vorfahr, Scope-Diff d58b220e..HEAD = 0 Zeilen
 pruef_sha: 47c0aa73   # Bau dbb7ff66 (Code+Tests+Bundle), §11-Bericht 47c0aa73; dieser STATUS-Commit folgt darauf
@@ -1081,6 +1081,7 @@ votum_bereit: "plan-pruefer 10.08. (2. Runde nach 9cecc6be): BEREIT — beide Pu
 naechster_schritt: "Warteschlange nach §3: A-04 baut JETZT (aeltester BEREIT, Claim steht), danach A-07 (Tor, sobald Planner-Nachzuege da) -> A-09 -> A-10. Der Generator zieht A-10, sobald die Schlange ihn erreicht und kein Auftrag IN_ARBEIT ist."
 claim_abnahme: "evaluator (Erstinstanz) 10.08. 19:3x: Abnahme A-10 GECLAIMT, VOR dem Pruefstand. Ich pruefe NICHT: es gibt noch keinen Commit. Gemessen: zwei Scope-Dateien liegen UNCOMMITTET im Arbeitsbaum (nichtDarstellbar.ts, dachAusKontur.test.ts), das Blatt traegt keinen §11-Bericht, der Datensatz keinen pruef_sha, Zustand steht auf IN_ARBEIT. §18 verbietet das Pruefen eines bewegten Arbeitsbaums statt eines Commits - und §4 verlangt einen EXAKTEN Commit. Ich beginne, sobald CODE_FERTIG mit Pruef-SHA steht; der Claim haelt die Station bis dahin frei."
 evaluator_votum: "evaluator 10.08.: ABGENOMMEN an 47c0aa73, Fehlerklasse KEINE. Selbst gefahren: tsc 0, Suite 1692/1692, Elter 165239e5 1689/1689, Rot am Elter fuer A-10-1 und A-10-5-ZEUGEN (A-10-2 ist die deklarierte must_preserve-Kontrolle), drei Mutationen aus A-10-5 alle gefangen, Bundle frisch gebaut und byte-gleich (md5 57314651). A-10-4 mit eigener Browserabnahme: Waechter zuerst (A-04-Erstnutzerpflicht), Buehne ueber browser-buehne.sh mit Nachweis ticket_testing am Kindprozess, Objekt 10229 / Dokument 36 / roofType l-shape, Expertenmodus und 3D - der Hinweis ist in 1440, 1024 und 375 IM FENSTER sichtbar, Screenshot gesichtet. Mein Messfehler offengelegt: der erste Lauf blieb in 2D, dort ist das role=status-Element 0x0, und ich stand kurz davor daraus einen P1 zu machen - der Melder gehoert zum 3D-Renderer. Testdaten: eigener Nutzer evaluator-a10@example.test id 269 in ticket_testing angelegt, NICHT geloescht (§15)."
+release_vermerk: "release-pruefer 10.08. (frische Instanz): RELEASE_FREI an 47c0aa73 (Bau dbb7ff66, Abnahme f6909653) — §10-Abschnitt mit allen Rohbelegen im Blatt. SELBST GEMESSEN an HEAD ccf9292c: Kette ce1ff7d5 -> 5fc9c9e2 -> dbb7ff66 -> 47c0aa73 -> 907a6117 -> f6909653 -> HEAD, jeder Uebergang merge-base --is-ancestor Exit 0. Suite am HEAD selbst: npm run test:hausplaner 1692/1692, fail 0. Scope exakt drei Dateien (nichtDarstellbar.ts +29, dachAusKontur.test.ts +67, Bundle als §5-Block); Content-Diff der Scope-Dateien 47c0aa73..HEAD leer (Index-Phantome zaehlen nicht); Beifang log 907a6117..HEAD auf resources/ und public/hausplaner/ LEER. Bundle selbst nachgebaut: md5 57314651a743ef689b0d788c23db7493 vor und nach byte-gleich. Die drei deklarierten Abweichungen gewuerdigt, je kein Befund: (1) Konjunktiv-Bauform Z.63 selbst gelesen, vom Evaluator ueber M3 + A-10-2-Kontrolle (Testzeilen 262-278, scharfer Fall l-mit-anbau) geprueft; (2) Testdatenzustand selbst gemessen via artisan --env=testing: db ticket_testing, user 268=0, 269=0, example.test-Nutzer 0, doc 36 vorhanden (revision 2, roofType l-shape, total 1) — Raeumung 09bc9ef7 auf Yamas Freigabe, doc 36 BEWUSST erhalten als einzige l-shape-Vorlage; (3) Sichtkette im Votum belegt (1440/1024/375 im Fenster sichtbar, Waechter-Vorlauf, ticket_testing am Kindprozess). Rueckweg: git show dbb7ff66 | git apply --check -R Exit 0, kein Datenpfad, git revert genuegt. Keine offenen P0/P1. OFFEN AN YAMA: Veroeffentlichung genehmigen (§10). Sicherungs-Push fork nach v1.2-Vertretung: Ergebnis unten."
 ```
 ---
 
