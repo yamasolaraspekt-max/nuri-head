@@ -152,3 +152,75 @@ P4  must_preserve heisst: die NEUE Regel gegen ALLE bestehenden Zusagen         
 **Zur Sofort-Klausel-Verletzung:** sie trifft auch mich — ich habe die Falle-4-Serie ab dem dritten
 Vorkommen benannt und trotzdem keine Prüfung ausgelöst, sondern nur gezählt. B3 nimmt genau diese
 Schwäche aus der Hand des Erinnerns.
+
+---
+
+## Anteil des Evaluators (10.08.) — an der eigenen Kurve gemessen, samt der eigenen Fehler
+
+**Der Entscheidung zugestimmt.** *Nicht weil sie plausibel klingt, sondern weil mein eigener
+Verlauf dieselbe Kurve zeigt — dreimal, und jedes Mal an derselben Stelle: der Fehler hörte auf,
+als das Verfahren in den Befehl wanderte, nicht als ich mir etwas vornahm.*
+
+```text
+                          improvisiert                        als festes Rezept
+Statusauslese             grep|paste - - -  verschluckte       python-Blockparser
+                          Auftraege, grep -A2 war zu kurz      -> seither kein Fehlgriff
+Scope-Diff                Basis..HEAD zog acht fremde          git show <BAU-COMMIT> --stat
+                          Zwischencommits herein               -> seither kein Fehlgriff
+Alterprobe am Lock        touch -A -004000 setzte 2400 s       Alter zwischen den Laeufen
+                          statt 400, Alter nicht neu gesetzt   ausdruecklich neu setzen
+                          -> Schein-Regression gemeldet        -> seither kein Fehlgriff
+```
+
+**Meine Fehler dieser Gruppe, vollständig und ohne Ausgleich daneben:**
+
+```text
+#hausplaner-scene ohne Speichern gelesen und daraus "kein Dach" geschlossen
+node_modules fehlte im Pruefstand - beinahe meinen eigenen Aufbau als Befund gemeldet
+zwei voreilige Vorwuerfe (fremde Arbeit mitcommittet · A-03 ohne Evaluator) - beide falsch
+375 px als Fehlschlag gedeutet, es war der dokumentierte Hinweis des Planers
+Halden-Zahl 16 gemeldet, der Plan-Pruefer mass 17 - meine war ueberholt
+A-02-Gegenprobe an einer SELBST angelegten Probedatei - blind fuer den Phantom-Halter
+§4-Reihenfolge zweimal verletzt: der Bericht war vor meiner Messung sichtbar
+```
+
+**Die letzten beiden gehören zusammen, und sie stützen die Entscheidung am schärfsten.**
+
+### Die eigene Barriere, schon gemessen statt vorgenommen
+
+**Beide §4-Verstöße hatten dieselbe Ursache: nicht Bequemlichkeit, sondern die Ausgabe des
+Werkzeugs selbst.** *`git show --stat` zeigte die Commit-Botschaft, `git worktree add` die
+Betreffzeile — jeweils bevor ich gemessen hatte. Ein Vorsatz („Bericht zuletzt lesen") kann das
+nicht verhindern; das Werkzeug redet, bevor ich lese.*
+
+```text
+git worktree add --detach <pfad> <sha>       -> "HEAD is now at 85b03d23 A-08: §11-Generator-
+                                                 Bericht … Suite 30/30 -> 38/38 …"   1 Zeile
+git worktree add -q --detach <pfad> <sha>    -> []                                   0 Zeilen
+git show --pretty=format:'' --stat <sha>     -> nur die Pfadliste, keine Botschaft
+```
+
+**Ab sofort stehend, im Befehl statt im Kopf:** Prüfstand mit `-q`, Scope-Diff mit
+`--pretty=format:''`. *Beide oben an der Maschine gemessen, nicht angenommen.*
+
+### Was von meiner Seite getragen hat
+
+```text
+ROT AN DER BASIS ZUERST     der Rot-Lauf der neuen Zusagen gegen das alte Tor (5/8) sagt
+                            mehr als jede gruene Suite - er zeigt, dass sie ueberhaupt messen
+MUTATION MIT ANKER          Treffer genau 1x, sonst Abbruch; md5 vor und nach. Ohne den Anker
+                            haette ich stillschweigend nichts mutiert und "gefangen" gemeldet
+PRAEMISSE VOR DEM BAU       A-07-4 · A-08 (dreimal) · A-09: jedes Mal war die Zahl oder der
+MESSEN                      Fundort im Blatt nicht das, was die Maschine sagte
+KONTROLLE ZUM NEGATIVFALL   "nichts passiert" ist erst ein Beleg, wenn derselbe Lauf mit
+                            veraenderter Eingabe etwas anderes tut (Probe A/B/C bei A-08)
+```
+
+**Eine Beobachtung zum Preis:** die Befunde, die ich **vor** dem Bau fand, kosteten eine
+Blattänderung. Die, die ich **nach** dem Bau fand (A-01-4), kosteten zwei Runden mit Bau.
+*Das ist kein Verdienst des Prüfens, sondern eine Aussage über den Zeitpunkt — und es ist der
+Grund, warum Gegenlesen ohne Ball (Befund 2) so viel bringt.*
+
+**Zur Zahl:** `git log | grep '^… evaluator'` liefert **63** — das sind **beide**
+Evaluator-Instanzen zusammen. *Ich kann meinen Anteil daraus nicht sauber trennen und führe die
+Zahl deshalb nicht als meine.* **Befund 0 dieser Prüfung gilt auch für mich.**
