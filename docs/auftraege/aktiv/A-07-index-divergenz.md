@@ -464,3 +464,81 @@ vor Diagnosewerkzeugen, die lügen.*
 
 **Und die Zuordnung stimmt diesmal, weil ich sie gemessen habe.** *Beim ersten Schnitt hatte ich
 sie geraten und lag falsch. Dieselbe Prüfung auf seine Aussage anzuwenden war das Mindeste.*
+
+---
+
+## §11-Bericht des Generators (10.08., CODE_FERTIG)
+
+```yaml
+auftrag: A-07
+basis: ff549b88
+commit: c512f931
+scope: [scripts/commit-pruefen.sh, scripts/__tests__/commitPruefen.test.mjs]
+tests:
+  statisch: pass          # bash -n + node --check, beide sauber
+  unit: "42/42"           # 38 Bestand + 4 neue A-07-Zusagen, selbst gefahren, vorher 38/38
+  backend: nicht_anwendbar
+  schema: nicht_anwendbar
+  build: nicht_anwendbar
+  browser: nicht_anwendbar
+abweichungen:
+  - "Unaufgeloeste Merge-Eintraege im Standard-Index gelten als Kippfall (nicht angleichen, melden) — konservative Ergaenzung ueber den Blatt-Wortlaut hinaus, Richtung 'weniger anfassen'."
+  - "A-07-5 mit 60s-Altersgrenze beim Beiseitelegen (Schutz eines moeglichen lebenden Parallel-Laufs, A-02-Klasse); zum Raeumzeitpunkt fielen ALLE 2589 darunter, 0 verblieben."
+  - "Die 1b-Meldung steht auf stdout, nicht stderr — der Lauf ist erfolgreich (exit 0), sie gehoert in den Erfolgs-Ausgabekanal."
+  - "HEAD wanderte waehrend des Baus (8adffd3d -> 60ebed62): die parallele A-04-Release-Kette committete 18:54-18:58 durchs GETEILTE Arbeitsverzeichnis — und damit durch das bereits editierte Tor. Die erste echte Angleichung fiel dadurch VOR meinem Bau-Commit, durch einen fremden Erstnutzer (genau die Erstnutzer-Form des Blatts). Alle Nachweise danach neu gemessen."
+  - "Risiko offen benannt: waehrend der vier Mutationsfenster (je Sekunden) koennten Parallel-Commits durch ein mutiertes Tor gelaufen sein. Verwaiste Blobs waren zu JEDEM Messzeitpunkt 0 (auch M2 'unbedingt angleichen' haette nichts verworfen); der Halden-Zuwachs 2554->2589 stammt aus Suite-Laeufen mit dem alten Tor und liegt in der A-07-5-Raeumung."
+offene_akzeptanz: []
+```
+
+### Kriterienstand, je mit Beleg
+
+```text
+A-07-1a  ERFUELLT   Tor gleicht nach erfolgreichem Commit an HEAD an (env -u GIT_INDEX_FILE
+                    git read-tree HEAD auf .git/index; Arbeitsbaum nie beruehrt). Real belegt
+                    an c512f931: 'INDEX ANGEGLICHEN' live, danach diff --cached --name-only = 0.
+         ZUSATZ     git status real: 58 Eintraege vorher -> 4 nachher, ALLE 4 echt (2 M mit
+                    Content-Abweichung = mein Scope, 2 ?? wirklich untracked); VIERZEHN
+                    verschwundene Eintraege einzeln index-frei belegt (git show HEAD:<p> |
+                    diff - <p> leer, darunter die D-Phantome — Dateien unversehrt auf der
+                    Platte). Verlangt waren zehn. 4-zu-0 statt 41-zu-1.
+A-07-1b  ERFUELLT   Kippfall gemessen VOR der ersten Angleichung: 20 Kandidaten-Blobs, 0 in
+                    keinem Commit, 0 unmerged -> Regelfall lag vor. Kippfall-Verhalten per
+                    Zusage: Index unangetastet (ls-files --stage identisch), Meldung
+                    'INDEX NICHT ANGEGLICHEN 1 … ungesichert.txt' mit Zahl UND Pfad.
+A-07-2   ERFUELLT   Zusage im Wegwerf-Repo: Datei angelegt, git add (Blob in ODB, in KEINEM
+                    Commit), Tor laeuft -> Index unveraendert + Meldung. Mutation 'unbedingt
+                    angleichen' faellt genau an dieser Zusage.
+A-07-3   ERHALTEN   Mechanismus unveraendert: eigener ausgelagerter Index je Lauf (index.$$,
+                    beide Bestands-Zusagen dazu weiter gruen); dazugekommen sind nur
+                    Initialisierung und Raeumung — wie das Blatt es erlaubt.
+A-07-4   ERFUELLT   Initialisierung: liegt unter index.$$ ein Erbe, wird er BEISEITEGELEGT
+                    (_to_delete/, nie geloescht), dann read-tree HEAD (ohne HEAD: --empty);
+                    Raeumung per trap 'rm -f …' EXIT — deckt alle sieben Auswege, Zusage
+                    prueft Erfolgs- UND Abbruchpfad plus das trap-Konstrukt im Quelltext.
+                    Gegenprobe als Zusage: vorgelegter Fremd-Index unter demselben Pfad
+                    (exec haelt die PID) beeinflusst den Lauf nicht, kein 'invalid object',
+                    Erbe liegt beiseite. Realwirkung: voller Suite-Lauf (rund 40 Tor-
+                    Aufrufe) hinterlaesst 0 Halden-Dateien — vorher je Lauf ~35.
+A-07-5   ERLEDIGT   EINMALIG, von Hand, dokumentiert: 2589 Halden-Dateien (gewachsen von
+                    2551 im Blatt) nach $TMPDIR/ticket-index/_to_delete/2026-08-10-A-07-5/
+                    beiseitegelegt — nur mv, 0 geloescht, 0 verblieben, 0 laufende Tore
+                    zum Zeitpunkt der Raeumung.
+```
+
+### Mutationsproben (Gruen/Rot/Gruen, md5)
+
+```text
+md5 vorher/nachher  59e23956c627085b0792def9486935dc  (identisch wiederhergestellt)
+M1 Angleichung entfernt          -> A-07-1a faellt          1/1 rot
+M2 Angleichung unbedingt         -> A-07-2 faellt           1/1 rot
+M3 trap entfernt                 -> A-07-4 faellt           1/1 rot
+M4 Initialisierung entfernt      -> A-07-4-Gegenprobe faellt 1/1 rot
+danach voller Lauf 42/42 gruen
+```
+
+**Bauentscheidungen, die der Evaluator kennen sollte:** Die Verwaisten-Frage laeuft ueber EIN
+`rev-list --objects --all` (22776 Objekte, 0,6 s gemessen) statt einer `log --find-object`-Suche
+je Blob; Kandidaten sind nur die von HEAD abweichenden Eintraege ohne Loeschungen (die tragen
+keinen Blob). Initialisierung und Raeumung stehen NACH der Stufe-4-Lock-Aufraeumung, damit
+W-09/K-01 (erst Locks raeumen, dann der erste git-Aufruf) wortgleich haelt. Der `trap` wird erst
+NACH dem Beiseitelegen des Erbes gesetzt, damit er ihn nie loeschen kann.
