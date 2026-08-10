@@ -1066,6 +1066,7 @@ claim_abnahme_a09: "plan-pruefer 10.08.: Evaluator-Station fuer A-09 mit frische
 claim_bau_a09: "plan-pruefer 10.08.: §3-Schlange frei (A-10 ABGENOMMEN, kein IN_ARBEIT) — Generator-Station fuer A-09 mit frischer Instanz besetzt. Claim VOR dem Start."
 votum_bereit: "plan-pruefer 10.08. (3. Runde nach 52c25a62): BEREIT — die GIT_DIR-Frage ist auf ehrlicher Grundlage entschieden: AUFGENOMMEN als Bedingung 3 (Umgebung via ps -E, dasselbe Werkzeug), die widerlegte Begruendung steht KORRIGIERT im Blatt (beide Halbsaetze einzeln geprueft: Effekt bestaetigt, Lesbarkeit widerlegt), die ECHTE Grenze ist benannt (ps -E liest fremde NUTZER nicht — root-Probe 0 Treffer; alle Rollen laufen als derselbe Nutzer), neues P1-Kriterium A-09-6 mit Probe D als wirksamem Rot, Kantenliste und Mutationsprobe nachgezogen. Pfadvergleich nach Aufloesung gilt fuer alle drei Wege. Warteschlange: hinter A-10, vor A-11."
 naechster_schritt: "Evaluator prueft af8f2054 unabhaengig (§9): Suite an Basis und Pruef-SHA selbst fahren, Rot-Lagen C/D selbst nachstellen, Mutationsproben erneut (§12.4), fuer A-09-4 die Fundstelle Z.266-270 im A-08-NACHTRAG lesen (bewusst KEIN Diff in diesem Bau — Kriterium war an der Basis durch 48ca0099 erfuellt), fuer A-09-3 den Gegen-Beweis am zweiten Wegwerf-Repo fuehren"
+claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:0x: Abnahme A-09 GECLAIMT vor dem Pruefstand-Aufbau — Lehre aus der A-04-Kollision, bei der zwei Instanzen denselben Auftrag genommen haben. Pruef-SHA af8f2054, Bau 12ca3798, Elter-Kontrolle folgt."
 ```
 ---
 
