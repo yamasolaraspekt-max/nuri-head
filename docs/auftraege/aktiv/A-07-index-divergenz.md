@@ -668,3 +668,104 @@ Rückfall gelesen.* Ich habe sie nach derselben Konvention beiseitegelegt
 **Zum Prüfstand:** `node_modules` **und** `vendor` verlinkt — beide Rezeptschritte, nachdem ich
 bei A-04 heute `vendor` vergessen und dadurch beinahe meinen eigenen Aufbau als Regression
 gemeldet hatte.
+
+---
+
+## Evaluator-Votum A-07 — Zweitinstanz, 10.08. (Claim-Kollision: Bestätigung, KEIN zweites Urteil)
+
+**Zuerst die Rollenlage, ehrlich:** Ich wurde als Evaluator für die A-07-Abnahme angesetzt und habe
+den `claim_abnahme` der Erstinstanz beim Prüfstart gesehen — und trotzdem gemessen, weil mein
+Auftrag mich als „den" Evaluator adressierte. **Während meiner Messungen hat die Erstinstanz die
+Abnahme vollzogen (`fc5a3daa`, ABGENOMMEN an `c512f931`).** Ihr Votum ist das gültige; dieses
+Blatt bekommt von mir **kein zweites Urteil, sondern eine unabhängige Zweitmessung** — dieselbe
+Klasse Kollision wie bei A-04, und diesmal steht sie als Befund da statt als zwei konkurrierende
+Voten. *Alle folgenden Zahlen sind selbst gemessen, kein Wert vom Generator oder der Erstinstanz
+übernommen; wo beide dasselbe messen, ist das jetzt eine DREIFACH unabhängige Bestätigung.*
+
+**Messbasis:** Arbeitsbaum-Scope-Dateien je `content-diff` **IDENTISCH** zu `c512f931`
+(vor und nach den Messungen geprüft; HEAD wanderte während der Prüfung 55317e1e → 5f98cc28 →
+fc5a3daa → 199039fa, **kein Commit berührte den Scope**: `git log c512f931.. -- <beide>` leer).
+
+### Suite und Basis — selbst gefahren, eigener TMPDIR je Lauf
+
+```text
+c512f931 (Arbeitsbaum identisch)   tests 42 · pass 42 · fail 0   Halden-Rueckstand des Laufs: 0
+c512f931^ (worktree add -q)        tests 38 · pass 38 · fail 0   Halden-Rueckstand des Laufs: 16
+Basis-Gegengriff: trap 0 · "INDEX ANGEGLICHEN|read-tree" 0 Treffer im Basis-Tor
+statisch: bash -n pass · node --check pass · md5 Tor 59e23956c627085b0792def9486935dc (= §11-Bericht)
+```
+
+### Je Kriterium — eigene Wegwerf-Proben (Repo selbst gebaut, Tor aus `git show c512f931:`)
+
+**A-07-1a BESTÄTIGT.** Eigener Tor-Zyklus: `INDEX ANGEGLICHEN … der Arbeitsbaum ist unberuehrt`,
+danach `diff --cached --name-only` = **0**, Arbeitsbaum trägt den neuen Stand. **Zwei-Richtungs-
+Probe:** identischer Zyklus mit dem Basis-Tor (`c512f931^`) → `diff --cached` = **1** (`anfang.txt`
+bleibt divergent) und 1 Halden-Datei. **Real am echten Repo:** `git status --porcelain` = 1 Eintrag
+(`?? zz-unlink-probe`), in der **korrigierten Zwei-Schritt-Form** (Schritt 1 `ls-files`) als
+untracked = ECHT; `diff --cached` = 0; **1 zu 1 statt 41 zu 1.**
+
+**A-07-1b/2 BESTÄTIGT.** Kippfall selbst hergestellt (`git add ungesichert.txt`, Blob in keinem
+Commit): `INDEX NICHT ANGEGLICHEN  1 … ungesichert.txt` — **Zahl UND Pfad**, `ls-files --stage`
+vorher/nachher **byte-identisch**, exit 0 (melden, nicht blockieren). Auflösung (Blob committet)
+→ nächster Tor-Lauf wieder `INDEX ANGEGLICHEN`, `diff --cached` = 0. **Dazu der Feldbeleg, den
+niemand bestellen konnte:** `7ab67893`/`eec79bc4` — der Kippfall trat LIVE mit 211 fremden
+Index-Blobs ein, das Tor meldete und fasste nichts an.
+
+**A-07-3 BESTÄTIGT.** Stufe-5-Block unverändert (nur der Marker `INDEX_VOM_TOR` kam hinzu);
+eigener ausgelagerter Index je Lauf, PID im Pfad. Die zwei Bestandszusagen: Z.180 („Ausweichpfad
+AUSSERHALB des Mounts, je Prozess eigen") und Z.205 („von aussen gesetzte GIT_INDEX_FILE wird
+NICHT ueberschrieben") — beide in meinem 42/42-Lauf grün.
+
+**A-07-4 BESTÄTIGT** (mit dem BEWEIS-Vorbehalt der Erstinstanz, s.u.). Code: `trap 'rm -f …' EXIT`
+Z.355, gesetzt NACH dem Beiseitelegen des Erbes; ich zähle **12** exit-Punkte (Blatt 7, Plan-Prüfer
+10 — nicht tragend, `trap EXIT` deckt alle). Verhaltensproben selbst: Abbruchlauf (`FEHLT`-Pfad,
+exit 1) hinterlässt **0** `index.*`; exec-PID-Trick mit Müll-Index → `GEERBTER INDEX … beiseitegelegt,
+nicht geloescht`, **kein** `invalid object`, Commit trägt exakt den genannten Pfad, Erbe liegt unter
+`_to_delete/`, Rückstand 0. Wirkungsdifferenz ganzer Suite-Lauf: **0 (neu) gegen 16 (Basis)**.
+
+**A-07-5 BESTÄTIGT.** Selbst gezählt: `_to_delete/2026-08-10-A-07-5/` = **2589** Dateien (deckt die
+Generator-Zahl; die 2590 der Erstinstanz weicht um 1 ab — nicht tragend), beiseitegelegt statt
+gelöscht; lebende Halde bei Abschlussmessung **0**, dazu `_to_delete/2026-08-10-evaluator-
+kontrolllaeufe/` = 92 (die Alt-Tor-Kontrollläufe der Erstinstanz — ich hatte sie 19:05–19:06 als
+52 wachsende Dateien live gesehen und als Rätsel notiert, ihr Blattnachtrag löst es auf).
+
+### Mutationsproben — an einer KOPIE, kein Mutationsfenster im echten Tor
+
+```text
+Kopie-Kontrolllauf                42/42       md5 = 59e23956c627085b0792def9486935dc
+M2 Angleichung unbedingt (-eq 0 -> -ge 0)    41/42 — GENAU A-07-2 faellt (die gefaehrliche Richtung)
+M3 trap entfernt                             40/42 — A-07-4 UND Gegenprobe fallen
+je md5-identisch zurueckgestellt, Abschlusslauf 42/42
+```
+
+*Der Weg über die Kopie beweist dasselbe wie die Generator-Mutationen — ohne die von ihm als
+Abweichung deklarierten Sekunden-Fenster am geteilten Arbeitsbaum. Empfehlung: künftig so.*
+
+### Die vier deklarierten Abweichungen, gewürdigt
+
+```text
+Erstnutzer ungeplant (A-04-Kette)   GEDECKT   exakt die Erstnutzer-Form des Blatts ("naechster
+                                              Commit, ohne eigenen Aufruf"); kein Schaden belegt
+Mutationsfenster                    GEDECKT   ehrlich deklariert; verwaiste Blobs zu jedem
+                                              Messzeitpunkt 0; kuenftig Kopie statt Fenster
+unmerged -> Kippfall                GEDECKT   konservativ, keine Zusage geschwaecht; RANDNOTIZ
+                                              P3 an den Planner: im Blatt kodifizieren + Zusage
+1b-Meldung auf stdout               GEDECKT   Blatt schreibt keinen Kanal vor; exit 0 = Erfolgskanal
+60s-Schutz bei A-07-5               GEDECKT   A-02-Klasse (lebende Laeufe); Ergebnis = Blattforderung
+```
+
+### Befunde dieser Zweitmessung (keiner blockiert)
+
+1. **KOLLISION (Prozess, P2):** Zweitbesetzung der Abnahme-Station trotz sichtbarem Claim — dieselbe
+   Klasse wie bei A-04. Der Claim-Mechanismus braucht eine Regel, die auch die **Beauftragung**
+   bindet, nicht nur die Instanz, die den Eintrag liest.
+2. **P3/UMGEBUNG:** Eine PID-lose Altdatei `index` (03.08., 145 B) liegt weiter in der Halde — von
+   `index.$$` nie erreichbar (Klasse `index.gen*`), von der A-07-5-Räumung nicht erfasst, vom
+   Blatt-Messbefehl (`^index\.`) nicht gezählt. Beim nächsten Aufräumen mit beiseitelegen.
+3. **Bestätigung des BEWEIS-Befunds der Erstinstanz (P2):** Meine M3-Probe zeigt, dass die
+   A-07-4-Zusagen an `trap` und Beiseitelegen hängen; den Wegfall der `read-tree`-Initialisierung
+   habe ich nicht separat mutiert — der Erstinstanz-Befund (M4 lässt die Suite grün) ist mit meiner
+   Code-Lesung konsistent: das Beiseitelegen beendet die Erbschaft, `read-tree` ist Diagnose/Netz.
+
+**Ergebnis der Zweitmessung: das Votum ABGENOMMEN an `c512f931` (Fehlerklasse KEINE, ein
+P2-BEWEIS-Folgeauftrag beim Generator) wird in allen Kriterien unabhängig bestätigt.**
