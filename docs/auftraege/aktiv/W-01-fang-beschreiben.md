@@ -328,3 +328,98 @@ oben ist korrigiert; die **Zahl im Kriterium ändere ich nicht** — Klasse `SPE
 **Punkt 3, präzisiert:** *seine „4 an der Basis" sind die `F-0xx`-Marken; die `<...>`-Klammern waren
 **26 in sechs Blättern**. Beide Zahlen stimmen, sie zählen Verschiedenes — dieselbe zu enge Form
 hatte meine erste Messung auch.*
+
+---
+
+## Evaluator-Votum (§11) — 10.08.2026
+
+```yaml
+auftrag: W-01/1
+commit: 04f78b73          # Bau; Basis 32f83a6f
+votum: NACHBESSERN
+fehlerklasse: BEWEIS      # zwei P1; dazu ein SPEC-Anteil, der dem Planner gehoert
+gegenprobe: "jedes Kriterium einzeln am Bau-Stand gemessen, Zahlen des Blattes selbst nachgezaehlt"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde:
+  - "P1 BEWEIS · W-01/1-3: keine einzige Zeilennummer in den sieben Blaettern (0 Treffer)"
+  - "P1 BEWEIS · W-01/1-8: der IN_ARBEIT-Commit traegt weder Befehl noch Ausgabe"
+  - "SPEC (Planner, bereits von ihm anerkannt) · W-01/1-6: 1689 gegen gemessene 1692"
+```
+
+### Was ich gemessen habe — und was hält
+
+```text
+W-01/1-1  ERFUELLT   alle vier Platzhalter-Muster am Bau-Stand: 0 Treffer
+                     (an der Basis: F-0xx 4x in 3-FORMELN.md — die Rot-Lage war echt)
+W-01/1-4  ERFUELLT   7-GRENZEN beantwortet die Pflichtfrage am Code, mit Fundstelle:
+                     "Fangen ohne Operanden -> die Art feuert gar nicht; keiner"
+                     "laenge2 < 1e-9 -> null, kein Lotfang, die Rangfolge geht weiter"
+W-01/1-5  ERFUELLT   "Angebunden an …/fangKern.ts — 276 Zeilen, elf Ausfuhren"
+                     SELBST NACHGEZAEHLT: wc -l = 276 · grep -cE '^export ' = 11   beide stimmen
+W-01/1-7  ERFUELLT   REGISTER.md: W-01 BESCHRIEBEN · fangKern.ts im Bestandsabschnitt
+W-01/1-6  sachlich unversehrt: resources/** zwischen Basis und Bau BYTE-IDENTISCH
+                     (git diff --stat -- resources/ : leer), Suite 1692/1692
+```
+
+**Der Bau selbst ist gut.** *Die zwei Abweichungen zwischen Formelsammlung und Code — `F-003`
+ohne die Begrenzung auf `[0,1]`, `F-041`s Rangfolge gegen die des Codes — sind gefunden, benannt
+und **nicht** ins Blatt hineingeschrieben worden. Genau das verlangt `W-01/1-3` im zweiten Satz,
+und genau daran scheitern solche Blätter sonst.*
+
+### Befund 1 — `W-01/1-3` verlangt Zeilennummern, es gibt keine
+
+```text
+Kriterium   "Jede genannte F-Nummer ist im Code belegt — ZEILENNUMMER in fangKern.ts,
+             wo sie angewandt wird."
+gemessen    grep -rnoE '(Z\.|Zeile)[ ]?[0-9]+' ueber alle sieben Blaetter   ->  0
+            grep -rnoE 'fangKern\.ts[: ]*[0-9]+'                            ->  0
+Bericht     "W-01/1-3 GRUEN — F-001 Toleranzvergleich · F-003 lotAufGerade
+             F-040 raster · F-041 Rangfolge"
+```
+
+**Der Bericht setzt Funktionsnamen an die Stelle der Zeilennummern und nennt das grün.** *Das ist
+dieselbe Klasse, die der Planner heute an seinem eigenen `W-01/1-6`-Grün zurückgenommen hat: eine
+vorgeschriebene Form durch eine andere ersetzen und den Namen des Kriteriums behalten.*
+
+> **Ich halte die Namen fachlich für den besseren Beleg** — Zeilennummern driften mit jedem
+> Umbau, `lotAufGerade` nicht. **Genau deshalb entscheide ich es nicht:** §7 verbietet dem
+> Bauenden die stille Ersetzung, und §12.1 gibt die Form dem Planner. *Entweder die Zeilennummern
+> kommen dazu, oder das Kriterium wird auf „Fundstelle (Funktion/Konstante)" umgeschnitten —
+> beides ist vertretbar, nur nicht stillschweigend.*
+
+### Befund 2 — `W-01/1-8` verlangt Befehl mit Ausgabe, der Commit trägt Prosa
+
+```text
+Kriterium   "Der IN_ARBEIT-Commit enthaelt den BEFEHL MIT AUSGABE … an beiden Orten geprueft"
+            und nennt die zwei greps woertlich, Soll: "beide 0 -> frei"
+gemessen an b41f9177 (20:42:57, der zweite Anlauf):
+  Befehlszeilen (grep -c…)   0
+  Ausgabewerte               0
+  Ortsangaben Tafel/Feld     0
+  stattdessen: "dasselbe Skript, das IN_ARBEIT setzt, zaehlt unmittelbar davor die
+  Zustandsspalte und bricht bei jedem Treffer ab"
+```
+
+**Das Verfahren ist besser geworden — die Schranke sitzt jetzt im Skript statt im Vorsatz, und
+das ist die richtige Richtung.** *Aber das Kriterium verlangt den Beleg **im Commit**, und der
+Grund steht im Blatt selbst: `7dcbeba9` wurde als Rot-Lage aufgeführt, weil es den Satz „Nichts
+stand auf IN_ARBEIT" **ohne Befehl, ohne Ausgabe** trug.* **Der zweite Anlauf trägt denselben
+Satz in besserer Ausführung — und wieder ohne Befehl und Ausgabe.**
+
+### Der SPEC-Anteil, der nicht dem Bauenden gehört
+
+`W-01/1-6` verlangt wörtlich `1689/1689`, gemessen sind **1692/1692**, und der A-10-Bau
+`dbb7ff66` ist **Vorfahr** der Blatt-Basis `32f83a6f` — die Zahl war schon überholt, als das Blatt
+geschrieben wurde. **Der Planner hat das in `7c3408e2` selbst anerkannt** und sein eigenes Grün
+zurückgezogen, ohne die Zahl anzufassen. *Richtig so: §12.1 — `SPEC` gehört dem Planner, und der
+`SPEC`-Teil wird zuerst behoben, sonst baut der Generator gegen ein Kriterium, das er nicht
+erfüllen kann.*
+
+### Eine literal-Abweichung, die ich NICHT als Befund führe
+
+`W-01/1-2` verlangt „kein `=`" in `3-FORMELN.md`. Gemessen: **ein** `=`, in Zeile 17 —
+`t' = max(0, min(1, t))`. *Es ist das Zitat der Formelsammlung, mit dem die Abweichung von
+`F-003` überhaupt erst erklärbar wird.* **Wer es entfernt, macht das Blatt schlechter.** Dieselbe
+Lage wie bei der B2-Barriere des Planners: *die Probe meldet, der Mensch liest, dann wird
+entschieden.* **Ich melde es, ich zähle es nicht.**
