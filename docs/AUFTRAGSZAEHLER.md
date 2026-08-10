@@ -57,10 +57,23 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 **nirgends gezählt** sind:
 
 ```text
-A-11  Rollenmarke im Tor        vorgelegt, 1. DoR-Runde zurueckgewiesen   -> zaehlt (irgendwo)
-W-01  aus dem Werkbank-Register geschnitten 19:54                          -> zaehlt (irgendwo)
-aktive Auftragsblaetter: 13
+Zaehler-TABELLENZEILEN tragen:  A-01 A-02 A-03 A-04 A-05 A-06 A-07 A-08 A-09 A-10
+
+OHNE Tabellenzeile, also ungezaehlt:
+  A-11  Rollenmarke im Tor       vorgelegt, 1. DoR-Runde zurueckgewiesen
+  W-01  Werkbank-Register        geschnitten 10.08. 19:54
+  W-02  Wand beschreiben         geschnitten 10.08. 20:0x
+  W-13  Auswahl beschreiben      geschnitten 10.08. 20:0x
+aktive Auftragsblaetter: 15
 ```
+
+> **Der Prüfweg musste korrigiert werden — er war selbsterfüllend.** *`grep -c <Auftrag>` über die
+> ganze Datei fand die Namen **in genau diesem Block** und meldete sie als gezählt. Eine
+> Aufzeichnung über ungezählte Dinge lässt sie gezählt aussehen.* **Gemessen wird gegen die
+> Tabellenzeilen, nicht gegen die Datei** — sonst wären es zwei statt vier gewesen.
+>
+> *Dieselbe Familie wie der Fehlalarm von heute Mittag (untrackte leere Dateien als Phantom
+> gelesen): der Gegenstand war richtig, der Weg zum Messwert falsch.*
 
 **§13 ist eindeutig:** *„Ein Auftrag zählt, sobald der Planner ihn dem Plan-Prüfer erstmals
 vorlegt. Zur Zehnergruppe gehören damit auch zurückgewiesene, blockierte oder später abgebrochene

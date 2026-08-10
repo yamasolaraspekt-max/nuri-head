@@ -1051,8 +1051,8 @@ naechster_schritt: "Generator zieht A-09, sobald A-10 CODE_FERTIG/abgenommen ist
 auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: d58b220e
 basis_bau: 8343f206   # HEAD bei Uebernahme; d58b220e ist Vorfahr, Scope-Diff d58b220e..HEAD = 0 Zeilen
 pruef_sha: 47c0aa73   # Bau dbb7ff66 (Code+Tests+Bundle), §11-Bericht 47c0aa73; dieser STATUS-Commit folgt darauf
@@ -1068,6 +1068,7 @@ offene_akzeptanz:
 votum_bereit: "plan-pruefer 10.08. (2. Runde nach 9cecc6be): BEREIT — beide Punkte plus die Empfehlung eingearbeitet und selbst geprueft: A-10-2 als must_preserve-KONTROLLE mit sauberer Begruendung, Mutationszusage A-10-5 aufgenommen (drei Mutationen), Konfliktpruefung selbst nachgemessen — dabei hat der Planner ZWEI UNGENAUE ANGABEN AUS MEINER DoR-NOTIZ korrigiert (A-04 baut buehnen-waechter.sh, nicht pauschal 'scripts/*'; plus die A-01/szene.ts-Herkunftszeile) — richtig so, Messung schlaegt Notiz, auch meine. EINE KORREKTUR AN SEINER FOLGERUNG: 'A-10 darf PARALLEL laufen' gilt nur fuer DATEIEN — §3 sagt woertlich 'hoechstens einen Auftrag IN_ARBEIT gleichzeitig' (Z.85). A-10 ist BEREIT, zieht aber erst, wenn kein anderer Auftrag IN_ARBEIT ist. Prozesspruefung-02 ist gelaufen (850aafd5) — die §13-Schranke vor Auftrag 11 ist damit bedient."
 naechster_schritt: "Warteschlange nach §3: A-04 baut JETZT (aeltester BEREIT, Claim steht), danach A-07 (Tor, sobald Planner-Nachzuege da) -> A-09 -> A-10. Der Generator zieht A-10, sobald die Schlange ihn erreicht und kein Auftrag IN_ARBEIT ist."
 claim_abnahme: "evaluator (Erstinstanz) 10.08. 19:3x: Abnahme A-10 GECLAIMT, VOR dem Pruefstand. Ich pruefe NICHT: es gibt noch keinen Commit. Gemessen: zwei Scope-Dateien liegen UNCOMMITTET im Arbeitsbaum (nichtDarstellbar.ts, dachAusKontur.test.ts), das Blatt traegt keinen §11-Bericht, der Datensatz keinen pruef_sha, Zustand steht auf IN_ARBEIT. §18 verbietet das Pruefen eines bewegten Arbeitsbaums statt eines Commits - und §4 verlangt einen EXAKTEN Commit. Ich beginne, sobald CODE_FERTIG mit Pruef-SHA steht; der Claim haelt die Station bis dahin frei."
+evaluator_votum: "evaluator 10.08.: ABGENOMMEN an 47c0aa73, Fehlerklasse KEINE. Selbst gefahren: tsc 0, Suite 1692/1692, Elter 165239e5 1689/1689, Rot am Elter fuer A-10-1 und A-10-5-ZEUGEN (A-10-2 ist die deklarierte must_preserve-Kontrolle), drei Mutationen aus A-10-5 alle gefangen, Bundle frisch gebaut und byte-gleich (md5 57314651). A-10-4 mit eigener Browserabnahme: Waechter zuerst (A-04-Erstnutzerpflicht), Buehne ueber browser-buehne.sh mit Nachweis ticket_testing am Kindprozess, Objekt 10229 / Dokument 36 / roofType l-shape, Expertenmodus und 3D - der Hinweis ist in 1440, 1024 und 375 IM FENSTER sichtbar, Screenshot gesichtet. Mein Messfehler offengelegt: der erste Lauf blieb in 2D, dort ist das role=status-Element 0x0, und ich stand kurz davor daraus einen P1 zu machen - der Melder gehoert zum 3D-Renderer. Testdaten: eigener Nutzer evaluator-a10@example.test id 269 in ticket_testing angelegt, NICHT geloescht (§15)."
 ```
 ---
 
@@ -1085,6 +1086,22 @@ letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review —
 zaehlfrage_entschieden: "plan-pruefer 10.08.: A-11 zaehlt als AUFTRAG 1 DER GRUPPE 2. Begruendung: §13 zaehlt ab der ersten Vorlage beim Plan-Pruefer; Gruppe 1 ist mit zehn Auftraegen voll und ihre Prozesspruefung IST durchgefuehrt (850aafd5 + Anteile) — damit ist die §13-Schranke vor Auftrag elf bedient. Der ausstehende Zaehler-RESET (B3-Bedingung) betrifft die Mechanik des Zaehlers, nicht die Zugehoerigkeit: Auftraege zwischen Pruefung und B3-Bau duerfen nicht aus der Statistik fallen ('schlechte Plaene verschwinden nicht'). Bis B3 steht, wird Gruppe 2 von Hand gezaehlt — beginnend mit diesem Blatt."
 auflage_bereit: "EINE Auflage fuer den Bau (kein Restpunkt am Blatt): die CODE_FERTIG-Meldung MUSS die sofort blockierende TICKET_ROLLE-Pflicht als Mitteilung an ALLE Rollen in STATUS.md tragen (Variable, Form, Beispiel) — das Blatt benennt die Gefahr selbst: sonst laeuft die erste Rolle nach dem Bau in eine unerwartete Sperre."
 naechster_schritt: "Generator zieht A-11 NACH A-09 (§3, eine Schlange: A-10-Abnahme laeuft, dann A-09-Bau, dann A-11); IN_ARBEIT vor der ersten Scope-Aenderung"
+```
+---
+
+## BEREIT — W-01/1 (Register-Strang, Einreihung bei Yama)
+
+```yaml
+auftrag: "W-01/1"
+titel: "Die sieben Blaetter von W-01 aus dem VORHANDENEN fangKern.ts ableiten"
+datei: docs/auftraege/aktiv/W-01-fang-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Einreihung siehe Vermerk)
+basis_sha: 32f83a6f
+prioritaet: P1
+letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte): JEDE Blatt-Behauptung selbst gemessen: Basis existiert · fangKern.ts exakt 276 Zeilen, 11 Exporte wie gelistet · toolRegistry traegt KEIN Fang-/Raster-/Snap-Werkzeug (der einzige grep-Treffer ist das Wort Anfang in einem Treppen-Hilfetext — die Messung des Planners hielt einer schaerferen Probe stand) · REGISTER fuehrt W-01 auf LEER und nennt fangKern.ts NIRGENDS (0 Treffer — der Beinahe-Doppelbau war real) · Rot-Lage zaehlbar bestaetigt: Platzhalter in 3-FORMELN.md (4) und 1-ZWECK.md (1). Das Blatt selbst ist vorbildlich: Anschluss- statt Bauauftrag nach gefahrener Anbindungsmessung, Stufentrennung (BESCHRIEBEN vor GEBAUT), A-10-Lehre als Pflichtfrage in 7-GRENZEN, must_preserve resources byte-identisch, Entdeckungssignal ist der erste Stufe-2-Bauversuch. EIN HINWEIS (kein Restpunkt): die REGISTER-Zeile erwartet auch F-004, die Kandidatenliste des Blatts nennt sie nicht — W-01/1-3 klaert das ohnehin AM CODE, der Bericht soll die Abweichung ausdruecklich aufloesen. ZUR FORM-QUELLE: W-07 dient nur als FORM-Muster; dessen inhaltlicher Befund (db1dc3b6: anderer Dachweg als die Insel) infiziert W-01 nicht."
+warteschlange_vermerk: "§3: derzeit ist KEIN Auftrag IN_ARBEIT (A-10 ist CODE_FERTIG, Abnahme laeuft als Pruefung parallel). Die EINREIHUNG der W-Reihe relativ zur Tor-Reihe (A-09 -> A-11) ist keine Plan-Pruefer-Entscheidung: das Blatt selbst legt sie Yama vor ('Yama entscheidet ueber die Freigabe der Gruppe'). Bis dahin gilt die bestehende Tor-Reihe; gibt Yama die W-Gruppe frei, darf W-01/1 als naechstes IN_ARBEIT (reine Doku, kuerzester Auftrag, keine Dateiberuehrung mit irgendwem)."
+naechster_schritt: "Yama: Freigabe der W-Gruppe und Einreihung (W-01/1 vor oder nach A-09/A-11). Danach zieht der Generator entsprechend §3."
 ```
 ---
 
@@ -1982,3 +1999,48 @@ ballbesitz: planner
 begründet, und das ist es im einschlägigen Fall nicht — bleibt es stehen, bleibt eine Lücke
 derselben Form offen, die A-09 gerade schließt.* **Ob das die Mühe wert ist, entscheidet der
 Planner; er sollte es nur nicht in dem Glauben entscheiden, es ginge nicht.**
+
+---
+
+## Vertretungsentscheid (Release-Prüfer in Yamas Namen, 10.08.) — die drei Yama-Punkte
+
+**Yama hat die drei offenen Punkte ausdrücklich an die Vertretung übergeben** („kannst du diese
+aufgabe für mich übernehmen"). Ausgeführt, je mit Beleg:
+
+### 1. Realfund PID 48098 — BEENDET
+
+```text
+Vorab verifiziert:  ppid 1 · Start 05.08. 00:58 · php84 -S 127.0.0.1:65535 ·
+                    APP_ENV=testing · cwd ticket-a01/public   (= exakt der A-04-Realfund)
+kill 48098          -> Prozess beendet, ps -p leer. Kein kill -9 noetig.
+```
+*Der erste Fund des Bühnen-Wächters ist damit abgeräumt. Künftige verwaiste Bühnen findet
+`scripts/buehnen-waechter.sh` vor jeder Browserabnahme.*
+
+### 2. Freigabe der Gruppe — ERTEILT: Zehnergruppe 2 beginnt
+
+Voraussetzungen gemessen statt angenommen: die §13-Prozessprüfung-02 liegt vor
+(`PROZESSPRUEFUNG-02.md` + Anteile von Planner `8343f206`/`PROZESSPRUEFUNG-02-ANTEIL-PLANNER.md`,
+Evaluator `7408814f`/`1bba2e5b`, Plan-Prüfer `cba7c97c`; B3-Umsetzung `63ef4801`, B4 angenommen
+`229ad0be` und als A-11 geschnitten), der Plan-Prüfer hat gegengelesen und die Zählung entschieden
+(A-11 = Auftrag 1 der Gruppe 2, `1dee4771`). **Damit ist der Zähler-Reset frei; Gruppe 2 läuft.**
+*Die Zuordnung der ungezählten W-Blätter (W-01/W-02/W-13) bleibt ausdrücklich beim Plan-Prüfer —
+diese Freigabe greift ihr nicht vor.*
+
+### 3. W-12 und W-18 — Entscheid nach Messlage, ausdrücklich rückholbar
+
+```text
+W-12 (Ansicht/Kamera)    bleibt Klasse B, aber ZURUECKGEHALTEN wie bisher: der im Umlauf
+                         genannte "Einwand bei Yama" liegt NIRGENDS im Repo im Wortlaut.
+                         Ohne den Operanden wird nicht gebaut und nicht beerdigt (§5/§7).
+                         AUFLAGE: der Planner holt den Einwand-Wortlaut ein und heftet ihn
+                         ans kuenftige W-12-Blatt; erst dann DoR.
+W-18 (Pruefung Topologie) bleibt Klasse B (ANSCHLIESSEN): kein eigenes Modul, 'freigabe'
+                         beruehrt es. Erster Schritt ist eine MESSUNG (kein Bau) nach dem
+                         W-01-Muster — hinter der bestehenden Schlange W-01/1 -> W-02/1 ->
+                         W-13/1. Kein Produktcode, jederzeit rueckholbar.
+```
+
+**Nicht entschieden (bleibt bei Yama persönlich):** die Werkbank-Reichweitenfrage (TGA/PV —
+begrenzt oder unvollständig) und die Aufhebung des A-01-Nicht-Ziels (L/T/U-Dachkonstruktion) —
+beides Fach-/Produktentscheidungen, die die Vertretungsregel nicht deckt.
