@@ -17,7 +17,7 @@
 | **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | **`RELEASE_FREI`** | **Yama** | Bau `b0f4c444` · Prüf-SHA `28760966` · Votum `efe38d1d` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 61/61 am HEAD selbst · Scope exakt 2 Dateien +165/−0, EIN Hunk @@49 · Revert-Probe sauber · Drift auf `scripts/` seit Bau: 0 · Entdeckungs-grep: 0 von 11 · **TICKET_ROLLE Pflicht — Mitteilung unten** |
 | **W-01** Raster und Fang | **`CODE_FERTIG`** | Evaluator | `04f78b73` · Nachbesserung Runde 2 · Basis `32f83a6f` | Befund 1 behoben: Zeilennummern **0 → 7** (F-041 als Rückgabe-Reihenfolge 128→195) · Befund 2: `51fab811` trägt beide §3-Befehle mit Ausgabe · Mutationsprobe 7→2 · Suite 1692/1692 · SPEC -6 weiter beim Planner |
-| **W-02** Wand zeichnen | **`IN_ARBEIT`** | **Generator** | `801e2daa` · Basis `193681cd` | **NACHBESSERN** (`a83254e6`): -9 §3-Beleg ohne Befehl · **dazu selbst gefunden: meine -2-Korrektur lag nur im Arbeitsbaum, nie in einem Commit — der Bau trägt die Formel weiter, ich hatte grün gemeldet** |
+| **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `e23440d1` · Runde 2 · Basis `193681cd` | -9 behoben (`5c06f5ca`: 2 Befehle, 2 Ausgaben) · **-2 war im Bau rot und von mir grün gemeldet** — Korrektur lag nie in einem Commit, jetzt 4 → 0 gegen Commits gemessen · Suite 1692/1692 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1173,8 +1173,8 @@ evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an 5823ada0, Fehlerklasse 
 ```yaml
 auftrag: "W-02/1"
 datei: docs/auftraege/aktiv/W-02-wand-beschreiben.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Runde 2: -9 plus die nie committete -2-Korrektur)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (Runde 2)
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das vierte): Messungen EXAKT bestaetigt: wallGeometry 317 / wandFlaeche 238 / wandaufbau 72 / linienBauteile 167 Zeilen aufs Zeichen; die Ausschluesse sind belegt (wandaufbau traegt berechneUWert = Bauphysik, linienBauteile 10x Schneefang = Dachzubehoer) und W-02/1-6 zwingt sie namentlich ins Blatt — die Matrix-Selbstkorrektur des Planners ist der wertvollste Teil des Schnitts. Registry 'wand' vorhanden. Rot-Lage zaehlbar (meine Zaehlung 5, Blatt 8 — Muster-abhaengig, beide > 0, nicht tragend; der Bericht nennt sein Muster). HINWEIS wie bei W-01: die REGISTER-Zeile nennt F-030 aber nicht F-003, die Blatt-Kandidaten beides — W-02/1-3 klaert am Code, der Bericht loest die Abweichung ausdruecklich auf. REGISTER.md-Beruehrung mit W-01/1 durch Reihenfolge + §3 geloest."
 naechster_schritt: "Nach W-01/1 (Reihenfolge im Blatt); Einreihung der W-Gruppe insgesamt bei Yama"

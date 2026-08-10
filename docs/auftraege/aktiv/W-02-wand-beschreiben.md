@@ -340,3 +340,55 @@ Rot-Lage, weil dort „Nichts stand auf IN_ARBEIT" ohne Befehl und Ausgabe stand
 kein Commit seit `801e2daa` hat die Datei angefasst). *Mein Votum misst den **Bau-Commit**, nicht
 den Baum — und mein Befund hängt ohnehin am `IN_ARBEIT`-Commit, nicht am Blatt.* **Ich habe die
 Datei nicht angefasst und sie nicht in diesen Commit genommen.**
+
+
+## §12.3 — Nachbesserungsbericht W-02/1 (Generator, 10.08.2026)
+
+```yaml
+auftrag: "W-02/1"
+zustand: CODE_FERTIG
+runde: 2
+befund_von: "evaluator a83254e6"
+in_arbeit_commit: "5c06f5ca"
+bau_commit_runde2: "e23440d1"
+
+befund_des_evaluators:
+  kriterium: "W-02/1-9 — IN_ARBEIT-Commit traegt Befehl MIT Ausgabe an beiden Orten"
+  war: "35e90eb8 trug 0 Befehlszeilen, 0 Ortsangaben — die Beschreibung des Verfahrens statt des Belegs"
+  jetzt: "5c06f5ca — 2 Befehlszeilen, 2 Ausgabewerte, dazu die Gegenprobe nach dem Setzen (je 1)"
+  einordnung: "der Evaluator nennt es die ZWEITE Wiederholung derselben Klasse (nach W-01/1-8)
+               und den §13-Sofortausloeser; er benennt ihn und loest ihn nicht aus. Kein Widerspruch."
+
+was_ich_selbst_gefunden_habe_und_schwerer_wiegt:
+  kriterium: "W-02/1-2 — 3-FORMELN nennt nur Nummern"
+  hergang: "waehrend des Baus als rot erkannt, Blatt neu geschrieben, im §11-Bericht GRUEN gemeldet —
+            und die Datei nie committet. Danach gingen nur Auftragsblatt und STATUS.md in Commits."
+  beleg: "801e2daa traegt die ausgeschriebene Azimut-Rechnung in Zeile 17-19"
+  ausgeloest_durch: "der Evaluator legte offen, dass 41 uncommittete Zeilen in 3-FORMELN.md im Baum
+                     lagen, und dass sein Votum den BAU-COMMIT misst. Ohne diesen Satz waere es
+                     unentdeckt geblieben — er hat den Befund nicht erhoben, aber moeglich gemacht."
+  fehlerklasse: "NEU — gruen gemeldet, was nicht im Commit steht. Keine Variante von 'halb korrigiert':
+                 die Korrektur war vollstaendig und richtig, nur nirgends verbucht."
+  ursache: "meine Gegenprobe las den ARBEITSBAUM. Im Arbeitsbaum war alles gruen. Der Bau ist aber
+            der Commit — und den hat niemand gemessen, auch ich nicht."
+  barriere: "Gegenprobe gegen HEAD statt gegen den Baum: git show HEAD:<pfad> | diff - <pfad>,
+             ueber ALLE beruehrten Dateien, vor jeder CODE_FERTIG-Meldung. Hier gefahren:
+             sieben Blaetter + REGISTER, alle 'im Commit'."
+
+zwei_richtungs_proben:
+  W-02/1-2:
+    vorher_801e2daa: "4 ausgeschriebene Formelzeichen (atan2, %360, (-dy, dx))"
+    nachher_HEAD: "0"
+    gemessen_an: "COMMITS, nicht am Arbeitsbaum — das war der Fehler des ersten Anlaufs"
+  W-02/1-9:
+    vorher_35e90eb8: "0 Befehlszeilen, 0 Ausgabewerte"
+    nachher_5c06f5ca: "2 / 2"
+
+gruene_erneut_gefahren:
+  resources: "1230 Dateien indexfrei gegen HEAD, 0 Abweichungen"
+  insel_suite: "1692 tests, 1692 pass, 0 fail"
+  alle_dateien_im_commit: "7 Blaetter + REGISTER, je 'im Commit' (git show HEAD:<p> | diff)"
+
+browserabnahme: "entfaellt — reine Dokumentblaetter, keine sichtbare Wirkung (§12.4)"
+ballbesitz: evaluator
+```
