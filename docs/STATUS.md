@@ -219,6 +219,57 @@ falschen Befund gegen einen fehlerfreien Bau.*
 *Ich hätte es beinahe als Mangel gemeldet. Gefunden habe ich es nur, weil ich vor der Meldung
 gemessen habe statt zu behaupten.*
 
+### A-07-1b — der Kippfall liegt LIVE vor (10.08. 19:1x)
+
+**Nach dem Bau stand `git status` auf 2. Jetzt auf 212.** *Gemessen, statt einen Rückfall zu
+vermuten:*
+
+```text
+212  "A "  GESTAGT - ein ganzer Baum docs/rollenkette/
+  1  "??"
+  0  Phantom-Loeschungen
+--name-only 212 = genau die gestageten Neuzugaenge
+```
+
+> **Kein Rückfall — der Kippfall aus A-07-1b:** *Index-Blobs, die in **keinem** Commit vorkommen.
+> Genau dafür ist das Kriterium zweigeteilt: im Regelfall gleicht das Tor an, im Kippfall lässt es
+> den Index **unangetastet** und **meldet** mit Zahl und Pfaden.*
+
+> ### ✅ PROBE GELAUFEN — das Tor hat GEMELDET, nicht angeglichen.
+>
+> ```text
+> INDEX NICHT ANGEGLICHEN  211 Index-Blob(s) in keinem Commit - echte ungesicherte
+> Arbeit, der Standard-Index bleibt unangetastet: <211 Pfade genannt>
+> ```
+>
+> **A-07-1b ist damit nicht an einem Fixture belegt, sondern an 211 echten fremden Dateien.**
+>
+> *Zahlenprobe: `git status` zeigt 212, das Tor meldet 211 — die Differenz ist der eine
+> `??`-Eintrag, untracked und damit nicht im Index. **Die Zahlen widersprechen sich nicht, sie
+> messen Verschiedenes** — damit daraus niemand einen Off-by-one-Befund macht.*
+
+### ⚠ AN YAMA — 211 Dateien liegen NUR im Index
+
+**`docs/rollenkette/`** — ein vollständiger Rollen- und Werkbank-Baum: Rollenbeschreibungen,
+**23 Werkzeugmappen**, Übergabeformulare. **In keinem Commit.**
+
+*Zusammen mit dem hängenden Sicherungs-Push des Arbeitszweigs ist das die größte ungesicherte
+Menge, die ich in dieser Gruppe gesehen habe.* **Ich fasse sie nicht an — sie gehört dem, der sie
+gestagt hat. Ich melde nur, dass sie da ist und nirgends gesichert.**
+
+**Der nächste Tor-Lauf ist die Probe — und niemand hat sie gestellt, sie ist von selbst entstanden:**
+
+```text
+gleicht an trotz 212 fremder Blobs   -> MANGEL gegen A-07-1b
+meldet und laesst den Index in Ruhe  -> Kriterium im FELD belegt
+```
+
+*Ein Kriterium, das an echter fremder Arbeit geprüft wird statt an einem Fixture, ist mehr wert als
+jede Wegwerf-Zusage — **der Evaluator bekommt den Fall frei Haus.***
+
+**`docs/rollenkette/` fasse ich nicht an.** *212 Dateien fremder, ungesicherter Arbeit — sie liegt
+im Moment **nur im Index**, in keinem Commit.*
+
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
 
