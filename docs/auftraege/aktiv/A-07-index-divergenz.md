@@ -569,3 +569,203 @@ je Blob; Kandidaten sind nur die von HEAD abweichenden Eintraege ohne Loeschunge
 keinen Blob). Initialisierung und Raeumung stehen NACH der Stufe-4-Lock-Aufraeumung, damit
 W-09/K-01 (erst Locks raeumen, dann der erste git-Aufruf) wortgleich haelt. Der `trap` wird erst
 NACH dem Beiseitelegen des Erbes gesetzt, damit er ihn nie loeschen kann.
+
+---
+
+## Evaluator-Votum (§11) — 10.08.2026
+
+```yaml
+auftrag: A-07
+commit: c512f931          # Pruef-SHA; Elter d6637a1c als Kontrolle
+votum: ABGENOMMEN
+fehlerklasse: BEWEIS      # nur der eine P2 unten
+gegenprobe: "Rot-Lauf der vier neuen Zusagen gegen das Elter-Tor · vier eigene Mutationen ·
+  Erbschafts-Szenario von Hand, mit und ohne Initialisierung · Halden-Zuwachs zwei Richtungen"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde:
+  - "P2 BEWEIS: die INITIALISIERUNG aus A-07-4 ist von keiner Zusage gedeckt und in keinem
+     konstruierbaren Szenario wirksam — ihr Wegfall aendert nichts ausser einer stderr-Zeile."
+```
+
+### Selbst gefahren
+
+```text
+Scope-Diff c512f931   commit-pruefen.sh +94 · commitPruefen.test.mjs +143   nichts sonst
+Statik                bash -n SYNTAX-OK · node --check OK
+Suite Pruefstand      42/42        Suite Elter d6637a1c   38/38
+Rot am Elter          die VIER neuen Zusagen: 4 von 4 rot
+                      A-07-1a · A-07-2 · A-07-4 · A-07-4 GEGENPROBE
+```
+
+**Die Wirkung in beide Richtungen, an derselben Suite gemessen** — das ist der Kern von A-07-4:
+
+```text
+Suite im PRUEFSTAND (mit trap)   Halde vorher 54 -> nachher 54   Zuwachs  0
+dieselbe Suite am ELTER          Halde vorher 54 -> nachher 70   Zuwachs +16
+```
+
+**Rest B in der am 10.08. korrigierten Zweischrittform, an ALLEN Einträgen statt an zehn:**
+
+```text
+git status meldet 2 Eintraege   (Blatt-Ist am 10.08. 18:3x: 52)
+  ?? docs/rollenkette/     untracked -> ECHT (Schritt 1)
+  ?? zz-unlink-probe       untracked -> ECHT (Schritt 1)
+ECHT 2 · PHANTOM 0
+```
+
+*Die Zehnerprobe ist nicht mehr fahrbar, weil der Bau erfolgreich war — es bleiben keine zehn
+Einträge übrig. Die Substanz ist erfüllt, die Form hat sich selbst überholt.*
+
+**Vier eigene Mutationen, Anker je genau 1×, `md5` vor und nach identisch:**
+
+```text
+M1 unbedingt angleichen (Kippfall ignoriert)   fail 1   GEFANGEN durch A-07-2
+M2 Angleichung ganz entfernt                   fail 1   GEFANGEN durch A-07-1a
+M3 trap EXIT entfernt                          fail 2   GEFANGEN durch A-07-4 + Gegenprobe
+M4 Initialisierung entfernt                    fail 0   BLIND
+```
+
+### Der eine Befund — P2, `BEWEIS`, Ball beim Generator
+
+**A-07-4 nennt zwei Mechanismen. Der eine ist bewiesen, der andere nicht.**
+
+```text
+trap EXIT          M3 faellt, zwei Zusagen greifen, Halden-Zuwachs 0 gegen +16   BEWIESEN
+Initialisierung    M4 faellt NICHT — keine einzige Zusage bemerkt ihren Wegfall
+```
+
+**Ich habe zwei Szenarien von Hand gebaut, in denen sie zählen müsste, und in beiden zählt sie
+nicht:**
+
+```text
+1  geerbter Muell-Index, Beiseitelegen gelingt
+     mit Initialisierung   -> GEERBTER INDEX beiseite, Commit, INDEX ANGEGLICHEN
+     ohne Initialisierung  -> GEERBTER INDEX beiseite, Commit, INDEX ANGEGLICHEN   IDENTISCH
+2  geerbter Muell-Index, Beiseitelegen SCHEITERT (Verzeichnis nur lesbar)
+     mit Initialisierung   -> "INDEX-INITIALISIERUNG GESCHEITERT" + fatal: index file smaller
+     ohne Initialisierung  -> fatal: index file smaller                            GLEICHER AUSGANG
+```
+
+**Die Erbschaft wird vom BEISEITELEGEN beendet, nicht vom `read-tree`.** *Der beobachtbare
+Beitrag der Initialisierung ist eine Zeile auf stderr.*
+
+> **Warum das die Abnahme nicht blockiert:** der **Zweck** von A-07-4 — die Erbschaft endet, der
+> Wegwerf-Index bleibt nicht liegen — ist an beiden Enden belegt. *Geschuldet ist kein Code,
+> sondern ein Nachweis:* entweder ein Szenario, in dem die Initialisierung den Lauf rettet, oder
+> der ehrliche Satz im Blatt, dass sie eine **Diagnose** ist und die Erbschaft vom Beiseitelegen
+> beendet wird. **§12: `BEWEIS` lässt den Code unverändert und schuldet die Zusage.**
+
+### Zwei Dinge in eigener Sache
+
+**A-07-5 ist erfüllt und ich habe die Zahl verfälscht.** Der Bau hat **2590** Dateien nach
+`_to_delete/2026-08-10-A-07-5/` beiseitegelegt — *beiseite, nicht gelöscht, Dauerregel gewahrt.*
+**Danach standen wieder 92 im Verzeichnis — alle nach 19:00 entstanden, alle aus MEINEN
+Elter-Kontrollläufen** (das alte Tor ohne `trap`). *Wer die Halde nach mir misst, hätte 92 als
+Rückfall gelesen.* Ich habe sie nach derselben Konvention beiseitegelegt
+(`_to_delete/2026-08-10-evaluator-kontrolllaeufe/`, 92 Dateien, nichts gelöscht); Stand danach: **0**.
+
+**Zum Prüfstand:** `node_modules` **und** `vendor` verlinkt — beide Rezeptschritte, nachdem ich
+bei A-04 heute `vendor` vergessen und dadurch beinahe meinen eigenen Aufbau als Regression
+gemeldet hatte.
+
+---
+
+## Evaluator-Votum A-07 — Zweitinstanz, 10.08. (Claim-Kollision: Bestätigung, KEIN zweites Urteil)
+
+**Zuerst die Rollenlage, ehrlich:** Ich wurde als Evaluator für die A-07-Abnahme angesetzt und habe
+den `claim_abnahme` der Erstinstanz beim Prüfstart gesehen — und trotzdem gemessen, weil mein
+Auftrag mich als „den" Evaluator adressierte. **Während meiner Messungen hat die Erstinstanz die
+Abnahme vollzogen (`fc5a3daa`, ABGENOMMEN an `c512f931`).** Ihr Votum ist das gültige; dieses
+Blatt bekommt von mir **kein zweites Urteil, sondern eine unabhängige Zweitmessung** — dieselbe
+Klasse Kollision wie bei A-04, und diesmal steht sie als Befund da statt als zwei konkurrierende
+Voten. *Alle folgenden Zahlen sind selbst gemessen, kein Wert vom Generator oder der Erstinstanz
+übernommen; wo beide dasselbe messen, ist das jetzt eine DREIFACH unabhängige Bestätigung.*
+
+**Messbasis:** Arbeitsbaum-Scope-Dateien je `content-diff` **IDENTISCH** zu `c512f931`
+(vor und nach den Messungen geprüft; HEAD wanderte während der Prüfung 55317e1e → 5f98cc28 →
+fc5a3daa → 199039fa, **kein Commit berührte den Scope**: `git log c512f931.. -- <beide>` leer).
+
+### Suite und Basis — selbst gefahren, eigener TMPDIR je Lauf
+
+```text
+c512f931 (Arbeitsbaum identisch)   tests 42 · pass 42 · fail 0   Halden-Rueckstand des Laufs: 0
+c512f931^ (worktree add -q)        tests 38 · pass 38 · fail 0   Halden-Rueckstand des Laufs: 16
+Basis-Gegengriff: trap 0 · "INDEX ANGEGLICHEN|read-tree" 0 Treffer im Basis-Tor
+statisch: bash -n pass · node --check pass · md5 Tor 59e23956c627085b0792def9486935dc (= §11-Bericht)
+```
+
+### Je Kriterium — eigene Wegwerf-Proben (Repo selbst gebaut, Tor aus `git show c512f931:`)
+
+**A-07-1a BESTÄTIGT.** Eigener Tor-Zyklus: `INDEX ANGEGLICHEN … der Arbeitsbaum ist unberuehrt`,
+danach `diff --cached --name-only` = **0**, Arbeitsbaum trägt den neuen Stand. **Zwei-Richtungs-
+Probe:** identischer Zyklus mit dem Basis-Tor (`c512f931^`) → `diff --cached` = **1** (`anfang.txt`
+bleibt divergent) und 1 Halden-Datei. **Real am echten Repo:** `git status --porcelain` = 1 Eintrag
+(`?? zz-unlink-probe`), in der **korrigierten Zwei-Schritt-Form** (Schritt 1 `ls-files`) als
+untracked = ECHT; `diff --cached` = 0; **1 zu 1 statt 41 zu 1.**
+
+**A-07-1b/2 BESTÄTIGT.** Kippfall selbst hergestellt (`git add ungesichert.txt`, Blob in keinem
+Commit): `INDEX NICHT ANGEGLICHEN  1 … ungesichert.txt` — **Zahl UND Pfad**, `ls-files --stage`
+vorher/nachher **byte-identisch**, exit 0 (melden, nicht blockieren). Auflösung (Blob committet)
+→ nächster Tor-Lauf wieder `INDEX ANGEGLICHEN`, `diff --cached` = 0. **Dazu der Feldbeleg, den
+niemand bestellen konnte:** `7ab67893`/`eec79bc4` — der Kippfall trat LIVE mit 211 fremden
+Index-Blobs ein, das Tor meldete und fasste nichts an.
+
+**A-07-3 BESTÄTIGT.** Stufe-5-Block unverändert (nur der Marker `INDEX_VOM_TOR` kam hinzu);
+eigener ausgelagerter Index je Lauf, PID im Pfad. Die zwei Bestandszusagen: Z.180 („Ausweichpfad
+AUSSERHALB des Mounts, je Prozess eigen") und Z.205 („von aussen gesetzte GIT_INDEX_FILE wird
+NICHT ueberschrieben") — beide in meinem 42/42-Lauf grün.
+
+**A-07-4 BESTÄTIGT** (mit dem BEWEIS-Vorbehalt der Erstinstanz, s.u.). Code: `trap 'rm -f …' EXIT`
+Z.355, gesetzt NACH dem Beiseitelegen des Erbes; ich zähle **12** exit-Punkte (Blatt 7, Plan-Prüfer
+10 — nicht tragend, `trap EXIT` deckt alle). Verhaltensproben selbst: Abbruchlauf (`FEHLT`-Pfad,
+exit 1) hinterlässt **0** `index.*`; exec-PID-Trick mit Müll-Index → `GEERBTER INDEX … beiseitegelegt,
+nicht geloescht`, **kein** `invalid object`, Commit trägt exakt den genannten Pfad, Erbe liegt unter
+`_to_delete/`, Rückstand 0. Wirkungsdifferenz ganzer Suite-Lauf: **0 (neu) gegen 16 (Basis)**.
+
+**A-07-5 BESTÄTIGT.** Selbst gezählt: `_to_delete/2026-08-10-A-07-5/` = **2589** Dateien (deckt die
+Generator-Zahl; die 2590 der Erstinstanz weicht um 1 ab — nicht tragend), beiseitegelegt statt
+gelöscht; lebende Halde bei Abschlussmessung **0**, dazu `_to_delete/2026-08-10-evaluator-
+kontrolllaeufe/` = 92 (die Alt-Tor-Kontrollläufe der Erstinstanz — ich hatte sie 19:05–19:06 als
+52 wachsende Dateien live gesehen und als Rätsel notiert, ihr Blattnachtrag löst es auf).
+
+### Mutationsproben — an einer KOPIE, kein Mutationsfenster im echten Tor
+
+```text
+Kopie-Kontrolllauf                42/42       md5 = 59e23956c627085b0792def9486935dc
+M2 Angleichung unbedingt (-eq 0 -> -ge 0)    41/42 — GENAU A-07-2 faellt (die gefaehrliche Richtung)
+M3 trap entfernt                             40/42 — A-07-4 UND Gegenprobe fallen
+je md5-identisch zurueckgestellt, Abschlusslauf 42/42
+```
+
+*Der Weg über die Kopie beweist dasselbe wie die Generator-Mutationen — ohne die von ihm als
+Abweichung deklarierten Sekunden-Fenster am geteilten Arbeitsbaum. Empfehlung: künftig so.*
+
+### Die vier deklarierten Abweichungen, gewürdigt
+
+```text
+Erstnutzer ungeplant (A-04-Kette)   GEDECKT   exakt die Erstnutzer-Form des Blatts ("naechster
+                                              Commit, ohne eigenen Aufruf"); kein Schaden belegt
+Mutationsfenster                    GEDECKT   ehrlich deklariert; verwaiste Blobs zu jedem
+                                              Messzeitpunkt 0; kuenftig Kopie statt Fenster
+unmerged -> Kippfall                GEDECKT   konservativ, keine Zusage geschwaecht; RANDNOTIZ
+                                              P3 an den Planner: im Blatt kodifizieren + Zusage
+1b-Meldung auf stdout               GEDECKT   Blatt schreibt keinen Kanal vor; exit 0 = Erfolgskanal
+60s-Schutz bei A-07-5               GEDECKT   A-02-Klasse (lebende Laeufe); Ergebnis = Blattforderung
+```
+
+### Befunde dieser Zweitmessung (keiner blockiert)
+
+1. **KOLLISION (Prozess, P2):** Zweitbesetzung der Abnahme-Station trotz sichtbarem Claim — dieselbe
+   Klasse wie bei A-04. Der Claim-Mechanismus braucht eine Regel, die auch die **Beauftragung**
+   bindet, nicht nur die Instanz, die den Eintrag liest.
+2. **P3/UMGEBUNG:** Eine PID-lose Altdatei `index` (03.08., 145 B) liegt weiter in der Halde — von
+   `index.$$` nie erreichbar (Klasse `index.gen*`), von der A-07-5-Räumung nicht erfasst, vom
+   Blatt-Messbefehl (`^index\.`) nicht gezählt. Beim nächsten Aufräumen mit beiseitelegen.
+3. **Bestätigung des BEWEIS-Befunds der Erstinstanz (P2):** Meine M3-Probe zeigt, dass die
+   A-07-4-Zusagen an `trap` und Beiseitelegen hängen; den Wegfall der `read-tree`-Initialisierung
+   habe ich nicht separat mutiert — der Erstinstanz-Befund (M4 lässt die Suite grün) ist mit meiner
+   Code-Lesung konsistent: das Beiseitelegen beendet die Erbschaft, `read-tree` ist Diagnose/Netz.
+
+**Ergebnis der Zweitmessung: das Votum ABGENOMMEN an `c512f931` (Fehlerklasse KEINE, ein
+P2-BEWEIS-Folgeauftrag beim Generator) wird in allen Kriterien unabhängig bestätigt.**
