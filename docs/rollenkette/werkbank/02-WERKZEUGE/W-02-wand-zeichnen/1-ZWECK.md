@@ -1,21 +1,22 @@
-# W · wand zeichnen — ZWECK
+# W-02 · Wand zeichnen — ZWECK
 
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
-<In EINEM Satz, aus Sicht des Anwenders. Nicht technisch.
-Beispiel: „Der Planer soll mit zwei Klicks eine Wand ziehen können,
-die automatisch an bestehenden Wänden andockt.">
+Der Planer soll aus zwei Punkten eine **Wand mit Dicke, Höhe und Seiten** bekommen — und an jeder
+Ecke einen **sauberen Anschluss**, ohne die Ecken selbst konstruieren zu müssen.
 
 ## Wann greift der Anwender danach?
 
-<Der konkrete Moment im Arbeitsablauf.>
+Beim Aufziehen des Grundrisses — dem ersten Schritt jedes Projekts. **Alles Weitere hängt daran:**
+Öffnungen, Räume, Decken, Mengen.
 
-## Woran merkt er, dass es fehlt?
+## Was wäre ohne dieses Werkzeug?
 
-<Was tut er ersatzweise, wenn es das Werkzeug nicht gibt?
-Diese Frage entscheidet über die Priorität.>
+Wände wären Striche ohne Stärke. **Ohne Wandfläche gibt es keine Mengenermittlung** — und der
+Befund, der `wandFlaeche.ts` ausgelöst hat, sagt es wörtlich: *„Die Öffnungen liegen im Modell, aber
+niemand zieht sie von einer Wandfläche ab, weil es keine Wandfläche gibt."*
 
-## Was ist ausdrücklich NICHT Zweck dieses Werkzeugs?
+## Die zwei Verträge in je einem Satz
 
-<Abgrenzung zu Nachbarwerkzeugen. Verhindert, dass ein Werkzeug
-über die Jahre alles frisst.>
+1. **mm-Integer-Welt** — Wände leben in ganzzahligen Millimetern (`istGanzzahlig`, `resources/planner/hausplaner/geometry/wallGeometry.ts:53`).
+2. **Entweder Mengen oder Meldungen, nie beides und nie halb** (`resources/planner/hausplaner/geometry/wandFlaeche.ts:96`).

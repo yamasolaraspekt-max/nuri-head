@@ -1,31 +1,34 @@
-# W · wand zeichnen — FORMELN
+# W-02 · Wand zeichnen — FORMELN
 
-> **Regel: hier werden nur F-Nummern aus `01-MATHEMATIK/FORMELSAMMLUNG.md` genannt.
-> Keine abgeschriebenen Formeln.** Eine Formel, die an zwei Orten steht, wird an
-> einem Ort korrigiert und am anderen vergessen.
+## Benutzte Formeln — jede mit Fundstelle
 
-## Benutzte Formeln
+| F-Nr | Wofür | Fundstelle | Grenzfall betrifft uns? |
+|---|---|---|---|
+| **F-001** Abstand zweier Punkte | Wandlänge | `wallGeometry.ts:13` | **JA** — Gleitkomma für Vergleiche, Persistenz bleibt ganzzahlig |
+| **F-002** Richtungswinkel | Azimut der **Normalen** | `wallGeometry.ts:37` | **JA** — `atan2`, sonst geht der Quadrant verloren |
+| **F-030** Wand aus Achse extrudieren | Band aus Achse + Stärke | `wallGeometry.ts:153` | **JA** — Länge 0 ergibt kein Band |
 
-| F-Nr | Wofür in diesem Werkzeug | Grenzfall betrifft uns? |
-|---|---|---|
-| F-0xx | | ja / nein — weil … |
+## Was der Code anders macht als die Sammlung
 
-## Reihenfolge der Anwendung
+### F-002: gemessen wird die NORMALE, nicht die Achse
 
+```text
+Formelsammlung   Richtungswinkel einer Strecke
+Code (Z.37-52)   Normale links = (-dy, dx), rechts = (dy, -dx)
+                 Azimut = atan2(nx, ny), im Uhrzeigersinn von NORD (+y)
+                 Ergebnis auf 0-359 normiert: ((grad % 360) + 360) % 360
 ```
-1. F-0xx  →  <Zwischenergebnis>
-2. F-0xx  →  <Zwischenergebnis>
-3. F-0xx  →  Endergebnis
+
+**Die Formel ist dieselbe, der Gegenstand nicht.** *Wer F-002 auf die Wandachse anwendet statt auf
+ihre Normale, liegt um 90° daneben — und zwar ohne Fehlermeldung.*
+
+### F-030: der Grenzfall im Code ist enger als in der Sammlung
+
+```text
+Sammlung   "Bei d <= 0 oder h <= 0 Absage. Bei sehr spitzen Wandwinkeln (< 15°)
+            ueberlappen sich die Ecken - dann verschneiden (F-004)."
+Code       Laenge 0 -> `continue`, kein Band (wallGeometry.ts:159-160)
 ```
 
-## Fehlt eine Formel?
-
-<Wenn dieses Werkzeug Mathematik braucht, die noch nicht in der Sammlung steht:
-hier benennen, DANN in die Sammlung eintragen, DANN hier auf die Nummer verweisen.
-Nicht umgekehrt.>
-
-## Genauigkeit
-
-- Eingangsgrößen in <Einheit>, Rechnung in <Einheit>, Rückgabe gerundet auf <…>
-- Toleranz ε = <…>
-- Bekannte Ungenauigkeit: <wo sich Fehler aufaddieren können>
+**Zur Winkelverschneidung nach F-004 sagt dieses Blatt nichts** — *sie wurde beim Ableiten nicht
+gemessen, und ein Satz ohne Beleg gehört nicht in ein Werkzeugblatt.*
