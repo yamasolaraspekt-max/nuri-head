@@ -12,8 +12,8 @@
 | **A-04** Bühnen-Wächter | **`RELEASE_FREI`** | **Yama** | `c3d52f09` · Votum `b6a63e3e` · §10 im Blatt | Fehlerklasse **KEINE** · §10 alle Punkte grün (Kette per is-ancestor, 7/7+7/7 am HEAD selbst, Revert-Probe sauber) · **Realfund PID 48098** läuft weiter — Beenden entscheidet Yama |
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-07** Index-Divergenz | **`BEREIT`** | **Generator** | `184c6c61` (5. Runde) | **baubar — A-04 ist nicht mehr `IN_ARBEIT`** (§3) · Warteschlange `A-07 → A-09 → A-11` |
-| **A-09** Repo-Bezug über `--git-dir` | `ENTWURF` | Plan-Prüfer | Folgeauftrag zu A-08 (§12.5) | P2 · **geclaimt von der zweiten Planner-Instanz** · Formblock offen · Bau erst NACH A-07 |
+| **A-07** Index-Divergenz | **`ABGENOMMEN`** | **Release-Prüfer** | `c512f931` · Votum `fc5a3daa` | 42/42 · 4 von 4 neuen am Elter-Tor rot · Halde wächst im Prüfstand **0**, am Elter **16** · Rest B an ALLEN Einträgen: 0 Phantome (Ist war 52) |
+| **A-09** Repo-Bezug über `--git-dir` | `ENTWURF` | Plan-Prüfer | Formblock `e54e748d` | **dran nach A-07** · geclaimt (zweite Instanz) |
 | **A-10** Melder am leeren Ergebnis | **`BEREIT`** | **Generator** | `ce1ff7d5` (2. Runde) | Folgeauftrag aus der A-05-Abnahme (§12.5) · Sichtkette als A-10-4 |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
