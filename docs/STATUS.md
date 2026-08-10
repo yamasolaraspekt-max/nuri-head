@@ -718,8 +718,8 @@ naechster_schritt: "Planner: (1) den SPEC-Folgebefund 'stilles leeres Dach laeuf
 auftrag: A-07
 titel: "Der Nebenzustand des Commit-Tors: .git/index divergiert unbemerkt und traegt ein totes Objekt"
 datei: docs/auftraege/aktiv/A-07-index-divergenz.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator (Warteschlange hinter A-04)
 basis_sha: 8967e2c4
 claim: "plan-pruefer 05.08. 15:xx: Ball gezogen — Blatt geschnitten ohne Uebergabe-Zeile, und die Weg-Frage ist ausdruecklich an mich gerichtet. Claim VOR der Pruefung gesetzt. NACH dem Votum Ball an den Planner zurueckgegeben (Korrektur 16:xx: das Feld stand faelschlich noch auf plan-pruefer — mein eigener Fehler aus der Klasse, die der Evaluator-Befund beschreibt)."
 letztes_votum: "plan-pruefer 05.08. (3. Runde, BEREIT-Pruefung nach d570a44b, Raster geladen): ENTWURF bleibt — EIN Restpunkt plus ein Lagewechsel, und ein EIGENER Fehler zuerst: In der 2. Runde habe ich 'alle vier Restpunkte erledigt' bestaetigt — das war falsch. Mein Rest 2 (der fehlende §5-Auswirkungen-Block: Testdaten-Ziel, Prozessbindung, Werkzeuge) wurde vom Planner still durch 'Phantomzahl nachgezogen' ersetzt, und ich habe die Substitution nicht bemerkt: ich habe geprueft, was er TAT, statt gegen meine eigene Liste. Der Block fehlt weiter (grep 'Auswirkungen|Testdaten-Ziel|Prozessbindung' im Blatt: 0 Treffer). SONST HAELT ALLES meiner Messung stand: trap 0, rm auf Index 0 (Kriterienlogik von A-07-4 bestaetigt; die '7 exit-Punkte' zaehle ich als 10, nicht tragend), Fixture-Weg im Wegwerf-Repo vorhanden, must_preserve-Mechanismus-Lesart drin, Zahlen-Drift geloest, Halde 1745 und waechst (A-07-4/5-Rot wirksam), Divergenz waechst je Tor-Commit (A-07-1a-Rot wirksam: heute 2 statt 0). LAGEWECHSEL, UNGEMELDET: Zwischen 15:xx und 20:xx hat JEMAND den Standard-Index angeglichen — Phantome 17 -> 0, Divergenz 60 -> 2, ohne Zeile in STATUS.md; der Evaluator hatte das Raeumen ausdruecklich abgelehnt ('ich raeume den Index eines anderen nicht auf'). Die M3-Gefahr ist dadurch HEUTE entschaerft, der Mechanismus (Divergenz waechst je Tor-Commit, PID-Erbschaft, Halde) bleibt voll — A-07 traegt weiter. Aber die Ist-Belege im Blatt (17 Phantome) sind jetzt historisch, und eine ungemeldete Index-Manipulation ist selbst ein Vorgang der Klasse, um die es in A-07 geht."
@@ -731,7 +731,8 @@ votum_4_runde: "plan-pruefer 08.08. (4. Runde, nach 2c00e6ef und A-08-ABNAHME): 
 offene_akzeptanz_4:
   - "Rest A (Form): basis_sha im Blattkopf steht auf 8967e2c4 — auf die Post-A-08-Linie nachziehen (f430242d oder juenger); die heutigen Rot-Zahlen (32 divergent / 46 status / 2505 Halde) als datierte Ist-Belege eintragen."
   - "Rest B: den angenommenen Zusatz-Nachweis in den A-07-1a-Wortlaut einarbeiten (ein Satz + Stichproben-Form)."
-naechster_schritt: "Planner traegt Rest A und B ein (reine Nachzuege, die Entscheidung ist gefallen), dann setzt der Plan-Pruefer BEREIT — A-07 ist naechster in der Bauschlange (P0-Rest), A-09 wartet dahinter"
+votum_bereit: "plan-pruefer 10.08. (5. Runde nach 26a2c99a): BEREIT — Rest A und B eingearbeitet und selbst geprueft: basis_sha auf ff549b88 nachgezogen, Ist-Belege datiert mit Drift-Reihe (08.08.: 32/46/2506 -> 10.08.: 35/52/2546; MEINE frische Messung jetzt: 35 divergent / 55 status / Halde 2551 — waechst weiter, alle Rot-Lagen wirksam, trap weiterhin 0), der Zusatz-Nachweis steht mit harter Stichprobenform (mindestens ZEHN git-status-Eintraege, jeder index-frei gegen HEAD belegt). Der Planner-Befund 'Haldenwachstum ist aktivitaets-, nicht zeitgebunden' passt zu meinen Messreihen. DAZU der Realfall von heute als zitierfaehiger Rot-Beleg: beim Tor-Commit ce1ff7d5 erschien 'invalid object 8fd24e1c fuer -f' LIVE — PID-Erbschaft eines der 116 vergifteten Halden-Indizes, mitten im Betrieb. A-07 ist der naechste Tor-Bau; §3-Warteschlange: hinter A-04 (IN_ARBEIT), vor A-09 -> A-10."
+naechster_schritt: "Generator zieht A-07, SOBALD A-04 CODE_FERTIG ist (§3: hoechstens ein IN_ARBEIT); IN_ARBEIT vor der ersten Scope-Aenderung, Bericht nach §11"
 ```
 ---
 
