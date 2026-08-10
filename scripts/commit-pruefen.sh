@@ -68,14 +68,60 @@ if [ -z "${GIT_INDEX_FILE:-}" ]; then
   INDEX_VOM_TOR=ja
 fi
 
-# ── A-08 FORM B: LAEUFT EIN GIT-PROZESS *DIESES* REPOSITORIUMS? ─────────────────────────────
-# Bedingung 2 der Drei-Nein-Regel (Nachtrag A-08, DECISION). Billig zuerst: erst die
-# Prozessliste (`ps`, haengt nicht), dann NUR fuer echte git-Kandidaten die cwd-Frage an
-# `lsof` — mit derselben Zeitgrenze wie die Halter-Frage. Der Repo-Bezug ist Pflicht
-# (Korrektur 2 im Nachtrag): ein git-Lauf in einem FREMDEN Verzeichnis zaehlt nicht.
-# Nicht Ermittelbares zaehlt als JA — im Zweifel gehalten, geraten wird nicht.
+# ── A-08 FORM B / A-09: LAEUFT EIN GIT-PROZESS *DIESES* REPOSITORIUMS? ──────────────────────
+# Bedingung 2 der Drei-Nein-Regel (Nachtrag A-08, DECISION; Repo-Bezug geschaerft durch A-09).
+# Billig zuerst: erst die Prozessliste (`ps`, haengt nicht), dann NUR fuer echte git-Kandidaten
+# die Bezugsfrage. Ein git-Prozess gilt als "auf diesem Repositorium arbeitend", wenn EINES
+# von dreien zutrifft (A-09 DECISION):
+#
+#   1  seine cwd liegt im Arbeitsbaum         `lsof -d cwd`, mit derselben Zeitgrenze wie die
+#                                             Halter-Frage (A-08, unveraendert der erste Weg)
+#   2  seine AUFRUFFORM nennt dieses Repo     --git-dir=<...> | --git-dir <...> | -C <...> |
+#                                             --work-tree=<...> | --work-tree <...>, gelesen
+#                                             aus `ps -o args=` — der Befund von Probe C:
+#                                             `git --git-dir=...` wechselt die cwd NICHT
+#   3  seine UMGEBUNG nennt dieses Repo       GIT_DIR= oder GIT_WORK_TREE=, gelesen aus
+#                                             `ps -E -p <pid> -o command=` (Probe D)
+#
+# Der Pfadvergleich laeuft stets NACH Aufloesung (relative Pfade beziehen sich auf die cwd
+# des Kandidaten — so loest git sie selbst auf; der macOS-Symlink /var -> /private/var wird
+# durch `pwd -P` gleich mit begradigt). Nicht Ermittelbares zaehlt als JA — im Zweifel
+# gehalten, geraten wird nicht.
+#
+# GRENZE (A-09, dokumentiert, kein Bau): `ps -E` liest die Umgebung FREMDER Nutzer nicht.
+# Fuer deren Prozesse liefert aber schon `lsof -d cwd` keine Auskunft, und der Zweifelspfad
+# unten haelt sie fest; alle Rollen dieses Repos laufen ohnehin als derselbe Nutzer
+# (gemessen, Blatt A-09). Zweite benannte Grenze: die `ps`-Ausgabe traegt keine Anfuehrungs-
+# zeichen — Pfade MIT LEERZEICHEN in Aufrufform oder Umgebung sind nicht rueckgewinnbar und
+# koennen dort nicht erkannt werden (die cwd-Frage ueber lsof bleibt davon unberuehrt).
 # Rueckgabe 0 = ja (oder nicht auszuschliessen), 1 = nachweislich keiner.
 REPO_WURZEL="$(pwd -P)"
+
+# A-09: liegt der genannte Pfad — physisch aufgeloest — in diesem Repositorium?
+# $1 = Pfad aus Aufrufform oder Umgebung, $2 = cwd des Kandidaten als Bezug fuer relative
+# Pfade. Arbeitsbaum und alles darunter (auch .git) zaehlen. Ein Pfad, der sich nicht
+# aufloesen laesst (existiert nicht), KANN dieses Repo nicht sein -> kein Treffer.
+pfad_meint_repo() {
+  PMR_PFAD="$1"; PMR_BEZUG="$2"; PMR_AUFGELOEST=""
+  case "$PMR_PFAD" in
+    /*) : ;;
+    *)  [ -n "$PMR_BEZUG" ] || return 1
+        PMR_PFAD="$PMR_BEZUG/$PMR_PFAD" ;;
+  esac
+  if [ -d "$PMR_PFAD" ]; then
+    PMR_AUFGELOEST=$(CDPATH= cd "$PMR_PFAD" 2>/dev/null && pwd -P)
+  elif [ -e "$PMR_PFAD" ]; then
+    # .git kann eine DATEI sein (verknuepfter Arbeitsbaum) — der Verzeichnisanteil wird aufgeloest.
+    PMR_AUFGELOEST=$(CDPATH= cd "$(dirname "$PMR_PFAD")" 2>/dev/null && printf '%s/%s' "$(pwd -P)" "$(basename "$PMR_PFAD")")
+  else
+    return 1
+  fi
+  case "$PMR_AUFGELOEST" in
+    "$REPO_WURZEL"|"$REPO_WURZEL"/*) return 0 ;;
+  esac
+  return 1
+}
+
 repo_git_laeuft() {
   KANDIDATEN=$(ps -axo pid=,comm= 2>/dev/null | awk '{
     pid=$1; comm=$2; for (i = 3; i <= NF; i++) comm = comm" "$i;
@@ -107,6 +153,44 @@ repo_git_laeuft() {
     case "$GCWD" in
       "$REPO_WURZEL"|"$REPO_WURZEL"/*) return 0 ;;
     esac
+
+    # ── A-09 Weg 2: die AUFRUFFORM nennt dieses Repo ─────────────────────────────────────
+    # Die cwd ist bekannt und fremd — das schliesst den Repo-Bezug seit Probe C nicht mehr
+    # aus. Ein Kandidat, dessen Aufrufform nicht lesbar ist, obwohl er noch existiert,
+    # bleibt nicht feststellbar -> im Zweifel gehalten (dieselbe Regel wie bei der cwd).
+    GARGS=$(ps -p "$GPID" -o args= 2>/dev/null)
+    if [ -z "$GARGS" ]; then
+      if ps -p "$GPID" >/dev/null 2>&1; then return 0; fi
+      continue
+    fi
+    set -f   # keine Glob-Expansion beim Zerlegen fremder Argumente
+    PFAD_FOLGT=nein
+    for GWORT in $GARGS; do
+      if [ "$PFAD_FOLGT" = "ja" ]; then
+        PFAD_FOLGT=nein
+        if pfad_meint_repo "$GWORT" "$GCWD"; then set +f; return 0; fi
+        continue
+      fi
+      case "$GWORT" in
+        --git-dir=*)   if pfad_meint_repo "${GWORT#--git-dir=}" "$GCWD"; then set +f; return 0; fi ;;
+        --work-tree=*) if pfad_meint_repo "${GWORT#--work-tree=}" "$GCWD"; then set +f; return 0; fi ;;
+        --git-dir|--work-tree|-C) PFAD_FOLGT=ja ;;
+      esac
+    done
+    set +f
+
+    # ── A-09 Weg 3 (Bedingung 3): die UMGEBUNG nennt dieses Repo ─────────────────────────
+    # GIT_DIR/GIT_WORK_TREE stehen NICHT in den Argumenten (Probe D, fc64f05e) — erst
+    # `ps -E` zeigt sie, fuer Prozesse desselben Nutzers. Die Werte werden wie die
+    # Aufrufform pfadaufgeloest verglichen; relative Werte beziehen sich auf die cwd
+    # des Kandidaten. Liefert `ps -E` nichts Passendes, ist das KEIN Zweifelsfall:
+    # ein leerer Fund sieht fuer "Variable nicht gesetzt" und "fremder Nutzer" gleich
+    # aus — die dokumentierte Grenze oben, fremde Nutzer faengt schon die cwd-Frage.
+    GUMWELT=$(ps -E -p "$GPID" -o command= 2>/dev/null | tr ' ' '\n')
+    for GVAR in GIT_DIR GIT_WORK_TREE; do
+      GWERT=$(printf '%s\n' "$GUMWELT" | sed -n "s/^${GVAR}=//p" | head -1)
+      if [ -n "$GWERT" ] && pfad_meint_repo "$GWERT" "$GCWD"; then return 0; fi
+    done
   done
   return 1
 }

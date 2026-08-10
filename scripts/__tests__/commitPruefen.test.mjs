@@ -41,7 +41,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, utimesSync, symlinkSync, statSync } from 'node:fs';
 import { execFileSync, spawn } from 'node:child_process';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { tmpdir } from 'node:os';
 
 const TOR = new URL('../commit-pruefen.sh', import.meta.url).pathname;
@@ -863,6 +863,231 @@ test('A-08 Form B: ein laufender git-Prozess DIESES Repos schuetzt einen alten 0
   const rFrei = tor(verz, 'Probe: Repo-git ist fort', 'anfang.txt');
   assert.equal(rFrei.code, 0, `nach dem Ende des Repo-git blockt das Tor weiterhin:\n${rFrei.text}`);
   assert.equal(existsSync(p), false, 'der Rest liegt noch, obwohl kein git mehr laeuft');
+});
+
+/**
+ * ── A-09 — DER REPO-BEZUG HAENGT NICHT MEHR AN DER CWD ALLEIN ───────────────────────────────
+ *
+ * **Der Befund (Probe C des Evaluators, 23b3a490):** `git --git-dir=<repo>/.git` wechselt die
+ * cwd NICHT — repo_git_laeuft() sah nur die cwd, legte den 0-Byte-Lock beiseite und liess den
+ * Commit laufen, waehrend ein git DIESES Repos arbeitete. Probe D (fc64f05e): derselbe Effekt
+ * ueber die UMGEBUNG (GIT_DIR), lesbar erst mit `ps -E`. Die schadhafte Kantenzeile dahinter
+ * verwechselte „fremde cwd" mit „fremdes Repositorium" — nicht dieselben Mengen.
+ *
+ * **Seit A-09 gilt der Bezug ueber EINEN von drei Wegen:** cwd im Arbeitsbaum ODER die
+ * Aufrufform nennt dieses Repo (--git-dir/-C/--work-tree) ODER die Umgebung nennt es
+ * (GIT_DIR/GIT_WORK_TREE). Pfadvergleich stets NACH Aufloesung; nicht Feststellbares bleibt
+ * im Zweifel gehalten.
+ *
+ * **Rot an der Basis (d836fb91), je zweimal selbst gemessen:** Form C (--git-dir, fremde cwd)
+ * und Form D (GIT_DIR-Umgebung) — beide Male BEISEITE, Commit lief, exit 0 statt 3.
+ */
+
+/** Startet einen git-Langlaeufer (`cat-file --batch`, stdin bleibt offen) und wartet, bis
+ *  `ps` ihn als git fuehrt — erst dann ist er ein Kandidat fuer repo_git_laeuft(). */
+async function gitLanglaeufer(args, optionen) {
+  const kind = spawn('git', args, { stdio: ['pipe', 'ignore', 'ignore'], ...optionen });
+  let comm = '';
+  for (let i = 0; i < 100; i++) {
+    try {
+      comm = execFileSync('ps', ['-p', String(kind.pid), '-o', 'comm='], { encoding: 'utf8' }).trim();
+      if (comm.split('/').pop() === 'git') break;
+    } catch { /* noch nicht da */ }
+    await kurzWarten(50);
+  }
+  assert.equal(comm.split('/').pop(), 'git', `der Probe-Prozess traegt kein git-Kommando: ${comm}`);
+  return kind;
+}
+
+/** Beendet den Langlaeufer und wartet, bis er wirklich fort ist. */
+async function prozessEnde(kind) {
+  try { kind.kill('SIGKILL'); } catch { /* schon fort */ }
+  await new Promise((fertig) => kind.once('exit', fertig));
+  await kurzWarten(200);
+}
+
+test('A-09-1: der Befund — git mit --git-dir auf DIESES Repo und FREMDER cwd zaehlt als Repo-git', async () => {
+  // **Exakt Probe C:** die cwd liegt fremd, der Bezug steht allein in der Aufrufform.
+  // Vor A-09 wurde der Lock beiseitegelegt und der Commit lief (Rot an der Basis).
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const fremd = mkdtempSync(join(tmpdir(), 'a09-fremd-'));
+  const gitLauf = await gitLanglaeufer([`--git-dir=${join(verz, '.git')}`, 'cat-file', '--batch'], { cwd: fremd });
+
+  try {
+    const r = tor(verz, 'Probe: --git-dir bei fremder cwd', 'anfang.txt');
+    assert.equal(r.code, 3, `der --git-dir-Fall wird weiterhin uebersehen: ${r.text}`);
+    assert.equal(existsSync(p), true, 'der Lock wurde trotz laufendem --git-dir-git weggezogen');
+    assert.match(r.text, /ENV_BLOCKED:/, 'die ENV_BLOCKED-Zeile fehlt');
+  } finally {
+    await prozessEnde(gitLauf);
+  }
+
+  // Gegenprobe im selben Lauf: ohne den Prozess ist derselbe Lock ein Rest — die Blockade
+  // kam also vom Prozess, nicht von einer Pauschal-Sperre.
+  const rFrei = tor(verz, 'Probe: der --git-dir-Prozess ist fort', 'anfang.txt');
+  assert.equal(rFrei.code, 0, `nach dem Prozessende blockt das Tor weiterhin:\n${rFrei.text}`);
+  assert.equal(existsSync(p), false, 'der Rest liegt noch, obwohl kein git mehr laeuft');
+});
+
+test('A-09 Aufloesung: ein RELATIVER --git-dir aus fremder cwd meint dieselbe Stelle', async () => {
+  // **Der Pfadvergleich darf nicht an der Schreibweise scheitern (DECISION):** relativ
+  // gegen absolut, dazu der macOS-Symlink /var -> /private/var. Aufgeloest wird gegen die
+  // cwd des KANDIDATEN — so loest git den Pfad selbst auf. Ohne Aufloesung ist das rot
+  // (Mutation 3 aus A-09-5).
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const fremd = mkdtempSync(join(tmpdir(), 'a09-fremd-'));
+  const relativVonFremd = relative(fremd, join(verz, '.git'));
+  assert.ok(!relativVonFremd.startsWith('/'), `die Probe braucht einen RELATIVEN Pfad, bekam: ${relativVonFremd}`);
+  const gitLauf = await gitLanglaeufer([`--git-dir=${relativVonFremd}`, 'cat-file', '--batch'], { cwd: fremd });
+
+  try {
+    const r = tor(verz, 'Probe: relativer --git-dir', 'anfang.txt');
+    assert.equal(r.code, 3, `der relative --git-dir wird nicht als dieses Repo erkannt: ${r.text}`);
+    assert.equal(existsSync(p), true, 'der Lock wurde trotz laufendem Repo-git weggezogen');
+  } finally {
+    await prozessEnde(gitLauf);
+  }
+});
+
+test('A-09-2 KONTROLLE: git -C auf dieses Repo bleibt erkannt — der neue Weg tritt DANEBEN, nicht an die Stelle', async () => {
+  // must_preserve, an der Basis gruen: `git -C` WECHSELT die cwd, Weg 1 (lsof) faengt ihn
+  // heute und weiter. Faellt Weg 1 einer Umbau-Laune zum Opfer, faellt diese Zusage.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const fremd = mkdtempSync(join(tmpdir(), 'a09-fremd-'));
+  const gitLauf = await gitLanglaeufer(['-C', verz, 'cat-file', '--batch'], { cwd: fremd });
+
+  try {
+    const r = tor(verz, 'Probe: git -C', 'anfang.txt');
+    assert.equal(r.code, 3, `git -C wird nicht mehr erkannt: ${r.text}`);
+    assert.equal(existsSync(p), true, 'der Lock wurde trotz git -C weggezogen');
+  } finally {
+    await prozessEnde(gitLauf);
+  }
+});
+
+test('A-09-3 KONTROLLE (Gegenrichtung): --git-dir auf ein FREMDES Repositorium zaehlt NICHT', async () => {
+  // must_preserve: ohne diese Haelfte waere „jeder git-Prozess zaehlt" gruen — die in
+  // d4308d35 verworfene Form B. Das fremde Repo ist ein ECHTES zweites Wegwerf-Repo,
+  // sein git-Prozess lebt waehrend des Tor-Laufs.
+  const verz = wegwerfRepo();
+  const anderes = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const fremd = mkdtempSync(join(tmpdir(), 'a09-fremd-'));
+  const gitLauf = await gitLanglaeufer([`--git-dir=${join(anderes, '.git')}`, 'cat-file', '--batch'], { cwd: fremd });
+
+  try {
+    const r = tor(verz, 'Probe: git eines ANDEREN Repos', 'anfang.txt');
+    assert.equal(r.code, 0, `ein git-Prozess eines FREMDEN Repos sperrt dieses Tor:\n${r.text}`);
+    assert.equal(existsSync(p), false, 'der Rest liegt noch — das fremde Repo hat faelschlich geschuetzt');
+    assert.equal(beiseiteGelegt(verz), 1, 'der Rest wurde nicht beiseitegelegt');
+  } finally {
+    await prozessEnde(gitLauf);
+  }
+});
+
+test('A-09 Aufrufform: --work-tree auf DIESEN Baum zaehlt — auch wenn das --git-dir woandershin zeigt', async () => {
+  // Die dritte Nennform der DECISION. Der Prozess arbeitet mit FREMDEM git-dir AUF den
+  // Dateien unseres Arbeitsbaums — genau deshalb zaehlt der work-tree-Bezug fuer sich.
+  const verz = wegwerfRepo();
+  const anderes = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const fremd = mkdtempSync(join(tmpdir(), 'a09-fremd-'));
+  const gitLauf = await gitLanglaeufer(
+    [`--git-dir=${join(anderes, '.git')}`, `--work-tree=${verz}`, 'cat-file', '--batch'], { cwd: fremd });
+
+  try {
+    const r = tor(verz, 'Probe: --work-tree auf diesen Baum', 'anfang.txt');
+    assert.equal(r.code, 3, `--work-tree auf diesen Baum wird nicht erkannt: ${r.text}`);
+    assert.equal(existsSync(p), true, 'der Lock wurde trotz --work-tree-Bezug weggezogen');
+  } finally {
+    await prozessEnde(gitLauf);
+  }
+});
+
+test('A-09-6: die UMGEBUNG nennt dieses Repo — GIT_DIR reicht, ohne --git-dir und bei fremder cwd', async () => {
+  // **Exakt Probe D (fc64f05e):** kein Repo-Bezug in cwd oder Aufrufform, nur GIT_DIR in
+  // der Umgebung — lesbar erst mit `ps -E`. Rot an der Basis: BEISEITE, Commit lief.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const fremd = mkdtempSync(join(tmpdir(), 'a09-fremd-'));
+  const gitLauf = await gitLanglaeufer(['cat-file', '--batch'],
+    { cwd: fremd, env: { ...process.env, GIT_DIR: join(verz, '.git') } });
+
+  try {
+    const r = tor(verz, 'Probe: GIT_DIR in der Umgebung', 'anfang.txt');
+    assert.equal(r.code, 3, `der GIT_DIR-Fall wird weiterhin uebersehen: ${r.text}`);
+    assert.equal(existsSync(p), true, 'der Lock wurde trotz GIT_DIR-git weggezogen');
+    assert.match(r.text, /ENV_BLOCKED:/, 'die ENV_BLOCKED-Zeile fehlt');
+  } finally {
+    await prozessEnde(gitLauf);
+  }
+
+  // Gegenprobe im selben Lauf: ohne den Prozess ist derselbe Lock ein Rest.
+  const rFrei = tor(verz, 'Probe: der GIT_DIR-Prozess ist fort', 'anfang.txt');
+  assert.equal(rFrei.code, 0, `nach dem Prozessende blockt das Tor weiterhin:\n${rFrei.text}`);
+  assert.equal(existsSync(p), false, 'der Rest liegt noch, obwohl kein git mehr laeuft');
+});
+
+test('A-09-6 GIT_WORK_TREE: auch der Arbeitsbaum-Verweis in der Umgebung zaehlt', async () => {
+  // Dieselbe Kantenzeile wie GIT_DIR („GIT_WORK_TREE zeigt auf diesen Baum -> Repo-git").
+  // Das git-dir zeigt auf ein fremdes Repo, damit NUR der work-tree-Verweis traegt.
+  const verz = wegwerfRepo();
+  const anderes = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const fremd = mkdtempSync(join(tmpdir(), 'a09-fremd-'));
+  const gitLauf = await gitLanglaeufer(['cat-file', '--batch'],
+    { cwd: fremd, env: { ...process.env, GIT_DIR: join(anderes, '.git'), GIT_WORK_TREE: verz } });
+
+  try {
+    const r = tor(verz, 'Probe: GIT_WORK_TREE in der Umgebung', 'anfang.txt');
+    assert.equal(r.code, 3, `GIT_WORK_TREE auf diesen Baum wird nicht erkannt: ${r.text}`);
+    assert.equal(existsSync(p), true, 'der Lock wurde trotz GIT_WORK_TREE-Bezug weggezogen');
+  } finally {
+    await prozessEnde(gitLauf);
+  }
+});
+
+test('A-09 Zweifel: ist die cwd eines lebenden git-Kandidaten NICHT feststellbar, gilt er als gehalten', async () => {
+  // **DECISION Punkt 4: geraten wird nicht.** Ein lsof, das genau die cwd-Frage nicht
+  // beantwortet (Wrapper verweigert nur `-d cwd`-Anfragen, alles andere laeuft echt),
+  // laesst den Kandidaten im Zweifel — der Lock liegt. Diese Zusage faellt, wenn
+  // „nicht feststellbar" als „kein Repo-git" gewertet wird (Mutation 4 aus A-09-5).
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const p = lockSetzen(verz, '', 300);
+  const echtesLsof = execFileSync('/bin/sh', ['-c', 'command -v lsof'], { encoding: 'utf8' }).trim();
+  const fake = join(verz, 'fake-bin');
+  mkdirSync(fake);
+  writeFileSync(join(fake, 'lsof'),
+    `#!/bin/sh\nfor a in "$@"; do case "$a" in cwd) exit 1 ;; esac; done\nexec ${echtesLsof} "$@"\n`,
+    { mode: 0o755 });
+  const gitLauf = await gitLanglaeufer(['cat-file', '--batch'], { cwd: verz });
+
+  try {
+    let r;
+    try {
+      const aus = execFileSync('bash', ['scripts/commit-pruefen.sh', 'Probe: cwd nicht feststellbar', 'anfang.txt'],
+        { cwd: verz, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
+          env: { ...process.env, PATH: `${fake}:${process.env.PATH}` } });
+      r = { code: 0, text: aus };
+    } catch (e) {
+      r = { code: e.status ?? -1, text: `${e.stdout ?? ''}${e.stderr ?? ''}` };
+    }
+    assert.equal(r.code, 3, `im Zweifel wurde geraten statt gehalten: ${r.text}`);
+    assert.equal(existsSync(p), true, 'der Lock wurde trotz nicht feststellbarer cwd weggezogen');
+  } finally {
+    await prozessEnde(gitLauf);
+  }
 });
 
 /**
