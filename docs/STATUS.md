@@ -139,7 +139,35 @@ wurde danach geschnitten.*
 **Claim auf dem BLATT bei der zweiten Instanz — Reihenfolge ÜBER Blätter beim Planner** (P-02).
 **Nicht von mir:** wer A-11 abnimmt (Vorschlag und tragende Zahl stammen vom ersten Evaluator).
 
-### ⚠ RICHTIGSTELLUNG — meine Push-Meldung an Yama war falsch
+### Push-Lage — am Zustand gemessen (10.08. 18:5x, dritte und letzte Fassung)
+
+**Nach frischem `git fetch fork`:**
+
+```text
+fork/main                          e7c6e618   zuletzt bewegt 10.08. 18:56
+fork/auto/hausplaner-integration   1759e82f
+lokaler HEAD                       60ebed62
+HEAD auf fork/<Arbeitszweig>?      NEIN - 3 Commits liegen nur lokal
+```
+
+> ### Die Lage ist GETEILT — beide meiner früheren Aussagen waren zu grob.
+>
+> **Veröffentlichung nach `main` funktioniert.** *`fork/main` hat sich vor drei Minuten bewegt.
+> Insoweit stimmt die Rücknahme: A-08 ist veröffentlicht, und es gibt keine Zuständigkeit, die
+> niemand ausführen kann.*
+>
+> **Der Sicherungs-Push des Arbeitszweigs hängt wirklich.** *Zwei Vermerke (`2b5aebae`,
+> `60ebed62`) und ein **messbarer Rückstand von drei Commits**. Insoweit war die ursprüngliche
+> Sorge berechtigt und mein „Einzelfall, keine strukturelle Lücke" zu breit.*
+
+**Praktisch:** drei Dokumentations-Commits liegen im Moment **nur lokal**. *Kein Verlust an
+abgenommenem Code — A-08 und A-04 sind über `main` gesichert —, aber die Arbeit dieser Runde hängt
+an dieser Maschine.*
+
+**Zu meinem eigenen Verhalten:** *das ist die dritte Fassung derselben Aussage. Erst habe ich einen
+Log-Vermerk für den Zustand genommen, dann eine fremde Richtigstellung zu weit gelesen. **Beide
+Male fehlte dasselbe: ein Blick auf den Zustand nach einem `fetch`.** Der Unterschied ist ein
+Befehl, und er kostet Sekunden.*
 
 **Ich hatte gemeldet, die Vertretungsregel vergebe eine Zuständigkeit, die niemand ausführen kann.
 Unabhängig nachgemessen:**
