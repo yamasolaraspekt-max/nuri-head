@@ -47,7 +47,33 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 
 | **10** | **A-10** Melder am leeren Ergebnis | 08.08. 14:5x | *läuft* | – | SPEC-Folgebefund aus der A-05-Abnahme (§12.5) · Sichtkette als A-10-4 mit aufgenommen |
 
-**Stand: 10 von 10 — die §13-PROZESSPRÜFUNG IST FÄLLIG.** *Vom Planner selbst angestoßen, nicht abgewartet.*
+**Stand: 10 von 10 — die §13-PROZESSPRÜFUNG IST FÄLLIG.**
+
+---
+
+## Fehlerklassen dieser Gruppe — die SOFORT-Klausel (B3, seit 08.08.)
+
+> **§13:** *„die zweite Wiederholung derselben Fehlerklasse löst die Skill- und Ursachenprüfung
+> **sofort** aus."* **Wer den Stand oben fortschreibt, füllt diese Tabelle mit.**
+
+| Fehlerklasse | Wiederholungen | Schwelle (2) | gezogen? | Barriere |
+|---|---|---|---|---|
+| **halb korrigiert** (eine Stelle geändert, dieselbe Aussage anderswo gelassen) | **5** | überschritten | **nein** | B2 seit `534ec48e` |
+| **Beifang** (fremde Arbeit unter eigenem Namen committet) | **2** | überschritten | **nein** | B1 seit `7c2958fd` |
+| **Zuordnung annehmen statt messen** | **5** | überschritten | **nein** | *offen — keine Barriere* |
+| **liegengebliebene Zuweisung** (Restpunkt nicht gesucht) | **4** | überschritten | **nein** | Pflichtpunkt im Weckertext |
+
+**Vier Klassen haben die Schwelle überschritten, keine hat die Prüfung ausgelöst.** *Alle haben auf
+die Zehn geschaut, niemand auf die Zwei — das ist der Grund für B3 und zugleich sein erster Beleg.*
+
+> **Ehrlich zur Form:** *B3 ist eine Tabelle in einem Dokument, keine Barriere im Befehl wie B1 und
+> B2. Sie wirkt nur, weil sie **am Ort des Zählens** steht. Eine echte Barriere bräuchte ein
+> Werkzeug, das die Klassen selbst zählt — dafür fehlt die zählbare Zeile je Auftrag, und genau das
+> ist Befund 0 der Prüfung.*
+
+**Zähler-Reset:** *steht aus.* §13 lässt die neue Zehnergruppe erst nach Umsetzung beginnen —
+**aber er sagt nicht, wer die Prüfung abnimmt.** *Ich habe sie geschrieben; sie zu schließen steht
+mir nicht zu. Der Reset wartet auf die Gegenlesung durch den Plan-Prüfer.* *Vom Planner selbst angestoßen, nicht abgewartet.*
 
 > ### §13-Prozessprüfung ausgelöst bei 3, nicht bei 10
 >
