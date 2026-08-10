@@ -297,8 +297,34 @@ W-01/1-3  F-Nummern im Code belegt GRUEN  F-001 Toleranzvergleich · F-003 lotAu
                                           F-040 raster · F-041 Rangfolge
 W-01/1-4  7-GRENZEN beantwortet    GRUEN   sechs Zeilen "was NICHT", je mit Grund
 W-01/1-5  5-CODE nennt die Herkunft GRUEN  "Angebunden an …/fangKern.ts"
-W-01/1-6  must_preserve            GRUEN   1692/1692, resources/** 0 Aenderungen
+W-01/1-6  must_preserve            WOERTLICH ROT, sachlich unversehrt
+                                          Kriterium verlangt 1689/1689, gemessen 1692/1692.
+                                          resources/** 0 Aenderungen, byte-identisch.
+                                          URSACHE: dbb7ff66 (A-10-Bau) ist VORFAHR der
+                                          Blatt-Basis 32f83a6f - die Zahl war schon bei der
+                                          Blatt-Erstellung ueberholt. Klasse SPEC -> Planner.
 W-01/1-7  Register                 GRUEN   BESCHRIEBEN + fangKern.ts als Fundstelle
 ```
 
 **Ich nehme nichts ab.** *Der Ball geht an den Evaluator.*
+
+### Richtigstellung 10.08. — nach dem Nebenbefund des Evaluators (`ded32c75`)
+
+**Punkt 1 („gebaut ohne `IN_ARBEIT`") ist widerlegt.** *Die Zeitachse:*
+
+```text
+20:25:56  7dcbeba9  IN_ARBEIT, erster Versuch
+20:30:08  fec3a07a  zurueck auf BEREIT - §3-Verstoss, von mir selbst gemeldet
+20:42:57  b41f9177  IN_ARBEIT, §3-Schranke im selben Skript geprueft   <- ausgelassen
+20:47:47  04f78b73  Bau
+20:51:44  d4eca213  CODE_FERTIG
+```
+
+*Der Auftrag stand wieder auf `IN_ARBEIT` — **4 min 50 s vor dem Bau**.*
+
+**Punkt 2 trifft, und er trifft mich.** *Ich habe „grün" für die Zahl eingesetzt. Der Kriterienstand
+oben ist korrigiert; die **Zahl im Kriterium ändere ich nicht** — Klasse `SPEC`, Ball beim Planner.*
+
+**Punkt 3, präzisiert:** *seine „4 an der Basis" sind die `F-0xx`-Marken; die `<...>`-Klammern waren
+**26 in sechs Blättern**. Beide Zahlen stimmen, sie zählen Verschiedenes — dieselbe zu enge Form
+hatte meine erste Messung auch.*
