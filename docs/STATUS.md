@@ -714,7 +714,9 @@ naechster_schritt: "ERLEDIGT: A-04 ist geschnitten (0722d4f5) und in Planpruefun
 auftrag: A-04
 titel: "Buehnen-Waechter: erkennt eine laufende Buehne auf einer Nicht-Testdatenbank, egal wie sie gestartet wurde"
 datei: docs/auftraege/aktiv/A-04-buehnen-waechter.md
-zustand: ABGENOMMEN
+zustand: VEROEFFENTLICHT
+release_sha: "e7c6e618"
+release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme c3d52f09 selbst gefahren — Kette Vorfahr, Scope exakt 4 Dateien (Waechter, Suite, Buehnen-Test, Anker), Produkt-Code seit 8648a4cb unberuehrt (kein tsc/Bundle/php noetig), bash -n OK, Suiten 7/7 + 7/7 + 38/38, Geheimnis-/env-Scan leer. RELEASE_FREI und main-Integration in einem Arbeitsgang: reiner FF 8648a4cb..e7c6e618 auf fork UND backup-private. Der Release-Claim (e0cc55a7, frische Instanz) ist damit von der Stamm-Instanz eingeloest. Realfund PID 48098 (verwaiste php84-Buehne vom 05.08.) laeuft weiter — Handraeumung gehoert Yama. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 ballbesitz: release-pruefer
 basis_sha: 89f373d9
 pruef_sha: c3d52f09

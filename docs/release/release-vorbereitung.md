@@ -214,3 +214,26 @@ ausfuehrung:
 statuswahrheit: "A-08 VEROEFFENTLICHT mit release_sha im selben Commit wie dieses Protokoll"
 naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama"
 ```
+
+---
+
+## Protokoll: Release A-04 nach main (10.08.)
+
+```yaml
+vorgang: release-a04-main
+datum: 2026-08-10
+rolle: release-pruefer (Stamm-Instanz, Vertretung nach Regelwerk 1.4.2)
+kandidat: e7c6e618f9aabc625ae336bee7366eb377d3adcc
+abnahme: "b6a63e3e (Evaluator, fehlerklasse KEINE) an c3d52f09 — Suiten 7/7+7/7 selbst,
+  Wegwerf-Proben je exit-belegt, 2 Mutationen gefallen, Zwei-Richtungs-Probe an 89f373d9"
+paragraph10: "Kette: c3d52f09 Vorfahr der Linie · Scope exakt 4 Dateien (buehnen-waechter.sh,
+  buehnenWaechter.test.mjs, browserBuehne.test.mjs +11, ANKER +7) · Produkt-Code seit 8648a4cb
+  unberuehrt (resources/public/app = 0 Treffer, deshalb kein tsc/Bundle/php) · bash -n OK ·
+  Suiten 7/7 + 7/7 + 38/38 · Geheimnis-/env-Scan leer · FF-Bedingung geprueft"
+ausfuehrung:
+  - "push fork  e7c6e618 -> main   8648a4cb..e7c6e618  FF"
+  - "push backup-private e7c6e618 -> main  8648a4cb..e7c6e618  FF"
+statuswahrheit: "A-04 VEROEFFENTLICHT mit release_sha im selben Commit wie dieses Protokoll"
+offen: "Realfund PID 48098 (verwaiste php84-Buehne) — Handraeumung bei Yama;
+  BETRIEBSBESTAETIGT fuer A-01/A-02/A-03/A-08/A-04 bei Yama"
+```
