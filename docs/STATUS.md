@@ -13,8 +13,8 @@
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | **`RELEASE_FREI`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
-| **A-09** Repo-Bezug über `--git-dir` | `ENTWURF` | Plan-Prüfer | 2. Runde `da758558` | **ein Restpunkt** — gehört der claimenden Instanz (P-02) · dran nach A-10 |
-| **A-10** Melder am leeren Ergebnis | **`CODE_FERTIG`** | **Evaluator** | Bau `dbb7ff66` · §11 `47c0aa73` | Suite 1689→1692 · Basis-Rot + 4 Mutationen belegt · Browserkette gefahren (l-shape-Dokument, 3 Viewports, Gegenprobe) |
+| **A-09** Repo-Bezug über `--git-dir` | **`BEREIT`** | **Generator** | 3. Runde `c93d68ae` | `GIT_DIR` aufgenommen statt weggebründet · dran nach A-10 |
+| **A-10** Melder am leeren Ergebnis | **`CODE_FERTIG`** | **Evaluator** | `47c0aa73` · Bau `dbb7ff66` | Suite 1689→1692 · 4 Mutationen gefallen · **A-10-4 Sichtkette GRÜN** (Browserabnahme mit Gegenprobe) · Probedaten in `ticket_testing` |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
