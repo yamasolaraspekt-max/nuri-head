@@ -682,6 +682,7 @@ votum_2_runde: "plan-pruefer 08.08. (2. Runde nach d5855056): ENTWURF bleibt, EI
 votum_3_runde: "plan-pruefer 08.08. (3. Runde nach f3faf111): ENTWURF bleibt, der Rest ist HALB erledigt und dadurch schaerfer geworden: Z.66 ist sauber nachgezogen ('liegt seit dem Merge 27a61da9 auf dem Zweig' ✓), aber im B2-Block wurde nur die ZAHL korrigiert (grep 0 -> 2) — die umgebende Begruendung sagt weiter 'ist hier nicht gemergt / der Satz ist noch wahr / das Skript existiert von hier aus nicht'. Der Block widerspricht sich jetzt IM SELBEN SATZ ('liegt seit dem Merge auf dem Arbeitszweig und ist hier nicht gemergt') — Falle 4 in ihrer reinsten Form: Zahl geaendert, Aussage gelassen. DAZU SELBST GEMESSEN, was B2 heute ist: ANKER-BROWSER.md widerspricht sich selbst — Z.62 'seit A-03 ist die Regel gebaut' gegen Z.92 'bis er steht, ist diese Regel die einzige Sicherung'. B2s Schliessungsbedingung (A-03-Merge) IST eingetreten."
 votum_bereit: "plan-pruefer 08.08. (4. Runde nach 534ec48e): BEREIT — B2 ist aufgeloest und SELBST verifiziert: Blatt traegt 'GESCHLOSSEN 08.08.' mit der eingetretenen Bedingung, der Anker sagt jetzt Z.92 f. 'Der Riegel steht (A-03) … nicht mehr die einzige Sicherung' — beide Selbstwidersprueche weg. Damit sind alle Reste aus vier Runden zu: Drift-Zusage, Fixture-Weg mit Wegwerf-.env, §5-Block, Wiederverwendung zeilengenau, Merge verifiziert. KONFLIKTPRUEFUNG AKTUALISIERT: A-04 beruehrt browser-buehne.sh, einen NEUEN buehnen-waechter.sh und browserBuehne.test.mjs — KEINE Beruehrung mit dem Tor-Strang (commit-pruefen.sh/commitPruefen.test.mjs von A-07/A-09); darf PARALLEL bauen."
 claim_bau: "plan-pruefer 08.08.: BEREIT gesetzt, Generator-Station fuer A-04 mit frischer Instanz besetzt (parallel zum Tor-Strang zulaessig). Claim VOR dem Start."
+env_hinweis_bau: "plan-pruefer 10.08.: A-04-Bau ENV-GEHEMMT — VIER Generator-Laeufe (zwei Instanzen, je zwei Anlaeufe, zuletzt mit kompaktem Lese-Auftrag) sind saemtlich in der Lesephase gestallt (600s ohne Fortschritt), jedes Mal OHNE Spuren (nachgemessen: kein buehnen-waechter.sh, kein IN_ARBEIT, STATUS content-gleich HEAD). Dazu seit 9c63da13 ZWEI TAGE lang keinerlei Commits irgendeiner Rolle — das ist eine Umgebungslage, keine Auftrags- oder Instanzschwaeche. A-04 bleibt BEREIT mit Claim; naechster Bauversuch, sobald die Umgebung wieder traegt (Signal: irgendein fremder Commit laeuft wieder durch) oder Yama eine eigene Instanz ansetzt. Das Blatt selbst ist unveraendert baubar."
 naechster_schritt: "Planner zieht die zwei Merge-ueberholten Stellen nach, dann setzt der Plan-Pruefer BEREIT — A-04 ist danach baubar (Blockade seit 27a61da9 aufgehoben)"
 ```
 
@@ -798,15 +799,16 @@ naechster_schritt: "Planner traegt den Formblock ein, dann setzt der Plan-Pruefe
 auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator (Warteschlange)
 basis_sha: d58b220e
 prioritaet: P2
 letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine Punkte — sonst das bisher SAUBERSTE Erstblatt der Gruppe: basis_sha, §5-Block, Wiederverwendung, Erstnutzer, Rueckweg, Nicht-Ziele ALLE beim ersten Schnitt da (das Muster 'dritter Auftrag ohne §5-Block' ist damit gebrochen — gehoert in die Prozesspruefung als Gegenbeleg). Rot-Lage A-10-1 SELBST strukturell verifiziert: nichtDarstellbar.ts faengt ausschliesslich DachGeometrieUngueltig-Wuerfe (try/catch Z.42-48), ein leeres Ergebnis ohne Wurf erreicht gefunden.push nie — dazu die dreifach unabhaengigen dynamischen Belege (9e97d274, e0fae829, E4b in b29bb79d). Sichtkette korrekt HIER verortet (A-10-4 mit Anker-Regel und browser-buehne.sh als Prozessbindung) statt in A-05. must_preserve A-10-3 sauber."
 offene_akzeptanz:
   - "Punkt 1: A-10-2 (Gegenprobe) ist an der Basis GRUEN (heute wird gar nichts gemeldet, also auch kein Flaechen-Dach) — nach dem stehenden Muster (A-01-2, A-02-1, A-08-2) als must_preserve-KONTROLLE kennzeichnen und von der Rot-Pflicht ausnehmen, sonst verletzt das Blatt 'kein Kriterium bereits erfuellt'."
   - "Punkt 2: Konfliktpruefungs-Zeile fehlt (§5) — eine Zeile genuegt: A-04 ist IN_ARBEIT auf scripts/*, A-07/A-09 warten auf commit-pruefen.sh — KEINE Beruehrung mit szene.ts/DreiDBereich.tsx; A-10 darf parallel. EMPFEHLUNG (kein Blocker): eine Mutationszusage (neue Bedingung entfernt -> A-10-1-Zusage faellt) nach dem Vorbild A-08-6, damit die Bedingung nicht stumm entfernbar ist."
-naechster_schritt: "Planner traegt die zwei Punkte ein, dann setzt der Plan-Pruefer BEREIT. WICHTIG §13: A-10 ist Auftrag 10 — VOR einem Auftrag 11 muss die Prozesspruefung der Zehnergruppe gelaufen sein (der Planner hat sie bereits angestossen)."
+votum_bereit: "plan-pruefer 10.08. (2. Runde nach 9cecc6be): BEREIT — beide Punkte plus die Empfehlung eingearbeitet und selbst geprueft: A-10-2 als must_preserve-KONTROLLE mit sauberer Begruendung, Mutationszusage A-10-5 aufgenommen (drei Mutationen), Konfliktpruefung selbst nachgemessen — dabei hat der Planner ZWEI UNGENAUE ANGABEN AUS MEINER DoR-NOTIZ korrigiert (A-04 baut buehnen-waechter.sh, nicht pauschal 'scripts/*'; plus die A-01/szene.ts-Herkunftszeile) — richtig so, Messung schlaegt Notiz, auch meine. EINE KORREKTUR AN SEINER FOLGERUNG: 'A-10 darf PARALLEL laufen' gilt nur fuer DATEIEN — §3 sagt woertlich 'hoechstens einen Auftrag IN_ARBEIT gleichzeitig' (Z.85). A-10 ist BEREIT, zieht aber erst, wenn kein anderer Auftrag IN_ARBEIT ist. Prozesspruefung-02 ist gelaufen (850aafd5) — die §13-Schranke vor Auftrag 11 ist damit bedient."
+naechster_schritt: "Warteschlange nach §3: A-04 baut JETZT (aeltester BEREIT, Claim steht), danach A-07 (Tor, sobald Planner-Nachzuege da) -> A-09 -> A-10. Der Generator zieht A-10, sobald die Schlange ihn erreicht und kein Auftrag IN_ARBEIT ist."
 ```
 ---
 
@@ -1642,3 +1644,65 @@ ballbesitz: planner
 **Ich entscheide nicht, welcher Weg genommen wird** — das ist die Wegfrage und gehört dem Planner.
 *Ich stelle nur fest, dass dieser eine Weg keine bestehende Zusage kostet, und das war vorher
 unbekannt: der Generator hat ihn vorgeschlagen, ohne die anderen fünf Zusagen dagegenzuhalten.*
+
+---
+
+## Befund des Evaluators zu A-09 — das Nicht-Ziel `GIT_DIR` steht auf einer widerlegten Begründung
+
+**A-09 ist `ENTWURF` beim Planner. Der Auftrag greift meinen P2 richtig auf** — A-09-1 bis
+A-09-5 treffen genau die Lage aus Probe C. **Eine Zeile habe ich nachgemessen, weil sie eine
+Messaussage enthält:**
+
+```text
+Blatt Z.85-88:  "Nicht-Ziel: die Umgebungsvariable GIT_DIR. Sie kann denselben Effekt haben,
+                 ist aber in der Umgebung eines FREMDEN Prozesses auf macOS nicht
+                 verlaesslich lesbar."
+```
+
+**Probe D, gefahren wie Probe C, nur mit `GIT_DIR` statt `--git-dir`:**
+
+```text
+( sleep 40 | GIT_DIR=<repo>/.git git hash-object --stdin ) &   cwd: scratchpad (fremd)
+Lock: 0 Byte, 242 s
+-> BEISEITE   .git/index.lock ... -> _locks_beiseite/2026-08-10/
+-> Commit lief
+```
+
+**Derselbe Effekt, dieselbe Lage wie Probe C.** *Das bestätigt den Halbsatz „kann denselben
+Effekt haben".*
+
+**Der zweite Halbsatz trägt nicht:**
+
+```text
+ps -p <pid> -o command=     ->  zeigt KEIN --git-dir      (erwartet, es steht in der Umgebung)
+ps -E -p <pid> -o command=  ->  GIT_DIR=/…/pr9/.git
+                                GIT_WORK_TREE=/…/pr9
+Pfad aufgeloest             ->  identisch mit dem Repo-.git
+```
+
+**`ps -E` liest die Umgebung eines fremden Prozesses auf dieser Maschine** — mit demselben
+Werkzeug, das A-09 ohnehin benutzt (`ps`), und mit absolut auflösbarem Pfad.
+
+**Die Grenze, die es wirklich gibt, ist eine andere — auch die gemessen:**
+
+```text
+ps -E auf einen root-Prozess (PID 1)   -> 0 Treffer   (fremder Nutzer: nicht lesbar)
+ps -E auf einen eigenen Prozess         -> lesbar
+alle Rollen dieses Repos laufen als     -> yamanuri (gemessen an laufenden Tor-/Suite-Prozessen)
+```
+
+*„Nicht verlässlich lesbar" stimmt **nutzerübergreifend** und stimmt **nicht** für den Fall, um
+den es hier geht: gleicher Nutzer, gleiche Maschine.*
+
+```yaml
+auftrag: A-09
+fehlerklasse: SPEC
+befund: "Nicht-Ziel GIT_DIR ruht auf einer Begruendung, die fuer den einschlaegigen Fall widerlegt ist"
+gegenprobe: Probe D (Effekt) gegen ps -E (Lesbarkeit) gegen root-PID (die echte Grenze)
+ballbesitz: planner
+```
+
+**Ein Nicht-Ziel ist nach §5 zulässig, und ich verlange keins.** *Aber es ist mit „nicht messbar"
+begründet, und das ist es im einschlägigen Fall nicht — bleibt es stehen, bleibt eine Lücke
+derselben Form offen, die A-09 gerade schließt.* **Ob das die Mühe wert ist, entscheidet der
+Planner; er sollte es nur nicht in dem Glauben entscheiden, es ginge nicht.**
