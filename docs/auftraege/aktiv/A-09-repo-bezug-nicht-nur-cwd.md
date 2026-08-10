@@ -79,16 +79,59 @@ ist das Beiseitelegen eines 0-Byte-Locks auch weniger folgenreich.
 1  seine cwd liegt im Arbeitsbaum                        (heute schon, bleibt)
 2  seine Aufrufform nennt dieses Repo:  --git-dir=<…>  ODER  -C <…>  ODER
    --work-tree=<…>, jeweils auf diesen Arbeitsbaum bzw. dieses .git zeigend
-3  der Bezug ist nicht feststellbar  ->  im Zweifel GEHALTEN
+3  seine UMGEBUNG nennt dieses Repo:    GIT_DIR=<…>  ODER  GIT_WORK_TREE=<…>
+   gelesen mit `ps -E -p <pid> -o command=`               (NEU, 10.08.)
+4  der Bezug ist nicht feststellbar  ->  im Zweifel GEHALTEN
 ```
 
 Pfadvergleich **nach Auflösung** (`--git-dir=.git` aus dem Repo heraus meint dasselbe wie der
-absolute Pfad), damit die Prüfung nicht an der Schreibweise scheitert.
+absolute Pfad), damit die Prüfung nicht an der Schreibweise scheitert. **Für Bedingung 3 gilt
+derselbe Vergleich** — Probe D hat den Pfad aus `GIT_DIR` absolut aufgelöst und identisch zum
+Repo-`.git` gemessen.
 
-**Nicht-Ziel: die Umgebungsvariable `GIT_DIR`.** Sie kann denselben Effekt haben, ist aber in der
-Umgebung eines **fremden** Prozesses auf macOS nicht verlaesslich lesbar. *Ein Kriterium, das man
-nicht messen kann, gehoert nicht ins Blatt — das war der Fehler von A-02. Die Grenze wird benannt,
-nicht verschwiegen.*
+> ### ⚠ KORRIGIERT 10.08. — mein `GIT_DIR`-Nicht-Ziel ruhte auf einer widerlegten Begründung
+>
+> **Hier stand:** *„Nicht-Ziel: die Umgebungsvariable `GIT_DIR`. Sie kann denselben Effekt haben,
+> ist aber in der Umgebung eines fremden Prozesses auf macOS nicht verlässlich lesbar. Ein
+> Kriterium, das man nicht messen kann, gehört nicht ins Blatt."*
+>
+> **Probe D des Evaluators (`fc64f05e`) hat beide Halbsätze geprüft. Der erste hält, der zweite
+> nicht:**
+>
+> ```text
+> Effekt      ( sleep 40 | GIT_DIR=<repo>/.git git hash-object --stdin ) &   cwd fremd
+>             Lock 0 Byte, 242 s  ->  BEISEITE, Commit lief
+>             = derselbe Effekt wie Probe C. Der erste Halbsatz ist bestaetigt.
+>
+> Lesbarkeit  ps -p <pid> -o command=      -> kein GIT_DIR  (steht in der Umgebung)
+>             ps -E -p <pid> -o command=   -> GIT_DIR=/…/pr9/.git
+>                                             GIT_WORK_TREE=/…/pr9
+>             Pfad aufgeloest              -> identisch mit dem Repo-.git
+>             = LESBAR. Der zweite Halbsatz traegt nicht.
+>
+> echte Grenze  ps -E auf root-Prozess (PID 1)  -> 0 Treffer (fremder NUTZER)
+>               ps -E auf eigenen Prozess       -> lesbar
+>               alle Rollen dieses Repos laufen als yamanuri (gemessen)
+> ```
+>
+> **„Nicht verlässlich lesbar" stimmt nutzerübergreifend und stimmt nicht für den Fall, um den es
+> hier geht:** gleicher Nutzer, gleiche Maschine.
+>
+> **Meine Wahl von zwei zulässigen: AUFNEHMEN, nicht ehrlicher begründen.** Der Plan-Prüfer hat
+> beide Wege freigegeben; dies ist die Begründung für diesen:
+>
+> ```text
+> derselbe Effekt      -> es ist DIESELBE Luecke, die A-09 schliessen soll, nur ein anderer Weg hinein
+> dasselbe Werkzeug    -> `ps`, das das Blatt ohnehin benutzt; nur `-E` kommt hinzu
+> derselbe Vergleich   -> Pfad absolut aufloesbar, die DECISION-Regel gilt unveraendert
+> realer Fall gedeckt  -> alle Rollen laufen als derselbe Nutzer
+> ```
+>
+> *Ein Nicht-Ziel wäre formal zulässig gewesen. Aber „messbar, Werkzeug vorhanden, Zuwachs klein,
+> gleiche Lücke — und wir lassen sie offen" ist genau die Bauweise, aus der A-02s `P0` entstand: eine
+> Lücke, die man kennt und stehen lässt, kommt als Befund zurück. **In einem Blatt, das die Klasse
+> „Zuordnung annehmen statt messen" behandelt, wäre das die Wiederholung des Fehlers im eigenen
+> Nicht-Ziel-Block.***
 
 ## Nicht-Ziele
 
@@ -96,7 +139,11 @@ nicht verschwiegen.*
 - **Kein Rueckwirken auf A-08.** Es bleibt `ABGENOMMEN` (§12.5).
 - **Kein maschinenweites „irgendwo laeuft git"** — das war Form B allein und ist in `d4308d35`
   verworfen.
-- **Kein `GIT_DIR`-Kriterium**, siehe oben.
+- **Git-Prozesse eines FREMDEN Nutzers.** `ps -E` liest deren Umgebung nicht (an `PID 1` gemessen:
+  0 Treffer). *Das ist die Grenze, die es wirklich gibt — gemessen, nicht vermutet. Sie ist
+  hinnehmbar, weil alle Rollen dieses Repos als derselbe Nutzer laufen; ein fremder git-Prozess auf
+  diesem Arbeitsbaum wäre ein eigenes Problem. **Die Lücke bleibt offen und ist hier dokumentiert,
+  statt hinter „nicht messbar" zu verschwinden.***
 
 ## Scope
 
@@ -118,6 +165,9 @@ lsof -a -p <pid> -d cwd    VORHANDEN (Z.81-85) — bleibt unveraendert der erste
                            Inklusive der perl-Zeitgrenze aus A-02-6, die weiter gilt.
 ps -o args=                BORDMITTEL, im Tor bisher NICHT genutzt (es liest nur `comm=`).
                            Kein neues Werkzeug — dieselbe `ps`-Familie, anderes Feld.
+ps -E -p <pid> -o command= DASSELBE Werkzeug mit einem Schalter mehr; liest die Umgebung
+                           (GIT_DIR/GIT_WORK_TREE). Vom Evaluator in Probe D bereits
+                           gefahren und belegt — kein unerprobter Bestandteil.
 commitPruefen.test.mjs     VORHANDEN UND IN GEBRAUCH — 38 Zusagen nach A-08, wird erweitert.
 Pfad-Aufloesung            KEIN vorhandener Baustein im Tor. Bordmittel-Weg (`cd … && pwd -P`
                            oder Vergleich gegen `git rev-parse --git-dir`) statt neuer Helfer.
@@ -176,9 +226,18 @@ verworfene Form B.*
 Verzeichnis", sondern **„fremdes Repositorium"** — mit dem Vermerk, dass die alte Fassung diesen
 Befund verursacht hat.
 
-**A-09-5 (P1, Mutationsprobe):** Mindestens **vier** Mutationen fallen — Aufrufform-Prüfung entfernt ·
+**A-09-5 (P1, Mutationsprobe):** Mindestens **sechs** Mutationen fallen — Aufrufform-Prüfung entfernt ·
 ihr Ergebnis ignoriert · Pfadvergleich ohne Auflösung (relativ vs. absolut) · „nicht feststellbar"
-als „kein Repo-git" gewertet.
+als „kein Repo-git" gewertet · **Umgebungs-Prüfung entfernt** · **`-E` bei `ps` weggelassen** (die
+Aufrufform wird dann noch gelesen, die Umgebung nicht — der Fall von Probe D kommt stumm zurück).
+
+**A-09-6 (P1, der Umgebungsweg — NEU 10.08. nach Probe D):** Ein git-Prozess, dessen **Umgebung**
+`GIT_DIR` oder `GIT_WORK_TREE` auf dieses Repo setzt, wird als Repo-git **erkannt**, auch bei fremder
+`cwd` und ohne `--git-dir` in der Aufrufform -> Lock bleibt liegen, `ENV_BLOCKED`.
+
+> *Rot an der Basis vom Evaluator gemessen (Probe D, `fc64f05e`):
+> `( sleep 40 | GIT_DIR=<repo>/.git git hash-object --stdin ) &` mit fremder `cwd`, Lock 0 Byte und
+> 242 s alt -> **beiseitegelegt, Commit lief**. Derselbe Effekt wie Probe C, über einen anderen Weg.*
 
 ## Kantenliste
 
@@ -189,7 +248,12 @@ als „kein Repo-git" gewertet.
 --git-dir zeigt auf ein FREMDES Repo           -> kein Repo-git
 weder cwd noch Aufrufform feststellbar         -> im Zweifel GEHALTEN
 Halter ist selbst ein git-Prozess              -> Bedingung 1 greift schon vorher
-GIT_DIR in der Umgebung gesetzt                -> AUSDRUECKLICH NICHT ERFASST (Nicht-Ziel)
+GIT_DIR zeigt auf dieses .git, cwd fremd       -> Repo-git   (Probe D, jetzt ERFASST)
+GIT_WORK_TREE zeigt auf diesen Baum            -> Repo-git   (dieselbe Zeile in ps -E)
+GIT_DIR zeigt auf ein FREMDES Repo             -> kein Repo-git
+git-Prozess eines FREMDEN NUTZERS              -> ps -E liest nichts -> Bezug nicht
+                                                  feststellbar -> im Zweifel GEHALTEN
+                                                  (die verbleibende, dokumentierte Grenze)
 ```
 
 ## Rueckweg und Entdeckung
