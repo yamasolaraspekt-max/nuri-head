@@ -237,3 +237,28 @@ statuswahrheit: "A-04 VEROEFFENTLICHT mit release_sha im selben Commit wie diese
 offen: "Realfund PID 48098 (verwaiste php84-Buehne) — Handraeumung bei Yama;
   BETRIEBSBESTAETIGT fuer A-01/A-02/A-03/A-08/A-04 bei Yama"
 ```
+
+---
+
+## Protokoll: Release A-07 nach main (10.08.)
+
+```yaml
+vorgang: release-a07-main
+datum: 2026-08-10
+rolle: release-pruefer (Stamm-Instanz, Vertretung nach Regelwerk 1.4.2)
+kandidat: e321f2a2378e6a69af5ac6af1c12cb5b189027e5
+abnahme: "fc5a3daa (Evaluator) + 05f3e1d9 (Zweitinstanz, unabhaengig deckungsgleich) an c512f931;
+  Suite 42/42, Elter 38/38, 4 neue Zusagen am Elter rot, 4 Mutationen; Wirkung zweiseitig:
+  Halde-Wachstum 0 im Pruefstand vs 16 am Elter"
+paragraph10: "Kette Vorfahr · Scope exakt 2 Dateien (commit-pruefen.sh +94, Suite +143) ·
+  Produkt-Code seit e7c6e618 unberuehrt · bash -n OK · 42/42 + 7/7 + 7/7 · Scans leer"
+feldbelege: "A-07-1b-Kippfall LIVE (7ab67893): 212 fremde Index-Blobs gemeldet, nichts angefasst —
+  danach als docs/rollenkette (211 Dateien) in 1e933a64 gesichert. Wirkungsmessung Plan-Pruefer:
+  Divergenz 35->0, status 55->2, Halde 2589 beiseitegelegt (0 geloescht)"
+offene_befunde: "P2/BEWEIS an Generator (A-07-4-Initialisierung ohne Zusage) — blockiert nicht"
+ausfuehrung:
+  - "push fork  e321f2a2 -> main   e7c6e618..e321f2a2  FF"
+  - "push backup-private e321f2a2 -> main  e7c6e618..e321f2a2  FF"
+statuswahrheit: "A-07 VEROEFFENTLICHT im selben Commit wie dieses Protokoll"
+naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama (jetzt 6 Auftraege offen)"
+```
