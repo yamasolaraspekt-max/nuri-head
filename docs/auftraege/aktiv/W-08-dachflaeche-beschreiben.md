@@ -199,7 +199,7 @@ Verweis auf W-02. *Es benutzt `polygonFlaecheM2` — genau deshalb wird es sonst
 
 **W-08/1-9 (P1, §3 wird BELEGT):** Der `IN_ARBEIT`-Commit enthält den Befehl mit Ausgabe für „kein
 anderer Auftrag steht auf `IN_ARBEIT`", **an beiden Orten** (Tafelzeile und `^zustand:`-Feld), im
-selben Commit. *Wortgleich zu `W-01/1-8`; Rot-Lage und Grenze dort belegt.*
+selben Commit. **Zählbare Form (E2 aus Prüfung 03): mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer.** *Wortgleich zu `W-01/1-8`; Rot-Lage und Grenze dort belegt.*
 
 ## Kantenliste
 

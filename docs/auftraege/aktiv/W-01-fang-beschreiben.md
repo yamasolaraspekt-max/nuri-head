@@ -184,7 +184,7 @@ dieser Auftrag beinahe als Neubau geschnitten worden wäre.***
 
 **W-01/1-8 (P1, §3 wird BELEGT, nicht behauptet — NEU 10.08. nach dem gemessenen Wettlauf):**
 Der `IN_ARBEIT`-Commit enthält den **Befehl mit Ausgabe**, der zeigt, dass kein anderer Auftrag auf
-`IN_ARBEIT` stand — **an beiden Orten geprüft**, weil der Zustand heute doppelt geführt wird:
+`IN_ARBEIT` stand **Zählbare Form (E2 aus Prüfung 03): mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer.** — **an beiden Orten geprüft**, weil der Zustand heute doppelt geführt wird:
 
 ```text
 Tafelzeile      grep -cE '^\| \*\*[AW]-[0-9]+.*`IN_ARBEIT`' docs/STATUS.md
