@@ -793,15 +793,16 @@ naechster_schritt: "Planner traegt den Formblock ein, dann setzt der Plan-Pruefe
 auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator (Warteschlange)
 basis_sha: d58b220e
 prioritaet: P2
 letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine Punkte — sonst das bisher SAUBERSTE Erstblatt der Gruppe: basis_sha, §5-Block, Wiederverwendung, Erstnutzer, Rueckweg, Nicht-Ziele ALLE beim ersten Schnitt da (das Muster 'dritter Auftrag ohne §5-Block' ist damit gebrochen — gehoert in die Prozesspruefung als Gegenbeleg). Rot-Lage A-10-1 SELBST strukturell verifiziert: nichtDarstellbar.ts faengt ausschliesslich DachGeometrieUngueltig-Wuerfe (try/catch Z.42-48), ein leeres Ergebnis ohne Wurf erreicht gefunden.push nie — dazu die dreifach unabhaengigen dynamischen Belege (9e97d274, e0fae829, E4b in b29bb79d). Sichtkette korrekt HIER verortet (A-10-4 mit Anker-Regel und browser-buehne.sh als Prozessbindung) statt in A-05. must_preserve A-10-3 sauber."
 offene_akzeptanz:
   - "Punkt 1: A-10-2 (Gegenprobe) ist an der Basis GRUEN (heute wird gar nichts gemeldet, also auch kein Flaechen-Dach) — nach dem stehenden Muster (A-01-2, A-02-1, A-08-2) als must_preserve-KONTROLLE kennzeichnen und von der Rot-Pflicht ausnehmen, sonst verletzt das Blatt 'kein Kriterium bereits erfuellt'."
   - "Punkt 2: Konfliktpruefungs-Zeile fehlt (§5) — eine Zeile genuegt: A-04 ist IN_ARBEIT auf scripts/*, A-07/A-09 warten auf commit-pruefen.sh — KEINE Beruehrung mit szene.ts/DreiDBereich.tsx; A-10 darf parallel. EMPFEHLUNG (kein Blocker): eine Mutationszusage (neue Bedingung entfernt -> A-10-1-Zusage faellt) nach dem Vorbild A-08-6, damit die Bedingung nicht stumm entfernbar ist."
-naechster_schritt: "Planner traegt die zwei Punkte ein, dann setzt der Plan-Pruefer BEREIT. WICHTIG §13: A-10 ist Auftrag 10 — VOR einem Auftrag 11 muss die Prozesspruefung der Zehnergruppe gelaufen sein (der Planner hat sie bereits angestossen)."
+votum_bereit: "plan-pruefer 10.08. (2. Runde nach 9cecc6be): BEREIT — beide Punkte plus die Empfehlung eingearbeitet und selbst geprueft: A-10-2 als must_preserve-KONTROLLE mit sauberer Begruendung, Mutationszusage A-10-5 aufgenommen (drei Mutationen), Konfliktpruefung selbst nachgemessen — dabei hat der Planner ZWEI UNGENAUE ANGABEN AUS MEINER DoR-NOTIZ korrigiert (A-04 baut buehnen-waechter.sh, nicht pauschal 'scripts/*'; plus die A-01/szene.ts-Herkunftszeile) — richtig so, Messung schlaegt Notiz, auch meine. EINE KORREKTUR AN SEINER FOLGERUNG: 'A-10 darf PARALLEL laufen' gilt nur fuer DATEIEN — §3 sagt woertlich 'hoechstens einen Auftrag IN_ARBEIT gleichzeitig' (Z.85). A-10 ist BEREIT, zieht aber erst, wenn kein anderer Auftrag IN_ARBEIT ist. Prozesspruefung-02 ist gelaufen (850aafd5) — die §13-Schranke vor Auftrag 11 ist damit bedient."
+naechster_schritt: "Warteschlange nach §3: A-04 baut JETZT (aeltester BEREIT, Claim steht), danach A-07 (Tor, sobald Planner-Nachzuege da) -> A-09 -> A-10. Der Generator zieht A-10, sobald die Schlange ihn erreicht und kein Auftrag IN_ARBEIT ist."
 ```
 ---
 
