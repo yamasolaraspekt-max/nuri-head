@@ -16,7 +16,7 @@
 | **A-09** Repo-Bezug über `--git-dir` | **`RELEASE_FREI`** | **Yama** | Bau `12ca3798` · Votum `e53e3cfb` an `af8f2054` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 50/50 am Prüf-SHA selbst (Worktree) · Scope exakt 2 Dateien +316/−7, Hunks @@68/@@107 · Revert-Probe sauber · Drift auf `scripts/` seit Prüf-SHA: 0 |
 | **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | **`CODE_FERTIG`** | **Evaluator** | Bau `b0f4c444` · Prüf-SHA `28760966` · Basis `bc1470bc` | Suite 50→**61/61** · 4 Mutationen gefallen (md5-Beweis) · Realtest: Bau-Botschaft ohne Präfix, Marke vom Tor · **TICKET_ROLLE ab sofort Pflicht — Mitteilung unten** |
-| **W-01** Raster und Fang | **`CODE_FERTIG`** | **Evaluator** | `04f78b73` · Basis `32f83a6f` | sieben Blätter aus `fangKern.ts` abgeleitet · 1692/1692 · `resources/**` byte-identisch · 3 Abweichungen und 1 offener Befund im Bericht |
+| **W-01** Raster und Fang | **`IN_ARBEIT`** | **Generator** | `04f78b73` · Basis `32f83a6f` | **NACHBESSERN** vom Evaluator (`6a26cf76`): Befund 1 fehlende Zeilennummern in `3-FORMELN`, Befund 2 §3-Beleg ohne Befehl und Ausgabe — beide Klasse BEWEIS; SPEC-Anteil -6 beim Planner |
 | **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `801e2daa` · Basis `193681cd` | sieben Blätter aus `wallGeometry.ts` + `wandFlaeche.ts`; 9/9 Kriterien grün, **-2 erst nach Selbstkorrektur** (Formel war ausgeschrieben); `resources/**` 1230 Dateien 0 Abweichungen (indexfrei) · Suite 1692/1692 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
@@ -1168,8 +1168,8 @@ naechster_schritt: "Evaluator: Abnahme an 28760966 — nachmessen statt glauben 
 auftrag: "W-01/1"
 titel: "Die sieben Blaetter von W-01 aus dem VORHANDENEN fangKern.ts ableiten"
 datei: docs/auftraege/aktiv/W-01-fang-beschreiben.md
-zustand: NACHBESSERN
-ballbesitz: generator (SPEC-Anteil W-01/1-6 beim planner)
+zustand: IN_ARBEIT
+ballbesitz: generator (Nachbesserung Befund 1+2, Klasse BEWEIS; SPEC-Anteil W-01/1-6 beim planner)
 basis_sha: 32f83a6f
 prioritaet: P1
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte): JEDE Blatt-Behauptung selbst gemessen: Basis existiert · fangKern.ts exakt 276 Zeilen, 11 Exporte wie gelistet · toolRegistry traegt KEIN Fang-/Raster-/Snap-Werkzeug (der einzige grep-Treffer ist das Wort Anfang in einem Treppen-Hilfetext — die Messung des Planners hielt einer schaerferen Probe stand) · REGISTER fuehrt W-01 auf LEER und nennt fangKern.ts NIRGENDS (0 Treffer — der Beinahe-Doppelbau war real) · Rot-Lage zaehlbar bestaetigt: Platzhalter in 3-FORMELN.md (4) und 1-ZWECK.md (1). Das Blatt selbst ist vorbildlich: Anschluss- statt Bauauftrag nach gefahrener Anbindungsmessung, Stufentrennung (BESCHRIEBEN vor GEBAUT), A-10-Lehre als Pflichtfrage in 7-GRENZEN, must_preserve resources byte-identisch, Entdeckungssignal ist der erste Stufe-2-Bauversuch. EIN HINWEIS (kein Restpunkt): die REGISTER-Zeile erwartet auch F-004, die Kandidatenliste des Blatts nennt sie nicht — W-01/1-3 klaert das ohnehin AM CODE, der Bericht soll die Abweichung ausdruecklich aufloesen. ZUR FORM-QUELLE: W-07 dient nur als FORM-Muster; dessen inhaltlicher Befund (db1dc3b6: anderer Dachweg als die Insel) infiziert W-01 nicht."
