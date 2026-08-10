@@ -9,7 +9,7 @@
 | **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
+| **A-04** Bühnen-Wächter | `IN_ARBEIT` | Generator | `BEREIT` seit 4. DoR-Runde (`534ec48e`) · Bau läuft | Warteschlange §3: A-04 baut JETZT (ältester `BEREIT`, Claim steht) |
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | **Planner** | Bericht `docs/BERICHT-A-05-l-kontur.md` · Votum an `e0fae829` | Evaluator 08.08.: echt + nachvollziehbar, 12/12 reproduziert; SPEC-Folgebefund (Melder-Lücke, P2) an den Planner |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
@@ -666,9 +666,10 @@ naechster_schritt: "ERLEDIGT: A-04 ist geschnitten (0722d4f5) und in Planpruefun
 auftrag: A-04
 titel: "Buehnen-Waechter: erkennt eine laufende Buehne auf einer Nicht-Testdatenbank, egal wie sie gestartet wurde"
 datei: docs/auftraege/aktiv/A-04-buehnen-waechter.md
-zustand: BEREIT
+zustand: IN_ARBEIT
 ballbesitz: generator
 basis_sha: 89f373d9
+in_arbeit_gesetzt: "generator 10.08. (frische Instanz, 5. Anlauf): VOR der ersten Scope-Aenderung gesetzt (§3). Kein anderer Auftrag IN_ARBEIT (der einzige grep-Treffer 'zustand: IN_ARBEIT' ist Prosa im A-05-Zitat Z.697, kein Zustandsfeld). §7-Vorpruefung: HEAD 26a2c99a, basis_sha 89f373d9 und BEREIT-Beleg d58b220e beide Vorfahren; Scope content-identisch zu HEAD (browser-buehne.sh, browserBuehne.test.mjs, ANKER-BROWSER.md, A-04-Blatt, STATUS.md — je git show | diff = 0); Ausgangsmessungen: buehnen-waechter.sh und buehnenWaechter.test.mjs existieren NICHT, grep -c buehnen-waechter ANKER-BROWSER.md = 0 (A-04-6-Basis), browserBuehne-Suite selbst gefahren 6/6. UMGEBUNGSBEFUND, gemeldet nicht angefasst (Nicht-Ziel 3): PID 48098 ist eine VERWAISTE echte Buehne vom 05.08. 00:58 (ppid 1, php84 -S 127.0.0.1:65535 …server.php, APP_ENV=testing, cwd ticket-a01/public) — genau die Prozessklasse, fuer die der Waechter gebaut wird; Herd-Binaries heissen php84, das Muster muss sie mitfassen."
 letztes_votum: "plan-pruefer 05.08. 09:3x (1. DoR-Runde, ERSTMALS nach v1.1 mit 18 Punkten): ENTWURF bleibt, ZWEI Restpunkte + eine Korrektur. GEMESSEN: Basis existiert · A-03-Bau liegt belegt NICHT auf der Hauptlinie (browser-buehne.sh FEHLT hier, Anker-grep 0 — die B2-Vertagung ist RICHTIG), aber auf work/a01-generator, nicht auf dem im Blatt genannten tmp-a03 (Korrektur noetig, betrifft den Merge-Bezug der B2-Auflage) · A-04-6-Basis 0 · php -S im A-03-Bau 0 (Anlass bestaetigt) · ps eww vorhanden und in Gebrauch (neuer 1.1-Punkt erfuellt). OFFENE PUNKTE BEANTWORTET: (1) Der Detektor ist KEINE dritte Aufrufform und keine zweite Wahrheit — er misst Zustand statt Startweg und beantwortet eine andere Frage; NICHT NOTWENDIG waere falsch, die lautlose php-S-Tuer steht JETZT offen. (2) Tor-Einbindung NEIN — deckungsgleich mit dem Planner, die A-02-Lehre (externe Abhaengigkeit im einzigen Commit-Weg) gilt."
 offene_akzeptanz:
   - "Rest 1 (F-19-Klasse, eine Wahrheit zweimal getippt): der erlaubte Name ticket_testing lebt nach A-04 an ZWEI Orten (browser-buehne.sh Namensliste + buehnen-waechter.sh Vergleich). Festlegung ins Blatt: gemeinsame Quelle (z. B. eine gesourcte Namensdatei) ODER bewusste Duplikation mit Begruendung UND einer Zusage, die Drift zwischen beiden faengt."
