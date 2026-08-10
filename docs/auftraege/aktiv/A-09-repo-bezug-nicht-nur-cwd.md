@@ -272,3 +272,96 @@ verursacher: planner
 prioritaet: P2
 warteschlange: ja — nach A-07 (P0-Rest) und ohne Eile; A-08 ist abgenommen und nicht betroffen
 ```
+
+---
+
+## §11-Bericht des Generators (10.08., CODE_FERTIG)
+
+```yaml
+auftrag: A-09
+basis: d836fb91          # HEAD bei Uebernahme; basis_sha 5a54b004 ist Vorfahr, Scope-Drift 5a54b004..d836fb91 auf beide Skripte: nur die A-07/A-08-Bauten, exakt der erwartete Stand
+commit: 12ca3798         # Bau (commit-pruefen.sh + commitPruefen.test.mjs); IN_ARBEIT-Tor: d6846f69
+scope:
+  - scripts/commit-pruefen.sh                    # NUR die repo_git_laeuft-Zone (Diff-Hunks @@68 und @@107 — Commit-Aufruf-Zone und Botschaft-Annahme unberuehrt)
+  - scripts/__tests__/commitPruefen.test.mjs     # Import-Zeile (+relative) und der neue A-09-Block
+  - docs/auftraege/aktiv/A-09-repo-bezug-nicht-nur-cwd.md   # dieser Bericht
+  - docs/STATUS.md                               # IN_ARBEIT/CODE_FERTIG-Tore
+tests:
+  statisch: pass         # bash -n exit 0; node --check exit 0
+  unit: "50/50"          # Basis d836fb91: 42/42; Bau: 50/50 (node --test, selbst gefahren, zweimal: nach dem Bau und nach den Mutationsproben)
+  backend: nicht_anwendbar
+  schema: nicht_anwendbar
+  build: nicht_anwendbar
+  browser: nicht_anwendbar
+abweichungen:
+  - "A-09-4 war an der Basis BEREITS ERFUELLT: der Planner hat die Kantenzeile schon beim Schnitt
+     des Blattes richtiggestellt (48ca0099, 08.08. 14:16 'die schadhafte Kantenzeile richtiggestellt').
+     Selbst verifiziert am A-08-NACHTRAG Z.266-270: 'git-Prozess auf einem FREMDEN REPOSITORIUM ->
+     irrelevant' + Vermerk 'hier stand: in einem FREMDEN VERZEICHNIS … verwechselt fremde cwd mit
+     fremdem Repo … 23b3a490, Probe C … laeuft als A-09'. Jede Anforderung des Kriteriums (Wortlaut
+     UND Verweis auf den verursachten Befund) steht woertlich da — eine zweite Aenderung waere
+     Doppelarbeit ohne Delta, deshalb fasst dieser Bau die Datei NICHT an. Der Evaluator moege das
+     an der Fundstelle nachlesen statt einem Diff zu suchen, den es bewusst nicht gibt."
+  - "Bauform ueber den Blatt-Wortlaut hinaus, gleiche Richtung: zusaetzlich zu --git-dir=<p> werden
+     auch die ZWEITEILIGEN Formen --git-dir <p> und --work-tree <p> gelesen (git akzeptiert beide;
+     nur die =-Form zu lesen waere dieselbe Luecken-Klasse in gruen). Erkennung wird dadurch nur
+     BREITER, nie enger — die Richtung, die das Entdeckungssignal des Blattes erlaubt."
+  - "Benannte Parser-Grenze (im Skriptkopf dokumentiert): die ps-Ausgabe traegt keine Anfuehrungs-
+     zeichen — Pfade MIT LEERZEICHEN in Aufrufform/Umgebung sind nicht rueckgewinnbar und dort
+     nicht erkennbar. Der cwd-Weg (lsof) bleibt davon unberuehrt. Das Blatt fordert keine
+     Leerzeichen-Behandlung; verschwiegen wird die Grenze nicht."
+  - "Fremde-Nutzer-Grenze wie im Blatt: KEIN Bau. Am Verhalten gemessen faengt sie heute der
+     BESTEHENDE Zweifelspfad: fuer fremde Nutzer liefert schon lsof -d cwd keine Auskunft ->
+     Kandidat existiert, cwd unbekannt -> im Zweifel gehalten. Die Weg-3-Luecke (ps -E liest fremde
+     Umgebungen nicht) bleibt offen und ist im Skriptkommentar dokumentiert."
+  - "HEAD wanderte waehrend des Baus (d836fb91 -> fec3a07a: A-12-Schnitt, W-01/1-IN_ARBEIT samt
+     Ruecknahme, Evaluator-Notiz) — Scope-Drift auf scripts/ selbst gemessen: 0 Commits. Der
+     parallele Release-Pruefer hielt zeitweise UNCOMMITTETE STATUS.md-Aenderungen im Arbeitsbaum;
+     alle meine Tor-Commits stagen deshalb ausschliesslich eigene Pfade, der STATUS-Commit erst
+     nach content-diff nur-eigener-Zeilen."
+offene_akzeptanz: []
+```
+
+### Kriterienstand, je mit Beleg
+
+```text
+A-09-1  ERFUELLT   Rot an der Basis SELBST 2x gemessen (Wegwerf-Repo, Skript von HEAD d836fb91):
+                   ( sleep 30 | git --git-dir=<repo>/.git cat-file --batch ) & bei fremder cwd,
+                   Prozess nachweislich lebend (ps args= zeigte die volle Aufrufform), 0-Byte-Lock
+                   302 s -> BEISEITE, Commit lief, exit 0. Am Bau: exit 3, Lock liegt, ENV_BLOCKED
+                   (Zusage 'A-09-1' + Gegenprobe im selben Lauf: nach Prozessende exit 0).
+A-09-2  ERHALTEN   must_preserve: 'A-09-2 KONTROLLE' (git -C, an Basis UND Bau gruen — Weg 1 traegt).
+A-09-3  ERHALTEN   must_preserve: 'A-09-3 KONTROLLE' — echtes zweites Wegwerf-Repo, git-Prozess
+                   lebt, --git-dir zeigt DORTHIN -> zaehlt nicht, Commit laeuft (Basis UND Bau gruen).
+A-09-4  ERFUELLT   an der Basis durch 48ca0099 (s. Abweichung 1) — verifiziert, kein neuer Diff.
+A-09-5  ERFUELLT   SECHS Mutationen einzeln eingespielt, ALLE gefangen (Grün 50/50 vorher, je Probe
+                   Rot, md5 fd351a78 vor und nach JEDER Probe byte-identisch, Grün 50/50 danach):
+                     M1 Aufrufform-Schleife leer            -> 3 Zusagen rot
+                     M2 Treffer-return neutralisiert (3 St.) -> 3 Zusagen rot
+                     M3 Aufloesung durch Rohvergleich ersetzt-> 5 Zusagen rot
+                     M4 cwd-Zweifel als kein-Repo-git       -> 1 Zusage rot ('A-09 Zweifel')
+                     M5 Umgebungs-Schleife leer             -> 2 Zusagen rot
+                     M6 ps ohne -E                          -> 2 Zusagen rot
+A-09-6  ERFUELLT   Rot an der Basis SELBST 2x gemessen: GIT_DIR=<repo>/.git in der UMGEBUNG,
+                   fremde cwd, Variable am lebenden Prozess per ps -E -p <pid> -o command=
+                   nachgewiesen -> BEISEITE, Commit lief, exit 0. Am Bau: exit 3, Lock liegt
+                   ('A-09-6' + Gegenprobe; 'A-09-6 GIT_WORK_TREE' deckt die zweite Kantenzeile).
+```
+
+### Rohausgaben (Kurzform; Befehle reproduzierbar)
+
+```text
+Suite Basis   node --test scripts/__tests__/commitPruefen.test.mjs @ d836fb91   tests 42 pass 42 fail 0
+Suite Bau     dito @ 12ca3798 (zweimal gefahren)                                tests 50 pass 50 fail 0
+Neue Zusagen  gegen BASIS-Skript (HEAD:scripts/commit-pruefen.sh, Struktur nachgestellt):
+              8 A-09-Zusagen -> pass 3 / fail 5 — rot genau die fuenf Neu-Verhalten
+              (A-09-1, Aufloesung, --work-tree, A-09-6, GIT_WORK_TREE); gruen genau die drei
+              deklarierten Kontrollen (A-09-2, A-09-3, Zweifel).
+Mutationsprobe md5 original fd351a78f23b9c52b433f313e8ccbaee; je Mutation: Fundstellen-Zaehlung,
+              node --test --test-name-pattern A-09, Wiederherstellung md5-identisch; M1 fail 3 ·
+              M2 fail 3 · M3 fail 5 · M4 fail 1 · M5 fail 2 · M6 fail 2.
+Erstnutzer    dieser Bericht und beide Tor-Commits liefen bereits DURCH das geaenderte Tor
+              (d6846f69 mit altem, 12ca3798 mit neuem repo_git_laeuft) — keine Aussperrung.
+```
+
+**Ich nehme NICHT ab.** Ball beim Evaluator.
