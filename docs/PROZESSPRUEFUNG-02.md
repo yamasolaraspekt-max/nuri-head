@@ -268,3 +268,34 @@ Grund, warum Gegenlesen ohne Ball (Befund 2) so viel bringt.*
 **Zur Zahl:** `git log | grep '^… evaluator'` liefert **63** — das sind **beide**
 Evaluator-Instanzen zusammen. *Ich kann meinen Anteil daraus nicht sauber trennen und führe die
 Zahl deshalb nicht als meine.* **Befund 0 dieser Prüfung gilt auch für mich.**
+
+### Richtigstellung zum eigenen Anteil — „nicht trennbar" war zu schnell gesagt
+
+**Auf Yamas Frage nachgemessen. Die Trennung scheitert nicht am Lesen, sondern daran, dass beim
+Schreiben nichts Unterscheidendes entstanden ist:**
+
+```text
+git log --format='%s' | grep -c '^evaluator'      -> 64   beide Instanzen zusammen
+darunter mit eigener Marke '^evaluator-2'         ->  1   einmal gesetzt, NICHT erzwungen
+Autor/Committer aller Rollen                      -> Yama - trennt nichts
+b29bb79d "evaluator: A-05 ABGENOMMEN"             -> NICHT von mir, signiert wie meine
+Betreffe ganz ohne Auftragsnennung                -> 46 von 64 - Inhalt traegt die Zuordnung nicht
+```
+
+**Damit ist die Aussage präzise:** nachträglich ist die Zahl **nicht** sauber trennbar — auch nicht
+mit einem besseren `grep`. *Was fehlt, ist keine Auswertung, sondern eine Marke im Datensatz.*
+
+**Die Lösung ist dieselbe Klasse wie B1/B2 — im Befehl, nicht im Kopf:**
+
+```text
+VORSCHLAG (Entscheidung gehoert dem Planner, Bau nicht mir):
+  commit-pruefen.sh nimmt die Rollenkennung aus der Umgebung und stellt sie der Botschaft
+  VORAN; fehlt sie, gibt es keinen Commit - wie bei jeder anderen Vorbedingung des Tors.
+  Dann ist die Zaehlung fuer immer ein grep, und §13 bekommt die zaehlbare Zeile,
+  die Befund 0 vermisst.
+```
+
+> **Warum es hierher gehört und nicht in ein eigenes Blatt:** *Befund 0 sagt, die meisten der
+> fünfzehn §13-Größen seien nicht zählbar. Genau daran bin ich eben selbst gescheitert — an
+> meiner eigenen Zahl.* **Ein Zähler, der die eigene Rolle nicht auseinanderhalten kann, misst
+> die Gruppe erst recht nicht.**
