@@ -147,11 +147,80 @@ begruendet. Ein Auftrag dafuer verlangt zuerst die AUFHEBUNG des A-01-Nicht-Ziel
 *Das ist der eine Punkt, an dem dieser Anschluss nicht weiterkommt, ohne dass du entscheidest. Alles
 andere oben kann ohne dich anlaufen.*
 
+---
+
+## ⚠ NACHTRAG 10.08. — DREI ZEILEN DIESER MATRIX SIND FALSCH
+
+**Die Warnung oben („Namensähnlichkeit ist keine Abdeckung") hat sich an der Matrix selbst
+bewiesen.** Beim Schneiden von W-02/1 und W-13/1 habe ich je Werkzeug einzeln gemessen, und dabei
+drei Zuordnungen widerlegt:
+
+```text
+MODUL                  stand hier unter   ist tatsaechlich
+wandaufbau.ts          W-02               BAUPHYSIK — Schicht, PruefSchwere, UPruefung,
+                                          berechneUWert. Ein Werkzeug "Wand zeichnen"
+                                          rechnet keinen Waermedurchgang.
+linienBauteile.ts      W-02               DACH-ZUBEHOER — DachLinienBauteil, SchneefangOpts,
+                                          platziereSchneefang, sperrzoneVRel, istInSperrzone.
+                                          Der Name sagt Bauteile, der Inhalt sagt Dach.
+editierGeometrie.ts    W-13               W-14 (Kopieren·Spiegeln·Drehen) — versetzePunkt,
+                                          versetzteWand, spiegelePunkt, spiegelteWand.
+                                          W-13 ist Auswahl und GRIFFE, nicht Verschieben.
+                                          bbox/achsenMitte brauchen BEIDE; sie liegen richtig
+                                          in geometry/, gehoeren im Register aber zu W-14.
+```
+
+> **Alle drei stehen namentlich in den betroffenen Blättern als Nicht-Gegenstand** (`W-02/1-6`,
+> `W-13/1-6`), damit der nächste Leser sie nicht wieder zuordnet. *Hätte der Generator diese Matrix
+> befolgt, wäre Bauphysik in ein Wandwerkzeug und Spiegeln in ein Auswahlwerkzeug beschrieben worden.*
+>
+> **Die Lehre für die restlichen Zeilen:** Klasse A/B/C oben bleibt als **Landkarte** gültig; die
+> **Zuordnung je Zeile ist ein Kandidat und kein Befund.** Vor jedem weiteren W-Auftrag wird sie an
+> den **Exporten** gemessen, nicht am Dateinamen. Drei von vier geprüften Zeilen waren falsch — die
+> Trefferquote der Namensheuristik liegt damit unter 50 %.
+
+## Offene Werkbank-Nachträge — fällig, sobald W-01/1 nicht mehr `IN_ARBEIT` ist
+
+*Der Bau von W-01/1 (`04f78b73`) hat sie gemeldet statt still korrigiert, weil sie außerhalb seines
+Scopes lagen. Sie gehören dem Planner („die Werkbank nachführen").*
+
+```text
+N1  F-004 im Register    Die Zeile fuehrt fuer W-01 auch F-004 (Schnittpunkt zweier Geraden).
+                         Diese FangArt existiert im Code NICHT — `FangArt` kennt sie nicht.
+                         -> aus der W-01-Zeile entfernen ODER als Soll-Erweiterung kennzeichnen.
+                            ENTSCHEIDUNG offen: ist die F-Liste ein IST oder ein SOLL?
+                            Das ist die eigentliche Frage und sie betrifft alle 23 Zeilen.
+
+N2  F-003 Grenzfall      Der Code rechnet lotAufGerade() OHNE Begrenzung auf [0,1]
+                         (0 Treffer auf max/min/clamp, vom Generator gemessen). Die Sammlung
+                         schreibt t' = max(0, min(1, t)) vor und nennt das Fehlen einen
+                         Grenzfall. Im Code ist es ABSICHT: `achse` und `verlaengerung` sind
+                         eigene Fangarten, die Verlaengerung ist dort das Ziel.
+                         -> F-003 braucht einen Zusatz "ohne Begrenzung, wenn die
+                            Verlaengerung selbst das Ziel ist", sonst liest die naechste
+                            Rolle einen Fehler, wo eine Entscheidung steht.
+
+N3  F-041 Rangfolge      Sammlung: Endpunkt > Schnittpunkt > Mittelpunkt > Lot > Verlaengerung
+                         > Raster.   Code: endpunkt > mittelpunkt > achse > verlaengerung >
+                         ortho > raster > keiner.
+                         DREI Unterschiede: kein Schnittpunkt, dafuer ortho, und mittelpunkt
+                         vor achse.
+                         -> die Sammlung beschreibt etwas anderes als der Code tut. Welche
+                            Fassung gilt, ist eine FACHFRAGE (Fang-Ergonomie) und keine
+                            Buchfuehrung — sie gehoert vorgelegt, nicht entschieden.
+```
+
+**Warum das jetzt nicht gemacht wird:** `REGISTER.md` liegt im Scope von W-01/1, und das ist
+`IN_ARBEIT`. *Dateifreiheit wäre gegeben, Ablauffreiheit nicht — dieselbe Unterscheidung, die ich
+heute schon einmal falsch gezogen habe.*
+
 ```yaml
 naechster_schritt: "Yama: Nicht-Ziel von A-01 aufheben (dann Dachkonstruktion schneidbar) —
                     oder bestaetigen (dann bleibt W-07 Klasse A, reine Doku).
                     Unabhaengig davon: Klasse A ist sofort beginnbar, ohne Bauauftrag."
 offene_frage_werkbank: "TGA/PV/Sanitaer/Kueche — begrenzt oder unvollstaendig? Nicht Planner"
 messgrenze: "Zuordnung nach Modulnamen. Namensaehnlichkeit ist KEINE Abdeckung —
-             jede Zeile braucht vor ihrem Auftrag eine eigene Pruefung."
+             jede Zeile braucht vor ihrem Auftrag eine eigene Pruefung.
+             BELEGT: 3 von 4 geprueften Zeilen waren falsch (Nachtrag 10.08.)."
+offene_nachtraege: "N1 F-004 · N2 F-003-Grenzfall · N3 F-041-Rangfolge — nach W-01/1"
 ```
