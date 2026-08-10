@@ -17,7 +17,7 @@
 | **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | **`IN_ARBEIT`** | **Generator** | BEREIT `1dee4771` · Claim `a1e732d5` | **B4** aus §13 · letzter Tor-Bau · Bau-Basis `0fef1a56` |
 | **W-01** Raster und Fang | **`CODE_FERTIG`** | **Evaluator** | `04f78b73` · Basis `32f83a6f` | sieben Blätter aus `fangKern.ts` abgeleitet · 1692/1692 · `resources/**` byte-identisch · 3 Abweichungen und 1 offener Befund im Bericht |
-| **W-02** Wand zeichnen | **`IN_ARBEIT`** | **Generator** | `debf3fbe` · Basis `193681cd` | §7-Vorprüfung 6/6 · §3 im selben Skript · rot an der Basis: **17 Platzhalter** in fünf Blättern |
+| **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `801e2daa` · Basis `193681cd` | sieben Blätter aus `wallGeometry.ts` + `wandFlaeche.ts`; 9/9 Kriterien grün, **-2 erst nach Selbstkorrektur** (Formel war ausgeschrieben); `resources/**` 1230 Dateien 0 Abweichungen (indexfrei) · Suite 1692/1692 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1071,6 +1071,7 @@ claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:0x: Abnahme A-09 GECLAIMT vor 
 letztes_votum: "evaluator 10.08.: ABGENOMMEN an af8f2054 (Bau 12ca3798; scripts/ zwischen Bau, Pruef-SHA und HEAD ded32c75 content-identisch, 0 Zeilen Drift — selbst gemessen). Alles unabhaengig nachgemessen in eigenen Worktrees (git worktree add -q): Basis 12ca3798^ = fec3a07a Suite 42/42, Pruef-SHA 50/50; Namensabgleich per tap+comm: exakt 8 neue A-09-Zusagen, 0 Bestandszusagen weggefallen — alle 42 must_preserve laufen namensgleich gruen, A-08-0-Byte-Schranke und A-07-Angleichung unberuehrt (Torlaeufe zeigten INDEX ANGEGLICHEN). Probe C (--git-dir, fremde cwd) und Probe D (GIT_DIR nur in der Umgebung, per ps -E am lebenden Prozess belegt, args ohne GIT_DIR) je in BEIDEN Richtungen am SELBEN lebenden Prozess: neues Tor exit 3 + Lock liegt + ENV_BLOCKED, Basis-Tor beiseite + Commit lief (01dd4f5 / 5027789). Eigener Gegen-Beweis A-09-3: echtes zweites Wegwerf-Repo, --git-dir dorthin, Prozess lebte — zaehlt NICHT, Commit 4565feb lief; 'jeder git zaehlt' widerlegt. A-09-2 via git -C lebend geprueft: exit 3. Relative Form --git-dir=pr-c/.git aus fremder cwd: gefangen. A-09-5 nach §12.4 selbst: M3 Rohvergleich statt Aufloesung -> 50/45/fail 5 (exakt die fuenf Neu-Verhalten), M6 ps ohne -E -> fail 2 (beide Umgebungs-Zusagen) — beide Zahlen decken den Generator-Bericht, md5 fd351a78 vor und nach jeder Probe selbst gemessen, Suite danach 50/50. A-09-4: 48ca0099 selbst gelesen (Diff traegt den Zeilentausch FREMDES VERZEICHNIS -> FREMDES REPOSITORIUM samt Befund-Vermerk 23b3a490/Probe C/SPEC) — kein Doppel-Diff war richtig, die Abweichungs-Deklaration trifft zu. Grenzen gegengelesen: fremde Nutzer KONSERVATIV (cwd-Zweifelspfad haelt Richtung Blockade), Leerzeichen-Pfade ehrlich benannt, wirken Richtung Uebersehen — Randnotiz ohne Auftrag, solange kein Arbeitsbaum mit Leerzeichen existiert. Realtest Erstnutzer: Votum-Commit e53e3cfb und dieser STATUS-Commit liefen selbst durchs neue Tor. Fehlerklasse KEINE, keine offenen P0/P1. Ball beim Release-Pruefer."
 naechster_schritt_evaluator: "Release-Pruefer faehrt §10 auf dem Abnahme-Stand: Kette d6846f69 -> 12ca3798 -> af8f2054 -> e53e3cfb je is-ancestor, Suite am Release-Kandidaten, Scope-Diff nur Blatt-Dateien, Rueckweg git revert 12ca3798"
 release_vermerk: "release-pruefer 10.08.: RELEASE_FREI an af8f2054 (§10-Abschnitt im Blatt, alles selbst gemessen). Kette c93d68ae -> d6846f69 -> 12ca3798 -> af8f2054 -> 8cd9de10 -> e53e3cfb -> HEAD a1e732d5: sechsmal is-ancestor OK. Suite im eigenen Worktree am Pruef-SHA: tests 50 pass 50 fail 0; bash -n und node --check am HEAD exit 0. Release-Diff: git show 12ca3798 --stat = exakt 2 Dateien (+316/-7), Skript-Hunks genau @@68 und @@107 — Botschaft-Annahme-Zone (A-11, Z.46-52) unberuehrt. Drift seit Pruef-SHA: git log af8f2054..HEAD -- scripts/ = 0 Commits, diff 0 Zeilen — der parallele A-11-Bau hatte die Datei bis zur Pruefung nicht angefasst, scripts/ am HEAD byte-identisch mit dem Kandidaten. Rueckweg: git show 12ca3798 | git apply --check -R exit 0, kein Datenpfad, git revert 12ca3798 genuegt. Randnotizen gewuerdigt, kein P0/P1: Leerzeichen-Pfade (Richtung Uebersehen, Repo-Pfad leerzeichenfrei, dokumentiert) und fremde Nutzer (Zweifelspfad haelt Richtung Blockade, root-Probe 0 Treffer, dokumentiert). Realtest Erstnutzer: dieser Blatt- und dieser STATUS-Commit liefen selbst durchs Tor mit den drei A-09-Wegen aktiv. Sicherungs-Push nach v1.2-Vertretung: git push fork auto/hausplaner-integration — Ergebnis siehe push_vermerk. Ball bei Yama: main-Veroeffentlichung."
+push_vermerk: "release-pruefer 10.08.: Sicherungs-Push versucht (git push fork auto/hausplaner-integration, kein main/Tag/force) — vom Berechtigungssystem der Umgebung VERWEIGERT, kein Netz-/Auth-Fehler des Remotes. Nach Auftrag als ENV-Hinweis verbucht, kein Befund am Release-Kandidaten; RELEASE_FREI bleibt bestehen. Folge fuer die Repo-Aufsicht: die verifizierte Arbeit ab e53e3cfb liegt weiter NUR lokal — der Push ist nachzuholen (Yama oder eine Instanz mit Push-Erlaubnis)."
 ```
 ---
 
@@ -1164,6 +1165,22 @@ letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde): ENTWURF bleibt, EIN Mini-Res
 offene_akzeptanz:
   - "Mini-Rest: Zaehlweise der Zusagen-Abdeckung in W-13/1-7 und befund_bestand definieren und die Zahl daran nachmessen (meine Messung: 0 dedizierte / 3 erwaehnende Dateien)."
 naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruefer BEREIT; Reihenfolge W-01/1 -> W-02/1 -> W-13/1 bleibt"
+```
+---
+
+## BEREIT — A-12 (Messauftrag F-026; Einreihung bei Yama)
+
+```yaml
+auftrag: A-12
+titel: "Ein L-Grundriss mit F-026 rechnen, Ergebnis ansehen, Ampel gelb -> gruen oder rot"
+datei: docs/auftraege/aktiv/A-12-f026-ausfuehren.md
+zustand: BEREIT
+ballbesitz: generator (Einreihung bei Yama — entsperrt die Dachkonstruktion, unabhaengig von der W-Reihe)
+basis_sha: d1d716c8
+prioritaet: P1
+letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review): die Pruefbefehle des Blatts selbst gefahren — Ampel-Rot bestaetigt (F-026 traegt woertlich die Sperre Z.229/277 der FORMELSAMMLUNG), Fremdquelle EXAKT belegt (132374 Byte, 2173 Zeilen aufs Zeichen; :965 buildCompoundPitched-Signatur und :1137 die l/t-shape-Weiche woertlich verifiziert). Der Machbarkeitsbefund, der den Auftrag zweiteilt (Teil A triviale Arithmetik / Teil B klassengebunden mit 64 THREE.-Vorkommen), ist die wertvollste Zeile des Blatts — er verhindert den Zwei-Stunden-SPEC_BLOCKED, den 'eine Funktion aufrufen' produziert haette. Attrappen-Regel (nur AUFZEICHNEN, nichts rechnen — sonst messen wir die Attrappe) und Scheitern-ist-Ergebnis-Regel vorbildlich. Kein Kopieren des Fremdcodes, Wegwerf-Probe nach A-05-Disziplin, Ampel wird VORGESCHLAGEN nicht gesetzt (Generator schlaegt vor, Evaluator bestaetigt, Planner traegt ein)."
+zaehlfrage_entschieden: "plan-pruefer 10.08.: A-12 zaehlt in GRUPPE 2 (wie A-11 entschieden: erste Vorlage nach durchgefuehrter Prozesspruefung). Stand der Handzaehlung Gruppe 2 nach Erstvorlage: 1 A-11 · 2 W-01/1 · 3 W-02/1 · 4 W-13/1 · 5 A-12. Handzaehlung bis B3 steht (A-11 baut gerade B4; B3 bleibt offen)."
+naechster_schritt: "Yama reiht ein (A-12 vs. W-Reihe); danach zieht der Generator nach §3 (erst wenn kein Auftrag IN_ARBEIT — A-11 laeuft gerade)"
 ```
 ---
 
