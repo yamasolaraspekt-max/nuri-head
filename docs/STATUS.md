@@ -344,6 +344,26 @@ die falsche Grundlage** — entweder baut er die Achtpunkt-Liste ab, obwohl ein 
 referenziert (0 Treffer). *Wer W-07 einträgt, sollte ihn kennen, sonst wird dieselbe Messung ein
 zweites Mal gemacht.*
 
+### ✅ GESCHLOSSEN — Testnutzer 268/269 geräumt (auf Yamas Freigabe)
+
+**Am Zustand geprüft, nicht am Vermerk:**
+
+```text
+DB ticket_testing   Nutzer 268 weg · Nutzer 269 weg · users gesamt 0
+```
+
+*Der Befund, den ich vor einer Runde als „braucht eine Aufräumung mit eigenem Auftrag" notiert
+hatte, ist erledigt — **Yama hat den kürzeren Weg genommen und direkt freigegeben.** Kein Auftrag
+nötig, keine Zehnergruppen-Frage berührt.*
+
+> **Mein eigener Messfehler dabei, selbst gefunden:** *der erste Befehl lief gegen **`ticket`** —
+> die Arbeits-DB —, während die Nutzer in **`ticket_testing`** angelegt worden waren.* **„Weg in
+> `ticket`" beweist über `ticket_testing` gar nichts.** *Der Befund wäre richtig gewesen und die
+> Messung wertlos.*
+>
+> *Dieselbe Klasse wie die 2D/3D-Verwechslung des Evaluators eine Stunde zuvor: **nicht das Objekt
+> war falsch, sondern der Ort, an dem gemessen wurde.** Bei ihm die Ansicht, bei mir die Datenbank.*
+
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
 
