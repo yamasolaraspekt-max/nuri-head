@@ -65,6 +65,13 @@ VERBOTEN         DB_DATABASE=... php artisan serve
 > wie das Original.* Wird `DB_DATABASE` mitgegeben, sagt es, dass diese Form wirkungslos ist, und
 > nennt die richtige. **Kein stiller Start.**
 
+> **Pflichtschritt VOR jeder Browserabnahme (A-04):** `bash scripts/buehnen-waechter.sh` — der
+> Wächter findet **jede bereits laufende** Bühne (`php -S` wie `artisan serve`, auch verwaiste und
+> solche, die an `browser-buehne.sh` vorbei gestartet wurden) und nennt ihre aufgelöste Datenbank.
+> Befund ungleich `ticket_testing` oder unbekannt → exit 3: **erst klären, dann messen.** Der
+> Wächter beendet nichts — wer beendet, entscheidet ein Mensch. Der Aufruf samt Ausgabe gehört in
+> den Abnahmebericht (Erstnutzer: der Evaluator).
+
 **Die verbotene Form ist nicht „schlechter Stil" — sie wirkt überhaupt nicht, und zwar lautlos.**
 
 ```text

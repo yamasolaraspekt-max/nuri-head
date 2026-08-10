@@ -76,7 +76,65 @@ selbst angelegten Dateien liefen und genau fuer diesen Fall blind waren. Diese P
 einmal von einem git-Lauf, sondern von der **Virtualisierungsschicht** — sie ist nicht herstellbar,
 21 Stunden gereift, und hat in dieser Zeit den Betrieb angehalten.
 
-## Befund 2 — zwoelf Commits liegen nur auf dieser Maschine
+## ⚠ BEFUND 2 IST FALSCH — richtiggestellt am 10.08. nach dem Vermerk des Release-Pruefers
+
+**Der ganze folgende Abschnitt trifft nicht zu. Er bleibt stehen, weil er committet ist und weil der
+Fehler lehrreicher ist als seine Loeschung.**
+
+```text
+BEHAUPTET (08.08. und mehrfach wiederholt)        GEMESSEN (10.08., nach git fetch)
+"zwoelf/32 Commits nur auf dieser Maschine"       genau EINER, und nicht meiner
+"A-08 kann nicht transportiert werden"            A-08 ist VEROEFFENTLICHT auf main
+                                                  (85b03d23 und b2f8c44b sind Vorfahren
+                                                  von fork/main 8648a4cb, selbst geprueft)
+"Permission-System verweigert fuer JEDE Instanz"  es verweigert fuer die ROLLEN-Instanzen.
+                                                  Der Release-Pruefer pusht seit Tagen im
+                                                  Takt (f4884cdc, 659fc009, bb150def)
+mein eigener Commit 26a2c99a "ungesichert"        liegt auf fork, backup-private UND
+                                                  fork/rettung/planner-20260810
+```
+
+**Der Messfehler, genau benannt:** Ich habe `ahead N` aus `git status -sb` gelesen. Das vergleicht
+gegen den **Remote-Tracking-Ref** — also gegen meinen letzten Kenntnisstand, **nicht** gegen den
+Remote. **Ohne `git fetch` ist `ahead N` keine Aussage ueber die Aussenwelt, sondern ueber mein
+Gedaechtnis.**
+
+> **Es ist dieselbe Fehlerklasse, die diese Woche schon zweimal auffiel — und beide Male habe ich
+> sie selbst benannt, bevor ich sie hier wiederholte:**
+>
+> ```text
+> A-02   "lsof trennt sie exakt"     im Wegwerf-Repo gemessen, fuer den echten Mount behauptet
+> A-07   Halde "3496"                 in TMPDIR gemessen statt in TMPDIR/ticket-index
+> hier   "32 ungesichert"             gegen den Tracking-Ref gemessen statt gegen den Remote
+> ```
+>
+> Jedes Mal: **ein lokaler Messwert, der die gestellte Frage nicht beantwortet, als Tatsache ueber
+> etwas Externes ausgegeben.** Der Werkzeuggriff war jeweils korrekt — falsch war die Zuordnung von
+> Messung zu Behauptung.
+
+**Erschwerend, und das ist der eigentliche Schaden:** Ich habe daraus nicht nur eine Notiz gemacht,
+sondern **mehrfach eskaliert** („der einzige echte Blocker", „zwei Tage Arbeit ohne Kopie") und
+Handlungsdruck auf Yama erzeugt — fuer ein Problem, das nicht bestand, waehrend die Arbeitsteilung
+laengst funktionierte. **Ein falscher Alarm kostet mehr als ein fehlender Befund**, weil er Aufwand
+an der falschen Stelle bindet und die naechste echte Meldung entwertet.
+
+### Die Regel, die daraus folgt
+
+```text
+VOR jeder "nur lokal!"-Aussage:
+  git fetch fork && git log fork/auto/hausplaner-integration..HEAD
+Die Linie auf fork ist die Wahrheit. Der lokale Zweig-Ref laeuft KONSTRUKTIONSBEDINGT
+hinterher, weil die Rollen nur committen und der Release-Pruefer merge und pusht.
+```
+
+*Die stehende Arbeitsteilung, die ich nicht kannte und nicht erfragt habe: **Rollen committen nur,
+der Release-Pruefer merge und pusht alle paar Minuten.** Das Permission-System der Rollen-Instanzen
+ist keine Stoerung, sondern die Durchsetzung genau dieser Teilung. Mein „niemand kann pushen" hat
+eine funktionierende Regel als Defekt beschrieben.*
+
+---
+
+## Befund 2 (falsch, siehe oben) — zwoelf Commits liegen nur auf dieser Maschine
 
 ```text
 ungepusht gegenueber fork/auto/hausplaner-integration     12

@@ -9,7 +9,7 @@
 | **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-04** Bühnen-Wächter | `IN_ARBEIT` | Generator | `BEREIT` seit 4. DoR-Runde (`534ec48e`) · Bau läuft | Warteschlange §3: A-04 baut JETZT (ältester `BEREIT`, Claim steht) |
+| **A-04** Bühnen-Wächter | `CODE_FERTIG` | **Evaluator** | Bau `c3d52f09` · §11-Bericht im Blatt | Suiten 14/14, 6 Mutationen gefallen · Erstnutzer-Regel: Wächter vor jeder Browserabnahme, Aufruf+Ausgabe in den Bericht |
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | **Planner** | Bericht `docs/BERICHT-A-05-l-kontur.md` · Votum an `e0fae829` | Evaluator 08.08.: echt + nachvollziehbar, 12/12 reproduziert; SPEC-Folgebefund (Melder-Lücke, P2) an den Planner |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
@@ -117,6 +117,48 @@ sondern die einzige, die heute trägt.**
 **Vorbehalt:** der Bericht ist `CODE_FERTIG`, **nicht abgenommen**. *Fällt eine der vier Messungen
 in der Abnahme, prüfe ich neu — die Entscheidung hängt aber nicht an Zahlen, sondern an zwei
 Strukturbefunden, und den ersten habe ich selbst gegengemessen.*
+
+### Warteschlange auf `scripts/commit-pruefen.sh` — Planner-Entscheidung 10.08.
+
+**Drei `ENTWURF`-Blätter ändern dieselbe Datei:** A-07 (kein Claim) · A-09 · A-11 (beide Claim der
+zweiten Instanz). *Die bestehende Reihenfolge `A-04 → A-07 → A-09 → A-10` kannte A-11 nicht — es
+wurde danach geschnitten.*
+
+> ### ENTSCHIEDEN: `A-07 → A-09 → A-11`
+>
+> ```text
+> 1  Maengel vor Faehigkeit bei geteilter Datei (A-07/A-09 beheben, A-11 ergaenzt)
+> 2  A-11s Nutzen (zaehlbare Zeile fuer §13) beginnt erst mit der NAECHSTEN
+>    Zehnergruppe - die kann nicht beginnen, solange der Zaehler auf 10 steht
+> 3  A-11 aendert als einziges die MELDEFORM des Tors -> zuletzt, wenn die
+>    anderen beiden abgenommen sind
+> ```
+
+**Claim auf dem BLATT bei der zweiten Instanz — Reihenfolge ÜBER Blätter beim Planner** (P-02).
+**Nicht von mir:** wer A-11 abnimmt (Vorschlag und tragende Zahl stammen vom ersten Evaluator).
+
+### ⚠ RICHTIGSTELLUNG — meine Push-Meldung an Yama war falsch
+
+**Ich hatte gemeldet, die Vertretungsregel vergebe eine Zuständigkeit, die niemand ausführen kann.
+Unabhängig nachgemessen:**
+
+```text
+85b03d23 Vorfahr von fork/main   JA      b2f8c44b Vorfahr von fork/main  JA
+fork/main steht auf 8648a4cb             fetch lief 10.08. 18:42
+lokal nicht auf fork: 5 Commits          (behauptet waren 32)
+```
+
+**A-08 ist VERÖFFENTLICHT, der Release-Prüfer pusht im Takt.** *Es bleibt **ein** abgelehnter
+Push-Versuch (`2b5aebae`) — ein Einzelfall, keine strukturelle Lücke.*
+
+> **Mein Fehler, benannt:** *ich habe eine Behauptung bestätigt, indem ich einen **passenden Vermerk
+> im Verlauf** fand, statt den Zustand zu messen.* **Falle 1 — Zuordnung annehmen statt messen, der
+> sechste Fall.** Ausgerechnet die Klasse, für die ich vor drei Runden begründet habe, dass es
+> keine Barriere gibt.
+>
+> *Der Messfehler der zweiten Instanz gehört derselben Familie an und ist präzise: `ahead N` aus
+> `git status -sb` vergleicht gegen den Remote-**Tracking**-Ref — ohne `fetch` ist das eine Aussage
+> über das eigene Gedächtnis, nicht über die Außenwelt.*
 
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
@@ -670,9 +712,13 @@ naechster_schritt: "ERLEDIGT: A-04 ist geschnitten (0722d4f5) und in Planpruefun
 auftrag: A-04
 titel: "Buehnen-Waechter: erkennt eine laufende Buehne auf einer Nicht-Testdatenbank, egal wie sie gestartet wurde"
 datei: docs/auftraege/aktiv/A-04-buehnen-waechter.md
-zustand: IN_ARBEIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 89f373d9
+pruef_sha: c3d52f09
+code_fertig: "generator 10.08.: Bau c3d52f09 (exakt 4 Dateien: buehnen-waechter.sh NEU 149 Z., buehnenWaechter.test.mjs NEU 7 Zusagen, browserBuehne.test.mjs +B3-Zusage (6->7), ANKER-BROWSER.md +1 Absatz A-04-6) — §11-Bericht im Blatt. Kern: Zustand messen statt Aufrufform (ps-Schnappschuss VOR der Auswertung, ps eww je Kandidat, lsof-cwd nur bei APP_ENV, .env.<APP_ENV> ja / nackte .env NIE); exakte Gleichheit ticket_testing (bewusste Duplikation, Drift-Zusage); Nicht-Ziele gehalten (startet nichts, beendet nichts — browser-buehne.sh unberuehrt, content-identisch HEAD). Suiten SELBST gefahren: buehnenWaechter 7/7 + browserBuehne 7/7 (Basis 6/6). A-04-5: SECHS Mutationen einzeln, jede rot (3/1/2/1/3/1 Zusagen), md5-identische Wiederherstellung belegt. KEINE echte Buehne im Test: artisan-Stub schlaeft, php -S dient leeres Wegwerf-Verzeichnis mit eigener .env (Rest 2); Positivfall traegt ticket_testing nur als Zeichenkette, verbunden wird nichts. ERSTE ECHTE MESSUNG: verwaiste Buehne PID 48098 (05.08., ppid 1, php84, Herd-Pfad mit Leerzeichen) gefunden und als ticket_testing/OK aufgeloest — gemeldet, nicht angefasst. CODE_FERTIG heisst: gebaut und eigengeprueft — kein gruen, keine Abnahme. Fuer den Evaluator (Erstnutzer nach Blatt): bash scripts/buehnen-waechter.sh vor jeder Browserabnahme, Aufruf samt Ausgabe in den Abnahmebericht."
+ballwechsel_bestaetigt: "plan-pruefer 10.08.: CODE_FERTIG-Meldepflichten geprueft — Kette 17984c82 (IN_ARBEIT vor erster Aenderung) -> c3d52f09 (Bau) -> 8fb99a30 (CODE_FERTIG), alle drei existieren. Scope-Diff des Bau-Commits SELBST gemessen: exakt 4 Dateien (buehnen-waechter.sh NEU, buehnenWaechter.test.mjs NEU, browserBuehne.test.mjs B3, ANKER-BROWSER.md). ABWEICHUNG SAUBER: der Anker steht nicht im Scope-Block des Blatts, wird aber von A-04-6 (P1) verlangt — vom Generator offen deklariert, von mir als kriteriengedeckt gewertet; der Evaluator wuerdigt sie in der Abnahme. Ball beim EVALUATOR — ich nehme NICHT ab. FUER SEINE PRUEFUNG: Suiten 7/7 + 7/7 (Basis 6/6), 6 Mutationen einzeln mit md5-Rueckstellung, der Positivfall traegt ticket_testing nur als Zeichenkette in Wegwerf-Env (Rest-2-Auslegung, DB-Zugriff entsteht nie — nachpruefen), Test-Naht BUEHNEN_WAECHTER_NUR_PIDS dokumentiert, Realfund PID 48098 gemeldet nicht angefasst."
+claim_abnahme: "plan-pruefer 10.08.: Evaluator-Station fuer A-04 mit frischer Instanz besetzt. Claim VOR dem Start."
 in_arbeit_gesetzt: "generator 10.08. (frische Instanz, 5. Anlauf): VOR der ersten Scope-Aenderung gesetzt (§3). Kein anderer Auftrag IN_ARBEIT (der einzige grep-Treffer 'zustand: IN_ARBEIT' ist Prosa im A-05-Zitat Z.697, kein Zustandsfeld). §7-Vorpruefung: HEAD 26a2c99a, basis_sha 89f373d9 und BEREIT-Beleg d58b220e beide Vorfahren; Scope content-identisch zu HEAD (browser-buehne.sh, browserBuehne.test.mjs, ANKER-BROWSER.md, A-04-Blatt, STATUS.md — je git show | diff = 0); Ausgangsmessungen: buehnen-waechter.sh und buehnenWaechter.test.mjs existieren NICHT, grep -c buehnen-waechter ANKER-BROWSER.md = 0 (A-04-6-Basis), browserBuehne-Suite selbst gefahren 6/6. UMGEBUNGSBEFUND, gemeldet nicht angefasst (Nicht-Ziel 3): PID 48098 ist eine VERWAISTE echte Buehne vom 05.08. 00:58 (ppid 1, php84 -S 127.0.0.1:65535 …server.php, APP_ENV=testing, cwd ticket-a01/public) — genau die Prozessklasse, fuer die der Waechter gebaut wird; Herd-Binaries heissen php84, das Muster muss sie mitfassen."
 letztes_votum: "plan-pruefer 05.08. 09:3x (1. DoR-Runde, ERSTMALS nach v1.1 mit 18 Punkten): ENTWURF bleibt, ZWEI Restpunkte + eine Korrektur. GEMESSEN: Basis existiert · A-03-Bau liegt belegt NICHT auf der Hauptlinie (browser-buehne.sh FEHLT hier, Anker-grep 0 — die B2-Vertagung ist RICHTIG), aber auf work/a01-generator, nicht auf dem im Blatt genannten tmp-a03 (Korrektur noetig, betrifft den Merge-Bezug der B2-Auflage) · A-04-6-Basis 0 · php -S im A-03-Bau 0 (Anlass bestaetigt) · ps eww vorhanden und in Gebrauch (neuer 1.1-Punkt erfuellt). OFFENE PUNKTE BEANTWORTET: (1) Der Detektor ist KEINE dritte Aufrufform und keine zweite Wahrheit — er misst Zustand statt Startweg und beantwortet eine andere Frage; NICHT NOTWENDIG waere falsch, die lautlose php-S-Tuer steht JETZT offen. (2) Tor-Einbindung NEIN — deckungsgleich mit dem Planner, die A-02-Lehre (externe Abhaengigkeit im einzigen Commit-Weg) gilt."
 offene_akzeptanz:
@@ -722,8 +768,8 @@ naechster_schritt: "Planner: (1) den SPEC-Folgebefund 'stilles leeres Dach laeuf
 auftrag: A-07
 titel: "Der Nebenzustand des Commit-Tors: .git/index divergiert unbemerkt und traegt ein totes Objekt"
 datei: docs/auftraege/aktiv/A-07-index-divergenz.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator (Warteschlange hinter A-04)
 basis_sha: 8967e2c4
 claim: "plan-pruefer 05.08. 15:xx: Ball gezogen — Blatt geschnitten ohne Uebergabe-Zeile, und die Weg-Frage ist ausdruecklich an mich gerichtet. Claim VOR der Pruefung gesetzt. NACH dem Votum Ball an den Planner zurueckgegeben (Korrektur 16:xx: das Feld stand faelschlich noch auf plan-pruefer — mein eigener Fehler aus der Klasse, die der Evaluator-Befund beschreibt)."
 letztes_votum: "plan-pruefer 05.08. (3. Runde, BEREIT-Pruefung nach d570a44b, Raster geladen): ENTWURF bleibt — EIN Restpunkt plus ein Lagewechsel, und ein EIGENER Fehler zuerst: In der 2. Runde habe ich 'alle vier Restpunkte erledigt' bestaetigt — das war falsch. Mein Rest 2 (der fehlende §5-Auswirkungen-Block: Testdaten-Ziel, Prozessbindung, Werkzeuge) wurde vom Planner still durch 'Phantomzahl nachgezogen' ersetzt, und ich habe die Substitution nicht bemerkt: ich habe geprueft, was er TAT, statt gegen meine eigene Liste. Der Block fehlt weiter (grep 'Auswirkungen|Testdaten-Ziel|Prozessbindung' im Blatt: 0 Treffer). SONST HAELT ALLES meiner Messung stand: trap 0, rm auf Index 0 (Kriterienlogik von A-07-4 bestaetigt; die '7 exit-Punkte' zaehle ich als 10, nicht tragend), Fixture-Weg im Wegwerf-Repo vorhanden, must_preserve-Mechanismus-Lesart drin, Zahlen-Drift geloest, Halde 1745 und waechst (A-07-4/5-Rot wirksam), Divergenz waechst je Tor-Commit (A-07-1a-Rot wirksam: heute 2 statt 0). LAGEWECHSEL, UNGEMELDET: Zwischen 15:xx und 20:xx hat JEMAND den Standard-Index angeglichen — Phantome 17 -> 0, Divergenz 60 -> 2, ohne Zeile in STATUS.md; der Evaluator hatte das Raeumen ausdruecklich abgelehnt ('ich raeume den Index eines anderen nicht auf'). Die M3-Gefahr ist dadurch HEUTE entschaerft, der Mechanismus (Divergenz waechst je Tor-Commit, PID-Erbschaft, Halde) bleibt voll — A-07 traegt weiter. Aber die Ist-Belege im Blatt (17 Phantome) sind jetzt historisch, und eine ungemeldete Index-Manipulation ist selbst ein Vorgang der Klasse, um die es in A-07 geht."
@@ -735,7 +781,9 @@ votum_4_runde: "plan-pruefer 08.08. (4. Runde, nach 2c00e6ef und A-08-ABNAHME): 
 offene_akzeptanz_4:
   - "Rest A (Form): basis_sha im Blattkopf steht auf 8967e2c4 — auf die Post-A-08-Linie nachziehen (f430242d oder juenger); die heutigen Rot-Zahlen (32 divergent / 46 status / 2505 Halde) als datierte Ist-Belege eintragen."
   - "Rest B: den angenommenen Zusatz-Nachweis in den A-07-1a-Wortlaut einarbeiten (ein Satz + Stichproben-Form)."
-naechster_schritt: "Planner traegt Rest A und B ein (reine Nachzuege, die Entscheidung ist gefallen), dann setzt der Plan-Pruefer BEREIT — A-07 ist naechster in der Bauschlange (P0-Rest), A-09 wartet dahinter"
+claim_bau: "plan-pruefer 10.08.: A-04 ist CODE_FERTIG — die §3-Schlange ist frei, Generator-Station fuer A-07 mit frischer Instanz besetzt (Tor-Bau). Claim VOR dem Start."
+votum_bereit: "plan-pruefer 10.08. (5. Runde nach 26a2c99a): BEREIT — Rest A und B eingearbeitet und selbst geprueft: basis_sha auf ff549b88 nachgezogen, Ist-Belege datiert mit Drift-Reihe (08.08.: 32/46/2506 -> 10.08.: 35/52/2546; MEINE frische Messung jetzt: 35 divergent / 55 status / Halde 2551 — waechst weiter, alle Rot-Lagen wirksam, trap weiterhin 0), der Zusatz-Nachweis steht mit harter Stichprobenform (mindestens ZEHN git-status-Eintraege, jeder index-frei gegen HEAD belegt). Der Planner-Befund 'Haldenwachstum ist aktivitaets-, nicht zeitgebunden' passt zu meinen Messreihen. DAZU der Realfall von heute als zitierfaehiger Rot-Beleg: beim Tor-Commit ce1ff7d5 erschien 'invalid object 8fd24e1c fuer -f' LIVE — PID-Erbschaft eines der 116 vergifteten Halden-Indizes, mitten im Betrieb. A-07 ist der naechste Tor-Bau; §3-Warteschlange: hinter A-04 (IN_ARBEIT), vor A-09 -> A-10."
+naechster_schritt: "Generator zieht A-07, SOBALD A-04 CODE_FERTIG ist (§3: hoechstens ein IN_ARBEIT); IN_ARBEIT vor der ersten Scope-Aenderung, Bericht nach §11"
 ```
 ---
 
