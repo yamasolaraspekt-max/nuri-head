@@ -118,6 +118,48 @@ sondern die einzige, die heute trägt.**
 in der Abnahme, prüfe ich neu — die Entscheidung hängt aber nicht an Zahlen, sondern an zwei
 Strukturbefunden, und den ersten habe ich selbst gegengemessen.*
 
+### Warteschlange auf `scripts/commit-pruefen.sh` — Planner-Entscheidung 10.08.
+
+**Drei `ENTWURF`-Blätter ändern dieselbe Datei:** A-07 (kein Claim) · A-09 · A-11 (beide Claim der
+zweiten Instanz). *Die bestehende Reihenfolge `A-04 → A-07 → A-09 → A-10` kannte A-11 nicht — es
+wurde danach geschnitten.*
+
+> ### ENTSCHIEDEN: `A-07 → A-09 → A-11`
+>
+> ```text
+> 1  Maengel vor Faehigkeit bei geteilter Datei (A-07/A-09 beheben, A-11 ergaenzt)
+> 2  A-11s Nutzen (zaehlbare Zeile fuer §13) beginnt erst mit der NAECHSTEN
+>    Zehnergruppe - die kann nicht beginnen, solange der Zaehler auf 10 steht
+> 3  A-11 aendert als einziges die MELDEFORM des Tors -> zuletzt, wenn die
+>    anderen beiden abgenommen sind
+> ```
+
+**Claim auf dem BLATT bei der zweiten Instanz — Reihenfolge ÜBER Blätter beim Planner** (P-02).
+**Nicht von mir:** wer A-11 abnimmt (Vorschlag und tragende Zahl stammen vom ersten Evaluator).
+
+### ⚠ RICHTIGSTELLUNG — meine Push-Meldung an Yama war falsch
+
+**Ich hatte gemeldet, die Vertretungsregel vergebe eine Zuständigkeit, die niemand ausführen kann.
+Unabhängig nachgemessen:**
+
+```text
+85b03d23 Vorfahr von fork/main   JA      b2f8c44b Vorfahr von fork/main  JA
+fork/main steht auf 8648a4cb             fetch lief 10.08. 18:42
+lokal nicht auf fork: 5 Commits          (behauptet waren 32)
+```
+
+**A-08 ist VERÖFFENTLICHT, der Release-Prüfer pusht im Takt.** *Es bleibt **ein** abgelehnter
+Push-Versuch (`2b5aebae`) — ein Einzelfall, keine strukturelle Lücke.*
+
+> **Mein Fehler, benannt:** *ich habe eine Behauptung bestätigt, indem ich einen **passenden Vermerk
+> im Verlauf** fand, statt den Zustand zu messen.* **Falle 1 — Zuordnung annehmen statt messen, der
+> sechste Fall.** Ausgerechnet die Klasse, für die ich vor drei Runden begründet habe, dass es
+> keine Barriere gibt.
+>
+> *Der Messfehler der zweiten Instanz gehört derselben Familie an und ist präzise: `ahead N` aus
+> `git status -sb` vergleicht gegen den Remote-**Tracking**-Ref — ohne `fetch` ist das eine Aussage
+> über das eigene Gedächtnis, nicht über die Außenwelt.*
+
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
 
