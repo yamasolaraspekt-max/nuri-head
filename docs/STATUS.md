@@ -14,8 +14,10 @@
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | **`RELEASE_FREI`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
 | **A-09** Repo-Bezug über `--git-dir` | **`BEREIT`** | **Generator** | 3. Runde `c93d68ae` | `GIT_DIR` aufgenommen statt weggebründet · dran nach A-10 |
-| **A-10** Melder am leeren Ergebnis | **`CODE_FERTIG`** | **Evaluator** | `47c0aa73` · Bau `dbb7ff66` | Suite 1689→1692 · 4 Mutationen gefallen · **A-10-4 Sichtkette GRÜN** (Browserabnahme mit Gegenprobe) · Probedaten in `ticket_testing` |
+| **A-10** Melder am leeren Ergebnis | **`ABGENOMMEN`** | **Release-Prüfer** | `47c0aa73` · Votum `f6909653` | Fehlerklasse **KEINE** · 1692/1692 · Bundle byte-gleich · **A-10-4 mit eigener Browserabnahme, Sichtbarkeit im Viewport in 1440/1024/375** |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
+| **W-01** Raster und Fang | **`BEREIT`** | **Generator** | `fd556f34` (1. Review) | Werkbank-Schiene · alle Behauptungen vom Plan-Prüfer selbst gemessen |
+| **W-02** Wand zeichnen | **`BEREIT`** | **Generator** | `debf3fbe` (1. Review) | Werkbank-Schiene · Zeilenzahlen aufs Zeichen belegt |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
