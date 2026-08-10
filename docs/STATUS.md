@@ -2117,3 +2117,62 @@ räumen will, braucht dafür eine eigene Freigabe; ich habe es nicht angefasst.*
 **Release-Prüfer** ausgeführt und ich habe nachgemessen. **Hier habe ich beides getan**, weil die
 Weisung an mich ging. *Die Trennung, die dabei verloren geht, ist real — deshalb steht die
 Sicherung oben, und deshalb ist jeder Schritt einzeln belegt statt zusammengefasst.*
+
+---
+
+## Befund des Evaluators — die Entscheidung, die §16 aussetzt, hat selbst keine Geltung
+
+**Der Planner lehnt es ab, die zwei Statusfelder nachzutragen (`d1d716c8`), und beruft sich auf
+`docs/rollenkette/ENTSCHEIDUNG-KONSISTENZ.md`.** *Ich habe seine Tatsachen nachgemessen — sie
+stimmen alle. Und genau eine Frage hat er nicht gestellt.*
+
+**Seine Angaben, von mir bestätigt:**
+
+```text
+Datei existiert und ist getrackt                        JA
+kam mit 1e933a64 "SICHERUNG", 10.08. 19:11              JA — 211 Dateien in einem Commit
+Wortlaut "Kein Ballbesitz-Feld mehr" (Z.71)             JA
+Wortlaut "Keine Tafel-Nachfuehrungs-Commits" (Z.73)     JA
+Sachverhalt A-04/A-08 veroeffentlicht                   JA (selbst gemessen, ls-remote)
+```
+
+**Die Frage, die offen blieb: gilt sie überhaupt?**
+
+```text
+Erwaehnung in docs/STATUS.md          0
+Erwaehnung in docs/ARBEITSREGELN.md   0
+eigene Geltungsklausel in der Datei   KEINE ("gilt ab", "in Kraft", "verbindlich": 0 Treffer
+                                       ausser einem Zitat ueber einen FREMDEN Vorfall)
+Kopf der Datei                        "Yamas Frage: ... Gemessen am eigenen Repo. Keine
+                                       Meinung, Zahlen."
+```
+
+**§1 der Arbeitsregeln ist an dieser Stelle unmissverständlich:** *„Dieses Dokument ist die
+**einzige** verbindliche Quelle für Arbeitsablauf, Rollen, Übergaben, Qualitätstore,
+**Statusführung** und Freigaben."* **§16 benennt `docs/STATUS.md` namentlich als Statusträger.**
+
+> **Damit setzt eine Datei ohne Autorität eine Regel mit Autorität aus.** *Die Analyse ist gut —
+> ihre Zahlen decken sich mit meinen, und ihr Kern („zwei Orte für einen Zustand") trifft genau
+> den vierten Fall, den ich gemeldet habe. Aber eine Analyse mit Empfehlung ist keine
+> Inkraftsetzung, und **wer sie wie eine behandelt, hat §1 zweimal gebrochen**: einmal beim
+> Befolgen, einmal beim Nicht-Befolgen von §16.*
+
+```yaml
+fehlerklasse: SPEC
+befund: "Empfehlung ohne Geltungsakt wird wie geltendes Recht behandelt und verdraengt §16"
+gegenprobe: "Wortlaut §1/§16 gegen Wortlaut und Kopf der Entscheidung · 0 Erwaehnungen in beiden Regelquellen"
+ballbesitz: yama
+```
+
+**Was daraus folgt, ist kleiner als es klingt — und es entlastet den Planner:**
+
+- **Seine drei Wege (V1/V2/V3) sind die richtige Vorlage**, aber die Frage davor lautet nicht
+  *„wann setzen wir sie in Kraft"*, sondern *„sie ist **nicht** in Kraft — bis Yama sie
+  in die Arbeitsregeln aufnimmt, gilt §16 unverändert."*
+- **Bis dahin sind die zwei Felder schlicht falsch** und dürfen nachgetragen werden; die Regel,
+  die es verbietet, gibt es noch nicht.
+- *Ich trage sie trotzdem nicht nach — Statusführung fremder Aufträge ist nicht meine Rolle, und
+  daran ändert ein Befund nichts.*
+
+**Erledigt und im Blatt des Planners noch offen geführt:** die Testdaten. *Yama hat freigegeben,
+ich habe geräumt (`09bc9ef7`), Nutzer 268/269 weg, Dokument 36 erhalten, vorher gesichert.*
