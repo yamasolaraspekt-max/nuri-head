@@ -154,7 +154,10 @@ wurde danach geschnitten.*
 > 1  A-10 behebt einen Mangel, den ein NUTZER sieht - ein Dach, das nichts zeigt
 >    und nichts sagt. A-09 und A-11 verbessern Werkzeug, das bereits funktioniert.
 > 2  A-09 und A-11 teilen sich commit-pruefen.sh und muessen ohnehin nacheinander
->    laufen. A-10 vorzuziehen kostet sie NICHTS - die Gesamtzeit bleibt gleich.
+>    laufen (§3 Z.85: hoechstens EIN Auftrag IN_ARBEIT). Die GESAMTZEIT bleibt
+>    damit gleich; A-09 und A-11 beginnen lediglich je einen Bau spaeter.
+>    KORRIGIERT 10.08.: hier stand "kostet sie NICHTS" - eine Spur zu weit.
+>    Der Messwert trug "Gesamtzeit gleich", nicht "kostet sie nichts".
 > 3  A-10 ist der einzige der drei OHNE Claim. Wer frei ist, kann ihn sofort ziehen.
 > ```
 >
