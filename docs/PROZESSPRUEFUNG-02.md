@@ -211,6 +211,45 @@ B3  NEU: der §13-Zaehler prueft die SOFORT-Klausel mit - bei der zweiten
 ein **Zitat** des Fehlers in der Erklärung, also berechtigt. *Die Barriere meldet, der Mensch liest,
 dann wird entschieden. Automatisches Ersetzen hätte die Erklärung zerstört.*
 
+## Die vierte Fehlerklasse bleibt OHNE Barriere — ausdrücklich
+
+**„Zuordnung annehmen statt messen" (5×).** *Ich habe eine Barriere gesucht und keine gefunden.
+Das steht hier, statt eine schwache Maßnahme zu erfinden.*
+
+```text
+WARUM B1/B2 TRAGEN     die Fehler waren MECHANISCH
+  ein Befehl lief, der nicht durfte      -> `&&`
+  eine Zeichenkette blieb stehen         -> grep mit genau diesem Wortlaut
+  beide haben ein PRAEZISES Ziel und feuern nur, wenn es getroffen ist
+
+WARUM DIESE KLASSE ANDERS IST     die fuenf Faelle sind SEMANTISCH
+  A-01-Pruefbefehl      Servertest fuer 3D-Verhalten
+  `invalid object`      WELCHER Index?
+  "kennt den Fall"      -> "beherrscht ihn"
+  die 7011             uebernommen statt gemessen
+  "unerreichbar"        von einer Datei auf die Maschine verallgemeinert
+-> eine Aussage ueber URSACHE oder REICHWEITE, ohne den Befehl der sie unterscheidet.
+   Es gibt kein Textmuster, das sie von einer belegten Aussage trennt.
+```
+
+**Verworfen:** *ein `grep` auf Ursachenwörter („weil", „liegt an", „stammt aus", „unerreichbar")
+vor jedem Commit.* **Er würde bei fast jedem Blatt feuern, auch bei belegten Sätzen** — und ich
+habe in der A-07-Wegentscheidung selbst geschrieben, dass *Meldungen, die immer kommen,
+weggelesen werden*. **Eine Barriere, die zur Gewohnheit wird, ist keine.**
+
+> ### Was tatsächlich gegen diese Klasse gewirkt hat: andere Rollen.
+>
+> ```text
+> das falsche `invalid object`   fand der Evaluator
+> die 7011                       fand der Generator
+> "rendert" statt "existiert"    fand der Generator
+> "unerreichbar"                 fand der Evaluator
+> ```
+>
+> **Vier von fünf habe nicht ich gefunden.** *Der wirksame Mechanismus ist Gegenlesen durch eine
+> zweite Rolle — und dafür liegt der Preis in dieser Prüfung gemessen vor: **ein Befund vor dem
+> Bau kostet eine Blattänderung, nach dem Bau zwei Runden mit Bau.***
+
 **Der Zähler wird erst zurückgesetzt, wenn B3 steht** — §13: *„Eine neue Zehnergruppe beginnt erst
 danach."*
 
