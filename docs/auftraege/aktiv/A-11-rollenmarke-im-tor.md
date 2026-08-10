@@ -259,3 +259,83 @@ verursacher: prozess (kein Bau-Fehler — die Marke war nie spezifiziert)
 prioritaet: P1
 warteschlange: A-07 -> A-09 -> A-11 (korrigiert nach e3d7b2c8; meine erste Fassung war falsch begruendet)
 ```
+
+---
+
+## §11-Bericht des Generators (Bau 10.08., frische Instanz)
+
+```yaml
+auftrag: A-11
+basis: bc1470bc          # Bau-Basis; Blatt-basis_sha 229ad0be ist der Schnitt-Stand, scripts/ zwischen meiner Rot-Messung (0fef1a56) und dem Bau unveraendert (diff 0 Zeilen)
+commit: b0f4c444         # der Bau (2 Dateien); dieser Blatt-Commit ist der Pruef-Stand
+scope:
+  - scripts/commit-pruefen.sh                # NUR Botschaft-Annahme: Einbau Z.53-85 direkt nach `BOTSCHAFT="$1"; shift` (Z.51). EIN Einfuege-Hunk; Commit-Aufruf (vorher Z.508, durch den Einbau Z.543) und A-07/A-08/A-09-Zonen content-unangetastet
+  - scripts/__tests__/commitPruefen.test.mjs # 1 zentrale Umgebungszeile im Kopf + Rollen-Helfer + 11 Zusagen, alles ANGEHAENGT; kein Bestandstest veraendert
+  - docs/auftraege/aktiv/A-11-rollenmarke-im-tor.md   # dieser Bericht
+  - docs/STATUS.md                           # IN_ARBEIT ffd06c1a; CODE_FERTIG + Mitteilung an alle Rollen folgt
+tests:
+  statisch: pass         # bash -n exit 0 · node --check exit 0
+  unit: "61/61"          # node --test scripts/__tests__/commitPruefen.test.mjs — Basis 50/50, neu 61/61 (50 Bestand + 11 A-11)
+  backend: nicht_anwendbar
+  schema: nicht_anwendbar
+  build: nicht_anwendbar
+  browser: nicht_anwendbar
+abweichungen:
+  - "MARKE mechanisch definiert: ein Praefix zaehlt nur in exakt der verbuchten Form '<marke>: ' (Doppelpunkt UND Leerzeichen) — deckungsgleich mit dem Entdeckungs-grep des Blatts. Folge: 'generator:x' ohne Leerzeichen ist KEINE Marke und wird praefigiert ('generator: generator:x'); Widerspruch kann nur ein form-echtes Praefix ausloesen."
+  - "A-11-3 + Leerzeichen-Kante zusammen: BEWERTET wird nach Trimmen, VERBUCHT byte-identisch. Eine Botschaft '  generator: x' mit Marke generator bleibt samt fuehrender Leerzeichen stehen (A-11-3 verlangt byte-identisch) — der Entdeckungs-grep zaehlt so eine Zeile dann als unmarkiert. Bewusst nicht geglaettet: Glaetten waere eine Veraenderung, die das Blatt nicht bestellt."
+  - "Suite-Integration mit kleinstem Eingriff: TICKET_ROLLE='probe' EINMAL zentral im Testkopf (process.env) statt in 50 Einzeltests; wirkt ueber ...process.env auch auf die vier Zusagen, die das Tor direkt per execFileSync fahren. Kein Bestandstest umgeschrieben, keiner abgeschwaecht."
+  - "§3-Wartezeit vor dem Start: W-02/1 stand IN_ARBEIT, als die Station besetzt wurde — GEWARTET bis 58342f47 (CODE_FERTIG), erst dann IN_ARBEIT gesetzt (ffd06c1a)."
+  - "BEIFANG-OFFENLEGUNG: meine vorbereitete Tafelzeile (A-11 IN_ARBEIT) wurde vom parallelen STATUS-Commit 7f592b20 mitgenommen, BEVOR IN_ARBEIT wirklich galt — die Zeile stand damit frueher im Log als der Zustand. Gemessen, im STATUS-Datensatz (beginn_bau) und hier deklariert; W-02/1 (58342f47) hat die Zeile bereits als gueltig gelesen und §3 danach bemessen."
+offene_akzeptanz: []
+```
+
+### Rot an der Basis, selbst gemessen (bc1470bc; scripts/ identisch mit 0fef1a56)
+
+```text
+grep Rollenpruefung im Tor            0 funktionale Treffer (2x 'Rolle' sind Kommentare Z.93/Z.490)
+Wegwerf-Repo, TICKET_ROLLE entfernt   exit=0, Commit 'Basisprobe ohne Marke' lief durch   -> A-11-1 rot
+Wegwerf-Repo, TICKET_ROLLE=generator  Betreff unveraendert, KEIN Praefix                  -> A-11-2 rot
+Suite an der Basis                    tests 50 / pass 50 / fail 0
+```
+
+### Kriterien, je mit Beleg
+
+```text
+A-11-1  ERFUELLT  2 Zusagen (fehlt · nur Leerzeichen): exit 2, rev-list --count bleibt 1,
+                  stderr nennt TICKET_ROLLE und die Form ^[a-z][a-z-]*(-[0-9]+)?$ woertlich
+A-11-2  ERFUELLT  'Anbau ohne Praefix' -> Betreff 'generator: Anbau ohne Praefix'
+A-11-3  ERFUELLT  'generator: schon markiert' -> byte-identisch, kein Stapeln (gegen die NEUE
+                  Fassung gemessen, wie im Blatt deklariert)
+A-11-4  ERFUELLT  'evaluator: fremde Feder' bei Marke generator -> exit 2, kein Commit, Meldung
+                  nennt WIDERSPRUCH + beide Marken; Kante Instanznummer: evaluator-2 gegen
+                  evaluator ist Widerspruch; Kante getarnt: '  evaluator: ...' faellt nach Trimmen
+A-11-5  ERFUELLT  'Planner' · 'evaluator:' · '2evaluator' · 'plan pruefer' -> je exit 2, 0 Commits;
+                  'evaluator-2' GUELTIG -> 'evaluator-2: Zweitinstanz am Werk'
+A-11-6  ERFUELLT  alle 50 Bestandszusagen laufen unveraendert und namensgleich gruen (61 = 50 + 11,
+                  nur Anhang, kein Bestandstest beruehrt); Suite mit gesetzter TICKET_ROLLE
+A-11-7  ERFUELLT  vier Mutationen, alle gefallen — Tabelle unten, md5 vor/nach jeder Probe identisch
+A-11-8  ERFUELLT  Mehrzeiler: %B == 'generator: Kopfzeile\n\n<rumpf>\n' byte-genau, Rumpf enthaelt
+                  absichtlich eine markenaehnliche eingerueckte Zeile — unangetastet
+Kante 'A-07: ...' ERFUELLT  -> 'generator: A-07: Auftrag, keine Rolle' (Auftrag ist keine Rolle)
+```
+
+### Mutationsproben (A-11-7) — Gruen/Rot/Gruen, am ECHTEN Tor
+
+```text
+Ausgang                                   61/61 gruen · md5 e5fece559500d5c90869cf6c2ada40da
+M1 Marken-Pruefung entfernt (Block weg)   tests 61 / pass 51 / FAIL 10
+M2 fehlende Marke nur gewarnt             tests 61 / pass 59 / FAIL 2   (beide A-11-1-Zusagen)
+M3 Doppelungs-Schutz entfernt             tests 61 / pass 60 / FAIL 1   (A-11-3)
+M4 Widerspruchs-Pruefung entfernt         tests 61 / pass 58 / FAIL 3   (A-11-4 x2 + Tarn-Kante)
+Nach JEDER Ruecknahme                     md5 e5fece559500d5c90869cf6c2ada40da (byte-identisch)
+Abschluss                                 tests 61 / pass 61 / fail 0
+```
+
+### Realtest und Dauerkontrolle
+
+Der Bau-Commit `b0f4c444` ging **ohne** Praefix ins Tor; die Marke `generator: ` davor stammt vom
+Tor selbst. Erstnutzer-Lage geprueft: **kein Skript** ruft das Tor auf (grep ueber scripts/ —
+die einzigen Treffer sind Zeichenketten in der W-07-Erlaubnislisten-Zusage und Kommentare);
+Erstnutzer sind also ausschliesslich die Rollen, und fuer die steht die Mitteilung in STATUS.md.
+Die Dauerkontrolle des Blatts gilt ab `b0f4c444`:
+`git log --format='%s' <bau>.. | grep -cvE '^[a-z][a-z-]*(-[0-9]+)?: '` muss 0 bleiben.

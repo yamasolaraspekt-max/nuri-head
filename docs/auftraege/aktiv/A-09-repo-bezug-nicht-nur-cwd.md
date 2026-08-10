@@ -470,3 +470,77 @@ durch das geänderte Tor. Rückweg unverändert: Skriptänderung ohne Datenmigra
 12ca3798` genügt.
 
 **Gesamturteil: ABGENOMMEN an `af8f2054`.** Ball beim Release-Prüfer.
+
+---
+
+## Release-Prüfung A-09 (§10) — 10.08.2026
+
+```yaml
+auftrag: A-09
+abnahme_commit: af8f2054   # Evaluator-Votum e53e3cfb zeigt auf af8f2054 — selbst gelesen, identisch
+release_commit: af8f2054   # Release-Kandidat = Prüf-SHA; scripts/ bis HEAD a1e732d5 content-identisch (0 Commits, 0 Zeilen — selbst gemessen)
+votum: RELEASE_FREI
+ci: pass                   # Suite 50/50 im eigenen Worktree am Prüf-SHA + bash -n / node --check am HEAD, alles selbst gefahren
+artefakte_reproduzierbar: true   # kein Build-Artefakt; das Skript IST das Artefakt, byte-identisch af8f2054 ↔ HEAD
+migration: nicht_anwendbar
+rueckweg: pass             # kein Datenpfad; git show 12ca3798 | git apply --check -R → exit 0, `git revert 12ca3798` genügt
+smoke_test_plan: "Erstnutzung nach Veröffentlichung: nächster regulärer Tor-Commit jeder Rolle; Regressionssignal aus dem Blatt beobachten (häufigeres ENV_BLOCKED = Prüfung zu weit)"
+befunde: []
+```
+
+**Messumgebung:** eigener Worktree (`git worktree add -q`) am Prüf-SHA `af8f2054`; Kette und
+Diffs am Hauptbaum (HEAD `a1e732d5`, Zweig `auto/hausplaner-integration`). Alles selbst gemessen,
+keine Zahl übernommen.
+
+### Prüfpunkte, je mit Rohausgabe
+
+**1 · Votum und Kandidat zeigen auf denselben Commit + Kette lückenlos** (je `git merge-base
+--is-ancestor`):
+
+```text
+OK   c93d68ae -> d6846f69   (BEREIT -> IN_ARBEIT)
+OK   d6846f69 -> 12ca3798   (IN_ARBEIT -> Bau)
+OK   12ca3798 -> af8f2054   (Bau -> Prüf-SHA)
+OK   af8f2054 -> 8cd9de10   (Prüf-SHA -> CODE_FERTIG)
+OK   8cd9de10 -> e53e3cfb   (CODE_FERTIG -> ABGENOMMEN)
+OK   e53e3cfb -> HEAD       (Votum ist Vorfahr des HEAD a1e732d5)
+```
+
+**2 · Release-Diff enthält ausschließlich Freigegebenes:** `git show 12ca3798 --stat` =
+**exakt 2 Dateien, 316 insertions(+), 7 deletions(-)** (`scripts/commit-pruefen.sh` 96,
+`scripts/__tests__/commitPruefen.test.mjs` 227). Zonen-Disziplin: die Skript-Hunks sind genau
+`@@ -68,14 +68,60` und `@@ -107,6 +153,44` — Commit-Aufruf-Zone und Botschaft-Annahme (A-11-Zone
+Z.46–52) unberührt. Drift seit dem Prüf-SHA: `git log af8f2054..HEAD -- scripts/` = **0 Commits**,
+`git diff af8f2054 HEAD -- scripts/ | wc -l` = **0** — der parallele A-11-Bau hat die Datei bis zu
+dieser Prüfung nicht angefasst, es liegt also nicht einmal belegter Beifang dazwischen.
+
+**3 · Qualitätstore am Kandidaten erneut grün (selbst gefahren):** Worktree am `af8f2054`:
+`node --test scripts/__tests__/commitPruefen.test.mjs` → `tests 50 · pass 50 · fail 0`.
+Statisch am HEAD (content-identisch): `bash -n` exit 0, `node --check` exit 0.
+
+**4 · Rückweg:** kein Datenpfad, keine Migration, keine Config-Abhängigkeit im Diff.
+`git show 12ca3798 | git apply --check -R` → **exit 0** — der Revert läge sauber auf. Vor der
+Veröffentlichung liegt der Stand zusätzlich als Push auf `fork` außerhalb der Maschine (s. u.).
+
+**5 · Realtest Erstnutzer:** dieser Abschnitt und der STATUS-Vermerk gehen selbst als
+Tor-Commits durch `scripts/commit-pruefen.sh` — mit den drei A-09-Wegen aktiv. Ergebnis im
+Push-/Commit-Vermerk unten; eine Aussperrung der eigenen Rolle hätte diese Prüfung selbst
+blockiert.
+
+**6 · Offene Randnotizen gewürdigt, kein P0/P1:**
+
+- **Pfade mit Leerzeichen in ps-Ausgaben** (Weg 2/3 können sie nicht rückgewinnen): ehrlich im
+  Skriptkopf und in der §11-Abweichung benannt; wirkt Richtung Übersehen, aber dieses Repo liegt
+  auf leerzeichenfreiem Pfad und der cwd-Weg bleibt unberührt. Dokumentiert-konservativ —
+  Randnotiz, Planner-Wissen für den Fall eines künftigen Arbeitsbaums mit Leerzeichen.
+- **Fremde Nutzer** (`ps -E` liest fremde Umgebungen nicht): der bestehende cwd-Zweifelspfad
+  hält Richtung **Blockade**, nie Richtung Beiseitelegen; root-Probe des Blattes 0 Treffer, alle
+  Rollen laufen als derselbe Nutzer. Dokumentiert-konservativ — Randnotiz, kein Befund.
+- `befunde: []` beim Evaluator, Fehlerklasse KEINE — **keine offenen P0/P1**.
+
+**Nicht anwendbar, ehrlich benannt:** Bundle/Build (reines Shell-/Test-Skript), Migrationen,
+Mandanten-/Datenschutzgrenzen (kein Endpunkt, kein Datenpfad berührt).
+
+**Gesamturteil: RELEASE_FREI an `af8f2054`.** Ball bei Yama (main-Veröffentlichung).
+Sicherungs-Push nach v1.2-Vertretung: `git push fork auto/hausplaner-integration` — Ergebnis im
+STATUS-Vermerk.

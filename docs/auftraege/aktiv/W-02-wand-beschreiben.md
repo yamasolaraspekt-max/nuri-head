@@ -208,3 +208,63 @@ warteschlange: "W-01/1 -> W-02/1 -> W-13/1 (W-12 zurueckgehalten, Einwand bei Ya
 befund_an_matrix: "wandaufbau.ts und linienBauteile.ts sind in WERKBANK-ANSCHLUSS.md falsch
                    unter W-02 gefuehrt — eigener Nachtrag, nicht Teil dieses Auftrags"
 ```
+
+
+## §11 — Bericht W-02/1 (Generator, 10.08.2026)
+
+```yaml
+auftrag: "W-02/1"
+zustand: CODE_FERTIG
+bau_commit: "801e2daa"
+basis: "193681cd"
+in_arbeit_commit: "35e90eb8"
+quellen_gelesen:
+  - "resources/planner/hausplaner/geometry/wallGeometry.ts   317 Zeilen, 12 Ausfuhren"
+  - "resources/planner/hausplaner/geometry/wandFlaeche.ts    238 Zeilen,  6 Ausfuhren"
+  - "docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md  F-001, F-002, F-030"
+
+kriterien:
+  W-02/1-1: GRUEN   # Platzhalter 17 an der Basis -> 0; Muster <[A-ZAeOeUea-z][^>]{10,}>
+  W-02/1-2: GRUEN   # NACH Korrektur waehrend des Baus, siehe unten
+  W-02/1-3: GRUEN   # F-001 wallGeometry.ts:13 · F-002 :37 · F-030 :153
+  W-02/1-4: GRUEN   # 7-GRENZEN: sieben Faelle, jeder mit Fundstelle oder Ausschluss-Begruendung
+  W-02/1-5: GRUEN   # 5-CODE sagt "angebunden aus zwei vorhandenen Dateien", beide Exportlisten voll
+  W-02/1-6: GRUEN   # wandaufbau.ts 1x, linienBauteile.ts 1x, als AUSSCHLUESSE ueberschrieben
+  W-02/1-7: GRUEN   # s.u., indexfrei gemessen
+  W-02/1-8: GRUEN   # REGISTER: W-02 LEER->BESCHRIEBEN (0 mal LEER verblieben), beide Fundstellen
+  W-02/1-9: GRUEN   # 35e90eb8 traegt den §3-Beleg im Commit-Text
+
+W-02/1-7_belege:
+  resources_byte_identisch: "1230 Dateien gegen HEAD, Abweichungen 0"
+  methode: "indexfrei — git ls-tree -r HEAD gegen git hash-object der Arbeitsdateien,
+            NICHT git status (der Index luegt nach W-09 Stufe 5)"
+  insel_suite: "1692 tests, 1692 pass, 0 fail — unveraendert gruen"
+  suite_zeitpunkt: "vor der 3-FORMELN-Korrektur gefahren; die Korrektur betraf eine .md-Datei,
+                    resources/** blieb unberuehrt (0 Abweichungen, s.o.)"
+
+selbst_gefundene_maengel:
+  - punkt: "W-02/1-2 war rot, als ich es zum ersten Mal geschrieben hatte"
+    was: "3-FORMELN enthielt die Azimut-Rechnung ausgeschrieben (Normale, atan2, 0-359-Normierung)"
+    warum_falsch: "das Kriterium verlangt NUR Nummern; eine zweite Kopie der Formel driftet
+                   gegen die Sammlung, dann gibt es zwei Wahrheiten statt einer"
+    behoben: "Blatt neu geschrieben, nennt Nummern und beschreibt die Abweichungen in Worten"
+    rest: "ein einziges '=' steht noch im Blatt: 'Nord = +y'. Das ist die Konvention,
+           nicht die Formel. Ich melde es, statt es wegzuputzen."
+  - punkt: "Zeilennummer der Laenge-0-Absage"
+    was: "ich hatte 159 fuer das 'continue' angegeben"
+    gemessen: "159 ist die Wache 'if (!dir)', 160 der Ausstieg 'continue'"
+    behoben: "auf 159-160 praezisiert, in beiden betroffenen Blaettern"
+
+zwei_dokumentierte_abweichungen:
+  F-002: "wird auf die NORMALE angewandt, nicht auf die Wandachse (Spec ▲K2).
+          Wer sie auf die Achse anwendet, liegt 90 Grad daneben — ohne Fehlermeldung."
+  F-030: "Grenzfall im Code enger als in der Sammlung. Zur Winkelverschneidung F-004
+          sagt das Blatt NICHTS, weil ungemessen — kein Satz ohne Beleg."
+
+nicht_gemessen:
+  - "F-004-Verschneidung bei spitzen Wandwinkeln — im Code nicht gefunden, aber auch
+     nicht ausgeschlossen; ich habe nicht die ganze Datei darauf abgesucht"
+  - "die Werkzeugschicht (Stufe 2 GEBAUT) — nicht Gegenstand dieses Auftrags"
+
+ballbesitz: evaluator
+```

@@ -1,37 +1,50 @@
-# W · wand zeichnen — FUNKTION
+# W-02 · Wand zeichnen — FUNKTION
 
-## Eingabe
+## Was tut das Werkzeug, Schritt für Schritt?
 
-| Was | Typ | Einheit | Pflicht | Prüfung |
-|---|---|---|---|---|
-| | | | | |
+1. Aus **Achse, Stärke und Höhe** entsteht ein **Band** — die Wand mit zwei Seiten.
+2. An **Endpunkten mehrerer Wände** werden die Bänder aneinander angeschlossen.
+3. Aus Band und Öffnungen entstehen **Mengen** — brutto und netto.
 
-## Verarbeitung — der Zustandsautomat
+## Zwei Schichten, zwei Dateien
 
-```
-Zustand A  ──Ereignis──►  Zustand B  ──Ereignis──►  fertig
-     │
-     └──Abbruch (Esc)──► Ausgangszustand, nichts geändert
-```
-
-<Jeder Zustand mit: was wird angezeigt, was wird erwartet, was passiert bei Abbruch.>
-
-## Ausgabe
-
-| Was | Typ | Wohin |
+| Schicht | Datei | Ausfuhren |
 |---|---|---|
-| | | |
+| **Geometrie** | `resources/planner/hausplaner/geometry/wallGeometry.ts` | 12, 317 Zeilen |
+| **Mengen** | `resources/planner/hausplaner/geometry/wandFlaeche.ts` | 6, 238 Zeilen |
 
-## Kommando (für Rückgängig)
+### Geometrie — die Ausfuhren mit Fundstelle
 
-- **Name:** `<KommandoName>`
-- **Ausführen:** <was genau am Datenmodell geändert wird>
-- **Zurücknehmen:** <wie der vorherige Zustand exakt wiederhergestellt wird>
-- **Bündelung:** <wird das Werkzeug zu EINEM Kommando gebündelt? Wenn ja, ab wann>
+| Zeile | Ausfuhr | Rolle |
+|---|---|---|
+| 7 | `Punkt` | x/y in mm |
+| 13 | `wandLaenge()` | Länge in mm; **Gleitkomma für Vergleiche, Persistenz ganzzahlig** |
+| 18 | `punktAufWand()` | Punkt im Abstand *offset* auf der Achse |
+| 37 | `azimutDerNormalen()` | Richtung der **Normalen**, nicht der Wand |
+| 53 | `istGanzzahlig()` | die mm-Invariante |
+| 70 | `WandEingabe` | Eingabeform |
+| 78 | `WandBand` | die Wand als Band |
+| 153 | `wandBaender()` | **Kern** — Bänder samt Endpunkt-Anschluss |
+| 267/268 | `TuerAnschlag`, `TuerOeffnung` | links/rechts, innen/außen |
+| 270 | `TuerBlattGeometrie` | Türblatt |
+| 291 | `tuerBlattGeometrie()` | Türblatt aus Öffnung |
 
-## Schichtzuordnung
+### Mengen — die Ausfuhren mit Fundstelle
 
-- Ändert Schicht 1 (Domäne): <ja/nein — was>
-- Rechnet in Schicht 2 (Geometrie): <welche F-Nummern>
-- Lebt in Schicht 3 (Anwendung): <Dateiname>
-- Zeigt sich in Schicht 4/5: <was der Anwender sieht>
+| Zeile | Ausfuhr | Rolle |
+|---|---|---|
+| 38 | `Bezugsmass` | `roh` oder `fertig` |
+| 46 | `WandMengen` | brutto, netto, Abzüge |
+| 77 | `MeldungArt` | **fünf** benannte Fehlerlagen |
+| 84 | `Meldung` | Art **und** Klartext mit Kennungen |
+| 96 | `WandFlaecheErgebnis` | **entweder** Mengen **oder** Meldungen |
+| 135 | `wandMengen()` | die Rechnung |
+
+## Die Azimut-Konvention ist Teil des Vertrags
+
+```text
+Nord = +y · Azimut = Richtung der Wand-NORMALEN · im Uhrzeigersinn von Nord · ganzzahlig 0-359
+```
+
+*Dokumentiert als Spec ▲K2 im Kopf von `wallGeometry.ts`.* **Nicht die Laufrichtung der Wand — die
+Normale.** Wer das verwechselt, bekommt 90° Abweichung ohne Fehlermeldung.

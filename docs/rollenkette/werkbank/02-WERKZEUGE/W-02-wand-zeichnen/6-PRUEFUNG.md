@@ -1,37 +1,19 @@
-# W · wand zeichnen — PRÜFUNG
+# W-02 · Wand zeichnen — PRÜFUNG
 
-> **Regel: jedes Kriterium muss VOR dem Bau wirksam rot sein.**
-> Ein Kriterium, das schon grün ist, bevor gebaut wurde, prüft nichts.
+## Was eine Prüfung hier belegen muss
 
-## Abnahmekriterien
+1. **Die Azimut-Konvention** — Normale statt Achse, Nord = +y, 0–359 ganzzahlig.
+   *Ein um 90° gedrehter Azimut sieht in der Draufsicht unauffällig aus.*
+2. **Die mm-Invariante** — dass Gespeichertes ganzzahlig bleibt, auch wenn gerechnet wird.
+3. **Dass Meldungen Meldungen bleiben** — kein Ergebnis, das Zahlen und Zweifel mischt.
+4. **Länge 0** — eine Wand ohne Ausdehnung ergibt kein Band, nicht ein leeres.
 
-| Nr | Kriterium | Rot-Beleg vor dem Bau | Wie gemessen |
-|---|---|---|---|
-| K-1 | | | |
-| K-2 | | | |
+## Warum Punkt 3 eigens geprüft wird
 
-## Fangprobe (Mutationsprobe)
+Der Ergebnistyp trennt **Mengen** und **Meldungen** in zwei Zweige. Der Grund steht im Code:
 
-<Eine absichtlich eingebaute Fehlerstelle, die von den Kriterien gefunden werden MUSS.
-Wenn die Suite trotz eingebautem Fehler grün bleibt, prüfen die Kriterien nichts.>
+> *„Ein Ergebnistyp, der Zahlen und Zweifel gleichzeitig zulässt, wird an der ersten Aufrufstelle
+> halb ausgewertet: die Zahlen nimmt man, die Meldungen übersieht man."*
+> `resources/planner/hausplaner/geometry/wandFlaeche.ts:96`
 
-| Mutation | Muss erkannt werden von |
-|---|---|
-| | |
-
-## Automatische Tests
-
-| Datei | Prüft |
-|---|---|
-| | |
-
-## Sichtprüfung (falls die Oberfläche betroffen ist)
-
-- [ ] 1440 px
-- [ ] 1024 px
-- [ ] 375 px
-- [ ] Meldung bei Absage lesbar und vollständig sichtbar
-
-## Bestandsprobe
-
-- [ ] Ein vor der Änderung gespeichertes Dokument lädt danach unverändert
+**Eine Prüfung, die nur die Zahlen ansieht, prüft genau die Hälfte, die immer stimmt.**

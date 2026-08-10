@@ -1,33 +1,29 @@
-# W-xx · CODE
+# W-02 · Wand zeichnen — CODE
 
-## Wo der Code wirklich lebt
+**Angebunden aus zwei vorhandenen Dateien** — dieses Blatt wurde am 10.08.2026 **aus dem Code
+abgeleitet**, nicht umgekehrt.
 
-| Schicht | Datei im Repo | Zweck |
-|---|---|---|
-| 1 Domäne | `resources/planner/hausplaner/domain/…` | |
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | |
-| 3 Werkzeug | `resources/planner/hausplaner/app/tools/…` | |
-| 4 Darstellung | `resources/planner/hausplaner/renderers/…` | |
-| 5 Oberfläche | `resources/planner/hausplaner/ui/…` | |
+## `resources/planner/hausplaner/geometry/wallGeometry.ts` — 317 Zeilen, 12 Ausfuhren
 
-> **Der Code steht im Repo, nicht in diesem Ordner.** Hier liegen nur
-> Schnittstellenbeschreibung, Ablaufskizze und — wo nötig — ein kurzer
-> Auszug der Kernstelle mit Zeilennummer, damit man beim Lesen nicht springen muss.
+`Punkt` · `wandLaenge()` · `punktAufWand()` · `azimutDerNormalen()` · `istGanzzahlig()` ·
+`WandEingabe` · `WandBand` · `wandBaender()` · `TuerAnschlag` · `TuerOeffnung` ·
+`TuerBlattGeometrie` · `tuerBlattGeometrie()`
 
-## Schnittstelle
+## `resources/planner/hausplaner/geometry/wandFlaeche.ts` — 238 Zeilen, 6 Ausfuhren
 
-```ts
-// Signatur der öffentlichen Funktion(en) dieses Werkzeugs
+`Bezugsmass` · `WandMengen` · `MeldungArt` · `Meldung` · `WandFlaecheErgebnis` · `wandMengen()`
+
+## AUSSCHLÜSSE — bewusst NICHT Teil dieses Werkzeugs
+
+```text
+resources/planner/hausplaner/geometry/wandaufbau.ts       nicht angebunden
+resources/planner/hausplaner/geometry/linienBauteile.ts   nicht angebunden
 ```
 
-## Kernstelle
+**Beide Dateien existieren im Repo und werden hier ausdrücklich nicht beschrieben.** *Der Auftrag
+grenzt W-02 auf Geometrie und Mengen ein; Schichtaufbau und Linienbauteile bekommen eigene Blätter.*
 
-```ts
-// Der eine Ausschnitt, auf den es ankommt — mit Datei:Zeile
-```
+## Was gebaut ist und was nicht
 
-## Abhängigkeiten
-
-| Braucht | Warum | Richtung geprüft? |
-|---|---|---|
-| | | ja/nein — kein Kreis |
+**Gebaut:** beide Rechenschichten, rein und ohne DOM-, Store- oder Befehls-Abhängigkeit.
+**Nicht Gegenstand dieser Stufe:** die Werkzeugschicht. *Stufe 2 (`GEBAUT`) folgt als eigener Auftrag.*

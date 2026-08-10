@@ -49,6 +49,41 @@ if [ "$#" -lt 2 ]; then
 fi
 
 BOTSCHAFT="$1"; shift
+
+# ── A-11: DIE ROLLENMARKE KOMMT AUS DER UMGEBUNG — OHNE SIE GIBT ES KEINEN COMMIT ────────────
+# Befund 0 der Prozesspruefung: die Rollen sind im Log ununterscheidbar, weil beim SCHREIBEN
+# nichts Unterscheidendes entsteht. Deshalb setzt das Tor die Marke HIER, bei der Annahme der
+# Botschaft — nicht am Commit-Aufruf (dessen Nachbarschaft gehoert A-07). Eine Marke zaehlt nur
+# in genau der Form, in der sie auch verbucht wuerde: `<marke>: ` (Doppelpunkt UND Leerzeichen).
+ROLLEN_FORM='^[a-z][a-z-]*(-[0-9]+)?$'
+ROLLE="$(printf '%s' "${TICKET_ROLLE:-}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+if [ -z "$ROLLE" ]; then
+  echo "TICKET_ROLLE fehlt oder ist leer — das Tor verbucht nur mit Rollenmarke, kein Commit. Setzen: TICKET_ROLLE=<rolle> mit Form $ROLLEN_FORM (z. B. planner, generator, evaluator-2)." >&2
+  exit 2
+fi
+if ! printf '%s\n' "$ROLLE" | grep -qE "$ROLLEN_FORM"; then
+  echo "TICKET_ROLLE='$ROLLE' entspricht nicht der Form $ROLLEN_FORM (klein geschrieben, Bindestriche, optionale Instanznummer wie evaluator-2) — kein Commit." >&2
+  exit 2
+fi
+# Erste Zeile der Botschaft; BEWERTET wird nach vorn getrimmt, VERAENDERT wird nichts daran.
+A11_ERSTE="${BOTSCHAFT%%$'\n'*}"
+A11_RUMPF=""
+case "$BOTSCHAFT" in *$'\n'*) A11_RUMPF=$'\n'"${BOTSCHAFT#*$'\n'}" ;; esac
+A11_BEWERTET="${A11_ERSTE#"${A11_ERSTE%%[![:space:]]*}"}"
+A11_VORHANDEN="$(printf '%s\n' "$A11_BEWERTET" | grep -oE '^[a-z][a-z-]*(-[0-9]+)?: ' | head -n 1)"
+if [ -n "$A11_VORHANDEN" ]; then
+  A11_VORHANDEN="${A11_VORHANDEN%: }"
+  if [ "$A11_VORHANDEN" != "$ROLLE" ]; then
+    # Der Fall b29bb79d: eine Botschaft, die sich als andere Rolle ausgibt, ist ein WIDERSPRUCH.
+    echo "WIDERSPRUCH: die Botschaft gibt sich als '$A11_VORHANDEN' aus, die Umgebung sagt TICKET_ROLLE='$ROLLE' — kein Commit." >&2
+    exit 2
+  fi
+  # Genau diese Marke steht schon: nichts voranstellen, die Botschaft bleibt byte-identisch.
+else
+  # Keine Rollenmarke (ein Praefix wie "A-07: " ist ein Auftrag, keine Rolle): voranstellen.
+  BOTSCHAFT="$ROLLE: $A11_ERSTE$A11_RUMPF"
+fi
+
 FEHLER=0
 
 # ── STUFE 5 ──────────────────────────────────────────────────────────────────────────────────

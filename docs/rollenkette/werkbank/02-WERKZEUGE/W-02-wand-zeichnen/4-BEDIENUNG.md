@@ -1,43 +1,36 @@
-# W · wand zeichnen — BEDIENUNG
+# W-02 · Wand zeichnen — BEDIENUNG
 
-## Aufruf
+## Was der Anwender tut
 
-| Weg | Wie |
+Zwei Punkte setzen. **Der Fang (W-01) liegt darunter** und bestimmt, wo die Punkte landen.
+
+## Was er einstellt
+
+| Größe | Wirkung |
 |---|---|
-| Werkzeugleiste | <Symbol, Position, Beschriftung> |
-| Tastenkürzel | <Taste> |
-| Kontextmenü | <ja/nein, wann> |
+| **Stärke** | Breite des Bandes, symmetrisch zur Achse |
+| **Höhe** | Extrusion nach oben |
+| **Seite** | `links` oder `rechts` — bestimmt den Azimut der Normalen |
+| **Bezugsmaß** | `roh` oder `fertig` (`wandFlaeche.ts:38`) |
 
-## Ablauf am Bildschirm
+## Was er zurückbekommt — und was nicht
 
-| Schritt | Anwender tut | Bildschirm zeigt |
-|---|---|---|
-| 1 | | |
-| 2 | | |
+**Entweder Mengen oder Meldungen.** Nie beides.
 
-## Rückmeldungen
-
-| Lage | Anzeige | Ton |
-|---|---|---|
-| Alles gut | | sachlich |
-| Eingabe unvollständig | | hinweisend |
-| **Nicht möglich** | | **erklärend — was und warum** |
-
-> **Pflicht:** Für jede Absage aus `7-GRENZEN.md` muss hier ein Satz stehen, den
-> ein Handwerker versteht. Nicht „DachGeometrieUngueltig", sondern
-> „Für diesen Grundriss kann kein Walmdach berechnet werden, weil er einspringende
-> Ecken hat. Mögliche Wege: Grundriss begradigen oder Flachdach wählen."
-
-## Abbruch
-
-- **Esc** bricht ab. Danach ist der Zustand **exakt** wie vorher.
-- Halbfertiges wird nie gespeichert.
-
-## Tastenkürzel während des Werkzeugs
-
-| Taste | Wirkung |
+| Meldungsart | Wann |
 |---|---|
-| Esc | abbrechen |
-| Eingabe | bestätigen |
-| Umschalt | <z.B. auf 45°-Winkel zwingen> |
-| Alt | <z.B. Fang aussetzen> |
+| `oeffnung-ragt-hinaus` | Öffnung liegt teilweise ausserhalb der Wand |
+| `oeffnungen-ueberlappen` | zwei Öffnungen überschneiden sich |
+| `oeffnung-hoeher-als-wand` | Öffnung höher als die Wand |
+| `schichten-dicker-als-wand` | Aufbau dicker als die Wand selbst |
+| `fremde-oeffnung` | Öffnung gehört nicht zu dieser Wand |
+
+*Belegt als `MeldungArt` in `resources/planner/hausplaner/geometry/wandFlaeche.ts:77`.*
+
+**Jede Meldung trägt Klartext mit den beteiligten Kennungen** — *„eine Meldung ohne Bezug ist keine
+Meldung"* (`wandFlaeche.ts:84`).
+
+## Die mm-Regel
+
+Punkte sind **ganzzahlige Millimeter**. `istGanzzahlig()` (`wallGeometry.ts:53`) prüft die
+Invariante. **Wandlängen dürfen für Vergleiche Gleitkomma sein — was gespeichert wird, ist ganzzahlig.**

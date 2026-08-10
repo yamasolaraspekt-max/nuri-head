@@ -13,7 +13,7 @@
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
 | W-01 | Raster und Fang | **BESCHRIEBEN** | — | F-040, F-041, F-001, F-003, F-004 |
-| W-02 | Wand zeichnen | LEER | W-01 | F-001, F-002, F-030 |
+| W-02 | Wand zeichnen | **BESCHRIEBEN** | W-01 | F-001, F-002, F-030 |
 | W-13 | Auswahl und Griffe | LEER | W-02 | F-012, F-003 |
 | W-12 | Ansicht und Kamera | LEER | — | F-032 |
 
@@ -94,6 +94,8 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/renderers/three-d/szene.ts` | W-07, Schicht 4 |
 | `resources/planner/hausplaner/app/tools/workspaceIds.ts` | Werkzeugregistrierung |
 | `resources/planner/hausplaner/geometry/fangKern.ts` | **W-01** — 276 Zeilen, 11 Ausfuhren, 3 Testdateien mit 45 Zusagen; **eingearbeitet 10.08.2026** |
+| `resources/planner/hausplaner/geometry/wallGeometry.ts` | **W-02** — 317 Zeilen, 12 Ausfuhren; Azimut-Konvention Spec ▲K2, mm-Integer-Welt; **eingearbeitet 10.08.2026** |
+| `resources/planner/hausplaner/geometry/wandFlaeche.ts` | **W-02** — 238 Zeilen, 6 Ausfuhren; AUF-77 Mengenermittlung M1, „entweder Mengen oder Meldungen"; **eingearbeitet 10.08.2026** |
 
 ## Was aus Yamas eigenem Bestand kommt
 

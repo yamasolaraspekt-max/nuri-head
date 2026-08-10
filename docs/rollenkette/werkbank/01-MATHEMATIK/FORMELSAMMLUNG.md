@@ -39,6 +39,39 @@
 - **Grenzfall:** `|B−A|² = 0` → keine Strecke, Absage. Ohne das Begrenzen auf [0,1]
   landet der Fang auf der **Verlängerung** der Wand statt auf der Wand.
 
+> ### Am Bestand nachgezogen (10.08.) — der Code weicht ZWEIMAL ab, beide Male mit Grund
+>
+> Belegstelle: `resources/planner/hausplaner/geometry/fangKern.ts:96-105`, `lotAufGerade()`.
+>
+> **1 · Die Begrenzung auf `[0,1]` fehlt — und das ist Absicht, kein Mangel.**
+>
+> ```text
+> gemessen:  0 Treffer auf Math.max / Math.min / clamp in lotAufGerade()
+> Code:      return { x: a.x + t * dx, y: a.y + t * dy };   // t UNBEGRENZT
+> ```
+>
+> Der Grenzfall oben nennt das Ergebnis („landet auf der Verlängerung") und behandelt es als
+> Fehler. **Im Fang ist es das Ziel:** `achse` ist ausdrücklich *„Lot auf die VERLÄNGERTE Gerade"*
+> (`fangKern.ts:147`), und `verlaengerung` ist eine **eigene Fangart** (F-041). Wer hier begrenzt,
+> zerstört zwei von sieben Fangarten.
+>
+> **Für die Anwendung heißt das:** `t' = max(0, min(1, t))` gilt, wenn der Punkt **auf dem Bauteil**
+> liegen muss — Öffnung auf Wandachse, Bemaßung, Flächenzuordnung. **Sie gilt NICHT, wenn die
+> Verlängerung selbst das Ziel ist.** *Ohne diesen Satz liest die nächste Rolle einen Fehler, wo eine
+> Entscheidung steht — und „korrigiert" den Fang kaputt.*
+>
+> **2 · Der Grenzfall prüft im Code auf ein EPSILON, nicht auf exakte Null — und das ist besser.**
+>
+> ```text
+> Sammlung:  |B−A|² = 0        exakte Null
+> Code:      laenge2 < 1e-9    Epsilon      (fangKern.ts:100)
+> ```
+>
+> **In Gleitkomma-Arithmetik ist die exakte Prüfung die gefährlichere.** Eine fast-entartete Strecke
+> (zwei Punkte 10⁻⁷ mm auseinander) besteht den Test `= 0` und liefert dann ein `t` in
+> Millionenhöhe — der Fang springt ins Nichts. *Hier trägt der Code, nicht die Formel; die
+> Formelfassung wird auf `< ε` nachgezogen.*
+
 ### F-004 · Schnittpunkt zweier Geraden
 - **Zweck:** Wandachsen verschneiden, Ecke bilden
 - **Eingabe:** Gerade 1 durch A,B · Gerade 2 durch C,D
@@ -216,6 +249,46 @@
   Innerhalb desselben Rangs gewinnt der nächstliegende.
 - **Grenzfall:** Ohne Rangfolge springt der Fang bei dichten Objekten unvorhersehbar —
   der häufigste Grund, warum Anwender einen Planer als „zickig" empfinden.
+
+> ### Am Bestand nachgezogen (10.08.) — die Ordnung stimmt, zwei Arten weichen ab
+>
+> **Der Code implementiert die Rangfolge als Früh-Return-Kette** in `fange()`
+> (`fangKern.ts:108-175`, Blöcke `// 1)` bis `// 5)`), nicht über eine Tabelle:
+>
+> ```text
+> Sammlung  Endpunkt > Schnittpunkt > Mittelpunkt > Lot        > Verlaengerung > Raster
+> Code      endpunkt >               mittelpunkt > achse(=Lot) > verlaengerung > ortho > raster
+>                                                                                       > keiner
+> ```
+>
+> **Die relative Ordnung ist identisch** — Mittelpunkt steht in beiden **vor** dem Lot. Genau zwei
+> Arten weichen ab:
+>
+> ```text
+> Schnittpunkt   in der Sammlung Rang 2, im Code NICHT VORHANDEN.
+>                `FangArt` kennt ihn nicht (fangKern.ts:26-33). Er haengt an F-004,
+>                das im Code ebenfalls fehlt — es ist EIN Befund, nicht zwei.
+> ortho          im Code Rang 5 (0/90° durch den Referenzpunkt), in der Sammlung
+>                NICHT GENANNT. Eine gebaute und benannte Fangart ohne Formelplatz.
+> ```
+>
+> **Begriffsabgleich, damit niemand zwei Dinge für eines nimmt:** was die Sammlung *„Lot"* nennt,
+> heißt im Code `achse` — und es ist das **Lot auf die verlängerte Gerade**, nicht auf die Strecke.
+> *Damit hängt dieser Eintrag direkt an der `[0,1]`-Frage in F-003; beide beschreiben dieselbe
+> Entscheidung von zwei Seiten.*
+>
+> **OFFENE FACHFRAGE — hier ausdrücklich NICHT entschieden:**
+>
+> ```text
+> a) Soll `Schnittpunkt` gebaut werden (dann bleibt Rang 2 als SOLL stehen)
+>    oder aus der Rangfolge gestrichen (dann ist die Sammlung ein IST)?
+> b) Wo gehoert `ortho` in die Rangfolge — im Code steht es NACH der Verlaengerung.
+>    Ist das die gewollte Ergonomie?
+> ```
+>
+> *Beides ist Fang-Ergonomie und keine Buchführung: die Rangfolge entscheidet, wie sich das Zeichnen
+> **anfühlt**. Der Planner legt das nicht fest — er stellt fest, dass Sammlung und Code
+> auseinandergehen, und legt die Frage vor. **Bis zur Entscheidung gilt der Code**, weil er läuft.*
 
 ---
 

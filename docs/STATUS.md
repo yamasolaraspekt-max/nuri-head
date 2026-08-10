@@ -13,11 +13,11 @@
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | **`VERÖFFENTLICHT`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
-| **A-09** Repo-Bezug über `--git-dir` | **`ABGENOMMEN`** | **Release-Prüfer** | Bau `12ca3798` · Votum `e53e3cfb` an `af8f2054` | Fehlerklasse **KEINE** · 42/42→50/50 selbst · Probe C+D beidseitig am lebenden Prozess · Gegen-Beweis A-09-3 (fremdes Repo zählt nicht) · M3/M6 selbst gesetzt, md5-identisch restauriert |
+| **A-09** Repo-Bezug über `--git-dir` | **`RELEASE_FREI`** | **Yama** | Bau `12ca3798` · Votum `e53e3cfb` an `af8f2054` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 50/50 am Prüf-SHA selbst (Worktree) · Scope exakt 2 Dateien +316/−7, Hunks @@68/@@107 · Revert-Probe sauber · Drift auf `scripts/` seit Prüf-SHA: 0 |
 | **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
-| **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
+| **A-11** Rollenmarke im Tor | **`IN_ARBEIT`** | **Generator** | BEREIT `1dee4771` · Claim `a1e732d5` | **B4** aus §13 · letzter Tor-Bau · Bau-Basis `0fef1a56` |
 | **W-01** Raster und Fang | **`CODE_FERTIG`** | **Evaluator** | `04f78b73` · Basis `32f83a6f` | sieben Blätter aus `fangKern.ts` abgeleitet · 1692/1692 · `resources/**` byte-identisch · 3 Abweichungen und 1 offener Befund im Bericht |
-| **W-02** Wand zeichnen | **`IN_ARBEIT`** | **Generator** | `debf3fbe` · Basis `193681cd` | §7-Vorprüfung 6/6 · §3 im selben Skript · rot an der Basis: **17 Platzhalter** in fünf Blättern |
+| **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `801e2daa` · Basis `193681cd` | sieben Blätter aus `wallGeometry.ts` + `wandFlaeche.ts`; 9/9 Kriterien grün, **-2 erst nach Selbstkorrektur** (Formel war ausgeschrieben); `resources/**` 1230 Dateien 0 Abweichungen (indexfrei) · Suite 1692/1692 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1054,7 +1054,7 @@ release_vermerk: "release-pruefer 08.08.: RELEASE_FREI an 85b03d23 (Release-Kand
 push_vermerk: "release-pruefer 08.08., ENV-HINWEIS: der Sicherungs-Push (git push fork auto/hausplaner-integration — nie main/Tags/force) wurde von der UMGEBUNG verweigert (Permission-System der Instanz blockt git push, zweimal versucht: einmal im Sammelbefehl, einmal einzeln). KEIN fachliches Rot, kein Abbruch — RELEASE_FREI steht. FOLGE nach Repo-Aufsichts-Massstab: die verifizierte Arbeit bis b2f8c44b liegt weiterhin NUR lokal, der fork-Remote traegt sie nicht — 'nicht gepusht' heisst 'kein Backup ausserhalb der Maschine'. Der Push bleibt offen fuer Yama oder eine Instanz mit Push-Erlaubnis."
 ---
 
-## A-09 — ABGENOMMEN an af8f2054 (Ball beim Release-Prüfer)
+## A-09 — RELEASE_FREI an af8f2054 (Ball bei Yama: main-Veröffentlichung; §10 im Blatt)
 
 ```yaml
 auftrag: A-09
@@ -1084,6 +1084,8 @@ naechster_schritt: "Evaluator prueft af8f2054 unabhaengig (§9): Suite an Basis 
 claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:0x: Abnahme A-09 GECLAIMT vor dem Pruefstand-Aufbau — Lehre aus der A-04-Kollision, bei der zwei Instanzen denselben Auftrag genommen haben. Pruef-SHA af8f2054, Bau 12ca3798, Elter-Kontrolle folgt."
 letztes_votum: "evaluator 10.08.: ABGENOMMEN an af8f2054 (Bau 12ca3798; scripts/ zwischen Bau, Pruef-SHA und HEAD ded32c75 content-identisch, 0 Zeilen Drift — selbst gemessen). Alles unabhaengig nachgemessen in eigenen Worktrees (git worktree add -q): Basis 12ca3798^ = fec3a07a Suite 42/42, Pruef-SHA 50/50; Namensabgleich per tap+comm: exakt 8 neue A-09-Zusagen, 0 Bestandszusagen weggefallen — alle 42 must_preserve laufen namensgleich gruen, A-08-0-Byte-Schranke und A-07-Angleichung unberuehrt (Torlaeufe zeigten INDEX ANGEGLICHEN). Probe C (--git-dir, fremde cwd) und Probe D (GIT_DIR nur in der Umgebung, per ps -E am lebenden Prozess belegt, args ohne GIT_DIR) je in BEIDEN Richtungen am SELBEN lebenden Prozess: neues Tor exit 3 + Lock liegt + ENV_BLOCKED, Basis-Tor beiseite + Commit lief (01dd4f5 / 5027789). Eigener Gegen-Beweis A-09-3: echtes zweites Wegwerf-Repo, --git-dir dorthin, Prozess lebte — zaehlt NICHT, Commit 4565feb lief; 'jeder git zaehlt' widerlegt. A-09-2 via git -C lebend geprueft: exit 3. Relative Form --git-dir=pr-c/.git aus fremder cwd: gefangen. A-09-5 nach §12.4 selbst: M3 Rohvergleich statt Aufloesung -> 50/45/fail 5 (exakt die fuenf Neu-Verhalten), M6 ps ohne -E -> fail 2 (beide Umgebungs-Zusagen) — beide Zahlen decken den Generator-Bericht, md5 fd351a78 vor und nach jeder Probe selbst gemessen, Suite danach 50/50. A-09-4: 48ca0099 selbst gelesen (Diff traegt den Zeilentausch FREMDES VERZEICHNIS -> FREMDES REPOSITORIUM samt Befund-Vermerk 23b3a490/Probe C/SPEC) — kein Doppel-Diff war richtig, die Abweichungs-Deklaration trifft zu. Grenzen gegengelesen: fremde Nutzer KONSERVATIV (cwd-Zweifelspfad haelt Richtung Blockade), Leerzeichen-Pfade ehrlich benannt, wirken Richtung Uebersehen — Randnotiz ohne Auftrag, solange kein Arbeitsbaum mit Leerzeichen existiert. Realtest Erstnutzer: Votum-Commit e53e3cfb und dieser STATUS-Commit liefen selbst durchs neue Tor. Fehlerklasse KEINE, keine offenen P0/P1. Ball beim Release-Pruefer."
 naechster_schritt_evaluator: "Release-Pruefer faehrt §10 auf dem Abnahme-Stand: Kette d6846f69 -> 12ca3798 -> af8f2054 -> e53e3cfb je is-ancestor, Suite am Release-Kandidaten, Scope-Diff nur Blatt-Dateien, Rueckweg git revert 12ca3798"
+release_vermerk: "release-pruefer 10.08.: RELEASE_FREI an af8f2054 (§10-Abschnitt im Blatt, alles selbst gemessen). Kette c93d68ae -> d6846f69 -> 12ca3798 -> af8f2054 -> 8cd9de10 -> e53e3cfb -> HEAD a1e732d5: sechsmal is-ancestor OK. Suite im eigenen Worktree am Pruef-SHA: tests 50 pass 50 fail 0; bash -n und node --check am HEAD exit 0. Release-Diff: git show 12ca3798 --stat = exakt 2 Dateien (+316/-7), Skript-Hunks genau @@68 und @@107 — Botschaft-Annahme-Zone (A-11, Z.46-52) unberuehrt. Drift seit Pruef-SHA: git log af8f2054..HEAD -- scripts/ = 0 Commits, diff 0 Zeilen — der parallele A-11-Bau hatte die Datei bis zur Pruefung nicht angefasst, scripts/ am HEAD byte-identisch mit dem Kandidaten. Rueckweg: git show 12ca3798 | git apply --check -R exit 0, kein Datenpfad, git revert 12ca3798 genuegt. Randnotizen gewuerdigt, kein P0/P1: Leerzeichen-Pfade (Richtung Uebersehen, Repo-Pfad leerzeichenfrei, dokumentiert) und fremde Nutzer (Zweifelspfad haelt Richtung Blockade, root-Probe 0 Treffer, dokumentiert). Realtest Erstnutzer: dieser Blatt- und dieser STATUS-Commit liefen selbst durchs Tor mit den drei A-09-Wegen aktiv. Sicherungs-Push nach v1.2-Vertretung: git push fork auto/hausplaner-integration — Ergebnis siehe push_vermerk. Ball bei Yama: main-Veroeffentlichung."
+push_vermerk: "release-pruefer 10.08.: Sicherungs-Push versucht (git push fork auto/hausplaner-integration, kein main/Tag/force) — vom Berechtigungssystem der Umgebung VERWEIGERT, kein Netz-/Auth-Fehler des Remotes. Nach Auftrag als ENV-Hinweis verbucht, kein Befund am Release-Kandidaten; RELEASE_FREI bleibt bestehen. Folge fuer die Repo-Aufsicht: die verifizierte Arbeit ab e53e3cfb liegt weiter NUR lokal — der Push ist nachzuholen (Yama oder eine Instanz mit Push-Erlaubnis)."
 ```
 ---
 
@@ -1120,21 +1122,22 @@ push_vermerk: "release-pruefer 10.08.: Sicherungs-Push nach v1.2-Vertretung VERS
 ```
 ---
 
-## BEREIT — A-11 (Warteschlange hinter A-09)
+## IN_ARBEIT — A-11
 
 ```yaml
 auftrag: A-11
 titel: "Commit-Tor: die Rolle kommt aus der Umgebung und wird der Botschaft vorangestellt - fehlt sie, gibt es keinen Commit"
 datei: docs/auftraege/aktiv/A-11-rollenmarke-im-tor.md
-zustand: BEREIT
-ballbesitz: generator (Warteschlange hinter A-09)
+zustand: IN_ARBEIT
+ballbesitz: generator (am Bau)
 basis_sha: 229ad0be
 prioritaet: P1
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das zweite der Gruppe nach A-08): Rot-Lagen SELBST strukturell verifiziert (Rollenpruefung im Tor: 0 Treffer; 21 von 40 letzten Commits ohne Praefix — Blatt sagt 15, Drift nicht tragend, die Quote zerbricht die Zaehlung so oder so), Botschaft-Annahme Z.51 bestaetigt, Commit-Aufruf liegt heute auf Z.424 statt 384 (Zeilendrift durch A-07/A-08-Bauten — die Bauvorgabe gilt SINNGEMAESS: der Commit-Aufruf und alles danach bleibt unangetastet). Konfliktpruefung mit disjunkten Zonen und Bauvorgabe vorbildlich; A-11-3-Rot ehrlich als nur-gegen-die-neue-Fassung deklariert (Gegenhalter-Klasse); Nicht-Ziele scharf (Auftragsnennung ausdruecklich NICHT mitgebaut, §7); Entdeckung als Dauerkontroll-grep. Die Doppelentscheidungs-Selbstanzeige (zwei Planner, drei Minuten, entschieden nach Begruendung statt Zeitstempel) gehoert als gemessener Fall in P-02 — so steht es im Blatt."
 claim_bau_a11: "plan-pruefer 10.08.: A-09 ABGENOMMEN, §3-Schlange frei — Generator-Station fuer A-11 (letzter Tor-Bau) mit frischer Instanz besetzt. Claim VOR dem Start."
 zaehlfrage_entschieden: "plan-pruefer 10.08.: A-11 zaehlt als AUFTRAG 1 DER GRUPPE 2. Begruendung: §13 zaehlt ab der ersten Vorlage beim Plan-Pruefer; Gruppe 1 ist mit zehn Auftraegen voll und ihre Prozesspruefung IST durchgefuehrt (850aafd5 + Anteile) — damit ist die §13-Schranke vor Auftrag elf bedient. Der ausstehende Zaehler-RESET (B3-Bedingung) betrifft die Mechanik des Zaehlers, nicht die Zugehoerigkeit: Auftraege zwischen Pruefung und B3-Bau duerfen nicht aus der Statistik fallen ('schlechte Plaene verschwinden nicht'). Bis B3 steht, wird Gruppe 2 von Hand gezaehlt — beginnend mit diesem Blatt."
 auflage_bereit: "EINE Auflage fuer den Bau (kein Restpunkt am Blatt): die CODE_FERTIG-Meldung MUSS die sofort blockierende TICKET_ROLLE-Pflicht als Mitteilung an ALLE Rollen in STATUS.md tragen (Variable, Form, Beispiel) — das Blatt benennt die Gefahr selbst: sonst laeuft die erste Rolle nach dem Bau in eine unerwartete Sperre."
-naechster_schritt: "Generator zieht A-11 NACH A-09 (§3, eine Schlange: A-10-Abnahme laeuft, dann A-09-Bau, dann A-11); IN_ARBEIT vor der ersten Scope-Aenderung"
+beginn_bau: "generator (frische Instanz) 10.08.: IN_ARBEIT VOR der ersten Scope-Aenderung (§3). §3 gewahrt: W-02/1 stand bereits IN_ARBEIT, als ich antreten sollte — ich habe GEWARTET, bis 58342f47 CODE_FERTIG setzte; jetzt ist A-11 das einzige IN_ARBEIT. Bau-Basis bc1470bc (scripts/ seit meiner Rot-Messung an 0fef1a56 unveraendert: diff 0 Zeilen). Rot-Lagen SELBST gemessen: Rollenpruefung im Tor 0 funktionale Treffer (2 grep-Treffer 'Rolle' sind Kommentare Z.93/Z.490); Wegwerf-Repo: ohne TICKET_ROLLE exit=0 und Commit lief (A-11-1 rot), mit TICKET_ROLLE=generator Betreff unveraendert ohne Praefix (A-11-2 rot); Suite 50/50 an der Basis. Zeilendrift: Botschaft-Annahme weiter Z.51, Commit-Aufruf jetzt Z.508 — Bauvorgabe gilt sinngemaess (Marke am Kopf, Commit-Aufruf und alles danach unangetastet). BEIFANG-OFFENLEGUNG: meine Tafelzeile (IN_ARBEIT) wurde waehrend meiner Vorbereitung vom parallelen STATUS-Commit 7f592b20 mitgenommen, BEVOR ich IN_ARBEIT wirklich gesetzt hatte — die Zeile stand damit frueher im Log als dieser Datensatz-Umschwung. Von mir gemessen und hier deklariert; W-02/1 (58342f47) und A-12-Einreihung haben die Zeile bereits als gueltig gelesen."
+naechster_schritt: "Generator baut in der Botschaft-Annahme-Zone; danach CODE_FERTIG mit Pruef-SHA und Mitteilung an ALLE Rollen (auflage_bereit)"
 ```
 ---
 
@@ -1144,13 +1147,15 @@ naechster_schritt: "Generator zieht A-11 NACH A-09 (§3, eine Schlange: A-10-Abn
 auftrag: "W-01/1"
 titel: "Die sieben Blaetter von W-01 aus dem VORHANDENEN fangKern.ts ableiten"
 datei: docs/auftraege/aktiv/W-01-fang-beschreiben.md
-zustand: BEREIT
-ballbesitz: generator (Einreihung siehe Vermerk)
+zustand: NACHBESSERN
+ballbesitz: generator (SPEC-Anteil W-01/1-6 beim planner)
 basis_sha: 32f83a6f
 prioritaet: P1
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte): JEDE Blatt-Behauptung selbst gemessen: Basis existiert · fangKern.ts exakt 276 Zeilen, 11 Exporte wie gelistet · toolRegistry traegt KEIN Fang-/Raster-/Snap-Werkzeug (der einzige grep-Treffer ist das Wort Anfang in einem Treppen-Hilfetext — die Messung des Planners hielt einer schaerferen Probe stand) · REGISTER fuehrt W-01 auf LEER und nennt fangKern.ts NIRGENDS (0 Treffer — der Beinahe-Doppelbau war real) · Rot-Lage zaehlbar bestaetigt: Platzhalter in 3-FORMELN.md (4) und 1-ZWECK.md (1). Das Blatt selbst ist vorbildlich: Anschluss- statt Bauauftrag nach gefahrener Anbindungsmessung, Stufentrennung (BESCHRIEBEN vor GEBAUT), A-10-Lehre als Pflichtfrage in 7-GRENZEN, must_preserve resources byte-identisch, Entdeckungssignal ist der erste Stufe-2-Bauversuch. EIN HINWEIS (kein Restpunkt): die REGISTER-Zeile erwartet auch F-004, die Kandidatenliste des Blatts nennt sie nicht — W-01/1-3 klaert das ohnehin AM CODE, der Bericht soll die Abweichung ausdruecklich aufloesen. ZUR FORM-QUELLE: W-07 dient nur als FORM-Muster; dessen inhaltlicher Befund (db1dc3b6: anderer Dachweg als die Insel) infiziert W-01 nicht."
 warteschlange_vermerk: "§3: derzeit ist KEIN Auftrag IN_ARBEIT (A-10 ist CODE_FERTIG, Abnahme laeuft als Pruefung parallel). Die EINREIHUNG der W-Reihe relativ zur Tor-Reihe (A-09 -> A-11) ist keine Plan-Pruefer-Entscheidung: das Blatt selbst legt sie Yama vor ('Yama entscheidet ueber die Freigabe der Gruppe'). Bis dahin gilt die bestehende Tor-Reihe; gibt Yama die W-Gruppe frei, darf W-01/1 als naechstes IN_ARBEIT (reine Doku, kuerzester Auftrag, keine Dateiberuehrung mit irgendwem)."
 naechster_schritt: "Yama: Freigabe der W-Gruppe und Einreihung (W-01/1 vor oder nach A-09/A-11). Danach zieht der Generator entsprechend §3."
+claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:2x: Abnahme W-01/1 GECLAIMT vor dem Pruefstand. Reihenfolge nach Rueckstand: W-01/1 zuerst (liegt seit 20:51), dann W-02/1. HINWEIS zur Auffindbarkeit: beide standen NUR in der Tafelzeile auf CODE_FERTIG/Evaluator, das Zustandsfeld sagte weiter BEREIT bzw. generator - ich lese ab jetzt BEIDE Orte und lasse den neueren Schreibvorgang gewinnen."
+evaluator_votum: "evaluator 10.08.: NACHBESSERN an 04f78b73, Klasse BEWEIS. Zwei P1 offen. W-01/1-3 verlangt Zeilennummern in fangKern.ts - gemessen 0 Treffer in allen sieben Blaettern, der Bericht setzt Funktionsnamen an ihre Stelle und nennt das gruen. W-01/1-8 verlangt Befehl MIT Ausgabe im IN_ARBEIT-Commit an beiden Orten - b41f9177 traegt Prosa, 0 Befehlszeilen, 0 Ausgabewerte; das Verfahren ist besser (Schranke im Skript), der Beleg fehlt trotzdem. ERFUELLT sind 1, 4, 5 und 7, jede Zahl selbst nachgezaehlt (fangKern.ts 276 Zeilen, 11 Exporte - beide stimmen), resources/** byte-identisch, Suite 1692/1692. Der SPEC-Anteil W-01/1-6 (1689 gegen 1692) gehoert dem Planner und ist von ihm in 7c3408e2 bereits anerkannt - nach §12.1 zuerst zu beheben. NICHT als Befund gefuehrt: das eine = in 3-FORMELN Z.17 ist das Zitat der Formelsammlung, ohne das die F-003-Abweichung unerklaerbar waere."
 ```
 ---
 
@@ -1164,6 +1169,7 @@ ballbesitz: generator (Warteschlange W-01/1 -> W-02/1)
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das vierte): Messungen EXAKT bestaetigt: wallGeometry 317 / wandFlaeche 238 / wandaufbau 72 / linienBauteile 167 Zeilen aufs Zeichen; die Ausschluesse sind belegt (wandaufbau traegt berechneUWert = Bauphysik, linienBauteile 10x Schneefang = Dachzubehoer) und W-02/1-6 zwingt sie namentlich ins Blatt — die Matrix-Selbstkorrektur des Planners ist der wertvollste Teil des Schnitts. Registry 'wand' vorhanden. Rot-Lage zaehlbar (meine Zaehlung 5, Blatt 8 — Muster-abhaengig, beide > 0, nicht tragend; der Bericht nennt sein Muster). HINWEIS wie bei W-01: die REGISTER-Zeile nennt F-030 aber nicht F-003, die Blatt-Kandidaten beides — W-02/1-3 klaert am Code, der Bericht loest die Abweichung ausdruecklich auf. REGISTER.md-Beruehrung mit W-01/1 durch Reihenfolge + §3 geloest."
 naechster_schritt: "Nach W-01/1 (Reihenfolge im Blatt); Einreihung der W-Gruppe insgesamt bei Yama"
+claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:2x: Abnahme W-02/1 GECLAIMT vor dem Pruefstand. Reihenfolge nach Rueckstand: W-01/1 zuerst (liegt seit 20:51), dann W-02/1. HINWEIS zur Auffindbarkeit: beide standen NUR in der Tafelzeile auf CODE_FERTIG/Evaluator, das Zustandsfeld sagte weiter BEREIT bzw. generator - ich lese ab jetzt BEIDE Orte und lasse den neueren Schreibvorgang gewinnen."
 ```
 ---
 
@@ -1179,6 +1185,22 @@ letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde): ENTWURF bleibt, EIN Mini-Res
 offene_akzeptanz:
   - "Mini-Rest: Zaehlweise der Zusagen-Abdeckung in W-13/1-7 und befund_bestand definieren und die Zahl daran nachmessen (meine Messung: 0 dedizierte / 3 erwaehnende Dateien)."
 naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruefer BEREIT; Reihenfolge W-01/1 -> W-02/1 -> W-13/1 bleibt"
+```
+---
+
+## BEREIT — A-12 (Messauftrag F-026; Einreihung bei Yama)
+
+```yaml
+auftrag: A-12
+titel: "Ein L-Grundriss mit F-026 rechnen, Ergebnis ansehen, Ampel gelb -> gruen oder rot"
+datei: docs/auftraege/aktiv/A-12-f026-ausfuehren.md
+zustand: BEREIT
+ballbesitz: generator (Einreihung bei Yama — entsperrt die Dachkonstruktion, unabhaengig von der W-Reihe)
+basis_sha: d1d716c8
+prioritaet: P1
+letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review): die Pruefbefehle des Blatts selbst gefahren — Ampel-Rot bestaetigt (F-026 traegt woertlich die Sperre Z.229/277 der FORMELSAMMLUNG), Fremdquelle EXAKT belegt (132374 Byte, 2173 Zeilen aufs Zeichen; :965 buildCompoundPitched-Signatur und :1137 die l/t-shape-Weiche woertlich verifiziert). Der Machbarkeitsbefund, der den Auftrag zweiteilt (Teil A triviale Arithmetik / Teil B klassengebunden mit 64 THREE.-Vorkommen), ist die wertvollste Zeile des Blatts — er verhindert den Zwei-Stunden-SPEC_BLOCKED, den 'eine Funktion aufrufen' produziert haette. Attrappen-Regel (nur AUFZEICHNEN, nichts rechnen — sonst messen wir die Attrappe) und Scheitern-ist-Ergebnis-Regel vorbildlich. Kein Kopieren des Fremdcodes, Wegwerf-Probe nach A-05-Disziplin, Ampel wird VORGESCHLAGEN nicht gesetzt (Generator schlaegt vor, Evaluator bestaetigt, Planner traegt ein)."
+zaehlfrage_entschieden: "plan-pruefer 10.08.: A-12 zaehlt in GRUPPE 2 (wie A-11 entschieden: erste Vorlage nach durchgefuehrter Prozesspruefung). Stand der Handzaehlung Gruppe 2 nach Erstvorlage: 1 A-11 · 2 W-01/1 · 3 W-02/1 · 4 W-13/1 · 5 A-12. Handzaehlung bis B3 steht (A-11 baut gerade B4; B3 bleibt offen)."
+naechster_schritt: "Yama reiht ein (A-12 vs. W-Reihe); danach zieht der Generator nach §3 (erst wenn kein Auftrag IN_ARBEIT — A-11 laeuft gerade)"
 ```
 ---
 
