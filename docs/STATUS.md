@@ -1929,3 +1929,48 @@ ballbesitz: planner
 begründet, und das ist es im einschlägigen Fall nicht — bleibt es stehen, bleibt eine Lücke
 derselben Form offen, die A-09 gerade schließt.* **Ob das die Mühe wert ist, entscheidet der
 Planner; er sollte es nur nicht in dem Glauben entscheiden, es ginge nicht.**
+
+---
+
+## Vertretungsentscheid (Release-Prüfer in Yamas Namen, 10.08.) — die drei Yama-Punkte
+
+**Yama hat die drei offenen Punkte ausdrücklich an die Vertretung übergeben** („kannst du diese
+aufgabe für mich übernehmen"). Ausgeführt, je mit Beleg:
+
+### 1. Realfund PID 48098 — BEENDET
+
+```text
+Vorab verifiziert:  ppid 1 · Start 05.08. 00:58 · php84 -S 127.0.0.1:65535 ·
+                    APP_ENV=testing · cwd ticket-a01/public   (= exakt der A-04-Realfund)
+kill 48098          -> Prozess beendet, ps -p leer. Kein kill -9 noetig.
+```
+*Der erste Fund des Bühnen-Wächters ist damit abgeräumt. Künftige verwaiste Bühnen findet
+`scripts/buehnen-waechter.sh` vor jeder Browserabnahme.*
+
+### 2. Freigabe der Gruppe — ERTEILT: Zehnergruppe 2 beginnt
+
+Voraussetzungen gemessen statt angenommen: die §13-Prozessprüfung-02 liegt vor
+(`PROZESSPRUEFUNG-02.md` + Anteile von Planner `8343f206`/`PROZESSPRUEFUNG-02-ANTEIL-PLANNER.md`,
+Evaluator `7408814f`/`1bba2e5b`, Plan-Prüfer `cba7c97c`; B3-Umsetzung `63ef4801`, B4 angenommen
+`229ad0be` und als A-11 geschnitten), der Plan-Prüfer hat gegengelesen und die Zählung entschieden
+(A-11 = Auftrag 1 der Gruppe 2, `1dee4771`). **Damit ist der Zähler-Reset frei; Gruppe 2 läuft.**
+*Die Zuordnung der ungezählten W-Blätter (W-01/W-02/W-13) bleibt ausdrücklich beim Plan-Prüfer —
+diese Freigabe greift ihr nicht vor.*
+
+### 3. W-12 und W-18 — Entscheid nach Messlage, ausdrücklich rückholbar
+
+```text
+W-12 (Ansicht/Kamera)    bleibt Klasse B, aber ZURUECKGEHALTEN wie bisher: der im Umlauf
+                         genannte "Einwand bei Yama" liegt NIRGENDS im Repo im Wortlaut.
+                         Ohne den Operanden wird nicht gebaut und nicht beerdigt (§5/§7).
+                         AUFLAGE: der Planner holt den Einwand-Wortlaut ein und heftet ihn
+                         ans kuenftige W-12-Blatt; erst dann DoR.
+W-18 (Pruefung Topologie) bleibt Klasse B (ANSCHLIESSEN): kein eigenes Modul, 'freigabe'
+                         beruehrt es. Erster Schritt ist eine MESSUNG (kein Bau) nach dem
+                         W-01-Muster — hinter der bestehenden Schlange W-01/1 -> W-02/1 ->
+                         W-13/1. Kein Produktcode, jederzeit rueckholbar.
+```
+
+**Nicht entschieden (bleibt bei Yama persönlich):** die Werkbank-Reichweitenfrage (TGA/PV —
+begrenzt oder unvollständig) und die Aufhebung des A-01-Nicht-Ziels (L/T/U-Dachkonstruktion) —
+beides Fach-/Produktentscheidungen, die die Vertretungsregel nicht deckt.
