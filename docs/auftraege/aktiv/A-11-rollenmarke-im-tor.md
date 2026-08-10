@@ -427,3 +427,97 @@ er geht ohne Praefix mit `TICKET_ROLLE=evaluator` ins Tor — die Marke am Betre
 
 **Gesamturteil: ABGENOMMEN.** Alle acht Kriterien selbst nachgemessen, jede Gegenprobe ueberstanden,
 keine offene P0/P1-Abweichung, Bestand 50/50 unversehrt im 61/61-Lauf. Ball beim Release-Pruefer (§10).
+
+---
+
+## Release-Pruefung A-11 (§10) — 10.08.2026, frische Instanz
+
+```yaml
+auftrag: A-11
+abnahme_commit: efe38d1d      # Evaluator-Votum ABGENOMMEN, Fehlerklasse KEINE
+release_commit: 28760966      # Pruef-SHA; Bau b0f4c444, Tor am HEAD byte-identisch (md5 e5fece559500d5c90869cf6c2ada40da)
+votum: RELEASE_FREI
+ci: pass                      # Suite selbst am HEAD: 61/61 · bash -n exit 0 · node --check exit 0
+artefakte_reproduzierbar: true # kein Build-Artefakt; das Artefakt IST das Skript, HEAD = Bau (diff 0)
+migration: nicht_anwendbar    # reine Skript-/Testaenderung, kein Datenpfad, kein Schema
+rueckweg: pass                # git show b0f4c444 | git apply --check -R exit 0; siehe Wuerdigung unten
+smoke_test_plan: "Realtest am lebenden Tor: die beiden Abschluss-Commits dieser Pruefung gehen OHNE Praefix mit TICKET_ROLLE=release-pruefer ins Tor und muessen markiert herauskommen; Dauerkontrolle git log --format='%s' b0f4c444.. | grep -cvE '^[a-z][a-z-]*(-[0-9]+)?: ' muss 0 bleiben"
+befunde: []
+```
+
+### Alles selbst gemessen, Rohausgaben
+
+**Kette** — sechsmal `git merge-base --is-ancestor`, je exit 0 (HEAD bei Beginn `5823ada0`):
+
+```text
+1dee4771 (BEREIT)      -> ffd06c1a (IN_ARBEIT)   exit=0
+ffd06c1a (IN_ARBEIT)   -> b0f4c444 (Bau)         exit=0
+b0f4c444 (Bau)         -> 28760966 (Pruef-SHA)   exit=0
+28760966 (Pruef-SHA)   -> 63c83a53 (CODE_FERTIG) exit=0
+63c83a53 (CODE_FERTIG) -> efe38d1d (ABGENOMMEN)  exit=0
+efe38d1d (ABGENOMMEN)  -> HEAD 5823ada0          exit=0
+```
+
+**Qualitaetstore am HEAD, selbst gefahren:**
+
+```text
+node --test scripts/__tests__/commitPruefen.test.mjs   tests 61 / pass 61 / fail 0
+bash -n scripts/commit-pruefen.sh                      exit 0
+node --check scripts/__tests__/commitPruefen.test.mjs  exit 0
+```
+
+**Release-Diff nur Freigegebenes** — Drift seit Bau und Scope:
+
+```text
+git log --oneline b0f4c444..HEAD -- scripts/           0 Commits (11 Commits seit Bau, keiner an scripts/)
+git diff b0f4c444 HEAD -- scripts/commit-pruefen.sh    0 Zeilen
+md5 scripts/commit-pruefen.sh                          e5fece559500d5c90869cf6c2ada40da (= Bau-Stand)
+git show b0f4c444 --stat                               exakt 2 Dateien, 165 insertions(+), 0 deletions
+git show b0f4c444 -- scripts/commit-pruefen.sh         EIN Hunk: @@ -49,6 +49,41 @@ — direkt nach
+                                                       `BOTSCHAFT="$1"; shift` (Z.51), also an der
+                                                       Botschaft-Annahme; Commit-Aufruf und
+                                                       A-07/A-08/A-09-Zonen unangetastet
+```
+
+**Rueckweg, geprueft und gewuerdigt:**
+
+```text
+git show b0f4c444 | git apply --check -R               exit 0 — Commit sauber zurueckdrehbar
+```
+
+Die Blatt-Aussage haelt und verdient die Wuerdigung: der Rueckweg ist hier sogar **ohne Revert eine
+Zuweisung** — `TICKET_ROLLE` setzen genuegt, um die Sperre im Notfall zu ueberbruecken. Der Rueckweg
+ist damit doppelt vorhanden (Zuweisung sofort, Revert vollstaendig), kein Datenpfad, keine Migration.
+
+**Entdeckungs-grep als Dauerkontrolle:**
+
+```text
+git log --format='%s' b0f4c444.. | grep -cvE '^[a-z][a-z-]*(-[0-9]+)?: '   0   (11 Commits, alle markiert)
+```
+
+**Mitteilungs-Pflicht (Auflage aus dem BEREIT-Votum):** Die Mitteilung an alle Rollen steht als
+eigener Abschnitt direkt unter der Tafel (`docs/STATUS.md` Z.24 ff.) und nennt **Variable**
+(`TICKET_ROLLE`), **Form** (`^[a-z][a-z-]*(-[0-9]+)?$`) und **Beispiel**
+(`TICKET_ROLLE=evaluator bash scripts/commit-pruefen.sh "Botschaft" pfad`) — per grep bestaetigt.
+
+**Realtest:** Die ehrliche Grenze des Evaluators gilt fort — rueckwirkend ist die Marke an
+`b0f4c444` nicht beweisbar. Der lebende Beweis setzt sich fort: die Abschluss-Commits DIESER
+Pruefung (dieses Blatt und der STATUS-Vermerk) gehen ohne Praefix mit `TICKET_ROLLE=release-pruefer`
+ins Tor; die Marke `release-pruefer: ` am Betreff stammt vom Tor. Ergebnis im STATUS-Vermerk.
+
+### Die zwei Evaluator-Randnotizen — ins Protokoll uebernommen (kein P0/P1)
+
+1. **Form-echte Nicht-Rollen-Praefixe** (`docs: `, `fix: `, `test: ` — Zensus der Historie: 129x/1x/2x)
+   fallen kuenftig bei anderer `TICKET_ROLLE` als **WIDERSPRUCH**. Richtung Blockade, sichtbar, durch
+   Umformulieren behebbar — kein stilles Loch. **Offene Planner-Entscheidung:** ob solche Praefixe
+   zulaessige Marken werden sollen oder verboten bleiben.
+2. **Trimm-Unschaerfe des Entdeckungs-greps:** eine fuehrend-eingerueckte, korrekt markierte Zeile
+   (`  evaluator: …`) wird byte-identisch verbucht und zaehlt im grep als unmarkiert —
+   **Fehlalarm-Richtung** (grep > 0 ohne echte Umgehung), kein stilles Loch. Dokumentierte
+   Unschaerfe der Dauerkontrolle, kein Handlungsbedarf vor Release.
+
+**Urteil: RELEASE_FREI an `28760966`.** Kette geschlossen, Tore am HEAD selbst gruen gefahren,
+Release-Diff enthaelt ausschliesslich den freigegebenen Bau, Rueckweg doppelt belegt, keine offenen
+P0/P1-Befunde. Nach v1.2-Vertretung folgt der Sicherungs-Push (`git push fork
+auto/hausplaner-integration`); das Ergebnis wird im STATUS-Datensatz verbucht. **Ball bei Yama:
+main-Veroeffentlichung.**
