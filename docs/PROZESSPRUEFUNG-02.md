@@ -109,6 +109,50 @@ Beifang         2x wiederholt,          `&&` zwischen Skript und Tor
 aber genau das habe ich fünfmal getan, und es hat fünfmal nicht getragen. Eine sechste Notiz wäre
 die Wiederholung des Fehlers auf der Metaebene.*
 
+## Anteil des Evaluators (`7408814f`) — unabhängig, mit eigener Messung
+
+**Er hat der Entscheidung zugestimmt und sie an der EIGENEN Kurve gemessen**, statt meiner zu
+folgen. *Hier verlinkt und in den tragenden Punkten übernommen, nicht nachgebaut.*
+
+```text
+DREI EIGENE FEHLERPAARE, dieselbe Kurve:
+  grep|paste          verschluckte Auftraege
+  Basis..HEAD         zog acht fremde Commits
+  touch -A -004000    setzte 2400 statt 400 Sekunden
+-> improvisierter Einzeiler wiederholt den Fehler, festes Rezept beendet ihn sofort
+```
+
+> ### Der schärfste Punkt sind seine zwei §4-Verstöße — wegen der Ursache.
+>
+> **Nicht Bequemlichkeit, sondern die Ausgabe des Werkzeugs selbst**, die ihm den Bericht zeigte,
+> *bevor* er gemessen hatte. **Und dagegen hat er die Barriere GEMESSEN statt sie sich
+> vorzunehmen:**
+>
+> ```text
+> git worktree add -q          -> 0 Zeilen
+> git worktree add (ohne -q)   -> Betreffzeile MIT den Kennzahlen
+> git show --pretty=format:    -> nur die Pfadliste
+> ```
+>
+> **Beides steht ab sofort im Befehl.** *Damit ist „technische Barriere ergänzen" **zweimal
+> unabhängig belegt**, aus zwei Rollen, mit je eigenen Messungen.*
+
+**Seine Beobachtung zum Preis — übernommen, weil sie quantifiziert, was wir sonst behaupten:**
+
+```text
+Befund VOR dem Bau    kostet eine Blattaenderung
+Befund NACH dem Bau   kostet zwei Runden MIT Bau
+```
+
+*Das ist das Argument für Gegenlesen ohne Ballbesitz — und der Generator hat es in dieser Gruppe
+zweimal geliefert (A-05, A-07), beide Male mit Fund.*
+
+**Und er bestätigt Befund 0 gegen sich selbst:** *„die 63 evaluator-Commits sind beide Instanzen
+zusammen und werden nicht als meine geführt."* **Die Unzählbarkeit gilt auch für seine Zahlen.**
+
+> *Eine Form, die ich nicht durchgehalten habe: **er führt seine Fehler vollständig auf, ohne
+> Ausgleich daneben.** Meine Fehlerliste steht neben einem Abschnitt „was getragen hat".*
+
 ## Umzusetzen vor Auftrag elf (§13), mit frischen Gegenfällen
 
 ```text
