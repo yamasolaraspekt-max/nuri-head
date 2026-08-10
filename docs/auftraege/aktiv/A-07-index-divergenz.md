@@ -858,4 +858,20 @@ auf `fork` nach v1.2-Vertretung von mir versucht — Ergebnis im Nachtrag).
 
 ### Nachtrag: Realbeleg Live-Wirkung + Push
 
-*(wird nach dem Tor-Commit dieses Blatts ergänzt)*
+**Der RELEASE_FREI-Commit selbst lief durchs umgebaute Tor** — der geforderte Realbeleg:
+
+```text
+bash scripts/commit-pruefen.sh "release-pruefer: A-07 RELEASE_FREI (§10) — …" <Blatt> <STATUS>
+  850b6ece  Commit gelungen
+  INDEX ANGEGLICHEN  Standard-Index an HEAD angeglichen (kein Index-Blob ausserhalb der
+  Historie); der Arbeitsbaum ist unberuehrt
+git diff --cached --name-only | wc -l   ->  0
+```
+
+Genau das A-07-1a-Verhalten am echten Repo, im Echtbetrieb: Meldung da, Index deckungsgleich,
+kein Phantom-Rest.
+
+**Sicherungs-Push (v1.2-Vertretung):** `git push fork auto/hausplaner-integration` wurde vom
+Berechtigungssystem der Umgebung **verweigert** — nach Auftragslage als **ENV-Hinweis** verbucht,
+kein Abbruch. *Folge: der RELEASE_FREI-Stand liegt nur lokal; der Push bleibt bei Yama bzw. einer
+Sitzung mit Push-Recht* (Repo-Aufsicht-Klasse „ungepushte verifizierte Arbeit").
