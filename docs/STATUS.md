@@ -9,7 +9,7 @@
 | **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-04** Bühnen-Wächter | **`ABGENOMMEN`** | **Release-Prüfer** | `c3d52f09` · Votum `b6a63e3e` | Fehlerklasse **KEINE** · 7/7+7/7 selbst · Zwei-Richtungs-Probe an `89f373d9` · **Realfund PID 48098** erkannt und nicht angefasst |
+| **A-04** Bühnen-Wächter | **`RELEASE_FREI`** | **Yama** | `c3d52f09` · Votum `b6a63e3e` · §10 im Blatt | Fehlerklasse **KEINE** · §10 alle Punkte grün (Kette per is-ancestor, 7/7+7/7 am HEAD selbst, Revert-Probe sauber) · **Realfund PID 48098** läuft weiter — Beenden entscheidet Yama |
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | **`BEREIT`** | **Generator** | `184c6c61` (5. Runde) | **baubar — A-04 ist nicht mehr `IN_ARBEIT`** (§3) · Warteschlange `A-07 → A-09 → A-11` |
@@ -704,14 +704,14 @@ naechster_schritt: "ERLEDIGT: A-04 ist geschnitten (0722d4f5) und in Planpruefun
 
 ---
 
-## Abgenommen — A-04
+## Release-frei — A-04
 
 ```yaml
 auftrag: A-04
 titel: "Buehnen-Waechter: erkennt eine laufende Buehne auf einer Nicht-Testdatenbank, egal wie sie gestartet wurde"
 datei: docs/auftraege/aktiv/A-04-buehnen-waechter.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama
 basis_sha: 89f373d9
 pruef_sha: c3d52f09
 code_fertig: "generator 10.08.: Bau c3d52f09 (exakt 4 Dateien: buehnen-waechter.sh NEU 149 Z., buehnenWaechter.test.mjs NEU 7 Zusagen, browserBuehne.test.mjs +B3-Zusage (6->7), ANKER-BROWSER.md +1 Absatz A-04-6) — §11-Bericht im Blatt. Kern: Zustand messen statt Aufrufform (ps-Schnappschuss VOR der Auswertung, ps eww je Kandidat, lsof-cwd nur bei APP_ENV, .env.<APP_ENV> ja / nackte .env NIE); exakte Gleichheit ticket_testing (bewusste Duplikation, Drift-Zusage); Nicht-Ziele gehalten (startet nichts, beendet nichts — browser-buehne.sh unberuehrt, content-identisch HEAD). Suiten SELBST gefahren: buehnenWaechter 7/7 + browserBuehne 7/7 (Basis 6/6). A-04-5: SECHS Mutationen einzeln, jede rot (3/1/2/1/3/1 Zusagen), md5-identische Wiederherstellung belegt. KEINE echte Buehne im Test: artisan-Stub schlaeft, php -S dient leeres Wegwerf-Verzeichnis mit eigener .env (Rest 2); Positivfall traegt ticket_testing nur als Zeichenkette, verbunden wird nichts. ERSTE ECHTE MESSUNG: verwaiste Buehne PID 48098 (05.08., ppid 1, php84, Herd-Pfad mit Leerzeichen) gefunden und als ticket_testing/OK aufgeloest — gemeldet, nicht angefasst. CODE_FERTIG heisst: gebaut und eigengeprueft — kein gruen, keine Abnahme. Fuer den Evaluator (Erstnutzer nach Blatt): bash scripts/buehnen-waechter.sh vor jeder Browserabnahme, Aufruf samt Ausgabe in den Abnahmebericht."
@@ -729,7 +729,8 @@ votum_3_runde: "plan-pruefer 08.08. (3. Runde nach f3faf111): ENTWURF bleibt, de
 votum_bereit: "plan-pruefer 08.08. (4. Runde nach 534ec48e): BEREIT — B2 ist aufgeloest und SELBST verifiziert: Blatt traegt 'GESCHLOSSEN 08.08.' mit der eingetretenen Bedingung, der Anker sagt jetzt Z.92 f. 'Der Riegel steht (A-03) … nicht mehr die einzige Sicherung' — beide Selbstwidersprueche weg. Damit sind alle Reste aus vier Runden zu: Drift-Zusage, Fixture-Weg mit Wegwerf-.env, §5-Block, Wiederverwendung zeilengenau, Merge verifiziert. KONFLIKTPRUEFUNG AKTUALISIERT: A-04 beruehrt browser-buehne.sh, einen NEUEN buehnen-waechter.sh und browserBuehne.test.mjs — KEINE Beruehrung mit dem Tor-Strang (commit-pruefen.sh/commitPruefen.test.mjs von A-07/A-09); darf PARALLEL bauen."
 claim_bau: "plan-pruefer 08.08.: BEREIT gesetzt, Generator-Station fuer A-04 mit frischer Instanz besetzt (parallel zum Tor-Strang zulaessig). Claim VOR dem Start."
 env_hinweis_bau: "plan-pruefer 10.08.: A-04-Bau ENV-GEHEMMT — VIER Generator-Laeufe (zwei Instanzen, je zwei Anlaeufe, zuletzt mit kompaktem Lese-Auftrag) sind saemtlich in der Lesephase gestallt (600s ohne Fortschritt), jedes Mal OHNE Spuren (nachgemessen: kein buehnen-waechter.sh, kein IN_ARBEIT, STATUS content-gleich HEAD). Dazu seit 9c63da13 ZWEI TAGE lang keinerlei Commits irgendeiner Rolle — das ist eine Umgebungslage, keine Auftrags- oder Instanzschwaeche. A-04 bleibt BEREIT mit Claim; naechster Bauversuch, sobald die Umgebung wieder traegt (Signal: irgendein fremder Commit laeuft wieder durch) oder Yama eine eigene Instanz ansetzt. Das Blatt selbst ist unveraendert baubar."
-naechster_schritt: "Release-Pruefer faehrt §10 auf c3d52f09 (Abnahme-Commit = Evaluator-Votum im Blatt); Erstnutzer-Regel ab sofort: bash scripts/buehnen-waechter.sh vor jeder Browserabnahme, Aufruf+Ausgabe in den Bericht; Realfund PID 48098 (Beenden ja/nein) liegt bei Yama"
+release_vermerk: "release-pruefer 10.08. (frische Instanz): RELEASE_FREI an c3d52f09 — §10-Abschnitt mit allen Rohbelegen im Blatt. SELBST GEMESSEN an HEAD 6ebf236d: Kette d58b220e -> 17984c82 -> c3d52f09 -> 8fb99a30 -> b6a63e3e -> HEAD, jeder Uebergang merge-base --is-ancestor Exit 0; IN_ARBEIT beruehrte nur STATUS.md, zwischen IN_ARBEIT und Bau kein fremder Scope-Commit. Beide Suiten am HEAD 7/7 + 7/7 selbst; alle vier Scope-Dateien content-identisch zu c3d52f09 (je diff 0) und seit dem Bau von keinem Commit beruehrt (log c3d52f09..HEAD leer) — der parallele A-07-Tor-Bau kreuzt den Scope nicht. Scope exakt 4 Dateien, 364(+)/0(-); Anker (A-04-6/P1) und browserBuehne (B3-Auflage) selbst als kriteriengedeckt gewuerdigt. Rueckweg zerstoerungsfrei belegt: Rueckdiff via git apply --reverse --check sauber, rein additiv, kein Datenpfad, migration nicht_anwendbar. §15: 0 DB-Treffer im Testcode, ticket_testing nur Zeichenkette. Keine offenen P0/P1. OFFEN AN YAMA: Veroeffentlichung genehmigen (§10) + Realfund PID 48098 (laeuft weiter, 10.08. erneut per ps belegt) beenden ja/nein. Sicherungs-Push fork nach v1.2-Vertretung: Ergebnis unten."
+naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098; Erstnutzer-Regel gilt ab sofort: bash scripts/buehnen-waechter.sh vor jeder Browserabnahme, Aufruf+Ausgabe in den Bericht"
 ```
 
 ---

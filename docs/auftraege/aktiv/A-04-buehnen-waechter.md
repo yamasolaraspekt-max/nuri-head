@@ -456,3 +456,59 @@ Nicht-Ziele gehalten (startet nichts, beendet nichts, `browser-buehne.sh` conten
 Basis — selbst gediffed). Ball: **Release-Prüfer**. Randnotiz an den Planner (nicht blockierend):
 der Index-Zustand des Arbeitsbaums (neue Dateien als „D"+„??") ist die A-07-Phänomen-Klasse und
 gehört in dessen Befundsammlung.
+
+## Release-Prüfung A-04 (§10) — 10.08.2026
+
+```yaml
+auftrag: A-04
+abnahme_commit: c3d52f09
+release_commit: c3d52f09
+votum: RELEASE_FREI
+ci: pass                      # beide Suiten am HEAD 6ebf236d selbst gefahren
+artefakte_reproduzierbar: true
+migration: nicht_anwendbar    # kein Datenpfad, kein Schema
+rueckweg: pass                # rein additiv, Rückdiff sauber angewendet (--check)
+smoke_test_plan: "Erstnutzung nach Anker: bash scripts/buehnen-waechter.sh VOR der nächsten
+  Browserabnahme, Aufruf samt Ausgabe in den Abnahmebericht"
+befunde:
+  - "OFFEN AN YAMA (kein Blocker): Realfund PID 48098 läuft weiter — verwaiste Bühne seit
+    05.08. 00:58, ppid 1, php84 -S 127.0.0.1:65535 …server.php; löst als ticket_testing/OK
+    auf. Beenden ja/nein entscheidet Yama (Nicht-Ziel 3), heute 10.08. erneut per ps belegt."
+  - "ENV-NOTIZ P3: die A-07-Index-Phantome (neue Scope-Dateien als D+?? zugleich) bestehen
+    fort — content-diff aller vier Scope-Dateien gegen c3d52f09 je 0, deshalb kein Blocker."
+```
+
+**Je Prüfpunkt der Beleg (alles selbst gemessen, HEAD `6ebf236d`):**
+
+1. **Kette** — jeder Übergang per `git merge-base --is-ancestor`, Exit je 0:
+   `d58b220e` (BEREIT) → `17984c82` (IN_ARBEIT) → `c3d52f09` (Bau) → `8fb99a30`
+   (CODE_FERTIG) → `b6a63e3e` (ABGENOMMEN) → HEAD. IN_ARBEIT stand **vor** der ersten
+   Scope-Änderung: `git show 17984c82 --stat` = nur `docs/STATUS.md`; zwischen `17984c82`
+   und `c3d52f09` liegen vier fremde Doku-Commits, keiner berührt den Scope.
+2. **Votum = Kandidat** — Evaluator-Votum im Blatt und `letztes_votum` in STATUS zeigen beide
+   auf `c3d52f09`; das ist der Release-Kandidat, `b6a63e3e` ist Vorfahr von HEAD.
+3. **Tore am Kandidaten grün** — beide Suiten am HEAD selbst gefahren:
+   `node --test scripts/__tests__/buehnenWaechter.test.mjs` → `tests 7 · pass 7 · fail 0`;
+   `node --test scripts/__tests__/browserBuehne.test.mjs` → `tests 7 · pass 7 · fail 0`.
+   Alle vier Scope-Dateien am HEAD content-identisch zu `c3d52f09`
+   (je `git show c3d52f09:<pfad> | diff -q - <pfad>` = 0); `git log c3d52f09..HEAD --
+   <4 Scope-Pfade>` = leer — der A-07-Parallel-Bau (Tor-Strang) hat den Scope nicht berührt.
+4. **Scope-Reinheit** — `git show c3d52f09 --stat` = **exakt 4 Dateien, 364(+)/0(−)**.
+   Anker-Abweichung selbst gewürdigt: der Scope-Block (Z.56 f.) nennt nur die zwei Skripte,
+   aber A-04-6 (P1, Blatt Z.167) **verlangt** `ANKER-BROWSER.md` und die B3-Auflage (Blatt
+   Z.228/252) **verlangt** `browserBuehne.test.mjs` — alle vier Dateien kriteriengedeckt,
+   offen deklariert (§11-Abweichungsblock), kein Befund.
+5. **Rückweg** — Diff ist rein additiv (numstat 7/11/197/149 Einfügungen, 0 Löschungen),
+   nur Skript + Tests + ein Doku-Absatz, kein Datenpfad, keine Migration. Zerstörungsfrei
+   geprüft: `git diff c3d52f09^ c3d52f09 | git apply --reverse --check` = sauber —
+   `git revert c3d52f09` genügt als Rückweg.
+6. **§15** — Testcode selbst gegriffen: `grep -E 'mysql|PDO|DB_HOST|createConnection|3306|3307'`
+   über beide Suiten = **0 Treffer**; `ticket_testing` kommt nur als Zeichenkette in
+   Prozess-Env/Wegwerf-`.env.testing` vor (Fixture-Weg Rest 2). Wächter-Code ohne
+   `kill/rm/mv/mysql` (Kommentare raus, 0 Treffer) — beendet nichts, verbindet nichts.
+7. **Offene P0/P1** — keine: Fehlerklasse KEINE, einziger Evaluator-Restpunkt ist die
+   P3/UMGEBUNG-Randnotiz (A-07-Klasse); der Realfund ist eine Betriebsentscheidung, kein
+   Befund am Auftrag.
+
+**Urteil: `RELEASE_FREI`.** Veröffentlichung genehmigt Yama (§10); nach v1.2-Vertretung folgt
+ein Sicherungs-Push (`git push fork auto/hausplaner-integration`) — Ergebnis im STATUS-Vermerk.
