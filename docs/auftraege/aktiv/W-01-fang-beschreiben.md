@@ -251,3 +251,54 @@ prioritaet: P1
 warteschlange: "nach A-10; W-01/1 vor W-01/2 vor W-02/1"
 naechster_schritt: "Plan-Pruefer prueft DoR. Yama entscheidet ueber die Freigabe der Gruppe."
 ```
+
+---
+
+## §11 — Generator-Bericht
+
+```yaml
+auftrag: "W-01/1"
+basis: 32f83a6f
+commit: 04f78b73
+scope:
+  - docs/rollenkette/werkbank/02-WERKZEUGE/W-01-raster-und-fang/1-ZWECK.md
+  - docs/rollenkette/werkbank/02-WERKZEUGE/W-01-raster-und-fang/2-FUNKTION.md
+  - docs/rollenkette/werkbank/02-WERKZEUGE/W-01-raster-und-fang/3-FORMELN.md
+  - docs/rollenkette/werkbank/02-WERKZEUGE/W-01-raster-und-fang/4-BEDIENUNG.md
+  - docs/rollenkette/werkbank/02-WERKZEUGE/W-01-raster-und-fang/5-CODE/LIESMICH.md
+  - docs/rollenkette/werkbank/02-WERKZEUGE/W-01-raster-und-fang/6-PRUEFUNG.md
+  - docs/rollenkette/werkbank/02-WERKZEUGE/W-01-raster-und-fang/7-GRENZEN.md
+  - docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md
+tests:
+  statisch: nicht_anwendbar
+  unit: "1692/1692"          # Insel-Suite, W-01/1-6 must_preserve
+  backend: nicht_anwendbar
+  schema: nicht_anwendbar
+  build: nicht_anwendbar
+  browser: nicht_anwendbar
+abweichungen:
+  - "F-003 wird OHNE die [0,1]-Begrenzung gerechnet (0 Treffer Math.max/min/clamp
+     in lotAufGerade). Absicht: achse und verlaengerung sind eigene Fangarten."
+  - "F-041-Rangfolge != Code: kein Schnittpunkt, dafuer ortho, mittelpunkt vor achse."
+  - "EIGENER MESSFEHLER: §7-Rot-Messung meldete 4 Platzhalter, richtig waren 26 in
+     sechs Blaettern - Muster traf die <...>-Klammern nicht. Vor dem Bau korrigiert."
+offene_akzeptanz:
+  - "REGISTER fuehrt fuer W-01 auch F-004 (Schnittpunkt). Die Art existiert im Code
+     NICHT. Aendern waere Scope-Erweiterung (§7) - gemeldet, nicht korrigiert."
+```
+
+### Kriterienstand, je Kriterium gemessen
+
+```text
+W-01/1-1  kein Platzhalter        GRUEN   0 in allen sieben (die zwei "<" sind
+                                          `laenge2 < 1e-9`, Mathematik)
+W-01/1-2  nur F-Nummern           GRUEN   keine ausgeschriebene Formel in 3-FORMELN
+W-01/1-3  F-Nummern im Code belegt GRUEN  F-001 Toleranzvergleich · F-003 lotAufGerade
+                                          F-040 raster · F-041 Rangfolge
+W-01/1-4  7-GRENZEN beantwortet    GRUEN   sechs Zeilen "was NICHT", je mit Grund
+W-01/1-5  5-CODE nennt die Herkunft GRUEN  "Angebunden an …/fangKern.ts"
+W-01/1-6  must_preserve            GRUEN   1692/1692, resources/** 0 Aenderungen
+W-01/1-7  Register                 GRUEN   BESCHRIEBEN + fangKern.ts als Fundstelle
+```
+
+**Ich nehme nichts ab.** *Der Ball geht an den Evaluator.*

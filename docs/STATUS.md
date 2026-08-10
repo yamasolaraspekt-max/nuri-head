@@ -16,7 +16,7 @@
 | **A-09** Repo-Bezug über `--git-dir` | **`CODE_FERTIG`** | **Evaluator** | Bau `12ca3798` · §11-Bericht `af8f2054` | Suite 42/42→50/50 · 5 Neu-Zusagen an der Basis rot · 6 Mutationen gefangen · A-09-4 war durch `48ca0099` bereits erfüllt (deklariert) |
 | **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
-| **W-01** Raster und Fang | **`IN_ARBEIT`** | **Generator** | `fd556f34` · Basis `32f83a6f` | §7-Vorprüfung 6/6 · §3-Schranke im selben Skript geprüft (0 laufend) |
+| **W-01** Raster und Fang | **`CODE_FERTIG`** | **Evaluator** | `04f78b73` · Basis `32f83a6f` | sieben Blätter aus `fangKern.ts` abgeleitet · 1692/1692 · `resources/**` byte-identisch · 3 Abweichungen und 1 offener Befund im Bericht |
 | **W-02** Wand zeichnen | **`BEREIT`** | **Generator** | `debf3fbe` (1. Review) | Werkbank-Schiene · Zeilenzahlen aufs Zeichen belegt |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
