@@ -190,7 +190,7 @@ dass die Trennung in den Daten liegt (`TUER_TYPEN` gegen `FENSTER_TYPEN`), nicht
 **W-04/1-9 (P1, Register mitgeführt):** Reifegrad **und** beide Katalog-Module als Fundstelle.
 
 **W-04/1-10 (P1, §3 wird BELEGT):** Befehl mit Ausgabe für „kein anderer Auftrag auf `IN_ARBEIT`",
-an beiden Orten, im selben Commit. *Wortgleich zu `W-01/1-8`.*
+an beiden Orten, im selben Commit. **Zählbare Form (E2 aus Prüfung 03): mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer.** *Wortgleich zu `W-01/1-8`.*
 
 ## Kantenliste
 

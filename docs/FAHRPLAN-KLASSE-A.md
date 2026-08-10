@@ -33,12 +33,13 @@ behoben). *Klasse A umfasst zehn Werkzeuge; sieben sind hier offen.*
 ## Die drei Runden
 
 ```text
-RUNDE 1 — die drei mit Registry und wenig Umfang
-  W-08  Dachflaeche messen    286 Z · Registry da · 2 Module
-  W-04  Oeffnung Tuer/Fenster 277 Z · ZWEI Registry-Werkzeuge (fenster, tuer)
+RUNDE 1 — KORRIGIERT 10.08.: zwei Werkzeuge, nicht drei
+  W-04  Oeffnung Tuer/Fenster 124 Z · ZWEI Registry-Werkzeuge (fenster, tuer)
   W-11  Mass und Bemassung    395 Z · Registry da · 3 Module
-  -> zusammen 958 Zeilen. Alle drei haben ein bedienbares Werkzeug, alle drei
-     haben dedizierte Zusagen. Der einfachste Fall: beschreiben, verlinken, fertig.
+  + W-13 nachziehen (steht auf ENTWURF, DoR-Rest behoben)
+  -> zwei Fundamentwerkzeuge ohne Dachbezug, plus ein Stufe-2-Werkzeug.
+
+  W-08 IST AUS RUNDE 1 ENTFERNT — es gehoert hinter A-12, zu W-07.
 
 RUNDE 2 — die drei OHNE Registry-Werkzeug
   W-05  Raum erkennen         371 Z · keine Registry · laeuft roomDetection automatisch?
@@ -61,6 +62,26 @@ RUNDE 3 — der Sonderfall
        (c) 5-CODE muss auf die NEUN Dach-Module zeigen, heute nennt das Register drei
   -> W-07 ist damit KEIN Klasse-A-Blatt wie die anderen, sondern der Anschluss
      an die Dachkonstruktion. Es gehoert HINTER A-12, nicht in Runde 1 oder 2.
+
+  W-08  Dachflaeche messen     48 Z · Registry da · 1 Modul
+  -> NACHGETRAGEN 10.08.: gehoert HIERHER, nicht in Runde 1. Ich hatte die
+     Einsicht bei W-07 und nicht bis zum Nachbarn gezogen.
+     ZWEI GRUENDE, beide am Register und am Code gemessen:
+       1  Das Register fuehrt W-08 als "braucht W-07". Dieselbe Begruendung, die
+          W-07 hinter A-12 stellt, trifft W-08: sein Fundament ist ungeklaert.
+       2  Von W-08s drei Register-Formeln sind ZWEI nicht belegbar:
+            F-011  Shoelace                        implementiert ✓
+            F-023  A/cos(alpha)                    nicht implementiert (Alternative)
+            F-024  Azimut aus Normalenvektor       nur die WAND-Variante existiert
+                   (azimutDerNormalen nimmt start/end/seite = 2D-Wandnormale;
+                    F-024 verlangt n=(nx,ny,nz) = 3D-Flaechennormale). Die
+                    Konvention stimmt (atan2(nx,ny), 0=Nord), aber die
+                    Dachflaechen-Fassung ist nicht gebaut — und mit ihr fehlt
+                    ihr Grenzfall "Flachdach -> keine Ausrichtung".
+     Dachflaechen gehen in die Ertragsrechnung. Ein Blatt, das Flaechen
+     beschreibt, deren Bezugsrichtung nicht belegbar ist, ist so verfrueht wie W-07.
+     Das BLATT W-08/1 bleibt geschnitten und gueltig (b6078b2a) — nur seine
+     Einreihung aendert sich.
 ```
 
 ## Was „fertig" für Klasse A heißt — damit es nicht hingezogen wird
@@ -113,6 +134,6 @@ Klasse A fertig  die zehn Werkzeuge stehen im Register als BESCHRIEBEN, jedes mi
 ```yaml
 naechster_schritt: "Runde 1 schneiden: W-08, W-04, W-11 — knapp, mit Verweis auf W-01/W-02"
 w07_gehoert: "hinter A-12 (Dachweg-Frage), nicht in Klasse A wie die anderen"
-abschluss_messbar_an: "grep -c 'BESCHRIEBEN' REGISTER.md — heute 1, Ziel 10"
+abschluss_messbar_an: "grep -cE '^\\| W-[0-9]+ .*BESCHRIEBEN' REGISTER.md — heute 3, Ziel 10"
 nicht_blockiert_durch: "die Werkzeug-oder-Schicht-Vorlage — W-01 wurde ohne sie fertig"
 ```

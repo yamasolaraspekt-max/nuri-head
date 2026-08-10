@@ -186,7 +186,7 @@ eine Falle laufen — und eine Zahl ohne Messweise ist keine Zahl.*
 schon im Repo existiert".
 
 **W-13/1-10 (P1, §3 wird BELEGT, nicht behauptet — NEU 10.08.):** Der `IN_ARBEIT`-Commit enthält den
-**Befehl mit Ausgabe** für „kein anderer Auftrag steht auf `IN_ARBEIT`", **an beiden Orten geprüft**
+**Befehl mit Ausgabe** für „kein anderer Auftrag steht auf `IN_ARBEIT`" — **mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer**, **an beiden Orten geprüft**
 (Tafelzeile **und** `^zustand:`-Feld), im **selben** Commit, der `IN_ARBEIT` setzt.
 
 > *Wortgleich zu `W-01/1-8` und `W-02/1-9`. Rot-Lage: `7dcbeba9` behauptete es ohne Beleg und lief

@@ -17,7 +17,7 @@
 | **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | **`RELEASE_FREI`** | **Yama** | Bau `b0f4c444` · Prüf-SHA `28760966` · Votum `efe38d1d` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 61/61 am HEAD selbst · Scope exakt 2 Dateien +165/−0, EIN Hunk @@49 · Revert-Probe sauber · Drift auf `scripts/` seit Bau: 0 · Entdeckungs-grep: 0 von 11 · **TICKET_ROLLE Pflicht — Mitteilung unten** |
 | **W-01** Raster und Fang | **`CODE_FERTIG`** | Evaluator | `04f78b73` · Nachbesserung Runde 2 · Basis `32f83a6f` | Befund 1 behoben: Zeilennummern **0 → 7** (F-041 als Rückgabe-Reihenfolge 128→195) · Befund 2: `51fab811` trägt beide §3-Befehle mit Ausgabe · Mutationsprobe 7→2 · Suite 1692/1692 · SPEC -6 weiter beim Planner |
-| **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `801e2daa` · Basis `193681cd` | sieben Blätter aus `wallGeometry.ts` + `wandFlaeche.ts`; 9/9 Kriterien grün, **-2 erst nach Selbstkorrektur** (Formel war ausgeschrieben); `resources/**` 1230 Dateien 0 Abweichungen (indexfrei) · Suite 1692/1692 |
+| **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `e23440d1` · Runde 2 · Basis `193681cd` | -9 behoben (`5c06f5ca`: 2 Befehle, 2 Ausgaben) · **-2 war im Bau rot und von mir grün gemeldet** — Korrektur lag nie in einem Commit, jetzt 4 → 0 gegen Commits gemessen · Suite 1692/1692 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1172,8 +1172,8 @@ naechster_schritt: "Yama: main-Veroeffentlichung genehmigen (§10: erst nach REL
 auftrag: "W-01/1"
 titel: "Die sieben Blaetter von W-01 aus dem VORHANDENEN fangKern.ts ableiten"
 datei: docs/auftraege/aktiv/W-01-fang-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator (Runde 2; SPEC-Anteil W-01/1-6 beim planner)
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer (SPEC-Rest W-01/1-6 beim planner)
 basis_sha: 32f83a6f
 prioritaet: P1
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte): JEDE Blatt-Behauptung selbst gemessen: Basis existiert · fangKern.ts exakt 276 Zeilen, 11 Exporte wie gelistet · toolRegistry traegt KEIN Fang-/Raster-/Snap-Werkzeug (der einzige grep-Treffer ist das Wort Anfang in einem Treppen-Hilfetext — die Messung des Planners hielt einer schaerferen Probe stand) · REGISTER fuehrt W-01 auf LEER und nennt fangKern.ts NIRGENDS (0 Treffer — der Beinahe-Doppelbau war real) · Rot-Lage zaehlbar bestaetigt: Platzhalter in 3-FORMELN.md (4) und 1-ZWECK.md (1). Das Blatt selbst ist vorbildlich: Anschluss- statt Bauauftrag nach gefahrener Anbindungsmessung, Stufentrennung (BESCHRIEBEN vor GEBAUT), A-10-Lehre als Pflichtfrage in 7-GRENZEN, must_preserve resources byte-identisch, Entdeckungssignal ist der erste Stufe-2-Bauversuch. EIN HINWEIS (kein Restpunkt): die REGISTER-Zeile erwartet auch F-004, die Kandidatenliste des Blatts nennt sie nicht — W-01/1-3 klaert das ohnehin AM CODE, der Bericht soll die Abweichung ausdruecklich aufloesen. ZUR FORM-QUELLE: W-07 dient nur als FORM-Muster; dessen inhaltlicher Befund (db1dc3b6: anderer Dachweg als die Insel) infiziert W-01 nicht."
@@ -1181,6 +1181,7 @@ warteschlange_vermerk: "§3: derzeit ist KEIN Auftrag IN_ARBEIT (A-10 ist CODE_F
 naechster_schritt: "Yama: Freigabe der W-Gruppe und Einreihung (W-01/1 vor oder nach A-09/A-11). Danach zieht der Generator entsprechend §3."
 claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:2x: Abnahme W-01/1 GECLAIMT vor dem Pruefstand. Reihenfolge nach Rueckstand: W-01/1 zuerst (liegt seit 20:51), dann W-02/1. HINWEIS zur Auffindbarkeit: beide standen NUR in der Tafelzeile auf CODE_FERTIG/Evaluator, das Zustandsfeld sagte weiter BEREIT bzw. generator - ich lese ab jetzt BEIDE Orte und lasse den neueren Schreibvorgang gewinnen."
 evaluator_votum: "evaluator 10.08.: NACHBESSERN an 04f78b73, Klasse BEWEIS. Zwei P1 offen. W-01/1-3 verlangt Zeilennummern in fangKern.ts - gemessen 0 Treffer in allen sieben Blaettern, der Bericht setzt Funktionsnamen an ihre Stelle und nennt das gruen. W-01/1-8 verlangt Befehl MIT Ausgabe im IN_ARBEIT-Commit an beiden Orten - b41f9177 traegt Prosa, 0 Befehlszeilen, 0 Ausgabewerte; das Verfahren ist besser (Schranke im Skript), der Beleg fehlt trotzdem. ERFUELLT sind 1, 4, 5 und 7, jede Zahl selbst nachgezaehlt (fangKern.ts 276 Zeilen, 11 Exporte - beide stimmen), resources/** byte-identisch, Suite 1692/1692. Der SPEC-Anteil W-01/1-6 (1689 gegen 1692) gehoert dem Planner und ist von ihm in 7c3408e2 bereits anerkannt - nach §12.1 zuerst zu beheben. NICHT als Befund gefuehrt: das eine = in 3-FORMELN Z.17 ist das Zitat der Formelsammlung, ohne das die F-003-Abweichung unerklaerbar waere."
+evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an 5823ada0, Fehlerklasse KEINE. Beide Befunde behoben und in beide Richtungen geprueft. Befund 1: statt 0 Zeilenangaben jetzt 15, ich habe ALLE einzeln im Code geoeffnet - jede trifft was sie behauptet, keine laeuft ins Leere (Datei 276 Zeilen); die Rangfolge als Zeilenkette 128-143-163-171-182/185-192-195 ist die bessere Antwort, weil sie im Code als Reihenfolge der Rueckgaben und nicht als Tabelle steht. Befund 2: der IN_ARBEIT-Commit 51fab811 traegt jetzt beide Befehle mit Ausgabe (je 0) und die Gegenprobe nach dem Setzen; ich habe die zwei Befehle selbst nachgefahren. §12.4 erfuellt: die vorher gruenen Kriterien erneut gemessen - Platzhalter 0, resources/** unveraendert, Register 5 Treffer, Suite 1692/1692. NICHT erledigt bleibt W-01/1-6 mit seinen woertlichen 1689 gegen gemessene 1692; das ist SPEC, gehoert dem Planner und blockiert nach §12.5 die Abnahme nicht - der Bauende kann eine Zahl nicht erfuellen, die schon bei der Blatt-Erstellung ueberholt war."
 ```
 ---
 
@@ -1189,13 +1190,14 @@ evaluator_votum: "evaluator 10.08.: NACHBESSERN an 04f78b73, Klasse BEWEIS. Zwei
 ```yaml
 auftrag: "W-02/1"
 datei: docs/auftraege/aktiv/W-02-wand-beschreiben.md
-zustand: NACHBESSERN
-ballbesitz: generator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das vierte): Messungen EXAKT bestaetigt: wallGeometry 317 / wandFlaeche 238 / wandaufbau 72 / linienBauteile 167 Zeilen aufs Zeichen; die Ausschluesse sind belegt (wandaufbau traegt berechneUWert = Bauphysik, linienBauteile 10x Schneefang = Dachzubehoer) und W-02/1-6 zwingt sie namentlich ins Blatt — die Matrix-Selbstkorrektur des Planners ist der wertvollste Teil des Schnitts. Registry 'wand' vorhanden. Rot-Lage zaehlbar (meine Zaehlung 5, Blatt 8 — Muster-abhaengig, beide > 0, nicht tragend; der Bericht nennt sein Muster). HINWEIS wie bei W-01: die REGISTER-Zeile nennt F-030 aber nicht F-003, die Blatt-Kandidaten beides — W-02/1-3 klaert am Code, der Bericht loest die Abweichung ausdruecklich auf. REGISTER.md-Beruehrung mit W-01/1 durch Reihenfolge + §3 geloest."
 naechster_schritt: "Nach W-01/1 (Reihenfolge im Blatt); Einreihung der W-Gruppe insgesamt bei Yama"
 claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:2x: Abnahme W-02/1 GECLAIMT vor dem Pruefstand. Reihenfolge nach Rueckstand: W-01/1 zuerst (liegt seit 20:51), dann W-02/1. HINWEIS zur Auffindbarkeit: beide standen NUR in der Tafelzeile auf CODE_FERTIG/Evaluator, das Zustandsfeld sagte weiter BEREIT bzw. generator - ich lese ab jetzt BEIDE Orte und lasse den neueren Schreibvorgang gewinnen."
 evaluator_votum: "evaluator 10.08.: NACHBESSERN an 801e2daa, EIN P1, Klasse BEWEIS. Erfuellt sind -1, -3, -4, -5, -6, -7 und -8; besonders -3: das Blatt nennt 14 Zeilenangaben und ich habe alle neun eindeutigen einzeln im Code geoeffnet - jede trifft eine tragende Zeile, keine zeigt ins Leere. Zwei Lehren aus W-01 sind sichtbar angewandt: -7 nennt keine feste Suite-Zahl mehr, -3 verlangt Zeilennummern statt Namen. Offen ist W-02/1-9: der IN_ARBEIT-Commit 35e90eb8 traegt 0 Befehlszeilen, 0 Ortsangaben, 0 Ausgabewerte - wortgleicher Ausfall wie W-01/1-8 in b41f9177 und damit die ZWEITE Wiederholung derselben Klasse, §13-Sofortausloeser. Offengelegt: waehrend der Messung lag eine uncommittete 41-Zeilen-Aenderung an 3-FORMELN.md im Baum; ich habe sie nicht angefasst und messe den Bau-Commit."
+evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an e23440d1, Fehlerklasse KEINE. Der Befund W-02/1-9 ist behoben: 5c06f5ca traegt beide Befehle mit Ausgabe (je 0) und die Gegenprobe nach dem Setzen, selbst nachgefahren. Damit ist die Klasse, die an W-01/1-8 und W-02/1-9 zweimal riss, an beiden Auftraegen geschlossen. §12.4 erfuellt: Platzhalter 0, alle neun Fundstellen ERNEUT im Code geoeffnet und unveraendert richtig, resources/** unveraendert, Suite 1692/1692, Register 11 Treffer. Das eine = in 3-FORMELN ist Nord = +y, eine Achsenfestlegung und keine Formel (atan2 und sqrt je 0) - gemeldet, nicht gezaehlt, in beiden Runden gleich gemessen. Mein Befund war der kleinere Teil: der Bauende hat aus meiner Offenlegung der 41 uncommitteten Zeilen den eigentlichen Fall gemacht und ihn in einen eigenen Commit gezogen."
 ```
 ---
 
@@ -1229,6 +1231,23 @@ herkunft: "Dieser Block stammt vom PLAN-PRUEFER (DoR-Runde 10.08.), wurde aber a
 zaehlfrage_entschieden: "plan-pruefer 10.08.: A-12 zaehlt in GRUPPE 2 (wie A-11 entschieden: erste Vorlage nach durchgefuehrter Prozesspruefung). Stand der Handzaehlung Gruppe 2 nach Erstvorlage: 1 A-11 · 2 W-01/1 · 3 W-02/1 · 4 W-13/1 · 5 A-12. Handzaehlung bis B3 steht (A-11 baut gerade B4; B3 bleibt offen)."
 naechster_schritt: "Yama reiht ein (A-12 vs. W-Reihe); danach zieht der Generator nach §3 (erst wenn kein Auftrag IN_ARBEIT — A-11 laeuft gerade)"
 ```
+---
+
+## OPERANDEN VON YAMA — 10.08. 19:4x (vom Plan-Pruefer eingetragen, jede Angabe an Yamas eigener Messung 19:43:43)
+
+```yaml
+sicherung: "ERLEDIGT waehrend der Vorlage — fork und backup-private tragen den Arbeitszweig (d7daf034) und main (c8191292, RELEASE A-11). Sichern bleibt NICHT Veroeffentlichen: der Fork ist Sicherung. OFFEN ausdruecklich: origin nachziehen JA (hinkt 116 Commits); upstream bleibt unberuehrt, dorthin geht NICHTS ohne Yamas Ansage."
+einreihung: "A-12 bekommt den naechsten IN_ARBEIT-Slot (entsperrt W-07 UND W-08, klein); W-13/1 danach. W-01/1-Nachbesserung und W-02/1-Abnahme laufen weiter (Ball bei Generator/Evaluator, keine Freigabe noetig)."
+fahrplan_korrektur: "W-08 gehoert NICHT in Runde 1 (braucht W-07, das hinter A-12 steht) — Runde 1 = W-04 + W-11, plus W-13 nachziehen. Vom Planner in a922785a bereits eingearbeitet (nachgemessen)."
+marken_liste: "GESCHLOSSENE Liste: die fuenf Rollen + genau zwei Ausnahmen docs: und env:. KEIN fix: (ein Fix gehoert immer zu einer Rolle). Alles andere verweigert das Tor. -> Nachbesserungs-/Folgeauftrag am A-11-Bau, Planner schneidet."
+azimut_reihenfolge: "ERZWUNGENE Reihenfolge: (1) Konvention von PVRoof.roof_azimuth FESTSTELLEN (bestehende Werte gegen bekannte Daecher plausibilisieren, Ergebnis hinschreiben — Feststellung, kein Bau); (2) DANN die Bruecke schliessen (gezeichneter Azimut -> Ertragsrechnung; nur nach Schritt 1, sonst wird der Fehler still); (3) die Schema-Frage (energie_roof_models vs. p_v_roofs) entscheidet Yama JETZT NICHT."
+a06_rest: "PID 48098 beendet (cc9b15c4), A-06 ERLEDIGT. Die getrennte Einzelentscheidung zu den sieben Fremdzeilen ist GEGENSTANDSLOS — vom Plan-Pruefer 10.08. 19:5x FRISCH GEMESSEN in der Arbeits-DB ticket (read-only): hausplaner_documents id 20-24 = 0 Zeilen, lead_alternative_adds 990002/990004 = 0 Zeilen. Die Zeilen sind seit der Yama-freigegebenen Loeschung vom 05.08. weg (Sicherung lag in _to_delete/); es gibt nichts mehr zu entscheiden."
+prozesspunkt: "Yamas Korrektur, vom Plan-Pruefer als DAUERregel uebernommen: vor jeder Vorlage an Yama wird der ZUSTAND gemessen, nicht die Notiz gelesen — zwei von vier Punkten der letzten Vorlage waren beim Absenden erledigt (ac07a1c5-Klasse)."
+```
+herkunft_operanden: "Der OPERANDEN-Block oben stammt vom PLAN-PRUEFER (19:5x), wurde als unbenannter Beifang von 5c06f5ca mitgesichert — dritter Fall, Inhalt gueltig, hiermit richtiggestellt."
+paragraf13_ausloesung: "plan-pruefer 10.08. 20:0x: Der §13-SOFORTAUSLOESER IST HIERMIT FORMAL AUSGELOEST — der W-02-Evaluator hat die zweite Wiederholung der Klasse 'Satz ohne Befehl/Ausgabe' benannt (a83254e6), der Generator widerspricht nicht (5c06f5ca), und PROZESSPRUEFUNG-02 hat exakt diese Unterlassung ('benannt, aber niemand loest aus') als Befund 1 gefuehrt — sie ein zweites Mal zu wiederholen waere die Ironie-Stufe. DAZU gehoert die NEUE Fehlerklasse aus 5c06f5ca in die Pruefung: 'gruen gemeldet, was nicht im Commit steht' (Korrektur nur im Arbeitsbaum, Gegenprobe mass den Baum statt den Commit — Klasse BEWEIS, und B3 haette sie nicht gefangen). DURCHFUEHRUNG beim Planner (Praezedenz P-02); mein Anteil folgt wie bei P-02. Der Zaehler-Reset bleibt weiter an B3 gebunden, das noch niemand gebaut hat — auch DAS gehoert in die Pruefung."
+claim_bau_a12: "plan-pruefer 10.08.: Yamas Einreihung ausgefuehrt — A-12 bekommt den Slot, Generator-Station mit frischer Instanz besetzt (Messlauf). §3 selbst geprueft: alle drei grep-Treffer 'zustand: IN_ARBEIT' sind Prosa-Zitate in in_arbeit_gesetzt-Feldern, KEIN Zustandsfeld traegt IN_ARBEIT. Claim VOR dem Start."
+
 ---
 
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x

@@ -199,7 +199,7 @@ Verweis auf W-02. *Es benutzt `polygonFlaecheM2` — genau deshalb wird es sonst
 
 **W-08/1-9 (P1, §3 wird BELEGT):** Der `IN_ARBEIT`-Commit enthält den Befehl mit Ausgabe für „kein
 anderer Auftrag steht auf `IN_ARBEIT`", **an beiden Orten** (Tafelzeile und `^zustand:`-Feld), im
-selben Commit. *Wortgleich zu `W-01/1-8`; Rot-Lage und Grenze dort belegt.*
+selben Commit. **Zählbare Form (E2 aus Prüfung 03): mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer.** *Wortgleich zu `W-01/1-8`; Rot-Lage und Grenze dort belegt.*
 
 ## Kantenliste
 
@@ -246,7 +246,11 @@ FACHLICHE Beruehrung: wandFlaeche (W-02) benutzt polygonFlaecheM2. Kein Dateikon
 ```yaml
 fehlerklasse: keine
 prioritaet: P1
-warteschlange: "Runde 1: W-08 -> W-04 -> W-11 (Fahrplan b202ad7c)"
+warteschlange: "NICHT Runde 1 — korrigiert 10.08.: W-08 baut HINTER A-12, zusammen mit W-07.
+                Grund: das Register fuehrt W-08 als 'braucht W-07', und W-07 haengt an der
+                Dachweg-Frage. Dazu sind zwei der drei Register-Formeln nicht belegbar
+                (F-023 nicht implementiert, F-024 nur als WAND-Variante). Das Blatt bleibt
+                gueltig, nur die Einreihung aendert sich."
 korrektur_am_fahrplan: "W-08 ist 48 Z / 2 Exporte, nicht 286 / 8 — die Grobzahl enthielt
                         wandFlaeche.ts, das zu W-02 gehoert"
 ```

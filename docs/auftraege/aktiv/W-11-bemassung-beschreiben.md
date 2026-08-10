@@ -176,7 +176,7 @@ behauptet „W-11 braucht W-13"; drei von vier Registerangaben waren in dieser R
 **W-11/1-9 (P1, Register mitgeführt):** Reifegrad **und** alle drei Module als Fundstelle.
 
 **W-11/1-10 (P1, §3 wird BELEGT):** Befehl mit Ausgabe für „kein anderer Auftrag auf `IN_ARBEIT`",
-an beiden Orten, im selben Commit. *Wortgleich zu `W-01/1-8`.*
+an beiden Orten, im selben Commit. **Zählbare Form (E2 aus Prüfung 03): mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer.** *Wortgleich zu `W-01/1-8`.*
 
 ## Kantenliste
 

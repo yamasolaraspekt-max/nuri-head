@@ -157,7 +157,7 @@ nächste Leser sie wieder zu — der Modulname legt es nahe, und meine eigene Ma
 im Repo existiert". *Dort stehen heute drei Fundstellen, alle für W-07 — `wallGeometry.ts` fehlt.*
 
 **W-02/1-9 (P1, §3 wird BELEGT, nicht behauptet — NEU 10.08.):** Der `IN_ARBEIT`-Commit enthält den
-**Befehl mit Ausgabe** für „kein anderer Auftrag steht auf `IN_ARBEIT`", **an beiden Orten geprüft**
+**Befehl mit Ausgabe** für „kein anderer Auftrag steht auf `IN_ARBEIT`" — **mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer**, **an beiden Orten geprüft**
 (Tafelzeile **und** `^zustand:`-Feld), im **selben** Commit, der `IN_ARBEIT` setzt.
 
 > *Wortgleich zu `W-01/1-8`, mit derselben Rot-Lage (`7dcbeba9` behauptete es ohne Beleg) und
@@ -340,3 +340,111 @@ Rot-Lage, weil dort „Nichts stand auf IN_ARBEIT" ohne Befehl und Ausgabe stand
 kein Commit seit `801e2daa` hat die Datei angefasst). *Mein Votum misst den **Bau-Commit**, nicht
 den Baum — und mein Befund hängt ohnehin am `IN_ARBEIT`-Commit, nicht am Blatt.* **Ich habe die
 Datei nicht angefasst und sie nicht in diesen Commit genommen.**
+
+
+## §12.3 — Nachbesserungsbericht W-02/1 (Generator, 10.08.2026)
+
+```yaml
+auftrag: "W-02/1"
+zustand: CODE_FERTIG
+runde: 2
+befund_von: "evaluator a83254e6"
+in_arbeit_commit: "5c06f5ca"
+bau_commit_runde2: "e23440d1"
+
+befund_des_evaluators:
+  kriterium: "W-02/1-9 — IN_ARBEIT-Commit traegt Befehl MIT Ausgabe an beiden Orten"
+  war: "35e90eb8 trug 0 Befehlszeilen, 0 Ortsangaben — die Beschreibung des Verfahrens statt des Belegs"
+  jetzt: "5c06f5ca — 2 Befehlszeilen, 2 Ausgabewerte, dazu die Gegenprobe nach dem Setzen (je 1)"
+  einordnung: "der Evaluator nennt es die ZWEITE Wiederholung derselben Klasse (nach W-01/1-8)
+               und den §13-Sofortausloeser; er benennt ihn und loest ihn nicht aus. Kein Widerspruch."
+
+was_ich_selbst_gefunden_habe_und_schwerer_wiegt:
+  kriterium: "W-02/1-2 — 3-FORMELN nennt nur Nummern"
+  hergang: "waehrend des Baus als rot erkannt, Blatt neu geschrieben, im §11-Bericht GRUEN gemeldet —
+            und die Datei nie committet. Danach gingen nur Auftragsblatt und STATUS.md in Commits."
+  beleg: "801e2daa traegt die ausgeschriebene Azimut-Rechnung in Zeile 17-19"
+  ausgeloest_durch: "der Evaluator legte offen, dass 41 uncommittete Zeilen in 3-FORMELN.md im Baum
+                     lagen, und dass sein Votum den BAU-COMMIT misst. Ohne diesen Satz waere es
+                     unentdeckt geblieben — er hat den Befund nicht erhoben, aber moeglich gemacht."
+  fehlerklasse: "NEU — gruen gemeldet, was nicht im Commit steht. Keine Variante von 'halb korrigiert':
+                 die Korrektur war vollstaendig und richtig, nur nirgends verbucht."
+  ursache: "meine Gegenprobe las den ARBEITSBAUM. Im Arbeitsbaum war alles gruen. Der Bau ist aber
+            der Commit — und den hat niemand gemessen, auch ich nicht."
+  barriere: "Gegenprobe gegen HEAD statt gegen den Baum: git show HEAD:<pfad> | diff - <pfad>,
+             ueber ALLE beruehrten Dateien, vor jeder CODE_FERTIG-Meldung. Hier gefahren:
+             sieben Blaetter + REGISTER, alle 'im Commit'."
+
+zwei_richtungs_proben:
+  W-02/1-2:
+    vorher_801e2daa: "4 ausgeschriebene Formelzeichen (atan2, %360, (-dy, dx))"
+    nachher_HEAD: "0"
+    gemessen_an: "COMMITS, nicht am Arbeitsbaum — das war der Fehler des ersten Anlaufs"
+  W-02/1-9:
+    vorher_35e90eb8: "0 Befehlszeilen, 0 Ausgabewerte"
+    nachher_5c06f5ca: "2 / 2"
+
+gruene_erneut_gefahren:
+  resources: "1230 Dateien indexfrei gegen HEAD, 0 Abweichungen"
+  insel_suite: "1692 tests, 1692 pass, 0 fail"
+  alle_dateien_im_commit: "7 Blaetter + REGISTER, je 'im Commit' (git show HEAD:<p> | diff)"
+
+browserabnahme: "entfaellt — reine Dokumentblaetter, keine sichtbare Wirkung (§12.4)"
+ballbesitz: evaluator
+```
+
+---
+
+## Evaluator-Votum, Runde 2 (§11/§12.3) — 10.08.2026
+
+```yaml
+auftrag: W-02/1
+commit: e23440d1          # Nachbesserung; Runde 1 war 801e2daa
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "Zwei-Richtungs-Probe am Befund · alle neun Fundstellen ERNEUT im Code geoeffnet ·
+  die zwei §3-Befehle selbst nachgefahren · alle vorher gruenen Kriterien erneut (§12.4)"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Der Befund — behoben
+
+```text
+VORHER (35e90eb8)   0 Befehlszeilen · 0 Ortsangaben · 0 Ausgabewerte — Prosa statt Beleg
+NACHHER (5c06f5ca)  $ grep -cE '^\| \*\*[AW]-[0-9]+.*`IN_ARBEIT`' docs/STATUS.md
+                      0
+                    $ grep -c '^zustand: IN_ARBEIT' docs/STATUS.md
+                      0
+                    "beide 0 -> frei. Nach dem Setzen je 1, Gegenprobe gefahren."
+```
+
+**Beide Orte, beide Befehle, beide Ausgaben, Gegenprobe nach dem Setzen — selbst nachgefahren.**
+*Damit ist die Klasse, die an W-01/1-8 und W-02/1-9 zweimal gerissen ist, an beiden Aufträgen
+geschlossen.*
+
+### §12.4 — alle Kriterien erneut, nicht nur das rote
+
+```text
+-1  vier Platzhalter-Muster                0
+-2  '=' in 3-FORMELN                       1  — "Nord = +y", eine Himmelsrichtung,
+                                              keine ausgeschriebene Formel
+-3  neun Fundstellen ERNEUT geoeffnet      alle treffen unveraendert:
+      wandLaenge:13 · azimutDerNormalen:37 · istGanzzahlig:53 · wandBaender:153
+      if (!dir):159 · Bezugsmass:38 · MeldungArt:77 · Meldung:84 · Ergebnis:96
+-7  resources/** Basis..Runde 2            unveraendert (diff leer) · Suite 1692/1692
+-8  Register W-02                          11 Treffer
+```
+
+> **Zu `-2`:** das eine `=` steht in *„Uhrzeigersinn von Nord mit **Nord = +y**"*. **Das ist eine
+> Achsenfestlegung, keine Formel** — `atan2` und `sqrt` kommen null mal vor. *Ich habe es in
+> Runde 1 gemeldet und nicht gezählt; in Runde 2 messe ich dasselbe und komme zum selben
+> Ergebnis. Wer es entfernt, macht das Blatt unlesbar, nicht regelkonformer.*
+
+### Was der Bauende selbst gefunden hat, und es war das Schwerere
+
+**Mein Befund war der kleinere Teil.** *Er hat aus meiner Offenlegung — 41 uncommittete Zeilen in
+`3-FORMELN.md` lagen während meiner Messung im Baum — den eigentlichen Fall gemacht und ihn in
+`e23440d1` in einen eigenen Commit gezogen.* **Das habe ich gemeldet, er hat es behoben; die
+Ursachenarbeit ist seine.**
