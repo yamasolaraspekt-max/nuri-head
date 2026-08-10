@@ -8,6 +8,9 @@ heimat_app: ticket
 status: ENTWURF                    # der Plan-Pruefer entscheidet ueber BEREIT
 status_steht_in: docs/STATUS.md    # §16: EINE Statuswahrheit. Hier steht keine zweite.
 prioritaet: P2
+basis_sha: 5a54b004   # (a) nachgetragen 10.08. — der A-08-Bau. Erst ab hier EXISTIERT
+                      # repo_git_laeuft(); vorher ist die Rot-Lage A-09-1 nicht messbar,
+                      # weil die Funktion fehlt. Fundstelle der dynamischen Probe C: 23b3a490.
 art: Folgeauftrag zu A-08 nach §12.5 — A-08 bleibt ABGENOMMEN, der Befund wirkt nicht rueckwirkend
 anlass: 23b3a490 (A-08-Abnahme, Probe C des Evaluators)
 verursacher: planner
@@ -102,6 +105,55 @@ scripts/commit-pruefen.sh                  repo_git_laeuft(): Aufrufform mitlese
 scripts/__tests__/commitPruefen.test.mjs   die Zusagen
 docs/auftraege/aktiv/A-08-NACHTRAG-…md     die schadhafte Kantenzeile richtigstellen (A-09-4)
 ```
+
+## Wiederverwendungsprüfung (§5) — (d) nachgetragen 10.08.
+
+*Die Inhalte standen schon im Ist-Zustand; hier sind sie als eigener Block benannt, damit die
+Prüfung nicht aus dem Fließtext herausgelesen werden muss.*
+
+```text
+repo_git_laeuft()          VORHANDEN (A-08-Bau, Z.73-106) — wird GESCHAERFT, nicht ersetzt.
+                           Kandidatensuche und Schleife bleiben; nur die Bezugsfrage kommt hinzu.
+lsof -a -p <pid> -d cwd    VORHANDEN (Z.81-85) — bleibt unveraendert der erste Weg (A-09-2).
+                           Inklusive der perl-Zeitgrenze aus A-02-6, die weiter gilt.
+ps -o args=                BORDMITTEL, im Tor bisher NICHT genutzt (es liest nur `comm=`).
+                           Kein neues Werkzeug — dieselbe `ps`-Familie, anderes Feld.
+commitPruefen.test.mjs     VORHANDEN UND IN GEBRAUCH — 38 Zusagen nach A-08, wird erweitert.
+Pfad-Aufloesung            KEIN vorhandener Baustein im Tor. Bordmittel-Weg (`cd … && pwd -P`
+                           oder Vergleich gegen `git rev-parse --git-dir`) statt neuer Helfer.
+docs/_playground-archiv/   nichts Vergleichbares.
+```
+
+**Kein neuer Baustein, keine neue Abhaengigkeit.** *A-09 ist eine Verfeinerung einer Funktion, die
+A-08 gebaut hat — genau der Fall, fuer den §12.5 den Folgeauftrag vorsieht.*
+
+## Auswirkungen (§5) — (b) nachgetragen 10.08.
+
+```text
+API · Server · Schema · Migration · Bestandsdaten · Bundle     KEINE
+Produktivcode    scripts/commit-pruefen.sh (Z.73-106) + scripts/__tests__/commitPruefen.test.mjs
+Testdaten-Ziel   KEINES
+Prozessbindung   ENTFAELLT - kein Serverstart, keine Datenbank; Proben im Wegwerf-Repo
+Werkzeuge        node-Testsuite commitPruefen.test.mjs - vorhanden UND in Gebrauch (38 Zusagen)
+                 `ps` und `lsof` sind Bordmittel, beide im Tor bereits im Einsatz
+```
+
+**Erstnutzer** (§5 — das Tor ist vorhanden, die geänderte Bezugsfrage ist neu): **jede Rolle beim
+nächsten Commit, ohne eigenen Aufruf** — wie bei A-08. *Die Wirkung ist nur in einer Richtung
+spürbar: es wird eher `ENV_BLOCKED` gemeldet als vorher, nie seltener. Ein zusätzlicher Handgriff
+entsteht nicht.*
+
+> ### Dass dieser Block hier nachgetragen wird, ist selbst ein Befund
+>
+> Der Plan-Prüfer hat es beim Bündeln vermerkt: **dritter Auftrag in Folge, dem der §5-Block beim
+> ersten Schnitt fehlt.** Das ist kein Zufall dreimal, sondern eine Lücke in meiner Schnittroutine —
+> ich schreibe Anlass, Ist-Zustand, DECISION und Kriterien zuverlässig und den Formblock nicht.
+>
+> **Es ist derselbe Griff, der bei A-10 saß** (dort war der Block beim ersten Schnitt da, und das
+> Blatt hieß deshalb „das sauberste Erstblatt der Gruppe") **und bei A-11 wieder** — die zwei
+> Blätter, die ich *nach* dieser Rückmeldung geschnitten habe. Die Reihenfolge der Blätter zeigt den
+> Lernvorgang, aber sie entschuldigt A-09 nicht. *Gehört als Muster in die nächste Prozessprüfung,
+> nicht als Einzelfall in dieses Blatt.*
 
 ## Akzeptanzkriterien
 
