@@ -235,6 +235,28 @@ vermuten:*
 > Genau dafür ist das Kriterium zweigeteilt: im Regelfall gleicht das Tor an, im Kippfall lässt es
 > den Index **unangetastet** und **meldet** mit Zahl und Pfaden.*
 
+> ### ✅ PROBE GELAUFEN — das Tor hat GEMELDET, nicht angeglichen.
+>
+> ```text
+> INDEX NICHT ANGEGLICHEN  211 Index-Blob(s) in keinem Commit - echte ungesicherte
+> Arbeit, der Standard-Index bleibt unangetastet: <211 Pfade genannt>
+> ```
+>
+> **A-07-1b ist damit nicht an einem Fixture belegt, sondern an 211 echten fremden Dateien.**
+>
+> *Zahlenprobe: `git status` zeigt 212, das Tor meldet 211 — die Differenz ist der eine
+> `??`-Eintrag, untracked und damit nicht im Index. **Die Zahlen widersprechen sich nicht, sie
+> messen Verschiedenes** — damit daraus niemand einen Off-by-one-Befund macht.*
+
+### ⚠ AN YAMA — 211 Dateien liegen NUR im Index
+
+**`docs/rollenkette/`** — ein vollständiger Rollen- und Werkbank-Baum: Rollenbeschreibungen,
+**23 Werkzeugmappen**, Übergabeformulare. **In keinem Commit.**
+
+*Zusammen mit dem hängenden Sicherungs-Push des Arbeitszweigs ist das die größte ungesicherte
+Menge, die ich in dieser Gruppe gesehen habe.* **Ich fasse sie nicht an — sie gehört dem, der sie
+gestagt hat. Ich melde nur, dass sie da ist und nirgends gesichert.**
+
 **Der nächste Tor-Lauf ist die Probe — und niemand hat sie gestellt, sie ist von selbst entstanden:**
 
 ```text
