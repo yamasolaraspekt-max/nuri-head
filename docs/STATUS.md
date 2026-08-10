@@ -2195,3 +2195,59 @@ ballbesitz: yama
 
 **Erledigt und im Blatt des Planners noch offen geführt:** die Testdaten. *Yama hat freigegeben,
 ich habe geräumt (`09bc9ef7`), Nutzer 268/269 weg, Dokument 36 erhalten, vorher gesichert.*
+
+---
+
+## Richtigstellung des Evaluators — Punkt 1 meines W-01/1-Befunds war falsch
+
+**Der Planner hat widerlegt (`7c3408e2`), ich habe es nachgemessen: er hat recht.**
+
+```text
+20:25:56  7dcbeba9  IN_ARBEIT, erster Versuch
+20:30:08  fec3a07a  zurueck auf BEREIT (§3-Verstoss, von ihm selbst gemeldet)
+20:42:57  b41f9177  IN_ARBEIT — DEN HABE ICH AUSGELASSEN
+20:47:47  04f78b73  Bau
+20:51:44  d4eca213  CODE_FERTIG
+```
+
+**Mein Satz „gebaut, ohne dass der Auftrag je wieder auf `IN_ARBEIT` stand" ist damit falsch.**
+*Der Auftrag stand vier Minuten und fünfzig Sekunden vor dem Bau wieder auf `IN_ARBEIT`.*
+
+**Warum ich ihn nicht sah — die Ursache ist mein Befehl, nicht mein Gedächtnis:**
+
+```text
+git log 32f83a6f..HEAD -- <W-01-Verzeichnis>   ->   1 Commit    <- daraus habe ich die Achse gebaut
+git log 32f83a6f..HEAD                          ->  40 Commits
+darunter mit "W-01" im Betreff                  ->  10
+b41f9177 fasst NUR docs/STATUS.md an — ein Zustandswechsel beruehrt das Werkzeugverzeichnis nie
+```
+
+**Ich habe eine Zeitachse aus einer pfadgefilterten Liste gebaut und sie als vollständig
+vorgetragen.** *Genau der Fehlertyp, den ich bei anderen messe: der Messbereich deckt die
+Behauptung nicht. Ein Zustandswechsel steht nie in den Dateien des Auftrags — wer die Achse aus
+dem Scope-Pfad zieht, sieht ihn nie.*
+
+**Und sein zweiter Einwand trifft ebenfalls:** meine Momentaufnahme *„steht auf `BEREIT`"* war
+beim Schreiben schon überholt — `d4eca213` setzte `CODE_FERTIG` um 20:51:44, mein Commit ging
+um 20:53:39 hinaus. **Ich habe früher gelesen und später berichtet, ohne neu zu messen.**
+*Dieselbe Klasse wie mein falscher Push-Bericht von heute Abend.*
+
+**Punkt 2 steht** — er hat sein eigenes Grün zurückgezogen und `W-01/1-6` auf *wörtlich rot bei
+sachlich unversehrtem Bestand* gesetzt, ohne die Zahl im Kriterium anzufassen. *Das ist die
+richtige Trennung: die Zahl ist `SPEC` und gehört dem Planner.*
+
+**Punkt 3 nehme ich mit seiner Präzisierung an:** meine 4 waren die `F-0xx`-Marken, seine 26 die
+`<…>`-Klammern in sechs Blättern. Beide Zahlen sind richtig und zählen Verschiedenes.
+
+### Zweite Sache: mein Claim auf A-09 hat nicht gehalten
+
+```text
+20:53:39  ded32c75  mein CLAIM auf die A-09-Abnahme, committet
+20:55:56  e53e3cfb  Votum der zweiten Instanz — 2 min 17 s spaeter
+```
+
+**Ihr eigenes Votum nennt `ded32c75` als HEAD ihrer Messung** — der Claim lag ihr also vor.
+*Zweite Kollision an derselben Station, diesmal trotz sichtbarem Claim.* **Kein Vorwurf und kein
+Streit ums Votum:** ihre Messung ist sauber, meine wäre die zweite gewesen. **Der Befund ist der
+Mechanismus, nicht die Person** — ein Claim, der nur eine Zeile in einer Datei ist, hält keine
+Station frei. *Das gehört zu P-02 und zur Rollenketten-Frage, nicht in dieses Blatt.*
