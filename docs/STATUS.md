@@ -1199,20 +1199,22 @@ naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruef
 ```
 ---
 
-## BEREIT — A-12 (Messauftrag F-026; Einreihung bei Yama)
+## IN_ARBEIT — A-12 (Messauftrag F-026; Generator misst)
 
 ```yaml
 auftrag: A-12
 titel: "Ein L-Grundriss mit F-026 rechnen, Ergebnis ansehen, Ampel gelb -> gruen oder rot"
 datei: docs/auftraege/aktiv/A-12-f026-ausfuehren.md
-zustand: BEREIT
-ballbesitz: generator (Einreihung bei Yama — entsperrt die Dachkonstruktion, unabhaengig von der W-Reihe)
+zustand: IN_ARBEIT
+ballbesitz: generator (Messlauf laeuft — Yamas Einreihung 10.08., claim_bau_a12 steht)
 basis_sha: d1d716c8
+mess_sha: 3e7e19d6
 prioritaet: P1
+in_arbeit_gesetzt: "generator 10.08. (frische Instanz, Claim claim_bau_a12): IN_ARBEIT gesetzt VOR der ersten Scope-Aenderung und VOR der Wegwerf-Probe (§3). §3-Beleg MIT Befehl und Ausgabe: grep -n 'zustand: IN_ARBEIT' docs/STATUS.md -> 4 Treffer (Z.945/973/1112 Prosa in in_arbeit_gesetzt-Feldern, Z.1232 Prosa im claim_bau_a12-Feld), KEIN Zustandsfeld traegt IN_ARBEIT. §7-Vorpruefung mit Befehl und Ausgabe: (1) git merge-base --is-ancestor d1d716c8 HEAD -> exit 0 (Basis ist Vorfahr von HEAD 3e7e19d6); (2) git diff --name-only d1d716c8..HEAD -- resources/ | wc -l -> 0 (die zu messende Insel-Geometrie ist byte-gleich zur Blatt-Basis; scripts/ wanderte durch die abgeschlossenen A-09/A-11-Bauten, ausserhalb meines Scopes); (3) Scope frei von fremden Aenderungen: git show HEAD:<pfad> | diff -q fuer STATUS.md, A-12-Blatt, FORMELSAMMLUNG.md, VORGEHEN.md -> alle 4 IDENTISCH; (4) Rot-Lage selbst gemessen: ls docs/BERICHT-A-12-f026.md -> No such file or directory, und die Ampel-Sperre steht woertlich (grep -n 'F-026' FORMELSAMMLUNG.md -> Z.302 Ampeltabelle 'noch nicht ausgefuehrt', Z.350 Formelblatt 🟡); (5) Fremdquelle exakt: wc -c -l dachdecker_pro_3d.tsx -> 2173 Zeilen, 132374 Byte (Blattangabe aufs Byte). Lieferung ist ein BERICHT (Muster A-05); Wegwerf-Probe am ueblichen Ort, vor dem Bericht restlos entfernt."
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review): die Pruefbefehle des Blatts selbst gefahren — Ampel-Rot bestaetigt (F-026 traegt woertlich die Sperre Z.229/277 der FORMELSAMMLUNG), Fremdquelle EXAKT belegt (132374 Byte, 2173 Zeilen aufs Zeichen; :965 buildCompoundPitched-Signatur und :1137 die l/t-shape-Weiche woertlich verifiziert). Der Machbarkeitsbefund, der den Auftrag zweiteilt (Teil A triviale Arithmetik / Teil B klassengebunden mit 64 THREE.-Vorkommen), ist die wertvollste Zeile des Blatts — er verhindert den Zwei-Stunden-SPEC_BLOCKED, den 'eine Funktion aufrufen' produziert haette. Attrappen-Regel (nur AUFZEICHNEN, nichts rechnen — sonst messen wir die Attrappe) und Scheitern-ist-Ergebnis-Regel vorbildlich. Kein Kopieren des Fremdcodes, Wegwerf-Probe nach A-05-Disziplin, Ampel wird VORGESCHLAGEN nicht gesetzt (Generator schlaegt vor, Evaluator bestaetigt, Planner traegt ein)."
 herkunft: "Dieser Block stammt vom PLAN-PRUEFER (DoR-Runde 10.08.), wurde aber als unbenannter Beifang vom W-02/1-Commit 58342f47 mitgesichert, waehrend er ungesichert im geteilten Baum lag — dieselbe Klasse wie 4307987b/c2feffd4, diesmal in Gegenrichtung. Inhalt unveraendert gueltig; hiermit richtiggestellt."
 zaehlfrage_entschieden: "plan-pruefer 10.08.: A-12 zaehlt in GRUPPE 2 (wie A-11 entschieden: erste Vorlage nach durchgefuehrter Prozesspruefung). Stand der Handzaehlung Gruppe 2 nach Erstvorlage: 1 A-11 · 2 W-01/1 · 3 W-02/1 · 4 W-13/1 · 5 A-12. Handzaehlung bis B3 steht (A-11 baut gerade B4; B3 bleibt offen)."
-naechster_schritt: "Yama reiht ein (A-12 vs. W-Reihe); danach zieht der Generator nach §3 (erst wenn kein Auftrag IN_ARBEIT — A-11 laeuft gerade)"
+naechster_schritt: "Generator fuehrt die drei Messungen aus (A-12-1 Konturen, A-12-2 Flaechen, A-12-3 Vergleich) und liefert docs/BERICHT-A-12-f026.md"
 ```
 ---
 
