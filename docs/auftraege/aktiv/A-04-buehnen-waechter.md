@@ -307,3 +307,152 @@ offene_akzeptanz: []
 2. **Soll der Wächter im Commit-Tor mitlaufen?** *Ich schlage NEIN vor: das Tor ist der einzige
    Commit-Weg aller Rollen, und A-02 hat gerade gezeigt, was eine zusätzliche externe Abhängigkeit
    dort anrichtet. Ein Aufruf vor der Browserabnahme genügt.*
+
+## Evaluator-Votum A-04 (10.08.2026)
+
+```yaml
+auftrag: A-04
+commit: c3d52f09
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "eigene Wegwerf-Proben nach dem Fixture-Weg (KEINE echte Buehne, kein ticket/
+  ticket_testing) + zwei eigene Mutationen (Drift-Name, Befund-Exit) + Basis-Richtung an 89f373d9"
+browser: nicht_anwendbar
+befunde:
+  - "P3/UMGEBUNG (kein Abnahme-Blocker): git-Index fuehrt die drei neuen Scope-Dateien als 'D'
+    UND '??' zugleich, ANKER-BROWSER.md als 'MM' — Inhalt aller vier Dateien ist content-identisch
+    zu c3d52f09 (je git show | diff -q = 0, selbst gemessen). A-07-Phaenomen-Klasse: gemeldet,
+    nicht behoben."
+```
+
+**Geprüft an:** Arbeitsbaum-HEAD `e3d7b2c8`, alle vier Scope-Dateien content-identisch zu
+Prüf-SHA `c3d52f09` (je `git show c3d52f09:<pfad> | diff -q - <pfad>` = 0 — die Prüfung lief
+damit exakt auf dem gemeldeten Stand). Scope selbst gemessen: `git show c3d52f09 --stat` =
+**exakt 4 Dateien, 364 Einfügungen, 0 Löschungen** (buehnen-waechter.sh NEU 149 Z.,
+buehnenWaechter.test.mjs NEU 197 Z., browserBuehne.test.mjs +11 Z., ANKER-BROWSER.md +7 Z.).
+
+### Beide Suiten selbst gefahren (Rohausgabe)
+
+```text
+node --test scripts/__tests__/buehnenWaechter.test.mjs
+  ℹ tests 7 · ℹ pass 7 · ℹ fail 0            (alle 7 Zusagen namentlich ✔ gesehen)
+node --test scripts/__tests__/browserBuehne.test.mjs
+  ℹ tests 7 · ℹ pass 7 · ℹ fail 0            (inkl. 'B3 … exec-Zeile traegt APP_ENV=testing' ✔)
+
+Baseline-Gegenprobe: browserBuehne.test.mjs aus c3d52f09^ (331cd125) temporaer eingespielt,
+IM REPO gefahren: ℹ tests 6 · ℹ pass 6 · ℹ fail 0 — Basis war wirklich 6/6, B3 ist die
+siebte, NEUE Zusage. Datei danach md5-identisch zurueck (9804c591… vorher = nachher).
+(Ein erster Baseline-Lauf in einer Scratchpad-Kopie zeigte 5/6 — Extraktions-Artefakt:
+A-03-4 prueft vendor/ServeCommand.php, das in der Kopie fehlt. Kein Befund.)
+```
+
+### A-04-1 — FALSCH-Meldung mit PID + Befehl + DB-Name, exit 3: **ERFÜLLT**
+
+Eigene Wegwerf-Probe (Fixture-Weg: Wegwerf-Verzeichnis in der Scratchpad, eigene `.env` mit
+`zz_eval_nur_fantasie`, `php -S` dient ein LEERES Verzeichnis aus, artisan-Stub schläft nur —
+keine Datenbank, kein ticket, kein ticket_testing):
+
+```text
+BUEHNE FALSCH     PID 68211 (php -S)
+  Befehl:    php -S 127.0.0.1:49733 -t …/eval-wegwerf/leer
+  Datenbank: 'zz_eval_erfunden' (DB_DATABASE aus der Prozessumgebung) — erwartet ist exakt 'ticket_testing'.
+ENV_BLOCKED   2 von 3 Buehnen FALSCH oder UNSICHER — erst klaeren, dann messen.
+EXIT=3
+```
+
+**Zwei-Richtungs-Probe:** an der Basis `89f373d9` existiert das Verhalten nicht —
+`git ls-tree 89f373d9 -- scripts/buehnen-waechter.sh` = **0 Treffer** (Datei existiert nicht,
+trivial rot); an `c3d52f09` grün wie oben.
+
+### A-04-2 — der Kern, beide Startformen + nackte-`.env`-Verbot: **ERFÜLLT**
+
+Eigene Proben, alle exit 3:
+
+```text
+php -S OHNE DB_DATABASE            -> BUEHNE UNSICHER PID 68637 … Datenbank: UNBEKANNT
+artisan-Stub OHNE APP_ENV          -> BUEHNE UNSICHER PID 68212 … Datenbank: UNBEKANNT
+DB_DATABASE=ticket_testing php artisan serve (die A-01-Vorfallsklasse, sieht richtig aus):
+  -> BUEHNE UNSICHER PID 68638 … DB_DATABASE='ticket_testing' ist bei 'artisan serve'
+     WIRKUNGSLOS (ServeCommand-Filter) und APP_ENV fehlt. Im Zweifel laut, nie still.
+```
+
+Code-Kern gegengelesen: `grep -n '\.env' scripts/buehnen-waechter.sh` → im **Code** (Kommentare
+raus) nur Z.103 `"$basis/.env.$app_env"` und Z.113 (Meldetext) — **die nackte `.env` wird an
+keiner Codestelle gelesen**; der WIRKUNGSLOS-Zweig steht in Z.92.
+
+### A-04-3 — Gegenprobe, beide Formen korrekt → exit 0: **ERFÜLLT**
+
+```text
+DB_DATABASE=ticket_testing php -S …        -> BUEHNE OK PID 68275
+APP_ENV=testing php artisan (Stub, loest Wegwerf-.env.testing auf) -> BUEHNE OK PID 68276
+ALLE BUEHNEN OK   2 geprueft, Datenbank jeweils 'ticket_testing'.   EXIT=0
+```
+
+`ticket_testing` kam dabei nur als Zeichenkette in Prozessumgebung/Wegwerf-`.env.testing` vor —
+verbunden wurde nichts (Rest-2-Auslegung nachvollzogen und für tragfähig befunden).
+
+### A-04-4 — beendet nichts, ändert nichts: **ERFÜLLT**
+
+```text
+grep kill/pkill/killall/rm/mv im Code von buehnen-waechter.sh (Kommentare raus): 0 Treffer
+Verhaltensprobe: nach dem Waechterlauf mit Befund leben beide Proben —
+  ps -p 68211 -> LEBT · ps -p 68212 -> LEBT (danach von MIR beendet, nicht vom Waechter)
+```
+
+### A-04-5 — Mutationsprobe, zwei eigene Mutationen: **ERFÜLLT**
+
+```text
+M-E1 (Namens-/Drift-Pruefung): browser-buehne.sh:31 ERWARTETE_DB=ticket_testing_drift
+  -> Suite: tests 7 · pass 6 · fail 1 — GENAU 'Drift-Zusage (Rest 1)' faellt
+  -> Rueckstellung git show c3d52f09^: md5 23ee4473… (identisch zum Bericht des Generators)
+M-E2 (Befund-Exit): buehnen-waechter.sh Z.145 exit 3 -> exit 0
+  -> Suite: tests 7 · pass 5 · fail 2 — 'A-04-1/2' und 'A-04-2 ROT' fallen
+  -> Rueckstellung git show c3d52f09: md5 9916d803… (identisch zum Bericht des Generators)
+Kontrolllauf nach beiden Rueckstellungen: tests 7 · pass 7 · fail 0
+```
+
+Damit ist die Drift-Zusage in **beide** Richtungen belegt: beide Skripte nennen heute denselben
+Namen (`buehnen-waechter.sh:29` und `browser-buehne.sh:31`, je `ERWARTETE_DB=ticket_testing`,
+selbst gegriffen), und ein verstellter Name lässt die Zusage fallen (M-E1).
+
+### A-04-6 — Anker nennt den Wächter als Pflichtschritt: **ERFÜLLT**
+
+```text
+grep -c 'buehnen-waechter' docs/auftraege/ANKER-BROWSER.md = 1   (Basis 89f373d9: 0)
+```
+
+Absatz gelesen: „**Pflichtschritt VOR jeder Browserabnahme (A-04)**: `bash
+scripts/buehnen-waechter.sh` … erst klären, dann messen … Der Aufruf samt Ausgabe gehört in den
+Abnahmebericht (Erstnutzer: der Evaluator)." — inhaltlich korrekt, VOR der Abnahme verortet.
+
+**Scope-Würdigung:** `ANKER-BROWSER.md` steht nicht im Scope-Block des Blatts, wird aber von
+A-04-6 (P1) und dem Rückweg-Absatz („plus eine Zeile in ANKER-BROWSER") ausdrücklich verlangt.
+Die Abweichung war vom Generator offen deklariert und ist **kriteriengedeckt** — ich schließe
+mich dem Plan-Prüfer an: kein Befund. Ein Blatt, dessen P1 eine Datei verlangt, hat sie im
+Scope, auch wenn der Scope-Block sie nicht aufzählt.
+
+### B3 (Auflage aus A-03) — **GESCHLOSSEN**
+
+Die neue Zusage steht in `browserBuehne.test.mjs` (selbst gelesen), Suite 6→7, Baseline-Lauf
+6/6 selbst geführt; die Mutationsklasse (exec-Zeile ohne `APP_ENV`) ist damit gedeckt.
+
+### Realfund PID 48098 — Zustand vermerkt, nicht angefasst
+
+```text
+ps -p 48098: LÄUFT WEITER — ppid 1, gestartet Mi 05.08. 00:58:16,
+  …/Herd/bin/php84 -S 127.0.0.1:65535 …ticket/vendor/…/server.php
+Mein Waechterlauf loest sie auf: BUEHNE OK — 'ticket_testing'
+  (DB_DATABASE aus /Users/yamanuri/Documents/ticket-a01/.env.testing via APP_ENV=testing)
+```
+
+Die verwaiste Bühne ist harmlos (ticket_testing), bleibt aber ein Prozess mit ppid 1 seit fünf
+Tagen — **Entscheidung über Beenden gehört einem Menschen** (Nicht-Ziel 3); an Yama gemeldet.
+
+### Gesamturteil
+
+**ABGENOMMEN** an `c3d52f09`, Fehlerklasse KEINE. Alle sechs Kriterien plus B3 mit eigenen
+Messungen und Gegen-Beweisen grün; §15-Grenze gehalten (keine Probe berührte je eine Datenbank);
+Nicht-Ziele gehalten (startet nichts, beendet nichts, `browser-buehne.sh` content-identisch zur
+Basis — selbst gediffed). Ball: **Release-Prüfer**. Randnotiz an den Planner (nicht blockierend):
+der Index-Zustand des Arbeitsbaums (neue Dateien als „D"+„??") ist die A-07-Phänomen-Klasse und
+gehört in dessen Befundsammlung.
