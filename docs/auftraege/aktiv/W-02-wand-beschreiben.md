@@ -392,3 +392,59 @@ gruene_erneut_gefahren:
 browserabnahme: "entfaellt — reine Dokumentblaetter, keine sichtbare Wirkung (§12.4)"
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum, Runde 2 (§11/§12.3) — 10.08.2026
+
+```yaml
+auftrag: W-02/1
+commit: e23440d1          # Nachbesserung; Runde 1 war 801e2daa
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "Zwei-Richtungs-Probe am Befund · alle neun Fundstellen ERNEUT im Code geoeffnet ·
+  die zwei §3-Befehle selbst nachgefahren · alle vorher gruenen Kriterien erneut (§12.4)"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Der Befund — behoben
+
+```text
+VORHER (35e90eb8)   0 Befehlszeilen · 0 Ortsangaben · 0 Ausgabewerte — Prosa statt Beleg
+NACHHER (5c06f5ca)  $ grep -cE '^\| \*\*[AW]-[0-9]+.*`IN_ARBEIT`' docs/STATUS.md
+                      0
+                    $ grep -c '^zustand: IN_ARBEIT' docs/STATUS.md
+                      0
+                    "beide 0 -> frei. Nach dem Setzen je 1, Gegenprobe gefahren."
+```
+
+**Beide Orte, beide Befehle, beide Ausgaben, Gegenprobe nach dem Setzen — selbst nachgefahren.**
+*Damit ist die Klasse, die an W-01/1-8 und W-02/1-9 zweimal gerissen ist, an beiden Aufträgen
+geschlossen.*
+
+### §12.4 — alle Kriterien erneut, nicht nur das rote
+
+```text
+-1  vier Platzhalter-Muster                0
+-2  '=' in 3-FORMELN                       1  — "Nord = +y", eine Himmelsrichtung,
+                                              keine ausgeschriebene Formel
+-3  neun Fundstellen ERNEUT geoeffnet      alle treffen unveraendert:
+      wandLaenge:13 · azimutDerNormalen:37 · istGanzzahlig:53 · wandBaender:153
+      if (!dir):159 · Bezugsmass:38 · MeldungArt:77 · Meldung:84 · Ergebnis:96
+-7  resources/** Basis..Runde 2            unveraendert (diff leer) · Suite 1692/1692
+-8  Register W-02                          11 Treffer
+```
+
+> **Zu `-2`:** das eine `=` steht in *„Uhrzeigersinn von Nord mit **Nord = +y**"*. **Das ist eine
+> Achsenfestlegung, keine Formel** — `atan2` und `sqrt` kommen null mal vor. *Ich habe es in
+> Runde 1 gemeldet und nicht gezählt; in Runde 2 messe ich dasselbe und komme zum selben
+> Ergebnis. Wer es entfernt, macht das Blatt unlesbar, nicht regelkonformer.*
+
+### Was der Bauende selbst gefunden hat, und es war das Schwerere
+
+**Mein Befund war der kleinere Teil.** *Er hat aus meiner Offenlegung — 41 uncommittete Zeilen in
+`3-FORMELN.md` lagen während meiner Messung im Baum — den eigentlichen Fall gemacht und ihn in
+`e23440d1` in einen eigenen Commit gezogen.* **Das habe ich gemeldet, er hat es behoben; die
+Ursachenarbeit ist seine.**

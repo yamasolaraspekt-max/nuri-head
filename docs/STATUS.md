@@ -1173,13 +1173,14 @@ evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an 5823ada0, Fehlerklasse 
 ```yaml
 auftrag: "W-02/1"
 datei: docs/auftraege/aktiv/W-02-wand-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator (Runde 2)
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das vierte): Messungen EXAKT bestaetigt: wallGeometry 317 / wandFlaeche 238 / wandaufbau 72 / linienBauteile 167 Zeilen aufs Zeichen; die Ausschluesse sind belegt (wandaufbau traegt berechneUWert = Bauphysik, linienBauteile 10x Schneefang = Dachzubehoer) und W-02/1-6 zwingt sie namentlich ins Blatt — die Matrix-Selbstkorrektur des Planners ist der wertvollste Teil des Schnitts. Registry 'wand' vorhanden. Rot-Lage zaehlbar (meine Zaehlung 5, Blatt 8 — Muster-abhaengig, beide > 0, nicht tragend; der Bericht nennt sein Muster). HINWEIS wie bei W-01: die REGISTER-Zeile nennt F-030 aber nicht F-003, die Blatt-Kandidaten beides — W-02/1-3 klaert am Code, der Bericht loest die Abweichung ausdruecklich auf. REGISTER.md-Beruehrung mit W-01/1 durch Reihenfolge + §3 geloest."
 naechster_schritt: "Nach W-01/1 (Reihenfolge im Blatt); Einreihung der W-Gruppe insgesamt bei Yama"
 claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:2x: Abnahme W-02/1 GECLAIMT vor dem Pruefstand. Reihenfolge nach Rueckstand: W-01/1 zuerst (liegt seit 20:51), dann W-02/1. HINWEIS zur Auffindbarkeit: beide standen NUR in der Tafelzeile auf CODE_FERTIG/Evaluator, das Zustandsfeld sagte weiter BEREIT bzw. generator - ich lese ab jetzt BEIDE Orte und lasse den neueren Schreibvorgang gewinnen."
 evaluator_votum: "evaluator 10.08.: NACHBESSERN an 801e2daa, EIN P1, Klasse BEWEIS. Erfuellt sind -1, -3, -4, -5, -6, -7 und -8; besonders -3: das Blatt nennt 14 Zeilenangaben und ich habe alle neun eindeutigen einzeln im Code geoeffnet - jede trifft eine tragende Zeile, keine zeigt ins Leere. Zwei Lehren aus W-01 sind sichtbar angewandt: -7 nennt keine feste Suite-Zahl mehr, -3 verlangt Zeilennummern statt Namen. Offen ist W-02/1-9: der IN_ARBEIT-Commit 35e90eb8 traegt 0 Befehlszeilen, 0 Ortsangaben, 0 Ausgabewerte - wortgleicher Ausfall wie W-01/1-8 in b41f9177 und damit die ZWEITE Wiederholung derselben Klasse, §13-Sofortausloeser. Offengelegt: waehrend der Messung lag eine uncommittete 41-Zeilen-Aenderung an 3-FORMELN.md im Baum; ich habe sie nicht angefasst und messe den Bau-Commit."
+evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an e23440d1, Fehlerklasse KEINE. Der Befund W-02/1-9 ist behoben: 5c06f5ca traegt beide Befehle mit Ausgabe (je 0) und die Gegenprobe nach dem Setzen, selbst nachgefahren. Damit ist die Klasse, die an W-01/1-8 und W-02/1-9 zweimal riss, an beiden Auftraegen geschlossen. §12.4 erfuellt: Platzhalter 0, alle neun Fundstellen ERNEUT im Code geoeffnet und unveraendert richtig, resources/** unveraendert, Suite 1692/1692, Register 11 Treffer. Das eine = in 3-FORMELN ist Nord = +y, eine Achsenfestlegung und keine Formel (atan2 und sqrt je 0) - gemeldet, nicht gezaehlt, in beiden Runden gleich gemessen. Mein Befund war der kleinere Teil: der Bauende hat aus meiner Offenlegung der 41 uncommitteten Zeilen den eigentlichen Fall gemacht und ihn in einen eigenen Commit gezogen."
 ```
 ---
 
