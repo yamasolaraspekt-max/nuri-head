@@ -1,21 +1,24 @@
-# W · raster und fang — ZWECK
+# W-01 · Raster und Fang — ZWECK
 
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
-<In EINEM Satz, aus Sicht des Anwenders. Nicht technisch.
-Beispiel: „Der Planer soll mit zwei Klicks eine Wand ziehen können,
-die automatisch an bestehenden Wänden andockt.">
+Der Planer soll Punkte setzen können, die **genau** dort landen, wo sie hingehören — am Endpunkt
+einer Wand, auf ihrer Flucht, im rechten Winkel oder im Raster — **ohne millimetergenau zielen zu
+müssen**.
 
 ## Wann greift der Anwender danach?
 
-<Der konkrete Moment im Arbeitsablauf.>
+In jedem Moment, in dem er einen Punkt setzt oder zieht: Wand zeichnen, Wand verschieben, Öffnung
+platzieren. **Er ruft das Werkzeug nicht auf — es liegt unter jedem Klick.**
 
-## Woran merkt er, dass es fehlt?
+## Was wäre ohne dieses Werkzeug?
 
-<Was tut er ersatzweise, wenn es das Werkzeug nicht gibt?
-Diese Frage entscheidet über die Priorität.>
+Zwei Wände, die aussehen wie verbunden, sind es um 3 mm nicht. Der Fehler ist **unsichtbar**, bis
+eine Fläche nicht schließt oder eine Mengenermittlung falsch rechnet.
 
-## Was ist ausdrücklich NICHT Zweck dieses Werkzeugs?
+## Der Vertrag in einem Satz
 
-<Abgrenzung zu Nachbarwerkzeugen. Verhindert, dass ein Werkzeug
-über die Jahre alles frisst.>
+**Es gibt genau EINE Fang-Entscheidung, und sie sagt, WAS sie gefangen hat.**
+
+> *Belegt in `resources/planner/hausplaner/geometry/fangKern.ts`, Kopfkommentar: „Eine Wahrheit" und
+> „Nie stilles Fangen: `art` benennt, WAS gefangen wurde (oder `keiner`)".*

@@ -1,37 +1,42 @@
-# W · raster und fang — FUNKTION
+# W-01 · Raster und Fang — FUNKTION
 
-## Eingabe
+## Was tut das Werkzeug, Schritt für Schritt?
 
-| Was | Typ | Einheit | Pflicht | Prüfung |
-|---|---|---|---|---|
-| | | | | |
+1. Der Aufrufer übergibt einen **Rohpunkt** und die **Toleranz in mm**.
+2. Der Kern prüft die Kandidaten **in fester Rangfolge** und nimmt den ersten Treffer.
+3. Er gibt den **gefangenen Punkt** zurück — **und die Art des Fangs**.
 
-## Verarbeitung — der Zustandsautomat
+## Die Rangfolge ist Teil des Vertrags
 
-```
-Zustand A  ──Ereignis──►  Zustand B  ──Ereignis──►  fertig
-     │
-     └──Abbruch (Esc)──► Ausgangszustand, nichts geändert
+```text
+endpunkt > mittelpunkt > achse > verlaengerung > ortho > raster > keiner
 ```
 
-<Jeder Zustand mit: was wird angezeigt, was wird erwartet, was passiert bei Abbruch.>
+*Ohne feste Rangfolge springt der Fang bei dichten Grundrissen zwischen zwei Kandidaten hin und her
+— und das sieht aus wie ein Wackelkontakt, nicht wie eine Entscheidung.*
+**`ortho` behält seinen Platz über `raster`; die drei neuen Arten schieben sich darüber, nicht
+dazwischen.**
 
-## Ausgabe
+## Was das Werkzeug NICHT selbst tut
 
-| Was | Typ | Wohin |
-|---|---|---|
-| | | |
+- **Es rechnet keine Bildschirmpixel um.** Der Aufrufer wandelt px über den Zoom in mm-Toleranz.
+- **Es zeichnet nichts.** Reine Funktion, ohne Konva und ohne three.
+- **Es entscheidet nicht, ob gefangen werden soll** — `aktiv: false` schaltet es ab.
 
-## Kommando (für Rückgängig)
+## Die elf Ausfuhren
 
-- **Name:** `<KommandoName>`
-- **Ausführen:** <was genau am Datenmodell geändert wird>
-- **Zurücknehmen:** <wie der vorherige Zustand exakt wiederhergestellt wird>
-- **Bündelung:** <wird das Werkzeug zu EINEM Kommando gebündelt? Wenn ja, ab wann>
+| Ausfuhr | Rolle |
+|---|---|
+| `FangArt` | die sieben Arten, zugleich die Rangfolge |
+| `FangPunkt` | Punkt mit Art |
+| `FangOptionen` | Konfiguration je Aufruf |
+| `FangErgebnis` | Rückgabe **mit** Art, nicht nur Koordinate |
+| `lotAufGerade()` | Lotfußpunkt — auf die **Gerade** |
+| `fange()` | die Hauptfunktion |
+| `FANG_PX = 12` | Toleranz in Bildschirmpixeln |
+| `toleranzAusZoom()` | zoomabhängige Toleranz in mm |
+| `WandStrecke` | Eingabeform |
+| `wandFangpunkte()` | Fangpunkte aus Wänden ableiten |
+| `FANG_TEXT` | Beschriftung je Art |
 
-## Schichtzuordnung
-
-- Ändert Schicht 1 (Domäne): <ja/nein — was>
-- Rechnet in Schicht 2 (Geometrie): <welche F-Nummern>
-- Lebt in Schicht 3 (Anwendung): <Dateiname>
-- Zeigt sich in Schicht 4/5: <was der Anwender sieht>
+> *Alle elf gemessen in `resources/planner/hausplaner/geometry/fangKern.ts` (276 Zeilen).*
