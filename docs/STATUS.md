@@ -9,10 +9,10 @@
 | **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-04** Bühnen-Wächter | **`ABGENOMMEN`** | **Release-Prüfer** | Bau `c3d52f09` · Evaluator-Votum im Blatt (10.08.) | Erstnutzer-Regel gilt: Wächter vor jeder Browserabnahme, Aufruf+Ausgabe in den Bericht · Realfund PID 48098 (verwaiste Bühne, ticket_testing/OK) an Yama |
+| **A-04** Bühnen-Wächter | **`ABGENOMMEN`** | **Release-Prüfer** | `c3d52f09` · Votum `b6a63e3e` | Fehlerklasse **KEINE** · 7/7+7/7 selbst · Zwei-Richtungs-Probe an `89f373d9` · **Realfund PID 48098** erkannt und nicht angefasst |
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-07** Index-Divergenz | **`BEREIT`** | **Generator** | `184c6c61` (5. Runde) | baut, sobald A-04 `CODE_FERTIG` ist (§3) · Warteschlange `A-07 → A-09 → A-11` |
+| **A-07** Index-Divergenz | **`BEREIT`** | **Generator** | `184c6c61` (5. Runde) | **baubar — A-04 ist nicht mehr `IN_ARBEIT`** (§3) · Warteschlange `A-07 → A-09 → A-11` |
 | **A-09** Repo-Bezug über `--git-dir` | `ENTWURF` | Plan-Prüfer | Folgeauftrag zu A-08 (§12.5) | P2 · **geclaimt von der zweiten Planner-Instanz** · Formblock offen · Bau erst NACH A-07 |
 | **A-10** Melder am leeren Ergebnis | **`BEREIT`** | **Generator** | `ce1ff7d5` (2. Runde) | Folgeauftrag aus der A-05-Abnahme (§12.5) · Sichtkette als A-10-4 |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
