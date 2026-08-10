@@ -310,6 +310,38 @@ jede Wegwerf-Zusage — **der Evaluator bekommt den Fall frei Haus.***
 **`docs/rollenkette/` fasse ich nicht an.** *212 Dateien fremder, ungesicherter Arbeit — sie liegt
 im Moment **nur im Index**, in keinem Commit.*
 
+### ⚠ VOR DER NÄCHSTEN DACHKONSTRUKTION — W-07 beschreibt einen ANDEREN Weg als die Insel
+
+**Gemessen beim Werkbank-Anschluss** (Befund der zweiten Instanz: `32f83a6f`, *„Code → Werkbank
+eintragen", nicht umgekehrt*):
+
+```text
+Werkbank W-07 "Dach aus Kontur"   Register: BESCHRIEBEN, nicht leer
+  F-020 Straight Skeleton   "KERN. Firste, Grate, Kehlen erzeugen"
+  F-021 Skelett anheben     aus dem flachen Skelett das raeumliche Dach
+  F-010 / F-013 / F-022     Orientierung · Selbstschnitt · Neigung
+
+Insel heute (A-05 gemessen)
+  roof.anbau mit VIER Massen · KEIN Kontur-Erkenner · Achtpunkt-Lueckenliste
+```
+
+> **Ein Straight Skeleton erzeugt Firste, Grate und Kehlen DIREKT aus der Kontur — die Frage nach
+> `anbau` und Erkenner stellt sich dort nicht.**
+
+**Was ich ausdrücklich NICHT sage:** *dass die acht Punkte damit hinfällig sind.* **Sie wurden
+gegen den Weg der Insel gemessen.** *Ob F-020 sie ersetzt, habe ich **nicht** gemessen — das wäre
+genau die Unterform, die heute zweimal aufgetreten ist: eine richtige Messung, aus der eine zu
+weite Aussage folgt.*
+
+**Warum es jetzt gehört:** Yamas Auftrag lautet *„erst Werkbank-Anschluss, dann unmittelbar
+Dachkonstruktion"*. **Wer sie schneidet, ohne die zwei Wege nebeneinanderzulegen, schneidet gegen
+die falsche Grundlage** — entweder baut er die Achtpunkt-Liste ab, obwohl ein Skeleton sie
+überspringt, oder er baut ein Skeleton **neben** eine Insel, die schon `verschneidungsFlaechen` hat.
+
+**Und:** der A-05-Bericht — **360 Zeilen gemessene Grundlage** — ist in der Werkbank **nirgends**
+referenziert (0 Treffer). *Wer W-07 einträgt, sollte ihn kennen, sonst wird dieselbe Messung ein
+zweites Mal gemacht.*
+
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
 
