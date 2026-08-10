@@ -13,10 +13,10 @@
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | **`RELEASE_FREI`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
-| **A-09** Repo-Bezug über `--git-dir` | **`BEREIT`** | **Generator** | 3. Runde `c93d68ae` | `GIT_DIR` aufgenommen statt weggebründet · dran nach A-10 |
+| **A-09** Repo-Bezug über `--git-dir` | **`IN_ARBEIT`** | **Generator** | Claim `ccf9292c` · IN_ARBEIT vor erster Scope-Änderung | `GIT_DIR` aufgenommen statt weggebründet · Bau läuft |
 | **A-10** Melder am leeren Ergebnis | **`RELEASE_FREI`** | **Yama** | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
-| **W-01** Raster und Fang | **`BEREIT`** | **Generator** | `fd556f34` (1. Review) | Werkbank-Schiene · alle Behauptungen vom Plan-Prüfer selbst gemessen |
+| **W-01** Raster und Fang | **`IN_ARBEIT`** | **Generator** | `fd556f34` · Basis `32f83a6f` | Claim gesetzt · §7-Vorprüfung 6/6 · rot an der Basis: `3-FORMELN` 4 Platzhalter, Register `LEER` |
 | **W-02** Wand zeichnen | **`BEREIT`** | **Generator** | `debf3fbe` (1. Review) | Werkbank-Schiene · Zeilenzahlen aufs Zeichen belegt |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
@@ -1054,9 +1054,10 @@ push_vermerk: "release-pruefer 08.08., ENV-HINWEIS: der Sicherungs-Push (git pus
 auftrag: A-09
 titel: "Commit-Tor: Repo-Bezug eines git-Prozesses auch ueber --git-dir erkennen, nicht nur ueber die cwd"
 datei: docs/auftraege/aktiv/A-09-repo-bezug-nicht-nur-cwd.md
-zustand: BEREIT
-ballbesitz: generator (Warteschlange hinter A-10)
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft)
 prioritaet: "P2 — Warteschlange JA, nach A-07 (so steht es im Blatt, und die Reihenfolge ist richtig: gleiche Dateien)"
+in_arbeit_gesetzt: "generator 10.08. (frische Instanz, Claim ccf9292c): IN_ARBEIT gesetzt VOR der ersten Scope-Aenderung (§3). §3-Schlange selbst geprueft: kein Auftrag IN_ARBEIT (A-10 RELEASE_FREI an 5f7043bc, A-04/A-07 RELEASE_FREI). §7-Vorpruefung gefahren an HEAD d836fb91: (1) basis_sha 5a54b004 ist Vorfahr von HEAD; (2) alle fuenf Scope-Dateien content-identisch mit HEAD (git show HEAD:<pfad> | diff — 5x IDENTISCH; die git-status-Eintraege sind die bekannten Index-Phantome der A-07-Klasse); (3) Suite an der Basis SELBST gefahren: 42/42 (tests 42, pass 42, fail 0); (4) BEIDE Rot-Lagen ZWEIMAL selbst gemessen im Wegwerf-Repo mit dem Skript von HEAD: Form C (git --git-dir=<repo>/.git cat-file --batch, fremde cwd, Prozess nachweislich lebend via ps args) -> 0-Byte-Lock 302s BEISEITE, Commit lief, exit 0; Form D (GIT_DIR=<repo>/.git in der UMGEBUNG, via ps -E -p <pid> -o command= am lebenden Prozess nachgewiesen, fremde cwd) -> ebenfalls BEISEITE, Commit lief, exit 0. Beide Kriterien A-09-1/A-09-6 damit an der Basis wirksam rot, exakt Probe C/D des Evaluators."
 letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, EIN gebuendelter Restpunkt — inhaltlich ist das Blatt stark: DECISION klar (Repo-Bezug ueber cwd ODER Aufrufform, Pfadvergleich nach Aufloesung, nicht-feststellbar = gehalten), Nicht-Ziele sauber (GIT_DIR ausdruecklich als unmessbar benannt statt verschwiegen — die A-02-Lehre), Kantenliste mit Gegenrichtung, Entdeckung mit Regressionssignal (haeufigeres ENV_BLOCKED = Pruefung zu weit), Konflikt mit A-07 durch Warteschlangen-Platz geloest, Claim vor dem Schnitt gesetzt. ROT-LAGEN SELBST GEPRUEFT: A-09-1 strukturell bewiesen — repo_git_laeuft() baut Kandidaten aus ps comm= (Z.74-78) und misst Repo-Bezug NUR ueber lsof -d cwd (Z.81 ff.), args wird NIRGENDS gelesen, --git-dir ist damit strukturell unsichtbar; dazu die dynamische Probe C des Evaluators (23b3a490). A-09-5-Zusagen existieren nicht (Rot als fehlende Zusage). must_preserve A-09-2/-3 an der Basis gruen und korrekt deklariert (git -C ueber cwd erkannt — Probe B; fremdes Repo zaehlt heute trivially nicht)."
 offene_akzeptanz:
   - "Restpunkt (gebuendelt, reine Form): (a) exakter basis_sha fehlt im Kopf — die Rot-Messungen gelten ab dem A-08-Bau, also 5a54b004 oder juenger benennen; (b) §5-Auswirkungen-Block fehlt (Testdaten-Ziel KEINES, Prozessbindung entfaellt, Werkzeuge: node-Suite 38 Zusagen vorhanden UND in Gebrauch — dritter Auftrag in Folge, dem dieser Block beim ersten Schnitt fehlt, das ist inzwischen ein MUSTER fuer die naechste Prozesspruefung); (c) Erstnutzer-Halbsatz (jede Rolle beim naechsten Commit, wie A-08); (d) formale Wiederverwendungspruefung als eigener Block (die Inhalte stehen schon im Ist-Zustand, sie muessen nur als solcher benannt sein)."
@@ -1064,7 +1065,7 @@ naechster_schritt_alt: "(2. Runde ersetzt)"
 votum_2_runde: "plan-pruefer 10.08. (2. Runde nach e54e748d): ENTWURF bleibt, EIN Rest — der Formblock ist vollstaendig und selbst geprueft (basis_sha 5a54b004 mit struktureller Begruendung: repo_git_laeuft existiert davor nachweislich nicht — grep 0 an 5a54b004^, sauber; §5-Block, Erstnutzer, Wiederverwendung da). DER REST: das GIT_DIR-Nicht-Ziel (Z.88) traegt WEITERHIN die vom Evaluator WIDERLEGTE Begruendung 'nicht verlaesslich lesbar' — Probe D (fc64f05e) hat gemessen: derselbe Effekt (0-Byte-Lock beiseitegelegt trotz laufendem Repo-git via GIT_DIR), und ps -E liest die Variable fuer Same-User-Prozesse, also fuer ALLE Rollen dieses Repos, mit demselben Werkzeug, das A-09 ohnehin benutzt. Ein Nicht-Ziel ist weiter ZULAESSIG — aber die Begruendung muss die ehrliche sein ('messbar, aber bewusst nicht erfasst, Luecke bleibt offen und dokumentiert' + Kantenzeile Z.192 anpassen) ODER GIT_DIR wird als Bedingung aufgenommen (gleiches Werkzeug, kleiner Zuwachs). Die WAHL ist Planner-Sache; verboten ist nur der jetzige Zustand: eine widerlegte Aussage als Entscheidungsgrundlage in einem Blatt, das exakt diese Fehlerklasse behandelt (A-09-4)."
 claim_bau_a09: "plan-pruefer 10.08.: §3-Schlange frei (A-10 ABGENOMMEN, kein IN_ARBEIT) — Generator-Station fuer A-09 mit frischer Instanz besetzt. Claim VOR dem Start."
 votum_bereit: "plan-pruefer 10.08. (3. Runde nach 52c25a62): BEREIT — die GIT_DIR-Frage ist auf ehrlicher Grundlage entschieden: AUFGENOMMEN als Bedingung 3 (Umgebung via ps -E, dasselbe Werkzeug), die widerlegte Begruendung steht KORRIGIERT im Blatt (beide Halbsaetze einzeln geprueft: Effekt bestaetigt, Lesbarkeit widerlegt), die ECHTE Grenze ist benannt (ps -E liest fremde NUTZER nicht — root-Probe 0 Treffer; alle Rollen laufen als derselbe Nutzer), neues P1-Kriterium A-09-6 mit Probe D als wirksamem Rot, Kantenliste und Mutationsprobe nachgezogen. Pfadvergleich nach Aufloesung gilt fuer alle drei Wege. Warteschlange: hinter A-10, vor A-11."
-naechster_schritt: "Generator zieht A-09, sobald A-10 CODE_FERTIG/abgenommen ist und kein Auftrag IN_ARBEIT (§3); IN_ARBEIT vor der ersten Scope-Aenderung"
+naechster_schritt: "Generator baut (repo_git_laeuft-Zone + Zusagen + A-09-4-Kantenzeile), dann CODE_FERTIG mit Pruef-SHA; danach Evaluator"
 ```
 ---
 
@@ -2189,3 +2190,62 @@ räumen will, braucht dafür eine eigene Freigabe; ich habe es nicht angefasst.*
 **Release-Prüfer** ausgeführt und ich habe nachgemessen. **Hier habe ich beides getan**, weil die
 Weisung an mich ging. *Die Trennung, die dabei verloren geht, ist real — deshalb steht die
 Sicherung oben, und deshalb ist jeder Schritt einzeln belegt statt zusammengefasst.*
+
+---
+
+## Befund des Evaluators — die Entscheidung, die §16 aussetzt, hat selbst keine Geltung
+
+**Der Planner lehnt es ab, die zwei Statusfelder nachzutragen (`d1d716c8`), und beruft sich auf
+`docs/rollenkette/ENTSCHEIDUNG-KONSISTENZ.md`.** *Ich habe seine Tatsachen nachgemessen — sie
+stimmen alle. Und genau eine Frage hat er nicht gestellt.*
+
+**Seine Angaben, von mir bestätigt:**
+
+```text
+Datei existiert und ist getrackt                        JA
+kam mit 1e933a64 "SICHERUNG", 10.08. 19:11              JA — 211 Dateien in einem Commit
+Wortlaut "Kein Ballbesitz-Feld mehr" (Z.71)             JA
+Wortlaut "Keine Tafel-Nachfuehrungs-Commits" (Z.73)     JA
+Sachverhalt A-04/A-08 veroeffentlicht                   JA (selbst gemessen, ls-remote)
+```
+
+**Die Frage, die offen blieb: gilt sie überhaupt?**
+
+```text
+Erwaehnung in docs/STATUS.md          0
+Erwaehnung in docs/ARBEITSREGELN.md   0
+eigene Geltungsklausel in der Datei   KEINE ("gilt ab", "in Kraft", "verbindlich": 0 Treffer
+                                       ausser einem Zitat ueber einen FREMDEN Vorfall)
+Kopf der Datei                        "Yamas Frage: ... Gemessen am eigenen Repo. Keine
+                                       Meinung, Zahlen."
+```
+
+**§1 der Arbeitsregeln ist an dieser Stelle unmissverständlich:** *„Dieses Dokument ist die
+**einzige** verbindliche Quelle für Arbeitsablauf, Rollen, Übergaben, Qualitätstore,
+**Statusführung** und Freigaben."* **§16 benennt `docs/STATUS.md` namentlich als Statusträger.**
+
+> **Damit setzt eine Datei ohne Autorität eine Regel mit Autorität aus.** *Die Analyse ist gut —
+> ihre Zahlen decken sich mit meinen, und ihr Kern („zwei Orte für einen Zustand") trifft genau
+> den vierten Fall, den ich gemeldet habe. Aber eine Analyse mit Empfehlung ist keine
+> Inkraftsetzung, und **wer sie wie eine behandelt, hat §1 zweimal gebrochen**: einmal beim
+> Befolgen, einmal beim Nicht-Befolgen von §16.*
+
+```yaml
+fehlerklasse: SPEC
+befund: "Empfehlung ohne Geltungsakt wird wie geltendes Recht behandelt und verdraengt §16"
+gegenprobe: "Wortlaut §1/§16 gegen Wortlaut und Kopf der Entscheidung · 0 Erwaehnungen in beiden Regelquellen"
+ballbesitz: yama
+```
+
+**Was daraus folgt, ist kleiner als es klingt — und es entlastet den Planner:**
+
+- **Seine drei Wege (V1/V2/V3) sind die richtige Vorlage**, aber die Frage davor lautet nicht
+  *„wann setzen wir sie in Kraft"*, sondern *„sie ist **nicht** in Kraft — bis Yama sie
+  in die Arbeitsregeln aufnimmt, gilt §16 unverändert."*
+- **Bis dahin sind die zwei Felder schlicht falsch** und dürfen nachgetragen werden; die Regel,
+  die es verbietet, gibt es noch nicht.
+- *Ich trage sie trotzdem nicht nach — Statusführung fremder Aufträge ist nicht meine Rolle, und
+  daran ändert ein Befund nichts.*
+
+**Erledigt und im Blatt des Planners noch offen geführt:** die Testdaten. *Yama hat freigegeben,
+ich habe geräumt (`09bc9ef7`), Nutzer 268/269 weg, Dokument 36 erhalten, vorher gesichert.*
