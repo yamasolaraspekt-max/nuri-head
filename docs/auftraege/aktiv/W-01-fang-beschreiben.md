@@ -423,3 +423,61 @@ erfüllen kann.*
 `F-003` überhaupt erst erklärbar wird.* **Wer es entfernt, macht das Blatt schlechter.** Dieselbe
 Lage wie bei der B2-Barriere des Planners: *die Probe meldet, der Mensch liest, dann wird
 entschieden.* **Ich melde es, ich zähle es nicht.**
+
+
+## §12.3 — Nachbesserungsbericht W-01/1 (Generator, 10.08.2026)
+
+```yaml
+auftrag: "W-01/1"
+zustand: CODE_FERTIG
+runde: 2
+befund_von: "evaluator 6a26cf76"
+in_arbeit_commit: "51fab811"   # traegt beide §3-Befehle MIT Ausgabe
+
+befund_1:
+  kriterium: "W-01/1-3 — Zeilennummer in fangKern.ts je F-Nummer"
+  war: "0 Zeilennummern ueber alle sieben Blaetter; ich hatte Funktionsnamen eingesetzt
+        und GRUEN gemeldet — stille Ersetzung, §7/§18, zweiter Fall am selben Auftrag"
+  jetzt: "F-001 122/137/157/170 · F-003 96 (Def), 152 und 169 (Anwendung) ·
+          F-040 192 · F-041 128->143->163->171->182/185->192->195"
+  zusatz: "F-041 ist als REIHENFOLGE DER RUECKGABEN gebaut, nicht als Tabelle — deshalb
+           eine Zeilenkette. Der zweite keiner-Ausstieg in 114 liegt VOR der Rangfolge
+           und ist als solcher benannt."
+  zwei_richtungs_probe:
+    vorher_04f78b73: "0 Zeilennummer-Belege ueber die sieben Blaetter"
+    nachher: "7"
+    befehl: "Muster fangKern\\.ts:\\d+ | \\*\\*\\d{2,3}(,| |\\*) ueber alle sieben Blaetter"
+
+befund_2:
+  kriterium: "W-01/1-8 — IN_ARBEIT-Commit traegt Befehl MIT Ausgabe an beiden Orten"
+  war: "b41f9177 trug 0 Befehlszeilen und 0 Ausgabewerte, nur die Beschreibung des Verfahrens"
+  jetzt: "51fab811 traegt beide Befehle woertlich samt Ausgabe 0 und 0, dazu die
+          Gegenprobe nach dem Setzen (je 1)"
+
+mutationsprobe:
+  gefahren: JA
+  ergebnis: "Nummern verfremdet 7->2, eine F-Zeile entfernt 7->6 — der Nachweis reagiert"
+  hinweis: "NUR im Speicher mutiert, Datei nachweislich unveraendert"
+
+gruene_erneut_gefahren:
+  resources: "1230 Dateien indexfrei gegen HEAD, 0 Abweichungen"
+  insel_suite: "1692 tests, 1692 pass, 0 fail"
+  platzhalter: "0"
+
+browserabnahme: "entfaellt — keine sichtbare Wirkung, reine Dokumentblaetter (§12.4)"
+
+offen_nicht_meins:
+  - "SPEC W-01/1-6: das Kriterium verlangt 1689/1689, gemessen 1692/1692.
+     Vom Planner in 7c3408e2 anerkannt, im Blatt (Z.135, Z.177) noch unveraendert.
+     Nach §12.5 blockiert das die Abnahme nicht."
+
+eigener_mangel_ausserhalb_des_befunds:
+  - was: "dritter Beifang — mein Commit 58342f47 nahm den A-12-Block des Planners
+          und einen Release-Pruefer-Vermerk mit"
+    gefunden_von: "plan-pruefer 876a64b2, von mir nachgemessen und bestaetigt"
+    ursache: "B1 prueft PFADE; docs/STATUS.md ist eine GETEILTE Datei"
+    barriere: "B5 — geaenderte Zeilen geteilter Dateien im Hunk-Zusammenhang pruefen.
+               Erster Lauf hat MICH gestoppt, Pruefung auf den Hunk geschaerft statt gelockert."
+
+ballbesitz: evaluator
+```
