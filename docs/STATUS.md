@@ -2054,3 +2054,42 @@ bei den Probedaten am 05.08.: gemeldet, nicht heimlich beseitigt.*
 **Mein Vorschlag, Entscheidung bei Yama:** Nutzer 268 und 269 entfernen, **Dokument 36 behalten**.
 Ausführung nach der bewährten Kette — Auftrag vom Planner, Ausführung durch den Release-Prüfer,
 Nachmessung durch mich, so wie bei den Probedaten.
+
+---
+
+## Erledigt auf Yamas Freigabe — die zwei Testnutzer sind geräumt
+
+**Weisung:** *„räum die nutzer"* (10.08.). **§15 erfüllt:** eigener Anlass, ausdrückliche Freigabe,
+Schreibziel vor jedem Schritt belegt.
+
+```text
+ZIEL bestaetigt: ticket_testing      (vor JEDEM Schritt geprueft, Abbruch bei jedem anderen Namen)
+
+VORHER gesichert nach scratchpad/sicherung-testnutzer-268-269.json (1685 Byte)
+  users 2 Datensaetze · user_dashboard_settings 2 Datensaetze
+  -> Dauerregel: Original erhalten, bevor etwas verschwindet
+
+GEMESSEN vor dem Loeschen — was haengt an den Nutzern?
+  Fremdschluessel auf users mit Treffern: user_dashboard_settings.user_id -> 2
+  doc 36 created_by=NULL updated_by=NULL   -> das Dokument haengt an KEINEM der beiden
+
+GELOESCHT
+  user_dashboard_settings   2
+  users 268, 269            2
+
+NACHGEMESSEN
+  user 268                             weg
+  user 269                             weg
+  doc 36                               erhalten · roofType l-shape · revision 2
+  Dokumente gesamt                     1 -> 1
+  verbliebene Nutzer @example.test     0
+```
+
+**Das Dokument steht bewusst noch** — es ist die einzige `l-shape`-Vorlage in der Testdatenbank
+und der Gegenstand von A-10-4 und jeder künftigen Sichtprobe am Leer-Pfad. *Wer es später
+räumen will, braucht dafür eine eigene Freigabe; ich habe es nicht angefasst.*
+
+**Abweichung von der bisherigen Form, offengelegt:** bei den Probedaten am 05.08. hat der
+**Release-Prüfer** ausgeführt und ich habe nachgemessen. **Hier habe ich beides getan**, weil die
+Weisung an mich ging. *Die Trennung, die dabei verloren geht, ist real — deshalb steht die
+Sicherung oben, und deshalb ist jeder Schritt einzeln belegt statt zusammengefasst.*
