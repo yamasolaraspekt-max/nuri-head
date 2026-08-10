@@ -1190,8 +1190,10 @@ evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an 5823ada0, Fehlerklasse 
 ```yaml
 auftrag: "W-02/1"
 datei: docs/auftraege/aktiv/W-02-wand-beschreiben.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: VEROEFFENTLICHT
+ballbesitz: yama
+release_sha: "56c77ae6"
+release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme b2fd68b2/e23440d1 — Kette Vorfahr, reiner Doku-Scope (Werkbank-Blaetter + Register; resources/public/app/scripts seit c8191292 = 0 Treffer), Tor-Suite 61/61 als Regressionskontrolle, Scans leer. main-FF c8191292..56c77ae6 auf fork UND backup-private. OFFENGELEGT: der Zustandseintrag kam wie bei A-09 einen Commit NACH dem Push — dasselbe Muster (Patch-Skript verfehlte den Block wegen Anfuehrungszeichen im auftrag-Feld, Push lief im selben Befehlsblock weiter). Zweiter Riss derselben eigenen Klasse; Konsequenz: Status-Patch und Push laufen ab jetzt in GETRENNTEN Befehlsbloecken, Patch-Verifikation dazwischen. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das vierte): Messungen EXAKT bestaetigt: wallGeometry 317 / wandFlaeche 238 / wandaufbau 72 / linienBauteile 167 Zeilen aufs Zeichen; die Ausschluesse sind belegt (wandaufbau traegt berechneUWert = Bauphysik, linienBauteile 10x Schneefang = Dachzubehoer) und W-02/1-6 zwingt sie namentlich ins Blatt — die Matrix-Selbstkorrektur des Planners ist der wertvollste Teil des Schnitts. Registry 'wand' vorhanden. Rot-Lage zaehlbar (meine Zaehlung 5, Blatt 8 — Muster-abhaengig, beide > 0, nicht tragend; der Bericht nennt sein Muster). HINWEIS wie bei W-01: die REGISTER-Zeile nennt F-030 aber nicht F-003, die Blatt-Kandidaten beides — W-02/1-3 klaert am Code, der Bericht loest die Abweichung ausdruecklich auf. REGISTER.md-Beruehrung mit W-01/1 durch Reihenfolge + §3 geloest."
 naechster_schritt: "Nach W-01/1 (Reihenfolge im Blatt); Einreihung der W-Gruppe insgesamt bei Yama"
