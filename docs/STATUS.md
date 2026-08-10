@@ -1071,6 +1071,23 @@ claim_abnahme: "evaluator (Erstinstanz) 10.08. 19:3x: Abnahme A-10 GECLAIMT, VOR
 ```
 ---
 
+## BEREIT — A-11 (Warteschlange hinter A-09)
+
+```yaml
+auftrag: A-11
+titel: "Commit-Tor: die Rolle kommt aus der Umgebung und wird der Botschaft vorangestellt - fehlt sie, gibt es keinen Commit"
+datei: docs/auftraege/aktiv/A-11-rollenmarke-im-tor.md
+zustand: BEREIT
+ballbesitz: generator (Warteschlange hinter A-09)
+basis_sha: 229ad0be
+prioritaet: P1
+letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das zweite der Gruppe nach A-08): Rot-Lagen SELBST strukturell verifiziert (Rollenpruefung im Tor: 0 Treffer; 21 von 40 letzten Commits ohne Praefix — Blatt sagt 15, Drift nicht tragend, die Quote zerbricht die Zaehlung so oder so), Botschaft-Annahme Z.51 bestaetigt, Commit-Aufruf liegt heute auf Z.424 statt 384 (Zeilendrift durch A-07/A-08-Bauten — die Bauvorgabe gilt SINNGEMAESS: der Commit-Aufruf und alles danach bleibt unangetastet). Konfliktpruefung mit disjunkten Zonen und Bauvorgabe vorbildlich; A-11-3-Rot ehrlich als nur-gegen-die-neue-Fassung deklariert (Gegenhalter-Klasse); Nicht-Ziele scharf (Auftragsnennung ausdruecklich NICHT mitgebaut, §7); Entdeckung als Dauerkontroll-grep. Die Doppelentscheidungs-Selbstanzeige (zwei Planner, drei Minuten, entschieden nach Begruendung statt Zeitstempel) gehoert als gemessener Fall in P-02 — so steht es im Blatt."
+zaehlfrage_entschieden: "plan-pruefer 10.08.: A-11 zaehlt als AUFTRAG 1 DER GRUPPE 2. Begruendung: §13 zaehlt ab der ersten Vorlage beim Plan-Pruefer; Gruppe 1 ist mit zehn Auftraegen voll und ihre Prozesspruefung IST durchgefuehrt (850aafd5 + Anteile) — damit ist die §13-Schranke vor Auftrag elf bedient. Der ausstehende Zaehler-RESET (B3-Bedingung) betrifft die Mechanik des Zaehlers, nicht die Zugehoerigkeit: Auftraege zwischen Pruefung und B3-Bau duerfen nicht aus der Statistik fallen ('schlechte Plaene verschwinden nicht'). Bis B3 steht, wird Gruppe 2 von Hand gezaehlt — beginnend mit diesem Blatt."
+auflage_bereit: "EINE Auflage fuer den Bau (kein Restpunkt am Blatt): die CODE_FERTIG-Meldung MUSS die sofort blockierende TICKET_ROLLE-Pflicht als Mitteilung an ALLE Rollen in STATUS.md tragen (Variable, Form, Beispiel) — das Blatt benennt die Gefahr selbst: sonst laeuft die erste Rolle nach dem Bau in eine unerwartete Sperre."
+naechster_schritt: "Generator zieht A-11 NACH A-09 (§3, eine Schlange: A-10-Abnahme laeuft, dann A-09-Bau, dann A-11); IN_ARBEIT vor der ersten Scope-Aenderung"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
