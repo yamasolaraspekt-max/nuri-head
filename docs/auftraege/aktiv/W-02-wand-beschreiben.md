@@ -156,6 +156,15 @@ nächste Leser sie wieder zu — der Modulname legt es nahe, und meine eigene Ma
 **W-02/1-8 (P1, Register mitgeführt):** Reifegrad **und** beide Fundstellen im Abschnitt „Was schon
 im Repo existiert". *Dort stehen heute drei Fundstellen, alle für W-07 — `wallGeometry.ts` fehlt.*
 
+**W-02/1-9 (P1, §3 wird BELEGT, nicht behauptet — NEU 10.08.):** Der `IN_ARBEIT`-Commit enthält den
+**Befehl mit Ausgabe** für „kein anderer Auftrag steht auf `IN_ARBEIT`", **an beiden Orten geprüft**
+(Tafelzeile **und** `^zustand:`-Feld), im **selben** Commit, der `IN_ARBEIT` setzt.
+
+> *Wortgleich zu `W-01/1-8`, mit derselben Rot-Lage (`7dcbeba9` behauptete es ohne Beleg) und
+> derselben ehrlichen Grenze: der Nachweis verkleinert das Fenster auf die Dauer eines Commits, er
+> schließt es nicht. **Beide Orte sind der Kern** — A-09 stand in Tafelzeile und Feld, W-01 nur in
+> der Tafelzeile; eine Prüfung nur des Feldes ergab beide Male `1` und hätte nichts gesehen.*
+
 ## Kantenliste
 
 ```text

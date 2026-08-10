@@ -1,43 +1,42 @@
-# W · raster und fang — BEDIENUNG
+# W-01 · Raster und Fang — BEDIENUNG
 
-## Aufruf
+## Was der Anwender tut
 
-| Weg | Wie |
+**Nichts Eigenes.** Der Fang liegt unter jedem Setzen und Ziehen eines Punktes.
+
+## Was er sieht
+
+Die Art des Fangs wird benannt — nie stumm:
+
+| Art | Beschriftung |
 |---|---|
-| Werkzeugleiste | <Symbol, Position, Beschriftung> |
-| Tastenkürzel | <Taste> |
-| Kontextmenü | <ja/nein, wann> |
+| `endpunkt` | Endpunkt |
+| `mittelpunkt` | Wandmitte |
+| `achse` | Wandflucht |
+| `verlaengerung` | Verlängerung |
+| `ortho` | rechter Winkel |
+| `raster` | Raster |
+| `keiner` | *(leer)* |
 
-## Ablauf am Bildschirm
+> *Belegt als `FANG_TEXT` in `resources/planner/hausplaner/geometry/fangKern.ts`.*
 
-| Schritt | Anwender tut | Bildschirm zeigt |
+## Was der aufrufende Code stellen muss
+
+| Feld | Pflicht | Wirkung |
 |---|---|---|
-| 1 | | |
-| 2 | | |
+| `toleranzMm` | **ja** | die einzige Fangbedingung |
+| `raster` | nein | ohne Angabe kein Rasterfang |
+| `ortho` | nein | Bezugspunkt für den rechten Winkel |
+| `orthoToleranzMm` | nein | eigene Toleranz für `ortho` |
+| `mitten` | nein | Kandidaten für `mittelpunkt` |
+| `achsen` | nein | Strecken für `achse` und `verlaengerung` |
+| `weg` | nein | die aktuell gezogene Strecke |
+| `aktiv` | nein | `false` schaltet den Fang ab |
 
-## Rückmeldungen
+**Jede Fangart braucht ihren eigenen Operanden.** *Ohne ihn kann sie nicht feuern — deshalb ändert
+sich das Verhalten bestehender Aufrufer nicht, wenn Arten hinzukommen.*
 
-| Lage | Anzeige | Ton |
-|---|---|---|
-| Alles gut | | sachlich |
-| Eingabe unvollständig | | hinweisend |
-| **Nicht möglich** | | **erklärend — was und warum** |
+## Toleranz: Pixel werden zu Millimetern
 
-> **Pflicht:** Für jede Absage aus `7-GRENZEN.md` muss hier ein Satz stehen, den
-> ein Handwerker versteht. Nicht „DachGeometrieUngueltig", sondern
-> „Für diesen Grundriss kann kein Walmdach berechnet werden, weil er einspringende
-> Ecken hat. Mögliche Wege: Grundriss begradigen oder Flachdach wählen."
-
-## Abbruch
-
-- **Esc** bricht ab. Danach ist der Zustand **exakt** wie vorher.
-- Halbfertiges wird nie gespeichert.
-
-## Tastenkürzel während des Werkzeugs
-
-| Taste | Wirkung |
-|---|---|
-| Esc | abbrechen |
-| Eingabe | bestätigen |
-| Umschalt | <z.B. auf 45°-Winkel zwingen> |
-| Alt | <z.B. Fang aussetzen> |
+`FANG_PX = 12` ist die Toleranz **in Bildschirmpixeln**; `toleranzAusZoom()` rechnet sie in mm um.
+**Der Kern selbst kennt keinen Zoom.**
