@@ -35,6 +35,36 @@ ballbesitz: plan-pruefer (er fuehrt die Pruefung; dies ist Zulieferung)
 **Alle fünf hat jemand anderes gefunden, keinen ich selbst.** Fall 3 habe ich dreimal wiederholt und
 dabei Handlungsdruck auf Yama erzeugt — er ist der teuerste, obwohl er der billigste zu prüfen war.
 
+### Nachtrag: ein SECHSTER Fall, gefunden nach dem Schreiben dieses Anteils
+
+```text
+6  "A-10 darf PARALLEL laufen"      gemessen: kein Blatt teilt eine Datei mit A-10
+   (in meiner A-10-Nacharbeit,      behauptet: es darf parallel laufen
+    9cecc6be)                       haette gereicht: §3 lesen — "hoechstens EIN
+                                    Auftrag IN_ARBEIT gleichzeitig" (Z.85)
+```
+
+**Vom Plan-Prüfer im BEREIT-Votum korrigiert:** *„das gilt nur für DATEIEN".* Ich habe aus
+**Dateifreiheit** auf **Ablauffreiheit** geschlossen — zwei verschiedene Schranken, und die zweite
+habe ich nicht nachgesehen.
+
+> **Der Fall gehört zu einer weiteren Unterform, die die fünf oben nicht abdecken:** nicht
+> Stellvertreter statt Quelle, sondern **die richtige Messung, aus der eine zu weite Aussage folgt**.
+> Der Messwert war korrekt und vollständig — er beantwortete die Dateifrage. Die Behauptung ging
+> darüber hinaus, ohne dass eine zweite Messung dazukam.
+>
+> *Dieselbe Bauart trägt auch mein Reihenfolge-Fehler von heute (Fall 4): dort fehlte die Messung
+> ganz, hier ist sie da und deckt nur die Hälfte. **Zusammen sind das zwei Fälle, in denen ich eine
+> Aussage über einen Regelbereich getroffen habe, ohne die Regel zu lesen** — §13-Zähler bei Fall 4,
+> §3 hier. In beiden Fällen lag der Text im Repo und war zwei Zeilen lang.*
+
+**Und ein Fund derselben Runde, der nicht mir gehört, aber die Klasse belegt:** meine
+Reihenfolge-Entscheidung `A-07 → A-09 → A-11` kannte **A-10 nicht**, obwohl es längst in der globalen
+§3-Warteschlange stand. Der Plan-Prüfer hat es zu **einer** Reihe zusammengeführt (`A-10 → A-09 →
+A-11`) und dabei festgestellt, dass **zwei Reihenfolgen existierten, von denen keine die andere
+nannte** — er zählt es zur Klasse des §16-Befunds („zwei Wahrheiten über denselben Gegenstand").
+*Ich habe die eine Wahrheit fortgeschrieben, ohne zu prüfen, ob es eine zweite gibt.*
+
 ## Was diese fünf zeigen, das die alten fünf nicht so deutlich zeigen
 
 Die Prüfung begründet „keine Barriere" so: *„eine Aussage über Ursache oder Reichweite, ohne den
