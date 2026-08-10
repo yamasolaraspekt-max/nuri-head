@@ -3,7 +3,7 @@
 ```yaml
 auftrag: A-07
 titel: "Der Nebenzustand des Commit-Tors: .git/index divergiert unbemerkt und traegt ein totes Objekt"
-basis_sha: 8967e2c4
+basis_sha: ff549b88   # nachgezogen 08.08. auf die Post-A-08-Linie (war 8967e2c4)
 status_steht_in: docs/STATUS.md   # §16: EINE Statuswahrheit. Hier steht keine zweite.
 ```
 
@@ -110,6 +110,24 @@ Phantom-Fund gemeldet, und ich hätte danach geschnitten.***
 **A-07-1a (P1, der Regelfall):** Existiert **kein** Index-Blob, der in keinem Commit vorkommt,
 gleicht das Tor nach erfolgreichem Commit den Standard-Index an HEAD an.
 **Nachweis:** `git diff --cached --name-only` meldet danach **0**.
+
+**UND (Rest B, Zusatz-Nachweis — vom Plan-Prüfer angenommen):** `git status` ist danach wieder
+brauchbar. **Stichprobenform:** mindestens **zehn** `git status`-Einträge, jeder **index-frei**
+gegen HEAD geprüft (`git show HEAD:<p> | diff - <p>`) — **alle** müssen einer echten Änderung
+entsprechen.
+
+> *Ohne diesen Satz wäre A-07-1a grün, während das Werkzeug weiter blind ist. **Heute entsprechen
+> 46 Meldungen genau EINER echten Änderung.***
+
+**Ist-Belege, datiert (Rest A) — selbst gemessen, deckungsgleich mit dem Plan-Prüfer:**
+
+```text
+08.08. 14:2x   --name-only  32   ·  git status  46   ·  Halde  2506
+07.08. 18:0x   --name-only  28   ·  git status  41   ·  Halde  1749
+```
+
+*Die Halde ist binnen eines Tages um **757** Dateien gewachsen. **Genau deshalb steht keine feste
+Zahl im Kriterium, sondern nur im Bericht.***
 
 > **Schärfung des Generators — der erste Nachweis deckte den Befund nicht ab:**
 > ```text
@@ -236,6 +254,49 @@ A-07-5    Die Zahl der beiseitezulegenden Dateien waechst weiter, auch waehrend 
 Vorhersage, pruefbar:  Phantome nach der Angleichung ~= Zahl der seither ueber das
           Tor NEU ANGELEGTEN Dateien. Wer den Bau abnimmt, kann das nachrechnen.
 ```
+
+## Messung 08.08. — drei Maße, drei Zahlen, und nur EINE echte Änderung
+
+**Nicht gesucht, sondern bei der Leerlauf-Probe aufgefallen:** `git status` meldete 41 Einträge.
+Jeden einzelnen index-frei gegen HEAD geprüft:
+
+```text
+git status --porcelain            41      <- was eine Rolle TATSAECHLICH sieht
+  davon echt geaendert/neu         1
+  davon falsch                    40
+
+--name-only   (A-07-1a-Nachweis)  28
+--diff-filter=D (Anlass-Zahl)     10
+
+Index-Eintraege                 7011
+Dateien in HEAD                 7021      Differenz 10 = genau die D-Phantome
+```
+
+> ### Die Struktur stimmt exakt: HEAD − Index = 10 = die Phantom-Löschungen.
+>
+> **Und die praktisch entscheidende Zahl ist keine der beiden im Blatt, sondern 41 zu 1.**
+> *Ein Werkzeug, das vierzig falsche Meldungen neben eine richtige stellt, ist nicht ungenau —
+> es ist unbenutzbar. Genau deshalb hat am 04.08. jemand von Hand geräumt.*
+
+**Zur Klassenverteilung, und hier bleibe ich bei dem, was ich messen kann:**
+
+```text
+10  D    Phantom-Loeschungen   -> der Mechanismus aus 2e83dfbc, gestern 9, heute 10
+18  MM   im Index UND im Baum als geaendert gefuehrt
+12  ??   dem Index voellig unbekannt
+```
+
+**Der `D`-Anteil folgt dem belegten Mechanismus** (eine neue Datei → ein Phantom; 9 → 10 passt).
+**Die Klassen `MM` und `??` habe ich NICHT erklärt** — sie sind größer als die `D`-Klasse und ich
+weiß nicht, wodurch sie entstehen. *Das steht hier als offene Frage, nicht als Befund.*
+
+### Was das für A-07-1a bedeutet
+
+**Der Nachweis über `--name-only` (28) ist besser als der über `--diff-filter=D` (10), aber er
+erfasst die `??`-Klasse nicht.** *Wenn der Bau die Divergenz beseitigt, sollte auch `git status`
+wieder brauchbar sein — sonst ist das Kriterium grün und das Werkzeug weiter blind.*
+**Vorschlag für den Plan-Prüfer, keine Vorwegnahme:** zusätzlich messen, wie viele
+`git status`-Einträge nach dem Bau einer echten Änderung entsprechen.
 
 ## Auswirkungen (§5) — Rest 2 aus der 1. Runde, nie erledigt
 

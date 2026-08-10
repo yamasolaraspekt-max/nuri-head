@@ -363,3 +363,374 @@ auf die Bestaetigung des Plan-Pruefers; der Bau ist mit alter UND korrigierter F
 deckungsgleich, ein Konflikt entsteht nicht.
 
 **Meldung: CODE_FERTIG.** Ich nehme nicht ab — Ball beim Evaluator.
+
+---
+
+## Evaluator-Votum (§11) — 08.08.2026
+
+```yaml
+auftrag: A-08
+commit: 85b03d23          # Pruef-SHA; Bau 5a54b004, A-08-7-Doku 6a264834, Basis c2de1eec
+votum: ABGENOMMEN
+fehlerklasse: SPEC        # nur der eine P2-Befund unten; kein CODE-Befund
+gegenprobe: sieben eigene Mutationen · Rot-Lauf gegen das Basis-Tor · drei eigene Torlaeufe
+browser: nicht_anwendbar  # Shell-Werkzeug, keine sichtbare Wirkung
+datenbank: nicht_anwendbar # §15: der Auftrag beruehrt keine Datenbank, kein Seed, kein Server
+befunde:
+  - "P2 SPEC: ein git-Prozess DIESES Repos mit --git-dir und fremder cwd wird nicht erkannt"
+```
+
+### Prüfstand
+
+Frischer Worktree auf `85b03d23`, `node_modules` per `cp -al`; zweiter Worktree auf der Basis
+`c2de1eec` als Kontrolle. **Scope-Diff des Bau-Commits** (nicht `Basis..HEAD`):
+
+```text
+5a54b004   scripts/commit-pruefen.sh  +144/-8 · scripts/__tests__/commitPruefen.test.mjs  +236
+6a264834   docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md  +20
+85b03d23   docs/auftraege/aktiv/A-08-halter-nach-kommando.md   +139
+```
+
+*Kein fremder Pfad, kein Bundle, keine Migration.* **§14 eingehalten.**
+
+### Selbst gefahren, nicht übernommen
+
+```text
+Suite Pruefstand   tests 38  pass 38  fail 0
+Suite Basis        tests 30  pass 30  fail 0        <- alle 30 Bestandszusagen halten (A-08-9)
+NEUE Zusagen GEGEN das Basis-Tor:  tests 38  pass 33  fail 5
+  gefallen: A-08-1 · A-08-4 · A-08-5 · A-08 Form B · A-08-10
+```
+
+**Sieben Mutationen, je mit Anker (Treffer genau 1×), volle Suite, danach `md5` zurückgesetzt:**
+
+```text
+M1 && -> ||                     fail 3   GEFANGEN
+M2 Kommando-Pruefung entfernt   fail 4   GEFANGEN
+M3 Ergebnis ignoriert           fail 2   GEFANGEN
+M4 Basename -> Pfad-Gleichheit  fail 3   GEFANGEN
+M5 git-* nicht erkannt          fail 1   GEFANGEN
+M6 unbekannt = nicht gehalten   fail 1   GEFANGEN
+M7 0-Byte-Schranke entfernt     fail 3   GEFANGEN — faellt durch A-02-2 und A-02-4
+md5 vor und nach jeder Probe identisch.
+```
+
+**Drei eigene Torläufe im Wegwerf-Repo** (Tor hineinkopiert, echter Lock, 0 Byte, 240 s):
+
+```text
+A  kein git-Prozess                 -> BEISEITE + Commit          (die Wirkung)
+B  git -C <repo>, cwd fremd gestartet -> ENV_BLOCKED, Lock liegt  (git chdirt selbst)
+C  git --git-dir=<repo>/.git, cwd fremd -> BEISEITE + Commit      <- der Befund
+```
+
+### Der eine Befund — P2, `SPEC`, Ball beim Planner
+
+**Probe C ist reproduzierbar:** ein `git`-Prozess, der **an diesem Repository arbeitet**, aber
+über `--git-dir` statt `-C` gestartet wurde, behält seine fremde `cwd` — und
+`repo_git_laeuft()` erkennt ihn nicht. Der Lock wurde beiseitegelegt und der Commit lief.
+
+**Warum es dennoch keine Abnahme blockiert:**
+
+- **A-08-1 verlangt „kein git-Prozess dieses Repositoriums"** — die **Kantenliste** des Blattes
+  legt dafür `cwd` gegen `REPO_WURZEL` fest und schreibt: *„git-Prozess in FREMDEM Verzeichnis
+  zählt nicht."* **Der Bau folgt dem Blatt genau.** *Die Zeile verwechselt „fremdes Verzeichnis"
+  mit „fremdes Repository" — das ist eine Lücke im Schnitt, nicht im Bau (§12.1 → Planner).*
+- **Die gefährliche Lage deckt Bedingung 1 ab:** ein arbeitendes `git` **hält** seinen
+  `index.lock` offen, und dann greift der git-Halter-Zweig — in Probe B genau so gemessen.
+  Für einen Fehlgriff müssten zusammentreffen: `--git-dir` **und** fremde `cwd` **und** ein
+  0-Byte-Lock **älter als 60 s**, den dieses `git` **nicht offen hält**.
+- **`git -C`, die verbreitete Form, wird erkannt** (Probe B) — auch die, die ich selbst benutze.
+
+### Offengelegt
+
+- **§4-Reihenfolge:** die Ausgabe von `git worktree add` hat mir die **Betreffzeile** von
+  `85b03d23` gezeigt (`Suite 30/30 -> 38/38, Rot-Lage 5/8, sieben Mutationen`), **bevor** ich
+  gemessen hatte. *Alle Zahlen oben sind trotzdem eigene Läufe; die Übereinstimmung ist das
+  Ergebnis, nicht die Quelle.* Beim nächsten Mal `worktree add` mit unterdrückter Ausgabe.
+- **A-08-2, A-08-4 `git-*` und A-08-8 sind an der Basis grün** — kein wirksames Rot. *Das ist
+  richtig so und im Blatt als Erhaltungsrichtung deklariert; ich nenne es, weil „5 von 8 rot"
+  sonst wie ein Mangel aussieht.*
+
+---
+
+## Evaluator-ZWEITVOTUM — 08.08.2026, ABGENOMMEN (unabhängige Bestätigung nach Instanzen-Kollision)
+
+> **Offenlegung der Kollision.** Die erste Evaluator-Instanz galt nach zwei Abbrüchen als
+> abgestorben (Claim-Nachtrag `966dea39`); ich wurde als zweite frische Instanz mit derselben
+> Abnahme gestartet. Während meiner Messung hat die erste Instanz ihr Votum committet
+> (`23b3a490`, oben). **Alle meine Messungen liefen davor an einem stillstehenden Stand** —
+> beide Scope-Dateien vor und nach jeder Probe byte-identisch mit `85b03d23` (`git diff` je
+> 0 Zeilen, md5 `7c71f5ba2daac3601ae9b1ee6fa4a912`); der fremde Commit berührte nur
+> STATUS/Trägerblatt, nicht den Scope. Die Voten sind unabhängig entstanden und
+> deckungsgleich — dieses hier ist die Zweitbestätigung, das Erstvotum trägt.
+>
+> **Zweite Offenlegung:** Meine ERSTE Votum-Fassung (geschrieben vor Kenntnis des Erstvotums,
+> mit dem inzwischen falschen Satz „keine neuen SPEC-Befunde" und ohne Kollisionskennzeichnung)
+> stand kurz auf der Platte und wurde von `4307987b` als Beifang mitcommittet — `7c2958fd`
+> stellt das in der Botschaft richtig. **Dieser Commit ersetzt sie durch die vorliegende
+> gekennzeichnete Zweitfassung** (daher die Entfernung der 118 Zeilen vor dem Erstvotum);
+> inhaltlich sind beide Fassungen bis auf Kennzeichnung und P2-Einarbeitung identisch.
+
+```yaml
+auftrag: A-08
+commit: 85b03d23        # Pruef-SHA; gemessen am Arbeitsbaum (Scope-Dateien byte-identisch, s. o.)
+votum: ABGENOMMEN
+fehlerklasse: SPEC      # ausschliesslich der P2-Befund des Erstvotums — von mir REPRODUZIERT, kein neuer
+gegenprobe: "eigene Wegwerf-Proben je Kriterium + Zwei-Richtungs-Probe gegen das Basis-Tor c2de1eec + alle sieben Mutationen eigenhaendig gesetzt + P2-Befund selbst reproduziert"
+browser: nicht_anwendbar
+befunde:
+  - "P2 SPEC (Erstvotum, von mir bestaetigt): git-Prozess DIESES Repos mit --git-dir und fremder cwd wird von repo_git_laeuft() nicht erkannt"
+```
+
+**Unabhängigkeit:** zuerst Auftrag, Diff (`git diff c2de1eec 85b03d23` — 427 Zeilen) und Code
+gelesen, alles selbst gemessen, den Generatorbericht erst danach abgeglichen, das Erstvotum erst
+nach Abschluss meiner Messungen gesehen. Scope-Diff `git diff --name-only c2de1eec 85b03d23`
+selbst gemessen: exakt die fünf Blatt-Dateien. Statisch: `bash -n` SYNTAX-OK, `node --check`
+CHECK-OK.
+
+### Suite, selbst gefahren (Baseline-Paar)
+
+```text
+Basis c2de1eec (Basis-Tor eingesetzt, nur A-08-Zusagen):   ℹ tests 8   ℹ pass 3   ℹ fail 5
+  rot an der Basis: A-08-1 · A-08-4 · A-08-5 · A-08 Form B · A-08-10
+  gewollt gruen (Gegenhalter/Erhaltung): A-08-2 · A-08-4 git-* · A-08-8
+Pruef-SHA 85b03d23 (voller Lauf):                           ℹ tests 38  ℹ pass 38  ℹ fail 0
+```
+
+### Je Kriterium (verbindliche Lesart: Nachtrag 1–8 + Trägerblatt als 9/10)
+
+**A-08-1 — GRÜN.** Eigene Wegwerf-Probe (0-Byte-Lock, 239 s, lebender node-Halter, kein
+Repo-git) am aktuellen Tor:
+
+```text
+exit=0
+BEISEITE   .git/index.lock  (0 Byte, 240s alt, Halter ohne git-Kommando: 15771 (node),
+           kein git-Prozess dieses Repos) -> .git/_locks_beiseite/2026-08-08/
+lock-liegt-noch=nein · Datei liegt in _locks_beiseite/2026-08-08/index.lock (NIE geloescht)
+```
+
+**Zwei-Richtungs-Probe:** dieselbe Lage gegen das Basis-Tor (`git show c2de1eec:` in
+Wegwerf-Kopie): `exit=3`, `GEHALTENER LOCK … Halter: 15841` — rot an der Basis, grün am Bau.
+**Realfall-Beleg (zitiert, ersetzt keine Messung):** `.git/_locks_beiseite/2026-08-08/index.lock`
+(0 Byte, mtime 07.08. 16:58) — das umgebaute Tor hat am 08.08. im Wildbetrieb einen echten
+0-Byte-Lock beiseitegelegt, Original erhalten.
+
+**A-08-2 — GRÜN.** Eigene Probe: 0 Byte, 30 s, lebender Halter → `exit=3`, Lock liegt,
+`Der Lock ist juenger als das Altersmass des Tors.` + `ENV_BLOCKED: … (Halter: 15889 (node))`.
+Gegenrichtung: Mutation M1 lässt genau diese Zusage fallen.
+
+**A-08-3 / A-08-9 (must_preserve) — GRÜN.** Alle 30 Bestandszusagen im eigenen 38/38-Lauf grün,
+namentlich `Tor Teil 2` (Z.115) · `A-02-2` (Z.512) · `A-02-2 GEGENPROBE` · `A-02-1 KONTROLLE`
+(Z.547) · `A-02-3` · `A-02-4` (Z.579) · `A-02-4 ROT` · `A-02 Kante 2` (hängendes lsof: 5081 ms
+statt Hängen). Eigene Probe der A-02-2-Klasse: 900 B, 400 s, node-Halter → `exit=3`, Lock liegt.
+Doppelpfad Z.163 laut Diff unangetastet (Bedingung 3 zitiert ihn, Original im HALTER=0-Zweig).
+
+**A-08-4 — GRÜN.** Code: `HBASE=${HKOMMANDO##*/}` + `case git|git-*`. Eigene Proben: Halter
+`git` als Symlink (ps liefert VOLLEN Pfad) → `exit=3`, `Ein Halter traegt ein git-Kommando`;
+`git-remote-https` (Suite) grün. **Gegenfall selbst gemessen:** Halter `gitarre` (0 Byte, 300 s)
+zählt NICHT als git → beiseite, `exit=0`, `Halter ohne git-Kommando: 16001 (gitarre)` — die
+Muster sind exakt, kein Präfix-Befund. Kante `mehrere Halter, EINER git` (node+git): `exit=3`.
+
+**A-08-5 — GRÜN.** Eigene Probe: lebender Halter + stummes fake-`ps` im PATH → `exit=3`, Lock
+liegt, `ENV_BLOCKED: halter-kommando nicht ermittelbar — .git/index.lock (Halter: unbekannt)`.
+
+**A-08-6 — GRÜN, alle sieben Mutationen EIGENHÄNDIG gesetzt** (md5 vorher = nachher =
+`7c71f5ba2daac3601ae9b1ee6fa4a912`, Endzustand `git diff 85b03d23` 0 Zeilen, finaler Lauf 38/38):
+
+```text
+M1 && -> ||                        tests 38  pass 35  fail 3   A-08-2 · A-08-4 · A-08-4 git-*
+M2 case erkennt nie git            tests 38  pass 36  fail 2   A-08-4 · A-08-4 git-*
+M3 Ergebnis ignoriert              tests 38  pass 36  fail 2   A-08-4 · A-08-4 git-*
+M4 Basename -> Pfad-Gleichheit     tests 38  pass 35  fail 3   A-08-4 · git-* · A-08-10
+M5 git-* nicht erkannt             tests 38  pass 37  fail 1   A-08-4 git-*
+M6 unbekannt = nicht gehalten      tests 38  pass 37  fail 1   A-08-5
+M7 0-Byte-Schranke entfernt        tests 38  pass 35  fail 3   A-02-2 · A-02-4 · A-08-10
+```
+
+M7 fällt exakt durch die bestehenden Zusagen `A-02-2`/`A-02-4` — der `f5098c40`-Fall ist nicht
+stumm grün. *Meine M2/M3-Bauart weicht von der der Erstinstanz ab (deren fail-Zähler 4/2, meine
+2/2) — die Mutationsklasse fällt in beiden Fassungen; kein Befund.*
+
+**A-08-7 — GRÜN.** Richtigstellung steht im A-02-Blatt direkt unter der widerlegten Messung,
+Original erhalten, Fehlertyp und Verweise (`de33d1e6`, `d377683a`, A-08) benannt.
+
+**A-08-8 — GRÜN.** Am Testcode geprüft: Lock stammt aus `git update-index --index-info` (git
+schreibt `index.lock` selbst), `statSync(p).size === 0` asserted, Blockade am LEBENDEN echten
+git-Halter vor dem SIGKILL asserted, Name/Kommentar benennen die Herkunft. Kein `writeFileSync`
+mit Etikett.
+
+**A-08-10 (P2) — GRÜN.** Eigene Probe am unveränderten Schutzpfad (900 B + Halter):
+`ENV_BLOCKED: lock wird gehalten — .git/index.lock (Halter: 15947 (node))`. An der Basis rot
+(selbst gemessen: `Halter: 15841` ohne Kommando; `✖ A-08-10` im Basis-Lauf).
+
+**Kanten, stichprobenartig:** mehrere Halter/einer git → liegt · `lsof` fehlt (900 B/400 s,
+PATH ohne lsof) → `exit=3`, `Ohne lsof gilt nur: 0 Byte und >=60s alt` — A-02-3-Rückfall
+unverändert · hängendes lsof → Zeitgrenze wirkt (5,1 s, Suite).
+
+### Der P2-Befund des Erstvotums — von mir unabhängig REPRODUZIERT
+
+```text
+Probe --git-dir (0-Byte-Lock 300 s, kein Halter, git --git-dir=<repo>/.git cat-file --batch, cwd fremd):
+  exit=0 · BEISEITE .git/index.lock (0 Byte, 300s alt, kein Halter)   <- die Luecke
+Gegenrichtung (git -C <repo>, cwd fremd gestartet):
+  exit=3 · LOCK BEI LAUFENDEM GIT … ENV_BLOCKED: git-prozess dieses repos laeuft
+```
+
+Einordnung wie im Erstvotum: Klasse `SPEC`, P2, Ball beim Planner als Folgeauftrag — der Bau
+folgt der Kantenliste wörtlich („git-Prozess in FREMDEM Verzeichnis zählt nicht", cwd-Kriterium);
+blockiert die Abnahme nach §12.5 nicht.
+
+**Gesamturteil: ABGENOMMEN — als unabhängige Zweitbestätigung des Erstvotums.** Alle zehn
+Kriterien grün, keine offene P0/P1-Abweichung, keine Regression (30/30-Bestand vollständig im
+38/38-Lauf), Mutationsprobe vollständig erneut gefahren (§12.4), Browserabnahme nicht anwendbar.
+Einziger Befund ist der bestätigte P2-`SPEC` oben (Folgeauftrag beim Planner). Ball beim
+Release-Prüfer.
+
+---
+
+## Bekannte Grenze nach der Abnahme (P2, `SPEC`, Ball beim Planner)
+
+**Der Evaluator hat sie in Probe C gefunden — bei `ABGENOMMEN`, nicht danach:**
+
+```text
+git --git-dir=<dieses Repo>/.git … aus FREMDER cwd
+  -> repo_git_laeuft() erkennt den Prozess NICHT
+  -> der Lock wurde beiseitegelegt und der Commit lief
+```
+
+> **Die Lücke steckt im Schnitt, nicht im Bau.** *Meine Kantenliste sagt wörtlich „ein git-Prozess
+> in FREMDEM Verzeichnis zählt nicht". **`--git-dir` habe ich nicht bedacht**, und der Bauende hat
+> getan, was dastand.*
+
+**Warum die Abnahme zu Recht nicht blockiert ist** — Bewertung des Evaluators, von mir übernommen
+und **ausdrücklich nicht nachgemessen**; sein Beleg liegt im Votum `23b3a490`:
+
+```text
+die gefaehrliche Lage   deckt Bedingung 1 ab (Halter mit git-Kommando)
+die verbreitete Form    `git -C` WIRD erkannt
+die Luecke              `--git-dir` aus fremder cwd - selten, aber echt
+```
+
+**Kein Kriterium wird nachträglich geändert** — A-08 ist `ABGENOMMEN`, inzwischen mit unabhängigem
+**Zweitvotum** (`f430242d`). *Die Grenze steht hier, damit sie niemand neu sucht; ein eigener
+Auftrag folgt, wenn wieder Platz ist.*
+
+**Wie er sie gefunden hat, gehört dazu:** drei eigene Torläufe im Wegwerf-Repo mit einem **echten**
+0-Byte-Lock — statt den Bericht zu lesen.
+
+---
+
+## Release-Prüfung A-08 (§10) — 08.08.2026, RELEASE_FREI
+
+```yaml
+auftrag: A-08
+abnahme_commit: 85b03d23      # beide Voten (23b3a490 + f430242d) zeigen auf diesen Commit
+release_commit: 76bb1992      # Branch-Spitze zum Pruefzeitpunkt; scripts/ content-identisch mit 85b03d23
+votum: RELEASE_FREI
+ci: pass                      # Suite am HEAD selbst gefahren: tests 38, pass 38, fail 0
+artefakte_reproduzierbar: true  # kein Bundle beruehrt; die zwei Skripte SIND das Artefakt, byte-identisch mit dem Pruef-SHA
+migration: nicht_anwendbar
+rueckweg: pass                # git revert 5a54b004 genuegt — nur 2 Skriptdateien, kein Datenpfad
+smoke_test_plan: "bereits im Wildbetrieb eingetreten: 18 Commits seit dem Bau liefen durchs umgebaute Tor, ein echter 0-Byte-Lock wurde beiseitegelegt (Beleg unten)"
+befunde:
+  - "P2 SPEC (--git-dir + fremde cwd) — kein Release-Hindernis nach §12.5; Folgeauftrag A-09 existiert und traegt ihn"
+```
+
+**Rollenreinheit:** Ich bin ausschließlich Release-Prüfer — nicht Generator, nicht Evaluator,
+nicht Plan-Prüfer. Ich habe nichts gebaut und nichts abgenommen; alle Zahlen unten sind eigene
+Läufe am Arbeitsbaum (Zweig `auto/hausplaner-integration`, HEAD `76bb1992`).
+
+### 1. Votum und Release-Kandidat zeigen auf denselben Commit — GRÜN
+
+Erstvotum `23b3a490` und Zweitvotum `f430242d` nennen beide `commit: 85b03d23`. Der
+Release-Kandidat ist derselbe Stand: beide Scope-Dateien am HEAD **content-identisch** mit
+`85b03d23` (die `MM`-Einträge im `git status` sind die bekannten Stale-Index-Phantome des
+virtualisierten Mounts):
+
+```text
+git show 85b03d23:scripts/commit-pruefen.sh              | diff - <datei>  -> IDENTISCH  (md5 7c71f5ba2daac3601ae9b1ee6fa4a912)
+git show 85b03d23:scripts/__tests__/commitPruefen.test.mjs | diff - <datei> -> IDENTISCH  (md5 8fa352075c9238ec8b98dbae28a2fc4a)
+git diff 85b03d23 76bb1992 -- scripts/   -> 0 Zeilen
+```
+
+### 2. Qualitätstor am Release-Kandidaten erneut grün — GRÜN, selbst gefahren
+
+```text
+node --test scripts/__tests__/commitPruefen.test.mjs   (am HEAD 76bb1992)
+ℹ tests 38   ℹ pass 38   ℹ fail 0   ℹ duration_ms 12757
+```
+
+### 3. Vollständigkeit der Zustandskette — GRÜN, jeder Übergang in der Historie belegt
+
+```text
+793b0729  BEREIT (Plan-Pruefer, 2. Runde)          — Vorfahr von 1f17f93a: ja
+1f17f93a  IN_ARBEIT (Generator)                    — Vorfahr des Baus 5a54b004: ja
+          git log c2de1eec..1f17f93a -- scripts/   -> 0 Commits: KEINE Scope-Aenderung vor IN_ARBEIT
+5a54b004  der Bau (erste und einzige Scope-Aenderung an den Skripten)
+6a264834  A-08-7-Doku · 85b03d23 §11-Bericht (Pruef-SHA)
+e491626d  CODE_FERTIG                              — Vorfahr von 23b3a490: ja
+23b3a490  ABGENOMMEN (Erstvotum)                   — Vorfahr von f430242d: ja
+f430242d  ABGENOMMEN (Zweitvotum, unabhaengig)
+```
+
+### 4. Scope-Reinheit — GRÜN
+
+```text
+git diff --name-only c2de1eec 85b03d23:
+  docs/STATUS.md
+  docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
+  docs/auftraege/aktiv/A-08-halter-nach-kommando.md
+  scripts/__tests__/commitPruefen.test.mjs
+  scripts/commit-pruefen.sh
+```
+
+Exakt die fünf Blatt-Dateien; **keine Produktivcode-Datei außerhalb des Blatts** (kein
+`app/`, `resources/`, `public/`, keine Migration, kein Bundle).
+
+### 5. Beifang-Kontrolle — GRÜN
+
+`4307987b` (trug fremde Arbeit, Richtigstellung `7c2958fd`) berührte nur `docs/STATUS.md` +
+Trägerblatt; `7c2958fd` nur `docs/STATUS.md`. Zwischen `e491626d` und `76bb1992` berührt
+**kein Commit** `scripts/` (`git log e491626d..76bb1992 -- scripts/` → 0), content-diff von
+`scripts/` gegen `85b03d23` → 0 Zeilen. Kein Produktivcode unbemerkt verändert.
+
+### 6. Rückweg — GRÜN, am Diff verifiziert
+
+`git show --stat 5a54b004`: genau `scripts/commit-pruefen.sh` (+144/−8) und
+`scripts/__tests__/commitPruefen.test.mjs` (+236). Keine Migration, keine Datenänderung,
+kein Zustand außerhalb des Repos — `git revert 5a54b004` genügt als Rückweg.
+(`6a264834`/`85b03d23` sind reine Doku und hängen an nichts.)
+
+### 7. P2-SPEC-Befund und Folgeauftrag — GRÜN (Vermerk nach §12.5)
+
+Der Befund (git-Prozess dieses Repos mit `--git-dir` und fremder cwd wird von
+`repo_git_laeuft()` nicht erkannt) ist nach §12.5 **kein Release-Hindernis**: der Bau folgt
+der Kantenliste wörtlich, die Lücke sitzt im Schnitt (Klasse `SPEC`, Verursacher Planner).
+**`docs/auftraege/aktiv/A-09-repo-bezug-nicht-nur-cwd.md` existiert** und trägt den Befund
+als A-09-1 (P1, Anlass `23b3a490`, Rot-Lage = Probe C des Evaluators), samt Kantenliste und
+Nicht-Zielen. Der Vermerk steht hiermit ausdrücklich im Release-Vermerk.
+
+### 8. Wildbetriebs-Beleg — das Tor arbeitet bereits richtig im Ernstfall
+
+```text
+.git/_locks_beiseite/2026-08-08/index.lock   0 Byte, mtime 07.08. 16:58
+Verzeichnis 2026-08-08/ angelegt 08.08. 13:58 — zeitgleich mit Commit 966dea39 (08.08. 13:58)
+danach ohne Aussperrung committet: f430242d (08.08. 14:19) · 76bb1992 (08.08. 14:21)
+git log 5a54b004..76bb1992 | wc -l  ->  18 Commits liefen durchs umgebaute Tor
+```
+
+Das umgebaute Tor hat am 08.08. einen echten 0-Byte-VM-Halter-Lock nach Dauerregel
+beiseitegelegt (nie gelöscht, Original liegt) und die Arbeit lief weiter — exakt der
+Vorfalls-Fall vom 06.08., diesmal ohne Blockade.
+
+### Übrige §10-Punkte
+
+Konfiguration/Umgebungsvariablen/Abhängigkeiten: keine neuen — `ps` und `lsof` sind
+Bordmittel, `lsof`-fehlt-Rückfall besteht als Zusage (A-02-3, grün im 38/38-Lauf).
+Sicherheits-, Rechte-, Mandanten- und Datenschutzgrenzen: nicht berührt (kein Endpunkt,
+keine DB, kein Server). Bundle: nicht berührt. Offene P0/P1: **keine** — der einzige
+offene Befund ist der P2 oben.
+
+**Urteil: RELEASE_FREI.** Die main-Veröffentlichung bleibt bei Yama (§14). Nach
+v1.2-Vertretungsregel folgt ein Sicherungs-Push des Zweigs `auto/hausplaner-integration`
+auf den fork-Remote (nie main, nie Tags, nie force); das Ergebnis steht in `docs/STATUS.md`.

@@ -10,10 +10,11 @@
 | **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
 | **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-04** Bühnen-Wächter | `ENTWURF` | Plan-Prüfer | `2ff8ec7a` | ✅ **ENTBLOCKT** — `browser-buehne.sh` liegt seit `27a61da9` auf dem Zweig |
-| **A-05** Messauftrag L-Kontur | `ENTWURF` | Plan-Prüfer | `2349ceda` · gegengelesen `a4de38f2` | DoR steht aus |
+| **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | **Planner** | Bericht `docs/BERICHT-A-05-l-kontur.md` · Votum an `e0fae829` | Evaluator 08.08.: echt + nachvollziehbar, 12/12 reproduziert; SPEC-Folgebefund (Melder-Lücke, P2) an den Planner |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `ENTWURF` | Plan-Prüfer | `0622e936` § 5-Block + Nachtrag | 3. Runde: *„es fehlt Form, nicht Substanz“* — danach `BEREIT` |
-| **A-08** Halter nach Kommando | **`CODE_FERTIG`** | **Evaluator** | Prüf-SHA `85b03d23` · Basis `c2de1eec` | §11-Bericht je Kriterium mit Rohausgabe · Meldepflichten vom Plan-Prüfer gegengemessen (`dda02e0d`) |
+| **A-09** Repo-Bezug über `--git-dir` | `ENTWURF` | Plan-Prüfer | Folgeauftrag zu A-08 (§12.5) | P2 · **geclaimt von der zweiten Planner-Instanz** · Formblock offen · Bau erst NACH A-07 |
+| **A-08** Halter nach Kommando | **`RELEASE_FREI`** | – | `85b03d23` · §10 `b2f8c44b` | Votum + Zweitvotum · ⚠ Sicherungs-Push auf `fork` von der **Umgebung verweigert** (`2b5aebae`) |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
@@ -87,6 +88,35 @@ VM-Halter) **fällt unter die Kommando-Frage und ist behoben**; ein 0-Byte-Lock 
 >
 > *Zur Herkunft ehrlich: der Vorschlag kam vom Generator, die Prüfung gegen den Zusagen-Bestand vom
 > Evaluator. Von mir kommt die Entscheidung — und die verworfene Fassung kam auch von mir.*
+
+### ENTSCHEIDUNG Planner 08.08. — A-01s Nicht-Ziel BLEIBT
+
+**Der A-05-Messbericht liegt** ([`BERICHT-A-05-l-kontur.md`](BERICHT-A-05-l-kontur.md), `e0fae829`)
+und legt die Entscheidung ausdrücklich mir vor. **Sie ist gefallen.**
+
+```text
+1  ueber roofType hinaus fehlt roof.anbau mit ALLEN vier Massen
+   -> und KEIN Bestandscode leitet es aus einer Kontur ab
+2  lTBauGueltig / uBauGueltig sind VALIDIERER - ein Kontur-ERKENNER existiert nicht
+   -> selbst gegengemessen: 0 Erkenner im Bestand
+3  ein l-shape-Dokument laedt schema-gueltig und bleibt ein STILLES LEERES DACH
+4  Lueckenliste: ACHT Punkte. "nur die Formzuweisung" ist WIDERLEGT
+```
+
+> ### Meine Hypothese vom 05.08. ist endgültig widerlegt.
+>
+> *„Die Insel kann L-Dächer möglicherweise schon"* — sie ist zweimal geschrumpft (erst „rendert" →
+> „die Pfade existieren", dann die stille Leere) und **fällt jetzt ganz**: acht Lücken, kein
+> Erkenner, keine Ableitung.
+
+**Und A-01 gewinnt dadurch an Wert, statt zu verlieren.** *Messung 3 zeigt: ein schema-gültiges
+`l-shape`-Dokument erzeugt heute ein stilles leeres Dach **ohne jede Meldung** — genau der Zustand,
+gegen den A-01-4 gebaut wurde, nur auf dem anderen Pfad.* **Die Absage war nicht die kleine Lösung,
+sondern die einzige, die heute trägt.**
+
+**Vorbehalt:** der Bericht ist `CODE_FERTIG`, **nicht abgenommen**. *Fällt eine der vier Messungen
+in der Abnahme, prüfe ich neu — die Entscheidung hängt aber nicht an Zahlen, sondern an zwei
+Strukturbefunden, und den ersten habe ich selbst gegengemessen.*
 
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
@@ -640,27 +670,37 @@ naechster_schritt: "ERLEDIGT: A-04 ist geschnitten (0722d4f5) und in Planpruefun
 auftrag: A-04
 titel: "Buehnen-Waechter: erkennt eine laufende Buehne auf einer Nicht-Testdatenbank, egal wie sie gestartet wurde"
 datei: docs/auftraege/aktiv/A-04-buehnen-waechter.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: 89f373d9
 letztes_votum: "plan-pruefer 05.08. 09:3x (1. DoR-Runde, ERSTMALS nach v1.1 mit 18 Punkten): ENTWURF bleibt, ZWEI Restpunkte + eine Korrektur. GEMESSEN: Basis existiert · A-03-Bau liegt belegt NICHT auf der Hauptlinie (browser-buehne.sh FEHLT hier, Anker-grep 0 — die B2-Vertagung ist RICHTIG), aber auf work/a01-generator, nicht auf dem im Blatt genannten tmp-a03 (Korrektur noetig, betrifft den Merge-Bezug der B2-Auflage) · A-04-6-Basis 0 · php -S im A-03-Bau 0 (Anlass bestaetigt) · ps eww vorhanden und in Gebrauch (neuer 1.1-Punkt erfuellt). OFFENE PUNKTE BEANTWORTET: (1) Der Detektor ist KEINE dritte Aufrufform und keine zweite Wahrheit — er misst Zustand statt Startweg und beantwortet eine andere Frage; NICHT NOTWENDIG waere falsch, die lautlose php-S-Tuer steht JETZT offen. (2) Tor-Einbindung NEIN — deckungsgleich mit dem Planner, die A-02-Lehre (externe Abhaengigkeit im einzigen Commit-Weg) gilt."
 offene_akzeptanz:
   - "Rest 1 (F-19-Klasse, eine Wahrheit zweimal getippt): der erlaubte Name ticket_testing lebt nach A-04 an ZWEI Orten (browser-buehne.sh Namensliste + buehnen-waechter.sh Vergleich). Festlegung ins Blatt: gemeinsame Quelle (z. B. eine gesourcte Namensdatei) ODER bewusste Duplikation mit Begruendung UND einer Zusage, die Drift zwischen beiden faengt."
   - "Rest 2 (§15-Kante am A-04-2-Fixture): der 'unsichere' Testfall darf KEINE real an ticket gebundene Buehne erzeugen — Fixture-Weg ins Blatt: Wegwerf-Verzeichnis mit eigener .env (Fantasiename), der Detektor liest Prozess/Env, nie die echte Arbeits-DB-Bindung."
   - "Korrektur: B2-Absatz nennt tmp-a03 — gemessen liegt 26e378a5 auf work/a01-generator; der Merge-Bezug der Auflage muss den richtigen Zweig nennen."
-naechster_schritt: "Planner traegt die zwei Restpunkte + Zweigkorrektur ein, dann setzt der Plan-Pruefer BEREIT"
+votum_2_runde: "plan-pruefer 08.08. (2. Runde nach d5855056): ENTWURF bleibt, EIN kleiner Rest — sonst alles erledigt und selbst geprueft: Merge 27a61da9 verifiziert (browser-buehne.sh in HEAD, Wiederverwendungspruefung ZEILENGENAU bestaetigt — :31 ERWARTETE_DB, :60 Aufloesung, exakt wie im Blatt), Drift-Zusage sauber (und KEINE echte Abweichung von meiner Vorgabe: 'bewusste Duplikation mit Begruendung UND Drift-Zusage' war deren zweiter Zweig; die 17-Fundstellen-Messung des Planners traegt die Begruendung, und dass er die 17 als eigenen Befund NICHT mitschneidet, ist §7 wie im Lehrbuch), Fixture-Weg mit Wegwerf-.env und erfundenem Namen ✓, §5-Block ✓ (Z.197 f.). DER REST: zwei Blatt-Stellen sind vom Merge ueberholt und tragen heute FALSCHE Aussagen — Z.66 'liegt auf tmp-a03' (liegt in HEAD) und der B2-Block Z.214-226 'grep browser-buehne im Anker = 0, hier nicht gemergt' (heute: 2 Treffer, gemergt — der Anker wurde bereits nachgezogen). Genau die Zeitbomben-Klasse aus A-09: ein Bauender befolgt das Blatt woertlich. B2s eigene Bedingung ('wird mit dem A-03-Merge geschlossen') ist eingetreten — der Planner belegt die Schliessung oder nimmt B2 in den A-04-Bau auf."
+votum_3_runde: "plan-pruefer 08.08. (3. Runde nach f3faf111): ENTWURF bleibt, der Rest ist HALB erledigt und dadurch schaerfer geworden: Z.66 ist sauber nachgezogen ('liegt seit dem Merge 27a61da9 auf dem Zweig' ✓), aber im B2-Block wurde nur die ZAHL korrigiert (grep 0 -> 2) — die umgebende Begruendung sagt weiter 'ist hier nicht gemergt / der Satz ist noch wahr / das Skript existiert von hier aus nicht'. Der Block widerspricht sich jetzt IM SELBEN SATZ ('liegt seit dem Merge auf dem Arbeitszweig und ist hier nicht gemergt') — Falle 4 in ihrer reinsten Form: Zahl geaendert, Aussage gelassen. DAZU SELBST GEMESSEN, was B2 heute ist: ANKER-BROWSER.md widerspricht sich selbst — Z.62 'seit A-03 ist die Regel gebaut' gegen Z.92 'bis er steht, ist diese Regel die einzige Sicherung'. B2s Schliessungsbedingung (A-03-Merge) IST eingetreten."
+votum_bereit: "plan-pruefer 08.08. (4. Runde nach 534ec48e): BEREIT — B2 ist aufgeloest und SELBST verifiziert: Blatt traegt 'GESCHLOSSEN 08.08.' mit der eingetretenen Bedingung, der Anker sagt jetzt Z.92 f. 'Der Riegel steht (A-03) … nicht mehr die einzige Sicherung' — beide Selbstwidersprueche weg. Damit sind alle Reste aus vier Runden zu: Drift-Zusage, Fixture-Weg mit Wegwerf-.env, §5-Block, Wiederverwendung zeilengenau, Merge verifiziert. KONFLIKTPRUEFUNG AKTUALISIERT: A-04 beruehrt browser-buehne.sh, einen NEUEN buehnen-waechter.sh und browserBuehne.test.mjs — KEINE Beruehrung mit dem Tor-Strang (commit-pruefen.sh/commitPruefen.test.mjs von A-07/A-09); darf PARALLEL bauen."
+claim_bau: "plan-pruefer 08.08.: BEREIT gesetzt, Generator-Station fuer A-04 mit frischer Instanz besetzt (parallel zum Tor-Strang zulaessig). Claim VOR dem Start."
+naechster_schritt: "Planner zieht die zwei Merge-ueberholten Stellen nach, dann setzt der Plan-Pruefer BEREIT — A-04 ist danach baubar (Blockade seit 27a61da9 aufgehoben)"
 ```
 
 ---
 
-## In Planprüfung — A-05
+## A-05 — ABGENOMMEN (Messauftrag; Ball beim Planner)
 
 ```yaml
 auftrag: A-05
 titel: "MESSAUFTRAG (kein Produktivbau): welche Luecke bleibt zwischen einer L-Kontur und einem l-shape-Dach"
 datei: docs/auftraege/aktiv/A-05-messung-l-kontur-l-dach.md
-zustand: ENTWURF
+zustand: ABGENOMMEN
 ballbesitz: planner
+letztes_votum: "evaluator 08.08.: ABGENOMMEN an e0fae829 (Mess-SHA 4da0e84c, Pruef-HEAD bd1383c8, Fehlerklasse KEINE) — Messungen ECHT und NACHVOLLZIEHBAR: alle vier Antwortformen exakt geliefert; Kern-Reproduktion per eigener Wegwerf-Zusage zzEvalA05probe.test.ts (12/12 mit Suite-Runner, VOR dem Votum restlos entfernt, kein Commit traegt sie) — jede Berichtszahl identisch reproduziert (safeParse true · dachMeshWelt {dreiecke:[]} · dachflaechen 0 · Melder [] · lTBauGueltig true/true/false · dachFlaechen-Wurf bei l-shape · 10 Dreiecke/First 5482 · E10-Eckpunkt bis zur letzten Nachkommastelle). Fundstellen-Stichprobe 10+ Zitate zeilengenau an 4da0e84c (alle neun Quelldateien byte-identisch, selbst gediffed). Suite SELBST gefahren: 1689/1689 (Insel-Suite). Grenzen: resources/app/tests content-sauber (Status-Eintraege sind A-07-Index-Phantome, byte-identisch zu HEAD), keine Buehne (kein Berichtswert braucht eine, alle auf Test-Ebene reproduziert), Wegwerf-Probe in keinem Commit (git log --all leer), e0fae829 traegt exakt 2 Pfade. EIGENE GEGENPROBE E4b: der A-01-4-Melder schlaegt beim Wurf-Pfad an (sattel+L-Kontur → 1 Meldung) — die Stille bei l-shape ist die spezifische Leer-ohne-Wurf-Luecke, kein kaputter Melder. SPEC-FOLGEBEFUND (§12.5, blockiert NICHT, Klasse SPEC, Schwere P2): stilles leeres Dach laeuft am A-01-4-Melder vorbei (nichtDarstellbar.ts:42-48 faengt nur Wuerfe, dachMesh.ts:78/144 liefert still leer) — Ball beim Planner: Auftrag schneiden oder ausdruecklich verwerfen. Randnotiz: bd1383c8 (A-01-Nicht-Ziel-Entscheidung) fiel VOR dieser Abnahme — haelt, weil der Bericht haelt. Volles Votum am Ende des Berichts."
+code_fertig: "generator 08.08.: BERICHT LIEGT — docs/BERICHT-A-05-l-kontur.md, Mess-SHA 4da0e84c (HEAD wanderte waehrend des Laufs auf f3faf111, nur A-04-Blatt; alle acht gemessenen Quelldateien per content-diff byte-identisch zu 4da0e84c). Alle vier Fragen in der verlangten Antwortform, je mit Fundstelle Datei:Zeile und Rohausgabe. Suite 1689/1689 selbst gefahren; Wegwerf-Probe zzA05wegwerf.test.ts (10/10) VOR dem Bericht restlos entfernt, kein Commit traegt sie (ls-Beleg im Bericht); resources/ content-sauber (die MM/??-Phantome sind die A-07-Index-Klasse, Arbeitsbaum byte-identisch). CODE_FERTIG heisst hier: Bericht liegt — kein gruen, keine Selbstabnahme. Offener Punkt im Bericht: Sichtkette (Buehne) nach Rest-2 NICHT geprueft, als Rueckfrage an den Planner notiert statt Buehnenstart"
+in_arbeit_gesetzt: "generator 08.08.: VOR der ersten Messung gesetzt (§3). Kein anderer Auftrag IN_ARBEIT (grep 'zustand: IN_ARBEIT' vor diesem Edit: 0 Treffer). Scope-Kontrolle: docs/STATUS.md content-gleich HEAD; die MM/??-Eintraege unter resources/ sind Index-Phantome (A-07-Klasse), Arbeitsbaum byte-identisch zu HEAD 1fc99005."
+beifang_richtigstellung: "plan-pruefer 08.08.: Der IN_ARBEIT-Wechsel oben (samt Tafelzeile) stammt vom MESSLAUF-GENERATOR, wurde aber von MEINEM Commit c2feffd4 (A-04-Votum) mitgenommen — zwei Rollen editierten STATUS.md gleichzeitig, Pfad-Commit schuetzt im GETEILTEN File nicht. Mein Beifang-Zaehler zeigte 7 und ich habe VOR der Pruefung committet statt danach — mein Fehler, Klasse wie 4307987b/7c2958fd. Inhalt ist korrekt und bleibt; nur die Urheberschaft war falsch verbucht. Kuenftig: bei Zaehler > 0 wird ERST gelesen, DANN committet."
+ballwechsel_bestaetigt: "plan-pruefer 08.08.: CODE_FERTIG-Meldepflichten geprueft — Bericht docs/BERICHT-A-05-l-kontur.md liegt (230 Zeilen), Mess-SHA 4da0e84c benannt, Commit e0fae829 traegt EXAKT Bericht + STATUS (selbst gemessen), resources/ unberuehrt, Wegwerf-Probe in keinem Commit. Ball beim EVALUATOR — er prueft 'echt und nachvollziehbar', nicht 'funktioniert'. FUER SEINE PRUEFUNG: die Kernbehauptungen sind reproduzierbar formuliert (A-05-3-Repro, anbau-Feldliste, Validierer-Gegenprobe, 8-Punkte-Lueckenliste je mit Fundstelle); die offene Sichtketten-Frage ist korrekt als Rueckfrage an den Planner notiert statt per Buehne beantwortet."
+claim_abnahme: "plan-pruefer 08.08.: Evaluator-Station fuer A-05 mit frischer Instanz besetzt. Claim VOR dem Start."
 basis_sha: 42c0320f
 claim: "plan-pruefer 05.08.: Ball selbst gezogen (Blatt lag geschnitten ohne Uebergabe-Zeile — kein Ball bleibt liegen; Claim VOR der Pruefung gesetzt, Lehre aus den drei Doppelarbeiten)"
 letztes_votum: "plan-pruefer 05.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine Restpunkte. STARK: Basis existiert, Ist-Beleg (roofType 'sattel' fest verdrahtet :962, dachMesh behandelt l/t/u bereits) prueffaehig, vier Fragen je mit Antwortform, Nicht-Gegenstand sauber (kein Urteil ueber A-01, keine Empfehlung — Messen und Planen getrennt), Werkzeug-Punkt v1.1 erfuellt, §16-konform ohne Statuskopf. Trivial-Rot der Kriterien ist bei einem Messauftrag ehrlich benannt."
@@ -668,7 +708,9 @@ offene_akzeptanz:
   - "Rest 1: der ABLAGEORT des Berichts ist nicht benannt — der Evaluator soll 'echt und nachvollziehbar' pruefen, braucht also einen festen Ort (Vorschlag-Form: docs/BERICHT-A-05-….md). Ein Satz."
   - "Rest 2: Spannung bei A-05-3 — das Blatt erklaert 'Prozessbindung entfaellt, kein Serverstart', aber die erlaubte Wegwerf-Probe ('was passiert beim Laden eines l-shape-Dokuments') KOENNTE eine Buehne brauchen. Festlegen: Probe auf Test-/DOM-Ebene OHNE Serverstart, ODER falls Buehne noetig, die Anker-Regel (APP_ENV-Form) ausdruecklich binden — sonst widerspricht sich das Blatt im Ernstfall selbst."
   - "Rest 3 (NEU, aus der Generator-Zuliefermessung 9e97d274): der Blatt-Satz 'waehrend die Insel l-shape-Daecher rendert' ist nach erster Messung FALSCH — mit dem A-01-Fixture auf l-shape liefert dachMeshWelt leere Dreiecke und dachflaechen 0 Flaechen: ein STILLES LEERES Dach (genau der Zustand, den A-01-4 beseitigt hat). Wahr ist nur: die Code-Pfade existieren. Der Ist-Beleg im Blatt muss das praezisieren, sonst startet der Messauftrag mit einer falschen Praemisse — die Frage selbst (fehlen nur Eingaben? = A-05-1) bleibt genau richtig gestellt. Die Messung ist reproduzierbar dokumentiert, kein Commit noetig; der Generator hat vorbildlich OHNE Ballbesitz gemessen und nichts gebaut."
-naechster_schritt: "Planner traegt beide Saetze ein, dann setzt der Plan-Pruefer BEREIT; danach kann der Generator A-05 als Messlauf ziehen, waehrend A-04 parallel in der Warteschlange haengt"
+votum_bereit: "plan-pruefer 08.08. (2. Runde nach b8d66a6c): BEREIT — alle drei Restpunkte erledigt und selbst geprueft: Ablageort docs/BERICHT-A-05-l-kontur.md steht, A-05-3 auf Test-Ebene OHNE Serverstart ENTSCHIEDEN (mit sauberer Eskalation: braucht es doch eine Buehne, geht der Auftrag an den Planner zurueck statt stiller Start — die A-03-Lehre), Praemisse praezisiert ('Code-Pfade existieren' statt 'rendert'). Ist-Beleg neu verifiziert: roofType 'sattel' fest verdrahtet, heute Z.968 (Blatt sagt :962 — Zeilendrift durch fremde Edits, nicht tragend, der Befund steht). KONFLIKTPRUEFUNG: reine Lesemessung + eigener Berichtspfad, kein Beruehrungspunkt mit A-07/A-09 (Tor-Dateien) — darf PARALLEL zum Tor-Strang laufen. basis_sha 42c0320f ist historisch; die Messungen laufen ohnehin am aktuellen Stand, der Bericht nennt seinen eigenen Mess-SHA (Antwortform verlangt es)."
+claim_messlauf: "plan-pruefer 08.08.: BEREIT gesetzt, Generator-Station fuer den A-05-MESSLAUF mit frischer Instanz besetzt (parallel zulaessig, kein Dateikonflikt). Claim VOR dem Start."
+naechster_schritt: "Planner: (1) den SPEC-Folgebefund 'stilles leeres Dach laeuft am A-01-4-Melder vorbei' (P2) schneiden oder ausdruecklich verwerfen; (2) die offene Sichtketten-Frage (Buehne) beantworten oder schliessen. Kein Release — Messauftrag, es gibt nichts zu veroeffentlichen"
 ```
 ---
 
@@ -687,21 +729,26 @@ weg_entscheidung: "WEG A in der MESSBAREN Fassung des Generators (1839d2e3): das
 offene_akzeptanz:
   - "Rest (der urspruengliche Rest 2 aus der 1. Runde, nie erledigt): §5-Auswirkungen-Block ins Blatt — Testdaten-Ziel KEINES, Prozessbindung entfaellt (kein Serverstart, keine DB; alle Proben im Wegwerf-Repo der Suite), Werkzeuge auf der Zielmaschine: node-Testsuite commitPruefen.test.mjs vorhanden UND in Gebrauch (30 Zusagen aus A-02). Vier Zeilen nach dem Muster von A-05."
   - "Nachtrag (kein neues Kriterium): die ungemeldete Index-Angleichung von heute Abend im Blatt vermerken — die Ist-Belege '17 Phantome / 60 divergent' sind seither historisch; das Rot von A-07-1a ist die WACHSENDE Divergenz je Tor-Commit (heute 2), nicht mehr die 17. Und: wer angeglichen hat, soll es in STATUS.md melden — ungemeldete Index-Eingriffe sind genau die Klasse dieses Auftrags."
-naechster_schritt: "Planner traegt den §5-Block und den Nachtrag ein — danach setzt der Plan-Pruefer BEREIT. ACHTUNG REIHENFOLGE (07.08.): A-08 aendert DIESELBEN zwei Dateien und baut ZUERST (P0); A-07 wird erst nach A-08-CODE_FERTIG bereit und misst seine Rot-Lagen dann NEU."
+votum_4_runde: "plan-pruefer 08.08. (4. Runde, nach 2c00e6ef und A-08-ABNAHME): Die Restpunkte der 3. Runde sind ERLEDIGT und selbst geprueft — §5-Block steht (Blatt Z.283, vom Planner ehrlich als 'Rest 2, nie erledigt' etikettiert), die Index-Angleichung ist gemeldet und verlinkt (MELDUNG-INDEX-ANGLEICHUNG-2026-08-06.md), die Zahlen sind als historisch markiert. NEU GEMESSEN auf dem Post-A-08-Stand: Rot-Lagen leben ALLE — Divergenz 32 (A-07-1a), git status 46 Eintraege (die 41-zu-1-Klasse besteht), Halde 2505 und waechst weiter (A-07-4/5), trap im Tor weiterhin 0 (A-08 hat keinen angelegt, kein Konflikt am Kriterium). VORSCHLAG DES PLANNERS ANGENOMMEN: A-07-1a bekommt den Zusatz-Nachweis 'nach dem Tor-Commit entspricht jeder verbleibende git-status-Eintrag einer echten Content-Abweichung (Stichprobe mit content-diff im Bericht)' — Begruendung des Planners ist richtig: --name-only erfasst die ??-Klasse nicht, und ein gruenes Kriterium neben einem weiter blinden Werkzeug waere genau die Falle aus A-08-7. Die MM/??-Klassen bleiben ehrlich als offene Frage im Blatt, nicht als Befund."
+offene_akzeptanz_4:
+  - "Rest A (Form): basis_sha im Blattkopf steht auf 8967e2c4 — auf die Post-A-08-Linie nachziehen (f430242d oder juenger); die heutigen Rot-Zahlen (32 divergent / 46 status / 2505 Halde) als datierte Ist-Belege eintragen."
+  - "Rest B: den angenommenen Zusatz-Nachweis in den A-07-1a-Wortlaut einarbeiten (ein Satz + Stichproben-Form)."
+naechster_schritt: "Planner traegt Rest A und B ein (reine Nachzuege, die Entscheidung ist gefallen), dann setzt der Plan-Pruefer BEREIT — A-07 ist naechster in der Bauschlange (P0-Rest), A-09 wartet dahinter"
 ```
 ---
 
-## A-08 — CODE_FERTIG in der 0-Byte-Fassung (Ball beim Evaluator)
+## A-08 — RELEASE_FREI an 85b03d23 (Ball bei Yama: main-Veroeffentlichung; P2-SPEC-Folgeauftrag: A-09)
 
 ```yaml
 auftrag: A-08
 titel: "Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt - statt ob irgendwer die Datei offen hat"
 datei: docs/auftraege/aktiv/A-08-halter-nach-kommando.md   # Traegerblatt; traegt den §11-Generator-Bericht
 nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidung + Kriterien; FUEHRENDER Wortlaut A-08-1
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: RELEASE_FREI
+ballbesitz: yama
+claim_release: "plan-pruefer 08.08.: ABGENOMMEN (Erst- und Zweitvotum unabhaengig deckungsgleich), Release-Station leer bei P0 — FRISCHE Release-Pruefer-Instanz wird gestartet. Claim VOR dem Start. LEHRE aus der Instanzen-Kollision der Abnahme: eine 'failed'-Meldung ist KEIN Todesbeweis — vor jedem kuenftigen Ersatzstart pruefe ich zusaetzlich die Commit-Historie auf spaete Commits der totgesagten Instanz."
 basis_bau: c2de1eec      # der Stand, auf dem gebaut wurde (HEAD bei Uebernahme, 1f17f93a = IN_ARBEIT-Commit direkt darauf)
-pruef_sha: 85b03d23      # letzter Generator-Commit: Bau 5a54b004 + A-08-7-Doku 6a264834 + §11-Bericht 85b03d23
+pruef_sha: 85b03d23
 ballwechsel_bestaetigt: "plan-pruefer 07.08.: CODE_FERTIG-Meldepflichten geprueft — Basis c2de1eec und Pruef-SHA 85b03d23 existieren, Scope-Diff SELBST gemessen (git diff --name-only c2de1eec 85b03d23): EXAKT die fuenf Blatt-Dateien (Tor, Suite, A-02-Blatt/A-08-7, Traegerblatt/Bericht, STATUS), nichts ausserhalb. IN_ARBEIT wurde VOR der ersten Scope-Aenderung gesetzt (1f17f93a, §3 erfuellt). Ball liegt beim EVALUATOR (§9) — ich nehme NICHT ab. FUER SEINE PRUEFUNG: Suite-Zaehler laut Generator 30/30 -> 38/38, davon 5 neue Zusagen an der Basis rot; Mutationsprobe 7/7 mit &&->|| zuerst; die Zwei-Richtungs-Probe (§12.3) je Kriterium gegenlesen; fremde Statuscommits 67038e50/c2de1eec liefen zwischen den Bau-Commits — am EXAKTEN Pruef-SHA messen."
 korrektur_bestaetigt: "plan-pruefer 07.08. zur Nach-BEREIT-Korrektur 4c85e9b9 (Traegerblatt-A-08-2): BESTAETIGT. Die alte Fassung ('fehlt eine der drei Bedingungen -> ENV_BLOCKED', unbeschraenkt) haette die must_preserve-Zusage Z.547 (885 kB, 317 s, OHNE Halter -> beiseite ueber den Stillstandspfad) woertlich gebrochen — die Korrektur beschraenkt die Gegenprobe auf 0-Byte-Locks und verweist >0-Byte-Faelle unveraendert an die A-02-Logik. Das ist DIESELBE Schranke wie im fuehrenden Nachtrag-Wortlaut, keine dritte Fassung; der Katalog der verbindlichen Lesart aendert sich nicht (Traegerblatt-A-08-2 zaehlt dort ohnehin nicht doppelt). Kein neues BEREIT noetig: der Bau ist nach Generator-Messung mit alter UND korrigierter Fassung deckungsgleich, die Korrektur ist Dokument-Hygiene gegen genau die Doppelfassungs-Klasse, die diesen Auftrag schon zweimal getroffen hat."
 generator_code_fertig: "generator 07.08.: CODE_FERTIG an 85b03d23 (Bau 5a54b004, Doku 6a264834). Drei-Nein-Regel NUR am 0-Byte-Pfad gebaut (ein &&-Ausdruck, Bedingung 3 zitiert das Tor-Mass woertlich, Doppelpfad Z.163 unangetastet); Lock MIT Inhalt + Halter blockt unveraendert, Meldungen nennen jetzt das Kommando je Halter-PID (A-08-10); Halter ohne ermittelbares Kommando bleibt unbekannt und liegt (A-08-5); Form B (git-Prozess DIESES Repos, cwd-Auskunft mit A-02-6-Zeitgrenze, im Zweifel gehalten) wirkt am Halter- UND am HALTER=0-Pfad, nur bei 0 Byte. Suite selbst gefahren: vorher 30/30 an c2de1eec, nachher 38/38 an 5a54b004; die 8 neuen Zusagen gegen das BASIS-Tor: 5 rot (A-08-1/-4/-5/Form B/-10), 3 gewollt gruen (Gegenhalter A-08-2, git-*, A-08-8). A-08-8 arbeitet mit einem ECHTEN unterbrochenen git-Lauf (update-index --index-info, 0 Byte gemessen, SIGKILL). Sieben Mutationen einzeln eingespielt und byte-identisch zurueckgesetzt: alle gefallen, M7 (0-Byte-Schranke entfernt) exakt durch A-02-2/A-02-4 — der f5098c40-Fall ist dauerhaft rot. Rohausgaben je Kriterium im §11-Bericht im Traegerblatt. Ich nehme NICHT ab."
@@ -721,6 +768,43 @@ umschnitt_meldung: "planner 07.08. (frische Instanz, Claim 6bc733bb) — Commit 
 claim_bau: "plan-pruefer 07.08.: BEREIT gesetzt, Generator-Station wird SOFORT mit frischer Instanz besetzt (P0). Claim VOR dem Start."
 claim_abnahme: "plan-pruefer 07.08.: CODE_FERTIG liegt, Evaluator-Station leer bei P0 — FRISCHE Evaluator-Instanz wird gestartet. Claim VOR dem Start. Ich nehme NICHT selbst ab (§4/§9); die Instanz ist rollenrein Evaluator. NACHTRAG 08.08.: die erste Instanz ist ZWEIMAL abgestorben (API-Abbruch, dann 600s-Stall) OHNE Spuren — beide Male gemessen: Tor/Suite byte-identisch mit 85b03d23, keine Commits, kein Lock, keine Mutationsreste. ZWEITE frische Instanz gestartet, gleicher Auftrag."
 naechster_schritt: "ERLEDIGT (85b03d23) — Generator hat in der 0-Byte-Fassung gebaut, Katalog Nachtrag 1-8 + 9/10, IN_ARBEIT war VOR der ersten Scope-Aenderung gesetzt (1f17f93a), §11-Bericht im Traegerblatt. Jetzt: Evaluator, siehe naechster_schritt_evaluator oben"
+evaluator_votum: "evaluator 08.08.: ABGENOMMEN an 85b03d23. Selbst gefahren: Suite 38/38, Basis 30/30, neue Zusagen gegen das Basis-Tor 5 von 8 rot, sieben eigene Mutationen alle gefangen (md5 zurueckgesetzt), drei eigene Torlaeufe im Wegwerf-Repo. EIN Befund, P2, Klasse SPEC, Ball beim Planner: ein git-Prozess DIESES Repos mit --git-dir und fremder cwd wird von repo_git_laeuft() nicht erkannt (Probe C: Lock beiseitegelegt, Commit lief). Blockiert nicht - der Bau folgt der Kantenliste des Blattes genau, die Luecke steckt im Schnitt; die gefaehrliche Lage deckt Bedingung 1 ab (Probe B), und git -C wird erkannt. Offengelegt: die Ausgabe von git worktree add zeigte mir die Betreffzeile des Pruef-SHA vor der Messung."
+evaluator_zweitvotum: "evaluator-2 08.08. (zweite frische Instanz nach dem Doppel-Absterbe-Claim 966dea39, Kollision offengelegt): ABGENOMMEN an 85b03d23 — unabhaengige Zweitbestaetigung, VOR Kenntnis des Erstvotums gemessen. Selbst gefahren: Suite 38/38 (Scope-Dateien byte-identisch mit 85b03d23, md5 7c71f5ba), A-08-Zusagen gegen das Basis-Tor 8/3/5 (rot: A-08-1/-4/-5/Form B/-10), eigene Wegwerf-Proben je Kriterium inkl. Zwei-Richtungs-Probe A-08-1 (Basis exit 3 -> Bau exit 0 + BEISEITE mit Zielpfad/Groesse/Alter), Gegenfall gitarre zaehlt NICHT als git, alle SIEBEN Mutationen eigenhaendig gesetzt und gefangen (M7 exakt durch A-02-2/A-02-4), Endzustand byte-identisch. Den P2-SPEC-Befund des Erstvotums (--git-dir + fremde cwd) selbst REPRODUZIERT (exit 0 + BEISEITE; git -C korrekt exit 3) — bestaetigt, kein neuer Befund. Realfall-Beleg zitiert: .git/_locks_beiseite/2026-08-08/index.lock (0 Byte, Original erhalten). Zweitvotum am Ende des Traegerblatts; meine versehentlich von 4307987b mitcommittete Erstfassung dort durch die gekennzeichnete Zweitfassung ersetzt."
+release_vermerk: "release-pruefer 08.08.: RELEASE_FREI an 85b03d23 (Release-Kandidat 76bb1992, scripts/ content-identisch; die danach gelandeten Doku-Commits ae6c6dca/d41db6a2/ff549b88 beruehren den Scope nicht — nachgemessen, 0 Zeilen). §10 selbst gefahren: Suite am HEAD 38/38; Kette 793b0729 BEREIT -> 1f17f93a IN_ARBEIT (VOR erster Scope-Aenderung, 0 Scope-Commits davor) -> 5a54b004 Bau -> e491626d CODE_FERTIG -> 23b3a490 + f430242d ABGENOMMEN, jede Stufe Vorfahr der naechsten; Scope-Diff c2de1eec..85b03d23 exakt die fuenf Blatt-Dateien, kein Produktivcode ausserhalb; Beifang-Kontrolle 4307987b/7c2958fd nur Doku, git log e491626d..76bb1992 -- scripts/ = 0; Rueckweg: git revert 5a54b004 genuegt (nur 2 Skriptdateien, keine Migration/Daten); Wildbetrieb: 0-Byte-VM-Lock am 08.08. 13:58 beiseitegelegt (_locks_beiseite/2026-08-08/, Original liegt), danach 18 Commits ohne Aussperrung durchs Tor. VERMERK nach §12.5: P2-SPEC (--git-dir + fremde cwd) ist KEIN Release-Hindernis, Folgeauftrag A-09 existiert und traegt ihn (A-09-1). Ball bei Yama: main-Veroeffentlichung ist seine. Sicherungs-Push auf fork folgt unmittelbar nach diesem Commit (nur auto/hausplaner-integration, nie main/Tags/force); Ergebnis als push_vermerk-Zeile nachgetragen — eine Verweigerung waere ENV-Hinweis, kein Abbruch."
+push_vermerk: "release-pruefer 08.08., ENV-HINWEIS: der Sicherungs-Push (git push fork auto/hausplaner-integration — nie main/Tags/force) wurde von der UMGEBUNG verweigert (Permission-System der Instanz blockt git push, zweimal versucht: einmal im Sammelbefehl, einmal einzeln). KEIN fachliches Rot, kein Abbruch — RELEASE_FREI steht. FOLGE nach Repo-Aufsichts-Massstab: die verifizierte Arbeit bis b2f8c44b liegt weiterhin NUR lokal, der fork-Remote traegt sie nicht — 'nicht gepusht' heisst 'kein Backup ausserhalb der Maschine'. Der Push bleibt offen fuer Yama oder eine Instanz mit Push-Erlaubnis."
+---
+
+## In Planprüfung — A-09
+
+```yaml
+auftrag: A-09
+titel: "Commit-Tor: Repo-Bezug eines git-Prozesses auch ueber --git-dir erkennen, nicht nur ueber die cwd"
+datei: docs/auftraege/aktiv/A-09-repo-bezug-nicht-nur-cwd.md
+zustand: ENTWURF
+ballbesitz: planner
+prioritaet: "P2 — Warteschlange JA, nach A-07 (so steht es im Blatt, und die Reihenfolge ist richtig: gleiche Dateien)"
+letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, EIN gebuendelter Restpunkt — inhaltlich ist das Blatt stark: DECISION klar (Repo-Bezug ueber cwd ODER Aufrufform, Pfadvergleich nach Aufloesung, nicht-feststellbar = gehalten), Nicht-Ziele sauber (GIT_DIR ausdruecklich als unmessbar benannt statt verschwiegen — die A-02-Lehre), Kantenliste mit Gegenrichtung, Entdeckung mit Regressionssignal (haeufigeres ENV_BLOCKED = Pruefung zu weit), Konflikt mit A-07 durch Warteschlangen-Platz geloest, Claim vor dem Schnitt gesetzt. ROT-LAGEN SELBST GEPRUEFT: A-09-1 strukturell bewiesen — repo_git_laeuft() baut Kandidaten aus ps comm= (Z.74-78) und misst Repo-Bezug NUR ueber lsof -d cwd (Z.81 ff.), args wird NIRGENDS gelesen, --git-dir ist damit strukturell unsichtbar; dazu die dynamische Probe C des Evaluators (23b3a490). A-09-5-Zusagen existieren nicht (Rot als fehlende Zusage). must_preserve A-09-2/-3 an der Basis gruen und korrekt deklariert (git -C ueber cwd erkannt — Probe B; fremdes Repo zaehlt heute trivially nicht)."
+offene_akzeptanz:
+  - "Restpunkt (gebuendelt, reine Form): (a) exakter basis_sha fehlt im Kopf — die Rot-Messungen gelten ab dem A-08-Bau, also 5a54b004 oder juenger benennen; (b) §5-Auswirkungen-Block fehlt (Testdaten-Ziel KEINES, Prozessbindung entfaellt, Werkzeuge: node-Suite 38 Zusagen vorhanden UND in Gebrauch — dritter Auftrag in Folge, dem dieser Block beim ersten Schnitt fehlt, das ist inzwischen ein MUSTER fuer die naechste Prozesspruefung); (c) Erstnutzer-Halbsatz (jede Rolle beim naechsten Commit, wie A-08); (d) formale Wiederverwendungspruefung als eigener Block (die Inhalte stehen schon im Ist-Zustand, sie muessen nur als solcher benannt sein)."
+naechster_schritt: "Planner traegt den Formblock ein, dann setzt der Plan-Pruefer BEREIT — Bau aber erst NACH A-07 (Warteschlange im Blatt)"
+```
+---
+
+## In Planprüfung — A-10
+
+```yaml
+auftrag: A-10
+titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
+datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
+zustand: ENTWURF
+ballbesitz: planner
+basis_sha: d58b220e
+prioritaet: P2
+letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, ZWEI kleine Punkte — sonst das bisher SAUBERSTE Erstblatt der Gruppe: basis_sha, §5-Block, Wiederverwendung, Erstnutzer, Rueckweg, Nicht-Ziele ALLE beim ersten Schnitt da (das Muster 'dritter Auftrag ohne §5-Block' ist damit gebrochen — gehoert in die Prozesspruefung als Gegenbeleg). Rot-Lage A-10-1 SELBST strukturell verifiziert: nichtDarstellbar.ts faengt ausschliesslich DachGeometrieUngueltig-Wuerfe (try/catch Z.42-48), ein leeres Ergebnis ohne Wurf erreicht gefunden.push nie — dazu die dreifach unabhaengigen dynamischen Belege (9e97d274, e0fae829, E4b in b29bb79d). Sichtkette korrekt HIER verortet (A-10-4 mit Anker-Regel und browser-buehne.sh als Prozessbindung) statt in A-05. must_preserve A-10-3 sauber."
+offene_akzeptanz:
+  - "Punkt 1: A-10-2 (Gegenprobe) ist an der Basis GRUEN (heute wird gar nichts gemeldet, also auch kein Flaechen-Dach) — nach dem stehenden Muster (A-01-2, A-02-1, A-08-2) als must_preserve-KONTROLLE kennzeichnen und von der Rot-Pflicht ausnehmen, sonst verletzt das Blatt 'kein Kriterium bereits erfuellt'."
+  - "Punkt 2: Konfliktpruefungs-Zeile fehlt (§5) — eine Zeile genuegt: A-04 ist IN_ARBEIT auf scripts/*, A-07/A-09 warten auf commit-pruefen.sh — KEINE Beruehrung mit szene.ts/DreiDBereich.tsx; A-10 darf parallel. EMPFEHLUNG (kein Blocker): eine Mutationszusage (neue Bedingung entfernt -> A-10-1-Zusage faellt) nach dem Vorbild A-08-6, damit die Bedingung nicht stumm entfernbar ist."
+naechster_schritt: "Planner traegt die zwei Punkte ein, dann setzt der Plan-Pruefer BEREIT. WICHTIG §13: A-10 ist Auftrag 10 — VOR einem Auftrag 11 muss die Prozesspruefung der Zehnergruppe gelaufen sein (der Planner hat sie bereits angestossen)."
 ```
 ---
 

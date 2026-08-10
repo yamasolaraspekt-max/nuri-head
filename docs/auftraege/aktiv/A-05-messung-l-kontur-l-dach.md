@@ -25,7 +25,14 @@ und **kein Commit** sie trägt.
 
 Yamas Frage (*„warum greift ihr auf playground und PV-Dachplaner nicht zurück"*) hat einen
 SPEC-Befund ausgelöst: [`BEFUND-ZWEI-DACHPFADE.md`](../../BEFUND-ZWEI-DACHPFADE.md).
-**A-01 baut eine Absage für L-Konturen — während die Insel `l-shape`-Dächer rendert.**
+**A-01 baut eine Absage für L-Konturen — während die Code-Pfade für `l-shape` existieren.**
+
+> **PRÄZISIERT (Rest 3 des Plan-Prüfers):** Der ursprüngliche Satz lautete *„während die Insel
+> `l-shape`-Dächer **rendert**"* — **das ist falsch.** Mit dem A-01-Fixture auf `l-shape` liefert
+> `dachMeshWelt` **leere Dreiecke** und `dachflaechen` **0 Flächen**: ein *stilles leeres Dach*,
+> genau der Zustand, den A-01-4 beseitigt hat. **Wahr ist nur: die Pfade existieren.**
+> *Ohne diese Präzisierung startete der Messauftrag mit einer falschen Prämisse — die Frage selbst
+> (fehlen nur Eingaben? = A-05-1) bleibt genau richtig gestellt.*
 
 ## Wiederverwendungsprüfung (§2) — die ich bei A-01 versäumt habe
 
@@ -87,6 +94,33 @@ Wegwerf-Zusage nach der Erlaubt-Liste oben — am üblichen Ort, vor dem Bericht
 **A-05-4:** **Die Lückenliste.** Was genau fehlt zwischen „Nutzer zeichnet L-Kontur" und
 „`l-shape`-Dach steht"? *Antwortform: nummerierte Liste, je Punkt eine Fundstelle. Auch die
 Antwort „nur die Formzuweisung" ist zulässig — dann bitte mit Beleg.*
+
+## Ablageort des Berichts (Rest 1) und die Bühnen-Frage (Rest 2)
+
+**Rest 1 — der Bericht bekommt einen festen Ort:**
+
+```text
+docs/BERICHT-A-05-l-kontur.md
+```
+
+*Der Evaluator soll „echt und nachvollziehbar" prüfen; dafür muss er wissen, wo er nachsieht.*
+
+**Rest 2 — ENTSCHIEDEN: die Probe läuft auf Test-Ebene, OHNE Serverstart.**
+
+```text
+erlaubt    Aufruf der Geometrie-/Mesh-Funktionen direkt aus einer Wegwerf-Zusage
+           (dachMeshWelt, dachflaechen, verschneidungsFlaechen)
+NICHT      Serverstart, Browserbuehne, Datenbank
+```
+
+> **Das ist keine Vermutung, sondern gemessen:** der Generator hat A-05-3 in seiner Zuliefermessung
+> (`9e97d274`) bereits **ohne Bühne** beantwortet — Aufruf direkt, Ergebnis `{dreiecke: []}` und
+> `0 Flächen`. **Was schon einmal ohne Bühne ging, braucht keine.**
+>
+> **Und falls sich das im Bau als falsch erweist:** dann geht der Auftrag an mich zurück, statt dass
+> der Bauende eine Bühne startet. *Eine Bühne ohne gebundene Anker-Regel ist genau der Fall, gegen
+> den A-03 geschnitten wurde — die Prozessbindung dieses Blatts sagt „entfällt", und das bleibt so
+> oder wird ausdrücklich geändert, nicht stillschweigend unterlaufen.*
 
 ## Was NICHT Gegenstand ist
 
