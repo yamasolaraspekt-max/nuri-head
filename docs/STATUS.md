@@ -1077,6 +1077,22 @@ naechster_schritt: "Generator zieht A-11 NACH A-09 (§3, eine Schlange: A-10-Abn
 ```
 ---
 
+## BEREIT — W-01/1 (Register-Strang, Einreihung bei Yama)
+
+```yaml
+auftrag: "W-01/1"
+titel: "Die sieben Blaetter von W-01 aus dem VORHANDENEN fangKern.ts ableiten"
+datei: docs/auftraege/aktiv/W-01-fang-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Einreihung siehe Vermerk)
+basis_sha: 32f83a6f
+prioritaet: P1
+letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte): JEDE Blatt-Behauptung selbst gemessen: Basis existiert · fangKern.ts exakt 276 Zeilen, 11 Exporte wie gelistet · toolRegistry traegt KEIN Fang-/Raster-/Snap-Werkzeug (der einzige grep-Treffer ist das Wort Anfang in einem Treppen-Hilfetext — die Messung des Planners hielt einer schaerferen Probe stand) · REGISTER fuehrt W-01 auf LEER und nennt fangKern.ts NIRGENDS (0 Treffer — der Beinahe-Doppelbau war real) · Rot-Lage zaehlbar bestaetigt: Platzhalter in 3-FORMELN.md (4) und 1-ZWECK.md (1). Das Blatt selbst ist vorbildlich: Anschluss- statt Bauauftrag nach gefahrener Anbindungsmessung, Stufentrennung (BESCHRIEBEN vor GEBAUT), A-10-Lehre als Pflichtfrage in 7-GRENZEN, must_preserve resources byte-identisch, Entdeckungssignal ist der erste Stufe-2-Bauversuch. EIN HINWEIS (kein Restpunkt): die REGISTER-Zeile erwartet auch F-004, die Kandidatenliste des Blatts nennt sie nicht — W-01/1-3 klaert das ohnehin AM CODE, der Bericht soll die Abweichung ausdruecklich aufloesen. ZUR FORM-QUELLE: W-07 dient nur als FORM-Muster; dessen inhaltlicher Befund (db1dc3b6: anderer Dachweg als die Insel) infiziert W-01 nicht."
+warteschlange_vermerk: "§3: derzeit ist KEIN Auftrag IN_ARBEIT (A-10 ist CODE_FERTIG, Abnahme laeuft als Pruefung parallel). Die EINREIHUNG der W-Reihe relativ zur Tor-Reihe (A-09 -> A-11) ist keine Plan-Pruefer-Entscheidung: das Blatt selbst legt sie Yama vor ('Yama entscheidet ueber die Freigabe der Gruppe'). Bis dahin gilt die bestehende Tor-Reihe; gibt Yama die W-Gruppe frei, darf W-01/1 als naechstes IN_ARBEIT (reine Doku, kuerzester Auftrag, keine Dateiberuehrung mit irgendwem)."
+naechster_schritt: "Yama: Freigabe der W-Gruppe und Einreihung (W-01/1 vor oder nach A-09/A-11). Danach zieht der Generator entsprechend §3."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
