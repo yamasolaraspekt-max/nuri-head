@@ -6,17 +6,17 @@
 
 | Auftrag | Zustand | Ball | letzter Beleg | offen |
 |---|---|---|---|---|
-| **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
-| **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-04** Bühnen-Wächter | **`RELEASE_FREI`** | **Yama** | `c3d52f09` · Votum `b6a63e3e` · §10 im Blatt | Fehlerklasse **KEINE** · §10 alle Punkte grün (Kette per is-ancestor, 7/7+7/7 am HEAD selbst, Revert-Probe sauber) · **Realfund PID 48098** läuft weiter — Beenden entscheidet Yama |
+| **A-01** Dach aus Kontur | `VERÖFFENTLICHT` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
+| **A-02** Lock-Halter | `VERÖFFENTLICHT` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
+| **A-03** Bühnen-Riegel | `VERÖFFENTLICHT` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
+| **A-04** Bühnen-Wächter | **`VERÖFFENTLICHT`** | – | `c3d52f09` · Votum `b6a63e3e` · §10 im Blatt | Fehlerklasse **KEINE** · §10 alle Punkte grün (Kette per is-ancestor, 7/7+7/7 am HEAD selbst, Revert-Probe sauber) · **Realfund PID 48098** läuft weiter — Beenden entscheidet Yama |
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-07** Index-Divergenz | **`RELEASE_FREI`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
+| **A-07** Index-Divergenz | **`VERÖFFENTLICHT`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
 | **A-09** Repo-Bezug über `--git-dir` | **`IN_ARBEIT`** | **Generator** | Claim `ccf9292c` · IN_ARBEIT vor erster Scope-Änderung | `GIT_DIR` aufgenommen statt weggebründet · Bau läuft |
-| **A-10** Melder am leeren Ergebnis | **`RELEASE_FREI`** | **Yama** | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
+| **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
-| **W-01** Raster und Fang | **`IN_ARBEIT`** | **Generator** | `fd556f34` · Basis `32f83a6f` | Claim gesetzt · §7-Vorprüfung 6/6 · rot an der Basis: `3-FORMELN` 4 Platzhalter, Register `LEER` |
+| **W-01** Raster und Fang | **`BEREIT`** | – | `fd556f34` · Basis `32f83a6f` | ⚠ mein `IN_ARBEIT` **zurückgenommen**: A-09 war 11 s früher, §3 lässt nur eines · Scope unberührt, §7-Vorprüfung 6/6 gilt weiter |
 | **W-02** Wand zeichnen | **`BEREIT`** | **Generator** | `debf3fbe` (1. Review) | Werkbank-Schiene · Zeilenzahlen aufs Zeichen belegt |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
@@ -819,6 +819,7 @@ auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage"
 datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
 zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF c908d3f0 (05.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: yama
 basis_sha: 16d5bbde
 pruef_sha: "94b58aaf"
@@ -858,6 +859,7 @@ auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
 datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
 zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF c908d3f0 (05.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: yama
 basis_sha: 93a9691f
 release_sha: "c908d3f0"
@@ -893,6 +895,7 @@ auftrag: A-03
 titel: "Browser-Buehne: der sichere Aufruf wird erzwungen, der lautlose wird laut"
 datei: docs/auftraege/aktiv/A-03-browser-buehne-testdatenbank.md
 zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF c908d3f0 (05.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: planner
 basis_sha: 89d69c13
 release_sha: "c908d3f0"
@@ -920,6 +923,7 @@ zustand: VEROEFFENTLICHT
 release_sha: "e7c6e618"
 release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme c3d52f09 selbst gefahren — Kette Vorfahr, Scope exakt 4 Dateien (Waechter, Suite, Buehnen-Test, Anker), Produkt-Code seit 8648a4cb unberuehrt (kein tsc/Bundle/php noetig), bash -n OK, Suiten 7/7 + 7/7 + 38/38, Geheimnis-/env-Scan leer. RELEASE_FREI und main-Integration in einem Arbeitsgang: reiner FF 8648a4cb..e7c6e618 auf fork UND backup-private. Der Release-Claim (e0cc55a7, frische Instanz) ist damit von der Stamm-Instanz eingeloest. Realfund PID 48098 (verwaiste php84-Buehne vom 05.08.) laeuft weiter — Handraeumung gehoert Yama. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 zweitpruefung: "Parallel lief ein UNABHAENGIGES §10 einer frischen Release-Instanz (a6b54b79, RELEASE_FREI an c3d52f09; Kette je is-ancestor, Suiten 7/7+7/7, Rueckweg apply --reverse --check) — deckungsgleich mit der Stamm-Pruefung, als Zweitbeleg verbucht. Ihr Sicherungs-Push wurde erneut von der Umgebung verweigert (60ebed62); Transport und Veroeffentlichung sind durch die Stamm-Instanz erfolgt. Doppel-§10 derselben Klasse wie P-02 — Claim-Vergabe an Release-Station beruecksichtigen."
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF e7c6e618 (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: yama
 basis_sha: 89f373d9
 pruef_sha: c3d52f09
@@ -982,6 +986,7 @@ zustand: VEROEFFENTLICHT
 release_sha: "e321f2a2"
 release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme c512f931 (Erstvotum fc5a3daa + unabhaengige Zweitmessung 05f3e1d9, deckungsgleich) — Kette Vorfahr, Scope exakt 2 Dateien (Tor +94, Suite +143), Produkt-Code seit e7c6e618 unberuehrt, bash -n OK, Suiten 42/42 + 7/7 + 7/7, Geheimnis-/env-Scan leer. RELEASE_FREI und main-Integration in einem Arbeitsgang: reiner FF e7c6e618..e321f2a2 auf fork UND backup-private. Feld-Belege der Abnahme beigefuegt: A-07-1b-Kippfall LIVE (7ab67893, Tor meldete 212 fremde Blobs und fasste nichts an; anschliessend als docs/rollenkette in 1e933a64 GESICHERT). Offener P2/BEWEIS-Befund (Initialisierung ohne Zusage) beim Generator, blockiert nicht. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 zweitpruefung_a07: "Unabhaengiges §10 der frischen Release-Instanz (850b6ece): RELEASE_FREI an c512f931, Kette 6x is-ancestor, 42/42, Scope content-identisch, Revert-Probe OK, Halden-Rueckweg 2589/0 — deckungsgleich mit der Stamm-Pruefung, als Zweitbeleg verbucht. Ihr Push erneut verweigert (facf791c); Transport und Veroeffentlichung waren durch die Stamm-Instanz bereits erfolgt (e321f2a2 auf main). Vierte Claim-Kollision derselben P-02-Klasse."
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF e321f2a2 (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: yama
 in_arbeit_gesetzt: "generator 10.08.: VOR der ersten Scope-Aenderung (§3). §7-Vorpruefung bestanden: basis_sha ff549b88 ist Vorfahr von HEAD (e3d7b2c8), Scope driftfrei (diff ff549b88..HEAD auf beide Tor-Dateien leer, Arbeitsbaum content-identisch zu HEAD), Suite selbst gefahren 38/38, Rot-Lagen leben ALLE und wachsen weiter (trap 0 · Halde 2554 · Divergenz 38 --name-only / 58 status / 18 Phantome — Vortag: 35/55/2551). STATUS.md vor diesem Commit content-identisch zu HEAD, kein Beifang der parallelen A-04-Abnahme."
 code_fertig: "generator 10.08.: CODE_FERTIG — §11-Bericht im Blatt (A-07-index-divergenz.md), Basis ff549b88, Pruef-SHA c512f931 (traegt EXAKT die 2 Scope-Dateien, content-diff gegen Arbeitsbaum = 0). Suite 42/42 selbst gefahren (38 Bestand + 4 neue Zusagen A-07-1a/-2/-4/-4-Gegenprobe), vier Mutationen gefallen, md5-identisch wiederhergestellt (59e23956…). Regelfall VOR der ersten Angleichung gemessen: 20 Kandidaten-Blobs, 0 verwaist, 0 unmerged. Zusatz-Nachweis 1a real: status 58 -> 4, alle 4 echt, VIERZEHN verschwundene Eintraege einzeln index-frei belegt (>= 10 verlangt). A-07-5 EINMALIG erledigt: 2589 Halden-Dateien nach $TMPDIR/ticket-index/_to_delete/2026-08-10-A-07-5/ beiseitegelegt, 0 geloescht, 0 verblieben; voller Suite-Lauf hinterlaesst jetzt 0 statt ~35. GEMELDET: HEAD wanderte waehrend des Baus (parallele A-04-Release-Kette 18:54-18:58 committete durchs geteilte Arbeitsverzeichnis und nutzte damit das editierte Tor als ERSTNUTZER der Angleichung — Details und Mutationsfenster-Risiko als Abweichungen im Bericht). Kein gruen, keine Selbstabnahme — Ball beim Evaluator."
@@ -1017,6 +1022,7 @@ titel: "Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt - statt o
 datei: docs/auftraege/aktiv/A-08-halter-nach-kommando.md   # Traegerblatt; traegt den §11-Generator-Bericht
 nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidung + Kriterien; FUEHRENDER Wortlaut A-08-1
 zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF 8648a4cb (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: yama
 release_sha: "8648a4cb"
 release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: main-Integration in Vertretung ausgefuehrt — reiner FF c908d3f0..8648a4cb auf fork UND backup-private. Das §10-Protokoll der frischen Release-Instanz (b2f8c44b, RELEASE_FREI an 85b03d23) uebernommen und das Grundtor am Kandidaten 8648a4cb selbst erneut gefahren: tsc clean, Insel 1689/1689, Bundle byte-gleich, bash -n OK, Tor-Suite 38/38, Buehne 6/6, php artisan test 880/880. Ihr verweigerter Sicherungs-Push (2b5aebae) ist nachgeholt: Linie liegt auf beiden Remotes. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
@@ -1076,6 +1082,7 @@ auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
 zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF 2da18c44 (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: yama
 release_sha: "2da18c44"
 release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: main-Integration in Vertretung — reiner FF e321f2a2..2da18c44 auf fork UND backup-private. Das §10 der frischen Release-Instanz (5f7043bc, RELEASE_FREI an 47c0aa73) uebernommen und das volle Grundtor am Kandidaten selbst erneut gefahren: tsc clean, Insel 1692/1692, Bundle BYTE-GLEICH (62338b66), php artisan test 880/880. Ihr verweigerter Push (d836fb91) ist nachgeholt. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
