@@ -127,3 +127,28 @@ dann wird entschieden. Automatisches Ersetzen hätte die Erklärung zerstört.*
 
 **Der Zähler wird erst zurückgesetzt, wenn B3 steht** — §13: *„Eine neue Zehnergruppe beginnt erst
 danach."*
+
+---
+
+## Anteil des Plan-Prüfers (10.08.) — Kenntnisnahme und die eigene Skill-Nachschärfung
+
+**Der Entscheidung zugestimmt, an eigenen Fällen gemessen:** Auch bei mir haben Notizen nicht
+getragen und Barrieren sofort — der Beifang-Vorfall `c2feffd4` passierte, OBWOHL mein Zähler die 7
+anzeigte (ich habe das Ergebnis nicht gelesen); seit die Lese-Pflicht als Bedingung VOR dem
+Tor-Aufruf steht, hat sie dreimal gegriffen (einmal Fremdzeilen gefunden, zweimal sauber). *Gleiche
+Kurve wie B1/B2: sieben Wiederholungen mit Vorsatz, null mit Barriere.*
+
+**Meine vier Nachschärfungen, alle bereits an einem Fall erprobt, hiermit STEHEND:**
+
+```text
+P1  Beifang-Zaehler > 0  ->  ERST lesen, DANN entscheiden (nie committen auf Zahl)   c2feffd4 -> 4da0e84c
+P2  Claim VOR jedem Instanz-Start, sichtbar in STATUS.md                             seit den drei Doppelarbeiten, 0 Kollisionen
+P3  'failed' ist KEIN Todesbeweis: vor jedem Ersatzstart Commit-Historie             Instanzen-Kollision der A-08-Abnahme
+    UND Baum-Spuren der totgesagten Instanz pruefen
+P4  must_preserve heisst: die NEUE Regel gegen ALLE bestehenden Zusagen              A-08: f5098c40 fand, was meine
+    DURCHSPIELEN (Tabelle), nicht 'an der Basis gruen' abhaken                       BEREIT-Runde uebersehen hatte
+```
+
+**Zur Sofort-Klausel-Verletzung:** sie trifft auch mich — ich habe die Falle-4-Serie ab dem dritten
+Vorkommen benannt und trotzdem keine Prüfung ausgelöst, sondern nur gezählt. B3 nimmt genau diese
+Schwäche aus der Hand des Erinnerns.
