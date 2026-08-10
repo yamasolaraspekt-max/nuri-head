@@ -769,3 +769,93 @@ unmerged -> Kippfall                GEDECKT   konservativ, keine Zusage geschwae
 
 **Ergebnis der Zweitmessung: das Votum ABGENOMMEN an `c512f931` (Fehlerklasse KEINE, ein
 P2-BEWEIS-Folgeauftrag beim Generator) wird in allen Kriterien unabhängig bestätigt.**
+
+---
+
+## Release-Prüfung A-07 (§10) — 10.08.2026
+
+```yaml
+auftrag: A-07
+abnahme_commit: c512f931
+release_commit: c512f931
+votum: RELEASE_FREI
+ci: pass
+artefakte_reproduzierbar: true
+migration: nicht_anwendbar
+rueckweg: pass
+smoke_test_plan: "Realbeleg: dieser Blatt-Commit laeuft selbst durch das umgebaute Tor
+  (INDEX ANGEGLICHEN, danach diff --cached --name-only = 0) — siehe Nachtrag unten"
+befunde:
+  - "P2 BEWEIS (uebernommen, Ball Generator): read-tree-Initialisierung von keiner Zusage
+     gedeckt — kein Release-Hindernis nach §12.5, schuldet Nachweis oder Blattsatz"
+  - "P2 PROZESS (uebernommen, Ball Planner): Claim bindet die Beauftragung nicht — dritte
+     Kollision derselben Klasse (A-04, A-07-Abnahme)"
+  - "P3 UMGEBUNG (selbst bestaetigt): PID-lose Altdatei 'index' (03.08., 145 B) liegt weiter
+     in $TMPDIR/ticket-index — beim naechsten Aufraeumen beiseitelegen"
+```
+
+**Rollenlage:** Ich war bei A-07 weder Generator noch Evaluator (§4 Release-Prüfer). Alle Zahlen
+unten selbst gemessen am HEAD `8343f206`, kein Wert aus Berichten übernommen.
+
+### Kette — je `git merge-base --is-ancestor`, Rohausgabe
+
+```text
+OK  184c6c61 ancestor-of 8adffd3d      BEREIT (5. Runde, 18:41)   -> IN_ARBEIT (18:50)
+OK  8adffd3d ancestor-of c512f931      IN_ARBEIT                  -> Bau (19:00)
+OK  c512f931 ancestor-of eb86828b      Bau                        -> CODE_FERTIG (19:03)
+OK  eb86828b ancestor-of fc5a3daa      CODE_FERTIG                -> ABGENOMMEN (19:13)
+OK  fc5a3daa ancestor-of 05f3e1d9      Abnahme                    -> Zweitmessung (19:17)
+OK  05f3e1d9 ancestor-of HEAD          Zweitmessung               -> HEAD 8343f206
+```
+
+Evaluator-Votum (`fc5a3daa`) und Release-Kandidat zeigen auf **denselben** Commit `c512f931`;
+die Zweitmessung (`05f3e1d9`) bestätigt ihn unabhängig.
+
+### Qualitätstor am HEAD — selbst gefahren
+
+```text
+node --test scripts/__tests__/commitPruefen.test.mjs
+  tests 42 · pass 42 · fail 0 · cancelled 0 · skipped 0
+git diff c512f931 -- scripts/commit-pruefen.sh scripts/__tests__/commitPruefen.test.mjs
+  0 Zeilen — beide Scope-Dateien am HEAD content-identisch zum Pruef-SHA
+md5 -q scripts/commit-pruefen.sh
+  59e23956c627085b0792def9486935dc   (= §11-Bericht des Generators UND beide Voten)
+```
+
+### Scope-Reinheit und Beifang
+
+```text
+git show c512f931 --stat   exakt 2 Dateien:
+  scripts/__tests__/commitPruefen.test.mjs  +143
+  scripts/commit-pruefen.sh                 +94
+git log --oneline eb86828b..HEAD -- scripts/   LEER — kein Commit nach CODE_FERTIG an scripts/
+```
+
+### Rückweg
+
+```text
+Code:   git show c512f931 -- scripts/ | git apply --reverse --check   -> OK
+        (Skript+Tests, kein Datenpfad, keine Migration — revert-faehig)
+Halde:  die einmalige A-07-5-Raeumung ist NICHT ueber revert rueckholbar. Ihr Rueckweg ist
+        das Beiseite-Verzeichnis, selbst gezaehlt:
+        find $TMPDIR/ticket-index/_to_delete/2026-08-10-A-07-5 -type f | wc -l   ->  2589
+        (deckt die Zweitmessung; 0 geloescht — Zahl seit Abnahme unveraendert, Dauerregel)
+        dazu _to_delete/2026-08-10-evaluator-kontrolllaeufe = 92 · lebende Halde index.* = 0
+```
+
+### Offene Befunde aus den Voten — gewürdigt, keine Release-Hindernisse (§12.5)
+
+Die drei Punkte stehen oben im YAML-Block als `befunde`: P2-BEWEIS (Generator schuldet den
+Nachweis zur `read-tree`-Initialisierung), P2-Prozess (Claim bindet die Beauftragung nicht),
+P3 (PID-lose Altdatei `index` — Existenz von mir selbst bestätigt: 145 B, 03.08. 01:03).
+Kein P0/P1 offen. Sicherheits-, Rechte-, Mandanten- und Datengrenzen unberührt (kein Endpunkt,
+keine Query, kein Produktdatenpfad).
+
+### Urteil
+
+**RELEASE_FREI** an `c512f931`. Ball: **Yama** (Veröffentlichung nach §4/§14; Sicherungs-Push
+auf `fork` nach v1.2-Vertretung von mir versucht — Ergebnis im Nachtrag).
+
+### Nachtrag: Realbeleg Live-Wirkung + Push
+
+*(wird nach dem Tor-Commit dieses Blatts ergänzt)*
