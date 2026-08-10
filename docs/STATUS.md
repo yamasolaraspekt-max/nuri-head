@@ -13,11 +13,11 @@
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | **`VERÖFFENTLICHT`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
-| **A-09** Repo-Bezug über `--git-dir` | **`CODE_FERTIG`** | **Evaluator** | Bau `12ca3798` · §11-Bericht `af8f2054` | Suite 42/42→50/50 · 5 Neu-Zusagen an der Basis rot · 6 Mutationen gefangen · A-09-4 war durch `48ca0099` bereits erfüllt (deklariert) |
+| **A-09** Repo-Bezug über `--git-dir` | **`ABGENOMMEN`** | **Release-Prüfer** | Bau `12ca3798` · Votum `e53e3cfb` an `af8f2054` | Fehlerklasse **KEINE** · 42/42→50/50 selbst · Probe C+D beidseitig am lebenden Prozess · Gegen-Beweis A-09-3 (fremdes Repo zählt nicht) · M3/M6 selbst gesetzt, md5-identisch restauriert |
 | **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
-| **W-01** Raster und Fang | **`IN_ARBEIT`** | **Generator** | `fd556f34` · Basis `32f83a6f` | §7-Vorprüfung 6/6 · §3-Schranke im selben Skript geprüft (0 laufend) |
-| **W-02** Wand zeichnen | **`BEREIT`** | **Generator** | `debf3fbe` (1. Review) | Werkbank-Schiene · Zeilenzahlen aufs Zeichen belegt |
+| **W-01** Raster und Fang | **`CODE_FERTIG`** | **Evaluator** | `04f78b73` · Basis `32f83a6f` | sieben Blätter aus `fangKern.ts` abgeleitet · 1692/1692 · `resources/**` byte-identisch · 3 Abweichungen und 1 offener Befund im Bericht |
+| **W-02** Wand zeichnen | **`IN_ARBEIT`** | **Generator** | `debf3fbe` · Basis `193681cd` | §7-Vorprüfung 6/6 · §3 im selben Skript · rot an der Basis: **17 Platzhalter** in fünf Blättern |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1054,30 +1054,34 @@ release_vermerk: "release-pruefer 08.08.: RELEASE_FREI an 85b03d23 (Release-Kand
 push_vermerk: "release-pruefer 08.08., ENV-HINWEIS: der Sicherungs-Push (git push fork auto/hausplaner-integration — nie main/Tags/force) wurde von der UMGEBUNG verweigert (Permission-System der Instanz blockt git push, zweimal versucht: einmal im Sammelbefehl, einmal einzeln). KEIN fachliches Rot, kein Abbruch — RELEASE_FREI steht. FOLGE nach Repo-Aufsichts-Massstab: die verifizierte Arbeit bis b2f8c44b liegt weiterhin NUR lokal, der fork-Remote traegt sie nicht — 'nicht gepusht' heisst 'kein Backup ausserhalb der Maschine'. Der Push bleibt offen fuer Yama oder eine Instanz mit Push-Erlaubnis."
 ---
 
-## In Planprüfung — A-09
+## A-09 — ABGENOMMEN an af8f2054 (Ball beim Release-Prüfer)
 
 ```yaml
 auftrag: A-09
 titel: "Commit-Tor: Repo-Bezug eines git-Prozesses auch ueber --git-dir erkennen, nicht nur ueber die cwd"
 datei: docs/auftraege/aktiv/A-09-repo-bezug-nicht-nur-cwd.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 5a54b004      # aus dem Blatt; Uebernahme-HEAD (Basis der Messungen): d836fb91
 basis_bau: d836fb91      # HEAD bei Uebernahme, 5a54b004 ist Vorfahr; Scope-Drift auf scripts/ bis zum Bau: 0
 pruef_sha: af8f2054      # Bau 12ca3798 (beide Skripte), §11-Bericht af8f2054; dieser STATUS-Commit folgt darauf
 generator_code_fertig: "generator 10.08.: CODE_FERTIG an af8f2054 (Kette d6846f69 IN_ARBEIT -> 12ca3798 Bau -> af8f2054 §11-Bericht im Blatt). repo_git_laeuft() traegt jetzt die DREI Wege der DECISION: cwd (unveraendert), Aufrufform (--git-dir/-C/--work-tree aus ps args=, auch die zweiteiligen Formen), Umgebung (GIT_DIR/GIT_WORK_TREE aus ps -E) — Pfadvergleich stets NACH physischer Aufloesung ueber die neue pfad_meint_repo() (relativ gegen die cwd des Kandidaten, /var-Symlink begradigt), nicht Feststellbares bleibt gehalten. Suite selbst gefahren: Basis 42/42, Bau 50/50 (acht neue Zusagen); die fuenf Neu-Verhalten (A-09-1, Aufloesung, --work-tree, A-09-6, GIT_WORK_TREE) gegen das BASIS-Skript nachweislich rot (pass 3 / fail 5), die drei Kontrollen (A-09-2, A-09-3, Zweifel) an Basis und Bau gruen. A-09-5: SECHS Mutationen einzeln eingespielt, ALLE gefangen (M1 3 rot, M2 3, M3 5, M4 1, M5 2, M6 2), md5 fd351a78 vor und nach jeder Probe byte-identisch. A-09-4 war an der Basis BEREITS erfuellt (Planner 48ca0099 beim Blattschnitt, verifiziert Z.266-270 des Nachtrags) — bewusst kein Doppel-Diff, als Abweichung im Bericht deklariert. Grenzen dokumentiert statt gebaut: fremde Nutzer (faengt der bestehende cwd-Zweifelspfad), Pfade mit Leerzeichen in ps-Ausgaben. Fuer den STATUS-Commit auf den Planner-Commit 874d6331 gewartet statt dessen uncommittete Zeilen mitzusichern. Ich nehme NICHT ab."
 prioritaet: "P2 — Warteschlange JA, nach A-07 (so steht es im Blatt, und die Reihenfolge ist richtig: gleiche Dateien)"
 in_arbeit_gesetzt: "generator 10.08. (frische Instanz, Claim ccf9292c): IN_ARBEIT gesetzt VOR der ersten Scope-Aenderung (§3). §3-Schlange selbst geprueft: kein Auftrag IN_ARBEIT (A-10 RELEASE_FREI an 5f7043bc, A-04/A-07 RELEASE_FREI). §7-Vorpruefung gefahren an HEAD d836fb91: (1) basis_sha 5a54b004 ist Vorfahr von HEAD; (2) alle fuenf Scope-Dateien content-identisch mit HEAD (git show HEAD:<pfad> | diff — 5x IDENTISCH; die git-status-Eintraege sind die bekannten Index-Phantome der A-07-Klasse); (3) Suite an der Basis SELBST gefahren: 42/42 (tests 42, pass 42, fail 0); (4) BEIDE Rot-Lagen ZWEIMAL selbst gemessen im Wegwerf-Repo mit dem Skript von HEAD: Form C (git --git-dir=<repo>/.git cat-file --batch, fremde cwd, Prozess nachweislich lebend via ps args) -> 0-Byte-Lock 302s BEISEITE, Commit lief, exit 0; Form D (GIT_DIR=<repo>/.git in der UMGEBUNG, via ps -E -p <pid> -o command= am lebenden Prozess nachgewiesen, fremde cwd) -> ebenfalls BEISEITE, Commit lief, exit 0. Beide Kriterien A-09-1/A-09-6 damit an der Basis wirksam rot, exakt Probe C/D des Evaluators."
-letztes_votum: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, EIN gebuendelter Restpunkt — inhaltlich ist das Blatt stark: DECISION klar (Repo-Bezug ueber cwd ODER Aufrufform, Pfadvergleich nach Aufloesung, nicht-feststellbar = gehalten), Nicht-Ziele sauber (GIT_DIR ausdruecklich als unmessbar benannt statt verschwiegen — die A-02-Lehre), Kantenliste mit Gegenrichtung, Entdeckung mit Regressionssignal (haeufigeres ENV_BLOCKED = Pruefung zu weit), Konflikt mit A-07 durch Warteschlangen-Platz geloest, Claim vor dem Schnitt gesetzt. ROT-LAGEN SELBST GEPRUEFT: A-09-1 strukturell bewiesen — repo_git_laeuft() baut Kandidaten aus ps comm= (Z.74-78) und misst Repo-Bezug NUR ueber lsof -d cwd (Z.81 ff.), args wird NIRGENDS gelesen, --git-dir ist damit strukturell unsichtbar; dazu die dynamische Probe C des Evaluators (23b3a490). A-09-5-Zusagen existieren nicht (Rot als fehlende Zusage). must_preserve A-09-2/-3 an der Basis gruen und korrekt deklariert (git -C ueber cwd erkannt — Probe B; fremdes Repo zaehlt heute trivially nicht)."
+votum_dor_1_runde: "plan-pruefer 08.08. (1. DoR-Runde): ENTWURF bleibt, EIN gebuendelter Restpunkt — inhaltlich ist das Blatt stark: DECISION klar (Repo-Bezug ueber cwd ODER Aufrufform, Pfadvergleich nach Aufloesung, nicht-feststellbar = gehalten), Nicht-Ziele sauber (GIT_DIR ausdruecklich als unmessbar benannt statt verschwiegen — die A-02-Lehre), Kantenliste mit Gegenrichtung, Entdeckung mit Regressionssignal (haeufigeres ENV_BLOCKED = Pruefung zu weit), Konflikt mit A-07 durch Warteschlangen-Platz geloest, Claim vor dem Schnitt gesetzt. ROT-LAGEN SELBST GEPRUEFT: A-09-1 strukturell bewiesen — repo_git_laeuft() baut Kandidaten aus ps comm= (Z.74-78) und misst Repo-Bezug NUR ueber lsof -d cwd (Z.81 ff.), args wird NIRGENDS gelesen, --git-dir ist damit strukturell unsichtbar; dazu die dynamische Probe C des Evaluators (23b3a490). A-09-5-Zusagen existieren nicht (Rot als fehlende Zusage). must_preserve A-09-2/-3 an der Basis gruen und korrekt deklariert (git -C ueber cwd erkannt — Probe B; fremdes Repo zaehlt heute trivially nicht)."
 offene_akzeptanz:
   - "Restpunkt (gebuendelt, reine Form): (a) exakter basis_sha fehlt im Kopf — die Rot-Messungen gelten ab dem A-08-Bau, also 5a54b004 oder juenger benennen; (b) §5-Auswirkungen-Block fehlt (Testdaten-Ziel KEINES, Prozessbindung entfaellt, Werkzeuge: node-Suite 38 Zusagen vorhanden UND in Gebrauch — dritter Auftrag in Folge, dem dieser Block beim ersten Schnitt fehlt, das ist inzwischen ein MUSTER fuer die naechste Prozesspruefung); (c) Erstnutzer-Halbsatz (jede Rolle beim naechsten Commit, wie A-08); (d) formale Wiederverwendungspruefung als eigener Block (die Inhalte stehen schon im Ist-Zustand, sie muessen nur als solcher benannt sein)."
 naechster_schritt_alt: "(2. Runde ersetzt)"
 votum_2_runde: "plan-pruefer 10.08. (2. Runde nach e54e748d): ENTWURF bleibt, EIN Rest — der Formblock ist vollstaendig und selbst geprueft (basis_sha 5a54b004 mit struktureller Begruendung: repo_git_laeuft existiert davor nachweislich nicht — grep 0 an 5a54b004^, sauber; §5-Block, Erstnutzer, Wiederverwendung da). DER REST: das GIT_DIR-Nicht-Ziel (Z.88) traegt WEITERHIN die vom Evaluator WIDERLEGTE Begruendung 'nicht verlaesslich lesbar' — Probe D (fc64f05e) hat gemessen: derselbe Effekt (0-Byte-Lock beiseitegelegt trotz laufendem Repo-git via GIT_DIR), und ps -E liest die Variable fuer Same-User-Prozesse, also fuer ALLE Rollen dieses Repos, mit demselben Werkzeug, das A-09 ohnehin benutzt. Ein Nicht-Ziel ist weiter ZULAESSIG — aber die Begruendung muss die ehrliche sein ('messbar, aber bewusst nicht erfasst, Luecke bleibt offen und dokumentiert' + Kantenzeile Z.192 anpassen) ODER GIT_DIR wird als Bedingung aufgenommen (gleiches Werkzeug, kleiner Zuwachs). Die WAHL ist Planner-Sache; verboten ist nur der jetzige Zustand: eine widerlegte Aussage als Entscheidungsgrundlage in einem Blatt, das exakt diese Fehlerklasse behandelt (A-09-4)."
+claim_release_a09: "plan-pruefer 10.08.: A-09 ABGENOMMEN (e53e3cfb) — Release-Station mit frischer Instanz besetzt. Claim VOR dem Start."
 ballwechsel_bestaetigt_a09: "plan-pruefer 10.08.: A-09-CODE_FERTIG-Meldepflichten geprueft — Kette d6846f69 -> 12ca3798 -> af8f2054 (Pruef-SHA) -> 8cd9de10, Scope SELBST gemessen: exakt die Blatt-Dateien (Tor repo_git_laeuft-Zone + Suite + A-08-Nachtrag-Zeile + Blatt + STATUS), Commit-Aufruf- und A-11-Zone unangetastet (Diff-Hunks @@68/@@107). Ball beim EVALUATOR. FUER SEINE PRUEFUNG: A-09-4 wird als AN-DER-BASIS-ERFUELLT deklariert (48ca0099 — nachpruefen statt glauben); Suite 42->50, neue Zusagen gegen Basis 3 pass/5 fail (exakt Kontrollen vs. Neu-Verhalten); die dokumentierten Grenzen (fremde Nutzer, Leerzeichen-Pfade in ps) gegenlesen."
 claim_abnahme_a09: "plan-pruefer 10.08.: Evaluator-Station fuer A-09 mit frischer Instanz besetzt. Claim VOR dem Start."
 claim_bau_a09: "plan-pruefer 10.08.: §3-Schlange frei (A-10 ABGENOMMEN, kein IN_ARBEIT) — Generator-Station fuer A-09 mit frischer Instanz besetzt. Claim VOR dem Start."
 votum_bereit: "plan-pruefer 10.08. (3. Runde nach 52c25a62): BEREIT — die GIT_DIR-Frage ist auf ehrlicher Grundlage entschieden: AUFGENOMMEN als Bedingung 3 (Umgebung via ps -E, dasselbe Werkzeug), die widerlegte Begruendung steht KORRIGIERT im Blatt (beide Halbsaetze einzeln geprueft: Effekt bestaetigt, Lesbarkeit widerlegt), die ECHTE Grenze ist benannt (ps -E liest fremde NUTZER nicht — root-Probe 0 Treffer; alle Rollen laufen als derselbe Nutzer), neues P1-Kriterium A-09-6 mit Probe D als wirksamem Rot, Kantenliste und Mutationsprobe nachgezogen. Pfadvergleich nach Aufloesung gilt fuer alle drei Wege. Warteschlange: hinter A-10, vor A-11."
 naechster_schritt: "Evaluator prueft af8f2054 unabhaengig (§9): Suite an Basis und Pruef-SHA selbst fahren, Rot-Lagen C/D selbst nachstellen, Mutationsproben erneut (§12.4), fuer A-09-4 die Fundstelle Z.266-270 im A-08-NACHTRAG lesen (bewusst KEIN Diff in diesem Bau — Kriterium war an der Basis durch 48ca0099 erfuellt), fuer A-09-3 den Gegen-Beweis am zweiten Wegwerf-Repo fuehren"
+claim_abnahme: "evaluator (Erstinstanz) 10.08. 21:0x: Abnahme A-09 GECLAIMT vor dem Pruefstand-Aufbau — Lehre aus der A-04-Kollision, bei der zwei Instanzen denselben Auftrag genommen haben. Pruef-SHA af8f2054, Bau 12ca3798, Elter-Kontrolle folgt."
+letztes_votum: "evaluator 10.08.: ABGENOMMEN an af8f2054 (Bau 12ca3798; scripts/ zwischen Bau, Pruef-SHA und HEAD ded32c75 content-identisch, 0 Zeilen Drift — selbst gemessen). Alles unabhaengig nachgemessen in eigenen Worktrees (git worktree add -q): Basis 12ca3798^ = fec3a07a Suite 42/42, Pruef-SHA 50/50; Namensabgleich per tap+comm: exakt 8 neue A-09-Zusagen, 0 Bestandszusagen weggefallen — alle 42 must_preserve laufen namensgleich gruen, A-08-0-Byte-Schranke und A-07-Angleichung unberuehrt (Torlaeufe zeigten INDEX ANGEGLICHEN). Probe C (--git-dir, fremde cwd) und Probe D (GIT_DIR nur in der Umgebung, per ps -E am lebenden Prozess belegt, args ohne GIT_DIR) je in BEIDEN Richtungen am SELBEN lebenden Prozess: neues Tor exit 3 + Lock liegt + ENV_BLOCKED, Basis-Tor beiseite + Commit lief (01dd4f5 / 5027789). Eigener Gegen-Beweis A-09-3: echtes zweites Wegwerf-Repo, --git-dir dorthin, Prozess lebte — zaehlt NICHT, Commit 4565feb lief; 'jeder git zaehlt' widerlegt. A-09-2 via git -C lebend geprueft: exit 3. Relative Form --git-dir=pr-c/.git aus fremder cwd: gefangen. A-09-5 nach §12.4 selbst: M3 Rohvergleich statt Aufloesung -> 50/45/fail 5 (exakt die fuenf Neu-Verhalten), M6 ps ohne -E -> fail 2 (beide Umgebungs-Zusagen) — beide Zahlen decken den Generator-Bericht, md5 fd351a78 vor und nach jeder Probe selbst gemessen, Suite danach 50/50. A-09-4: 48ca0099 selbst gelesen (Diff traegt den Zeilentausch FREMDES VERZEICHNIS -> FREMDES REPOSITORIUM samt Befund-Vermerk 23b3a490/Probe C/SPEC) — kein Doppel-Diff war richtig, die Abweichungs-Deklaration trifft zu. Grenzen gegengelesen: fremde Nutzer KONSERVATIV (cwd-Zweifelspfad haelt Richtung Blockade), Leerzeichen-Pfade ehrlich benannt, wirken Richtung Uebersehen — Randnotiz ohne Auftrag, solange kein Arbeitsbaum mit Leerzeichen existiert. Realtest Erstnutzer: Votum-Commit e53e3cfb und dieser STATUS-Commit liefen selbst durchs neue Tor. Fehlerklasse KEINE, keine offenen P0/P1. Ball beim Release-Pruefer."
+naechster_schritt_evaluator: "Release-Pruefer faehrt §10 auf dem Abnahme-Stand: Kette d6846f69 -> 12ca3798 -> af8f2054 -> e53e3cfb je is-ancestor, Suite am Release-Kandidaten, Scope-Diff nur Blatt-Dateien, Rueckweg git revert 12ca3798"
 ```
 ---
 
@@ -1125,6 +1129,7 @@ ballbesitz: generator (Warteschlange hinter A-09)
 basis_sha: 229ad0be
 prioritaet: P1
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das zweite der Gruppe nach A-08): Rot-Lagen SELBST strukturell verifiziert (Rollenpruefung im Tor: 0 Treffer; 21 von 40 letzten Commits ohne Praefix — Blatt sagt 15, Drift nicht tragend, die Quote zerbricht die Zaehlung so oder so), Botschaft-Annahme Z.51 bestaetigt, Commit-Aufruf liegt heute auf Z.424 statt 384 (Zeilendrift durch A-07/A-08-Bauten — die Bauvorgabe gilt SINNGEMAESS: der Commit-Aufruf und alles danach bleibt unangetastet). Konfliktpruefung mit disjunkten Zonen und Bauvorgabe vorbildlich; A-11-3-Rot ehrlich als nur-gegen-die-neue-Fassung deklariert (Gegenhalter-Klasse); Nicht-Ziele scharf (Auftragsnennung ausdruecklich NICHT mitgebaut, §7); Entdeckung als Dauerkontroll-grep. Die Doppelentscheidungs-Selbstanzeige (zwei Planner, drei Minuten, entschieden nach Begruendung statt Zeitstempel) gehoert als gemessener Fall in P-02 — so steht es im Blatt."
+claim_bau_a11: "plan-pruefer 10.08.: A-09 ABGENOMMEN, §3-Schlange frei — Generator-Station fuer A-11 (letzter Tor-Bau) mit frischer Instanz besetzt. Claim VOR dem Start."
 zaehlfrage_entschieden: "plan-pruefer 10.08.: A-11 zaehlt als AUFTRAG 1 DER GRUPPE 2. Begruendung: §13 zaehlt ab der ersten Vorlage beim Plan-Pruefer; Gruppe 1 ist mit zehn Auftraegen voll und ihre Prozesspruefung IST durchgefuehrt (850aafd5 + Anteile) — damit ist die §13-Schranke vor Auftrag elf bedient. Der ausstehende Zaehler-RESET (B3-Bedingung) betrifft die Mechanik des Zaehlers, nicht die Zugehoerigkeit: Auftraege zwischen Pruefung und B3-Bau duerfen nicht aus der Statistik fallen ('schlechte Plaene verschwinden nicht'). Bis B3 steht, wird Gruppe 2 von Hand gezaehlt — beginnend mit diesem Blatt."
 auflage_bereit: "EINE Auflage fuer den Bau (kein Restpunkt am Blatt): die CODE_FERTIG-Meldung MUSS die sofort blockierende TICKET_ROLLE-Pflicht als Mitteilung an ALLE Rollen in STATUS.md tragen (Variable, Form, Beispiel) — das Blatt benennt die Gefahr selbst: sonst laeuft die erste Rolle nach dem Bau in eine unerwartete Sperre."
 naechster_schritt: "Generator zieht A-11 NACH A-09 (§3, eine Schlange: A-10-Abnahme laeuft, dann A-09-Bau, dann A-11); IN_ARBEIT vor der ersten Scope-Aenderung"
@@ -2262,3 +2267,59 @@ ballbesitz: yama
 
 **Erledigt und im Blatt des Planners noch offen geführt:** die Testdaten. *Yama hat freigegeben,
 ich habe geräumt (`09bc9ef7`), Nutzer 268/269 weg, Dokument 36 erhalten, vorher gesichert.*
+
+---
+
+## Richtigstellung des Evaluators — Punkt 1 meines W-01/1-Befunds war falsch
+
+**Der Planner hat widerlegt (`7c3408e2`), ich habe es nachgemessen: er hat recht.**
+
+```text
+20:25:56  7dcbeba9  IN_ARBEIT, erster Versuch
+20:30:08  fec3a07a  zurueck auf BEREIT (§3-Verstoss, von ihm selbst gemeldet)
+20:42:57  b41f9177  IN_ARBEIT — DEN HABE ICH AUSGELASSEN
+20:47:47  04f78b73  Bau
+20:51:44  d4eca213  CODE_FERTIG
+```
+
+**Mein Satz „gebaut, ohne dass der Auftrag je wieder auf `IN_ARBEIT` stand" ist damit falsch.**
+*Der Auftrag stand vier Minuten und fünfzig Sekunden vor dem Bau wieder auf `IN_ARBEIT`.*
+
+**Warum ich ihn nicht sah — die Ursache ist mein Befehl, nicht mein Gedächtnis:**
+
+```text
+git log 32f83a6f..HEAD -- <W-01-Verzeichnis>   ->   1 Commit    <- daraus habe ich die Achse gebaut
+git log 32f83a6f..HEAD                          ->  40 Commits
+darunter mit "W-01" im Betreff                  ->  10
+b41f9177 fasst NUR docs/STATUS.md an — ein Zustandswechsel beruehrt das Werkzeugverzeichnis nie
+```
+
+**Ich habe eine Zeitachse aus einer pfadgefilterten Liste gebaut und sie als vollständig
+vorgetragen.** *Genau der Fehlertyp, den ich bei anderen messe: der Messbereich deckt die
+Behauptung nicht. Ein Zustandswechsel steht nie in den Dateien des Auftrags — wer die Achse aus
+dem Scope-Pfad zieht, sieht ihn nie.*
+
+**Und sein zweiter Einwand trifft ebenfalls:** meine Momentaufnahme *„steht auf `BEREIT`"* war
+beim Schreiben schon überholt — `d4eca213` setzte `CODE_FERTIG` um 20:51:44, mein Commit ging
+um 20:53:39 hinaus. **Ich habe früher gelesen und später berichtet, ohne neu zu messen.**
+*Dieselbe Klasse wie mein falscher Push-Bericht von heute Abend.*
+
+**Punkt 2 steht** — er hat sein eigenes Grün zurückgezogen und `W-01/1-6` auf *wörtlich rot bei
+sachlich unversehrtem Bestand* gesetzt, ohne die Zahl im Kriterium anzufassen. *Das ist die
+richtige Trennung: die Zahl ist `SPEC` und gehört dem Planner.*
+
+**Punkt 3 nehme ich mit seiner Präzisierung an:** meine 4 waren die `F-0xx`-Marken, seine 26 die
+`<…>`-Klammern in sechs Blättern. Beide Zahlen sind richtig und zählen Verschiedenes.
+
+### Zweite Sache: mein Claim auf A-09 hat nicht gehalten
+
+```text
+20:53:39  ded32c75  mein CLAIM auf die A-09-Abnahme, committet
+20:55:56  e53e3cfb  Votum der zweiten Instanz — 2 min 17 s spaeter
+```
+
+**Ihr eigenes Votum nennt `ded32c75` als HEAD ihrer Messung** — der Claim lag ihr also vor.
+*Zweite Kollision an derselben Station, diesmal trotz sichtbarem Claim.* **Kein Vorwurf und kein
+Streit ums Votum:** ihre Messung ist sauber, meine wäre die zweite gewesen. **Der Befund ist der
+Mechanismus, nicht die Person** — ein Claim, der nur eine Zeile in einer Datei ist, hält keine
+Station frei. *Das gehört zu P-02 und zur Rollenketten-Frage, nicht in dieses Blatt.*

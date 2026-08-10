@@ -365,3 +365,108 @@ Erstnutzer    dieser Bericht und beide Tor-Commits liefen bereits DURCH das geae
 ```
 
 **Ich nehme NICHT ab.** Ball beim Evaluator.
+
+---
+
+## Evaluator-Votum A-09 (10.08.2026)
+
+```yaml
+auftrag: A-09
+commit: af8f2054          # Pruef-SHA; Bau 12ca3798 — scripts/ zwischen 12ca3798, af8f2054 und
+                          # HEAD ded32c75 content-identisch (git diff --stat je 0 Zeilen)
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "A-09-3-Gegenrichtung selbst gefahren: echtes zweites Wegwerf-Repo pr-fremd, lebender
+             git-Prozess mit --git-dir DORTHIN bei fremder cwd -> das NEUE Tor legte den alten
+             0-Byte-Lock beiseite und der Commit lief (exit 0) — 'jeder git zaehlt' ist damit
+             widerlegt. Dazu Probe C und Probe D je in BEIDEN Richtungen: neues Tor exit 3 /
+             Basis-Tor beiseite+Commit, am selben lebenden Prozess."
+browser: nicht_anwendbar
+befunde: []
+```
+
+**Messumgebung:** Worktrees (`git worktree add -q`) an `af8f2054` (Prüf-SHA) und `12ca3798^`
+(= `fec3a07a`); Scope-Drift `d836fb91..fec3a07a` auf `scripts/` selbst gemessen: **0 Commits,
+0 Zeilen** — die Generator-Basis d836fb91 und der Bau-Elter sind für den Scope derselbe Stand.
+Torläufe ausschließlich in Wegwerf-Repos unter dem Scratchpad, nie am echten Baum.
+
+### Je Kriterium, mit Rohausgabe
+
+**Suite (Wächter-Baseline, selbst gefahren):** Basis `12ca3798^`: `tests 42 pass 42 fail 0` ·
+Prüf-SHA `af8f2054`: `tests 50 pass 50 fail 0`. Namensabgleich (tap, `comm`): **exakt 8 neue
+A-09-Zusagen, 0 Bestandszusagen weggefallen** — alle 42 Bestandszusagen (W-09/W-04/Tor/A-02/A-08/
+A-07) laufen namensgleich im 50er-Lauf. Tests gewachsen, nie geschrumpft.
+
+**A-09-1 ERFÜLLT (Zwei-Richtungs-Probe C):** lebender Prozess
+`git --git-dir=<pr-c>/.git cat-file --batch` (PID 15626, per `ps -o args=` belegt), cwd fremd,
+0-Byte-Lock 300 s:
+
+```text
+NEUES Tor   LOCK BEI LAUFENDEM GIT .git/index.lock — 0 Byte, 300s alt, kein Halter
+            ENV_BLOCKED: git-prozess dieses repos laeuft — exit=3, LOCK LIEGT NOCH
+BASIS-Tor   (derselbe Prozess lebt, PID 15626)
+            BEISEITE .git/index.lock (0 Byte, 300s alt, kein Halter) — Commit 01dd4f5, exit=0
+```
+
+**A-09-2 ERHALTEN:** lebender `git -C <pr-c> cat-file --batch` (PID 15890) → neues Tor `exit=3`,
+Lock liegt. In der Suite trägt `A-09-2 KONTROLLE` denselben Fall; an der Basis grün über Weg 1
+(cwd) — der neue Weg tritt daneben, nicht an die Stelle.
+
+**A-09-3 ERHALTEN (die Gegenrichtung, eigener Gegen-Beweis):** lebender
+`git --git-dir=<pr-fremd>/.git cat-file --batch` (PID 15965, zweites echtes Wegwerf-Repo) →
+neues Tor: `BEISEITE … Commit 4565feb`, `exit=0`, der fremde Prozess lebte danach nachweislich
+noch. Ohne dieses Kriterium wäre die in `d4308d35` verworfene Form B unbemerkt zurückgekommen.
+
+**A-09-4 ERFÜLLT AN DER BASIS (Abweichung des Generators nachgeprüft, zutreffend):**
+`git show 48ca0099` (planner, 08.08. 14:16) trägt exakt den Tausch
+`-git-Prozess in einem FREMDEN Verzeichnis` → `+git-Prozess auf einem FREMDEN REPOSITORIUM`
+samt Vermerk `⚠ RICHTIGGESTELLT 08.08. … 23b3a490, Probe C … Klasse SPEC, Verursacher Planner,
+laeuft als A-09`. An der heutigen Fundstelle (A-08-NACHTRAG, Kantenblock) selbst gelesen: Wortlaut
+UND Befund-Verweis stehen da. **Kein Doppel-Diff war die richtige Entscheidung** — ein zweiter
+Diff hätte kein Delta getragen.
+
+**A-09-5 ERFÜLLT (zwei der sechs Mutationen selbst gesetzt, §12.4):** Original-md5 selbst
+gemessen: `fd351a78f23b9c52b433f313e8ccbaee` (deckt die Generator-Angabe).
+
+```text
+M3 Pfadvergleich ohne Aufloesung (Rohvergleich statt pwd -P)   -> tests 50 pass 45 fail 5
+   rot: A-09-1 · Aufloesung · --work-tree · A-09-6 · GIT_WORK_TREE   (Generator: fail 5 ✓)
+M6 ps ohne -E                                                  -> tests 50 pass 48 fail 2
+   rot: A-09-6 · A-09-6 GIT_WORK_TREE                                (Generator: fail 2 ✓)
+Wiederherstellung nach JEDER Probe: md5 fd351a78… byte-identisch, Suite danach 50/50.
+```
+
+**A-09-6 ERFÜLLT (Zwei-Richtungs-Probe D):** lebender Prozess `git hash-object --stdin`
+(PID 15755), `GIT_DIR=<pr-c>/.git` **nur** in der Umgebung — `ps -o args=` zeigt kein GIT_DIR,
+`ps -E -p 15755 -o command=` zeigt `GIT_DIR=/…/pr-c/.git` (selbst gemessen):
+
+```text
+NEUES Tor   ENV_BLOCKED: git-prozess dieses repos laeuft — exit=3, LOCK LIEGT NOCH
+BASIS-Tor   BEISEITE … Commit 5027789, exit=0   (derselbe lebende Prozess)
+```
+
+**Pfadauflösung (Mutations-Gegenstück am lebenden Tor):** `git --git-dir=pr-c/.git` **relativ**
+aus fremder cwd (PID 16197) → neues Tor `exit=3`, Lock liegt. Zusammen mit M3 ist die Auflösung
+in beide Richtungen belegt: vorhanden = gefangen, entfernt = Suite rot.
+
+### Grenzen gegengelesen
+
+- **Fremde Nutzer:** ehrlich benannt und **konservativ** — `lsof -d cwd` liefert für fremde
+  Prozesse nichts, der Zweifelspfad (`GCWD` leer + Prozess existiert → gehalten, Z.147–151)
+  fängt sie Richtung Blockade, nie Richtung Beiseitelegen. Deckt sich mit der Nicht-Ziel-Messung
+  des Blattes (root-Probe 0 Treffer).
+- **Leerzeichen-Pfade in ps:** ehrlich benannt (Skriptkopf + §11-Abweichung), aber diese Grenze
+  wirkt in Richtung **Übersehen** (Weg 2/3 können einen Repo-Pfad mit Leerzeichen nicht
+  rückgewinnen; Weg 1/cwd unberührt). Das Blatt fordert keine Behandlung — **Randnotiz, kein
+  Befund**: dieses Repo liegt auf leerzeichenfreiem Pfad; sollte je ein Arbeitsbaum mit
+  Leerzeichen entstehen, gehört die Grenze neu bewertet (Planner-Wissen, kein Auftrag).
+
+### Wächter / must_preserve
+
+A-08-Kette (0-Byte-Schranke) und A-07-Angleichung unberührt: die Bestandszusagen A-02-*/A-08-*/
+A-07-* laufen alle 42 namensgleich grün; die Torläufe oben zeigen `INDEX ANGEGLICHEN` nach jedem
+erfolgreichen Commit. **Realtest Erstnutzer:** dieses Votum und der STATUS-Commit gehen selbst
+durch das geänderte Tor. Rückweg unverändert: Skriptänderung ohne Datenmigration, `git revert
+12ca3798` genügt.
+
+**Gesamturteil: ABGENOMMEN an `af8f2054`.** Ball beim Release-Prüfer.
