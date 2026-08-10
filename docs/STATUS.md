@@ -1074,8 +1074,10 @@ naechster_schritt: "Generator zieht A-09, sobald A-10 CODE_FERTIG/abgenommen ist
 auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
-zustand: RELEASE_FREI
+zustand: VEROEFFENTLICHT
 ballbesitz: yama
+release_sha: "2da18c44"
+release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: main-Integration in Vertretung — reiner FF e321f2a2..2da18c44 auf fork UND backup-private. Das §10 der frischen Release-Instanz (5f7043bc, RELEASE_FREI an 47c0aa73) uebernommen und das volle Grundtor am Kandidaten selbst erneut gefahren: tsc clean, Insel 1692/1692, Bundle BYTE-GLEICH (62338b66), php artisan test 880/880. Ihr verweigerter Push (d836fb91) ist nachgeholt. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 basis_sha: d58b220e
 basis_bau: 8343f206   # HEAD bei Uebernahme; d58b220e ist Vorfahr, Scope-Diff d58b220e..HEAD = 0 Zeilen
 pruef_sha: 47c0aa73   # Bau dbb7ff66 (Code+Tests+Bundle), §11-Bericht 47c0aa73; dieser STATUS-Commit folgt darauf

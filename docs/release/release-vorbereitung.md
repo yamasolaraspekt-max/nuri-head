@@ -262,3 +262,24 @@ ausfuehrung:
 statuswahrheit: "A-07 VEROEFFENTLICHT im selben Commit wie dieses Protokoll"
 naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama (jetzt 6 Auftraege offen)"
 ```
+
+---
+
+## Protokoll: Release A-10 nach main (10.08.)
+
+```yaml
+vorgang: release-a10-main
+datum: 2026-08-10
+rolle: release-pruefer (Stamm-Instanz, Vertretung nach Regelwerk 1.4.2)
+kandidat: 2da18c444e4704230fddc6a5b4adc129aaf3ff82
+release_frei: "5f7043bc (frische Release-Instanz, §10 an 47c0aa73: Kette 6x is-ancestor,
+  Suite 1692/1692, Scope 3 Dateien content-identisch, Bundle md5 byte-gleich, Rueckweg
+  apply --check -R). Ihr Push verweigert (d836fb91) — hier nachgeholt."
+grundtor_eigenlauf: "Abnahme-Commit Vorfahr · tsc clean · Insel 1692/1692 · Bundle
+  BYTE-GLEICH (62338b66…) · php artisan test 880/880 · Scans leer · FF-Bedingung geprueft"
+ausfuehrung:
+  - "push fork  2da18c44 -> main   e321f2a2..2da18c44  FF"
+  - "push backup-private 2da18c44 -> main  e321f2a2..2da18c44  FF"
+statuswahrheit: "A-10 VEROEFFENTLICHT im selben Commit wie dieses Protokoll"
+naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama (7 Auftraege offen)"
+```
