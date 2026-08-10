@@ -237,3 +237,88 @@ ticket_testing"; Pflichtschritt vorab: bash scripts/buehnen-waechter.sh -> "ALLE
 
 Ich baue und melde CODE_FERTIG — ich nehme NICHT ab.
 ```
+
+---
+
+## Evaluator-Votum (§11) — 10.08.2026
+
+```yaml
+auftrag: A-10
+commit: 47c0aa73          # Pruef-SHA; Bau dbb7ff66, Elter 165239e5
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "Rot-Lauf der neuen Zusagen gegen den Elter-Melder · drei eigene Mutationen ·
+  Bundle frisch gebaut und md5 verglichen · eigene Browserabnahme 1440/1024/375 mit Sichtpruefung
+  im Viewport statt Existenzpruefung"
+browser: 1440/1024/375 — Hinweis in ALLEN drei Breiten im Fenster sichtbar
+datenbank: ticket_testing (am Kindprozess belegt, browser-buehne.sh)
+befunde: []
+```
+
+### Selbst gefahren
+
+```text
+Scope-Diff dbb7ff66   nichtDarstellbar.ts +29 · dachAusKontur.test.ts +67 · public/…/hausplaner.js
+tsc (tsconfig.hausplaner)  Ausgang 0
+Suite Pruefstand      tests 1692  pass 1692  fail 0
+Suite Elter 165239e5  tests 1689  pass 1689  fail 0
+Rot am Elter          A-10-1 und "A-10-5 ZEUGEN" fallen; A-10-2 ist die deklarierte
+                      must_preserve-KONTROLLE und dort gruen — korrekt so
+```
+
+**Bundle-Nachweis (§8) — das getrackte Artefakt stammt aus den Quellen:**
+
+```text
+md5 mitgeliefert   57314651a743ef689b0d788c23db7493
+npm run build:hausplaner  -> Ausgang 0
+md5 danach         57314651a743ef689b0d788c23db7493   BYTE-GLEICH
+```
+
+**Drei Mutationen aus A-10-5, Anker je genau 1×, `md5` vor und nach identisch:**
+
+```text
+M1 Leer-Bedingung entfernt                 fail 2   GEFANGEN (A-10-1 + ZEUGEN)
+M2 Ergebnis ignoriert (geprueft, nicht gemeldet)  fail 2   GEFANGEN
+M3 auf dreiecke.length === 0 verengt       fail 1   GEFANGEN (ZEUGEN)
+```
+
+### A-10-4, die Sichtkette — und mein eigener Messfehler dabei
+
+**Erst der Wächter, wie A-04 es dem Evaluator als Erstnutzer vorschreibt:**
+
+```text
+bash scripts/buehnen-waechter.sh
+  BUEHNE OK  PID 48098 (php -S) — 'ticket_testing' (aus ticket-a01/.env.testing via APP_ENV=testing)
+  ALLE BUEHNEN OK   1 geprueft            exit 0
+bash scripts/browser-buehne.sh --port 8123
+  BUEHNE   Datenbank am Kindprozess geprueft: ticket_testing
+```
+
+**Gemessen wurde die SICHTBARKEIT im Fenster, nicht die Existenz** — Lehre aus A-01-4:
+
+```text
+Objekt #10229, Dokument 36, szeneRoofType "l-shape", Expertenmodus, dann 3D
+MESSUNG-1440  canvas 2 · status "…die Berechnung der Dachform „l-shape" liefert keine
+              einzige Fläche — es gibt nichts zu zeichnen"   imFenster: true
+MESSUNG-1024  identisch, imFenster: true
+MESSUNG-375   identisch, imFenster: true  + der dokumentierte Schmalbild-Hinweis (Bestand)
+Screenshot 1440 gesichtet: der Hinweis steht orange umrandet ueber der 3D-Flaeche.
+```
+
+> **Mein Messfehler, offengelegt:** mein erster Lauf blieb in der **2D**-Ansicht stehen. Dort
+> trägt das `role="status"`-Element den Text, hat aber **0×0 px** — ich hatte bereits die
+> Geometrie vermessen und stand kurz davor, „Hinweis vorhanden, aber unsichtbar" als P1 zu
+> melden. **Das wäre falsch gewesen:** der Melder gehört zum 3D-Renderer, und in 3D ist der
+> Hinweis sichtbar. *Erst der Kontrollblick auf den Screenshot hat es gezeigt — dieselbe Lehre
+> wie am 03.08. beim `#hausplaner-scene`: der Zustand vor dem entscheidenden Schritt misst nichts.*
+
+### In eigener Sache
+
+**Testdaten:** Für den Login habe ich in `ticket_testing` einen eigenen Nutzer angelegt —
+`evaluator-a10@example.test`, **id 269**, `is_admin=1`. *Schreibziel vor dem Schreiben belegt
+(`SCHREIBZIEL: ticket_testing`).* **Er ist nicht gelöscht** — §15 und die Dauerregel; er gehört
+zusammen mit dem Generator-Nutzer (id 268) in eine Aufräumung mit eigenem Auftrag.
+
+**Prüfstand:** `node_modules` **und** `vendor` verlinkt, Prüfstand mit `-q` angelegt und
+Scope-Diff mit `--pretty=format:''` — die beiden Barrieren aus der §13-Prüfung, damit mir der
+Bericht nicht vor der Messung vor Augen steht.

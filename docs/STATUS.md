@@ -1039,8 +1039,8 @@ naechster_schritt: "Generator zieht A-09, sobald A-10 CODE_FERTIG/abgenommen ist
 auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: d58b220e
 basis_bau: 8343f206   # HEAD bei Uebernahme; d58b220e ist Vorfahr, Scope-Diff d58b220e..HEAD = 0 Zeilen
 pruef_sha: 47c0aa73   # Bau dbb7ff66 (Code+Tests+Bundle), §11-Bericht 47c0aa73; dieser STATUS-Commit folgt darauf
@@ -1056,6 +1056,7 @@ offene_akzeptanz:
 votum_bereit: "plan-pruefer 10.08. (2. Runde nach 9cecc6be): BEREIT — beide Punkte plus die Empfehlung eingearbeitet und selbst geprueft: A-10-2 als must_preserve-KONTROLLE mit sauberer Begruendung, Mutationszusage A-10-5 aufgenommen (drei Mutationen), Konfliktpruefung selbst nachgemessen — dabei hat der Planner ZWEI UNGENAUE ANGABEN AUS MEINER DoR-NOTIZ korrigiert (A-04 baut buehnen-waechter.sh, nicht pauschal 'scripts/*'; plus die A-01/szene.ts-Herkunftszeile) — richtig so, Messung schlaegt Notiz, auch meine. EINE KORREKTUR AN SEINER FOLGERUNG: 'A-10 darf PARALLEL laufen' gilt nur fuer DATEIEN — §3 sagt woertlich 'hoechstens einen Auftrag IN_ARBEIT gleichzeitig' (Z.85). A-10 ist BEREIT, zieht aber erst, wenn kein anderer Auftrag IN_ARBEIT ist. Prozesspruefung-02 ist gelaufen (850aafd5) — die §13-Schranke vor Auftrag 11 ist damit bedient."
 naechster_schritt: "Warteschlange nach §3: A-04 baut JETZT (aeltester BEREIT, Claim steht), danach A-07 (Tor, sobald Planner-Nachzuege da) -> A-09 -> A-10. Der Generator zieht A-10, sobald die Schlange ihn erreicht und kein Auftrag IN_ARBEIT ist."
 claim_abnahme: "evaluator (Erstinstanz) 10.08. 19:3x: Abnahme A-10 GECLAIMT, VOR dem Pruefstand. Ich pruefe NICHT: es gibt noch keinen Commit. Gemessen: zwei Scope-Dateien liegen UNCOMMITTET im Arbeitsbaum (nichtDarstellbar.ts, dachAusKontur.test.ts), das Blatt traegt keinen §11-Bericht, der Datensatz keinen pruef_sha, Zustand steht auf IN_ARBEIT. §18 verbietet das Pruefen eines bewegten Arbeitsbaums statt eines Commits - und §4 verlangt einen EXAKTEN Commit. Ich beginne, sobald CODE_FERTIG mit Pruef-SHA steht; der Claim haelt die Station bis dahin frei."
+evaluator_votum: "evaluator 10.08.: ABGENOMMEN an 47c0aa73, Fehlerklasse KEINE. Selbst gefahren: tsc 0, Suite 1692/1692, Elter 165239e5 1689/1689, Rot am Elter fuer A-10-1 und A-10-5-ZEUGEN (A-10-2 ist die deklarierte must_preserve-Kontrolle), drei Mutationen aus A-10-5 alle gefangen, Bundle frisch gebaut und byte-gleich (md5 57314651). A-10-4 mit eigener Browserabnahme: Waechter zuerst (A-04-Erstnutzerpflicht), Buehne ueber browser-buehne.sh mit Nachweis ticket_testing am Kindprozess, Objekt 10229 / Dokument 36 / roofType l-shape, Expertenmodus und 3D - der Hinweis ist in 1440, 1024 und 375 IM FENSTER sichtbar, Screenshot gesichtet. Mein Messfehler offengelegt: der erste Lauf blieb in 2D, dort ist das role=status-Element 0x0, und ich stand kurz davor daraus einen P1 zu machen - der Melder gehoert zum 3D-Renderer. Testdaten: eigener Nutzer evaluator-a10@example.test id 269 in ticket_testing angelegt, NICHT geloescht (§15)."
 ```
 ---
 
