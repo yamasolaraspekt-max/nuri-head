@@ -2002,3 +2002,53 @@ W-18 (Pruefung Topologie) bleibt Klasse B (ANSCHLIESSEN): kein eigenes Modul, 'f
 **Nicht entschieden (bleibt bei Yama persönlich):** die Werkbank-Reichweitenfrage (TGA/PV —
 begrenzt oder unvollständig) und die Aufhebung des A-01-Nicht-Ziels (L/T/U-Dachkonstruktion) —
 beides Fach-/Produktentscheidungen, die die Vertretungsregel nicht deckt.
+
+---
+
+## Befund des Evaluators — zwei Posten, die als „bei Yama" geführt werden und keine sind
+
+**Auf Yamas Weisung aufgeschrieben. Beides gemessen, nichts davon geraten.**
+
+### 1 · Statuswahrheit hinkt der Veröffentlichung hinterher (§16)
+
+```text
+A-08   Tafelzeile        VEROEFFENTLICHT, ballbesitz –
+       Auftragsdatensatz RELEASE_FREI,   ballbesitz: yama      <- Widerspruch IN EINER DATEI
+       gemessen          85b03d23 ist Vorfahr von main, fork/main, origin/main,
+                         backup-private/main · Zielintegration im Merge 8648a4cb, 10.08. 18:20
+
+A-04   Tafelzeile        RELEASE_FREI, Yama
+       Auftragsdatensatz RELEASE_FREI, yama
+       gemessen          c3d52f09 ist Vorfahr von fork/main (ls-remote, nicht Tracking-Ref)
+                         -> die Zielintegration hat stattgefunden, der Zustand kennt sie nicht
+```
+
+**Folge, nicht Theorie:** Yama hat gefragt, *wer A-08 freigeben soll* — die Statusseite hatte ihm
+eine Aufgabe zugewiesen, die seit Stunden erledigt war. **Vierter Fall derselben Klasse in dieser
+Gruppe:** eine Handlung passiert, die Statuswahrheit erfährt es nur zum Teil.
+
+*Zuständig ist der Planner (§16). Ich trage fremde Zustände nicht nach.*
+
+### 2 · Testdaten aus zwei Abnahmen, nicht gelöscht (§15)
+
+```text
+SCHREIBZIEL vor jeder Messung belegt: ticket_testing
+
+user 268  a10-test@example.test        is_admin=1   10.08. 19:34   Generator (A-10-Bau)
+user 269  evaluator-a10@example.test   is_admin=1   10.08. 20:04   Evaluator (A-10-Abnahme)
+doc  36   alternative_id 10229, roofType l-shape, revision 2        Generator
+          -> das EINZIGE HausplanerDocument in ticket_testing
+```
+
+**Ich habe nichts gelöscht** — §15 verlangt für Löschungen einen eigenen Auftrag und Yamas
+ausdrückliche Freigabe, und die Dauerregel verlangt Erhalt statt Entfernung. *Dieselbe Form wie
+bei den Probedaten am 05.08.: gemeldet, nicht heimlich beseitigt.*
+
+> **Vorsicht bei der Reihenfolge, gemessen:** `doc 36` ist die **einzige** Vorlage mit
+> `roofType: l-shape` in der Testdatenbank — sie ist der Gegenstand von A-10-4 und von jeder
+> künftigen Sichtprobe am Leer-Pfad. *Wer die Nutzer räumt, sollte das Dokument stehen lassen,
+> sonst kostet die nächste Browserabnahme den Aufbau von vorn.*
+
+**Mein Vorschlag, Entscheidung bei Yama:** Nutzer 268 und 269 entfernen, **Dokument 36 behalten**.
+Ausführung nach der bewährten Kette — Auftrag vom Planner, Ausführung durch den Release-Prüfer,
+Nachmessung durch mich, so wie bei den Probedaten.
