@@ -144,3 +144,96 @@ der nächsten Browserabnahme eines Bestandsdokuments.**
 ## Rückweg
 
 Eine Bedingung in `szene.ts`, `git revert` genügt. **Kein Zustand außerhalb des Repos betroffen.**
+
+---
+
+## §11-Bericht des Generators (10.08.)
+
+```yaml
+auftrag: A-10
+basis: d58b220e          # Blatt-Basis; Bau-Basis (HEAD bei Uebernahme) 8343f206 — Scope-Diff d58b220e..8343f206 leer
+commit: dbb7ff66         # Bau: nichtDarstellbar.ts + dachAusKontur.test.ts + Bundle
+scope:
+  - resources/planner/hausplaner/renderers/three-d/nichtDarstellbar.ts
+  - resources/planner/hausplaner/__tests__/dachAusKontur.test.ts
+  - public/hausplaner/hausplaner.js          # Bundle — §5: gehoert ins Tor, frisch gebaut
+  - docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
+  - docs/STATUS.md
+tests:
+  statisch: pass          # npm run tsc:hausplaner — exit 0
+  unit: "1692/1692"       # npm run test:hausplaner; an der Basis selbst gefahren: 1689/1689
+  backend: nicht_anwendbar
+  schema: pass            # schema:hausplaner:check laeuft im Vorspann von test: und build:
+  build: pass             # npm run build:hausplaner; Bundle traegt den neuen Grund (grep -c = 1)
+  browser: pass           # Buehne NUR ueber browser-buehne.sh (Port 8099), Waechter vorab, Anker dreistufig
+abweichungen:
+  - "szene.ts und DreiDBereich.tsx UNVERAENDERT — die zweite Eingangsbedingung sitzt vollstaendig in
+     nichtDarstellbar.ts, dem EINEN Ort aus A-01-4; das '+ ggf.' des Blatts wurde nicht gebraucht."
+  - "Mutation 3 (verengt auf nur dreiecke.length===0) ist am heutigen Code im VERHALTEN nicht von der
+     vollstaendigen Fassung zu trennen: dreiecke==0 erzwingt dachflaechen()==0, beide lesen dieselbe
+     Quelle dachRoh. Die Zusage 'A-10-5 ZEUGEN' haelt sie darum STRUKTURELL fest (liest Quelltext,
+     Grenze offen benannt — Vorbild 'A-01-4 OBERFLAECHE'). Die Gegenrichtung ist doppelt gedeckt:
+     &&->|| faellt an A-10-2 am VERHALTEN, denn ein l-shape MIT anbau hat 10 Dreiecke und
+     dachflaechen()=0 (gemessen) — eine Oder-Fassung meldete dieses zeichenbare Dach."
+  - "Probedaten fuer die Browserabnahme in ticket_testing angelegt (new_leads 8160, Objekt 10229,
+     Testnutzer a10-test@example.test, HausplanerDocument 36: das a01-Fixture mit roofType 'l-shape',
+     OHNE anbau). Grund: die Blatt-Zeile 'Testdaten-Ziel KEINES' verweist auf das a01-Fixture — das
+     traegt aber roofType 'sattel' und zeigt im Browser den WURF-Pfad, nicht den Leer-Pfad. Nur
+     Testdatenbank, keine Produktivdaten, kein Scope-Code."
+offene_akzeptanz: []
+```
+
+### Kriterienstand
+
+```text
+A-10-1  GRUEN  Zusage 'A-10-1' (Verhalten): l-shape ohne anbau -> 1 Meldung, nodeId korrekt, Grund
+               lesbar (nennt die fehlende Flaeche). An der BASIS-Fassung rot gemessen (Melder []).
+A-10-2  GRUEN  Zusage 'A-10-2 KONTROLLE' (must_preserve-KONTROLLE, laut Blatt von der Rot-Pflicht
+               ausgenommen — an der Basis wie deklariert gruen): Sattel-Rechteck NICHT gemeldet UND
+               l-shape MIT anbau NICHT gemeldet (der scharfe Fall: dreiecke>0, dachflaechen()=0).
+A-10-3  GRUEN  Alle A-01-Zusagen gruen — an Basis-Fassung UND Bau-Fassung selbst gefahren (13/13
+               bzw. 15/15 im File, Suite 1689/1689 -> 1692/1692, +3 = exakt die neuen Zusagen).
+               Wurf-Pfad und Fussleisten-Absage unangetastet; dachGeometrie.ts:87 NICHT geaendert
+               (Datei nicht im Diff). Keine bestehende Testzeile veraendert, nur ergaenzt.
+A-10-4  GRUEN  Browserabnahme, Rohausgaben unten: Hinweis ueber dem geladenen l-shape-Dokument in
+               1440/1024/375, role="status"; Gegenprobe u-dach-Fixture OHNE Hinweis.
+A-10-5  GRUEN  Drei Blatt-Mutationen + Zugabe einzeln eingespielt, Suite je Lauf, byte-identisch
+               zurueckgesetzt (md5 746b68c2 vor und nach jeder Probe).
+```
+
+### Rohausgaben (Auszug; Befehle im Wortlaut)
+
+```text
+BASIS-SUITE   npm run test:hausplaner @ 5fc9c9e2 (vor dem Bau)   tests 1689  pass 1689  fail 0
+BAU-SUITE     npm run test:hausplaner @ dbb7ff66                 tests 1692  pass 1692  fail 0
+TSC           npm run tsc:hausplaner                              exit 0
+BUILD         npm run build:hausplaner                            "built in 1.17s"; grep -c "liefert keine einzige Fläche" public/hausplaner/hausplaner.js = 1
+
+ROT-LAGE (§7, ZWEIMAL identisch, eigene Probe am Basis-Code):
+  dachMeshWelt.dreiecke.length = 0   dachflaechen.length = 0   nichtDarstellbareDaecher = []
+  MIT anbau: dreiecke = 10 | dachflaechen = 0 | melder = []
+
+BASIS-ROT der neuen Zusagen (Basis-nichtDarstellbar.ts eingespielt, Testfile des Baus):
+  ✖ A-10-1 (Melder [])   ✔ A-10-2 (wie deklariert)   ✖ A-10-5   — alle 12 A-01-Zusagen ✔
+MUTATIONEN (je: einspielen -> Lauf -> md5-Wiederherstellung 746b68c2):
+  M1 Bedingung entfernt            -> ✖ A-10-1  ✖ A-10-5          (pass 13, fail 2)
+  M2 geprueft, nicht gemeldet      -> ✖ A-10-1  ✖ A-10-5          (pass 13, fail 2)
+  M3 verengt auf nur dreiecke==0   -> ✖ A-10-5                    (pass 14, fail 1)
+  M4 Zugabe && -> ||               -> ✖ A-10-2 (VERHALTEN) ✖ A-10-5 (pass 13, fail 2)
+
+BROWSER (Buehne: bash scripts/browser-buehne.sh --port 8099 — "Datenbank am Kindprozess geprueft:
+ticket_testing"; Pflichtschritt vorab: bash scripts/buehnen-waechter.sh -> "ALLE BUEHNEN OK,
+1 geprueft, Datenbank jeweils 'ticket_testing'" [die bekannte verwaiste PID 48098, unangetastet]):
+  HTTP 200 · TITEL "SA-DESK - Hausplaner — Objekt #10229"
+  ANKER-1 {"root":true,"szene":true,"szeneRoofType":"l-shape"} · Expertenmodus geklickt · canvas 0->2
+  MESSUNG-1440 {"canvas":2,"status":["Ein Dach wird hier nicht gezeigt: die Berechnung der Dachform
+    „l-shape\" liefert keine einzige Fläche — es gibt nichts zu zeichnen"]}
+  MESSUNG-1024 identisch · MESSUNG-375 identisch + der bestehende Schmalbild-Hinweis (Bestand)
+  GEGENPROBE-U-DACH (studio?fixture=u-dach, gleicher Weg) {"canvas":2,"status":[]}
+  Konsole: KEIN Hausplaner-/three-/WebGL-Fehler; das uebrige Rauschen (Reverb-WS 6001, HR-Widget,
+  404-Legacy) erscheint auf jeder CRM-Seite und ist vom Diff unberuehrt (Bestand).
+  Screenshots: a10-1440.png / a10-1024.png / a10-375.png / a10-gegenprobe-u-dach.png (Scratchpad
+  der Generator-Sitzung; der Evaluator faehrt die Kette ohnehin selbst).
+
+Ich baue und melde CODE_FERTIG — ich nehme NICHT ab.
+```
