@@ -43,6 +43,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { dachFlaechen, DachGeometrieUngueltig } from '../geometry/dachGeometrie';
 import { nichtDarstellbareDaecher } from '../renderers/three-d/nichtDarstellbar';
+// A-10: die beiden Ausgänge der Dachberechnung — für die Vorbedingungs-Messungen des Leer-Pfads.
+import { dachMeshWelt, dachflaechen } from '../renderers/three-d/dachMesh';
 import { readFileSync } from 'node:fs';
 import { teil, ohneKommentare } from './_zerlegteApp';
 import type { RoofNode } from '../domain/scene.types';
@@ -233,6 +235,71 @@ test('A-01-4 EIN ORT: die Faenger in szene.ts entscheiden NICHT selbst', () => {
     'die Szene holt die Liste nicht aus der pruefbaren Funktion');
   assert.doesNotMatch(code, /nichtGezeichnet\.push\(/,
     'ein Faenger entscheidet wieder selbst, was gemeldet wird — zweite Wahrheit, und die ungeprueft');
+});
+
+test('A-10-1: ein Dach mit NULL Flaechen OHNE Wurf wird gemeldet — der Leer-Pfad', () => {
+  // **A-01-4 hat den stillen Ausfall nur auf EINEM der beiden Wege beseitigt.** Der Wurf-Pfad
+  // meldet; eine `l-shape`-Kontur ohne `anbau`-Maße wirft aber NICHT — sie liefert
+  // `{ dreiecke: [] }`, und bis A-10 blieb der Melder dabei stumm: *ein Dach, das nichts zeigt
+  // und nichts sagt.* (Rot-Beleg dreifach unabhängig: 9e97d274, e0fae829, E4b in b29bb79d.)
+  const lOhneAnbau: RoofNode = { ...dach(L_KONTUR), id: 'a10-l-ohne-anbau', roofType: 'l-shape' };
+
+  // Vorbedingung des Falls, im Test selbst gemessen: DIESER Weg wirft nicht und liefert nichts —
+  // sonst prüfte die Zusage den Wurf-Pfad von A-01-4 ein zweites Mal statt die Lücke.
+  const mesh = dachMeshWelt(lOhneAnbau);
+  assert.equal(mesh.dreiecke.length, 0,
+    'die l-shape ohne anbau liefert ploetzlich Dreiecke — dann misst diese Zusage nicht mehr den Leer-Pfad');
+
+  const gemeldet = nichtDarstellbareDaecher([lOhneAnbau]);
+  assert.equal(gemeldet.length, 1,
+    'das leere Ergebnis wird nicht gemeldet — der Melder greift weiterhin nur am Wurf');
+  assert.equal(gemeldet[0].nodeId, 'a10-l-ohne-anbau', 'gemeldet wird ein anderer Knoten');
+  assert.ok(gemeldet[0].grund.length > 0, 'die Meldung traegt keinen Grund');
+  assert.match(gemeldet[0].grund, /[Ff]l(ae|ä)che/,
+    'der Grund nennt die fehlende Flaeche nicht — er ist nicht lesbar im Sinn von A-10-1');
+});
+
+test('A-10-2 KONTROLLE: ein Dach, das Flaechen liefert, wird NICHT gemeldet (must_preserve)', () => {
+  // **Der Gegenhalter zu A-10-1** — ohne ihn wäre „melde immer" eine vollständig grüne Lösung
+  // (dasselbe Kriterienpaar wie A-01-2, A-02-1, A-08-2). An der Basis trivial grün und darum
+  // von der Rot-Pflicht ausgenommen (Blatt, Restpunkt 1 der 1. DoR-Runde).
+  assert.deepEqual(nichtDarstellbareDaecher([dach(RECHTECK)]), [],
+    'ein Sattel-Rechteck wird gemeldet — die Leer-Bedingung feuert auf zeichenbare Daecher');
+
+  // **Der scharfe Fall, 10.08. gemessen:** ein `l-shape` MIT `anbau` liefert Dreiecke (10),
+  // aber `dachflaechen() = []` — der Trägerflächen-Filter kennt nur rechteckige Quads (walm
+  // ebenso). *Eine Bedingung, die an `dachflaechen === 0` ALLEIN hängt, würde genau dieses
+  // zeichenbare Dach melden.* Diese Zusage hält fest, dass sie es nicht tut.
+  const lMitAnbau: RoofNode = {
+    ...dach(L_KONTUR), id: 'a10-l-mit-anbau', roofType: 'l-shape',
+    anbau: { length: 10000, width: 6000, lengthB: 4000, widthB: 3000 },
+  };
+  assert.ok(dachMeshWelt(lMitAnbau).dreiecke.length > 0,
+    'die l-shape mit anbau liefert keine Dreiecke mehr — dann misst die Kontrolle den falschen Fall');
+  assert.equal(dachflaechen(lMitAnbau).length, 0,
+    'dachflaechen liefert ploetzlich Traegerflaechen fuer l-shape — die Vorbedingung dieser Kontrolle ist weg');
+  assert.deepEqual(nichtDarstellbareDaecher([lMitAnbau]), [],
+    'ein zeichenbares l-Dach wird gemeldet — die Bedingung haengt an dachflaechen allein statt an den Dreiecken');
+});
+
+test('A-10-5 ZEUGEN: die Leer-Bedingung fragt BEIDE Ausgaenge der geteilten Quelle', () => {
+  // **Grenze dieser Zusage, offen gesagt (wie A-01-4 OBERFLAECHE): sie liest Quelltext.** Am
+  // Nullpunkt sind die beiden Zeugen heute gekoppelt — `dreiecke === 0` erzwingt
+  // `dachflaechen() === 0`, beide lesen `dachRoh` — eine VERHALTENS-Zusage kann die dritte
+  // Mutation aus dem Blatt (*Bedingung verengt auf nur `dreiecke.length === 0`,
+  // `dachflaechen === 0` übersehen*) darum nicht von der vollständigen Fassung trennen.
+  // Diese Zusage deckt den Fall, den ein Test decken kann: *dass die Übersetzung von
+  // „null Flächen" still verengt wird.* Fällt bei Mutation 3 — und bei `&&`→`||` gleich
+  // doppelt: hier am Wortlaut, in A-10-2 am Verhalten (l-shape mit anbau würde gemeldet).
+  const quelle = readFileSync(new URL('../renderers/three-d/nichtDarstellbar.ts', import.meta.url), 'utf8');
+  const code = quelle.split('\n').filter((z) => !/^\s*(\/\/|\*|\/\*)/.test(z.trim())).join('\n');
+
+  assert.match(code, /mesh\.dreiecke\.length === 0 && dachflaechen\(dach\)\.length === 0/,
+    'die Leer-Bedingung fragt nicht mehr beide Zeugen konjunktiv — sie wurde verengt oder umgebaut');
+  // Der Wurf-Pfad trägt ein EIGENES `gefunden.push` — deshalb hängt diese Zusage die Meldung
+  // DIREKT an die Leer-Bedingung, sonst hielte der Wurf-Pfad sie grün (Mutation 2).
+  assert.match(code, /mesh\.dreiecke\.length === 0 && dachflaechen\(dach\)\.length === 0\) \{\s*\n\s*gefunden\.push\(/,
+    'auf die Leer-Bedingung folgt keine Meldung mehr — geprueft, aber verschwiegen');
 });
 
 test('A-01-4 OBERFLAECHE: die Meldung erreicht den 3D-Bereich', () => {
