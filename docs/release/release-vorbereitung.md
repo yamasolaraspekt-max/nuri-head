@@ -306,3 +306,27 @@ abweichung: "Zustandseintrag kam einen Commit NACH dem main-Push (Patch-Skript g
   der Push-Befehl im selben Block steht."
 naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama (8 Auftraege offen)"
 ```
+
+---
+
+## Protokoll: Release A-11 nach main (10.08.)
+
+```yaml
+vorgang: release-a11-main
+datum: 2026-08-10
+rolle: release-pruefer (Stamm-Instanz, Vertretung nach Regelwerk 1.4.2)
+kandidat: c819129236b7dd4476552870ac2586fb4cf8d011
+abnahme: "efe38d1d (Evaluator, Fehlerklasse KEINE) an 28760966; Suite 61/61, Basis 50/50,
+  acht Kriterien je Wegwerf-Repo-Probe, zwei eigene Mutationen gefallen"
+paragraph10: "Kette Vorfahr · Scope exakt 2 Dateien (Tor +35, Suite +130) · Produkt-Code
+  seit 2e7b58fc unberuehrt · bash -n OK · 61/61 (TICKET_ROLLE gesetzt) + 7/7 · Scans leer ·
+  Zweitbeleg: unabhaengiges §10 der frischen Instanz (6a9ea6ab), Push verweigert (f26ed034)"
+ausfuehrung:
+  - "push fork  c8191292 -> main   2e7b58fc..c8191292  FF"
+  - "push backup-private c8191292 -> main  2e7b58fc..c8191292  FF"
+statuswahrheit: "IM Kandidaten (A-09-Lehre angewandt: Patch verifiziert VOR dem Push)"
+wirkung: "Das Commit-Tor traegt jetzt: Drei-Nein-Regel (A-08), Index-Waechter (A-07),
+  --git-dir/GIT_DIR-Erkennung (A-09), Rollenmarke TICKET_ROLLE (A-11); dazu Buehnen-Waechter
+  (A-04) und Melder am leeren Ergebnis (A-10). §13 ist ab jetzt zaehlbar."
+naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama (9 Auftraege offen)"
+```
