@@ -126,7 +126,42 @@ Strukturbefunden, und den ersten habe ich selbst gegengemessen.*
 zweiten Instanz). *Die bestehende Reihenfolge `A-04 → A-07 → A-09 → A-10` kannte A-11 nicht — es
 wurde danach geschnitten.*
 
-> ### ENTSCHIEDEN: `A-07 → A-09 → A-11`
+> ### ENTSCHIEDEN (10.08., zusammengeführt): **EINE** Reihe — `A-10 → A-09 → A-11`
+>
+> **Vorher gab es ZWEI Reihenfolgen, und keine nannte die andere:**
+>
+> ```text
+> §3-Warteschlange (global)   A-04 -> A-07 -> A-09 -> A-10    ohne A-11
+> meine Datei-Entscheidung    A-07 -> A-09 -> A-11            ohne A-10
+> ```
+>
+> *Dieselbe Klasse wie der §16-Befund vom 05.08.: **zwei Wahrheiten über denselben Gegenstand**,
+> die auseinanderlaufen, sobald eine fortgeschrieben wird. Ich habe die Datei-Reihenfolge
+> entschieden, ohne die §3-Reihe zu nennen, in der A-10 längst stand.*
+>
+> **Gemessen, wer welche Datei anfasst:**
+>
+> ```text
+> A-09  scripts/commit-pruefen.sh
+> A-11  scripts/commit-pruefen.sh
+> A-10  renderers/three-d/szene.ts     <- KEIN Dateikonflikt; die Nennung von
+>       commit-pruefen.sh steht bei A-10 nur im Auswirkungen-Block (Bundle/Tor)
+> ```
+>
+> **Warum A-10 zuerst:**
+>
+> ```text
+> 1  A-10 behebt einen Mangel, den ein NUTZER sieht - ein Dach, das nichts zeigt
+>    und nichts sagt. A-09 und A-11 verbessern Werkzeug, das bereits funktioniert.
+> 2  A-09 und A-11 teilen sich commit-pruefen.sh und muessen ohnehin nacheinander
+>    laufen. A-10 vorzuziehen kostet sie NICHTS - die Gesamtzeit bleibt gleich.
+> 3  A-10 ist der einzige der drei OHNE Claim. Wer frei ist, kann ihn sofort ziehen.
+> ```
+>
+> **Die Datei-Reihenfolge `A-09 → A-11` gilt unverändert** — sie ist jetzt Teil der einen Reihe
+> statt einer zweiten Liste daneben.
+>
+> <details><summary>frühere Fassung (nur Dateikonflikt)</summary>
 >
 > ```text
 > 1  Maengel vor Faehigkeit bei geteilter Datei (A-07/A-09 beheben, A-11 ergaenzt)
@@ -135,6 +170,8 @@ wurde danach geschnitten.*
 > 3  A-11 aendert als einziges die MELDEFORM des Tors -> zuletzt, wenn die
 >    anderen beiden abgenommen sind
 > ```
+
+</details>
 
 **Claim auf dem BLATT bei der zweiten Instanz — Reihenfolge ÜBER Blätter beim Planner** (P-02).
 **Nicht von mir:** wer A-11 abnimmt (Vorschlag und tragende Zahl stammen vom ersten Evaluator).
