@@ -126,7 +126,42 @@ Strukturbefunden, und den ersten habe ich selbst gegengemessen.*
 zweiten Instanz). *Die bestehende Reihenfolge `A-04 → A-07 → A-09 → A-10` kannte A-11 nicht — es
 wurde danach geschnitten.*
 
-> ### ENTSCHIEDEN: `A-07 → A-09 → A-11`
+> ### ENTSCHIEDEN (10.08., zusammengeführt): **EINE** Reihe — `A-10 → A-09 → A-11`
+>
+> **Vorher gab es ZWEI Reihenfolgen, und keine nannte die andere:**
+>
+> ```text
+> §3-Warteschlange (global)   A-04 -> A-07 -> A-09 -> A-10    ohne A-11
+> meine Datei-Entscheidung    A-07 -> A-09 -> A-11            ohne A-10
+> ```
+>
+> *Dieselbe Klasse wie der §16-Befund vom 05.08.: **zwei Wahrheiten über denselben Gegenstand**,
+> die auseinanderlaufen, sobald eine fortgeschrieben wird. Ich habe die Datei-Reihenfolge
+> entschieden, ohne die §3-Reihe zu nennen, in der A-10 längst stand.*
+>
+> **Gemessen, wer welche Datei anfasst:**
+>
+> ```text
+> A-09  scripts/commit-pruefen.sh
+> A-11  scripts/commit-pruefen.sh
+> A-10  renderers/three-d/szene.ts     <- KEIN Dateikonflikt; die Nennung von
+>       commit-pruefen.sh steht bei A-10 nur im Auswirkungen-Block (Bundle/Tor)
+> ```
+>
+> **Warum A-10 zuerst:**
+>
+> ```text
+> 1  A-10 behebt einen Mangel, den ein NUTZER sieht - ein Dach, das nichts zeigt
+>    und nichts sagt. A-09 und A-11 verbessern Werkzeug, das bereits funktioniert.
+> 2  A-09 und A-11 teilen sich commit-pruefen.sh und muessen ohnehin nacheinander
+>    laufen. A-10 vorzuziehen kostet sie NICHTS - die Gesamtzeit bleibt gleich.
+> 3  A-10 ist der einzige der drei OHNE Claim. Wer frei ist, kann ihn sofort ziehen.
+> ```
+>
+> **Die Datei-Reihenfolge `A-09 → A-11` gilt unverändert** — sie ist jetzt Teil der einen Reihe
+> statt einer zweiten Liste daneben.
+>
+> <details><summary>frühere Fassung (nur Dateikonflikt)</summary>
 >
 > ```text
 > 1  Maengel vor Faehigkeit bei geteilter Datei (A-07/A-09 beheben, A-11 ergaenzt)
@@ -135,6 +170,8 @@ wurde danach geschnitten.*
 > 3  A-11 aendert als einziges die MELDEFORM des Tors -> zuletzt, wenn die
 >    anderen beiden abgenommen sind
 > ```
+
+</details>
 
 **Claim auf dem BLATT bei der zweiten Instanz — Reihenfolge ÜBER Blätter beim Planner** (P-02).
 **Nicht von mir:** wer A-11 abnimmt (Vorschlag und tragende Zahl stammen vom ersten Evaluator).
@@ -901,6 +938,8 @@ votum_4_runde: "plan-pruefer 08.08. (4. Runde, nach 2c00e6ef und A-08-ABNAHME): 
 offene_akzeptanz_4:
   - "Rest A (Form): basis_sha im Blattkopf steht auf 8967e2c4 — auf die Post-A-08-Linie nachziehen (f430242d oder juenger); die heutigen Rot-Zahlen (32 divergent / 46 status / 2505 Halde) als datierte Ist-Belege eintragen."
   - "Rest B: den angenommenen Zusatz-Nachweis in den A-07-1a-Wortlaut einarbeiten (ein Satz + Stichproben-Form)."
+claim_release_a07: "plan-pruefer 10.08.: A-07 ABGENOMMEN (fc5a3daa, Zweitmessung 05f3e1d9 deckungsgleich) — Release-Station mit frischer Instanz besetzt. Claim VOR dem Start. KENNTNIS des P2-Prozessbefunds der Zweitinstanz: der Claim bindet die Beauftragung nicht (dritte Kollision heute, Ausgang erneut gutartig aber teuer) — Unterstuetzung fuer eine B-Massnahme beim Planner: die Rollenkennung aus B4 koennte den CLAIM-Halter mitfuehren, dann ist die Bindung ein grep statt einer Hoffnung."
+claim_bau_a10: "plan-pruefer 10.08.: §3-Schlange frei (A-07 ABGENOMMEN, kein IN_ARBEIT) — Generator-Station fuer A-10 mit frischer Instanz besetzt. Claim VOR dem Start."
 ballwechsel_bestaetigt_a07: "plan-pruefer 10.08.: A-07-CODE_FERTIG-Meldepflichten geprueft — Kette 8adffd3d (IN_ARBEIT vor erster Aenderung) -> c512f931 (Bau, SELBST gemessen: exakt die 2 Scope-Dateien, +237) -> eb86828b (CODE_FERTIG). WIRKUNG LIVE NACHGEMESSEN auf dieser Maschine: Divergenz 0 (vorher 35), git status 2 Eintraege (vorher 55), Halde ausser _to_delete nur 1 lebender Lauf (vorher 2589 Altlasten). Ball beim EVALUATOR. FUER SEINE PRUEFUNG: Suite 42/42 behauptet (4 neue Zusagen), Mutationen 4/4 mit md5 59e23956, der Erstnutzer trat UNGEPLANT ein (A-04-Release-Kette lief durch das umgebaute Tor), Kippfall nur per Zusage belegt (real 0 verwaiste Blobs — richtig so), unmerged-Ergaenzung und 60s-Schutz als konservative Abweichungen deklariert."
 claim_abnahme_a07: "plan-pruefer 10.08.: Evaluator-Station fuer A-07 mit frischer Instanz besetzt. Claim VOR dem Start."
 claim_bau: "plan-pruefer 10.08.: A-04 ist CODE_FERTIG — die §3-Schlange ist frei, Generator-Station fuer A-07 mit frischer Instanz besetzt (Tor-Bau). Claim VOR dem Start."
