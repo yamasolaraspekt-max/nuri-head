@@ -1,5 +1,12 @@
 # BEFUND — vier Dachwelten, keine Brücke
 
+> **KEIN AUFTRAG — VORLAGE.** Yama, 10.08.2026: *„das muss alles erst mal fachlich geprüft
+> validiert werden — das ist die Aufgabe von Planner und Plan-Prüfer."*
+> **Ball: Planner, danach Plan-Prüfer.** Der Generator hat hier **gemessen, nicht bewertet**:
+> Existenz, Umfang, Gleichheit, Fundstelle. **Ob ein Stück fachlich taugt, steht in keinem dieser
+> Sätze** — auch nicht in den Reihenfolge-Vorschlägen, die Vorschläge bleiben.
+> **Es wird nichts kopiert, bevor Planner und Plan-Prüfer geprüft haben.**
+
 **Gemessen:** 10.08.2026 · **Rolle:** Generator · **Anlass:** Yamas Frage, ob die Dachplanung
 seinen Playground-Bestand und den ticket-Bestand bedient — gerade bei Azimut und Dachformen.
 **Ball:** Planner (Klasse SPEC). Nichts davon ist gebaut oder geändert, nur gemessen.

@@ -15,11 +15,29 @@
 | **A-07** Index-Divergenz | **`VERÖFFENTLICHT`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
 | **A-09** Repo-Bezug über `--git-dir` | **`RELEASE_FREI`** | **Yama** | Bau `12ca3798` · Votum `e53e3cfb` an `af8f2054` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 50/50 am Prüf-SHA selbst (Worktree) · Scope exakt 2 Dateien +316/−7, Hunks @@68/@@107 · Revert-Probe sauber · Drift auf `scripts/` seit Prüf-SHA: 0 |
 | **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
-| **A-11** Rollenmarke im Tor | **`IN_ARBEIT`** | **Generator** | BEREIT `1dee4771` · Claim `a1e732d5` | **B4** aus §13 · letzter Tor-Bau · Bau-Basis `0fef1a56` |
+| **A-11** Rollenmarke im Tor | **`CODE_FERTIG`** | **Evaluator** | Bau `b0f4c444` · Prüf-SHA `28760966` · Basis `bc1470bc` | Suite 50→**61/61** · 4 Mutationen gefallen (md5-Beweis) · Realtest: Bau-Botschaft ohne Präfix, Marke vom Tor · **TICKET_ROLLE ab sofort Pflicht — Mitteilung unten** |
 | **W-01** Raster und Fang | **`CODE_FERTIG`** | **Evaluator** | `04f78b73` · Basis `32f83a6f` | sieben Blätter aus `fangKern.ts` abgeleitet · 1692/1692 · `resources/**` byte-identisch · 3 Abweichungen und 1 offener Befund im Bericht |
 | **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `801e2daa` · Basis `193681cd` | sieben Blätter aus `wallGeometry.ts` + `wandFlaeche.ts`; 9/9 Kriterien grün, **-2 erst nach Selbstkorrektur** (Formel war ausgeschrieben); `resources/**` 1230 Dateien 0 Abweichungen (indexfrei) · Suite 1692/1692 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
+
+### ⚠ MITTEILUNG AN ALLE ROLLEN — das Commit-Tor verlangt ab `28760966` eine Rollenmarke (A-11)
+
+> **Ab dem Prüf-SHA `28760966` (Bau `b0f4c444`) committet das Tor NUR noch mit gesetzter
+> Umgebungsvariable `TICKET_ROLLE` — sofort blockierend, ohne Übergangsfrist.** Wer sie nicht
+> setzt, bekommt `exit 2` und KEINEN Commit; das ist die B4-Barriere, keine Störung.
+>
+> ```text
+> VARIABLE   TICKET_ROLLE
+> FORM       ^[a-z][a-z-]*(-[0-9]+)?$   (klein, Bindestriche, optionale Instanznummer)
+> BEISPIEL   TICKET_ROLLE=evaluator bash scripts/commit-pruefen.sh "Botschaft" pfad
+>            gültig: planner · generator · evaluator · evaluator-2 · plan-pruefer · release-pruefer
+> ```
+>
+> Das Tor stellt `<marke>: ` selbst der ersten Zeile voran (nicht doppelt, wenn sie schon exakt
+> so dasteht). **Beginnt die Botschaft mit einer ANDEREN Rollenmarke als die Umgebung sagt, ist
+> das ein WIDERSPRUCH und der Commit wird verweigert** (der Fall `b29bb79d`). Auftrags-Präfixe
+> wie `A-07: …` sind keine Rollen und bleiben erlaubt — die Marke kommt dann davor.
 
 ### Reihenfolge der DoR-Prüfungen — Planner-Entscheidung 07.08. (A-08 ist durch)
 
@@ -1122,22 +1140,25 @@ push_vermerk: "release-pruefer 10.08.: Sicherungs-Push nach v1.2-Vertretung VERS
 ```
 ---
 
-## IN_ARBEIT — A-11
+## CODE_FERTIG — A-11 (Ball beim Evaluator)
 
 ```yaml
 auftrag: A-11
 titel: "Commit-Tor: die Rolle kommt aus der Umgebung und wird der Botschaft vorangestellt - fehlt sie, gibt es keinen Commit"
 datei: docs/auftraege/aktiv/A-11-rollenmarke-im-tor.md
-zustand: IN_ARBEIT
-ballbesitz: generator (am Bau)
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 229ad0be
 prioritaet: P1
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review — das zweite der Gruppe nach A-08): Rot-Lagen SELBST strukturell verifiziert (Rollenpruefung im Tor: 0 Treffer; 21 von 40 letzten Commits ohne Praefix — Blatt sagt 15, Drift nicht tragend, die Quote zerbricht die Zaehlung so oder so), Botschaft-Annahme Z.51 bestaetigt, Commit-Aufruf liegt heute auf Z.424 statt 384 (Zeilendrift durch A-07/A-08-Bauten — die Bauvorgabe gilt SINNGEMAESS: der Commit-Aufruf und alles danach bleibt unangetastet). Konfliktpruefung mit disjunkten Zonen und Bauvorgabe vorbildlich; A-11-3-Rot ehrlich als nur-gegen-die-neue-Fassung deklariert (Gegenhalter-Klasse); Nicht-Ziele scharf (Auftragsnennung ausdruecklich NICHT mitgebaut, §7); Entdeckung als Dauerkontroll-grep. Die Doppelentscheidungs-Selbstanzeige (zwei Planner, drei Minuten, entschieden nach Begruendung statt Zeitstempel) gehoert als gemessener Fall in P-02 — so steht es im Blatt."
+ballwechsel_bestaetigt_a11: "plan-pruefer 10.08.: A-11-CODE_FERTIG-Meldepflichten geprueft — Kette ffd06c1a (IN_ARBEIT nach §3-Wartezeit auf W-02/1, sauber) -> b0f4c444 (Bau, exakt 2 Dateien) -> 28760966 (Pruef-SHA) -> 63c83a53. Die AUFLAGE aus dem BEREIT-Votum ist ERFUELLT (Mitteilung an alle Rollen unter der Tafel). DIE ROLLENMARKE IST AB 28760966 LIVE — auch fuer mich: dieser Commit traegt TICKET_ROLLE=plan-pruefer. Ball beim EVALUATOR. FUER SEINE PRUEFUNG: der Realtest (Marke an b0f4c444 stammt vom Tor) ist elegant, aber selbst nachzumessen; die fuenf deklarierten Abweichungen wuerdigen (insb. Trimm-Bewertung vs. byte-identische Verbuchung — eine fuehrend-eingerueckte markierte Zeile zaehlt im Entdeckungs-grep als unmarkiert, das ist eine dokumentierte Unschaerfe der Dauerkontrolle); Beifang-Offenlegung 7f592b20 gegenlesen."
+claim_abnahme_a11: "plan-pruefer 10.08.: Evaluator-Station fuer A-11 mit frischer Instanz besetzt. Claim VOR dem Start."
 claim_bau_a11: "plan-pruefer 10.08.: A-09 ABGENOMMEN, §3-Schlange frei — Generator-Station fuer A-11 (letzter Tor-Bau) mit frischer Instanz besetzt. Claim VOR dem Start."
 zaehlfrage_entschieden: "plan-pruefer 10.08.: A-11 zaehlt als AUFTRAG 1 DER GRUPPE 2. Begruendung: §13 zaehlt ab der ersten Vorlage beim Plan-Pruefer; Gruppe 1 ist mit zehn Auftraegen voll und ihre Prozesspruefung IST durchgefuehrt (850aafd5 + Anteile) — damit ist die §13-Schranke vor Auftrag elf bedient. Der ausstehende Zaehler-RESET (B3-Bedingung) betrifft die Mechanik des Zaehlers, nicht die Zugehoerigkeit: Auftraege zwischen Pruefung und B3-Bau duerfen nicht aus der Statistik fallen ('schlechte Plaene verschwinden nicht'). Bis B3 steht, wird Gruppe 2 von Hand gezaehlt — beginnend mit diesem Blatt."
 auflage_bereit: "EINE Auflage fuer den Bau (kein Restpunkt am Blatt): die CODE_FERTIG-Meldung MUSS die sofort blockierende TICKET_ROLLE-Pflicht als Mitteilung an ALLE Rollen in STATUS.md tragen (Variable, Form, Beispiel) — das Blatt benennt die Gefahr selbst: sonst laeuft die erste Rolle nach dem Bau in eine unerwartete Sperre."
 beginn_bau: "generator (frische Instanz) 10.08.: IN_ARBEIT VOR der ersten Scope-Aenderung (§3). §3 gewahrt: W-02/1 stand bereits IN_ARBEIT, als ich antreten sollte — ich habe GEWARTET, bis 58342f47 CODE_FERTIG setzte; jetzt ist A-11 das einzige IN_ARBEIT. Bau-Basis bc1470bc (scripts/ seit meiner Rot-Messung an 0fef1a56 unveraendert: diff 0 Zeilen). Rot-Lagen SELBST gemessen: Rollenpruefung im Tor 0 funktionale Treffer (2 grep-Treffer 'Rolle' sind Kommentare Z.93/Z.490); Wegwerf-Repo: ohne TICKET_ROLLE exit=0 und Commit lief (A-11-1 rot), mit TICKET_ROLLE=generator Betreff unveraendert ohne Praefix (A-11-2 rot); Suite 50/50 an der Basis. Zeilendrift: Botschaft-Annahme weiter Z.51, Commit-Aufruf jetzt Z.508 — Bauvorgabe gilt sinngemaess (Marke am Kopf, Commit-Aufruf und alles danach unangetastet). BEIFANG-OFFENLEGUNG: meine Tafelzeile (IN_ARBEIT) wurde waehrend meiner Vorbereitung vom parallelen STATUS-Commit 7f592b20 mitgenommen, BEVOR ich IN_ARBEIT wirklich gesetzt hatte — die Zeile stand damit frueher im Log als dieser Datensatz-Umschwung. Von mir gemessen und hier deklariert; W-02/1 (58342f47) und A-12-Einreihung haben die Zeile bereits als gueltig gelesen."
-naechster_schritt: "Generator baut in der Botschaft-Annahme-Zone; danach CODE_FERTIG mit Pruef-SHA und Mitteilung an ALLE Rollen (auflage_bereit)"
+bericht_generator: "generator 10.08.: CODE_FERTIG. Basis bc1470bc -> Bau b0f4c444 (exakt 2 Dateien: Tor-Einbau Z.53-85 direkt nach der Botschaft-Annahme, Suite-Anhang; Commit-Aufruf und A-07/A-08/A-09-Zonen content-unangetastet) -> Pruef-SHA 28760966 (§11-Bericht im Blatt). Alle acht Kriterien mit Beleg: Suite 50/50 an der Basis -> 61/61 am Bau (11 neue Zusagen, nur Anhang, kein Bestandstest beruehrt); vier Mutationen nach A-11-7 alle gefallen (Pruefung weg FAIL 10 · nur gewarnt FAIL 2 · Doppelungs-Schutz weg FAIL 1 · Widerspruch weg FAIL 3), md5 e5fece559500d5c90869cf6c2ada40da vor/nach JEDER Ruecknahme identisch, Abschluss 61/61. Wegwerf-Repo-Wirkprobe 5 Faelle (fehlt/ohne Praefix/identisch/fremd/Formfehler) wie spezifiziert. Realtest: die Bau-Botschaft ging OHNE Praefix ins Tor, die Marke 'generator: ' an b0f4c444 stammt vom Tor. AUFLAGE ERFUELLT: Mitteilung an alle Rollen steht als eigener Abschnitt direkt unter der Tafel. Fuenf deklarierte Abweichungen im Blatt (u. a. Marken-Definition nur in Form '<marke>: '; Trimm-Bewertung vs. byte-identische Verbuchung; Beifang-Offenlegung 7f592b20). FUER DEN EVALUATOR: Rot-Basis fuer Gegenlauf ist bc1470bc (Suite dort 50/50, Tor committet ohne Marke); die Suite laeuft ab dem Bau NUR mit gesetzter TICKET_ROLLE (zentral im Testkopf: probe)."
+naechster_schritt: "Evaluator: Abnahme an 28760966 — nachmessen statt glauben (Basis-Gegenlauf, Mutationen selbst setzen, md5 selbst ziehen); danach Release-Pruefung nach §10"
 ```
 ---
 
@@ -1199,6 +1220,7 @@ ballbesitz: generator (Einreihung bei Yama — entsperrt die Dachkonstruktion, u
 basis_sha: d1d716c8
 prioritaet: P1
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review): die Pruefbefehle des Blatts selbst gefahren — Ampel-Rot bestaetigt (F-026 traegt woertlich die Sperre Z.229/277 der FORMELSAMMLUNG), Fremdquelle EXAKT belegt (132374 Byte, 2173 Zeilen aufs Zeichen; :965 buildCompoundPitched-Signatur und :1137 die l/t-shape-Weiche woertlich verifiziert). Der Machbarkeitsbefund, der den Auftrag zweiteilt (Teil A triviale Arithmetik / Teil B klassengebunden mit 64 THREE.-Vorkommen), ist die wertvollste Zeile des Blatts — er verhindert den Zwei-Stunden-SPEC_BLOCKED, den 'eine Funktion aufrufen' produziert haette. Attrappen-Regel (nur AUFZEICHNEN, nichts rechnen — sonst messen wir die Attrappe) und Scheitern-ist-Ergebnis-Regel vorbildlich. Kein Kopieren des Fremdcodes, Wegwerf-Probe nach A-05-Disziplin, Ampel wird VORGESCHLAGEN nicht gesetzt (Generator schlaegt vor, Evaluator bestaetigt, Planner traegt ein)."
+herkunft: "Dieser Block stammt vom PLAN-PRUEFER (DoR-Runde 10.08.), wurde aber als unbenannter Beifang vom W-02/1-Commit 58342f47 mitgesichert, waehrend er ungesichert im geteilten Baum lag — dieselbe Klasse wie 4307987b/c2feffd4, diesmal in Gegenrichtung. Inhalt unveraendert gueltig; hiermit richtiggestellt."
 zaehlfrage_entschieden: "plan-pruefer 10.08.: A-12 zaehlt in GRUPPE 2 (wie A-11 entschieden: erste Vorlage nach durchgefuehrter Prozesspruefung). Stand der Handzaehlung Gruppe 2 nach Erstvorlage: 1 A-11 · 2 W-01/1 · 3 W-02/1 · 4 W-13/1 · 5 A-12. Handzaehlung bis B3 steht (A-11 baut gerade B4; B3 bleibt offen)."
 naechster_schritt: "Yama reiht ein (A-12 vs. W-Reihe); danach zieht der Generator nach §3 (erst wenn kein Auftrag IN_ARBEIT — A-11 laeuft gerade)"
 ```
