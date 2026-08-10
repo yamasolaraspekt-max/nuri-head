@@ -122,9 +122,37 @@ entsprechen.
 **Ist-Belege, datiert (Rest A) — selbst gemessen, deckungsgleich mit dem Plan-Prüfer:**
 
 ```text
+10.08. 18:3x   --name-only  35   ·  git status  52   ·  Halde  2546
 08.08. 14:2x   --name-only  32   ·  git status  46   ·  Halde  2506
 07.08. 18:0x   --name-only  28   ·  git status  41   ·  Halde  1749
 ```
+
+**MESSORT DER HALDE — bitte genau diesen nehmen** (`commit-pruefen.sh:59-61`):
+
+```text
+$TMPDIR/ticket-index/index.<PID>          <- die Halde
+ls "${TMPDIR:-/tmp}/ticket-index" | grep -c '^index\.'
+```
+
+> *Ich habe beim ersten Griff `ls "$TMPDIR" | grep -c 'index\|tor-'` gemessen und **3496**
+> bekommen — das zaehlt Eintraege in `TMPDIR` selbst, nicht die Halde. Die richtige Zahl ist
+> **2546**. Offengelegt, weil eine um 950 zu hohe Haldenzahl im Blatt genau die Sorte Beleg waere,
+> die bei der Abnahme auffliegt und dann das ganze Blatt in Zweifel zieht — wie die 7011 des
+> Generators.*
+
+**PRAEZISIERUNG des Wachstums — die Halde waechst pro TOR-LAUF, nicht pro Tag:**
+
+```text
+07.08. -> 08.08.   1749 -> 2506   +757    viele Tor-Laeufe (A-08-Bau, drei DoR-Runden, Abnahme)
+08.08. -> 10.08.   2506 -> 2546    +40    rund 45 Stunden STILLSTAND, kaum Laeufe
+```
+
+> **Das schaerft die Rot-Lage, statt sie zu entkraeften.** Der Satz „binnen eines Tages um 757
+> gewachsen" legt eine Zeitrate nahe; tatsaechlich haengt das Wachstum an der **Aktivitaet**. In
+> 45 Stunden ohne Arbeit kamen nur 40 dazu. Die Folge ist unangenehmer als eine Zeitrate: **je
+> produktiver das Team, desto schneller waechst die Halde** — und sie schrumpft nie, weil das Tor
+> keinen `trap` hat (heute erneut gemessen: **0**). Ein Kriterium mit fester Zahl waere hier falsch;
+> A-07-5 verlangt deshalb richtig „alle zum Zeitpunkt des Laufs vorhandenen, Zahl im Bericht".
 
 *Die Halde ist binnen eines Tages um **757** Dateien gewachsen. **Genau deshalb steht keine feste
 Zahl im Kriterium, sondern nur im Bericht.***
