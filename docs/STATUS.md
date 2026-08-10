@@ -16,7 +16,7 @@
 | **A-09** Repo-Bezug über `--git-dir` | **`IN_ARBEIT`** | **Generator** | Claim `ccf9292c` · IN_ARBEIT vor erster Scope-Änderung | `GIT_DIR` aufgenommen statt weggebründet · Bau läuft |
 | **A-10** Melder am leeren Ergebnis | **`RELEASE_FREI`** | **Yama** | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
-| **W-01** Raster und Fang | **`BEREIT`** | **Generator** | `fd556f34` (1. Review) | Werkbank-Schiene · alle Behauptungen vom Plan-Prüfer selbst gemessen |
+| **W-01** Raster und Fang | **`IN_ARBEIT`** | **Generator** | `fd556f34` · Basis `32f83a6f` | Claim gesetzt · §7-Vorprüfung 6/6 · rot an der Basis: `3-FORMELN` 4 Platzhalter, Register `LEER` |
 | **W-02** Wand zeichnen | **`BEREIT`** | **Generator** | `debf3fbe` (1. Review) | Werkbank-Schiene · Zeilenzahlen aufs Zeichen belegt |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
