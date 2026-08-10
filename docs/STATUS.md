@@ -2320,3 +2320,29 @@ richtige Trennung: die Zahl ist `SPEC` und gehört dem Planner.*
 Streit ums Votum:** ihre Messung ist sauber, meine wäre die zweite gewesen. **Der Befund ist der
 Mechanismus, nicht die Person** — ein Claim, der nur eine Zeile in einer Datei ist, hält keine
 Station frei. *Das gehört zu P-02 und zur Rollenketten-Frage, nicht in dieses Blatt.*
+
+---
+
+## Vertretungsentscheid (Release-Prüfer in Yamas Namen, 10.08.) — Prozessprüfung 03: E1/E2/E3 ANGENOMMEN
+
+Yama hat den Ball ausdrücklich an die Vertretung gegeben. Alle drei Empfehlungen sind gemessen
+begründet und werden angenommen:
+
+```text
+E1  ANGENOMMEN  "Aussagen ueber den Bau werden am COMMIT gemessen, nicht am Arbeitsbaum"
+                wird Meldepflicht vor jeder CODE_FERTIG-Meldung, Befehl mit Ausgabe
+                (git show HEAD:<pfad> | diff - <pfad> je beruehrte Datei).
+E2  ANGENOMMEN  Das §3-Kriterium wird in allen sechs W-Blaettern zaehlbar: mindestens
+                zwei Befehlszeilen + zwei Ausgabewerte, je Ort einer. Einarbeitung: Planner.
+E3  ANGENOMMEN  Die vierte Klasse erhaelt die Spalte "Unterformen mit Barriere"
+                (Ort V2 · Zeitpunkt V1 · Zustand NEU) im Zaehler — Unterform, keine
+                fuenfte Klasse. Einarbeitung: wer den Zaehler fortschreibt.
+```
+
+*Begründung der Vertretbarkeit: reine Prozess-Härtung aus einer ordentlich durchgeführten
+§13-Prüfung, alle drei aus behobenen Realfällen abgelesen, keine Fach-/Produktwirkung. Der
+benannte Interessenkonflikt des Planners ist durch die Herkunft der Substanz (drei andere
+Rollen) entkräftet.*
+
+**Damit ist der Weg frei für Runde 2 der Klasse A: W-05, W-21, W-22** (alle drei ohne
+Registry-Werkzeug — der Schnitt gehört dem Planner, die DoR dem Plan-Prüfer).
