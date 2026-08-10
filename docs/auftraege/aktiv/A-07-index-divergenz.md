@@ -569,3 +569,102 @@ je Blob; Kandidaten sind nur die von HEAD abweichenden Eintraege ohne Loeschunge
 keinen Blob). Initialisierung und Raeumung stehen NACH der Stufe-4-Lock-Aufraeumung, damit
 W-09/K-01 (erst Locks raeumen, dann der erste git-Aufruf) wortgleich haelt. Der `trap` wird erst
 NACH dem Beiseitelegen des Erbes gesetzt, damit er ihn nie loeschen kann.
+
+---
+
+## Evaluator-Votum (§11) — 10.08.2026
+
+```yaml
+auftrag: A-07
+commit: c512f931          # Pruef-SHA; Elter d6637a1c als Kontrolle
+votum: ABGENOMMEN
+fehlerklasse: BEWEIS      # nur der eine P2 unten
+gegenprobe: "Rot-Lauf der vier neuen Zusagen gegen das Elter-Tor · vier eigene Mutationen ·
+  Erbschafts-Szenario von Hand, mit und ohne Initialisierung · Halden-Zuwachs zwei Richtungen"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde:
+  - "P2 BEWEIS: die INITIALISIERUNG aus A-07-4 ist von keiner Zusage gedeckt und in keinem
+     konstruierbaren Szenario wirksam — ihr Wegfall aendert nichts ausser einer stderr-Zeile."
+```
+
+### Selbst gefahren
+
+```text
+Scope-Diff c512f931   commit-pruefen.sh +94 · commitPruefen.test.mjs +143   nichts sonst
+Statik                bash -n SYNTAX-OK · node --check OK
+Suite Pruefstand      42/42        Suite Elter d6637a1c   38/38
+Rot am Elter          die VIER neuen Zusagen: 4 von 4 rot
+                      A-07-1a · A-07-2 · A-07-4 · A-07-4 GEGENPROBE
+```
+
+**Die Wirkung in beide Richtungen, an derselben Suite gemessen** — das ist der Kern von A-07-4:
+
+```text
+Suite im PRUEFSTAND (mit trap)   Halde vorher 54 -> nachher 54   Zuwachs  0
+dieselbe Suite am ELTER          Halde vorher 54 -> nachher 70   Zuwachs +16
+```
+
+**Rest B in der am 10.08. korrigierten Zweischrittform, an ALLEN Einträgen statt an zehn:**
+
+```text
+git status meldet 2 Eintraege   (Blatt-Ist am 10.08. 18:3x: 52)
+  ?? docs/rollenkette/     untracked -> ECHT (Schritt 1)
+  ?? zz-unlink-probe       untracked -> ECHT (Schritt 1)
+ECHT 2 · PHANTOM 0
+```
+
+*Die Zehnerprobe ist nicht mehr fahrbar, weil der Bau erfolgreich war — es bleiben keine zehn
+Einträge übrig. Die Substanz ist erfüllt, die Form hat sich selbst überholt.*
+
+**Vier eigene Mutationen, Anker je genau 1×, `md5` vor und nach identisch:**
+
+```text
+M1 unbedingt angleichen (Kippfall ignoriert)   fail 1   GEFANGEN durch A-07-2
+M2 Angleichung ganz entfernt                   fail 1   GEFANGEN durch A-07-1a
+M3 trap EXIT entfernt                          fail 2   GEFANGEN durch A-07-4 + Gegenprobe
+M4 Initialisierung entfernt                    fail 0   BLIND
+```
+
+### Der eine Befund — P2, `BEWEIS`, Ball beim Generator
+
+**A-07-4 nennt zwei Mechanismen. Der eine ist bewiesen, der andere nicht.**
+
+```text
+trap EXIT          M3 faellt, zwei Zusagen greifen, Halden-Zuwachs 0 gegen +16   BEWIESEN
+Initialisierung    M4 faellt NICHT — keine einzige Zusage bemerkt ihren Wegfall
+```
+
+**Ich habe zwei Szenarien von Hand gebaut, in denen sie zählen müsste, und in beiden zählt sie
+nicht:**
+
+```text
+1  geerbter Muell-Index, Beiseitelegen gelingt
+     mit Initialisierung   -> GEERBTER INDEX beiseite, Commit, INDEX ANGEGLICHEN
+     ohne Initialisierung  -> GEERBTER INDEX beiseite, Commit, INDEX ANGEGLICHEN   IDENTISCH
+2  geerbter Muell-Index, Beiseitelegen SCHEITERT (Verzeichnis nur lesbar)
+     mit Initialisierung   -> "INDEX-INITIALISIERUNG GESCHEITERT" + fatal: index file smaller
+     ohne Initialisierung  -> fatal: index file smaller                            GLEICHER AUSGANG
+```
+
+**Die Erbschaft wird vom BEISEITELEGEN beendet, nicht vom `read-tree`.** *Der beobachtbare
+Beitrag der Initialisierung ist eine Zeile auf stderr.*
+
+> **Warum das die Abnahme nicht blockiert:** der **Zweck** von A-07-4 — die Erbschaft endet, der
+> Wegwerf-Index bleibt nicht liegen — ist an beiden Enden belegt. *Geschuldet ist kein Code,
+> sondern ein Nachweis:* entweder ein Szenario, in dem die Initialisierung den Lauf rettet, oder
+> der ehrliche Satz im Blatt, dass sie eine **Diagnose** ist und die Erbschaft vom Beiseitelegen
+> beendet wird. **§12: `BEWEIS` lässt den Code unverändert und schuldet die Zusage.**
+
+### Zwei Dinge in eigener Sache
+
+**A-07-5 ist erfüllt und ich habe die Zahl verfälscht.** Der Bau hat **2590** Dateien nach
+`_to_delete/2026-08-10-A-07-5/` beiseitegelegt — *beiseite, nicht gelöscht, Dauerregel gewahrt.*
+**Danach standen wieder 92 im Verzeichnis — alle nach 19:00 entstanden, alle aus MEINEN
+Elter-Kontrollläufen** (das alte Tor ohne `trap`). *Wer die Halde nach mir misst, hätte 92 als
+Rückfall gelesen.* Ich habe sie nach derselben Konvention beiseitegelegt
+(`_to_delete/2026-08-10-evaluator-kontrolllaeufe/`, 92 Dateien, nichts gelöscht); Stand danach: **0**.
+
+**Zum Prüfstand:** `node_modules` **und** `vendor` verlinkt — beide Rezeptschritte, nachdem ich
+bei A-04 heute `vendor` vergessen und dadurch beinahe meinen eigenen Aufbau als Regression
+gemeldet hatte.
