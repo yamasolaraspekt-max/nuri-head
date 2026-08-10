@@ -1060,8 +1060,10 @@ push_vermerk: "release-pruefer 08.08., ENV-HINWEIS: der Sicherungs-Push (git pus
 auftrag: A-09
 titel: "Commit-Tor: Repo-Bezug eines git-Prozesses auch ueber --git-dir erkennen, nicht nur ueber die cwd"
 datei: docs/auftraege/aktiv/A-09-repo-bezug-nicht-nur-cwd.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: VEROEFFENTLICHT
+ballbesitz: yama
+release_sha: "2e7b58fc"
+release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme af8f2054 (Votum e53e3cfb, Fehlerklasse KEINE) — Kette Vorfahr, Scope exakt 2 Dateien (Tor +96, Suite +227), Produkt-Code seit 2da18c44 unberuehrt, bash -n OK, Tor-Suite 50/50, Waechter 7/7, Geheimnis-/env-Scan leer. main-Integration als reiner FF 2da18c44..2e7b58fc auf fork UND backup-private. OFFENGELEGT: der Zustandseintrag kam einen Commit NACH dem Push statt im selben Arbeitsgang (Patch-Skript griff nicht, Release lief weiter) — Verstoss gegen die eigene Regel vom 05.08., hier transparent nachgeholt. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 basis_sha: 5a54b004      # aus dem Blatt; Uebernahme-HEAD (Basis der Messungen): d836fb91
 basis_bau: d836fb91      # HEAD bei Uebernahme, 5a54b004 ist Vorfahr; Scope-Drift auf scripts/ bis zum Bau: 0
 pruef_sha: af8f2054      # Bau 12ca3798 (beide Skripte), §11-Bericht af8f2054; dieser STATUS-Commit folgt darauf

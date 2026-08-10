@@ -283,3 +283,26 @@ ausfuehrung:
 statuswahrheit: "A-10 VEROEFFENTLICHT im selben Commit wie dieses Protokoll"
 naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama (7 Auftraege offen)"
 ```
+
+---
+
+## Protokoll: Release A-09 nach main (10.08.)
+
+```yaml
+vorgang: release-a09-main
+datum: 2026-08-10
+rolle: release-pruefer (Stamm-Instanz, Vertretung nach Regelwerk 1.4.2)
+kandidat: 2e7b58fc83df74a746272e7c0e5d1be25c0c8a5a
+abnahme: "e53e3cfb (Evaluator) an af8f2054, Fehlerklasse KEINE; Suite 42/42->50/50,
+  fuenf Neu-Zusagen an der Basis rot, sechs Mutationen gefangen"
+paragraph10: "Kette Vorfahr · Scope exakt 2 Dateien (commit-pruefen.sh +96, Suite +227) ·
+  Produkt-Code seit 2da18c44 unberuehrt · bash -n OK · 50/50 + 7/7 · Scans leer · FF geprueft"
+ausfuehrung:
+  - "push fork  2e7b58fc -> main   2da18c44..2e7b58fc  FF"
+  - "push backup-private 2e7b58fc -> main  2da18c44..2e7b58fc  FF"
+abweichung: "Zustandseintrag kam einen Commit NACH dem main-Push (Patch-Skript griff nicht,
+  Assertion uebersehen weil der Push im selben Block weiterlief) — eigene Regel vom 05.08.
+  verletzt, transparent im release_vermerk offengelegt. Lehre: Patch-Erfolg pruefen BEVOR
+  der Push-Befehl im selben Block steht."
+naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama (8 Auftraege offen)"
+```
