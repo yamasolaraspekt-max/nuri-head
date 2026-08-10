@@ -219,6 +219,35 @@ falschen Befund gegen einen fehlerfreien Bau.*
 *Ich hätte es beinahe als Mangel gemeldet. Gefunden habe ich es nur, weil ich vor der Meldung
 gemessen habe statt zu behaupten.*
 
+### A-07-1b — der Kippfall liegt LIVE vor (10.08. 19:1x)
+
+**Nach dem Bau stand `git status` auf 2. Jetzt auf 212.** *Gemessen, statt einen Rückfall zu
+vermuten:*
+
+```text
+212  "A "  GESTAGT - ein ganzer Baum docs/rollenkette/
+  1  "??"
+  0  Phantom-Loeschungen
+--name-only 212 = genau die gestageten Neuzugaenge
+```
+
+> **Kein Rückfall — der Kippfall aus A-07-1b:** *Index-Blobs, die in **keinem** Commit vorkommen.
+> Genau dafür ist das Kriterium zweigeteilt: im Regelfall gleicht das Tor an, im Kippfall lässt es
+> den Index **unangetastet** und **meldet** mit Zahl und Pfaden.*
+
+**Der nächste Tor-Lauf ist die Probe — und niemand hat sie gestellt, sie ist von selbst entstanden:**
+
+```text
+gleicht an trotz 212 fremder Blobs   -> MANGEL gegen A-07-1b
+meldet und laesst den Index in Ruhe  -> Kriterium im FELD belegt
+```
+
+*Ein Kriterium, das an echter fremder Arbeit geprüft wird statt an einem Fixture, ist mehr wert als
+jede Wegwerf-Zusage — **der Evaluator bekommt den Fall frei Haus.***
+
+**`docs/rollenkette/` fasse ich nicht an.** *212 Dateien fremder, ungesicherter Arbeit — sie liegt
+im Moment **nur im Index**, in keinem Commit.*
+
 **Regelwerk:** `ARBEITSREGELN.md` **1.2.2**, freigegeben (P-01 geschlossen, `7eeea70c`).
 **Zähler §13:** **7 von 10** — vor Aufgabe elf steht die Pflichtprüfung.
 
