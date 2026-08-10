@@ -46,6 +46,11 @@ import { tmpdir } from 'node:os';
 
 const TOR = new URL('../commit-pruefen.sh', import.meta.url).pathname;
 
+// A-11: Das Tor verlangt eine Rollenmarke aus der Umgebung. ZENTRAL fuer alle Laeufe gesetzt
+// (auch fuer die Zusagen, die das Tor direkt per execFileSync mit ...process.env fahren) —
+// die Bestandszusagen bleiben unangefasst und messen weiter, was sie immer gemessen haben.
+process.env.TICKET_ROLLE = 'probe';
+
 /** Ein frisches Repo im Systemtemp — mit dem Tor an derselben relativen Stelle wie im echten. */
 function wegwerfRepo() {
   const verz = mkdtempSync(join(tmpdir(), 'w09-tor-'));
@@ -1249,4 +1254,129 @@ test('A-08-10: die Blockade-Meldung nennt das KOMMANDO des Halters, nicht nur di
   } finally {
     halter.stop();
   }
+});
+
+/**
+ * A-11 — **Die Rollenkennung entsteht im Tor, nicht in der Selbstdisziplin.**
+ *
+ * Quelle ist die Umgebungsvariable `TICKET_ROLLE` (Form `^[a-z][a-z-]*(-[0-9]+)?$`). Fehlt sie,
+ * gibt es keinen Commit; steht sie, beginnt jede erste Zeile mit `<marke>: ` — ohne Doppelung
+ * und ohne dass eine Botschaft sich als andere Rolle ausgeben kann (der Fall `b29bb79d`).
+ * Gefahren wird wie oben ausschliesslich im Wegwerf-Repo.
+ */
+
+/** Faehrt das Tor mit ausdruecklicher Rollen-Umgebung; rolle === null ENTFERNT TICKET_ROLLE. */
+function torAlsRolle(verz, rolle, ...args) {
+  const env = { ...process.env };
+  if (rolle === null) delete env.TICKET_ROLLE; else env.TICKET_ROLLE = rolle;
+  try {
+    const aus = execFileSync('bash', ['scripts/commit-pruefen.sh', ...args],
+      { cwd: verz, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], env });
+    return { code: 0, text: aus };
+  } catch (e) {
+    return { code: e.status ?? -1, text: `${e.stdout ?? ''}${e.stderr ?? ''}` };
+  }
+}
+
+const betreff = (verz) =>
+  execFileSync('git', ['log', '-1', '--format=%s'], { cwd: verz, encoding: 'utf8' }).replace(/\n$/, '');
+const commitZahl = (verz) =>
+  execFileSync('git', ['rev-list', '--count', 'HEAD'], { cwd: verz, encoding: 'utf8' }).trim();
+
+test('A-11-1: ohne TICKET_ROLLE gibt es KEINEN Commit — exit 2, und die Meldung nennt Variable und Form', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const r = torAlsRolle(verz, null, 'Probe: ohne Marke', 'anfang.txt');
+  assert.equal(r.code, 2, `erwartet Exitcode 2 (Aufruffehler-Klasse), kam ${r.code}`);
+  assert.equal(commitZahl(verz), '1', 'es wurde trotz fehlender Marke committet');
+  assert.match(r.text, /TICKET_ROLLE/, 'die Meldung nennt die Variable nicht');
+  assert.ok(r.text.includes('^[a-z][a-z-]*(-[0-9]+)?$'), `die Meldung nennt die erlaubte Form nicht: ${r.text}`);
+});
+
+test('A-11-1: gesetzt, aber nur Leerzeichen — wie nicht gesetzt, exit 2, kein Commit', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const r = torAlsRolle(verz, '   ', 'Probe: leere Marke', 'anfang.txt');
+  assert.equal(r.code, 2, `erwartet Exitcode 2, kam ${r.code}`);
+  assert.equal(commitZahl(verz), '1', 'es wurde trotz leerer Marke committet');
+});
+
+test('A-11-2: mit Marke und ohne Praefix beginnt der Betreff mit "<marke>: "', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const r = torAlsRolle(verz, 'generator', 'Anbau ohne Praefix', 'anfang.txt');
+  assert.equal(r.code, 0, `Tor brach ab: ${r.text}`);
+  assert.equal(betreff(verz), 'generator: Anbau ohne Praefix');
+});
+
+test('A-11-3: beginnt die Botschaft bereits mit GENAU dieser Marke, bleibt sie byte-identisch', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const r = torAlsRolle(verz, 'generator', 'generator: schon markiert', 'anfang.txt');
+  assert.equal(r.code, 0, `Tor brach ab: ${r.text}`);
+  assert.equal(betreff(verz), 'generator: schon markiert', 'die Marke wurde gestapelt oder veraendert');
+});
+
+test('A-11-4: eine ANDERE Rollenmarke im Betreff ist ein WIDERSPRUCH — exit 2, kein Commit (Fall b29bb79d)', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const r = torAlsRolle(verz, 'generator', 'evaluator: fremde Feder', 'anfang.txt');
+  assert.equal(r.code, 2, `erwartet Exitcode 2, kam ${r.code}`);
+  assert.equal(commitZahl(verz), '1', 'der widerspruechliche Betreff wurde committet');
+  assert.match(r.text, /WIDERSPRUCH/, 'die Meldung benennt den Widerspruch nicht');
+  assert.match(r.text, /evaluator/, 'die Meldung nennt die vorgefundene Marke nicht');
+  assert.match(r.text, /generator/, 'die Meldung nennt die Umgebungs-Marke nicht');
+});
+
+test('A-11-4 Kante: auch eine INSTANZNUMMER trennt — evaluator-2 gegen evaluator ist ein Widerspruch', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const r = torAlsRolle(verz, 'evaluator', 'evaluator-2: nicht dieselbe', 'anfang.txt');
+  assert.equal(r.code, 2, `erwartet Exitcode 2, kam ${r.code}`);
+  assert.equal(commitZahl(verz), '1', 'der widerspruechliche Betreff wurde committet');
+});
+
+test('A-11-5: Formfehler werden abgewiesen — Grossbuchstabe, Doppelpunkt, fuehrende Ziffer, Leerzeichen innen', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  for (const kaputt of ['Planner', 'evaluator:', '2evaluator', 'plan pruefer']) {
+    const r = torAlsRolle(verz, kaputt, 'Probe: kaputte Marke', 'anfang.txt');
+    assert.equal(r.code, 2, `Marke '${kaputt}': erwartet Exitcode 2, kam ${r.code}`);
+  }
+  assert.equal(commitZahl(verz), '1', 'eine formfalsche Marke fuehrte zu einem Commit');
+});
+
+test('A-11-5: die Instanznummer ist GUELTIG — evaluator-2 ist der Zweck der Form', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const r = torAlsRolle(verz, 'evaluator-2', 'Zweitinstanz am Werk', 'anfang.txt');
+  assert.equal(r.code, 0, `Tor brach ab: ${r.text}`);
+  assert.equal(betreff(verz), 'evaluator-2: Zweitinstanz am Werk');
+});
+
+test('A-11 Kante: "A-07: …" ist ein AUFTRAG, keine Rolle — die Marke wird davorgestellt', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const r = torAlsRolle(verz, 'generator', 'A-07: Auftrag, keine Rolle', 'anfang.txt');
+  assert.equal(r.code, 0, `Tor brach ab: ${r.text}`);
+  assert.equal(betreff(verz), 'generator: A-07: Auftrag, keine Rolle');
+});
+
+test('A-11 Kante: fuehrende Leerzeichen — nach Trimmen bewertet, ein fremdes Praefix bleibt ein Widerspruch', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const r = torAlsRolle(verz, 'generator', '  evaluator: eingerueckt getarnt', 'anfang.txt');
+  assert.equal(r.code, 2, `erwartet Exitcode 2, kam ${r.code}`);
+  assert.equal(commitZahl(verz), '1', 'der getarnte Betreff wurde committet');
+});
+
+test('A-11-8: bei einer mehrzeiligen Botschaft bekommt NUR die erste Zeile die Marke — der Rumpf bleibt byte-identisch', () => {
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const rumpf = 'Zeile zwei mit  doppeltem Leerzeichen\n\n  eingerueckt: sieht aus wie eine Marke, steht aber im Rumpf';
+  const r = torAlsRolle(verz, 'generator', `Kopfzeile\n\n${rumpf}`, 'anfang.txt');
+  assert.equal(r.code, 0, `Tor brach ab: ${r.text}`);
+  // %B liefert die gespeicherte Botschaft (git schliesst sie mit \n ab) plus die Formatzeile.
+  const voll = execFileSync('git', ['log', '-1', '--format=%B'], { cwd: verz, encoding: 'utf8' });
+  assert.equal(voll, `generator: Kopfzeile\n\n${rumpf}\n\n`, 'der Rumpf ist nicht byte-identisch geblieben');
 });
