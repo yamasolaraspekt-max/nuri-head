@@ -55,11 +55,17 @@ FEHLER=0
 # Der Index wandert aus dem Mount. Der Pfad traegt die PID: teilen sich zwei gleichzeitige
 # Laeufe denselben externen Index, waere die Kollision nur nach draussen gewandert statt zu
 # verschwinden (Auflage des Evaluators, 03.08.).
+INDEX_VOM_TOR=nein
 if [ -z "${GIT_INDEX_FILE:-}" ]; then
   INDEX_HEIMAT="${TMPDIR:-/tmp}/ticket-index"
   mkdir -p "$INDEX_HEIMAT" 2>/dev/null
   GIT_INDEX_FILE="$INDEX_HEIMAT/index.$$"
   export GIT_INDEX_FILE
+  # A-07: Initialisierung und Raeumung dieses Index stehen WEITER UNTEN, nach der Stufe-4-
+  # Aufraeumung — die Reihenfolge "erst Locks raeumen, dann der erste git-Aufruf" (W-09/K-01)
+  # bleibt bestehen. Hier wird nur gemerkt, dass der Index dem Tor gehoert: nur einen Index,
+  # den das Tor selbst angelegt hat, darf es initialisieren und am Ende wegraeumen.
+  INDEX_VOM_TOR=ja
 fi
 
 # ── A-08 FORM B: LAEUFT EIN GIT-PROZESS *DIESES* REPOSITORIUMS? ─────────────────────────────
@@ -321,6 +327,40 @@ for lock in $(find .git -name '*.lock' -not -path '*_locks_beiseite*' 2>/dev/nul
   fi
 done
 
+# ── A-07-4: DER WEGWERF-INDEX WIRD INITIALISIERT UND UEBER `trap EXIT` GERAEUMT ─────────────
+# Der Befund (A-07, Evaluator): `GIT_INDEX_FILE=index.$$` wurde nie initialisiert und nie
+# geraeumt. Das Betriebssystem vergibt PIDs wieder — ein Lauf ERBTE bei wiederverwendeter PID
+# den Index seines Vorgaengers (Realfall 10.08.: beim Tor-Commit ce1ff7d5 erschien live
+# "invalid object 8fd24e1c fuer -f" aus einem geerbten Halden-Index; derselbe kaputte Eintrag
+# lag 116-fach auf der Halde). Deshalb, NUR fuer den Index, den das Tor selbst angelegt hat:
+#
+#   1  Liegt unter dem Pfad schon eine Datei (PID-Erbschaft), wird sie BEISEITEGELEGT,
+#      nie geloescht (`_to_delete/`-Muster, Dauerregel) — sie ist fremder Zustand.
+#   2  `trap … EXIT` raeumt den eigenen Index auf ALLEN Auswegen — das Tor hat sieben
+#      exit-Punkte, und nur einer davon ist "am Ende". Ein `rm` in der letzten Zeile
+#      liesse die sechs Abbruchpfade weiter Halde produzieren.
+#   3  `git read-tree HEAD` schreibt den Index frisch aus HEAD — beendet die Erbschaft
+#      auch dann, wenn die Beiseitelage scheitert. Ohne HEAD (frisches Repo) wird der
+#      Index geleert statt geraten.
+#
+# Der Mechanismus der Stufe 5 (eigener, ausgelagerter Index je Lauf) bleibt unveraendert —
+# A-07-3 schuetzt ihn; die liegengebliebenen DATEIEN sind der Mangel, nicht die Loesung.
+if [ "$INDEX_VOM_TOR" = "ja" ]; then
+  if [ -e "$GIT_INDEX_FILE" ]; then
+    ERBE_ZIEL="$INDEX_HEIMAT/_to_delete/$(date +%F)"
+    mkdir -p "$ERBE_ZIEL" 2>/dev/null
+    mv "$GIT_INDEX_FILE" "$ERBE_ZIEL/index.$$.geerbt.$(date +%s)" 2>/dev/null \
+      && echo "GEERBTER INDEX  index.$$ lag von einem frueheren Lauf da (PID-Wiederverwendung) -> $ERBE_ZIEL/ (beiseitegelegt, nicht geloescht)"
+  fi
+  trap 'rm -f "$GIT_INDEX_FILE" "$GIT_INDEX_FILE.lock"' EXIT
+  if git rev-parse -q --verify HEAD >/dev/null 2>&1; then
+    git read-tree HEAD 2>/dev/null \
+      || echo "INDEX-INITIALISIERUNG GESCHEITERT  read-tree HEAD auf $GIT_INDEX_FILE — der Lauf startet mit leerem Index (Verhalten vor A-07)" >&2
+  else
+    git read-tree --empty 2>/dev/null
+  fi
+fi
+
 for p in "$@"; do
   if [ ! -e "$p" ]; then
     echo "FEHLT      $p" >&2; FEHLER=1; continue
@@ -383,6 +423,60 @@ done
 
 git commit -q -m "$BOTSCHAFT" -- "$@" || exit 1
 git --no-optional-locks log -1 --pretty='%h %s'
+
+# ── A-07-1a/1b: DER STANDARD-INDEX WIRD NACH ERFOLGREICHEM COMMIT AN HEAD ANGEGLICHEN ───────
+# Stufe 5 committet am Standard-Index VORBEI — der divergiert deshalb mit jedem Tor-Commit
+# (jede ueber das Tor angelegte Datei wird dort zum Phantom-Loeschen), `git status` und
+# `git diff HEAD` luegen, und ein Commit AM TOR VORBEI wuerde die Phantom-Loeschungen
+# ausfuehren. Deshalb, NUR im Regelfall:
+#
+#   REGELFALL   kein Index-Blob existiert, der in KEINEM Commit vorkommt
+#               -> `git read-tree HEAD` auf .git/index. Schreibt NUR den Index neu;
+#                  der Arbeitsbaum wird nicht angefasst.
+#   KIPPFALL    ein solcher Blob existiert (echte gestagete, nirgends gesicherte Arbeit)
+#               -> der Index bleibt UNANGETASTET, die Meldung nennt Zahl und Pfade (A-07-1b).
+#
+# Gefragt wird ausdruecklich "in keinem COMMIT", nicht "nicht in der Objektdatenbank" —
+# jeder gestagete Blob liegt in der Objektdatenbank, die Frage waere immer gruen. Die
+# Antwort liefert EIN `rev-list --objects --all` (alle von Refs erreichbaren Objekte,
+# gemessen 10.08.: 22776 Objekte in 0,6 s) statt einer log-Suche je Blob. Kandidaten sind
+# nur die Index-Eintraege, die von HEAD abweichen (Loeschungen tragen keinen Blob);
+# unaufgeloeste Merge-Eintraege werden nie angefasst — im Zweifel gilt der Kippfall.
+# Alle Standard-Index-Fragen laufen mit `env -u GIT_INDEX_FILE`: Stufe 5 hat die Variable
+# gesetzt, gefragt wird aber .git/index.
+VERWAISTE=0
+VERWAISTE_PFADE=""
+KANDIDATEN=$(env -u GIT_INDEX_FILE git --no-optional-locks diff --cached --diff-filter=d --raw --no-abbrev 2>/dev/null)
+UNMERGED=$(env -u GIT_INDEX_FILE git --no-optional-locks ls-files --unmerged 2>/dev/null | head -1)
+if [ -n "$UNMERGED" ]; then
+  VERWAISTE=1
+  VERWAISTE_PFADE="(unaufgeloeste Merge-Eintraege im Standard-Index)"
+elif [ -n "$KANDIDATEN" ]; then
+  OBJEKT_LISTE="${TMPDIR:-/tmp}/tor-objekte.$$"
+  env -u GIT_INDEX_FILE git --no-optional-locks rev-list --objects --all 2>/dev/null > "$OBJEKT_LISTE"
+  while IFS='	' read -r META PFAD; do
+    NEU_SHA=$(printf '%s' "$META" | awk '{print $4}')
+    [ -z "$NEU_SHA" ] && continue
+    case "$NEU_SHA" in *[!0-9a-f]*) continue ;; esac
+    case "$NEU_SHA" in 0000000000000000000000000000000000000000) continue ;; esac
+    if ! grep -q "^$NEU_SHA" "$OBJEKT_LISTE"; then
+      VERWAISTE=$((VERWAISTE + 1))
+      VERWAISTE_PFADE="${VERWAISTE_PFADE}${VERWAISTE_PFADE:+ }${PFAD}"
+    fi
+  done <<KANDIDATEN_ENDE
+$KANDIDATEN
+KANDIDATEN_ENDE
+  rm -f "$OBJEKT_LISTE" 2>/dev/null
+fi
+if [ "$VERWAISTE" -eq 0 ]; then
+  if env -u GIT_INDEX_FILE git read-tree HEAD 2>/dev/null; then
+    echo "INDEX ANGEGLICHEN  Standard-Index an HEAD angeglichen (kein Index-Blob ausserhalb der Historie); der Arbeitsbaum ist unberuehrt"
+  else
+    echo "INDEX-ANGLEICHUNG GESCHEITERT  read-tree HEAD auf .git/index kam nicht durch (haelt jemand den Index?) — der Commit selbst ist verbucht, der Standard-Index bleibt wie er war" >&2
+  fi
+else
+  echo "INDEX NICHT ANGEGLICHEN  $VERWAISTE Index-Blob(s) in keinem Commit — echte ungesicherte Arbeit, der Standard-Index bleibt unangetastet: $VERWAISTE_PFADE"
+fi
 
 # NACHSORGE (K-04): was der Commit selbst hinterlaesst, kommt im SELBEN Aufruf beiseite —
 # F-10, hier laesst es sich nicht loeschen. **Die Vorsorge oben ersetzt sie nicht:** die eine

@@ -865,6 +865,149 @@ test('A-08 Form B: ein laufender git-Prozess DIESES Repos schuetzt einen alten 0
   assert.equal(existsSync(p), false, 'der Rest liegt noch, obwohl kein git mehr laeuft');
 });
 
+/**
+ * ── A-07 — DER STANDARD-INDEX DIVERGIERT UNBEMERKT, DIE HALDE WAECHST UNBEGRENZT ───────────
+ *
+ * **Der Befund:** Stufe 5 committet am Standard-Index VORBEI — er divergiert mit jedem
+ * Tor-Commit (jede ueber das Tor ANGELEGTE Datei wird dort zum Phantom-Loeschen), `git status`
+ * lag am 08.08. bei 41 Eintraegen neben EINER echten Aenderung. Und `index.$$` wurde nie
+ * initialisiert und nie geraeumt: 2554 Halden-Dateien (10.08.), PID-Wiederverwendung liess
+ * Laeufe FREMDE Indizes erben — Realfall beim Tor-Commit ce1ff7d5: `invalid object 8fd24e1c
+ * fuer '-f'` live aus einem geerbten Halden-Index.
+ *
+ * **Rot-Belege vor dem Bau, selbst gemessen (10.08.):**
+ *
+ * ```text
+ * trap im Tor                        0     (sieben exit-Punkte, keiner raeumt)
+ * Halde $TMPDIR/ticket-index      2554     und waechst je Tor-Lauf
+ * Standard-Index divergent          38     davon 18 Phantom-Loeschungen
+ * ```
+ *
+ * **Zur Herstellung der Faelle:** der Kippfall (A-07-2) entsteht mit `git add` im
+ * Wegwerf-Repo — der Blob liegt dann in der Objektdatenbank, aber in KEINEM Commit; genau
+ * die Lage, in der die Angleichung Arbeit verwerfen wuerde. Der geerbte Index (A-07-4
+ * Gegenprobe) entsteht ueber `exec`: das Vorlege-Skript und das Tor sind DERSELBE Prozess,
+ * `index.$$` zeigt fuer beide auf dieselbe Datei — die PID-Erbschaft, ohne auf eine echte
+ * PID-Wiederverwendung warten zu muessen.
+ */
+
+/** Wie `tor`, aber mit eigenem TMPDIR — die Halde der Probe liegt dann beobachtbar allein. */
+function torMitHeim(verz, heim, ...args) {
+  try {
+    const aus = execFileSync('bash', ['scripts/commit-pruefen.sh', ...args],
+      { cwd: verz, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
+        env: { ...process.env, TMPDIR: heim } });
+    return { code: 0, text: aus };
+  } catch (e) {
+    return { code: e.status ?? -1, text: `${e.stdout ?? ''}${e.stderr ?? ''}` };
+  }
+}
+
+const standardIndexStand = (verz) =>
+  execFileSync('git', ['ls-files', '--stage'], { cwd: verz, encoding: 'utf8' });
+
+test('A-07-1a: nach erfolgreichem Commit ist der Standard-Index an HEAD angeglichen — und der Arbeitsbaum unberuehrt', () => {
+  // Vor A-07 blieb der Standard-Index nach jedem Tor-Commit auf dem alten Stand stehen —
+  // `git diff --cached` meldete die committete Datei weiter als geaendert. **Das Rot dieser
+  // Zusage ist genau diese Divergenz; im echten Repo stand sie beim Bau bei 38.**
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+
+  const r = tor(verz, 'Probe: Angleichung', 'anfang.txt');
+  assert.equal(r.code, 0, `der Lauf ist gescheitert:\n${r.text}`);
+  assert.match(r.text, /INDEX ANGEGLICHEN/, 'die Angleichung geschah still oder gar nicht');
+
+  const cached = execFileSync('git', ['diff', '--cached', '--name-only'],
+    { cwd: verz, encoding: 'utf8' }).trim();
+  assert.equal(cached, '', `der Standard-Index divergiert nach dem Tor-Commit weiter: ${cached}`);
+  // `read-tree` schreibt NUR den Index — die Datei auf der Platte darf sich nicht ruehren.
+  assert.equal(readFileSync(join(verz, 'anfang.txt'), 'utf8'), 'zweiter Stand\n',
+    'die Angleichung hat den ARBEITSBAUM angefasst — genau das darf sie nie');
+});
+
+test('A-07-2 (Gegenprobe zu 1b): echte gestagete Arbeit wird NICHT verworfen — Index unangetastet, Meldung mit Zahl und Pfad', () => {
+  // **Ohne dieses Kriterium waere „Index immer plattmachen" gruen — und das waere schlimmer
+  // als der Fehler.** Der Blob von ungesichert.txt liegt nach `git add` in der
+  // Objektdatenbank, aber in KEINEM Commit: die einzige Kopie dieser Arbeit ist der Index.
+  const verz = wegwerfRepo();
+  writeFileSync(join(verz, 'ungesichert.txt'), 'Arbeit, die nur der Index kennt\n');
+  execFileSync('git', ['add', 'ungesichert.txt'], { cwd: verz });
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+  const vorher = standardIndexStand(verz);
+
+  const r = tor(verz, 'Probe: Kippfall', 'anfang.txt');
+  assert.equal(r.code, 0, `der Kippfall bricht den Commit ab — melden ja, blockieren nein:\n${r.text}`);
+  assert.equal(standardIndexStand(verz), vorher,
+    'der Standard-Index wurde trotz ungesicherter Arbeit angefasst — die Arbeit waere verloren');
+  assert.match(r.text, /INDEX NICHT ANGEGLICHEN\s+1 /, 'die Meldung nennt die ZAHL nicht');
+  assert.match(r.text, /ungesichert\.txt/, 'die Meldung nennt den PFAD nicht');
+  assert.doesNotMatch(r.text, /INDEX ANGEGLICHEN/, 'das Tor meldet Angleichung UND Kippfall zugleich');
+});
+
+test('A-07-4: der Wegwerf-Index wird ueber `trap EXIT` geraeumt — auf dem Erfolgs- UND dem Abbruchpfad', () => {
+  // **Warum `trap` und nicht „am Ende": sieben Auswege, nur einer ist „am Ende".** Ein `rm`
+  // in der letzten Zeile liesse die sechs Abbruchpfade weiter Halde produzieren — genau
+  // daraus sind die 2554 Dateien entstanden. Die Struktur-Haelfte nagelt das Konstrukt fest,
+  // die Wirkungs-Haelfte beide Pfade.
+  const quelle = readFileSync(TOR, 'utf8');
+  assert.match(quelle, /trap '[^']*\$GIT_INDEX_FILE[^']*' EXIT/,
+    'kein `trap … EXIT` auf den Wegwerf-Index — die Halde waechst weiter je Abbruch');
+
+  const verz = wegwerfRepo();
+  const heim = mkdtempSync(join(tmpdir(), 'a07-heim-'));
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+
+  const gut = torMitHeim(verz, heim, 'Probe: Erfolgspfad', 'anfang.txt');
+  assert.equal(gut.code, 0, `der Erfolgslauf ist gescheitert:\n${gut.text}`);
+  const nachErfolg = readdirSync(join(heim, 'ticket-index')).filter((e) => /^index\./.test(e));
+  assert.deepEqual(nachErfolg, [],
+    `der Erfolgspfad laesst seinen Index liegen: ${nachErfolg.join(', ')}`);
+
+  const schlecht = torMitHeim(verz, heim, 'Probe: Abbruchpfad', 'gibt-es-nicht.txt');
+  assert.notEqual(schlecht.code, 0, 'der Abbruchfall ist nicht abgebrochen — die Probe traegt nicht');
+  const nachAbbruch = readdirSync(join(heim, 'ticket-index')).filter((e) => /^index\./.test(e));
+  assert.deepEqual(nachAbbruch, [],
+    `der ABBRUCHpfad laesst seinen Index liegen — genau daraus ist die Halde entstanden: ${nachAbbruch.join(', ')}`);
+});
+
+test('A-07-4 GEGENPROBE: ein vorgelegter Fremd-Index unter demselben Pfad beeinflusst den Lauf nicht — und liegt danach beiseite', () => {
+  // **Die PID-Erbschaft, nachgestellt:** `exec` behaelt die PID, das Vorlege-Skript und das
+  // Tor teilen sich `index.$$`. Ohne Initialisierung stirbt der Lauf am geerbten Muell
+  // (Realfall ce1ff7d5: `invalid object … fuer '-f'`); mit ihr wird der Erbe BEISEITEGELEGT
+  // — nie geloescht, er ist fremder Zustand — und der Lauf startet frisch aus HEAD.
+  const verz = wegwerfRepo();
+  const heim = mkdtempSync(join(tmpdir(), 'a07-erbe-'));
+  writeFileSync(join(verz, 'anfang.txt'), 'zweiter Stand\n');
+
+  const skript = 'mkdir -p "$TMPDIR/ticket-index"; '
+    + 'printf \'kein index, nur muell\' > "$TMPDIR/ticket-index/index.$$"; '
+    + 'exec bash scripts/commit-pruefen.sh "Probe: geerbter Index" anfang.txt';
+  let r;
+  try {
+    const aus = execFileSync('bash', ['-c', skript],
+      { cwd: verz, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
+        env: { ...process.env, TMPDIR: heim } });
+    r = { code: 0, text: aus };
+  } catch (e) {
+    r = { code: e.status ?? -1, text: `${e.stdout ?? ''}${e.stderr ?? ''}` };
+  }
+
+  assert.equal(r.code, 0, `der geerbte Index hat den Lauf gebrochen — die Erbschaft wirkt weiter:\n${r.text}`);
+  assert.match(r.text, /GEERBTER INDEX/, 'die Erbschaft geschah still — niemand erfaehrt von der PID-Wiederverwendung');
+  assert.doesNotMatch(r.text, /invalid object/, 'das invalid-object-Rauschen aus dem Realfall ist wieder da');
+
+  const drin = execFileSync('git', ['show', '--name-only', '--format=', 'HEAD'],
+    { cwd: verz, encoding: 'utf8' });
+  assert.match(drin, /anfang\.txt/, 'der genannte Pfad fehlt im Commit');
+
+  const beiseite = join(heim, 'ticket-index', '_to_delete');
+  assert.equal(existsSync(beiseite), true, 'der Erbe wurde geloescht statt beiseitegelegt');
+  const abgelegt = readdirSync(beiseite).flatMap((tag) => readdirSync(join(beiseite, tag)));
+  assert.ok(abgelegt.length >= 1, 'unter _to_delete liegt nichts — wohin ist der Erbe?');
+  const halde = readdirSync(join(heim, 'ticket-index')).filter((e) => /^index\./.test(e));
+  assert.deepEqual(halde, [], `nach dem Lauf liegt wieder Halde: ${halde.join(', ')}`);
+});
+
 test('A-08-10: die Blockade-Meldung nennt das KOMMANDO des Halters, nicht nur die PID', async () => {
   // *"Halter: 59792" sagt niemandem etwas; "Halter: 59792 (XPCService)" beendet die Suche
   // sofort.* Geprueft am unveraenderten Schutzpfad (Lock MIT Inhalt + Halter).
