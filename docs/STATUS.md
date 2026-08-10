@@ -744,8 +744,10 @@ auftrag: A-08
 titel: "Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt - statt ob irgendwer die Datei offen hat"
 datei: docs/auftraege/aktiv/A-08-halter-nach-kommando.md   # Traegerblatt; traegt den §11-Generator-Bericht
 nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidung + Kriterien; FUEHRENDER Wortlaut A-08-1
-zustand: RELEASE_FREI
+zustand: VEROEFFENTLICHT
 ballbesitz: yama
+release_sha: "8648a4cb"
+release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: main-Integration in Vertretung ausgefuehrt — reiner FF c908d3f0..8648a4cb auf fork UND backup-private. Das §10-Protokoll der frischen Release-Instanz (b2f8c44b, RELEASE_FREI an 85b03d23) uebernommen und das Grundtor am Kandidaten 8648a4cb selbst erneut gefahren: tsc clean, Insel 1689/1689, Bundle byte-gleich, bash -n OK, Tor-Suite 38/38, Buehne 6/6, php artisan test 880/880. Ihr verweigerter Sicherungs-Push (2b5aebae) ist nachgeholt: Linie liegt auf beiden Remotes. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 claim_release: "plan-pruefer 08.08.: ABGENOMMEN (Erst- und Zweitvotum unabhaengig deckungsgleich), Release-Station leer bei P0 — FRISCHE Release-Pruefer-Instanz wird gestartet. Claim VOR dem Start. LEHRE aus der Instanzen-Kollision der Abnahme: eine 'failed'-Meldung ist KEIN Todesbeweis — vor jedem kuenftigen Ersatzstart pruefe ich zusaetzlich die Commit-Historie auf spaete Commits der totgesagten Instanz."
 basis_bau: c2de1eec      # der Stand, auf dem gebaut wurde (HEAD bei Uebernahme, 1f17f93a = IN_ARBEIT-Commit direkt darauf)
 pruef_sha: 85b03d23

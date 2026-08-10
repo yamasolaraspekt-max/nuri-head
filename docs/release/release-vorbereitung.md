@@ -188,3 +188,29 @@ statuswahrheit: "A-01/A-02/A-03 auf VEROEFFENTLICHT gesetzt, Antwort auf die
   Evaluator-Nachverfolgung in STATUS.md — im selben Commit wie dieses Protokoll"
 naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama"
 ```
+
+---
+
+## Protokoll: Release A-08 nach main (10.08.)
+
+```yaml
+vorgang: release-a08-main
+datum: 2026-08-10
+rolle: release-pruefer (Stamm-Instanz, Vertretung nach Regelwerk 1.4.2)
+kandidat: 8648a4cbe0a40cace0ac03c409064efa0a8be8ea
+release_frei: "b2f8c44b (frische Release-Instanz, §10 an 85b03d23 vollstaendig: Kette
+  BEREIT->IN_ARBEIT->Bau->CODE_FERTIG->Erst-+Zweitvotum als Vorfahrenkette, Scope exakt
+  fuenf Blatt-Dateien, Rueckweg git revert 5a54b004, Wildbetriebs-Beleg). Ihr Push wurde
+  verweigert (2b5aebae) — Transport und main-Integration hier nachgeholt."
+enthaelt: "A-08 (Abnahme 23b3a490 + Zweitvotum f430242d an 85b03d23), A-05-Messbericht
+  (ABGENOMMEN b29bb79d, bleibt beim Planner), Blaetter A-09/A-10, Doku/Governance"
+grundtor_eigenlauf: "tsc clean · Insel 1689/1689 · Bundle byte-gleich (98d27e80…) ·
+  bash -n OK · Tor-Suite 38/38 · Buehne 6/6 · php artisan test 880/880 (3110 Assertions)"
+ff_bedingung: "fork/main und backup-private/main beide auf c908d3f0, Vorfahr des Kandidaten"
+geheimnisse: "diff fork/main..Kandidat: 0 Treffer, keine .env, kein _to_delete"
+ausfuehrung:
+  - "push fork  8648a4cb -> main   c908d3f0..8648a4cb  FF"
+  - "push backup-private 8648a4cb -> main  c908d3f0..8648a4cb  FF"
+statuswahrheit: "A-08 VEROEFFENTLICHT mit release_sha im selben Commit wie dieses Protokoll"
+naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama"
+```
