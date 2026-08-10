@@ -1,5 +1,12 @@
 # ÜBERNAHME Playground → ticket, Dachplanung
 
+> **KEIN AUFTRAG — VORLAGE.** Yama, 10.08.2026: *„das muss alles erst mal fachlich geprüft
+> validiert werden — das ist die Aufgabe von Planner und Plan-Prüfer."*
+> **Ball: Planner, danach Plan-Prüfer.** Der Generator hat hier **gemessen, nicht bewertet**:
+> Existenz, Umfang, Gleichheit, Fundstelle. **Ob ein Stück fachlich taugt, steht in keinem dieser
+> Sätze** — auch nicht in den Reihenfolge-Vorschlägen, die Vorschläge bleiben.
+> **Es wird nichts kopiert, bevor Planner und Plan-Prüfer geprüft haben.**
+
 **Auftrag von Yama, 10.08.2026:** alles aus dem Playground-PV-Dachplaner, was für das 3D-Haus und
 den Dachplan sinnvoll ist, wird übernommen und hier eingefügt. **Das „ob" ist entschieden.**
 **Rolle:** Generator · **Zustand:** gemessen, **nichts kopiert** · **Ball:** Planner (Auftrag schneiden) + eine Frage an Yama.
