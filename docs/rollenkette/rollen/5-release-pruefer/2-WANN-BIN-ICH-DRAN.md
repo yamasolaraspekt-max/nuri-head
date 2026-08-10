@@ -1,0 +1,7 @@
+# WANN BIN ICH DRAN
+
+| Lage | dran? |
+|---|---|
+| Ein Votum C steht auf **ABGENOMMEN** | **ja** |
+| Ich war Generator oder Evaluator bei diesem Auftrag | **nein — Rollentrennung** |
+| Yama hat noch nicht veröffentlicht | egal — mein Schein ist die Grundlage, nicht die Freigabe |
