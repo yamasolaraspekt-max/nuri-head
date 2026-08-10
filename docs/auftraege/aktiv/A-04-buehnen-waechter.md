@@ -240,6 +240,64 @@ löst damit den Sofort-Trigger aus. **Er ist bereits ausgelöst und beantwortet:
 deren §5-Punkt *„vorgeschriebene Formen müssen vorhanden UND in Gebrauch sein"* genau diese Klasse
 adressiert. **A-04 ist die bauliche Antwort, 1.1 die prozessuale.**
 
+## §11-Bericht des Generators (10.08.)
+
+```yaml
+auftrag: A-04
+basis: 89f373d9 (Blatt) · Bau-Ausgang HEAD 26a2c99a · IN_ARBEIT-Commit 17984c82
+commit: c3d52f09
+scope:
+  - scripts/buehnen-waechter.sh            # NEU, der Detektor
+  - scripts/__tests__/buehnenWaechter.test.mjs  # NEU, die Zusagen (7)
+  - scripts/__tests__/browserBuehne.test.mjs    # B3-Auflage: exec-Zeile-Zusage ergaenzt (6 -> 7)
+  - docs/auftraege/ANKER-BROWSER.md        # A-04-6: Waechter als Pflichtschritt (grep 0 -> 1)
+tests:
+  statisch: pass          # bash -n beide Skripte, node --check beide Suiten
+  unit: "14/14"           # buehnenWaechter 7/7 + browserBuehne 7/7, je selbst gefahren
+  backend: nicht_anwendbar
+  schema: nicht_anwendbar
+  build: nicht_anwendbar
+  browser: nicht_anwendbar  # laut Blatt (§5-Block)
+abweichungen:
+  - "ANKER-BROWSER.md steht nicht im Scope-Block des Blatts (der nennt nur die zwei Skripte),
+    wird aber von A-04-6 (P1) und dem Rueckweg-Absatz ('plus eine Zeile in ANKER-BROWSER')
+    ausdruecklich verlangt — genau ein Absatz eingefuegt, sonst nichts."
+  - "Rest-2-Auslegung im Positivfall A-04-3: 'frei erfundener Name' gilt fuer die unsicheren
+    Faelle; Exit 0 ist nur zusagbar, wenn die Aufloesung exakt ticket_testing ergibt. Der Name
+    kommt deshalb als blosse ZEICHENKETTE in Prozessumgebung bzw. Wegwerf-.env.testing vor —
+    verbunden wird nichts: der artisan-Stub schlaeft nur, die php -S-Proben dienen ein LEERES
+    Wegwerf-Verzeichnis aus. KEINE echte Buehne gestartet, kein Zugriff auf ticket/ticket_testing."
+  - "Test-Naht BUEHNEN_WAECHTER_NUR_PIDS (PID-Filter, nur fuer die Suite dokumentiert):
+    Positivfaelle laufen mit Naht (gegen zufaellig mitlaufende fremde Buehnen), Negativfaelle
+    OHNE Naht — eine Mutation 'Naht immer aktiv' oder 'nur eigener Baum' faellt dort."
+  - "Formen-Muster bewusst laut: es matcht php-Binaries mit Version (Herd: php84) und Pfaden
+    mit Leerzeichen; eine Befehlszeile, die 'php -S'/'artisan serve' nur als TEXT traegt
+    (z. B. ein grep), wuerde als UNSICHER gemeldet — im Zweifel laut, nie still (Kante 3)."
+kriterien:
+  A-04-1: "erfuellt — FALSCH-Meldung traegt PID, Startbefehl, gefundenen Namen; exit 3"
+  A-04-2: "erfuellt — php -S ohne DB_DATABASE UND artisan serve ohne APP_ENV je UNSICHER;
+           dazu die Rot-Zusage: DB_DATABASE bei artisan serve zaehlt NICHT als Sicherheit
+           (WIRKUNGSLOS benannt — der Irrtum des 05.08.)"
+  A-04-3: "erfuellt — beide Formen korrekt gestartet -> BUEHNE OK + exit 0"
+  A-04-4: "erfuellt — verhaltensseitig (alle Proben leben nach dem Lauf) + Quell-Zusage
+           (kein kill/pkill/rm/mv im Code)"
+  A-04-5: "erfuellt — SECHS Mutationen einzeln gefahren, jede faellt, Datei danach
+           md5-identisch (9916d803… Waechter, 23ee4473… Buehne):
+           M1 Serve-Muster totgelegt -> 3 rot · M2 Gleichheit auf Suffix -> 1 rot
+           (zz_ticket_testing faellt; ticket_testing_kopie deckt die Praefix-Richtung) ·
+           M3 Befund-exit 3->0 -> 2 rot · M4 Meldung ohne DB-Name -> 1 rot ·
+           M5 Suche auf eigenen Baum verengt -> 3 rot · M6 exec-Zeile ohne APP_ENV -> 1 rot (B3)"
+  A-04-6: "erfuellt — grep -c buehnen-waechter ANKER-BROWSER.md: Basis 0, jetzt 1"
+  B3: "geschlossen — Zusage in browserBuehne.test.mjs, Mutation M6 faellt"
+drift_zusage: "beide Skripte muessen denselben ERWARTETE_DB-Namen tragen, sonst faellt die
+  Zusage; zusaetzlich ist der Waechter-Name auf woertlich ticket_testing verankert"
+erste_echte_messung: "der Waechter fand beim ersten Lauf die VERWAISTE Buehne PID 48098
+  (05.08. 00:58, ppid 1, php84 -S :65535, Herd-Pfad MIT Leerzeichen) und loeste sie ueber
+  APP_ENV=testing -> ticket-a01/.env.testing als ticket_testing/OK auf — exakt die
+  Prozessklasse, fuer die er gebaut wurde. NICHT beendet (Nicht-Ziel 3), nur gemeldet."
+offene_akzeptanz: []
+```
+
 ## Offene Punkte für den Plan-Prüfer
 
 1. **Ist der Detektor wirklich besser als eine dritte Aufrufform — oder baue ich eine zweite
