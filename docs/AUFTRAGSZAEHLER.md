@@ -51,6 +51,30 @@ sofort aus. Der Vorfall bleibt trotzdem Teil seiner Gruppe.
 
 ---
 
+## ⚠ NOCH NICHT ZUGEORDNET — geschnitten, aber in keiner Zehnergruppe
+
+**Gemessen 10.08.:** der Stand steht auf 10, aber es sind Aufträge geschnitten worden, die
+**nirgends gezählt** sind:
+
+```text
+A-11  Rollenmarke im Tor        vorgelegt, 1. DoR-Runde zurueckgewiesen   -> zaehlt (irgendwo)
+W-01  aus dem Werkbank-Register geschnitten 19:54                          -> zaehlt (irgendwo)
+aktive Auftragsblaetter: 13
+```
+
+**§13 ist eindeutig:** *„Ein Auftrag zählt, sobald der Planner ihn dem Plan-Prüfer erstmals
+vorlegt. Zur Zehnergruppe gehören damit auch zurückgewiesene, blockierte oder später abgebrochene
+Aufträge; **schlechte Pläne dürfen nicht aus der Statistik verschwinden**."*
+
+> **Ich entscheide NICHT, wohin sie zählen.** *Genau diese Frage — alte oder neue Zehnergruppe —
+> liegt seit dem 10.08. beim Plan-Prüfer, weil ich die Prüfung geschrieben habe, deren Zähler daran
+> hängt. Sie zu beantworten, während sie offen bei ihm liegt, wäre die Selbstabnahme, die §18
+> verbietet.*
+
+**Warum es trotzdem hier steht:** *solange die Frage offen ist, entstehen weiter Aufträge — und
+jeder unnotierte ist einer, den die nächste §13-Prüfung nicht sieht.* **Eine Statistik, die während
+der Klärung leer läuft, misst am Ende die falsche Gruppe.**
+
 ## Fehlerklassen dieser Gruppe — die SOFORT-Klausel (B3, seit 08.08.)
 
 > **§13:** *„die zweite Wiederholung derselben Fehlerklasse löst die Skill- und Ursachenprüfung
