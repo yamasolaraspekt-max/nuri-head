@@ -6,15 +6,15 @@
 
 | Auftrag | Zustand | Ball | letzter Beleg | offen |
 |---|---|---|---|---|
-| **A-01** Dach aus Kontur | `RELEASE_FREI` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-02** Lock-Halter | `RELEASE_FREI` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
-| **A-03** Bühnen-Riegel | `RELEASE_FREI` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
-| **A-04** Bühnen-Wächter | **`RELEASE_FREI`** | **Yama** | `c3d52f09` · Votum `b6a63e3e` · §10 im Blatt | Fehlerklasse **KEINE** · §10 alle Punkte grün (Kette per is-ancestor, 7/7+7/7 am HEAD selbst, Revert-Probe sauber) · **Realfund PID 48098** läuft weiter — Beenden entscheidet Yama |
+| **A-01** Dach aus Kontur | `VERÖFFENTLICHT` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
+| **A-02** Lock-Halter | `VERÖFFENTLICHT` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
+| **A-03** Bühnen-Riegel | `VERÖFFENTLICHT` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
+| **A-04** Bühnen-Wächter | **`VERÖFFENTLICHT`** | – | `c3d52f09` · Votum `b6a63e3e` · §10 im Blatt | Fehlerklasse **KEINE** · §10 alle Punkte grün (Kette per is-ancestor, 7/7+7/7 am HEAD selbst, Revert-Probe sauber) · **Realfund PID 48098** läuft weiter — Beenden entscheidet Yama |
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
-| **A-07** Index-Divergenz | **`RELEASE_FREI`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
+| **A-07** Index-Divergenz | **`VERÖFFENTLICHT`** | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
 | **A-09** Repo-Bezug über `--git-dir` | **`IN_ARBEIT`** | **Generator** | Claim `ccf9292c` · IN_ARBEIT vor erster Scope-Änderung | `GIT_DIR` aufgenommen statt weggebründet · Bau läuft |
-| **A-10** Melder am leeren Ergebnis | **`RELEASE_FREI`** | **Yama** | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
+| **A-10** Melder am leeren Ergebnis | **`VERÖFFENTLICHT`** | – | `47c0aa73` · Votum `f6909653` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 1692/1692 am HEAD selbst · Bundle selbst nachgebaut byte-gleich · Revert-Probe sauber · drei Abweichungen gewürdigt, kein Befund |
 | **A-11** Rollenmarke im Tor | `ENTWURF` | Plan-Prüfer | `331cd125` | **B4** aus §13 · geclaimt (zweite Instanz) · baut **zuletzt** der drei |
 | **W-01** Raster und Fang | **`BEREIT`** | – | `fd556f34` · Basis `32f83a6f` | ⚠ mein `IN_ARBEIT` **zurückgenommen**: A-09 war 11 s früher, §3 lässt nur eines · Scope unberührt, §7-Vorprüfung 6/6 gilt weiter |
 | **W-02** Wand zeichnen | **`BEREIT`** | **Generator** | `debf3fbe` (1. Review) | Werkbank-Schiene · Zeilenzahlen aufs Zeichen belegt |
@@ -818,7 +818,8 @@ darübersteht. **Hiermit richtiggestellt: der Befund ist seiner.**
 auftrag: A-01
 titel: "Dach aus Kontur - nicht-rechteckige Kontur bekommt eine lesbare Absage"
 datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
-zustand: ABGENOMMEN
+zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF c908d3f0 (05.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: release-pruefer
 basis_sha: 16d5bbde
 pruef_sha: "94b58aaf"
@@ -856,7 +857,8 @@ generator_meldung: "05.08. 09:30 CODE_FERTIG an 94b58aaf. Nachgebessert: nichtDa
 auftrag: A-02
 titel: "Commit-Tor: Halter fragen statt Ruhe raten - und bei Blockade ENV_BLOCKED melden statt raeumen"
 datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
-zustand: ABGENOMMEN
+zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF c908d3f0 (05.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: release-pruefer
 basis_sha: 93a9691f
 pruef_sha: "6953198a"
@@ -889,7 +891,8 @@ sie nicht als stille Weiterreichung erscheint.
 auftrag: A-03
 titel: "Browser-Buehne: der sichere Aufruf wird erzwungen, der lautlose wird laut"
 datei: docs/auftraege/aktiv/A-03-browser-buehne-testdatenbank.md
-zustand: ABGENOMMEN
+zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF c908d3f0 (05.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: planner
 basis_sha: 89d69c13
 pruef_sha: "26e378a5"
@@ -912,7 +915,8 @@ naechster_schritt: "ERLEDIGT: A-04 ist geschnitten (0722d4f5) und in Planpruefun
 auftrag: A-04
 titel: "Buehnen-Waechter: erkennt eine laufende Buehne auf einer Nicht-Testdatenbank, egal wie sie gestartet wurde"
 datei: docs/auftraege/aktiv/A-04-buehnen-waechter.md
-zustand: RELEASE_FREI
+zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF e7c6e618 (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: yama
 basis_sha: 89f373d9
 pruef_sha: c3d52f09
@@ -971,7 +975,8 @@ naechster_schritt: "ERLEDIGT 10.08. — (1) als A-10 geschnitten (607b9f7a), (2)
 auftrag: A-07
 titel: "Der Nebenzustand des Commit-Tors: .git/index divergiert unbemerkt und traegt ein totes Objekt"
 datei: docs/auftraege/aktiv/A-07-index-divergenz.md
-zustand: ABGENOMMEN
+zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF e321f2a2 (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: release-pruefer
 in_arbeit_gesetzt: "generator 10.08.: VOR der ersten Scope-Aenderung (§3). §7-Vorpruefung bestanden: basis_sha ff549b88 ist Vorfahr von HEAD (e3d7b2c8), Scope driftfrei (diff ff549b88..HEAD auf beide Tor-Dateien leer, Arbeitsbaum content-identisch zu HEAD), Suite selbst gefahren 38/38, Rot-Lagen leben ALLE und wachsen weiter (trap 0 · Halde 2554 · Divergenz 38 --name-only / 58 status / 18 Phantome — Vortag: 35/55/2551). STATUS.md vor diesem Commit content-identisch zu HEAD, kein Beifang der parallelen A-04-Abnahme."
 code_fertig: "generator 10.08.: CODE_FERTIG — §11-Bericht im Blatt (A-07-index-divergenz.md), Basis ff549b88, Pruef-SHA c512f931 (traegt EXAKT die 2 Scope-Dateien, content-diff gegen Arbeitsbaum = 0). Suite 42/42 selbst gefahren (38 Bestand + 4 neue Zusagen A-07-1a/-2/-4/-4-Gegenprobe), vier Mutationen gefallen, md5-identisch wiederhergestellt (59e23956…). Regelfall VOR der ersten Angleichung gemessen: 20 Kandidaten-Blobs, 0 verwaist, 0 unmerged. Zusatz-Nachweis 1a real: status 58 -> 4, alle 4 echt, VIERZEHN verschwundene Eintraege einzeln index-frei belegt (>= 10 verlangt). A-07-5 EINMALIG erledigt: 2589 Halden-Dateien nach $TMPDIR/ticket-index/_to_delete/2026-08-10-A-07-5/ beiseitegelegt, 0 geloescht, 0 verblieben; voller Suite-Lauf hinterlaesst jetzt 0 statt ~35. GEMELDET: HEAD wanderte waehrend des Baus (parallele A-04-Release-Kette 18:54-18:58 committete durchs geteilte Arbeitsverzeichnis und nutzte damit das editierte Tor als ERSTNUTZER der Angleichung — Details und Mutationsfenster-Risiko als Abweichungen im Bericht). Kein gruen, keine Selbstabnahme — Ball beim Evaluator."
@@ -1006,7 +1011,8 @@ auftrag: A-08
 titel: "Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt - statt ob irgendwer die Datei offen hat"
 datei: docs/auftraege/aktiv/A-08-halter-nach-kommando.md   # Traegerblatt; traegt den §11-Generator-Bericht
 nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidung + Kriterien; FUEHRENDER Wortlaut A-08-1
-zustand: RELEASE_FREI
+zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF 8648a4cb (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: yama
 claim_release: "plan-pruefer 08.08.: ABGENOMMEN (Erst- und Zweitvotum unabhaengig deckungsgleich), Release-Station leer bei P0 — FRISCHE Release-Pruefer-Instanz wird gestartet. Claim VOR dem Start. LEHRE aus der Instanzen-Kollision der Abnahme: eine 'failed'-Meldung ist KEIN Todesbeweis — vor jedem kuenftigen Ersatzstart pruefe ich zusaetzlich die Commit-Historie auf spaete Commits der totgesagten Instanz."
 basis_bau: c2de1eec      # der Stand, auf dem gebaut wurde (HEAD bei Uebernahme, 1f17f93a = IN_ARBEIT-Commit direkt darauf)
@@ -1063,7 +1069,8 @@ naechster_schritt: "Generator baut (repo_git_laeuft-Zone + Zusagen + A-09-4-Kant
 auftrag: A-10
 titel: "Ein Dach, das KEINE Flaeche liefert, wird gemeldet - auch ohne Ausnahme"
 datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
-zustand: RELEASE_FREI
+zustand: VEROEFFENTLICHT
+nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF 2da18c44 (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
 ballbesitz: yama
 basis_sha: d58b220e
 basis_bau: 8343f206   # HEAD bei Uebernahme; d58b220e ist Vorfahr, Scope-Diff d58b220e..HEAD = 0 Zeilen
