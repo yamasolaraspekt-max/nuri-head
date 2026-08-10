@@ -182,6 +182,31 @@ Kriterium wäre „ich baue nebenbei das Werkzeug mit" grün — und Stufe 1 wä
 einer Woche wieder zwei Wahrheiten. **Heute fehlt die Fundstelle dort — das ist der Grund, warum
 dieser Auftrag beinahe als Neubau geschnitten worden wäre.***
 
+**W-01/1-8 (P1, §3 wird BELEGT, nicht behauptet — NEU 10.08. nach dem gemessenen Wettlauf):**
+Der `IN_ARBEIT`-Commit enthält den **Befehl mit Ausgabe**, der zeigt, dass kein anderer Auftrag auf
+`IN_ARBEIT` stand — **an beiden Orten geprüft**, weil der Zustand heute doppelt geführt wird:
+
+```text
+Tafelzeile      grep -cE '^\| \*\*[AW]-[0-9]+.*`IN_ARBEIT`' docs/STATUS.md
+Zustandsfeld    grep -c '^zustand: IN_ARBEIT' docs/STATUS.md
+beide 0  ->  frei.   Der Beleg gehoert in DENSELBEN Commit, der IN_ARBEIT setzt.
+```
+
+> **Rot heute belegbar am eigenen Vorgang.** `7dcbeba9` (20:25:56) setzte W-01/1 auf `IN_ARBEIT`
+> und enthält den Satz *„Nichts stand auf IN_ARBEIT"* — **ohne Befehl, ohne Ausgabe, ohne
+> Ortsangabe.** Elf Sekunden vorher hatte `d6846f69` A-09 gesetzt; der Verstoß wurde in `fec3a07a`
+> selbst gefunden und zurückgenommen.
+>
+> **Warum „an beiden Orten" der Kern ist:** A-09 wurde in Tafelzeile **und** Zustandsfeld gesetzt,
+> W-01 **nur** in der Tafelzeile. Selbst nachgemessen: `grep -c '^zustand: IN_ARBEIT'` ergibt an
+> beiden Commits **1** — **eine Prüfung nur des Feldes hätte den zweiten `IN_ARBEIT` nie gesehen.**
+>
+> **Ehrlich zur Wirkung:** Der Beleg **schließt das Fenster nicht**, er verkleinert es von einer
+> Vorprüfungsrunde auf die Dauer eines Commits. Ein echter Riegel braucht **einen** Ort für den
+> Zustand — siehe [`BEFUND-P02-DER-ERSTE-GEMESSENE-WETTLAUF.md`](../../BEFUND-P02-DER-ERSTE-GEMESSENE-WETTLAUF.md).
+> *Bis dahin ist dies das Beste, was ein Blatt verlangen kann: kein Hinweis im Fließtext, sondern
+> ein Nachweis, den der Evaluator prüft.*
+
 ## Kantenliste
 
 ```text
@@ -213,8 +238,11 @@ A-09   ENTWURF     scripts/commit-pruefen.sh                            KEINE Be
 A-11   ENTWURF     scripts/commit-pruefen.sh                            KEINE Beruehrung
 W-01/1 DIESES      docs/rollenkette/werkbank/**                         disjunkt zu allen
 
-§3-SCHRANKE: A-10 ist derzeit IN_ARBEIT. Dieses Blatt geht NICHT vor A-10s Abschluss in
-IN_ARBEIT — Dateifreiheit ist NICHT Ablauffreiheit (§3 Z.85, Lehre vom 10.08.).
+§3-SCHRANKE: Dateifreiheit ist NICHT Ablauffreiheit (§3 Z.85). Der Ablauf wird NICHT hier
+als Satz behauptet, sondern in W-01/1-8 als NACHWEIS verlangt — an beiden Orten, im
+selben Commit, der IN_ARBEIT setzt. Grund: am 10.08. um 20:25 ist genau dieser Satz
+in einem Blatt gestanden und ein Generator ist trotzdem ins Fenster gelaufen.
+Ein Hinweis im Fliesstext schuetzt nicht; ein geprueftes Kriterium schon.
 ```
 
 ```yaml

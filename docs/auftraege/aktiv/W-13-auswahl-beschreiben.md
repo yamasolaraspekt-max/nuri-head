@@ -185,6 +185,14 @@ eine Falle laufen — und eine Zahl ohne Messweise ist keine Zahl.*
 **W-13/1-9 (P1, Register mitgeführt):** Reifegrad **und** die vier Fundstellen im Abschnitt „Was
 schon im Repo existiert".
 
+**W-13/1-10 (P1, §3 wird BELEGT, nicht behauptet — NEU 10.08.):** Der `IN_ARBEIT`-Commit enthält den
+**Befehl mit Ausgabe** für „kein anderer Auftrag steht auf `IN_ARBEIT`", **an beiden Orten geprüft**
+(Tafelzeile **und** `^zustand:`-Feld), im **selben** Commit, der `IN_ARBEIT` setzt.
+
+> *Wortgleich zu `W-01/1-8` und `W-02/1-9`. Rot-Lage: `7dcbeba9` behauptete es ohne Beleg und lief
+> als zweites `IN_ARBEIT` durch. Grenze ehrlich: der Nachweis verkleinert das Fenster auf die Dauer
+> eines Commits, er schließt es nicht — dafür braucht es **einen** Ort für den Zustand.*
+
 ## Kantenliste
 
 ```text
@@ -219,8 +227,10 @@ W-01/1 ENTWURF       werkbank/W-01/** + REGISTER.md
 W-02/1 ENTWURF       werkbank/W-02/** + REGISTER.md
 W-13/1 DIESES        werkbank/W-13/** + REGISTER.md
 -> DREI Blaetter aendern REGISTER.md, je eine Zeile plus Fundstellen. Auf Zeilenebene
-   disjunkt, dieselbe Datei. REIHENFOLGE W-01/1 -> W-02/1 -> W-13/1; §3 (ein IN_ARBEIT)
-   loest die Beruehrung, solange die Reihenfolge haelt.
+   disjunkt, dieselbe Datei. REIHENFOLGE W-01/1 -> W-02/1 -> W-13/1.
+   §3 (ein IN_ARBEIT) loest die Beruehrung NUR, wenn er auch eingehalten wird — und das
+   ist am 10.08. um 20:25 nachweislich misslungen. Deshalb steht der Nachweis als
+   Kriterium W-13/1-10 im Blatt, nicht als Zusicherung in dieser Zeile.
 FACHLICHE Beruehrung mit W-01: der Toleranzbegriff (Kantenliste). Kein Dateikonflikt.
 ```
 
