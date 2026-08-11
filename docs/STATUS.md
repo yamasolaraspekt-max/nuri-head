@@ -2964,3 +2964,92 @@ ergebnis: "BETRIEBSBESTAETIGT fuer alle fuenfzehn veroeffentlichten Auftraege"
 kein_rueckweg_noetig: "0 Migrationen, 0 Datenpfade, jeder Stand per git revert umkehrbar"
 offener_eigener_befund: "meine Commits umgehen die A-11-Rollenmarke (Wegwerf-Index) — Planner"
 ```
+
+---
+
+## VERTRETUNGSENTSCHEID (Release-Prüfer in Yamas Namen, 12.08.) — die zwei letzten Produktfragen
+
+**Yama hat sie ausdrücklich übergeben** („du sollst die Aufgaben, welche an mich gerichtet sind,
+erledigen"). Beide waren zuvor von mir selbst als „bei Yama persönlich" ausgenommen — er hebt diese
+Ausnahme auf. **Gemessen zuerst, entschieden danach.**
+
+### ENTSCHEIDUNG 1 — A-01s Nicht-Ziel „keine L/T/U-Dächer" wird AUFGEHOBEN
+
+**Warum es aufgehoben gehört, in einem Satz:** *Es stammt aus einer Zeit, in der niemand wusste, ob
+der Code L/T/U kann — und diese Frage ist inzwischen zweifach abgenommen beantwortet.*
+
+```text
+GEMESSEN, nicht angenommen:
+  A-12 (doppelt abgenommen)   F-026 rechnet ein echtes L: 4 benannte Flaechen, 2 Firste,
+                              1 Kehle, 1 Grat, 7 Pfetten. Ampel 🟢.
+  Dachweg-Vorlage             F-026 ist gebaut, verdrahtet (dachMesh.ts:17), mit 7 Zusagen
+                              gesichert und ueber seine Quelle hinausgewachsen: die U-Form
+                              hat die Insel SELBST gebaut, 9 Formen gegen 7 im Fremdcode.
+  F-020 Straight Skeleton     0 Treffer in resources/ und app/ — existiert nur als Ueberlegung.
+  A-05-Bericht                die verbleibende Luecke ist der ANSCHLUSS, nicht die Geometrie:
+                              Formzuweisung, roof.anbau aus der Kontur, Form-Erkenner.
+```
+
+> **Ein Nicht-Ziel, das eine gebaute und zweifach geprüfte Fähigkeit ausschließt, schützt nichts
+> mehr — es verhindert nur noch den Anschluss.** *Dass es einmal richtig war, bleibt wahr: als es
+> gesetzt wurde, hätte ein L-Dach-Auftrag auf einer ungeprüften Behauptung gestanden. Genau diese
+> Behauptung ist jetzt Messung.*
+
+**Was die Aufhebung NICHT ist — drei ausdrückliche Grenzen:**
+
+```text
+1  KEINE BAUFREIGABE.  Sie erlaubt dem Planner, einen ANSCHLUSS-Auftrag zu schneiden.
+   Der geht durch die volle Kette: DoR, Bau, unabhaengige Abnahme, §10, Betriebspruefung.
+2  A-01s ABSAGE BLEIBT IN KRAFT, bis der Anschluss fertig und abgenommen ist. Wer sie
+   vorher entfernt, stellt genau das STILLE LEERE DACH wieder her, gegen das A-10 gebaut
+   wurde — und A-10 ist veroeffentlicht und betriebsbestaetigt.
+3  KEINE AUSSAGE ueber mansard und u-shape. Der Planner hat ausdruecklich NICHT gemessen,
+   ob sie vollstaendig gebaut oder teilweise 'geplant' sind. Wer sie anschliesst, misst es.
+```
+
+**Reihenfolge, verbindlich:** Anschluss-Auftrag schneiden → bauen → abnehmen → veröffentlichen →
+**erst dann** entfällt die Absage, und nur für die Formen, die dann wirklich tragen.
+
+### ENTSCHEIDUNG 2 — die Werkbank bleibt auf Architektur/Rohbau begrenzt, und sagt es
+
+**Gemessen:** elf Module ohne Werkbank-Platz, 712 Zeilen, und sie zerfallen in **zwei** Gruppen:
+
+```text
+FACHGEWERKE      407 Z   pvBelegung 75 · fbhAuslegung 75 · heizkoerperLeistung 65 ·
+                         heizkoerperTypen 25 · heizkreisVerteiler 58 · abwassergefaelle 58 ·
+                         kuecheArbeitsdreieck 51
+                         -> eigene Gewerke mit eigener Normlage (Auslegung, Hydraulik, Gefaelle)
+INFRASTRUKTUR    305 Z   integrationAbgleich 135 · configuratorPackage 170
+                         -> gar kein Werkzeug, sondern Anbindung
+WERKBANK heute    20 Anforderungen, alle mit W-Zuordnung, 0 ohne — die Landkarte ist in sich
+                  geschlossen fuer das, was sie abdeckt.
+```
+
+**ENTSCHEIDUNG: Die W-Reihe bleibt Architektur/Rohbau/Dach.** *Die Fachgewerke in dieselbe Reihe zu
+pressen würde genau die Zuordnungsfehler multiplizieren, die diese Runde schon dreimal hatte
+(wandaufbau als Bauphysik, linienBauteile als Dachzubehör, editierGeometrie als W-14). Eine
+Heizkörperauslegung ist kein Zeichenwerkzeug — sie teilt mit W-02 kein einziges Kriterium.*
+
+**Aber „begrenzt" heißt nicht „unsichtbar".** Damit kein W-Auftrag mehr an dieser Frage hängt:
+
+```text
+1  Die Werkbank erklaert ihren UMFANG ausdruecklich im Architektur-Teil:
+   Architektur, Rohbau, Dach — Fachgewerke und Integration liegen ausserhalb.
+2  Ein Abschnitt "BEKANNT, AUSSERHALB DES UMFANGS" fuehrt die elf Module mit Gewerk und
+   Zeilenzahl. Wer sie spaeter beschreibt, bekommt eine EIGENE Kennung (nicht W-),
+   damit die Reihe nicht ueberdehnt und keine Doppelzuordnung entsteht.
+3  "Vollstaendig" ist damit wieder definiert: vollstaendig FUER DEN UMFANG.
+```
+
+> **Das ist derselbe Gedanke, den diese Insel dreimal unabhängig selbst gebaut hat** — bei
+> `dachformVorlagen` (Status „geplant"), bei `gaubeGeometrie` (`pruefeAufbau`) und in A-10 (Melder):
+> ***sag, was du nicht abdeckst, statt still Vollständigkeit zu behaupten.*** Die Werkbank bekommt
+> hier ihre eigene Ampel.
+
+```yaml
+einarbeitung: "Planner — A-01-Nicht-Ziel im Blatt streichen mit Verweis hierauf; Werkbank-Umfang
+               und Abschnitt 'ausserhalb des Umfangs' in 00-ARCHITEKTUR aufnehmen"
+ich_baue_nicht: "beide Entscheidungen sind Weichen, keine Auftraege. Schnitt und DoR laufen
+                 normal; ich habe keinen Auftrag geschnitten und keinen Code angefasst"
+bei_yama_bleibt: "nichts mehr aus diesen beiden Fragen"
+```
