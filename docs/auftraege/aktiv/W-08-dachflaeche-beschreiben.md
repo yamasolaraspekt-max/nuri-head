@@ -453,3 +453,97 @@ Flächenazimut abgeleitet, und wer das verwechselt, hat 90° Fehler zusätzlich 
 `-10`.
 
 *Damit ist die Klasse A vollständig durchgeprüft: W-01, W-02, W-04, W-05, W-08, W-11, W-21, W-22.*
+
+
+## Release-Prüfung (§10, Sammel-Kontrolle 3) — 12.08.2026
+
+```yaml
+auftrag: "W-08/1"
+abnahme_commit: 7aa49e33
+release_commit: 7aa49e33
+votum: RELEASE_FREI
+ci: pass
+artefakte_reproduzierbar: true
+migration: nicht_anwendbar
+rueckweg: nicht_anwendbar
+smoke_test_plan: "Doku-Stufe ohne Laufzeitanteil — der betriebliche Nachweis ist der erste
+  Stufe-2-Bauversuch gegen die sieben Blaetter. Regressionswache: Insel-Suite 1692/1692,
+  von mir selbst gefahren."
+befunde: []
+```
+
+### Die Kette, je Stufe mit `merge-base --is-ancestor` gegen die folgende
+
+```text
+BEREIT        63de0ab8
+IN_ARBEIT     b972a8af
+Bau           7aa49e33   8 Dateien = sieben Blaetter + REGISTER.md
+CODE_FERTIG   1c34655c
+ABGENOMMEN    d185d2f6
+letzte Stufe gegen HEAD geprueft — Kette lueckenlos, eine Runde, keine Nachbesserung.
+Basis b202ad7c ist Vorfahr des Bau-Commits (nachgemessen).
+```
+
+**Scope-Reinheit:** `7aa49e33` trägt **0** Pfade unter `resources/` und **0** unter `scripts/`.
+**Das Votum nennt den gemessenen Commit:** `commit: 7aa49e33` im Votum-YAML, `ABGENOMMEN an
+7aa49e33` in `STATUS.md`, Release-Kandidat `7aa49e33`.
+
+### Die Pflichtfrage — trägt der Messtisch JEDE Kriterienzeile? Gezählt.
+
+```text
+Kriterien im Blatt                          12   W-08/1-1 … -12
+                                                 (-10, -11, -12 sind die am 12.08. nachgetragenen
+                                                  Auflagen aus Yamas Azimut-Antwort — sie zaehlen mit)
+im Evaluator-Votum ausgewiesen              12   Messtisch "ALLE ZWOELF Zeilen", -1 bis -12,
+                                                 jede mit eigenem Messwert
+FEHLEND                                      0
+```
+
+**12 gegen 12 — vollständig.** *Und die Vollständigkeit ist hier kein Zufall: das Blatt hat drei
+Kriterien **nach** der ersten Fassung dazubekommen, und genau die drei nachgetragenen stehen im
+Messtisch (`-10` Azimut-Bereich in `7-GRENZEN`, `-11` First/Fläche als Eingangsbedingung, `-12`
+F-024 beim gemessenen Befund).* **Ein Messtisch, der die spät hinzugefügten Zeilen trägt, ist der
+Beweis, dass gegen die Kriterienliste geprüft wurde und nicht gegen die Erinnerung an sie.**
+
+*Zum Kernkriterium `-4` prüfe ich die Beweisform nach, nicht die Sache: der Evaluator hält die drei
+Null-Pfade gegen `polygonFlaeche.ts:32/42/47` und belegt die zweite Hälfte doppelt
+(`7-GRENZEN:20` als Überschrift, `2-FUNKTION:3` als erste Stelle des Blattes, was `-11` verlangt).*
+**Das ist die Form, die §11 letzter Satz meint: Zahlen mit Befehl und Fundstelle.**
+
+### Stichprobe
+
+```text
+Platzhalter in den sieben Blaettern    <…> 0 · TODO/TBD/XXX/FIXME 0 · F-0xx/W-xx 0
+REGISTER.md Z.41                       W-08 | Dachflaeche messen | BESCHRIEBEN | W-07 | F-011, F-023 ⚠, F-024 ⚠
+REGISTER.md Fundstelle                 polygonFlaeche.ts  3 Treffer
+Werkzeugordner seit der Abnahme        7aa49e33..HEAD  0 Commits
+```
+
+### Hinweis des Plan-Prüfers, in den Vermerk genommen — **kein Hindernis**
+
+**`Punkt2D` ist viermal zeichenweise identisch definiert:** `polygonFlaeche.ts:19`,
+`dachUForm.ts:13`, `dachVerschneidung.ts:144`, `schifterListe.ts:28`. *Das Blatt beschreibt den Typ
+vollständig und richtig — es benennt die Mehrfachdefinition nicht.* **Für W-08 ist das die schärfste
+Form des Befunds, weil das Blatt die Absicht zitiert** (*„nimmt bewusst auch `THREE.Vector2` an"*):
+wer diese Definition anfasst, fasst eine an, die drei andere stumm mittragen.
+
+**Warum das den Release nicht hält:** *kein Kriterium des Blattes verlangt es — weder `-5`
+(Herkunft) noch `-11` noch eines der übrigen zehn.* **Ein Release-Prüfer, der ein Blatt an einer
+Anforderung misst, die niemand gestellt hat, prüft seine eigene Meinung.** *Der Punkt gehört in den
+Typ-Komplex, der inzwischen **sechs** Fälle zählt und beim Planner ein eigenes Blatt bekommen soll;
+er ist damit adressiert, nicht verloren.*
+
+### Gemeinsame Messungen der Sammel-Kontrolle 3
+
+*Belege vollständig im W-01-Blatt unter derselben Überschrift.* **Kurzfassung:**
+
+```text
+npm run test:hausplaner                                 1692/1692, fail 0
+must_preserve drei Richtungen einzeln, resources/       0 · 0 · 0
+must_preserve drei Richtungen einzeln, scripts/         0 · 0 · 0
+Beifang d4eca213..HEAD -- resources/ scripts/           1 Commit (b0f4c444 = A-11-Bau,
+                                                        eigener Auftrag, nur scripts/, 0 resources/)
+7aa49e33..HEAD -- resources/ scripts/                   0 Commits
+```
+
+**Urteil: `RELEASE_FREI`.**
