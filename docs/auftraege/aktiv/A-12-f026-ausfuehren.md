@@ -231,3 +231,75 @@ warteschlange: "unabhaengig von der W-Reihe — A-12 entsperrt die Dachkonstrukt
                 die W-Reihe baut das Fundament. Reihenfolge entscheidet Yama."
 naechster_schritt: "Plan-Pruefer prueft DoR (Ampel-Rot per grep, Belegstellen per sed)."
 ```
+
+---
+
+## Evaluator-Votum (§11) — 11.08.2026
+
+```yaml
+auftrag: A-12
+commit: 752174d1          # Pruef-SHA; Messlauf 92310844, Basis d1d716c8
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+ampel: "BESTAETIGT — 🟢 fuer F-026, mit der vom Bericht selbst verlangten Wortlaut-Korrektur"
+gegenprobe: "die drei Kernzahlen mit EIGENER Wegwerf-Probe unabhaengig nachgerechnet"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Die Ampel bestätige ich — weil ich sie nachgerechnet habe, nicht weil der Bericht sie vorschlägt
+
+**Eigene Wegwerf-Probe, eigener `RoofNode`, dieselben Maße wie im Bericht.** *Ich habe die Zahlen
+nicht aus dem Bericht übernommen, sondern die Insel selbst gefragt:*
+
+```text
+                       BERICHT (3e/3f/3g/3h)      MEINE MESSUNG        gleich?
+dreiecke                        10                      10               ja
+firstHoeheMm                  5482                    5482               ja
+Flaechensumme m2           167.246   (Fremd 167.234)  167.246            ja
+dachflaechen (Traeger)           0                       0               ja
+dachGeometrie.dachFlaechen    WIRFT                   WIRFT              ja
+                    "Traufkontur ist nicht rechteckig — V1 unterstuetzt nur rechteckige"
+```
+
+**Fünf von fünf deckungsgleich.** *Die Flächensumme habe ich nicht abgelesen, sondern aus den zehn
+Dreiecken über das Kreuzprodukt selbst gerechnet — und komme auf dieselben 167.246 m².*
+
+> **Damit ist die Ampel-Frage beantwortbar geworden, und zwar so, wie das Blatt sie stellt:**
+> *„🟢 wenn ein L-Dach mit benannten Flächen herauskommt."* **Es kommt heraus** — zehn Dreiecke,
+> vier benannte Flächen, First bei 5482 mm, Kehle und Grat mit je 3,945 m. **🔴 ist widerlegt,
+> „bleibt 🟡" ebenfalls: die Messung ist gefahren, nicht ausstehend.**
+
+### Mein eigener Messfehler, offengelegt
+
+**Mein erster Lauf ergab `dreiecke=0`, `firstHoeheMm=2500` — und widersprach dem Bericht in jedem
+Punkt.** *Die Ursache war meine Eingabe: ich hatte `pitchDeg` geschrieben, das Feld heißt
+`neigungGrad`, und `firstAzimutGrad` fehlte ganz.* **Der `RoofNode` nahm meine Werte nicht an, die
+Firsthöhe blieb auf der Traufhöhe stehen, und ich hatte für einen Moment eine „Widerlegung", die
+nur meine eigene Schlamperei war.**
+
+> *Erst der Blick in `scene.types.ts:315` hat es geklärt. **Wäre ich beim ersten Lauf stehen
+> geblieben, hätte ich einen fehlerfreien Messbericht als falsch gemeldet** — dieselbe Klasse wie
+> `vendor` im A-04-Prüfstand und die 2D-Ansicht bei A-10, drittes Mal an drei Tagen. Die Lehre ist
+> jedes Mal dieselbe: **bei einer Abweichung zuerst den eigenen Aufbau prüfen, nicht den fremden
+> Bau.***
+
+### Die übrigen Kriterien
+
+```text
+A-12-1  ERFUELLT  sechs Punkte, geschlossen, Masse genannt
+A-12-2  ERFUELLT  Weg 1 mit Begruendung, Ergebnis benannt
+A-12-3  ERFUELLT  Insel und Fremdcode nebeneinander, maxAbweichung 0 (3b),
+                  Flaechensummen 167.246 gegen 167.234 — Abweichung 12 mm2 auf 167 m2
+A-12-5  ERFUELLT  MEIN Messbereich waren die A-12-Commits selbst, nicht die Spanne:
+                    4e935e84 docs/STATUS.md · 92310844 Bericht · 752174d1 Bericht ·
+                    3a4838e1 docs/STATUS.md   -> resources/ und scripts/ 0x beruehrt
+                  (die Spanne d1d716c8..752174d1 zeigt scripts/-Aenderungen, die aus
+                   A-11 und W-01 stammen — fremde Zwischencommits, nicht A-12)
+                  Wegwerf-Probe in KEINEM Commit: git log --all --diff-filter=A leer
+A-12-6  ERFUELLT  sechs Datei:Zeile-Angaben, alle nachgeschlagen, alle treffen
+```
+
+*Meine eigene Wegwerf-Probe habe ich nach der Messung entfernt; Suite wieder 1692/1692,
+`git status -- resources/` leer.*

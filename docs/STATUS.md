@@ -1200,14 +1200,14 @@ naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruef
 ```
 ---
 
-## CODE_FERTIG — A-12 (Messauftrag F-026; Bericht geliefert, Ball beim Evaluator)
+## ABGENOMMEN — A-12 (Messauftrag F-026; Ampel 🟢 bestaetigt, Ball beim Planner)
 
 ```yaml
 auftrag: A-12
 titel: "Ein L-Grundriss mit F-026 rechnen, Ergebnis ansehen, Ampel gelb -> gruen oder rot"
 datei: docs/auftraege/aktiv/A-12-f026-ausfuehren.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator (Bericht liegt; Ampel bestaetigen oder verwerfen)
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: d1d716c8
 mess_sha: 239a163e
 mess_sha_vorgaenger: 3e7e19d6
@@ -1231,6 +1231,7 @@ ballwechsel_bestaetigt: "plan-pruefer 11.08.: A-12-CODE_FERTIG-Meldepflichten ge
 claim_abnahme_a12: "plan-pruefer 11.08.: Evaluator-Station fuer A-12 mit frischer Instanz besetzt (Wochenlimit der Umgebung ist zurueckgesetzt). Claim VOR dem Start."
 naechster_schritt: "Evaluator prueft den Bericht an 752174d1 und bestaetigt oder verwirft den Ampel-Vorschlag 🟢; danach traegt der PLANNER die Ampel in FORMELSAMMLUNG.md ein und entscheidet ueber die Wortlaut-Korrektur des F-026-Verfahrens. Mit CODE_FERTIG ist die §3-Sperre der W-Reihe gefallen."
 claim_abnahme: "evaluator (Erstinstanz) 11.08.: Abnahme A-12 GECLAIMT vor der Messung, Pruef-SHA 752174d1. Kein Bau, sondern ein Messauftrag - ich pruefe den Bericht gegen die Wirklichkeit, nicht Code gegen Kriterien."
+evaluator_votum: "evaluator 11.08.: ABGENOMMEN an 752174d1, Fehlerklasse KEINE, AMPEL BESTAETIGT auf gruen. Ich habe die Kernzahlen mit einer EIGENEN Wegwerf-Probe unabhaengig nachgerechnet statt sie abzulesen: dreiecke 10, firstHoeheMm 5482, Flaechensumme 167.246 m2 (aus den zehn Dreiecken selbst ueber das Kreuzprodukt gerechnet), dachflaechen 0, dachGeometrie wirft mit dem Wortlaut Traufkontur nicht rechteckig - fuenf von fuenf deckungsgleich mit dem Bericht. Damit kommt ein L-Dach mit benannten Flaechen heraus, rot ist widerlegt und bleibt-gelb auch. A-12-5 habe ich am richtigen Messbereich geprueft: die vier A-12-Commits selbst beruehren resources/ und scripts/ null mal; die Spanne zeigt scripts/-Aenderungen aus A-11 und W-01, also fremde Zwischencommits. MEIN MESSFEHLER offengelegt: mein erster Lauf ergab dreiecke 0 und firstHoehe 2500 und widersprach dem Bericht in jedem Punkt - Ursache war meine Eingabe, ich schrieb pitchDeg statt neigungGrad und liess firstAzimutGrad weg; waere ich dabei stehen geblieben, haette ich einen fehlerfreien Messbericht als falsch gemeldet. Drittes Mal derselben Klasse an drei Tagen nach vendor und 2D-Ansicht: bei einer Abweichung zuerst den eigenen Aufbau pruefen."
 ```
 ---
 
