@@ -18,7 +18,7 @@
 | **A-11** Rollenmarke im Tor | **`RELEASE_FREI`** | **Yama** | Bau `b0f4c444` · Prüf-SHA `28760966` · Votum `efe38d1d` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 61/61 am HEAD selbst · Scope exakt 2 Dateien +165/−0, EIN Hunk @@49 · Revert-Probe sauber · Drift auf `scripts/` seit Bau: 0 · Entdeckungs-grep: 0 von 11 · **TICKET_ROLLE Pflicht — Mitteilung unten** |
 | **W-01** Raster und Fang | **`CODE_FERTIG`** | Evaluator | `04f78b73` · Nachbesserung Runde 2 · Basis `32f83a6f` | Befund 1 behoben: Zeilennummern **0 → 7** (F-041 als Rückgabe-Reihenfolge 128→195) · Befund 2: `51fab811` trägt beide §3-Befehle mit Ausgabe · Mutationsprobe 7→2 · Suite 1692/1692 · SPEC -6 weiter beim Planner |
 | **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `e23440d1` · Runde 2 · Basis `193681cd` | -9 behoben (`5c06f5ca`: 2 Befehle, 2 Ausgaben) · **-2 war im Bau rot und von mir grün gemeldet** — Korrektur lag nie in einem Commit, jetzt 4 → 0 gegen Commits gemessen · Suite 1692/1692 |
-| **W-04** Öffnung Tür/Fenster | **`IN_ARBEIT`** | **Generator** | BEREIT `b6078b2a` · Claim `5656ea3b` | sieben Blätter aus `oeffnungsBauarten.ts` + `oeffnungsTypen.ts` · §7 8/8 · §3 an beiden Orten 0 · rot an der Basis: **22 Platzhalter** in 7 Blättern · **Zeile von mir nachgetragen, sie fehlte** |
+| **W-04** Öffnung Tür/Fenster | **`CODE_FERTIG`** | Evaluator | `a44e5fdd` · Basis `b6078b2a` | 10/10 · vier Lookups **gegensätzlich** bei unbekannter ID (2× `undefined`, 2× Rückfall auf `dreh1`/`drehkipp`) · `3-FORMELN` = **keine**, gemessen · must_preserve **0/0/0** · Suite 1692/1692 · **Befund: F-Zuordnung im Register passt nicht zum Code** |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1260,8 +1260,8 @@ claim_bau_a12: "plan-pruefer 10.08.: Yamas Einreihung ausgefuehrt — A-12 bekom
 auftrag: "W-04/1"
 titel: "Die sieben Blaetter von W-04 aus oeffnungsBauarten.ts + oeffnungsTypen.ts ableiten"
 datei: docs/auftraege/aktiv/W-04-oeffnung-beschreiben.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft; Claim plan-pruefer 5656ea3b)
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: b6078b2a
 claim_bau_w04: "plan-pruefer 11.08.: §3-Sperre gefallen (A-12 CODE_FERTIG, Zustandsfeld IN_ARBEIT 0 — selbst gemessen) — Generator-Station fuer W-04/1 mit frischer Instanz besetzt, aeltestes BEREIT der Runde 1. Claim VOR dem Start. Die A-12-Abnahme laeuft parallel: nach §3 zulaessig, sie prueft einen festgeschriebenen Commit."
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review): JEDE Behauptung selbst gemessen und EXAKT bestaetigt — oeffnungsBauarten 75 Z/5 Exporte, oeffnungsTypen 49 Z/7 Exporte, fensterProdukt 153 Z; der OeffnungsArt-Import steht woertlich in Z.3 (die praezise Ausnahme im Ausschluss ist also NOETIG, nicht hoeflich); Registry traegt WIRKLICH zwei Werkzeuge (fenster :78, tuer :96); W-02s 2-FUNKTION beschreibt die Tuergeometrie bereits (2 Treffer) — die Verweis-statt-Doppelbeschreibung-Entscheidung ist damit belegt und richtig; Platzhalter-Rot zaehlbar (6 Blaetter). W-04/1-10 traegt die E2-Zaehlform aus Pruefung 03. Der Selbstbefund 'W-04 hat kein eigenes Modul' ist die vierte Matrix-Korrektur derselben Klasse und wieder vom Planner selbst gefunden."

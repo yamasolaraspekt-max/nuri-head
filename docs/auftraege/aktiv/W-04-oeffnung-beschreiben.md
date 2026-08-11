@@ -238,3 +238,72 @@ befund_an_matrix: "W-04 hat kein eigenes Geometrie-Modul — Kataloge eigen, Geo
 beobachtung_ohne_forderung: "eine eigene Datei fuer die Tuergeometrie wuerde die
                              Zuordnungsfrage aufloesen — Code-Entscheidung, nicht meine"
 ```
+
+
+## §11 — Bericht W-04/1 (Generator, 11.08.2026)
+
+```yaml
+auftrag: "W-04/1"
+zustand: CODE_FERTIG
+bau_commit: "a44e5fdd"
+in_arbeit_commit: "a9e58dd4"
+basis: "b6078b2a"
+
+kriterien:
+  W-04/1-1:  GRUEN   # 22 -> 0, Zaehlweise des Auftrags: ALLE <…>-Klammern
+  W-04/1-2:  GRUEN   # "keine" ist die Antwort — Math. null mal in BEIDEN Modulen, gemessen
+  W-04/1-3:  GRUEN   # 2-FUNKTION verweist auf W-02, vier Datei:Zeile-Angaben, beschreibt nicht
+  W-04/1-4:  GRUEN   # alle vier Lookups am Code gemessen, Rueckfallwerte selbst nachgezaehlt
+  W-04/1-5:  GRUEN   # "Angebunden aus zwei vorhandenen Modulen", beide Exportlisten voll
+  W-04/1-6:  GRUEN   # Ausschluss MIT der Ausnahme OeffnungsArt, als import type belegt
+  W-04/1-7:  GRUEN   # beide Werkzeuge, Trennung liegt in den Daten (Registry-Zeilen genannt)
+  W-04/1-8:  GRUEN   # drei Richtungen, s. u.
+  W-04/1-9:  GRUEN   # Register: BESCHRIEBEN + beide Katalog-Module
+  W-04/1-10: GRUEN   # a9e58dd4: 2 Befehlszeilen, 2 Ausgabewerte, je Ort einer (E2)
+
+W-04/1-8_drei_richtungen:   # Auflage 239a163e — einzeln ausgewiesen
+  geaendert:    "0 von 1230 verfolgten Dateien (ls-tree HEAD gegen hash-object)"
+  hinzugefuegt: "0 (git ls-files --others --exclude-standard -- resources/)"
+  entfernt:     "0 (in HEAD, nicht mehr im Baum)"
+  insel_suite:  "1692 tests, 1692 pass, 0 fail — unveraendert gruen"
+  hinweis: "die Einweg-Messung haette gestern 0 gesagt und gelogen; heute ist auch die
+            fremde A-12-Wegwerf-Probe weg, gemessen statt angenommen"
+
+E1_commit_messung:
+  gefahren: JA
+  ergebnis: "7 Blaetter + REGISTER, je 'im Commit' (git show HEAD:<p> | diff - <p>)"
+
+der_fachliche_kern:
+  was: "die vier Lookups antworten GEGENSAETZLICH auf eine unbekannte ID"
+  undefined: "fensterBauartNach (Z.70), tuerBauartNach (Z.73)"
+  nie_undefined: "tuerTyp (Z.42) -> TUER_TYPEN[0] = dreh1 · fensterTyp (Z.47) -> FENSTER_TYPEN[0] = drehkipp"
+  selbst_nachgezaehlt: "Z.23 dreh1, Z.32 drehkipp — der Kommentar behauptet es, und diesmal stimmt er"
+  warum_beides_richtig: "Bauart ist Aussehen (fehlt sie, gibt es nichts zu zeichnen);
+                         Typ traegt die Masse (eine Oeffnung ohne Mass ist keine)"
+  gefahr_benannt: "tuerTyp('gibtsnicht') liefert 875x2010 OHNE zu sagen dass gefallen wurde —
+                   A-10-Klasse. Der TS-Typ verhindert es im Uebersetzer, nicht bei Daten aus
+                   Datei, Netz oder Altstand."
+
+befund_nicht_still_behoben:
+  - was: "das REGISTER schreibt W-04 die Formeln F-003 und F-031 zu"
+    gemessen: "beide Module enthalten KEINE Rechnung — Math. null mal, nur find() und ??"
+    getan: "Reifegrad und Fundstellen nachgetragen, F-Spalte UNVERAENDERT, Fussnote im Register"
+    warum: "die Zuordnung gehoert dem Planner; er hat selbst gemeldet, dass 3 von 4 geprueften
+            Matrix-Zeilen falsch waren"
+
+eigener_messfehler_waehrend_des_baus:
+  was: "erste Zaehlung ergab TUER_TYPEN = 12 Eintraege"
+  erkannt_an: "der Typ TuerTyp erlaubt nur FUENF Werte — 12 kann nicht stimmen"
+  ursache: "meine sed-Bereichsgrenze /^\];/ griff nicht, der Bereich lief in FENSTER_TYPEN hinein
+            und zaehlte dessen 7 mit (5+7=12)"
+  behoben: "an festen Zeilenbereichen nachgezaehlt: TUER 5, FENSTER 7 — deckungsgleich mit den
+            Typunionen. Vor dem Schreiben gefunden, nicht danach."
+
+nicht_gemessen:
+  - "ob die 48 SVG-Dateien unter public/hausplaner/icons/ wirklich existieren — als Pruefpunkt
+     in 6-PRUEFUNG benannt, nicht als Zusage im Blatt behauptet"
+  - "die Werkzeugschicht (Stufe 2 GEBAUT) — nicht Gegenstand dieses Auftrags"
+
+browserabnahme: "entfaellt — reine Dokumentblaetter, keine sichtbare Wirkung"
+ballbesitz: evaluator
+```
