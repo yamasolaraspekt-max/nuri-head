@@ -27,6 +27,12 @@ W-07     3626      140  dach                       7 / 10         8   <- Sonderf
 zusammen 6647      296                             29 / 44
 ```
 
+> **⚠ Diese Zeilenzahlen sind MATRIX-GROBZAHLEN vom 10.08. und stehen als Ist-Beleg dieser Messung.
+> Drei von ihnen sind bei der Einzelmessung gefallen (W-08 286→48, W-04 277→124, W-05 371→190) —
+> die richtiggestellten Werte stehen im NACHTRAG 11.08. am Ende dieses Blattes. Nicht ersetzt,
+> weil ein datierter Ist-Beleg nicht rückdatiert wird; verwiesen, damit niemand die Grobzahl als
+> Umfang liest.** *Gleiches gilt für „371 Z" bei W-05 in der Runde-2-Beschreibung unten.*
+
 **Bereits durch oder laufend:** W-01 (`CODE_FERTIG`), W-02 (`IN_ARBEIT`), W-13 (`ENTWURF`, DoR-Rest
 behoben). *Klasse A umfasst zehn Werkzeuge; sieben sind hier offen.*
 
@@ -131,9 +137,61 @@ Klasse A fertig  die zehn Werkzeuge stehen im Register als BESCHRIEBEN, jedes mi
 - **Kein Kriterium ohne Rot-Lage.** Die Platzhalterzahl wird je Werkzeug gezählt, nicht geschätzt —
   meine erste Zählung war zu klein (8 statt 26), das wiederhole ich nicht.
 
+## NACHTRAG 11.08. — Klasse A ist vollständig GESCHNITTEN, und drei Grobzahlen sind gefallen
+
+**Stand nach W-22/1 (`22a42c3d`):**
+
+```text
+GESCHNITTEN  W-04/1  W-05/1  W-08/1  W-11/1  W-13/1  W-21/1  W-22/1   sieben Blaetter
+ABGENOMMEN   W-01/1 (320a95c8, SPEC-Rest -> W-01N)     W-02/1
+HINTER A-12  W-07 (3626 Z, Dachweg-Frage)   W-08 (Bezugsrichtung ungeklaert)
+NICHT IN A   W-09 (Treppe, 698 Z) — war nie in den drei Runden
+-> "geschnitten" ist NICHT "BESCHRIEBEN". Der Abschluss haengt am Generator,
+   und die Abschlusszahl bleibt der Befehl unten.
+```
+
+**Drei Grobzahlen der Matrix-Tabelle (Z.18-23) sind beim Einzelmessen gefallen — nicht ersetzt,
+sondern hier richtiggestellt:**
+
+```text
+        Tabelle    gemessen    Differenz
+W-08      286          48       -238   nur polygonFlaecheM2, nicht die Nachbarn
+W-04      277         124       -153   die Geometrie liegt in W-02s Modul
+W-05      371         190       -181   grundriss.ts + polygonFlaeche.ts ausgeschlossen
+W-21      496         496          0   erste korrekte Grobzahl
+W-22      498         498          0   dito
+W-11      395         395          0
+```
+
+> **Jede Einzelmessung ging nach UNTEN, keine nach oben — sechs von sechs.** *Die Matrix-Grobzahl
+> ist damit systematisch zu hoch, weil sie **Modulgruppen** zählt, die Einzelmessung aber den
+> **Ausschluss** anwendet. **Das ist kein Zufall, sondern die Bauart des Fehlers: eine Grobzahl
+> ohne Ausschlussentscheidung ist immer eine Obergrenze.*** Für W-09 (698 Z) und W-07 (3626 Z) gilt
+> das ungemessen mit — beide Zahlen sind Obergrenzen, keine Umfänge.
+
+**Vier Befunde aus Runde 2, die über Klasse A hinausgehen:**
+
+```text
+W-05   grundriss.ts traegt die Formerkennungs-Bausteine (eckenAnalyse,
+       anzahlInnenwinkel, erwarteteInnenwinkel, istZusammengesetzt)
+       -> ZULIEFERUNG an A-12: A-05s Luecke 4 haelt, der Weg ist kuerzer
+W-21   sparrenBerechnung.ts ist Vorbemessung nach EUROCODE = BEMESSUNG, nicht
+       Geometrie. Die Statik-Linse trennt "Geometrie (jetzt) von Bemessung
+       (Fach-Freigabe/spaeter)" -> Fach-Gate, kein Blatt-Problem
+W-21   Registerquelle M-02 (profi_holzbau_solar_cad.tsx, 2021 Z) UNAUSGEWERTET
+W-22   FUENF Module (975 Z) bilden das Thema Dachaufbauten, die Werkbank fuehrt
+       nur "Gaube" -> Befund fuer die Anschlussmatrix, nicht meine Entscheidung
+W-22   auswechslung.ts (174 Z) steht in W-21 UND W-22 als Nachbar und ist in
+       KEINEM zuhause -> braucht ein Werkzeug oder eine Zuordnung
+```
+
 ```yaml
-naechster_schritt: "Runde 1 schneiden: W-08, W-04, W-11 — knapp, mit Verweis auf W-01/W-02"
+naechster_schritt: "Klasse A ist geschnitten. Ballbesitz: plan-pruefer (DoR fuer sieben Blaetter),
+                    danach generator. Der Planner schneidet nichts mehr in Klasse A."
+stand_11_08: "sieben Blaetter geschnitten, keines gebaut — der Abschluss haengt nicht mehr am Schnitt"
 w07_gehoert: "hinter A-12 (Dachweg-Frage), nicht in Klasse A wie die anderen"
+w08_gehoert: "ebenfalls hinter A-12 — nachgetragen 10.08., Blatt bleibt gueltig (b6078b2a)"
 abschluss_messbar_an: "grep -cE '^\\| W-[0-9]+ .*BESCHRIEBEN' REGISTER.md — heute 3, Ziel 10"
 nicht_blockiert_durch: "die Werkzeug-oder-Schicht-Vorlage — W-01 wurde ohne sie fertig"
+grobzahl_lehre: "eine Grobzahl ohne Ausschlussentscheidung ist immer eine Obergrenze, nie ein Umfang"
 ```
