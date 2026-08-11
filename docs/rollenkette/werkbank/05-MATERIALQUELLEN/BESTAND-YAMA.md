@@ -74,7 +74,7 @@
 | `dachdecker_pro.tsx` | 2.993 | 48 | Vorgänger von M-01, evtl. andere Dachformen |
 | `profi_holzbau_solar_cad.tsx` | 2.021 | 46 | **Holzbau/Sparrenkonstruktion** — für W-21 |
 | `solarmaster_konstruktion.tsx` | 3.045 | 33 | PV-Belegung, Reihen/Spalten-Logik |
-| `solarconstructapp.tsx` | 3.321 | 33 | Konstruktion + Statik? |
+| `solarconstructapp.tsx` | 3.321 | 33 | **KEINE Statik** (gemessen 12.08.: 0 von 11 Statik-Begriffen, keiner der N-003-Beiwerte). Es ist **PV-Modulbelegung + Montagesystem** — Zieladresse **W-31**, nicht N-003 |
 | `solar_master_pro.tsx` | 2.472 | 11 | Angebots-/Ertragsseite |
 
 Alle unter `~/Desktop/Gemini-Code-Ideen-2026-05-25/03-energie-pv-dach-3d/`.

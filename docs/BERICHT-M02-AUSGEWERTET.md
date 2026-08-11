@@ -155,10 +155,50 @@ solar_master_pro.tsx         2.472 Z   Angebots-/Ertragsseite
    und sie werden dort gemessen, nicht hier.
 ```
 
-> **`solarconstructapp.tsx` trägt laut Bestandsliste ein Fragezeichen bei „Statik?" — das ist nach
-> N-003 der interessanteste offene Posten der vier.** *Wenn dort eine zweite Statik-Rechnung liegt,
-> ist das eine mögliche zweite Wahrheit zu `sparrenBerechnung` und gehört gemessen, **bevor** jemand
-> N-003 erweitert.*
+> **`solarconstructapp.tsx` trug laut Bestandsliste ein Fragezeichen bei „Statik?" — das war nach
+> N-003 der interessanteste offene Posten der vier.**
+
+### NACHTRAG 12.08. — der Prüfkandidat ist gemessen: KEINE Statik
+
+**Die Frage war: liegt dort eine zweite Statik-Rechnung, also eine zweite Wahrheit zu
+`sparrenBerechnung`? Gemessen: nein, und zwar eindeutig.**
+
+```text
+GESUCHT (B5, Zeilen gelesen):
+  eurocode · DIN EN 199x · biegung · biegespannung · ausnutzung · durchbiegung ·
+  kmod · gamma · schneelast · tragfaehigkeit · nachweis
+  -> NULL Treffer, alle elf Begriffe.
+Die N-003-Sicherheitsbeiwerte einzeln:
+  GAMMA_G 0 · GAMMA_Q 0 · GAMMA_M 0 · KMOD 0 · 1.35 0
+  (1.5 kommt 66x vor, 1.3 zweimal, 0.9 fuenfmal — Zahlen ohne Statik-Kontext,
+   kein einziger Beiwertname daneben)
+```
+
+> **Es gibt keine zweite Statik-Wahrheit im Archiv. Der Posten ist geschlossen, und N-003 bleibt die
+> einzige Statik-Rechnung im Haus.** *Das war die Frage, die ich vor einer N-003-Erweiterung geklärt
+> haben wollte — sie ist geklärt, bevor jemand sie erweitert hat.*
+
+**Und die Bestandszeile „Konstruktion + Statik?" ist damit falsch. Was es wirklich ist:**
+
+```text
+modul   146    string  57    montage 21    schiene 15    klemme 10    dachhaken 5
+wechselrichter 0 · mppt 0 · verschattung 0 · ertrag 0
+sparren 8 · pfette 5   -> nur als BEFESTIGUNGSGRUND (Dachhaken auf Sparren)
+Tabellen: MODULE_DIMS · MODULE_TYPES · FASTENER_MAPPING
+-> es ist PV-MODULBELEGUNG UND MONTAGESYSTEM. Keine Statik, keine Elektrotechnik,
+   keine Ertragsrechnung.
+-> Zieladresse: W-31 (PV-Belegung, gesperrt bis F-028 🟢), NICHT N-003.
+```
+
+**Und `TIME_VARS` steht auch hier — zum DRITTEN Mal.**
+
+```text
+F-051s Zeitwerte finden sich in:  dachdecker_pro_3d (M-01) · profi_holzbau_solar_cad
+                                  · solarconstructapp
+-> DREI Prototypen, dieselben elf unbelegten Zahlen. Die rote Ampel ist damit
+   dreifach begruendet. Und es zeigt, dass die Prototypen VONEINANDER kopiert sind —
+   was zugleich erklaert, warum keiner eine Quelle nennt: es gab nie eine.
+```
 
 ## Ergebnis
 
@@ -186,8 +226,12 @@ fundstelle: "Holzbau gemessen. Insel ueberall weiter, vier Begriffe nur bei ihr.
 echter_fund: "Abbund-Zeichnung (Canvas). Das Wissen hat die Insel, die Darstellung nicht."
 kein_gewinn: "TIME_VARS = F-051 (bestaetigt die Sperre) · battenDist 34 ohne Quelle"
 offen: "11.831 Zeilen in vier Dateien, Zieladresse W-31 und W-23 (beide blockiert)"
-pruefkandidat: "solarconstructapp.tsx — 'Statik?' laut Bestandsliste. Moegliche zweite
-                Wahrheit zu sparrenBerechnung. Messen BEVOR N-003 erweitert wird."
+pruefkandidat_geschlossen: "solarconstructapp.tsx traegt KEINE Statik — null Treffer auf
+   elf Statik-Begriffe und keinen der N-003-Beiwerte. Es ist PV-Modulbelegung und
+   Montagesystem (modul 146, schiene 15, klemme 10, dachhaken 5). Zieladresse W-31,
+   nicht N-003. Die Bestandszeile 'Konstruktion + Statik?' war falsch."
+f051_dritte_quelle: "TIME_VARS steht in DREI Prototypen — die elf unbelegten Zeitwerte
+   sind voneinander kopiert. Das erklaert, warum keiner eine Quelle nennt: es gab nie eine."
 eigener_fehler: "ich fuehrte M-02 als '2021 Zeilen' — das ist EINE der fuenf.
                  B6-Klasse, achter Fall der Reihe."
 ```
