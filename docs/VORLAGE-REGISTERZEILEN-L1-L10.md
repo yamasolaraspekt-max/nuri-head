@@ -141,3 +141,96 @@ gebaut_ohne_zeile: "W-29 stark · W-31 Schnellstufe · W-25/W-28/W-30 teilweise"
 f028_geprueft: "pvBelegung.ts traegt KEINEN Azimut -> kein Verstoss im Bestand"
 naechster_schritt: "eintragen, sobald §3 frei ist. Die Messung ist fertig."
 ```
+
+
+---
+
+# NACHTRAG 12.08. — Stufe 6 · Führung. Und meine Zeilenzahl war zu klein
+
+**Yamas Entscheidung:** *„Die Prozessebene bekommt Registerzeilen im SELBEN Register. Keine zweite
+Tafel, kein Sonderweg … eine eigene **Stufe** im Register, unterhalb der bestehenden fünf."*
+
+## Erste Korrektur: 1593 Zeilen, nicht 640
+
+**Ich habe Yama „über 640 Zeilen" gemeldet. Vollerhebung ergibt mehr als das Doppelte:**
+
+```text
+app/StartView.tsx              267 Z   "Start-Launcher 'Was moechtest du planen?' (v9).
+                                        Projekt-Karten + Fachplaner-Hubs + Zuletzt"
+app/ConfigWizard.tsx           271 Z   gefuehrter Dialog Fenster/Tuer/Treppe, 5 Schritte
+app/studioDaten.ts             257 Z   SchrittStatus · Pruefpunkt · Aufgabe · Empfehlung
+app/dashboard/fahrschritte.ts  202 Z   die ELF Schritte, "abgeleitet aus dem Modell"
+app/EngineFlaeche.tsx          196 Z   Rechenpanel-Flaeche, zeigt `Grundlage:` sichtbar
+app/GuidedView.tsx             165 Z   Stepper + Fokus-Schrittkarte + Aufgabe-Panel
+app/HausplanerStudio.tsx       159 Z   Rahmen, ruft GuidedView und ConfigWizard
+app/FaehigkeitenNavi.tsx        76 Z   Faehigkeiten-Navigation
+                              ------
+                              1.593 Z   ACHT Bausteine, nicht fuenf
+```
+
+> **Ursache: ich hatte gezählt, was mir bei der Suche nach den drei Fragen begegnet ist, und daraus
+> eine Summe gemacht — statt die Ebene zu erheben.** *`StartView.tsx` (267 Z) und
+> `FaehigkeitenNavi.tsx` fehlten ganz, `EngineFlaeche.tsx` und `studioDaten.ts` hatte ich nur als
+> „(Teil)" geführt.* **Sechster Fall meiner Messfehlerreihe — und diesmal keine Zahl aus einem
+> Suchmuster, sondern eine Summe aus einem Zufallsfund.** *Die Lehre neben B5: **eine Summe braucht
+> eine Erhebung, keine Sammlung.***
+>
+> *Für Yamas Entscheidung ändert es nichts — es verstärkt sie: **1593 Zeilen ohne Registerzeile** ist
+> die größte Anschlusslücke, die dieses Register bisher hatte.*
+
+## Die Zeilen für Stufe 6 — sieben gebaut, drei leer
+
+**Nummernwahl:** *dieselbe W-Reihe, keine zweite. `P-01`/`P-02` sind bereits belegt (Prozessprüfung 01,
+P-02-Doppel-Launch-Lehre) — eine dritte Bedeutung derselben Kennung wäre genau die zweite Wahrheit,
+die Yamas Entscheidung vermeiden soll.* **Fortgeführt als W-33 ff., gruppiert unter „Stufe 6 —
+Führung".**
+
+```text
+## Stufe 6 — Fuehrung   (benutzt Werkzeuge, statt von einem zu haengen — wie W-17)
+
+| W-33 | **Start und Projektwahl** | LEER | braucht: alle | ungeprüft — `app/StartView.tsx` (267 Z) |
+| W-34 | **Geführte Planung** (Stepper, elf Schritte) | LEER | braucht: alle | ungeprüft — `app/GuidedView.tsx` (165 Z) + `app/dashboard/fahrschritte.ts` (202 Z) |
+| W-35 | **Konfigurator-Dialog** Fenster·Tür·Treppe | LEER | W-04, W-09 | ungeprüft — `app/ConfigWizard.tsx` (271 Z) · **schreibt NICHT ins Gebäudemodell** |
+| W-36 | **Fähigkeiten-Navigation** | LEER | braucht: alle | ungeprüft — `app/FaehigkeitenNavi.tsx` (76 Z) + `app/tools/faehigkeiten.ts` |
+| W-37 | **Rechenpanels (Engine-Flächen)** | LEER | N-001…N-003 | ungeprüft — `app/EngineFlaeche.tsx` (196 Z) + `app/dashboard/enginePanels.ts` · **trägt die N-003-Ausgabeauflage** |
+| W-38 | **Schritt-Status und Prüfpunkte** | LEER | braucht: alle | ungeprüft — `app/studioDaten.ts` (257 Z), `SchrittStatus` mit VIER Stufen |
+| W-39 | **Studio-Rahmen** | LEER | braucht: alle | ungeprüft — `app/HausplanerStudio.tsx` (159 Z) |
+| W-40 | **Gültigkeitsstatus** confirmed·outdated·blocked | LEER | W-38 | — **kein Code**; die drei Stufen fehlen im Statusmodell |
+| W-41 | **Abhängigkeitsgraph / Invalidierung** | LEER | W-38, W-40 | — **kein Code**; "Änderungen propagieren, niemals stille Löschung" |
+| W-42 | **Schreibpfad Wizard → Gebäudemodell** | LEER | W-35 | — **kein Code**; im Dateikopf von ConfigWizard als "nächste Scheibe" benannt |
+```
+
+## Was diese zehn Zeilen NICHT sind
+
+```text
+- KEIN Schnitt. Zehn Zeilen, Reifegrad LEER, keine Blaetter. Yamas 6.1-Regel.
+- KEINE F-Spalte geraten. "ungeprueft" ueberall, ausser W-37 (N-001..N-003 sind
+  gemessen und W-37 ist ihre Ausgabestelle).
+- KEINE Aussage, dass die sieben gebauten Bausteine GUT sind. Sie existieren.
+  Ob sie Yamas Zielbild 3.1 bis 3.6 erfuellen, ist die Anschlussmessung VOR dem
+  ersten Blatt — und meine vier ungemessenen Punkte aus dem Bericht stehen weiter
+  offen (Inhalte der elf Schritte, Fortschritt je Geschoss, Abhaengigkeitsgraph,
+  der ConfigWizard-Test).
+```
+
+**W-40 bis W-42 sind die drei Lücken aus dem Bericht, jetzt als Zeilen:**
+
+```text
+W-40  die Gueltigkeitsachse. Ohne 'confirmed' ist L-9 ("PV erst nach BESTAETIGTER
+      Dachgeometrie") nicht pruefbar — die Sperre haette nichts, woran sie greift.
+W-41  die Invalidierung. Yamas 3.6: "Aenderungen propagieren als Invalidierung,
+      niemals als stille Loeschung." Ohne 'outdated' gibt es kein Wort dafuer.
+W-42  der Schreibpfad. Solange "Uebernehmen" eine JSON-Datei herunterlaedt, arbeiten
+      Wizard und Expertenmodus NICHT auf denselben Fachobjekten (Yamas Teil 5).
+```
+
+```yaml
+nachtrag_zeilen: 10
+stufe: "6 — Fuehrung"
+nummern: "W-33 bis W-42 (dieselbe Reihe; P-01/P-02 sind belegt)"
+gebaut_ohne_zeile: "sieben Bausteine, 1.593 Zeilen"
+echte_luecken: "W-40 Gueltigkeitsstatus · W-41 Invalidierung · W-42 Schreibpfad"
+eigener_messfehler: "ich meldete 640 Zeilen, es sind 1.593. Eine Summe braucht eine
+                     Erhebung, keine Sammlung — sechster Fall der Reihe."
+eintragen: "sobald §3 frei ist. W-22/1 ist IN_ARBEIT und hat REGISTER.md im Scope."
+```

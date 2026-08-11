@@ -41,7 +41,7 @@
 | W-08 | Dachfläche messen | LEER | W-07 | F-011, F-023, F-024 |
 | W-09 | Treppe | LEER | W-06 | F-001, F-030 |
 | W-21 | **Sparren und Lattung** | **BESCHRIEBEN** | W-07 | **N-001…N-003** ✓ (~~F-001~~, ~~F-030~~ ⓝ) · Quelle M-01/**M-02 ungelesen** |
-| W-22 | **Gaube** | LEER | W-07 | **F-027** ✓, ~~F-031~~ ⓝ |
+| W-22 | **Gaube** | **BESCHRIEBEN** | W-07 | **F-027** ✓ (Thema ja, Formel ⚠), ~~F-031~~ ⓝ |
 | W-23 | **Deckung und Material** | LEER | W-07, W-08 | **F-050** |
 
 ## Stufe 4 — Darstellung und Ausgabe
@@ -60,6 +60,57 @@
 | W-18 | Topologie prüfen | LEER | W-02, W-05 | F-004, F-013 |
 | W-19 | Sonne und Verschattung | LEER | W-07, W-08 | F-024 |
 | W-20 | Stückliste und Mengen | LEER | W-05, W-08 | F-011, F-023 |
+
+---
+
+## Stufe 5b — Zielbild-Ergänzungen (Yamas Zielbild 11.08., eingetragen 12.08.)
+
+> **Neun Zeilen für zehn Zielbild-Lücken.** *Messgrundlage:
+> `docs/VORLAGE-REGISTERZEILEN-L1-L10.md`. **Sechs der zehn „Lücken" sind gebauter Code ohne
+> Registerzeile** — die Fundstelle steht deshalb in der Zeile, damit niemand nachbaut.*
+> `LEER` heißt hier **„kein Blatt gefüllt"**, nicht „kein Code vorhanden".
+
+| Nr | Werkzeug | Reifegrad | Braucht | Formeln / Fundstelle |
+|---|---|---|---|---|
+| W-24 | **Fundament und Bodenplatte** | LEER | W-05 | ungeprüft — Registry-Werkzeug `Bodenplatte`, **kein Geometriemodul** |
+| W-25 | **Pfetten und Kehlbalken** | LEER | W-07, W-21 | ungeprüft — `dachformVorlagen`, `holzBauteile`; Registry `Pfette` |
+| W-26 | **Dachschichten (Aufbau)** | LEER | W-07 | ungeprüft — **kein Modul**; `konterlattungMm` in `dachformVorlagen` ist ein **toter Vertrag** |
+| W-27 | **Dachkantentypen** First·Grat·Kehle·Traufe·Ortgang | LEER | W-07 | **F-025**, **F-026** — Erkennung fehlt, im Code nur Erwähnungen |
+| W-28 | **Dachentwässerung** | LEER | W-07, W-27 | ungeprüft — `linienBauteile` führt `'dachrinne'` als Linientyp; Bemessung fehlt |
+| W-29 | **Dachdurchdringungen** Dachfenster·Kamin·Lüfter·Lichtkuppel | LEER | W-07, W-21 | ungeprüft — **stark gebaut**: `dachOeffnung`, `dachAusschnitt`, `auswechslung`, `aufbauPlatzierung`, `aufbautenStatus` |
+| W-30 | **Flachdach-Aufbau** Gefälle·Attika·Abläufe | LEER | W-07 | ungeprüft — `dachformVorlagen` (`attika`, `svgFlach`) |
+| W-31 | **PV-Belegung (vollständig)** | LEER | W-07, W-08, W-19 | **gesperrt bis F-028 🟢** — autarke Schnellstufe gebaut (`pvBelegung.ts`, **kein Azimut** → kein F-028-Fall) |
+| W-32 | **Giebelwand-Bindung** `Wall.topConstraint` | LEER | W-02, W-03, W-07 | ungeprüft — **kein Modul**, 0 Treffer auf `topconstraint` |
+
+*L-6 und L-8 sind in **W-29** zusammengefasst: dieselben Module bedienen Dachfenster, Kamin, Lüfter
+und Lichtkuppel. **Die Trennlinie zieht der Code selbst** — `aufbauOrientierung` unterscheidet
+**stehende** Aufbauten (Gaube, Kamin → W-22) von Durchdringungen.*
+
+---
+
+## Stufe 6 — Führung
+
+> **Yamas Einordnung 12.08.: dieselbe Tafel, kein Sonderweg, dieselben Reifegrade.** *Was diese
+> Werkzeuge von einem Wandwerkzeug unterscheidet, ist nicht ihre Art, sondern ihre
+> **Abhängigkeitsrichtung**: sie benutzen viele Werkzeuge, statt von einem zu hängen — wie `W-17`,
+> das schon „braucht: alle" trägt.*
+>
+> **Erhoben: 1.593 Zeilen in acht Bausteinen, bisher ohne eine einzige Registerzeile.** *Die größte
+> Anschlusslücke, die diese Tafel hatte. Messbericht:
+> `docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md`.*
+
+| Nr | Werkzeug | Reifegrad | Braucht | Formeln / Fundstelle |
+|---|---|---|---|---|
+| W-33 | **Start und Projektwahl** | LEER | alle | ungeprüft — `app/StartView.tsx` (267 Z) |
+| W-34 | **Geführte Planung** (Stepper, elf Schritte) | LEER | alle | ungeprüft — `app/GuidedView.tsx` (165 Z) + `app/dashboard/fahrschritte.ts` (202 Z) |
+| W-35 | **Konfigurator-Dialog** Fenster·Tür·Treppe | LEER | W-04, W-09 | ungeprüft — `app/ConfigWizard.tsx` (271 Z) · **schreibt NICHT ins Gebäudemodell** |
+| W-36 | **Fähigkeiten-Navigation** | LEER | alle | ungeprüft — `app/FaehigkeitenNavi.tsx` (76 Z) + `app/tools/faehigkeiten.ts` |
+| W-37 | **Rechenpanels (Engine-Flächen)** | LEER | N-001…N-003 | **N-003** — `app/EngineFlaeche.tsx` (196 Z) + `app/dashboard/enginePanels.ts`; trägt die **A-14**-Ausgabeauflage |
+| W-38 | **Schritt-Status und Prüfpunkte** | LEER | alle | ungeprüft — `app/studioDaten.ts` (257 Z), `SchrittStatus` mit **vier** Stufen |
+| W-39 | **Studio-Rahmen** | LEER | alle | ungeprüft — `app/HausplanerStudio.tsx` (159 Z) |
+| W-40 | **Gültigkeitsstatus** `confirmed`·`outdated`·`blocked` | LEER | W-38 | — **kein Code**; ohne `confirmed` ist „PV erst nach **bestätigter** Geometrie" nicht prüfbar |
+| W-41 | **Abhängigkeitsgraph / Invalidierung** | LEER | W-38, W-40 | — **kein Code**; „Änderungen propagieren, **niemals** stille Löschung" |
+| W-42 | **Schreibpfad Wizard → Gebäudemodell** | LEER | W-35 | — **kein Code**; im `ConfigWizard`-Dateikopf als **„nächste Scheibe"** benannt |
 
 ---
 
@@ -112,6 +163,7 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/geometry/schifterListe.ts` | **W-21** — 152 Zeilen, 9 Ausfuhren; **gemischt** — konstruiert UND aggregiert; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/geometry/holzBauteile.ts` | **W-21** — 82 Zeilen, 4 Ausfuhren; trägt `OFFENE_HOLZBAUTEILE` — gebaute Selbstauskunft über die Grenzen; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/geometry/holzMengen.ts` | **W-21** — 64 Zeilen, 3 Ausfuhren; Mengen aus der **echten** 3D-Holzliste statt geschätzt; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/gaubeGeometrie.ts` | **W-22** — 498 Zeilen, 26 Ausfuhren; **Gaube, Kamin UND Ampel-Prüfung**; kein Registry-Werkzeug; **eingearbeitet 12.08.2026** |
 
 ## Was aus Yamas eigenem Bestand kommt
 
@@ -217,3 +269,7 @@ werden nicht durch meine Korrektur unsichtbar gemacht.
 > ⚠ **W-11s Registerangaben halten der Messung nicht stand — zwei Stellen.** (1) **F-002 und F-003 stehen nicht im Code:** kein `atan2`, kein `lotAufGerade` in den drei Modulen; nur F-001 ist belegt (`bemassung.ts:77`, `masseingabe.ts:58`). (2) **Die Abhängigkeit „braucht W-13" trägt nicht:** `auswahl`/`select`/`markiert` kommen in `bemassung.ts` und `masskette.ts` **null mal** vor, `bemassung()` hat keinen Auswahl-Parameter, und die einzige Aufrufstelle übergibt alle Wände und alle Öffnungen. **Der Generator ändert beides nicht** — die Zuordnung gehört dem Planner.
 
 > ⚠ **W-21: beide genannten F-Nummern stehen nicht im Code.** `Math.hypot`/`Math.sqrt` kommen in **keinem** der fünf Module vor (F-001), und es wird nichts extrudiert (F-030) — die Stäbe kommen fertig aus der 3D-Engine. **Das ist stimmig:** drei der fünf Module aggregieren aus einer bereits erzeugten Liste und brauchen keine Geometrieformel. **Umgekehrt fehlt eine Nummer:** `bodenschneelast()` und `formbeiwertSchnee()` rechnen, sind aber **normative** Größen (DIN EN 1991-1-3 / EN 1995-1-1) — die Sammlung kennt sie zu Recht nicht. *Eine erfundene F-Nummer wäre schlimmer als die gemeldete Lücke.* **Und M-02 (2.021 Zeilen) ist nicht ausgewertet.** Der Generator ändert nichts davon.
+
+> ⚠ **W-22, F-027: die ZUORDNUNG stimmt, die FORMEL deckt sich nicht mit dem Bau.** Der Planner hat F-027 als ✓ bestätigt — thematisch zu Recht, das Modul setzt genau diese Gauben auf eine Dachfläche. **Der Generator hat die Formel selbst geprüft, Merkmal für Merkmal, und sie beschreibt einen anderen Bau.** F-031 (CSG-Differenz) ist bereits gestrichen und das deckt sich: **0 Treffer** im Modul. F-027 wurde Merkmal für Merkmal geprüft: der trigonometrische Kern ist da (`Math.tan` 6×), aber mit **anderem Operanden** (`halfW` statt `d`), **kein Quader** (das Modul liefert Dreiecke und Linien), **kein `Math.atan2`** (Ausrichtung über ein lokales Dreibein) und **andere Vorgaben** (5°/2° statt 15°). **F-027s Belegstelle ist `dachdecker_pro_3d.tsx` — M-01 auf Yamas Desktop, nicht der ticket-Code.** *Der trigonometrische Kern ist derselbe, weil Trigonometrie derselbe ist; die Konstruktion ist es nicht.* Der Generator ändert die Zuordnung nicht.
+
+> **Dazu ein Befund zur Werkbank selbst:** das Thema Dachaufbauten besteht aus **fünf Modulen mit 975 Zeilen** (`gaubeGeometrie` 498, `aufbauPlatzierung` 190, `auswechslung` 174, `aufbauOrientierung` 61, `aufbautenStatus` 52 — selbst nachgezählt). Die Werkbank führt davon nur „Gaube", und **`auswechslung.ts` (174 Z) wird in W-21 und W-22 als Nachbar genannt und ist in keinem von beiden zuhause.**

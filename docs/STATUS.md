@@ -22,7 +22,8 @@
 | **W-11** Maß und Bemaßung | **`RELEASE_FREI`** | **Yama** | Bau `0299e5ca` · Votum `63c9cf21` · §10 im Blatt (`35687019`) | Fehlerklasse **KEINE** · Kette 5× `is-ancestor` · Scope exakt 8 Dateien, **0 Nicht-Doku-Pfade** · Votum nennt den Bau-SHA · Blattstand seit Bau unverändert (0 Dateien) · Platzhalter 0 · **Votum belegt `-1` bis `-10` einzeln** · 1692/1692 selbst · 0/0/0 in drei Richtungen, `resources` **und** `scripts` · 10/10 · **zwei Registerangaben tragen nicht**: F-002/F-003 nicht im Code, W-13-Abhängigkeit gemessen verneint · `MassPunkt` doppelt definiert, stumme Divergenz benannt · 4 Zitat-Zeilen vor dem Melden berichtigt · 0/0/0 · 1692/1692 |
 | **W-05** Raum erkennen | **`RELEASE_FREI`** | **Yama** | Bau `34ecf8a4` · Votum `af98d7b6` · §10 im Blatt (`35687019`) | Fehlerklasse **KEINE** · Kette 5× `is-ancestor` · Scope exakt 8 Dateien, **0 Nicht-Doku-Pfade** · **gemeldeter Fremdzugriff am Release-Kandidaten nachgemessen: 0 geänderte Blätter** · Platzhalter 0 · Votum belegt `-1` bis `-10` einzeln · 1692/1692 selbst · 0/0/0 in drei Richtungen · `signierteFlaeche` ist **weder F-010 noch F-011, sondern beider Kern** (ohne Betrag) · F-012/F-013 **0 Treffer**, F-001 im Code aber nicht im Register · zweite Shoelace in `polygonFlaeche.ts` · **-1 mit zwei Zahlen gemeldet** (1 wörtlich / 0 Platzhalter) · 0/0/0 · 1692/1692 |
 | **W-21** Sparren und Lattung | **`CODE_FERTIG`** | Evaluator | `992d5d76` · Basis `c9325929` | 12/12 · **Vorbemessung ≠ Statik** als erste Zeile · **Auftragsvermutung zur Lattung widerlegt** (Menge IST gebaut) · F-001/F-030 nicht im Code, dafür zwei Normgrößen ohne Nummer · `OFFENE_HOLZBAUTEILE` ausgelesen · M-02 ungelesen benannt · 0/0/0 |
-| **W-22** Gaube | **`IN_ARBEIT`** | **Generator** | BEREIT `95fe1b88` | 498 Zeilen, 26 Ausfuhren — **das Modul kann mehr als der Name**: Gaube, Kamin, Prüfung · §7 7/7 · §3 beide Orte 0 · rot an der Basis: **34 Treffer** · **Tafelzeile von mir nachgetragen** |
+| **W-22** Gaube | **`CODE_FERTIG`** | Evaluator | `8a3acb53` · Basis `95fe1b88` | 11/11 · **AK4 ist absichtlich nicht kritisch** (schiefe Front = gelb) · AK1 beim Kamin **gesetzt statt gemessen** · F-027: **Thema ja, Formel nein** (Belegstelle zeigt auf M-01) · fünf Module 975 Z, `auswechslung.ts` heimatlos · 0/0/0 |
+| **A-13** `roof_azimuth` absichern | **`IN_ARBEIT`** | **Generator** | BEREIT `783d47c1` | **BAU, Produktivcode** · fünf Nullen selbst nachgemessen · Prüfung ans **Model** (alle Pfade) · `must_preserve`: **kein Bestandsdatensatz**, Probe nur gegen `ticket_testing` · **Tafelzeile von mir nachgetragen** |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1262,12 +1263,13 @@ evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an e23440d1, Fehlerklasse 
 ```yaml
 auftrag: "W-13/1"
 datei: docs/auftraege/aktiv/W-13-auswahl-beschreiben.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator (Runde 2)
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde): ENTWURF bleibt, EIN Mini-Rest — sonst BEREIT-reif: Modul-Zeilenzahlen exakt (98/71/77/75 = 321, editierGeometrie 75), der W-14-Ausschluss belegt (versetzen/spiegeln), Registry 'auswahl' da, BEIDE Toleranzbegriffe verifiziert (toleranzAusZoom in fangKern, toleranzInWelt in trefferSuche — der Beruehrungsfund ist echt und die Benennen-statt-zusammenlegen-Regel genau richtig), Platzhalter-Rot zaehlbar. DER REST: die 'EINE Zusage' in P1-Kriterium W-13/1-7 ist zaehlweise-abhaengig — meine Messung findet NULL dedizierte Auswahl-Testdateien und DREI erwaehnende (toolKatalog, activation, pan). Die Substanz (duenne Absicherung) haelt in jeder Zaehlweise, aber eine Zahl, die woertlich in einem P1 steht, muss eine definierte Messweise haben — sonst traegt das fertige Blatt eine anfechtbare Aussage (Zeitbomben-Klasse aus A-09). Ein Satz: Zaehlweise definieren (dediziert vs. erwaehnend), Zahl danach nachmessen und in Kriterium + Befund-Zeile angleichen."
 offene_akzeptanz:
   - "Mini-Rest: Zaehlweise der Zusagen-Abdeckung in W-13/1-7 und befund_bestand definieren und die Zahl daran nachmessen (meine Messung: 0 dedizierte / 3 erwaehnende Dateien)."
+votum_bereit: "plan-pruefer 12.08. (2. Runde): BEREIT — der Mini-Rest ist erledigt und die Zahl ist jetzt NACHRECHENBAR, was der ganze Punkt war. W-13/1-7 traegt die Messweise im Text; ich habe sie angewandt und komme exakt auf dieselben Zahlen: dedizierte Zusagen 0 (keine Testdatei traegt den Namen eines der vier Module), erwaehnende 2 (markieren.test.ts, teilKennung.test.ts — die einzigen beiden, die die vier Module ueberhaupt nennen). MEINE DAMALIGE ZAHL WAR DIE UNGENAUERE: ich hatte 3 erwaehnende gemessen, weil mein Muster 'auswahl' als Wort suchte und Dateien traf, die die MODULE gar nicht nennen. Genau deshalb war der Restpunkt richtig — nicht weil die Zahl falsch war, sondern weil ohne definierte Messweise zwei Messungen zwei Zahlen liefern und keine nachpruefbar ist. Vorbildlich auch die Anmerkung zur 7 bei W-02: eine Datei ist streng gezaehlt keine Testdatei, beide Zahlen genannt statt eine gewaehlt."
 naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruefer BEREIT; Reihenfolge W-01/1 -> W-02/1 -> W-13/1 bleibt"
 ```
 ---
@@ -1517,11 +1519,13 @@ evaluator_votum: "evaluator 12.08.: ABGENOMMEN an 992d5d76, Fehlerklasse KEINE. 
 auftrag: "W-22/1"
 titel: "Die sieben Blaetter von W-22 aus gaubeGeometrie.ts ableiten — und die Aufbauten-Nachbarn benennen"
 datei: docs/auftraege/aktiv/W-22-gaube-beschreiben.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft, Runde 2 letztes Blatt)
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 95fe1b88
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die Kernzahl stimmt AUFS ZEICHEN — gaubeGeometrie.ts 498 Zeilen und 26 Exporte, beides selbst nachgezaehlt, keine Abweichung. Der Zuschnitt (ein Modul im Scope, die Aufbauten-Nachbarn benannt statt mitgenommen) folgt dem Muster, das in dieser Klasse viermal getragen hat. Nach der W-21-Erfahrung EIN HINWEIS ohne Restpunkt: die Exportzahl 26 ist gross genug, dass eine Doppelung wie Punkt2D/MassPunkt darin unauffaellig waere — der Bauende soll beim Ableiten der Exportliste ausdruecklich pruefen, ob gaubeGeometrie eigene Punkt-/Masstypen definiert, die anderswo schon existieren, und einen Fund melden statt ihn einzuebnen."
 naechster_schritt: "Generator zieht W-22/1 nach W-21/1. Damit ist die Klasse A vollstaendig geprueft: W-01, W-02, W-04, W-05, W-08, W-11, W-13, W-21, W-22 — neun Blaetter, alle beim ersten oder zweiten Review BEREIT"
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-22/1 GECLAIMT vor der Messung, Bau 8a3acb53. Messtisch wird vollstaendig gefuehrt, alle elf Zeilen."
+evaluator_votum: "evaluator 12.08.: ABGENOMMEN an 8a3acb53, Fehlerklasse KEINE, Messtisch mit allen elf Zeilen. Die Math-Inventur des Blattes habe ich Funktion fuer Funktion nachgezaehlt: max 20, tan 6, hypot 4, min 3, abs 3, sin 2, cos 2, atan 1, atan2 0 - neun Zahlen, neun Treffer. Deshalb ist -2 erfuellt und nicht verletzt: was wie eine Formel aussieht, ist die F-027-Behauptung, die -3 ausdruecklich zu pruefen verlangt, und das Blatt weist zwei davon zurueck. Die Ampel-Logik gegen Z.491 gehalten - drei Stufen samt dem ODER feasible === false, stimmen ueberein. Acht Fundstellen einzeln geoeffnet (Datei 498 Zeilen), keine laeuft ins Leere. -4 ist der staerkste Teil: 2-FUNKTION trennt GAUBE, KAMIN und PRUEFUNG als eigene Abschnitte, und 1-ZWECK:18 sagt warum - der Name ist enger als das Modul, wer nach Kamin sucht findet dieses Blatt nicht. resources/ 0 Pfade, Suite 1692/1692. -11 zum fuenften Mal in Folge im ersten Anlauf."
 ```
 ---
 
@@ -1614,6 +1618,34 @@ grundsatzfrage_entschieden: "Der Planner hat die Frage entschieden, die ich zwei
 folge_fuer_die_lage: "W-04/1 und W-21/1 stehen ABGENOMMEN beim Release-Pruefer — nach der neuen Regel sind das ZWEI von drei. Das ist KEIN Stillstand, sondern planmaessiges Sammeln: W-08/1 und W-22/1 sind BEREIT und liefern die dritte Stufe. Ich stosse deshalb keine Einzelpruefung an."
 an_yama_regelaenderung: "Der Planner legt die Regel ausdruecklich VOR, statt §10 selbst zu aendern ('das ist Regelarbeit und gehoert nicht dem Planner') — richtig nach §1. Damit liegt sie ohne Adressaten. NACH DEM P-01-PRAEZEDENZFALL (Yamas Weisung 05.08.: 'lass doch von plan pruefer die fassung pruefen und freigeben, dann wird das verbindlich') waere der Weg: Yama beauftragt, ich pruefe die Fassung, seine Freigabe macht sie verbindlich. Ich MASSE mir das nicht selbst an — die Beauftragung fehlt. Vorlage an Yama, mit einer Zeile: die Regel ist praktisch schon erprobt (die Sammelpruefung heute hat genau den Fund gemacht, den sie begruendet)."
 an_yama_fachgate: "DRINGENDER und unabhaengig davon: der Planner hat N-003 (Sparren-Vorbemessung) auf GELB als FACH-GATE gesetzt und ausdruecklich als BESTAETIGUNGSPFLICHTIG markiert — nicht wegen der Rechenqualitaet (die ist belegt), sondern wegen der REICHWEITE: Einfeldtraeger, gleichmaessige Last, nur senkrechte Komponente; Wind, Mehrfeld, Knicken, Auflagerpressung und Lastkombinationen fehlen. Sein Satz: 'Eine Sparrenbemessung, die als geprueft gilt und dann nicht traegt, ist Personenschaden.' Er hat die STRENGERE Lesart gesetzt, weil ein Irrtum in dieser Richtung niemandem schadet. CLAUDE.md verlangt bei Fach-, Rechts- und Haftungsfragen die Rueckfrage — das ist eine YAMA-Entscheidung, keine Rollen-Entscheidung, und sie steht offen."
+```
+---
+
+## BEREIT — A-13 (erster Produktivcode-Auftrag seit Tagen)
+
+```yaml
+auftrag: "A-13"
+titel: "Das einzige Azimut-Feld im Haus ohne Test bekommt Validierung, Zusage und den Konventionshinweis"
+datei: docs/auftraege/aktiv/A-13-roof-azimuth-absichern.md
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft — erster Produktivcode-Auftrag)
+basis_sha: 783d47c1
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die FUENF NULLEN selbst nachgemessen und ALLE bestaetigt — Validierung in Requests 0, in Controllers 0, PVRoofFactory existiert nicht, Tests 0, Konventionshinweis am Model 0; der Migrations-Kommentar von 2024 ('0=N, 90=E, 180=S, 270=W') steht woertlich in Z.67, und beide Vergleichszusagen existieren (BuildingModelSchemaContractTest, SzeneProjektionServiceTest). Die Kernbelege der DECISION halten: PVRoofController Z.42 HAT ein validate, und roof_azimuth steht nachweislich NICHT darin (0 Treffer im Block) — 'der Ort fuer Validierung existiert und wurde uebersprungen' ist gemessen, nicht behauptet; der Mass-Assignment-Pfad PVRoof::create(\$roofData) liegt in NewLeadsController:7082. Acht Kriterien, §5-Block, Erstnutzer und Rueckweg vorhanden. Die Model-Entscheidung deckt sich mit der ticket-Bauordnung (eine Wahrheit im Model-Hook)."
+mein_zweiter_beinahe_fehlbefund: "Ich habe SIEBEN Schreibpfade gezaehlt, das Blatt sagt SECHS — und ich war im Begriff, die Abweichung zu melden. Der siebte ist ein KOMMENTAR (NewLeadsController:7209: '// optionally pass \$roof = new PVRoof or an empty array if needed'). Das Blatt hat recht, meine Zahl war falsch. ZWEITER Beinahe-Fehlbefund heute, wieder aus einem zu groben Muster (nach dem Glob ohne Rekursion jetzt ein grep, das Kommentare mitzaehlt). Ich melde ihn, weil ein Pruefer, der seine eigenen Fehlgriffe verschweigt, die Verlaesslichkeit seiner Befunde nicht belegen kann."
+zulieferung: "Der Kommentar ist trotzdem wertvoll und STUETZT die DECISION: das Blatt argumentiert, eine Controller-Validierung 'wuerde beim siebten Schreibpfad fehlen' — und genau dieser siebte Pfad ist im Code bereits als Absicht notiert. Der Bauende soll ihn im Bericht nennen: die Regel am Model deckt auch den Pfad ab, den noch niemand geschrieben hat."
+naechster_schritt: "Generator zieht A-13, sobald kein Auftrag IN_ARBEIT ist (W-22/1 laeuft); IN_ARBEIT vor der ersten Scope-Aenderung, §3-Beleg nach A-13-8"
+```
+---
+
+## W-22/1 CODE_FERTIG bestaetigt + ein FUND aus meiner eigenen Warnung (plan-pruefer 12.08.)
+
+```yaml
+ballwechsel_bestaetigt: "Kette vollstaendig, Bau 8a3acb53 exakt 8 Dateien (sieben Blaetter + REGISTER), 11/11 gemeldet. Ball beim EVALUATOR. Damit ist Runde 2 der Klasse A gebaut."
+meine_warnung_und_ihr_ergebnis: "Ich hatte im BEREIT-Votum gewarnt: 'die Exportzahl 26 ist gross genug, dass eine Doppelung wie Punkt2D/MassPunkt darin unauffaellig waere — der Bauende soll ausdruecklich pruefen, ob gaubeGeometrie eigene Punkt-/Masstypen definiert, die anderswo schon existieren'. Der Bau hat NICHT danach gesucht (0 Treffer auf doppel/zweimal/identisch in seiner Meldung). ICH HABE ES GEMESSEN, und es gibt ZWEI Funde — der zweite ist der schwerere."
+fund_1_vec3: "Vec3 ist VIERMAL definiert und alle vier sind ZEICHENWEISE IDENTISCH ('exportinterfaceVec3{x:number;y:number;z:number;}') — aufbauOrientierung.ts:22, gaubeGeometrie.ts:34, dachVerschneidung.ts:20, dachUForm.ts:12. Exakt dieselbe Klasse und exakt dieselbe Zahl wie Punkt2D. Das ist jetzt der DRITTE Fall (MassPunkt 2x, Punkt2D 4x, Vec3 4x) und kein Einzelfall mehr, sondern die Bauart der Geometrie-Schicht: jedes Modul definiert seine Grundtypen selbst, damit es importfrei bleibt. Regel wie bei W-11: benennen, nicht zusammenlegen."
+fund_2_dreieck_schwerer: "'Dreieck' ist ZWEIMAL definiert und die beiden sind NICHT identisch, sondern BEDEUTEN VERSCHIEDENES: dachMesh.ts:32 'type Dreieck = [WeltPunkt3, WeltPunkt3, WeltPunkt3]' gegen gaubeGeometrie.ts:37 'type Dreieck = [LokalPunkt, LokalPunkt, LokalPunkt]'. EIN NAME, ZWEI KOORDINATENSYSTEME. Das ist keine Doppelung, sondern die gefaehrlichere Form: bei Punkt2D/Vec3 waere eine Verwechslung folgenlos (die Typen sind gleich), hier ist sie ein Rechenfehler im Raum — Weltkoordinaten in eine Lokalfunktion zu geben faellt dem Uebersetzer nicht auf, wenn beide 'Dreieck' heissen und strukturell gleich gebaut sind (drei Punkte). Das gehoert in 7-GRENZEN und, anders als die Typ-Doppelungen, moeglicherweise WIRKLICH aufgeloest — aber das entscheidet der Planner, nicht ich und nicht der Bau."
+pruefhinweis_evaluator: "Beide Funde als HINWEIS, nicht als Blocker — kein W-22-Kriterium verlangt eine Doppelungssuche (meine Warnung stand im Votum, nicht im Blatt; das ist MEIN Anteil: haette ich sie als Restpunkt gesetzt statt als Hinweis, waere sie verbindlich gewesen). Die Blaetter nennen Vec3 und Dreieck je einmal, aber nur in Exportliste und Formelblatt, nicht als Grenzfall."
 ```
 ---
 

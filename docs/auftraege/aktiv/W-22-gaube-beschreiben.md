@@ -271,3 +271,146 @@ befund_2: "fuenf Module (975 Z) bilden das Thema Dachaufbauten, die Werkbank fue
 befund_3: "auswechslung.ts (174 Z) steht in W-21 UND W-22 als Nachbar und ist in keinem
            zuhause — es braucht ein eigenes Werkzeug oder eine Zuordnung"
 ```
+
+
+## §11 — Bericht W-22/1 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "W-22/1"
+zustand: CODE_FERTIG
+bau_commit: "8a3acb53"
+in_arbeit_commit: "6a592b26"
+basis: "95fe1b88"
+
+kriterien:
+  W-22/1-1:  GEMELDET_MIT_ZWEI_ZAHLEN   # 3 woertlich / 0 nach Muster, s. u.
+  W-22/1-2:  GRUEN   # nur Nummern
+  W-22/1-3:  GRUEN   # F-027 Merkmal fuer Merkmal geprueft, Ergebnis differenziert
+  W-22/1-4:  GRUEN   # Gaube, Kamin, Pruefung als drei Abschnitte
+  W-22/1-5:  GRUEN   # lx/ly/lz mit Fundstelle 35, ly = Welt-Hoch ausdruecklich
+  W-22/1-6:  GRUEN   # alle fuenf AK mit Zeile, kritisch/nicht-kritisch getrennt
+  W-22/1-7:  GRUEN   # "Angebunden aus gaubeGeometrie.ts" + 26 Ausfuhren gruppiert
+  W-22/1-8:  GRUEN   # fuenf Module 975 Z selbst nachgezaehlt; auswechslung.ts benannt
+  W-22/1-9:  GRUEN   # drei Richtungen 0/0/0, Suite unveraendert gruen (ohne Zahl)
+  W-22/1-10: GRUEN   # Register: BESCHRIEBEN + gaubeGeometrie.ts
+  W-22/1-11: GRUEN   # 6a592b26: 2 Befehlszeilen, 2 Ausgabewerte
+
+W-22/1-1_zwei_zahlen:
+  woertlich: "3"
+  muster: "0"
+  die_drei: "Falschtreffer aus zitiertem Code — sie beginnen bei '<=' (AK1-Bedingung und
+             zweimal die Entwaesserungsschranke) und enden am naechsten '>' im Text."
+  zwei_echte_selbst_gefunden: "ich hatte <typ> und AK<n> geschrieben — beides sah wie ein
+                               Platzhalter aus und ist ersetzt (<<Bauart>>, AK-Nummer)."
+
+der_fachliche_kern:
+  ampel: "haengt an EINER Zeile (491): rot wenn ein KRITISCHES AK verletzt ist, gelb wenn
+          alles Kritische ok ist aber irgendein AK verletzt ODER feasible === false, sonst gruen"
+  ak4_nicht_kritisch: "der Filter nennt AK1|AK2|AK3|AK5 einzeln — AK4 'Front lotrecht' fehlt darin.
+                       Eine schiefe Front macht GELB, kein Rot. Das ist eine Entscheidung:
+                       Schoenheitsfehler, kein Anschlussfehler."
+  ak1_beim_kamin: "Z.485 setzt AK1 mit ok:true und ist:'lotrecht' — GESETZT, nicht gemessen.
+                   Wer es als Messung liest, liest eine Setzung."
+  hoehe_wird_geklemmt: "Entwaesserungsschranke h <= d*(tan a - tan(minNeigung)), sonst 'h klemmen'.
+                        Der Anwender bekommt moeglicherweise eine andere Hoehe als eingegeben."
+
+f_027_differenziert:
+  zuordnung: "STIMMT — der Planner hat sie zu Recht als ✓ bestaetigt; das Modul setzt genau
+              diese Gauben auf eine Dachflaeche"
+  formel: "DECKT SICH NICHT mit dem Bau"
+  merkmale:
+    rise: "teilweise — Math.tan 6x, aber halfW statt d (Z.248), beim Kamin d/2 (Z.393)"
+    quader: "NEIN — 0 Treffer; das Modul liefert Dreiecke und Linien"
+    atan2: "NEIN — 0 Treffer; Ausrichtung ueber ein lokales Dreibein (aufbauBasis, Z.76)"
+    vorgabe_15_grad: "NEIN — MIN_PULT_GRAD 5 und MIN_FLACH_GRAD 2"
+  belegstelle: "F-027 zeigt selbst auf dachdecker_pro_3d.tsx:1190-1210 — M-01 auf Yamas Desktop.
+                Die Datei existiert (132.374 B). Sie ist NICHT der ticket-Code."
+  korrektur_an_mir_selbst: "meine erste Fassung sagte pauschal 'trifft nicht zu'. Zu grob —
+                            das haette dem Planner widersprochen, wo er recht hat. Geschaerft
+                            zu 'Thema ja, Formel nein', im Blatt und im Register."
+
+werkbank_befund:
+  fuenf_module_975_zeilen: "gaubeGeometrie 498 · aufbauPlatzierung 190 · auswechslung 174 ·
+                            aufbauOrientierung 61 · aufbautenStatus 52 — selbst nachgezaehlt,
+                            exakt die Zahl des Auftrags"
+  auswechslung: "in W-21 UND W-22 als Nachbar gefuehrt, in keinem zuhause — 174 Zeilen"
+  namensfalle: "wandaufbau.ts (72 Z) heisst 'Aufbau', ist aber Wandaufbau/U-Wert und bei W-02
+                ausdruecklich Ausschluss. Zweite Namensfalle nach grundriss.ts bei W-05."
+
+nicht_gemessen:
+  - "ob das GEKLEMMTE h nach aussen sichtbar wird — steht als offene Frage in 6-PRUEFUNG"
+  - "der Inhalt von M-01 (dachdecker_pro_3d.tsx) — nur Existenz und Groesse gemessen"
+
+browserabnahme: "entfaellt — reine Dokumentblaetter"
+ballbesitz: evaluator
+```
+
+---
+
+## Evaluator-Votum (§11) — 12.08.2026
+
+```yaml
+auftrag: W-22/1
+commit: 8a3acb53          # Bau; Basis 95fe1b88
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "acht Fundstellen einzeln geoeffnet · die Math-Zaehlung des Blattes Funktion fuer
+  Funktion nachgezaehlt · die Ampel-Logik gegen Z.491 gehalten"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Messtisch — ALLE ELF Zeilen
+
+```text
+-1   Platzhalter, vier Muster                        0
+-2   3-FORMELN: die Treffer auf Math./=/atan2/hypot sind KEINE Rechnungen, sondern
+     die gepruefte F-027-Behauptung und die Code-Zaehlung — siehe unten
+-3   F-027 wird GEPRUEFT statt uebernommen           6 Nennungen, mit Ergebnis je Zeile
+-4   drei Gegenstaende getrennt: 2-FUNKTION traegt "### 1 · GAUBE", "### 2 · KAMIN",
+     "### 3 · PRUEFUNG" — und 1-ZWECK:18 sagt "Der Name ist enger als das Modul"
+-5   lokales System lx/ly/lz im Blatt                 ja, mit Bedeutung je Achse
+-6   7-GRENZEN liest pruefeAufbau() aus               drei Stufen, gegen Z.491 geprueft
+-7   Herkunft "angebunden aus gaubeGeometrie.ts"      ja
+-8   Dachaufbauten-Befund im Blatt                    ja
+-9   resources/ im Bau-Commit 0 Pfade  ·  Suite 1692/1692
+-10  Register: gaubeGeometrie.ts als Fundstelle       3 Treffer
+-11  §3-Beleg in 6a592b26                             2 Befehlszeilen, 2 Ausgaben
+```
+
+### Die Math-Zählung des Blattes — Funktion für Funktion nachgezählt
+
+*Das Blatt behauptet eine Inventur des Codes. Ich habe sie nicht gelesen, sondern wiederholt:*
+
+```text
+             Blatt   gemessen              Blatt   gemessen
+Math.max      20        20        Math.abs    3         3
+Math.tan       6         6        Math.sin    2         2
+Math.hypot     4         4        Math.cos    2         2
+Math.min       3         3        Math.atan   1         1
+Math.atan2  "0 Treffer"            0   <- die Verneinung stimmt
+Datei: 498 Zeilen
+```
+
+**Neun Zahlen, neun Treffer.** *Deshalb ist `-2` erfüllt und nicht verletzt: was wie eine Formel
+aussieht (`rise = d · tan(φ)`, `atan2(fall_x, fall_z)`), ist die **Behauptung aus F-027**, die
+`-3` ausdrücklich zu prüfen verlangt — und das Blatt prüft sie und weist zwei davon zurück.*
+
+### Die Ampel — gegen den Code gehalten
+
+```text
+BLATT  rot    wenn ein KRITISCHES Kriterium verletzt ist
+       gelb   wenn alles Kritische ok, aber ein Kriterium verletzt ODER feasible === false
+       gruen  sonst
+CODE   :491   const ampel: Ampel = !kritischOk ? 'rot' : (!allesOk || !feasibleFlag) ? 'gelb' : …
+```
+
+**Die drei Stufen und ihre Bedingungen stimmen mit der Zeile überein**, einschließlich des
+`ODER feasible === false`, das ein flüchtiger Leser übersieht.
+
+> **`-4` ist der stärkste Teil.** *Das Blatt trennt nicht nur, es sagt auch **warum die Trennung
+> nötig ist**: „Wer nach ‚Kamin' sucht, findet dieses Blatt nicht — deshalb steht der Satz hier."
+> Ein Werkzeugname, der enger ist als sein Modul, ist genau die Falle, in die ein Register läuft.*
+
+**`-11` zum fünften Mal in Folge im ersten Anlauf** (W-04, W-11, W-05, W-21, W-22).

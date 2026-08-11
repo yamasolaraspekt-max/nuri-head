@@ -1,43 +1,30 @@
-# W-xx · <Name> — BEDIENUNG
+# W-22 · Gaube — BEDIENUNG
 
-## Aufruf
+## Kein eigenes Werkzeug
 
-| Weg | Wie |
+**0 Treffer** auf `gaube`, `kamin`, `aufbau` in der Werkzeugregistrierung. **Dieselbe Lage wie W-01,
+W-05 und W-21:** die Rechenschicht steht, die Werkzeugschicht fehlt. *Benannt, nicht gelöst.*
+
+## Was der Anwender angibt
+
+| Größe | Anmerkung |
 |---|---|
-| Werkzeugleiste | <Symbol, Position, Beschriftung> |
-| Tastenkürzel | <Taste> |
-| Kontextmenü | <ja/nein, wann> |
+| **Bauart** | `schleppgaube` · `flachgaube` · `trapezgaube` · `giebelgaube` · `spitzgaube` · `chimney` |
+| **Position** `x`, `y` | **relativ, 0…1 auf der Fläche** (Z.47) — nicht in Millimetern |
+| Breite, Höhe, Tiefe | die Höhe wird ggf. **geklemmt**, siehe `7-GRENZEN` |
+| Eigenneigung | untere Schranken: **5°** Pult, **2°** Flach |
 
-## Ablauf am Bildschirm
+**Die Position ist relativ.** *Eine Gaube „bei 0,5 / 0,3" sitzt auf jeder Dachgröße an der gleichen
+Stelle — und wandert mit, wenn das Dach sich ändert.*
 
-| Schritt | Anwender tut | Bildschirm zeigt |
-|---|---|---|
-| 1 | | |
-| 2 | | |
+## Was er zurückbekommt
 
-## Rückmeldungen
+Nicht nur Geometrie, sondern eine **Ampel mit Kernbefund im Klartext**:
 
-| Lage | Anzeige | Ton |
-|---|---|---|
-| Alles gut | | sachlich |
-| Eingabe unvollständig | | hinweisend |
-| **Nicht möglich** | | **erklärend — was und warum** |
+```text
+gruen  "«Bauart»: Geometrie im Toleranzband, Anschluss auf Hauptdach, kein Vertex ueber First."
+sonst  "«Bauart»: AK-Nummer verletzt (ist=…, soll …)."
+```
 
-> **Pflicht:** Für jede Absage aus `7-GRENZEN.md` muss hier ein Satz stehen, den
-> ein Handwerker versteht. Nicht „DachGeometrieUngueltig", sondern
-> „Für diesen Grundriss kann kein Walmdach berechnet werden, weil er einspringende
-> Ecken hat. Mögliche Wege: Grundriss begradigen oder Flachdach wählen."
-
-## Abbruch
-
-- **Esc** bricht ab. Danach ist der Zustand **exakt** wie vorher.
-- Halbfertiges wird nie gespeichert.
-
-## Tastenkürzel während des Werkzeugs
-
-| Taste | Wirkung |
-|---|---|
-| Esc | abbrechen |
-| Eingabe | bestätigen |
-| Umschalt | <z.B. auf 45°-Winkel zwingen> |
-| Alt | <z.B. Fang aussetzen> |
+*Aus `resources/planner/hausplaner/geometry/gaubeGeometrie.ts:493-495`.* **Der Befund nennt das verletzte Kriterium mit Ist
+und Soll** — nicht „ungültig".

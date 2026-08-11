@@ -1,33 +1,44 @@
-# W-xx · CODE
+# W-22 · Gaube — CODE
 
-## Wo der Code wirklich lebt
+**Angebunden aus `resources/planner/hausplaner/geometry/gaubeGeometrie.ts`** — 498 Zeilen, 26 Ausfuhren, selbst nachgezählt.
 
-| Schicht | Datei im Repo | Zweck |
+**Geometrie-Grundlage:** `Vec3` (34) · `LokalPunkt` (36) · `Dreieck` (37) · `Linie` (38) ·
+`SurfaceFrame` (41) · `GaubeEingabe` (45) · `surfacePointRein()` (66) · `AufbauBasisWelt` (74) ·
+`aufbauBasis()` (76) · `weltAusLokal()` (82)
+
+**Hauptdach:** `Hauptdach` (87) · `hauptdachAusFrame()` (88) · `neigungAusFrame()` (92) ·
+`signierterAbstand()` (97)
+
+**Grenzwerte:** `MIN_PULT_GRAD` (102) · `MIN_FLACH_GRAD` (103)
+
+**Gauben:** `PultGaube` (106) · `pultGaubeGeometrie()` (129) · `GiebelGaube` (203) ·
+`giebelGaubeGeometrie()` (236) · `fussabdruckUV()` (367)
+
+**Kamin:** `KaminGeometrie` (387) · `kaminGeometrie()` (389)
+
+**Prüfung:** `Ampel` (398) · `PruefBefund` (399) · `pruefeAufbau()` (409)
+
+**Abhängigkeit:** `aufbauOrientierung.ts` (Z.32) — die einzige.
+
+## Das Thema ist größer als dieses Blatt: fünf Module, 975 Zeilen
+
+| Modul | Z | was es ist |
 |---|---|---|
-| 1 Domäne | `resources/planner/hausplaner/domain/…` | |
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | |
-| 3 Werkzeug | `resources/planner/hausplaner/app/tools/…` | |
-| 4 Darstellung | `resources/planner/hausplaner/renderers/…` | |
-| 5 Oberfläche | `resources/planner/hausplaner/ui/…` | |
+| `resources/planner/hausplaner/geometry/gaubeGeometrie.ts` | **498** | dieses Blatt |
+| `resources/planner/hausplaner/geometry/aufbauPlatzierung.ts` | 190 | flächenabhängige Platzierung |
+| `resources/planner/hausplaner/geometry/auswechslung.ts` | **174** | Auswechslungen / Wechselhölzer |
+| `resources/planner/hausplaner/geometry/aufbauOrientierung.ts` | 61 | Orientierung aufrecht |
+| `resources/planner/hausplaner/geometry/aufbautenStatus.ts` | 52 | Statuslogik für Dach-Aufbauten |
+| | **975** | **selbst nachgezählt, deckt sich mit dem Auftrag** |
 
-> **Der Code steht im Repo, nicht in diesem Ordner.** Hier liegen nur
-> Schnittstellenbeschreibung, Ablaufskizze und — wo nötig — ein kurzer
-> Auszug der Kernstelle mit Zeilennummer, damit man beim Lesen nicht springen muss.
+**Die Werkbank führt davon nur „Gaube".**
 
-## Schnittstelle
+### `auswechslung.ts` ist in keinem Blatt zuhause
 
-```ts
-// Signatur der öffentlichen Funktion(en) dieses Werkzeugs
-```
+Sie wird in **W-21 und W-22** als Nachbar genannt und ist **in beiden nur Nachbar**.
+*Ohne diesen Satz verschwinden 174 Zeilen zwischen zwei Blättern.*
 
-## Kernstelle
+### Ein Modulname, der nicht dazugehört
 
-```ts
-// Der eine Ausschnitt, auf den es ankommt — mit Datei:Zeile
-```
-
-## Abhängigkeiten
-
-| Braucht | Warum | Richtung geprüft? |
-|---|---|---|
-| | | ja/nein — kein Kreis |
+`resources/planner/hausplaner/geometry/wandaufbau.ts` (72 Z) heißt „Aufbau", ist aber **Wandaufbau / U-Wert** — bei **W-02**
+ausdrücklich Ausschluss. *Der Name trägt hier zum zweiten Mal in die Irre.*
