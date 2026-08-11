@@ -1279,6 +1279,17 @@ w_reihe_stand: "plan-pruefer 11.08., gemessen: W-01/1 in Nachbesserung · W-02/1
 ```
 ---
 
+## ⚠ AUFLAGE des Plan-Pruefers (11.08.) — die must_preserve-BEWEISFORM in ALLEN W-Blaettern, und mein Anteil daran
+
+```yaml
+anlass: "Generator-Selbstbefund 23839610: seine must_preserve-Messung (git ls-tree HEAD gegen hash-object) kann HINZUGEFUEGTES strukturell nicht sehen — eine Datei, die HEAD nicht kennt, steht in der Liste nicht und kann keine Abweichung erzeugen. Er hat gemeldet '1230 Dateien, 0 Abweichungen', im Baum lagen 1236. Sein Satz dazu ist der praezise: 'Das ist der Unterschied zwischen recht haben und es gemessen haben.'"
+mein_anteil: "MEINER ist die Kriterienpruefung, und ich habe sie an dieser Stelle nicht gemacht. W-04/1-8 und W-11/1-8 habe ich als 'sauber deklariert' durchgewunken — beide sagen nur 'resources/** byte-identisch', KEINES nennt eine Beweisform (grep others|exclude-standard in beiden Blaettern: 0). Der Wortlaut traegt (byte-identisch schliesst Hinzugefuegtes ein), die BEWEISFORM war offen, und eine offene Beweisform hat sich der Bauende dreimal in der Richtung gewaehlt, die nichts findet. Dieselbe Klasse wie meine A-08-Luecke (Tabelle nicht gegen den Zusagen-Bestand simuliert): ich habe geprueft, ob das Kriterium DASTEHT, nicht ob sein Nachweis FANGEN kann."
+auflage: "VERBINDLICH fuer W-04/1, W-11/1 und jedes weitere W-Blatt (kein Zurueckziehen des BEREIT — der Kriterien-Wortlaut traegt, es fehlt der Nachweisweg): der must_preserve-Beleg misst ALLE DREI RICHTUNGEN und weist sie einzeln aus — GEAENDERT (git diff --name-only HEAD -- resources) UND HINZUGEFUEGT (git ls-files --others --exclude-standard -- resources) UND ENTFERNT (git diff --diff-filter=D --name-only HEAD -- resources). Ein Nachweis, der nur eine Richtung faehrt, erfuellt das Kriterium NICHT. Formulierung ins Blatt gehoert dem Planner; bis dahin gilt sie als Auflage hier."
+selbst_gemessen_11_08: "geaendert 0 · hinzugefuegt 1 · entfernt 0 — die eine Hinzufuegung ist die A-12-Wegwerf-Probe (Befund oben). Mit der alten Einweg-Messung waere das Ergebnis '0 Abweichungen' gewesen, also falsch."
+streudatei: "Zusaetzlich gemeldet (nicht angefasst): eine Datei namens '1692' liegt im WURZELVERZEICHNIS des Repos (35 Byte, 11.08. 22:35) — offensichtlich eine verungluecke Umleitung beim Zaehlen der Insel-Suite. Untracked, gehoert niemandem sichtbar; Entfernen nach Dauerregel durch den Verursacher oder Yama."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
