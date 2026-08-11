@@ -256,13 +256,18 @@ Repo.*
 ## Konfliktprüfung (§5)
 
 ```text
-A-12     IN_ARBEIT   FORMELSAMMLUNG + VORGEHEN + BERICHT-A-12    KEINE Beruehrung
+A-12     ENTWURF     FORMELSAMMLUNG + VORGEHEN + BERICHT-A-12    KEINE Beruehrung
 W-01N    ENTWURF     W-01-Blatt + FAHRPLAN                       KEINE Beruehrung
 W-04/1 · W-05/1 · W-08/1 · W-11/1 · W-13/1   ENTWURF   werkbank/W-xx/** + REGISTER.md
 W-21/1   DIESES      werkbank/W-21/** + REGISTER.md
 -> SECHS Blaetter teilen REGISTER.md, je eine Zeile plus Fundstellen, zeilenweise disjunkt.
    §3 loest es; belegt in W-21/1-12.
-§3: A-12 ist IN_ARBEIT. W-21/1 geht NICHT vor dessen Abschluss in IN_ARBEIT.
+§3 GEMESSEN 11.08. (korrigiert, siehe docs/MELDUNG-ERFUNDENE-SPERRE-A-12.md):
+   grep -cE '^\|.*\| *\*{0,2}.?IN_ARBEIT' docs/STATUS.md   -> 0
+   A-12 traegt status: ENTWURF, NICHT IN_ARBEIT.
+   -> §3 sperrt W-21/1 NICHT. Es darf in IN_ARBEIT, sobald DoR durch ist.
+   Der Vorrang von A-12 (F-026 ist gelb, W-07/W-08 haengen fachlich daran) ist eine
+   planerische EMPFEHLUNG, kein Verbot. Die Reihenfolge entscheidet der Plan-Pruefer.
 FACHLICHE Beruehrung: W-21 braucht laut Register W-07 (Dach) — der Dachstuhl entsteht aus
    dem Dach. Kein Dateikonflikt, aber es ist der Grund, warum W-21 nach W-07 GEBAUT werden
    sollte, auch wenn es JETZT beschrieben werden kann.
