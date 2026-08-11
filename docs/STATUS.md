@@ -880,7 +880,7 @@ datei: docs/auftraege/aktiv/A-01-dach-aus-kontur.md
 zustand: BETRIEBSBESTAETIGT
 betriebspruefung: "release-pruefer 12.08. (§19: dieser Uebergang ist die unabhaengige Betriebspruefung des Release-Pruefers, NICHT Yamas Freigabe): main-Stand auf beiden Fernzielen identisch, 0 Migrationen, Smoke-Tests am veroeffentlichten Stand gruen, Bundle byte-gleich, Wildbetriebs-Belege gemessen. Sammelbericht am Dateiende."
 nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF c908d3f0 (05.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
-ballbesitz: yama
+ballbesitz: —  # Kette vollstaendig, kein offener Ball
 basis_sha: 16d5bbde
 pruef_sha: "94b58aaf"
 pruef_branch: "work/a01-generator"
@@ -921,7 +921,7 @@ datei: docs/auftraege/aktiv/A-02-lock-halter-statt-ruhe.md
 zustand: BETRIEBSBESTAETIGT
 betriebspruefung: "release-pruefer 12.08. (§19: dieser Uebergang ist die unabhaengige Betriebspruefung des Release-Pruefers, NICHT Yamas Freigabe): main-Stand auf beiden Fernzielen identisch, 0 Migrationen, Smoke-Tests am veroeffentlichten Stand gruen, Bundle byte-gleich, Wildbetriebs-Belege gemessen. Sammelbericht am Dateiende."
 nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF c908d3f0 (05.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
-ballbesitz: yama
+ballbesitz: —  # Kette vollstaendig, kein offener Ball
 basis_sha: 93a9691f
 release_sha: "c908d3f0"
 release_vermerk: "release-pruefer 05.08.: RELEASE_FREI (Protokoll fa2b8345, Auflage 'Blatt nennt 6953198a' laut Evaluator-Nachverfolgung erfuellt); mit dem Sammel-Release d8612a63..c908d3f0 auf main (fork+backup-private). Grundtor-Beleg wie bei A-01."
@@ -987,7 +987,7 @@ release_sha: "e7c6e618"
 release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme c3d52f09 selbst gefahren — Kette Vorfahr, Scope exakt 4 Dateien (Waechter, Suite, Buehnen-Test, Anker), Produkt-Code seit 8648a4cb unberuehrt (kein tsc/Bundle/php noetig), bash -n OK, Suiten 7/7 + 7/7 + 38/38, Geheimnis-/env-Scan leer. RELEASE_FREI und main-Integration in einem Arbeitsgang: reiner FF 8648a4cb..e7c6e618 auf fork UND backup-private. Der Release-Claim (e0cc55a7, frische Instanz) ist damit von der Stamm-Instanz eingeloest. Realfund PID 48098 (verwaiste php84-Buehne vom 05.08.) laeuft weiter — Handraeumung gehoert Yama. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 zweitpruefung: "Parallel lief ein UNABHAENGIGES §10 einer frischen Release-Instanz (a6b54b79, RELEASE_FREI an c3d52f09; Kette je is-ancestor, Suiten 7/7+7/7, Rueckweg apply --reverse --check) — deckungsgleich mit der Stamm-Pruefung, als Zweitbeleg verbucht. Ihr Sicherungs-Push wurde erneut von der Umgebung verweigert (60ebed62); Transport und Veroeffentlichung sind durch die Stamm-Instanz erfolgt. Doppel-§10 derselben Klasse wie P-02 — Claim-Vergabe an Release-Station beruecksichtigen."
 nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF e7c6e618 (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
-ballbesitz: yama
+ballbesitz: —  # Kette vollstaendig, kein offener Ball
 basis_sha: 89f373d9
 pruef_sha: c3d52f09
 code_fertig: "generator 10.08.: Bau c3d52f09 (exakt 4 Dateien: buehnen-waechter.sh NEU 149 Z., buehnenWaechter.test.mjs NEU 7 Zusagen, browserBuehne.test.mjs +B3-Zusage (6->7), ANKER-BROWSER.md +1 Absatz A-04-6) — §11-Bericht im Blatt. Kern: Zustand messen statt Aufrufform (ps-Schnappschuss VOR der Auswertung, ps eww je Kandidat, lsof-cwd nur bei APP_ENV, .env.<APP_ENV> ja / nackte .env NIE); exakte Gleichheit ticket_testing (bewusste Duplikation, Drift-Zusage); Nicht-Ziele gehalten (startet nichts, beendet nichts — browser-buehne.sh unberuehrt, content-identisch HEAD). Suiten SELBST gefahren: buehnenWaechter 7/7 + browserBuehne 7/7 (Basis 6/6). A-04-5: SECHS Mutationen einzeln, jede rot (3/1/2/1/3/1 Zusagen), md5-identische Wiederherstellung belegt. KEINE echte Buehne im Test: artisan-Stub schlaeft, php -S dient leeres Wegwerf-Verzeichnis mit eigener .env (Rest 2); Positivfall traegt ticket_testing nur als Zeichenkette, verbunden wird nichts. ERSTE ECHTE MESSUNG: verwaiste Buehne PID 48098 (05.08., ppid 1, php84, Herd-Pfad mit Leerzeichen) gefunden und als ticket_testing/OK aufgeloest — gemeldet, nicht angefasst. CODE_FERTIG heisst: gebaut und eigengeprueft — kein gruen, keine Abnahme. Fuer den Evaluator (Erstnutzer nach Blatt): bash scripts/buehnen-waechter.sh vor jeder Browserabnahme, Aufruf samt Ausgabe in den Abnahmebericht."
@@ -1051,7 +1051,7 @@ release_sha: "e321f2a2"
 release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme c512f931 (Erstvotum fc5a3daa + unabhaengige Zweitmessung 05f3e1d9, deckungsgleich) — Kette Vorfahr, Scope exakt 2 Dateien (Tor +94, Suite +143), Produkt-Code seit e7c6e618 unberuehrt, bash -n OK, Suiten 42/42 + 7/7 + 7/7, Geheimnis-/env-Scan leer. RELEASE_FREI und main-Integration in einem Arbeitsgang: reiner FF e7c6e618..e321f2a2 auf fork UND backup-private. Feld-Belege der Abnahme beigefuegt: A-07-1b-Kippfall LIVE (7ab67893, Tor meldete 212 fremde Blobs und fasste nichts an; anschliessend als docs/rollenkette in 1e933a64 GESICHERT). Offener P2/BEWEIS-Befund (Initialisierung ohne Zusage) beim Generator, blockiert nicht. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 zweitpruefung_a07: "Unabhaengiges §10 der frischen Release-Instanz (850b6ece): RELEASE_FREI an c512f931, Kette 6x is-ancestor, 42/42, Scope content-identisch, Revert-Probe OK, Halden-Rueckweg 2589/0 — deckungsgleich mit der Stamm-Pruefung, als Zweitbeleg verbucht. Ihr Push erneut verweigert (facf791c); Transport und Veroeffentlichung waren durch die Stamm-Instanz bereits erfolgt (e321f2a2 auf main). Vierte Claim-Kollision derselben P-02-Klasse."
 nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF e321f2a2 (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
-ballbesitz: yama
+ballbesitz: —  # Kette vollstaendig, kein offener Ball
 in_arbeit_gesetzt: "generator 10.08.: VOR der ersten Scope-Aenderung (§3). §7-Vorpruefung bestanden: basis_sha ff549b88 ist Vorfahr von HEAD (e3d7b2c8), Scope driftfrei (diff ff549b88..HEAD auf beide Tor-Dateien leer, Arbeitsbaum content-identisch zu HEAD), Suite selbst gefahren 38/38, Rot-Lagen leben ALLE und wachsen weiter (trap 0 · Halde 2554 · Divergenz 38 --name-only / 58 status / 18 Phantome — Vortag: 35/55/2551). STATUS.md vor diesem Commit content-identisch zu HEAD, kein Beifang der parallelen A-04-Abnahme."
 code_fertig: "generator 10.08.: CODE_FERTIG — §11-Bericht im Blatt (A-07-index-divergenz.md), Basis ff549b88, Pruef-SHA c512f931 (traegt EXAKT die 2 Scope-Dateien, content-diff gegen Arbeitsbaum = 0). Suite 42/42 selbst gefahren (38 Bestand + 4 neue Zusagen A-07-1a/-2/-4/-4-Gegenprobe), vier Mutationen gefallen, md5-identisch wiederhergestellt (59e23956…). Regelfall VOR der ersten Angleichung gemessen: 20 Kandidaten-Blobs, 0 verwaist, 0 unmerged. Zusatz-Nachweis 1a real: status 58 -> 4, alle 4 echt, VIERZEHN verschwundene Eintraege einzeln index-frei belegt (>= 10 verlangt). A-07-5 EINMALIG erledigt: 2589 Halden-Dateien nach $TMPDIR/ticket-index/_to_delete/2026-08-10-A-07-5/ beiseitegelegt, 0 geloescht, 0 verblieben; voller Suite-Lauf hinterlaesst jetzt 0 statt ~35. GEMELDET: HEAD wanderte waehrend des Baus (parallele A-04-Release-Kette 18:54-18:58 committete durchs geteilte Arbeitsverzeichnis und nutzte damit das editierte Tor als ERSTNUTZER der Angleichung — Details und Mutationsfenster-Risiko als Abweichungen im Bericht). Kein gruen, keine Selbstabnahme — Ball beim Evaluator."
 basis_sha: 8967e2c4
@@ -1088,7 +1088,7 @@ nachtrag: docs/auftraege/aktiv/A-08-NACHTRAG-drei-nein.md  # liefert Entscheidun
 zustand: BETRIEBSBESTAETIGT
 betriebspruefung: "release-pruefer 12.08. (§19: dieser Uebergang ist die unabhaengige Betriebspruefung des Release-Pruefers, NICHT Yamas Freigabe): main-Stand auf beiden Fernzielen identisch, 0 Migrationen, Smoke-Tests am veroeffentlichten Stand gruen, Bundle byte-gleich, Wildbetriebs-Belege gemessen. Sammelbericht am Dateiende."
 nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF 8648a4cb (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
-ballbesitz: yama
+ballbesitz: —  # Kette vollstaendig, kein offener Ball
 release_sha: "8648a4cb"
 release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: main-Integration in Vertretung ausgefuehrt — reiner FF c908d3f0..8648a4cb auf fork UND backup-private. Das §10-Protokoll der frischen Release-Instanz (b2f8c44b, RELEASE_FREI an 85b03d23) uebernommen und das Grundtor am Kandidaten 8648a4cb selbst erneut gefahren: tsc clean, Insel 1689/1689, Bundle byte-gleich, bash -n OK, Tor-Suite 38/38, Buehne 6/6, php artisan test 880/880. Ihr verweigerter Sicherungs-Push (2b5aebae) ist nachgeholt: Linie liegt auf beiden Remotes. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 claim_release: "plan-pruefer 08.08.: ABGENOMMEN (Erst- und Zweitvotum unabhaengig deckungsgleich), Release-Station leer bei P0 — FRISCHE Release-Pruefer-Instanz wird gestartet. Claim VOR dem Start. LEHRE aus der Instanzen-Kollision der Abnahme: eine 'failed'-Meldung ist KEIN Todesbeweis — vor jedem kuenftigen Ersatzstart pruefe ich zusaetzlich die Commit-Historie auf spaete Commits der totgesagten Instanz."
@@ -1164,7 +1164,7 @@ datei: docs/auftraege/aktiv/A-10-melder-am-leeren-ergebnis.md
 zustand: BETRIEBSBESTAETIGT
 betriebspruefung: "release-pruefer 12.08. (§19: dieser Uebergang ist die unabhaengige Betriebspruefung des Release-Pruefers, NICHT Yamas Freigabe): main-Stand auf beiden Fernzielen identisch, 0 Migrationen, Smoke-Tests am veroeffentlichten Stand gruen, Bundle byte-gleich, Wildbetriebs-Belege gemessen. Sammelbericht am Dateiende."
 nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF 2da18c44 (10.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
-ballbesitz: yama
+ballbesitz: —  # Kette vollstaendig, kein offener Ball
 release_sha: "2da18c44"
 release_vermerk: "release-pruefer (Stamm-Instanz) 10.08.: main-Integration in Vertretung — reiner FF e321f2a2..2da18c44 auf fork UND backup-private. Das §10 der frischen Release-Instanz (5f7043bc, RELEASE_FREI an 47c0aa73) uebernommen und das volle Grundtor am Kandidaten selbst erneut gefahren: tsc clean, Insel 1692/1692, Bundle BYTE-GLEICH (62338b66), php artisan test 880/880. Ihr verweigerter Push (d836fb91) ist nachgeholt. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 basis_sha: d58b220e
@@ -3052,4 +3052,54 @@ einarbeitung: "Planner — A-01-Nicht-Ziel im Blatt streichen mit Verweis hierau
 ich_baue_nicht: "beide Entscheidungen sind Weichen, keine Auftraege. Schnitt und DoR laufen
                  normal; ich habe keinen Auftrag geschnitten und keinen Code angefasst"
 bei_yama_bleibt: "nichts mehr aus diesen beiden Fragen"
+```
+
+---
+
+## ANTWORT DES RELEASE-PRÜFERS (12.08.) — auf den Macht-Befund gegen mich, und auf den Konsistenz-Befund
+
+### Zum Macht-Befund: „Vertretung über die Veröffentlichung hinaus ausgedehnt"
+
+**Der Befund hat recht, und er ist wichtig genug, dass ich ihn nicht wegerkläre.** §4 deckt
+Veröffentlichung und ist an `RELEASE_FREI` gebunden. **E1/E2/E3 sind Prozessrecht und davon nicht
+gedeckt.** Dasselbe gilt für W-12/W-18, für `auswechslung`/W-22, für die A-01- und
+Werkbank-Entscheidung von heute.
+
+**Was sie stattdessen deckt — und das ist keine Ausrede, sondern eine andere Rechtsgrundlage:**
+§1 Rangfolge Nummer **1** lautet *„aktuelle ausdrückliche Anweisung von Yama"* und steht **über**
+diesem Dokument. Jede dieser Entscheidungen hat eine solche Einzelanweisung, im Wortlaut:
+
+```text
+E1/E2/E3          "Ball bei dir fuer die drei Entscheidungen"
+W-12 / W-18       "kannst du mich in der hinsicht vertreten … und bitte hierfuer eine loesung finden"
+Yama-Uebergabe    "kannst du diese aufgabe fuer mich uebernehmen"
+A-01 / Werkbank   "du sollst die aufgaben, welche an mich gerichtet sind, erledigen"
+```
+
+> **Der Unterschied ist nicht kosmetisch.** *Eine stehende Vertretung gilt ohne Rückfrage und für
+> alles Künftige. Eine Einzelanweisung gilt für ihren Vorgang. Ich habe im Text meiner Entscheide
+> „Vertretung" geschrieben, wo „auf Yamas ausdrückliche Anweisung vom <Datum>" richtig gewesen
+> wäre — **das ist der berechtigte Kern des Befunds**, und er trifft die Form, nicht die Befugnis.*
+
+**Ab sofort: jeder Entscheid außerhalb von §4 nennt die Einzelanweisung im Wortlaut mit Datum.**
+Rückwirkend ist es hiermit für alle fünf Vorgänge nachgeholt (Liste oben).
+
+**Was ich NICHT tue: die Vertretungsregel erweitern.** *Eine Regeländerung, die die eigene Vollmacht
+vergrößert, prüft man nicht selbst — das ist die Machtprüfung, die der Plan-Prüfer bei P-01
+eingeführt hat.* **Vorlage an den Plan-Prüfer:** Soll §4 um „Prozess- und Zuordnungsentscheidungen
+nach ausdrücklicher Einzelanweisung" ergänzt werden, oder bleibt es bei der Einzelanweisung je
+Vorgang? *Ich empfehle das Zweite — es kostet Yama einen Satz und hält die Grenze sichtbar.*
+
+### Zum Konsistenz-Befund (`ENTSCHEIDUNG-KONSISTENZ.md` verdrängt §16)
+
+**Erledigt am 11.08.** — auf Yamas Anweisung *„lies mal den Bericht von Evaluator gründlich bevor du
+handelst"* habe ich festgestellt: die Datei ist eine **Analyse ohne Inkraftsetzungsakt**, §16 gilt
+unverändert, die Statusfelder wurden nachgetragen. Der Befund des Evaluators war in jedem Punkt
+richtig. **Ball geschlossen.**
+
+```yaml
+macht_befund: "BERECHTIGT in der Form — Rechtsgrundlage ist §1 Nr.1 (Einzelanweisung), nicht §4"
+konsequenz: "jeder Entscheid ausserhalb §4 nennt kuenftig die Anweisung im Wortlaut mit Datum"
+nicht_von_mir_entschieden: "ob §4 erweitert wird — Vorlage an den Plan-Pruefer, mit Empfehlung NEIN"
+konsistenz_befund: "erledigt 11.08., §16 gilt, Statusfelder nachgetragen"
 ```
