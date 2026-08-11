@@ -23,7 +23,7 @@
 |---|---|---|---|---|
 | W-03 | Wand bearbeiten | LEER | W-02, W-13 | F-003, F-004, F-030 |
 | W-04 | Öffnung (Tür/Fenster) | **BESCHRIEBEN** | W-02 | **keine** ⓝ (~~F-003~~, ~~F-031~~) |
-| W-05 | Raum erkennen | LEER | W-02 | F-010, F-011, F-012, F-013 |
+| W-05 | Raum erkennen | **BESCHRIEBEN** | W-02 | F-010, F-011 (ohne Betrag), F-012 ⚠, F-013 ⚠, **F-001** |
 | W-10 | Decke und Boden | LEER | W-05 | F-011, F-030 |
 | W-16 | Grundriss unterlegen | LEER | W-12 | F-032 |
 
@@ -101,6 +101,7 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/geometry/masskette.ts` | **W-11** — 118 Zeilen, 7 Ausfuhren; Rechenschicht, entdoppelt mit Toleranz; **eingearbeitet 11.08.2026** |
 | `resources/planner/hausplaner/geometry/bemassung.ts` | **W-11** — 108 Zeilen, 6 Ausfuhren; Rechenschicht, innen Öffnungskette / außen Gesamtmaß; **eingearbeitet 11.08.2026** |
 | `resources/planner/hausplaner/geometry/masseingabe.ts` | **W-11** — 169 Zeilen, 9 Ausfuhren; **EINGABEschicht**, ohne Importe; **eingearbeitet 11.08.2026** |
+| `resources/planner/hausplaner/geometry/roomDetection.ts` | **W-05** — 190 Zeilen, 4 Ausfuhren; planares Halbkanten-Verfahren, **kein Registry-Werkzeug**, läuft automatisch; **eingearbeitet 11.08.2026** |
 
 ## Was aus Yamas eigenem Bestand kommt
 

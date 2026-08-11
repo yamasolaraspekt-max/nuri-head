@@ -1,21 +1,25 @@
-# W · raum erkennen — ZWECK
+# W-05 · Raum erkennen — ZWECK
 
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
-<In EINEM Satz, aus Sicht des Anwenders. Nicht technisch.
-Beispiel: „Der Planer soll mit zwei Klicks eine Wand ziehen können,
-die automatisch an bestehenden Wänden andockt.">
+**Keines, das er selbst anstößt** — und genau das ist der Zweck. Er zeichnet Wände; die Räume
+dazwischen **entstehen von allein**. Fläche und Volumen stehen da, ohne dass jemand einen Raum
+umrandet hat.
 
-## Wann greift der Anwender danach?
+## Was wäre ohne dieses Werkzeug?
 
-<Der konkrete Moment im Arbeitsablauf.>
+Jeder Raum müsste von Hand nachgezogen werden — und bei jeder verschobenen Wand noch einmal.
+**Räume wären Zeichnung statt Folge.**
 
-## Woran merkt er, dass es fehlt?
+## Woran der Anwender es merkt
 
-<Was tut er ersatzweise, wenn es das Werkzeug nicht gibt?
-Diese Frage entscheidet über die Priorität.>
+Er zieht eine Wand, und der geschlossene Bereich ist plötzlich ein Raum mit Zahlen.
+*Er merkt es daran, dass etwas da ist, das er nicht angelegt hat.*
 
-## Was ist ausdrücklich NICHT Zweck dieses Werkzeugs?
+## Die Zusicherung, die dieses Werkzeug gibt
 
-<Abgrenzung zu Nachbarwerkzeugen. Verhindert, dass ein Werkzeug
-über die Jahre alles frisst.>
+> *„jede Halbkante gehört zu genau einer Fläche ⇒ **KEINE Endlosschleife**, auch nicht bei offenen
+> Wandzügen"* (`resources/planner/hausplaner/geometry/roomDetection.ts:9-12`)
+
+**Ein Werkzeug, das automatisch läuft, darf nicht hängenbleiben.** *Es hat keinen Abbrechen-Knopf,
+weil es keinen Start-Knopf hat.*

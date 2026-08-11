@@ -1,33 +1,37 @@
-# W-xx · CODE
+# W-05 · Raum erkennen — CODE
 
-## Wo der Code wirklich lebt
+**Angebunden aus `resources/planner/hausplaner/geometry/roomDetection.ts`** — 190 Zeilen, 4 Ausfuhren.
+Aus dem Code abgeleitet, nicht umgekehrt.
 
-| Schicht | Datei im Repo | Zweck |
-|---|---|---|
-| 1 Domäne | `resources/planner/hausplaner/domain/…` | |
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | |
-| 3 Werkzeug | `resources/planner/hausplaner/app/tools/…` | |
-| 4 Darstellung | `resources/planner/hausplaner/renderers/…` | |
-| 5 Oberfläche | `resources/planner/hausplaner/ui/…` | |
+`RaumKante` (26) · `ErkannterRaum` (35) · `signierteFlaeche()` (70) · `erkenneRaeume()` (82)
 
-> **Der Code steht im Repo, nicht in diesem Ordner.** Hier liegen nur
-> Schnittstellenbeschreibung, Ablaufskizze und — wo nötig — ein kurzer
-> Auszug der Kernstelle mit Zeilennummer, damit man beim Lesen nicht springen muss.
+**Eingaben:** `WallNode` aus `domain/scene.types`, `Punkt` aus `geometry/wallGeometry` (beides
+Typ-Importe, Z.23-24).
 
-## Schnittstelle
+## ZWEI AUSSCHLÜSSE — beide mit Grund
 
-```ts
-// Signatur der öffentlichen Funktion(en) dieses Werkzeugs
+```text
+resources/planner/hausplaner/geometry/grundriss.ts        NICHT Gegenstand
+resources/planner/hausplaner/geometry/polygonFlaeche.ts   NICHT Gegenstand
 ```
 
-## Kernstelle
+**`grundriss.ts`** heißt „Grundriss" und wird deshalb immer wieder W-05 zugeordnet — *die Matrix des
+Planners hat es selbst getan*. **Der Name ist die Falle, nicht der Inhalt.**
 
-```ts
-// Der eine Ausschnitt, auf den es ankommt — mit Datei:Zeile
-```
+**`polygonFlaeche.ts`** ist der gefährlichere Ausschluss: sie rechnet **dieselbe Schuhbandformel ein
+zweites Mal** — `polygonFlaecheM2()`, mit `Math.abs(summe) / 2`, Ergebnis in **m²**, mit Prüfung auf
+`Number.isFinite` und Rückgabe `0` bei unbrauchbarer Eingabe.
 
-## Abhängigkeiten
-
-| Braucht | Warum | Richtung geprüft? |
+| | `signierteFlaeche()` (W-05) | `polygonFlaecheM2()` (Ausschluss) |
 |---|---|---|
-| | | ja/nein — kein Kreis |
+| Betrag | **nein** — Vorzeichen wird gebraucht | **ja** |
+| Einheit | mm² | **m²** |
+| bei kaputter Eingabe | keine Prüfung | **`0`** |
+
+**Zwei Rechnungen derselben Formel, absichtlich getrennt.** *Wer sie zusammenlegt, muss vorher
+entscheiden, wessen Verhalten gilt — das ist keine Aufräumarbeit.*
+
+## Was gebaut ist und was nicht
+
+**Gebaut:** die Rechenschicht, rein. **Nicht vorhanden:** eine Werkzeugschicht — es gibt keine.
+*Stufe 2 (`GEBAUT`) müsste erst eine schaffen; das ist ein eigener Auftrag und eine eigene Frage.*
