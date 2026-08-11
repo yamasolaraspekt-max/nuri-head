@@ -1,47 +1,56 @@
-# W · mass und bemassung — GRENZEN
+# W-11 · Maß und Bemaßung — GRENZEN
 
-> **Dieses Blatt ist Pflicht.**
-> Der teuerste Fehler des Projekts bisher: ein Dach, das bei nicht-rechteckiger
-> Kontur unsichtbar verschwand statt eine Absage zu geben. Die Domäne verweigerte
-> korrekt — der Renderer schluckte die Absage mit `catch { continue; }`.
-> **Ein Werkzeug ohne benannte Grenze baut genau diesen Fehler wieder ein.**
+## Entartete Eingabe bei `masskette()` — am Code gelesen
 
-## Was dieses Werkzeug NICHT kann
+`masskette(werte, toleranz = 1)` (Z.29):
 
-| Fall | Warum nicht | Was der Anwender stattdessen sieht |
+| Eingabe | Ergebnis | warum |
 |---|---|---|
-| | | |
+| leere Liste | **keine Segmente** | die Schleife beginnt bei `i = 1` |
+| ein einziger Wert | **keine Segmente** | ein Punkt hat keinen Abstand zu sich |
+| zwei Werte näher als `toleranz` | **ein Punkt, kein Segment** | *„verhindert 0-Segmente, z. B. wenn zwei Wände denselben Eckpunkt teilen"* (Z.25-27) |
+| unsortierte Werte | **sortiert** | `sort((a,b) => a-b)` vor der Kettenbildung |
+| Kommazahlen | **gerundet** | `Math.round` — mm-Integer-Welt |
 
-## Die Absagekette
+**Die Toleranz ist standardmäßig 1 mm** und ein Parameter, kein fester Wert.
 
-Für jeden Fall oben muss die Kette vollständig sein:
+## Was `istBrauchbareLaenge()` prüft — vollständig
 
-```
-Schicht 1/2 wirft benannten Fehler
-        ↓
-Schicht 3 fängt und übersetzt
-        ↓
-Schicht 4 reicht DURCH — kein catch/continue
-        ↓
-Schicht 5 zeigt dem Anwender einen verständlichen Satz
+```text
+typeof laengeMm === 'number'   kein Text, kein undefined
+Number.isFinite(laengeMm)      kein NaN, kein Infinity
+laengeMm > 0                   NULL ist ausgeschlossen, negativ auch
 ```
 
-| Fall | Fehlername | Wer fängt | Anwendertext steht in |
-|---|---|---|---|
-| | | | 4-BEDIENUNG.md |
+Die Begründung steht daneben: *„Null ist keine Länge und negativ ist keine Richtung: beides wäre kein
+Punkt, sondern ein stehengebliebener Zug."* (`masseingabe.ts:37-38`)
 
-## Fänger-Prüfung
+## `MassPunkt` ist ZWEIMAL definiert — und das ist heute Absicht
 
-- [ ] Jeder Fehlerpfad ist durch einen Test belegt, der prüft:
-      **die Meldung erreicht die Oberfläche**
-- [ ] Kein `catch { }` ohne Weiterreichen im Pfad dieses Werkzeugs
-- [ ] Kein stilles `return` bei ungültiger Eingabe
+```text
+resources/planner/hausplaner/geometry/masskette.ts:9     export interface MassPunkt { x: number; y: number }
+resources/planner/hausplaner/geometry/masseingabe.ts:25  export interface MassPunkt { x: number; y: number }
+```
 
-## Bekannte Ungenauigkeiten
+**Beide sind heute identisch** — Feld für Feld nachgelesen, nicht angenommen. Der Grund für die
+Doppelung steht im Code: *„Bewusst lokal: dieses Modul kennt keine Szene."* (`masseingabe.ts:24`)
 
-| Größe | Abweichung | Ab wann stört es |
-|---|---|---|
+**Und hier wird es gefährlich:** ändert eine Seite — ein `z`, ein optionales Feld, eine Einheit —,
+dann **divergieren sie stumm**, weil **kein Import sie verbindet**. Kein Übersetzerfehler, keine
+Warnung; erst die Zahlen stimmen nicht mehr.
 
-## Was später kommen könnte
+> **Weder übersehen noch voreilig aufräumen.** Ein Import von `masskette` nach `masseingabe` würde
+> die Unabhängigkeit der Eingabeschicht aufgeben, die hier ausdrücklich gewollt ist. *Wer sie
+> zusammenlegt, entscheidet etwas — er räumt nicht auf.*
 
-<Absichtlich weggelassene Funktionen, damit sie nicht als Fehler gemeldet werden.>
+## Braucht die Bemaßung die Auswahl (W-13)? — GEMESSEN: nein
+
+| Messung | Ergebnis |
+|---|---|
+| `auswahl`/`select`/`markiert` in `bemassung.ts` und `masskette.ts` | **0 Treffer** |
+| Signatur `bemassung()` (Z.52-56) | `waende`, `oeffnungen`, `toleranz` — **kein Auswahl-Parameter** |
+| Aufrufstelle `HausplanerApp.tsx:1268` | übergibt **alle** Wände und **alle** Öffnungen |
+
+**Das Register behauptet „W-11 braucht W-13". Der Code trägt das nicht.** Die Bemaßung rechnet über
+den ganzen Grundriss, unabhängig davon, was ausgewählt ist. *Nicht korrigiert, sondern gemeldet —
+die Zuordnung gehört dem Planner.*

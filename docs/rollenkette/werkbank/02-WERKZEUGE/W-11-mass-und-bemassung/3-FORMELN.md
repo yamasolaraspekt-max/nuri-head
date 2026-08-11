@@ -1,31 +1,27 @@
-# W · mass und bemassung — FORMELN
+# W-11 · Maß und Bemaßung — FORMELN
 
-> **Regel: hier werden nur F-Nummern aus `01-MATHEMATIK/FORMELSAMMLUNG.md` genannt.
-> Keine abgeschriebenen Formeln.** Eine Formel, die an zwei Orten steht, wird an
-> einem Ort korrigiert und am anderen vergessen.
+**Nur Nummern, keine ausgeschriebene Formel.** Die Formeln stehen in
+`../../01-MATHEMATIK/FORMELSAMMLUNG.md`.
 
-## Benutzte Formeln
+## Das Register nennt drei — gemessen sind es andere
 
-| F-Nr | Wofür in diesem Werkzeug | Grenzfall betrifft uns? |
+| F-Nr | laut Register | im Code gefunden? |
 |---|---|---|
-| F-0xx | | ja / nein — weil … |
+| **F-001** Abstand zweier Punkte | ja | **JA** — `bemassung.ts:77` und `masseingabe.ts:58` (`Math.hypot`) |
+| **F-002** Richtungswinkel | ja | **NEIN** — kein `atan2` in keinem der drei Module |
+| **F-003** Lotfußpunkt | ja | **NEIN** — `lotAufGerade` kommt null mal vor |
 
-## Reihenfolge der Anwendung
+**Eine Registerangabe ist keine Fundstelle.** *Zwei von drei genannten Formeln stehen nicht im Code
+dieses Werkzeugs; das ist gemessen und wird hier benannt statt abgeschrieben.*
 
-```
-1. F-0xx  →  <Zwischenergebnis>
-2. F-0xx  →  <Zwischenergebnis>
-3. F-0xx  →  Endergebnis
-```
+## Was stattdessen dasteht — der umgekehrte Weg
 
-## Fehlt eine Formel?
+`masseingabe.ts:99-100` rechnet **`Math.cos` und `Math.sin`** — also **aus einem Winkel eine
+Richtung**, nicht aus einer Richtung einen Winkel. **Das ist die Umkehrung von F-002 und nicht F-002.**
+*Der Anwender tippt den Winkel; das Werkzeug misst ihn nicht.*
 
-<Wenn dieses Werkzeug Mathematik braucht, die noch nicht in der Sammlung steht:
-hier benennen, DANN in die Sammlung eintragen, DANN hier auf die Nummer verweisen.
-Nicht umgekehrt.>
+## Und eine Rechnung, die keine F-Nummer hat
 
-## Genauigkeit
-
-- Eingangsgrößen in <Einheit>, Rechnung in <Einheit>, Rückgabe gerundet auf <…>
-- Toleranz ε = <…>
-- Bekannte Ungenauigkeit: <wo sich Fehler aufaddieren können>
+Die Entdopplung in `masskette()` (Z.29-38): sortieren, runden, und alles, was näher als `toleranz`
+beieinanderliegt, gilt als **ein** Bezugspunkt. **Dafür gibt es in der Sammlung keine Nummer.**
+*Gemeldet, nicht erfunden — eine Formel zweiter Ordnung wäre schlimmer als eine fehlende.*

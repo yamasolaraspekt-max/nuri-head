@@ -98,7 +98,7 @@ Fünf Fragen, je eine Ampel. **Eine rote Ampel blockiert die Zuordnung.**
 |---|---|---|---|---|---|---|---|
 | **F-014** Eckenerkennung | Winkel + Kreuzprodukt | 🟡 gelesen | 🟢 **mathematisch nachvollzogen**, Standardverfahren | 🟢 Datei:Zeile | 🟢 zeitlos | 🟢 | **grün** — Mathematik ist prüfbar wahr |
 | **F-025** Grat/Kehle/Ortgang | Regeltabelle | 🟡 | 🟢 fachlich schlüssig: Kehle nur an einspringender Ecke | 🟢 | 🟢 | 🟢 | **grün** |
-| **F-026** Dach über Grundform | L/T-Aufbau | 🟡 gelesen, **nicht ausgeführt** | 🟡 **unbelegt, dass das Ergebnis stimmt** | 🟢 | 🟢 | 🟢 | **gelb** — muss laufen, bevor ein Auftrag darauf baut |
+| **F-026** Dach über Grundform | L/T-Aufbau | 🟢 **ausgeführt 11.08.** (A-12) | 🟢 **Ergebnis belegt** — L-Dach, 4 benannte Flächen, doppelt abgenommen | 🟢 | 🟢 | 🟢 | **grün für die Parametergeometrie** — NICHT für die Kantentopologie-Beschreibung (Berichtigung in FORMELSAMMLUNG) |
 | **F-027** Gaube | Anstieg = d·tan(φ) | 🟡 | 🟢 Trigonometrie | 🟢 | 🟢 | 🟢 | **grün** |
 | **F-050** Materialkennwerte | 45 kg/m², 12 Stk/m² | — | 🟡 **teilgeprüft** | 🟢 | 🟡 | 🟢 | **gelb** — siehe unten |
 | **F-051** Zeitwerte | 8 min/m² Gerüst usw. | — | 🔴 **völlig unbelegt** | 🟢 | 🔴 unbekannt | 🟢 | **ROT — nicht verwendbar** |
@@ -141,7 +141,7 @@ Vier Spalten, alle vier Pflicht:
 |---|---|---|---|
 | F-014 Eckenerkennung | Planner (Schnitt W-07), Generator (Bau) | vor jedem Dach-Auftrag | keine — grün |
 | F-025 Grat/Kehle | Planner, Generator | beim Dachschnitt | keine — grün |
-| F-026 L/T-Dach | **Planner zuerst** | **vor der Entscheidung, welcher Dachweg** | 🟡 **erst ausführen und Ergebnis sehen** |
+| F-026 L/T-Dach | **Planner zuerst** | **vor der Entscheidung, welcher Dachweg** | 🟢 **ausgeführt 11.08. (A-12)** — die Wegentscheidung ist damit entsperrt und liegt bei Yama |
 | F-027 Gaube | Planner (W-22) | wenn W-22 geschnitten wird | keine — grün |
 | F-050 Material | Planner (W-23), Generator | bei Mengenwerkzeug | 🟡 **nur als Näherung, nicht für Angebote** |
 | F-051 Zeiten | **niemand** | — | 🔴 **gesperrt bis belegt** |
@@ -172,7 +172,7 @@ Erst jetzt. Und mit drei Pflichtangaben je Eintrag:
 |---|---|---|
 | 1 | Alle 64 einzigartigen tsx nach Thema sortieren | Inventar mit Hash |
 | 2 | Die 5 Dach-/Holzbau-Dateien durch Q1–Q5 schicken | Ampeln |
-| 3 | **F-026 tatsächlich ausführen** — ein L-Grundriss, Ergebnis ansehen | 🟡 → 🟢 oder 🔴 |
+| 3 | ~~**F-026 tatsächlich ausführen** — ein L-Grundriss, Ergebnis ansehen~~ **ERLEDIGT 11.08.** | **🟡 → 🟢** *mit Berichtigung* |
 | 4 | F-050 an einem Herstellerdatenblatt festmachen | 🟡 → 🟢 |
 | 5 | F-051 verwerfen oder an echten Aufmaßen neu erheben | 🔴 → 🟢 oder gelöscht |
 | 6 | Ergebnis ins `~/wissensregister` zurückschreiben | ein Katalog, nicht zwei |
@@ -181,3 +181,32 @@ Erst jetzt. Und mit drei Pflichtangaben je Eintrag:
 > stammt bisher aus dem *Lesen* des Codes. Das ist genau die Art unbelegter
 > Machbarkeitsaussage, an der Z-07 gescheitert ist — nur diesmal in die andere
 > Richtung. **Ausführen, ansehen, dann behaupten.**
+
+### Schritt 3 GESCHLOSSEN — 11.08., und er hat sich selbst gerechtfertigt
+
+**Ausgeführt als Auftrag A-12** (`docs/BERICHT-A-12-f026.md`, 424 Zeilen), **doppelt und unabhängig
+abgenommen** (`171baafe` und `6a06c386` — zwei Evaluator-Instanzen, beide `ABGENOMMEN`, kein
+inhaltlicher Widerspruch). *Ampel eingetragen vom Planner nach A-12-4.*
+
+```text
+DAS ERGEBNIS   ein L-Dach mit VIER benannten Flaechen (main_N/main_S/ext_W/ext_E),
+               zwei Firstlinien, 1 Kehle, 1 Grat, 7 Pfetten, 10 Dreiecke,
+               First 5482 mm, Flaechensumme 167.246 m2
+               -> "der Code kann L-Grundrisse" ist damit BELEGT, nicht gelesen
+DER HAKEN      und er ist genau die Art Befund, fuer die dieser Schritt da war:
+               das VERFAHREN, das die Formelsammlung fuer F-026 beschreibt, laeuft
+               NICHT. Die Kantentopologie-Kette (:95/:123/:134) wird aus dem
+               Geometrie-Aufbau (:774-971) null Mal gerufen — sie speist eine
+               ANZEIGE in der React-Schicht (:1496/:1706). Und fuer l-shape/t-shape
+               liefert sie grate=5, wo der Bau 1 Grat setzt.
+               Beides selbst am Fremdcode nachgemessen, Befehle in FORMELSAMMLUNG.
+```
+
+> **Die Lehre dieses Schrittes ist stärker als erwartet, und sie geht über F-026 hinaus:**
+> *Das Lesen hatte recht — der Code kann L-Grundrisse. **Aber die Begründung, die ich aus dem Lesen
+> mitgeschrieben hatte, war falsch: ich hatte das Verfahren aus den Funktionen abgeleitet, die
+> danach aussahen, statt aus denen, die aufgerufen werden.*** **„Ausführen, ansehen, dann behaupten"
+> reicht nicht — es muss heißen: ausführen, ansehen, und prüfen, ob der Weg dorthin der ist, den man
+> beschrieben hat.** *Ein richtiges Ergebnis ist kein Beweis für die richtige Erklärung; hier waren
+> das Ergebnis richtig und die Erklärung falsch, und ohne A-12 hätte die falsche Erklärung den
+> nächsten Dach-Auftrag begründet.*

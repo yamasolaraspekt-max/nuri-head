@@ -43,7 +43,7 @@
 
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
-| W-11 | Maß und Bemaßung | LEER | W-13 | F-001, F-002, F-003 |
+| W-11 | Maß und Bemaßung | **BESCHRIEBEN** | W-13 ⚠ | F-001, F-002 ⚠, F-003 ⚠ |
 | W-14 | Kopieren/Spiegeln/Drehen | LEER | W-13 | F-032 |
 | W-15 | Material und Farbe | LEER | W-13 | — |
 | W-17 | Export und Speichern | LEER | alle | — |
@@ -98,6 +98,9 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/geometry/wandFlaeche.ts` | **W-02** — 238 Zeilen, 6 Ausfuhren; AUF-77 Mengenermittlung M1, „entweder Mengen oder Meldungen"; **eingearbeitet 10.08.2026** |
 | `resources/planner/hausplaner/geometry/oeffnungsBauarten.ts` | **W-04** — 75 Zeilen, 5 Ausfuhren; 24 Fenster- und 24 Tür-Bauarten, SVGs unter `public/hausplaner/icons/`; **eingearbeitet 11.08.2026** |
 | `resources/planner/hausplaner/geometry/oeffnungsTypen.ts` | **W-04** — 49 Zeilen, 7 Ausfuhren; 5 Tür- und 7 Fenster-Vorlagen mit Standardmaßen; **eingearbeitet 11.08.2026** |
+| `resources/planner/hausplaner/geometry/masskette.ts` | **W-11** — 118 Zeilen, 7 Ausfuhren; Rechenschicht, entdoppelt mit Toleranz; **eingearbeitet 11.08.2026** |
+| `resources/planner/hausplaner/geometry/bemassung.ts` | **W-11** — 108 Zeilen, 6 Ausfuhren; Rechenschicht, innen Öffnungskette / außen Gesamtmaß; **eingearbeitet 11.08.2026** |
+| `resources/planner/hausplaner/geometry/masseingabe.ts` | **W-11** — 169 Zeilen, 9 Ausfuhren; **EINGABEschicht**, ohne Importe; **eingearbeitet 11.08.2026** |
 
 ## Was aus Yamas eigenem Bestand kommt
 
@@ -121,3 +124,5 @@ Ausgewertet am 07.08.2026 — Einzelheiten in `../05-MATERIALQUELLEN/BESTAND-YAM
 > zuerst kommt. Der Vergleich steht in der Formelsammlung, Gruppe 6.
 
 > ⚠ **W-04s F-Zuordnung stimmt nicht mit dem Code überein.** Das Register nennt F-003 und F-031; gemessen enthalten `oeffnungsBauarten.ts` und `oeffnungsTypen.ts` **keine Rechnung** — `Math.` kommt in beiden **null mal** vor, die einzigen Operationen sind `Array.find()` und `??`. **Der Generator ändert die Zuordnung nicht** (sie gehört dem Planner) und meldet sie als Befund. *Siehe `1-ZWECK`/`3-FORMELN` des Werkzeugs.*
+
+> ⚠ **W-11s Registerangaben halten der Messung nicht stand — zwei Stellen.** (1) **F-002 und F-003 stehen nicht im Code:** kein `atan2`, kein `lotAufGerade` in den drei Modulen; nur F-001 ist belegt (`bemassung.ts:77`, `masseingabe.ts:58`). (2) **Die Abhängigkeit „braucht W-13" trägt nicht:** `auswahl`/`select`/`markiert` kommen in `bemassung.ts` und `masskette.ts` **null mal** vor, `bemassung()` hat keinen Auswahl-Parameter, und die einzige Aufrufstelle übergibt alle Wände und alle Öffnungen. **Der Generator ändert beides nicht** — die Zuordnung gehört dem Planner.

@@ -221,3 +221,70 @@ warteschlange: "Runde 1 damit vollstaendig geschnitten: W-08, W-04, W-11"
 besonderheit: "erstes Blatt der Runde OHNE Falschzuordnung — alle drei Module gehoeren dazu"
 beobachtung_ohne_forderung: "MassPunkt doppelt definiert, heute identisch, ohne Import verbunden"
 ```
+
+
+## §11 — Bericht W-11/1 (Generator, 11.08.2026)
+
+```yaml
+auftrag: "W-11/1"
+zustand: CODE_FERTIG
+bau_commit: "0299e5ca"
+in_arbeit_commit: "a436d8a3"
+basis: "7a415aff"
+
+kriterien:
+  W-11/1-1:  GRUEN   # 28 -> 0, Zaehlweise: alle <…>
+  W-11/1-2:  GRUEN   # nur Nummern, keine ausgeschriebene Formel
+  W-11/1-3:  GRUEN   # F-001 belegt; F-002 und F-003 ausdruecklich als NICHT GEFUNDEN benannt
+  W-11/1-4:  GRUEN   # Rechen- gegen Eingabeschicht, einzige Abhaengigkeit bemassung.ts:18
+  W-11/1-5:  GRUEN   # masskette() entartet + istBrauchbareLaenge() vollstaendig ausgelesen
+  W-11/1-6:  GRUEN   # MassPunkt doppelt (9 / 25), heute identisch, stumme Divergenz benannt
+  W-11/1-7:  GRUEN   # W-13-Abhaengigkeit GEMESSEN und verneint
+  W-11/1-8:  GRUEN   # drei Richtungen 0/0/0, Suite 1692/1692
+  W-11/1-9:  GRUEN   # Register: BESCHRIEBEN + alle DREI Module
+  W-11/1-10: GRUEN   # a436d8a3: 2 Befehlszeilen, 2 Ausgabewerte, je Ort einer
+
+zwei_registerangaben_die_nicht_tragen:   # gemeldet, NICHT still korrigiert
+  formeln:
+    F-001: "belegt — bemassung.ts:77 und masseingabe.ts:58 (Math.hypot)"
+    F-002: "NICHT im Code — kein atan2 in keinem der drei Module.
+            Stattdessen der UMGEKEHRTE Weg: Math.cos/Math.sin in masseingabe.ts:99-100 machen
+            aus einem Winkel eine Richtung. Der Anwender tippt den Winkel; das Werkzeug misst ihn nicht."
+    F-003: "NICHT im Code — lotAufGerade kommt null mal vor"
+  abhaengigkeit_W13:
+    behauptung: "Register: W-11 braucht W-13"
+    gemessen:
+      - "auswahl/select/markiert in bemassung.ts und masskette.ts: 0 Treffer"
+      - "Signatur bemassung(waende, oeffnungen, toleranz) — kein Auswahl-Parameter"
+      - "einzige Aufrufstelle HausplanerApp.tsx:1268 uebergibt ALLE Waende und ALLE Oeffnungen"
+    schluss: "traegt nicht. Die Bemassung rechnet ueber den ganzen Grundriss."
+  getan: "Reifegrad und drei Fundstellen nachgetragen, beide Spalten mit ⚠ markiert und in einer
+          Fussnote begruendet. Zuordnung UNVERAENDERT — sie gehoert dem Planner."
+
+eigener_fehler_vor_dem_melden_gefunden:
+  was: "VIER Zitat-Zeilenangaben waren falsch"
+  wie_entstanden: "aus dem Blickfeld eines sed-Ausschnitts abgezaehlt statt gemessen"
+  einzeln: "masskette 1-6 -> 5-6 · masseingabe 20-23 -> 19-21 · 38-39 -> 37-38 · 44-51 -> 48-53"
+  danach: "ALLE 15 eindeutigen Zeilenangaben der sieben Blaetter gegen die Dateien geprueft,
+           0 ueber dem Dateiende"
+  einordnung: "keine neue Klasse — es ist die Zeilennummer-Praezision aus W-02 (159 gegen 159-160),
+               diesmal vierfach. Der Unterschied: gefunden, bevor gemeldet wurde."
+
+fachlicher_kern:
+  - "MassPunkt ist ZWEIMAL definiert (masskette.ts:9, masseingabe.ts:25), heute Feld fuer Feld
+     identisch, absichtlich lokal: 'Bewusst lokal: dieses Modul kennt keine Szene' (Z.24).
+     Gefaehrlich wird es, wenn eine Seite sich aendert — dann divergieren sie STUMM, weil kein
+     Import sie verbindet. Kein Uebersetzerfehler, keine Warnung."
+  - "Weder uebersehen noch voreilig aufraeumen: ein Import wuerde die Unabhaengigkeit der
+     Eingabeschicht aufgeben, die ausdruecklich gewollt ist. Wer sie zusammenlegt, ENTSCHEIDET etwas."
+  - "istBrauchbareLaenge() und richtungAus() sind eigene Ausfuhren, weil eine Mutationsprobe
+     sonst BLIND bleibt — das steht als Lehre im Code selbst (masseingabe.ts:48-53)."
+
+nicht_gemessen:
+  - "ob die Bemassung an der Werkzeugschicht doch eine Auswahl braucht — gemessen sind die zwei
+     Rechenmodule und die einzige Aufrufstelle, nicht die gesamte App"
+  - "die Werkzeugschicht (Stufe 2 GEBAUT)"
+
+browserabnahme: "entfaellt — reine Dokumentblaetter"
+ballbesitz: evaluator
+```

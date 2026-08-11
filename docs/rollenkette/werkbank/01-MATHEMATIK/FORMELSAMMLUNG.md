@@ -299,7 +299,7 @@
 > | F-Nr | Ampel | Bedingung für die Nutzung |
 > |---|---|---|
 > | F-014, F-025, F-027 | 🟢 | keine — Mathematik nachvollzogen |
-> | **F-026** | 🟡 | **noch nicht ausgeführt.** Darf keinen Auftrag begründen, bis ein L-Grundriss gerechnet und das Ergebnis gesehen wurde |
+> | **F-026** | 🟢 | **ausgeführt 11.08.** (A-12, `docs/BERICHT-A-12-f026.md`, doppelt abgenommen). Es kam ein L-Dach mit vier benannten Flächen heraus. **Grün gilt für die PARAMETERGEOMETRIE, nicht für die Kantentopologie-Beschreibung unten** — siehe Berichtigung am Formelblatt |
 > | **F-050** | 🟡 | **nur als Näherung.** Nicht für Angebote — 12 Stück/m² ist modellabhängig |
 > | **F-051** | 🔴 | **GESPERRT.** Zeitwerte ohne jede Herkunft. Nicht verwenden |
 >
@@ -347,7 +347,69 @@
   ohne einspringende Ecke hat keine Kehle — wenn doch eine gemeldet wird, ist F-014 falsch.
 - **Belegstelle:** `dachdecker_pro_3d.tsx:153–158`
 
-### F-026 · Dach über vorgegebene Grundform (Alternative zu F-020) · 🟡
+### F-026 · Dach über vorgegebene Grundform (Alternative zu F-020) · 🟢
+
+> **⚠ BERICHTIGUNG 11.08. — das Verfahren unten beschreibt NICHT, was läuft.** *Eingetragen vom
+> Planner nach A-12 (§A-12-4: Generator schlägt vor, Evaluator bestätigt, Planner trägt ein), und
+> die Berichtigung ist die **Bedingung** des Grüns — nicht ein Zusatz dazu.*
+>
+> **Selbst am Fremdcode nachgemessen** (`~/Desktop/Gemini-Code-Ideen-2026-05-25/03-energie-pv-dach-3d/dachdecker_pro_3d.tsx`, 2173 Z / 132374 B):
+>
+> ```text
+> ZWEI GETRENNTE WELTEN, und sie beruehren sich nirgends:
+>
+> WELT 1  die Kantentopologie-Kette — das Verfahren unten
+>   :95   buildTopologyPolygon()
+>   :123  getDefaultEdgeTopologyConfigs()
+>   :134  analyzeTopology()          -> liefert grate / kehlen als ZAHLEN
+>   Aufrufe: NUR :1496 (useState) und :1706 (useMemo) — beide in der REACT-Schicht.
+>            analyzeTopology speist eine ANZEIGE, keine Geometrie.
+>
+> WELT 2  was tatsaechlich gebaut wird
+>   :774  buildCompoundPitchedFaces()
+>   :965  buildCompoundPitched()
+>   :1137 der einzige Aufruf fuer l-shape / t-shape
+>   Messung: sed -n '774,971p' | grep -E 'EdgeTopology|analyzeTopolog|joinType|grate|kehlen'
+>            -> LEER. NULL Aufrufe der Kette aus Welt 1.
+> ```
+>
+> **Was läuft, ist fest verdrahtete Parametergeometrie für L und T** — keine Kantentypisierung,
+> keine Eckenklassifikation, kein Flächenaufbau aus typisierten Kanten.
+>
+> **Und die zwei Welten widersprechen sich in einer Zahl.** *Schritt 3 unten sagt „Vorgabe je
+> Grundform" und listet `sattel`, `pult`, `walm`, `flach`.* **`l-shape` und `t-shape` fehlen in
+> dieser Liste — im Formelblatt genauso wie im Code.** Sie fallen in
+> `getDefaultEdgeTopologyConfigs` auf die letzte Zeile (`:131`) durch: **alle Kanten `TRAUFE`.**
+> Daraus rechnet `analyzeTopology` bei einem L-Grundriss (6 Ecken, davon 1 einspringend) über
+> `:157` **`grate=5`, `kehlen=1`**. Gebaut wird aber:
+>
+> ```text
+> :861  'Kehlsparren Links'    if (u_L > 0)
+> :866  'Kehlsparren Rechts'   if (type === 'T' && u_R < uMaxMain)
+> :868  'Gratsparren Rechts'   ELSE  <- der L-Fall nimmt IMMER diesen Zweig
+> -> bei einem L:  1 Kehle, 1 Grat.   Die Anzeige sagt 5 Grate.
+> ```
+>
+> *Die Zahlen `grate=5/kehlen=1` hat der Evaluator gemessen; ich habe die Logik gegengelesen, die
+> dazu führt, und die drei Bauzeilen selbst am Code belegt.* **Für F-026 heißt das: genau der
+> Zweig, der F-026 gegenüber F-020 auszeichnet (L und T), ist der Zweig, für den kein
+> Kantentyp-Schema existiert.**
+>
+> **Was das Grün deshalb erlaubt und was nicht:**
+>
+> ```text
+> ERLAUBT      F-026 als PARAMETERGEOMETRIE fuer L und T zu benutzen und zu begruenden.
+>              Das ist gerechnet, gesehen, doppelt abgenommen — vier benannte Flaechen
+>              (main_N/main_S/ext_W/ext_E), zwei Firstlinien, 1 Kehle, 1 Grat, 7 Pfetten.
+> NICHT        das sechsschrittige Verfahren unten zu ZITIEREN, als waere es der Weg.
+> ERLAUBT      Wer Schritt 3 und 5 fuer L/T zitiert, zitiert eine Anzeige-Kette, die
+>              nachweislich nicht gelaufen ist und eine andere Zahl liefert als der Bau.
+> UNBERUEHRT   F-014 und F-025 (die Ecken-/Kantenformeln selbst) bleiben 🟢 — sie sind
+>              richtig, sie werden von l-shape nur nicht ERREICHT.
+> ```
+>
+> *Ohne diese Berichtigung würde 🟢 genau die Zitierung erlauben, die die 🟡-Sperre verhindern
+> sollte. Das ist der Grund, warum der Evaluator sein Grün ausdrücklich daran gebunden hat.*
 - **Zweck:** Dach erzeugen, **ohne** allgemeines Straight Skeleton
 - **Verfahren:**
   ```
@@ -377,6 +439,30 @@
 > | Grat/Kehle/Ortgang benannt | muss abgeleitet werden | **fertig benannt** |
 > | Mathematische Tiefe | hoch | gering |
 > | Aufwand bis lauffähig | groß | **Code liegt vor** |
+>
+> **⚠ ZWEI ZEILEN DIESER TABELLE SIND NACH A-12 ANDERS ZU LESEN (Planner 11.08.):**
+>
+> ```text
+> "laeuft bereits (buildCompoundPitched)"    STIMMT — aber es laeuft als
+>                                            PARAMETERGEOMETRIE, nicht als
+>                                            Kantentopologie. Die Spaltenueberschrift
+>                                            "F-026 Kantentopologie" trifft fuer den
+>                                            L-/T-Zweig nicht zu.
+> "Grat/Kehle/Ortgang fertig benannt"        STIMMT fuer die Bauteile ('Kehlsparren
+>                                            Links', 'Gratsparren Rechts' als Namen
+>                                            im Modell), NICHT fuer die
+>                                            Ecken-Klassifikation: die laeuft fuer
+>                                            l-shape/t-shape nicht, und ihre Zahl
+>                                            (grate=5) widerspricht dem Bau (1).
+> "Verschiedene Neigung je Seite von Haus    UNGEPRUEFT fuer L/T. Der Mechanismus
+>  aus (Neigung je Kante)"                   dafuer sitzt in getDefaultEdgeTopology-
+>                                            Configs (pitch je Kante) — also in
+>                                            Welt 1, die fuer L/T nicht laeuft.
+>                                            Nicht widerlegt, nur nicht belegt.
+> ```
+>
+> *Die dritte Zeile nenne ich ausdrücklich als **ungeprüft** statt sie zu berichtigen — A-12 hat sie
+> nicht gemessen, und eine Berichtigung ohne Messung wäre derselbe Fehler in der anderen Richtung.*
 >
 > **Befund:** Der Fall, an dem Auftrag Z-07 scheiterte — ein L-förmiges Dach —
 > ist auf Yamas eigenem Schreibtisch bereits gelöst. Nicht mit dem Verfahren,
