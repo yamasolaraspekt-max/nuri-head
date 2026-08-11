@@ -307,3 +307,54 @@ nicht_gemessen:
 browserabnahme: "entfaellt — reine Dokumentblaetter, keine sichtbare Wirkung"
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum (§11) — 11.08.2026
+
+```yaml
+auftrag: W-04/1
+commit: a44e5fdd          # Bau; Basis b6078b2a
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "jedes Kriterium am Bau-Stand gemessen · alle sechs Fundstellen einzeln im Code
+  geoeffnet · der §3-Beleg im IN_ARBEIT-Commit nachgezaehlt"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Gemessen, nicht gelesen
+
+```text
+-1   Platzhalter, alle vier Muster am Bau-Stand              0
+-5   Herkunft: "Angebunden aus zwei vorhandenen …"           ja
+-6   Ausschluss fensterProdukt.ts benannt, und PRAEZISE:     4 Fundstellen im Blatt,
+     darunter "Ausschluss — bis auf den Typ OeffnungsArt"    kein pauschales "hat nichts damit zu tun"
+-7   4-BEDIENUNG nennt beide Werkzeuge                       fenster 7x · tuer 3x
+-8   resources/** im Bau-Commit beruehrt                     0 Pfade  ·  Suite 1692/1692
+-9   Register: W-04 BESCHRIEBEN, beide Katalog-Module        ja
+-10  §3-Beleg im IN_ARBEIT-Commit a9e58dd4                   2 Befehlszeilen, 2 Ausgaben (je 0)
+```
+
+**Alle sechs Fundstellen einzeln geöffnet** — keine läuft ins Leere, jede trifft, was sie behauptet:
+
+```text
+oeffnungsBauarten.ts:1    // Premium-Bauarten (Yamas SVG-Saetze) — Icon-Auswahl …
+oeffnungsBauarten.ts:3    import type { OeffnungsArt } from './fensterProdukt';   <- der Ausschluss-Bezug
+oeffnungsBauarten.ts:12   /** Vorgabe-Oeffnungsart, sofern eindeutig; sonst undefined */
+oeffnungsTypen.ts:2       * Hausplaner — Oeffnungs-Typen als Vorlagen (Tuer/Fenster)
+oeffnungsTypen.ts:17      /** nur Fenster: Standard-Bruestungshoehe in mm */
+oeffnungsTypen.ts:21      /** Tuer-Vorlagen (Reihenfolge = Anzeigereihenfolge …) */
+```
+
+> **`-10` ist diesmal von Anfang an erfüllt** — zwei Befehlszeilen, zwei Ausgaben, im selben
+> Commit. *Bei W-01 und W-02 hat dieselbe Zusage zweimal gerissen und musste nachgebessert werden;
+> hier steht sie im ersten Anlauf. **Das ist die Wirkung von E2 aus Prozessprüfung 03** — die
+> zählbare Form („mindestens zwei Befehlszeilen und zwei Ausgabewerte") macht den Unterschied
+> zwischen einer Behauptung und einem Nachweis.*
+
+**Der Ausschluss ist der stärkste Teil dieses Blatts:** `fensterProdukt.ts` wird nicht pauschal
+weggeschoben, sondern mit der einen Ausnahme benannt, die wirklich hineinragt — der Typ
+`OeffnungsArt`, den `oeffnungsBauarten.ts:3` importiert. *Ein pauschales „hat nichts damit zu tun"
+wäre an dieser Importzeile widerlegbar gewesen.*

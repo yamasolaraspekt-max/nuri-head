@@ -1261,8 +1261,8 @@ claim_bau_a12: "plan-pruefer 10.08.: Yamas Einreihung ausgefuehrt — A-12 bekom
 auftrag: "W-04/1"
 titel: "Die sieben Blaetter von W-04 aus oeffnungsBauarten.ts + oeffnungsTypen.ts ableiten"
 datei: docs/auftraege/aktiv/W-04-oeffnung-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: b6078b2a
 claim_bau_w04: "plan-pruefer 11.08.: §3-Sperre gefallen (A-12 CODE_FERTIG, Zustandsfeld IN_ARBEIT 0 — selbst gemessen) — Generator-Station fuer W-04/1 mit frischer Instanz besetzt, aeltestes BEREIT der Runde 1. Claim VOR dem Start. Die A-12-Abnahme laeuft parallel: nach §3 zulaessig, sie prueft einen festgeschriebenen Commit."
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review): JEDE Behauptung selbst gemessen und EXAKT bestaetigt — oeffnungsBauarten 75 Z/5 Exporte, oeffnungsTypen 49 Z/7 Exporte, fensterProdukt 153 Z; der OeffnungsArt-Import steht woertlich in Z.3 (die praezise Ausnahme im Ausschluss ist also NOETIG, nicht hoeflich); Registry traegt WIRKLICH zwei Werkzeuge (fenster :78, tuer :96); W-02s 2-FUNKTION beschreibt die Tuergeometrie bereits (2 Treffer) — die Verweis-statt-Doppelbeschreibung-Entscheidung ist damit belegt und richtig; Platzhalter-Rot zaehlbar (6 Blaetter). W-04/1-10 traegt die E2-Zaehlform aus Pruefung 03. Der Selbstbefund 'W-04 hat kein eigenes Modul' ist die vierte Matrix-Korrektur derselben Klasse und wieder vom Planner selbst gefunden."
@@ -1271,6 +1271,7 @@ ballwechsel_bestaetigt: "plan-pruefer 11.08. 23:3x: W-04/1-CODE_FERTIG-Meldepfli
 claim_abnahme: "plan-pruefer 11.08. 23:3x: Evaluator-Station fuer W-04/1 mit frischer Instanz besetzt. Claim VOR dem Start. KANONISCHER Feldname ohne Auftrags-Suffix — erste Anwendung der Konsequenz aus der fuenften Kollision."
 naechster_schritt: "NACHGEZOGEN 11.08. 23:xx: W-04/1 ist seit a9e58dd4 IN_ARBEIT bei einer Team-Generator-Instanz (§3-Beleg an beiden Orten, Drei-Richtungs-Auflage ausdruecklich befolgt). Die alte Zeile sagte 'A-12 laeuft' — A-12 ist seit 3a4838e1 CODE_FERTIG, die Sperre ist gefallen."
 claim_abnahme: "evaluator (Erstinstanz) 11.08. 23:1x: Abnahme W-04/1 GECLAIMT vor der Messung, Bau a44e5fdd. Kanonischer Feldname ohne Auftrags-Suffix, wie der Plan-Pruefer es nach der fuenften Kollision festgelegt hat - bei A-12 hatte ich seinen claim_abnahme_a12 nicht gefunden, weil ich claim_abnahme gesucht habe."
+evaluator_votum: "evaluator 11.08.: ABGENOMMEN an a44e5fdd, Fehlerklasse KEINE, alle zehn Kriterien erfuellt. Gemessen statt gelesen: Platzhalter 0, resources/** im Bau-Commit 0 Pfade, Suite 1692/1692, Register gefuehrt, 4-BEDIENUNG nennt fenster 7x und tuer 3x. Alle sechs Fundstellen einzeln im Code geoeffnet - keine laeuft ins Leere. Der Ausschluss fensterProdukt.ts ist der staerkste Teil: nicht pauschal weggeschoben, sondern mit der einen Ausnahme benannt, die hineinragt (Typ OeffnungsArt, importiert in oeffnungsBauarten.ts:3) - ein pauschales hat-nichts-damit-zu-tun waere an dieser Importzeile widerlegbar gewesen. W-04/1-10 ist im ERSTEN Anlauf erfuellt: 2 Befehlszeilen, 2 Ausgaben im IN_ARBEIT-Commit a9e58dd4; bei W-01 und W-02 riss dieselbe Zusage zweimal - das ist die messbare Wirkung von E2 aus Prozesspruefung 03."
 ```
 ---
 
