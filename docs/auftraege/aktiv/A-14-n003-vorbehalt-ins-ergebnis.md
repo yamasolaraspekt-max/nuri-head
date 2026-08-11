@@ -59,14 +59,36 @@ TEIL 1  PFLICHTFELD IM ERGEBNIS                                        (Yamas Ab
         traegt "[feld: string]: unknown" — ein zusaetzliches Feld geht durch
         "as unknown as EngineErgebnis" NICHT verloren.
 
-TEIL 2  DIE PLAKETTE HOERT AUF, EINEN NACHWEIS ZU BEHAUPTEN            (der neue Fund)
-        Gewaehlte Form: das Panel traegt einen eigenen Plakettentext; wo keiner
-        steht, bleibt der heutige Wortlaut. EIN Ort, ein Wert — dasselbe Muster
-        wie panel.grundlage.
-        Fuer N-003 sinngemaess: "Vorbemessung im Rahmen — KEIN Standsicherheitsnachweis"
-        statt "Alle Pruefungen bestanden".
-        NICHT gewaehlt: bestanden weglassen. Es traegt echte Information
-        (Ausnutzung <= 1,0). Wegnehmen waere Verlust, Umbenennen genuegt.
+TEIL 2  DIE PLAKETTE FAELLT — ERSATZLOS                    (Yamas Entscheidung 12.08.)
+        MEINE erste Fassung wollte den Plakettentext ERSETZEN ("Vorbemessung im
+        Rahmen"). Yama hat das aufgehoben, woertlich:
+          "Bei N-003 faellt die gruene Plakette. Ersatzlos. Nicht umformulieren,
+           nicht abschwaechen, nicht in Gelb. WEG.
+           Nach eurer eigenen Regel: wo nichts besteht, steht nichts."
+        Und seine Diagnose ist praeziser als meine:
+          bestanden: true IST WAHR — der Kommentar sagt ehrlich "beide Nachweise
+            <= 1,0". Das Feld luegt nicht.
+          DIE PLAKETTE luegt: sie macht aus "beide gerechneten" ein "ALLE".
+            Das Wort ALLE ist der Fehler, nicht der Boolean.
+        N-003 rechnet ZWEI Nachweise von sechs moeglichen (Wind, Mehrfeld, Knicken,
+        Auflagerpressung fehlen) und schreibt darueber "Alle Pruefungen bestanden".
+
+        DIE FORM, die mir gehoert — und sie loest das Problem fuer ALLE Engines:
+        Der PLAKETTENTEXT gehoert der ENGINE, nicht der Huelle.
+        Yamas Begruendung: "Eine Huelle, die fuer dreizehn Rechnungen denselben Satz
+        erfindet, wird irgendwann fuer eine davon falsch — heute ist es die Statik."
+        Gewaehlt: EngineErgebnis bekommt ein OPTIONALES Urteilstext-Feld.
+          Feld vorhanden  -> Plakette mit DIESEM Text
+          Feld fehlt      -> KEINE Plakette
+          N-003 liefert es NICHT  -> Plakette weg, ersatzlos
+        Das ist genau die Mechanik von AUF-52 Scheibe C, eine Ebene feiner:
+          dort  kein bestanden      -> keine Plakette
+          hier  kein Urteilstext    -> keine Plakette
+        Die zwoelf anderen Engines behalten ihren heutigen Wortlaut, weil die Huelle
+        einen Vorgabetext behaelt, solange keine Engine widerspricht — bis die
+        Klassifizierung (A-15) sagt, welche davon ebenfalls schweigen muessen.
+        NICHT gewaehlt: bestanden weglassen. Es traegt echte Information und die
+        Tests haengen daran (Yama ausdruecklich: "das Feld darf bleiben").
 
 TEIL 3  EIN PRUEFLISTEN-EINTRAG, ueber das VORHANDENE Muster            (Yamas 1.1b)
         EngineErgebnis kennt schon "pruefungen?" mit { id, schwere, meldung,
@@ -96,9 +118,20 @@ TEIL 4  panel.grundlage TRAEGT DIE GRENZE                              (Yamas 1.
   abwassergefaelle · kuecheArbeitsdreieck · fbhAuslegung
   heizkreisVerteiler · wandaufbau (UPruefung) · werkzeugRegistry · configuratorPackage
 -> ALLE haengen an DERSELBEN Plakette "Alle Pruefungen bestanden".
--> N-003 ist die EINZIGE davon, deren Ergebnis in einem Bauwerk landen kann.
-   Ein Kuechen-Arbeitsdreieck, das "nicht bestanden" zeigt, ist ein Hinweis.
-   Eine Statik, die "bestanden" zeigt, ist eine Zusage.
+-> MEIN SATZ "N-003 ist die EINZIGE, deren Ergebnis in einem Bauwerk landen kann"
+   IST FALSCH. Yama hat die Menge erhoben und ihn widerlegt:
+     treppenBerechnung  DIN 18065        -> Sturzrisiko
+     wandaufbau         U-Wert/Feuchte   -> Schimmel, Energie
+     abwassergefaelle   DIN 1986         -> Rueckstau
+     fbhAuslegung · heizkreisVerteiler   -> Anlagenauslegung
+   Nur kuecheArbeitsdreieck ist wirklich ein HINWEIS ohne Fachrecht.
+   Ich hatte die Liste gemessen und die REICHWEITE geschaetzt — genau die Klasse
+   "richtige Einzelmessung, zu weite Aussage", die der Plan-Pruefer an sich selbst
+   gefunden hat (a1d29aed). Diesmal in die andere Richtung: zu ENG statt zu weit.
+   Yamas Hausregel, die daraus wird:
+     "Wo eine Rechnung eine NORM nennt, darf die Software nicht 'bestanden' sagen."
+   -> die Klassifizierung der dreizehn Dateien ist ein EIGENER Auftrag (A-15),
+      und sie wird GEMESSEN (Normnennung ja/nein), nicht eingeschaetzt.
 ```
 
 > **Ich behandle in diesem Auftrag NUR N-003.** *Ob die anderen zehn Engines eine Unterscheidung
@@ -169,10 +202,12 @@ steht nur im Dateikopf, und *„ein Dateikopf wird nicht mitgeliefert, wenn jema
 Machbarkeit: `EngineErgebnis:81` trägt `[feld: string]: unknown`.* **Ohne diesen Nachweis ist Teil 1
 eine Hoffnung.**
 
-**A-14-3 (P1, die Plakette behauptet keinen Nachweis mehr):** Bei der Sparren-Vorbemessung erscheint
-**nicht** „Alle Prüfungen bestanden". *Nachweis: der neue Wortlaut, plus die Rohausgabe des heutigen
-Zustands zum Vergleich.* **Und die anderen zehn Engines behalten ihren Wortlaut** — Nachweis:
-Sichtprobe an mindestens einer davon (Treppe).
+**A-14-3 (P1, die Plakette ist WEG — ersatzlos, nicht umformuliert):** Bei der Sparren-Vorbemessung
+erscheint **keine** Plakette. **Nicht** „Alle Prüfungen bestanden", **auch nicht** ein milderer Satz.
+*Nachweis: Browserabnahme mit Bildlage, plus die Rohausgabe des heutigen Zustands zum Vergleich.*
+**Und die zwölf anderen Engines behalten ihre Plakette** — Nachweis: Sichtprobe an mindestens zwei
+davon (Treppe und eine Anlagen-Engine). *Eine Änderung, die alle dreizehn trifft, wäre ein anderer
+Auftrag und würde zwölf Engines ohne Messung verändern.*
 
 **A-14-4 (P1, der Vorbehalt steht im selben Blick):** Der Prüflisten-Eintrag erscheint **in derselben
 Liste** wie `ausnutzungBiegung`/`ausnutzungDurchbiegung`, nicht darüber und nicht in einem Tooltip.
