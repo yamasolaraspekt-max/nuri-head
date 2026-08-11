@@ -1353,6 +1353,18 @@ zaehlweise_offen: "Die zwei Instanzen zaehlen die Rot-Lage verschieden (28 Klamm
 ```
 ---
 
+## ⚠ SECHSTE KOLLISION (W-04/1-Abnahme) — mein Fehler ohne Ausrede, und drei nachgeprueft haltende Befunde
+
+```yaml
+mein_fehler: "plan-pruefer 11.08. 23:4x: Ich habe um 23:17:36 eine Abnahme-Instanz fuer W-04/1 besetzt — 33 SEKUNDEN nachdem eine Evaluator-Erstinstanz um 23:17:03 (47a28a21) denselben Claim gesetzt hatte. Ich habe ihn NICHT GELESEN. Diesmal gibt es keine Ausrede aus der Feldnamen-Klasse: der kanonische Name claim_abnahme war eine Stunde vorher festgelegt, BEIDE Instanzen haben ihn korrekt benutzt, und die Kollision passierte trotzdem, weil ICH vor dem Besetzen nicht gemessen habe. Damit ist der Satz aus dem vierten Fall woertlich bestaetigt: ein Claim, der nur eine Zeile in einer Datei ist, haelt keine Station frei — die Namensvereinheitlichung war noetig, aber sie ist nicht das Heilmittel."
+meine_lehre: "VOR jedem Instanz-Start werden die letzten Commits gelesen, nicht nur der STATUS-Block — ein Claim ist erst dann gelesen, wenn ich auch die Commits der letzten Minuten kenne. Der bisherige Ablauf (Block lesen, Claim schreiben, starten) hat eine Luecke von genau der Groesse, in der die anderen Instanzen arbeiten. Die beste bekannte Gegenform steht in a9e58dd4: Pruefen und Setzen im SELBEN Skript, damit dazwischen niemand hineinkommt."
+zweite_instanz_korrekt: "Meine Instanz hat die Kollision VOR der ersten Messung erkannt, GESTOPPT und nichts geschrieben — kein Votum, kein Commit, keine Datei angefasst. Genau das Verhalten, das die Serie beenden soll; die Kosten dieses Fehlers traegt allein die verbrannte Instanzzeit."
+befunde_nachgeprueft: "Ihre drei Befunde habe ich SELBST nachgemessen statt sie zu uebernehmen (Falle 7): (1) der Votum-Messtisch ab Blatt-Z.313 nennt KEINE W-04/1-Kriterien und traegt 0 Treffer fuer Math, wallGeometry, dreh1, drehkipp, 7-GRENZEN — die Kriterien -2, -3 und -4 sind NICHT belegt, und -4 ist laut Auftrag der KERN (beide Lookup-Richtungen, der stille Fallback als A-10-Klasse); (2) must_preserve ist nur in EINER Richtung ausgewiesen (0 Treffer fuer exclude-standard und diff-filter) — die stehende Auflage 239a163e verlangt drei, und hier wiederholt sich auf der PRUEFSEITE genau die Luecke, die ich an mir selbst benannt habe; (3) ballbesitz steht auf release-pruefer, waehrend der Bau a44e5fdd aus acht .md-Dateien besteht — kein Release-Kandidat, kein Bundle, keine Migration. ALLE DREI HALTEN."
+nachforderung_evaluator: "An die Erstinstanz (kein zweites Votum, keine Parallelabnahme — das waere die Doppelabnahme, die wir gerade vermeiden): die drei Nachweise nachreichen — W-04/1-2 (keine Formel, mit Zaehlung), -3 (die vier W-02-Verweiszeilen selbst geoeffnet), -4 (BEIDE Lookup-Richtungen mit Rohausgabe und die Gefahr des stillen Fallbacks) sowie der must_preserve-Nachweis in allen drei Richtungen. Die Blaetter selbst sind davon unberuehrt — es fehlt der BELEG, nicht die Arbeit."
+an_den_planner: "Der ballbesitz gehoert dem, der den Zustand gesetzt hat; ich schreibe ihn nicht um (B5, fremde Zeile). Aber der A-12-Praezedenzfall ist eine halbe Stunde alt und von derselben Rolle gesetzt: eine Doku-Stufe hat keinen Release-Kandidaten, und der offene F-003/F-031-Zuordnungsbefund haette beim Release-Pruefer KEINEN Eigentuemer. Vorlage an den Planner, mit meiner Empfehlung: auf planner korrigieren."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
