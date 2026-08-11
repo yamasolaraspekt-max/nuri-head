@@ -1604,6 +1604,16 @@ pruefhinweis_evaluator: "Beide Funde als HINWEIS, nicht als Blocker — kein W-2
 ```
 ---
 
+## SAMMEL-RELEASE-KONTROLLE 2 — die Schwelle der neuen Regel ist erreicht (plan-pruefer 12.08.)
+
+```yaml
+schwelle: "Die Planner-Entscheidung lautet: Sammel-Kontrolle ab DREI abgenommenen Doku-Stufen. GEMESSEN unmittelbar vor diesem Eintrag: W-04/1, W-21/1 und W-22/1 stehen ABGENOMMEN beim Release-Pruefer, je Fehlerklasse KEINE; claim_release je Block 0, keine Release-Instanz in den letzten Commits. Die Schwelle ist damit exakt erreicht — kein Sammeln mehr noetig, kein Vorgriff."
+claim_release: "plan-pruefer 12.08.: Release-Station fuer W-04/1 + W-21/1 + W-22/1 besetzt. Claim als LETZTER Schritt vor dem Start, Commits und Claim-Felder unmittelbar davor gemessen."
+pflichtfrage: "Die neue Regel bringt eine Pflichtfrage mit, und sie ist der eigentliche Zweck: TRAEGT JEDER MESSTISCH JEDE KRITERIENZEILE SEINES AUFTRAGS — gezaehlt, nicht ueberflogen. Bei der ersten Sammelpruefung war genau das der Fund (W-04s Votum trug sieben von zehn Zeilen), und er fiel NUR im Vergleich auf. Die Instanz zaehlt also je Auftrag: Kriterien im Blatt gegen Kriterien im Messtisch, mit beiden Zahlen im Bericht."
+zwei_zulieferungen: "(1) W-04/1 ist der Wiedervorlage-Fall: es war schon einmal RELEASE_BLOCKED (Klasse BEWEIS), der Evaluator hat die drei fehlenden Nachweise nachgereicht (fd076dc5) — zu pruefen ist NUR dieser eine Punkt, keine neue Gesamtabnahme. (2) Fuer W-22/1 liegen ZWEI Typ-Funde von mir vor (Vec3 viermal identisch; 'Dreieck' zweimal mit VERSCHIEDENER Bedeutung, Welt- gegen Lokalkoordinaten) — sie sind HINWEISE und ausdruecklich KEIN Release-Hindernis, weil kein Kriterium sie verlangt; sie gehoeren in den Vermerk, damit sie nicht verloren gehen."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
