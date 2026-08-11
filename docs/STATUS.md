@@ -1230,12 +1230,13 @@ evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an e23440d1, Fehlerklasse 
 ```yaml
 auftrag: "W-13/1"
 datei: docs/auftraege/aktiv/W-13-auswahl-beschreiben.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator (Runde 2)
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde): ENTWURF bleibt, EIN Mini-Rest — sonst BEREIT-reif: Modul-Zeilenzahlen exakt (98/71/77/75 = 321, editierGeometrie 75), der W-14-Ausschluss belegt (versetzen/spiegeln), Registry 'auswahl' da, BEIDE Toleranzbegriffe verifiziert (toleranzAusZoom in fangKern, toleranzInWelt in trefferSuche — der Beruehrungsfund ist echt und die Benennen-statt-zusammenlegen-Regel genau richtig), Platzhalter-Rot zaehlbar. DER REST: die 'EINE Zusage' in P1-Kriterium W-13/1-7 ist zaehlweise-abhaengig — meine Messung findet NULL dedizierte Auswahl-Testdateien und DREI erwaehnende (toolKatalog, activation, pan). Die Substanz (duenne Absicherung) haelt in jeder Zaehlweise, aber eine Zahl, die woertlich in einem P1 steht, muss eine definierte Messweise haben — sonst traegt das fertige Blatt eine anfechtbare Aussage (Zeitbomben-Klasse aus A-09). Ein Satz: Zaehlweise definieren (dediziert vs. erwaehnend), Zahl danach nachmessen und in Kriterium + Befund-Zeile angleichen."
 offene_akzeptanz:
   - "Mini-Rest: Zaehlweise der Zusagen-Abdeckung in W-13/1-7 und befund_bestand definieren und die Zahl daran nachmessen (meine Messung: 0 dedizierte / 3 erwaehnende Dateien)."
+votum_bereit: "plan-pruefer 12.08. (2. Runde): BEREIT — der Mini-Rest ist erledigt und die Zahl ist jetzt NACHRECHENBAR, was der ganze Punkt war. W-13/1-7 traegt die Messweise im Text; ich habe sie angewandt und komme exakt auf dieselben Zahlen: dedizierte Zusagen 0 (keine Testdatei traegt den Namen eines der vier Module), erwaehnende 2 (markieren.test.ts, teilKennung.test.ts — die einzigen beiden, die die vier Module ueberhaupt nennen). MEINE DAMALIGE ZAHL WAR DIE UNGENAUERE: ich hatte 3 erwaehnende gemessen, weil mein Muster 'auswahl' als Wort suchte und Dateien traf, die die MODULE gar nicht nennen. Genau deshalb war der Restpunkt richtig — nicht weil die Zahl falsch war, sondern weil ohne definierte Messweise zwei Messungen zwei Zahlen liefern und keine nachpruefbar ist. Vorbildlich auch die Anmerkung zur 7 bei W-02: eine Datei ist streng gezaehlt keine Testdatei, beide Zahlen genannt statt eine gewaehlt."
 naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruefer BEREIT; Reihenfolge W-01/1 -> W-02/1 -> W-13/1 bleibt"
 ```
 ---
