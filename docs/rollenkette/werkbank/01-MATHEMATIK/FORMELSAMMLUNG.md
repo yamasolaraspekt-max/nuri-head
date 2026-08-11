@@ -692,13 +692,74 @@ NICHT enthalten: Wind · Mehrfeld · Knicken · Auflagerpressung · Lastkombinat
 > bestätigt oder lockert, gilt die strengere Fassung — **das ist die einzige Richtung, in der ein
 > Irrtum niemandem schadet.***
 
-- **Was die Ampel auf 🟢 heben würde:** eine ausdrückliche Freigabe Yamas über den Geltungsbereich
-  (*„Vorbemessung genügt für X, für Y nicht"*), festgehalten im Blatt. **Nicht** mehr Rechnung —
-  die Rechnung ist belegt.
-- **Der Generator hat den Vorbehalt richtig behandelt:** *er steht nicht nur im Dateikopf, sondern
-  zusätzlich als Prüfpunkt in `6-PRUEFUNG` — mit der Begründung, dass **„ein Dateikopf nicht
-  mitgeliefert wird, wenn jemand nur die Zahl übernimmt"**.* **Dieser Satz ist die beste Begründung
-  für die ganze N-Gruppe.**
+### N-003 · Geltungsbereich — von Yama festgelegt 12.08., DAUERGELB
+
+> **Yamas Bestätigung liegt vor, in der strengeren Fassung und ohne Einschränkung.** *Er hat den
+> Geltungsbereich vorher selbst im Wortlaut gelesen.* **Und er hat meine 🟢-Zeile aufgehoben:**
+
+```text
+ERLAUBT — N-003 darf benutzt werden fuer:
+  Vorbemessung im Entwurf     Querschnittsvorschlag, Achsabstand, Machbarkeit
+  Angebot und Kalkulation     Holzmengen, Laengen, Kosten
+  Plausibilitaet              "passt die Groessenordnung ueberhaupt"
+  Variantenvergleich          Sparrendach gegen Pfettendach, 60 gegen 80 cm Achsmass
+
+NICHT ERLAUBT — N-003 darf NIEMALS benutzt werden fuer:
+  Ausfuehrungsnachweis        kein Ersatz fuer die Statik des Tragwerksplaners
+  Genehmigungsunterlage       nicht in einen Bauantrag, nicht in eine Prueferklaerung
+  Freigabe zur Ausfuehrung    kein "gerechnet, also gebaut"
+  Sonderlasten                Wind, Schnee-Verwehung, Mehrfeld, Knicken,
+                              Auflagerpressung, Lastkombinationen
+```
+
+> **DAUERGELB — 🟢 ist für diese Formel nicht vorgesehen.** *Yamas Korrektur meiner Fassung, wörtlich:
+> „🟢 würde bedeuten: uneingeschränkt benutzbar. Das kann N-003 nie werden — nicht wegen der
+> Rechenqualität, sondern weil der Geltungsbereich **fachlich unvollständig ist und bleibt**. Wind
+> fehlt, Mehrfeld fehlt, Knicken fehlt. **Das ist kein Mangel, den man wegarbeitet; das ist die Natur
+> einer Vorbemessung.**"*
+>
+> **Ich hatte geschrieben, eine Freigabe würde die Ampel auf grün heben. Das war falsch** — eine
+> Freigabe *über den Geltungsbereich* macht die Grenze nicht kleiner, sie macht sie **verbindlich**.
+> *Gelb heißt in diesem Regelwerk genau das Richtige: benutzbar **mit** der genannten Bedingung.*
+
+### N-003 · AUFLAGE an die Ausgabe — keine stille Zahl
+
+**Yamas Auflage, wörtlich:** *„Jede ausgegebene Bemessungszahl aus N-003 trägt ihren Vorbehalt mit —
+in der Oberfläche, im Export, in der Stückliste, im PDF. Wer die Zahl sieht, sieht den Satz
+‚Vorbemessung, ersetzt keine prüffähige Statik'. Nicht als Fußnote in den Einstellungen, sondern **am
+Wert**."*
+
+**Der Anschlusspunkt ist gemessen, nicht vermutet:**
+
+```text
+DIE ZAHL ENTSTEHT      geometry/sparrenBerechnung.ts:86   berechneSparren(e)
+SIE WIRD GERUFEN VON   app/dashboard/enginePanels.ts:210  (die EINZIGE Aufrufstelle
+                       ausserhalb der Tests)
+SIE WIRD ANGEZEIGT IN  app/EngineFlaeche.tsx:56-58
+                       "Die Rechengrundlage steht sichtbar: der Nutzer soll wissen,
+                        wonach gerechnet wird."   ->   Grundlage: {panel.grundlage}
+WAS HEUTE DORT STEHT   'Eurocode 5 (Biegung, Durchbiegung L/300) mit Schneelast
+                        nach DIN EN 1991-1-3'
+                       -> die NORM steht da, die GRENZE nicht. "Eurocode 5" liest sich
+                          wie ein Nachweis.
+AUSGEGEBEN WERDEN u.a. ausnutzungBiegung · ausnutzungDurchbiegung
+                       -> eine "Ausnutzung 0,85" liest JEDER als "Nachweis erfuellt".
+                          Das ist die gefaehrlichste Zeile der ganzen Ausgabe.
+WEITERE AUSGABEWEGE    gemessen: KEINE. Kein Export, kein PDF, keine Stueckliste
+                       traegt heute ein EngineErgebnis (0 Treffer ausserhalb
+                       enginePanels/EngineFlaeche).
+```
+
+> **Deshalb gehört der Vorbehalt NICHT in die Anzeige, sondern in das ERGEBNIS.** *Heute gibt es
+> genau einen Ausgabeweg; morgen gibt es Export, Stückliste und PDF. Wer den Satz in
+> `EngineFlaeche.tsx` schreibt, pflegt ihn danach an vier Stellen — und die vierte vergisst ihn.*
+>
+> **Vorschlag für das Kriterium (gehört an die Ausgabestelle, nicht in einen eigenen Auftrag):**
+> `SparrenErgebnis` trägt ein **Pflichtfeld** mit dem Vorbehaltssatz. Dann kann keine Ausgabestelle
+> ihn weglassen, ohne ihn **aktiv zu unterdrücken** — und das fällt in einer Prüfung auf.
+> *Das ist genau der Generator-Satz, konsequent gedacht: **„ein Dateikopf wird nicht mitgeliefert,
+> wenn jemand nur die Zahl übernimmt" → also muss der Vorbehalt Teil der Zahl sein, nicht ihrer
+> Darstellung.***
 
 ### Regeln für die N-Gruppe
 
