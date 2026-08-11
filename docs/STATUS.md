@@ -19,6 +19,7 @@
 | **W-01** Raster und Fang | **`CODE_FERTIG`** | Evaluator | `04f78b73` · Nachbesserung Runde 2 · Basis `32f83a6f` | Befund 1 behoben: Zeilennummern **0 → 7** (F-041 als Rückgabe-Reihenfolge 128→195) · Befund 2: `51fab811` trägt beide §3-Befehle mit Ausgabe · Mutationsprobe 7→2 · Suite 1692/1692 · SPEC -6 weiter beim Planner |
 | **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `e23440d1` · Runde 2 · Basis `193681cd` | -9 behoben (`5c06f5ca`: 2 Befehle, 2 Ausgaben) · **-2 war im Bau rot und von mir grün gemeldet** — Korrektur lag nie in einem Commit, jetzt 4 → 0 gegen Commits gemessen · Suite 1692/1692 |
 | **W-04** Öffnung Tür/Fenster | **`CODE_FERTIG`** | Evaluator | `a44e5fdd` · Basis `b6078b2a` | 10/10 · vier Lookups **gegensätzlich** bei unbekannter ID (2× `undefined`, 2× Rückfall auf `dreh1`/`drehkipp`) · `3-FORMELN` = **keine**, gemessen · must_preserve **0/0/0** · Suite 1692/1692 · **Befund: F-Zuordnung im Register passt nicht zum Code** |
+| **W-11** Maß und Bemaßung | **`IN_ARBEIT`** | **Generator** | BEREIT `7a415aff` | drei Module, zwei Schichten · §7 8/8 · §3 beide Orte 0 · rot an der Basis: **28 Platzhalter** in 7 Blättern · **Tafelzeile von mir nachgetragen, sie fehlte** |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1288,8 +1289,8 @@ geschlossen: "plan-pruefer 11.08. — SELBST nachgemessen, nicht geglaubt: die N
 auftrag: "W-11/1"
 titel: "Die sieben Blaetter von W-11 aus bemassung.ts + masskette.ts + masseingabe.ts ableiten"
 datei: docs/auftraege/aktiv/W-11-bemassung-beschreiben.md
-zustand: BEREIT
-ballbesitz: generator (Runde 1 nach W-04/1; §3-Stand 11.08. 23:xx: A-12 ist CODE_FERTIG, gesperrt ist jetzt durch W-04/1)
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft, Runde 1 drittes Blatt)
 basis_sha: 7a415aff
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte W-Blatt in Folge): ALLE Zahlen aufs Zeichen bestaetigt — 118/108/169 = 395 Zeilen, 7/6/9 = 22 Exporte, Registry 'bemassen' 1 Treffer, 4 dedizierte Zusagen (bestes Verhaeltnis der Runde, stimmt). Die EINZIGE Abhaengigkeit steht woertlich in bemassung.ts:18 ('import { masskette, type MassSegment, type Bbox }'), masseingabe.ts ist WIRKLICH importfrei (grep ^import = 0) — die Schichtentrennung ist damit am Code belegt, nicht behauptet. Die MassPunkt-Doppelung habe ich ZEICHENWEISE nachgeprueft: masskette.ts:9 und masseingabe.ts:25 sind byte-identisch ('exportinterfaceMassPunkt{x:number;y:number;}') — die Einordnung 'Doppelung, aber keine zweite Wahrheit, gefaehrlich erst bei einseitiger Aenderung' traegt exakt. W-11/1-7 ist der wertvollste Punkt des Blatts: die Register-Abhaengigkeit zu W-13 wird GEPRUEFT statt uebernommen, mit der ehrlichen Begruendung 'drei von vier Registerangaben waren in dieser Runde ungenau' — genau die Haltung, die die Runde bisher getragen hat. W-11/1-10 traegt die E2-Zaehlform."
 naechster_schritt: "Generator zieht W-11/1 nach W-04/1; Start erst ohne laufendes IN_ARBEIT — das ist jetzt W-04/1 (a9e58dd4), NICHT mehr A-12 (seit 3a4838e1 CODE_FERTIG)"
