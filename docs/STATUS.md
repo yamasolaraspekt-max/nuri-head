@@ -1562,6 +1562,16 @@ pruefhinweis_evaluator: "Zwei Punkte fuer die Abnahme, beide als HINWEIS und nic
 ```
 ---
 
+## KENNTNIS + zwei Adressierungen (plan-pruefer 12.08.)
+
+```yaml
+grundsatzfrage_entschieden: "Der Planner hat die Frage entschieden, die ich zweimal vorgelegt hatte: KEINE eigene Release-Station fuer Doku-Stufen, sondern eine SAMMEL-Kontrolle ab DREI abgenommenen Stufen, mit einer Pflichtfrage — traegt jeder Messtisch JEDE Kriterienzeile seines Auftrags, GEZAEHLT nicht ueberflogen. Ausfuehrender bleibt der Release-Pruefer, weil ein Evaluator seinen eigenen Messtisch nicht nachzaehlen kann. Die Begruendung ist besser als meine Vorlage: nicht die 6-von-11-Zahl traegt sie, sondern WO der Fund herkam — aus der Sammelform; bei einer Einzelpruefung waere 'sieben Zeilen' eine Zahl ohne Massstab gewesen. Ich nehme die Entscheidung an; sie deckt sich mit der dritten Antwort des Release-Pruefers, die keiner von uns beiden vorgeschlagen hatte."
+folge_fuer_die_lage: "W-04/1 und W-21/1 stehen ABGENOMMEN beim Release-Pruefer — nach der neuen Regel sind das ZWEI von drei. Das ist KEIN Stillstand, sondern planmaessiges Sammeln: W-08/1 und W-22/1 sind BEREIT und liefern die dritte Stufe. Ich stosse deshalb keine Einzelpruefung an."
+an_yama_regelaenderung: "Der Planner legt die Regel ausdruecklich VOR, statt §10 selbst zu aendern ('das ist Regelarbeit und gehoert nicht dem Planner') — richtig nach §1. Damit liegt sie ohne Adressaten. NACH DEM P-01-PRAEZEDENZFALL (Yamas Weisung 05.08.: 'lass doch von plan pruefer die fassung pruefen und freigeben, dann wird das verbindlich') waere der Weg: Yama beauftragt, ich pruefe die Fassung, seine Freigabe macht sie verbindlich. Ich MASSE mir das nicht selbst an — die Beauftragung fehlt. Vorlage an Yama, mit einer Zeile: die Regel ist praktisch schon erprobt (die Sammelpruefung heute hat genau den Fund gemacht, den sie begruendet)."
+an_yama_fachgate: "DRINGENDER und unabhaengig davon: der Planner hat N-003 (Sparren-Vorbemessung) auf GELB als FACH-GATE gesetzt und ausdruecklich als BESTAETIGUNGSPFLICHTIG markiert — nicht wegen der Rechenqualitaet (die ist belegt), sondern wegen der REICHWEITE: Einfeldtraeger, gleichmaessige Last, nur senkrechte Komponente; Wind, Mehrfeld, Knicken, Auflagerpressung und Lastkombinationen fehlen. Sein Satz: 'Eine Sparrenbemessung, die als geprueft gilt und dann nicht traegt, ist Personenschaden.' Er hat die STRENGERE Lesart gesetzt, weil ein Irrtum in dieser Richtung niemandem schadet. CLAUDE.md verlangt bei Fach-, Rechts- und Haftungsfragen die Rueckfrage — das ist eine YAMA-Entscheidung, keine Rollen-Entscheidung, und sie steht offen."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
