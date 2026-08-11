@@ -18,13 +18,25 @@ seinen Playground-Bestand und den ticket-Bestand bedient — gerade bei Azimut u
 | 1 | `resources/planner/hausplaner/geometry/wallGeometry.ts:37` | Nord = +y, im Uhrzeigersinn, 0–359, **Normale** | **ja** — Spec ▲K2 im Dateikopf |
 | 2 | `app/Services/Geometrie/SzeneProjektionService.php:257` | Nord = +y = 0°, Ost = 90° | **ja** — im Klassenkopf |
 | 3 | `app/Services/Energie/PvgisErtragService.php:41` | **0 = Süd**, −90 = Ost, 90 = West | **ja** — PVGIS-Fremdkonvention |
-| 4 | `app/Models/PVRoof.php:24` `roof_azimuth` (decimal:2, seit 2024) | **keine Angabe** | **NEIN** |
+| 4 | `app/Models/PVRoof.php:24` `roof_azimuth` (decimal:2, seit 2024) | 0=N, 90=E, 180=S, 270=W | **JA** — `database/migrations/2024_06_04_103808:67` |
 
 1 und 2 sind konsistent. 3 ist eine Fremd-API und darf abweichen.
 
-**4 ist der Befund:** `roof_azimuth` liegt seit 2024 in `p_v_roofs`, hat repoweit **3 Treffer**, und
-an keinem steht, ob 0° Nord oder Süd meint. *Ein Zahlenfeld ohne Konvention ist kein Datum, es ist
-eine Vermutung mit zwei Nachkommastellen.*
+**BERICHTIGT am 12.08.2026 — Punkt 4 war falsch.** Der Planner hat gemessen (`3d368625`), ich habe
+es nachgeprüft: **die Konvention steht da**, als Kommentar neben der Spalte —
+`database/migrations/2024_06_04_103808:67` → `// 0=N, 90=E, 180=S, 270=W`.
+
+**Warum ich sie verfehlt habe:** meine Prüfung lief mit `--include='*.php' app/`. Die Angabe liegt in
+`database/`. *Ich habe am falschen Ort gesucht und aus dem leeren Ergebnis auf Abwesenheit geschlossen —
+dieselbe Klasse wie „im falschen Schema gemessen".* **Ein `grep`, der den richtigen Ort nicht
+einschließt, beweist nichts.**
+
+**Was stattdessen gilt** (Messung des Planners, von mir nicht nachgemessen): fünf Stellen dokumentieren
+0=Nord/0…360 und **drei Tests sichern sie zu**. Die PVGIS-Konvention ist an allen vier Stellen korrekt
+als solche benannt. Der wirkliche Mangel ist kleiner und schärfer als meiner: **die Umrechnung an der
+Grenze fehlt** — und sie fällt nicht auf, weil **0…180 in beiden Systemen gültig ist und das Gegenteil
+bedeutet**. Ein Süddach trägt im Kompass 180; unverändert an PVGIS gegeben, rechnet PVGIS ein **Norddach**.
+*Der größtmögliche Fehler, und nichts schlägt an.*
 
 ## 2 · Es gibt keine Brücke vom Planer in die PV-Rechnung
 

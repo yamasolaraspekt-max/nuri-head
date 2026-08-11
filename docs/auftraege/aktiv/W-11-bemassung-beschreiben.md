@@ -349,3 +349,79 @@ steht im Code.**
 *Bei W-01 und W-02 riss dieselbe Zusage zweimal. W-04 und W-11 erfüllen sie sofort — **das ist die
 zweite Messung, die E2 aus Prozessprüfung 03 bestätigt**, und zwei Fälle sind kein Beweis, aber
 mehr als eine Hoffnung.*
+
+---
+
+## Release-Prüfung (§10) — 12.08.2026
+
+```yaml
+auftrag: W-11/1
+abnahme_commit: 63c9cf21   # Evaluator-Votum; gemessen wurde 0299e5ca (Bau, Basis 7a415aff)
+release_commit: b5c8389d   # HEAD bei dieser Prüfung
+votum: RELEASE_FREI
+ci: pass                   # npm run test:hausplaner selbst gefahren: tests 1692, pass 1692, fail 0
+artefakte_reproduzierbar: nicht_anwendbar   # Doku-Stufe: kein Bundle, kein Build-Artefakt im Scope
+migration: nicht_anwendbar
+rueckweg: pass             # git revert 0299e5ca — acht .md-Dateien, kein Datenpfad, kein Zielsystem
+smoke_test_plan: "Nach Freigabe: die sieben Blätter gegen die drei Module gegenlesen —
+  masskette.ts:9 und masseingabe.ts:25 (MassPunkt-Doppelung), bemassung.ts:18 (einzige
+  Abhängigkeit), masseingabe.ts:41 (istBrauchbareLaenge). Register-Zeile W-11 trägt BESCHRIEBEN."
+befunde: []
+```
+
+### Prüfpunkte, je selbst gemessen
+
+**1. Kette** — jeder Übergang `git merge-base --is-ancestor`, Exit je 0:
+
+```text
+c33d4c1a (BEREIT) -> a436d8a3 (IN_ARBEIT) -> 0299e5ca (Bau) -> 5088b5ba (CODE_FERTIG)
+-> 63c9cf21 (ABGENOMMEN) -> HEAD b5c8389d                       5/5 Exit 0
+```
+
+**2. Scope-Reinheit** — `git show 0299e5ca --stat`: **exakt acht Dateien**, sieben Blätter +
+`REGISTER.md`, 164 Einfügungen / 179 Löschungen. Nicht-Doku-Pfade im Commit gezählt:
+
+```text
+git show 0299e5ca --name-only --format="" | grep -v "^docs/" | wc -l      0
+```
+
+Nichts unter `resources/`, nichts unter `scripts/`.
+
+**3. Votum trifft den Prüf-SHA** — das Evaluator-Votum nennt `commit: 0299e5ca`, und das ist der
+Bau-Commit. Kein Auseinanderfallen von geprüftem und freizugebendem Stand.
+
+**4. Der abgenommene Stand ist heute noch der Stand** — `git diff 0299e5ca..HEAD` über das
+Werkzeugverzeichnis: **0 geänderte Dateien**. `REGISTER.md` wurde danach einmal angefasst
+(`603eddc2`, Planner), die Zeile W-11 trägt weiter `BESCHRIEBEN`.
+
+**5. Ergebnis stichprobenartig** — Platzhalter nach der Zählweise des Auftrags (alle spitzen
+Klammern) über alle sieben Blätter: **0**. Register: `W-11 | Maß und Bemaßung | BESCHRIEBEN`, drei
+Fundstellen mit Zeilen- und Ausfuhrzahl (`masskette.ts` 118/7, `bemassung.ts` 108/6,
+`masseingabe.ts` 169/9).
+
+**6. Das Votum belegt alle zehn Kriterien** — der Messtisch führt `-1` bis `-10` einzeln, jede
+Zeile mit Zahl oder Fundstelle. *Das ist der Unterschied zu W-04/1, das an derselben Stelle nur
+sieben Zeilen trägt.*
+
+**7. §15** — Geheimnis-Stichprobe über die sieben Blätter
+(`password|secret|token|api_key|BEGIN RSA`): **0 Treffer**. Keine Rechte-, Mandanten- oder
+Datenwirkung; die Stufe ändert keine Zeile ausführbaren Codes.
+
+### Gemeinsame Messungen (einmal für alle drei Aufträge gefahren)
+
+`must_preserve` in **allen drei Richtungen einzeln**, Auflage `239a163e`, für `resources/` **und**
+`scripts/`:
+
+```text
+resources/  geändert 0   hinzugefügt 0   entfernt 0
+scripts/    geändert 0   hinzugefügt 0   entfernt 0
+```
+
+Beifang-Kontrolle `git log <CODE_FERTIG>..HEAD -- resources/ scripts/`: **0 Commits**, sowohl ab
+`5088b5ba` als auch ab dem frühesten CODE_FERTIG `3dcca1b8`. *Damit ist die Insel-Suite am HEAD
+zugleich die Suite am Release-Kandidaten: zwischen Bau und HEAD hat kein Commit den gemessenen Code
+berührt.*
+
+Untracked im Arbeitsbaum, **nicht angefasst** (Dauerregel Erhalt, fremde Streudateien): `1692` und
+`zz-unlink-probe` im Wurzelverzeichnis. Beide liegen außerhalb `resources/` und `scripts/` und
+außerhalb jedes Prüfgegenstands.

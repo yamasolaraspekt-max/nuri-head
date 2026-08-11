@@ -385,3 +385,82 @@ beim Schreiben nicht erneut, drei Minuten später war die Bedingung eine andere.
 
 > **`-10` zum dritten Mal in Folge im ersten Anlauf** (W-04, W-11, W-05). *Die zählbare Form aus
 > E2 hält jetzt über drei Blätter — bei W-01 und W-02 riss dieselbe Zusage zweimal.*
+
+---
+
+## Release-Prüfung (§10) — 12.08.2026
+
+```yaml
+auftrag: W-05/1
+abnahme_commit: af98d7b6   # Evaluator-Votum; gemessen wurde 34ecf8a4 (Bau, Basis 3358d1cc)
+release_commit: b5c8389d   # HEAD bei dieser Prüfung
+votum: RELEASE_FREI
+ci: pass                   # npm run test:hausplaner selbst gefahren: tests 1692, pass 1692, fail 0
+artefakte_reproduzierbar: nicht_anwendbar   # Doku-Stufe: kein Bundle, kein Build-Artefakt im Scope
+migration: nicht_anwendbar
+rueckweg: pass             # git revert 34ecf8a4 — acht .md-Dateien, kein Datenpfad, kein Zielsystem
+smoke_test_plan: "Nach Freigabe: die drei Wächter im Blatt gegen roomDetection.ts gegenlesen —
+  laenge === 0 (Z.89), polygon.length < 3 (Z.167), flaeche <= 0 (Z.171); dazu der Ausschluss
+  polygonFlaeche.ts. Register-Zeile W-05 trägt BESCHRIEBEN."
+befunde: []
+```
+
+### Prüfpunkte, je selbst gemessen
+
+**1. Kette** — jeder Übergang `git merge-base --is-ancestor`, Exit je 0:
+
+```text
+601aff5c (BEREIT) -> 77af6797 (IN_ARBEIT) -> 34ecf8a4 (Bau) -> babf93ce (CODE_FERTIG)
+-> af98d7b6 (ABGENOMMEN) -> HEAD b5c8389d                       5/5 Exit 0
+```
+
+**2. Scope-Reinheit** — `git show 34ecf8a4 --stat`: **exakt acht Dateien**, sieben Blätter +
+`REGISTER.md`, 182 Einfügungen / 182 Löschungen. Nicht-Doku-Pfade im Commit gezählt:
+
+```text
+git show 34ecf8a4 --name-only --format="" | grep -v "^docs/" | wc -l      0
+```
+
+Nichts unter `resources/`, nichts unter `scripts/`.
+
+**3. Votum trifft den Prüf-SHA** — das Evaluator-Votum nennt `commit: 34ecf8a4`, und das ist der
+Bau-Commit.
+
+**4. Der abgenommene Stand ist heute noch der Stand** — und das ist bei W-05 der Punkt, der eine
+eigene Messung verdient, weil der Planner einen Fremdzugriff auf diesen Scope **selbst gemeldet**
+hat (`ce30174f`). `git diff 34ecf8a4..HEAD` über `W-05-raum-erkennen/`: **0 geänderte Dateien**.
+Der Zugriff `603eddc2` fasst ausschließlich `REGISTER.md` an; die Zeile W-05 trägt dort weiter
+`BESCHRIEBEN`. *Der Evaluator hat dasselbe am Bau-Stand gemessen; ich messe es am
+Release-Kandidaten, und es hält auch dort.*
+
+**5. Ergebnis stichprobenartig** — Platzhalter nach der Zählweise des Auftrags (alle spitzen
+Klammern) über alle sieben Blätter: **0**. *Damit ist auch die vom Generator ehrlich mit zwei
+Zahlen gemeldete Lage entschieden — der eine wörtliche Treffer existiert am Release-Stand nicht
+mehr als spitze Klammer.* Register: `W-05 | Raum erkennen | BESCHRIEBEN` mit `roomDetection.ts`
+als Fundstelle (190 Zeilen, 4 Ausfuhren).
+
+**6. Das Votum belegt alle zehn Kriterien** — der Messtisch führt `-1` bis `-10` einzeln.
+
+**7. §15** — Geheimnis-Stichprobe über die sieben Blätter: **0 Treffer**. Keine Rechte-,
+Mandanten- oder Datenwirkung.
+
+### Gemeinsame Messungen (einmal für alle drei Aufträge gefahren)
+
+`must_preserve` in **allen drei Richtungen einzeln**, Auflage `239a163e`, für `resources/` **und**
+`scripts/`:
+
+```text
+resources/  geändert 0   hinzugefügt 0   entfernt 0
+scripts/    geändert 0   hinzugefügt 0   entfernt 0
+```
+
+Beifang-Kontrolle `git log babf93ce..HEAD -- resources/ scripts/`: **0 Commits**. *Damit ist die
+Insel-Suite am HEAD zugleich die Suite am Release-Kandidaten.*
+
+Untracked im Arbeitsbaum, **nicht angefasst**: `1692` und `zz-unlink-probe` im Wurzelverzeichnis —
+außerhalb `resources/`, `scripts/` und jedes Prüfgegenstands.
+
+> **Ein Befund, der nicht W-05 gehört, aber hier auffiel:** der Statusblock nennt als `datei`
+> `docs/auftraege/aktiv/W-05-raum-erkennen-beschreiben.md`. Die Datei heißt
+> `W-05-raum-beschreiben.md`. Kein Release-Hindernis — aber ein Verweis in der Statuswahrheit, der
+> ins Leere zeigt. *Gehört dem Planner; ich ändere fremde Zeilen nicht.*
