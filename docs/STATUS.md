@@ -1280,8 +1280,9 @@ claim_bau_a12: "plan-pruefer 10.08.: Yamas Einreihung ausgefuehrt — A-12 bekom
 auftrag: "W-04/1"
 titel: "Die sieben Blaetter von W-04 aus oeffnungsBauarten.ts + oeffnungsTypen.ts ableiten"
 datei: docs/auftraege/aktiv/W-04-oeffnung-beschreiben.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: VEROEFFENTLICHT
+ballbesitz: yama
+release_vermerk: "release-pruefer (Stamm-Instanz) 11.08.: §10 an der Abnahme 973f1ec4/a44e5fdd — Kette Vorfahr, reiner Doku-Scope (7 Werkbank-Blaetter + REGISTER, 8 Dateien), Produkt-Code seit 56c77ae6 unberuehrt (resources/public/app/scripts = 0), Insel-Suite 1692/1692 als Regressionskontrolle, Scans leer. main-FF unmittelbar nach diesem Statuscommit. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 basis_sha: b6078b2a
 claim_bau_w04: "plan-pruefer 11.08.: §3-Sperre gefallen (A-12 CODE_FERTIG, Zustandsfeld IN_ARBEIT 0 — selbst gemessen) — Generator-Station fuer W-04/1 mit frischer Instanz besetzt, aeltestes BEREIT der Runde 1. Claim VOR dem Start. Die A-12-Abnahme laeuft parallel: nach §3 zulaessig, sie prueft einen festgeschriebenen Commit."
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review): JEDE Behauptung selbst gemessen und EXAKT bestaetigt — oeffnungsBauarten 75 Z/5 Exporte, oeffnungsTypen 49 Z/7 Exporte, fensterProdukt 153 Z; der OeffnungsArt-Import steht woertlich in Z.3 (die praezise Ausnahme im Ausschluss ist also NOETIG, nicht hoeflich); Registry traegt WIRKLICH zwei Werkzeuge (fenster :78, tuer :96); W-02s 2-FUNKTION beschreibt die Tuergeometrie bereits (2 Treffer) — die Verweis-statt-Doppelbeschreibung-Entscheidung ist damit belegt und richtig; Platzhalter-Rot zaehlbar (6 Blaetter). W-04/1-10 traegt die E2-Zaehlform aus Pruefung 03. Der Selbstbefund 'W-04 hat kein eigenes Modul' ist die vierte Matrix-Korrektur derselben Klasse und wieder vom Planner selbst gefunden."
