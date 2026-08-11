@@ -7,6 +7,21 @@
 > **NICHT** als `BESCHRIEBEN`; die Zahl nennt, wie viele stehen) · `BESCHRIEBEN` (**alle sieben**
 > Blätter gefüllt) · `GEBAUT` (Code vorhanden) · `GEPRÜFT` (Kriterien grün, Grenzen belegt)
 >
+> **`ENTWORFEN`** (Yamas Entscheidung 12.08.) — **alle sieben Blätter gefüllt, aber als VORGABE
+> statt als Ablesung.** *Für Werkzeuge, deren Code noch nicht existiert (Klasse C).*
+>
+> ```text
+> BESCHRIEBEN   die Blaetter LESEN den vorhandenen Code ab.   Quelle: der Bestand.
+> ENTWORFEN     die Blaetter GEBEN VOR, was gebaut werden soll. Quelle: Vertrag,
+>               Fachregel oder Zielbild — KEIN Code.
+> -> zwei PARALLELE Stufen, keine aufeinanderfolgenden. Beide fuehren zu GEBAUT.
+> -> Der Abschlusszaehler zaehlt NUR 'BESCHRIEBEN'. ENTWORFEN wird NICHT gezaehlt:
+>    sonst misst die Zahl Plaene statt Messungen (H-3).
+> -> BEIM UEBERGANG ENTWORFEN -> GEBAUT ist zu pruefen, ob die VORGABE mit der
+>    ABLESUNG uebereinstimmt. Ein Entwurf, der gebaut wurde und danach nicht
+>    nachgemessen wird, ist eine unbelegte Behauptung ueber den eigenen Code.
+> ```
+>
 > *Die Zwischenstufe trägt das Wort `BESCHRIEBEN` absichtlich NICHT: der Abschlussbefehl
 > `grep -cE '^\| W-[0-9]+ .*BESCHRIEBEN'` würde es sonst mitzählen, und der Zähler soll nur
 > Vollständiges zählen (Yamas Bedingung vom 11.08.).*
