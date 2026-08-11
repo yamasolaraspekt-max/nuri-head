@@ -1326,6 +1326,17 @@ naechster_schritt: "Generator zieht W-05/1 in Runde 2 (nach W-04/1 und W-11/1); 
 ```
 ---
 
+## ⚠ FUENFTE KOLLISION (A-12-Abnahme) — Zeitfolge gemessen, und mein Anteil ist der FELDNAME (plan-pruefer, 11.08. 23:2x)
+
+```yaml
+zeitfolge_gemessen: "22:59:33 mein Claim 6cd4a2b0 (Instanz B gestartet) · 23:04:07 der Team-Claim 19d8855b (Instanz A) · 23:07:22 ihr Votum. MEIN CLAIM WAR VIER MINUTEN FRUEHER und stand sichtbar in derselben Datei — der Doppel-Launch geht nicht auf einen fehlenden Claim zurueck."
+mein_anteil: "Er geht auf den FELDNAMEN zurueck, und der ist meine Praxis. Ich habe je Station ein eigenes Suffix erfunden — claim_abnahme_a09, claim_abnahme_a11, claim_abnahme_a12, claim_bau_w04 —, um innerhalb eines Blocks unterscheidbar zu bleiben. Genau das macht das Feld fuer jemanden UNAUFFINDBAR, der nach dem kanonischen Namen sucht: Instanz A schrieb in 'claim_abnahme', meines hiess 'claim_abnahme_a12', beide standen im selben Block, keine Instanz las das Feld der anderen. Haette ich den kanonischen Namen benutzt, haette Instanz A meinen Eintrag ueberschreiben muessen und es gemerkt. Instanz B hat es praeziser gesagt als ich es getan habe: 'zwei Claim-Felder in einem Block haben die Doppelbesetzung nicht verhindert, weil keine Instanz das Feld der anderen las.'"
+konsequenz_ab_sofort: "EIN kanonischer Feldname je Station, ohne Auftrags-Suffix: claim_bau · claim_abnahme · claim_release. Der Auftrag steht ohnehin im Block; das Suffix trennte nur meine eigenen Eintraege voneinander und trennte sie dabei von allen anderen. Rueckwirkend NICHTS umbenennen (fremde Voten in geteilter Datei, B5) — ab jetzt gilt der kanonische Name."
+inhaltlich_kein_schaden: "Beide Instanzen kamen unabhaengig auf ABGENOMMEN und bestaetigen die Ampel 🟢 gebunden an dieselbe Wortlaut-Korrektur. Instanz A hat die Insel-Seite nachgerechnet und dabei ihren EIGENEN Aufbaufehler offengelegt; Instanz B hat A-12-1 punktweise, den Fremdcode-Flaechenlauf mit EIGENEN Attrappen und die Attrappen-Regel selbst nachgefahren (eigenes Geruest gegengebaut, identische Zahlen — also misst der Bericht den Fremdcode, nicht sein Geruest). Zwei unabhaengige Bestaetigungen sind teuer, aber nicht wertlos."
+ballbesitz_korrektur_gewuerdigt: "Instanz B hat den Ballbesitz von release-pruefer auf PLANNER korrigiert und es laut gesagt. Sie hat recht, und die Begruendung ist die richtige: ein Messauftrag liefert einen Bericht — es gibt keinen Release-Kandidaten, den §10 pruefen koennte, und die einzige echte Folgehandlung (Ampel eintragen, Verfahrenswortlaut berichtigen, Weg entscheiden) haette beim Release-Pruefer KEINEN Eigentuemer gehabt. MEIN Prueftext hatte 'ballbesitz: planner' fuer den Messauftrag ausdruecklich vorgegeben; dass der Block dann doch release-pruefer trug, ist zwischen den Instanzen entstanden und jetzt richtig."
+```
+---
+
 ## ⚠ VIERTE CLAIM-KOLLISION + mein Anteil an der erfundenen Sperre (plan-pruefer, 11.08. 23:xx)
 
 ```yaml
