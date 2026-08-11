@@ -323,3 +323,71 @@ nicht_gemessen:
 browserabnahme: "entfaellt — reine Dokumentblaetter"
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum (§11) — 12.08.2026
+
+```yaml
+auftrag: "W-13/1"
+commit: a62ae7c6          # Bau; Basis 193681cd
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "vierzehn Fundstellen einzeln geoeffnet · die Absicherungs-Zahlen des Blattes
+  (321 Zeilen, 18 Ausfuhren, 0 dediziert, 36 Zusagen) Modul fuer Modul und Datei fuer Datei
+  selbst nachgezaehlt"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Messtisch — ALLE ZEHN Zeilen
+
+```text
+-1   Platzhalter, vier Muster                     0
+-2   3-FORMELN: das eine '=' ist ein CODE-ZITAT — siehe unten
+-3   vierzehn Fundstellen, ALLE einzeln geoeffnet, keine laeuft ins Leere
+-4   7-GRENZEN beantwortet BEIDE Faelle: kein Treffer (drei Unterfaelle mit Fundstelle)
+     und mehrere gleich nahe ("OBEN gewinnt, nicht NAH", trefferSuche.ts:60-65)
+-5   Herkunft "angebunden aus …" mit allen vier Modulen
+-6   Ausschluss editierGeometrie.ts namentlich benannt     3 Nennungen
+-7   duenne Absicherung mit Messweise — Zahlen unten selbst nachgezaehlt
+-8   resources/ im Bau-Commit 0 Pfade  ·  Suite 1692/1692
+-9   Register: alle vier Fundstellen
+-10  §3-Beleg in 3e7fa5b7                          2 Befehlszeilen, 2 Ausgaben
+```
+
+### `-7` ist der wertvollste Teil — und jede Zahl darin habe ich nachgezählt
+
+**Das Blatt behauptet: „Null dedizierte Zusagen bei 321 Zeilen und 18 Ausfuhren", dazu zwei
+erwähnende Dateien mit 36 Zusagen zusammen.** *Ich habe es nicht geglaubt, sondern gezählt:*
+
+```text
+                        Zeilen  Ausfuhren     dedizierte Testdatei
+auswahlModus.ts            98       7                 0
+trefferSuche.ts            75       4                 0
+auswahlUebersicht.ts       77       4                 0
+auswahlDarstellung.ts      71       3                 0
+SUMME                     321      18                 0        <- Blatt: 321 / 18 / 0
+
+markieren.test.ts     21 Zusagen
+teilKennung.test.ts   15 Zusagen
+                      36 zusammen                              <- Blatt: 36
+```
+
+**Vier Zahlen, vier Treffer.** *Ein Blatt, das seine eigene dünne Grundlage beziffert statt sie zu
+verschweigen, ist mehr wert als eines, das grün aussieht — und der Satz daneben sagt auch warum:
+„Eine Beschreibung, die eine dünne Grundlage verschweigt, lässt Stufe 2 in eine Falle laufen."*
+
+### Zu `-2`: das eine `=` ist kein Verstoß
+
+```text
+BLATT  trefferSuche.ts:72-74   toleranzInWelt(pixel, zoom) = zoom > 0 ? pixel / zoom : pixel
+CODE   :73  export function toleranzInWelt(pixel: number, zoom: number): number
+       :74  return zoom > 0 ? pixel / zoom : pixel;
+```
+
+**Es ist das wörtliche Zitat der einzigen Rechnung in allen vier Modulen** — und das Blatt zieht
+daraus ausdrücklich **keinen** Sammlungseintrag: *„Eine Einheitenumrechnung, keine Geometrieformel.
+Eine Division ist keine Formel, die man nachschlägt."* **Das ist die richtige Antwort auf `-3`,
+nicht eine Umgehung von `-2`.**
