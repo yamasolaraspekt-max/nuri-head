@@ -1,21 +1,21 @@
-# W · mass und bemassung — ZWECK
+# W-11 · Maß und Bemaßung — ZWECK
 
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
-<In EINEM Satz, aus Sicht des Anwenders. Nicht technisch.
-Beispiel: „Der Planer soll mit zwei Klicks eine Wand ziehen können,
-die automatisch an bestehenden Wänden andockt.">
+Zwei verschiedene, und sie werden hier oft verwechselt:
 
-## Wann greift der Anwender danach?
+1. **Er will Maße SEHEN** — die Bemaßungslinien wie im Architekturplan, ohne sie zu setzen.
+2. **Er will ein Maß EINGEBEN** — eine Wand auf genau 3475 mm ziehen, statt sie zu treffen.
 
-<Der konkrete Moment im Arbeitsablauf.>
+## Warum das zwei Dinge sind
 
-## Woran merkt er, dass es fehlt?
+Das erste ist eine **Rechnung**: aus Wänden und Öffnungen werden Ketten von Abständen.
+Das zweite ist eine **Bedienung**: Ziffern, ein Feldwechsel, ein Zeiger, der die Richtung gibt.
 
-<Was tut er ersatzweise, wenn es das Werkzeug nicht gibt?
-Diese Frage entscheidet über die Priorität.>
+**Die Module trennen das sauber, und dieses Blatt hält die Trennung.** *Ohne sie liest jemand
+`tippe()` als Rechenschritt.*
 
-## Was ist ausdrücklich NICHT Zweck dieses Werkzeugs?
+## Was wäre ohne dieses Werkzeug?
 
-<Abgrenzung zu Nachbarwerkzeugen. Verhindert, dass ein Werkzeug
-über die Jahre alles frisst.>
+Ein Grundriss ohne Maße ist ein Bild. **Erst die Kette macht ihn zu einer Zeichnung**, aus der jemand
+bauen kann — und die Zahleneingabe macht aus Zielen ein Konstruieren.

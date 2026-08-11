@@ -1,33 +1,32 @@
-# W-xx · CODE
+# W-11 · Maß und Bemaßung — CODE
 
-## Wo der Code wirklich lebt
+**Angebunden aus drei vorhandenen Modulen** — aus dem Code abgeleitet, nicht umgekehrt.
 
-| Schicht | Datei im Repo | Zweck |
-|---|---|---|
-| 1 Domäne | `resources/planner/hausplaner/domain/…` | |
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | |
-| 3 Werkzeug | `resources/planner/hausplaner/app/tools/…` | |
-| 4 Darstellung | `resources/planner/hausplaner/renderers/…` | |
-| 5 Oberfläche | `resources/planner/hausplaner/ui/…` | |
+## Rechenschicht
 
-> **Der Code steht im Repo, nicht in diesem Ordner.** Hier liegen nur
-> Schnittstellenbeschreibung, Ablaufskizze und — wo nötig — ein kurzer
-> Auszug der Kernstelle mit Zeilennummer, damit man beim Lesen nicht springen muss.
+**`resources/planner/hausplaner/geometry/masskette.ts` — 118 Zeilen, 7 Ausfuhren**
+`MassPunkt` · `MassSegment` · `masskette()` · `Bbox` · `GrundrissMassketten` ·
+`grundrissMassketten()` · `punkteMassketten()`
 
-## Schnittstelle
+**`resources/planner/hausplaner/geometry/bemassung.ts` — 108 Zeilen, 6 Ausfuhren**
+`BemPunkt` · `BemWand` · `BemOeffnung` · `AchsKetten` · `Bemassung` · `bemassung()`
 
-```ts
-// Signatur der öffentlichen Funktion(en) dieses Werkzeugs
+## Eingabeschicht
+
+**`resources/planner/hausplaner/geometry/masseingabe.ts` — 169 Zeilen, 9 Ausfuhren**
+`MassPunkt` · `istBrauchbareLaenge()` · `richtungAus()` · `punktAusLaenge()` · `MassEingabe` ·
+`oeffneMit()` · `wechsleFeld()` · `tippe()` · `massEingabeText()`
+
+## Verdrahtung — einmal, an einer Stelle
+
+```text
+app/HausplanerApp.tsx:22    import { bemassung } from '../geometry/bemassung';
+app/HausplanerApp.tsx:1268  const bem = bemassung(waende…, oeffnungen…);
 ```
 
-## Kernstelle
+**Der einzige Aufrufer.** Er übergibt **alle** Wände und **alle** Öffnungen.
 
-```ts
-// Der eine Ausschnitt, auf den es ankommt — mit Datei:Zeile
-```
+## Was gebaut ist und was nicht
 
-## Abhängigkeiten
-
-| Braucht | Warum | Richtung geprüft? |
-|---|---|---|
-| | | ja/nein — kein Kreis |
+**Gebaut:** beide Schichten, rein. **Nicht Gegenstand dieser Stufe:** die Werkzeugschicht —
+Stufe 2 (`GEBAUT`) folgt als eigener Auftrag.

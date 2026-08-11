@@ -1,37 +1,42 @@
-# W · mass und bemassung — FUNKTION
+# W-11 · Maß und Bemaßung — FUNKTION
 
-## Eingabe
+## Zwei Schichten, drei Module
 
-| Was | Typ | Einheit | Pflicht | Prüfung |
-|---|---|---|---|---|
-| | | | | |
+### RECHENSCHICHT — was gemessen wird
 
-## Verarbeitung — der Zustandsautomat
-
-```
-Zustand A  ──Ereignis──►  Zustand B  ──Ereignis──►  fertig
-     │
-     └──Abbruch (Esc)──► Ausgangszustand, nichts geändert
-```
-
-<Jeder Zustand mit: was wird angezeigt, was wird erwartet, was passiert bei Abbruch.>
-
-## Ausgabe
-
-| Was | Typ | Wohin |
+| Modul | Zeilen / Ausfuhren | Aufgabe |
 |---|---|---|
-| | | |
+| `resources/planner/hausplaner/geometry/masskette.ts` | 118 / 7 | **eine Kette aus Zahlen** — sortieren, entdoppeln, Abstände bilden |
+| `resources/planner/hausplaner/geometry/bemassung.ts` | 108 / 6 | **die Ketten eines Grundrisses** — innen die Öffnungskette, außen das Gesamtmaß |
 
-## Kommando (für Rückgängig)
+`MassPunkt` (9) · `MassSegment` (14) · `masskette()` (29) · `Bbox` (45) ·
+`GrundrissMassketten` (52) · `grundrissMassketten()` (71) · `punkteMassketten()` (102)
 
-- **Name:** `<KommandoName>`
-- **Ausführen:** <was genau am Datenmodell geändert wird>
-- **Zurücknehmen:** <wie der vorherige Zustand exakt wiederhergestellt wird>
-- **Bündelung:** <wird das Werkzeug zu EINEM Kommando gebündelt? Wenn ja, ab wann>
+`BemPunkt` (20) · `BemWand` (24) · `BemOeffnung` (30) · `AchsKetten` (36) · `Bemassung` (43) ·
+`bemassung()` (52)
 
-## Schichtzuordnung
+### EINGABESCHICHT — was der Anwender tippt
 
-- Ändert Schicht 1 (Domäne): <ja/nein — was>
-- Rechnet in Schicht 2 (Geometrie): <welche F-Nummern>
-- Lebt in Schicht 3 (Anwendung): <Dateiname>
-- Zeigt sich in Schicht 4/5: <was der Anwender sieht>
+| Modul | Zeilen / Ausfuhren | Aufgabe |
+|---|---|---|
+| `resources/planner/hausplaner/geometry/masseingabe.ts` | 169 / 9 | **Maßeingabe während des Zeichnens** — Ziffern, Feldwechsel, Richtung aus dem Zeiger |
+
+`MassPunkt` (25) · `istBrauchbareLaenge()` (40) · `richtungAus()` (55) · `punktAusLaenge()` (82) ·
+`MassEingabe` (130) · `oeffneMit()` (138) · `wechsleFeld()` (143) · `tippe()` (148) ·
+`massEingabeText()` (160)
+
+## Die einzige Abhängigkeit zwischen den Modulen
+
+```text
+resources/planner/hausplaner/geometry/bemassung.ts:18
+    import { masskette, type MassSegment, type Bbox } from './masskette';
+```
+
+**Sonst keine.** `masskette.ts` und `masseingabe.ts` haben **überhaupt keine Importe** — gemessen,
+nicht angenommen. *Die Eingabeschicht ruft die Rechenschicht nicht auf und umgekehrt.*
+
+## Was die Rechenschicht ausdrücklich NICHT tut
+
+*„Der Renderer LIEST das Ergebnis; hier wird nur gerechnet, nichts gezeichnet, nichts geschrieben."*
+(`masskette.ts:5-6`). An der einzigen Aufrufstelle steht derselbe Satz noch einmal:
+*„mehrstufige Bemaßung (nur lesen, kein Command)"* (`app/HausplanerApp.tsx:1266`).

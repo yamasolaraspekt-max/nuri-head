@@ -1,43 +1,29 @@
-# W · mass und bemassung — BEDIENUNG
+# W-11 · Maß und Bemaßung — BEDIENUNG
 
-## Aufruf
+## Maße sehen — der Anwender tut nichts
 
-| Weg | Wie |
-|---|---|
-| Werkzeugleiste | <Symbol, Position, Beschriftung> |
-| Tastenkürzel | <Taste> |
-| Kontextmenü | <ja/nein, wann> |
+Die Bemaßung wird **gerechnet und gelesen**, nicht bedient. Sie zeigt zwei Ebenen:
 
-## Ablauf am Bildschirm
+```text
+INNEN   die Oeffnungskette   Wandstaerken + Fenster/Tuer-Oeffnungen + lichte Masse
+AUSSEN  das Gesamt-Aussenmass
+```
 
-| Schritt | Anwender tut | Bildschirm zeigt |
+*Wörtlich aus `app/HausplanerApp.tsx:1266-1267`.*
+
+## Maß eingeben — der Anwender tippt
+
+| Handlung | Funktion | Zeile |
 |---|---|---|
-| 1 | | |
-| 2 | | |
+| eine Ziffer beginnt die Eingabe | `oeffneMit()` | 138 |
+| weitere Ziffern | `tippe()` | 148 |
+| zwischen Länge und Winkel wechseln | `wechsleFeld()` | 143 |
+| was angezeigt wird | `massEingabeText()` | 160 |
 
-## Rückmeldungen
+## Der Bedienweg, den dieses Modul bewusst erhält
 
-| Lage | Anzeige | Ton |
-|---|---|---|
-| Alles gut | | sachlich |
-| Eingabe unvollständig | | hinweisend |
-| **Nicht möglich** | | **erklärend — was und warum** |
+> *„**Die Richtung kommt aus dem Zeiger, nur die Länge aus dem Feld** — und wer will, tippt den
+> Winkel dazu. **Niemand muss.** Das hält den Bedienweg vertraut: man zielt weiter mit der Maus und
+> gibt nur das Maß genau an."* (`masseingabe.ts:19-21`)
 
-> **Pflicht:** Für jede Absage aus `7-GRENZEN.md` muss hier ein Satz stehen, den
-> ein Handwerker versteht. Nicht „DachGeometrieUngueltig", sondern
-> „Für diesen Grundriss kann kein Walmdach berechnet werden, weil er einspringende
-> Ecken hat. Mögliche Wege: Grundriss begradigen oder Flachdach wählen."
-
-## Abbruch
-
-- **Esc** bricht ab. Danach ist der Zustand **exakt** wie vorher.
-- Halbfertiges wird nie gespeichert.
-
-## Tastenkürzel während des Werkzeugs
-
-| Taste | Wirkung |
-|---|---|
-| Esc | abbrechen |
-| Eingabe | bestätigen |
-| Umschalt | <z.B. auf 45°-Winkel zwingen> |
-| Alt | <z.B. Fang aussetzen> |
+**Der Winkel ist freiwillig.** *Wer ihn nicht tippt, zielt — wie vorher.*
