@@ -569,7 +569,102 @@ Unzulässig sind insbesondere:
 
 Diese Regeln gelten ab sofort. Frühere Prozessregeln werden weder zitiert noch wieder aktiviert.
 
+## 18a. Hausregeln — Grundsätze aus gemessenen Vorfällen
+
+> **Aufgenommen 12.08. auf Yamas ausdrückliche Anweisung** (*„H-1 bis H-7 gehören in die
+> ARBEITSREGELN — und die Sammlung geht darin auf"*). **Vom Planner formuliert, von Yama
+> beauftragt** — dieselbe Praxis wie bei Fassung 1.1.
+>
+> **Warum `18a` und nicht `19`:** *das Änderungsverzeichnis ist unter `§19` **fünffach
+> referenziert** (`STATUS.md:502`, `:579`, `:802`, `:803`, `handoff-status.md:1612`). Eine
+> Umnummerierung hätte fünf Verweise gebrochen. **Gemessen, bevor umnummeriert wurde.***
+>
+> **Diese Regeln stehen NICHT über den Abschnitten 1–18, sondern daneben.** *Bei Widerspruch gilt
+> §1s Rangfolge unverändert.*
+
+### H-1 · Eine Notiz über eine Lücke ist kein Plan für die Lücke
+
+Wer eine Zeile schreibt, die erklärt, **warum** etwas nicht enthalten ist, hat damit **nichts
+erledigt**. Ein Ausschluss ist erst gültig, wenn daneben steht, **wo die Sache stattdessen
+hingeht**. „Nicht hier" ohne „sondern dort" ist ein offener Posten in Tarnkleidung.
+
+*Belege: `W-09` (zwei Tage ohne Blatt, weil `FAHRPLAN-KLASSE-A.md:148` die Lücke nur notierte) ·
+`konterlattungMm` (definiert, zweimal befüllt, von nichts gelesen) · `auswechslung.ts` (in zwei
+Blättern „verwandt, nicht im Scope", in keinem zuhause).*
+
+### H-2 · Ein Bericht, der ein Fachurteil wie eine Messung aussehen lässt, ist gefährlicher als keiner
+
+Jede Zeile, die eine Bewertung trägt, sagt sichtbar, ob sie **gemessen** oder **geurteilt** ist. Bei
+Fachurteilen steht „vorgeschlagen, nicht entschieden" oder der Name dessen, der urteilt.
+
+### H-3 · Ein Reifegrad ist eine Ablesung, keine Bewertung
+
+Die Tafel ist das **Instrument**, kein Zeugnis. **Ein Instrument, das schont, zeigt falsch.**
+Schuldfrage und Zustandsfrage sind zu trennen: ein Altstand entschuldigt den Entstehungsweg, er
+macht die Angabe nicht wahr.
+
+*Und: eine Kennzahl, die sich durch Papier bewegen lässt, misst Papier — **der Abschlusszähler steigt
+nur durch Bauten, nicht durch Schnitte.***
+
+### H-4 · §3 sperrt die Dateien im Scope des laufenden Auftrags — nicht das Repo
+
+„Ein Auftrag läuft" und „meine Datei ist gesperrt" sind **zwei verschiedene Messungen**. Wer die
+erste macht und die zweite meint, verliert Zeit; wer es umgekehrt macht, verliert Arbeit. **Die
+Scope-Sektion des `IN_ARBEIT`-Auftrags wird unmittelbar vor dem Schreiben gelesen**, nicht Minuten
+davor.
+
+*Belege in beide Richtungen: `ce30174f` (drei Minuten alte Messung → in fremden Scope geschrieben) ·
+12.08. dreimal `REGISTER.md` liegen gelassen, obwohl der laufende Auftrag `app/` hielt.*
+
+### H-5 · Ein Werkzeug darf nur urteilen, wenn es alle Bedingungen kennt, von denen das Urteil abhängt
+
+Sonst **rechnet es Werte und schweigt**. Prüfform: Bedingungen der Aufgabe auflisten, gerechnete
+zählen, vergleichen. **Die Begründung ist nicht die Schwere der Folge, sondern die
+Unvollständigkeit** — eine Engine darf nicht „bestanden" sagen, was sie nicht geprüft hat.
+
+*Belegte Fälle, die ihre Grenze selbst benennen und trotzdem urteilen: `sparrenBerechnung`
+(„Ersetzt KEINE prüffähige Statik") · `fbhAuslegung:6-7` · `heizkreisVerteiler:6`.*
+
+### H-6 · Ein Wort ist kein Beleg; erst die Stelle ist einer
+
+*Fälle eines Tages: `bewerteDeckung` (Leistungsdeckung, nicht Dachdeckung) · `material` traf jedes
+`THREE.Material` (61 Dateien) · `export` traf jedes `export function` · `GEG` traf „gegeben" ·
+`< 1 mm²` wurde als Platzhalter gezählt.*
+
+**Gehört zu B5:** *B5 verlangt, die Trefferzeilen zu lesen — H-6 sagt, warum.*
+
+### H-7 · Ein Ist-Wert ist kein Soll-Wert
+
+Ein Kundenaufmaß sagt, wie ein Bauteil **gebaut wurde**. Eine Fachregel sagt, wie es **gebaut werden
+muss**. Ein Planungswerkzeug braucht das Zweite. **`QUELLE = Kundenaufmaß` belegt Vorkommen, nicht
+Zulässigkeit — und hebt allein keine 🔴-Sperre auf.**
+
+*Jeder Wert in einem Katalog trägt, ob er Ist oder Soll ist. Eine Tabelle aus Ist-Werten mit dem
+Etikett „Fachregel" ist F-051 in neuer Gestalt, nur mit echten Zahlen.*
+
+---
+
 ## 19. Änderungsverzeichnis
+
+### Fassung 1.3 — 12.08.2026, sieben Hausregeln auf Yamas Anweisung
+
+**Abschnitt 18a aufgenommen.** *Yama hatte H-1 bis H-7 in drei aufeinanderfolgenden Antworten
+gesetzt; offen war nur der Ort. Vom Planner formuliert und gesammelt, von Yama beauftragt, vom
+Plan-Prüfer gegenzulesen.*
+
+```text
+JEDE der sieben stammt aus einem GEMESSENEN Vorfall dieser Woche, keine aus einem Vorsatz:
+  H-1  W-09 lag zwei Tage ohne Blatt, weil die Luecke notiert war
+  H-2  meine Normnennungs-Achse gab ein Urteil als Kriterium aus
+  H-3  ich nannte Zurueckstufen eine "Strafe" und verwechselte Schuld mit Zustand
+  H-4  §3 einmal zu spaet gemessen (ce30174f), dreimal zu vorsichtig
+  H-5  drei Engines benennen ihre Grenze selbst und urteilen trotzdem
+  H-6  fuenf Suchmuster an einem Tag trafen das Wort statt den Gegenstand
+  H-7  ich schlug Kundenaufmasse als Quelle fuer eine Fachregel vor
+```
+
+**Die Sammlung `docs/HAUSREGELN.md` ist damit aufgelöst** — sie trägt nur noch einen Verweis
+hierher. *Zwei Fassungen einer Regel wären genau die zweite Wahrheit, die H-1 verhindern soll.*
 
 ### Fassung 1.1 — 05.08.2026, auf ausdrückliche Anweisung Yamas
 

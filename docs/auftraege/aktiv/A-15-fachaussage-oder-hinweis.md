@@ -360,3 +360,61 @@ gemessen_von_mir: "DREI von elf benennen ihre Grenze selbst und urteilen trotzde
                    sparrenBerechnung, fbhAuslegung, heizkreisVerteiler. Belegt, nicht vermutet."
 ehrliche_aufwandsangabe: "Achse 3 ist zu einem Drittel ein Grep und zu zwei Dritteln
                           Fachpruefung. Zustand B und C sind vom Grep nicht unterscheidbar."
+```
+
+
+---
+
+# NACHTRAG 2 · 12.08. — Yamas Entscheidungsregel für Achse 2. Der Auftrag steht damit nicht still
+
+**Yama vertritt Achse 2 ausdrücklich NICHT selbst:**
+
+> *„Dort wird einer Fehlfunktion eine **Schadensklasse** zugeordnet. Das ist eine Fach- und
+> Haftungsentscheidung … **Eine Vollmacht, Aufgaben zu erledigen, ist keine Vollmacht, Fachwissen zu
+> ersetzen, das ich nicht habe.**"*
+
+**Damit der Auftrag trotzdem läuft, hat er die ENTSCHEIDUNGSREGEL gegeben — und sie ersetzt das
+fehlende Urteil nicht, sondern macht es entbehrlich:**
+
+```text
+REGEL 1  IM ZWEIFEL DIE HOEHERE KLASSE.
+         Begruendung woertlich: "eine zu strenge kostet eine Rueckfrage, eine zu milde
+         den Schaden."
+         -> das ist dieselbe Richtung wie bei N-003, wo ich die strengere Lesart gesetzt
+            habe: die einzige Richtung, in der ein Irrtum niemandem schadet.
+REGEL 2  JEDE ZEILE MIT BEGRUENDUNG UND FUNDSTELLE.
+         -> kein "vermutlich Bauschaden", sondern "Bauschaden, weil <Datei:Zeile> sagt <X>"
+REGEL 3  EIN VORSCHLAG JE ENGINE, nicht eine offene Frage je Engine.
+         Yamas Ziel: "dann ist es fuer dich ein Blick auf eine Liste, keine Sitzung."
+```
+
+> **Damit ändert sich der Charakter von `A-15-4`:** *dort stand „Fachurteil als Urteil kennzeichnen".
+> **Das bleibt — aber es genügt nicht mehr.** Ein Vorschlag muss ENTSCHEIDBAR sein: eine Klasse, eine
+> Begründung, eine Fundstelle. **Eine als „vorgeschlagen" gekennzeichnete Leerstelle ist keine
+> Vorlage, sondern eine zurückgegebene Aufgabe.***
+
+**Neue Kriterien:**
+
+**A-15-12 (P1, im Zweifel die höhere Klasse):** Wo Achse 2 unklar ist, trägt die Zeile die
+**strengere** Klasse — und sagt ausdrücklich, dass sie aus Zweifel gewählt wurde. *Nachweis: jede
+Zeile mit unklarer Lage nennt beide erwogenen Klassen und warum die höhere steht.*
+
+**A-15-13 (P1, entscheidbar statt offen):** Jede der elf Engines bekommt **genau einen** Vorschlag
+mit Klasse, Begründung und Fundstelle. **Keine Zeile lautet „zu klären".** *Wenn eine Engine ohne
+Fachwissen nicht einzuordnen ist, steht die höhere Klasse plus der Satz, welches Fachwissen fehlen
+würde, um sie zu senken.*
+
+**A-15-14 (P1, die Regel selbst steht im Bericht):** Der Bericht nennt Yamas drei Regeln wörtlich,
+damit die nächste Klassifikation (neue Engine) sie anwenden kann, ohne diese Antwort zu kennen.
+*H-1: der Bericht ist die Zieladresse, nicht eine Notiz über die Regel.*
+
+```yaml
+nachtrag_2: "12.08. — Yamas Entscheidungsregel fuer Achse 2"
+regel: "im Zweifel die hoehere Klasse (eine zu strenge kostet eine Rueckfrage, eine zu
+        milde den Schaden) · jede Zeile mit Begruendung und Fundstelle · EIN Vorschlag
+        je Engine, keine offene Frage"
+wirkung: "der Auftrag steht nicht still, obwohl Yama Achse 2 nicht vertritt. Aus einer
+          Sitzung wird ein Blick auf eine Liste."
+verschaerft: "A-15-4 bleibt (Urteil kennzeichnen), genuegt aber nicht mehr — eine als
+              'vorgeschlagen' gekennzeichnete Leerstelle ist eine zurueckgegebene Aufgabe."
+```

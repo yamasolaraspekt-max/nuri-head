@@ -542,3 +542,81 @@ H3  Kosmetisch: der Docblock der Ausnahme nennt die Tabelle `pv_roofs`; sie
 Zusage, die **speichert** statt aufzurufen, fehlt weiterhin; die Nachforderung liegt beim Generator.*
 **Nach §12.5 ist das kein Release-Hindernis** — das Verhalten ist von zwei Rollen unabhängig belegt,
 was fehlt, ist der Regressionsschutz gegen einen späteren Umbau.
+
+
+---
+
+# NACHTRAG 12.08. — Yamas Messung liegt vor. Die Bedingung ist LEER, und der Hetzner-Posten ist dadurch SCHÄRFER
+
+**A-13 ist `RELEASE_FREI` (8/8, Bau `a09b69af`). Die Betriebsauflage aus `A-13-7` verlangte die
+Datenmessung — Yama hat sie gefahren:**
+
+```text
+SELECT COUNT(*) … roof_azimuth ausserhalb [0,360)
+ERGEBNIS   0 Saetze gesamt · 0 ausserhalb · 0 NULL
+-> DIE BEDINGUNG IST LEER. Kein Bestandsdatensatz kann beim naechsten Speichern
+   haengen bleiben, weil es keinen gibt.
+```
+
+**Und warum Yama das durfte und die Rollen nicht — seine Begründung, weil sie eine Regel schärft:**
+
+> *„Der Unterschied ist nicht Rang, sondern **Handlung**: §15 verbietet Testdaten in der Arbeits-DB
+> und Messen an Produktivdaten; ein **lesender** `COUNT` gegen die **lokale Dev-DB** schreibt nichts
+> und ist keine Datenoperation."*
+
+*Damit ist auch mein eigener Abbruch vom 11.08. richtig eingeordnet: ich hatte `artisan tinker`
+versucht und die Verweigerung gemeldet statt sie zu umgehen. **Das war richtig — nicht weil Messen
+verboten ist, sondern weil `tinker` ein schreibfähiges Werkzeug ist.***
+
+## Der Hetzner-Posten ist jetzt SCHÄRFER als vor der Heilung
+
+**Gegengemessen, Yamas drei Zahlen:**
+
+```text
+SPEICHERNDE CONTROLLER   4 Dateien mit PVRoof::create / new PVRoof:
+                           Customer/PVRoofController · Customer/NewLeadsController ·
+                           Task/PersonalTaskController · Old/PVChecklistController
+                         -> davon DREI ausserhalb von Old/. Yamas "drei" trifft die
+                            aktiven; meine Vier zaehlt die Dateien. Beide Zahlen richtig,
+                            verschiedene Mengen (B6).
+catch-BLOECKE um diese Schreibpfade      0
+FORMULARVALIDIERUNG fuer roof_azimuth    0   (app/Http/Requests/ -> 0 Treffer)
+```
+
+> **Und daraus folgt der Punkt, den Yama benennt und der vor der Heilung nicht existierte:**
+>
+> *Lokal ist die Bedingung leer. **Auf Hetzner ist sie ungemessen** — und dort trifft ein Altsatz mit
+> Wert außerhalb `[0,360)` jetzt auf eine Model-Validierung, **0 `catch`-Blöcke und 0
+> Formularvalidierung**.*
+>
+> **Das heißt: die Heilung kann auf Hetzner einen FEHLER AUSLÖSEN, wo vorher nur ein falscher Wert
+> stand.** *Ein erneutes Speichern eines Altsatzes wirft, niemand fängt es, und es gibt keine
+> Formularmeldung, die es abfängt — der Nutzer sieht einen Serverfehler statt eines Hinweises.*
+>
+> **Das ist keine Kritik an A-13.** *Der Bau ist richtig; ohne ihn wäre der falsche Wert still
+> geblieben. **Aber es ist ein Vor-Deploy-Posten, und er gehört Yama:*** dieselben drei SELECTs auf
+> Hetzner, **vor** der Veröffentlichung.
+
+```text
+WAS DARAUS FOLGT, und es ist kein neuer Auftrag:
+  1  vor dem Hetzner-Deploy: die drei SELECTs dort fahren. Ergebnis 0/0/0 -> nichts zu tun.
+  2  Ergebnis > 0  ->  DANN braucht es eine Entscheidung: Altsaetze korrigieren
+     (Datenoperation, nur Yama) ODER die Validierung auf neue Saetze begrenzen.
+     BEIDES ist eine Yama-Entscheidung, keine Rollenarbeit.
+  3  UNABHAENGIG davon ist "0 catch-Bloecke bei vier Schreibpfaden" ein eigener Befund
+     ueber die Fehlerbehandlung — er betrifft NICHT nur roof_azimuth, und er ist hier
+     nur BENANNT, nicht behoben (H-1: mit Zieladresse, naemlich als eigener Auftrag,
+     falls Yama ihn will).
+```
+
+```yaml
+nachtrag: "12.08. — Yamas Datenmessung: 0/0/0, die Bedingung ist leer"
+a13_7_geschlossen: "die Verhaltensaenderung ist gemessen und beziffert: lokal trifft sie
+                    KEINEN Bestandssatz"
+hetzner_offen: "ungemessen. Und dort SCHAERFER als vorher: Altsatz + Model-Validierung +
+                0 catch + 0 Formularvalidierung = Serverfehler statt Hinweis."
+gegenmessung: "4 schreibende Dateien (3 ausserhalb Old/) · 0 catch · 0 Requests-Validierung —
+               Yamas Zahlen bestaetigt, die 3/4-Differenz ist eine Mengenfrage (B6)"
+neuer_nebenbefund: "0 catch-Bloecke bei vier Schreibpfaden auf p_v_roofs. Betrifft mehr als
+                    roof_azimuth. Nur benannt, mit Zieladresse (eigener Auftrag, falls gewollt)."
+```
