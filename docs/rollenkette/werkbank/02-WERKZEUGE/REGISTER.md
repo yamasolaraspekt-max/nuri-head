@@ -63,6 +63,57 @@
 
 ---
 
+## Stufe 5b — Zielbild-Ergänzungen (Yamas Zielbild 11.08., eingetragen 12.08.)
+
+> **Neun Zeilen für zehn Zielbild-Lücken.** *Messgrundlage:
+> `docs/VORLAGE-REGISTERZEILEN-L1-L10.md`. **Sechs der zehn „Lücken" sind gebauter Code ohne
+> Registerzeile** — die Fundstelle steht deshalb in der Zeile, damit niemand nachbaut.*
+> `LEER` heißt hier **„kein Blatt gefüllt"**, nicht „kein Code vorhanden".
+
+| Nr | Werkzeug | Reifegrad | Braucht | Formeln / Fundstelle |
+|---|---|---|---|---|
+| W-24 | **Fundament und Bodenplatte** | LEER | W-05 | ungeprüft — Registry-Werkzeug `Bodenplatte`, **kein Geometriemodul** |
+| W-25 | **Pfetten und Kehlbalken** | LEER | W-07, W-21 | ungeprüft — `dachformVorlagen`, `holzBauteile`; Registry `Pfette` |
+| W-26 | **Dachschichten (Aufbau)** | LEER | W-07 | ungeprüft — **kein Modul**; `konterlattungMm` in `dachformVorlagen` ist ein **toter Vertrag** |
+| W-27 | **Dachkantentypen** First·Grat·Kehle·Traufe·Ortgang | LEER | W-07 | **F-025**, **F-026** — Erkennung fehlt, im Code nur Erwähnungen |
+| W-28 | **Dachentwässerung** | LEER | W-07, W-27 | ungeprüft — `linienBauteile` führt `'dachrinne'` als Linientyp; Bemessung fehlt |
+| W-29 | **Dachdurchdringungen** Dachfenster·Kamin·Lüfter·Lichtkuppel | LEER | W-07, W-21 | ungeprüft — **stark gebaut**: `dachOeffnung`, `dachAusschnitt`, `auswechslung`, `aufbauPlatzierung`, `aufbautenStatus` |
+| W-30 | **Flachdach-Aufbau** Gefälle·Attika·Abläufe | LEER | W-07 | ungeprüft — `dachformVorlagen` (`attika`, `svgFlach`) |
+| W-31 | **PV-Belegung (vollständig)** | LEER | W-07, W-08, W-19 | **gesperrt bis F-028 🟢** — autarke Schnellstufe gebaut (`pvBelegung.ts`, **kein Azimut** → kein F-028-Fall) |
+| W-32 | **Giebelwand-Bindung** `Wall.topConstraint` | LEER | W-02, W-03, W-07 | ungeprüft — **kein Modul**, 0 Treffer auf `topconstraint` |
+
+*L-6 und L-8 sind in **W-29** zusammengefasst: dieselben Module bedienen Dachfenster, Kamin, Lüfter
+und Lichtkuppel. **Die Trennlinie zieht der Code selbst** — `aufbauOrientierung` unterscheidet
+**stehende** Aufbauten (Gaube, Kamin → W-22) von Durchdringungen.*
+
+---
+
+## Stufe 6 — Führung
+
+> **Yamas Einordnung 12.08.: dieselbe Tafel, kein Sonderweg, dieselben Reifegrade.** *Was diese
+> Werkzeuge von einem Wandwerkzeug unterscheidet, ist nicht ihre Art, sondern ihre
+> **Abhängigkeitsrichtung**: sie benutzen viele Werkzeuge, statt von einem zu hängen — wie `W-17`,
+> das schon „braucht: alle" trägt.*
+>
+> **Erhoben: 1.593 Zeilen in acht Bausteinen, bisher ohne eine einzige Registerzeile.** *Die größte
+> Anschlusslücke, die diese Tafel hatte. Messbericht:
+> `docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md`.*
+
+| Nr | Werkzeug | Reifegrad | Braucht | Formeln / Fundstelle |
+|---|---|---|---|---|
+| W-33 | **Start und Projektwahl** | LEER | alle | ungeprüft — `app/StartView.tsx` (267 Z) |
+| W-34 | **Geführte Planung** (Stepper, elf Schritte) | LEER | alle | ungeprüft — `app/GuidedView.tsx` (165 Z) + `app/dashboard/fahrschritte.ts` (202 Z) |
+| W-35 | **Konfigurator-Dialog** Fenster·Tür·Treppe | LEER | W-04, W-09 | ungeprüft — `app/ConfigWizard.tsx` (271 Z) · **schreibt NICHT ins Gebäudemodell** |
+| W-36 | **Fähigkeiten-Navigation** | LEER | alle | ungeprüft — `app/FaehigkeitenNavi.tsx` (76 Z) + `app/tools/faehigkeiten.ts` |
+| W-37 | **Rechenpanels (Engine-Flächen)** | LEER | N-001…N-003 | **N-003** — `app/EngineFlaeche.tsx` (196 Z) + `app/dashboard/enginePanels.ts`; trägt die **A-14**-Ausgabeauflage |
+| W-38 | **Schritt-Status und Prüfpunkte** | LEER | alle | ungeprüft — `app/studioDaten.ts` (257 Z), `SchrittStatus` mit **vier** Stufen |
+| W-39 | **Studio-Rahmen** | LEER | alle | ungeprüft — `app/HausplanerStudio.tsx` (159 Z) |
+| W-40 | **Gültigkeitsstatus** `confirmed`·`outdated`·`blocked` | LEER | W-38 | — **kein Code**; ohne `confirmed` ist „PV erst nach **bestätigter** Geometrie" nicht prüfbar |
+| W-41 | **Abhängigkeitsgraph / Invalidierung** | LEER | W-38, W-40 | — **kein Code**; „Änderungen propagieren, **niemals** stille Löschung" |
+| W-42 | **Schreibpfad Wizard → Gebäudemodell** | LEER | W-35 | — **kein Code**; im `ConfigWizard`-Dateikopf als **„nächste Scheibe"** benannt |
+
+---
+
 ## Abhängigkeitskette — die Reihenfolge, in der gebaut werden muss
 
 ```
