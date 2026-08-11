@@ -22,6 +22,7 @@
 | **W-11** Maß und Bemaßung | **`RELEASE_FREI`** | **Yama** | Bau `0299e5ca` · Votum `63c9cf21` · §10 im Blatt (`35687019`) | Fehlerklasse **KEINE** · Kette 5× `is-ancestor` · Scope exakt 8 Dateien, **0 Nicht-Doku-Pfade** · Votum nennt den Bau-SHA · Blattstand seit Bau unverändert (0 Dateien) · Platzhalter 0 · **Votum belegt `-1` bis `-10` einzeln** · 1692/1692 selbst · 0/0/0 in drei Richtungen, `resources` **und** `scripts` · 10/10 · **zwei Registerangaben tragen nicht**: F-002/F-003 nicht im Code, W-13-Abhängigkeit gemessen verneint · `MassPunkt` doppelt definiert, stumme Divergenz benannt · 4 Zitat-Zeilen vor dem Melden berichtigt · 0/0/0 · 1692/1692 |
 | **W-05** Raum erkennen | **`RELEASE_FREI`** | **Yama** | Bau `34ecf8a4` · Votum `af98d7b6` · §10 im Blatt (`35687019`) | Fehlerklasse **KEINE** · Kette 5× `is-ancestor` · Scope exakt 8 Dateien, **0 Nicht-Doku-Pfade** · **gemeldeter Fremdzugriff am Release-Kandidaten nachgemessen: 0 geänderte Blätter** · Platzhalter 0 · Votum belegt `-1` bis `-10` einzeln · 1692/1692 selbst · 0/0/0 in drei Richtungen · `signierteFlaeche` ist **weder F-010 noch F-011, sondern beider Kern** (ohne Betrag) · F-012/F-013 **0 Treffer**, F-001 im Code aber nicht im Register · zweite Shoelace in `polygonFlaeche.ts` · **-1 mit zwei Zahlen gemeldet** (1 wörtlich / 0 Platzhalter) · 0/0/0 · 1692/1692 |
 | **W-21** Sparren und Lattung | **`CODE_FERTIG`** | Evaluator | `992d5d76` · Basis `c9325929` | 12/12 · **Vorbemessung ≠ Statik** als erste Zeile · **Auftragsvermutung zur Lattung widerlegt** (Menge IST gebaut) · F-001/F-030 nicht im Code, dafür zwei Normgrößen ohne Nummer · `OFFENE_HOLZBAUTEILE` ausgelesen · M-02 ungelesen benannt · 0/0/0 |
+| **W-22** Gaube | **`IN_ARBEIT`** | **Generator** | BEREIT `95fe1b88` | 498 Zeilen, 26 Ausfuhren — **das Modul kann mehr als der Name**: Gaube, Kamin, Prüfung · §7 7/7 · §3 beide Orte 0 · rot an der Basis: **34 Treffer** · **Tafelzeile von mir nachgetragen** |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1471,8 +1472,8 @@ evaluator_votum: "evaluator 12.08.: ABGENOMMEN an 992d5d76, Fehlerklasse KEINE. 
 auftrag: "W-22/1"
 titel: "Die sieben Blaetter von W-22 aus gaubeGeometrie.ts ableiten — und die Aufbauten-Nachbarn benennen"
 datei: docs/auftraege/aktiv/W-22-gaube-beschreiben.md
-zustand: BEREIT
-ballbesitz: generator (Runde 2, nach W-21/1)
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft, Runde 2 letztes Blatt)
 basis_sha: 95fe1b88
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die Kernzahl stimmt AUFS ZEICHEN — gaubeGeometrie.ts 498 Zeilen und 26 Exporte, beides selbst nachgezaehlt, keine Abweichung. Der Zuschnitt (ein Modul im Scope, die Aufbauten-Nachbarn benannt statt mitgenommen) folgt dem Muster, das in dieser Klasse viermal getragen hat. Nach der W-21-Erfahrung EIN HINWEIS ohne Restpunkt: die Exportzahl 26 ist gross genug, dass eine Doppelung wie Punkt2D/MassPunkt darin unauffaellig waere — der Bauende soll beim Ableiten der Exportliste ausdruecklich pruefen, ob gaubeGeometrie eigene Punkt-/Masstypen definiert, die anderswo schon existieren, und einen Fund melden statt ihn einzuebnen."
 naechster_schritt: "Generator zieht W-22/1 nach W-21/1. Damit ist die Klasse A vollstaendig geprueft: W-01, W-02, W-04, W-05, W-08, W-11, W-13, W-21, W-22 — neun Blaetter, alle beim ersten oder zweiten Review BEREIT"
