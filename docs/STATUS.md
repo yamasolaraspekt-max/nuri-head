@@ -1640,6 +1640,18 @@ an_yama: "Die Sicherung nach fork steht jetzt fuer FUENF freigegebene Stufen aus
 ```
 ---
 
+## ⚠ A-13 IST RELEASE_FREI — aber die Veroeffentlichung hat eine BEDINGUNG (plan-pruefer 12.08.)
+
+```yaml
+urteil_gewuerdigt: "RELEASE_FREI an a09b69af, mit Betriebsauflage. Die §15-Frage, die ich als wichtigste mitgegeben hatte, ist am Code beantwortet und die Antwort ist die richtige: der Hook VERAENDERT KEINE BESTANDSDATEN — pruefeAzimut enthaelt keine einzige Zuweisung, nur return oder throw, kein Mutator, 144 Zeilen rein additiv, 0 Migrationen. '370 wird nicht zu 10 gemacht, sondern abgewiesen.' Auch Frage 2 hat er besser beantwortet als gefragt: statt die sechs Pfade abzuhaken hat er das GEGENTEIL gesucht — einen Schreibweg, der am Model vorbeigeht (table('p_v_roofs')->update|insert: 0, PVRoof::where->update: 0). Es gibt keinen. Das ist der staerkere Beweis."
+die_bedingung_scharf: "DREI Befunde des Berichts gehoeren ZUSAMMENGELESEN, dann sind sie eine Bedingung und nicht drei Hinweise — SELBST NACHGEMESSEN: (1) ein Altsatz ausserhalb 0 <= x < 360 wird beim naechsten Speichern ABGEWIESEN; (2) die RoofAzimuthOutOfRangeException wird NIRGENDS gefangen (Treffer nur in ihrer eigenen Definition und im Model, catch-Bloecke: 0); (3) der DECISION-Punkt 'roof_azimuth ins vorhandene validate() von PVRoofController::store' ist NICHT gebaut (roof_azimuth im validate-Block: 0). ZUSAMMEN heisst das: existiert im Bestand EIN Satz ausserhalb des Bereichs, bekommt der Nutzer beim naechsten Speichern dieses Datensatzes einen 500er statt einer Formularmeldung — und zwar auch dann, wenn er den Azimut gar nicht angefasst hat."
+was_yama_vor_der_veroeffentlichung_tun_muss: "DIE MESSUNG GEGEN ticket, die keine Rolle fahren darf (§15 verbietet uns das Messen an Produktivdaten, das Blatt weist sie ausdruecklich Yama zu): SELECT COUNT(*) FROM p_v_roofs WHERE roof_azimuth IS NOT NULL AND (roof_azimuth < 0 OR roof_azimuth >= 360). Ergebnis 0 -> die Bedingung ist leer, A-13 kann veroeffentlicht werden. Ergebnis > 0 -> die Saetze zuerst klaeren ODER H1 vorher bauen, sonst tauscht die Veroeffentlichung ein stilles Feld gegen einen lauten Fehler. Risikobegrenzend gemessen: die Spalte ist float nullable, im Bestand koennen also nur Zahlen stehen, keine Textwerte."
+folgeauftrag_vorlage: "H1 (roof_azimuth ins vorhandene validate) ist KEIN Mangel des Baus — kein Kriterium verlangt ihn, und der Planner hat den Model-Ort bewusst gewaehlt. Aber es ist genau die Zeile, die aus dem 500er eine freundliche Meldung macht, und sie kostet eine Zeile in einem validate-Block, der schon existiert. Vorlage an den Planner als kleiner Folgeauftrag; er waere auch die Antwort auf den Restfall oben."
+kleinere_punkte: "H2 (Cast decimal:2 rundet 359.999 beim Lesen auf 360.00 und wuerde abgewiesen) gehoert in denselben Folgeauftrag. H3 (Docblock nennt pv_roofs statt p_v_roofs) ist kosmetisch. Der offene P2 der Klasse BEWEIS (es fehlt eine Zusage, die SPEICHERT statt aufzurufen) ist im Vermerk genannt und nicht geschluckt — Nachforderung beim Generator, kein Hindernis."
+gewuerdigt_2: "Der Release-Pruefer hat einen EIGENEN Fehlgriff protokolliert: sein erster Commit ging mit git commit am Tor VORBEI (fehlende Rollenmarke), selbst bemerkt, per reset --soft zurueckgenommen und ueber das Tor neu gebucht — und der Satz steht in der Commit-Botschaft, nicht nur im Bericht. Das ist die Kultur, die diese Kette traegt."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
