@@ -382,3 +382,163 @@ Probe danach entfernt.
 keine `PVRoof`-Factory, und er hat keine angelegt, obwohl der Auftrag das Wort „Factory" enthielt.
 Und `A-13-7` nennt die Verhaltensänderung mitsamt dem unangenehmen Teil: ein Altwert außerhalb der
 Grenze bleibt beim nächsten Speichern hängen.*
+
+---
+
+## Release-Prüfung A-13 (§10) — 12.08.2026
+
+**Urteil: `RELEASE_FREI`** — mit **einer Betriebsauflage** (siehe unten) und **einem offenen P2**,
+der nach §12.5 kein Release-Hindernis ist.
+
+```yaml
+auftrag: "A-13"
+abnahme_commit: "a09b69af"
+release_commit: "a09b69af"
+votum: RELEASE_FREI
+ci: pass                      # php artisan test --testsuite=Unit -> 278 passed (851 assertions)
+artefakte_reproduzierbar: true # kein Bundle, kein Build — reiner PHP-Serverpfad
+migration: nicht_anwendbar     # 0 Migrationen im Bau-Diff
+rueckweg: pass                 # reiner git revert, reverse-apply-Probe sauber
+smoke_test_plan: "Vor der Veroeffentlichung Yamas drei SELECTs gegen `ticket` (Betriebsauflage).
+                  Danach: ein Dachformular mit gueltigem Azimut speichern (muss durchgehen),
+                  eines mit 400 (muss abgewiesen werden), und ein BESTANDSDach ohne Azimut-
+                  Aenderung speichern (muss durchgehen)."
+befunde: []
+```
+
+### Die drei Fragen, die bei einem `saving`-Hook auf einer Live-Tabelle zählen
+
+**1. §15 — verändert der Hook Bestandsdaten? NEIN, am Code gemessen, nicht am Bericht.**
+
+```text
+pruefeAzimut()   PVRoof.php:145-154  -> enthaelt KEINE Zuweisung. Nur `return` (null/'')
+                                        oder `throw`. Kein Rechenweg, keine Normalisierung.
+booted()/saving  PVRoof.php:161-166  -> ruft nur pruefeAzimut($roof->roof_azimuth).
+                                        Der Wert wird gelesen, nicht zurueckgeschrieben.
+Mutator          setRoofAzimuthAttribute -> 0 Treffer im Model.
+Bau-Diff         3 Dateien, 144 insertions(+), 0 deletions(-)
+                 Migrationen 0 · UPDATE 0 · Seeder 0 · database/ 0
+```
+
+*370 wird also **nicht** zu 10 gemacht.* **Abgewiesen statt zurechtgebogen** — genau so steht es
+auch im Docblock der Ausnahme (`Keine stille Korrektur`). Es gibt keinen Pfad, auf dem ein
+bestehender Wert beim Speichern eines Datensatzes still verändert würde. **§15 ist gewahrt; eine
+eigene Freigabe für Datenänderung ist nicht nötig, weil keine stattfindet.** Test-Ziel ist
+`ticket_testing` (`phpunit.xml:28`, `force="true"`), also auch kein Messen an Produktivdaten.
+
+**Der Restfall ist eine ABWEISUNG, keine Änderung — und er ist die Betriebsauflage:** ein
+Bestandssatz mit einem Wert außerhalb `0 ≤ x < 360` wird beim nächsten Speichern **abgelehnt**
+(A-13-7 nennt das ausdrücklich). Zwei Dinge dazu habe ich nachgemessen, weil sie die Größe des
+Restrisikos bestimmen:
+
+```text
+Spaltentyp   2024_06_04_103808:67  $table->float('roof_azimuth')->nullable();
+             -> nur ZAHLEN oder NULL koennen im Bestand stehen. Textwerte wie 'Sued'
+                sind im Bestand nicht moeglich; is_numeric kann dort nicht zuschlagen.
+Ausnahme     RoofAzimuthOutOfRangeException wird NIRGENDS gefangen (0 Treffer ausserhalb
+             ihrer Definition und des Models) -> ein Altsatz ausserhalb der Grenze
+             erzeugt beim Speichern eine 500, keine freundliche Formularmeldung.
+```
+
+> **Betriebsauflage (bindend vor der Veröffentlichung, nicht vor `RELEASE_FREI`):** Yamas drei
+> `SELECT`s gegen `ticket` — wie viele `p_v_roofs`-Sätze tragen `roof_azimuth` außerhalb
+> `0 ≤ x < 360`. *Das Blatt weist diese Messung ausdrücklich Yama zu („der Fall gehört ihm, nicht
+> dem Code"), und §15 verbietet mir das Messen an Produktivdaten. Ich habe sie deshalb **nicht**
+> gefahren, sondern als Bedingung eingetragen.* **Bei Ergebnis 0 ist die Auflage erledigt; bei > 0
+> gehört die Entscheidung Yama, bevor deployt wird.**
+
+**2. Greift die Prüfung auf ALLEN sechs Schreibpfaden? JA — und auf mehr als sechs.**
+
+```text
+1  Old/PVChecklistController.php:138   new PVRoof + ->save()      -> saving greift
+2  Task/PersonalTaskController.php:6495 PVRoof::create([…])       -> saving greift
+3  Customer/PVRoofController.php:70     PVRoof::create([…])       -> saving greift
+4  Customer/NewLeadsController.php:845  PVRoof::create([…])       -> saving greift
+5  Customer/NewLeadsController.php:1347 PVRoof::create([…])       -> saving greift
+6  Customer/NewLeadsController.php:7082 PVRoof::create($roofData) -> MASS-ASSIGNMENT, saving greift
++  Customer/NewLeadsController.php:7070 fill($roofData)+save()    -> Aenderungspfad, saving greift
++  Customer/PVRoofController.php:136    find(id)->update([…])     -> Model-update, saving greift
++  Customer/PVRoofController.php:199    firstOrCreate([…])        -> saving greift
+```
+
+**Die entscheidende Gegenprobe ist nicht die Liste, sondern die Suche nach dem Pfad, der am Model
+VORBEI schreibt** — denn nur ein solcher würde den Hook aushebeln:
+
+```text
+$ grep -rn --include='*.php' -E "table\('p_v_roofs'\)->(update|insert|delete)" app/
+  (0 Treffer)
+$ grep -rn --include='*.php' -E "PVRoof::where\([^)]*\)->update\(" app/
+  (0 Treffer)
+```
+
+*Die einzigen ereignislosen Operationen auf `p_v_roofs` sind `->delete()`
+(`NewLeadsController:6993`, `:13979`, `Old/PVChecklistController:104`) — sie schreiben keinen
+Azimut.* **Es existiert kein Schreibweg an Eloquent vorbei; der Model-Ort deckt damit tatsächlich
+alles ab, was heute schreibt — und auch den „siebten Pfad", der bei `NewLeadsController:7209` erst
+als Kommentar notiert ist.**
+
+*Nachweislage:* der **Beweis** dafür fehlt weiterhin in der Zusagenmenge — das ist der offene P2
+(alle acht Zusagen rufen `pruefeAzimut` direkt auf, keine speichert). Der Evaluator hat das
+Verhalten mit einer eigenen Wegwerf-Probe gegen `ticket_testing` belegt (`save(400)` wirft), der
+Generator zusätzlich auf dem `create()`-Pfad. **Verhalten belegt, Regressionsschutz offen.**
+
+**3. Rückweg — reiner `git revert`, keine Datenmigration? JA, am Diff verifiziert.**
+
+```text
+$ git show a09b69af --stat
+  app/Exceptions/RoofAzimuthOutOfRangeException.php | 26 ++++
+  app/Models/PVRoof.php                             | 49 ++++++
+  tests/Unit/Models/PVRoofAzimutVertragTest.php     | 69 ++++++
+  3 files changed, 144 insertions(+)          <- 0 deletions, rein additiv
+$ git show a09b69af | git apply --check -R -
+  (ohne Ausgabe -> reverse-apply ist sauber, ohne etwas zu schreiben)
+$ git diff a09b69af HEAD -- app/… tests/…
+  (leer -> die drei Dateien sind seit dem Bau unveraendert)
+```
+
+*Keine Migration im Scope (0), keine Datenänderung, keine Abhängigkeit von außen auf die neue
+Ausnahme oder die Konstanten (0 Treffer außerhalb der zwei Dateien).* **`git revert a09b69af`
+stellt den Vorzustand vollständig her; ein Rückweg für Daten ist nicht nötig, weil keine Daten
+angefasst wurden.** Das deckt sich mit der Rückweg-Zusage des Blattes.
+
+### Standard-§10
+
+```text
+Kette (je merge-base --is-ancestor, alle OK)
+  783d47c1 Basis -> 7f80eeea BEREIT -> 6d57e627 IN_ARBEIT -> a09b69af Bau
+        -> 511fe7d7 CODE_FERTIG -> c9397575 ABGENOMMEN -> 4ce5b4d4 Claim -> HEAD
+Votum und Kandidat zeigen auf DENSELBEN Commit: c9397575 nennt a09b69af.  pass
+Scope-Reinheit: 3 Dateien, alle drei im Blatt-Scope. Keine resources/, keine
+  scripts/, keine database/, kein Blade, kein Bundle.                      pass
+Suite selbst gefahren: php artisan test --testsuite=Unit
+  -> 278 passed (851 assertions), 2.95s — dieselbe Zahl wie im §11-Bericht.
+Beifang seit dem Bau: git diff --name-only a09b69af HEAD -- app/ database/
+  tests/ config/ routes/  -> LEER. Kein Produktivpfad hat sich seither bewegt.
+Artefakte: kein Build, kein Bundle, keine Konfig-, ENV- oder Abhaengigkeits-
+  aenderung (composer.json/lock 0). Nichts zu reproduzieren.
+Rechte/Mandanten/Datenschutz: unberuehrt — der Hook liest ein Feld und wirft.
+Offene P0/P1: KEINE.
+```
+
+### Zwei Hinweise ohne Hindernis (Eigentümer: Planner/Generator, nicht dieser Vermerk)
+
+```text
+H1  Der Scope-Punkt "roof_azimuth in das vorhandene validate() von
+    PVRoofController::store" (DECISION, Zeile ZUSAETZLICH) ist NICHT gebaut —
+    PVRoofController.php steht nicht im Bau-Diff, und roof_azimuth fehlt weiter
+    im validate()-Block ab Z.42. Kein Akzeptanzkriterium verlangt ihn, deshalb
+    kein Befund; er ist aber genau die Zeile, die aus der 500 eine freundliche
+    Formularmeldung machen wuerde -> passt zur Betriebsauflage oben.
+H2  Der Cast ist 'decimal:2'. Ein Bestandswert 359.999 wird beim LESEN zu
+    "360.00" gerundet und damit vom Waechter abgewiesen, obwohl der gespeicherte
+    Wert innerhalb der Grenze liegt. Sehr schmale Kante, keine Datenaenderung,
+    aber sie gehoert benannt, falls die SELECTs der Betriebsauflage Werte
+    knapp unter 360 zeigen.
+H3  Kosmetisch: der Docblock der Ausnahme nennt die Tabelle `pv_roofs`; sie
+    heisst `p_v_roofs` (Model ohne $table, Migration 2024_06_04_103808).
+```
+
+**Der offene P2 (Klasse `BEWEIS`) wird hier ausdrücklich mitgeführt und nicht geschluckt:** *eine
+Zusage, die **speichert** statt aufzurufen, fehlt weiterhin; die Nachforderung liegt beim Generator.*
+**Nach §12.5 ist das kein Release-Hindernis** — das Verhalten ist von zwei Rollen unabhängig belegt,
+was fehlt, ist der Regressionsschutz gegen einen späteren Umbau.

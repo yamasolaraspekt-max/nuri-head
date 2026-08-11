@@ -137,6 +137,39 @@ ALTERNATIVE, falls es schneller gehen soll:
 
 ## Akzeptanzkriterien (gelten erst nach dem Operanden)
 
+**W-21L-0 (P1, IST-WERT und SOLL-WERT werden NICHT verwechselt — Yamas Auflage 12.08.):**
+
+> **Ein Kundenaufmaß sagt, wie ein Dach GEBAUT WURDE.
+> Eine Fachregel sagt, wie es GEBAUT WERDEN MUSS.
+> Ein Planungswerkzeug braucht das Zweite.**
+
+*Anlass: ich habe `p_v_roofs.roof_covering_dimensions_cm` gefunden („Eindeckmaß in cm", Freitext
+„B x H in cm") und als möglichen Wertebestand vorgeschlagen. **Yama hat die Falle benannt, bevor
+jemand hineingelaufen ist:***
+
+```text
+Was dort steht, ist ein IST-Wert: der Aufmesser hat gemessen, was auf dem Dach LIEGT.
+Daraus folgt NICHT, dass diese Lattweite fuer diesen Ziegel bei dieser Neigung
+ZULAESSIG ist — nur, dass sie dort verbaut wurde.
+"Auf deutschen Daechern liegt viel, was heute nicht mehr so gelegt wuerde."
+
+TAUGT   welche Ziegeltypen kommen vor      -> Prioritaet des Katalogs
+        welche Deckmasse sind realistisch   -> Plausibilitaetsgrenzen
+        welche Formate tippen Menschen ein  -> Parser fuer den Freitext
+TAUGT   als Sollwert einer Lattweite. Das ist Fachregel oder Herstellerdatenblatt.
+NICHT
+```
+
+**Auflage, wörtlich:** *Geht ein Wert aus `p_v_roofs` in den Katalog, trägt er
+`QUELLE = Kundenaufmaß` — **und diese Quelle allein hebt keine 🔴-Sperre auf.** Sie belegt
+**Vorkommen**, nicht **Zulässigkeit**.* **Sonst steht in einer Woche eine Lattweitentabelle da, die
+aussieht wie eine Fachregel und eine Stichprobe ist.**
+
+*Und der beste Fund des Abschnitts gehört Yama: `dachformVorlagen:118`
+`lattmassAbhaengigVonProdukt: boolean` plus `:29` „konfigurierbare RICHTWERTE" — **die Insel weiß
+schon, dass das Lattmaß produktabhängig ist, und trägt ein Flag dafür.** Die Struktur ist richtig
+gedacht, es fehlen nur die belegten Werte. **Das ist Anbinden, nicht Bauen.***
+
 **W-21L-1 (P1, die Quelle steht am Wert):** Jede Lattweite trägt Deckungsart, Bereich und **Quelle**
 (Herstellerdatenblatt oder Fachregel). *Ein Wert ohne Quelle ist F-051 in neuer Kleidung.*
 

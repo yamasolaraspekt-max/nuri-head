@@ -309,3 +309,77 @@ warteschlange: "NICHT Runde 1 — korrigiert 10.08.: W-08 baut HINTER A-12, zusa
 korrektur_am_fahrplan: "W-08 ist 48 Z / 2 Exporte, nicht 286 / 8 — die Grobzahl enthielt
                         wandFlaeche.ts, das zu W-02 gehoert"
 ```
+
+
+## §11 — Bericht W-08/1 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "W-08/1"
+zustand: CODE_FERTIG
+bau_commit: "7aa49e33"
+in_arbeit_commit: "b972a8af"
+basis: "b202ad7c"
+
+kriterien:
+  W-08/1-1:  GRUEN   # 28 -> 0 nach BEIDEN Zaehlweisen
+  W-08/1-2:  GRUEN   # nur Nummern
+  W-08/1-3:  GRUEN   # F-011 mit Zeile 44 und 46; F-023/F-024 als nicht vorhanden benannt
+  W-08/1-4:  GRUEN   # Kernkriterium: die Eingabe-EBENE entscheidet, Modul kann sie nicht pruefen
+  W-08/1-5:  GRUEN   # Herkunft + Aufrufer — mit gemessener Korrektur, s. u.
+  W-08/1-6:  GRUEN   # Ausschluss benannt — Begruendung des Auftrags widerlegt, s. u.
+  W-08/1-7:  GRUEN   # 0/0/0, Suite unveraendert gruen
+  W-08/1-8:  GRUEN   # Register: BESCHRIEBEN + polygonFlaeche.ts
+  W-08/1-9:  GRUEN   # b972a8af: 2 Befehlszeilen, 2 Ausgabewerte
+  W-08/1-10: GRUEN   # Antwort (a), gemessen begruendet, s. u.
+  W-08/1-11: GRUEN   # Eingangsbedingung steht in 2-FUNKTION vor allem anderen
+  W-08/1-12: GRUEN   # F-024 bleibt beim gemessenen Befund: liegt in wallGeometry.ts
+
+zwei_auftragsangaben_widerlegt:
+  aufrufer:
+    auftrag: "fuenf Aufrufer"
+    gemessen: "VIER Importe im Produktivcode — deckenMesh.ts:7, dachAusschnitt.ts:26,
+               dachformVorlagen.ts:33, grundriss.ts:19"
+  ausschluss_begruendung:
+    auftrag: "wandFlaeche.ts BENUTZT polygonFlaecheM2 — genau deshalb wird es sonst wieder zugeordnet"
+    gemessen: "es importiert sie NICHT. Einzige Fundstelle: ein Kommentar in Zeile 27, und der
+               sagt das Gegenteil — 'Keine zweite Flaechenengine. polygonFlaecheM2 und die
+               Raumerkennung bleiben, was sie sind.'"
+    folge: "Der Ausschluss bleibt richtig, seine Begruendung nicht. wandFlaeche.ts ist ein
+            Nachbar, der Abstand haelt — kein Benutzer."
+
+der_gefaehrliche_fall:
+  was: "0 bedeutet DREIERLEI — zu wenig Punkte (Z.32), ungueltige Zahl (Z.42), nicht endliches
+        Ergebnis (Z.47) — und eine entartete Flaeche ist ebenfalls 0."
+  warum_bewusst: "der Kopf sagt 'Niemals NaN oder Infinity' zu (Z.29). Wer das zusagt, MUSS etwas
+                  zurueckgeben; er hat 0 gewaehlt. Der Preis steht jetzt im Blatt."
+  klasse: "A-10 — nicht das leere Ergebnis ist das Problem, sondern das gefuellte, das seine
+           Herkunft verschweigt."
+
+befund_ueber_W08_hinaus:
+  drei_umsetzungen: "die Schuhbandformel ist DREIMAL im Haus, ZWEI Fassungen heissen GLEICH"
+  ts: "polygonFlaeche.ts:31 — Eingabe METER, Ergebnis m², Betrag, Number.isFinite je Punkt"
+  php: "app/Services/Heizlast/GeometrieAbleitungService.php:118 — Eingabe MILLIMETER,
+        geteilt durch 1.000.000, KEINE Endlichkeitspruefung"
+  dritte: "roomDetection.ts:70 signierteFlaeche — mm², MIT Vorzeichen (W-05)"
+  gefahr: "wer die zwei gleichnamigen verwechselt, irrt um den Faktor eine Million — und beide
+           liefern eine Zahl, die aussieht wie eine Flaeche"
+
+W-08/1-10_antwort:
+  gewaehlt: "(a) — in ihrer schaerfsten Form"
+  begruendung: "polygonFlaecheM2() hat KEINEN Parameter fuer eine Ausrichtung. Das Werkzeug nimmt
+                ueberhaupt keinen Azimutwert und kann ihn deshalb nicht stillschweigend
+                durchrechnen. Die Gefahr sitzt eine Ebene weiter — und steht trotzdem im Blatt."
+  selbst_nachgemessen: "0 Treffer auf '+180'/'-180' in app/Services/Energie — es gibt im Haus
+                        keine Umrechnung zwischen den beiden Konventionen"
+
+nicht_gemessen:
+  - "ob die vier Aufrufer wirklich METER uebergeben — Zusage des Dateikopfs gelesen, Importe
+     gezaehlt, aber die Einheit an den vier Aufrufstellen NICHT nachgerechnet.
+     Steht als Frage in 6-PRUEFUNG."
+  - "ob der PHP- und der TS-Weg bei derselben Geometrie dieselbe Zahl liefern — als Pruefpunkt
+     benannt, nicht ausgefuehrt."
+
+zeilenpruefung: "14 Stellen inhaltlich geprueft, 0 falsch — erstes Blatt ohne Korrektur"
+browserabnahme: "entfaellt — reine Dokumentblaetter"
+ballbesitz: evaluator
+```
