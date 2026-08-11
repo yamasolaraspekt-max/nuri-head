@@ -601,6 +601,119 @@ scene.types.ts:280  "Die Flaechen-Azimute werden NIE gepflegt, sondern [abgeleit
   (Produktivdaten).*
 - **Herkunft:** `docs/BEFUND-AZIMUT-KONVENTION.md` · Yamas Auflage vom 11.08.
 
+## Gruppe N — NORMATIVE Größen (eigenes Präfix, eigene Regeln)
+
+> **Angelegt 12.08. vom Planner.** *Anlass: der Generator hat bei W-21 gemeldet, dass
+> `bodenschneelast` und `formbeiwertSchnee` rechnen, aber keine F-Nummer haben — und geschrieben,
+> „die Sammlung kennt sie zu Recht nicht". **Er hat recht, dass sie keine F-Nummer sind. Er hat
+> nicht recht, dass sie fehlen dürfen.***
+
+**Warum ein eigenes Präfix und nicht F-052:**
+
+```text
+Eine GEOMETRIEFORMEL   ist zeitlos. Der Satz des Pythagoras hat keine Fassung.
+Eine NORMATIVE GROESSE hat eine FASSUNG, einen Nationalen Anhang und einen Geltungsbereich.
+                       Sie kann sich aendern, ohne dass die Mathematik falsch wird.
+-> Deshalb traegt jede N-Zeile PFLICHTFELDER, die F-Zeilen nicht haben:
+   Norm · Fassung/Anhang · Geltungsbereich · Wer darf sich darauf verlassen
+```
+
+> **Und der Grund, warum sie nicht einfach fehlen dürfen:** *Ohne Nummer kann kein Werkzeugblatt auf
+> sie verweisen. W-21 rechnet mit ihnen, und seine Registerzeile trug bis heute zwei **falsche**
+> F-Nummern (F-001, F-030 — beide mit 0 Treffern in allen fünf Modulen, selbst gegengemessen).*
+> **Eine leere Stelle im Register wird mit der nächstbesten Zahl gefüllt. Das ist genau passiert.**
+
+### N-001 · Charakteristische Bodenschneelast sₖ · 🟢
+
+- **Norm:** DIN EN 1991-1-3 + **Nationaler Anhang** (Zone + Geländehöhe)
+- **Belegstelle:** `geometry/sparrenBerechnung.ts:33`, `bodenschneelast(zone, gelaendehoeheM)`
+- **Formel im Code, selbst gelesen:**
+
+```text
+t  = (A + 140) / 760            A = Gelaendehoehe in m, auf >= 0 begrenzt
+Zone 1:  sk = 0,19 + 0,91·t²    Mindestwert 0,65 kN/m²
+Zone 2:  sk = 0,25 + 1,91·t²    Mindestwert 0,85 kN/m²
+Zone 3:  sk = 0,31 + 2,91·t²    Mindestwert 1,10 kN/m²
+Rueckgabe: max(Mindestwert, gerechneter Wert)
+```
+
+- **Ausgabe:** sₖ in kN/m²
+- **Grenzfall:** Negative Geländehöhe wird auf 0 gesetzt (`Math.max(0, …)`) — **kein Wurf, keine
+  Meldung**. *Das ist zulässig, weil eine negative Höhe über NN in Deutschland kein Anwendungsfall
+  ist; **wer sie übergibt, hat einen Eingabefehler und bekommt still den Wert für 0 m**.*
+- **🟢 weil belegt:** *Norm namentlich, Zonenformel vollständig, Mindestwerte je Zone, Herkunft im
+  Dateikopf.* **Das ist mehr Beleg als F-050 (🟡 „plausibel, aber unbelegt") und deutlich mehr als
+  F-051 (🔴 „ohne jede Herkunft") haben.**
+
+### N-002 · Formbeiwert μ₁ für Schneelast · 🟢
+
+- **Norm:** DIN EN 1991-1-3 (Pult- und Satteldach)
+- **Belegstelle:** `geometry/sparrenBerechnung.ts:45`, `formbeiwertSchnee(neigungGrad)`
+- **Formel im Code:**
+
+```text
+α <= 30°   ->  μ₁ = 0,8
+α >= 60°   ->  μ₁ = 0
+sonst      ->  μ₁ = 0,8 · (60 − α) / 30      (linear)
+```
+
+- **Grenzfall:** **Bei α ≥ 60° ist μ₁ = 0 — die Schneelast verschwindet vollständig.** *Das ist
+  normgerecht (Schnee rutscht ab), aber es ist die Stelle, an der eine Vorbemessung optimistisch
+  wird: ein Dach mit 60° trägt nach dieser Rechnung **keinen** Schnee.* **Wer ein steiles Dach
+  bemisst, muss wissen, dass die Last hier nicht klein, sondern null wird.**
+
+### N-003 · Sparren-Vorbemessung (Biegung + Durchbiegung) · 🟡 FACH-GATE
+
+- **Norm:** DIN EN 1995-1-1 (Eurocode 5) — Biegenachweis σₘ,d ≤ fₘ,d und Durchbiegung
+- **Belegstelle:** `geometry/sparrenBerechnung.ts:86`, `berechneSparren(e)`
+- **Beiwerte im Code, selbst gelesen:**
+
+```text
+GAMMA_G = 1,35   GAMMA_Q = 1,5   GAMMA_M = 1,3   KMOD = 0,9
+                 Kommentar: "Vollholz, NKL 1/2, mittelfristige Einwirkung Schnee"
+DURCHBIEGUNG_GRENZE = 300        L/300, "Empfehlung Endzustand, Vorbemessung"
+```
+
+- **Geltungsbereich — wörtlich aus dem Dateikopf, und das ist der Grund für 🟡:**
+
+```text
+Einfeldtraeger · gleichmaessige Last · NUR die senkrechte Lastkomponente
+NICHT enthalten: Wind · Mehrfeld · Knicken · Auflagerpressung · Lastkombinationen
+-> "ersetzt KEINE prueffaehige Statik"
+```
+
+> **🟡 ist hier keine Aussage über die Rechenqualität — die ist belegt. Es ist eine
+> Reichweitengrenze mit Haftungsbezug.** *Eine Sparrenbemessung, die als „geprüft" gilt und dann
+> nicht trägt, ist Personenschaden. Deshalb steht sie als **Fach-Gate**: benutzbar für Vorbemessung,
+> Angebot und Machbarkeit — **nicht** als Nachweis für die Ausführung ohne Tragwerksplaner.*
+>
+> **Diese Ampel setze ich in der STRENGEREN Lesart, und sie braucht Yamas Bestätigung.** *Statik ist
+> Fachrecht; CLAUDE.md verlangt, dass Fachentscheidungen nicht still automatisiert werden. Bis Yama
+> bestätigt oder lockert, gilt die strengere Fassung — **das ist die einzige Richtung, in der ein
+> Irrtum niemandem schadet.***
+
+- **Was die Ampel auf 🟢 heben würde:** eine ausdrückliche Freigabe Yamas über den Geltungsbereich
+  (*„Vorbemessung genügt für X, für Y nicht"*), festgehalten im Blatt. **Nicht** mehr Rechnung —
+  die Rechnung ist belegt.
+- **Der Generator hat den Vorbehalt richtig behandelt:** *er steht nicht nur im Dateikopf, sondern
+  zusätzlich als Prüfpunkt in `6-PRUEFUNG` — mit der Begründung, dass **„ein Dateikopf nicht
+  mitgeliefert wird, wenn jemand nur die Zahl übernimmt"**.* **Dieser Satz ist die beste Begründung
+  für die ganze N-Gruppe.**
+
+### Regeln für die N-Gruppe
+
+```text
+1  Jede N-Zeile nennt NORM und FASSUNG/ANHANG. Ohne Norm keine N-Nummer —
+   dann ist es ein Erfahrungswert und gehoert als F-Nummer mit Ampel behandelt
+   (Muster: F-050 gelb, F-051 rot).
+2  Jede N-Zeile nennt den GELTUNGSBEREICH. Eine Norm ohne Geltungsbereich ist
+   eine Einladung zur Uebertragung auf einen Fall, den sie nicht deckt.
+3  N-Nummern begruenden KEINE Ausfuehrungsentscheidung, solange ein Fach-Gate
+   offen ist. Sie begruenden Vorbemessung, Angebot und Machbarkeit.
+4  Aendert sich eine Norm, aendert sich die ZEILE — nicht der Code allein.
+   Wer den Code aendert, ohne die Zeile zu aendern, hinterlaesst zwei Wahrheiten.
+```
+
 ## Gruppe 7 — Gauben
 
 ### F-027 · Gaubenaufbau
