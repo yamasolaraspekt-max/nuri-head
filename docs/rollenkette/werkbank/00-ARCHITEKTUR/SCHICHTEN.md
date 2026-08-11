@@ -42,6 +42,65 @@ nach Schicht 1 oder das Brauchende nach oben.
 
 ---
 
+## BAURICHTLINIE — Prüfbarkeit ist ein Wahlkriterium, nicht nur ein Vorteil
+
+> **Yamas Freigabe 11.08.** *Aufgenommen vom Planner nach fünf gemessenen Vorkommen in der Insel.
+> Vorgelegt in `docs/BEFUND-FORMELSAMMLUNG-GEGEN-INSEL.md`.*
+
+**Die Regel:**
+
+```text
+Stehen fuer eine Aufgabe zwei Wege offen und ist der eine ohne Browser pruefbar,
+der andere nicht — dann wird der pruefbare gebaut, auch wenn er weniger kann.
+Und was er nicht kann, wird ANGEZEIGT, nicht stillschweigend falsch geliefert.
+```
+
+**Warum das hier steht und nicht als Empfehlung:** *Dieses Blatt sagt weiter unten über Schicht 1,
+sie könne „ohne Browser vollständig geprüft werden — und **das ist ihr eigentlicher Wert**". Das
+beschreibt eine **Eigenschaft**, die eine Schichtung mitbringt.* **Die Insel hat daraus etwas anderes
+gemacht: ein Kriterium, nach dem sie zwischen zwei möglichen Wegen entscheidet.** *Das ist aktiv, wo
+die Beschreibung passiv ist — und es stand bisher nirgends in der Werkbank.*
+
+**Fünf unabhängige Vorkommen, jedes am Code belegt und jedes mit aufgeschriebenem Grund:**
+
+```text
+1  renderers/three-d/segmentierung.ts:7
+     "Keine CSG-Bibliothek, mm-exakt, unit-testbar ohne Browser"
+     -> F-031 (CSG-Differenz) ABGELEHNT, Quader-Segmentierung gebaut
+2  geometry/dachVerschneidung.ts:4-5
+     "REGRESSIONSSCHLOSS … numerisch eingefroren (kein 3D-Render verfuegbar)"
+     -> die ungesicherte L/T-Geometrie in Zahlen festgehalten statt am Bild geprueft
+3  geometry/dachformVorlagen.ts:6-9
+     Formen nur 'verfuegbar', wenn die Engine sie WIRKLICH sauber baut; alle uebrigen
+     'geplant' — "statt als Platzhalter / still falsche Geometrie zu erzeugen"
+     -> gemessen: 11 'verfuegbar', 1 'geplant'
+4  geometry/gaubeGeometrie.ts
+     "prueft jeden Aufbau numerisch (kein Render verfuegbar)"
+     -> pruefeAufbau() mit Ampel und PruefBefund
+5  geometry/dachAusschnitt.ts
+     "STUFENMODELL (bewusst risikoarm)" · Stufe C (CSG) "NICHT HIER"
+     -> "sonst bleibt es beim Prueffeld", also Absage statt Naeherung
+```
+
+> **Vier dieser fünf sind älter als A-10, der Auftrag, der „sag es, wenn du nicht kannst" zur Regel
+> gemacht hat.** *Die Insel hat die Regel also nicht befolgt — sie hat sie erfunden, fünfmal
+> unabhängig, und niemand hat sie aufgeschrieben. **Ein Muster, das fünf Mal auftritt und nirgends
+> steht, ist keine Kultur, sondern ein Zufall, der beim sechsten Mal ausfällt.***
+
+**Was die Richtlinie NICHT sagt:**
+
+```text
+NICHT   "CSG ist verboten" oder "Straight Skeleton ist verboten". Beide sind richtige
+        Verfahren. Die Richtlinie greift nur, wenn ein PRUEFBARER Weg zur Verfuegung
+        steht und der Fall ihn abdeckt.
+NICHT   "Browserabnahmen sind unnoetig". Das Gegenteil: §9 verlangt sie fuer UI. Die
+        Richtlinie sagt, wo die GEOMETRIE gebaut wird — dort, wo ein Test sie fassen kann.
+NICHT   dass eine Grenze verschwiegen werden darf. Sie ist der zweite Halbsatz der Regel
+        und der wichtigere: was der pruefbare Weg nicht kann, wird ANGEZEIGT.
+```
+
+---
+
 ## Warum diese Reihenfolge
 
 ### Schicht 1 — Domäne: die Bauteile ohne Bildschirm
@@ -58,6 +117,11 @@ nicht in ein Formular.
 
 Hier gibt es keine Wände, nur Polygone, Punkte und Körper. Der Straight-Skeleton-
 Algorithmus weiß nicht, dass er ein Dach baut — er kennt nur ein Polygon.
+
+> *Randnotiz 11.08.: **dieses Beispiel ist im Repo nicht gebaut** — `grep -rliE 'straight.?skeleton'`
+> über `resources/` und `app/` ergibt 0 Treffer (F-020 ist Reserve, siehe FORMELSAMMLUNG). Als
+> Illustration der Trennung bleibt es richtig und verständlich; es behauptet keine Existenz. Nur wer
+> es als Bestandsangabe liest, liest falsch — deshalb diese Zeile.*
 
 *Der Nutzen der Trennung:* Die Geometrie ist mathematisch prüfbar. Ein Fehler in
 der Dachfläche ist entweder ein Rechenfehler (Schicht 2) oder ein Modellfehler

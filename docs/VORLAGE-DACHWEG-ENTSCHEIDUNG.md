@@ -110,20 +110,54 @@ neu aufzumachen — und das kostet jedes Mal eine Runde.*
 solchen Grundriss bringt, ist F-020 kein Rückstand. Sobald einer kommt, ist es die einzige Antwort —
 und dann ist die Recherche im Formelblatt Gold. **Löschen wäre falsch, „offene Wahl" auch.***
 
-**3. Die Grenze zur Zusage machen, statt sie zu beschreiben.**
-*Die Insel hat mit `status: 'geplant'` schon die richtige Antwort gebaut. **Was fehlt, ist die
-Zusage, dass eine nicht baubare Form NIE still gezeichnet wird** — heute ist es eine
-Katalog-Eigenschaft, morgen kann sie jemand auf `verfuegbar` setzen, ohne dass etwas anschlägt.*
-**Das ist ein Auftragskandidat, und er ist billiger als jede Dachformel:** ein Kriterium, eine
-Zusage, und die A-10-Klasse ist für Dachformen geschlossen.
+**3. ~~Die Grenze zur Zusage machen, statt sie zu beschreiben.~~ ZURÜCKGEZOGEN 11.08. — sie ist schon
+gebaut, und zwar besser als mein Vorschlag.**
+
+> **Ich habe diese Empfehlung geschrieben, ohne zu prüfen, ob es sie schon gibt.** *Das ist genau die
+> Wiederverwendungsprüfung, die ich unter §5 in jedes Blatt verlange — und ich habe sie bei meiner
+> eigenen Empfehlung nicht gefahren.* **Nachgemessen, nachdem Yama den Auftrag zum Umsetzen gab:**
+
+```text
+MEINE SORGE 1  "morgen setzt jemand 'geplant' auf 'verfuegbar', ohne dass etwas anschlaegt"
+ZUGESAGT       __tests__/dachformVorlagen.test.ts:313-316
+                 assert.equal(v.anwendbar, false,     'geplant anwendbar: …')
+                 assert.equal(v.apply, undefined,     'geplant mit apply: …')
+                 assert.ok((v.geplantGrund ?? '').trim().length > 0, 'geplantGrund fehlt: …')
+                 assert.equal(istAnwendbar(v), false, 'istAnwendbar true bei geplant: …')
+               -> eine geplante Vorlage hat KEIN apply. Es gibt keinen Weg, sie anzuwenden.
+                  Und geplantGrund ist PFLICHT — die "sag es"-Haelfte ist zugesagt.
+               Gegenrichtung ebenfalls zugesagt (:305-311): anwendbare Vorlagen muessen
+                  endliche, positive Masse haben. Beide Richtungen, nicht nur eine.
+
+MEINE SORGE 2  "eine nicht baubare Form wird still als Flachdach gezeichnet"
+ABGEDECKT      renderers/three-d/nichtDarstellbar.ts (A-10, VEROEFFENTLICHT):
+                 :34  "das leere Ergebnis OHNE WURF (null Flaechen, wie l-shape ohne
+                       anbau-Masse). Zwei Faenger"
+                 :48  "A-10-1 — die ZWEITE Eingangsbedingung: das leere Ergebnis ohne Wurf"
+                 :52  die Bedingung haengt an den DREIECKEN, "weil ein l-shape MIT anbau
+                       10 Dreiecke liefert und trotzdem [dachflaechen 0]" — gemessen 10.08.
+               -> genau mein Fall. Und A-10 hat das Detail beruecksichtigt, das MICH
+                  fast fehlgeleitet haette: dachflaechen kann 0 sein, obwohl gezeichnet wird.
+```
+
+> **Damit ist die Kette geschlossen, und zwar an drei Stellen unabhängig:** *der Katalog kann eine
+> nicht baubare Form nicht anwendbar machen (Zusage), der Renderer gibt bei ungültiger Eingabe leer
+> zurück statt zu raten (`dachMesh.ts:154`), und A-10 meldet das leere Ergebnis an den Dreiecken.*
+> **Ein vierter Auftrag hätte nichts hinzugefügt außer einer vierten Wahrheit.**
+>
+> *Der Satz in `dachMesh.ts:139` — „leer (**Aufrufer** setzt Prüf-Marker)" — sah nach der Lücke aus:
+> eine Zusage an eine andere Schicht, die niemand prüft. **Sie wird geprüft. A-10 ist dieser
+> Aufrufer.** Ich habe eine Lücke vermutet, wo eine Arbeitsteilung steht.*
 
 ## Was ich als Nächstes tue, wenn du 1–3 so bestätigst
 
 ```text
 SOFORT     Formelblatt F-020/F-026: die Vergleichstabelle auf "gebaut gegen Reserve"
            umstellen, mit dem benannten Fall fuer F-020
-DANACH     den Auftrag aus Empfehlung 3 schneiden (Arbeitstitel: "keine stille
-           Geometrie fuer nicht baubare Dachformen") — Spur A, Insel, klein
+DANACH     ~~den Auftrag aus Empfehlung 3 schneiden~~ ENTFAELLT — Empfehlung 3 ist
+           zurueckgezogen, die Sache ist an drei Stellen gebaut (siehe oben).
+           KEIN Auftrag geschnitten. §3 waere ohnehin besetzt: gemessen mit dem
+           Zeilenform-Befehl -> 1 (W-11 IN_ARBEIT beim Generator).
 ENTSPERRT  W-07 (3626 Z) und W-08: ihre Sperre war "der Dachweg ist ungeklaert".
            Mit einer Entscheidung sind beide schneidbar. W-07 bleibt gross, aber
            es ist nicht mehr BLOCKIERT.
@@ -131,8 +165,24 @@ NICHT      die Dachkonstruktion selbst. A-01s Nicht-Ziel steht weiter (bd1383c8)
            und das ist eine eigene Frage an dich.
 ```
 
+## ERLEDIGT 11.08. — Yamas Freigabe, und was daraus wurde
+
+```text
+EMPFEHLUNG 1  UMGESETZT   FORMELSAMMLUNG: die Vergleichstabelle steht jetzt als
+              "gebaut gegen Reserve", die alte Empfehlungszeile ist durchgestrichen
+              und ersetzt. F-020 bleibt als Reserve fuer den benannten Fall.
+EMPFEHLUNG 2  UMGESETZT   Baurichtlinie in werkbank/00-ARCHITEKTUR/SCHICHTEN.md
+              aufgenommen, mit allen fuenf Vorkommen am Code belegt. Dabei EIGENE
+              Fehlbehauptung korrigiert: ich hatte gesagt "die Werkbank kennt sie
+              nicht" — sie kennt Pruefbarkeit als EIGENSCHAFT (SCHICHTEN.md:53),
+              nur nicht als WAHLKRITERIUM. Die Korrektur schaerft die Regel.
+EMPFEHLUNG 3  ZURUECKGEZOGEN   schon gebaut, an drei Stellen unabhaengig. Kein
+              Auftrag geschnitten. Begruendung oben, mit Messung.
+```
+
 ```yaml
-offen_an_yama: "Empfehlung 1, 2, 3 — je einzeln bestaetigen oder ablehnen"
+offen_an_yama: "nichts mehr aus dieser Vorlage — 1 und 2 umgesetzt, 3 zurueckgezogen"
+erledigt_am: "11.08."
 kern: "die Entscheidung ist gefallen, sie ist nur nie getroffen worden. Ein Weg, der gebaut,
        verdrahtet, zugesagt und ueber seine Quelle hinaus erweitert ist, konkurriert nicht
        mehr mit einer Ueberlegung."

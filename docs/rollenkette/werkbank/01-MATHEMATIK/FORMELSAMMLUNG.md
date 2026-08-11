@@ -469,10 +469,53 @@
 > das ich recherchiert habe, sondern mit einem einfacheren, das weniger kann,
 > aber den gebrauchten Fall abdeckt.
 >
-> **Empfehlung: F-026 zuerst bauen** (deckt Rechteck, L, T, Pult, Walm, Sattel,
-> Flach — das sind praktisch alle Wohnhäuser), **F-020 später** für freie Grundrisse.
-> Beide können nebeneinander bestehen: F-026 als schneller Weg für die Standardformen,
-> F-020 als allgemeiner Weg, wenn die Kontur nicht in die Liste passt.
+> ~~**Empfehlung: F-026 zuerst bauen** … **F-020 später** für freie Grundrisse. Beide können
+> nebeneinander bestehen …~~
+>
+> ### ENTSCHIEDEN 11.08. — die Wahl ist keine Wahl mehr, sie ist gebaut
+>
+> **Yamas Freigabe 11.08. auf die Vorlage `docs/VORLAGE-DACHWEG-ENTSCHEIDUNG.md`.** *Die Empfehlung
+> oben stellte zwei Wege gegenüber, als stünde die Entscheidung noch aus. **Sie stand nicht mehr
+> aus — sie war durch drei Bauten längst gefallen, nur nie getroffen worden.***
+>
+> ```text
+> GEMESSEN 11.08. (Planner, am Code, nicht aus einem Bericht):
+>
+> F-020 STRAIGHT SKELETON
+>   grep -rliE 'straight.?skeleton|skelett' resources/ app/     -> 0 Treffer
+>   nicht gebaut, nicht angefangen, kein Modul, keine Zusage.
+>
+> F-026-WEG — vier Module, 2.882 Zeilen, 105 Exporte, 7 Zusagen, PRODUKTIV VERDRAHTET
+>   geometry/dachVerschneidung.ts    205 Z   L/T-Kehl-/Gratlinien, byte-treu
+>   geometry/dachUForm.ts            126 Z   U-Form
+>   geometry/dachformVorlagen.ts   2.399 Z   Formenkatalog + Validierung
+>   geometry/schifterListe.ts        152 Z   Schifter (jack rafters)
+>   renderers/three-d/dachMesh.ts:17  importiert verschneidungsFlaechen + lTBauGueltig
+>
+> UEBER DIE QUELLE HINAUSGEWACHSEN
+>   buildCompoundPitchedU    Fremdcode 0 Treffer  ·  Insel 2 Treffer
+>   Dachformen               F-026s Liste 7       ·  Insel 9 (+ u-shape, mansard)
+>   -> die U-Form hat die Insel SELBST gebaut. F-026 kann sie nicht.
+> ```
+>
+> **Die neue Lage, und sie ersetzt die Vergleichstabelle als Entscheidungsgrundlage:**
+>
+> | | **F-020 Straight Skeleton** | **F-026-Weg (Parametergeometrie)** |
+> |---|---|---|
+> | Zustand | **RESERVE** — nicht gebaut | **DER WEG** — gebaut, verdrahtet, zugesagt |
+> | Wofür | **ein freier Grundriss, der in keine Formvorlage passt** | alle 9 Formen des Katalogs |
+> | Wann anfassen | **erst wenn dieser Fall real auftritt** | jetzt und weiter |
+> | Im Register | als Reserve führen, **nicht als offene Wahl** | als gegangener Weg |
+>
+> **F-020 wird NICHT verworfen und NICHT gelöscht.** *Die Recherche ist gültige Arbeit und im Moment,
+> in dem ein Kunde einen freien Grundriss bringt, die einzige Antwort. **Aber sie ist eine Reserve
+> für einen benannten Fall, keine gleichrangige Option** — eine Vergleichstabelle, die eine nie
+> gebaute Alternative als gleichrangig führt, lädt jeden nächsten Auftrag ein, die Wahl neu
+> aufzumachen, und das kostet jedes Mal eine Runde.*
+>
+> **Die Grenze von F-026 bleibt bestehen und ist im eigenen Katalog belegt:** nur vorgegebene Formen,
+> und **eine** von zwölf steht auf `status: 'geplant'` statt `'verfuegbar'`. *Das ist der Beleg, dass
+> die Grenze real ist — und gleichzeitig, dass die Insel sie ehrlich anzeigt.*
 
 ## Gruppe 7 — Gauben
 
