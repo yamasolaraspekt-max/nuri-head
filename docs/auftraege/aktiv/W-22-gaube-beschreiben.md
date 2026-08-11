@@ -414,3 +414,90 @@ CODE   :491   const ampel: Ampel = !kritischOk ? 'rot' : (!allesOk || !feasibleF
 > Ein Werkzeugname, der enger ist als sein Modul, ist genau die Falle, in die ein Register läuft.*
 
 **`-11` zum fünften Mal in Folge im ersten Anlauf** (W-04, W-11, W-05, W-21, W-22).
+
+---
+
+## Release-Prüfung (§10, Sammel-Kontrolle 2) — 12.08.2026
+
+```yaml
+auftrag: W-22/1
+abnahme_commit: 88c70b00   # Evaluator-Votum; gemessen wurde 8a3acb53 (Bau, Basis 95fe1b88)
+release_commit: 50e968e9   # HEAD bei dieser Prüfung
+votum: RELEASE_FREI
+ci: pass                   # npm run test:hausplaner selbst gefahren: tests 1692, pass 1692, fail 0
+artefakte_reproduzierbar: nicht_anwendbar   # Doku-Stufe: kein Bundle, kein Build-Artefakt im Scope
+migration: nicht_anwendbar
+rueckweg: nicht_anwendbar   # nichts veröffentlicht; Rückweg wäre `git revert 8a3acb53`, acht Doku-Dateien
+smoke_test_plan: "Entfällt — reine Dokumentblätter, keine sichtbare oder betriebliche Wirkung."
+befunde: []
+hinweise_ohne_hindernis: 2   # die zwei Typ-Funde des Plan-Prüfers, unten festgehalten
+```
+
+### Die Pflichtfrage der Sammel-Kontrolle — gezählt
+
+```text
+Kriterien im Blatt (Abschnitt Akzeptanzkriterien)   11   (W-22/1-1 … -11)
+Zeilen im Votum-Messtisch                           11   (-1 -2 -3 -4 -5 -6 -7 -8 -9 -10 -11)
+                                                    ->  11 von 11, lückenlos
+```
+
+**`-1` ist der Prüfstein dieser Zählung.** *Der Generator meldet es nicht als `GRUEN`, sondern als
+`GEMELDET_MIT_ZWEI_ZAHLEN`: 3 wörtlich, 0 nach Muster — die drei sind Falschtreffer, die bei `<=`
+beginnen und am nächsten `>` enden.* **Ich habe nachgezählt** (`grep -roE '<[^<>]{1,60}>'` über
+alle sieben Blätter, `<=`/`>=`/`=>` ausgenommen): **0**. *Die zwei Zahlen waren also nicht
+Unsicherheit, sondern Genauigkeit — und der Messtisch trägt die Zeile trotzdem.*
+
+### Kette, Scope, Stichprobe
+
+```text
+Kette      dcf0071c (BEREIT) -> 6a592b26 (IN_ARBEIT) -> 8a3acb53 (Bau)
+           -> cb727abc (CODE_FERTIG) -> 88c70b00 (ABGENOMMEN) -> HEAD
+           je git merge-base --is-ancestor, Exit 0                      5/5
+Basis      95fe1b88 -> 6a592b26  Exit 0
+Scope      git show 8a3acb53 --name-only: 8 Dateien = 7 Blätter + REGISTER.md
+           Pfade unter resources/ oder scripts/:                        0
+Votum-SHA  Votum nennt 8a3acb53 = Bau-Commit                            deckungsgleich
+Blattstand git diff 8a3acb53..HEAD -- W-22-gaube/                       0 Dateien
+Ergebnis   Platzhalter über alle sieben Blätter                         0
+Register   Z.44 W-22 BESCHRIEBEN, F-027 „Thema ja, Formel ⚠" · Z.166 gaubeGeometrie.ts
+           498 Zeilen / 26 Ausfuhren als Fundstelle
+```
+
+### Zwei Typ-Funde des Plan-Prüfers — HINWEIS, kein Release-Hindernis
+
+**Kein Kriterium von W-22/1 verlangt sie**, und der Plan-Prüfer hat sie ausdrücklich als Hinweis
+übergeben. *Sie stehen hier, damit sie nicht zwischen den Runden verloren gehen.* **Ich habe beide
+nachgemessen, nicht übernommen:**
+
+```text
+Vec3 — VIERMAL zeichenweise identisch definiert, kein Import verbindet sie:
+  geometry/aufbauOrientierung.ts:22   export interface Vec3 { x: number; y: number; z: number; }
+  geometry/gaubeGeometrie.ts:34       export interface Vec3 { x: number; y: number; z: number; }
+  geometry/dachVerschneidung.ts:20    export interface Vec3 { x: number; y: number; z: number; }
+  geometry/dachUForm.ts:12            export interface Vec3 { x: number; y: number; z: number; }
+
+Dreieck — ZWEIMAL definiert, mit VERSCHIEDENER Bedeutung:
+  renderers/three-d/dachMesh.ts:32    export type Dreieck = [WeltPunkt3, WeltPunkt3, WeltPunkt3]
+  geometry/gaubeGeometrie.ts:37       export type Dreieck = [LokalPunkt, LokalPunkt, LokalPunkt]
+```
+
+> **Beim Nachmessen ist mir eine dritte Zeile aufgefallen, die den `Vec3`-Fund zuspitzt:**
+> `gaubeGeometrie.ts:32` **importiert** `Vec3` aus `aufbauOrientierung` unter dem Aliasnamen
+> `BasisVec3` — und definiert zwei Zeilen darunter, in `:34`, ein **eigenes** `Vec3`. *Eine Datei
+> führt damit zwei Namen für dieselbe Struktur, einen geliehenen und einen eigenen. Wer später
+> eines der beiden ändert, ändert in dieser Datei nur die Hälfte.*
+
+**Warum das trotzdem kein Hindernis ist:** *`Vec3` und `Dreieck` sind Produktivcode; W-22/1 ist
+eine reine Doku-Stufe und hat `resources/**` als `must_preserve` — der Bau durfte sie gar nicht
+anfassen und hat es mit 0 Pfaden auch nicht.* **Es ist dieselbe Klasse wie `Punkt2D` (viermal, aus
+W-21/W-08) und `MassPunkt` (zweimal, aus W-11)**, und dieselbe Regel gilt: *benennen, nicht
+zusammenlegen* — wer vier Definitionen über drei Werkzeuggrenzen hinweg vereinigt, entscheidet
+etwas und räumt nicht auf. **`Dreieck` ist der schärfere der beiden**: ein Name, zwei
+Koordinatensysteme (`WeltPunkt3` gegen `LokalPunkt`) — hier divergieren die Bedeutungen nicht
+künftig, sie sind es **heute schon**.
+
+**Eigentümer des Hinweises ist der PLANNER**, wie bei `Punkt2D`: er entscheidet, ob daraus ein
+Blattzusatz (7-GRENZEN bei W-22 und den Nachbarn) oder ein eigener Auftrag wird. *Aus einem
+Release-Vermerk entsteht kein Auftrag.*
+
+**Urteil: `RELEASE_FREI`.** *Ohne Befund; die zwei Funde sind als Hinweise festgehalten.*

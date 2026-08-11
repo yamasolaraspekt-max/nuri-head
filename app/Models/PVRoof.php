@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\AuditableLead;
+use App\Exceptions\RoofAzimuthOutOfRangeException;
 
 class PVRoof extends Model
 {
@@ -115,6 +116,54 @@ class PVRoof extends Model
         'roof_height' => 'decimal:2',
         'pv_investment_costs' => 'decimal:2',
     ];
+
+    /**
+     * Vertrag fuer `roof_azimuth` — Kompass-Konvention des Hauses: **0=N, 90=E, 180=S, 270=W**.
+     *
+     * Gueltig ist `0 <= x < 360`. Dieselbe Grenze wie `north_angle_deg` im kanonischen
+     * Gebaeudemodell (dort als `minimum: 0` / `exclusiveMaximum: 360` zugesagt); `360` ist
+     * derselbe Punkt wie `0`.
+     *
+     * **Die PVGIS-Konvention ist eine ANDERE** (dort ist `0` = Sued, Bereich -180..180). Sie ist
+     * kein Fehler, sondern die Konvention einer Fremd-API — aber ein Wert aus diesem Feld darf
+     * NICHT unveraendert an PVGIS gegeben werden. Der gefaehrliche Bereich ist `0..180`: er ist in
+     * beiden Systemen gueltig und bedeutet das Gegenteil. Siehe **F-028** in
+     * `docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md` — dort steht die Umrechnung,
+     * hier steht sie bewusst NICHT (zwei Fassungen derselben Warnung waeren eine zweite Wahrheit).
+     */
+    public const AZIMUT_MIN = 0;
+
+    /** Obergrenze, AUSSCHLIESSLICH — `360` ist ungueltig, siehe `AZIMUT_MIN`. */
+    public const AZIMUT_MAX_EXKLUSIV = 360;
+
+    /**
+     * Prueft einen Azimutwert gegen den Vertrag. `null` und `''` sind gueltig (Feld ist nullable).
+     *
+     * Oeffentlich und statisch, damit die Zusage geprueft werden kann, ohne die Datenbank
+     * anzufassen — und damit der Waechter unten genau dieselbe Frage stellt wie der Test.
+     */
+    public static function pruefeAzimut(mixed $wert): void
+    {
+        if ($wert === null || $wert === '') {
+            return;
+        }
+
+        if (! is_numeric($wert) || $wert < self::AZIMUT_MIN || $wert >= self::AZIMUT_MAX_EXKLUSIV) {
+            throw new RoofAzimuthOutOfRangeException($wert);
+        }
+    }
+
+    /**
+     * Der Waechter sitzt am Model, nicht im Controller: `saving` greift bei `create`, `update`
+     * UND beim Mass-Assignment-Pfad `PVRoof::create($array)`. Ein Controller-Riegel wuerde jeden
+     * anderen Schreibweg offen lassen.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (self $roof): void {
+            self::pruefeAzimut($roof->roof_azimuth);
+        });
+    }
 
     public function customer()
     {

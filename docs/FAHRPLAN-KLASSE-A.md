@@ -1,4 +1,21 @@
-# Fahrplan Klasse A — sieben Blätter, drei Runden, ein Sonderfall
+# Fahrplan Klasse A — AUFGEHOBEN 12.08. · nur noch Beleg
+
+> ## ⚠ DIESER PLAN IST NICHT MEHR DER PLAN
+>
+> **Gültig ist `docs/FAHRPLAN-WERKZEUGKASTEN.md`** — er umfasst alle 42 Registerzeilen statt zehn.
+>
+> **Warum dieser hier abgelöst wurde, und es ist ein Bauartfehler:** *Er hatte eine **feste
+> Rundenzahl**. `W-09 Treppe` passte in keine der drei Runden, und ich habe daraufhin Z.148
+> geschrieben — „NICHT IN A: W-09 (Treppe, 698 Z) — war nie in den drei Runden" — **statt den Plan
+> zu erweitern.*** **Weil die Lücke notiert war, sah sie erledigt aus.** *Der neue Plan hat deshalb
+> keine Runden, sondern **Stufen mit Eintrittsbedingung**: eine Zeile, die in keine Stufe passt, ist
+> ein Befund gegen den Plan, nicht gegen das Werkzeug.*
+>
+> **Was hier weiter gilt und deshalb stehen bleibt:** die sechs Grobzahl-Korrekturen (jede Messung
+> ging nach unten), die Anbindungsmessungen der zehn Klasse-A-Werkzeuge, und die Lehre, dass eine
+> Grobzahl ohne Ausschlussentscheidung immer eine Obergrenze ist. **Als Beleg, nicht als Anweisung.**
+
+# (Ursprünglicher Titel) Fahrplan Klasse A — sieben Blätter, drei Runden, ein Sonderfall
 
 ```yaml
 art: "PLANNER-FAHRPLAN — Antwort auf Yamas Ansage 'A vor C, aber A auch fertigstellen'"

@@ -413,3 +413,66 @@ CODE   :90   const cosA = Math.cos(a);
 
 **`-12` zum vierten Mal in Folge im ersten Anlauf** (W-04, W-11, W-05, W-21). *E2 aus
 Prozessprüfung 03 hält jetzt über vier Blätter.*
+
+---
+
+## Release-Prüfung (§10, Sammel-Kontrolle 2) — 12.08.2026
+
+```yaml
+auftrag: W-21/1
+abnahme_commit: e5b4c219   # Evaluator-Votum; gemessen wurde 992d5d76 (Bau, Basis c9325929)
+release_commit: 50e968e9   # HEAD bei dieser Prüfung
+votum: RELEASE_FREI
+ci: pass                   # npm run test:hausplaner selbst gefahren: tests 1692, pass 1692, fail 0
+artefakte_reproduzierbar: nicht_anwendbar   # Doku-Stufe: kein Bundle, kein Build-Artefakt im Scope
+migration: nicht_anwendbar
+rueckweg: nicht_anwendbar   # nichts veröffentlicht; Rückweg wäre `git revert 992d5d76`, acht Doku-Dateien
+smoke_test_plan: "Entfällt — reine Dokumentblätter, keine sichtbare oder betriebliche Wirkung."
+befunde: []
+```
+
+### Die Pflichtfrage der Sammel-Kontrolle — gezählt
+
+**Trägt der Messtisch JEDE Kriterienzeile?**
+
+```text
+Kriterien im Blatt (Abschnitt Akzeptanzkriterien)   12   (W-21/1-1 … -12)
+Zeilen im Votum-Messtisch                           12   (-1 -2 -3 -4 -5 -6 -7 -8 -9 -10 -11 -12)
+                                                    ->  12 von 12, lückenlos
+```
+
+**Der Evaluator führt die Zeilen ausdrücklich als Konsequenz aus dem W-04-Befund** — *„Nach dem
+§10-Befund gegen mein W-04-Votum (sieben von zehn Zeilen) führe ich hier jede Kriterienzeile
+einzeln, ohne Ausnahme."* **Und er führt auch die Zeilen mit der Antwort „keine"**, die genau die
+sind, die beim Überfliegen wegfallen: `-3` weist aus, dass `F-001` und `F-030` **nicht** im Code
+stehen, gegengeprüft über **alle fünf** Module (`hypot 0`, `Math.sqrt 0`) statt über eines.
+
+> *Das ist der Unterschied, den Kontrolle 1 sichtbar gemacht hat: ein Kriterium, dessen richtige
+> Antwort „keine" lautet, ist keine Zeile, die man weglassen darf — es ist die Zeile, an der man
+> sieht, ob gemessen oder vermutet wurde.*
+
+### Kette, Scope, Stichprobe
+
+```text
+Kette      dcf0071c (BEREIT) -> 9bd728fe (IN_ARBEIT) -> 992d5d76 (Bau)
+           -> 37cd8890 (CODE_FERTIG) -> e5b4c219 (ABGENOMMEN) -> HEAD
+           je git merge-base --is-ancestor, Exit 0                      5/5
+Basis      c9325929 -> 9bd728fe  Exit 0
+Scope      git show 992d5d76 --name-only: 8 Dateien = 7 Blätter + REGISTER.md
+           Pfade unter resources/ oder scripts/:                        0
+Votum-SHA  Votum nennt 992d5d76 = Bau-Commit                            deckungsgleich
+Blattstand git diff 992d5d76..HEAD -- W-21-sparren-und-lattung/         0 Dateien
+Ergebnis   Platzhalter über alle sieben Blätter                         0
+Register   Z.43 W-21 BESCHRIEBEN · Z.161-165 alle FÜNF Module mit Zeilen und Ausfuhren,
+           M-02 ausdrücklich als ungelesen geführt
+```
+
+**Zur Herkunft des `BEREIT`-Commits:** `dcf0071c` trägt eine Planner-Botschaft, weil die beiden
+`BEREIT`-Blöcke dort als unbenannter Beifang mitgesichert wurden. *Die Richtigstellung steht im
+Block selbst (`herkunft_w21_w22`) und bei `66fb2476`.* **Für die Kette ändert das nichts** — der
+Zustand ist an einem Commit festgeschrieben und der Commit ist Vorfahr des Baus; für die
+Statuswahrheit ist es der bekannte Bauart-Befund, der beim Planner liegt.
+
+**Urteil: `RELEASE_FREI`.** *Ohne Befund. Der Messtisch trägt seine zwölf Zeilen, der Bau-Commit
+trägt acht Doku-Dateien und keinen Produktivpfad, und das Blatt meldet seine eigene Lücke, statt
+sie zu glätten.*
