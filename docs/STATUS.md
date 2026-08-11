@@ -2372,3 +2372,52 @@ Rollen) entkräftet.*
 
 **Damit ist der Weg frei für Runde 2 der Klasse A: W-05, W-21, W-22** (alle drei ohne
 Registry-Werkzeug — der Schnitt gehört dem Planner, die DoR dem Plan-Prüfer).
+
+---
+
+## Befund des Evaluators — der Vertretungsentscheid zu Prozessprüfung 03 ist von §4 nicht gedeckt
+
+**Gemessen an `b9dc3c35`, nicht vermutet.** *Der Release-Prüfer hat E1, E2 und E3 „in Yamas Namen"
+angenommen. Die Prüfung selbst weist den Ball ausdrücklich Yama zu.*
+
+```text
+PROZESSPRUEFUNG-03.md Z.166      ballbesitz: yama
+b9dc3c35                          "… ANGENOMMEN in Yamas Namen; … Vertretung: Release-Pruefer"
+```
+
+**§4 Vertretungsregel, Wortlaut:**
+
+```text
+"Yama wird bei der VEROEFFENTLICHUNG staendig durch den Release-Pruefer vertreten.
+ … fuehrt in Yamas Namen ohne Einzelrueckfrage aus: Push von Arbeitszweigen, Merge
+ nach main, Tags und Deployments … AUSSCHLIESSLICH fuer Staende, die zuvor das Votum
+ RELEASE_FREI nach §10/§11 erhalten haben."
+```
+
+**Die Vertretung ist auf Veröffentlichung begrenzt und an `RELEASE_FREI` gebunden.** *E1, E2 und
+E3 sind kein Stand und keine Veröffentlichung — sie ändern **Kriterien in sechs W-Blättern**, eine
+**Meldepflicht vor `CODE_FERTIG`** und die **Zählweise** in §13.* **Das ist Prozessrecht, und
+Prozessrecht hat nach §1 nur eine Autorität: Yama.**
+
+```yaml
+fehlerklasse: SPEC
+befund: "Vertretung ueber die Veroeffentlichung hinaus auf Prozessentscheidungen ausgedehnt"
+gegenprobe: "§4-Wortlaut gegen den Entscheid · die Pruefung nennt selbst ballbesitz: yama ·
+  im Pruefdokument 1 Treffer fuer RELEASE_FREI/Push/Merge/Tag/Deployment, keiner davon ein Stand"
+ballbesitz: yama
+```
+
+**Was ich ausdrücklich NICHT sage:** dass die drei Entscheidungen falsch sind. *Sie sind sachlich
+gut, kosten wenig und stammen aus Realfällen — E1 hat der Generator selbst gefunden und gefahren.*
+**Der Befund betrifft die Zuständigkeit, nicht den Inhalt.** *Wer Prozessregeln in Vertretung
+setzen darf, hat eine Vollmacht, die im Regelwerk nicht steht — und §1 sagt, dass Regeln nur aus
+diesem einen Dokument entstehen.*
+
+> **Zweiter Fall derselben Bauart, gemessen:** `874d6331` hat die Statuswahrheit „in Vertretung
+> Yama" angeglichen — auf meine eigenen Befunde hin. *Auch das ist keine Veröffentlichung.*
+> **Ich habe davon profitiert und melde es trotzdem**, weil sonst die Grenze dort verläuft, wo
+> das Ergebnis gefällt.
+
+**Zwei Wege, beide bei Yama:** die Vertretungsregel ausdrücklich auf Prozessentscheidungen
+erweitern — dann ist beides gedeckt und künftige Fälle sind sauber. Oder sie so lassen und die
+zwei Entscheide von Yama bestätigen lassen. *Nicht entscheiden kann ich das; ich messe und melde.*
