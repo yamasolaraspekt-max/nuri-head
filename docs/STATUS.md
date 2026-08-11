@@ -2554,3 +2554,80 @@ diesem einen Dokument entstehen.*
 **Zwei Wege, beide bei Yama:** die Vertretungsregel ausdrücklich auf Prozessentscheidungen
 erweitern — dann ist beides gedeckt und künftige Fälle sind sauber. Oder sie so lassen und die
 zwei Entscheide von Yama bestätigen lassen. *Nicht entscheiden kann ich das; ich messe und melde.*
+
+---
+
+## Vertretungsentscheid (Release-Prüfer in Yamas Namen, 11.08.) — zwei Punkte, beide gemessen
+
+Yama hat beide Punkte ausdrücklich übergeben („kannst du mich in der hinsicht vertreten … und bitte
+hierfür eine lösung finden"). **Gemessen zuerst, entschieden danach.**
+
+### Punkt 1 — Der zweite Belegort ist NICHT leer; gemessen wurde die falsche Datei
+
+```text
+docs/auftraege/AUFTRAGSTAFEL.md   0 Auftragszeilen  <- diese Datei war gemeint und ist
+                                                       seit 04.08. NICHT VERBINDLICH
+                                                       (ihr eigener Kopf sagt es, Z.3)
+docs/STATUS.md                    13 Tafelzeilen
+                                  17 Zustandsfelder  <- BEIDE Orte liegen hier
+```
+
+**E2 ist erfüllbar und wird nicht geändert, sondern präzisiert.** Die zwei Orte sind **beide in
+`docs/STATUS.md`** — genau die Form, die die Generatoren real gefahren haben:
+
+```bash
+grep -cE '^\| \*\*[AW]-[0-9]+.*`IN_ARBEIT`' docs/STATUS.md   # Ort 1: Tafelzeile
+grep -c '^zustand: IN_ARBEIT' docs/STATUS.md                 # Ort 2: Zustandsfeld
+```
+
+*Die Verwechslung ist entschuldbar: die Sektion in `STATUS.md` heißt „AUFTRAGSTAFEL" und eine alte
+Datei heißt genauso. **Nicht der Melder hat falsch gemessen — der Name ist doppelt vergeben.***
+
+### Punkt 1b — der eigentliche Fund: ein ungekennzeichneter Alt-Träger
+
+`docs/auftraege/AUFTRAGSTAFEL.md` **ist** sauber gekennzeichnet („NICHT MEHR VERBINDLICH SEIT
+04.08."). **`docs/AKTUELLER_AUFTRAG.yaml` war es nicht** — 41 Zeilen, `regel_version: "1.3"`,
+Stand 04.08., ohne jeden Hinweis, und unter Fassung 1.3 **war** sie der benannte Statusträger.
+*Dieselbe Klasse wie `ENTSCHEIDUNG-KONSISTENZ.md` (Evaluator `a99547b1`): eine Datei ohne
+Autorität, die aussieht wie eine mit.* **Kopf-Hinweis gesetzt, Inhalt erhalten** (Archivregel).
+Sie liegt nur auf der Linie, nicht im Arbeitsbaum der Rollen — kam mit dem v1.3-Merge.
+
+### Punkt 2 — `auswechslung.ts` gehört zu W-21, und W-22 heißt zu eng
+
+**Gemessen, nicht nach Namen zugeordnet** (die Lehre aus den drei Falschzuordnungen des Planners):
+
+```text
+auswechslung.ts        174 Z · 5 Exporte
+  export function sparrenPositionenU(breiteM, rafterDistM, rafterWidthM)   <- SPARREN
+  export function analysiereAuswechslung(...)
+  interfaces: FlaecheMasse · Oeffnung · AuswechslungAnalyse
+```
+
+**ENTSCHEIDUNG: `auswechslung.ts` gehört zu W-21 (Sparren).** *Fachlich: die Auswechslung IST ein
+Bauteil des Dachstuhls — ein Wechsel fängt die Sparren ab, die eine Öffnung unterbricht. Die Gaube
+ist der **Anlass**, der Wechsel die **Antwort im Tragwerk**. Der Code belegt es selbst: dieselbe
+Datei rechnet `sparrenPositionenU`.* **W-22 nennt sie als Nachbar mit Verweis, nicht als Inhalt.**
+
+**ENTSCHEIDUNG: W-22 wird von „Gaube" auf „Dachaufbauten" erweitert, mit der Gaube als erstem und
+derzeit einzigem ausgebauten Fall.**
+
+```text
+aufbautenStatus.ts      52 Z ·  5 Exporte
+aufbauOrientierung.ts   61 Z ·  4 Exporte     drei Module heissen im CODE "Aufbau",
+aufbauPlatzierung.ts   190 Z · 13 Exporte     nicht "Gaube" — sie tragen Dachfenster,
+gaubeGeometrie.ts      498 Z                  Schornstein, Sat gleichermassen
+auswechslung.ts        174 Z  -> W-21         (975 Z gesamt, Melderzahl bestaetigt)
+```
+
+*Begründung: **ein Werkbank-Name, der enger ist als der Code, erzeugt genau die Falschzuordnung,
+die diesen Rollen schon dreimal passiert ist.** „Gaube" als Werkzeugname zwingt vier allgemeine
+Module unter einen Sonderfall.*
+
+**Einarbeitung ins REGISTER: Planner/Generator im Zuge von W-21/W-22 — nicht von mir.** *Ich
+entscheide in Vertretung, ich baue nicht; und `REGISTER.md` ist Scope laufender W-Aufträge.*
+
+### Was NICHT entschieden ist und bei Yama bleibt
+
+Die **Reichweitenfrage der Werkbank** (TGA, PV, Sanitär, Küche — begrenzt oder unvollständig)
+bleibt offen. *Punkt 2 ist innerhalb der unstrittigen Architektur-/Rohbau-Domäne entschieden und
+greift ihr nicht vor.*
