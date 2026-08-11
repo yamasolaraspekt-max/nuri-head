@@ -473,3 +473,358 @@ offene_akzeptanz:
   - "A-12-4: die Ampel selbst ist nicht gesetzt — das ist so gewollt (Evaluator bestätigt, Planner trägt ein)."
 ```
 
+---
+
+# Evaluator-Votum A-12 — 2026-08-11
+
+```yaml
+rolle: evaluator (frische Instanz, Claim claim_abnahme_a12)
+geprueft_an: 752174d1        # Pruef-SHA laut STATUS-Block; der Bericht traegt dort 475 Zeilen
+bericht_commits: "92310844 (424 Z.) · 752174d1 (+53 Z.: E1-Messung + §11-Kurzstand)"
+mess_sha_des_generators: 239a163e
+eigener_mess_sha: 5656ea3b   # HEAD zum Zeitpunkt meiner Nachmessung
+gesamturteil: ABGENOMMEN
+ampel: "🟢 BESTAETIGT — gebunden an die Wortlaut-Korrektur (siehe Abschnitt E-4)"
+```
+
+**Art der Prüfung:** Dies ist ein MESSAUFTRAG (Muster A-05). Ich habe **nicht** geprüft, ob etwas
+funktioniert, sondern ob die Messungen **echt und nachvollziehbar** sind. Dazu habe ich die
+Kernmessungen **selbst nachgefahren** — mit einem eigenen Skript außerhalb des Repos
+(`…/scratchpad/evalA12.mjs` und `evalA12b.ts`, nichts unter `resources/**` oder `scripts/**`),
+eigenem Zeilenschnitt per **expliziter Zeilennummer** statt per Startmarke und **eigenen**
+aufzeichnenden Attrappen. Meine Rohausgaben tragen das Präfix `EVAL|`, die des Berichts `A12|`.
+
+---
+
+## E-1. KERN-REPRODUKTION A-12-1 — die sechs Punkte, unabhängig nachgefahren
+
+Zuerst die Schnittgrenzen, die der Bericht behauptet (`:95–121`, `:774–928`) — an der Quelle geprüft:
+
+```text
+EVAL| Kopfzeile 95  = "function buildTopologyPolygon(build: BuildingParams): TopologyPoint[] {"
+EVAL| Kopfzeile 774 = "    buildCompoundPitchedFaces(p: BuildingParams, mat: THREE.Material, type: 'L' | 'T') {"
+EVAL| Endzeile  121 = "}"
+EVAL| Endzeile  928 = "    }"
+$ wc -lc dachdecker_pro_3d.tsx   ->  2173  132374     (Blattangabe aufs Byte)
+```
+
+*Der Bericht präzisiert die Blattangabe `:101–131` auf die tatsächlichen Funktionsgrenzen `:95–121`
+und benennt beide l-shape-Zweige einzeln (`:101–106` flat, `:107–112` pitched). **Das ist korrekt**
+— ich habe die Zweige an der Quelle gelesen.*
+
+**Meine eigene Rohausgabe, gegen Bericht 1a/1b/1c gestellt:**
+
+```text
+EVAL| 1 KONTUR flat: [{"x":-6,"y":-4},{"x":6,"y":-4},{"x":6,"y":0},{"x":-2,"y":0},{"x":-2,"y":4},{"x":-6,"y":4}]
+EVAL| 1 PRUEF  flat: punkte=6 doppelte=0 flaeche=64 selbstschnitte=0 einspringend=[{"i":3,"p":{"x":-2,"y":0}}]
+EVAL| 1 KONTUR pitched: [{"x":-6,"y":-4},{"x":6,"y":-4},{"x":6,"y":0},{"x":2,"y":0},{"x":2,"y":8},{"x":-6,"y":8}]
+EVAL| 1 PRUEF  pitched: punkte=6 doppelte=0 flaeche=112 selbstschnitte=0 einspringend=[{"i":3,"p":{"x":2,"y":0}}]
+EVAL| 1 GRENZ WB=8  flat:    [...{"x":-2,"y":4},{"x":-2,"y":4}...] doppelte=1 selbstschnitte=0 einspringend=0
+EVAL| 1 GRENZ WB=8  pitched: [{"x":-6,"y":-4},{"x":6,"y":-4},{"x":6,"y":0},{"x":-2,"y":0},{"x":-2,"y":8},{"x":-6,"y":8}] doppelte=0 selbstschnitte=0 einspringend=1
+EVAL| 1 GRENZ WB=10 flat:    [...] doppelte=0 selbstschnitte=0 einspringend=1
+EVAL| 1 GRENZ WB=10 pitched: [...{"x":-4,"y":0},{"x":-4,"y":8}...] doppelte=0 selbstschnitte=0 einspringend=1
+```
+
+**Deckungsgleich mit 1a/1b/1c/1f/1g — Punkt für Punkt, Zahl für Zahl, einschließlich beider
+Grenzfälle.** Auch der Befund A-12-1/a ist unabhängig belegt: 64 m² gegen 112 m² bei identischer
+Eingabe; `flat` schneidet den Anbau heraus, `pitched` setzt ihn an. Zwei Gebäude, nicht zwei
+Schreibweisen — die Kantenlisten-Auflage „beide nennen, keine wählen" ist eingehalten.
+
+---
+
+## E-2. Attrappen-Regel — die Kern-Auflage des Blatts, gegengelesen UND gegengebaut
+
+Die Probe ist gelöscht (richtig so), aber vom Generator außerhalb des Repos gesichert. Ich habe sie
+**gelesen** und die sechs Attrappen einzeln geprüft:
+
+```text
+mats                    { wood: 'MAT_WOOD' }                 -> Konstante
+gRafters.add            (b) => b                             -> reicht durch
+gVisualTiles.add        () => { auf.tiles++ }                -> zaehlt
+createBeam              push({name, typ, posY}) ; return {name, typ}   -> legt ab
+drawBeamBetweenPoints   push({name, typ, von, bis})          -> legt ab
+buildRoofFace           push({id, origin, uMax, vMax, poly}) -> legt ab
+```
+
+**Keine Attrappe rechnet.** Die einzige Zahlenberührung ist `r3()` — Rundung auf drei Stellen für
+die Ausgabe, keine Ableitung. Die Weg-2-Kontrolle (2e) rechnet zwar, steht aber **außerhalb** der
+Attrappen im Testkörper — genau das ist Weg 2, sie darf es.
+
+**Gegengelesen genügt mir hier nicht.** Ich habe `buildCompoundPitchedFaces` mit **meinen eigenen,
+neu geschriebenen** Attrappen laufen lassen. Wenn eine fremde Attrappe gerechnet hätte, müssten
+meine Zahlen abweichen:
+
+```text
+EVAL| 2 FLAECHEN (4): [{"id":"main_N","origin":[6.5,2.331,-4.5],"uMax":13,"vMax":5.493,"poly":[[0,0],[13,0],[13,5.493],[0,5.493]]},
+ {"id":"main_S","origin":[-6.5,2.331,4.5],"uMax":13,"vMax":5.493,"poly":[[0,5.493],[0,0],[8,0],[10.5,3.052],[13,0],[13,5.493]]},
+ {"id":"ext_W","origin":[1.5,2.331,2],"uMax":6.5,"vMax":3.052,"poly":[[0,3.052],[2.5,0],[6.5,0],[6.5,3.052]]},
+ {"id":"ext_E","origin":[6.5,2.331,8.5],"uMax":6.5,"vMax":3.052,"poly":[[0,0],[4,0],[6.5,3.052],[0,3.052]]}]
+EVAL| 2 BALKEN (7): Fußpfette Nord/Süd Links/Süd Rechts/Anbau West/Anbau Ost (posY=2.57) ·
+     Firstpfette Main (5.412) · Firstpfette Anbau (4.011)   [typ 'pfette']
+EVAL| 2 LINIEN (2): [{"name":"Kehlsparren Links","typ":"kehlsparren","von":[1.5,2.29,4.5],"bis":[4,4.04,2]},
+                     {"name":"Gratsparren Rechts","typ":"gratsparren","von":[6.5,2.29,4.5],"bis":[4,4.04,2]}]
+EVAL| 2 Firstkappen: 2
+EVAL| 2 Shoelace-Summe der 4 poly: 167.234 m2
+EVAL| 2 GRENZ WB=8: faces=4 main_S-poly=[[0,5.493],[0,0],[4,0],[8.5,5.493],[13,0],[13,5.493]]
+```
+
+**Identisch mit 2a/2b/2c/2d/2f und 3f — bis auf die letzte Stelle.** Die Zahlen stammen aus
+`:774–928`, nicht aus dem Gerüst. *Das ist die wirksame Gegenprobe nach §9: ein anderes Gerüst,
+dieselben Zahlen.*
+
+---
+
+## E-3. Stichprobe A-12-3 — die Insel-Seite selbst gefahren
+
+Nicht eine Zahl, sondern der ganze Vergleichsblock, mit Repo-Code an `5656ea3b`:
+
+```text
+EVAL| 3 INSEL verschneidungsFlaechen: 4 — main_N "Hauptdach Nord" · main_S "Hauptdach Süd" ·
+     ext_W "Anbau West" · ext_E "Anbau Ost"  (uMax/vMax/poly identisch zu 2 FLAECHEN oben)
+EVAL| 3 INSEL verschneidungslinien: [{"art":"kehle","seite":"links","laenge3D":3.945,"neigungGrad":26.341,"pruefpflichtig":false},
+                                     {"art":"grat","seite":"rechts","laenge3D":3.945,"neigungGrad":26.341,"pruefpflichtig":false}]
+EVAL| 3 INSEL dachMeshWelt: dreiecke=10 firstHoeheMm=5482 flaechensummeM2=167.246
+EVAL| 3 INSEL dachflaechen: 0
+EVAL| 3 INSEL dachGeometrie.dachFlaechen WIRFT: Traufkontur ist nicht rechteckig — V1 unterstützt nur rechteckige Grundrisse (kein stilles Falschdach).
+EVAL| 3 GRENZE WB=8: lTBauGueltig=false flaechen=0 pruefpflichtig=[true,true]
+```
+
+**Deckungsgleich mit 3a/3c/3e/3g/3h/3i/3j.** Die Behauptung **`maxAbweichung = 0`** (3b) habe ich
+nicht nachgelesen, sondern **nachgebaut**: meine Insel-Polygone und meine Fremdcode-Polygone sind
+punktweise dieselben Zahlenreihen (oben untereinander lesbar). *Der Vergleich trägt.*
+
+Auch die Erklärung dafür trifft zu — ich habe die zitierten Stellen gelesen:
+`dachVerschneidung.ts:3` („Spiegelt EXAKT die Engine-Konstanten … (SSOT)"), `:139` („Byte-treue
+Spiegelung … (Z.1170 ff.)"), Anlage-Commit `588283df` (23.07.), Anschluss `dachMesh.ts:17` /
+`:152–155` / `:215–217`, Testzahlen 11 / 6 / 6. **Alle sechs Angaben stimmen.**
+
+---
+
+## E-4. AMPEL — trägt der Vorschlag 🟢 an den eigenen Rohausgaben?
+
+Das Blatt sagt: *„🟢 wenn ein L-Dach mit benannten Flächen herauskommt."* Die vier Elemente, an denen
+das zu messen ist — **an MEINER Rohausgabe aus E-2**, nicht an der des Generators:
+
+| verlangt | in meiner eigenen Messung | |
+|---|---|---|
+| vier Flächen | `main_N`, `main_S`, `ext_W`, `ext_E` | **ja** |
+| zwei Firstlinien | `Firstpfette Main` (5.412), `Firstpfette Anbau` (4.011), Quelle `:872`/`:883` | **ja** |
+| benannte Kehle | `Kehlsparren Links`, typ `kehlsparren`, Quelle `:861` | **ja** |
+| benannter Grat | `Gratsparren Rechts`, typ `gratsparren`, Quelle `:868` | **ja** |
+
+**Der Vorschlag wird von den Rohausgaben getragen. 🟢 BESTÄTIGT.**
+
+**Und die Korrektur schränkt die Aussage tatsächlich ein — ich habe sie eigenständig nachgemessen:**
+
+```text
+$ awk 'NR>=774 && NR<=928' dachdecker_pro_3d.tsx | grep -cE "buildTopologyPolygon|getDefaultEdgeTopologyConfigs|analyzeTopology|edgeConfig|TopologyPoint"
+0
+$ grep -n "analyzeTopology\|buildTopologyPolygon\|getDefaultEdgeTopologyConfigs" dachdecker_pro_3d.tsx
+95: 123: 134:      (Definitionen)
+1496: 1558: 1560: 1706:   (ALLE Aufrufe in der React-Komponente)
+$ sed -n '807p'  ->  let cx = type === 'T' ? 0 : L/2 - W_b/2;      (= +4 -> Anbau rechts)
+```
+
+Dazu die im Bericht **zitierte, aber nicht abgedruckte** Rohausgabe `1d` — ich habe sie selbst
+erzeugt (Nebenbefund E-6/1):
+
+```text
+EVAL| 1d analyzeTopology flat:    innen=1 aussen=5 grate=5 kehlen=1 ortgaenge=0 typen=[TRAUFE ×6]
+EVAL| 1d analyzeTopology pitched: innen=1 aussen=5 grate=5 kehlen=1 ortgaenge=0 typen=[TRAUFE ×6]
+```
+
+Und die beiden Blattstellen, auf die sich die Korrektur bezieht, stehen wörtlich so da:
+`FORMELSAMMLUNG.md:352–364` (die sechs Schritte, Schritt 6 „Flächen aus den typisierten Kanten
+aufbauen"), `:377` („Grat/Kehle/Ortgang benannt | … | **fertig benannt**"),
+`getDefaultEdgeTopologyConfigs :127–130` kennt `pult/walm/sattel/flat` und **kein** `l-shape`,
+`:131` gibt pauschal `TRAUFE` zurück.
+
+> **Mein Votum zur Reichweite des Grüns — ausdrücklich, weil hier der Nutzen der Ampel liegt:**
+>
+> 🟢 gilt **nur** für die Bedingung, die die Sperre wörtlich nennt: *„bis ein L-Grundriss gerechnet
+> und das Ergebnis gesehen wurde"*. Sie ist erfüllt, doppelt gerechnet, doppelt gesehen.
+>
+> 🟢 gilt **nicht** für die Verfahrensbeschreibung in `:352–364`. Gemessen läuft **kein**
+> Kantentopologie-Verfahren, sondern fest verdrahtete Parametergeometrie für L und T. Die
+> Topologie-Kette ist UI-Anzeige (0 Aufrufe im Flächenteil, alle vier Aufrufe in der React-Schicht),
+> sie kennt für `l-shape` keine Kantentypen und liefert mit `grate=5, kehlen=1` eine Zählung, die
+> das **tatsächlich gebaute** Dach (1 Kehle, 1 Grat) nicht beschreibt. Kontur und gebaute Geometrie
+> legen den Schenkel sogar auf **entgegengesetzte Seiten** (x ∈ [−6, 2] gegen `cx = +4`).
+>
+> **Darum ist die Ampel nur zusammen mit der Wortlaut-Korrektur einzutragen.** Ein 🟢 ohne sie
+> erlaubt genau die Zitierung, die die Ampel verhindern sollte: einen Auftrag, der sich auf ein
+> sechsschrittiges Verfahren beruft, das der Code nicht ausführt. *Das ist dieselbe Klasse
+> unbelegter Machbarkeitsaussage, an der Z-07 gescheitert ist — nur eine Ebene höher.*
+
+Dass `FORMELSAMMLUNG.md` weiterhin 🟡 trägt (`:302`, `:350` — selbst nachgemessen) und der Generator
+sie **nicht** gesetzt hat, ist **blattkonform** (A-12-4) und kein offener Punkt: der Planner trägt
+sie ein. Ebenso richtig ist, `VORGEHEN.md` unberührt zu lassen (Abschnitt 7 des Berichts) — ein
+„Schritt 3 erledigt" vor der Abnahme wäre eine zweite Statuswahrheit gegen §16.
+
+---
+
+## E-5. A-12-5 `must_preserve` — alle drei Richtungen EINZELN, plus Wegwerf-Probe
+
+*Stehende Auflage des Plan-Prüfers nach Befund `23839610`: eine Einweg-Messung erfüllt das Kriterium
+nicht. Ich habe darum sechs Messungen gefahren, nicht zwei.*
+
+```text
+$ git diff --name-only HEAD -- resources/                    -> (leer)   geaendert   0
+$ git diff --name-only HEAD -- scripts/                      -> (leer)   geaendert   0
+$ git ls-files --others --exclude-standard -- resources/     -> (leer)   hinzugefuegt 0
+$ git ls-files --others --exclude-standard -- scripts/       -> (leer)   hinzugefuegt 0
+$ git diff --diff-filter=D --name-only HEAD -- resources/    -> (leer)   entfernt    0
+$ git diff --diff-filter=D --name-only HEAD -- scripts/      -> (leer)   entfernt    0
+```
+
+**Wegwerf-Probe — beide Nachweise, nicht einer:**
+
+```text
+$ ls resources/planner/hausplaner/__tests__/ | grep -i "zz\|wegwerf\|a12"   -> exit 1, kein Treffer
+$ git log --all --oneline -- '*zzA12wegwerf*' | wc -l                       -> 0
+$ find . -name "dachdecker_pro*" -not -path "./node_modules/*"              -> (leer)
+```
+
+**Insel-Suite selbst gefahren, nicht abgeschrieben:**
+
+```text
+$ npm run test:hausplaner
+ℹ tests 1692 · suites 0 · pass 1692 · fail 0 · cancelled 0 · skipped 0 · todo 0 · duration_ms 2329.98
+$ npm run schema:hausplaner:check   -> pass
+```
+
+**Die fünf gemessenen Insel-Dateien content-identisch zu HEAD** (der Bericht druckt die Schleife in
+Abschnitt 1 mit einer unaufgelösten Variable `$pfad` ab — die Aussage habe ich darum selbst neu
+gefahren, Nebenbefund E-6/3):
+
+```text
+geometry/dachVerschneidung.ts   IDENTISCH      renderers/three-d/dachMesh.ts  IDENTISCH
+geometry/dachGeometrie.ts       IDENTISCH      domain/scene.types.ts          IDENTISCH
+geometry/dachUForm.ts           IDENTISCH
+$ git diff --name-only 3e7e19d6..752174d1 -- resources/ | wc -l   -> 0
+```
+
+**Nicht-Ziele, einzeln geprüft:**
+
+```text
+kein Fremdcode ins Repo kopiert   BELEGT — keine Kopie der Datei (find leer); die 10 Treffer auf
+                                  'buildCompoundPitchedFaces' in resources/ stammen saemtlich aus
+                                  den Port-Commits vom Juli (588283df/f0d02f45), nicht aus A-12
+keine Wegentscheidung getroffen   BELEGT — Abschnitt 4.2 stellt nebeneinander und sagt woertlich
+                                  "die Wegentscheidung gehoert dem Planner"
+nichts zu F-050/F-051             BELEGT — ein einziger Treffer im ganzen Bericht (Z.417) und der
+                                  lautet "Keine Aussage zu F-050/F-051 — Nicht-Ziel, unberuehrt"
+kein L-Dach in der Insel gebaut   BELEGT — resources/ in allen drei Richtungen 0
+Scope sauber                      BELEGT — git diff --name-only 239a163e..752174d1 -- resources/ scripts/
+                                  -> 0; im Diff nur BERICHT + STATUS + ein fremdes Planner-Blatt (W-21)
+```
+
+---
+
+## E-6. Nebenbefunde — dokumentiert, KEIN Rot, von mir selbst geschlossen
+
+1. **`(Rohausgabe 1d)` verweist auf eine Rohausgabe, die der Bericht nicht abdruckt.** Abschnitt 6
+   zitiert `grate=5, kehlen=1, ortgaenge=0` als „Rohausgabe 1d"; Abschnitt 2 druckt nur 1a/1b/1c/1f/1g.
+   Die Probe erzeugte `1d`/`1e`, der Bericht hat sie nicht übernommen. **Die Zahl ist richtig** — ich
+   habe sie in E-4 selbst erzeugt und damit die Lücke geschlossen. *Kein A-12-6-Verstoß: die Zahl
+   trägt ihre Fundstelle (`:127–131`); es fehlt der interne Rückverweis, nicht die Herkunft.*
+2. **Abschnitt 9 nennt „Prüf-SHA für den Evaluator: `92310844`".** Der tragende Commit ist
+   `752174d1` — der Commit, der Abschnitt 9 selbst hinzugefügt hat. Der STATUS-Block führt
+   `pruef_sha: 752174d1` korrekt; ich habe an `752174d1` geprüft.
+3. **Abschnitt 1 druckt eine Schleife mit unaufgelöster Variable `$pfad`** — so nicht lauffähig. Die
+   Aussage (fünf Dateien identisch) trifft dennoch zu, von mir neu gemessen (E-5).
+4. Die Streudateien `1692` und `zz-unlink-probe` im Wurzelverzeichnis liegen weiter da. Sie stammen
+   aus **fremden** Vorgängen (`239a163e` bzw. A-08), der Generator hat sie zu Recht gemeldet statt
+   angefasst (§14: kein destruktives Bereinigen eines fremden Arbeitsbaums). **Nicht A-12 anzulasten.**
+
+*Alle vier sind Genauigkeitsmängel an der Darstellung, keiner berührt einen Messwert. Nach §12.1
+wäre die Klasse `BEWEIS`; da ich jeden betroffenen Wert selbst erzeugt habe, ist kein Nachweis mehr
+geschuldet. Kein P0/P1 offen.*
+
+---
+
+## E-7. Urteil je Kriterium
+
+| Kriterium | Urteil | tragender Beleg |
+|---|---|---|
+| **A-12-1** Konturen | **ERFÜLLT** | Maße genannt (L=12 W=8 WB=4 LB=4, 35°, oh=0,5, h=2,5); sechs Punkte als Rohausgabe für **beide** Varianten; geschlossen / 0 Selbstschnitte / genau 1 einspringende Ecke — **von mir Punkt für Punkt reproduziert** (E-1), Grenzfälle WB=8 und WB=10 eingeschlossen |
+| **A-12-2** Flächen | **ERFÜLLT** | Weg 1 gewählt **mit** Begründung an der Sache (die Sperre fragt nach dem Lauf, nicht nach der Arithmetik); Ergebnis roh; Weg 2 zusätzlich als Gegenprobe. Attrappen zeichnen **nur auf** — gegengelesen **und** mit eigenem Gerüst gegengebaut, identische Zahlen (E-2) |
+| **A-12-3** Vergleich | **ERFÜLLT** | Insel und F-026 nebeneinander mit Flächenzahl (4/4), First-/Grat-/Kehllinien und Kantentypen; `maxAbweichung=0` **nachgebaut, nicht nachgelesen** (E-3); Ursache am Port-Commit belegt |
+| **A-12-4** Ampel-Vorschlag | **ERFÜLLT** | 🟢 **vorgeschlagen, nicht gesetzt**; an den eigenen Rohausgaben begründet; `FORMELSAMMLUNG` trägt unverändert 🟡 (`:302`/`:350`) — blattkonform |
+| **A-12-5** `must_preserve` | **ERFÜLLT** | `resources/` und `scripts/` in **allen drei Richtungen einzeln** 0/0/0 (sechs Messungen); Probe weg und in keinem Commit; Suite **selbst gefahren: 1692/1692**; Schema pass |
+| **A-12-6** Herkunft | **ERFÜLLT** | Stichproben an der Quelle: `:807 cx`, `:861`/`:868`, `:872`/`:883`, `:127–131`, `:352–364`, `:377`, `2173 Z./132.374 B`, `this.`-Zählung 10/10/7/5/3/2, `THREE.`=67 — **alle bestätigt**; ein Rückverweis dokumentiert unvollständig (E-6/1), Herkunft dennoch vorhanden |
+| **Nicht-Ziele** | **GEWAHRT** | kein Fremdcode kopiert · keine Wegentscheidung · nichts zu F-050/F-051 · kein L-Dach gebaut (E-5) |
+
+**§9 im Einzelnen:** Prüfung auf dem gemeldeten Commit ✓ · Scope sauber ✓ · alle anwendbaren
+Kriterien erfüllt ✓ · anwendbares Tor grün (Unit 1692/1692, Schema pass; Browser/Build/Backend
+mangels Produktivcode nicht anwendbar) ✓ · **wirksame Gegenprobe** ✓ (eigenes Gerüst, eigene
+Instrumente, eigener Zeilenschnitt) · keine offene P0/P1-Abweichung ✓ · keine Restarbeit, die zur
+Aufgabe gehört ✓.
+
+---
+
+## E-8. GESAMTURTEIL: **ABGENOMMEN**
+
+**Die Messungen sind echt.** Jede Kernzahl, die ich unabhängig nachgefahren habe — sechs
+Konturpunkte in beiden Varianten, vier Flächenpolygone, sieben Pfetten, zwei Sparrenlinien,
+Flächensumme, beide Grenzfälle, die komplette Insel-Seite — kam **bis auf die letzte Stelle**
+identisch heraus, mit eigenem Gerüst und eigenen Instrumenten. Jede Fundstelle, die ich stichprobenhaft
+gegen die Quelle gehalten habe, stimmt. Der Bericht behauptet nichts, was er nicht zeigt.
+
+**Zwei Dinge hebe ich hervor**, weil sie über die Erfüllung hinausgehen: der Generator hat die
+Messinstrumente **bewusst nicht** dem Fremdcode entnommen (sonst hätte der Code sich selbst geprüft)
+— und er hat den Befund gemeldet, der seinen eigenen grünen Vorschlag **einschränkt**, statt ihn
+wegzulassen. *Das ist der Unterschied zwischen einer Messung und einer Bestätigung.*
+
+**Ampel: 🟢 BESTÄTIGT**, gebunden an die Wortlaut-Korrektur aus E-4. Der Planner trägt sie ein.
+
+**Ball: PLANNER.** Ein Messauftrag erzeugt keinen Release-Kandidaten — es gibt keinen Produktivcode
+zu veröffentlichen. Offen für den Planner: (1) 🟢 in `FORMELSAMMLUNG.md` eintragen, (2) die
+Verfahrensbeschreibung `:352–364` und die Vergleichszeile `:377` berichtigen, (3) `VORGEHEN.md`
+Schritt 3 als erledigt führen, (4) die Wegentscheidung zur Dachkonstruktion treffen — wofür der
+Vergleich in Abschnitt 4 jetzt die belegte Grundlage liefert.
+
+---
+
+## E-9. Nachtrag beim Sichern: DOPPEL-LAUNCH der Evaluator-Station — offengelegt
+
+*Ich habe das erst beim Commit bemerkt und schreibe es hierher, statt es zu glätten.*
+
+**A-12 ist von zwei Evaluator-Instanzen parallel abgenommen worden.** Instanz A claimte im
+STATUS-Feld `claim_abnahme` (`19d8855b`) und lieferte `171baafe`; ich wurde vom Plan-Prüfer im Feld
+`claim_abnahme_a12` (`6cd4a2b0`) besetzt und arbeitete zeitgleich. Aufgefallen ist es, weil
+`171baafe` meine bereits geschriebenen, noch ungesicherten STATUS-Zeilen als **Beifang**
+mitgenommen hat — dieselbe Klasse wie `58342f47` / `4307987b`.
+
+**Inhaltlich gibt es keinen Widerspruch.** Beide Instanzen kommen **unabhängig** auf `ABGENOMMEN`
+und bestätigen **🟢 gebunden an die Wortlaut-Korrektur**. Instanz A legt ihr Votum ins Auftragsblatt,
+ich meines hierher; beide bleiben stehen. Ihren `claim_abnahme` und ihr `evaluator_votum` habe ich
+**nicht angefasst** (B5: fremder Inhalt in geteilter Datei).
+
+**Die Messungen ergänzen sich, sie doppeln sich nicht:**
+
+```text
+Instanz A   Insel-Seite nachgerechnet (dreiecke 10 · firstHoeheMm 5482 · 167,246 m2 aus den zehn
+            Dreiecken selbst gerechnet · dachflaechen 0 · der Wurf) — 5 von 5 deckungsgleich.
+            Dazu die vorbildliche Offenlegung eines EIGENEN Aufbaufehlers (pitchDeg statt
+            neigungGrad): sie haette beinahe einen fehlerfreien Bericht als falsch gemeldet.
+Instanz B   zusaetzlich A-12-1 Punkt fuer Punkt (beide Varianten, beide Grenzfaelle), den
+(ich)       Fremdcode-Flaechenlauf :774-928 mit EIGENEN Attrappen, die Attrappen-Regel selbst
+            (gelesen UND gegengebaut), must_preserve in allen drei Richtungen, Suite und
+            Schema selbst gefahren, alle Fundstellen an der Quelle.
+```
+
+**Eine einzige Zeile habe ich korrigiert, und ich sage es laut:** `ballbesitz` stand auf
+`release-pruefer`. Ein Messauftrag liefert nur einen Bericht — es gibt keinen Release-Kandidaten,
+kein Bundle, keine Migration, nichts, was §10 prüfen könnte; der Rückweg des Blatts sagt wörtlich
+*„ein Bericht und zwei Ampel-/Statuszeilen — `git revert` genügt"*. Wäre der Ball beim
+Release-Prüfer geblieben, hätte die einzige echte Folgehandlung — Ampel eintragen, Verfahrenswortlaut
+berichtigen, Weg entscheiden — **keinen Eigentümer** gehabt.
+
+> **Der Prozessbefund bleibt stehen, unabhängig davon, dass es gut ausging:** in **einem** Block
+> standen **zwei** Claim-Felder (`claim_abnahme`, `claim_abnahme_a12`), und die Doppelbesetzung ist
+> trotzdem passiert — weil keine Instanz das Feld der anderen gelesen hat. Ein Claim schützt nur,
+> wenn er an **einem** verabredeten Ort steht und **vor** dem Start gelesen wird. *Das ist ein
+> Befund für den Planner, nicht für den Generator: hier hat der Prozess doppelt bezahlt, nicht der
+> Bau.*
+
