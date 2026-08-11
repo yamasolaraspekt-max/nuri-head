@@ -1549,6 +1549,17 @@ zwei_nebenbefunde_uebernommen: "(1) Die drei Tafelzeilen standen auf CODE_FERTIG
 ```
 ---
 
+## W-21/1 CODE_FERTIG — Meldepflichten bestaetigt, plus ein BEINAHE-FEHLBEFUND von mir (plan-pruefer 12.08.)
+
+```yaml
+ballwechsel_bestaetigt: "Kette 9bd728fe (IN_ARBEIT, §3-Beleg an beiden Orten) -> 992d5d76 (Bau, exakt 8 Dateien = sieben Blaetter + REGISTER) -> 37cd8890 (CODE_FERTIG, 12/12). Ball beim EVALUATOR."
+mein_beinahe_fehlbefund: "Ich hatte gemessen 'Punkt2D kommt in KEINEM der sieben Blaetter vor' und war im Begriff, das als verlorene Zulieferung zu melden. FALSCH — mein Glob-Muster W-21*/*.md erfasst keine UNTERORDNER, und 5-CODE/LIESMICH.md liegt in einem. Gerettet hat mich nur, dass ich weitergemessen habe (die Kriterien-Pruefung), statt sofort zu melden. Das ist woertlich die Klasse, die ich anderen vorhalte: eine Messung, die nicht misst, was sie zu messen vorgibt — beim Generator hiess sie heute 'sed-Bereichsgrenze lief in den Nachbar-Katalog', bei mir heisst sie 'Glob ohne Rekursion'. Korrekt gemessen (grep -r) liegt der Fall anders und ist HALB gut."
+was_wirklich_gemessen_ist: "ANGEKOMMEN: die Exportliste in 5-CODE/LIESMICH.md nennt ALLE NEUN Exporte von schifterListe.ts, Punkt2D (28) eingeschlossen — die Zahl im Blatt ist also im Bau korrigiert worden. NICHT ANGEKOMMEN: der eigentliche Befund. Die VIERFACHE identische Definition (polygonFlaeche:19, dachUForm:13, dachVerschneidung:144, schifterListe:28) und die Gefahr der stummen Divergenz stehen NIRGENDS in den sieben Blaettern — 7-GRENZEN nennt Punkt2D 0 mal, kein Blatt nennt die drei Nachbarmodule. OFFEN GEBLIEBEN ist damit auch die Inkonsistenz im Auftragsblatt selbst: sein Ist-Zustand fuehrt schifterListe weiter mit '8 Exporte' (Z.34), waehrend das gebaute 5-CODE neun listet."
+gewuerdigt: "Der Generator hat die KLASSE selbst gefunden und angewandt, ohne meinen Fall zu kennen: 'HolzStueckRef gibt es ZWEIMAL — schifterListe.ts:134 und holzBauteile.ts:22', mit derselben Begruendung (kein Import verbindet sie). Er hat also nicht die Erkenntnis verfehlt, sondern eine ZWEITE derselben Art beigetragen. Das ist der Grund, warum ich das nicht als Versaeumnis fuehre, sondern als Luecke."
+pruefhinweis_evaluator: "Zwei Punkte fuer die Abnahme, beide als HINWEIS und nicht als Blocker (kein Kriterium verlangt sie ausdruecklich): (1) die vierfache Punkt2D-Definition gehoert fachlich in 7-GRENZEN, wo W-11 die zweifache MassPunkt-Doppelung vorbildlich behandelt hat — dieselbe Regel: benennen, nicht zusammenlegen; (2) das Auftragsblatt widerspricht dem gebauten Blatt in der Exportzahl (8 gegen 9) — die Korrektur des Ist-Zustands gehoert dem Planner, nicht dem Bau."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
