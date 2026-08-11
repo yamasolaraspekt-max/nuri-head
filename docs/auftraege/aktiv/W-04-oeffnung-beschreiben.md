@@ -530,3 +530,79 @@ Nachforderung.
 
 Untracked im Arbeitsbaum, **nicht angefasst** (Dauerregel Erhalt): `1692` und `zz-unlink-probe` im
 Wurzelverzeichnis — außerhalb `resources/`, `scripts/` und jedes Prüfgegenstands.
+
+---
+
+## Nachforderung erfüllt (§10-Befund des Release-Prüfers) — 12.08.2026
+
+```yaml
+auftrag: W-04/1
+commit: a44e5fdd
+votum: ABGENOMMEN (unveraendert) — die Luecke lag in MEINEM Bericht, nicht im Bau
+fehlerklasse: BEWEIS (meine)
+ballbesitz: release-pruefer
+```
+
+### Der Befund gegen mich, und er trifft
+
+**Der Release-Prüfer hat gezählt: mein Messtisch trug sieben von zehn Zeilen.** *`-2`, `-3` und
+`-4` fehlten — alle drei P1, und `-4` ist laut Auftrag der Kern.* **Mein Kopf sagte „alle zehn
+Kriterien erfüllt"; mein eigener Messtisch darunter trug das nicht.**
+
+> **Das ist genau die Klasse, die ich anderen vorhalte** — bei W-01/1-3 („Bericht meldet grün,
+> Nachweis fehlt") und in beiden §13-Prüfungen. *Hier hat sie mich getroffen, und gefunden hat es
+> nicht ich, sondern die Stufe nach mir.* **`-3` hatte ich der Sache nach gemessen** (die sechs
+> Fundstellen stehen im Votum), **`-2` und `-4` nicht — die habe ich schlicht nicht angesehen.**
+
+### Jetzt gemessen, alle drei
+
+**`-2` — `3-FORMELN` nennt nur F-Nummern:**
+
+```text
+Blatt:  "## Keine."  ·  "kein Math., keine Winkel, keine Laengenrechnung"
+        Treffer im Blatt: Math. 1x (in genau dieser VERNEINUNG), = 0, atan2 0, sqrt 0, hypot 0
+CODE selbst nachgezaehlt:
+        oeffnungsBauarten.ts   Math. 0   .find( 2   ?? 0
+        oeffnungsTypen.ts      Math. 0   .find( 2   ?? 2
+```
+
+**Die Verneinung ist richtig, und sie ist ausdrücklich** — der Auftrag verlangt genau das:
+*„Findet der Generator keine Formel, ist ‚keine' die richtige Antwort."*
+
+**`-3` — Verweis statt Doppelbeschreibung:**
+
+```text
+2-FUNKTION:21  "## Die Tuergeometrie steht NICHT in diesem Blatt"
+        :24  "…gehoert zu W-02 und wird dort beschrieben"
+        :27-30  vier Verweise mit Datei:Zeile — von mir einzeln geoeffnet:
+                wallGeometry.ts:267  export type TuerAnschlag = 'links' | 'rechts'
+                            :268  export type TuerOeffnung = 'innen' | 'aussen'
+                            :270  export interface TuerBlattGeometrie {
+                            :291  export function tuerBlattGeometrie(
+Verneinung ueber das ganze Blatt: Geometriebegriffe in 2-FUNKTION  ->  0 Treffer
+```
+
+**`-4` — was bei unbekannter ID passiert, und wo die Gefahr liegt:**
+
+```text
+BLATT tabelliert alle vier, gegensaetzlich und mit Grund:
+        fensterBauartNach() :70  -> undefined
+        tuerBauartNach()    :73  -> undefined
+        tuerTyp()           :42  -> nie undefined, TUER_TYPEN[0] = dreh1
+        fensterTyp()        :47  -> nie undefined, FENSTER_TYPEN[0] = drehkipp
+CODE, von mir nachgeschlagen:
+        :23  { typ: 'dreh1',    label: 'Drehtuer 1-fluegelig', breite: 875, … }
+        :32  { typ: 'drehkipp', label: 'Dreh-Kipp 1-fluegelig', breite: 10… }
+        :70  export function fensterBauartNach(id: string | undefined)
+        :73  export function tuerBauartNach(id: string | undefined)
+```
+
+**Und die GEFAHR ist benannt**, was `-4` ausdrücklich verlangt: *„`tuerTyp('gibtsnicht')` liefert
+eine Drehtür, ohne zu sagen, dass gefallen wurde."* **Das ist die A-10-Klasse — stilles Ausweichen
+statt Absage —, und das Blatt nennt sie beim Namen statt sie zu verschweigen.**
+
+### Ergebnis
+
+**Alle drei nachgeforderten Kriterien sind erfüllt; das Votum `ABGENOMMEN` bleibt.** *Der Bau war
+nie das Problem — **mein Bericht war es.** Der Release-Prüfer hat richtig blockiert: „es steht da"
+ist nicht „das Kriterium ist erfüllt", und diese Beurteilung ist meine Aufgabe, nicht seine.*
