@@ -606,3 +606,81 @@ statt Absage —, und das Blatt nennt sie beim Namen statt sie zu verschweigen.*
 **Alle drei nachgeforderten Kriterien sind erfüllt; das Votum `ABGENOMMEN` bleibt.** *Der Bau war
 nie das Problem — **mein Bericht war es.** Der Release-Prüfer hat richtig blockiert: „es steht da"
 ist nicht „das Kriterium ist erfüllt", und diese Beurteilung ist meine Aufgabe, nicht seine.*
+
+---
+
+## Release-Prüfung (§10, Sammel-Kontrolle 2) — 12.08.2026
+
+```yaml
+auftrag: W-04/1
+abnahme_commit: 973f1ec4   # Erstvotum; Nachreichung fd076dc5; gemessen wurde a44e5fdd (Bau)
+release_commit: 50e968e9   # HEAD bei dieser Prüfung
+votum: RELEASE_FREI
+ci: pass                   # npm run test:hausplaner selbst gefahren: tests 1692, pass 1692, fail 0
+artefakte_reproduzierbar: nicht_anwendbar   # Doku-Stufe: kein Bundle, kein Build-Artefakt im Scope
+migration: nicht_anwendbar
+rueckweg: nicht_anwendbar   # nichts veröffentlicht; Rückweg wäre `git revert a44e5fdd`, acht Doku-Dateien
+smoke_test_plan: "Entfällt — reine Dokumentblätter, keine sichtbare oder betriebliche Wirkung."
+befunde: []
+```
+
+### WIEDERVORLAGE — nur der eine Punkt, keine zweite Gesamtabnahme
+
+**Der Blockgrund aus Sammel-Kontrolle 1 war: der Messtisch trug sieben von zehn Zeilen.** *`-2`,
+`-3` und `-4` fehlten.* Der Evaluator hat sie in `fd076dc5` nachgereicht — **das ist der einzige
+Punkt, den ich hier nachprüfe.** Alles Übrige stand bereits grün und wird nicht erneut aufgerollt.
+
+**Pflichtfrage der Regel — gezählt, nicht überflogen:**
+
+```text
+Kriterien im Blatt (Abschnitt Akzeptanzkriterien)   10   (W-04/1-1 … -10)
+Zeilen im Votum-Messtisch, Erstfassung 973f1ec4      7   (-1 -5 -6 -7 -8 -9 -10)
+Zeilen nachgereicht in fd076dc5                      3   (-2 -3 -4)
+Zeilen im Votum-Messtisch jetzt                     10   ->  10 von 10, die Lücke ist zu
+```
+
+**Die drei Nachweise habe ich nicht gelesen, sondern gegen den Code gehalten** — jeder von ihnen
+zitiert eine Stelle, und jede Stelle trifft:
+
+```text
+-2  oeffnungsBauarten.ts   Math. 0   .find( 2        Evaluator: "Math. 0"      stimmt
+    oeffnungsTypen.ts      Math. 0   .find( 2        Evaluator: "Math. 0"      stimmt
+-3  wallGeometry.ts:267    export type TuerAnschlag = 'links' | 'rechts';      trifft
+                :268    export type TuerOeffnung = 'innen' | 'aussen';         trifft
+                :270    export interface TuerBlattGeometrie {                  trifft
+                :291    export function tuerBlattGeometrie(                    trifft
+-4  oeffnungsTypen.ts:23   { typ: 'dreh1', … breite: 875, hoehe: 2010 }        trifft
+                  :32   { typ: 'drehkipp', … }                                 trifft
+                  :42   export function tuerTyp(typ: TuerTyp): TypVorlage<…>   trifft
+                  :47   export function fensterTyp(…)                          trifft
+    oeffnungsBauarten.ts:70  fensterBauartNach(id: string|undefined): … | undefined   trifft
+                        :73  tuerBauartNach(id: string|undefined):   … | undefined    trifft
+```
+
+> **Die Gegensätzlichkeit ist damit belegt, nicht behauptet:** *die beiden `…BauartNach()` tragen
+> `| undefined` in ihrer Signatur, die beiden `…Typ()` nicht.* **Und die Gefahr steht im Blatt** —
+> `tuerTyp('gibtsnicht')` liefert 875×2010, ohne zu sagen, dass gefallen wurde. Das ist die
+> A-10-Klasse, benannt statt verschwiegen; genau das verlangt `-4`.
+
+**Der Evaluator hat die Trennung sauber gezogen**, die ich in Kontrolle 1 verlangt hatte: `-3`
+hatte er der Sache nach gemessen, `-2` und `-4` nicht — und er schreibt das so hin, statt die
+Lücke nachträglich als Versehen zu glätten. *Damit ist die Beurteilung dort geblieben, wo sie
+hingehört: bei der Abnahme, nicht bei mir.*
+
+### Die übrigen §10-Punkte, im Durchgang mitgemessen
+
+```text
+Kette      2d45785f (BEREIT) -> a9e58dd4 (IN_ARBEIT) -> a44e5fdd (Bau)
+           -> 3dcca1b8 (CODE_FERTIG) -> 973f1ec4 (ABGENOMMEN) -> fd076dc5 -> HEAD
+           je git merge-base --is-ancestor, Exit 0                      6/6
+Basis      b6078b2a -> 2d45785f  Exit 0
+Scope      git show a44e5fdd --name-only: 8 Dateien = 7 Blätter + REGISTER.md
+           Pfade unter resources/ oder scripts/:                        0
+Votum-SHA  Votum nennt a44e5fdd = Bau-Commit                            deckungsgleich
+Blattstand git diff a44e5fdd..HEAD -- W-04-oeffnung-tuer-fenster/       0 Dateien
+Ergebnis   Platzhalter über alle sieben Blätter                         0
+Register   Z.30 W-04 BESCHRIEBEN · Z.155/156 beide Katalog-Module mit Zeilen und Ausfuhren
+```
+
+**Urteil: `RELEASE_FREI`.** *Der Block ist an genau der Stelle aufgehoben, an der er gesetzt
+wurde — der Bau war nie das Problem, der Beweis war es, und der Beweis liegt jetzt vor.*
