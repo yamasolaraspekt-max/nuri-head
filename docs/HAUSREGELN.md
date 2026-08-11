@@ -142,6 +142,34 @@ das Wort steht überall, der Gegenstand nur an einer Stelle.*
 
 ---
 
+## H-7 · Ein Ist-Wert ist kein Soll-Wert
+
+> **Ein Kundenaufmaß sagt, wie ein Dach gebaut WURDE. Eine Fachregel sagt, wie es gebaut werden
+> MUSS. Ein Planungswerkzeug braucht das Zweite.**
+
+**Gesetzt:** 12.08., als ich `p_v_roofs.roof_covering_dimensions_cm` als möglichen Wertebestand für
+die Lattweitentabelle vorschlug.
+
+```text
+DER FUND      p_v_roofs:52  roof_covering_dimensions_cm  "Eindeckmass in cm", Freitext
+DIE FALLE     es ist ein IST-Wert. Dass eine Lattweite verbaut WURDE, heisst nicht,
+              dass sie zulaessig IST. "Auf deutschen Daechern liegt viel, was heute
+              nicht mehr so gelegt wuerde."
+DIE FOLGE     QUELLE = Kundenaufmass belegt VORKOMMEN, nicht ZULAESSIGKEIT —
+              und hebt allein keine 🔴-Sperre auf.
+WOZU ES TAUGT Prioritaet des Katalogs · Plausibilitaetsgrenzen · Parser fuer den Freitext
+```
+
+**Prüfform:** *Jeder Wert in einem Katalog trägt, ob er ein Ist-Wert oder ein Soll-Wert ist.* **Eine
+Tabelle aus Ist-Werten, die wie eine Fachregel aussieht, ist eine Stichprobe mit falschem Etikett** —
+und damit F-051 in neuer Gestalt, nur diesmal mit echten Zahlen.
+
+*Verwandt mit H-5: dort urteilt eine Engine über etwas, das sie nicht vollständig kennt; hier
+begründet ein Katalog eine Zulässigkeit mit einem Vorkommen. **Beides ist eine Aussage, die weiter
+reicht als ihr Beleg.***
+
+---
+
 ## Zwei Regeln, die schon in ARBEITSREGELN stehen und hier nur verwiesen werden
 
 ```text
@@ -153,10 +181,10 @@ das Wort steht überall, der Gegenstand nur an einer Stelle.*
 das ist der Fehler, den die Sammlung verhindern soll, nicht der, den sie machen darf.*
 
 ```yaml
-regeln: 6
+regeln: 7
 alle_von: yama
 gesetzt_zwischen: "11.08. und 12.08."
-offen_an_yama: "gehoeren H-1 bis H-6 in docs/ARBEITSREGELN.md? Der Planner legt vor,
+offen_an_yama: "gehoeren H-1 bis H-7 in docs/ARBEITSREGELN.md? Der Planner legt vor,
                 er schreibt keine Regel ein (§1). Und: soll diese Sammlung bleiben
                 oder aufgehen?"
 kern: "Yama hat dreimal 'nimm das als Hausregel auf' gesagt. Ein Satz in einer Antwort
