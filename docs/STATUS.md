@@ -1647,7 +1647,8 @@ an_yama_fachgate: "DRINGENDER und unabhaengig davon: der Planner hat N-003 (Spar
 auftrag: "A-13"
 titel: "Das einzige Azimut-Feld im Haus ohne Test bekommt Validierung, Zusage und den Konventionshinweis"
 datei: docs/auftraege/aktiv/A-13-roof-azimuth-absichern.md
-zustand: RELEASE_FREI
+zustand: BETRIEBSBESTAETIGT
+statusdrift_korrigiert: "release-pruefer 12.08.: das Feld stand auf RELEASE_FREI, waehrend der Bau a09b69af nachweislich auf fork/main UND backup-private/main liegt (merge-base --is-ancestor, selbst gemessen) und die §19-Betriebspruefung bereits gefahren war. Ursache: die parallele Release-Instanz hat ihr RELEASE_FREI gesetzt, nachdem ich veroeffentlicht hatte, und beim Merge gewann die juengere Zeile. Fuenfte Auspraegung der Klasse 'Statuswahrheit hinkt der Handlung hinterher' — diesmal MEINE: ich habe nach dem Merge nicht geprueft, ob mein eigener Zustand ueberschrieben wurde. Konsequenz fuer mich: nach jedem Merge, der einen Auftragsblock beruehrt, den Zustand gegen die Wirklichkeit (main-Zugehoerigkeit) gegenlesen, nicht nur den Konflikt aufloesen."
 release_vermerk: "release-pruefer (Stamm-Instanz) 12.08.: §10 an der Abnahme c9397575/a09b69af — ERSTER PRODUKTIVCODE-AUFTRAG, deshalb VOLLES Grundtor statt Doku-Scope: tsc clean, Insel 1692/1692, php artisan test 888/888 (vorher 880 — die acht neuen Zusagen greifen), Kette Vorfahr, Scope exakt 3 Dateien (Exception NEU, PVRoof.php, Vertragstest NEU), Migration 0, Seeder 0, geloeschte Zeilen 0 (rein additiv), Rueckweg per git revert ohne Datenpfad."
 datenrisiko_gemessen: "Der Waechter wirft kuenftig bei roof_azimuth ausserhalb [0,360). A-13-7 nennt die Folge: ein ALTWERT ausserhalb der Grenze bleibt beim naechsten Speichern haengen. SELBST GEMESSEN in der Arbeits-DB ticket: p_v_roofs gesamt 0, ausserhalb 0, NULL 0 — lokal KEIN Bestandsrisiko. NICHT GEMESSEN UND AUSDRUECKLICH OFFEN: der Bestand auf Hetzner (3000 Kunden) — Produktionssysteme fasse ich nicht an. VOR EINEM PRODUKTIONS-DEPLOY ist dort zu zaehlen, wie viele p_v_roofs roof_azimuth ausserhalb [0,360) tragen; sonst schlaegt der Waechter erst beim Speichern zu, und zwar beim Anwender. Fuer main kein Hindernis — main ist kein Produktionssystem."
 wirkungskette_nachgetragen: "NACHGEMELDET vom Plan-Pruefer (a6e91db1) und von mir SELBST nachgemessen — ich hatte das Datenrisiko gemessen, aber NICHT seine Wirkung. Drei Befunde ergeben zusammen EINE Bedingung: (1) ein Altsatz ausserhalb [0,360) wird beim Speichern abgewiesen, (2) RoofAzimuthOutOfRangeException wird NIRGENDS gefangen — catch-Bloecke dafuer in app/ und resources/: 0, selbst gezaehlt, (3) es gibt KEINE Formularvalidierung — roof_azimuth in app/Http/: 0 Treffer, selbst gezaehlt; gespeichert wird in DREI Controllern (PVRoofController, PVChecklistController, PersonalTaskController). ERGEBNIS: ein HTTP 500 statt einer Formularmeldung, und zwar AUCH WENN DER NUTZER DEN AZIMUT GAR NICHT ANFASST. Fuer main unveraendert kein Hindernis (lokal 0 Saetze). Fuer Hetzner ist es ein HARTER BLOCKER: dort darf dieser Stand erst nach dem SELECT und nach H1/H2 (Formularvalidierung + gefangene Ausnahme) deployt werden. MEIN ANTEIL: mein §10 hat die URSACHE gemessen und die WIRKUNG nicht — ich habe gezaehlt, wie viele Altsaetze es gibt, aber nicht, was beim Treffer passiert. Der Plan-Pruefer hat die drei Einzelbefunde zusammengelesen; das ist die Leistung, die mir gefehlt hat."
@@ -3315,4 +3316,40 @@ entschieden_in_vertretung: "H-1..H-7 gehoeren in die ARBEITSREGELN, Sammlung geh
 bewusst_NICHT_vertreten: "Achse 2 je Engine — Fach- und Haftungsfrage; stattdessen die
                           Entscheidungsregel gegeben, damit der Auftrag laeuft"
 bleibt_bei_yama: "Achse-2-Zuordnung je Engine · jeder Hetzner-Deploy"
+```
+
+---
+
+## BEFUND DES RELEASE-PRÜFERS (12.08.) — die Wurzel der wiederkehrenden Regelwerks-Konflikte
+
+**Gemessen, nicht vermutet:**
+
+```text
+lokaler Zweig auto/hausplaner-integration   ARBEITSREGELN Version 1.2.2
+vereinte Linie fork/auto/...                ARBEITSREGELN Version 1.4.2
+Abstand                                     lokal 5 voraus · Linie 115 voraus
+```
+
+**Alle Rollen arbeiten auf dem lokalen Zweig und sehen 1.4.2 nie.** *Jede Regeländerung, die sie
+schneiden, geht deshalb von **1.2.2** aus — und landet erst durch meinen Merge in der geltenden
+Fassung. Bisher ist das jedes Mal gutgegangen, aber es ist Zufall, kein System: Es hat achtmal
+funktioniert, weil ich jeden Konflikt von Hand aufgelöst habe.*
+
+**Beleg von heute:** Der Planner hat H-1…H-7 korrekt eingearbeitet — in **seine** 1.2.2. In der
+Linie stehen sie jetzt trotzdem richtig (§18a, Z.707 ff.), weil der Merge getragen hat. **Das ist
+das Ergebnis, nicht der Beweis, dass der Weg sicher ist.**
+
+```yaml
+fehlerklasse: UMGEBUNG
+befund: "zwei Fassungen desselben Regelwerks gleichzeitig in Gebrauch — die Rollen lesen 1.2.2,
+         geltend ist 1.4.2; die Vereinigung haengt an einer Handaufloesung je Konflikt"
+loesung: "lokalen Zweig-Zeiger per --ff-only auf die Linie nachfuehren, dann lesen alle dieselbe
+          Fassung. Der lokale Zweig hat 5 eigene Commits, ist also KEIN reiner Vorfahr —
+          ein FF ist damit NICHT moeglich, es braucht einen Merge im gemeinsamen Checkout."
+warum_ich_es_nicht_selbst_tue: "der gemeinsame Arbeitsbaum gehoert den Rollen; ein Merge dort
+          waehrend eine Instanz laeuft ist genau die Klasse, die heute den achten Kollisionsfall
+          erzeugt hat. Ich melde und lege vor."
+vorlage_an_yama_und_planner: "EINMALIG den lokalen Zweig auf die Linie bringen (git merge
+          fork/auto/hausplaner-integration im Haupt-Checkout, bei ruhigem Baum). Danach lesen
+          alle Rollen 1.4.2, und meine Handaufloesungen entfallen."
 ```
