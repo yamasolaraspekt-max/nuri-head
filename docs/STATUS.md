@@ -1536,6 +1536,17 @@ auftrag_an_die_instanz: "Prueft die drei Ketten je einzeln, die Suite EINMAL, un
 ```
 ---
 
+## RICHTIGSTELLUNG an mir selbst + Nachforderung W-04/1 (plan-pruefer 12.08.)
+
+```yaml
+mein_fehler: "Ich habe dem Release-Pruefer die einseitige must_preserve-Messung als W-04-BESONDERHEIT uebergeben. Er hat gemessen und widerlegt: die Luecke ist SYMMETRISCH, alle drei Voten tragen sie. Mein Fehler ist die Zuschreibung ohne Vergleichsmessung — ich hatte W-04 gemessen (weil dort ein Befund lag) und daraus eine Besonderheit gemacht, ohne W-05 und W-11 dagegen zu halten. Dieselbe Klasse wie die Grobzahlen des Planners: eine richtige Einzelmessung, aus der eine zu weite Aussage folgt. Er hat die Luecke ausdruecklich NICHT als Blockgrund verwendet — richtig so, sie taugt nicht dafuer."
+sein_ergebnis_gewuerdigt: "Zwei RELEASE_FREI (W-05/1, W-11/1), ein RELEASE_BLOCKED (W-04/1, Klasse BEWEIS). Der Blockgrund ist praezise und liegt im VOTUM, nicht im Blatt: der Messtisch traegt sieben von zehn Zeilen, -2/-3/-4 fehlen, und -4 ist der Kern. Er hat die Substanz per Praesenzpruefung im Blatt GEFUNDEN und trotzdem blockiert, mit der richtigen Begruendung: 'es steht da' ist nicht 'das Kriterium ist erfuellt' — das zu beurteilen ist die Abnahme, und §10 gibt Release-Faehigkeit, keine zweite Abnahme. Genau die Rollengrenze, an der diese Kette lebt."
+zahl_zur_grundsatzfrage: "Er liefert eine Zahl statt einer Meinung: von elf §10-Punkten griffen SECHS, fuenf waren mangels Gegenstand nicht anwendbar — und der einzige Fund der Runde liegt in den sechs. Sein Zusatz ist der wertvollste Teil: die W-04-Luecke faellt NUR IM VERGLEICH mit den beiden vollstaendigen Voten auf, die SAMMELFORM war der Hebel. Fuer die offene Grundsatzfrage heisst das: nicht 'Doku braucht §10' oder 'braucht es nicht', sondern 'Doku braucht eine SAMMEL-Kontrolle, weil der Vergleich findet, was die Einzelpruefung durchlaesst'. Das ist eine dritte Antwort, die weder ich noch der Planner vorgeschlagen hatten."
+nachforderung: "An den EVALUATOR von W-04/1: drei Nachweise am Bau-Stand a44e5fdd nachreichen — -2 (keine Formel, mit Zaehlung), -3 (die vier W-02-Verweiszeilen selbst geoeffnet, als Verneinung ueber das GANZE Blatt), -4 (BEIDE Lookup-Richtungen mit Rohausgabe UND die benannte Gefahr des stillen Fallbacks). Kein Revert, keine Blattaenderung, keine zweite Abnahme — nach den drei Nachweisen genuegt eine erneute Pruefung dieses einen §10-Punkts."
+zwei_nebenbefunde_uebernommen: "(1) Die drei Tafelzeilen standen auf CODE_FERTIG, waehrend die Bloecke ABGENOMMEN trugen — von ihm angeglichen, Belegtext erhalten; das ist die Doppelfuehrung, siebter Fall. (2) Der W-05-Block nennt eine Datei, die so nicht heisst (W-05-raum-erkennen-beschreiben.md statt W-05-raum-beschreiben.md) — fremde Zeile, gehoert dem Planner, ICH habe sie beim BEREIT-Votum eingetragen und den Namen nicht geprueft: also meine Zeile und mein Fehler, hiermit gemeldet statt stillschweigend korrigiert (die Zeile steht in einem Block, den inzwischen andere fortgeschrieben haben)."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
