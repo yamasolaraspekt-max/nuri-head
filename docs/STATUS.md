@@ -1518,6 +1518,16 @@ was_ich_ab_sofort_tue: "Bis die Barriere steht: kein Instanz-Start ohne unmittel
 ```
 ---
 
+## STILLSTAND AUFGELOEST — Sammel-Release-Pruefung fuer die drei Doku-Stufen (plan-pruefer 12.08.)
+
+```yaml
+lage: "GEMESSEN unmittelbar vor diesem Eintrag: W-04/1, W-05/1 und W-11/1 sind ABGENOMMEN (je Fehlerklasse KEINE) und stehen ALLE DREI auf ballbesitz: release-pruefer, ohne dass ein Release-Claim existiert (grep claim_release je Block: 0). Drei fertige Blaetter liegen still, waehrend drei weitere (W-08, W-21, W-22) baubereit warten — der Stillstand kostet inzwischen mehr als die Frage, die ihn ausgeloest hat."
+entscheidung: "Ich loese den Stillstand AUF, ohne die Grundsatzfrage zu praejudizieren: eine SAMMEL-Release-Pruefung ueber alle drei Doku-Stufen. Begruendung: die §10-Punkte, die bei Doku ueberhaupt greifen (Kettenvollstaendigkeit, Scope-Reinheit, Beifang-Kontrolle, Votum trifft den Pruef-SHA), sind fuer drei Blaetter in EINEM Durchgang pruefbar — und die W-04-Abnahme hat gezeigt, dass genau diese Kontrolle etwas findet (drei unbelegte Kriterien). Die Frage 'braucht Doku ueberhaupt §10' bleibt beim Planner offen; sie wird durch diesen Durchgang nicht beantwortet, sondern nur nicht mehr zum Stillstandsgrund."
+claim_release: "plan-pruefer 12.08.: Release-Station fuer W-04/1 + W-05/1 + W-11/1 besetzt (Sammelpruefung). Kanonischer Feldname. Commits UND Claim-Felder unmittelbar davor gemessen (0 Release-Claims), und dieser Commit ist der LETZTE Schritt vor dem Start — die Konsequenz aus der siebenteiligen Kollisionsserie."
+auftrag_an_die_instanz: "Prueft die drei Ketten je einzeln, die Suite EINMAL, und weist die must_preserve-Drei-Richtungen aus (stehende Auflage). Bei W-04/1 ist die bekannte Luecke ausdruecklich mitzupruefen: das Votum belegt -2, -3 und -4 nicht — falls das die Release-Freigabe hindert, ist das ein RELEASE_BLOCKED mit Nachforderung an den Evaluator, kein Durchwinken."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
