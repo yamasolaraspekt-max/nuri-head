@@ -22,7 +22,7 @@
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
 | W-03 | Wand bearbeiten | LEER | W-02, W-13 | F-003, F-004, F-030 |
-| W-04 | Öffnung (Tür/Fenster) | LEER | W-02 | F-003, F-031 |
+| W-04 | Öffnung (Tür/Fenster) | **BESCHRIEBEN** | W-02 | F-003, F-031 ⚠ |
 | W-05 | Raum erkennen | LEER | W-02 | F-010, F-011, F-012, F-013 |
 | W-10 | Decke und Boden | LEER | W-05 | F-011, F-030 |
 | W-16 | Grundriss unterlegen | LEER | W-12 | F-032 |
@@ -96,6 +96,8 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/geometry/fangKern.ts` | **W-01** — 276 Zeilen, 11 Ausfuhren, 3 Testdateien mit 45 Zusagen; **eingearbeitet 10.08.2026** |
 | `resources/planner/hausplaner/geometry/wallGeometry.ts` | **W-02** — 317 Zeilen, 12 Ausfuhren; Azimut-Konvention Spec ▲K2, mm-Integer-Welt; **eingearbeitet 10.08.2026** |
 | `resources/planner/hausplaner/geometry/wandFlaeche.ts` | **W-02** — 238 Zeilen, 6 Ausfuhren; AUF-77 Mengenermittlung M1, „entweder Mengen oder Meldungen"; **eingearbeitet 10.08.2026** |
+| `resources/planner/hausplaner/geometry/oeffnungsBauarten.ts` | **W-04** — 75 Zeilen, 5 Ausfuhren; 24 Fenster- und 24 Tür-Bauarten, SVGs unter `public/hausplaner/icons/`; **eingearbeitet 11.08.2026** |
+| `resources/planner/hausplaner/geometry/oeffnungsTypen.ts` | **W-04** — 49 Zeilen, 7 Ausfuhren; 5 Tür- und 7 Fenster-Vorlagen mit Standardmaßen; **eingearbeitet 11.08.2026** |
 
 ## Was aus Yamas eigenem Bestand kommt
 
@@ -117,3 +119,5 @@ Ausgewertet am 07.08.2026 — Einzelheiten in `../05-MATERIALQUELLEN/BESTAND-YAM
 > an dem Auftrag Z-07 scheiterte. Der Code liegt auf Yamas Schreibtisch und läuft.
 > Vor jedem weiteren Bau an W-07 ist zu entscheiden, welcher der beiden Dachwege
 > zuerst kommt. Der Vergleich steht in der Formelsammlung, Gruppe 6.
+
+> ⚠ **W-04s F-Zuordnung stimmt nicht mit dem Code überein.** Das Register nennt F-003 und F-031; gemessen enthalten `oeffnungsBauarten.ts` und `oeffnungsTypen.ts` **keine Rechnung** — `Math.` kommt in beiden **null mal** vor, die einzigen Operationen sind `Array.find()` und `??`. **Der Generator ändert die Zuordnung nicht** (sie gehört dem Planner) und meldet sie als Befund. *Siehe `1-ZWECK`/`3-FORMELN` des Werkzeugs.*

@@ -1,43 +1,33 @@
-# W · oeffnung tuer fenster — BEDIENUNG
+# W-04 · Öffnung (Tür/Fenster) — BEDIENUNG
 
-## Aufruf
+## Zwei Werkzeuge in der Registry
 
-| Weg | Wie |
-|---|---|
-| Werkzeugleiste | <Symbol, Position, Beschriftung> |
-| Tastenkürzel | <Taste> |
-| Kontextmenü | <ja/nein, wann> |
+```text
+app/tools/toolRegistry.ts:78   id: 'fenster'
+app/tools/paketAdapter.ts:186  'fenster' -> feld 'type', wert 'window'
+app/tools/paketAdapter.ts:195  'tuer'    -> feld 'type', wert 'door'
+```
 
-## Ablauf am Bildschirm
+**Die Trennung liegt in den DATEN, nicht im Code.** Beide Werkzeuge laufen durch dieselben
+Funktionen; was sie unterscheidet, sind die Tabellen, die sie lesen — `TUER_TYPEN` gegen
+`FENSTER_TYPEN`, `TUER_BAUARTEN` gegen `FENSTER_BAUARTEN`. *Es gibt keinen Tür-Zweig und keinen
+Fenster-Zweig in der Logik.*
 
-| Schritt | Anwender tut | Bildschirm zeigt |
+## Was der Anwender wählt
+
+| Schritt | Woraus | Was er bekommt |
 |---|---|---|
-| 1 | | |
-| 2 | | |
+| **Bauart** (Aussehen) | 24 bzw. 24 SVG-Bauarten | Icon im Panel; SVGs unter `public/hausplaner/icons/` |
+| **Typ** (Größe) | 5 Tür- bzw. 7 Fenster-Vorlagen | lichte Breite, lichte Höhe, bei Fenstern die Brüstung |
 
-## Rückmeldungen
+**Nur Fenster haben eine Brüstungshöhe** — `bruestung?` ist optional (`oeffnungsTypen.ts:17`).
 
-| Lage | Anzeige | Ton |
-|---|---|---|
-| Alles gut | | sachlich |
-| Eingabe unvollständig | | hinweisend |
-| **Nicht möglich** | | **erklärend — was und warum** |
+## Reihenfolge ist Absicht
 
-> **Pflicht:** Für jede Absage aus `7-GRENZEN.md` muss hier ein Satz stehen, den
-> ein Handwerker versteht. Nicht „DachGeometrieUngueltig", sondern
-> „Für diesen Grundriss kann kein Walmdach berechnet werden, weil er einspringende
-> Ecken hat. Mögliche Wege: Grundriss begradigen oder Flachdach wählen."
+*„Reihenfolge = Anzeigereihenfolge; Drehtür 1-flg. zuerst = häufigste"* (`oeffnungsTypen.ts:21`).
+**Der erste Eintrag ist der häufigste Fall — und zugleich der Rückfallwert** (siehe `7-GRENZEN`).
 
-## Abbruch
+## Die Vorgabe-Öffnungsart darf fehlen
 
-- **Esc** bricht ab. Danach ist der Zustand **exakt** wie vorher.
-- Halbfertiges wird nie gespeichert.
-
-## Tastenkürzel während des Werkzeugs
-
-| Taste | Wirkung |
-|---|---|
-| Esc | abbrechen |
-| Eingabe | bestätigen |
-| Umschalt | <z.B. auf 45°-Winkel zwingen> |
-| Alt | <z.B. Fang aussetzen> |
+`oeffnungsArt?` ist optional, und der Code sagt warum: *„Vorgabe-Öffnungsart, sofern eindeutig; sonst
+undefined (Nutzer wählt)"* (`oeffnungsBauarten.ts:12`). **Der Katalog rät nicht.**

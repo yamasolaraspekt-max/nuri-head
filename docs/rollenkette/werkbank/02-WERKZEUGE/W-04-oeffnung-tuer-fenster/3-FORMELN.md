@@ -1,31 +1,22 @@
-# W · oeffnung tuer fenster — FORMELN
+# W-04 · Öffnung (Tür/Fenster) — FORMELN
 
-> **Regel: hier werden nur F-Nummern aus `01-MATHEMATIK/FORMELSAMMLUNG.md` genannt.
-> Keine abgeschriebenen Formeln.** Eine Formel, die an zwei Orten steht, wird an
-> einem Ort korrigiert und am anderen vergessen.
+## Keine.
 
-## Benutzte Formeln
+**Beide Module sind Kataloge und Nachschlagefunktionen — es wird nichts gerechnet.**
 
-| F-Nr | Wofür in diesem Werkzeug | Grenzfall betrifft uns? |
+Gemessen, nicht vermutet: kein `Math.`, keine Winkel, keine Längenrechnung in
+`oeffnungsBauarten.ts` und `oeffnungsTypen.ts`. Die einzigen Operationen sind `Array.find()` und
+der Vorgabewert `??`.
+
+**Die Maße in den Vorlagen sind Zahlen, keine Formeln** — `875 × 2010` für eine einflügelige Drehtür
+steht im Katalog, es wird nicht hergeleitet. *DIN-nah, sagt der Dateikopf; die Quelle der Zahlen ist
+der Katalog selbst.*
+
+## Wo die Rechnung stattdessen liegt
+
+| Rechnung | Werkzeug | Fundstelle |
 |---|---|---|
-| F-0xx | | ja / nein — weil … |
+| Türblatt-Schwenk | **W-02** | `resources/planner/hausplaner/geometry/wallGeometry.ts:291` |
+| Öffnungsabzug von der Wandfläche | **W-02** | `resources/planner/hausplaner/geometry/wandFlaeche.ts:135` |
 
-## Reihenfolge der Anwendung
-
-```
-1. F-0xx  →  <Zwischenergebnis>
-2. F-0xx  →  <Zwischenergebnis>
-3. F-0xx  →  Endergebnis
-```
-
-## Fehlt eine Formel?
-
-<Wenn dieses Werkzeug Mathematik braucht, die noch nicht in der Sammlung steht:
-hier benennen, DANN in die Sammlung eintragen, DANN hier auf die Nummer verweisen.
-Nicht umgekehrt.>
-
-## Genauigkeit
-
-- Eingangsgrößen in <Einheit>, Rechnung in <Einheit>, Rückgabe gerundet auf <…>
-- Toleranz ε = <…>
-- Bekannte Ungenauigkeit: <wo sich Fehler aufaddieren können>
+> **„Keine Formel" ist hier die Antwort, nicht die Lücke.** *Ein Katalog, der rechnet, wäre der Fehler.*
