@@ -1620,6 +1620,18 @@ push_env_hinweis: "release-pruefer 12.08.: Der Sicherungs-Push nach RELEASE_FREI
 ```
 ---
 
+## KENNTNIS Kontrolle 2 + VORLAGE an den Planner: der Typ-Komplex ist gross genug fuer ein eigenes Blatt
+
+```yaml
+ergebnis: "3 x RELEASE_FREI, 0 blockiert. Die PFLICHTFRAGE der neuen Regel hat je Auftrag beide Zahlen geliefert: W-04/1 10 von 10 (7 in der Erstfassung + 3 nachgereicht), W-21/1 12 von 12, W-22/1 11 von 11 — alle drei Messtische lueckenlos."
+der_eigentliche_beleg: "Sein Schlusssatz ist die Antwort auf die Grundsatzfrage, und er ist besser als jede Meinung: 'Kontrolle 2 hat NICHTS gefunden — und das ist ihr Ergebnis, nicht ihr Versagen. Der Evaluator fuehrt seit dem Befund aus Kontrolle 1 jede Zeile; zwei vollstaendige Messtische, die es vorher nicht gab.' Damit ist die Regel nicht plausibel, sondern WIRKSAM gemessen: eine Barriere, die das Verhalten geaendert hat, findet beim zweiten Mal nichts mehr — genau die Kurve aus Prozesspruefung-02 (sieben Wiederholungen mit Vorsatz, null mit Barriere)."
+gewuerdigt: "Er hat die drei nachgereichten Nachweise NICHT gelesen, sondern gegen den Code gehalten — die Gegensaetzlichkeit der Lookups an den SIGNATUREN belegt ('| undefined' steht bei den Bauart-Lookups, bei den Typ-Lookups nicht) statt am Kommentar. Das ist der Unterschied zwischen 'der Bericht sagt es' und 'der Code sagt es'."
+typ_komplex_vorlage: "VIER Faelle derselben Klasse liegen jetzt vor, gefunden von drei verschiedenen Rollen: MassPunkt 2x identisch (W-11, vom Bau gefunden) · Punkt2D 4x identisch (W-21, von mir) · Vec3 4x identisch (W-22, von mir) · HolzStueckRef 2x (W-21, vom Bau). DAZU ZWEI, die NICHT in die Klasse gehoeren und schwerer wiegen: (a) 'Dreieck' ist zweimal definiert und BEDEUTET VERSCHIEDENES — dachMesh:32 [WeltPunkt3 x3] gegen gaubeGeometrie:37 [LokalPunkt x3], ein Name fuer zwei Koordinatensysteme; (b) SELBST NACHGEMESSEN nach dem Release-Hinweis: gaubeGeometrie.ts:32 importiert 'Vec3 as BasisVec3' aus aufbauOrientierung und definiert ZWEI ZEILEN DARUNTER in :34 ein eigenes Vec3 — dieselbe Struktur, zwei Namen, in EINER Datei sichtbar untereinander. Das ist der schaerfste Einzelfall des ganzen Komplexes, weil er nicht einmal ueber Dateigrenzen versteckt ist."
+warum_ein_blatt: "Einzeln sind es Randnotizen in sieben Werkbank-Blaettern, die niemand zusammenliest. Zusammen sind sie eine Aussage ueber die Bauart der Geometrie-Schicht (jedes Modul definiert seine Grundtypen selbst, um importfrei zu bleiben) und EINE echte Gefahr (Dreieck). Die Entscheidung — benennen, zusammenlegen oder trennen — gehoert dem PLANNER und braucht einen Schnitt, keine weitere Randnotiz. Ich lege sie vor; ein Auftrag daraus ist SEINE Sache."
+an_yama: "Die Sicherung nach fork steht jetzt fuer FUENF freigegebene Stufen aus (W-05/1, W-11/1, W-04/1, W-21/1, W-22/1) — die Berechtigungsschicht lehnt den Push in jeder Instanz vor der Ausfuehrung ab, das ist keine Eigenschaft einer einzelnen Sitzung. Dazu unveraendert: das Fach-Gate N-003 und die vorgelegte §10-Regelaenderung ohne Adressaten."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
