@@ -27,13 +27,14 @@ Register:  | W-07 | Dach aus Kontur | BESCHRIEBEN | W-05, W-06 | F-010, F-013, F
                                                                 F-021, F-022 |
 Werkbank-Ordner W-07-dach-aus-kontur/ — echte Platzhalter je Blatt:
   1-ZWECK.md        0        4-BEDIENUNG.md    0        6-PRUEFUNG.md   0
-  2-FUNKTION.md     6  <--   5-CODE/LIESMICH   (vorhanden, 927 B)      7-GRENZEN.md  0
+  2-FUNKTION.md     9  <--   5-CODE/LIESMICH   (vorhanden, 927 B)      7-GRENZEN.md  0
   -> SECHS von SIEBEN Blaettern sind gefuellt. EINES ist ein leeres Formular.
 ```
 
-**Die sechs Platzhalter, wörtlich aus `2-FUNKTION.md`:**
+**Die NEUN Platzhalter, wörtlich aus `2-FUNKTION.md` — mit `grep -n` gelesen, nicht gezählt (B5):**
 
 ```text
+:17  <Jeder Zustand mit: was wird angezeigt, was wird erwartet, was passiert bei Abbruch.>
 :27  - **Name:** `<KommandoName>`
 :28  - **Ausfuehren:** <was genau am Datenmodell geaendert wird>
 :29  - **Zuruecknehmen:** <wie der vorherige Zustand exakt wiederhergestellt wird>
@@ -45,11 +46,23 @@ Werkbank-Ordner W-07-dach-aus-kontur/ — echte Platzhalter je Blatt:
 Dazu eine leere Tabelle:  | Was | Typ | Wohin |  ->  | | | |
 ```
 
-> **Und ich habe mich beim Zählen selbst korrigiert:** *Mein erster Lauf meldete **sieben**
-> Platzhalter. Der siebte war `7-GRENZEN.md:69` — `< 1 mm² | erst bei Gebäuden >`, ein
-> **Vergleichsoperator in einer Tabelle**, kein Platzhalter.* **Sechs sind echt, einer war mein
-> Suchmuster.** *Das ist heute der vierte Fall, in dem ein zu weites Muster fast einen Befund
-> erzeugt hätte.*
+> **Meine Zählung war ZWEIMAL falsch, in beide Richtungen — und Yama hat die richtige Zahl geliefert:**
+>
+> ```text
+> 1. Lauf   grep -rnoE '<[^>]{3,40}>'   -> 7   davon EINER falsch:
+>           7-GRENZEN.md:69  "< 1 mm² | erst bei Gebäuden >"  = Vergleichsoperator
+> 2. Lauf   grep -cE '<[a-zA-ZäöüÄÖÜ][^>]{2,40}>'  -> 6   der Vergleich war weg,
+>           aber DREI echte Platzhalter fehlten jetzt: :17, :29, :30
+> Yama       grep -n ohne Laengengrenze          -> 9   RICHTIG
+>           Zeile 17 ist 86 Zeichen lang — mein {2,40} hat sie verschluckt.
+> ```
+>
+> **Die Lehre ist doppelt und beide Hälften sind meine:** *Erstens habe ich mit `-c` gezählt statt
+> mit `-n` gelesen — deshalb sah ich den Vergleichsoperator nicht.* **Zweitens habe ich, um ihn
+> loszuwerden, eine willkürliche Längengrenze `{2,40}` ins Muster gesetzt — und damit drei echte
+> Treffer verloren. Der Filter gegen einen Fehlertyp erzeugte einen anderen.** *Das ist genau der
+> Grund für die neue Barriere **B5** (eigener Auftrag, `docs/auftraege/aktiv/B5-...`): wer mit `-c`
+> etwas behauptet, führt denselben Lauf ohne `-c` und liest, was er gezählt hat.*
 
 ## Das ist ein ALTSTAND, kein Verstoß — und der Unterschied gehört ins Blatt
 
@@ -62,7 +75,7 @@ Platzhalter-Kriterium    W-01/1, 10.08. 19:54 (193681cd)
 
 **W-07 wurde beschrieben, bevor „kein Platzhalter" ein Kriterium war.** *Niemand hat eine Regel
 gebrochen; die Regel entstand danach.* **Aber der Reifegrad `BESCHRIEBEN` behauptet heute etwas, das
-für `2-FUNKTION` nicht gilt — und die Abschlusszahl der Klasse A (5 von 10) zählt W-07 mit.**
+für `2-FUNKTION` nicht gilt — und der Abschlusszähler der Klasse A zählt W-07 mit: **er sagt 6, richtig wäre 5.**
 
 > *Deshalb ist dieser Auftrag eine **Nachbesserung nach §12.5**: er wirkt nicht rückwirkend, nimmt
 > W-07 nichts weg und wertet niemandes Arbeit ab. Er füllt eine Lücke, die entstanden ist, weil das
@@ -71,7 +84,7 @@ für `2-FUNKTION` nicht gilt — und die Abschlusszahl der Klasse A (5 von 10) z
 ## DECISION
 
 ```text
-FUELLEN       2-FUNKTION.md von W-07 — alle sechs Platzhalter plus die Tabelle.
+FUELLEN       2-FUNKTION.md von W-07 — alle NEUN Platzhalter plus die Tabelle.
               Quelle ist der CODE, nicht die Vorstellung: die acht Dachmodule, die
               W-07s Registerzeile abdeckt, und dachMesh.ts als Renderer-Seite.
 EINTRAGEN     Yamas Auflage 1: der doppelsinnige Azimut-Bereich 0..180 in 7-GRENZEN.
@@ -79,9 +92,17 @@ EINTRAGEN     Yamas Auflage 1: der doppelsinnige Azimut-Bereich 0..180 in 7-GREN
               nicht ersetzt, und der bestehende Inhalt bleibt woertlich stehen.
 NICHT         Kein Stufe-1-Schnitt. Kein Anfassen der sechs gefuellten Blaetter
               ausser der einen Ergaenzung in 7-GRENZEN.
-NICHT         Der Reifegrad bleibt BESCHRIEBEN. Ich stufe W-07 NICHT zurueck:
-              6 von 7 Blaettern sind echte Arbeit, und Zurueckstufen waere eine
-              Strafe fuer einen Altstand. Der BEFUND steht im Register als Zeile.
+KORRIGIERT    Der Reifegrad WIRD richtiggestellt. Meine erste Fassung sagte "bleibt
+12.08.        BESCHRIEBEN, Zurueckstufen waere eine Strafe fuer einen Altstand" —
+              Yama hat das aufgehoben, und er hat recht:
+              "Die Tafel ist kein Zeugnis. Sie ist das Instrument.
+               Ein Instrument, das schont, zeigt falsch."
+              Ich hatte SCHULDFRAGE und ZUSTANDSFRAGE zusammengelegt:
+                Schuldfrage  niemand hat eine Regel gebrochen (43 Minuten) — steht
+                Zustandsfrage die Tafel sagt BESCHRIEBEN, das Blatt ist es nicht
+              Ein Altstand entschuldigt den Entstehungsweg. Er macht die Angabe
+              nicht wahr. Und es hat eine messbare Folge, keine optische:
+              der Abschlusszaehler von Klasse A zaehlt W-07 mit — 6 statt 5.
 NICHT         Die drei Werkbank-Nachtraege N1/N2/N3 und der Widerspruch F-020-Weg
               gegen roof.anbau-Weg (db1dc3b6). Sie gehoeren zu W-07, aber NICHT
               in diesen Auftrag — er waere sonst kein kleiner Auftrag mehr.
@@ -91,7 +112,9 @@ NICHT         Die drei Werkbank-Nachtraege N1/N2/N3 und der Widerspruch F-020-We
 ## Nicht-Ziele
 
 - **Keine Änderung an `resources/**` oder `app/**`.** Reine Doku-Stufe.
-- **Kein Rückstufen des Reifegrades.** Der Befund wird benannt, nicht bestraft.
+- **KEIN Löschen der geleisteten Arbeit.** *Die sechs gefüllten Blätter bleiben unangetastet und
+  werden in der Registerzeile selbst gewürdigt (`6/7`).* **Der Reifegrad wird aber richtiggestellt —
+  das war in der ersten Fassung dieses Blattes ein Nicht-Ziel und ist von Yama aufgehoben.**
 - **Keine Umrechnung bauen.** Die Azimutgrenze wird **beschrieben**; die
   Umrechnungsfunktion ist Yamas Schritt 7 und braucht erst seine drei SELECTs.
 - **Keine Aussage über W-08.** Dessen Auflagen stehen als `W-08/1-10` bis `-12` im eigenen Blatt.
@@ -104,7 +127,12 @@ NICHT         Die drei Werkbank-Nachtraege N1/N2/N3 und der Widerspruch F-020-We
 ```text
 docs/rollenkette/werkbank/02-WERKZEUGE/W-07-dach-aus-kontur/2-FUNKTION.md   fuellen
 docs/rollenkette/werkbank/02-WERKZEUGE/W-07-dach-aus-kontur/7-GRENZEN.md    ERGAENZEN
-docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md    eine Befundzeile (kein Reifegrad!)
+docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md    W-07-Zeile: Reifegrad richtigstellen
+                                                      + Legende um die Zwischenstufe ergaenzen
+  ACHTUNG §3: REGISTER.md liegt im Scope von ZEHN W-Blaettern. Am 12.08. gemessen war
+  W-21/1 IN_ARBEIT (9bd728fe) und hat es im Scope -> dieser Auftrag wartet, bis §3 frei ist.
+  Das ist der Grund, warum Yamas '0a sofort' NICHT sofort ausgefuehrt wurde: nicht Zoegern,
+  sondern dieselbe Sperre, die ich am 11.08. missachtet habe (ce30174f).
 ```
 
 *NICHT im Scope: die anderen fünf Blätter von W-07, jedes andere Werkzeug, `FORMELSAMMLUNG.md`.*
@@ -146,7 +174,7 @@ Werkzeug am Datenmodell" ein Platzhalter, und W-07 ist das größte Werkzeug der
 
 ## Akzeptanzkriterien
 
-**W-07N-1 (P1, die sechs Platzhalter sind weg):** `2-FUNKTION.md` trägt keinen `<…>`-Platzhalter mehr.
+**W-07N-1 (P1, alle NEUN Platzhalter sind weg):** `2-FUNKTION.md` trägt keinen `<…>`-Platzhalter mehr.
 *Rot heute: `grep -cE '<[a-zA-ZäöüÄÖÜ][^>]{2,40}>' 2-FUNKTION.md` → **6**.*
 
 **W-07N-2 (P1, aus dem Code abgeleitet):** Jede der acht Angaben (Kommandoname, Ausführen,
@@ -168,10 +196,36 @@ byte-identisch erhalten** — Nachweis: `git diff` zeigt nur Einfügungen, **0 g
 (`SzeneProjektionService.php:258`) als **vorhandene, zweisprachig konsistente** Ableitung. *Kein
 neuer Rechenweg — das wäre die dritte Wahrheit.*
 
-**W-07N-6 (P1, der Reifegrad-Befund steht im Register):** Eine Zeile: `2-FUNKTION` war bis `W-07N`
-ein leeres Formular, W-07 ist als **Altstand vor dem Platzhalter-Kriterium** entstanden (43 Minuten),
-**und der Reifegrad wird NICHT zurückgestuft**. *Ohne diese Zeile sieht die Korrektur später aus wie
-ein verschwiegener Fehler.*
+**W-07N-6 (P1, der Reifegrad wird RICHTIGGESTELLT und der Zähler zählt nur Vollständiges):**
+Die W-07-Registerzeile sagt ablesbar, dass **sechs von sieben** Blättern gefüllt sind, **und der
+Abschlussbefehl zählt W-07 nicht mehr mit**, solange `2-FUNKTION` unvollständig ist.
+
+```text
+GEMESSEN (B5 angewandt — Trefferzeilen gelesen, nicht gezaehlt):
+  grep -nE '<[^>]+>' W-07/2-FUNKTION.md   -> NEUN Platzhalterzeilen
+    :17 :27 :28 :29 :30 :34 :35 :36 :37
+  Legende des Registers: "BESCHRIEBEN (Blaetter gefuellt)" — Plural, alle.
+  -> nach der EIGENEN Definition ist W-07 nicht BESCHRIEBEN. Ablesung, keine Wertung.
+
+DIE FOLGE, messbar und nicht optisch:
+  grep -cE '^\| W-[0-9]+ .*BESCHRIEBEN' REGISTER.md   -> heute 6, richtig waere 5
+  Klasse A wird gegen eine Zahl gemessen, die um eins zu hoch ist.
+
+FORM (die Bedingung gehoert Yama, die Form uns):
+  Der Zaehlbefehl trifft '.*BESCHRIEBEN' — jede Zeile, die das Wort irgendwo traegt.
+  'BESCHRIEBEN (6/7)' wuerde deshalb WEITER mitgezaehlt und die Bedingung verfehlen.
+  Gewaehlt: eine Zwischenstufe OHNE das Wort, plus Legendeneintrag:
+     | W-07 | **Dach aus Kontur** | **6/7 BLAETTER** | W-05, W-06 | … |
+  und in der Legende Z.6-7 ergaenzt:
+     `6/7 BLAETTER` o.ae. (Zwischenstufe) — Blaetter teilweise gefuellt, zaehlt
+     NICHT als BESCHRIEBEN; die Zahl nennt, wie viele stehen
+  Nachweis im Bau: der Zaehlbefehl liefert 5, und die Zeile nennt 6/7.
+```
+
+> **Warum keine Fußnote und kein „(6/7)" hinter dem Wort:** *Yamas Bedingung ist, dass der Zähler nur
+> Vollständiges zählt. Ein Zusatz **hinter** `BESCHRIEBEN` erfüllt die Lesbarkeit, aber nicht die
+> Zählbarkeit — `.*BESCHRIEBEN` greift weiter.* **Die Bedingung schlägt die Form, deshalb fällt das
+> Wort weg und die geleistete Arbeit steht als Zahl in derselben Zeile.**
 
 **W-07N-7 (P1, die offenen Posten von W-07 bleiben sichtbar):** Das Blatt nennt als **nicht
 erledigt**: N1/N2/N3, der Widerspruch F-020-Weg gegen `roof.anbau`-Weg (`db1dc3b6`), und die
