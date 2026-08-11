@@ -1,31 +1,30 @@
-# W · auswahl und griffe — FORMELN
+# W-13 · Auswahl und Griffe — FORMELN
 
-> **Regel: hier werden nur F-Nummern aus `01-MATHEMATIK/FORMELSAMMLUNG.md` genannt.
-> Keine abgeschriebenen Formeln.** Eine Formel, die an zwei Orten steht, wird an
-> einem Ort korrigiert und am anderen vergessen.
+## Keine F-Nummer trifft zu — und das Register sagt es bereits
 
-## Benutzte Formeln
+Die Registerzeile führt **„keine"** und hat F-012 und F-003 gestrichen. **Diese Messung bestätigt
+das und korrigiert nichts** — sie fügt hinzu, *was stattdessen* gerechnet wird.
 
-| F-Nr | Wofür in diesem Werkzeug | Grenzfall betrifft uns? |
-|---|---|---|
-| F-0xx | | ja / nein — weil … |
+**In allen vier Modulen wird nur eine einzige Sache gerechnet**, und die hat in der Sammlung keine
+Nummer:
 
-## Reihenfolge der Anwendung
-
-```
-1. F-0xx  →  <Zwischenergebnis>
-2. F-0xx  →  <Zwischenergebnis>
-3. F-0xx  →  Endergebnis
+```text
+trefferSuche.ts:72-74   toleranzInWelt(pixel, zoom) = zoom > 0 ? pixel / zoom : pixel
 ```
 
-## Fehlt eine Formel?
+**Eine Einheitenumrechnung**, keine Geometrieformel. *Sie in die Sammlung aufzunehmen, wäre kein
+Gewinn: eine Division ist keine Formel, die man nachschlägt.*
 
-<Wenn dieses Werkzeug Mathematik braucht, die noch nicht in der Sammlung steht:
-hier benennen, DANN in die Sammlung eintragen, DANN hier auf die Nummer verweisen.
-Nicht umgekehrt.>
+## Der Befund statt eines Eintrags
 
-## Genauigkeit
+**Das ist eine Rechnung ohne Nummer** — nach Kriterium `W-13/1-3` als **Befund** zu melden und
+**nicht** einzutragen. Hiermit gemeldet.
 
-- Eingangsgrößen in <Einheit>, Rechnung in <Einheit>, Rückgabe gerundet auf <…>
-- Toleranz ε = <…>
-- Bekannte Ungenauigkeit: <wo sich Fehler aufaddieren können>
+**Bemerkenswert an ihr ist nicht die Formel, sondern der Grenzfall:** *„ein Zoom von 0 oder kleiner
+liefert die Toleranz unverändert, statt durch null zu teilen"* (Z.73-74). **Die Absage ist gebaut,
+nicht vergessen.**
+
+## Was hier ausdrücklich NICHT gerechnet wird
+
+**Abstände.** `TrefferKandidat` bringt seine `distanz` **mit** — das Modul misst sie nicht, es
+sortiert danach. *Wer eine Abstandsformel sucht, findet sie bei W-01 (F-001), nicht hier.*

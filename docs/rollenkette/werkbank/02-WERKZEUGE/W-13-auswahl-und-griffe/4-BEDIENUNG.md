@@ -1,43 +1,33 @@
-# W · auswahl und griffe — BEDIENUNG
+# W-13 · Auswahl und Griffe — BEDIENUNG
 
-## Aufruf
+## Das Werkzeug gibt es wirklich
 
-| Weg | Wie |
-|---|---|
-| Werkzeugleiste | <Symbol, Position, Beschriftung> |
-| Tastenkürzel | <Taste> |
-| Kontextmenü | <ja/nein, wann> |
+```text
+resources/planner/hausplaner/app/tools/toolRegistry.ts:39   id: 'auswahl'
+```
 
-## Ablauf am Bildschirm
+**Als einziges Klasse-A-Werkzeug.** *Bei W-01, W-05, W-08, W-21 und W-22 steht die Rechenschicht
+allein; hier kann der Anwender das Werkzeug wählen.*
 
-| Schritt | Anwender tut | Bildschirm zeigt |
+## Was er drückt und was passiert
+
+| Eingabe | Modus | Wirkung |
 |---|---|---|
-| 1 | | |
-| 2 | | |
+| Klick | `replace` | nur dieses Objekt |
+| **Shift** + Klick | `add` | dazunehmen |
+| **Ctrl** / **Cmd** + Klick | `toggle` | drin → raus, draußen → rein |
+| **Alt** + Klick | `remove` | herausnehmen |
+| Klick ins Leere | — | **Auswahl weg** |
+| Klick ins Leere **mit** Modifikator | — | **Auswahl bleibt** |
 
-## Rückmeldungen
+**Die letzte Zeile ist die, die man vermisst, wenn sie fehlt:** wer bei gedrückter Umschalttaste
+danebentrifft, verliert nicht alles (`auswahlModus.ts:93-95`).
 
-| Lage | Anzeige | Ton |
-|---|---|---|
-| Alles gut | | sachlich |
-| Eingabe unvollständig | | hinweisend |
-| **Nicht möglich** | | **erklärend — was und warum** |
+## Was er bei mehreren sieht
 
-> **Pflicht:** Für jede Absage aus `7-GRENZEN.md` muss hier ein Satz stehen, den
-> ein Handwerker versteht. Nicht „DachGeometrieUngueltig", sondern
-> „Für diesen Grundriss kann kein Walmdach berechnet werden, weil er einspringende
-> Ecken hat. Mögliche Wege: Grundriss begradigen oder Flachdach wählen."
+Eine **Mehrfach-Ansicht mit Anzahl je Typ** — keine Einzelfelder. Die Kante steht wörtlich im Code:
+*„Mehrfachauswahl gemischter Typen (Wand + Fenster + Dach): das Panel darf **nicht raten**."*
+(`resources/planner/hausplaner/app/tools/auswahlUebersicht.ts:3-5`)
 
-## Abbruch
-
-- **Esc** bricht ab. Danach ist der Zustand **exakt** wie vorher.
-- Halbfertiges wird nie gespeichert.
-
-## Tastenkürzel während des Werkzeugs
-
-| Taste | Wirkung |
-|---|---|
-| Esc | abbrechen |
-| Eingabe | bestätigen |
-| Umschalt | <z.B. auf 45°-Winkel zwingen> |
-| Alt | <z.B. Fang aussetzen> |
+`benenne()` (Z.73) liefert Ein- und Mehrzahl — und **bei unbekanntem Typ den Typnamen selbst**,
+statt eine Bezeichnung zu erfinden.

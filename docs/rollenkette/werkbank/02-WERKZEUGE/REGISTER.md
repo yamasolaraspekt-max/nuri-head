@@ -19,7 +19,7 @@
 |---|---|---|---|---|
 | W-01 | Raster und Fang | **BESCHRIEBEN** | — | F-040 ✓, F-041 ✓, F-001 ✓, F-003 ✓, ~~F-004~~ ⓝ |
 | W-02 | Wand zeichnen | **BESCHRIEBEN** | W-01 | F-001, F-002, F-030 |
-| W-13 | Auswahl und Griffe | LEER | W-02 | **keine** ⓝ (~~F-012~~, ~~F-003~~) |
+| W-13 | Auswahl und Griffe | **BESCHRIEBEN** | W-02 | **keine** ⓝ (~~F-012~~, ~~F-003~~) |
 | W-12 | Ansicht und Kamera | LEER | — | F-032 |
 
 ## Stufe 2 — Grundriss
@@ -165,6 +165,10 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/geometry/holzMengen.ts` | **W-21** — 64 Zeilen, 3 Ausfuhren; Mengen aus der **echten** 3D-Holzliste statt geschätzt; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/geometry/gaubeGeometrie.ts` | **W-22** — 498 Zeilen, 26 Ausfuhren; **Gaube, Kamin UND Ampel-Prüfung**; kein Registry-Werkzeug; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/geometry/polygonFlaeche.ts` | **W-08** — 48 Zeilen, 2 Ausfuhren; Shoelace in m²; **`0` ist Ergebnis UND Fehlersignal**; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/app/tools/auswahlModus.ts` | **W-13** — 98 Zeilen, 7 Ausfuhren; vier Modi, Modifikator-Vorrang alt vor ctrl/meta vor shift; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/app/tools/trefferSuche.ts` | **W-13** — 75 Zeilen, 4 Ausfuhren; **oben schlägt nah** — Zeichenreihenfolge vor Distanz; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/app/tools/auswahlDarstellung.ts` | **W-13** — 71 Zeilen, 3 Ausfuhren; Zustand als Daten, kein Markup; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/app/tools/auswahlUebersicht.ts` | **W-13** — 77 Zeilen, 4 Ausfuhren; Mehrfach-Ansicht, „das Panel darf nicht raten"; **eingearbeitet 12.08.2026** |
 
 ## Was aus Yamas eigenem Bestand kommt
 
@@ -278,3 +282,7 @@ werden nicht durch meine Korrektur unsichtbar gemacht.
 > ⚠ **W-08: F-023 und F-024 stehen nicht im Code.** F-023 (wahre Dachfläche aus Grundfläche) ist ein **alternativer Weg** — das Modul misst direkt in der geneigten Ebene und braucht keine Neigung. F-024 (Azimut einer Dachfläche) liegt in `wallGeometry.ts`; dieses Modul kennt **keine** Ausrichtung. F-011 ist belegt (`polygonFlaeche.ts:44` und `:46`).
 
 > **Und ein Befund, der über W-08 hinausgeht: die Schuhbandformel ist DREIMAL umgesetzt, zwei Fassungen heißen gleich.** `polygonFlaecheM2()` in `polygonFlaeche.ts:31` erwartet **Meter**; `polygonFlaecheM2()` in `app/Services/Heizlast/GeometrieAbleitungService.php:118` erwartet **Millimeter** und teilt durch 1.000.000. Dazu `signierteFlaeche()` in `roomDetection.ts:70` (mm², mit Vorzeichen, W-05). *Wer die ersten beiden verwechselt, irrt um den Faktor eine Million — und beide liefern eine Zahl, die aussieht wie eine Fläche.* Zusätzlich: die TS-Fassung prüft jeden Punkt mit `Number.isFinite`, die PHP-Fassung hat keine solche Prüfung.
+
+> ✓ **W-13: das Register sagt bereits „keine" — die Messung BESTAETIGT das und korrigiert nichts.** In allen vier Modulen wird genau eine Sache gerechnet: `toleranzInWelt(pixel, zoom)` (`trefferSuche.ts:72-74`), eine **Einheitenumrechnung**. Sie hat keine Nummer in der Sammlung und braucht keine — *eine Division ist keine Formel, die man nachschlägt*. Nach `W-13/1-3` als **Befund gemeldet, nicht eingetragen**. Abstände werden hier nicht berechnet: `TrefferKandidat` bringt seine `distanz` mit.
+
+> **Und: W-13 ist das einzige Klasse-A-Werkzeug MIT Registry-Eintrag** (`app/tools/toolRegistry.ts:39`, `id: 'auswahl'`) — bei W-01, W-05, W-08, W-21 und W-22 steht die Rechenschicht ohne Werkzeugschicht. **Dafür hat es NULL dedizierte Zusagen** (W-01: 2, W-02: 1) bei 321 Zeilen; erwähnend sind zwei Testdateien mit 36 Zusagen. *Messweise steht im `6-PRUEFUNG`-Blatt, damit die Zahl nachrechenbar ist.*
