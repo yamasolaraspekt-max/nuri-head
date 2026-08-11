@@ -1592,6 +1592,17 @@ naechster_schritt: "Generator zieht A-13, sobald kein Auftrag IN_ARBEIT ist (W-2
 ```
 ---
 
+## W-22/1 CODE_FERTIG bestaetigt + ein FUND aus meiner eigenen Warnung (plan-pruefer 12.08.)
+
+```yaml
+ballwechsel_bestaetigt: "Kette vollstaendig, Bau 8a3acb53 exakt 8 Dateien (sieben Blaetter + REGISTER), 11/11 gemeldet. Ball beim EVALUATOR. Damit ist Runde 2 der Klasse A gebaut."
+meine_warnung_und_ihr_ergebnis: "Ich hatte im BEREIT-Votum gewarnt: 'die Exportzahl 26 ist gross genug, dass eine Doppelung wie Punkt2D/MassPunkt darin unauffaellig waere — der Bauende soll ausdruecklich pruefen, ob gaubeGeometrie eigene Punkt-/Masstypen definiert, die anderswo schon existieren'. Der Bau hat NICHT danach gesucht (0 Treffer auf doppel/zweimal/identisch in seiner Meldung). ICH HABE ES GEMESSEN, und es gibt ZWEI Funde — der zweite ist der schwerere."
+fund_1_vec3: "Vec3 ist VIERMAL definiert und alle vier sind ZEICHENWEISE IDENTISCH ('exportinterfaceVec3{x:number;y:number;z:number;}') — aufbauOrientierung.ts:22, gaubeGeometrie.ts:34, dachVerschneidung.ts:20, dachUForm.ts:12. Exakt dieselbe Klasse und exakt dieselbe Zahl wie Punkt2D. Das ist jetzt der DRITTE Fall (MassPunkt 2x, Punkt2D 4x, Vec3 4x) und kein Einzelfall mehr, sondern die Bauart der Geometrie-Schicht: jedes Modul definiert seine Grundtypen selbst, damit es importfrei bleibt. Regel wie bei W-11: benennen, nicht zusammenlegen."
+fund_2_dreieck_schwerer: "'Dreieck' ist ZWEIMAL definiert und die beiden sind NICHT identisch, sondern BEDEUTEN VERSCHIEDENES: dachMesh.ts:32 'type Dreieck = [WeltPunkt3, WeltPunkt3, WeltPunkt3]' gegen gaubeGeometrie.ts:37 'type Dreieck = [LokalPunkt, LokalPunkt, LokalPunkt]'. EIN NAME, ZWEI KOORDINATENSYSTEME. Das ist keine Doppelung, sondern die gefaehrlichere Form: bei Punkt2D/Vec3 waere eine Verwechslung folgenlos (die Typen sind gleich), hier ist sie ein Rechenfehler im Raum — Weltkoordinaten in eine Lokalfunktion zu geben faellt dem Uebersetzer nicht auf, wenn beide 'Dreieck' heissen und strukturell gleich gebaut sind (drei Punkte). Das gehoert in 7-GRENZEN und, anders als die Typ-Doppelungen, moeglicherweise WIRKLICH aufgeloest — aber das entscheidet der Planner, nicht ich und nicht der Bau."
+pruefhinweis_evaluator: "Beide Funde als HINWEIS, nicht als Blocker — kein W-22-Kriterium verlangt eine Doppelungssuche (meine Warnung stand im Votum, nicht im Blatt; das ist MEIN Anteil: haette ich sie als Restpunkt gesetzt statt als Hinweis, waere sie verbindlich gewesen). Die Blaetter nennen Vec3 und Dreieck je einmal, aber nur in Exportliste und Formelblatt, nicht als Grenzfall."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
