@@ -1,47 +1,55 @@
-# W · raum erkennen — GRENZEN
+# W-05 · Raum erkennen — GRENZEN
 
-> **Dieses Blatt ist Pflicht.**
-> Der teuerste Fehler des Projekts bisher: ein Dach, das bei nicht-rechteckiger
-> Kontur unsichtbar verschwand statt eine Absage zu geben. Die Domäne verweigerte
-> korrekt — der Renderer schluckte die Absage mit `catch { continue; }`.
-> **Ein Werkzeug ohne benannte Grenze baut genau diesen Fehler wieder ein.**
+## Die drei Fälle, am Code gemessen
 
-## Was dieses Werkzeug NICHT kann
+### Offener Wandzug — kein Umlauf
 
-| Fall | Warum nicht | Was der Anwender stattdessen sieht |
-|---|---|---|
-| | | |
+Er erzeugt **keinen Raum und keine Meldung**. Der Umlauf entsteht trotzdem, entartet aber und fällt
+an zwei Stellen heraus:
 
-## Die Absagekette
-
-Für jeden Fall oben muss die Kette vollständig sein:
-
-```
-Schicht 1/2 wirft benannten Fehler
-        ↓
-Schicht 3 fängt und übersetzt
-        ↓
-Schicht 4 reicht DURCH — kein catch/continue
-        ↓
-Schicht 5 zeigt dem Anwender einen verständlichen Satz
+```text
+roomDetection.ts:167-168   if (polygon.length < 3) continue;
+roomDetection.ts:171-172   if (flaeche <= 0) continue;
+                           // "Aussenumlauf (negativ) oder entartet (0) — kein Raum."
 ```
 
-| Fall | Fehlername | Wer fängt | Anwendertext steht in |
-|---|---|---|---|
-| | | | 4-BEDIENUNG.md |
+**Das Ergebnis ist eine leere Liste, kein Fehler.** *Der Anwender sieht keinen Raum — und ein
+fehlender Raum sieht genauso aus wie ein Raum, den es nicht geben soll.*
 
-## Fänger-Prüfung
+### Sich kreuzende Wände — X-Kreuzungen werden NICHT geteilt
 
-- [ ] Jeder Fehlerpfad ist durch einen Test belegt, der prüft:
-      **die Meldung erreicht die Oberfläche**
-- [ ] Kein `catch { }` ohne Weiterreichen im Pfad dieses Werkzeugs
-- [ ] Kein stilles `return` bei ungültiger Eingabe
+Der Dateikopf sagt es selbst (Z.19-22):
 
-## Bekannte Ungenauigkeiten
+> *„Echte X-Kreuzungen (zwei Wände schneiden sich abseits aller Endpunkte) werden **NICHT** geteilt
+> (Snapping führt Wände auf Endpunkte/T). Ein Fall mit X-Kreuzung erzeugt schlicht **keine
+> zusätzlichen Räume — nie falsche**."*
 
-| Größe | Abweichung | Ab wann stört es |
-|---|---|---|
+**Die Grenze ist benannt und ihre Richtung ist festgelegt:** lieber ein Raum zu wenig als einer zu
+viel. *Das ist eine Entscheidung, keine Lücke.*
 
-## Was später kommen könnte
+### Wand mit Länge 0 — fällt vorher raus
 
-<Absichtlich weggelassene Funktionen, damit sie nicht als Fehler gemeldet werden.>
+```text
+roomDetection.ts:88-91   const laenge = Math.hypot(…);
+                         if (laenge === 0) { continue; }
+```
+
+**Exakt gegen 0 geprüft, nicht gegen ein Epsilon** — mm-Integer-Welt. *Eine Wand von 1 mm bleibt eine
+Wand.*
+
+## Die bewussten P0-Grenzen — aus dem Dateikopf, nicht erfunden
+
+| Grenze | Folge |
+|---|---|
+| **Polygone laufen über die WANDACHSEN** (Mittellinien) | die Fläche ist **Achsmaß**, nicht lichtes Maß — sie ist um die halbe Wanddicke ringsum zu groß |
+| der lichte Abzug ist *„eine spätere Verfeinerung"* | die Testwerte sind **auf Achsmaß handgerechnet** |
+| keine F-013-Prüfung | siehe `3-FORMELN` — gemeldet, nicht bewertet |
+
+**Wer die Fläche für eine Wohnflächenberechnung nimmt, nimmt die falsche Zahl.** *Sie ist nicht
+falsch gerechnet — sie misst etwas anderes.*
+
+## Kein Werkzeug, kein Ausweg
+
+Es gibt **keinen Registry-Eintrag** für W-05. Damit kann der Anwender die Erkennung **nicht
+abschalten und nicht anstoßen**. *Deshalb ist die Endlosschleifen-Freiheit hier keine Feinheit,
+sondern die Bedingung dafür, dass das Werkzeug überhaupt automatisch laufen darf.*

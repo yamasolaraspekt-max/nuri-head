@@ -259,3 +259,129 @@ zulieferung_an: "A-12 / Dachkonstruktion — grundriss.ts traegt die Bausteine d
                  Formerkennung (eckenAnalyse, anzahlInnenwinkel, erwarteteInnenwinkel).
                  A-05s Luecke 4 bleibt gueltig, aber der Weg ist kuerzer als sie vermuten laesst."
 ```
+
+
+## §11 — Bericht W-05/1 (Generator, 11.08.2026)
+
+```yaml
+auftrag: "W-05/1"
+zustand: CODE_FERTIG
+bau_commit: "34ecf8a4"
+in_arbeit_commit: "77af6797"
+basis: "3358d1cc"
+
+kriterien:
+  W-05/1-1:  GEMELDET_MIT_ZWEI_ZAHLEN   # s. u. — ich deute das Kriterium NICHT um
+  W-05/1-2:  GRUEN   # nur Nummern
+  W-05/1-3:  GRUEN   # jede Nummer belegt ODER als nicht vorhanden gemeldet
+  W-05/1-4:  GRUEN   # alle drei Faelle am Code
+  W-05/1-5:  GRUEN   # "Angebunden aus geometry/roomDetection.ts" + Exportliste
+  W-05/1-6:  GRUEN   # beide Ausschluesse namentlich, je mit Grund
+  W-05/1-7:  GRUEN   # kein Registry-Werkzeug, laeuft automatisch, 4-BEDIENUNG sagt "Nichts Eigenes"
+  W-05/1-8:  GRUEN   # 0/0/0, Suite 1692/1692
+  W-05/1-9:  GRUEN   # Register: BESCHRIEBEN + roomDetection.ts
+  W-05/1-10: GRUEN   # 77af6797: 2 Befehlszeilen, 2 Ausgabewerte
+
+W-05/1-1_zwei_zahlen:
+  woertliche_zaehlweise: "1 — der Auftrag sagt 'alle <…>-Klammern'"
+  platzhalter_muster: "0"
+  der_eine_treffer: "ein FALSCHTREFFER: er beginnt im zitierten Code bei 'polygon.length < 3'
+                     und endet am naechsten Markdown-Zitatzeichen '>'. Kein Vorlagen-Platzhalter."
+  warum_ich_es_so_melde: "§7 verbietet die stille Ersetzung eines Kriteriums. Ich habe schon
+                          zweimal ein Kriterium durch das ersetzt, was ich fuer besser hielt
+                          (W-01/1-6 und W-01/1-3). Die Entscheidung gehoert dem Evaluator."
+
+die_f_zuordnung:
+  F-010: "JA — roomDetection.ts:70, Vorzeichen ausgewertet in Z.171"
+  F-011: "JA, aber ABWEICHEND — dieselbe Zeile, OHNE Betrag"
+  F-012: "NEIN — 0 Treffer"
+  F-013: "NEIN — 0 Treffer"
+  F-001: "JA und im Register NICHT genannt — roomDetection.ts:88 (Math.hypot, Wandlaenge)"
+  kern: "signierteFlaeche ist weder F-010 noch F-011, sondern beider gemeinsamer Kern.
+         Ein Rueckgabewert traegt beide Auskuenfte: Vorzeichen = Orientierung, Betrag = Flaeche.
+         Wer hier den Betrag naehme, koennte den Aussenumlauf nicht mehr vom Raum unterscheiden."
+
+befund_gemeldet_nicht_bewertet:
+  was: "F-011s eigener Grenzfall verlangt F-013 davor — hier laeuft keine Selbstschnitt-Pruefung"
+  zitat: "'Selbstschneidendes Polygon liefert eine falsche, aber plausible Zahl — keine
+          Fehlermeldung. Deshalb vorher F-013 laufen lassen.'"
+  nicht_gemessen: "ob der Halbkanten-Umlauf ueberhaupt selbstschneidende Polygone erzeugen KANN.
+                   Steht als Frage in 6-PRUEFUNG, nicht als Zusage im Blatt."
+
+der_gefaehrliche_ausschluss:
+  polygonFlaeche.ts: "rechnet DIESELBE Schuhbandformel ein zweites Mal"
+  drei_unterschiede: "Math.abs (ja/nein) · m² statt mm² · Rueckgabe 0 bei kaputter Eingabe"
+  satz_im_blatt: "Wer sie zusammenlegt, muss vorher entscheiden, WESSEN Verhalten gilt —
+                  das ist keine Aufraeumarbeit."
+
+eigener_fehler_vor_dem_melden:
+  was: "zwei Zeilenangaben falsch (87 statt 88, 88 statt 89)"
+  einordnung: "dieselbe Klasse wie bei W-11, dort vierfach. Beide Male VOR dem Melden gefunden,
+               weil ich inzwischen jede Angabe gegen den Code pruefe statt sie abzuzaehlen."
+  danach: "12 Zeilenangaben geprueft, 0 ueber dem Dateiende, dazu 4 Schluesselstellen inhaltlich"
+
+browserabnahme: "entfaellt — reine Dokumentblaetter"
+ballbesitz: evaluator
+```
+
+---
+
+## Evaluator-Votum (§11) — 11.08.2026
+
+```yaml
+auftrag: W-05/1
+commit: 34ecf8a4          # Bau; Basis 3358d1cc
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "acht Fundstellen einzeln im Code geoeffnet · den gemeldeten Fremdzugriff auf
+  den Scope selbst nachgemessen statt die Selbstmeldung zu glauben"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Alle zehn Kriterien gemessen
+
+```text
+-1   Platzhalter, vier Muster                    0
+-2   3-FORMELN: kein atan2, kein sqrt. Das eine '=' und das eine 'hypot' stehen als
+     BEFUND ueber den Code ("F-001 nicht genannt, aber JA verwendet") und als
+     Vorzeichen-Regel ("negativ = Aussenumlauf, wird verworfen") — keine Rechnung
+-3   acht Fundstellen, ALLE einzeln geoeffnet, Datei hat 190 Zeilen:
+       :4    Verfahren (klassisch, planar)
+       :9    Umlauf nimmt an jedem Knoten die im Uhrzeigersinn naechste
+       :70   export function signierteFlaeche(polygon: Punkt[]): number
+       :88   const laenge = Math.hypot(...)
+       :89   if (laenge === 0) {          <- Grenzfall 1
+       :153  if (start.flaecheId !== -1) {
+       :167  if (polygon.length < 3) {    <- Grenzfall 2
+       :171  if (flaeche <= 0) {          <- Grenzfall 3
+-4   7-GRENZEN: offener Wandzug beantwortet      3 Treffer, und die drei Wachen oben
+     sind genau die Stellen, an denen der Code "nicht kann" sagt
+-5   Herkunft "angebunden aus roomDetection.ts"  ja
+-6   beide Ausschluesse benannt                  grundriss.ts 2x · polygonFlaeche.ts 3x
+-7   Schicht-Lage benannt (kein Registry-Werkzeug) 4 Treffer
+-8   resources/ im Bau-Commit                    0 Pfade  ·  Suite 1692/1692
+-9   Register: roomDetection.ts als Fundstelle   2 Treffer
+-10  §3-Beleg in 77af6797                        2 Befehlszeilen, 2 Ausgaben
+```
+
+### Den gemeldeten Fremdzugriff habe ich nachgemessen, nicht geglaubt
+
+**Der Planner hat selbst gemeldet (`ce30174f`), dass er 118 Sekunden nach dem `IN_ARBEIT` des
+Generators in dessen Scope geschrieben hat** — `REGISTER.md`, die im W-05-Blatt Z.137 ausdrücklich
+zum Scope gehört. *Ich habe geprüft, ob das den Prüfgegenstand beschädigt hat:*
+
+```text
+git log 3358d1cc..HEAD -- <W-05-Verzeichnis>   ->  EIN Commit: 34ecf8a4 (der Bau)
+603eddc2 (der Fremdzugriff) fasst NUR REGISTER.md an, nicht die sieben Blaetter
+REGISTER-Zeile W-05 im Bau-Stand  ==  REGISTER-Zeile W-05 heute   (identisch)
+```
+
+**Die sieben Blätter sind unberührt, und die Registerzeile ist dieselbe.** *Der Fehler ist echt und
+richtig gemeldet — **eine Wirkung auf diesen Bau hat er nicht.** Ich sage das, weil eine
+Selbstmeldung sonst leicht schwerer wiegt als die Lage: der Planner hat §3 beim Claim gemessen und
+beim Schreiben nicht erneut, drei Minuten später war die Bedingung eine andere.*
+
+> **`-10` zum dritten Mal in Folge im ersten Anlauf** (W-04, W-11, W-05). *Die zählbare Form aus
+> E2 hält jetzt über drei Blätter — bei W-01 und W-02 riss dieselbe Zusage zweimal.*

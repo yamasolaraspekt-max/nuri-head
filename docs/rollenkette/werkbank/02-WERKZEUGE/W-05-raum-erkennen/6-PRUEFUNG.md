@@ -1,37 +1,23 @@
-# W · raum erkennen — PRÜFUNG
+# W-05 · Raum erkennen — PRÜFUNG
 
-> **Regel: jedes Kriterium muss VOR dem Bau wirksam rot sein.**
-> Ein Kriterium, das schon grün ist, bevor gebaut wurde, prüft nichts.
+## Was eine Prüfung hier belegen muss
 
-## Abnahmekriterien
+1. **Dass es nicht hängenbleibt.** Die Endlosschleifen-Freiheit ist eine ausdrückliche Zusicherung
+   des Dateikopfs — und ein automatisch laufendes Werkzeug hat keinen Ausweg.
+2. **Dass der Außenumlauf verworfen wird.** Sonst ist das ganze Haus ein Raum.
+3. **Dass die Referenzwerte auf Achsmaß gerechnet sind** — nicht lichte Maße (siehe `7-GRENZEN`).
+4. **Dass ein offener Wandzug keinen Raum erzeugt** — und dass das Ergebnis leer ist, nicht falsch.
 
-| Nr | Kriterium | Rot-Beleg vor dem Bau | Wie gemessen |
-|---|---|---|---|
-| K-1 | | | |
-| K-2 | | | |
+## Warum Punkt 1 nicht durch Nachdenken zu prüfen ist
 
-## Fangprobe (Mutationsprobe)
+Die Zusicherung stützt sich auf einen Mechanismus, den man messen kann:
+**jede Halbkante wird genau einmal verbraucht** (`roomDetection.ts:153-154` —
+`if (start.flaecheId !== -1) continue`). **Eine Prüfung, die nur „läuft durch" feststellt, prüft die
+Eingabe, nicht die Zusicherung.**
 
-<Eine absichtlich eingebaute Fehlerstelle, die von den Kriterien gefunden werden MUSS.
-Wenn die Suite trotz eingebautem Fehler grün bleibt, prüfen die Kriterien nichts.>
+## Der Prüfpunkt, den ich NICHT beantwortet habe
 
-| Mutation | Muss erkannt werden von |
-|---|---|
-| | |
-
-## Automatische Tests
-
-| Datei | Prüft |
-|---|---|
-| | |
-
-## Sichtprüfung (falls die Oberfläche betroffen ist)
-
-- [ ] 1440 px
-- [ ] 1024 px
-- [ ] 375 px
-- [ ] Meldung bei Absage lesbar und vollständig sichtbar
-
-## Bestandsprobe
-
-- [ ] Ein vor der Änderung gespeichertes Dokument lädt danach unverändert
+**Kann der Halbkanten-Umlauf ein selbstschneidendes Polygon erzeugen?** Wenn ja, liefert die
+Schuhbandformel laut Sammlung *„eine falsche, aber plausible Zahl — keine Fehlermeldung"*, und es
+gibt hier keine F-013-Prüfung. **Ich habe das nicht gemessen.** *Es steht als Frage im Blatt, nicht
+als Zusage.*

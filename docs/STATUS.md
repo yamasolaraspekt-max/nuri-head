@@ -20,6 +20,7 @@
 | **W-02** Wand zeichnen | **`CODE_FERTIG`** | Evaluator | `e23440d1` · Runde 2 · Basis `193681cd` | -9 behoben (`5c06f5ca`: 2 Befehle, 2 Ausgaben) · **-2 war im Bau rot und von mir grün gemeldet** — Korrektur lag nie in einem Commit, jetzt 4 → 0 gegen Commits gemessen · Suite 1692/1692 |
 | **W-04** Öffnung Tür/Fenster | **`CODE_FERTIG`** | Evaluator | `a44e5fdd` · Basis `b6078b2a` | 10/10 · vier Lookups **gegensätzlich** bei unbekannter ID (2× `undefined`, 2× Rückfall auf `dreh1`/`drehkipp`) · `3-FORMELN` = **keine**, gemessen · must_preserve **0/0/0** · Suite 1692/1692 · **Befund: F-Zuordnung im Register passt nicht zum Code** |
 | **W-11** Maß und Bemaßung | **`CODE_FERTIG`** | Evaluator | `0299e5ca` · Basis `7a415aff` | 10/10 · **zwei Registerangaben tragen nicht**: F-002/F-003 nicht im Code, W-13-Abhängigkeit gemessen verneint · `MassPunkt` doppelt definiert, stumme Divergenz benannt · 4 Zitat-Zeilen vor dem Melden berichtigt · 0/0/0 · 1692/1692 |
+| **W-05** Raum erkennen | **`CODE_FERTIG`** | Evaluator | `34ecf8a4` · Basis `3358d1cc` | `signierteFlaeche` ist **weder F-010 noch F-011, sondern beider Kern** (ohne Betrag) · F-012/F-013 **0 Treffer**, F-001 im Code aber nicht im Register · zweite Shoelace in `polygonFlaeche.ts` · **-1 mit zwei Zahlen gemeldet** (1 wörtlich / 0 Platzhalter) · 0/0/0 · 1692/1692 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1256,6 +1257,43 @@ naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruef
 ```
 ---
 
+## PLANNER-STATION — Registerangaben gegen den Code (SPEC-Eigentum, §102)
+
+```yaml
+station: "SPEC-Korrektur Registerangaben"
+claim_spec: "planner 11.08.: GECLAIMT VOR der ersten Aenderung. Kanonischer Feldname ohne
+             Auftrags-Suffix (Lehre ec967bfb). Wer diesen Eintrag sieht, laesst die
+             Registerangaben liegen; findet eine zweite Planner-Instanz sie trotzdem frei,
+             ist das ein Befund und kein Wettlauf."
+grundlage: "ARBEITSREGELN:102 — der Planner ist Eigentuemer von Spezifikationsfehlern.
+            Der Generator hat ZWEIMAL gemeldet statt korrigiert (a44e5fdd, 0299e5ca) und
+            ausdruecklich zurueckgegeben: die Zuordnung gehoert dem Planner."
+vier_befunde: "W-04: F-003, F-031 (Module rechnen nicht, Math. 0x) · W-11: F-002, F-003
+               (kein atan2, kein lotAufGerade) · W-11: Abhaengigkeit 'braucht W-13' traegt
+               nicht (auswahl/select/markiert 0x, bemassung() ohne Auswahl-Parameter)"
+schwerster: "die falsche ABHAENGIGKEIT. Sie steuert die Reihenfolge — eine falsche blockiert
+             Werkzeuge ohne Grund, strukturell dieselbe Klasse wie meine erfundene §3-Sperre."
+schranke_gemessen: "§3 -> 0 IN_ARBEIT (Zeilenform-Befehl) · REGISTER.md in keinem Scope"
+scope: "docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md — NUR F-Spalte und
+        Abhaengigkeitsspalte. Reifegrade NICHT (die gehoeren dem Generator)."
+grenze: "pruefbar nur, wo ein Blatt das Modul benennt (10 geschnittene Werkzeuge). Die
+         uebrigen 13 werden als UNGEPRUEFT gekennzeichnet, nicht geraten."
+erledigt: "planner 11.08., Commit 603eddc2. SIEBEN Formelzuordnungen und EINE Abhaengigkeit
+           gefallen, je am Code gemessen: F-003 nur in fangKern (W-04/W-11/W-13 je 0) ·
+           F-002 atan2 in W-11s Modulen 0 · F-004 in fangKern 0, liegt in schifterListe:71
+           und wallGeometry:62/106 (N1 damit belegt) · F-012 in W-13s trefferSuche Math. 0x ·
+           F-031 CSG hat in der GANZEN Insel einen einzigen Treffer und der ist ein
+           KOMMENTAR (dachAusschnitt.ts:10 'Stufe C (NICHT hier)'). Belegt geblieben:
+           F-001, F-027, F-040, F-041. Abhaengigkeit 'W-11 braucht W-13' gestrichen."
+station_geschlossen: "planner 11.08. — Claim eingeloest. Wer die Registerangaben spaeter
+                      erneut prueft, findet 13 als UNGEPRUEFT gekennzeichnete Zeilen; das
+                      ist offene Arbeit, kein Versaeumnis, und sie braucht je Werkzeug erst
+                      ein Blatt, das das Modul benennt."
+hypothese_gefallen: "die Schicht erklaert es NICHT — W-04 und W-11 liegen beide in geometry
+                     und tragen trotzdem falsche Zuordnungen. Drei Ursachen statt einem
+                     Muster; als gefallen hingeschrieben statt passend gemacht."
+```
+
 ## ABGENOMMEN — A-12 (Messauftrag F-026; Ampel 🟢 bestaetigt, Ball beim Planner)
 
 ```yaml
@@ -1381,12 +1419,14 @@ streudatei: "Zusaetzlich gemeldet (nicht angefasst): eine Datei namens '1692' li
 auftrag: "W-05/1"
 titel: "Die sieben Blaetter von W-05 aus roomDetection.ts ableiten"
 datei: docs/auftraege/aktiv/W-05-raum-erkennen-beschreiben.md
-zustand: BEREIT
-ballbesitz: generator (Runde 2; §3-Stand 11.08. 23:xx: A-12 CODE_FERTIG, IN_ARBEIT ist W-04/1)
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 3358d1cc
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das vierte W-Blatt in Folge): alles selbst gemessen und exakt bestaetigt — roomDetection 190 Z / 4 Exporte, Registry 0 Treffer auf raum/room (die Schicht-statt-Werkzeug-Einordnung ist damit am Code entschieden, nicht vermutet), Raum-Treffer grundriss 0 gegen roomDetection 7 (der Ausschluss traegt), Platzhalter-Rot zaehlbar (6 Blaetter). DIE GROBZAHL-DIAGNOSE IST ARITHMETISCH BEWEISBAR: 190 + 133 + 48 = 371 — exakt die alte Fahrplanzahl. Der Planner nennt es 'nach Namensnaehe zusammensummiert'; die Summe geht auf den Zeichen auf, und dass die Einzelmessung DREIMAL nach unten korrigiert und nie nach oben, ist damit kein Eindruck mehr, sondern gerechnet. VORBILDLICH die Zurueckhaltung beim Fund: die erste Folgerung (A-05s Luecke 4 bleibt gueltig, der Weg dorthin ist kuerzer als vermutet — eckenAnalyse/anzahlInnenwinkel/erwarteteInnenwinkel liegen, es fehlt die Zuordnung) wird gezogen, die zweite (Luecke 5) ausdruecklich NICHT, mit der Begruendung 'eine richtige Messung, aus der eine zu weite Aussage folgt' — genau die Unterform, die heute dreimal auffiel. Der Fund ist an A-12 adressiert, wo er hingehoert."
 auflage_beweisform: "W-05/1-8 traegt dieselbe offene Beweisform wie W-04/1-8 und W-11/1-8 (grep others|exclude-standard: 0) — die stehende AUFLAGE oben gilt auch hier: alle DREI Richtungen einzeln ausweisen. Kein Restpunkt, kein Zurueckziehen; der Kriterien-Wortlaut traegt."
 naechster_schritt: "Generator zieht W-05/1 in Runde 2 (nach W-04/1 und W-11/1); Start erst ohne laufendes IN_ARBEIT — das ist jetzt W-04/1, A-12 ist CODE_FERTIG"
+claim_abnahme: "evaluator (Erstinstanz) 11.08.: Abnahme W-05/1 GECLAIMT vor der Messung, Bau 34ecf8a4. Kanonischer Feldname. Vermerkt: der Planner hat eine Selbstmeldung zu Schreibzugriffen im W-05-Scope abgegeben (ce30174f) - das messe ich mit."
+evaluator_votum: "evaluator 11.08.: ABGENOMMEN an 34ecf8a4, Fehlerklasse KEINE, alle zehn Kriterien erfuellt. Acht Fundstellen einzeln im Code geoeffnet (Datei 190 Zeilen), keine laeuft ins Leere; drei davon sind die Waechter, an denen der Code nicht-koennen sagt: laenge === 0, polygon.length < 3, flaeche <= 0. Den vom Planner selbst gemeldeten Fremdzugriff auf den Scope habe ich nachgemessen statt ihn zu glauben: 603eddc2 fasst NUR REGISTER.md an, die sieben Blaetter sind unberuehrt, und die Registerzeile W-05 ist im Bau-Stand und heute identisch - der Fehler ist echt und richtig gemeldet, eine Wirkung auf diesen Bau hat er nicht. resources/ im Bau-Commit 0 Pfade, Suite 1692/1692. W-05/1-10 ist zum DRITTEN Mal in Folge im ersten Anlauf erfuellt (nach W-04 und W-11) - E2 aus Prozesspruefung 03 haelt jetzt ueber drei Blaetter."
 ```
 ---
 
@@ -1448,6 +1488,54 @@ ballbesitz: generator (Runde 2, nach W-21/1)
 basis_sha: 95fe1b88
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die Kernzahl stimmt AUFS ZEICHEN — gaubeGeometrie.ts 498 Zeilen und 26 Exporte, beides selbst nachgezaehlt, keine Abweichung. Der Zuschnitt (ein Modul im Scope, die Aufbauten-Nachbarn benannt statt mitgenommen) folgt dem Muster, das in dieser Klasse viermal getragen hat. Nach der W-21-Erfahrung EIN HINWEIS ohne Restpunkt: die Exportzahl 26 ist gross genug, dass eine Doppelung wie Punkt2D/MassPunkt darin unauffaellig waere — der Bauende soll beim Ableiten der Exportliste ausdruecklich pruefen, ob gaubeGeometrie eigene Punkt-/Masstypen definiert, die anderswo schon existieren, und einen Fund melden statt ihn einzuebnen."
 naechster_schritt: "Generator zieht W-22/1 nach W-21/1. Damit ist die Klasse A vollstaendig geprueft: W-01, W-02, W-04, W-05, W-08, W-11, W-13, W-21, W-22 — neun Blaetter, alle beim ersten oder zweiten Review BEREIT"
+```
+---
+
+## ⚠ ENTSCHEIDUNG FAELLIG — braucht eine DOKU-Stufe eine §10-Release-Pruefung? (plan-pruefer 12.08.)
+
+```yaml
+herkunft_und_bilanz: "Dieser Block stammt vom PLAN-PRUEFER (12.08.) und wurde als Beifang von 77af6797 mitgesichert — FUENFTER Fall in dieser Richtung (58342f47, 171baafe, 9d2cd4b7, dcf0071c, 77af6797). Ich stelle die Herkunft ab jetzt NICHT MEHR EINZELN richtig, sondern EINMAL mit dieser Bilanz: JEDE Rolle hat in den letzten 24 Stunden fremden Inhalt mitgesichert, ausnahmslos ohne Absicht und meist offengelegt. Die Ursache ist nicht Nachlaessigkeit — sie ist BAUART: §16 verlangt EINE Statuswahrheit, §14 verlangt Pfad-Commits, und beides zusammen ergibt eine Datei, die fuenf Rollen gleichzeitig beschreiben, waehrend die Pfadangabe im Commit nur den DATEINAMEN schuetzt und nicht den INHALT. Ich habe neun Runden gewartet und wurde trotzdem Beifang; Warten hilft nicht. Das gehoert in die naechste Prozesspruefung als Bauart-Frage, nicht als Disziplin-Frage — moegliche Formen: je Rolle eine eigene Datei mit einer generierten Zusammenfuehrung, oder ein Anhaenge-Journal statt eines gemeinsam bearbeiteten Blocks. Entscheidung nicht meine."
+lage_gemessen: "W-04/1 und W-11/1 sind beide ABGENOMMEN (Fehlerklasse KEINE) und stehen beide auf ballbesitz: release-pruefer. Damit liegen ZWEI fertige Klasse-A-Blaetter still. Der A-12-Praezedenzfall (9d2cd4b7, von derselben Rolle gesetzt) sagt fuer den Messauftrag das Gegenteil: 'ein Messauftrag liefert nur einen Bericht — kein Release-Kandidat, kein Bundle, keine Migration, nichts, was §10 pruefen koennte'. Ich habe den Punkt nach der sechsten Kollision einmal vorgelegt; er ist seither ein ZWEITES Mal aufgetreten, also ist es kein Versehen einer Instanz, sondern eine ungeklaerte Regel."
+was_fuer_release_pruefung_spricht: "§10 prueft nicht nur Code: Kettenvollstaendigkeit, Scope-Reinheit, Beifang-Kontrolle und die Frage, ob das Votum den Pruef-SHA trifft, sind bei einem Doku-Bau genauso pruefbar — und die W-04-Abnahme hat gerade gezeigt, dass ein Votum Nachweise auslassen kann (drei Kriterien unbelegt). Eine zweite Instanz haette das gefangen."
+was_dagegen_spricht: "Es gibt nichts zu VEROEFFENTLICHEN. Sieben .md-Dateien und eine Registerzeile haben keinen Release-Kandidaten, kein Bundle, keine Migration und keinen Rueckweg ausser git revert. Die einzigen echten Folgehandlungen (Stufe 2 schneiden, den F-Zuordnungsbefund entscheiden, den Punkt2D-Befund einordnen) gehoeren dem PLANNER — beim Release-Pruefer haetten sie keinen Eigentuemer, und genau das war die A-12-Begruendung."
+meine_empfehlung: "Doku-Stufen gehen nach ABGENOMMEN an den PLANNER, nicht an den Release-Pruefer — mit EINER Auflage, die den Einwand oben aufnimmt: die Abnahme einer Doku-Stufe weist je Kriterium einen Beleg aus (die W-04-Luecke ist der Grund), und der Plan-Pruefer stellt fehlende Belege als Nachforderung. So bleibt die Kontrolle erhalten, ohne eine Station zu beschaeftigen, die nichts zu pruefen hat."
+zustaendig: "Der PLANNER entscheidet die Prozessfrage (§4), oder Yama, wenn er sie an sich zieht. Ich schreibe die zwei ballbesitz-Zeilen NICHT um (B5, fremde Zeilen) — solange die Frage offen ist, liegen W-04/1 und W-11/1 still, und das ist der eigentliche Preis."
+```
+---
+
+## BEREIT — W-08/1 (der Block FEHLTE in der Statuswahrheit; hiermit angelegt)
+
+```yaml
+auftrag: "W-08/1"
+titel: "Die sieben Blaetter von W-08 aus polygonFlaeche.ts ableiten"
+datei: docs/auftraege/aktiv/W-08-dachflaeche-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Runde 2)
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review — das fuenfte W-Blatt): alles selbst gemessen und exakt bestaetigt — polygonFlaeche.ts 48 Zeilen / 2 Exporte, Registry 'flaeche-messen' vorhanden (3 Treffer), wandFlaeche BENUTZT polygonFlaecheM2 (1 Aufruf — der Ausschluss ist damit nicht Abgrenzung sondern belegte Nutzungsrichtung), Platzhalter-Rot zaehlbar (6 Blaetter). Die Selbstkorrektur der Grobzahl (286/8 auf 48/2, Differenz war wandFlaeche) ist der fuenfte Fall derselben Art und wieder nach unten — das Muster ist jetzt durchgehend belegt. YAMAS EINREIHUNG ist eingeloest: W-08 stand hinter A-12 zurueck, A-12 ist abgenommen und die Ampel steht auf gruen, damit ist die Zurueckstellung erledigt."
+zulieferung_punkt2d: "PLAN-PRUEFER-ZULIEFERUNG, gemessen: das Blatt nennt Punkt2D nur als eigenen Typ ('nimmt bewusst auch THREE.Vector2 an') und WEISS NICHT, dass es eine von VIER zeichenweise identischen Definitionen ist — polygonFlaeche.ts:19 ist eine davon, dazu dachUForm:13, dachVerschneidung:144, schifterListe:28 (W-07 und W-21). Fuer W-08 ist das die schaerfste Form des Befunds, weil hier die Absicht dokumentiert ist ('bewusst auch THREE.Vector2'): wer diese Definition anfasst, fasst eine an, die drei andere stumm mittragen. Gehoert in 7-GRENZEN, mit derselben Regel wie bei MassPunkt in W-11: benennen, nicht zusammenlegen."
+naechster_schritt: "Generator zieht W-08/1 in Runde 2 (W-05/1 ist IN_ARBEIT, §3 beachten)"
+```
+---
+
+## ⚠ BEFUND — die Blatt-Statuskoepfe haben den Planner in die Irre gefuehrt (plan-pruefer 12.08.)
+
+```yaml
+anlass: "Der Planner meldet zum Stationsabschluss: 'die fuenf geschnittenen Blaetter W-05, W-08, W-13, W-21, W-22 stehen als ENTWURF und warten auf die DoR beim Plan-Pruefer'. GEMESSEN gegen die Statuswahrheit stimmt davon EINE Angabe."
+messung: "W-05 Blatt ENTWURF | STATUS IN_ARBEIT (wird GERADE gebaut, 77af6797) · W-08 Blatt ENTWURF | STATUS: KEIN BLOCK VORHANDEN · W-13 Blatt ENTWURF | STATUS ENTWURF (stimmt — der Mini-Rest liegt beim Planner) · W-21 Blatt ENTWURF | STATUS BEREIT (seit 12.08.) · W-22 Blatt ENTWURF | STATUS BEREIT (seit 12.08.). Drei Angaben ueberholt, eine richtig, eine Luecke."
+ursache: "ALLE FUENF Blaetter tragen 'status: ENTWURF' in ihrem YAML-Kopf — obwohl die §16-Entscheidung vom 05.08. den Statuskopf aus den Blaettern GESTRICHEN hat (BLATT behaelt auftrag/titel/basis_sha, BLATT verliert zustand/ballbesitz/...). Die W-Blaetter sind NACH dieser Entscheidung geschnitten worden und haben das gestrichene Feld trotzdem geerbt; niemand zieht es nach, weil es laut Regel gar nicht existieren duerfte. Es ist der Vorfall vom 05.08. in neuer Auflage, und diesmal hat es nicht einen Leser getaeuscht, sondern die Rolle, die die Reihenfolge bestimmt."
+mein_anteil: "Ich habe fuenf W-Blaetter geprueft und BEREIT gesetzt, ohne den verbotenen Statuskopf zu beanstanden — er stand in jedem einzelnen davon. §5 verlangt Pruefbarkeit, §16 verbietet die zweite Statuswahrheit; ich habe gegen die Kriterien geprueft und die Bauart des Blattkopfs uebersehen. Fuer die kuenftigen W-Blaetter nehme ich es in die DoR auf."
+was_zu_tun_ist: "Der Planner streicht 'status:' aus den Blattkoepfen (seine Dateien, sein Schnitt) und ersetzt es durch 'status_steht_in: docs/STATUS.md' — dieselbe Form, die die A-Blaetter seit dem 05.08. tragen. Ich fasse fremde Blaetter nicht an. Der W-08-Block ist von mir angelegt (oben) und schliesst die Luecke."
+```
+---
+
+## ⚠ VORLAGE — die Kollisionsserie ist vollstaendig, die Loesung ist erprobt (plan-pruefer 12.08.)
+
+```yaml
+serie: "SIEBEN Faelle in 24 Stunden, und mit der Planner-Selbstmeldung ce30174f hat sie JEDE ROLLE getroffen: Generator (W-04-Doppelzug), Evaluator (A-12-Doppelabnahme), Plan-Pruefer (ich, zweimal: A-12-Feldname und W-04-Claim 33 s zu spaet), Planner (Schreiben in W-05s Scope, §3-Messung drei Minuten alt), dazu die drei frueheren an A-04/A-07/A-11. KEIN Fall ging auf Nachlaessigkeit zurueck, alle wurden offengelegt, in KEINEM ging Arbeit verloren. Das ist die entscheidende Zahl: sieben Beinahe-Unfaelle, null Schaden — die Rollen fangen sich gegenseitig, aber sie fangen jedes Mal EINEN Fehler, der nicht haette entstehen muessen."
+gemeinsame_ursache: "In allen sieben Faellen liegt zwischen MESSEN und SCHREIBEN eine Luecke, in der eine andere Instanz arbeitet: 33 Sekunden bei mir, 66 beim Planner-Claim, 118 Sekunden bis zu seinem Schreiben, drei Minuten bei seiner §3-Messung. Der Planner sagt es genau: 'Eine §3-Messung gilt nur in dem Augenblick, in dem sie faellt.' Ein Claim als Zeile in einer Datei ist eine Messung mit Haltbarkeitsdatum, und niemand kennt es."
+erprobte_loesung: "Sie ist gebaut und hat gehalten: a9e58dd4 (W-04-Bau) prueft §3 und setzt IN_ARBEIT IM SELBEN SKRIPT, 'damit zwischen Pruefen und Setzen niemand dazwischenkommt'. Der Planner hat sie in seiner Selbstmeldung ausdruecklich als die bessere Loesung anerkannt, die er selbst nicht hatte. In den Faellen, in denen sie lief, gab es KEINE Kollision."
+mein_vorschlag: "Aus der erprobten Form eine Pflicht machen — je Rolle EIN Skript, das (1) die Schranke misst, (2) bei frei sofort den Zustandswechsel schreibt, (3) bei besetzt abbricht und meldet, ohne dass dazwischen eine menschliche oder modellhafte Entscheidung liegt. Fuer PRUEFENDE Rollen dieselbe Form mit dem Claim statt dem Zustand. Das ist B-Klasse (Barriere im Befehl), also genau die Massnahmenart, die Prozesspruefung-02 als einzige wirksame benannt hat. Entscheidung und Schnitt gehoeren dem PLANNER; ich lege sie vor, weil ich die Serie vollstaendig gesehen und zwei ihrer Faelle selbst verursacht habe."
+was_ich_ab_sofort_tue: "Bis die Barriere steht: kein Instanz-Start ohne unmittelbar davor gefahrene Messung von Commits UND Claim-Feldern, und der Claim-Commit ist der LETZTE Schritt vor dem Start, nicht der erste. Das schliesst die Luecke nicht, aber es verkleinert sie auf die Sekunden, die der Commit selbst braucht."
 ```
 ---
 

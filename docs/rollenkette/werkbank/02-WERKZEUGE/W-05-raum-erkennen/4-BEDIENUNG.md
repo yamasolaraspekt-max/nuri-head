@@ -1,43 +1,25 @@
-# W · raum erkennen — BEDIENUNG
+# W-05 · Raum erkennen — BEDIENUNG
 
-## Aufruf
+## Nichts Eigenes.
 
-| Weg | Wie |
+**Es gibt kein Werkzeug für „Raum erkennen".** Kein Eintrag in der Registry, keine Schaltfläche,
+keinen Modus. *Gemessen: 0 Treffer auf `raum`/`room` in der Werkzeugregistrierung.*
+
+**W-05 ist damit in derselben Lage wie W-01:** die Rechenschicht steht, die Werkzeugschicht gibt es
+nicht — **und das Blatt benennt die Lage, statt sie zu lösen.**
+
+## Woran der Anwender es trotzdem merkt
+
+| Er tut | Er sieht |
 |---|---|
-| Werkzeugleiste | <Symbol, Position, Beschriftung> |
-| Tastenkürzel | <Taste> |
-| Kontextmenü | <ja/nein, wann> |
+| eine Wand so ziehen, dass ein Umlauf sich schließt | ein Raum entsteht — mit Fläche und Volumen |
+| eine Wand verschieben | die Zahlen ändern sich mit, ohne Zutun |
+| einen Wandzug offen lassen | **nichts** — kein Raum, keine Meldung |
 
-## Ablauf am Bildschirm
+**Der letzte Fall ist der wichtige.** *Ein fehlender Raum sieht genauso aus wie ein Raum, den es
+nicht geben soll.* Siehe `7-GRENZEN`.
 
-| Schritt | Anwender tut | Bildschirm zeigt |
-|---|---|---|
-| 1 | | |
-| 2 | | |
+## Wann es läuft
 
-## Rückmeldungen
-
-| Lage | Anzeige | Ton |
-|---|---|---|
-| Alles gut | | sachlich |
-| Eingabe unvollständig | | hinweisend |
-| **Nicht möglich** | | **erklärend — was und warum** |
-
-> **Pflicht:** Für jede Absage aus `7-GRENZEN.md` muss hier ein Satz stehen, den
-> ein Handwerker versteht. Nicht „DachGeometrieUngueltig", sondern
-> „Für diesen Grundriss kann kein Walmdach berechnet werden, weil er einspringende
-> Ecken hat. Mögliche Wege: Grundriss begradigen oder Flachdach wählen."
-
-## Abbruch
-
-- **Esc** bricht ab. Danach ist der Zustand **exakt** wie vorher.
-- Halbfertiges wird nie gespeichert.
-
-## Tastenkürzel während des Werkzeugs
-
-| Taste | Wirkung |
-|---|---|
-| Esc | abbrechen |
-| Eingabe | bestätigen |
-| Umschalt | <z.B. auf 45°-Winkel zwingen> |
-| Alt | <z.B. Fang aussetzen> |
+Bei jeder Ableitung aus den Wänden — `app/ableitungen.ts:62` — und beim Aufbau der 3D-Szene
+(`renderers/three-d/szene.ts:357`). **Der Anwender löst es nicht aus; er löst es mit aus.**
