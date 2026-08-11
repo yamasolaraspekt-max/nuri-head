@@ -1474,12 +1474,13 @@ evaluator_votum: "evaluator 12.08.: ABGENOMMEN an 992d5d76, Fehlerklasse KEINE. 
 auftrag: "W-22/1"
 titel: "Die sieben Blaetter von W-22 aus gaubeGeometrie.ts ableiten — und die Aufbauten-Nachbarn benennen"
 datei: docs/auftraege/aktiv/W-22-gaube-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 95fe1b88
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die Kernzahl stimmt AUFS ZEICHEN — gaubeGeometrie.ts 498 Zeilen und 26 Exporte, beides selbst nachgezaehlt, keine Abweichung. Der Zuschnitt (ein Modul im Scope, die Aufbauten-Nachbarn benannt statt mitgenommen) folgt dem Muster, das in dieser Klasse viermal getragen hat. Nach der W-21-Erfahrung EIN HINWEIS ohne Restpunkt: die Exportzahl 26 ist gross genug, dass eine Doppelung wie Punkt2D/MassPunkt darin unauffaellig waere — der Bauende soll beim Ableiten der Exportliste ausdruecklich pruefen, ob gaubeGeometrie eigene Punkt-/Masstypen definiert, die anderswo schon existieren, und einen Fund melden statt ihn einzuebnen."
 naechster_schritt: "Generator zieht W-22/1 nach W-21/1. Damit ist die Klasse A vollstaendig geprueft: W-01, W-02, W-04, W-05, W-08, W-11, W-13, W-21, W-22 — neun Blaetter, alle beim ersten oder zweiten Review BEREIT"
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-22/1 GECLAIMT vor der Messung, Bau 8a3acb53. Messtisch wird vollstaendig gefuehrt, alle elf Zeilen."
+evaluator_votum: "evaluator 12.08.: ABGENOMMEN an 8a3acb53, Fehlerklasse KEINE, Messtisch mit allen elf Zeilen. Die Math-Inventur des Blattes habe ich Funktion fuer Funktion nachgezaehlt: max 20, tan 6, hypot 4, min 3, abs 3, sin 2, cos 2, atan 1, atan2 0 - neun Zahlen, neun Treffer. Deshalb ist -2 erfuellt und nicht verletzt: was wie eine Formel aussieht, ist die F-027-Behauptung, die -3 ausdruecklich zu pruefen verlangt, und das Blatt weist zwei davon zurueck. Die Ampel-Logik gegen Z.491 gehalten - drei Stufen samt dem ODER feasible === false, stimmen ueberein. Acht Fundstellen einzeln geoeffnet (Datei 498 Zeilen), keine laeuft ins Leere. -4 ist der staerkste Teil: 2-FUNKTION trennt GAUBE, KAMIN und PRUEFUNG als eigene Abschnitte, und 1-ZWECK:18 sagt warum - der Name ist enger als das Modul, wer nach Kamin sucht findet dieses Blatt nicht. resources/ 0 Pfade, Suite 1692/1692. -11 zum fuenften Mal in Folge im ersten Anlauf."
 ```
 ---
 

@@ -344,3 +344,73 @@ nicht_gemessen:
 browserabnahme: "entfaellt — reine Dokumentblaetter"
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum (§11) — 12.08.2026
+
+```yaml
+auftrag: W-22/1
+commit: 8a3acb53          # Bau; Basis 95fe1b88
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "acht Fundstellen einzeln geoeffnet · die Math-Zaehlung des Blattes Funktion fuer
+  Funktion nachgezaehlt · die Ampel-Logik gegen Z.491 gehalten"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Messtisch — ALLE ELF Zeilen
+
+```text
+-1   Platzhalter, vier Muster                        0
+-2   3-FORMELN: die Treffer auf Math./=/atan2/hypot sind KEINE Rechnungen, sondern
+     die gepruefte F-027-Behauptung und die Code-Zaehlung — siehe unten
+-3   F-027 wird GEPRUEFT statt uebernommen           6 Nennungen, mit Ergebnis je Zeile
+-4   drei Gegenstaende getrennt: 2-FUNKTION traegt "### 1 · GAUBE", "### 2 · KAMIN",
+     "### 3 · PRUEFUNG" — und 1-ZWECK:18 sagt "Der Name ist enger als das Modul"
+-5   lokales System lx/ly/lz im Blatt                 ja, mit Bedeutung je Achse
+-6   7-GRENZEN liest pruefeAufbau() aus               drei Stufen, gegen Z.491 geprueft
+-7   Herkunft "angebunden aus gaubeGeometrie.ts"      ja
+-8   Dachaufbauten-Befund im Blatt                    ja
+-9   resources/ im Bau-Commit 0 Pfade  ·  Suite 1692/1692
+-10  Register: gaubeGeometrie.ts als Fundstelle       3 Treffer
+-11  §3-Beleg in 6a592b26                             2 Befehlszeilen, 2 Ausgaben
+```
+
+### Die Math-Zählung des Blattes — Funktion für Funktion nachgezählt
+
+*Das Blatt behauptet eine Inventur des Codes. Ich habe sie nicht gelesen, sondern wiederholt:*
+
+```text
+             Blatt   gemessen              Blatt   gemessen
+Math.max      20        20        Math.abs    3         3
+Math.tan       6         6        Math.sin    2         2
+Math.hypot     4         4        Math.cos    2         2
+Math.min       3         3        Math.atan   1         1
+Math.atan2  "0 Treffer"            0   <- die Verneinung stimmt
+Datei: 498 Zeilen
+```
+
+**Neun Zahlen, neun Treffer.** *Deshalb ist `-2` erfüllt und nicht verletzt: was wie eine Formel
+aussieht (`rise = d · tan(φ)`, `atan2(fall_x, fall_z)`), ist die **Behauptung aus F-027**, die
+`-3` ausdrücklich zu prüfen verlangt — und das Blatt prüft sie und weist zwei davon zurück.*
+
+### Die Ampel — gegen den Code gehalten
+
+```text
+BLATT  rot    wenn ein KRITISCHES Kriterium verletzt ist
+       gelb   wenn alles Kritische ok, aber ein Kriterium verletzt ODER feasible === false
+       gruen  sonst
+CODE   :491   const ampel: Ampel = !kritischOk ? 'rot' : (!allesOk || !feasibleFlag) ? 'gelb' : …
+```
+
+**Die drei Stufen und ihre Bedingungen stimmen mit der Zeile überein**, einschließlich des
+`ODER feasible === false`, das ein flüchtiger Leser übersieht.
+
+> **`-4` ist der stärkste Teil.** *Das Blatt trennt nicht nur, es sagt auch **warum die Trennung
+> nötig ist**: „Wer nach ‚Kamin' sucht, findet dieses Blatt nicht — deshalb steht der Satz hier."
+> Ein Werkzeugname, der enger ist als sein Modul, ist genau die Falle, in die ein Register läuft.*
+
+**`-11` zum fünften Mal in Folge im ersten Anlauf** (W-04, W-11, W-05, W-21, W-22).
