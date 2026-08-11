@@ -1233,8 +1233,8 @@ evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an e23440d1, Fehlerklasse 
 ```yaml
 auftrag: "W-13/1"
 datei: docs/auftraege/aktiv/W-13-auswahl-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde): ENTWURF bleibt, EIN Mini-Rest — sonst BEREIT-reif: Modul-Zeilenzahlen exakt (98/71/77/75 = 321, editierGeometrie 75), der W-14-Ausschluss belegt (versetzen/spiegeln), Registry 'auswahl' da, BEIDE Toleranzbegriffe verifiziert (toleranzAusZoom in fangKern, toleranzInWelt in trefferSuche — der Beruehrungsfund ist echt und die Benennen-statt-zusammenlegen-Regel genau richtig), Platzhalter-Rot zaehlbar. DER REST: die 'EINE Zusage' in P1-Kriterium W-13/1-7 ist zaehlweise-abhaengig — meine Messung findet NULL dedizierte Auswahl-Testdateien und DREI erwaehnende (toolKatalog, activation, pan). Die Substanz (duenne Absicherung) haelt in jeder Zaehlweise, aber eine Zahl, die woertlich in einem P1 steht, muss eine definierte Messweise haben — sonst traegt das fertige Blatt eine anfechtbare Aussage (Zeitbomben-Klasse aus A-09). Ein Satz: Zaehlweise definieren (dediziert vs. erwaehnend), Zahl danach nachmessen und in Kriterium + Befund-Zeile angleichen."
 offene_akzeptanz:
@@ -1245,6 +1245,7 @@ mitgabe_an_den_bau: "DREI Punkte aus meiner DoR, die im Blatt stehen und leicht 
 zulieferung_typ_komplex: "AUSDRUECKLICH ALS ERWARTUNG, nicht als Hinweis — nach zwei Erfahrungen, in denen meine Zulieferung nur zur Haelfte ankam (W-21, W-08): pruefe beim Ableiten der Exportliste, ob die vier Auswahl-Module eigene Grundtypen definieren, die anderswo schon existieren, und BENENNE einen Fund in 7-GRENZEN wie W-11 es mit MassPunkt vorgemacht hat. Der Komplex hat inzwischen vier Faelle (MassPunkt, Punkt2D, Vec3, HolzStueckRef) plus zwei schwerere; wenn hier ein fuenfter liegt, soll er nicht wieder nur in einer Exportliste auftauchen."
 naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruefer BEREIT; Reihenfolge W-01/1 -> W-02/1 -> W-13/1 bleibt"
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-13/1 GECLAIMT vor der Messung, Bau a62ae7c6. Messtisch vollstaendig."
+evaluator_votum: "evaluator 12.08.: ABGENOMMEN an a62ae7c6, Fehlerklasse KEINE, Messtisch mit allen zehn Zeilen. Vierzehn Fundstellen einzeln geoeffnet, keine laeuft ins Leere. Der wertvollste Teil ist -7, und jede Zahl darin habe ich nachgezaehlt statt sie zu glauben: auswahlModus 98/7, trefferSuche 75/4, auswahlUebersicht 77/4, auswahlDarstellung 71/3 - Summe 321 Zeilen und 18 Ausfuhren wie behauptet, dedizierte Testdateien 0 wie behauptet, und die zwei erwaehnenden Dateien tragen 21 plus 15 gleich 36 Zusagen wie behauptet. Vier Zahlen, vier Treffer. Zu -2: das eine = in 3-FORMELN ist das woertliche Zitat der einzigen Rechnung in allen vier Modulen (toleranzInWelt, trefferSuche.ts:73-74, von mir nachgeschlagen), und das Blatt zieht daraus ausdruecklich KEINEN Sammlungseintrag - eine Einheitenumrechnung ist keine Geometrieformel. Das ist die richtige Antwort auf -3, keine Umgehung von -2. resources/ 0 Pfade, Suite 1692/1692."
 ```
 ---
 
