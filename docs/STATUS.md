@@ -1573,6 +1573,23 @@ an_yama_fachgate: "DRINGENDER und unabhaengig davon: der Planner hat N-003 (Spar
 ```
 ---
 
+## BEREIT — A-13 (erster Produktivcode-Auftrag seit Tagen)
+
+```yaml
+auftrag: "A-13"
+titel: "Das einzige Azimut-Feld im Haus ohne Test bekommt Validierung, Zusage und den Konventionshinweis"
+datei: docs/auftraege/aktiv/A-13-roof-azimuth-absichern.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 783d47c1
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die FUENF NULLEN selbst nachgemessen und ALLE bestaetigt — Validierung in Requests 0, in Controllers 0, PVRoofFactory existiert nicht, Tests 0, Konventionshinweis am Model 0; der Migrations-Kommentar von 2024 ('0=N, 90=E, 180=S, 270=W') steht woertlich in Z.67, und beide Vergleichszusagen existieren (BuildingModelSchemaContractTest, SzeneProjektionServiceTest). Die Kernbelege der DECISION halten: PVRoofController Z.42 HAT ein validate, und roof_azimuth steht nachweislich NICHT darin (0 Treffer im Block) — 'der Ort fuer Validierung existiert und wurde uebersprungen' ist gemessen, nicht behauptet; der Mass-Assignment-Pfad PVRoof::create(\$roofData) liegt in NewLeadsController:7082. Acht Kriterien, §5-Block, Erstnutzer und Rueckweg vorhanden. Die Model-Entscheidung deckt sich mit der ticket-Bauordnung (eine Wahrheit im Model-Hook)."
+mein_zweiter_beinahe_fehlbefund: "Ich habe SIEBEN Schreibpfade gezaehlt, das Blatt sagt SECHS — und ich war im Begriff, die Abweichung zu melden. Der siebte ist ein KOMMENTAR (NewLeadsController:7209: '// optionally pass \$roof = new PVRoof or an empty array if needed'). Das Blatt hat recht, meine Zahl war falsch. ZWEITER Beinahe-Fehlbefund heute, wieder aus einem zu groben Muster (nach dem Glob ohne Rekursion jetzt ein grep, das Kommentare mitzaehlt). Ich melde ihn, weil ein Pruefer, der seine eigenen Fehlgriffe verschweigt, die Verlaesslichkeit seiner Befunde nicht belegen kann."
+zulieferung: "Der Kommentar ist trotzdem wertvoll und STUETZT die DECISION: das Blatt argumentiert, eine Controller-Validierung 'wuerde beim siebten Schreibpfad fehlen' — und genau dieser siebte Pfad ist im Code bereits als Absicht notiert. Der Bauende soll ihn im Bericht nennen: die Regel am Model deckt auch den Pfad ab, den noch niemand geschrieben hat."
+naechster_schritt: "Generator zieht A-13, sobald kein Auftrag IN_ARBEIT ist (W-22/1 laeuft); IN_ARBEIT vor der ersten Scope-Aenderung, §3-Beleg nach A-13-8"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
