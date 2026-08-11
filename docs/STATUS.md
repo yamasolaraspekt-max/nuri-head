@@ -1506,12 +1506,13 @@ zustaendig: "Der PLANNER entscheidet die Prozessfrage (§4), oder Yama, wenn er 
 auftrag: "W-08/1"
 titel: "Die sieben Blaetter von W-08 aus polygonFlaeche.ts ableiten"
 datei: docs/auftraege/aktiv/W-08-dachflaeche-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review — das fuenfte W-Blatt): alles selbst gemessen und exakt bestaetigt — polygonFlaeche.ts 48 Zeilen / 2 Exporte, Registry 'flaeche-messen' vorhanden (3 Treffer), wandFlaeche BENUTZT polygonFlaecheM2 (1 Aufruf — der Ausschluss ist damit nicht Abgrenzung sondern belegte Nutzungsrichtung), Platzhalter-Rot zaehlbar (6 Blaetter). Die Selbstkorrektur der Grobzahl (286/8 auf 48/2, Differenz war wandFlaeche) ist der fuenfte Fall derselben Art und wieder nach unten — das Muster ist jetzt durchgehend belegt. YAMAS EINREIHUNG ist eingeloest: W-08 stand hinter A-12 zurueck, A-12 ist abgenommen und die Ampel steht auf gruen, damit ist die Zurueckstellung erledigt."
 zulieferung_punkt2d: "PLAN-PRUEFER-ZULIEFERUNG, gemessen: das Blatt nennt Punkt2D nur als eigenen Typ ('nimmt bewusst auch THREE.Vector2 an') und WEISS NICHT, dass es eine von VIER zeichenweise identischen Definitionen ist — polygonFlaeche.ts:19 ist eine davon, dazu dachUForm:13, dachVerschneidung:144, schifterListe:28 (W-07 und W-21). Fuer W-08 ist das die schaerfste Form des Befunds, weil hier die Absicht dokumentiert ist ('bewusst auch THREE.Vector2'): wer diese Definition anfasst, fasst eine an, die drei andere stumm mittragen. Gehoert in 7-GRENZEN, mit derselben Regel wie bei MassPunkt in W-11: benennen, nicht zusammenlegen."
 naechster_schritt: "Generator zieht W-08/1 in Runde 2 (W-05/1 ist IN_ARBEIT, §3 beachten)"
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-08/1 GECLAIMT vor der Messung, Bau 7aa49e33. Messtisch vollstaendig, alle zwoelf Zeilen."
+evaluator_votum: "evaluator 12.08.: ABGENOMMEN an 7aa49e33, Fehlerklasse KEINE, Messtisch mit allen zwoelf Zeilen. Dreizehn Fundstellen einzeln geoeffnet, keine laeuft ins Leere. -4 ist das Kernkriterium und doppelt belegt: die drei Null-Pfade stimmen mit polygonFlaeche.ts 32, 42 und 47 ueberein, und die zweite Haelfte - die Eingabe-Ebene entscheidet und das Modul kann es nicht pruefen - traegt 7-GRENZEN:20 als Ueberschrift, waehrend 2-FUNKTION:3 sie an die erste Stelle des Blattes stellt, was -11 verlangt. Der tragende Satz steht da: 0 ist zugleich gueltiges Ergebnis und Fehlersignal, der Aufrufer kann beides nicht unterscheiden - das Blatt ordnet es selbst der A-10-Klasse zu, ohne fremden Anstoss. Die zwei scene.types-Belege fuer -11 nachgeschlagen, beide tragen was das Blatt ihnen zuschreibt. resources/ 0 Pfade, Suite 1692/1692. Damit ist die Klasse A vollstaendig durchgeprueft."
 ```
 ---
 

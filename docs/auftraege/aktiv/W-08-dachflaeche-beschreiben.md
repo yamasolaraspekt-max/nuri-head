@@ -383,3 +383,73 @@ zeilenpruefung: "14 Stellen inhaltlich geprueft, 0 falsch — erstes Blatt ohne 
 browserabnahme: "entfaellt — reine Dokumentblaetter"
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum (§11) — 12.08.2026
+
+```yaml
+auftrag: "W-08/1"
+commit: 7aa49e33          # Bau; Basis b202ad7c
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "dreizehn Fundstellen einzeln geoeffnet · die drei Null-Pfade gegen den Code
+  gehalten · die zwei scene.types-Belege nachgeschlagen"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Messtisch — ALLE ZWÖLF Zeilen
+
+```text
+-1   Platzhalter, vier Muster                    0
+-2   3-FORMELN: Math./=/atan2/sqrt/hypot         0 — keine Rechnung im Blatt
+-3   dreizehn Fundstellen, ALLE einzeln geoeffnet, keine laeuft ins Leere
+-4   7-GRENZEN traegt beide Haelften (unten belegt)
+-5   Herkunft + die vier Aufrufer                4 Nennungen
+-6   Ausschluss wandFlaeche.ts benannt           6 Nennungen
+-7   resources/ im Bau-Commit 0 Pfade  ·  Suite 1692/1692
+-8   Register: polygonFlaeche.ts                 3 Treffer
+-9   §3-Beleg in b972a8af                        2 Befehlszeilen, 2 Ausgaben
+-10  doppelsinniger Azimut-Bereich in 7-GRENZEN  2 Nennungen
+-11  First/Flaeche als EINGANGSBEDINGUNG         2-FUNKTION:3 ist die erste Ueberschrift
+-12  F-024 bleibt beim gemessenen Befund         1 Nennung
+```
+
+### `-4` ist das Kernkriterium — und es ist doppelt belegt
+
+**Erste Hälfte: die drei Null-Pfade, gegen den Code gehalten:**
+
+```text
+BLATT  polygonFlaeche.ts:32   weniger als 3 Punkte        -> 0
+       polygonFlaeche.ts:42   ungueltige Zahl im Polygon  -> 0
+       polygonFlaeche.ts:47   Ergebnis nicht endlich      -> 0
+CODE   :32  if (!Array.isArray(punkte) || punkte.length < 3) return 0;
+       :42  return 0;
+       :47  return Number.isFinite(flaeche) ? flaeche : 0;
+```
+
+**Zweite Hälfte: dass die Eingabe-Ebene entscheidet und das Modul es nicht prüfen kann** —
+`7-GRENZEN:20` trägt genau diese Überschrift, und `2-FUNKTION:3` stellt sie **an die erste
+Stelle des Blattes**, was `-11` verlangt.
+
+> **Der Satz, auf den es ankommt, steht da:** *„`0` ist zugleich ein gültiges Ergebnis und das
+> Fehlersignal. Der Aufrufer bekommt eine Zahl und kann nicht unterscheiden, ob die Fläche
+> wirklich null ist oder ob seine Eingabe kaputt war."* **Das Blatt ordnet es selbst der
+> A-10-Klasse zu** — nicht das leere Ergebnis ist das Problem, sondern das gefüllte, das seine
+> Herkunft verschweigt. *Das ist dieselbe Klasse, die ich bei A-10 abgenommen habe, hier ohne
+> fremden Anstoß gefunden.*
+
+**Die zwei `scene.types`-Belege für `-11` habe ich nachgeschlagen:**
+
+```text
+:280  "Die Flaechen-Azimute werden NIE gepflegt, sondern …"
+:325  firstAzimutGrad: number;   // First-RICHTUNG (Grad); Flaechen-Azimute we…
+```
+
+**Beide tragen, was das Blatt ihnen zuschreibt** — die Firstrichtung ist gespeichert, der
+Flächenazimut abgeleitet, und wer das verwechselt, hat 90° Fehler zusätzlich zu den 180° aus
+`-10`.
+
+*Damit ist die Klasse A vollständig durchgeprüft: W-01, W-02, W-04, W-05, W-08, W-11, W-21, W-22.*
