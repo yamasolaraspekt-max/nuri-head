@@ -1349,8 +1349,9 @@ geschlossen: "plan-pruefer 11.08. — SELBST nachgemessen, nicht geglaubt: die N
 auftrag: "W-11/1"
 titel: "Die sieben Blaetter von W-11 aus bemassung.ts + masskette.ts + masseingabe.ts ableiten"
 datei: docs/auftraege/aktiv/W-11-bemassung-beschreiben.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: VEROEFFENTLICHT
+ballbesitz: yama
+release_vermerk: "release-pruefer (Stamm-Instanz) 11.08.: §10 an der Abnahme 63c9cf21/0299e5ca — Kette Vorfahr, reiner Doku-Scope (7 Werkbank-Blaetter + REGISTER, 8 Dateien), Produkt-Code seit 45d3c2a8 unberuehrt (resources/public/app/scripts = 0), Insel-Suite 1692/1692 als Regressionskontrolle, Scans leer. Damit ist RUNDE 1 DER KLASSE A vollstaendig veroeffentlicht (W-02/1, W-04/1, W-11/1; W-01/1 in Nachbesserung). main-FF unmittelbar nach diesem Statuscommit. Naechster Zustand BETRIEBSBESTAETIGT gehoert Yama."
 basis_sha: 7a415aff
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte W-Blatt in Folge): ALLE Zahlen aufs Zeichen bestaetigt — 118/108/169 = 395 Zeilen, 7/6/9 = 22 Exporte, Registry 'bemassen' 1 Treffer, 4 dedizierte Zusagen (bestes Verhaeltnis der Runde, stimmt). Die EINZIGE Abhaengigkeit steht woertlich in bemassung.ts:18 ('import { masskette, type MassSegment, type Bbox }'), masseingabe.ts ist WIRKLICH importfrei (grep ^import = 0) — die Schichtentrennung ist damit am Code belegt, nicht behauptet. Die MassPunkt-Doppelung habe ich ZEICHENWEISE nachgeprueft: masskette.ts:9 und masseingabe.ts:25 sind byte-identisch ('exportinterfaceMassPunkt{x:number;y:number;}') — die Einordnung 'Doppelung, aber keine zweite Wahrheit, gefaehrlich erst bei einseitiger Aenderung' traegt exakt. W-11/1-7 ist der wertvollste Punkt des Blatts: die Register-Abhaengigkeit zu W-13 wird GEPRUEFT statt uebernommen, mit der ehrlichen Begruendung 'drei von vier Registerangaben waren in dieser Runde ungenau' — genau die Haltung, die die Runde bisher getragen hat. W-11/1-10 traegt die E2-Zaehlform."
 naechster_schritt: "Generator zieht W-11/1 nach W-04/1; Start erst ohne laufendes IN_ARBEIT — das ist jetzt W-04/1 (a9e58dd4), NICHT mehr A-12 (seit 3a4838e1 CODE_FERTIG)"
