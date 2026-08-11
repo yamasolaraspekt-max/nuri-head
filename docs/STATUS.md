@@ -1478,6 +1478,7 @@ ballbesitz: evaluator
 basis_sha: 95fe1b88
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die Kernzahl stimmt AUFS ZEICHEN — gaubeGeometrie.ts 498 Zeilen und 26 Exporte, beides selbst nachgezaehlt, keine Abweichung. Der Zuschnitt (ein Modul im Scope, die Aufbauten-Nachbarn benannt statt mitgenommen) folgt dem Muster, das in dieser Klasse viermal getragen hat. Nach der W-21-Erfahrung EIN HINWEIS ohne Restpunkt: die Exportzahl 26 ist gross genug, dass eine Doppelung wie Punkt2D/MassPunkt darin unauffaellig waere — der Bauende soll beim Ableiten der Exportliste ausdruecklich pruefen, ob gaubeGeometrie eigene Punkt-/Masstypen definiert, die anderswo schon existieren, und einen Fund melden statt ihn einzuebnen."
 naechster_schritt: "Generator zieht W-22/1 nach W-21/1. Damit ist die Klasse A vollstaendig geprueft: W-01, W-02, W-04, W-05, W-08, W-11, W-13, W-21, W-22 — neun Blaetter, alle beim ersten oder zweiten Review BEREIT"
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-22/1 GECLAIMT vor der Messung, Bau 8a3acb53. Messtisch wird vollstaendig gefuehrt, alle elf Zeilen."
 ```
 ---
 
