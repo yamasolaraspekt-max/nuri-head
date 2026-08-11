@@ -1218,22 +1218,34 @@ naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruef
 ```
 ---
 
-## IN_ARBEIT — A-12 (Messauftrag F-026; Generator misst)
+## CODE_FERTIG — A-12 (Messauftrag F-026; Bericht geliefert, Ball beim Evaluator)
 
 ```yaml
 auftrag: A-12
 titel: "Ein L-Grundriss mit F-026 rechnen, Ergebnis ansehen, Ampel gelb -> gruen oder rot"
 datei: docs/auftraege/aktiv/A-12-f026-ausfuehren.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Messlauf laeuft — Yamas Einreihung 10.08., claim_bau_a12 steht)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (Bericht liegt; Ampel bestaetigen oder verwerfen)
 basis_sha: d1d716c8
-mess_sha: 3e7e19d6
+mess_sha: 239a163e
+mess_sha_vorgaenger: 3e7e19d6
+pruef_sha: 752174d1
+bericht_commits: "92310844 (Bericht) · 752174d1 (E1-Messung + §11-Kurzstand)"
 prioritaet: P1
+lieferung: docs/BERICHT-A-12-f026.md
+uebernahme: "generator 11.08. (frische Instanz, Vertretung durch den Release-Pruefer angestossen): Ich habe den LAUFENDEN Auftrag uebernommen und IN_ARBEIT NICHT erneut gesetzt — die Vorgaenger-Instanz hatte §3 und die §7-Vorpruefung sauber gesetzt und belegt (4e935e84) und starb danach am Wochenlimit. Doppel-Launch-Pruefung VOR dem ersten Schritt (Lehre P-02), mit Befehl und Ausgabe: git log --oneline --all | grep -i 'A-12' -> kein Bau-Commit einer zweiten Instanz; ls docs/BERICHT-A-12-f026.md -> No such file or directory. Uebernommen habe ich auch die untracked liegengebliebene Wegwerf-Probe (14612 B): gelesen, gegen die Attrappen-Regel geprueft, gefahren, restlos entfernt — ich verantworte sie ab hier selbst."
+ampel_vorschlag: "🟢 — VORGESCHLAGEN, NICHT GESETZT (A-12-4: Evaluator bestaetigt, Planner traegt ein). Begruendung am Kriterium: es kam ein L-Dach mit VIER benannten Flaechen (main_N/main_S/ext_W/ext_E), zwei Firstlinien, einer benannten Kehle und einem benannten Grat heraus — gerechnet, nicht gelesen. Dazu gehoert eine Wortlaut-Korrektur am Formelblatt: F-026 ist dort als sechsschrittiges Kantentopologie-Verfahren beschrieben, gemessen wird das NICHT durchlaufen (0 Aufrufe der Topologie-Kette in :774-928, alle Aufrufe stehen in der React-Komponente). Was laeuft, ist fest verdrahtete Parametergeometrie fuer L und T."
+befund_des_plan_pruefers_erledigt: "Der Befundblock 11.08. (A-12 ENV-unterbrochen, Wegwerf-Probe im Baum) ist sachlich erledigt: die Probe ist entfernt (ls -> kein Treffer; git log --all -- '*zzA12wegwerf*' -> 0), die Insel-Suite steht wieder auf 1692/1692 (mit Probe waren es 1695/1695 — der Zaehler-Befund ist damit zugleich belegt). Ich habe den fremden Block NICHT umgeschrieben (B5: fremder Inhalt in geteilter Datei); schliessen darf ihn, wer ihn gesetzt hat."
+e1_messung: "E1 (Meldepflicht vor CODE_FERTIG, am COMMIT statt am Arbeitsbaum): git show HEAD:docs/BERICHT-A-12-f026.md | diff - <pfad> -> keine Ausgabe (Baum == Commit). Fuer docs/STATUS.md faellt die Messung unmittelbar nach diesem Statuscommit und geht mit den SHAs an den Evaluator. Zusaetzlich gegen den Mess-SHA statt nur gegen HEAD, weil HEAD waehrend des Laufs fuenfmal durch fremde Commits wanderte: git diff --name-only 239a163e..92310844 -- resources/ scripts/ -> 0."
+must_preserve: "ALLE DREI RICHTUNGEN einzeln (Auflage 239a163e), fuer resources/ und scripts/: geaendert 0 (git diff --name-only HEAD) · hinzugefuegt 0 (git ls-files --others --exclude-standard) · entfernt 0 (git diff --diff-filter=D). Die alte Einweg-Messung haette die Wegwerf-Probe nicht gesehen."
 in_arbeit_gesetzt: "generator 10.08. (frische Instanz, Claim claim_bau_a12): IN_ARBEIT gesetzt VOR der ersten Scope-Aenderung und VOR der Wegwerf-Probe (§3). §3-Beleg MIT Befehl und Ausgabe: grep -n 'zustand: IN_ARBEIT' docs/STATUS.md -> 4 Treffer (Z.945/973/1112 Prosa in in_arbeit_gesetzt-Feldern, Z.1232 Prosa im claim_bau_a12-Feld), KEIN Zustandsfeld traegt IN_ARBEIT. §7-Vorpruefung mit Befehl und Ausgabe: (1) git merge-base --is-ancestor d1d716c8 HEAD -> exit 0 (Basis ist Vorfahr von HEAD 3e7e19d6); (2) git diff --name-only d1d716c8..HEAD -- resources/ | wc -l -> 0 (die zu messende Insel-Geometrie ist byte-gleich zur Blatt-Basis; scripts/ wanderte durch die abgeschlossenen A-09/A-11-Bauten, ausserhalb meines Scopes); (3) Scope frei von fremden Aenderungen: git show HEAD:<pfad> | diff -q fuer STATUS.md, A-12-Blatt, FORMELSAMMLUNG.md, VORGEHEN.md -> alle 4 IDENTISCH; (4) Rot-Lage selbst gemessen: ls docs/BERICHT-A-12-f026.md -> No such file or directory, und die Ampel-Sperre steht woertlich (grep -n 'F-026' FORMELSAMMLUNG.md -> Z.302 Ampeltabelle 'noch nicht ausgefuehrt', Z.350 Formelblatt 🟡); (5) Fremdquelle exakt: wc -c -l dachdecker_pro_3d.tsx -> 2173 Zeilen, 132374 Byte (Blattangabe aufs Byte). Lieferung ist ein BERICHT (Muster A-05); Wegwerf-Probe am ueblichen Ort, vor dem Bericht restlos entfernt."
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde, BEREIT beim ersten Review): die Pruefbefehle des Blatts selbst gefahren — Ampel-Rot bestaetigt (F-026 traegt woertlich die Sperre Z.229/277 der FORMELSAMMLUNG), Fremdquelle EXAKT belegt (132374 Byte, 2173 Zeilen aufs Zeichen; :965 buildCompoundPitched-Signatur und :1137 die l/t-shape-Weiche woertlich verifiziert). Der Machbarkeitsbefund, der den Auftrag zweiteilt (Teil A triviale Arithmetik / Teil B klassengebunden mit 64 THREE.-Vorkommen), ist die wertvollste Zeile des Blatts — er verhindert den Zwei-Stunden-SPEC_BLOCKED, den 'eine Funktion aufrufen' produziert haette. Attrappen-Regel (nur AUFZEICHNEN, nichts rechnen — sonst messen wir die Attrappe) und Scheitern-ist-Ergebnis-Regel vorbildlich. Kein Kopieren des Fremdcodes, Wegwerf-Probe nach A-05-Disziplin, Ampel wird VORGESCHLAGEN nicht gesetzt (Generator schlaegt vor, Evaluator bestaetigt, Planner traegt ein)."
 herkunft: "Dieser Block stammt vom PLAN-PRUEFER (DoR-Runde 10.08.), wurde aber als unbenannter Beifang vom W-02/1-Commit 58342f47 mitgesichert, waehrend er ungesichert im geteilten Baum lag — dieselbe Klasse wie 4307987b/c2feffd4, diesmal in Gegenrichtung. Inhalt unveraendert gueltig; hiermit richtiggestellt."
 zaehlfrage_entschieden: "plan-pruefer 10.08.: A-12 zaehlt in GRUPPE 2 (wie A-11 entschieden: erste Vorlage nach durchgefuehrter Prozesspruefung). Stand der Handzaehlung Gruppe 2 nach Erstvorlage: 1 A-11 · 2 W-01/1 · 3 W-02/1 · 4 W-13/1 · 5 A-12. Handzaehlung bis B3 steht (A-11 baut gerade B4; B3 bleibt offen)."
-naechster_schritt: "Generator fuehrt die drei Messungen aus (A-12-1 Konturen, A-12-2 Flaechen, A-12-3 Vergleich) und liefert docs/BERICHT-A-12-f026.md"
+ergebnis_kurz: "A-12-1 KONTUREN belegt: beide l-shape-Varianten (:101-106 flat, :107-112 pitched) gerechnet, je 6 Punkte, geschlossen, 0 Selbstschnitte, genau 1 einspringende Ecke — mit EIGENEN Messinstrumenten geprueft, nicht mit denen des Fremdcodes. A-12-2 FLAECHEN: WEG 1 gewaehlt UND gelaufen (three.js aus dem Repo, Attrappen zeichnen nur auf) -> 4 Flaechen, 7 Pfetten, Kehl- und Gratsparren; Weg 2 zusaetzlich als Gegenprobe nachgerechnet, stimmt. Das im Blatt zugelassene Ergebnis 'rechnet, aber nicht isolierbar' ist NICHT eingetreten. A-12-3 VERGLEICH: Insel und Fremdcode je 4 Flaechen, Polygone punktweise maxAbweichung 0 — Grund gemessen: die Insel traegt seit 588283df (23.07.) einen PORT genau dieser Funktion, produktiv verdrahtet seit f0d02f45."
+offene_akzeptanz: "A-12-4 ist bewusst offen: die Ampel ist NICHT gesetzt. FORMELSAMMLUNG.md und VORGEHEN.md sind im Scope des Blatts und bewusst UNVERAENDERT (content-identisch zu HEAD) — die Ampel traegt der Planner ein, und 'Schritt 3 erledigt' waere eine zweite Statuswahrheit vor der Abnahme (§16)."
+fuer_die_wegentscheidung: "NICHT entschieden, nur nebeneinandergestellt (Nicht-Ziel des Blatts): der Flaechenteil von F-026 ist in der Insel bereits gebaut und produktiv angeschlossen — die Frage ist dort keine Bau-, sondern eine Anschlussfrage. Offen sind drei gemessene Luecken: Kennwertpfad (dachGeometrie.dachFlaechen wirft bei L, dachflaechen liefert 0), Linien (verschneidungslinien gebaut, produktiv nirgends benutzt) und Anlegepfad (A-05: roof.anbau wird nie gesetzt)."
+naechster_schritt: "Evaluator prueft den Bericht an 752174d1 und bestaetigt oder verwirft den Ampel-Vorschlag 🟢; danach traegt der PLANNER die Ampel in FORMELSAMMLUNG.md ein und entscheidet ueber die Wortlaut-Korrektur des F-026-Verfahrens. Mit CODE_FERTIG ist die §3-Sperre der W-Reihe gefallen."
 ```
 ---
 
@@ -1252,6 +1264,76 @@ herkunft_operanden: "Der OPERANDEN-Block oben stammt vom PLAN-PRUEFER (19:5x), w
 paragraf13_ausloesung: "plan-pruefer 10.08. 20:0x: Der §13-SOFORTAUSLOESER IST HIERMIT FORMAL AUSGELOEST — der W-02-Evaluator hat die zweite Wiederholung der Klasse 'Satz ohne Befehl/Ausgabe' benannt (a83254e6), der Generator widerspricht nicht (5c06f5ca), und PROZESSPRUEFUNG-02 hat exakt diese Unterlassung ('benannt, aber niemand loest aus') als Befund 1 gefuehrt — sie ein zweites Mal zu wiederholen waere die Ironie-Stufe. DAZU gehoert die NEUE Fehlerklasse aus 5c06f5ca in die Pruefung: 'gruen gemeldet, was nicht im Commit steht' (Korrektur nur im Arbeitsbaum, Gegenprobe mass den Baum statt den Commit — Klasse BEWEIS, und B3 haette sie nicht gefangen). DURCHFUEHRUNG beim Planner (Praezedenz P-02); mein Anteil folgt wie bei P-02. Der Zaehler-Reset bleibt weiter an B3 gebunden, das noch niemand gebaut hat — auch DAS gehoert in die Pruefung."
 claim_bau_a12: "plan-pruefer 10.08.: Yamas Einreihung ausgefuehrt — A-12 bekommt den Slot, Generator-Station mit frischer Instanz besetzt (Messlauf). §3 selbst geprueft: alle drei grep-Treffer 'zustand: IN_ARBEIT' sind Prosa-Zitate in in_arbeit_gesetzt-Feldern, KEIN Zustandsfeld traegt IN_ARBEIT. Claim VOR dem Start."
 
+---
+
+## BEREIT — W-04/1 (Runde 1 Klasse A)
+
+```yaml
+auftrag: "W-04/1"
+titel: "Die sieben Blaetter von W-04 aus oeffnungsBauarten.ts + oeffnungsTypen.ts ableiten"
+datei: docs/auftraege/aktiv/W-04-oeffnung-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Warteschlange Runde 1; §3: A-12 ist IN_ARBEIT)
+basis_sha: b6078b2a
+letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review): JEDE Behauptung selbst gemessen und EXAKT bestaetigt — oeffnungsBauarten 75 Z/5 Exporte, oeffnungsTypen 49 Z/7 Exporte, fensterProdukt 153 Z; der OeffnungsArt-Import steht woertlich in Z.3 (die praezise Ausnahme im Ausschluss ist also NOETIG, nicht hoeflich); Registry traegt WIRKLICH zwei Werkzeuge (fenster :78, tuer :96); W-02s 2-FUNKTION beschreibt die Tuergeometrie bereits (2 Treffer) — die Verweis-statt-Doppelbeschreibung-Entscheidung ist damit belegt und richtig; Platzhalter-Rot zaehlbar (6 Blaetter). W-04/1-10 traegt die E2-Zaehlform aus Pruefung 03. Der Selbstbefund 'W-04 hat kein eigenes Modul' ist die vierte Matrix-Korrektur derselben Klasse und wieder vom Planner selbst gefunden."
+messbefund_zu_w04_1_4: "PLAN-PRUEFER-ZULIEFERUNG (gemessen, damit der Bauende nicht nach dem Falschen sucht): der Nebensatz des Blatts 'Stilles undefined ist die A-10-Klasse' trifft NICHT zu — oeffnungsTypen.ts:43 und :48 liefern bei unbekannter ID KEIN undefined, sondern '?? TUER_TYPEN[0]' bzw. '?? FENSTER_TYPEN[0]': einen STILLEN FALLBACK auf den ersten Katalogeintrag. Das ist die A-10-Klasse in ihrer schaerferen Form — nicht 'nichts', sondern ein plausibel aussehender FALSCHER Wert, den niemand als Ersatz erkennt. Die Frage von W-04/1-4 ist richtig gestellt und traegt (sie verlangt Messung, nicht die Vermutung); der Bauende soll den Fallback benennen, nicht nach undefined suchen. Die Bauarten-Lookups sind getrennt zu messen — dort kann die Antwort anders lauten."
+naechster_schritt: "Generator zieht W-04/1, sobald kein Auftrag IN_ARBEIT ist (A-12 laeuft); Runde 1 nach Yamas Korrektur: W-04 + W-11, W-13 nachziehen"
+```
+---
+
+## ⚠ BEFUND des Plan-Pruefers (11.08.) — A-12 ist ENV-unterbrochen und hat eine WEGWERF-PROBE im Baum
+
+```yaml
+lage: "Die A-12-Generator-Instanz ist am WOECHENTLICHEN NUTZUNGSLIMIT der Umgebung gestorben (reset 11.08. 22:00 Europe/Berlin), mitten im Messlauf. A-12 steht weiter IN_ARBEIT und BLOCKIERT damit nach §3 die gesamte W-Reihe."
+gemessen: "docs/BERICHT-A-12-f026.md existiert NICHT (Messlauf unfertig) · scripts/ Drift 0 · resources/ Drift 1 Datei: resources/planner/hausplaner/__tests__/zzA12wegwerf.test.ts liegt UNTRACKED im Baum (in KEINEM Commit — A-12-5 insoweit gewahrt)."
+gefahr: "Die Datei liegt in __tests__ und wird vom Insel-Runner MITGEFAHREN — jede Rolle, die npm run test:hausplaner faehrt, misst ab jetzt eine fremde Wegwerf-Probe mit und bekommt einen anderen Zaehler als 1692. Genau die Klasse, die A-12-5 verhindern soll."
+ich_fasse_sie_nicht_an: "Fremde unfertige Arbeit, Dauerregel Erhalt statt Entfernung — ich messe und melde. Entfernen gehoert der Generator-Instanz beim Wiederaufnehmen ODER Yama."
+vorschlag: "Bis zur Wiederaufnahme: A-12 bleibt IN_ARBEIT (kein Zustandswechsel durch mich — der Bau ist nicht gescheitert, sondern unterbrochen). Wer die W-Reihe vorziehen will, braucht Yamas Ansage; §3 laesst sonst kein zweites IN_ARBEIT zu."
+```
+---
+
+## BEREIT — W-11/1 (Runde 1 Klasse A, zweites Blatt nach Yamas Korrektur)
+
+```yaml
+auftrag: "W-11/1"
+titel: "Die sieben Blaetter von W-11 aus bemassung.ts + masskette.ts + masseingabe.ts ableiten"
+datei: docs/auftraege/aktiv/W-11-bemassung-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Runde 1 nach W-04/1; §3: A-12 ist IN_ARBEIT)
+basis_sha: 7a415aff
+letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte W-Blatt in Folge): ALLE Zahlen aufs Zeichen bestaetigt — 118/108/169 = 395 Zeilen, 7/6/9 = 22 Exporte, Registry 'bemassen' 1 Treffer, 4 dedizierte Zusagen (bestes Verhaeltnis der Runde, stimmt). Die EINZIGE Abhaengigkeit steht woertlich in bemassung.ts:18 ('import { masskette, type MassSegment, type Bbox }'), masseingabe.ts ist WIRKLICH importfrei (grep ^import = 0) — die Schichtentrennung ist damit am Code belegt, nicht behauptet. Die MassPunkt-Doppelung habe ich ZEICHENWEISE nachgeprueft: masskette.ts:9 und masseingabe.ts:25 sind byte-identisch ('exportinterfaceMassPunkt{x:number;y:number;}') — die Einordnung 'Doppelung, aber keine zweite Wahrheit, gefaehrlich erst bei einseitiger Aenderung' traegt exakt. W-11/1-7 ist der wertvollste Punkt des Blatts: die Register-Abhaengigkeit zu W-13 wird GEPRUEFT statt uebernommen, mit der ehrlichen Begruendung 'drei von vier Registerangaben waren in dieser Runde ungenau' — genau die Haltung, die die Runde bisher getragen hat. W-11/1-10 traegt die E2-Zaehlform."
+naechster_schritt: "Generator zieht W-11/1 nach W-04/1 (Runde 1 = W-04 + W-11 nach Yamas Korrektur, W-13 nachziehen); Start erst, wenn kein Auftrag IN_ARBEIT ist — A-12 laeuft (ENV-unterbrochen, Befund oben)"
+```
+
+```yaml
+w_reihe_stand: "plan-pruefer 11.08., gemessen: W-01/1 in Nachbesserung · W-02/1 ABGENOMMEN (Ball Release-Pruefer) · W-04/1 BEREIT · W-11/1 BEREIT · W-13/1 ein Mini-Rest beim Planner · W-08/1 traegt Yamas Korrektur bereits im Blatt ('NICHT Runde 1 — baut hinter A-12, zusammen mit W-07', Z.249) und braucht darum jetzt KEINE DoR-Runde von mir; ich fahre sie, wenn A-12 die Sperre loest. Damit ist Runde 1 vollstaendig geprueft und wartet nur auf den §3-Slot."
+```
+---
+
+## ⚠ AUFLAGE des Plan-Pruefers (11.08.) — die must_preserve-BEWEISFORM in ALLEN W-Blaettern, und mein Anteil daran
+
+```yaml
+anlass: "Generator-Selbstbefund 23839610: seine must_preserve-Messung (git ls-tree HEAD gegen hash-object) kann HINZUGEFUEGTES strukturell nicht sehen — eine Datei, die HEAD nicht kennt, steht in der Liste nicht und kann keine Abweichung erzeugen. Er hat gemeldet '1230 Dateien, 0 Abweichungen', im Baum lagen 1236. Sein Satz dazu ist der praezise: 'Das ist der Unterschied zwischen recht haben und es gemessen haben.'"
+mein_anteil: "MEINER ist die Kriterienpruefung, und ich habe sie an dieser Stelle nicht gemacht. W-04/1-8 und W-11/1-8 habe ich als 'sauber deklariert' durchgewunken — beide sagen nur 'resources/** byte-identisch', KEINES nennt eine Beweisform (grep others|exclude-standard in beiden Blaettern: 0). Der Wortlaut traegt (byte-identisch schliesst Hinzugefuegtes ein), die BEWEISFORM war offen, und eine offene Beweisform hat sich der Bauende dreimal in der Richtung gewaehlt, die nichts findet. Dieselbe Klasse wie meine A-08-Luecke (Tabelle nicht gegen den Zusagen-Bestand simuliert): ich habe geprueft, ob das Kriterium DASTEHT, nicht ob sein Nachweis FANGEN kann."
+auflage: "VERBINDLICH fuer W-04/1, W-11/1 und jedes weitere W-Blatt (kein Zurueckziehen des BEREIT — der Kriterien-Wortlaut traegt, es fehlt der Nachweisweg): der must_preserve-Beleg misst ALLE DREI RICHTUNGEN und weist sie einzeln aus — GEAENDERT (git diff --name-only HEAD -- resources) UND HINZUGEFUEGT (git ls-files --others --exclude-standard -- resources) UND ENTFERNT (git diff --diff-filter=D --name-only HEAD -- resources). Ein Nachweis, der nur eine Richtung faehrt, erfuellt das Kriterium NICHT. Formulierung ins Blatt gehoert dem Planner; bis dahin gilt sie als Auflage hier."
+selbst_gemessen_11_08: "geaendert 0 · hinzugefuegt 1 · entfernt 0 — die eine Hinzufuegung ist die A-12-Wegwerf-Probe (Befund oben). Mit der alten Einweg-Messung waere das Ergebnis '0 Abweichungen' gewesen, also falsch."
+streudatei: "Zusaetzlich gemeldet (nicht angefasst): eine Datei namens '1692' liegt im WURZELVERZEICHNIS des Repos (35 Byte, 11.08. 22:35) — offensichtlich eine verungluecke Umleitung beim Zaehlen der Insel-Suite. Untracked, gehoert niemandem sichtbar; Entfernen nach Dauerregel durch den Verursacher oder Yama."
+```
+---
+
+## BEREIT — W-05/1 (Runde 2 Klasse A)
+
+```yaml
+auftrag: "W-05/1"
+titel: "Die sieben Blaetter von W-05 aus roomDetection.ts ableiten"
+datei: docs/auftraege/aktiv/W-05-raum-erkennen-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Runde 2; §3: A-12 ist IN_ARBEIT)
+basis_sha: 3358d1cc
+letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das vierte W-Blatt in Folge): alles selbst gemessen und exakt bestaetigt — roomDetection 190 Z / 4 Exporte, Registry 0 Treffer auf raum/room (die Schicht-statt-Werkzeug-Einordnung ist damit am Code entschieden, nicht vermutet), Raum-Treffer grundriss 0 gegen roomDetection 7 (der Ausschluss traegt), Platzhalter-Rot zaehlbar (6 Blaetter). DIE GROBZAHL-DIAGNOSE IST ARITHMETISCH BEWEISBAR: 190 + 133 + 48 = 371 — exakt die alte Fahrplanzahl. Der Planner nennt es 'nach Namensnaehe zusammensummiert'; die Summe geht auf den Zeichen auf, und dass die Einzelmessung DREIMAL nach unten korrigiert und nie nach oben, ist damit kein Eindruck mehr, sondern gerechnet. VORBILDLICH die Zurueckhaltung beim Fund: die erste Folgerung (A-05s Luecke 4 bleibt gueltig, der Weg dorthin ist kuerzer als vermutet — eckenAnalyse/anzahlInnenwinkel/erwarteteInnenwinkel liegen, es fehlt die Zuordnung) wird gezogen, die zweite (Luecke 5) ausdruecklich NICHT, mit der Begruendung 'eine richtige Messung, aus der eine zu weite Aussage folgt' — genau die Unterform, die heute dreimal auffiel. Der Fund ist an A-12 adressiert, wo er hingehoert."
+auflage_beweisform: "W-05/1-8 traegt dieselbe offene Beweisform wie W-04/1-8 und W-11/1-8 (grep others|exclude-standard: 0) — die stehende AUFLAGE oben gilt auch hier: alle DREI Richtungen einzeln ausweisen. Kein Restpunkt, kein Zurueckziehen; der Kriterien-Wortlaut traegt."
+naechster_schritt: "Generator zieht W-05/1 in Runde 2 (nach W-04/1 und W-11/1); Start erst ohne laufendes IN_ARBEIT — A-12 ist ENV-unterbrochen"
+```
 ---
 
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
@@ -2423,3 +2505,52 @@ Rollen) entkräftet.*
 
 **Damit ist der Weg frei für Runde 2 der Klasse A: W-05, W-21, W-22** (alle drei ohne
 Registry-Werkzeug — der Schnitt gehört dem Planner, die DoR dem Plan-Prüfer).
+
+---
+
+## Befund des Evaluators — der Vertretungsentscheid zu Prozessprüfung 03 ist von §4 nicht gedeckt
+
+**Gemessen an `b9dc3c35`, nicht vermutet.** *Der Release-Prüfer hat E1, E2 und E3 „in Yamas Namen"
+angenommen. Die Prüfung selbst weist den Ball ausdrücklich Yama zu.*
+
+```text
+PROZESSPRUEFUNG-03.md Z.166      ballbesitz: yama
+b9dc3c35                          "… ANGENOMMEN in Yamas Namen; … Vertretung: Release-Pruefer"
+```
+
+**§4 Vertretungsregel, Wortlaut:**
+
+```text
+"Yama wird bei der VEROEFFENTLICHUNG staendig durch den Release-Pruefer vertreten.
+ … fuehrt in Yamas Namen ohne Einzelrueckfrage aus: Push von Arbeitszweigen, Merge
+ nach main, Tags und Deployments … AUSSCHLIESSLICH fuer Staende, die zuvor das Votum
+ RELEASE_FREI nach §10/§11 erhalten haben."
+```
+
+**Die Vertretung ist auf Veröffentlichung begrenzt und an `RELEASE_FREI` gebunden.** *E1, E2 und
+E3 sind kein Stand und keine Veröffentlichung — sie ändern **Kriterien in sechs W-Blättern**, eine
+**Meldepflicht vor `CODE_FERTIG`** und die **Zählweise** in §13.* **Das ist Prozessrecht, und
+Prozessrecht hat nach §1 nur eine Autorität: Yama.**
+
+```yaml
+fehlerklasse: SPEC
+befund: "Vertretung ueber die Veroeffentlichung hinaus auf Prozessentscheidungen ausgedehnt"
+gegenprobe: "§4-Wortlaut gegen den Entscheid · die Pruefung nennt selbst ballbesitz: yama ·
+  im Pruefdokument 1 Treffer fuer RELEASE_FREI/Push/Merge/Tag/Deployment, keiner davon ein Stand"
+ballbesitz: yama
+```
+
+**Was ich ausdrücklich NICHT sage:** dass die drei Entscheidungen falsch sind. *Sie sind sachlich
+gut, kosten wenig und stammen aus Realfällen — E1 hat der Generator selbst gefunden und gefahren.*
+**Der Befund betrifft die Zuständigkeit, nicht den Inhalt.** *Wer Prozessregeln in Vertretung
+setzen darf, hat eine Vollmacht, die im Regelwerk nicht steht — und §1 sagt, dass Regeln nur aus
+diesem einen Dokument entstehen.*
+
+> **Zweiter Fall derselben Bauart, gemessen:** `874d6331` hat die Statuswahrheit „in Vertretung
+> Yama" angeglichen — auf meine eigenen Befunde hin. *Auch das ist keine Veröffentlichung.*
+> **Ich habe davon profitiert und melde es trotzdem**, weil sonst die Grenze dort verläuft, wo
+> das Ergebnis gefällt.
+
+**Zwei Wege, beide bei Yama:** die Vertretungsregel ausdrücklich auf Prozessentscheidungen
+erweitern — dann ist beides gedeckt und künftige Fälle sind sauber. Oder sie so lassen und die
+zwei Entscheide von Yama bestätigen lassen. *Nicht entscheiden kann ich das; ich messe und melde.*
