@@ -1298,6 +1298,7 @@ ballbesitz: evaluator
 basis_sha: 7a415aff
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte W-Blatt in Folge): ALLE Zahlen aufs Zeichen bestaetigt — 118/108/169 = 395 Zeilen, 7/6/9 = 22 Exporte, Registry 'bemassen' 1 Treffer, 4 dedizierte Zusagen (bestes Verhaeltnis der Runde, stimmt). Die EINZIGE Abhaengigkeit steht woertlich in bemassung.ts:18 ('import { masskette, type MassSegment, type Bbox }'), masseingabe.ts ist WIRKLICH importfrei (grep ^import = 0) — die Schichtentrennung ist damit am Code belegt, nicht behauptet. Die MassPunkt-Doppelung habe ich ZEICHENWEISE nachgeprueft: masskette.ts:9 und masseingabe.ts:25 sind byte-identisch ('exportinterfaceMassPunkt{x:number;y:number;}') — die Einordnung 'Doppelung, aber keine zweite Wahrheit, gefaehrlich erst bei einseitiger Aenderung' traegt exakt. W-11/1-7 ist der wertvollste Punkt des Blatts: die Register-Abhaengigkeit zu W-13 wird GEPRUEFT statt uebernommen, mit der ehrlichen Begruendung 'drei von vier Registerangaben waren in dieser Runde ungenau' — genau die Haltung, die die Runde bisher getragen hat. W-11/1-10 traegt die E2-Zaehlform."
 naechster_schritt: "Generator zieht W-11/1 nach W-04/1; Start erst ohne laufendes IN_ARBEIT — das ist jetzt W-04/1 (a9e58dd4), NICHT mehr A-12 (seit 3a4838e1 CODE_FERTIG)"
+claim_abnahme: "evaluator (Erstinstanz) 11.08.: Abnahme W-11/1 GECLAIMT vor der Messung, Bau 0299e5ca. Kanonischer Feldname."
 ```
 
 ```yaml
