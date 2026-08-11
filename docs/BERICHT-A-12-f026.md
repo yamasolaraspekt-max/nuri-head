@@ -420,5 +420,56 @@ geändert**. Begründung:
 
 ## 9. E1 — Commit-Messung (Aussagen über den Bau werden am COMMIT gemessen)
 
-*Wird unmittelbar nach dem Bericht-Commit gefahren und hier nachgetragen; Befehl je berührter Datei:
-`git show HEAD:<pfad> | diff - <pfad>`.*
+*Pflicht vor `CODE_FERTIG`, von Yamas Vertretung am 10.08. angenommen. Die Klasse, die sie verhindert:
+„grün gemeldet, was nicht im Commit steht" (`5c06f5ca`) — eine Gegenprobe, die den Arbeitsbaum misst,
+ist blind für genau den Unterschied, auf den es ankommt.*
+
+**Berührte Dateien: zwei.** `docs/BERICHT-A-12-f026.md` (dieser Bericht) und `docs/STATUS.md`
+(Zustandswechsel, eigener Commit). Kein Produktiv-, Test- oder Regelpfad berührt.
+
+```text
+$ git show HEAD:docs/BERICHT-A-12-f026.md | diff - docs/BERICHT-A-12-f026.md
+(keine Ausgabe, exit 0)   -> Baum == Commit 92310844
+
+$ git show HEAD:docs/STATUS.md | diff - docs/STATUS.md
+(wird unmittelbar nach dem Statuscommit gefahren; Ergebnis geht mit den SHAs an den
+ Release-Prüfer und ist an jedem Stand nachfahrbar)
+```
+
+**Zusätzlich gegen den Mess-SHA gemessen, nicht nur gegen HEAD** — HEAD ist während des Laufs
+viermal gewandert (fremde Planner-/Plan-Prüfer-Commits `23839610`, `c9325929`, `239a163e`,
+`601aff5c`, `95fe1b88`):
+
+```text
+$ git diff --name-only 239a163e..92310844 -- resources/ scripts/ | wc -l
+0        # kein fremder Commit hat gemessenen Code bewegt; alle Zahlen oben bleiben gültig
+```
+
+**Prüf-SHA für den Evaluator: `92310844`** (Bericht) zuzüglich des Statuscommits, der ihn nennt.
+
+---
+
+## 10. §11-Kurzstand
+
+```yaml
+auftrag: A-12
+basis: d1d716c8
+mess_sha: 239a163e
+commit: 92310844
+scope: [docs/BERICHT-A-12-f026.md, docs/STATUS.md]
+tests:
+  statisch: nicht_anwendbar
+  unit: "1692/1692"
+  backend: nicht_anwendbar
+  schema: pass
+  build: nicht_anwendbar
+  browser: nicht_anwendbar
+abweichungen:
+  - "FORMELSAMMLUNG.md und VORGEHEN.md im Scope, bewusst NICHT geändert (Abschnitt 7) — die Ampel
+     trägt der Planner ein, 'Schritt 3 erledigt' wäre eine zweite Statuswahrheit vor der Abnahme."
+  - "Wegwerf-Probe vom Vorgänger übernommen statt neu geschrieben; gelesen, gegen die Attrappen-Regel
+     geprüft, gefahren, restlos entfernt."
+offene_akzeptanz:
+  - "A-12-4: die Ampel selbst ist nicht gesetzt — das ist so gewollt (Evaluator bestätigt, Planner trägt ein)."
+```
+
