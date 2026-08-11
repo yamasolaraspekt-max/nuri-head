@@ -1590,6 +1590,7 @@ letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): d
 mein_zweiter_beinahe_fehlbefund: "Ich habe SIEBEN Schreibpfade gezaehlt, das Blatt sagt SECHS — und ich war im Begriff, die Abweichung zu melden. Der siebte ist ein KOMMENTAR (NewLeadsController:7209: '// optionally pass \$roof = new PVRoof or an empty array if needed'). Das Blatt hat recht, meine Zahl war falsch. ZWEITER Beinahe-Fehlbefund heute, wieder aus einem zu groben Muster (nach dem Glob ohne Rekursion jetzt ein grep, das Kommentare mitzaehlt). Ich melde ihn, weil ein Pruefer, der seine eigenen Fehlgriffe verschweigt, die Verlaesslichkeit seiner Befunde nicht belegen kann."
 zulieferung: "Der Kommentar ist trotzdem wertvoll und STUETZT die DECISION: das Blatt argumentiert, eine Controller-Validierung 'wuerde beim siebten Schreibpfad fehlen' — und genau dieser siebte Pfad ist im Code bereits als Absicht notiert. Der Bauende soll ihn im Bericht nennen: die Regel am Model deckt auch den Pfad ab, den noch niemand geschrieben hat."
 naechster_schritt: "Generator zieht A-13, sobald kein Auftrag IN_ARBEIT ist (W-22/1 laeuft); IN_ARBEIT vor der ersten Scope-Aenderung, §3-Beleg nach A-13-8"
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-13 GECLAIMT vor dem Pruefstand. Erster Produktivcode seit Laengerem - voller §8-Umfang."
 ```
 ---
 
