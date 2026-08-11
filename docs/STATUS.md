@@ -1329,12 +1329,13 @@ geschlossen: "plan-pruefer 11.08. — SELBST nachgemessen, nicht geglaubt: die N
 auftrag: "W-11/1"
 titel: "Die sieben Blaetter von W-11 aus bemassung.ts + masskette.ts + masseingabe.ts ableiten"
 datei: docs/auftraege/aktiv/W-11-bemassung-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 7a415aff
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte W-Blatt in Folge): ALLE Zahlen aufs Zeichen bestaetigt — 118/108/169 = 395 Zeilen, 7/6/9 = 22 Exporte, Registry 'bemassen' 1 Treffer, 4 dedizierte Zusagen (bestes Verhaeltnis der Runde, stimmt). Die EINZIGE Abhaengigkeit steht woertlich in bemassung.ts:18 ('import { masskette, type MassSegment, type Bbox }'), masseingabe.ts ist WIRKLICH importfrei (grep ^import = 0) — die Schichtentrennung ist damit am Code belegt, nicht behauptet. Die MassPunkt-Doppelung habe ich ZEICHENWEISE nachgeprueft: masskette.ts:9 und masseingabe.ts:25 sind byte-identisch ('exportinterfaceMassPunkt{x:number;y:number;}') — die Einordnung 'Doppelung, aber keine zweite Wahrheit, gefaehrlich erst bei einseitiger Aenderung' traegt exakt. W-11/1-7 ist der wertvollste Punkt des Blatts: die Register-Abhaengigkeit zu W-13 wird GEPRUEFT statt uebernommen, mit der ehrlichen Begruendung 'drei von vier Registerangaben waren in dieser Runde ungenau' — genau die Haltung, die die Runde bisher getragen hat. W-11/1-10 traegt die E2-Zaehlform."
 naechster_schritt: "Generator zieht W-11/1 nach W-04/1; Start erst ohne laufendes IN_ARBEIT — das ist jetzt W-04/1 (a9e58dd4), NICHT mehr A-12 (seit 3a4838e1 CODE_FERTIG)"
 claim_abnahme: "evaluator (Erstinstanz) 11.08.: Abnahme W-11/1 GECLAIMT vor der Messung, Bau 0299e5ca. Kanonischer Feldname."
+evaluator_votum: "evaluator 11.08.: ABGENOMMEN an 0299e5ca, Fehlerklasse KEINE, alle zehn Kriterien erfuellt. Elf Fundstellen einzeln im Code geoeffnet, keine laeuft ins Leere. Zwei Stellen habe ich Zeichen fuer Zeichen gegen den Code gehalten: die drei Bedingungen von istBrauchbareLaenge stimmen mit masseingabe.ts:41 ueberein, und die Signatur masskette(werte, toleranz = 1) mit masskette.ts:29. Die MassPunkt-Doppelung habe ich unabhaengig bestaetigt - masskette.ts:9 und masseingabe.ts:25 tragen beide export interface MassPunkt; die Behauptung stammt nicht aus dem Blatt, sie steht im Code. Das Blatt erfindet keinen Grenzfall, es liest den vorhandenen aus. resources/ im Bau-Commit 0 Pfade, Suite 1692/1692, Register mit allen drei Modulen. W-11/1-10 ist wie schon bei W-04 im ERSTEN Anlauf erfuellt (a436d8a3: 2 Befehlszeilen, 2 Ausgaben) - zweite Messung, die E2 aus Prozesspruefung 03 bestaetigt."
 ```
 
 ```yaml
