@@ -1585,8 +1585,8 @@ an_yama_fachgate: "DRINGENDER und unabhaengig davon: der Planner hat N-003 (Spar
 auftrag: "A-13"
 titel: "Das einzige Azimut-Feld im Haus ohne Test bekommt Validierung, Zusage und den Konventionshinweis"
 datei: docs/auftraege/aktiv/A-13-roof-azimuth-absichern.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer (P2-Nachforderung beim generator)
 basis_sha: 783d47c1
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die FUENF NULLEN selbst nachgemessen und ALLE bestaetigt — Validierung in Requests 0, in Controllers 0, PVRoofFactory existiert nicht, Tests 0, Konventionshinweis am Model 0; der Migrations-Kommentar von 2024 ('0=N, 90=E, 180=S, 270=W') steht woertlich in Z.67, und beide Vergleichszusagen existieren (BuildingModelSchemaContractTest, SzeneProjektionServiceTest). Die Kernbelege der DECISION halten: PVRoofController Z.42 HAT ein validate, und roof_azimuth steht nachweislich NICHT darin (0 Treffer im Block) — 'der Ort fuer Validierung existiert und wurde uebersprungen' ist gemessen, nicht behauptet; der Mass-Assignment-Pfad PVRoof::create(\$roofData) liegt in NewLeadsController:7082. Acht Kriterien, §5-Block, Erstnutzer und Rueckweg vorhanden. Die Model-Entscheidung deckt sich mit der ticket-Bauordnung (eine Wahrheit im Model-Hook)."
@@ -1594,6 +1594,7 @@ mein_zweiter_beinahe_fehlbefund: "Ich habe SIEBEN Schreibpfade gezaehlt, das Bla
 zulieferung: "Der Kommentar ist trotzdem wertvoll und STUETZT die DECISION: das Blatt argumentiert, eine Controller-Validierung 'wuerde beim siebten Schreibpfad fehlen' — und genau dieser siebte Pfad ist im Code bereits als Absicht notiert. Der Bauende soll ihn im Bericht nennen: die Regel am Model deckt auch den Pfad ab, den noch niemand geschrieben hat."
 naechster_schritt: "Generator zieht A-13, sobald kein Auftrag IN_ARBEIT ist (W-22/1 laeuft); IN_ARBEIT vor der ersten Scope-Aenderung, §3-Beleg nach A-13-8"
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-13 GECLAIMT vor dem Pruefstand. Erster Produktivcode seit Laengerem - voller §8-Umfang."
+evaluator_votum: "evaluator 12.08.: ABGENOMMEN an a09b69af mit EINEM P2 der Klasse BEWEIS. Rot am Elter 8/8, im Pruefstand 8/8 gruen. Fuenf eigene Mutationen: M2, M3 und M5 gefangen, M1 (saving-Hook entfernt) und M4 (is_numeric entfernt) BLIND - Grund ist derselbe, alle acht Zusagen rufen PVRoof::pruefeAzimut direkt auf, keine speichert ein Model (save/create 0 Treffer). M4 ist erklaerbar und harmlos: PHP 8 vergleicht Sued mit 360 als Zeichenketten und wirft trotzdem. BEFUND P2: A-13-1 verlangt den Waechter fuer ALLE Pfade, keine Zusage misst das - der Hook ist entfernbar und die Suite bleibt gruen. Ich habe den Schreibpfad selbst geprueft statt es beim Befund zu belassen: eigene Wegwerf-Probe, DB vorher als ticket_testing belegt, save mit 400 wirft die Ausnahme - das Verhalten stimmt, der Nachweis fehlt. Deshalb BEWEIS statt CODE und P2 statt P1. Nachforderung an den Generator: eine Zusage die SPEICHERT statt aufzurufen. Gut und benannt: A-13-4 wurde gemessen statt gebaut (keine PVRoof-Factory im Repo, keine angelegt, obwohl der Auftrag das Wort enthielt), A-13-6 ist sauber (Migration 0, Seeder 0, UPDATE 0; p_v_roofs 0 Saetze), und A-13-7 nennt die Verhaltensaenderung samt dem unangenehmen Teil."
 ```
 ---
 

@@ -293,3 +293,92 @@ E1_commit_messung: "drei Dateien, je 'im Commit' geprueft"
 browserabnahme: "entfaellt — keine sichtbare Wirkung; die Aenderung ist ein Schreib-Waechter"
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum (§11) — 12.08.2026
+
+```yaml
+auftrag: "A-13"
+commit: a09b69af          # Bau; Basis 783d47c1, Elter 50e968e9
+votum: ABGENOMMEN
+fehlerklasse: BEWEIS      # ein P2, der den Bau nicht trifft
+gegenprobe: "Rot am Elter (8/8 rot) · fuenf eigene Mutationen · eigene Wegwerf-Probe am
+  SCHREIBPFAD (save mit 400) · Bestandsdaten gezaehlt"
+browser: nicht_anwendbar
+datenbank: "ticket_testing — vor dem ersten Schreiben belegt (DB = ticket_testing)"
+befunde:
+  - "P2 BEWEIS · A-13-1: KEINE Zusage misst den saving-Hook. Alle acht rufen die statische
+     Methode direkt; der Hook laesst sich entfernen und die Suite bleibt gruen."
+```
+
+### Messtisch — alle acht Zeilen
+
+```text
+-1  Waechter am Model, alle Pfade    VERHALTEN JA (eigene Probe unten), ZUSAGE FEHLT (Befund)
+-2  Konventionshinweis am Model      "0=N, 90=E, 180=S, 270=W" steht in PVRoof.php
+-3  Test in der Hausform             8 Zusagen, Namensmuster wie das Vorbild
+-4  Factory gemessen statt gebaut    selbst nachgemessen: KEINE PVRoof-Factory im Repo,
+                                     der Bau hat auch keine angelegt — richtig entschieden
+-5  Grenze 0 <= x < 360 begruendet    am Hausmuster belegt, nicht selbst gewaehlt
+-6  kein Bestandsdatensatz geaendert  Migration 0, Seeder 0, UPDATE 0 im Bau-Diff;
+                                     p_v_roofs in ticket_testing: 0 Saetze, 0 ausserhalb 0..359
+-7  Verhaltensaenderung im Bericht   ausdruecklich, samt dem unangenehmen Teil
+-8  §3-Beleg in 6d57e627             2 Befehlszeilen, 2 Ausgaben
+```
+
+### Rot am Elter — die Zusagen messen wirklich etwas
+
+```text
+dieselbe Testdatei gegen das Elter-Model 50e968e9:  8 von 8 ROT
+im Pruefstand a09b69af:                             8 von 8 GRUEN
+```
+
+### Fünf eigene Mutationen — und zwei überleben
+
+```text
+M1 saving-Hook entfernt              failed 0   BLIND   <- Befund
+M2 '>= 360' auf '> 360' aufgeweicht  failed 1   GEFANGEN
+M3 untere Grenze entfernt            failed 1   GEFANGEN
+M4 is_numeric entfernt               failed 0   BLIND   (erklaerbar, s.u.)
+M5 null/'' Fruehausstieg entfernt    failed 1   GEFANGEN
+md5 vor und nach jeder Probe identisch.
+```
+
+**Der Grund ist derselbe für beide:** *alle acht Zusagen rufen `PVRoof::pruefeAzimut(...)`
+**direkt** auf — keine einzige speichert ein Model.*
+
+```text
+Test :30 :36 :43 :49 :55 :60 :67   ->  PVRoof::pruefeAzimut(...)
+save() / create() in der Zusage    ->  0 Treffer
+```
+
+**M4 ist dabei harmlos und erklärbar:** ohne `is_numeric` vergleicht PHP 8 `'Sued'` mit `360` als
+Zeichenketten, `'S' > '3'`, also wirft es trotzdem. *Die Wache ist richtig, nur nicht durch diese
+Zusage bewiesen.*
+
+### Der Befund — P2, `BEWEIS`, und warum er die Abnahme nicht hält
+
+**`A-13-1` verlangt: „die Prüfung sitzt am Model und greift für ALLE Pfade."** *Der Bericht meldet
+das grün und verweist auf eine Wegwerf-Probe. **Die Zusagen decken es nicht** — der `saving`-Hook
+ist entfernbar, ohne dass ein Test es merkt.*
+
+**Ich habe deshalb den Schreibpfad selbst geprüft, statt es beim Befund zu belassen:**
+
+```text
+eigene Wegwerf-Probe im Pruefstand, §15 vorher belegt (DB = ticket_testing):
+  $r = new PVRoof(); $r->roof_azimuth = 400; $r->save();
+  -> EVAL| save(400) WIRFT RoofAzimuthOutOfRangeException — der Hook greift
+Probe danach entfernt.
+```
+
+> **Das Verhalten stimmt, der Nachweis fehlt.** *Deshalb `BEWEIS` und nicht `CODE`, und deshalb P2
+> statt P1: der Bau tut, was `A-13-1` verlangt — was fehlt, ist eine Zusage, die es festhält.
+> **Ohne sie kann der Hook bei einem späteren Umbau still verschwinden**, und genau diese Lage hat
+> die Werkbank bei A-08 schon einmal gekostet.* **Nachforderung an den Generator: eine Zusage, die
+> speichert statt aufzurufen.**
+
+*Was hier gut ist und benannt gehört: `A-13-4` hat der Bauende gemessen statt gebaut — es gibt
+keine `PVRoof`-Factory, und er hat keine angelegt, obwohl der Auftrag das Wort „Factory" enthielt.
+Und `A-13-7` nennt die Verhaltensänderung mitsamt dem unangenehmen Teil: ein Altwert außerhalb der
+Grenze bleibt beim nächsten Speichern hängen.*
