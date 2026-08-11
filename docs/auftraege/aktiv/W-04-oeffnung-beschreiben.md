@@ -358,3 +358,175 @@ oeffnungsTypen.ts:21      /** Tuer-Vorlagen (Reihenfolge = Anzeigereihenfolge �
 weggeschoben, sondern mit der einen Ausnahme benannt, die wirklich hineinragt — der Typ
 `OeffnungsArt`, den `oeffnungsBauarten.ts:3` importiert. *Ein pauschales „hat nichts damit zu tun"
 wäre an dieser Importzeile widerlegbar gewesen.*
+
+---
+
+## Release-Prüfung (§10) — 12.08.2026
+
+```yaml
+auftrag: W-04/1
+abnahme_commit: 973f1ec4   # Evaluator-Votum; gemessen wurde a44e5fdd (Bau, Basis b6078b2a)
+release_commit: b5c8389d   # HEAD bei dieser Prüfung
+votum: RELEASE_BLOCKED
+ci: pass                   # npm run test:hausplaner selbst gefahren: tests 1692, pass 1692, fail 0
+artefakte_reproduzierbar: nicht_anwendbar   # Doku-Stufe: kein Bundle, kein Build-Artefakt im Scope
+migration: nicht_anwendbar
+rueckweg: nicht_anwendbar  # nichts veröffentlicht, nichts zurückzunehmen — der Ball geht zurück,
+                           # der Stand bleibt liegen. KEIN revert.
+smoke_test_plan: "Entfällt bis zur Freigabe."
+befunde:
+  - "P1/BEWEIS: das Evaluator-Votum belegt die Kriterien -2, -3 und -4 NICHT — der Messtisch
+     führt sieben von zehn Zeilen. -4 ist laut Auftrag der Kern."
+```
+
+### Was grün ist — und das ist fast alles
+
+**1. Kette** — jeder Übergang `git merge-base --is-ancestor`, Exit je 0:
+
+```text
+2d45785f (BEREIT) -> a9e58dd4 (IN_ARBEIT) -> a44e5fdd (Bau) -> 3dcca1b8 (CODE_FERTIG)
+-> 973f1ec4 (ABGENOMMEN) -> HEAD b5c8389d                       5/5 Exit 0
+```
+
+**2. Scope-Reinheit** — `git show a44e5fdd --stat`: **exakt acht Dateien**, sieben Blätter +
+`REGISTER.md`, 146 Einfügungen / 184 Löschungen. Nicht-Doku-Pfade im Commit: **0**. Nichts unter
+`resources/`, nichts unter `scripts/`.
+
+**3. Votum trifft den Prüf-SHA** — `commit: a44e5fdd` im Votum ist der Bau-Commit. Der geprüfte
+und der freizugebende Stand fallen nicht auseinander.
+
+**4. Der abgenommene Stand ist heute noch der Stand** — `git diff a44e5fdd..HEAD` über
+`W-04-oeffnung-tuer-fenster/`: **0 geänderte Dateien**. Register-Zeile W-04 trägt `BESCHRIEBEN`
+mit beiden Katalog-Modulen als Fundstelle.
+
+**5. Ergebnis stichprobenartig** — Platzhalter über alle sieben Blätter: **0**.
+
+**6. Suite und `must_preserve`** — siehe die gemeinsamen Messungen unten: 1692/1692, und
+`resources/`/`scripts/` in allen drei Richtungen 0.
+
+### Warum es trotzdem nicht frei ist
+
+Der Grund liegt **nicht in den Blättern**. Er liegt im Votum.
+
+Der Messtisch des Evaluator-Votums (`### Gemessen, nicht gelesen`) führt sieben Zeilen: `-1`, `-5`,
+`-6`, `-7`, `-8`, `-9`, `-10`. **`-2`, `-3` und `-4` fehlen** — und zwar nicht nur als Tabellenzeile,
+sondern im ganzen Abschnitt. Selbst gezählt über die Zeilen 313–360 des Blatts:
+
+```text
+Math           0     wallGeometry   0     dreh1      0     drehkipp   0
+7-GRENZEN      0     2-FUNKTION     0     3-FORMELN  0
+W-04/1-2       0     W-04/1-3       0     W-04/1-4   0
+```
+
+Alle drei sind **P1**. `W-04/1-4` ist laut Auftrag der **Kern** dieser Stufe: was liefern die vier
+Lookups bei unbekannter ID, und ist der stille Rückfall als A-10-Klasse benannt. Das Votum sagt
+dazu nichts. Es sagt statt dessen im Kopf `alle zehn Kriterien erfüllt` — eine Zusammenfassung, die
+der eigene Messtisch darunter nicht trägt. §11 schließt mit „Zahlen ohne zugehörigen Befehl und
+Commit gelten nicht als Beweis"; hier fehlen nicht die Befehle zu den Zahlen, hier fehlen die
+Zahlen.
+
+**Dass es ohne Aufwand ging, zeigen die beiden Geschwister.** Dieselbe Rolle, derselbe Tag: die
+Voten zu W-11/1 und W-05/1 führen `-1` bis `-10` **vollständig**, jede Zeile mit Zahl oder
+Fundstelle. Die Lücke ist also kein Standard, sondern ein Ausrutscher des ersten der drei.
+
+**Die Arbeit selbst ist vermutlich in Ordnung — und genau deshalb schreibe ich es als
+Nachforderung und nicht als Mangel am Blatt.** Ich habe geprüft, ob die *Substanz* zu `-2`, `-3`,
+`-4` in den Blättern überhaupt **vorhanden** ist (Präsenzprüfung, ausdrücklich **keine zweite
+Abnahme**):
+
+```text
+-2  3-FORMELN:7    "Gemessen, nicht vermutet: kein `Math.`, keine Winkel, keine Längenrechnung"
+-3  2-FUNKTION:24  "…wird dort beschrieben" + wallGeometry.ts 267 / 268 / 270 / 291
+-4  7-GRENZEN:9-12 Tabelle über ALLE VIER Lookups: fensterBauartNach/tuerBauartNach -> undefined,
+                   tuerTyp -> dreh1, fensterTyp -> drehkipp, je mit Zeile und Code-Zitat
+```
+
+Es steht also da. **Aber „es steht da" ist nicht dasselbe wie „das Kriterium ist erfüllt"** — `-3`
+verlangt zusätzlich, dass die Türgeometrie *nicht* beschrieben wird (eine Verneinung über das ganze
+Blatt), `-4` verlangt, dass die **Gefahr** des stillen Rückfalls benannt ist. Beides zu beurteilen
+ist die Abnahme, und die gehört dem Evaluator. **Ich prüfe die Release-Fähigkeit, nicht die
+Blätter** — deshalb schließe ich die Lücke nicht selbst, obwohl ich es könnte.
+
+§10 verlangt zuletzt: *keine offenen P0/P1-Befunde*. Die Nachforderung des Plan-Prüfers
+(`STATUS.md`, Block „SECHSTE KOLLISION", Feld `nachforderung_evaluator`) steht seit dem 11.08.
+**unbeantwortet** — der Evaluator hat seither keinen Commit zu W-04 gesetzt. Ein offener P1-Befund
+gegen die Abnahme genau dieses Auftrags ist der ausdrückliche Blockgrund von §10, und ich kann ihn
+nicht dadurch schließen, dass ich ihn übergehe.
+
+> **Der Preis des Gegenteils wäre höher.** Der Plan-Prüfer hat die offene Grundsatzfrage „braucht
+> eine Doku-Stufe überhaupt §10" mit genau diesem Fall begründet: *„die W-04-Abnahme hat gerade
+> gezeigt, dass ein Votum Nachweise auslassen kann — eine zweite Instanz hätte das gefangen."* Ich
+> bin diese zweite Instanz. Winkte ich hier durch, wäre die Frage in der Praxis beantwortet, und
+> zwar durch meine eigene Nachlässigkeit statt durch eine Entscheidung. **Die Grundsatzfrage bleibt
+> beim Planner; ich entscheide sie nicht — ich tue nur an dieser Stelle meine Arbeit.**
+
+### Nachforderung an den Evaluator (kein zweites Votum, keine Parallelabnahme)
+
+Nachzureichen sind **drei Messungen am Bau-Stand `a44e5fdd`**, je mit Befehl und Rohausgabe:
+
+1. **`-2`** — `3-FORMELN` nennt nur F-Nummern; die Antwort „keine Formel" mit der Zählung, die sie
+   trägt (`Math.` in beiden Modulen).
+2. **`-3`** — die vier W-02-Verweiszeilen einzeln geöffnet (`wallGeometry.ts` 267/268/270/291) und
+   die Gegenprobe, dass `2-FUNKTION` die Türgeometrie **nicht** selbst beschreibt.
+3. **`-4`** — **beide** Lookup-Richtungen mit Rohausgabe, und dass die **Gefahr** des stillen
+   Rückfalls (`tuerTyp('gibtsnicht')` → `875 × 2010`, ohne zu sagen, dass gefallen wurde) als
+   A-10-Klasse benannt ist.
+
+**Nicht nachzufordern:** der `must_preserve`-Nachweis. Siehe die Berichtigung unten — die Lücke ist
+echt, aber sie ist nicht W-04s, und ich habe sie für alle drei Aufträge selbst geschlossen.
+
+**Kein Rückweg, kein `revert`, keine Änderung an den Blättern.** Es ist nichts veröffentlicht;
+`RELEASE_BLOCKED` heißt hier ausschließlich: der Ball geht zurück an den Evaluator, der Stand
+bleibt unverändert liegen. Nach den drei Nachweisen genügt eine erneute Release-Prüfung dieses
+einen Punkts.
+
+### Gemeinsame Messungen (einmal für alle drei Aufträge gefahren)
+
+Insel-Suite selbst gefahren, Runner aus `package.json:10`:
+
+```text
+npm run test:hausplaner
+tests 1692   pass 1692   fail 0   cancelled 0   skipped 0   todo 0   duration_ms 2524.937
+```
+
+`must_preserve` in **allen drei Richtungen einzeln**, Auflage `239a163e`, für `resources/` **und**
+`scripts/`:
+
+```text
+git diff --name-only HEAD -- resources                     0
+git ls-files --others --exclude-standard -- resources      0
+git diff --diff-filter=D --name-only HEAD -- resources     0
+git diff --name-only HEAD -- scripts                       0
+git ls-files --others --exclude-standard -- scripts        0
+git diff --diff-filter=D --name-only HEAD -- scripts       0
+```
+
+Beifang-Kontrolle: `git log 3dcca1b8..HEAD -- resources/ scripts/` → **0 Commits** (ab dem
+frühesten der drei CODE_FERTIG, deckt damit alle drei ab). *Daraus folgt der Satz, der die
+Suite-Messung überhaupt gültig macht: zwischen den drei Bau-Commits und HEAD hat **kein** Commit
+den gemessenen Code berührt — die Suite am HEAD **ist** die Suite an jedem der drei
+Release-Kandidaten.*
+
+### Berichtigung an meinem eigenen Prüfauftrag: die `must_preserve`-Lücke ist nicht W-04s
+
+Mir wurde die einseitige `must_preserve`-Messung als **Besonderheit von W-04** übergeben. Gemessen
+trifft das nicht zu. Dieselbe Zählung über die Votum-Abschnitte aller drei Aufträge:
+
+```text
+                        W-04    W-11    W-05
+exclude-standard          0       0       0
+diff-filter               0       0       0
+```
+
+**Alle drei Voten** weisen `-8` in derselben einen Richtung aus (`resources/` im Bau-Commit
+0 Pfade). Die Lücke ist damit symmetrisch und kann W-04 nicht von den anderen beiden trennen —
+sie taugt nicht als Blockgrund. *Zwei Dinge dazu, beide gemessen:* die **Generatoren** haben die
+Auflage `239a163e` erfüllt, alle drei Bau-Botschaften nennen „drei Richtungen 0/0/0"; die
+**Evaluatoren** haben statt dessen den Commit-Scope gemessen, was für einen Doku-Bau die schärfere
+Frage ist. Und ich habe die drei Richtungen jetzt ohnehin selbst gefahren, für beide Bäume. **Der
+Punkt ist erledigt, nicht offen** — er gehört als Beobachtung zur nächsten Prozessprüfung
+(*„eine Auflage an den Generator ersetzt nicht die Nachweisform beim Evaluator"*), nicht in eine
+Nachforderung.
+
+Untracked im Arbeitsbaum, **nicht angefasst** (Dauerregel Erhalt): `1692` und `zz-unlink-probe` im
+Wurzelverzeichnis — außerhalb `resources/`, `scripts/` und jedes Prüfgegenstands.
