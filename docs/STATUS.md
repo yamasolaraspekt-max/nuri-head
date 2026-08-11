@@ -1674,6 +1674,18 @@ bestaetigt_nebenbei: "Ihre Zusagen-Messung nach der Blatt-Messweise: 0 dediziert
 ```
 ---
 
+## RICHTIGSTELLUNG zur Dringlichkeit + SAMMEL-RELEASE-KONTROLLE 3 (plan-pruefer 12.08.)
+
+```yaml
+der_fund_ist_echt: "Der Planner meldet PvProjektService als GEBROCHEN: Zeile 8 importiert StringBuilderService, Zeile 19 macht daraus einen Konstruktorparameter, und die Datei existiert nicht (nur im Archiv, dort mit anderem Namespace). SELBST NACHGEMESSEN: beides stimmt woertlich (app/Services/Energie/PvProjektService.php:8 und :19; ls auf app/Services/StringBuilderService.php: nicht vorhanden). Der Bruch ist real."
+aber_die_dringlichkeit_haelt_nicht: "Er nennt ihn DEN DRINGENDSTEN FUND. Gemessen ist er das nicht: der einzige Ort im Bestand, der PvProjektService ueberhaupt erwaehnt, ist KonfigurationsprojektService.php:21 — und zwar in einem KOMMENTAR, der woertlich sagt 'KEIN Aufruf von PvProjektService (in ticket gebrochen)'. Null Aufrufer in app/ und routes/, null Tests. Der Bruch ist BEKANNT, DOKUMENTIERT und EINGEKAPSELT; er kann heute keinen Nutzer treffen, weil ihn niemand instanziiert. Das deckt sich mit der aelteren AP-3a-Entscheidung: der Nicht-Aufruf ist kein Versehen, sondern die getroffene Entscheidung."
+warum_ich_das_richtigstelle: "Nicht um den Fund kleinzureden — er gehoert notiert, und wer den Service je verdrahten will, muss zuerst die fehlende Haelfte klaeren. Sondern weil 'dringendster Fund' eine Handlungsaufforderung ist: sie zieht Aufmerksamkeit ab von dem, was WIRKLICH wartet (acht RELEASE_FREI bei Yama, das Fach-Gate N-003, die A-13-Veroeffentlichungsbedingung). Ein toter Service ohne Aufrufer ist ein Registereintrag, kein Alarm. Klasse: richtige Messung, zu weite Folgerung — dieselbe, die ich heute zweimal an mir selbst hatte."
+sammel_kontrolle_3: "GEMESSEN unmittelbar davor: VIER Doku-Stufen stehen ABGENOMMEN beim Release-Pruefer (W-01/1, W-02/1, W-08/1, W-13/1), claim_release je 0. Die Schwelle der Planner-Regel (ab DREI) ist ueberschritten. Mit W-13/1 ist die KLASSE A vollstaendig durchgelaufen: neun Blaetter geprueft, gebaut, abgenommen."
+claim_release: "plan-pruefer 12.08.: Release-Station fuer W-01/1 + W-02/1 + W-08/1 + W-13/1 besetzt (Sammel-Kontrolle 3). NEUE REGEL AUS DER ACHTEN KOLLISION ANGEWANDT: die Instanz wird ERST GESTARTET, NACHDEM dieser Tor-Commit durch ist — ein Claim im Arbeitsbaum ist fuer andere Instanzen unsichtbar und damit kein Claim."
+eigener_werkzeugfehler: "Dieser Block musste zweimal geschrieben werden: mein erster Versuch enthielt einen Shell-Syntaxfehler (fehlendes fi), der die GANZE Kommandozeile verwarf — auch das Schreiben. Ich hielt ihn faelschlich fuer geschrieben, bis das Tor 'UNVERAENDERT' meldete und ich nachmass. Das Tor hat den Irrtum gefangen, nicht ich; ohne seine Meldung haette ich einen Block fuer gesetzt gehalten, der nie existierte."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
