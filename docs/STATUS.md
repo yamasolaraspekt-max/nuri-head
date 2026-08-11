@@ -142,6 +142,42 @@ sondern die einzige, die heute trägt.**
 in der Abnahme, prüfe ich neu — die Entscheidung hängt aber nicht an Zahlen, sondern an zwei
 Strukturbefunden, und den ersten habe ich selbst gegengemessen.*
 
+#### VORBEHALT GESCHLOSSEN — Planner 11.08., alle vier Befunde heute nachgemessen
+
+**A-05 ist `ABGENOMMEN`** (Votum `b29bb79d`, Fehlerklasse KEINE, *„alle vier Antwortformen exakt
+geliefert"*). **Der Vorbehalt war an die Abnahme gebunden — sie ist erfolgt.** *Ich habe die vier
+Befunde trotzdem heute noch einmal selbst am Code gemessen, weil der Vorbehalt meiner war:*
+
+```text
+1  roof.anbau      scene.types.ts:334  "anbau?: RoofAnbauMasse"  — OPTIONAL,
+                   und kein Code leitet es aus einer Kontur ab            HAELT
+2  Validierer      dachVerschneidung.ts:158  lTBauGueltig(e: VerschneidungEingabe): boolean
+   statt Erkenner  dachUForm.ts:86           uBauGueltig(e: UFormEingabe): boolean
+                   -> die SIGNATUR belegt es besser als der Name: beide nehmen eine
+                      FERTIGE Eingabe mit Massen und geben boolean. Sie pruefen, was
+                      jemand eingegeben hat; sie erkennen nichts aus einer Kontur.
+                   Erkenner gesucht (erkenneForm|formAusKontur|konturZuForm|
+                      erkenneDachform) -> 0 Treffer                       HAELT
+3  stilles leeres  BERICHT-A-05 Z.137/182: laedt gueltig, kein Wurf, kein Melder
+   Dach                                                                   HAELT
+4  acht Luecken    "acht Punkte" steht woertlich im Bericht.
+                   EHRLICH: mein Zaehlbefehl auf Tabellenzeilen ergab 0 — die Liste
+                   ist anders formatiert. Ich habe die ACHT also NICHT selbst
+                   gezaehlt, sondern nur das Wort gelesen. Nicht tragend: die
+                   Entscheidung haengt an 1 und 2, nicht an der Anzahl.
+```
+
+> **Die Entscheidung ist damit endgültig: A-01s Nicht-Ziel bleibt.** *Und sie war von Anfang an keine
+> Yama-Frage — sie ist eine **Planner-Entscheidung**, hier am 08.08. getroffen. **Ich habe sie in zwei
+> Statusberichten an Yama fälschlich als „offen bei dir" geführt** (11.08.); das ist wieder meine
+> Klasse „falscher Zustand", diesmal in die für Yama teuerste Richtung: ich habe ihn um eine
+> Entscheidung gebeten, die längst gefallen war und in dieser Datei steht.*
+
+**Was jetzt offen bleibt — und das ist eine andere Frage:** *Der Vorbehalt ist geschlossen, aber der
+**SPEC-Folgebefund** aus A-05 lebt weiter (§12.5, P2): „stilles leeres Dach läuft am A-01-4-Melder
+vorbei". Er ist am 10.08. als **A-10** geschnitten und veröffentlicht — also ebenfalls erledigt.
+**Kein Rest aus A-05 offen.***
+
 ### Warteschlange auf `scripts/commit-pruefen.sh` — Planner-Entscheidung 10.08.
 
 **Drei `ENTWURF`-Blätter ändern dieselbe Datei:** A-07 (kein Claim) · A-09 · A-11 (beide Claim der
@@ -1313,12 +1349,13 @@ geschlossen: "plan-pruefer 11.08. — SELBST nachgemessen, nicht geglaubt: die N
 auftrag: "W-11/1"
 titel: "Die sieben Blaetter von W-11 aus bemassung.ts + masskette.ts + masseingabe.ts ableiten"
 datei: docs/auftraege/aktiv/W-11-bemassung-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 7a415aff
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte W-Blatt in Folge): ALLE Zahlen aufs Zeichen bestaetigt — 118/108/169 = 395 Zeilen, 7/6/9 = 22 Exporte, Registry 'bemassen' 1 Treffer, 4 dedizierte Zusagen (bestes Verhaeltnis der Runde, stimmt). Die EINZIGE Abhaengigkeit steht woertlich in bemassung.ts:18 ('import { masskette, type MassSegment, type Bbox }'), masseingabe.ts ist WIRKLICH importfrei (grep ^import = 0) — die Schichtentrennung ist damit am Code belegt, nicht behauptet. Die MassPunkt-Doppelung habe ich ZEICHENWEISE nachgeprueft: masskette.ts:9 und masseingabe.ts:25 sind byte-identisch ('exportinterfaceMassPunkt{x:number;y:number;}') — die Einordnung 'Doppelung, aber keine zweite Wahrheit, gefaehrlich erst bei einseitiger Aenderung' traegt exakt. W-11/1-7 ist der wertvollste Punkt des Blatts: die Register-Abhaengigkeit zu W-13 wird GEPRUEFT statt uebernommen, mit der ehrlichen Begruendung 'drei von vier Registerangaben waren in dieser Runde ungenau' — genau die Haltung, die die Runde bisher getragen hat. W-11/1-10 traegt die E2-Zaehlform."
 naechster_schritt: "Generator zieht W-11/1 nach W-04/1; Start erst ohne laufendes IN_ARBEIT — das ist jetzt W-04/1 (a9e58dd4), NICHT mehr A-12 (seit 3a4838e1 CODE_FERTIG)"
 claim_abnahme: "evaluator (Erstinstanz) 11.08.: Abnahme W-11/1 GECLAIMT vor der Messung, Bau 0299e5ca. Kanonischer Feldname."
+evaluator_votum: "evaluator 11.08.: ABGENOMMEN an 0299e5ca, Fehlerklasse KEINE, alle zehn Kriterien erfuellt. Elf Fundstellen einzeln im Code geoeffnet, keine laeuft ins Leere. Zwei Stellen habe ich Zeichen fuer Zeichen gegen den Code gehalten: die drei Bedingungen von istBrauchbareLaenge stimmen mit masseingabe.ts:41 ueberein, und die Signatur masskette(werte, toleranz = 1) mit masskette.ts:29. Die MassPunkt-Doppelung habe ich unabhaengig bestaetigt - masskette.ts:9 und masseingabe.ts:25 tragen beide export interface MassPunkt; die Behauptung stammt nicht aus dem Blatt, sie steht im Code. Das Blatt erfindet keinen Grenzfall, es liest den vorhandenen aus. resources/ im Bau-Commit 0 Pfade, Suite 1692/1692, Register mit allen drei Modulen. W-11/1-10 ist wie schon bei W-04 im ERSTEN Anlauf erfuellt (a436d8a3: 2 Befehlszeilen, 2 Ausgaben) - zweite Messung, die E2 aus Prozesspruefung 03 bestaetigt."
 ```
 
 ```yaml
@@ -1383,6 +1420,33 @@ zweite_instanz_korrekt: "Meine Instanz hat die Kollision VOR der ersten Messung 
 befunde_nachgeprueft: "Ihre drei Befunde habe ich SELBST nachgemessen statt sie zu uebernehmen (Falle 7): (1) der Votum-Messtisch ab Blatt-Z.313 nennt KEINE W-04/1-Kriterien und traegt 0 Treffer fuer Math, wallGeometry, dreh1, drehkipp, 7-GRENZEN — die Kriterien -2, -3 und -4 sind NICHT belegt, und -4 ist laut Auftrag der KERN (beide Lookup-Richtungen, der stille Fallback als A-10-Klasse); (2) must_preserve ist nur in EINER Richtung ausgewiesen (0 Treffer fuer exclude-standard und diff-filter) — die stehende Auflage 239a163e verlangt drei, und hier wiederholt sich auf der PRUEFSEITE genau die Luecke, die ich an mir selbst benannt habe; (3) ballbesitz steht auf release-pruefer, waehrend der Bau a44e5fdd aus acht .md-Dateien besteht — kein Release-Kandidat, kein Bundle, keine Migration. ALLE DREI HALTEN."
 nachforderung_evaluator: "An die Erstinstanz (kein zweites Votum, keine Parallelabnahme — das waere die Doppelabnahme, die wir gerade vermeiden): die drei Nachweise nachreichen — W-04/1-2 (keine Formel, mit Zaehlung), -3 (die vier W-02-Verweiszeilen selbst geoeffnet), -4 (BEIDE Lookup-Richtungen mit Rohausgabe und die Gefahr des stillen Fallbacks) sowie der must_preserve-Nachweis in allen drei Richtungen. Die Blaetter selbst sind davon unberuehrt — es fehlt der BELEG, nicht die Arbeit."
 an_den_planner: "Der ballbesitz gehoert dem, der den Zustand gesetzt hat; ich schreibe ihn nicht um (B5, fremde Zeile). Aber der A-12-Praezedenzfall ist eine halbe Stunde alt und von derselben Rolle gesetzt: eine Doku-Stufe hat keinen Release-Kandidaten, und der offene F-003/F-031-Zuordnungsbefund haette beim Release-Pruefer KEINEN Eigentuemer. Vorlage an den Planner, mit meiner Empfehlung: auf planner korrigieren."
+```
+---
+
+## BEREIT — W-21/1 und W-22/1 (Runde 2; Klasse A ist damit VOLLSTAENDIG geprueft)
+
+```yaml
+auftrag: "W-21/1"
+titel: "Die sieben Blaetter von W-21 aus fuenf vorhandenen Holzbau-Modulen ableiten"
+datei: docs/auftraege/aktiv/W-21-sparren-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Runde 2)
+basis_sha: c9325929
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): vier der fuenf Modulzahlen exakt (sparrenBerechnung 131 Z/7, sparrenTrennung 67 Z/3, holzBauteile 82 Z/4, holzMengen 64 Z/3), Zeilensumme 496 geht auf. EINE ABWEICHUNG, und sie fuehrt zu einem Fund: schifterListe.ts traegt 9 Exporte, das Blatt zaehlt 8 — die Summe ist 26, nicht 25. Der fehlende neunte ist 'Punkt2D' (Z.28), und er wurde nicht uebersehen, sondern ist Teil eines Musters."
+herkunft_w21_w22: "Diese beiden Bloecke (W-21/1 und W-22/1 BEREIT samt Punkt2D-Befund) stammen vom PLAN-PRUEFER, 12.08. — sie wurden als unbenannter Beifang von dcf0071c mitgesichert, waehrend sie ungesichert im geteilten Baum lagen. VIERTER Fall in Gegenrichtung (nach 58342f47, 171baafe, 9d2cd4b7); Inhalt unveraendert gueltig, hiermit richtiggestellt. Ich hatte NEUN Runden auf den fremden Commit gewartet, um KEINEN Beifang zu erzeugen — und wurde in derselben Minute selbst zum Beifang. Das ist kein Vorwurf an den Planner: es ist der Beleg, dass Warten das Problem nicht loest, solange die Statuswahrheit EINE Datei ist, die alle gleichzeitig beschreiben."
+befund_punkt2d: "PLAN-PRUEFER-FUND (selbst gemessen, gehoert ins Blatt): 'Punkt2D' ist VIERMAL unabhaengig definiert und alle vier sind ZEICHENWEISE IDENTISCH ('exportinterfacePunkt2D{x:number;y:number;}') — polygonFlaeche.ts:19 (W-08), dachUForm.ts:13 (W-07), dachVerschneidung.ts:144 (W-07), schifterListe.ts:28 (W-21); dazu 3 Import-Stellen, die eine der vier holen. Das ist DIESELBE Klasse wie die MassPunkt-Doppelung, die W-11 sorgfaeltig als Beobachtung-mit-Bedingung behandelt hat — nur VIERFACH und ueber drei Werkzeuge verteilt. Die Bedingung ist dieselbe und hier schaerfer: aendert eine Seite (etwa um ein z zu ergaenzen), divergieren sie STUMM, weil kein Import sie verbindet und TypeScript strukturell prueft. W-21/1 soll ihn in 7-GRENZEN benennen wie W-11 es vorgemacht hat — BENENNEN, nicht zusammenlegen: wer vier Definitionen vereinigt, entscheidet etwas ueber drei Werkzeuggrenzen hinweg und raeumt nicht auf. Die Zahl 8 im Ist-Zustand ist entsprechend auf 9 zu berichtigen (Summe 26)."
+naechster_schritt: "Generator zieht W-21/1 in Runde 2; der Punkt2D-Befund gehoert in 7-GRENZEN, die Exportzahl in den Ist-Zustand"
+```
+
+```yaml
+auftrag: "W-22/1"
+titel: "Die sieben Blaetter von W-22 aus gaubeGeometrie.ts ableiten — und die Aufbauten-Nachbarn benennen"
+datei: docs/auftraege/aktiv/W-22-gaube-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Runde 2, nach W-21/1)
+basis_sha: 95fe1b88
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die Kernzahl stimmt AUFS ZEICHEN — gaubeGeometrie.ts 498 Zeilen und 26 Exporte, beides selbst nachgezaehlt, keine Abweichung. Der Zuschnitt (ein Modul im Scope, die Aufbauten-Nachbarn benannt statt mitgenommen) folgt dem Muster, das in dieser Klasse viermal getragen hat. Nach der W-21-Erfahrung EIN HINWEIS ohne Restpunkt: die Exportzahl 26 ist gross genug, dass eine Doppelung wie Punkt2D/MassPunkt darin unauffaellig waere — der Bauende soll beim Ableiten der Exportliste ausdruecklich pruefen, ob gaubeGeometrie eigene Punkt-/Masstypen definiert, die anderswo schon existieren, und einen Fund melden statt ihn einzuebnen."
+naechster_schritt: "Generator zieht W-22/1 nach W-21/1. Damit ist die Klasse A vollstaendig geprueft: W-01, W-02, W-04, W-05, W-08, W-11, W-13, W-21, W-22 — neun Blaetter, alle beim ersten oder zweiten Review BEREIT"
 ```
 ---
 

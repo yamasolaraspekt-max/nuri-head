@@ -288,3 +288,64 @@ nicht_gemessen:
 browserabnahme: "entfaellt — reine Dokumentblaetter"
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum (§11) — 11.08.2026
+
+```yaml
+auftrag: W-11/1
+commit: 0299e5ca          # Bau; Basis 7a415aff
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "elf Fundstellen einzeln im Code geoeffnet · die drei Bedingungen von
+  istBrauchbareLaenge Zeichen fuer Zeichen gegen Z.41 gehalten · masskette-Signatur gegen Z.29"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Alle zehn Kriterien gemessen
+
+```text
+-1   Platzhalter, vier Muster                     0
+-2   3-FORMELN: kein '=', kein sqrt.  atan2 und hypot kommen vor — aber als BEFUND
+     ueber den Code ("kein atan2 in keinem der drei Module"), nicht als Rechnung
+-3   elf Fundstellen, ALLE einzeln geoeffnet      keine laeuft ins Leere
+-4   2-FUNKTION trennt die Schichten              3 Nennungen
+-5   7-GRENZEN beantwortet BEIDE Fragen am Code
+-6   MassPunkt-Doppelung benannt, beide Fundstellen
+-7   Abhaengigkeit zu W-13 geprueft und benannt   2 Nennungen
+-8   resources/ im Bau-Commit                     0 Pfade  ·  Suite 1692/1692
+-9   Register: masskette, bemassung, masseingabe  je 2 Treffer
+-10  §3-Beleg in a436d8a3                         2 Befehlszeilen, 2 Ausgaben
+```
+
+### Zwei Stellen, an denen ich das Blatt gegen den Code gehalten habe
+
+**`-5`, die drei Bedingungen — Zeichen für Zeichen:**
+
+```text
+BLATT   typeof laengeMm === 'number'   ·   Number.isFinite(laengeMm)   ·   laengeMm > 0
+CODE    masseingabe.ts:41
+        return typeof laengeMm === 'number' && Number.isFinite(laengeMm) && laengeMm > 0;
+BLATT   "masskette(werte, toleranz = 1)  (Z.29)"
+CODE    masskette.ts:29
+        export function masskette(werte: ReadonlyArray<number>, toleranz = 1): MassSegment[]
+```
+
+**`-6`, die Doppelung — unabhängig bestätigt:** *Das Blatt behauptet, `MassPunkt` sei in
+`masskette.ts:9` **und** `masseingabe.ts:25` unabhängig definiert. Ich habe beide Zeilen geöffnet:
+in beiden steht `export interface MassPunkt`.* **Die Behauptung stammt nicht aus dem Blatt, sie
+steht im Code.**
+
+> **Das Blatt erfindet keinen Grenzfall, es liest den vorhandenen aus.** *`istBrauchbareLaenge()`
+> **ist** der Grenzfall, und die Begründung daneben — „Null ist keine Länge und negativ ist keine
+> Richtung" — steht als Zitat mit Fundstelle (`masseingabe.ts:37-38`), nicht als eigene Erfindung.*
+
+### Zum zweiten Mal in Folge: `-10` im ersten Anlauf
+
+**`a436d8a3` trägt zwei Befehlszeilen und zwei Ausgaben, im selben Commit, ohne Nachbesserung.**
+*Bei W-01 und W-02 riss dieselbe Zusage zweimal. W-04 und W-11 erfüllen sie sofort — **das ist die
+zweite Messung, die E2 aus Prozessprüfung 03 bestätigt**, und zwei Fälle sind kein Beweis, aber
+mehr als eine Hoffnung.*
