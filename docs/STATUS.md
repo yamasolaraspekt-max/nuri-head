@@ -1261,6 +1261,24 @@ vorschlag: "Bis zur Wiederaufnahme: A-12 bleibt IN_ARBEIT (kein Zustandswechsel 
 ```
 ---
 
+## BEREIT — W-11/1 (Runde 1 Klasse A, zweites Blatt nach Yamas Korrektur)
+
+```yaml
+auftrag: "W-11/1"
+titel: "Die sieben Blaetter von W-11 aus bemassung.ts + masskette.ts + masseingabe.ts ableiten"
+datei: docs/auftraege/aktiv/W-11-bemassung-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Runde 1 nach W-04/1; §3: A-12 ist IN_ARBEIT)
+basis_sha: 7a415aff
+letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das dritte W-Blatt in Folge): ALLE Zahlen aufs Zeichen bestaetigt — 118/108/169 = 395 Zeilen, 7/6/9 = 22 Exporte, Registry 'bemassen' 1 Treffer, 4 dedizierte Zusagen (bestes Verhaeltnis der Runde, stimmt). Die EINZIGE Abhaengigkeit steht woertlich in bemassung.ts:18 ('import { masskette, type MassSegment, type Bbox }'), masseingabe.ts ist WIRKLICH importfrei (grep ^import = 0) — die Schichtentrennung ist damit am Code belegt, nicht behauptet. Die MassPunkt-Doppelung habe ich ZEICHENWEISE nachgeprueft: masskette.ts:9 und masseingabe.ts:25 sind byte-identisch ('exportinterfaceMassPunkt{x:number;y:number;}') — die Einordnung 'Doppelung, aber keine zweite Wahrheit, gefaehrlich erst bei einseitiger Aenderung' traegt exakt. W-11/1-7 ist der wertvollste Punkt des Blatts: die Register-Abhaengigkeit zu W-13 wird GEPRUEFT statt uebernommen, mit der ehrlichen Begruendung 'drei von vier Registerangaben waren in dieser Runde ungenau' — genau die Haltung, die die Runde bisher getragen hat. W-11/1-10 traegt die E2-Zaehlform."
+naechster_schritt: "Generator zieht W-11/1 nach W-04/1 (Runde 1 = W-04 + W-11 nach Yamas Korrektur, W-13 nachziehen); Start erst, wenn kein Auftrag IN_ARBEIT ist — A-12 laeuft (ENV-unterbrochen, Befund oben)"
+```
+
+```yaml
+w_reihe_stand: "plan-pruefer 11.08., gemessen: W-01/1 in Nachbesserung · W-02/1 ABGENOMMEN (Ball Release-Pruefer) · W-04/1 BEREIT · W-11/1 BEREIT · W-13/1 ein Mini-Rest beim Planner · W-08/1 traegt Yamas Korrektur bereits im Blatt ('NICHT Runde 1 — baut hinter A-12, zusammen mit W-07', Z.249) und braucht darum jetzt KEINE DoR-Runde von mir; ich fahre sie, wenn A-12 die Sperre loest. Damit ist Runde 1 vollstaendig geprueft und wartet nur auf den §3-Slot."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
