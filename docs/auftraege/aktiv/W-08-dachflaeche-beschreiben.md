@@ -201,6 +201,61 @@ Verweis auf W-02. *Es benutzt `polygonFlaecheM2` — genau deshalb wird es sonst
 anderer Auftrag steht auf `IN_ARBEIT`", **an beiden Orten** (Tafelzeile und `^zustand:`-Feld), im
 selben Commit. **Zählbare Form (E2 aus Prüfung 03): mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer.** *Wortgleich zu `W-01/1-8`; Rot-Lage und Grenze dort belegt.*
 
+---
+
+### NACHGETRAGEN 12.08. — zwei Auflagen aus Yamas Azimut-Antwort
+
+*Grundlage: `docs/BEFUND-AZIMUT-KONVENTION.md` (`3d368625`) und Yamas Freigabe von Schritt 2 mit
+zwei Auflagen. **Beide Auflagen stammen aus Funden dieses Berichts, nicht aus einer Vermutung.***
+
+**W-08/1-10 (P1, der doppelsinnige Azimut-Bereich steht in `7-GRENZEN`):** Das Blatt nennt
+**wörtlich**, dass ein Azimutwert im Bereich **0…180 in zwei Konventionen gültig ist und
+Entgegengesetztes bedeutet** — Kompass (0=Nord, Hausstandard, im Schema dokumentiert:
+`2024_06_04_103808_create_p_v_roofs_table.php:67`) gegen PVGIS (0=Süd,
+`PvgisErtragService.php:41`). Dazu **die Antwort auf „was tut es, wenn es nicht kann?":** was das
+Werkzeug tut, wenn es einen Azimutwert **ohne mitgelieferte Konvention** bekommt.
+
+```text
+ROT-LAGE, heute messbar:
+  grep -ciE 'azimut' <W-08-Blattordner>/7-GRENZEN.md      -> heute 0
+  grep -rnE '\+ *180|- *180' app/Services/Energie/*.php   -> 0 (keine Umrechnung im Haus)
+ZUGELASSENE ANTWORTEN (eine davon, ausdruecklich):
+  (a) das Werkzeug NIMMT nur Werte mit benannter Konvention und sagt es ab, wenn keine dabei ist
+  (b) es nimmt Kompass als Vorgabe UND schreibt die Annahme in sein Ergebnis
+  VERBOTEN: den Wert stillschweigend durchrechnen. Ein Sueddach traegt im Kompass 180;
+  unveraendert an PVGIS gegeben rechnet PVGIS ein NORDdach — groesstmoeglicher Fehler,
+  und nichts schlaegt an, weil 180 in beiden Systemen eine gueltige Zahl ist.
+```
+
+**W-08/1-11 (P1, die First/Fläche-Ableitung ist EINGANGSBEDINGUNG in `2-FUNKTION`, kein Nebensatz):**
+Das Blatt sagt in `2-FUNKTION`, dass der Azimut einer Dachfläche **abgeleitet und nie gepflegt** ist:
+
+```text
+scene.types.ts:325  firstAzimutGrad: number;   // First-RICHTUNG (Grad)
+scene.types.ts:280  "Die Flaechen-Azimute werden NIE gepflegt, sondern [abgeleitet]"
+-> gespeichert ist die FIRSTrichtung. Der First laeuft ENTLANG des Dachs, die Flaeche
+   schaut SENKRECHT dazu. Wer die Firstrichtung als Flaechenazimut nimmt, hat 90 Grad
+   Fehler — zusaetzlich zu den 180 aus W-08/1-10.
+DER ABLEITUNGSMECHANISMUS EXISTIERT und ist zweisprachig konsistent — im Blatt zu nennen,
+nicht neu zu bauen:
+  wallGeometry.ts:37   azimutDerNormalen(start, end, seite)  -> 0..359, Nord=0, Uhrzeigersinn
+  SzeneProjektionService.php:258  azimutRechteNormale($von, $bis)
+  BEIDE rechnen atan2(dy, -dx) fuer die rechte Normale — selbst nachgemessen, identisch.
+  Zugesagt in SzeneProjektionServiceTest:80  assertSame([0, 90, 180, 270], $azimute)
+```
+
+> **Warum das Eingangsbedingung ist und nicht Hintergrund:** *W-08 **misst Dachflächen**. Wenn der
+> Azimut einer Fläche nicht gespeichert, sondern gerechnet wird, dann ist „welcher Azimut gilt für
+> diese Fläche" keine Randfrage, sondern die Frage, ob die Messung überhaupt einer benennbaren
+> Fläche gilt.* **Ein Flächenmaß ohne belegte Ausrichtung ist für die Ertragsrechnung wertlos — und
+> genau dorthin führt Schritt 7.**
+
+**W-08/1-12 (P1, F-024 bleibt beim gemessenen Befund):** Der bereits im Blatt stehende Befund —
+*F-024 „Azimut aus Normalenvektor" liegt in `wallGeometry.ts` als `azimutDerNormalen`, also in W-02s
+Modulen, nicht in W-08s* — **bleibt wörtlich stehen und wird nicht durch die zwei neuen Kriterien
+ersetzt.** *Er ist der Beleg dafür, dass W-08 die Ableitung **benutzt** und nicht **besitzt**; ohne
+ihn liest W-08/1-11 wie eine Bauvorgabe.*
+
 ## Kantenliste
 
 ```text

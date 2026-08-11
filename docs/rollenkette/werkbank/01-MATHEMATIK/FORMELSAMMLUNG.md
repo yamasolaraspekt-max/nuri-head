@@ -302,6 +302,7 @@
 > | **F-026** | 🟢 | **ausgeführt 11.08.** (A-12, `docs/BERICHT-A-12-f026.md`, doppelt abgenommen). Es kam ein L-Dach mit vier benannten Flächen heraus. **Grün gilt für die PARAMETERGEOMETRIE, nicht für die Kantentopologie-Beschreibung unten** — siehe Berichtigung am Formelblatt |
 > | **F-050** | 🟡 | **nur als Näherung.** Nicht für Angebote — 12 Stück/m² ist modellabhängig |
 > | **F-051** | 🔴 | **GESPERRT.** Zeitwerte ohne jede Herkunft. Nicht verwenden |
+> | **F-028** | 🔴 | **GESPERRT fuer das DURCHREICHEN.** Ein Azimutwert 0…180 ist in ZWEI Konventionen gueltig und bedeutet Entgegengesetztes. Ohne mitgelieferte Konvention und ohne Umrechnung an der Systemgrenze darf kein Azimut weitergegeben werden |
 >
 > Prüfraster und Begründung: `../05-MATERIALQUELLEN/VORGEHEN.md`
 
@@ -516,6 +517,89 @@
 > **Die Grenze von F-026 bleibt bestehen und ist im eigenen Katalog belegt:** nur vorgegebene Formen,
 > und **eine** von zwölf steht auf `status: 'geplant'` statt `'verfuegbar'`. *Das ist der Beleg, dass
 > die Grenze real ist — und gleichzeitig, dass die Insel sie ehrlich anzeigt.*
+
+### F-028 · Azimut-Konvention an der Systemgrenze · 🔴
+
+> **Aufgenommen 12.08. auf Yamas ausdrückliche Auflage.** *Herkunft: `docs/BEFUND-AZIMUT-KONVENTION.md`
+> (`3d368625`), Planner-Messung, von Yama gegengelesen und in zwei Punkten bestätigt.*
+> **Das ist keine Rechenformel, sondern eine Sperre — sie steht hier, weil hier nachgeschlagen wird.**
+
+- **Zweck:** verhindern, dass ein Azimutwert zwischen zwei Konventionen durchgereicht wird
+- **Die zwei Konventionen, beide dokumentiert, beide richtig:**
+
+```text
+KOMPASS (Hausstandard)   0 = Nord · 90 = Ost · 180 = Sued · 270 = West · Bereich 0..360
+  create_p_v_roofs_table.php:67       "// 0=N, 90=E, 180=S, 270=W"
+  create_heizlast_bauteile_table:22   "// 0=N,90=O,180=S,270=W"
+  SzeneProjektionService.php:257      "Nord = +y = 0 Grad, Ost = 90 Grad"
+  CanonicalBuildingModelValidator:24  "0 <= azimut < 360 (0=Nord)"
+  szene.ts:60                         "Kompass-Azimut der Sonne: 180 Grad = Sued"
+  ZUGESAGT: BuildingModelSchemaContractTest:53 · SzeneProjektionServiceTest:80
+            assertSame([0, 90, 180, 270]) · GeometrieAbleitungReferenzTest:84 (Sued=180)
+
+PVGIS (Fremdgrenze)      0 = Sued · -90 = Ost · +90 = West · Bereich -180..+180
+  PvgisErtragService.php:41           "@param float $aspect … 0 = Sued, -90 = Ost, 90 = West"
+  InverterSizingService.php:69        "(Sued = 0 Grad, Konvention PVGIS)"
+  energiekonzept.blade.php:394        <input min="-180" max="180">
+  pvgis/index.blade.php:128           <input min="-180" max="180">
+```
+
+- **Warum 🔴 und nicht 🟡 — der Bereich, der NICHT auffällt:**
+
+```text
+270      im PVGIS-Feld nicht eingebbar (max 180)   -> faellt auf
+-90      im Kompass ungueltig (< 0)                -> faellt auf
+0..180   in BEIDEN gueltig, bedeutet das GEGENTEIL -> FAELLT NICHT AUF
+   0     Kompass NORD  ·  PVGIS SUED     180 Grad Fehler
+  90     Kompass OST   ·  PVGIS WEST     180 Grad Fehler
+ 180     Kompass SUED  ·  PVGIS (Nord)   180 Grad Fehler
+```
+
+> **Ein Süddach trägt im Kompass `180`. Unverändert an PVGIS gegeben rechnet PVGIS ein Norddach —
+> der größtmögliche Ertragsfehler, und nichts schlägt an, weil `180` in beiden Systemen eine gültige
+> Zahl ist.** *Genau die Werte, die deutsche Dächer am häufigsten haben, liegen im doppelsinnigen
+> Bereich.* **Das ist die A-10-Klasse — stilles Nichts, nur nicht als leeres Ergebnis, sondern als
+> plausible falsche Zahl.**
+
+- **Was die rote Ampel sperrt und was sie NICHT sperrt:**
+
+```text
+GESPERRT      einen Azimutwert von einem System ins andere geben, ohne Umrechnung.
+              Gemessen: grep '\+ *180|- *180' app/Services/Energie/*.php -> 0 Treffer.
+              Es GIBT heute keine Umrechnung im Haus.
+GESPERRT      einen Azimut annehmen, dessen Konvention nicht mitgeliefert ist.
+NICHT         die PVGIS-Konvention. Sie ist korrekt benannt und bleibt wie sie ist —
+GESPERRT      eine fremde API-Konvention anzupassen waere der Fehler.
+NICHT         die Kompass-Konvention im Haus. Sie ist Standard, fuenffach dokumentiert
+GESPERRT      und dreifach zugesagt.
+NICHT         das Rechnen INNERHALB einer Konvention.
+GESPERRT
+```
+
+- **Der Ableitungsmechanismus existiert und ist zweisprachig konsistent — nicht neu bauen:**
+
+```text
+wallGeometry.ts:37              azimutDerNormalen(start, end, seite) -> 0..359, Nord=0
+SzeneProjektionService.php:258  azimutRechteNormale($von, $bis)
+BEIDE rechnen atan2(dy, -dx) fuer die rechte Normale — selbst nachgemessen, identisch.
+```
+
+- **Und die Falle daneben, 90° statt 180°:**
+
+```text
+scene.types.ts:325  firstAzimutGrad = FIRST-Richtung, NICHT der Flaechenazimut
+scene.types.ts:280  "Die Flaechen-Azimute werden NIE gepflegt, sondern [abgeleitet]"
+-> der First laeuft ENTLANG des Dachs, die Flaeche schaut SENKRECHT dazu.
+   Wer die Firstrichtung als Dachausrichtung nimmt, hat 90 Grad Fehler ZUSAETZLICH.
+   ABLEITEN, NICHT DURCHREICHEN.
+```
+
+- **Was die Ampel auf 🟡 senken würde:** eine Umrechnungsfunktion an der Grenze mit **zwei
+  Zusagen** (Süd→0 in beiden Richtungen, Ost→−90) **plus** der Ableitung First→Fläche.
+  *Auf 🟢 erst, wenn zusätzlich belegt ist, welche Konvention die **vorhandenen** Zeilen in
+  `p_v_roofs.roof_azimuth` tragen — diese Messung fährt **Yama**, nicht die Kette
+  (Produktivdaten).*
+- **Herkunft:** `docs/BEFUND-AZIMUT-KONVENTION.md` · Yamas Auflage vom 11.08.
 
 ## Gruppe 7 — Gauben
 
