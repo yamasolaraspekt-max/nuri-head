@@ -238,3 +238,125 @@ offen_an_yama: "Achse 2 je Datei bestaetigen oder aendern. Und: gehoert eine
 kern: "eine Norm im Dateikopf sagt, dass jemand eine Quelle aufgeschrieben hat —
        nicht, was passiert, wenn das Ergebnis falsch ist."
 ```
+
+
+---
+
+# NACHTRAG 12.08. — Yamas dritte Achse ersetzt mein Kriterium. Und sie ist zu einem Drittel ein Grep
+
+**Yama hat sein eigenes Kriterium („nennt eine Norm") verworfen und eine dritte Achse gesetzt, die
+mein Zwei-Achsen-Modell ablöst:**
+
+> **Kennt die Engine ALLE Bedingungen, von denen das Urteil abhängt, das sie fällt?**
+> *Nur dann darf sie eines fällen. Sonst rechnet sie Werte und schweigt.*
+
+```text
+ACHSE 1  Normnennung      liegt vor. ENTSCHEIDET NICHTS — Yamas Worte: "meine falsche
+                          Abkuerzung". Bleibt als Beleg und Fundstelle im Blatt.
+ACHSE 2  Folge            Yamas Fachurteil, liegt vor (Tabelle unten). Entscheidet nicht
+                          die Plakette, sondern die STRENGE der Absage und die REIHENFOLGE.
+ACHSE 3  Vollstaendigkeit DER ENTSCHEIDER. Urteilstext-Feld NUR bei VOLLSTAENDIG.
+```
+
+## Achse 3 hat DREI Zustände — und ich habe gemessen, welchen der Grep findet
+
+```text
+MENGE     elf ENGINES (nicht dreizehn Dateien — werkzeugRegistry und enginePanels tragen
+          'bestanden' als DURCHREICHE, nicht als Aussage. Yamas Richtigstellung, und es
+          war mein Zaehlfehler: Dateien erhoben, Engines gemeint.)
+
+ZUSTAND A · GRENZE SELBST BENANNT      -> MESSBAR, drei Treffer, Fundstelle gelesen:
+  sparrenBerechnung    "Ersetzt KEINE prueffaehige Statik"
+  fbhAuslegung:6-7     "GRENZE: hydraulischer Abgleich und normative Auslegung
+                        bleiben Fach-Engine"
+  heizkreisVerteiler:6 "GRENZE: hydraulischer Abgleich/Rohrnetz bleibt Fach-Engine"
+  -> alle DREI liefern trotzdem 'bestanden'. Der Widerspruch ist damit BELEGT,
+     nicht vermutet: ein Werkzeug, das seine Grenze kennt und trotzdem urteilt.
+  -> KLASSE FACHAUSSAGE, ohne weitere Pruefung. Drei von elf sind entschieden.
+
+ZUSTAND B · VOLLSTAENDIG               -> braucht Pruefung gegen die AUFGABE
+  Yamas Beispiel: kuecheArbeitsdreieck — drei Punkte, drei Wege, feste Grenzen.
+  "Das Arbeitsdreieck ist durch die drei Abstaende vollstaendig definiert."
+  -> KLASSE HINWEIS, Plakette bleibt.
+
+ZUSTAND C · UNVOLLSTAENDIG, OHNE ES ZU SAGEN   -> DER GEFAEHRLICHSTE FALL
+  ACHT Engines benennen KEINE Grenze. Das heisst NICHT, dass sie vollstaendig sind —
+  es heisst, sie sagen nichts darueber. Zustand B und C sind vom Grep NICHT
+  unterscheidbar; sie brauchen die Fachpruefung gegen die Aufgabe.
+```
+
+> **Damit ist Achse 3 zu einem Drittel ein Grep und zu zwei Dritteln Fachprüfung — und das ist die
+> ehrliche Aufwandsangabe für diesen Auftrag.** *Ich schreibe es hin, weil „messbar" sonst wie
+> „billig" klingt.*
+
+## Yamas Achse-2-Tabelle, übernommen und als sein Urteil gekennzeichnet
+
+```text
+ENGINE                    ACHSE 2 (Yamas Fachurteil)     ACHSE 3          KLASSE
+sparrenBerechnung         PERSONENSCHADEN                A: selbst benannt FACHAUSSAGE ✓
+fbhAuslegung              FEHLAUSLEGUNG (kalte Wohnung)  A: selbst benannt FACHAUSSAGE ✓
+heizkreisVerteiler        FEHLAUSLEGUNG                  A: selbst benannt FACHAUSSAGE ✓
+treppenBerechnung         PERSONENSCHADEN (Sturz)        B oder C — MESSEN  offen
+treppe2D · treppe3D       dito, abgeleitet               B oder C — MESSEN  offen
+treppenTypen              dito                           B oder C — MESSEN  offen
+wandaufbau                BAUSCHADEN (Feuchte/Schimmel)  B oder C — MESSEN  offen
+abwassergefaelle          BAUSCHADEN (Rueckstau)         B oder C — MESSEN  offen
+kuecheArbeitsdreieck      KOMFORT                        B (Yamas Begruendung) HINWEIS
+configuratorPackage       zu messen                      B oder C — MESSEN  offen
+```
+
+**Yamas Entscheidung zu meiner Frage, mit Beleg — und ich habe sie nachgeprüft:**
+
+> *„`fbhAuslegung` und `heizkreisVerteiler` sind **FACHAUSSAGE**. Und die Begründung ist nicht die
+> Schwere der Folge, sondern die **Unvollständigkeit**. Selbst wenn sie harmlos wäre: die Engine darf
+> nicht ‚bestanden' sagen, was sie nicht geprüft hat."*
+
+*Beide Dateiköpfe selbst gelesen — die Belege tragen wörtlich.*
+
+## Der Treppen-Verdacht ist Yamas, und er ist prüfbar
+
+> *„Der Kopf nennt Schrittmaß-, Bequemlichkeits-, Sicherheitsregel; Grenzmaße je Nutzungsbereich —
+> **DIN 18065 verlangt zusätzlich lichte Durchgangshöhe, Laufbreite, Podestmaße.** Die Eingabe ist
+> ‚Höhen + Fläche'; die Durchgangshöhe hängt an der **Deckenöffnung**, die die Engine nicht kennt.
+> Mein Verdacht: unvollständig."*
+
+**Und dieser Verdacht deckt sich mit `W-09/1-5`, das dieselbe Frage stellt.** *Damit gilt: **A-15
+wiederholt die Treppen-Messung nicht**, sondern nimmt sie aus `W-09/1-5` als Zulieferung. Zwei
+Aufträge, die dieselbe Datei messen, erzeugen zwei Zahlen und eine Diskussion.*
+
+## Die Regel, die aus allen drei Achsen folgt
+
+```text
+Urteilstext-Feld (und damit eine Plakette) NUR bei Achse 3 = VOLLSTAENDIG.
+Alles andere rechnet Werte und schweigt.
+```
+
+> *Das ist der Satz, an dem A-14 hängt: **N-003 ist Zustand A, also liefert es kein Urteilstext-Feld
+> und die Plakette verschwindet.** Die Mechanik baut A-14, die Klassifikation liefert A-15.*
+
+## Was sich an den Kriterien ändert
+
+```text
+A-15-2   Achse 1 bleibt, aber die Formulierung "Klasse = Fachaussage wenn Norm" FAELLT.
+         Sie ist Beleg, nicht Entscheider.
+NEU      A-15-9  Achse 3 je Engine mit Zustand A/B/C und Fundstelle. Die drei
+         Zustand-A-Faelle sind belegt und werden NACHGEPRUEFT, nicht neu gesucht.
+NEU      A-15-10 Zustand B und C werden UNTERSCHIEDEN — und wo das nicht moeglich ist,
+         sagt der Bericht "nicht unterscheidbar" statt zu raten. Der Unterschied
+         zwischen "vollstaendig" und "unvollstaendig, sagt es nicht" ist der Kern
+         des ganzen Auftrags.
+NEU      A-15-11 Die Treppen-Zeilen kommen aus W-09/1-5. Der Bericht nennt sie als
+         ZULIEFERUNG mit Commit-Verweis, statt sie zu wiederholen.
+BLEIBT   A-15-4 (Fachurteil als Urteil kennzeichnen) — Yama nennt es die beste Zeile
+         des Berichts und will es als Hausregel. Es steht jetzt zweifach: als
+         Kriterium hier und als Regel in docs/HAUSREGELN.md.
+```
+
+```yaml
+nachtrag: "12.08. — Achse 3 ersetzt mein Kriterium, Achse 1 entscheidet nichts mehr"
+entschieden_durch_yama: "fbhAuslegung + heizkreisVerteiler = FACHAUSSAGE, begruendet
+                         ueber Unvollstaendigkeit statt ueber Schwere"
+gemessen_von_mir: "DREI von elf benennen ihre Grenze selbst und urteilen trotzdem —
+                   sparrenBerechnung, fbhAuslegung, heizkreisVerteiler. Belegt, nicht vermutet."
+ehrliche_aufwandsangabe: "Achse 3 ist zu einem Drittel ein Grep und zu zwei Dritteln
+                          Fachpruefung. Zustand B und C sind vom Grep nicht unterscheidbar."
