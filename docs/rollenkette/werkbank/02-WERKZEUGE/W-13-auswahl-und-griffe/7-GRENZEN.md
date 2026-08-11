@@ -1,47 +1,62 @@
-# W · auswahl und griffe — GRENZEN
+# W-13 · Auswahl und Griffe — GRENZEN
 
-> **Dieses Blatt ist Pflicht.**
-> Der teuerste Fehler des Projekts bisher: ein Dach, das bei nicht-rechteckiger
-> Kontur unsichtbar verschwand statt eine Absage zu geben. Die Domäne verweigerte
-> korrekt — der Renderer schluckte die Absage mit `catch { continue; }`.
-> **Ein Werkzeug ohne benannte Grenze baut genau diesen Fehler wieder ein.**
+## Kein Treffer — zwei verschiedene Fälle, beide gebaut
 
-## Was dieses Werkzeug NICHT kann
-
-| Fall | Warum nicht | Was der Anwender stattdessen sieht |
+| Fall | Was passiert | Fundstelle |
 |---|---|---|
-| | | |
+| Klick ins Leere **ohne** Modifikator | Auswahl wird **aufgehoben** | `resources/planner/hausplaner/app/tools/auswahlModus.ts:93-95` |
+| Klick ins Leere **mit** Modifikator | Auswahl **bleibt unverändert** | dieselbe Stelle |
+| kein Kandidat in Toleranz | `besterTreffer()` liefert **`null`** | `resources/planner/hausplaner/app/tools/trefferSuche.ts:45-46` |
 
-## Die Absagekette
+**`null` und nicht ein leerer Kandidat** — *das ist die ehrliche Antwort: es gibt keinen Treffer, und
+der Aufrufer muss es entscheiden.* Für „nichts ausgewählt" gibt es genau eine Fassung:
+`LEERE_AUSWAHL` (Z.98) — *„eine Stelle, damit ‚nichts ausgewählt' überall dasselbe heißt."*
 
-Für jeden Fall oben muss die Kette vollständig sein:
+## Mehrere gleich nahe Treffer — OBEN gewinnt, nicht NAH
 
-```
-Schicht 1/2 wirft benannten Fehler
-        ↓
-Schicht 3 fängt und übersetzt
-        ↓
-Schicht 4 reicht DURCH — kein catch/continue
-        ↓
-Schicht 5 zeigt dem Anwender einen verständlichen Satz
+```text
+trefferSuche.ts:60-65
+  sort:  zuerst  Zeichenreihenfolge ABSTEIGEND   (was oben liegt, gewinnt)
+         danach  Distanz AUFSTEIGEND             (nur bei Gleichstand)
 ```
 
-| Fall | Fehlername | Wer fängt | Anwendertext steht in |
-|---|---|---|---|
-| | | | 4-BEDIENUNG.md |
+**Die Distanz ist das zweite Kriterium, nicht das erste.** *Wer die Sortierung „nächstes Objekt
+gewinnt" nennt, beschreibt den Ausnahmefall.*
 
-## Fänger-Prüfung
+## Der Filter, der leicht falsch gelesen wird
 
-- [ ] Jeder Fehlerpfad ist durch einen Test belegt, der prüft:
-      **die Meldung erreicht die Oberfläche**
-- [ ] Kein `catch { }` ohne Weiterreichen im Pfad dieses Werkzeugs
-- [ ] Kein stilles `return` bei ungültiger Eingabe
+```text
+trefferSuche.ts:58   .filter((k) => k.waehlbar !== false)
+```
 
-## Bekannte Ungenauigkeiten
+**Nicht `=== true`.** Ein Kandidat **ohne** gesetztes `waehlbar` ist **wählbar**. *Wer das Feld
+einführt und irgendwo vergisst, ändert nichts — wer die Prüfung auf `=== true` umstellt, macht
+stillschweigend alles unwählbar, was es nicht ausdrücklich setzt.*
 
-| Größe | Abweichung | Ab wann stört es |
-|---|---|---|
+## Zoom 0 — keine Division durch null
 
-## Was später kommen könnte
+```text
+trefferSuche.ts:72-74   zoom > 0 ? pixel / zoom : pixel
+```
 
-<Absichtlich weggelassene Funktionen, damit sie nicht als Fehler gemeldet werden.>
+**Die Toleranz bleibt dann in Pixeln stehen** — sie ist nicht richtig, aber sie ist endlich.
+*Eine Absage, die gebaut ist und nicht vergessen wurde.*
+
+## Unbekannter Typ in der Übersicht
+
+`benenne()` (`resources/planner/hausplaner/app/tools/auswahlUebersicht.ts:73-77`) gibt bei unbekanntem Typ **den Typnamen
+selbst** zurück. **Es erfindet keine Bezeichnung** — der Anwender sieht `wall` statt „Wand", aber er
+sieht nichts Falsches.
+
+## Was dieses Werkzeug NICHT tut
+
+| Fall | wohin es gehört |
+|---|---|
+| Verschieben, Spiegeln, Drehen | **W-14** — `geometry/editierGeometrie.ts` ist Ausschluss |
+| Abstände messen | die `distanz` wird **mitgeliefert**, nicht berechnet |
+| Griffe zeichnen | Darstellung ist **Zustand als Daten**, kein Markup (`auswahlDarstellung.ts:3-5`) |
+
+## Und die dünnste Stelle
+
+**Null dedizierte Zusagen** bei 321 Zeilen — siehe `6-PRUEFUNG`. *Das ist keine Grenze des Werkzeugs,
+sondern eine Grenze dessen, was man über es weiß.*

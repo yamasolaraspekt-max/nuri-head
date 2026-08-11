@@ -243,3 +243,83 @@ befund_an_matrix: "editierGeometrie.ts ist in WERKBANK-ANSCHLUSS.md falsch unter
 befund_bestand: "321 Zeilen Auswahl-Logik, nur EINE Zusage. Kein Auftragsgegenstand,
                  aber im Blatt zu benennen."
 ```
+
+
+## §11 — Bericht W-13/1 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "W-13/1"
+zustand: CODE_FERTIG
+bau_commit: "a62ae7c6"
+in_arbeit_commit: "3e7fa5b7"
+basis: "193681cd"
+
+kriterien:
+  W-13/1-1:  GRUEN   # 28 -> 0 nach BEIDEN Zaehlweisen
+  W-13/1-2:  GRUEN   # nur Nummern
+  W-13/1-3:  GRUEN   # keine F-Nummer trifft zu; die eine Rechnung ohne Nummer GEMELDET
+  W-13/1-4:  GRUEN   # kein Treffer UND mehrere gleich nahe, beide am Code gelesen
+  W-13/1-5:  GRUEN   # vier Module mit Exportlisten und Zeilen
+  W-13/1-6:  GRUEN   # editierGeometrie.ts namentlich, mit Verweis auf W-14 — nachgemessen
+  W-13/1-7:  GRUEN   # 0 dediziert / 2 erwaehnend, MIT Messweise im Blatt
+  W-13/1-8:  GRUEN   # 0/0/0, Suite unveraendert gruen
+  W-13/1-9:  GRUEN   # Register: BESCHRIEBEN + alle vier Fundstellen
+  W-13/1-10: GRUEN   # 3e7fa5b7: 2 Befehlszeilen, 2 Ausgabewerte
+
+der_kernvertrag:
+  oben_schlaegt_nah: "trefferInReihenfolge (trefferSuche.ts:56-65) sortiert ZUERST nach
+                      Zeichenreihenfolge absteigend, ERST DANN nach Distanz aufsteigend.
+                      Bei gleich nahen Treffern gewinnt das OBERE. Wer die Sortierung
+                      'naechstes Objekt gewinnt' nennt, beschreibt den Ausnahmefall."
+  waehlbar_filter: "trefferSuche.ts:58 prueft `waehlbar !== false`, NICHT `=== true`.
+                    Ein Kandidat ohne gesetztes Feld ist waehlbar. Wer die Pruefung umstellt,
+                    macht stillschweigend alles unwaehlbar, was es nicht ausdruecklich setzt."
+  modifikator_vorrang: "alt -> remove, ctrl/meta -> toggle, shift -> add, sonst replace.
+                        Eine Kette, kein Schalterfeld: Alt+Shift ergibt remove."
+  primaerstand: "wird das PRIMAERE Objekt entfernt, rueckt das ZULETZT verbliebene nach;
+                 sonst bleibt der Primaerstand unveraendert (auswahlModus.ts:84-85)."
+  klick_ins_leere: "ohne Modifikator hebt er die Auswahl auf, MIT Modifikator nicht.
+                    Wer bei gedrueckter Umschalttaste danebentrifft, verliert nicht alles."
+
+zu_den_formeln:
+  ich_korrigiere_nichts: "das Register fuehrt W-13 bereits als 'keine' und hat F-012 und F-003
+                          gestrichen. Meine Messung BESTAETIGT das."
+  was_stattdessen: "genau eine Rechnung in allen vier Modulen — toleranzInWelt(pixel, zoom)
+                    (trefferSuche.ts:72-74), eine Einheitenumrechnung ohne Nummer in der Sammlung.
+                    Nach W-13/1-3 als Befund GEMELDET und NICHT eingetragen."
+  keine_abstaende: "TrefferKandidat bringt seine distanz MIT — hier wird nicht gemessen, sondern
+                    sortiert. Wer eine Abstandsformel sucht, findet sie bei W-01."
+
+ausschluss_nachgemessen:
+  behauptung_des_auftrags: "editierGeometrie.ts gehoert zu W-14, nicht zu W-13"
+  meine_messung: "STIMMT — kein einziger der acht Exporte betrifft Auswahl oder Griffe;
+                  versetzePunkt, versetzteWand, spiegelePunkt, spiegelteWand, Bbox, bbox,
+                  achsenMitte, Achse betreffen alle die Lageaenderung."
+
+die_duenne_stelle:
+  messweise: "dediziert = Testdatei, deren DATEINAME mit dem Modulnamen beginnt;
+              erwaehnend = Testdatei, die das Modul IMPORTIERT"
+  ergebnis: "0 dedizierte fuer alle vier Module. Zwei erwaehnende Dateien (markieren.test.ts,
+             teilKennung.test.ts) mit zusammen 36 Zusagen."
+  vergleich: "W-01 fangKern 2 dedizierte, W-02 wallGeometry 1 dedizierte"
+  einordnung: "keine Grenze des Werkzeugs, sondern eine Grenze dessen, was man ueber es weiss"
+
+besonderheit: "W-13 ist das EINZIGE Klasse-A-Werkzeug MIT Registry-Eintrag
+               (app/tools/toolRegistry.ts:39, id 'auswahl'). Stufe 2 hat hier eine andere
+               Ausgangslage als bei W-01, W-05, W-08, W-21 und W-22."
+
+eigener_fehler_vor_dem_melden:
+  was: "DREI Zeilenangaben falsch — trefferSuche 59 statt 58, 69-72 statt 50-53, 3-5 statt 4"
+  danach: "22 Stellen inhaltlich geprueft, 0 falsch"
+  bemerkung: "die zwei letzten waren zunaechst FALSCH-Meldungen meiner eigenen Pruefung
+              (Umlaute im Suchbegriff). Erst die exakte Messung hat gezeigt, dass EINE davon
+              echt war. Eine Pruefung, die falsch Alarm schlaegt, ist besser als eine, die
+              schweigt — aber ihre Treffer sind selbst zu pruefen."
+
+nicht_gemessen:
+  - "was die 36 Zusagen der zwei erwaehnenden Dateien tatsaechlich abdecken — gezaehlt wurde,
+     WELCHE Dateien importieren, nicht WAS darin steht. Als Frage in 6-PRUEFUNG notiert."
+
+browserabnahme: "entfaellt — reine Dokumentblaetter"
+ballbesitz: evaluator
+```

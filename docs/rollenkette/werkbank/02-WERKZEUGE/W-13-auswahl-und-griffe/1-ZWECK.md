@@ -1,21 +1,25 @@
-# W · auswahl und griffe — ZWECK
+# W-13 · Auswahl und Griffe — ZWECK
 
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
-<In EINEM Satz, aus Sicht des Anwenders. Nicht technisch.
-Beispiel: „Der Planer soll mit zwei Klicks eine Wand ziehen können,
-die automatisch an bestehenden Wänden andockt.">
+**Er will genau das anfassen, was er meint** — auch wenn dort drei Dinge übereinanderliegen, und auch
+wenn es mehrere sind.
 
-## Wann greift der Anwender danach?
+## Der gemessene Mangel, aus dem es entstand
 
-<Der konkrete Moment im Arbeitsablauf.>
+> *„Das Datenmodell kann seit jeher **mehrere** Objekte halten (`selectedNodeIds: string[]`), die
+> Oberfläche konnte genau **eines** — an fünf Stellen."* (`resources/planner/hausplaner/app/tools/auswahlModus.ts:3-5`)
 
-## Woran merkt er, dass es fehlt?
+**Die Fähigkeit war da, die Bedienung fehlte.** *Das ist der Grund, warum es hier nicht um eine neue
+Funktion geht, sondern um eine eingelöste.*
 
-<Was tut er ersatzweise, wenn es das Werkzeug nicht gibt?
-Diese Frage entscheidet über die Priorität.>
+## Und die zweite Frage, ohne die ein Canvas nicht bedienbar ist
 
-## Was ist ausdrücklich NICHT Zweck dieses Werkzeugs?
+> *„Welches Objekt hat der Nutzer getroffen, wenn mehrere übereinanderliegen? **Ohne diese Antwort
+> gewinnt in einem Canvas immer das zuletzt gezeichnete oder das zufällig …**"*
+> (`resources/planner/hausplaner/app/tools/trefferSuche.ts:4`)
 
-<Abgrenzung zu Nachbarwerkzeugen. Verhindert, dass ein Werkzeug
-über die Jahre alles frisst.>
+## Was W-13 von den anderen Klasse-A-Werkzeugen unterscheidet
+
+**Es hat als einziges ein echtes Werkzeug** — `toolRegistry.ts:39` trägt `id: 'auswahl'`. Bei W-01,
+W-05, W-21 und W-22 steht die Rechenschicht ohne Werkzeugschicht. *Hier ist beides da.*
