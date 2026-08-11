@@ -24,7 +24,7 @@
 | **W-21** Sparren und Lattung | **`CODE_FERTIG`** | Evaluator | `992d5d76` · Basis `c9325929` | 12/12 · **Vorbemessung ≠ Statik** als erste Zeile · **Auftragsvermutung zur Lattung widerlegt** (Menge IST gebaut) · F-001/F-030 nicht im Code, dafür zwei Normgrößen ohne Nummer · `OFFENE_HOLZBAUTEILE` ausgelesen · M-02 ungelesen benannt · 0/0/0 |
 | **W-22** Gaube | **`CODE_FERTIG`** | Evaluator | `8a3acb53` · Basis `95fe1b88` | 11/11 · **AK4 ist absichtlich nicht kritisch** (schiefe Front = gelb) · AK1 beim Kamin **gesetzt statt gemessen** · F-027: **Thema ja, Formel nein** (Belegstelle zeigt auf M-01) · fünf Module 975 Z, `auswechslung.ts` heimatlos · 0/0/0 |
 | **A-13** `roof_azimuth` absichern | **`RELEASE_FREI`** | Yama | `a09b69af` · Basis `783d47c1` | 8/8 · Wächter am **Model** (greift auch bei `create()`) · Grenze `0 ≤ x < 360` **am Hausmuster belegt** · **keine Factory** (gemessen entschieden) · Mutationsprobe + Wegwerf-Probe gegen `ticket_testing`, **0 Zeilen geschrieben** · Unit 278/278 (8 neu) · **Verhaltensänderung im Bericht benannt** |
-| **W-08** Dachfläche messen | **`IN_ARBEIT`** | **Generator** | BEREIT `b202ad7c` | 48 Zeilen, 2 Ausfuhren — **das Modul, das ich bei W-05 als gefährlichen Ausschluss benannt habe** · §7 6/6 · §3 beide Orte 0 · rot an der Basis: **28 Treffer** · **Tafelzeile von mir nachgetragen** |
+| **W-08** Dachfläche messen | **`CODE_FERTIG`** | Evaluator | `7aa49e33` · Basis `b202ad7c` | 12/12 · **`0` bedeutet dreierlei** (A-10-Klasse, bewusst) · Eingabe-**Ebene** entscheidet, Modul kann sie nicht prüfen · **Shoelace dreimal im Haus, zwei Fassungen heißen gleich** — m gegen mm · zwei Auftragsangaben widerlegt · 0/0/0 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1506,8 +1506,8 @@ zustaendig: "Der PLANNER entscheidet die Prozessfrage (§4), oder Yama, wenn er 
 auftrag: "W-08/1"
 titel: "Die sieben Blaetter von W-08 aus polygonFlaeche.ts ableiten"
 datei: docs/auftraege/aktiv/W-08-dachflaeche-beschreiben.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft — letztes offenes Klasse-A-Blatt)
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review — das fuenfte W-Blatt): alles selbst gemessen und exakt bestaetigt — polygonFlaeche.ts 48 Zeilen / 2 Exporte, Registry 'flaeche-messen' vorhanden (3 Treffer), wandFlaeche BENUTZT polygonFlaecheM2 (1 Aufruf — der Ausschluss ist damit nicht Abgrenzung sondern belegte Nutzungsrichtung), Platzhalter-Rot zaehlbar (6 Blaetter). Die Selbstkorrektur der Grobzahl (286/8 auf 48/2, Differenz war wandFlaeche) ist der fuenfte Fall derselben Art und wieder nach unten — das Muster ist jetzt durchgehend belegt. YAMAS EINREIHUNG ist eingeloest: W-08 stand hinter A-12 zurueck, A-12 ist abgenommen und die Ampel steht auf gruen, damit ist die Zurueckstellung erledigt."
 zulieferung_punkt2d: "PLAN-PRUEFER-ZULIEFERUNG, gemessen: das Blatt nennt Punkt2D nur als eigenen Typ ('nimmt bewusst auch THREE.Vector2 an') und WEISS NICHT, dass es eine von VIER zeichenweise identischen Definitionen ist — polygonFlaeche.ts:19 ist eine davon, dazu dachUForm:13, dachVerschneidung:144, schifterListe:28 (W-07 und W-21). Fuer W-08 ist das die schaerfste Form des Befunds, weil hier die Absicht dokumentiert ist ('bewusst auch THREE.Vector2'): wer diese Definition anfasst, fasst eine an, die drei andere stumm mittragen. Gehoert in 7-GRENZEN, mit derselben Regel wie bei MassPunkt in W-11: benennen, nicht zusammenlegen."
 naechster_schritt: "Generator zieht W-08/1 in Runde 2 (W-05/1 ist IN_ARBEIT, §3 beachten)"
