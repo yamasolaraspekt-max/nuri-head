@@ -218,3 +218,78 @@ befund_3: "nur DREI Factories im ganzen Repo -> eine PVRoofFactory ist kein Ansc
            Hausmuster. A-13-4 laesst dem Generator die gemessene Entscheidung."
 abhaengig_von: "NICHTS — Yamas SELECTs sind fuer den BERICHT wichtig (A-13-7), nicht fuer den Bau"
 ```
+
+
+## §11 — Bericht A-13 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "A-13"
+zustand: CODE_FERTIG
+bau_commit: "a09b69af"
+in_arbeit_commit: "6d57e627"
+basis: "783d47c1"
+art: "BAU — Produktivcode"
+
+kriterien:
+  A-13-1: GRUEN   # Waechter am Model, greift auf ALLEN Schreibpfaden — Wegwerf-Probe s. u.
+  A-13-2: GRUEN   # Wortlaut 0=N,90=E,180=S,270=W am Model + VERWEIS auf F-028, kein Zitat
+  A-13-3: GRUEN   # Test in der Hausform, gleicher Methodenname test_azimut_vertrag_0_bis_360
+  A-13-4: GRUEN   # gemessen entschieden: KEINE Factory, Begruendung s. u.
+  A-13-5: GRUEN   # 0 <= x < 360, am Hausmuster belegt statt selbst gewaehlt
+  A-13-6: GRUEN   # Migration 0, Seeder 0, kein UPDATE, kein delete, Factory 0, resources 0
+  A-13-7: GRUEN   # Verhaltensaenderung s. u., ausdruecklich benannt
+  A-13-8: GRUEN   # 6d57e627 traegt beide Befehle mit Ausgabe, gemessen VOR der ersten Aenderung
+
+hausmuster_gemessen_statt_erfunden:
+  befund: "14 Models nutzen protected static function booted(); SECHS werfen darin eine
+           eigene Ausnahme. BuildingModelVersion (Unveraenderlichkeits-Waechter) ist der
+           naechste Verwandte und war die Vorlage — booted + Ereignis + final Exception."
+  wiederverwendung_geprueft: "GeometrieUngueltigException existiert bereits. NICHT verwendet:
+                              ihr Konstruktor verlangt ein TopologieErgebnis. Sie wiederzuverwenden
+                              hiesse, ein Ergebnis zu erfinden, das es nicht gibt."
+
+A-13-4_factory_entscheidung:
+  gemessen: "database/factories enthaelt DREI Factories, keine fuer PVRoof"
+  entschieden: "KEINE Factory"
+  begruendung: "eine neue waere kein Anschluss an ein Hausmuster, sondern ein neues Muster —
+                und der Test braucht sie nicht. pruefeAzimut() ist oeffentlich und statisch,
+                damit die Zusage OHNE Datenbank prueffbar ist und der Waechter genau dieselbe
+                Frage stellt wie der Test. Der DB-Pfad ist trotzdem belegt (Wegwerf-Probe)."
+
+A-13-5_grenze:
+  entschieden: "0 <= x < 360 — 360 ist UNGUELTIG"
+  nicht_meine_wahl: "das Hausmuster test_azimut_vertrag_0_bis_360 sichert minimum 0 und
+                     exclusiveMaximum 360 zu (BuildingModelSchemaContractTest:57-58).
+                     360 ist derselbe Punkt wie 0; wer beide zulaesst, hat zwei Zahlen
+                     fuer eine Richtung."
+
+zwei_richtungs_probe:
+  mutationsprobe: "Grenze von '>=' auf '>' verfremdet -> GENAU test_azimut_vertrag_360_wird_abgewiesen
+                   faellt (8 Tests, 1 Failure). Zurueckgesetzt und per git hash-object als
+                   IDENTISCH nachgewiesen, danach wieder 8/8."
+  wegwerf_probe_mass_assignment:
+    db_selbst_geprueft: "config('database.connections.mysql.database') === 'ticket_testing'"
+    create_mit_400: "RoofAzimuthOutOfRangeException — der Waechter greift auf dem create()-Pfad"
+    create_mit_180: "passiert den Waechter"
+    danach: "pv_roofs in ticket_testing: 0 Zeilen — die Probe hat NICHTS geschrieben"
+    aufgeraeumt: "beide Wegwerf-Dateien entfernt, git ls-files --others zeigt sie nicht mehr"
+
+A-13-7_verhaltensaenderung:
+  neu: "Ein Schreibvorgang mit roof_azimuth ausserhalb 0..360 wird KUENFTIG ABGEWIESEN —
+        auf jedem Pfad, auch bei PVRoof::create(\$array)."
+  folge_fuer_bestandsdaten: "Ein BESTEHENDER Datensatz mit einem solchen Wert wird NICHT
+                             korrigiert (A-13-6) — er bliebe aber beim naechsten Speichern
+                             HAENGEN, weil der Waechter beim Speichern greift, nicht beim Lesen."
+  ehrlich: "Das ist eine echte Verhaltensaenderung und keine reine Verbesserung. Ohne diesen
+            Satz sieht sie wie eine aus."
+  nicht_gemessen: "wie viele Bestandsdatensaetze in der PRODUKTIVEN Datenbank betroffen waeren.
+                   Ich habe NICHT gegen ticket gemessen — das sind Yamas drei SELECTs."
+
+suite:
+  unit: "278 tests, 851 assertions, OK — davon 8 neu"
+  vorher: "270 (278 minus meine 8) — Tests sind GEWACHSEN, nicht geschrumpft (§12.2)"
+
+E1_commit_messung: "drei Dateien, je 'im Commit' geprueft"
+browserabnahme: "entfaellt — keine sichtbare Wirkung; die Aenderung ist ein Schreib-Waechter"
+ballbesitz: evaluator
+```
