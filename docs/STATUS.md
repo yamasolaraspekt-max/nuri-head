@@ -1635,7 +1635,10 @@ an_yama_fachgate: "DRINGENDER und unabhaengig davon: der Planner hat N-003 (Spar
 auftrag: "A-13"
 titel: "Das einzige Azimut-Feld im Haus ohne Test bekommt Validierung, Zusage und den Konventionshinweis"
 datei: docs/auftraege/aktiv/A-13-roof-azimuth-absichern.md
-zustand: ABGENOMMEN
+zustand: RELEASE_FREI
+release_vermerk: "release-pruefer (Stamm-Instanz) 12.08.: §10 an der Abnahme c9397575/a09b69af — ERSTER PRODUKTIVCODE-AUFTRAG, deshalb VOLLES Grundtor statt Doku-Scope: tsc clean, Insel 1692/1692, php artisan test 888/888 (vorher 880 — die acht neuen Zusagen greifen), Kette Vorfahr, Scope exakt 3 Dateien (Exception NEU, PVRoof.php, Vertragstest NEU), Migration 0, Seeder 0, geloeschte Zeilen 0 (rein additiv), Rueckweg per git revert ohne Datenpfad."
+datenrisiko_gemessen: "Der Waechter wirft kuenftig bei roof_azimuth ausserhalb [0,360). A-13-7 nennt die Folge: ein ALTWERT ausserhalb der Grenze bleibt beim naechsten Speichern haengen. SELBST GEMESSEN in der Arbeits-DB ticket: p_v_roofs gesamt 0, ausserhalb 0, NULL 0 — lokal KEIN Bestandsrisiko. NICHT GEMESSEN UND AUSDRUECKLICH OFFEN: der Bestand auf Hetzner (3000 Kunden) — Produktionssysteme fasse ich nicht an. VOR EINEM PRODUKTIONS-DEPLOY ist dort zu zaehlen, wie viele p_v_roofs roof_azimuth ausserhalb [0,360) tragen; sonst schlaegt der Waechter erst beim Speichern zu, und zwar beim Anwender. Fuer main kein Hindernis — main ist kein Produktionssystem."
+offener_befund_p2: "BEWEIS/P2 aus der Abnahme, blockiert nicht: alle acht Zusagen rufen pruefeAzimut DIREKT auf, keine speichert — deshalb ueberlebt die Mutation saving-Hook-entfernt die Suite. Der Evaluator hat den Schreibpfad SELBST verifiziert (new PVRoof mit 400 + save wirft). Das VERHALTEN stimmt, der Regressionsschutz fehlt. Ich gebe frei, weil das Verhalten unabhaengig belegt und der Rueckweg zerstoerungsfrei ist — die Nachforderung an den Generator (eine Zusage, die SPEICHERT) bleibt offen und erlischt NICHT mit der Veroeffentlichung: ohne sie kann der Hook bei einem spaeteren Umbau still verschwinden."
 ballbesitz: release-pruefer (P2-Nachforderung beim generator)
 basis_sha: 783d47c1
 prioritaet: P1
