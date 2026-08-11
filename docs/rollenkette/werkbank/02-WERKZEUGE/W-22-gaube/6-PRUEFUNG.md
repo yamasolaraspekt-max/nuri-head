@@ -1,37 +1,27 @@
-# W-xx · <Name> — PRÜFUNG
+# W-22 · Gaube — PRÜFUNG
 
-> **Regel: jedes Kriterium muss VOR dem Bau wirksam rot sein.**
-> Ein Kriterium, das schon grün ist, bevor gebaut wurde, prüft nichts.
+## Das Werkzeug prüft sich selbst — und genau das ist zu prüfen
 
-## Abnahmekriterien
+`pruefeAufbau()` ist ein Drittel des Moduls. **Eine Selbstprüfung, die nie rot wird, ist schlimmer als
+keine.** Zu belegen ist deshalb nicht, dass sie läuft, sondern **dass jede Stufe erreichbar ist**.
 
-| Nr | Kriterium | Rot-Beleg vor dem Bau | Wie gemessen |
-|---|---|---|---|
-| K-1 | | | |
-| K-2 | | | |
-
-## Fangprobe (Mutationsprobe)
-
-<Eine absichtlich eingebaute Fehlerstelle, die von den Kriterien gefunden werden MUSS.
-Wenn die Suite trotz eingebautem Fehler grün bleibt, prüfen die Kriterien nichts.>
-
-| Mutation | Muss erkannt werden von |
+| zu belegen | wie |
 |---|---|
-| | |
+| **rot** ist erreichbar | ein kritisches Kriterium verletzen (AK1, AK2, AK3 oder AK5) |
+| **gelb** ist erreichbar | **AK4 verletzen** — es ist absichtlich *nicht* kritisch |
+| **gelb** auch ohne verletztes AK | `geo.feasible === false` setzen |
+| **grün** | alles ok |
 
-## Automatische Tests
+*Die Vorfahrt steht in einer einzigen Zeile:* `resources/planner/hausplaner/geometry/gaubeGeometrie.ts:491`.
 
-| Datei | Prüft |
-|---|---|
-| | |
+## Der Prüfpunkt, den man leicht übersieht
 
-## Sichtprüfung (falls die Oberfläche betroffen ist)
+**Die Höhe wird geklemmt, nicht abgelehnt** (Entwässerungsschranke). Eine Prüfung, die nur „kommt ein
+Ergebnis?" fragt, sieht davon nichts. *Zu prüfen ist, ob das geklemmte `h` auch **gemeldet** wird —
+sonst bekommt der Anwender eine andere Gaube, als er eingegeben hat, ohne es zu erfahren.*
 
-- [ ] 1440 px
-- [ ] 1024 px
-- [ ] 375 px
-- [ ] Meldung bei Absage lesbar und vollständig sichtbar
+## Was ich NICHT geprüft habe
 
-## Bestandsprobe
-
-- [ ] Ein vor der Änderung gespeichertes Dokument lädt danach unverändert
+**Ob das Klemmen der Höhe nach außen sichtbar ist.** Ich habe die Kopplung im Dateikopf gelesen und
+die Ampel-Logik gemessen — **nicht**, ob ein geklemmtes `h` im `PruefBefund` auftaucht.
+*Als Frage notiert, nicht als Zusage.*

@@ -1,21 +1,27 @@
-# W-xx · <Name des Werkzeugs> — ZWECK
+# W-22 · Gaube — ZWECK
 
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
-<In EINEM Satz, aus Sicht des Anwenders. Nicht technisch.
-Beispiel: „Der Planer soll mit zwei Klicks eine Wand ziehen können,
-die automatisch an bestehenden Wänden andockt.">
+Er setzt eine Gaube oder einen Kamin auf ein **geneigtes** Dach — und das Ding muss **anschließen**.
+Nicht schweben, nicht im Dach stecken, nicht über den First ragen.
 
-## Wann greift der Anwender danach?
+## Warum das schwerer ist, als es aussieht
 
-<Der konkrete Moment im Arbeitsablauf.>
+Ein Aufbau steht **lotrecht**, die Fläche darunter ist **geneigt**. Jede Kante trifft die Dachhaut in
+einer anderen Höhe. **Der Anschluss ist die eigentliche Arbeit, nicht der Körper.**
 
-## Woran merkt er, dass es fehlt?
+## Was das Werkzeug dazu mitbringt
 
-<Was tut er ersatzweise, wenn es das Werkzeug nicht gibt?
-Diese Frage entscheidet über die Priorität.>
+Es rechnet nicht nur — **es prüft sich selbst** und gibt eine **Ampel** aus: grün, gelb oder rot,
+mit dem verletzten Kriterium im Klartext (`resources/planner/hausplaner/geometry/gaubeGeometrie.ts:409`).
 
-## Was ist ausdrücklich NICHT Zweck dieses Werkzeugs?
+## Der Name ist enger als das Modul
 
-<Abgrenzung zu Nachbarwerkzeugen. Verhindert, dass ein Werkzeug
-über die Jahre alles frisst.>
+Das Werkzeug heißt „Gaube". Das Modul kann **Gauben, Kamine und die Prüfung**. Der Dateikopf spricht
+von **stehenden Dachaufbauten**. *Wer nach „Kamin" sucht, findet dieses Blatt nicht — deshalb steht
+der Satz hier.*
+
+## Was es ausdrücklich NICHT ist
+
+> *„**KEINE Dacheindeckung, KEINE Statik, KEINE Schneelast** — nur Lage/Höhe/Anschluss-Geometrie.
+> **Realer Tragwerksplaner/Dachdecker bleibt nötig.**"* (`resources/planner/hausplaner/geometry/gaubeGeometrie.ts:28-29`)
