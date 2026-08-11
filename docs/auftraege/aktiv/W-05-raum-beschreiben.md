@@ -259,3 +259,67 @@ zulieferung_an: "A-12 / Dachkonstruktion — grundriss.ts traegt die Bausteine d
                  Formerkennung (eckenAnalyse, anzahlInnenwinkel, erwarteteInnenwinkel).
                  A-05s Luecke 4 bleibt gueltig, aber der Weg ist kuerzer als sie vermuten laesst."
 ```
+
+
+## §11 — Bericht W-05/1 (Generator, 11.08.2026)
+
+```yaml
+auftrag: "W-05/1"
+zustand: CODE_FERTIG
+bau_commit: "34ecf8a4"
+in_arbeit_commit: "77af6797"
+basis: "3358d1cc"
+
+kriterien:
+  W-05/1-1:  GEMELDET_MIT_ZWEI_ZAHLEN   # s. u. — ich deute das Kriterium NICHT um
+  W-05/1-2:  GRUEN   # nur Nummern
+  W-05/1-3:  GRUEN   # jede Nummer belegt ODER als nicht vorhanden gemeldet
+  W-05/1-4:  GRUEN   # alle drei Faelle am Code
+  W-05/1-5:  GRUEN   # "Angebunden aus geometry/roomDetection.ts" + Exportliste
+  W-05/1-6:  GRUEN   # beide Ausschluesse namentlich, je mit Grund
+  W-05/1-7:  GRUEN   # kein Registry-Werkzeug, laeuft automatisch, 4-BEDIENUNG sagt "Nichts Eigenes"
+  W-05/1-8:  GRUEN   # 0/0/0, Suite 1692/1692
+  W-05/1-9:  GRUEN   # Register: BESCHRIEBEN + roomDetection.ts
+  W-05/1-10: GRUEN   # 77af6797: 2 Befehlszeilen, 2 Ausgabewerte
+
+W-05/1-1_zwei_zahlen:
+  woertliche_zaehlweise: "1 — der Auftrag sagt 'alle <…>-Klammern'"
+  platzhalter_muster: "0"
+  der_eine_treffer: "ein FALSCHTREFFER: er beginnt im zitierten Code bei 'polygon.length < 3'
+                     und endet am naechsten Markdown-Zitatzeichen '>'. Kein Vorlagen-Platzhalter."
+  warum_ich_es_so_melde: "§7 verbietet die stille Ersetzung eines Kriteriums. Ich habe schon
+                          zweimal ein Kriterium durch das ersetzt, was ich fuer besser hielt
+                          (W-01/1-6 und W-01/1-3). Die Entscheidung gehoert dem Evaluator."
+
+die_f_zuordnung:
+  F-010: "JA — roomDetection.ts:70, Vorzeichen ausgewertet in Z.171"
+  F-011: "JA, aber ABWEICHEND — dieselbe Zeile, OHNE Betrag"
+  F-012: "NEIN — 0 Treffer"
+  F-013: "NEIN — 0 Treffer"
+  F-001: "JA und im Register NICHT genannt — roomDetection.ts:88 (Math.hypot, Wandlaenge)"
+  kern: "signierteFlaeche ist weder F-010 noch F-011, sondern beider gemeinsamer Kern.
+         Ein Rueckgabewert traegt beide Auskuenfte: Vorzeichen = Orientierung, Betrag = Flaeche.
+         Wer hier den Betrag naehme, koennte den Aussenumlauf nicht mehr vom Raum unterscheiden."
+
+befund_gemeldet_nicht_bewertet:
+  was: "F-011s eigener Grenzfall verlangt F-013 davor — hier laeuft keine Selbstschnitt-Pruefung"
+  zitat: "'Selbstschneidendes Polygon liefert eine falsche, aber plausible Zahl — keine
+          Fehlermeldung. Deshalb vorher F-013 laufen lassen.'"
+  nicht_gemessen: "ob der Halbkanten-Umlauf ueberhaupt selbstschneidende Polygone erzeugen KANN.
+                   Steht als Frage in 6-PRUEFUNG, nicht als Zusage im Blatt."
+
+der_gefaehrliche_ausschluss:
+  polygonFlaeche.ts: "rechnet DIESELBE Schuhbandformel ein zweites Mal"
+  drei_unterschiede: "Math.abs (ja/nein) · m² statt mm² · Rueckgabe 0 bei kaputter Eingabe"
+  satz_im_blatt: "Wer sie zusammenlegt, muss vorher entscheiden, WESSEN Verhalten gilt —
+                  das ist keine Aufraeumarbeit."
+
+eigener_fehler_vor_dem_melden:
+  was: "zwei Zeilenangaben falsch (87 statt 88, 88 statt 89)"
+  einordnung: "dieselbe Klasse wie bei W-11, dort vierfach. Beide Male VOR dem Melden gefunden,
+               weil ich inzwischen jede Angabe gegen den Code pruefe statt sie abzuzaehlen."
+  danach: "12 Zeilenangaben geprueft, 0 ueber dem Dateiende, dazu 4 Schluesselstellen inhaltlich"
+
+browserabnahme: "entfaellt — reine Dokumentblaetter"
+ballbesitz: evaluator
+```
