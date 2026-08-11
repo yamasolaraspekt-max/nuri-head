@@ -1,33 +1,32 @@
-# W-xx · CODE
+# W-04 · Öffnung (Tür/Fenster) — CODE
 
-## Wo der Code wirklich lebt
+**Angebunden aus zwei vorhandenen Modulen** — dieses Blatt ist aus dem Code abgeleitet, nicht umgekehrt.
 
-| Schicht | Datei im Repo | Zweck |
-|---|---|---|
-| 1 Domäne | `resources/planner/hausplaner/domain/…` | |
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | |
-| 3 Werkzeug | `resources/planner/hausplaner/app/tools/…` | |
-| 4 Darstellung | `resources/planner/hausplaner/renderers/…` | |
-| 5 Oberfläche | `resources/planner/hausplaner/ui/…` | |
+## `resources/planner/hausplaner/geometry/oeffnungsBauarten.ts` — 75 Zeilen, 5 Ausfuhren
 
-> **Der Code steht im Repo, nicht in diesem Ordner.** Hier liegen nur
-> Schnittstellenbeschreibung, Ablaufskizze und — wo nötig — ein kurzer
-> Auszug der Kernstelle mit Zeilennummer, damit man beim Lesen nicht springen muss.
+`OeffnungsBauart` · `FENSTER_BAUARTEN` · `TUER_BAUARTEN` · `fensterBauartNach()` · `tuerBauartNach()`
 
-## Schnittstelle
+## `resources/planner/hausplaner/geometry/oeffnungsTypen.ts` — 49 Zeilen, 7 Ausfuhren
 
-```ts
-// Signatur der öffentlichen Funktion(en) dieses Werkzeugs
+`TuerTyp` · `FensterTyp` · `TypVorlage` · `TUER_TYPEN` · `FENSTER_TYPEN` · `tuerTyp()` · `fensterTyp()`
+
+## AUSSCHLUSS — mit einer Ausnahme, die wirklich besteht
+
+```text
+resources/planner/hausplaner/geometry/fensterProdukt.ts   NICHT Gegenstand dieses Blattes
 ```
 
-## Kernstelle
+**Aber der Ausschluss ist nicht pauschal.** Gemessen:
 
-```ts
-// Der eine Ausschnitt, auf den es ankommt — mit Datei:Zeile
+```text
+oeffnungsBauarten.ts:3   import type { OeffnungsArt } from './fensterProdukt';
 ```
 
-## Abhängigkeiten
+**Ein reiner Typ-Import** (`import type`) — er verschwindet beim Übersetzen und bringt keinen
+Laufzeitcode mit. `OeffnungsArt` ist damit die **einzige** Berührung; `oeffnungsTypen.ts` nennt
+`fensterProdukt` gar nicht. *Ein pauschales „hat nichts damit zu tun" wäre nachweislich falsch.*
 
-| Braucht | Warum | Richtung geprüft? |
-|---|---|---|
-| | | ja/nein — kein Kreis |
+## Was gebaut ist und was nicht
+
+**Gebaut:** beide Kataloge und vier Nachschlagefunktionen, rein — keine Szene-Mutation, kein Rendern.
+**Nicht Gegenstand dieser Stufe:** die Werkzeugschicht. *Stufe 2 (`GEBAUT`) folgt als eigener Auftrag.*

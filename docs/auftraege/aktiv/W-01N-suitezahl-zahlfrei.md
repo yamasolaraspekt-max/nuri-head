@@ -170,7 +170,7 @@ einem `grep` über `docs/auftraege/aktiv/W-*.md`.*
 ## Konfliktprüfung (§5)
 
 ```text
-A-12     IN_ARBEIT   Messlauf, FORMELSAMMLUNG + VORGEHEN + BERICHT   KEINE Beruehrung
+A-12     ENTWURF     Messlauf, FORMELSAMMLUNG + VORGEHEN + BERICHT   KEINE Beruehrung
 W-04/1   ENTWURF     werkbank/W-04/** + REGISTER.md                  KEINE Beruehrung
 W-08/1   ENTWURF     werkbank/W-08/** + REGISTER.md                  KEINE Beruehrung
 W-11/1   ENTWURF     werkbank/W-11/** + REGISTER.md                  KEINE Beruehrung
@@ -178,7 +178,12 @@ W-13/1   ENTWURF     werkbank/W-13/** + REGISTER.md                  KEINE Berue
 W-01N    DIESES      W-01-Blatt (docs/auftraege/) + FAHRPLAN         disjunkt zu allen
 -> Dieser Auftrag beruehrt KEINE Werkbank-Datei und KEIN REGISTER. Er ist der einzige
    der Gruppe, der nur in docs/auftraege/ und docs/ arbeitet.
-§3: A-12 ist IN_ARBEIT. W-01N geht NICHT vor dessen Abschluss in IN_ARBEIT.
+§3 GEMESSEN 11.08. (korrigiert, siehe docs/MELDUNG-ERFUNDENE-SPERRE-A-12.md):
+   grep -cE '^\|.*\| *\*{0,2}.?IN_ARBEIT' docs/STATUS.md   -> 0
+   A-12 traegt status: ENTWURF, NICHT IN_ARBEIT.
+   -> §3 sperrt W-01N NICHT. Es darf in IN_ARBEIT, sobald DoR durch ist.
+   Der Vorrang von A-12 (F-026 ist gelb, W-07/W-08 haengen fachlich daran) ist eine
+   planerische EMPFEHLUNG, kein Verbot. Die Reihenfolge entscheidet der Plan-Pruefer.
 ```
 
 ```yaml

@@ -1,0 +1,273 @@
+# W-22 Stufe 1 — Gaube BESCHREIBEN: das Modul kann mehr, als das Werkzeug heißt
+
+```yaml
+auftrag: "W-22/1"
+werkzeug: "W-22 Gaube"
+stufe: "1 von 2 — BESCHRIEBEN. Stufe 2 folgt als eigener Auftrag."
+titel: "Die sieben Blaetter von W-22 aus gaubeGeometrie.ts ableiten — und die Aufbauten-Nachbarn benennen"
+spur: A
+heimat_app: ticket
+status: ENTWURF
+status_steht_in: docs/STATUS.md
+basis_sha: 95fe1b88
+prioritaet: P1
+anlass: "Runde 2 der Klasse A, letztes Blatt — vom Release-Pruefer freigegeben (b9dc3c35)"
+ballbesitz: "plan-pruefer (DoR), danach generator"
+claim: "planner 11.08. — Claim VOR dem Schnitt. Kein W-22-Blatt lag als Auftrag vor."
+muster: "W-01/1, W-02/1, W-04/1, W-05/1, W-08/1, W-11/1, W-21/1"
+```
+
+## Ist-Zustand — der Werkzeugname ist enger als das Modul
+
+**Anbindungsmessung an Exporten und Dateikopf gefahren:**
+
+```text
+KERN VON W-22
+geometry/gaubeGeometrie.ts              498 Zeilen, 26 Exporte
+  Geometrie    Vec3 · LokalPunkt · Dreieck · Linie · SurfaceFrame · GaubeEingabe
+               surfacePointRein() · AufbauBasisWelt · aufbauBasis() · weltAusLokal()
+  Hauptdach    Hauptdach · hauptdachAusFrame() · neigungAusFrame() · signierterAbstand()
+  Grenzwerte   MIN_PULT_GRAD · MIN_FLACH_GRAD
+  Gauben       PultGaube · pultGaubeGeometrie() · GiebelGaube · giebelGaubeGeometrie()
+               fussabdruckUV()
+  KAMIN        KaminGeometrie · kaminGeometrie()
+  PRUEFUNG     Ampel · PruefBefund · pruefeAufbau()
+Registry-Werkzeug                       KEINES (0 Treffer auf gaube/kamin/aufbau)
+Zusagen                                 2 dediziert (gaubeGeometrie, dachAufbauten)
+                                        + aufbautenStatus.test.ts (Nachbar)
+Register                                LEER · braucht W-07 · F-027, F-031
+```
+
+> **Der Dateikopf sagt selbst, dass „Gaube" zu eng ist:**
+>
+> *„REINE, testbare Geometrie für **stehende Dachaufbauten** (Pultgauben: Schlepp/Flach/Trapez,
+> Giebel-/Spitzgaube, **Kamin**) und ihren **Anschluss** an die geneigte Hauptdachfläche … und
+> **prüft jeden Aufbau numerisch (kein Render verfügbar)**."*
+>
+> **Damit sind `kaminGeometrie` und `pruefeAufbau` keine Fremdkörper, sondern erklärt.** *Der Kamin
+> ist ein stehender Aufbau wie die Gaube — dieselbe Geometrie, andere Form. Und die numerische
+> Prüfung existiert, **weil kein Render verfügbar ist**: das Modul kann sich nicht ansehen, also
+> rechnet es nach. **Das ist die A-10-Lehre in Reinform, freiwillig und vor A-10 gebaut.***
+
+## Der Anlass des Moduls — mit Zahlen, und er gehört in `1-ZWECK`
+
+```text
+Dateikopf woertlich:
+"Der bisherige Box-Hack in updateObstacles liess hinten eine vertikale Rueckwand bis
+ lokal y=height+rise stehen -> bei 35 Grad Dachneigung ragte sie ~0,36 m UEBER den
+ First und ~1,3 m ueber die Hauptdachflaeche (numerisch bestaetigt: Welt-Y 8,336 >
+ First 7,978). Eine echte Pultgaube hat hinten KEINE Wand — ihr Pultdach endet auf
+ der Hauptdachebene (Anschnitt)."
+```
+
+> *Das ist die beste `1-ZWECK`-Quelle der ganzen Klasse: **ein Fachfehler, eine Fachbegründung
+> („eine echte Pultgaube hat hinten keine Wand") und zwei gemessene Zahlen.*** Der Generator muss
+> hier nichts erfinden.
+
+## BEFUND — fünf Module bilden „Dachaufbauten", die Werkbank kennt nur „Gaube"
+
+**Die vier Nachbarn, alle gemessen:**
+
+```text
+geometry/aufbauOrientierung.ts    61 Z   stehendeAufbauBasis() · istStehenderAufbau()
+  "Orientierung aufrecht STEHENDER Dachaufbauten (Gaube, Kamin). Diese stehen
+   LOTRECHT (Welt-Hoch), NICHT senkrecht zur Dachschraege."
+geometry/aufbauPlatzierung.ts    190 Z   platziereAufbauten() · RAND_M · MIN_GAUBE_M
+                                         MAX_BREITE_ANTEIL · AUFBAU_ABSTAND_M
+  "FLAECHENABHAENGIGE Platzierung von Standard-Aufbauten (Kamin/Dachfenster/Luefter/
+   Sat/Gaube/Lichtkuppel)"
+geometry/aufbautenStatus.ts       52 Z   aufbautenOhneFlaeche() · istAufbauPruefpflichtig()
+                                         AUFBAUTEN_WARNUNG
+  "Statuslogik fuer Dach-Aufbauten (Kamin, Gaube, Dachfenster, sonstige Hindernisse)"
+geometry/auswechslung.ts         174 Z   analysiereAuswechslung() · sparrenPositionenU()
+  "Auswechslungen/Wechselhoelzer an Dachoeffnungen (Kamin, Dachfenster, Gaube, Lueefter)"
+                                 ------
+                                 477 Z   Nachbarn, zusaetzlich zu W-22s 498
+```
+
+**Meine Entscheidung, und sie ist knapp:**
+
+```text
+IM SCOPE      gaubeGeometrie.ts allein (498 Z)
+              Begruendung: es ist EIN Modul, sein Kopf beschreibt EINEN Gegenstand
+              (stehende Aufbauten samt Anschluss), und es ist zweifach abgesichert.
+NICHT IM      die vier Nachbarn (477 Z). Sie gehoeren fachlich zum selben Thema, aber:
+SCOPE           - aufbauPlatzierung deckt SECHS Aufbauarten ab, davon eine die Gaube
+                - aufbautenStatus ist Statuslogik ueber ALLE Hindernisse
+                - auswechslung ist HOLZBAU an einer Oeffnung — in W-21/1 steht es
+                  bereits als "verwandt, nicht im Scope"
+              Sie in W-22 zu ziehen hiesse, ein Gauben-Blatt ueber Dachfenster,
+              Lueefter und Lichtkuppeln schreiben zu lassen.
+GEMELDET      Die Werkbank hat kein "Dachaufbauten"-Werkzeug. Fuenf Module (975 Z)
+              bilden das Thema, W-22 traegt eines davon. Das ist ein Befund fuer die
+              Anschlussmatrix und moeglicherweise ein Argument, W-22 umzubenennen
+              oder ein W-24 zu schneiden — NICHT meine Entscheidung.
+```
+
+> **`auswechslung.ts` ist der schärfste Fall:** es steht in **W-21/1** als *„verwandt, nicht im
+> Scope"* und hier ebenso. **Ein Modul, das in zwei Blättern als Nachbar geführt wird und in keinem
+> zuhause ist, hat kein Zuhause.** *Das gehört gemeldet, damit es nicht zwischen den Blättern
+> verschwindet — 174 Zeilen Wechselholz-Geometrie mit eigenem Zweck.*
+
+## DECISION
+
+```text
+Quelle       gaubeGeometrie.ts (498 Z) + die zwei dedizierten Zusagen
+NICHT Quelle die vier Nachbarn — namentlich benannt, mit Begruendung
+1-ZWECK      aus dem Dateikopf: der Box-Hack, die 0,36 m ueber dem First, die
+             Fachbegruendung "eine echte Pultgaube hat hinten keine Wand"
+2-FUNKTION   DREI Gegenstaende trennen: Gaube (Pult/Giebel), KAMIN, und die
+             numerische PRUEFUNG. Dazu das LOKALE SYSTEM — der Kopf definiert
+             lx/ly/lz ausdruecklich, und ohne das ist keine Zeile verstaendlich.
+3-FORMELN    nur F-Nummern. Register nennt F-027 (Gaubenaufbau, aus M-01) und F-031.
+             ACHTUNG: F-027 stammt aus Yamas dachdecker_pro_3d.tsx — pruefen, ob der
+             HAUSPLANER-Code sie benutzt oder einen eigenen Weg geht. Das ist derselbe
+             Fall wie F-020 gegen roof.anbau bei W-07.
+5-CODE       "angebunden aus geometry/gaubeGeometrie.ts", mit den vier Nachbarn als
+             VERWEIS (nicht als Anbindung)
+7-GRENZEN    der Anker ist GEBAUT: pruefeAufbau() liefert eine Ampel und einen
+             PruefBefund. Das Blatt liest sie aus. Dazu MIN_PULT_GRAD und
+             MIN_FLACH_GRAD — zwei benannte Untergrenzen, die zu messen sind.
+```
+
+## Nicht-Ziele
+
+- **Keine vier Nachbarmodule.** Sie sind benannt, nicht beschrieben.
+- **Kein Dachaufbauten-Werkzeug schneiden.** Der Befund wird gemeldet; ob W-22 umbenannt oder ein
+  W-24 geschnitten wird, ist keine Planner-Entscheidung im Rahmen dieses Blattes.
+- **Kein Registry-Eintrag.** W-22 ist eine Schicht (fünfter Fall).
+- **Keine Aussage über den Renderer.** `dachAufbautenMesh.ts` zeichnet, dieses Blatt beschreibt die
+  Geometrie.
+- **Keine Änderung an `gaubeGeometrie.ts`** oder seinen Zusagen.
+
+## Scope
+
+```text
+docs/rollenkette/werkbank/02-WERKZEUGE/W-22-gaube/1-ZWECK.md … 7-GRENZEN.md
+docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md   Reifegrad W-22 LEER -> BESCHRIEBEN
+                                                     + gaubeGeometrie.ts als Fundstelle
+```
+
+*NICHT im Scope: `resources/**`, die vier Nachbarmodule, die F-Liste des Registers (N1-Frage).*
+
+## Wiederverwendungsprüfung (§5)
+
+```text
+gaubeGeometrie.ts       VORHANDEN, 498 Z — Quelle, unangetastet
+sein Dateikopf          16 Zeilen mit Fehlerbeschreibung, Fachbegruendung, zwei Zahlen
+                        und der Definition des lokalen Systems — beste Quelle der Klasse
+pruefeAufbau()          VORHANDEN — der Grenzfall-Melder ist gebaut, mit Ampel
+2 dedizierte Zusagen    VORHANDEN — Quelle fuer 6-PRUEFUNG
+MIN_PULT_GRAD /         VORHANDEN — benannte Untergrenzen, nicht zu erfinden
+  MIN_FLACH_GRAD
+W-01/1, W-05/1, W-21/1  Muster fuer SCHICHT-Blaetter
+```
+
+## Auswirkungen (§5)
+
+```text
+API · Server · Schema · Migration · Bestandsdaten · Bundle   KEINE
+Produktivcode                                                KEINER — reine Doku-Stufe
+Testdaten-Ziel                                               KEINES
+Prozessbindung                                               ENTFAELLT
+Werkzeuge                                                    grep/Editor; Insel-Suite bleibt
+                                                             unveraendert gruen (ohne Zahl)
+```
+
+**Erstnutzer:** *der Generator von W-22 Stufe 2 — und jede Rolle, die einen Aufbau platziert: das
+lokale System (`lx`/`ly`/`lz`) und die Aussage „ein stehender Aufbau steht **lotrecht**, nicht
+senkrecht zur Dachschräge" sind die zwei Sätze, ohne die man den Box-Hack wieder baut.*
+
+## Akzeptanzkriterien
+
+**W-22/1-1 (P1, kein Platzhalter):** keiner mehr in den sieben Blättern. *Zählweise: alle
+`<…>`-Klammern.*
+
+**W-22/1-2 (P1):** `3-FORMELN` nennt nur F-Nummern, keine ausgeschriebene Formel.
+
+**W-22/1-3 (P1, F-027 wird GEPRÜFT, nicht übernommen):** Das Blatt sagt, **ob** der Hausplaner-Code
+F-027 (Gaubenaufbau, aus M-01) tatsächlich benutzt oder einen eigenen Weg geht — am Code gemessen.
+*Derselbe Fall wie F-020 gegen `roof.anbau` bei W-07: eine Formel aus fremdem Material im Register
+heißt nicht, dass der Code sie geht.*
+
+**W-22/1-4 (P1, drei Gegenstände getrennt):** `2-FUNKTION` trennt **Gaube**, **Kamin** und
+**numerische Prüfung** — und benennt, dass der Werkzeugname nur den ersten nennt. *Ohne diese
+Trennung sucht niemand den Kamin in einem Gauben-Blatt.*
+
+**W-22/1-5 (P1, das lokale System steht im Blatt):** `lx` (parallel Traufe), `ly` (Welt-Hoch),
+`lz` (Falllinie, `+lz` = Traufe) — **wörtlich aus dem Kopf übernommen**. *Es ist die Voraussetzung,
+um jede andere Zeile zu verstehen; ein Blatt ohne es ist unbrauchbar.*
+
+**W-22/1-6 (P1, `7-GRENZEN` liest `pruefeAufbau()` aus):** Das Blatt nennt, **welche** Ampelstufen
+und **welche** `PruefBefund`-Fälle das Modul kennt — am Code gemessen, nicht erfunden. Dazu
+`MIN_PULT_GRAD` und `MIN_FLACH_GRAD` mit ihren Werten. *Der Melder ist gebaut; ihn zu erfinden wäre
+schlechter als ihn abzulesen.*
+
+**W-22/1-7 (P1, Herkunft):** `5-CODE` sagt „angebunden aus `geometry/gaubeGeometrie.ts`", mit den
+vier Nachbarn als **Verweis** und der ausdrücklichen Angabe, dass sie **nicht** angebunden sind.
+
+**W-22/1-8 (P1, der Dachaufbauten-Befund steht im Blatt):** Das Blatt nennt, dass **fünf Module
+(975 Zeilen) das Thema Dachaufbauten bilden** und die Werkbank nur „Gaube" führt — und dass
+`auswechslung.ts` in **W-21 und W-22** als Nachbar geführt wird und **in keinem zuhause** ist.
+*Ohne diesen Satz verschwinden 174 Zeilen zwischen zwei Blättern.*
+
+**W-22/1-9 (`must_preserve`):** `resources/**` byte-identisch, Insel-Suite **unverändert** grün
+(ohne Zahl — W-01N-Regel).
+
+**W-22/1-10 (P1, Register mitgeführt):** Reifegrad **und** `gaubeGeometrie.ts` als Fundstelle.
+
+**W-22/1-11 (P1, §3 wird BELEGT):** Befehl mit Ausgabe, an beiden Orten, **mindestens zwei
+Befehlszeilen und zwei Ausgabewerte, je Ort einer**. *E2 aus Prüfung 03.*
+
+## Kantenliste
+
+```text
+Pultgaube flacher als MIN_PULT_GRAD    -> MESSEN, was pruefeAufbau meldet
+Flachdach-Aufbau unter MIN_FLACH_GRAD  -> dito
+Gaube ragt ueber den First             -> DER Anlassfall (0,36 m bei 35 Grad).
+                                          Das Blatt muss sagen, dass es geprueft WIRD
+Aufbau breiter als die Dachflaeche      -> aufbauPlatzierung hat MAX_BREITE_ANTEIL,
+                                          aber das ist NICHT im Scope — Verweis
+Kamin auf der Kehle                     -> MESSEN oder als ungeprueft benennen
+kein Render verfuegbar                  -> ist der GRUND fuer die numerische Pruefung,
+                                          keine Einschraenkung. Als Entscheidung schreiben
+F-027 aus M-01 nicht benutzt            -> dann sagt das Blatt das (W-22/1-3)
+```
+
+## Rückweg und Entdeckung
+
+**Rückweg:** sieben Doku-Dateien und eine Registerzeile, `git revert` genügt.
+
+**Entdeckung:** Baut jemand später wieder eine vertikale Rückwand an eine Pultgaube, hat `1-ZWECK`
+nicht gewirkt — *der Anlassfall steht mit Zahlen im Dateikopf, und wenn er im Blatt steht, ist er
+nicht mehr nur im Code auffindbar.*
+
+## Konfliktprüfung (§5)
+
+```text
+A-12     ENTWURF     FORMELSAMMLUNG + VORGEHEN + BERICHT-A-12    KEINE Beruehrung
+W-01N    ENTWURF     W-01-Blatt + FAHRPLAN                       KEINE Beruehrung
+W-04/1 · W-05/1 · W-08/1 · W-11/1 · W-13/1 · W-21/1   ENTWURF    werkbank/W-xx/** + REGISTER.md
+W-22/1   DIESES      werkbank/W-22/** + REGISTER.md
+-> SIEBEN Blaetter teilen REGISTER.md, je eine Zeile plus Fundstellen, zeilenweise disjunkt.
+   §3 loest es; belegt in W-22/1-11.
+§3 GEMESSEN 11.08. (korrigiert, siehe docs/MELDUNG-ERFUNDENE-SPERRE-A-12.md):
+   grep -cE '^\|.*\| *\*{0,2}.?IN_ARBEIT' docs/STATUS.md   -> 0
+   A-12 traegt status: ENTWURF, NICHT IN_ARBEIT.
+   -> §3 sperrt W-22/1 NICHT. Es darf in IN_ARBEIT, sobald DoR durch ist.
+   Der Vorrang von A-12 (F-026 ist gelb, W-07/W-08 haengen fachlich daran) ist eine
+   planerische EMPFEHLUNG, kein Verbot. Die Reihenfolge entscheidet der Plan-Pruefer.
+FACHLICHE Beruehrungen: W-22 braucht laut Register W-07 (Dach) — ein Aufbau braucht eine
+   Dachflaeche. Und auswechslung.ts beruehrt W-21. Kein Dateikonflikt.
+```
+
+```yaml
+fehlerklasse: keine
+prioritaet: P1
+warteschlange: "Runde 2 damit vollstaendig: W-05, W-21, W-22 — Klasse A ist geschnitten"
+befund_1: "der Werkzeugname ist enger als das Modul: gaubeGeometrie deckt Gaube, KAMIN und
+           eine numerische PRUEFUNG ab, laut eigenem Dateikopf"
+befund_2: "fuenf Module (975 Z) bilden das Thema Dachaufbauten, die Werkbank fuehrt nur Gaube"
+befund_3: "auswechslung.ts (174 Z) steht in W-21 UND W-22 als Nachbar und ist in keinem
+           zuhause — es braucht ein eigenes Werkzeug oder eine Zuordnung"
+```

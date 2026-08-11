@@ -1,21 +1,21 @@
-# W · oeffnung tuer fenster — ZWECK
+# W-04 · Öffnung (Tür/Fenster) — ZWECK
 
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
-<In EINEM Satz, aus Sicht des Anwenders. Nicht technisch.
-Beispiel: „Der Planer soll mit zwei Klicks eine Wand ziehen können,
-die automatisch an bestehenden Wänden andockt.">
+Der Planer soll eine Tür oder ein Fenster **aussuchen**, nicht ausmessen. Er wählt aus einer Liste —
+und bekommt Standardmaße, die stimmen, bis er sie ändern will.
 
-## Wann greift der Anwender danach?
+## Wann greift er danach?
 
-<Der konkrete Moment im Arbeitsablauf.>
+Wenn die Wände stehen. **Öffnungen brauchen eine Wand, in der sie sitzen.**
 
-## Woran merkt er, dass es fehlt?
+## Was wäre ohne dieses Werkzeug?
 
-<Was tut er ersatzweise, wenn es das Werkzeug nicht gibt?
-Diese Frage entscheidet über die Priorität.>
+Jede Tür müsste von Hand bemaßt werden. **Es gibt 48 Bauarten und 12 Vorlagen** — das ist der
+Unterschied zwischen Auswählen und Konstruieren.
 
-## Was ist ausdrücklich NICHT Zweck dieses Werkzeugs?
+## Was dieses Werkzeug NICHT ist
 
-<Abgrenzung zu Nachbarwerkzeugen. Verhindert, dass ein Werkzeug
-über die Jahre alles frisst.>
+**Es ist keine Geometrie.** W-04 sind **zwei Kataloge und vier Nachschlagefunktionen**, sonst nichts:
+keine Szene-Mutation, kein Rendern, keine Rechnung. *Die Geometrie des Türblatts gehört W-02 —
+`resources/planner/hausplaner/geometry/wallGeometry.ts:291`.*

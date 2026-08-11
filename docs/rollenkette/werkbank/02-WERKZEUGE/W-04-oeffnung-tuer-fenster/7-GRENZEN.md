@@ -1,47 +1,39 @@
-# W · oeffnung tuer fenster — GRENZEN
+# W-04 · Öffnung (Tür/Fenster) — GRENZEN
 
-> **Dieses Blatt ist Pflicht.**
-> Der teuerste Fehler des Projekts bisher: ein Dach, das bei nicht-rechteckiger
-> Kontur unsichtbar verschwand statt eine Absage zu geben. Die Domäne verweigerte
-> korrekt — der Renderer schluckte die Absage mit `catch { continue; }`.
-> **Ein Werkzeug ohne benannte Grenze baut genau diesen Fehler wieder ein.**
+## Der wichtigste Fall: eine ID, die es nicht gibt
 
-## Was dieses Werkzeug NICHT kann
+**Die vier Nachschlagefunktionen antworten gegensätzlich — und beides ist Absicht.**
 
-| Fall | Warum nicht | Was der Anwender stattdessen sieht |
-|---|---|---|
-| | | |
-
-## Die Absagekette
-
-Für jeden Fall oben muss die Kette vollständig sein:
-
-```
-Schicht 1/2 wirft benannten Fehler
-        ↓
-Schicht 3 fängt und übersetzt
-        ↓
-Schicht 4 reicht DURCH — kein catch/continue
-        ↓
-Schicht 5 zeigt dem Anwender einen verständlichen Satz
-```
-
-| Fall | Fehlername | Wer fängt | Anwendertext steht in |
+| Funktion | Zeile | bei unbekannter ID | belegt durch |
 |---|---|---|---|
-| | | | 4-BEDIENUNG.md |
+| `fensterBauartNach()` | 70 | **`undefined`** | `return id ? FENSTER_BAUARTEN.find(…) : undefined` |
+| `tuerBauartNach()` | 73 | **`undefined`** | dieselbe Form |
+| `tuerTyp()` | 42 | **nie `undefined`** → `TUER_TYPEN[0]` = **`dreh1`** | `?? TUER_TYPEN[0]` |
+| `fensterTyp()` | 47 | **nie `undefined`** → `FENSTER_TYPEN[0]` = **`drehkipp`** | `?? FENSTER_TYPEN[0]` |
 
-## Fänger-Prüfung
+**Beide Rückfallwerte selbst nachgezählt**, nicht aus dem Kommentar übernommen: `TUER_TYPEN[0]` ist
+`dreh1` (Zeile 23), `FENSTER_TYPEN[0]` ist `drehkipp` (Zeile 32). *Der Kommentar behauptet genau das,
+und diesmal stimmt er.*
 
-- [ ] Jeder Fehlerpfad ist durch einen Test belegt, der prüft:
-      **die Meldung erreicht die Oberfläche**
-- [ ] Kein `catch { }` ohne Weiterreichen im Pfad dieses Werkzeugs
-- [ ] Kein stilles `return` bei ungültiger Eingabe
+### Warum die Bauart `undefined` liefern DARF und der Typ nicht
 
-## Bekannte Ungenauigkeiten
+Eine **Bauart** ist Aussehen — fehlt sie, gibt es nichts zu zeichnen, und `undefined` ist die ehrliche
+Antwort. Ein **Typ** trägt die Maße — ohne ihn gäbe es keine Breite und keine Höhe. *Eine Öffnung
+ohne Maß ist keine Öffnung.*
 
-| Größe | Abweichung | Ab wann stört es |
+### Und wo die Gefahr dabei liegt
+
+**`tuerTyp('gibtsnicht')` liefert eine Drehtür, ohne zu sagen, dass gefallen wurde.** Der Aufrufer
+bekommt 875 × 2010 und keinen Hinweis. *Das ist die A-10-Klasse: nicht das leere Ergebnis ist das
+Problem, sondern das gefüllte, das seine Herkunft verschweigt.* **Der TypeScript-Typ verhindert den
+Fall im Übersetzer — er verhindert ihn nicht bei Daten aus Datei, Netz oder Altstand.**
+
+## Was das Werkzeug sonst nicht kann
+
+| Fall | Warum | Was der Anwender sieht |
 |---|---|---|
-
-## Was später kommen könnte
-
-<Absichtlich weggelassene Funktionen, damit sie nicht als Fehler gemeldet werden.>
+| Eigene Maße im Katalog speichern | Kataloge sind `readonly`-Konstanten | die Vorlage bleibt; **Maße sind nach dem Setzen frei überschreibbar** |
+| Bauart ohne Vorgabe-Öffnungsart | `oeffnungsArt?` ist optional | er wählt selbst — *„sofern eindeutig; sonst undefined"* |
+| Brüstung an einer Tür | `bruestung?` gibt es nur bei Fenstern | nichts |
+| Türgeometrie | gehört **W-02** | dort beschrieben, `wallGeometry.ts:291` |
+| `fensterProdukt.ts` | **Ausschluss** — bis auf den Typ `OeffnungsArt` | eigenes Blatt |
