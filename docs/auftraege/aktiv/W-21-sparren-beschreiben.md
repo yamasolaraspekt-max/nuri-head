@@ -284,3 +284,63 @@ befund_2: "Register-Quelle M-02 (profi_holzbau_solar_cad.tsx, 2.021 Z) ist nicht
            ausgewertet — eigener Messauftrag, Bauart wie A-12 fuer F-026"
 befund_3: "kein Lattungs-Modul gefunden, obwohl der Werkzeugname sie nennt"
 ```
+
+
+## §11 — Bericht W-21/1 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "W-21/1"
+zustand: CODE_FERTIG
+bau_commit: "992d5d76"
+in_arbeit_commit: "9bd728fe"
+basis: "c9325929"
+
+kriterien:
+  W-21/1-1:  GRUEN   # 34 -> 0, nach BEIDEN Zaehlweisen (woertlich und Platzhaltermuster)
+  W-21/1-2:  GRUEN   # nur Nummern
+  W-21/1-3:  GRUEN   # beide als NICHT vorhanden gemeldet + die umgekehrte Luecke benannt
+  W-21/1-4:  GRUEN   # Vorbemessung ist die erste Ueberschrift in 7-GRENZEN
+  W-21/1-5:  GRUEN   # OFFENE_HOLZBAUTEILE woertlich ausgelesen, vier Eintraege
+  W-21/1-6:  GRUEN   # drei der fuenf aggregieren; schifterListe als GEMISCHT benannt
+  W-21/1-7:  GRUEN   # alle fuenf Module mit Zeilen und Exportlisten
+  W-21/1-8:  GRUEN   # Lattung mit fuenf Fundstellen — und die Auftragsvermutung widerlegt
+  W-21/1-9:  GRUEN   # M-02 als ungelesen im Blatt UND im Register
+  W-21/1-10: GRUEN   # drei Richtungen 0/0/0, Suite unveraendert gruen (ohne Zahl, W-01N)
+  W-21/1-11: GRUEN   # Register: BESCHRIEBEN + alle fuenf Module
+  W-21/1-12: GRUEN   # 9bd728fe: 2 Befehlszeilen, 2 Ausgabewerte
+
+wo_ich_dem_auftrag_widerspreche:
+  punkt: "W-21/1-8 — der Auftrag vermutet: Lattung als Lastanteil sei gebaut, als Gegenstand nicht"
+  gemessen: "beides ist gebaut. Last: sparrenBerechnung.ts:63. Menge: holzMengen.ts:32
+             (Konterlatten, lfm) und :34 (Traglatten, lfm), aus der ECHTEN 3D-Liste."
+  was_wirklich_fehlt: "der Schritt DAZWISCHEN — niemand leitet den Lattenabstand aus der
+                       Deckungsart ab; konterlattungMm wird ausserhalb der eigenen Datei von
+                       KEINEM Produktivcode gelesen, nur von einem Test (dachformVorlagen.test.ts:533)."
+  bemerkung: "Der Auftrag verlangt ausdruecklich zu messen statt anzunehmen — genau daran
+              faellt die Vermutung. Nicht erfunden, nicht verschwiegen."
+
+f_nummern:
+  F-001: "NICHT im Code — kein Math.hypot/Math.sqrt in KEINEM der fuenf Module"
+  F-030: "NICHT im Code — nichts wird extrudiert; die Staebe kommen fertig aus der 3D-Engine"
+  stimmigkeit: "drei der fuenf aggregieren aus einer bereits erzeugten Liste — sie brauchen
+                keine Geometrieformel, weil sie keine Geometrie erzeugen"
+  umgekehrte_luecke: "bodenschneelast() und formbeiwertSchnee() RECHNEN, haben aber keine
+                      F-Nummer. Normative Groessen (DIN EN 1991-1-3 / EN 1995-1-1) gehoeren
+                      nicht in ein Geometrie-Verzeichnis. Eine erfundene Nummer waere schlimmer."
+
+benannt_aber_NICHT_gemessen:
+  - "HolzStueckRef ist doppelt definiert (schifterListe.ts:134 und holzBauteile.ts:22), kein
+     Import verbindet sie — dieselbe Lage wie MassPunkt bei W-11. OB die Felder heute
+     deckungsgleich sind, habe ich nicht geprueft. Im Blatt als ungemessen gekennzeichnet."
+  - "M-02 (2.021 Zeilen) — nicht gelesen, weder fuer dieses Blatt noch erkennbar fuer den Code"
+
+eigener_fehler_vor_dem_melden:
+  was: "eine Zeilenangabe falsch — holzMengen.ts:31 statt :32 fuer die Konterlattenlaengen"
+  gefunden: "durch die inhaltliche Zeilenpruefung, die seit W-11 vor jedem Melden laeuft"
+  danach: "18 Zeilenangaben geprueft, 0 ueber dem Dateiende, 17 Schluesselstellen inhaltlich"
+  bilanz: "dritter Auftrag in Folge mit dieser Klasse — aber alle drei Male VOR der Meldung
+           gefunden. Die Pruefung faengt sie zuverlaessig; das Abzaehlen bleibt unzuverlaessig."
+
+browserabnahme: "entfaellt — reine Dokumentblaetter"
+ballbesitz: evaluator
+```

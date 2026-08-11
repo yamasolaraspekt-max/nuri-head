@@ -1,21 +1,26 @@
-# W-xx · <Name des Werkzeugs> — ZWECK
+# W-21 · Sparren und Lattung — ZWECK
 
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
-<In EINEM Satz, aus Sicht des Anwenders. Nicht technisch.
-Beispiel: „Der Planer soll mit zwei Klicks eine Wand ziehen können,
-die automatisch an bestehenden Wänden andockt.">
+Zwei, und sie gehören verschiedenen Leuten:
 
-## Wann greift der Anwender danach?
+1. **„Welchen Querschnitt braucht der Sparren?"** — eine **Vorbemessung** nach Eurocode, für das
+   Gespräch beim Kunden.
+2. **„Wie viel Holz ist das?"** — Längen und Stückzahlen, **aus der wirklich gezeichneten Geometrie**
+   und nicht geschätzt.
 
-<Der konkrete Moment im Arbeitsablauf.>
+## Warum das zweite überhaupt ein Problem war
 
-## Woran merkt er, dass es fehlt?
+Der Code sagt es selbst:
 
-<Was tut er ersatzweise, wenn es das Werkzeug nicht gibt?
-Diese Frage entscheidet über die Priorität.>
+> *„Die Material-/Holzliste **schätzte** Sparren-/Lattenlängen aus dem Rechteck-Rahmen. Die Engine
+> zeichnet die Stäbe aber bereits an die reale (an Walm/L/T geclippte) Geometrie → **zwei
+> Wahrheiten**."* (`resources/planner/hausplaner/geometry/holzMengen.ts:5-8`)
 
-## Was ist ausdrücklich NICHT Zweck dieses Werkzeugs?
+**Die Aufgabe war nicht, besser zu schätzen, sondern nicht mehr zu schätzen.**
 
-<Abgrenzung zu Nachbarwerkzeugen. Verhindert, dass ein Werkzeug
-über die Jahre alles frisst.>
+## Die wichtigste Zeile dieses Werkzeugs
+
+**`berechneSparren()` ist eine VORBEMESSUNG und ersetzt keine prüffähige Statik.** Sie steht hier im
+Zweck, weil sie in `7-GRENZEN` noch einmal steht — *wer eine Vorbemessung für eine Bemessung nimmt,
+baut ein Dach danach.*
