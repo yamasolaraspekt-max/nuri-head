@@ -12,9 +12,9 @@
 
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
-| W-01 | Raster und Fang | **BESCHRIEBEN** | — | F-040, F-041, F-001, F-003, F-004 |
+| W-01 | Raster und Fang | **BESCHRIEBEN** | — | F-040 ✓, F-041 ✓, F-001 ✓, F-003 ✓, ~~F-004~~ ⓝ |
 | W-02 | Wand zeichnen | **BESCHRIEBEN** | W-01 | F-001, F-002, F-030 |
-| W-13 | Auswahl und Griffe | LEER | W-02 | F-012, F-003 |
+| W-13 | Auswahl und Griffe | LEER | W-02 | **keine** ⓝ (~~F-012~~, ~~F-003~~) |
 | W-12 | Ansicht und Kamera | LEER | — | F-032 |
 
 ## Stufe 2 — Grundriss
@@ -22,7 +22,7 @@
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
 | W-03 | Wand bearbeiten | LEER | W-02, W-13 | F-003, F-004, F-030 |
-| W-04 | Öffnung (Tür/Fenster) | **BESCHRIEBEN** | W-02 | F-003, F-031 ⚠ |
+| W-04 | Öffnung (Tür/Fenster) | **BESCHRIEBEN** | W-02 | **keine** ⓝ (~~F-003~~, ~~F-031~~) |
 | W-05 | Raum erkennen | LEER | W-02 | F-010, F-011, F-012, F-013 |
 | W-10 | Decke und Boden | LEER | W-05 | F-011, F-030 |
 | W-16 | Grundriss unterlegen | LEER | W-12 | F-032 |
@@ -36,14 +36,14 @@
 | W-08 | Dachfläche messen | LEER | W-07 | F-011, F-023, F-024 |
 | W-09 | Treppe | LEER | W-06 | F-001, F-030 |
 | W-21 | **Sparren und Lattung** | LEER | W-07 | F-001, F-030 · Quelle M-01/M-02 |
-| W-22 | **Gaube** | LEER | W-07 | **F-027**, F-031 |
+| W-22 | **Gaube** | LEER | W-07 | **F-027** ✓, ~~F-031~~ ⓝ |
 | W-23 | **Deckung und Material** | LEER | W-07, W-08 | **F-050** |
 
 ## Stufe 4 — Darstellung und Ausgabe
 
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
-| W-11 | Maß und Bemaßung | **BESCHRIEBEN** | W-13 ⚠ | F-001, F-002 ⚠, F-003 ⚠ |
+| W-11 | Maß und Bemaßung | **BESCHRIEBEN** | ~~W-13~~ ⓝ | F-001 ✓, ~~F-002~~ ⓝ, ~~F-003~~ ⓝ |
 | W-14 | Kopieren/Spiegeln/Drehen | LEER | W-13 | F-032 |
 | W-15 | Material und Farbe | LEER | W-13 | — |
 | W-17 | Export und Speichern | LEER | alle | — |
@@ -122,6 +122,84 @@ Ausgewertet am 07.08.2026 — Einzelheiten in `../05-MATERIALQUELLEN/BESTAND-YAM
 > an dem Auftrag Z-07 scheiterte. Der Code liegt auf Yamas Schreibtisch und läuft.
 > Vor jedem weiteren Bau an W-07 ist zu entscheiden, welcher der beiden Dachwege
 > zuerst kommt. Der Vergleich steht in der Formelsammlung, Gruppe 6.
+
+### F-SPALTE UND ABHÄNGIGKEITEN GEGEN DEN CODE GEMESSEN — Planner 11.08.
+
+**Grundlage:** `ARBEITSREGELN:102` — *der Planner ist Eigentümer von Spezifikationsfehlern.* Der
+Generator hat zweimal gemeldet statt korrigiert (`a44e5fdd`, `0299e5ca`) und ausdrücklich
+zurückgegeben, dass die Zuordnung dem Planner gehört. **Claim `d0adbec5`, gesetzt vor der ersten
+Änderung.**
+
+```text
+ZEICHEN
+  ✓   am Code BELEGT, mit Fundstelle unten
+  ⓝ   am Code NICHT belegt -> durchgestrichen. Die Formel bleibt gueltig, sie steht
+      nur am falschen Werkzeug. NICHTS ist aus der Formelsammlung geloescht.
+  ohne Zeichen  UNGEPRUEFT — kein Blatt benennt das Modul, also ist die Zuordnung
+      nicht messbar. Ich habe sie NICHT geraten (13 der 23 Zeilen).
+```
+
+**Die Messungen, je Formel einmal, in `resources/planner/hausplaner/`:**
+
+```text
+F-001  Abstand         Math.hypot|Math.sqrt   fangKern 4x ✓ · bemassung 1x ✓ ·
+                                              masseingabe 1x ✓ · (14 Module insgesamt)
+F-002  Winkel          Math.atan2             dachAusschnitt · roomDetection · wallGeometry
+                                              -> in W-11s DREI Modulen: 0x  ⓝ
+F-003  Lotfusspunkt    lotAufGerade|lotFuss   NUR fangKern (W-01) ✓
+                                              -> W-04: 0x · W-11: 0x · W-13: 0x  ⓝ
+F-004  Schnittpunkt    schnittpunkt           schifterListe:71 · wallGeometry:62,106
+                                              -> fangKern (W-01): 0x  ⓝ
+F-012  Punkt-in-Polygon punktInPolygon|strahl szene.ts · dachAusschnitt
+                                              -> W-13s trefferSuche: Math. 0x  ⓝ
+F-027  Gaubenaufbau    Math.tan               gaubeGeometrie 6x ✓
+F-031  CSG-Differenz   csg|CSG                NUR EIN Treffer, und er ist ein KOMMENTAR:
+                                              dachAusschnitt.ts:10 " * - Stufe C (NICHT
+                                              hier): echte Polygonloch-/CSG-Operationen"
+                                              -> in der ganzen Insel NICHT gebaut  ⓝ
+F-040  Raster          raster|snap            fangKern ✓        F-041  fangKern ✓
+```
+
+**Die falsche ABHÄNGIGKEIT, und sie ist der schwerste der Befunde:**
+
+```text
+"W-11 braucht W-13"   auswahl|select|markiert in bemassung.ts + masskette.ts:  0x
+                      bemassung() hat keinen Auswahl-Parameter
+                      die einzige Aufrufstelle uebergibt ALLE Waende und ALLE Oeffnungen
+                      -> die Abhaengigkeit traegt nicht, gestrichen
+```
+
+> **Warum die Abhängigkeit schwerer wiegt als jede F-Nummer:** *Eine falsche Formelangabe führt
+> beim Schreiben eines Blattes in die Irre — ärgerlich, aber der Bauende merkt es (und hat es
+> gemerkt).* **Eine falsche Abhängigkeit steuert die REIHENFOLGE: sie sperrt ein Werkzeug hinter
+> ein anderes, das es nicht braucht.** *Das ist strukturell dieselbe Klasse wie die erfundene
+> §3-Sperre, die ich heute in vier eigenen Blättern gemeldet und korrigiert habe
+> (`docs/MELDUNG-ERFUNDENE-SPERRE-A-12.md`) — nur an einem Ort, der **jede künftige Planung**
+> steuert statt nur vier Blätter.*
+
+**Drei verschiedene Ursachen, kein einheitliches Muster — meine erste Hypothese ist gefallen:**
+
+```text
+W-04   das Modul ist ein KATALOG (Math. 0x). Ein Katalog braucht keine Formel.
+W-11   die Formeln wurden nach THEMA zugeordnet ("Bemassung braucht Winkel und Lot")
+       statt am Modul gemessen. F-001 stimmt, F-002/F-003 nicht.
+W-13   das Modul liegt in app/tools (Schicht 3), nicht in geometry (Schicht 2).
+       Ein Anwendungswerkzeug RUFT Formeln, es enthaelt sie nicht.
+```
+
+> *Ich hatte gehofft, die Schicht erklärt alles — sie tut es nicht: **W-04 und W-11 liegen beide in
+> `geometry` und tragen trotzdem falsche Zuordnungen.** Die Hypothese fällt, und ich schreibe sie
+> als gefallen hin, statt die drei Fälle in ein Muster zu pressen, in das sie nicht passen.*
+
+**Was ausdrücklich NICHT geändert ist:**
+
+```text
+KEINE Formel geloescht, keine umgeschrieben — FORMELSAMMLUNG.md ist nicht im Scope.
+KEIN Reifegrad angefasst (die Spalte gehoert dem Generator).
+13 der 23 Zeilen UNGEPRUEFT gelassen, weil kein Blatt ihr Modul benennt.
+Die alten Generator-Befunde (unten) bleiben stehen — sie sind der Anlass und
+werden nicht durch meine Korrektur unsichtbar gemacht.
+```
 
 > ⚠ **W-04s F-Zuordnung stimmt nicht mit dem Code überein.** Das Register nennt F-003 und F-031; gemessen enthalten `oeffnungsBauarten.ts` und `oeffnungsTypen.ts` **keine Rechnung** — `Math.` kommt in beiden **null mal** vor, die einzigen Operationen sind `Array.find()` und `??`. **Der Generator ändert die Zuordnung nicht** (sie gehört dem Planner) und meldet sie als Befund. *Siehe `1-ZWECK`/`3-FORMELN` des Werkzeugs.*
 
