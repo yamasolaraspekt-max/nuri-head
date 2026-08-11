@@ -48,14 +48,33 @@
 > sondern über vorgegebene Grundformen mit typisierten Kanten.
 > Der Vergleich beider Wege steht in `01-MATHEMATIK/FORMELSAMMLUNG.md`, Gruppe 6.
 
-### M-02 · Weitere 3D-Prototypen — noch nicht ausgewertet
+### M-02 · Weitere 3D-Prototypen — **HOLZBAU AUSGEWERTET 12.08.**, vier Dateien offen
+
+> **Bericht: `docs/BERICHT-M02-AUSGEWERTET.md`.** *Existenz, Umfang und Gleichheit für **alle fünf**
+> gemessen; der Holzbau-Teil (`profi_holzbau_solar_cad.tsx`) inhaltlich ausgewertet.*
+>
+> ```text
+> EXISTENZ     alle fuenf vorhanden. Zeilenzahlen unten stimmen EXAKT — erste
+>              Bestandsangabe in diesem Projekt, die punktgenau haelt.
+> UMFANG       13.852 Zeilen zusammen
+> GLEICHHEIT   jede liegt 2-3x, ALLE Kopien byte-identisch. Keine divergenten Fassungen.
+>              ACHTUNG: VORGEHEN.md:43 nennt "fuenfmal" — gemessen sind DREI. Grund unbekannt.
+> ERGEBNIS     der BESTAND ist bei jedem gemessenen Holzbau-Begriff weiter.
+>              Schifter, Kehlbalken, Zange, Aufschiebling hat NUR die Insel.
+> EIN FUND     die Abbund-ZEICHNUNG (Canvas). Das Fachwissen hat die Insel schon —
+>              dachformVorlagen traegt DREIZEHN ausgefuellte 'abbundhinweis'-Texte.
+> KEIN GEWINN  TIME_VARS ist F-051 woertlich (zweite Quelle, Sperre bestaetigt) ·
+>              battenDist 34 ohne Quelle (loest W-21Ls Operanden-Gate NICHT)
+> OFFEN        11.831 Zeilen in vier Dateien — Zieladresse W-31 (PV) und W-23 (Deckung),
+>              beide heute blockiert. Plus Pruefkandidat: solarconstructapp "Statik?"
+> ```
 
 | Datei | Zeilen | Trig-Stellen | Erwarteter Gewinn |
 |---|---|---|---|
 | `dachdecker_pro.tsx` | 2.993 | 48 | Vorgänger von M-01, evtl. andere Dachformen |
 | `profi_holzbau_solar_cad.tsx` | 2.021 | 46 | **Holzbau/Sparrenkonstruktion** — für W-21 |
 | `solarmaster_konstruktion.tsx` | 3.045 | 33 | PV-Belegung, Reihen/Spalten-Logik |
-| `solarconstructapp.tsx` | 3.321 | 33 | Konstruktion + Statik? |
+| `solarconstructapp.tsx` | 3.321 | 33 | **KEINE Statik** (gemessen 12.08.: 0 von 11 Statik-Begriffen, keiner der N-003-Beiwerte). Es ist **PV-Modulbelegung + Montagesystem** — Zieladresse **W-31**, nicht N-003 |
 | `solar_master_pro.tsx` | 2.472 | 11 | Angebots-/Ertragsseite |
 
 Alle unter `~/Desktop/Gemini-Code-Ideen-2026-05-25/03-energie-pv-dach-3d/`.
