@@ -35,7 +35,7 @@
 | W-07 | **Dach aus Kontur** | **BESCHRIEBEN** | W-05, W-06 | F-010, F-013, **F-014, F-025, F-026**, F-020, F-021, F-022 |
 | W-08 | Dachfläche messen | LEER | W-07 | F-011, F-023, F-024 |
 | W-09 | Treppe | LEER | W-06 | F-001, F-030 |
-| W-21 | **Sparren und Lattung** | LEER | W-07 | F-001, F-030 · Quelle M-01/M-02 |
+| W-21 | **Sparren und Lattung** | **BESCHRIEBEN** | W-07 | F-001 ⚠, F-030 ⚠ · Quelle M-01/**M-02 ungelesen** |
 | W-22 | **Gaube** | LEER | W-07 | **F-027** ✓, ~~F-031~~ ⓝ |
 | W-23 | **Deckung und Material** | LEER | W-07, W-08 | **F-050** |
 
@@ -102,6 +102,11 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/geometry/bemassung.ts` | **W-11** — 108 Zeilen, 6 Ausfuhren; Rechenschicht, innen Öffnungskette / außen Gesamtmaß; **eingearbeitet 11.08.2026** |
 | `resources/planner/hausplaner/geometry/masseingabe.ts` | **W-11** — 169 Zeilen, 9 Ausfuhren; **EINGABEschicht**, ohne Importe; **eingearbeitet 11.08.2026** |
 | `resources/planner/hausplaner/geometry/roomDetection.ts` | **W-05** — 190 Zeilen, 4 Ausfuhren; planares Halbkanten-Verfahren, **kein Registry-Werkzeug**, läuft automatisch; **eingearbeitet 11.08.2026** |
+| `resources/planner/hausplaner/geometry/sparrenBerechnung.ts` | **W-21** — 131 Zeilen, 7 Ausfuhren; **Eurocode-VORBEMESSUNG**, ersetzt keine prüffähige Statik; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/sparrenTrennung.ts` | **W-21** — 67 Zeilen, 3 Ausfuhren; Trennung an Öffnungen + Sicher-Entscheidung; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/schifterListe.ts` | **W-21** — 152 Zeilen, 9 Ausfuhren; **gemischt** — konstruiert UND aggregiert; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/holzBauteile.ts` | **W-21** — 82 Zeilen, 4 Ausfuhren; trägt `OFFENE_HOLZBAUTEILE` — gebaute Selbstauskunft über die Grenzen; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/holzMengen.ts` | **W-21** — 64 Zeilen, 3 Ausfuhren; Mengen aus der **echten** 3D-Holzliste statt geschätzt; **eingearbeitet 12.08.2026** |
 
 ## Was aus Yamas eigenem Bestand kommt
 
@@ -205,3 +210,5 @@ werden nicht durch meine Korrektur unsichtbar gemacht.
 > ⚠ **W-04s F-Zuordnung stimmt nicht mit dem Code überein.** Das Register nennt F-003 und F-031; gemessen enthalten `oeffnungsBauarten.ts` und `oeffnungsTypen.ts` **keine Rechnung** — `Math.` kommt in beiden **null mal** vor, die einzigen Operationen sind `Array.find()` und `??`. **Der Generator ändert die Zuordnung nicht** (sie gehört dem Planner) und meldet sie als Befund. *Siehe `1-ZWECK`/`3-FORMELN` des Werkzeugs.*
 
 > ⚠ **W-11s Registerangaben halten der Messung nicht stand — zwei Stellen.** (1) **F-002 und F-003 stehen nicht im Code:** kein `atan2`, kein `lotAufGerade` in den drei Modulen; nur F-001 ist belegt (`bemassung.ts:77`, `masseingabe.ts:58`). (2) **Die Abhängigkeit „braucht W-13" trägt nicht:** `auswahl`/`select`/`markiert` kommen in `bemassung.ts` und `masskette.ts` **null mal** vor, `bemassung()` hat keinen Auswahl-Parameter, und die einzige Aufrufstelle übergibt alle Wände und alle Öffnungen. **Der Generator ändert beides nicht** — die Zuordnung gehört dem Planner.
+
+> ⚠ **W-21: beide genannten F-Nummern stehen nicht im Code.** `Math.hypot`/`Math.sqrt` kommen in **keinem** der fünf Module vor (F-001), und es wird nichts extrudiert (F-030) — die Stäbe kommen fertig aus der 3D-Engine. **Das ist stimmig:** drei der fünf Module aggregieren aus einer bereits erzeugten Liste und brauchen keine Geometrieformel. **Umgekehrt fehlt eine Nummer:** `bodenschneelast()` und `formbeiwertSchnee()` rechnen, sind aber **normative** Größen (DIN EN 1991-1-3 / EN 1995-1-1) — die Sammlung kennt sie zu Recht nicht. *Eine erfundene F-Nummer wäre schlimmer als die gemeldete Lücke.* **Und M-02 (2.021 Zeilen) ist nicht ausgewertet.** Der Generator ändert nichts davon.

@@ -1,37 +1,23 @@
-# W-xx · <Name> — PRÜFUNG
+# W-21 · Sparren und Lattung — PRÜFUNG
 
-> **Regel: jedes Kriterium muss VOR dem Bau wirksam rot sein.**
-> Ein Kriterium, das schon grün ist, bevor gebaut wurde, prüft nichts.
+## Was eine Prüfung hier belegen muss
 
-## Abnahmekriterien
+1. **Dass der Schiftsparren als Sparren zählt.** Der Code nennt den Fehler beim Namen:
+   *„sonst Mengen-Unter-Count!"* (`resources/planner/hausplaner/geometry/holzMengen.ts:14`). **Eine Menge, die zu klein ist,
+   sieht nicht falsch aus.**
+2. **Dass ungültige Längen zu 0 werden und nie zu `NaN`.** `gueltigeLaenge()` prüft
+   `typeof number && isFinite && > 0` — in **beiden** Aggregationsmodulen getrennt implementiert.
+3. **Dass `OFFENE_HOLZBAUTEILE` mitgeführt wird**, wenn ein Bericht Mengen zeigt. *Eine Liste der
+   Lücken nützt nur, wenn sie dort ankommt, wo die Zahlen stehen.*
+4. **Dass die Vorbemessung als Vorbemessung ausgewiesen ist** — an jeder Stelle, die sie zitiert.
 
-| Nr | Kriterium | Rot-Beleg vor dem Bau | Wie gemessen |
-|---|---|---|---|
-| K-1 | | | |
-| K-2 | | | |
+## Warum Punkt 4 in einer Prüfliste steht und nicht nur in `7-GRENZEN`
 
-## Fangprobe (Mutationsprobe)
+**Der Vorbehalt reist nicht mit der Zahl.** `berechneSparren()` liefert einen Querschnitt; der
+Warnsatz steht im Dateikopf. *Wer das Ergebnis in ein Angebot übernimmt, überträgt die Zahl und
+lässt den Satz zurück.*
 
-<Eine absichtlich eingebaute Fehlerstelle, die von den Kriterien gefunden werden MUSS.
-Wenn die Suite trotz eingebautem Fehler grün bleibt, prüfen die Kriterien nichts.>
+## Was ich NICHT geprüft habe
 
-| Mutation | Muss erkannt werden von |
-|---|---|
-| | |
-
-## Automatische Tests
-
-| Datei | Prüft |
-|---|---|
-| | |
-
-## Sichtprüfung (falls die Oberfläche betroffen ist)
-
-- [ ] 1440 px
-- [ ] 1024 px
-- [ ] 375 px
-- [ ] Meldung bei Absage lesbar und vollständig sichtbar
-
-## Bestandsprobe
-
-- [ ] Ein vor der Änderung gespeichertes Dokument lädt danach unverändert
+**Ob die beiden `HolzStueckRef` heute feldgleich sind** (`schifterListe.ts:134` gegen
+`holzBauteile.ts:22`). *Benannt, nicht gemessen.*

@@ -1,31 +1,34 @@
-# W-xx · <Name> — FORMELN
+# W-21 · Sparren und Lattung — FORMELN
 
-> **Regel: hier werden nur F-Nummern aus `01-MATHEMATIK/FORMELSAMMLUNG.md` genannt.
-> Keine abgeschriebenen Formeln.** Eine Formel, die an zwei Orten steht, wird an
-> einem Ort korrigiert und am anderen vergessen.
+**Nur Nummern.** Die Formeln stehen in `../../01-MATHEMATIK/FORMELSAMMLUNG.md`.
 
-## Benutzte Formeln
+## Das Register nennt F-001 und F-030 — gemessen steht keine von beiden im Code
 
-| F-Nr | Wofür in diesem Werkzeug | Grenzfall betrifft uns? |
+| F-Nr | laut Register | gemessen |
 |---|---|---|
-| F-0xx | | ja / nein — weil … |
+| **F-001** Abstand zweier Punkte | ja | **NEIN** — kein `Math.hypot`, kein `Math.sqrt` in **keinem** der fünf Module |
+| **F-030** Wand aus Achse extrudieren | ja | **NEIN** — keine Extrusion; die Stäbe kommen fertig aus der 3D-Engine |
 
-## Reihenfolge der Anwendung
+**Das ist stimmig, sobald man die Natur der Module kennt:** drei von fünf **aggregieren** aus einer
+bereits erzeugten Liste — *sie brauchen keine Geometrieformel, weil sie keine Geometrie erzeugen.*
 
+## Die gemeldete Lücke: `bodenschneelast()` und `formbeiwertSchnee()` haben keine F-Nummer
+
+Beide rechnen — `sparrenBerechnung.ts:33` und `:45` — und **die Sammlung kennt sie nicht.**
+
+**Das ist kein Mangel der Sammlung.** Es sind **normative Größen**, keine Geometrieformeln, und ihre
+Quelle steht im Dateikopf:
+
+```text
+Schneelast       DIN EN 1991-1-3 + Nationaler Anhang
+                 (charakt. Bodenschneelast sk je Zone/Hoehe, Formbeiwert my1 nach Dachneigung)
+Holzbemessung    DIN EN 1995-1-1 (Eurocode 5): Biegenachweis und Durchbiegung
 ```
-1. F-0xx  →  <Zwischenergebnis>
-2. F-0xx  →  <Zwischenergebnis>
-3. F-0xx  →  Endergebnis
-```
 
-## Fehlt eine Formel?
+> **Eine erfundene F-Nummer wäre schlimmer als eine gemeldete Lücke.** *Die Sammlung ist ein
+> Geometrie-Verzeichnis; eine Norm gehört nicht hinein, nur weil sie eine Zahl liefert.*
 
-<Wenn dieses Werkzeug Mathematik braucht, die noch nicht in der Sammlung steht:
-hier benennen, DANN in die Sammlung eintragen, DANN hier auf die Nummer verweisen.
-Nicht umgekehrt.>
+## Was sonst gerechnet wird
 
-## Genauigkeit
-
-- Eingangsgrößen in <Einheit>, Rechnung in <Einheit>, Rückgabe gerundet auf <…>
-- Toleranz ε = <…>
-- Bekannte Ungenauigkeit: <wo sich Fehler aufaddieren können>
+`sparrenBerechnung.ts:90` benutzt `Math.cos` für die **senkrechte Lastkomponente** — der Dateikopf
+nennt genau das als Annahme der Vorbemessung. *Kein Winkel wird gemessen; der Winkel ist Eingabe.*
