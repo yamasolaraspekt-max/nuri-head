@@ -1,37 +1,43 @@
-# W · dachflaeche messen — FUNKTION
+# W-08 · Dachfläche messen — FUNKTION
 
-## Eingabe
+## Die Eingangsbedingung steht vor allem anderen
 
-| Was | Typ | Einheit | Pflicht | Prüfung |
-|---|---|---|---|---|
-| | | | | |
+**Die Ebene, in der die Punkte liegen, entscheidet über die Bedeutung des Ergebnisses** — und das
+Modul kann sie nicht prüfen:
 
-## Verarbeitung — der Zustandsautomat
+> *„Eingabe sind die 2D-Punkte der Dachfläche **IN DER (geneigten) Flächenebene**, in **Metern** (so
+> liegt `surf.polygon` vor: lokale u/v-Koordinaten der Dachfläche). Damit ist das Ergebnis die echte
+> geneigte Dachfläche in m²."* (`resources/planner/hausplaner/geometry/polygonFlaeche.ts:11-13`)
 
-```
-Zustand A  ──Ereignis──►  Zustand B  ──Ereignis──►  fertig
-     │
-     └──Abbruch (Esc)──► Ausgangszustand, nichts geändert
-```
+**Dieselben Zahlen in der Grundriss-Ebene ergeben die Grundfläche** — dieselbe Rechnung, ein anderes
+Maß, und **kein Unterschied im Ergebnistyp**. *Es ist keine Zahl dabei, die verrät, welche der beiden
+man in der Hand hat.*
 
-<Jeder Zustand mit: was wird angezeigt, was wird erwartet, was passiert bei Abbruch.>
+## Die zwei Ausfuhren
 
-## Ausgabe
-
-| Was | Typ | Wohin |
+| Zeile | Ausfuhr | |
 |---|---|---|
-| | | |
+| 19 | `Punkt2D` | `{x, y}` — *„nimmt beliebige Objekte mit numerischen x/y entgegen (auch `THREE.Vector2`)"* (Z.15-16) |
+| 31 | `polygonFlaecheM2()` | Shoelace, Betrag, geteilt durch 2 (Z.44, 46) |
 
-## Kommando (für Rückgängig)
+## Wer es benutzt — vier Importe, gemessen
 
-- **Name:** `<KommandoName>`
-- **Ausführen:** <was genau am Datenmodell geändert wird>
-- **Zurücknehmen:** <wie der vorherige Zustand exakt wiederhergestellt wird>
-- **Bündelung:** <wird das Werkzeug zu EINEM Kommando gebündelt? Wenn ja, ab wann>
+```text
+renderers/three-d/deckenMesh.ts:7
+geometry/dachAusschnitt.ts:26
+geometry/dachformVorlagen.ts:33
+geometry/grundriss.ts:19
+```
 
-## Schichtzuordnung
+**Vier, nicht fünf.** *Der Auftrag nennt fünf Aufrufer; gemessen sind es vier Importe im
+Produktivcode. Die fünfte Fundstelle ist `wandFlaeche.ts` — sie **importiert nichts**, siehe `5-CODE`.*
 
-- Ändert Schicht 1 (Domäne): <ja/nein — was>
-- Rechnet in Schicht 2 (Geometrie): <welche F-Nummern>
-- Lebt in Schicht 3 (Anwendung): <Dateiname>
-- Zeigt sich in Schicht 4/5: <was der Anwender sieht>
+## Der Azimut kommt hier nicht vor — und das ist die Antwort
+
+`polygonFlaecheM2()` nimmt **ausschließlich Punkte** entgegen. **Es gibt keinen Parameter für eine
+Ausrichtung**, also auch keinen Weg, eine Konvention mitzuliefern oder wegzulassen.
+
+**Damit gilt Antwort (a) in ihrer schärfsten Form:** das Werkzeug nimmt **überhaupt keinen**
+Azimutwert und kann ihn deshalb nicht stillschweigend durchrechnen. *Die Gefahr sitzt nicht hier,
+sondern eine Ebene weiter — dort, wo diese Fläche mit einer Ausrichtung zusammengeführt wird.*
+**Siehe `7-GRENZEN`.**

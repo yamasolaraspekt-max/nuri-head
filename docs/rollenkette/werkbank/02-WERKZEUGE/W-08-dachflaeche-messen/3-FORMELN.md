@@ -1,31 +1,23 @@
-# W · dachflaeche messen — FORMELN
+# W-08 · Dachfläche messen — FORMELN
 
-> **Regel: hier werden nur F-Nummern aus `01-MATHEMATIK/FORMELSAMMLUNG.md` genannt.
-> Keine abgeschriebenen Formeln.** Eine Formel, die an zwei Orten steht, wird an
-> einem Ort korrigiert und am anderen vergessen.
+**Nur Nummern.** Die Formeln stehen in `../../01-MATHEMATIK/FORMELSAMMLUNG.md`.
 
-## Benutzte Formeln
-
-| F-Nr | Wofür in diesem Werkzeug | Grenzfall betrifft uns? |
+| F-Nr | laut Register | gemessen |
 |---|---|---|
-| F-0xx | | ja / nein — weil … |
+| **F-011** Fläche eines Polygons | ja | **JA** — `polygonFlaeche.ts:44` (die Summe) und `:46` (Betrag, halbiert) |
+| **F-023** Wahre Dachfläche aus Grundfläche | ja | **NEIN, im Code nicht vorhanden** — ein **alternativer Weg**: F-023 rechnet die Grundfläche über die Neigung hoch; **hier wird direkt in der geneigten Ebene gemessen** |
+| **F-024** Ausrichtung einer Dachfläche (Azimut) | ja | **NEIN** — F-024 liegt in `resources/planner/hausplaner/geometry/wallGeometry.ts`, nicht hier; dieses Modul kennt keine Ausrichtung |
 
-## Reihenfolge der Anwendung
+## Warum F-023 kein Mangel ist, sondern eine andere Bauart
 
-```
-1. F-0xx  →  <Zwischenergebnis>
-2. F-0xx  →  <Zwischenergebnis>
-3. F-0xx  →  Endergebnis
-```
+F-023 und dieses Modul beantworten **dieselbe Frage auf zwei Wegen**: hochrechnen aus Grundfläche und
+Neigung, oder direkt in der geneigten Ebene messen. **Das Modul hat sich für den zweiten entschieden**
+— und braucht dafür keine Neigung, sondern die richtige Eingabe-Ebene (`2-FUNKTION`).
 
-## Fehlt eine Formel?
+*Beide Wege im Haus zu haben wäre nicht falsch; sie unausgesprochen nebeneinander zu führen schon.*
 
-<Wenn dieses Werkzeug Mathematik braucht, die noch nicht in der Sammlung steht:
-hier benennen, DANN in die Sammlung eintragen, DANN hier auf die Nummer verweisen.
-Nicht umgekehrt.>
+## Und die Formel steht dreimal im Haus
 
-## Genauigkeit
-
-- Eingangsgrößen in <Einheit>, Rechnung in <Einheit>, Rückgabe gerundet auf <…>
-- Toleranz ε = <…>
-- Bekannte Ungenauigkeit: <wo sich Fehler aufaddieren können>
+Die Schuhbandformel ist an **drei** Stellen umgesetzt. Die Nummer F-011 zeigt auf eine davon.
+**Welche Fassung gilt, entscheidet die Einheit der Eingabe** — die Gegenüberstellung steht in
+`7-GRENZEN`, damit sie nur an einer Stelle steht.

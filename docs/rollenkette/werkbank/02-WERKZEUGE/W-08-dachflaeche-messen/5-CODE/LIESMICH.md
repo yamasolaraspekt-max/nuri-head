@@ -1,33 +1,36 @@
-# W-xx · CODE
+# W-08 · Dachfläche messen — CODE
 
-## Wo der Code wirklich lebt
+**Angebunden aus `resources/planner/hausplaner/geometry/polygonFlaeche.ts`** — 48 Zeilen, 2 Ausfuhren, selbst nachgezählt.
+`Punkt2D` (19) · `polygonFlaecheM2()` (31). **Keine Importe** — das Modul hängt an nichts.
 
-| Schicht | Datei im Repo | Zweck |
-|---|---|---|
-| 1 Domäne | `resources/planner/hausplaner/domain/…` | |
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | |
-| 3 Werkzeug | `resources/planner/hausplaner/app/tools/…` | |
-| 4 Darstellung | `resources/planner/hausplaner/renderers/…` | |
-| 5 Oberfläche | `resources/planner/hausplaner/ui/…` | |
+## Die Aufrufer — vier, gemessen
 
-> **Der Code steht im Repo, nicht in diesem Ordner.** Hier liegen nur
-> Schnittstellenbeschreibung, Ablaufskizze und — wo nötig — ein kurzer
-> Auszug der Kernstelle mit Zeilennummer, damit man beim Lesen nicht springen muss.
+| Datei | Zeile |
+|---|---|
+| `resources/planner/hausplaner/renderers/three-d/deckenMesh.ts` | 7 |
+| `resources/planner/hausplaner/geometry/dachAusschnitt.ts` | 26 |
+| `resources/planner/hausplaner/geometry/dachformVorlagen.ts` | 33 |
+| `resources/planner/hausplaner/geometry/grundriss.ts` | 19 |
 
-## Schnittstelle
+**Der Auftrag nennt fünf — gemessen sind es vier.** *Nicht korrigiert, sondern gemeldet.*
 
-```ts
-// Signatur der öffentlichen Funktion(en) dieses Werkzeugs
+## AUSSCHLUSS `wandFlaeche.ts` — und die Begründung des Auftrags trifft nicht zu
+
+`resources/planner/hausplaner/geometry/wandFlaeche.ts` gehört zu **W-02** und ist hier Nicht-Gegenstand.
+
+**Der Auftrag begründet den Ausschluss damit, dass `wandFlaeche.ts` `polygonFlaecheM2` *benutzt*.
+Gemessen tut es das nicht.** Es gibt **keinen Import**; die einzige Fundstelle ist ein Kommentar, und
+der sagt das Gegenteil:
+
+```text
+wandFlaeche.ts:27
+  * - **Keine zweite Flaechenengine.** `polygonFlaecheM2` und die Raumerkennung bleiben, was sie sind.
 ```
 
-## Kernstelle
+**Der Ausschluss bleibt richtig, seine Begründung nicht.** *`wandFlaeche.ts` grenzt sich ausdrücklich
+ab — es ist ein Nachbar, der Abstand hält, kein Benutzer.*
 
-```ts
-// Der eine Ausschnitt, auf den es ankommt — mit Datei:Zeile
-```
+## Was gebaut ist und was nicht
 
-## Abhängigkeiten
-
-| Braucht | Warum | Richtung geprüft? |
-|---|---|---|
-| | | ja/nein — kein Kreis |
+**Gebaut:** die Rechnung, rein — *„bewusst rein (keine React-/THREE-Abhängigkeit)"* (Z.15).
+**Keine Werkzeugschicht**, und hier ist das kein Mangel (siehe `4-BEDIENUNG`).

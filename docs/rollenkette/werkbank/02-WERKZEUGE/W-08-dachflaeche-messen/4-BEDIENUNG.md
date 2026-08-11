@@ -1,43 +1,23 @@
-# W · dachflaeche messen — BEDIENUNG
+# W-08 · Dachfläche messen — BEDIENUNG
 
-## Aufruf
+## Nichts Eigenes — aber diesmal aus einem anderen Grund
 
-| Weg | Wie |
+Es gibt kein Registry-Werkzeug. **Bei W-01, W-05, W-21 und W-22 war das eine fehlende Schicht. Hier
+ist es richtig so:** eine Flächenformel ist kein Werkzeug, das man anfasst, sondern eine Rechnung,
+die andere benutzen.
+
+## Woran der Anwender es merkt
+
+| Er tut | Er sieht |
 |---|---|
-| Werkzeugleiste | <Symbol, Position, Beschriftung> |
-| Tastenkürzel | <Taste> |
-| Kontextmenü | <ja/nein, wann> |
+| eine Walm-, L- oder T-Fläche zeichnen | eine Fläche, die **kleiner** ist als der umschließende Rahmen |
+| eine Materialmenge abrufen | Mengen auf Grundlage der echten Fläche |
+| ein Rechteck-Satteldach zeichnen | **keinen Unterschied** — dort war die alte Rechnung schon richtig |
 
-## Ablauf am Bildschirm
+**Die letzte Zeile ist die wichtige:** *Wer die Verbesserung am Satteldach prüft, sieht nichts und
+hält sie für wirkungslos.*
 
-| Schritt | Anwender tut | Bildschirm zeigt |
-|---|---|---|
-| 1 | | |
-| 2 | | |
+## Was er nie eingibt
 
-## Rückmeldungen
-
-| Lage | Anzeige | Ton |
-|---|---|---|
-| Alles gut | | sachlich |
-| Eingabe unvollständig | | hinweisend |
-| **Nicht möglich** | | **erklärend — was und warum** |
-
-> **Pflicht:** Für jede Absage aus `7-GRENZEN.md` muss hier ein Satz stehen, den
-> ein Handwerker versteht. Nicht „DachGeometrieUngueltig", sondern
-> „Für diesen Grundriss kann kein Walmdach berechnet werden, weil er einspringende
-> Ecken hat. Mögliche Wege: Grundriss begradigen oder Flachdach wählen."
-
-## Abbruch
-
-- **Esc** bricht ab. Danach ist der Zustand **exakt** wie vorher.
-- Halbfertiges wird nie gespeichert.
-
-## Tastenkürzel während des Werkzeugs
-
-| Taste | Wirkung |
-|---|---|
-| Esc | abbrechen |
-| Eingabe | bestätigen |
-| Umschalt | <z.B. auf 45°-Winkel zwingen> |
-| Alt | <z.B. Fang aussetzen> |
+**Keine Einheit, keine Neigung, keine Ausrichtung.** Das Modul nimmt Punkte und sonst nichts.
+*Alles, was das Ergebnis bedeutet, ist vorher entschieden — von dem, der die Punkte übergibt.*

@@ -1,37 +1,24 @@
-# W · dachflaeche messen — PRÜFUNG
+# W-08 · Dachfläche messen — PRÜFUNG
 
-> **Regel: jedes Kriterium muss VOR dem Bau wirksam rot sein.**
-> Ein Kriterium, das schon grün ist, bevor gebaut wurde, prüft nichts.
+## Was eine Prüfung hier belegen muss
 
-## Abnahmekriterien
+1. **Dass eine polygonale Fläche kleiner herauskommt als ihr Rahmen.** Das war der ganze Anlass.
+2. **Dass die Umlaufrichtung egal ist.** Der Code sagt es zu: *„umgekehrte Reihenfolge → identisches
+   (positives) Ergebnis (Betrag)"* (Z.28).
+3. **Dass niemals `NaN` oder `Infinity` herauskommt** (Z.29) — geprüft wird jeder Punkt, nicht nur
+   der erste (Z.37-43).
+4. **Dass `0` in allen drei Bedeutungen unterschieden wird** — siehe `7-GRENZEN`. *Eine Prüfung, die
+   nur „kommt eine Zahl?" fragt, kann diesen Fall nicht sehen.*
 
-| Nr | Kriterium | Rot-Beleg vor dem Bau | Wie gemessen |
-|---|---|---|---|
-| K-1 | | | |
-| K-2 | | | |
+## Der Prüfpunkt, den nur ein Vergleich findet
 
-## Fangprobe (Mutationsprobe)
+**Dieselbe Fläche, einmal durch die TS-Fassung und einmal durch die PHP-Fassung** — mit derselben
+Geometrie, aber in der jeweils erwarteten Einheit. **Kommt beide Male dieselbe Zahl heraus?**
+*Wenn nicht, ist eine der beiden Aufrufstellen falsch verdrahtet, und keine Zusage im Haus würde es
+melden.* Siehe `7-GRENZEN`.
 
-<Eine absichtlich eingebaute Fehlerstelle, die von den Kriterien gefunden werden MUSS.
-Wenn die Suite trotz eingebautem Fehler grün bleibt, prüfen die Kriterien nichts.>
+## Was ich NICHT geprüft habe
 
-| Mutation | Muss erkannt werden von |
-|---|---|
-| | |
-
-## Automatische Tests
-
-| Datei | Prüft |
-|---|---|
-| | |
-
-## Sichtprüfung (falls die Oberfläche betroffen ist)
-
-- [ ] 1440 px
-- [ ] 1024 px
-- [ ] 375 px
-- [ ] Meldung bei Absage lesbar und vollständig sichtbar
-
-## Bestandsprobe
-
-- [ ] Ein vor der Änderung gespeichertes Dokument lädt danach unverändert
+**Ob die vier Aufrufer wirklich Meter übergeben.** Ich habe die Zusage des Dateikopfs gelesen und die
+Importe gezählt — **nicht** die Einheit an jeder der vier Aufrufstellen nachgerechnet.
+*Als Frage notiert, nicht als Zusage.*
