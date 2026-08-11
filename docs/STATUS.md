@@ -1237,6 +1237,29 @@ naechster_schritt: "Planner zieht den einen Satz nach, dann setzt der Plan-Pruef
 ```
 ---
 
+## PLANNER-STATION — Registerangaben gegen den Code (SPEC-Eigentum, §102)
+
+```yaml
+station: "SPEC-Korrektur Registerangaben"
+claim_spec: "planner 11.08.: GECLAIMT VOR der ersten Aenderung. Kanonischer Feldname ohne
+             Auftrags-Suffix (Lehre ec967bfb). Wer diesen Eintrag sieht, laesst die
+             Registerangaben liegen; findet eine zweite Planner-Instanz sie trotzdem frei,
+             ist das ein Befund und kein Wettlauf."
+grundlage: "ARBEITSREGELN:102 — der Planner ist Eigentuemer von Spezifikationsfehlern.
+            Der Generator hat ZWEIMAL gemeldet statt korrigiert (a44e5fdd, 0299e5ca) und
+            ausdruecklich zurueckgegeben: die Zuordnung gehoert dem Planner."
+vier_befunde: "W-04: F-003, F-031 (Module rechnen nicht, Math. 0x) · W-11: F-002, F-003
+               (kein atan2, kein lotAufGerade) · W-11: Abhaengigkeit 'braucht W-13' traegt
+               nicht (auswahl/select/markiert 0x, bemassung() ohne Auswahl-Parameter)"
+schwerster: "die falsche ABHAENGIGKEIT. Sie steuert die Reihenfolge — eine falsche blockiert
+             Werkzeuge ohne Grund, strukturell dieselbe Klasse wie meine erfundene §3-Sperre."
+schranke_gemessen: "§3 -> 0 IN_ARBEIT (Zeilenform-Befehl) · REGISTER.md in keinem Scope"
+scope: "docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md — NUR F-Spalte und
+        Abhaengigkeitsspalte. Reifegrade NICHT (die gehoeren dem Generator)."
+grenze: "pruefbar nur, wo ein Blatt das Modul benennt (10 geschnittene Werkzeuge). Die
+         uebrigen 13 werden als UNGEPRUEFT gekennzeichnet, nicht geraten."
+```
+
 ## ABGENOMMEN — A-12 (Messauftrag F-026; Ampel 🟢 bestaetigt, Ball beim Planner)
 
 ```yaml
