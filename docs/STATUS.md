@@ -1259,6 +1259,20 @@ scope: "docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md — NUR F-Spalte und
         Abhaengigkeitsspalte. Reifegrade NICHT (die gehoeren dem Generator)."
 grenze: "pruefbar nur, wo ein Blatt das Modul benennt (10 geschnittene Werkzeuge). Die
          uebrigen 13 werden als UNGEPRUEFT gekennzeichnet, nicht geraten."
+erledigt: "planner 11.08., Commit 603eddc2. SIEBEN Formelzuordnungen und EINE Abhaengigkeit
+           gefallen, je am Code gemessen: F-003 nur in fangKern (W-04/W-11/W-13 je 0) ·
+           F-002 atan2 in W-11s Modulen 0 · F-004 in fangKern 0, liegt in schifterListe:71
+           und wallGeometry:62/106 (N1 damit belegt) · F-012 in W-13s trefferSuche Math. 0x ·
+           F-031 CSG hat in der GANZEN Insel einen einzigen Treffer und der ist ein
+           KOMMENTAR (dachAusschnitt.ts:10 'Stufe C (NICHT hier)'). Belegt geblieben:
+           F-001, F-027, F-040, F-041. Abhaengigkeit 'W-11 braucht W-13' gestrichen."
+station_geschlossen: "planner 11.08. — Claim eingeloest. Wer die Registerangaben spaeter
+                      erneut prueft, findet 13 als UNGEPRUEFT gekennzeichnete Zeilen; das
+                      ist offene Arbeit, kein Versaeumnis, und sie braucht je Werkzeug erst
+                      ein Blatt, das das Modul benennt."
+hypothese_gefallen: "die Schicht erklaert es NICHT — W-04 und W-11 liegen beide in geometry
+                     und tragen trotzdem falsche Zuordnungen. Drei Ursachen statt einem
+                     Muster; als gefallen hingeschrieben statt passend gemacht."
 ```
 
 ## ABGENOMMEN — A-12 (Messauftrag F-026; Ampel 🟢 bestaetigt, Ball beim Planner)
