@@ -23,6 +23,7 @@
 | **W-05** Raum erkennen | **`RELEASE_FREI`** | **Yama** | Bau `34ecf8a4` · Votum `af98d7b6` · §10 im Blatt (`35687019`) | Fehlerklasse **KEINE** · Kette 5× `is-ancestor` · Scope exakt 8 Dateien, **0 Nicht-Doku-Pfade** · **gemeldeter Fremdzugriff am Release-Kandidaten nachgemessen: 0 geänderte Blätter** · Platzhalter 0 · Votum belegt `-1` bis `-10` einzeln · 1692/1692 selbst · 0/0/0 in drei Richtungen · `signierteFlaeche` ist **weder F-010 noch F-011, sondern beider Kern** (ohne Betrag) · F-012/F-013 **0 Treffer**, F-001 im Code aber nicht im Register · zweite Shoelace in `polygonFlaeche.ts` · **-1 mit zwei Zahlen gemeldet** (1 wörtlich / 0 Platzhalter) · 0/0/0 · 1692/1692 |
 | **W-21** Sparren und Lattung | **`CODE_FERTIG`** | Evaluator | `992d5d76` · Basis `c9325929` | 12/12 · **Vorbemessung ≠ Statik** als erste Zeile · **Auftragsvermutung zur Lattung widerlegt** (Menge IST gebaut) · F-001/F-030 nicht im Code, dafür zwei Normgrößen ohne Nummer · `OFFENE_HOLZBAUTEILE` ausgelesen · M-02 ungelesen benannt · 0/0/0 |
 | **W-22** Gaube | **`CODE_FERTIG`** | Evaluator | `8a3acb53` · Basis `95fe1b88` | 11/11 · **AK4 ist absichtlich nicht kritisch** (schiefe Front = gelb) · AK1 beim Kamin **gesetzt statt gemessen** · F-027: **Thema ja, Formel nein** (Belegstelle zeigt auf M-01) · fünf Module 975 Z, `auswechslung.ts` heimatlos · 0/0/0 |
+| **A-13** `roof_azimuth` absichern | **`IN_ARBEIT`** | **Generator** | BEREIT `783d47c1` | **BAU, Produktivcode** · fünf Nullen selbst nachgemessen · Prüfung ans **Model** (alle Pfade) · `must_preserve`: **kein Bestandsdatensatz**, Probe nur gegen `ticket_testing` · **Tafelzeile von mir nachgetragen** |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1580,8 +1581,8 @@ an_yama_fachgate: "DRINGENDER und unabhaengig davon: der Planner hat N-003 (Spar
 auftrag: "A-13"
 titel: "Das einzige Azimut-Feld im Haus ohne Test bekommt Validierung, Zusage und den Konventionshinweis"
 datei: docs/auftraege/aktiv/A-13-roof-azimuth-absichern.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft — erster Produktivcode-Auftrag)
 basis_sha: 783d47c1
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die FUENF NULLEN selbst nachgemessen und ALLE bestaetigt — Validierung in Requests 0, in Controllers 0, PVRoofFactory existiert nicht, Tests 0, Konventionshinweis am Model 0; der Migrations-Kommentar von 2024 ('0=N, 90=E, 180=S, 270=W') steht woertlich in Z.67, und beide Vergleichszusagen existieren (BuildingModelSchemaContractTest, SzeneProjektionServiceTest). Die Kernbelege der DECISION halten: PVRoofController Z.42 HAT ein validate, und roof_azimuth steht nachweislich NICHT darin (0 Treffer im Block) — 'der Ort fuer Validierung existiert und wurde uebersprungen' ist gemessen, nicht behauptet; der Mass-Assignment-Pfad PVRoof::create(\$roofData) liegt in NewLeadsController:7082. Acht Kriterien, §5-Block, Erstnutzer und Rueckweg vorhanden. Die Model-Entscheidung deckt sich mit der ticket-Bauordnung (eine Wahrheit im Model-Hook)."
