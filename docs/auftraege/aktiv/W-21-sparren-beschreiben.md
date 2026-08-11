@@ -344,3 +344,72 @@ eigener_fehler_vor_dem_melden:
 browserabnahme: "entfaellt — reine Dokumentblaetter"
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum (§11) — 12.08.2026
+
+```yaml
+auftrag: W-21/1
+commit: 992d5d76          # Bau; Basis c9325929
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "achtzehn Fundstellen einzeln geoeffnet · fuenf Modul-Zeilenzahlen selbst nachgezaehlt ·
+  die Formel-Verneinung gegen alle fuenf Module gegengeprueft"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Messtisch — ALLE ZWÖLF Zeilen, auch die mit der Antwort „keine"
+
+*Nach dem §10-Befund gegen mein W-04-Votum (sieben von zehn Zeilen) führe ich hier jede
+Kriterienzeile einzeln, ohne Ausnahme.*
+
+```text
+-1   Platzhalter, vier Muster                          0
+-2   3-FORMELN: kein '=', kein atan2. 'Math.' 2x und 'sqrt/hypot' je 1x —
+     beide in der VERNEINUNG bzw. als Code-Beleg, nicht als Rechnung
+-3   achtzehn Fundstellen, ALLE einzeln geoeffnet      keine laeuft ins Leere
+     Luecke gemeldet: F-001 und F-030 stehen NICHT im Code — von mir
+     gegengeprueft, alle fuenf Module tragen hypot 0 und Math.sqrt 0
+-4   Vorbemessungs-Charakter ist die ERSTE Ueberschrift von 7-GRENZEN
+     ("Das Wichtigste zuerst: es ist eine VORBEMESSUNG … ersetzt KEINE pruefbare Statik")
+-5   OFFENE_HOLZBAUTEILE ausgelesen: alle vier Eintraege im Blatt genannt
+     (Mittelpfette · Schwelle · Wechselholz · Schifter), Code holzBauteile.ts:45
+-6   2-FUNKTION nennt die Aggregations-Natur                    ja
+-7   5-CODE listet alle FUENF Module mit Zeilenzahl und Ausfuhren
+-8   Lattung: 15 Nennungen, und die zwei Fundstellen ausserhalb der fuenf Module
+     sind belegt — dachWerte.ts:20 "battenDist: 0.05 // Lattenabstand"
+     und dachformVorlagen.ts:118 "lattmassAbhaengigVonProdukt"
+-9   M-02 als offene Quelle benannt                              2 Nennungen
+-10  resources/ im Bau-Commit 0 Pfade  ·  Suite 1692/1692
+-11  Register: alle fuenf Module als Fundstelle
+-12  §3-Beleg in 9bd728fe: 2 Befehlszeilen, 2 Ausgaben
+```
+
+### Zwei Stellen, an denen ich das Blatt gegen den Code gehalten habe
+
+**Die fünf Zeilenzahlen — selbst nachgezählt, nicht abgelesen:**
+
+```text
+sparrenBerechnung.ts  Blatt 131  gemessen 131      schifterListe.ts  Blatt 152  gemessen 152
+sparrenTrennung.ts    Blatt  67  gemessen  67      holzBauteile.ts   Blatt  82  gemessen  82
+holzMengen.ts         Blatt  64  gemessen  64
+```
+
+**Die Formel-Verneinung — gegen alle fünf Module geprüft, nicht gegen eines:**
+
+```text
+Blatt: "F-001 … NEIN — kein Math.hypot"      alle fuenf Module: hypot 0, Math.sqrt 0
+Blatt: "sparrenBerechnung.ts:90 benutzt Math.cos fuer die senkrechte Lastkomponente"
+CODE   :90   const cosA = Math.cos(a);
+```
+
+> **Das Blatt meldet seine eigene Lücke**, statt sie zu glätten: die zwei im Register geführten
+> F-Nummern stehen **nicht** im Code, und das steht mit ⚠ im Register. *Genau das verlangt `-3` im
+> zweiten Halbsatz — eine Formel, die in der Sammlung steht und im Code fehlt, wird gemeldet und
+> nicht hineingeschrieben.*
+
+**`-12` zum vierten Mal in Folge im ersten Anlauf** (W-04, W-11, W-05, W-21). *E2 aus
+Prozessprüfung 03 hält jetzt über vier Blätter.*
