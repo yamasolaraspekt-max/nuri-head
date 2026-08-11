@@ -1480,6 +1480,31 @@ zustaendig: "Der PLANNER entscheidet die Prozessfrage (§4), oder Yama, wenn er 
 ```
 ---
 
+## BEREIT — W-08/1 (der Block FEHLTE in der Statuswahrheit; hiermit angelegt)
+
+```yaml
+auftrag: "W-08/1"
+titel: "Die sieben Blaetter von W-08 aus polygonFlaeche.ts ableiten"
+datei: docs/auftraege/aktiv/W-08-dachflaeche-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Runde 2)
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review — das fuenfte W-Blatt): alles selbst gemessen und exakt bestaetigt — polygonFlaeche.ts 48 Zeilen / 2 Exporte, Registry 'flaeche-messen' vorhanden (3 Treffer), wandFlaeche BENUTZT polygonFlaecheM2 (1 Aufruf — der Ausschluss ist damit nicht Abgrenzung sondern belegte Nutzungsrichtung), Platzhalter-Rot zaehlbar (6 Blaetter). Die Selbstkorrektur der Grobzahl (286/8 auf 48/2, Differenz war wandFlaeche) ist der fuenfte Fall derselben Art und wieder nach unten — das Muster ist jetzt durchgehend belegt. YAMAS EINREIHUNG ist eingeloest: W-08 stand hinter A-12 zurueck, A-12 ist abgenommen und die Ampel steht auf gruen, damit ist die Zurueckstellung erledigt."
+zulieferung_punkt2d: "PLAN-PRUEFER-ZULIEFERUNG, gemessen: das Blatt nennt Punkt2D nur als eigenen Typ ('nimmt bewusst auch THREE.Vector2 an') und WEISS NICHT, dass es eine von VIER zeichenweise identischen Definitionen ist — polygonFlaeche.ts:19 ist eine davon, dazu dachUForm:13, dachVerschneidung:144, schifterListe:28 (W-07 und W-21). Fuer W-08 ist das die schaerfste Form des Befunds, weil hier die Absicht dokumentiert ist ('bewusst auch THREE.Vector2'): wer diese Definition anfasst, fasst eine an, die drei andere stumm mittragen. Gehoert in 7-GRENZEN, mit derselben Regel wie bei MassPunkt in W-11: benennen, nicht zusammenlegen."
+naechster_schritt: "Generator zieht W-08/1 in Runde 2 (W-05/1 ist IN_ARBEIT, §3 beachten)"
+```
+---
+
+## ⚠ BEFUND — die Blatt-Statuskoepfe haben den Planner in die Irre gefuehrt (plan-pruefer 12.08.)
+
+```yaml
+anlass: "Der Planner meldet zum Stationsabschluss: 'die fuenf geschnittenen Blaetter W-05, W-08, W-13, W-21, W-22 stehen als ENTWURF und warten auf die DoR beim Plan-Pruefer'. GEMESSEN gegen die Statuswahrheit stimmt davon EINE Angabe."
+messung: "W-05 Blatt ENTWURF | STATUS IN_ARBEIT (wird GERADE gebaut, 77af6797) · W-08 Blatt ENTWURF | STATUS: KEIN BLOCK VORHANDEN · W-13 Blatt ENTWURF | STATUS ENTWURF (stimmt — der Mini-Rest liegt beim Planner) · W-21 Blatt ENTWURF | STATUS BEREIT (seit 12.08.) · W-22 Blatt ENTWURF | STATUS BEREIT (seit 12.08.). Drei Angaben ueberholt, eine richtig, eine Luecke."
+ursache: "ALLE FUENF Blaetter tragen 'status: ENTWURF' in ihrem YAML-Kopf — obwohl die §16-Entscheidung vom 05.08. den Statuskopf aus den Blaettern GESTRICHEN hat (BLATT behaelt auftrag/titel/basis_sha, BLATT verliert zustand/ballbesitz/...). Die W-Blaetter sind NACH dieser Entscheidung geschnitten worden und haben das gestrichene Feld trotzdem geerbt; niemand zieht es nach, weil es laut Regel gar nicht existieren duerfte. Es ist der Vorfall vom 05.08. in neuer Auflage, und diesmal hat es nicht einen Leser getaeuscht, sondern die Rolle, die die Reihenfolge bestimmt."
+mein_anteil: "Ich habe fuenf W-Blaetter geprueft und BEREIT gesetzt, ohne den verbotenen Statuskopf zu beanstanden — er stand in jedem einzelnen davon. §5 verlangt Pruefbarkeit, §16 verbietet die zweite Statuswahrheit; ich habe gegen die Kriterien geprueft und die Bauart des Blattkopfs uebersehen. Fuer die kuenftigen W-Blaetter nehme ich es in die DoR auf."
+was_zu_tun_ist: "Der Planner streicht 'status:' aus den Blattkoepfen (seine Dateien, sein Schnitt) und ersetzt es durch 'status_steht_in: docs/STATUS.md' — dieselbe Form, die die A-Blaetter seit dem 05.08. tragen. Ich fasse fremde Blaetter nicht an. Der W-08-Block ist von mir angelegt (oben) und schliesst die Luecke."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
