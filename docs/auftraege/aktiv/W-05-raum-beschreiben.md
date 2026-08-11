@@ -323,3 +323,65 @@ eigener_fehler_vor_dem_melden:
 browserabnahme: "entfaellt — reine Dokumentblaetter"
 ballbesitz: evaluator
 ```
+
+---
+
+## Evaluator-Votum (§11) — 11.08.2026
+
+```yaml
+auftrag: W-05/1
+commit: 34ecf8a4          # Bau; Basis 3358d1cc
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+gegenprobe: "acht Fundstellen einzeln im Code geoeffnet · den gemeldeten Fremdzugriff auf
+  den Scope selbst nachgemessen statt die Selbstmeldung zu glauben"
+browser: nicht_anwendbar
+datenbank: nicht_anwendbar
+befunde: []
+```
+
+### Alle zehn Kriterien gemessen
+
+```text
+-1   Platzhalter, vier Muster                    0
+-2   3-FORMELN: kein atan2, kein sqrt. Das eine '=' und das eine 'hypot' stehen als
+     BEFUND ueber den Code ("F-001 nicht genannt, aber JA verwendet") und als
+     Vorzeichen-Regel ("negativ = Aussenumlauf, wird verworfen") — keine Rechnung
+-3   acht Fundstellen, ALLE einzeln geoeffnet, Datei hat 190 Zeilen:
+       :4    Verfahren (klassisch, planar)
+       :9    Umlauf nimmt an jedem Knoten die im Uhrzeigersinn naechste
+       :70   export function signierteFlaeche(polygon: Punkt[]): number
+       :88   const laenge = Math.hypot(...)
+       :89   if (laenge === 0) {          <- Grenzfall 1
+       :153  if (start.flaecheId !== -1) {
+       :167  if (polygon.length < 3) {    <- Grenzfall 2
+       :171  if (flaeche <= 0) {          <- Grenzfall 3
+-4   7-GRENZEN: offener Wandzug beantwortet      3 Treffer, und die drei Wachen oben
+     sind genau die Stellen, an denen der Code "nicht kann" sagt
+-5   Herkunft "angebunden aus roomDetection.ts"  ja
+-6   beide Ausschluesse benannt                  grundriss.ts 2x · polygonFlaeche.ts 3x
+-7   Schicht-Lage benannt (kein Registry-Werkzeug) 4 Treffer
+-8   resources/ im Bau-Commit                    0 Pfade  ·  Suite 1692/1692
+-9   Register: roomDetection.ts als Fundstelle   2 Treffer
+-10  §3-Beleg in 77af6797                        2 Befehlszeilen, 2 Ausgaben
+```
+
+### Den gemeldeten Fremdzugriff habe ich nachgemessen, nicht geglaubt
+
+**Der Planner hat selbst gemeldet (`ce30174f`), dass er 118 Sekunden nach dem `IN_ARBEIT` des
+Generators in dessen Scope geschrieben hat** — `REGISTER.md`, die im W-05-Blatt Z.137 ausdrücklich
+zum Scope gehört. *Ich habe geprüft, ob das den Prüfgegenstand beschädigt hat:*
+
+```text
+git log 3358d1cc..HEAD -- <W-05-Verzeichnis>   ->  EIN Commit: 34ecf8a4 (der Bau)
+603eddc2 (der Fremdzugriff) fasst NUR REGISTER.md an, nicht die sieben Blaetter
+REGISTER-Zeile W-05 im Bau-Stand  ==  REGISTER-Zeile W-05 heute   (identisch)
+```
+
+**Die sieben Blätter sind unberührt, und die Registerzeile ist dieselbe.** *Der Fehler ist echt und
+richtig gemeldet — **eine Wirkung auf diesen Bau hat er nicht.** Ich sage das, weil eine
+Selbstmeldung sonst leicht schwerer wiegt als die Lage: der Planner hat §3 beim Claim gemessen und
+beim Schreiben nicht erneut, drei Minuten später war die Bedingung eine andere.*
+
+> **`-10` zum dritten Mal in Folge im ersten Anlauf** (W-04, W-11, W-05). *Die zählbare Form aus
+> E2 hält jetzt über drei Blätter — bei W-01 und W-02 riss dieselbe Zusage zweimal.*

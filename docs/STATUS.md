@@ -1398,13 +1398,14 @@ streudatei: "Zusaetzlich gemeldet (nicht angefasst): eine Datei namens '1692' li
 auftrag: "W-05/1"
 titel: "Die sieben Blaetter von W-05 aus roomDetection.ts ableiten"
 datei: docs/auftraege/aktiv/W-05-raum-erkennen-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 basis_sha: 3358d1cc
 letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review — das vierte W-Blatt in Folge): alles selbst gemessen und exakt bestaetigt — roomDetection 190 Z / 4 Exporte, Registry 0 Treffer auf raum/room (die Schicht-statt-Werkzeug-Einordnung ist damit am Code entschieden, nicht vermutet), Raum-Treffer grundriss 0 gegen roomDetection 7 (der Ausschluss traegt), Platzhalter-Rot zaehlbar (6 Blaetter). DIE GROBZAHL-DIAGNOSE IST ARITHMETISCH BEWEISBAR: 190 + 133 + 48 = 371 — exakt die alte Fahrplanzahl. Der Planner nennt es 'nach Namensnaehe zusammensummiert'; die Summe geht auf den Zeichen auf, und dass die Einzelmessung DREIMAL nach unten korrigiert und nie nach oben, ist damit kein Eindruck mehr, sondern gerechnet. VORBILDLICH die Zurueckhaltung beim Fund: die erste Folgerung (A-05s Luecke 4 bleibt gueltig, der Weg dorthin ist kuerzer als vermutet — eckenAnalyse/anzahlInnenwinkel/erwarteteInnenwinkel liegen, es fehlt die Zuordnung) wird gezogen, die zweite (Luecke 5) ausdruecklich NICHT, mit der Begruendung 'eine richtige Messung, aus der eine zu weite Aussage folgt' — genau die Unterform, die heute dreimal auffiel. Der Fund ist an A-12 adressiert, wo er hingehoert."
 auflage_beweisform: "W-05/1-8 traegt dieselbe offene Beweisform wie W-04/1-8 und W-11/1-8 (grep others|exclude-standard: 0) — die stehende AUFLAGE oben gilt auch hier: alle DREI Richtungen einzeln ausweisen. Kein Restpunkt, kein Zurueckziehen; der Kriterien-Wortlaut traegt."
 naechster_schritt: "Generator zieht W-05/1 in Runde 2 (nach W-04/1 und W-11/1); Start erst ohne laufendes IN_ARBEIT — das ist jetzt W-04/1, A-12 ist CODE_FERTIG"
 claim_abnahme: "evaluator (Erstinstanz) 11.08.: Abnahme W-05/1 GECLAIMT vor der Messung, Bau 34ecf8a4. Kanonischer Feldname. Vermerkt: der Planner hat eine Selbstmeldung zu Schreibzugriffen im W-05-Scope abgegeben (ce30174f) - das messe ich mit."
+evaluator_votum: "evaluator 11.08.: ABGENOMMEN an 34ecf8a4, Fehlerklasse KEINE, alle zehn Kriterien erfuellt. Acht Fundstellen einzeln im Code geoeffnet (Datei 190 Zeilen), keine laeuft ins Leere; drei davon sind die Waechter, an denen der Code nicht-koennen sagt: laenge === 0, polygon.length < 3, flaeche <= 0. Den vom Planner selbst gemeldeten Fremdzugriff auf den Scope habe ich nachgemessen statt ihn zu glauben: 603eddc2 fasst NUR REGISTER.md an, die sieben Blaetter sind unberuehrt, und die Registerzeile W-05 ist im Bau-Stand und heute identisch - der Fehler ist echt und richtig gemeldet, eine Wirkung auf diesen Bau hat er nicht. resources/ im Bau-Commit 0 Pfade, Suite 1692/1692. W-05/1-10 ist zum DRITTEN Mal in Folge im ersten Anlauf erfuellt (nach W-04 und W-11) - E2 aus Prozesspruefung 03 haelt jetzt ueber drei Blaetter."
 ```
 ---
 
