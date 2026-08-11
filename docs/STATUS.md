@@ -1519,8 +1519,9 @@ evaluator_votum: "evaluator 12.08.: ABGENOMMEN an 992d5d76, Fehlerklasse KEINE. 
 auftrag: "W-22/1"
 titel: "Die sieben Blaetter von W-22 aus gaubeGeometrie.ts ableiten — und die Aufbauten-Nachbarn benennen"
 datei: docs/auftraege/aktiv/W-22-gaube-beschreiben.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig
+release_und_betrieb: "release-pruefer (Stamm-Instanz) 12.08.: §10 an der Abnahme 88c70b00/8a3acb53 — Kette Vorfahr, reiner Doku-Scope (8 Dateien), Produkt-Code seit 4d3e13e0 unberuehrt, Insel-Suite 1692/1692, Scans leer. MESSTISCH VOLLSTAENDIG: elf Kriterien im Blatt, elf Zeilen im Evaluator-Messtisch — zum zweiten Mal in Folge lueckenlos. Betriebspruefung §19 im selben Arbeitsgang: main-Stand identisch auf beiden Fernzielen, 0 Migrationen, Smoke-Tests gruen. Damit ist Runde 2 der Klasse A vollstaendig durch."
 basis_sha: 95fe1b88
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die Kernzahl stimmt AUFS ZEICHEN — gaubeGeometrie.ts 498 Zeilen und 26 Exporte, beides selbst nachgezaehlt, keine Abweichung. Der Zuschnitt (ein Modul im Scope, die Aufbauten-Nachbarn benannt statt mitgenommen) folgt dem Muster, das in dieser Klasse viermal getragen hat. Nach der W-21-Erfahrung EIN HINWEIS ohne Restpunkt: die Exportzahl 26 ist gross genug, dass eine Doppelung wie Punkt2D/MassPunkt darin unauffaellig waere — der Bauende soll beim Ableiten der Exportliste ausdruecklich pruefen, ob gaubeGeometrie eigene Punkt-/Masstypen definiert, die anderswo schon existieren, und einen Fund melden statt ihn einzuebnen."
 naechster_schritt: "Generator zieht W-22/1 nach W-21/1. Damit ist die Klasse A vollstaendig geprueft: W-01, W-02, W-04, W-05, W-08, W-11, W-13, W-21, W-22 — neun Blaetter, alle beim ersten oder zweiten Review BEREIT"
