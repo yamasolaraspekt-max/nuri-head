@@ -25,7 +25,7 @@
 | **W-22** Gaube | **`RELEASE_FREI`** | **Yama** | `8a3acb53` · Basis `95fe1b88` | 11/11 · **AK4 ist absichtlich nicht kritisch** (schiefe Front = gelb) · AK1 beim Kamin **gesetzt statt gemessen** · F-027: **Thema ja, Formel nein** (Belegstelle zeigt auf M-01) · fünf Module 975 Z, `auswechslung.ts` heimatlos · 0/0/0 |
 | **A-13** `roof_azimuth` absichern | **`RELEASE_FREI`** | Yama | `a09b69af` · Basis `783d47c1` | 8/8 · Wächter am **Model** (greift auch bei `create()`) · Grenze `0 ≤ x < 360` **am Hausmuster belegt** · **keine Factory** (gemessen entschieden) · Mutationsprobe + Wegwerf-Probe gegen `ticket_testing`, **0 Zeilen geschrieben** · Unit 278/278 (8 neu) · **Verhaltensänderung im Bericht benannt** |
 | **W-08** Dachfläche messen | **`ABGENOMMEN`** | Release-Prüfer | `7aa49e33` · Basis `b202ad7c` | 12/12 · **`0` bedeutet dreierlei** (A-10-Klasse, bewusst) · Eingabe-**Ebene** entscheidet, Modul kann sie nicht prüfen · **Shoelace dreimal im Haus, zwei Fassungen heißen gleich** — m gegen mm · zwei Auftragsangaben widerlegt · 0/0/0 |
-| **W-13** Auswahl und Griffe | **`IN_ARBEIT`** | **Generator** | BEREIT `193681cd` | vier Module, 321 Zeilen, 18 Ausfuhren — **einziges Klasse-A-Werkzeug MIT Registry-Eintrag** · §7 4/4 · §3 beide Orte 0 · rot an der Basis: **28 Treffer** · **Tafelzeile von mir nachgetragen** |
+| **W-13** Auswahl und Griffe | **`CODE_FERTIG`** | Evaluator | `a62ae7c6` · Basis `193681cd` | 10/10 · **oben schlägt nah** (Zeichenreihenfolge vor Distanz) · `waehlbar !== false`, nicht `=== true` · Modifikator-Vorrang als Kette · **einziges Klasse-A-Werkzeug mit Registry** · **0 dedizierte Zusagen** bei 321 Z · 0/0/0 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 
@@ -1233,8 +1233,8 @@ evaluator_votum_runde2: "evaluator 10.08.: ABGENOMMEN an e23440d1, Fehlerklasse 
 ```yaml
 auftrag: "W-13/1"
 datei: docs/auftraege/aktiv/W-13-auswahl-beschreiben.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft)
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde): ENTWURF bleibt, EIN Mini-Rest — sonst BEREIT-reif: Modul-Zeilenzahlen exakt (98/71/77/75 = 321, editierGeometrie 75), der W-14-Ausschluss belegt (versetzen/spiegeln), Registry 'auswahl' da, BEIDE Toleranzbegriffe verifiziert (toleranzAusZoom in fangKern, toleranzInWelt in trefferSuche — der Beruehrungsfund ist echt und die Benennen-statt-zusammenlegen-Regel genau richtig), Platzhalter-Rot zaehlbar. DER REST: die 'EINE Zusage' in P1-Kriterium W-13/1-7 ist zaehlweise-abhaengig — meine Messung findet NULL dedizierte Auswahl-Testdateien und DREI erwaehnende (toolKatalog, activation, pan). Die Substanz (duenne Absicherung) haelt in jeder Zaehlweise, aber eine Zahl, die woertlich in einem P1 steht, muss eine definierte Messweise haben — sonst traegt das fertige Blatt eine anfechtbare Aussage (Zeitbomben-Klasse aus A-09). Ein Satz: Zaehlweise definieren (dediziert vs. erwaehnend), Zahl danach nachmessen und in Kriterium + Befund-Zeile angleichen."
 offene_akzeptanz:
