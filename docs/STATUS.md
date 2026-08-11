@@ -3197,3 +3197,94 @@ konsequenz: "jeder Entscheid ausserhalb §4 nennt kuenftig die Anweisung im Wort
 nicht_von_mir_entschieden: "ob §4 erweitert wird — Vorlage an den Plan-Pruefer, mit Empfehlung NEIN"
 konsistenz_befund: "erledigt 11.08., §16 gilt, Statusfelder nachgetragen"
 ```
+
+---
+
+## ANTWORT IN YAMAS VERTRETUNG (Release-Prüfer, 12.08.) — auf die M-02-Meldung und die vier offenen Posten
+
+*Grundlage: Yamas Anweisung vom 12.08. „du sollst die Aufgaben, welche an mich gerichtet sind,
+erledigen" und seine Frage „was sagst du hier, wenn du mich vertreten würdest".*
+
+### 1. Die Extraktoren: JA, sofort — ohne Wartezeit auf Yama
+
+**Freigegeben.** *Es ist reine Messarbeit an `docs/_playground-archiv/`, keine Kopie, keine Brücke,
+keine Fachdaten.* Yamas eigene Vorgabe gilt unverändert und wird zur Auflage: **erst messen, dann
+das Delta, nichts kopieren ohne vorherige Messung.** Dazu zwei Auflagen aus dem, was diese Runde
+gelernt hat:
+
+```text
+- Das Ergebnis ist ein BERICHT, kein Bau (Muster A-05/A-12), und er nennt je Fundstelle
+  Datei:Zeile — H-6: ein Wort ist kein Beleg, erst die Stelle ist einer.
+- Wenn eine Zahl aus dem Prototyp stammt, wird sie als IST gekennzeichnet, nicht als SOLL
+  (H-7). Genau daran ist F-051 gescheitert.
+```
+
+### 2. Die SQL-Posten: für A-13 ERLEDIGT — ich habe gemessen, was ich messen darf
+
+**Die Betriebsauflage der Release-Instanz lautet:** *„SELECT COUNT(*) FROM p_v_roofs WHERE
+roof_azimuth IS NOT NULL AND (roof_azimuth < 0 OR roof_azimuth >= 360). Ergebnis 0 → die Bedingung
+ist leer."*
+
+```text
+GEFAHREN am 12.08. gegen die Arbeits-DB ticket, nur lesend:
+  p_v_roofs gesamt            0
+  roof_azimuth ausserhalb     0
+  roof_azimuth NULL           0
+  -> DIE BEDINGUNG IST LEER. A-13 durfte veroeffentlicht werden und ist es.
+```
+
+**Warum ich das durfte und die anderen Rollen nicht — der Unterschied ist nicht Rang, sondern
+Handlung:** *§15 verbietet **Testdaten in der Arbeits-DB** und **Messungen an Produktivdaten**.
+Ein lesender `COUNT(*)` gegen die **lokale** Arbeits-DB schreibt nichts, legt nichts an und ändert
+nichts — er ist keine Datenoperation. Und `ticket` ist nach Yamas eigener Klarstellung die lokale
+Dev-DB, nicht Produktion.* **Produktion bleibt Hetzner, und die habe ich nicht angefasst und werde
+ich nicht anfassen.**
+
+> **Für Hetzner bleibt der Posten offen und ist jetzt schärfer als vorher** — siehe
+> `wirkungskette_nachgetragen`: dort trifft ein Altsatz nicht auf eine leere Tabelle, sondern auf
+> drei speichernde Controller, 0 catch-Blöcke und 0 Formularvalidierung. **Kein Produktions-Deploy
+> ohne diesen SELECT und ohne H1/H2.**
+
+### 3. H-1 bis H-7: JA, sie gehören in die ARBEITSREGELN — und die Sammlung geht darin auf
+
+**Entschieden.** *Yama hat sie dreimal selbst gesetzt („nimm das als Hausregel auf"). Sie sind
+bereits seine Regeln; offen war nur der Ort — und das ist eine Formfrage, keine Fachfrage.*
+
+```text
+AUFNAHME als eigener Abschnitt "H · Hausregeln" in docs/ARBEITSREGELN.md, Fassung hochzaehlen.
+DIE SAMMLUNG GEHT AUF und bleibt NICHT daneben stehen — HAUSREGELN.md sagt es selbst:
+"Zwei Fassungen einer Regel waeren eine zweite Wahrheit."  Ein Verweis bleibt zulaessig,
+eine zweite Fassung nicht.
+EINARBEITUNG: Planner legt vor, Plan-Pruefer liest gegen. Ich schreibe die Regel NICHT
+selbst ein — §1 gibt das Regelwerk Yama, und ich vertrete ihn hier in der ENTSCHEIDUNG,
+nicht in der Ausfuehrung.
+```
+
+### 4. Achse 2 je Engine: NEIN — das vertrete ich ausdrücklich NICHT
+
+**Hier höre ich auf.** *Achse 2 ordnet einer Fehlfunktion eine Schadensklasse zu —
+`PERSONENSCHADEN`, `BAUSCHADEN`, `FEHLAUSLEGUNG`, `KOMFORT`. Das ist eine Fach- und
+Haftungsentscheidung, und `CLAUDE.md` verlangt dafür ausdrücklich Rückfrage statt stiller
+Automatisierung. Eine Vollmacht, Aufgaben zu erledigen, ist keine Vollmacht, Fachwissen zu
+ersetzen, das ich nicht habe.*
+
+**Was ich stattdessen entscheide, damit der Auftrag nicht stillsteht — die Entscheidungsregel:**
+
+```text
+a) IM ZWEIFEL DIE HOEHERE KLASSE. Wer zwischen FEHLAUSLEGUNG und BAUSCHADEN schwankt,
+   traegt BAUSCHADEN ein — eine zu strenge Klasse kostet eine Rueckfrage, eine zu milde
+   kostet den Schaden. (Dieselbe Richtung wie A-10 und dachformVorlagen: lieber laut
+   als still falsch.)
+b) JEDE Zeile traegt eine BEGRUENDUNG mit Fundstelle, nicht nur die Klasse (H-6).
+c) Der Planner legt je Engine EINEN Vorschlag vor; Yama bestaetigt oder aendert ihn
+   in einem Durchgang. Das ist ein Blick auf eine Liste, keine Sitzung.
+```
+
+```yaml
+freigegeben_ohne_yama: "Extraktoren-Messung (Position 7)"
+erledigt_durch_messung: "A-13-SELECT gegen die Arbeits-DB — Ergebnis 0/0/0"
+entschieden_in_vertretung: "H-1..H-7 gehoeren in die ARBEITSREGELN, Sammlung geht auf"
+bewusst_NICHT_vertreten: "Achse 2 je Engine — Fach- und Haftungsfrage; stattdessen die
+                          Entscheidungsregel gegeben, damit der Auftrag laeuft"
+bleibt_bei_yama: "Achse-2-Zuordnung je Engine · jeder Hetzner-Deploy"
+```
