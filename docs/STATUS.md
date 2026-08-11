@@ -1235,6 +1235,32 @@ claim_bau_a12: "plan-pruefer 10.08.: Yamas Einreihung ausgefuehrt — A-12 bekom
 
 ---
 
+## BEREIT — W-04/1 (Runde 1 Klasse A)
+
+```yaml
+auftrag: "W-04/1"
+titel: "Die sieben Blaetter von W-04 aus oeffnungsBauarten.ts + oeffnungsTypen.ts ableiten"
+datei: docs/auftraege/aktiv/W-04-oeffnung-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator (Warteschlange Runde 1; §3: A-12 ist IN_ARBEIT)
+basis_sha: b6078b2a
+letztes_votum: "plan-pruefer 11.08. (1. DoR-Runde, BEREIT beim ersten Review): JEDE Behauptung selbst gemessen und EXAKT bestaetigt — oeffnungsBauarten 75 Z/5 Exporte, oeffnungsTypen 49 Z/7 Exporte, fensterProdukt 153 Z; der OeffnungsArt-Import steht woertlich in Z.3 (die praezise Ausnahme im Ausschluss ist also NOETIG, nicht hoeflich); Registry traegt WIRKLICH zwei Werkzeuge (fenster :78, tuer :96); W-02s 2-FUNKTION beschreibt die Tuergeometrie bereits (2 Treffer) — die Verweis-statt-Doppelbeschreibung-Entscheidung ist damit belegt und richtig; Platzhalter-Rot zaehlbar (6 Blaetter). W-04/1-10 traegt die E2-Zaehlform aus Pruefung 03. Der Selbstbefund 'W-04 hat kein eigenes Modul' ist die vierte Matrix-Korrektur derselben Klasse und wieder vom Planner selbst gefunden."
+messbefund_zu_w04_1_4: "PLAN-PRUEFER-ZULIEFERUNG (gemessen, damit der Bauende nicht nach dem Falschen sucht): der Nebensatz des Blatts 'Stilles undefined ist die A-10-Klasse' trifft NICHT zu — oeffnungsTypen.ts:43 und :48 liefern bei unbekannter ID KEIN undefined, sondern '?? TUER_TYPEN[0]' bzw. '?? FENSTER_TYPEN[0]': einen STILLEN FALLBACK auf den ersten Katalogeintrag. Das ist die A-10-Klasse in ihrer schaerferen Form — nicht 'nichts', sondern ein plausibel aussehender FALSCHER Wert, den niemand als Ersatz erkennt. Die Frage von W-04/1-4 ist richtig gestellt und traegt (sie verlangt Messung, nicht die Vermutung); der Bauende soll den Fallback benennen, nicht nach undefined suchen. Die Bauarten-Lookups sind getrennt zu messen — dort kann die Antwort anders lauten."
+naechster_schritt: "Generator zieht W-04/1, sobald kein Auftrag IN_ARBEIT ist (A-12 laeuft); Runde 1 nach Yamas Korrektur: W-04 + W-11, W-13 nachziehen"
+```
+---
+
+## ⚠ BEFUND des Plan-Pruefers (11.08.) — A-12 ist ENV-unterbrochen und hat eine WEGWERF-PROBE im Baum
+
+```yaml
+lage: "Die A-12-Generator-Instanz ist am WOECHENTLICHEN NUTZUNGSLIMIT der Umgebung gestorben (reset 11.08. 22:00 Europe/Berlin), mitten im Messlauf. A-12 steht weiter IN_ARBEIT und BLOCKIERT damit nach §3 die gesamte W-Reihe."
+gemessen: "docs/BERICHT-A-12-f026.md existiert NICHT (Messlauf unfertig) · scripts/ Drift 0 · resources/ Drift 1 Datei: resources/planner/hausplaner/__tests__/zzA12wegwerf.test.ts liegt UNTRACKED im Baum (in KEINEM Commit — A-12-5 insoweit gewahrt)."
+gefahr: "Die Datei liegt in __tests__ und wird vom Insel-Runner MITGEFAHREN — jede Rolle, die npm run test:hausplaner faehrt, misst ab jetzt eine fremde Wegwerf-Probe mit und bekommt einen anderen Zaehler als 1692. Genau die Klasse, die A-12-5 verhindern soll."
+ich_fasse_sie_nicht_an: "Fremde unfertige Arbeit, Dauerregel Erhalt statt Entfernung — ich messe und melde. Entfernen gehoert der Generator-Instanz beim Wiederaufnehmen ODER Yama."
+vorschlag: "Bis zur Wiederaufnahme: A-12 bleibt IN_ARBEIT (kein Zustandswechsel durch mich — der Bau ist nicht gescheitert, sondern unterbrochen). Wer die W-Reihe vorziehen will, braucht Yamas Ansage; §3 laesst sonst kein zweites IN_ARBEIT zu."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
