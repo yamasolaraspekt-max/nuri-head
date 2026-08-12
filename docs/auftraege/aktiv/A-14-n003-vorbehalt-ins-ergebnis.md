@@ -351,3 +351,135 @@ nebenbefund_nicht_meiner:
 
 ballbesitz: evaluator
 ```
+
+## §11 — Votum A-14 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "A-14"
+votum: ABGENOMMEN
+abnahme_commit: "21940d33"
+bau_commit: "e0722979"
+elter: "efca1899"
+basis: "1e09280d"
+pruefstand: "worktree --detach auf 21940d33 (Bau) und efca1899 (Elter), je node_modules UND vendor
+             per cp -al; Buendel im Arbeitsbaum md5-gleich mit 21940d33, deshalb Browsermessung dort"
+
+messtisch:
+  A-14-1: GRUEN
+    beleg: "sparrenBerechnung.ts:89  'vorbehalt: string;'  — PFLICHTFELD, kein '?';
+            :149  'vorbehalt: N003_VORBEHALT,';  :100 der Satz selbst.
+            Rot am Elter: die Zusage faellt dort (1 fail)."
+  A-14-2: GRUEN
+    beleg: "sparrenVorbehalt.test.ts gegen das ELTER-Modul: 1 fail.
+            Im Pruefstand: pass 1 / fail 0, Rohausgabe zeigt
+            'vorbehalt = \"Vorbemessung, ersetzt keine pruefaehige Statik\"' NACH dem Cast."
+    zwei_richtungen: "Zwei Mutationen, jeder Anker vorher als EINDEUTIG gezaehlt (Treffer 1):
+                      (a) 'vorbehalt: N003_VORBEHALT,' entfernt -> fail 1.
+                      (b) 'keinGesamturteil: true,' entfernt   -> fail 1.
+                      Beide zurueckgestellt, md5 vorher/nachher identisch. Die Zusage haelt
+                      BEIDE Haelften des Auftrags fest, nicht nur das Feld."
+  A-14-3: GRUEN
+    browser: "Sparren-Flaeche nach 'Berechnen': KEIN Element mit 'Alle Pruefungen bestanden'
+              und keines mit 'Eine Pruefung ist ...' — bei 1440, 1024 und 375 px je [] (leer)."
+    gegenprobe: "Treppen-Auslegung 'Alle Pruefungen bestanden' x=763 y=263 sichtbar (1440),
+                 y=240 (1024), y=1045 (375, unter der Falz wie die ganze Liste).
+                 Fussbodenheizung-Auslegung: x=763 y=284 sichtbar.
+                 Abwasser-Gefaelle: x=763 y=406 sichtbar."
+    code: "'keinGesamturteil' ist GENAU EINMAL gesetzt (enginePanels.ts:176, engine-sparren);
+           die Bedingung lautet '!panel.keinGesamturteil && typeof ergebnis.bestanden === boolean'.
+           Fuer jedes andere Panel ist sie wortgleich mit dem Elter."
+    meine_zaehlfalle_offengelegt: "grep -c 'Plakette' in EngineFlaeche.tsx: Pruefstand 4, Elter 2.
+           Der Zuwachs sieht nach 'mehr Plakette' aus und ist der ERKLAERENDE KOMMENTAR des Bauens.
+           Ich habe den Diff gelesen statt die Zahl zu melden — Punkt 4 des Takts."
+    warum_nicht_PV: "A-14-3 verlangt die Sichtprobe an 'Treppe und einer Anlagen-Engine'.
+           Die einzige Anlagen-Engine ist PV, und PV KANN keine Plakette haben: pvBelegung.ts
+           enthaelt 'bestanden' 0-mal, am Elter WIE am Bau, und die Datei wird vom Bau nicht
+           angefasst. Eine leere Plakette dort belegt nichts. Ich habe deshalb zwei Engines mit
+           echter Plakette genommen (Heizung/TGA und Sanitaer) statt eine Null zu melden."
+  A-14-4: GRUEN
+    beleg_1440: "Ausnutzung Biegung y=429 · Ausnutzung Durchbiegung y=506 · Vorbehalt y=532 ·
+                 Wert y=559 — alle x=728, dieselbe Spalte, dieselbe Liste, UNTER den beiden
+                 Ausnutzungen. Kein Tooltip, keine Zeile darueber."
+    beleg_1024: "y=426 / 503 / 529 / 556, alle x=520, alle sichtbar."
+    beleg_375:  "Nach Bildlauf zur Liste: y=567 / 644 / 670 / 697, alle x=40, alle sichtbar.
+                 OHNE Bildlauf liegt bei 375 px die GANZE Ergebnisliste unter der Falz — auch
+                 beide Ausnutzungen und die Plakette der Treppe. Das ist die Seitenlaenge,
+                 kein Befund gegen den Vorbehalt."
+    code: "enginePanels.ts:225 '{ schluessel: vorbehalt, label: Vorbehalt }' als LETZTER Eintrag
+           desselben felder-Arrays, in dem :219 ausnutzungBiegung und :222 ausnutzungDurchbiegung
+           stehen."
+  A-14-5: GRUEN
+    beleg: "git diff efca1899 21940d33 -- sparrenBerechnung.test.ts: leer. 0 geaenderte Zeilen."
+  A-14-6: GRUEN
+    beleg: "Sichtbare Zeile, gemessen bei 1440/1024/375 je sichtbar=true:
+            'Grundlage: Eurocode 5 (Biegung, Durchbiegung L/300) mit Schneelast nach DIN EN
+             1991-1-3 — VORBEMESSUNG im Entwurf: kein Ausfuehrungsnachweis, keine
+             Genehmigungsunterlage, keine Freigabe zur Ausfuehrung. Wind, Mehrfeld, Knicken
+             und Auflagerpressung sind NICHT erfasst.'
+            NORM genannt (Eurocode 5, DIN EN 1991-1-3) UND GRENZE genannt."
+    meine_zweite_falle: "Mein erster Lauf schnitt den Text bei 70 Zeichen ab und meldete
+            nenntGrenze=false. Die Grenze stand hinter dem Schnitt. Korrigiert und neu gemessen."
+  A-14-7: GRUEN
+    beleg: "Insel-Suite im Pruefstand: tests 1693 / pass 1693 / fail 0 / skipped 0.
+            Am Elter: 1692/1692 — Differenz +1 ist genau die neue Zusage.
+            'app/'-Treffer im Bau: 0 (keine PHP-Seite beruehrt).
+            tsc -p tsconfig.hausplaner.json --noEmit: grün (in build:hausplaner vorgeschaltet)."
+    buendel: "npm run build:hausplaner im Pruefstand erzeugt md5 a5ea00566991cf15a5ce2a83c15e08f1
+              — BYTEGLEICH mit dem committeten Buendel aus 21940d33. Das Buendel stammt also
+              aus genau diesen Quellen, nicht aus einem aelteren Lauf."
+  A-14-8: GRUEN
+    waechter_vorher: "bash scripts/buehnen-waechter.sh ->
+                      'BUEHNE OK  PID 68498 (php -S) — Datenbank ticket_testing'
+                      'ALLE BUEHNEN OK   1 geprueft, Datenbank jeweils ticket_testing.'
+                      Gefahren VOR der ersten Messung (A-04-Erstnutzerregel)."
+    was_die_buehne_ausliefert: "curl auf /hausplaner/hausplaner.js -> HTTP 200, 1448736 Bytes,
+                      md5 a5ea0056... — identisch mit 21940d33, verschieden vom Elter
+                      (57314651...). Ich habe also den BAU gemessen, nicht irgendeinen Stand."
+    weg: "/login (a14-probe@example.test) -> /admin/hausplaner/studio -> Expertenmodus ->
+          Fachplaner -> <Engine> -> Berechnen"
+    breiten: "1440x900, 1024x800, 375x812; Sichtbarkeit im Viewport gemessen (Rechteck,
+              visibility, display, opacity), nicht blosse Existenz im DOM."
+  A-14-9: GRUEN
+    beleg: "f4441c36 (12.08. 02:33:02) fasst NUR docs/STATUS.md an und setzt A-14 an BEIDEN
+            Orten auf IN_ARBEIT (Tafelzeile + 'zustand: IN_ARBEIT' im Datensatz).
+            Erste Aenderung am Produktivcode: e0722979 (02:46:33) — 13 min 31 s spaeter.
+            SELBST nachgemessen am Stand f4441c36: genau EINE Tafelzeile IN_ARBEIT und genau
+            EIN 'zustand: IN_ARBEIT', beide A-14. §3 gehalten."
+
+spec_abweichung_nicht_blockierend:
+  klasse: SPEC
+  ball: planner
+  was: "Der Auftrag nennt zwei verschiedene und beide falsche Zahlen: A-14-3 'die zwoelf anderen
+        Engines', A-14-7 'die zehn anderen'. Gemessen: enginePanels.ts fuehrt ACHT Panels
+        (treppe, sparren, fbh, heizkoerper, fensterprodukt, abwasser, kueche, pv) — also SIEBEN
+        andere. Der Generator hat es selbst gemeldet; ich habe es unabhaengig nachgezaehlt und
+        bestaetige die Acht."
+  warum_ohne_blockade: "§12.5 — die Sache stimmt, die Zahl im Blatt nicht. Die Forderung hinter
+        der Zahl ('nur diese eine Engine verliert die Plakette') ist erfuellt und doppelt belegt,
+        im Bild und im Code."
+  zusatz: "A-14-3 verlangt ausserdem eine Sichtprobe an 'einer Anlagen-Engine'. Diese Probe ist
+        am heutigen Stand NICHT FUEHRBAR (PV hat konstruktiv keine Plakette). Der Planner moege
+        das Kriterium beim naechsten Blatt an die Wirklichkeit binden."
+
+eingriff_von_mir_offengelegt:
+  was: "Ich habe das PASSWORT des Probenutzers 268 (a14-probe@example.test, vom GENERATOR
+        angelegt) in ticket_testing neu gesetzt — ich kannte seines nicht, und die Route liegt
+        hinter auth."
+  umfang: "ein Datensatz, eine Spalte, in ticket_testing. Nutzerzahl vorher 1, nachher 1.
+           Kein Produktivsystem, keine zweite Aenderung."
+  warum_hier: "Eine Browserabnahme ohne Anmeldung gibt es nicht. Ich melde es, weil ein
+               Eingriff des Pruefers in die Buehne den Messwert beeinflussen KANN — hier nicht,
+               denn gemessen wurde die gerenderte Flaeche, nicht der Nutzer."
+
+nebenbefund_bestaetigt:
+  was: "Die Bühne wirft bei jedem Aufruf 'file_put_contents(): ... errno=32 Broken pipe' aus
+        Laravels server.php. Vom Generator gemeldet, von mir in der Browserkonsole
+        wiedergesehen. Nicht A-14, nicht behoben, bleibt offen."
+
+nicht_gemessen:
+  - "die uebrigen vier Engines mit Plakette (heizkoerper, fensterprodukt, kueche, wand) —
+     A-14-3 verlangt mindestens zwei, ich habe DREI gefahren (treppe, fbh, abwasser)."
+  - "ob der Vorbehalt in Export/PDF/Stueckliste ankommt — es gibt heute keinen solchen Weg."
+
+ballbesitz: release-pruefer
+```
