@@ -233,3 +233,64 @@ die_falle_im_pruefmuster_ist_der_eigentliche_lehrsatz: "Mein erster Zaehler zaeh
         NULL melden und gruen sein. Deshalb steht die Falle in A-25-1 und nicht nur das Ergebnis."
 A_25_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+---
+
+## 6 — Votum des Evaluators (§11)
+
+**ABGENOMMEN.** Bau in `c8dd6d49` (STATUS.md-Zäune, als Beifang in einem Planner-Commit), Werkzeug
+und Bericht in `83ad35e1`, gemeldet an `360bf913`. Prüfstand auf `360bf913` — dem einzigen Stand,
+der **beides** trägt; `c8dd6d49` hat das Werkzeug nicht, `83ad35e1` liegt auf einer anderen Linie.
+Gemessen wurde gegen `c8dd6d49^` als Vor-Zustand.
+
+**Vorab, weil es die Prüfung färben könnte:** dieser Auftrag ist aus meinem eigenen Befund
+entstanden (`f017b6f9`, wörtlich im Blatt zitiert). Ich habe gemeldet, nicht gebaut — die
+Rollentrennung hält —, aber ich habe ein Interesse daran, dass mein Befund trägt. Deshalb habe ich
+jede Zahl gegen den Stand **vor** dem Bau erhoben und am Ende ausdrücklich gegen meine eigene Milde
+gegengeprüft (letzter Absatz).
+
+| Kriterium | Befund | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **A-25-1** (TRAGEND) | **grün** | Eigener CommonMark-Parser (`​```yaml` öffnet, nur ein Zaun **ohne** Info-String schließt): **vor dem Bau 2** Blöcke mit mehr als einem Datensatz — `Z.1245-1317` (A-08, A-09) und `Z.7726-8375` (W-06, W-31, A-24, A-23, A-22) —, **am Bau 0**, **am HEAD 0**. Das Muster kann rot werden: es hat vorher 2 gemeldet |
+| **A-25-1b** | **grün** | Mit dem Muster **des Kriteriums** (`zustand:`/`ballbesitz:`): vorher **5** nicht zuordenbare Blöcke, darunter der benannte Fall `Z.5475` (`ballbesitz: plan-pruefer`, die Vorlage des Release-Prüfers) — nachher **0** |
+| **A-25-2** (SCHUTZGRENZE) | **grün** | Mengenvergleich statt Anzahl, wie der Nachtrag verlangt: `auftrag` 69→70, `zustand` 60→61, **verschwunden: 0 und 0**. Der eine neue Wert ist `W-05/1`/`ENTWURF` — der Auftrag des Planners aus demselben Commit. **Kein Verlust** |
+| **A-25-3** | **grün** | Die sieben stehen namentlich im Bericht, mit `Z.1245-1317` und `Z.7726-8375` — **exakt die Zeilennummern, die ich unabhängig am Bau-Stand erhoben habe** |
+| **A-25-4** | **grün, mit einem Hinweis** | Die zwei Fehlerformen selbst nachgemessen und sie **sind** verschieden: Bereich 1 trägt bei `Z.1286` einen **zweiten Öffner**, wo ein Schließer stehen müsste (Öffner 1245, Öffner 1286, Schließer erst 1317); Bereich 2 hat einen **korrekten** Zaun (7726→8375) mit fünf Datensätzen darin. Der Bericht unterscheidet beide in einem eigenen Abschnitt. **Hinweis:** er nennt die Stelle als `1284`; am Bau-Stand ist es `1286`. Die Zahl stammt aus dem Blatt und wurde nicht am Stand nachgezogen — dieselbe Pflichtprüfung 8, die der Bericht bei A-25-3 vorbildlich erfüllt |
+| **A-25-5** | **grün** | Fangprobe **selbst gefahren**, im Prüfstand und nicht an der Statuswahrheit: einen Zaun-Übergang entfernt (`Z.1288-1290`) → **ROT**, „1 Bereich mit mehreren Datensätzen: A-08 · A-09". md5 danach zurückgesetzt, identisch |
+| **A-25-6** | **grün** | Am Code belegt: `kopfVorher` (`:89`), `kopfNachher` (`:118`), Abbruch mit `exit 3` (`:120`) — und `writeFileSync` steht erst in `:124`, die Prüfung sitzt also **vor** dem Schreiben, nicht danach. Kein `git add` im Werkzeug: es kann nichts Fremdes stagen |
+
+**Der Bau ist wirksam, und das ist unabhängig von seiner Commit-Lage.** Dass er als Beifang in
+`c8dd6d49` steckt, macht ihn nicht unwirksam — es macht ihn nur schwer zuzuordnen. Der Planner
+führt das in A-25-2 selbst aus, und die Ironie steht dort schon: **A-25-6 wurde geschrieben, um
+genau diesen Schaden zu verhindern, und der fremde Commit während des Baus war seiner.** Ich
+bestätige den Kern seiner Feststellung unabhängig: **null Werte verschwunden**, genau ein neuer,
+benennbar.
+
+**Die Gegenprobe gegen meine eigene Milde.** Ein Auftrag aus meinem Befund, von mir grün gemessen —
+also habe ich zuletzt gefragt, ob die Datei jetzt *wirklich* maschinell lesbar ist oder nur nach dem
+Buchstaben der Kriterien. Gemessen am HEAD: **genau ein** yaml-Block zitiert einen Zaun im
+Fließtext, und es ist **mein eigener Claim von heute** (`Z.7829-7989`, fünf Zitate) — ausgerechnet
+der Block, der vor dieser Falle warnt. Die Zitate sind eingerückt, nach CommonMark also kein Zaun;
+das Werkzeug des Baus liest sie korrekt, mein alter Parser tat es nicht. **Der Bau ist davon nicht
+berührt — das ist mein Werkzeug, und der Auftrag schließt es ausdrücklich aus** („seine Methode
+gehört ihm").
+
+**Meine eigenen Messfehler in dieser Runde:**
+
+1. **A-25-1b zuerst mit einem zu weiten Muster gemessen** — ich nahm `fehlerklasse:` und `befund:`
+   als Zustandsfelder und meldete „nach dem Bau bleiben 2 Blöcke offen". Das Kriterium definiert
+   Zustandsfelder als **`zustand:` oder `ballbesitz:`**. Mit dem Muster des Kriteriums: **0**.
+   Beinahe ein Fehlbefund gegen einen Bau, der vollständig ist.
+2. **Die Zaun-Zählung im Diff hat mich fehlgeleitet:** `+6 ```yaml` in `c8dd6d49` sah nach dem
+   A-25-Bau aus, gehörte aber zu W-05/1 und den Vorgangs-Blöcken. Erst der Vergleich
+   *Blockzahl gegen auftrag-Zahl über alle Commits* (176→182 bei nur +1 Auftrag) hat den Bau
+   wirklich lokalisiert.
+3. **Die Reihenfolge der Commits geraten:** ich hielt `83ad35e1` für älter als `c8dd6d49` und setzte
+   den Prüfstand auf einen Stand **ohne** das Werkzeug. `merge-base --is-ancestor` zeigte, dass sie
+   auf verschiedenen Linien liegen.
+4. Zweimal an zsh gescheitert, beide Male ohne Folge: `set -- $p` in einer `for`-Schleife (die
+   Prüfstände entstanden nicht) und Backticks in einem `grep`-Muster (`unmatched`).
+
+**§15:** keine Datenbankschreibung in dieser Abnahme.
+
+**Weiter an den Release-Prüfer.**
