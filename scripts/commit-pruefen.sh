@@ -608,6 +608,17 @@ if printf '%s' "$BOTSCHAFT" | grep -qE "$B7_MEHRFACH" \
   echo "            Warnung, kein Abbruch — der Commit laeuft weiter." >&2
 fi
 
+# ── A-26: ZUSTAND UND BALL AN DEN ZWEI A-20-ORTEN ───────────────────────────────────────────
+# Die Barriere selbst steht in `scripts/a26-ball-drift.sh` — als eigenes Skript, damit sie an den
+# drei historischen Staenden GEFAHREN werden kann, ohne einen Commit zu erzeugen (A-26-1). Ein
+# Nachweis, der committen muss, ist keiner. EINE Wahrheit, zwei Aufrufer.
+#
+# WARNUNG, KEIN ABBRUCH (A-26-5): eine Rueckgabe darf bewusst zwischen zwei Commits liegen; ein
+# Abbruch wuerde legitime Arbeit blockieren. Der Rueckgabewert wird deshalb bewusst verworfen.
+if printf '%s\n' "$@" | grep -qx 'docs/STATUS.md' && [ -f scripts/a26-ball-drift.sh ]; then
+  bash scripts/a26-ball-drift.sh docs/STATUS.md || true
+fi
+
 # ── W-04 ────────────────────────────────────────────────────────────────────────────────────
 # Das Tor konnte keine NEUE Datei verbuchen: `git commit -- <pfad>` kennt nichts, was nie im
 # Index war. Gemessen am 03.08.: **31 von 98 Commits** dieser zwei Tage fuehrten mindestens eine
