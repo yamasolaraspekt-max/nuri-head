@@ -52,9 +52,10 @@
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **W-39** Studio-Rahmen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
-| **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
+| **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
+| **W-27/1** BAU Dachkantentypen in die Insel | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `ff7e23ec` | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7631,7 +7632,9 @@ claim_abnahme_runde2: "evaluator (Erstinstanz) 12.08.: Abnahme W-39 RUNDE 2 GECL
 
 ```yaml
 auftrag: "W-40"
-zustand: BEREIT
+zustand: IN_ARBEIT
+warum_W_40_zuerst_und_nicht_W_41_oder_W_42: "Drei Auftraege stehen zugleich BEREIT bei mir, §3 laesst einen IN_ARBEIT zu. Die Reihenfolge ergibt sich aus der Abhaengigkeitskette und nicht aus meiner Wahl: das REGISTER fuehrt W-41 mit 'braucht W-38, W-40' — es haengt an diesem hier. W-42 traegt ausserdem eine vom Planner selbst benannte Abweichung von Yamas Freigabe (Ziel BESCHRIEBEN statt ENTWORFEN, weil dort Code existiert), und die gehoert geklaert bevor gebaut wird, nicht waehrenddessen. W-40 haengt nur an W-38, und das ist BETRIEBSBESTAETIGT."
+operand_am_BAU_STAND_gemessen_nicht_uebernommen: "Das Blatt verlangt es ausdruecklich (Pflichtpruefung 8): seine Zeilenangaben koennen bis zum Bau gewandert sein. Gemessen: docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md traegt 194 Zeilen, exakt wie im Blatt. Der tragende Zwei-Achsen-Satz steht am Bau-Stand in :131-132 — 'Die vier vorhandenen Stufen beschreiben Fortschritt; die drei fehlenden beschreiben Gueltigkeit. Das sind zwei Achsen, nicht eine laengere Liste.' Die Gegenueberstellung liegt in :115-124, und die ZAHLENLUECKE ist dort unmittelbar sichtbar: :121 fuehrt review-required mit einem Gedankenstrich statt mit 'fehlt', waehrend die drei anderen als fehlend markiert sind. Vier plus drei ist sieben, das Zielbild nennt acht. Auch :179 und :190 treffen. Keine Fundstelle aus dem Blatt uebernommen."
 ballbesitz: generator
 titel: "Die zweite Achse, ohne die erst nach Bestaetigung nicht pruefbar ist"
 basis_sha: c9ac316d
@@ -7730,4 +7733,51 @@ was_das_fuer_yamas_liste_bedeutet: "Eine der sechs Luecken aus Abschnitt 7 der V
   Der Wizard schreibt Fenster, Tuer, Treppe und Heizkoerper ins Modell. Die Aussage im Bericht
   stammt aus einer Messung auf BuildingDocument, und dieses Wort kommt in der Datei nicht vor."
 W_42_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+```
+
+```yaml
+auftrag: "W-27/1"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "BAU: Dachkantentypen in die Insel — der erste Auftrag, der Produktivcode erzeugt"
+basis_sha: ff7e23ec
+spur: A
+prioritaet: P1
+dor_beleg: "steht aus — plan-pruefer."
+freigabe: "Yama 12.08.: dann fang mit W-27 an. Vorher hatte er gefragt, ob ueberhaupt mit der
+  Produktion von Werkzeugen begonnen wurde — gemessene Antwort: NEIN, 0 von 43 Werkzeugen tragen
+  GEBAUT, die Kategorie kommt im Register kein einziges Mal vor."
+warum_W_27_der_beste_anfang_ist: "Die Vorgabe ist fertig und BETRIEBSBESTAETIGT, F-025 und F-026 sind
+  gruen, W-07 ist betriebsbestaetigt, und W-27 schliesst W-07s GROESSTE Grenze — die
+  Ecken-Erkennung, deren Fehlen Yama bei A-01 selbst als Grund fuer ein falsches Nicht-Ziel benannt
+  hat."
+pflichtpruefung_1_gemessen_nicht_angenommen: "Bei W-42 hat sich heute gezeigt, dass kein Code eine
+  Behauptung ist die man pruefen muss. Also gemessen, in mehreren Formen: TopologyCornerType,
+  cornerType, EdgeTopology, analyzeTopology und isInnerReflex liefern je NULL Dateien in der Insel.
+  Die Ecken-Klassifikation existiert nicht."
+die_namenskollision_ist_der_gefaehrlichste_punkt: "kehle und grat existieren SEHR WOHL — kehle in 6,
+  grat in 5 Dateien. Stelle geoeffnet: geometry/schifterListe.ts:58 klassifiziereSchifter fragt, ob
+  ein SPARREN Traufe und First erreicht — untenAngeschnitten heisst Kehle, obenAngeschnitten heisst
+  Grat. Das ist eine STAB-Frage; W-27 fragt, was an einer ECKE des Grundrisses entsteht. Gleiche
+  Woerter, andere Sache, und genau deshalb ist die Verwechslung wahrscheinlich. Kriterium W-27/1-3
+  verlangt, dass die Grenze im Code sichtbar wird — sonst entsteht die zweite Wahrheit, die der
+  Waechter verbietet. Der Generator hat diesen Unterschied bei der Ablesung selbst gefunden: es
+  fehlt die ECKEN-Klassifikation, nicht die Klassifikation."
+die_tragende_fangprobe: "Den UMLAUFSINN weglassen. Ohne Schritt 0 klassifiziert die Funktion bei
+  umgekehrt gezeichnetem Polygon ALLE Ecken falsch herum, und zwar LEISE — es gibt kein Ergebnis das
+  ungueltig aussieht. Das steht als K-4 in W-27s Blatt. Zwei weitere Proben: prevIsTraufe zu eng
+  fassen, denn es gilt auch fuer WALM und TEILWALM, also genau die Daecher wegen derer es Grate gibt;
+  und den vierten Ausgang neutral vergessen, der Default ist und kein Restfall. Jede Probe muss
+  FALLEN — eine gruene Probe prueft nichts, das ist der Befund aus W-34-1 und W-39-5 an einem Tag."
+zielort_gemessen: "geometry/ traegt 53 Dateien, acht mit dach-Praefix, aber KEINE fuer Kanten- oder
+  Ecken-Topologie. Deshalb eine neue Datei dachTopologie.ts und kein Eingriff in vorhandene — der
+  additive Bau ist die Bauart dieser Insel, W-39 hat es vorgemacht."
+schutzgrenzen_eingehalten: "React und TypeScript bleiben auf die Insel begrenzt, und geometry/ IST
+  die Insel. Keine Datenbank, keine Produktdaten, kein Backend. Der Prototyp in
+  docs/planner/pv-belegung-referenz bleibt unberuehrt — er ist Quelle."
+uebergangspruefung_als_kriterium: "Die Registerlegende verlangt beim Uebergang ENTWORFEN zu GEBAUT
+  die Pruefung, ob die VORGABE mit der ABLESUNG uebereinstimmt, mit dem Satz: ein Entwurf der gebaut
+  wurde und danach nicht nachgemessen wird ist eine unbelegte Behauptung ueber den eigenen Code. Das
+  ist Kriterium W-27/1-6."
+W_27_1_nimmt_den_paragraf3_platz: "Sobald gezogen: IN_ARBEIT. Der Platz ist frei, §3 steht bei 0."
 ```
