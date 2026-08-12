@@ -31,7 +31,7 @@
 | **W-07N** `2-FUNKTION` + Azimutgrenze | `ENTWURF` | **Plan-Prüfer** | Schnitt `1734aa3b` · Basis `3d368625` | Nachbesserung §12.5 · 9 Platzhalter in `2-FUNKTION` gemessen · **schließt W-07 auf BESCHRIEBEN** |
 | **W-09** Treppe | `ENTWURF` | **Plan-Prüfer** | Schnitt `6e2949a7` · Basis `65f3ece4` | sieben Module, 698 Z, **12 Zusagen** · Grobzahl stimmt aufs Wort · **letzter offener Schnitt der Klasse A** |
 | **A-14** N-003-Vorbehalt ins Ergebnis | **`CODE_FERTIG`** | Evaluator | `e0722979` + Bündel `21940d33` · Basis `1e09280d` | 9/9 · Vorbehalt als **Pflichtfeld im Ergebnis** · Plakette beim Sparren **nicht im DOM**, Treppe (y=413) und Heizkörper (y=380) unberührt · Vorbehalt y=586 unter den Ausnutzungen y=456/533 · Wächter exit 0 · **Auftragszahl „zwölf/zehn Engines" gemessen widerlegt: acht** |
-| **A-15** Fachaussage oder Hinweis | `ENTWURF` | **Plan-Prüfer** | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
+| **A-15** Fachaussage oder Hinweis | **`IN_ARBEIT`** | **Generator** | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
 | **B5** Zählergebnis mit Trefferzeilen | `ENTWURF` | **Plan-Prüfer** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
 | **B6** Summe braucht Erhebung | `ENTWURF` | **Plan-Prüfer** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `ENTWURF` | **Plan-Prüfer** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
@@ -1917,8 +1917,8 @@ naechster_schritt: "Generator zieht A-14 (§3 beachten); Browserabnahme nach §9
 auftrag: "A-15"
 titel: "Wo eine Rechnung eine Norm nennt, darf die Software nicht 'bestanden' sagen — gemessen, nicht eingeschaetzt"
 datei: docs/auftraege/aktiv/A-15-fachaussage-oder-hinweis.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: generator (Messauftrag laeuft — KEIN Bau, kein Code angefasst)
 basis_sha: d814be02
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): ENTWURF bleibt, EIN Restpunkt — sonst ist das Blatt stark. BEIDE VORERHEBUNGS-ZAHLEN SELBST GEMESSEN UND EXAKT BESTAETIGT: 13 Dateien in geometry/ und app/dashboard/ tragen \bbestanden\b, davon nennen 8 eine Norm (DIN/EN 199x/Eurocode). Die Selbstkorrektur des Planners ist vorbildlich und benennt die Klasse genau: 'ich hatte die Liste gemessen und die REICHWEITE geschaetzt' — mit ausdruecklichem Bezug auf meine eigene Selbstkorrektur a1d29aed, nur in die andere Richtung (zu eng statt zu weit). Dass unsere Fehlerklassen inzwischen eine gemeinsame Sprache haben, ist der eigentliche Fortschritt dieser Runde. Die Trennung zu A-14 ist sauber: A-14 baut die Mechanik fuer N-003 und laeuft zuerst (Risiko), A-15 klassifiziert die uebrigen zwoelf. §5-Block, Erstnutzer, Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden; A-15-4 (Fachurteil als Urteil kennzeichnen) steht zusaetzlich als Hausregel — richtig, denn ein Kriterium gilt fuer einen Auftrag, eine Hausregel fuer alle."
