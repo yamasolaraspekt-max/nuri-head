@@ -51,6 +51,7 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
+| **A-23** Sechs Zettel an einer erledigten Sperre | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. Sechs Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung. Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7474,6 +7475,41 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 ```
 
 ```yaml
+auftrag: "A-23"
+zustand: ENTWURF
+ballbesitz: plan-pruefer  # DoR steht aus
+titel: "Sechs Stellen in der Insel fuehren AUF-40 Teil B als offen — beide Haelften sind gebaut"
+basis_sha: 59c66eb2
+spur: A
+prioritaet: P2
+blatt: "docs/auftraege/aktiv/A-23-sechs-zettel-an-einer-erledigten-sperre.md"
+A_20_2_diesmal_eingehalten: "Tafelzeile UND Datensatz im SELBEN Commit wie der Schnitt. Bei W-37 habe
+  ich genau das verletzt — das Blatt lag committet und die Statuswahrheit sagte GAR NICHTS dazu, der
+  erste A-20-Verstoss seit die Regel steht, gefunden von der Blatt-gegen-Block-Probe der Wache
+  (d976060f). Die Regel ist meine, der Verstoss war meiner, und deshalb steht hier nicht nur die
+  Zeile sondern der Vermerk."
+herkunft_des_befunds_und_meine_grenze: "Der Befund ist der des GENERATORS (c767426d), und er hat ihn
+  ausdruecklich ohne Auftrag zu Ende gemessen und NICHT geschnitten mit dem Satz 'Kein Blatt
+  geschnitten, das ist Planner-Arbeit'. Ich habe die sechs Stellen selbst nachgemessen, bevor sie in
+  ein Kriterium kamen — das war heute mehrfach mein Fehler, fremde Zahlen zu uebernehmen. Was ich
+  ERGAENZT habe und was in keinem seiner Befunde stand: A-23-1, die Feststellung dass die
+  naheliegendste Fehlhandlung dieses Auftrags das LOESCHEN eines richtigen Tests ist. Er hat den Fall
+  benannt, aber er stand in keinem Kriterium."
+was_selbst_gemessen_und_was_uebernommen: "SELBST: die sechs Stellen, jede Zeile gelesen; die
+  Projektlisten-Naht (Controller:42/:101/:55, blade:141, main.tsx:18/:82); die drei Paket-Routen
+  web.php:5016/5018/5020 und die Migration. UEBERNOMMEN und nur gegengelesen: paketSpeichern.ts:45
+  und ConfigWizard.tsx:255. Das steht hier, damit niemand meine Uebernahme fuer eine Messung haelt."
+warum_die_haelften_getrennt_gehoeren: "Fuenf der sechs Stellen meinen die PROJEKTLISTE, eine meint die
+  PAKETSPEICHERUNG. Wer 'Teil B' liest, weiss nicht welche Haelfte gemeint ist — und daran ist der
+  Posten zweimal falsch gemessen worden: bei der Projektliste GIBT es keine Route (Mount-Attribut,
+  Controller:57 'kein Lade-Fetch aus der Insel'), bei der Speicherung gibt es eine, sie wird aber als
+  Attribut gereicht statt in der Insel gebaut. Wer 'Route' misst, findet im ersten Fall 0 und
+  schliesst falsch; wer 'fetch in der Insel' misst, findet im zweiten genau einen und haelt ihn fuer
+  die Ausnahme. H-9 zweimal am selben Posten."
+A_23_schliesst_AUF_40_NICHT: "Ob AUF-40 Teil B geschlossen ist, sagt Yama. Der release-pruefer hat den
+  Posten in dd0fee90 als gegenstandslos gemeldet; dieser Auftrag raeumt nur die Zettel weg, die den
+  falschen Stand behaupten."
+
 auftrag: "A-22"
 zustand: BETRIEBSBESTAETIGT
 bericht: "docs/BERICHT-A-22-statuswahrheit-maschinell-lesbar.md"
