@@ -131,10 +131,10 @@ API · Server · Schema · Migration · Bestandsdaten · Bundle     KEINE
 Produktivcode                                                  KEINER — reine Doku-Stufe
 Testdaten-Ziel                                                 KEINES
 Prozessbindung                                                 ENTFAELLT (kein Serverstart, keine DB)
-Werkzeuge                                                      grep/Editor. Die Insel-Suite
-                                                               (1689 Zusagen) MUSS unveraendert
-                                                               gruen bleiben — sie wird nicht
-                                                               beruehrt, das ist die Kontrolle
+Werkzeuge                                                      grep/Editor. Die Insel-Suite MUSS
+                                                               unveraendert gruen bleiben — sie
+                                                               wird nicht beruehrt, das ist die
+                                                               Kontrolle. OHNE feste Zahl (W-01N)
 ```
 
 **Erstnutzer:** *der Generator von W-01 Stufe 2 — er baut das Werkzeug gegen diese Beschreibung.
@@ -173,9 +173,21 @@ Absage schluckte.** Ein Werkzeug ohne beantwortete Grenzfrage darf nicht `BESCHR
 aus `geometry/fangKern.ts`"** mit Export-Liste und Zeilennummern — nicht „neu gebaut".
 *Yamas Punkt 4: „neu gebaut" ohne vorherige Suche ist ein Befund, kein Fortschritt.*
 
-**W-01/1-6 (`must_preserve`):** `resources/**` bleibt **byte-identisch**, und die Insel-Suite
-bleibt bei **1689/1689**. *Nachweis: `git diff --stat` auf `resources/` ist leer. Ohne dieses
-Kriterium wäre „ich baue nebenbei das Werkzeug mit" grün — und Stufe 1 wäre keine eigene Stufe.*
+**W-01/1-6 (`must_preserve`):** `resources/**` bleibt **byte-identisch**, und die Insel-Suite bleibt
+**unverändert grün** — *ohne feste Zahl im Kriterium.* **Nachweis:** `git diff --stat` auf
+`resources/` ist leer, und die Suite läuft mit **derselben Zahl wie vor dem Bau**; diese Zahl steht
+im **Bericht**, nicht hier. *Ohne dieses Kriterium wäre „ich baue nebenbei das Werkzeug mit" grün —
+und Stufe 1 wäre keine eigene Stufe.*
+
+> **§12.5-Nachbesserung (W-01N, 12.08.), und sie ändert nur die Messform, nicht die Härte:** *hier
+> stand `1689/1689`, während schon bei der Abnahme **1692/1692** gemessen wurden — `dbb7ff66` (A-10,
+> drei Zusagen mehr) ist Vorfahr der Basis, die Zahl war beim Schnitt des Blattes bereits überholt.*
+> **Die Abnahme von W-01/1 bleibt unberührt gültig** (§12.5: der Befund blockiert nicht und wirkt
+> nicht rückwirkend). *Ersetzt wurde die Zahl **nicht** durch eine neuere — das wäre derselbe Fehler
+> mit frischerem Datum. Denn inzwischen sind für dieselbe Sache **vier** Werte im Umlauf, und der
+> letzte zeigt warum: ein `grep` über die Testdateien zählt **1668**, der Lauf meldet **1693** —
+> beide richtig, sie messen Verschiedenes.* **Eine Zahl in einem Ist-Beleg ist richtig und datiert;
+> eine Zahl in einem Soll-Kriterium ist eine Zeitbombe.**
 
 **W-01/1-7 (P1, das Register wird mitgeführt):** `REGISTER.md` trägt W-01 als `BESCHRIEBEN` **und**
 `fangKern.ts` im Abschnitt *„Was schon im Repo existiert"*. *Yamas Punkt 7.4: sonst haben wir in

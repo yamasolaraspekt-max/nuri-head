@@ -212,3 +212,35 @@ abschluss_messbar_an: "grep -cE '^\\| W-[0-9]+ .*BESCHRIEBEN' REGISTER.md — he
 nicht_blockiert_durch: "die Werkzeug-oder-Schicht-Vorlage — W-01 wurde ohne sie fertig"
 grobzahl_lehre: "eine Grobzahl ohne Ausschlussentscheidung ist immer eine Obergrenze, nie ein Umfang"
 ```
+
+---
+
+## NACHTRAG 12.08. (W-01N) — keine festen Suite-Zahlen in Kriterien
+
+> **Regel für jede weitere Runde und Stufe:** *Ein Kriterium sagt „die Insel-Suite bleibt
+> **unverändert** grün" — **ohne Zahl**. Die gemessene Zahl gehört in den **Bericht**, zusammen mit
+> dem Befehl, der sie erzeugt hat.*
+
+**Der Fall, aus dem die Regel kommt:** `W-01/1-6` verlangte wörtlich `1689/1689`, gemessen waren bei
+der Abnahme `1692/1692`. *Der Bauende kann eine Zahl nicht erfüllen, die schon beim Schnitt des
+Blattes überholt war — `dbb7ff66` (A-10, drei Zusagen mehr) ist Vorfahr der Basis.*
+
+**Und der stärkere Grund, gemessen statt vermutet:** für dieselbe Sache sind **vier** Werte im
+Umlauf — `1689` (Blatt), `1692` (Abnahme), `1693` (heutiger Stand, fünfmal unabhängig genannt) und
+`1668` aus einem `grep -cE '^\s*(test|it)\('` über die Testdateien. **Die letzten beiden sind beide
+richtig und messen Verschiedenes:** *`grep` zählt geschriebene `test(`-Aufrufe, der Lauf zählt
+**ausgeführte** Zusagen; parametrisierte Tests erzeugen mehr Läufe als Zeilen.* **Eine feste Zahl im
+Kriterium ist also nicht erst veraltet, sobald jemand einen Test schreibt — sie ist schon dann
+unbestimmt, wenn zwei Rollen mit verschiedenen Werkzeugen messen.**
+
+*Der Kern in einem Satz:* **eine Zahl in einem Ist-Beleg ist richtig und datiert; eine Zahl in einem
+Soll-Kriterium ist eine Zeitbombe.**
+
+> **WO DIESE REGEL WIRKLICH HINGEHÖRT — offen, und ich entscheide es nicht:** *`W-01N-4` nennt
+> ausdrücklich diese Datei, und die Scope des Auftrags nennt ebenfalls nur sie. **Dieses Dokument ist
+> aber seit dem 12.08. aufgehoben** („DIESER PLAN IST NICHT MEHR DER PLAN … als Beleg, nicht als
+> Anweisung", Z.1-16); gültig ist `docs/FAHRPLAN-WERKZEUGKASTEN.md`, und der hat keine „Runden",
+> sondern Stufen mit Eintrittsbedingung.* **Ich habe die Regel dorthin geschrieben, wo Kriterium und
+> Scope sie verlangen, und den Widerspruch NICHT still gelöst, indem ich eine Datei außerhalb der
+> Scope angefasst hätte.** *Damit sie wirkt statt nur dazustehen, muss sie jemand in den gültigen
+> Plan übernehmen — Ball beim Planner, benannt statt vorausgesetzt.*
