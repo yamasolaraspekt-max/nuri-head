@@ -61,6 +61,7 @@
 | **W-21/2** Auswechslung bekommt ein Zuhause | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `9ea1c3db` | **BAU** · **174 Zeilen ohne Zuhause, und zwei Blätter sagen es selbst.** `W-22/5-CODE/LIESMICH.md:36` und `W-22/7-GRENZEN.md:55` melden beide *„auswechslung.ts ist in keinem Blatt zuhause"*; `W-21`s Blatt führt es in `:156` als **ausdrückliches Nicht-Ziel** („VERWANDT — NICHT im Scope"). **Der Ausschluss war für die Ablesung richtig** und ließ die andere Frage offen: *wo ist das Modul zuhause.* Entschieden am 13.08. — **W-21, weil ein Wechselholz Tragwerk ist und seine Verbraucher mehrere sind** (Gaube W-22, Dachdurchdringungen W-29); ein Modul, das mehrere Werkzeuge brauchen, gehört zum Fundament. Selbst gezählt: **5 Exporte, 174 Z.**, und W-21 führt heute **fünf** Module — `auswechslung.ts` ist das sechste. `sparrenTrennung.ts` ist der Beleg für den Ort: sein Kopf sagt *„ergänzt auswechslung.ts"*, und es ist längst in W-21 zuhause. **W-21-2-2 zieht die zwei überholten Sätze in W-22 mit** — sonst entstünde die A-23-Klasse im selben Auftrag. **Kennung geprüft:** `W-21/1` ist 18× belegt, ebenso `W-21/W`, `W-21L`, `W-21L/F` — `W-21/2` ist frei (Präzedenz W-05/2, W-07/2). |
 | **A-27** Der Bau-Commit gehört in ein Feld | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `875d1da5` | **BAU, P1 · fünfte Barriere im Tor.** **Zwei Regeln laufen zusammen ins Rote, die einzeln richtig sind:** §12.4 verlangt bei der Wieder-Abnahme *alle* Kriterien, E1 (`ARBEITSREGELN.md:509`) die Messung **am Commit** — und der Datensatz sagt nicht, an welchem. **An A-23 gemessen:** `bau_sha` stand auf `3ad920b1`, dem Stand **vor** der Nachbesserung; `9d800094` kommt im Block **null Mal** vor. Wer beide Regeln befolgt, misst am falschen Stand und **meldet zu Recht rot, obwohl der Bau stimmt.** Herkunft: `24a122e9`, und der Plan-Prüfer hat ausdrücklich **nicht** selbst nachgetragen — *ein Bau-SHA, den der Prüfer einträgt, ist keine Meldung des Bauenden mehr.* **Reichweite selbst gemessen und größer als drei:** 57 Datensätze mit Bau-Zustand, **17 nennen einen Commit im Feld, 40 nicht** — bei **19** verschiedenen Feldnamen. `bau_sha` wird festgelegt (6× belegt, häufigste vorhandene Form), **kein neuer Name.** **Nicht im Scope:** die vierzig Altfälle — ein falsch nachgetragener SHA ist schlimmer als ein fehlender; sie werden gezählt, nicht gefüllt. **Und A-27-3 benennt, was die Barriere NICHT fängt:** einen existierenden, aber überholten Commit — genau A-23s Fall. |
 | **A-28** Zwei Typen, eine Wahrheit | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `bd0f7e0d` | **BAU, P2** · **Die neun Aufbauarten stehen ZWEIMAL, zeichengleich:** `aufbauPlatzierung.ts:21 AufbauArt` und `dachformVorlagen.ts:173 VorlagenAufbauArt` — `md5` der Werteliste **identisch** (`35ed563c…`), selbst verglichen. **Eine zweite Wahrheit, und CLAUDE.md verbietet sie** — schlimmer verborgen als bei einem Wert: wer eine zehnte Art hinzufügt, muss beide ändern, **und `tsc` merkt es nicht**, weil die Typen unabhängig sind. **Die Behebung ist klein:** jeder Typ wird nur in seiner eigenen Datei benutzt, kein Import-Geflecht. **Der Ort ist nicht erfunden** — `domain/roofShape.ts:12` ist der Präzedenzfall (Domänen-Typ in `domain/`, von vier Dateien genutzt); die *Art* eines Aufbaus ist Domäne, Platzierung und Vorlagen sind **Verbraucher**. **Zweiter Befund im selben Griff:** der Dateikopf nennt **sechs** Arten, der Typ hat **neun** — sechs Gattungen, neun Arten (Gaube zerfällt in vier). Beide Zahlen stimmen über verschiedene Mengen; A-28-5 verlangt die Unterscheidung im Bericht statt eine Zahl zu „berichtigen". **Gefunden beim Messen für W-22s Bedien-Schnitt**, kein fremder Befund. |
+| **W-18/1** Topologie prüfen (Ablesung) | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `8c920624` | **STUFE B, und die EINORDNUNG IST GEMESSEN — Ablesung, kein Bau.** Nach Yamas Regel vom 13.08. (*„bei B gilt zuerst die Messung"*) zu Ende gefahren: **F-013 ist gebaut UND hat eine Nutzermeldung** — `kontur.ts:109 schneidetSichSelbst`, acht Exporte, und `:63` wörtlich *„Die Kontur überschneidet sich selbst — zieh den letzten Punkt so, dass sich keine zwei Kanten kreuzen."* **Angeschlossen:** `HausplanerApp.tsx:31` führt vier Symbole ein, `:30` nennt den Grund. **F-004 ist auch gebaut, aber als GEHRUNGSDETAIL** — `wallGeometry.ts:62`/`:106`; Gegenprobe: kein `achsenSchnitt`/`geradenSchnitt` im Repo. **Die H-9-Falle ist scharf:** `'kontur'` in `toolRegistry.ts:230` ist das **Zeichnen-Werkzeug**, `geometry/kontur.ts` die **Prüfung** — Import trifft **einen** Test, das Wort **zwölf**. Keine nackte Zahl im Kriterium. **Dritter Topologie-Fall aus W-09:207-208:** *„Treppe ohne Zielgeschoss → gehört zu W-18"* — nicht gebaut, als Grenze benannt; dieselbe Zeile belegt *„Yama hat W-18 ausdrücklich behalten"*. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7599,6 +7600,32 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
   nichts leistet und daraus NICHT die Frage abgeleitet, ob eine andere Position traegt. Dieselbe
   Rechnung haette es hergegeben, ich hatte die 85 Kombinationen schon laufen. Ein Befund, der nur
   verneint, laesst die Haelfte der Arbeit beim anderen."
+```
+
+```yaml
+auftrag: "W-18/1"
+zustand: ENTWURF
+ballbesitz: plan-pruefer  # DoR steht aus
+titel: "Topologie pruefen — beide Formeln sind gebaut, und eine steckt in der Gehrung"
+basis_sha: 8c920624
+spur: A
+prioritaet: P2
+blatt: "docs/auftraege/aktiv/W-18-1-topologie-pruefen-ablesen.md"
+die_einordnung_ist_gemessen_und_nicht_angenommen: "Yamas Regel vom 13.08. angewandt: bei Klasse B gilt
+  zuerst die Messung, was ist gebaut und was fehlt, und erst danach steht fest ob Ablesung oder Bau.
+  Gemessen: beide genannten Formeln sind gebaut, F-013 in geometry/kontur.ts:109 mit lesbarer
+  Nutzermeldung in :63, F-004 als Gehrungsdetail in wallGeometry.ts:62 und :106. Die Pruefung ist
+  angeschlossen (HausplanerApp.tsx:31, vier Symbole). ERGEBNIS: ABLESUNG — es fehlen die Blaetter, nicht
+  der Code, und der W-27-Maszstab greift hier nicht."
+was_die_zwei_muster_gebracht_haben: "Der IMPORT auf geometry/kontur liefert EINE Testdatei, das WORT
+  'kontur' liefert ZWOELF — weil elf die WERKZEUG-ID treffen und nicht das Pruefmodul. toolRegistry.ts:230
+  fuehrt 'kontur' als Zeichnen-Werkzeug. Haette ich nur das Wort gezaehlt, stuende zwoelf Waechter im
+  Kriterium und eine ehrliche Messung haette es verletzt — die Klasse, die W-36-5 und W-37-5 je eine
+  DoR-Runde gekostet hat."
+offener_posten_aus_einem_fremden_blatt: "W-09-treppe-beschreiben.md:207-208 sagt woertlich, eine Treppe
+  ohne Zielgeschoss gehoere zu W-18 und Yama habe W-18 ausdruecklich behalten. Das ist ein DRITTER
+  Topologie-Fall neben Selbstschnitt und Achsenschnitt, und er ist NICHT gebaut: die Konturpruefung sieht
+  eine Punktfolge und kein Geschoss. Als Grenze im Blatt, damit er nicht in W-09s Blatt verwaist."
 ```
 
 ```yaml
