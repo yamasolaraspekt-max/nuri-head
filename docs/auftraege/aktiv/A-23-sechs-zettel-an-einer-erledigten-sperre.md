@@ -182,6 +182,29 @@ A-23-5  BERICHTIGT nach 2772c198, und der Befund ist schwerer als eine Zahl. Mei
         Test haelt fest, dass in dieser Datei KEIN Statuswort eine Freigabe
         behauptet. Wer die Herkunft nennen will, nennt sie ohne dieses Wort —
         Auftragsnummer und Datum genuegen (AUF-81, Tor 1, 26.07.).
+        PRAEZISIERT 13.08. nach dem NACHBESSERN-Votum (d4b28e12), UND DIE UNSCHAERFE
+        WAR MEINE. Dieses Kriterium sprach von 'diesem Wort' und nannte weder die
+        SCHREIBWEISE noch die REICHWEITE. Selbst nachgemessen, beides:
+          gesperrt ist   'Frei' + 'gegeben', also das PARTIZIP Freigegeben
+                         (gefuehrteEhrlich.test.ts:34, bewusst zusammengesetzt)
+          und NUR in     app/studioDaten.ts und app/GuidedView.tsx
+                         (dieselbe Datei, :29 und :30 — nur diese zwei werden
+                         gelesen)
+          NICHT gesperrt Freigabe als Substantiv: steht in 15 Dateien der Insel.
+        WAS DARAUS FOLGT UND WAS SCHIEFGING: der Bau hat in
+        startEhrlich.test.ts:129 ein ZITAT geaendert — 'liegt hinter Yamas
+        ENTSCHEIDUNG', im Elter stand 'Yamas FREIGABE'. Das ist eine dritte Datei
+        und ein anderes Wort; die Sperre war NIE beruehrt. Vorsorglich geaendert,
+        wo nichts zu befuerchten war — und damit genau der Schaden, den A-23-2
+        verhindern soll: ein Zitat, das Woertlichkeit behauptet und keine liefert.
+        A-23-2 HAT VORRANG IN JEDER DATEI AUSSER DEN ZWEI GENANNTEN. Ein Zitat
+        wird woertlich uebernommen; wo die Wortsperre wirklich greift, wird nicht
+        zitiert, sondern die Herkunft ohne das Partizip genannt. Beides zugleich
+        ist nur in studioDaten.ts und GuidedView.tsx noetig, und dort steht kein
+        Zitat.
+        DAS IST H-9 AN MEINER EIGENEN AUFLAGE: ich habe eine Wortsperre benannt und
+        die Schreibweise nicht gemessen — dieselbe Klasse, die dieses Blatt zweimal
+        am Suchmuster diagnostiziert.
         VOLLSTAENDIG, statt einer Zahl die Klassen: von den fuenf
         Ehrlichkeitswaechtern der Insel sind startEhrlich und konfiguratorEhrlich
         KOMMENTARBLIND, gefuehrteEhrlich ist KOMMENTAR-EMPFINDLICH auf studioDaten.ts,
@@ -220,6 +243,19 @@ A-23-7  ENTSCHEIDUNG DES PLANNERS ZUR ACHTEN STELLE, 13.08. — und sie wirkt
         Abnahme erweitert, macht einen korrekten Bau nachtraeglich unvollstaendig.
         Der Generator hat die Stelle gemeldet statt sie stillschweigend zu
         beruehren; genau deshalb ist sie jetzt entschieden und nicht verwaist.
+
+A-23-8  WERKZEUGBEFUND aus d4b28e12, gemeldet und NICHT als Blocker: das
+        Pruefskript a23-sieben-stellen.mjs:32 sucht die Kennzeichnung im Umkreis
+        von plus minus 1200 Zeichen. Damit ginge eine Kennzeichnung 'einen Absatz
+        weiter' durch — genau das, was die bindende Bedingung des plan-pruefers
+        (baa785a2, uebernommen in A-23-2) ausschliesst.
+        DER BAU BRAUCHT ES NICHT: der Evaluator hat den Abstand Marke zu Zitat
+        einzeln gemessen, 0 bis 3 Zeilen. Das Werkzeug ist also LAXER als der Bau,
+        nicht falscher.
+        KEINE NACHBESSERUNG VERLANGT, weil ein Pruefwerkzeug, das strenger sein
+        soll als es ist, kein Mangel am Bau ist. Aufgenommen, damit die naechste
+        Rolle das Werkzeug nicht fuer strenger haelt als es ist — und damit es
+        nicht als stiller Freibrief weiterlebt.
 
 **Nachweisform: Befehl und Trefferzeilen** (B5), **Messung am COMMIT statt am Zustand** (Yamas E1),
 **Fundstellen am Bau-Stand** (Pflichtprüfung 8).
