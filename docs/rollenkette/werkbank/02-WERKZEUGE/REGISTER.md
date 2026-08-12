@@ -119,7 +119,7 @@ und Lichtkuppel. **Die Trennlinie zieht der Code selbst** — `aufbauOrientierun
 |---|---|---|---|---|
 | W-33 | **Start und Projektwahl** | LEER | alle | ungeprüft — `app/StartView.tsx` (267 Z) |
 | W-34 | **Geführte Planung** (Stepper, elf Schritte) | **BESCHRIEBEN** | **W-38** *(Typquelle, `GuidedView.tsx:4`)* | **keine** ⓝ — gezählt, nicht gerechnet: 17 Zählungen über `zaehle()`; `statusAus` `fahrschritte.ts:43-49` · **6 der 11 Schritte haben keine Modellgrundlage** |
-| W-35 | **Konfigurator-Dialog** Fenster·Tür·Treppe | LEER | W-04, W-09 | ungeprüft — `app/ConfigWizard.tsx` (271 Z) · **schreibt NICHT ins Gebäudemodell** |
+| W-35 | **Konfigurator-Dialog** Fenster·Tür·Treppe·**Heizkörper** | **BESCHRIEBEN** | W-04, W-09 | `app/ConfigWizard.tsx` (271 Z) ⓝ — **VIER Arten** (`:23`), fünf Schritte (`:34`), **`TYP_MAP` (`:43`)** bildet sie auf `ConfiguratorType` ab · **schreibt sehr wohl ins Gebäudemodell**: `ADD_NODE` in `:184`, `:205`, `:226` — der Schreibpfad selbst ist W-42 · sechs Wächter, davon `konfiguratorEhrlich` (11 Tests) |
 | W-36 | **Fähigkeiten-Navigation** | LEER | alle | ungeprüft — `app/FaehigkeitenNavi.tsx` (76 Z) + `app/tools/faehigkeiten.ts` |
 | W-37 | **Rechenpanels (Engine-Flächen)** | LEER | N-001…N-003 | **N-003** — `app/EngineFlaeche.tsx` (196 Z) + `app/dashboard/enginePanels.ts`; trägt die **A-14**-Ausgabeauflage |
 | W-38 | **Schritt-Status und Prüfpunkte** | **BESCHRIEBEN** | alle *(Richtung, keine Vorbedingung)* | **keine** ⓝ — rein deklarativ: **0 Funktionen, 0 Importe**; `app/studioDaten.ts:163` trägt `SchrittStatus` mit **vier** Stufen, `:255` die vier Beschriftungen |
