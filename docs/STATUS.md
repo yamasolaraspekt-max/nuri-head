@@ -50,7 +50,7 @@
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
-| **A-22** Statuswahrheit maschinell lesbar | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · 17 doppelte yaml-Schlüssel, **0 mit gleichem Wert** · 4× `ballbesitz` auf abgeschlossenen Aufträgen · Feldform 33/19 |
+| **A-22** Statuswahrheit maschinell lesbar | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · 17 doppelte yaml-Schlüssel, **0 mit gleichem Wert** · 4× `ballbesitz` auf abgeschlossenen Aufträgen · Feldform 33/19 |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7091,13 +7091,13 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "A-22"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "Doppelte yaml-Schluessel und uneinheitliche Feldform in docs/STATUS.md"
 basis_sha: e1a478fb
 spur: A
 prioritaet: P1
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN. UNABHAENGIG NACHGEMESSEN mit eigenem Verfahren (python ueber alle yaml-Bloecke statt grep): 17 doppelte Schluessel, davon 17 mit ABWEICHENDEM Wert — also null harmlose Dubletten, genau wie das Blatt sagt; 4 davon sind ballbesitz, die uebrigen 13 Aufzeichnungen (release_vermerk, letztes_votum). Ich zaehle 146 Bloecke statt der 145 des Blattes: die Differenz ist A-22 selbst, das seit dem Schnitt dazugekommen ist — dieselbe Klasse wie die wachsende ZURUECKGESTELLT-Zahl, und diesmal habe ich sie vorher erkannt. IN EIGENER SACHE: dieser Auftrag repariert das Werkzeug, mit dem MEINE Wache jede Runde misst — ich bin Nutzniesser, nicht Autor, und habe gegen die Kriterien geprueft. Die Belegform von A-22-5 ist die schaerfste des Tages: kein fremder Zustand geaendert, nachgewiesen AM COMMIT statt am Arbeitsbaum."
 anlass: "Der Generator hat in e1a478fb 17 doppelte yaml-Schluessel gemeldet, aus einem Nebenbefund
   des Evaluators in e5716bc0. Es ist der DRITTE Strukturmangel dieser Datei an einem Tag."
 selbst_nachgemessen: "Ueber alle yaml-Bloecke gefahren, 145 Bloecke: 17 doppelte Schluessel und
