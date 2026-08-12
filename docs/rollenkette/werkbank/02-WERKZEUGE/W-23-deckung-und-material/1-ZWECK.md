@@ -19,7 +19,7 @@ dessen, was der Ziegel erlaubt, **und zwar leise**.* Gemessen an den sieben bele
 801 Sparrenlängen je Modell (**5.607 Fälle**, Vertretungsentscheid 12.08.).
 
 > **Der Grund ist Teilbarkeit, kein Fachwissen:** *zwischen zwei Reihenzahlen liegt eine Lücke.
-> Beispiel `Harzer Pfanne` bei einer Sparrenlänge von 1000 mm — `n=2` ergibt 500 mm (zu groß),
+> Beispiel `Harzer Pfanne 7` (Variante `Big`) bei einer Sparrenlänge von 1000 mm — `n=2` ergibt 500 mm (zu groß),
 > `n=3` ergibt 333 mm (zu klein), und der Ziegel erlaubt nur **372–405**. **Es gibt hier keine
 > gleichmäßige Teilung, und ein Werkzeug, das trotzdem eine Zahl nennt, erfindet sie.***
 

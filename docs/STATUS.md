@@ -43,7 +43,7 @@
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
-| **W-23** Deckung und Material | **`IN_ARBEIT`** | **Generator** | Bau `2143c5db` · Elter `c2c6bf4e` | **6/7** · Fachkern stark und **nachgerechnet** (Teilbarkeitsfalle: `n_min 3 > n_max 2`, verworfene Fassung liefert 333,3 statt 372–405) · Quelle selbst geöffnet, alle Zahlen treffen · **P1: die als Abweichung gemeldete Namenskorrektur ist selbst der Fehler** — die Zeile mit 372/405 heißt in der Quelle `Harzer Pfanne 7` |
+| **W-23** Deckung und Material | **`CODE_FERTIG`** | **Evaluator** | Bau `2143c5db` · Elter `c2c6bf4e` | **6/7** · Fachkern stark und **nachgerechnet** (Teilbarkeitsfalle: `n_min 3 > n_max 2`, verworfene Fassung liefert 333,3 statt 372–405) · Quelle selbst geöffnet, alle Zahlen treffen · **P1: die als Abweichung gemeldete Namenskorrektur ist selbst der Fehler** — die Zeile mit 372/405 heißt in der Quelle `Harzer Pfanne 7` |
 | **W-27** Dachkantentypen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
 | **W-20** Stückliste und Mengen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
@@ -6119,8 +6119,27 @@ mein_anteil_am_befund: "Zwei der drei Fehlalarme entstanden durch MEINE Votumsze
 ```yaml
 auftrag: "W-23"
 datei: docs/auftraege/aktiv/W-23-deckung-und-material.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Nachbesserung laeuft — §12.1, Vorrang vor allem Neuen)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (Nachbesserung gebaut 12.08. auf 7d332457)
+nachbesserung_gebaut: "P1 behoben und die Ursache benannt. Der Evaluator nannte ZWEI Zeilen
+  (5-CODE:41 und :54-55); ich habe alle ZWOELF Fundstellen von 'Harzer' gemessen und fuenf weitere
+  in 1-ZWECK, 3-FORMELN, 6-PRUEFUNG sowie zwei im Bericht berichtigt — meine Lehre aus der halb
+  korrigierten Falle 4. Der falsche Absatz ist ZURUECKGEZOGEN statt geloescht, in Blatt und
+  Bericht, mit Ursache und Fundstellen der drei Rollen. Gegenprobe: acht 'Harzer Pfanne' ohne 7
+  bleiben stehen — sie benennen alle absichtlich die LEERE Zeile 9, das ist der Fehladressierungs-
+  Fall selbst."
+W_23_8_gebaut: "Das neue Kriterium steht in 5-CODE als eigener Abschnitt und im Bericht mit der
+  verlangten Gegenprobe. Die Zahlen des Planners habe ich an der Quelle nachgemessen statt
+  uebernommen — alle stimmen: 114 verschiedene Namen bei 127 Zeilen, 8 mit Dubletten, 5 davon ohne
+  jede gefuellte Zeile, und jede Einzelzahl (Opal Standard 5/0, Rubin 11V 3/0, Rubin 13V 3/2,
+  Frankfurter 2/0, Harzer Pfanne 2/0, Harzer Pfanne 7 2/1, Taunus 2/0, Topas 13V 2/2). Gegenprobe
+  gefahren: Zugriff 'Harzer Pfanne' -> Zeile 9 LEER, kein Bereich; 'Harzer Pfanne 7' plus Variante
+  'Big' -> Zeile 10, 372-405."
+eine_praezisierung_von_mir: "Rubin 13V hat DREI Zeilen, nicht zwei — die dritte (Zeile 75) ist leer.
+  Die Angabe 'neun Zeilen, sieben Modelle' bleibt richtig, sie zaehlt nur die gefuellten; die
+  Adressierung muss die leeren aber kennen."
+must_preserve_erneut: "resources und app je 0 Dateien, Quelldatei unveraendert 718574 Byte,
+  Platzhalter unveraendert 3 (alle drei weiterhin Vergleichsoperator, XML-Tag, TS-Generic)."
 der_fehler_ist_meiner_und_ich_habe_die_ursache: "Der Evaluator hat recht, und ich habe es
   nachgemessen statt es zu uebernehmen: Zeile 10 traegt Modell_Typ 'Harzer Pfanne 7', Variante
   'Big', Lattmass 372-405. Die 7 STEHT dort, das Auftragsblatt hatte recht, und meine

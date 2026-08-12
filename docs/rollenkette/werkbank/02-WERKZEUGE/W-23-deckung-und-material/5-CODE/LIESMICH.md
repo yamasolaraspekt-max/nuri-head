@@ -38,7 +38,7 @@ Datei voraus und brach ab; der zweite sieht nach.*
 |---|---|---|---|---|---|---|---|---|---|
 | 2 | Braas | Achat 12V | — | 330–360 | 30 | **OK** | 16° | verifiziert | ja |
 | 6 | Braas | Granat 11V | — | 338–380 | 42 | **OK** | 25° | verifiziert | ja |
-| 10 | Braas | Harzer Pfanne | **Big** | 372–405 | **—** | **fehlt** | 22° | verifiziert | ja |
+| 10 | Braas | **Harzer Pfanne 7** | **Big** | 372–405 | **—** | **fehlt** | 22° | verifiziert | ja |
 | 23 | Braas | Rubin 13V | **HA** | 330–360 | 30 | **OK** | **—** | teilweise verifiziert | ja |
 | 24 | Braas | Rubin 13V | **OG** | 330–360 | 30 | **OK** | **—** | teilweise verifiziert | ja |
 | 25 | Braas | Rubin 9V | — | 370–400 | 30 | **OK** | 16° | verifiziert | ja |
@@ -49,11 +49,49 @@ Datei voraus und brach ab; der zweite sieht nach.*
 **Neun Zeilen, sieben Modelle** — *`Rubin 13V` und `Topas 13V` stehen je zweimal (Varianten `HA` und
 `OG`), mit identischen Maßen.* **Alle neun tragen `Quelle_1_URL`.**
 
-> ### Zwei Abweichungen zum Auftragsblatt, gemessen und gemeldet
+### W-23-8 · Der Modellname ist keine Adresse
+
+**Adressiert wird über `Modell_Typ` PLUS `Variante_Ausfuehrung`** — *und wo auch das nicht eindeutig
+ist, entscheidet **die Zeile mit gefüllten Lattmaßen**.*
+
+```text
+gemessen ueber alle 127 Zeilen, Namen normalisiert (Braas-Praefix und Klammerzusaetze entfernt):
+  114 verschiedene Modellnamen bei 127 Zeilen
+    8 Namen mit Dubletten — und bei FUENF davon traegt KEINE Zeile Lattmasse
+
+  Opal Standard      5 Zeilen, 0 gefuellt      Frankfurter Pfanne  2 Zeilen, 0 gefuellt
+  Rubin 11V          3 Zeilen, 0 gefuellt      Harzer Pfanne       2 Zeilen, 0 gefuellt
+  Rubin 13V          3 Zeilen, 2 gefuellt      Harzer Pfanne 7     2 Zeilen, 1 gefuellt
+  Taunus Pfanne      2 Zeilen, 0 gefuellt      Topas 13V           2 Zeilen, 2 gefuellt
+```
+
+**Die Gegenprobe, die das Kriterium verlangt — an der Quelle gefahren:**
+
+```text
+Zugriff "Harzer Pfanne"                    ->  Zeile 9,  Lattmass LEER   ->  KEIN Bereich
+Zugriff "Harzer Pfanne 7" + Variante "Big" ->  Zeile 10, 372-405          ->  Bereich
+```
+
+> **Warum das gefährlicher ist als eine fehlende Zahl:** *eine leere Zelle **sieht man**. Ein Treffer
+> auf der falschen Zeile sieht aus wie ein Ergebnis.* **Wer über den Namen allein adressiert, bekommt
+> für fünf der acht Dubletten stillschweigend eine Zeile ohne Werte — und für `Harzer Pfanne` genau
+> die, an der dieses Blatt gescheitert ist.**
+
+> ### Eine Abweichung zum Auftragsblatt — und eine ZURÜCKGEZOGENE
 >
-> **(1) Der Name.** *Das Blatt schreibt `Harzer Pfanne 7`. In der Quelle heißt das Modell
-> `Modell_Typ = "Harzer Pfanne"`, `Variante_Ausfuehrung = "Big"` — eine `7` steht dort nicht.*
-> **Die Maße stimmen (372–405), der Name nicht.**
+> **(1) ZURÜCKGEZOGEN, 12.08. — die „Korrektur" war selbst der Fehler.** *Hier stand: „das Blatt
+> schreibt `Harzer Pfanne 7`, in der Quelle heißt das Modell `Harzer Pfanne`, eine `7` steht dort
+> nicht."* **Das war falsch.** *Zeile 10 trägt `Modell_Typ = "Harzer Pfanne 7"`, Variante `"Big"` —
+> die `7` steht dort, und das Auftragsblatt hatte recht.*
+>
+> **Die Ursache war mein Ausleseskript:** *es kürzte die Spalte auf 14 Zeichen, und
+> `"Harzer Pfanne 7"` hat 15.* **Die Anzeige hat die Ziffer abgeschnitten, und ich habe die Kürzung
+> als Befund gemeldet — H-9 an dem Tag, an dem ich die Regel formuliert habe.**
+>
+> *Der Vermerk bleibt stehen statt gelöscht zu werden, weil die Richtung zählt:* **wer mit
+> `Harzer Pfanne` in die Quelle geht, landet auf Zeile 9 — dort stehen KEINE Lattmaße.** *Die
+> falsche Korrektur hätte dieses Blatt unbrauchbar gemacht.* Gefunden vom Evaluator (`30cc04c5`),
+> nachgemessen und bestätigt vom Planner (`3a94fe59`).
 >
 > **(2) Die Regeldachneigung von `Rubin 13V` ist LEER — in beiden Zeilen.** *Das Blatt führt in
 > seiner Tabelle für alle sieben eine Regeldachneigung; gemessen fehlt sie bei einem.* **Und das ist

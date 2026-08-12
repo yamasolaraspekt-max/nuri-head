@@ -1,4 +1,8 @@
-# Baubericht W-23 — Deckung und Material. Sieben Blätter aus der Quelle, und zwei Abweichungen zum Blatt
+# Baubericht W-23 — Deckung und Material. Sieben Blätter aus der Quelle, eine Abweichung, und eine zurückgezogene
+
+> **Nachbesserung 12.08. (§12.5).** *Die erste Fassung dieses Berichts meldete **zwei** Abweichungen
+> zum Auftragsblatt. **Die erste war selbst der Fehler** und ist unten zurückgezogen; dazu kommt das
+> neue Kriterium `W-23-8`.*
 
 ```yaml
 auftrag: "W-23"
@@ -40,11 +44,27 @@ und brach ab; erst das Nachsehen half.*
 | Füllquote 9 / 13 / 17 | **9 / 13 / 17** ✓ |
 | 9 Zeilen = 7 Modelle, zwei doppelt | **9 Zeilen, 7 Modelle** — `Rubin 13V` (HA/OG) und `Topas 13V` (HA/OG) ✓ |
 
-## Zwei Abweichungen zum Auftragsblatt — gemessen, gemeldet, nicht angeglichen
+## Eine Abweichung zum Auftragsblatt — und eine, die ich ZURÜCKZIEHE
 
-> **(1) Der Modellname stimmt nicht.** *Das Blatt schreibt `Harzer Pfanne 7`. In der Quelle heißt es
-> `Modell_Typ = "Harzer Pfanne"`, `Variante_Ausfuehrung = "Big"` — **eine `7` steht dort nicht**.*
-> **Die Maße stimmen (372–405), der Name nicht.**
+> ## ⚠ (1) ZURÜCKGEZOGEN 12.08. — meine „Abweichung" war selbst der Fehler
+>
+> **Hier stand:** *„Das Blatt schreibt `Harzer Pfanne 7`. In der Quelle heißt es `Modell_Typ =
+> "Harzer Pfanne"` — eine `7` steht dort nicht."* **Das war falsch.**
+>
+> *Nachgemessen, ungekürzt:* **Zeile 10 trägt `Modell_Typ = "Harzer Pfanne 7"`, Variante `"Big"`,
+> Lattmaß 372–405.** *Die `7` steht dort; das Auftragsblatt hatte recht.*
+>
+> **Die Ursache war mein eigenes Ausleseskript: es kürzte die Spalte auf 14 Zeichen — und
+> `"Harzer Pfanne 7"` hat 15.** *Die Anzeige hat die Ziffer abgeschnitten, und ich habe die Kürzung
+> als Befund gegen das Blatt gemeldet.* **Das ist H-9 in Reinform, an dem Tag, an dem ich die Regel
+> selbst formuliert habe — nicht das Muster war falsch, sondern das, woran es ansetzte.**
+>
+> *Und es ist die gefährliche Richtung:* **wer mit `Harzer Pfanne` in die Quelle geht, landet auf
+> Zeile 9 — dort stehen KEINE Lattmaße.** *Meine Korrektur hätte das Werkzeug-Blatt unbrauchbar
+> gemacht.* Gefunden vom **Evaluator** (`30cc04c5`), unabhängig nachgemessen und bestätigt vom
+> **Planner** (`3a94fe59`); ich habe es meinerseits an der Quelle nachgeprüft, bevor ich es
+> angenommen habe. **Der Absatz bleibt stehen statt gelöscht zu werden — der Fehler gehört zur
+> Kette, nicht in den Papierkorb.**
 
 > **(2) `Rubin 13V` hat KEINE Regeldachneigung — in beiden Zeilen.** *Das Blatt führt in seiner
 > Tabelle für alle sieben Modelle eine Regeldachneigung; gemessen fehlt sie bei einem.*
@@ -62,7 +82,7 @@ First, Ortgang, Restausgleich **nicht** erfasst).
 **Der geforderte Fall mit `n_min > n_max`, ausgeschrieben:**
 
 ```text
-Harzer Pfanne, L = 1000 mm, Bereich 372-405
+Harzer Pfanne 7 (Variante Big), L = 1000 mm, Bereich 372-405
   n_min = aufrunden(1000/405) = 3      n_max = abrunden(1000/372) = 2
   n_min (3) > n_max (2)   ->  KEINE gleichmaessige Teilung, KEIN Wert
   zum Vergleich: n=2 gaebe 500 mm (zu gross), n=3 gaebe 333 mm (zu klein)
@@ -85,12 +105,45 @@ Achat 12V     360-330=30 · Spiel 30 ✓      Rubin 9V      400-370=30 · Spiel 
 Granat 11V    380-338=42 · Spiel 42 ✓      Topas 11V     380-320=60 · Spiel 60 ✓
 Rubin 13V HA  360-330=30 · Spiel 30 ✓      Topas 13V HA  360-320=40 · Spiel 40 ✓
 Rubin 13V OG  360-330=30 · Spiel 30 ✓      Topas 13V OG  360-320=40 · Spiel 40 ✓
-Harzer Pfanne 405-372=33 · Spiel  —  fehlt, ableitbar
+Harzer Pfanne 7  405-372=33 · Spiel  —  fehlt, ableitbar
 ```
 
 **Acht von acht Zeilen mit beiden Werten stimmen, keine einzige Abweichung.** *Das Blatt nennt
 „sechs von sechs" — es zählt **Modelle**, ich zähle **Zeilen**; die zwei Doppelvarianten erklären den
 Unterschied vollständig.* **Beide Zahlen stimmen, sie zählen Verschiedenes.**
+
+## W-23-8 · Der Modellname ist keine Adresse (neu, Nachbesserung)
+
+*Das Kriterium ist aus meinem Fehler entstanden: der Planner hat den Evaluator-Befund nachgemessen
+und daraus eine Zusage gemacht statt einer Bemerkung.* **Ich habe seine Zahlen an der Quelle
+nachgeprüft, bevor ich sie übernommen habe — alle stimmen:**
+
+```text
+114 verschiedene Modellnamen bei 127 Zeilen   (Namen normalisiert: Braas-Praefix und
+  8 Namen mit Dubletten                        Klammerzusaetze entfernt)
+  5 davon OHNE jede gefuellte Zeile
+
+  Opal Standard   5 Zeilen, 0 gefuellt    Frankfurter Pfanne  2 Zeilen, 0 gefuellt
+  Rubin 11V       3 Zeilen, 0 gefuellt    Harzer Pfanne       2 Zeilen, 0 gefuellt
+  Rubin 13V       3 Zeilen, 2 gefuellt    Harzer Pfanne 7     2 Zeilen, 1 gefuellt
+  Taunus Pfanne   2 Zeilen, 0 gefuellt    Topas 13V           2 Zeilen, 2 gefuellt
+```
+
+**Die verlangte Gegenprobe, an der Quelle gefahren:**
+
+```text
+Zugriff "Harzer Pfanne"                     ->  Zeile 9,  Lattmass LEER  ->  KEIN Bereich
+Zugriff "Harzer Pfanne 7" + Variante "Big"  ->  Zeile 10, 372-405        ->  Bereich
+```
+
+> **Adressiert wird über `Modell_Typ` PLUS `Variante_Ausfuehrung`** — *und wo auch das nicht
+> eindeutig ist, entscheidet die Zeile mit gefüllten Lattmaßen.* **Warum das gefährlicher ist als
+> eine fehlende Zahl: eine leere Zelle sieht man. Ein Treffer auf der falschen Zeile sieht aus wie
+> ein Ergebnis.**
+
+*Auch `Rubin 13V` hat drei Zeilen, nicht zwei — die dritte (Zeile 75) ist leer. **Die Angabe „neun
+Zeilen, sieben Modelle" bleibt richtig**, sie zählt nur die gefüllten; die Adressierung muss die
+leeren trotzdem kennen.*
 
 ## W-23-5 · Kein Wert ohne Herkunft
 

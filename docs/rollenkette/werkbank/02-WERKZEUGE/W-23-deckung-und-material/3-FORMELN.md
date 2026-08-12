@@ -33,7 +33,7 @@ TEILUNG    n_min = aufrunden(L / Lattmass_max)
 > über 801 Sparrenlängen je Modell — 5.607 Fälle — liefert sie in 2,6 % bis 18,2 % einen Wert
 > außerhalb des erlaubten Bereichs, und zwar leise.**
 >
-> *Beispiel `Harzer Pfanne` bei `L = 1000`: sie rechnet **333,3 mm**, der Ziegel erlaubt **372–405**.*
+> *Beispiel `Harzer Pfanne 7` (Variante `Big`) bei `L = 1000`: sie rechnet **333,3 mm**, der Ziegel erlaubt **372–405**.*
 > **Der Grund ist Teilbarkeit, nicht Fachwissen:** *zwischen `n=2` (500 mm, zu groß) und `n=3`
 > (333 mm, zu klein) liegt eine Lücke — für dieses Dach mit diesem Ziegel gibt es keine
 > gleichmäßige Teilung.* **Wer die erste Fassung allein einbaut, baut einen Fehler ein, der in bis zu
