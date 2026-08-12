@@ -39,7 +39,7 @@
 | **W-01N** Suite-Zahl zahlfrei | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53930b60` · Elter `2e587fb7` | **5/5** · die feste Zahl ist raus und **nicht durch eine neuere ersetzt** · Nachweis prüfbar geblieben (resources 0, Suite 1698 an beiden Ständen) · Fahrplan-Widerspruch **vorgelegt statt umgebogen** — entschieden: richtig so · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | **`BETRIEBSBESTAETIGT`** | – | Abnahme `b1554b01` · Elter `9d09b02d` | **7/7 — dritte Barriere, ausgelöst statt gelesen** · Unabhängigkeit **zweifach gemessen**: B5/B6-Blöcke bytegleich + Mutation → beide feuern weiter · H-1…H-7 alle zeichengleich, H-8 **angehängt** · Wegweiser trägt nur den Verweis, kein zweiter Regeltext · Tor +26/−0, scripts-Suite 107/107 beidseitig · P2: nie auf `IN_ARBEIT` gesetzt (ohne Schaden — zum Bauzeitpunkt lief nachweislich keiner) |
-| **B5N** Belegzeilen-Schreibweisen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `c54c7129` · Elter `a1751fbe` | **6/6** · drei Formen **einzeln** belegt, Barriere bleibt bei fehlendem Beleg laut · B5-Zählwort und B6/B7 nachweislich unberührt (gehasht + am Tor) · Testlücke **gemessen statt angenommen** (0 Stellen), bleibt offen · **einziger Bau des Tages mit `IN_ARBEIT` im committeten Stand vor dem Bau** |
+| **B5N** Belegzeilen-Schreibweisen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c54c7129` · Elter `a1751fbe` | **6/6** · drei Formen **einzeln** belegt, Barriere bleibt bei fehlendem Beleg laut · B5-Zählwort und B6/B7 nachweislich unberührt (gehasht + am Tor) · Testlücke **gemessen statt angenommen** (0 Stellen), bleibt offen · **einziger Bau des Tages mit `IN_ARBEIT` im committeten Stand vor dem Bau** |
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c89e9096` | **neun Belege an einem Tag, vier Rollen**: ein Prüfmuster setzt am TEXT an statt am GEGENSTAND · H-9 im Wortlaut des Generators (»misst die Schreibweise und nicht die Sache«) plus die dreifach erprobte Kontrollprobe · **KEINE achte Barriere** (B5/B6/B7 in derselben Datei, dreimal »wird weggeklickt« gemeldet) · zweiter Teil: `ARBEITSREGELN.md:103` — `.*IN_ARBEIT` reicht über alle Spalten, die B7-Zeile (ABGENOMMEN) wird als laufend gezählt · **der Fehler ist meiner**: linke Seite erweitert, rechte nicht angesehen |
@@ -5745,8 +5745,51 @@ wenn_yama_trotzdem_loescht: "Archiv + Manifest + Rueckweg nach der Dauerregel, k
 ```yaml
 auftrag: "B5N"
 datei: docs/auftraege/aktiv/B5N-belegzeilen-schreibweisen.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig
+meine_eigene_befangenheit_offengelegt: "release-pruefer 12.08.: DIESER AUFTRAG BEHEBT EINEN
+  BEFUND, DEN ICH MITGEMELDET HABE. Im B6-Lauf hat die B5-Barriere auf meine eigene
+  Freigabe-Botschaft angeschlagen, weil ich die Fundstelle als 'Z.217-268' geschrieben hatte;
+  ich habe das als Beleg fuer den P2 des Evaluators festgehalten, und daraus ist B5N geworden.
+  Der Evaluator hat dieselbe Befangenheit fuer sich offengelegt (der P2 war urspruenglich
+  seiner). Ich messe deshalb GEGEN DIE KRITERIEN DES BLATTES, nicht gegen meinen Einwand —
+  und das ist mehr als eine Floskel: mein Einwand nannte VIER Schreibweisen, das Blatt verlangt
+  DREI, und ich habe die vierte nicht zum Massstab gemacht."
+
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an c54c7129, Fehlerklasse KEINE.
+  Messtisch 6/6 im Blatt gegengelesen (B5N-1 bis B5N-6). Grundtor: Kette Vorfahr, must_preserve
+  resources/app/database 0/0/0, Geheimnisse 0, bash -n exit 0, scripts-Suite 107/107.
+  DIE DREI VERLANGTEN FORMEN EINZELN GEFAHREN, wie B5N-1 es ausdruecklich fordert und die
+  Sammelaussage verbietet: 'Trefferzeilen in Z.217' 0 Warnungen · 'die Stellen stehen in
+  Z.217-268' 0 · 'die Fundstelle steht in Zeile 171' 0.
+  DER TRAGENDE PUNKT B5N-2 EIGENS NACHGEMESSEN: 'der Begriff kommt zweimal vor, also ist er
+  gebaut' warnt WEITERHIN, 1 Warnung. Die Barriere ist leiser geworden, nicht stumm — genau der
+  Unterschied, den das Kriterium fordert, und ohne den die Nachbesserung eine Abschaltung mit
+  anderem Namen waere.
+  MEIN EIGENER FALL IST BEHOBEN: die Botschaft, die mich im B6-Lauf falsch angeschlagen hat,
+  laeuft jetzt durch. Das ist die Probe mit dem hoechsten Beweiswert, weil sie aus dem
+  Wildbetrieb stammt und nicht aus dem Blatt."
+
+was_offen_bleibt_und_KEIN_mangel_ist: "Mein urspruenglicher Einwand nannte vier nicht erkannte
+  Schreibweisen. B5N behebt die drei, die das Blatt benennt. Gemessen bleiben zwei Formen
+  warnend: 'treppenTypen:4' (Wort-Doppelpunkt-Zahl ohne Dateiendung) und ':38' (blosse
+  Doppelpunkt-Zahl). Das ist KEIN Mangel des Baus — der Auftrag war so geschnitten, und ein
+  Bauender, der ueber sein Blatt hinausgeht, baut Beifang. Ich benenne es als Rest, damit es
+  nicht in der Freigabe verschwindet; ob daraus ein Auftrag wird, entscheidet der Planner."
+
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau c54c7129 ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt (resources/ 0 Dateien),
+  Smoke-Tests: scripts-Suite 107/107 an Bau und Elter. WILDBETRIEBS-BELEG in Reinform: die
+  Barriere hat ihre Nachbesserung an MEINER eigenen Commit-Botschaft aus dem laufenden Betrieb
+  bestanden, nicht an einer Probe aus dem Blatt. Und die drei anderen Barrieren feuern
+  unveraendert weiter — B5, B6 und B7 je eine Warnung im Probelauf am selben Tor."
+
+testluecke_zum_dritten_mal: "Auch B5N bringt keinen Test mit — der Evaluator hat es SELBST
+  gemessen und offengelegt: 0 Stellen in scripts/__tests__ pruefen B5s Muster, der Bau hat die
+  Luecke nicht vergroessert und laesst sie offen. Damit stehen jetzt VIER Barrieren ohne
+  Regressionsschutz im Tor (B5, B6, B7, B5N), waehrend A-07, A-08, A-09 und A-11 je elf bis
+  fuenfzehn Test-Nennungen tragen. Mein P2 aus der B6-Freigabe waechst damit von zwei auf vier
+  Faelle; er blockiert weiterhin nicht, aber er wird nicht kleiner."
 gebaut: "EINE Musterzeile, drei Formen, zwei Alternativen (Z.217-268 beginnt mit Z.217).
   B5N-1 je Form EINZELN gefahren, alle drei schweigen. B5N-2 der tragende Punkt: dieselbe Probe
   ohne Beleg warnt weiter (1), mit Z.217 schweigt sie (0) — die Nachbesserung ist keine
