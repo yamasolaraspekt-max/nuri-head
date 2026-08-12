@@ -2206,6 +2206,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## MEIN SCHWERSTER FEHLBEFUND HEUTE: "es laeuft keine Release-Pruefer-Instanz" — sie lief die ganze Zeit (plan-pruefer 12.08.)
+
+```yaml
+was_ich_gemeldet_habe: "Ich habe Yama gemeldet: 'VIER Auftraege stehen abgenommen beim Release-Pruefer, die Sammel-Kontrolle ist ueberfaellig — kein Rollenfehler, es laeuft schlicht keine Release-Pruefer-Instanz.' DAS WAR FALSCH. Selbst nachgemessen nach dem Merge: A-15, W-09/1 und W-07N stehen BETRIEBSBESTAETIGT, sind also durch die VOLLE Release-Kette gegangen; nur B5 ist frisch abgenommen und wartet echt. Der Release-Pruefer hat durchgehend gearbeitet — 28 Commits lang, nur auf einem anderen Zweig."
+die_ursache_und_warum_sie_mich_trifft: "fork und backup-private standen auf 5579a6c0, der lokale Zweig auf 1872eb68 — MEINEM letzten Commit — und sie waren GEGABELT: 28 Commits nur auf fork, 7 nur lokal. Generator, Planner und Plan-Pruefer arbeiteten lokal, der Release-Pruefer auf fork. Gefunden und gemergt hat es der Release-Pruefer selbst (ed7ccb70), mit kontrollierter Union: 40 Tafelzeilen lokal, 40 auf fork, 40 im Ergebnis — und ausdruecklich die NAMEN verglichen, nicht die Zahl."
+die_lehre_und_sie_ist_die_schwerste_von_heute: "Alle meine Wache-Messungen setzen stillschweigend voraus, dass ich auf DEM Zweig messe, auf dem alle arbeiten. DAS HABE ICH NIE GEPRUEFT — nicht ein einziges Mal in achtzehn Runden. Und der Fehler hat eine besonders gefaehrliche Form: ich habe die ABWESENHEIT von Arbeit gemeldet. Eine Abwesenheitsaussage ist nur so gut wie die Vollstaendigkeit des Raums, in dem man sucht; wer einen Teil des Raums nicht sieht, findet dort zuverlaessig nichts und haelt das fuer einen Befund. Meine drei DoR-Luecken von heute (Zustand, Ziel, Beweiskraft) bekommen damit eine vierte, die ueber allen liegt: SEHE ICH UEBERHAUPT DEN GANZEN GEGENSTAND."
+konsequenz_praktisch: "Ab jetzt beginnt jede Wache-Runde mit einer Zweigprobe: rev-parse HEAD gegen die Remote-Refs (fork, backup-private, origin) und, wenn sie auseinanderlaufen, die Zahl der Commits auf jeder Seite. Eine Divergenz wird GEMELDET, nicht gemergt — Zweige zusammenfuehren ist keine Pruefer-Handlung. Und keine Abwesenheitsaussage mehr ohne den Satz, WORIN ich gesucht habe."
+was_stehen_bleibt: "Der Rueckstau war real, nur kleiner als gemeldet: EINER (B5) wartet auf den Release-Pruefer, nicht vier. Und die ballbesitz-Felder der drei betriebsbestaetigten sagen noch 'release-pruefer', obwohl der Zustand weiter ist — Nachzieharbeit an ihren eigenen Zeilen, kein Befund von mir."
+```
+---
+
 ## A-18 CODE_FERTIG geprueft — und die dritte Luecke meiner DoR, damit ist das Muster sichtbar (plan-pruefer 12.08.)
 
 ```yaml
