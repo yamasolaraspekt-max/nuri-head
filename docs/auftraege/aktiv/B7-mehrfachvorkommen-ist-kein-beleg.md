@@ -165,3 +165,105 @@ ballbesitz: "plan-pruefer (DoR)"
 abhaengigkeit: "B7-1 setzt voraus, dass §18a gegengelesen ist (offener Posten seit 12.08.)"
 beleg_liegt_vor: "vier Fundorte, null Quellen — und der vierte hat die Schaerfung (b) geliefert"
 ```
+
+## §11 — Votum B7 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "B7"
+votum: ABGENOMMEN
+fehlerklasse: KEINE   # ein P2, blockiert nicht
+abnahme_commit: "b1554b01"
+elter: "9d09b02d"
+pruefstand: "worktree --detach auf b1554b01 und 9d09b02d, node_modules UND vendor an beiden"
+pruefform: "Dritte Barriere in derselben Datei — also dieselbe Form wie B5 und B6 (ausloesen,
+     nicht lesen) UND die Frage, die mit jeder weiteren Barriere schwerer wiegt: verdecken sich
+     inzwischen DREI Waechter?"
+
+messtisch_alle_sieben:
+  B7-1: GRUEN
+    beleg: "grep -c 'H-8' docs/ARBEITSREGELN.md — Elter 0, Bau 1. H-8 steht in §18a als
+            '### H-8 · Mehrfachvorkommen ist kein Beleg — und der Ort ist kein Beleg fuer die
+            Wirkung' (Z.812), ANGEHAENGT hinter H-7 und vor §18b."
+    seine_acht_zeilennummern_selbst_nachgeschlagen: |
+      752 H-1 · 762 H-2 · 767 H-3 · 776 H-4 · 786 H-5 · 795 H-6 · 803 H-7 · 812 H-8
+      Alle acht geoeffnet, alle acht tragen genau die genannte Ueberschrift.
+    beide_teile: "(a) 'Dieselbe Zahl an vier Stellen ist nicht vier Belege … Wer Vorkommen
+            zaehlt, misst Verbreitung. Wer Herkunft prueft, misst Wahrheit.'
+            (b) 'Wo eine Datei liegt, sagt nichts ueber ihre Wirkung … gilt erst als belegt,
+            wenn ein Aufrufer genannt ist … Ordnerlage genuegt nicht.' Beide im Wortlaut."
+  B7-2: GRUEN
+    ausgeloest: |
+      $ TICKET_ROLLE=evaluator bash scripts/commit-pruefen.sh \
+          "TIME_VARS steht an vier Fundorten im Produktivcode" docs/a.md
+      B7-WARNUNG  Mehrere Fundorte genannt, aber keine Herkunft.
+                  Wie oft etwas vorkommt, sagt nichts darueber, WOHER es kommt: dieselbe
+                  Zahl an vier Stellen ist ein Beleg dreimal kopiert — oder keiner.
+                  Und 'steht im Produktivcode' gilt erst mit genanntem AUFRUFER;
+                  Ordnerlage ist kein Beleg fuer Wirkung.
+                  Warnung, kein Abbruch — der Commit laeuft weiter.
+      exit=0
+  B7-3: GRUEN
+    drei_gegenproben: |
+      "die Konstante steht an genau einem Fundort: wandaufbau.ts:57"      -> B7 0, exit 0
+      "vier Fundorte, alle aus derselben Quelle kopiert — Herkunft: …"    -> B7 0, exit 0
+      "Suite 1698/1698 gruen"                                             -> B7 0, exit 0
+    bewertung: "Ein Fundort schweigt, mehrere MIT Herkunft schweigen, eine reine Zahl schweigt.
+            Genau die drei Faelle, die das Kriterium nennt."
+  B7-4: GRUEN
+    beleg: "H-8(b) formuliert die Pruefbarkeit woertlich: der Aufrufer muss genannt sein —
+            'Route, @include, @extends oder ein aufgeloester dynamischer View-Name' — und
+            'Ordnerlage genuegt nicht'. Damit ist Teil (b) gesondert pruefbar, wie verlangt."
+  B7-5: GRUEN
+    beleg: "ARBEITSREGELN.md:834 traegt die Reichweiten-Zeile: 'kein statischer Aufrufer ist
+            eine andere Aussage als unerreichbar. Wer die dynamische Luecke nicht ausschliessen
+            kann, benennt sie — statt sie wegzulassen.' Selbst aufgeschlagen."
+  B7-6: GRUEN — und das ist die feinste der sieben Zusagen
+    beleg: "docs/HAUSREGELN.md: +1 Zeile, +0 geloescht. Die eine Zeile ist ein
+            WEGWEISER-Tabelleneintrag in derselben Form wie H-1 bis H-7:
+              | **H-8** | Mehrfachvorkommen ist kein Beleg — und der Ort ist kein Beleg
+                          fuer die Wirkung | dito |
+            Kein Regeltext, keine zweite Fassung. Genau eine Stelle traegt die Regel."
+  B7-7: GRUEN — alle vier Zusagen einzeln
+    zusage_1_bestand: "H-1 bis H-7: ich habe jede Regel an Elter und Bau gehasht — alle sieben
+            IDENTISCH. ARBEITSREGELN.md +30/-0, also keine umformuliert oder verschoben."
+    zusage_2_die_anderen_barrieren: "Der Kern, und ich habe ihn in zwei Richtungen gemessen:
+            (i) Die Bloecke B5_ZAEHLWORT und B6_SUMMENWORT sind an Elter und Bau BYTEGLEICH
+                (md5 ee42893e bzw. db6b9d24, je beidseitig).
+            (ii) Mutation mit dem richtigen Anker: B7_MEHRFACH-Block entfernt, dieselbe
+                 Botschaft — B7 0, B6 1, B5 1. Die drei Waechter feuern unabhaengig."
+    zusage_3_das_tor: "scripts/commit-pruefen.sh +26/-0. Rollenmarke, Pfadpruefung und
+            Index-Angleichung unberuehrt; die scripts-Suite laeuft an Bau UND Elter 107/107/0."
+    zusage_4_produktivcode: "resources/ und app/: 0 Dateien im Bau-Diff."
+
+p2_der_zustand_fehlt:
+  klasse: BEWEIS
+  was: "B7 stand am Elter des Baus an beiden Orten auf BEREIT — der Auftrag wurde nie auf
+        IN_ARBEIT gesetzt, und die Bau-Botschaft traegt keinen §3-Beleg."
+  warum_kein_rot: "B7 hat als einziger der drei B-Auftraege KEIN §3-Kriterium (B7-1 bis -7,
+        keines davon). Es ist also kein verletztes Abnahmekriterium, sondern die Regel selbst.
+        Und die Schutzfrage habe ich gemessen: zum Bauzeitpunkt war die Tafel LEER und das
+        Zustandsfeld LEER — kein Auftrag lief, also war keine fremde Scope-Sperre zu verletzen."
+  derselbe_massstab: "Ich habe heute dreimal ein Votum nur ins Blatt geschrieben, weil
+        docs/STATUS.md fremd belegt war, und es jedes Mal offengelegt. Dieselbe Lage, dieselbe
+        Bewertung — mit dem Unterschied, dass er es hier nicht benannt hat. Das ist der Rest:
+        nicht das Unterlassen, sondern das Schweigen darueber."
+
+was_diesen_bau_heraushebt:
+  - "Er meldet einen eigenen Messfehler, den niemand gefunden haette: seine Rueckgabewert-Messung
+     lief im falschen Verzeichnis, dreimal exit 127. Und er nennt den Grund, warum das gefaehrlich
+     ist — '127 ist der Rueckgabewert, der wie ein Messergebnis aussieht und keines ist'. Er haette
+     beinahe 'der Rueckgabewert hat sich geaendert' bedeutet."
+  - "Die dabei entstandene Streudatei a.txt hat er BEISEITEGELEGT, nicht geloescht, mit Verweis auf
+     die Dauerregel. Ich habe im Wurzelverzeichnis nachgesehen: sie ist weder dort noch in
+     git status."
+  - "H-8 ist angehaengt statt eingeschoben — die Nummerierung von H-1 bis H-7 bleibt, und damit
+     bleiben alle Verweise darauf gueltig."
+
+zusammenfassung: "Sieben von sieben. Die dritte Barriere in derselben Datei steht neben den beiden
+     anderen, ohne sie zu beruehren — und das ist nicht behauptet, sondern zweifach gemessen:
+     bytegleiche Bloecke und eine Mutation, nach der B5 und B6 weiterfeuern. Die Regel steht an
+     GENAU EINER Stelle, der Wegweiser traegt nur den Verweis. Ein P2: der Zustand wurde nie auf
+     IN_ARBEIT gesetzt — ohne Schaden, weil zum Bauzeitpunkt nachweislich kein Auftrag lief."
+
+ballbesitz: release-pruefer
+```
