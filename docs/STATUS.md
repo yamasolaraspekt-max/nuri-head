@@ -2192,6 +2192,16 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## A-18 CODE_FERTIG geprueft — und die dritte Luecke meiner DoR, damit ist das Muster sichtbar (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "492a6a71 existiert, Scope SELBST gemessen: vier Dateien — Bericht (+215), STATUS (18/3), der Test (16/1) und wandaufbau.ts (+24). Nichts ausserhalb, kein Fremdcode. Der ZEICHENGENAUE Wortlaut selbst verglichen, Code gegen Blatt: identisch, einschliesslich der gemischten Umlautschreibung ('geprueft', 'dafuer', 'Diffusionswiderstaende' neben 'Raumklima' und 'feuchtesicher'). A-18-3 haelt. Ball beim Evaluator."
+er_hat_die_testschwaeche_gemeldet_UND_behoben: "Seine Meldung nennt sie offen: 'vorbehalt === UWERT_VORBEHALT vergleicht zwei Verweise auf dieselbe Zeichenkette und bleibt gruen, wenn jemand den Wortlaut umformuliert.' Selbst nachgesehen — er hat es nicht bei der Meldung belassen: der Test prueft jetzt gegen die Konstante UND gegen den ausgeschriebenen Wortlaut, mit einem Kommentar der die Begruendung traegt. Eine tautologische Zusage haette die zentrale Zusage des Auftrags nur scheinbar abgesichert."
+die_dritte_luecke_meiner_dor_und_jetzt_das_muster: "A-18-6 verlangte 'EINE Zusage kommt hinzu'. Meine DoR hat geprueft, ob das ERFUELLBAR ist — nicht, ob seine Erfuellung etwas BEWEIST. Der naheliegende Test waere tautologisch gewesen und haette das Kriterium erfuellt, ohne die Zusage zu sichern. Damit sind es heute DREI Luecken derselben Familie: bei W-07N habe ich den ZUSTAND falsch gemessen (Rot-Lage), bei B5 das ZIEL nicht geprueft (existiert der Ort?), hier die BEWEISKRAFT (haelt die Zusage, wenn jemand sie umgeht?). Das ist kein Zufall, sondern eine unvollstaendige Pruefliste: eine DoR muss alle drei Fragen stellen — stimmt der Ausgangszustand, existiert das Ziel, und beweist die Erfuellung das Gemeinte. Ab jetzt fest in dieser Reihenfolge."
+release_rueckstau_VIER_und_ueberfaellig: "Gemessen: A-15, W-09/1, B5 und W-07N stehen ABGENOMMEN mit Ball beim Release-Pruefer — VIER, die Schwelle von drei ist ueberschritten und die Sammel-Kontrolle ist ueberfaellig. A-05 und A-12 zaehlen nicht mit (Messauftraege beim Planner). Ich kann sie nicht fahren, das ist nicht meine Rolle; ich stelle den Rueckstau fest und melde ihn an Yama, weil das Auflaufen daran haengt, dass keine Release-Pruefer-Instanz laeuft — kein Rollenfehler, eine fehlende Besetzung."
+```
+---
+
 ## B5 CODE_FERTIG geprueft — und die Formulierung "gegen ihren Wortlaut" richtiggestellt (plan-pruefer 12.08.)
 
 ```yaml
