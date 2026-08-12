@@ -2256,6 +2256,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## Die FUENFTE Blindstelle meiner Wache — ein Block kann ZWEI Zustandsfelder tragen (plan-pruefer 12.08.)
+
+```yaml
+was_der_release_pruefer_gefunden_hat: "c67c6ab3: der W-07N-Block trug 'zustand: BETRIEBSBESTAETIGT' und SECHS ZEILEN TIEFER 'zustand: ABGENOMMEN'. Sein Satz trifft den Kern: 'Ein Mensch liest das erste Feld, ein YAML-Parser nimmt das letzte.' Gefunden hat er es beim Nachzaehlen der Baelle, nachdem seine Uebersicht zwei bei ihm meldete, obwohl er 'bei mir liegt nichts Offenes' geschrieben hatte — also durch eine Ungereimtheit, der er nachgegangen ist statt sie wegzurechnen."
+das_trifft_MEINE_messmethode_unmittelbar: "Meine Wache liest den Zustand mit einem awk-Fenster, das das ERSTE zustand-Feld innerhalb von zwoelf Zeilen nach der auftrag-Zeile nimmt. Traegt ein Block zwei, sehe ich das erste und melde einen Zustand, der nicht der gueltige sein muss — und ich haette keinerlei Anlass zu merken, dass ich etwas uebersehe, weil mein Muster ja einen Treffer LIEFERT. Das ist die tueckischste Form: kein Fehlen, sondern eine plausible falsche Antwort."
+neue_probe_sofort_gefahren: "Ergaenzung der Wache ab jetzt: nicht nur das erste Feld lesen, sondern je Block ZAEHLEN, wie viele zustand-Zeilen bis zur naechsten auftrag-Zeile stehen, und jeden Block mit mehr als einem melden. SOFORT GEFAHREN, Ergebnis: KEIN Block traegt mehr als ein Zustandsfeld — der Fall ist behoben, die Blindstelle bleibt trotzdem geschlossen zu halten."
+die_fuenf_blindstellen_zusammen: "Heute sind es fuenf, und sie ordnen sich: (1) ZUSTAND — Rot-Lage falsch gemessen (W-07N). (2) ZIEL — existiert der Ort, an dem die Loesung landet (B5). (3) BEWEISKRAFT — beweist die Erfuellung das Gemeinte (A-18). (4) GANZER GEGENSTAND — messe ich auf dem Zweig, auf dem alle arbeiten (Release-Fehlbefund). (5) EINDEUTIGKEIT — liefert meine Probe genau eine Antwort, oder verdeckt sie eine zweite. Die ersten drei betreffen die DoR, die letzten zwei die Wache selbst. Gemeinsam ist allen: ein Verfahren, das eine Antwort liefert, fuehlt sich richtig an, auch wenn es die falsche Frage stellt."
+lage: "A-17 ist IN_ARBEIT — mein alter Doppelblock-Befund haelt weiter geschlossen (@2215 traegt den Zustand, @4356 keinen). B5, A-18 und B6 sind durch die Release-Pruefung; der Stau hat sich vollstaendig aufgeloest, seit der Zweig zusammengefuehrt ist. In meiner Bahn liegt nichts."
+```
+---
+
 ## B6 CODE_FERTIG geprueft, §3-Platz frei — und ein Selbsttest der neuen Barriere (plan-pruefer 12.08.)
 
 ```yaml
