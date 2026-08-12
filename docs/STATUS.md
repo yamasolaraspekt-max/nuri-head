@@ -8330,6 +8330,13 @@ zwei_pfadangaben_geradegezogen: "Aus Yamas Belegen, beide vom release-pruefer ge
   der Uebergangsblock beginnt bei :103 und nicht bei :101. Der INHALT beider Angaben stimmt
   zeichengenau — nur die Fundstelle wird geradegezogen, damit sie beim Nachschlagen nicht aufhaelt."
 W_40_1_nimmt_den_paragraf3_platz: "Sobald gezogen: IN_ARBEIT. Paragraf 3 steht bei 0."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-40/1 GECLAIMT vor dem Pruefstand.
+  DAS IST DIE NACHBESSERUNG ZU MEINEM EIGENEN BEFUND: ich habe W-40 abgenommen und dabei
+  gemeldet, dass seine Praemisse 'kein Code' nicht traegt — outdated existiert samt
+  Uebergangstabelle in configuratorPackage.ts. Ich pruefe deshalb besonders, ob die Erweiterung
+  an der Stelle sitzt, die ich BELEGT habe, und nicht an einer daraus abgeleiteten: 'approved
+  spielt die Rolle von confirmed' war eine EINORDNUNG des Generators und keine Messung, und ich
+  habe sie in meinem Votum ausdruecklich NICHT bestaetigt."
 ```
 
 dor_nachtrag: "plan-pruefer 12.08., NACHTRAG ZU MEINER FREIGABE — der Generator hat einen Befund vor dem Ziehen gemeldet (ea418041) und er trifft MEINE Pruefung: W-40/1-1 nennt EINE ueberholte Stelle, ueberholt sind aber VIER BLAETTER an dreizehn Stellen. Ich habe die genannten Zeilen einzeln GEOEFFNET und alle bestaetigt: 3-FORMELN:33 rechnet 4+3=7 und sagt die achte falle aus der Rechnung; 6-PRUEFUNG:12 und :13 fuehren K-3 und K-4, die ausdruecklich verlangen, die Fragen NICHT zu beantworten; 2-FUNKTION:18 sagt was blocked von DECISION_BLOCKED unterscheide stehe nicht hier; 7-GRENZEN traegt es in :48, :54, :56, :61, :65, :73 und in :106/:107 sogar als Tabelle mit Yama als Adressat. MEIN ANTEIL: ich habe die Kernbehauptungen am Gegenstand gemessen und die VOLLSTAENDIGKEIT der Berichtigung nicht gefragt — genau die Frage, die ich heute dreimal bei anderen gestellt habe (die widerlegte Zahl an vier Stationen). Sein Satz nennt den Grund praeziser als ich es koennte: wer nur 7-GRENZEN anfasst, laesst K-3 und K-4 stehen, und die verlangen dann weiterhin, die Fragen offen zu lassen — zwei Wahrheiten, beide belegt aussehend. ZAEHL-FEINHEIT ohne Folge: der Titel nennt dreizehn, die Aufzaehlung neun plus fuenf; die Differenz sind zwei Zeilenbereiche (:65-66, :73-74), die einmal als Stelle und einmal als zwei Zeilen gezaehlt sind. Die Liste selbst ist vollstaendig und jede Stelle von mir belegt."
