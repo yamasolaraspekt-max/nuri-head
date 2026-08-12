@@ -47,7 +47,7 @@
 | **W-27** Dachkantentypen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
-| **A-20** Zustand an vier Orten | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
+| **A-20** Zustand an vier Orten | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6415,8 +6415,9 @@ meine_frage_wurde_beantwortet: "Der Planner hat die Grundmengen zu '17 von 24' n
 
 ```yaml
 auftrag: "A-20"
-zustand: BEREIT
+zustand: IN_ARBEIT
 ballbesitz: generator
+ballbesitz_bau: generator (Bau laeuft — Regelwerk plus Bereinigung von 33 Blaettern)
 basis_sha: f1296de8
 spur: A
 BEFANGENHEIT_OFFENGELEGT: "Dieser Auftrag regelt MEINE Rolle und beantwortet eine Frage, die ich selbst gestellt habe — und er entscheidet sie GEGEN meinen Vorschlag: A-20-2 legt fest, dass der SCHNEIDENDE Tafelzeile und Datensatz anlegt, waehrend ich vorgeschlagen hatte, dass der Plan-Pruefer es bei der DoR tut. Ich lege das offen, weil ich sonst in Versuchung waere, strenger zu pruefen als noetig. Geprueft habe ich gegen die Kriterien des Blattes, nicht gegen meinen Vorschlag — und die Entscheidung ist sachlich besser als meine: der Block entsteht dann, wenn der Auftrag entsteht, und nicht erst Stunden spaeter; genau die Leerstelle, die ich heute zweimal selbst schliessen musste (W-38 und dieses Blatt hier), kann dann nicht mehr auftreten."
