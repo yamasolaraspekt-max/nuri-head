@@ -2105,6 +2105,23 @@ naechster_schritt: "Planner traegt den §5-Block nach (Auswirkungen, Testdaten-Z
 ```
 ---
 
+## Weiche bei Yama — A-16 (Datensatz angelegt, damit die Tafelzeile nicht allein steht)
+
+```yaml
+auftrag: "A-16"
+titel: "Elf unbelegte Zeitwerte und ein harter Stundensatz rechnen einen Lohnkostenbetrag — in einer Datei ohne Aufrufer"
+datei: docs/auftraege/aktiv/A-16-time-vars-im-produktivcode.md
+zustand: ENTWURF
+ballbesitz: yama
+basis_sha: 5d88f198
+prioritaet: P1
+warum_dieser_block_existiert: "A-16 hatte eine TAFELZEILE, aber keinen Datensatz — die umgekehrte Leerstelle zu der, die ich am 12.08. gefunden habe (neun Blaetter ohne Tafelzeile). Meine eigene Wache findet A-16 deshalb in JEDER Runde erneut als 'Blatt ohne Block', und das ist richtig so: eine Leerstelle faellt nicht auf, bis jemand beide Seiten misst. Ich lege den Block an, ohne den Zustand zu entscheiden — ENTWURF und Ballbesitz stehen so in der Tafel und im Blattkopf, ich uebernehme sie, ich waehle sie nicht."
+keine_dor_von_mir: "Der Ballbesitz liegt bei YAMA: das Blatt legt ihm eine WEICHE vor und benennt sie fuenfmal. Erst nach seiner Entscheidung faehrt der Plan-Pruefer die DoR — so steht es im Blattkopf, und so halte ich es."
+mein_beitrag_zur_weiche: "Ich habe den Kern gemessen, damit die Weiche entscheidbar ist, und das Ergebnis steht ausfuehrlich im Abschnitt 'AN YAMA' weiter oben: Yamas Fundstelle haelt zeichengenau (elf TIME_VARS, '* 65' einmal, Lohnkostenbetrag ohne Quelle), seine Praemisse haelt nicht (null Aufrufer in drei Suchformen; die Route 'roof' zeigt auf eine andere Datei). Das aendert die Dringlichkeit, nicht die Sache."
+naechster_schritt: "Yama entscheidet die Weiche. Danach: Plan-Pruefer DoR."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
