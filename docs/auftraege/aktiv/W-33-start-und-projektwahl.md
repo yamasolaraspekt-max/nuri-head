@@ -236,3 +236,129 @@ die_lehre_aus_diesem_blatt: "Dreimal in einer Stufe habe ich 'kein Code' ueberno
         Male war die Sache gebaut. Pflichtpruefung 1 wird darum geschaerft."
 W_33_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+
+## §11 — Votum W-33 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-33"
+votum: ABGENOMMEN
+geprueft_an: "fa7547c7"
+elter: "bd6284fb"
+scope_diff: "9 Dateien, +1124/-1: sieben Werkzeugblaetter neu, REGISTER.md eine Zeile, Bericht.
+  0 Code-Dateien — die zwei ueberholten Codestellen sind GEMELDET und nicht geaendert."
+pruefstand: "git worktree add -q --detach auf fa7547c7. Reine Ablesung."
+
+wie_im_claim_zugesagt: "Ich habe Waechter und Registerzeile ZUERST selbst erhoben, bevor ich das
+  Blatt gelesen habe — die drei Ablesungen davor haben mich je einen Befund gekostet, der in einer
+  ungenauen Waechter- oder Registerzuordnung sass."
+  
+DIE_ZWEI_EIGENEN_ERHEBUNGEN_VORWEG:
+  waechter: "grep -rl 'StartView' __tests__/ liefert GENAU ACHT Dateien: rohwertZusage,
+    konfiguratorEhrlich, breiten, startEhrlich, dialogFokus, stilschicht, projektKlick,
+    elevationTokens. Deckungsgleich mit W-33-6."
+  registerzeile_und_die_lehre_aus_W35: "Bei W-35 habe ich gelernt, dass zwei Registerzeilen ueber
+    DIESELBE Datei Gegensaetzliches sagen koennen — und dass ich das bei W-42 uebersehen hatte.
+    Hier habe ich es ausdruecklich geprueft: 'StartView' kommt im Register GENAU EINMAL vor,
+    in Zeile 120. Kein zweiter Ort, kein Widerspruch."
+
+messtisch:
+
+  W-33-1_der_anlass_woertlich:
+    urteil: ERFUELLT
+    beleg: "1-ZWECK:8ff zitiert den Kopf von startEhrlich.test.ts mit dem tragenden Satz:
+      'Ein Startbildschirm, der fremde Projekte zeigt, ist keine Vorschau; er ist eine
+      Falschauskunft ueber den eigenen Bestand.' Und die drei erfundenen Namen stehen daneben."
+
+  W-33-2_befund_b:
+    urteil: ERFUELLT
+    beleg: "1-ZWECK:28 'Alle drei riefen onGuided(1) — drei Versprechen, ein Ziel', und der
+      heutige Schutz ist mit projektKlick benannt. 6-PRUEFUNG:192 fuehrt die Fangprobe
+      'beide Karten auf onGuided(1) legen' mit demselben Waechter."
+
+  W-33-3_leerzustand_als_normalfall:
+    urteil: ERFUELLT
+    selbst_geoeffnet: "StartView.tsx:206 `{projekte.length === 0 ? (Leerzustand) : (Liste)}` und
+      der Dateikommentar bei :15 'Leer heisst leer'. Beide Stellen im Code nachgesehen."
+
+  W-33-4_vier_komponenten_drei_mit_hover:
+    urteil: ERFUELLT
+    am_code_gezaehlt: "Karte :52, ProjektKachel :104, HubKarte :165, StartView :193 — vier, davon
+      genau EIN Export. useState kommt dreimal vor (:53, :105, :166) und ist jedes Mal `hover` —
+      also halten drei der vier einen eigenen hover-Zustand. Keine Zahl aus dem Blatt uebernommen;
+      die Datei hat 267 Zeilen, wie die Registerzeile sagt."
+
+  W-33-5_der_ueberholte_satz:
+    urteil: ERFUELLT
+    was_das_kriterium_verlangt: "(a) den Wortlaut als ZITAT MIT HERKUNFT, (b) die Messung daneben,
+      (c) den Grund — und als BINDENDE Bedingung des plan-pruefers: die Kennzeichnung als
+      UEBERHOLT an DERSELBEN Stelle wie das Zitat."
+    a_das_zitat_mit_herkunft: "7-GRENZEN:11-18 nennt DREI Fundstellen statt der zwei des
+      Kriteriums — startEhrlich.test.ts (Dateikopf), StartView.tsx:18 und StartView.tsx:205.
+      Ich habe alle drei geoeffnet, jede traegt den Satz."
+    bindende_bedingung_erfuellt: ":20, unmittelbar unter dem Zitat: 'DREI Stellen, ein Satz —
+      und er ist UEBERHOLT.' Nicht einen Absatz weiter, nicht in einem anderen Blatt."
+    b_die_messung_SELBST_nachgefahren: "Die Naht ist vierstufig belegt, und ich habe jede Stufe
+      geoeffnet: HausplanerController.php:101 (hausplanerProjekte() mit LeadAlternativeAdd-Query),
+      :55 ('hpProjekte' => …), objekt.blade.php:141 (data-projekte=json_encode), main.tsx:82
+      (setProjekte(leseProjekte(mount.dataset[…]))). Controller-Kommentar :57 sagt 'dieselbe Naht
+      wie hpProjekte, kein Lade-Fetch aus der Insel' — die Haelfte 1 laeuft tatsaechlich OHNE Route."
+    ZWEI_EIGENE_FEHLGRIFFE_DABEI: "Erstens hielt ich die drei Routen aus web.php:5016-5020 fuer
+      einen Fehlbeleg, weil es Konfigurator-Paket-Routen sind und nichts mit der Projektliste zu
+      tun haben. Sie sind aber HAELFTE 2 — das Auftragsblatt trennt in Abschnitt 2 ausdruecklich
+      'HAELFTE 1 die Projektliste' und 'HAELFTE 2 die Konfigurator-Persistenz'. Ich hatte 'Teil B'
+      mit der Projektliste gleichgesetzt.
+      Zweitens fand mein Muster Haelfte 2 in 7-GRENZEN nicht und ich stand vor der Meldung, sie
+      fehle — sie steht bei :71 als 'fuer die PAKET-Seite hat der Release-Pruefer drei Routen
+      belegt, fuer die OBJEKT-Seite gibt es weiterhin keine Listen-Route'. Mein Muster suchte
+      'Haelfte', das Blatt schreibt 'PAKET-Seite'."
+    c_der_grund_und_die_ehrlichkeit: "7-GRENZEN traegt getrennt, was gemessen ist (die Naht in
+      allen vier Stufen) und was NICHT (ob die Liste im Browser ankommt — 'ich habe die Naht
+      gelesen, nicht ausgefuehrt'). Und der Satz, der die Sache traegt: 'damit dieses Blatt nicht
+      zur vierten Stelle wird, an der ein falscher Stand als Beleg gilt.'"
+    die_zwei_codestellen_gemeldet_nicht_geaendert: "0 Code-Dateien im Scope — belegt."
+
+  W-33-6_acht_waechter:
+    urteil: ERFUELLT
+    deckungsgleich_mit_meiner_erhebung: "Die acht des Blattes sind genau die acht, die ich
+      unabhaengig erhoben habe. Testzahlen selbst nachgezaehlt: startEhrlich 9, projektKlick 15,
+      rohwertZusage 16, elevationTokens 9 — alle vier zeichengenau."
+    die_drei_woertlichen_zusagen: "startEhrlich 'AUF-40 Teil A — der Startbildschirm sagt, was es
+      gibt', projektKlick 'AUF-66 — ein Klick zurueck in die Arbeit', rohwertZusage 'AUF-38 — die
+      generische Rohwert-Zusage. Eine fuer alle Scheiben.' Alle drei als Zitat gekennzeichnet."
+    die_ZUSATZAUFLAGE_greift_nicht_und_das_ist_richtig: "W-33-6 verlangt zusaetzlich: 'WO das
+      Blatt startEhrlich in die Reihe der Ehrlichkeitswaechter stellt, nennt es BEIDE Mengen mit
+      Traeger'. Ich habe alle sieben Blaetter durchsucht: das Blatt stellt startEhrlich NIRGENDWO
+      in eine solche Reihe — es fuehrt ihn als '1 · der tragende Waechter' in der Liste der ACHT
+      W-33-Waechter, was eine andere Menge ist. Die Bedingung des Kriteriums tritt damit nicht
+      ein, und die Auflage laeuft leer.
+      DAS IST DIE KLUEGERE BAUWEISE: statt einer Zahl, die driftet ('vierter Gegenstand, fuenfte
+      Datei' — ich habe nachgezaehlt, es sind heute 5 Dateien mit 'Ehrlich' im Namen), nennt das
+      Blatt sie gar nicht. Eine Zahl, die man nicht schreibt, kann nicht veralten."
+
+  W-33-7_scope_grenzen:
+    urteil: ERFUELLT
+    beleg: "2-FUNKTION:99-112 nennt alle drei: der RAHMEN -> W-39 ('W-39 importiert StartView
+      namentlich'), T/FACH/PROJ -> W-38, die Konfigurator-Flaeche hinter onKonfigurator -> W-35.
+      Je mit dem Zustand des Nachbarwerkzeugs."
+
+  W-33-8_sieben_blaetter_und_md5:
+    urteil: ERFUELLT
+    selbst_gefahren: "Sieben Blaetter, alle gefuellt (79/128/85/134/105/208/174 Zeilen).
+      md5-Gegenprobe unabhaengig ueber alle 33 Werkzeugordner: Dubletten MIT W-33: 0."
+
+meine_eigenen_messfehler_in_dieser_runde:
+  - "Die beiden Fehlgriffe zu W-33-5 stehen oben — 'Teil B' mit der Projektliste gleichgesetzt,
+     und Haelfte 2 nicht gefunden, weil das Blatt sie 'PAKET-Seite' nennt."
+  - "ZUM VIERTEN MAL IN FOLGE war mein Suchmuster zu eng: bei W-39 die Waechterliste, bei W-35
+     die Waechterliste, hier zweimal. Das ist keine Einzelheit mehr, sondern meine haeufigste
+     Fehlerquelle — ich baue das Muster nach der Schreibweise, die ich ERWARTE, statt nach der
+     Sache. Bei jedem dieser Faelle stand ich kurz vor einem Fehlbefund gegen einen richtigen Bau."
+
+was_diesen_bau_traegt: "Er loest eine Klemme, die das Kriterium selbst gebaut hatte: W-33-5 verlangte
+  woertlich einen Satz, der inzwischen ueberholt ist — wer buchstabengetreu erfuellt, luegt; wer
+  ehrlich misst, verletzt das Kriterium. Der Generator hat den Weg vorgeschlagen und die Entscheidung
+  ABGEGEBEN statt sie zu nehmen, der plan-pruefer hat sie getroffen, und das Blatt traegt jetzt beides:
+  den Wortlaut als Zitat und die Messung daneben. Dazu meldet es zwei ueberholte CODESTELLEN, ohne sie
+  anzufassen — ein Blatt beschreibt, es berichtigt keinen Code."
+```

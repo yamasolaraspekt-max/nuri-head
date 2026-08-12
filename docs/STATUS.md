@@ -58,7 +58,7 @@
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-35** Konfigurator-Dialog | **`BETRIEBSBESTAETIGT`** | – | Release `3dae69b4` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
-| **W-33** Start und Projektwahl | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
+| **W-33** Start und Projektwahl | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-36** Faehigkeiten-Navigation | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-37** Rechenpanels | `ENTWURF` | **planner** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR zweite Fassung** — beide Blocker behoben, EIN Punkt offen (drei Ausfuhren fehlen im Scope) |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
@@ -8473,8 +8473,8 @@ drei_eigene_messfehler: "Jeder haette einen Fehlbefund gegen einen richtigen Bau
 dor_nachtrag: "plan-pruefer 12.08., NACHTRAG ZU MEINER FREIGABE — der Generator hat einen Befund vor dem Ziehen gemeldet (ea418041) und er trifft MEINE Pruefung: W-40/1-1 nennt EINE ueberholte Stelle, ueberholt sind aber VIER BLAETTER an dreizehn Stellen. Ich habe die genannten Zeilen einzeln GEOEFFNET und alle bestaetigt: 3-FORMELN:33 rechnet 4+3=7 und sagt die achte falle aus der Rechnung; 6-PRUEFUNG:12 und :13 fuehren K-3 und K-4, die ausdruecklich verlangen, die Fragen NICHT zu beantworten; 2-FUNKTION:18 sagt was blocked von DECISION_BLOCKED unterscheide stehe nicht hier; 7-GRENZEN traegt es in :48, :54, :56, :61, :65, :73 und in :106/:107 sogar als Tabelle mit Yama als Adressat. MEIN ANTEIL: ich habe die Kernbehauptungen am Gegenstand gemessen und die VOLLSTAENDIGKEIT der Berichtigung nicht gefragt — genau die Frage, die ich heute dreimal bei anderen gestellt habe (die widerlegte Zahl an vier Stationen). Sein Satz nennt den Grund praeziser als ich es koennte: wer nur 7-GRENZEN anfasst, laesst K-3 und K-4 stehen, und die verlangen dann weiterhin, die Fragen offen zu lassen — zwei Wahrheiten, beide belegt aussehend. ZAEHL-FEINHEIT ohne Folge: der Titel nennt dreizehn, die Aufzaehlung neun plus fuenf; die Differenz sind zwei Zeilenbereiche (:65-66, :73-74), die einmal als Stelle und einmal als zwei Zeilen gezaehlt sind. Die Liste selbst ist vollstaendig und jede Stelle von mir belegt."
 ```yaml
 auftrag: "W-33"
-zustand: CODE_FERTIG
-ballbesitz: evaluator  # der plan-pruefer notierte hier: "Bau laeuft; meine Auflage ist durch seinen Befund ueberholt" — Wortlaut erhalten, nur der Traeger gewechselt
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 meine_bindende_bedingung_selbst_nachgeprueft: "plan-pruefer 12.08.: In baa785a2 habe ich W-33
   freigegeben unter EINER bindenden Bedingung — die Kennzeichnung als ueberholt muss an DERSELBEN
   Stelle stehen wie das geforderte Zitat, nicht in einem anderen Blatt und nicht nur im Bericht.
@@ -8702,6 +8702,23 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-33 GECLAIMT vor dem Pr
   pruefe. Vierte Ablesung der Stufe 6: die drei davor haben mich je einen Befund gekostet, der
   in einer ungenauen Waechter- oder Registerzuordnung sass (W-39 stilschicht, W-35 die zwei
   widersprechenden Registerzeilen). Ich erhebe Waechter und Registerzeile deshalb zuerst selbst."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an fa7547c7, Elter bd6284fb, ACHT von acht."
+zwei_eigene_erhebungen_vorweg: "grep auf StartView in den Tests liefert GENAU ACHT Dateien —
+  deckungsgleich. Und die Lehre aus W-35 angewandt: StartView kommt im Register GENAU EINMAL vor,
+  kein zweiter Ort, kein Widerspruch."
+W_33_5_das_schwerste: "Der ueberholte Satz steht als ZITAT MIT HERKUNFT an drei Fundstellen (statt
+  der zwei des Kriteriums), alle drei geoeffnet; die bindende Bedingung ist gewahrt — 'UEBERHOLT'
+  unmittelbar unter dem Zitat. Die Messung selbst nachgefahren, alle vier Stufen der Naht geoeffnet:
+  Controller:101, :55, objekt.blade.php:141, main.tsx:82 — sie laeuft ohne Route."
+zusatzauflage_greift_nicht: "W-33-6 verlangt beide Mengen mit Traeger, WO das Blatt startEhrlich in
+  die Reihe der Ehrlichkeitswaechter stellt. Alle sieben Blaetter durchsucht: es tut das nirgendwo.
+  Die Bedingung tritt nicht ein — und das ist die kluegere Bauweise, denn eine Zahl, die man nicht
+  schreibt, kann nicht veralten."
+eigene_messfehler: "Zwei Fehlgriffe zu W-33-5: 'Teil B' mit der Projektliste gleichgesetzt (die drei
+  web.php-Routen sind HAELFTE 2, die Konfigurator-Persistenz), und Haelfte 2 in 7-GRENZEN nicht
+  gefunden, weil das Blatt sie 'PAKET-Seite' nennt. ZUM VIERTEN MAL IN FOLGE war mein Suchmuster zu
+  eng — meine haeufigste Fehlerquelle: ich baue es nach der erwarteten Schreibweise statt nach der
+  Sache, und jedes Mal stand ich kurz vor einem Fehlbefund gegen einen richtigen Bau."
 ```
 
 ```yaml
