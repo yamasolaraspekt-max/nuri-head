@@ -1771,7 +1771,58 @@ release_vermerk: "release-pruefer (Stamm-Instanz) 12.08.: §10 an der Abnahme c9
 datenrisiko_gemessen: "Der Waechter wirft kuenftig bei roof_azimuth ausserhalb [0,360). A-13-7 nennt die Folge: ein ALTWERT ausserhalb der Grenze bleibt beim naechsten Speichern haengen. SELBST GEMESSEN in der Arbeits-DB ticket: p_v_roofs gesamt 0, ausserhalb 0, NULL 0 — lokal KEIN Bestandsrisiko. NICHT GEMESSEN UND AUSDRUECKLICH OFFEN: der Bestand auf Hetzner (3000 Kunden) — Produktionssysteme fasse ich nicht an. VOR EINEM PRODUKTIONS-DEPLOY ist dort zu zaehlen, wie viele p_v_roofs roof_azimuth ausserhalb [0,360) tragen; sonst schlaegt der Waechter erst beim Speichern zu, und zwar beim Anwender. Fuer main kein Hindernis — main ist kein Produktionssystem."
 wirkungskette_nachgetragen: "NACHGEMELDET vom Plan-Pruefer (a6e91db1) und von mir SELBST nachgemessen — ich hatte das Datenrisiko gemessen, aber NICHT seine Wirkung. Drei Befunde ergeben zusammen EINE Bedingung: (1) ein Altsatz ausserhalb [0,360) wird beim Speichern abgewiesen, (2) RoofAzimuthOutOfRangeException wird NIRGENDS gefangen — catch-Bloecke dafuer in app/ und resources/: 0, selbst gezaehlt, (3) es gibt KEINE Formularvalidierung — roof_azimuth in app/Http/: 0 Treffer, selbst gezaehlt; gespeichert wird in DREI Controllern (PVRoofController, PVChecklistController, PersonalTaskController). ERGEBNIS: ein HTTP 500 statt einer Formularmeldung, und zwar AUCH WENN DER NUTZER DEN AZIMUT GAR NICHT ANFASST. Fuer main unveraendert kein Hindernis (lokal 0 Saetze). Fuer Hetzner ist es ein HARTER BLOCKER: dort darf dieser Stand erst nach dem SELECT und nach H1/H2 (Formularvalidierung + gefangene Ausnahme) deployt werden. MEIN ANTEIL: mein §10 hat die URSACHE gemessen und die WIRKUNG nicht — ich habe gezaehlt, wie viele Altsaetze es gibt, aber nicht, was beim Treffer passiert. Der Plan-Pruefer hat die drei Einzelbefunde zusammengelesen; das ist die Leistung, die mir gefehlt hat."
 offener_befund_p2: "BEWEIS/P2 aus der Abnahme, blockiert nicht: alle acht Zusagen rufen pruefeAzimut DIREKT auf, keine speichert — deshalb ueberlebt die Mutation saving-Hook-entfernt die Suite. Der Evaluator hat den Schreibpfad SELBST verifiziert (new PVRoof mit 400 + save wirft). Das VERHALTEN stimmt, der Regressionsschutz fehlt. Ich gebe frei, weil das Verhalten unabhaengig belegt und der Rueckweg zerstoerungsfrei ist — die Nachforderung an den Generator (eine Zusage, die SPEICHERT) bleibt offen und erlischt NICHT mit der Veroeffentlichung: ohne sie kann der Hook bei einem spaeteren Umbau still verschwinden."
-ballbesitz: release-pruefer (P2-Nachforderung beim generator)
+ballbesitz: generator (P2-Nachforderung — mein Pruefauftrag ist erledigt, siehe unten)
+pruefauftrag_erledigt: "release-pruefer 12.08., auf das Feld auftrag_an_die_release_instanz.
+  Es stellte DREI Fragen; alle drei gemessen, keine geschaetzt.
+
+  (1) GREIFT DIE PRUEFUNG AUF ALLEN SECHS SCHREIBPFADEN? JA. Alle sechs gehen ueber Eloquent
+  und loesen damit saving aus: PVChecklistController:138 (new PVRoof), PersonalTaskController:6495,
+  PVRoofController:70, NewLeadsController:845, :1347 und der genannte Prueffall :7082
+  (PVRoof::create(\$roofData), Mass-Assignment — roof_azimuth steht im fillable, also greift er).
+  UMGEHUNGSPFADE GESUCHT statt vorausgesetzt: DB::table('p_v_roofs') kommt VIER Mal vor und wuerde
+  Model-Events immer umgehen — alle vier GELESEN, alle vier rein lesend (->get()/select, kein
+  update, kein insert): NewLeadsController:2997 und :3028, ProfitabilityCalculationController:146,
+  roof_info.blade.php:4. saveQuietly/updateQuietly/withoutEvents auf PVRoof: 0.
+  PVRoof::find(...)->update() in PVRoofController:136 ist ein INSTANZ-Update und feuert saving —
+  nur ein Query-Builder-Massenupdate wuerde vorbeigehen, und das gibt es nicht.
+
+  (2) BLEIBT DER RUECKWEG EIN REINER GIT REVERT? JA. Der Bau c9397575 bringt 0 Migrationen mit;
+  der Hook ist reiner Anwendungscode, das Schema ist unberuehrt.
+
+  (3) VERAENDERT DER HOOK BESTANDSDATEN — die §15-Frage? NEIN, und zwar aus dem Code gelesen:
+  pruefeAzimut WIRFT nur (PVRoof.php:152), es gibt keine Zuweisung, keine stille Korrektur.
+  ABER die Frage ist damit nicht beantwortet, sondern VERSCHOBEN, und das ist der eigentliche
+  Punkt: ein werfender saving-Hook aendert keine Bestandsdaten, er kann sie UNSPEICHERBAR machen.
+  Liegt in p_v_roofs ein Altdatensatz mit roof_azimuth ausserhalb [0,360), dann scheitert jedes
+  kuenftige Speichern dieses Satzes — auch wenn jemand ein voellig anderes Feld aendert."
+
+wirkungskette_gemessen: "release-pruefer 12.08.: WER FAENGT DIE AUSNAHME — NIEMAND.
+  RoofAzimuthOutOfRangeException wird an genau einer Stelle geworfen (PVRoof.php:152) und in
+  app/ und resources/ an KEINER Stelle gefangen; die einzigen weiteren Treffer sind der
+  use-Import und die Klassendefinition selbst. UND ES GIBT KEINE FORMULARVALIDIERUNG:
+  roof_azimuth kommt in app/Http/Requests/ 0 Mal vor. Der Model-Hook ist der EINZIGE Riegel.
+  Fachlich ist das die gewollte Haerte — lieber werfen als still falsch speichern, das ist die
+  Begruendung des Auftrags und ich stelle sie nicht in Frage. Die FOLGE fuer den Bediener ist
+  aber ungedeckt: ein Tippfehler im Azimutfeld erzeugt einen unbehandelten Fehler, keine
+  Feldmeldung. Das ist KEIN Release-Hindernis und ich mache daraus keins — A-13 ist
+  betriebsbestaetigt und das Verhalten ist richtig. Es ist ein Befund fuer den Planner:
+  der Riegel haelt, die Ruecksicht auf den Menschen davor fehlt."
+
+bestandsdaten_NICHT_gemessen_wo_es_zaehlt: "release-pruefer 12.08., ausdruecklich als Luecke:
+  Ich habe die LOKALE Datenbank gelesen (nur SELECT, kein Schreibvorgang): p_v_roofs enthaelt
+  0 Datensaetze, also auch 0 ausserhalb [0,360). Das ist ein NULLBEFUND OHNE AUSSAGEKRAFT —
+  eine leere Tabelle beweist nichts ueber Hetzner. Genau dort liegt das Risiko, und genau dort
+  endet meine Zustaendigkeit: Produktion gehoert Yama. Die Frage, die vor einem Deploy zu
+  klaeren ist, lautet daher: SELECT COUNT(*) FROM p_v_roofs WHERE roof_azimuth IS NOT NULL
+  AND (roof_azimuth < 0 OR roof_azimuth >= 360). Ist die Zahl 0, ist der Hook folgenlos fuer
+  den Bestand. Ist sie groesser 0, werden genau so viele Datensaetze unspeicherbar, ohne dass
+  jemand sie angefasst hat. Zwei Werte sind dabei besonders zu erwarten und deshalb genannt:
+  exakt 360 ist UNGUELTIG (Obergrenze ausschliesslich) und waere als Nord plausibel eingetragen,
+  und negative Werte sind ungueltig, waehrend die PVGIS-Konvention in
+  PvgisErtragService.php:41 ausdruecklich mit -90 fuer Ost arbeitet. Gegenprobe dazu: ein Weg
+  vom PVGIS-Service in dieses Feld existiert NICHT (roof_azimuth in app/Services/ 0 Treffer),
+  die zwei Konventionen bleiben getrennt — die Verwechslungsgefahr liegt beim Menschen, der
+  eintippt, nicht im Code."
 basis_sha: 783d47c1
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die FUENF NULLEN selbst nachgemessen und ALLE bestaetigt — Validierung in Requests 0, in Controllers 0, PVRoofFactory existiert nicht, Tests 0, Konventionshinweis am Model 0; der Migrations-Kommentar von 2024 ('0=N, 90=E, 180=S, 270=W') steht woertlich in Z.67, und beide Vergleichszusagen existieren (BuildingModelSchemaContractTest, SzeneProjektionServiceTest). Die Kernbelege der DECISION halten: PVRoofController Z.42 HAT ein validate, und roof_azimuth steht nachweislich NICHT darin (0 Treffer im Block) — 'der Ort fuer Validierung existiert und wurde uebersprungen' ist gemessen, nicht behauptet; der Mass-Assignment-Pfad PVRoof::create(\$roofData) liegt in NewLeadsController:7082. Acht Kriterien, §5-Block, Erstnutzer und Rueckweg vorhanden. Die Model-Entscheidung deckt sich mit der ticket-Bauordnung (eine Wahrheit im Model-Hook)."
