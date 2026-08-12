@@ -17,7 +17,8 @@ anlass: "Ich habe mehrfach behauptet, nach W-37 sei der Vorrat erschöpft und al
          eine Entscheidung Yamas. Diese Behauptung habe ich geprüft statt sie zu wiederholen — sie
          trägt nicht. W-31 steht auf LEER und die Registerzeile nennt den gebauten Code selbst."
 grundlage: "geometry/pvBelegung.ts (75 Z., 3 Exporte) · app/dashboard/enginePanels.ts:32/:380/:403 ·
-            app/tools/faehigkeiten.ts:80 als Registry-Eintrag · zwei Wächtertests"
+            app/tools/faehigkeiten.ts:80 als Registry-Eintrag · app/dashboard/fachFlaechen.ts:240-258
+            als FUENFTE Stelle (nachgetragen nach 94bd30f8) · zwei Wächtertests"
 ```
 
 ## 1 — Der tragende Punkt: die Sperre trifft diesen Teil nicht
@@ -59,7 +60,15 @@ faehigkeiten.ts:80    { id: 'engine-pv', label: 'PV-Schnellbelegung',
                         engineModul: 'geometry/pvBelegung' }
 ```
 
-> **Der Bedienweg ist damit vollständig belegt und läuft über drei andere Werkzeuge:** *`faehigkeiten.ts`
+> **BERICHTIGT nach `94bd30f8`: hier stand „der Bedienweg ist damit vollständig belegt".** *Er ist es
+> nicht — es gibt eine **fünfte** Stelle, siehe Abschnitt 3a. **Und mein Muster konnte sie nicht finden:**
+> ich habe über die **Importe** von `pvBelegung` gemessen, und `fachFlaechen.ts` importiert nichts — es
+> nennt Engine und Typen als **Strings** (`'engine-pv'`, `'PvEingabe'`, `'PvBelegung'`). **Eine Verdrahtung
+> über Strings ist für ein Import-Muster unsichtbar**, dieselbe Klasse wie die NUR-QUELLE-Wächter in W-36
+> und W-37, nur auf der Bedienseite. **Wer „vollständig" behauptet, braucht ein zweites Muster, das
+> Strings erfasst.***
+
+> **Der Bedienweg läuft über drei andere Werkzeuge:** *`faehigkeiten.ts`
 > ist **W-36**, `enginePanels.ts` ist **W-37**, und `alsPvEingabe` (`:509`) ist einer der **acht
 > Adapter**, deren Zahl W-37 zwei Runden gekostet hat. **W-31 ist der erste Beleg, dass die Stufe-6-Kette
 > zusammenhängt:** wer W-31 abliest, liest die Naht, die W-36 und W-37 beschreiben, von der anderen
@@ -80,6 +89,41 @@ pvBelegung.ts:6-7, woertlich:
 *Und der Kopf nennt die Herkunft: **„Yamas Abschnitt 7: Für PV muss man nicht das ganze Haus
 modellieren."** Das ist eine Anforderung Yamas im Code, und sie erklärt, warum die Schnellstufe autark
 neben der vollständigen Belegung steht statt als deren Vorstufe.*
+
+## 3a — Die fünfte Stelle nennt eine Ausrichtung, die die Engine nicht entgegennimmt
+
+**Nachgetragen nach `94bd30f8`, jede Stelle selbst geöffnet:**
+
+```text
+fachFlaechen.ts:252    Eingang „Ausrichtung und Neigung", Einheit °
+pvBelegung.ts:10-24    PvEingabe hat SIEBEN Felder:
+                       dachLaenge · dachBreite · modulBreite · modulHoehe
+                       modulLeistung · randabstand? · modulabstand?
+                       -> KEINE Richtung, KEINE Neigung
+FachFlaeche.tsx:208    <h3>Eingangsgroessen ({flaeche.eingaenge.length})</h3>
+           :210        rendert je Eingang ein EingangFeld
+Dateikopf  :4-6        „Feldstruktur-Vorschau (deaktivierte Ein- und Ausgangsfelder
+                       mit sichtbarem Grund)"
+```
+
+> **Das ist keine Erklärseite, sondern eine Feldvorschau** — *`FachFlaeche` rendert die Einträge als
+> **Eingangsgrößen** mit deaktivierten Feldern. Der Nutzer sieht also ein Feld „Ausrichtung und Neigung
+> (°)" für eine Engine, die **weder Ausrichtung noch Neigung entgegennimmt.***
+
+**Und ich nenne es hier ausdrücklich NICHT einen Mangel** — *H-7, Ist ist nicht Soll. Der Dateikopf sagt
+selbst „Vorschau … mit sichtbarem Grund": **eine Vorschau darf künftige Felder zeigen**, das ist ihr
+Zweck. Was ich messe, ist die **Spannung**, nicht der Fehler:*
+
+```text
+Die Vorschau kuendigt eine RICHTUNG an.
+Die Engine nimmt keine.
+Und genau diese Richtung ist der Gegenstand von F-028 — der roten Sperre.
+```
+
+> **Für dieses Blatt folgt daraus genau eine Pflicht:** *`7-GRENZEN` nennt die Stelle und sagt, dass die
+> angekündigte Ausrichtung heute **nicht** im Eingabetyp steht und an F-028 hängt. **Ob die Vorschau ein
+> Feld zeigen soll, das an einer roten Sperre hängt, ist eine eigene Frage** — sie gehört nicht in eine
+> Ablesung, und ich schneide sie hier nicht mit. Sie steht im Fuß als Vormerkung.*
 
 ## 4 — Scope
 
@@ -108,9 +152,21 @@ W-31-1  (P1, TRAGEND) Das Blatt sagt, WELCHER Teil gesperrt ist und welcher nich
         F-028-Fall. Ohne diese Unterscheidung liest die naechste Rolle 'gesperrt'
         und laesst ein gebautes, angeschlossenes Werkzeug unbeschrieben — genau der
         Zustand, den dieses Blatt beendet.
-W-31-2  (P1) Der Bedienweg steht VOLLSTAENDIG mit Fundstelle: enginePanels.ts:32
-        Einfuhr, :380 engineId, :403 der Aufruf ueber alsPvEingabe, und
-        faehigkeiten.ts:80 der Registry-Eintrag mit zustand 'verfuegbar'.
+W-31-2  (P1) BERICHTIGT nach 94bd30f8: mein Kriterium sagte 'der Bedienweg steht
+        VOLLSTAENDIG' und nannte VIER Stellen. Es gibt eine FUENFTE, sie ist live,
+        und sie ist nicht irgendeine.
+        DIE VIER, die ich hatte: enginePanels.ts:32 Einfuhr, :380 engineId, :403 der
+        Aufruf ueber alsPvEingabe, faehigkeiten.ts:80 Registry mit zustand
+        'verfuegbar'.
+        DIE FUENFTE, selbst nachgemessen: app/dashboard/fachFlaechen.ts:240-258,
+        Eintrag fach-pv-module mit engine 'engine-pv', :248 typ PvEingabe und :255 typ
+        PvBelegung — eingefuehrt von app/FachFlaeche.tsx und HausplanerStudio.tsx:18,
+        also GERENDERT und nicht nur vorhanden.
+        UND WARUM SIE DER KERN DIESES BLATTES BERUEHRT: unter ihren Eingaengen steht
+        bei fachFlaechen.ts:252 'Ausrichtung und Neigung' in GRAD. Dieses Blatt sagt
+        an seiner tragendsten Stelle 'kein Azimut' — wer den Bedienweg als vollstaendig
+        beschreibt und diese Stelle auslaesst, laesst genau die eine Stelle weg, an der
+        eine RICHTUNG steht.
         Am Bau-Stand zaehlen, keine Zahl aus diesem Blatt uebernehmen.
 W-31-3  (P1) Die GRENZE zu wberechnung steht in 7-GRENZEN, woertlich aus
         pvBelegung.ts:6-7: Ertrag, Verschattung und Strings bleiben der Fach-Engine
@@ -130,6 +186,14 @@ W-31-6  Die Waechter, je mit Zugriffsart und Zusage — getrennt nach IMPORT und
         Registry-Verdrahtung und keine Verriegelung.
         Keine Zahl im Kriterium: am Bau-Stand erheben.
 W-31-7  Die Scope-Grenzen zu W-36, W-37 und W-19 stehen in 2-FUNKTION.
+W-31-7b (P1) 7-GRENZEN nennt fachFlaechen.ts:252 und sagt: die dort angekuendigte
+        'Ausrichtung und Neigung' in Grad steht HEUTE NICHT in PvEingabe (sieben
+        Felder, keine Richtung) und haengt an F-028. Ohne diesen Satz behauptet das
+        Blatt 'kein Azimut' und laesst die einzige Stelle weg, an der eine Richtung
+        steht — und die naechste Rolle findet sie beim ersten grep auf 'Ausrichtung'.
+        NICHT VERLANGT: eine Bewertung, ob die Vorschau das Feld zeigen darf. Eine
+        Vorschau darf kuenftige Felder zeigen, das ist ihr Zweck (FachFlaeche.tsx:4-6).
+        Das Blatt BENENNT die Spannung und entscheidet sie nicht.
 W-31-8  Alle sieben Blaetter gefuellt, Gegenprobe `tail -n +2 <blatt> | md5` je Blatt,
         keine zwei Werkzeuge mit gleichem Hash.
 ```
@@ -157,5 +221,34 @@ warum_die_sperre_nicht_verletzt_wird: "Eine Ablesung beschreibt den Bestand. Die
         nichts, aendert nichts an pvBelegung.ts und nennt die Sperre als Grenze — es macht sie
         SICHTBARER als heute, wo sie in einer Registerzeile steht, die niemand liest, weil das Werkzeug
         LEER ist."
+die_fuenfte_stelle_und_was_sie_ueber_mein_messen_sagt: "Ich habe den Bedienweg ueber die IMPORTE von
+        pvBelegung gemessen — enginePanels und zwei Tests — und daraus 'vollstaendig' geschlossen. Die
+        fuenfte Stelle importiert pvBelegung NICHT: fachFlaechen.ts nennt die Engine als STRING
+        ('engine-pv') und die Typen als STRING ('PvEingabe', 'PvBelegung'). Mein Muster konnte sie nicht
+        finden, und ich habe trotzdem VOLLSTAENDIG geschrieben. Das ist dieselbe Klasse wie die
+        NUR-QUELLE-Waechter in W-36 und W-37, nur auf der Bedienseite: eine Verdrahtung ueber Strings
+        ist fuer ein Import-Muster unsichtbar. Wer 'vollstaendig' behauptet, braucht ein zweites Muster,
+        das Strings erfasst — und genau das verlangt Pflichtpruefung 7 seit heute."
+vormerkung_und_ausdruecklich_KEIN_auftrag: "Die Vorschau kuendigt eine Ausrichtung an, die die Engine
+        nicht entgegennimmt, und die Richtung ist der Gegenstand von F-028. Ob eine Feldvorschau ein
+        Feld zeigen soll, das an einer roten Sperre haengt, ist eine Produktfrage und keine Ablesung.
+        Ich schneide sie NICHT mit, weil sie erstens H-7 beruehrt — die Vorschau tut, was ihr Kopf sagt
+        — und zweitens weil ein Auftrag daraus die Sperre selbst beruehren wuerde. Vorgemerkt, damit sie
+        nicht in diesem Blatt verwaist."
+zur_sperre_und_was_der_plan_pruefer_dazu_gemessen_hat: "Meine Praemisse traegt, und er hat sie
+        unabhaengig geprueft: F-028 ist eine ECHTE, noch rote Sperre auf Yamas ausdrueckliche Auflage
+        (FORMELSAMMLUNG.md:522), gesperrt fuer das DURCHREICHEN eines Azimut zwischen Kompass- und
+        PVGIS-Konvention — und PvEingabe hat keine Richtung. Er hat dabei eine Wortfalle geprueft statt
+        sie zu uebersehen: ein Muster auf 'Orientier' liefert VIER Treffer in pvBelegung.ts, und alle
+        meinen hochkant gegen quer, also die Modul-LAGE und keine Himmelsrichtung. Wer nach dem Wort
+        sucht, findet einen Azimut, der keiner ist. Heute faellt diese Falle zum ersten Mal ZUGUNSTEN
+        eines Auftrags aus."
+mein_beifang_in_f7c19bee: "Der plan-pruefer haelt fest, dass sein W-31-Beleg ungespeichert im Baum lag,
+        als ich f7c19bee (W-06) committet habe, und mitgenommen wurde — Inhalt unveraendert, aber ohne
+        Botschaft. Ich habe KEIN -A benutzt, sondern zwei Pfade genannt; der Beifang kam ueber
+        docs/STATUS.md, in die wir beide schreiben. Das ist genau der Nebenlaeufigkeits-Befund, den ich
+        Yama in Abschnitt 6 vorgelegt habe, jetzt an mir selbst: 317 Commits an einem Tag auf eine
+        Datei, und der Pfad allein schuetzt nicht, wenn der Pfad geteilt ist. Es gehoert in die Vorlage
+        als gemessener Fall und nicht als Vermutung."
 W_31_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
