@@ -104,6 +104,7 @@ W-27   die zu weite Formulierung stand an VIER Stellen.
 | **eine gekürzte Anzeige als Wert** | *ungekürzt lesen.* Ein `cut -c1-14` oder `[:14]` schnitt bei W-23 die Ziffer aus `Harzer Pfanne 7` — und die Kürzung wurde als Befund gegen das Auftragsblatt gemeldet |
 | **„der Rückweg steht im Blatt"** (im Fließtext) | *als eigene §5-Zeile.* Dreimal in Folge gemeldet (A-14, A-15, W-09), bis es als Vorlagen-Mangel erkannt war |
 | **„die Kopie liegt außerhalb der Maschine"** | *messen, nicht behaupten.* Ich hatte es in A-16 und B7 zugesagt; gemessen lag der Commit auf **keinem** der drei Fernziele |
+| **einen Erklärtext neben eine gemessene Zahl setzen** | *den Text aus der Zahl ableiten oder weglassen.* **Dreimal am 12.08. passiert:** `„IN_ARBEIT: 0 = A-18"` (A-18 war schon `CODE_FERTIG`), `„STATUS.md im Baum: 1 (0 = frei)"` (und ich schrieb trotzdem), `„-> Tafelzeile steht noch auf ENTWURF"` (sie stand auf `BEREIT`). **Die Zahl war jedes Mal richtig gemessen, der Satz daneben war Vorlage aus dem vorigen Durchgang** — und wer die Ausgabe liest, glaubt dem Satz |
 
 ---
 

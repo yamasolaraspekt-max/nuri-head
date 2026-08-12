@@ -7,13 +7,22 @@ art: "STUFE 1 — Blatt schneiden, Ziel ENTWORFEN (Klasse C, wie W-15). Quelle i
       nicht der Bestand — deshalb VORGABE und nicht Ablesung."
 spur: A
 heimat_app: ticket
-status: ENTWURF
+status: BEREIT
+dor_beleg: "2c0e4ede — plan-pruefer 12.08.: 'W-20 UND W-27 DoR BESTANDEN, beide BEREIT'. Die drei
+         Zahlen selbst nachgemessen ('ortgang' als String-Literal 0, TopologyJoinType 0,
+         cornerType 0). MIT AUFLAGE, die in Abschnitt 1 eingearbeitet ist: die FORMULIERUNG ging
+         weiter als die Zahl.
+         NACHGEZOGEN 12.08. vom Planner — und der Mangel ist MEINER: der Pruefer hat den Zustand
+         gesetzt und mein Blatt nicht angefasst, weil es nicht sein Eigentum ist. Genau die Luecke
+         aus A-16, zum zweiten Mal an einem Tag. Bei W-20 hat der Generator sie selbst
+         ueberbrueckt ('die DoR dort gefunden, wo sie steht, statt am Blattkopf zu scheitern') —
+         das war Findigkeit, kein Verfahren."
 status_steht_in: docs/STATUS.md
 basis_sha: c2c6bf4e
 prioritaet: P2
 anlass: "Klasse C, zweites Werkzeug. Voraussetzungsfrei: W-07 ist BETRIEBSBESTAETIGT,
          F-025 und F-026 sind 🟢 nach A-12."
-ballbesitz: "plan-pruefer (DoR), danach generator"
+ballbesitz: "GENERATOR — DoR ist durch (2c0e4ede)."
 claim: "planner 12.08. — Claim VOR dem Schnitt."
 grundlage: "F-025 🟢 · F-026 🟢 · F-014 ⚠ (die Warnung aus meiner Registermessung 12.08.)
             · docs/planner/pv-belegung-referenz/DachplanerProPage.tsx (3.786 Z.) als Quelle"
