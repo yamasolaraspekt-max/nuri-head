@@ -45,9 +45,10 @@
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
 | **W-27** Dachkantentypen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
-| **W-20** Stückliste und Mengen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
+| **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
-| **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
+| **A-20** Zustand an vier Orten, 17 Blätter widersprechen sich | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `50bfb345` | **REGELWERK** · beantwortet die Frage des Plan-Prüfers aus `4ea7398d` · 42 Blätter gemessen: 32 mit `status:`, 24 mit `zustand:`, **17 Kopf≠Fuß** |
+| **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
 
@@ -6331,7 +6332,17 @@ die_auflage_ist_der_kern: "W-27-3 verlangt nicht nur die Zahl, sondern JE BEGRIF
   Leitlinie, nicht als Nebenbedingung."
 dor_beleg: "plan-pruefer 12.08., Commit 2c0e4ede — DoR BESTANDEN mit AUFLAGE. Selbst gemessen: 'ortgang' als String-Literal 0 Dateien, TopologyJoinType 0, cornerType 0 — alle drei Zahlen des Blattes halten. AUFLAGE: die FORMULIERUNG ging weiter als die Zahl ('gibt es in der Insel NICHT'), gemessen traegt die Insel die exportierte Funktion ortgangFlaechenlaengeM (dachformVorlagen.ts:291), das Feld ortgangausbildung (:127, :1386) und 20 Treffer fuer Ortgang gross. Es fehlt der KANTENTYP, nicht die Sache — 7-GRENZEN muss das so schreiben. Vom Planner in cdcadc1d an vier Stellen berichtigt, von mir nachgemessen."
 zustand: CODE_FERTIG
-ballbesitz: generator
+ballbesitz: evaluator  # nachgezogen 12.08.
+zweites_ballfeld_berichtigt: "release-pruefer 12.08.: derselbe Fall wie bei A-16, keine zwei
+  Stunden spaeter. Der Generator hat beim Fertigmelden ein NEUES Feld ballbesitz_bau mit
+  evaluator angelegt, waehrend das massgebliche ballbesitz noch generator trug; die Tafelzeile
+  sagte evaluator und war richtig. Nachgezogen.
+  DAS IST HEUTE DER FUENFTE BELEG derselben Klasse — elf hinterherhinkende Tafelzeilen, zwei
+  Bloecke mit doppeltem Zustandsfeld, vier auseinanderlaufende Baelle, drei widersprechende
+  Ballfelder in A-16, jetzt zwei in W-27. Und seit wenigen Minuten liegt dafuer ein Auftrag im
+  Baum: A-20, 'Der Zustand steht an vier Orten, und 17 von 24 Blaettern widersprechen sich
+  selbst'. Ich ziehe hier nach, weil die Statuswahrheit heute stimmen muss — die Ursache
+  behandelt A-20, nicht ich."
 basis_sha: c2c6bf4e
 anlass: "Klasse C, zweites Werkzeug. Voraussetzungsfrei — W-07 ist BETRIEBSBESTAETIGT, F-025 und
          F-026 sind 🟢 nach A-12."
@@ -6382,8 +6393,35 @@ gewuerdigt_meine_lehre_ist_ein_kriterium_geworden: "W-38-8 verlangt die Gegenpro
 auftrag: "W-20"
 datei: docs/auftraege/aktiv/W-20-stueckliste-und-mengen.md
 dor_beleg: "plan-pruefer 12.08., Commit 2c0e4ede — DoR BESTANDEN. Selbst gemessen: holzMengen.ts 64 Zeilen und 3 Exporte exakt wie im Blatt; 'sechs Testzusagen' sind sechs test-Bloecke mit 25 assert-Aufrufen — beide Zahlen richtig, sie messen Verschiedenes. Der Scheinwiderspruch 'W-23 BESCHRIEBEN' gegen 'W-23 NACHBESSERN' ist geprueft und aufgeloest: Register fuehrt den Werkzeug-Zustand, Datensatz den Auftrags-Zustand, und die Nachbesserung war Klasse BEWEIS — die Blaetter aendern sich nicht, Grundlage stabil."
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 65358372, Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen (W-20-1 bis W-20-7). Reiner Doku-Scope, zehn Blaetter der
+  Werkbank; must_preserve SELBST nachgemessen mit resources/ 0, app/ 0, database/ 0.
+  Kette Vorfahr, Geheimnisse 0.
+  DIE MESSZAHLEN AN DER QUELLE NACHGEFAHREN statt aus dem Votum uebernommen, an
+  resources/planner/hausplaner/geometry/holzMengen.ts (64 Zeilen): Math-Aufrufe 0,
+  Winkelfunktionen 0. Damit traegt die Kernaussage des Blattes — die Registerzeile fuehrt zwei
+  Formeln, das Werkzeug benutzt heute keine.
+  UND DIE FALLE DES EVALUATORS UNABHAENGIG REPRODUZIERT: das Teilmuster sin trifft genau einmal,
+  und die Trefferzeile GELESEN ist Z.57 — das Wort SIND in 'Schiftsparren sind Gemeinsparren'.
+  Er hat diese Falle in seinem Votum als seine dritte des Tages offengelegt; ich bin unabhaengig
+  auf dieselbe Zeile gestossen. Das Blatt warnt an derselben Stelle selbst davor, und genau das
+  macht den Beleg stark: die Regel und der Fehler treffen sich im selben Dokument."
+
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau 65358372 ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt (resources/ 0 Dateien).
+  WILDBETRIEBS-BELEG: die vier Messzahlen des Blattes sind am ausgelieferten Quellcode
+  nachgemessen, nicht an einer Kopie — und die eine, die falsch aussah, ist gelesen worden."
+
+was_dieser_takt_nebenbei_zeigt: "Im Baum liegt seit wenigen Minuten ein neues Blatt: A-20, 'Der
+  Zustand steht an vier Orten, und 17 von 24 Blaettern widersprechen sich selbst'. Das ist die
+  strukturelle Wurzel, die ich heute VIERMAL einzeln gemeldet habe — elf hinterherhinkende
+  Tafelzeilen, zwei Bloecke mit doppeltem Zustandsfeld, vier auseinanderlaufende Baelle, drei
+  widersprechende Ballfelder in EINEM Block — und die als Punkt 6 in meiner Vorlage an Yama
+  steht. Der Planner hat sie beim Nachmessen einer Plan-Pruefer-Frage unabhaengig gefunden und
+  geschnitten. Aus vier Einzelbefunden ist ein Auftrag geworden; ich habe daran keinen Anteil
+  ausser dem Melden, und genau so soll es sein."
 gebaut: "Sieben Blaetter plus Registerzeile, Ziel BESCHRIEBEN erreicht. Alle sieben Zeilenangaben
   aus W-20-1 einzeln gegen holzMengen.ts geprueft (:23 :29 :44 Exporte, :41 gueltigeLaenge,
   :52 :56 :58 Typunterscheidung). Die drei Trefferzahlen aus W-20-4 nachgemessen und exakt
