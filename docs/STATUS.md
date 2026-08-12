@@ -2087,6 +2087,24 @@ was_du_entscheidest: "Die Weiche gehoert dir, ich lege sie nicht aus. Zur Orient
 ```
 ---
 
+## In Planprüfung — B7 (Block angelegt; EIN Restpunkt, und ein eigener Messfehler zuerst)
+
+```yaml
+auftrag: "B7"
+titel: "Verbreitung sieht wie Bestaetigung aus. Barriere gegen die Zahl, die nur oft ist"
+datei: docs/auftraege/aktiv/B7-mehrfachvorkommen-ist-kein-beleg.md
+zustand: ENTWURF
+ballbesitz: planner
+basis_sha: 5d88f198
+prioritaet: P2
+mein_messfehler_zuerst: "Mein erster §5-Check meldete 'Rueckweg fehlt' — FALSCH. Mein Suchmuster trug einen Umlaut und lief in der Schale ins Leere; das Blatt hat einen vollstaendigen Abschnitt 'Rueckweg & Entdeckung — als eigene Zeile', sogar ausdruecklich mit KOPIE AUSSERHALB DER MASCHINE und einem Entdeckungssignal. VIERTER Beinahe-Fehlbefund heute, und wieder hat nur das Weitermessen gerettet. Bemerkenswert: das Blatt hat GENAU DIE ZEILE, deren Fehlen ich dreimal in Folge (A-14, A-15, W-09) als Vorlagen-Mangel gemeldet habe — der Planner hat den Hinweis aufgenommen, und ich habe ihn beim ersten Mal, wo er da war, uebersehen."
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): ENTWURF bleibt, EIN Restpunkt. STARK: die Regel steht in Yamas Wortlaut unveraendert; fuenf Kriterien mit klarer Aufgabenteilung — B7-1 traegt sie ins Regelwerk (§18a, die entschiedene Heimat), B7-2 waehlt WARNUNG statt Abbruch mit der richtigen Begruendung (Mehrfachvorkommen ist oft harmlos, jede Konstante kommt mehrfach vor), B7-3 verlangt den GEGENBELEG dass die Warnung schweigt (die Lehre aus B6-2, hier uebernommen statt neu erfunden), B7-4 macht den Fundort-Teil gesondert pruefbar (eine Aussage 'steht im Produktivcode' gilt erst mit genanntem AUFRUFER — Ordnerlage genuegt nicht), B7-5 verlangt die REICHWEITE der eigenen Messung. ROT-LAGEN SELBST GEMESSEN: H-8 steht 0-mal in den ARBEITSREGELN, §18a existiert bereits als Heimat, und im Tor gibt es keine Mehrfachvorkommen-Pruefung. Rueckweg und Konfliktpruefung vorhanden."
+restpunkt: "Der §5-AUSWIRKUNGEN-BLOCK fehlt — und zwar als einziges der drei B-Blaetter: B5 traegt Auswirkungen, Erstnutzer, zwei Nicht-Ziele und must_preserve, B7 traegt keines davon (je 0 Treffer, mit demselben Muster gemessen). Das ist kein Formalismus bei einem Auftrag, der das REGELWERK aendert: 'Testdaten-Ziel KEINES' und 'Prozessbindung entfaellt' sind hier zwar trivial, aber der ERSTNUTZER ist es nicht — wer traegt die neue Hausregel zuerst, und ab wann gilt sie fuer laufende Berichte? Und ein must_preserve fehlt fuer die 78 bestehenden Tor-Zusagen, die B5/B6/B7 nacheinander anfassen."
+warum_das_zaehlt: "B7 ist die DRITTE Barriere in derselben Datei (nach B5 und B6, beide BEREIT und noch nicht gebaut). Drei Auftraege, ein Werkzeug — ohne must_preserve-Zeile hat keiner von ihnen eine Zusage darauf, dass die Arbeit der beiden anderen stehen bleibt. Die Konfliktpruefung nennt die Reihenfolge, aber eine Reihenfolge ist keine Zusage."
+naechster_schritt: "Planner traegt den §5-Block nach (Auswirkungen, Testdaten-Ziel, Prozessbindung, Erstnutzer, must_preserve fuer die Tor-Zusagen), dann setzt der Plan-Pruefer BEREIT"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
