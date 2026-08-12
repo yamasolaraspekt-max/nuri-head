@@ -60,6 +60,7 @@
 | **W-05/2** Raum anwählen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 13.08. · Basis `c09dcb93` | **BAU** · erster Posten aus der Frontend-Bestandsaufnahme des Release-Prüfers (`STATUS.md:5355`) — **und die Messung hat den Auftrag KLEINER gemacht.** Sein Vorschlag war *„Raum anwählen, benennen, Fläche ablesen"* als ein Schnitt; gemessen sind es drei ungleiche Teile: **Fläche ablesen ist GEBAUT** (`Buehne.tsx:139` Kommentar, `:148` Füllung, `:152` die m²-Zahl), **anwählen ist klein** (`:147` trägt `listening={false}`, das Auswahlmuster steht daneben in `:165`/`:190`), **und der NAME ist eine Entscheidung Yamas**: `ErkannterRaum` (`roomDetection.ts:35-40`) trägt `polygon`, `kanten`, `flaecheMm2`, `volumenMm3` — **keine id**, und `Buehne.tsx:147` nutzt `key={raum${i}}`, also den **Index**. Räume werden *erkannt*, nicht gezeichnet; ein Name ist dauerhaft, ein Index nicht. **Dieselbe Klasse wie die offene ZoneNode-Frage.** Der ganze Auftrag hängt an W-05-1-1: **die Auswahl wird zurückgesetzt, wenn sich die Raumliste ändert** — eine Auswahl, die einen Wandzug überlebt, zeigt auf einen anderen Raum und sieht gleich aus. |
 | **W-21/2** Auswechslung bekommt ein Zuhause | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `9ea1c3db` | **BAU** · **174 Zeilen ohne Zuhause, und zwei Blätter sagen es selbst.** `W-22/5-CODE/LIESMICH.md:36` und `W-22/7-GRENZEN.md:55` melden beide *„auswechslung.ts ist in keinem Blatt zuhause"*; `W-21`s Blatt führt es in `:156` als **ausdrückliches Nicht-Ziel** („VERWANDT — NICHT im Scope"). **Der Ausschluss war für die Ablesung richtig** und ließ die andere Frage offen: *wo ist das Modul zuhause.* Entschieden am 13.08. — **W-21, weil ein Wechselholz Tragwerk ist und seine Verbraucher mehrere sind** (Gaube W-22, Dachdurchdringungen W-29); ein Modul, das mehrere Werkzeuge brauchen, gehört zum Fundament. Selbst gezählt: **5 Exporte, 174 Z.**, und W-21 führt heute **fünf** Module — `auswechslung.ts` ist das sechste. `sparrenTrennung.ts` ist der Beleg für den Ort: sein Kopf sagt *„ergänzt auswechslung.ts"*, und es ist längst in W-21 zuhause. **W-21-2-2 zieht die zwei überholten Sätze in W-22 mit** — sonst entstünde die A-23-Klasse im selben Auftrag. **Kennung geprüft:** `W-21/1` ist 18× belegt, ebenso `W-21/W`, `W-21L`, `W-21L/F` — `W-21/2` ist frei (Präzedenz W-05/2, W-07/2). |
 | **A-27** Der Bau-Commit gehört in ein Feld | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `875d1da5` | **BAU, P1 · fünfte Barriere im Tor.** **Zwei Regeln laufen zusammen ins Rote, die einzeln richtig sind:** §12.4 verlangt bei der Wieder-Abnahme *alle* Kriterien, E1 (`ARBEITSREGELN.md:509`) die Messung **am Commit** — und der Datensatz sagt nicht, an welchem. **An A-23 gemessen:** `bau_sha` stand auf `3ad920b1`, dem Stand **vor** der Nachbesserung; `9d800094` kommt im Block **null Mal** vor. Wer beide Regeln befolgt, misst am falschen Stand und **meldet zu Recht rot, obwohl der Bau stimmt.** Herkunft: `24a122e9`, und der Plan-Prüfer hat ausdrücklich **nicht** selbst nachgetragen — *ein Bau-SHA, den der Prüfer einträgt, ist keine Meldung des Bauenden mehr.* **Reichweite selbst gemessen und größer als drei:** 57 Datensätze mit Bau-Zustand, **17 nennen einen Commit im Feld, 40 nicht** — bei **19** verschiedenen Feldnamen. `bau_sha` wird festgelegt (6× belegt, häufigste vorhandene Form), **kein neuer Name.** **Nicht im Scope:** die vierzig Altfälle — ein falsch nachgetragener SHA ist schlimmer als ein fehlender; sie werden gezählt, nicht gefüllt. **Und A-27-3 benennt, was die Barriere NICHT fängt:** einen existierenden, aber überholten Commit — genau A-23s Fall. |
+| **A-28** Zwei Typen, eine Wahrheit | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `bd0f7e0d` | **BAU, P2** · **Die neun Aufbauarten stehen ZWEIMAL, zeichengleich:** `aufbauPlatzierung.ts:21 AufbauArt` und `dachformVorlagen.ts:173 VorlagenAufbauArt` — `md5` der Werteliste **identisch** (`35ed563c…`), selbst verglichen. **Eine zweite Wahrheit, und CLAUDE.md verbietet sie** — schlimmer verborgen als bei einem Wert: wer eine zehnte Art hinzufügt, muss beide ändern, **und `tsc` merkt es nicht**, weil die Typen unabhängig sind. **Die Behebung ist klein:** jeder Typ wird nur in seiner eigenen Datei benutzt, kein Import-Geflecht. **Der Ort ist nicht erfunden** — `domain/roofShape.ts:12` ist der Präzedenzfall (Domänen-Typ in `domain/`, von vier Dateien genutzt); die *Art* eines Aufbaus ist Domäne, Platzierung und Vorlagen sind **Verbraucher**. **Zweiter Befund im selben Griff:** der Dateikopf nennt **sechs** Arten, der Typ hat **neun** — sechs Gattungen, neun Arten (Gaube zerfällt in vier). Beide Zahlen stimmen über verschiedene Mengen; A-28-5 verlangt die Unterscheidung im Bericht statt eine Zahl zu „berichtigen". **Gefunden beim Messen für W-22s Bedien-Schnitt**, kein fremder Befund. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7598,6 +7599,28 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
   nichts leistet und daraus NICHT die Frage abgeleitet, ob eine andere Position traegt. Dieselbe
   Rechnung haette es hergegeben, ich hatte die 85 Kombinationen schon laufen. Ein Befund, der nur
   verneint, laesst die Haelfte der Arbeit beim anderen."
+```
+
+```yaml
+auftrag: "A-28"
+zustand: ENTWURF
+ballbesitz: plan-pruefer  # DoR steht aus
+titel: "AufbauArt und VorlagenAufbauArt sind zeichengleich — ein Typ gehoert an einen Ort"
+basis_sha: bd0f7e0d
+spur: A
+prioritaet: P2
+blatt: "docs/auftraege/aktiv/A-28-zwei-typen-eine-wahrheit.md"
+warum_P2_und_nicht_P1: "Es ist heute kein Fehler im Betrieb: beide Typen sind zeichengleich, also
+  verhaelt sich nichts falsch. Der Schaden ist LATENT und tritt beim naechsten Hinzufuegen ein — und dann
+  still, weil tsc zwei unabhaengige Typen nicht vergleicht. Ein latenter Schaden mit klarer Ursache ist
+  P2; P1 waere er, wenn heute etwas falsch waere."
+wie_gefunden: "Beim Messen der Grundlage fuer W-22s Bedien-Schnitt. Ich suchte, wo die Aufbauarten
+  definiert sind, und fand ZWEI Typen mit fast gleichem Namen — kein fremder Befund, sondern weil ich
+  beide Stellen geoeffnet habe statt die erste zu nehmen. Genau das verlangt Pflichtpruefung 7; hier hat
+  sie einen Befund ERZEUGT statt einen zu verhindern."
+was_ich_nicht_getan_habe: "Nach weiteren Typ-Dubletten gesucht. Das waere eine Verallgemeinerung ohne
+  Messung — dieselbe Falle, die mich heute mehrfach erwischt hat. Ein eigener Vorgang mit eigenem
+  Zuschnitt, wenn jemand sie will."
 ```
 
 ```yaml
