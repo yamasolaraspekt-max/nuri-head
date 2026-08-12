@@ -78,7 +78,26 @@ export interface SparrenErgebnis {
   durchbiegungGrenzeMm: number;  // L/300
   ausnutzungDurchbiegung: number;
   bestanden: boolean;            // beide Nachweise ≤ 1,0
+  /**
+   * N-003-Vorbehalt — **Pflichtfeld, kein Kommentar.** Jede ausgegebene Bemessungszahl traegt
+   * ihre Grenze MIT: wer die Zahl sieht, sieht den Satz. Er steht hier und nicht in der Anzeige,
+   * weil es heute genau EINEN Ausgabeweg gibt und morgen Export, Stueckliste und PDF — wer ihn in
+   * die Anzeige schreibt, pflegt ihn danach an vier Stellen und die vierte vergisst ihn.
+   *
+   * Als Feld kann keine Ausgabestelle ihn weglassen, ohne ihn AKTIV zu unterdruecken. Das faellt auf.
+   */
+  vorbehalt: string;
 }
+
+/**
+ * Der Vorbehaltssatz im Wortlaut, wie Yama ihn am 12.08.2026 festgelegt hat. Eine Fassung, eine
+ * Stelle — zwei Fassungen derselben Warnung waeren eine zweite Wahrheit.
+ *
+ * N-003 ist DAUERGELB: nicht wegen der Rechenqualitaet, sondern weil der Geltungsbereich fachlich
+ * unvollstaendig ist und bleibt (Wind, Mehrfeld, Knicken fehlen). Das ist kein Mangel, den man
+ * wegarbeitet — das ist die Natur einer Vorbemessung.
+ */
+export const N003_VORBEHALT = 'Vorbemessung, ersetzt keine prüffähige Statik';
 
 const rad = (g: number): number => (g * Math.PI) / 180;
 const r = (x: number, n = 2): number => { const f = 10 ** n; return Math.round(x * f) / f; };
@@ -127,5 +146,6 @@ export function berechneSparren(e: SparrenEingabe): SparrenErgebnis {
     durchbiegungGrenzeMm: r(deltaGrenze, 1),
     ausnutzungDurchbiegung: r(ausnDurch),
     bestanden: ausnBiegung <= 1 && ausnDurch <= 1,
+    vorbehalt: N003_VORBEHALT,
   };
 }

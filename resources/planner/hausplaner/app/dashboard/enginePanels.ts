@@ -68,6 +68,17 @@ export interface EnginePanel {
    * liefert — unverändert. Kein Nachrechnen, kein Nachrunden, kein Filtern.
    */
   berechne: (werte: Record<string, string>) => EngineErgebnis;
+  /**
+   * **Kein Gesamturteil anzeigen** — auch dann nicht, wenn die Engine ein `bestanden` liefert.
+   *
+   * Fuer N-003 (Sparren-Vorbemessung): die Rechnung liefert `bestanden` weiterhin, weil es
+   * Information traegt — aber eine Plakette "Alle Pruefungen bestanden" behauptet einen NACHWEIS,
+   * und den gibt es hier nicht. Der Vorbehalt steht stattdessen als Feld im Ergebnis.
+   *
+   * Ohne dieses Flag muesste man `bestanden` entfernen, um die Plakette loszuwerden — das waere
+   * Informationsverlust statt Richtigstellung.
+   */
+  keinGesamturteil?: boolean;
 }
 
 /**
@@ -159,7 +170,10 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
     titel: 'Sparren-Vorbemessung',
     zweck: 'Bemisst den Sparrenquerschnitt gegen Schnee- und Eigenlast und prueft Biegespannung '
       + 'und Durchbiegung nach.',
-    grundlage: 'Eurocode 5 (Biegung, Durchbiegung L/300) mit Schneelast nach DIN EN 1991-1-3',
+    grundlage: 'Eurocode 5 (Biegung, Durchbiegung L/300) mit Schneelast nach DIN EN 1991-1-3 — '
+      + 'VORBEMESSUNG im Entwurf: kein Ausführungsnachweis, keine Genehmigungsunterlage, keine '
+      + 'Freigabe zur Ausführung. Wind, Mehrfeld, Knicken und Auflagerpressung sind NICHT erfasst.',
+    keinGesamturteil: true,
     felder: [
       {
         schluessel: 'gebaeudebreiteM', label: 'Gebäudebreite', einheit: 'm', pflicht: true, vorgabe: 10,
@@ -206,6 +220,9 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
       { schluessel: 'durchbiegungMm', label: 'Durchbiegung', einheit: 'mm' },
       { schluessel: 'durchbiegungGrenzeMm', label: 'Grenzwert L/300', einheit: 'mm' },
       { schluessel: 'ausnutzungDurchbiegung', label: 'Ausnutzung Durchbiegung' },
+      // N-003: der Vorbehalt steht IM SELBEN BLICK wie die beiden Ausnutzungen — eine
+      // "Ausnutzung 0,85" liest jeder als "Nachweis erfuellt". Genau dort gehoert die Grenze hin.
+      { schluessel: 'vorbehalt', label: 'Vorbehalt' },
     ],
     berechne: (werte) => berechneSparren(alsSparrenEingabe(werte)) as unknown as EngineErgebnis,
   },

@@ -1917,15 +1917,34 @@ naechster_schritt: "Generator zieht A-14 (§3 beachten); Browserabnahme nach §9
 auftrag: "A-15"
 titel: "Wo eine Rechnung eine Norm nennt, darf die Software nicht 'bestanden' sagen — gemessen, nicht eingeschaetzt"
 datei: docs/auftraege/aktiv/A-15-fachaussage-oder-hinweis.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: d814be02
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): ENTWURF bleibt, EIN Restpunkt — sonst ist das Blatt stark. BEIDE VORERHEBUNGS-ZAHLEN SELBST GEMESSEN UND EXAKT BESTAETIGT: 13 Dateien in geometry/ und app/dashboard/ tragen \bbestanden\b, davon nennen 8 eine Norm (DIN/EN 199x/Eurocode). Die Selbstkorrektur des Planners ist vorbildlich und benennt die Klasse genau: 'ich hatte die Liste gemessen und die REICHWEITE geschaetzt' — mit ausdruecklichem Bezug auf meine eigene Selbstkorrektur a1d29aed, nur in die andere Richtung (zu eng statt zu weit). Dass unsere Fehlerklassen inzwischen eine gemeinsame Sprache haben, ist der eigentliche Fortschritt dieser Runde. Die Trennung zu A-14 ist sauber: A-14 baut die Mechanik fuer N-003 und laeuft zuerst (Risiko), A-15 klassifiziert die uebrigen zwoelf. §5-Block, Erstnutzer, Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden; A-15-4 (Fachurteil als Urteil kennzeichnen) steht zusaetzlich als Hausregel — richtig, denn ein Kriterium gilt fuer einen Auftrag, eine Hausregel fuer alle."
 restpunkt: "DIE KRITERIENLISTE IST ZWEIGETEILT, und das ist keine Formalie: die Hauptliste traegt A-15-1 bis -8 sowie -12, -13, -14 in der ueblichen Form (**A-15-x**); die drei Kriterien A-15-9, -10 und -11 stehen NUR im Abschnitt 'Was sich an den Kriterien aendert' als Tabellenzeilen mit dem Wort NEU. Wer die Liste abarbeitet, findet sie nicht — und die Zaehlung wird mehrdeutig: elf Eintraege in der Liste, vierzehn Nummern insgesamt. GENAU DIESE KLASSE hat die Sammel-Release-Kontrolle 1 gefunden (W-04: sieben Zeilen im Messtisch gegen zehn im Blatt), und die Pflichtfrage der neuen Regel ('traegt jeder Messtisch JEDE Kriterienzeile, gezaehlt') braucht eine eindeutige Liste, sonst zaehlt sie gegen eine Zahl, die es zweimal gibt. Die drei gehoeren in die Hauptliste — inhaltlich sind sie fertig formuliert, es ist ein Verschieben, keine Arbeit."
 hinweis_ohne_restpunkt: "Wie bei A-14 fehlt der RUECKWEG als eigene Zeile. Bei einem MESSAUFTRAG ist er trivial (ein Bericht, git revert genuegt) — deshalb kein Restpunkt, aber der Bericht soll ihn nennen, damit die Form bei Bau- und Messauftraegen dieselbe bleibt."
 herkunft_des_blocks: "Auch dieser Block existierte NICHT (Befund 87e49ccd, neun unsichtbare Blaetter). Angelegt mit dem Votum; A-15 ist damit sichtbar und wartet beim Planner."
+votum_bereit: "plan-pruefer 12.08. (2. Runde nach 3f8af6af): BEREIT — der Restpunkt ist behoben und SELBST NACHGEMESSEN: die Hauptliste traegt jetzt VIERZEHN Kriterien in EINER durchgehenden Reihe (A-15-1 bis -14, lueckenlos gezaehlt), die drei vorher nur im Aenderungsabschnitt stehenden -9, -10 und -11 sind darin enthalten. Vierzehn Kriterien, vierzehn Nummern, eine Liste — genau die Eindeutigkeit, die die Pflichtfrage der Sammel-Release-Kontrolle braucht, um gegen EINE Zahl zaehlen zu koennen. Damit ist A-15 baubereit; die inhaltliche Substanz war schon in der ersten Runde stark (beide Vorerhebungszahlen von mir bestaetigt: 13 Dateien, davon 8 mit Normnennung)."
 naechster_schritt: "Planner verschiebt A-15-9/-10/-11 in die Hauptliste (Verschieben, kein Umformulieren), dann setzt der Plan-Pruefer BEREIT"
+```
+---
+
+## BEREIT — W-09/1 (Block angelegt; dritter der neun unsichtbaren)
+
+```yaml
+auftrag: "W-09/1"
+titel: "Sieben Module, 698 Zeilen, ZWOELF Zusagen — und DIN 18065 mitten drin"
+datei: docs/auftraege/aktiv/W-09-treppe-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 65f3ece4
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): ALLE ZAHLEN EINZELN NACHGEZAEHLT UND EXAKT — treppenBerechnung 114/6, treppenTypen 153/4, treppenBauarten 38/3, treppe2D 93/4, treppe3D 74/4, treppeSvg 142/5, treppeObjekt 84/4; Summe 698 Zeilen und 30 Exporte, beide gehen auf; zwoelf Zusagen im Testverzeichnis, und DIN 18065 steht zweimal woertlich in treppenBerechnung.ts. Elf Kriterien, §5-Block, Erstnutzer, zwei Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden. DIE ZULIEFERBEZIEHUNG IST SAUBER GESCHNITTEN: das Blatt nennt A-15 an sieben Stellen und ordnet sich richtig ein — W-09/1-5 LIEFERT die Treppen-Zeilen, A-15-11 ZITIERT sie mit Commit-Verweis statt sie zu wiederholen. Zwei Auftraege, eine Messung, keine zweite Wahrheit; genau die Form, die bei den Typ-Doppelungen gefehlt hat."
+fachliche_bedeutung: "Dieses Blatt ist keine Doku-Uebung wie die uebrigen W-Blaetter: die Treppe traegt DIN 18065, und Yamas eigenes Gegenbeispiel gegen den zu engen Planner-Satz lautete 'Treppe -> DIN 18065, Sturzrisiko'. Damit steht W-09 in derselben Reihe wie N-003: eine Rechnung, deren Ergebnis in einem Bauwerk landet. Der Bau BESCHREIBT nur — aber was er beschreibt, entscheidet spaeter, ob die Software an dieser Stelle 'bestanden' sagen darf."
+hinweis_ohne_restpunkt: "Zum dritten Mal in Folge (A-14, A-15, W-09) fehlt der RUECKWEG als eigene Zeile im §5-Block. Einzeln ist es trivial (Doku, git revert), dreimal ist es ein MUSTER der Blattvorlage, kein Versehen des einzelnen Schnitts. Kein Restpunkt — aber der Planner sollte die Zeile in die Vorlage nehmen, sonst korrigiert sie jede Runde jemand anders im Kopf."
+herkunft_des_blocks: "Dritter der neun unsichtbaren Blaetter (Befund 87e49ccd), Block mit dem Votum angelegt."
+naechster_schritt: "Generator zieht W-09/1 (§3 beachten; A-14 ist IN_ARBEIT). Die Treppen-Zeilen aus -5 gehen als Zulieferung an A-15."
 ```
 ---
 
