@@ -4021,3 +4021,40 @@ B7  Tafelzeile                        0  VERLOREN
 behoben hat:** *er fand „Tafelzeile ohne Datensatz" und legte den Datensatz an. Jetzt war es
 „Datensatz ohne Tafelzeile". Beide Hälften desselben §16-Bruchs an einem Tag — die Ursache ist
 nicht Nachlässigkeit, sondern **dass zwei Orte gepflegt werden müssen und Merges nur einen treffen.***
+
+## REIHENFOLGE-ENTSCHEIDUNG — nach A-15 läuft W-07N. Klasse A wird geschlossen, nicht verbreitert
+
+*Planner 12.08. auf Yamas Anweisung („mach W-07N weiter damit das Projekt mit A fertig ist").
+Angehängter Abschnitt statt Tabelleneinschub — die Lehre aus dem Merge-Verlust `6e3f2408`.*
+
+```text
+GEMESSEN, was W-07N blockiert — und es ist WENIGER als ich vermutet hatte:
+  DoR-Runde       a5aab234  "plan-pruefer: W-01N und W-07N BEREIT beim ersten Review"  -> DURCH
+  Operand Yama    A-13:613  "Yamas Datenmessung: 0/0/0, die Bedingung ist leer"        -> GELIEFERT
+  Blattkopf       stand auf ENTWURF, Tafel auf BEREIT                                 -> berichtigt
+  §3-Platz        A-15 ist IN_ARBEIT (Generator)                                      -> DAS ist alles
+```
+
+> **Es blockiert weder eine Prüfung noch ein Operand, sondern allein der §3-Platz.** *Mein erster
+> Verdacht war „`BEREIT` ohne DoR" — an der Datei hängen nur zwei Planner-Commits. Gemessen ist die
+> DoR gelaufen, der Prüfer hat die Datei nur nicht angefasst. **Die Tafel war die genauere Quelle,
+> nicht das Blatt** — der Widerspruch war meiner.*
+
+**Die Entscheidung, und warum sie nicht „der Reihe nach" heißt:**
+
+| | Blatt | Zustand | schließt etwas ab? |
+|---|---|---|---|
+| **1.** | **W-07N** | `BEREIT` | **JA — elftes von elf. Zähler 10 → 11, Klasse A ist zu** |
+| 2. | B5 | `BEREIT` | nein, sechste Barriere von acht |
+| 3. | B6 | `BEREIT` | nein, siebte Barriere |
+| 4. | W-15 | `BEREIT` | nein, erstes C-Blatt — eröffnet einen neuen Strang |
+
+> **Ein geschlossener Strang ist mehr wert als drei angefangene.** *B5, B6 und W-15 sind alle
+> baubereit und keiner von ihnen bringt einen Zähler ans Ziel; W-15 würde sogar Klasse C eröffnen,
+> während A noch offen ist. Deshalb: W-07N zuerst, und zwar unmittelbar wenn A-15 den §3-Platz
+> freigibt.*
+
+**Was danach zu prüfen ist, ausdrücklich benannt statt stillschweigend erwartet:** *W-07N stellt den
+Reifegrad von W-07 richtig (`6/7 BLÄTTER` → `BESCHRIEBEN`). Der Zähler springt also **erst mit dem
+Bau** auf 11 — er zählt heute 10 korrekt, nicht zu wenig. Wer nach dem Bau 11 messen will, misst
+`grep -cE '^\| W-[0-9]+ .*BESCHRIEBEN'` gegen REGISTER.md, dieselbe Zeile wie in jedem Rundgang.*

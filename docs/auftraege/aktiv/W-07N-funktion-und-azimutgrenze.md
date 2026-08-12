@@ -7,8 +7,9 @@ art: "Nachbesserung eines ALTSTANDES — kein Stufe-1-Blatt, W-07 ist zu 6/7 bes
 titel: "2-FUNKTION.md ist ein leeres Formular, waehrend W-07 im Register BESCHRIEBEN traegt"
 spur: A
 heimat_app: ticket
-status: ENTWURF
+status: BEREIT
 status_steht_in: docs/STATUS.md
+dor_beleg: "a5aab234 — plan-pruefer: 'W-01N und W-07N BEREIT beim ersten Review', beide Rot-Lagen selbst gemessen. Berichtigt 12.08.: der Blattkopf hing auf ENTWURF, weil die DoR die Datei nicht anfasste."
 basis_sha: 3d368625
 prioritaet: P1
 anlass: "Yamas Schritt 2 (W-07+W-08 schneiden) mit zwei Auflagen. Beim Messen: W-07 braucht
@@ -284,5 +285,38 @@ befund_2: "eigene Fehlmessung offengelegt: mein erster Lauf sagte 7 Platzhalter,
            fast einen Befund erzeugt haette."
 befund_3: "W-07s acht Registerformeln sind ALLE ungeprueft. Nach 603eddc2 ist das keine
            Kleinigkeit — dort fielen sieben von zehn geprueften Zuordnungen."
-offen_bei_yama: "die drei SELECTs auf p_v_roofs. Ohne sie kein Schritt 7."
+offen_bei_yama: "ERLEDIGT 12.08. — die drei SELECTs auf p_v_roofs sind gefahren, Ergebnis 0/0/0.
+           Beleg: docs/auftraege/aktiv/A-13-roof-azimuth-absichern.md:613 ('Yamas Datenmessung:
+           0/0/0, die Bedingung ist leer'). Damit ist bei Yama fuer W-07N NICHTS mehr offen.
+           Was die 0/0/0 fuer W-07N bedeuten: Schritt 7 (Umrechnung nach PVGIS) wird NICHT
+           dadurch faellig, dass Altdaten sie braeuchten — es gibt keine. Die Azimutgrenze
+           (W-07N-Teil 2) bleibt trotzdem noetig, weil sie kuenftige Eingaben betrifft und
+           nicht den Bestand. Ein leerer Bestand ist keine Freigabe, sondern nur die
+           Abwesenheit eines Altlastenproblems (H-7: ein Ist-Wert ist kein Soll-Wert)."
 ```
+
+## NACHTRAG 12.08. — Zustand berichtigt und der DoR-Beleg nachgetragen (Planner)
+
+**Yamas Auftrag: „mach W-07N weiter damit das Projekt mit A fertig ist." Gemessen, was tatsächlich
+im Weg steht — und es war weniger als ich vermutet hatte:**
+
+```text
+VERMUTUNG (falsch)   "BEREIT ohne DoR-Runde" — an der Datei haengen nur zwei Planner-Commits,
+                     kein plan-pruefer-Commit.
+GEMESSEN             a5aab234  "plan-pruefer: W-01N und W-07N BEREIT beim ersten Review —
+                                beide Rot-Lagen selbst gemessen"
+                     Die DoR IST gelaufen. Der Pruefer hat die Datei nur nicht angefasst,
+                     deshalb hing der Blattkopf auf ENTWURF, waehrend die Tafel BEREIT trug.
+                     Der Widerspruch war MEINER, nicht der Tafel — sie war die genauere Quelle.
+BERICHTIGT           status: ENTWURF -> BEREIT (siehe Kopf), dor_beleg eingetragen.
+```
+
+> **Was W-07N blockiert, ist damit weder eine Prüfung noch ein Operand, sondern allein der
+> §3-Platz:** *A-15 ist `IN_ARBEIT` beim Generator, und §3 erlaubt genau einen. W-07N ist
+> vollständig baubereit — DoR durch, Operand geliefert, neun Platzhalter benannt.*
+
+**Reihenfolge-Entscheidung (Planner-Eigentum, gefallen 12.08.):** *nach A-15 läuft **W-07N**, nicht
+B5/B6/W-15. Begründung: W-07N ist das **elfte** von elf Blättern der Klasse A — es schließt den
+Zähler und damit die Klasse. B5, B6 und W-15 sind ebenfalls `BEREIT`, aber keiner von ihnen
+schließt etwas ab; sie verlängern die Liste der halbfertigen Stränge. Ein geschlossener Strang ist
+mehr wert als drei angefangene.*
