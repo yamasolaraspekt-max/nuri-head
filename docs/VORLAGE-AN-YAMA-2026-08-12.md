@@ -90,19 +90,21 @@ Wirkung gemessen:
 
 | | Anordnung | Wirkung heute |
 |---|---|---|
-| **E1** | Aussagen über den Bau am **Commit** messen (`git show HEAD:<pfad> \| diff - <pfad>`) vor jedem `CODE_FERTIG` | **0× beim Namen genannt**, aber **1× der Sache nach angewandt** in 60 Botschaften |
+| **E1** | Aussagen über den Bau am **Commit** messen (`git show HEAD:<pfad> \| diff - <pfad>`) vor jedem `CODE_FERTIG` | **0× beim Namen genannt**, aber **2× der Sache nach angewandt** — und beide Male hat es etwas gefunden |
 | **E2** | §3-Kriterium in allen W-Blättern zählbar | **14 von 14** — wird gelebt |
 | **E3** | Spalte „Unterformen mit Barriere" im Zähler | 4× in `STATUS.md`, **0×** in den Arbeitsregeln — halb verankert |
 
-**Korrektur an meiner ersten Fassung:** Dort stand „E1 wird nicht befolgt". Das war zu stark.
-Beim §10 für W-01N fand ich den einen Anwendungsfall: Der Evaluator misst den §3-Beleg **gegen
-den committeten Elterstand statt gegen den Arbeitsbaum** und deckt damit auf, dass die gemeldete
-Null nur für einen nie committeten Zwischenstand galt. **Das ist exakt E1** — angewandt, ohne
-genannt zu werden.
+**Korrektur an meiner ersten Fassung:** Dort stand „E1 wird nicht befolgt". Das war zu stark,
+und ich habe es beim §10 zweimal selbst widerlegt — bei **W-01N** und noch einmal bei
+**W-15/1**. Beide Male misst der Evaluator den §3-Beleg **gegen den committeten Elterstand
+statt gegen den Arbeitsbaum** und deckt damit auf, dass eine gemeldete Null nur für einen nie
+committeten Zwischenstand galt. **Das ist exakt E1** — angewandt, ohne genannt zu werden. Er
+benennt den zweiten Fall selbst als „zweiter Fall derselben Klasse heute", ohne die Regel zu
+kennen, die ihn beschreibt.
 
 **Meine Empfehlung, geändert:** **E1 nicht streichen, sondern bekannt machen.** Eine Regel, die
-beim ersten nachweisbaren Gebrauch sofort einen von außen nicht nachprüfbaren Beleg aufdeckt,
-ist nicht wirkungslos — sie ist unbekannt. Sie steht in einem Vertretungsentscheid in
+bei **jedem** nachweisbaren Gebrauch sofort einen von außen nicht nachprüfbaren Beleg aufdeckt —
+zwei Fälle, zwei Treffer —, ist nicht wirkungslos, sondern unbekannt. Sie steht in einem Vertretungsentscheid in
 `STATUS.md`, nicht in den Arbeitsregeln, und keine Rolle liest sie beim Start.
 **E2 bestätigen** (bewährt sich). **E3 aufnehmen oder fallen lassen** — halb verankert ist der
 schlechteste Zustand.

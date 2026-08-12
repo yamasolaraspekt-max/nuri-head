@@ -35,7 +35,7 @@
 | **A-15** Fachaussage oder Hinweis | `BETRIEBSBESTAETIGT` | – | Abnahme `8aded3b2` · Runde 1 `60d62d74` | **14/14 nach §12.4 neu gemessen** · P1 vorbildlich behoben: der überholte Abschnitt ist **als überholt markiert**, nicht gelöscht (Datum, Grund, Verweis) · Bilanz jetzt `6 + 4 + 1 = 11` · `__tests__` 15 · DIN-Stufung adressiert · Menge 13 und drei A-Fundstellen **erneut** selbst geöffnet |
 | **B5** Zählergebnis mit Trefferzeilen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `157576c2` · Elter `2a95ab40` | **7/7 — die Barriere AUSGELÖST, nicht gelesen**: Wegwerf-Repo, drei Probeläufe (feuert · schweigt bei Suite 1692/1692 · schweigt mit Belegzeile) + Mutation (Block raus → 0 Warnungen) · kein Abbruch, exit=0 beidseitig · scripts-Suite 107/107 an Bau **und** Elter · **P2: Belegmuster erkennt `Z.157` / `treppenTypen:4` nicht** (4 von 17 warnenden Botschaften) |
 | **B6** Summe braucht Erhebung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `6ecf911c` · Elter `7be1a381` | **8/8 — Barriere ausgelöst, nicht gelesen** · alle **vier Beispiele des Regeltexts** am Tor nachgefahren, alle vier wie dokumentiert · B5 bytegleich unberührt (md5) + Mutation: B6 raus → B5 feuert weiter, die Wächter verdecken einander nicht · scripts-Suite 107/107 beidseitig · P2 zur §3-Belegform (kein wörtlicher Befehl), gleicher Maßstab wie W-07N |
-| **W-15** Material und Farbe | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `72c5a6d6` · Elter `df673fdc` | **10/10** · erstes **`ENTWORFEN`** der Werkbank, Zähler 11→11 unverändert · **zwei Befunde gegen das eigene Blatt**, beide treffen: „vier Werkzeuge" sind drei (`PaintCommand` ist `commandId`, `:875`) und die feste Zahl 9 ist 11 · acht Vertrags-Fundstellen selbst geöffnet, alle exakt · Suite 1698/1698 · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
+| **W-15** Material und Farbe | **`BETRIEBSBESTAETIGT`** | – | Abnahme `72c5a6d6` · Elter `df673fdc` | **10/10** · erstes **`ENTWORFEN`** der Werkbank, Zähler 11→11 unverändert · **zwei Befunde gegen das eigene Blatt**, beide treffen: „vier Werkzeuge" sind drei (`PaintCommand` ist `commandId`, `:875`) und die feste Zahl 9 ist 11 · acht Vertrags-Fundstellen selbst geöffnet, alle exakt · Suite 1698/1698 · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
 | **W-01N** Suite-Zahl zahlfrei | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53930b60` · Elter `2e587fb7` | **5/5** · die feste Zahl ist raus und **nicht durch eine neuere ersetzt** · Nachweis prüfbar geblieben (resources 0, Suite 1698 an beiden Ständen) · Fahrplan-Widerspruch **vorgelegt statt umgebogen** — entschieden: richtig so · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | **`BETRIEBSBESTAETIGT`** | – | Abnahme `b1554b01` · Elter `9d09b02d` | **7/7 — dritte Barriere, ausgelöst statt gelesen** · Unabhängigkeit **zweifach gemessen**: B5/B6-Blöcke bytegleich + Mutation → beide feuern weiter · H-1…H-7 alle zeichengleich, H-8 **angehängt** · Wegweiser trägt nur den Verweis, kein zweiter Regeltext · Tor +26/−0, scripts-Suite 107/107 beidseitig · P2: nie auf `IN_ARBEIT` gesetzt (ohne Schaden — zum Bauzeitpunkt lief nachweislich keiner) |
@@ -2282,8 +2282,38 @@ evaluator_votum_r2: "evaluator 12.08.: ABGENOMMEN an b732427f, Votum seit f13e1d
 auftrag: "W-15/1"
 titel: "Vier Vertragswerkzeuge ohne Implementierung — und der Vertrag liefert die Blattinhalte"
 datei: docs/auftraege/aktiv/W-15-material-und-farbe-entwerfen.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 72c5a6d6, Fehlerklasse KEINE.
+  Messtisch 10/10 im Blatt gegengelesen, Lang- UND Kurzform geprueft (das Blatt fuehrt
+  W-15/1-1 bis W-15/1-10). REINER DOKU-SCOPE: acht Dateien, alle in der Werkbank unter
+  02-WERKZEUGE/W-15-material-und-farbe. must_preserve SELBST nachgemessen — resources/ 0,
+  app/ 0, database/ 0. Kette Vorfahr, Geheimnisse 0.
+  DEN BEFUND GEGEN DAS EIGENE BLATT UNABHAENGIG NACHGEFAHREN statt aus dem Votum uebernommen:
+  das Kriterium W-15/1-7 nennt VIER Werkzeuge und fuehrt PaintCommand als viertes. Am echten
+  Vertrag resources/planner/hausplaner/app/tools/werkzeugVertrag.ts gemessen (1440 Zeilen):
+  werkzeugId 'paint' 0 Treffer, PaintCommand genau EINE Fundstelle in :875 — und :874 darueber
+  steht werkzeugId 'material-aufnehmen'. PaintCommand ist dessen commandId, kein Werkzeug.
+  Der Befund haelt, der Bauende hat ihn gemeldet statt eine vierte Zeile zu erfinden.
+  MEIN SIEBTER BEINAHE-FEHLBEFUND HEUTE steckt darin: ich hatte zuerst in der Werkbank-Datei
+  5-CODE/LIESMICH.md gemessen (78 Zeilen) und dort 0 PaintCommand und 1 werkzeugId gefunden —
+  ich haette dem Evaluator widersprochen, waehrend ich die falsche Datei las. Seine
+  Zeilenangabe :875 passte nicht zu einer 78-Zeilen-Datei; das hat es verraten."
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau 72c5a6d6 ist im
+  veroeffentlichten Stand (is-ancestor gegen fork und backup-private), Migrationen 0,
+  Artefakt unberuehrt (reiner Doku-Scope, resources/ 0 Dateien), Smoke-Tests am veroeffentlichten
+  Stand bereits in diesem Takt gefahren: tsc 0 Fehler, Insel-Suite 1698/1698, scripts-Suite
+  107/107. Wildbetriebs-Beleg: das Blatt ist der Vertrag, und der Vertrag steht im
+  ausgelieferten Code — die vier werkzeugId-Eintraege des W-15-Bereichs sind am
+  veroeffentlichten Stand einzeln nachgezaehlt."
+p2_zum_dritten_mal_dieselbe_klasse: "Der Evaluator meldet erneut den §3-Beleg gegen den
+  ARBEITSBAUM statt gegen den committeten Elterstand, und er benennt es selbst als 'zweiter Fall
+  derselben Klasse heute'. Gruen bleibt es wegen H-4 (disjunkte Scopes, von ihm gegengeprueft).
+  ICH TRAGE DIESELBE ERGAENZUNG NACH WIE BEI W-01N: diese Messung IST E1. Damit ist E1 heute
+  ZWEIMAL der Sache nach angewandt worden und beide Male hat es einen von aussen nicht
+  nachpruefbaren Beleg aufgedeckt. Meine Vorlage an Yama nennt bisher einen Fall — sie wird
+  entsprechend nachgezogen. Eine Regel, die bei JEDEM Gebrauch etwas findet, gehoert bekannt
+  gemacht, nicht gestrichen."
 zwei_zahlen_des_blattes_stimmen_nicht: "Beide gemeldet statt angepasst.
   (1) W-15/1-7 nennt VIER Werkzeuge und fuehrt PaintCommand als viertes. Gemessen fuehrt der
       Vertrag DREI werkzeugId-Eintraege (werkzeugVertrag.ts:874, :886, :898); PaintCommand ist die
