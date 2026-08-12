@@ -336,20 +336,24 @@ Alles andere rechnet Werte und schweigt.
 
 ## Was sich an den Kriterien ändert
 
+> **⚠ BEHOBEN 12.08. auf den DoR-Restpunkt `b17c3cb1`.** *Hier standen `A-15-9`, `-10` und `-11` als
+> **Tabellenzeilen** — nicht als Kriterien in der Hauptliste. **Der Plan-Prüfer hat gemessen: elf
+> Einträge, vierzehn Nummern, und „wer sie abarbeitet findet sie nicht".** Er hat recht, und die
+> Klasse ist meine eigene H-1 in neuer Gestalt: **ich habe eine Änderung NOTIERT statt sie
+> EINZUARBEITEN.** Ein Abschnitt „was sich ändert" ist eine Notiz; die Änderung selbst ist die
+> Hauptliste.*
+>
+> **Die drei stehen jetzt dort, wo sie hingehören** — `A-15-9` bis `A-15-11` in der Kriterienliste,
+> zwischen `-8` und `-12`. **Diese Zeile bleibt nur als Herkunftsvermerk.**
+
 ```text
-A-15-2   Achse 1 bleibt, aber die Formulierung "Klasse = Fachaussage wenn Norm" FAELLT.
-         Sie ist Beleg, nicht Entscheider.
-NEU      A-15-9  Achse 3 je Engine mit Zustand A/B/C und Fundstelle. Die drei
-         Zustand-A-Faelle sind belegt und werden NACHGEPRUEFT, nicht neu gesucht.
-NEU      A-15-10 Zustand B und C werden UNTERSCHIEDEN — und wo das nicht moeglich ist,
-         sagt der Bericht "nicht unterscheidbar" statt zu raten. Der Unterschied
-         zwischen "vollstaendig" und "unvollstaendig, sagt es nicht" ist der Kern
-         des ganzen Auftrags.
-NEU      A-15-11 Die Treppen-Zeilen kommen aus W-09/1-5. Der Bericht nennt sie als
-         ZULIEFERUNG mit Commit-Verweis, statt sie zu wiederholen.
-BLEIBT   A-15-4 (Fachurteil als Urteil kennzeichnen) — Yama nennt es die beste Zeile
-         des Berichts und will es als Hausregel. Es steht jetzt zweifach: als
-         Kriterium hier und als Regel in docs/HAUSREGELN.md.
+A-15-2   Achse 1 bleibt, aber "Klasse = Fachaussage wenn Norm" FAELLT.
+         Sie ist Beleg, nicht Entscheider.  -> im Kriterium selbst vermerkt.
+A-15-4   BLEIBT (Fachurteil als Urteil kennzeichnen). Yama hat es zur Hausregel
+         erhoben — sie steht jetzt als H-2 in ARBEITSREGELN §18a, NICHT mehr in
+         docs/HAUSREGELN.md (die Sammlung ist aufgeloest, 57e582af).
+         -> die alte Fundstellenangabe in diesem Abschnitt war ueberholt.
+ZAEHLUNG nach der Behebung: VIERZEHN Kriterien, VIERZEHN Nummern, eine Liste.
 ```
 
 ```yaml
@@ -394,6 +398,21 @@ REGEL 3  EIN VORSCHLAG JE ENGINE, nicht eine offene Frage je Engine.
 > Vorlage, sondern eine zurückgegebene Aufgabe.***
 
 **Neue Kriterien:**
+
+**A-15-9 (P1, Achse 3 je Engine mit Zustand und Fundstelle):** Jede der elf Engines trägt
+`A` (Grenze selbst benannt) · `B` (vollständig) · `C` (unvollständig, sagt es nicht) — **mit
+Datei:Zeile**. *Die drei Zustand-A-Fälle (`sparrenBerechnung`, `fbhAuslegung:6-7`,
+`heizkreisVerteiler:6`) sind in diesem Blatt belegt und werden **nachgeprüft, nicht neu gesucht**.*
+
+**A-15-10 (P1, B und C werden UNTERSCHIEDEN — oder die Nichtunterscheidbarkeit wird gesagt):** Wo
+der Unterschied zwischen „vollständig" und „unvollständig, sagt es nicht" nicht feststellbar ist,
+schreibt der Bericht **„nicht unterscheidbar"** statt zu raten. *Dieser Unterschied ist der Kern des
+ganzen Auftrags: **Zustand C ist der gefährlichste, weil er sich wie B liest.***
+
+**A-15-11 (P1, die Treppen-Zeilen sind ZULIEFERUNG, keine Wiederholung):** `treppenBerechnung`,
+`treppe2D`, `treppe3D` und `treppenTypen` werden **nicht neu gemessen** — der Bericht nimmt sie aus
+`W-09/1-5` mit Commit-Verweis. *Zwei Aufträge, die dieselbe Datei messen, erzeugen zwei Zahlen und
+eine Diskussion.*
 
 **A-15-12 (P1, im Zweifel die höhere Klasse):** Wo Achse 2 unklar ist, trägt die Zeile die
 **strengere** Klasse — und sagt ausdrücklich, dass sie aus Zweifel gewählt wurde. *Nachweis: jede
