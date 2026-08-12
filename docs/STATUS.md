@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | **A-01** Dach aus Kontur | `BETRIEBSBESTAETIGT` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-02** Lock-Halter | `BETRIEBSBESTAETIGT` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
-| **A-03** Bühnen-Riegel | `BETRIEBSBESTAETIGT` | **Planner** (§15-Befund offen) | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
+| **A-03** Bühnen-Riegel | `BETRIEBSBESTAETIGT`  | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` · **§15-Befund 12.08. nachgemessen und geschlossen:** `passthroughVariables` führt heute **neun** Namen (im Befund stehen 13 — die Zahl ist überholt), `DB_DATABASE` **nicht** darunter, `:179` setzt jede nicht gelistete Variable auf `false`. **Kein offener Posten:** die Lehre wirkt in `scripts/browser-buehne.sh` als **Abbruch** (Z.43 »WIRKUNGSLOS«), nicht als Regeltext — der Generator hat sie im A-17-Bau benutzt |
 | **A-04** Bühnen-Wächter | `BETRIEBSBESTAETIGT` | – | `c3d52f09` · Votum `b6a63e3e` · §10 im Blatt | Fehlerklasse **KEINE** · §10 alle Punkte grün (Kette per is-ancestor, 7/7+7/7 am HEAD selbst, Revert-Probe sauber) · **Realfund PID 48098** läuft weiter — Beenden entscheidet Yama |
 | **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` (22.974 B) · Votum `b29bb79d` | **ERGEBNIS VERWERTET, Ball geschlossen (Planner 12.08.):** der Bericht hat gemessen, was zwischen L-Kontur und `l-shape`-Dach fehlt. **BERICHTIGT:** hier stand „Entscheidung gefallen (`bd1383c8`): A-01s Nicht-Ziel bleibt" — **Yama hat es aufgehoben**: „A-01s Nicht-Ziel »keine L/T/U-Dächer« AUFGEHOBEN — es stammt aus Unwissen über die Fähigkeit". Die Zeile trug eine aufgehobene Entscheidung als geltende. Ein Messauftrag hat keinen Release-Kandidaten; `ABGENOMMEN` + verwertetes Ergebnis **ist** sein Ende |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
@@ -1070,7 +1070,7 @@ sie nicht als stille Weiterreichung erscheint.
 
 ---
 
-## In Planprüfung — A-03
+## BETRIEBSBESTAETIGT — A-03 (Bühnen-Riegel; §15-Befund am 12.08. nachgemessen und geschlossen)
 
 ```yaml
 auftrag: A-03
@@ -1079,7 +1079,25 @@ datei: docs/auftraege/aktiv/A-03-browser-buehne-testdatenbank.md
 zustand: BETRIEBSBESTAETIGT
 betriebspruefung: "release-pruefer 12.08. (§19: dieser Uebergang ist die unabhaengige Betriebspruefung des Release-Pruefers, NICHT Yamas Freigabe): main-Stand auf beiden Fernzielen identisch, 0 Migrationen, Smoke-Tests am veroeffentlichten Stand gruen, Bundle byte-gleich, Wildbetriebs-Belege gemessen. Sammelbericht am Dateiende."
 nachtrag_vertretung: "10.08., Release-Pruefer in Yamas Vertretung (§16, Evaluator-Befunde ac07a1c5/a99547b1): Feld dem tatsaechlichen Stand angeglichen — veroeffentlicht mit main-FF c908d3f0 (05.08.). ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert."
-ballbesitz: planner (§15-Befund offen: ServeCommand.php:179 setzt DB_DATABASE fuer den Kindprozess auf false)
+ballbesitz: "— (geschlossen 12.08. vom Planner: der §15-Befund ist HEUTE NACHGEMESSEN und weiterhin
+         wahr, aber er ist KEIN offener Posten mehr — die Lehre ist dort verankert, wo sie wirkt.)"
+paragraf15_befund_nachgemessen: "12.08., am heutigen Laravel-Stand: ServeCommand.php:79 fuehrt
+         $passthroughVariables mit NEUN Namen (APP_ENV, IGNITION_LOCAL_SITES_PATH, LARAVEL_SAIL,
+         PATH, PHP_IDE_CONFIG, SYSTEMROOT, XDEBUG_CONFIG, XDEBUG_MODE, XDEBUG_SESSION).
+         DB_DATABASE steht NICHT darin: 0 Treffer. Zeile 179 setzt jede nicht gelistete Variable
+         auf false. Der Mechanismus ist unveraendert — ABER die Zahl im Befundtext ist ueberholt:
+         er nennt 13 passthroughVariables, heute sind es NEUN. Eine feste Zahl in einem Befund
+         veraltet mit der Abhaengigkeit, genau wie die Suite-Zahl in W-01N."
+warum_kein_offener_posten_mehr: "die Lehre steht nicht in den ARBEITSREGELN (0 Treffer auf
+         passthroughVariables, APP_ENV=testing, ServeCommand) — und das ist RICHTIG so, denn sie
+         steht in scripts/browser-buehne.sh, und zwar nicht als Kommentar sondern als WIRKENDE
+         Pruefung: Zeile 13/14 nennt beide Aufrufe im Vergleich, und Zeile 43 bricht mit
+         'WIRKUNGSLOS DB_DATABASE=... ist gesetzt' ab. Eine Regel im Regelwerk haette gelesen
+         werden muessen; diese hier greift ein. Der Generator hat sie heute im A-17-Bau benutzt
+         (Datenbank am Kindprozess geprueft, ticket_testing)."
+was_dennoch_offen_bleibt: "NICHTS an A-03. Aber als eigener Posten benannt: die Zahl 13 im
+         Befundtext oben ist falsch und bleibt als Beleg stehen — wer sie zitiert, zitiert einen
+         Stand vom 05.08. Berichtigen wuerde den Beleg verfaelschen; danebenstellen ist richtig."
 basis_sha: 89d69c13
 release_sha: "c908d3f0"
 release_vermerk: "release-pruefer 05.08.: RELEASE_FREI (Protokoll 88a7b725, Transport 2b1ef24a); mit dem Sammel-Release d8612a63..c908d3f0 auf main (fork+backup-private). Ballbesitz bleibt planner wegen der offenen Befunde B1(SPEC/P1: A-04 schneiden), B2, B3 — die Veroeffentlichung aendert daran nichts."
