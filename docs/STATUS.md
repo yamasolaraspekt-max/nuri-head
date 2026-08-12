@@ -48,7 +48,8 @@
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
-| **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
+| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · aus dem Befund des Plan-Prüfers `7b7db5b6` · **Bau erst NACH A-20s Abnahme** (dieselbe Datei) |
+| **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
 
@@ -6599,4 +6600,43 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-20 GECLAIMT vor dem Pr
 evaluator_votum: "evaluator 12.08.: ABGENOMMEN an 65358372, sieben von sieben. Jede Fundstelle selbst geoeffnet (:23, :29, :41, :44, :52-58), die drei Exporte nachgezaehlt, und den Dateikopf danebengelegt: das Zitat in 1-ZWECK ist zeichengleich, nicht paraphrasiert — ebenso der EA28-Kommentar in 2-FUNKTION gegen holzMengen.ts:57-58. Die vier Messzahlen aus W-20-4 selbst nachgemessen: stueck.*m2 0, bedarf 1 (Trefferzeile gelesen: gaubeGeometrie.ts:127, eine Gaubenbemerkung), ziegel 16, deckung 79 — alle vier exakt. W-20-5 ist aus seinem eigenen Messfehler entstanden und steht jetzt an zwei Stellen im Blatt. must_preserve: resources und app 0, sechs Testzusagen unberuehrt, Suite 1698/1698. §3 an beiden Orten am Elter, Registerzeile genau eine geaendert."
 die_frage_aus_meinem_claim: "Ich wollte die Formelzuordnung am Code pruefen, bevor ich sie im Blatt lese — nach 603eddc2 sind sieben von zehn Registerformeln gefallen. Gemessen: holzMengen.ts enthaelt keinen Math-Aufruf, keine Winkelfunktion, keine Wurzel; die einzigen Rechenzeilen sind drei Summierungen und ein Zaehler. Die Aussage des Blattes haelt — die Registerzeile fuehrt F-011 und F-023, das Werkzeug benutzt heute keine, und genau das steht jetzt in beiden."
 meine_dritte_falle: "Mein Suchmuster meldete zuerst EINEN Math-Treffer in holzMengen.ts. Gelesen war es Zeile 57, und getroffen hatte das Teilmuster sin das Wort SIND in Schiftsparren sind Gemeinsparren. Ein Fehltreffer im Kommentar, kein Rechenaufruf — genau H-6, und genau die Falle, vor der W-20-4 im selben Blatt warnt."
+```
+
+```yaml
+auftrag: "A-21"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "E1 und E3 verankern · ZURUECKGESTELLT abschaffen · ERLEDIGT und VORLAGE definieren"
+basis_sha: 7b7db5b6
+spur: A
+prioritaet: P1
+dor_beleg: "steht aus — plan-pruefer."
+anlass: "Der plan-pruefer hat in 7b7db5b6 die Vorlage an Yama Punkt fuer Punkt frisch nachgemessen
+  und zwei Punkte als OFFEN belegt. Sein Satz zu A-20: Wer daraus schliesst A-20 habe das
+  mitgeloest, irrt; ein benachbarter Auftrag loest nicht, was er nur beruehrt."
+die_messung: "E1 kommt in ARBEITSREGELN.md 0 mal vor und in den fuenf Rollenblaettern 0 mal —
+  und E1 ist eine ANORDNUNG YAMAS vom 10.08. (Bau-Aussagen am Commit messen, git show HEAD:pfad
+  diff gegen pfad, vor jedem CODE_FERTIG). E3 steht 4 mal in STATUS.md und 0 mal im Regelwerk.
+  E2 ist mit 14 von 14 gelebt und bleibt unberuehrt. Die drei Zustandsworte je 0 Treffer im
+  Regelwerk bei je einem echten Auftrag im Gebrauch: ERLEDIGT bei A-06 Zeile 14, VORLAGE bei
+  P-02 Zeile 31, ZURUECKGESTELLT bei W-21L Zeile 51."
+alle_drei_stellen_geoeffnet: "Pflichtpruefung 7 angewandt, die es gibt weil ich in A-20 17 Faelle
+  gemeldet habe ohne einen zu oeffnen. Gelesen: A-06 traegt ERLEDIGT mit ausgefuehrt 880eb726
+  und gegengeprueft; P-02 traegt VORLAGE und definiert seine Bedeutung im KOMMENTARFELD der
+  Tafelzeile — kein Bauauftrag, zaehlt nicht in Paragraf 3; W-21L traegt ZURUECKGESTELLT mit dem
+  Operanden-Gate. Damit steht eine Zustandsregel im Kommentarfeld einer Tabellenzeile, derselbe
+  Fehlertyp wie A-20s vier Zustandsorte."
+der_kern_des_befunds: "ZURUECKGESTELLT braucht keine Definition sondern eine ABSCHAFFUNG. Paragraf
+  3 fuehrt DECISION_BLOCKED woertlich als eine ausdruecklich Yama vorbehaltene Entscheidung fehlt
+  — genau W-21Ls Fall, es wartet auf zwei Fachfragen aus F-053. Wir fuehren ein Phantasiewort
+  neben dem definierten Zustand, und ein zweites Wort fuer dieselbe Sache ist eine zweite
+  Wahrheit."
+reihenfolge_bedingung: "Bau erst NACH A-20s Abnahme. A-20 fasst dieselbe Datei an und steht auf
+  CODE_FERTIG; findet der Evaluator ein Rot, bessert A-20 in ARBEITSREGELN.md nach. Zwei
+  Auftraege gleichzeitig in einer Datei fangt Paragraf 3 nicht ab, weil er Auftraege zaehlt und
+  nicht Dateien. Die Bedingung steht als Kriterium A-21-7 im Blatt."
+A_21_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+regel_A_20_2_auf_mich_selbst_angewandt: "Blatt, Tafelzeile und dieser Block in EINEM Commit — die
+  Entscheidung aus A-20-2 gilt fuer den Schneidenden, und der bin hier ich. Bei W-38 habe ich es
+  noch falsch gemacht und die Tafelzeile aufgeschoben; der plan-pruefer musste sie anlegen."
 ```
