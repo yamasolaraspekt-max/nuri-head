@@ -46,10 +46,21 @@
 > stehen jetzt oben; ohne Zeile sieht der Plan-Prüfer ein Blatt nicht.*
 
 ```text
-YAMA                ELF Auftraege auf RELEASE_FREI, alle mit Ball bei dir:
-                      A-09 · A-11 · W-01 · W-02 · W-05 · W-08 · W-11 · W-13 ·
-                      W-21 · W-22 · A-13
-                    -> Veroeffentlichung. A-13 ZUSAETZLICH: die drei SELECTs auf
+YAMA                NULL offene Veroeffentlichungen. MEINE ANGABE "ELF RELEASE_FREI"
+                    WAR FALSCH — korrigiert 12.08. nach dem Wecker-Rundgang.
+                    Gemessen gegen fork/main (3409b80d), nicht gegen die Tabelle:
+                      HEAD..fork/main = 0 · fork/main..HEAD = 13 (meine Doku-Commits)
+                      a09b69af · 0299e5ca · a44e5fdd · 8a3acb53 -> ALLE Vorfahren
+                      von fork/main, je per merge-base geprueft
+                    URSACHE (Release-Pruefer f8fa74bb, und er hat sie genau getroffen):
+                      "es gibt zwei Leseorte fuer eine Wahrheit" — main und origin/main
+                      stehen auf 8648a4cb, fork/main und backup-private/main auf
+                      3409b80d. Wer die Tabelle liest, liest den aelteren Ort.
+                      Sein Ergebnis: "0 offene Auftraege fuer Yama, 0 fuer mich."
+                    MEIN ANTEIL: ich habe die Tabelle gelesen und daraus eine
+                      Arbeitsliste gemacht, ohne gegen ein Ref zu messen. Damit haette
+                      ich Yama an Arbeit geschickt, die getan ist.
+                    -> A-13 BLEIBT dennoch offen, aber anders: die drei SELECTs auf
                        HETZNER vor dem Deploy (lokal 0/0/0, dort ungemessen — und
                        dort schaerfer: Altsatz + Model-Validierung + 0 catch).
                     OFFENE FRAGEN, die niemand sonst entscheiden kann:
@@ -242,7 +253,37 @@ Befunde trotzdem heute noch einmal selbst am Code gemessen, weil der Vorbehalt m
                    Entscheidung haengt an 1 und 2, nicht an der Anzahl.
 ```
 
-> **Die Entscheidung ist damit endgültig: A-01s Nicht-Ziel bleibt.** *Und sie war von Anfang an keine
+#### AUFGEHOBEN 12.08. — Vertretungsentscheid `4c241a6c`. Meine „endgültig" hielt vier Tage
+
+> **A-01s Nicht-Ziel „keine L/T/U-Dächer" ist AUFGEHOBEN.** *Begründung des Vertretungsentscheids:
+> „es stammt aus **Unwissen über die Fähigkeit des Codes**, und die ist seit A-12 zweifach abgenommen
+> gemessen (4 Flächen, 2 Firste, Kehle, Grat; F-026 gebaut, verdrahtet, über die Quelle
+> hinausgewachsen; F-020 existiert nicht)."*
+>
+> **Mein Satz „die Entscheidung ist endgültig" war zu stark.** *Er war am 08.08. richtig — mit dem
+> damaligen Wissen. **A-12 hat das Wissen geändert, und ich habe die Entscheidung nicht
+> nachgeprüft**, obwohl ich A-12 selbst nachgezogen habe. „Endgültig" ist ein Wort, das ich für eine
+> Entscheidung auf gemessener Grundlage nicht hätte benutzen dürfen: die Grundlage kann sich ändern.*
+
+**DIE DREI GRENZEN, wörtlich — sie sind der Kern, nicht die Aufhebung:**
+
+```text
+1  KEINE BAUFREIGABE, sondern SCHNITTERLAUBNIS.
+   -> W-07 und W-08 durften geschnitten werden. Sie SIND geschnitten (W-07N, W-08/1).
+      Gebaut wird nach DoR, nicht wegen dieser Aufhebung.
+2  A-01s ABSAGE BLEIBT, bis der Anschluss ABGENOMMEN ist.
+   -> woertlich: "sonst kehrt das stille leere Dach zurueck, gegen das A-10 gebaut wurde."
+      Die Aufhebung des NICHT-ZIELS ist NICHT die Aufhebung der ABSAGE. Zwei Dinge.
+3  KEINE AUSSAGE ueber mansard/u-shape.
+   -> deckt sich mit meinem eigenen "NICHT GEMESSEN" in der Dachweg-Vorlage: ich hatte
+      Formzahl und Ampelzahlen gemessen, nicht die Zuordnung Form-zu-Ampel.
+```
+
+> **Grenze 2 ist die wichtigste und die leichteste zu übersehen:** *„Nicht-Ziel aufgehoben" liest sich
+> wie „jetzt darf gebaut werden". **Es heißt: jetzt darf geplant werden.** Die Absage im Melder bleibt
+> stehen, bis der Anschluss abgenommen ist — und A-10 ist der Grund.*
+
+> **Die Entscheidung vom 08.08. war: A-01s Nicht-Ziel bleibt.** *Und sie war von Anfang an keine
 > Yama-Frage — sie ist eine **Planner-Entscheidung**, hier am 08.08. getroffen. **Ich habe sie in zwei
 > Statusberichten an Yama fälschlich als „offen bei dir" geführt** (11.08.); das ist wieder meine
 > Klasse „falscher Zustand", diesmal in die für Yama teuerste Richtung: ich habe ihn um eine
