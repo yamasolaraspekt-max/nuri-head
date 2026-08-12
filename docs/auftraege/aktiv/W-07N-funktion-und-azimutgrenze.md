@@ -1,9 +1,15 @@
-# W-07N — `2-FUNKTION` füllen und die Azimutgrenze eintragen. Nicht neu schneiden: sechs von sieben Blättern stehen
+# W-07N — drei Blätter füllen und die Azimutgrenze eintragen. Nicht neu schneiden: vier von sieben Blättern stehen
 
 ```yaml
 auftrag: "W-07N"
 werkzeug: "W-07 Dach aus Kontur"
-art: "Nachbesserung eines ALTSTANDES — kein Stufe-1-Blatt, W-07 ist zu 6/7 beschrieben"
+art: "Nachbesserung eines ALTSTANDES — kein Stufe-1-Blatt, W-07 ist zu 4/7 beschrieben"
+titel_berichtigt: "12.08. — Ueberschrift und art trugen die widerlegte Zahl 6/7 an ihrer DRITTEN und
+         VIERTEN Station. Befund des plan-pruefers 50505407, und es ist genau der Vorlagen-Mangel,
+         den ich in b01f9027 selbst notiert habe: eine SPEC-Berichtigung muss JEDE abhaengige
+         Stelle treffen. Ich habe ihn notiert und im selben Blatt erneut begangen.
+         BELEGE, ZITATE UND PROTOKOLLE bleiben unangetastet — dort ist 6/7 der Gegenstand
+         des Befundes und nicht seine Behauptung."
 titel: "2-FUNKTION.md ist ein leeres Formular, waehrend W-07 im Register BESCHRIEBEN traegt"
 spur: A
 heimat_app: ticket
@@ -132,7 +138,7 @@ NICHT         Die drei Werkbank-Nachtraege N1/N2/N3 und der Widerspruch F-020-We
 
 - **Keine Änderung an `resources/**` oder `app/**`.** Reine Doku-Stufe.
 - **KEIN Löschen der geleisteten Arbeit.** *Die sechs gefüllten Blätter bleiben unangetastet und
-  werden in der Registerzeile selbst gewürdigt (`6/7`).* **Der Reifegrad wird aber richtiggestellt —
+  werden in der Registerzeile selbst gewürdigt (`4/7` — **berichtigt**, die Zahl 6/7 war widerlegt).* **Der Reifegrad wird aber richtiggestellt —
   das war in der ersten Fassung dieses Blattes ein Nicht-Ziel und ist von Yama aufgehoben.**
 - **Keine Umrechnung bauen.** Die Azimutgrenze wird **beschrieben**; die
   Umrechnungsfunktion ist Yamas Schritt 7 und braucht erst seine drei SELECTs.
@@ -253,7 +259,7 @@ byte-identisch erhalten** — Nachweis: `git diff` zeigt nur Einfügungen, **0 g
 neuer Rechenweg — das wäre die dritte Wahrheit.*
 
 **W-07N-6 (P1, der Reifegrad wird RICHTIGGESTELLT und der Zähler zählt nur Vollständiges):**
-Die W-07-Registerzeile sagt ablesbar, dass **sechs von sieben** Blättern gefüllt sind, **und der
+~~Die W-07-Registerzeile sagt ablesbar, dass **sechs von sieben** Blättern gefüllt sind~~ **[ÜBERHOLT 12.08.: es waren VIER von sieben; der Bau hat drei gefüllt und die Zeile steht auf `BESCHRIEBEN`. Der Kriterientext bleibt LESBAR stehen, weil der Evaluator ihn in dieser Form geprüft hat — ein umgeschriebenes Kriterium verfälscht die Prüfspur.]** *und der
 Abschlussbefehl zählt W-07 nicht mehr mit**, solange `2-FUNKTION` unvollständig ist.
 
 ```text
