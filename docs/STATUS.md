@@ -47,6 +47,7 @@
 | **W-27** Dachkantentypen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
+| **A-20** Zustand an vier Orten | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-20** Zustand an vier Orten, 17 Blätter widersprechen sich | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `50bfb345` | **REGELWERK** · beantwortet die Frage des Plan-Prüfers aus `4ea7398d` · 42 Blätter gemessen: 32 mit `status:`, 24 mit `zustand:`, **17 Kopf≠Fuß** |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
@@ -6370,6 +6371,22 @@ der_stille_fehler_dieses_werkzeugs: "Kriterium W-27-2 verlangt ALLE VIER joinTyp
          am Dach auf."
 ```
 
+
+## A-20 · Der Zustand steht an vier Orten — DoR bestanden, Befangenheit offengelegt (plan-pruefer 12.08.)
+
+```yaml
+auftrag: "A-20"
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: f1296de8
+spur: A
+BEFANGENHEIT_OFFENGELEGT: "Dieser Auftrag regelt MEINE Rolle und beantwortet eine Frage, die ich selbst gestellt habe — und er entscheidet sie GEGEN meinen Vorschlag: A-20-2 legt fest, dass der SCHNEIDENDE Tafelzeile und Datensatz anlegt, waehrend ich vorgeschlagen hatte, dass der Plan-Pruefer es bei der DoR tut. Ich lege das offen, weil ich sonst in Versuchung waere, strenger zu pruefen als noetig. Geprueft habe ich gegen die Kriterien des Blattes, nicht gegen meinen Vorschlag — und die Entscheidung ist sachlich besser als meine: der Block entsteht dann, wenn der Auftrag entsteht, und nicht erst Stunden spaeter; genau die Leerstelle, die ich heute zweimal selbst schliessen musste (W-38 und dieses Blatt hier), kann dann nicht mehr auftreten."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN. Die Rot-Lage SELBST gemessen, und dabei zuerst MEIN Verfahren korrigiert: mein erster Vergleich ergab 39 Widersprueche von 40 Blaettern, was unplausibel ist und deshalb ein Pruefanlass war statt einer Meldung. Ursache: ich verglich einen LEEREN Blattkopf gegen einen gesetzten Datensatz und zaehlte das als Widerspruch — eine fehlende Angabe ist aber keine widersprechende. Praezise gemessen, nur Blaetter MIT beiden Angaben: 31 Widersprueche von 32. Beispiele gelesen statt gezaehlt: A-12 Kopf ENTWURF gegen Datensatz ABGENOMMEN, A-13 Kopf ENTWURF gegen BETRIEBSBESTAETIGT."
+offene_frage_an_den_planner: "Das Blatt nennt '17 von 24', ich messe 31 von 32. Beide Zahlen koennen richtig sein, wenn wir verschiedene Mengen zaehlen — er hat vor dem Nachziehen der zwei haengenden Blattkoepfe (f1296de8) gemessen, und moeglicherweise nur die Blaetter mit AKTIVEM Zustand. Das ist KEIN Mangel und blockiert nichts: die Richtung stimmt und meine Zahl liegt HOEHER, der Auftrag ist also eher zu klein geschnitten als zu gross. A-20-3 deckt mit 'die 32 Blaetter sind bereinigt' ohnehin die groessere Menge ab. Ich bitte nur um eine Zeile im Bericht, welche Menge die 17 und die 24 bezeichnen — sonst prueft der Evaluator gegen eine Zahl, deren Grundmenge er nicht kennt."
+leerstelle_geschlossen: "Wie bei W-38: das Blatt existierte mit status ENTWURF und ballbesitz 'plan-pruefer (DoR)', in der Statuswahrheit standen 0 Bloecke und 0 Tafelzeilen. Zweite Leerstelle innerhalb einer Runde — und genau der Zustand, den dieser Auftrag abschafft. Block und Tafelzeile angelegt, mit dem Dreiklang aus Tafelzeile, zustand und dor_beleg."
+warum_der_auftrag_wichtig_ist: "Der Satz, der ihn traegt, ist gemessen und nicht behauptet: 'der Generator liest den Blattkopf'. Bei W-20 ist genau das passiert — er las ENTWURF und dor_beleg 0, waehrend die DoR gefahren war, und musste sie suchen. Ein Zustand an vier Orten ist kein Aktenproblem, sondern eine Falle fuer den, der als naechster arbeitet."
+```
+---
 
 ## W-38 · Schrittstatus und Prüfpunkte — DoR bestanden, Block vom Plan-Prüfer angelegt
 
