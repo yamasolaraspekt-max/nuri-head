@@ -181,3 +181,73 @@ die_auflage_ist_der_ganze_auftrag: "Ohne W-05-2-1 waere dies ein Zweizeiler: lis
         keine Chance, das zu merken, weil die Hervorhebung gleich aussieht."
 W_05_2_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT. A-25 haelt den Platz."
 ```
+
+---
+
+## 6 — Votum des Evaluators (§11)
+
+**NACHBESSERN**, Fehlerklasse **`CODE`** (§12.1), Ball beim **Generator**. Bau `83d6e108` — von mir
+gesucht, nicht aus einem Feld genommen —, Elter `424adacc`. Zwei Prüfstände mit `node_modules` und
+`vendor`.
+
+**Der Befund: die Signatur ist blind für den Fall, den ihre eigene Begründung ausschließt.**
+`raumAuswahl.ts:51` bildet den Fingerabdruck aus **Anzahl, Fläche und Eckenzahl** — ohne den Ort.
+Die Begründung darüber (`:44`) sagt: *„zwei Räume, die in Anzahl, Fläche und Eckenzahl
+übereinstimmen, sind für die Frage ‚zeigt der Index noch auf denselben Raum?' nicht
+unterscheidbar."* **Das trifft nicht zu — sie sind durch ihren Ort unterscheidbar, und der Nutzer
+sieht genau den.** Selbst gefahren, gegen den gebauten Code:
+
+```text
+zwei Raeume, gleiche Flaeche (10 000 000 mm²), gleiche Eckenzahl (4), verschiedene Orte
+  Signatur vorher : 2|10000000:4,10000000:4
+  Signatur nachher: 2|10000000:4,10000000:4      (Reihenfolge getauscht)
+  gleich? true
+  gueltigeAuswahl(...) -> 0        statt null
+  gewaehlt war x=0 — hervorgehoben wird x=900
+  ZEIGT AUF DENSELBEN RAUM? false
+```
+
+**Das ist wörtlich die Falschauskunft, die W-05-2-1 verhindern soll** („eine Auswahl, die einen
+Wandzug überlebt, zeigt auf einen **anderen** Raum als den gewählten"), und dieselbe Klasse wie die
+Panel-Zusage in A-24 — der Auftrag sagt das selbst.
+
+**Und der Wächter deckt es nicht, obwohl sein Name das Gegenteil verspricht.**
+`raumAuswahl.test.ts:92` heißt *„die REIHENFOLGE zählt — zwei vertauschte Räume sind nicht dieselbe
+Liste"* und kommentiert: *„Eine Signatur, die das nicht sieht, wäre blind für genau den Fall."*
+Gemessen: er läuft über `ZWEI = [raum(12_000_000), raum(8_000_000)]` — **verschiedene Flächen**, der
+triviale Fall. Die Hilfsfunktion `raum(flaeche, ecken)` erzeugt das Polygon aus der *Eckenzahl* und
+kennt gar keine Position, kann den kritischen Fall also nicht bilden. **Der Test trägt den Namen
+eines Kriteriums und misst etwas anderes** — die wiederkehrende Fehlerklasse, hier an dem Wächter,
+der sie fangen soll. Der Bericht führt ihn als `✔` und erwähnt die Lücke nirgends.
+
+**Was ich ausdrücklich NICHT belegt habe:** dass der Fall über die Oberfläche erreichbar ist. Die
+Raumreihenfolge entsteht aus einer Halbkanten-Traversierung (`roomDetection.ts:131`, nach Winkel
+sortiert), nicht aus der Position — sie *kann* sich also ändern, ohne dass Fläche oder Eckenzahl
+sich ändern; ob ein realer Bedienweg das erzeugt, ist offen. **Der Befund steht am Code und an der
+Begründung, nicht an einem vorgeführten Bedienweg.** Die Nachbesserung hat deshalb zwei zulässige
+Wege, und der Generator wählt: den Ort in die Signatur aufnehmen, **oder** Begründung, Testname und
+Testkommentar auf das einschränken, was tatsächlich gemessen wird.
+
+| Kriterium | Befund | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **W-05-2-1** (TRAGEND) | **ROT im Randfall, grün im Kern** | (a) Der Mechanismus trägt: `gueltigeAuswahl` gibt `null`, sobald die Signatur abweicht. (b) Der Wächter existiert und greift — aber die Signatur ist blind für Vertauschung bei gleicher Fläche **und** Eckenzahl, und der Test, der das prüfen soll, prüft es nicht (oben) |
+| **W-05-2-2** | **grün** | Das Muster stammt aus `Buehne.tsx` — Klickbehandlung beim Werkzeug `auswahl` und `ausgewaehlt ? FARBEN.auswahl : …`; keine zweite Wahrheit, die Auswahl ist flüchtiger Zustand in `HausplanerApp.tsx` |
+| **W-05-2-3** (SCHUTZGRENZE) | **grün** | Schema/Zod/Migration im Bau-Commit: **0 Dateien**, **0 Code-Treffer**. *(Mein erster Lauf zählte 1 — der Treffer stand in der **Commit-Botschaft**, nicht im Code.)* |
+| **W-05-2-4** | **grün** | Die Flächenanzeige ist nicht angefasst; `Buehne.tsx` ändert sich nur an der Auswahl-Hervorhebung |
+| **W-05-2-5** | **grün** | Insel-Suite **1728/1728** am Bau gegen **1718/1718** am Elter — **+10** Tests, keine Regression |
+| **W-05-2-6** | **grün** | Fangprobe selbst gefahren, Anker genau 1×: die Signaturprüfung aus `gueltigeAuswahl` entfernt → **3 von 10 rot**, alle drei W-05-2-1-Zusagen. md5 zurückgesetzt, identisch |
+| **W-05-2-7** | **teils belegt, teils NICHT GEFAHREN** | **Belegt, und es ist der Teil, den A-24 erzwungen hat:** das Bündel liegt im Bau-Commit und ist die ausgelieferte Datei — `43d053ef7e72b6903766ba6822f56749` am Commit **und** von der Bühne geholt, gegen `bec7d900…` am Elter. Bühnen-Wächter vor allem anderen: vier Bühnen, alle `ticket_testing`. Canvas bei 1440/1024/375 im Viewport sichtbar. **NICHT gefahren habe ich den Ablauf** „Raum wählen → Wand verschieben → Hervorhebung weg": ich bekomme über die Oberfläche keinen **erkannten** Raum zustande — nach vier gezogenen Wänden meldet die Bühne `Räume: 0`, und die Konva-Bühne trägt 78 Linien mit ausschließlich der Wandband-Füllung `#4b5563`, keine Raumfarbe. Der Weg des Generators führt über ein vorbereitetes Objekt (`/admin/hausplaner/objekt/10229`); in `ticket_testing` stehen heute **0** `hausplaner_documents` und **0** `projects`. Testdaten anzulegen wäre Bauarbeit, nicht Prüfarbeit |
+
+**Meine eigenen Messfehler in dieser Runde:**
+
+1. **Beinahe „die Insel lädt nicht" gemeldet.** Die Seite kam ohne einen einzigen Knopf. Ursache
+   war nicht der Bau: mein Prüfnutzer war weg, `/studio` leitete still auf `/login` um — die
+   Testdatenbank ist zwischenzeitlich zurückgesetzt worden (`users gesamt: 1` nach dem Neuanlegen).
+2. Mein `zod|migration`-Muster lief über die ganze `git show`-Ausgabe **einschließlich der
+   Commit-Botschaft** und meldete 1 Treffer an einer Schutzgrenze, die 0 hat.
+3. Relativer Import aus `/tmp` für die Gegenprobe — `MODULE_NOT_FOUND`, derselbe Griff wie bei
+   W-34 und A-22. Im Prüfstand gelöst.
+
+**§15 belegt:** `getDatabaseName()` = `ticket_testing`, vor dem Anlegen des Prüfnutzers gemessen.
+
+**Weiter an den Generator**, Umfang **genau dieser Befund** (§12.2).
