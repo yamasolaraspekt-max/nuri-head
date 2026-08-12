@@ -57,6 +57,7 @@
 | **W-06** Geschoss verwalten | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `acb3d494` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Die größte Ablesung des Vorrats: DREI Module, 355 Z., zehn Exporte** — `geometry/geschossVorlage.ts` (78) · `app/dashboard/geschossStapel.ts` (104) · `GeschossFlaeche.tsx` (173), alle drei angeschlossen. **Tragend ist der ID-Remap** (`geschossVorlage.ts:5-7`): Öffnungen werden auf die **neuen** Wand-IDs umgehängt — wer das bricht, hängt Türen des Duplikats an die Wände des Ursprungsgeschosses, und **das fällt erst auf, wenn unten eine Wand geändert wird**. Die Generics `<N extends NodeBasis, R extends RoofBasis>` verankern die Schichttrennung **im Typsystem** statt in einer Absprache. AUF-43s stiller Befund steht im Dateikopf: *die Höhenlage wird im Modell geführt, aber nirgends gezeigt* — kein falscher Wert, ein vorhandener der nie erscheint. **Dritter Fall der NUR-QUELLE-Wächterklasse:** `geschossFlaeche.test.ts` heißt nach der Komponente, importiert das Datenmodul und verriegelt die Komponente über ihre Quelle (`:27`) — strenger als ein Import, denn `:125` schließt eine zweite Definition aus. **Und F-032 ist eine FORMEL, keine Sperre** (`FORMELSAMMLUNG.md:218`); vier LEER-Werkzeuge tragen die Referenz und das sieht wie ein gemeinsamer Blocker aus. |
 | **A-25** Die Zäune fehlen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `fc0abdd5` | **BAU, P1 — und der größere Anteil ist meiner.** Zwei yaml-Bereiche in `docs/STATUS.md` tragen zusammen **sieben** Datensätze: `1243-1315` (A-08, A-09) und `7525-8084` (559 Z.: W-06, W-31, A-24, A-23, A-22). **P1, weil eine PRÜFROLLE betroffen ist** — der Evaluator in `f017b6f9`: *„mein Takt-Scan liest seit Runden das LETZTE zustand-Feld eines Bereichs statt das des gesuchten Auftrags, und dass es bisher stimmte war GLÜCK in der Reihenfolge."* Er meldete für A-24 einen Widerspruch, den es nicht gibt; beim nächsten Mal kann er einen **verschweigen**, den es gibt. **Mein Anteil:** der große Bereich trug am Morgen einen Datensatz, ich habe heute vier dazugehängt — jedes Mal den Block *vor* die `auftrag:`-Zeile des vorherigen, also **innerhalb** des bestehenden Zauns. A-20-2 habe ich erfüllt; dass ein Datensatz auch ein eigener **Block** sein muss, sagt A-20-2 nicht — und ich habe damit den Zweck von A-22 unterlaufen, während A-22 in Kraft war. **Die Falle steht im Kriterium:** mein erster Zähler meldete *einen* Bereich statt zwei, weil er `​```yaml` als Schließer zählte — nach CommonMark schließt nur ein Zaun **ohne** Info-String. Ein solches Muster kann nach dem Bau **null** melden und grün sein. |
 | **A-26** Ball-Drift am Tor | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `d3d234a6` | **BAU, P1 · hängt an A-25.** **Dreimal an einem Tag, drei verschiedene Rollen** — W-36, W-33, W-31: jedes Mal Datensatz gepflegt, Tafelzeile vergessen. Der Release-Prüfer hat alle drei nachgezogen und die Ursache benannt (`38bc5e12`): *„seit A-20 gibt es ZWEI Zustandsorte, und der zweite liegt räumlich weit vom ersten entfernt. Wer im Auftragsblock arbeitet, sieht die Tafel nicht."* **A-20 ist meine Regel, also gehört die Fehlerklasse mir.** Der schwerste Teil: im dritten Fall **glaubte** der Verursacher, beide Orte gepflegt zu haben, und schrieb es in die Botschaft — am Diff fehlte die Tafelzeile. **Ein Fehler, der nicht im Willen liegt, wird von einer Mahnung nicht behoben**, deshalb eine Barriere im Tor (vierte nach F-14, B5, B6) und ausdrücklich eine, die **warnt statt abbricht**. Drei Fallen stehen im Kriterium, weil jede sie grün und wirkungslos machen würde: Schreibweise (`**`ENTWURF`**` gegen `ENTWURF`), Kommentare nach `#`, und die Zuordnung — daran ist der Takt-Scan des Evaluators gescheitert. **Nicht-Ziel: die zwei Orte zusammenführen** (wäre Rückabwicklung von A-20 und gehört Yama). |
+| **W-05/1** Raum anwählen | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `c09dcb93` | **BAU** · erster Posten aus der Frontend-Bestandsaufnahme des Release-Prüfers (`STATUS.md:5355`) — **und die Messung hat den Auftrag KLEINER gemacht.** Sein Vorschlag war *„Raum anwählen, benennen, Fläche ablesen"* als ein Schnitt; gemessen sind es drei ungleiche Teile: **Fläche ablesen ist GEBAUT** (`Buehne.tsx:139` Kommentar, `:148` Füllung, `:152` die m²-Zahl), **anwählen ist klein** (`:147` trägt `listening={false}`, das Auswahlmuster steht daneben in `:165`/`:190`), **und der NAME ist eine Entscheidung Yamas**: `ErkannterRaum` (`roomDetection.ts:35-40`) trägt `polygon`, `kanten`, `flaecheMm2`, `volumenMm3` — **keine id**, und `Buehne.tsx:147` nutzt `key={raum${i}}`, also den **Index**. Räume werden *erkannt*, nicht gezeichnet; ein Name ist dauerhaft, ein Index nicht. **Dieselbe Klasse wie die offene ZoneNode-Frage.** Der ganze Auftrag hängt an W-05-1-1: **die Auswahl wird zurückgesetzt, wenn sich die Raumliste ändert** — eine Auswahl, die einen Wandzug überlebt, zeigt auf einen anderen Raum und sieht gleich aus. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -1282,6 +1283,9 @@ push_vermerk: "release-pruefer 08.08., ENV-HINWEIS: der Sicherungs-Push (git pus
 ---
 
 ## A-09 — RELEASE_FREI an af8f2054 (Ball bei Yama: main-Veröffentlichung; §10 im Blatt)
+
+```yaml
+```
 
 ```yaml
 auftrag: "A-09"
@@ -3416,6 +3420,7 @@ mitgenommen zu werden. *Alter des Zustands: mindestens seit Sitzungsbeginn; `zz-
 im Wurzelverzeichnis datiert vom 03.08., 00:25 — die Ablagerung ist älter als diese Nacht.*
 
 ```yaml
+vorgang: "Befund des Evaluators — Index traegt 16 unbeschlossene Loeschungen (Abschnitt daruber)"
 fehlerklasse: UMGEBUNG
 gegenprobe: git commit --dry-run mit und ohne Pfadangabe, gegenläufig
 ballbesitz: offen — ich messe und melde, ich räume den Index eines anderen nicht auf
@@ -3594,6 +3599,7 @@ Kontrolle  dasselbe OHNE Pfadangabe                                        -> 16
 *Das deckt sich mit dem Wegwerf-Repo des Planners und wurde unabhängig davon gefahren.*
 
 ```yaml
+vorgang: "Befund des Evaluators — Stichprobe durch Vollerhebung ersetzt, drei Zahlen berichtigt"
 fehlerklasse: BEWEIS
 gegenprobe: Vollerhebung 1746 statt Stichprobe 25 · Tor-Form gegen Nicht-Tor-Form
 ballbesitz: generator (die Zahlen sind seine), nachrichtlich planner (A-07 zitiert sie)
@@ -4527,6 +4533,7 @@ Kopf der Datei                        "Yamas Frage: ... Gemessen am eigenen Repo
 > Befolgen, einmal beim Nicht-Befolgen von §16.*
 
 ```yaml
+vorgang: "Befund des Evaluators — die Entscheidung, die §16 aussetzt, hat selbst keine Geltung"
 fehlerklasse: SPEC
 befund: "Empfehlung ohne Geltungsakt wird wie geltendes Recht behandelt und verdraengt §16"
 gegenprobe: "Wortlaut §1/§16 gegen Wortlaut und Kopf der Entscheidung · 0 Erwaehnungen in beiden Regelquellen"
@@ -4671,6 +4678,7 @@ E3 sind kein Stand und keine Veröffentlichung — sie ändern **Kriterien in se
 Prozessrecht hat nach §1 nur eine Autorität: Yama.**
 
 ```yaml
+vorgang: "Befund des Evaluators — Vertretungsentscheid zu Prozesspruefung 03, von §4 nicht gedeckt"
 fehlerklasse: SPEC
 befund: "Vertretung ueber die Veroeffentlichung hinaus auf Prozessentscheidungen ausgedehnt"
 gegenprobe: "§4-Wortlaut gegen den Entscheid · die Pruefung nennt selbst ballbesitz: yama ·
@@ -5473,6 +5481,7 @@ kleinste Schnitt mit dem größten Nutzen. **W-08 rückt als fünfter Posten daz
 KEIN Frontend-Auftrag, sondern erst F-023, dann die Frage nach F-024.*
 
 ```yaml
+vorgang: "VORLAGE AN DEN PLANNER — Frontend-Bestandsaufnahme Klasse A (release-pruefer, 12.08.)"
 ballbesitz: plan-pruefer  # ANTWORT DES PLANNERS LIEGT (13.08.): die W-08-Zuordnung ist gemessen und
   # traegt nicht, der Reihenfolge-Vorschlag ist uebernommen, W-05 wird als naechstes geschnitten.
   # Der Ball lag seit 12.08. bei mir und war unsichtbar, weil dieser Block kein auftrag:-Feld traegt.
@@ -7571,6 +7580,34 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 ```
 
 ```yaml
+auftrag: "W-05/1"
+zustand: ENTWURF
+ballbesitz: plan-pruefer  # DoR steht aus
+titel: "Raum anwaehlen — und der Name ist ausdruecklich NICHT dabei"
+basis_sha: c09dcb93
+spur: A
+prioritaet: P2
+blatt: "docs/auftraege/aktiv/W-05-1-raum-anwaehlen.md"
+die_messung_hat_den_auftrag_kleiner_gemacht: "Der Release-Pruefer schlug drei Dinge als EINEN kleinen
+  Schnitt vor. Gemessen ist die Flaechenanzeige GEBAUT (Buehne.tsx:139 Kommentar, :148 Fuellung, :152 die
+  m²-Zahl), das Anwaehlen klein (:147 listening false) und der Name eine Entscheidung Yamas. Er hat
+  ausdruecklich vorgelegt statt geschnitten und die Rollengrenze benannt; die Messung war meine Aufgabe,
+  und sie hat den Auftrag verkleinert. Dritte Reichweitenmessung heute, die einen Befund kleiner macht."
+warum_der_name_zu_yama_gehoert: "ErkannterRaum (roomDetection.ts:35-40) traegt polygon, kanten,
+  flaecheMm2 und volumenMm3 — KEINE id. Buehne.tsx:147 nutzt key raum plus Index. Raeume werden ERKANNT
+  und nicht gezeichnet, sind also ein abgeleitetes Ergebnis; ein Name ist dauerhaft, ein Index nicht:
+  nach einem Wandzug haengt er am falschen Raum. Dieselbe Klasse wie die offene ZoneNode-Frage —
+  dort materialId an einem abgeleiteten Knoten, hier ein Name an einem abgeleiteten Raum. Dazu muesste er
+  ins Szenendokument, also Schema und Zod und Migration an Bestandsdaten. Der Klappzustand der Schienen
+  durfte in den localStorage weil er eine Bedienereinstellung ist; ein Raumname ist eine Eigenschaft des
+  Gebaeudes, und diese Grenze zieht schienenSpeicher.ts in seinem eigenen Kopf."
+die_auflage_ist_der_ganze_auftrag: "Ohne W-05-1-1 waere dies ein Zweizeiler. Mit ihr verhindert er eine
+  Falschauskunft: eine Auswahl, die einen Wandzug ueberlebt, zeigt auf einen ANDEREN Raum als den
+  gewaehlten, und der Nutzer kann es nicht merken weil die Hervorhebung gleich aussieht. Dieselbe Klasse
+  wie die Panel-Zusage in A-24, nur an der Auswahl statt am Hinweis."
+```
+
+```yaml
 auftrag: "A-26"
 zustand: BEREIT
 ballbesitz: generator  # nach A-25, nicht davor
@@ -7785,6 +7822,9 @@ was_selbst_gemessen: "Alle drei Dateien geoeffnet, Zeilen und Exporte VOR dem Sc
   Waechter geoeffnet und ihre Zugriffsart bestimmt, F-032 in der Formelsammlung nachgesehen, und
   geprueft dass kein aktiver Auftrag W-06 abdeckt (Pflichtpruefung 1)."
 
+```
+
+```yaml
 auftrag: "W-31"
 zustand: BEREIT
 ballbesitz: generator
@@ -7848,6 +7888,9 @@ mein_erster_messversuch_war_untauglich_und_das_gehoert_dazu: "Mein erster Sweep 
   Zahlen NICHT ausgegeben sondern das Verfahren gewechselt, auf Dateinamen dedizierter Module. Das ist
   derselbe zu weite Griff wie heute mehrfach, nur diesmal vor der Meldung bemerkt."
 
+```
+
+```yaml
 auftrag: "A-24"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
@@ -8070,6 +8113,9 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-24 GECLAIMT vor dem Pr
   Fuer mich heisst das: mein Takt-Scan liest seit Runden das letzte Feld eines BEREICHS statt das
   des gesuchten Auftrags — dass es bisher stimmte, war Glueck in der Reihenfolge. Der Befund
   gehoert dem Planner, nicht mir; er ist hier belegt statt vermutet."
+```
+
+```yaml
 auftrag: "A-23"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
@@ -8199,6 +8245,9 @@ was_der_evaluator_zuerst_pruefen_sollte: "Ob wirklich keine Zusage geschwaecht i
   zeichengleich stehen und nur Name und Kommentare gewechselt haben. Und die zweite Gegenprobe ist
   billiger als jede Lesung: das Buendel ist byte-identisch."
 
+```
+
+```yaml
 auftrag: "A-22"
 zustand: BETRIEBSBESTAETIGT
 bericht: "docs/BERICHT-A-22-statuswahrheit-maschinell-lesbar.md"
