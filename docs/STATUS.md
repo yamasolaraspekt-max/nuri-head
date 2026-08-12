@@ -2186,6 +2186,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## §3-Schranke selbst nachgemessen (haelt), und die Scope-Berichtigung hat EINE Stelle nicht erreicht (plan-pruefer 12.08.)
+
+```yaml
+der_generator_befund_haelt_selbst_gemessen: "Der kanonische Tafelzeilen-Befehl mit Muster [AW] findet 31 Zeilen, das Muster [A-Z]+-?[0-9]+ findet 36 — FUENF Auftraege fallen durch, weil sie nicht mit A oder W beginnen (B5, B6, B7 und je einer mit P und M). Die Folge selbst gemessen: 'IN_ARBEIT laut [AW]-Tafel' = 0, 'IN_ARBEIT laut Zustandsfeldern' = 1 (B5). Der §3-Check meldet FREI, waehrend gebaut wird. Die Richtung ist das Schwere daran: die Statusdrift von heute frueh behauptete MEHR Sperre als da war, diese behauptet WENIGER — sie laedt zum Parallelbau ein."
+das_trifft_meine_eigenen_pruefungen: "Ich pruefe §3-Belege bei DoR und bei CODE_FERTIG und habe mich auf genau dieses Muster verlassen. Jeder meiner §3-Belege der letzten Runden ist damit fuer die fuenf B/P/M-Auftraege blind gewesen — nicht falsch abgelesen, sondern gar nicht erfasst. Ich uebernehme das breitere Muster ab sofort und melde es hier, statt es still zu wechseln."
+eine_praezisierung_am_befund: "Der Commit sagt, das Muster stehe 'in docs/ARBEITSREGELN.md 0 MAL — die Schranke ist nirgends als Regel verankert'. Selbst nachgemessen und zu trennen: 'IN_ARBEIT' kommt in den ARBEITSREGELN VIER mal vor, der ZUSTAND ist also sehr wohl verankert. Nicht verankert ist die PRUEFMETHODE — der grep-Ausdruck, mit dem alle die Schranke messen. Das ist der genauere und immer noch ernste Satz: verankert ist die Regel, Gewohnheit ist ihr Messwerkzeug. Der Unterschied zaehlt, weil eine unverankerte REGEL neu beschlossen werden muesste, ein unverankertes WERKZEUG dagegen nur aufgeschrieben."
+die_berichtigung_hat_eine_stelle_nicht_erreicht: "Der Planner hat -8 aufgeloest (Scope Z.157 berichtigt, der alte Satz als Zitat mit Begruendung erhalten, must_preserve von FUENF auf VIER mitgezogen) — sauber und mit stehengelassenem eigenem Anteil. ABER: Zeile 1, die UEBERSCHRIFT des Blattes, traegt weiter 'Nicht neu schneiden: sechs von sieben Blaettern stehen'. Das ist MEINE widerlegte Zahl aus der DoR, an ihrer dritten Station. Die Vorkommen in Z.506 und Z.709 sind legitime ZITATE in Evaluator-Befunden, gepruefter Kontext — die Ueberschrift ist keins, sie ist die Titelaussage. Und es ist genau der Mangel, den der Planner im selben Commit selbst notiert: 'eine SPEC-Berichtigung muss JEDE abhaengige Stelle treffen; eine Berichtigung an einer Stelle ist gefaehrlich.' Ich korrigiere fremde Blaetter nicht — Ball beim Planner, es ist ein Einzeiler."
+release_schwelle_wartet_genau_darauf: "Gemessen: A-15 und W-09/1 stehen ABGENOMMEN mit Ball beim Release-Pruefer, W-07N traegt weiter 'ballbesitz: planner (Scope-Entscheidung zu -8)'. Mit dem Nachziehen dieses einen Feldes waeren es DREI und die Sammel-Kontrolle waere ausgeloest. A-05 und A-12 zaehlen nicht mit, sie sind Messauftraege beim Planner. Ich ziehe das Feld nicht selbst nach: die Entscheidung ist gefallen, die Berichtigung aber unvollstaendig — der Ball liegt sachlich noch dort."
+```
+---
+
 ## N-003 ist erledigt — Yama, 12.08. (plan-pruefer eingetragen)
 
 ```yaml
