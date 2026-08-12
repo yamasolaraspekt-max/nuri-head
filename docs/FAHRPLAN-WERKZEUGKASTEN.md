@@ -74,6 +74,70 @@ KLASSE C  BAUEN — kein Modul, gemessen
   Giebelbindung · W-40 W-41 W-42 (Fuehrung)                             (9)
 ```
 
+## YAMAS VORBEHALT ZU KLASSE B, 13.08. — erst die Messung, dann die Einordnung
+
+**Sein Wortlaut:** *„bei B gilt laut Fahrplan zuerst die Messung: was ist gebaut, was fehlt. Erst danach
+steht fest, ob eine B-Zeile eine Ablesung (schnell) oder ein Bau (langsam) wird. … Wenn sich mehrere
+B-Zeilen als Bauten entpuppen, gilt eher der W-27-Maßstab: dieser eine Bau hat etwa zweieinhalb Stunden
+gebraucht."*
+
+**Der Vorbehalt ist berechtigt, und die Klassendefinition sagt es selbst:** *Klasse B heißt
+**„ANSCHLIESSEN — teils gebaut, Anschluss unklar"**. **Unklar heißt: nicht entschieden.** Wer eine
+B-Zeile für eine Ablesung hält, hat die Klasse mit einer Zusage verwechselt.*
+
+**Und es gibt einen gemessenen Datenpunkt in JEDE Richtung:**
+
+```text
+W-06 Geschoss verwalten   KLASSE B, und es war eine ABLESUNG.
+                          Gemessen 13.08.: DREI Module, 355 Zeilen, zehn Exporte,
+                          alle angeschlossen — es fehlten nur die Blaetter.
+                          Geschnitten, DoR in der ersten Runde erteilt.
+W-27 Kantentypen          KLASSE C, und es war ein BAU: etwa zweieinhalb Stunden
+                          (Yamas Maszstab), und danach OHNE Aufrufer — die
+                          Registerzeile sagt es seit 13.08.
+```
+
+> **B ist also nicht „schnell" und nicht „langsam", sondern UNGEMESSEN.** *Das ist der Grund, warum jede
+> Zeitschätzung über B ohne Messung eine Vermutung ist — und der W-27-Maßstab ist die richtige Obergrenze
+> für den Fall, dass eine B-Zeile sich als Bau entpuppt.*
+
+### Erste Messung an den zwei Zeilen, die Yama nennt — INDIKATION, keine Einordnung
+
+```text
+W-12 Ansicht und Kamera   Registerzeile LEER · KEIN dediziertes Modul ·
+                          0 Registry-Eintraege fuer 'ansicht'/'kamera'.
+                          ABER der Zustand IST gebaut: app/state/uiState.ts:11
+                          nennt ihn und sagt woertlich „(Rename modus→viewMode ist
+                          ein eigener Hygiene-Slice)". Dazu 'split' in 7 Dateien,
+                          zoom in 11, PerspectiveCamera/OrbitControls in 1.
+                          -> deutet auf ABLESUNG plus einen benannten Hygiene-Posten.
+W-18 Topologie pruefen    Registerzeile LEER · F-004 und F-013 genannt.
+                          F-013 IST GEBAUT UND WIRKT, Stelle geoeffnet:
+                          geometry/kontur.ts:47 fuehrt 'selbstschnitt' als
+                          KonturGrund, :140 gibt ihn zurueck, und :63 traegt eine
+                          LESBARE Nutzermeldung — „Die Kontur ueberschneidet sich
+                          selbst — zieh den letzten Punkt so, dass sich keine zwei
+                          Kanten kreuzen."
+                          -> deutet auf ABLESUNG; offen bleibt, ob ein WERKZEUG
+                             'Topologie pruefen' fehlt oder die Vorpruefung genuegt.
+```
+
+**Was diese Messung IST und was sie NICHT ist:** *ich habe je zwei Stellen **geöffnet** statt nur
+gezählt — das ist mehr als eine Musterzählung und weniger als die Vollmessung, die W-06 bekommen hat
+(alle Module, alle Exporte, alle Aufrufer). **Für den Schnitt reicht sie nicht;** sie sagt nur, in welche
+Richtung die Einordnung wahrscheinlich fällt.*
+
+**Die Regel, die daraus für jede B-Zeile gilt:**
+
+```text
+1  Module und Exporte zaehlen, VOR jeder Einordnung.
+2  Die Aufrufer messen — und zwar mit ZWEI Mustern: Import UND String,
+   weil eine Verdrahtung ueber Strings fuer ein Import-Muster unsichtbar ist
+   (belegt an W-31s fuenfter Bedienstelle).
+3  Erst dann sagen: Ablesung oder Bau. Vorher steht nur die Klasse fest.
+4  Und wenn Bau: der W-27-Maszstab gilt, nicht der Ablesungs-Takt.
+```
+
 ## Die Reihenfolge — nach ENTSPERRUNG, nicht nach Aufwand
 
 ```text
