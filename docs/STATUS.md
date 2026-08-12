@@ -1911,6 +1911,24 @@ naechster_schritt: "Generator zieht A-14 (§3 beachten); Browserabnahme nach §9
 ```
 ---
 
+## In Planprüfung — A-15 (Block angelegt; EIN Restpunkt)
+
+```yaml
+auftrag: "A-15"
+titel: "Wo eine Rechnung eine Norm nennt, darf die Software nicht 'bestanden' sagen — gemessen, nicht eingeschaetzt"
+datei: docs/auftraege/aktiv/A-15-fachaussage-oder-hinweis.md
+zustand: ENTWURF
+ballbesitz: planner
+basis_sha: d814be02
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): ENTWURF bleibt, EIN Restpunkt — sonst ist das Blatt stark. BEIDE VORERHEBUNGS-ZAHLEN SELBST GEMESSEN UND EXAKT BESTAETIGT: 13 Dateien in geometry/ und app/dashboard/ tragen \bbestanden\b, davon nennen 8 eine Norm (DIN/EN 199x/Eurocode). Die Selbstkorrektur des Planners ist vorbildlich und benennt die Klasse genau: 'ich hatte die Liste gemessen und die REICHWEITE geschaetzt' — mit ausdruecklichem Bezug auf meine eigene Selbstkorrektur a1d29aed, nur in die andere Richtung (zu eng statt zu weit). Dass unsere Fehlerklassen inzwischen eine gemeinsame Sprache haben, ist der eigentliche Fortschritt dieser Runde. Die Trennung zu A-14 ist sauber: A-14 baut die Mechanik fuer N-003 und laeuft zuerst (Risiko), A-15 klassifiziert die uebrigen zwoelf. §5-Block, Erstnutzer, Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden; A-15-4 (Fachurteil als Urteil kennzeichnen) steht zusaetzlich als Hausregel — richtig, denn ein Kriterium gilt fuer einen Auftrag, eine Hausregel fuer alle."
+restpunkt: "DIE KRITERIENLISTE IST ZWEIGETEILT, und das ist keine Formalie: die Hauptliste traegt A-15-1 bis -8 sowie -12, -13, -14 in der ueblichen Form (**A-15-x**); die drei Kriterien A-15-9, -10 und -11 stehen NUR im Abschnitt 'Was sich an den Kriterien aendert' als Tabellenzeilen mit dem Wort NEU. Wer die Liste abarbeitet, findet sie nicht — und die Zaehlung wird mehrdeutig: elf Eintraege in der Liste, vierzehn Nummern insgesamt. GENAU DIESE KLASSE hat die Sammel-Release-Kontrolle 1 gefunden (W-04: sieben Zeilen im Messtisch gegen zehn im Blatt), und die Pflichtfrage der neuen Regel ('traegt jeder Messtisch JEDE Kriterienzeile, gezaehlt') braucht eine eindeutige Liste, sonst zaehlt sie gegen eine Zahl, die es zweimal gibt. Die drei gehoeren in die Hauptliste — inhaltlich sind sie fertig formuliert, es ist ein Verschieben, keine Arbeit."
+hinweis_ohne_restpunkt: "Wie bei A-14 fehlt der RUECKWEG als eigene Zeile. Bei einem MESSAUFTRAG ist er trivial (ein Bericht, git revert genuegt) — deshalb kein Restpunkt, aber der Bericht soll ihn nennen, damit die Form bei Bau- und Messauftraegen dieselbe bleibt."
+herkunft_des_blocks: "Auch dieser Block existierte NICHT (Befund 87e49ccd, neun unsichtbare Blaetter). Angelegt mit dem Votum; A-15 ist damit sichtbar und wartet beim Planner."
+naechster_schritt: "Planner verschiebt A-15-9/-10/-11 in die Hauptliste (Verschieben, kein Umformulieren), dann setzt der Plan-Pruefer BEREIT"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
