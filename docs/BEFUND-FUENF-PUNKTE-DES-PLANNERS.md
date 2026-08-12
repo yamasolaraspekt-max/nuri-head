@@ -176,3 +176,83 @@ WEG C   W-15 auf die Wand begrenzen, Raum->Belag ausdruecklich als NICHT im
 Raum→Belag jetzt gebraucht wird oder später. **Das ist deine, nicht meine.** Was ich sagen kann:
 Weg A ist additiv und bricht nichts, und der Planner hat bereits gemessen, dass ein reiner
 Bauauftrag hier die Wand-Zuweisung ein zweites Mal bauen würde — der Auftrag muss die Grenze tragen.
+
+---
+
+## 6 · Nachtrag: AUF-40 Teil B ist zur Hälfte längst gebaut
+
+**Der Planner hat in `48599889` einen sechsten offenen Posten gemeldet** — gefunden im Testkopf von
+`startEhrlich.test.ts`, *„AUF-40 Teil B stand auf KEINER meiner Vorlagen"*. Der Test sagt wörtlich,
+die echte Projektliste *„braucht eine Route und ist Teil B — der liegt bei Yama"*.
+
+**Ich habe nachgemessen, ob das noch stimmt. Es stimmt zur Hälfte nicht.**
+
+```text
+AUF-40 laut Inventur   "Start/Zuletzt an echte Projekte
+                        + Konfigurator-Paket serverseitig speichern"
+                       -> ZWEI Gegenstaende in einem Posten.
+```
+
+### Hälfte 1 — serverseitig speichern: **GEBAUT, und zwar vollständig**
+
+```text
+Model       app/Domain/Hausplaner/Models/HausplanerConfiguratorPackage.php
+Migration   2026_07_26_180000_create_hausplaner_configurator_packages_table.php
+Routen      POST /konfigurator-pakete            paketSpeichern   (permission add)
+            GET  /konfigurator-pakete            paketListe       (permission read)
+            GET  /konfigurator-pakete/{paket}    paketZeigen      (permission read)
+```
+
+Eine alte Abnahme führt das ausdrücklich so:
+`abnahme-evaluator-haertung-2026-07-25.md:1335` — **„AUF-81 … (B7 / AUF-40 Teil B)"**.
+
+### Und `paketListe` liefert genau das, was der Startbildschirm braucht
+
+```php
+HausplanerConfiguratorPackage::query()
+    ->vonNutzer($request->user()?->id)                                    // die EIGENEN
+    ->select(['id','art','titel','status','alternative_id','created_at'])
+    ->orderByDesc('created_at')                                           // ZULETZT zuerst
+    ->paginate(25)
+```
+
+**Die Insel ruft sie 0 mal auf** (`grep 'konfigurator-pakete' resources/planner` → 0 Treffer).
+
+### Hälfte 2 — „Start/Zuletzt an echte Projekte": **fehlt wirklich**
+
+Und hier ist die Unterscheidung, die den Posten teilt. Die drei stillgelegten Karten waren **zwei
+verschiedene Sorten**:
+
+```text
+"Fenster-Angebot Hahn"    meta: "ConfiguratorPackage · gestern"
+                          -> Sorte PAKET.  Zulieferung EXISTIERT (paketListe).
+
+"EFH Mustermann"          meta: "Rev. 42 · Schritt 2/11"
+"Sanierung Musterstr. 5"  meta: "Rev. 12 · vor 3 Tagen"
+                          -> Sorte PROJEKT/OBJEKT. Dafuer gibt es KEINE
+                             Listen-Route: die Objektrouten sind alle
+                             /objekt/{objekt}, also EINZELN, und eine
+                             "meine Objekte"-Liste kommt 0 mal vor.
+```
+
+### Was daraus folgt — und es verschiebt den Ballbesitz
+
+```text
+FUER PAKETE     kein Yama-Gate mehr. Die Route steht, mit Rechten und
+                Eigentumspruefung. Was fehlt, ist der ANSCHLUSS in der Insel:
+                fetch auf /konfigurator-pakete und Uebergabe an StartView.projekte.
+                Das ist ein Bauauftrag der Kette, keine Entscheidung.
+
+FUER PROJEKTE   bleibt bei dir — aber als kleinere Frage als bisher: nicht
+                "Teil B bauen", sondern "soll der Startbildschirm auch OBJEKTE
+                zeigen, und wenn ja, mit welcher Sichtbarkeitsregel?"
+                Die Objektrouten sind rechte-gated (permission:Hausplaner,read)
+                und objektgebunden — eine nutzerweite Liste ist eine neue
+                Sichtbarkeitsentscheidung und deshalb deine.
+```
+
+> **Warum ich das melde, obwohl der Planner es selbst vorlegen wollte:** *er schreibt, er lege den
+> Posten vor, „sobald das Blatt ihn belegt" — richtig für sein Blatt.* **Aber solange „Teil B liegt
+> bei Yama" unwidersprochen im Testkopf steht, behandelt ihn die nächste Rolle als ganzes Gate.**
+> *Die Hälfte, die gebaut ist, würde ein zweites Mal gebaut — und das wäre der zweite Schreibpfad,
+> den wir heute bei W-42 schon einmal knapp verhindert haben.*
