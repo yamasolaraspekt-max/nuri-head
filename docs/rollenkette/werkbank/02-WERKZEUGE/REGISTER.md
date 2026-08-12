@@ -65,7 +65,7 @@
 |---|---|---|---|---|
 | W-11 | Maß und Bemaßung | **BESCHRIEBEN** | ~~W-13~~ ⓝ | F-001 ✓, ~~F-002~~ ⓝ, ~~F-003~~ ⓝ |
 | W-14 | Kopieren/Spiegeln/Drehen | LEER | W-13 | F-032 |
-| W-15 | Material und Farbe | LEER | W-13 | — |
+| W-15 | Material und Farbe | **ENTWORFEN** | W-13 | **keine** ⓝ — zugewiesen wird, nicht gerechnet |
 | W-17 | Export und Speichern | LEER | alle | — |
 | W-43 | **Abbund-Zeichnung** | LEER | **W-07, W-21** | — · Darstellungslogik liegt in **M-02**, Fachwissen im Feld **`abbundhinweis`** ([dachformVorlagen.ts:107](../../../../resources/planner/hausplaner/geometry/dachformVorlagen.ts#L107), 2.399 Z) — **die Insel kennt ihre eigene Lücke**: `:2051` *„Geplant — Abbund erst nach sauberer Geometrie-/Tragwerksumsetzung."* **Ausschluss mit Zieladresse, nicht schneiden** (Yama 12.08.) |
 
@@ -251,6 +251,7 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/app/tools/auswahlModus.ts` | **W-13** — 98 Zeilen, 7 Ausfuhren; vier Modi, Modifikator-Vorrang alt vor ctrl/meta vor shift; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/app/tools/trefferSuche.ts` | **W-13** — 75 Zeilen, 4 Ausfuhren; **oben schlägt nah** — Zeichenreihenfolge vor Distanz; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/app/tools/auswahlDarstellung.ts` | **W-13** — 71 Zeilen, 3 Ausfuhren; Zustand als Daten, kein Markup; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/app/tools/werkzeugVertrag.ts:874-908` | **W-15** — **VERTRAG, kein Code.** Drei Einträge: `material-aufnehmen`/`PaintCommand` (:874), `material-zuweisen`/`MaterialCommand` (:886), `textur`/`TextureCommand` (:898). Alle drei nennen `services.material.execute(…)` — **das im Repo 0 Treffer hat**. Deshalb `ENTWORFEN` statt `BESCHRIEBEN`; eingearbeitet 12.08. (W-15/1) |
 | `resources/planner/hausplaner/app/tools/auswahlUebersicht.ts` | **W-13** — 77 Zeilen, 4 Ausfuhren; Mehrfach-Ansicht, „das Panel darf nicht raten"; **eingearbeitet 12.08.2026** |
 
 ## Was aus Yamas eigenem Bestand kommt
