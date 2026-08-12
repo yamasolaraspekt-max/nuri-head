@@ -918,3 +918,78 @@ Sicherungszweige stehen einen Commit auseinander — beides normal, solange lauf
 
 *Ich lasse den Befund stehen, weil er zum Zeitpunkt der Messung richtig war. **Eine Lagemeldung ist ein
 Zeitpunkt-Beleg, kein Zustand** — genau das, was dieser Abschnitt an den Sperrgründen zeigt.*
+
+---
+
+## 13 · Du hast das Nicht-Ziel „keine L/T/U-Dächer" aufgehoben — hier ist, was daraus folgt
+
+**Deine Aufhebung im Wortlaut:** *„A-01s Nicht-Ziel »keine L/T/U-Dächer« AUFGEHOBEN — es stammt aus
+Unwissen über die Fähigkeit."* **Du hattest recht: die Fähigkeit ist da.** *Der Renderer baut L/T/U
+(`dachMesh.ts:215` zweigt über `istVerschneidungsForm` ab), und A-05 hat es gefahren — `l-shape` mit
+vier Maßen ergibt 10 Dreiecke, First 5482 mm, auch auf einer L-Kontur.*
+
+**Was fehlt, ist nicht die Fähigkeit, sondern eine Entscheidung** — und die ist deine, weil sie
+Handwerkspraxis ist. Selbst gemessen, jede Stelle geöffnet:
+
+```text
+HEUTE, gemessen:
+  HausplanerApp.tsx:968   der Anlegepfad setzt roofType: 'sattel' as const — FEST.
+                          Nichts im Bestand setzt je 'l-shape' aus einer Kontur.
+  dachMesh.ts:179         der Verschneidungs-Pfad liest vom Polygon NUR
+                          polygonBbox(roof.polygon) — also die Bbox-MITTE als Anker.
+                          Die ganze Dachgeometrie kommt aus `anbau` + RoofNode-Skalaren.
+  dachMesh.ts:215/:218    der Renderer zweigt fuer l/t/u AB, bevor die Rechteck-
+                          pruefung greift. dachGeometrie.ts kennt diesen Abzweig NICHT
+                          und prueft fuer JEDE Form zuerst pruefeRechteckigeKontur.
+```
+
+> **Der Kern in einem Satz** *(A-05, Punkt 5, und ich habe es an `:179` nachgelesen)*: **Kontur und
+> gerendertes Dach sind heute nur über den Anker gekoppelt.** *„Deckungsgleichheit ist heute
+> Nutzer-Verantwortung, kein Code-Vertrag." **Wer eine L-Kontur zeichnet und vier Maße einträgt,
+> bekommt ein L-Dach — aber die Form kommt aus den Maßen, nicht aus seiner Zeichnung.** Passt beides
+> nicht zusammen, sagt es niemand.*
+
+### Zwei Wege, und sie schließen sich nicht aus
+
+**Weg B — die Maße sind führend, und die Oberfläche sagt es.** *Das ist der heutige Zustand, nur
+**unausgesprochen**. Zu bauen ist die Ehrlichkeit: die Kontur bestimmt **wo** das Dach steht, die Maße
+bestimmen **wie** es aussieht. Klein, sofort baubar, braucht keine Entscheidung von dir außer dem Ja.*
+
+**Weg A — die Kontur ist führend, die Maße werden abgeleitet.** *Das ist das, was ein Handwerker
+erwartet: ich zeichne den Grundriss, das Dach folgt. **Und genau hier brauche ich dich**, denn A-05
+Punkt 8 sagt: die Zerlegung ist **unterbestimmt**.*
+
+```text
+Was aus einer L-Kontur allein NICHT eindeutig folgt (A-05-1, letzter Absatz):
+  - WELCHER Schenkel ist Hauptbau und welcher Anbau?
+  - wie liegt die Zerlegung gegen firstAzimutGrad, also gegen die Firstrichtung?
+Die Eingabe-Semantik (dachVerschneidung.ts:22-30) VERLANGT diese Zuordnung.
+```
+
+*Ein Rechner kann hier raten — **der längere Schenkel ist der Hauptbau** wäre die naheliegende Regel.
+**Ich schneide das nicht als Auftrag, weil Raten hier ein falsches Dach baut**, und ein falsches Dach
+ist eine falsche Stückliste. Das ist dieselbe Sorte Frage wie F-053 beim Lattmaß.*
+
+### Meine Empfehlung
+
+**B jetzt, A als Zielbild** — *weil B billig und ehrlich ist und A nicht blockiert, und weil A ohne
+deine Zerlegungsregel nicht gebaut werden kann, ohne zu raten.*
+
+**Was ich brauche, wenn du A willst:** *einen Satz zur Zuordnung. „Der längere Schenkel ist der
+Hauptbau, der First liegt auf ihm" wäre einer — ich schlage ihn vor und baue ihn **nicht**, bevor du ihn
+bestätigt oder ersetzt hast.*
+
+### Was ohne dich schon läuft
+
+```text
+A-05 Punkt 6   Melder am leeren Ergebnis  -> A-10, BETRIEBSBESTAETIGT
+A-05 Punkt 7   Panel-Zusage gegen Tor     -> A-24, laeuft (P1)
+A-05 Punkt 2   Tor gegen Renderer         -> Teil von Weg A oder B, siehe oben
+W-27/1         Ecken-Erkennung            -> gebaut, OHNE Aufrufer, und heute kann es
+                                             keinen geben: dachGeometrie.ts:88-92 wirft
+                                             fuer nicht-rechteckige Konturen. Ein VORBAU,
+                                             und die Registerzeile sagt das jetzt.
+```
+
+*Diese Vorlage ist **kein neuer Posten**, sondern die Fortsetzung deiner eigenen Aufhebung. Sie wartet
+nur auf einen Satz.*
