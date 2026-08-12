@@ -196,3 +196,92 @@ meine_eigene_fehlmessung: "ich meldete 'lattenMengen 0 Treffer' und schloss auf 
 was_es_nicht_ist: "kein Angebot, keine Preisrechnung, keine Zeitwerte. F-051 ist 🔴 GESPERRT und
         A-16 hat gezeigt, was ein Lohnkostenbetrag ohne Herkunft anrichtet."
 ```
+
+## §11 — Votum W-20 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-20"
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+abnahme_commit: "65358372"
+elter: "a146e0b3"
+pruefstand: "worktree --detach auf 65358372, node_modules UND vendor"
+
+messtisch_alle_sieben:
+  W-20-1: GRUEN
+    beleg: "Die fuenf genannten Fundstellen selbst geoeffnet, alle exakt:
+              :23 export interface HolzStueck   ·  :29 export interface HolzMengen
+              :44 export function holzMengenAusListe(...)
+              :41 return typeof l === 'number' && Number.isFinite(l) && l > 0 ? l : 0
+                  — die Funktion heisst gueltigeLaenge und beginnt in :40
+              :52-58 die Typunterscheidung (latte / Konterlatte / Schiftsparren)
+            Und die Zahl der Exporte selbst gezaehlt: 3, wie das Blatt sagt."
+  W-20-2: GRUEN — der tragende Punkt, WOERTLICH
+    beleg: "1-ZWECK:11-12 zitiert den Dateikopf: '... schaetzte Sparren-/Lattenlaengen aus dem
+            Rechteck-Rahmen ... Die Engine zeichnet die Staebe aber bereits an die reale (an
+            Walm/L/T geclippte) Geometrie -> ZWEI WAHRHEITEN.'
+            Ich habe den Dateikopf (holzMengen.ts:5-9) danebengelegt: zeichengleich zitiert,
+            nicht paraphrasiert."
+  W-20-3: GRUEN
+    beleg: "2-FUNKTION:37-43 traegt die Begruendung als Zitat aus dem Code:
+            'EA28: Schiftsparren sind Gemeinsparren (nur verkuerzt/angeschnitten) — sie MUESSEN
+            hier mitzaehlen, sonst fallen die an Kehle/Grat geclippten Sparren aus Bauholz-m3
+            und Lohn heraus (Unter-Count).'
+            Im Code selbst geoeffnet: :57-58, wortgleich. Die Ueberschrift trifft die Sache:
+            'die Begruendung steht im Code, nicht in der Gewohnheit'."
+  W-20-4: GRUEN — alle vier Messzahlen selbst nachgemessen
+    beleg: |
+      'stueck.*m2' in geometry/   0    Blatt sagt 0    stimmt
+      'bedarf'                    1    Blatt sagt 1    stimmt — und ich habe die Zeile GELESEN:
+                                                       gaubeGeometrie.ts:127, eine Gaubenbemerkung
+      'ziegel'                   16    Blatt sagt 16   stimmt
+      'deckung'                  79    Blatt sagt 79   stimmt
+    bewertung: "Und der Satz dazu ist der eigentliche Wert: 'Wer die 95 Treffer fuer eine
+            Mengenrechnung haelt, sucht falsch.' Das ist H-6 vorweggenommen, nicht nachgetragen."
+  W-20-5: GRUEN
+    beleg: "1-ZWECK:49-54 trennt die zwei Fragen: 'WIE WEIT liegen die Latten auseinander ->
+            Lattmass in mm' gegen 'lattenLaenge (holzMengen.ts:35) und ist gefuellt'.
+            Zeile 35 selbst geoeffnet: 'lattenLaenge: number;'. Und 2-FUNKTION:58 sagt es
+            noch einmal in der Ergebnistabelle: 'Traglatten, nicht Lattmass'."
+    bemerkenswert: "Das Kriterium ist aus SEINEM eigenen Messfehler entstanden ('ich habe sie
+            beim Messen selbst verwechselt') — und die Unterscheidung steht jetzt an zwei
+            Stellen im Blatt, damit sie der naechsten Rolle nicht auch passiert."
+  W-20-6: GRUEN
+    beleg: "resources/ und app/ 0 Dateien im Bau. holzMengen.test.ts traegt 6 test()-Bloecke,
+            wie das Blatt sagt. Insel-Suite 1698/1698/0."
+  W-20-7: GRUEN
+    beleg: "Am Elter des Baus steht W-20 an beiden Orten auf IN_ARBEIT (Tafel 1 / Feld 1).
+            Und die Registerzeile: genau EINE geaendert (LEER -> BESCHRIEBEN), gelesen statt
+            gezaehlt — Minus- und Plus-Fassung derselben W-20-Zeile."
+
+die_frage_aus_meinem_claim_beantwortet:
+  was_ich_pruefen_wollte: "Die Registerzeile fuehrt F-011 und F-023. Nach 603eddc2 (sieben von
+        zehn Registerformeln gefallen) wollte ich die Zuordnung am CODE pruefen, bevor ich sie
+        im Blatt lese."
+  was_der_bau_sagt: "3-FORMELN fuehrt beide auf und schreibt daneben: 'Was das Werkzeug HEUTE
+        rechnet — und es ist keine Formel. Eine Summe ueber eine Liste. Es gibt keine
+        Umformung, keine Trigonometrie, keinen Grenzwert.' Die Registerzeile traegt jetzt
+        'F-011, F-023 — heute keine benutzt'."
+  was_ich_messe: "holzMengen.ts enthaelt KEINEN Math-Aufruf, keine Winkelfunktion, keine
+        Wurzel. Die einzigen Rechenzeilen sind drei Summierungen (:53, :55, :59) und ein
+        Zaehler (:60). Die Aussage des Blattes haelt: heute rechnet W-20 keine Formel."
+  meine_dritte_falle_dabei: "Mein Suchmuster meldete zuerst EINEN Math-Treffer. Gelesen war es
+        Zeile 57 — und getroffen hatte 'sin' das Wort 'sind' in 'Schiftsparren SIND
+        Gemeinsparren'. Ein Fehltreffer im Kommentar, kein Rechenaufruf. Genau H-6, und genau
+        die Falle, vor der W-20-4 im selben Blatt warnt."
+
+was_diesen_bau_heraushebt:
+  - "Er zitiert den Code, statt ihn zu paraphrasieren — Dateikopf und EA28-Kommentar stehen
+     woertlich im Blatt, und ich konnte beide danebenlegen."
+  - "Er macht aus einem EIGENEN Messfehler ein Kriterium (W-20-5, Lattmass gegen Lattenlaenge)
+     und schreibt die Unterscheidung an zwei Stellen ins Blatt."
+  - "Er nennt die Registerformeln, ohne sie zu benutzen — mit dem Satz, wofuer sie SPAETER
+     gebraucht werden (Ziegelmenge aus W-23). Keine geratene Zuordnung, keine leere Spalte."
+
+zusammenfassung: "Sieben von sieben. Jede Fundstelle geoeffnet, jede der vier Messzahlen
+     nachgemessen, der Dateikopf danebengelegt — alles trifft. Die Formelfrage aus meinem
+     Claim ist beantwortet und zwar in die richtige Richtung: die Registerzeile fuehrt zwei
+     Formeln, das Werkzeug benutzt heute keine, und genau das steht jetzt in beiden."
+
+ballbesitz: release-pruefer
+```
