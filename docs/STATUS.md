@@ -42,7 +42,7 @@
 | **B5N** Belegzeilen-Schreibweisen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `c54c7129` · Elter `a1751fbe` | **6/6** · drei Formen **einzeln** belegt, Barriere bleibt bei fehlendem Beleg laut · B5-Zählwort und B6/B7 nachweislich unberührt (gehasht + am Tor) · Testlücke **gemessen statt angenommen** (0 Stellen), bleibt offen · **einziger Bau des Tages mit `IN_ARBEIT` im committeten Stand vor dem Bau** |
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
-| **A-19** H-9 + §3-Musterberichtigung | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c89e9096` | **neun Belege an einem Tag, vier Rollen**: ein Prüfmuster setzt am TEXT an statt am GEGENSTAND · H-9 im Wortlaut des Generators (»misst die Schreibweise und nicht die Sache«) plus die dreifach erprobte Kontrollprobe · **KEINE achte Barriere** (B5/B6/B7 in derselben Datei, dreimal »wird weggeklickt« gemeldet) · zweiter Teil: `ARBEITSREGELN.md:103` — `.*IN_ARBEIT` reicht über alle Spalten, die B7-Zeile (ABGENOMMEN) wird als laufend gezählt · **der Fehler ist meiner**: linke Seite erweitert, rechte nicht angesehen |
+| **A-19** H-9 + §3-Musterberichtigung | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c89e9096` | **neun Belege an einem Tag, vier Rollen**: ein Prüfmuster setzt am TEXT an statt am GEGENSTAND · H-9 im Wortlaut des Generators (»misst die Schreibweise und nicht die Sache«) plus die dreifach erprobte Kontrollprobe · **KEINE achte Barriere** (B5/B6/B7 in derselben Datei, dreimal »wird weggeklickt« gemeldet) · zweiter Teil: `ARBEITSREGELN.md:103` — `.*IN_ARBEIT` reicht über alle Spalten, die B7-Zeile (ABGENOMMEN) wird als laufend gezählt · **der Fehler ist meiner**: linke Seite erweitert, rechte nicht angesehen |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -5803,8 +5803,13 @@ zu_meinem_eigenen_befund: "Meine B5-Messung: von 17 warnenden Botschaften trugen
 ```yaml
 auftrag: "A-19"
 datei: docs/auftraege/aktiv/A-19-h9-und-die-paragraf-3-musterberichtigung.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft — der Auftrag ist sein eigener erster Anwendungsfall)
+rot_lage_heute_deutlicher_als_im_blatt: "Das Blatt nennt EINEN Fehlalarm (die B7-Zeile). Unmittelbar
+  vor der ersten Aenderung gemessen sind es DREI, und keiner davon laeuft: Z.41 B7
+  (BETRIEBSBESTAETIGT), Z.42 B5N (ABGENOMMEN), Z.45 A-19 selbst (BEREIT). Alle drei erwaehnen
+  IN_ARBEIT im Fliesstext ihrer Notizspalte. Tafelzeile heutige Fassung 3, auf Spalte 2 begrenzt 0,
+  Zustandsfeld 0."
 basis_sha: c89e9096
 anlass: "Yamas Freigabe 12.08. mit Bedingung: 'wenn du sicher bist dass das die beste Loesung ist
          und wir damit Qualitaet verbessern und der Workflow effizienter wird'."
