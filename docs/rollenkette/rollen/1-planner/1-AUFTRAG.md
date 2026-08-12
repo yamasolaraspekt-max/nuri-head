@@ -25,7 +25,7 @@ fest, ob sie das überhaupt können.
 
 ---
 
-## Die sieben Pflichtprüfungen vor jedem Auftrag
+## Die acht Pflichtprüfungen vor jedem Auftrag
 
 ### 1 · Existiert das Werkzeug schon?
 
@@ -122,6 +122,32 @@ kam auf 39 von 40, erkannte das als unplausibel und stellte fest, dass er leere 
 mitzählte — „eine fehlende Angabe ist keine widersprechende". Der Evaluator hatte einen
 `Math`-Treffer, öffnete die Zeile und fand das Wort **SIND** in „Schiftsparren sind
 Gemeinsparren". **Beide haben gelesen. Genau daran lag es.***
+
+### 8 · Wächst mein Messgegenstand durch das Messen? (neu 12.08., aus A-21)
+
+**Ein Kriterium, dessen Zahl sich dadurch ändert, dass man sie dokumentiert, konvergiert nie.**
+
+> **Der Beleg ist A-21-3, und er ist meiner:** *ich verlangte „0 Treffer von `ZURUECKGESTELLT` in
+> `docs/STATUS.md`". Der Generator hat die Zahl an vier festen Commits gemessen — **13, 14, 14, 15,
+> monoton steigend.** Der Grund ist die Messung selbst: jede Rolle, die ihren Befund verbucht,
+> schreibt das Wort erneut in dieselbe Datei. **Das Kriterium hätte die eigene Abnahme
+> mitgezählt** — es war nicht streng, sondern unerreichbar.*
+
+```text
+Volltext ueber die Datei     13 -> 14 -> 14 -> 15      waechst mit jedem Befund
+gebundener Zustandsort        2 ->  2 ->  2 ->  2      steht, auch nach vier Stunden
+  (zustand: <WORT> + Tafelzeile)                        Schreibverkehr von fuenf Rollen
+
+PRUEFFORM: Wenn ich mein Ergebnis in dieselbe Datei schreibe, die ich gemessen habe —
+           aendert sich dann die Zahl? Dann ist es kein Kriterium.
+ABHILFE:   nicht eine kleinere Zahl, sondern ein GEBUNDENER Messort.
+```
+
+**Und die zweite Hälfte derselben Lehre:** *ich hatte die Abweichung zwischen seiner Zahl und
+meiner als „unterschiedliche Zählweise" abgetan. **Es waren unterschiedliche STÄNDE derselben
+Datei.** Beide Zahlen waren richtig, verschieden war der Zeitpunkt. Wer eine Abweichung als
+Methodenfrage deutet, ohne den Stand zu vergleichen, erklärt sie weg statt sie aufzulösen — und in
+einer Datei, in die fünf Rollen schreiben, ist der Stand die häufigere Ursache.*
 
 ---
 
