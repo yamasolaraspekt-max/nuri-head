@@ -2187,6 +2187,18 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## B5 CODE_FERTIG geprueft — und die Formulierung "gegen ihren Wortlaut" richtiggestellt (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "157576c2 existiert, Scope SELBST gemessen: neun Dateien — ARBEITSREGELN (+39), Bericht (+263), STATUS (4/4), scripts/commit-pruefen.sh (+30) und FUENF Rollenblaetter mit je genau EINER Zeile. Kein Loeschen irgendwo (alle Zaehler 0 in der zweiten Spalte ausser STATUS). Ball beim Evaluator, Claim 80d7a6d2 liegt vor. Nichts fuer mich."
+richtigstellung_zugunsten_des_bauenden: "Seine Botschaft sagt, er habe 'zwei Kriterien gegen ihren eigenen Wortlaut messen' muessen. Das klingt nach einem Mangel des Auftrags — GEMESSEN ist es das Gegenteil: das Blatt hat BEIDE Faelle vorweggenommen. B5-5 schreibt woertlich vor 'Falls es keinen gemeinsamen Pruefweg gibt, sagt er das — statt eine Datei zu erfinden' und setzt hinzu 'Ich habe es nicht gemessen und behaupte es deshalb nicht'; die Falschlesungs-Tabelle des Blattes fuehrt sogar die Zeile 'Pruefweg-Datei existiert nicht -> B5-5: dann sagt der Generator das'. Er hat also nicht GEGEN den Wortlaut gemessen, sondern GENAU nach ihm. Das gehoert richtiggestellt, damit spaeter niemand aus dieser Zeile einen Auftragsmangel liest, wo eine eingebaute Vorkehrung funktioniert hat."
+seine_antwort_auf_b5_5_ist_die_bessere: "Weil es keinen gemeinsamen Pruefweg gibt, hat er die Zeile in JEDES der fuenf Rollenblaetter eingetragen — je eine Zeile, selbst im Diff gezaehlt. Das ist mehr Arbeit als eine zentrale Datei und die ehrlichere Loesung: er hat den Ort gemessen statt ihn zu erfinden, und die Regel steht jetzt dort, wo jede Rolle sie liest."
+seine_zahl_selbst_nachgemessen_sie_haelt: "'Barrierenliste: kein Treffer, nirgends' — gegen den Stand VOR seinem Bau (2a95ab40) nachgemessen: ARBEITSREGELN 0, STATUS 0. Heute zwei in den ARBEITSREGELN, weil ER die Liste angelegt hat. Ich hatte kurz einen Widerspruch (heute finde ich fuenf Dateien), und er loest sich vollstaendig auf: vier der fuenf sind sein eigener Bau und die Blaetter, die darueber sprechen. Fremde Zahl gegen den RICHTIGEN Zeitpunkt messen, nicht gegen heute."
+meine_eigene_luecke_ehrlich: "Meine DoR hat diese zwei Kriterien durchgelassen, OHNE zu pruefen, ob die genannten Ziele (Barrierenliste, Pruefweg-Datei) ueberhaupt existieren. Dass daraus kein Schaden wurde, verdanke ich dem Blatt, nicht meiner Pruefung. LEHRE, und sie ergaenzt die W-07N-Lehre um die Gegenrichtung: dort habe ich den ZUSTAND falsch gemessen (Rot-Lage), hier haette ich das ZIEL pruefen muessen. Ab jetzt gehoert zur DoR beides — existiert das Problem, UND existiert der Ort, an dem die Loesung landen soll."
+a18_in_arbeit_zur_kenntnis: "A-18 ist gezogen (ee2dad24), §3 sauber: Tafelzeile 1 und Zustandsfeld 1, beide Orte im selben Zug. B6 hat er BEWUSST zurueckgestellt statt still liegen zu lassen — Begruendung: B6 aendert dieselbe Datei wie B5, deren Abnahme gerade laeuft. Das ist genau die Ruecksicht, die Beifang und Kollisionen verhindert."
+```
+---
+
 ## Yamas zwei Entscheidungen 12.08. — A-16 auf W3, Azimut-Posten faellt (plan-pruefer)
 
 ```yaml
