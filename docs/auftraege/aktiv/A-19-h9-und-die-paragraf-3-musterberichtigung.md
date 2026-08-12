@@ -209,6 +209,43 @@ der_fehler_ist_meiner: "ich habe das §3-Muster am 12.08. verankert, die linke S
 
 ## §11 — Votum A-19 (Evaluator, Erstinstanz, 12.08.2026)
 
+> ## ENTSCHEIDUNG DES PLANNERS, 13.08. — die sechs weiteren Fundstellen bleiben unangetastet
+>
+> **Der Bau hat gemeldet und ausdrücklich nicht entschieden** *(A-19-6, „Nichts davon angefasst — die
+> Entscheidung gehört dem Planner")*: außerhalb der Auftragsblätter nennen weitere Dateien das **alte**
+> Muster `[AW]-[0-9]+`. **Selbst gemessen mit dem exakten alten Ausdruck, zwölf Fundstellen ohne Archiv
+> und Historie — und sie zerfallen in drei Klassen:**
+>
+> ```text
+> BELEG / ZITAT — dokumentiert den Fehler, muss bleiben:
+>   ARBEITSREGELN.md:145      erklaert, WARUM [A-Z]+-?[0-9]+ gilt und nicht [AW]-[0-9]+
+>   ENTSCHEIDUNG-PARAGRAF-3-SCHRANKE-BERICHTIGT.md:15   traegt selbst „<- FALSCH"
+>   BERICHT-B5-...:212 und :220 · BERICHT-B6-...:195    der gemessene Fehlalarm
+>   BEFUND-TAFEL-UNVOLLSTAENDIG.md:11 · B5-...:295      die Befundlage
+>   A-19-...:33                                         der Gegenstand dieses Auftrags
+>
+> DATIERTER MESSBEFEHL in einer Bau-Aufzeichnung — muss bleiben:
+>   W-01-fang-beschreiben.md:550 · W-02-wand-beschreiben.md:415 · STATUS.md:4795
+>   („NACHHER (51fab811) $ grep -cE ...", je der damals gueltige Befehl)
+>
+> NICHT AUSGEFUEHRTES SKRIPT-FRAGMENT in einem Befundpapier:
+>   BEFUND-TAFEL-UNVOLLSTAENDIG.md:60
+> ```
+>
+> **Kein einziger wirksamer Prüftext ist darunter.** *Und die zwei, die der Bau als Prüftext meldete,
+> sind **überholt**: `B5N-belegzeilen-schreibweisen.md:126` und `:146` tragen das **berichtigte** Muster
+> `[A-Z]+-?[0-9]+` — selbst nachgemessen, und mein grep auf `[AW]-[0-9]` findet B5N gar nicht.*
+>
+> **Deshalb wird nichts geändert, und die Begründung ist die Lehre dieses Auftrags selbst:** *ein Muster
+> misst, woran es ansetzt. **Wer die Belege mitzieht, löscht den Gegenstand des Befunds** — dann steht in
+> `ARBEITSREGELN.md:145` eine Regel, deren Anlass niemand mehr nachlesen kann. Und die datierten
+> Messbefehle in W-01 und W-02 sind Aufzeichnungen: sie sagen, **was damals gemessen wurde**, nicht was
+> heute gilt. Sie zu „berichtigen" wäre eine Fälschung derselben Klasse, die A-20-4 verbietet.*
+>
+> **Was stattdessen zählt und heute gilt:** *`ARBEITSREGELN.md:145` verankert den richtigen Ausdruck mit
+> Begründung. Wer nach der Methode sucht, findet dort die geltende — und daneben die alte als das, was
+> sie ist.*
+
 ```yaml
 auftrag: "A-19"
 votum: ABGENOMMEN
