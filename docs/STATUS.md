@@ -1977,6 +1977,35 @@ naechster_schritt: "Generator zieht B6 NACH B5"
 ```
 ---
 
+## BEREIT — W-01N und W-07N (Bloecke angelegt; sechster und siebter der neun unsichtbaren)
+
+```yaml
+auftrag: "W-01N"
+titel: "W-01/1-6 traegt die Zahl 1689/1689, gemessen sind 1692 — zahlfreie Form wie in W-02"
+datei: docs/auftraege/aktiv/W-01N-suitezahl-zahlfrei.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 548bef5c
+prioritaet: P2
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — die Zahl 1689 steht ACHTMAL im W-01-Blatt, darunter woertlich im Kriterium W-01/1-6 (Z.177: 'bleibt bei 1689/1689'), waehrend die Suite heute 1692 traegt. Der Befund ist damit nicht nur belegt, sondern in seiner Reichweite gemessen: es ist keine einzelne Zeile, sondern acht Fundstellen in einem freigegebenen Blatt. Sauber nach §12.5 geschnitten — W-01/1 bleibt ABGENOMMEN, der Befund wirkt nicht rueckwirkend, und die Loesung uebernimmt die ZAHLFREIE Form, die W-02 bereits traegt (kein neues Muster erfinden, das vorhandene anwenden)."
+warum_das_mehr_ist_als_kosmetik: "Eine feste Zahl in einem must_preserve-Kriterium ist eine ZEITBOMBE derselben Klasse wie A-09s widerlegte Begruendung: sie ist heute falsch und wird morgen wieder falsch, sobald jemand eine Zusage hinzufuegt — und dann steht ein freigegebenes Blatt gegen die Wirklichkeit. Genau das ist bei W-01 passiert: die Zahl war beim Schnitt richtig."
+naechster_schritt: "Generator zieht W-01N (§3 beachten)"
+```
+
+```yaml
+auftrag: "W-07N"
+titel: "2-FUNKTION.md ist ein leeres Formular, waehrend W-07 im Register BESCHRIEBEN traegt"
+datei: docs/auftraege/aktiv/W-07N-funktion-und-azimutgrenze.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 3d368625
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen und der Befund haelt genau in der Form, in der er geschnitten ist — W-07/2-FUNKTION.md traegt 37 Zeilen mit NEUN Platzhaltern, ist also ein leeres Formular; das REGISTER fuehrt W-07 folgerichtig nicht mehr als BESCHRIEBEN, sondern als '6/7 BLAETTER' (selbst nachgelesen). Damit ist die Registerzeile bereits ehrlich und der Auftrag schliesst die letzte Luecke, statt einen falschen Zustand zu kaschieren. Der Zuschnitt ist richtig: NACHBESSERUNG eines Altstandes, kein neuer Stufe-1-Auftrag — sechs von sieben Blaettern stehen, sie werden nicht neu geschnitten."
+gewuerdigt: "Dass die Registerzeile die Zwischenstufe '6/7 BLAETTER' traegt, ist die Frucht eines frueheren Befunds: der Zaehlbefehl trifft nur '^\\| W-[0-9]+ .*BESCHRIEBEN' und haette 'BESCHRIEBEN (6/7)' weitergezaehlt — die Legende wurde deshalb um die Zwischenstufe ergaenzt statt das Wort zu behalten. Eine Korrektur, die den ZAEHLER respektiert statt nur den Leser."
+naechster_schritt: "Generator zieht W-07N (§3 beachten)"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
