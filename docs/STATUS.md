@@ -44,6 +44,7 @@
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
+| **W-27** Dachkantentypen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6129,4 +6130,39 @@ was_es_entsperrt: "W-21L fuer SIEBEN Braas-Modelle. Weiter gesperrt fuer alles a
 zweiter_posten_nicht_erledigt: "118 der 127 Zeilen haben kein Lattmass. Das ist Pflegearbeit an der
          Quelle und gehoert Yama. KEIN Ergaenzen fehlender Werte in diesem Auftrag — das waere das
          Erfinden, gegen das das Gate steht."
+```
+
+
+## W-27 — Dachkantentypen (Datensatz, EINZIGER Zustandsort neben der Tafelzeile)
+
+```yaml
+auftrag: "W-27"
+datei: docs/auftraege/aktiv/W-27-dachkantentypen-entwerfen.md
+zustand: ENTWURF
+ballbesitz: "plan-pruefer (DoR)"
+basis_sha: c2c6bf4e
+anlass: "Klasse C, zweites Werkzeug. Voraussetzungsfrei — W-07 ist BETRIEBSBESTAETIGT, F-025 und
+         F-026 sind 🟢 nach A-12."
+der_befund: "Die vollstaendige Kantentopologie steht im Prototyp DachplanerProPage.tsx (3.786 Z.)
+         und mit NULL Treffern in der Insel. Gemessen in resources/planner/: 'ortgang' 0,
+         TopologyJoinType 0, cornerType 0 — waehrend 'grat' 17 und 'kehle' 33 Treffer haben.
+         Der Unterschied ist der Kern: die Insel hat die BEGRIFFE, nicht die ERKENNUNG."
+die_regel_im_wortlaut: "analyzeTopology:193 — angleDeg = isInnerReflex ? 360-baseAngle : baseAngle ·
+         cornerType = angleDeg > 180 ? innen : aussen · joinType: Traufe+Traufe -> innen ? kehle :
+         grat; Traufe+GIEBEL -> ortgang; sonst neutral. Das ist F-025 in ausfuehrbarer Form."
+was_es_anschliesst: "F-014s Warnung aus meiner Registermessung 12.08.: W-07s pruefeRechteckigeKontur
+         LEHNT einspringende Ecken AB (1 % Toleranz gegen die Bounding-Box) statt sie zu erkennen —
+         der Prototyp erkennt sie (isInnerReflex, angleDeg > 180). W-27 ist damit der Anschluss an
+         W-07s groesste Grenze, und es ist dieselbe Faehigkeit, deren Unkenntnis Yama bei A-01 als
+         Grund fuer ein falsches Nicht-Ziel benannt hat ('stammt aus Unwissen ueber die Faehigkeit')."
+abweichung_zur_registerzeile: "Das Register nennt 'First·Grat·Kehle·Traufe·Ortgang' in EINER Liste.
+         Der Prototyp trennt Kanten von Ecken, und die Trennung ist die bessere: First und Grat sind
+         KEINE Kantentypen, sie entstehen an ECKEN. Die Trennung wird uebernommen, die Registerzeile
+         beim BAU nachgezogen — nicht jetzt."
+nicht_der_skelettweg: "F-020 und F-021 sind nach meiner Messung 12.08. NICHT ZUTREFFEND (0 Treffer
+         auf 'skelett' in allen acht Dachmodulen). W-27 arbeitet auf dem Kanten-/Eckenweg."
+der_stille_fehler_dieses_werkzeugs: "Kriterium W-27-2 verlangt ALLE VIER joinTypes einschliesslich
+         'neutral'. Wer nur drei nennt, laesst den haeufigsten dem Bauenden — und das gebaute
+         Werkzeug klassifiziert dann jede gewoehnliche Kante als Grat oder Kehle. Das faellt erst
+         am Dach auf."
 ```
