@@ -126,7 +126,7 @@ test('die Karte MIT Ziel ist unverändert bedienbar', () => {
 test('StartView holt sich die Liste NICHT selbst — kein fetch, kein dataset', () => {
   // **ÜBERHOLT (A-23, 13.08.), und nicht gelöscht.** Der Test hieß: „Teil A hat weder Route noch
   // Controller berührt — das ist Teil B", und hier stand: „Der Auftrag verbietet es ausdrücklich:
-  // alles, was `routes/` oder `app/Http/` berührt, liegt hinter Yamas Entscheidung. Die Zulieferung
+  // alles, was `routes/` oder `app/Http/` berührt, liegt hinter Yamas Freigabe. Die Zulieferung
   // der Liste bleibt deshalb offen."
   //
   // **Die Zulieferung ist NICHT mehr offen** — die PROJEKTLISTE ist gebaut (AUF-78):
