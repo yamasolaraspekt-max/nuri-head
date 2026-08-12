@@ -212,3 +212,112 @@ zweiter_posten: "'speist Heizlast & Dach' (Dateikopf:2) gegen 0 Aufrufe aus app/
 praezisierung: "'feuchte' hat im Haus ZWEI Fundstellen (Feuchtelast g/h, holzfeuchteProzent),
                 beide andere Groessen. Die Aussage gilt fuer DIESE Engine, nicht fuer das Haus."
 ```
+
+## §11 — Votum A-18 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "A-18"
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+abnahme_commit: "492a6a71"
+elter: "b7ab49c5"
+pruefstand: "worktree --detach auf 492a6a71 und b7ab49c5, node_modules UND vendor per cp -al
+     — nach dem vendor-Fehler bei B5 diesmal beides vor der ersten Messung."
+reihenfolge: "Die KERNBEHAUPTUNG des Auftrags habe ich am Datentyp selbst geprueft, bevor ich
+     irgendetwas anderes gelesen habe: Schicht traegt name?, dicke, lambda — drei Felder, kein
+     mu, kein s_d, kein Klima. Die Praemisse haelt. Den Bericht habe ich zuletzt gelesen."
+
+messtisch_alle_acht:
+  A-18-1: GRUEN — mit der vom Kriterium verlangten Gegenprobe
+    beleg: "wandaufbau.ts:49 'vorbehalt: string;' — kein Fragezeichen, also Pflicht."
+    gegenprobe_gefahren: "Mutation: 'vorbehalt: UWERT_VORBEHALT,' aus dem Rueckgabeblock
+            entfernt (Anker genau 1x). tsc bricht ab:
+              wandaufbau.ts(87,3): error TS2741: Property 'vorbehalt' is missing in type ...
+            Zurueckgestellt, md5 identisch. Das ist der Beweis, den das Kriterium verlangt —
+            ein optionales Feld haette diesen Fehler NICHT erzeugt."
+  A-18-2: GRUEN — und seine Frage entscheide ich, gemessen statt geurteilt
+    beleg: "export const UWERT_VORBEHALT genau 1x deklariert (wandaufbau.ts:57), 1x verwendet (:94)."
+    seine_vorlage: "Er meldet, dass der WORTLAUT zweimal vorkommt — Konstante und ausgeschrieben
+            in der Zusage — und legt mir die Entscheidung vor, statt die passende Stelle
+            auszuwaehlen. Das ist die richtige Form."
+    meine_entscheidung: "DIE ZWEITE STELLE BLEIBT. Begruendung nicht aus dem Bauchgefuehl,
+            sondern gemessen: ich habe den Wortlaut in der KONSTANTE still umformuliert
+            ('bedeutet' -> 'heisst', Anker genau 1x) und die Zusagen gefahren:
+              ✖ A-18: jede Rueckgabe traegt den Vorbehalt, zeichengenau
+              pass 6 / fail 1
+            Zurueckgestellt, md5 identisch. Der ausgeschriebene Vergleich IST der Waechter
+            gegen die stille Umformulierung, die A-18-3 verbietet. Ein Test, der nur
+            r.vorbehalt === UWERT_VORBEHALT prueft, waere tautologisch und haette geschwiegen."
+    zur_zahl_des_kriteriums: "'Die Konstante kommt genau einmal vor' ist erfuellt — die
+            Konstante. Der WORTLAUT kommt zweimal vor, und die zweite Stelle ist ein Test,
+            keine zweite Wahrheit im Produktivcode. Kein Befund."
+  A-18-3: GRUEN
+    beleg: "Maschineller Zeichenvergleich Blatt (Zeilen 91-93) gegen die Konstante im Commit:
+            beide 258 Zeichen, IDENTISCH: True. Ich habe den Vergleich selbst gefahren, nicht
+            seinen uebernommen — und beim ersten Versuch den falschen Codeblock des Blattes
+            erwischt (den ENTSCHIEDEN/NICHT-Block); das war mein Raster, nicht sein Bau."
+  A-18-4: GRUEN
+    beleg: "git diff --numstat wandaufbau.ts: 24 Einfuegungen, 0 LOESCHUNGEN. Es gibt keine
+            geaenderte Rechenzeile, weil es keine geaenderte Zeile gibt. Alle neuen
+            Nicht-Kommentarzeilen sind: das Feld, die Konstante, die drei Wortlautzeilen und
+            die Zuweisung im Rueckgabeblock — kein Ausdruck, kein Operator, keine Konstante
+            in UEBERGANG oder ZIEL_U."
+  A-18-5: GRUEN
+    beleg: "Zehn Feuchte-Begriffe, Elter gegen Bau: alle waren 0. Im Bau tragen Tauwasser,
+            Glaser, Schimmel, 4108, Diffusion, s_d und Feuchte Treffer — und ich habe die
+            TREFFERZEILEN GELESEN, nicht gezaehlt: alle liegen in :41-42 (Kommentar) und
+            :58-60 (der Vorbehaltstext). Kein einziger im Rechenweg.
+            mu, Kondensat, Dampfbremse bleiben bei 0."
+    der_unterschied_haelt: "Die Engine SPRICHT ueber die Groessen, sie RECHNET sie nicht.
+            Genau die Grenze, die -5 zieht."
+  A-18-6: GRUEN
+    was_ich_zuerst_falsch_mass: "Ich zaehlte test()-Bloecke: Elter 6, Bau 7 — und haette
+            'die zehn des Auftrags stimmen nicht' gemeldet. Beide Zaehlweisen selbst gefahren:
+              grep -cE '^test\\('   -> Elter 6,  Bau 7
+              grep -cE 'assert\\.'  -> Elter 10, Bau 13
+            Die ZEHN sind die Assertions. Die Zahl des Auftrags stimmt, meine Ebene war falsch."
+    beleg: "Keine Zusage entfernt — die einzige geloeschte Zeile ist die import-Zeile, ersetzt
+            durch dieselbe plus UWERT_VORBEHALT. Ein Block kommt hinzu, mit drei Assertions.
+            Insel-Suite: 1694/1694/0, vorher 1693 — genau ein Block mehr."
+  A-18-7: GRUEN
+    beleg: "faehigkeiten.ts:81 selbst geoeffnet: id 'engine-uwert', eingang 'Schicht[]',
+            ausgang 'UErgebnis', zustand 'in_entwicklung'. Der Eintrag nennt den TYP, nicht
+            seine Felder — ein neues Pflichtfeld macht ihn nicht falsch. Die Datei ist im Bau
+            0-mal angefasst, und das ist richtig so."
+  A-18-8: GRUEN
+    beleg: "Dateikopf:2 sagt 'speist Heizlast & Dach'. Aufrufe aus app/: ich zaehlte zuerst
+            EINE Datei und war im Begriff, den Auftrag zu widerlegen. Die Trefferzeile gelesen:
+            faehigkeiten.ts:81 — dort steht 'berechneUWert' als ZEICHENKETTE im
+            Faehigkeits-Eintrag, nicht als Aufruf. Echte Aufrufe: 0. Die Behauptung haelt,
+            der Befund ist benannt und ausdruecklich nicht behandelt."
+
+must_preserve_gemessen:
+  suite: "1694/1694/0 (Elter 1693)"
+  tsc: "tsc -p tsconfig.hausplaner.json --noEmit -> clean"
+  loeschungen_im_produktivcode: "0"
+
+was_diesen_bau_heraushebt:
+  - "Er legt eine ENTSCHEIDUNG vor, statt sie selbst zu treffen: der Wortlaut kommt zweimal vor,
+     er nennt beide Stellen, begruendet die zweite und sagt ausdruecklich 'das ist seine
+     Entscheidung, nicht meine'. Genau so soll ein Bauender mit einer Kriteriumsgrenze umgehen."
+  - "Er loest die 6-gegen-10 selbst auf, statt sie zu verschweigen oder den Auftrag zu
+     widerlegen — und nennt sie 'B6 in freier Wildbahn: eine Summe, deren Menge nie benannt
+     wurde'. Dieselbe Messung habe ich unabhaengig gemacht und komme auf dieselben Zahlen."
+  - "Der Rueckweg steht als eigene Zeile, am BAUTAG gemessen — der Punkt, der bei A-14, A-15
+     und W-09 dreimal in Folge gefehlt hat."
+
+meine_eigenen_zwei_fallen_in_dieser_abnahme:
+  - "test()-Bloecke statt Assertions gezaehlt (6 statt 10) — beinahe ein Fehlbefund gegen den
+     Auftrag. Aufgeloest durch beide Zaehlweisen, nicht durch eine."
+  - "'berechneUWert in app/: 1 Datei' — beinahe 'der Auftrag ist widerlegt'. Die Trefferzeile
+     gelesen: eine Zeichenkette in der Faehigkeitsliste. Das ist B5, angewandt auf mich,
+     zum zweiten Mal in zwei Abnahmen."
+
+zusammenfassung: "Acht von acht. Der Kern A-18-1 ist nicht behauptet, sondern bewiesen: ohne das
+     Feld bricht tsc mit TS2741 ab. Der Wortlaut ist zeichengenau (258 = 258, maschinell
+     verglichen). Die Rechnung ist unberuehrt, weil es 0 Loeschungen gibt. Und die vorgelegte
+     Frage habe ich entschieden, indem ich sie gemessen habe: der ausgeschriebene Vergleich
+     faengt eine stille Umformulierung — er bleibt."
+
+ballbesitz: release-pruefer
+```
