@@ -163,3 +163,110 @@ warum_nicht_still_erweitert: "das Tor ist eine Schranke, die allen Rollen gehoer
        obwohl er es in der Hand hatte. Dieselbe Linie gilt fuer B5s Muster."
 zweiter_posten_offen: "B5N-5 — Barrieren ohne Test. Betrifft B5 UND B6, eigener Vorgang."
 ```
+
+## §11 — Votum B5N (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "B5N"
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+abnahme_commit: "c54c7129"
+elter: "a1751fbe"
+in_arbeit_commit: "2766e0ac"
+pruefstand: "worktree --detach auf c54c7129 und a1751fbe, node_modules UND vendor an beiden"
+befangenheit_offengelegt: "Dieser Auftrag entstand aus MEINEM Befund in der B5-Abnahme
+     (b7ab49c5, P2 Musterluecke). Ich pruefe hier also die Behebung meines eigenen Einwands.
+     Das ist keine Selbstabnahme — gebaut hat der Generator, und ich messe gegen die
+     KRITERIEN des Blattes, nicht gegen meinen Einwand. Wo beide dasselbe sagen, sage ich es
+     dazu."
+
+messtisch_alle_sechs:
+  B5N-1: GRUEN — drei Formen, drei EINZELNE Belege
+    beleg: |
+      "gezaehlt, Trefferzeilen in Z.217"               -> B5 0 Warnungen, exit 0
+      "gemessen, die Stellen stehen in Z.217-268"      -> B5 0 Warnungen, exit 0
+      "die Fundstelle steht in Zeile 171, gezaehlt"    -> B5 0 Warnungen, exit 0
+    bemerkung: "Das Kriterium verlangt ausdruecklich je Form eine eigene Probe und verbietet
+            die Sammelaussage 'erkennt jetzt alles'. Ich habe drei Laeufe gefahren."
+  B5N-2: GRUEN — der tragende Punkt
+    beleg: |
+      "vier Treffer gezaehlt"                          -> B5 1 Warnung
+      "vier Treffer gezaehlt, Trefferzeilen in Z.217"  -> B5 0 Warnungen
+    bewertung: "Dieselbe Botschaft, einmal ohne und einmal mit Beleg. Die Barriere ist LEISER
+            geworden, nicht stumm — genau der Unterschied, den das Kriterium fordert."
+  B5N-3: GRUEN
+    beleg: |
+      "gezaehlt, Trefferzeilen in wandaufbau.ts:57"    -> B5 0   (datei.ext:zeile)
+      "gezaehlt, siehe :891:"                          -> B5 0   (:NNN:)
+      "gezaehlt, Trefferzeile unten"                   -> B5 0   (das Wort)
+    diff: "Die drei alten Alternativen stehen im Muster zeichengleich; angehaengt sind genau
+            zwei: Z\\.[0-9]+ und Zeile [0-9]+. Der Auftrag nennt DREI Formen — er loest sie mit
+            ZWEI Alternativen und begruendet es im Kommentar: 'Z.217-268 beginnt mit Z.217 und
+            ist damit mit abgedeckt'. Selbst nachgefahren: die Bindestrich-Form schweigt."
+  B5N-4: GRUEN
+    beleg: "scripts/commit-pruefen.sh +11/-1 — die EINE geloeschte Zeile ist die alte Fassung
+            von B5_BELEGZEILE, ersetzt durch dieselbe plus zwei Alternativen. Die uebrigen
+            zehn Zeilen sind der Begruendungskommentar."
+    die_anderen_barrieren: "B5_ZAEHLWORT, B6_SUMMENWORT, B6_MENGE, B7_MEHRFACH und B7_HERKUNFT
+            sind an Elter und Bau je IDENTISCH (einzeln gehasht). Und die Gegenprobe am
+            laufenden Tor: eine Botschaft mit Zaehlwort, Summe und vier Fundorten loest
+            B5=1, B6=1, B7=1 aus — alle drei feuern weiter."
+    scripts_suite: "Bau 107/107/0, Elter 107/107/0. resources/ und app/ 0 Dateien."
+  B5N-5: GRUEN
+    gemessen_statt_angenommen: "Das Kriterium sagt: 'Ob es sie gibt, ist zu MESSEN und im
+            Bericht zu sagen, nicht anzunehmen.' Ich habe selbst gemessen:
+              grep -rl 'B5|BELEGZEILE|ZAEHLWORT' scripts/__tests__/  -> 0 Dateien
+            Es gibt keine Stelle, an der B5s Muster geprueft wird. Der Bau hat die Luecke
+            also nicht vergroessern koennen — und hat scripts/__tests__ mit 0 Dateien
+            unberuehrt gelassen. Die Luecke bleibt BENANNT und offen, wie das Kriterium es
+            verlangt: eine Barriere ohne Test ist eine Behauptung ueber sich selbst."
+  B5N-6: GRUEN — und diesmal stimmt die Reihenfolge vollstaendig
+    beleg: "2766e0ac (11:01:40) setzt BEIDE Orte und nennt beide Zahlen: 'Tafelzeile 0,
+            Zustandsfeld 0. Danach 1 und 1 auf B5N.' Bau 11:06:51, also fuenf Minuten spaeter."
+    selbst_gegengemessen: "Am Elter des Baus steht B5N an beiden Orten auf IN_ARBEIT
+            (Tafel 1 / Datensatz 1). Damit ist dies der EINZIGE der vier heute geprueften
+            Bauten, bei dem der Zustand vor dem Bau im committeten Stand steht — bei W-01N,
+            W-15/1 und B7 fehlte er."
+
+sein_selbstbefund_gegengeprueft:
+  was_er_meldet: "Der Sonden-Commit 27ca84a5 ('TIME_VARS steht an vier Fundorten') ist SEINER:
+        beim B7-Bau lief seine Rueckgabewert-Messung im falschen Verzeichnis, und weil
+        scripts/commit-pruefen.sh hier genauso liegt wie im Wegwerf-Repo, hat die Sonde das
+        ECHTE Tor bedient. Zurueckgenommen mit git revert -> 9df633c2."
+  und_der_werkzeug_befund: "Er sagt: der Revert ging NICHT durch das Tor, weil das Tor keine
+        Loeschung verbuchen kann — Stufe 4 weist einen fehlenden Pfad mit 'FEHLT' ab.
+        SELBST NACHGEFAHREN im Wegwerf-Repo: Datei angelegt und committet, dann geloescht und
+        dieselbe Datei als Pfad uebergeben:
+          FEHLT      docs/weg.md
+          KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt.
+        Sein Befund stimmt. Wer im Tor eine Datei entfernen will, kommt strukturell nicht
+        durch. Das gehoert dem Planner, nicht diesem Bau — er hat es richtig weitergereicht."
+
+was_diesen_bau_heraushebt:
+  - "Er hat seinen EIGENEN Fehler aus der Vorrunde nachgetragen, obwohl ihn ein anderer
+     gefunden hat, und dabei praezisiert, was er beim ersten Mal uebersehen hatte: gemeldet
+     war die Streudatei, uebersehen der Commit."
+  - "Die Begruendung steht im CODE, nicht nur im Bericht — zehn Kommentarzeilen ueber der
+     einen geaenderten Zeile, mit der Zahl (9 von 40 Botschaften) und dem Grund, warum Z.
+     keine Randform ist."
+  - "Er macht die Barriere LEISER und sagt es so: 'B5_ZAEHLWORT bleibt unberuehrt.' Eine
+     Nachbesserung, die den Ausloeser statt der Ausnahme entschaerft haette, waere eine
+     Abschaltung mit anderem Namen gewesen."
+
+zu_meinem_eigenen_befund:
+  meine_zahl: "Ich hatte in der B5-Abnahme gemessen: von 17 warnenden Botschaften trugen VIER
+        eine Fundstelle in nicht erkannter Form."
+  seine_zahl: "Er misst ueber die letzten 40 Botschaften: NEUN tragen die Form Z.NNN, davon nur
+        ZWEI zusaetzlich eine erkannte Form — also sieben zu Unrecht gewarnte."
+  kein_widerspruch: "Verschiedene Mengen (17 warnende gegen 40 Botschaften) und verschiedene
+        Formen (meine vier umfassten auch 'treppenTypen:4' und 'Zeile 39'). Beide Messungen
+        zeigen dieselbe Richtung; seine ist die schaerfere fuer die Form Z.NNN."
+
+zusammenfassung: "Sechs von sechs. Die Nachbesserung meines eigenen Befunds ist sauber gebaut:
+     drei Formen einzeln belegt, die Barriere bleibt bei fehlendem Beleg laut, die drei alten
+     Formen und die drei anderen Barrieren sind nachweislich unberuehrt — und die Testluecke
+     ist gemessen statt angenommen und bleibt als eigener Vorgang offen. Der einzige Bau des
+     Tages, bei dem der IN_ARBEIT-Zustand im committeten Stand vor dem Bau steht."
+
+ballbesitz: release-pruefer
+```
