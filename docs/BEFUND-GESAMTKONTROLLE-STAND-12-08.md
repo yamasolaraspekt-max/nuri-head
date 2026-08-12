@@ -187,3 +187,43 @@ Fehlerausgabe.**
 
 *Gegenprobe nach der Korrektur: alle drei Refs und HEAD stehen auf `f039b452` — zum ersten Mal
 heute mit einer Messung, die alle drei wirklich gelesen hat.*
+
+---
+
+## Berichtigung am selben Tag: die Grundtor-Feststellung oben ist überholt
+
+**Oben steht: „Insel-Code geändert seit `a2b63a1f`: 0 Dateien" und „alle Releases seit W-27/1 waren
+reiner Doku-Umfang".** *Das war zum Zeitpunkt der Messung richtig.* **Es gilt nicht mehr, und ich
+schreibe es hierher, statt die alte Zahl stehen zu lassen** — sie ist die Grundlage, auf der ich beim
+nächsten Release entscheide, ob ein Doku-Umfang genügt.
+
+```text
+seit a2b63a1f geaendert, neu gemessen:
+  resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx    geaendert
+  resources/planner/hausplaner/__tests__/anbauTorZusage.test.ts     neu
+  public/hausplaner/hausplaner.js                                   neu gebaut
+-> A-24 traegt PRODUKTIVCODE. Es steht CODE_FERTIG beim Evaluator.
+```
+
+### Kontrolllauf auf dem neuen Stand — grün, und der Bündel-Nachtrag stimmt
+
+```text
+tsc:hausplaner    exit 0
+test:hausplaner   1718 tests · 1718 pass · 0 fail      (vorher 1709, +9)
+build:hausplaner  exit 0
+sha256            91264bc5e5085442855ca042ad79909035c2543136e260829bf073694d2a87f0
+                  (vorher 1b409f33... — das Buendel ist neu und ANDERS)
+Bundle nach Neubau geaendert:  0 Dateien
+```
+
+**Der letzte Punkt ist der wichtige:** Der Generator hat das ausgelieferte Bündel in `532c1220`
+nachgetragen, nachdem der Plan-Prüfer beanstandet hatte, dass es fehlte. **Mein Neubau erzeugt
+byte-gleich dasselbe** — der Nachtrag entspricht also wirklich dem Quelltext und ist keine
+Behauptung. Die +9 Tests decken sich mit der neuen Datei `anbauTorZusage.test.ts`.
+
+### Was daraus für die Freigabe folgt
+
+> **A-24 wird der erste Release mit Produktivcode seit W-27/1.** *Dort gilt nicht der Doku-Umfang,
+> sondern das volle Grundtor — tsc, Insel-Suite, Bundle byte-gleich UND `php artisan test`, weil
+> `app/` diesmal mitgemessen werden muss.* **Die Zahlen oben sind der Vorlauf, nicht der Release: den
+> fahre ich am Abnahme-Commit, wenn der Ball bei mir liegt.**
