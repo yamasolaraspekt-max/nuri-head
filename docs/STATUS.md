@@ -43,7 +43,7 @@
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
-| **W-23** Deckung und Material | **`NACHBESSERN`** | **Generator** | Bau `2143c5db` · Elter `c2c6bf4e` | **6/7** · Fachkern stark und **nachgerechnet** (Teilbarkeitsfalle: `n_min 3 > n_max 2`, verworfene Fassung liefert 333,3 statt 372–405) · Quelle selbst geöffnet, alle Zahlen treffen · **P1: die als Abweichung gemeldete Namenskorrektur ist selbst der Fehler** — die Zeile mit 372/405 heißt in der Quelle `Harzer Pfanne 7` |
+| **W-23** Deckung und Material | **`IN_ARBEIT`** | **Generator** | Bau `2143c5db` · Elter `c2c6bf4e` | **6/7** · Fachkern stark und **nachgerechnet** (Teilbarkeitsfalle: `n_min 3 > n_max 2`, verworfene Fassung liefert 333,3 statt 372–405) · Quelle selbst geöffnet, alle Zahlen treffen · **P1: die als Abweichung gemeldete Namenskorrektur ist selbst der Fehler** — die Zeile mit 372/405 heißt in der Quelle `Harzer Pfanne 7` |
 | **W-27** Dachkantentypen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
 | **W-20** Stückliste und Mengen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
@@ -6107,8 +6107,23 @@ mein_anteil_am_befund: "Zwei der drei Fehlalarme entstanden durch MEINE Votumsze
 ```yaml
 auftrag: "W-23"
 datei: docs/auftraege/aktiv/W-23-deckung-und-material.md
-zustand: NACHBESSERN
-ballbesitz: generator (eine Stelle, zwei Zeilen, kein neuer Inhalt)
+zustand: IN_ARBEIT
+ballbesitz: generator (Nachbesserung laeuft — §12.1, Vorrang vor allem Neuen)
+der_fehler_ist_meiner_und_ich_habe_die_ursache: "Der Evaluator hat recht, und ich habe es
+  nachgemessen statt es zu uebernehmen: Zeile 10 traegt Modell_Typ 'Harzer Pfanne 7', Variante
+  'Big', Lattmass 372-405. Die 7 STEHT dort, das Auftragsblatt hatte recht, und meine
+  'Abweichung 1' war selbst der Fehler. URSACHE, und sie ist mein eigenes Werkzeug: mein
+  Ausleseskript kuerzte die Spalte Modell_Typ auf 14 Zeichen ([:14]) — 'Harzer Pfanne 7' hat 15.
+  Die Anzeige hat die Ziffer abgeschnitten, und ich habe die Kuerzung als Befund gegen das Blatt
+  gemeldet. Das ist H-9 in Reinform, an dem Tag gebaut, an dem ich die Regel selbst formuliert
+  habe: das Muster war richtig, es setzte an der falschen Zeile an — beziehungsweise die Anzeige
+  zeigte nicht, woran es ansetzte. Und es ist die gefaehrliche Richtung: wer spaeter mit 'Harzer
+  Pfanne' in die Quelle geht, landet auf Zeile 9 OHNE Lattmasse."
+umfang_der_nachbesserung: "Der Evaluator nennt zwei Zeilen (5-CODE:41 und :54-55). Ich habe alle
+  Fundstellen gemessen: ZWOELF Vorkommen von 'Harzer' in fuenf Dateien (1-ZWECK, 3-FORMELN,
+  6-PRUEFUNG, 5-CODE, Bericht). Ich pruefe alle — meine eigene Lehre aus der halb korrigierten
+  Falle 4. Dazu das neue Kriterium W-23-8 des Planners: Modell_Typ allein ist keine Adresse,
+  adressiert wird ueber Modell_Typ PLUS Variante_Ausfuehrung."
 gebaut: "Sieben Blaetter plus Registerzeile. Alle Zahlen des Blattes gegen die Quelle nachgemessen
   und bestaetigt: 127 Datenzeilen, 48 Spalten, Datenstatus 78/26/17/6, Fuellquote 9/13/17, neun
   Zeilen gleich sieben Modelle. Herkunft 9 von 9 (Datenstatus UND Quelle_1_URL). Eingangspruefung
