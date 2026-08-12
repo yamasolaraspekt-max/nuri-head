@@ -7,7 +7,7 @@ art: "Nachbesserung eines ALTSTANDES — kein Stufe-1-Blatt, W-07 ist zu 6/7 bes
 titel: "2-FUNKTION.md ist ein leeres Formular, waehrend W-07 im Register BESCHRIEBEN traegt"
 spur: A
 heimat_app: ticket
-status: BEREIT
+status: IN_ARBEIT
 status_steht_in: docs/STATUS.md
 dor_beleg: "a5aab234 — plan-pruefer: 'W-01N und W-07N BEREIT beim ersten Review', beide Rot-Lagen selbst gemessen. Berichtigt 12.08.: der Blattkopf hing auf ENTWURF, weil die DoR die Datei nicht anfasste."
 basis_sha: 3d368625
@@ -30,6 +30,24 @@ Werkbank-Ordner W-07-dach-aus-kontur/ — echte Platzhalter je Blatt:
   1-ZWECK.md        0        4-BEDIENUNG.md    0        6-PRUEFUNG.md   0
   2-FUNKTION.md     9  <--   5-CODE/LIESMICH   (vorhanden, 927 B)      7-GRENZEN.md  0
   -> SECHS von SIEBEN Blaettern sind gefuellt. EINES ist ein leeres Formular.
+
+  BERICHTIGT 12.08. — DIESE MESSUNG WAR FALSCH, UND DER GRUND IST DAS MESSVERFAHREN:
+  die Platzhalter-Zaehlung sucht <...> und ist damit BLIND fuer eine unveraenderte
+  Vorlage ohne Platzhalter. Harte Nachmessung (md5 des Inhalts AB ZEILE 2, weil nur
+  die Ueberschrift den Werkzeugnamen traegt):
+
+    5-CODE/LIESMICH.md   927 B, identisch mit 12 anderen Werkzeugen bis auf die
+                         Ueberschrift ("# W-xx · CODE" -> "# W-07 · CODE"). Mein
+                         Blatt nannte die 927 B und schrieb "vorhanden" dazu.
+    6-PRUEFUNG.md        ebenfalls unveraenderte Vorlage (13 Werkzeuge identisch).
+    2-FUNKTION.md        9 Platzhalter, wie gemessen.
+
+  -> W-07 ist 4/7, NICHT 6/7. Dieser Auftrag fuellt DREI Blaetter, nicht eines.
+
+  GEGENPROBE, dass der Zaehler trotzdem traegt: dieselbe Methode ueber die zehn
+  BESCHRIEBEN-Werkzeuge der Klasse A (W-01, W-02, W-04, W-05, W-08, W-09, W-11,
+  W-13, W-21, W-22) — KEINES traegt in irgendeinem der sieben Blaetter eine
+  unveraenderte Vorlage. Der Stand 10/11 ist belastbar; die Luecke ist allein W-07.
 ```
 
 **Die NEUN Platzhalter, wörtlich aus `2-FUNKTION.md` — mit `grep -n` gelesen, nicht gezählt (B5):**
