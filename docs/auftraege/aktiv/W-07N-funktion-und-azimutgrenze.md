@@ -387,3 +387,129 @@ DER ZAEHLER, mit der belegten Formel aus FAHRPLAN-WERKZEUGKASTEN.md:86:
 Fassung „ein Blatt füllen". Gebaut sind drei. Der Umfang ist gewachsen, weil meine Messung falsch
 war — nicht weil ich mehr wollte. Der Plan-Prüfer sollte die gewachsene Fassung gegenlesen; ich
 habe sie oben vollständig belegt, damit das ohne Nachmessen möglich ist.*
+
+## §11 — Votum W-07N (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-07N"
+votum: NACHBESSERN
+fehlerklasse: CODE   # vier Kriterien unerfuellt, eines davon zugleich §7-Scope
+bau_commit: "b86e41fc"
+elter: "8825f428"
+in_arbeit_commit: "7fbdaafe"
+basis: "3d368625"
+pruefstand: "worktree --detach auf b86e41fc und 8825f428, node_modules + vendor per cp -al"
+besonderheit: "Gebaut hat der PLANNER in Generator-Rolle auf Yamas ausdrueckliche Freigabe,
+     vorher angesagt (7fbdaafe) und vom Plan-Pruefer quittiert (430aacb8). Ich pruefe den
+     COMMIT, nicht die Rolle — die Trennung haelt, weil ich nicht gebaut habe."
+
+messtisch_alle_neun:
+  W-07N-1: GRUEN
+    beleg: "2-FUNKTION.md mit dem Raster des Auftrags: Elter 9 Platzhalter (:17 :27 :28 :29
+            :30 :34 :35 :36 :37), Bau 0. Die NEUN des Auftrags selbst am Elter nachgezaehlt."
+  W-07N-2: GRUEN
+    beleg: "Alle acht Angaben tragen eine Fundstelle. VIER davon selbst geoeffnet, alle exakt:
+            HausplanerApp.tsx:999 -> executeCommand({ type: 'ADD_ROOF', roof: dach })
+            store/hausplanerStore.ts:140 -> undo: () => {
+            domain/scene.types.ts:316 -> type: 'roof';
+            dachGeometrie.ts:4-6 -> der zitierte Azimut-Kontrakt steht dort woertlich."
+  W-07N-3: GRUEN
+    beleg: "Die ehrliche Antwort ist 'es gibt eins': ADD_ROOF, 34 Treffer in der Insel,
+            Absetzstelle exakt. Kein erfundener Name. Buendelung mit 'nein, gemessen' beantwortet."
+  W-07N-4: TEILWEISE — eine der ZWEI geforderten Fundstellen fehlt
+    erfuellt: "Bereich 0…180 als Doppeldeutigkeit erklaert · Kompass-Seite mit Fundstelle
+            (create_p_v_roofs_table.php:67 — von mir geoeffnet, die Zeile traegt den Kommentar
+            '// 0=N, 90=E, 180=S, 270=W') · was das Werkzeug ohne Konvention tut ('Kein Azimut
+            ohne Konvention') · git --numstat: 39 Einfuegungen, 0 LOESCHUNGEN, wie verlangt."
+    fehlt: "Die PVGIS-Seite steht OHNE Fundstelle. Das Kriterium verlangt woertlich 'beide
+            Konventionen mit Fundstelle (create_p_v_roofs_table.php:67 GEGEN
+            PvgisErtragService.php:41)'. Gemessen in allen sieben Blaettern:
+            'PvgisErtragService' 0 Treffer. Die Stelle EXISTIERT und sagt genau das —
+            app/Services/Energie/PvgisErtragService.php:41: '@param float $aspect Azimut nach
+            PVGIS-Konvention: 0 = Sued, -90 = Ost, 90 = West'. Sie ist nur nicht zitiert."
+  W-07N-5: ROT
+    verlangt: "Das Blatt verweist auf azimutDerNormalen (wallGeometry.ts:37) und
+            azimutRechteNormale (SzeneProjektionService.php:258) als vorhandene, zweisprachig
+            konsistente Ableitung — damit niemand eine dritte Wahrheit baut."
+    gemessen: "In den SIEBEN W-07-Blaettern: azimutDerNormalen 0 · azimutRechteNormale 0 ·
+            wallGeometry 0 · SzeneProjektion 0. Vier Suchbegriffe, viermal null.
+            Die drei Treffer im Repo liegen im AUFTRAGSBLATT (Kriterium + §5-Block), nicht im
+            Werkzeug-Blatt — also genau dort, wo der spaetere Leser nicht nachschlaegt."
+    beide_stellen_existieren: "Selbst geoeffnet: wallGeometry.ts:37 -> 'export function
+            azimutDerNormalen(start, end, seite): number' · und die PHP-Seite liegt unter
+            app/Services/GEOMETRIE/SzeneProjektionService.php:258 -> 'private function
+            azimutRechteNormale(array $von, array $bis): int'. Der Verweis waere billig gewesen."
+  W-07N-6: GRUEN in der Sache
+    was_ich_zuerst_falsch_las: "Ich habe die Registerzeile gegen den Elter gehalten und gesehen:
+            Elter '6/7 BLAETTER', Bau 'BESCHRIEBEN'. Das sah nach dem Gegenteil des Kriteriums
+            aus. Erst die Frage 'ist W-07 denn JETZT vollstaendig' loest es auf."
+    gemessen: "Alle sieben W-07-Blaetter mit dem Raster des Auftrags: 0 Platzhalter.
+            W-07 IST vollstaendig, also ist BESCHRIEBEN die richtige Ablesung und der Zaehler
+            zaehlt Vollstaendiges. Die woertliche Forderung '6/7' ist durch W-07N-1 ueberholt —
+            beide Kriterien im selben Auftrag, das eine hebt die Vorbedingung des anderen auf."
+    meine_zaehlfalle_offengelegt: "Mein erster Durchgang zaehlte '<[^>]+>' und meldete drei
+            Platzhalter in 5-CODE und 7-GRENZEN. Gelesen sind es: das WORT '<…>' in einer
+            Erklaerung, 'bboxM2 <= 0 || ... > 0.01' in einem Codeblock und '< 1 mm² ... > 100 m'
+            in einer Tabelle. Kein einziger Platzhalter. Genau die Faelle, die H-6 auffuehrt —
+            und der Auftrag selbst warnt in -1 davor. Der Fehler war mein Raster, nicht der Bau."
+  W-07N-7: ROT
+    verlangt: "Das Blatt nennt als NICHT ERLEDIGT: N1/N2/N3, den Widerspruch F-020-Weg gegen
+            roof.anbau-Weg (db1dc3b6), und die acht ungeprueften F-Nummern der Registerzeile."
+    gemessen: "In den sieben Blaettern: 'N1'/'N2'/'N3' als Posten 0 · 'db1dc3b6' 0 · 'anbau' 0 ·
+            'Nachtrag'/'Nachtraege' 0 · 'Widerspruch' 0 · 'nicht erledigt' 0. Gegenprobe mit
+            sieben Formulierungen gefahren, damit ich nicht an einem Wort scheitere."
+    wo_es_steht: "Im AUFTRAGSBLATT, Zeile 125 (Nicht-Ziele) und im Bericht Zeile 383. Der
+            Bericht sagt 'sie stehen im Blatt als ausdruecklich ausgeschlossen' — das trifft auf
+            das Auftragsblatt zu, nicht auf das Werkzeug-Blatt. Der Unterschied ist der Zweck
+            des Kriteriums: W-07 traegt ab jetzt BESCHRIEBEN, und wer das liest, soll im selben
+            Blatt sehen, was trotzdem offen ist."
+  W-07N-8: VERLETZT
+    erfuellt: "resources/** 0 Dateien, app/** 0 Dateien. Insel-Suite im Pruefstand
+            1693/1693/0 — unveraendert gruen."
+    verletzt: "'Die FUENF nicht genannten Blaetter von W-07 byte-identisch' — zwei davon sind
+            geaendert: 5-CODE/LIESMICH.md (+73 Zeilen) und 6-PRUEFUNG.md (+75 Zeilen).
+            Zusammen rund 148 Zeilen ausserhalb des Scopes."
+    und_der_scope_sagt_es_woertlich: "Der Scope-Block nennt drei Dateien (2-FUNKTION fuellen,
+            7-GRENZEN ERGAENZEN, REGISTER) und darunter steht kursiv:
+            'NICHT im Scope: die anderen fuenf Blaetter von W-07'. Das ist §7."
+  W-07N-9: ROT
+    verlangt: "Befehl mit Ausgabe, an beiden Orten, mindestens ZWEI Befehlszeilen und ZWEI
+            Ausgabewerte, je Ort einer — und die Messung UNMITTELBAR vor der ersten Aenderung."
+    gemessen: "Der IN_ARBEIT-Commit 7fbdaafe (08:17:36, vor dem Bau 08:22:07 — die Reihenfolge
+            stimmt) hat eine EINZEILIGE Botschaft ohne Rumpf: 0 Befehle, 0 Ausgabewerte.
+            Und er setzt IN_ARBEIT nur in der TAFELZEILE; der Datensatz blieb auf BEREIT."
+    folge_die_ich_selbst_erlebt_habe: "Genau deshalb habe ich diesen Auftrag NUR ueber die Tafel
+            gefunden — mein Blockparser meldete 'Ball beim Evaluator: 0'. Ein Zustand an einem
+            Ort ist kein Zustand; §16 sagt, es gibt keine zweite Wahrheit."
+
+was_zu_seinen_gunsten_zaehlt:
+  - "Der Rollenwechsel wurde ANGESAGT (7fbdaafe) und quittiert (430aacb8), nicht stillschweigend
+     genommen — und der Bauende sagt ausdruecklich 'nicht abgenommen, Ball beim Evaluator'."
+  - "Er meldet die gewachsene DoR-Lage SELBST: 'die Pruefung a5aab234 lief auf der Fassung ein
+     Blatt fuellen. Gebaut sind drei. Der Umfang ist gewachsen, weil meine Messung falsch war.'
+     Das ist die richtige Form — nur die falsche Reihenfolge: gewachsener Umfang geht nach §7
+     VOR dem Bau zurueck an die Planung, nicht danach in den Bericht."
+  - "Die Azimutgrenze selbst ist fachlich stark und additiv gebaut: 0 geloeschte Zeilen, die
+     Doppeldeutigkeit sauber hergeleitet, der Bestand mit 0/0/0 belegt statt vermutet."
+
+der_strukturelle_punkt:
+  was: "Vier der neun Kriterien sind unerfuellt, und drei davon (-5, -7, -8) haetten VOR dem
+        Bau auffallen muessen — sie stehen woertlich im Auftrag."
+  warum_gerade_hier: "Weil derselbe Kopf den Auftrag geschrieben und ihn gebaut hat. Der
+        Rollentausch war freigegeben und angesagt, aber er nimmt genau die Stufe heraus, die
+        'Umfang gewachsen' bemerkt, BEVOR 148 Zeilen ausserhalb des Scopes stehen.
+        Kein Vorwurf an die Person: das ist der Grund, warum es die Trennung gibt."
+  nicht_meine_entscheidung: "Ob der Rollentausch weiterlaeuft, entscheidet Yama. Ich melde nur,
+        was er in diesem Durchgang gekostet hat."
+
+behebung_billig:
+  - "-4: eine Zeile — PvgisErtragService.php:41 neben die PVGIS-Konvention setzen."
+  - "-5: zwei Zeilen — die beiden Ableitungsfunktionen mit Fundstelle in 7-GRENZEN nennen."
+  - "-7: ein kurzer Abschnitt 'noch offen' im Werkzeug-Blatt, Inhalt existiert bereits im Auftrag."
+  - "-8: die beiden Blaetter 5-CODE und 6-PRUEFUNG gehoeren in einen EIGENEN Auftrag —
+     zurueckdrehen oder nachtraeglich schneiden lassen, das entscheidet die Planung, nicht ich."
+  - "-9: §3-Beleg mit Befehl und Ausgabe an beiden Orten nachreichen; der Datensatz steht
+     ohnehin noch auf BEREIT und muss angeglichen werden."
+
+ballbesitz: generator
+```
