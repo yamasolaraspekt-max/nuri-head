@@ -1892,6 +1892,25 @@ was_ich_jetzt_tue: "Ich lege die neun fehlenden Bloecke NICHT im Alleingang an �
 ```
 ---
 
+## BEREIT — A-14 (der Block FEHLTE in der Statuswahrheit; hiermit angelegt)
+
+```yaml
+auftrag: "A-14"
+titel: "Vorbehalt als Pflichtfeld · grundlage traegt die Grenze · die Plakette hoert auf, einen Nachweis zu behaupten"
+datei: docs/auftraege/aktiv/A-14-n003-vorbehalt-ins-ergebnis.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 1e09280d
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): DER FUND IST DER KERN UND ER HAELT — selbst gemessen: sparrenBerechnung.ts:80 traegt 'bestanden: boolean; // beide Nachweise <= 1,0', und EngineFlaeche.tsx:142-143 zeigt daraus woertlich '✓ Alle Pruefungen bestanden', gruen hinterlegt, fontWeight 700, als Gesamturteil ueber der Zahlenliste — fuer eine Rechnung, die Wind, Mehrfeld, Knicken, Auflagerpressung und Lastkombinationen NICHT kennt (N-003 Geltungsbereich, von Yama festgelegt, DAUERGELB). Das ist die Nachweissprache, die Yamas Auflage verbietet, an einer Stelle, die WEDER Yama NOCH der Planner in ihrer Auflage genannt hatten. UND DER PRAEZEDENZFALL STEHT IM CODE SELBST: EngineFlaeche.tsx:131-135 (AUF-52) sagt woertlich 'sie bestehen nichts... eine Plakette waere dort eine ERFUNDENE BEWERTUNG; die Huelle zeigt, was da ist, und wo nichts ist, steht nichts'. Jemand hat die Frage schon entschieden — die Antwort trifft N-003 genauso, und A-14-3 zieht sie konsequent (Plakette WEG, ersatzlos, nicht umformuliert)."
+zulaessigkeit_gepruefft: "Der Auftrag beruehrt Fachrecht und Haftung, trifft aber KEINE Fachentscheidung — der Geltungsbereich ist von Yama festgelegt (FORMELSAMMLUNG N-003, 'Geltungsbereich — von Yama festgelegt 12.08., DAUERGELB'). Damit ist er nach CLAUDE.md zulaessig: er TRAEGT eine Fachentscheidung in den Code, er FAELLT sie nicht. Genau die Trennung, an der A-12 und N-003 haengen."
+neun_kriterien_geprueft: "A-14-1 bis -9, jedes P1 mit benannter Rot-Lage; -7 als must_preserve, -8 Browserabnahme nach §9 mit gebundener Anker-Regel (buehnen-waechter.sh vor der Abnahme — die A-04-Erstnutzer-Regel wird hier zum ersten Mal von einem fremden Auftrag ZITIERT statt nur zu existieren), -9 §3-Beleg. §5-Block vollstaendig, Bundle als betroffen benannt, Testdaten-Ziel KEINES, Nicht-Ziele und Konfliktpruefung vorhanden."
+ein_hinweis_ohne_restpunkt: "Der §5-Block nennt keinen RUECKWEG als eigene Zeile. Kein Restpunkt, weil die Sache trivial und im Blatt implizit ist (Aenderung an resources/ + Bundle, git revert genuegt, keine Migration, keine Bestandsdaten) — aber die Zeile fehlt formal, und bei einem Auftrag, der SICHTBARES VERHALTEN aendert, ist sie nicht rein formal: wer die Plakette vermisst, muss wissen, wie er sie zurueckholt. Der Bericht soll den Rueckweg ausdruecklich nennen."
+herkunft_des_blocks: "Dieser Block existierte NICHT — A-14 war eines der neun Blaetter, die in der Statuswahrheit unsichtbar waren (Befund 87e49ccd). Ich lege ihn mit dem Votum an, weil ein BEREIT ohne Block genau die Leerstelle waere, die den Befund ausgeloest hat. Zustand und Ballbesitz folgen meiner Pruefung, nicht meiner Wahl."
+naechster_schritt: "Generator zieht A-14 (§3 beachten); Browserabnahme nach §9 mit Waechter-Vorlauf, Rueckweg im Bericht nennen"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
