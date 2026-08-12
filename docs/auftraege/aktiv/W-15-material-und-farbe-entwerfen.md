@@ -255,3 +255,101 @@ befund_2_gross: "werkzeugVertrag.ts fuehrt 111 Werkzeuge, REGISTER.md 42. Der Ve
 kern: "das erste C-Blatt ist kein Entwurf aus dem Kopf, sondern ein Entwurf mit Quelle.
        Das ist der Unterschied zwischen ENTWORFEN und erfunden."
 ```
+
+## §11 — Votum W-15/1 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-15/1"
+votum: ABGENOMMEN
+fehlerklasse: KEINE   # ein P2, blockiert nicht
+abnahme_commit: "72c5a6d6"
+elter: "df673fdc"
+pruefstand: "worktree --detach auf 72c5a6d6 und df673fdc, node_modules UND vendor"
+
+messtisch_alle_zehn:
+  W-15/1-1: GRUEN
+    beleg: "Platzhalter in den sieben Blaettern — Elter 21 (seine Zahl, von mir nachgezaehlt:
+            21), Bau 0. Beide Zaehlweisen gefahren: roh <[^>]+> und das Auftragsraster mit
+            Buchstabe am Anfang — beide 0."
+  W-15/1-2: GRUEN — und er meldet die veraltete Zahl selbst
+    beleg: "Abschlusszaehler grep -cE '^\\| W-[0-9]+ .*BESCHRIEBEN': Elter 11, Bau 11 —
+            UNVERAENDERT, wie das Kriterium verlangt. Die Registerzeile traegt ENTWORFEN,
+            und ENTWORFEN-Zeilen gibt es im Bau genau eine."
+    seine_meldung: "Das Kriterium sagt 'heute 9'. Gemessen sind es 11, vorher wie nachher.
+            Er hat es GEMELDET statt das Blatt anzupassen, mit dem Satz: 'genau die Klasse,
+            gegen die ich eine Stunde vorher W-01N gebaut habe. Eine Zahl in einem
+            Soll-Kriterium ist eine Zeitbombe, auch wenn sie in einem Blatt steht, das die
+            Regel selbst zitiert.' Die Sache ist erfuellt, die Zahl im Blatt ist es nicht."
+  W-15/1-3: GRUEN
+    beleg: "ACHT Fundstellen selbst geoeffnet, alle exakt:
+              :874 werkzeugId: 'material-aufnehmen'   :875 commandId: 'PaintCommand'
+              :877 eingaben: ['objectIds','parameters'] :878 ergebnisse: [...]
+              :886 werkzeugId: 'material-zuweisen'    :889 eingaben: [...]
+              :898 werkzeugId: 'textur'               :901 eingaben: [...]
+            Kein Wert geschaetzt — jede Angabe traegt ihre Vertragszeile."
+  W-15/1-4: GRUEN
+    beleg: "3-FORMELN: 'KEINE — und das ist eine Aussage, kein leeres Feld', mit der
+            Begruendung 'Material und Farbe rechnen nicht' und dem Gegenbeleg, wo die
+            Mathematik stattdessen liegt (W-23 F-050, W-20 F-011/F-023)."
+  W-15/1-5: GRUEN
+    beleg: "5-CODE sagt 'NOCH NICHT GEBAUT' als Ueberschrift. Seine Messung selbst
+            nachgefahren: services.material hat 3 Treffer, und ich habe die TREFFERZEILEN
+            GELESEN — alle drei stehen in werkzeugVertrag.ts:883, :895, :907 als
+            dienstMethode-ZEICHENKETTE. Ohne den Vertrag: 0. Der Vertrag nennt eine
+            Dienstmethode, die niemand gebaut hat."
+  W-15/1-6: GRUEN
+    beleg: "Alle drei Vorbedingungen in 7-GRENZEN mit Absage und Fundstelle. Ich habe
+            werkzeugVertrag.ts:891 geoeffnet:
+              vorbedingungen: ['project.open', 'selection.count >= 1', 'permission.edit'],
+            Genau die drei, die das Kriterium nennt. Dazu ein vierter Fall (Textur ohne
+            Material), den das Kriterium nicht verlangt hat."
+  W-15/1-7: GRUEN — mit einem BEFUND GEGEN DAS BLATT, und er trifft
+    seine_richtigstellung: "Das Kriterium nennt VIER Werkzeuge und fuehrt PaintCommand als
+            viertes. Er misst DREI werkzeugId-Eintraege; PaintCommand ist die commandId von
+            material-aufnehmen."
+    selbst_nachgefahren: "grep -c \"werkzeugId: 'paint'\" -> 0 (seine Zahl bestaetigt).
+            PaintCommand im ganzen Vertrag: genau EINE Fundstelle, :875, und die steht direkt
+            unter werkzeugId: 'material-aufnehmen' (:874). Der Befund haelt."
+    und_die_frage_ist_beantwortet: "Das Kriterium wollte wissen, ob alle vier zu W-15 gehoeren
+            oder eines ein eigenes Werkzeug ist. Antwort: alle DREI gehoeren zu W-15, und das
+            vierte war nie ein Werkzeug. Er hat die Richtigstellung ins Blatt gesetzt, statt
+            eine vierte Zeile zu erfinden."
+  W-15/1-8: GRUEN
+    beleg: "1-ZWECK:39 'Der Zweck der Zuweisung selbst — offen, und das ist eine Messung',
+            belegt mit 0 Treffern fuer surfaceMaterialId/materialAssignment ausserhalb des
+            Vertrags: niemand verbraucht die Zuweisung. Kein erfundener Zweck."
+  W-15/1-9: GRUEN
+    beleg: "resources/ und app/ 0 Dateien. Im REGISTER genau EINE geaenderte Werkzeugzeile —
+            der Diff zeigt zwei Zeilen, aber gelesen sind es die Minus- und die Plus-Fassung
+            DERSELBEN W-15-Zeile (LEER -> ENTWORFEN). Insel-Suite 1698/1698/0."
+    seine_zeilenkorrektur_geprueft: "Er berichtigt eine eigene Zeilenangabe: W-13 stehe im
+            REGISTER in Zeile 37, nicht 68. Ich habe :37 geoeffnet — dort steht W-13. Stimmt."
+  W-15/1-10: GRUEN mit P2
+    beleg: "Die Bau-Botschaft traegt: '§3 als Scope-Messung: Tafelzeile 0, Zustandsfeld 0,
+            kein Auftrag IN_ARBEIT, also haelt auch keiner Dateien.'"
+    p2: "Gegen den COMMITTETEN Elterstand (df673fdc) messe ich A-17 an BEIDEN Orten als
+            laufend. Seine Null gilt fuer den Arbeitsbaum. Zweiter Fall derselben Klasse
+            heute — bei W-01N habe ich denselben P2 vermerkt."
+    warum_kein_rot: "H-4: §3 sperrt die DATEIEN. A-17-Scope war enginePanels.ts, zwei
+            geometry-Dateien, das Buendel und eine Testdatei; W-15/1-Scope sind die sieben
+            W-15-Blaetter und REGISTER.md. Disjunkt — A-17 hat das Register nicht angefasst,
+            von mir gegengeprueft. Und er benennt die Nichtberuehrung von STATUS.md samt der
+            vier nachzutragenden Zustaende, statt sie zu verschweigen."
+
+was_diesen_bau_heraushebt:
+  - "ZWEI Befunde gegen das eigene Auftragsblatt, beide gemeldet statt angepasst — und beide
+     treffen: die vier Werkzeuge sind drei, und die feste Zahl 9 ist elf. Der zweite ist der
+     bemerkenswerte: er erkennt an seinem eigenen Auftrag die Fehlerklasse wieder, gegen die
+     er eine Stunde vorher W-01N gebaut hat."
+  - "Er berichtigt eine EIGENE Zeilenangabe (W-13 im Register), bevor sie jemand findet."
+  - "Das erste 2-FUNKTION der Tafel, das nicht geschaetzt werden muss — und er hat die Quelle
+     wirklich benutzt: dreizehn Zeilenangaben, von mir acht stichprobenartig geoeffnet, alle exakt."
+
+zusammenfassung: "Zehn von zehn. Das erste ENTWORFEN der Werkbank steht, und es steht ehrlich:
+     5-CODE sagt NOCH NICHT GEBAUT, der Zweck ist als offen belegt statt erfunden, und die
+     Dienstmethode des Vertrags zeigt nachweislich auf nichts. Zwei Zahlen des Blattes hat er
+     widerlegt statt sie zu uebernehmen. Ein P2 am §3-Beleg, dieselbe Klasse wie bei W-01N:
+     die Null gilt fuer einen Arbeitsbaum, den niemand nachlesen kann."
+
+ballbesitz: release-pruefer
+```
