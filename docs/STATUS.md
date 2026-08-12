@@ -47,7 +47,7 @@
 | **W-27** Dachkantentypen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
-| **A-20** Zustand an vier Orten | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
+| **A-20** Zustand an vier Orten | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · aus dem Befund des Plan-Prüfers `7b7db5b6` · **Bau erst NACH A-20s Abnahme** (dieselbe Datei) |
 | **W-34** Geführte Planung (Stepper) | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
@@ -6459,8 +6459,8 @@ meine_frage_wurde_beantwortet: "Der Planner hat die Grundmengen zu '17 von 24' n
 
 ```yaml
 auftrag: "A-20"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 nachbesserung_runde_2: "Der Befund des Evaluators (99fc86cd) trifft, und er trifft an der teuersten Stelle. SELBST NACHGEMESSEN am Elter 6af2572d mit einem Raster das BEIDE Schreibweisen aufloest: A-09 BETRIEBSBESTAETIGT, A-11 BETRIEBSBESTAETIGT, A-12 ABGENOMMEN — alle drei haben einen Datensatz, mein Auftrag an den Planner hatte keine Grundlage und ist zurueckgezogen. URSACHE bestaetigt: mein Parser las die Kennung mit ^auftrag: \"([^\"]+)\" und verlangte damit Anfuehrungszeichen; gemessen stehen 31 Felder MIT und 19 OHNE, und von den 19 unzitierten haben nur diese drei ein Blatt mit status: im Kopf — das erklaert die 3 exakt. BERICHTIGT an drei Orten: A-20-4 im Bericht (Tabelle jetzt 32 Namen, gegengeprobt gegen die gemessene Menge, 0 fehlen 0 zuviel), A-20-1 in ARBEITSREGELN §16 (29/3/20 -> 32/0/22, und '29 Blaetter waren Fallen' -> 32), und A-20-5 dessen Nachweis eine BAUMMESSUNG war: git diff --name-only ist nach einem Commit zwangslaeufig 0 und waere auch bei zwanzig fremden Zustaenden 0 gewesen. Am COMMIT neu gemessen: 48fac1f0 aendert in STATUS.md genau 4 Zustandszeilen und 1 Tafelzeile, alle A-20s eigene, 0 fremde. Das ist E1 woertlich, angewandt im selben Bericht und an dieser Stelle vergessen."
 zurueckgezogen_nicht_geloescht: "Die falschen Zahlen und der gegenstandslose Planner-Auftrag stehen weiter im Bericht, als ZURUECKGEZOGEN gekennzeichnet und mit Ursache — nach dem Vorbild von W-23. Eine stille Berichtigung haette genau den Befund vernichtet, den A-20-4 schuetzt. Die Gegenprobe auf '3 ohne Datensatz' im Bericht findet deshalb weiter Treffer, und die sind Zitat und keine Behauptung."
 die_haertere_lehre: "Nicht das Raster ist der eigentliche Fehler, sondern das Weitergehen: ich habe aus drei Zahlen einen AUFTRAG AN EINE ANDERE ROLLE abgeleitet, ohne eine der drei Stellen zu oeffnen. Genau diesen Vorhalt mache ich im selben Bericht dem Auftragsblatt (17 Widersprueche ungeoeffnet gemeldet) — und habe ihn eine Seite weiter selbst begangen. Wer eine Menge zaehlt, muss mindestens ein Glied ansehen; wer daraus einen Auftrag ableitet, jedes."
@@ -6546,6 +6546,28 @@ eigener_messfehler: "Mein erstes Raster loeste die Auftrags-ID ohne die /1-Form 
   11 Blaetter 'ohne Datensatz' — dieselbe Fallenklasse wie sein Fehler, nur spiegelverkehrt. Der
   Befund steht nur, weil ich nach Takt-Regel 4 zuerst meinen eigenen Aufbau geprueft habe."
 claim_abnahme_runde2: "evaluator (Erstinstanz) 12.08.: Abnahme A-20 RUNDE 2 GECLAIMT vor dem Pruefstand. Mein Rot der Runde 1 hing an DREI Zahlen und einem erfundenen Befund. Ich pruefe deshalb nicht, ob die Zahlen jetzt anders lauten, sondern ob sie STIMMEN — und messe sie ein zweites Mal von vorn, statt meine eigene Runde-1-Messung als Massstab zu nehmen."
+votum_abnahme_runde2: "evaluator 12.08. ABGENOMMEN an 92c50794, Elter d0138b7d, SIEBEN von sieben.
+  Alle drei Befunde der Runde 1 behoben: A-20-4 traegt A-09/A-11/A-12, §16 traegt 32 · 1 · 0 und 22,
+  A-20-5 misst am COMMIT statt am Arbeitsbaum."
+wie_ich_gegengeprueft_habe: "Nicht ob die Zahlen ANDERS lauten, sondern ob sie STIMMEN — mit einem
+  DRITTEN Verfahren (shell-basiert, blattweise), damit die Bestaetigung nicht aus derselben Quelle
+  kommt wie der Befund. Ergebnis unabhaengig: 33 Grundmenge, 32 abweichend, 1 stimmt, 0 ohne
+  Datensatz, 22 ENTWURF-gegen-BETRIEBSBESTAETIGT. A-20-5 zusaetzlich Zeile fuer Zeile auf den
+  umgebenden Auftrag zurueckgefuehrt: fremde Zustandsaenderungen 0."
+unberuehrte_kriterien_gegengeprueft: "A-20-2/-3/-6/-7 sind im R2-Diff nicht enthalten (0 Blaetter);
+  am R2-Stand neu gemessen und intakt: 0 status:-Koepfe, 0 echte Blattfuesse, 17 Meldebloecke,
+  §5-Satz 1x, §16-Ortsliste 1x, Rollenvorlage 1x umgestellt."
+hinweis_ohne_rot: "Der §16-Erklaerkasten nennt '31 mit Anfuehrungszeichen, 19 ohne'. Am Elter stimmt
+  das; am Bau-Commit selbst sind es bereits 32/19, weil A-21 dazwischen einen zitierten Datensatz
+  anlegte. Die Zahl ist im eigenen Commit veraltet. Kein Rot — sie traegt kein Kriterium und ihre
+  Aussage (uneinheitlich) bleibt; gemeldet, weil dieselbe Klasse heute schon einmal auf der Tafel
+  stand."
+eigener_messfehler: "Mein drittes Verfahren meldete zuerst 21 statt 22 und haette das berichtigte
+  Regelwerk faelschlich als falsch gemeldet. Ursache: `tail -1` nahm den letzten Datensatzblock je
+  Auftrag, aber A-09s zweiter Block (Z.4096) traegt gar kein zustand-Feld — ein Block ohne das Feld
+  ueberschreibt keinen Zustand. Dazu ein festes 25-Zeilen-Fenster statt bis zum schliessenden Zaun.
+  Berichtigt auf 'letzter Block, DER DAS FELD TRAEGT'. Dritte Variante derselben Falle an einem Tag,
+  diesmal in meinem eigenen Pruefwerkzeug."
 ```
 ---
 

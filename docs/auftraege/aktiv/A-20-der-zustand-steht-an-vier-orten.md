@@ -353,3 +353,114 @@ paragraf_18_waehrend_der_abnahme: "Beim ersten Schreibversuch wich docs/STATUS.m
   Der gepruefte Bau-Commit 48fac1f0 ist davon unberuehrt — nachgeprueft, er liegt unveraendert
   in der Historie, meine Messung gilt unveraendert."
 ```
+
+
+## §12.3 — Votum A-20 Runde 2 (Evaluator, 12.08.2026)
+
+```yaml
+auftrag: "A-20"
+runde: 2
+votum: ABGENOMMEN
+geprueft_an: "92c50794"
+elter: "d0138b7d"
+befund_von: "evaluator 99fc86cd"
+scope_diff: "3 Dateien, +108/-31: ARBEITSREGELN.md, BERICHT-A-20, STATUS.md. 0 Dateien
+  ausserhalb docs/. 0 Auftragsblaetter — die Bereinigung aus Runde 1 ist unberuehrt."
+pruefstand: "git worktree add -q --detach auf 92c50794."
+browserabnahme: "ENTFAELLT — keine sichtbare Wirkung, 0 Code-Dateien."
+paragraf_15: "GEGENSTANDSLOS — kein DB-Zugriff im Scope."
+
+wie_ich_geprueft_habe: "Der Claim sagt es zu: ich habe NICHT geprueft, ob die Zahlen jetzt anders
+  lauten als in Runde 1, sondern ob sie STIMMEN. Dafuer habe ich ein DRITTES Messverfahren
+  gebaut — shell-basiert und blattweise, nicht meine Runde-1-Implementierung wiederholt —, damit
+  die Bestaetigung nicht aus derselben Quelle kommt wie der Befund."
+
+messtisch:
+
+  A-20-1_paragraf16_ortsliste:
+    urteil: ERFUELLT
+    zahlen_mit_drittem_verfahren_bestaetigt: "Grundmenge 33 · abweichend 32 · uebereinstimmend 1
+      · ohne Datensatz 0 · Kopf ENTWURF waehrend BETRIEBSBESTAETIGT 22. Alle vier Werte des
+      berichtigten §16-Kastens, unabhaengig nachgemessen. Die 22er-Liste enthaelt A-09 und A-11 —
+      genau die beiden, die in Fassung 1 fehlten."
+    auch_der_folgesatz_berichtigt: "'29 Blaetter waren Fallen dieser Art' -> 32. Und der Absatz
+      nennt jetzt 'Zweiundzwanzig von 33'."
+    die_ursache_steht_im_regelwerk: "§16 traegt die Falle selbst: das Raster
+      `^auftrag: \"([^\"]+)\"` verlangte Anfuehrungszeichen, A-09/A-11/A-12 stehen ohne. Damit
+      steht die Fehlerquelle dort, wo die naechste Rolle sie liest, statt nur die Zahl."
+    HINWEIS_KEIN_ROT: "Der Erklaerkasten nennt '31 mit Anfuehrungszeichen, 19 ohne'. Am Elter
+      6af2572d stimmt das (31/19) — am Bau-Commit 92c50794 selbst sind es bereits 32/19, weil
+      A-21 dazwischen einen zitierten Datensatz angelegt hat, und an HEAD ebenso. Die Zahl ist
+      also im selben Commit veraltet, in dem sie geschrieben wird. Ich gebe deswegen KEIN Rot:
+      sie traegt kein Kriterium, ihre Aussage (die Felder sind uneinheitlich) bleibt unberuehrt,
+      und sie driftet strukturell mit jedem neuen Datensatz. Ich melde sie, weil dieselbe Klasse
+      — feste Zahl statt 'zum Zeitpunkt des Laufs' — heute schon einmal auf der Tafel stand."
+
+  A-20-2_paragraf5_entscheidung:
+    urteil: ERFUELLT
+    unberuehrt_gegengeprueft: "Der R2-Diff fasst §5 nicht an. Am R2-Stand nachgesehen: der Satz
+      'legt im SELBEN Commit Tafelzeile UND Datensatz-Block an' steht 1x in ARBEITSREGELN.md."
+
+  A-20-3_blaetter_bereinigt:
+    urteil: ERFUELLT
+    unberuehrt_gegengeprueft: "0 Auftragsblaetter im R2-Diff. Am R2-Stand neu gemessen:
+      status: im Kopf = 0, echte Blattfuesse = 0, Meldebloecke = 17. Die Entscheidung aus
+      Runde 1 (die 17 bleiben, sie tragen bau_commit und sind Belege) steht unveraendert."
+
+  A-20-4_jede_abweichende_kopie_benannt:
+    urteil: ERFUELLT
+    war_der_befund_der_runde_1: "Ja — und er ist behoben, ohne den Beleg zu vernichten."
+    gemessen: "Die Tabelle traegt jetzt 'A-09 · A-11 ENTWURF/BETRIEBSBESTAETIGT' und
+      'A-12 ENTWURF/ABGENOMMEN'. Der Kopf sagt 32 · 1 · 0. Die 22er-Liste ist vollstaendig."
+    was_ich_besonders_wuerdige: "Der Abschnitt 'Drei Blaetter haben KEINEN Datensatz' ist NICHT
+      geloescht, sondern als ZURUECKGEZOGEN mit Ursache und Wirkung stehen geblieben — samt der
+      Python-Zeile, die den Fehler erzeugt hat. Genau das verlangt A-20-4 dem Sinn nach: wer
+      loescht ohne zu sagen was gegolten hat, vernichtet einen Befund. Hier gilt es fuer den
+      eigenen Fehler."
+
+  A-20-5_kein_zustand_geaendert:
+    urteil: ERFUELLT
+    der_nachweis_ist_jetzt_einer: "Fassung 1 belegte mit `git diff --name-only -- docs/STATUS.md
+      -> 0`, einer Baummessung, die nach jedem Commit zwangslaeufig 0 ergibt. Fassung 2 misst am
+      COMMIT: 4 geaenderte zustand-/ballbesitz-Zeilen, 1 geaenderte Tafelzeile, 0 fremde."
+    selbst_nachgemessen: "`git show 48fac1f0 -- docs/STATUS.md` liefert genau 4 Zeilen
+      -zustand: IN_ARBEIT / -ballbesitz: generator / +zustand: CODE_FERTIG / +ballbesitz:
+      evaluator und ein Tafelzeilen-Paar. Ich habe zusaetzlich JEDE geaenderte Zeile auf ihren
+      umgebenden Auftrag zurueckgefuehrt: fremde Zustandsaenderungen 0. Die Behauptung ist
+      damit nicht nur berichtigt, sondern belegt."
+
+  A-20-6_rollenvorlagen:
+    urteil: ERFUELLT
+    unberuehrt_gegengeprueft: "Am R2-Stand: 1-planner/1-AUFTRAG.md traegt weiterhin 1x
+      'er steht an genau ZWEI Orten'."
+
+  A-20-7_B6_gewahrt:
+    urteil: ERFUELLT
+    unberuehrt_gegengeprueft: "0 Blaetter im R2-Diff — die Nachbesserung hat keine
+      Datei-Chirurgie angefasst, sie fasst drei Doku-Dateien an."
+
+mein_eigener_messfehler_in_dieser_runde:
+  - "Mein drittes Verfahren meldete zuerst 21 statt 22 und haette damit das berichtigte Regelwerk
+     faelschlich als falsch gemeldet. Ursache: ich nahm mit `tail -1` den LETZTEN Datensatzblock
+     je Auftrag — richtig nach der Regel 'der neuere Schreibvorgang gewinnt' —, aber A-09 hat
+     einen zweiten Block (Z.4096), der gar kein `zustand:`-Feld traegt. Ein Block ohne das Feld
+     ueberschreibt keinen Zustand; meine Runde-1-Fassung hatte das richtig gemacht, meine
+     Runde-2-Fassung nicht. Dazu las ich mit einem festen 25-Zeilen-Fenster statt bis zum
+     schliessenden Zaun. Berichtigt auf 'letzter Block, DER DAS FELD TRAEGT' — dann 22.
+     DAS IST DIE DRITTE VARIANTE DERSELBEN FALLE AN EINEM TAG, und diesmal in meinem eigenen
+     Pruefwerkzeug: ein Muster, das eine Form voraussetzt, misst die Form und nicht die Sache."
+
+zur_bemerkung_ueber_drei_rollen: "§16 sagt, die uneinheitliche Schreibweise habe 'drei Rollen
+  falsch messen lassen'. Ich habe die drei Stellen aufgesucht statt das Wort zu glauben:
+  Generator (3 ohne Datensatz, 48fac1f0), Evaluator (11 ohne Datensatz, mein erstes Raster,
+  99fc86cd) und Planner (f901483f). Der Planner schreibt dort allerdings selbst: 'MEIN ANTEIL
+  IST NICHT DIE MESSUNG SONDERN DIE UEBERNAHME'. Streng gelesen haben zwei Rollen falsch
+  gemessen und eine hat ungeprueft uebernommen. Die Formulierung stammt woertlich aus seiner
+  eigenen Botschaft; ich praezisiere sie hier, ohne daraus einen Mangel zu machen."
+
+was_dem_generator_zusteht: "Der Befund traf an der teuersten Stelle — einem Auftrag an eine
+  andere Rolle — und er hat ihn nicht kleingeredet, sondern die haertere Lehre selbst formuliert:
+  wer eine Menge zaehlt, muss mindestens ein Glied ansehen; wer daraus einen Auftrag ableitet,
+  jedes. Dass er dabei meinen spiegelverkehrten Fehler mit aufnimmt statt ihn gegen mich zu
+  wenden, ist der Grund, warum diese Runde in einem Durchgang durch ist."
+```
