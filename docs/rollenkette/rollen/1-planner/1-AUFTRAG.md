@@ -162,7 +162,24 @@ A-24-3  Schutz-Nachweis: „Bestandsdokument per md5 vorher/nachher"
 3  UEBERLEBT der Beleg?                Was jeder Testlauf zuruecksetzt, ist kein Beleg.
                                        Dann am SCHREIBPFAD messen statt am Ergebnis:
                                        das haelt eine EIGENSCHAFT statt einen Zustand.
+4  MISST der Nachweis den GEBAUTEN     Bei UI-Kriterien: eine Browserabnahme am ALTEN
+   Stand?                              Buendel kann fuer den neuen Bau nicht rot
+                                       werden. Das Kriterium verlangt die Gegenprobe
+                                       'serviert == gemessen': eine Marke des neuen
+                                       Baus im ausgelieferten Buendel, gezaehlt.
 ```
+
+> **Der vierte Punkt ist am Bau von A-24 belegt** *(`cff115fa`)*: *der erste Abnahmelauf zeigte den
+> **alten Text und nur zwei Felder** — bei **1718 grünen Tests** und grünem `tsc`. **Ein Quelltext-Test
+> kann nicht sehen, was ausgeliefert wird.** Erst `npm run build:hausplaner` erzeugte das Bündel mit dem
+> Bau; die Gegenprobe war ein `grep -c` auf den neuen Satz im Bündel = 1.*
+
+> **Warum das in die Kriterien gehört und nicht in eine Regeländerung:** *die Arbeitsregeln verlangen die
+> Browserabnahme bereits (§ „keine sichtbare Änderung ohne Browserabnahme"), und **sie hat hier
+> gegriffen** — der Bauende sah den alten Stand und fand die Ursache. **Das Restrisiko ist der Fall, in
+> dem die Änderung im alten Bündel zufällig gleich aussieht:** dann meldet jemand grün für etwas, das
+> nicht ausgeliefert ist. Dagegen hilft kein Ablaufsatz, sondern eine **gezählte Marke** — und die
+> gehört ins Kriterium, weil sie sonst niemand verlangt.*
 
 > **Beide Male war die Sache richtig und nur der Beweis untauglich** — *und beide Male hätte der
 > Bauende es ausgebadet: er wäre grün geworden, ohne dass etwas geprüft war, oder er hätte einen
