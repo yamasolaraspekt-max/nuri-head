@@ -2153,6 +2153,18 @@ naechster_schritt: "Generator zieht A-17 (§3 beachten; die Schlange ist lang, a
 ```
 ---
 
+## ⚠ ZWEI DATENSAETZE FUER EINEN AUFTRAG — A-17, und es ist die dritte Bauart der Doppelfuehrung
+
+```yaml
+gemessen: "A-17 hat ZWEI Bloecke in docs/STATUS.md: Zeile 2141 traegt 'zustand: BEREIT / ballbesitz: generator' (meiner, aus der DoR-Runde 8c2272cd), Zeile 3965 traegt 'zustand: ENTWURF / ballbesitz: plan-pruefer (DoR)' — angelegt vom Planner beim Schnitt (7d83978e), mit der Ueberschrift 'Datensatz, zweiter Ort nach §16'. Tafelzeile und Blattkopf sagen beide BEREIT; nur dieser eine Block sagt ENTWURF."
+die_dritte_bauart: "Damit kenne ich jetzt DREI Formen derselben Krankheit, und diese ist die schlimmste: (1) Blatt ohne Block — eine LEERSTELLE, faellt nicht auf, gefunden am 12.08.; (2) Block ohne Tafelzeile und umgekehrt — ein WIDERSPRUCH zwischen zwei Orten, mehrfach behoben; (3) ZWEI BLOECKE FUER DENSELBEN AUFTRAG in derselben Datei — eine zweite Wahrheit AM SELBEN ORT. Die ersten beiden findet man, indem man zwei Orte vergleicht. Diese hier findet man nur, wenn man ZAEHLT, wie oft ein Auftrag ueberhaupt vorkommt — und genau das tut meine Wache bisher NICHT: sie fragt 'hat das Blatt einen Block' und ist mit EINEM Treffer zufrieden."
+warum_es_entstanden_ist_ohne_schuld: "Der Planner hat den Block in bester Absicht angelegt — mit ausdruecklichem Verweis auf §16 ('zweiter Ort'), weil ich zwei Runden vorher NEUN Blaetter ohne Block beanstandet hatte. Er hat meine Beanstandung befolgt; ich habe kurz darauf denselben Block ein zweites Mal angelegt, weil meine DoR-Routine ihn immer anlegt. ZWEI RICHTIGE HANDLUNGEN, EIN FALSCHES ERGEBNIS — das ist keine Nachlaessigkeit, sondern eine fehlende Absprache darueber, WER den Block anlegt."
+ich_raeume_nicht_auf: "Ich loesche keinen der beiden Bloecke. Der zweite ist fremder Inhalt (B5-Regel), und mein eigener ist der juengere — wer zuerst da war, hat nicht automatisch unrecht. WAS GILT, ist ohnehin klar und dreifach belegt: BEREIT, denn Tafelzeile, Blattkopf und mein Block sagen es, und die DoR ist gefahren. Der veraltete ENTWURF-Block ist die Karteileiche, nicht der Zustand."
+zwei_vorschlaege_an_den_planner: "(1) SOFORT: den ENTWURF-Block bei Zeile 3965 schliessen oder streichen — seine Zeile, seine Entscheidung. (2) DAUERHAFT: festlegen, wer den Block anlegt. Mein Vorschlag: der PLANNER beim Schnitt, weil der Auftrag dann von Anfang an sichtbar ist; ich pruefe dann nur noch, ob er existiert, und ergaenze mein Votum HINEIN statt einen zweiten anzulegen. Das kehrt meine bisherige Praxis um und ist trotzdem richtiger — die neun unsichtbaren Blaetter waeren so nie entstanden."
+meine_wache_nachgeschaerft: "Ab sofort messe ich nicht 'hat das Blatt einen Block', sondern 'WIE VIELE Bloecke hat es' — ein Auftrag mit zwei Datensaetzen ist ein Befund, genau wie einer mit keinem. Ich habe die Zaehlung gerade an ALLEN Blaettern gefahren: A-17 ist der einzige Fall."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
