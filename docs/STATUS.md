@@ -49,7 +49,7 @@
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
-| **W-34** Geführte Planung (Stepper) | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
+| **W-34** Geführte Planung (Stepper) | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6404,6 +6404,16 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## A-21 CODE_FERTIG geprueft — meine beiden gemeldeten Punkte sind gebaut (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "Zwei Commits, beide Scopes selbst gemessen. BAU 74efb8c2: drei Dateien — ARBEITSREGELN (+74), Bericht (+167), STATUS (10/3). FERTIGMELDUNG 869c560d: zwei Dateien — Bericht (8/1), STATUS (4/2). Nichts ausserhalb. Ball beim Evaluator."
+die_trennung_ist_klug_und_gehoert_gewuerdigt: "Er hat die Fertigmeldung VOM BAU GETRENNT, mit Begruendung: A-21-6 verlangt den Nachweis, dass KEIN anderer Auftragszustand geaendert wurde — gemessen per git diff auf docs/STATUS.md. Laegen Bau und Zustandswechsel in EINEM Commit, zeigte dieser Diff die eigene Zustandsaenderung mit, und das Kriterium waere nicht sauber messbar. Das ist dieselbe Einsicht wie bei A-21-7 (Messung am Elter statt am Arbeitsbaum): wer einen Nachweis fuehrt, muss den Zeitpunkt so waehlen, dass die eigene Handlung ihn nicht verfaelscht."
+meine_befunde_sind_umgesetzt_selbst_nachgemessen: "Die zwei Punkte, die ich am Vormittag als offen bei Yama gemeldet hatte, sind gebaut — und ich habe die Gegenprobe gefahren statt sie zu glauben: E1 stand bei 0 Treffern in ARBEITSREGELN.md, jetzt 2. E3 stand bei 0, jetzt 1. ERLEDIGT in §3 stand bei 0, jetzt 2. W-21L trug ZURUECKGESTELLT, jetzt DECISION_BLOCKED. Vier Zahlen, alle von mir vorher UND nachher gemessen — das ist die Form, in der eine Rot-Lage ihren Bau belegt."
+was_daran_fuer_mich_zaehlt: "Der Weg dieses Auftrags ist der vollstaendigste des Tages: aus meiner Bestandsaufnahme wurde ein Befund, aus dem Befund ein Blatt, aus meinem FEHLER an diesem Blatt eine Berichtigung, aus der Berichtigung eine achte Pflichtpruefung des Planners — und jetzt steht das Ergebnis im Regelwerk. Dass mein Zaehlfehler auf dem Weg lag, hat den Auftrag nicht aufgehalten, sondern praeziser gemacht."
+```
+---
+
 ## MEIN FEHLER an A-21: ich habe GEZAEHLT und es MESSEN genannt (plan-pruefer 12.08.)
 
 ```yaml
@@ -6898,7 +6908,8 @@ regel_A_20_2_auf_mich_selbst_angewandt: "Blatt, Tafelzeile und dieser Block in E
 
 ```yaml
 auftrag: "W-34"
-zustand: BEREIT
+zustand: IN_ARBEIT
+operanden_vor_dem_ziehen_geprueft: "Beide Quellen gemessen statt geglaubt: GuidedView.tsx 165 Zeilen, fahrschritte.ts 202 — beide exakt wie im Blatt. statusAus an :43-49 woertlich gelesen, fuenf Zweige in der genannten Reihenfolge, und SCHRITTE_OHNE_GRUNDLAGE beginnt an :56. Der BLATTKOPF traegt noch dor_beleg 'steht aus — plan-pruefer' und ballbesitz 'plan-pruefer (DoR)'; das ist ein veralteter Stand aus dem Schnitt, seit A-20 ist docs/STATUS.md die Wahrheit und hier steht die bestandene DoR. Kein Mangel, nur benannt, damit niemand den Blattkopf fuer eine Sperre haelt."
 ballbesitz: generator
 titel: "Elf Schritte, und sechs von ihnen koennen nichts bestaetigen"
 basis_sha: 6682b83c
