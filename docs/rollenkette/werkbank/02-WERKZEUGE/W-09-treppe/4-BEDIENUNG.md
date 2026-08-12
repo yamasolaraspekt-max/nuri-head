@@ -1,43 +1,34 @@
-# W · treppe — BEDIENUNG
+# W-09 · Treppe — BEDIENUNG
 
-## Aufruf
+## Ein Werkzeug gibt es — die Engine-Fläche
 
-| Weg | Wie |
-|---|---|
-| Werkzeugleiste | <Symbol, Position, Beschriftung> |
-| Tastenkürzel | <Taste> |
-| Kontextmenü | <ja/nein, wann> |
+`engine-treppe` in `resources/planner/hausplaner/app/dashboard/enginePanels.ts:121`,
+Titel **„Treppen-Auslegung"**. *Am Bildschirm gesehen: sie zeigt heute die Plakette
+„✓ Alle Prüfungen bestanden".*
 
-## Ablauf am Bildschirm
+## Was der Anwender eingibt
 
-| Schritt | Anwender tut | Bildschirm zeigt |
-|---|---|---|
-| 1 | | |
-| 2 | | |
+Geschosshöhe, gewünschte Steigungshöhe, Auftritt, **Nutzungsbereich** — und **freiwillig**
+Laufbreite und Durchgangshöhe.
 
-## Rückmeldungen
+**Die letzten beiden sind der Punkt, den man kennen muss:** *werden sie nicht angegeben, werden sie
+auch nicht geprüft* (`resources/planner/hausplaner/geometry/treppenBerechnung.ts:93`, `:97`). **Das Ergebnis sagt trotzdem
+„bestanden".** Siehe `7-GRENZEN`.
 
-| Lage | Anzeige | Ton |
-|---|---|---|
-| Alles gut | | sachlich |
-| Eingabe unvollständig | | hinweisend |
-| **Nicht möglich** | | **erklärend — was und warum** |
+## Der Nutzungsbereich ändert die Norm
 
-> **Pflicht:** Für jede Absage aus `7-GRENZEN.md` muss hier ein Satz stehen, den
-> ein Handwerker versteht. Nicht „DachGeometrieUngueltig", sondern
-> „Für diesen Grundriss kann kein Walmdach berechnet werden, weil er einspringende
-> Ecken hat. Mögliche Wege: Grundriss begradigen oder Flachdach wählen."
+```text
+treppenBerechnung.ts:53-55
+  Bereich    Steigung hoechstens   Auftritt mindestens   Laufbreite mindestens
+  wohnung          200 mm                230 mm                 800 mm
+  gebaeude         190 mm                260 mm                1000 mm
+  aussen           160 mm                300 mm                1000 mm
+```
 
-## Abbruch
+**Dieselbe Treppe ist in der Wohnung zulässig und im Gebäude nicht.** *Der Bereich ist kein
+Komfortschalter, sondern die Wahl der Grenzwerte.*
 
-- **Esc** bricht ab. Danach ist der Zustand **exakt** wie vorher.
-- Halbfertiges wird nie gespeichert.
+## Was er zurückbekommt
 
-## Tastenkürzel während des Werkzeugs
-
-| Taste | Wirkung |
-|---|---|
-| Esc | abbrechen |
-| Eingabe | bestätigen |
-| Umschalt | <z.B. auf 45°-Winkel zwingen> |
-| Alt | <z.B. Fang aussetzen> |
+Maße **und eine Prüfliste mit sieben Einträgen**, jeder mit Klartext, Ist-Wert und Sollwert —
+nicht nur ein Urteil.

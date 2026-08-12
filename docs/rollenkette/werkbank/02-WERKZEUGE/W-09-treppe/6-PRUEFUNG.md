@@ -1,37 +1,23 @@
-# W · treppe — PRÜFUNG
+# W-09 · Treppe — PRÜFUNG
 
-> **Regel: jedes Kriterium muss VOR dem Bau wirksam rot sein.**
-> Ein Kriterium, das schon grün ist, bevor gebaut wurde, prüft nichts.
+## Was eine Prüfung hier belegen muss
 
-## Abnahmekriterien
+1. **Dass ein Fehler ein Fehler bleibt.** Drei der sieben Prüfungen sind als `fehler` eingestuft;
+   sie allein entscheiden über `bestanden`.
+2. **Dass eine fehlende Eingabe nicht als bestanden zählt.** Laufbreite und Durchgangshöhe werden
+   **nur geprüft, wenn sie da sind** — siehe `7-GRENZEN`.
+3. **Dass der Nutzungsbereich wirklich die Grenzwerte wechselt** — dieselbe Treppe, drei Bereiche,
+   drei Ergebnisse.
+4. **Dass die Meldung den Ist-Wert nennt**, nicht nur „nicht bestanden".
 
-| Nr | Kriterium | Rot-Beleg vor dem Bau | Wie gemessen |
-|---|---|---|---|
-| K-1 | | | |
-| K-2 | | | |
+## Der Prüfpunkt, der leicht übersehen wird
 
-## Fangprobe (Mutationsprobe)
+**Das Schrittmaß ist gestaffelt** (`resources/planner/hausplaner/geometry/treppenBerechnung.ts:87`): innerhalb 590–650
+bestanden, innerhalb 570–670 **Warnung**, sonst **Fehler**. *Eine Prüfung, die nur den grünen und
+den roten Fall kennt, sieht die mittlere Stufe nicht — und die ist der häufigste Ausgang.*
 
-<Eine absichtlich eingebaute Fehlerstelle, die von den Kriterien gefunden werden MUSS.
-Wenn die Suite trotz eingebautem Fehler grün bleibt, prüfen die Kriterien nichts.>
+## Was ich NICHT geprüft habe
 
-| Mutation | Muss erkannt werden von |
-|---|---|
-| | |
-
-## Automatische Tests
-
-| Datei | Prüft |
-|---|---|
-| | |
-
-## Sichtprüfung (falls die Oberfläche betroffen ist)
-
-- [ ] 1440 px
-- [ ] 1024 px
-- [ ] 375 px
-- [ ] Meldung bei Absage lesbar und vollständig sichtbar
-
-## Bestandsprobe
-
-- [ ] Ein vor der Änderung gespeichertes Dokument lädt danach unverändert
+**Ob DIN 18065 mehr verlangt als diese sieben Regeln.** Das ist eine Fachfrage; am Code ist nur
+messbar, **was geprüft wird**, nicht **was die Norm insgesamt fordert**. *Als Frage benannt, nicht
+als Zusage.*

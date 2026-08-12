@@ -1,47 +1,64 @@
-# W · treppe — GRENZEN
+# W-09 · Treppe — GRENZEN
 
-> **Dieses Blatt ist Pflicht.**
-> Der teuerste Fehler des Projekts bisher: ein Dach, das bei nicht-rechteckiger
-> Kontur unsichtbar verschwand statt eine Absage zu geben. Die Domäne verweigerte
-> korrekt — der Renderer schluckte die Absage mit `catch { continue; }`.
-> **Ein Werkzeug ohne benannte Grenze baut genau diesen Fehler wieder ein.**
+## Der Kern: was `bestanden` bedeutet — und was nicht
 
-## Was dieses Werkzeug NICHT kann
+`resources/planner/hausplaner/geometry/treppenBerechnung.ts` prüft **sieben** Regeln:
 
-| Fall | Warum nicht | Was der Anwender stattdessen sieht |
-|---|---|---|
-| | | |
-
-## Die Absagekette
-
-Für jeden Fall oben muss die Kette vollständig sein:
-
-```
-Schicht 1/2 wirft benannten Fehler
-        ↓
-Schicht 3 fängt und übersetzt
-        ↓
-Schicht 4 reicht DURCH — kein catch/continue
-        ↓
-Schicht 5 zeigt dem Anwender einen verständlichen Satz
-```
-
-| Fall | Fehlername | Wer fängt | Anwendertext steht in |
+| Prüfung | Zeile | Schwere | wirkt auf `bestanden`? |
 |---|---|---|---|
-| | | | 4-BEDIENUNG.md |
+| `steigung-max` | **83** | **fehler** | **ja** |
+| `auftritt-min` | **85** | **fehler** | **ja** |
+| `schrittmass` | **87** | **fehler ODER warnung** (gestaffelt) | **nur im Fehlerfall** |
+| `bequemlichkeit` | **89** | warnung | **nein** |
+| `sicherheit` | **91** | warnung | **nein** |
+| `laufbreite` | **94** | fehler | **ja — aber nur wenn angegeben** |
+| `durchgangshoehe` | **98** | fehler | **ja — aber nur wenn angegeben** |
 
-## Fänger-Prüfung
+**Die Regel dahinter, wörtlich:**
 
-- [ ] Jeder Fehlerpfad ist durch einen Test belegt, der prüft:
-      **die Meldung erreicht die Oberfläche**
-- [ ] Kein `catch { }` ohne Weiterreichen im Pfad dieses Werkzeugs
-- [ ] Kein stilles `return` bei ungültiger Eingabe
+```text
+bestanden: !p.some((x) => x.schwere === 'fehler' && !x.bestanden)
+```
 
-## Bekannte Ungenauigkeiten
+### Daraus folgen zwei Sätze, die im Blatt stehen müssen
 
-| Größe | Abweichung | Ab wann stört es |
+**1 · Eine verletzte Bequemlichkeits- oder Sicherheitsregel lässt `bestanden` auf `true`.**
+Beide sind `warnung`. *Die Treppe ist dann normwidrig unbequem und gilt trotzdem als bestanden.*
+
+**2 · Zwei Prüfungen laufen nur, wenn die Eingabe da ist.** Fehlt die Laufbreite, wird sie nicht
+geprüft — **und `bestanden` bleibt `true`**, obwohl die Treppe zu schmal sein könnte.
+
+> **`bestanden` heißt: „keine der DURCHGEFÜHRTEN harten Prüfungen ist verletzt."**
+> **Es heißt NICHT: „die Treppe entspricht DIN 18065."**
+> *Das ist eine **Teilaussage**, und die Plakette „Alle Prüfungen bestanden" sagt mehr, als die
+> Rechnung weiß — zweimal: sie verschweigt die Warnungen und die nicht durchgeführten Prüfungen.*
+
+## Was bei einer Normverletzung passiert — kein stilles Nichts
+
+**Gemessen an `resources/planner/hausplaner/geometry/treppenBerechnung.ts:83-99`:** jede verletzte Regel erzeugt einen
+Prüfeintrag **mit Klartext, Ist-Wert, Sollwert und Nutzungsbereich**, zum Beispiel:
+
+```text
+"Steigung 205,0 mm > zulaessig 200 mm (wohnung)."
+"Auftritt 215,0 mm unter Mindestmass 230 mm (wohnung)."
+```
+
+**Kein Default, keine stille Korrektur, kein Zurechtbiegen.** *Die Auflage ist damit erfüllt, ohne
+dass etwas gebaut werden muss — das gehört gesagt, weil ein erfüllter Auftrag ohne Bau leicht wie
+ein übersehener aussieht.*
+
+## Der Nutzungsbereich ist eine Normwahl
+
+Dieselbe Treppe: `wohnung` zulässig, `gebaeude` nicht (`:53-55`). **Wer den Bereich falsch setzt,
+bekommt ein richtiges Ergebnis zur falschen Frage.**
+
+## Zulieferung an A-15 — Norm und Folge, ohne Klassifikation
+
+| Modul | nennt eine Norm? | was eine Verletzung bedeutet |
 |---|---|---|
+| `treppenBerechnung.ts` | **ja** — `:5` und `:58` (DIN 18065) | Sturzgefahr: Steigung, Auftritt, Laufbreite, Durchgangshöhe sind Sicherheitsmaße |
+| `treppe2D.ts` | **ja** — `:6`, verweist auf `berechneTreppe` (DIN 18065) | zeichnet nur; eine Verletzung entsteht hier nicht, sie wird **abgebildet** |
+| `treppe3D.ts` | **nein** | dieselbe Lage: Darstellung, keine Prüfung |
 
-## Was später kommen könnte
-
-<Absichtlich weggelassene Funktionen, damit sie nicht als Fehler gemeldet werden.>
+> **Das ist Zulieferung, keine Klassifikation.** *Welche Klasse daraus folgt, entscheidet A-15 nach
+> Yamas Achse 2 — nicht dieses Blatt.*

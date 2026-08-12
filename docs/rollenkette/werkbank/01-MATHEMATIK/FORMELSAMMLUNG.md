@@ -824,3 +824,36 @@ Dachhaken  6 /Stk    Haken geschliffen 5    Schiene 4 /lfm  Modul 12 /Stk
   Erfundenem.** Bleibt als markierter Platzhalter stehen, damit sichtbar ist,
   dass hier echte Werte fehlen.
 - **Belegstelle:** `dachdecker_pro_3d.tsx:194–198`
+
+#### Vierter Fundort — im Produktivbaum, aber **ohne Aufrufer** (Planner 12.08., A-16)
+
+*Yamas Antwort auf den M-02-Bericht führte hierher. Die Zahlen stehen zeichengenau dort — die
+Auslieferung nicht. Beides gehört in dieselbe Zeile, sonst wird aus einer Sperre eine Panik oder
+eine Beruhigung, und beide wären falsch:*
+
+```text
+resources/views/admin/layouts/roof.blade.php:73    // time assumptions (minutes) – adjust to your company values
+                                            :74    const TIME_VARS = { … elf Werte … }
+                                          :1672    const laborCost = (installMinutes / 60) * 65;
+                                          :2266    'Montage (Arbeit)'  →  ein Euro-Betrag
+
+GEMESSEN, weil "steht in resources/views" wie Auslieferung aussieht und keine ist:
+  statische View-Referenz  "admin.layouts.roof" / "layouts.roof" / "layouts/roof"   0 / 0 / 0
+  Route::get('roof')       zeigt auf admin/roof_config/roof.blade.php  →  0x TIME_VARS
+  Historie der Datei       EIN Commit, e14cd1ec "Checkpoint: save WIP" (26.06.2026)
+  Serverschreibpfade       0 (kein fetch, kein axios, kein <form action>)
+  Reichweite dieser Aussage: kein STATISCHER Aufrufer. Dynamische View-Namen sind nicht
+  ausgeschlossen (ProductController.php:443 ruft view($view, …)) — offen in A-16-1.
+```
+
+**Was das für die Ampel bedeutet: 🔴 bleibt, breiter begründet statt schärfer.** *Vier Fundorte,
+null unabhängige Herkunftsangaben — die Sperre ist damit doppelt belegt. Sie wird **nicht** zur
+Meldung „live", weil kein Bildschirm diesen Betrag heute zeigt. **Der zweite unbelegte Wert steht
+daneben und ist keine Zeit, sondern ein Preis:** `* 65` — Stundensatz, hart im Code, ohne Quelle,
+ohne Datum, ohne Gewerk. Er wird in A-16-3 gesondert geführt, weil er sonst unter „Zeitwerte"
+mitläuft und dort niemand nach ihm sucht.*
+
+> **Die Gefahr liegt nicht in der Auslieferung, sondern in ihrer Leichtigkeit:** *2.688 Zeilen
+> fertige PV-Konfigurator-Oberfläche warten auf drei Zeilen in `web.php`. Der Aufwand für „live"
+> ist kleiner als der Aufwand, die Sperre zu lesen. Deshalb A-16-2: **der Vermerk gehört an die
+> Zahl, nicht nur in dieses Blatt.***

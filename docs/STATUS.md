@@ -3818,3 +3818,77 @@ befund: "BERECHTIGT, P1, Klasse BEWEIS — vom Evaluator gefunden, von mir behob
 belege: "Tafelzeilen mit RELEASE_FREI: vorher 11, nachher 0 (gemessen)"
 nicht_von_mir: "W-09 und W-15 — fremder Ball, Planner/Plan-Pruefer"
 ```
+
+## OFFENE POSTEN aus dem M-02-Bericht — als Zeile geführt, nicht als Kuriosität (Planner 12.08.)
+
+*Yamas Auflage: „Führe es als offene Zeile, nicht als Kuriosität. (Eine Notiz über eine Lücke ist
+kein Plan für die Lücke.)"*
+
+| Posten | Ist | Soll | Drei mögliche Ursachen | Ball |
+|---|---|---|---|---|
+| **M-02-Kopienzahl** | **drei** Kopien gemessen, alle byte-identisch | `VORGEHEN.md:43` sagt **„fünfmal"** | (1) zwei Kopien gelöscht · (2) zwei umbenannt und nicht mehr als M-02 erkennbar · (3) die Zahl in `VORGEHEN.md` war **nie** richtig | **offen** — keine Ursache behauptet, weil keine gemessen ist |
+| **`grundlage`-Zeile A-14** | nennt **vier** Sonderlasten | F-051-Nachbar N-003 nennt **sechs** (Schnee-Verwehung, Lastkombinationen fehlen) | P2-Befund des Release-Prüfers `93b591e1`, von mir bestätigt und verschärft: die Zeile nennt Schnee **positiv** — das Fehlen der Verwehung ist damit lesbar als „Schnee ist erfasst" | **Yama** — §12.5-Nachbesserung vor der Veröffentlichung oder eigenes Blatt danach |
+| **`BERICHT-A-15-klassifikation.md`** | **erledigt, kein Verlust** | — | halber `git mv` in `82d7c31e`: neuer Pfad committet, Löschung des alten nicht; `ls-files` nennt beide | Generator (seine Datei) |
+
+> **Warum der erste Posten offen bleiben muss:** *drei Ursachen, null Messungen. Eine davon zu nennen
+> wäre H-2 — ein Fachurteil, das wie eine Messung aussieht. Der Posten kostet eine Zeile und ist
+> billiger als eine falsche Erklärung.*
+
+---
+
+## ACHSE-2-VORSCHLAG GEPRÜFT UND BESTÄTIGT (Release-Prüfer in Yamas Vertretung, 12.08.)
+
+**Anweisung im Wortlaut, 12.08.:** *„lies nach was evaluator und generator geschrieben haben, sind
+davon nicht aufgaben an uns gerichtet"* — der A-15-Achse-2-Vorschlag (`82d7c31e`) war die einzige
+echte Aufgabe darin, und sie war an Yama gerichtet. **Ich habe sie geprüft, nicht durchgewinkt.**
+
+### Fünf Zeilen bestätige ich — sie folgen aus dem, was der Code über SICH SELBST sagt
+
+```text
+sparrenBerechnung   PERSONENSCHADEN  FACHAUSSAGE   Standsicherheit. Code Z.10-12 sagt selbst
+                                                   "Ersetzt KEINE prueffaehige Statik".
+                                                   ERLEDIGT — A-14 hat es umgesetzt.
+abwassergefaelle    BAUSCHADEN       FACHAUSSAGE   Rueckstau. DIN 1986-100 (vereinfacht, Z.4).
+                                                   Stehendes Abwasser ist Feuchte am Bau.
+fbhAuslegung        FEHLAUSLEGUNG    FACHAUSSAGE   Code Z.6-7: "GRENZE: hydraulischer Abgleich
+                                                   bleibt Fach-Engine". Anlage zu klein/gross.
+heizkreisVerteiler  FEHLAUSLEGUNG    FACHAUSSAGE   dieselbe GRENZE-Zeile, Durchfluss/Verteiler.
+kuecheArbeitsdreieck KOMFORT         HINWEIS       DIN 18022 IST eine Komfortnorm, und Norm und
+                                                   "Ergonomie-Pruefung" stehen in DERSELBEN Zeile.
+```
+
+**Warum das keine Fachentscheidung von mir ist:** *In allen fünf Fällen sagt der Code seine eigene
+Reichweite. Ich ordne nicht zu, was ich nicht weiß — ich bestätige, was dort steht.* Besonders
+sauber: Bei `heizkreisVerteiler` hat der Generator die höhere Klasse **nicht** gesetzt und es
+begründet — *„ein falscher Durchfluss macht die Anlage schlecht, nicht das Gebäude nass"*. Das ist
+eine Unterscheidung, keine Bequemlichkeit.
+
+### Eine Zeile bleibt ausdrücklich OFFEN — und die gehört Yama
+
+```text
+wandaufbau   BAUSCHADEN (vorlaeufig)   Der Generator hat aus ZWEIFEL die hoehere Klasse gesetzt,
+                                       nach der Regel, die ich am 12.08. gegeben habe.
+             OFFEN ist:                deckt die Engine den TAUPUNKT ab oder nur den U-Wert?
+                                       Am Code NICHT entscheidbar — derselbe Rechenweg traegt
+                                       beides.
+             FOLGE:                    solange offen, bleibt BAUSCHADEN stehen. Die Senkung auf
+                                       FEHLAUSLEGUNG braucht Fachwissen, das weder der Generator
+                                       noch ich hat. "Die strengere Klasse kostet eine Rueckfrage,
+                                       die mildere den Schimmel" — sein Satz, und er traegt.
+```
+
+### Was daraus folgt — ein Folgeauftrag, den ich NICHT selbst schneide
+
+**Nach dem bestätigten Vorschlag müssen ZWEI Engines zusätzlich schweigen:** `abwassergefaelle`
+und `fbhAuslegung` (beide haben ein Panel und urteilen). `heizkreisVerteiler` und `wandaufbau`
+haben **kein eigenes Panel** — bei `wandaufbau` aus einem anderen Grund als Schweigen: *es kommt
+nie zu Wort.* `kuecheArbeitsdreieck` behält sein Urteil, **Hinweise dürfen urteilen.**
+
+```yaml
+bestaetigt: "5 von 6 Zuordnungen — je am Selbstzeugnis des Codes belegt"
+offen_bei_yama: "wandaufbau: deckt die Engine den Taupunkt ab? Nur diese EINE Frage."
+folgeauftrag: "zwei Engines nach A-14-Muster zum Schweigen bringen — Schnitt beim Planner,
+               nicht bei mir. Vier Treppen-Zeilen fehlen weiterhin als W-09/1-Zulieferung."
+grenze_die_ich_ziehe: "ich bestaetige, was der Code ueber sich selbst sagt. Ich ordne NICHT zu,
+                       was nur ein Fachmann wissen kann — deshalb bleibt wandaufbau offen."
+```
