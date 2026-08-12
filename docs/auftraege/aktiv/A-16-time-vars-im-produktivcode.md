@@ -225,3 +225,91 @@ messung_liegt_vor: "Aufrufer 0/0/0 statisch · Route zeigt auf andere Datei · 0
                     · Einheit Geruest korrekt · Vorbehalt vorhanden aber an falscher Groesse"
 kein_bau_ohne: "Yamas Firmenwerte (Punkt 4) — die Zahlen bleiben unberuehrt"
 ```
+
+## §11 — Votum A-16 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "A-16"
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+abnahme_commit: "ad13b732"
+elter: "f37423fa"
+pruefstand: "worktree --detach auf ad13b732 und f37423fa"
+
+messtisch_alle_sieben:
+  A-16-5: GRUEN — DER KERN, zeichengenau gegen den Elter
+    beleg: "roof.blade.php: 43 Einfuegungen, 0 LOESCHUNGEN. Es kann keine Ziffer bewegt worden
+            sein, weil keine Zeile ersetzt wurde. Zusaetzlich die elf Werte einzeln extrahiert
+            und gehasht: Elter und Bau 4f1ba659… — IDENTISCH, je 11 Eintraege.
+            Die laborCost-Zeile ist zeichengleich (nur die Zeilennummer wandert 1672 -> 1715)."
+    meine_falle_dabei: "Mein erster Vergleich nahm 'grep -A14 TIME_VARS' und meldete
+            verschiedene md5 — weil das Raster die NEUEN Kommentarzeilen mitfing, die selbst
+            Ziffern tragen (F-051, 12.08.). Beinahe 'die Ziffern haben sich bewegt' gemeldet.
+            Und mein zweites Raster [A-Z_]+ verschluckte SCAFFOLD_M2, weil der Name eine Ziffer
+            traegt — 10 statt 11. Erst [A-Z0-9_]+ war richtig. Zweimal mein Raster, keinmal der Bau."
+  A-16-1: GRUEN — abschliessend, und ich habe beide Richtungen nachgefahren
+    statisch: "grep -rn 'admin.layouts.roof' app/ routes/ resources/views/ -> EIN Treffer, und
+            der ist SEIN EIGENER Kommentar in der Datei selbst (roof.blade.php:91). Also 0
+            echte Aufrufer."
+    dynamisch: "grep nach view() mit Variable im ganzen Haus -> drei Treffer, davon zwei
+            FUNKTIONSDEFINITIONEN (draf_view($id), view($id)) und EINE echte Aufrufstelle:
+            app/Http/Controllers/Product/ProductController.php:443 'view($view, compact('.
+            Dort geoeffnet: $view wird zwei Zeilen davor gesetzt auf genau zwei feste Namen —
+            '…partials.product_cards' oder '…partials.product_list'. Keiner davon diese Datei."
+    ergebnis: "Seine Aussage 'kein Aufrufer, statisch UND dynamisch geprueft' haelt, und die
+            Reichweite steht dabei. Das ist H-8(b) in seiner eigenen Anwendung: der ORT ist
+            kein Beleg fuer die Wirkung."
+  A-16-2: GRUEN
+    beleg: "Sperrvermerk direkt ueber TIME_VARS (:88-101) mit F-051, den vier Fundorten, dem
+            was je Wert fehlt, der Reichweite und dem Verweis aufs Blatt.
+            Gegenprobe des Kriteriums selbst gefahren: von den 43 neuen Zeilen sind
+            NICHT-Kommentarzeilen = 0. Keine geaenderte Ziffer, ausschliesslich Kommentar."
+  A-16-3: GRUEN
+    beleg: "Eigener Vermerk ueber der laborCost-Zeile (:1705-1714) mit denselben drei Fragen
+            (Quelle, Datum, Gewerk) und ausdruecklich OHNE Vorschlagswert — mit der richtigen
+            Begruendung: 'ein Vorschlag waere genau die falsche Zahl, die Yamas Auflage
+            verbietet'. Und der Satz, der die Sache trifft: '* 65' ist ein PREIS, keine Zeit."
+  A-16-4: GRUEN
+    beleg: "Die Zeile mit dem falschen Vorbehalt ist ZEICHENGLEICH geblieben — Elter :2255
+            gegen Bau :2298, byteweise verglichen: gleich. Nur die Zeilennummer wandert durch
+            die eingefuegten Vermerke."
+    im_blatt_festgehalten: "Das Blatt nennt sie in Z.99 im Wortlaut und begruendet in Z.106,
+            warum sie der falsche Vorbehalt ist. Die Umhaengung geschieht erst bei Auslieferung
+            — mit dem richtigen Grund: eine Sichtaenderung an einer NICHT ausgelieferten Datei
+            ist nicht pruefbar, weil es keinen Bildschirm gibt, an dem ich sie messen koennte."
+  A-16-6: GRUEN
+    beleg: "FORMELSAMMLUNG +33/-0. Der Nachtrag nennt den vierten Fundort MIT gemessener Lage
+            ('im Produktivbaum, kein statischer Aufrufer'), fuehrt beide Zeilenstaende (vor und
+            nach dem Bau, 'damit niemand zweimal sucht') und schliesst ausdruecklich die vorher
+            offene Zeile ueber die dynamischen View-Namen. Die Ampel bleibt 🔴 — breiter
+            begruendet, nicht schaerfer."
+  A-16-7: GRUEN — jeden Begriff selbst nachgezaehlt
+    beleg: |
+      fetch(  0 · axios 0 · $.post 0 · $.ajax 0 · <form 0 · XMLHttpRequest 0 · sendBeacon 0
+      action= 7  -> GELESEN statt gezaehlt: :1841 data-action="next", :1845 data-action="offer",
+                    :1852 data-action="back" — Knopf-Attribute, kein Formularziel.
+    bewertung: "0 Schreibpfade zum Server. Angebot -> Auftrag -> Rechnung ist aktenkundig
+            unberuehrt. Er hat die sieben action-Treffer selbst gelesen statt sie als Befund
+            zu melden — B5 in eigener Sache."
+
+must_preserve:
+  beleg: "Vier Dateien im Bau: der Bericht, STATUS.md, FORMELSAMMLUNG (+33/-0) und die
+          Blade-Datei (+43/-0). Kein anderer Produktivcode, keine Testdatei."
+
+was_diesen_bau_heraushebt:
+  - "Die Ziffern sind nicht 'nicht geaendert worden' — sie KONNTEN nicht geaendert werden,
+     weil der Bau 0 Loeschungen hat. Das ist die staerkste Form dieses Nachweises."
+  - "Er schliesst eine Zeile, die vorher als OFFEN in der Formelsammlung stand, statt sie
+     stehen zu lassen: die dynamischen View-Namen sind jetzt ausgeschlossen, mit der
+     Aufrufstelle und den zwei moeglichen Namen im Klartext."
+  - "Der Sperrvermerk steht AM ORT DER ZAHLEN, nicht nur im Blatt — wer die Datei oeffnet,
+     sieht die Sperre, ohne das Auftragswesen zu kennen."
+
+zusammenfassung: "Sieben von sieben. Der Kern ist so belegt, wie ein must_preserve belegt sein
+     soll: 0 Loeschungen, elf Werte gehasht und identisch, die 65 zeichengleich. Die
+     Aufrufer-Frage ist in beiden Richtungen abschliessend beantwortet und von mir in beiden
+     nachgefahren — der einzige dynamische view()-Aufruf des Hauses zeigt nachweislich woanders
+     hin. Und die Belegkette ist freigemessen, mit gelesenen statt gezaehlten action-Treffern."
+
+ballbesitz: release-pruefer
+```
