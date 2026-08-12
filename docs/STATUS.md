@@ -59,6 +59,7 @@
 | **W-35** Konfigurator-Dialog | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`ABGENOMMEN`** | **Release-Prüfer** | Bau `53142fc2` · Basis `2e7504ec` | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
+| **W-36** Faehigkeiten-Navigation | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -8417,4 +8418,49 @@ acht_waechter: "startEhrlich, rohwertZusage, konfiguratorEhrlich, projektKlick, 
   die Zusage, denn acht Namen sind keine Aussage."
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 W_33_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+```
+
+```yaml
+auftrag: "W-36"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "Die VIERTE Statusachse, und ein Kommentar der zwei davon mischt"
+basis_sha: 08b264cc
+spur: A
+prioritaet: P2
+dor_beleg: "steht aus — plan-pruefer."
+warum_jetzt: "Sechste Ablesung der Stufe 6, und die Kette braucht Vorrat: W-35 laeuft, W-33 ist in
+  der DoR, W-40/1 in der Freigabe. Danach waere sie leer."
+DER_TRAGENDE_PUNKT_VIER_STATUSACHSEN: "Gemessen und jede Stelle geoeffnet: SchrittStatus mit ok, prog,
+  warn, open am Traeger Fahrschritt und Pruefpunkt (W-38, W-34); ConfiguratorStatus mit sieben Stufen
+  am Traeger ConfiguratorPackage (W-40, W-42); FaehigkeitZustand mit verfuegbar, voraussetzung,
+  nur_ergebnis und in_entwicklung in faehigkeiten.ts:25 am Traeger Faehigkeit — das ist W-36; und
+  WerkzeugAnzeige mit system, aktiv und weiteren in werkzeugZustand.ts:30 am Traeger Werkzeug.
+  YAMAS AUFLOESUNG ZU W-40 GILT HIER ALS REGEL und nicht als Einzelfall: der Schluessel ist der
+  TRAEGER und nicht das Wort. Vier Achsen sind keine vier Wahrheiten, solange jede an ihrem eigenen
+  Traeger haengt — aber wer sie ohne Traeger nennt, erzeugt genau die Verwechslung, die W-40 zwei
+  Nachbesserungsrunden gekostet hat. Kriterium W-36-1 verlangt alle vier JE MIT Traeger.
+  UND DIE VIERTE HAT KEIN WERKZEUG: WerkzeugAnzeige gehoert zu keinem Registereintrag. Das ist eine
+  Anschlussluecke der Stufe und steht als W-36-6 in 7-GRENZEN."
+ein_kommentar_der_zwei_achsen_mischt: "faehigkeiten.ts:24 sagt woertlich, aktiv sei bedienbar und
+  schlaeft sei registriert und sichtbar — fuer einen Typ, der in Zeile 25 GANZ ANDERE Werte traegt.
+  Gemessen: aktiv hat 7 Treffer, aber der Wert lebt in werkzeugZustand.ts:30 als Teil von
+  WerkzeugAnzeige, also an einer anderen Achse in einer anderen Datei; schlaeft hat 3 Treffer und
+  ALLE stehen in Kommentaren von faehigkeiten.ts. Kein Wert im Code.
+  MEINE ERSTE VERMUTUNG WAR ZU FRUEH: ich haette es als ueberholten Kommentar gemeldet. Gemessen ist
+  es schlimmer und praeziser — der Kommentar mischt eine NACHBARACHSE mit einem Begriff, den es nie
+  als Wert gab. Wer ihn liest, sucht schlaeft im Code und findet drei Kommentartreffer, die wie
+  Belege aussehen. Das Blatt benennt es und aendert den Code NICHT."
+zwei_eigene_fehlspuren_vor_dem_schnitt_gefangen: "Erstens: ein grep auf FaehigkeitenNavi oder
+  faehigkeiten ueber die Testdateien liefert ZWOELF Treffer. Gemessen, welche W-36 wirklich
+  importieren: VIER — faehigkeiten, toolPresentation, schienenReiter und enginePanelRest, und der
+  letzte gehoert zu W-37 und importiert W-36 nur. Zwoelf Waechter waere eine falsche Zahl gewesen,
+  genau die Sorte die heute mehrfach teuer war. Zweitens die Kommentar-Vermutung oben. Beide Male hat
+  das Oeffnen der Stelle es gefangen, nicht die Zaehlung."
+der_guard_test: "Das Blatt muss den Satz aus dem Code tragen: der ECHTE Export-Name im Modul ist
+  ungleich dem Modulnamen und ist VOM GUARD-TEST VERRIEGELT. Das ist ein Waechter gegen genau die
+  Verwechslung, die heute die Kette mehrfach eingeholt hat — ein Name, der wie die Sache aussieht und
+  eine andere ist. faehigkeiten.test.ts traegt ihn."
+regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
+W_36_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
