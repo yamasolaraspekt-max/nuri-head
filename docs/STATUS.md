@@ -4591,3 +4591,70 @@ zweiter_posten_nicht_erledigt: "Dateikopf:2 sagt 'speist Heizlast & Dach' — ge
 abhaengigkeit: "A-18 darf erst BAUEN, wenn A-15 abgeschlossen ist — sonst baut es auf einem
        Vorschlag. A-15 ist IN_ARBEIT beim Generator; ich habe es NICHT angefasst."
 ```
+
+---
+
+## N-003 UND DIE SORGE DAHINTER (Release-Prüfer an Yama, 12.08.) — die Regel, die dich künftig nicht mehr fragt
+
+**Yama, 12.08.:** *„ich bin gerade mit N-003 überfordert — wie machen wir das, damit es fundiert,
+effizient und fachlich korrekt funktioniert?"*
+
+### Erstens: bei N-003 ist nichts mehr zu tun. Drei Zeilen Beweis
+
+```text
+ENTSCHEIDUNG   liegt (12.08.): Geltungsbereich woertlich, Ampel DAUERGELB — ein ENDZUSTAND,
+               keine Wiedervorlage. "Gruen kann N-003 nie werden" ist deine eigene Begruendung.
+UMSETZUNG      A-14 gebaut, veroeffentlicht, betriebsbestaetigt. Vorbehalt als PFLICHTFELD am
+               Wert, Plakette "Alle Pruefungen bestanden" fuer diese Engine ersatzlos weg.
+KONTROLLE      heute nachgemessen: EIN Ausgabeweg, er traegt den Satz. Kein zweiter existiert.
+```
+
+**N-003 kommt nicht wieder auf deinen Tisch.** *DAUERGELB heißt: die Frage ist beantwortet und
+bleibt beantwortet.*
+
+### Zweitens: die Sorge dahinter ist die richtige — und sie ist adressiert
+
+*Die eigentliche Frage lautet nicht „ist die Formel korrekt", sondern **„was, wenn jemand eine
+Vorbemessung für einen Nachweis hält".*** Dagegen stehen heute vier Dinge, alle gebaut:
+
+```text
+1  die Zahl traegt ihren Vorbehalt AM WERT, nicht in einer Fussnote   (A-14)
+2  es gibt kein Gesamturteil mehr, das "geprueft" suggeriert           (A-14)
+3  NICHT ERLAUBT steht schriftlich und nennt den Bauantrag beim Namen  (dein Geltungsbereich)
+4  das Feld ist PFLICHT — ein kuenftiger Export muesste es aktiv unterdruecken (A-14)
+```
+
+### Drittens — die eigentliche Idee: eine Sortierregel, damit du nur noch das Nötige siehst
+
+**Gemessen an sieben Engines, alle sieben nennen ihre Grenze SELBST im Dateikopf:**
+
+```text
+sparrenBerechnung · wandaufbau · abwassergefaelle · fbhAuslegung · heizkreisVerteiler
+kuecheArbeitsdreieck · treppenBerechnung        -> je 1-2 Grenzsaetze im Kopf, meist mit Norm
+```
+
+**VORSCHLAG — eine Regel, zwei Faelle:**
+
+```text
+FALL A   Die Engine NENNT ihre Grenze selbst (Dateikopf, Datentyp, Norm).
+         -> Der Vorbehalt wird ABGELESEN und als Pflichtfeld gebaut. OHNE Yama.
+            Beleg: A-18 (wandaufbau) — der Planner hat es so geschnitten, jeder Satzteil
+            ist eine Ablesung. Deine Rolle waere nur: bestaetigen, dass es sichtbar wird.
+
+FALL B   Die Grenze muss ERST FESTGELEGT werden — "wofuer darf man das benutzen".
+         -> Das ist eine Nutzungs- und Haftungsfrage. NUR DIESER FALL kommt zu dir.
+            Beleg: N-003 — dort musstest du entscheiden, und du hast es getan.
+```
+
+> **Die Zahl, die zählt: heute nennen ALLE sieben gemessenen Engines ihre Grenze selbst.**
+> *Nach dieser Regel wäre also **keine einzige** weitere Fach-Frage an dich offen — sie werden
+> abgelesen, nicht entschieden.* **N-003 war der Sonderfall, nicht das Muster.**
+
+```yaml
+was_du_tun_muesstest: "einen Satz: 'Fall A wird abgelesen, nur Fall B kommt zu mir'.
+                       Dann sortiert die Regel kuenftige Faelle, ohne dass du sie siehst."
+was_ich_dann_tue:     "die Regel dem Planner als Schnittvorgabe vorlegen — er prueft je Engine,
+                       ob die Grenze im Kopf steht, und schneidet Fall A ohne Rueckfrage."
+was_offen_bliebe:     "nichts aus N-003. Und aus der Achse-2-Reihe nur das, was Fall B ist —
+                       heute: keines."
+```
