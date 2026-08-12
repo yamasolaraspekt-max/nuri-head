@@ -3622,6 +3622,50 @@ die Lücke, benannt an der Stelle, an der ich sie gelassen habe.
 
 ---
 
+## Yamas zwei Posten erledigt — und einer war gar keiner (Release-Prüfer, 12.08.)
+
+```yaml
+anlass: "Yamas Anweisung 12.08. im Wortlaut: 'kannst du bitte diese aufgabe fuer mich uebernehmen
+  und erledigen' — zu zwei Posten, die ihm gemeldet worden waren."
+
+posten_1_die_zwei_artefakte: ERLEDIGT
+  was_es_war: "1692 und zz-unlink-probe lagen seit Stunden unverfolgt im Arbeitsbaum.
+    BEIDE GEOEFFNET statt gezaehlt: 1692 traegt 35 Byte mit dem Text '(eval):19: command not
+    found: 1689' — eine Shell-FEHLERMELDUNG, die jemand versehentlich in eine Datei umgeleitet
+    hat. Es ist kein Messergebnis und keine Notiz, es ist ein Umleitungsunfall.
+    zz-unlink-probe ist 0 Byte, vom 03.08., und steht in docs/STATUS.md:438 selbst als
+    'UNTRACKED und LEER' dokumentiert."
+  gegenprobe_vor_dem_anfassen: "Beide Namen im Bestand gesucht. Die 1692-Treffer in
+    FAHRPLAN-KLASSE-A.md und den Berichten sind SUITE-ZAHLEN ('1692/1692'), keine Dateiverweise
+    — gelesen, nicht gezaehlt. zz-unlink-probe wird nur als Artefakt beschrieben, nirgends
+    benutzt."
+  wie_erledigt: "Nach der Dauerregel: VORHER gesichert, dann mv statt rm. Beide liegen im
+    Sitzungsordner unter artefakte-12-08/, je zweimal (Kopie und verschobenes Original).
+    Der Arbeitsbaum traegt jetzt 0 unverfolgte Dateien."
+
+posten_2_der_origin_rueckstand: WAR_KEINER
+  gemeldet: "origin bei 530 Commits Rueckstand, Fork und backup-private tragen, der Hauptstand
+    nicht — ein Push brauche Yamas ausdrueckliche Freigabe."
+  gemessen: "origin und fork zeigen auf DIESELBE URL:
+    https://github.com/yamasolaraspekt-max/nuri-head.git — zeichengleich verglichen, nicht
+    angenommen. Es sind zwei Namen fuer ein Repository."
+  woher_die_zahl_kam: "Der lokale origin-Ref stand auf aa6584ae, weil seit Stunden niemand
+    'git fetch origin' gefahren hatte — alle Takte fetchen fork und backup-private. Nach einem
+    einzigen Fetch: origin/auto/hausplaner-integration = 3e205402 = fork = lokal, Rueckstand 0.
+    Die 530 (bei mir vor dem Fetch 652) war die Entfernung zu einem VERALTETEN REF, nicht zu
+    einem zurueckliegenden Fernstand."
+  was_daraus_folgt: "KEIN Push noetig und KEINE Freigabe. Der Hauptstand traegt alles seit
+    Stunden — er wurde nur unter dem Namen fork gepusht. Ein Push auf origin waere derselbe
+    Push auf dasselbe Repo gewesen.
+    UND EINE SICHERHEITSREGEL BLEIBT DAVON UNBERUEHRT: upstream ist ein FREMDES Repository
+    (raminsadid2021/nuri-head) und wird nie angefasst. Das ist der Fall, vor dem die Regel
+    'nicht auf origin schreiben' urspruenglich schuetzte — heute schuetzt sie an der falschen
+    Stelle, denn origin ist Yamas eigenes Repo."
+  klasse: "Dieselbe wie H-9: ein Messgegenstand wurde am NAMEN erkannt statt an der Sache.
+    Vier Fernziele, zwei Namen fuer dasselbe Repo, und die Zahl kam aus einem Ref, den niemand
+    aktualisiert hatte."
+```
+
 ## Befund gegen mein EIGENES Prüfwerkzeug — und vier Dubletten, die meine sind (12.08.)
 
 ```yaml
@@ -7420,11 +7464,15 @@ STILLSTANDSMELDUNG_WIDERLEGT: "Der plan-pruefer hat in 6fbe3013 einen HALT gemel
   IN_ARBEIT angefasst.
   AN YAMA: kein Eingriff noetig. Wer die zwei Meldungen allein liest, greift moeglicherweise in
   einen laufenden Bau ein."
-zweiter_befund_beim_messen: "CODE_FERTIG steht in HEAD, die SIEBEN Blaetter stehen es nicht: im
-  Werkbankordner liegen 7 Dateien, git ls-tree HEAD zeigt 0. Der Bau ist gemeldet und liegt
-  ungesichert im Baum. Das kann eine bewusste Trennung sein wie bei A-21 — dort war sie richtig und
-  begruendet — aber dann fehlt der zweite Commit noch. Ich fasse es NICHT an und melde es: es ist
-  seine Arbeit, und nach E1 ist die Fertigmeldung erst belegt, wenn der Bau im Commit steht."
+zweiter_befund_ZURUECKGEZOGEN_vor_dem_commit: "Hier stand: CODE_FERTIG sei in HEAD und die sieben
+  Blaetter nicht, der Bau liege ungesichert im Baum — gemessen mit git ls-tree HEAD, das 0 von 7
+  zeigte. ERLEDIGT, BEVOR DIESER VERMERK COMMITTET WURDE: die Gegenprobe unmittelbar vor dem Commit
+  zeigt 7 von 7 in HEAD. Der Generator hat waehrend meines Schreibens committet.
+  ICH LASSE ES ALS BELEG STEHEN, statt es zu loeschen, weil es genau der Fehler ist, den ich heute
+  viermal gemacht habe — eine Messung, die zwischen Messen und Schreiben veraltet, und dieses Mal
+  vor dem Commit gefangen statt danach berichtigt. Der Befund war zum Messzeitpunkt richtig und ist
+  jetzt gegenstandslos; die Widerlegung der Stillstandsmeldung darueber ist davon unberuehrt, ihre
+  Zeitstempel liegen fest."
 bericht: "docs/BERICHT-W-39-studio-rahmen.md"
 vier_zahlen_des_blattes_anders_gefunden_keine_geglaettet: "13 Importe gegen gemessene 14 — Zeile 7 ist React und damit extern, die 13 sind die Insel-Module, zwei Mengen und kein Mangel. SECHS Zustaende gegen gemessene FUENF — das +1 des Blattes ist toastTimer, ein useRef in :60, also ausserhalb des genannten Bereichs :23-29 und kein Zustand, weil ein Ref kein Neuzeichnen ausloest. W-34 und W-38 als BETRIEBSBESTAETIGT gegen BESCHRIEBEN — im REGISTER steht der Reifegrad des WERKZEUGS, BETRIEBSBESTAETIGT ist der Zustand des AUFTRAGS; ich hatte beides verwechselt und im Blatt berichtigt. Und NEUN Module ohne Werkzeug gegen gemessene ACHT — 13 minus 5 erfasste, meine eigene Zahl war falsch waehrend die Liste darunter schon acht Zeilen trug."
 ein_befund_gegen_meine_eigene_behauptung: "Ich hatte in 6-PRUEFUNG geschrieben, das Flag imStudio sei durch keinen Test gesichert. Gemessen ist das FALSCH: grep -rl imStudio ueber __tests__ findet ZWEI Dateien, kopfrahmen.test.ts:138 und buehnenBreite.test.ts:76. Beide nennen HausplanerStudio nicht und gehoerten deshalb nicht zu den acht Waechtern — sie sitzen am EMPFANGENDEN Ende in Kopfrahmen.tsx. Und kopfrahmen.test.ts ist aus einer DURCHGEKOMMENEN Mutation entstanden, woertlich im Test: die Mutation von geschweift-Ausrufezeichen-imStudio zu geschweift-imStudio kam durch, eine Marke ueber einer Testflaeche waere genau die Anzeige die AUF-40 entfernt hat, nur andersherum. Haette ich nur die acht Dateien betrachtet die HausplanerStudio nennen, waere eine falsche Luecke im Blatt geblieben."
