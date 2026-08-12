@@ -2062,6 +2062,30 @@ lehre: "Ein Zustandswechsel ist erst vollstaendig, wenn BEIDE Orte ihn tragen. I
 ```
 ---
 
+## ⚠ AN YAMA — A-14 ist RELEASE_FREI, aber auf der SICHERUNG liegt ein beschaedigter Stand
+
+```yaml
+das_urteil_zuerst: "A-14 ist RELEASE_FREI, und die Pruefung ist die gruendlichste dieser Runde. Alle drei Kernfragen sind beantwortet, eine davon SCHAERFER als ich sie gestellt hatte: bei der Gegenprobe zu A-14-3 hat er die Renderbedingung fuer JEDES Panel ausgefuehrt — nur engine-sparren verliert die Plakette, treppe/fbh/heizkoerper/abwasser/kueche behalten sie, und heizkoerper zeigt mit bestanden=false die ROTE Plakette. Damit ist belegt, dass das Flag DIESE EINE Engine unterdrueckt und nicht negative Urteile allgemein. Das Buendel ist byte-identisch mit dem, was der Evaluator am Bildschirm gemessen hat (md5 a5ea0056, Neubau aendert nichts). Und fachlich: Yamas Wortlaut ist ZEICHENGENAU uebernommen, die Reichweitengrenze wird getragen, nicht veraendert."
+der_schaden_selbst_gemessen: "Er hat einen eigenen Fehler gemeldet, und ich habe ihn nachgemessen — er ist real und liegt auf dem REMOTE: auf fork/auto/hausplaner-integration traegt docs/BEFUND-GETEILTER-INDEX-STEHT-VOLL.md NULL Zeilen (geloescht) und docs/FAHRPLAN-WERKZEUGKASTEN.md 166 statt 202. LOKAL sind beide heil (62 und 202) — es ist also KEIN Datenverlust, sondern ein beschaedigter Stand auf der Sicherungskopie. Die Ursache ist die geteilte-Index-Falle: er hat zwei Pfade gestaged, den gestageten Stand geprueft und dann OHNE Pfadangabe committet — womit der Commit den ganzen Index mit veralteten Eintraegen dreier Rollen mitnahm. Die geloeschte Datei ist ausgerechnet der Generator-Befund UEBER GENAU DIESE FALLE."
+warum_er_es_nicht_selbst_richten_kann: "Seine Reparatur (5d88f198, zerstoerungsfrei, ohne reset oder amend) liegt LOKAL. Sie kommt nicht auf fork, weil der Push non-fast-forward ist: fork traegt ZWOELF Commits, die lokal fehlen, lokal traegt VIER, die fork fehlen (selbst gemessen). Er hat NICHT forciert und NICHT einseitig gemergt — beides waere hier die falsche Rettung gewesen. Das ist die Zweig-Gabelung, die seit Tagen offen ist, jetzt mit einem konkreten Preis."
+was_du_entscheiden_musst: "EINE Entscheidung, zwei Wege: (a) die beiden Staende integrieren und dann pushen — dann traegt die Sicherung wieder den heilen Stand; oder (b) einen eigenen Transport-Auftrag schneiden lassen, der die Integration als Gegenstand hat statt als Nebenwirkung. Was NICHT geht: es liegen lassen. Solange fork den beschaedigten Stand traegt, ist die Sicherung fuer diese zwei Dateien wertlos, und wer sie von dort holt, holt ein Loch."
+zweiter_befund_zustandswiderspruch: "fork fuehrt A-14 bereits als BETRIEBSBESTAETIGT, lokal steht es auf RELEASE_FREI. Er hat NICHT angeglichen, mit der richtigen Begruendung: er hat die Betriebspruefung nicht gesehen. Ich gleiche ebenfalls nicht an — ein Zustand, den ich nicht gemessen habe, wird nicht abgeschrieben. Es gehoert aber in dieselbe Entscheidung wie oben: die zwoelf Fremd-Commits tragen offenbar mehr als nur Doku."
+ein_p2_ohne_hindernis: "Die sichtbare grundlage-Zeile nennt VIER der SECHS Sonderlasten (Schnee-Verwehung und Lastkombinationen fehlen). Kein Blocker, und seine Begruendung traegt: die Zeile trug vorher NULL Reichweitenangabe, die Aenderung ist rein additiv, niemand gewinnt eine Erlaubnis. Ball beim Planner."
+```
+---
+
+## ⚠ AN YAMA — A-16 liegt bei DIR (Weiche), und es ist UNGESICHERT
+
+```yaml
+lage: "Der Planner hat A-16 geschnitten (TIME_VARS im Produktivbaum) und den Ballbesitz ausdruecklich auf YAMA gesetzt — eine Weiche, danach erst die DoR bei mir. Ich fahre deshalb KEINE DoR; ich habe den Kern nachgemessen, damit die Weiche entscheidbar ist."
+zuerst_ein_risiko: "DIE DATEI IST UNTRACKED — git status fuehrt docs/auftraege/aktiv/A-16-time-vars-im-produktivcode.md mit '??'. Sie liegt also in keinem Commit und waere bei einem unachtsamen Handgriff weg. Ich fasse fremde Arbeit nicht an (B5-Regel) und committe sie nicht — aber sie gehoert gesichert, und der Verfasser sollte das tun, bevor etwas anderes passiert."
+deine_fundstelle_haelt: "SELBST NACHGEMESSEN, Zeichen fuer Zeichen: resources/views/admin/layouts/roof.blade.php traegt ELF TIME_VARS-Vorkommen und den harten Faktor '* 65' genau einmal — die Lohnkostenrechnung existiert, sie fuehrt zu einem Euro-Betrag, und der Stundensatz steht ohne Quelle, Datum und Gewerk im Code. Deine Beobachtung war richtig."
+deine_praemisse_haelt_nicht: "Aber die Datei wird NICHT AUSGELIEFERT, und auch das habe ich selbst gemessen statt uebernommen: die Suche nach einem Aufrufer (admin.layouts.roof, layouts.roof, layouts/roof) liefert in app/, routes/ und resources/views/ NULL Treffer — und die Route, die 'roof' heisst, zeigt nachweislich auf eine ANDERE Datei (routes/web.php:4756 -> admin.roof_config.roof, die es gibt). Es ist also kein 'laufender Produktivcode', sondern eine Datei OHNE AUFRUFER im Produktivbaum."
+warum_das_die_entscheidung_aendert_und_nicht_erledigt: "Der Unterschied ist die DRINGLICHKEIT, nicht die Sache. Ohne Aufrufer rechnet heute niemand mit '* 65' einen Preis — es kann also kein Angebot damit entstehen. ABER die Zahlen stehen im Produktivbaum, sind unbelegt, und die Datei sieht aus wie eine benutzte View; wer sie morgen verdrahtet, bekommt einen Lohnkostenbetrag ohne Herkunft. Das ist dieselbe Klasse wie der gebrochene PvProjektService (echt, dokumentiert, ohne Aufrufer) — und dieselbe Lehre, die ich dort gezogen habe: der Fund gehoert notiert, die Dringlichkeit gehoert gemessen."
+was_du_entscheidest: "Die Weiche gehoert dir, ich lege sie nicht aus. Zur Orientierung nur die gemessene Lage: die Datei hat keinen Aufrufer (0), die Route zeigt woanders hin, die elf Werte und der Stundensatz sind unbelegt. Sobald du entschieden hast, faehrt der Plan-Pruefer die DoR."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
