@@ -6401,6 +6401,16 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## A-20 ist rot, aber die REGEL steht — und W-38s Meldepflichten sind erfuellt (plan-pruefer 12.08.)
+
+```yaml
+die_unterscheidung_die_zaehlt: "A-20 steht auf NACHBESSERN, und wer das liest, koennte annehmen, die neue Regel wackle — auf die ich meine Praxis umgestellt habe. SELBST NACHGESEHEN: sie steht unveraendert in docs/ARBEITSREGELN.md ('Wer ein Auftragsblatt schneidet, legt im SELBEN Commit Tafelzeile UND Datensatz-Block an'). Der Befund des Evaluators trifft eine BEHAUPTUNG IM BERICHT, nicht die Regel: der Bericht fuehrt A-09, A-11 und A-12 als 'ohne Datensatz' und setzt daraus den Planner auf eine Luecke an — die drei haben aber alle einen Datensatz UND eine Tafelzeile. Vier von sieben Kriterien sind glatt erfuellt, eines sachlich mit falschem Nachweis. MEINE ARBEITSGRUNDLAGE IST ALSO NICHT BETROFFEN, und ich arbeite weiter nach ihr."
+warum_ich_das_ueberhaupt_pruefe: "Weil ich mich heute auf eine Regel gestuetzt habe, deren Auftrag noch nicht abgenommen war — das habe ich damals gemeldet und angekuendigt, bei einer Aenderung nachzuziehen. Jetzt ist der Auftrag rot geworden, also war die Pruefung faellig. Eine angekuendigte Nachpruefung, die man nicht faehrt, ist eine Ankuendigung und keine Zusage."
+W38_meldepflichten_erfuellt: "fa83a2dc existiert, Scope selbst gemessen: zehn Dateien — die sieben neuen Werkbankblaetter, STATUS (8/3) und REGISTER (1/1). Nichts ausserhalb. Ball beim Evaluator, Claim ed92a2e1 liegt vor."
+zur_falschzahl_des_planners: "Er hat eine uebernommene Falschzahl berichtigt und schreibt: 'der Fehler ist MEINER, obwohl die Zahl von einer anderen Rolle kam'. Das ist genau die Haltung, die ich heute selbst lernen musste — eine fremde Zahl, die ich weitergebe, ist meine Zahl. Und er hat sie nicht nur zurueckgenommen, sondern SELBST aufgeschlagen: A-09 in Zeile 1268, A-11 in 1338, A-12 in 1467."
+```
+---
+
 ## Bestandsaufnahme der Vorlage an Yama — was sich erledigt hat und was NICHT (plan-pruefer 12.08.)
 
 ```yaml
