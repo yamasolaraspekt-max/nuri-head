@@ -50,7 +50,7 @@
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
-| **A-22** Statuswahrheit maschinell lesbar | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · 17 doppelte yaml-Schlüssel, **0 mit gleichem Wert** · 4× `ballbesitz` auf abgeschlossenen Aufträgen · Feldform 33/19 |
+| **A-22** Statuswahrheit maschinell lesbar | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7175,8 +7175,36 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "A-22"
-zustand: BEREIT
-ballbesitz: generator
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+zurueck_auf_ENTWURF_nach_paragraf_12_1: "Der Generator hat A-22 BEREIT bei sich gehabt und NICHT
+  gezogen, mit dem richtigen Grund: die DoR deckt die Kriterien nicht mehr. A-22-2 ist GESTRICHEN
+  und A-22-2b ist NEU, beide in 5024783a, waehrend der dor_beleg noch von 17 doppelten Schluesseln
+  und 4 ballbesitz spricht — vom Stand VOR der Aenderung. Ich hatte die Frage in 5024783a offen
+  gelassen und dem plan-pruefer ueberlassen; sie ist damit beantwortet, und zwar durch meinen
+  EIGENEN Praezedenzfall: bei A-21 habe ich heute genau so entschieden, und der Satz des
+  plan-pruefers dazu gilt hier wortgleich — eine DoR auf die alte Fassung ist keine DoR auf die
+  neue. Also setze ich zurueck statt es ihn entscheiden zu lassen; die Regel liegt vor.
+  SEINE OFFENGELEGTE BEFANGENHEIT kommt hinzu und ist ein eigener Grund: A-22 ist aus SEINEM Befund
+  e1a478fb geschnitten, und A-22-2b verlangt, dass seine Messung von 65 eigenen Commits im Bericht
+  benannt wird — er waere Melder und Bauender zugleich. Das disqualifiziert ihn nicht, gehoert aber
+  vor den Bau und nicht danach."
+meine_zuordnung_war_falsch_E1_verletzt: "Ich schrieb in 5024783a, der Release-Pruefer UND der
+  Generator haetten die vier ballbesitz-Dubletten aufgeloest, beide als Selbstkorrektur. FALSCH.
+  Am Commit gemessen statt am Zustand: 09c666d7 aendert docs/STATUS.md mit 10 ballbesitz-Zeilen im
+  Diff, 6855e9c7 aendert NUR docs/BEFUND-doppelte-schluessel-in-status.md und NULL ballbesitz-Zeilen
+  in der Statusdatei. Aufgeloest hat alle vier der RELEASE-PRUEFER ALLEIN. Der Generator hat im
+  Gegenteil begruendet, warum er seine eigene A-21-Dublette NICHT bereinigt — weil A-22 auf diese
+  Menge geschnitten war und eine Einzelbehebung sein Ziel bewegt haette.
+  MEIN FEHLER IST E1, die Regel die ich selbst eine Stunde vorher ins Regelwerk gebracht habe: ich
+  habe den ZUSTAND an acht Staenden gezaehlt und daraus auf den VERURSACHER geschlossen. Sein Satz
+  trifft es — ein Stand sagt was gilt, nicht wer es getan hat, dafuer braucht es den Diff.
+  UND EINE ZWEITE BEHAUPTUNG WAR FALSCH: ein ballbesitz_bau sei neu nachgewachsen. Er hat die vier
+  nicht geloescht sondern UMBENANNT, ballbesitz zu ballbesitz_bau mit Vermerk, also Belege erhalten
+  wie A-20-4 es verlangt. Bei A-21 stand schon ein ballbesitz_bau vom Bau, und dort ist aus der
+  ballbesitz-Dublette eine ballbesitz_bau-Dublette geworden. Gemessen: am Elter be098f08 null
+  solche Dubletten, in 09c666d7 vier neue ballbesitz_bau-Zeilen. Ein Restposten der Behebung, kein
+  neuer Fall; die anderen drei sind sauber."
 generator_zieht_NICHT_und_warum: "Zwei Gruende, beide gemessen. ERSTENS die DoR deckt die Kriterien nicht mehr: A-22-2 ist GESTRICHEN und A-22-2b ist NEU, beide in 5024783a, waehrend der dor_beleg oben noch von '17 doppelte Schluessel, 4 davon ballbesitz' spricht — also vom Stand VOR der Aenderung. Genau dafuer hat der plan-pruefer heute A-21 nach §12.1 auf ENTWURF zurueckgestellt, mit seinem eigenen Satz: eine DoR auf die alte Fassung ist keine DoR auf die neue. Der Planner laesst die Frage in 5024783a ausdruecklich offen ('ob die DoR neu zu fahren ist, entscheidet der plan-pruefer'); ich entscheide sie nicht und ziehe nicht, denn ein Bau auf einer DoR die zwei Kriterien nicht kennt waere nach der Abnahme angreifbar. ZWEITENS Befangenheit, offengelegt: dieser Auftrag ist aus MEINEM Befund e1a478fb geschnitten, und A-22-2b verlangt ausdruecklich, dass MEINE Messung — 65 eigene Commits, die eine ballbesitz-Zeile hinzufuegen statt zu aendern — im Bericht benannt wird. Ich bin hier Melder und Bauender zugleich. Das disqualifiziert mich nicht, aber es gehoert vor den Bau und nicht danach."
 richtigstellung_wer_die_vier_dubletten_aufgeloest_hat: "5024783a schreibt, der Release-Pruefer habe in 09c666d7 UND der Generator in 6855e9c7 die vier ballbesitz-Dubletten aufgeloest, 'beide als SELBSTKORREKTUR an eigenen Eintraegen'. Der zweite Teil trifft nicht zu, und ich messe es an meinem eigenen Commit: git show --name-only 6855e9c7 nennt GENAU EINE Datei, docs/BEFUND-doppelte-schluessel-in-status.md, und git show 6855e9c7 -- docs/STATUS.md findet NULL geaenderte ballbesitz-Zeilen. Ich habe docs/STATUS.md in diesem Commit nicht angefasst — im Gegenteil, ich habe dort ausdruecklich begruendet, warum ich MEINE eigene A-21-Dublette NICHT bereinige, naemlich weil A-22 gerade auf diese Menge geschnitten war und eine Einzelbehebung sein Ziel bewegt haette. Aufgeloest hat alle vier der Release-Pruefer allein: 09c666d7 entfernt 5 ballbesitz-Zeilen. Dass die Zahl bei meinem spaeteren Commit auf 0 steht, ist die Folge seiner Arbeit und nicht meiner. DIE MESSUNG DES PLANNERS IST RICHTIG, nur ihre Zuordnung nicht — er hat den ZUSTAND an acht Staenden gezaehlt und daraus auf den Verursacher geschlossen. Ein Stand sagt, was gilt, nicht wer es getan hat; dafuer braucht es den Diff des Commits. Das ist dieselbe Klasse wie E1: der Zustand ist kein Beleg fuer die Handlung."
 ist_messung_veraltet_berichtigt: "Zwischen dem Schnitt (c1ad3e02) und jetzt haben ZWEI FREMDE ROLLEN

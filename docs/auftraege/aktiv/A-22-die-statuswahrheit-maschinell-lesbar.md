@@ -35,11 +35,46 @@ STAND e1a478fb, beim Schnitt         STAND 6855e9c7, nach zwei fremden Selbstkor
 ```
 
 > **Die Ist-Messung eines Auftrags ist ein Zeitpunkt-Beleg und veraltet, wenn fünf Rollen parallel
-> arbeiten.** *Zwischen Schnitt (`c1ad3e02`) und dieser Berichtigung haben **zwei fremde Rollen den
-> gefährlichsten Teil selbst behoben** — der Release-Prüfer in `09c666d7`, der Generator in
-> `6855e9c7`, beide als Selbstkorrektur an eigenen Einträgen. **Die DoR war zu diesem Zeitpunkt
-> schon bestanden** (`be098f08`, bei noch vier Dubletten). Deshalb stehen hier ab jetzt **beide
-> Stände mit ihrem SHA** und nicht eine Zahl.*
+> arbeiten.** *Zwischen Schnitt (`c1ad3e02`) und dieser Berichtigung wurde **der gefährlichste Teil
+> von fremder Hand behoben**, und **die DoR war zu diesem Zeitpunkt schon bestanden**
+> (`be098f08`, bei noch vier Dubletten). Deshalb stehen hier ab jetzt **beide Stände mit ihrem
+> SHA** und nicht eine Zahl.*
+
+**ZUORDNUNG BERICHTIGT — und mein Fehler ist eine Verletzung von E1**, der Regel, die ich selbst
+eine Stunde vorher ins Regelwerk gebracht habe:
+
+```text
+Ich schrieb   „der Release-Pruefer in 09c666d7 UND der Generator in 6855e9c7,
+               beide als Selbstkorrektur an eigenen Eintraegen"
+Gemessen      09c666d7  aendert docs/STATUS.md · 10 ballbesitz-Zeilen im Diff
+              6855e9c7  aendert NUR docs/BEFUND-doppelte-schluessel-in-status.md
+                        · NULL ballbesitz-Zeilen in docs/STATUS.md
+-> Aufgeloest hat alle vier der RELEASE-PRUEFER ALLEIN.
+```
+
+> **Ich habe den ZUSTAND an acht Ständen gezählt und daraus auf den VERURSACHER geschlossen.** *Der
+> Generator hat es benannt: „Ein Stand sagt, was gilt, nicht wer es getan hat — dafür braucht es
+> den Diff des Commits. Dieselbe Klasse wie E1: **der Zustand ist kein Beleg für die Handlung.**"
+> Und er hat sogar begründet, warum er seine eigene A-21-Dublette **nicht** bereinigt hat: weil A-22
+> auf diese Menge geschnitten war und eine Einzelbehebung sein Ziel bewegt hätte.*
+
+**Und die zweite falsche Behauptung: „ein `ballbesitz_bau` ist neu nachgewachsen".** Gemessen am
+Commit statt am Zustand:
+
+```text
+Der Release-Pruefer hat die vier NICHT geloescht, sondern UMBENANNT:
+   ballbesitz: generator  ->  ballbesitz_bau: generator  # umbenannt 12.08.
+   (Belege erhalten — genau wie A-20-4 es verlangt)
+
+be098f08   ballbesitz_bau-Dubletten: 0
+09c666d7   vier neue ballbesitz_bau-Zeilen
+A-21       traegt jetzt ZWEI: den echten Bau-Vermerk des Generators
+           und das umbenannte Feld
+```
+
+*Nichts ist nachgewachsen. **Bei genau einem der vier Blöcke stand schon ein `ballbesitz_bau`**, und
+die Umbenennung hat dort aus einer `ballbesitz`-Dublette eine `ballbesitz_bau`-Dublette gemacht. Das
+ist ein Restposten der Behebung und kein neuer Fall — die anderen drei sind sauber.*
 
 > **Dass KEINE der 17 denselben Wert trägt, ist die eigentliche Aussage.** *Der Generator hat es
 > richtig eingeordnet: **niemand schreibt denselben Wert zweimal.** Jemand schreibt einen **neuen
