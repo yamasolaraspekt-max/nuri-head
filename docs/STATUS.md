@@ -60,6 +60,7 @@
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-36** Faehigkeiten-Navigation | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
+| **W-37** Rechenpanels | `ENTWURF` | **planner** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR nicht erteilt** — zwei Kriterienzahlen verfehlt (fuenf/acht Adapter, vier/sechs Waechter) |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -8714,3 +8715,67 @@ der_guard_test: "Das Blatt muss den Satz aus dem Code tragen: der ECHTE Export-N
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 W_36_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+## W-37 — Rechenpanels (Datensatz)
+
+```yaml
+auftrag: "W-37"
+zustand: ENTWURF
+ballbesitz: planner  # DoR nicht erteilt
+titel: "Fuenf Adapter zwischen Bedienung und echten Engines — gemessen sind es acht"
+basis_sha: a94d91ac
+spur: A
+prioritaet: P2
+leerstelle_nach_A_20_geschlossen: "plan-pruefer 12.08.: Dieses Blatt lag COMMITTET in
+  docs/auftraege/aktiv/ (Schnitt 9db30a06) — ohne Tafelzeile und ohne Datensatz-Block. Die
+  Statuswahrheit sagte zu W-37 nicht das Falsche, sondern GAR NICHTS. A-20 verlangt Tafelzeile UND
+  Block im SELBEN Commit wie den Schnitt; das ist der erste Verstoss, seit die Regel steht.
+  Ich lege beides an, damit der offene Auftrag sichtbar ist, und schreibe den Verstoss dazu, statt
+  ihn stillschweigend auszubuegeln — die Pflicht bleibt beim Schneidenden. Gefunden hat es die
+  Blatt-gegen-Block-Probe der Wache, nicht ein Zufall; genau dafuer gibt es sie."
+dor_beleg: "plan-pruefer 12.08. — DoR NICHT ERTEILT. Zwei Kriterien tragen falsche Zahlen, beide
+  dieselbe Klasse wie W-36-5 eine halbe Stunde vorher.
+  BEFUND 1, W-37-1 (P1, TRAGEND): FUENF Adapter behauptet, ACHT gemessen. Nicht genannt sind
+  :494 alsAbwasserEingabe, :503 alsArbeitsdreieck, :509 alsPvEingabe — alle drei mit der
+  IDENTISCHEN Signatur (werte: Record<string, string>) auf einen Engine-Eingabetyp, also genau die
+  Klasse, die das Kriterium beschreibt.
+  UND DIE KLASSENBEZEICHNUNG SELBST TRAEGT NICHT: das Blatt nennt sie 'als*Eingabe', aber
+  alsBetriebsBedingung (:457) steht INNEN und endet nicht auf Eingabe, waehrend alsAbwasserEingabe
+  draussen steht und darauf endet. Die Klasse ist die SIGNATUR, nicht der Name — und solange das
+  Kriterium eine Zahl nennt statt der Signatur, kann keine ehrliche Messung es erfuellen.
+  BEFUND 2, W-37-5: VIER Waechter behauptet, SECHS importieren. Fehlend sind
+  zweiEnginesSchweigen.test.ts:3 (enginePanel, ENGINE_PANELS) und sparrenVorbehalt.test.ts:3
+  (enginePanel).
+  UND DER FEHLENDE IST DER WICHTIGSTE DES GANZEN BLATTES: sparrenVorbehalt.test.ts traegt im Kopf
+  'A-14 — der N-003-Vorbehalt als Zusage, nicht als Probelauf' und prueft woertlich
+  'A-14-2: vorbehalt ueberlebt berechneSparren(...) as unknown as EngineErgebnis'. W-37-2 verlangt,
+  die A-14-Ausgabeauflage zu beschreiben, DAMIT eine spaetere Aenderung den Vorbehalt nicht still
+  entfernt — und die Waechterliste laesst genau den Test weg, der das heute verhindert. Das Blatt
+  wuerde die Auflage beschreiben und ihren Waechter verschweigen.
+  DAZU DIESELBE DRITTE KLASSE WIE BEI W-36: Tests, die die Datei ueber ihre QUELLE verriegeln statt
+  sie zu importieren — stilschicht.test.ts:584-603 (EngineFlaeche.tsx als Datei, keine Rohfarben),
+  gesperrtAppWeit.test.ts:41 und :134 (Muster auf EngineFlaeche.tsx), fussUndUeberlagerungen.test.ts:175
+  (Marke '<EngineFlaeche'). W-37-5 schliesst stilschicht mit '0 Importe' ausdruecklich aus: die Zahl
+  stimmt, der Schluss nicht.
+  MEIN EIGENES MUSTER WAR ZUERST GENAUSO ZU ENG: from '...enginePanels' verlangt das
+  Anfuehrungszeichen direkt hinter dem Namen und verfehlt jeden Import mit .ts-Endung — also genau
+  die zwei fehlenden Waechter. Haette ich es nicht nachgeschaerft, haette ich 'vier, alle echt'
+  BESTAETIGT. Derselbe Musterfehler in meiner Hand, eine Runde nach H-9.
+  WAS STIMMT, damit niemand doppelt misst: 199 Z. und 540 Z. exakt · die zehn Fundstellen :35 :51
+  :57 :89 :100 :119 :414 :439 :457 :482 alle · SCHWERE_ANZEIGE an EngineFlaeche.tsx:31 mit DREI
+  Graden, je Zeichen und Wort und Token (fehler, warnung, info) · die A-14-Fundstellen existieren,
+  W-37-2 ist erfuellbar: EngineFlaeche.tsx:135 (keinGesamturteil), enginePanels.ts:74-76, :223-225,
+  :262-264, :354 · Registerzeile 124 sagt 196, gemessen 199, der Befund traegt · und die GEGENPROBE
+  traegt ebenfalls, von mir einzeln nachgezaehlt: StartView 267, ConfigWizard 271, FaehigkeitenNavi
+  76, auswechslung 174, dachTopologie 183 stimmen, nur EngineFlaeche weicht ab. Fuenf von sechs,
+  wie das Blatt sagt.
+  GEWUERDIGT, und das ist keine Hoeflichkeit neben zwei Blockern: Abschnitt 3 ist die beste Stelle
+  dieses Blattes. Der Planner haette aus der falschen Zeilenzahl den Satz 'Zeilenzahlen im Register
+  driften' machen koennen — nach den Zeilennummern und Abschnittsnummern von heute lag das nahe. Er
+  hat die REICHWEITE gemessen und den Befund dadurch VERKLEINERT. Genau diese Messung fehlt an den
+  zwei Zahlen, die ich beanstande: fuenf Adapter und vier Waechter sind ungemessene Reichweiten im
+  selben Blatt, das eine gemessene vorfuehrt.
+  Ball beim Planner: beide Zahlen aus dem Kriterienwortlaut heraus, W-37-1 an die Signatur binden,
+  W-37-5 an die drei Klassen. Zustand bleibt ENTWURF."
+```
+
