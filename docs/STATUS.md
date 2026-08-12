@@ -2073,8 +2073,15 @@ zustandseintrag_nachgezogen: "release-pruefer 12.08.: der Evaluator hat in f13e1
 release_und_betrieb: "release-pruefer 12.08.: §10 an der Abnahme f13e1d43/b732427f — Kette Vorfahr, reiner Doku-Scope (Runde 2 fasste GENAU EIN Blatt an, +44/-0, kein Beifang), Produkt-Code seit 69c1df5a unberuehrt, Insel-Suite 1693/1693, Scans leer. §19-Betriebspruefung im selben Arbeitsgang. DAMIT IST KLASSE A VOLLSTAENDIG — die Luecke W-07, die ich am 12.08. faelschlich als geschlossen gemeldet hatte, ist jetzt wirklich zu."
 offener_spec_punkt: "W-07N-8 (Scope-Bruch aus Runde 1) bleibt OFFEN und blockiert nach §12.5 nicht: ein Rueckbau waere die Loeschung inhaltlich richtiger Arbeit. Der Plan-Pruefer hat den Fehler ausdruecklich als SEINEN uebernommen (seine DoR nahm den Zuschnitt mit falscher Begruendung ab) und schlaegt vor, den Scope nachtraeglich zu schneiden statt 148 Zeilen zurueckzubauen. SPEC-Entscheidung nach §12.1, Ball beim PLANNER."
 formhinweis_kein_blocker: "Der Messtisch fehlt diesmal als eigener Abschnitt — das Votum belegt in Gruppenform ('acht von neun erfuellt', vier §3-Werte, acht F-Nummern, beide Ableitungs-Fundstellen, PVGIS-Zitat) statt Zeile fuer Zeile, wie er es bei W-21/W-22/W-08/W-09 gefuehrt hat. KEIN Blocker: die Zahl ist explizit genannt, die Belege sind benannt und das offene Kriterium ist einzeln behandelt — anders als bei W-04, wo die Substanz fehlte. Hinweis an den Evaluator, damit die Form nicht zurueckfaellt."
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand_vor_dem_release: ABGENOMMEN   # historisch — der geltende Zustand steht oben
+ballbesitz_vor_dem_release: release-pruefer
+doppeltes_feld_berichtigt: "release-pruefer 12.08.: DIESER BLOCK TRUG ZWEI zustand-FELDER.
+  Ich habe am 12.08. oben einen neuen Kopf mit BETRIEBSBESTAETIGT eingefuegt und die alten
+  Zeilen stehen lassen, statt sie zu aendern. Fuer einen Leser stand oben BETRIEBSBESTAETIGT,
+  fuer einen YAML-Parser gewinnt das LETZTE Feld und damit ABGENOMMEN — zwei Wahrheiten in
+  einem Block, und meine eigene Drift-Messung fand sie nicht, weil sie den ersten Treffer
+  nimmt und der mit der Tafelzeile uebereinstimmte. Alte Felder umbenannt statt geloescht,
+  damit die Spur bleibt. Geltend ist BETRIEBSBESTAETIGT."
 basis_sha: 3d368625
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen und der Befund haelt genau in der Form, in der er geschnitten ist — W-07/2-FUNKTION.md traegt 37 Zeilen mit NEUN Platzhaltern, ist also ein leeres Formular; das REGISTER fuehrt W-07 folgerichtig nicht mehr als BESCHRIEBEN, sondern als '6/7 BLAETTER' (selbst nachgelesen). Damit ist die Registerzeile bereits ehrlich und der Auftrag schliesst die letzte Luecke, statt einen falschen Zustand zu kaschieren. Der Zuschnitt ist richtig: NACHBESSERUNG eines Altstandes, kein neuer Stufe-1-Auftrag — sechs von sieben Blaettern stehen, sie werden nicht neu geschnitten."
@@ -2183,8 +2190,12 @@ datei: docs/auftraege/aktiv/A-16-time-vars-im-produktivcode.md
 zustand: BEREIT
 ueberholt_durch_yama: "Meine Zurueckstellung vom 12.08. ist AUFGEHOBEN — Yama hat A-16 auf Welle 3 entschieden und der Plan-Pruefer hat die DoR bestanden (alle Zeilenangaben treffen, laborCost * 65 genau einmal, 2688 Zeilen, statische Aufrufer 0). Meine Weichenentscheidung war eine Vertretung; sobald Yama selbst entscheidet, gilt seine. Ich ziehe nach, ich widerspreche nicht."
 vertretungsentscheid: "release-pruefer 12.08. auf Yamas Anweisung 'plan prueferhat was an uns gerichtet kannst du es erledigen': A-16 wird ZURUECKGESTELLT, der Fund bleibt stehen. SELBST NACHGEMESSEN, nicht uebernommen: elf TIME_VARS in resources/views/admin/layouts/roof.blade.php, der harte Lohnfaktor '* 65' in Zeile 1672 (const laborCost = installMinutes/60*65) — Yamas Fundstelle haelt zeichengenau, ein Euro-Betrag ohne Quelle. UND die Gegenmessung haelt auch: kein einziger Aufrufer (grep ueber app/, routes/, resources/views/ = 0 Treffer), die Route zeigt auf eine andere Datei. WARUM ZURUECKSTELLEN UND NICHT BAUEN: die Rechnung hat heute keine Wirkung, weil niemand sie aufruft. Ein Bau an totem Code kostet einen Auftrag und aendert nichts — dieselbe Lage wie beim gebrochenen PvProjektService. WAS ICH AUSDRUECKLICH NICHT ENTSCHEIDE: die Datei zu LOESCHEN. Tote Views entfernen ist eine Bestandsentscheidung und faellt unter die Dauerregel 'kein Loeschen ohne Freigabe' — sie gehoert Yama. WAS DIE SPERRE LOEST: wird die View je verdrahtet, ist A-16 VOR der Verdrahtung faellig — der Fund steht als Vorbedingung im Blatt, damit er nicht erst auffaellt, wenn der Euro-Betrag beim Kunden steht."
-ballbesitz: —  # Weiche vom Release-Pruefer in Vertretung entschieden 12.08.
-zustand: BEREIT
+ballbesitz_weiche: "—  # die WEICHE ist entschieden (Release-Pruefer in Vertretung 12.08.).
+  Umbenannt am 12.08.: ich hatte hier ballbesitz: — gesetzt und damit ein ZWEITES Feld neben
+  dem vorhandenen ballbesitz: generator erzeugt. Beides zugleich ist falsch, und meines war
+  auch sachlich falsch: entschieden ist die Weiche, gebaut ist nichts — BEREIT heisst, der
+  Ball liegt beim Generator. Der geltende Ballbesitz steht unten."
+# (doppeltes zustand-Feld entfernt — identisch BEREIT, der geltende steht oben in Z.2183)
 ballbesitz: generator
 basis_sha: 5d88f198
 prioritaet: P1
