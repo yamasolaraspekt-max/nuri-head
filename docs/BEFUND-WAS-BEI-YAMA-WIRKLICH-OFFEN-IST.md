@@ -269,3 +269,62 @@ dachMesh.ts:73-78   fehlen die Anbau-Masse -> KEINE Eingabe, leer/Marker
 gezeichneten L-Polygon automatisch `W`/`W_b` abgeleitet werden".** Das ist eine Produktentscheidung
 (Weg A gegen Weg B des Planners) — **aber sie braucht keine neue Regel von dir, weil die Zuordnung
 beim Ableiten aus `W_b < W` von selbst folgt.**
+
+---
+
+## Berichtigung 13.08.: drei Posten oben stehen unter der falschen Herkunft — mein Zähler hat sie fehlzugeordnet
+
+**Der Planner hat in `c09dcb93` einen Block gefunden, der einen Tag lang unsichtbar war:** *der Fuß
+seiner Vorlage trägt `ballbesitz: planner`, aber **kein `auftrag:`-Feld**. Jeder Zähler, der Bälle
+über Auftragskennungen sucht, sieht ihn nicht.*
+
+**Meiner sieht ihn auch nicht — und macht etwas Schlimmeres: er ordnet ihn dem nächstbesten
+Auftrag davor zu.** Nachgemessen:
+
+```text
+Zustandsfelder in docs/STATUS.md gesamt:            135
+davon naeher an einer UEBERSCHRIFT als an auftrag:    5
+-> diese fuenf schrieb mein Zaehler einem FREMDEN Auftrag zu.
+
+Z.4989  gehoert zu "### ENTSCHEIDUNG 2 — die Werkbank bleibt auf Rohbau begrenzt"
+Z.5130  gehoert zu "### 4. Achse 2 je Engine: NEIN"
+Z.5354  gehoert zu "### Was daraus folgt — ein Folgeauftrag"
+Z.5431  gehoert zu "### Was ich ausdruecklich NICHT tue"
+Z.5490  gehoert zu "### ANTWORT DES PLANNERS, 13.08."
+A-09 selbst reicht nur von Z.1291 bis Z.1327 — 36 Zeilen.
+```
+
+### Was das für die Liste oben heißt
+
+**Ich habe drei Posten unter „A-09" geführt, die nicht zu A-09 gehören:**
+
+```text
+"deckt die Engine den Taupunkt ab"          -> Folgeauftrag-Abschnitt, nicht A-09
+"gehoert Tragwerk an die Zeichenflaeche"    -> Vorlage an den Planner, nicht A-09
+"Achse-2-Zuordnung je Engine"               -> Abschnitt "Achse 2: NEIN", nicht A-09
+```
+
+**Die Posten selbst sind real — falsch war die Herkunftsangabe.** Wer unter A-09 nachschlägt, findet
+sie nicht, und genau dafür ist eine Postenliste da. *(Der Taupunkt ist inzwischen beantwortet, siehe
+oben; das Tragwerk steht weiter offen, jetzt mit der richtigen Fundstelle.)*
+
+### Der Werkzeugfehler, und es ist der dritte dieser Art an zwei Tagen
+
+```text
+1  git fetch fork backup-private     -> fetchte nur EINEN Remote, Warnung weggefiltert
+2  Muster **LEER** mit Fettschrift   -> zaehlte 20 Registerzeilen als 0
+3  Anker nur auftrag:                -> ordnet 5 Felder einem fremden Auftrag zu
+```
+
+**Alle drei haben dieselbe Form: ein Muster, das eine Annahme über die Schreibweise trifft, und eine
+Ausgabe, die dabei plausibel aussieht.** *Keiner hat einen Fehler geworfen — sie haben eine Zahl
+geliefert, und die Zahl war falsch.* **Der Handgriff dagegen ist derselbe wie in H-10: nicht die Form
+suchen, die ich erwarte, sondern beide Anker nennen und den näheren nehmen:**
+
+```python
+anker = max(letzte_auftrag_zeile, letzte_ueberschrift_zeile)
+```
+
+> **Für die Statuswahrheit heißt das, was A-25-1b ohnehin verlangt:** *jeder Block mit Zustandsfeldern
+> nennt seinen Vorgang.* **Solange das nicht überall gilt, ist jede Ballzählung über `auftrag:` eine
+> Schätzung — auch meine.**
