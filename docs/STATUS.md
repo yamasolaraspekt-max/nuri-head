@@ -43,7 +43,7 @@
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
-| **W-23** Deckung und Material | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
+| **W-23** Deckung und Material | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6070,8 +6070,30 @@ mein_anteil_am_befund: "Zwei der drei Fehlalarme entstanden durch MEINE Votumsze
 ```yaml
 auftrag: "W-23"
 datei: docs/auftraege/aktiv/W-23-deckung-und-material.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft — sieben Blaetter aus der Quelle abgelesen, nicht entworfen)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08. auf 39270fab; Bericht docs/BERICHT-W-23-deckung-und-material.md)
+gebaut: "Sieben Blaetter plus Registerzeile. Alle Zahlen des Blattes gegen die Quelle nachgemessen
+  und bestaetigt: 127 Datenzeilen, 48 Spalten, Datenstatus 78/26/17/6, Fuellquote 9/13/17, neun
+  Zeilen gleich sieben Modelle. Herkunft 9 von 9 (Datenstatus UND Quelle_1_URL). Eingangspruefung
+  Verschiebespiel gleich max minus min: acht von acht Zeilen mit beiden Werten stimmen, keine
+  Abweichung. Abschlusszaehler BESCHRIEBEN 11 -> 12 (hier SOLL er steigen, anders als bei W-15/1).
+  resources und app 0 Dateien, Quelldatei unveraendert 718574 Byte, Rueckweg Exit 0."
+zwei_abweichungen_zum_blatt: "Gemessen, gemeldet, NICHT angeglichen.
+  (1) Das Blatt schreibt 'Harzer Pfanne 7'. In der Quelle heisst das Modell Modell_Typ 'Harzer
+      Pfanne', Variante_Ausfuehrung 'Big' — eine 7 steht dort nicht. Die Masse stimmen (372-405),
+      der Name nicht.
+  (2) Rubin 13V hat KEINE Regeldachneigung, in BEIDEN Zeilen. Das Blatt fuehrt fuer alle sieben
+      eine. Das ist nicht kosmetisch: die Schranke des Werkzeugs prueft genau gegen diesen Wert —
+      ausgerechnet das Modell mit der doppelten Datenlage kann sie nicht passieren. Es gibt
+      deshalb jetzt eine eigene Absage 2 'Schranke nicht pruefbar' statt eines stillen
+      Durchrutschens."
+dritte_zahl_die_verschieden_zaehlt: "Das Blatt sagt bei der Eingangspruefung 'sechs von sechs', ich
+  messe 'acht von acht'. Beide stimmen — es zaehlt MODELLE, ich zaehle ZEILEN, und die zwei
+  Doppelvarianten (Rubin 13V HA/OG, Topas 13V HA/OG) erklaeren den Unterschied vollstaendig."
+platzhalter_drei_treffer_keiner_ist_einer: "grep -nE '<[^>]+>' ueber die sieben Blaetter ergibt 3.
+  Alle drei gelesen: ein Vergleichsoperator (n_min <= n_max ->), eine XML-Tag-Erwaehnung (<is><t>)
+  und ein TypeScript-Generic (Array<{...}>). Keiner ist ein unausgefuellter Platzhalter. Rot vorher
+  27. Das ist B5s Fall 4 in neuer Gestalt, wo '< 1 mm²' als Platzhalter gezaehlt wurde."
 quelle_vor_dem_ziehen_geprueft: "braas_dachziegel_datenbank_v14.xlsx liegt am genannten Pfad,
   718574 Byte — die Groesse des Blattes auf das Byte. openpyxl fehlt in dieser Umgebung; eine xlsx
   ist ein ZIP mit XML, gelesen wird deshalb mit Bordmitteln (zipfile + ElementTree). Blatt

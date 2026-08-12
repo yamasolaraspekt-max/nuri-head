@@ -57,7 +57,7 @@
 | W-09 | Treppe | **BESCHRIEBEN** | W-06 | **F-001 ✓** (`treppe2D.ts:47`, `treppeSvg.ts:125` — `Math.hypot(dx,dy)`), ~~F-030~~ ⓝ **0 Treffer in allen sieben Treppen-Modulen** · Rechenkern sind **normative Größen**, keine Geometrieformel |
 | W-21 | **Sparren und Lattung** | **BESCHRIEBEN** | W-07 | **N-001…N-003** ✓ (~~F-001~~, ~~F-030~~ ⓝ) · Quelle M-01/**M-02 ungelesen** |
 | W-22 | **Gaube** | **BESCHRIEBEN** | W-07 | **F-027** ✓ (Thema ja, Formel ⚠), ~~F-031~~ ⓝ |
-| W-23 | **Deckung und Material** | LEER | W-07, W-08 | **F-050** |
+| W-23 | **Deckung und Material** | **BESCHRIEBEN** | W-07, W-08 | **F-050** 🟡, **F-053** 🟡 — Bereich aus der Quelle, Wert aus der Rechnung |
 
 ## Stufe 4 — Darstellung und Ausgabe
 
@@ -251,6 +251,7 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/app/tools/auswahlModus.ts` | **W-13** — 98 Zeilen, 7 Ausfuhren; vier Modi, Modifikator-Vorrang alt vor ctrl/meta vor shift; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/app/tools/trefferSuche.ts` | **W-13** — 75 Zeilen, 4 Ausfuhren; **oben schlägt nah** — Zeichenreihenfolge vor Distanz; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/app/tools/auswahlDarstellung.ts` | **W-13** — 71 Zeilen, 3 Ausfuhren; Zustand als Daten, kein Markup; **eingearbeitet 12.08.2026** |
+| `~/Desktop/…/Tabellen/braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte` | **W-23** — **QUELLE, kein Code.** 718.574 Byte · `xl/worksheets/sheet11.xml` · 127 Datenzeilen, 48 Spalten. Nutzbar sind **9 Zeilen = 7 Braas-Modelle** mit `Lattmass_min/max_mm` (Sp. 26/27); `Verschiebespiel_mm` (32) ist deren Differenz und damit die Eingangsprüfung. **Alle neun tragen `Quelle_1_URL`.** Eingearbeitet 12.08. (W-23) |
 | `resources/planner/hausplaner/app/tools/werkzeugVertrag.ts:874-908` | **W-15** — **VERTRAG, kein Code.** Drei Einträge: `material-aufnehmen`/`PaintCommand` (:874), `material-zuweisen`/`MaterialCommand` (:886), `textur`/`TextureCommand` (:898). Alle drei nennen `services.material.execute(…)` — **das im Repo 0 Treffer hat**. Deshalb `ENTWORFEN` statt `BESCHRIEBEN`; eingearbeitet 12.08. (W-15/1) |
 | `resources/planner/hausplaner/app/tools/auswahlUebersicht.ts` | **W-13** — 77 Zeilen, 4 Ausfuhren; Mehrfach-Ansicht, „das Panel darf nicht raten"; **eingearbeitet 12.08.2026** |
 
