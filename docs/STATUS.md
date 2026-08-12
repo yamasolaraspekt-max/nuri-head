@@ -42,7 +42,7 @@
 | **B5N** Belegzeilen-Schreibweisen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c54c7129` · Elter `a1751fbe` | **6/6** · drei Formen **einzeln** belegt, Barriere bleibt bei fehlendem Beleg laut · B5-Zählwort und B6/B7 nachweislich unberührt (gehasht + am Tor) · Testlücke **gemessen statt angenommen** (0 Stellen), bleibt offen · **einziger Bau des Tages mit `IN_ARBEIT` im committeten Stand vor dem Bau** |
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
-| **A-19** H-9 + §3-Musterberichtigung | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
+| **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
@@ -5915,8 +5915,55 @@ zu_meinem_eigenen_befund: "Meine B5-Messung: von 17 warnenden Botschaften trugen
 ```yaml
 auftrag: "A-19"
 datei: docs/auftraege/aktiv/A-19-h9-und-die-paragraf-3-musterberichtigung.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 0ab70812, Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen (A-19-1 bis A-19-7). Grundtor: Kette Vorfahr,
+  must_preserve resources/app/database 0/0/0, Geheimnisse 0, bash -n exit 0,
+  scripts-Suite 107/107. Reiner Doku-Scope — die §3-Methode steht als REGEL im Regelwerk,
+  nicht als Code im Tor; das habe ich gemessen, nicht angenommen (scripts/ nicht im Diff).
+  DIE TRAGENDE GEGENPROBE SELBST NACHGEFAHREN statt aus dem Votum uebernommen, denn sie ist
+  der ganze Auftrag: eine Berichtigung, die nur Fehlalarme entfernt, KOENNTE eine Abschaltung
+  sein — ein Muster, das nie zaehlt, meldet immer frei.
+    (a) Am Abnahmestand: altes Muster 3 Treffer, neues 0, Zustandsfeld 0. Die drei alten
+        TREFFERZEILEN GELESEN statt gezaehlt: B7 und B5N stehen auf BETRIEBSBESTAETIGT, A-19
+        auf CODE_FERTIG — alle drei tragen IN_ARBEIT nur im Notiztext der letzten Spalte.
+        Echte Fehlalarme.
+    (b) An einer ECHTEN laufenden Zeile aus der Historie (30457e2b, B6 auf IN_ARBEIT):
+        altes Muster 1, neues Muster 1, Zustandsfeld 1. Das neue Muster ZAEHLT eine laufende
+        Zeile. Keine Abschaltung.
+  H-1 bis H-9 einzeln nachgezaehlt: je genau ein Vorkommen, die acht alten unberuehrt.
+  Geltungsakt geprueft: das Blatt traegt anlass 'Yamas Freigabe 12.08. auf meine Vorlage, mit
+  der Bedingung: wenn du sicher bist dass das die beste Loesung ist und wir damit Qualitaet
+  verbessern und der Workflow effizienter wird'."
+
+warum_dieser_bau_mich_persoenlich_trifft: "A-19 berichtigt ein Pruefmuster, das am TEXT ansetzt
+  statt am GEGENSTAND — und genau diese Klasse Fehler habe ich heute ACHT Mal an mir selbst
+  gefunden: ein Namensraum (W-04/1 gegen W-04), ein Block-Griff (letzter statt Auftragsdatensatz),
+  ein Diff-Filter, mein Geheimnismuster auf Design-Tokens, ein tail-5-Fenster, eine falsche
+  Datei, zwei erledigte Baelle in einer Vorlage. Die neue Hausregel H-9 beschreibt meinen
+  eigenen haeufigsten Fehlgriff. Ich habe sie deshalb nicht nur geprueft, sondern uebernommen."
+
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau 0ab70812 ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt (resources/ 0 Dateien),
+  scripts-Suite 107/107. WILDBETRIEBS-BELEG: das berichtigte Muster ist an der laufenden
+  Statusdatei gefahren worden — (a) am heutigen Stand und (b) an einem echten historischen
+  Stand mit laufendem Auftrag, beide Male mit dem erwarteten Ergebnis."
+
+formbefund_waechst_von_einem_auf_zwei_faelle:
+  klasse: SPEC
+  schwere: P2
+  blockiert: nein
+  was: "Auch A-19 aendert die ARBEITSREGELN (50 Zeilen, Abschnitt H-9) und zaehlt die FASSUNG
+    NICHT hoch — gemessen, 0 neue Fassungszeilen im Diff. Nach B7 ist das der ZWEITE Fall in
+    Folge. Zum Vergleich: B5 fuehrte 1.5 ein, B6 die 1.6."
+  und_der_kopf_hinkt_weiter: "Der Kopf des Regelwerks nennt Version 1.4.2, die hoechste
+    Fassungszeile im Dokument ist 1.6. Zwei Fassungen Rueckstand an der Stelle, die jede Rolle
+    beim Start liest — und inzwischen stehen zwei weitere Regelaenderungen ganz ohne Nummer."
+  warum_kein_blocker: "Form, nicht Inhalt. Die Regeln selbst stehen vollstaendig und richtig da,
+    H-1 bis H-9 je genau einmal nachgezaehlt."
+  ball: "generator (Fassungszeilen nachtragen) und planner (Kopfzeile). Ich setze keine Nummer —
+    zu entscheiden, welche Fassung gilt, ist Prozessrecht."
 gebaut: "H-9 in §18a hinter H-8, Regel UND Pruefform im Wortlaut, Abgrenzung zu H-6 als Tabelle IM
   Regeltext. Musterzeile in §3 auf die Zustandsspalte begrenzt. A-19-3 dreifach am LEBENDEN Fall:
   Fehlalarm-Zeilen Z.41 B7 und Z.42 B5N (beide BETRIEBSBESTAETIGT) nicht gezaehlt, echte
