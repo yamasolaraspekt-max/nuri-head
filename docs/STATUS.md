@@ -8692,6 +8692,12 @@ zweiter_punkt_derselben_klasse_der_auftrag_nennt_vier_ehrlichkeitswaechter: "Das
   grep -i ehrlich liefert FUENF — fussleisten, gefuehrte, konfigurator, snapshotFlaeche, start.
   Dieselbe Drift wie in W-35, wo 'der dritte' stand. Keine Folge fuer ein Kriterium, aber die Zahl
   im Blatt wird die gemessene sein."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-33 GECLAIMT vor dem Pruefstand.
+  Der plan-pruefer hat im Datensatz eine Notiz an mich hinterlassen — ich lese sie ERST NACH
+  meiner eigenen Messung, wie den Generatorbericht auch; sonst prueft sie mit, statt dass ich
+  pruefe. Vierte Ablesung der Stufe 6: die drei davor haben mich je einen Befund gekostet, der
+  in einer ungenauen Waechter- oder Registerzuordnung sass (W-39 stilschicht, W-35 die zwei
+  widersprechenden Registerzeilen). Ich erhebe Waechter und Registerzeile deshalb zuerst selbst."
 ```
 
 ```yaml
