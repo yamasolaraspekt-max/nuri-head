@@ -4672,7 +4672,7 @@ fehlerklasse: SPEC
 befund: "Vertretung ueber die Veroeffentlichung hinaus auf Prozessentscheidungen ausgedehnt"
 gegenprobe: "§4-Wortlaut gegen den Entscheid · die Pruefung nennt selbst ballbesitz: yama ·
   im Pruefdokument 1 Treffer fuer RELEASE_FREI/Push/Merge/Tag/Deployment, keiner davon ein Stand"
-ballbesitz: plan-pruefer  # ERLEDIGT 11.08. in der Sache; offen nur die §4-Frage, und die
+ballbesitz: —  # §4-Teilfrage vom plan-pruefer 12.08. beantwortet (NEIN, mit Begruendung); Ball war seit 11.08. offen
                           # gehoert dem Plan-Pruefer, NICHT Yama. Feld am 12.08. nachgezogen.
 erledigt_nachgezogen: "release-pruefer 12.08.: AUCH DIESER BALL LAG SEIT DEM 11.08. FALSCH.
   Beantwortet wurde er so: der berechtigte Kern ist die FORM, nicht die Befugnis — Rechtsgrundlage
@@ -4685,6 +4685,35 @@ erledigt_nachgezogen: "release-pruefer 12.08.: AUCH DIESER BALL LAG SEIT DEM 11.
   Text: NEIN, es kostet Yama einen Satz je Vorgang und haelt die Grenze sichtbar. Ich schliesse
   mich dem an und aendere nichts daran — eine Regel, die meine eigene Vollmacht vergroessert,
   pruefe ich nicht selbst."
+antwort_des_plan_pruefers_auf_die_paragraf4_teilfrage: "plan-pruefer 12.08. — BEANTWORTET, und der
+  Ball lag seit dem 11.08. bei mir. NEIN, §4 wird NICHT ergaenzt. Ich schliesse mich der Empfehlung
+  an, aber mit einer anderen und aus meiner Sicht tragenderen Begruendung als 'es kostet einen Satz'.
+  ERSTENS BRAUCHT EINE EINZELANWEISUNG KEINE REGEL. §1 stellt Yamas Weisung an die hoechste Stelle.
+  Wer auf ausdrueckliche Einzelanweisung handelt, hat seine Grundlage bereits — in §1, nicht in §4.
+  Die Ergaenzung wuerde nichts erlauben, was heute unzulaessig waere; sie wuerde nur die FORM aendern.
+  ZWEITENS IST GENAU DIESE FORM DER SCHUTZ. §4 ist eine STEHENDE Vollmacht: einmal geschrieben, gilt
+  sie ohne weitere Rueckfrage. Eine Einzelanweisung ist punktuell. Der Unterschied ist nicht
+  Buerokratie, sondern ob nach dem Vorgang noch nachweisbar ist, dass Yama es wollte — bei der
+  Einzelanweisung stehen Datum und Wortlaut im Vorgang, bei einer stehenden Vollmacht steht dort
+  nichts.
+  DRITTENS WAERE DIE ERGAENZUNG DIE RUECKNAHME DER BEHEBUNG. Der Fehler, aus dem diese Frage entstand,
+  war eine falsch benannte Rechtsgrundlage — 'Vertretung' statt 'auf Yamas Anweisung vom <Datum>'.
+  Behoben wurde er, indem die Einzelanweisung im Wortlaut genannt wird. Eine §4-Ergaenzung machte
+  genau diese Nennung wieder entbehrlich.
+  VIERTENS PASST SIE NICHT IN DEN BAU DES PARAGRAFEN, am Wortlaut gemessen (ARBEITSREGELN.md
+  Z.205-218): die Vertretungsregel zaehlt ABSCHLIESSEND auf, wofuer sie gilt (Push, Merge, Tags,
+  Deployments in Nicht-Produktion), bindet an ein VOTUM (nur Staende mit RELEASE_FREI) und traegt
+  eine ausdrueckliche AUSNAHMENLISTE (Hetzner, produktive Datenoperationen, Force, endgueltige
+  Loeschung). 'Prozess- und Zuordnungsentscheidungen' hat keines dieser drei Tore — kein Votum, das
+  sie freigibt, keine Liste, die sie begrenzt. Eine Vollmacht ohne Tor in einen Paragrafen zu
+  schreiben, der sonst ueberall Tore hat, waere der Fremdkoerper.
+  MEINE EIGENE GRENZE, und sie gehoert dazu: ich ENTSCHEIDE das nicht, ich beantworte es. Nach §1
+  entstehen Prozessregeln nur aus dem Regelwerk, und die hoechste Stufe ist Yamas Weisung. Wenn §4
+  geaendert wird, dann durch ihn. Meine Antwort ist eine Empfehlung mit Begruendung und keine
+  Aenderung — ich habe an ARBEITSREGELN.md nichts angefasst.
+  GEWUERDIGT: der Release-Pruefer hat die Frage NICHT selbst entschieden mit dem Satz, eine Regel die
+  seine eigene Vollmacht vergroessert pruefe er nicht selbst. Das ist Rollentrennung an der Stelle,
+  wo sie unbequem ist, und es ist der Grund, warum die Frage ueberhaupt bei mir lag."
 
 neuer_befund_dazu_E1_wird_nicht_befolgt:
   klasse: SPEC
@@ -4698,6 +4727,22 @@ neuer_befund_dazu_E1_wird_nicht_befolgt:
     — sie lehrt, dass Regeln folgenlos sind. Das ist dieselbe Klasse wie die Falschmeldungen der
     B5-Barriere: was bei richtiger Arbeit anschlaegt oder bei falscher schweigt, wird weggeklickt."
   ball: planner (Vorlage an Yama) — E1 streichen oder durchsetzen, aber nicht liegen lassen
+nachgemessen_die_zahl_traegt_nicht_mehr: "plan-pruefer 12.08. — BEVOR das an Yama geht: frisch
+  gemessen ueber die letzten 60 Botschaften, und der Befund ist ueberholt. 'E1' steht jetzt FUENF Mal
+  statt einmal, und DREI davon sind echte Anwendungen desselben Rollentraegers in drei aufeinander
+  folgenden Fertigmeldungen — e8532cd7 (W-36), e910d13f (W-33), ea10438f (W-35), jede mit dem Satz
+  'Bau <sha>, E1 mit 9 von 9 GLEICH'. Das ist Messen am Commit, genau wofuer E1 da ist.
+  UND DIE URSPRUENGLICHE MESSUNG WAR AUCH METHODISCH ZU ENG: sie suchte die Zeichenfolgen
+  'git show HEAD:' und 'am COMMIT gemessen'. Beide stehen auch heute bei 0 — aber E1 anzuwenden
+  verlangt keinen dieser Wortlaute. Gemessen wurde die SCHREIBWEISE, nicht die SACHE; dieselbe Klasse
+  wie die Route bei AUF-40 und das Muster bei den Waechtern. Wer nach dem Satz sucht, findet die
+  Anwendung nicht.
+  WAS DAS FUER DIE VORLAGE HEISST: die Frage 'E1 streichen oder durchsetzen' steht auf einer
+  Grundlage, die es nicht mehr gibt. Yama soll nicht gebeten werden, eine Regel zu streichen, weil
+  niemand sie befolgt, wenn sie inzwischen dreimal in Folge befolgt wird. Der Posten ist damit nicht
+  erledigt, aber er ist ein anderer: nicht 'wird nicht befolgt', sondern 'wird von einer Rolle
+  befolgt und ist in den ARBEITSREGELN noch nicht bei allen angekommen'. Ball bleibt beim Planner,
+  die Zahl ist berichtigt."
 ```
 
 **Was ich ausdrücklich NICHT sage:** dass die drei Entscheidungen falsch sind. *Sie sind sachlich
