@@ -7763,6 +7763,30 @@ dor_beleg: "plan-pruefer 13.08. — DoR ERTEILT. Und ich fange mit meinem eigene
   KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator — mit der Abhaengigkeit auf A-25."
 haengt_an: A-25
 blatt: "docs/auftraege/aktiv/A-26-ball-drift-am-tor.md"
+beobachtung_aus_dem_betrieb_und_EINE_FALLE_FUER_DIE_ABNAHME: "plan-pruefer 13.08., nach meinem
+  Commit bf75a25b — der erste Lauf der Barriere an einem fremden Stand.
+  SIE SCHWIEG, und das ist RICHTIG: mein Commit traegt docs/STATUS.md, sie ist also angesprungen,
+  aber er aendert weder Zustand noch Ball — er fuegt ein Feld hinzu. A-26-3 verlangt Stille am
+  sauberen Stand, und sie war still. Direkt nachgefahren ergibt sie ebenfalls keine Ausgabe,
+  Rueckgabewert 0.
+  DANN HABE ICH VERSUCHT, IHR SCHWEIGEN ZU WIDERLEGEN — denn Schweigen zaehlt nur, wenn sie sprechen
+  KANN. Ich habe docs/STATUS.md vom Stand 38bc5e12~1 in eine Datei gezogen, wo ich die Drift SELBST
+  gemessen habe (W-31: Tafel=plan-pruefer gegen Datensatz=planner), und die Barriere darauf gefahren.
+  SIE SCHWIEG AUCH DORT.
+  UND DAS IST MEIN FEHLER UND NICHT IHRER: sie bestimmt ihren Umfang aus dem DIFF —
+  a26-ball-drift.sh:29 setzt DIFF aus 'git diff HEAD -- <datei>', :30-33 zieht die Kennungen aus den
+  geaenderten Zeilen, :34 steigt bei leerer Menge aus. Eine herausgeloeste Datei hat keinen Diff
+  gegen HEAD, also ist die Kennungsmenge leer und der Ausstieg korrekt. Ich habe die Barriere in eine
+  Lage gebracht, fuer die sie nicht gebaut ist, und haette daraus beinahe 'sie greift nicht'
+  gemeldet.
+  DAS IST DIE FALLE FUER DIE ABNAHME, und deshalb steht es hier: A-26-1 verlangt, die drei
+  historischen Staende HERZUSTELLEN. Wer sie stattdessen mit 'git show <sha>~1:docs/STATUS.md >
+  datei' HERAUSLOEST und die Barriere darauf faehrt, bekommt Schweigen — und muesste nach dem
+  Wortlaut rot melden, obwohl die Barriere in Ordnung ist. Der Stand muss im ARBEITSBAUM stehen, mit
+  einem echten Diff gegen HEAD.
+  ICH NEHME DEM EVALUATOR DIE PROBE NICHT AB — sie ist seine, und ich habe sie ausdruecklich nicht
+  gefahren, weil sie eine Drift im gemeinsamen Arbeitsbaum erzeugen wuerde, waehrend fuenf Rollen
+  darin schreiben. Ich melde nur, welche Bauart der Probe belastbar ist und welche nicht."
 meldepflichten_geprueft_EIN_BEFUND: "plan-pruefer 13.08. — der Bau ist da und die Abhaengigkeit ist
   sauber gefallen, aber DER DATENSATZ NENNT WEDER BAU NOCH BERICHT.
   GEMESSEN, blockgenau (die Lehre aus A-25, wo mein erster Griff ueber die Blockgrenze las): der
