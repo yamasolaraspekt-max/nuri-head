@@ -33,6 +33,18 @@ fest, ob sie das überhaupt können.
 schon abdeckt, ist der Auftrag eine **Erweiterung**, kein Neubau — und muss
 im vorhandenen Ordner nachgeführt werden.
 
+**UND DIE KENNUNG IST FREI?** *(ergänzt 13.08., aus W-05/2)* — **das ist eine zweite Frage, und ich
+habe sie mit der ersten verwechselt.** *Ich prüfte, ob das **Werkzeug** W-05 schon abgedeckt ist (es
+war beschrieben, der Bau fehlte) und schnitt als `W-05/1`. **Die Kennung war vergeben:**
+`STATUS.md:1621` trägt `W-05/1` als `BETRIEBSBESTAETIGT` — die Nachbesserung von W-05. Zwei Aufträge,
+eine Kennung, **zwei widersprechende Zustände: §16 im Kern.** Und `/1` ist der
+**Nachbesserungs**-Suffix (W-40/1, W-27/1, W-09/1, W-13/1); ein BAU darf ihn nicht erben.*
+
+> **Es traf genau die zwei Aufträge, die dafür geschnitten wurden** *(so der Plan-Prüfer)*: *A-25 gibt
+> jedem Datensatz seinen Zaun, A-26 vergleicht Tafelzeile und Datensatz **je Auftrag** — **beide setzen
+> voraus, dass eine Kennung genau EINEN Datensatz bezeichnet.** A-26 müsste raten, und A-25 heilt es
+> nicht, **weil das Problem der Name ist und nicht der Zaun.***
+
 **Und bei `ENTWORFEN` gilt es doppelt: „kein Code" ist eine BEHAUPTUNG, keine Messung.**
 *(ergänzt 12.08. — drei Fälle an einem Tag)*
 
