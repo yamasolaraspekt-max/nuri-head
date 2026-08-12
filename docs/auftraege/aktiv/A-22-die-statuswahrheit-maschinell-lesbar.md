@@ -76,6 +76,23 @@ A-21       traegt jetzt ZWEI: den echten Bau-Vermerk des Generators
 die Umbenennung hat dort aus einer `ballbesitz`-Dublette eine `ballbesitz_bau`-Dublette gemacht. Das
 ist ein Restposten der Behebung und kein neuer Fall — die anderen drei sind sauber.*
 
+### 1b — Eine Auflage lag vor und ich habe sie nicht eingearbeitet
+
+**Der Plan-Prüfer hat die Berichtigung zu A-22-2b bereits in der ZWEITEN DoR-Fassung gegeben**
+(`dad47230`), ausdrücklich als *„kein Blocker — die Ursache EXISTIERT, sechsmal belegt; sie braucht
+nur die Zahl, die zu ihr gehört."* Sie stand vollständig im `dor_beleg`, samt Messung und samt dem
+Satz: *„Die Zahl 65 passt zur ersten Lesart, die Formulierung ‚statt eine vorhandene zu ändern' zur
+zweiten — **beide zusammen sind falsch.**"*
+
+> **Ich habe sie nicht eingearbeitet, und zwar in einem Datensatz, in den ich zweimal selbst
+> geschrieben habe.** *Beim Editieren habe ich nur die Felder angefasst, die ich ändern wollte
+> (`zustand`, `ballbesitz`), und den `dor_beleg` nicht gelesen. **Deshalb ist aus einem Hinweis ein
+> Blocker geworden** — die erste Nicht-Freigabe seiner Wache.*
+
+**Die Lehre gehört zum Handgriff, nicht zu einer neuen Prüfung:** *wer einen Datensatz ändert, liest
+den `dor_beleg` — dort stehen die Auflagen. Ein Feld zu ändern, ohne den Block zu lesen, ist
+dasselbe wie eine Zahl zu nehmen, ohne die Trefferzeile zu lesen.*
+
 > **Dass KEINE der 17 denselben Wert trägt, ist die eigentliche Aussage.** *Der Generator hat es
 > richtig eingeordnet: **niemand schreibt denselben Wert zweimal.** Jemand schreibt einen **neuen
 > neben den alten**, statt den alten zu ändern. Jede Dublette ist also ein überholter Wert, der
@@ -150,13 +167,22 @@ A-22-2  ERLEDIGT VOR DEM BAU, und NICHT durch diesen Auftrag — Kriterium gestr
         WAS AN DER STELLE ZU TUN BLEIBT: nichts. Die URSACHE bleibt und steht in
         A-22-2b, denn der Generator hat sie selbst gemessen und sie ist kein
         Einzelfall.
-A-22-2b Die URSACHE der ballbesitz-Dubletten ist im Bericht benannt: 65 Commits des
-        Generators auf docs/STATUS.md fuegen eine ballbesitz-Zeile HINZU, statt eine
-        vorhandene zu aendern — seine eigene Messung, und zweimal an einem Tag
-        eingetreten (A-21 in 869c560d, W-34 im selben Handgriff). Ein neues
-        ballbesitz_bau ist bereits nachgewachsen. Das Kriterium verlangt KEINE
-        Verhaltensaenderung fremder Rollen, sondern dass die Bereinigung den
-        Nachwuchs MITZAEHLT: die Zahl am Bau-Stand, nicht die aus diesem Blatt.
+A-22-2b BERICHTIGT — die erste Fassung sagte das GEGENTEIL der Messung. Sie lautete
+        '65 Commits des Generators fuegen eine ballbesitz-Zeile HINZU, statt eine
+        vorhandene zu aendern'. Die 65 bezeichnet genau die Commits, die KORREKT
+        aendern.
+        SELBST NACHGEMESSEN, je Commit der Diff auf docs/STATUS.md:
+          80  Generator-Commits auf dieser Datei
+          71  fuegen eine ballbesitz-Zeile hinzu
+          65  davon entfernen ZUGLEICH eine  ->  korrektes Aendern
+           6  davon entfernen KEINE          ->  DIE URSACHE
+          Rechnung schliesst: 71 - 6 = 65.
+        Die Ursache ist im Bericht mit der Zahl SECHS benannt, und die 65 als das,
+        was sie ist: der Beleg dafuer, dass ueberwiegend richtig geaendert wird.
+        Zwei der sechs sind namentlich belegt (A-21 in 869c560d und W-34 im selben
+        Handgriff), beide vom Generator selbst eingeraeumt.
+        Das Kriterium verlangt KEINE Verhaltensaenderung einer fremden Rolle, sondern
+        dass die Bereinigung am BAU-STAND zaehlt und nicht aus diesem Blatt uebernimmt.
 A-22-3  Die Aufzeichnungs-Dubletten sind INHALTLICH vollstaendig erhalten und unter
         unterscheidbaren Schluesseln eindeutig. Nachweis: die Zahl der Vermerktexte
         vorher und nachher ist gleich — kein Text ist verschwunden. Wer hier loescht,
