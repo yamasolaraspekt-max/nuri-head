@@ -2176,6 +2176,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## Zwei Postenmessungen — und ein Fehlbefund, den ich um Haaresbreite verfehlt habe (plan-pruefer 12.08.)
+
+```yaml
+mein_beinahe_fehlbefund: "Meine Wache-Messung ergab: W-07N steht auf BEREIT, IN_ARBEIT gesamt 0 — waehrend der Planner in 7fbdaafe einen §3-Beleg fuehrt, 'nach dem Setzen: genau 1, und zwar W-07N'. Der naheliegende Befund waere gewesen: 'sein Setzen ist verloren gegangen.' ER WAERE FALSCH GEWESEN, und zwar in die entgegengesetzte Richtung: der Auftrag ist nicht ZURUECK-, sondern WEITERgefallen. Die Tafel fuehrt ihn seit 08:22:07 auf CODE_FERTIG/Evaluator, nur der Datensatz haengt auf BEREIT/generator von 03:01:35. Gerettet hat mich nicht Vorsicht, sondern dass ich der Widerspruechlichkeit nachgegangen bin statt sie zu melden."
+gefunden_hat_es_der_evaluator: "Der Fund gehoert dem Evaluator (721025d5): 'Gefunden NUR ueber die Tafel' — er hat beim Claim die zweite Seite gelesen, sonst haette er einen BEREITen Auftrag zur Abnahme gehabt. Und er hat die richtige Konsequenz gezogen: 'das kommt ins Votum, nicht in eine stille Korrektur von mir.' Wer den Zustand nicht gesetzt hat, zieht ihn auch nicht nach — sonst verschwindet der Bruch, statt behandelt zu werden. Das ist derselbe §16-Bruch wie in meinen sieben Tafelzeilen, nur mit vertauschten Seiten: damals hinkte die TAFEL dem Datensatz nach, heute hinkt der DATENSATZ der Tafel nach."
+was_das_ueber_die_richtung_lehrt: "Ich habe die Doppelfuehrung bisher als 'Tafel hinkt nach' gedacht, weil meine sieben Faelle so lagen. Die Richtung ist aber NICHT die Eigenschaft des Fehlers — sie haengt nur daran, wer zuletzt geschrieben hat. Eine Probe, die nur eine Richtung sucht, findet die halben Faelle. Ab jetzt vergleiche ich BEIDE Seiten symmetrisch und nehme die JUENGERE Zeitmarke als den wahren Stand, nicht die Seite, der ich gewohnheitsmaessig traue. Der Ball fuer das Nachziehen liegt beim Setzenden (Planner in Generatorrolle), nicht bei mir."
+posten_a13_praezisiert_nicht_erledigt: "FRISCH GEMESSEN, weil ich diesen Posten bei Yama fuehre: A-13 steht auf BETRIEBSBESTAETIGT, und die LOKALE Zaehlung IST gefahren — p_v_roofs gesamt 0, ausserhalb [0,360) 0, NULL 0. Fuer main damit kein Hindernis. Der Posten ist aber NICHT erledigt, sondern VERSCHOBEN UND STRENGER GEWORDEN: die Zaehlung gegen Hetzner (3000 Kunden) ist offen und faellt erst VOR EINEM PRODUKTIONS-DEPLOY an — und seither sind ZWEI Bedingungen dazugekommen, die es beim ersten Formulieren nicht gab: H1 Formularvalidierung und H2 gefangene Ausnahme. Ohne sie ist die Folge ein HTTP 500 beim Anwender, AUCH WENN ER DEN AZIMUT GAR NICHT ANFASST. Ich melde Yama also nicht mehr 'entscheide die Veroeffentlichungsbedingung', sondern 'kein Handlungsbedarf bis zum Deploy-Tag, dann drei Dinge statt einem'."
+posten_n003_unveraendert_offen: "N-003 (Sparren-Vorbemessung) frisch gemessen: weiter als FACH-GATE auf GELB, ausdruecklich bestaetigungspflichtig, keine Entscheidung eingetragen. A-14 hat den Vorbehalt ins Ergebnis gebracht (BETRIEBSBESTAETIGT) — die Anzeige ist also sauber, das FACHURTEIL steht aus. Bleibt bei Yama, unveraendert."
+```
+---
+
 ## Kenntnis: Rollenwechsel + ein Befund, der MEINE Messmethode trifft (plan-pruefer 12.08.)
 
 ```yaml
