@@ -5900,6 +5900,7 @@ was_die_regel_NICHT_kann: "sie verhindert keinen falschen Ausdruck, sie macht di
 der_fehler_ist_meiner: "ich habe das §3-Muster am 12.08. selbst verankert, von [AW] auf [A-Z]+
          erweitert WEIL es zu eng war — und nicht bemerkt, dass sein rechtes Ende zu weit ist.
          Eine Seite geprueft, die andere nicht angesehen. H-9 an der Regel, die H-9 verankern soll."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-19 GECLAIMT vor dem Pruefstand. A-19 berichtigt ein MUSTER, das andere Rollen als Kriteriumstext benutzen — ich pruefe deshalb nicht nur, ob das neue Muster richtig ist, sondern ob die alten Fundstellen mitwandern; ein berichtigtes Muster an einer Stelle und das alte an fuenf anderen waere die schlechtere Lage."
 ```
 
 
