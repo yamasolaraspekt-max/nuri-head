@@ -46,6 +46,7 @@
 | **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
 | **W-27** Dachkantentypen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
 | **W-20** Stückliste und Mengen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
+| **W-38** Schrittstatus und Prüfpunkte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6336,6 +6337,22 @@ der_stille_fehler_dieses_werkzeugs: "Kriterium W-27-2 verlangt ALLE VIER joinTyp
          am Dach auf."
 ```
 
+
+## W-38 · Schrittstatus und Prüfpunkte — DoR bestanden, Block vom Plan-Prüfer angelegt
+
+```yaml
+auftrag: "W-38"
+zustand: BEREIT
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN, jede Behauptung selbst gemessen: studioDaten.ts traegt 257 Zeilen (exakt wie im Blatt), STATUS_LABEL existiert, SchrittStatus definiert VIER Stufen ('ok'|'prog'|'warn'|'open', Z.163). Bei den _STILLGELEGT-Konstanten zeigte mein Zaehler DREI, das Blatt sagt ZWEI — GELESEN statt gezaehlt: Z.157 ZULETZT_STILLGELEGT und Z.186 STEPS_STILLGELEGT sind Konstanten, Z.146 ist ein Kommentarverweis. Das Blatt hat recht."
+ballbesitz: generator
+titel: "Vier Stufen, vier Datenformen, zwei stillgelegte Konstanten — Ablesung aus dem Bestand"
+basis_sha: fb1a396d
+spur: A
+leerstelle_geschlossen: "Das Blatt existierte mit status ENTWURF und ballbesitz 'plan-pruefer (DoR)', aber in der Statuswahrheit stand NICHTS — 0 Bloecke, 0 Tafelzeilen. Genau die Bauart, die ich seit Tagen pruefe: die Statuswahrheit sagt dort nicht das Falsche, sie sagt gar nichts. Meine Leerstellen-Probe hat sie gefunden, und ich habe Block UND Tafelzeile angelegt."
+die_alte_offene_frage_ist_damit_beantwortet: "Seit dem A-17-Doppelblock steht die Frage offen, WER den Block anlegt — Planner beim Schnitt oder Plan-Pruefer bei der DoR. Sie ist nie entschieden worden. Faktisch ist es beide Male der Plan-Pruefer gewesen: bei den neun unsichtbaren Blaettern und jetzt hier. ICH SCHLAGE VOR, es dabei zu belassen und es als Regel zu schreiben: der Planner schneidet das Blatt, der Plan-Pruefer legt den Block bei der DoR an — dann entsteht der Block genau dann, wenn es einen geprueften Zustand zu tragen gibt, und ein Doppelblock wie bei A-17 kann nicht mehr entstehen. Entscheidung gehoert dem Planner oder Yama, nicht mir."
+gewuerdigt_meine_lehre_ist_ein_kriterium_geworden: "W-38-8 verlangt die Gegenprobe 'tail -n +2 <blatt> | md5 je Blatt, keine zwei Werkzeuge mit gleichem Hash' — und begruendet sie woertlich mit MEINEM Fehler: 'weil meine erste W-07N-SPEC 6/7 zaehlte, wo 4/7 standen — Platzhalterzaehlung ist blind fuer unveraenderte Vorlagen'. Aus einem Fehlbefund von heute Vormittag ist eine stehende Pruefung geworden, und sie ist schaerfer als beide Verfahren, die ich damals hatte: ein Hash-Vergleich findet die unveraenderte Vorlage UND die minimal veraenderte."
+```
+---
 
 ## W-20 — Stückliste und Mengen (Datensatz, EINZIGER Zustandsort neben der Tafelzeile)
 
