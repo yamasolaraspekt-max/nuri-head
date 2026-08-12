@@ -34,6 +34,7 @@ erhalten; hier ist der Rückweg der Verweis selbst.*
 | **H-5** | Ein Werkzeug darf nur urteilen, wenn es alle Bedingungen kennt | dito |
 | **H-6** | Ein Wort ist kein Beleg; erst die Stelle ist einer | dito |
 | **H-7** | Ein Ist-Wert ist kein Soll-Wert | dito |
+| **H-8** | Mehrfachvorkommen ist kein Beleg — und der Ort ist kein Beleg für die Wirkung | dito |
 
 ```yaml
 zustand: "AUFGELOEST — Inhalt in ARBEITSREGELN.md §18a, Fassung 1.3"

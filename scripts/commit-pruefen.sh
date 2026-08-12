@@ -572,6 +572,32 @@ if printf '%s' "$BOTSCHAFT" | grep -qE "$B6_SUMMENWORT" \
   echo "            Warnung, kein Abbruch — der Commit laeuft weiter." >&2
 fi
 
+# ── B7: MEHRFACHVORKOMMEN IST KEIN BELEG (H-8) ──────────────────────────────────────────────
+# Yamas Wortlaut: *dieselbe Zahl an vier Stellen ist NICHT vier Belege — sie ist ein Beleg, dreimal
+# kopiert, oder gar keiner, viermal kopiert.* Der belegte Fall: TIME_VARS, elf Zeitwerte an VIER
+# Fundorten, NULL unabhaengige Herkunftsangaben; die Quelle sagt selbst "adjust to your company
+# values". Ein Platzhalter, viermal mitkopiert.
+#
+# STELLE, ausdruecklich gegen B5 und B6 gehalten (B7-7 Zusage 2): B5 liegt in 513-541, B6 in
+# 543-573, B7 beginnt DAHINTER. Die drei Bloecke beruehren sich nicht — gemessen, nicht vermutet.
+#
+# WAS DAS TOR KANN: sehen, ob eine Botschaft MEHRERE Fundorte nennt und dazu keine Herkunft.
+# WAS ES NICHT KANN: pruefen, ob die genannte Herkunft stimmt. Das kann kein Tor.
+#
+# Der Ausloeser verlangt ausdruecklich MEHR ALS EINEN Fundort (>= 2 oder ein Zahlwort ab zwei) —
+# eine Zahl mit genau EINEM Fundort ist keine Verbreitung und darf nicht warnen (B7-3).
+B7_MEHRFACH='(([2-9]|[1-9][0-9]+)|zwei|drei|vier|fuenf|fünf|sechs|sieben|acht|neun|zehn) *(Fundorte|Fundstellen|Vorkommen|Stellen|Orten|Dateien)|an (zwei|drei|vier|fuenf|fünf|([2-9]|[1-9][0-9]+)) (Stellen|Orten)'
+B7_HERKUNFT='[Hh]erkunft|[Qq]uelle|stammt|[Uu]nabh(ae|ä)ngig|Ursprung|kopiert|[Aa]ufrufer|@include|@extends|[Rr]oute'
+if printf '%s' "$BOTSCHAFT" | grep -qE "$B7_MEHRFACH" \
+   && ! printf '%s' "$BOTSCHAFT" | grep -qE "$B7_HERKUNFT"; then
+  echo "B7-WARNUNG  Mehrere Fundorte genannt, aber keine Herkunft." >&2
+  echo "            Wie oft etwas vorkommt, sagt nichts darueber, WOHER es kommt: dieselbe" >&2
+  echo "            Zahl an vier Stellen ist ein Beleg dreimal kopiert — oder keiner." >&2
+  echo "            Und 'steht im Produktivcode' gilt erst mit genanntem AUFRUFER;" >&2
+  echo "            Ordnerlage ist kein Beleg fuer Wirkung." >&2
+  echo "            Warnung, kein Abbruch — der Commit laeuft weiter." >&2
+fi
+
 # ── W-04 ────────────────────────────────────────────────────────────────────────────────────
 # Das Tor konnte keine NEUE Datei verbuchen: `git commit -- <pfad>` kennt nichts, was nie im
 # Index war. Gemessen am 03.08.: **31 von 98 Commits** dieser zwei Tage fuehrten mindestens eine

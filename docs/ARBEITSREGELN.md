@@ -809,6 +809,36 @@ Zulässigkeit — und hebt allein keine 🔴-Sperre auf.**
 *Jeder Wert in einem Katalog trägt, ob er Ist oder Soll ist. Eine Tabelle aus Ist-Werten mit dem
 Etikett „Fachregel" ist F-051 in neuer Gestalt, nur mit echten Zahlen.*
 
+### H-8 · Mehrfachvorkommen ist kein Beleg — und der Ort ist kein Beleg für die Wirkung
+
+> **(a) Dieselbe Zahl an vier Stellen ist nicht vier Belege** — sie ist ein Beleg, dreimal kopiert,
+> oder gar keiner, viermal kopiert. *Die Frage ist nie „wie oft kommt sie vor", sondern **„wie oft
+> kommt sie UNABHÄNGIG vor"**.* **Wer Vorkommen zählt, misst Verbreitung. Wer Herkunft prüft, misst
+> Wahrheit.**
+>
+> **(b) Wo eine Datei liegt, sagt nichts über ihre Wirkung.** *„Steht im Produktivcode" gilt erst
+> als belegt, wenn ein **Aufrufer** genannt ist — Route, `@include`, `@extends` oder ein aufgelöster
+> dynamischer View-Name. **Ordnerlage genügt nicht.***
+
+**Der belegte Fall, aus dem beide Teile stammen:** *`TIME_VARS` — elf Zeitwerte an **vier**
+Fundorten, davon **null** unabhängige Herkunftsangaben. Der Kommentar der Quelle sagt es selbst:
+„time assumptions (minutes) – adjust to your company values". **Ein Platzhalter, viermal
+mitkopiert und nie eingelöst.*** *Und der vierte Fundort lieferte Teil (b): er liegt in
+`resources/views/` und sah deshalb nach Auslieferung aus — gemessen hatte er **0** statische
+View-Referenzen, die gleichnamige Route zeigt auf eine andere Datei ohne `TIME_VARS`, und seine
+ganze Historie ist **ein** Commit „Checkpoint: save WIP".*
+
+> **Beides ist dieselbe Verwechslung:** *ein Merkmal, das leicht zu zählen ist, wird für das Merkmal
+> genommen, auf das es ankommt — **Vorkommen statt Herkunft, Ort statt Ausführung**.*
+
+**Und die Reichweite der eigenen Messung gehört dazu:** *„kein statischer Aufrufer" ist eine andere
+Aussage als „unerreichbar".* **Wer die dynamische Lücke nicht ausschließen kann, benennt sie —
+statt sie wegzulassen.**
+
+*Das Tor erinnert daran (`scripts/commit-pruefen.sh`): eine Botschaft, die mehrere Fundorte nennt
+und keine Herkunft, bekommt eine **Warnung**. Kein Abbruch — Mehrfachvorkommen ist meistens harmlos,
+jede Konstante kommt mehrfach vor.*
+
 ---
 
 ## 18b. Die Barriere B5 — Zählergebnis und Trefferzeilen
