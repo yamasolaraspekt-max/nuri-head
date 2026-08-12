@@ -38,11 +38,18 @@ DREI ZUSTANDSWORTE IM GEBRAUCH           im Regelwerk
 17 Fälle gemeldet habe, ohne einen zu öffnen):
 
 ```text
-STATUS.md:14   | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgefuehrt 880eb726 …
-STATUS.md:31   | **P-02** parallele Instanzen | `VORLAGE` | Plan-Pruefer | c2de1eec |
-                 kein Bauauftrag, zaehlt nicht i…
-STATUS.md:51   | **W-21L** Lattung | `ZURUECKGESTELLT` | – | Schnitt 717eb11c | OPERANDEN-GATE …
+Tafelzeile A-06   | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgefuehrt 880eb726 …
+Tafelzeile P-02   | **P-02** parallele Instanzen | `VORLAGE` | Plan-Pruefer | c2de1eec |
+                    kein Bauauftrag, zaehlt nicht i…
+Tafelzeile W-21L  | **W-21L** Lattung | `ZURUECKGESTELLT` | – | 717eb11c | OPERANDEN-GATE …
 ```
+
+> **Hier standen zuerst Zeilennummern (`STATUS.md:14/:31/:51`), und sie waren beim ersten
+> Gegenlesen schon falsch.** *Der Generator hat es an sich selbst gemessen: er notierte zehn
+> Zeilennummern, und **alle zehn schlugen fehl** — `docs/STATUS.md` wuchs zwischen Messung und
+> Gegenprobe von 6.779 auf 6.815 Zeilen, der A-21-Block wanderte um 37 Zeilen. **In einer Datei,
+> in die fünf Rollen gleichzeitig schreiben, ist eine Zeilennummer kein Beleg, sondern ein
+> Verfallsdatum.** Belegt wird ab hier über die Auftragskennung und den Feldnamen.*
 
 > **P-02 definiert seine eigene Bedeutung in der Tafelzeile** — *„kein Bauauftrag, zählt nicht in
 > §3". **Damit steht eine Zustandsregel im Kommentarfeld einer Tabellenzeile**, und niemand außer
@@ -111,17 +118,42 @@ A-21-1  E1 steht in ARBEITSREGELN.md, mit dem Befehl woertlich
         (git show HEAD:<pfad> | diff - <pfad>) und mit Yamas Datum 10.08. als Herkunft.
         Nachweis: grep 'E1' liefert Treffer, vorher 0.
 A-21-2  E3 steht dort, wo der Zaehler beschrieben ist. Nachweis wie A-21-1.
-A-21-3  ZURUECKGESTELLT ist abgeschafft: 0 Treffer in docs/STATUS.md, und W-21L
-        traegt DECISION_BLOCKED an BEIDEN Orten (Tafelzeile und Datensatz).
+A-21-3  BERICHTIGT nach dem Befund des Generators (605fde3b) — die erste Fassung
+        verlangte '0 Treffer von ZURUECKGESTELLT in docs/STATUS.md' und war damit
+        unerfuellbar, ohne Belege zu vernichten.
+        W-21L traegt DECISION_BLOCKED an BEIDEN ZUSTANDSORTEN: Tafelzeile und
+        zustand:-Feld. Nachweis mit einem Muster, das den Zustandsort BINDET —
+        keine Volltextsuche.
+        Volltext ergibt 14 Treffer, selbst nachgemessen und jede Stelle geoeffnet:
+        2 sind der Zustand, 12 sind Belege und Fliesstext (zwei
+        vertretungsentscheid:-Felder, die Yamas Anweisung zitieren, Befunde,
+        Vergleichsmessungen, der Titel und der dor_beleg DIESES Auftrags).
+        DIE 12 BLEIBEN ALLE STEHEN. A-20-4 verlangt woertlich, nicht zu loeschen
+        ohne zu sagen was gegolten hat, und der Evaluator hat in 99fc86cd aus
+        demselben Grund die 17 Meldebloecke stehen gelassen. Ein Kriterium, das
+        einen Auftrag zwingt, seinen eigenen Titel zu loeschen, ist kein Kriterium.
 A-21-4  ERLEDIGT und VORLAGE sind in §3 definiert, JE MIT der Angabe, ob sie einen
         §3-Platz belegen. Ohne diese Angabe ist die Definition unbrauchbar.
 A-21-5  P-02s Tafelzeile enthaelt keine eigene Zustandsregel mehr, sondern verweist
         auf §3 — oder die alte Fassung bleibt ausdruecklich als BELEG gekennzeichnet
         stehen. Geloescht wird sie nicht.
-A-21-6  KEIN anderer Auftragszustand wurde geaendert. Nachweis: git diff auf
-        docs/STATUS.md zeigt Zustandsaenderungen ausschliesslich bei W-21L.
-A-21-7  Die Reihenfolge ist eingehalten: A-20 ist abgenommen, bevor dieses Blatt
-        gezogen wird. Nachweis: A-20s Zustand zum Zeitpunkt des IN_ARBEIT.
+A-21-6  BERICHTIGT nach demselben Befund. KEIN anderer Auftragszustand wurde
+        geaendert — Nachweis AM COMMIT: git show <bau-sha> -- docs/STATUS.md zeigt
+        geaenderte zustand:-Zeilen und Tafelzeilen ausschliesslich bei W-21L.
+        Die erste Fassung verlangte git diff, und das ist untauglich: git diff misst
+        den ARBEITSBAUM und ist nach einem Commit zwangslaeufig leer, also auch bei
+        zwanzig geaenderten Fremdzustaenden gruen. Es ist woertlich der Mangel, den
+        der Evaluator in 99fc86cd an A-20-5 gefunden hat — und genau die Messung, die
+        E1 vorschreibt. Ein Blatt, das E1 ins Regelwerk schreiben soll, darf sie nicht
+        im eigenen Kriterienblock verfehlen.
+A-21-7  BERICHTIGT und VERSCHAERFT. A-20 ist BETRIEBSBESTAETIGT, bevor dieses Blatt
+        gezogen wird — nicht nur ABGENOMMEN. Grund: nach der Abnahme kann
+        RELEASE_BLOCKED folgen, und dann bessert A-20 in DERSELBEN Datei nach.
+        Nachweis: der IN_ARBEIT-Commit nennt A-20s Zustand, gemessen am ELTER
+        (git show <elter>:docs/STATUS.md), nicht am Arbeitsbaum. Die erste Fassung
+        sagte 'Zustand zum Zeitpunkt des IN_ARBEIT' ohne Messort — der Generator hat
+        zu Recht angemerkt, dass ein Nachweis, der an einem nicht nachholbaren
+        Zeitpunkt haengt, das Kriterium fuer immer rot macht, wenn man zu frueh zieht.
 ```
 
 **Nachweisform: Befehl und Trefferzeilen** (B5), und **mindestens eine Stelle je Zählung

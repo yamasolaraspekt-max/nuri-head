@@ -48,7 +48,7 @@
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
-| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · aus dem Befund des Plan-Prüfers `7b7db5b6` · **Bau erst NACH A-20s Abnahme** (dieselbe Datei) |
+| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
@@ -6756,8 +6756,40 @@ meine_dritte_falle: "Mein Suchmuster meldete zuerst EINEN Math-Treffer in holzMe
 
 ```yaml
 auftrag: "A-21"
-zustand: BEREIT
-ballbesitz: generator
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+spec_berichtigt_nach_befund: "605fde3b — der Generator hat VOR dem Ziehen gegengelesen und NICHT
+  gezogen, und beide Befunde treffen. Zurueck auf ENTWURF, weil sich KRITERIEN geaendert haben und
+  eine DoR auf die alte Fassung keine DoR auf die neue ist. §12.1.
+  BEFUND 1 zu A-21-3: mein Nachweis verlangte 0 Treffer von ZURUECKGESTELLT in docs/STATUS.md.
+  SELBST NACHGEMESSEN und jede Stelle geoeffnet: 14 Treffer, davon 2 der echte Zustand von W-21L
+  (Tafelzeile und zustand-Feld) und 12 Belege und Fliesstext — darunter zwei
+  vertretungsentscheid-Felder, die Yamas Anweisung zitieren, und der TITEL sowie der DOR-BELEG
+  dieses Auftrags selbst. 0 Treffer haette verlangt, dass der Auftrag seinen eigenen Titel
+  loescht, und es kollidiert frontal mit A-20-4 und mit der Entscheidung des Evaluators in
+  99fc86cd, die 17 Meldebloecke als Belege stehen zu lassen. Berichtigt: das Kriterium bindet
+  jetzt den ZUSTANDSORT statt Volltext zu zaehlen, und die 12 bleiben ausdruecklich stehen.
+  BEFUND 2 zu A-21-6: mein Nachweis war git diff auf docs/STATUS.md — genau der Nachweistyp, den
+  der Evaluator eine Runde vorher an A-20-5 verworfen hat, weil git diff den Arbeitsbaum misst und
+  nach einem Commit zwangslaeufig leer ist. Und das Bittere daran: ich habe diesen Mangel gelesen,
+  verstanden und weitergemeldet — und nicht auf mein eigenes offenes Blatt angewandt. Berichtigt
+  auf Messung am COMMIT, git show bau-sha, also genau die Messung, die E1 vorschreibt. Ein Blatt,
+  das E1 verankern soll, darf sie im eigenen Kriterienblock nicht verfehlen.
+  DRITTENS, seine Beobachtung uebernommen: er notierte zehn Zeilennummern, und alle zehn schlugen
+  beim Gegenlesen fehl, weil docs/STATUS.md von 6779 auf 6815 Zeilen wuchs und der A-21-Block um
+  37 Zeilen wanderte. In einer Datei, in die fuenf Rollen gleichzeitig schreiben, ist eine
+  Zeilennummer kein Beleg sondern ein Verfallsdatum. Die Belege in Abschnitt 1 des Blattes standen
+  als STATUS.md-Doppelpunkt-14, -31 und -51 und waren schon falsch; sie sind auf Auftragskennung
+  und Feldname umgestellt.
+  VIERTENS von mir aus verschaerft: A-21-7 verlangt jetzt BETRIEBSBESTAETIGT statt ABGENOMMEN,
+  weil nach der Abnahme RELEASE_BLOCKED folgen kann und A-20 dann in derselben Datei nachbessert.
+  Sein Einwand dazu war berechtigt: ein Nachweis, der an einem nicht nachholbaren Zeitpunkt
+  haengt, macht das Kriterium fuer immer rot, wenn zu frueh gezogen wird — deshalb nennt der
+  Nachweis jetzt den Messort, den Elter-Commit."
+was_der_generator_richtig_gemacht_hat: "Er hat gemessen BEVOR er zog, nicht gezogen, nichts
+  umgedeutet und beide Zahlen genannt statt sich eine Lesart auszusuchen: 14 gesamt und 2 als
+  Zustand, mit dem Satz welche Menge gemeint ist entscheidet nicht der Bauende. Haette er gezogen,
+  waere A-21-7 dauerhaft rot gewesen."
 titel: "E1 und E3 verankern · ZURUECKGESTELLT abschaffen · ERLEDIGT und VORLAGE definieren"
 basis_sha: 7b7db5b6
 spur: A
