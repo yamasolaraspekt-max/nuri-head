@@ -68,6 +68,27 @@ Datensatz im yaml-Block:
                    ohne Normalisierung meldet JEDE Zeile als Drift — die Barriere
                    wird weggeklickt und ist damit tot (A-03).
                    -> Backticks, Sterne und Randleerzeichen weg, dann vergleichen.
+                   ERGAENZT 13.08., UND MEINE AUFZAEHLUNG WAR UNVOLLSTAENDIG:
+                   Backticks und Sterne genuegen NICHT. Selbst gemessen an der
+                   Ball-Spalte gegen die Datensatzfelder:
+                     Tafel      **Generator** (4x) · **Evaluator** (3x)
+                                Plan-Pruefer mit UMLAUT (1x)
+                     Datensatz  generator (6x) · evaluator (3x) · planner (7x)
+                                plan-pruefer OHNE Umlaut
+                   Es unterscheiden sich also auch GROSS/KLEIN und UMLAUT gegen
+                   Umschrift. Ohne diese zwei Normalisierungen meldete die Barriere
+                   bei JEDER Zeile Drift — genau der Fall, den A-26-3 verbietet.
+                   -> zusaetzlich kleinschreiben UND umlautfrei vergleichen
+                      (ue/ae/oe fuer ue/ae/oe).
+                   DER BAU HAT ES SCHON RICHTIG GEMACHT: scripts/a26-ball-drift.sh
+                   vergleicht den Ball kleingeschrieben und umlautfrei. Diese
+                   Ergaenzung verlangt also NICHTS NEUES — sie DECKT, was gebaut ist.
+                   WARUM SIE TROTZDEM NOETIG IST: eine Zusage, die gebaut aber nicht
+                   gefordert ist, wird beim naechsten Umbau nicht rot. Wer die
+                   Kleinschreibung entfernt, faellt an keinem Kriterium — und die
+                   Barriere warnt danach bei jeder Zeile, bis sie abgeschaltet wird.
+                   Dieselbe Logik wie A-24-5: der Waechter haelt die KOPPLUNG, nicht
+                   den Wortlaut.
 (b) KOMMENTARE     `ballbesitz: plan-pruefer  # DoR steht aus`. Wer alles nach dem
                    Doppelpunkt nimmt, vergleicht den Kommentar mit.
                    -> alles ab # abschneiden.
