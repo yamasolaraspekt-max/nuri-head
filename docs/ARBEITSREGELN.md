@@ -80,6 +80,28 @@ Zusätzliche Blockzustände:
 - `RELEASE_BLOCKED`: der abgenommene Stand ist nicht sicher oder nicht reproduzierbar
   veröffentlichbar.
 
+Zwei Zustände außerhalb der Baukette, **verankert 12.08. (A-21), weil sie im Gebrauch waren und
+nirgends definiert**:
+
+- `ERLEDIGT`: **ein Auftrag ist ausgeführt und gegengeprüft, ohne jemals Code erzeugt zu haben.**
+  *Ein Ausführungsauftrag — etwas wird getan, nicht gebaut.* Er durchläuft die Baukette nicht und
+  endet hier. **Belegt eine `IN_ARBEIT`-Stelle nach §3: NEIN.** *Realfall: `A-06` Probedaten
+  Arbeits-DB, ausgeführt `880eb726`, gegengeprüft.*
+- `VORLAGE`: **ein Verfahrensvorschlag, der auf Yamas Entscheidung wartet.** *Kein Bauauftrag.* Er
+  wird nicht gebaut, sondern beschieden. **Belegt eine `IN_ARBEIT`-Stelle nach §3: NEIN**, *und er
+  zählt auch nicht im §13-Zähler, weil dieser Planner-Bauaufträge zählt.* **Realfall: `P-02`
+  parallele Instanzen, `c2de1eec`.**
+
+> **Warum die Angabe „belegt einen §3-Platz: ja/nein" zur Definition gehört und nicht dahinter:**
+> *ohne sie ist die Definition unbrauchbar.* **§3 lässt genau einen `IN_ARBEIT` zu — wer einen
+> Zustand einführt, ohne zu sagen, ob er auf diese Schranke zählt, hat kein Wort erklärt, sondern
+> eine Lücke geschaffen.** *Beide zählen nicht: keiner von beiden ist ein laufender Bau.*
+>
+> **Sie standen vorher nirgends.** *Gemessen am 12.08. vor dieser Änderung: `ERLEDIGT` **0** Treffer
+> in dieser Datei, `VORLAGE` **0** — bei je einem Auftrag, der sie trug. `P-02` definierte `VORLAGE`
+> in der **Kommentarspalte seiner eigenen Tafelzeile**; wer diese eine Zeile nicht las, erfuhr die
+> Regel nie.* **Derselbe Fehlertyp wie A-20s vier Zustandsorte, eine Ebene kleiner.**
+
 Beim Eintritt in `ENV_BLOCKED`, `DECISION_BLOCKED` oder `RELEASE_BLOCKED` wird der vorherige
 Prüfzustand als `fortsetzung_zustand` gespeichert. Eine Rückkehr ist nur nach dokumentierter
 Beseitigung des Blockers, durch dieselbe verantwortliche Rolle und ohne verdeckte Inhaltsänderung
@@ -479,6 +501,36 @@ befunde: []
 
 Zahlen ohne zugehörigen Befehl und Commit gelten nicht als Beweis.
 
+### E1 — Aussagen über den Bau werden am COMMIT gemessen, nicht am Arbeitsbaum
+
+> **Yamas Anordnung vom 10.08.**, erteilt durch den Release-Prüfer in seinem Namen und mit
+> ausdrücklich übergebenem Ball (*Prozessprüfung 03, `docs/PROZESSPRUEFUNG-03.md`*).
+
+**Vor jeder `CODE_FERTIG`-Meldung wird JEDE berührte Datei gegen den Commit geprüft, und der
+Befehl steht mit seiner Ausgabe im Bericht:**
+
+```text
+git show HEAD:<pfad> | diff - <pfad>        je beruehrter Datei
+```
+
+**Der Arbeitsbaum ist kein Beleg.** *Er zeigt, was jemand geschrieben hat — nicht, was committet
+wurde. Beides fällt regelmäßig auseinander: eine vergessene Datei, ein Pfad außerhalb des Scopes,
+ein Commit, der die Änderung gar nicht trug.*
+
+> **Und die Umkehrung gehört dazu, weil sie zweimal übersehen wurde:** *auch ein **leerer**
+> `git diff` ist kein Beleg.* **Nach einem Commit ist er zwangsläufig leer — er wäre auch dann
+> grün, wenn zwanzig fremde Zustände geändert worden wären.** *Wer belegen will, dass er nichts
+> Fremdes angefasst hat, misst den Commit:*
+
+```text
+git show <bau-sha> -- <pfad>                zeigt, was der Bau WIRKLICH geaendert hat
+```
+
+**Belegte Fälle, aus denen die Regel abgelesen ist:** *A-20-5 nannte `git diff --name-only` als
+Nachweis und wurde vom Evaluator zurückgewiesen (`99fc86cd`); A-21 trug denselben Nachweistyp im
+eigenen Kriterienblock — in einem Blatt, dessen Auftrag genau diese Verankerung war
+(`605fde3b`, berichtigt in `6fa15fb7`).*
+
 ## 12. Behandlung roter Abnahmen
 
 Jeder rote Befund wird genau einer Klasse zugeordnet:
@@ -607,6 +659,28 @@ Die Prüfung endet mit genau einer Entscheidung:
 Erforderliche Änderungen werden vor Aufgabe elf umgesetzt und mit frischen Gegenfällen getestet.
 Eine neue Zehnergruppe beginnt erst danach. Der Zähler wird nie wegen Sitzung, Monatswechsel,
 Branchwechsel oder Rollenwechsel zurückgesetzt.
+
+### E3 — die Unterform kommt in die Tabelle, nicht als eigene Klasse
+
+> **Yamas Anordnung vom 10.08.**, erteilt durch den Release-Prüfer in seinem Namen
+> (*`docs/PROZESSPRUEFUNG-03.md`*). **Einarbeitung: wer den Zähler fortschreibt.**
+
+**Die vierte Fehlerklasse — „Zuordnung annehmen statt messen" — führt im Zähler eine Spalte
+`Unterformen mit Barriere` und bekommt KEINE fünfte Klasse daneben:**
+
+| Unterform | Was angenommen statt gemessen wird | Barriere |
+|---|---|---|
+| **Ort** | Zahlen über Dateimengen ohne Bezugspunkt | **V2** — der absolute Pfad steht daneben |
+| **Zeitpunkt** | Aussagen über den Fernstand ohne frischen Abgleich | **V1** — `git fetch` im selben zitierten Befehl |
+| **Zustand** | Arbeitsbaum statt Commit | **NEU** — `git show HEAD:<p> \| diff` (das ist E1, §11) |
+
+> **Warum Spalte und nicht Klasse:** *die Klasse ist **semantisch** — sie beschreibt einen Denkfehler
+> (etwas für gemessen halten, das angenommen wurde). Ihre Unterformen sind es nicht: sie
+> unterscheiden nur, **worüber** die Annahme lief.* **Eine fünfte Klasse würde denselben Fehler
+> zweimal zählen und die Zählung genau dort unehrlich machen, wo sie ehrlich sein soll.**
+
+**Die Spalte macht sichtbar, dass jede Unterform bereits eine Barriere hat** — *und damit auch,
+welche Unterform trotz Barriere wieder auftritt. Das ist die Zahl, die den Zähler wertvoll macht.*
 
 Schwere Fehler warten nicht auf die Zehnergrenze. Ein P1-Spezifikationsfehler, ein unerfüllbarer
 Auftrag, eine übersehene Daten-/Sicherheitskante oder die zweite Wiederholung derselben
