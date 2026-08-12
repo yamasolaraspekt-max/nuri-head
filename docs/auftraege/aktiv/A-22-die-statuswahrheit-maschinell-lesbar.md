@@ -93,6 +93,29 @@ zweiten — **beide zusammen sind falsch.**"*
 den `dor_beleg` — dort stehen die Auflagen. Ein Feld zu ändern, ohne den Block zu lesen, ist
 dasselbe wie eine Zahl zu nehmen, ohne die Trefferzeile zu lesen.*
 
+### 1c — Und dann war auch die Berichtigung falsch: ein Präfix, drei Rollen
+
+**Die zweite Fassung von A-22-2b nannte SECHS. Auch das war zu hoch** — und die Ursache ist dieselbe
+wie beim ersten Mal, nur an anderer Stelle:
+
+```text
+'ballbesitz'    als Muster OHNE Doppelpunkt faengt ballbesitz_bau: MIT — ein anderes Feld
+'ballbesitz: '  gebunden, mit Doppelpunkt, misst das gemeinte Feld
+
+  ohne Doppelpunkt   71 Commits · 6 „ohne zugleich zu entfernen"
+  mit Doppelpunkt    65 Commits · 63 Aenderungen · 2 Einfuegungen · davon 1 falsch
+```
+
+> **Dieselbe Falle hat heute drei Rollen erwischt** — *den Generator (zählte Änderungen als
+> Einfügungen mit), den Plan-Prüfer (Präfix fing `ballbesitz_bau`), und mich: **mein
+> Nachmess-Befehl trug denselben Präfix-Fehler wie der, den ich damit prüfen wollte.** Ich habe
+> „selbst gemessen" und dabei das falsche Muster benutzt — eine Bestätigung, die nichts bestätigt.*
+
+**Der Generator hat es aufgelöst und ausdrücklich NICHT entschieden:** *„ich bin hier befangen, die
+Zahl ist meine und der Auftrag aus meinem Befund geschnitten — deshalb Messung und Vorschlag, keine
+Entscheidung."* **Die Entscheidung ist meine, und sie lautet: ein einziger fehlerhafter Fall unter
+den Generator-Commits, plus W-34 als zweiter belegter Fall außerhalb dieser Menge.**
+
 > **Dass KEINE der 17 denselben Wert trägt, ist die eigentliche Aussage.** *Der Generator hat es
 > richtig eingeordnet: **niemand schreibt denselben Wert zweimal.** Jemand schreibt einen **neuen
 > neben den alten**, statt den alten zu ändern. Jede Dublette ist also ein überholter Wert, der
@@ -167,20 +190,29 @@ A-22-2  ERLEDIGT VOR DEM BAU, und NICHT durch diesen Auftrag — Kriterium gestr
         WAS AN DER STELLE ZU TUN BLEIBT: nichts. Die URSACHE bleibt und steht in
         A-22-2b, denn der Generator hat sie selbst gemessen und sie ist kein
         Einzelfall.
-A-22-2b BERICHTIGT — die erste Fassung sagte das GEGENTEIL der Messung. Sie lautete
-        '65 Commits des Generators fuegen eine ballbesitz-Zeile HINZU, statt eine
-        vorhandene zu aendern'. Die 65 bezeichnet genau die Commits, die KORREKT
-        aendern.
-        SELBST NACHGEMESSEN, je Commit der Diff auf docs/STATUS.md:
-          80  Generator-Commits auf dieser Datei
-          71  fuegen eine ballbesitz-Zeile hinzu
-          65  davon entfernen ZUGLEICH eine  ->  korrektes Aendern
-           6  davon entfernen KEINE          ->  DIE URSACHE
-          Rechnung schliesst: 71 - 6 = 65.
-        Die Ursache ist im Bericht mit der Zahl SECHS benannt, und die 65 als das,
-        was sie ist: der Beleg dafuer, dass ueberwiegend richtig geaendert wird.
-        Zwei der sechs sind namentlich belegt (A-21 in 869c560d und W-34 im selben
-        Handgriff), beide vom Generator selbst eingeraeumt.
+A-22-2b DRITTE FASSUNG. Die ersten zwei Zahlen waren BEIDE falsch, in
+        entgegengesetzte Richtungen — 65 zu hoch, 6 zu hoch. Ursache in beiden
+        Faellen: ein Muster ohne Doppelpunkt faengt ballbesitz_bau: mit, ein ANDERES
+        Feld. Mein eigener Messbefehl hatte denselben Fehler.
+        MIT GEBUNDENEM FELDNAMEN GEMESSEN, ^[+-]ballbesitz: mit Doppelpunkt, je
+        Commit der Diff auf docs/STATUS.md:
+          81  Generator-Commits auf dieser Datei
+          65  beruehren ein ECHTES ballbesitz:
+          63  davon ordentliche AENDERUNGEN (- und + zugleich)
+           2  davon echte EINFUEGUNGEN
+          Gegenprobe schliesst zweimal: 63 + 2 = 65.
+        BEIDE EINFUEGUNGEN EINZELN GEOEFFNET und am Vorgaengerstand geprueft:
+          9e97d274  A-05: echte ballbesitz-Felder vorher 0, nachher 1
+                    -> der Block hatte KEINES. RICHTIG, kein Mangel.
+          869c560d  A-21: vorher 1, nachher 2
+                    -> aus einem wurde zwei. DAS ist die Dublette.
+        ES BLEIBT EIN EINZIGER fehlerhafter Fall in den Generator-Commits, nicht 65
+        und nicht 6. Dazu kommt W-34 als zweiter belegter Fall — er erscheint in
+        dieser Zaehlung NICHT, weil die Fertigmeldung damals als Beifang im Commit
+        des Release-Pruefers mitging und deshalb kein Generator-Commit ist.
+        Die Ursache ist im Bericht an den ZWEI belegten Faellen festzumachen (A-21 und
+        W-34), und die 65 als das zu benennen, was sie ist: der Beleg dafuer, dass
+        ueberwiegend richtig geaendert wird — 63 von 65.
         Das Kriterium verlangt KEINE Verhaltensaenderung einer fremden Rolle, sondern
         dass die Bereinigung am BAU-STAND zaehlt und nicht aus diesem Blatt uebernimmt.
 A-22-3  Die Aufzeichnungs-Dubletten sind INHALTLICH vollstaendig erhalten und unter
