@@ -705,3 +705,61 @@ drin, der alte ist **weiterhin getrackt**. Berührt A-14 nicht, gemeldet an den 
 
 **Nächster Schritt: Yama.** Nach §10 darf nur er die Veröffentlichung genehmigen. Ein main-Merge
 steht hier nicht an; der Sicherungs-Push auf `fork/auto/hausplaner-integration` ist unten verbucht.
+
+### Nachtrag — Sicherungs-Push, ein eigener Fehler und ein Fund am Fernziel
+
+**Push-Ergebnis: ABGELEHNT (non-fast-forward), zweimal versucht, NICHT forciert.**
+
+```text
+git push fork auto/hausplaner-integration
+  ! [rejected]  auto/hausplaner-integration -> … (non-fast-forward)
+git rev-list --left-right --count fork/…...HEAD   -> 12  2
+```
+
+`fork` trägt zwölf Commits, die lokal fehlen — darunter Merge-Commits einer parallelen Linie. Ein
+Fast-Forward ist unmöglich. **Kein `--force`** (§14, ohne Yamas Freigabe verboten) und **kein
+einseitiger Merge der zwölf Fremd-Commits** in den Zweig, den ich soeben zertifiziert habe: das wäre
+eine Integrationsentscheidung, nicht der beauftragte Sicherungs-Push.
+
+**Gute Nachricht zuerst:** der Inhalts-Commit `21940d33` **liegt bereits auf `fork`**, ebenso mein
+Release-Commit `93b591e1` (dort per `b455b93b` gemerged). Der geprüfte Produktivstand ist am
+Fernziel gesichert; nur zwei lokale Commits fehlen dort (`f8b0ee26` fremd, `5d88f198` meine
+Reparatur).
+
+**MEIN FEHLER, offengelegt — `93b591e1` hat drei fremde Dateien mitgerissen.** Ich hatte genau zwei
+Pfade gestaged und mit `git diff --cached --name-only` geprüft; die Anzeige zeigte genau diese zwei.
+Dann habe ich **ohne Pfadangabe** committet — und der Commit nahm den **gesamten geteilten Index**,
+in dem veraltete Einträge dreier anderer Rollen lagen:
+
+```text
+docs/BEFUND-GETEILTER-INDEX-STEHT-VOLL.md   GELOESCHT       (62 Zeilen)
+docs/FAHRPLAN-WERKZEUGKASTEN.md             202 -> 166      (fbce86eb, Planner)
+docs/BERICHT-A-15-fachaussage-oder-hinweis.md  258 -> 233   (bd011a06, Generator)
+```
+
+*Die Datei, die ich gelöscht habe, ist der Befund des Generators über genau diese Falle.* **Lokal
+behoben in `5d88f198`, zerstörungsfrei** — kein `reset`, kein `amend`, keine Historienänderung; der
+Arbeitsbaum trug noch den richtigen Stand (sha256 aller drei identisch mit `ad8f7314`), der
+Reparatur-Commit stellt ihn exakt wieder her. **Die Lehre:** `git diff --cached --name-only` zeigt
+den Index *zum Zeitpunkt des Aufrufs*; bei einem Index, in den drei Rollen nebenher schreiben, ist
+das kein Zustand, auf den man sich einen Schritt später berufen kann. Belastbar ist nur: `add`,
+Index-Inhalt **gegen die erwartete Liste vergleichen und bei Abweichung abbrechen**, alles in einem
+Arbeitsgang.
+
+> **⚠ OFFEN UND DRINGEND — der Schaden ist auf `fork` gelandet, die Reparatur nicht.** `b455b93b`
+> hat `93b591e1` gemerged; auf `fork` steht heute `BEFUND-GETEILTER-INDEX…` mit **0** Zeilen,
+> `FAHRPLAN-WERKZEUGKASTEN` mit **166** statt 202, `BERICHT-A-15-…` mit **233** statt 258.
+> `5d88f198` kann das ohne Integration der zwölf Fremd-Commits nicht erreichen. **Das braucht eine
+> Entscheidung: Integration des Fernstands in den Arbeitszweig (dann Push) — oder ein eigener
+> Transport-Auftrag.** Nicht meine Entscheidung, deshalb hier und nicht still.
+
+**Zweiter Fund am Fernziel, ohne Wertung:** die A-14-Tafelzeile auf `fork` steht bereits auf
+`BETRIEBSBESTAETIGT` (Ball `–`), lokal auf `RELEASE_FREI` (Ball Yama). Eine parallele Instanz hat
+den Übergang dort schon gesetzt. **Ich ziehe meinen lokalen Zustand deswegen nicht nach** — ich habe
+die Betriebsprüfung nicht gesehen und übernehme keinen Zustand, den ich nicht gemessen habe. Der
+Widerspruch gehört gemeldet, nicht angeglichen.
+
+**Die Release-Prüfung selbst ist von alledem unberührt:** der Fehler lag im *Transport*, nicht in
+der *Messung*. Gegenprobe am finalen HEAD nach allen Parallel-Commits: `git diff --stat 21940d33
+HEAD -- resources/ public/ app/ scripts/ database/ config/ routes/` **leer**, Bündel-md5 weiterhin
+`a5ea0056`, Insel-Suite erneut **1693/1693**. Urteil bleibt **`RELEASE_FREI`**.
