@@ -33,7 +33,7 @@
 | **A-14** N-003-Vorbehalt ins Ergebnis | `BETRIEBSBESTAETIGT` | – | Inhalt `21940d33` (Bau `e0722979`) · Elter `efca1899` · Basis `1e09280d` · Kandidat `a2385d35` | **§10 voll gefahren** (Produktivcode mit Sichtwirkung, keine Doku-Sammelform) · Kette lückenlos, jeder Übergang `--is-ancestor` Exit 0 · Bündel im Kandidaten und **byte-gleich nachgebaut** (md5 `a5ea0056` vor = nach Neubau; genau das Artefakt, das der Browserlauf auslieferte) · Insel-Suite selbst **1693/1693** · Rückweg reiner Revert, `git apply --check -R` Exit 0, keine Migration/kein Datenpfad · **Plaketten-Renderbedingung selbst ausgeführt: nur `engine-sparren` unterdrückt, fünf Engines behalten ihre — auch `heizkoerper` mit roter Plakette** · `must_preserve` resources/+scripts/ in drei Richtungen 0/0/0 · Beifang ab CODE_FERTIG nur `docs/` · **ein P2/SPEC beim Planner (grundlage-Zeile nennt 4 von 6 Sonderlasten), blockiert nicht** · Veröffentlichung gehört Yama |
 | **A-15** Fachaussage oder Hinweis | `BETRIEBSBESTAETIGT` | – | Abnahme `8aded3b2` · Runde 1 `60d62d74` | **14/14 nach §12.4 neu gemessen** · P1 vorbildlich behoben: der überholte Abschnitt ist **als überholt markiert**, nicht gelöscht (Datum, Grund, Verweis) · Bilanz jetzt `6 + 4 + 1 = 11` · `__tests__` 15 · DIN-Stufung adressiert · Menge 13 und drei A-Fundstellen **erneut** selbst geöffnet |
 | **B5** Zählergebnis mit Trefferzeilen | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `157576c2` · Elter `2a95ab40` | **7/7 — die Barriere AUSGELÖST, nicht gelesen**: Wegwerf-Repo, drei Probeläufe (feuert · schweigt bei Suite 1692/1692 · schweigt mit Belegzeile) + Mutation (Block raus → 0 Warnungen) · kein Abbruch, exit=0 beidseitig · scripts-Suite 107/107 an Bau **und** Elter · **P2: Belegmuster erkennt `Z.157` / `treppenTypen:4` nicht** (4 von 17 warnenden Botschaften) |
-| **B6** Summe braucht Erhebung | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `6ecf911c` · Elter `7be1a381` | **8/8 — Barriere ausgelöst, nicht gelesen** · alle **vier Beispiele des Regeltexts** am Tor nachgefahren, alle vier wie dokumentiert · B5 bytegleich unberührt (md5) + Mutation: B6 raus → B5 feuert weiter, die Wächter verdecken einander nicht · scripts-Suite 107/107 beidseitig · P2 zur §3-Belegform (kein wörtlicher Befehl), gleicher Maßstab wie W-07N |
+| **B6** Summe braucht Erhebung | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `6ecf911c` · Elter `7be1a381` | **8/8 — Barriere ausgelöst, nicht gelesen** · alle **vier Beispiele des Regeltexts** am Tor nachgefahren, alle vier wie dokumentiert · B5 bytegleich unberührt (md5) + Mutation: B6 raus → B5 feuert weiter, die Wächter verdecken einander nicht · scripts-Suite 107/107 beidseitig · P2 zur §3-Belegform (kein wörtlicher Befehl), gleicher Maßstab wie W-07N |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
@@ -2076,8 +2076,46 @@ zwei_eigene_fallen: "(1) VENDOR VERGESSEN: mein erster Suite-Lauf meldete 106/10
 auftrag: "B6"
 titel: "Wer eine Gesamtzahl ueber eine Menge meldet, definiert zuerst die MENGE"
 datei: docs/auftraege/aktiv/B6-summe-braucht-erhebung.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama (TRANSPORTSPERRE — wie B5 und A-18)
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 6ecf911c, Fehlerklasse KEINE,
+  ein P2 offen und unten benannt. Messtisch 8/8 im Blatt gegengelesen (B6-1 bis B6-8, Z.217-268).
+  Grundtor: Kette Vorfahr, must_preserve resources/app/database 0/0/0, Geheimnisse 0,
+  bash -n exit 0, scripts-Suite 107/107.
+  BARRIERE SELBST AUSGELOEST, drei Proben mit echt geaenderter Datei — die Lehre aus meiner
+  wertlosen B5-Probenreihe ist angewandt, ich habe die Datei zuerst angelegt: Summe OHNE Menge
+  ('ueber 640 Zeilen Prozessebene') warnt; Summe MIT Menge ('acht Bausteine unter
+  resources/planner/, zusammen 1593 Zeilen: StartView.tsx 267, ConfigWizard.tsx 271') schweigt;
+  eine Zahl ueber EIN Ding ('StartView.tsx hat 267 Zeilen') schweigt. Commit entsteht jedesmal —
+  Warnung, keine Sperre. MUTATION: B6-Block entfernt (8 Zeilen), derselbe Lauf 0 Warnungen,
+  zurueckgestellt md5 identisch. Die Warnung kommt nachweislich aus diesem Code.
+  Prozessrecht wie bei B5 einzeln geprueft statt uebertragen: ARBEITSREGELN auf Fassung 1.6,
+  Blatt traegt anlass 'Yamas Auflage 12.08. Abschnitt 3' und den Regeltext woertlich wie Yama
+  ihn gesetzt hat; art nennt sogar ausdruecklich, dass Yama B6 von B5 getrennt hat.
+  Geltungsakt liegt vor."
+
+p2_zwei_barrieren_ohne_test:
+  klasse: BEWEIS
+  schwere: P2
+  blockiert: nein
+  was: "B6 fuegt dem Commit-Tor Code hinzu und bringt KEINEN Test mit. Gemessen, nicht vermutet:
+    scripts-Suite am Elter 7be1a381 107/107, am Bau 6ecf911c 107/107, und
+    git diff --stat 7be1a381 6ecf911c -- scripts/__tests__/ ist LEER. Dasselbe gilt fuer B5."
+  warum_das_abweicht: "Es ist keine Geschmacksfrage, sondern eine Abweichung vom Muster, das im
+    selben Tor etabliert ist. Nennungen in commitPruefen.test.mjs je Barriere, nachgezaehlt:
+    A-07 elf, A-08 fuenfzehn, A-09 dreizehn, A-11 dreizehn — B5 null, B6 null. Vier Barrieren
+    mit Tor-Code sind getestet, die zwei neuesten nicht, bei 61 Tests in der Datei."
+  folge: "Beide Barrieren sind heute nachweislich wirksam — der Evaluator hat sie ausgeloest,
+    ich habe es unabhaengig wiederholt und bei B6 zusaetzlich die Mutation gefahren. Ohne Test
+    fehlt aber der REGRESSIONSSCHUTZ: baut jemand das Tor um, verschwindet die Warnung STILL,
+    kein Lauf schlaegt an. Das ist woertlich dieselbe Klasse wie der offene P2 in A-13
+    ('das Verhalten stimmt, der Regressionsschutz fehlt') — und dort steht der Satz, der auch
+    hier gilt: die Nachforderung erlischt NICHT mit der Veroeffentlichung."
+  warum_ich_trotzdem_freigebe: "Das Verhalten ist unabhaengig belegt, der Rueckweg ist
+    zerstoerungsfrei (kein Produktivcode, 0 Migrationen), und nach §12.5 blockiert ein
+    fehlender Nachweis bei stimmendem Verhalten nicht. Ich melde ihn, statt ihn zu schlucken."
+  ball: "generator — je ein Test fuer B5 und B6 in scripts/__tests__/commitPruefen.test.mjs,
+    nach dem Muster der vier vorhandenen. Kein Auftrag von mir, ein Befund."
 haertetest_statt_behauptung: "Nicht nur die zwei Probelaeufe des Blattes, sondern eine Messung an
   echten Botschaften — Menge ausdruecklich: die letzten 60 Commits von HEAD auf
   auto/hausplaner-integration, alle fuenf Rollen. Summenwort getroffen 5, davon ohne Mengennennung
