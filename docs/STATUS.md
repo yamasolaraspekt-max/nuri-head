@@ -4296,3 +4296,63 @@ UNVERAENDERT:  alle neun beschriebenen Blaetter sind veroeffentlicht und betrieb
 Messbericht.* **Kein Doppel-Zustand.** A-02, A-07 und A-09 haben je **einen** echten
 Zustandsdatensatz, A-08 keinen eigenen (nur Chronik-Erwähnungen). *Auch hier: erst zählen, dann
 urteilen — die Kennung allein ist kein Datensatz.*
+
+---
+
+## VERTRETUNGSENTSCHEID (Release-Prüfer, 12.08.) — der strukturelle Punkt des Evaluators an Yama
+
+**Anweisung im Wortlaut, 12.08.:** *„schau ob aufgaben für mich ist, welche du erledigen kannst"* —
+und der Evaluator hat einen Punkt **ausdrücklich an Yama** gerichtet: *„derselbe Kopf hat den
+Auftrag geschrieben und gebaut"* (W-07N, Planner in Generator-Rolle).
+
+### Die Regellage — gemessen, nicht erinnert
+
+```text
+§4 Zeile 107   "Planner und Plan-Pruefer duerfen nicht dieselbe Instanz sein."
+§4 Zeile 118   "Generator und Evaluator duerfen nicht dieselbe Instanz sein."
+GEMESSEN       das sind die EINZIGEN zwei Verbote. Planner = Generator ist NICHT verboten.
+FORM           der Wechsel wurde ANGESAGT und nicht stillschweigend vollzogen (7fbdaafe),
+               auf Yamas ausdrueckliche Freigabe.
+```
+
+**Formal ist die Doppelrolle also zulässig, und sie wurde korrekt angemeldet.** *Wer sie jetzt
+nachträglich für unzulässig erklärt, ändert die Regel rückwirkend — und §1 sagt ausdrücklich, dass
+aus früheren Ausnahmen kein Gewohnheitsrecht entsteht, aber ebenso wenig ein nachträgliches Verbot.*
+
+### Warum der Befund trotzdem trägt — er ist empirisch, nicht formal
+
+```text
+DREI der vier Befunde an W-07N standen WOERTLICH im Auftrag und haetten vor dem Bau
+auffallen muessen (-5 vier Suchbegriffe mit je 0 Treffern, -7 offene Posten am falschen
+Ort, -9 IN_ARBEIT-Commit ohne Befehle und Ausgaben).
+-> Das ist der messbare Preis der Doppelrolle: wer den Auftrag schreibt, liest ihn beim
+   Bauen nicht mehr mit fremden Augen.
+```
+
+**Aber der Anteil liegt nicht allein dort.** *Der Plan-Prüfer hat selbst eingeräumt (`3f2b0e20`):
+„DER SCOPE-BRUCH -8 AN W-07N IST MEIN FEHLER — meine DoR hat den Scope mit einer Begründung
+durchgelassen."* **Die unabhängige Instanz existierte und hat den Fall trotzdem passieren lassen.**
+
+### ENTSCHEIDUNG
+
+```text
+1  DIE DOPPELROLLE PLANNER=GENERATOR BLEIBT ZULAESSIG. §4 verbietet sie nicht, der Wechsel
+   war angesagt und freigegeben. Ein rueckwirkendes Verbot loest das Problem nicht — es
+   verschiebt es auf die Frage, wer sonst gebaut haette.
+2  SIE BEKOMMT EINE AUFLAGE, und die richtet sich an den PLAN-PRUEFER, nicht an den Bauenden:
+   Wenn Schnitt und Bau aus demselben Kopf kommen, ist die DoR die EINZIGE fremde Lesung.
+   Sie prueft dann den Scope-Block ZEILENWEISE gegen die Blattliste — nicht auf Plausibilitaet,
+   sondern auf Deckungsgleichheit. Sein eigener Befund 3f2b0e20 ist die Begruendung.
+3  NICHT ENTSCHIEDEN, weil es Yama gehoert: ob §4 um ein drittes Verbot ergaenzt wird.
+   Das waere eine REGELAENDERUNG, und Regeln gehoeren nach §1 ihm. Ich lege vor, was gemessen
+   ist: die Doppelrolle hat heute drei vermeidbare Befunde gekostet, und die DoR hat sie
+   nicht gefangen. Zwei Zahlen, eine Entscheidung — deine.
+```
+
+```yaml
+zulaessig_ohne_regelaenderung: "Planner = Generator (§4 kennt nur zwei Verbote)"
+auflage_ab_sofort: "bei Doppelrolle prueft die DoR den Scope zeilenweise gegen die Blattliste"
+bei_yama: "ob §4 ein drittes Verbot bekommt — Regelaenderung, gehoert ihm"
+belege: "§4:107 und §4:118 selbst gelesen · 7fbdaafe Rollenwechsel angesagt · 80261c87 drei
+         von vier Befunden standen im Auftrag · 3f2b0e20 Plan-Pruefer raeumt DoR-Fehler ein"
+```
