@@ -9,7 +9,23 @@ in_arbeit_commit: "b4e7243e"
 gebaut_am: "12.08.2026"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+fassung: "2 — nachgebessert nach dem NACHBESSERN des Evaluators (2ff41efd)"
 ```
+
+> **Fassung 2. Sieben von acht Kriterien waren erfüllt; rot war W-39-5 — und der Fehler ist meiner,
+> und er ist derselbe, den ich im selben Bau schon einmal gemacht und selbst gefangen hatte.**
+
+```text
+6-PRUEFUNG  „stilschicht = Farben nur aus Tokens, geteilter Waechter"   -> unvollstaendig
+6-PRUEFUNG  Fangprobe „guided-Schalter entfernen -> KEIN TEST"          -> ZURUECKGEZOGEN
+7-GRENZEN   K-05 unter „Zusagen ohne Waechter"                          -> ZURUECKGEZOGEN
+7-GRENZEN   neue Luecke des Evaluators: das Flag AM AUFRUF              -> aufgenommen
+```
+
+**Die Ursache in einem Satz: ich habe eine Testdatei nach ihrer Überschrift eingeordnet, statt sie
+zu öffnen.** *Fünf ihrer 58 Tests lesen die Studio-Quelle, vier davon tragen W-39s eigene K-Zusagen
+im Namen — `T2/K-01`, `K-03`, `K-04`, `K-05`.* **Bei `imStudio` hatte ich denselben Griff eine
+Stunde vorher selbst bemerkt und berichtigt; bei K-05 nicht.**
 
 > **Vier Zahlen des Blattes habe ich beim Nachmessen anders gefunden, und keine davon habe ich
 > geglättet.** *Drei sind Mengenfragen, eine war schlicht meine eigene Schlamperei. Alle vier stehen
@@ -84,7 +100,7 @@ gibt keinen Modus, in dem der Rückweg fehlt.**
 
 | Datei | Tests | trifft W-39 | Zusage (Auszug) |
 |---|---|---|---|
-| `stilschicht` | 58 | geteilt | kein Farbwert in einer CSS-Regel |
+| `stilschicht` | 58 | **beides** — 53 geteilt, **5 unmittelbar** | kein Farbwert in einer CSS-Regel · **und `T2/K-01`, `K-03`, `K-04`, `K-05` lesen die Studio-Quelle** |
 | `projektKlick` | 15 | unmittelbar | ein Klick, nicht zwei |
 | `dialogFokus` | 11 | geteilt | die Falle schlägt an beiden Rändern um |
 | `speicherAnzeige` | 10 | unmittelbar | „Gespeichert" steht NIE auf einer Fläche, die nicht speichern kann |
@@ -140,6 +156,12 @@ Mutation entstanden**, wörtlich:
 > **Die additive Bauart ist damit belegt gesichert, nur von der anderen Seite der Grenze.** *Hätte
 > ich nur die acht Dateien betrachtet, die `HausplanerStudio` nennen, wäre die Lücke im Blatt
 > geblieben — und sie wäre falsch gewesen.*
+
+**Der Evaluator hat die Naht danach genauer gelegt als ich** (`2ff41efd`): *eine zweite Mutation —
+**das Flag am Aufruf in `:140` entfernen** — bleibt **grün**, weil `kopfrahmen.test.ts` den
+Kopfrahmen-Quelltext **statisch** misst und damit nur die empfangende Seite.* **Die empfangende
+Seite ist bewacht, die sendende nicht.** *Beide meiner Aussagen waren zu grob; die richtige liegt
+genau auf der Grenze. Aufgenommen in `7-GRENZEN.md`.*
 
 ## W-39-7 · Die Anschlusslücke der Stufe
 

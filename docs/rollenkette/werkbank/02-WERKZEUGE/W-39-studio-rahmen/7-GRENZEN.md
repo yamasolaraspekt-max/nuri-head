@@ -46,19 +46,45 @@ Schicht 5 zeigt einen Satz             -> die Plakette, aber die kommt aus speic
 > *„Kein Toast mehr: das Modul bekommt seine Fläche mit der Feldstruktur des späteren Panels."*
 > **Aus „Konfigurator folgt" wurde etwas, das da ist.**
 
-## Zwei Zusagen ohne Wächter
+## Zusagen ohne Wächter — eine zurückgezogen, eine neue aufgenommen
+
+> **ZURÜCKGEZOGEN nach dem NACHBESSERN des Evaluators (`2ff41efd`).** *Hier stand K-05 als
+> ungesicherte Zusage:* **„der Rückweg in die geführte Planung … belegt NUR im Kommentar. KEIN
+> Test."** *Das ist falsch:*
+>
+> ```text
+> stilschicht.test.ts:809
+>   test('T2/K-05: der Weg in die gefuehrte Planung ist direkt erreichbar')
+>   assert.match(studio, /modeBtn\('guided', 'Gefuehrte Planung'/, 'der direkte Weg fehlt');
+> ```
+>
+> **Der Evaluator hat die Mutation GEFAHREN: Schalter entfernt → 1697 pass, 1 FAIL**, *und der
+> fallende Test trägt `K-05` wörtlich im Namen.* **Der Wächter sitzt in einer Datei, die dieses
+> Blatt selbst unter seinen acht führt** — *ich hatte sie nach ihrer Überschrift eingeordnet
+> („Farben nur aus Tokens") statt sie zu öffnen.*
+>
+> **Warum das kein Wortklauben ist:** *dieses Blatt ist die Anschlussliste.* **Wer hier eine Lücke
+> liest, die es nicht gibt, baut einen zweiten Wächter — oder ändert den Schalter im Vertrauen
+> darauf, dass ohnehin nichts fängt.**
+
+**Was wirklich offen ist:**
 
 ```text
-K-05  „der Rueckweg in die gefuehrte Planung ist in JEDEM Modus sichtbar"
-      belegt NUR im Kommentar :138-139 und durch die Bauart (ein gemeinsamer
-      Container :109, Kopfzeile modusunabhaengig). KEIN Test.
+vierter Modus       StudioModus erzwingt den Typ, aber niemand prueft, dass jeder Modus
+                    auch einen Schalter UND einen Render-Zweig hat.
 
-vierter Modus   StudioModus erzwingt den Typ, aber niemand prueft, dass jeder
-                Modus auch einen Schalter und einen Render-Zweig hat.
+das Flag AM AUFRUF  `imStudio` aus :140 zu entfernen bleibt GRUEN.  Neu gefunden vom
+                    Evaluator (2ff41efd) und hier aufgenommen: kopfrahmen.test.ts misst
+                    den Kopfrahmen-Quelltext STATISCH und damit nur die EMPFANGENDE
+                    Seite — dass der Rahmen das Flag auch SETZT, prueft niemand.
 ```
 
-> **Benannt, nicht behoben** — *eine Ablesung baut keine Tests.* **Wer W-39 später erweitert, findet
-> hier, wo die Sicherung fehlt.**
+> **Die zweite Zeile ist die genauere Fassung dessen, was ich beim Bau schon einmal falsch hatte.**
+> *Zuerst schrieb ich, `imStudio` sei ungesichert; gemessen war es das Gegenteil.* **Jetzt zeigt der
+> Evaluator die Naht dazwischen: die empfangende Seite ist bewacht, die sendende nicht.** *Beide
+> Aussagen waren zu grob — die richtige liegt genau auf der Grenze.*
+
+**Benannt, nicht behoben** — *eine Ablesung baut keine Tests.*
 
 ## Bekannte Ungenauigkeiten
 

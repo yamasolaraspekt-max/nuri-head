@@ -96,17 +96,36 @@ jede id ist eindeutig und schluesseltauglich (Kante 1: ss, Umlaut, Leerzeichen)
 > **Der erste Test ist derselbe Gedanke wie Yamas Maßstab, eine Ebene tiefer:** *der Fahrplan sagte
 > 20, gemessen sind es 19 — und der Test hält die gemessene Zahl fest, nicht die behauptete.*
 
-**`stilschicht.test.ts` · 58 Tests — Farben nur aus Tokens**
+**`stilschicht.test.ts` · 58 Tests — und FÜNF davon lesen die Studio-Quelle**
+
+> **BERICHTIGT nach dem NACHBESSERN des Evaluators (`2ff41efd`).** *Hier stand allein „Farben nur
+> aus Tokens" und die Einordnung „geteilter Wächter". **Beides war unvollständig — und aus dieser
+> Unvollständigkeit sind zwei falsche Lücken in diesem Blatt entstanden.***
 
 ```text
-K5: jede Variable traegt einen Wert aus studioDaten.ts — keine Konstante daneben
-K4: die CSS-Quelle enthaelt in KEINER Regel einen Farbwert
+Farbregeln (geteilt, ganze Insel):
+  K5: jede Variable traegt einen Wert aus studioDaten.ts — keine Konstante daneben
+  K4: die CSS-Quelle enthaelt in KEINER Regel einen Farbwert
+
+W-39 UNMITTELBAR — fuenf Tests lesen STUDIO_TSX, vier tragen W-39s eigene K-Zusagen:
+  T2/K-05  :809  der Weg in die gefuehrte Planung ist direkt erreichbar
+                 assert.match(studio, /modeBtn\('guided', 'Gefuehrte Planung'/)
+  T2/K-04        der Erklaertext kostet keine Zeile mehr — ist aber ERHALTEN
+  T2/K-03        die Hausplaner-Marke ist fort — in der Insel UND in BEIDEN Blades
+  T2/K-01        der Studio-Bildschirm traegt keine zweite Navigation mehr
+  Scheibe 8c     jede angelegte Klasse wird auch benutzt — keine Regel ins Leere
 ```
 
-> **`stilschicht`, `dialogFokus` und `breiten` sind GETEILTE Wächter** — *sie decken die ganze Insel
-> ab.* **`speicherAnzeige`, `fussleistenEhrlich`, `projektKlick`, `arbeitszeileSuche` und
-> `fachFlaechen` treffen den Rahmen unmittelbar.** *Der Unterschied gehört genannt, weil „acht
-> Tests" sonst mehr verspricht, als es hält.*
+> **`stilschicht` ist kein reiner Stilwächter, sondern der Träger von vier Entwurfsentscheidungen,
+> die dieses Blatt beschreibt** — *K-01 die fehlende zweite Navigation, K-03 die Marke, K-04 der
+> gewanderte Erklärtext, K-05 der Rückweg.* **Wer ihn unter „Farben" ablegt, liest anderswo eine
+> Lücke, die es nicht gibt.**
+
+**Die Einordnung, berichtigt:**
+
+| geteilt (ganze Insel) | unmittelbar (Rahmen) |
+|---|---|
+| `dialogFokus` · `breiten` · *`stilschicht` in seinen Farbregeln* | `speicherAnzeige` · `fussleistenEhrlich` · `projektKlick` · `arbeitszeileSuche` · `fachFlaechen` · **`stilschicht` in seinen fünf Studio-Tests** |
 
 ## Fangprobe (Mutationsprobe)
 
@@ -116,8 +135,9 @@ K4: die CSS-Quelle enthaelt in KEINER Regel einen Farbwert
 | `height: imStudio ? …` verändern | **`buehnenBreite.test.ts:76-86`** |
 | die Kopfzeile wieder auf feste Höhe setzen | `breiten.test.ts` („die Kopfzeile bricht um") |
 | `kannSpeichern` aus `:107` streichen | `speicherAnzeige.test.ts` („Gespeichert steht NIE …") |
-| den `guided`-Schalter aus `:111` entfernen | **kein Test** — K-05 ist nur im Kommentar belegt |
+| den `guided`-Schalter aus `:111` entfernen | **`stilschicht.test.ts:809`** — *gefahren vom Evaluator: 1 fail* |
 | einen vierten Modus ergänzen ohne Schalter | **kein Test** — `StudioModus` erzwingt nur den Typ |
+| `imStudio` am **Aufruf** in `:140` entfernen | **kein Test** — *der Wächter misst die empfangende Seite statisch* |
 
 > **Hier stand zuerst, das Flag `imStudio` sei durch keinen Test gesichert. Das war falsch, und ich
 > habe es gemessen statt es stehen zu lassen:** *`grep -rl imStudio __tests__/` findet **zwei**
@@ -137,14 +157,23 @@ kopfrahmen.test.ts:138   test('K-03 (Bindung): die Marke steht NUR ausserhalb de
 > die Bedingung da ist, sondern auch, dass sie **nicht umgedreht** wurde.* **Die additive Bauart von
 > W-39 ist damit belegt gesichert, nur eben von der anderen Seite der Grenze.**
 
-**Alle sechs Zeilen sind ABGELESEN, nicht gefahren.** *Zwei Lücken bleiben und stehen in
-`7-GRENZEN.md`: der Rückweg-Schalter (K-05) und ein vierter Modus sind durch keinen Test gesichert.*
+**Vier der sieben Zeilen sind ABGELESEN; zwei hat der Evaluator gefahren** — *die Markenzeile
+(`kopfrahmen.test.ts`) und den `guided`-Schalter (`stilschicht.test.ts:809`, **1 fail**).*
+
+> **ZURÜCKGEZOGEN: „der `guided`-Schalter — kein Test, K-05 ist nur im Kommentar belegt".** *Der
+> Wächter existiert und steht in einer Datei, die dieses Blatt selbst unter seinen acht führt.*
+> **Zweimal im selben Bau habe ich eine Lücke behauptet, die es nicht gibt** — *bei `imStudio` habe
+> ich es selbst gefangen, bei K-05 nicht.* **Beide Male aus derselben Ursache: eine Testdatei nach
+> ihrer Überschrift eingeordnet, statt sie zu öffnen.**
+
+**Es bleibt EINE benannte Lücke** *(vierter Modus)* **und eine neue, die der Evaluator gefunden
+hat** *(das Flag am Aufruf)* — *beide in `7-GRENZEN.md`.*
 
 ## Automatische Tests
 
 | Datei | Tests | trifft W-39 |
 |---|---|---|
-| `stilschicht.test.ts` | 58 | geteilt |
+| `stilschicht.test.ts` | 58 | **beides** — 53 geteilt, **5 unmittelbar** (`T2/K-01`, `K-03`, `K-04`, `K-05`, Scheibe 8c) |
 | `projektKlick.test.ts` | 15 | unmittelbar |
 | `dialogFokus.test.ts` | 11 | geteilt |
 | `speicherAnzeige.test.ts` | 10 | unmittelbar |
