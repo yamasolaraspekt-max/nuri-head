@@ -192,6 +192,35 @@ lautet dann „ALLE ueberholten Stellen" mit der Liste — nie „die Stelle".
 **Wer eine Menge zählt, hat noch nichts gelesen.** Vor jeder Meldung „N Fälle" mindestens einen
 Fall öffnen und die Zeile mit eigenen Augen lesen — und zwar einen, der in die Zählung fällt.
 
+**ZWEITER SCHRITT, ergänzt 12.08. nach W-37: steht die Zahl in einem KRITERIENWORTLAUT, wird sie
+an ZWEI verschiedenen Mustern gemessen, bevor sie ins Blatt kommt.** *Nicht zweimal dasselbe Muster,
+sondern zwei, die verschieden falsch liegen können — eines am Namen, eines an der Struktur; eines am
+Import, eines am Quelltext.*
+
+```text
+W-36-5  „VIER Waechter"   ein Muster (Import mit Anfuehrungszeichen)  -> blockiert
+        gemessen: sieben, und eine ganze Klasse fehlte (Markenstring)
+W-37-1  „FUENF Adapter"   ein Muster (Name als*Eingabe)               -> blockiert
+        gemessen: acht — zwei Falsche drin, drei Richtige draussen.
+        Das Klassenmerkmal war die SIGNATUR, nicht der Name.
+W-37-5  „VIER Waechter"   ein Muster (Import ohne .ts-Endung)         -> blockiert
+        gemessen: sechs — und der fehlende hielt die Auflage, die das
+        Nachbarkriterium schuetzen sollte.
+W-37-3  Zeilenzahlen      ZWEI Muster (Register gegen wc -l, alle sechs)
+        -> TRAEGT, und die Reichweitenmessung hat den Befund VERKLEINERT.
+```
+
+> **Drei Blocker an einem Tag, alle dieselbe Klasse — und der eine Punkt, der trug, ist der mit zwei
+> Mustern.** *Die Lehre ist nicht „sorgfältiger sein". **Aufschreiben ist nicht anwenden:** W-37 hat
+> den Fehler zweimal gemacht, eine Stunde nachdem ich die Lehre aus W-36 ins Blatt geschrieben hatte.
+> Deshalb steht hier ein SCHRITT und keine Mahnung.*
+
+> **Und der Prüfende ist nicht immun:** *der Plan-Prüfer hat in `d976060f` festgehalten, dass sein
+> erstes Muster ebenfalls zu eng war und „vier, alle echt" **bestätigt hätte** — es verlangte das
+> Anführungszeichen direkt hinter dem Namen und verfehlte beide `.ts`-Importe. **Zwei Rollen,
+> dasselbe zu enge Muster.** Ein zweites Muster ersetzt keine unabhängige Prüfung, aber eine
+> unabhängige Prüfung ersetzt auch kein zweites Muster.*
+
 > **Der Beleg ist A-20, und er ist meiner:** *ich meldete **17 widersprüchliche Blätter**, ohne ein
 > einziges zu öffnen. **13 der 17 verglichen einen Blattkopf mit einer BAUAUFZEICHNUNG** — einem
 > Block mit `auftrag:`, `zustand:` und `bau_commit:` — und nicht mit einer Statuskopie. Der
