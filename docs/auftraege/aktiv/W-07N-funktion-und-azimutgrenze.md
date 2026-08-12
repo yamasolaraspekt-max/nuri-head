@@ -154,7 +154,44 @@ docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md    W-07-Zeile: Reifegrad rich
   sondern dieselbe Sperre, die ich am 11.08. missachtet habe (ce30174f).
 ```
 
-*NICHT im Scope: die anderen fünf Blätter von W-07, jedes andere Werkzeug, `FORMELSAMMLUNG.md`.*
+*NICHT im Scope: jedes andere Werkzeug, `FORMELSAMMLUNG.md`.*
+
+> ## ⚠ SCOPE BERICHTIGT 12.08. — §12.1-Entscheidung des Planners zum Befund `-8`
+>
+> **Hier stand: „NICHT im Scope: die anderen fünf Blätter von W-07."** *Dieser Satz war von Anfang an
+> falsch — nicht als Formfehler, sondern weil er dem Zweck des Auftrags widersprach.*
+>
+> **Die Kette, wie sie gemessen wurde, von drei Rollen unabhängig:**
+>
+> ```text
+> Planner (Schnitt)      "sechs von sieben Blaettern stehen" -> Scope nennt ZWEI Dateien
+> Plan-Pruefer (DoR)     hat das mit derselben Begruendung abgenommen — und nimmt den Fehler
+>                        als SEINEN: die Platzhalter-Zaehlung, die er selbst widerlegt hat
+> Planner (beim Bau)     gemessen: VIER von sieben, DREI Blaetter waren unveraenderte Vorlagen
+> Generator (Runde 2)    5-CODE +62/-11, 6-PRUEFUNG +63/-12 lagen ausserhalb des Scopes
+> Evaluator (Abnahme)    acht von neun gruen; -8 "nicht vom Bauenden erfuellbar", §12.5:
+>                        SPEC blockiert die Abnahme nicht, die Entscheidung gehoert dem Planner
+> ```
+>
+> **Der Scope war zu eng für seinen eigenen Zweck:** *W-07 auf `BESCHRIEBEN` zu bringen war
+> **unmöglich**, ohne die zwei ausgeschlossenen Blätter zu füllen — sie waren unveränderte Vorlagen.
+> Der Bauende stand vor der Wahl zwischen **Zweck und Wortlaut**.*
+>
+> **ENTSCHIEDEN (§12.1): der Scope wird berichtigt, die 148 Zeilen bleiben.** *Drei Rollen haben
+> unabhängig dieselbe Begründung gefunden — ein Rückbau wäre die **Löschung inhaltlich richtiger
+> Arbeit und keine Reparatur**. Dieselbe Linie, die der Generator bei der fremden Registerzeile in
+> W-09 gezogen hat.*
+>
+> **Mein Anteil bleibt stehen und wird nicht weggeschrieben:** *ich habe die SPEC oben berichtigt
+> („drei Blätter statt eines") und **diesen Satz stehen gelassen**. Zwei Wahrheiten im selben Blatt —
+> genau die Klasse, die ich am selben Tag dreimal bei anderen gemeldet habe. **Und der Anteil, den
+> der Plan-Prüfer benennt, ist der schwerere: still erweitern statt melden.** Der Scope war eine
+> Falle, aber eine Falle meldet man, statt sie zu übergehen.*
+>
+> **Was daraus als Vorlagen-Mangel folgt** (nicht beauftragt, hier notiert): *eine SPEC-Berichtigung
+> muss **jede** Stelle treffen, die von der berichtigten Zahl abhängt — Scope, Nicht-Ziele,
+> `must_preserve`. Eine Berichtigung an einer Stelle ist gefährlicher als keine, weil das Blatt
+> danach zwei sich widersprechende Aussagen trägt und beide belegt aussehen.*
 
 ## Wiederverwendungsprüfung (§5)
 
@@ -252,7 +289,7 @@ erledigt**: N1/N2/N3, der Widerspruch F-020-Weg gegen `roof.anbau`-Weg (`db1dc3b
 Registerformeln falsch zugeordnet sein können — bei W-07 sind es acht, und keine ist geprüft.*
 
 **W-07N-8 (`must_preserve`):** `resources/**` und `app/**` byte-identisch, Insel-Suite **unverändert**
-grün (ohne Zahl). Die fünf nicht genannten Blätter von W-07 byte-identisch.
+grün (ohne Zahl). Die **vier** nicht genannten Blätter von W-07 byte-identisch (`1-ZWECK`, `3-FORMELN`, `4-BEDIENUNG` unverändert; `7-GRENZEN` nur ERGÄNZT, 0 gelöschte Zeilen) — **berichtigt 12.08.: die Zahl fünf gehörte zum falschen Scope.**
 
 **W-07N-9 (P1, §3 wird BELEGT):** Befehl mit Ausgabe, an beiden Orten, **mindestens zwei
 Befehlszeilen und zwei Ausgabewerte, je Ort einer**. **Und die Messung fällt UNMITTELBAR vor der
