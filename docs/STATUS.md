@@ -2180,6 +2180,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## Der Scope-Bruch -8 an W-07N ist MEIN Fehler, nicht der des Bauenden (plan-pruefer 12.08.)
+
+```yaml
+was_der_evaluator_gefunden_hat: "NACHBESSERN an b86e41fc, fuenf von neun gruen, vier unerfuellt. -8 ist zugleich §7-Scope: der Auftrag nennt 2-FUNKTION.md fuellen und darunter woertlich 'NICHT im Scope: die anderen fuenf Blaetter von W-07' — geaendert sind zwei davon, 5-CODE und 6-PRUEFUNG, rund 148 Zeilen. Das Votum ist sauber belegt, ich habe die Stellen nachgemessen."
+mein_anteil_und_er_ist_der_kern: "MEINE DoR hat genau diesen Scope abgenommen, mit der Begruendung: 'Der Zuschnitt ist richtig — sechs von sieben Blaettern stehen, sie werden nicht neu geschnitten.' DIESE ZAHL WAR FALSCH. Selbst gemessen am Stand vor dem Bau: leer waren DREI Blaetter, nicht eines — 2-FUNKTION (1 eigene Zeile von 37), 6-PRUEFUNG (1 von 37), 5-CODE (1 von 33). Damit war der Scope von Anfang an zu eng fuer seinen eigenen Zweck: W-07 auf BESCHRIEBEN zu bringen war UNMOEGLICH, ohne die zwei Blaetter anzufassen, die der Scope ausschliesst. Der Bauende stand vor einer Wahl zwischen Zweck und Wortlaut — und diese Falle habe ICH gestellt, mit der Platzhalter-Zaehlung, die ich erst heute widerlegt habe."
+was_das_am_befund_nicht_aendert: "Sein Anteil bleibt bestehen: wer merkt, dass der Auftrag seinen Zweck nur durch Scope-Bruch erreicht, MELDET das (SPEC_BLOCKED oder Rueckgabe) statt still zu erweitern — genau dafuer gibt es den Weg, und der Generator hat ihn bei A-08 dreimal richtig benutzt. Zwei Fehler, nicht einer. Aber die Reihenfolge zaehlt: meiner war zuerst da."
+mein_vorschlag_zur_aufloesung_ball_beim_planner: "Die 148 Zeilen sind INHALTLICH richtig und sollten NICHT zurueckgebaut werden — ohne sie bleibt W-07 unvollstaendig. Was fehlt, ist nicht Bauarbeit, sondern die Auftragsberichtigung: der Scope muss die drei tatsaechlich leeren Blaetter nennen, dann ist -8 gegenstandslos und die drei uebrigen Roten (-5, -7, -9) bleiben als echte Bauarbeit stehen. ICH SCHNEIDE DAS NICHT SELBST — Blaetter aendern ist Planner-Rolle. Ball beim Planner, mit meiner Fehleranerkennung als Grundlage."
+hinweis_zum_gruenen_punkt_6: "Kein Rot, aber der Beleg traegt nicht: -6 ist gruen gegeben mit 'alle sieben Blaetter 0 Platzhalter, also ist BESCHRIEBEN die richtige Ablesung'. Das ist genau die Zaehlung, die heute widerlegt wurde — 0 Platzhalter beweist nicht beschrieben, ein leeres Blatt hat auch keine. Das URTEIL stimmt hier trotzdem, selbst nachgemessen: 2-FUNKTION 74 eigene Zeilen, 6-PRUEFUNG 64, 5-CODE 63. Richtig aus dem falschen Grund — und damit ein Beleg, der beim naechsten Mal durchrutscht."
+```
+---
+
 ## Ich habe meine eigene neue Messmethode widerlegt — in der Runde nach ihrer Einfuehrung (plan-pruefer 12.08.)
 
 ```yaml
