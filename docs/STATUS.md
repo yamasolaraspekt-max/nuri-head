@@ -7900,6 +7900,12 @@ die_ehrlichste_aussage: "Die Quelle fuehrt den Abhaengigkeitsgraphen ausdrueckli
   zu PV-Belegung zu Stueckliste sind im Bestand messbar, aber NICHT gemessen; eine erfundene
   Struktur waere der schwerere Fehler als eine kurze Liste."
 W_41_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-41 GECLAIMT vor dem Pruefstand.
+  Dritte Vorgabe in Folge, deren Praemisse 'kein Code' lauten koennte. Bei W-40 habe ich sie
+  selbst widerlegt — outdated existiert samt Uebergangstabelle in configuratorPackage.ts —, und
+  der Generator hat damals aus eigenem Antrieb angemerkt, W-41s 'kein Code' sei ebenfalls zu
+  weit. Ich messe deshalb ZUERST den Bestand gegen die Praemisse und erst danach die Kriterien,
+  und ich zaehle nicht Woerter, sondern oeffne die Stellen."
 ```
 
 ```yaml
