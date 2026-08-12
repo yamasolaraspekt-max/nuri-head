@@ -52,7 +52,7 @@
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **A-23** Sechs Zettel an einer erledigten Sperre | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. SIEBEN Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung, und die siebte trug die Zeichenfolge gar nicht: `startEhrlich.test.ts:120` sagt *„Die Zulieferung der Liste bleibt deshalb offen“* im Rumpf des geschützten Tests — H-9 an meinem eigenen Suchmuster. **DoR NICHT erteilt (`2772c198`), zwei Fehler in meinen eigenen Kriterien behoben:** A-23-1 und A-23-2 kollidierten (md5 über den Rohtext gegen die Pflicht, überholte Sätze zu berichtigen — jetzt md5 **ohne Kommentare**, mit dem Werkzeug der Insel), und meine Gegenprobe nannte **kommentarblinde** Wächter: `startEhrlich` und `konfiguratorEhrlich` lesen über `ohneKommentare`. Der einzige, der greifen kann, fehlte — `gefuehrteEhrlich:30` liest `studioDaten.ts` **roh** und prüft ein Statuswort in der ganzen Datei; **mein A-23-3 trieb den Bauenden genau in dessen Wortsperre.** Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
-| **A-24** Panel-Zusage trifft das Tor nicht | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
+| **A-24** Panel-Zusage trifft das Tor nicht | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
 | **W-31** PV-Schnellbelegung | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `6ace6f3e` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Widerlegt meine eigene Behauptung, der Vorrat sei erschöpft.** Die Registerzeile `REGISTER.md:98` sagt im selben Satz *gesperrt bis F-028* **und** *autarke Schnellstufe gebaut (`pvBelegung.ts`, KEIN Azimut → kein F-028-Fall)* — ich hatte das Wort **gesperrt** gelesen und die Sache nicht gemessen, dieselbe Ursache wie bei AUF-40 heute. `pvBelegung.ts` hat 75 Z. und **drei** Exporte (`:10`, `:26`, `:46`), und es ist **angeschlossen** — anders als W-27/1: `enginePanels.ts:32` Einfuhr, `:380 engineId`, `:403` Aufruf über `alsPvEingabe`, `faehigkeiten.ts:80` Registry mit `zustand: verfuegbar`. **DoR NICHT erteilt (`94bd30f8`): eine FÜNFTE Bedienstelle fehlte, und sie ist die einzige mit einer RICHTUNG.** `fachFlaechen.ts:240-258` trägt `fach-pv-module` mit `engine: engine-pv`, ist über `FachFlaeche.tsx` und `HausplanerStudio.tsx:18` **gerendert** — und `:252` nennt als Eingang *„Ausrichtung und Neigung"* in Grad, während `PvEingabe` **sieben** Felder hat und keine Richtung. Mein Muster konnte sie nicht finden: ich maß über **Importe**, und `fachFlaechen.ts` verdrahtet über **Strings**. Dieselbe Klasse wie die NUR-QUELLE-Wächter, nur auf der Bedienseite. Die Spannung ist benannt und **nicht** zum Mangel erklärt (H-7: eine Feldvorschau darf künftige Felder zeigen) — als Vormerkung im Fuß, nicht als Auftrag. **Erster Beleg, dass die Stufe-6-Kette zusammenhängt:** der Bedienweg läuft über W-36 und W-37, und `alsPvEingabe` ist einer der acht Adapter, deren Zahl W-37 zwei Runden gekostet hat. Die Grenze steht im Dateikopf `:6-7` — *Ertrag/Verschattung/Strings bleiben der Fach-Engine (wberechnung) vorbehalten*, also Arbeitsteilung zwischen zwei Apps. |
 | **W-06** Geschoss verwalten | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `acb3d494` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Die größte Ablesung des Vorrats: DREI Module, 355 Z., zehn Exporte** — `geometry/geschossVorlage.ts` (78) · `app/dashboard/geschossStapel.ts` (104) · `GeschossFlaeche.tsx` (173), alle drei angeschlossen. **Tragend ist der ID-Remap** (`geschossVorlage.ts:5-7`): Öffnungen werden auf die **neuen** Wand-IDs umgehängt — wer das bricht, hängt Türen des Duplikats an die Wände des Ursprungsgeschosses, und **das fällt erst auf, wenn unten eine Wand geändert wird**. Die Generics `<N extends NodeBasis, R extends RoofBasis>` verankern die Schichttrennung **im Typsystem** statt in einer Absprache. AUF-43s stiller Befund steht im Dateikopf: *die Höhenlage wird im Modell geführt, aber nirgends gezeigt* — kein falscher Wert, ein vorhandener der nie erscheint. **Dritter Fall der NUR-QUELLE-Wächterklasse:** `geschossFlaeche.test.ts` heißt nach der Komponente, importiert das Datenmodul und verriegelt die Komponente über ihre Quelle (`:27`) — strenger als ein Import, denn `:125` schließt eine zweite Definition aus. **Und F-032 ist eine FORMEL, keine Sperre** (`FORMELSAMMLUNG.md:218`); vier LEER-Werkzeuge tragen die Referenz und das sieht wie ein gemeinsamer Blocker aus. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
@@ -7663,8 +7663,8 @@ mein_erster_messversuch_war_untauglich_und_das_gehoert_dazu: "Mein erster Sweep 
   derselbe zu weite Griff wie heute mehrfach, nur diesmal vor der Meldung bemerkt."
 
 auftrag: "A-24"
-zustand: IN_ARBEIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
   Bestandsdokument, Zeilennummer auf :25 berichtigt. UND EIN EIGENER FEHLGRIFF, den der plan-pruefer
   eine Zeile vorher an sich selbst benannt hat: ich habe die Uebergabe in der COMMIT-BOTSCHAFT gesagt
   und nicht ins FELD geschrieben — Tafelzeile und Datensatz trugen den Ball weiter bei mir. Genau die
@@ -7732,6 +7732,59 @@ was_selbst_gemessen_und_was_nur_gelesen: "SELBST: Panel-Text :300, Feldbedingung
   GELESEN, nicht wiederholt: die A-05-Probe 4d des Generators (l-shape mit zwei Massen ergibt dreiecke
   leer). Torcode gelesen statt Probe gefahren — fuer einen Auftragsschnitt genug, fuer eine Abnahme
   nicht."
+bau_sha: 0c9aa0a9
+abnahme_sha: cff115fa
+bericht: docs/BERICHT-A-24-panel-zusage-trifft-das-tor.md
+E1_gefahren: "4 von 4 GLEICH — EigenschaftenPanel.tsx, anbauTorZusage.test.ts,
+  a24-browserabnahme.mjs, der Bericht."
+alle_sieben_kriterien: "A-24-1 beide Richtungen: der Text nennt alle vier Masse UND die
+  fehlt-Bedingung prueft alle vier, ohne istU. A-24-2 die zwei Felder stehen fuer L/T offen, mit
+  der Bezeichnung aus dachVerschneidung.ts:25. A-24-3 die Schutzgrenze haelt als EIGENSCHAFT: vier
+  setzeAnbau-Aufrufe, alle aus onChange, 0 useEffect — vom Waechter festgehalten. A-24-4 das Tor
+  unberuehrt, dachMesh.ts steht in keinem meiner Commits. A-24-5 der Waechter haelt die KOPPLUNG:
+  er vergleicht die Feldmengen beider Orte sortiert. A-24-6 Fangprobe GEFAHREN, zwei Zusagen
+  wurden rot, md5 gegen den Anker identisch. A-24-7 Browserabnahme als Ablauf, 10 von 10."
+DIE_BROWSERABNAHME_HAT_ETWAS_GEFUNDEN_DAS_KEIN_TEST_FINDEN_KONNTE: "public/build/manifest.json war
+  vom 4. JULI. Der erste Abnahmelauf zeigte den ALTEN Panel-Text und nur ZWEI Felder — bei 1718
+  gruenen Tests und gruenem tsc. Ein Quelltext-Test kann nicht sehen, was AUSGELIEFERT wird.
+  Erst npm run build:hausplaner erzeugte public/hausplaner/hausplaner.js mit meinem Bau; Gegenprobe
+  grep -c auf den neuen Satz im Buendel = 1, danach war der Ablauf gruen.
+  NEBENFUND: mein erster Griff war npm run build — der baut die CRM-Seite, NICHT die Insel. Die
+  Insel hat einen eigenen Befehl. public/build ist nicht versioniert, der Fehlgriff hat nichts
+  hinterlassen (gemessen, nicht angenommen).
+  DAS IST DER GRUND, warum die Arbeitsregeln bei UI-Arbeit eine reale Browserabnahme verlangen.
+  Wer sie als Formsache behandelt, liefert hier gruen und der Nutzer sieht den alten Text."
+die_buehne_am_kindprozess_geprueft: "Vor der Abnahme gemessen statt geglaubt: ps eww am
+  php-Kindprozess zeigt APP_ENV=testing, und config('database…') loest auf ticket_testing auf.
+  Das ist der A-03-Riegel; er haelt. Der Server auf 8099 war 58 Sekunden alt und damit meiner —
+  ein 302 allein waere kein Beleg dafuer gewesen, dass die Buehne mir gehoert."
+der_ablauf_zehn_schritte: "Anmeldung · Insel geoeffnet · Expertenmodus · L-Dach ueber die
+  ZEICHENFLAECHE ausgewaehlt (das Panel verlangt woertlich 'Objekt anklicken (Auswahl-Werkzeug)')
+  · Warnung ohne Masse nennt alle vier · die vier Felder sind da · NACH ZWEI MASSEN BLEIBT DIE
+  WARNUNG · nach vier ist sie weg · die vier Werte stehen im Modell (10000, 8000, 4000, 3000) ·
+  das Tor laesst durch. Der KERN ist Schritt sieben: genau dort log die Flaeche vorher.
+  Bildschirmabzug vorhanden, er zeigt L-Dach, vier gefuellte Felder und keine Warnung.
+  NICHT BELEGT und deshalb so gesagt: dass die 3D-Geometrie sichtbar wird. Das misst kein
+  Textausleser."
+zwei_fehler_steckten_in_meinem_eigenen_test: "Beide gefangen, weil ich ihn GEFAHREN habe statt ihn
+  fuer gruen zu halten. (1) Mein Tor-Muster war if \\(([^)]*)\\) und brach an der geschachtelten
+  Klammer (a.lengthB && …) ab, also mitten in der Bedingung — der Test zeigte auf den Bau, der
+  Fehler stand im Messmuster. (2) Meine Aufrufzaehlung zog eine 1 fuer die Definition ab, die das
+  Muster setzeAnbau\\( gar nicht erfasst, weil dort 'setzeAnbau = (' steht; 3 gegen 4.
+  Beide Ursachen stehen als Kommentar IM Test und nicht nur im Bericht."
+drei_eigene_fehlgriffe_bei_der_saat: "Und die Insel hat jeden EINZELN benannt, mit Feldnamen.
+  (1) lead_id zeigt auf new_leads, nicht auf leads — ich hielt den Spaltennamen fuer den
+  Tabellennamen, der Fremdschluessel-Constraint hat es widerlegt. (2) Das Dach lag in nodes[];
+  Daecher stehen in der EIGENEN Sammlung roofs[] (scene.types.ts:46). (3) Meine Ebene trug visible
+  und locked — Level hat GENAU sechs Felder und keines davon; ein Feld zu viel ist so falsch wie
+  eines zu wenig. Die Insel sagte dazu woertlich: 'Der Plan wurde NICHT geladen, damit nichts
+  stillschweigend verloren geht.' Das ist das genaue Gegenteil des Fehlers, den dieser Auftrag
+  behebt — hier sagt die Flaeche, was FEHLT, statt eine Bedingung zu nennen, die nicht die
+  Bedingung ist."
+was_der_evaluator_zuerst_pruefen_sollte: "Ob der Waechter wirklich die KOPPLUNG haelt und nicht den
+  Wortlaut. Der Test anbauTorZusage.test.ts vergleicht die Feldmengen beider Orte sortiert; wer ihn
+  fuer einen Textpruefer haelt, hat den Auftrag nicht getroffen. Gegenprobe: das istU in der
+  fehlt-Zeile wieder einsetzen — zwei Zusagen muessen rot werden, nicht eine."
 gezogen_am: "12.08. vom generator. §3 vor dem Ziehen 0/0 an beiden Orten, danach 1/1."
 warum_A_24_und_nicht_A_23_oder_W_37: "DREI Auftraege standen zugleich BEREIT bei mir, §3 laesst
   einen zu. Gemessen statt gewaehlt: A-24 traegt P1, A-23 und W-37 tragen P2. A-24 ist ausserdem der
