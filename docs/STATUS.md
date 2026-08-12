@@ -46,7 +46,7 @@
 | **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
 | **W-27** Dachkantentypen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
-| **W-38** Schrittstatus und Prüfpunkte | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
+| **W-38** Schrittstatus und Prüfpunkte | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
@@ -6482,9 +6482,14 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-20 GECLAIMT vor dem Pr
 
 ```yaml
 auftrag: "W-38"
-zustand: IN_ARBEIT
+zustand: CODE_FERTIG
+ballbesitz_bau: generator (Bau fertig — sieben Werkbankblaetter neu, REGISTER.md Zeile 125 LEER -> BESCHRIEBEN)
+bericht: "docs/BERICHT-W-38-schrittstatus-und-pruefpunkte.md"
+zwei_fehltreffer_gemeldet: "(1) IM AUFTRAGSBLATT: dessen Abschnitt 2 nennt app/dashboard/enginePanels.ts als Pruefpunkt-Nutzer. Gemessen nennt diese Datei studioDaten an keiner Stelle und importiert nichts daraus; ihr einziger Treffer ist enginePanels.ts:235, ein deutscher Anzeigetext 'Auslegung nach Verlegeabstand … Pruefpunkte zu Leistung'. Die beiden dort ebenfalls genannten Testdateien sind derselbe Fall — das Wort im Testnamen, nicht der Typ. H-6. Kein Vorwurf: das Blatt schreibt zu Abschnitt 2 selbst 'meine Erhebung, nachzumessen', und W-38-4 hat den Fund erzwungen, weil es die Trefferzeile verlangt statt des Wortes 'wird verwendet'. (2) MEINER: ich wollte die Rechenfreiheit der Datei mit einem Rechenausdruck-Muster belegen und bekam 6 Treffer, von denen KEINER eine Rechnung ist — vier SVG-Pfade (6-4 sind zwei Koordinaten) und zwei Anzeigetexte. H-9 an mir selbst. Der tragende Beleg ist die 0 bei 'export function'; die Fehlmessung steht in 3-FORMELN.md, statt geloescht zu sein."
+nebenbefund_neun_vorlagen: "Die W-38-8-Gegenprobe ueber alle 26 Werkzeugordner zeigt neun Werkzeuge, die ihre Blaetter noch unveraendert als Vorlage tragen: W-03 W-06 W-10 W-12 W-14 W-16 W-17 W-18 W-19. Alle neun stehen im Register auf LEER — konsistent, kein Mangel. Genannt, damit die Zahl '10 gleiche Hashes' niemanden erschreckt. Kein W-38-Blatt ist darunter, und keines gleicht einem fremden Werkzeug."
+aufgefallen_am_eigenen_werkzeug: "Zwei meiner Gegenproben schrieben \"$w1-ZWECK.md\" — die Shell liest darin die Variable w1, nicht $w gefolgt von 1. Beide Laeufe prueften eine Datei die es nicht gab und meldeten 'keine Dublette'. Aufgefallen, weil derselbe Bestand zwei Saetze vorher '1 Dublette' gesagt hatte; korrigiert mit ${w}1-ZWECK.md. Zwei Messungen die sich widersprechen sind ein Pruefanlass, keine Auswahl."
 dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN, jede Behauptung selbst gemessen: studioDaten.ts traegt 257 Zeilen (exakt wie im Blatt), STATUS_LABEL existiert, SchrittStatus definiert VIER Stufen ('ok'|'prog'|'warn'|'open', Z.163). Bei den _STILLGELEGT-Konstanten zeigte mein Zaehler DREI, das Blatt sagt ZWEI — GELESEN statt gezaehlt: Z.157 ZULETZT_STILLGELEGT und Z.186 STEPS_STILLGELEGT sind Konstanten, Z.146 ist ein Kommentarverweis. Das Blatt hat recht."
-ballbesitz: generator
+ballbesitz: evaluator
 titel: "Vier Stufen, vier Datenformen, zwei stillgelegte Konstanten — Ablesung aus dem Bestand"
 basis_sha: fb1a396d
 spur: A
