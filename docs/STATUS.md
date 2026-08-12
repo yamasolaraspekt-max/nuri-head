@@ -2206,6 +2206,19 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## W-01N: DoR bestanden nach der NEUEN vierteiligen Pruefliste (plan-pruefer 12.08.)
+
+```yaml
+der_auftrag_und_der_weg: "Der Planner hat W-01N formuliert und an mich gegeben (931def29) — ausdruecklich 'Regelwerk statt Rollenwechsel, wie Yama es angewiesen hat': er hatte angeboten, selbst zu bauen, und nimmt das Angebot zurueck. Damit laeuft der Auftrag den vollen Weg Planner -> Plan-Pruefer -> Generator; genau die Stufe, deren Fehlen der Evaluator bei W-07N als strukturellen Preis benannt hatte."
+1_ZUSTAND_rot_lage_gemessen: "Haelt. W-01-fang-beschreiben.md traegt '1689/1689' woertlich an Z.135 und Z.177, und das Blatt selbst dokumentiert den Widerspruch an Z.306 ('Kriterium verlangt 1689/1689, gemessen 1692/1692'). Ein Abnahmekriterium, das eine feste Suite-Zahl verlangt, wird mit jedem neuen Test falsch — das ist der Gegenstand."
+2_ZIEL_existiert: "Geprueft, weil mir genau das bei B5 gefehlt hat: W-01N-4 verlangt eine Regel in FAHRPLAN-KLASSE-A.md — die Datei EXISTIERT (docs/FAHRPLAN-KLASSE-A.md). Der genannte Basis-Commit ed7ccb70 existiert ebenfalls, ebenso der abgeloeste 548bef5c."
+3_BEWEISKRAFT_der_kriterien: "W-01N-1 ist per Suche pruefbar (keine Suite-Zahl mehr im Kriterium), W-01N-3 ueber die drei must_preserve-Richtungen. W-01N-2 ist der tragende: die neue Fassung muss ein UEBERPRUEFBARES Kriterium nennen — sonst waere die Zahl nur geloescht und das Kriterium leer. Das Blatt loest es ueber die zahlfreie Form aus W-02, die es als Vorbild benennt."
+4_GANZER_GEGENSTAND_zweigprobe: "Neu seit meinem Fehlbefund: fork und backup-private stehen auf 5579a6c0, VORAUS sind sie null. Ich messe also auf dem Zweig, auf dem alle arbeiten — diesmal geprueft statt vorausgesetzt."
+BEFUND_die_rot_lage_zahl_ist_selbst_schon_ueberholt: "Das Blatt nennt 'gemessen sind 1692'. SELBST NACHGEMESSEN am juengsten Beleg: der A-18-Bericht Z.143 fuehrt 'tests 1694 pass 1694 fail 0'. Die 1692 ist also bereits ueberholt — und das ist KEIN Mangel des Auftrags, sondern sein staerkster Beleg: sogar die Rot-Lage-Beschreibung eines Auftrags, der Zahlen aus Kriterien entfernen will, traegt schon wieder eine veraltete Zahl. AUFLAGE FUER DEN BAU: 1692 ist keine Zielzahl. Wer sie in die neue Fassung schreibt, baut denselben Fehler nach, nur mit einer anderen Ziffer. Die Suite selbst habe ich NICHT gefahren — Pruefstand-Arbeit, ich melde die Zahl als fremden Beleg."
+ergebnis_und_wartelage: "DoR BESTANDEN, W-01N bleibt BEREIT beim Generator. Gebaut werden kann er aber noch nicht: B6 ist IN_ARBEIT, der §3-Platz ist besetzt. Das ist keine Sperre des Auftrags, sondern die Reihenfolge — und pikanterweise ist W-01N dadurch der erste Auftrag, bei dem das neu verankerte §3-Muster wirklich zaehlt, denn B6 ist ein B-Auftrag und waere dem alten [AW]-Muster entgangen."
+```
+---
+
 ## MEIN SCHWERSTER FEHLBEFUND HEUTE: "es laeuft keine Release-Pruefer-Instanz" — sie lief die ganze Zeit (plan-pruefer 12.08.)
 
 ```yaml
