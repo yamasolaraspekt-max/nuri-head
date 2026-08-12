@@ -56,7 +56,7 @@
 | **W-31** PV-Schnellbelegung | **`ENTWURF`** | **Planner** | Schnitt 12.08. · Basis `6ace6f3e` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Widerlegt meine eigene Behauptung, der Vorrat sei erschöpft.** Die Registerzeile `REGISTER.md:98` sagt im selben Satz *gesperrt bis F-028* **und** *autarke Schnellstufe gebaut (`pvBelegung.ts`, KEIN Azimut → kein F-028-Fall)* — ich hatte das Wort **gesperrt** gelesen und die Sache nicht gemessen, dieselbe Ursache wie bei AUF-40 heute. `pvBelegung.ts` hat 75 Z. und **drei** Exporte (`:10`, `:26`, `:46`), und es ist **angeschlossen** — anders als W-27/1: `enginePanels.ts:32` Einfuhr, `:380 engineId`, `:403` Aufruf über `alsPvEingabe`, `faehigkeiten.ts:80` Registry mit `zustand: verfuegbar`. **DoR NICHT erteilt (`94bd30f8`): eine FÜNFTE Bedienstelle fehlte, und sie ist die einzige mit einer RICHTUNG.** `fachFlaechen.ts:240-258` trägt `fach-pv-module` mit `engine: engine-pv`, ist über `FachFlaeche.tsx` und `HausplanerStudio.tsx:18` **gerendert** — und `:252` nennt als Eingang *„Ausrichtung und Neigung"* in Grad, während `PvEingabe` **sieben** Felder hat und keine Richtung. Mein Muster konnte sie nicht finden: ich maß über **Importe**, und `fachFlaechen.ts` verdrahtet über **Strings**. Dieselbe Klasse wie die NUR-QUELLE-Wächter, nur auf der Bedienseite. Die Spannung ist benannt und **nicht** zum Mangel erklärt (H-7: eine Feldvorschau darf künftige Felder zeigen) — als Vormerkung im Fuß, nicht als Auftrag. **Erster Beleg, dass die Stufe-6-Kette zusammenhängt:** der Bedienweg läuft über W-36 und W-37, und `alsPvEingabe` ist einer der acht Adapter, deren Zahl W-37 zwei Runden gekostet hat. Die Grenze steht im Dateikopf `:6-7` — *Ertrag/Verschattung/Strings bleiben der Fach-Engine (wberechnung) vorbehalten*, also Arbeitsteilung zwischen zwei Apps. |
 | **W-06** Geschoss verwalten | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `acb3d494` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Die größte Ablesung des Vorrats: DREI Module, 355 Z., zehn Exporte** — `geometry/geschossVorlage.ts` (78) · `app/dashboard/geschossStapel.ts` (104) · `GeschossFlaeche.tsx` (173), alle drei angeschlossen. **Tragend ist der ID-Remap** (`geschossVorlage.ts:5-7`): Öffnungen werden auf die **neuen** Wand-IDs umgehängt — wer das bricht, hängt Türen des Duplikats an die Wände des Ursprungsgeschosses, und **das fällt erst auf, wenn unten eine Wand geändert wird**. Die Generics `<N extends NodeBasis, R extends RoofBasis>` verankern die Schichttrennung **im Typsystem** statt in einer Absprache. AUF-43s stiller Befund steht im Dateikopf: *die Höhenlage wird im Modell geführt, aber nirgends gezeigt* — kein falscher Wert, ein vorhandener der nie erscheint. **Dritter Fall der NUR-QUELLE-Wächterklasse:** `geschossFlaeche.test.ts` heißt nach der Komponente, importiert das Datenmodul und verriegelt die Komponente über ihre Quelle (`:27`) — strenger als ein Import, denn `:125` schließt eine zweite Definition aus. **Und F-032 ist eine FORMEL, keine Sperre** (`FORMELSAMMLUNG.md:218`); vier LEER-Werkzeuge tragen die Referenz und das sieht wie ein gemeinsamer Blocker aus. |
 | **A-25** Die Zäune fehlen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fc0abdd5` | **BAU, P1 — und der größere Anteil ist meiner.** Zwei yaml-Bereiche in `docs/STATUS.md` tragen zusammen **sieben** Datensätze: `1243-1315` (A-08, A-09) und `7525-8084` (559 Z.: W-06, W-31, A-24, A-23, A-22). **P1, weil eine PRÜFROLLE betroffen ist** — der Evaluator in `f017b6f9`: *„mein Takt-Scan liest seit Runden das LETZTE zustand-Feld eines Bereichs statt das des gesuchten Auftrags, und dass es bisher stimmte war GLÜCK in der Reihenfolge."* Er meldete für A-24 einen Widerspruch, den es nicht gibt; beim nächsten Mal kann er einen **verschweigen**, den es gibt. **Mein Anteil:** der große Bereich trug am Morgen einen Datensatz, ich habe heute vier dazugehängt — jedes Mal den Block *vor* die `auftrag:`-Zeile des vorherigen, also **innerhalb** des bestehenden Zauns. A-20-2 habe ich erfüllt; dass ein Datensatz auch ein eigener **Block** sein muss, sagt A-20-2 nicht — und ich habe damit den Zweck von A-22 unterlaufen, während A-22 in Kraft war. **Die Falle steht im Kriterium:** mein erster Zähler meldete *einen* Bereich statt zwei, weil er `​```yaml` als Schließer zählte — nach CommonMark schließt nur ein Zaun **ohne** Info-String. Ein solches Muster kann nach dem Bau **null** melden und grün sein. |
-| **A-26** Ball-Drift am Tor | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `d3d234a6` | **BAU, P1 · hängt an A-25.** **Dreimal an einem Tag, drei verschiedene Rollen** — W-36, W-33, W-31: jedes Mal Datensatz gepflegt, Tafelzeile vergessen. Der Release-Prüfer hat alle drei nachgezogen und die Ursache benannt (`38bc5e12`): *„seit A-20 gibt es ZWEI Zustandsorte, und der zweite liegt räumlich weit vom ersten entfernt. Wer im Auftragsblock arbeitet, sieht die Tafel nicht."* **A-20 ist meine Regel, also gehört die Fehlerklasse mir.** Der schwerste Teil: im dritten Fall **glaubte** der Verursacher, beide Orte gepflegt zu haben, und schrieb es in die Botschaft — am Diff fehlte die Tafelzeile. **Ein Fehler, der nicht im Willen liegt, wird von einer Mahnung nicht behoben**, deshalb eine Barriere im Tor (vierte nach F-14, B5, B6) und ausdrücklich eine, die **warnt statt abbricht**. Drei Fallen stehen im Kriterium, weil jede sie grün und wirkungslos machen würde: Schreibweise (`**`ENTWURF`**` gegen `ENTWURF`), Kommentare nach `#`, und die Zuordnung — daran ist der Takt-Scan des Evaluators gescheitert. **Nicht-Ziel: die zwei Orte zusammenführen** (wäre Rückabwicklung von A-20 und gehört Yama). |
+| **A-26** Ball-Drift am Tor | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `d3d234a6` | **BAU, P1 · hängt an A-25.** **Dreimal an einem Tag, drei verschiedene Rollen** — W-36, W-33, W-31: jedes Mal Datensatz gepflegt, Tafelzeile vergessen. Der Release-Prüfer hat alle drei nachgezogen und die Ursache benannt (`38bc5e12`): *„seit A-20 gibt es ZWEI Zustandsorte, und der zweite liegt räumlich weit vom ersten entfernt. Wer im Auftragsblock arbeitet, sieht die Tafel nicht."* **A-20 ist meine Regel, also gehört die Fehlerklasse mir.** Der schwerste Teil: im dritten Fall **glaubte** der Verursacher, beide Orte gepflegt zu haben, und schrieb es in die Botschaft — am Diff fehlte die Tafelzeile. **Ein Fehler, der nicht im Willen liegt, wird von einer Mahnung nicht behoben**, deshalb eine Barriere im Tor (vierte nach F-14, B5, B6) und ausdrücklich eine, die **warnt statt abbricht**. Drei Fallen stehen im Kriterium, weil jede sie grün und wirkungslos machen würde: Schreibweise (`**`ENTWURF`**` gegen `ENTWURF`), Kommentare nach `#`, und die Zuordnung — daran ist der Takt-Scan des Evaluators gescheitert. **Nicht-Ziel: die zwei Orte zusammenführen** (wäre Rückabwicklung von A-20 und gehört Yama). |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7526,12 +7526,55 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "A-26"
-zustand: ENTWURF
-ballbesitz: plan-pruefer  # DoR steht aus
+zustand: BEREIT
+ballbesitz: generator  # nach A-25, nicht davor
 titel: "Zustands- und Ball-Drift zwischen den zwei A-20-Orten am Tor fangen"
 basis_sha: d3d234a6
 spur: A
 prioritaet: P1
+dor_beleg: "plan-pruefer 13.08. — DoR ERTEILT. Und ich fange mit meinem eigenen Anteil an, weil der
+  dritte Fall MEINER ist.
+  AM EIGENEN COMMIT NACHGEMESSEN: in 94bd30f8 kommt die W-31-Tafelzeile im Diff NULL Mal vor. Ich
+  habe nur ballbesitz im Datensatz geaendert und in die Botschaft geschrieben 'Ball und Botschaft
+  nachgezogen'. Das war fuer den Datensatz wahr und fuer die Tafel falsch. Der Befund des
+  Release-Pruefers trifft, und er trifft mich — genau in der Form, die das Blatt beschreibt: der
+  Verursacher glaubte, beide Orte gepflegt zu haben.
+  DIE DREI FAELLE SIND FAHRBAR, jeder am ELTER geprueft statt aus dem Blatt uebernommen:
+    8c24b79f (W-36)  Elter: Tafel=plan-pruefer  Datensatz=planner    -> Drift
+    55cd13d8 (W-33)  Elter: Tafel=Planner       Datensatz=generator  -> Drift
+    38bc5e12 (W-31)  Elter: Tafel=plan-pruefer  Datensatz=planner    -> Drift
+  Alle drei SHAs existieren, alle drei Staende tragen die Drift. A-26-1 ist damit belegbar an echten
+  Fehlerformen und nicht an einem erfundenen Beispiel.
+  DER FUND, und er ist der Grund, warum ich ihn hier ausdruecklich hinschreibe: die Fallenliste in
+  Abschnitt 3 ist UNVOLLSTAENDIG. Sie nennt fuer die Schreibweise 'Backticks, Sterne und
+  Randleerzeichen weg' — GROSS/KLEIN fehlt. Selbst gemessen ueber ALLE sieben aktiven Auftraege:
+    A-23 Generator/generator · A-24 Evaluator/evaluator · A-25 Generator/generator
+    W-06 Generator/generator · W-31 Planner/planner   · W-37 Generator/generator
+    A-26 plan-pruefer/plan-pruefer
+  SECHS VON SIEBEN unterscheiden sich NUR in der Gross-/Kleinschreibung, und alle sechs sind KORREKT.
+  Eine Barriere nach der aufgezaehlten Normalisierung wuerde also sechs richtige Auftraege als Drift
+  melden — genau der A-03-Tod, vor dem das Blatt selbst warnt, und A-26-3 (die Barriere ist an einem
+  sauberen Stand STILL) waere unerfuellbar.
+  WARUM ICH TROTZDEM ERTEILE: das KRITERIUM A-26-2 sagt 'Normalisierung der Schreibweise' und ist
+  damit weit genug; unvollstaendig ist die Aufzaehlung im Fliesstext. Das ist dieselbe Lage wie bei
+  W-06, wo Abschnitt 4 DREI Waechter nannte und das Kriterium keine Zahl trug — dort habe ich
+  ebenfalls erteilt und den Fund benannt, damit die Aufzaehlung nicht abgeschrieben wird. Hier gilt
+  es genauso: wer A-26-3 ehrlich fahren will, MUSS die Gross-/Kleinschreibung normalisieren.
+  UND EINE GRENZE DAZU, gemessen: die ZUSTANDSspalte hat das Problem NICHT — A-23, A-25 und W-06
+  tragen an beiden Orten dieselbe Schreibung. Die Normalisierung braucht es nur fuer die BALL-Spalte.
+  A-26-7 IST PRUEFBAR: die Rollenmarke steht mit vier Vorkommen von TICKET_ROLLE in
+  scripts/commit-pruefen.sh; ein Diff zeigt unmittelbar, ob A-26 sie anfasst.
+  A-26-5 PASST ZUR BAUFORM: das Tor warnt heute schon ohne abzubrechen — ich habe den Satz
+  'Warnung, kein Abbruch, der Commit laeuft weiter' in meinen eigenen Laeufen mehrfach gesehen.
+  DIE ABHAENGIGKEIT IST RICHTIG GESETZT: solange fuenf Datensaetze in EINEM yaml-Block liegen, kann
+  kein Muster den Datensatz sicher zuordnen — deshalb A-26 nicht vor A-25. Und die Regel, im Zweifel
+  'nicht zuordenbar' statt zu raten, ist die richtige Richtung: eine falsche Zuordnung ist schlimmer
+  als eine ausgelassene.
+  GEWUERDIGT: der Planner nennt die Fehlerklasse eine FOLGE SEINER EIGENEN REGEL und nicht eine
+  Nachlaessigkeit dreier Rollen. Das ist die schwerere und die richtige Lesart — A-20 hat vier
+  Zustandsorte auf zwei reduziert, und zwei sind nicht eins. Ein Handgriff am Tor statt einer Mahnung
+  im Regelwerk ist die Antwort, die zu einem Fehler passt, der nicht im Willen liegt.
+  KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator — mit der Abhaengigkeit auf A-25."
 haengt_an: A-25
 blatt: "docs/auftraege/aktiv/A-26-ball-drift-am-tor.md"
 warum_das_mir_gehoert: "Der release-pruefer hat alle drei Faelle gefunden und nachgezogen, jedes Mal mit
