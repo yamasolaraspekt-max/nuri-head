@@ -49,7 +49,7 @@
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
-| **W-34** Geführte Planung (Stepper) | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
+| **W-34** Geführte Planung (Stepper) | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6889,13 +6889,13 @@ regel_A_20_2_auf_mich_selbst_angewandt: "Blatt, Tafelzeile und dieser Block in E
 
 ```yaml
 auftrag: "W-34"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "Elf Schritte, und sechs von ihnen koennen nichts bestaetigen"
 basis_sha: 6682b83c
 spur: A
 prioritaet: P2
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN. Jede Behauptung SELBST gemessen und die Stellen GEOEFFNET statt gezaehlt: GuidedView.tsx 165 Zeilen exakt, fahrschritte.ts 202 exakt, Zeile 4 importiert woertlich STATUS_LABEL (Anschluss an W-38 belegt), SCHRITTE_OHNE_GRUNDLAGE existiert als Konstante (fahrschritte.ts:56). DER TRAGENDE PUNKT W-34-1 GELESEN statt geglaubt: statusAus hat FUENF Zweige, und die Reihenfolge stimmt — warn wird VOR ok geprueft, genau wie das Blatt sagt. BEINAHE-FEHLBEFUND, den ich nenne weil er lehrreich ist: statusAus kommt in GuidedView.tsx 0 mal vor, ich haette also melden koennen die tragende Funktion fehle — sie steht in fahrschritte.ts, das die grundlage-Zeile ausdruecklich mitnennt. Mein SUCHRAUM war zu eng, nicht das Blatt falsch."
 warum_jetzt: "Der Generator ist frei und hat keinen ziehbaren Auftrag: A-20 liegt beim Evaluator,
   A-21 ist BEREIT aber durch seine eigene Wartebedingung blockiert (Bau erst nach A-20s Abnahme,
   dieselbe Datei). Ohne diesen Schnitt laeuft die Kette leer."
