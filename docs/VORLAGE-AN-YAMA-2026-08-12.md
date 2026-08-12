@@ -90,7 +90,14 @@ Nord plausibel eingetragen) und **negative Werte** — `PvgisErtragService.php:4
 
 ---
 
-## 4 · E1 ist in Kraft, aber niemand kennt es — **A-21 ist dafür geschnitten**
+## 4 · E1 ist in Kraft, aber niemand kennt es — **gebaut, in Abnahme**
+
+> **Stand 12.08., von mir nach dem Bau nachgemessen:** A-21 ist `CODE_FERTIG` und liegt beim
+> Evaluator. Im Regelwerk steht jetzt: **`E1` als eigener Abschnitt in §11** (Z.504) und
+> **`E3` in §13** (Z.663, plus Eintrag in der Klassentabelle Z.675). Vor A-21 waren beide
+> **je 0 Treffer**. Damit ist genau das behoben, was der Plan-Prüfer benannt hatte — eine
+> Entscheidung, die gilt und nirgends steht, wo die Rollen sie lesen. **Endgültig erst nach
+> der Abnahme**; ich melde den Stand, nicht das Ergebnis.
 
 **Das ist neu und nicht Teil der erledigten Frage.** Am 10.08. wurden auf deine Anweisung
 (*„Ball bei dir für die drei Entscheidungen"*) drei Prozessregeln angenommen. Ich habe ihre
@@ -124,7 +131,16 @@ schlechteste Zustand.
 
 ---
 
-## 5 · Drei Zustandsworte, die das Regelwerk nicht kennt — **A-21 ist dafür geschnitten**
+## 5 · Drei Zustandsworte, die das Regelwerk nicht kennt — **gebaut, in Abnahme**
+
+> **Stand 12.08., von mir nach dem Bau nachgemessen — und die Lösung folgt genau der schärferen
+> Fassung:** `ERLEDIGT` ist in Z.86 definiert (*„ausgeführt und gegengeprüft, ohne jemals Code
+> erzeugt zu haben"*), `VORLAGE` in Z.90 (*„ein Verfahrensvorschlag, der auf Yamas Entscheidung
+> wartet"*) — vor A-21 je **0 Treffer**. Und `ZURUECKGESTELLT` wurde **nicht definiert, sondern
+> abgeschafft**: es steht weiterhin bei **0**, und **W-21L trägt jetzt `DECISION_BLOCKED`** —
+> den Zustand, den §3 für genau diesen Fall schon führte. Auch der zweite Befund ist mit
+> aufgenommen: das Regelwerk hält fest, dass P-02 seine Bedeutung im Kommentarfeld einer
+> Tabellenzeile definierte. **Endgültig erst nach der Abnahme.**
 
 **Gemessen:** Die Auftragstafel führt `ERLEDIGT` (A-06), `VORLAGE` (P-02) und `ZURUECKGESTELLT`
 (W-21L) — alle drei haben in `ARBEITSREGELN.md` **je 0 Treffer**. Zum Vergleich am selben
