@@ -2116,6 +2116,23 @@ p2_zwei_barrieren_ohne_test:
     fehlender Nachweis bei stimmendem Verhalten nicht. Ich melde ihn, statt ihn zu schlucken."
   ball: "generator — je ein Test fuer B5 und B6 in scripts/__tests__/commitPruefen.test.mjs,
     nach dem Muster der vier vorhandenen. Kein Auftrag von mir, ein Befund."
+
+belegfall_fuer_den_ANDEREN_p2_an_mir_selbst:
+  "release-pruefer 12.08., unmittelbar nach der Freigabe: MEIN EIGENER Freigabe-Commit 550fdf4d
+   hat eine B5-WARNUNG ausgeloest. Nachgesehen statt ignoriert — sie ist eine FALSCHMELDUNG,
+   und zwar genau die, die der Evaluator in der B5-Abnahme als p2_die_musterluecke gemeldet hat:
+   ich hatte die Fundstelle als 'Z.217-268' geschrieben, das Belegmuster verlangt aber
+   datei.ext:zeile und kennt die Schreibweise Z. nicht. Die Zeilen STANDEN da, das Tor konnte
+   sie nur nicht sehen.
+   Warum ich das hier festhalte: der Evaluator hat den P2 an vier von dreissig historischen
+   Botschaften belegt und daraus geschlossen, eine Barriere die zu oft falsch anschlaegt werde
+   umgangen. Der naechste Commit nach seiner Abnahme ist bereits ein fuenfter Fall — und er ist
+   meiner. Das ist kein zusaetzlicher Befund, es ist ein Beleg fuer seinen, aus dem Betrieb
+   statt aus der Historie. Die von ihm vorgeschlagene Erweiterung des Musters um Z. und um
+   :[0-9]+ nach einem Wort gewinnt damit an Gewicht.
+   Ich habe die Warnung NICHT durch Umformulieren meiner Botschaft umgangen: sie ist eine
+   Warnung ohne Sperre, der Commit ist entstanden, und genau dieses Verhalten hat B5-3
+   verlangt und ich habe es freigegeben."
 haertetest_statt_behauptung: "Nicht nur die zwei Probelaeufe des Blattes, sondern eine Messung an
   echten Botschaften — Menge ausdruecklich: die letzten 60 Commits von HEAD auf
   auto/hausplaner-integration, alle fuenf Rollen. Summenwort getroffen 5, davon ohne Mengennennung
