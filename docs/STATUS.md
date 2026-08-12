@@ -2534,7 +2534,18 @@ ballbesitz_weiche: "—  # die WEICHE ist entschieden (Release-Pruefer in Vertre
   auch sachlich falsch: entschieden ist die Weiche, gebaut ist nichts — BEREIT heisst, der
   Ball liegt beim Generator. Der geltende Ballbesitz steht unten."
 # (doppeltes zustand-Feld entfernt — identisch BEREIT, der geltende steht oben in Z.2183)
-ballbesitz: generator
+ballbesitz: evaluator  # nachgezogen 12.08., siehe unten
+drei_ballfelder_berichtigt: "release-pruefer 12.08.: DIESER BLOCK TRUG DREI ballbesitz-artige
+  Felder und sie widersprachen sich. ballbesitz_bau sagte evaluator (vom Generator beim
+  Fertigmelden angelegt), ballbesitz_weiche sagte — (meine eigene Umbenennung von heute frueh),
+  und das MASSGEBLICHE ballbesitz sagte noch generator. Die Tafelzeile sagte evaluator und war
+  damit richtig; der Datensatz hinkte nach.
+  DIE URSACHE IST MEIN EIGENES MUSTER, diesmal bei einer anderen Rolle: der Generator hat beim
+  Fertigmelden ein NEUES Feld angelegt statt das vorhandene zu AENDERN — genau das, was ich mir
+  heute bei W-07N und A-16 selbst vorgeworfen habe. Kein Vorwurf an ihn: es ist der Mechanismus,
+  nicht die Person, und es ist der vierte Beleg heute fuer Punkt 6 meiner Vorlage an Yama.
+  Nachgezogen auf evaluator, weil der Bau CODE_FERTIG ist und der naechste Schritt die Abnahme.
+  Die zwei anderen Felder bleiben als Spur stehen, umbenannt statt geloescht."
 basis_sha: 5d88f198
 prioritaet: P1
 warum_dieser_block_existiert: "A-16 hatte eine TAFELZEILE, aber keinen Datensatz — die umgekehrte Leerstelle zu der, die ich am 12.08. gefunden habe (neun Blaetter ohne Tafelzeile). Meine eigene Wache findet A-16 deshalb in JEDER Runde erneut als 'Blatt ohne Block', und das ist richtig so: eine Leerstelle faellt nicht auf, bis jemand beide Seiten misst. Ich lege den Block an, ohne den Zustand zu entscheiden — ENTWURF und Ballbesitz stehen so in der Tafel und im Blattkopf, ich uebernehme sie, ich waehle sie nicht."
