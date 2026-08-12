@@ -57,7 +57,7 @@
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`BETRIEBSBESTAETIGT`** | – | Release `0474f53b` · §19 12.08. | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-35** Konfigurator-Dialog | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
-| **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`CODE_FERTIG`** | **Evaluator** | Bau `53142fc2` · Basis `2e7504ec` | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
+| **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`ABGENOMMEN`** | **Release-Prüfer** | Bau `53142fc2` · Basis `2e7504ec` | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
@@ -8240,10 +8240,10 @@ zwei_schreibweisen_im_auftragsblatt_die_der_code_nicht_traegt: "Das Blatt nennt 
 
 ```yaml
 auftrag: "W-40/1"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 warum_W_40_1_vor_W_35: "Zwei Auftraege standen zugleich BEREIT bei mir, §3 laesst einen zu. W-40/1 berichtigt etwas, das in der Werkbank gerade FALSCH steht — dreizehn ueberholte Stellen in vier Blaettern, die ich in ea418041 einzeln gemessen und aufgelistet habe. W-35 ist neue Beschreibung. Ein bekannt falsches Blatt stehen zu lassen und daneben ein neues zu schreiben, waere die Reihenfolge, die §12.1 fuer NACHBESSERN gerade verbietet; ich wende denselben Vorrang hier an, obwohl der Zustand formal BEREIT und nicht NACHBESSERN heisst."
 es_ist_meine_eigene_arbeit_die_berichtigt_wird: "W-40s sieben Blaetter sind von mir, und beide Fehler, die dieser Auftrag behebt, sind meine: die Praemisse 'kein Code' habe ich aus der Quelle uebernommen statt sie zu messen — den Teil hat der Planner in c4973de2 bereits als seinen eigenen H-6-Fall eingeraeumt, und ich habe ihn beim Bau selbst gemeldet —, und den TRAEGER habe ich an den Schritt gehaengt, weil W-38s SchrittStatus dort haengt, ohne zu pruefen woran die VORHANDENE Achse haengt. Der zweite Teil ist ungeteilt meiner. Die dreizehn Stellen liegen bereits gemessen vor; ich baue gegen meine eigene Liste."
-ballbesitz: evaluator
+ballbesitz: release-pruefer
 bau_sha: 53142fc2
 bericht: docs/BERICHT-W-40-1-ablesung-mit-einer-erweiterung.md
 E1_gefahren: "9 von 9 Dateien GLEICH, gemessen mit git show 53142fc2:<pfad> | diff - <pfad>. Der
@@ -8347,6 +8347,23 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-40/1 GECLAIMT vor dem 
   an der Stelle sitzt, die ich BELEGT habe, und nicht an einer daraus abgeleiteten: 'approved
   spielt die Rolle von confirmed' war eine EINORDNUNG des Generators und keine Messung, und ich
   habe sie in meinem Votum ausdruecklich NICHT bestaetigt."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an 53142fc2, Elter 5e9c8b08, NEUN von neun.
+  Nachbesserung zu meinem eigenen W-40-Befund."
+der_kern_hart_geprueft: "W-40/1-1 verlangt: keine Stelle geloescht. Der Diff entfernt SIEBEN Zeilen
+  mit review-required oder DECISION_BLOCKED — eine Entfernung im Diff ist aber keine Loeschung. Jede
+  der sieben im Bau aufgesucht: K-3/K-4 umgestellt mit altem Wortlaut daneben, die zwei Yama-Fragen
+  um eine Spalte 'Stand 12.08. BEANTWORTET' erweitert, 2-FUNKTION:18 als Zitat bei :41,
+  7-GRENZEN:73-74 woertlich bei :134 unter 'ueberholt, nicht geloescht'. Keine ersatzlos verschwunden.
+  Die zwoelf Positionen am ELTER einzeln aufgeschlagen — jede traegt die ueberholte Aussage."
+was_mich_selbst_betrifft: "Die Einordnung 'approved spielt die Rolle von confirmed', die ich in
+  meinem W-40-Votum ausdruecklich NICHT bestaetigt hatte, ist jetzt als Yamas Entscheidung getragen
+  statt als Vermutung des Bauenden. Beide Pfadangaben an der Quelle nachgemessen:
+  app/dashboard/fahrschritte.ts:43 und configuratorPackage.ts:103-111."
+drei_eigene_messfehler: "Jeder haette einen Fehlbefund gegen einen richtigen Bau ergeben.
+  (1) Zuerst den falschen Commit geprueft — aedc9d27 setzt nur den Zustand, der Bau ist 53142fc2.
+  (2) Mein Muster auf K-3/K-4 fand nichts, weil die Zeilen jetzt fett und mit '(umgestellt)'
+  stehen; beinahe haette ich sie als GELOESCHT gemeldet. (3) Mein Blatt-Muster erfasst den
+  Unterordner 5-CODE nicht, womit W-40/1-6 unerfuellt ausgesehen haette."
 ```
 
 dor_nachtrag: "plan-pruefer 12.08., NACHTRAG ZU MEINER FREIGABE — der Generator hat einen Befund vor dem Ziehen gemeldet (ea418041) und er trifft MEINE Pruefung: W-40/1-1 nennt EINE ueberholte Stelle, ueberholt sind aber VIER BLAETTER an dreizehn Stellen. Ich habe die genannten Zeilen einzeln GEOEFFNET und alle bestaetigt: 3-FORMELN:33 rechnet 4+3=7 und sagt die achte falle aus der Rechnung; 6-PRUEFUNG:12 und :13 fuehren K-3 und K-4, die ausdruecklich verlangen, die Fragen NICHT zu beantworten; 2-FUNKTION:18 sagt was blocked von DECISION_BLOCKED unterscheide stehe nicht hier; 7-GRENZEN traegt es in :48, :54, :56, :61, :65, :73 und in :106/:107 sogar als Tabelle mit Yama als Adressat. MEIN ANTEIL: ich habe die Kernbehauptungen am Gegenstand gemessen und die VOLLSTAENDIGKEIT der Berichtigung nicht gefragt — genau die Frage, die ich heute dreimal bei anderen gestellt habe (die widerlegte Zahl an vier Stationen). Sein Satz nennt den Grund praeziser als ich es koennte: wer nur 7-GRENZEN anfasst, laesst K-3 und K-4 stehen, und die verlangen dann weiterhin, die Fragen offen zu lassen — zwei Wahrheiten, beide belegt aussehend. ZAEHL-FEINHEIT ohne Folge: der Titel nennt dreizehn, die Aufzaehlung neun plus fuenf; die Differenz sind zwei Zeilenbereiche (:65-66, :73-74), die einmal als Stelle und einmal als zwei Zeilen gezaehlt sind. Die Liste selbst ist vollstaendig und jede Stelle von mir belegt."

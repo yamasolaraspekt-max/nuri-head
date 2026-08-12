@@ -173,3 +173,125 @@ was_dieser_auftrag_NICHT_tut: "Er baut nichts und er loescht nichts. Die ueberho
         hat und die A-20-4 verlangt."
 W_40_1_nimmt_den_paragraf3_platz: "Sobald gezogen: IN_ARBEIT. §3 steht bei 0."
 ```
+
+
+## §11 — Votum W-40/1 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-40/1"
+votum: ABGENOMMEN
+geprueft_an: "53142fc2"
+elter: "5e9c8b08"
+scope_diff: "9 Dateien, +633/-133: alle sieben W-40-Blaetter, REGISTER.md, Bericht neu.
+  0 Code-Dateien — W-40/1-8 erfuellt, configuratorPackage.ts und studioDaten.ts unberuehrt."
+pruefstand: "git worktree add -q --detach auf 53142fc2. Reine Blattarbeit — Suite nicht
+  einschlaegig, §15 gegenstandslos, Browserabnahme entfaellt."
+mein_eigener_anteil_am_anlass: "Dieser Auftrag entsteht aus MEINEM Befund: ich habe W-40 mit
+  sieben von sieben abgenommen und dabei gemeldet, dass die Praemisse 'kein Code' nicht traegt.
+  Und ich habe damals ausdruecklich NICHT bestaetigt, dass approved die Rolle von confirmed
+  spielt — das war eine Einordnung des Generators. Yama hat sie inzwischen entschieden."
+
+messtisch:
+
+  W_40_1_1_dreizehn_stellen_in_vier_blaettern:
+    urteil: ERFUELLT
+    die_stellen_selbst_geoeffnet: "Ich habe die zwoelf genannten Positionen am ELTER 5e9c8b08
+      einzeln aufgeschlagen — 3-FORMELN:33, 6-PRUEFUNG:12 und :13, 7-GRENZEN:48, :54, :56, :61,
+      :65, :73, :106, :107, 2-FUNKTION:18. Jede traegt tatsaechlich die ueberholte Aussage.
+      Die Liste des Generators trifft."
+    KEINE_STELLE_GELOESCHT: "Das ist der Kern des Kriteriums, und ich habe ihn haert geprueft:
+      der Diff entfernt SIEBEN Zeilen mit 'review-required' oder 'DECISION_BLOCKED'. Eine
+      Entfernung im Diff ist aber noch keine Loeschung — ich habe jede der sieben im Bau
+      aufgesucht:
+        K-3 und K-4       umgestellt, mit dem ALTEN Wortlaut daneben zitiert (6-PRUEFUNG:19-21)
+        die zwei Yama-Fragen  stehen weiter in der Tabelle, um eine dritte Spalte
+                          'Stand 12.08.' erweitert (7-GRENZEN:181-182): BEANTWORTET
+        2-FUNKTION:18     der Satz steht jetzt bei :41 als Zitat, mit Yamas Antwort daneben
+        7-GRENZEN:73-74   woertlich bei :134-136: 'Was hier zuvor stand — ueberholt, nicht
+                          geloescht', mit dem alten Wortlaut in Anfuehrungszeichen
+      Keine der sieben ist ersatzlos verschwunden. A-20-4 gewahrt."
+    kennzeichnungen_gezaehlt: "Alle sieben Blaetter tragen Kennzeichnungen (3/9/1/5/6/9/9 Zeilen);
+      allein in den vier betroffenen Blaettern 28."
+    der_traeger_ist_berichtigt: "2-FUNKTION traegt jetzt die Achse am PAKET statt am Schritt —
+      genau der zweite Teil des Fehlers, den das Blatt selbst als 'mein_anteil' benennt."
+
+  W_40_1_1b_K3_und_K4_umgestellt:
+    urteil: ERFUELLT
+    warum_das_der_gefaehrlichste_teil_war: "Stehen gelassen haetten die beiden Kriterien vom
+      naechsten Bauenden verlangt, Yamas Entscheidung zu IGNORIEREN — ein Blatt, dessen Kriterien
+      der eigenen Vorgabe widersprechen, ist unbaubar."
+    gemessen: "6-PRUEFUNG:14 traegt 'K-3 (umgestellt) — Das Blatt traegt Yamas Aufloesung:
+      review-required IST checked', :15 'K-4 (umgestellt) — Das Blatt traegt Yamas Abgrenzung:
+      DECISION_BLOCKED wartet auf einen MENSCHEN, blocked auf eine BEDINGUNG'. Und :19-21 nennt
+      beide alten Fassungen woertlich: 'K-3 und K-4 sind UMGESTELLT, nicht gestrichen'."
+
+  W_40_1_2_drei_stufen_als_ablesung:
+    urteil: ERFUELLT
+    mit_fundstelle_am_bau_stand: "2-FUNKTION:10-12 ordnet zu: review-required -> checked
+      (configuratorPackage.ts:26, Uebergang :107), confirmed -> approved (:26) mit
+      kannIntegrieren (:120), outdated -> outdated (:26) mit markiereVeraltet (:125-128).
+      Damit ist die Einordnung, die ich in meinem W-40-Votum ausdruecklich NICHT bestaetigt
+      habe, jetzt als Yamas Entscheidung getragen — nicht mehr als Vermutung des Bauenden."
+
+  W_40_1_3_blocked_als_einzige_erweiterung:
+    urteil: ERFUELLT
+    selbst_gegengeprobt: "2-FUNKTION:6 'blocked ist die EINZIGE Erweiterung', :13 mit der Messung.
+      Meine eigene Gegenprobe im Produktivcode: 'blocked' 0 Treffer. Die drei anderen Stufen sind
+      als Ablesung belegt, blocked als einziges als Vorgabe."
+
+  W_40_1_4_yamas_zwei_auflagen_woertlich:
+    urteil: ERFUELLT
+    beide_im_wortlaut: "7-GRENZEN:110ff: 'blocked traegt seinen Grund mit, denn ein blocked ohne
+      blockiert_durch ist eine Absage ohne Erklaerung.' und 'blocked wird NIE von Hand gesetzt
+      oder geloest, wer das will meint DECISION_BLOCKED.' Beide als Zitat gekennzeichnet.
+      Und die Verbindung zu W-41 steht daneben: dort outdated mit Grund, hier blocked mit
+      blockiert_durch — beide aus demselben Satz."
+
+  W_40_1_5_vier_merkmale:
+    urteil: ERFUELLT
+    beleg: "7-GRENZEN:95-105 als Tabelle: worauf gewartet wird (Mensch gegen Bedingung), Ebene
+      (Prozess gegen Produkt), Ort (docs/STATUS.md gegen Gebaeudemodell), Aufhebung (nur Yama
+      gegen automatisch). Dazu ein fuenftes Merkmal (Adressat) und Yamas Beispiel."
+
+  W_40_1_6_zwei_pfadangaben_berichtigt:
+    urteil: ERFUELLT
+    beide_gegengeprobt: "5-CODE/LIESMICH:98-104 fuehrt beide mit genannt/richtig.
+      Ich habe sie an der Quelle nachgemessen: statusAus liegt tatsaechlich in
+      app/dashboard/fahrschritte.ts, und dort bei :43 — der dashboard-Teil fehlte.
+      STATUS_UEBERGAENGE beginnt bei :103 (nicht :101), der Block endet bei :111.
+      Beide Angaben des Blattes treffen zeichengenau."
+    der_satz_der_dazugehoert: "'Ein falscher Pfad kostet den Naechsten die Suche, und wer nicht
+      findet was belegt ist, haelt es fuer unbelegt. Genau so ist die Praemisse kein Code
+      entstanden.' Das ist die richtige Einordnung meines eigenen W-40-Befunds."
+
+  W_40_1_7_registerzeile:
+    urteil: ERFUELLT
+    diff_geoeffnet: "ENTWORFEN -> BESCHRIEBEN, und der Titel ist mitberichtigt: aus
+      'confirmed · outdated · blocked' wird 'checked · approved · outdated + blocked' — die
+      GEBAUTEN Namen plus die eine Erweiterung, statt der Zielbild-Namen."
+
+  W_40_1_8_kein_produktivcode:
+    urteil: ERFUELLT
+    am_commit_gemessen: "0 Code-Dateien im Bau-Diff; configuratorPackage.ts und studioDaten.ts
+      mit 0 Treffern. Die Fertigmeldung liegt in einem EIGENEN Commit (aedc9d27) und aendert nur
+      docs/STATUS.md — Bau und Meldung sind getrennt."
+
+meine_eigenen_messfehler_in_dieser_runde:
+  - "ICH HABE ZUERST DEN FALSCHEN COMMIT GEPRUEFT: aedc9d27 setzt nur den Zustand und aendert
+     eine einzige Datei. Waere ich dabei geblieben, haette ich 'kein Blatt angefasst' gemeldet.
+     Der Bau ist 53142fc2, und die Tafelzeile nennt ihn — ich habe sie erst danach gelesen."
+  - "Mein Muster '^\\| K-[34]' fand nichts, weil die Zeilen jetzt '| **K-3** *(umgestellt)* |'
+     heissen. Beinahe haette ich K-3 und K-4 als GELOESCHT gemeldet — dabei sind sie genau so
+     umgestellt, wie W-40/1-1b es verlangt. H-9 an mir selbst: das Muster misst die Schreibweise."
+  - "Mein '$W/*.md' erfasst den Unterordner 5-CODE/ NICHT. Damit fand ich die beiden berichtigten
+     Pfadangaben nicht und stand vor der Meldung, W-40/1-6 sei unerfuellt. Rekursiv gesucht
+     stehen sie in 5-CODE/LIESMICH.md:98-104."
+  - "Alle drei haetten einen Fehlbefund gegen einen richtigen Bau ergeben. Sie stehen hier, weil
+     der Takt sagt: bei jeder Abweichung zuerst den eigenen Aufbau pruefen."
+
+was_diesen_bau_traegt: "Er repariert einen Fehler, den ich gefunden habe, und er repariert ihn
+  vollstaendiger als mein Befund war — ich hatte die Praemisse widerlegt, er berichtigt zusaetzlich
+  den TRAEGER (die Achse haengt am Paket, nicht am Schritt) und die dreizehn Folgestellen. Und er
+  loescht nichts: jede ueberholte Aussage steht mit ihrem alten Wortlaut da, gekennzeichnet und
+  datiert. Das ist die Form, die A-20-4 verlangt, und sie ist teurer als Umschreiben."
+```
