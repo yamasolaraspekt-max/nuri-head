@@ -7398,6 +7398,33 @@ eigener_messfehler: "Mein erstes Raster war doppelt zu eng und haette den Bau fa
 ```yaml
 auftrag: "W-39"
 zustand: CODE_FERTIG
+STILLSTANDSMELDUNG_WIDERLEGT: "Der plan-pruefer hat in 6fbe3013 einen HALT gemeldet — W-39 seit 66
+  Minuten im Bau, der Arbeitsbaum trage NULL geaenderte Dateien, seit 18:41 habe keine Rolle mehr
+  geschrieben — und der release-pruefer hat die Lage in 3e205402 bestaetigt. BEIDE IRREN, und ich
+  habe es gemessen statt widersprochen.
+  git status ueber den GANZEN Baum zeigte zum Messzeitpunkt VIER Eintraege statt null: REGISTER.md
+  modifiziert und W-39 darin schon auf BESCHRIEBEN, der Ordner W-39-studio-rahmen mit SIEBEN
+  Dateien, dazu zwei alte Fremddateien vom 11.08. und 3.08.
+  DIE AENDERUNGSZEITEN DER SIEBEN BLAETTER, einzeln gelesen: 1-ZWECK 18:51:59, 2-FUNKTION 18:52:46,
+  3-FORMELN 18:53:19, 4-BEDIENUNG 18:53:54, 5-CODE 18:54:59, 6-PRUEFUNG 19:48:10 und 7-GRENZEN
+  19:49:22. Der plan-pruefer hat um 19:48 gemessen und um 19:49:11 committet — GENAU in den Minuten,
+  in denen die letzten zwei Blaetter entstanden. Der Generator arbeitete waehrend der
+  Stillstandsmessung, und W-39 steht inzwischen auf CODE_FERTIG.
+  DIE URSACHE IST DAS WERKZEUG UND KEINE NACHLAESSIGKEIT: ein Bau, der NEUE Blaetter anlegt, erzeugt
+  ausschliesslich UNGETRACKTE Dateien. Wer mit git diff oder einem auf M gefilterten Status messt,
+  sieht davon nichts — dieselbe Klasse wie der Nachweis, den der Evaluator an A-20-5 verworfen hat,
+  und dieselbe Lehre wie E1. Fuer Stillstand taugt git status ueber den GANZEN Baum plus die
+  Aenderungszeit der Dateien; der Diff taugt nicht.
+  WAS RICHTIG BLEIBT: es gab eine echte Pause von etwa 53 Minuten zwischen 18:55 und 19:48, sie war
+  zum Messzeitpunkt aber vorbei. Und die Zurueckhaltung beider war richtig — keiner hat ein fremdes
+  IN_ARBEIT angefasst.
+  AN YAMA: kein Eingriff noetig. Wer die zwei Meldungen allein liest, greift moeglicherweise in
+  einen laufenden Bau ein."
+zweiter_befund_beim_messen: "CODE_FERTIG steht in HEAD, die SIEBEN Blaetter stehen es nicht: im
+  Werkbankordner liegen 7 Dateien, git ls-tree HEAD zeigt 0. Der Bau ist gemeldet und liegt
+  ungesichert im Baum. Das kann eine bewusste Trennung sein wie bei A-21 — dort war sie richtig und
+  begruendet — aber dann fehlt der zweite Commit noch. Ich fasse es NICHT an und melde es: es ist
+  seine Arbeit, und nach E1 ist die Fertigmeldung erst belegt, wenn der Bau im Commit steht."
 bericht: "docs/BERICHT-W-39-studio-rahmen.md"
 vier_zahlen_des_blattes_anders_gefunden_keine_geglaettet: "13 Importe gegen gemessene 14 — Zeile 7 ist React und damit extern, die 13 sind die Insel-Module, zwei Mengen und kein Mangel. SECHS Zustaende gegen gemessene FUENF — das +1 des Blattes ist toastTimer, ein useRef in :60, also ausserhalb des genannten Bereichs :23-29 und kein Zustand, weil ein Ref kein Neuzeichnen ausloest. W-34 und W-38 als BETRIEBSBESTAETIGT gegen BESCHRIEBEN — im REGISTER steht der Reifegrad des WERKZEUGS, BETRIEBSBESTAETIGT ist der Zustand des AUFTRAGS; ich hatte beides verwechselt und im Blatt berichtigt. Und NEUN Module ohne Werkzeug gegen gemessene ACHT — 13 minus 5 erfasste, meine eigene Zahl war falsch waehrend die Liste darunter schon acht Zeilen trug."
 ein_befund_gegen_meine_eigene_behauptung: "Ich hatte in 6-PRUEFUNG geschrieben, das Flag imStudio sei durch keinen Test gesichert. Gemessen ist das FALSCH: grep -rl imStudio ueber __tests__ findet ZWEI Dateien, kopfrahmen.test.ts:138 und buehnenBreite.test.ts:76. Beide nennen HausplanerStudio nicht und gehoerten deshalb nicht zu den acht Waechtern — sie sitzen am EMPFANGENDEN Ende in Kopfrahmen.tsx. Und kopfrahmen.test.ts ist aus einer DURCHGEKOMMENEN Mutation entstanden, woertlich im Test: die Mutation von geschweift-Ausrufezeichen-imStudio zu geschweift-imStudio kam durch, eine Marke ueber einer Testflaeche waere genau die Anzeige die AUF-40 entfernt hat, nur andersherum. Haette ich nur die acht Dateien betrachtet die HausplanerStudio nennen, waere eine falsche Luecke im Blatt geblieben."
