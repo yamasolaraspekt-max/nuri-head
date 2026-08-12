@@ -448,3 +448,107 @@ geschlossen.*
 `3-FORMELN.md` lagen während meiner Messung im Baum — den eigentlichen Fall gemacht und ihn in
 `e23440d1` in einen eigenen Commit gezogen.* **Das habe ich gemeldet, er hat es behoben; die
 Ursachenarbeit ist seine.**
+
+
+## Release-Prüfung (§10, Sammel-Kontrolle 3) — 12.08.2026
+
+```yaml
+auftrag: "W-02/1"
+abnahme_commit: e23440d1
+release_commit: e23440d1
+votum: RELEASE_FREI
+ci: pass
+artefakte_reproduzierbar: true
+migration: nicht_anwendbar
+rueckweg: nicht_anwendbar
+smoke_test_plan: "Doku-Stufe ohne Laufzeitanteil — der betriebliche Nachweis ist der erste
+  Stufe-2-Bauversuch gegen die sieben Blaetter. Regressionswache: Insel-Suite 1692/1692,
+  von mir selbst gefahren."
+befunde:
+  - "P2 BEWEIS · das Runde-2-Votum weist 6 der 9 Kriterien aus (-4, -5, -6 fehlen), obwohl
+     §12.4 ALLE vorher gruenen verlangt. Substanz von mir selbst nachgemessen, alle drei
+     halten — Nachweisluecke, kein Sachmangel, deshalb kein Block. Gleiche Klasse wie bei
+     W-01/1, dort mit anderen Nummern."
+```
+
+### Die Kette, je Stufe mit `merge-base --is-ancestor` gegen die folgende
+
+```text
+BEREIT        debf3fbe
+IN_ARBEIT     35e90eb8
+Bau           801e2daa   8 Dateien = sieben Blaetter + REGISTER.md
+CODE_FERTIG   58342f47
+NACHBESSERN   a83254e6   Klasse BEWEIS, ein P1
+IN_ARBEIT 2   5c06f5ca
+Bau 2         e23440d1   1 Datei: 3-FORMELN.md
+CODE_FERTIG 2 3e7e19d6
+ABGENOMMEN    b2fd68b2
+letzte Stufe gegen HEAD geprueft — Kette lueckenlos.
+Basis 193681cd ist Vorfahr des Bau-Commits (nachgemessen).
+```
+
+**Scope-Reinheit:** `801e2daa` trägt **0** Pfade unter `resources/` und **0** unter `scripts/`,
+exakt sieben Blätter + `REGISTER.md`. *Der Nachbesserungs-Commit `e23440d1` trägt genau **eine**
+Datei — der Umfang ist der Befund (§12.2), sauberer geht es nicht.*
+
+**Das Votum nennt den gemessenen Commit:** `commit: e23440d1` im Votum-YAML, `ABGENOMMEN an
+e23440d1` in `STATUS.md`, Release-Kandidat `e23440d1`.
+
+### Die Pflichtfrage — trägt der Messtisch JEDE Kriterienzeile? Gezählt.
+
+```text
+Kriterien im Blatt                          9    W-02/1-1 … -9
+im Runde-1-Votum ausgewiesen                8    -1/-3/-4/-5/-6/-7/-8 als ERFUELLT-Zeilen,
+                                                 -9 als befund;  -2 fehlt dort
+im Runde-2-Votum (das ABGENOMMEN) ausgew.   6    -9 als behobener Befund,
+                                                 -1/-2/-3/-7/-8 unter "§12.4 — alle Kriterien erneut"
+FEHLEND in Runde 2                          3    -4, -5, -6
+Union ueber beide Runden                    9    lueckenlos
+```
+
+**9 gegen 6.** *Und die Überschrift des Runde-2-Abschnitts lautet wörtlich „alle Kriterien erneut,
+nicht nur das rote" — sie verspricht neun und liefert sechs.* **Das ist der ehrlichere Ausfall von
+beiden:** *Runde 2 holt `-2` nach, das in Runde 1 keine eigene Zeile hatte, und begründet die eine
+`=`-Fundstelle („Nord = +y") sauber. Wer nachholt, was ihm fehlte, und dabei drei andere verliert,
+hat kein Sorgfaltsproblem, sondern eine fehlende Prüfliste.* **Genau das ist der Wert dieser
+Sammel-Kontrolle: die Liste gibt es, sie heißt Akzeptanzkriterien, und niemand hakt sie ab.**
+
+**Ich habe die drei fehlenden Zeilen selbst gemessen**, am Abnahmestand:
+
+```text
+-4  7-GRENZEN.md    traegt "Was dieses Werkzeug NICHT kann" (Z.9) und "Der teuerste Fehler,
+                    gegen den dieses Blatt schuetzt" (Z.21) — die Frage ist beantwortet
+-5  5-CODE/LIESMICH.md:3   "Angebunden aus zwei vorhandenen Dateien"
+-6  Ausschluesse    wandaufbau.ts und linienBauteile.ts stehen je in 2 Blaettern, in
+                    5-CODE/LIESMICH.md Z.19/20 mit dem Zusatz "nicht angebunden"
+```
+
+**Alle drei halten** — und keine der drei wurde von der Nachbesserung überhaupt berührt: `e23440d1`
+fasst nur `3-FORMELN.md` an, `-4`/`-5`/`-6` liegen in `7-GRENZEN` und `5-CODE`. *Das Risiko war
+hier also kleiner als bei W-01, wo die Nachbesserung die von `-2` beschränkte Datei selbst änderte.*
+**Verbucht als `P2 BEWEIS`, mit dieser Messung geschlossen.**
+
+### Stichprobe
+
+```text
+Platzhalter in den sieben Blaettern    <…> 0 · TODO/TBD/XXX/FIXME 0 · F-0xx/W-xx 0
+REGISTER.md Z.21                       W-02 | Wand zeichnen | BESCHRIEBEN | W-01 | F-001, F-002, F-030
+REGISTER.md Fundstellen                wallGeometry.ts 2 Treffer · wandFlaeche.ts 1 Treffer
+Werkzeugordner seit der Abnahme        e23440d1..HEAD  0 Commits
+```
+
+### Gemeinsame Messungen der Sammel-Kontrolle 3
+
+*Einmal gefahren, für alle vier Aufträge gültig — die Belege stehen vollständig im W-01-Blatt unter
+derselben Überschrift.* **Kurzfassung:**
+
+```text
+npm run test:hausplaner                                 1692/1692, fail 0
+must_preserve drei Richtungen einzeln, resources/       0 · 0 · 0
+must_preserve drei Richtungen einzeln, scripts/         0 · 0 · 0
+Beifang d4eca213..HEAD -- resources/ scripts/           1 Commit (b0f4c444 = A-11-Bau,
+                                                        eigener Auftrag, nur scripts/, 0 resources/)
+e23440d1..HEAD -- resources/ scripts/                   0 Commits
+```
+
+**Urteil: `RELEASE_FREI`.**

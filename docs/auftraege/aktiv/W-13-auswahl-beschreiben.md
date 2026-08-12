@@ -391,3 +391,98 @@ CODE   :73  export function toleranzInWelt(pixel: number, zoom: number): number
 daraus ausdrücklich **keinen** Sammlungseintrag: *„Eine Einheitenumrechnung, keine Geometrieformel.
 Eine Division ist keine Formel, die man nachschlägt."* **Das ist die richtige Antwort auf `-3`,
 nicht eine Umgehung von `-2`.**
+
+
+## Release-Prüfung (§10, Sammel-Kontrolle 3) — 12.08.2026
+
+```yaml
+auftrag: "W-13/1"
+abnahme_commit: a62ae7c6
+release_commit: a62ae7c6
+votum: RELEASE_FREI
+ci: pass
+artefakte_reproduzierbar: true
+migration: nicht_anwendbar
+rueckweg: nicht_anwendbar
+smoke_test_plan: "Doku-Stufe ohne Laufzeitanteil — der betriebliche Nachweis ist der erste
+  Stufe-2-Bauversuch gegen die sieben Blaetter. Regressionswache: Insel-Suite 1692/1692,
+  von mir selbst gefahren."
+befunde: []
+```
+
+### Die Kette, je Stufe mit `merge-base --is-ancestor` gegen die folgende
+
+```text
+BEREIT        6df53243   (2. Runde; die 1. endete mit einem Mini-Rest)
+IN_ARBEIT     3e7fa5b7
+Bau           a62ae7c6   8 Dateien = sieben Blaetter + REGISTER.md
+CODE_FERTIG   fbc361a7
+ABGENOMMEN    ce30ff98
+letzte Stufe gegen HEAD geprueft — Kette lueckenlos, eine Runde, keine Nachbesserung.
+Basis 193681cd ist Vorfahr des Bau-Commits (nachgemessen).
+```
+
+**Scope-Reinheit:** `a62ae7c6` trägt **0** Pfade unter `resources/` und **0** unter `scripts/`.
+**Das Votum nennt den gemessenen Commit:** `commit: a62ae7c6` im Votum-YAML, `ABGENOMMEN an
+a62ae7c6` in `STATUS.md`, Release-Kandidat `a62ae7c6`.
+
+### Die Pflichtfrage — trägt der Messtisch JEDE Kriterienzeile? Gezählt.
+
+```text
+Kriterien im Blatt                          10   W-13/1-1 … -10
+im Evaluator-Votum ausgewiesen              10   Messtisch "ALLE ZEHN Zeilen", -1 bis -10,
+                                                 jede mit eigenem Messwert
+FEHLEND                                      0
+```
+
+**10 gegen 10 — vollständig.** *Der Messtisch trägt zusätzlich die Zahlen, die `-7` behauptet, und
+zwar nachgezählt statt geglaubt: 98/7, 75/4, 77/4, 71/3, Summe 321 Zeilen und 18 Ausfuhren, 0
+dedizierte Testdateien, 36 Zusagen in den zwei erwähnenden Dateien.* **Vier Behauptungen, vier
+eigene Zählungen — das ist §11 letzter Satz in Reinform.**
+
+### Zwei Hinweise des Plan-Prüfers, in den Vermerk genommen — **keine Hindernisse**
+
+**1 · Der Typ-Komplex, sechster und schärfster Fall.** `Auswahlstand` (`auswahlModus.ts:50-54`)
+beschreibt denselben Zustand wie die losen Store-Felder `selectedNodeIds` und `primaerId`
+(`hausplanerStore.ts:30` / `:36`). *Schärfer noch:* `LEERE_AUSWAHL` trägt den Kommentar **„eine
+Stelle, damit ‚nichts ausgewählt' überall dasselbe heißt"** — und der Store schreibt das Literal
+**dreimal selbst** (`:74-75`, `:89-90`, `:103`) und **importiert die Konstante nie**. *Eine
+Konstante, deren erklärter Zweck „eine Stelle" ist und die an keiner der drei Stellen benutzt wird,
+ist die teuerste Form dieses Befunds: sie sieht aus wie die Lösung des Problems, das sie hat.*
+
+**2 · Die „Griffe"-Hälfte ist entschieden, aber nicht gezeichnet.** *Von 18 Ausfuhren sind nur vier
+produktiv verdrahtet;* `auswahlDarstellung.ts` und `trefferSuche.ts` **haben außerhalb von
+`markieren.test.ts` keinen Aufrufer.** *Das Blatt beziffert seine dünne Grundlage vorbildlich
+(`-7`), aber die Frage „was davon läuft überhaupt" beantwortet es nicht.*
+
+**Warum beides den Release nicht hält:** *keines der zehn Kriterien verlangt es.* **Der Auftrag
+war, den vorhandenen Code zu BESCHREIBEN, nicht ihn zu bewerten** — und ein Release-Prüfer, der
+gegen eine ungestellte Anforderung misst, verschiebt die Ziellinie nach der Abnahme. *Beide Punkte
+sind an den Planner adressiert: der Typ-Komplex hat mit diesem Fall sechs Belege und ist damit ein
+eigenes Blatt wert; die Verdrahtungslücke gehört in die Stufe, die W-13 tatsächlich baut.*
+
+### Stichprobe
+
+```text
+Platzhalter in den sieben Blaettern    <…> 0 · TODO/TBD/XXX/FIXME 0 · F-0xx/W-xx 0
+REGISTER.md Z.22                       W-13 | Auswahl und Griffe | BESCHRIEBEN | W-02 | keine ⓝ
+REGISTER.md Fundstellen                auswahlModus.ts 1 · trefferSuche.ts 2 ·
+                                       auswahlUebersicht.ts 1 · auswahlDarstellung.ts 1
+                                       -> alle vier Module getragen
+Werkzeugordner seit der Abnahme        a62ae7c6..HEAD  0 Commits
+```
+
+### Gemeinsame Messungen der Sammel-Kontrolle 3
+
+*Belege vollständig im W-01-Blatt unter derselben Überschrift.* **Kurzfassung:**
+
+```text
+npm run test:hausplaner                                 1692/1692, fail 0
+must_preserve drei Richtungen einzeln, resources/       0 · 0 · 0
+must_preserve drei Richtungen einzeln, scripts/         0 · 0 · 0
+Beifang d4eca213..HEAD -- resources/ scripts/           1 Commit (b0f4c444 = A-11-Bau,
+                                                        eigener Auftrag, nur scripts/, 0 resources/)
+a62ae7c6..HEAD -- resources/ scripts/                   0 Commits
+```
+
+**Urteil: `RELEASE_FREI`.**

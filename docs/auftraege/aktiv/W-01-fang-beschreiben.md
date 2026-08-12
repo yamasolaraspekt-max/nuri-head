@@ -566,3 +566,148 @@ sie ist `SPEC` und gehört ihm (§12.1).*
 *Der Bauende hat in derselben Runde einen dritten Beifang-Fall selbst gemessen und offengelegt
 (`58342f47` nahm fremde Zeilen aus `docs/STATUS.md` mit) und daraus B5 abgeleitet: Pfadprüfung
 schützt nicht vor fremdem Inhalt in geteilten Dateien. **Das habe ich nicht gefunden, er selbst.***
+
+
+## Release-Prüfung (§10, Sammel-Kontrolle 3) — 12.08.2026
+
+```yaml
+auftrag: "W-01/1"
+abnahme_commit: 5823ada0
+release_commit: 5823ada0
+votum: RELEASE_FREI
+ci: pass
+artefakte_reproduzierbar: true
+migration: nicht_anwendbar
+rueckweg: nicht_anwendbar
+smoke_test_plan: "Doku-Stufe ohne Laufzeitanteil — der betriebliche Nachweis ist der erste
+  Stufe-2-Bauversuch gegen die sieben Blaetter (das Entdeckungssignal, das das Blatt selbst
+  benennt). Regressionswache bis dahin: die Insel-Suite, von mir gefahren, 1692/1692."
+befunde:
+  - "P2 BEWEIS · das Runde-2-Votum weist nur 5 der 8 Kriterien aus (-2, -4, -5 fehlen),
+     obwohl §12.4 ALLE vorher gruenen verlangt. Substanz von mir selbst nachgemessen,
+     alle drei halten — Nachweisluecke, kein Sachmangel, deshalb kein Block."
+  - "SPEC (offen, Ball beim Planner) · W-01/1-6 verlangt woertlich 1689/1689, gemessen
+     sind 1692/1692. §12.5 — blockiert nicht, erzeugt den Folgeauftrag."
+```
+
+### Die Kette, je Stufe mit `merge-base --is-ancestor` gegen die folgende
+
+```text
+BEREIT        fd556f34
+IN_ARBEIT     b41f9177   (7dcbeba9 war das zweite IN_ARBEIT und wurde in fec3a07a zurueckgenommen)
+Bau           04f78b73   8 Dateien = sieben Blaetter + REGISTER.md
+CODE_FERTIG   d4eca213
+NACHBESSERN   6a26cf76   Klasse BEWEIS, zwei P1
+IN_ARBEIT 2   51fab811
+Bau + CF 2    5823ada0   3 Dateien: 3-FORMELN.md, Auftragsblatt, STATUS.md
+ABGENOMMEN    320a95c8
+letzte Stufe gegen HEAD geprueft — Kette lueckenlos, keine Stufe uebersprungen.
+Basis 32f83a6f ist Vorfahr des Bau-Commits (nachgemessen).
+```
+
+**Scope-Reinheit:** `04f78b73` trägt **0** Pfade unter `resources/` und **0** unter `scripts/`.
+*Der Nachbesserungs-Commit `5823ada0` weicht bewusst vom Muster ab — er trägt statt der sieben
+Blätter nur die eine Datei, die der Befund verlangte, plus Blatt und `STATUS.md`. Das ist §12.2
+(„der Umfang ist der Befund"), nicht Scope-Drift; `resources/` und `scripts/` je 0.*
+
+**Das Votum nennt den gemessenen Commit:** `commit: 5823ada0` im Votum-YAML, `ABGENOMMEN an
+5823ada0` in `STATUS.md`, Release-Kandidat `5823ada0` — **drei Orte, ein Commit.**
+
+### Die Pflichtfrage — trägt der Messtisch JEDE Kriterienzeile? Gezählt.
+
+```text
+Kriterien im Blatt                          8    W-01/1-1 … -8
+im Runde-1-Votum ausgewiesen                8    -1/-4/-5/-6/-7 im Messtisch-Block,
+                                                 -3/-8 als befunde, -2 als eigener Abschnitt
+im Runde-2-Votum (das ABGENOMMEN) ausgew.   5    -3 und -8 als behobene Befunde,
+                                                 -1/-6/-7 unter "§12.4"
+FEHLEND in Runde 2                          3    -2, -4, -5
+```
+
+**8 gegen 5.** *Über beide Runden gelesen trägt das Votum jede Zeile — das ABGENOMMEN-Votum allein
+trägt sie nicht.* **§12.4 verlangt ausdrücklich mehr als das rote Kriterium:** *„die vorher grünen
+— Prüfbefehle erneut fahren (sie sind Befehle, das kostet wenig)".* Der Abschnitt trägt genau
+diese Überschrift und erfüllt sie zu drei Fünfteln.
+
+> **Und der Fall ist schärfer als er aussieht.** *Die Nachbesserung hat genau die Datei angefasst,
+> die `-2` beschränkt:* `5823ada0` ändert `3-FORMELN.md` von 29 auf 38 Zeilen. **Das ist der von
+> §12.4 selbst benannte Grund** — *„eine Reparatur ist eine Änderung, und Änderungen brechen
+> Nachbarn"*. Ausgerechnet der Nachbar, der angefasst wurde, wurde nicht nachgemessen.
+
+**Ich habe die drei fehlenden Zeilen selbst gemessen**, am Abnahmestand:
+
+```text
+-2  3-FORMELN.md   '=' 1 · Math. 1 · atan2 0 · sqrt 0 · hypot 0
+    VORHER 04f78b73: '=' 1 · Math. 1     NACHHER 5823ada0: '=' 1 · Math. 1   -> unveraendert
+    beide Treffer stehen in Z.30/31 und sind die Zitat-Gegenueberstellung
+    (Formelsammlung t' = max(0, min(1, t))  gegen  "kein Math.max/Math.min/clamp im Code"),
+    also genau die Stelle, die der Evaluator in Runde 1 gewuerdigt und bewusst NICHT
+    gezaehlt hat. Die Nachbesserung hat sie nicht angetastet.
+-4  7-GRENZEN.md   beantwortet die Pflichtfrage, die zwei in Runde 1 woertlich zitierten
+    Antworten stehen unveraendert im Blatt
+-5  5-CODE/LIESMICH.md:3  "Angebunden an .../fangKern.ts — 276 Zeilen, elf Ausfuhren"
+```
+
+**Alle drei halten.** *Damit ist die Lücke eine des Nachweises, nicht der Sache — sie wird als
+`P2 BEWEIS` verbucht und ist mit dieser Messung geschlossen, nicht offen.* **Ein Block wäre hier
+falsch:** *er würde einen fehlenden Beleg bestrafen, den ich in derselben Minute selbst erbringen
+konnte, und die Substanz ist unversehrt.*
+
+### Die Besonderheit: die Nachbesserung ist im Votum belegt
+
+**Beide P1 der Klasse `BEWEIS` sind mit Zwei-Richtungs-Probe belegt** (§12.3), *und der Zustand
+danach ist sauber gesetzt:*
+
+```text
+Befund 1  W-01/1-3   VORHER 04f78b73  0 Zeilenangaben
+                     NACHHER 5823ada0 15 Zeilenangaben, vom Evaluator ALLE einzeln geoeffnet
+Befund 2  W-01/1-8   VORHER b41f9177  0 Befehlszeilen, 0 Ausgabewerte
+                     NACHHER 51fab811 zwei Befehle mit Ausgabe (je 0) + Gegenprobe
+Zustand danach       5823ada0 = CODE_FERTIG auf der Linie des Baus (§12.3, kein eigener
+                     Zustand fuer Nachbesserungen, kein Nebenzweig)  ->  320a95c8 ABGENOMMEN
+```
+
+*Beide Nachbesserungs-Commits liegen nachweislich auf der Linie des Baus — `04f78b73` ist Vorfahr
+von `51fab811`, dieser von `5823ada0`.* **§12.2 erster Punkt erfüllt, gemessen und nicht geglaubt.**
+
+### Stichprobe
+
+```text
+Platzhalter in den sieben Blaettern    <…> 0 · TODO/TBD/XXX/FIXME 0 · F-0xx/W-xx 0
+REGISTER.md Z.20                       W-01 | Raster und Fang | BESCHRIEBEN | F-040 ✓ F-041 ✓ F-001 ✓ F-003 ✓
+REGISTER.md Fundstelle                 fangKern.ts  1 Treffer
+Werkzeugordner seit der Abnahme        5823ada0..HEAD  0 Commits  -> was ich messe, ist der Abnahmestand
+```
+
+### Gemeinsame Messungen der Sammel-Kontrolle 3 (einmal gefahren, für alle vier gültig)
+
+```text
+npm run test:hausplaner     tests 1692  pass 1692  fail 0  cancelled 0  skipped 0  todo 0
+
+must_preserve, alle drei Richtungen EINZELN, fuer resources/ UND scripts/:
+  git diff --name-only HEAD -- resources                    0
+  git ls-files --others --exclude-standard -- resources     0
+  git diff --diff-filter=D --name-only HEAD -- resources    0
+  git diff --name-only HEAD -- scripts                      0
+  git ls-files --others --exclude-standard -- scripts       0
+  git diff --diff-filter=D --name-only HEAD -- scripts      0
+
+Beifang ab dem fruehesten CODE_FERTIG:
+  git log d4eca213..HEAD -- resources/ scripts/        1 Commit
+  -> b0f4c444 "A-11 gebaut: das Tor liest TICKET_ROLLE", Pfade scripts/commit-pruefen.sh
+     und scripts/__tests__/commitPruefen.test.mjs. EIGENER, freigegebener Auftrag, KEIN
+     Beifang eines W-Baus: 0 Pfade unter resources/, und kein W-Bau-Commit traegt scripts/.
+  Ab jedem der vier Release-Kandidaten:
+     5823ada0..HEAD 0 · e23440d1..HEAD 0 · 7aa49e33..HEAD 0 · a62ae7c6..HEAD 0
+  -> zwischen jedem Kandidaten und HEAD hat KEIN Commit den gemessenen Code beruehrt.
+     Die Suite am HEAD IST die Suite an jedem der vier Kandidaten.
+```
+
+**Fremde uncommittete Arbeit im Lesebereich, vor dem Start gemessen und unangetastet gelassen:**
+`docs/ARBEITSREGELN.md` (+95, der Planner trägt H-1…H-7 als §18a ein), `docs/HAUSREGELN.md`,
+`docs/auftraege/aktiv/A-13-…`, `docs/auftraege/aktiv/A-15-…`. *Keine dieser Dateien ist eines der
+vier Auftragsblätter, und **keine** liegt unter `resources/` oder `scripts/` — die Suite-Messung
+ist dadurch nicht berührt. Die §10/§11/§14, nach denen ich prüfe, stehen vor Zeile 569 und sind
+vom Zusatz unverändert.* **Nichts davon habe ich angefasst** (§14).
+
+**Urteil: `RELEASE_FREI`.**
