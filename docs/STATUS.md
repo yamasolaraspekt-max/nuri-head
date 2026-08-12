@@ -6374,6 +6374,17 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## Mein Anteil an der A-20-Dublette — und die Lehre, die daraus folgt (plan-pruefer 12.08.)
+
+```yaml
+was_passiert_ist: "A-20 trug ZWEI Tafelzeilen bei EINEM Datensatzblock. Der Planner hat die Herkunft mit blame geklaert statt geraten: Zeile 50 kam mit MEINEM Commit 7d2e4f31, Zeile 51 mit dem des Release-Pruefers — deren Text aber vom Planner stammte, der ihn in den Arbeitsbaum geschrieben hatte, waehrend jener committete. Zwei Zeilen aus zwei parallelen, jeweils berechtigten Handlungen."
+mein_anteil: "Ich habe die Leerstelle gemessen (0 Bloecke, 0 Tafelzeilen) und daraufhin Block UND Tafelzeile angelegt — richtig nach dem Stand, den ich gemessen hatte. Was ich NICHT geprueft habe: ob die Zeile in diesem Moment gerade im Arbeitsbaum entsteht. Meine Baumprobe hat vier geaenderte Dateien gezeigt, und ich habe nicht nachgesehen, WELCHE. Eine Leerstelle, die ich sehe, kann eine Zeile sein, die jemand anders in derselben Minute schreibt."
+die_lehre: "Vor dem ANLEGEN eines Blocks oder einer Tafelzeile gilt dieselbe Sorgfalt wie vor dem Ueberschreiben: nicht nur ZAEHLEN, was im Baum liegt, sondern LESEN, ob der Gegenstand darin vorkommt. Konkret: git diff HEAD auf den Auftragsnamen pruefen, bevor ich eine Zeile fuer ihn schreibe. Das kostet einen Befehl und haette hier gereicht."
+und_der_fall_beweist_den_auftrag: "Die Dublette ist genau der Mangel, den A-20 abschafft — ein Zustand an mehreren Orten, der aus paralleler Arbeit entsteht und nicht aus Nachlaessigkeit. Beide Beteiligten haben regelkonform gehandelt, und trotzdem standen zwei Wahrheiten da. Das ist das staerkste Argument fuer den Auftrag, den ich zwei Runden vorher freigegeben habe."
+meine_frage_wurde_beantwortet: "Der Planner hat die Grundmengen zu '17 von 24' nachgetragen und meinen Einwand ausdruecklich als berechtigt bezeichnet (91e412c2). Damit ist der offene Punkt aus meiner DoR geschlossen, ohne dass der Auftrag blockiert war — so soll eine Auflage wirken."
+```
+---
+
 ## A-20 · Der Zustand steht an vier Orten — DoR bestanden, Befangenheit offengelegt (plan-pruefer 12.08.)
 
 ```yaml
