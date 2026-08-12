@@ -29,7 +29,7 @@
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 | **W-07N** `2-FUNKTION` + Azimutgrenze | `BEREIT` | **Generator** | Schnitt `1734aa3b` · Basis `3d368625` | Nachbesserung §12.5 · 9 Platzhalter in `2-FUNKTION` gemessen · **schließt W-07 auf BESCHRIEBEN** |
-| **W-09** Treppe | **`CODE_FERTIG`** | Evaluator | `d26d50b4` · Basis `65f3ece4` | 11/11 · **`bestanden` ist eine Teilaussage** — Warnungen zählen nicht, zwei Prüfungen laufen nur bei vorhandener Eingabe · Normverletzung erzeugt Klartext-Absage (Auflage **ohne Bau** erfüllt) · **Auftragssatz zum Register widerlegt** · 0/0/0 · 1693/1693 |
+| **W-09** Treppe | **`NACHBESSERN`** | **Generator** | Bau `d26d50b4` · Votum `—` · Basis `65f3ece4` | **9/11 grün, 1 mit P2, `-11` ROT** · Fachkern selbst am Code gemessen (sieben Zeilen 83/85/87/89/91/94/98, gestaffelte Schwere richtig, `bestanden` = Teilaussage **bestätigt**) · **ROT: `-11` misst die ZAHL, wo das Kriterium die DATEIEN verlangt** · P1: der Bau schreibt in `REGISTER.md:373` einen Satz, den er selbst widerlegt · P2: zitierter Meldungs-Wortlaut ist nicht die Ausgabe (selbst erzeugt) · P2: fremde W-43-Zeile mitgetragen |
 | **A-14** N-003-Vorbehalt ins Ergebnis | `BETRIEBSBESTAETIGT` | – | Inhalt `21940d33` (Bau `e0722979`) · Elter `efca1899` · Basis `1e09280d` · Kandidat `a2385d35` | **§10 voll gefahren** (Produktivcode mit Sichtwirkung, keine Doku-Sammelform) · Kette lückenlos, jeder Übergang `--is-ancestor` Exit 0 · Bündel im Kandidaten und **byte-gleich nachgebaut** (md5 `a5ea0056` vor = nach Neubau; genau das Artefakt, das der Browserlauf auslieferte) · Insel-Suite selbst **1693/1693** · Rückweg reiner Revert, `git apply --check -R` Exit 0, keine Migration/kein Datenpfad · **Plaketten-Renderbedingung selbst ausgeführt: nur `engine-sparren` unterdrückt, fünf Engines behalten ihre — auch `heizkoerper` mit roter Plakette** · `must_preserve` resources/+scripts/ in drei Richtungen 0/0/0 · Beifang ab CODE_FERTIG nur `docs/` · **ein P2/SPEC beim Planner (grundlage-Zeile nennt 4 von 6 Sonderlasten), blockiert nicht** · Veröffentlichung gehört Yama |
 | **A-15** Fachaussage oder Hinweis | **`IN_ARBEIT`** | **Generator** | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
 | **B5** Zählergebnis mit Trefferzeilen | `BEREIT` | **Generator** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
@@ -1955,8 +1955,8 @@ naechster_schritt: "Planner verschiebt A-15-9/-10/-11 in die Hauptliste (Verschi
 auftrag: "W-09/1"
 titel: "Sieben Module, 698 Zeilen, ZWOELF Zusagen — und DIN 18065 mitten drin"
 datei: docs/auftraege/aktiv/W-09-treppe-beschreiben.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator (Zulieferung fuer A-15 liegt damit vor)
+zustand: NACHBESSERN
+ballbesitz: generator (zwei Nachweise, kein neuer Inhalt noetig)
 basis_sha: 65f3ece4
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): ALLE ZAHLEN EINZELN NACHGEZAEHLT UND EXAKT — treppenBerechnung 114/6, treppenTypen 153/4, treppenBauarten 38/3, treppe2D 93/4, treppe3D 74/4, treppeSvg 142/5, treppeObjekt 84/4; Summe 698 Zeilen und 30 Exporte, beide gehen auf; zwoelf Zusagen im Testverzeichnis, und DIN 18065 steht zweimal woertlich in treppenBerechnung.ts. Elf Kriterien, §5-Block, Erstnutzer, zwei Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden. DIE ZULIEFERBEZIEHUNG IST SAUBER GESCHNITTEN: das Blatt nennt A-15 an sieben Stellen und ordnet sich richtig ein — W-09/1-5 LIEFERT die Treppen-Zeilen, A-15-11 ZITIERT sie mit Commit-Verweis statt sie zu wiederholen. Zwei Auftraege, eine Messung, keine zweite Wahrheit; genau die Form, die bei den Typ-Doppelungen gefehlt hat."
@@ -1969,6 +1969,9 @@ was_das_fuer_die_reihenfolge_heisst: "Der Planner-Entscheid fbce86eb (W-09/1 vor
 fuer_die_abnahme: "Zwei Punkte fuer den Evaluator: (1) W-09/1-5 ist das Kriterium, an dem die Zulieferung haengt — pruefen, ob die Tabelle A-15s Bedarf WIRKLICH deckt (Schwere je Pruefung UND Durchschlag auf 'bestanden'), nicht nur ob sie existiert; sonst zitiert A-15 spaeter eine Zeile, die die Frage nicht beantwortet. (2) DIN 18065 macht dieses Blatt fachlich zur N-003-Klasse: die Beschreibung entscheidet mit, ob die Software an dieser Stelle spaeter 'bestanden' sagen darf."
 naechster_schritt: "Generator zieht W-09/1 (§3 beachten; A-14 ist IN_ARBEIT). Die Treppen-Zeilen aus -5 gehen als Zulieferung an A-15."
 claim_abnahme: "evaluator (Erstinstanz) 12.08. 07:5x: Abnahme W-09/1 GECLAIMT vor dem Pruefstand. Zwoelf Zusagen laut Blatt, elf laut Tafel — die Differenz messe ich als erstes selbst nach, statt eine der beiden Zahlen zu uebernehmen. Doku-Auftrag mit Fachinhalt (DIN 18065), also Blatt gegen CODE, nicht Blatt gegen Bericht."
+evaluator_votum: "evaluator 12.08.: NACHBESSERN an d26d50b4, Fehlerklasse BEWEIS. NEUN der elf Kriterien gruen, jedes einzeln am CODE nachgemessen bevor ich den Generatorbericht aufgeschlagen habe. Der FACHKERN traegt und ist das Beste der Runde: die sieben Pruefzeilen 83/85/87/89/91/94/98 stimmen alle, die GESTAFFELTE Schwere von schrittmass (:87 fehler ODER warnung) ist richtig wiedergegeben — ein flaches warnung waere hier falsch gewesen — und die Folgerung bestanden=TEILAUSSAGE traegt, doppelt begruendet (Warnungen zaehlen nicht, zwei Pruefungen laufen nur bei vorhandener Eingabe). Die sieben Zeilenzahlen 114/153/38/93/74/142/84 und die Summe 698 selbst nachgerechnet, alle exakt. Die DIN-Fundstellen :5/:58, :6 und 0 selbst geoeffnet. Fuer -6 habe ich berechneTreppe SELBST mit einer normwidrigen Treppe aufgerufen statt den Satz zu glauben: bestanden=false, Klartext mit Ist, Soll und Bereich, kein Default — die Auflage ist ohne Bau erfuellt, das bestaetige ich. ROT ist -11: das Kriterium sagt woertlich, die Messung fragt WELCHE DATEIEN der laufende Auftrag haelt und NICHT ob einer laeuft; geliefert ist Tafelzeile 1 / Zustandsfeld 1 vorher wie nachher, also genau die verworfene Messung, und ohne genannten Befehl. Schaden heute: keiner (A-15 war sein eigener Auftrag, Platz getauscht) — der Mangel liegt im Nachweis. Zweiter P1: der Bau fuegt REGISTER.md:373 den Satz Das Register nennt fuer W-09 keine Formel ein, waehrend Zeile 57 derselben Datei F-001, F-030 fuehrt und der Bau genau diese Zeile angefasst hat; in 3-FORMELN steht die richtige Fassung, im Register die widerlegte. Beides ohne neuen Inhalts-Commit zu beheben."
+zwei_p2: "(1) 7-GRENZEN:42-43 zeigt zwei Meldungen in Anfuehrungszeichen, die das Werkzeug nie ausgibt — Dezimalkomma statt Punkt (r1 liefert eine Zahl, 205,0 kann nicht entstehen), Umlaute ersetzt, und das Zeichen < durch das Wort unter. Ich habe die echten Zeilen erzeugt: Steigung 214.3 mm > zulaessig 200 mm (wohnung). / Auftritt 201.4 mm < Mindestmass 230 mm (wohnung). (2) Der Bau traegt eine FREMDE Registerzeile mit (W-43, :70; Elter 0, Bau 1). Sie gehoert dem PLANNER: sein 7d6c39cf 07:36:52 fasst REGISTER.md nicht an, weil d26d50b4 07:34:27 sie zwei Minuten vorher mitcommittet hat. Kein boeser Wille — derselbe geteilte Baum, den der Generator elf Minuten vorher SELBST gemeldet hat (ad8f7314) und an dem der Release-Pruefer vier Minuten spaeter gescheitert ist (5d88f198)."
+spec_an_den_planner: "Zwei Kriterien beissen sich bzw. verlangen Nichtvorhandenes, beides ohne Folge fuer das Votum: -2 verbietet ausgeschriebene Formeln, waehrend -4 verlangt die Rechenregeln zu nennen und einzuordnen — erfuellbar nur, wenn -2 die F-Formeln meint (so gelesen, so erfuellt). Und -8 verlangt die Wendung angebunden an; sie kommt in KEINEM der zehn anderen W-Blaetter vor (je 0 Treffer gemessen). Eine Hausform, die kein Haus benutzt, ist keine."
 ```
 ---
 
@@ -2130,6 +2133,24 @@ warum_dieser_block_existiert: "A-16 hatte eine TAFELZEILE, aber keinen Datensatz
 keine_dor_von_mir: "Der Ballbesitz liegt bei YAMA: das Blatt legt ihm eine WEICHE vor und benennt sie fuenfmal. Erst nach seiner Entscheidung faehrt der Plan-Pruefer die DoR — so steht es im Blattkopf, und so halte ich es."
 mein_beitrag_zur_weiche: "Ich habe den Kern gemessen, damit die Weiche entscheidbar ist, und das Ergebnis steht ausfuehrlich im Abschnitt 'AN YAMA' weiter oben: Yamas Fundstelle haelt zeichengenau (elf TIME_VARS, '* 65' einmal, Lohnkostenbetrag ohne Quelle), seine Praemisse haelt nicht (null Aufrufer in drei Suchformen; die Route 'roof' zeigt auf eine andere Datei). Das aendert die Dringlichkeit, nicht die Sache."
 naechster_schritt: "Yama entscheidet die Weiche. Danach: Plan-Pruefer DoR."
+```
+---
+
+## BEREIT — A-17 (zwei weitere Engines muessen schweigen)
+
+```yaml
+auftrag: "A-17"
+titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach dem A-14-Muster, mit vorhandenem Bauteil"
+datei: docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 3678d1de
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): JEDE Behauptung selbst gemessen, und eine davon haette ich beinahe falsch beanstandet. GEMESSEN: keinGesamturteil steht heute genau EINMAL in enginePanels.ts, beim Panel engine-sparren (A-14) — die beiden Kandidaten engine-fbh (Z.231) und engine-abwasser (Z.323) tragen es NICHT, die Rot-Lage haelt also. Beide Dateikoepfe habe ich selbst gelesen: abwassergefaelle.ts nennt 'Reine Pruef-/Rechenlogik nach DIN 1986-100 (VEREINFACHT)', fbhAuslegung.ts nennt 'GRENZE: hydraulischer Abgleich und normative Auslegung bleiben Fach-Engine — hier Rohrlaengen/Kreise/Plausibilitaet'. Beide Zitate stehen woertlich so im Code. Neun Kriterien."
+mein_fuenfter_beinahe_fehlbefund: "Meine erste Messung suchte in beiden Modulen nach 'DIN |EN 1' und fand bei fbhAuslegung NULL — ich war im Begriff zu beanstanden, dass ein Auftrag eine Engine schweigen laesst, die gar keine Norm nennt. FALSCH IN DER PRAEMISSE: A-17 begruendet die FBH-Engine NICHT mit einer Normnennung, sondern mit ihrem SELBSTBENANNTEN Geltungsbereich ('normative Auslegung bleibt Fach-Engine'). Das ist die staerkere Begruendung, nicht die schwaechere — eine Engine, die selbst sagt, dass die normative Auslegung woanders passiert, darf erst recht nicht 'alle Pruefungen bestanden' behaupten. Fuenfter Beinahe-Fehlbefund heute, und zum zweiten Mal in Folge VOR dem Melden bemerkt."
+warum_der_auftrag_traegt: "Er nutzt das VORHANDENE Bauteil (das keinGesamturteil-Flag aus A-14) statt ein zweites zu bauen, und er beruft sich auf drei belegte Vorentscheidungen: A-15 Achse 2 (die Klassifikation), A-14 als Praezedenzfall, AUF-52 Scheibe C (die Plakette nur bei echtem Bestehens-Merkmal). Damit ist er die konsequente Anwendung einer Regel, die dreimal unabhaengig bestaetigt wurde — kein neuer Gedanke, sondern die Reichweite eines alten."
+fuer_den_bau: "Die A-14-Gegenprobe des Release-Pruefers ist die Messlatte: er hat die Renderbedingung fuer JEDES Panel ausgefuehrt und belegt, dass heizkoerper mit bestanden=false weiterhin die ROTE Plakette zeigt. A-17 muss dasselbe zeigen — nach dem Bau tragen DREI Panels das Flag, und alle uebrigen behalten ihre Plakette, positive wie negative."
+naechster_schritt: "Generator zieht A-17 (§3 beachten; die Schlange ist lang, aber A-17 ist P1 und nutzt vorhandenes Bauteil)"
 ```
 ---
 
@@ -4124,3 +4145,39 @@ ich habe es für die ganze gehalten.*
 
 **A-16-Tafelzeile im selben Zug angeglichen** (`ENTWURF/YAMA` → `ZURUECKGESTELLT/–`) — sie stand
 noch auf dem Stand vor meinem Weichen-Entscheid. Beide Orte gezählt.
+## REIHENFOLGE-ENTSCHEIDUNG — nach A-15 läuft W-07N. Klasse A wird geschlossen, nicht verbreitert
+
+*Planner 12.08. auf Yamas Anweisung („mach W-07N weiter damit das Projekt mit A fertig ist").
+Angehängter Abschnitt statt Tabelleneinschub — die Lehre aus dem Merge-Verlust `6e3f2408`.*
+
+```text
+GEMESSEN, was W-07N blockiert — und es ist WENIGER als ich vermutet hatte:
+  DoR-Runde       a5aab234  "plan-pruefer: W-01N und W-07N BEREIT beim ersten Review"  -> DURCH
+  Operand Yama    A-13:613  "Yamas Datenmessung: 0/0/0, die Bedingung ist leer"        -> GELIEFERT
+  Blattkopf       stand auf ENTWURF, Tafel auf BEREIT                                 -> berichtigt
+  §3-Platz        A-15 ist IN_ARBEIT (Generator)                                      -> DAS ist alles
+```
+
+> **Es blockiert weder eine Prüfung noch ein Operand, sondern allein der §3-Platz.** *Mein erster
+> Verdacht war „`BEREIT` ohne DoR" — an der Datei hängen nur zwei Planner-Commits. Gemessen ist die
+> DoR gelaufen, der Prüfer hat die Datei nur nicht angefasst. **Die Tafel war die genauere Quelle,
+> nicht das Blatt** — der Widerspruch war meiner.*
+
+**Die Entscheidung, und warum sie nicht „der Reihe nach" heißt:**
+
+| | Blatt | Zustand | schließt etwas ab? |
+|---|---|---|---|
+| **1.** | **W-07N** | `BEREIT` | **JA — elftes von elf. Zähler 10 → 11, Klasse A ist zu** |
+| 2. | B5 | `BEREIT` | nein, sechste Barriere von acht |
+| 3. | B6 | `BEREIT` | nein, siebte Barriere |
+| 4. | W-15 | `BEREIT` | nein, erstes C-Blatt — eröffnet einen neuen Strang |
+
+> **Ein geschlossener Strang ist mehr wert als drei angefangene.** *B5, B6 und W-15 sind alle
+> baubereit und keiner von ihnen bringt einen Zähler ans Ziel; W-15 würde sogar Klasse C eröffnen,
+> während A noch offen ist. Deshalb: W-07N zuerst, und zwar unmittelbar wenn A-15 den §3-Platz
+> freigibt.*
+
+**Was danach zu prüfen ist, ausdrücklich benannt statt stillschweigend erwartet:** *W-07N stellt den
+Reifegrad von W-07 richtig (`6/7 BLÄTTER` → `BESCHRIEBEN`). Der Zähler springt also **erst mit dem
+Bau** auf 11 — er zählt heute 10 korrekt, nicht zu wenig. Wer nach dem Bau 11 messen will, misst
+`grep -cE '^\| W-[0-9]+ .*BESCHRIEBEN'` gegen REGISTER.md, dieselbe Zeile wie in jedem Rundgang.*
