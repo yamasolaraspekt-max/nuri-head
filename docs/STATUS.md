@@ -2313,6 +2313,30 @@ evaluator_votum_r2: "evaluator 12.08.: ABGENOMMEN an b732427f, Votum seit f13e1d
 
 ```yaml
 auftrag: "W-15/1"
+BEFUND_DES_PLANNERS_VOR_DEM_BAUAUFTRAG: "Ich wollte W-15 als zweiten Bauauftrag schneiden und habe
+  vorher die Praemisse gemessen statt sie zu glauben — nach den Faellen W-40 und W-42, wo genau diese
+  Praemisse falsch war. SIE TRAEGT ZUR HAELFTE NICHT.
+  ERSTE ZAEHLUNG, Produktivcode ohne Tests: material 18 Dateien, Material 23, farbe 11, Farbe 25,
+  materialId 4. Das allein beweist nichts, es sind Woerter — also jede Stelle geoeffnet.
+  WAS GEBAUT IST, Wand zu Mauerwerk: scene.types.ts:73-78 fuehrt MaterialDefinition mit id, name,
+  color und uValue; :39 haelt materials als Liste im Dokument; :108 traegt materialId an der
+  construction einer Wand; :133 und :357 fuehren schichten als Array mit materialId und dickeMm.
+  validation.ts validiert es an drei Stellen (45, 58, 271). Und es gibt eine BEDIENUNG:
+  EigenschaftenPanel.tsx:312 zeigt ein select mit der Beschriftung Mauerwerk auf
+  selectedWall.construction.materialId, gespeist aus einem MAUERWERK-Katalog; HausplanerApp.tsx:576
+  nennt ihn P2b-1 Mauerwerk-Katalog. Das ist Schema, Validierung, Katalog und Oberflaeche.
+  WAS FEHLT, Raum oder Flaeche zu Belag: ZoneNode traegt KEIN Materialfeld. Der Kommentar bei :202
+  sagt es selbst — P0 aktiv NUR zoneType room und NUR abgeleitet aus der Raumerkennung. Das Bad
+  bekommt seine Fliese also nicht, und genau das nennt W-15s ZWECK neben dem Putz der Aussenwand.
+  FOLGE FUER DEN BAUAUFTRAG: W-15 kann NICHT als reiner Bau geschnitten werden. Ein Auftrag, der die
+  Vorgabe umsetzt, wuerde die Wand-Zuweisung ein zweites Mal bauen — die zweite Wahrheit, die der
+  Waechter verbietet. Der Auftrag muss die Grenze tragen: was existiert wird ANGESCHLOSSEN, was fehlt
+  wird GEBAUT, und beides mit Fundstelle.
+  DAS IST DER DRITTE FALL DERSELBEN KLASSE an einem Tag — W-40 (die Gueltigkeitsachse war gebaut),
+  W-42 (der Schreibpfad war gebaut), W-15 (die Haelfte ist gebaut). Alle drei trugen ENTWORFEN mit
+  der Praemisse kein Code. Der Unterschied heute: bei W-40 hat es der Bau gefunden, bei W-42 mein
+  Operandenmessen beim Schneiden, bei W-15 die Messung VOR dem Schnitt. Nur der dritte Weg kostet
+  nichts."
 titel: "Vier Vertragswerkzeuge ohne Implementierung — und der Vertrag liefert die Blattinhalte"
 datei: docs/auftraege/aktiv/W-15-material-und-farbe-entwerfen.md
 zustand: BETRIEBSBESTAETIGT

@@ -33,6 +33,25 @@ fest, ob sie das überhaupt können.
 schon abdeckt, ist der Auftrag eine **Erweiterung**, kein Neubau — und muss
 im vorhandenen Ordner nachgeführt werden.
 
+**Und bei `ENTWORFEN` gilt es doppelt: „kein Code" ist eine BEHAUPTUNG, keine Messung.**
+*(ergänzt 12.08. — drei Fälle an einem Tag)*
+
+```text
+W-27   Praemisse geprueft, 0 Treffer in mehreren Formen -> traegt. Bau war richtig.
+W-40   Praemisse GEGLAUBT (die Quelle sagte „fehlt") -> traegt NICHT: eine
+       vollstaendige Gueltigkeitsachse ist gebaut, mit Uebergangstabelle.
+       Gefunden hat es der BAU — nach der DoR, nach dem Schnitt.
+W-42   Praemisse beim Operandenmessen widerlegt -> der Schreibpfad ist gebaut.
+       Gefunden beim SCHNEIDEN, also frueh genug fuer eine Abweichung.
+W-15   Praemisse VOR dem Schnitt gemessen -> traegt zur Haelfte: Wand zu Mauerwerk
+       ist gebaut (Schema, Validierung, Katalog, Oberflaeche), Raum zu Belag fehlt.
+```
+
+> **Nur der letzte Weg kostet nichts.** *Eine `ENTWORFEN`-Vorgabe stützt sich auf ein Fehlen, und
+> ein Fehlen ist die schwerste Aussage überhaupt: **man kann es nicht sehen, nur nicht finden.**
+> Deshalb: mehrere Schreibweisen, mehrere Dateien, und mindestens eine Trefferstelle geöffnet — und
+> wenn eine Quelle „fehlt" sagt, ist das ihr Suchraum und nicht der Bestand.*
+
 ### 2 · Hängt es an etwas, das noch nicht steht?
 
 Die Abhängigkeitskette in `REGISTER.md` prüfen. Ein Auftrag für W-07 (Dach) ist
