@@ -44,7 +44,7 @@
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
-| **W-27** Dachkantentypen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
+| **W-27** Dachkantentypen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
 | **W-20** Stückliste und Mengen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
@@ -6300,7 +6300,29 @@ meine_eigene_falle: "Mein erster Dubletten-Lauf zaehlte DREI statt acht — ich 
 ```yaml
 auftrag: "W-27"
 datei: docs/auftraege/aktiv/W-27-dachkantentypen-entwerfen.md
-ballbesitz_bau: generator (Bau laeuft — Ziel ENTWORFEN, Quelle ist der Prototyp)
+ballbesitz_bau: evaluator (gebaut 12.08. auf a6101569; Bericht docs/BERICHT-W-27-dachkantentypen.md)
+gebaut: "Sieben Blaetter NEU aus _VORLAGE angelegt (der Ordner fehlte, anders als bei W-15/W-20/W-23)
+  plus Registerzeile. Platzhalter 27 -> 2, und die zwei sind ReadonlyArray-Generics. Alle acht
+  Fundstellen des Prototyps einzeln geprueft. Abschlusszaehler BESCHRIEBEN 13 -> 13, hier soll er
+  NICHT steigen (Ziel ENTWORFEN); ENTWORFEN-Zeilen 1 -> 2. Prototyp unveraendert, W-07-Blaetter
+  unberuehrt, resources und app 0 Dateien."
+zwei_praezisierungen_aus_der_quelle: "(1) prevIsTraufe ist wahr fuer TRAUFE, WALM UND TEILWALM
+  (Prototyp:212-213) — wer es als 'beide Kanten sind TRAUFE' liest, baut Walm- und Teilwalmdaecher
+  falsch, also genau die Daecher wegen derer es Grate gibt. (2) Der Umlaufsinn entscheidet, ob eine
+  Ecke einspringt (isCCW ? cross > 0 : cross < 0, :206) — wer ihn weglaesst, klassifiziert bei
+  umgekehrt gezeichnetem Polygon alle Ecken falsch herum, und zwar LEISE. Steht als K-4 im Blatt."
+fund_ueber_die_auflage_hinaus: "Die Auflage nannte den Ortgang. Beim Nachmessen von grat und kehle
+  fand ich mehr: die Insel KLASSIFIZIERT beide bereits — klassifiziereSchifter (schifterListe.ts:58)
+  gibt 'kehle'|'grat'|'voll'|'beidseitig' zurueck, getestet. Nur an einer anderen Sache: sie fragt,
+  ob ein SPARREN bis Traufe und First reicht; was fehlt, fragt was an einer ECKE des Grundrisses
+  entsteht. Damit ist auch 'die Klassifikation fehlt' zu weit — es fehlt die ECKEN-Klassifikation.
+  Genau der Fehlertyp, gegen den die Auflage geschrieben wurde, eine Ebene tiefer."
+zwei_zahlen_zu_grat_und_kehle: "Das Blatt nennt grat 17 und kehle 33. Ich messe case-insensitiv
+  ueber alle .ts in resources/planner 195 und 157. Die MENGEN sind verschieden (Blatt: nur
+  kleingeschrieben; meine: beide Schreibweisen inklusive Tests). Beide Zahlen sind fuer ihr Muster
+  richtig, keine widerlegt die andere."
+registerzeile_nur_reifegrad: "W-27-4 sagt, die Namensliste wird beim BAU nachgezogen, nicht jetzt.
+  Ich habe deshalb NUR den Reifegrad gesetzt; First-Grat-Kehle-Traufe-Ortgang steht unveraendert."
 die_auflage_ist_der_kern: "W-27-3 verlangt nicht nur die Zahl, sondern JE BEGRIFF die Trefferzeile,
   die zeigt WAS existiert. Verboten ist ausdruecklich die Formulierung 'gibt es nicht' — sie fuehrt
   dazu, dass jemand eine Ortgang-Laenge neu baut, die es schon gibt (ortgangFlaechenlaengeM,
@@ -6308,7 +6330,7 @@ die_auflage_ist_der_kern: "W-27-3 verlangt nicht nur die Zahl, sondern JE BEGRIF
   MUSTERS ist kein Beleg fuer die Abwesenheit der SACHE. Ich baue mit dieser Auflage als
   Leitlinie, nicht als Nebenbedingung."
 dor_beleg: "plan-pruefer 12.08., Commit 2c0e4ede — DoR BESTANDEN mit AUFLAGE. Selbst gemessen: 'ortgang' als String-Literal 0 Dateien, TopologyJoinType 0, cornerType 0 — alle drei Zahlen des Blattes halten. AUFLAGE: die FORMULIERUNG ging weiter als die Zahl ('gibt es in der Insel NICHT'), gemessen traegt die Insel die exportierte Funktion ortgangFlaechenlaengeM (dachformVorlagen.ts:291), das Feld ortgangausbildung (:127, :1386) und 20 Treffer fuer Ortgang gross. Es fehlt der KANTENTYP, nicht die Sache — 7-GRENZEN muss das so schreiben. Vom Planner in cdcadc1d an vier Stellen berichtigt, von mir nachgemessen."
-zustand: IN_ARBEIT
+zustand: CODE_FERTIG
 ballbesitz: generator
 basis_sha: c2c6bf4e
 anlass: "Klasse C, zweites Werkzeug. Voraussetzungsfrei — W-07 ist BETRIEBSBESTAETIGT, F-025 und
