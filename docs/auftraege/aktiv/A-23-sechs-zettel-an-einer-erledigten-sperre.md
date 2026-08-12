@@ -262,3 +262,80 @@ was_ich_daraus_fuer_kuenftige_kriterien_mitnehme: "Ein Kriterium, das einen WAEC
         Wirkung: ein Waechter, der die Datei anfasst, bewacht nicht automatisch die Aenderung."
 A_23_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+---
+
+## 5 — Votum des Evaluators (§11)
+
+**NACHBESSERN**, Fehlerklasse **`CODE`** (§12.1), Ball beim **Generator**. Bau `3ad920b1`, Elter
+`4e590f74` (als git-Elter nachgemessen), zwei Prüfstände mit `node_modules` und `vendor`.
+
+**Der Befund ist klein und er ist trotzdem einer: ein Zitat, das Wörtlichkeit behauptet und keine
+liefert.** `startEhrlich.test.ts:129` schreibt *„hier stand: … liegt hinter Yamas **Entscheidung**"*
+— im Elter stand *„liegt hinter Yamas **Freigabe**"*. Dreimal gemessen, zuletzt am Commit-Diff
+selbst (E1):
+
+```text
+git show 3ad920b1 -- .../startEhrlich.test.ts
+  -  // hinter Yamas Freigabe. Die Zulieferung der Liste bleibt deshalb offen.
+  +  // alles, was `routes/` … liegt hinter Yamas Entscheidung. Die Zulieferung
+```
+
+**Warum das nicht Formalismus ist.** A-23-2 verlangt wörtlich, *der alte Wortlaut wird NICHT
+gelöscht, sondern als überholt gekennzeichnet* — und begründet es mit der W-33-5-Bedingung: ein
+Satz wird später **als Beleg gelesen**. Ein Zitat in der Form *„Hier stand: …"* ist genau dieser
+Beleg. Wer künftig prüft, was hier gegolten hat, bekommt ein Wort, das nie dastand. Das ist die
+wiederkehrende Fehlerklasse in ihrer leisesten Form: **die Kennzeichnung trägt die Form eines
+wörtlichen Zitats und ist keins** — in einem Auftrag, der von Belegtreue handelt.
+
+**Kein Wächter erzwingt die Änderung.** `gefuehrteEhrlich:33-36` verbietet `'Frei'+'gegeben'` in
+`studioDaten.ts` und `GuidedView.tsx` — nicht in dieser Datei und nicht das Wort „Freigabe", das in
+der Insel **58×** vorkommt. Der Bericht sagt bei `:53` ausdrücklich *„Der alte Wortlaut steht
+**überall** noch da, als Zitat"*; gemessen sind **5 von 6** Zitaten wörtlich.
+
+**Die Behebung ist ein Wort und bricht nichts** — selbst gefahren, mit Anker und md5-Rücksetzung:
+
+```text
+'Entscheidung' -> 'Freigabe':  md5(Rumpf ohne Kommentare) c8e514e0d2ae399ffa8b4fa1baae0114
+                               = der A-23-1-Anker, UNVERAENDERT (der Satz steht in einem //-Kommentar)
+                               a23-sieben-stellen.mjs: 7 von 7 belegt
+                               startEhrlich.test.ts:    9 tests, 9 pass, 0 fail
+```
+
+**Alles Übrige trägt.** Der Messtisch vollständig:
+
+| Kriterium | Befund | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **A-23-1** (TRAGEND) | **grün** | md5 des Rumpfs **ohne Kommentare** an Bau und Elter identisch (`c8e514e0…`, mit derselben `ohneKommentare`-Funktion wie die Insel). Testzahl der Datei **9 = 9**. Der Name ist geändert — das erlaubt das Kriterium; die zwei `assert.doesNotMatch`-Zeilen sind zeichengleich |
+| **A-23-2** | **ROT im Belegteil, grün im Rest** | Sieben Stellen, jede berichtigt, jede nennt ihre Hälfte (sechs Projektliste, `konfiguratorEhrlich:12` als einzige Paketspeicherung). „An derselben Stelle" selbst nachgemessen: Abstand Marke → Zitat **0–3 Zeilen** (max 306 Zeichen). **Aber 1 von 6 Zitaten nicht wörtlich** — siehe oben |
+| **A-23-3** | **grün** | Jede Fundstelle **geöffnet**, nicht abgeschrieben: `HausplanerController.php:101/:55/:57` · `objekt.blade.php:141` (`data-projekte`) `:144` (`data-pakete-url`) · `main.tsx:82/:89` · `web.php:5016/5018/5020` · `paketSpeichern.ts:45` (`await fetch`) · `ConfigWizard.tsx:255`. **Alle stimmen.** Die Herkunft steht ohne das Wort, das `gefuehrteEhrlich` verbietet: „AUF-81, Tor 1, 26.07." |
+| **A-23-4** | **grün** | Der Grund steht an drei Stellen, und `HausplanerController.php:57` sagt ihn wörtlich: *„dieselbe Naht wie `hpProjekte`, kein Lade-Fetch aus der Insel"* |
+| **A-23-5** | **grün** | `gefuehrteEhrlich` **gefahren**, nicht wortgezählt: 8 tests, 8 pass, 0 fail an Bau **und** Elter. Das verbotene Wort selbst gezählt: **0** in `studioDaten.ts`, **0** in `GuidedView.tsx` |
+| **A-23-5b** | **grün** | Insel-Suite **1718/1718 an beiden Ständen** — kein Test entfernt, keiner dazu |
+| **A-23-6** | **grün** | Fangprobe selbst gefahren: ÜBERHOLT-Marke in `studioDaten.ts` entfernt (Anker genau 1×) → **6 von 7**, `[überholt NEIN]`. md5 danach zurückgesetzt, identisch |
+
+**Ein Nebenbefund am Werkzeug, nicht am Bau.** `scripts/a23-sieben-stellen.mjs:32` sucht die Marke
+im Umkreis von **±1200 Zeichen** — etwa zwölf Zeilen. Damit würde es eine Kennzeichnung, die „einen
+Absatz weiter" steht, für gültig halten; genau den Fall, den A-23-2 ausschließt. **Der Bau braucht
+diese Nachsicht nicht** (gemessen 0–3 Zeilen), das Werkzeug wäre nur beim nächsten Mal zu milde.
+
+**Meine eigenen Messfehler in dieser Runde**, alle vor dem Urteil gefunden:
+
+1. `grep --include=*.ts` **ohne Anführungszeichen** — zsh hat das Glob geschluckt und **0 Treffer**
+   gemeldet. Hätte ich die Null genommen, stünde hier „keine der sieben Stellen existiert".
+2. Ein 8-Zeilen-Fenster **ab** der Fundstelle sollte messen, welche Hälfte jede Stelle nennt — die
+   ÜBERHOLT-Marke steht aber **davor**. Es meldete `konfiguratorEhrlich` als „Projektliste", obwohl
+   sie die Paketspeicherung meint. Berichtigt, indem ich die Stellen **gelesen** habe (B6).
+3. Mein Zitat-Regex suchte das schließende `“` (U+201C); dort steht ein ASCII-`"` (U+0022). Er fand
+   nichts — leer statt falsch, aber wieder ein zu enges Muster.
+4. **Zwei Pfade geraten statt gesucht:** `views/hausplaner/objekt.blade.php` (liegt unter
+   `views/admin/hausplaner/`) und `app/paketSpeichern.ts` (liegt unter `app/state/`). Beide Male
+   meldete `sed` „No such file" — beinahe ein Fehlbefund „die Fundstelle existiert nicht" gegen eine
+   Kette, die vollständig stimmt. **Derselbe Griff wie bei A-24; er ist mir jetzt zweimal passiert.**
+5. `set -- $p` in einer `for`-Schleife greift unter zsh nicht wie erwartet — beide Prüfstände
+   entstanden zunächst gar nicht.
+
+**§15 belegt:** keine Datenbankschreibung in dieser Abnahme; die Suite läuft gegen die Insel, nicht
+gegen eine Datenbank.
+
+**Weiter an den Generator**, Umfang **genau dieser eine Befund** (§12.2: keine Nebenreparaturen).
