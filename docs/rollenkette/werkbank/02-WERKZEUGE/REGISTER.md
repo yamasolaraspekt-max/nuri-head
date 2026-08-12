@@ -117,7 +117,7 @@ und Lichtkuppel. **Die Trennlinie zieht der Code selbst** — `aufbauOrientierun
 
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln / Fundstelle |
 |---|---|---|---|---|
-| W-33 | **Start und Projektwahl** | LEER | alle | ungeprüft — `app/StartView.tsx` (267 Z) |
+| W-33 | **Start und Projektwahl** | **BESCHRIEBEN** | alle | `app/StartView.tsx` (267 Z) ⓝ — **vier Komponenten, ein Export**; drei halten einen eigenen `hover`-Zustand. **Behebt eine Falschauskunft**: der Bildschirm zeigte erfundene Projekte bei jedem Nutzer (`startEhrlich`). **Der Leerzustand ist der Normalfall** (`:206`). Die Projektkachel ist ein **Verweis**, keine Schaltfläche (`:142`) · acht Wächter, davon **zwei rendernde** (`projektKlick`, `elevationTokens`) |
 | W-34 | **Geführte Planung** (Stepper, elf Schritte) | **BESCHRIEBEN** | **W-38** *(Typquelle, `GuidedView.tsx:4`)* | **keine** ⓝ — gezählt, nicht gerechnet: 17 Zählungen über `zaehle()`; `statusAus` `fahrschritte.ts:43-49` · **6 der 11 Schritte haben keine Modellgrundlage** |
 | W-35 | **Konfigurator-Dialog** Fenster·Tür·Treppe·**Heizkörper** | **BESCHRIEBEN** | W-04, W-09 | `app/ConfigWizard.tsx` (271 Z) ⓝ — **VIER Arten** (`:23`), fünf Schritte (`:34`), **`TYP_MAP` (`:43`)** bildet sie auf `ConfiguratorType` ab · **schreibt sehr wohl ins Gebäudemodell**: `ADD_NODE` in `:184`, `:205`, `:226` — der Schreibpfad selbst ist W-42 · sechs Wächter, davon `konfiguratorEhrlich` (11 Tests) |
 | W-36 | **Fähigkeiten-Navigation** | LEER | alle | ungeprüft — `app/FaehigkeitenNavi.tsx` (76 Z) + `app/tools/faehigkeiten.ts` |
