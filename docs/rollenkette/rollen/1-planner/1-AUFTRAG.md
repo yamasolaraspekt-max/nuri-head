@@ -25,7 +25,7 @@ fest, ob sie das überhaupt können.
 
 ---
 
-## Die vier Pflichtprüfungen vor jedem Auftrag
+## Die sieben Pflichtprüfungen vor jedem Auftrag
 
 ### 1 · Existiert das Werkzeug schon?
 
@@ -93,6 +93,35 @@ W-27   die zu weite Formulierung stand an VIER Stellen.
 > zwei sich widersprechende Aussagen, und **beide sehen belegt aus**. *Belege, Zitate und
 > Protokolle werden dabei NICHT mitberichtigt: ein nachträglich umgeschriebener Beleg ist
 > keiner.*
+
+### 7 · Habe ich mindestens eine der gezählten Stellen GEÖFFNET? (neu 12.08., aus A-20)
+
+**Wer eine Menge zählt, hat noch nichts gelesen.** Vor jeder Meldung „N Fälle" mindestens einen
+Fall öffnen und die Zeile mit eigenen Augen lesen — und zwar einen, der in die Zählung fällt.
+
+> **Der Beleg ist A-20, und er ist meiner:** *ich meldete **17 widersprüchliche Blätter**, ohne ein
+> einziges zu öffnen. **13 der 17 verglichen einen Blattkopf mit einer BAUAUFZEICHNUNG** — einem
+> Block mit `auftrag:`, `zustand:` und `bau_commit:` — und nicht mit einer Statuskopie. Der
+> Generator hat `A-13-roof-azimuth-absichern.md:227` geöffnet und es gefunden; **beinahe hätte er
+> eine datierte Bauaufzeichnung gelöscht, weil mein Auftrag es verlangte.***
+
+```text
+Der Unterschied ist nicht Sorgfalt, sondern Methode:
+
+  grep -c '^zustand:'   misst die ZEILE
+  gebraucht war         der BLOCK, in dem sie steht
+                        Blattfuss = Block OHNE auftrag:   Meldeblock = MIT auftrag:
+
+-> H-9 an mir, am Tag an dem ich H-9 verankert habe. Und die Pruefform von H-9
+   haette es gefunden: "Findet der Befehl die Zeile, die ich mit eigenen Augen
+   gelesen habe?" — ich hatte keine gelesen.
+```
+
+**Zwei andere Rollen haben ihre Zählfehler am selben Tag durch Lesen gefunden:** *der Plan-Prüfer
+kam auf 39 von 40, erkannte das als unplausibel und stellte fest, dass er leere Blattköpfe
+mitzählte — „eine fehlende Angabe ist keine widersprechende". Der Evaluator hatte einen
+`Math`-Treffer, öffnete die Zeile und fand das Wort **SIND** in „Schiftsparren sind
+Gemeinsparren". **Beide haben gelesen. Genau daran lag es.***
 
 ---
 
