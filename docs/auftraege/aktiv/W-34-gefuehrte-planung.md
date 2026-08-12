@@ -349,3 +349,79 @@ meine_eigenen_messfehler_in_dieser_runde:
   - "Mein Schrittzaehler-Muster traf die Einrueckung statt der Sache und meldete 8 statt 11 —
      dieselbe Falle, die der Generator in 2-FUNKTION beschreibt und die ich gelesen hatte."
 ```
+
+
+## §12.3 — Votum W-34 Runde 2 (Evaluator, 12.08.2026)
+
+```yaml
+auftrag: "W-34"
+runde: 2
+votum: ABGENOMMEN
+geprueft_an: "4c1d205b"
+elter: "0847e83e"
+befund_von: "evaluator e5716bc0"
+scope_diff: "4 Dateien, +138/-26: 2-FUNKTION.md, 6-PRUEFUNG.md, BERICHT, STATUS.md.
+  0 Code-Dateien, 0 der uebrigen fuenf Werkzeugblaetter."
+pruefstand: "git worktree add -q --detach auf 4c1d205b, node_modules UND vendor per cp -al."
+suite: "npm run test:hausplaner am R2-Stand: 1698 tests, 1698 pass, 0 fail."
+paragraf_15: "GEGENSTANDSLOS — kein DB-Zugriff. Browserabnahme entfaellt, 0 Code-Dateien."
+
+wie_ich_geprueft_habe: "Der Planner hat das Kriterium nicht nur berichtigt, sondern auf eine
+  ANDERE Stelle gelegt — Zweig 1 statt Zweig 2. Diese Verschaerfung ist SEINE Rechnung, nicht
+  meine; ich hatte nur belegt, dass Zweig 2 nichts leistet, nicht dass Zweig 1 traegt. Ich habe
+  sie deshalb zuerst von vorn gemessen, bevor ich geprueft habe, ob der Bau sie einhaelt."
+
+messtisch:
+
+  W-34-1_statusAus_und_die_reihenfolge_wo_sie_wirkt:
+    urteil: ERFUELLT
+    war_der_befund_der_runde_1: "Ja — die einzige rote Zeile, und sie ist behoben."
+    die_neue_behauptung_selbst_nachgemessen: "Original gegen eine Fassung mit dem LEER-Zweig
+      hinter den every-Pruefungen, ueber alle 85 Kombinationen: GENAU 1 Abweichung, und es ist
+      checks = [] mit 'open' -> 'ok'. Die Ursache selbst gegengeprobt: [].every(x=>x==='ok')
+      liefert true. Die Verschaerfung des Planners traegt."
+    und_diesmal_im_ECHTEN_code_gefahren: "Ich habe die Mutation nicht nur als reine Funktion
+      gerechnet, sondern im Pruefstand am Code gefahren, mit Anker (Treffer genau 1x) und
+      md5-Ruecksetzung: 1698 tests, 1693 pass, 5 fail — darunter 'K5: ein LEERES Dokument
+      liefert keinen gruenen Schritt und keinen gruenen Pruefpunkt'. Das ist genau die fachliche
+      Aussage, und der Waechter haelt sie. md5 nach der Ruecksetzung identisch."
+    seine_md5_gegen_meine: "Der Bericht nennt ace90cf96cb559da4849d4cf458cac44 als Anker; ich
+      messe zeichengleich dasselbe. Auch seine 1693/5 decken sich mit meinem Lauf."
+    zwei_weitere_behauptungen_geoeffnet: "Erstens: der Dateikopf habe die Regel schon benannt.
+      fahrschritte.ts:40-41 selbst gelesen — 'Leere Liste => open — ein Schritt ohne pruefbare
+      Aussage ist nicht fertig, er ist unbekannt.' Trifft zu. Zweitens: alle sechs Schritte ohne
+      Modellgrundlage haetten checks: []. Selbst ausgefuehrt, alle sechs: checks=[] und
+      status=open. Trifft zu — und macht die Regel erst gefaehrlich, denn genau diese sechs
+      wuerden bei verschobenem Zweig 1 gruen melden."
+    die_drei_berichtigten_stellen_einzeln: "2-FUNKTION: die Kausalaussage ist ZURUECKGEZOGEN und
+      nicht geloescht, mit beiden Messungen daneben. 6-PRUEFUNG Fangprobe: die wirkungslose ist
+      zurueckgezogen, die wirksame steht da und ist als GEFAHREN ausgewiesen — die Tabelle
+      unterscheidet jetzt Spalte fuer Spalte zwischen 'gefahren' und 'abgelesen', was sie vorher
+      nur im Fliesstext tat. 6-PRUEFUNG K-1: trug dieselbe Aussage ein zweites Mal; vorher 'ohne
+      zu sagen, dass warn vor den every…', jetzt 'und der Reihenfolge an der Stelle, wo sie
+      wirkt'. Diese dritte Stelle hatte ICH NICHT GEMELDET — er hat sie selbst gefunden."
+    gegenprobe_auf_restbestaende: "Die widerlegte Kausalaussage ('deshalb gewinnt/schlaegt') steht
+      in keinem der sieben Blaetter mehr als Behauptung: 0 Treffer. Sie existiert nur noch im
+      zurueckgezogenen Absatz."
+
+  W-34-2_bis_W-34-8:
+    urteil: "ERFUELLT — unberuehrt und gegengeprueft, nicht als erledigt fortgeschrieben."
+    beleg: "Der R2-Diff fasst nur 2-FUNKTION und 6-PRUEFUNG an; die uebrigen fuenf Blaetter und
+      alle Quelldateien sind unberuehrt. Am R2-Stand neu gemessen: W-34-2 elf Schritte in
+      2-FUNKTION (2 Nennungen) · W-34-3 alle sechs Eintraege in 7-GRENZEN · W-34-4
+      bebauteGeschosse (2) · W-34-5 GuidedView.tsx:4 · W-34-6 alle fuenf Waechterdateien ·
+      W-34-7 die Scope-Grenze · W-34-8 sieben Blaetter und 0 md5-Dubletten ueber 27
+      Werkzeugordner."
+
+was_dem_generator_zusteht: "Er hat den Befund nicht nur abgearbeitet, sondern die Stelle gefunden,
+  die ich NICHT hatte. Mein Rot sagte 'Zweig 2 leistet nichts'; er hat daraus die Frage gemacht,
+  WO die Reihenfolge dann traegt, und sie mit derselben Methode beantwortet — 85 Kombinationen,
+  eine Abweichung, [].every ist true. Das ist mehr als Nachbessern, und die dritte Fundstelle
+  (K-1) hat er selbst gefunden. Dass er die Fangprobe jetzt als GEFAHREN statt ABGELESEN
+  ausweist, schliesst genau die Luecke, aus der mein Befund entstanden ist."
+
+mein_eigener_anteil_offengelegt: "Mein Rot war richtig, aber unvollstaendig: ich hatte gemessen,
+  dass Zweig 2 nichts leistet, und daraus NICHT die Frage abgeleitet, ob eine andere Position
+  traegt. Dieselbe Rechnung haette es hergegeben — ich hatte die 85 Kombinationen schon laufen.
+  Ein Befund, der nur verneint, laesst die Haelfte der Arbeit beim anderen."
+```

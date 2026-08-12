@@ -49,7 +49,7 @@
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
-| **W-34** Geführte Planung (Stepper) | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
+| **W-34** Geführte Planung (Stepper) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · 17 doppelte yaml-Schlüssel, **0 mit gleichem Wert** · 4× `ballbesitz` auf abgeschlossenen Aufträgen · Feldform 33/19 |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
@@ -7012,7 +7012,7 @@ eigener_messfehler: "grep -c zaehlt Zeilen, nicht Treffer — ich habe erst dana
 
 ```yaml
 auftrag: "W-34"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 ballbesitz_bau: generator (Bau fertig — sieben Werkbankblaetter neu, REGISTER.md Zeile 121 LEER -> BESCHRIEBEN; Runde 2 nachgebessert)
 nachbesserung_runde_2_W_34_1: "Der Befund des Evaluators (e5716bc0) trifft, und der Fehler ist meiner. Ich hatte in 2-FUNKTION KAUSAL behauptet, Zweig 2 stehe VOR den every-Pruefungen und DESHALB schlage warn neunmal ok. Diese Ursache gibt es nicht — ein warn bricht beide every-Bedingungen ohnehin, die Mengen sind disjunkt. SELBST NACHGEMESSEN ueber alle 85 Kombinationen aus vier Statuswerten bei Laenge 0 bis 3, mit einem Skript im Scratchpad: M1, den warn-Zweig hinter die every-Pruefungen verschoben, ergibt 0 Abweichungen von 85 — wirkungslos, sein Befund bestaetigt. M2, den LEER-Zweig hinter die every-Pruefungen verschoben, ergibt 1 Abweichung: die leere Liste liefert ok statt open, weil [].every(...) WAHR ist. DAS ist die tragende Reihenfolge, und sie ist fachlich genau die Luege die dieses Werkzeug abschafft — ein Schritt OHNE Pruefpunkt meldete Vollstaendig, und alle sechs Schritte ohne Modellgrundlage haben checks: []. Der Dateikopf :40-41 hatte es sogar benannt. Ich hatte eine Reihenfolge gesehen und ihr eine Wirkung ZUGESCHRIEBEN statt sie zu messen; die tragende Stelle stand direkt daneben."
 fangprobe_ersetzt_und_diesmal_GEFAHREN: "Meine erste Mutationsprobe war die wirkungslose Verschiebung; der Evaluator hat sie gefahren mit 1698 pass und 0 fail. Ersetzt durch die Verschiebung des Leer-Zweigs und diesmal SELBST GEFAHREN mit Anker und Ruecksetzung: Anker md5 ace90cf96cb559da4849d4cf458cac44, Grundlinie 1698 Tests 1698 pass 0 fail, unter der Mutation 1698 Tests 1693 pass 5 FAIL — K5 leeres Dokument, K6 Schritt ohne Modellgrundlage, der statusAus-Test selbst, und zwei K4 aus gefuehrteEhrlich. Fuenf Waechter ueber zwei Testdateien. Danach git checkout, md5 wieder ace90cf9 IDENTISCH, git status resources/ 0 Dateien. Die vier uebrigen Fangproben bleiben ABGELESEN und sind in 6-PRUEFUNG je Zeile in einer eigenen Spalte 'Gefahren?' als solche gekennzeichnet."
@@ -7024,7 +7024,7 @@ befund_am_dateikommentar_NICHT_behoben: "W-34-3 verlangt das WOERTLICHE Zitat de
 zum_befund_des_plan_pruefers_74b2fa09_die_fehlende_ursache: "Sein Befund trifft und ich nehme ihn an: die Trennung von Bau und Fertigmeldung erzeugt ein Zeitfenster, und meine W-34-Fertigmeldung ging als Beifang in 559c632a mit, dem Commit des Release-Pruefers. Seine Empfehlung 'den zweiten Commit unmittelbar folgen lassen' konnte ich aber nicht befolgen, und der Grund ist messbar. DAS FENSTER WAR GENAU ZWEI COMMITS, jeder einzeln nachgemessen mit git show --name-only: 3452aa5f (evaluator, A-21 ABGENOMMEN) beruehrt docs/STATUS.md NULL mal — er schrieb seine A-21-Zustandszeilen in den ARBEITSBAUM und committete sie nicht, sein eigener Satz lautet 'Votum ins Blatt, Zustand steht noch aus'. 559c632a (release-pruefer) beruehrt sie einmal und nahm dabei seine Zeilen UND meine mit. Solange fremde Zustandszeilen unverfolgt in der Datei lagen, konnte ich meine Fertigmeldung nur committen, indem ich sie einsammle — und das verbietet die stehende Auflage. ZWEI REGELN STOSSEN HIER ANEINANDER: 'zweiter Commit unmittelbar' und 'nie fremde unverfolgte Arbeit einsammeln'. Ist die geteilte Datei belegt, ist nur eine von beiden erfuellbar. Ich habe die zweite gewaehlt und zweimal gewartet, was das Fenster verlaengert hat — die Alternative waere gewesen, fremde Zustandsaenderungen unter meinem Namen zu committen. WAS ICH DARAUS ZIEHE, ohne dafuer etwas zu schneiden: das Fenster entsteht nicht durch die Trennung allein, sondern erst dadurch, dass jemand eine Zustandsaenderung in die geteilte Datei SCHREIBT und sie liegen laesst. Wer den Zustand setzt, sollte ihn im selben Zug committen; dann ist die Datei zwischen zwei Commits nie belegt und die Trennung kostet nichts."
 blattkopf_war_veraltet: "Das Auftragsblatt trug im Kopf noch dor_beleg 'steht aus — plan-pruefer' und ballbesitz 'plan-pruefer (DoR)', obwohl die DoR hier bestanden vermerkt ist. Seit A-20 ist docs/STATUS.md die Wahrheit; ich habe danach gehandelt und den veralteten Kopf beim Ziehen gemeldet statt ihn fuer eine Sperre zu halten."
 operanden_vor_dem_ziehen_geprueft: "Beide Quellen gemessen statt geglaubt: GuidedView.tsx 165 Zeilen, fahrschritte.ts 202 — beide exakt wie im Blatt. statusAus an :43-49 woertlich gelesen, fuenf Zweige in der genannten Reihenfolge, und SCHRITTE_OHNE_GRUNDLAGE beginnt an :56. Der BLATTKOPF traegt noch dor_beleg 'steht aus — plan-pruefer' und ballbesitz 'plan-pruefer (DoR)'; das ist ein veralteter Stand aus dem Schnitt, seit A-20 ist docs/STATUS.md die Wahrheit und hier steht die bestandene DoR. Kein Mangel, nur benannt, damit niemand den Blattkopf fuer eine Sperre haelt."
-ballbesitz: evaluator
+ballbesitz: release-pruefer
 titel: "Elf Schritte, und sechs von ihnen koennen nichts bestaetigen"
 basis_sha: 6682b83c
 spur: A
@@ -7064,6 +7064,29 @@ regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit. Das B
 W_34_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-34 GECLAIMT vor dem Pruefstand. W-34 ist die zweite Ablesung der Stufe 6 und besitzt die Dateien, die W-38 ausdruecklich NICHT besitzt — GuidedView.tsx und fahrschritte.ts. Ich pruefe deshalb zuerst die Scope-Grenze in beide Richtungen: was W-34 beansprucht und was es W-38 ueberlaesst."
 claim_abnahme_runde2: "evaluator (Erstinstanz) 12.08.: Abnahme W-34 RUNDE 2 GECLAIMT vor dem Pruefstand. Mein Rot hing an EINER Aussage, und der Planner hat das Kriterium daraufhin nicht nur berichtigt, sondern auf eine andere Stelle gelegt: Zweig 1 statt Zweig 2, weil [].every(...) true ist. Diese Verschaerfung habe ich NICHT gemessen — sie ist seine Rechnung, nicht meine. Ich messe sie deshalb zuerst und von vorn, bevor ich pruefe, ob der Bau sie einhaelt."
+votum_abnahme_runde2: "evaluator 12.08. ABGENOMMEN an 4c1d205b, Elter 0847e83e, ACHT von acht.
+  Der einzige rote Punkt der Runde 1 ist behoben, an drei Stellen, und das Falsche ist jeweils
+  ZURUECKGEZOGEN statt geloescht."
+wie_ich_gegengeprueft_habe: "Der Planner hat das Kriterium auf eine ANDERE Stelle gelegt — Zweig 1
+  statt Zweig 2. Das ist seine Rechnung, nicht meine; ich hatte nur belegt dass Zweig 2 nichts
+  leistet. Selbst nachgemessen ueber dieselben 85 Kombinationen: GENAU 1 Abweichung, checks = []
+  mit open -> ok, und [].every(x=>x==='ok') liefert true. Danach im ECHTEN Code gefahren, Anker und
+  md5-Ruecksetzung: 1693 pass, 5 fail, darunter K5 'ein LEERES Dokument liefert keinen gruenen
+  Schritt'. Seine md5 ace90cf96cb559da4849d4cf458cac44 und seine 1693/5 decken sich zeichengleich
+  mit meinem Lauf."
+zwei_seiner_behauptungen_geoeffnet: "Der Dateikopf :40-41 sagt woertlich 'Leere Liste => open';
+  und alle sechs Schritte ohne Modellgrundlage haben tatsaechlich checks: [] — ausgefuehrt, nicht
+  gelesen. Genau diese sechs wuerden bei verschobenem Zweig 1 gruen melden."
+die_dritte_stelle_hatte_ich_nicht_gemeldet: "6-PRUEFUNG K-1 trug dieselbe widerlegte Aussage ein
+  zweites Mal. Er hat sie selbst gefunden. Gegenprobe ueber alle sieben Blaetter: die Kausalaussage
+  steht nirgends mehr als Behauptung, 0 Treffer."
+unberuehrte_kriterien_gegengeprueft: "W-34-2 bis W-34-8 sind im R2-Diff nicht enthalten; am
+  R2-Stand neu gemessen statt fortgeschrieben, alle sieben intakt, 0 md5-Dubletten ueber 27
+  Werkzeugordner."
+mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte gemessen dass Zweig 2
+  nichts leistet und daraus NICHT die Frage abgeleitet, ob eine andere Position traegt. Dieselbe
+  Rechnung haette es hergegeben, ich hatte die 85 Kombinationen schon laufen. Ein Befund, der nur
+  verneint, laesst die Haelfte der Arbeit beim anderen."
 ```
 
 ```yaml
