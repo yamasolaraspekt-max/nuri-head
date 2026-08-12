@@ -52,6 +52,9 @@
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **W-39** Studio-Rahmen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
+| **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
+| **W-41** Abhaengigkeitsgraph / Invalidierung | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
+| **W-42** Schreibpfad Wizard zum Gebaeudemodell | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7608,4 +7611,107 @@ eigener_fehler: "Der Commit 2cff9e8e traegt meine Claim-Botschaft ueber 27 Zeile
   Text vernichtet; falsch ist die Zuordnung. Kein revert. Zweiter Fall nach der A-21-Runde; seither
   haengt das Tor mit && am Check. Dazu: erste Registerzaehlung 7 statt 8, weil mein grep den
   Modulnamen im ganzen Zeilentext suchte und HausplanerApp die W-39-Zeile SELBST traf."
+```
+
+```yaml
+auftrag: "W-40"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "Die zweite Achse, ohne die erst nach Bestaetigung nicht pruefbar ist"
+basis_sha: c9ac316d
+spur: A
+prioritaet: P1
+dor_beleg: "steht aus — plan-pruefer."
+freigabe: "Yama 12.08.: ich sage zu diesen sachen ja W-40, W-41, W-42 warten auf dich — das Angebot
+  des Planners, sie als Vorgabe mit Ziel ENTWORFEN zu schneiden."
+operand_gemessen: "docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md, 194 Zeilen, Markdown, direkt lesbar.
+  Traegt die Gegenueberstellung von Yamas Zielbild 3.6 gegen den Bestand, die Einordnung als zwei
+  Achsen, und die drei Stufen als benannten Posten."
+der_tragende_punkt: "Die Quelle sagt woertlich: die vier vorhandenen Stufen beschreiben FORTSCHRITT,
+  die drei fehlenden beschreiben GUELTIGKEIT, das sind zwei Achsen und keine laengere Liste. Damit
+  ist die Frage beantwortet, die ich in W-38s Blatt als offenen Anschluss hinterlassen habe — ob
+  W-40 ein zweites Statussystem einfuehrt und damit eine zweite Wahrheit. Es sind zwei ACHSEN: ein
+  Schritt kann ok sein, also gerechnet und fertig, und trotzdem nicht confirmed, also nicht vom
+  Nutzer bestaetigt. Ohne diese Unterscheidung baut jemand die drei Stufen in SchrittStatus hinein."
+was_jede_stufe_leistet: "confirmed trennt gerechnet von bestaetigt und traegt L-9, also PV erst nach
+  BESTAETIGTER Dachgeometrie — solange die Stufe fehlt, gilt die Regel und ist nicht pruefbar.
+  outdated ist die Invalidierung und damit der Anschluss an W-41. blocked ist die Sperre, und die
+  Quelle beziffert sie nicht weiter."
+eine_zahlenluecke_die_ich_nicht_glaette: "Das Zielbild fuehrt ACHT Stufen, vorhanden sind VIER,
+  als fehlend genannt sind DREI. 4 plus 3 ist 7 und nicht 8. Die achte ist review-required, in der
+  Tabelle mit einem Strich markiert statt mit fehlt, und in der Einordnung nicht mitgezaehlt.
+  Entweder gehoert sie nicht zur Gueltigkeitsachse oder die Zahl drei ist zu niedrig. Kriterium
+  W-40-3 verlangt, die Frage zu STELLEN und nicht zu beantworten — sie gehoert Yama."
+W_40_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+```
+
+```yaml
+auftrag: "W-41"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "Aenderungen propagieren, niemals stille Loeschung"
+basis_sha: c9ac316d
+spur: A
+prioritaet: P1
+dor_beleg: "steht aus — plan-pruefer."
+freigabe: "Yama 12.08., dieselbe Freigabe wie W-40 und W-42."
+der_kern_ist_das_VERBOT: "Propagieren allein ist gewoehnliche Technik. Die Leistung ist die Zusage,
+  dass bei einer Invalidierung nichts STILL verschwindet — ein abgeleiteter Wert darf seinen ZUSTAND
+  aendern und nicht seinen INHALT verlieren. Damit ist W-41 dieselbe Bauart wie W-20, W-34 und W-38:
+  eine Ehrlichkeitskonstruktion. Wer es als Invalidierungs-Cache beschreibt, verfehlt den Zweck."
+grenze_zu_W_40: "W-40 sagt DASS es outdated gibt und was der Zustand bedeutet. W-41 sagt WANN er
+  eintritt, WORAUF er sich fortsetzt und WAS dabei erhalten bleibt. Ohne diese Grenze schreiben
+  beide Blaetter dieselbe Sache zweimal, und dann gilt der Befund aus A-20: zwei Orte fuer eine
+  Wahrheit, die unabhaengig veralten. W-41 definiert outdated NICHT neu, es verweist."
+die_ehrlichste_aussage: "Die Quelle fuehrt den Abhaengigkeitsgraphen ausdruecklich unter NICHT
+  GEMESSEN, neben den Inhalten der elf Schritte, dem Fortschritt je Geschoss und dem
+  ConfigWizard-Test. W-41 ist damit die duennste der drei Vorgaben: es gibt den Satz aus dem
+  Register, es gibt outdated als Anschluss, und es gibt KEINE erhobene Abhaengigkeitsstruktur.
+  Kriterium W-41-3 verlangt, dass das Blatt diese Lage benennt, und W-41-4 verlangt die
+  Anschlussliste als FRAGE — welche Groesse haengt an welcher. Kandidaten wie Geometrie zu Flaechen
+  zu PV-Belegung zu Stueckliste sind im Bestand messbar, aber NICHT gemessen; eine erfundene
+  Struktur waere der schwerere Fehler als eine kurze Liste."
+W_41_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+```
+
+```yaml
+auftrag: "W-42"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "Der Schreibpfad ist gebaut, und zwei Quellen sagen das Gegenteil"
+basis_sha: c9ac316d
+spur: A
+prioritaet: P1
+dor_beleg: "steht aus — plan-pruefer."
+ABWEICHUNG_VON_YAMAS_FREIGABE_GEMELDET: "Yama hat alle drei als VORGABE mit Ziel ENTWORFEN
+  freigegeben. Fuer W-40 und W-41 trifft das zu. Fuer W-42 NICHT: der Code existiert, und die
+  Legende des Registers reserviert ENTWORFEN ausdruecklich fuer Werkzeuge, deren Code noch nicht
+  existiert. Ein Vorgabe-Blatt haette vorgegeben was schon gebaut ist, und die naechste Rolle haette
+  einen ZWEITEN Schreibpfad angelegt. Deshalb Ziel BESCHRIEBEN. Die Abweichung ist gemeldet und
+  nicht still vollzogen — will Yama es anders, gilt seine Fassung."
+der_befund_gemessen_und_jede_stelle_geoeffnet: "app/ConfigWizard.tsx holt in Zeile 171 den Store per
+  useHausplanerStore.getState() und schreibt an DREI Stellen: Zeile 184 einen radiator als
+  ObjectNode, Zeile 205 eine treppe als ObjectNode mit objectType stair, Zeile 226 einen knoten als
+  OpeningNode mit type window oder door je nach art. Das sind VIER Bauteilarten, nicht drei, weil
+  die dritte Stelle Fenster UND Tuer ueber einen Ausdruck abdeckt. Die Meldungen sagen es selbst:
+  Heizkoerper ins Modell gesetzt, Treppe ins Modell gesetzt, auf die gewaehlte Wand gesetzt."
+zwei_ueberholte_quellen_und_eine_ursache: "Der eigene Dateikopf in Zeile 5 bis 6 sagt, der
+  Schreibpfad ins Gebaeudemodell bleibe die naechste Scheibe. Der Bericht
+  BERICHT-PROZESSEBENE-DREI-FRAGEN.md sagt, der ConfigWizard schreibe NICHTS ins BuildingDocument.
+  BEIDE messen die falsche Schreibweise: BuildingDocument kommt in der Datei NULL Mal vor, der Pfad
+  heisst executeCommand mit ADD_NODE und die Knoten sind SceneNode, ObjectNode, OpeningNode. Das ist
+  H-9, derselbe Fehler der heute dreimal an einem einzigen Feldnamen passiert ist. Der Dateikopf ist
+  ueberholt und nicht falsch gemeint — die Scheibe ist gebaut, der Kommentar wurde nicht nachgezogen.
+  Ein ueberholter Kommentar an der Quelle ist gefaehrlicher als eine Luecke: er sieht wie eine
+  Aussage ueber den Bestand aus. Kriterium W-42-2 verlangt, beide Stellen zu benennen — nicht sie zu
+  korrigieren, denn ein Blatt beschreibt und berichtigt keine Kommentare."
+was_wirklich_offen_ist: "Zwei Wege sind gebaut, standalone mit JSON-Download und der Weg ins
+  Gebaeude. Ungemessen bleibt: was passiert wenn executeCommand fehlschlaegt und ob etwas
+  zurueckgerollt wird; ob das ConfiguratorPackage und der ADD_NODE-Weg DASSELBE Bauteil ergeben,
+  also die Frage nach einer zweiten Wahrheit; und der ConfigWizard-Test, den die Quelle unter NICHT
+  GEMESSEN fuehrt. Alle drei stehen als GRENZE im Blatt und werden nicht beantwortet."
+was_das_fuer_yamas_liste_bedeutet: "Eine der sechs Luecken aus Abschnitt 7 der Vorlage ist keine.
+  Der Wizard schreibt Fenster, Tuer, Treppe und Heizkoerper ins Modell. Die Aussage im Bericht
+  stammt aus einer Messung auf BuildingDocument, und dieses Wort kommt in der Datei nicht vor."
+W_42_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
