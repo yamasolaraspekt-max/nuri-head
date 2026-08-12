@@ -375,3 +375,51 @@ diese Nachsicht nicht** (gemessen 0–3 Zeilen), das Werkzeug wäre nur beim nä
 gegen eine Datenbank.
 
 **Weiter an den Generator**, Umfang **genau dieser eine Befund** (§12.2: keine Nebenreparaturen).
+
+---
+
+## 6 — Votum des Evaluators, RUNDE 2 (§11, Wiederabnahme nach §12.4)
+
+**ABGENOMMEN.** Nachbesserung `9d800094`, Elter `cd5feafb`. Prüfstand mit `node_modules` und
+`vendor`.
+
+**Zum maßgeblichen Commit, weil der plan-pruefer ihn in `24a122e9` zu Recht angemahnt hat:**
+`bau_sha` steht unverändert auf `3ad920b1`, dem Stand **vor** der Korrektur. Ich habe an
+`9d800094` gemessen und das Feld `pruef_sha` beim Claim gesetzt. Seine Folgerung, ein Evaluator
+würde deshalb „zu Recht rot melden", trifft allerdings nur, wenn der Evaluator dem Feld glaubt —
+der Takt schreibt den **Scope-Diff der Bau-Commits** vor, nicht das Feld. Bei A-25 und A-26 hat die
+Lücke aus demselben Grund nicht gegriffen.
+
+**§12.2 — der Umfang ist der Befund, nichts sonst.** Gemessen: **eine Datei, eine Zeile, ein Wort.**
+
+```text
+git show 9d800094 -- resources/
+  -  // … liegt hinter Yamas Entscheidung. Die Zulieferung
+  +  // … liegt hinter Yamas Freigabe. Die Zulieferung
+```
+
+| Kriterium | Runde 2 | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **Der Befund aus Runde 1** | **behoben** | Alle Zitate gegen den Elter `4e590f74` geprüft: **6 von 6 wörtlich** (Runde 1: 5 von 6) |
+| **A-23-1** (TRAGEND) | **grün** | md5 des Rumpfs ohne Kommentare `c8e514e0d2ae399ffa8b4fa1baae0114` — **identisch mit Runde 1**, die Reparatur steht in einem `//`-Kommentar und rührt die Zusage nicht an. Testzahl der Datei **9** |
+| **A-23-2** | **grün** | `a23-sieben-stellen.mjs`: **7 von 7** belegt |
+| **A-23-3** | **grün** | Die drei übrigen Dateien (`StartView.tsx`, `studioDaten.ts`, `konfiguratorEhrlich.test.ts`) sind **md5-identisch mit `3ad920b1`** — die in Runde 1 einzeln geöffneten Fundstellen gelten unverändert. Belegt statt angenommen |
+| **A-23-4** | **grün** | dito |
+| **A-23-5** | **grün** | `gefuehrteEhrlich` **gefahren**: 8 tests, 8 pass, 0 fail |
+| **A-23-5b** | **grün** | Insel-Suite **1718/1718**, unverändert gegenüber Runde 1 |
+| **A-23-6** | **grün** | Fangprobe erneut gefahren, Anker genau 1×: Marke entfernt → **6 von 7**, `[überholt NEIN]`; md5 zurückgesetzt, identisch |
+
+**Zur Präzisierung des Kriteriums in `cd5feafb`.** Der Planner hat die Unschärfe als seine benannt
+und den Befund unabhängig bestätigt: gesperrt ist das **Partizip** `'Frei'+'gegeben'`, und nur in
+`studioDaten.ts` und `GuidedView.tsx`; „Freigabe" als Substantiv ist nie gesperrt gewesen. Der Bau
+hatte vorsorglich geändert, wo nichts zu befürchten war. **Seine Zahl selbst nachgezählt:** 15
+Dateien mit „Freigabe" — gemessen an `cd5feafb` **15**, an `9d800094` **16**. Die Differenz ist die
+wiederhergestellte Stelle selbst; seine Zahl war zu ihrem Zeitpunkt richtig. *(Nebenbei gemessen,
+außerhalb des Scopes: das gesperrte Partizip steht in zwei Dateien, die `gefuehrteEhrlich` nicht
+liest — `herkunftUndFreigabe.test.ts` und `geometry/freigabe.ts`. Kein A-23-Gegenstand, aber es
+gehört dem Planner, falls die Sperre mehr abdecken soll als zwei Dateien.)*
+
+**Kein eigener Messfehler in dieser Runde** — die Messungen waren die aus Runde 1, an einem neuen
+Stand wiederholt.
+
+**Weiter an den Release-Prüfer.**
