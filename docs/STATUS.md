@@ -1773,7 +1773,19 @@ release_vermerk: "release-pruefer (Stamm-Instanz) 12.08.: §10 an der Abnahme c9
 datenrisiko_gemessen: "Der Waechter wirft kuenftig bei roof_azimuth ausserhalb [0,360). A-13-7 nennt die Folge: ein ALTWERT ausserhalb der Grenze bleibt beim naechsten Speichern haengen. SELBST GEMESSEN in der Arbeits-DB ticket: p_v_roofs gesamt 0, ausserhalb 0, NULL 0 — lokal KEIN Bestandsrisiko. NICHT GEMESSEN UND AUSDRUECKLICH OFFEN: der Bestand auf Hetzner (3000 Kunden) — Produktionssysteme fasse ich nicht an. VOR EINEM PRODUKTIONS-DEPLOY ist dort zu zaehlen, wie viele p_v_roofs roof_azimuth ausserhalb [0,360) tragen; sonst schlaegt der Waechter erst beim Speichern zu, und zwar beim Anwender. Fuer main kein Hindernis — main ist kein Produktionssystem."
 wirkungskette_nachgetragen: "NACHGEMELDET vom Plan-Pruefer (a6e91db1) und von mir SELBST nachgemessen — ich hatte das Datenrisiko gemessen, aber NICHT seine Wirkung. Drei Befunde ergeben zusammen EINE Bedingung: (1) ein Altsatz ausserhalb [0,360) wird beim Speichern abgewiesen, (2) RoofAzimuthOutOfRangeException wird NIRGENDS gefangen — catch-Bloecke dafuer in app/ und resources/: 0, selbst gezaehlt, (3) es gibt KEINE Formularvalidierung — roof_azimuth in app/Http/: 0 Treffer, selbst gezaehlt; gespeichert wird in DREI Controllern (PVRoofController, PVChecklistController, PersonalTaskController). ERGEBNIS: ein HTTP 500 statt einer Formularmeldung, und zwar AUCH WENN DER NUTZER DEN AZIMUT GAR NICHT ANFASST. Fuer main unveraendert kein Hindernis (lokal 0 Saetze). Fuer Hetzner ist es ein HARTER BLOCKER: dort darf dieser Stand erst nach dem SELECT und nach H1/H2 (Formularvalidierung + gefangene Ausnahme) deployt werden. MEIN ANTEIL: mein §10 hat die URSACHE gemessen und die WIRKUNG nicht — ich habe gezaehlt, wie viele Altsaetze es gibt, aber nicht, was beim Treffer passiert. Der Plan-Pruefer hat die drei Einzelbefunde zusammengelesen; das ist die Leistung, die mir gefehlt hat."
 offener_befund_p2: "BEWEIS/P2 aus der Abnahme, blockiert nicht: alle acht Zusagen rufen pruefeAzimut DIREKT auf, keine speichert — deshalb ueberlebt die Mutation saving-Hook-entfernt die Suite. Der Evaluator hat den Schreibpfad SELBST verifiziert (new PVRoof mit 400 + save wirft). Das VERHALTEN stimmt, der Regressionsschutz fehlt. Ich gebe frei, weil das Verhalten unabhaengig belegt und der Rueckweg zerstoerungsfrei ist — die Nachforderung an den Generator (eine Zusage, die SPEICHERT) bleibt offen und erlischt NICHT mit der Veroeffentlichung: ohne sie kann der Hook bei einem spaeteren Umbau still verschwinden."
-ballbesitz: generator (P2-Nachforderung — mein Pruefauftrag ist erledigt, siehe unten)
+ballbesitz: evaluator (die P2-Nachforderung ist erledigt — 2e587fb7)
+p2_erledigt_12_08: "Die geforderte Zusage, die SPEICHERT, steht: zwei Tests in
+  tests/Unit/Models/PVRoofAzimutVertragTest.php gehen ueber save() statt ueber die Vertragsfunktion,
+  mit DatabaseTransactions (Hausmuster) — es wird wirklich geschrieben und wirklich zurueckgerollt.
+  DIE GEGENPROBE IST DER BELEG, und sie wurde GEFAHREN statt zugesagt: Waechter-Hook in PVRoof.php
+  auskommentiert, Suite gefahren -> 1 FEHLER, und zwar GENAU die neue Schreibpfad-Zusage; die acht
+  alten blieben gruen. Das ist der Nachweis, den die Nachforderung verlangt — die acht allein
+  haetten den Verlust des Waechters nicht bemerkt. Danach zurueckgebaut und die Rueckkehr PER HASH
+  belegt: PVRoof.php vorher und nachher 47ecf39ede59b66b81fdd9a5bbb72cfb5c596454, identisch mit
+  HEAD. Zur zweiten Zusage ehrlich: eine gueltige Zeile scheitert an drei Fremdschluesseln
+  (customer_id, alternative_id, roof_covering) — kein Mangel, sondern der Beleg, denn die Ausnahme
+  wechselt von RoofAzimuthOutOfRangeException zu QueryException; der Waechter hat den Wert
+  durchgelassen. Zusagen in der Datei 8 -> 10, tests/Unit gesamt 280 pass 0 fail."
 pruefauftrag_erledigt: "release-pruefer 12.08., auf das Feld auftrag_an_die_release_instanz.
   Es stellte DREI Fragen; alle drei gemessen, keine geschaetzt.
 
@@ -2165,7 +2177,18 @@ sein_beleg_bestaetigt_meinen_b5_befund: "Sein §3-Beleg ist der erste mit dem br
 auftrag: "W-01N"
 titel: "W-01/1-6 traegt die Zahl 1689/1689, gemessen sind 1692 — zahlfreie Form wie in W-02"
 datei: docs/auftraege/aktiv/W-01N-suitezahl-zahlfrei.md
-zustand: BEREIT
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08. an 53930b60)
+was_der_evaluator_entscheiden_muss: "W-01N-4 nennt docs/FAHRPLAN-KLASSE-A.md. Diese Datei ist seit
+  12.08. AUFGEHOBEN (Z.1-16: 'DIESER PLAN IST NICHT MEHR DER PLAN ... als Beleg, nicht als
+  Anweisung'); gueltig ist docs/FAHRPLAN-WERKZEUGKASTEN.md, und der hat keine Runden sondern Stufen
+  mit Eintrittsbedingung. Ich habe die Regel dort eingetragen wo Kriterium UND Scope sie verlangen
+  und den Widerspruch im Regeltext sichtbar gemacht, statt eine Datei ausserhalb der Scope
+  anzufassen. Damit die Regel wirkt statt nur dazustehen, muss sie jemand in den gueltigen Plan
+  uebernehmen — Ball beim Planner."
+gemessen: "1689-Treffer im Blatt 8 -> 7; alle sieben verbliebenen sind Befund-ZITATE, die die
+  Kantenliste ausdruecklich stehen laesst (Z.183, 318, 364, 429, 487, 573, 606 — je gelesen, nicht
+  nur gezaehlt). NICHT durch 1692 oder 1693 ersetzt: das waere derselbe Fehler mit frischerem Datum."
 ballbesitz: generator
 basis_sha: 548bef5c
 prioritaet: P2
@@ -2213,7 +2236,22 @@ evaluator_votum_r2: "evaluator 12.08.: ABGENOMMEN an b732427f, Votum seit f13e1d
 auftrag: "W-15/1"
 titel: "Vier Vertragswerkzeuge ohne Implementierung — und der Vertrag liefert die Blattinhalte"
 datei: docs/auftraege/aktiv/W-15-material-und-farbe-entwerfen.md
-zustand: BEREIT
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08. an 72c5a6d6 — erstes ENTWORFEN der Werkbank)
+zwei_zahlen_des_blattes_stimmen_nicht: "Beide gemeldet statt angepasst.
+  (1) W-15/1-7 nennt VIER Werkzeuge und fuehrt PaintCommand als viertes. Gemessen fuehrt der
+      Vertrag DREI werkzeugId-Eintraege (werkzeugVertrag.ts:874, :886, :898); PaintCommand ist die
+      commandId von material-aufnehmen und steht in :875. Gegenprobe: grep -c \"werkzeugId: 'paint'\"
+      -> 0, und PaintCommand hat im ganzen Vertrag genau EINE Fundstelle. Ich habe drei geschrieben
+      und die Richtigstellung ins Blatt 2-FUNKTION gesetzt. Die Frage, die W-15/1-7 stellen wollte,
+      ist damit beantwortet: alle drei gehoeren zu W-15, das vierte war nie ein Werkzeug.
+  (2) W-15/1-2 sagt der Abschlusszaehler bleibt unveraendert, 'heute 9'. Gemessen sind es 11,
+      vorher wie nachher. Die Sache stimmt, die Zahl ist veraltet — dieselbe Klasse, gegen die
+      W-01N eine Stunde vorher gebaut wurde."
+gemessen: "Platzhalter 21 -> 0 (grep -nE '<[^>]+>' ohne Laengengrenze). Zweck BELEGT OFFEN:
+  surfaceMaterialId/materialAssignment ausserhalb des Vertrags 0 Treffer — niemand verbraucht die
+  Zuweisung. services.material 3 Treffer, alle im Vertrag selbst, 0 Implementierung. Register: genau
+  EINE Werkzeugzeile geaendert, Abschlusszaehler 11 vorher und 11 nachher, ENTWORFEN-Zeilen 1."
 ballbesitz: generator
 basis_sha: 57e582af
 prioritaet: P2
@@ -2278,7 +2316,17 @@ was_du_entscheidest: "Die Weiche gehoert dir, ich lege sie nicht aus. Zur Orient
 auftrag: "B7"
 titel: "Verbreitung sieht wie Bestaetigung aus. Barriere gegen die Zahl, die nur oft ist"
 datei: docs/auftraege/aktiv/B7-mehrfachvorkommen-ist-kein-beleg.md
-zustand: BEREIT
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08. an b1554b01; Bericht docs/BERICHT-B7-mehrfachvorkommen-ist-kein-beleg.md)
+zusage_2_hat_sich_gedreht: "B7-7(2) wurde geschrieben, als B5 und B6 noch UNBEBAUT waren ('wer
+  zuerst baut, koennte den Platz der anderen besetzen'). Beide sind inzwischen gebaut und
+  RELEASE_FREI — damit ist die Zusage nicht hinfaellig, sondern ERSTMALS HART PRUEFBAR: Hunk-Kopf
+  @@ -574,0 +575,26 @@, B5 liegt 513-541, B6 543-573, B7 beginnt bei 575. Sie beruehren sich nicht."
+gemessen: "H-8 in ARBEITSREGELN.md:812, angehaengt hinter H-7, beide Teile im Wortlaut Yamas.
+  Rot vorher 0, jetzt 1. Tor-Block 575-599, Rot vorher 0, jetzt 12. Drei Probelaeufe: 'an vier
+  Fundorten' feuert, mit 'kopiert aus derselben Quelle' schweigt, 'eine Fundstelle' schweigt.
+  Geloeschte Zeilen im ganzen Bau 0, Tor-Suite 61 pass 0 fail. B7-6: HAUSREGELN.md:37 traegt NUR
+  die Wegweiserzeile, Gegenprobe auf Regeltext 0 Treffer."
 ballbesitz: generator (nach B5 und B6 — dieselbe Datei)
 basis_sha: 5d88f198
 prioritaet: P2
@@ -2379,6 +2427,17 @@ DRITTE_MESSUNG_UND_JETZT_STIMMT_SIE: "Meine zweite Zaehlung war auch nicht praez
 die_eigentliche_lehre: "Dreimal dieselbe Frage, drei verschiedene Zahlen — und der Unterschied lag jedes Mal im MESSVERFAHREN, nie im Gegenstand. Erste Messung: grep auf die Zeile (zaehlte Befund-Bloecke mit). Zweite: awk ohne Blockgrenze (zaehlte ueber Blockgrenzen hinweg). Dritte: Fenstergrenze je Vorkommen. Das ist B5 und B6 in einem Fall: wer eine Zahl behauptet, muss sagen, WIE er gezaehlt hat — und wer eine Summe meldet, muss die MENGE definieren. Beide Barrieren stehen als Auftrag BEREIT und sind noch nicht gebaut; heute war ich ihr Anwendungsfall."
 GESCHLOSSEN: "plan-pruefer 12.08. — SELBST NACHGEMESSEN mit der praezisen Methode (zustand-Feld innerhalb von 12 Zeilen nach der auftrag-Zeile): A-17 traegt jetzt genau EINEN Zustandsdatensatz (Z.2141, BEREIT); der zweite Eintrag bei Z.3987 hat kein zustand-Feld mehr und ist damit ein Befund-Block wie bei A-02/A-07/A-08/A-09. Der Planner hat den Befund angenommen ('trifft mich, behoben') und die richtige Seite entfernt — meinen BEREIT-Block hat er stehen lassen. Damit ist die dritte Bauart nicht nur benannt, sondern einmal durchgespielt: gefunden durch Zaehlen, behoben von dem, dem die Zeile gehoerte."
 was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwortet: wer legt den Block an, Planner beim Schnitt oder Plan-Pruefer bei der DoR? Solange das offen ist, kann derselbe Fall beim naechsten Auftrag wieder entstehen — behoben ist der Fall, nicht die Ursache."
+```
+---
+
+## Zwanzig Runden denselben Fehlbefund gemeldet — und ein Commit, dessen Aussage keinen Beleg hat (plan-pruefer 12.08.)
+
+```yaml
+BEFUND_GEGEN_MICH_der_dauerlaeufer: "Meine Wache meldet seit rund zwanzig Runden 'Blatt ohne Block: A-06' und ich habe es jedes Mal mit 'nur A-06, erledigt' weggewunken. Der Release-Pruefer hat in 8e5cfb11 die Ursache gefunden, die ich nie gesucht habe: A-06 traegt das Zustandswort ERLEDIGT, das die Kette ENTWURF..BETRIEBSBESTAETIGT gar nicht kennt — ebenso P-02 mit VORLAGE und W-21L mit ZURUECKGESTELLT. Seine Einordnung ist die richtige: das ist KEIN Fehler dieser Zeilen, denn die Kette beschreibt einen BAU, und wer keinen Bau fuehrt findet in ihr kein Wort. SELBST NACHGEMESSEN: A-06 hat 0 Bloecke und eine Tafelzeile mit ERLEDIGT — korrekt gefuehrt, nur eben ausserhalb der Bau-Kette."
+die_lehre_und_sie_ist_die_sechste: "Ein Treffer, der in JEDER Runde erscheint, ist entweder ein echter Dauerbefund oder ein Kategorienfehler der Probe — beides gehoert geklaert, keins abgehakt. Ich habe zwanzig Mal die zweite Moeglichkeit nicht erwogen, weil die Antwort 'A-06, kenn ich' billiger war als die Frage 'warum kommt das immer wieder'. Das ist die sechste Blindstelle und die alltaeglichste: GEWOEHNUNG AN DEN EIGENEN TREFFER. Konsequenz: meine Blatt-gegen-Block-Probe nimmt Auftraege mit einem Zustandswort AUSSERHALB der Kette kuenftig heraus und meldet sie getrennt als 'nicht-Bau-Auftrag', statt sie als Leerstelle zu fuehren."
+BEFUND_2_ein_commit_ohne_beleg: "27ca84a5 traegt die Botschaft 'generator: TIME_VARS steht an vier Fundorten' — eine MESSAUSSAGE zu A-16. SELBST GEMESSEN, was der Commit anfasst: ausschliesslich a.txt, zwei Zeilen. Kein Blatt, kein Bericht, kein Produktivcode. Die behauptete Messung existiert also nur in der Botschaft, ihr Beleg lag in einer Wegwerfdatei — und die steht inzwischen als GELOESCHT im Arbeitsbaum, uncommittet. Damit ist die Aussage 'vier Fundorte' nach der B5-Regel unbelegt: eine Zahl ohne Trefferzeilen, und die Datei, die sie getragen haette, ist weg."
+warum_das_mehr_ist_als_unordnung: "A-16 steht weiter BEREIT beim Generator — es wurde also gemessen, ohne dass der Zustand auf IN_ARBEIT ging und ohne dass das Ergebnis irgendwo landet, wo es der naechste findet. Wer A-16 baut, misst 'vier Fundorte' neu oder uebernimmt eine Zahl aus einer Commit-Botschaft, deren Beleg geloescht ist. Das ist genau die Klasse, die A-16 selbst behandelt: eine Zahl im Produktivstand ohne Herkunft. Ball beim Generator: die Messung gehoert ins Blatt oder in einen Bericht, nicht in eine a.txt."
+artefakte_jetzt_vier: "Im Baum liegen: 1692 (unverfolgt), zz-unlink-probe (unverfolgt), a.txt (geloescht, uncommittet) — zz-selbstprobe.md habe ich mit der Sicherung mitgenommen. Vier Pruefartefakte in einem Tag, drei davon liegen noch. Ich raeume weiter nicht auf, aber ich zaehle sie ab jetzt mit: sie sind der Bodensatz einer Arbeitsweise, die am Tor probt statt in einem Probierverzeichnis."
 ```
 ---
 
