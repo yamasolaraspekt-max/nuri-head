@@ -43,7 +43,7 @@
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c89e9096` | **neun Belege an einem Tag, vier Rollen**: ein Prüfmuster setzt am TEXT an statt am GEGENSTAND · H-9 im Wortlaut des Generators (»misst die Schreibweise und nicht die Sache«) plus die dreifach erprobte Kontrollprobe · **KEINE achte Barriere** (B5/B6/B7 in derselben Datei, dreimal »wird weggeklickt« gemeldet) · zweiter Teil: `ARBEITSREGELN.md:103` — `.*IN_ARBEIT` reicht über alle Spalten, die B7-Zeile (ABGENOMMEN) wird als laufend gezählt · **der Fehler ist meiner**: linke Seite erweitert, rechte nicht angesehen |
-| **W-23** Deckung und Material | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
+| **W-23** Deckung und Material | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -2596,6 +2596,19 @@ DRITTE_MESSUNG_UND_JETZT_STIMMT_SIE: "Meine zweite Zaehlung war auch nicht praez
 die_eigentliche_lehre: "Dreimal dieselbe Frage, drei verschiedene Zahlen — und der Unterschied lag jedes Mal im MESSVERFAHREN, nie im Gegenstand. Erste Messung: grep auf die Zeile (zaehlte Befund-Bloecke mit). Zweite: awk ohne Blockgrenze (zaehlte ueber Blockgrenzen hinweg). Dritte: Fenstergrenze je Vorkommen. Das ist B5 und B6 in einem Fall: wer eine Zahl behauptet, muss sagen, WIE er gezaehlt hat — und wer eine Summe meldet, muss die MENGE definieren. Beide Barrieren stehen als Auftrag BEREIT und sind noch nicht gebaut; heute war ich ihr Anwendungsfall."
 GESCHLOSSEN: "plan-pruefer 12.08. — SELBST NACHGEMESSEN mit der praezisen Methode (zustand-Feld innerhalb von 12 Zeilen nach der auftrag-Zeile): A-17 traegt jetzt genau EINEN Zustandsdatensatz (Z.2141, BEREIT); der zweite Eintrag bei Z.3987 hat kein zustand-Feld mehr und ist damit ein Befund-Block wie bei A-02/A-07/A-08/A-09. Der Planner hat den Befund angenommen ('trifft mich, behoben') und die richtige Seite entfernt — meinen BEREIT-Block hat er stehen lassen. Damit ist die dritte Bauart nicht nur benannt, sondern einmal durchgespielt: gefunden durch Zaehlen, behoben von dem, dem die Zeile gehoerte."
 was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwortet: wer legt den Block an, Planner beim Schnitt oder Plan-Pruefer bei der DoR? Solange das offen ist, kann derselbe Fall beim naechsten Auftrag wieder entstehen — behoben ist der Fall, nicht die Ursache."
+```
+---
+
+## W-23 DoR bestanden + das berichtigte §3-Muster selbst dreifach geprueft (plan-pruefer 12.08.)
+
+```yaml
+das_neue_muster_selbst_gegengeprobt: "A-19 ist gebaut, die Schranke misst jetzt die SPALTE statt die Zeile. Ich habe die dreifache Gegenprobe SELBST gefahren, nicht die Meldung geglaubt: (a) heute 0 Treffer — die zwei Fehlalarme B7 und A-19 sind weg; (b) gegen den Stand VOR dem Bau: 1 Treffer, das Muster findet eine echte IN_ARBEIT-Zeile also weiterhin; (c) Zustandsfelder 0, deckungsgleich mit (a). Zusaetzlich an zwei konstruierten Zeilen geprobt — eine echte und eine, die IN_ARBEIT nur im Fliesstext nennt: genau EIN Treffer. Leiser, nicht stumm. MEIN WACHE-BEFEHL IST NACHGEZOGEN, wie angekuendigt."
+W23_1_ZUSTAND: "Rot-Lage: W-21L steht seit Tagen am OPERANDEN-GATE und wartet auf genau diese Ziegeltabelle. W-23 liefert sie. Der Auftrag entsperrt damit einen Posten, der auch bei Yama lag."
+W23_2_ZIEL_und_hier_lag_das_risiko: "Die Quelle liegt AUSSERHALB des Repos: eine Excel-Datei auf Yamas Desktop. Genau die Pruefung, die mir bei B5 gefehlt hat — SELBST NACHGESEHEN: die Datei existiert, 718.574 Byte, exakt die Zahl aus dem Blatt, zeichengenau. HINWEIS ZUM RISIKO: eine externe Quelle kann verschwinden, ohne dass es im Repo auffaellt; der Bau sollte die uebernommenen Werte deshalb so ablegen, dass sie ohne die Datei nachvollziehbar bleiben — das verlangt W-23-5 ohnehin (kein Wert ohne Datenstatus und Quelle_1_URL)."
+W23_3_BEWEISKRAFT_der_heikelste_punkt_sauber_geloest: "Der Auftrag traegt eine FACHREGEL, die Yama noch nicht bestaetigt hat — die Lattmass-Rechnung. Ein Blatt, das sie einfach eintraegt, wuerde eine unbestaetigte Fachaussage festschreiben, und CLAUDE.md verbietet genau das. W-23-2 loest es vorbildlich: die Rechnung kommt ins Blatt ALS VORSCHLAG mit dem Vermerk 'vorgeschlagen, nicht entschieden' und Yamas Fachaussage WOERTLICH als Grundlage. Sein Satz: 'Ohne diesen Vermerk waere es eine erfundene Fachregel; mit ihm ist es eine Ableitung aus seinem Satz.' Dazu W-23-3, das die Fuellquote UNGESCHOENT verlangt (9 von 127 Zeilen, alle sieben Modelle von EINEM Hersteller) samt der Folge 'das Werkzeug kann fuer andere Modelle NICHTS sagen' — und das Nicht-Ziel, das die 118 leeren Zeilen ausdruecklich schuetzt: 'wer fehlende Werte ergaenzt, erfindet sie'."
+W23_4_GANZER_GEGENSTAND: "Zweigprobe und Baumprobe vor dem Schreiben gefahren; der Baum war beim ersten Blick belegt und beim zweiten frei — die fremde Arbeit war inzwischen committet."
+AN_YAMA_kein_blocker_aber_eine_offene_bestaetigung: "Die Lattmass-Rechnung braucht Yamas Bestaetigung, BEVOR sie als Formel (Vorschlag F-053) eingetragen wird. Sie blockiert W-23 NICHT: dieser Auftrag beschreibt das Werkzeug und kennzeichnet die Rechnung als unbestaetigt. Erst der Schritt danach braucht sein Ja."
+ergebnis: "W-23 BEREIT beim Generator, an beiden Orten gesetzt. §3 mit dem BERICHTIGTEN Muster gemessen: Tafel 0, Zustandsfelder 0 — frei."
 ```
 ---
 
@@ -5910,8 +5923,8 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-19 GECLAIMT vor dem Pr
 ```yaml
 auftrag: "W-23"
 datei: docs/auftraege/aktiv/W-23-deckung-und-material.md
-zustand: ENTWURF
-ballbesitz: "plan-pruefer (DoR)"
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: e9f370f1
 anlass: "Yamas Freigabe 12.08. ('bedien dich nach Hersteller Typ Format') und unmittelbar danach
          seine Fachaussage: 'die eindecklattung ist abhaengig von dach neigung und dach maße und
