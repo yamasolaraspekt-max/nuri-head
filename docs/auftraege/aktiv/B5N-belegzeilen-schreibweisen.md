@@ -39,7 +39,25 @@ Z.NNN-NNN                 4 Vorkommen   z.B. Z.217-268                fällt dur
 :NNN:                     1 Vorkommen   z.B. :2076:                   ERKANNT
 ```
 
-> **Zwanzig Vorkommen in vierzig Botschaften fallen durch.** *Das ist keine Randform: `Z.` ist die
+**PRÄZISIERT 12.08. — der Generator hat die richtigere Metrik geliefert (`53930b60`), selbst
+nachgemessen und zeichengleich bestätigt:**
+
+```text
+Botschaften (nicht Vorkommen) mit Z.NNN in den letzten 40   ->  9
+davon OHNE zusaetzlich eine ERKANNTE Form                   ->  7   <- zu Unrecht gewarnt
+```
+
+> **Meine Zahl „20 von 40 fallen durch" war die falsche Größe.** *Sie zählte **Vorkommen**, und eine
+> Botschaft, die `Z.217` **und** `datei.ts:44` trägt, wird gar nicht gewarnt — die Barriere prüft pro
+> Botschaft, nicht pro Fundstelle. **Richtig ist: sieben Botschaften mit gelesenen Trefferzeilen
+> wären zu Unrecht gewarnt worden.** Die Zahl ist kleiner und der Befund dadurch belastbarer: er
+> steht jetzt auf der Größe, die die Barriere tatsächlich misst.*
+
+**Und es ist seine eigene Barriere** — sein Satz dazu: *„Das ist mein Muster und mein Fehler, und es
+ist die gefährliche Richtung: eine Barriere, die falsch anschlägt, wird abgeschaltet — genau die
+A-03-Lehre, die ich selbst in den Kommentar geschrieben habe."*
+
+> **Sieben von neun Botschaften mit dieser Schreibweise fallen durch.** *Das ist keine Randform: `Z.` ist die
 > gängige Schreibweise, wenn die Datei im Satz vorher genannt wurde — „`STATUS.md`, Z.217-268" ist
 > **präziser** als eine Wiederholung des Dateinamens, und sie wird bestraft.*
 

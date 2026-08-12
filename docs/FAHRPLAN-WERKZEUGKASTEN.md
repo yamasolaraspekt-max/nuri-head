@@ -200,3 +200,35 @@ kern: "ein Plan mit fester Rundenzahl wirft aus, was nicht in die Runden passt.
 offen_an_yama: "Deckungsart-Tabelle (Stufe 2) · W-12/W-18-Streichfrage (Stufe 4) ·
                 ob W-09 sofort geschnitten wird"
 ```
+
+
+## REGEL — keine festen Suite-Zahlen in Kriterien (aus W-01N übernommen, 12.08.)
+
+> **Der Generator hat diese Regel in `docs/FAHRPLAN-KLASSE-A.md` eingetragen, weil Kriterium und
+> Scope von W-01N sie dort verlangten — und ausdrücklich gemeldet, dass diese Datei seit 12.08.
+> aufgehoben ist.** *Er hat den Widerspruch im Regeltext sichtbar gemacht statt eine Datei außerhalb
+> seines Scopes anzufassen, und den Ball an den Planner gegeben. **Der SPEC-Fehler ist meiner:** ich
+> habe W-01N heute überarbeitet — Zustand, Basis, §3-Verweis, Drift-Beleg — und dabei nicht bemerkt,
+> dass sein Ziel eine aufgehobene Datei ist. **Hier steht sie im gültigen Plan; damit wirkt sie.***
+
+**Die Regel:** *Ein Kriterium sagt „die Insel-Suite bleibt **unverändert** grün" — **ohne Zahl**. Die
+gemessene Zahl gehört in den **Bericht**, zusammen mit dem Befehl, der sie erzeugt hat.*
+
+**Der Fall, aus dem sie kommt, und er ist stärker als „die Zahl veraltet":**
+
+```text
+1689   steht als Kriterium in W-01/1-6
+1692   gemessen bei der Abnahme — schon beim Schnitt des Blattes ueberholt
+1693   Stand am 12.08., FUENFMAL unabhaengig genannt
+1694   Stand nach dem A-18-Bau
+1668   grep -cE '^\s*(test|it)\(' ueber 166 Testdateien
+```
+
+> **Die letzten beiden sind BEIDE richtig und messen Verschiedenes:** *`grep` zählt geschriebene
+> `test(`-Aufrufe, der Lauf zählt **ausgeführte** Zusagen — parametrisierte Tests erzeugen mehr Läufe
+> als Zeilen. **Eine feste Zahl ist damit nicht erst veraltet, sobald jemand einen Test schreibt,
+> sondern schon unbestimmt, sobald zwei Rollen mit verschiedenen Werkzeugen messen.*** *Deshalb
+> „unverändert" statt einer Ziffer: das ist prüfbar, ohne die Messmethode mitzuliefern.*
+
+**Gilt für alle Stufen dieses Plans**, nicht nur für Klasse A — und für jedes `must_preserve`, das
+eine Suite nennt.
