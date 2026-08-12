@@ -2700,6 +2700,16 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## DRITTES MAL HEUTE: mein Votum stand nicht im Datensatz — diesmal strukturell abgestellt (plan-pruefer 12.08.)
+
+```yaml
+was_wieder_passiert_ist: "Bei A-16 habe ich heute gelernt und verbucht: ein Votum gehoert IN den Datensatz des Auftrags, ueber den es urteilt. Dann habe ich W-20 und W-27 durch die DoR gelassen und die Belege WIEDER nur in meinen eigenen Block geschrieben. Gemessen: W-27 hatte im Datensatz KEINEN DoR-Beleg, bei W-20 musste der Generator meine Pruefung suchen und hat dafuer ein eigenes Feld angelegt (dor_gefunden_wo_sie_steht: 'Blattkopf sagt ENTWURF und dor_beleg 0 — die DoR IST aber da'). Der Planner hat W-27s Beleg nachgezogen und dabei selbst gemeldet, er habe denselben Fehler zum DRITTEN Mal gemacht."
+warum_die_lehre_nicht_gegriffen_hat: "Weil sie eine Absicht war und kein Ablauf. Mein Vorgehen ist: Zustand an beiden Orten setzen, Block schreiben, committen — der Beleg-Eintrag kam darin nicht vor. Eine Lehre, die nicht Teil der Handgriffe ist, wird beim naechsten Mal vergessen, egal wie klar sie formuliert war. Genau das ist mir heute schon einmal passiert (Berichtigung erreicht nicht jede Stelle), und beide Male lag zwischen Verbuchen und Wiederholen weniger als eine Stunde."
+strukturell_abgestellt: "Ab sofort ist das Setzen des Zustands EIN Handgriff mit drei Teilen, die zusammen geschrieben werden: (1) Tafelzeile, (2) zustand-Feld, (3) dor_beleg-Feld mit Commit-SHA und den tragenden Messungen. Wer nur zwei davon schreibt, hat den Auftrag nicht freigegeben, sondern nur verschoben. Fuer W-20 und W-27 jetzt nachgetragen — mit den tatsaechlichen Messzahlen, nicht mit einem Verweis."
+was_das_ueber_den_tag_sagt: "Der Generator hat den Fall nicht als Fehler gemeldet, sondern GELOEST: er hat die DoR gesucht, gefunden und dokumentiert, wo sie steht, statt am Blattkopf zu scheitern und den Auftrag zurueckzugeben. Sein Satz zum Unterschied trifft es: 'der Unterschied zu A-16 ist, dass es dort keinen einzigen Beleg gab.' Er hat also unterschieden zwischen einer fehlenden Pruefung und einer schlecht abgelegten — das ist genau die Sorgfalt, die ich bei mir vermisst habe."
+```
+---
+
 ## Meine W-27-Auflage ist vollstaendig umgesetzt, W-23 nachgebessert — und eine Ursache, die ein Werkzeug entlarvt (plan-pruefer 12.08.)
 
 ```yaml
@@ -6238,6 +6248,7 @@ meine_eigene_falle: "Mein erster Dubletten-Lauf zaehlte DREI statt acht — ich 
 ```yaml
 auftrag: "W-27"
 datei: docs/auftraege/aktiv/W-27-dachkantentypen-entwerfen.md
+dor_beleg: "plan-pruefer 12.08., Commit 2c0e4ede — DoR BESTANDEN mit AUFLAGE. Selbst gemessen: 'ortgang' als String-Literal 0 Dateien, TopologyJoinType 0, cornerType 0 — alle drei Zahlen des Blattes halten. AUFLAGE: die FORMULIERUNG ging weiter als die Zahl ('gibt es in der Insel NICHT'), gemessen traegt die Insel die exportierte Funktion ortgangFlaechenlaengeM (dachformVorlagen.ts:291), das Feld ortgangausbildung (:127, :1386) und 20 Treffer fuer Ortgang gross. Es fehlt der KANTENTYP, nicht die Sache — 7-GRENZEN muss das so schreiben. Vom Planner in cdcadc1d an vier Stellen berichtigt, von mir nachgemessen."
 zustand: BEREIT
 ballbesitz: generator
 basis_sha: c2c6bf4e
@@ -6273,6 +6284,7 @@ der_stille_fehler_dieses_werkzeugs: "Kriterium W-27-2 verlangt ALLE VIER joinTyp
 ```yaml
 auftrag: "W-20"
 datei: docs/auftraege/aktiv/W-20-stueckliste-und-mengen.md
+dor_beleg: "plan-pruefer 12.08., Commit 2c0e4ede — DoR BESTANDEN. Selbst gemessen: holzMengen.ts 64 Zeilen und 3 Exporte exakt wie im Blatt; 'sechs Testzusagen' sind sechs test-Bloecke mit 25 assert-Aufrufen — beide Zahlen richtig, sie messen Verschiedenes. Der Scheinwiderspruch 'W-23 BESCHRIEBEN' gegen 'W-23 NACHBESSERN' ist geprueft und aufgeloest: Register fuehrt den Werkzeug-Zustand, Datensatz den Auftrags-Zustand, und die Nachbesserung war Klasse BEWEIS — die Blaetter aendern sich nicht, Grundlage stabil."
 zustand: IN_ARBEIT
 ballbesitz: generator (Bau laeuft — Ziel BESCHRIEBEN, also Ablesung statt Vorgabe)
 dor_gefunden_wo_sie_steht: "Blattkopf sagt status: ENTWURF und dor_beleg 0 — die DoR IST aber
