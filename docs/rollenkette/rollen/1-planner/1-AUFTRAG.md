@@ -163,16 +163,43 @@ A-24-3  Schutz-Nachweis: „Bestandsdokument per md5 vorher/nachher"
                                        Dann am SCHREIBPFAD messen statt am Ergebnis:
                                        das haelt eine EIGENSCHAFT statt einen Zustand.
 4  MISST der Nachweis den GEBAUTEN     Bei UI-Kriterien: eine Browserabnahme am ALTEN
-   Stand?                              Buendel kann fuer den neuen Bau nicht rot
+   Stand — und zwar am COMMIT?         Buendel kann fuer den neuen Bau nicht rot
                                        werden. Das Kriterium verlangt die Gegenprobe
                                        'serviert == gemessen': eine Marke des neuen
-                                       Baus im ausgelieferten Buendel, gezaehlt.
+                                       Baus im ausgelieferten Buendel, gezaehlt
+                                       AM COMMIT und nicht am Arbeitsbaum:
+                                         git show <bau-sha>:<buendel> | grep -c <marke>
+                                       Eine Marke, die nur im Baum steht, belegt
+                                       nichts — sie verschwindet beim naechsten
+                                       Auschecken.
 ```
 
 > **Der vierte Punkt ist am Bau von A-24 belegt** *(`cff115fa`)*: *der erste Abnahmelauf zeigte den
 > **alten Text und nur zwei Felder** — bei **1718 grünen Tests** und grünem `tsc`. **Ein Quelltext-Test
 > kann nicht sehen, was ausgeliefert wird.** Erst `npm run build:hausplaner` erzeugte das Bündel mit dem
 > Bau; die Gegenprobe war ein `grep -c` auf den neuen Satz im Bündel = 1.*
+
+> **PRÄZISIERT eine Stunde später, und der Anlass ist derselbe Auftrag** *(`46f766bf`)*: *meine erste
+> Fassung verlangte die Marke „im ausgelieferten Bündel" — **ohne zu sagen, wo gezählt wird.** Genau
+> dieser Fall trat sofort ein. Selbst nachgemessen an A-24:*
+
+```text
+Buendel im Bau-Commit 0c9aa0a9    0 Nennungen
+              cff115fa           0
+              6de5838c           0
+Marke 'Anbau Laenge' im Baum     1 Treffer
+Marke 'Anbau Laenge' im HEAD     0 Treffer
+public/hausplaner/hausplaner.js   liegt GEAENDERT im Arbeitsbaum
+```
+
+> *Fünf frühere Bauten haben das Bündel **mitgeliefert** (`9d79b1ca`, `21940d33`, `dbb7ff66`,
+> `94b58aaf`, `7fdf6e05`), dieser nicht. **Wer den Bau-Stand auscheckt und den Browser öffnet, sieht die
+> alte Zusage** — die gefahrene Browserabnahme ist am Commit nicht nachvollziehbar. **Das ist E1 auf die
+> Bündelfrage angewandt**, und meine eigene Regel hätte die Lücke offen gelassen: eine Marke, die nur im
+> Arbeitsbaum steht, ist kein Beleg, weil sie beim nächsten Auschecken verschwindet.*
+>
+> *Die Entscheidung über A-24 gehört dem Evaluator und ich nehme sie ihm nicht ab. **Was mir gehört, ist
+> das Kriterium** — und es sagt jetzt, wo gezählt wird.*
 
 > **Warum das in die Kriterien gehört und nicht in eine Regeländerung:** *die Arbeitsregeln verlangen die
 > Browserabnahme bereits (§ „keine sichtbare Änderung ohne Browserabnahme"), und **sie hat hier
