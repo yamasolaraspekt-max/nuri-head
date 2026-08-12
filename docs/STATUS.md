@@ -43,7 +43,7 @@
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
-| **W-23** Deckung und Material | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
+| **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
 | **W-27** Dachkantentypen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
 | **W-20** Stückliste und Mengen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
@@ -6139,8 +6139,59 @@ mein_anteil_am_befund: "Zwei der drei Fehlalarme entstanden durch MEINE Votumsze
 ```yaml
 auftrag: "W-23"
 datei: docs/auftraege/aktiv/W-23-deckung-und-material.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 53060551 (Runde 2), Fehlerklasse KEINE,
+  ein P2 offen und unten benannt. Messtisch 8/8 im Blatt gegengelesen (W-23-1 bis W-23-8, die
+  Runde-2-Zeilen 445-452; Runde 1 hatte zwei ROT, beide sind gruen geworden).
+  Reiner Doku-Scope: sechs Werkbank-Blaetter, must_preserve SELBST nachgemessen mit resources/ 0,
+  app/ 0, database/ 0. Kette Vorfahr, Geheimnisse 0.
+
+  DIE FACHAUSSAGE SELBST NACHGERECHNET statt das Votum zu uebernehmen — das ist bei diesem
+  Auftrag der Kern, weil der Planner die Formel in Yamas ausdruecklicher Vertretung entschieden
+  hat und dabei SEINEN EIGENEN ersten Vorschlag verwarf:
+    verworfene Fassung, Harzer Pfanne 7 bei L=1000: n = aufrunden(1000/405) = 3,
+      Lattmass = 333,3 mm — der Ziegel erlaubt 372 bis 405. AUSSERHALB, und zwar leise.
+    entschiedene Fassung, derselbe Fall: n_min = aufrunden(1000/405) = 3,
+      n_max = abrunden(1000/372) = 2, also n_min > n_max -> KEINE gleichmaessige Teilung,
+      die Formel gibt keinen Wert zurueck sondern diesen Fall.
+    Gegenprobe auf der anderen Seite, damit die neue Fassung nicht einfach alles ablehnt:
+      L=2000 ergibt n_min=n_max=5, Lattmass 400,0 mm, im erlaubten Bereich.
+    UND DIE HAEUFIGKEIT eigens gezaehlt: ueber 801 Sparrenlaengen von 1000 bis 9000 mm liefert
+      die verworfene Fassung 136 Mal einen Wert ausserhalb des Bereichs — 17,0 Prozent. Das ist
+      auf die Einerstelle genau die Zahl, die der Planner fuer dieses Modell genannt hat.
+      Eine unabhaengig nachgerechnete Uebereinstimmung, kein uebernommener Wert.
+
+  W-23-1 gegengeprueft: der Name ist an allen Stellen auf 'Harzer Pfanne 7' berichtigt, und der
+  falsche Vermerk wurde NICHT geloescht sondern als ZURUECKGEZOGEN stehen gelassen, mit Ursache
+  (das Ausleseskript kuerzte die Spalte auf 14 Zeichen, der Name hat 15)."
+
+p2_uebernommen_ort_statt_inhalt:
+  klasse: BEWEIS
+  schwere: P2
+  blockiert: nein
+  was: "W-23-8 verlangt die Dubletten-Adressierung IN 2-FUNKTION. Selbst nachgemessen: in
+    2-FUNKTION.md 0 Treffer, in 5-CODE/LIESMICH.md 4 (ab Z.52, 'Der Modellname ist keine
+    Adresse'). Der Inhalt ist vollstaendig belegt, nur der Ort ist ein anderer als verlangt."
+  warum_kein_rot: "§12.5 — der Nachweis steht, er steht nur woanders. Aber der Evaluator hat den
+    Satz geschrieben, der das Gewicht traegt: 2-FUNKTION liest, wer Stufe 2 baut. Ein Befund am
+    falschen Ort erreicht den nicht, fuer den er gedacht ist."
+  ball: generator (Verweis oder Umzug nach 2-FUNKTION)
+
+mein_elfter_beinahe_fehlbefund_und_er_ist_eine_wiederholung: "Ich habe den zurueckgezogenen
+  Vermerk zuerst NICHT gefunden und war im Begriff zu melden, der Generator habe ihn geloescht
+  statt ihn stehen zu lassen. Grund: ich suchte ZURUECKGEZOGEN, die Datei schreibt ZURUECKGEZOGEN
+  mit Ue-Umlaut. GENAU DIESE KLASSE habe ich heute frueh selbst dokumentiert, als elf Tafelzeilen
+  auf VEROEFFENTLICHT mit Oe standen und mein Muster nur die OE-Form kannte. Derselbe Fehler,
+  zwoelf Stunden spaeter, an derselben Stelle im Kopf. Die Lehre von heute frueh war zu eng
+  gefasst: ich hatte das Zustandsmuster berichtigt, nicht die Gewohnheit."
+
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau 53060551 ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt (resources/ 0 Dateien).
+  WILDBETRIEBS-BELEG in der staerksten Form, die bei einem Rechenblatt moeglich ist: die
+  entschiedene Formel ist an 801 echten Sparrenlaengen durchgerechnet, gegen die verworfene
+  gehalten, und beide Richtungen belegt — sie lehnt den unteilbaren Fall ab UND gibt den
+  teilbaren frei."
 nachbesserung_gebaut: "P1 behoben und die Ursache benannt. Der Evaluator nannte ZWEI Zeilen
   (5-CODE:41 und :54-55); ich habe alle ZWOELF Fundstellen von 'Harzer' gemessen und fuenf weitere
   in 1-ZWECK, 3-FORMELN, 6-PRUEFUNG sowie zwei im Bericht berichtigt — meine Lehre aus der halb
