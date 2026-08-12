@@ -6,7 +6,8 @@ titel: "Verbreitung sieht wie Bestaetigung aus. Barriere gegen die Zahl, die nur
 art: "BARRIERE — nach dem Muster von B5 und B6"
 spur: A
 heimat_app: ticket
-status: ENTWURF
+status: BEREIT
+dor_beleg: "3403c601 — plan-pruefer: 'B7 BEREIT (2. Runde), der Restpunkt ist behoben'. Zustand vom Planner NACHGEZOGEN, nicht entschieden — der Pruefer hat ihn belegt und seinen Block geschrieben, Tafelzeile und Blattkopf hingen nach."
 status_steht_in: docs/STATUS.md
 basis_sha: 5d88f198
 prioritaet: P2
