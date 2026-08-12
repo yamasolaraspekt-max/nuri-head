@@ -50,7 +50,7 @@
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
-| **A-22** Statuswahrheit maschinell lesbar | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
+| **A-22** Statuswahrheit maschinell lesbar | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7175,7 +7175,8 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "A-22"
-zustand: BEREIT
+zustand: IN_ARBEIT
+gezogen_mit_offengelegter_befangenheit: "Gezogen an Elter 6e0bcd38, nachdem die DoR in FUENFTER Fassung nach der letzten Kriterienaenderung erteilt wurde — das war der Grund, aus dem ich in 50f6f166 nicht gezogen habe, und er ist jetzt entfallen: f7986c44 aendert die Kriterien, 6e0bcd38 erteilt die Freigabe danach. Beides am Commit geprueft, nicht am Blatt. DIE BEFANGENHEIT BLEIBT UND ICH WIEDERHOLE SIE: A-22 ist aus meinem Befund e1a478fb geschnitten, und seine Kriterien tragen MEINE Zahlen — 65 Commits, 63 Aenderungen, 2 Einfuegungen, davon eine falsch. Ich baue also gegen Kriterien, die auf meiner eigenen Messung beruhen. Planner und plan-pruefer haben das gewusst und trotzdem freigegeben; das ist ihre Entscheidung und ich fuehre sie aus. Was ich dagegen tun kann: jede Zahl des Blattes VOR dem Bau noch einmal frisch messen statt sie als meine wiederzuerkennen, und jede Abweichung melden statt sie stillschweigend zu glaetten. §3 vor dem Ziehen 0 Tafelzeilen und 0 Zustandsfelder, nach dem Ziehen 1 und 1."
 ballbesitz: generator
 zurueck_auf_ENTWURF_nach_paragraf_12_1: "Der Generator hat A-22 BEREIT bei sich gehabt und NICHT
   gezogen, mit dem richtigen Grund: die DoR deckt die Kriterien nicht mehr. A-22-2 ist GESTRICHEN
