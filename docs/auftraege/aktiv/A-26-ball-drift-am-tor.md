@@ -213,3 +213,56 @@ die_abhaengigkeit_ist_kein_formalismus: "A-26 misst Felder in yaml-Bloecken. Sol
         zuerst, und deshalb meldet A-26 im Zweifel 'nicht zuordenbar' statt zu raten."
 A_26_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+---
+
+## 6 — Votum des Evaluators (§11)
+
+**ABGENOMMEN.** Bau `c059c019`, Elter `2001eda2` (als git-Elter nachgemessen), drei Dateien,
+286 Zeilen. Prüfstände auf beiden, dazu **drei historische Prüfstände** für A-26-1.
+
+**Vorab die Lage, die ich schon im Claim angesagt habe:** dieser Bau ändert
+`scripts/commit-pruefen.sh` — das Tor, mit dem ich selbst committe, und ich habe es heute fünfmal
+mit der neuen Barriere darin benutzt. Ich kannte ihre Wirkung aus dem Betrieb, bevor ich sie prüfte.
+Die Frage, die daraus folgt, war die eigentliche Prüffrage: **war die Barriere bei meinen Commits
+richtig still — oder blind?** Beide Fälle sehen von außen gleich aus. Sie ist belegt **richtig
+still** (A-26-3 gegen A-26-5, unten).
+
+| Kriterium | Befund | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **A-26-1** (TRAGEND) | **grün** | Die drei SHAs selbst geprüft statt aus dem Blatt übernommen — alle drei sind Ball-Drift-Nachzüge des Release-Prüfers. Dann **die drei Stände selbst hergestellt** (Worktree auf den Nachzug, `git checkout <sha>^ -- docs/STATUS.md`, Barriere-Skript hineinkopiert) und gefahren: **W-36** → `BALL: Tafel 'plan-pruefer' <-> Datensatz 'planner'`; **W-33** → `BALL: Tafel 'Planner' <-> Datensatz 'generator'`; **W-31** → `nicht zuordenbar — mehrere Datensätze in einem yaml-Block (A-25)`. Drei von drei gemeldet |
+| **A-26-2** | **grün** | Alle drei Fallen einzeln geprüft. **(a) Normalisierung:** Tafelzeile auf ` \`IN_ARBEIT\` \| generator ` umgeschrieben — Sterne weg, kleingeschrieben, **Sache unverändert** → Barriere **still**, kein Fehlalarm. **(b) Kommentar:** `s/#.*//` (`:65/:66`), und ich habe es im Betrieb gesehen — `ballbesitz: generator  # nach A-25, nicht davor` wird als `generator` gelesen. **(c) Zuordnung:** der W-31-Lauf meldet „nicht zuordenbar" statt zu raten, genau wie das Kriterium es für den Zustand vor A-25 verlangt |
+| **A-26-3** (WIRKSAMKEIT) | **grün** | Beide Orte gleich geändert (6 Zeilen: Tafel **und** Datensatz auf `CODE_FERTIG`/`evaluator`) → **keine Ausgabe, exit 0**. Und am unveränderten Stand ebenso still |
+| **A-26-4** | **grün** | Von **70** Aufträgen in der Datei wird nur der berührte gemeldet. Laufzeit mit bash-eigener Zeitnahme: **0,018–0,019 s**. Und der Guard `:618` lässt sie bei Commits ohne `docs/STATUS.md` **gar nicht erst** laufen |
+| **A-26-5** | **grün** | Nur **einen** Ort geändert → beide Drifts gemeldet (`ZUSTAND` und `BALL`), Skript-Rückgabe **1**. Das Tor ruft mit `\|\| true` (`:619`), der Kommentar sagt es ausdrücklich: der Rückgabewert wird bewusst verworfen. **Warnung, kein Abbruch** |
+| **A-26-6** | **grün** | Fangprobe selbst gefahren, Anker genau 1×, md5 zurückgesetzt: **mit** Normalisierung 0 Ausgabezeilen, **ohne** meldet sie ` **\`CODE_FERTIG\`** ` gegen `CODE_FERTIG` als Drift — der Dauerwarner, den A-26-3 verbietet, tritt ein |
+| **A-26-7** | **grün** | `TICKET_ROLLE` an Bau und Elter je 4 Zeilen, zeichengleich |
+
+**Die Antwort auf meine Claim-Frage, und sie ist der Kern der Abnahme.** A-26-3 und A-26-5 sind
+zusammen der Beweis, den keines von beiden allein liefert: die Barriere ist **still, wenn beide
+Orte stimmen**, und sie **meldet, sobald einer abweicht** — an derselben Datei, im selben Lauf,
+mit demselben Skript. Ihre Stille bei meinen fünf Commits heute war also kein Blindflug, sondern
+die richtige Antwort auf einen sauberen Stand. Genau diese Unterscheidung verlangt Pflichtprüfung 4,
+und sie war hier nicht theoretisch.
+
+**Meine eigenen Messfehler in dieser Runde:**
+
+1. **Ich hätte beinahe einen Fehlbefund gegen eine funktionierende Barriere gemeldet.** Mein erster
+   A-26-3-Aufbau wollte „beide Orte gleich ändern", aber beide Ersetzungsmuster griffen ins Leere:
+   am Prüfstand steht A-26 auf `IN_ARBEIT`/`Generator`, nicht auf `CODE_FERTIG`/`Evaluator`. Die
+   Datei blieb **unverändert**, der Diff war leer — und ich las die Stille der Barriere zuerst als
+   „sie hat eine Drift übersehen". Erst `git diff HEAD` hat gezeigt, dass es nichts zu übersehen
+   gab. **Der Anker war falsch, nicht der Bau.**
+2. **Zeitmessung mit falschem Verfahren:** ich maß 77–92 ms und hätte damit dem Bericht (26 ms)
+   widersprochen. Mein Verfahren rief zweimal `python3` auf und maß Fremdprozesse mit. Mit
+   bash-eigener Zeitnahme: **18–19 ms** — dieselbe Größenordnung wie seine Zahl, kein Widerspruch.
+3. **Ein zu kurzer Edit-Anker hat Text vernichtet**, und zwar in `docs/STATUS.md` selbst: mein
+   Claim-Edit endete bei `ballbesitz: evaluator` und löschte den Kommentar dahinter (die Notiz, dass
+   die A-25-Sperre gefallen ist). Bemerkt hat es meine eigene Fremdzeilen-Prüfung, die die zwei
+   Zeilen als „fremd" meldete — sie waren nicht fremd, sie waren mein Verlust. Vor dem Commit
+   wiederhergestellt, entfernte Zeilen 0. **A-20-4 verbietet genau das, und ich habe es in dem
+   Commit getan, mit dem ich eine Barriere gegen Statusfehler claime.**
+
+**§15:** keine Datenbankschreibung in dieser Abnahme.
+
+**Weiter an den Release-Prüfer.**
