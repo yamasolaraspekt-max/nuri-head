@@ -1827,6 +1827,18 @@ an_yama_gemessen: "ZWOELF Stufen warten jetzt auf die fork-Sicherung, nicht mehr
 ```
 ---
 
+## ⚠ RICHTIGSTELLUNG an Yama — meine Push-Meldung war FALSCH, und es ist die zweite Wiederholung
+
+```yaml
+was_ich_gemeldet_habe: "Vor wenigen Minuten an Yama: 'ZWOELF Stufen warten auf die fork-Sicherung — zwoelf abgenommene und freigegebene Auftraege ohne jede Kopie ausserhalb dieser Maschine.' Das war der groesste Posten meiner Meldung."
+was_gemessen_ist: "SELBST GEMESSEN, jetzt: fork/auto = 297df0f3 · backup-private/auto = 297df0f3 · origin/auto = 297df0f3 · HEAD lokal = 297df0f3. Rueckstand zu fork: 0 Commits. ALLE DREI Remotes tragen exakt den lokalen Stand — auch origin, das zuletzt 116 Commits zurueckhing. Es wartet NICHTS auf Sicherung. Die Arbeit hat drei Kopien ausserhalb der Maschine."
+mein_fehler: "Ich habe die Zahl aus dem Release-Pruefer-Bericht UEBERNOMMEN ('zwoelf Stufen warten'), statt die Remotes zu messen. Seine Messung war richtig — SEIN Push wurde verweigert. Meine Folgerung daraus war falsch: aus 'ich darf nicht pushen' folgt nicht 'niemand hat gepusht'. Yama oder eine Sitzung mit Push-Recht hat es getan, und das steht in den Refs, nicht in unseren Berichten."
+zweite_wiederholung_benannt: "Das ist die ZWEITE Wiederholung derselben Klasse gegenueber Yama. Beim ersten Mal (11.08.) hat ER mich korrigiert: zwei von vier Posten meiner Liste waren beim Absenden erledigt, und sein Satz war 'vor jeder Vorlage an mich den ZUSTAND messen, nicht die Notiz lesen'. Ich habe daraus eine Dauerregel gemacht, sie ins Gedaechtnis geschrieben — und dann eine fremde Zahl uebernommen, ohne sie zu pruefen. Die Regel galt fuer MEINE Notizen; sie gilt genauso fuer die Zahlen anderer Rollen. §13 sagt: die zweite Wiederholung derselben Fehlerklasse loest die Pruefung SOFORT aus. Ich benenne sie hiermit, statt sie zu zaehlen — das war der Vorwurf an die Prozesspruefung-02 und er trifft mich hier."
+regel_nachgeschaerft: "Vor jeder Vorlage an Yama wird JEDE Zahl gemessen, auch die aus einem fremden Bericht — besonders die. Fremde Messungen sind Belege fuer das, was die andere Rolle GETAN hat, nicht fuer den Zustand der Welt danach."
+was_wirklich_offen_ist_gemessen: "Nach frischer Messung bleiben bei Yama nur zwei Posten, beide fachlich: das FACH-GATE N-003 (Sparren-Vorbemessung, bestaetigungspflichtig wegen der Reichweitengrenze — Personenschaden-Argument) und die A-13-VEROEFFENTLICHUNGSBEDINGUNG, das eine SELECT gegen ticket (roof_azimuth ausserhalb 0-360). Beide sind unveraendert offen. Der Push ist es NICHT."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
