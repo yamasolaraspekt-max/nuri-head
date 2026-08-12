@@ -75,7 +75,7 @@
 |---|---|---|---|---|
 | W-18 | Topologie prüfen | LEER | W-02, W-05 | F-004, F-013 |
 | W-19 | Sonne und Verschattung | LEER | W-07, W-08 | F-024 |
-| W-20 | Stückliste und Mengen | LEER | W-05, W-08 | F-011, F-023 |
+| W-20 | Stückliste und Mengen | **BESCHRIEBEN** | W-05, W-08 | F-011, F-023 — **heute keine benutzt**: Summe über die echte Liste, keine Formel |
 
 ---
 
@@ -251,6 +251,7 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/app/tools/auswahlModus.ts` | **W-13** — 98 Zeilen, 7 Ausfuhren; vier Modi, Modifikator-Vorrang alt vor ctrl/meta vor shift; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/app/tools/trefferSuche.ts` | **W-13** — 75 Zeilen, 4 Ausfuhren; **oben schlägt nah** — Zeichenreihenfolge vor Distanz; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/app/tools/auswahlDarstellung.ts` | **W-13** — 71 Zeilen, 3 Ausfuhren; Zustand als Daten, kein Markup; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/holzMengen.ts` | **W-20** — 64 Zeilen, 3 Ausfuhren (`:23`, `:29`, `:44`), 6 Testblöcke mit **24** Assertions. **Reparatur einer zweiten Wahrheit**: die Liste schätzte vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt (`:5-9`). Schiftsparren zählen als Sparren mit, mit Begründung im Code (`:57-58`). **Einzige Lücke: die Ziegelmenge** — eingearbeitet 12.08. (W-20) |
 | `~/Desktop/…/Tabellen/braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte` | **W-23** — **QUELLE, kein Code.** 718.574 Byte · `xl/worksheets/sheet11.xml` · 127 Datenzeilen, 48 Spalten. Nutzbar sind **9 Zeilen = 7 Braas-Modelle** mit `Lattmass_min/max_mm` (Sp. 26/27); `Verschiebespiel_mm` (32) ist deren Differenz und damit die Eingangsprüfung. **Alle neun tragen `Quelle_1_URL`.** Eingearbeitet 12.08. (W-23) |
 | `resources/planner/hausplaner/app/tools/werkzeugVertrag.ts:874-908` | **W-15** — **VERTRAG, kein Code.** Drei Einträge: `material-aufnehmen`/`PaintCommand` (:874), `material-zuweisen`/`MaterialCommand` (:886), `textur`/`TextureCommand` (:898). Alle drei nennen `services.material.execute(…)` — **das im Repo 0 Treffer hat**. Deshalb `ENTWORFEN` statt `BESCHRIEBEN`; eingearbeitet 12.08. (W-15/1) |
 | `resources/planner/hausplaner/app/tools/auswahlUebersicht.ts` | **W-13** — 77 Zeilen, 4 Ausfuhren; Mehrfach-Ansicht, „das Panel darf nicht raten"; **eingearbeitet 12.08.2026** |

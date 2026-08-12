@@ -45,7 +45,7 @@
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
 | **W-27** Dachkantentypen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
-| **W-20** Stückliste und Mengen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
+| **W-20** Stückliste und Mengen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6336,8 +6336,31 @@ der_stille_fehler_dieses_werkzeugs: "Kriterium W-27-2 verlangt ALLE VIER joinTyp
 auftrag: "W-20"
 datei: docs/auftraege/aktiv/W-20-stueckliste-und-mengen.md
 dor_beleg: "plan-pruefer 12.08., Commit 2c0e4ede — DoR BESTANDEN. Selbst gemessen: holzMengen.ts 64 Zeilen und 3 Exporte exakt wie im Blatt; 'sechs Testzusagen' sind sechs test-Bloecke mit 25 assert-Aufrufen — beide Zahlen richtig, sie messen Verschiedenes. Der Scheinwiderspruch 'W-23 BESCHRIEBEN' gegen 'W-23 NACHBESSERN' ist geprueft und aufgeloest: Register fuehrt den Werkzeug-Zustand, Datensatz den Auftrags-Zustand, und die Nachbesserung war Klasse BEWEIS — die Blaetter aendern sich nicht, Grundlage stabil."
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft — Ziel BESCHRIEBEN, also Ablesung statt Vorgabe)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08. auf a146e0b3; Bericht docs/BERICHT-W-20-stueckliste-und-mengen.md)
+gebaut: "Sieben Blaetter plus Registerzeile, Ziel BESCHRIEBEN erreicht. Alle sieben Zeilenangaben
+  aus W-20-1 einzeln gegen holzMengen.ts geprueft (:23 :29 :44 Exporte, :41 gueltigeLaenge,
+  :52 :56 :58 Typunterscheidung). Die drei Trefferzahlen aus W-20-4 nachgemessen und exakt
+  bestaetigt: 'stueck.*m2' 0, 'ziegel' 16, 'deckung' 79. Platzhalter 21 -> 2, und die zwei sind
+  ReadonlyArray<HolzStueck>, also TypeScript-Generics — dieselbe Klasse wie bei W-23. resources und
+  app in drei Richtungen 0, holzMengen.ts und sein Test unberuehrt, Abschlusszaehler 12 -> 13."
+drei_zahlen_fuer_dieselbe_sache: "Das Blatt sagt 'sechs Testzusagen', der DoR-Beleg '25
+  assert-Aufrufe'. Gemessen: 6 test-Bloecke, 24 echte Assertions (grep -cE 'assert\\.'), und 25 mit
+  grep -c 'assert' — die 25. ist die Zeile import assert from 'node:assert/strict'. Alle drei Muster
+  messen genau, was sie messen, und drei verschiedene Dinge. Die Zahl der Zusagen ist 24. Ich melde
+  alle drei, statt eine auszuwaehlen."
+befund_benannt_nicht_behoben: "gueltigeLaenge (holzMengen.ts:40-42) macht aus jeder kaputten Laenge
+  eine 0 — und niemand erfaehrt es. Das Verhalten ist richtig (eine Liste, die wegen eines Stabes
+  gar nichts liefert, waere unbrauchbarer), aber es gibt keine Meldung, keine Zaehlung, keinen
+  Hinweis: der Stab verschwindet aus der Summe und die Liste sieht vollstaendig aus. In einer
+  Stueckliste, aus der ein Angebot wird, ist eine stille Null die unangenehmste Zahl von allen. Es
+  ist NICHT der Dach-Vorfall — hier wird nichts geworfen und nichts geschluckt; es ist die leisere
+  Verwandte: ein Ergebnis, das seine Auslassung nicht mitteilt. In 7-GRENZEN als offener Punkt der
+  Faenger-Pruefung gefuehrt, nicht in diesem Auftrag behoben."
+W_20_7_zweimal_gemessen: "Das Kriterium verlangt die Messung unmittelbar vor der ersten Aenderung
+  UND weist darauf hin, dass REGISTER.md im Scope mehrerer W-Blaetter liegt. Also zweimal: vor dem
+  Bau Tafelzeile 0 und Zustandsfeld 0, vor der Registerzeile 1 und 1 (beide W-20), und REGISTER.md
+  war dabei unveraendert im Arbeitsbaum — kein fremder Bau darin."
 dor_gefunden_wo_sie_steht: "Blattkopf sagt status: ENTWURF und dor_beleg 0 — die DoR IST aber
   gefahren und steht in 2c0e4ede ('W-20 UND W-27 DoR BESTANDEN, beide BEREIT'). Dieselbe Lage wie
   bei A-16: der Zustand hinkt im Blatt nach. Diesmal habe ich NICHT blockiert, weil die DoR
