@@ -7764,6 +7764,32 @@ was_selbst_gemessen_und_was_nur_gelesen: "SELBST: Panel-Text :300, Feldbedingung
   nicht."
 bau_sha: 0c9aa0a9
 buendel_sha: 532c1220
+reichweite_des_buendel_befunds_gemessen_er_waechst_NICHT: "plan-pruefer 12.08., nach der Behebung.
+  DER BEFUND IST ERLEDIGT, selbst nachgemessen statt die Meldung gelesen: 532c1220 traegt
+  public/hausplaner/hausplaner.js, der neue Text steht EINMAL im HEAD-Buendel und die alte Zusage
+  ('braucht Aussenmass Laenge und Breite') NULL Mal. Damit ist die Browserabnahme am Commit
+  nachvollziehbar.
+  UND ICH HABE DIE REICHWEITE GEMESSEN, BEVOR JEMAND EINE REGEL DARAUS MACHT — das Regelwerk kennt
+  heute keine Buendel-Regel (0 Treffer auf hausplaner.js in ARBEITSREGELN.md), und es wird gerade an
+  mehreren Stellen an Regeln geschrieben. Ueber 200 Commits gemessen, Bedingung: aendert der Commit
+  eine .ts/.tsx unter app|renderers|geometry|projection|domain|state UND liegt das Buendel dabei?
+  ES GIBT GENAU ZWEI TREFFER, und nur EINER ist ein Fall:
+    0c9aa0a9  A-24        Quelle ja, Buendel nein  -> ECHTER Fall, inzwischen behoben
+    a2b63a1f  W-27/1      Quelle ja, Buendel nein  -> KEIN Fall
+  WARUM W-27/1 KEINER IST: dachTopologie.ts hat ausser seinem eigenen Test KEINEN Aufrufer. Was
+  niemand einfuehrt, kommt nicht ins Buendel — ein Buendel-Eintrag waere dort falsch gewesen, nicht
+  richtig. Gegenprobe am Buendel selbst: analyzeTopology, EdgeTopologyType und TopologyJoinType je
+  NULL Treffer.
+  UND DABEI HAETTE ICH MICH FAST VERMESSEN: meine erste Gegenprobe suchte 'klassifiziereSchifter ODER
+  analyzeTopology' und fand EINEN Treffer — ich haette daraus geschlossen, dachTopologie sei doch
+  gebuendelt. Getrennt gemessen gehoert der Treffer dem NACHBARMODUL geometry/schifterListe.ts:58;
+  dachTopologie.ts:9 nennt es nur im Kommentar als Namensgrenze. Zwei Namen in einem Muster sind
+  keine Messung.
+  DIE REGEL, DIE DARAUS FOLGT, IST ENGER ALS DER BEFUND: nicht 'jede Quellaenderung liefert das
+  Buendel mit', sondern 'jede Quellaenderung, die vom Einstiegspunkt ERREICHBAR ist'. Wer sie weiter
+  zieht, verlangt Buendel-Eintraege fuer Module, die niemand einfuehrt — und erzeugt genau die Sorte
+  Vorschrift, die bei richtiger Arbeit anschlaegt und deshalb weggeklickt wird.
+  Der Befund war richtig und er ist EIN Fall, kein Muster. Ich sage das, weil ich ihn gemeldet habe."
 meldepflichten_geprueft_und_EIN_BEFUND: "plan-pruefer 12.08. — Meldepflichten halten, und ich habe
   die Zusage nachgemessen, auf die ich die DoR erteilt habe. AM BAU-COMMIT gemessen (E1), nicht am
   Baum: bau_sha 0c9aa0a9 existiert, Bericht vorhanden, Ball beim Evaluator. Scope-Diff selbst
