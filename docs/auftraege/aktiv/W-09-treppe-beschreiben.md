@@ -245,3 +245,80 @@ abweichung_von_yamas_auflage: "Yama verlangt 'keine Bestanden-Plakette'. Ich MES
    Nachweise fuehrt, die sie fuehren muss, wuerde ein Bau eine KORREKTE Angabe loeschen.
    Die Auflage bleibt gueltig; sie greift, wenn die Messung sie ausloest."
 ```
+
+
+## §11 — Bericht W-09/1 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "W-09/1"
+zustand: CODE_FERTIG
+bau_commit: "d26d50b4"
+in_arbeit_commit: "f8b0ee26"
+basis: "65f3ece4"
+
+kriterien:
+  W-09/1-1:  GRUEN   # 28 -> 0 nach BEIDEN Zaehlweisen
+  W-09/1-2:  GRUEN   # nur Nummern, keine ausgeschriebene Formel
+  W-09/1-3:  GRUEN   # vier Schichten, sieben Module namentlich zugeordnet
+  W-09/1-4:  GRUEN   # gemessen — und dem Auftrag an einer Stelle widersprochen, s. u.
+  W-09/1-5:  GRUEN   # DER KERN, s. u.
+  W-09/1-6:  GRUEN   # erfuellt OHNE Bau, s. u.
+  W-09/1-7:  GRUEN   # Zulieferung an A-15, ohne Klassifikation
+  W-09/1-8:  GRUEN   # alle sieben Module mit Zeilenzahl und Schicht
+  W-09/1-9:  GRUEN   # 0/0/0, Suite 1693/1693 unveraendert
+  W-09/1-10: GRUEN   # Register: BESCHRIEBEN + alle sieben Fundstellen
+  W-09/1-11: GRUEN   # f8b0ee26: beide Orte, Befehl mit Ausgabe, als Scope-Messung
+
+der_kern_W09_1_5:
+  geprueft: "SIEBEN Regeln, jede mit Zeile — steigung-max 83 (fehler), auftritt-min 85 (fehler),
+             schrittmass 87 (GESTAFFELT: 590-650 bestanden, 570-670 warnung, sonst fehler),
+             bequemlichkeit 89 (warnung), sicherheit 91 (warnung), laufbreite 94 (fehler,
+             nur wenn angegeben), durchgangshoehe 98 (fehler, nur wenn angegeben)"
+  regel: "bestanden = !p.some(x => x.schwere === 'fehler' && !x.bestanden)"
+  folgerung: "bestanden ist eine TEILAUSSAGE, und zwar aus ZWEI Gruenden:
+              (1) Warnungen zaehlen nicht — eine verletzte Bequemlichkeits- oder Sicherheitsregel
+                  laesst bestanden auf true;
+              (2) zwei Pruefungen laufen nur bei vorhandener Eingabe — eine fehlende Laufbreite
+                  wird nicht geprueft und laesst bestanden ebenfalls auf true."
+  satz_im_blatt: "bestanden heisst 'keine der DURCHGEFUEHRTEN harten Pruefungen ist verletzt'
+                  und NICHT 'die Treppe entspricht DIN 18065'."
+  fuer_die_plakette: "'Alle Pruefungen bestanden' sagt ZWEIMAL mehr als die Rechnung weiss."
+
+W-09_1_6_erfuellt_ohne_bau:
+  gemessen: "treppenBerechnung.ts:83-99 — jede verletzte Regel erzeugt einen Pruefeintrag mit
+             Klartext, Ist-Wert, Sollwert und Nutzungsbereich"
+  beispiel: "'Steigung 205,0 mm > zulaessig 200 mm (wohnung).'"
+  schluss: "kein Default, keine stille Korrektur. Yamas Auflage ist erfuellt, OHNE dass etwas
+            gebaut wird — das gehoert gesagt, weil ein erfuellter Auftrag ohne Bau leicht wie
+            ein uebersehener aussieht."
+
+wo_ich_dem_auftrag_widerspreche:
+  W-09/1-4: "der Auftrag sagt 'Das Register nennt fuer W-09 keine Formel'. Die Registerzeile
+             nennt F-001 und F-030. Haette ich den Satz uebernommen, haette ich eine leere
+             Spalte gemeldet, wo zwei Nummern stehen."
+  gemessen: "F-001 steht im Code, aber NICHT in der Auslegung — treppe2D.ts:47 und
+             treppeSvg.ts:125 (je Math.hypot); treppenBerechnung.ts 0 Treffer.
+             F-030 ist als Aufruf nicht messbar."
+  einordnung: "der Auftrag hat inhaltlich recht fuer die AUSLEGUNGSSCHICHT und unrecht ueber
+               das Register. Beides steht im Blatt."
+
+zulieferung_an_A15:
+  treppenBerechnung.ts: "nennt DIN 18065 (Z.5, Z.58); Verletzung = Sturzgefahr"
+  treppe2D.ts: "nennt DIN 18065 (Z.6, verweisend); zeichnet nur — bildet eine Verletzung ab"
+  treppe3D.ts: "nennt KEINE Norm; Darstellung, keine Pruefung"
+  ausdruecklich: "Zulieferung, KEINE Klassifikation. Die Klasse entscheidet A-15 nach Achse 2."
+
+eigener_fehler_vor_dem_melden:
+  was: "ich hatte enginePanels.ts:110 fuer engine-treppe zitiert; richtig ist 121"
+  ursache: "MEINE EIGENE A-14-Aenderung hat die Datei um elf Zeilen verschoben"
+  lehre: "wer eine Datei aendert, entwertet seine frueheren Zeilenangaben darin —
+          eine Zeilennummer ist nur so lange gueltig wie die Datei unveraendert"
+  danach: "16 Stellen inhaltlich geprueft, 0 falsch"
+
+nicht_gemessen:
+  - "ob DIN 18065 mehr verlangt als diese sieben Regeln — am Code ist messbar WAS geprueft wird,
+     nicht WAS die Norm insgesamt fordert. Als Frage in 6-PRUEFUNG, nicht als Zusage."
+
+browserabnahme: "entfaellt — reine Dokumentblaetter"
+ballbesitz: evaluator
+```
