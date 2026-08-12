@@ -6,14 +6,22 @@ werkzeug: "W-20 Stückliste und Mengen"
 art: "STUFE 1 — Blatt schneiden, Ziel BESCHRIEBEN. Ablesung: der Kern ist gebaut und getestet."
 spur: A
 heimat_app: ticket
-status: ENTWURF
+status: CODE_FERTIG
+dor_beleg: "2c0e4ede — plan-pruefer 12.08., DoR BESTANDEN. Er hat holzMengen.ts mit 64 Zeilen und
+         drei Exporten selbst nachgemessen und die sechs Testzusagen als sechs test-Bloecke
+         belegt. NACHGEZOGEN vom Planner nach dem Bau: der Blattkopf hing auf ENTWURF, waehrend
+         Tafelzeile und Datensatz schon CODE_FERTIG trugen. Dritter Fall dieser Luecke an einem
+         Tag (A-16, W-27, W-38) und immer derselbe Grund: der Plan-Pruefer setzt Tafelzeile und
+         Datensatz und fasst mein Blatt nicht an, weil es nicht sein Eigentum ist. Richtig von
+         ihm — der Eigentuemer muss nachziehen, und das bin ich."
 status_steht_in: docs/STATUS.md
 basis_sha: 8300aa59
 prioritaet: P2
 anlass: "Klasse C, letztes voraussetzungsfreies Werkzeug. W-05 und W-08 sind BETRIEBSBESTAETIGT.
          Und der Zeitpunkt ist kein Zufall: W-23 ist gerade gebaut und F-053 eingetragen —
          genau die zwei Zulieferungen, die W-20s Luecke schliessen wuerden."
-ballbesitz: "plan-pruefer (DoR), danach generator"
+ballbesitz: "EVALUATOR — Abnahme laeuft, Claim fafbff12. Er prueft die Formelzuordnung F-011 und
+             F-023 an der Registerzeile; das ist Planner-Eigentum, ein Befund kommt zu mir zurueck."
 claim: "planner 12.08. — Claim VOR dem Schnitt."
 grundlage: "geometry/holzMengen.ts (64 Z., 3 Exporte, 6 Testzusagen) · W-23 (BESCHRIEBEN) ·
             F-053 🟡 · F-011 ✓ (Polygonflaeche, aus W-08)"

@@ -8,8 +8,13 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Der Code EXISTIE
       NICHT Vorgabe — anders als W-15/W-23/W-27."
 spur: A
 heimat_app: ticket
-status: ENTWURF
-dor_beleg: "steht aus — plan-pruefer."
+status: BEREIT
+dor_beleg: "4ea7398d — plan-pruefer 12.08., DoR BESTANDEN. Jede Behauptung selbst nachgemessen:
+         257 Zeilen exakt, STATUS_LABEL vorhanden, SchrittStatus mit vier Stufen in Z.163. Bei den
+         _STILLGELEGT-Konstanten zeigte sein Zaehler DREI gegen die ZWEI im Blatt — er hat gelesen
+         statt gezaehlt und den Unterschied gefunden: zwei sind Konstanten (Z.157, Z.186), die
+         dritte ist ein Kommentarverweis (Z.146). Das ist H-9 richtig angewandt, und er hat sein
+         eigenes Werkzeug verworfen statt mein Blatt."
 status_steht_in: docs/STATUS.md
 basis_sha: d5d830d2
 prioritaet: P2
@@ -17,7 +22,7 @@ anlass: "Erstes Werkzeug der Stufe 6. Das Register nennt sie selbst 'die größt
          die diese Tafel hatte' — 1.593 Zeilen in acht Bausteinen, bisher ohne eine einzige
          Registerzeile. Yamas Einordnung 12.08.: 'dieselbe Tafel, kein Sonderweg, dieselben
          Reifegrade.'"
-ballbesitz: "plan-pruefer (DoR)"
+ballbesitz: "GENERATOR — DoR ist durch (4ea7398d)."
 claim: "planner 12.08. — Claim VOR dem Schnitt."
 grundlage: "resources/planner/hausplaner/app/studioDaten.ts (257 Z.) als Quelle · drei
             Testdateien als Wächter · REGISTER.md Stufe 6"
@@ -146,16 +151,19 @@ Trefferzeile ist kein Beleg, und ein Erklärsatz neben einer Zahl muss aus ihr a
 und nicht vorformuliert — das ist mir heute viermal misslungen.
 
 ```yaml
-zustand: ENTWURF
-ballbesitz: "plan-pruefer (DoR)"
+zustand: BEREIT
+ballbesitz: "GENERATOR"
 warum_BESCHRIEBEN_und_nicht_ENTWORFEN: "der Code existiert im Bestand (resources/planner/
         hausplaner/app/studioDaten.ts, 257 Z.), die Typen haben echte Nutzer und drei
         Testdateien. Ein ENTWORFEN-Blatt gibt vor, was gebaut werden soll; hier wird
         Vorhandenes abgelesen."
-tafelzeile_kommt_nach: "STATUS.md wird NICHT jetzt angefasst: der Generator hält den Baum
-        (REGISTER.md ist modifiziert, W-20 auf BESCHRIEBEN, sein Commit steht aus). Tafelzeile
-        und Datensatz zieht der Planner unmittelbar nach seinem Commit nach. Grund für die
-        Trennung ist der W-43-Beifang vom Vormittag und der Verlust zweier Tafelzeilen im
-        Merge 6e3f2408 — in einen fremd gehaltenen Baum schreibt man keine Tabellenzeile."
+tafelzeile_ZURUECKGEZOGEN: "Hier stand, der Planner ziehe Tafelzeile und Datensatz nach dem
+        Generator-Commit nach, weil man in einen fremd gehaltenen Baum keine Tabellenzeile
+        schreibt. Die Vorsicht war richtig, die FOLGE war ein Mangel: das Blatt lag committet
+        vor, waehrend die Statuswahrheit null Bloecke und null Tafelzeilen dazu trug — ein
+        unsichtbarer Auftrag. Der plan-pruefer hat es in 4ea7398d gefunden und beides angelegt,
+        und seine Einordnung trifft es: die Statuswahrheit sagt dort nicht das Falsche, sie sagt
+        gar nichts. RICHTIG waere gewesen, den SCHNITT zu verschieben, nicht die Tafelzeile —
+        Blatt und Tafelzeile gehoeren in EINEN Commit. Der Baum war wenige Minuten belegt."
 W-38_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT. §3 steht bei 1 und das ist W-20."
 ```
