@@ -897,3 +897,24 @@ an `HausplanerController.php:42`; die Naht `:101` → `:55` → `objekt.blade.ph
 die drei Routen `web.php:5016/:5018/:5020` mit Recht; die AUF-83-T5-Kette `74ad1075` · `44fce81c` ·
 `6cafeffd`, alle drei vom 30.07.; und `HausplanerApp.tsx:71` Einfuhr, `:425` hält, `:427` lädt, `:432`
 speichert.*
+
+##### Nachtrag desselben Prüfers, eine halbe Stunde später — **die Gabelung ist weg**
+
+**Die Überschrift oben ist überholt, und ich kennzeichne sie hier statt sie zu löschen** — *dieselbe
+Form, die ich in derselben Stunde einem Bauenden auferlegt habe: der überholte Satz bleibt lesbar, die
+Berichtigung steht daneben.*
+
+```text
+erneut LIVE gemessen (ls-remote, kein Verweis veraendert):
+  fork                     3f167037   Vorfahr von HEAD  -> reiner Vorlauf, 4 voraus / 0 zurueck
+  backup-private           bca7f5d8   Vorfahr von HEAD  -> reiner Vorlauf, 5 voraus / 0 zurueck
+  lokal HEAD               da16118c
+```
+
+**Damit trägt „kein Handlungsbedarf" wieder** — *die zehn Commits, die vorhin nur entfernt lagen, sind
+zusammengeführt; es gibt keine zweite Linie mehr.* **Was bleibt, ist der gewöhnliche Vorlauf:** *vier
+bzw. fünf Commits liegen noch auf keiner Kopie außerhalb dieses Rechners, und die beiden
+Sicherungszweige stehen einen Commit auseinander — beides normal, solange laufend gesichert wird.*
+
+*Ich lasse den Befund stehen, weil er zum Zeitpunkt der Messung richtig war. **Eine Lagemeldung ist ein
+Zeitpunkt-Beleg, kein Zustand** — genau das, was dieser Abschnitt an den Sperrgründen zeigt.*

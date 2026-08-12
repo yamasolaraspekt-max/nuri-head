@@ -61,7 +61,7 @@
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-36** Faehigkeiten-Navigation | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
-| **W-37** Rechenpanels | `ENTWURF` | **planner** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR zweite Fassung** — beide Blocker behoben, EIN Punkt offen (drei Ausfuhren fehlen im Scope) |
+| **W-37** Rechenpanels | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -8837,8 +8837,8 @@ vor_dem_ziehen_nachgemessen: "Die tragenden Zahlen selbst geoeffnet statt uebern
 
 ```yaml
 auftrag: "W-37"
-zustand: ENTWURF
-ballbesitz: planner  # DoR nicht erteilt
+zustand: BEREIT
+ballbesitz: generator
 titel: "Fuenf Adapter zwischen Bedienung und echten Engines — gemessen sind es acht"
 basis_sha: a94d91ac
 spur: A
@@ -8850,29 +8850,26 @@ leerstelle_nach_A_20_geschlossen: "plan-pruefer 12.08.: Dieses Blatt lag COMMITT
   Ich lege beides an, damit der offene Auftrag sichtbar ist, und schreibe den Verstoss dazu, statt
   ihn stillschweigend auszubuegeln — die Pflicht bleibt beim Schneidenden. Gefunden hat es die
   Blatt-gegen-Block-Probe der Wache, nicht ein Zufall; genau dafuer gibt es sie."
-dor_beleg: "plan-pruefer 12.08., ZWEITE Fassung — DoR NOCH NICHT ERTEILT, EIN Punkt, und es ist
-  der letzte. Beide Blocker aus d976060f sind sauber behoben, nachgelesen: W-37-1 nennt jetzt ACHT
-  Adapter und macht das Klassenmerkmal ausdruecklich zur SIGNATUR statt zum Namen — mit dem eigenen
-  Nachweis, dass sein Muster zwei Falsche drin und drei Richtige draussen hatte. W-37-5 fuehrt IMPORT
-  und NUR QUELLE getrennt, nennt sparrenVorbehalt als den wichtigsten Waechter des Blattes und sagt
-  zum Ausschluss von stilschicht den richtigen Satz: die Zahl 0 Importe stimmt, der Schluss 'gehoert
-  nicht dazu' nicht — Ort ist nicht Wirkung. Beide Kriterien zaehlen am Bau-Stand.
-  DER OFFENE PUNKT IST DIE VOLLSTAENDIGKEITSFRAGE, und ich habe sie bei W-37 in der ersten Fassung
-  NICHT gestellt, obwohl ich sie eine Stunde vorher bei W-36 gestellt habe. Das ist mein Versaeumnis
-  und deshalb sage ich es zuerst.
-  GEMESSEN: enginePanels.ts exportiert neben den acht Adaptern DREI weitere Funktionen, und keine
-  steht in einem der beiden Scope-Bloecke — :522 enginePanel(engineId), :527 startwerte(panel),
-  :538 fehlendePflichtfelder(panel, werte). Sie sind nicht am Rand, sie sind die BEDIENFLAECHE des
-  Moduls: enginePanelRest:14, enginePanelSparren:17 und enginePanelTgaHeizung:14 importieren alle
-  drei zusammen, zweiEnginesSchweigen:3 und sparrenVorbehalt:3 importieren enginePanel. Damit ist
-  enginePanel die einzige Ausfuhr, die JEDER der Waechter anfasst — und sie kommt im Scope nicht vor.
-  Wer das Blatt aus dem Scope schreibt, beschreibt acht Uebersetzer und laesst den Zugang weg.
-  WARUM ICH DAFUER NOCH EINE RUNDE NEHME statt es als Auflage mitzugeben: heute ist eine Auflage von
-  mir nie im Blatt angekommen, weil sie nur in meinem Beleg stand. Eine Zeile im Scope ist billiger
-  als eine Auflage, die niemand liest — und der Planner hat heute zweimal binnen Minuten berichtigt.
-  ALLES UEBRIGE AUS DER ERSTEN FASSUNG GILT UNVERAENDERT und ist dort belegt: 199 und 540 Zeilen,
-  zehn Fundstellen, SCHWERE_ANZEIGE an :31 mit drei Graden je Zeichen und Wort, die A-14-Fundstellen
-  vorhanden und W-37-2 erfuellbar, Registerzeile 124 mit 196 gegen gemessene 199, Gegenprobe fuenf
-  von sechs richtig. Ball beim Planner, Zustand bleibt ENTWURF."
+dor_beleg: "plan-pruefer 12.08., DRITTE Fassung — DoR ERTEILT. Der letzte Punkt ist behoben und
+  weiter belegt als verlangt.
+  SELBST NACHGEMESSEN, jede Zeile geoeffnet: die drei Ausfuhren stehen jetzt im Scope, mit den
+  Signaturen wortgleich am Code — :522 enginePanel(engineId): EnginePanel | undefined, :527
+  startwerte(panel): Record<string, string>, :538 fehlendePflichtfelder(panel, werte): EngineFeld[].
+  W-37-7b bindet sie an ein Kriterium und schliesst mit 'Am Bau-Stand zaehlen', traegt also keine
+  feste Zahl in der Pflicht.
+  SEINE ZUSATZMESSUNG STIMMT, von mir an den IMPORTBLOECKEN nachgezaehlt statt an Wortvorkommen:
+  enginePanel steht in ALLEN SECHS importierenden Testdateien — enginePanelRest, enginePanelSparren,
+  enginePanelTgaHeizung, enginePanelTreppe, sparrenVorbehalt, zweiEnginesSchweigen. Und VIER davon
+  fuehren zusaetzlich startwerte UND fehlendePflichtfelder zusammen: Rest, Sparren, TgaHeizung,
+  Treppe. Bei Treppe steht die Einfuhr ueber drei Zeilen (:17-19); ein zeilenweises Muster haette
+  sie verfehlt, ich habe den ganzen Importblock gelesen.
+  ER HAT SEINE EIGENE ZAHL VOR DEM SCHREIBEN GEFANGEN: ein Wortmuster ergab SIEBEN Dateien, die
+  Messung an den Importzeilen SECHS. Das ist die Zwei-Muster-Regel, und heute zum ersten Mal hat sie
+  VOR dem Blatt gegriffen statt danach — an W-36 und an W-37 in erster Fassung hatte sie das nicht.
+  ALLES UEBRIGE AUS DEN ERSTEN BEIDEN FASSUNGEN GILT und ist dort belegt: 199 und 540 Zeilen, zehn
+  Fundstellen, SCHWERE_ANZEIGE an :31 mit drei Graden je Zeichen und Wort, die A-14-Fundstellen
+  vorhanden, Registerzeile 124 mit 196 gegen gemessene 199, Gegenprobe fuenf von sechs richtig.
+  KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator — W-36 ist gerade IN_ARBEIT, W-37 nimmt
+  keinen §3-Platz."
 ```
 
