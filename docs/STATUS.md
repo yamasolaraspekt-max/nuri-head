@@ -1948,6 +1948,35 @@ naechster_schritt: "Generator zieht W-09/1 (§3 beachten; A-14 ist IN_ARBEIT). D
 ```
 ---
 
+## BEREIT — B5 und B6 (Bloecke angelegt; vierter und fuenfter der neun unsichtbaren)
+
+```yaml
+auftrag: "B5"
+titel: "Wer mit -c etwas behauptet, faehrt denselben Lauf ohne -c und liest, was er gezaehlt hat"
+datei: docs/auftraege/aktiv/B5-zaehlergebnis-mit-trefferzeilen.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 1734aa3b
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — grep auf B5/Trefferzeile in scripts/commit-pruefen.sh: 0 Treffer, das Tor kennt die Pruefung nicht. Sieben Kriterien, §5-Block, Erstnutzer, zwei Nicht-Ziele, Konfliktpruefung, must_preserve. DIE FORM IST DER KERN UND SIE IST RICHTIG GEWAEHLT: Warnung statt Abbruch, mit ausdruecklicher Begruendung ('eine harte Sperre auf Zahlen in Commit-Botschaften wuerde jeden legitimen Bericht blockieren — Suite 1692/1692, 0 Platzhalter, 5 von 10'). Das ist Stufe 1 der Barrierenleiter und die einzige, die hier traegt: das Tor kann nicht pruefen WIE gemessen wurde, nur ob eine Zahlenbehauptung ohne Beleg dasteht. Ein Auftrag, der seine eigene Wirkungsgrenze benennt, statt sie zu ueberschaetzen."
+mein_eigener_bezug: "Dieser Auftrag trifft MICH als Rolle direkt — ich habe heute zweimal mit einem grep -c gezaehlt und die Trefferzeilen nicht gelesen: der Glob ohne Rekursion (Punkt2D 'fehlt ueberall') und die sieben Schreibpfade, deren siebter ein Kommentar war. Beide Male hat mich nur das Weitermessen gerettet. Ich bin damit Erstnutzer im Wortsinn, nicht nur der Form nach."
+naechster_schritt: "Generator zieht B5 (§3 beachten; A-14 ist IN_ARBEIT)"
+```
+
+```yaml
+auftrag: "B6"
+titel: "Wer eine Gesamtzahl ueber eine Menge meldet, definiert zuerst die MENGE"
+datei: docs/auftraege/aktiv/B6-summe-braucht-erhebung.md
+zustand: BEREIT
+ballbesitz: generator (nach B5 — dieselbe Datei)
+basis_sha: 1e09280d
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — grep auf B6/Summe-Menge im Tor: 0 Treffer. Acht Kriterien, §5-Block vollstaendig. B6-2 ist die wertvollste Zeile: die Warnung muss NACHWEISLICH SCHWEIGEN, wenn Menge und Summe genannt sind, belegt durch ZWEI Probelaeufe mit beiden Ausgaben im Bericht — 'ohne diesen Gegenbeleg ist die Barriere eine Belaestigung'. Genau die Gegenrichtung, die bei must_preserve-Kriterien so oft fehlt. Die Trennung von B5 ist sauber und stammt von Yama selbst: B5 fragt 'hast du gelesen, was du gezaehlt hast', B6 fragt 'weisst du, WORUEBER du gezaehlt hast' — der Planner-Fehler dahinter ist belegt (640 gemeldet, 1.593 erhoben)."
+konfliktpruefung_ergaenzt: "Von mir gemessen, weil beide Blaetter dieselbe Datei anfassen: B5 und B6 aendern BEIDE scripts/commit-pruefen.sh (heute 610 Zeilen, 78 Zusagen in der Suite). Sie sind zeilenweise disjunkt (Zahlenbehauptung gegen Summenbehauptung), aber §3 loest es ohnehin — REIHENFOLGE B5 dann B6, damit der zweite Bau auf dem ersten aufsetzt statt gegen ihn."
+naechster_schritt: "Generator zieht B6 NACH B5"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
