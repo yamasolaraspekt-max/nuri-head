@@ -51,8 +51,8 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
-| **A-23** Sechs Zettel an einer erledigten Sperre | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. SIEBEN Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung, und die siebte trug die Zeichenfolge gar nicht: `startEhrlich.test.ts:120` sagt *„Die Zulieferung der Liste bleibt deshalb offen“* im Rumpf des geschützten Tests — H-9 an meinem eigenen Suchmuster. **DoR NICHT erteilt (`2772c198`), zwei Fehler in meinen eigenen Kriterien behoben:** A-23-1 und A-23-2 kollidierten (md5 über den Rohtext gegen die Pflicht, überholte Sätze zu berichtigen — jetzt md5 **ohne Kommentare**, mit dem Werkzeug der Insel), und meine Gegenprobe nannte **kommentarblinde** Wächter: `startEhrlich` und `konfiguratorEhrlich` lesen über `ohneKommentare`. Der einzige, der greifen kann, fehlte — `gefuehrteEhrlich:30` liest `studioDaten.ts` **roh** und prüft ein Statuswort in der ganzen Datei; **mein A-23-3 trieb den Bauenden genau in dessen Wortsperre.** Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
-| **A-24** Panel-Zusage trifft das Tor nicht | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
+| **A-23** Sechs Zettel an einer erledigten Sperre | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. SIEBEN Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung, und die siebte trug die Zeichenfolge gar nicht: `startEhrlich.test.ts:120` sagt *„Die Zulieferung der Liste bleibt deshalb offen“* im Rumpf des geschützten Tests — H-9 an meinem eigenen Suchmuster. **DoR NICHT erteilt (`2772c198`), zwei Fehler in meinen eigenen Kriterien behoben:** A-23-1 und A-23-2 kollidierten (md5 über den Rohtext gegen die Pflicht, überholte Sätze zu berichtigen — jetzt md5 **ohne Kommentare**, mit dem Werkzeug der Insel), und meine Gegenprobe nannte **kommentarblinde** Wächter: `startEhrlich` und `konfiguratorEhrlich` lesen über `ohneKommentare`. Der einzige, der greifen kann, fehlte — `gefuehrteEhrlich:30` liest `studioDaten.ts` **roh** und prüft ein Statuswort in der ganzen Datei; **mein A-23-3 trieb den Bauenden genau in dessen Wortsperre.** Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
+| **A-24** Panel-Zusage trifft das Tor nicht | **`ENTWURF`** | **planner** | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7478,7 +7478,7 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 ```yaml
 auftrag: "A-24"
 zustand: ENTWURF
-ballbesitz: plan-pruefer  # DoR steht aus
+ballbesitz: planner  # DoR nicht erteilt (7c1ecc9f) — mein Feld hinkte dem eigenen Beleg nach, ZWEITES Mal heute
 titel: "L/T-Dach: das Panel verlangt zwei Masse, das Mesh-Tor verlangt vier"
 basis_sha: 7b9ad18c
 spur: A
@@ -7551,52 +7551,46 @@ was_selbst_gemessen_und_was_nur_gelesen: "SELBST: Panel-Text :300, Feldbedingung
   nicht."
 
 auftrag: "A-23"
-zustand: ENTWURF
-ballbesitz: planner  # DoR nicht erteilt (2772c198) — mein Beleg gab den Ball ab, das Feld nicht
+zustand: BEREIT
+ballbesitz: generator
 titel: "Sechs Stellen in der Insel fuehren AUF-40 Teil B als offen — beide Haelften sind gebaut"
 basis_sha: 59c66eb2
 spur: A
 prioritaet: P2
 blatt: "docs/auftraege/aktiv/A-23-sechs-zettel-an-einer-erledigten-sperre.md"
-dor_beleg: "plan-pruefer 12.08. — DoR NICHT ERTEILT, ZWEI Punkte. Beide sind klein, einer ist
-  gefaehrlich, und der gefaehrliche steht nicht in der Liste der sechs.
-  ZUERST WAS TRAEGT: die SECHS Stellen habe ich selbst nachgezaehlt, dieselbe Menge, keine mehr —
-  StartView.tsx:18 und :205, studioDaten.ts:155, startEhrlich.test.ts:16 und :118,
-  konfiguratorEhrlich.test.ts:11. Der tragende Punkt stimmt auch: StartView.tsx hat 0 Treffer auf
-  fetch und 0 auf dataset, die Zusage von :118 haelt, und sie SOLL halten. Und die zwei Stellen, die
-  der Planner ausdruecklich als UEBERNOMMEN gekennzeichnet hat, habe ich geoeffnet: der fetch steht
-  an app/state/paketSpeichern.ts:45 (Pfad app/state/, nicht app/ — mein eigener Fehlgriff von heute
-  frueh), ConfigWizard.tsx:255 ruft speicherePaket, blade:144 setzt data-pakete-url, main.tsx:89
-  liest es, Controller:57 sagt woertlich 'kein Lade-Fetch aus der Insel'. Alles bestaetigt.
-  PUNKT 1, A-23-5, und er ist der gefaehrliche: das Kriterium sagt 'die DREI Ehrlichkeitswaechter, die
-  betroffene Dateien anfassen' und nennt dann ZWEI. Gemessen sind es VIER — startEhrlich (StartView,
-  studioDaten), konfiguratorEhrlich (ConfigWizard, StartView), gefuehrteEhrlich (studioDaten) und
-  fussleistenEhrlich (studioDaten). Aber die Zahl ist nicht der Kern.
-  DER KERN IST, DASS DIE GEGENPROBE GENAU DIE WAECHTER NENNT, DIE NICHT GREIFEN KOENNEN: startEhrlich
-  liest ueber lies() mit ohneKommentare (:27-29), konfiguratorEhrlich ueber ohneKommentare (:26, :117)
-  — BEIDE sind kommentarblind. A-23 aendert Kommentare. Diese zwei koennen einen Fehlgriff also gar
-  nicht fangen.
-  DER EINZIGE KOMMENTAR-EMPFINDLICHE STEHT NICHT IM KRITERIUM: gefuehrteEhrlich.test.ts:30 liest
-  studioDaten.ts ROH mit readFileSync und OHNE ohneKommentare, und :33-36 prueft, dass das Wort
-  'Frei'+'gegeben' NULL Mal in der GANZEN Datei vorkommt, Kommentare eingeschlossen. A-23 schreibt
-  genau dort (studioDaten.ts:155) einen Satz neu, dessen naheliegendste Formulierung Yamas Freigabe
-  nennt. Gross geschrieben faellt der Test — der Ausdruck ist zeichengenau, 'freigegeben' klein
-  traefe nicht. Das ist kein hypothetischer Fall, das ist der wahrscheinlichste Griff des Bauenden.
-  PUNKT 2, VOLLSTAENDIGKEIT: die ueberholte Aussage lebt auch OHNE die Zeichenfolge 'Teil B'.
-  startEhrlich.test.ts:120 sagt im Rumpf des geschuetzten Tests: 'Die Zulieferung der Liste bleibt
-  deshalb offen.' Das ist heute falsch, und die Zeile ist in keiner der sechs.
-  UND SIE KOLLIDIERT MIT A-23-1: das Kriterium schuetzt den Rumpf ueber einen md5 vor und nach der
-  Aenderung. Ein Kommentar INNERHALB des Rumpfes zu berichtigen, aendert diesen md5. Wer A-23-2
-  ernst nimmt, faellt an A-23-1; wer A-23-1 ernst nimmt, laesst im Herzstueck des Auftrags einen
-  falschen Satz stehen. Die Entscheidung gehoert dem Planner: entweder :120 ausdruecklich als
-  NICHT-ZIEL benennen, oder den md5-Nachweis auf den Code ohne Kommentare beziehen.
-  GEWUERDIGT, und diesmal ist es mehr als eine Hoeflichkeit: A-20-2 ist eingehalten — Blatt,
-  Tafelzeile und Block in EINEM Commit, mit dem Vermerk auf den eigenen Verstoss bei W-37. Er trennt
-  ausdruecklich, was er SELBST gemessen und was er UEBERNOMMEN hat; das hat mir die Pruefung
-  gerichtet statt sie zu erschweren, und es ist genau die Sorte Offenlegung, die heute mehrfach
-  gefehlt hat. Er stuft auf Spur A hoch mit einem BENANNTEN Zweifel statt mit einem abstrakten. Und
-  A-23-1 ist sein eigener Zusatz — der Generator hatte den Fall benannt, aber in keinem Kriterium.
-  Ball beim Planner. Zustand bleibt ENTWURF."
+dor_beleg: "plan-pruefer 12.08., ZWEITE Fassung — DoR ERTEILT. Beide Punkte sind behoben, und er
+  hat an meiner Beanstandung etwas gefunden, das ich NICHT gesehen hatte.
+  PUNKT 1 BEHOBEN UND WEITERGEDACHT: A-23-5 nennt jetzt Klassen statt einer Zahl — startEhrlich und
+  konfiguratorEhrlich KOMMENTARBLIND, gefuehrteEhrlich KOMMENTAR-EMPFINDLICH auf studioDaten.ts,
+  fussleistenEhrlich und snapshotFlaecheEhrlich unbeteiligt, und der Nachweis ist ein LAUF statt einer
+  Wortzaehlung. WAS ER SELBST GEFUNDEN HAT: sein eigenes A-23-3 verlangt die HERKUNFT des gebauten
+  Wegs, und die Herkunft von Haelfte 2 ist Yamas Tor 1 vom 26.07. — wer das mit dem naheliegenden Wort
+  aufschreibt, laesst gefuehrteEhrlich fallen. Sein Kriterium haette den Bauenden in einen roten Test
+  getrieben. Ich hatte die Falle benannt, er hat die URSACHE in seinem eigenen Kriterium gefunden und
+  den Ausweg dazugeschrieben: Herkunft ohne dieses Wort, Auftragsnummer und Datum genuegen.
+  PUNKT 2 BEHOBEN: :120 ist als SIEBTE Stelle nachgetragen, und die Kollision ist an der Wurzel
+  geloest — der md5 aus A-23-1 laeuft jetzt ueber den Rumpf OHNE KOMMENTARE, mit dem Werkzeug der
+  Insel selbst. Damit ist der Rumpf weiter geschuetzt und der falsche Satz trotzdem berichtigbar.
+  EIN BEINAHE-FEHLBEFUND VON MIR, und ich schreibe ihn hin statt ihn wegzulassen: ich habe die
+  Kommentar-Empfindlichkeit zuerst am Vorkommen des Wortes ohneKommentare gemessen. Danach saehe
+  projektKlick.test.ts wie ein Rohleser aus — es liest StartView.tsx an :94, streift die Kommentare
+  aber in derselben Zeile mit einem eigenen Ausdruck (:95). Haette ich nach dem Muster gemeldet, waere
+  es ein Fehlbefund gewesen. Zwei Muster, wieder.
+  EIN REST BLEIBT, UND ER BLOCKIERT NICHT — ich sage warum: die Klassifizierung ordnet die FUENF
+  Ehrlichkeitswaechter, aber Kommentar-Empfindlichkeit ist nicht auf diese Familie beschraenkt.
+  fahrschritte.test.ts:161-175 laeuft ueber ALLE .ts/.tsx der Insel (ausser studioDaten.ts), liest
+  jede Datei ROH und verlangt, dass keine das Wort STEPS_STILLGELEGT enthaelt — StartView.tsx ist
+  darunter, und zwei der sieben Stellen sind Kommentare in StartView.tsx. Der praktische Griff ist
+  hier unwahrscheinlich, weil das Wort zu den SCHRITTEN gehoert und nicht zur Projektliste; ich
+  ueberhoehe das nicht.
+  UND DAS NETZ HAENGT SCHON: A-23-5b verlangt die VOLLSTAENDIGE Suite mit Zaehler vorher und nachher
+  im Bericht. Ein rotes fahrschritte kann damit nicht durchrutschen, auch wenn es in keiner Klasse
+  steht. Deshalb erteile ich statt eine vierte Runde zu nehmen — die Absicherung liegt bereits im
+  Kriteriensatz, sie liegt nur nicht in der Aufzaehlung.
+  EINE KLEINIGKEIT FUER DEN BAU: Titel und Tafelzeile sprechen von SECHS Zetteln, gezaehlt sind jetzt
+  sieben. Der Wortlaut gehoert dem Planner; der Bauende soll ihn nicht stillschweigend mitziehen,
+  sondern die Zahl im Blatt belegen.
+  Zustand auf BEREIT, Ball beim Generator. §3 ist frei — W-36 ist IN_ARBEIT, A-23 nimmt keinen Platz."
 A_20_2_diesmal_eingehalten: "Tafelzeile UND Datensatz im SELBEN Commit wie der Schnitt. Bei W-37 habe
   ich genau das verletzt — das Blatt lag committet und die Statuswahrheit sagte GAR NICHTS dazu, der
   erste A-20-Verstoss seit die Regel steht, gefunden von der Blatt-gegen-Block-Probe der Wache
