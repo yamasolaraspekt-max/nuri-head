@@ -34,7 +34,30 @@ export interface UErgebnis {
   uWert: number;              // W/(m²K)
   schichtR: number[];         // R je Schicht, m²K/W
   pruefungen: UPruefung[];
+  /**
+   * A-18 — Pflichtfeld, kein Kommentar und kein optionales Anzeigefeld.
+   *
+   * Die Engine rechnet den Taupunkt nicht — sie KANN ihn nicht rechnen: `Schicht` trägt drei
+   * Felder (`name?`, `dicke`, `lambda`), für Glaser nach DIN 4108-3 fehlen die
+   * Diffusionswiderstände (μ bzw. s_d) je Schicht UND das Raumklima innen/außen. Das ist kein
+   * „noch nicht implementiert", sondern mathematisch nicht durchführbar, und es steht im
+   * Datentyp statt in einer Meinung.
+   *
+   * Pflicht, damit `tsc` bricht, wenn eine Rückgabe den Vorbehalt weglässt. Ein optionales Feld
+   * wäre die stille Ersetzung: es ließe genau den Fall zu, den A-18 verhindern soll.
+   */
+  vorbehalt: string;
 }
+
+/**
+ * Der Vorbehalt steht EINMAL im Haus und ist damit zitierbar (Muster: `N003_VORBEHALT`,
+ * sparrenBerechnung.ts:100). Jeder Satzteil ist eine Ablesung, kein Fachurteil: die Norm steht
+ * im Dateikopf, die fehlenden Größen stehen im Datentyp, der Schlusssatz folgt daraus.
+ */
+export const UWERT_VORBEHALT =
+  'U-Wert nach DIN EN ISO 6946. Keine Feuchteschutz-Aussage — Tauwasser und Schimmelrisiko ' +
+  'nach DIN 4108-3 sind nicht geprueft; dafuer fehlen die Diffusionswiderstaende und das ' +
+  'Raumklima. Ein guter U-Wert bedeutet nicht, dass die Konstruktion feuchtesicher ist.';
 
 const r3 = (x: number): number => Math.round(x * 1000) / 1000;
 
@@ -68,5 +91,6 @@ export function berechneUWert(schichten: ReadonlyArray<Schicht>, opt?: UOptionen
     uWert: r3(uWert),
     schichtR: schichtR.map(r3),
     pruefungen,
+    vorbehalt: UWERT_VORBEHALT,
   };
 }

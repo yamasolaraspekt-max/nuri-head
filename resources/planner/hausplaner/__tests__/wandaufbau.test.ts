@@ -3,7 +3,7 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { berechneUWert, UEBERGANG } from '../geometry/wandaufbau';
+import { berechneUWert, UEBERGANG, UWERT_VORBEHALT } from '../geometry/wandaufbau';
 
 test('KS 240 + WDVS 160: U ≈ 0,20 W/(m²K), erfüllt Ziel 0,24', () => {
   const r = berechneUWert([
@@ -45,4 +45,19 @@ test('Bauteilart wählt Übergangswiderstände (Dach ≠ Außenwand)', () => {
 test('Determinismus', () => {
   const s = [{ dicke: 240, lambda: 0.99 }, { dicke: 160, lambda: 0.035 }];
   assert.deepEqual(berechneUWert(s), berechneUWert(s));
+});
+
+// A-18: der Vorbehalt steht im Ergebnis und ist zeichengenau. Der Vergleich läuft gegen die
+// Konstante UND gegen den ausgeschriebenen Wortlaut — sonst prüfte er nur, dass zwei Verweise
+// auf dieselbe Zeichenkette gleich sind, und eine stille Umformulierung bliebe grün.
+test('A-18: jede Rückgabe trägt den Vorbehalt, zeichengenau', () => {
+  const r = berechneUWert([{ dicke: 240, lambda: 0.99 }]);
+  assert.equal(r.vorbehalt, UWERT_VORBEHALT);
+  assert.equal(
+    r.vorbehalt,
+    'U-Wert nach DIN EN ISO 6946. Keine Feuchteschutz-Aussage — Tauwasser und Schimmelrisiko ' +
+      'nach DIN 4108-3 sind nicht geprueft; dafuer fehlen die Diffusionswiderstaende und das ' +
+      'Raumklima. Ein guter U-Wert bedeutet nicht, dass die Konstruktion feuchtesicher ist.',
+  );
+  assert.equal(berechneUWert([], { bauteil: 'dach' }).vorbehalt, UWERT_VORBEHALT);
 });

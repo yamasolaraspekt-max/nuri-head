@@ -39,7 +39,7 @@
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
 | **A-17** Zwei Engines schweigen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
-| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `ea9522bc` | **löst A-15s letzte offene Achse-2-Zeile auf, ohne Fachurteil** — die `Schicht` hat drei Felder (`name?`, `dicke`, `lambda`), für Glaser fehlen μ/s_d **und** Klima: der Taupunkt ist **nicht rechenbar**, nicht »nicht implementiert« · 10 Feuchte-Begriffe = 0 in der Datei · Pflichtfeld nach A-14/A-17-Muster · **kein Panel, keine Plakette zu streichen** · 2. Posten: »speist Heizlast« gegen **0** Aufrufe aus `app/` |
+| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `ea9522bc` | **löst A-15s letzte offene Achse-2-Zeile auf, ohne Fachurteil** — die `Schicht` hat drei Felder (`name?`, `dicke`, `lambda`), für Glaser fehlen μ/s_d **und** Klima: der Taupunkt ist **nicht rechenbar**, nicht »nicht implementiert« · 10 Feuchte-Begriffe = 0 in der Datei · Pflichtfeld nach A-14/A-17-Muster · **kein Panel, keine Plakette zu streichen** · 2. Posten: »speist Heizlast« gegen **0** Aufrufe aus `app/` |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -4260,8 +4260,23 @@ Bau** auf 11 — er zählt heute 10 korrekt, nicht zu wenig. Wer nach dem Bau 11
 ```yaml
 auftrag: "A-18"
 datei: docs/auftraege/aktiv/A-18-wandaufbau-vorbehalt-uwert.md
-zustand: IN_ARBEIT
-ballbesitz: "generator (Bau laeuft seit 12.08.)"
+zustand: CODE_FERTIG
+ballbesitz: "evaluator (gebaut 12.08. auf ee2dad24; Bericht docs/BERICHT-A-18-wandaufbau-vorbehalt-uwert.md)"
+zwei_punkte_fuer_den_evaluator: "Beide sind Zahlen, die ich NICHT passend gemacht habe.
+  (1) A-18-2 sagt 'die Konstante kommt genau einmal vor' — der Wortlaut kommt ZWEIMAL vor:
+      wandaufbau.ts:58 (die Konstante) und wandaufbau.test.ts:58 (ausgeschrieben in der Zusage).
+      Die zweite Stelle ist Absicht: ein Test, der nur r.vorbehalt === UWERT_VORBEHALT prueft,
+      vergleicht zwei Verweise auf dieselbe Zeichenkette und bleibt gruen, wenn jemand den
+      Wortlaut umformuliert. Er ist der einzige Waechter im Repo gegen eine stille
+      Umformulierung. Soll die Zahl woertlich stimmen, streiche ich die Zeile — dann faellt
+      der Schutz weg.
+  (2) must_preserve sagt 'NUR Einfuegung' — der Test hat EINE geloeschte Zeile, die Import-Zeile
+      (import { berechneUWert, UEBERGANG } -> ... , UWERT_VORBEHALT). Keine Zusage, keine
+      Rechenzeile; die zehn Assertions sind unveraendert. Soll 0 woertlich stimmen, wird daraus
+      eine zweite Import-Zeile, also ein doppelter Import in der Datei."
+zusagen_zahl_geklaert: "Das Blatt sagt 'die ZEHN vorhandenen Testzusagen', gemessen sind es
+  6 test()-Bloecke und 10 assert-Aufrufe. Gemeint sind die Assertions. B6 in freier Wildbahn:
+  eine Summe, deren Menge nie benannt wurde — hier ohne Schaden, aber es hat eine Messung gekostet."
 warum_A18_und_nicht_B6: "B6 steht direkt nach B5 und ist mein naechster Ball — ich habe es
   ZURUECKGESTELLT, nicht uebersprungen. Grund, gemessen: der Evaluator hat in 80d7a6d2 die
   B5-Abnahme GECLAIMT, und B6 aendert dieselbe Datei (scripts/commit-pruefen.sh). Waehrend eine
