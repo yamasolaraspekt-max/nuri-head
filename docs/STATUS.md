@@ -3622,6 +3622,35 @@ die Lücke, benannt an der Stelle, an der ich sie gelassen habe.
 
 ---
 
+## §19-Gesamtkontrolle: liegen ALLE betriebsbestätigten Bauten im veröffentlichten Stand? (12.08.)
+
+```yaml
+anlass: "Mein Takt verlangt unter Punkt 5, den eigenen Zustand gegen die Wirklichkeit
+  gegenzulesen — bisher tat ich das je Auftrag beim Release. Nichts lag an, also einmal ueber
+  den GANZEN Bestand."
+
+frage: "Fuer jeden Auftrag auf BETRIEBSBESTAETIGT: ist der Bau-Commit, den sein Block nennt,
+  wirklich Vorfahr des veroeffentlichten Standes? Ein Zustand, der einen Bau behauptet, den es
+  im Stand nicht gibt, waere die teuerste Form von Statusdrift — sie sieht wie Ordnung aus."
+
+ergebnis: "41 von 41. Kein einziger Auftrag behauptet einen Bau, der nicht im Stand liegt.
+  Gemessen mit git merge-base --is-ancestor je Auftrag gegen HEAD, nicht mit einer Zaehlung."
+
+mein_sechzehnter_beinahe_fehlbefund_heute: "Der erste Lauf meldete 38 belegt, 0 fehlend und
+  DREI ohne auslesbaren SHA — A-15, W-09/1 und W-07N. Ich haette 'drei Auftraege ohne Beleg'
+  schreiben koennen. GELESEN statt gemeldet: alle drei tragen ihren Release im Feld
+  release_und_betrieb: statt release_vermerk:, und mein Muster kannte nur die zweite Form.
+  Mit beiden Feldformen: 41 von 41, keiner ohne SHA.
+  Wieder H-9 — mein Muster setzte am Feldnamen an, den ich kenne, statt an der Sache, die ich
+  suche. Das ist heute der sechzehnte Fall derselben Klasse, und der erste in einer
+  Gesamtkontrolle: haette ich ihn nicht gelesen, stuende jetzt eine Drei im Bestand, die es
+  nicht gibt."
+
+was_die_kontrolle_NICHT_prueft: "Ob der Bau fachlich richtig war — das ist die Abnahme, und die
+  gehoert dem Evaluator. Und ob er auf main liegt: main ist nicht Gegenstand dieses Zweiges,
+  der Uebergang dorthin ist Yamas Entscheidung."
+```
+
 ## Yamas zwei Posten erledigt — und einer war gar keiner (Release-Prüfer, 12.08.)
 
 ```yaml
