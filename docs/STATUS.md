@@ -4488,3 +4488,73 @@ belege:                       "Schicht-Interface selbst gelesen · 10 Feuchte-Be
                                Treffer in Datei UND Haus · Dateikopf nennt ISO 6946 · ein
                                Aufrufer, kein Panel · Heizlast ruft die Engine nicht"
 ```
+
+---
+
+## N-003: DAS PROBLEM IST GELÖST — von Yama selbst, und die Auflage ist messbar erfüllt
+
+**Yamas Frage, 12.08.:** *„was mit N-003, welche auch eine Lösung von uns verlangt — wie lösen wir
+hier das Problem? Das hat Plan-Prüfer geschrieben."*
+
+**Antwort in einem Satz: Du hast es am 12.08. entschieden, A-14 hat es gebaut, und ich habe gerade
+nachgemessen, dass deine Auflage überall greift.** *Was noch als „offen bei Yama" in der
+Statuswahrheit steht, ist ein überholter Eintrag — genau die Klasse, die uns heute schon mehrfach
+begegnet ist.*
+
+### Was du entschieden hast (Formelsammlung, Abschnitt „Geltungsbereich")
+
+```text
+GELTUNGSBEREICH   ERLAUBT: Vorbemessung, Angebot/Kalkulation, Plausibilitaet, Variantenvergleich
+                  NICHT ERLAUBT: Ausfuehrungsnachweis, Genehmigungsunterlage, Freigabe zur
+                  Ausfuehrung, Sonderlasten (Wind, Mehrfeld, Knicken, Auflagerpressung, …)
+AMPEL             DAUERGELB — und dein Satz dazu ist der Kern:
+                  "Gruen wuerde bedeuten: uneingeschraenkt benutzbar. Das kann N-003 nie werden —
+                   nicht wegen der Rechenqualitaet, sondern weil der Geltungsbereich fachlich
+                   unvollstaendig ist und bleibt. Das ist kein Mangel, den man wegarbeitet;
+                   das ist die Natur einer Vorbemessung."
+AUFLAGE           "Jede ausgegebene Bemessungszahl traegt ihren Vorbehalt mit — in der Oberflaeche,
+                   im Export, in der Stueckliste, im PDF. Am Wert, nicht als Fussnote."
+```
+
+### Deine Auflage — heute nachgemessen, Weg für Weg
+
+```text
+1  DIE ZAHL ENTSTEHT MIT VORBEHALT
+   sparrenBerechnung.ts:89   vorbehalt: string   <- PFLICHTFELD im SparrenErgebnis
+   sparrenBerechnung.ts:149  vorbehalt: N003_VORBEHALT   <- dein Wortlaut, zeichengenau
+
+2  ES GIBT GENAU EINEN AUSGABEWEG, und er traegt ihn
+   enginePanels.ts:227       ruft berechneSparren
+   enginePanels.ts:225       { schluessel: 'vorbehalt', label: 'Vorbehalt' }
+                             -> in DERSELBEN Werteliste wie die beiden Ausnutzungen
+   EngineFlaeche.tsx:56-58   die grundlage-Zeile mit der Reichweitengrenze, sichtbar
+
+3  ES GIBT KEINEN ZWEITEN WEG — gemessen, nicht angenommen
+   PHP-Ausgabe (Export/PDF/Stueckliste) mit Sparrenzahlen:  0 Dateien
+   Downstream-Konsumenten (holzMengen, holzBauteile):        0 Importe von dort
+   -> "im Export, in der Stueckliste, im PDF" ist heute gegenstandslos, WEIL es sie nicht gibt
+```
+
+> **Damit ist die Auflage nicht „so gut wie möglich" erfüllt, sondern vollständig** — es gibt genau
+> eine Ausgabe, und sie trägt den Satz am Wert. *Und das Pflichtfeld ist die Vorsorge für den Tag,
+> an dem ein Export gebaut wird: **wer den Vorbehalt dann weglässt, muss ihn aktiv unterdrücken,
+> und das fällt auf.***
+
+### Die eine Restaufgabe — und sie ist klein
+
+**Deine Auflage nennt Wege, die es heute nicht gibt (Export, Stückliste, PDF).** Wenn sie gebaut
+werden, muss der Vorbehalt mit — und das Pflichtfeld allein *erzwingt* nur, dass er im Datensatz
+steht, nicht dass die Ausgabestelle ihn *zeigt*.
+
+```yaml
+vorschlag: "Die Auflage wird VORBEDINGUNG an der Stelle, wo ein kuenftiger Auftrag sie findet —
+            im N-003-Abschnitt der Formelsammlung als Zeile 'wer einen neuen Ausgabeweg fuer
+            Bemessungszahlen baut, zeigt den Vorbehalt AM WERT; ohne ihn ist der Auftrag nicht
+            BEREIT-faehig'. Ein Satz, kein Bau."
+alternative: "Ein Waechter nach A-04-Muster (Ausgabewege ohne Vorbehalt melden) waere die
+              dauerhafte Form — aber das ist ein eigener Bauauftrag und heute ohne Gegenstand,
+              weil es nur einen Ausgabeweg gibt. Ich empfehle ihn NICHT jetzt."
+was_von_dir_gebraucht_wird: "nichts. Die Entscheidung liegt, die Auflage ist erfuellt.
+                             Der Vorschlag oben ist eine Zeile fuer den Planner."
+status_korrektur: "der Eintrag 'FACH-GATE N-003 offen bei Yama' ist ueberholt und wird geschlossen"
+```
