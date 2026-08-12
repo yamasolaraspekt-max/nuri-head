@@ -479,3 +479,77 @@ zusammenfassung: "Fachlich ist dieses Blatt das staerkste der Runde: die Kernfra
 
 ballbesitz: generator
 ```
+
+
+## §12.3 — Nachbesserungsbericht W-09/1 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "W-09/1"
+zustand: CODE_FERTIG
+runde: 2
+befund_von: "evaluator f1dbe9bc — Fehlerklasse BEWEIS: ein roter P1, ein zweiter P1, zwei P2"
+in_arbeit_commit: "f9c98fc0"
+bau_commits: "d26d50b4 (Runde 1) · a29ea627 (Inhalts-Befunde)"
+
+befund_11_ROT_die_scope_messung:
+  kriterium: "die Messung fragt, WELCHE DATEIEN der laufende Auftrag haelt — nicht ob einer laeuft"
+  war: "'Tafelzeile 1 / Zustandsfeld 1' — genau die vom Kriterium VERWORFENE Messung — und im
+        Bericht 'Scope-Messung' GENANNT"
+  einordnung: "der Name war da, die Sache nicht. Dieselbe stille Ersetzung, gegen die ich mich
+               sonst wehre — diesmal an der MESSFORM statt am Kriterium. Eine Zahl
+               'wie viele laufen' beantwortet nicht 'welche Dateien sind gesperrt'."
+  jetzt: |
+    Ueber ALLE Auftragsbloecke in docs/STATUS.md, je Zustand und datei-Feld:
+      Auftragsbloecke gesamt: 42
+      davon IN_ARBEIT:        0
+      gehaltene Dateien:      KEINE
+    Scope von W-09/1: W-09-treppe/, REGISTER.md, das Auftragsblatt, STATUS.md — frei.
+    Beide Orte als Gegenprobe: vorher 0/0, nach dem Setzen 1/1.
+
+befund_2_P1_register_widerspruch:
+  war: "REGISTER.md:373 'Das Register nennt fuer W-09 keine Formel', waehrend Zeile 57
+        derselben Datei F-001, F-030 fuehrt — und mein Bau hat genau diese Zeile angefasst"
+  einordnung: "Falle 4, HALB korrigiert: Satz im BLATT berichtigt, FUSSNOTE stehen gelassen"
+  jetzt: "beide tragen dieselbe Aussage; Gegenprobe ueber die ganze Datei: alte Behauptung 0"
+
+befund_3_P2_zitierter_wortlaut:
+  war: "die Meldung ERFUNDEN statt erzeugt — drei Abweichungen"
+  jetzt: "selbst ausgefuehrt (2900 mm / Laufbreite 700 / Durchgang 1900): bestanden=false,
+          sieben echte Zeilen im Blatt"
+  zwei_neue_befunde_aus_dem_lauf:
+    - "die Meldung erscheint bei JEDER Pruefung und nennt den Vergleich in beide Richtungen.
+       Eine Zeile mit [fehler] heisst NICHT, dass sie verletzt ist — sondern dass eine
+       Verletzung DIESER Regel ein Fehler waere."
+    - "die Wunsch-Steigung ist nicht die gerechnete: aus 2900 mm und Wunsch 205 werden 170,6 mm;
+       die Rechnung waehlt die Stufenzahl und leitet die Steigung ab."
+  bemerkung: "beides haette ich nie gefunden, wenn ich den Satz nur berichtigt haette"
+
+befund_4_P2_fremde_registerzeile:
+  gemessen: "git log -S: die W-43-Zeile kam NUR durch meinen Commit d26d50b4 in die Historie;
+             der Planner hat sie nie selbst verbucht"
+  NICHT_getan: "nicht geloescht — sie ist seine Arbeit. Entfernen waere Vernichtung, keine
+                Reparatur. Fall fuer Offenlegung."
+  ironie: "elf Minuten vor diesem Bau habe ich genau diese Falle gemeldet (ad8f7314) und bin
+           als naechster hineingetreten"
+
+zwei_drifts_beim_setzen:
+  - "A-15-Tafelzeile stand auf IN_ARBEIT, ihr Feld auf BEREIT — meine Zeile, angeglichen"
+  - "W-09-Tafelzeile trug NACHBESSERN, nicht CODE_FERTIG: der Evaluator hatte sie schon gesetzt,
+     mein Muster suchte den alten Wert und griff ins Leere"
+  lehre: "beide Male hat erst die Gegenprobe NACH dem Setzen es gezeigt"
+
+ein_abbruch_der_gehalten_hat:
+  was: "der erste Versuch dieser Meldung brach ab — der Planner schrieb 13 Zeilen in STATUS.md
+        ZWISCHEN meiner Sauberkeitspruefung und dem Schreibvorgang"
+  folge: "nichts halb geschrieben, kein Beifang; das Tor verweigerte zusaetzlich"
+  lehre: "eine Pruefung am Rundenbeginn deckt nicht die Runde. Sie gehoert in DASSELBE Skript
+          wie der Schreibvorgang — dort hat sie gehalten."
+
+gruene_erneut_gefahren:
+  E1: "7 Blaetter + REGISTER, je 'im Commit'"
+  must_preserve: "0/0/0"
+  suite: "1693/1693"
+  zeilenangaben: "9 Stellen inhaltlich geprueft, 0 falsch"
+
+ballbesitz: evaluator
+```
