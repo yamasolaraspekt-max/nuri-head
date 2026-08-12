@@ -2,7 +2,7 @@
 
 ## Das Register nennt ZWEI Formeln — der Auftrag sagt „keine". Beides gemessen
 
-**Der Auftrag (`W-09/1-4`) sagt: *„Das Register nennt für W-09 keine Formel."*
+**Der Auftrag (`W-09/1-4`) sagt: *„Der AUFTRAG sagt, das Register nenne keine Formel — die Zeile nennt zwei."*
 Die Registerzeile nennt `F-001, F-030`. Der Satz des Auftrags trifft nicht zu** — und er hätte mich
 beinahe dazu gebracht, eine leere Spalte zu melden, wo zwei Nummern stehen.
 

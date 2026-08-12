@@ -6,7 +6,8 @@ titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach de
 art: "BAU — Sichtaenderung an der Hausplaner-Insel, kein Datenpfad"
 spur: A
 heimat_app: ticket
-status: ENTWURF
+status: BEREIT
+dor_beleg: "8c2272cd — plan-pruefer: 'A-17 BEREIT beim ersten Review', Rot-Lage selbst gemessen. Zustand vom Planner NACHGEZOGEN, nicht entschieden — der Pruefer hat ihn belegt und seinen Block geschrieben, Tafelzeile und Blattkopf hingen nach."
 status_steht_in: docs/STATUS.md
 basis_sha: 3678d1de
 prioritaet: P1
