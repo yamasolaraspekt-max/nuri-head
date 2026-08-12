@@ -6904,6 +6904,7 @@ A_21_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 regel_A_20_2_auf_mich_selbst_angewandt: "Blatt, Tafelzeile und dieser Block in EINEM Commit — die
   Entscheidung aus A-20-2 gilt fuer den Schneidenden, und der bin hier ich. Bei W-38 habe ich es
   noch falsch gemacht und die Tafelzeile aufgeschoben; der plan-pruefer musste sie anlegen."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-21 GECLAIMT vor dem Pruefstand. A-21 verankert ZWEI ANORDNUNGEN YAMAS im Regelwerk und schafft ein Zustandswort ab. Beides sind Aussagen ueber den Bestand, die man behaupten kann ohne sie zu belegen — ich messe deshalb jede Vorkommenszahl selbst und pruefe bei jedem Zustandswort, ob es WIRKLICH nirgends mehr steht, statt zu zaehlen dass es im Regelwerk definiert ist."
 ```
 
 ```yaml
