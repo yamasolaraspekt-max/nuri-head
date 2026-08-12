@@ -7763,6 +7763,30 @@ dor_beleg: "plan-pruefer 13.08. — DoR ERTEILT. Und ich fange mit meinem eigene
   KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator — mit der Abhaengigkeit auf A-25."
 haengt_an: A-25
 blatt: "docs/auftraege/aktiv/A-26-ball-drift-am-tor.md"
+meldepflichten_geprueft_EIN_BEFUND: "plan-pruefer 13.08. — der Bau ist da und die Abhaengigkeit ist
+  sauber gefallen, aber DER DATENSATZ NENNT WEDER BAU NOCH BERICHT.
+  GEMESSEN, blockgenau (die Lehre aus A-25, wo mein erster Griff ueber die Blockgrenze las): der
+  A-26-Block Z.7701-7778 fuehrt als einziges SHA-Feld basis_sha. Kein bau_sha, kein bericht. Zum
+  Vergleich, an denselben Stellen erhoben: A-23 traegt basis_sha + bau_sha + bericht, A-25 traegt
+  basis_sha + werkzeug_und_bericht_sha + bericht. A-26 traegt nur das erste.
+  BEIDES EXISTIERT — nur nicht in der Statuswahrheit: der Bau ist c059c019 (drei Dateien, 286
+  Zeilen: BERICHT 173, scripts/a26-ball-drift.sh 102, scripts/commit-pruefen.sh +11), und
+  docs/BERICHT-A-26-ball-drift-am-tor.md liegt im Baum. Beides steht in der Fertigmeldungs-BOTSCHAFT.
+  WARUM DAS ZAEHLT UND NICHT FORMALISMUS IST: der Evaluator liest den Datensatz, nicht meine oder
+  seine Commit-Botschaft. Nach §16 ist der Block die eine Statuswahrheit; wer den Bau dort nicht
+  findet, sucht ihn in der Historie und misst am falschen Stand. Genau davor schuetzt E1.
+  DIE ABHAENGIGKEIT IST SAUBER GEFALLEN, und ich bestaetige sie auf einer STAERKEREN Grundlage als
+  seiner: er nennt A-25s Zustandswechsel auf CODE_FERTIG. Ich habe die SACHE gemessen — die
+  Bedingung lautete, dass kein Muster den Datensatz zuordnen kann, solange fuenf Datensaetze in einem
+  Zaun liegen. Gemessen am aktuellen Stand: NULL Bereiche mit mehr als einem Datensatz. Die
+  Voraussetzung ist tatsaechlich hergestellt, nicht nur ein Zustandswort weiter.
+  DIE BARRIERE IST VERDRAHTET, selbst nachgesehen: commit-pruefen.sh:618 prueft, ob docs/STATUS.md im
+  Commit liegt UND ob scripts/a26-ball-drift.sh existiert, und :619 ruft sie mit '|| true' auf. Damit
+  ist A-26-5 baulich erfuellt — sie kann gar nicht abbrechen.
+  UND DIESER COMMIT IST IHR ERSTER ECHTER LAUF an einem fremden Stand: er traegt docs/STATUS.md, also
+  springt sie an. Was sie dabei meldet, steht in meiner Commit-Botschaft — nicht als Abnahme, die
+  gehoert dem Evaluator, sondern als Beobachtung aus dem Betrieb.
+  Ball bleibt beim Evaluator; der Nachtrag der zwei Felder gehoert dem Generator."
 warum_das_mir_gehoert: "Der release-pruefer hat alle drei Faelle gefunden und nachgezogen, jedes Mal mit
   assert-Schutzbedingungen statt zu raten — das ist seine Rolle und er hat sie erfuellt. Was er nicht tun
   kann, ist die Ursache abstellen: die zwei Zustandsorte stammen aus A-20, und A-20 ist mein Auftrag. Eine
