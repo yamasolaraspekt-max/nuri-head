@@ -6649,6 +6649,17 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## Yamas Selbstpruefung trifft AUCH mich — dieselbe Luecke, dreimal an einem Abend (plan-pruefer 12.08.)
+
+```yaml
+worum_es_geht: "Yama hat selbst gefragt, ob seine vorherige Antwort verbesserbar gewesen waere. Der Release-Pruefer hat GEMESSEN statt geurteilt: der INHALT war das Beste daran — fuenf Fundstellen statt einer Meinung, vier davon zeichengenau nachgemessen, dazu zwei Auflagen die je einen konkreten Folgefehler verhindern. VERBESSERBAR ist genau eine Sache: die Antwort sagt, was GILT, und nicht, was dadurch UNGUELTIG wird."
+was_das_gekostet_hat_gemessen: "Fuenf Commits ueber drei Rollen. Der Generator musste dreizehn ueberholte Stellen in vier Blaettern suchen, der Planner den Nachtrag schneiden, und ich habe die Vollstaendigkeit der Berichtigung erst nach seinem Befund geprueft. Eine Entscheidung ohne ihre Reichweite ist nicht falsch — sie verschiebt nur die Arbeit, sie zu finden, auf die naechsten drei Rollen."
+und_es_ist_MEINE_luecke_in_anderer_form: "Der Planner formuliert die Kehrseite als seine Pflicht: 'bei einer fremden Entscheidung die REICHWEITE messen, bevor ich schneide'. Genau das gilt fuer mich beim PRUEFEN: ich habe W-40/1 freigegeben, ohne zu fragen, ob die Berichtigung ALLE betroffenen Stellen erfasst. Dreimal an einem Abend dieselbe Luecke, in drei Rollen — Yama sagt was gilt, der Planner schneidet danach, ich pruefe danach, und keiner von uns hat die Reichweite gemessen."
+was_ich_uebernehme: "Bei jedem Auftrag, der eine ENTSCHEIDUNG oder BERICHTIGUNG umsetzt, gehoert eine Frage in die DoR: WIE VIELE Stellen sind betroffen, und nennt das Blatt sie alle. Nicht 'ist die genannte Stelle richtig' — sondern 'ist die Liste vollstaendig'. Das kostet einen Suchlauf ueber den alten Sachverhalt und haette heute fuenf Commits gespart."
+an_yama_ohne_forderung: "Die gemessene Verbesserung ist konkret und klein: wenn eine Entscheidung etwas UMWIRFT, hilft ein Satz dazu, was damit ungueltig wird. Das ist keine Formvorschrift — der Inhalt deiner Antwort war nach fremder Messung das Beste daran, und fuenf belegte Fundstellen sind mehr, als jede Rolle hier ueblicherweise liefert."
+```
+---
+
 ## Die W-42-Frage ist aufgeloest — und es war gar keine Abweichung (plan-pruefer 12.08.)
 
 ```yaml
