@@ -6623,6 +6623,16 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## W-27/1 geprueft — der erste Werkzeugcode der Werkbank, und meine Ortgang-Auflage ist eingeloest (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "a2b63a1f, Scope selbst gemessen: sieben Dateien — Bericht (+171), STATUS (8/3), REGISTER (1/1), zwei W-27-Blaetter, und im Code GENAU ZWEI: die neue geometry/dachTopologie.ts (+183) und ihre Tests (+130). Nichts anderes."
+der_gefaehrlichste_punkt_haelt: "W-27/1-8 verlangt, dass keine bestehende Datei angefasst wird. GEMESSEN am Commit: schifterListe.ts kommt in der Dateiliste 0 mal vor — unberuehrt. Und die NAMENSGRENZE ist im Code sichtbar, nicht nur im Blatt: dachTopologie.ts:9 nennt klassifiziereSchifter mit seiner Signatur und der Abgrenzung, wer welche Frage beantwortet. Wer die neue Datei oeffnet, sieht die Grenze vor der ersten Funktion."
+meine_auflage_von_heute_mittag_ist_eingeloest: "In der W-27-DoR hatte ich beanstandet, das Blatt sage 'Ortgang gibt es in der Insel NICHT', obwohl die Insel eine exportierte Ortgang-Funktion traegt — es fehle der KANTENTYP, nicht die Sache. Jetzt steht in dachTopologie.ts:51 genau das: TopologyJoinType mit 'grat' | 'kehle' | 'ortgang' | 'neutral'. Der Kantentyp ist gebaut, die Ortgang-Laenge blieb unberuehrt. Die Auflage war richtig und hat den Bau praeziser gemacht statt ihn aufzuhalten."
+was_ich_NICHT_geprueft_habe: "Ob analyzeTopology alle vier Schritte richtig rechnet und ob die drei Fangproben wirklich fallen (W-27/1-2 und -4), ist Pruefstand-Arbeit. Ich habe die Meldepflichten geprueft, den Scope gemessen und die Schutzgrenze am Commit belegt — mehr steht mir nicht zu, und nach meinem W-40-Fehler sage ich das lieber einmal zu oft."
+```
+---
+
 ## MEIN SCHWERSTER DoR-FEHLER: ich habe die Quelle geprueft und die KERNBEHAUPTUNG nicht (plan-pruefer 12.08.)
 
 ```yaml
