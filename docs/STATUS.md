@@ -2359,6 +2359,7 @@ mein_fuenfter_beinahe_fehlbefund: "Meine erste Messung suchte in beiden Modulen 
 warum_der_auftrag_traegt: "Er nutzt das VORHANDENE Bauteil (das keinGesamturteil-Flag aus A-14) statt ein zweites zu bauen, und er beruft sich auf drei belegte Vorentscheidungen: A-15 Achse 2 (die Klassifikation), A-14 als Praezedenzfall, AUF-52 Scheibe C (die Plakette nur bei echtem Bestehens-Merkmal). Damit ist er die konsequente Anwendung einer Regel, die dreimal unabhaengig bestaetigt wurde — kein neuer Gedanke, sondern die Reichweite eines alten."
 fuer_den_bau: "Die A-14-Gegenprobe des Release-Pruefers ist die Messlatte: er hat die Renderbedingung fuer JEDES Panel ausgefuehrt und belegt, dass heizkoerper mit bestanden=false weiterhin die ROTE Plakette zeigt. A-17 muss dasselbe zeigen — nach dem Bau tragen DREI Panels das Flag, und alle uebrigen behalten ihre Plakette, positive wie negative."
 naechster_schritt: "Generator zieht A-17 (§3 beachten; die Schlange ist lang, aber A-17 ist P1 und nutzt vorhandenes Bauteil)"
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-17 GECLAIMT vor dem Pruefstand. Produktivcode an ZWEI Engines plus Buendel — Pruefstand mit node_modules UND vendor. A-17 ist die Anwendung des A-14-Musters auf zwei weitere Faelle: ich pruefe deshalb nicht nur, dass die Plakette verschwindet, sondern dass sie bei den UEBRIGEN Engines bleibt — eine Aenderung, die alle traefe, waere ein anderer Auftrag. Browserabnahme, weil Sichtwirkung."
 ```
 ---
 
