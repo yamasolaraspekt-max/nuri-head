@@ -59,8 +59,8 @@
 | **W-35** Konfigurator-Dialog | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
-| **W-36** Faehigkeiten-Navigation | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
-| **W-37** Rechenpanels | `ENTWURF` | **planner** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR nicht erteilt** — zwei Kriterienzahlen verfehlt (fuenf/acht Adapter, vier/sechs Waechter) |
+| **W-36** Faehigkeiten-Navigation | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
+| **W-37** Rechenpanels | `ENTWURF` | **planner** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR zweite Fassung** — beide Blocker behoben, EIN Punkt offen (drei Ausfuhren fehlen im Scope) |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -8471,6 +8471,21 @@ dor_nachtrag: "plan-pruefer 12.08., NACHTRAG ZU MEINER FREIGABE — der Generato
 auftrag: "W-33"
 zustand: CODE_FERTIG
 ballbesitz: evaluator  # der plan-pruefer notierte hier: "Bau laeuft; meine Auflage ist durch seinen Befund ueberholt" — Wortlaut erhalten, nur der Traeger gewechselt
+meine_bindende_bedingung_selbst_nachgeprueft: "plan-pruefer 12.08.: In baa785a2 habe ich W-33
+  freigegeben unter EINER bindenden Bedingung — die Kennzeichnung als ueberholt muss an DERSELBEN
+  Stelle stehen wie das geforderte Zitat, nicht in einem anderen Blatt und nicht nur im Bericht.
+  SELBST NACHGESEHEN im gebauten Blatt, 7-GRENZEN.md Abschnitt 'W-33-5 · AUF-40 TEIL B': das Zitat
+  steht mit Herkunft (Z.11-18), und unmittelbar darunter Z.20 'DREI Stellen, ein Satz — und er ist
+  UEBERHOLT' samt der Messung. Erfuellt, und weiter als verlangt: er nennt DREI Fundstellen des
+  ueberholten Satzes, ich hatte zwei. StartView.tsx:205 hatte ich nicht.
+  Z.73-76 sagt ausserdem ausdruecklich, dass er das Kriterium nicht still ersetzt. Genau die Form,
+  die ich entschieden habe.
+  UND ER ZIEHT EINE GRENZE, DIE ICH NICHT VERLANGT HABE: 'NICHT gemessen — ob die Liste im BROWSER
+  wirklich ankommt; die Naht gelesen, nicht ausgefuehrt.' Das ist die Trennung zwischen gelesener
+  Naht und belegtem Betrieb, und sie steht im Blatt statt in einer Fussnote.
+  ICH PRUEFE DIESE BEDINGUNG, WEIL ICH HEUTE EINE VERSAEUMT HABE: meine W-33-Auflage aus der ersten
+  DoR ist nie im Blatt angekommen, und ich habe es erst zwei Runden spaeter gemerkt. Eine Auflage
+  ist erfuellt, wenn sie im BLATT steht — und geprueft, wenn ICH sie dort gelesen habe."
 entscheidung_zu_seinem_befund: "plan-pruefer 12.08. — ER HAT RECHT UND MEIN BEFUND EINE RUNDE
   VORHER WAR ZU ENG. Seine Kette selbst nachgemessen, jede Stelle geoeffnet:
     HausplanerController.php:101  hausplanerProjekte() — LeadAlternativeAdd, select auf id,
@@ -8681,65 +8696,31 @@ zweiter_punkt_derselben_klasse_der_auftrag_nennt_vier_ehrlichkeitswaechter: "Das
 
 ```yaml
 auftrag: "W-36"
-zustand: ENTWURF
-ballbesitz: planner  # DoR nicht erteilt, W-36-5 traegt eine falsche Zahl
+zustand: BEREIT
+ballbesitz: generator
 titel: "Die VIERTE Statusachse, und ein Kommentar der zwei davon mischt"
 basis_sha: 08b264cc
 spur: A
 prioritaet: P2
-dor_beleg: "plan-pruefer 12.08. — DoR NICHT ERTEILT. Ein Kriterium traegt eine falsche Zahl,
-  und zwar die, die das Blatt selbst als Fehlerquelle ausweist.
-  W-36-5 SAGT VIER, GEMESSEN SIND SIEBEN. Befehl:
-  grep -rlE \"from '[^']*(faehigkeiten|FaehigkeitenNavi)'\" __tests__ — und danach ALLE ZWOELF
-  Dateien einzeln geoeffnet (Pflichtpruefung 7), weil genau dieser Auftrag zeigt, wie teuer ein
-  Muster ohne geoeffnete Stelle ist. Es importieren wirklich:
-    faehigkeiten.test.ts:7 · schienenReiter.test.ts:21 · toolPresentation.test.ts:25 ·
-    enginePanelRest.test.ts:19        (die vier aus dem Blatt)
-    enginePanelTgaHeizung.test.ts:17 · enginePanelSparren.test.ts:19 ·
-    enginePanelTreppe.test.ts:21      (im Blatt NICHT genannt)
-  Die drei fehlenden tragen WORTGLEICH dieselbe Zeile wie enginePanelRest, das im Blatt unter JA
-  steht: import { FAEHIGKEITEN } from '../app/tools/faehigkeiten'. Es gibt keinen Unterschied,
-  an dem eine Trennung haengen koennte.
-  UND ES FEHLT EINE DRITTE KLASSE, die das Blatt gar nicht kennt: Tests, die die Navi-QUELLE
-  lesen statt sie zu importieren — keineKappung.test.ts:22 (readFileSync auf
-  app/FaehigkeitenNavi.tsx), gruppenzeileUndSchiene.test.ts:102 (Marke '<FaehigkeitenNavi'),
-  stilschicht.test.ts:679 (fuehrt die Navi-Datei in seiner Dateiliste), schienenReiter.test.ts:32
-  (tut beides). Das Blatt fuehrt keineKappung und gruppenzeileUndSchiene unter NEIN — sie
-  verriegeln die Datei aber sehr wohl, nur ohne Import.
-  DIE AUFTEILUNG GEHT AUF, zwoelf ohne Rest: 7 importieren (davon schienenReiter auch Quelle),
-  3 lesen nur die Quelle, 2 sind echte Wortzufaelle — ansichtBereit.test.ts:96 ist ein lokaler
-  Parametername, werkzeugRegistry.test.ts:14 ein Objektschluessel. Nur diese zwei gehoeren unter
-  NEIN, das Blatt nennt dort vier.
-  WARUM DAS BLOCKIERT und keine Auflage ist: die Zahl steht im KRITERIENWORTLAUT ('VIER
-  importieren W-36 wirklich, nicht zwoelf'). Wer ehrlich misst, findet sieben und verletzt das
-  Kriterium; wer VIER schreibt, macht das Blatt falsch. Dieselbe Klasse wie A-21-3, und die
-  Entscheidung gehoert dem Planner, nicht dem Beschreiber.
-  DER PLANNER HAT DEN FEHLER IN DIE GEGENRICHTUNG KORRIGIERT: sein erster grep war zu weit
-  (zwoelf), die Korrektur ist zu eng (vier). Der Absatz, in dem er das zu weite Muster als
-  Fehlerquelle benennt, steht ueber einer Liste, die dasselbe Muster in der anderen Richtung
-  verfehlt. Das ist kein Vorwurf, sondern der Grund, warum die Zahl aus dem Kriterienwortlaut
-  heraus gehoert und in eine Klassifizierung mit drei Faechern hinein.
-  ZWEITER BEFUND, VOLLSTAENDIGKEITSFRAGE, nicht blockierend aber zu entscheiden: Abschnitt 3 und
-  der Scope nennen EINE von VIER exportierten Funktionen. Gemessen an faehigkeiten.ts: :106
-  faehigkeitenNach (genannt), :111 alleFaehigkeiten, :116 doppelteIds, :127 faehigkeitNach (alle
-  drei nicht genannt). Sie sind nicht tot — faehigkeitNach laeuft in app/HausplanerApp.tsx:39 und
-  app/rahmen/FussUndUeberlagerungen.tsx:26, alleFaehigkeiten in schienenReiter.test.ts:21,
-  doppelteIds in faehigkeiten.test.ts:7 und toolPresentation.test.ts:25, wo es einen
-  Doppel-ID-Waechter traegt. Weder der IST- noch der IST-NICHT-Block erwaehnt sie, also muss der
-  Beschreiber raten. Ich habe diese Frage bei W-35 einmal vergessen und sie haette dort beide
-  Registerfehler gefunden; deshalb steht sie hier vor der Freigabe.
-  WAS ICH GEMESSEN HABE UND WAS STIMMT, damit der Planner nichts doppelt misst: 129 Z. und 76 Z.
-  exakt · die Fundstellen :17 :22 :25 :27 :46 :59 :99 :106 alle acht · neun Gruppen · WerkzeugAnzeige
-  an werkzeugZustand.ts:30 · der Kommentar :24 wortgleich zitiert · 'aktiv' 7 Treffer und
-  'schlaeft' 3, letztere an :7 :24 :73 und ALLE in Kommentaren · FaehigkeitenNavi.tsx genau ein
-  Export an :16 · der Guard-Test ist faehigkeiten.test.ts:38 ('Guard (AP-E)'), er importiert das
-  Modul zur Laufzeit und prueft, dass engineExport darin existiert · zwoelf Wort-Treffer-Dateien ·
-  Registerzeile REGISTER.md:123 mit 76 Z. Von den geprueften Zahlen ist nur die Waechterzahl falsch.
-  W-36-1 TRAEGT und ist der beste Teil des Blattes: vier Achsen je mit Traeger, Yamas Aufloesung zu
-  W-40 als Regel statt als Einzelfall. Genau deshalb darf das Blatt nicht mit einer falschen
-  Aufzaehlung danebenstehen — es ist dasselbe Fehlerbild eine Ebene tiefer.
-  Ball beim Planner: W-36-5 auf die drei Klassen umstellen, Scope um die drei Funktionen
-  entscheiden. Zustand bleibt ENTWURF."
+dor_beleg: "plan-pruefer 12.08., ZWEITE Fassung — DoR ERTEILT. Die Nicht-Freigabe e5285913 ist
+  abgearbeitet, und die Korrektur geht weiter als meine Beanstandung.
+  BEIDE BEFUNDE BEHOBEN, nachgelesen: W-36-5 traegt KEINE ZAHL mehr, sondern drei Zugriffsklassen
+  (IMPORT · NUR QUELLE · WORTZUFALL) mit je der Zusage, und die Zahl je Klasse wird am BAU-STAND
+  gezaehlt. Damit ist das Kriterium erfuellbar, ohne dass eine ehrliche Messung es verletzt — genau
+  der Punkt, an dem es gescheitert war. Der Scope nennt jetzt ALLE VIER exportierten Funktionen
+  (faehigkeitenNach, alleFaehigkeiten, doppelteIds, faehigkeitNach) und sagt dazu, dass die drei in
+  keinem Block standen. Das war meine Vollstaendigkeitsfrage, und sie ist beantwortet.
+  ER HAT SEINEN EIGENEN FEHLER GENAUER BESCHRIEBEN ALS ICH: ich hatte 'zu weit, dann in die
+  Gegenrichtung ueberkorrigiert'. Er nennt die Mechanik — er hat ACHT der zwoelf Dateien geprueft
+  und das Ergebnis als Vollzaehlung ausgegeben, und sein Quelle-Muster erfasste readFileSync und
+  Dateipfade, aber keine Markenstrings. Sein Satz dazu gehoert in die Werkzeugkiste: eine Stichprobe
+  ist keine Vollzaehlung, auch wenn sie zwei Drittel abdeckt.
+  MEINE ZAHLEN AUS DER ERSTEN FASSUNG GELTEN UNVERAENDERT und sind dort belegt: 129 Z. und 76 Z.,
+  acht Fundstellen, neun Gruppen, WerkzeugAnzeige an werkzeugZustand.ts:30, Kommentar :24 wortgleich,
+  'aktiv' 7 und 'schlaeft' 3 alle in Kommentaren, ein Export an :16, Guard-Test faehigkeiten.test.ts:38,
+  zwoelf Wort-Treffer-Dateien in der Aufteilung 7 Import (davon schienenReiter auch Quelle) + 3 nur
+  Quelle + 2 Wortzufall.
+  KEINE ROT-LAGE: W-36 nimmt keinen §3-Platz, Zustand geht auf BEREIT. Ball beim Generator."
 warum_jetzt: "Sechste Ablesung der Stufe 6, und die Kette braucht Vorrat: W-35 laeuft, W-33 ist in
   der DoR, W-40/1 in der Freigabe. Danach waere sie leer."
 DER_TRAGENDE_PUNKT_VIER_STATUSACHSEN: "Gemessen und jede Stelle geoeffnet: SchrittStatus mit ok, prog,
@@ -8793,49 +8774,29 @@ leerstelle_nach_A_20_geschlossen: "plan-pruefer 12.08.: Dieses Blatt lag COMMITT
   Ich lege beides an, damit der offene Auftrag sichtbar ist, und schreibe den Verstoss dazu, statt
   ihn stillschweigend auszubuegeln — die Pflicht bleibt beim Schneidenden. Gefunden hat es die
   Blatt-gegen-Block-Probe der Wache, nicht ein Zufall; genau dafuer gibt es sie."
-dor_beleg: "plan-pruefer 12.08. — DoR NICHT ERTEILT. Zwei Kriterien tragen falsche Zahlen, beide
-  dieselbe Klasse wie W-36-5 eine halbe Stunde vorher.
-  BEFUND 1, W-37-1 (P1, TRAGEND): FUENF Adapter behauptet, ACHT gemessen. Nicht genannt sind
-  :494 alsAbwasserEingabe, :503 alsArbeitsdreieck, :509 alsPvEingabe — alle drei mit der
-  IDENTISCHEN Signatur (werte: Record<string, string>) auf einen Engine-Eingabetyp, also genau die
-  Klasse, die das Kriterium beschreibt.
-  UND DIE KLASSENBEZEICHNUNG SELBST TRAEGT NICHT: das Blatt nennt sie 'als*Eingabe', aber
-  alsBetriebsBedingung (:457) steht INNEN und endet nicht auf Eingabe, waehrend alsAbwasserEingabe
-  draussen steht und darauf endet. Die Klasse ist die SIGNATUR, nicht der Name — und solange das
-  Kriterium eine Zahl nennt statt der Signatur, kann keine ehrliche Messung es erfuellen.
-  BEFUND 2, W-37-5: VIER Waechter behauptet, SECHS importieren. Fehlend sind
-  zweiEnginesSchweigen.test.ts:3 (enginePanel, ENGINE_PANELS) und sparrenVorbehalt.test.ts:3
-  (enginePanel).
-  UND DER FEHLENDE IST DER WICHTIGSTE DES GANZEN BLATTES: sparrenVorbehalt.test.ts traegt im Kopf
-  'A-14 — der N-003-Vorbehalt als Zusage, nicht als Probelauf' und prueft woertlich
-  'A-14-2: vorbehalt ueberlebt berechneSparren(...) as unknown as EngineErgebnis'. W-37-2 verlangt,
-  die A-14-Ausgabeauflage zu beschreiben, DAMIT eine spaetere Aenderung den Vorbehalt nicht still
-  entfernt — und die Waechterliste laesst genau den Test weg, der das heute verhindert. Das Blatt
-  wuerde die Auflage beschreiben und ihren Waechter verschweigen.
-  DAZU DIESELBE DRITTE KLASSE WIE BEI W-36: Tests, die die Datei ueber ihre QUELLE verriegeln statt
-  sie zu importieren — stilschicht.test.ts:584-603 (EngineFlaeche.tsx als Datei, keine Rohfarben),
-  gesperrtAppWeit.test.ts:41 und :134 (Muster auf EngineFlaeche.tsx), fussUndUeberlagerungen.test.ts:175
-  (Marke '<EngineFlaeche'). W-37-5 schliesst stilschicht mit '0 Importe' ausdruecklich aus: die Zahl
-  stimmt, der Schluss nicht.
-  MEIN EIGENES MUSTER WAR ZUERST GENAUSO ZU ENG: from '...enginePanels' verlangt das
-  Anfuehrungszeichen direkt hinter dem Namen und verfehlt jeden Import mit .ts-Endung — also genau
-  die zwei fehlenden Waechter. Haette ich es nicht nachgeschaerft, haette ich 'vier, alle echt'
-  BESTAETIGT. Derselbe Musterfehler in meiner Hand, eine Runde nach H-9.
-  WAS STIMMT, damit niemand doppelt misst: 199 Z. und 540 Z. exakt · die zehn Fundstellen :35 :51
-  :57 :89 :100 :119 :414 :439 :457 :482 alle · SCHWERE_ANZEIGE an EngineFlaeche.tsx:31 mit DREI
-  Graden, je Zeichen und Wort und Token (fehler, warnung, info) · die A-14-Fundstellen existieren,
-  W-37-2 ist erfuellbar: EngineFlaeche.tsx:135 (keinGesamturteil), enginePanels.ts:74-76, :223-225,
-  :262-264, :354 · Registerzeile 124 sagt 196, gemessen 199, der Befund traegt · und die GEGENPROBE
-  traegt ebenfalls, von mir einzeln nachgezaehlt: StartView 267, ConfigWizard 271, FaehigkeitenNavi
-  76, auswechslung 174, dachTopologie 183 stimmen, nur EngineFlaeche weicht ab. Fuenf von sechs,
-  wie das Blatt sagt.
-  GEWUERDIGT, und das ist keine Hoeflichkeit neben zwei Blockern: Abschnitt 3 ist die beste Stelle
-  dieses Blattes. Der Planner haette aus der falschen Zeilenzahl den Satz 'Zeilenzahlen im Register
-  driften' machen koennen — nach den Zeilennummern und Abschnittsnummern von heute lag das nahe. Er
-  hat die REICHWEITE gemessen und den Befund dadurch VERKLEINERT. Genau diese Messung fehlt an den
-  zwei Zahlen, die ich beanstande: fuenf Adapter und vier Waechter sind ungemessene Reichweiten im
-  selben Blatt, das eine gemessene vorfuehrt.
-  Ball beim Planner: beide Zahlen aus dem Kriterienwortlaut heraus, W-37-1 an die Signatur binden,
-  W-37-5 an die drei Klassen. Zustand bleibt ENTWURF."
+dor_beleg: "plan-pruefer 12.08., ZWEITE Fassung — DoR NOCH NICHT ERTEILT, EIN Punkt, und es ist
+  der letzte. Beide Blocker aus d976060f sind sauber behoben, nachgelesen: W-37-1 nennt jetzt ACHT
+  Adapter und macht das Klassenmerkmal ausdruecklich zur SIGNATUR statt zum Namen — mit dem eigenen
+  Nachweis, dass sein Muster zwei Falsche drin und drei Richtige draussen hatte. W-37-5 fuehrt IMPORT
+  und NUR QUELLE getrennt, nennt sparrenVorbehalt als den wichtigsten Waechter des Blattes und sagt
+  zum Ausschluss von stilschicht den richtigen Satz: die Zahl 0 Importe stimmt, der Schluss 'gehoert
+  nicht dazu' nicht — Ort ist nicht Wirkung. Beide Kriterien zaehlen am Bau-Stand.
+  DER OFFENE PUNKT IST DIE VOLLSTAENDIGKEITSFRAGE, und ich habe sie bei W-37 in der ersten Fassung
+  NICHT gestellt, obwohl ich sie eine Stunde vorher bei W-36 gestellt habe. Das ist mein Versaeumnis
+  und deshalb sage ich es zuerst.
+  GEMESSEN: enginePanels.ts exportiert neben den acht Adaptern DREI weitere Funktionen, und keine
+  steht in einem der beiden Scope-Bloecke — :522 enginePanel(engineId), :527 startwerte(panel),
+  :538 fehlendePflichtfelder(panel, werte). Sie sind nicht am Rand, sie sind die BEDIENFLAECHE des
+  Moduls: enginePanelRest:14, enginePanelSparren:17 und enginePanelTgaHeizung:14 importieren alle
+  drei zusammen, zweiEnginesSchweigen:3 und sparrenVorbehalt:3 importieren enginePanel. Damit ist
+  enginePanel die einzige Ausfuhr, die JEDER der Waechter anfasst — und sie kommt im Scope nicht vor.
+  Wer das Blatt aus dem Scope schreibt, beschreibt acht Uebersetzer und laesst den Zugang weg.
+  WARUM ICH DAFUER NOCH EINE RUNDE NEHME statt es als Auflage mitzugeben: heute ist eine Auflage von
+  mir nie im Blatt angekommen, weil sie nur in meinem Beleg stand. Eine Zeile im Scope ist billiger
+  als eine Auflage, die niemand liest — und der Planner hat heute zweimal binnen Minuten berichtigt.
+  ALLES UEBRIGE AUS DER ERSTEN FASSUNG GILT UNVERAENDERT und ist dort belegt: 199 und 540 Zeilen,
+  zehn Fundstellen, SCHWERE_ANZEIGE an :31 mit drei Graden je Zeichen und Wort, die A-14-Fundstellen
+  vorhanden und W-37-2 erfuellbar, Registerzeile 124 mit 196 gegen gemessene 199, Gegenprobe fuenf
+  von sechs richtig. Ball beim Planner, Zustand bleibt ENTWURF."
 ```
 
