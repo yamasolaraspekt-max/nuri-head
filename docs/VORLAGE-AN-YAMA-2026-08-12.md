@@ -835,3 +835,39 @@ origin                    44 Commits zurueck — erwartet, origin ist read-only
 *Der Release-Prüfer sichert laufend und hat W-35 heute veröffentlicht und betriebsbestätigt. **Die vier
 Commits sind der normale Vorlauf, keine hängende Arbeit** — gemessen ohne `fetch`, die Remote-Refs sind
 also so aktuell wie der letzte Abruf.*
+
+#### Nachmessung des Plan-Prüfers, 12.08. — es ist **kein** reiner Vorlauf
+
+**Der Vorbehalt oben war der richtige, und ich habe ihn eingelöst:** *`ls-remote` fragt den echten
+Fernstand ab, ohne einen Verweis zu verändern — die Zahlen stammen also nicht aus einem alten Abruf.*
+
+```text
+fork (live)             4403f52e
+backup-private (live)   4403f52e
+lokal HEAD              63c474ff
+gemeinsamer Punkt       e910d13f
+nur lokal                3 Commits — 1faea789 plan-pruefer · c767426d generator · 63c474ff evaluator
+nur entfernt            10 Commits
+origin/auto/hausplaner-integration   HEAD ist 49 voraus, 0 zurueck
+```
+
+**Der Unterschied zur Zeile darüber ist nicht die Zahl, sondern die ART.** *Die beiden Stände sind
+**divergent**: der Fernstand ist **kein Vorfahr** des lokalen. Einen Vorlauf holt ein Push ein — hier
+braucht es eine bewusste Zusammenführung.*
+
+**Und die drei lokalen Commits liegen auf keiner Kopie außerhalb dieses Rechners.** *Einzeln geprüft,
+keiner ist in `4403f52e` enthalten. Solange nichts deployt ist, ist der gepushte Stand die einzige Kopie
+außerhalb der Maschine — **„kein Handlungsbedarf" trägt für diese drei nicht.***
+
+**Die 44 gegen `origin` sind nicht falsch, sondern gewachsen:** *gemessen 49 voraus, 0 zurück. Eine Zahl
+mit Verfallsdatum, genau wie die Sperrgründe eine Seite vorher.*
+
+**Nicht behauptet:** *dass jemand einen Fehler gemacht hat. Der Release-Prüfer arbeitet auf einer eigenen
+Linie und führt zusammen; dass dabei zwei Linien entstehen, ist die Bauart. Nur der Satz „kein
+Handlungsbedarf" trägt nicht, solange drei Commits ohne Kopie sind.*
+
+**Die übrigen Zahlen dieses Abschnitts habe ich nachgemessen und sie halten:** *`PROJEKTLISTE_MAX = 6`
+an `HausplanerController.php:42`; die Naht `:101` → `:55` → `objekt.blade.php:141` → `main.tsx:18/:82`;
+die drei Routen `web.php:5016/:5018/:5020` mit Recht; die AUF-83-T5-Kette `74ad1075` · `44fce81c` ·
+`6cafeffd`, alle drei vom 30.07.; und `HausplanerApp.tsx:71` Einfuhr, `:425` hält, `:427` lädt, `:432`
+speichert.*
