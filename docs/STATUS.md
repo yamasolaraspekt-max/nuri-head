@@ -49,7 +49,7 @@
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
-| **W-34** Geführte Planung (Stepper) | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
+| **W-34** Geführte Planung (Stepper) | **`NACHBESSERN`** | **Generator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6990,8 +6990,8 @@ eigener_messfehler: "grep -c zaehlt Zeilen, nicht Treffer — ich habe erst dana
 
 ```yaml
 auftrag: "W-34"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: NACHBESSERN
+ballbesitz: generator
 ballbesitz_bau: generator (Bau fertig — sieben Werkbankblaetter neu, REGISTER.md Zeile 121 LEER -> BESCHRIEBEN)
 bericht: "docs/BERICHT-W-34-gefuehrte-planung.md"
 drei_zaehlfehler_alle_selbst_gefangen: "Alle drei sind dieselbe Sorte — ein Muster misst die Schreibweise und nicht die Sache — und alle drei stehen in den Blaettern statt geloescht zu sein. (1) Die Schrittzahl: mein erstes Muster zaehlte 16, weil es schritt( und ohneGrundlage( auch INNERHALB der Ternaerausdruecke traf; mein zweites zaehlte 13 ueber die Einrueckung, weil zwei Kommentarzeilen (:127, :161) auf derselben Ebene stehen. Erst 'genau vier Leerzeichen UND keine Kommentarzeile' ergibt die 11. (2) Die Zaehlungen in 3-FORMELN: ich schrieb 16, gemessen sind es 17 — grep -c 'zaehle(nodes' meldet 14, weil die DEFINITIONSZEILE function zaehle(nodes: …) dasselbe Muster traegt; mit '= zaehle(nodes' sind es 13 Aufrufe plus 4 direkte .length. Eine Funktion zaehlt sich sonst selbst mit. (3) Die Vergleichsmenge der md5-Gegenprobe: ich schrieb 27 Werkzeuge, gemessen sind es 25 ohne _VORLAGE und ohne W-34 selbst."

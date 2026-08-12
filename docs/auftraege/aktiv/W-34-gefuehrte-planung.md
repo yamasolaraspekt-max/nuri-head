@@ -150,3 +150,163 @@ was_dieses_blatt_fuer_yama_hergibt: "Sechs von elf Schritten der gefuehrten Plan
         vorher: erst wenn das Blatt steht, ist die Liste belegt."
 W_34_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+
+## §11 — Votum W-34 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-34"
+votum: NACHBESSERN
+geprueft_an: "7c782f76"
+elter: "bd4aa721"
+scope_diff: "9 Dateien, +845/-1: sieben Werkzeugblaetter neu, REGISTER.md eine Zeile, Bericht
+  neu. 0 Code-Dateien. Die Fertigmeldung liegt NICHT in diesem Commit, sondern kam in 559c632a
+  des Release-Pruefers mit — dazu unten."
+pruefstand: "git worktree add -q --detach auf 7c782f76, node_modules UND vendor per cp -al."
+ablesung_belegt: "Alle drei Quelldateien md5-identisch zwischen Elter und Bau:
+  GuidedView.tsx d1a0ad75, fahrschritte.ts ace90cf9, studioDaten.ts b1e4942e."
+browserabnahme: "ENTFAELLT — 0 Code-Dateien geaendert."
+paragraf_15: "GEGENSTANDSLOS — kein DB-Zugriff im Scope."
+suite: "npm run test:hausplaner am Bau: 1698 tests, 1698 pass, 0 fail."
+
+messtisch:
+
+  W-34-1_statusAus_fuenf_zweige_UND_reihenfolge:
+    urteil: "NICHT ERFUELLT im tragenden Teil — die fuenf Zweige stimmen, die REIHENFOLGE-Aussage
+      traegt nicht. Dieses Kriterium ist im Blatt ausdruecklich (P1, TRAGEND)."
+    was_stimmt: "fahrschritte.ts:43-49 ist zeichengenau zitiert, alle fuenf Zweige stehen da, und
+      ich habe sie am AUSGEFUEHRTEN Code belegt statt am Text: [] -> open · [warn,ok] -> warn ·
+      [ok,ok] -> ok · [open,open] -> open · [ok,open] -> prog. Auch die Wirkung stimmt: ein
+      einzelner warn macht den ganzen Schritt gelb."
+    was_nicht_traegt: "2-FUNKTION begruendet KAUSAL: 'Zweig 2 steht VOR den every-Pruefungen —
+      DESHALB gewinnt warn gegen neunmal ok.' Diese Ursache gibt es nicht. Ein warn bricht die
+      every-Bedingungen ohnehin, die Mengen sind disjunkt; die Position von Zweig 2 gegenueber
+      Zweig 3 und 4 leistet nichts."
+    erschoepfend_gemessen: "Ich habe Original und zwei Mutationsfassungen als reine Funktionen
+      ueber ALLE Kombinationen aus vier Statuswerten bei Laenge 0 bis 3 verglichen — 85
+      Kombinationen: Abweichungen bei 'warn hinter die erste every' 0, bei 'warn hinter BEIDE
+      every' 0. Nicht eine einzige."
+    und_die_fangprobe_faengt_nicht: "6-PRUEFUNG fuehrt als erste Fangprobe 'in statusAus Zweig 2
+      (warn) HINTER die every-Pruefungen schieben'. ICH HABE SIE GEFAHREN, mit Anker (Treffer
+      genau 1x) und md5-Ruecksetzung: 1698 tests, 1698 pass, 0 fail. Die Mutation wird von
+      keinem Waechter erkannt, weil es nichts zu erkennen gibt.
+      Zum Vergleich die beiden anderen, ebenfalls selbst gefahren: 'einen Eintrag aus
+      SCHRITTE_OHNE_GRUNDLAGE entfernen' -> 1 fail (K6). 'einen zwoelften Schritt ergaenzen'
+      -> 4 fail (K5, K4). Beide fangen. Von fuenf Fangproben ist genau die eine wirkungslos,
+      die zum tragenden P1-Kriterium gehoert."
+    damit_der_befund_nicht_nur_verneint: "Der warn-Zweig SELBST ist sehr wohl bewacht — ich habe
+      ihn ersatzweise ENTFERNT statt verschoben: 3 fail, darunter 'K7 der verletzte Zwang: zwei
+      Geschosse ohne Treppe => warn, nicht open' und 'statusAus: … ein warn => warn'. Eine
+      tragende Fangprobe an dieser Stelle existiert also; sie muss am ZWEIG ansetzen, nicht an
+      seiner Position."
+    warum_das_kein_wortklauben_ist: "Das Kriterium sagt nicht 'die fuenf Zweige', sondern 'die
+      fuenf Zweige UND die Reihenfolge', und markiert sich selbst als TRAGEND. Wer 2-FUNKTION
+      liest, nimmt mit, die Reihenfolge sei die Aussage — und wer die Fangprobe fuer bare Muenze
+      nimmt, haelt einen Waechter fuer vorhanden, den es nicht gibt. Das ist die wiederkehrende
+      Fehlerklasse: die Zusage traegt den Namen des Kriteriums und belegt etwas anderes."
+
+  W-34-2_schritte_anzahl_am_code:
+    urteil: ERFUELLT
+    selbst_gemessen: "Ich habe schrittTitel() AUSGEFUEHRT statt gezaehlt: 11 Schritte,
+      Projektgrundlagen · Import oder Grundriss · Geschosse und Gebaeude · Fenster, Tueren und
+      Treppen · Dach und Fassade · Raeume und Einrichtung · Kueche und Bad · Elektro · TGA ·
+      Pruefung und Koordination · Dokumentation und Rendering. Titel und Reihenfolge decken sich
+      mit dem Blatt. Nicht aus fahrschritte.test.ts uebernommen, wie das Kriterium verlangt."
+    mein_eigener_fehler_dabei: "Mein erstes Muster `^\\s+(schritt|ohneGrundlage)\\(` zaehlte 8 —
+      drei Schritte stehen als Ternaerausdruck und beginnen nicht am Zeilenanfang. Der Generator
+      beschreibt genau diese Falle in 2-FUNKTION (sein Muster zaehlte 16, das Einrueckungsmuster
+      13); ich bin ihr trotzdem zugelaufen und habe sie erst durch den Aufruf bemerkt."
+
+  W-34-3_SCHRITTE_OHNE_GRUNDLAGE:
+    urteil: ERFUELLT
+    selbst_gemessen: "Object.keys(SCHRITTE_OHNE_GRUNDLAGE).length = 6, alle sechs stehen in der
+      Titelliste der elf. 7-GRENZEN traegt alle sechs mit Titel UND dem Satz aus dem Code,
+      woertlich. Das Verhaeltnis 6 von 11 steht da."
+    der_dateikommentar: "':52-54' woertlich zitiert. Und der Generator meldet dazu einen eigenen
+      Befund, den ich nachgemessen habe: SCHRITTE_OHNE_GRUNDLAGE ist ein Record — .length darauf
+      ist undefined (selbst ausgefuehrt), und die Rueckgabeliste hat 11 statt 6. Beides
+      bestaetigt. Er stuft die Wirkung als 'keine' ein, weil ausserhalb der Datei mit
+      Object.keys gemessen wird; auch das trifft zu."
+    was_ich_zusaetzlich_gemessen_habe: "Drei der sechs sind BEDINGT: mit einem Dokument, das
+      Waende, einen Raum und ein Sanitaerobjekt traegt, melden 'Import oder Grundriss', 'Raeume
+      und Einrichtung' und 'Kueche und Bad' status=ok — ihr Hinweis bleibt aber der
+      Luecken-Satz, und der Pruefpunkt bestaetigt nur ein Ersatzsignal ('2 Waende gezeichnet').
+      Die Ueberschrift von 7-GRENZEN 'sechs von elf koennen nichts bestaetigen' ist dafuer zu
+      grob. KEIN ROT: 2-FUNKTION:79-81 traegt die Unterscheidung ausdruecklich ('Drei der elf
+      sind Ternaerausdruecke … ein Eintrag, zwei moegliche Gestalten'), die Nuance steht also im
+      Bau, nur nicht in der Ueberschrift des Grenzenblattes."
+
+  W-34-4_bebauteGeschosse:
+    urteil: ERFUELLT
+    selbst_geoeffnet: "fahrschritte.ts:84-88 zaehlt levels, die per levelId von nodes ODER roofs
+      ODER ceilings getragen werden. 2-FUNKTION gibt den Code und die Begruendung. Die Regel
+      'ein angelegtes Geschoss ohne Inhalt darf nicht gruen melden' deckt sich mit dem Code."
+
+  W-34-5_anschluss_an_W38:
+    urteil: ERFUELLT
+    selbst_geoeffnet: "GuidedView.tsx:4 importiert T, STATUS_LABEL, type SchrittStatus und type
+      Fahrschritt aus './studioDaten'. :18 badgeFarbe und :22 checkFarbe sind je
+      Record<SchrittStatus, …>. Die Grenze zu W-38 steht in beiden Blaettern gleichlautend —
+      W-38 sagt 'gehoert W-34', W-34 sagt 'gehoert W-38, benutzen ist nicht besitzen'."
+
+  W-34-6_waechtertests_je_mit_zusage:
+    urteil: ERFUELLT
+    gemessen: "Alle fuenf mit Datei, Testzahl und Zusage: fahrschritte 12 (die Ableitung),
+      gefuehrteEhrlich 8 (Statuswoerter, leere Aufgabenkarte), breiten 5 (keine feste zweite
+      Spalte), dialogFokus 11 (Fokusfalle, Tastaturausloesung), stilschicht 58 (Farben nur aus
+      Tokens). 'Fuenf Tests allein genuegt nicht' — die Zusagen stehen einzeln da."
+
+  W-34-7_scope_grenze_in_2FUNKTION:
+    urteil: ERFUELLT
+    beleg: "2-FUNKTION.md:139-155: IST (fahrschritte.ts, GuidedView.tsx) / IST NICHT
+      (studioDaten.ts -> W-38, EngineFlaeche.tsx und enginePanels.ts -> W-37), mit
+      'Benutzen ist nicht besitzen' und dem Satz, dass studioDaten.ts unberuehrt blieb."
+
+  W-34-8_sieben_blaetter_und_md5:
+    urteil: ERFUELLT
+    selbst_gefahren: "Sieben Blaetter, alle gefuellt (56/155/72/94/90/108/110 Zeilen). Die
+      md5-Gegenprobe habe ich UNABHAENGIG ueber alle 27 Werkzeugordner gefahren: 7 Blattnamen
+      teilen sich einen Hash in mehr als einem Ordner, davon MIT W-34 beteiligt: 0."
+
+was_zu_tun_ist:
+  - "2-FUNKTION: die kausale Begruendung zu Zweig 2 berichtigen. Die WIRKUNG ('ein warn macht den
+     ganzen Schritt gelb') stimmt und bleibt; die URSACHE ist nicht die Position, sondern dass ein
+     warn die every-Bedingungen ohnehin bricht. Die Reihenfolge von Zweig 2 gegenueber 3 und 4 ist
+     semantisch neutral — 85 Kombinationen, 0 Abweichungen."
+  - "6-PRUEFUNG: die erste Fangprobe ersetzen. Sie muss am ZWEIG ansetzen statt an seiner Position;
+     'den warn-Zweig entfernen' faengt mit 3 fail, belegt oben."
+  - "NICHT anzufassen: die uebrigen sieben Kriterien. Sie sind gemessen erfuellt, und der Bau ist
+     im Kern eine saubere Ablesung."
+
+verfahrensbefund_ohne_rot: "Die W-34-Fertigmeldung steht nicht im Bau-Commit, sondern kam mit
+  559c632a — einem Commit des Release-Pruefers zu A-21. Sie lag als uncommittete Zeile in
+  docs/STATUS.md, waehrend ich A-21 abnahm; ich habe deshalb meinen eigenen Zustandswechsel
+  zurueckgehalten (3452aa5f), und er ist danach im Commit einer anderen Rolle mitgekommen. Das
+  ist kein Mangel dieses Baus und kein Vorwurf an den Release-Pruefer — es ist der Preis eines
+  geteilten Arbeitsbaums, und es gehoert benannt, weil A-21-6 und A-20-5 gerade erst festgelegt
+  haben, dass Bau-Aussagen am COMMIT gemessen werden. Wessen Commit eine Zustandszeile traegt,
+  ist damit nicht mehr gleichgueltig."
+
+zweiter_verfahrensbefund_er_beruehrt_MEINE_messmethode: "Beim Setzen des Zustands ist mir
+  aufgefallen, dass der W-34-Datensatz ZWEI `ballbesitz:`-Zeilen traegt, und zwar schon in HEAD,
+  nicht durch mich: `ballbesitz: evaluator` und weiter unten `ballbesitz: generator`.
+  Ueber alle Bloecke gemessen sind FUENF betroffen — W-01N, W-15/1, B7, A-21 und W-34.
+  Bei den ersten vier ist die erste Zeile `ballbesitz: —  # Kette vollstaendig` und die zweite ein
+  Altwert; dort ist der Zustand BETRIEBSBESTAETIGT und die Doppelung folgenlos. NUR BEI W-34
+  widersprachen sich die beiden Werte.
+  DAS GEHT MICH SELBST AN: mein Takt-Parser nimmt `re.search` und damit das ERSTE Vorkommen. YAML
+  liest bei Feld-Dubletten das LETZTE. Bei W-34 stand erste=evaluator, letzte=generator — mein
+  Parser sah den Ball bei mir, ein YAML-Leser haette ihn beim Generator gesehen. Der Auftrag lag
+  richtig bei mir (die Tafelzeile sagt Evaluator, und die Fertigmeldung kam vom Generator), aber
+  das war Glueck in der Wahl des Rasters und keine Messung.
+  Ich habe die Dublette NICHT aufgeloest — das ist Datensatzpflege und gehoert dem Planner. Mein
+  Zustandswechsel hat die erste Zeile gesetzt; beide sagen jetzt `generator`, die Uneindeutigkeit
+  ist damit zufaellig verschwunden, die Dublette nicht."
+
+meine_eigenen_messfehler_in_dieser_runde:
+  - "Erste Probe scheiterte an ERR_MODULE_NOT_FOUND: ich hatte das Skript nach /tmp geschrieben
+     und darin relativ importiert. Der Pfad zeigte ins Leere; eine Zahl aus einem Lauf mit
+     Fehlermeldung waere keine Messung gewesen."
+  - "Mein Schrittzaehler-Muster traf die Einrueckung statt der Sache und meldete 8 statt 11 —
+     dieselbe Falle, die der Generator in 2-FUNKTION beschreibt und die ich gelesen hatte."
+```
