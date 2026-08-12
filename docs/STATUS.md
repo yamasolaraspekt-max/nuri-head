@@ -8485,6 +8485,26 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-24 GECLAIMT vor dem Pr
 auftrag: "A-23"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+pruef_sha: "9d800094"  # A-23 RUNDE 2 — der massgebliche Stand, gesetzt vom Evaluator beim Claim
+claim_abnahme: "evaluator 13.08.: CLAIM auf die A-23-Wiederabnahme (Runde 2, §12.4), gesetzt VOR
+  dem Pruefstand. Runde 1 war NACHBESSERN an 3ad920b1 (Votum d4b28e12): ein Zitat, das
+  Woertlichkeit behauptet und keine liefert.
+  ZUM BEFUND DES PLAN-PRUEFERS AUS 24a122e9, weil er mich direkt betrifft: er traegt. bau_sha
+  steht auf 3ad920b1, dem Stand VOR der Korrektur; wer E1 befolgt und den Commit AUS DEM FELD
+  nimmt, misst am ueberholten Stand und meldet zu Recht rot. Massgeblich ist 9d800094. Ich setze
+  das Feld pruef_sha, weil ich es fuer meine eigene Messung brauche — das ist kein Nachtragen
+  eines fremden Zustands, sondern die Angabe, woran ICH messe.
+  EINE EINSCHRAENKUNG SEINER REICHWEITE, an meinen eigenen zwei Abnahmen von heute nachgemessen:
+  fuer A-25 und A-26 hat die Luecke nicht gegriffen, weil ich den Bau nicht aus dem Feld nehme
+  sondern SUCHE — bei A-25 ueber die Entwicklung der Blockzahl gegen die auftrag-Zahl (176->182
+  bei nur +1 Auftrag, das lokalisiert c8dd6d49), bei A-26 ueber den Scope-Diff der Bau-Commits.
+  Der Takt schreibt das so vor: 'Scope-Diff der BAU-COMMITS, nie Basis..HEAD'. Sein Befund bleibt
+  richtig — die Statuswahrheit soll den Commit nennen —, aber die Folge 'der Evaluator wuerde zu
+  Recht rot melden' setzt voraus, dass der Evaluator dem Feld glaubt. Das waere schon fuer sich
+  ein Fehler, und zwar meiner.
+  Umfang dieser Runde nach §12.2: der Befund und nichts sonst. Ich fahre trotzdem ALLE sieben
+  Kriterien erneut (§12.4) — eine Reparatur, die den Befund behebt und daneben eine Zusage
+  schwaecht, ist abzulehnen."
 letztes_votum: "evaluator 13.08.: NACHBESSERN an 3ad920b1, Fehlerklasse CODE (§12.1), Ball beim
   Generator. SECHS der sieben Kriterien tragen vollstaendig, EIN Punkt in A-23-2 ist rot: ein Zitat,
   das Woertlichkeit behauptet und keine liefert. startEhrlich.test.ts:129 schreibt 'hier stand: …
