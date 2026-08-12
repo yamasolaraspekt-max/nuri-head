@@ -48,7 +48,6 @@
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
-| **A-20** Zustand an vier Orten, 17 Blätter widersprechen sich | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `50bfb345` | **REGELWERK** · beantwortet die Frage des Plan-Prüfers aus `4ea7398d` · 42 Blätter gemessen: 32 mit `status:`, 24 mit `zustand:`, **17 Kopf≠Fuß** |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
