@@ -302,3 +302,88 @@ meine_eigenen_messfehler_in_dieser_runde:
      mir: das Muster traf seine eigene Fundstelle. Nach dem Oeffnen der Treffer: 8, und die
      Gegenprobe 8 + 5 = 13 schliesst."
 ```
+
+
+## §12.3 — Votum W-39 Runde 2 (Evaluator, 12.08.2026)
+
+```yaml
+auftrag: "W-39"
+runde: 2
+votum: ABGENOMMEN
+geprueft_an: "4f80cb38"
+elter: "681bf339"
+befund_von: "evaluator 2ff41efd"
+scope_diff: "4 Dateien, +103/-23: 6-PRUEFUNG.md, 7-GRENZEN.md, BERICHT, STATUS.md.
+  0 Code-Dateien, 0 der uebrigen fuenf Werkzeugblaetter — genau die zwei beanstandeten Stellen."
+pruefstand: "git worktree add -q --detach auf 4f80cb38, node_modules UND vendor per cp -al."
+suite: "npm run test:hausplaner am R2-Stand: 1698 tests, 1698 pass, 0 fail."
+
+wie_ich_geprueft_habe: "Mein Rot war eine Aussage UEBER einen Waechter. Ob sie jetzt anders lautet,
+  ist keine Messung — ich habe deshalb BEIDE Zusagen der Liste erneut gefahren, auch die, die ich
+  in Runde 1 ungeprueft stehen gelassen hatte."
+
+messtisch:
+
+  W-39-5_acht_waechter_je_mit_ihrer_zusage:
+    urteil: ERFUELLT
+    war_der_rote_punkt_der_runde_1: "Ja — und er ist an beiden Stellen behoben, jeweils
+      ZURUECKGEZOGEN statt geloescht."
+    mutation_erneut_gefahren: "guided-Schalter aus :111 entfernt, Anker Treffer genau 1x,
+      md5-Ruecksetzung: 1698 tests, 1697 pass, 1 FAIL — 'T2/K-05: der Weg in die gefuehrte
+      Planung ist direkt erreichbar'. Deckungsgleich mit meiner Runde-1-Messung, und 6-PRUEFUNG
+      traegt die Zeile jetzt mit `stilschicht.test.ts:809`."
+    die_zweite_zusage_die_ich_in_runde_1_STEHEN_LIESS: "Ich hatte 'der vierte Modus ist
+      ungesichert' ungeprueft uebernommen — das war nachlaessig, denn ich hatte dem Bau genau
+      das vorgehalten. Jetzt gemessen: StudioModus um 'vierter' erweitert, kein Schalter, kein
+      Render-Zweig -> 1698 pass, 0 fail. Die Aussage des Blattes trifft zu."
+    stilschicht_traegt_jetzt_beide_zusagen: "Die Liste nennt neben den Farbregeln vier
+      unmittelbare K-Zusagen. Ich habe sie einzeln aufgesucht: T2/K-01 :734, T2/K-03 :750,
+      T2/K-04 :799, T2/K-05 :809. Alle vier lesen STUDIO_TSX und tragen W-39s Zusagen im Namen."
+    BEFUND_OHNE_ROT: "Der berichtigte Abschnitt sagt 'FUENF Tests lesen STUDIO_TSX' und fuehrt
+      als fuenften 'Scheibe 8c: jede angelegte Klasse wird auch benutzt'. GEMESSEN SIND ES VIER.
+      Der Test Scheibe 8c beginnt :711 und endet :718; die Konstante
+      `const STUDIO_TSX = join(hier, '../app/HausplanerStudio.tsx')` steht bei :730 auf
+      MODULEBENE, ausserhalb jedes Testblocks. Scheibe 8c liest sie gar nicht — er liest KLEINE.
+      Die Zahl ist um eins zu hoch, weil ein Test seiner NACHBARSCHAFT zur Konstanten zugeordnet
+      wurde statt seinem Inhalt.
+      KEIN ROT: das Kriterium verlangt die acht Waechter je mit ihrer Zusage, und die stehen —
+      die vier K-Zusagen sind namentlich exakt richtig, und der sachliche Kern der Berichtigung
+      (stilschicht ist kein reiner Stilwaechter) traegt. Die 'fuenf' ist eine Nebenzahl in der
+      Erlaeuterung und aendert keine Aussage ueber einen Waechter.
+      ANMERKEN MUSS ICH ES TROTZDEM: mein eigenes erstes Zaehlskript hat denselben Fehler
+      gemacht — es ordnete die Modulkonstante dem letzten test() davor zu und meldete Scheibe 8c
+      mit. Erst das Oeffnen der Zeilen 711-736 hat es geklaert. Es ist dieselbe Klasse wie sein
+      Ursprungsfehler: eine Stelle nach ihrer Nachbarschaft einordnen statt sie zu lesen."
+
+  W-39-7_grenzen_und_anschlussliste:
+    urteil: ERFUELLT
+    K05_zurueckgezogen: "7-GRENZEN traegt den Abschnitt jetzt als 'eine zurueckgezogen, eine neue
+      aufgenommen'. Die falsche Aussage steht als ZURUECKGEZOGEN mit Testname, Assertion und
+      meiner Messung darunter — nicht geloescht."
+    meine_neue_luecke_ist_aufgenommen: "Mein Zusatzbefund aus Runde 1 steht unter 'Was wirklich
+      offen ist': das Flag AM AUFRUF aus :140 zu entfernen bleibt gruen, weil kopfrahmen.test.ts
+      den Quelltext STATISCH und damit nur die empfangende Seite misst. Er formuliert es
+      genauer, als ich es getan habe — 'die empfangende Seite ist bewacht, die sendende nicht'."
+    gegenprobe_auf_restbestaende: "Die widerlegte Aussage 'K-05 … KEIN Test' steht in keinem der
+      sieben Blaetter mehr als Behauptung, nur im zurueckgezogenen Absatz."
+
+  W-39-1_bis_W-39-4_und_W-39-6_und_W-39-8:
+    urteil: "ERFUELLT — unberuehrt und am R2-Stand gegengeprueft, nicht fortgeschrieben."
+    beleg: "Der R2-Diff fasst nur 6-PRUEFUNG und 7-GRENZEN an. Am R2-Stand neu gemessen:
+      W-39-1 Additiv-Zitat in 1-ZWECK · W-39-2 die drei Render-Zweige in 2-FUNKTION ·
+      W-39-3 die fuenf useState · W-39-4 modeBtn · W-39-6 die Scope-Grenze mit der
+      Modul-Zuordnung · W-39-8 sieben Blaetter und 0 md5-Dubletten ueber 28 Werkzeugordner."
+
+mein_eigener_anteil_offengelegt:
+  - "In Runde 1 habe ich die ERSTE der beiden Zusagen widerlegt und die ZWEITE stehen gelassen,
+     ohne sie zu pruefen — obwohl ich im selben Votum bemaengelt habe, dass eine Aussage ueber
+     einen Waechter ungeprueft im Blatt steht. Jetzt nachgeholt: sie trifft zu."
+  - "Mein erstes Zaehlskript in dieser Runde ordnete die Modulkonstante :730 dem test() bei :711
+     zu und meldete damit denselben fuenften Test wie der Bau. Der Befund oben steht nur, weil ich
+     die Zeilen danach geoeffnet habe."
+
+was_dem_generator_zusteht: "Er nennt die Ursache in einem Satz, und sie ist die richtige: 'ich habe
+  eine Testdatei nach ihrer Ueberschrift eingeordnet, statt sie zu oeffnen'. Dass er dazu schreibt,
+  denselben Griff eine Stunde vorher bei imStudio selbst bemerkt und berichtigt zu haben, macht die
+  Meldung nicht schwaecher, sondern brauchbar — sie sagt, wo der Fehler wieder auftreten wird."
+```

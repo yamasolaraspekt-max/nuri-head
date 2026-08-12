@@ -51,7 +51,7 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
-| **W-39** Studio-Rahmen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
+| **W-39** Studio-Rahmen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
@@ -7495,7 +7495,7 @@ eigener_messfehler: "Mein erstes Raster war doppelt zu eng und haette den Bau fa
 
 ```yaml
 auftrag: "W-39"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 nachbesserung_runde_2_W_39_5: "Der Befund des Evaluators (2ff41efd) trifft, und der Fehler ist meiner. FIRST-HAND NACHGEMESSEN statt uebernommen: stilschicht.test.ts:809 traegt test('T2/K-05: der Weg in die gefuehrte Planung ist direkt erreichbar') und prueft mit assert.match auf modeBtn('guided', 'Gefuehrte Planung') genau den Schalter aus :111. Weiter gemessen als der Befund verlangt: von den 58 Tests der Datei lesen FUENF die Studio-Quelle, und VIER tragen W-39s eigene K-Zusagen im Namen — T2/K-01 die fehlende zweite Navigation, K-03 die Marke, K-04 der gewanderte Erklaertext, K-05 der Rueckweg. Ich hatte die Datei als 'Farben nur aus Tokens' und 'geteilter Waechter' abgelegt; daraus sind ZWEI falsche Luecken entstanden, in 6-PRUEFUNG als Fangprobe und in 7-GRENZEN als Zusage ohne Waechter. Beide ZURUECKGEZOGEN und nicht geloescht, mit Ursache. DIE URSACHE IN EINEM SATZ: ich habe eine Testdatei nach ihrer Ueberschrift eingeordnet statt sie zu oeffnen. DASSELBE HATTE ICH IM SELBEN BAU EINE STUNDE VORHER SCHON EINMAL — bei imStudio, wo ich behauptete es sei ungesichert und beim Nachmessen das Gegenteil fand; dort habe ich es selbst gefangen, hier nicht. Der Unterschied ist nicht die Sorgfalt, sondern dass ich bei imStudio nachgemessen habe und bei stilschicht der Ueberschrift geglaubt."
 neue_luecke_des_evaluators_aufgenommen: "Sein Zusatzbefund ohne Kriterium ist praeziser als beide meiner Aussagen: das Flag AM AUFRUF in :140 zu entfernen bleibt GRUEN, weil kopfrahmen.test.ts den Kopfrahmen-Quelltext STATISCH misst und damit nur die EMPFANGENDE Seite. Die empfangende Seite ist bewacht, die sendende nicht — die richtige Aussage liegt genau auf der Grenze zwischen meinen beiden falschen. In 7-GRENZEN aufgenommen, nicht behoben; eine Ablesung baut keine Tests."
 gewuerdigt_planner_hat_seine_zahl_selbst_berichtigt: "c9ac316d: der Planner hat die Zustandszahl SECHS in seinem eigenen Blatt als geschaetzt statt gezaehlt eingeraeumt — dieselbe Zahl, die ich beim Bau als FUENF gemessen und gemeldet hatte. Sein Satz, dass sie im selben Absatz stand wie die Regel gegen feste Zahlen, gehoert festgehalten."
@@ -7551,7 +7551,7 @@ vier_zahlen_des_blattes_anders_gefunden_keine_geglaettet: "13 Importe gegen geme
 ein_befund_gegen_meine_eigene_behauptung: "Ich hatte in 6-PRUEFUNG geschrieben, das Flag imStudio sei durch keinen Test gesichert. Gemessen ist das FALSCH: grep -rl imStudio ueber __tests__ findet ZWEI Dateien, kopfrahmen.test.ts:138 und buehnenBreite.test.ts:76. Beide nennen HausplanerStudio nicht und gehoerten deshalb nicht zu den acht Waechtern — sie sitzen am EMPFANGENDEN Ende in Kopfrahmen.tsx. Und kopfrahmen.test.ts ist aus einer DURCHGEKOMMENEN Mutation entstanden, woertlich im Test: die Mutation von geschweift-Ausrufezeichen-imStudio zu geschweift-imStudio kam durch, eine Marke ueber einer Testflaeche waere genau die Anzeige die AUF-40 entfernt hat, nur andersherum. Haette ich nur die acht Dateien betrachtet die HausplanerStudio nennen, waere eine falsche Luecke im Blatt geblieben."
 tafelzeile_und_datensatz_in_einem_griff_und_der_dritte_anlauf: "Beide Zustandsorte zusammen gesetzt — das ist die Lehre aus A-22, wo ich die Tafelzeile auf Evaluator setzte und das Datensatzfeld stehen liess, sodass der Release-Pruefer es in 1ccdc5b6 nachziehen musste. BEIM ERSTEN VERSUCH HABE ICH DEN ANDEREN FEHLER GEMACHT: ich habe ein ZWEITES ballbesitz angelegt statt das vorhandene zu aendern, also genau die Dublette aus A-21 und W-34 zum dritten Mal. Gefangen hat es meine eigene Gegenprobe VOR dem Commit — der Block meldete 22 Schluessel und 1 Dublette. Behoben, indem das vorhandene Feld geaendert und meine zweite Zeile entfernt wurde; der Block traegt jetzt genau ein ballbesitz. DIE GEGENPROBE IST DAMIT KEIN ZIERRAT: die Regel allein hat nicht gereicht, sie hat mich vor dem falschen Griff nicht bewahrt — die Messung hat es getan."
 operanden_vor_dem_ziehen_gemessen: "HausplanerStudio.tsx traegt 159 Zeilen, exakt wie im Blatt. Alle sieben genannten Fundstellen geoeffnet und getroffen: :23 der modus-Zustand, :85 imExperte, :97 der EINE return, :131/:132/:133 die drei Render-Zweige, :140 das Flag imStudio. EINE ZAHL WICH AB und ich habe sie nicht geglaettet: grep '^import' findet 14 Zeilen, das Blatt nennt 13 Importe. Aufgeloest durch Oeffnen statt Rechnen — Zeile 7 ist 'import React from react', also extern; die 13 des Blattes sind die Insel-Module. Kein Mangel, zwei verschiedene Mengen. §3 vor dem Ziehen 0 und 0, danach 1 und 1; und nach meiner Regel aus b16ba855 KEIN zweites ballbesitz angelegt — der Ballbesitz bleibt beim Generator, das vorhandene Feld traegt ihn bereits."
-ballbesitz: evaluator
+ballbesitz: release-pruefer
 titel: "Ein additiver Rahmen um eine App, die er nicht anfasst"
 basis_sha: d53806f6
 spur: A
@@ -7628,6 +7628,20 @@ claim_abnahme_runde2: "evaluator (Erstinstanz) 12.08.: Abnahme W-39 RUNDE 2 GECL
   und sehe nach, ob die berichtigte Zuordnung stimmt: welcher Test faengt, mit welchem Namen, in
   welcher Datei. Dazu die ZWEITE Zusage derselben Liste — der vierte Modus —, die ich in Runde 1
   stehen gelassen habe, ohne sie zu pruefen."
+votum_abnahme_runde2: "evaluator 12.08. ABGENOMMEN an 4f80cb38, Elter 681bf339, ACHT von acht.
+  Beide Stellen des Rot sind behoben, jeweils ZURUECKGEZOGEN statt geloescht."
+wie_ich_gegengeprueft_habe: "BEIDE Zusagen der Liste erneut gefahren, auch die, die ich in Runde 1
+  ungeprueft stehen liess. Guided-Schalter entfernt -> 1697 pass, 1 FAIL (T2/K-05), deckungsgleich
+  mit Runde 1. Vierter Modus ohne Schalter -> 1698 pass, 0 fail: die Aussage des Blattes trifft zu.
+  Mein Zusatzbefund ist aufgenommen und genauer formuliert als von mir."
+befund_ohne_rot: "Der berichtigte Abschnitt sagt 'FUENF Tests lesen STUDIO_TSX' und fuehrt Scheibe
+  8c als fuenften. Gemessen sind es VIER: Scheibe 8c laeuft :711-718, die Konstante steht :730 auf
+  MODULEBENE, er liest sie nicht. Ein Test nach NACHBARSCHAFT eingeordnet statt nach Inhalt —
+  dieselbe Klasse wie sein Ursprungsfehler. Kein Rot: die vier K-Zusagen sind namentlich exakt und
+  einzeln aufgesucht. Trifft mich selbst: mein erstes Zaehlskript machte denselben Fehler."
+mein_anteil: "In Runde 1 habe ich die erste Zusage widerlegt und die zweite stehen gelassen, ohne
+  sie zu pruefen — obwohl ich im selben Votum bemaengelt habe, dass eine ungeprueffte
+  Waechteraussage im Blatt steht. Jetzt nachgeholt."
 ```
 
 ```yaml
