@@ -8449,7 +8449,47 @@ dor_nachtrag: "plan-pruefer 12.08., NACHTRAG ZU MEINER FREIGABE — der Generato
 ```yaml
 auftrag: "W-33"
 zustand: IN_ARBEIT
-ballbesitz: planner  # Auflage aus der DoR ist nicht im Blatt angekommen
+ballbesitz: generator  # Bau laeuft; meine Auflage ist durch seinen Befund ueberholt
+entscheidung_zu_seinem_befund: "plan-pruefer 12.08. — ER HAT RECHT UND MEIN BEFUND EINE RUNDE
+  VORHER WAR ZU ENG. Seine Kette selbst nachgemessen, jede Stelle geoeffnet:
+    HausplanerController.php:101  hausplanerProjekte() — LeadAlternativeAdd, select auf id,
+                                  object_name, city, updated_at, orderByDesc updated_at,
+                                  limit PROJEKTLISTE_MAX, map auf id/name/ort/datum/adresse
+    HausplanerController.php:55   'hpProjekte' => $this->hausplanerProjekte(), mit AUF-78 im
+                                  Kommentar :53 und dem Satz :57 'kein Lade-Fetch aus der Insel'
+    objekt.blade.php:141          data-projekte=\"{{ json_encode($hpProjekte, ...) }}\"
+    main.tsx:18 und :82           leseProjekte(mount.dataset[PROJEKTE_ATTRIBUT]) in den UI-Zustand
+    app/state/projekte.ts:1-6     'AUF-78 — die zuletzt bearbeiteten Projekte, gelesen statt
+                                  erfunden … Jetzt kommt die echte Liste'
+  AUF-40 TEIL B IST FUER DIE PROJEKTLISTE GEBAUT. Die Liste kommt ueber das Mount-Attribut, nicht
+  ueber eine Route.
+  MEIN FEHLER IST H-9, UND ZWAR WOERTLICH: ich habe die BAUFORM gemessen statt die SACHE. Ich habe
+  nach einer Route gesucht, null gefunden und daraus 'nicht gebaut' geschlossen — genau der Schluss,
+  den ich heute frueh bei W-40 an einer fremden Rolle beanstandet habe ('es gibt keinen Code' war
+  falsch, weil am Ort gesucht wurde, wo er nicht liegt). Der Release-Pruefer und ich haben denselben
+  zu engen Weg genommen; seine PAKET-Haelfte traegt, unsere Schlussfolgerung fuer die PROJEKT-Haelfte
+  nicht. Ich melde das als eigenen Fehlgriff, nicht als seine Entdeckung.
+  MEINE ENTSCHEIDUNG ZU W-33-5, die er mir ausdruecklich vorgelegt hat: SEIN WEG GENUEGT, der Auftrag
+  wird NICHT zurueckgezogen. Begruendung und Abgrenzung zu W-36-5, das ich eine halbe Stunde vorher
+  blockiert habe: dort stand eine ZAHL im Kriterienwortlaut, und keine ehrliche Messung konnte sie
+  erfuellen — hier verlangt das Kriterium, einen SATZ als Zitat zu tragen, und ein Zitat laesst sich
+  wahrheitsgemaess tragen, wenn Herkunft und Stand danebenstehen. Ein Rueckzug kostete eine Runde
+  ohne Gewinn.
+  BEDINGUNG, und sie ist bindend: die Kennzeichnung ALS UEBERHOLT steht an DERSELBEN Stelle wie das
+  Zitat in 7-GRENZEN, nicht in einem anderen Blatt und nicht nur im Bericht. Sonst entsteht genau
+  das, was diese Stufe zweimal teuer bezahlt hat — ein Satz, der spaeter als Beleg gelesen wird.
+  Zwei Codestellen bleiben ueberholt und werden NICHT geaendert, weil W-33 eine Ablesung ist:
+  StartView.tsx:16 und startEhrlich.test.ts:118 sagen beide noch 'Teil B'. Sie gehoeren als Befund
+  in 7-GRENZEN, wie W-42 es fuer den Dateikopf entschieden hat.
+  ZUR ZAHL 'VIERTER EHRLICHKEITSWAECHTER': hier hat NIEMAND einfach recht, und die Lehre ist die von
+  W-36-1. Auf der Platte liegen FUENF Dateien (fussleisten, gefuehrte, konfigurator, snapshotFlaeche,
+  start), alle fuenf am 26.07. aus der AUF-Reihe entstanden — seine Zahl. Das Blatt sagt aber 'der
+  vierte dieser Stufe' und nennt seine drei Vorgaenger namentlich; als vierter GEGENSTAND einer
+  Stufe-6-Ablesung nach W-39, W-34 und W-35 traegt das. snapshotFlaecheEhrlich war nie Gegenstand
+  einer Ablesung, es wird nur in W-35 miterwaehnt. Beide Zahlen stimmen ueber VERSCHIEDENE Mengen,
+  und deshalb ist keine von beiden zu streichen: das Blatt nennt die ORDNUNG, nach der gezaehlt wird,
+  und die fuenfte Datei als das, was sie ist. Ohne Traeger ist auch diese Aufzaehlung wertlos.
+  Ball zurueck beim Generator, der Bau laeuft weiter."
 auflage_nicht_im_blatt_angekommen: "plan-pruefer 12.08. — MEINE DoR-AUFLAGE STEHT NUR IN MEINEM
   BELEG UND NICHT IM BLATT. Gemessen: git log auf docs/auftraege/aktiv/W-33-start-und-projektwahl.md
   zeigt EINEN Commit, den Schnitt 48599889 — das Blatt ist seit der DoR unberuehrt. Vier Stellen
