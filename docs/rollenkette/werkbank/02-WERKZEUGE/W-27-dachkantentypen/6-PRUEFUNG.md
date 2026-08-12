@@ -35,13 +35,37 @@ je **0 Treffer** in `resources/planner/`.
 
 ## Fangprobe (Mutationsprobe)
 
-| Mutation | Muss erkannt werden von |
-|---|---|
-| `isCCW`-Berücksichtigung entfernen | **K-4** |
-| `WALM`/`TEILWALM` aus `prevIsTraufe` streichen | **K-3 und K-6** |
-| `angleDeg > 180` zu `>= 180` ändern | **K-7** |
-| `joinType`-Vorbelegung `'neutral'` zu `'grat'` ändern | **K-5** |
-| `360 - baseAngle` zu `baseAngle` vereinfachen | **K-2** — die innere Ecke wird zur äußeren |
+> **DREI davon sind seit W-27/1 GEFAHREN, nicht mehr nur abgelesen** — *mit Anker
+> `bfc684226f02161448ef02d20b7629f3` und md5-Rücksetzung nach jeder Probe. Grundlinie 1709 pass,
+> 0 fail.*
+
+| Mutation | Muss erkannt werden von | Gefahren? |
+|---|---|---|
+| `isCCW`-Berücksichtigung entfernen | **K-4** | **ja — 2 FAIL**, beide K-4-Tests |
+| `WALM`/`TEILWALM` aus `prevIsTraufe` streichen | **K-3 und K-6** | **ja — 1 FAIL** |
+| `joinType`-Vorbelegung `'neutral'` entfernen | **K-5** | **ja — 2 FAIL** |
+| `angleDeg > 180` zu `>= 180` ändern | **K-7** | nein — *abgelesen* |
+| `360 - baseAngle` zu `baseAngle` vereinfachen | **K-2** — die innere Ecke wird zur äußeren | nein — *abgelesen* |
+
+```text
+Anker md5 vor den Proben   bfc684226f02161448ef02d20b7629f3
+Grundlinie                 1709 Tests · 1709 pass · 0 fail
+
+M1  isCCW = true              1707 pass · 2 FAIL
+      ✖ K-4 TRAGEND: der Umlaufsinn — dasselbe Polygon in beiden Richtungen
+      ✖ K-4: die L-Form hat GENAU EINE einspringende Ecke
+M2  nur 'TRAUFE'              1708 pass · 1 FAIL
+      ✖ WALM und TEILWALM zaehlen als Traufe im weiteren Sinn
+M3  kein 'neutral'-Default    1707 pass · 2 FAIL
+      ✖ der VIERTE Ausgang: … ist neutral — nicht undefined
+      ✖ jede Ecke traegt IMMER einen der vier Ausgaenge — nie undefined
+
+md5 nach jedem Ruecksetzen bfc684226f02161448ef02d20b7629f3   IDENTISCH
+Suite danach               1709 pass · 0 fail · Typpruefung gruen
+```
+
+> **Keine der drei blieb grün.** *Das ist der Unterschied zu W-34-1 und W-39-5, wo je eine Fangprobe
+> nichts fing — dort war es eine Aussage über einen Wächter, hier eine Messung an ihm.*
 
 > **Die vorletzte Zeile ist die gefährlichste**, weil sie **keine** Absage erzeugt: *jede Ecke bekäme
 > einen Typ, die Zählung stimmte, und das Dach wäre falsch.* **Ein Fehler, der eine plausible Zahl

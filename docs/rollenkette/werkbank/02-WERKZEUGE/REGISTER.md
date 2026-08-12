@@ -91,7 +91,7 @@
 | W-24 | **Fundament und Bodenplatte** | LEER | W-05 | ungeprüft — Registry-Werkzeug `Bodenplatte`, **kein Geometriemodul** |
 | W-25 | **Pfetten und Kehlbalken** | LEER | W-07, W-21 | ungeprüft — `dachformVorlagen`, `holzBauteile`; Registry `Pfette` |
 | W-26 | **Dachschichten (Aufbau)** | LEER | W-07 | ungeprüft — **kein Modul**; `konterlattungMm` in `dachformVorlagen` ist ein **toter Vertrag** |
-| W-27 | **Dachkantentypen** First·Grat·Kehle·Traufe·Ortgang | **ENTWORFEN** | W-07 | **F-025**, **F-026** — die ECKEN-Erkennung fehlt (`joinType`/`cornerType` je 0); Ortganglänge und Grat/Kehle **am Sparren** gibt es (`dachformVorlagen.ts:291`, `schifterListe.ts:58`) |
+| W-27 | **Dachkantentypen** First·Grat·Kehle·Traufe·Ortgang | **GEBAUT** | W-07 | **F-025**, **F-026** — **die ECKEN-Erkennung ist gebaut** (W-27/1): `geometry/dachTopologie.ts` (183 Z.) + 11 Tests, drei Fangproben **gefahren** und gefallen. Ortganglänge und Grat/Kehle **am Sparren** gibt es weiterhin getrennt (`dachformVorlagen.ts:291`, `schifterListe.ts:58`) — die Namensgrenze steht im Dateikopf |
 | W-28 | **Dachentwässerung** | LEER | W-07, W-27 | ungeprüft — `linienBauteile` führt `'dachrinne'` als Linientyp; Bemessung fehlt |
 | W-29 | **Dachdurchdringungen** Dachfenster·Kamin·Lüfter·Lichtkuppel | LEER | W-07, W-21 | ungeprüft — **stark gebaut**: `dachOeffnung`, `dachAusschnitt`, `auswechslung`, `aufbauPlatzierung`, `aufbautenStatus` |
 | W-30 | **Flachdach-Aufbau** Gefälle·Attika·Abläufe | LEER | W-07 | ungeprüft — `dachformVorlagen` (`attika`, `svgFlach`) |

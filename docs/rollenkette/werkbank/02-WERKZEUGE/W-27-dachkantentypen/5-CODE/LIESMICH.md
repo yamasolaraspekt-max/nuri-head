@@ -17,13 +17,37 @@ QUELLE   docs/planner/pv-belegung-referenz/DachplanerProPage.tsx      3.786 Zeil
 
 **Alle acht Fundstellen sind einzeln gegen die Datei geprüft, nicht übernommen.**
 
-## Wo der Code leben WIRD
+## Wo der Code lebt — seit W-27/1 GEBAUT
 
 | Schicht | Datei im Repo | Zweck | Zustand |
 |---|---|---|---|
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | Eckwinkel, Eckenart, Verbindungsart | **fehlt** |
-| 3 Werkzeug | — | vermutlich keine eigene Werkzeugschicht, die Analyse läuft mit | offen |
+| 2 Geometrie | **`resources/planner/hausplaner/geometry/dachTopologie.ts` (183 Z.)** | Eckwinkel, Eckenart, Verbindungsart | **GEBAUT** (W-27/1) |
+| Test | **`resources/planner/hausplaner/__tests__/dachTopologie.test.ts`** | elf Tests, drei gefahrene Fangproben | **GEBAUT** |
+| 3 Werkzeug | — | keine eigene Werkzeugschicht, die Analyse läuft mit | offen |
 | 4/5 | Anzeige der Ecktypen am Modell | — | **fehlt**, nicht Gegenstand |
+
+**Die acht Exporte der gebauten Datei, am Bau-Stand abgelesen:**
+
+```text
+:34   interface TopologyPoint        { x, y }
+:40   type EdgeTopologyType          TRAUFE · GIEBEL · PULT_WAND · WALM · TEILWALM
+:43   type TopologyCornerType        innen · aussen
+:51   type TopologyJoinType          grat · kehle · ortgang · neutral
+:54   interface EdgeTopologyConfig   { id, type, pitch, label }
+:62   interface TopologyCornerInfo   { index, point, angleDeg, cornerType, joinType }
+:77   interface TopologyAnalysis     { points, edgeConfigs, corners, + FUENF Zaehlungen }
+:123  function analyzeTopology(points, edgeConfigs): TopologyAnalysis
+        :127 Schritt 0 Umlaufsinn · :133 Schritt 1 Winkel
+        :151 Schritt 2 Eckenart   · :154 Schritt 3 Verbindungsart
+```
+
+> **Zwei Abweichungen gegenüber der Vorgabe, beide im Baubericht mit Grund:** *`TopologyPoint`
+> wird **exportiert** (die Vorgabe nannte ihn nur als Fundstelle `:123`), und die Rückgabe ist
+> **`TopologyAnalysis`** statt `TopologyCornerInfo[]` — so steht es in der Quelle `:193`, und die
+> fünf Zählungen sind genau die Zahlen, deren Fehlen diese Ablesung als Lücke gemessen hat.*
+>
+> **Und die Namensgrenze zu `klassifiziereSchifter` steht jetzt im Dateikopf des gebauten Codes**
+> (`dachTopologie.ts:4-17`) — *dort, wo sie ein Leser findet, der `'kehle'` an zwei Orten sieht.*
 
 ## Kernstelle — die Ableitung, auf die es ankommt
 
