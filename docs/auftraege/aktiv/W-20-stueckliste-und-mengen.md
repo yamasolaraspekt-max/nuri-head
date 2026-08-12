@@ -6,7 +6,6 @@ werkzeug: "W-20 Stückliste und Mengen"
 art: "STUFE 1 — Blatt schneiden, Ziel BESCHRIEBEN. Ablesung: der Kern ist gebaut und getestet."
 spur: A
 heimat_app: ticket
-status: CODE_FERTIG
 dor_beleg: "2c0e4ede — plan-pruefer 12.08., DoR BESTANDEN. Er hat holzMengen.ts mit 64 Zeilen und
          drei Exporten selbst nachgemessen und die sechs Testzusagen als sechs test-Bloecke
          belegt. NACHGEZOGEN vom Planner nach dem Bau: der Blattkopf hing auf ENTWURF, waehrend
@@ -183,7 +182,6 @@ W-20 wird auf ENTWURF geschnitten und nimmt keinen §3-Platz.
 ```
 
 ```yaml
-zustand: ENTWURF
 ballbesitz: "plan-pruefer (DoR)"
 warum_BESCHRIEBEN_und_nicht_ENTWORFEN: "der Kern ist gebaut, getestet und im Dateikopf begruendet —
         das ist eine Ablesung. Die fehlende Ziegelmenge wird als GRENZE benannt, nicht als Vorgabe;

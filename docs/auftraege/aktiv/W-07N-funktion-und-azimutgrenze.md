@@ -13,7 +13,6 @@ titel_berichtigt: "12.08. — Ueberschrift und art trugen die widerlegte Zahl 6/
 titel: "2-FUNKTION.md ist ein leeres Formular, waehrend W-07 im Register BESCHRIEBEN traegt"
 spur: A
 heimat_app: ticket
-status: CODE_FERTIG
 status_steht_in: docs/STATUS.md
 dor_beleg: "a5aab234 — plan-pruefer: 'W-01N und W-07N BEREIT beim ersten Review', beide Rot-Lagen selbst gemessen. Berichtigt 12.08.: der Blattkopf hing auf ENTWURF, weil die DoR die Datei nicht anfasste."
 basis_sha: 3d368625

@@ -6,7 +6,6 @@ werkzeug: "W-23 Deckung und Material"
 art: "STUFE 1 — Blatt schneiden, Ziel BESCHRIEBEN. Der Auftrag, der W-21L entsperrt."
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: e9f370f1
 prioritaet: P1
@@ -289,7 +288,6 @@ W-23 wird auf ENTWURF geschnitten und nimmt keinen §3-Platz.
 ```
 
 ```yaml
-zustand: ENTWURF
 ballbesitz: "plan-pruefer (DoR)"
 was_yama_bestaetigen_muss: "die Rechnung aus Abschnitt 5. Sie ist die Umsetzung SEINES Satzes,
        aber die Umsetzung ist meine — Reihenanzahl aufrunden und dann gleichmaessig teilen ist

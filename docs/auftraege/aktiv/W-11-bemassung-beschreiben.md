@@ -7,7 +7,6 @@ stufe: "1 von 2 — BESCHRIEBEN. Stufe 2 folgt als eigener Auftrag."
 titel: "Die sieben Blaetter von W-11 aus bemassung.ts + masskette.ts + masseingabe.ts ableiten"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 7a415aff
 prioritaet: P1

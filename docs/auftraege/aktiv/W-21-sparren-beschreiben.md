@@ -7,7 +7,6 @@ stufe: "1 von 2 — BESCHRIEBEN. Stufe 2 folgt als eigener Auftrag."
 titel: "Die sieben Blaetter von W-21 aus fuenf vorhandenen Holzbau-Modulen ableiten"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: c9325929
 prioritaet: P1

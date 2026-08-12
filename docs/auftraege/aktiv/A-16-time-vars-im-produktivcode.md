@@ -6,7 +6,6 @@ titel: "Elf unbelegte Zeitwerte und ein harter Stundensatz rechnen einen Lohnkos
 art: "MESSEN + ENTSCHEIDEN. Kein Bau am Wert (Yamas Punkt 4)."
 spur: A
 heimat_app: ticket
-status: BEREIT
 dor_beleg: "95b4de4f — plan-pruefer 12.08.: 'A-16 DoR BESTANDEN, BEREIT beim Generator: alle
          Zeilenangaben treffen exakt' + 'MACHBARKEIT GEMESSEN, der Punkt an dem eine DoR faellt:
          A-16-1 verlangt jede view()-Stelle mit Variable einzeln zu oeffnen — es sind VIER, machbar.'
@@ -212,7 +211,6 @@ neue Hausregel eine Stufe weiter: nicht nur *Mehrfachvorkommen* ist kein Beleg, 
 ist kein Beleg für die Wirkung**. Beides gehört in B7; die Schärfung steht dort.
 
 ```yaml
-zustand: BEREIT
 ballbesitz: "GENERATOR — Bau. Weiche und DoR sind durch (95b4de4f)."
 ueberholt_12_08: "Hier stand: 'YAMA — Weiche W1/W2/W3. Ohne sie ist A-16-2 nicht schneidbar.'
          Der Satz war richtig, als das Blatt geschnitten wurde, und ist seit Yamas W3-Entscheidung

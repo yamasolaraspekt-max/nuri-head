@@ -7,7 +7,6 @@ stufe: "1 von 2 — ENTWORFEN (nicht BESCHRIEBEN). Stufe 2 ist der BAU."
 titel: "Vier Vertragswerkzeuge ohne Implementierung — und der Vertrag liefert die Blattinhalte"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 57e582af
 prioritaet: P2

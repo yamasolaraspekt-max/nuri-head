@@ -75,9 +75,13 @@ ist**. Pfad, Größe, und bei Binärformaten das Werkzeug.
 
 ### 6 · An WIE VIELEN Stellen steht die Angabe, die ich ändere? (neu 12.08.)
 
-Vor jeder Berichtigung **zählen**, nicht beheben. Ein Zustand steht an bis zu **vier**
-Orten: Tafelzeile, Datensatz-Feld, Blattkopf, Blattfuß. Eine Zahl steht in Überschrift,
+Vor jeder Berichtigung **zählen**, nicht beheben. Eine Zahl steht in Überschrift,
 Fließtext, Tabelle und Kriterium.
+
+**Für den ZUSTAND gilt das seit A-20 (12.08.) nicht mehr: er steht an genau ZWEI Orten** —
+Tafelzeile und `zustand:` im Datensatz, beide in `docs/STATUS.md`. *Blattkopf `status:` und
+Blattfuß `zustand:` sind entfallen; die Blätter tragen nur noch `status_steht_in:`.* **Die Fälle
+unten sind der Grund dafür und bleiben als Beleg stehen.**
 
 ```text
 A-16   vier Orte, ich traf DREI. Der vierte fiel nur der Gegenprobe auf.

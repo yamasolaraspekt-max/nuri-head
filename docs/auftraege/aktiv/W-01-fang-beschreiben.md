@@ -7,7 +7,6 @@ stufe: "1 von 2 — BESCHRIEBEN (die sieben Blaetter). Stufe 2 GEBAUT folgt als 
 titel: "Die sieben Blaetter von W-01 aus dem VORHANDENEN fangKern.ts ableiten"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 32f83a6f
 prioritaet: P1

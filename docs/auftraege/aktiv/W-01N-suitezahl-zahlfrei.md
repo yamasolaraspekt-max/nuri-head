@@ -6,7 +6,6 @@ art: "Nachbesserung nach §12.5 — W-01/1 bleibt ABGENOMMEN, der Befund wirkt n
 titel: "W-01/1-6 traegt die Zahl 1689/1689, gemessen sind 1692 — zahlfreie Form wie in W-02"
 spur: A
 heimat_app: ticket
-status: BEREIT
 status_steht_in: docs/STATUS.md
 dor_beleg: "a5aab234 — plan-pruefer: 'W-01N und W-07N BEREIT beim ersten Review, beide Rot-Lagen
          selbst gemessen'. Angeglichen 12.08. vom Planner: der Blattkopf hing auf ENTWURF, waehrend

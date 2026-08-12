@@ -6,7 +6,6 @@ art: "siebte Barriere. NICHT dieselbe Klasse wie B5 — Yama hat sie ausdrueckli
 titel: "Wer eine Gesamtzahl ueber eine Menge meldet, definiert zuerst die MENGE"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 1e09280d
 prioritaet: P1

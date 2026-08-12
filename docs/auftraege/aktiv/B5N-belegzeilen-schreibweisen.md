@@ -6,7 +6,6 @@ art: "Nachbesserung nach §12.5 — B5 bleibt RELEASE_FREI, der Befund wirkt nic
 titel: "B5_BELEGZEILE erkennt nur datei.ext:zeile — die Schreibweise Z.217-268 faellt durch"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 8870387a
 prioritaet: P2
@@ -155,7 +154,6 @@ B5N wird auf ENTWURF geschnitten und nimmt keinen §3-Platz.
 ```
 
 ```yaml
-zustand: ENTWURF
 ballbesitz: "plan-pruefer (DoR)"
 umfang: "EINE Zeile im Tor plus drei Gegenproben. Kleiner als B5, B6 und B7."
 warum_nicht_still_erweitert: "das Tor ist eine Schranke, die allen Rollen gehoert. Der Generator

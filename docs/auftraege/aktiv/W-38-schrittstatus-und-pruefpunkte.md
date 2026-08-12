@@ -8,7 +8,6 @@ art: "STUFE 6 — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Der Code EXISTIE
       NICHT Vorgabe — anders als W-15/W-23/W-27."
 spur: A
 heimat_app: ticket
-status: BEREIT
 dor_beleg: "4ea7398d — plan-pruefer 12.08., DoR BESTANDEN. Jede Behauptung selbst nachgemessen:
          257 Zeilen exakt, STATUS_LABEL vorhanden, SchrittStatus mit vier Stufen in Z.163. Bei den
          _STILLGELEGT-Konstanten zeigte sein Zaehler DREI gegen die ZWEI im Blatt — er hat gelesen
@@ -151,7 +150,6 @@ Trefferzeile ist kein Beleg, und ein Erklärsatz neben einer Zahl muss aus ihr a
 und nicht vorformuliert — das ist mir heute viermal misslungen.
 
 ```yaml
-zustand: BEREIT
 ballbesitz: "GENERATOR"
 warum_BESCHRIEBEN_und_nicht_ENTWORFEN: "der Code existiert im Bestand (resources/planner/
         hausplaner/app/studioDaten.ts, 257 Z.), die Typen haben echte Nutzer und drei

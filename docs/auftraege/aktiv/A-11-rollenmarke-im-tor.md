@@ -5,7 +5,6 @@ auftrag: A-11
 titel: "Commit-Tor: die Rolle kommt aus der Umgebung und wird der Botschaft vorangestellt - fehlt sie, gibt es keinen Commit"
 spur: A                            # Werkzeug am Commit-Weg
 heimat_app: ticket
-status: ENTWURF                    # der Plan-Pruefer entscheidet ueber BEREIT
 status_steht_in: docs/STATUS.md    # §16: EINE Statuswahrheit. Hier steht keine zweite.
 basis_sha: 229ad0be
 anlass: "PROZESSPRUEFUNG-02, Befund 0 · B4 angenommen in 229ad0be · Messung des Evaluators in 12982e6c"

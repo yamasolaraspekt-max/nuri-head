@@ -197,6 +197,28 @@ widerrufen.
 
 ## 5. Definition of Ready
 
+### Wer den Auftrag schneidet, legt seinen Platz in der Statuswahrheit an (A-20, 12.08.)
+
+> **Wer ein Auftragsblatt schneidet, legt im SELBEN Commit Tafelzeile UND Datensatz-Block in
+> `docs/STATUS.md` an** — Zustand `ENTWURF`, `dor_beleg: steht aus`.
+> **Wer danach prüft oder baut, ÄNDERT Felder in diesem einen Block. Er legt keinen zweiten an.
+> Nie.**
+
+**Warum der Schneidende und nicht erst die DoR:** *würde der Block erst bei der DoR entstehen, gäbe
+es ein Fenster zwischen Schnitt und Prüfung, in dem der Auftrag in der Statuswahrheit **nicht
+existiert**. Genau das ist am 12.08. bei W-38 eingetreten — Blatt committet, null Blöcke, null
+Tafelzeilen.* **Die Statuswahrheit sagte dort nicht das Falsche, sie sagte gar nichts.**
+
+**Warum ein Block mit geteilter Feldhoheit und nicht zwei Blöcke:** *der A-17-Doppelblock entstand
+nicht daraus, dass zwei Rollen schrieben, sondern daraus, dass ein **zweiter Block** angelegt wurde,
+der `zustand` trug.* **Ein Block schließt beides: kein Fenster, kein Doppelblock.**
+
+*Unverändert gilt der Dreiklang: **Tafelzeile, `zustand` und `dor_beleg` sind EIN Handgriff.** Wer
+nur zwei davon schreibt, hat verschoben statt freigegeben — die Regel oben sagt nur, **wer** ihn
+zuerst ausführt.*
+
+---
+
 Ein Auftrag darf nur `BEREIT` werden, wenn der Plan-Prüfer alle folgenden Punkte belegt hat:
 
 - exakter Basis-SHA,
@@ -614,6 +636,50 @@ seiner laufenden Zehnergruppe.
 - Geheimnisse, Zugangsdaten und personenbezogene Daten werden nicht in Berichte oder Git geschrieben.
 
 ## 16. Statusführung
+
+### Die vier Orte — zwei bleiben, zwei entfallen (A-20, 12.08.)
+
+**Der Zustand eines Auftrags stand bis zum 12.08. an vier Stellen. Zwei davon waren Kopien:**
+
+```text
+BLEIBT     docs/STATUS.md · Tafelzeile            die Uebersicht
+BLEIBT     docs/STATUS.md · zustand: im Datensatz die Begruendung samt dor_beleg
+ENTFAELLT  Auftragsblatt  · status: im Kopf       Kopie
+ENTFAELLT  Auftragsblatt  · zustand: im Fuss      Kopie der Kopie
+BLEIBT     Auftragsblatt  · status_steht_in: docs/STATUS.md
+```
+
+> **`docs/STATUS.md` ist die einzige Statuswahrheit.** *Wer wissen will, ob ein Auftrag `BEREIT`
+> ist, liest sie — **nicht den Blattkopf**. Das Feld `status_steht_in:` sagte das schon; es wird
+> damit vom Hinweis zur einzigen Auskunft.*
+
+**Warum die Kopien entfallen statt „disziplinierter nachgezogen" zu werden — gemessen am 12.08.:**
+
+```text
+43 Auftragsblaetter · 33 mit status: im Kopf · 10 mit zustand: im echten Blattfuss
+
+Blattkopf gegen die Statuswahrheit in docs/STATUS.md:
+  abweichend        29        uebereinstimmend  1        ohne Datensatz  3
+  davon: Kopf ENTWURF, waehrend BETRIEBSBESTAETIGT gilt  20
+```
+
+**Zwanzig von 33 Blättern behaupteten `ENTWURF`, während der Auftrag abgenommen und im Betrieb
+bestätigt war.** *Nur ein einziger Kopf stimmte.*
+
+> **Zur Herkunft der Zahlen, weil eine ältere Fassung dieses Absatzes „24 mit zustand: im Fuss" und
+> „17 Widersprüche" nannte:** *beide stammten aus der Regel „die erste `^zustand:`-Zeile ist der
+> Blattfuß". Die ist falsch* — **`^zustand:` steht auch in MELDEBLÖCKEN** *(yaml-Blöcke mit
+> `auftrag:` und `bau_commit:`, also datierten Bauaufzeichnungen).* **Gemessen: 10 echte Blattfüße,
+> 17 Meldeblöcke auf 14 Blättern — zusammen die 24.** *Von den „17 Widersprüchen" sind 4 echt
+> (Kopf gegen Fuß), 13 verglichen einen Kopf mit einer Bauaufzeichnung.* **Unterschieden wird am
+> BLOCK, nicht an der Zeile.**
+
+**Eine Stelle, die es nicht gibt, kann nicht veralten.** *Ein Verfahren, das an Aufmerksamkeit
+hängt, ist bei 43 Blättern und fünf Rollen keines.*
+
+> **Der belegte Beinahe-Schaden:** *beim Bau von W-20 stand im Blattkopf `status: ENTWURF`, während
+> `BEREIT` galt. Der Generator ist nur deshalb nicht gescheitert, weil er den DoR-Beleg woanders
+> gesucht hat.* **Das war Findigkeit, kein Verfahren — 29 Blätter waren Fallen dieser Art.**
 
 **Der Statusträger ist `docs/STATUS.md`** — namentlich. *Fassung 1.3 nannte hier
 `docs/AKTUELLER_AUFTRAG.yaml`; P-01 mit Yamas Weisung (Fassung 1.2.2, Commit `8fc5edb8`) hat den

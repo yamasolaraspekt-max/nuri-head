@@ -8,7 +8,6 @@ art: "REGELWERK. Fasst docs/ARBEITSREGELN.md an (§16, §5) und danach 32 Auftra
       Wie A-19: zwei Punkte in EINEM Blatt, weil beide dieselbe Datei anfassen."
 spur: A
 heimat_app: ticket
-status: BEREIT
 dor_beleg: "7d2e4f31 — plan-pruefer 12.08., DoR BESTANDEN MIT OFFENGELEGTER BEFANGENHEIT: der
          Auftrag regelt seine eigene Rolle und entscheidet seine eigene Frage GEGEN seinen
          Vorschlag. Er hat das offengelegt und gegen die Kriterien des Blattes geprueft statt

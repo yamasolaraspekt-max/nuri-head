@@ -5,7 +5,6 @@ auftrag: A-09
 titel: "Commit-Tor: Repo-Bezug eines git-Prozesses auch ueber --git-dir erkennen, nicht nur ueber die cwd"
 spur: A                            # Werkzeug am Commit-Weg
 heimat_app: ticket
-status: ENTWURF                    # der Plan-Pruefer entscheidet ueber BEREIT
 status_steht_in: docs/STATUS.md    # §16: EINE Statuswahrheit. Hier steht keine zweite.
 prioritaet: P2
 basis_sha: 5a54b004   # (a) nachgetragen 10.08. — der A-08-Bau. Erst ab hier EXISTIERT

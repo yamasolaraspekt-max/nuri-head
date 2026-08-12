@@ -6,7 +6,6 @@ titel: "Das einzige Azimut-Feld im Haus ohne Test bekommt Validierung, Zusage un
 art: "BAU — erster Produktivcode-Auftrag seit Tagen"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 783d47c1
 prioritaet: P1

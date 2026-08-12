@@ -7,7 +7,6 @@ stufe: "1 von 2 — BESCHRIEBEN. Stufe 2 folgt als eigener Auftrag."
 titel: "Die sieben Blaetter von W-05 aus roomDetection.ts ableiten"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 3358d1cc
 prioritaet: P1

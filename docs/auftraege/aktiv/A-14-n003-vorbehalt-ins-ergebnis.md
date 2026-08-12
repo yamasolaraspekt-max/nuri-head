@@ -6,7 +6,6 @@ titel: "Vorbehalt als Pflichtfeld · grundlage traegt die Grenze · die Plakette
 art: "BAU, Spur A — Fachrecht/Haftung beruehrt, aber KEINE Fachentscheidung: der Vorbehalt ist von Yama festgelegt"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 1e09280d
 prioritaet: P1

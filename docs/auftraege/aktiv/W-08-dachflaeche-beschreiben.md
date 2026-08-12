@@ -7,7 +7,6 @@ stufe: "1 von 2 — BESCHRIEBEN. Stufe 2 folgt als eigener Auftrag."
 titel: "Die sieben Blaetter von W-08 aus polygonFlaeche.ts ableiten"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: b202ad7c
 prioritaet: P1

@@ -47,7 +47,7 @@
 | **W-27** Dachkantentypen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
-| **A-20** Zustand an vier Orten | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
+| **A-20** Zustand an vier Orten | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6415,9 +6415,13 @@ meine_frage_wurde_beantwortet: "Der Planner hat die Grundmengen zu '17 von 24' n
 
 ```yaml
 auftrag: "A-20"
-zustand: IN_ARBEIT
-ballbesitz: generator
-ballbesitz_bau: generator (Bau laeuft — Regelwerk plus Bereinigung von 33 Blaettern)
+zustand: CODE_FERTIG
+ballbesitz: evaluator
+ballbesitz_bau: generator (Bau fertig — Regelwerk §16+§5, 33 Blaetter bereinigt, 43 Zeilen entfernt, 0 eingefuegt)
+bericht: "docs/BERICHT-A-20-zustand-an-vier-orten.md"
+felder_geaendert_kein_zweiter_block: "Ich habe A-20-2 zuerst auf mich selbst angewandt: dieser Block ist der vom Plan-Pruefer angelegte, ich habe zustand und ballbesitz DARIN geaendert und keinen zweiten daruntergesetzt. Der Doppelblock aus A-17, der diesen Auftrag mitbegruendet hat, entstand genau aus der anderen Gewohnheit."
+zwei_zahlen_fuer_den_evaluator: "A-20-3 misst 'zustand: im Blattfuss 10 -> 0'. Ein naives grep -c '^zustand:' ueber die Blaetter findet weiterhin 17 — das sind ausschliesslich MELDEBLOECKE (yaml-Bloecke MIT auftrag:, also datierte Bauaufzeichnungen mit bau_commit), verteilt auf 14 Blaetter. Ich habe sie ABSICHTLICH stehen lassen, weil sie Belege sind und keine Statusbehauptung; A-20-4 verbietet ausdruecklich, Befunde beim Loeschen zu vernichten. Beide Zahlen stehen im Bericht. Werden sie als Kopien gewertet, ist das eine Nachbesserung von zwei Zeilen im Skript — die Unterscheidung ist gemessen, nicht geschaetzt."
+befund_zur_ist_messung_des_blattes: "Die vom Plan-Pruefer erbetene Zeile (welche Menge 17 und 24 bezeichnen) steht im Bericht — und beim Nachmessen fiel auf: die '17 von 24' beruhen auf derselben Verwechslung, der mein eigener erster Lauf aufgesessen ist. Gegen HEAD gemessen sind es 4 echte Widersprueche Kopf gegen Blattfuss (A-17, B7, W-20, W-27) plus 13 Vergleiche eines Kopfes mit einem MELDEBLOCK. Zwei Faelle habe ich mit eigenen Augen gelesen statt dem Muster zu glauben. Das schmaelert den Auftrag nicht: die Zahl steht in der Ist-Messung, in keinem Kriterium, und entfernt sind mit 33 Koepfen plus 10 Fuessen ohnehin mehr als jede Lesart umfasst. Der groessere Schaden lag woanders — 29 der 33 Koepfe wichen von STATUS.md ab."
 basis_sha: f1296de8
 spur: A
 BEFANGENHEIT_OFFENGELEGT: "Dieser Auftrag regelt MEINE Rolle und beantwortet eine Frage, die ich selbst gestellt habe — und er entscheidet sie GEGEN meinen Vorschlag: A-20-2 legt fest, dass der SCHNEIDENDE Tafelzeile und Datensatz anlegt, waehrend ich vorgeschlagen hatte, dass der Plan-Pruefer es bei der DoR tut. Ich lege das offen, weil ich sonst in Versuchung waere, strenger zu pruefen als noetig. Geprueft habe ich gegen die Kriterien des Blattes, nicht gegen meinen Vorschlag — und die Entscheidung ist sachlich besser als meine: der Block entsteht dann, wenn der Auftrag entsteht, und nicht erst Stunden spaeter; genau die Leerstelle, die ich heute zweimal selbst schliessen musste (W-38 und dieses Blatt hier), kann dann nicht mehr auftreten."

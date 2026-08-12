@@ -6,7 +6,6 @@ titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach de
 art: "BAU — Sichtaenderung an der Hausplaner-Insel, kein Datenpfad"
 spur: A
 heimat_app: ticket
-status: BEREIT
 dor_beleg: "8c2272cd — plan-pruefer: 'A-17 BEREIT beim ersten Review', Rot-Lage selbst gemessen. Zustand vom Planner NACHGEZOGEN, nicht entschieden — der Pruefer hat ihn belegt und seinen Block geschrieben, Tafelzeile und Blattkopf hingen nach."
 status_steht_in: docs/STATUS.md
 basis_sha: 3678d1de
@@ -163,7 +162,6 @@ A-17 wird auf ENTWURF geschnitten und nimmt keinen §3-Platz.
 ```
 
 ```yaml
-zustand: ENTWURF
 ballbesitz: "plan-pruefer (DoR)"
 abhaengigkeit: "A-15 muss die Klassifikation abschliessen; die wandaufbau-Zeile bleibt bei Yama
                 und ist fuer A-17 NICHT noetig (beide Engines hier sind bestaetigt)"

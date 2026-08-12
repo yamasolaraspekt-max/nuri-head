@@ -6,7 +6,6 @@ art: "MESSAUFTRAG — kein Produktivcode, kein Bau. Muster: A-05"
 titel: "Ein L-Grundriss mit F-026 rechnen, Ergebnis ansehen, Ampel 🟡 -> 🟢 oder 🔴"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: d1d716c8
 prioritaet: P1

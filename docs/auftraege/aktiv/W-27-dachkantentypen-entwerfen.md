@@ -7,7 +7,6 @@ art: "STUFE 1 — Blatt schneiden, Ziel ENTWORFEN (Klasse C, wie W-15). Quelle i
       nicht der Bestand — deshalb VORGABE und nicht Ablesung."
 spur: A
 heimat_app: ticket
-status: BEREIT
 dor_beleg: "2c0e4ede — plan-pruefer 12.08.: 'W-20 UND W-27 DoR BESTANDEN, beide BEREIT'. Die drei
          Zahlen selbst nachgemessen ('ortgang' als String-Literal 0, TopologyJoinType 0,
          cornerType 0). MIT AUFLAGE, die in Abschnitt 1 eingearbeitet ist: die FORMULIERUNG ging
@@ -210,7 +209,6 @@ W-27 wird auf ENTWURF geschnitten und nimmt keinen §3-Platz.
 ```
 
 ```yaml
-zustand: ENTWURF
 ballbesitz: "plan-pruefer (DoR)"
 warum_ENTWORFEN_und_nicht_BESCHRIEBEN: "die Quelle ist ein Prototyp in docs/, nicht der Bestand in
         resources/. Ein BESCHRIEBEN-Blatt liest Code ab; hier wird VORGEGEBEN, was gebaut werden

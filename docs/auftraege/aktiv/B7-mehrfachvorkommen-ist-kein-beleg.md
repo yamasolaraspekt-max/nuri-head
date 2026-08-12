@@ -6,7 +6,6 @@ titel: "Verbreitung sieht wie Bestaetigung aus. Barriere gegen die Zahl, die nur
 art: "BARRIERE — nach dem Muster von B5 und B6"
 spur: A
 heimat_app: ticket
-status: BEREIT
 dor_beleg: "3403c601 — plan-pruefer: 'B7 BEREIT (2. Runde), der Restpunkt ist behoben'. Zustand vom Planner NACHGEZOGEN, nicht entschieden — der Pruefer hat ihn belegt und seinen Block geschrieben, Tafelzeile und Blattkopf hingen nach."
 status_steht_in: docs/STATUS.md
 basis_sha: 5d88f198
@@ -160,7 +159,6 @@ plan-pruefer steht noch offen — B7-1 haengt daran und darf es nicht ueberholen
 ```
 
 ```yaml
-zustand: ENTWURF
 ballbesitz: "plan-pruefer (DoR)"
 abhaengigkeit: "B7-1 setzt voraus, dass §18a gegengelesen ist (offener Posten seit 12.08.)"
 beleg_liegt_vor: "vier Fundorte, null Quellen — und der vierte hat die Schaerfung (b) geliefert"

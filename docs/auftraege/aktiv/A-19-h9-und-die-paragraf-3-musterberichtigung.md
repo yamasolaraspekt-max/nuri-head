@@ -7,7 +7,6 @@ art: "REGEL + Musterberichtigung. EIN Blatt, weil beide Teile dieselbe Datei anf
       dieselbe Ursache haben — zwei Blaetter wuerden sich gegenseitig sperren."
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: c89e9096
 prioritaet: P1
@@ -197,7 +196,6 @@ A-19 wird auf ENTWURF geschnitten und nimmt keinen §3-Platz.
 ```
 
 ```yaml
-zustand: ENTWURF
 ballbesitz: "plan-pruefer (DoR)"
 warum_EIN_blatt: "H-9 und die Musterberichtigung fassen BEIDE docs/ARBEITSREGELN.md an. Zwei
        Blaetter wuerden sich nach H-4 gegenseitig sperren und zwei DoR-Runden kosten — bei

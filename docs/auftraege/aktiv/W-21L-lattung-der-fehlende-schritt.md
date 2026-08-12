@@ -7,7 +7,6 @@ art: "Bau-Auftrag, Spur A — aber BLOCKIERT: die Fachdaten existieren nicht"
 titel: "Niemand leitet den Lattenabstand aus der Deckungsart ab. Und die Daten dafuer fehlen."
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 4f0d4584
 prioritaet: P2

@@ -6,7 +6,6 @@ titel: "Der U-Wert traegt seinen Vorbehalt als Pflichtfeld — keine Feuchteschu
 art: "BAU — ein Feld, ein Satz. Nach dem Muster A-14/A-17."
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: ea9522bc
 prioritaet: P1
@@ -201,7 +200,6 @@ A-18 wird auf ENTWURF geschnitten und nimmt keinen §3-Platz.
 ```
 
 ```yaml
-zustand: ENTWURF
 ballbesitz: "plan-pruefer (DoR)"
 abhaengigkeit: "A-15 muss die Klassifikation abschliessen. Die wandaufbau-Zeile war die LETZTE
                 offene — mit A-18 loest sie sich auf, ohne dass Yama ein Fachurteil faellen muss."

@@ -6,7 +6,6 @@ titel: "Wo eine Rechnung eine Norm nennt, darf die Software nicht 'bestanden' sa
 art: "MESSAUFTRAG mit anschliessender Klassifikation. KEIN Bau."
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: d814be02
 prioritaet: P1

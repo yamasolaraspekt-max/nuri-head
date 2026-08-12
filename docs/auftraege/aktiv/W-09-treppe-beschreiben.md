@@ -7,7 +7,6 @@ stufe: "1 von 2 — BESCHRIEBEN. Stufe 2 folgt als eigener Auftrag."
 titel: "Sieben Module, 698 Zeilen, ZWOELF Zusagen — und DIN 18065 mitten drin"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 65f3ece4
 prioritaet: P1

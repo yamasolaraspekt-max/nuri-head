@@ -6,7 +6,6 @@ art: "sechste Barriere, nach dem Muster von B3 und B4 — Regel im BEFEHL, nicht
 titel: "Wer mit -c etwas behauptet, faehrt denselben Lauf ohne -c und liest, was er gezaehlt hat"
 spur: A
 heimat_app: ticket
-status: ENTWURF
 status_steht_in: docs/STATUS.md
 basis_sha: 1734aa3b
 prioritaet: P1
