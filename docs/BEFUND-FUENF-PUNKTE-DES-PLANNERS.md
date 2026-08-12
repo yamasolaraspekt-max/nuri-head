@@ -218,7 +218,45 @@ HausplanerConfiguratorPackage::query()
 
 **Die Insel ruft sie 0 mal auf** (`grep 'konfigurator-pakete' resources/planner` → 0 Treffer).
 
-### Hälfte 2 — „Start/Zuletzt an echte Projekte": **fehlt wirklich**
+### BERICHTIGT am 12.08.: Hälfte 2 fehlt NICHT — mein Befund war falsch
+
+> **Die folgende Passage bleibt als Beleg stehen, aber sie ist widerlegt.** *Der Planner hat es in
+> `054eaa0b` nachgewiesen, der Generator hatte es vor dem Ziehen von W-33 gemessen, der Plan-Prüfer
+> bestätigt — und ich habe jede Stelle selbst geöffnet, statt es zu übernehmen:*
+
+```text
+HausplanerController.php:42   private const PROJEKTLISTE_MAX = 6
+                       :101   private function hausplanerProjekte(): array
+                       :55    'hpProjekte' => $this->hausplanerProjekte()
+objekt.blade.php:141          data-projekte="{{ json_encode($hpProjekte, ...) }}"
+main.tsx:18                   import { leseProjekte, PROJEKTE_ATTRIBUT }
+main.tsx:82                   setProjekte(leseProjekte(mount.dataset[PROJEKTE_ATTRIBUT]))
+-> die Kette ist LUECKENLOS. Gebaut unter AUF-78 mit eigener Abnahme.
+```
+
+**Warum ich sie nicht gefunden habe — und der Fehler ist meiner:** *ich habe nach einer **Route**
+gesucht* (`grep` auf `routes/web.php`, 0 Treffer) *und aus der Null geschlossen, die Zulieferung
+fehle.* **Sie kommt aber über das Mount-Attribut, nicht über einen Fetch** — und der Controller sagt
+das in `:57` wörtlich: *„Server — dieselbe Naht wie `hpProjekte`, **kein Lade-Fetch aus der
+Insel**."*
+
+> **Das ist H-9 auf eine ABWESENHEIT, und dort ist es gefährlicher als bei einem Vorkommen:** *ein
+> falsch positiver Treffer fällt beim Öffnen auf — **null Treffer öffnet niemand**.* **Ich habe die
+> Bauform gemessen, die ich erwartet habe, und nicht die, die da ist.**
+
+**Was mein Fehlbefund angerichtet hätte:** Ich habe unten geschrieben, für Projekte *„bleibt bei dir
+— als kleinere Frage"*. **Es gab gar keine Frage.** Yama hätte über eine Sichtbarkeitsregel
+entschieden, die längst gebaut und abgenommen ist — und die nächste Rolle hätte sie ein zweites Mal
+gebaut. Genau der zweite Schreibpfad, vor dem ich in derselben Datei gewarnt habe.
+
+**Der Rest von Punkt 6 gilt weiter:** AUF-40 besteht aus zwei Hälften, beide sind gebaut, und was
+fehlt, ist allein der **Anschluss der Konfigurator-Pakete** an den Startbildschirm — `paketListe`
+wird von der Insel 0-mal gerufen. **Aber auch das ist ein Bauauftrag der Kette, keine Entscheidung
+für dich.** Damit liegt bei dir aus diesem Punkt: **nichts.**
+
+---
+
+### ~~Hälfte 2 — „Start/Zuletzt an echte Projekte": **fehlt wirklich**~~ (widerlegt, siehe oben)
 
 Und hier ist die Unterscheidung, die den Posten teilt. Die drei stillgelegten Karten waren **zwei
 verschiedene Sorten**:
