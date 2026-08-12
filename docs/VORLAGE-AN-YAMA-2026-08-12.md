@@ -597,3 +597,102 @@ nicht"-Sätze waren Suchraum statt Bestand.* W-40 ist damit schon durch die ganz
 DAZU BRAUCHT ES VON DIR NICHTS — es ist gemessen und die Rollen haben reagiert.
 Es steht hier, damit du es weisst, bevor du ueber a) b) c) oben entscheidest.
 ```
+
+---
+
+## 11 · W-40 aufgelöst — Reifegrad, Bau und zweite Wahrheit, auf deine Anweisung beantwortet
+
+**Dein Auftrag, 12.08. wörtlich:** *„Eine Antwort von dir löst jetzt drei Dinge auf einmal: W-40s
+Reifegrad, W-40s Bau und die Frage, ob dort eine zweite Wahrheit entstanden ist. diese Frage war an
+mich gerichtet kannst du das übernehmen und sauber fundiert beantworten"*
+
+### Der Schlüssel ist der Träger, nicht das Wort
+
+Alle vier Rollen — ich als vierte — haben `ConfiguratorStatus` gegen W-40s Vorgabe gehalten und
+gefragt, ob dasselbe zweimal da ist. **Die Frage lässt sich nicht am Namen entscheiden, nur am
+Träger.** Selbst gemessen, jede Stelle geöffnet:
+
+```text
+ConfiguratorStatus  haengt an  ConfiguratorPackage       configuratorPackage.ts:72
+                    und das ist :69  type: ConfiguratorType
+                    window · door · stair · roof · pv · kitchen · +17 weitere
+                    -> der Freigabegrad eines autarken BAUTEIL-PAKETS
+
+SchrittStatus       haengt an  Fahrschritt               studioDaten.ts:169
+                    und an     Pruefpunkt                :164
+                    -> der Fortschritt eines SCHRITTS im Planungsablauf
+
+W-40s Traeger       legt sein eigenes Blatt fest, 2-FUNKTION Z.42-45:
+                      fortschritt: SchrittStatus       (W-38, gebaut)
+                      gueltigkeit: Gueltigkeitsstatus  (W-40, Vorgabe)
+                      "ein Schritt kann ok UND confirmed sein"
+                    -> also am SCHRITT, nicht am Paket.
+```
+
+**Gegenprobe gefahren statt angenommen:** `studioDaten.ts` nennt `ConfiguratorPackage` genau
+einmal — Zeile 159, und das ist eine **Zeichenkette in Beispieldaten** (`meta: 'ConfiguratorPackage
+· gestern'`), Import-Zähler **0**. Umgekehrt kommt `Fahrschritt` in `configuratorPackage.ts`
+**0**-mal vor. **Die beiden Träger kennen einander nicht.**
+
+### Die drei Antworten
+
+```text
+1  ZWEITE WAHRHEIT?   NEIN, heute keine — und das ist gemessen, nicht beruhigt:
+                        Gueltigkeitsstatus   0 Treffer in resources/
+                        Feld  gueltigkeit    0
+                        Wert  'confirmed'    0
+                        Wert  'blocked'      0
+                      Eine Achse am Paket, eine am Schritt. Wo nichts gebaut
+                      wurde, kann keine zweite Wahrheit sein.
+
+2  W-40s BAU?         NULL Code. Am Bau-Commit 1eedb9cf gemessen: zehn Dateien,
+                      ALLE unter docs/ — sieben Blaetter, Bericht, REGISTER,
+                      STATUS. Code-Dateien unter resources/: 0.
+                      W-40 hat vorgegeben, nicht gebaut.
+
+3  REIFEGRAD?         ENTWORFEN IST RICHTIG UND BLEIBT. Die Legende verlangt,
+                      dass der Code DES WERKZEUGS nicht existiert — und die
+                      Gueltigkeitsachse AM SCHRITT existiert nicht. Was
+                      existiert, ist eine Freigabeachse AM PAKET.
+```
+
+### Ich berichtige dabei meinen eigenen Befund von heute Mittag
+
+In `c002574b` habe ich geschrieben: *„ein Werkzeug mit Code trägt die Stufe, die für Werkzeuge ohne
+Code gedacht ist."* **Das war zu schnell.** Ich habe Namensgleichheit für Gegenstandsgleichheit
+genommen — genau der Fehler, vor dem W-27s eigene Namensgrenze warnt (`klassifiziereSchifter` gegen
+Ecken: *gleiche Wörter, andere Sache*). Der Planner hat es richtig gerochen, als er schrieb, die
+Frage sei nicht der Reifegrad, sondern der Gegenstand; auflösen konnte er es nicht, weil ihm der
+Träger fehlte.
+
+**Damit ist auch Punkt 9 vollständig:** `approved` ist **nicht** dasselbe wie `confirmed`. `approved`
+sagt, ein **Bauteil-Paket** ist freigegeben und darf übernommen werden (`kannIntegrieren`, in
+Gebrauch in `integrationAbgleich.ts:13` und `:134`). `confirmed` sagt, ein **Planungsschritt** trägt
+ein vom Nutzer bestätigtes Ergebnis. Meine erste Fassung nannte es *Paket gegen Geometrie* — genauer
+gemessen ist es **Paket gegen Schritt**.
+
+### Eine Stelle, an der die zweite Wahrheit doch entstehen kann
+
+```text
+outdated steht in BEIDEN Listen und meint beide Male dasselbe:
+"durch spaetere Aenderung veraltet".
+
+Wer W-40 baut, OHNE die Uebergangslogik mit configuratorPackage.ts zu teilen,
+erzeugt zwei outdated mit zwei Tabellen. Das ist eine AUFLAGE FUER DEN BAU —
+kein heutiger Mangel.
+```
+
+### Was bei dir bleibt
+
+Zwei Fachfragen über **dein Zielbild**, die am Code nicht ablesbar sind — ich beantworte sie nicht:
+
+```text
+review-required   gehoert sie zur Gueltigkeitsachse? 4 + 3 = 7, dein Zielbild 3.6
+                  nennt ACHT Stufen. Eine Angabe fehlt.
+blocked           wie grenzt es sich von DECISION_BLOCKED im Prozess ab?
+                  Die Quelle sagt vier Woerter: "blocked ist die Sperre."
+```
+
+**Ein Hinweis zur Registerzeile 127:** ihr Befund sagt *„eine Gültigkeitsachse ist bereits gebaut"* —
+**ohne den Träger zu nennen.** Genau diese Verkürzung hat vier Rollen und mich in die Irre geführt.
+Wer sie präzisiert, sollte **„am Paket"** dazuschreiben.
