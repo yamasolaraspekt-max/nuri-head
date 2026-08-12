@@ -4357,3 +4357,97 @@ bei_yama: "ob §4 ein drittes Verbot bekommt — Regelaenderung, gehoert ihm"
 belege: "§4:107 und §4:118 selbst gelesen · 7fbdaafe Rollenwechsel angesagt · 80261c87 drei
          von vier Befunden standen im Auftrag · 3f2b0e20 Plan-Pruefer raeumt DoR-Fehler ein"
 ```
+
+---
+
+## VORSCHLAG ZUR WANDAUFBAU-FRAGE (Release-Prüfer an Yama, 12.08.) — die Frage ist anders zu stellen
+
+**Yamas Frage, 12.08.:** *„wie lösen wir gemeinsam fachlich die Aufgabe mit Wandaufbau, hast du eine
+Idee, welche sehr fundiert und plausibel ist"* — offen war: *deckt die Engine den Taupunkt ab oder
+nur den U-Wert?*
+
+### Die Frage ist entschieden — durch die DATENSTRUKTUR, nicht durch ein Fachurteil
+
+```text
+export interface Schicht {
+  name?: string;
+  dicke: number;     // mm
+  lambda: number;    // W/(m·K)
+}                    <- DAS SIND ALLE FELDER. Selbst gelesen, nicht gezaehlt.
+```
+
+**Eine Tauwasserrechnung nach Glaser (DIN 4108-3) braucht zwingend zwei Größen, die hier fehlen:**
+
+```text
+FEHLT   my bzw. sd je Schicht   (Wasserdampf-Diffusionswiderstand)
+FEHLT   Klima innen und aussen  (Temperatur, relative Feuchte)
+```
+
+> **Die Engine rechnet den Taupunkt nicht — sie KANN ihn nicht rechnen.** *Das ist kein „noch nicht
+> implementiert", sondern mathematisch nicht durchführbar: ohne Diffusionswiderstand und ohne Klima
+> gibt es keinen Taupunkt. **Das kann jeder nachzählen, dafür braucht niemand Bauphysik.***
+
+**Gegenprobe, ebenfalls gemessen:** `taupunkt · tauwasser · kondensat · feuchte · diffusion ·
+dampf · sd · glaser · 4108 · schimmel` — **je 0 Treffer** in der Datei, und **0 Treffer im ganzen
+Haus** (`app/` und `resources/`). Der Dateikopf nennt **DIN EN ISO 6946**, die U-Wert-Norm — nicht
+DIN 4108-3, die Feuchteschutz-Norm.
+
+### Damit ist die Achse-2-Frage falsch gestellt — und das ist die eigentliche Idee
+
+*Die Klassifikation fragte: „Ist ein falscher U-Wert ein BAUSCHADEN oder eine FEHLAUSLEGUNG?"*
+**Aber die Engine behauptet überhaupt keine Feuchteschutz-Aussage.** Sie behauptet einen U-Wert nach
+ISO 6946 — und den rechnet sie vollständig und richtig.
+
+**Die wirkliche Gefahr ist die A-10-Klasse, nicht die Klassifikation:**
+
+> Wer einen U-Wert bekommt, kann glauben, die Wand sei damit **bauphysikalisch beurteilt**.
+> Das ist der stille Rückfallwert: *nicht falsch gerechnet, sondern eine Teilaussage, die aussieht
+> wie eine Gesamtaussage.* **Genau das Muster, das diese Insel dreimal selbst erkannt hat** —
+> `dachformVorlagen` (Status „geplant"), `gaubeGeometrie` (`pruefeAufbau`), A-10 (Melder) — und das
+> Yama bei N-003 mit A-14 beseitigt hat.
+
+### VORSCHLAG: behandle `wandaufbau` wie N-003 — Grenze ins ERGEBNIS, nicht in eine Tabelle
+
+```text
+UErgebnis bekommt ein PFLICHTFELD vorbehalt, nach dem Muster von A-14:
+
+  "U-Wert nach DIN EN ISO 6946. KEINE Feuchteschutz-Aussage — Tauwasser und
+   Schimmelrisiko nach DIN 4108-3 sind NICHT geprueft; dafuer fehlen die
+   Diffusionswiderstaende (my/sd) und das Raumklima. Ein guter U-Wert bedeutet
+   NICHT, dass die Konstruktion feuchtesicher ist."
+```
+
+**Warum das besser ist als eine Klassenentscheidung:**
+
+```text
+1  ES BRAUCHT KEIN FACHURTEIL. Die Aussage folgt aus der Datenstruktur — pruefbar,
+   nicht strittig. Yama muss nichts entscheiden, was nur ein Bauphysiker weiss.
+2  ES WIRKT AN DER QUELLE. Als PFLICHTFELD kann keine Ausgabestelle es weglassen,
+   ohne es aktiv zu unterdruecken (A-14s Begruendung, woertlich uebernommen).
+3  ES FOLGT DEM PRAEZEDENZFALL. A-14 hat es fuer N-003 vorgemacht, A-17 wiederholt es
+   fuer zwei weitere Engines — der Bauauftrag ist "ein Feld, ein Satz", nichts Neues.
+4  DIE ACHSE-2-ZEILE LOEST SICH DAMIT AUF: was die Engine WIRKLICH behauptet, ist der
+   U-Wert, und der wirkt auf die Heizlast — also FEHLAUSLEGUNG. Der Bauschaden-Weg ist
+   ausgeschlossen, SOBALD die Engine selbst sagt, dass sie ihn nicht abdeckt.
+```
+
+### Zwei Messungen, die die Dringlichkeit senken — aber nichts an der Systematik ändern
+
+```text
+berechneUWert    genau EIN Aufrufer im Produktivcode: faehigkeiten.ts (eine Faehigkeitsliste,
+                 KEIN Panel). Die Engine ist heute nicht sichtbar — sie hat kein Gesamturteil,
+                 das man streichen muesste.
+Heizlast (PHP)   rechnet mit U-Werten, aber NICHT mit denen dieser Engine (kein Aufruf).
+                 Die Bruecke fehlt — derselbe Befund wie beim Dach-Azimut.
+```
+
+```yaml
+was_yama_bestaetigen_muesste: "nur EINEN Satz: 'ja, der Vorbehalt kommt ins UErgebnis' —
+                               der Wortlaut steht oben und ist aus der Messung abgeleitet"
+was_ich_NICHT_entscheide:     "die Achse-2-Klasse selbst; sie loest sich auf, wenn der
+                               Vorbehalt gebaut ist. Bis dahin bleibt BAUSCHADEN stehen."
+folgeauftrag:                 "Schnitt beim Planner, Muster A-14/A-17 — ein Feld, ein Satz"
+belege:                       "Schicht-Interface selbst gelesen · 10 Feuchte-Begriffe je 0
+                               Treffer in Datei UND Haus · Dateikopf nennt ISO 6946 · ein
+                               Aufrufer, kein Panel · Heizlast ruft die Engine nicht"
+```
