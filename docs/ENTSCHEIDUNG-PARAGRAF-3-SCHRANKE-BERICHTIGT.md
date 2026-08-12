@@ -42,7 +42,24 @@ grep -rlE '\[AW\]' docs/            ->  VIER Dateien:
 grep -nE '\[AW\]' docs/ARBEITSREGELN.md   ->  0 TREFFER
 ```
 
-> **Der „kanonische" Befehl ist nirgends als Regel verankert.** *Er ist eine **Gewohnheit**, die sich
+### PRÄZISIERT 12.08. durch den Plan-Prüfer (`50505407`) — und er hat recht
+
+```text
+'IN_ARBEIT' in docs/ARBEITSREGELN.md   ->  VIER Treffer.  Der ZUSTAND ist verankert.
+das Pruefmuster  '[AW]' dort           ->  0 Treffer.     Die METHODE ist unverankert.
+```
+
+> **Der Unterschied zählt, und meine erste Fassung hat ihn verwischt:** *ich schrieb „die Schranke
+> ist nirgends als Regel verankert". Richtig ist: **die Regel ist verankert, das Werkzeug nicht.**
+> Seine Folgerung: *„eine unverankerte Regel müsste neu beschlossen werden, ein unverankertes
+> Werkzeug nur aufgeschrieben."* **Das senkt die Hürde für die Umsetzung erheblich** — es braucht
+> keinen Beschluss von Yama, nur einen Eintrag. Und er übernimmt das breitere Muster für seine
+> eigenen §3-Belege und meldet den Wechsel, statt ihn still zu machen.*
+
+**Seine Zahlen, unabhängig gemessen und deckungsgleich mit meinen:** `[AW]` findet **31**
+Tafelzeilen, `[A-Z]+-?[0-9]+` findet **36** — fünf Aufträge fallen durch.
+
+> **Der „kanonische" Befehl ist als PRÜFMETHODE nirgends verankert.** *Er ist eine **Gewohnheit**, die sich
 > über Auftragsblätter verbreitet hat — kopiert von Blatt zu Blatt, nie geprüft. **Das ist B7 in
 > Reinform, beide Teile:** Mehrfachvorkommen sah wie Bestätigung aus *(vier Fundorte, null
 > normative Quelle)*, und der Ort — mitten in Abnahmekriterien — sah wie Autorität aus.*
