@@ -29,9 +29,9 @@
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 | **W-07N** `2-FUNKTION` + Azimutgrenze | `BEREIT` | **Generator** | Schnitt `1734aa3b` · Basis `3d368625` | Nachbesserung §12.5 · 9 Platzhalter in `2-FUNKTION` gemessen · **schließt W-07 auf BESCHRIEBEN** |
-| **W-09** Treppe | `BEREIT` | **Generator** | Schnitt `6e2949a7` · Basis `65f3ece4` | sieben Module, 698 Z, **12 Zusagen** · Grobzahl stimmt aufs Wort · **letzter offener Schnitt der Klasse A** |
+| **W-09** Treppe | **`IN_ARBEIT`** | **Generator** | Schnitt `6e2949a7` · Basis `65f3ece4` | sieben Module, 698 Z, **12 Zusagen** · Grobzahl stimmt aufs Wort · **letzter offener Schnitt der Klasse A** | · **Bau läuft; löst die A-15-Sperre (Planner-Entscheid `fbce86eb`)**
 | **A-14** N-003-Vorbehalt ins Ergebnis | **`RELEASE_FREI`** | Yama | Inhalt `21940d33` (Bau `e0722979`) · Elter `efca1899` · Basis `1e09280d` · Kandidat `a2385d35` | **§10 voll gefahren** (Produktivcode mit Sichtwirkung, keine Doku-Sammelform) · Kette lückenlos, jeder Übergang `--is-ancestor` Exit 0 · Bündel im Kandidaten und **byte-gleich nachgebaut** (md5 `a5ea0056` vor = nach Neubau; genau das Artefakt, das der Browserlauf auslieferte) · Insel-Suite selbst **1693/1693** · Rückweg reiner Revert, `git apply --check -R` Exit 0, keine Migration/kein Datenpfad · **Plaketten-Renderbedingung selbst ausgeführt: nur `engine-sparren` unterdrückt, fünf Engines behalten ihre — auch `heizkoerper` mit roter Plakette** · `must_preserve` resources/+scripts/ in drei Richtungen 0/0/0 · Beifang ab CODE_FERTIG nur `docs/` · **ein P2/SPEC beim Planner (grundlage-Zeile nennt 4 von 6 Sonderlasten), blockiert nicht** · Veröffentlichung gehört Yama |
-| **A-15** Fachaussage oder Hinweis | **`IN_ARBEIT`** | **Generator** | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
+| **A-15** Fachaussage oder Hinweis | `BEREIT` | Generator | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
 | **B5** Zählergebnis mit Trefferzeilen | `BEREIT` | **Generator** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
 | **B6** Summe braucht Erhebung | `BEREIT` | **Generator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
@@ -1931,8 +1931,8 @@ release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 21940d33, Kandidat a23
 auftrag: "A-15"
 titel: "Wo eine Rechnung eine Norm nennt, darf die Software nicht 'bestanden' sagen — gemessen, nicht eingeschaetzt"
 datei: docs/auftraege/aktiv/A-15-fachaussage-oder-hinweis.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Messauftrag laeuft — KEIN Bau, kein Code angefasst)
+zustand: BEREIT
+ballbesitz: generator (ZURUECKGESTELLT bis W-09/1 gebaut ist — Planner-Entscheid fbce86eb. Sieben von elf Zeilen liegen fertig in docs/BERICHT-A-15-fachaussage-oder-hinweis.md; die vier Treppen-Zeilen sind Zulieferung aus W-09/1-5 und existieren noch nicht)
 basis_sha: d814be02
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): ENTWURF bleibt, EIN Restpunkt — sonst ist das Blatt stark. BEIDE VORERHEBUNGS-ZAHLEN SELBST GEMESSEN UND EXAKT BESTAETIGT: 13 Dateien in geometry/ und app/dashboard/ tragen \bbestanden\b, davon nennen 8 eine Norm (DIN/EN 199x/Eurocode). Die Selbstkorrektur des Planners ist vorbildlich und benennt die Klasse genau: 'ich hatte die Liste gemessen und die REICHWEITE geschaetzt' — mit ausdruecklichem Bezug auf meine eigene Selbstkorrektur a1d29aed, nur in die andere Richtung (zu eng statt zu weit). Dass unsere Fehlerklassen inzwischen eine gemeinsame Sprache haben, ist der eigentliche Fortschritt dieser Runde. Die Trennung zu A-14 ist sauber: A-14 baut die Mechanik fuer N-003 und laeuft zuerst (Risiko), A-15 klassifiziert die uebrigen zwoelf. §5-Block, Erstnutzer, Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden; A-15-4 (Fachurteil als Urteil kennzeichnen) steht zusaetzlich als Hausregel — richtig, denn ein Kriterium gilt fuer einen Auftrag, eine Hausregel fuer alle."
@@ -1950,8 +1950,8 @@ naechster_schritt: "Planner verschiebt A-15-9/-10/-11 in die Hauptliste (Verschi
 auftrag: "W-09/1"
 titel: "Sieben Module, 698 Zeilen, ZWOELF Zusagen — und DIN 18065 mitten drin"
 datei: docs/auftraege/aktiv/W-09-treppe-beschreiben.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft — loest zugleich die A-15-Sperre)
 basis_sha: 65f3ece4
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): ALLE ZAHLEN EINZELN NACHGEZAEHLT UND EXAKT — treppenBerechnung 114/6, treppenTypen 153/4, treppenBauarten 38/3, treppe2D 93/4, treppe3D 74/4, treppeSvg 142/5, treppeObjekt 84/4; Summe 698 Zeilen und 30 Exporte, beide gehen auf; zwoelf Zusagen im Testverzeichnis, und DIN 18065 steht zweimal woertlich in treppenBerechnung.ts. Elf Kriterien, §5-Block, Erstnutzer, zwei Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden. DIE ZULIEFERBEZIEHUNG IST SAUBER GESCHNITTEN: das Blatt nennt A-15 an sieben Stellen und ordnet sich richtig ein — W-09/1-5 LIEFERT die Treppen-Zeilen, A-15-11 ZITIERT sie mit Commit-Verweis statt sie zu wiederholen. Zwei Auftraege, eine Messung, keine zweite Wahrheit; genau die Form, die bei den Typ-Doppelungen gefehlt hat."
