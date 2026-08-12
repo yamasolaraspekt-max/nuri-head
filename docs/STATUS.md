@@ -8689,6 +8689,31 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-24 GECLAIMT vor dem Pr
 ```yaml
 auftrag: "A-23"
 zustand: BETRIEBSBESTAETIGT
+doppelter_schluessel_geschlossen_und_die_klasse_gemessen: "plan-pruefer 13.08. — der Block trug
+  claim_abnahme ZWEIMAL: Runde 1 und die Wiederabnahme nach §12.4. Ein Parser nimmt einen und
+  verwirft den anderen still; hier widersprechen sie sich nicht, aber einer der zwei Belege
+  verschwindet aus jeder maschinellen Lesung.
+  BEHOBEN OHNE ZU LOESCHEN (A-20-4): die Runde-1-Fassung heisst jetzt claim_abnahme_runde_1 und
+  bleibt vollstaendig lesbar. Der INHALT beider gehoert dem Evaluator und ist unveraendert — ich habe
+  nur den Schluessel eindeutig gemacht, dieselbe Form, die der Release-Pruefer bei A-22 fuer
+  ballbesitz/ballbesitz_bau gewaehlt hat.
+  UND ICH HABE DIE HERKUNFT GEMESSEN STATT SIE ZU VERMUTEN, blockgenau ueber vierzig Staende: der
+  Wechsel von EINEM auf ZWEI claim_abnahme geschieht in e6cfb58e (13.08. 01:04, 'CLAIM auf die
+  A-23-Wiederabnahme, Runde 2, §12.4'). Kurz darauf faellt er in 3aedb154 wieder auf eins — das ist
+  eine PARALLELE Linie ohne die Ergaenzung — und die Zusammenfuehrung 0598d662 bringt ihn zurueck.
+  Die Dublette ist also FRISCH und keine Altlast: sie entsteht am 13.08. um 01:04, lange nach A-22.
+  DIE KLASSE IST DAMIT BELEGT UND SIE HAT EINE FORM: doppelte Schluessel entstehen bei der ZWEITEN
+  RUNDE. Wer einen zweiten Claim, einen zweiten Beleg oder eine zweite Fassung schreibt, haengt sie
+  unter denselben Namen statt den ersten umzubenennen. ZWEI unabhaengige Rollen haben es in derselben
+  Stunde getan: der Evaluator hier um 01:04, und ICH bei W-05/2 mit zwei dor_beleg — beide Male
+  Runde eins gegen Runde zwei, beide Male derselbe Griff.
+  WAS DARAUS FOLGT, und es gehoert dem Planner: A-22 hat die vorhandenen Dubletten bereinigt, aber es
+  gibt KEINE Barriere, die neue verhindert — anders als bei der Ball-Drift (A-26) und beim Bau-Commit
+  (A-27), die beide gerade baubereit liegen. Eine dritte Barriere derselben Bauform waere die
+  naheliegende Schwester; ich schneide sie NICHT, das ist sein Zuschnitt.
+  OFFEN BLEIBT EINE ZWEITE DUBLETTE, die ich NICHT anfasse: A-09 traegt release_vermerk zweimal. Sie
+  ist alt (die Belege stammen vom 08. und 10.08.), der Auftrag ist BETRIEBSBESTAETIGT, und beide
+  Vermerke gehoeren dem Release-Pruefer. Ich melde sie, statt sie im Vorbeigehen umzubenennen."
 ballbesitz: — # Kette vollstaendig
 
 release_vermerk: "Release-Pruefer 13.08., §10, Bau 3ad920b1, Wiederabnahme Runde 2 nach §12.4. VOLLES GRUNDTOR, weil vier Insel-Dateien im Scope liegen — StartView.tsx, studioDaten.ts und zwei Tests, dazu scripts/a23-sieben-stellen.mjs. Selbst gefahren: tsc exit 0 · Insel-Suite 1728 tests 1728 pass 0 fail · build exit 0 mit Bundle nach Neubau 0 geaenderte Dateien · node --test scripts 107/107 · php artisan test 890 passed 3121 assertions. MESSTISCH-GEGENLESUNG MIT EINEM BEINAHE-FEHLBEFUND, gefangen durch Oeffnen: das Blatt fuehrt NEUN Kennungen A-23-1 bis -8 plus -5b, die Votum-Tabellen decken SIEBEN. Ich stand vor der Meldung, zwei Kriterien seien unbelegt. Geoeffnet statt gezaehlt: A-23-7 ist eine ENTSCHEIDUNG DES PLANNERS zur achten Stelle mit dem ausdruecklichen Satz, sie wirke nicht rueckwirkend, und A-23-8 ist ein WERKZEUGBEFUND, woertlich gemeldet und NICHT als Blocker, mit dem Zusatz KEINE NACHBESSERUNG VERLANGT. Beide tragen Kriterien-Nummern, sind aber keine Abnahmekriterien — sie kamen nach der Abnahme ins Blatt. Die sieben echten Kriterien sind in ZWEI Tabellen je vollstaendig belegt, Runde 1 und Runde 2, vierzehn Zeilen, vierzehnmal gruen. Das ist dieselbe Namensfalle, vor der ich heute mehrfach gewarnt habe, diesmal in meiner eigenen Zaehlung."
@@ -8758,7 +8783,9 @@ letztes_votum: "evaluator 13.08.: NACHBESSERN an 3ad920b1, Fehlerklasse CODE (§
   'die Fundstelle existiert nicht' gegen eine Kette, die vollstaendig stimmt; derselbe Griff wie
   bei A-24, mir jetzt zweimal passiert. Der Befund aus meinem Claim (Tafel zaehlte sechs, Blatt
   sieben) ist inzwischen behoben — die Tafelzeile sagt jetzt SIEBEN."
-claim_abnahme: "evaluator 13.08.: CLAIM auf die A-23-Abnahme, gesetzt VOR dem Pruefstand-Aufbau.
+# UMBENANNT statt geloescht (A-20-4), plan-pruefer 13.08.: der Block trug claim_abnahme ZWEIMAL —
+# Runde 1 und Runde 2. Beide Inhalte gehoeren dem Evaluator und bleiben unveraendert lesbar.
+claim_abnahme_runde_1: "evaluator 13.08.: CLAIM auf die A-23-Abnahme, gesetzt VOR dem Pruefstand-Aufbau.
   Vorher A-24 abgenommen (Votum 200dcb7a). UND EIN BEFUND AUS DEM CLAIM-LESEN, bevor ich messe:
   DAS BLATT ZAEHLT SIEBEN, DIE TAFEL ZAEHLT SECHS. Blatt-Ueberschrift 'SIEBEN Zettel an einer
   erledigten Sperre', A-23-2 woertlich 'Alle SIEBEN Stellen sind berichtigt'; Tafelzeile 'Sechs
