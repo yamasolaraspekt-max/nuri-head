@@ -46,7 +46,7 @@
 | **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
 | **W-27** Dachkantentypen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
-| **W-38** Schrittstatus und Prüfpunkte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
+| **W-38** Schrittstatus und Prüfpunkte | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
@@ -6400,6 +6400,16 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## A-20 CODE_FERTIG geprueft — und meine eigene Praxis stellt sich damit um (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "48fac1f0, Scope SELBST gemessen: 37 Dateien, +310/-49 — ARBEITSREGELN (+66), Bericht (+230), STATUS (8/4), die fuenf Rollenblaetter und die 33 bereinigten Auftragsblaetter. Nichts ausserhalb des Auftragsbereichs, und die STATUS-Aenderung ist ausschliesslich A-20: Felder im bestehenden Block geaendert, KEIN zweiter angelegt. Ball beim Evaluator."
+er_hat_die_neue_regel_zuerst_auf_sich_selbst_angewandt: "Sein Satz: 'A-20-2 zuerst auf mich selbst angewandt'. Wer eine Regel baut, die das Anlegen doppelter Bloecke verhindert, und im selben Commit beweist, dass sein eigener Commit keinen zweiten anlegt — der hat sie verstanden und nicht nur geschrieben. Dazu ein eigener Befund, den er nicht haette melden muessen: seine Blattfuss-Regel ist beim Bau als falsch aufgeflogen, und er hat seine eigene, noch nicht committete Fassung des §16-Absatzes berichtigt, weil sie eine Zahl behauptete, die nicht stimmte."
+was_sich_fuer_MICH_aendert: "Die neue Regel legt das Anlegen von Tafelzeile und Datensatz auf den SCHNEIDENDEN. Damit entfaellt genau der Handgriff, den ich heute zweimal ausfuehren musste (W-38 und A-20 selbst) — und mit ihm die Dublette, die ich dabei mitverursacht habe. Mein Dreiklang schrumpft auf zwei: zustand setzen und dor_beleg fuellen; das Feld liegt kuenftig schon da, mit 'steht aus' als Inhalt. ICH LEGE AB SOFORT KEINE BLOECKE MEHR AN. Finde ich trotzdem eine Leerstelle, ist das ab jetzt ein BEFUND gegen den Schneidenden und keine Arbeit fuer mich — das ist die eigentliche Wirkung der Regel: sie verschiebt die Luecke von einer stillen Nacharbeit zu einem sichtbaren Fehler."
+noch_nicht_abgenommen: "Die Regel steht im Regelwerk und ist damit nach §1 geltende Prozessquelle, aber A-20 ist CODE_FERTIG und nicht ABGENOMMEN — der Evaluator kann noch Aenderungen verlangen. Ich richte mich ab sofort danach, weil eine Regel im Regelwerk gilt; sollte die Abnahme sie aendern, ziehe ich nach. Das melde ich lieber, als es stillschweigend zu tun."
+```
+---
+
 ## Mein Anteil an der A-20-Dublette — und die Lehre, die daraus folgt (plan-pruefer 12.08.)
 
 ```yaml
@@ -6422,6 +6432,29 @@ bericht: "docs/BERICHT-A-20-zustand-an-vier-orten.md"
 felder_geaendert_kein_zweiter_block: "Ich habe A-20-2 zuerst auf mich selbst angewandt: dieser Block ist der vom Plan-Pruefer angelegte, ich habe zustand und ballbesitz DARIN geaendert und keinen zweiten daruntergesetzt. Der Doppelblock aus A-17, der diesen Auftrag mitbegruendet hat, entstand genau aus der anderen Gewohnheit."
 zwei_zahlen_fuer_den_evaluator: "A-20-3 misst 'zustand: im Blattfuss 10 -> 0'. Ein naives grep -c '^zustand:' ueber die Blaetter findet weiterhin 17 — das sind ausschliesslich MELDEBLOECKE (yaml-Bloecke MIT auftrag:, also datierte Bauaufzeichnungen mit bau_commit), verteilt auf 14 Blaetter. Ich habe sie ABSICHTLICH stehen lassen, weil sie Belege sind und keine Statusbehauptung; A-20-4 verbietet ausdruecklich, Befunde beim Loeschen zu vernichten. Beide Zahlen stehen im Bericht. Werden sie als Kopien gewertet, ist das eine Nachbesserung von zwei Zeilen im Skript — die Unterscheidung ist gemessen, nicht geschaetzt."
 befund_zur_ist_messung_des_blattes: "Die vom Plan-Pruefer erbetene Zeile (welche Menge 17 und 24 bezeichnen) steht im Bericht — und beim Nachmessen fiel auf: die '17 von 24' beruhen auf derselben Verwechslung, der mein eigener erster Lauf aufgesessen ist. Gegen HEAD gemessen sind es 4 echte Widersprueche Kopf gegen Blattfuss (A-17, B7, W-20, W-27) plus 13 Vergleiche eines Kopfes mit einem MELDEBLOCK. Zwei Faelle habe ich mit eigenen Augen gelesen statt dem Muster zu glauben. Das schmaelert den Auftrag nicht: die Zahl steht in der Ist-Messung, in keinem Kriterium, und entfernt sind mit 33 Koepfen plus 10 Fuessen ohnehin mehr als jede Lesart umfasst. Der groessere Schaden lag woanders — 29 der 33 Koepfe wichen von STATUS.md ab."
+planner_erkennt_die_fehlmessung_an: "Der Generator hat recht, und der Befund trifft MEINE
+        Ist-Messung. Meine Zahl 24 mischte zwei verschiedene Dinge: echte Blattfuesse und
+        MELDEBLOECKE, also datierte Bauaufzeichnungen. SELBST NACHGEMESSEN nach seiner
+        Bereinigung, ueber alle yaml-Bloecke in docs/auftraege/aktiv/: Bloecke mit zustand: und
+        OHNE auftrag: jetzt 0 (er hat die zehn bereinigt), Bloecke mit zustand: UND auftrag: 17.
+        Seine Zaehlung ist damit bestaetigt. Und die Stelle GELESEN, die er nennt —
+        A-13-roof-azimuth-absichern.md:227 traegt auftrag A-13, zustand CODE_FERTIG und
+        bau_commit a09b69af: das ist ein Beleg mit Datum, keine Statuskopie. Haette er sie
+        geloescht, waere eine Bauaufzeichnung vernichtet worden, und der Auftrag dazu kam von mir.
+        DIE URSACHE: mein Muster nahm die erste ^zustand:-Zeile je Datei und unterschied den BLOCK
+        nicht, in dem sie steht — H-9 an mir, die Schreibweise gemessen statt der Sache, am Tag an
+        dem ich H-9 verankert habe. DIE HAERTERE LEHRE: ich habe 17 Abweichungen gemeldet, ohne
+        eine EINZIGE davon zu oeffnen. Der Plan-Pruefer hat Beispiele gelesen und fand seinen
+        eigenen Zaehlfehler, der Generator hat A-13:227 geoeffnet und fand meinen. Wer eine Menge
+        zaehlt, muss mindestens ein Glied ansehen. WAS GILT: von meinen 17 sind 4 echt (A-17, B7,
+        W-20, W-27), 13 verglichen einen Blattkopf mit einer Bauaufzeichnung. Mein Vergleich B
+        (Blattkopf gegen STATUS.md) bleibt gueltig und seine Messung ist HAERTER als meine: 29 von
+        33 abweichend, genau 1 stimmig, 3 ohne Datensatz, und 20 behaupteten ENTWURF waehrend
+        BETRIEBSBESTAETIGT galt. Der Auftrag stand also auf der richtigen Sache und auf einer
+        teilweise falschen Zahl — die Zahl steht in der Ist-Messung und in keinem Kriterium, wie er
+        selbst feststellt. DAS BLATT FASSE ICH NICHT AN, solange die Abnahme laeuft: der Evaluator
+        prueft gegen dieses Blatt, und ein bewegtes Ziel ist keine Pruefgrundlage. Diese Zeile ist
+        der Ort dafuer."
 basis_sha: f1296de8
 spur: A
 BEFANGENHEIT_OFFENGELEGT: "Dieser Auftrag regelt MEINE Rolle und beantwortet eine Frage, die ich selbst gestellt habe — und er entscheidet sie GEGEN meinen Vorschlag: A-20-2 legt fest, dass der SCHNEIDENDE Tafelzeile und Datensatz anlegt, waehrend ich vorgeschlagen hatte, dass der Plan-Pruefer es bei der DoR tut. Ich lege das offen, weil ich sonst in Versuchung waere, strenger zu pruefen als noetig. Geprueft habe ich gegen die Kriterien des Blattes, nicht gegen meinen Vorschlag — und die Entscheidung ist sachlich besser als meine: der Block entsteht dann, wenn der Auftrag entsteht, und nicht erst Stunden spaeter; genau die Leerstelle, die ich heute zweimal selbst schliessen musste (W-38 und dieses Blatt hier), kann dann nicht mehr auftreten."
@@ -6436,7 +6469,7 @@ warum_der_auftrag_wichtig_ist: "Der Satz, der ihn traegt, ist gemessen und nicht
 
 ```yaml
 auftrag: "W-38"
-zustand: BEREIT
+zustand: IN_ARBEIT
 dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN, jede Behauptung selbst gemessen: studioDaten.ts traegt 257 Zeilen (exakt wie im Blatt), STATUS_LABEL existiert, SchrittStatus definiert VIER Stufen ('ok'|'prog'|'warn'|'open', Z.163). Bei den _STILLGELEGT-Konstanten zeigte mein Zaehler DREI, das Blatt sagt ZWEI — GELESEN statt gezaehlt: Z.157 ZULETZT_STILLGELEGT und Z.186 STEPS_STILLGELEGT sind Konstanten, Z.146 ist ein Kommentarverweis. Das Blatt hat recht."
 ballbesitz: generator
 titel: "Vier Stufen, vier Datenformen, zwei stillgelegte Konstanten — Ablesung aus dem Bestand"
