@@ -51,11 +51,11 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
-| **W-39** Studio-Rahmen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
+| **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
-| **W-27/1** BAU Dachkantentypen in die Insel | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `ff7e23ec` | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
+| **W-27/1** BAU Dachkantentypen in die Insel | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `ff7e23ec` | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7495,7 +7495,7 @@ eigener_messfehler: "Mein erstes Raster war doppelt zu eng und haette den Bau fa
 
 ```yaml
 auftrag: "W-39"
-zustand: ABGENOMMEN
+zustand: BETRIEBSBESTAETIGT
 nachbesserung_runde_2_W_39_5: "Der Befund des Evaluators (2ff41efd) trifft, und der Fehler ist meiner. FIRST-HAND NACHGEMESSEN statt uebernommen: stilschicht.test.ts:809 traegt test('T2/K-05: der Weg in die gefuehrte Planung ist direkt erreichbar') und prueft mit assert.match auf modeBtn('guided', 'Gefuehrte Planung') genau den Schalter aus :111. Weiter gemessen als der Befund verlangt: von den 58 Tests der Datei lesen FUENF die Studio-Quelle, und VIER tragen W-39s eigene K-Zusagen im Namen — T2/K-01 die fehlende zweite Navigation, K-03 die Marke, K-04 der gewanderte Erklaertext, K-05 der Rueckweg. Ich hatte die Datei als 'Farben nur aus Tokens' und 'geteilter Waechter' abgelegt; daraus sind ZWEI falsche Luecken entstanden, in 6-PRUEFUNG als Fangprobe und in 7-GRENZEN als Zusage ohne Waechter. Beide ZURUECKGEZOGEN und nicht geloescht, mit Ursache. DIE URSACHE IN EINEM SATZ: ich habe eine Testdatei nach ihrer Ueberschrift eingeordnet statt sie zu oeffnen. DASSELBE HATTE ICH IM SELBEN BAU EINE STUNDE VORHER SCHON EINMAL — bei imStudio, wo ich behauptete es sei ungesichert und beim Nachmessen das Gegenteil fand; dort habe ich es selbst gefangen, hier nicht. Der Unterschied ist nicht die Sorgfalt, sondern dass ich bei imStudio nachgemessen habe und bei stilschicht der Ueberschrift geglaubt."
 neue_luecke_des_evaluators_aufgenommen: "Sein Zusatzbefund ohne Kriterium ist praeziser als beide meiner Aussagen: das Flag AM AUFRUF in :140 zu entfernen bleibt GRUEN, weil kopfrahmen.test.ts den Kopfrahmen-Quelltext STATISCH misst und damit nur die EMPFANGENDE Seite. Die empfangende Seite ist bewacht, die sendende nicht — die richtige Aussage liegt genau auf der Grenze zwischen meinen beiden falschen. In 7-GRENZEN aufgenommen, nicht behoben; eine Ablesung baut keine Tests."
 gewuerdigt_planner_hat_seine_zahl_selbst_berichtigt: "c9ac316d: der Planner hat die Zustandszahl SECHS in seinem eigenen Blatt als geschaetzt statt gezaehlt eingeraeumt — dieselbe Zahl, die ich beim Bau als FUENF gemessen und gemeldet hatte. Sein Satz, dass sie im selben Absatz stand wie die Regel gegen feste Zahlen, gehoert festgehalten."
@@ -7551,7 +7551,35 @@ vier_zahlen_des_blattes_anders_gefunden_keine_geglaettet: "13 Importe gegen geme
 ein_befund_gegen_meine_eigene_behauptung: "Ich hatte in 6-PRUEFUNG geschrieben, das Flag imStudio sei durch keinen Test gesichert. Gemessen ist das FALSCH: grep -rl imStudio ueber __tests__ findet ZWEI Dateien, kopfrahmen.test.ts:138 und buehnenBreite.test.ts:76. Beide nennen HausplanerStudio nicht und gehoerten deshalb nicht zu den acht Waechtern — sie sitzen am EMPFANGENDEN Ende in Kopfrahmen.tsx. Und kopfrahmen.test.ts ist aus einer DURCHGEKOMMENEN Mutation entstanden, woertlich im Test: die Mutation von geschweift-Ausrufezeichen-imStudio zu geschweift-imStudio kam durch, eine Marke ueber einer Testflaeche waere genau die Anzeige die AUF-40 entfernt hat, nur andersherum. Haette ich nur die acht Dateien betrachtet die HausplanerStudio nennen, waere eine falsche Luecke im Blatt geblieben."
 tafelzeile_und_datensatz_in_einem_griff_und_der_dritte_anlauf: "Beide Zustandsorte zusammen gesetzt — das ist die Lehre aus A-22, wo ich die Tafelzeile auf Evaluator setzte und das Datensatzfeld stehen liess, sodass der Release-Pruefer es in 1ccdc5b6 nachziehen musste. BEIM ERSTEN VERSUCH HABE ICH DEN ANDEREN FEHLER GEMACHT: ich habe ein ZWEITES ballbesitz angelegt statt das vorhandene zu aendern, also genau die Dublette aus A-21 und W-34 zum dritten Mal. Gefangen hat es meine eigene Gegenprobe VOR dem Commit — der Block meldete 22 Schluessel und 1 Dublette. Behoben, indem das vorhandene Feld geaendert und meine zweite Zeile entfernt wurde; der Block traegt jetzt genau ein ballbesitz. DIE GEGENPROBE IST DAMIT KEIN ZIERRAT: die Regel allein hat nicht gereicht, sie hat mich vor dem falschen Griff nicht bewahrt — die Messung hat es getan."
 operanden_vor_dem_ziehen_gemessen: "HausplanerStudio.tsx traegt 159 Zeilen, exakt wie im Blatt. Alle sieben genannten Fundstellen geoeffnet und getroffen: :23 der modus-Zustand, :85 imExperte, :97 der EINE return, :131/:132/:133 die drei Render-Zweige, :140 das Flag imStudio. EINE ZAHL WICH AB und ich habe sie nicht geglaettet: grep '^import' findet 14 Zeilen, das Blatt nennt 13 Importe. Aufgeloest durch Oeffnen statt Rechnen — Zeile 7 ist 'import React from react', also extern; die 13 des Blattes sind die Insel-Module. Kein Mangel, zwei verschiedene Mengen. §3 vor dem Ziehen 0 und 0, danach 1 und 1; und nach meiner Regel aus b16ba855 KEIN zweites ballbesitz angelegt — der Ballbesitz bleibt beim Generator, das vorhandene Feld traegt ihn bereits."
-ballbesitz: release-pruefer
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 4f80cb38 (Runde 2), Fehlerklasse KEINE.
+  Messtisch 8/8 im Blatt gegengelesen. Reiner Doku-Scope, vier Dateien; must_preserve SELBST
+  nachgemessen mit resources/ 0 und app/ 0. Kette Vorfahr, Geheimnisse 0.
+  DEN BEFUND DES EVALUATORS SELBST NACHGEMESSEN — und er hat recht: das Blatt sagt FUENF Tests
+  lesen die Studio-Quelle, es sind VIER. Die Lesestellen sind stilschicht.test.ts:735, :757,
+  :800 und :813, sie gehoeren zu T2/K-01, K-03, K-04 und K-05. Der Test 'Scheibe 8c' (Z.711)
+  liest sie NICHT; die Konstante steht bei :730 auf MODULEBENE zwischen den beiden Testbloecken."
+
+mein_siebzehnter_beinahe_fehlbefund_und_er_ist_der_lehrreichste: "Mein erstes Skript zaehlte
+  FUENF und haette dem Blatt recht gegeben statt dem Evaluator. Der Grund: es nahm als Rumpf
+  eines Tests alles bis zum naechsten Testbeginn — und die Konstantendefinition in :730 liegt
+  genau in diesem Fenster. Ich habe damit EXAKT den Fehler wiederholt, den der Evaluator
+  beschreibt: 'ein Test wurde seiner NACHBARSCHAFT zur Konstanten zugeordnet statt seinem
+  Inhalt'. Erst die Messung an den LESESTELLEN (readFileSync) statt am Namensraum gab die Vier.
+  Das ist der siebzehnte Fall der H-9-Klasse heute — und der einzige, in dem ich den Fehler
+  eines anderen nachgebaut habe, waehrend ich ihn pruefte."
+
+gewuerdigt_am_bau: "Der Generator hat den roten Punkt als SEINEN benannt und den Satz dazu
+  geschrieben, der die Ursache trifft: 'ich habe eine Testdatei nach ihrer Ueberschrift
+  eingeordnet statt sie zu oeffnen'. Und er hat offengelegt, dass ihm dasselbe eine Stunde
+  vorher im selben Bau schon einmal passiert war — dort hatte er es selbst gefangen, hier nicht,
+  und er benennt den Unterschied: nicht die Sorgfalt, sondern dass er dort nachgemessen und hier
+  der Ueberschrift geglaubt hat. Beide falschen Stellen sind ZURUECKGEZOGEN statt geloescht."
+
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau 4f80cb38 ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt (resources/ 0 Dateien).
+  WILDBETRIEBS-BELEG: die Waechter-Aussagen des Blattes sind an der echten Testdatei geprueft —
+  vier Lesestellen, vier Tests, je mit Zeilennummer."
 titel: "Ein additiver Rahmen um eine App, die er nicht anfasst"
 basis_sha: d53806f6
 spur: A
@@ -7648,6 +7676,7 @@ mein_anteil: "In Runde 1 habe ich die erste Zusage widerlegt und die zweite steh
 auftrag: "W-40"
 zustand: IN_ARBEIT
 warum_W_40_zuerst_und_nicht_W_41_oder_W_42: "Drei Auftraege stehen zugleich BEREIT bei mir, §3 laesst einen IN_ARBEIT zu. Die Reihenfolge ergibt sich aus der Abhaengigkeitskette und nicht aus meiner Wahl: das REGISTER fuehrt W-41 mit 'braucht W-38, W-40' — es haengt an diesem hier. W-42 traegt ausserdem eine vom Planner selbst benannte Abweichung von Yamas Freigabe (Ziel BESCHRIEBEN statt ENTWORFEN, weil dort Code existiert), und die gehoert geklaert bevor gebaut wird, nicht waehrenddessen. W-40 haengt nur an W-38, und das ist BETRIEBSBESTAETIGT."
+BEFUND_VOR_DEM_BAU_die_praemisse_traegt_so_nicht: "W-40s art-Feld sagt 'Es gibt KEINEN Code: die drei Stufen fehlen im Bestand', und die Quelle sagt es auch. Fuer SchrittStatus stimmt das. FUER DIE INSEL NICHT. Gemessen mit grep auf die drei Woerter und dann JEDE Stelle geoeffnet, weil ein Wort kein Beleg ist: resources/planner/hausplaner/geometry/configuratorPackage.ts traegt eine vollstaendige GUELTIGKEITSACHSE — export type ConfiguratorStatus mit SIEBEN Stufen (draft, incomplete, generated, checked, approved, integrated, outdated), dazu STATUS_UEBERGAENGE als vollstaendige Uebergangstabelle mit dem ausdruecklichen Grundsatz 'bewusst streng: aus approved/integrated geht es nur ueber outdated zurueck in die Bearbeitung, Freigabe-Schutz, keine stille Rueckstufung', die Waechterfunktion statusUebergangErlaubt, das Tor kannIntegrieren (nur approved darf uebernommen werden) und markiereVeraltet als Invalidierung. Es ist GEBAUT, GETESTET und IN GEBRAUCH: configuratorPackage.test.ts prueft Uebergaenge, Tor und Invalidierung einzeln, und geometry/integrationAbgleich.ts:13 und :134 benutzt kannIntegrieren ausserhalb der Tests. WAS DAS BEDEUTET, dreifach: ERSTENS outdated existiert bereits samt Uebergaengen — die Vorgabe darf keine zweite Tabelle daneben erfinden, sonst entsteht genau die zweite Wahrheit, die W-40 laut seinem eigenen tragenden Punkt verhindern soll. ZWEITENS approved spielt fachlich die Rolle, die die Quelle confirmed zuschreibt: nur ein approved-Paket darf uebernommen werden, das ist 'PV erst nach bestaetigter Geometrie' eine Ebene tiefer. DRITTENS beruehrt es W-41: markiereVeraltet IST die Invalidierung fuer Pakete, also ist auch dessen 'kein Code' zu weit gefasst. ICH ENTSCHEIDE DAS NICHT und deute kein Kriterium um. W-40-5 verlangt die Uebergaenge als Vorgabe ODER die ausdrueckliche Feststellung, dass die Quelle sie nicht hergibt — sie gibt sie nicht her, aber der Bestand hat einen Praezedenzfall, und den in 7-GRENZEN zu verschweigen waere derselbe Fehler wie eine erfundene Tabelle. FRAGE AN PLANNER UND PLAN-PRUEFER: traegt das Ziel ENTWORFEN noch, wenn eine Gueltigkeitsachse mit Uebergaengen bereits gebaut ist, oder ist W-40 in Wahrheit eine ABLESUNG mit Erweiterung? Das ist dieselbe Klasse wie die Abweichung, die der Planner bei W-42 selbst benannt hat. Ich baue nicht weiter, bevor das geklaert ist — ein Blatt auf einer zu weiten Praemisse waere nach der Abnahme angreifbar."
 operand_am_BAU_STAND_gemessen_nicht_uebernommen: "Das Blatt verlangt es ausdruecklich (Pflichtpruefung 8): seine Zeilenangaben koennen bis zum Bau gewandert sein. Gemessen: docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md traegt 194 Zeilen, exakt wie im Blatt. Der tragende Zwei-Achsen-Satz steht am Bau-Stand in :131-132 — 'Die vier vorhandenen Stufen beschreiben Fortschritt; die drei fehlenden beschreiben Gueltigkeit. Das sind zwei Achsen, nicht eine laengere Liste.' Die Gegenueberstellung liegt in :115-124, und die ZAHLENLUECKE ist dort unmittelbar sichtbar: :121 fuehrt review-required mit einem Gedankenstrich statt mit 'fehlt', waehrend die drei anderen als fehlend markiert sind. Vier plus drei ist sieben, das Zielbild nennt acht. Auch :179 und :190 treffen. Keine Fundstelle aus dem Blatt uebernommen."
 ballbesitz: generator
 titel: "Die zweite Achse, ohne die erst nach Bestaetigung nicht pruefbar ist"
@@ -7751,13 +7780,13 @@ W_42_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 
 ```yaml
 auftrag: "W-27/1"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "BAU: Dachkantentypen in die Insel — der erste Auftrag, der Produktivcode erzeugt"
 basis_sha: ff7e23ec
 spur: A
 prioritaet: P1
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN mit EINEM HINWEIS. Erster BAU-Auftrag der Werkbank, deshalb streng geprueft. ROT-LAGE: die Zieldatei geometry/dachTopologie.ts existiert NICHT, der Bau ist ein reiner Zusatz. DIE NAMENSKOLLISION, vom Blatt selbst als gefaehrlichster Punkt benannt, SELBST NACHGEMESSEN: 'kehle' in 6 Dateien, 'grat' in 5 — beide Zahlen exakt wie im Blatt; klassifiziereSchifter steht wirklich in schifterListe.ts:58, und das Blatt hat die Zeilen 62 bis 67 GEOEFFNET und zitiert statt sie zu zaehlen. SCHUTZGRENZEN eng und ausdruecklich: keine Aenderung an schifterListe.ts, dachGeometrie.ts oder dem Prototyp; keine Datenbank, keine Produktdaten, kein Backend, React/TypeScript bleibt auf die Insel begrenzt — das deckt sich mit CLAUDE.md. W-27/1-8 ist die must_preserve-Zusage in Reinform: Nachweis AM COMMIT, nur die neue Datei und ihre Tests. HINWEIS, kein Blocker: das Blatt fuehrt KEINEN Rueckweg-Abschnitt, anders als A-13 und A-18. Hier ist er trivial — eine neue Datei ohne Anbindung, der Rueckweg ist ihr Loeschen, und die Anbindung an W-07 ist ausdruecklich NICHT im Scope. Ich halte das fuer vertretbar, nenne es aber, damit es nicht zur Gewohnheit wird: ein Bau-Auftrag ohne Rueckweg-Zeile ist nur dann unbedenklich, wenn der Bau nichts beruehrt."
 freigabe: "Yama 12.08.: dann fang mit W-27 an. Vorher hatte er gefragt, ob ueberhaupt mit der
   Produktion von Werkzeugen begonnen wurde — gemessene Antwort: NEIN, 0 von 43 Werkzeugen tragen
   GEBAUT, die Kategorie kommt im Register kein einziges Mal vor."
