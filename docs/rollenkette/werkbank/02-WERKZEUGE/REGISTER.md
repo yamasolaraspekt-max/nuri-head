@@ -52,7 +52,7 @@
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
 | W-06 | Geschoss verwalten | LEER | W-02 | F-032 |
-| W-07 | **Dach aus Kontur** | **6/7 BLÄTTER** ⓝ | W-05, W-06 | F-010, F-013, **F-014, F-025, F-026**, F-020, F-021, F-022 |
+| W-07 | **Dach aus Kontur** | **BESCHRIEBEN** | W-05, W-06 | F-010, F-013, **F-014, F-025, F-026**, F-020, F-021, F-022 |
 | W-08 | Dachfläche messen | **BESCHRIEBEN** | W-07 | F-011, F-023 ⚠, F-024 ⚠ |
 | W-09 | Treppe | **BESCHRIEBEN** | W-06 | F-001, F-030 |
 | W-21 | **Sparren und Lattung** | **BESCHRIEBEN** | W-07 | **N-001…N-003** ✓ (~~F-001~~, ~~F-030~~ ⓝ) · Quelle M-01/**M-02 ungelesen** |
