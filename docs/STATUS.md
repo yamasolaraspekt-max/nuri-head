@@ -47,7 +47,7 @@
 | **W-27** Dachkantentypen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
-| **A-20** Zustand an vier Orten | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
+| **A-20** Zustand an vier Orten | **`NACHBESSERN`** | **Generator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · aus dem Befund des Plan-Prüfers `7b7db5b6` · **Bau erst NACH A-20s Abnahme** (dieselbe Datei) |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
@@ -6438,8 +6438,8 @@ meine_frage_wurde_beantwortet: "Der Planner hat die Grundmengen zu '17 von 24' n
 
 ```yaml
 auftrag: "A-20"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: NACHBESSERN
+ballbesitz: generator
 ballbesitz_bau: generator (Bau fertig — Regelwerk §16+§5, 33 Blaetter bereinigt, 43 Zeilen entfernt, 0 eingefuegt)
 bericht: "docs/BERICHT-A-20-zustand-an-vier-orten.md"
 felder_geaendert_kein_zweiter_block: "Ich habe A-20-2 zuerst auf mich selbst angewandt: dieser Block ist der vom Plan-Pruefer angelegte, ich habe zustand und ballbesitz DARIN geaendert und keinen zweiten daruntergesetzt. Der Doppelblock aus A-17, der diesen Auftrag mitbegruendet hat, entstand genau aus der anderen Gewohnheit."
@@ -6476,6 +6476,26 @@ offene_frage_an_den_planner: "Das Blatt nennt '17 von 24', ich messe 31 von 32. 
 leerstelle_geschlossen: "Wie bei W-38: das Blatt existierte mit status ENTWURF und ballbesitz 'plan-pruefer (DoR)', in der Statuswahrheit standen 0 Bloecke und 0 Tafelzeilen. Zweite Leerstelle innerhalb einer Runde — und genau der Zustand, den dieser Auftrag abschafft. Block und Tafelzeile angelegt, mit dem Dreiklang aus Tafelzeile, zustand und dor_beleg."
 warum_der_auftrag_wichtig_ist: "Der Satz, der ihn traegt, ist gemessen und nicht behauptet: 'der Generator liest den Blattkopf'. Bei W-20 ist genau das passiert — er las ENTWURF und dor_beleg 0, waehrend die DoR gefahren war, und musste sie suchen. Ein Zustand an vier Orten ist kein Aktenproblem, sondern eine Falle fuer den, der als naechster arbeitet."
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-20 GECLAIMT vor dem Pruefstand. A-20 nimmt den Zustand aus 33 Blaettern heraus — der gefaehrlichste Bau des Tages, weil er ABGESCHLOSSENE Blaetter anfasst. Ich pruefe deshalb zuerst, ob ausser den Zustandszeilen etwas verschwunden ist, und messe die Zahl 33 selbst nach, statt sie zu lesen."
+votum_abnahme: "evaluator 12.08. NACHBESSERN an 48fac1f0, Elter 6af2572d. Messtisch mit allen
+  sieben Kriterien im Blatt. Erfuellt: A-20-2, A-20-3, A-20-6, A-20-7. A-20-5 sachlich erfuellt,
+  Nachweis falsch. NICHT erfuellt: A-20-4 — und A-20-1 traegt dieselben falschen Zahlen im
+  gueltigen Regelwerk."
+befund_kern: "Der Bericht fuehrt A-09, A-11 und A-12 als 'haben KEINEN Datensatz in
+  docs/STATUS.md' und leitet daraus einen Befund an den Planner ab. Alle drei haben Datensatz
+  UND Tafelzeile, an jedem der acht Staende des Tages: Z.1268 A-09 BETRIEBSBESTAETIGT,
+  Z.1338 A-11 BETRIEBSBESTAETIGT, Z.1467 A-12 ABGENOMMEN (Elter-Zeilennummern, einzeln
+  geoeffnet). Ursache belegt: die auftrag:-Felder sind uneinheitlich geschrieben, 31 mit und
+  19 ohne Anfuehrungszeichen; diese drei stehen OHNE, ein Raster mit Anfuehrungszeichen-Pflicht
+  findet sie mit 0. Genau diese drei, weil von den 19 unzitierten nur sie ein Blatt mit status:
+  im Kopf haben. Folge: 29 -> 32 abweichend, 3 -> 0 ohne Datensatz, 20 -> 22, und ein Auftrag an
+  den Planner, dem nichts zugrunde liegt."
+was_ausdruecklich_steht: "A-20-3 ist ERFUELLT. Der Generator hat mir die Entscheidung vorgelegt,
+  ob die 17 Meldebloecke Kopien sind; sie sind es nicht und bleiben. Sie tragen bau_commit und
+  sind Belege — das Blatt sagt selbst 'Entfernt werden Kopien, nicht Wahrheiten'. Seine Zahl
+  10/17/14 habe ich mit zwei unabhaengigen Definitionen an beiden Staenden bestaetigt."
+eigener_messfehler: "Mein erstes Raster loeste die Auftrags-ID ohne die /1-Form auf und meldete
+  11 Blaetter 'ohne Datensatz' — dieselbe Fallenklasse wie sein Fehler, nur spiegelverkehrt. Der
+  Befund steht nur, weil ich nach Takt-Regel 4 zuerst meinen eigenen Aufbau geprueft habe."
 ```
 ---
 
