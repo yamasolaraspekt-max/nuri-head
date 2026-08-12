@@ -25,7 +25,7 @@ fest, ob sie das überhaupt können.
 
 ---
 
-## Die acht Pflichtprüfungen vor jedem Auftrag
+## Die neun Pflichtprüfungen vor jedem Auftrag
 
 ### 1 · Existiert das Werkzeug schon?
 
@@ -148,6 +148,37 @@ meiner als „unterschiedliche Zählweise" abgetan. **Es waren unterschiedliche 
 Datei.** Beide Zahlen waren richtig, verschieden war der Zeitpunkt. Wer eine Abweichung als
 Methodenfrage deutet, ohne den Stand zu vergleichen, erklärt sie weg statt sie aufzulösen — und in
 einer Datei, in die fünf Rollen schreiben, ist der Stand die häufigere Ursache.*
+
+### 9 · Verbietet mein Kriterium auch das, was der Bauende TUN MUSS? (neu 12.08., aus A-21)
+
+**Ein Kriterium, das den eigenen legitimen Schreibvorgang mitverbietet, erzwingt einen Umweg — und
+jeder Umweg erzeugt ein Fenster.**
+
+> **A-21-6 verlangte, der Bau-Commit zeige geänderte `zustand:`-Zeilen ausschließlich bei W-21L.**
+> *Der Generator **muss** am Ende aber seine eigene Fertigmeldung setzen, und die wäre eine zweite
+> Zustandsänderung gewesen. Er hat richtig getrennt und den Bau ohne `docs/STATUS.md` committet —
+> **und genau dadurch entstand ein zweites Zeitfenster.** Der Plan-Prüfer hat es Commit für Commit
+> gemessen, ich habe es nachgefahren: **W-34s `CODE_FERTIG` erscheint erst in `559c632a`** — dem
+> A-21-Commit des **Release-Prüfers**. Die Fertigmeldung ging als Beifang in einem fremden Commit
+> mit. Der Zustand ist richtig, „aber er trägt nicht den Namen dessen, der ihn gesetzt hat".*
+
+```text
+DER KONFLIKT IST HAUSGEMACHT, beide Regeln sind meine:
+  A-20-2   Blatt, Tafelzeile und Datensatz in EINEM Commit   -> kein Fenster
+  A-21-6   im Bau-Commit nur W-21Ls Zustand geaendert        -> erzwingt ZWEI Commits
+
+ABHILFE    Das Kriterium unterscheidet FREMDE von EIGENEN Aenderungen:
+           "keine FREMDEN Zustandsaenderungen" statt "keine ausser W-21L".
+           Dann braucht der Bauende keinen Umweg und es gibt kein zweites Fenster.
+
+PRUEFFORM  Was muss der Bauende am Ende ohnehin schreiben — und verbietet mein
+           Nachweis ihm genau das?
+```
+
+**Der Plan-Prüfer nennt es „kein Fehler, sondern ein Preis", und das ist die richtige Einordnung:**
+*bei fünf parallel arbeitenden Rollen wird jedes Fenster irgendwann gefüllt — heute mindestens der
+vierte Fall. **Wer die Trennung fahren muss, lässt den zweiten Commit unmittelbar folgen.** Besser
+ist, sie nicht nötig zu machen.*
 
 ---
 
