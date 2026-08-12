@@ -49,6 +49,7 @@
 | **W-38** Schrittstatus und Prüfpunkte | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · aus dem Befund des Plan-Prüfers `7b7db5b6` · **Bau erst NACH A-20s Abnahme** (dieselbe Datei) |
+| **W-34** Geführte Planung (Stepper) | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6731,4 +6732,47 @@ A_21_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 regel_A_20_2_auf_mich_selbst_angewandt: "Blatt, Tafelzeile und dieser Block in EINEM Commit — die
   Entscheidung aus A-20-2 gilt fuer den Schneidenden, und der bin hier ich. Bei W-38 habe ich es
   noch falsch gemacht und die Tafelzeile aufgeschoben; der plan-pruefer musste sie anlegen."
+```
+
+```yaml
+auftrag: "W-34"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "Elf Schritte, und sechs von ihnen koennen nichts bestaetigen"
+basis_sha: 6682b83c
+spur: A
+prioritaet: P2
+dor_beleg: "steht aus — plan-pruefer."
+warum_jetzt: "Der Generator ist frei und hat keinen ziehbaren Auftrag: A-20 liegt beim Evaluator,
+  A-21 ist BEREIT aber durch seine eigene Wartebedingung blockiert (Bau erst nach A-20s Abnahme,
+  dieselbe Datei). Ohne diesen Schnitt laeuft die Kette leer."
+warum_W_34_und_nicht_ein_anderes: "GuidedView.tsx Zeile 4 importiert STATUS_LABEL, SchrittStatus
+  und Fahrschritt aus studioDaten — W-38s Typen, und W-38 ist gerade ABGENOMMEN mit acht von acht.
+  Ein Werkzeug direkt nach seiner Typquelle abzulesen ist billiger als spaeter: die Grenze zwischen
+  beiden ist frisch gemessen und in W-38s Blatt schon benannt."
+der_tragende_punkt: "statusAus in fahrschritte.ts:43-49 ist die Regel, die W-38 nur als TYP kennt.
+  Fuenf Zweige, und die REIHENFOLGE ist die Aussage: warn schlaegt alles, ein einziger Warnpunkt
+  macht den ganzen Schritt gelb; prog ist kein eigener Test sondern der Rest. Wer die Zweige
+  aufzaehlt ohne die Reihenfolge, beschreibt eine andere Funktion."
+der_fachliche_befund: "SCHRITTE_OHNE_GRUNDLAGE hat SECHS Eintraege, einzeln gelesen und gezaehlt:
+  Projektgrundlagen, Import oder Grundriss, Raeume und Einrichtung, Kueche und Bad, Pruefung und
+  Koordination, Dokumentation und Rendering. Jeder sagt, WELCHE Angabe im Gebaeudemodell fehlt.
+  Der Dateikommentar begruendet es selbst: sie stehen zusammen und nicht verstreut, damit die
+  Luecke zaehlbar ist, und jeder Eintrag ist der Anfang des naechsten Postens. Das ist kein Mangel
+  des Werkzeugs sondern seine Leistung."
+zweite_ehrlichkeitsregel: "bebauteGeschosse zaehlt ein Geschoss nur, wenn nodes, roofs oder
+  ceilings darauf verweisen. Begruendung im Code: ein frisch angelegtes Projekt HAT bereits ein
+  Geschoss, weil die Anwendung es anlegt und nicht der Nutzer — 1 Geschoss angelegt Haken waere
+  gruen ohne dass jemand etwas getan hat. Damit ist W-34 derselbe Bautyp wie W-20 (die Stueckliste
+  schaetzte, waehrend die Engine geclippt zeichnete) und W-38 (Attrappen samt Waechtertests): die
+  Stufe-6-Bausteine sind EHRLICHKEITSKONSTRUKTIONEN."
+meine_eigene_falle_im_auftrag_weitergegeben: "Mein Muster titel-Doppelpunkt-Hochkomma fand 0
+  Treffer in fahrschritte.ts. Die Titel sind ARGUMENTE und keine Feldliterale (:113, :115, :118,
+  :201). Aus 0 Treffern haette die Aussage die Schritte haben keine Titel werden koennen, und die
+  waere falsch. H-9, und deshalb steht die Falle im Blatt: der Generator soll sie nicht zweimal
+  treten. Kriterium W-34-2 verlangt deshalb ausdruecklich, die ANZAHL am Code zu zaehlen und nicht
+  aus fahrschritte.test.ts zu uebernehmen — ein Test belegt eine Erwartung, nicht den Bestand."
+regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit. Das Blatt traegt weder
+  status im Kopf noch zustand im Fuss."
+W_34_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
