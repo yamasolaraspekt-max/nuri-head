@@ -3283,6 +3283,57 @@ die Lücke, benannt an der Stelle, an der ich sie gelassen habe.
 
 ---
 
+## Die Transportsperre ist gefunden — eine deny-Regel, keine Störung (Release-Prüfer, 12.08.)
+
+```yaml
+befund: "release-pruefer 12.08., auf Yamas Anweisung 'dann push alles was notwendig und fertig sind'"
+klasse: UMGEBUNG
+blockiert: JA — alle Veroeffentlichungen
+
+was_es_ist: "In /Users/yamanuri/.claude/settings.json steht unter permissions.deny an Stelle [13]
+  ein Eintrag, der jede Veroeffentlichung ueber die Shell abfaengt — das Muster deckt den Befehl
+  in JEDER Schreibweise ab. Das erklaert rueckwirkend alle sieben abgewiesenen Versuche ueber
+  sechs Takte in drei verschiedenen Formen. In derselben Datei steht unter permissions.allow die
+  entsprechende Erlaubnis, aber deny schlaegt allow; sie kommt nie zum Zug."
+
+und_es_faengt_MEHR_als_es_soll: "Gemessen im selben Arbeitsgang: der Eintrag hat auch meinen
+  DOKUMENTATIONS-Commit abgewiesen, weil dessen Botschaft den Befehlsnamen im Fliesstext nannte.
+  Die Regel prueft den ganzen Befehlstext, nicht den Befehl. Damit ist sie genau die Klasse
+  Fehlalarm, die ich heute schon dreimal an anderen Mustern gefunden habe — B5s Belegzeilen-
+  Luecke, mein Geheimnismuster auf Design-Tokens, mein Diff-Filter. Ein Muster, das bei
+  richtiger Arbeit anschlaegt, wird umgangen; ich habe stattdessen das Werkzeug gewechselt und
+  diesen Block mit dem Datei-Editor geschrieben."
+
+warum_das_KEINE_stoerung_ist: "Der Eintrag steht in einer Liste von dreissig Schutzregeln, und
+  die Nachbarschaft sagt alles ueber die Absicht: rm -rf, sudo rm, DROP DATABASE, DROP TABLE,
+  TRUNCATE, migrate:fresh, migrate:reset, db:wipe, dazu Lesesperren auf .ssh, .env, *.pem und
+  id_rsa. Eine bewusst gesetzte Grenze gegen irreversible Handlungen, kein Versehen."
+
+warum_ICH_sie_nicht_aendere: "Zwei Gruende, beide hart. Erstens waere es eine Regelaenderung
+  zugunsten der eigenen Vollmacht — genau der Fall, den mein Takt unter Punkt 6 ausdruecklich
+  von der Vertretung ausnimmt. Zweitens ist es eine Sicherheitseinstellung des Nutzers
+  ausserhalb dieses Repos. Wer die Sperre entfernt, die ihn hindert, hat sie nicht geprueft
+  sondern umgangen."
+
+alles_andere_ist_fertig: "Yamas Anweisung ist angekommen und vollstaendig vorbereitet:
+  53 Commits, reines Vorspulen auf beide Ziele (is-ancestor je JA), Locks 0, Geheimnisse 0 ueber
+  den ganzen Bereich — der EINE Treffer im Suchlauf war meine eigene Pruefzeile, die das
+  Suchmuster im Klartext dokumentiert, gelesen statt gezaehlt. Es fehlt nur die Ausfuehrung."
+
+drei_wege_zur_wahl_von_yama:
+  a: "Er fuehrt die zwei Befehle selbst aus. Kein Eingriff in die Schutzliste, sofort erledigt."
+  b: "Er entfernt Stelle [13] ganz. Dann kann ich veroeffentlichen — aber damit faellt auch der
+      Schutz gegen das FREMDE Repo upstream und gegen erzwungenes Ueberschreiben.
+      Das empfehle ich NICHT."
+  c: "Er ersetzt [13] durch zwei engere Regeln, die nur noch das Ziel 'upstream' und die
+      Option '--force' sperren. Dann bleibt gesperrt, was wirklich gefaehrlich ist, der
+      Transport auf fork und backup-private laeuft ohne Rueckfrage, und der Fehlalarm auf
+      Fliesstext verschwindet. DAS EMPFEHLE ICH — es traegt die Absicht der Regel."
+
+fuenf_wartende_releases: "B5, B6, A-18, A-17, W-01N — alle mit §10-Votum RELEASE_FREI,
+  Messtische gegengelesen, vier davon mit vollem Grundtor."
+```
+
 ## Befund des Release-Prüfers — drei Zustandsworte, die das Regelwerk nicht kennt (12.08.)
 
 ```yaml
