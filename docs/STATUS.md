@@ -60,7 +60,7 @@
 | **W-05/2** Raum anwählen | **`NACHBESSERN`** | **Generator** | Schnitt 13.08. · Basis `c09dcb93` | **BAU** · erster Posten aus der Frontend-Bestandsaufnahme des Release-Prüfers (`STATUS.md:5355`) — **und die Messung hat den Auftrag KLEINER gemacht.** Sein Vorschlag war *„Raum anwählen, benennen, Fläche ablesen"* als ein Schnitt; gemessen sind es drei ungleiche Teile: **Fläche ablesen ist GEBAUT** (`Buehne.tsx:139` Kommentar, `:148` Füllung, `:152` die m²-Zahl), **anwählen ist klein** (`:147` trägt `listening={false}`, das Auswahlmuster steht daneben in `:165`/`:190`), **und der NAME ist eine Entscheidung Yamas**: `ErkannterRaum` (`roomDetection.ts:35-40`) trägt `polygon`, `kanten`, `flaecheMm2`, `volumenMm3` — **keine id**, und `Buehne.tsx:147` nutzt `key={raum${i}}`, also den **Index**. Räume werden *erkannt*, nicht gezeichnet; ein Name ist dauerhaft, ein Index nicht. **Dieselbe Klasse wie die offene ZoneNode-Frage.** Der ganze Auftrag hängt an W-05-1-1: **die Auswahl wird zurückgesetzt, wenn sich die Raumliste ändert** — eine Auswahl, die einen Wandzug überlebt, zeigt auf einen anderen Raum und sieht gleich aus. |
 | **W-21/2** Auswechslung bekommt ein Zuhause | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `9ea1c3db` | **BAU** · **174 Zeilen ohne Zuhause, und zwei Blätter sagen es selbst.** `W-22/5-CODE/LIESMICH.md:36` und `W-22/7-GRENZEN.md:55` melden beide *„auswechslung.ts ist in keinem Blatt zuhause"*; `W-21`s Blatt führt es in `:156` als **ausdrückliches Nicht-Ziel** („VERWANDT — NICHT im Scope"). **Der Ausschluss war für die Ablesung richtig** und ließ die andere Frage offen: *wo ist das Modul zuhause.* Entschieden am 13.08. — **W-21, weil ein Wechselholz Tragwerk ist und seine Verbraucher mehrere sind** (Gaube W-22, Dachdurchdringungen W-29); ein Modul, das mehrere Werkzeuge brauchen, gehört zum Fundament. Selbst gezählt: **5 Exporte, 174 Z.**, und W-21 führt heute **fünf** Module — `auswechslung.ts` ist das sechste. `sparrenTrennung.ts` ist der Beleg für den Ort: sein Kopf sagt *„ergänzt auswechslung.ts"*, und es ist längst in W-21 zuhause. **W-21-2-2 zieht die zwei überholten Sätze in W-22 mit** — sonst entstünde die A-23-Klasse im selben Auftrag. **Kennung geprüft:** `W-21/1` ist 18× belegt, ebenso `W-21/W`, `W-21L`, `W-21L/F` — `W-21/2` ist frei (Präzedenz W-05/2, W-07/2). |
 | **A-27** Der Bau-Commit gehört in ein Feld | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `875d1da5` | **BAU, P1 · fünfte Barriere im Tor.** **Zwei Regeln laufen zusammen ins Rote, die einzeln richtig sind:** §12.4 verlangt bei der Wieder-Abnahme *alle* Kriterien, E1 (`ARBEITSREGELN.md:509`) die Messung **am Commit** — und der Datensatz sagt nicht, an welchem. **An A-23 gemessen:** `bau_sha` stand auf `3ad920b1`, dem Stand **vor** der Nachbesserung; `9d800094` kommt im Block **null Mal** vor. Wer beide Regeln befolgt, misst am falschen Stand und **meldet zu Recht rot, obwohl der Bau stimmt.** Herkunft: `24a122e9`, und der Plan-Prüfer hat ausdrücklich **nicht** selbst nachgetragen — *ein Bau-SHA, den der Prüfer einträgt, ist keine Meldung des Bauenden mehr.* **Reichweite selbst gemessen und größer als drei:** 57 Datensätze mit Bau-Zustand, **17 nennen einen Commit im Feld, 40 nicht** — bei **19** verschiedenen Feldnamen. `bau_sha` wird festgelegt (6× belegt, häufigste vorhandene Form), **kein neuer Name.** **Nicht im Scope:** die vierzig Altfälle — ein falsch nachgetragener SHA ist schlimmer als ein fehlender; sie werden gezählt, nicht gefüllt. **Und A-27-3 benennt, was die Barriere NICHT fängt:** einen existierenden, aber überholten Commit — genau A-23s Fall. |
-| **A-28** Zwei Typen, eine Wahrheit | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `bd0f7e0d` | **BAU, P2** · **Die neun Aufbauarten stehen ZWEIMAL, zeichengleich:** `aufbauPlatzierung.ts:21 AufbauArt` und `dachformVorlagen.ts:173 VorlagenAufbauArt` — `md5` der Werteliste **identisch** (`35ed563c…`), selbst verglichen. **Eine zweite Wahrheit, und CLAUDE.md verbietet sie** — schlimmer verborgen als bei einem Wert: wer eine zehnte Art hinzufügt, muss beide ändern, **und `tsc` merkt es nicht**, weil die Typen unabhängig sind. **Die Behebung ist klein:** jeder Typ wird nur in seiner eigenen Datei benutzt, kein Import-Geflecht. **Der Ort ist nicht erfunden** — `domain/roofShape.ts:12` ist der Präzedenzfall (Domänen-Typ in `domain/`, von vier Dateien genutzt); die *Art* eines Aufbaus ist Domäne, Platzierung und Vorlagen sind **Verbraucher**. **Zweiter Befund im selben Griff:** der Dateikopf nennt **sechs** Arten, der Typ hat **neun** — sechs Gattungen, neun Arten (Gaube zerfällt in vier). Beide Zahlen stimmen über verschiedene Mengen; A-28-5 verlangt die Unterscheidung im Bericht statt eine Zahl zu „berichtigen". **Gefunden beim Messen für W-22s Bedien-Schnitt**, kein fremder Befund. |
+| **A-28** Zwei Typen, eine Wahrheit | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `bd0f7e0d` | **BAU, P2** · **Die neun Aufbauarten stehen ZWEIMAL, zeichengleich:** `aufbauPlatzierung.ts:21 AufbauArt` und `dachformVorlagen.ts:173 VorlagenAufbauArt` — `md5` der Werteliste **identisch** (`35ed563c…`), selbst verglichen. **Eine zweite Wahrheit, und CLAUDE.md verbietet sie** — schlimmer verborgen als bei einem Wert: wer eine zehnte Art hinzufügt, muss beide ändern, **und `tsc` merkt es nicht**, weil die Typen unabhängig sind. **Die Behebung ist klein:** jeder Typ wird nur in seiner eigenen Datei benutzt, kein Import-Geflecht. **Der Ort ist nicht erfunden** — `domain/roofShape.ts:12` ist der Präzedenzfall (Domänen-Typ in `domain/`, von vier Dateien genutzt); die *Art* eines Aufbaus ist Domäne, Platzierung und Vorlagen sind **Verbraucher**. **Zweiter Befund im selben Griff:** der Dateikopf nennt **sechs** Arten, der Typ hat **neun** — sechs Gattungen, neun Arten (Gaube zerfällt in vier). Beide Zahlen stimmen über verschiedene Mengen; A-28-5 verlangt die Unterscheidung im Bericht statt eine Zahl zu „berichtigen". **Gefunden beim Messen für W-22s Bedien-Schnitt**, kein fremder Befund. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7603,8 +7603,8 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "A-28"
-zustand: ENTWURF
-ballbesitz: plan-pruefer  # zweite Fassung liegt (47d45869): NEU GESCHNITTEN. Es sind VIER
+zustand: BEREIT
+ballbesitz: generator
   Deklarationen, nicht zwei — domain/scene.types.ts:248 ObstacleType und domain/validation.ts:187
   fuehren ZEHN Werte (mit spitzgaube). Mein Vorschlag ein Typ an einem Ort in domain/ war falsch;
   die Loesung ist ABLEITUNG aus ObstacleType, damit die Teilmengen-Beziehung im Typsystem steht.
@@ -7614,42 +7614,40 @@ basis_sha: bd0f7e0d
 spur: A
 prioritaet: P2
 blatt: "docs/auftraege/aktiv/A-28-zwei-typen-eine-wahrheit.md"
-dor_beleg: "plan-pruefer 13.08. — DoR NICHT ERTEILT. Der Befund ist RICHTIG und er ist GROESSER
-  als das Blatt: es sind nicht zwei Deklarationen, es sind VIER, und sie sind nicht alle gleich.
-  WAS ICH BESTAETIGE, selbst erhoben: AufbauArt (aufbauPlatzierung.ts:21-23) und VorlagenAufbauArt
-  (dachformVorlagen.ts:173-175) tragen dieselben NEUN Werte. Mein eigener md5 ueber beide Wertelisten
-  ist identisch — mit zwei verschiedenen Auszugsverfahren gerechnet, einmal 35ed563c… wie im Blatt und
-  einmal f5cfb65c… nach meiner eigenen Normalisierung; entscheidend ist die GLEICHHEIT der beiden,
-  nicht der Wert. Und beide Typen leben nur in ihrer eigenen Datei — die Zusammenlegung waere klein.
-  DER BLOCKER: DOMAIN/ HAT DIE ARTEN SCHON, UND ZWAR MIT EINER MEHR.
-    domain/scene.types.ts:248  ObstacleType   ZEHN Werte — die neun PLUS 'spitzgaube'
-    domain/validation.ts:187-190  z.enum      dieselben ZEHN, mit 'spitzgaube'
-  A-28-1 verlangt 'GENAU EINE Deklaration der Aufbauarten, und sie liegt in domain/'. In domain/
-  liegen bereits ZWEI, und sie fuehren eine Art mehr als die zwei, die zusammengelegt werden sollen.
-  Wer die Neun nach domain/ zieht, hat dort drei Listen mit zwei verschiedenen Laengen — oder er
-  vereinheitlicht auf zehn, und dann ist A-28-2 verletzt ('KEIN Wert geaendert', md5 identisch).
-  DIE ZWEI KRITERIEN SCHLIESSEN SICH DAMIT GEGENSEITIG AUS, solange nicht entschieden ist, was mit
-  'spitzgaube' geschieht — und diese Entscheidung steht im Blatt nicht.
-  UND SIE IST NICHT AKADEMISCH: 'spitzgaube' ist an 21 Stellen lebendig, davon im Produktivcode
-  gaubeGeometrie.ts:247/:375/:418 (echte Geometrie), dachAufbautenMesh.ts:137 (Darstellung),
-  dachAusschnitt.ts:281, aufbauOrientierung.ts:60 und dachformVorlagen.ts:2379 als echte Vorlage
-  'sattel-spitzgaube'. Das Szenenmodell kennt die Art, die Platzierung und die Vorlagen-Typdeklaration
-  kennen sie nicht.
-  DAZU EIN DRITTER BEFUND, den das Blatt nicht hat und der die Sache erklaert:
-  dachformVorlagen.ts:172 sagt woertlich 'Arten exakt wie ObstacleType im Planer (nur sicher
-  unterstuetzte)'. Der Klammerzusatz ist die Absicht — es ist eine BEWUSSTE Teilmenge, keine
-  vergessene Dublette. Damit ist die Lage: AufbauArt und VorlagenAufbauArt sind eine echte Dublette
-  (beide neun, beide dieselbe Menge), ObstacleType ist der Obermenge-Typ des Modells. Das aendert den
-  Zuschnitt: zusammenzulegen sind ZWEI, und das Verhaeltnis zur dritten ist zu BENENNEN, nicht
-  einzuebnen.
-  WAS ICH NICHT ENTSCHEIDE: ob die Neun eine benannte Teilmenge der Zehn werden, ob 'spitzgaube' in
-  die Platzierung aufgenommen wird, oder ob die drei Listen getrennt bleiben. Das ist ein Zuschnitt
-  und gehoert dem Planner.
-  WAS AM BLATT GUT IST: A-28-5 benennt den Sechs-gegen-Neun-Fall im Dateikopf ausdruecklich als 'zwei
-  Zahlen ueber verschiedene Mengen' und verlangt NICHT, den Kopf umzuschreiben — genau die Form, die
-  ich seit W-33 einfordere. Und A-28-2 sagt von sich aus, der md5 aus dem Blatt sei kein Beleg und am
-  Bau-Stand neu zu erheben.
-  Zustand bleibt ENTWURF, Ball beim Planner."
+dor_beleg: "plan-pruefer 13.08., ZWEITE Fassung — DoR ERTEILT. Die Loesung ist besser als das, was
+  mein Einwand verlangt haette, und ich sage das vor dem einen Punkt, der bleibt.
+  MEIN EINWAND WAR: in domain/ liegen die Arten schon, mit einer mehr — 'ein Typ an einen Ort' geht
+  also nicht. SEINE ANTWORT IST NICHT 'anderer Ort', sondern ABLEITUNG: die neun entstehen aus
+  ObstacleType durch Ausschluss. Das loest den Widerspruch an der Wurzel — die Wiederholung wird
+  nicht verschoben, sie wird UNMOEGLICH. Und es leistet etwas, das mein Einwand nicht verlangt hat:
+  verliert ObstacleType eine Art, bricht tsc. Heute merkt das niemand.
+  NACHGEPRUEFT, dass die Ableitung wirklich die neun ergibt: ObstacleType traegt zehn Werte, davon
+  einer 'spitzgaube'; die Restmenge ist zeichengleich die Neunerliste, Element fuer Element
+  verglichen. A-28-2 kann damit halten.
+  UND SEIN UMGANG MIT DEM EIGENEN FEHLGRIFF GEHOERT INS PROTOKOLL: 'ich habe zwei Deklarationen
+  gemessen und nicht weiter gesucht — obwohl ich im Fuss selbst geschrieben habe, dass ich nicht
+  gesucht habe. Das war keine Grenze, das war eine Luecke.' Genau die Unterscheidung, an der heute
+  mehrere Befunde haengen.
+  SPITZGAUBE BLEIBT AUSSEN, MIT GRUND: A-28-5b traegt den Befund und verbietet ausdruecklich, ihn zu
+  beheben — der Klammerzusatz 'nur sicher unterstuetzte' liest sich als bewusste Auslassung, und H-7
+  verbietet, aus dem Ist ein Soll zu machen. Benannt statt entschieden, und die Fachfrage bleibt
+  offen. Das ist die richtige Zurueckhaltung.
+  DER EINE PUNKT, NICHT BLOCKIEREND: ZWEI NACHWEISE NENNEN IHREN GEGENSTAND NICHT.
+    A-28-1 sagt 'nach dem Bau gibt es genau EINE Aufzaehlung im Repo' und erlaubt im selben Atemzug,
+    dass das z.enum in validation.ts als zweite Aufzaehlung bestehen bleibt. Beides ist vertretbar —
+    Zod braucht Literale, und ObstacleType ist eine blanke Union ohne const-Array, aus der sich ein
+    z.enum nicht ohne Zusatzbau ableiten laesst; ich habe es nachgesehen. Aber der Nachweis muss
+    sagen, ueber WELCHE Menge er zaehlt, sonst ist 'genau eine' und 'die zweite darf bleiben' ein
+    Widerspruch im selben Kriterium.
+    A-28-2 verankert den md5 der NEUNERLISTE — und genau diese Aufzaehlung entfernt der Bau. Nach dem
+    Bau gibt es sie als Aufzaehlung nicht mehr; der Nachweis ist nur fahrbar, wenn der Bauende die
+    AUFGELOESTE Menge bildet (ObstacleType minus spitzgaube) und DIE hasht. Das ist zumutbar und
+    naheliegend, steht aber nicht da.
+  WARUM ICH TROTZDEM ERTEILE: beide Nachweise sind mit einer vernuenftigen Lesart fahrbar, und die
+  Kriterien sagen von sich aus 'am Bau-Stand neu erheben, weil ein md5 aus einem Blatt kein Beleg
+  ist'. Ich nenne die zwei Gegenstaende hier, damit der Bauende sie nicht raten muss — und damit der
+  Evaluator nicht an einer Aufzaehlung misst, die es nach dem Bau nicht mehr gibt.
+  KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator."
 warum_P2_und_nicht_P1: "Es ist heute kein Fehler im Betrieb: beide Typen sind zeichengleich, also
   verhaelt sich nichts falsch. Der Schaden ist LATENT und tritt beim naechsten Hinzufuegen ein — und dann
   still, weil tsc zwei unabhaengige Typen nicht vergleicht. Ein latenter Schaden mit klarer Ursache ist
