@@ -45,6 +45,7 @@
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
 | **W-27** Dachkantentypen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
+| **W-20** Stückliste und Mengen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6201,4 +6202,44 @@ der_stille_fehler_dieses_werkzeugs: "Kriterium W-27-2 verlangt ALLE VIER joinTyp
          'neutral'. Wer nur drei nennt, laesst den haeufigsten dem Bauenden — und das gebaute
          Werkzeug klassifiziert dann jede gewoehnliche Kante als Grat oder Kehle. Das faellt erst
          am Dach auf."
+```
+
+
+## W-20 — Stückliste und Mengen (Datensatz, EINZIGER Zustandsort neben der Tafelzeile)
+
+```yaml
+auftrag: "W-20"
+datei: docs/auftraege/aktiv/W-20-stueckliste-und-mengen.md
+zustand: ENTWURF
+ballbesitz: "plan-pruefer (DoR)"
+basis_sha: 8300aa59
+anlass: "Klasse C, letztes voraussetzungsfreies Werkzeug — und der Zeitpunkt ist kein Zufall: W-23
+         ist gerade gebaut (BESCHRIEBEN) und F-053 eingetragen, genau die zwei Zulieferungen, die
+         W-20s Luecke schliessen wuerden."
+bestand_gemessen: "geometry/holzMengen.ts, 64 Zeilen, 3 Exporte (HolzStueck :23, HolzMengen :29,
+         holzMengenAusListe :44), 6 Testzusagen. Vier Kennzahlen: sparrenLaenge, konterLaenge,
+         lattenLaenge, sparrenAnzahl — alle aus der ECHTEN Geometrie."
+der_kern_aus_dem_dateikopf: "'Problem vorher: Die Material-/Holzliste SCHAETZTE Sparren-/Lattenlaengen
+         aus dem Rechteck-Rahmen. Die Engine zeichnet die Staebe aber bereits an die reale (an
+         Walm/L/T geclippte) Geometrie -> ZWEI WAHRHEITEN.' Das Werkzeug ist als Beseitigung einer
+         zweiten Wahrheit entstanden — deshalb laeuft die Aggregation ueber die echte Liste und
+         nicht ueber Formeln. Kriterium W-20-2 verlangt diesen Satz woertlich in 1-ZWECK."
+die_feinheit_die_geld_kostet: "Schiftsparren zaehlen als Gemeinsparren mit (:56-58), 'sonst fallen die
+         an Kehle/Grat geclippten Sparren aus Bauholz-m3 und Lohn heraus (Unter-Count)'. Ein
+         Unter-Count in der Stueckliste ist ein Fehlbetrag im Angebot."
+die_einzige_luecke: "ZIEGELMENGE. Gemessen in geometry/: 'stueck.*m2' 0 Treffer, 'bedarf' 1 und der
+         ist eine Gaubenbemerkung. 'ziegel' hat 16 und 'deckung' 79 Treffer — aber als TYP
+         (RoofCovering) beziehungsweise als LAST (sparrenBerechnung), nicht als Menge. Wer die 95
+         Treffer fuer eine Mengenrechnung haelt, sucht falsch. Zieladresse: Dachflaeche (F-011 ✓ aus
+         W-08) mal Bedarf_Stk_m2 (W-23, Spalte 28/29)."
+meine_eigene_fehlmessung_berichtigt: "ich meldete 'lattenMengen 0 Treffer' und schloss 'die Lattung
+         fehlt'. FALSCH — das Feld heisst lattenLaenge und ist gefuellt. H-9 an mir, vierter Fall
+         heute: das Muster suchte eine Schreibweise statt die Sache. Und die Unterscheidung, die
+         daraus folgt, traegt jetzt das Werkzeug: W-21L/F-053 fragt WIE WEIT die Latten
+         auseinanderliegen (Lattmass in mm), W-20 fragt WIE VIELE laufende Meter. Zwei Fragen an
+         dieselbe Latte; wer sie verwechselt, sucht die Antwort in der falschen Datei."
+warum_BESCHRIEBEN: "der Kern ist gebaut, getestet und begruendet — Ablesung. Die fehlende Ziegelmenge
+         wird als GRENZE benannt, nicht als Vorgabe: ein ENTWORFEN-Teil in einem BESCHRIEBEN-Blatt
+         wuerde zwei Stufen vermischen, die Yamas Legende als parallel und nicht aufeinanderfolgend
+         fuehrt."
 ```
