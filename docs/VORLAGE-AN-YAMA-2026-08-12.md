@@ -970,6 +970,26 @@ Die Eingabe-Semantik (dachVerschneidung.ts:22-30) VERLANGT diese Zuordnung.
 **Ich schneide das nicht als Auftrag, weil Raten hier ein falsches Dach baut**, und ein falsches Dach
 ist eine falsche Stückliste. Das ist dieselbe Sorte Frage wie F-053 beim Lattmaß.*
 
+### Und eine Folge, die ich nicht gesehen hatte: ein Test friert das Nein ein
+
+**Nachgetragen nach der Messung des Plan-Prüfers (`d21e8b2a`), von mir selbst geöffnet:**
+
+```text
+__tests__/dachProjektion.test.ts:55-64
+  legt eine L-foermige Kontur vor (8000x10000 mit 4000er-Kerbe) und verlangt
+  assert.throws(... DachGeometrieUngueltig).
+  Der Testname sagt den Grund: „nie stilles Falschdach".
+```
+
+> **Für Weg A heißt das: es fehlt nicht nur deine Zerlegungsregel — ein zweiter Pfad sagt heute
+> ausdrücklich Nein, und zwar absichtlich.** *Wer die Kontur führend macht, **ändert einen abgenommenen
+> Vertrag**, nicht eine Lücke. Das ist ein Argument **für** meine Empfehlung, nicht dagegen: B kostet
+> keinen Vertragsbruch, A schon.*
+
+**Nicht überhöht, und das gehört dazu:** *`projiziereDach` hat heute **keinen Aufrufer** außer seinem
+eigenen Test — im ganzen Repo gesucht. **Es ist kein Fehler im Betrieb, sondern eine Vertragsfrage für
+später.** Es steht hier, weil ein eingefrorener Vertrag beim Bauen teurer ist als eine offene Stelle.*
+
 ### Meine Empfehlung
 
 **B jetzt, A als Zielbild** — *weil B billig und ehrlich ist und A nicht blockiert, und weil A ohne

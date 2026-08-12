@@ -53,6 +53,7 @@
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **A-23** Sechs Zettel an einer erledigten Sperre | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. SIEBEN Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung, und die siebte trug die Zeichenfolge gar nicht: `startEhrlich.test.ts:120` sagt *„Die Zulieferung der Liste bleibt deshalb offen“* im Rumpf des geschützten Tests — H-9 an meinem eigenen Suchmuster. **DoR NICHT erteilt (`2772c198`), zwei Fehler in meinen eigenen Kriterien behoben:** A-23-1 und A-23-2 kollidierten (md5 über den Rohtext gegen die Pflicht, überholte Sätze zu berichtigen — jetzt md5 **ohne Kommentare**, mit dem Werkzeug der Insel), und meine Gegenprobe nannte **kommentarblinde** Wächter: `startEhrlich` und `konfiguratorEhrlich` lesen über `ohneKommentare`. Der einzige, der greifen kann, fehlte — `gefuehrteEhrlich:30` liest `studioDaten.ts` **roh** und prüft ein Statuswort in der ganzen Datei; **mein A-23-3 trieb den Bauenden genau in dessen Wortsperre.** Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
 | **A-24** Panel-Zusage trifft das Tor nicht | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
+| **W-31** PV-Schnellbelegung | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `6ace6f3e` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Widerlegt meine eigene Behauptung, der Vorrat sei erschöpft.** Die Registerzeile `REGISTER.md:98` sagt im selben Satz *gesperrt bis F-028* **und** *autarke Schnellstufe gebaut (`pvBelegung.ts`, KEIN Azimut → kein F-028-Fall)* — ich hatte das Wort **gesperrt** gelesen und die Sache nicht gemessen, dieselbe Ursache wie bei AUF-40 heute. `pvBelegung.ts` hat 75 Z. und **drei** Exporte (`:10`, `:26`, `:46`), und es ist **angeschlossen** — anders als W-27/1: `enginePanels.ts:32` Einfuhr, `:380 engineId`, `:403` Aufruf über `alsPvEingabe`, `faehigkeiten.ts:80` Registry mit `zustand: verfuegbar`. **Erster Beleg, dass die Stufe-6-Kette zusammenhängt:** der Bedienweg läuft über W-36 und W-37, und `alsPvEingabe` ist einer der acht Adapter, deren Zahl W-37 zwei Runden gekostet hat. Die Grenze steht im Dateikopf `:6-7` — *Ertrag/Verschattung/Strings bleiben der Fach-Engine (wberechnung) vorbehalten*, also Arbeitsteilung zwischen zwei Apps. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7476,6 +7477,35 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 ```
 
 ```yaml
+auftrag: "W-31"
+zustand: ENTWURF
+ballbesitz: plan-pruefer  # DoR steht aus
+titel: "PV-Schnellbelegung — ein gesperrtes Werkzeug, dessen gebauter Teil nicht gesperrt ist"
+basis_sha: 6ace6f3e
+spur: A
+prioritaet: P2
+blatt: "docs/auftraege/aktiv/W-31-pv-schnellbelegung.md"
+es_widerlegt_meine_eigene_behauptung: "Ich habe im Fuss von W-37 geschrieben, nach der siebten Ablesung
+  trage jedes Werkzeug mit vorhandenem Code ein Blatt oder einen laufenden Auftrag und alles Weitere
+  brauche eine Entscheidung Yamas. Diesen Satz habe ich geprueft statt ihn zu wiederholen — er traegt
+  nicht. W-31 hat gebauten, ANGESCHLOSSENEN Code und steht auf LEER. Die Ursache ist dieselbe wie bei
+  AUF-40 heute: ich habe ein WORT gelesen, gesperrt, und nicht die Sache gemessen. Die Registerzeile
+  sagt im selben Satz, dass die Schnellstufe gebaut und kein F-028-Fall ist."
+warum_die_sperre_nicht_verletzt_wird: "Die Sperre verhindert den BAU der vollstaendigen Belegung, die
+  einen Azimut braucht und damit F-028. Eine Ablesung beschreibt den Bestand, baut nichts, aendert
+  pvBelegung.ts nicht und nennt die Sperre als Grenze — sie macht sie SICHTBARER als heute, wo sie in
+  einer Registerzeile steht, die niemand liest, weil das Werkzeug LEER ist."
+vorrat_gemessen_und_NICHT_mitgeschnitten: "Beim Pruefen aller 19 LEER-Werkzeuge fand ich weitere
+  dedizierte Module: geometry/geschossVorlage.ts und app/dashboard/geschossStapel.ts und
+  GeschossFlaeche.tsx bei W-06, renderers/three-d/deckenMesh.ts bei W-10, geometry/abwassergefaelle.ts.
+  Ich schneide sie NICHT mit — jedes braucht seine eigene Messung, und ein Sammelauftrag ueber fuenf
+  Werkzeuge waere der Zuschnitt, der spaeter nicht abnehmbar ist. Sie stehen als Vorrat und nicht als
+  Befund: dass eine Datei existiert, ist nach H-8 kein Beleg fuer ein beschreibbares Werkzeug."
+mein_erster_messversuch_war_untauglich_und_das_gehoert_dazu: "Mein erster Sweep zaehlte Wortvorkommen
+  und meldete fuer W-17 Export 155 Dateien — export ist ein TypeScript-Schluesselwort. Ich habe die
+  Zahlen NICHT ausgegeben sondern das Verfahren gewechselt, auf Dateinamen dedizierter Module. Das ist
+  derselbe zu weite Griff wie heute mehrfach, nur diesmal vor der Meldung bemerkt."
+
 auftrag: "A-24"
 zustand: IN_ARBEIT
 ballbesitz: generator
