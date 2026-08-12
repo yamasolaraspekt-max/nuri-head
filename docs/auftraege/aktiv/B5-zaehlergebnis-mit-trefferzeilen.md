@@ -201,3 +201,117 @@ warteschlange: "kann sofort in DoR — beruehrt REGISTER.md NICHT und ist damit 
 kern: "eine Zahl beweist nichts, solange niemand gelesen hat, WAS sie gezaehlt hat.
        Und ein Filter, der einen Fehlertyp ausschliesst, erzeugt leicht einen anderen."
 ```
+
+## §11 — Votum B5 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "B5"
+votum: ABGENOMMEN
+fehlerklasse: KEINE   # ein P2, blockiert nicht
+abnahme_commit: "157576c2"
+elter: "2a95ab40"
+in_arbeit_commit: "c528161c"
+pruefstand: "worktree --detach auf 157576c2 und 2a95ab40, node_modules UND vendor per cp -al"
+pruefform: "B5 baut eine BARRIERE. Ich habe sie deshalb AUSGELOEST statt ihren Code zu lesen:
+     Wegwerf-Repo, das Tor hineinkopiert, drei Probelaeufe und eine Mutation."
+
+messtisch_alle_sieben:
+  B5-1: GRUEN
+    rot_lage_selbst_gemessen: "grep -cE 'Trefferzeile|B5' scripts/commit-pruefen.sh —
+            am ELTER 0 (wie das Blatt sagt), im Bau 8."
+    ausgeloest: |
+      $ TICKET_ROLLE=evaluator bash scripts/commit-pruefen.sh \
+          "der Begriff kommt einmal vor, also ist er gebaut" docs/a.md
+      B5-WARNUNG  Zaehlwort in der Botschaft, aber keine Belegzeile (datei.ext:zeile).
+                  Zahl als Gegenstand ist in Ordnung. Traegt die Zahl einen BEFUND,
+                  fahre denselben Lauf ohne -c und nimm die Zeilen mit, die du gezaehlt hast.
+                  Warnung, kein Abbruch — der Commit laeuft weiter.
+      exit=0, Commit 7b3df02 ist entstanden.
+    mutation: "B5_ZAEHLWORT-Block entfernt (Anker genau 1x), derselbe Lauf: 0 Warnungen.
+            Zurueckgestellt, md5 identisch. Die Warnung kommt nachweislich aus diesem Code."
+  B5-2: GRUEN
+    gegenprobe_1: "'Suite 1692/1692 gruen, 0 Platzhalter' -> 0 Warnungen, exit=0."
+    gegenprobe_2: "'drei Treffer gemessen, Trefferzeilen: geometry/treppe.ts:42, :57, :91'
+            -> 0 Warnungen. Ein Zaehlwort MIT Belegzeile schweigt, wie es soll."
+  B5-3: GRUEN
+    beleg: "exit=0 bei feuernder UND bei schweigender Botschaft. Der Commit der feuernden
+            Probe ist entstanden — die Warnung sperrt nicht, sie erinnert."
+    im_code_abgesichert: "Die Stelle liegt NACH dem Fehler-Riegel und setzt weder FEHLER=1
+            noch exit. Das habe ich nach dem Auslesen zusaetzlich gelesen, nicht stattdessen."
+  B5-4: GRUEN
+    beleg: "ARBEITSREGELN §18b, neu. Die Unterscheidung steht als Tabelle:
+            'Zahl als Gegenstand' 2 Treffer, 'Befund aus einer Zahl' 2 Treffer. Elter: 1
+            B5-Erwaehnung (die H-6-Querverweiszeile), Bau: der ganze Abschnitt."
+    und_das_leere_ergebnis_gemeldet: "Der Auftrag sagt 'B5 steht in der Barrierenliste'.
+            Eine solche Liste GIBT ES NICHT — am Elter 0 Treffer, von mir nachgemessen.
+            Der Bauende hat das gemeldet statt eine Liste zu erfinden, mit Verweis auf A-10.
+            Genau die Antwort, die ich sehen will."
+  B5-5: GRUEN
+    beleg: "Er hat zuerst gemessen: find docs -iname '*pruefweg*' -o -iname '*rollenblatt*'
+            -> 0 Dateien. SELBST nachgefahren: ebenfalls 0. Die Alternative
+            4-WAS-ICH-ABLIEFERE.md existiert fuenfmal (nachgezaehlt: 5), und die neue
+            Trefferzeilen-Zeile steht in allen fuenf."
+    warum_das_gut_ist: "Das Blatt sagte woertlich 'Ich habe es nicht gemessen und behaupte es
+            deshalb nicht'. Der Bauende hat die Luecke gemessen statt sie zu fuellen."
+  B5-6: GRUEN
+    beleg: "resources/ und app/ 0 Dateien · Tor +30/-0 (nur Einfuegungen, wie verlangt) ·
+            scripts-Suite: Bau 107/107/0, Elter 107/107/0."
+  B5-7: GRUEN
+    beleg: "c528161c (09:02:14) setzt BEIDE Orte und traegt die Scope-Messung: 43
+            Auftragsbloecke, davon IN_ARBEIT 0, 'gehaltene Dateien: KEINE', dazu der eigene
+            Scope namentlich. Erste Aenderung 09:23:08 — 21 Minuten spaeter, Reihenfolge stimmt."
+
+p2_die_musterluecke:
+  klasse: BEWEIS
+  schwere: P2
+  was: "Das Belegmuster verlangt eine Dateiendung: [A-Za-z0-9_./-]+\\.[A-Za-z]{1,5}:[0-9]+.
+        Fundstellen in den Schreibweisen 'Z.157', 'treppenTypen:4', 'Zeile 39' erkennt es nicht —
+        die Warnung feuert dann, obwohl die Zeilen dastehen."
+  gemessen: "Ueber die letzten 30 Commit-Botschaften: 8 ohne Zaehlwort (nie betroffen),
+        5 mit Zaehlwort UND erkannter Belegzeile (schweigen), 17 warnend. Von diesen 17 tragen
+        VIER eine Fundstelle in nicht erkannter Form — 95b4de4f (Z.73, Z.1672, Z.2255),
+        50505407 (Z.157, Z.1), a704fb1d (:38, :19, treppenTypen:4), 379c134e (Zeile 39).
+        Die uebrigen dreizehn warnen zu Recht."
+  bewertung: "Kein verletztes Kriterium — B5-2 nennt zwei Beispiele, und beide schweigen.
+        Aber der Auftrag begruendet -2 damit, dass eine Barriere, die zu oft falsch anschlaegt,
+        umgangen wird. Vier vermeidbare Warnungen in dreissig Commits sind wenig; die Erweiterung
+        des Belegmusters um ':[0-9]+' nach einem Wort und um 'Z.' waere zwei Zeichen teuer."
+  ball: "generator oder planner — keine Blockade, ein Vorschlag."
+
+zwei_eigene_fallen_offengelegt:
+  vendor_vergessen: "Mein erster Suite-Lauf meldete 106/107 mit EINEM Fehlschlag. Beinahe ein
+        Regressionsbefund. Gelesen statt gezaehlt: es fiel 'A-03-4 KONTROLLE: php artisan serve
+        bleibt unangetastet (must_preserve)' mit der Meldung 'ServeCommand fehlt — dann misst die
+        Zusage Leere'. Ursache: ich hatte node_modules verlinkt, aber VENDOR VERGESSEN — exakt der
+        Fehler, den mein eigener Takt namentlich auffuehrt und der mir bei A-04 schon einmal
+        passiert ist. Mit vendor: Bau 107/107, Elter 107/107. Die Zusage hat mich gewarnt, indem
+        sie sagte, dass sie Leere misst — genau dafuer ist sie gebaut."
+  ich_haette_gezaehlt_statt_gelesen: "Meine erste Falschpositiv-Messung lautete '17 von 30
+        Botschaften warnen'. Als Rate gemeldet waere das ein schwerer Vorwurf gewesen. Erst das
+        LESEN der 17 zeigte: dreizehn warnen zu Recht, vier wegen der Musterluecke. Das ist B5,
+        angewandt auf mich, waehrend ich B5 pruefe — und der Grund, warum ich den Befund als
+        schmalen P2 melde statt als Quote."
+
+sein_nebenfund_trifft_MEIN_werkzeug:
+  was_er_meldet: "Der kanonische §3-Tafelbefehl trifft '^| ** gefolgt von [AW]-[0-9]+' und
+        uebersieht damit B-, M- und P-Auftraege. Er hat den Befehl NICHT einseitig geaendert,
+        weil er als Kriteriumstext in vielen Blaettern steht, sondern gemeldet."
+  selbst_nachgemessen: "In docs/STATUS.md findet mein eigenes Takt-Muster [AW]- 30 Tafelzeilen,
+        ein breites Muster 34. Unsichtbar sind: P-02, B5, B6, B7."
+  was_das_fuer_mich_heisst: "Ich habe B5 in der TAFEL nie gesehen — ich habe diesen Auftrag ueber
+        den Datensatz-Parser gefunden. Meine §3-Zaehlung 'Tafel IN_ARBEIT: 0' war in mehreren
+        Takten falsch, waehrend B5 sichtbar auf IN_ARBEIT stand. Der Befund gehoert dem Planner,
+        aber die Lehre gehoert mir: ein Raster, das ich seit Tagen benutze, hat vier Zeilen nie
+        gezeigt — dieselbe Klasse wie meine W-Auftrags-Luecke von vorgestern, nur eine Ebene
+        weiter. Ich fuehre den Takt ab sofort mit dem breiten Muster."
+
+zusammenfassung: "Sieben von sieben. Die Barriere feuert, wo sie soll, schweigt, wo sie soll,
+     und sperrt nicht — alles drei von mir ausgeloest, nicht gelesen, und die Mutation zeigt,
+     dass die Warnung aus genau diesem Code kommt. Zwei Stellen heben den Bau ueber den
+     Durchschnitt: die 'Barrierenliste' des Auftrags gibt es nicht, und er hat das gemeldet
+     statt sie zu erfinden; und den §3-Befehlsfehler, den er beim Belegen selbst ausgeloest hat,
+     hat er nicht stillschweigend repariert, obwohl er es haette tun koennen. Ein P2 zur
+     Musterluecke, der nicht blockiert."
+
+ballbesitz: release-pruefer
+```
