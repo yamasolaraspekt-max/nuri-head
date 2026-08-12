@@ -51,7 +51,7 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
-| **W-39** Studio-Rahmen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
+| **W-39** Studio-Rahmen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7362,7 +7362,8 @@ eigener_messfehler: "Mein erstes Raster war doppelt zu eng und haette den Bau fa
 
 ```yaml
 auftrag: "W-39"
-zustand: BEREIT
+zustand: IN_ARBEIT
+operanden_vor_dem_ziehen_gemessen: "HausplanerStudio.tsx traegt 159 Zeilen, exakt wie im Blatt. Alle sieben genannten Fundstellen geoeffnet und getroffen: :23 der modus-Zustand, :85 imExperte, :97 der EINE return, :131/:132/:133 die drei Render-Zweige, :140 das Flag imStudio. EINE ZAHL WICH AB und ich habe sie nicht geglaettet: grep '^import' findet 14 Zeilen, das Blatt nennt 13 Importe. Aufgeloest durch Oeffnen statt Rechnen — Zeile 7 ist 'import React from react', also extern; die 13 des Blattes sind die Insel-Module. Kein Mangel, zwei verschiedene Mengen. §3 vor dem Ziehen 0 und 0, danach 1 und 1; und nach meiner Regel aus b16ba855 KEIN zweites ballbesitz angelegt — der Ballbesitz bleibt beim Generator, das vorhandene Feld traegt ihn bereits."
 ballbesitz: generator
 titel: "Ein additiver Rahmen um eine App, die er nicht anfasst"
 basis_sha: d53806f6
