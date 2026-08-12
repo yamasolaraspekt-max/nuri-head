@@ -58,7 +58,7 @@
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-35** Konfigurator-Dialog | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
-| **W-33** Start und Projektwahl | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
+| **W-33** Start und Projektwahl | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-36** Faehigkeiten-Navigation | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
@@ -8448,8 +8448,37 @@ drei_eigene_messfehler: "Jeder haette einen Fehlbefund gegen einen richtigen Bau
 dor_nachtrag: "plan-pruefer 12.08., NACHTRAG ZU MEINER FREIGABE — der Generator hat einen Befund vor dem Ziehen gemeldet (ea418041) und er trifft MEINE Pruefung: W-40/1-1 nennt EINE ueberholte Stelle, ueberholt sind aber VIER BLAETTER an dreizehn Stellen. Ich habe die genannten Zeilen einzeln GEOEFFNET und alle bestaetigt: 3-FORMELN:33 rechnet 4+3=7 und sagt die achte falle aus der Rechnung; 6-PRUEFUNG:12 und :13 fuehren K-3 und K-4, die ausdruecklich verlangen, die Fragen NICHT zu beantworten; 2-FUNKTION:18 sagt was blocked von DECISION_BLOCKED unterscheide stehe nicht hier; 7-GRENZEN traegt es in :48, :54, :56, :61, :65, :73 und in :106/:107 sogar als Tabelle mit Yama als Adressat. MEIN ANTEIL: ich habe die Kernbehauptungen am Gegenstand gemessen und die VOLLSTAENDIGKEIT der Berichtigung nicht gefragt — genau die Frage, die ich heute dreimal bei anderen gestellt habe (die widerlegte Zahl an vier Stationen). Sein Satz nennt den Grund praeziser als ich es koennte: wer nur 7-GRENZEN anfasst, laesst K-3 und K-4 stehen, und die verlangen dann weiterhin, die Fragen offen zu lassen — zwei Wahrheiten, beide belegt aussehend. ZAEHL-FEINHEIT ohne Folge: der Titel nennt dreizehn, die Aufzaehlung neun plus fuenf; die Differenz sind zwei Zeilenbereiche (:65-66, :73-74), die einmal als Stelle und einmal als zwei Zeilen gezaehlt sind. Die Liste selbst ist vollstaendig und jede Stelle von mir belegt."
 ```yaml
 auftrag: "W-33"
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: planner  # Auflage aus der DoR ist nicht im Blatt angekommen
+auflage_nicht_im_blatt_angekommen: "plan-pruefer 12.08. — MEINE DoR-AUFLAGE STEHT NUR IN MEINEM
+  BELEG UND NICHT IM BLATT. Gemessen: git log auf docs/auftraege/aktiv/W-33-start-und-projektwahl.md
+  zeigt EINEN Commit, den Schnitt 48599889 — das Blatt ist seit der DoR unberuehrt. Vier Stellen
+  (Z.63, 70, 129, 147) sagen unveraendert 'die echte Projektliste braucht eine Route, und das liegt
+  bei Yama', ohne die gebaute Haelfte.
+  DEN BESTAND SELBST NACHGEMESSEN statt aus dem Beleg des Release-Pruefers uebernommen — eine fremde
+  Messung belegt, was die andere Rolle GETAN hat, nicht den Zustand danach:
+    Model      app/Domain/Hausplaner/Models/HausplanerConfiguratorPackage.php
+    Migration  2026_07_26_180000_create_hausplaner_configurator_packages_table.php,
+               Tabelle hausplaner_configurator_packages mit user_id, alternative_id (nullable),
+               art, titel, status, schema_version, paket
+    Routen     routes/web.php:5016 pakete.speichern (permission Hausplaner,add) ·
+               :5018 pakete.liste (read) · :5020 pakete.zeigen (read)
+  DREI Routen, alle drei rechte-gegattert. Seine Zahl haelt.
+  MEIN ERSTES MUSTER HAETTE DAS MODEL VERFEHLT: in app/Models liegt es nicht, sondern unter
+  app/Domain/Hausplaner/Models. Haette ich nur am erwarteten Ort gesucht, haette ich eine richtige
+  fremde Messung fuer widerlegt erklaert — dieselbe Falle wie heute bei den 13 Modulen.
+  WAS OFFEN BLEIBT und die Grenzaussage nur ZU WEIT und nicht falsch macht: eine Route fuer die
+  PROJEKTliste gibt es nicht, die drei gebauten tragen Konfigurator-PAKETE. Wer W-33-5 woertlich
+  erfuellt, schreibt eine zu weite Grenze in 7-GRENZEN und legt Yama einen Posten als ganz offen vor,
+  der zur Haelfte gebaut ist.
+  MEIN EIGENER FEHLER, UND ES IST DIE KLASSE VON W-42: eine Auflage, die nur in meinem dor_beleg
+  steht, erreicht den Bauenden nicht. Bei W-42 habe ich meine Frage nachtraeglich sichtbar gemacht,
+  nachdem mir aufgefallen war, dass sie nur im Beleg lebt. Hier habe ich die Freigabe erteilt und
+  NICHT nachgesehen, ob die eine Zeile im Blatt ankommt — und der Auftrag stand seitdem baubereit.
+  MEINE REGEL DARAUS: eine Auflage ist erfuellt, wenn sie im BLATT steht, nicht wenn sie im Beleg
+  steht. Ich pruefe sie kuenftig im naechsten Rundgang nach, wie eine Rot-Lage.
+  Ball beim Planner: eine Zeile in W-33-5 und in der 7-GRENZEN-Vorgabe. Zustand bleibt BEREIT, der
+  Auftrag traegt inhaltlich unveraendert."
 titel: "Ein Startbildschirm, der fremde Projekte zeigt, ist eine Falschauskunft"
 basis_sha: 75ad92eb
 spur: A
@@ -8486,6 +8515,47 @@ acht_waechter: "startEhrlich, rohwertZusage, konfiguratorEhrlich, projektKlick, 
   die Zusage, denn acht Namen sind keine Aussage."
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 W_33_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+gezogen_am: "12.08. vom generator. §3 vor dem Ziehen 0/0 an beiden Orten gemessen, danach 1/1."
+BEFUND_VOR_DEM_ZIEHEN_AUF_40_TEIL_B_IST_GEBAUT: "W-33-5 verlangt, 7-GRENZEN trage WOERTLICH 'die
+  echte Projektliste braucht eine ROUTE und ist TEIL B — der liegt bei Yama'. Ich habe das vor dem
+  Ziehen gemessen, weil der release-pruefer in 5e9c8b08 bereits gemeldet hat, AUF-40 Teil B sei zur
+  Haelfte gebaut. Ergebnis: fuer die PROJEKTLISTE ist es GANZ gebaut, und zwar auf einem anderen Weg
+  als gesucht wurde.
+  DIE NAHT IST VOLLSTAENDIG, jede Stelle geoeffnet:
+    app/Http/Controllers/Hausplaner/HausplanerController.php:101 hausplanerProjekte() —
+      LeadAlternativeAdd, select auf id/object_name/city/updated_at, orderByDesc updated_at,
+      limit PROJEKTLISTE_MAX, map auf id/name/ort/datum/adresse
+    :55  'hpProjekte' => $this->hausplanerProjekte()
+    resources/views/admin/hausplaner/objekt.blade.php:141
+      data-projekte=\"{{ json_encode($hpProjekte, JSON_UNESCAPED_UNICODE) }}\"
+    resources/planner/hausplaner/main.tsx:82
+      usePlannerUiStore.getState().setProjekte(leseProjekte(mount.dataset[PROJEKTE_ATTRIBUT]))
+  Und app/state/projekte.ts sagt es im Dateikopf selbst: 'AUF-78 — die zuletzt bearbeiteten
+  Projekte, gelesen statt erfunden. JETZT KOMMT DIE ECHTE LISTE — ueber dieselbe Naht wie
+  data-rechte und data-speichern-url: das Blade setzt, main.tsx liest, der UI-Zustand haelt.'
+  WARUM ES TROTZDEM NIEMAND GESEHEN HAT: gesucht wurde eine ROUTE, und es ist keine. Die Liste
+  kommt ueber das Mount-Attribut, ohne Lade-Fetch — der Controller sagt das woertlich in :57,
+  'dieselbe Naht wie hpProjekte, kein Lade-Fetch aus der Insel'. Wer 'Route' misst, findet 0 und
+  schliesst auf 'nicht gebaut'. Das ist H-9: das Muster misst die Bauform und nicht die Sache.
+  DER RELEASE-PRUEFER HAT DESHALB NUR HALB RECHT, und seine Haelfte stimmt: er hat fuer PAKETE die
+  drei Routen belegt und fuer PROJEKTE gemessen, dass es KEINE Listen-Route gibt. Das trifft — es
+  gibt keine. Es braucht auch keine.
+  WAS DARAUS FOLGT: StartView.tsx:18 sagt 'Gefuellt wird sie in Teil B (Route + Controller, bei
+  Yama)' und der Testkopf von startEhrlich sagt dasselbe. BEIDE Quellen sind ueberholt, und W-33-5
+  wuerde die ueberholte Fassung woertlich in ein Blatt schreiben, wo sie danach als Beleg gilt.
+  Genau derselbe Fall wie W-35 zwei Auftraege vorher: ein Kriterium verlangt woertlich etwas, das
+  inzwischen widerlegt ist.
+  WAS ICH TUE: 7-GRENZEN traegt den geforderten Wortlaut ALS ZITAT samt Herkunft — und daneben die
+  Messung, dass er ueberholt ist. Das erfuellt W-33-5 buchstaeblich und laesst zugleich keinen
+  falschen Stand stehen. Ich ersetze das Kriterium nicht still; ob das genuegt oder ob der Auftrag
+  wie bei W-35 nachzuziehen ist, entscheidet der plan-pruefer beziehungsweise der Evaluator.
+  NICHT GEMESSEN und deshalb nicht behauptet: ob die Liste im Browser wirklich ankommt. Ich habe
+  die Naht gelesen, nicht ausgefuehrt."
+zweiter_punkt_derselben_klasse_der_auftrag_nennt_vier_ehrlichkeitswaechter: "Das Blatt sagt,
+  startEhrlich sei 'der VIERTE Ehrlichkeitswaechter dieser Stufe'. Gezaehlt: ls __tests__ |
+  grep -i ehrlich liefert FUENF — fussleisten, gefuehrte, konfigurator, snapshotFlaeche, start.
+  Dieselbe Drift wie in W-35, wo 'der dritte' stand. Keine Folge fuer ein Kriterium, aber die Zahl
+  im Blatt wird die gemessene sein."
 ```
 
 ```yaml
