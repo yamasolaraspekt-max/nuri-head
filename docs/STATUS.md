@@ -24,6 +24,7 @@
 | **W-21** Sparren und Lattung | `BETRIEBSBESTAETIGT` | – | `992d5d76` · Basis `c9325929` | 12/12 · **Vorbemessung ≠ Statik** als erste Zeile · **Auftragsvermutung zur Lattung widerlegt** (Menge IST gebaut) · F-001/F-030 nicht im Code, dafür zwei Normgrößen ohne Nummer · `OFFENE_HOLZBAUTEILE` ausgelesen · M-02 ungelesen benannt · 0/0/0 |
 | **W-22** Gaube | `BETRIEBSBESTAETIGT` | – | `8a3acb53` · Basis `95fe1b88` | 11/11 · **AK4 ist absichtlich nicht kritisch** (schiefe Front = gelb) · AK1 beim Kamin **gesetzt statt gemessen** · F-027: **Thema ja, Formel nein** (Belegstelle zeigt auf M-01) · fünf Module 975 Z, `auswechslung.ts` heimatlos · 0/0/0 |
 | **A-13** `roof_azimuth` absichern | `BETRIEBSBESTAETIGT` | **Generator** (P2-Nachforderung) | `a09b69af` · Basis `783d47c1` | 8/8 · Wächter am **Model** (greift auch bei `create()`) · Grenze `0 ≤ x < 360` **am Hausmuster belegt** · **keine Factory** (gemessen entschieden) · Mutationsprobe + Wegwerf-Probe gegen `ticket_testing`, **0 Zeilen geschrieben** · Unit 278/278 (8 neu) · **Verhaltensänderung im Bericht benannt** |
+| **A-12** Messauftrag F-026 ausführen | **`ABGENOMMEN`** | **Planner** | Bau `d1d716c8` · Votum im Block | Messauftrag, kein Release-Kandidat · **Tafelzeile nachgetragen** (release-pruefer 12.08.): der Datensatz existierte seit dem 10.08., die Tafelzeile fehlte — der Auftrag war in der Übersicht unsichtbar |
 | **W-08** Dachfläche messen | `BETRIEBSBESTAETIGT` | – | `7aa49e33` · Basis `b202ad7c` | 12/12 · **`0` bedeutet dreierlei** (A-10-Klasse, bewusst) · Eingabe-**Ebene** entscheidet, Modul kann sie nicht prüfen · **Shoelace dreimal im Haus, zwei Fassungen heißen gleich** — m gegen mm · zwei Auftragsangaben widerlegt · 0/0/0 |
 | **W-13** Auswahl und Griffe | `BETRIEBSBESTAETIGT` | – | `a62ae7c6` · Basis `193681cd` | 10/10 · **oben schlägt nah** (Zeichenreihenfolge vor Distanz) · `waehlbar !== false`, nicht `=== true` · Modifikator-Vorrang als Kette · **einziges Klasse-A-Werkzeug mit Registry** · **0 dedizierte Zusagen** bei 321 Z · 0/0/0 |
 | **A-08** Halter nach Kommando | `BETRIEBSBESTAETIGT` | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
@@ -3146,6 +3147,49 @@ von einem echten `git`-Lauf stammen, nicht von `touch`.* Das ist keine Entschuld
 die Lücke, benannt an der Stelle, an der ich sie gelassen habe.
 
 ---
+
+## Befund des Release-Prüfers — drei Zustandsworte, die das Regelwerk nicht kennt (12.08.)
+
+```yaml
+befund: "release-pruefer 12.08., beim Schliessen der Deckungsluecke zwischen Tafel und Datensaetzen"
+fehlerklasse: SPEC
+schwere: P2
+blockiert: nein
+
+was_gemessen_ist: "Die Auftragstafel fuehrt drei Zustaende, die in docs/ARBEITSREGELN.md
+  NICHT vorkommen — je 0 Treffer, einzeln nachgezaehlt: ERLEDIGT (A-06), VORLAGE (P-02),
+  ZURUECKGESTELLT (W-21L). Zum Vergleich am selben Dokument: ENTWURF 4 Treffer, BEREIT 9.
+  §16 benennt docs/STATUS.md als Statustraeger, und die Zustandskette in den Arbeitsregeln
+  ist die Liste der gueltigen Werte. Diese drei stehen ausserhalb."
+
+warum_das_KEIN_fehler_der_drei_ist: "Alle drei bezeichnen Vorgaenge, die die Kette gar nicht
+  vorsieht: P-02 sagt selbst 'kein Bauauftrag, zaehlt nicht im §13-Zaehler', W-21L ist
+  zurueckgestellt statt gebaut, A-06 war eine einmalige Ausfuehrung. Die Kette ENTWURF bis
+  BETRIEBSBESTAETIGT beschreibt einen BAU. Wer keinen Bau fuehrt, findet in ihr kein Wort.
+  Der Mangel liegt also nicht bei den drei Zeilen, sondern in der Luecke: fuer Nicht-Bau-
+  Vorgaenge gibt es keine definierten Zustaende."
+
+warum_ich_es_NICHT_entscheide: "Das waere eine Ergaenzung der Zustandskette, und die steht in
+  den Arbeitsregeln — §1 nennt in Zeile 7 'Autoritaet: Yama'. Genau diese Frage liegt bereits
+  als offener SPEC-Punkt bei ihm (A-09, Z.3572: ob meine Vertretung auf Prozessrecht reicht).
+  Ich melde und lasse liegen; ein Pruefer, der die Regel erweitert, an der er gemessen wird,
+  hat die Unabhaengigkeit verkauft."
+
+zweiter_teil_A_06: "A-06 hat ein Auftragsblatt (docs/auftraege/aktiv/A-06-probedaten-arbeits-db.md)
+  und eine Tafelzeile, aber KEINEN Datensatz — die umgekehrte Leerstelle zu A-12, die ich in
+  diesem Takt geschlossen habe. Damit traegt A-06 seinen Zustand an nur einem der zwei Orte.
+  Einen Datensatz anzulegen hiesse, den Zustand zu bestimmen; ERLEDIGT gibt es in der Kette
+  nicht, und ohne Datensatz kann ich ihn nicht ableiten. Auch das melde ich statt es zu setzen."
+
+was_ich_stattdessen_getan_habe: "Die Deckung hergestellt, wo sie ohne Entscheidung herstellbar
+  war: A-12 hatte seit dem 10.08. einen Datensatz (ABGENOMMEN, Ball planner) und keine
+  Tafelzeile — der Auftrag war in der Uebersicht unsichtbar. Zeile nachgetragen. Danach
+  Deckung vollstaendig: 35 Datensaetze mit Zustand, 35 Tafelzeilen abgeglichen,
+  Zustands-Drift 0, Ball-Drift 0."
+
+ball: planner (Vorlage an Yama) — die Kette um Nicht-Bau-Zustaende ergaenzen, oder
+  ausdruecklich festhalten, dass solche Vorgaenge keinen Kettenzustand fuehren
+```
 
 ## Befund des Evaluators zu A-08 — vor dem Bau: A-08-1 und A-08-3 widersprechen sich
 
