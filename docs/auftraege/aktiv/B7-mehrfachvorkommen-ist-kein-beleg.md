@@ -92,12 +92,56 @@ B7-6  KEINE DRITTE STELLE. Beim Eintrag in §18a wird geprueft, dass H-8 nicht z
       Regeltext zu wiederholen.
 ```
 
+## §5 · AUSWIRKUNGEN und `must_preserve` — Nachtrag nach dem DoR-Restpunkt (`8b1b9d05`)
+
+**Der Plan-Prüfer hat recht, und die Begründung ist stärker als der Formfehler:** *B7 ist die **dritte**
+Barriere in derselben Datei. B5 und B6 stehen auf `BEREIT` und sind **nicht gebaut**. Eine Reihenfolge
+ist keine Zusage — wer zuerst baut, könnte den Platz der anderen besetzen, und keines der drei
+Blätter sagt heute, dass das nicht passieren darf.*
+
+```text
+B7-7 (must_preserve) — vier Zusagen, jede einzeln nachweisbar:
+
+  (1) §18a BESTAND    H-1 bis H-7 bleiben zeichengleich. H-8 wird ANGEHAENGT, keine
+                      bestehende Regel umformuliert, umnummeriert oder verschoben.
+                      Nachweis: git diff docs/ARBEITSREGELN.md zeigt 0 geloeschte Zeilen
+                      im §18a-Block, ausschliesslich Einfuegungen.
+
+  (2) DIE ANDEREN ZWEI BARRIEREN   B5 und B6 sind unbebaut. B7 belegt ihre Stellen im Tor
+                      NICHT und formuliert seine Pruefung so, dass sie neben ihnen stehen
+                      kann. Nachweis vor dem Bau: die Einfuegestelle von B7 wird benannt
+                      und gegen die in B5/B6 vorgesehenen Stellen gehalten — beruehren sie
+                      sich, geht der Auftrag zurueck an den Planner statt sich zu einigen.
+
+  (3) DAS TOR SELBST  Rollenmarke, Pfadpruefung, Index-Angleichung und die Barrieren B1-B4
+                      unveraendert. Nachweis: git diff scripts/commit-pruefen.sh zeigt nur
+                      Einfuegungen, 0 geloeschte Zeilen.
+
+  (4) PRODUKTIVCODE   resources/** und app/** byte-identisch. B7 ist eine Prozessbarriere
+                      und faehrt an keiner Fachdatei vorbei. Nachweis: git diff --stat
+                      nennt weder resources/ noch app/.
+```
+
+> **Warum (2) die eigentliche Zusage ist:** *die drei Barrieren sind nacheinander geschnitten und
+> werden womöglich in umgekehrter Reihenfolge gebaut. Ohne diese Zeile ist die Frage „wessen Änderung
+> gewinnt" erst dann sichtbar, wenn sie schon verloren ist.*
+
 ## Rückweg & Entdeckung — als eigene Zeile
 
 ```text
 RUECKWEG      reiner Revert; B7 fuegt Text in §18a ein und ein Pruefmuster in das Werkzeug.
               Kein Datenpfad, kein Wert, keine Migration.
-KOPIE AUSSERHALB DER MASCHINE  fork/main + backup-private/main.
+KOPIE AUSSERHALB DER MASCHINE  ZUM BAUZEITPUNKT ZU PRUEFEN, hier NICHT behauptet.
+              BERICHTIGUNG meiner ersten Fassung: dort stand "vorhanden: fork/main +
+              backup-private/main". Selbst nachgemessen, nachdem der Release-Pruefer den
+              abgelehnten Push gemeldet hatte:
+                7d6c39cf (der Commit, der dieses Blatt traegt)
+                  auf fork/main             NEIN
+                  auf backup-private/main   NEIN
+                  auf origin/main           NEIN
+              Ich hatte eine Kopie zugesagt, die es fuer diesen Stand nicht gab — B5 in
+              eigener Sache, ein Wort statt einer Stelle. Der Generator baut erst, wenn der
+              Rueckfallpunkt AM BAUTAG gemessen und im Bericht mit Befehl belegt ist.
 ENTDECKUNG    das Signal ist die Warnung selbst: feuert sie bei einer einfach vorkommenden
               Zahl mit Quellenangabe, ist B7-3 gebrochen und das Werkzeug macht Laerm statt
               Arbeit. Messbar an den beiden Gegenproben aus B7-3.

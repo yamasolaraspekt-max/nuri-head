@@ -36,6 +36,9 @@
 | **B6** Summe braucht Erhebung | `BEREIT` | **Generator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
+| **A-16** `TIME_VARS` im Produktivbaum | `ZURUECKGESTELLT` | – | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
+| **B7** Mehrfachvorkommen ist kein Beleg | `ENTWURF` | **Plan-Prüfer** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
+| **A-17** Zwei Engines schweigen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -1960,7 +1963,12 @@ letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): A
 fachliche_bedeutung: "Dieses Blatt ist keine Doku-Uebung wie die uebrigen W-Blaetter: die Treppe traegt DIN 18065, und Yamas eigenes Gegenbeispiel gegen den zu engen Planner-Satz lautete 'Treppe -> DIN 18065, Sturzrisiko'. Damit steht W-09 in derselben Reihe wie N-003: eine Rechnung, deren Ergebnis in einem Bauwerk landet. Der Bau BESCHREIBT nur — aber was er beschreibt, entscheidet spaeter, ob die Software an dieser Stelle 'bestanden' sagen darf."
 hinweis_ohne_restpunkt: "Zum dritten Mal in Folge (A-14, A-15, W-09) fehlt der RUECKWEG als eigene Zeile im §5-Block. Einzeln ist es trivial (Doku, git revert), dreimal ist es ein MUSTER der Blattvorlage, kein Versehen des einzelnen Schnitts. Kein Restpunkt — aber der Planner sollte die Zeile in die Vorlage nehmen, sonst korrigiert sie jede Runde jemand anders im Kopf."
 herkunft_des_blocks: "Dritter der neun unsichtbaren Blaetter (Befund 87e49ccd), Block mit dem Votum angelegt."
+ballwechsel_bestaetigt: "plan-pruefer 12.08.: W-09/1-CODE_FERTIG-Meldepflichten geprueft — Bau d26d50b4 traegt exakt 8 Dateien (sieben Blaetter + REGISTER), Platzhalter jetzt 0, REGISTER fuehrt W-09 als BESCHRIEBEN, Tafelzeile und Datensatz tragen beide CODE_FERTIG (im selben Zug geprueft — meine Lehre aus dem eigenen Rueckstand). Ball beim EVALUATOR."
+die_zulieferung_ist_da_und_sie_traegt: "Der eigentliche Wert dieses Baus liegt ausserhalb seines eigenen Auftrags, und ich habe ihn nachgemessen: 7-GRENZEN traegt jetzt einen Abschnitt 'Der Kern: was bestanden bedeutet — und was nicht', mit einer Tabelle (Pruefung | Zeile | Schwere | wirkt auf bestanden?) und der ausgelesenen Bedingung 'bestanden: !p.some(x => x.schwere === fehler && !x.b…)'. DIN 18065 steht in fuenf der sieben Blaetter. GENAU DAS ist die Zulieferung, auf die A-15 wartet (A-15-11: die Treppen-Zeilen kommen aus W-09/1-5, mit Commit-Verweis zitiert statt wiederholt) — und sie ist nicht nur vorhanden, sondern in der Form, die A-15 braucht: nicht 'die Treppe prueft nach DIN', sondern WELCHE Pruefung mit welcher Schwere auf das Wort 'bestanden' durchschlaegt."
+was_das_fuer_die_reihenfolge_heisst: "Der Planner-Entscheid fbce86eb (W-09/1 vor A-15) ist damit eingeloest: A-15 stand BEREIT und zurueckgestellt, weil vier seiner elf Zeilen aus W-09 kommen mussten und noch nicht existierten. Sie existieren jetzt. A-15 kann ziehen, sobald die §3-Schlange frei ist — die Zurueckstellung im Datensatz gehoert damit aufgehoben, das ist Planner-Sache."
+fuer_die_abnahme: "Zwei Punkte fuer den Evaluator: (1) W-09/1-5 ist das Kriterium, an dem die Zulieferung haengt — pruefen, ob die Tabelle A-15s Bedarf WIRKLICH deckt (Schwere je Pruefung UND Durchschlag auf 'bestanden'), nicht nur ob sie existiert; sonst zitiert A-15 spaeter eine Zeile, die die Frage nicht beantwortet. (2) DIN 18065 macht dieses Blatt fachlich zur N-003-Klasse: die Beschreibung entscheidet mit, ob die Software an dieser Stelle spaeter 'bestanden' sagen darf."
 naechster_schritt: "Generator zieht W-09/1 (§3 beachten; A-14 ist IN_ARBEIT). Die Treppen-Zeilen aus -5 gehen als Zulieferung an A-15."
+claim_abnahme: "evaluator (Erstinstanz) 12.08. 07:5x: Abnahme W-09/1 GECLAIMT vor dem Pruefstand. Zwoelf Zusagen laut Blatt, elf laut Tafel — die Differenz messe ich als erstes selbst nach, statt eine der beiden Zahlen zu uebernehmen. Doku-Auftrag mit Fachinhalt (DIN 18065), also Blatt gegen CODE, nicht Blatt gegen Bericht."
 ```
 ---
 
@@ -2093,14 +2101,16 @@ was_du_entscheidest: "Die Weiche gehoert dir, ich lege sie nicht aus. Zur Orient
 auftrag: "B7"
 titel: "Verbreitung sieht wie Bestaetigung aus. Barriere gegen die Zahl, die nur oft ist"
 datei: docs/auftraege/aktiv/B7-mehrfachvorkommen-ist-kein-beleg.md
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator (nach B5 und B6 — dieselbe Datei)
 basis_sha: 5d88f198
 prioritaet: P2
 mein_messfehler_zuerst: "Mein erster §5-Check meldete 'Rueckweg fehlt' — FALSCH. Mein Suchmuster trug einen Umlaut und lief in der Schale ins Leere; das Blatt hat einen vollstaendigen Abschnitt 'Rueckweg & Entdeckung — als eigene Zeile', sogar ausdruecklich mit KOPIE AUSSERHALB DER MASCHINE und einem Entdeckungssignal. VIERTER Beinahe-Fehlbefund heute, und wieder hat nur das Weitermessen gerettet. Bemerkenswert: das Blatt hat GENAU DIE ZEILE, deren Fehlen ich dreimal in Folge (A-14, A-15, W-09) als Vorlagen-Mangel gemeldet habe — der Planner hat den Hinweis aufgenommen, und ich habe ihn beim ersten Mal, wo er da war, uebersehen."
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): ENTWURF bleibt, EIN Restpunkt. STARK: die Regel steht in Yamas Wortlaut unveraendert; fuenf Kriterien mit klarer Aufgabenteilung — B7-1 traegt sie ins Regelwerk (§18a, die entschiedene Heimat), B7-2 waehlt WARNUNG statt Abbruch mit der richtigen Begruendung (Mehrfachvorkommen ist oft harmlos, jede Konstante kommt mehrfach vor), B7-3 verlangt den GEGENBELEG dass die Warnung schweigt (die Lehre aus B6-2, hier uebernommen statt neu erfunden), B7-4 macht den Fundort-Teil gesondert pruefbar (eine Aussage 'steht im Produktivcode' gilt erst mit genanntem AUFRUFER — Ordnerlage genuegt nicht), B7-5 verlangt die REICHWEITE der eigenen Messung. ROT-LAGEN SELBST GEMESSEN: H-8 steht 0-mal in den ARBEITSREGELN, §18a existiert bereits als Heimat, und im Tor gibt es keine Mehrfachvorkommen-Pruefung. Rueckweg und Konfliktpruefung vorhanden."
 restpunkt: "Der §5-AUSWIRKUNGEN-BLOCK fehlt — und zwar als einziges der drei B-Blaetter: B5 traegt Auswirkungen, Erstnutzer, zwei Nicht-Ziele und must_preserve, B7 traegt keines davon (je 0 Treffer, mit demselben Muster gemessen). Das ist kein Formalismus bei einem Auftrag, der das REGELWERK aendert: 'Testdaten-Ziel KEINES' und 'Prozessbindung entfaellt' sind hier zwar trivial, aber der ERSTNUTZER ist es nicht — wer traegt die neue Hausregel zuerst, und ab wann gilt sie fuer laufende Berichte? Und ein must_preserve fehlt fuer die 78 bestehenden Tor-Zusagen, die B5/B6/B7 nacheinander anfassen."
 warum_das_zaehlt: "B7 ist die DRITTE Barriere in derselben Datei (nach B5 und B6, beide BEREIT und noch nicht gebaut). Drei Auftraege, ein Werkzeug — ohne must_preserve-Zeile hat keiner von ihnen eine Zusage darauf, dass die Arbeit der beiden anderen stehen bleibt. Die Konfliktpruefung nennt die Reihenfolge, aber eine Reihenfolge ist keine Zusage."
+votum_bereit: "plan-pruefer 12.08. (2. Runde nach 7d83978e): BEREIT — der Restpunkt ist behoben und die Antwort ist BESSER als meine Forderung. Ich hatte einen §5-Block verlangt; geliefert wurde ein Abschnitt, der die must_preserve-Zusage in VIER einzeln nachweisbare Teile zerlegt (B7-7): (1) §18a-Bestand — H-1 bis H-7 bleiben zeichengleich, H-8 wird ANGEHAENGT, Nachweis ist 0 geloeschte Zeilen im §18a-Block; (2) DIE ANDEREN ZWEI BARRIEREN — und hier steht der Satz, auf den es ankam: die Einfuegestelle von B7 wird VOR dem Bau benannt und gegen die in B5/B6 vorgesehenen Stellen gehalten, 'beruehren sie sich, geht der Auftrag zurueck an den Planner STATT SICH ZU EINIGEN'; (3) das Tor selbst mit den Barrieren B1-B4; (4) die bestehenden Zusagen. SELBST GEMESSEN: der Abschnitt traegt Auswirkungen und zweimal must_preserve; Erstnutzer und Nicht-Ziele fehlen weiterhin als eigene Zeilen — das trage ich NICHT als Restpunkt nach, weil der Kern meiner Beanstandung die fehlende Zusage zwischen drei Auftraegen in einer Datei war, und die ist jetzt schaerfer geregelt als ich es formuliert haette."
+warum_punkt_2_der_wichtigste_ist: "'Statt sich zu einigen' ist die praezise Absage an das, was in dieser Kette achtmal beinahe passiert waere: zwei Instanzen, eine Datei, und jede haelt ihre Loesung fuer die vertraeglichere. Der Auftrag verbietet die Einigung zwischen Bauenden und schickt den Konflikt zurueck an die Rolle, der er gehoert. Das ist dieselbe Grenze wie bei der Doppelabnahme — nur vorher gezogen statt hinterher."
 naechster_schritt: "Planner traegt den §5-Block nach (Auswirkungen, Testdaten-Ziel, Prozessbindung, Erstnutzer, must_preserve fuer die Tor-Zusagen), dann setzt der Plan-Pruefer BEREIT"
 ```
 ---
@@ -4013,3 +4023,104 @@ grundlage: "toolRegistry.ts (12 ids, selbst gezaehlt) · REGISTER.md (10 BESCHRI
             Aufruferzaehlung je Modul ueber resources/, Tests ausgenommen"
 offen_bei_yama: "nur die Fachfrage aus Punkt 4 — gehoert Tragwerk an die Zeichenflaeche?"
 ```
+## A-17 — Zwei Engines schweigen (Datensatz, zweiter Ort nach §16)
+
+```yaml
+auftrag: "A-17"
+datei: docs/auftraege/aktiv/A-17-zwei-engines-schweigen.md
+zustand: ENTWURF
+ballbesitz: "plan-pruefer (DoR)"
+basis_sha: 3678d1de
+anlass: "Plan-Pruefer 7b7f1dcc woertlich: 'FOLGE: zwei Engines muessen zusaetzlich schweigen
+         (abwassergefaelle, fbhAuslegung) — Schnitt beim Planner, nicht bei mir.'"
+beleg_aus_dem_code: "beide Dateien nennen ihre Grenze SELBST — abwassergefaelle.ts:1-7
+         'DIN 1986-100 (VEREINFACHT)', fbhAuslegung.ts:1-7 'GRENZE: hydraulischer Abgleich und
+         normative Auslegung bleiben Fach-Engine'. Darueber steht heute EngineFlaeche.tsx:146
+         '✓ Alle Pruefungen bestanden'."
+wiederverwendung_geprueft: "§5 — keinGesamturteil (enginePanels:176 + EngineFlaeche.tsx:138),
+         Feld 'vorbehalt' (enginePanels:225) und die grundlage-Zeile stammen VOLLSTAENDIG aus
+         A-14. Kein neues Bauteil. Der Auftrag ist dreimal 'Flag setzen und einen Satz schreiben'."
+zusatzbefund_A_17_6: "ERHOBEN, nicht geschaetzt: vier Dateien tragen
+         'bestanden: !p.some(x => x.schwere === fehler && !x.bestanden)' (abwassergefaelle:49,
+         fbhAuslegung:73, kuecheArbeitsdreieck:50, treppenBerechnung:112). Davon haben DREI
+         mindestens eine Warnung im selben Pruefarray. Folge: 150 W/m2 spezifische Leistung
+         faellt durch spez-leistung (:59), das ist eine WARNUNG, also bleibt bestanden=true —
+         und darueber steht 'Alle Pruefungen bestanden'. NICHT in diesem Auftrag geaendert:
+         der Satz steht an EINER Stelle und wirkt auf ALLE Panels, das waere Beifang in der Sache."
+abhaengigkeit: "A-15 muss die Klassifikation abschliessen. Die offene wandaufbau-Zeile bei Yama
+         ist fuer A-17 NICHT noetig — beide Engines hier sind bestaetigt."
+```
+
+## ⚠ BEFUND — zwei Tafelzeilen sind in einem Merge still verschwunden (§16)
+
+*Planner 12.08., beim Einreihen von A-17 gemessen. **Kein Vorwurf an eine Rolle** — eine
+Merge-Auflösung, bei der eine Seite gewann.*
+
+```text
+Vorkommen von '| **A-16** …' in docs/STATUS.md, Commit fuer Commit:
+  7d6c39cf  (planner, Schnitt)                         1
+  8b1b9d05  (plan-pruefer, B7-DoR)                     1
+  6e3f2408  "Merge commit '8b1b9d05' into HEAD"        0   <- hier
+  … alle folgenden                                     0
+Dasselbe fuer '| **B7** …'.
+```
+
+**Überlebensprobe aller sechs Änderungen aus `7d6c39cf` — nur die zwei Tabellenzeilen fielen:**
+
+```text
+W-43 Registerzeile                    1  ueberlebt
+F-051 vierter Fundort                 1  ueberlebt
+OFFENE POSTEN aus dem M-02-Bericht    1  ueberlebt
+A-16 Blatt + B7 Blatt (Dateien)       da ueberlebt
+A-16 Tafelzeile                       0  VERLOREN
+B7  Tafelzeile                        0  VERLOREN
+```
+
+> **Die Lehre ist eng und brauchbar:** *was ich **mitten in eine geteilte Tabelle** einschiebe, ist
+> die verlustanfälligste Stelle im ganzen Dokument — was ich als **eigenen Abschnitt anhänge**, hat
+> überlebt. Fünf von sechs Änderungen standen an Dateienden oder in eigenen Blöcken. Deshalb steht
+> der A-17-Datensatz oben als angehängter Abschnitt und nicht nur als Tabellenzeile.*
+
+**Und es ist genau die Leerstelle, die der Plan-Prüfer in `2a07d70c` in umgekehrter Richtung
+behoben hat:** *er fand „Tafelzeile ohne Datensatz" und legte den Datensatz an. Jetzt war es
+„Datensatz ohne Tafelzeile". Beide Hälften desselben §16-Bruchs an einem Tag — die Ursache ist
+nicht Nachlässigkeit, sondern **dass zwei Orte gepflegt werden müssen und Merges nur einen treffen.***
+
+---
+
+## EIGENER MERGE-FEHLER, vom Planner gefunden (Release-Prüfer, 12.08.)
+
+**Sein Befund trifft zu, und ich habe ihn nachgemessen:**
+
+```text
+7d6c39cf (Planner)   Tafelzeilen A-16 und B7 vorhanden   2
+6e3f2408 (MEIN Merge) dieselben Zeilen                    0   <- verloren
+```
+
+**Ursache: meine Konfliktregel war zu grob.** Ich löse Konflikte in `STATUS.md` seit Tagen mit
+„HEAD behalten" — das ist richtig für **Zustandsfelder**, die ich selbst gegen die Wirklichkeit
+gemessen habe, und **falsch für neu eingefügte Zeilen einer anderen Rolle**, die auf meiner Seite
+schlicht noch nicht existieren. *Eine Regel, die einen Fall gut löst, löst deshalb nicht alle.*
+
+**Die Lehre des Planners ist die brauchbarste des Tages und ich übernehme sie:**
+
+> *„Ein Einschub **mitten in eine geteilte Tabelle** ist die verlustanfälligste Stelle, ein
+> **angehängter eigener Abschnitt** überlebt."*
+
+```text
+KONSEQUENZ fuer meine Takte, ab sofort:
+1  Konflikte in STATUS.md werden UNION geloest, sobald beide Seiten NEUE Zeilen tragen —
+   'HEAD behalten' gilt nur noch fuer Zustandsfelder, die ich selbst gemessen habe.
+2  Nach jedem Merge zaehle ich die TAFELZEILEN vorher/nachher und melde die Zahl.
+   (Heute in diesem Commit: A-16 1, B7 1 — beide vorhanden.)
+3  Eigene Abschnitte haenge ich an, statt sie einzuschieben. Das habe ich ohnehin getan,
+   und genau deshalb hat die Frontend-Bestandsaufnahme den Merge ueberlebt.
+```
+
+**Dritte Ausprägung derselben Klasse bei mir an einem Tag** — einseitiger Massenpatch (nur
+Datensätze), zu enges Messmuster (Langform statt Kurzform), jetzt zu grobe Konfliktregel.
+*Alle drei sind Werkzeugfehler, keine Urteilsfehler: das Werkzeug traf einen Teil der Sache und
+ich habe es für die ganze gehalten.*
+
+**A-16-Tafelzeile im selben Zug angeglichen** (`ENTWURF/YAMA` → `ZURUECKGESTELLT/–`) — sie stand
+noch auf dem Stand vor meinem Weichen-Entscheid. Beide Orte gezählt.
