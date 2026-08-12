@@ -109,3 +109,96 @@ jetzt     9 — und von den neun sind zwei reine Bestaetigungen (F-028-SELECT
 **Vier von zwölf waren gegenstandslos oder falsch** — einer davon mein eigener Fehlbefund. **Das ist
 der Grund, warum ich vor jeder Vorlage messe statt aus Notizen zu schreiben:** eine Postenliste, die
 nicht nachgemessen wird, wächst von allein.
+
+---
+
+## Nachtrag 12.08.: zwei deiner sechs Posten sind beantwortbar — hier sind sie
+
+> **Der Planner hat dir sechs Posten gemeldet:** *H-10 · F-053 · ZoneNode/W-15 · F-028 ·
+> Nebenläufigkeit · und ob AUF-40 damit geschlossen ist.* **Der letzte ist eine Messfrage, und beim
+> ersten kann ich den Gegenbeweis liefern, statt dich raten zu lassen.**
+
+### AUF-40 — **ja, geschlossen. Beide Teile des Auftragstexts sind erfüllt.**
+
+Der Auftragstext lautet wörtlich (Inventur): *„Start/Zuletzt an echte Projekte **+** Konfigurator-Paket
+serverseitig speichern."* **Zwei Teile — beide gemessen, jede Stelle geöffnet:**
+
+```text
+TEIL 1 · Start/Zuletzt an echte Projekte      GEBAUT UND ANGESCHLOSSEN
+  HausplanerController.php:101  hausplanerProjekte() — LeadAlternativeAdd,
+                                orderByDesc(updated_at), limit PROJEKTLISTE_MAX
+                          :55   'hpProjekte' => ...
+  objekt.blade.php:141          data-projekte="{{ json_encode($hpProjekte) }}"
+  main.tsx:18/:82               leseProjekte(mount.dataset[PROJEKTE_ATTRIBUT])
+                                -> setProjekte(...)   ANKOMMEND im UI-Zustand
+
+TEIL 2 · Konfigurator-Paket serverseitig speichern   GEBAUT, ANGESCHLOSSEN, AUFGERUFEN
+  ConfigWizard.tsx:255          void speicherePaket(art, wahl.label, paket)
+                                -> nicht nur importiert, sondern GERUFEN
+  main.tsx:89                   setzePaketZiel(mount.dataset[PAKETE_URL_ATTRIBUT], csrf)
+  objekt.blade.php:144          data-pakete-url="{{ route('hausplaner.objekt.pakete.speichern') }}"
+  HausplanerConfiguratorPackage + Migration + drei Routen mit Rechten
+```
+
+**Und mein eigener Restposten fällt damit weg.** Ich hatte geschrieben, es fehle *„der Anschluss der
+Konfigurator-Pakete an den Startbildschirm"* (`paketListe` wird 0-mal gerufen). **Das ist keine
+AUF-40-Forderung** — der Auftrag verlangt *speichern*, nicht *auflisten*. Das Auflisten ist ein
+zusätzlicher Endpunkt, den niemand bestellt hat.
+
+> **AUF-40 ist vollständig. Von dir ist dazu nichts mehr nötig.**
+
+### H-10 — ich kann nicht entscheiden, aber ich kann den Gegenbeweis liefern
+
+**Die Regel gehört dir**, das ist Prozessrecht für alle Rollen. Was ich beitragen kann: **ob der
+Vorschlag meine Fehler wirklich gefangen hätte.** Eine Regel, die den Fall nicht fängt, ist wertlos —
+das ist prüfbar, und ich bin einer der drei Betroffenen.
+
+**Ich habe denselben Fehler ZWEIMAL gemacht, in derselben Datei, an derselben Bauform:**
+
+```text
+FEHLER 1   gesucht:   Route fuer die Projektliste in routes/web.php
+           gefunden:  0  ->  geschlossen "fehlt"
+           wahr:      Mount-Attribut data-projekte, kein Fetch
+
+FEHLER 2   gesucht:   'konfigurator-pakete' in resources/planner
+           gefunden:  0  ->  geschlossen "nicht angeschlossen"
+           wahr:      die URL kommt als data-pakete-url aus dem Blade,
+                      die Insel kennt sie nur als mount.dataset — die
+                      Zeichenkette steht dort nie
+```
+
+**Beide Male dieselbe Ursache: ich habe den WEG gesucht, den ich erwartet habe, statt am ZIEL zu
+messen.** Der zweite Fehler ist der schwerere, weil er **nach** dem ersten passierte — die Lehre lag
+vor und hat nicht gegriffen, weil sie nur als Einsicht bestand und nicht als Handgriff.
+
+**Gegenprobe an beiden Fällen, mit deinem Regeltext:**
+
+```text
+"mindestens ZWEI Bauformen nennen und beide messen"
+  Fehler 1  Route  UND  Mount-Attribut        -> haette gegriffen
+  Fehler 2  Fetch  UND  Mount-Attribut        -> haette gegriffen
+
+"bei einer Zulieferung am ZIEL messen, nicht am Weg"
+  Fehler 1  nicht "gibt es eine Route", sondern "steht die Liste im UI-Zustand"
+            -> main.tsx:82 setProjekte, sofort sichtbar   -> haette gegriffen
+  Fehler 2  nicht "gibt es einen Fetch", sondern "wird gespeichert"
+            -> ConfigWizard.tsx:255 speicherePaket(...)   -> haette gegriffen
+```
+
+**Beide Teile der Regel fangen beide Fehler, unabhängig voneinander.** Das ist mehr als ein Indiz:
+der zweite Teil allein hätte gereicht, und der erste ist die billigere Prüfung.
+
+**Was ich nicht sagen kann:** ob die Regel Fälle erzeugt, in denen sie unnötig aufhält — dafür
+bräuchte es Abwesenheitsbefunde, bei denen nur eine Bauform denkbar ist. **Das ist die einzige
+Gegenfrage, die ich dir nicht abnehmen kann.**
+
+### Damit bleiben bei dir vier statt sechs
+
+```text
+H-10        entscheidungsreif, Gegenbeweis an zwei Faellen oben
+AUF-40      ERLEDIGT — geschlossen, gemessen
+F-053       Fach und Haftung
+ZoneNode    Produktentscheid, drei Wege liegen vor
+F-028       Produktion, SELECT liegt fertig
+Nebenlaeuf. entscheidungsreif, fuer mich selbst bereits gezogen
+```
