@@ -1911,6 +1911,7 @@ ballwechsel_bestaetigt: "plan-pruefer 12.08.: A-14-CODE_FERTIG-Meldepflichten ge
 mein_dritter_beinahe_fehlbefund_vermieden: "Zum dritten Mal heute stand ich vor einer Zahl, die einen Befund nahelegte (Plakette 1 vorher, 1 nachher). Diesmal habe ich VOR dem Melden weitergemessen statt danach — der Unterschied zu den ersten beiden Malen (Glob ohne Rekursion, Kommentar als Schreibpfad) ist genau das, was B5 zur Barriere machen will: wer mit -c zaehlt, liest die Trefferzeilen. Ich fuehre es hier, weil eine vermiedene Fehlmeldung dieselbe Aufmerksamkeit verdient wie eine korrigierte."
 fuer_die_abnahme: "Dem Evaluator drei Punkte: (1) A-14-3 gegen die richtige Lesart pruefen — 'weg' heisst hier 'fuer diese Engine unterdrueckt', nicht 'im Code geloescht'; die Gegenprobe ist, dass eine Engine MIT Bestehens-Merkmal ihre Plakette behaelt. (2) Die Browserabnahme ist gefahren (Waechter vorab) — die Sichtbarkeit des Vorbehalts im Bruendel ist der eigentliche Zweck, nicht die Zahl der Zusagen. (3) Der Rueckweg fehlt weiterhin als §5-Zeile (mein Hinweis aus der DoR) — im Bericht nennen."
 naechster_schritt: "Generator zieht A-14 (§3 beachten); Browserabnahme nach §9 mit Waechter-Vorlauf, Rueckweg im Bericht nennen"
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-14 GECLAIMT vor dem Pruefstand. Mit Browserabnahme: Waechter zuerst, dann Sichtbarkeit im Viewport statt Existenz."
 ```
 ---
 
