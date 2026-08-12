@@ -63,6 +63,50 @@ A-25  das Feld nennt ein ANDERES Artefakt        (sha-Feld = Bericht, nicht Bau)
 A-26  das Feld FEHLT                             (Commit nur im Prueftext)
 ```
 
+## 2a — DEFINITION, nachgetragen nach `e037ff7b`: was ein Bau-Commit-Feld IST
+
+**Der Plan-Prüfer hat den Punkt getroffen, und er trägt vollständig:** *das Blatt definierte nirgends, was
+ein „Bau-Commit-Feld" ist — die Zeichenfolge kam **genau einmal** vor, in A-27-1 selbst. **Davon hängt
+zweierlei ab: die Barriere UND die Zahl.***
+
+**Er hat drei vertretbare Lesarten gemessen, ich habe sie nachgemessen:**
+
+```text
+                                                        er        ich
+weit    Feldname endet auf _sha ODER enthaelt commit    20/37     56/1
+eng     bau_sha · bau_commit · pruef_sha · release_sha  18/39     18/39  ✓ gleich
+enger   NUR bau_sha und bau_commit                       7/50      7/50  ✓ gleich
+```
+
+> **Zwei von drei Lesarten sind deckungsgleich, die dritte nicht — und die Abweichung ist der Beleg:**
+> *meine „weite" Zählung nahm `basis_sha` mit, seine nicht. **`basis_sha` steht 62× und meint den Stand
+> VOR dem Bau** — wer es mitzählt, macht fast jeden Datensatz grün. **Selbst innerhalb einer Lesart gibt
+> es also zwei Auslegungen, und sie unterscheiden sich um 36 Fälle.** Ohne Prädikat ist keine Zahl
+> reproduzierbar; meine ursprünglichen 17/40 stammen aus einer vierten, undokumentierten Variante.*
+
+**DIE DEFINITION, und sie folgt dem ZWECK und nicht der Bequemlichkeit:**
+
+```text
+Ein Bau-Commit-Feld ist GENAU EINES VON ZWEIEN:  bau_sha  ·  bau_commit
+
+Und warum kein weiteres — je mit dem Grund, nicht mit einer Aufzaehlung:
+  basis_sha    der Stand VOR dem Bau. E1 misst den Bau, nicht seinen Elter.
+               62x vorhanden; mitzuzaehlen hiesse, die Luecke wegzudefinieren.
+  pruef_sha    der Stand, an dem GEPRUEFT wurde — ein anderer Vorgang.
+  release_sha  der veroeffentlichte Stand, nach der Abnahme.
+  mess_sha ·   einzelne Messungen und Abnahmen. Sie belegen etwas anderes.
+  abnahme_sha
+```
+
+> **Damit ist der Befund GRÖSSER als ich geschrieben habe: 50 Altfälle, nicht 40.** *Das gehört
+> hierher, weil ich die kleinere Zahl gemeldet habe — sie stammt aus einem Muster, das `pruef_sha`,
+> `release_sha`, `mess_sha` und `abnahme_sha` mitzählte, also aus einer Lesart, die ich nirgends
+> aufgeschrieben habe.*
+
+**Und keine dieser Zahlen steht ab jetzt in einem Kriterium** — *das ist die Lehre aus W-36-5 und
+W-37-5, hier zum dritten Mal: **die Klasse ins Kriterium, die Zahl in den Bericht.** Ein Kriterium mit
+fester Zahl zwingt den ehrlich Messenden, sie zu verletzen oder zu fälschen.*
+
 ## 3 — Scope
 
 ```text
@@ -92,8 +136,11 @@ A-27 IST NICHT
 
 ```text
 A-27-1  (P1, TRAGEND) Die Barriere meldet, wenn ein Commit `zustand: CODE_FERTIG`
-        in einen Datensatz einfuehrt und derselbe Block KEIN Bau-Commit-Feld
-        nennt. Nachweis an den DREI echten Faellen aus 24a122e9: A-23, A-25 und
+        in einen Datensatz einfuehrt und derselbe Block WEDER bau_sha NOCH
+        bau_commit nennt — genau diese zwei, nach der Definition in Abschnitt 2a.
+        KEIN ANDERES FELD ZAEHLT, und der Grund steht dort je Feld: basis_sha ist
+        der Stand VOR dem Bau, pruef_sha der Pruefstand, release_sha der
+        veroeffentlichte Stand. Wer eines davon zulaesst, definiert die Luecke weg. Nachweis an den DREI echten Faellen aus 24a122e9: A-23, A-25 und
         A-26 — die Staende stehen in der Historie, also ist der Nachweis fahrbar.
         Am Bau-Stand die SHAs pruefen, nicht aus diesem Blatt uebernehmen.
 A-27-2  (P1) Der genannte Commit muss EXISTIEREN: `git cat-file -e <sha>^{commit}`.
@@ -113,9 +160,17 @@ A-27-4  (P1, WIRKSAMKEIT) Die Barriere ist an einem sauberen Stand STILL. Nachwe
         abgeschaltet — und dann ist der Zustand schlechter als vorher.
 A-27-5  Nur die im Diff BERUEHRTEN Datensaetze werden geprueft, nicht alle 76. Das
         Tor laeuft bei jedem Commit (A-26-4, dieselbe Begruendung).
-A-27-6  Die VIERZIG Altfaelle sind gezaehlt und im Bericht benannt, mit der
-        ausdruecklichen Feststellung, dass sie NICHT gefuellt werden. Eine stille
-        Auslassung waere ein Freibrief; eine gezaehlte ist eine Grenze.
+A-27-6  BERICHTIGT nach e037ff7b, und meine Zahl war zu klein. Die Altfaelle sind
+        AM BAU-STAND zu zaehlen — nach dem Praedikat aus Abschnitt 2a — und im
+        Bericht zu benennen, mit der ausdruecklichen Feststellung, dass sie NICHT
+        gefuellt werden. Eine stille Auslassung waere ein Freibrief; eine gezaehlte
+        ist eine Grenze.
+        KEINE FESTE ZAHL IM KRITERIUM: mein erster Wortlaut sagte 'die VIERZIG
+        Altfaelle'. Wer ehrlich zaehlt, bekommt je nach Lesart 37, 39 oder 50 und
+        muesste das Kriterium verletzen oder eine falsche Zahl schreiben — Klasse
+        W-36-5 und W-37-5, zum dritten Mal. Zur Einordnung, NICHT als Sollwert:
+        nach der jetzt geltenden Definition sind es 50 von 57, gemessen am
+        13.08. und mit dem plan-pruefer deckungsgleich.
 A-27-7  Die Fangprobe wird GEFAHREN und belegt: das Feld aus einem Datensatz
         entfernen und zeigen, dass A-27-1 rot wird. Nicht gefahren heisst
         'nicht gefahren' im Bericht.
