@@ -101,7 +101,33 @@ A-26 IST NICHT
            von A-20 und gehoert Yama, nicht diesem Auftrag.
            der Takt-Scan des Evaluators -> sein Werkzeug, er hat es selbst
            umgestellt.
+
+           UND EINE ZWEITE KLASSE, die diese Barriere NICHT faengt — benannt,
+           weil sie mir am Tag des Schnitts zweimal passiert ist:
+             BEIDE Orte stimmen ueberein und sind BEIDE veraltet.
+             A-24 und W-31: ich habe das Blatt berichtigt, zurueckgegeben, und
+             die Uebergabe nirgends vermerkt — nicht im Feld und nicht in der
+             Botschaft. A-26 vergleicht die zwei Orte MITEINANDER; wo sie
+             uebereinstimmen, sagt es nichts.
 ```
+
+> **Und dafür habe ich keine tragfähige Barriere** — *das gehört hierher, statt eine schwache zu
+> erfinden. Die naheliegenden Auslöser tragen nicht:*
+
+```text
+'Blatt geaendert, ballbesitz-Feld nicht im Diff'
+  -> waere zu weit: Tippfehler und Nachtraege aendern Blaetter auch.
+     Eine Barriere, die oft warnt, ist nach A-03 abgeschaltet (A-26-3).
+'Uebergabewort in der Botschaft ohne Feldaenderung' (B5-Bauform)
+  -> haette bei MIR nicht gegriffen: b39f3845 enthaelt gar kein
+     Uebergabewort. Ich habe die Uebergabe nicht behauptet, sondern
+     vergessen.
+```
+
+> **Die zweite Klasse bleibt damit offen, und sie ist benannt statt verschwiegen.** *Wer sie beheben
+> will, braucht ein Signal, das das Tor nicht hat: **was der Commit inhaltlich tut.** Das ist ein eigener
+> Gegenstand — und ich schneide ihn nicht, weil ich für ihn heute keine Nachweisform habe, die rot werden
+> kann (Pflichtprüfung 4).*
 
 ## 5 — Abnahmekriterien
 
