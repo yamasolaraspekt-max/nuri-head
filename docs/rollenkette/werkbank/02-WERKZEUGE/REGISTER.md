@@ -123,7 +123,7 @@ und Lichtkuppel. **Die Trennlinie zieht der Code selbst** — `aufbauOrientierun
 | W-36 | **Fähigkeiten-Navigation** | LEER | alle | ungeprüft — `app/FaehigkeitenNavi.tsx` (76 Z) + `app/tools/faehigkeiten.ts` |
 | W-37 | **Rechenpanels (Engine-Flächen)** | LEER | N-001…N-003 | **N-003** — `app/EngineFlaeche.tsx` (196 Z) + `app/dashboard/enginePanels.ts`; trägt die **A-14**-Ausgabeauflage |
 | W-38 | **Schritt-Status und Prüfpunkte** | **BESCHRIEBEN** | alle *(Richtung, keine Vorbedingung)* | **keine** ⓝ — rein deklarativ: **0 Funktionen, 0 Importe**; `app/studioDaten.ts:163` trägt `SchrittStatus` mit **vier** Stufen, `:255` die vier Beschriftungen |
-| W-39 | **Studio-Rahmen** | LEER | alle | ungeprüft — `app/HausplanerStudio.tsx` (159 Z) |
+| W-39 | **Studio-Rahmen** | **BESCHRIEBEN** | **13 Module** *(benutzt, nicht besessen — 8 ohne eigenes Werkzeug)* | **keine** ⓝ — **ADDITIV**: die `HausplanerApp` bleibt unverändert, einziger Eingriff ist das Flag `imStudio` (`:140`); drei Modi in `:131/:132/:133`, der dritte heißt `imExperte` (`:85`) |
 | W-40 | **Gültigkeitsstatus** `confirmed`·`outdated`·`blocked` | LEER | W-38 | — **kein Code**; ohne `confirmed` ist „PV erst nach **bestätigter** Geometrie" nicht prüfbar |
 | W-41 | **Abhängigkeitsgraph / Invalidierung** | LEER | W-38, W-40 | — **kein Code**; „Änderungen propagieren, **niemals** stille Löschung" |
 | W-42 | **Schreibpfad Wizard → Gebäudemodell** | LEER | W-35 | — **kein Code**; im `ConfigWizard`-Dateikopf als **„nächste Scheibe"** benannt |
