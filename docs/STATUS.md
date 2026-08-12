@@ -54,7 +54,7 @@
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
-| **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
+| **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-35** Konfigurator-Dialog | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `2e7504ec` | **NACHBESSERUNG §12** auf Yamas Entscheidung: drei Stufen sind GEBAUT (checked/approved/outdated), nur `blocked` ist Erweiterung · **Traeger ist das PAKET, nicht der Schritt** |
@@ -7985,10 +7985,10 @@ was_dem_generator_zusteht: "Er hat seinen EIGENEN Einwand zurueckgenommen, nachd
 
 ```yaml
 auftrag: "W-42"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 gegengelesen_vor_dem_ziehen: "Die Abweichung des Planners von Yamas Freigabe habe ich in 40a9a74a gegengelesen, wie beim Ziehen von W-27/1 zugesagt — sie traegt, und staerker als sein Blatt sagte: die Quelle BERICHT-PROZESSEBENE-DREI-FRAGEN.md:184-185 behauptet 'schreibt NICHTS ins BuildingDocument', gemessen sind es DREI executeCommand-Aufrufe mit ADD_NODE in ConfigWizard.tsx :184, :205 und :226. Das Blatt hat den Befund inzwischen aufgenommen; W-42-2 verlangt ausdruecklich, BEIDE ueberholten Quellen woertlich zu nennen. Damit ist die Tatsachengrundlage der Abweichung bestaetigt und mein Vorbehalt entfaellt. Ob Yamas Freigabe damit erfuellt oder abgewichen ist, entscheide ich nicht — der Release-Pruefer hat die Frage in c002574b als Punkt 10 an Yama gestellt."
 warum_zuletzt_gezogen: "W-42 stand seit drei Runden BEREIT bei mir und ich habe es zweimal liegen lassen: einmal wegen der ungeklaerten Abweichung, einmal weil docs/STATUS.md 24 Zeilen Fremdarbeit trug. Beides ist jetzt erledigt — die Abweichung ist von mir gemessen und vom Blatt aufgenommen, die Datei ist hash-identisch mit HEAD."
-ballbesitz: evaluator
+ballbesitz: release-pruefer
 bericht: "docs/BERICHT-W-42-schreibpfad-wizard-modell.md"
 fuenf_kriterien_je_am_BAU_STAND_belegt: "W-42-1 der Schreibpfad ist GEBAUT — drei executeCommand mit ADD_NODE in ConfigWizard.tsx :184, :205 und :226, vier Bauteilarten, weil :226 Fenster UND Tuer traegt. W-42-2 BEIDE ueberholten Quellen woertlich, der Dateikopf :6 mit 'bleibt die naechste Scheibe' und die Berichtsaussage 'schreibt NICHTS ins BuildingDocument', dazu die gemeinsame Ursache GEMESSEN: BuildingDocument kommt in ConfigWizard.tsx 0 mal vor und SceneDocument ebenfalls 0 mal — der Schreibpfad nennt den Dokumenttyp gar nicht, er nennt den Store und das Kommando. W-42-3 die zwei Wege je mit Bedingung, && scene in :174 gegen den Blob-Download in :244-247; der Download ist der RUECKFALL und nicht der Regelfall. W-42-4 die drei ungemessenen Punkte als FRAGE, darunter ob beide Wege dasselbe Bauteil ergeben — die Frage nach der zweiten Wahrheit. W-42-5 die Grenze zu W-35 verlaeuft INNERHALB einer Datei und steht deshalb in 2-FUNKTION. W-42-6 sieben Blaetter, keines gleicht der Vorlage oder einem der 29 fremden Werkzeugordner."
 FEHLGRIFF_SELBST_GEFUNDEN_der_dritte_seiner_art: "In 6-PRUEFUNG stand zuerst 'kein Test prueft den ADD_NODE-Weg'. Falsch, und ich habe es vor der Fertigmeldung selbst gemessen: grep -rl ADD_NODE ueber __tests__ nennt fuenf Dateien, darunter configWizardWrite.test.ts mit 85 Zeilen und DREI Tests, je einer pro Bauteilart. Und konfiguratorEhrlich.test.ts traegt K6 — der Uebernahme-Weg ins Modell ist unberuehrt, er war schon wahr. Ich hatte drei Paket-Tests aufgezaehlt und daraus auf eine Luecke geschlossen, statt zu messen welche Datei den Gegenstand beruehrt. DIESELBE KLASSE wie bei W-39, wo ich stilschicht als 'Farben' abgetan habe, und wie bei imStudio, wo ich eine Luecke behauptete die es nicht gab — der Unterschied ist, dass ich es diesmal selbst gefunden habe. Die Regel daraus ist im Blatt angewandt: ein 'kein Test' ohne Messung ist keine Aussage, und die zwei Mutationen die ich nicht gemessen habe stehen jetzt ausdruecklich als UNKLAR."
@@ -8035,6 +8035,23 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-42 GECLAIMT vor dem Pr
   W-42 ist der Schreibpfad vom Wizard ins Gebaeudemodell, und die GEGENRICHTUNG ist nachweislich
   vorhanden: kannIntegrieren steht in configuratorPackage.ts als Tor. Wer nur nach 'Schreibpfad'
   sucht, findet nichts; die Frage ist, was von der Uebernahme schon gebaut ist."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an 0474f53b, Elter 547e9c16, SECHS von sechs."
+die_praemisse_zuerst: "Vierte Vorgabe in Folge — bei W-40 war 'kein Code' falsch, bei W-41 tragend,
+  hier wieder falsch. DER SCHREIBPFAD IST GEBAUT: ConfigWizard.tsx:184 (radiator), :205 (treppe),
+  :226 (knoten), je executeCommand ADD_NODE; vier Bauteilarten, weil :226 Fenster UND Tuer traegt.
+  Alle drei Zeilen geoeffnet. Der eigene Dateikopf :5-6 sagt das Gegenteil — das Blatt hat es
+  bereits aufgeloest und verlangt die Feststellung GEBAUT."
+was_nicht_gebaut_ist: "Der Weg vom ConfiguratorPackage ins Modell. integrationAbgleich.ts sagt im
+  eigenen Kopf 'reine Pruef-Logik OHNE Szene-Zugriff' — gegengeprobt: 0 Szene-Zugriffe, und die
+  Pruef-Funktionen werden ausserhalb der Tests nirgends gerufen. Pruefen ob man darf ist nicht
+  schreiben."
+was_selbst_nachgezaehlt_wurde: "'&& scene' genau dreimal · ConfigWizard.tsx 271 Zeilen · die
+  Berichtsstelle :184-185 geoeffnet · sieben Blaetter, 0 md5-Dubletten ueber 31 Werkzeugordner."
+eigener_messfehler: "Ich habe 'BuildingDocument' zuerst ueber den GANZEN Bestand gemessen (3
+  Treffer: configuratorPackage.ts:5 und :76 sourceBuildingDocumentId, UnterlagenEbene.tsx:6) und
+  stand kurz davor, die Blatt-Aussage '0 Mal' als falsch zu melden. Das Blatt sagt praezise 'in
+  ConfigWizard.tsx', und dort sind es 0. MEINE MENGE WAR ZU WEIT, nicht seine Zahl falsch — ein
+  Fehlbefund gegen einen richtigen Bau, wenn ich ihn nicht vor dem Melden geprueft haette."
 ```
 
 ```yaml

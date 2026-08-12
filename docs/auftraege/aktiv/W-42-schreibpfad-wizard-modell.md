@@ -155,3 +155,104 @@ warum_P1: "Zwei Quellen im Repo behaupten das Gegenteil des Bestands, eine davon
         an der Quelle wirkt wie eine Messung."
 W_42_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+
+## §11 — Votum W-42 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-42"
+votum: ABGENOMMEN
+geprueft_an: "0474f53b"
+elter: "547e9c16"
+scope_diff: "10 Dateien, +665/-7: sieben Werkzeugblaetter neu, REGISTER.md, Bericht, STATUS.md.
+  0 Code-Dateien."
+pruefstand: "git worktree add -q --detach auf 0474f53b. Reine Vorgabe — Suite nicht einschlaegig,
+  §15 gegenstandslos, Browserabnahme entfaellt."
+
+DIE_PRAEMISSE_ZUERST_wie_im_claim_zugesagt:
+  warum: "Vierte Vorgabe in Folge. Bei W-40 war 'kein Code' falsch, bei W-41 tragend — ich habe
+    sie deshalb auch hier VOR dem Blatt gemessen."
+  was_ich_gefunden_habe: "DER SCHREIBPFAD IST GEBAUT. app/ConfigWizard.tsx schreibt an drei
+    Stellen ins Modell: :184 (radiator), :205 (treppe), :226 (knoten), je per
+    store.executeCommand({ type: 'ADD_NODE', node: … as SceneNode }). Vier Bauteilarten, weil
+    :226 Fenster UND Tuer traegt. Ich habe alle drei Zeilen geoeffnet."
+  und_der_dateikopf_widerspricht_sich_selbst: "ConfigWizard.tsx:5-6 sagt woertlich 'Der
+    Schreibpfad ins Gebaeudemodell (Command) bleibt die naechste Scheibe' — zwanzig Zeilen ueber
+    dem Code, der genau diesen Pfad geht. DAS BLATT HAT DAS BEREITS AUFGELOEST: W-42-1 verlangt
+    ausdruecklich die Feststellung 'GEBAUT', W-42-2 verlangt beide ueberholten Quellen woertlich.
+    Meine unabhaengige Messung deckt sich damit."
+  was_NICHT_gebaut_ist_und_die_unterscheidung_zaehlt: "Der Weg vom ConfiguratorPackage ins Modell.
+    geometry/integrationAbgleich.ts sagt in seinem eigenen Kopf 'Reine, deterministische
+    Pruef-Logik OHNE Szene-Zugriff' — ich habe es gegengeprobt: 0 Szene-Zugriffe in der Datei,
+    und pruefeOeffnungsIntegration/pruefePaketIntegration werden AUSSERHALB der Tests nirgends
+    aufgerufen. kannIntegrieren wird genau einmal produktiv gerufen, in integrationAbgleich.ts:134,
+    und dort nur zur Bewertung. Pruefen ob man darf ist nicht schreiben."
+
+messtisch:
+
+  W-42-1_der_schreibpfad_ist_gebaut_TRAGEND:
+    urteil: ERFUELLT
+    fundstellen_am_bau_stand_selbst_geoeffnet: "1-ZWECK nennt :184, :205, :226 mit dem jeweiligen
+      Knotentyp und ordnet die vier Bauteilarten zu — Heizkoerper (ObjectNode, objectType
+      'radiator'), Treppe (ObjectNode freistehend), Fenster und Tuer (OpeningNode, eine Stelle
+      fuer zwei Arten). Alle drei Zeilen habe ich im Code gelesen; die Zuordnung trifft zu."
+
+  W-42-2_beide_ueberholten_quellen_woertlich:
+    urteil: ERFUELLT
+    erste_quelle: "Der eigene Dateikopf, 'bleibt die naechste Scheibe' — steht in 7-GRENZEN
+      woertlich und ist von mir an ConfigWizard.tsx:5-6 gegengeprobt."
+    zweite_quelle: "Die Berichtsaussage. 7-GRENZEN zitiert BERICHT-PROZESSEBENE-DREI-FRAGEN.md:184-185
+      mit 'schreibt NICHTS ins BuildingDocument, laedt JSON herunter'. Ich habe die Zeilen
+      geoeffnet — das Zitat steht dort."
+    die_gemeinsame_ursache_ist_messbar: "Das Blatt fuehrt sie als 'BuildingDocument in
+      ConfigWizard.tsx 0 Treffer · SceneDocument in ConfigWizard.tsx 0 Treffer'. Gegengeprobt:
+      beide 0. Der Schreibpfad nennt den Dokumenttyp gar nicht, er nennt den Store und das
+      Kommando — wer nach dem Dokument sucht, findet nichts und schliesst daraus, es werde nicht
+      geschrieben. Das Blatt nennt es H-9 in seiner teuersten Form, und das trifft."
+    MEIN_EIGENER_MESSFEHLER_AN_DIESER_STELLE: "Ich habe 'BuildingDocument' zuerst ueber den
+      GANZEN Bestand gemessen und drei Treffer gefunden (configuratorPackage.ts:5 und :76 mit
+      sourceBuildingDocumentId, UnterlagenEbene.tsx:6) — und stand kurz davor, die Blatt-Aussage
+      '0 Mal' als falsch zu melden. Das Blatt sagt aber praezise 'in ConfigWizard.tsx', und dort
+      sind es 0. MEINE MENGE WAR ZU WEIT, nicht seine Zahl falsch. Genau die Fehlerklasse, die
+      ich anderen vorhalte, und sie waere hier ein Fehlbefund gegen einen richtigen Bau gewesen."
+
+  W-42-3_die_zwei_wege:
+    urteil: ERFUELLT
+    je_bedingung_und_fundstelle: "Weg A IM GEBAEUDE, Bedingung 'eine Szene ist geladen', :172
+      const scene = store.scene und :174 if (art === 'heizkoerper' && scene). Weg B STANDALONE,
+      Bedingung 'kein Gebaeude', :244-247 Blob + a.download + a.click(). Beide Fundstellen
+      geoeffnet, beide treffen. Die Bedingung '&& scene' kommt genau DREIMAL vor — je
+      Bauteilart eine, wie das Blatt sagt; selbst nachgezaehlt."
+    der_satz_der_es_traegt: "'Wer nur den Download sieht, haelt ihn fuer den Regelfall. Er ist der
+      Rueckfall.' Genau diese Verwechslung steckt in beiden ueberholten Quellen."
+
+  W-42-4_drei_ungemessene_punkte:
+    urteil: ERFUELLT
+    beleg: "7-GRENZEN:39-54 fuehrt drei: was bei ok === false geschieht (Rollback ungeprueft),
+      ob die ZWEI WEGE dasselbe Bauteil ergeben, und ob Rueckgaengig wirklich greift. Punkt 2
+      ist ausdruecklich als 'die Frage nach einer zweiten Wahrheit' benannt und wird GESTELLT
+      statt beantwortet — mit der richtigen Einordnung daneben: dieselbe Klasse wie A-20s vier
+      Zustandsorte und wie die Gueltigkeitsachse, die W-40 doppelt vorgegeben haette."
+
+  W-42-5_scope_grenze_zu_W35:
+    urteil: ERFUELLT
+    und_sie_ist_ungewoehnlich: "2-FUNKTION:78-96. Die Grenze verlaeuft INNERHALB einer Datei:
+      W-35 ist alles bis zur Auswahl, W-42 was danach damit geschieht — beide in
+      app/ConfigWizard.tsx. Ich habe die Datei gezaehlt: 271 Zeilen, wie das Blatt sagt. Und
+      app/state/paketSpeichern.ts ist ausdruecklich ausgegrenzt; die Datei existiert."
+
+  W-42-6_sieben_blaetter_und_md5:
+    urteil: ERFUELLT
+    selbst_gefahren: "Sieben Blaetter, alle gefuellt (62/96/38/70/78/85/92 Zeilen). md5-Gegenprobe
+      unabhaengig ueber alle 31 Werkzeugordner: Dubletten MIT W-42 beteiligt: 0."
+
+meine_eigenen_messfehler_in_dieser_runde:
+  - "Die BuildingDocument-Messung ueber den ganzen Bestand statt ueber die genannte Datei — oben
+     unter W-42-2 im Einzelnen. Ein Fehlbefund gegen einen richtigen Bau, wenn ich ihn nicht
+     vor dem Melden geprueft haette."
+
+was_diesen_bau_traegt: "Er ist der dritte Fall in Folge, in dem eine Praemisse geprueft statt
+  geglaubt wurde — bei W-40 war sie falsch, bei W-41 richtig, hier falsch. Und er behandelt den
+  eigenen Dateikopf als das, was er ist: eine ueberholte Quelle, die woertlich zitiert und
+  widerlegt gehoert, damit die naechste Rolle nicht einen zweiten Schreibpfad daneben baut."
+```
