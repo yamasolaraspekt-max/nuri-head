@@ -51,7 +51,7 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
-| **W-39** Studio-Rahmen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
+| **W-39** Studio-Rahmen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -2376,6 +2376,30 @@ zustand: DECISION_BLOCKED
 fortsetzung_zustand: ENTWURF  # §3: der Zustand vor der Blockade, fuer die Rueckkehr
 zustandswort_umgestellt: "A-21 12.08.: hier stand ZURUECKGESTELLT — ein Phantasiewort neben dem definierten Zustand. §3 fuehrt DECISION_BLOCKED woertlich als 'eine ausdruecklich Yama vorbehaltene Entscheidung fehlt', und genau das ist W-21Ls Lage: es wartet auf zwei Fachfragen aus F-053. Ein zweites Wort fuer dieselbe Sache ist eine zweite Wahrheit. Der ALTE Wortlaut ist damit nicht verschwunden, er steht in dieser Zeile."
 ballbesitz: —  # bis Yama die Fachdaten liefert oder W-23 sie erzeugt
+die_bedingung_hat_sich_geaendert:
+  befund: "release-pruefer 12.08.: W-21L wartet laut eigenem Blatt auf zwei Wege — Yama liefert
+    die Fachdaten ODER W-23 erzeugt sie. Das Blatt begruendet den zweiten so: 'Der Auftrag W-23
+    (Mengen/Katalog) ist dafuer vorgesehen und steht auf LEER'. DIESE BEGRUENDUNG IST HEUTE
+    UEBERHOLT: W-23 ist seit d5d830d2 BETRIEBSBESTAETIGT."
+  was_W_23_jetzt_traegt: "Selbst nachgemessen im Vertrag 5-CODE/LIESMICH.md: eine Modelltabelle
+    mit 10 Zeilen, je Zeile Hersteller, Modell, Variante und eine LATTWEITEN-SPANNE — Achat 12V
+    330-360, Granat 11V 338-380, Harzer Pfanne 7 372-405, Rubin 13V 330-360 und weitere. Dazu
+    eine benannte Quelle (braas_dachziegel_datenbank_v14.xlsx, 'gelesen, nicht zitiert') und je
+    Zeile ein Verifikationsstand (verifiziert / teilweise verifiziert). Genau die Datenart, deren
+    Fehlen W-21L als Operanden-Gate blockiert hat."
+  WAS_ICH_NICHT_ENTSCHEIDE: "Ob das als Operand GENUEGT. Zwei Gruende, und beide sind hart:
+    erstens ist W-23 ein C-Blatt mit Ziel ENTWORFEN — die Daten stehen im VERTRAG, nicht im
+    Code, und ob eine Beschreibung einen Operanden liefert oder erst eine Implementierung, ist
+    eine Fachentscheidung. Zweitens nennt W-21L selbst eine Abstufung: 'DREI Deckungsarten mit
+    belegter Quelle genuegen fuer den ersten Schritt — aber die Ampel bleibt dann gelb'. Welcher
+    Weg gilt, entscheidet der Planner oder Yama, nicht der, der es transportiert.
+    Das Operanden-Gate ist ausdruecklich eine Yama-Sache: fehlende Operanden fuehren zu
+    Rueckfrage, nicht zu stiller Automatisierung."
+  warum_ich_es_trotzdem_melde: "Ein DECISION_BLOCKED, dessen Bedingung sich erfuellt hat, bleibt
+    sonst stehen, bis jemand zufaellig hinsieht. W-21L ist der EINZIGE blockierte Auftrag im
+    Bestand, und die Warteschlange ist leer — das ist der Moment, in dem es auffaellt.
+    Ball unveraendert; ich habe den Zustand NICHT angefasst."
+
 vertretungsentscheid: "release-pruefer 12.08. auf Yamas Anweisung 'schau nach ob aufgaben fuer mich da sind welche du erledigen kannst und muss': W-21L wird AUSDRUECKLICH ZURUECKGESTELLT. Das ist die eine der beiden Optionen, die ich vertreten kann — die andere (Fachdaten liefern: welche Deckungsart welche Lattweite traegt) waere das Erfinden von Normwerten und faellt unter das Operanden-Gate, das ich nicht umgehe. GEMESSEN und bestaetigt: in geometry/ traegt genau eine Datei einen Lattenbegriff, dachWerte.ts mit 'battenDist: 0.05 // Lattenabstand min 5 cm' — eine SCHUTZSCHRANKE, keine Zuordnung. WAS DIE SPERRE LOEST, damit sie nicht unbemerkt liegen bleibt: entweder eine Tabelle Deckungsart -> Lattweite von Yama (Quelle nennen, Fachregeln des Dachdeckerhandwerks oder Herstellerangabe), ODER W-23 erzeugt sie als Nebenprodukt. Bis dahin blockiert W-21L NICHTS: der fehlende Schritt ist gemeldet, W-21 selbst ist veroeffentlicht und betriebsbestaetigt. Rueckholbar mit einem Satz."
 basis_sha: 4f0d4584
 prioritaet: P2
@@ -7373,9 +7397,13 @@ eigener_messfehler: "Mein erstes Raster war doppelt zu eng und haette den Bau fa
 
 ```yaml
 auftrag: "W-39"
-zustand: IN_ARBEIT
+zustand: CODE_FERTIG
+bericht: "docs/BERICHT-W-39-studio-rahmen.md"
+vier_zahlen_des_blattes_anders_gefunden_keine_geglaettet: "13 Importe gegen gemessene 14 — Zeile 7 ist React und damit extern, die 13 sind die Insel-Module, zwei Mengen und kein Mangel. SECHS Zustaende gegen gemessene FUENF — das +1 des Blattes ist toastTimer, ein useRef in :60, also ausserhalb des genannten Bereichs :23-29 und kein Zustand, weil ein Ref kein Neuzeichnen ausloest. W-34 und W-38 als BETRIEBSBESTAETIGT gegen BESCHRIEBEN — im REGISTER steht der Reifegrad des WERKZEUGS, BETRIEBSBESTAETIGT ist der Zustand des AUFTRAGS; ich hatte beides verwechselt und im Blatt berichtigt. Und NEUN Module ohne Werkzeug gegen gemessene ACHT — 13 minus 5 erfasste, meine eigene Zahl war falsch waehrend die Liste darunter schon acht Zeilen trug."
+ein_befund_gegen_meine_eigene_behauptung: "Ich hatte in 6-PRUEFUNG geschrieben, das Flag imStudio sei durch keinen Test gesichert. Gemessen ist das FALSCH: grep -rl imStudio ueber __tests__ findet ZWEI Dateien, kopfrahmen.test.ts:138 und buehnenBreite.test.ts:76. Beide nennen HausplanerStudio nicht und gehoerten deshalb nicht zu den acht Waechtern — sie sitzen am EMPFANGENDEN Ende in Kopfrahmen.tsx. Und kopfrahmen.test.ts ist aus einer DURCHGEKOMMENEN Mutation entstanden, woertlich im Test: die Mutation von geschweift-Ausrufezeichen-imStudio zu geschweift-imStudio kam durch, eine Marke ueber einer Testflaeche waere genau die Anzeige die AUF-40 entfernt hat, nur andersherum. Haette ich nur die acht Dateien betrachtet die HausplanerStudio nennen, waere eine falsche Luecke im Blatt geblieben."
+tafelzeile_und_datensatz_in_einem_griff_und_der_dritte_anlauf: "Beide Zustandsorte zusammen gesetzt — das ist die Lehre aus A-22, wo ich die Tafelzeile auf Evaluator setzte und das Datensatzfeld stehen liess, sodass der Release-Pruefer es in 1ccdc5b6 nachziehen musste. BEIM ERSTEN VERSUCH HABE ICH DEN ANDEREN FEHLER GEMACHT: ich habe ein ZWEITES ballbesitz angelegt statt das vorhandene zu aendern, also genau die Dublette aus A-21 und W-34 zum dritten Mal. Gefangen hat es meine eigene Gegenprobe VOR dem Commit — der Block meldete 22 Schluessel und 1 Dublette. Behoben, indem das vorhandene Feld geaendert und meine zweite Zeile entfernt wurde; der Block traegt jetzt genau ein ballbesitz. DIE GEGENPROBE IST DAMIT KEIN ZIERRAT: die Regel allein hat nicht gereicht, sie hat mich vor dem falschen Griff nicht bewahrt — die Messung hat es getan."
 operanden_vor_dem_ziehen_gemessen: "HausplanerStudio.tsx traegt 159 Zeilen, exakt wie im Blatt. Alle sieben genannten Fundstellen geoeffnet und getroffen: :23 der modus-Zustand, :85 imExperte, :97 der EINE return, :131/:132/:133 die drei Render-Zweige, :140 das Flag imStudio. EINE ZAHL WICH AB und ich habe sie nicht geglaettet: grep '^import' findet 14 Zeilen, das Blatt nennt 13 Importe. Aufgeloest durch Oeffnen statt Rechnen — Zeile 7 ist 'import React from react', also extern; die 13 des Blattes sind die Insel-Module. Kein Mangel, zwei verschiedene Mengen. §3 vor dem Ziehen 0 und 0, danach 1 und 1; und nach meiner Regel aus b16ba855 KEIN zweites ballbesitz angelegt — der Ballbesitz bleibt beim Generator, das vorhandene Feld traegt ihn bereits."
-ballbesitz: generator
+ballbesitz: evaluator
 titel: "Ein additiver Rahmen um eine App, die er nicht anfasst"
 basis_sha: d53806f6
 spur: A
