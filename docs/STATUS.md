@@ -38,7 +38,7 @@
 | **W-15** Material und Farbe | **`CODE_FERTIG`** | **Evaluator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
 | **W-01N** Suite-Zahl zahlfrei | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `53930b60` · Elter `2e587fb7` | **5/5** · die feste Zahl ist raus und **nicht durch eine neuere ersetzt** · Nachweis prüfbar geblieben (resources 0, Suite 1698 an beiden Ständen) · Fahrplan-Widerspruch **vorgelegt statt umgebogen** — entschieden: richtig so · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
-| **B7** Mehrfachvorkommen ist kein Beleg | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `b1554b01` · Elter `9d09b02d` | **7/7 — dritte Barriere, ausgelöst statt gelesen** · Unabhängigkeit **zweifach gemessen**: B5/B6-Blöcke bytegleich + Mutation → beide feuern weiter · H-1…H-7 alle zeichengleich, H-8 **angehängt** · Wegweiser trägt nur den Verweis, kein zweiter Regeltext · Tor +26/−0, scripts-Suite 107/107 beidseitig · P2: nie auf `IN_ARBEIT` gesetzt (ohne Schaden — zum Bauzeitpunkt lief nachweislich keiner) |
+| **B7** Mehrfachvorkommen ist kein Beleg | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `b1554b01` · Elter `9d09b02d` | **7/7 — dritte Barriere, ausgelöst statt gelesen** · Unabhängigkeit **zweifach gemessen**: B5/B6-Blöcke bytegleich + Mutation → beide feuern weiter · H-1…H-7 alle zeichengleich, H-8 **angehängt** · Wegweiser trägt nur den Verweis, kein zweiter Regeltext · Tor +26/−0, scripts-Suite 107/107 beidseitig · P2: nie auf `IN_ARBEIT` gesetzt (ohne Schaden — zum Bauzeitpunkt lief nachweislich keiner) |
 | **B5N** Belegzeilen-Schreibweisen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `8870387a` | **Nachbesserung §12.5 zu B5** — `B5_BELEGZEILE` (`commit-pruefen.sh:534`) erkennt nur `datei.ext:zeile`; **erhoben über 40 Botschaften: 20 Vorkommen fallen durch** (`Z.NNN` 12×, `Z.NNN-NNN` 4×, »Zeile NNN« 4×) · **dreimal gemeldet** (Evaluator, Release-Prüfer, Plan-Prüfer) — A-03-Klasse: eine Warnung, die bei richtiger Arbeit anschlägt, wird weggeklickt · tragend ist **B5N-2**: sie muss weiter anschlagen, wo kein Beleg steht |
 | **A-17** Zwei Engines schweigen | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
@@ -2335,8 +2335,44 @@ was_du_entscheidest: "Die Weiche gehoert dir, ich lege sie nicht aus. Zur Orient
 auftrag: "B7"
 titel: "Verbreitung sieht wie Bestaetigung aus. Barriere gegen die Zahl, die nur oft ist"
 datei: docs/auftraege/aktiv/B7-mehrfachvorkommen-ist-kein-beleg.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama (TRANSPORTSPERRE — der sechste, wie B5, B6, A-18, A-17, W-01N)
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an b1554b01, Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen (B7-1 bis B7-7). Grundtor: Kette Vorfahr, must_preserve
+  resources/app/database 0/0/0, Geheimnisse 0, bash -n exit 0, scripts-Suite 107/107.
+  BARRIERE SELBST AUSGELOEST, drei Proben mit echt geaenderter Datei: mehrere Fundorte OHNE
+  Herkunft warnt; EIN Fundort schweigt (das ist B7-3, die Zusage gegen den Fehlalarm); mehrere
+  Fundorte MIT genannter Herkunft schweigt. MUTATION: B7-Block entfernt (25 Zeilen), derselbe
+  Lauf 0 Warnungen, zurueckgestellt md5 identisch.
+  UND DIE ZUSAGE B7-7 EIGENS NACHGEMESSEN statt aus dem Votum uebernommen: nach dem Einbau
+  feuern B5 und B6 unveraendert weiter, je 1 Warnung im Probelauf. Die drei Barrieren beruehren
+  sich nicht.
+  Geltungsakt geprueft wie bei B5 und B6 einzeln, nicht uebertragen: das Blatt traegt
+  anlass 'Yamas Antwort 12.08. Punkt 2 (Schneide sie als B7), Wortlaut von ihm' und
+  ueberschreibt den Regeltext mit 'Die Regel — Yamas Wortlaut, unveraendert'. Liegt vor."
+
+zwei_befunde_am_regelwerk_kein_blocker:
+  klasse: SPEC
+  schwere: P2
+  blockiert: nein
+  eins: "B7 fuegt den ARBEITSREGELN 30 Zeilen hinzu (Abschnitt H-8) und zaehlt die FASSUNG NICHT
+    HOCH — keine neue Fassungszeile im Diff, gemessen. B5 hat 1.5 eingefuehrt, B6 die 1.6,
+    B7 nichts. Damit ist eine Regelaenderung im Dokument, die keine Fassung nennt."
+  zwei: "Der KOPF des Regelwerks nennt 'Version: 1.4.2' (Z.3), waehrend die Fassungen 1.5 und 1.6
+    weiter unten im selben Dokument stehen (Z.923 und Z.917). Die Kopfzeile hinkt zwei Fassungen
+    hinterher — und der Kopf ist die Stelle, die jede Rolle beim Start liest."
+  warum_kein_blocker: "Beides ist Form, nicht Inhalt: die Regeln SELBST stehen vollstaendig und
+    richtig da (18b fuer B5, der B6-Abschnitt, H-8 fuer B7 — alle drei am Bau nachgezaehlt).
+    Nach §12.5 blockiert ein Formmangel bei stimmendem Inhalt nicht."
+  warum_ich_es_nicht_selbst_setze: "Eine Fassungsnummer zu vergeben heisst zu entscheiden, WELCHE
+    Fassung gilt — das ist Prozessrecht und gehoert nicht dem, der es transportiert. Mein Takt
+    nennt das Hochzaehlen ausdruecklich nur fuer den Fall eines MERGE-Konflikts; hier ist keiner."
+  ball: generator (Fassungszeile nachtragen) und planner (Kopfzeile auf den Stand bringen)
+
+  mein_sechster_beinahe_fehlbefund_heute: "Ich hatte die Fassungsliste mit tail -5 gelesen und
+    1.5 und 1.6 nicht gefunden — beinahe haette ich einen VERLUST gemeldet. Die Liste ist nicht
+    chronologisch sortiert, beide stehen bei Z.917 und Z.923. Gelesen statt gezaehlt, wieder
+    einmal, und wieder war das Fenster zu eng."
 zusage_2_hat_sich_gedreht: "B7-7(2) wurde geschrieben, als B5 und B6 noch UNBEBAUT waren ('wer
   zuerst baut, koennte den Platz der anderen besetzen'). Beide sind inzwischen gebaut und
   RELEASE_FREI — damit ist die Zusage nicht hinfaellig, sondern ERSTMALS HART PRUEFBAR: Hunk-Kopf
