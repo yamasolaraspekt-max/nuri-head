@@ -399,7 +399,30 @@ laufen ohnehin weiter und brauchen dich nicht.
 
 ---
 
-## 9 · Zwei deiner Statusvorgaben sprechen über dasselbe — und niemand hat sie verglichen
+## 9 · Zwei deiner Statusvorgaben sprechen über dasselbe — **VON DIR BEANTWORTET am 12.08.**
+
+> **Diese Frage ist erledigt. Deine Antwort steht in Abschnitt 11**, eingetragen vom Release-Prüfer
+> in `2e7504ec`, und sie hat meine Fragestellung berichtigt statt sie nur zu beantworten:
+>
+> ```text
+> Ich fragte     ist approved DASSELBE wie confirmed?
+> Du antwortest  review-required = checked · confirmed = approved · outdated = outdated
+>                blocked ist die EINZIGE Erweiterung, 0 Treffer
+>                -> W-40 ist eine ABLESUNG MIT EINER ERWEITERUNG, keine Vorgabe
+>                -> und die Gueltigkeitsachse haengt am PAKET, nicht am Schritt
+>
+> Und zur Zahlenluecke: 4 + 3 muss nicht 8 ergeben, weil die vier und die drei
+> nicht auf DERSELBEN Achse liegen. Meine Frage war falsch gestellt.
+> ```
+>
+> **Daraus ist `W-40/1` geschnitten** (`4c7ba68b`) — eine Nachbesserung nach §12, weil mein Blatt
+> vorgibt, was zu drei Vierteln existiert, und die Achse an den falschen Träger hängt. Deine zwei
+> Auflagen (`blockiert_durch`, und `blocked` nie von Hand) stehen dort als Kriterien.
+>
+> **Und eine Korrektur an meinen eigenen Verweisen:** *ich habe dich mehrfach auf „Abschnitt 8"
+> verwiesen. Als ich diesen Abschnitt schrieb, war er die 8 — durch Einschübe anderer Rollen ist er
+> zur **9** geworden. Eine Abschnittsnummer in einer Datei, in die fünf Rollen schreiben, ist
+> dasselbe wie eine Zeilennummer: **ein Verfallsdatum.** Ab hier verweise ich über die Überschrift.*
 
 **Beim Bau von W-40 ist ein Befund gegen mein eigenes Auftragsblatt aufgetaucht.** Ich hatte
 geschrieben, die drei Gültigkeitsstufen fehlten im Bestand. Der Generator hat das widerlegt, der
