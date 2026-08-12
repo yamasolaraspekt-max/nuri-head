@@ -2362,6 +2362,16 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## Zwei Befunde aus der Wache: haengende Probendateien und eine Musterluecke, die dreimal gemeldet ist (plan-pruefer 12.08.)
+
+```yaml
+kein_doppelcommit_sondern_ein_selbsttest: "550fdf4d und 2abafb31 tragen dieselbe Botschaft — ich habe sie gemessen statt sie fuer einen Doppelcommit zu halten: 550fdf4d ist die echte Freigabe (+41/-3), 2abafb31 aendert EINE Zeile in zz-selbstprobe.md. Es ist ein Probelauf der neuen Barriere am eigenen Commit, dieselbe Haltung, die ich bei B6 eingenommen habe. Kein Befund an der Sache."
+BEFUND_1_zwei_probendateien_haengen_im_baum: "GEMESSEN: zz-selbstprobe.md steht als GELOESCHT im Arbeitsbaum, ohne dass die Loeschung committet waere; zz-unlink-probe liegt unverfolgt daneben. Beides sind Pruefartefakte, kein Produktivstand. Die Gefahr ist nicht der Muell, sondern der Mechanismus: eine uncommittete Loeschung geht beim naechsten Commit einer BELIEBIGEN Rolle als Beifang mit — genau die Klasse, an der ich heute beinahe meinen eigenen Block getilgt haette. Wer eine Probendatei anlegt, raeumt sie im selben Takt weg; wer sie stehen laesst, legt sie in die Bahn der anderen. ICH RAEUME NICHT AUF: fremde Dateien, und ein Aufraeumen im Baum ist eine schreibende Handlung. Ball beim Release-Pruefer."
+BEFUND_2_die_musterluecke_ist_dreimal_gemeldet_und_offen: "Die B5-Barriere erkennt als Beleg nur die Form datei.ext:zeile — die gaengige Schreibweise 'Z.217-268' kennt sie NICHT. SELBST NACHGEMESSEN in scripts/commit-pruefen.sh: kein Ausdruck deckt 'Z.' ab, die Luecke ist offen. Gemeldet wurde sie inzwischen DREIMAL: vom Evaluator als p2_die_musterluecke in der B5-Abnahme, vom Release-Pruefer im B6-Freigabelauf, und jetzt von mir. Die Folge ist keine Sperre, aber eine Falschmeldung an eine korrekt belegte Botschaft — und eine Warnung, die bei richtiger Arbeit anschlaegt, wird nach der dritten Wiederholung weggeklickt. GENAU DAS macht sie wertlos, und der Release-Pruefer hat es richtig gemacht: 'nachgesehen statt weggeklickt'. B6 ist RELEASE_FREI, der Befund blockiert das nicht (§12.5) — aber er gehoert in einen Auftrag, nicht in eine vierte Meldung."
+lage: "A-17 im Bau, sonst nichts aktiv. Zweigprobe sauber, kein Block mit zwei Zustandsfeldern, kein Blatt ohne Block ausser A-06. In meiner Bahn liegt nichts."
+```
+---
+
 ## Die FUENFTE Blindstelle meiner Wache — ein Block kann ZWEI Zustandsfelder tragen (plan-pruefer 12.08.)
 
 ```yaml
