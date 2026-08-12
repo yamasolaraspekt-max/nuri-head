@@ -58,7 +58,7 @@
 | **A-25** Die Zäune fehlen | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `fc0abdd5` | **BAU, P1 — und der größere Anteil ist meiner.** Zwei yaml-Bereiche in `docs/STATUS.md` tragen zusammen **sieben** Datensätze: `1243-1315` (A-08, A-09) und `7525-8084` (559 Z.: W-06, W-31, A-24, A-23, A-22). **P1, weil eine PRÜFROLLE betroffen ist** — der Evaluator in `f017b6f9`: *„mein Takt-Scan liest seit Runden das LETZTE zustand-Feld eines Bereichs statt das des gesuchten Auftrags, und dass es bisher stimmte war GLÜCK in der Reihenfolge."* Er meldete für A-24 einen Widerspruch, den es nicht gibt; beim nächsten Mal kann er einen **verschweigen**, den es gibt. **Mein Anteil:** der große Bereich trug am Morgen einen Datensatz, ich habe heute vier dazugehängt — jedes Mal den Block *vor* die `auftrag:`-Zeile des vorherigen, also **innerhalb** des bestehenden Zauns. A-20-2 habe ich erfüllt; dass ein Datensatz auch ein eigener **Block** sein muss, sagt A-20-2 nicht — und ich habe damit den Zweck von A-22 unterlaufen, während A-22 in Kraft war. **Die Falle steht im Kriterium:** mein erster Zähler meldete *einen* Bereich statt zwei, weil er `​```yaml` als Schließer zählte — nach CommonMark schließt nur ein Zaun **ohne** Info-String. Ein solches Muster kann nach dem Bau **null** melden und grün sein. |
 | **A-26** Ball-Drift am Tor | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 13.08. · Basis `d3d234a6` | **BAU, P1 · hängt an A-25.** **Dreimal an einem Tag, drei verschiedene Rollen** — W-36, W-33, W-31: jedes Mal Datensatz gepflegt, Tafelzeile vergessen. Der Release-Prüfer hat alle drei nachgezogen und die Ursache benannt (`38bc5e12`): *„seit A-20 gibt es ZWEI Zustandsorte, und der zweite liegt räumlich weit vom ersten entfernt. Wer im Auftragsblock arbeitet, sieht die Tafel nicht."* **A-20 ist meine Regel, also gehört die Fehlerklasse mir.** Der schwerste Teil: im dritten Fall **glaubte** der Verursacher, beide Orte gepflegt zu haben, und schrieb es in die Botschaft — am Diff fehlte die Tafelzeile. **Ein Fehler, der nicht im Willen liegt, wird von einer Mahnung nicht behoben**, deshalb eine Barriere im Tor (vierte nach F-14, B5, B6) und ausdrücklich eine, die **warnt statt abbricht**. Drei Fallen stehen im Kriterium, weil jede sie grün und wirkungslos machen würde: Schreibweise (`**`ENTWURF`**` gegen `ENTWURF`), Kommentare nach `#`, und die Zuordnung — daran ist der Takt-Scan des Evaluators gescheitert. **Nicht-Ziel: die zwei Orte zusammenführen** (wäre Rückabwicklung von A-20 und gehört Yama). |
 | **W-05/2** Raum anwählen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 13.08. · Basis `c09dcb93` | **BAU** · erster Posten aus der Frontend-Bestandsaufnahme des Release-Prüfers (`STATUS.md:5355`) — **und die Messung hat den Auftrag KLEINER gemacht.** Sein Vorschlag war *„Raum anwählen, benennen, Fläche ablesen"* als ein Schnitt; gemessen sind es drei ungleiche Teile: **Fläche ablesen ist GEBAUT** (`Buehne.tsx:139` Kommentar, `:148` Füllung, `:152` die m²-Zahl), **anwählen ist klein** (`:147` trägt `listening={false}`, das Auswahlmuster steht daneben in `:165`/`:190`), **und der NAME ist eine Entscheidung Yamas**: `ErkannterRaum` (`roomDetection.ts:35-40`) trägt `polygon`, `kanten`, `flaecheMm2`, `volumenMm3` — **keine id**, und `Buehne.tsx:147` nutzt `key={raum${i}}`, also den **Index**. Räume werden *erkannt*, nicht gezeichnet; ein Name ist dauerhaft, ein Index nicht. **Dieselbe Klasse wie die offene ZoneNode-Frage.** Der ganze Auftrag hängt an W-05-1-1: **die Auswahl wird zurückgesetzt, wenn sich die Raumliste ändert** — eine Auswahl, die einen Wandzug überlebt, zeigt auf einen anderen Raum und sieht gleich aus. |
-| **W-21/2** Auswechslung bekommt ein Zuhause | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `9ea1c3db` | **BAU** · **174 Zeilen ohne Zuhause, und zwei Blätter sagen es selbst.** `W-22/5-CODE/LIESMICH.md:36` und `W-22/7-GRENZEN.md:55` melden beide *„auswechslung.ts ist in keinem Blatt zuhause"*; `W-21`s Blatt führt es in `:156` als **ausdrückliches Nicht-Ziel** („VERWANDT — NICHT im Scope"). **Der Ausschluss war für die Ablesung richtig** und ließ die andere Frage offen: *wo ist das Modul zuhause.* Entschieden am 13.08. — **W-21, weil ein Wechselholz Tragwerk ist und seine Verbraucher mehrere sind** (Gaube W-22, Dachdurchdringungen W-29); ein Modul, das mehrere Werkzeuge brauchen, gehört zum Fundament. Selbst gezählt: **5 Exporte, 174 Z.**, und W-21 führt heute **fünf** Module — `auswechslung.ts` ist das sechste. `sparrenTrennung.ts` ist der Beleg für den Ort: sein Kopf sagt *„ergänzt auswechslung.ts"*, und es ist längst in W-21 zuhause. **W-21-2-2 zieht die zwei überholten Sätze in W-22 mit** — sonst entstünde die A-23-Klasse im selben Auftrag. **Kennung geprüft:** `W-21/1` ist 18× belegt, ebenso `W-21/W`, `W-21L`, `W-21L/F` — `W-21/2` ist frei (Präzedenz W-05/2, W-07/2). |
+| **W-21/2** Auswechslung bekommt ein Zuhause | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `9ea1c3db` | **BAU** · **174 Zeilen ohne Zuhause, und zwei Blätter sagen es selbst.** `W-22/5-CODE/LIESMICH.md:36` und `W-22/7-GRENZEN.md:55` melden beide *„auswechslung.ts ist in keinem Blatt zuhause"*; `W-21`s Blatt führt es in `:156` als **ausdrückliches Nicht-Ziel** („VERWANDT — NICHT im Scope"). **Der Ausschluss war für die Ablesung richtig** und ließ die andere Frage offen: *wo ist das Modul zuhause.* Entschieden am 13.08. — **W-21, weil ein Wechselholz Tragwerk ist und seine Verbraucher mehrere sind** (Gaube W-22, Dachdurchdringungen W-29); ein Modul, das mehrere Werkzeuge brauchen, gehört zum Fundament. Selbst gezählt: **5 Exporte, 174 Z.**, und W-21 führt heute **fünf** Module — `auswechslung.ts` ist das sechste. `sparrenTrennung.ts` ist der Beleg für den Ort: sein Kopf sagt *„ergänzt auswechslung.ts"*, und es ist längst in W-21 zuhause. **W-21-2-2 zieht die zwei überholten Sätze in W-22 mit** — sonst entstünde die A-23-Klasse im selben Auftrag. **Kennung geprüft:** `W-21/1` ist 18× belegt, ebenso `W-21/W`, `W-21L`, `W-21L/F` — `W-21/2` ist frei (Präzedenz W-05/2, W-07/2). |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7601,13 +7601,48 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "W-21/2"
-zustand: ENTWURF
-ballbesitz: plan-pruefer  # DoR steht aus
+zustand: BEREIT
+ballbesitz: generator
 titel: "auswechslung.ts bekommt ein Zuhause — 174 Zeilen, die zwei Blaetter als heimatlos melden"
 basis_sha: 9ea1c3db
 spur: A
 prioritaet: P2
 blatt: "docs/auftraege/aktiv/W-21-2-auswechslung-bekommt-ein-zuhause.md"
+dor_beleg: "plan-pruefer 13.08. — DoR ERTEILT. Der Kern haelt an jeder Stelle; ZWEI Punkte benenne
+  ich, keiner blockiert, und einer davon beruehrt Yamas offenen Posten.
+  SELBST GEMESSEN UND EXAKT: auswechslung.ts hat 174 Zeilen und FUENF Exporte an :24, :31, :42, :69
+  und :87 — alle fuenf Fundstellen stimmen. Die drei Melderstellen sagen woertlich das Behauptete:
+  W-22/5-CODE/LIESMICH.md:29 fuehrt das Modul mit 174 Zeilen, :36 traegt die Ueberschrift 'ist in
+  keinem Blatt zuhause', W-22/7-GRENZEN.md:55 dasselbe, und W-21s Blatt:156 fuehrt es als 'NICHT im
+  Scope'. W-21s Modulliste zaehlt heute FUENF Module — das Ziel SECHS ist damit richtig gesetzt.
+  DIE KENNUNGSPROBE HAT ER GEMACHT UND SIE TRAEGT: W-21/2 hat genau EINEN Datensatzblock. Dass diese
+  Probe seit W-05/1 in seiner Pflichtpruefung 1 steht, ist die Lehre aus meinem Blocker von vorhin,
+  angewandt bevor sie noetig wurde.
+  PUNKT 1, und er beruehrt Yamas Liste: W-21-2-5 sagt 'W-21 traegt N-001 und N-002'. GEMESSEN SIND ES
+  DREI. N-003 (FORMELSAMMLUNG.md:666, Sparren-Vorbemessung, 🟡 FACH-GATE) nennt als Belegstelle
+  geometry/sparrenBerechnung.ts:86 — und sparrenBerechnung.ts ist EINES DER FUENF MODULE VON W-21.
+  Die Registerzeile selbst widerspricht sich dabei: ihre Spalte sagt 'N-001…N-003 ✓', ihr Fliesstext
+  schliesst mit 'damit traegt W-21 N-001 und N-002'. Das Kriterium hat die zwei aus dem Fliesstext
+  uebernommen.
+  WARUM DAS MEHR IST ALS EINE ZAHL: N-003 ist genau die Nummer mit Yamas FACH-GATE (DAUERGELB,
+  Geltungsbereich von ihm festgelegt) UND der A-14-Ausgabeauflage. Wer W-21s Blaetter mit N-001 und
+  N-002 fuellt, laesst ausgerechnet die Norm weg, die ein offenes Gate und eine Auflage traegt — am
+  Werkzeug, dessen Modul sie rechnet. NICHT BLOCKIEREND, weil die METHODE des Kriteriums richtig ist:
+  'am Code erhoben und nicht geraten' fuehrt zwangslaeufig auf :86 und damit auf N-003. Nur das
+  angegebene Ergebnis ist zu kurz, und ich nenne es hier, damit es nicht abgeschrieben wird.
+  PUNKT 2, ein Nachweis, der so nicht laeuft: W-21-2-7 verlangt, der Zustand von W-21 sei vorher und
+  nachher 'an BEIDEN Orten' derselbe. Gemessen gibt es KEINEN Datensatzblock mit auftrag 'W-21' —
+  null Treffer. Die zwei Orte tragen VERSCHIEDENE Kennungen: die Tafelzeile heisst W-21
+  (BETRIEBSBESTAETIGT), der Datensatz heisst W-21/1 (Z.1678, 'Die sieben Blaetter von W-21 aus fuenf
+  vorhandenen Holzbau-Modulen ableiten', BETRIEBSBESTAETIGT, datei W-21-sparren-beschreiben.md). Wer
+  den Nachweis woertlich faehrt, findet den zweiten Ort nicht und meldet eine Luecke, die keine ist.
+  Zu messen ist: Tafelzeile W-21 UND Datensatz W-21/1.
+  UND DAS IST ZUGLEICH EIN BEFUND ZU A-26, den ich dort nachtrage: die neue Ball-Drift-Barriere
+  ordnet Tafelzeile und Datensatz ueber die KENNUNG zu. Wo die zwei Orte verschiedene Kennungen
+  tragen — wie hier — kann sie das Paar nie pruefen. Sie meldet nichts, weil sie nichts findet; das
+  ist nach ihrer Bauart richtig (a26-ball-drift.sh:87 springt bei leerem Datensatzwert ab) und
+  trotzdem ein blinder Fleck, den die Abnahme kennen sollte.
+  KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator."
 eine_eingeloeste_zusage: "Ich habe die Zuordnung am 13.08. in der Registerzeile W-22 entschieden und
   dort geschrieben, die Blatt-Erweiterung sei ein eigener Auftrag — weil W-21 BESCHRIEBEN ist und ein
   zusaetzliches Modul drei Blaetter beruehrt. Das hier ist der angekuendigte Auftrag; ohne ihn waere die
