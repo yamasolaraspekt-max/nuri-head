@@ -39,7 +39,7 @@
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
 | **A-17** Zwei Engines schweigen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
-| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `ea9522bc` | **löst A-15s letzte offene Achse-2-Zeile auf, ohne Fachurteil** — die `Schicht` hat drei Felder (`name?`, `dicke`, `lambda`), für Glaser fehlen μ/s_d **und** Klima: der Taupunkt ist **nicht rechenbar**, nicht »nicht implementiert« · 10 Feuchte-Begriffe = 0 in der Datei · Pflichtfeld nach A-14/A-17-Muster · **kein Panel, keine Plakette zu streichen** · 2. Posten: »speist Heizlast« gegen **0** Aufrufe aus `app/` |
+| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `ea9522bc` | **löst A-15s letzte offene Achse-2-Zeile auf, ohne Fachurteil** — die `Schicht` hat drei Felder (`name?`, `dicke`, `lambda`), für Glaser fehlen μ/s_d **und** Klima: der Taupunkt ist **nicht rechenbar**, nicht »nicht implementiert« · 10 Feuchte-Begriffe = 0 in der Datei · Pflichtfeld nach A-14/A-17-Muster · **kein Panel, keine Plakette zu streichen** · 2. Posten: »speist Heizlast« gegen **0** Aufrufe aus `app/` |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -4640,8 +4640,18 @@ status_korrektur: "der Eintrag 'FACH-GATE N-003 offen bei Yama' ist ueberholt un
 ```yaml
 auftrag: "A-18"
 datei: docs/auftraege/aktiv/A-18-wandaufbau-vorbehalt-uwert.md
-zustand: BEREIT
-ballbesitz: "generator"
+zustand: IN_ARBEIT
+ballbesitz: "generator (Bau laeuft seit 12.08.)"
+warum_A18_und_nicht_B6: "B6 steht direkt nach B5 und ist mein naechster Ball — ich habe es
+  ZURUECKGESTELLT, nicht uebersprungen. Grund, gemessen: der Evaluator hat in 80d7a6d2 die
+  B5-Abnahme GECLAIMT, und B6 aendert dieselbe Datei (scripts/commit-pruefen.sh). Waehrend eine
+  Abnahme auf einer Datei laeuft, verschiebe ich sie nicht — H-4 sperrt die Dateien im Scope,
+  und die B5-Belege (30 Einfuegungen/0 geloescht, grep-Stand 8) haengen an 157576c2. A-18 ist
+  davon vollstaendig disjunkt (resources/planner/hausplaner/geometry/). Sobald B5 abgenommen
+  ist, ziehe ich B6. Widerspricht das der Reihenfolge des Plan-Pruefers, korrigiert er mich."
+tafelzeile_driftete: "Die Tafelzeile stand auf ENTWURF/Plan-Pruefer, das Zustandsfeld auf
+  BEREIT/generator — die DoR war nur an EINEM Ort nachgezogen. Ich habe beide auf IN_ARBEIT
+  gesetzt. Dritter Fall derselben Klasse innerhalb von zwei Tagen."
 basis_sha: ea9522bc
 anlass: "Yamas Auftrag 12.08. — 'bitte das loesen, das ist dein Auftrag konzeptionell', auf die
          vorgelegte Analyse zur letzten offenen Achse-2-Zeile."
