@@ -49,7 +49,7 @@
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
-| **W-34** Geführte Planung (Stepper) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
+| **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · 17 doppelte yaml-Schlüssel, **0 mit gleichem Wert** · 4× `ballbesitz` auf abgeschlossenen Aufträgen · Feldform 33/19 |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
@@ -2262,7 +2262,7 @@ was_der_evaluator_entscheiden_muss: "W-01N-4 nennt docs/FAHRPLAN-KLASSE-A.md. Di
 gemessen: "1689-Treffer im Blatt 8 -> 7; alle sieben verbliebenen sind Befund-ZITATE, die die
   Kantenliste ausdruecklich stehen laesst (Z.183, 318, 364, 429, 487, 573, 606 — je gelesen, nicht
   nur gezaehlt). NICHT durch 1692 oder 1693 ersetzt: das waere derselbe Fehler mit frischerem Datum."
-ballbesitz: generator
+ballbesitz_bau: generator  # umbenannt 12.08. (Rest aus der Bauphase)
 basis_sha: 548bef5c
 prioritaet: P2
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — die Zahl 1689 steht ACHTMAL im W-01-Blatt, darunter woertlich im Kriterium W-01/1-6 (Z.177: 'bleibt bei 1689/1689'), waehrend die Suite heute 1692 traegt. Der Befund ist damit nicht nur belegt, sondern in seiner Reichweite gemessen: es ist keine einzelne Zeile, sondern acht Fundstellen in einem freigegebenen Blatt. Sauber nach §12.5 geschnitten — W-01/1 bleibt ABGENOMMEN, der Befund wirkt nicht rueckwirkend, und die Loesung uebernimmt die ZAHLFREIE Form, die W-02 bereits traegt (kein neues Muster erfinden, das vorhandene anwenden)."
@@ -2356,7 +2356,7 @@ gemessen: "Platzhalter 21 -> 0 (grep -nE '<[^>]+>' ohne Laengengrenze). Zweck BE
   surfaceMaterialId/materialAssignment ausserhalb des Vertrags 0 Treffer — niemand verbraucht die
   Zuweisung. services.material 3 Treffer, alle im Vertrag selbst, 0 Implementierung. Register: genau
   EINE Werkzeugzeile geaendert, Abschlusszaehler 11 vorher und 11 nachher, ENTWORFEN-Zeilen 1."
-ballbesitz: generator
+ballbesitz_bau: generator  # umbenannt 12.08. (Rest aus der Bauphase)
 basis_sha: 57e582af
 prioritaet: P2
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die Ist-Messung SELBST nachgefahren und exakt bestaetigt — kein Modul in geometry/ mit material/farbe/textur (0 Treffer), und MaterialCommand kommt im GANZEN Repo genau EINMAL vor: werkzeugVertrag.ts:887, also im Vertrag selbst. Zehn Kriterien. DIE EINORDNUNG IST DER WERT DIESES BLATTS: 'W-15 ist nicht KEIN CODE, es ist ein VERTRAG ohne Implementierung' — das ist eine dritte Lage, die die bisherige Klassifikation (beschrieben / nicht beschrieben) nicht kennt, und sie aendert die Quelle: nicht der Code liefert die Blattinhalte, sondern der Vertrag. Damit ist es das erste Klasse-C-Blatt und ein anderer Auftragstyp als die neun Klasse-A-Blaetter: dort wurde aus VORHANDENEM abgeleitet, hier wird ENTWORFEN, was noch niemand gebaut hat."
@@ -2486,7 +2486,7 @@ gemessen: "H-8 in ARBEITSREGELN.md:812, angehaengt hinter H-7, beide Teile im Wo
   Fundorten' feuert, mit 'kopiert aus derselben Quelle' schweigt, 'eine Fundstelle' schweigt.
   Geloeschte Zeilen im ganzen Bau 0, Tor-Suite 61 pass 0 fail. B7-6: HAUSREGELN.md:37 traegt NUR
   die Wegweiserzeile, Gegenprobe auf Regeltext 0 Treffer."
-ballbesitz: generator (nach B5 und B6 — dieselbe Datei)
+ballbesitz_bau: generator (nach B5 und B6 — dieselbe Datei)  # umbenannt 12.08. (Rest aus der Bauphase)
 basis_sha: 5d88f198
 prioritaet: P2
 mein_messfehler_zuerst: "Mein erster §5-Check meldete 'Rueckweg fehlt' — FALSCH. Mein Suchmuster trug einen Umlaut und lief in der Schale ins Leere; das Blatt hat einen vollstaendigen Abschnitt 'Rueckweg & Entdeckung — als eigene Zeile', sogar ausdruecklich mit KOPIE AUSSERHALB DER MASCHINE und einem Entdeckungssignal. VIERTER Beinahe-Fehlbefund heute, und wieder hat nur das Weitermessen gerettet. Bemerkenswert: das Blatt hat GENAU DIE ZEILE, deren Fehlen ich dreimal in Folge (A-14, A-15, W-09) als Vorlagen-Mangel gemeldet habe — der Planner hat den Hinweis aufgenommen, und ich habe ihn beim ersten Mal, wo er da war, uebersehen."
@@ -3596,6 +3596,52 @@ von einem echten `git`-Lauf stammen, nicht von `touch`.* Das ist keine Entschuld
 die Lücke, benannt an der Stelle, an der ich sie gelassen habe.
 
 ---
+
+## Befund gegen mein EIGENES Prüfwerkzeug — und vier Dubletten, die meine sind (12.08.)
+
+```yaml
+befund: "release-pruefer 12.08., ausgeloest durch den Nebenbefund des Evaluators in e5716bc0 und
+  die Messung des Generators in e1a478fb"
+klasse: BEWEIS
+schwere: P2
+blockiert: nein
+
+die_asymmetrie_und_sie_trifft_mich: "Mein Drift-Skript liest bei mehreren gleichnamigen Feldern
+  das ERSTE Vorkommen. YAML liest das LETZTE. Solange ein Block nur ein ballbesitz-Feld traegt,
+  ist das gleichgueltig; bei zweien lesen ein Mensch mit meinem Werkzeug und eine Maschine mit
+  einem YAML-Parser ZWEI VERSCHIEDENE WAHRHEITEN aus derselben Datei.
+  Und die Richtung ist die gefaehrliche: mein Werkzeug meldet 'kein Ball' (das erste Feld sagt
+  'Kette vollstaendig'), ein YAML-Leser meldet 'liegt beim Generator' (das letzte Feld).
+  Vier ABGESCHLOSSENE Auftraege saehen damit aus, als laegen sie noch beim Generator."
+
+die_vier_sind_MEINE: "W-01N, W-15/1, B7 und A-21. In allen vier Faellen habe ICH beim Release
+  'ballbesitz: —  # Kette vollstaendig' oben eingefuegt und das alte 'ballbesitz: generator'
+  weiter unten stehen lassen, statt es zu aendern. Das ist genau das Muster, das ich heute
+  DREIMAL bei anderen Rollen gemeldet habe — bei A-16, bei W-27 und als Punkt 6 der Vorlage an
+  Yama. Ich habe es benannt, waehrend ich es selbst tat.
+  Behoben durch UMBENENNEN, nicht Loeschen: die alten Zeilen heissen jetzt ballbesitz_bau: und
+  tragen den Vermerk 'Rest aus der Bauphase'. Der Beleg bleibt lesbar, die Dublette ist weg."
+
+eigene_messung_groesser_als_die_gemeldete: "Der Generator meldet 17 doppelte Schluessel ueber
+  144 yaml-Bloecke. Ich messe ueber AUFTRAGSBLOECKE (auftrag: bis auftrag:) und komme auf 61
+  doppelte Schluessel in 25 Bloecken. Kein Widerspruch, zwei verschiedene Grundmengen — ein
+  Auftragsblock enthaelt mehrere yaml-Zaeune. Die Zahl, die zaehlt, ist die kritische:
+  7 Bloecke mit doppeltem zustand oder ballbesitz, nach meiner Berichtigung noch 3."
+
+was_von_den_drei_bleibt_und_warum_ich_es_NICHT_anfasse: "A-07, A-09 und A-17. Ihre zweiten
+  ballbesitz-Felder gehoeren zu EINGEBETTETEN BEFUNDEN, nicht zum Auftrag — bei A-17 steht
+  woertlich 'offen — ich messe und melde, ich raeume den Index eines anderen nicht auf'.
+  Das ist kein Rest, sondern ein eigener Ballbesitz an einem eigenen Vorgang. Sie sind fuer
+  einen YAML-Leser trotzdem missverstaendlich, aber sie zu aendern hiesse, fremde Befunde
+  umzuschreiben. Gehoert dem Planner; A-22 ist dafuer bereits geschnitten."
+
+was_ich_an_meinem_werkzeug_aendere: "Nichts im Vorbeigehen. Ein Pruefmuster, das man waehrend
+  einer Messung anpasst, hat die Anpassung nicht geprueft — dieselbe Begruendung, mit der ich
+  heute mein Geheimnismuster nicht verschaerft habe. Der Befund steht hier, die Aenderung
+  gehoert in einen Auftrag."
+
+ball: planner (A-22 traegt es bereits)
+```
 
 ## Die Transportsperre ist AUFGELÖST — und sechs Aufträge sind betriebsbestätigt (12.08.)
 
@@ -6918,7 +6964,7 @@ ZWEI_KRITERIEN_STOSSEN_ANEINANDER_entscheidung_beim_evaluator: "A-21-5 verlangt,
 volltext_bleibt_14_und_das_ist_absicht: "ZURUECKGESTELLT am ZUSTANDSORT ist von 2 auf 0. Der Volltext steht bei 14: 15 am Elter minus die 2 umgestellten plus 1 neuer, naemlich mein Feld zustandswort_umgestellt: bei W-21L, das den alten Wortlaut festhaelt. Die 12 uebrigen sind Belege — zwei vertretungsentscheid:-Felder die Yamas Anweisung zitieren, Befunde, Vergleichsmessungen, der Titel und der dor_beleg dieses Auftrags selbst — und sie bleiben alle stehen, weil A-20-4 woertlich verbietet zu loeschen ohne zu sagen was gegolten hat."
 mit_eingetragen_ohne_kriterium: "fortsetzung_zustand: ENTWURF bei W-21L. §3 verlangt beim Eintritt in DECISION_BLOCKED den vorherigen Pruefzustand fuer die Rueckkehr; kein Kriterium nennt das, aber ohne ihn waere die Umstellung formal unvollstaendig gewesen. Gemeldet statt stillschweigend."
 A_21_7_nachweis_am_elter: "Gezogen an Elter 877f81ee. Dort gemessen mit git show 877f81ee:docs/STATUS.md, BEIDE Zustandsorte: die Tafelzeile traegt A-20 BETRIEBSBESTAETIGT, das Datensatzfeld traegt zustand: BETRIEBSBESTAETIGT mit ballbesitz — Kette vollstaendig. Die Wartebedingung ist damit erfuellt, gemessen am Commit und nicht am Arbeitsbaum, wie A-21-7 es in der berichtigten Fassung verlangt."
-ballbesitz: generator
+ballbesitz_bau: generator  # umbenannt 12.08. (Rest aus der Bauphase)
 spec_berichtigt_nach_befund: "605fde3b — der Generator hat VOR dem Ziehen gegengelesen und NICHT
   gezogen, und beide Befunde treffen. Zurueck auf ENTWURF, weil sich KRITERIEN geaendert haben und
   eine DoR auf die alte Fassung keine DoR auf die neue ist. §12.1.
@@ -7012,7 +7058,7 @@ eigener_messfehler: "grep -c zaehlt Zeilen, nicht Treffer — ich habe erst dana
 
 ```yaml
 auftrag: "W-34"
-zustand: ABGENOMMEN
+zustand: BETRIEBSBESTAETIGT
 ballbesitz_bau: generator (Bau fertig — sieben Werkbankblaetter neu, REGISTER.md Zeile 121 LEER -> BESCHRIEBEN; Runde 2 nachgebessert)
 nachbesserung_runde_2_W_34_1: "Der Befund des Evaluators (e5716bc0) trifft, und der Fehler ist meiner. Ich hatte in 2-FUNKTION KAUSAL behauptet, Zweig 2 stehe VOR den every-Pruefungen und DESHALB schlage warn neunmal ok. Diese Ursache gibt es nicht — ein warn bricht beide every-Bedingungen ohnehin, die Mengen sind disjunkt. SELBST NACHGEMESSEN ueber alle 85 Kombinationen aus vier Statuswerten bei Laenge 0 bis 3, mit einem Skript im Scratchpad: M1, den warn-Zweig hinter die every-Pruefungen verschoben, ergibt 0 Abweichungen von 85 — wirkungslos, sein Befund bestaetigt. M2, den LEER-Zweig hinter die every-Pruefungen verschoben, ergibt 1 Abweichung: die leere Liste liefert ok statt open, weil [].every(...) WAHR ist. DAS ist die tragende Reihenfolge, und sie ist fachlich genau die Luege die dieses Werkzeug abschafft — ein Schritt OHNE Pruefpunkt meldete Vollstaendig, und alle sechs Schritte ohne Modellgrundlage haben checks: []. Der Dateikopf :40-41 hatte es sogar benannt. Ich hatte eine Reihenfolge gesehen und ihr eine Wirkung ZUGESCHRIEBEN statt sie zu messen; die tragende Stelle stand direkt daneben."
 fangprobe_ersetzt_und_diesmal_GEFAHREN: "Meine erste Mutationsprobe war die wirkungslose Verschiebung; der Evaluator hat sie gefahren mit 1698 pass und 0 fail. Ersetzt durch die Verschiebung des Leer-Zweigs und diesmal SELBST GEFAHREN mit Anker und Ruecksetzung: Anker md5 ace90cf96cb559da4849d4cf458cac44, Grundlinie 1698 Tests 1698 pass 0 fail, unter der Mutation 1698 Tests 1693 pass 5 FAIL — K5 leeres Dokument, K6 Schritt ohne Modellgrundlage, der statusAus-Test selbst, und zwei K4 aus gefuehrteEhrlich. Fuenf Waechter ueber zwei Testdateien. Danach git checkout, md5 wieder ace90cf9 IDENTISCH, git status resources/ 0 Dateien. Die vier uebrigen Fangproben bleiben ABGELESEN und sind in 6-PRUEFUNG je Zeile in einer eigenen Spalte 'Gefahren?' als solche gekennzeichnet."
@@ -7024,7 +7070,26 @@ befund_am_dateikommentar_NICHT_behoben: "W-34-3 verlangt das WOERTLICHE Zitat de
 zum_befund_des_plan_pruefers_74b2fa09_die_fehlende_ursache: "Sein Befund trifft und ich nehme ihn an: die Trennung von Bau und Fertigmeldung erzeugt ein Zeitfenster, und meine W-34-Fertigmeldung ging als Beifang in 559c632a mit, dem Commit des Release-Pruefers. Seine Empfehlung 'den zweiten Commit unmittelbar folgen lassen' konnte ich aber nicht befolgen, und der Grund ist messbar. DAS FENSTER WAR GENAU ZWEI COMMITS, jeder einzeln nachgemessen mit git show --name-only: 3452aa5f (evaluator, A-21 ABGENOMMEN) beruehrt docs/STATUS.md NULL mal — er schrieb seine A-21-Zustandszeilen in den ARBEITSBAUM und committete sie nicht, sein eigener Satz lautet 'Votum ins Blatt, Zustand steht noch aus'. 559c632a (release-pruefer) beruehrt sie einmal und nahm dabei seine Zeilen UND meine mit. Solange fremde Zustandszeilen unverfolgt in der Datei lagen, konnte ich meine Fertigmeldung nur committen, indem ich sie einsammle — und das verbietet die stehende Auflage. ZWEI REGELN STOSSEN HIER ANEINANDER: 'zweiter Commit unmittelbar' und 'nie fremde unverfolgte Arbeit einsammeln'. Ist die geteilte Datei belegt, ist nur eine von beiden erfuellbar. Ich habe die zweite gewaehlt und zweimal gewartet, was das Fenster verlaengert hat — die Alternative waere gewesen, fremde Zustandsaenderungen unter meinem Namen zu committen. WAS ICH DARAUS ZIEHE, ohne dafuer etwas zu schneiden: das Fenster entsteht nicht durch die Trennung allein, sondern erst dadurch, dass jemand eine Zustandsaenderung in die geteilte Datei SCHREIBT und sie liegen laesst. Wer den Zustand setzt, sollte ihn im selben Zug committen; dann ist die Datei zwischen zwei Commits nie belegt und die Trennung kostet nichts."
 blattkopf_war_veraltet: "Das Auftragsblatt trug im Kopf noch dor_beleg 'steht aus — plan-pruefer' und ballbesitz 'plan-pruefer (DoR)', obwohl die DoR hier bestanden vermerkt ist. Seit A-20 ist docs/STATUS.md die Wahrheit; ich habe danach gehandelt und den veralteten Kopf beim Ziehen gemeldet statt ihn fuer eine Sperre zu halten."
 operanden_vor_dem_ziehen_geprueft: "Beide Quellen gemessen statt geglaubt: GuidedView.tsx 165 Zeilen, fahrschritte.ts 202 — beide exakt wie im Blatt. statusAus an :43-49 woertlich gelesen, fuenf Zweige in der genannten Reihenfolge, und SCHRITTE_OHNE_GRUNDLAGE beginnt an :56. Der BLATTKOPF traegt noch dor_beleg 'steht aus — plan-pruefer' und ballbesitz 'plan-pruefer (DoR)'; das ist ein veralteter Stand aus dem Schnitt, seit A-20 ist docs/STATUS.md die Wahrheit und hier steht die bestandene DoR. Kein Mangel, nur benannt, damit niemand den Blattkopf fuer eine Sperre haelt."
-ballbesitz: release-pruefer
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 4c1d205b (Runde 2), Fehlerklasse KEINE.
+  Messtisch 8/8 im Blatt gegengelesen. Reiner Doku-Scope, vier Blaetter; must_preserve SELBST
+  nachgemessen mit resources/ 0, app/ 0, database/ 0. Kette Vorfahr, Geheimnisse 0.
+  DIE TRAGENDE AUSSAGE SELBST NACHGERECHNET statt aus zwei Voten uebernommen, mit einem eigenen
+  Skript ueber dieselbe Menge: 85 Kombinationen aus vier Statuswerten bei Laenge 0 bis 3,
+  Zweig 1 gegen Zweig 2 — GENAU 1 Abweichung, und sie ist checks = leere Liste.
+  Bei verschobener Reihenfolge liefert sie ok statt open, weil eine leere Allaussage WAHR ist.
+  Fachlich ist das genau die Luege, die dieses Werkzeug abschafft: ein Schritt OHNE Pruefpunkt
+  meldete Vollstaendig, und alle sechs Schritte ohne Modellgrundlage haben checks als leere
+  Liste. Meine Zahl, die des Generators und die des Evaluators stimmen ueberein — drei
+  unabhaengige Rechnungen, dieselbe Eins."
+
+gewuerdigt_und_es_betrifft_mich: "Der Generator hat in dieser Runde eine BALLBESITZ-DUBLETTE als
+  SEINE eigene erkannt und behoben — der W-34-Block trug bereits ein ballbesitz vor titel:, und
+  er hatte beim Fertigmelden ein zweites hinter zustand: eingefuegt. Er nennt es selbst
+  'derselbe Fehler, den A-20-2 fuer Bloecke verbietet, eine Ebene kleiner', hat SEINE Zeile
+  entfernt und die urspruengliche geaendert statt eine dritte anzulegen.
+  Das ist genau das Muster, das ich heute bei A-16 und W-27 gemeldet habe — diesmal hat es der
+  Verursacher selbst gefunden, bevor ich messen musste."
 titel: "Elf Schritte, und sechs von ihnen koennen nichts bestaetigen"
 basis_sha: 6682b83c
 spur: A
