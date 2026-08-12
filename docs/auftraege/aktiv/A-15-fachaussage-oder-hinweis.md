@@ -642,3 +642,57 @@ zusammenfassung: "Fachlich ist der Bericht vollstaendig und belastbar: alle vier
 
 ballbesitz: generator
 ```
+
+
+## §12.3 — Nachbesserungsbericht A-15 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "A-15"
+zustand: CODE_FERTIG
+runde: 2
+befund_von: "evaluator a704fb1d — Fehlerklasse BEWEIS, ein P1, drei P2"
+in_arbeit_commit: "ea9522bc"
+
+P1_zwei_abschnitte_mit_gegensaetzlicher_aussage:
+  war: "der Bericht trug ZWEI Abschnitte A-15-11. Der erste sagte 'die Zulieferung existiert noch
+        nicht', der zweite 'die Sperre ist aufgeloest'. Der erste war um 08:38 nachweislich falsch:
+        W-09/1 ist seit 08:19 abgenommen, und meine EIGENE Betreffzeile sagte DIE ZULIEFERUNG IST DA."
+  einordnung: "Falle 4 — den neuen Abschnitt eingefuegt, den alten stehen gelassen.
+               Bei W-09 habe ich denselben Fehlertyp mit einer Warnzeile geloest; hier fehlte sie."
+  jetzt: "UEBERHOLT-Vermerk mit Datum, Grund und Verweis auf den gueltigen Abschnitt.
+          Gegenprobe: alte Behauptung 0 Treffer, Warnvermerk 1."
+  warum_nicht_geloescht: "ein Bericht, aus dem ein ueberholter Satz spurlos verschwindet, sieht aus,
+                          als haette er nie gestanden"
+
+P2_1_bilanzzeile: "'FACHAUSSAGE (7)' bei SECHS Namen — die siebte war configuratorPackage, die ich
+                   selbst als KEINE ENGINE fuehre. Jetzt 6 + 4 + 1 = 11, ablesbar."
+P2_2_treppenTypen: "stand ohne Zusatz in der Fuenferliste. Gemessen: treppenTypen.ts:4 schreibt
+                    'DIN-Stufung aus dem getesteten berechneTreppe'. Jetzt 'keine EIGENE Norm'
+                    plus Warnzusatz — an der Einordnung aendert es nichts, am Satz schon."
+P2_3_testdateien: "14 gezaehlt, 15 gemessen. Beide Stellen berichtigt."
+
+eigener_fehler_dazwischen:
+  was: "ich hatte A-15 auf IN_ARBEIT gesetzt und den Commit VERGESSEN"
+  folge: "der naechste Schreibvorgang brach an meiner eigenen Sauberkeitspruefung ab"
+  einordnung: "die Schranke hatte recht — die Datei wich von HEAD ab. Nur war die Abweichung
+               MEINE. Sie unterscheidet nicht zwischen fremder und eigener ungesicherter Arbeit;
+               beides ist ein Grund anzuhalten, aber fremde darf ich nicht mitnehmen und eigene
+               muss ich erst verbuchen."
+  behoben: "IN_ARBEIT nachgereicht (ea9522bc), vorher gemessen: 17 geaenderte Zeilen, FREMD 0"
+
+was_der_evaluator_unabhaengig_nachgemessen_hat:
+  - "Menge 13 Dateien, Datei fuer Datei"
+  - "Ausschluesse einzeln"
+  - "Normzeilen ueber alle dreizehn"
+  - "Panel-Zuordnung BLOCKGENAU, alle acht — einschliesslich des mehrzeiligen Blocks,
+     an dem mein erstes Muster gescheitert war"
+  - "die drei A-Fundstellen woertlich geoeffnet"
+  - "die §3-Zahlen am Elter"
+  sein_satz: "jede Fundstelle, die ich geoeffnet habe, hat getroffen"
+
+gruene_erneut_gefahren:
+  A-15-7: "0 geaenderte Dateien in resources/ und app/ — es bleibt ein Bericht"
+  platzhalter: "0 nach beiden Zaehlweisen"
+
+ballbesitz: evaluator
+```

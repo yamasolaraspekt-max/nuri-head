@@ -31,7 +31,7 @@
 | **W-07N** `2-FUNKTION` + Azimutgrenze | **`CODE_FERTIG`** | **Generator** (gebaut vom Planner in Generator-Rolle, Yamas Freigabe) | Bau `b86e41fc` · Elter `8825f428` · Basis `3d368625` | **5/9 grün, vier unerfüllt** · `-8` **§7: zwei der fünf ausdrücklich ausgeschlossenen Blätter geändert (+148 Z.)** · `-5` die zwei Ableitungen nirgends genannt (4× 0 Treffer) · `-7` offene Posten nur im Auftragsblatt · `-9` §3-Beleg ohne Befehl und nur an EINEM Ort · `-4` PVGIS-Fundstelle fehlt · Suite 1693/1693 |
 | **W-09** Treppe | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `f9c98fc0` (Inhalt `a29ea627`) · Runde 1 `d26d50b4` · Basis `65f3ece4` | **11/11 nach §12.4 alle neu gemessen** · der Wortlaut ist jetzt **gelaufen, nicht geschrieben**: seine Eingaben nachgefahren, sieben Zeilen deckungsgleich (170.6 · 288.8 · 118.2 · 459.4) · `-11` nennt jetzt **Dateien** statt Zahlen · Register-Selbstwiderspruch weg · Suite 1693/1693 · **zwei P2 zur Reihenfolge des Nachweisens, §12.5** |
 | **A-14** N-003-Vorbehalt ins Ergebnis | `BETRIEBSBESTAETIGT` | – | Inhalt `21940d33` (Bau `e0722979`) · Elter `efca1899` · Basis `1e09280d` · Kandidat `a2385d35` | **§10 voll gefahren** (Produktivcode mit Sichtwirkung, keine Doku-Sammelform) · Kette lückenlos, jeder Übergang `--is-ancestor` Exit 0 · Bündel im Kandidaten und **byte-gleich nachgebaut** (md5 `a5ea0056` vor = nach Neubau; genau das Artefakt, das der Browserlauf auslieferte) · Insel-Suite selbst **1693/1693** · Rückweg reiner Revert, `git apply --check -R` Exit 0, keine Migration/kein Datenpfad · **Plaketten-Renderbedingung selbst ausgeführt: nur `engine-sparren` unterdrückt, fünf Engines behalten ihre — auch `heizkoerper` mit roter Plakette** · `must_preserve` resources/+scripts/ in drei Richtungen 0/0/0 · Beifang ab CODE_FERTIG nur `docs/` · **ein P2/SPEC beim Planner (grundlage-Zeile nennt 4 von 6 Sonderlasten), blockiert nicht** · Veröffentlichung gehört Yama |
-| **A-15** Fachaussage oder Hinweis | **`IN_ARBEIT`** | **Generator** | Bericht `60d62d74` · `BERICHT-A-15-fachaussage-oder-hinweis.md` | **14/14 der Sache nach erfüllt, tragende Zahlen unabhängig nachgemessen** (Menge 13, Panel-Zuordnung blockgenau, alle drei A-Fundstellen, §3-Zahlen am Elter) · **P1: ZWEI Abschnitte `A-15-11` mit gegensätzlicher Aussage**, der ältere zuerst und unmarkiert · drei P2 (Bilanzzeile, `treppenTypen:4`, `__tests__` 14 statt 15) |
+| **A-15** Fachaussage oder Hinweis | **`CODE_FERTIG`** | **Generator** | Bericht `60d62d74` · `BERICHT-A-15-fachaussage-oder-hinweis.md` | **14/14 der Sache nach erfüllt, tragende Zahlen unabhängig nachgemessen** (Menge 13, Panel-Zuordnung blockgenau, alle drei A-Fundstellen, §3-Zahlen am Elter) · **P1: ZWEI Abschnitte `A-15-11` mit gegensätzlicher Aussage**, der ältere zuerst und unmarkiert · drei P2 (Bilanzzeile, `treppenTypen:4`, `__tests__` 14 statt 15) |
 | **B5** Zählergebnis mit Trefferzeilen | `BEREIT` | **Generator** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
 | **B6** Summe braucht Erhebung | `BEREIT` | **Generator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
@@ -39,6 +39,7 @@
 | **A-16** `TIME_VARS` im Produktivbaum | `ZURUECKGESTELLT` | – | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
 | **A-17** Zwei Engines schweigen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
+| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `ea9522bc` | **löst A-15s letzte offene Achse-2-Zeile auf, ohne Fachurteil** — die `Schicht` hat drei Felder (`name?`, `dicke`, `lambda`), für Glaser fehlen μ/s_d **und** Klima: der Taupunkt ist **nicht rechenbar**, nicht »nicht implementiert« · 10 Feuchte-Begriffe = 0 in der Datei · Pflichtfeld nach A-14/A-17-Muster · **kein Panel, keine Plakette zu streichen** · 2. Posten: »speist Heizlast« gegen **0** Aufrufe aus `app/` |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -1936,8 +1937,8 @@ release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 21940d33, Kandidat a23
 auftrag: "A-15"
 titel: "Wo eine Rechnung eine Norm nennt, darf die Software nicht 'bestanden' sagen — gemessen, nicht eingeschaetzt"
 datei: docs/auftraege/aktiv/A-15-fachaussage-oder-hinweis.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Nachbesserung — ein P1, drei P2)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (Runde 2 — P1 und drei P2 behoben)
 basis_sha: d814be02
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): ENTWURF bleibt, EIN Restpunkt — sonst ist das Blatt stark. BEIDE VORERHEBUNGS-ZAHLEN SELBST GEMESSEN UND EXAKT BESTAETIGT: 13 Dateien in geometry/ und app/dashboard/ tragen \bbestanden\b, davon nennen 8 eine Norm (DIN/EN 199x/Eurocode). Die Selbstkorrektur des Planners ist vorbildlich und benennt die Klasse genau: 'ich hatte die Liste gemessen und die REICHWEITE geschaetzt' — mit ausdruecklichem Bezug auf meine eigene Selbstkorrektur a1d29aed, nur in die andere Richtung (zu eng statt zu weit). Dass unsere Fehlerklassen inzwischen eine gemeinsame Sprache haben, ist der eigentliche Fortschritt dieser Runde. Die Trennung zu A-14 ist sauber: A-14 baut die Mechanik fuer N-003 und laeuft zuerst (Risiko), A-15 klassifiziert die uebrigen zwoelf. §5-Block, Erstnutzer, Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden; A-15-4 (Fachurteil als Urteil kennzeichnen) steht zusaetzlich als Hausregel — richtig, denn ein Kriterium gilt fuer einen Auftrag, eine Hausregel fuer alle."
@@ -4557,4 +4558,36 @@ alternative: "Ein Waechter nach A-04-Muster (Ausgabewege ohne Vorbehalt melden) 
 was_von_dir_gebraucht_wird: "nichts. Die Entscheidung liegt, die Auflage ist erfuellt.
                              Der Vorschlag oben ist eine Zeile fuer den Planner."
 status_korrektur: "der Eintrag 'FACH-GATE N-003 offen bei Yama' ist ueberholt und wird geschlossen"
+
+## A-18 — `wandaufbau`: der U-Wert trägt seinen Vorbehalt (Datensatz, einziger Zustandsort neben der Tafelzeile)
+
+```yaml
+auftrag: "A-18"
+datei: docs/auftraege/aktiv/A-18-wandaufbau-vorbehalt-uwert.md
+zustand: ENTWURF
+ballbesitz: "plan-pruefer (DoR)"
+basis_sha: ea9522bc
+anlass: "Yamas Auftrag 12.08. — 'bitte das loesen, das ist dein Auftrag konzeptionell', auf die
+         vorgelegte Analyse zur letzten offenen Achse-2-Zeile."
+kern: "Die Frage 'Bauschaden oder Fehlauslegung?' war FALSCH GESTELLT. Die Engine behauptet keine
+       Feuchteschutz-Aussage — sie kann sie nicht behaupten. Entschieden hat das die
+       DATENSTRUKTUR, nicht ein Fachurteil."
+selbst_nachgemessen: "alle fuenf Kernaussagen der Analyse halten:
+  (1) wandaufbau.ts:9-15  Schicht = name?, dicke, lambda — mu/sd und Klima fehlen
+  (2) zehn Feuchte-Begriffe in der Datei: je 0
+  (3) Dateikopf:4 nennt DIN EN ISO 6946 (U-Wert), nicht DIN 4108-3 (Feuchteschutz)
+  (4) berechneUWert: EIN Aufrufer, faehigkeiten.ts:81, zustand in_entwicklung — kein Panel
+  (5) app/ ruft die Engine 0x auf"
+eine_praezisierung: "'null Treffer im ganzen Haus' ist zu stark: feuchte hat ZWEI Fundstellen —
+       fachFlaechen.ts:149 'Feuchtelast g/h' und dachformVorlagen.ts:105 holzfeuchteProzent.
+       Beide sind ANDERE Feuchtegroessen, keine Tauwasserrechnung. Die Aussage gilt fuer DIESE
+       Engine; die Begruendung muss das sagen."
+warum_kein_fachurteil_noetig: "anders als bei N-003, wo Yama den GELTUNGSBEREICH festlegen musste,
+       ist hier jeder Satzteil eine Ablesung: die Norm steht im Dateikopf, die fehlenden Groessen
+       stehen im Datentyp, der Schlusssatz ist die Folge daraus."
+zweiter_posten_nicht_erledigt: "Dateikopf:2 sagt 'speist Heizlast & Dach' — gemessen 0 Aufrufe aus
+       app/. Dieselbe Klasse wie die fehlende Azimut-Bruecke und W-15s Vertrag ohne
+       Implementierung. KEIN Brueckenbau in diesem Auftrag."
+abhaengigkeit: "A-18 darf erst BAUEN, wenn A-15 abgeschlossen ist — sonst baut es auf einem
+       Vorschlag. A-15 ist IN_ARBEIT beim Generator; ich habe es NICHT angefasst."
 ```

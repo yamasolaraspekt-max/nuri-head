@@ -26,7 +26,7 @@ eine andere Menge. Gut, dass ich es als zu klären gemeldet habe und nicht als W
 |---|---|---|
 | `app/EngineFlaeche.tsx` | ja | **zeigt** die Plakette, rechnet nichts — die Hülle ist keine Rechnung |
 | `app/rahmen/Buehne.tsx`, `EigenschaftenPanel.tsx` | ja | Darstellung |
-| `__tests__/**` (14 Dateien) | ja | Zusagen über die Rechnungen, nicht die Rechnungen |
+| `__tests__/**` (15 Dateien) | ja | Zusagen über die Rechnungen, nicht die Rechnungen |
 | `renderers/`, `app/tools/` | nein | **0 Treffer** — sie kommen gar nicht in Frage |
 
 *Die Ausschlüsse sind gemessen, nicht gesetzt: `renderers/` und `app/tools/` tragen das Wort nicht.*
@@ -46,8 +46,14 @@ eine andere Menge. Gut, dass ich es als zu klären gemeldet habe und nicht als W
 | `enginePanels.ts` | **124**, **125** | DIN 18065 (im `zweck` und in `grundlage`) |
 | `werkzeugRegistry.ts` | **13** | DIN 18065 (im Kommentar eines Feldes) |
 
-**FÜNF nennen keine:** `configuratorPackage.ts` · `fbhAuslegung.ts` · `heizkreisVerteiler.ts` ·
-`treppe3D.ts` · `treppenTypen.ts`
+**FÜNF nennen keine EIGENE Norm:** `configuratorPackage.ts` · `fbhAuslegung.ts` ·
+`heizkreisVerteiler.ts` · `treppe3D.ts` · `treppenTypen.ts`
+
+> **⚠ Eine der fünf nennt DIN mittelbar, und das gehört gesagt:** `treppenTypen.ts:4` schreibt
+> *„**DIN-Stufung** aus dem getesteten `berechneTreppe`"*. **Das ist keine eigene Normnennung —
+> es ist ein Verweis auf die Engine, die sie führt.** *An der Einordnung ändert es nichts
+> (`treppenTypen` prüft nichts und bleibt HINWEIS), aber die Zeile „nennt keine Norm" wäre ohne
+> diesen Zusatz zu grob: sie nennt keine EIGENE.*
 
 **Auch die Fünf stimmen mit dem Auftrag überein.**
 
@@ -132,16 +138,19 @@ Zustand A.*
 > „nicht unterscheidbar" statt einer Vermutung — der Unterschied ist am Code nicht messbar und
 > braucht Fachprüfung.*
 
-## A-15-11 · Die vier Treppen-Dateien — ZULIEFERUNG, und sie fehlt noch
+## ⚠ ÜBERHOLT — dieser Abschnitt stand hier und war ab 08:19 falsch
 
-`treppenBerechnung.ts` · `treppe2D.ts` · `treppe3D.ts` · `treppenTypen.ts` werden **nicht hier
-gemessen**, sondern aus `W-09/1-5` übernommen.
+**Hier stand: „W-09/1 steht heute auf `BEREIT` und ist nicht gebaut — die Zulieferung existiert also
+noch nicht."** *Das war am 12.08. um 08:38 nachweislich falsch:* **W-09/1 ist seit 08:19 abgenommen.**
 
-**W-09/1 steht heute auf `BEREIT` und ist nicht gebaut** — die Zulieferung existiert also noch
-nicht. **Das ist keine Lücke dieses Berichts, sondern eine Reihenfolge:** *A-15 kann erst
-abschließen, wenn W-09/1 seine vier Zeilen geliefert hat, oder die Auflage wird geändert.*
-**Ich messe sie NICHT ersatzweise — zwei Aufträge, die dieselbe Datei messen, erzeugen zwei Zahlen
-und eine Diskussion.**
+**Der gültige Abschnitt steht weiter unten** — „A-15-11 · Die vier Treppen-Zeilen — ZULIEFERUNG aus
+W-09/1, nicht neu gemessen". *Dort ist die Sperre aufgelöst und die Zulieferung eingetragen.*
+
+> **Warum der Text hier nicht einfach verschwindet:** *ein Bericht, aus dem ein überholter Satz
+> spurlos entfernt wird, sieht aus, als hätte er nie gestanden.* **Bei W-09 habe ich denselben
+> Fehlertyp mit genau so einer Warnzeile gelöst — hier hatte ich sie vergessen, und der Bericht trug
+> zwei Abschnitte mit gegensätzlicher Aussage.** *Das ist meine Falle 4: den neuen Abschnitt
+> eingefügt, den alten stehen gelassen.*
 
 ## A-15-4 / -12 / -13 · Achse 2 — VORGESCHLAGEN, NICHT ENTSCHIEDEN
 
@@ -212,7 +221,7 @@ nicht entscheidbar — siehe A-15-10.
 | `treppenBerechnung.ts` | **ja** — `:5`, `:58` (DIN 18065) | **Sturzgefahr**: Steigung, Auftritt, Laufbreite, Durchgangshöhe sind Sicherheitsmaße | **PERSONENSCHADEN** | **FACHAUSSAGE** |
 | `treppe2D.ts` | **ja** — `:6`, verweist auf `berechneTreppe` | zeichnet nur; eine Verletzung **entsteht** hier nicht, sie wird **abgebildet** | **KOMFORT** | **HINWEIS** |
 | `treppe3D.ts` | **nein** | dieselbe Lage: Darstellung, keine Prüfung | **KOMFORT** | **HINWEIS** |
-| `treppenTypen.ts` | **nein** | Katalog der Grundriss-Geometrie; prüft nichts | **KOMFORT** | **HINWEIS** |
+| `treppenTypen.ts` | **nein — aber `:4` verweist auf die „DIN-Stufung aus `berechneTreppe`"** | Katalog der Grundriss-Geometrie; prüft nichts | **KOMFORT** | **HINWEIS** |
 
 ### Die Begründung der Klassen — und wo ich aus Zweifel die höhere gesetzt habe
 
@@ -230,10 +239,11 @@ ihnen zugleich Prüfstelle, stünde FACHAUSSAGE.**
 ## A-15-13 · Elf von elf — die Tabelle ist vollständig
 
 ```text
-FACHAUSSAGE (7)  sparrenBerechnung · abwassergefaelle · wandaufbau · fbhAuslegung
+FACHAUSSAGE (6)  sparrenBerechnung · abwassergefaelle · wandaufbau · fbhAuslegung
                  heizkreisVerteiler · treppenBerechnung
-                 (+ configuratorPackage: KEINE Engine, siehe oben)
 HINWEIS (4)      kuecheArbeitsdreieck · treppe2D · treppe3D · treppenTypen
+KEINE ENGINE (1) configuratorPackage
+                 6 + 4 + 1 = 11 — die elf sind vollstaendig verteilt
 ```
 
 **Sechs Engines mit einer Norm, fünf ohne — und die Klasse folgt nicht der Norm.** *`fbhAuslegung`
