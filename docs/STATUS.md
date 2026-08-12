@@ -7516,4 +7516,14 @@ pruefungen_auf_die_eigenen_kriterien_angewandt: "Pflichtpruefung 8: kein Kriteri
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit; das Blatt traegt weder
   status im Kopf noch zustand im Fuss."
 W_39_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-39 GECLAIMT vor dem Pruefstand.
+  ZUERST MEIN FEHLER: der Commit 2cff9e8e traegt meine Claim-Botschaft ueber 27 fremden Zeilen
+  (STILLSTANDSMELDUNG_WIDERLEGT und zweiter_befund_beim_messen, beide vom Release-Pruefer).
+  Mein §18-Check hatte GEGRIFFEN und nichts geschrieben — aber das Tor lief in derselben
+  Befehlszeile weiter, ohne an den Exit-Code gekoppelt zu sein. Gemessen: 0 entfernte Zeilen,
+  kein Text vernichtet; falsch ist die Zuordnung, nicht der Inhalt. Kein revert, das haette
+  seinen Text geloescht. Zweiter Fall derselben Kopplungsluecke nach der A-21-Runde.
+  DER CLAIM: dritte Ablesung der Stufe 6. Die Registerzeile behauptet 13 Module und 8 ohne
+  eigenes Werkzeug — zwei Zahlen ueber FREMDEN Besitz, und daran ist W-34s Abschnitt 2 schon
+  gescheitert. Ich zaehle beide selbst am Code und oeffne jede Zuordnung."
 ```
