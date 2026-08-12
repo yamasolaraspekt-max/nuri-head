@@ -125,7 +125,7 @@ und Lichtkuppel. **Die Trennlinie zieht der Code selbst** — `aufbauOrientierun
 | W-38 | **Schritt-Status und Prüfpunkte** | **BESCHRIEBEN** | alle *(Richtung, keine Vorbedingung)* | **keine** ⓝ — rein deklarativ: **0 Funktionen, 0 Importe**; `app/studioDaten.ts:163` trägt `SchrittStatus` mit **vier** Stufen, `:255` die vier Beschriftungen |
 | W-39 | **Studio-Rahmen** | **BESCHRIEBEN** | **13 Module** *(benutzt, nicht besessen — 8 ohne eigenes Werkzeug)* | **keine** ⓝ — **ADDITIV**: die `HausplanerApp` bleibt unverändert, einziger Eingriff ist das Flag `imStudio` (`:140`); drei Modi in `:131/:132/:133`, der dritte heißt `imExperte` (`:85`) |
 | W-40 | **Gültigkeitsstatus** `confirmed`·`outdated`·`blocked` | **ENTWORFEN** | W-38 | **keine** ⓝ — **zwei Achsen**: Fortschritt (W-38, gebaut) neben Gültigkeit (Vorgabe). Ohne `confirmed` ist „PV erst nach **bestätigter** Geometrie" nicht prüfbar · **BEFUND: eine Gültigkeitsachse mit Übergängen ist in `geometry/configuratorPackage.ts` bereits gebaut** — siehe `7-GRENZEN` |
-| W-41 | **Abhängigkeitsgraph / Invalidierung** | LEER | W-38, W-40 | — **kein Code**; „Änderungen propagieren, **niemals** stille Löschung" |
+| W-41 | **Abhängigkeitsgraph / Invalidierung** | **ENTWORFEN** | W-38, W-40 | **keine** ⓝ — **kein Code**; „Änderungen propagieren, **niemals** stille Löschung" · **die dünnste Vorgabe**: die Quelle führt den Graphen selbst unter *nicht gemessen*. Von sechs Kandidat-Kanten ist **eine belegt** — Dachfläche → PV-Belegung (`geometry/pvBelegung.ts:10-14`) |
 | W-42 | **Schreibpfad Wizard → Gebäudemodell** | LEER | W-35 | — **kein Code**; im `ConfigWizard`-Dateikopf als **„nächste Scheibe"** benannt |
 
 ---
