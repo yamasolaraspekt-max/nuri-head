@@ -6,6 +6,7 @@ rolle: "generator"
 blatt: docs/auftraege/aktiv/A-21-yamas-anordnungen-und-drei-zustandsworte.md
 basis_sha: 877f81ee
 in_arbeit_commit: "96b588e0"
+bau_commit: "74efb8c2"   # OHNE die Fertigmeldung — A-21-6 misst diesen Commit
 gebaut_am: "12.08.2026"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
@@ -120,7 +121,13 @@ BELEG daneben, wörtlich und nicht gelöscht.**
 
 ## A-21-6 · Am Commit gemessen — und hier stoßen zwei Kriterien aneinander
 
-**Der Nachweis, wie das berichtigte Kriterium ihn verlangt** — `git show <bau-sha> -- docs/STATUS.md`:
+**Der Nachweis, wie das berichtigte Kriterium ihn verlangt** —
+`git show 74efb8c2 -- docs/STATUS.md`:
+
+> **Der Bau steht bewusst in einem EIGENEN Commit ohne die Fertigmeldung.** *Hätte ich A-21s eigene
+> `CODE_FERTIG`-Zeile mit hineingelegt, wäre sie eine **zweite** geänderte `zustand:`-Zeile
+> gewesen — und A-21-6 wäre ohne Not verletzt, an meinem eigenen Zustand.* **Der Zustandswechsel
+> folgt getrennt.**
 
 ```text
 geaenderte zustand:-Zeilen     1     -zustand: ZURUECKGESTELLT / +zustand: DECISION_BLOCKED

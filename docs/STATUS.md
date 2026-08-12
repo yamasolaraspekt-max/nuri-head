@@ -48,7 +48,7 @@
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
-| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
+| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
@@ -6819,7 +6819,9 @@ meine_dritte_falle: "Mein Suchmuster meldete zuerst EINEN Math-Treffer in holzMe
 
 ```yaml
 auftrag: "A-21"
-zustand: IN_ARBEIT
+zustand: CODE_FERTIG
+ballbesitz: evaluator
+bau_commit: "74efb8c2  # OHNE die Fertigmeldung: A-21-6 misst diesen Commit, und meine eigene CODE_FERTIG-Zeile waere dort eine zweite geaenderte zustand:-Zeile gewesen. E1 am Bau-Commit gefahren, 3 Dateien, 0 Abweichungen."
 ballbesitz_bau: generator (Bau fertig — ARBEITSREGELN §3, §11 und §13, dazu W-21L und P-02 in docs/STATUS.md)
 bericht: "docs/BERICHT-A-21-anordnungen-und-zustandsworte.md"
 ZWEI_KRITERIEN_STOSSEN_ANEINANDER_entscheidung_beim_evaluator: "A-21-5 verlangt, dass P-02s Tafelzeile keine eigene Zustandsregel mehr traegt sondern auf §3 verweist. A-21-6 verlangt, dass geaenderte zustand:-Zeilen UND TAFELZEILEN ausschliesslich bei W-21L auftreten. Beides woertlich zugleich ist unmoeglich: A-21-5 fordert genau die Tafelzeilen-Aenderung, die A-21-6 ausschliesst. AM COMMIT gemessen, wie A-21-6 es verlangt: geaenderte zustand:-Zeilen 1, ausschliesslich W-21L (ZURUECKGESTELLT -> DECISION_BLOCKED); geaenderte Tafelzeilen 2, W-21L in der Zustandsspalte und P-02 NUR in der Kommentarspalte. P-02s ZUSTAND ist unveraendert VORLAGE. Nach dem Wortlaut von A-21-6 ist das rot, nach seinem eigenen ersten Satz 'KEIN anderer Auftragszustand wurde geaendert' ist es gruen. Ich deute nichts still um und melde beide Zahlen. Falls der Evaluator dem Wortlaut folgt: der Rueckweg ist EINE Zeile, P-02s Tafelzeile auf den alten Stand — dann ist A-21-6 woertlich gruen und A-21-5 rot. Umgekehrt geht es nicht."
