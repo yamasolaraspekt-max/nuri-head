@@ -7,7 +7,7 @@ art: "Nachbesserung eines ALTSTANDES — kein Stufe-1-Blatt, W-07 ist zu 6/7 bes
 titel: "2-FUNKTION.md ist ein leeres Formular, waehrend W-07 im Register BESCHRIEBEN traegt"
 spur: A
 heimat_app: ticket
-status: IN_ARBEIT
+status: CODE_FERTIG
 status_steht_in: docs/STATUS.md
 dor_beleg: "a5aab234 — plan-pruefer: 'W-01N und W-07N BEREIT beim ersten Review', beide Rot-Lagen selbst gemessen. Berichtigt 12.08.: der Blattkopf hing auf ENTWURF, weil die DoR die Datei nicht anfasste."
 basis_sha: 3d368625
@@ -338,3 +338,52 @@ B5/B6/W-15. Begründung: W-07N ist das **elfte** von elf Blättern der Klasse A 
 Zähler und damit die Klasse. B5, B6 und W-15 sind ebenfalls `BEREIT`, aber keiner von ihnen
 schließt etwas ab; sie verlängern die Liste der halbfertigen Stränge. Ein geschlossener Strang ist
 mehr wert als drei angefangene.*
+
+
+## BAUBERICHT — Planner in Generator-Rolle (Yamas Freigabe 12.08.), Ball beim Evaluator
+
+**Umgesetzt, nicht abgenommen.** *Ich habe in fremder Rolle gebaut und nehme ausdrücklich nicht ab;
+Evaluator und Release-Prüfer bleiben unabhängig.*
+
+```text
+GEBAUT — drei Blaetter gefuellt statt eines (die SPEC-Korrektur steht oben):
+  2-FUNKTION.md        Vorlage (9 Platzhalter)   ->  8.138 B   Ablesung aus dem Code
+  5-CODE/LIESMICH.md   unveraenderte Vorlage      ->  4.406 B   acht Module, 3.626 Z. benannt
+  6-PRUEFUNG.md        unveraenderte Vorlage      ->  5.780 B   10 Kriterien, 6 Mutationen,
+                                                                277 Testzusagen je Datei gezaehlt
+ERGAENZT — kein Zeichen des Bestands angetastet:
+  7-GRENZEN.md         +39 Zeilen, 0 geloescht (git diff --numstat: 39  0)
+                       die Azimutgrenze F-028 als eigener Abschnitt
+GEZOGEN:
+  REGISTER.md  W-07:  "6/7 BLAETTER" -> "BESCHRIEBEN"
+```
+
+**Die Gegenprobe mit derselben Methode, die den Fehler gefunden hat** — `md5` des Inhalts ab Zeile 2
+gegen die häufigste Fassung, für alle sieben Blätter:
+
+```text
+1-ZWECK 1.355 B · 2-FUNKTION 8.138 · 3-FORMELN 3.257 · 4-BEDIENUNG 2.906
+5-CODE/LIESMICH 4.406 · 6-PRUEFUNG 5.780 · 7-GRENZEN 6.503
+-> KEIN Blatt traegt mehr eine unveraenderte Vorlage.
+-> Platzhalter-Gegenprobe (die alte, blinde Methode): 0 / 0 / 0.
+
+DER ZAEHLER, mit der belegten Formel aus FAHRPLAN-WERKZEUGKASTEN.md:86:
+  grep -cE '^\| W-(0[1-9]|1[0-3]|21|22) .*BESCHRIEBEN'  ->  11 / 11
+```
+
+**Was ich NICHT getan habe, ausdrücklich:**
+
+- **Nicht abgenommen.** Der Zustand ist `CODE_FERTIG`, nicht `ABGENOMMEN`. Ball beim Evaluator.
+- **Die Suite nicht ausgeführt.** Ich habe 277 Zusagen gezählt und ihre Gegenstände gelesen, nicht
+  ihren Lauf. Das steht auch im Blatt `6-PRUEFUNG` unter „Was ich NICHT geprüft habe".
+- **Keine Zeile Produktivcode angefasst.** `resources/**` und `app/**` sind unberührt — dies ist eine
+  reine Doku-Stufe.
+- **Die W-09-Registerzeile nicht angefasst** (Zeile 57, `F-001`/`F-030`), obwohl der Befund meiner
+  ist: W-09 liegt beim Evaluator in der Wieder-Abnahme, und die Zeile gehört in dessen Vorgang.
+- **Die drei Werkbank-Nachträge N1/N2/N3 und den Widerspruch F-020-Weg gegen `roof.anbau`-Weg
+  (`db1dc3b6`) nicht mitbehandelt** — sie stehen im Blatt als ausdrücklich ausgeschlossen.
+
+**Und die DoR-Lage sage ich, statt sie zu verschweigen:** *die Prüfung `a5aab234` lief auf der
+Fassung „ein Blatt füllen". Gebaut sind drei. Der Umfang ist gewachsen, weil meine Messung falsch
+war — nicht weil ich mehr wollte. Der Plan-Prüfer sollte die gewachsene Fassung gegenlesen; ich
+habe sie oben vollständig belegt, damit das ohne Nachmessen möglich ist.*

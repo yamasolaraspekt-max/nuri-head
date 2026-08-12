@@ -75,3 +75,42 @@ hat den Fehler nicht behoben — nur verschoben.
 - Löcher / Innenhöfe
 - Gewichtete Kanten → verschiedene Neigungen je Dachseite (Krüppelwalm)
 - Gauben als eigenes Werkzeug
+
+## Die Azimutgrenze — F-028 🔴, und sie ist keine Ungenauigkeit, sondern eine Doppeldeutigkeit
+
+*Ergänzt 12.08. (W-07N, Yamas Auflage 1). **Der bestehende Inhalt dieses Blattes ist unverändert** —
+diese Grenze kommt hinzu, weil sie fehlte, nicht weil etwas falsch war.*
+
+**Zwei Konventionen sind im Haus, und im Bereich 0…180 ist ein Wert in beiden gültig:**
+
+```text
+Kompass  0 = Nord, 90 = Ost, 180 = Sued, 270 = West      0 … 360
+          -> belegt in database/migrations/…create_p_v_roofs_table.php:67
+             $table->float('roof_azimuth')->nullable(); // 0=N, 90=E, 180=S, 270=W
+PVGIS    0 = Sued, negativ = Ost, positiv = West         -180 … +180
+
+-> "90" heisst im einen OST, im anderen WEST-SUEDWEST. "180" heisst SUED oder NORD.
+   Ein Wert zwischen 0 und 180 ist in BEIDEN Konventionen gueltig und bedeutet
+   Entgegengesetztes. Es gibt keinen Wert, an dem der Fehler auffaellt.
+```
+
+**Was W-07 selbst benutzt** — [`dachGeometrie.ts:4`](../../../../../resources/planner/hausplaner/geometry/dachGeometrie.ts#L4):
+`Nord = +y`, und der Flächenazimut wird **nie gepflegt**, sondern aus `roof.firstAzimutGrad`
+abgeleitet (Satteldach: First ± 90°).
+
+| Grenze | Was gilt |
+|---|---|
+| **Kein Azimut ohne Konvention** | ein Zahlenwert allein darf dieses Werkzeug nicht verlassen und nicht erreichen; die Konvention gehört mitgeliefert |
+| **Keine Umrechnung in W-07** | die Umrechnung Kompass ↔ PVGIS ist **nicht** Teil dieses Werkzeugs (Yamas Schritt 7/8, eigener Auftrag) |
+| **`firstAzimutGrad` ≠ Flächenazimut** | das Feld ist die **First**-Richtung; wer es als Flächenazimut liest, liegt beim Satteldach um **90°** falsch |
+| **`azimut_grad = null`** | heißt **horizontal** (Flachdach), nicht „unbekannt" — ein `null` darf nicht als 0 = Nord gelesen werden |
+
+> **Warum das hier steht und nicht bei den Ungenauigkeiten:** *eine Ungenauigkeit ist ein Fehler mit
+> bekannter Größe. Dies ist ein Fehler mit bekannter **Richtung** — 90° oder 180°, je nach
+> Verwechslung — und ohne jedes Signal am Wert selbst. **PV-Ertrag und Heizlast hängen daran**; die
+> Formelsammlung führt es deshalb als **F-028 🔴 GESPERRT für das Durchreichen**.*
+
+**Der Bestand ist gemessen, nicht vermutet:** *Yamas drei SELECTs auf `p_v_roofs` ergaben **0/0/0**
+(belegt in `docs/auftraege/aktiv/A-13-roof-azimuth-absichern.md:613`). **Es gibt keine Altdaten mit
+Azimut** — das nimmt der Grenze die Rückwirkung, nicht die Gültigkeit: sie betrifft künftige
+Eingaben. Ein leerer Bestand ist keine Freigabe.*
