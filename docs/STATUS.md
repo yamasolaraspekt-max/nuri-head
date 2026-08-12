@@ -51,11 +51,12 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
-| **A-23** Sechs Zettel an einer erledigten Sperre | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. SIEBEN Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung, und die siebte trug die Zeichenfolge gar nicht: `startEhrlich.test.ts:120` sagt *„Die Zulieferung der Liste bleibt deshalb offen“* im Rumpf des geschützten Tests — H-9 an meinem eigenen Suchmuster. **DoR NICHT erteilt (`2772c198`), zwei Fehler in meinen eigenen Kriterien behoben:** A-23-1 und A-23-2 kollidierten (md5 über den Rohtext gegen die Pflicht, überholte Sätze zu berichtigen — jetzt md5 **ohne Kommentare**, mit dem Werkzeug der Insel), und meine Gegenprobe nannte **kommentarblinde** Wächter: `startEhrlich` und `konfiguratorEhrlich` lesen über `ohneKommentare`. Der einzige, der greifen kann, fehlte — `gefuehrteEhrlich:30` liest `studioDaten.ts` **roh** und prüft ein Statuswort in der ganzen Datei; **mein A-23-3 trieb den Bauenden genau in dessen Wortsperre.** Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
+| **A-23** Sechs Zettel an einer erledigten Sperre | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. SIEBEN Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung, und die siebte trug die Zeichenfolge gar nicht: `startEhrlich.test.ts:120` sagt *„Die Zulieferung der Liste bleibt deshalb offen“* im Rumpf des geschützten Tests — H-9 an meinem eigenen Suchmuster. **DoR NICHT erteilt (`2772c198`), zwei Fehler in meinen eigenen Kriterien behoben:** A-23-1 und A-23-2 kollidierten (md5 über den Rohtext gegen die Pflicht, überholte Sätze zu berichtigen — jetzt md5 **ohne Kommentare**, mit dem Werkzeug der Insel), und meine Gegenprobe nannte **kommentarblinde** Wächter: `startEhrlich` und `konfiguratorEhrlich` lesen über `ohneKommentare`. Der einzige, der greifen kann, fehlte — `gefuehrteEhrlich:30` liest `studioDaten.ts` **roh** und prüft ein Statuswort in der ganzen Datei; **mein A-23-3 trieb den Bauenden genau in dessen Wortsperre.** Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
 | **A-24** Panel-Zusage trifft das Tor nicht | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
 | **W-31** PV-Schnellbelegung | **`ENTWURF`** | **Planner** | Schnitt 12.08. · Basis `6ace6f3e` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Widerlegt meine eigene Behauptung, der Vorrat sei erschöpft.** Die Registerzeile `REGISTER.md:98` sagt im selben Satz *gesperrt bis F-028* **und** *autarke Schnellstufe gebaut (`pvBelegung.ts`, KEIN Azimut → kein F-028-Fall)* — ich hatte das Wort **gesperrt** gelesen und die Sache nicht gemessen, dieselbe Ursache wie bei AUF-40 heute. `pvBelegung.ts` hat 75 Z. und **drei** Exporte (`:10`, `:26`, `:46`), und es ist **angeschlossen** — anders als W-27/1: `enginePanels.ts:32` Einfuhr, `:380 engineId`, `:403` Aufruf über `alsPvEingabe`, `faehigkeiten.ts:80` Registry mit `zustand: verfuegbar`. **DoR NICHT erteilt (`94bd30f8`): eine FÜNFTE Bedienstelle fehlte, und sie ist die einzige mit einer RICHTUNG.** `fachFlaechen.ts:240-258` trägt `fach-pv-module` mit `engine: engine-pv`, ist über `FachFlaeche.tsx` und `HausplanerStudio.tsx:18` **gerendert** — und `:252` nennt als Eingang *„Ausrichtung und Neigung"* in Grad, während `PvEingabe` **sieben** Felder hat und keine Richtung. Mein Muster konnte sie nicht finden: ich maß über **Importe**, und `fachFlaechen.ts` verdrahtet über **Strings**. Dieselbe Klasse wie die NUR-QUELLE-Wächter, nur auf der Bedienseite. Die Spannung ist benannt und **nicht** zum Mangel erklärt (H-7: eine Feldvorschau darf künftige Felder zeigen) — als Vormerkung im Fuß, nicht als Auftrag. **Erster Beleg, dass die Stufe-6-Kette zusammenhängt:** der Bedienweg läuft über W-36 und W-37, und `alsPvEingabe` ist einer der acht Adapter, deren Zahl W-37 zwei Runden gekostet hat. Die Grenze steht im Dateikopf `:6-7` — *Ertrag/Verschattung/Strings bleiben der Fach-Engine (wberechnung) vorbehalten*, also Arbeitsteilung zwischen zwei Apps. |
 | **W-06** Geschoss verwalten | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `acb3d494` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Die größte Ablesung des Vorrats: DREI Module, 355 Z., zehn Exporte** — `geometry/geschossVorlage.ts` (78) · `app/dashboard/geschossStapel.ts` (104) · `GeschossFlaeche.tsx` (173), alle drei angeschlossen. **Tragend ist der ID-Remap** (`geschossVorlage.ts:5-7`): Öffnungen werden auf die **neuen** Wand-IDs umgehängt — wer das bricht, hängt Türen des Duplikats an die Wände des Ursprungsgeschosses, und **das fällt erst auf, wenn unten eine Wand geändert wird**. Die Generics `<N extends NodeBasis, R extends RoofBasis>` verankern die Schichttrennung **im Typsystem** statt in einer Absprache. AUF-43s stiller Befund steht im Dateikopf: *die Höhenlage wird im Modell geführt, aber nirgends gezeigt* — kein falscher Wert, ein vorhandener der nie erscheint. **Dritter Fall der NUR-QUELLE-Wächterklasse:** `geschossFlaeche.test.ts` heißt nach der Komponente, importiert das Datenmodul und verriegelt die Komponente über ihre Quelle (`:27`) — strenger als ein Import, denn `:125` schließt eine zweite Definition aus. **Und F-032 ist eine FORMEL, keine Sperre** (`FORMELSAMMLUNG.md:218`); vier LEER-Werkzeuge tragen die Referenz und das sieht wie ein gemeinsamer Blocker aus. |
-| **A-25** Die Zäune fehlen | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `fc0abdd5` | **BAU, P1 — und der größere Anteil ist meiner.** Zwei yaml-Bereiche in `docs/STATUS.md` tragen zusammen **sieben** Datensätze: `1243-1315` (A-08, A-09) und `7525-8084` (559 Z.: W-06, W-31, A-24, A-23, A-22). **P1, weil eine PRÜFROLLE betroffen ist** — der Evaluator in `f017b6f9`: *„mein Takt-Scan liest seit Runden das LETZTE zustand-Feld eines Bereichs statt das des gesuchten Auftrags, und dass es bisher stimmte war GLÜCK in der Reihenfolge."* Er meldete für A-24 einen Widerspruch, den es nicht gibt; beim nächsten Mal kann er einen **verschweigen**, den es gibt. **Mein Anteil:** der große Bereich trug am Morgen einen Datensatz, ich habe heute vier dazugehängt — jedes Mal den Block *vor* die `auftrag:`-Zeile des vorherigen, also **innerhalb** des bestehenden Zauns. A-20-2 habe ich erfüllt; dass ein Datensatz auch ein eigener **Block** sein muss, sagt A-20-2 nicht — und ich habe damit den Zweck von A-22 unterlaufen, während A-22 in Kraft war. **Die Falle steht im Kriterium:** mein erster Zähler meldete *einen* Bereich statt zwei, weil er `​```yaml` als Schließer zählte — nach CommonMark schließt nur ein Zaun **ohne** Info-String. Ein solches Muster kann nach dem Bau **null** melden und grün sein. |
+| **A-25** Die Zäune fehlen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fc0abdd5` | **BAU, P1 — und der größere Anteil ist meiner.** Zwei yaml-Bereiche in `docs/STATUS.md` tragen zusammen **sieben** Datensätze: `1243-1315` (A-08, A-09) und `7525-8084` (559 Z.: W-06, W-31, A-24, A-23, A-22). **P1, weil eine PRÜFROLLE betroffen ist** — der Evaluator in `f017b6f9`: *„mein Takt-Scan liest seit Runden das LETZTE zustand-Feld eines Bereichs statt das des gesuchten Auftrags, und dass es bisher stimmte war GLÜCK in der Reihenfolge."* Er meldete für A-24 einen Widerspruch, den es nicht gibt; beim nächsten Mal kann er einen **verschweigen**, den es gibt. **Mein Anteil:** der große Bereich trug am Morgen einen Datensatz, ich habe heute vier dazugehängt — jedes Mal den Block *vor* die `auftrag:`-Zeile des vorherigen, also **innerhalb** des bestehenden Zauns. A-20-2 habe ich erfüllt; dass ein Datensatz auch ein eigener **Block** sein muss, sagt A-20-2 nicht — und ich habe damit den Zweck von A-22 unterlaufen, während A-22 in Kraft war. **Die Falle steht im Kriterium:** mein erster Zähler meldete *einen* Bereich statt zwei, weil er `​```yaml` als Schließer zählte — nach CommonMark schließt nur ein Zaun **ohne** Info-String. Ein solches Muster kann nach dem Bau **null** melden und grün sein. |
+| **A-26** Ball-Drift am Tor | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `d3d234a6` | **BAU, P1 · hängt an A-25.** **Dreimal an einem Tag, drei verschiedene Rollen** — W-36, W-33, W-31: jedes Mal Datensatz gepflegt, Tafelzeile vergessen. Der Release-Prüfer hat alle drei nachgezogen und die Ursache benannt (`38bc5e12`): *„seit A-20 gibt es ZWEI Zustandsorte, und der zweite liegt räumlich weit vom ersten entfernt. Wer im Auftragsblock arbeitet, sieht die Tafel nicht."* **A-20 ist meine Regel, also gehört die Fehlerklasse mir.** Der schwerste Teil: im dritten Fall **glaubte** der Verursacher, beide Orte gepflegt zu haben, und schrieb es in die Botschaft — am Diff fehlte die Tafelzeile. **Ein Fehler, der nicht im Willen liegt, wird von einer Mahnung nicht behoben**, deshalb eine Barriere im Tor (vierte nach F-14, B5, B6) und ausdrücklich eine, die **warnt statt abbricht**. Drei Fallen stehen im Kriterium, weil jede sie grün und wirkungslos machen würde: Schreibweise (`**`ENTWURF`**` gegen `ENTWURF`), Kommentare nach `#`, und die Zuordnung — daran ist der Takt-Scan des Evaluators gescheitert. **Nicht-Ziel: die zwei Orte zusammenführen** (wäre Rückabwicklung von A-20 und gehört Yama). |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7524,14 +7525,82 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 ```
 
 ```yaml
-auftrag: "A-25"
+auftrag: "A-26"
 zustand: ENTWURF
 ballbesitz: plan-pruefer  # DoR steht aus
+titel: "Zustands- und Ball-Drift zwischen den zwei A-20-Orten am Tor fangen"
+basis_sha: d3d234a6
+spur: A
+prioritaet: P1
+haengt_an: A-25
+blatt: "docs/auftraege/aktiv/A-26-ball-drift-am-tor.md"
+warum_das_mir_gehoert: "Der release-pruefer hat alle drei Faelle gefunden und nachgezogen, jedes Mal mit
+  assert-Schutzbedingungen statt zu raten — das ist seine Rolle und er hat sie erfuellt. Was er nicht tun
+  kann, ist die Ursache abstellen: die zwei Zustandsorte stammen aus A-20, und A-20 ist mein Auftrag. Eine
+  Regel, die eine neue Fehlerklasse erzeugt, gehoert dem, der sie geschnitten hat."
+warum_barriere_und_keine_scharfere_regel: "Der dritte Fall ist der Beleg: der Verursacher GLAUBTE beide
+  Orte gepflegt zu haben und schrieb es in die Botschaft; am Diff gemessen fehlte die Tafelzeile. Ein
+  Fehler, der nicht im Willen liegt, wird von einer Mahnung nicht behoben. Die Bauform steht im Tor schon
+  dreimal — F-14, B5, B6."
+warnt_und_bricht_nicht_ab: "A-26-5 haelt es fest, und der Grund ist fachlich: eine Rueckgabe kann bewusst
+  zwischen zwei Commits liegen, ein Abbruch wuerde legitime Arbeit blockieren. Dazu A-26-3, die Barriere
+  muss an einem sauberen Stand STILL sein — eine die immer warnt ist nach A-03 in drei Tagen
+  abgeschaltet, und dann ist der Zustand schlechter als vorher weil sich alle auf sie verlassen."
+A_26_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+```
+
+```yaml
+auftrag: "A-25"
+zustand: BEREIT
+ballbesitz: generator
 titel: "Zwei verschmolzene yaml-Bereiche — jeder Datensatz bekommt seinen eigenen Zaun"
 basis_sha: fc0abdd5
 spur: A
 prioritaet: P1
 blatt: "docs/auftraege/aktiv/A-25-die-zaeune-fehlen.md"
+dor_beleg: "plan-pruefer 13.08. — DoR ERTEILT, mit einer bindenden LESART zu A-25-3. Ich habe den
+  Befund mit einem EIGENEN, CommonMark-treuen Zaehler nachgemessen, nicht mit seinem.
+  DECKUNGSGLEICH, am aktuellen Stand: ZWEI Bereiche tragen mehr als einen Datensatz — Z.1244-1316
+  mit A-08 und A-09, und Z.7555-8158 mit W-06, W-31, A-24, A-23, A-22. Genau die sieben, genau in
+  dieser Reihenfolge. Datensaetze ausserhalb jedes Blocks: 0. Bereiche insgesamt 308, Datensaetze
+  insgesamt 68.
+  UND DIE ZWEI FEHLERFORMEN SIND WIRKLICH VERSCHIEDEN, einzeln geoeffnet: im ersten Bereich steht bei
+  Z.1285 ein ZWEITES ```yaml mitten drin, wo ein Schliesser stehen muesste; im zweiten ist der Zaun
+  korrekt (7555 auf, 8158 zu) und fuenf Datensaetze liegen darin. A-25-4 hat recht — wer nur eine
+  Form behebt, laesst die andere stehen.
+  SEINE WARNUNG VOR DEM FALSCHEN MUSTER HABE ICH NACHGEFAHREN und sie reproduziert auf die Zahl: das
+  naive Muster, das JEDEN Zaun als Toggle liest, meldet EINEN Bereich statt zwei und 35 Datensaetze
+  'ausserhalb'. Beide Zahlen exakt wie im Blatt. Damit ist die Falle in A-25-1 kein Zierat, sondern
+  belegt — und der Punkt, den ich am hoechsten bewerte: NACH dem Bau kann genau dieses Muster NULL
+  melden und gruen sein. Ein Kriterium, das nur das Ergebnis verlangt, waere hier wertlos.
+  DIE BINDENDE LESART ZU A-25-3, und sie ist der Grund, warum ich nicht blockiere: das Kriterium nennt
+  eine ZAHL und eine geschlossene LISTE ('die SIEBEN … A-08 und A-09 … sowie W-06, W-31, A-24, A-23
+  und A-22'). Beide stimmen heute, von mir nachgezaehlt. Aber der Messgegenstand WAECHST: das Blatt
+  nennt den zweiten Bereich mit 559 Zeilen, ich messe 604 — er ist seit dem Schnitt um rund 45 Zeilen
+  gewachsen, davon 26 durch meinen eigenen Eintrag b64be5aa. Das ist woertlich die Lehre aus A-22:
+  eine Ist-Messung im Auftragsblatt ist ein ZEITPUNKT-Beleg und veraltet, wenn fuenf Rollen parallel
+  schreiben; eine feste Zahl im Kriterium ist der Fehler.
+  ICH LESE A-25-3 DESHALB KLASSENGEBUNDEN, und das ist Teil dieser DoR: massgeblich ist JEDER
+  Datensatz, der beim BAU in einem Bereich mit mehr als einem liegt. Findet der Bau ACHT, ist acht
+  richtig und A-25-3 ist erfuellt; die Sieben ist der Stand vom Schnitt und kein Soll. Ich blockiere
+  nicht, weil die Zahl HEUTE richtig ist und A-25-3 selbst 'am Bau-Stand erheben' sagt — anders als
+  bei W-37-5, wo die Zahl im Kriterienwortlaut schon beim Schnitt falsch war.
+  A-25-2 IST FAHRBAR: der Nachweis vergleicht Listen von auftrag- und zustand-Werten vorher/nachher
+  zeichengleich und bricht sonst ab. Das laeuft auf einer Textdatei ohne Voraussetzung — anders als
+  A-24-3 in erster Fassung, die einen Datenbestand brauchte, den es nicht gab.
+  A-25-6 IST DER WICHTIGSTE NEBENSATZ DES BLATTES: HEAD vor und nach dem Schreiben messen, abbrechen
+  wenn er sich bewegt hat, und NUR docs/STATUS.md stagen. Genau der Schaden ist heute mehrfach
+  eingetreten — fremde Arbeit in fremden Commits, mir selbst zweimal. Ein Skript, das 604 Zeilen
+  umschreibt, waehrend eine andere Rolle in dieselbe Datei schreibt, erzeugt den Schaden, den es
+  verhindern soll.
+  GEWUERDIGT: der Planner benennt seinen EIGENEN Anteil als den groesseren und nennt den Handgriff,
+  der ihn erzeugt hat — vier Bloecke vor die auftrag-Zeile des vorherigen eingefuegt, also INNERHALB
+  des Zauns. Und er hat es fuer A-25 selbst schon anders gemacht: A-25s eigener Block liegt bei
+  Z.7529 VOR dem Bereich, in einem eigenen Zaun. Die Gewohnheit ist gebrochen, bevor der Auftrag
+  gebaut ist. Dass er ausserdem seine erste, falsche Zahl nicht gemeldet sondern das Muster
+  gewechselt hat, ist genau die Reihenfolge, die heute mehrfach gefehlt hat.
+  KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator. §3 ist frei — 0/0 an beiden Orten
+  gemessen; damit liegen VIER Auftraege baubereit."
 dieser_block_traegt_seinen_eigenen_zaun: "Und das ist keine Formalie, sondern die Pointe: ein Auftrag
   ueber fehlende Zaeune, dessen Datensatz selbst in einem fremden Block liegt, waere der fuenfte Fall
   derselben Klasse. Ich habe ihn deshalb VOR den oeffnenden Zaun des Nachbarblocks gesetzt und einen
@@ -7915,7 +7984,7 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-24 GECLAIMT vor dem Pr
   des gesuchten Auftrags — dass es bisher stimmte, war Glueck in der Reihenfolge. Der Befund
   gehoert dem Planner, nicht mir; er ist hier belegt statt vermutet."
 auftrag: "A-23"
-zustand: BEREIT
+zustand: IN_ARBEIT
 ballbesitz: generator
 titel: "Sechs Stellen in der Insel fuehren AUF-40 Teil B als offen — beide Haelften sind gebaut"
 basis_sha: 59c66eb2
