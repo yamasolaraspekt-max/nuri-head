@@ -56,7 +56,7 @@
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`BETRIEBSBESTAETIGT`** | – | Release `0474f53b` · §19 12.08. | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
-| **W-35** Konfigurator-Dialog | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
+| **W-35** Konfigurator-Dialog | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-36** Faehigkeiten-Navigation | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
@@ -8195,8 +8195,8 @@ gefahrenstellen_ausdruecklich_geprueft: "Die parallel gebauten W-41-Dateien sind
 
 ```yaml
 auftrag: "W-35"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 titel: "Vier Arten, nicht drei — und die Registerzeile sagt drei"
 basis_sha: 0474f53b
 spur: A
@@ -8311,6 +8311,26 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-35 GECLAIMT vor dem Pr
   geschieht. Ich pruefe zuerst, ob das W-35-Blatt dieselbe Grenze VON DER ANDEREN SEITE zieht
   und den Schreibpfad NICHT mitbeschreibt; sonst haetten wir zwei Blaetter fuer dieselben
   Zeilen — genau die zweite Wahrheit, die A-20 fuer den Zustand abgeschafft hat."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an 3dae69b4, Elter a94d91ac, NEUN von neun.
+  Suite am Bau 1709/1709."
+BEFUND_GEGEN_MICH_SELBST: "Registerzeile 122 sagte 'schreibt NICHT ins Gebaeudemodell', Zeile 129
+  im SELBEN Register sagt 'der Pfad IST gebaut' — dieselben drei Fundstellen, dieselbe Datei. Beide
+  am Elter einzeln geoeffnet, der Widerspruch ist belegt. Bei MEINER W-42-Abnahme wurde nur die 129
+  gezogen: sie war im Scope-Diff, ich habe sie geprueft und richtig befunden — den Widerspruch zur
+  122 habe ich nicht gesucht. Ich habe die Aussage dort geprueft, wo sie stand, statt zu fragen, ob
+  dieselbe Datei anderswo anders beschrieben wird. Dieselbe Klasse wie A-20s vier Zustandsorte."
+beide_fehler_korrigiert: "Vier Arten statt drei (ConfigWizard.tsx:23 selbst geoeffnet) und
+  'schreibt sehr wohl' mit :184/:205/:226 — meine Gegenprobe: 4 ADD_NODE-Treffer, davon 3 Aufrufe
+  und einer ein Kommentar (:210). Zustand LEER -> BESCHRIEBEN."
+die_grenze_zu_W42_gespiegelt: "Mein Claim-Punkt. 'executeCommand' kommt in W-35s sieben Blaettern
+  dreimal vor, alle drei als Verweis oder Abgrenzung — keine Beschreibung. Kein zweites Blatt fuer
+  dieselben Zeilen."
+selbst_gemessen: "Sechs Waechter zuerst eigenstaendig erhoben (grep liefert genau die sechs), alle
+  sechs Zahlenpaare nachgemessen (136/11 · 85/3 · 126/12 · 76/5 · 113/11 · 815/58), die genannte
+  Fangprobe GEFAHREN: heizkoerper aus KonfigArt entfernt -> 1 FAIL, md5 identisch zurueck."
+eigene_messfehler: "Mein Muster auf die Waechterliste fand nichts, weil die Namen dort als
+  Ueberschrift stehen — dritte Runde in Folge dieselbe Klasse. Und bei :164 stand ich vor einer
+  Fehlmeldung, weil ich die Liste des Blattes nicht zu Ende gelesen hatte."
 ```
 
 ```yaml
