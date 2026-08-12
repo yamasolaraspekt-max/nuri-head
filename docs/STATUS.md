@@ -43,6 +43,7 @@
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c89e9096` | **neun Belege an einem Tag, vier Rollen**: ein Prüfmuster setzt am TEXT an statt am GEGENSTAND · H-9 im Wortlaut des Generators (»misst die Schreibweise und nicht die Sache«) plus die dreifach erprobte Kontrollprobe · **KEINE achte Barriere** (B5/B6/B7 in derselben Datei, dreimal »wird weggeklickt« gemeldet) · zweiter Teil: `ARBEITSREGELN.md:103` — `.*IN_ARBEIT` reicht über alle Spalten, die B7-Zeile (ABGENOMMEN) wird als laufend gezählt · **der Fehler ist meiner**: linke Seite erweitert, rechte nicht angesehen |
+| **W-23** Deckung und Material | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -5899,4 +5900,44 @@ was_die_regel_NICHT_kann: "sie verhindert keinen falschen Ausdruck, sie macht di
 der_fehler_ist_meiner: "ich habe das §3-Muster am 12.08. selbst verankert, von [AW] auf [A-Z]+
          erweitert WEIL es zu eng war — und nicht bemerkt, dass sein rechtes Ende zu weit ist.
          Eine Seite geprueft, die andere nicht angesehen. H-9 an der Regel, die H-9 verankern soll."
+```
+
+
+## W-23 — Deckung und Material (Datensatz, EINZIGER Zustandsort neben der Tafelzeile)
+
+```yaml
+auftrag: "W-23"
+datei: docs/auftraege/aktiv/W-23-deckung-und-material.md
+zustand: ENTWURF
+ballbesitz: "plan-pruefer (DoR)"
+basis_sha: e9f370f1
+anlass: "Yamas Freigabe 12.08. ('bedien dich nach Hersteller Typ Format') und unmittelbar danach
+         seine Fachaussage: 'die eindecklattung ist abhaengig von dach neigung und dach maße und
+         zulaessig ueberlappung der ziegel'."
+warum_der_zuschnitt_sich_aenderte: "Die Suche nach 'der Lattweite' war falsch gestellt. Ein Auftrag,
+         der eine Tabelle mit EINEM Wert je Modell erwartet, haette den Operanden nie gefunden —
+         auch wenn er vor ihm lag. Die Tabelle liefert den BEREICH, die Rechnung den Wert."
+quelle_gemessen: "~/Desktop/Downloads_Aufgeraeumt_2026-05-22/01_Energie_PV_Waermepumpe/Tabellen/
+         braas_dachziegel_datenbank_v14.xlsx, 718.574 Byte, Blatt DB_Produkte (sheet11 von 47),
+         127 Datenzeilen, 48 Spalten. Relevante Felder: Lattmass_min_mm (26), Lattmass_max_mm (27),
+         Verschiebespiel_mm (32), Regeldachneigung_grad (33), Datenstatus (37), Quelle_1_URL (38)."
+fuellquote_ungeschoent: "9 von 127 Zeilen mit Lattmass min UND max = SIEBEN Modelle, alle Braas:
+         Achat 12V 330-360/30/16 · Granat 11V 338-380/42/25 · Harzer Pfanne 7 372-405/—/22 ·
+         Rubin 13V 330-360/30/— · Rubin 9V 370-400/30/16 · Topas 11V 320-380/60/25 ·
+         Topas 13V 320-360/40/25. Datenstatus ueber alle 127: 78x verifiziert aus PDF,
+         26x teilweise, 17x verifiziert, 6x offen."
+fund_der_die_daten_pruefbar_macht: "Verschiebespiel_mm IST die Differenz Lattmass_max - Lattmass_min.
+         Sechs von sechs stimmen; bei der Harzer Pfanne fehlt der Wert und ist ableitbar (405-372=33).
+         Eine Doppelangabe, die uebereinstimmen MUSS, ist eine Pruefung — sie kostet eine Subtraktion
+         und wird W-23s Eingangspruefung (Kriterium W-23-4)."
+was_yama_bestaetigen_muss: "die Rechnung: Reihen n = aufrunden(Sparrenlaenge / Lattmass_max), dann
+         Lattmass = L/n, zulaessig wenn min <= L/n <= max UND Dachneigung >= Regeldachneigung.
+         Das ist die Umsetzung SEINES Satzes — aber die Umsetzung ist meine, abgeleitet und nicht
+         abgelesen. Vorgeschlagen als F-053, Nummer beim Planner."
+was_es_entsperrt: "W-21L fuer SIEBEN Braas-Modelle. Weiter gesperrt fuer alles andere, und das ist
+         richtig: eine Lattung ohne belegten Bereich waere genau die erfundene Zahl, gegen die das
+         Operanden-Gate steht. W-21L wird damit ZUSCHNEIDBAR, nicht entsperrt."
+zweiter_posten_nicht_erledigt: "118 der 127 Zeilen haben kein Lattmass. Das ist Pflegearbeit an der
+         Quelle und gehoert Yama. KEIN Ergaenzen fehlender Werte in diesem Auftrag — das waere das
+         Erfinden, gegen das das Gate steht."
 ```
