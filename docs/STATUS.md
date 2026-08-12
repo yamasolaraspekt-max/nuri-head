@@ -55,7 +55,7 @@
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
-| **W-27/1** BAU Dachkantentypen in die Insel | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `ff7e23ec` | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
+| **W-27/1** BAU Dachkantentypen in die Insel | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `ff7e23ec` | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7908,7 +7908,7 @@ W_42_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 
 ```yaml
 auftrag: "W-27/1"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 bericht: "docs/BERICHT-W-27-1-bau-dachkantentypen.md"
 DER_ERSTE_GEBAUTE_WERKZEUGCODE: "geometry/dachTopologie.ts, 183 Zeilen, 8 Exporte, plus __tests__/dachTopologie.test.ts mit 11 Tests. Vorher trugen 0 von 43 Werkzeugen GEBAUT; REGISTER.md Zeile 94 steht jetzt auf GEBAUT. KEINE bestehende Datei geaendert — der Prototyp, schifterListe.ts und jede andere Dachdatei sind unberuehrt, der Bau ist additiv."
 DREI_FANGPROBEN_GEFAHREN_ALLE_DREI_GEFALLEN: "Anker md5 bfc684226f02161448ef02d20b7629f3, Grundlinie 1709 Tests 1709 pass 0 fail. M1 Umlaufsinn weggelassen: 1707 pass, 2 FAIL, beide K-4-Tests. M2 WALM und TEILWALM aus prevIsTraufe gestrichen: 1708 pass, 1 FAIL. M3 der neutral-Default entfernt: 1707 pass, 2 FAIL. Nach jeder Probe zurueckgesetzt, md5 jedes Mal identisch; Suite danach wieder 1709 pass und Typpruefung gruen. KEINE der drei blieb gruen — das ist der Unterschied zu W-34-1 und W-39-5, wo je eine Fangprobe nichts fing: dort war es eine Aussage UEBER einen Waechter, hier eine Messung AN ihm."
@@ -7916,7 +7916,7 @@ zwei_abweichungen_beide_mit_grund: "ERSTENS die Rueckgabe ist TopologyAnalysis u
 uebergangspruefung_W_27_1_6: "Die Vorgabe gegen die ABLESUNG des gebauten Codes geprueft, wie die Registerlegende es verlangt: acht Exporte am Bau-Stand abgelesen, alle drei Typlisten und beide Strukturen zeichengenau, die vier Schritte im Code benannt (:127, :133, :151, :154). Genau die zwei Abweichungen oben, keine stillschweigende Umbenennung."
 warum_W_27_1_und_nicht_W_41_oder_W_42: "Drei Auftraege standen zugleich BEREIT, §3 laesst einen zu, und keiner traegt eine Wartebedingung — gemessen, nicht angenommen. Die Sachlage entscheidet: W-41s Praemisse ist von meinem eigenen Befund aus 1eedb9cf beruehrt, denn markiereVeraltet in geometry/configuratorPackage.ts IST die Invalidierung, und sein Blatt sagt 'kein Code'. W-42 traegt die vom Planner selbst benannte Abweichung von Yamas Freigabe. W-27/1 hat als einziger keine offene Frage und ist zugleich der erste Auftrag, der Produktivcode erzeugt — 0 von 43 Werkzeugen tragen heute GEBAUT."
 BEFUND_BEIM_ZIEHEN_die_Rueckgabe_im_Auftragsblatt_widerspricht_der_Quelle: "Das Auftragsblatt nennt in Abschnitt 1 'analyzeTopology(points, edgeConfigs): TopologyCornerInfo[]' und beruft sich dabei auf W-27s 2-FUNKTION. AM BAU-STAND GEMESSEN, alle Stellen einzeln geoeffnet: der Prototyp DachplanerProPage.tsx traegt 3786 Zeilen wie angegeben, :85-87 die drei Typlisten zeichengenau, :128 EdgeTopologyConfig mit id, type, pitch, label und :135 TopologyCornerInfo mit index, point, angleDeg, cornerType, joinType — alles trifft. NICHT trifft die Rueckgabe: :193 lautet 'function analyzeTopology(points, edgeConfigs): TopologyAnalysis', und TopologyAnalysis ist eine DRITTE Struktur bei :143, die das Auftragsblatt nicht nennt. Sie traegt points, edgeConfigs, corners UND FUENF ZAEHLUNGEN: innenEcken, aussenEcken, grate, kehlen, ortgaenge. UND DIE VORGABE SELBST SAGT NICHTS DAZU: W-27s 5-CODE/LIESMICH fuehrt die Stelle als ':193 function analyzeTopology(points, edgeConfigs)' OHNE Rueckgabetyp. Der TopologyCornerInfo[] stammt also aus dem Auftragsblatt und nicht aus der Vorgabe, auf die es sich beruft. WAS ICH TUE: ich baue nach der QUELLE, also mit TopologyAnalysis samt Zaehlungen, weil W-27/1-1 Abweichungen ausdruecklich zulaesst sofern jede mit Grund im Bericht steht — und weil die fuenf Zaehlungen genau die Zahlen sind, deren Fehlen W-27s Ablesung als Luecke gemessen hat (joinType und cornerType je 0). Ich melde es hier VOR dem Bau statt es im Bericht nachzuschieben, damit der Evaluator gegen die richtige Erwartung prueft."
-ballbesitz: evaluator
+ballbesitz: release-pruefer
 REIHENFOLGE_VOM_PLANNER_FESTGELEGT: "Vier Auftraege liegen beim Generator und alle tragen P1: W-40
   laeuft (IN_ARBEIT), W-27/1, W-41 und W-42 sind BEREIT. Damit entscheidet die Reihenfolge, was
   zuerst entsteht, und das ist Planner-Eigentum.
@@ -7978,4 +7978,22 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-27/1 GECLAIMT vor dem 
   die Zusagen per Mutation mit Anker und md5-Ruecksetzung statt am Text gepruefft.
   ZUM SCOPE: der Generator baut parallel W-41. Dessen Dateien duerfen in keinen meiner
   Scope-Diffs geraten; ich pruefe das ausdruecklich statt es anzunehmen."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an a2b63a1f, Elter 044f78a3, ACHT von acht. Erste
+  Abnahme mit Produktivcode, voller §8-Umfang: ZWEI Pruefstaende mit node_modules und vendor, einer
+  am Bau und einer am ELTER. Suite Bau 1709/1709, Elter 1698/1698 — Differenz +11, und
+  dachTopologie.test.ts traegt genau 11 Tests."
+das_tragende_kriterium_nicht_am_text_geprueft: "Alle vier Ausgaenge stehen im Code, aber ein
+  Ausgang der dasteht muss erreichbar sein. analyzeTopology AUFGERUFEN und alle vier selbst erzeugt:
+  4x Traufe -> grat · Traufe/Giebel -> ortgang · 4x Giebel -> neutral · L-Form -> kehle an genau der
+  Ecke, die als einzige cornerType innen traegt. Vier Schritte als Schritt 0 bis 3 im Code."
+alle_drei_fangproben_selbst_gefahren: "Je mit Anker und md5-Ruecksetzung auf bfc684226f02161448:
+  Umlaufsinn weglassen -> 2 FAIL (beide K-4), prevIsTraufe verengen -> 1 FAIL, neutral-Vorbelegung
+  entfernen -> 2 FAIL. Alle drei fallen, md5 jedes Mal identisch, seine Zahlen 2/1/2 zeichengenau.
+  Das ist der Punkt, an dem W-34-1 und W-39-5 an einem Tag gescheitert sind — hier haelt er."
+zu_den_abweichungen: "Der Bau traegt VIER Strukturen, wo die Vorgabe zwei nennt. Genau diese beiden
+  stehen als Abweichung 1 und 2 mit Grund im Bericht — und die Rangfolge ist richtig herum: bei der
+  Rueckgabe folgt er der QUELLE (Prototyp :193) statt der Verkuerzung im eigenen Auftragsblatt."
+gefahrenstellen_ausdruecklich_geprueft: "Die parallel gebauten W-41-Dateien sind NICHT im Scope
+  (0 Treffer), der Prototyp ist unberuehrt, und fremde Zustandsaenderungen in STATUS.md: 0 —
+  jede geaenderte Zeile auf ihren Auftragsblock zurueckgefuehrt."
 ```

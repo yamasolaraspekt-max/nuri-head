@@ -178,3 +178,120 @@ was_dieser_auftrag_NICHT_entscheidet: "Die Anbindung an W-07 und die Dachflaeche
 W_27_1_nimmt_den_paragraf3_platz: "Sobald er gezogen wird, ist er IN_ARBEIT und §3 ist belegt. Der
         Platz ist frei: §3 steht bei 0."
 ```
+
+
+## §11 — Votum W-27/1 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-27/1"
+votum: ABGENOMMEN
+geprueft_an: "a2b63a1f"
+elter: "044f78a3"
+scope_diff: "7 Dateien, +551/-14. ZWEI Code-Dateien — die erste Abnahme dieser Reihe mit
+  Produktivcode. Ausdruecklich geprueft: 0 W-41-Dateien im Scope, obwohl der Generator parallel
+  daran baut."
+pruefstand: "git worktree add -q --detach auf a2b63a1f, node_modules UND vendor per cp -al —
+  und ein ZWEITER Pruefstand auf dem Elter 044f78a3, weil eine Suitezahl ohne Vergleichsstand
+  keine Aussage ueber Regression ist."
+paragraf_15: "GEGENSTANDSLOS — kein DB-Zugriff, keine Migration, kein Seed im Scope."
+browserabnahme: "ENTFAELLT — reine Geometrie ohne Oberflaechenanbindung; der Auftrag schliesst
+  die Anbindung an W-07 ausdruecklich aus."
+
+messtisch:
+
+  W-27_1_1_typen_und_strukturen_wie_die_vorgabe:
+    urteil: ERFUELLT
+    zeichengenau_verglichen: "Die drei Typlisten gegen W-27s 2-FUNKTION gelegt:
+      EdgeTopologyType :40 'TRAUFE'|'GIEBEL'|'PULT_WAND'|'WALM'|'TEILWALM' · TopologyCornerType
+      :43 'innen'|'aussen' · TopologyJoinType :51 'grat'|'kehle'|'ortgang'|'neutral'. Alle drei
+      stimmen mit der Vorgabe Wort fuer Wort. Die zwei Strukturen EdgeTopologyConfig :54 und
+      TopologyCornerInfo :62 ebenso."
+    beide_abweichungen_stehen_mit_grund: "Mir ist beim Lesen der Ausfuhren aufgefallen, dass der
+      Bau VIER Strukturen traegt, wo die Vorgabe zwei nennt. Der Bericht fuehrt genau diese
+      beiden als Abweichung 1 und 2 mit Grund: TopologyAnalysis als Rueckgabetyp — und zwar weil
+      die QUELLE (Prototyp :193) ihn so fuehrt und das Auftragsblatt TopologyCornerInfo[] nur
+      verkuerzt hatte; TopologyPoint exportiert, weil sonst die Eingabe der oeffentlichen
+      Funktion nicht benennbar waere. Die Rangfolge ist richtig herum: er folgt der Vorgabe, nicht
+      der Verkuerzung im Auftragsblatt. Eine dritte Aenderung (zwei benannte Hilfsfunktionen,
+      beide nicht exportiert) ist ebenfalls benannt."
+
+  W-27_1_2_analyzeTopology_TRAGEND:
+    urteil: ERFUELLT
+    vier_schritte_selbst_gelesen: ":100 'Schritt 0 — der Umlaufsinn' (Funktion :106), :133
+      'Schritt 1 — Eckenwinkel', :151 'Schritt 2 — Eckenart', :154 'Schritt 3 — Verbindungsart'.
+      Vier, einschliesslich des Umlaufsinns, wie das Kriterium verlangt."
+    UND_ALLE_VIER_AUSGAENGE_SELBST_ERZEUGT: "Hier reicht 'die Zeilen zeigen' nicht — ein Ausgang,
+      der im Code steht, muss auch erreichbar sein. Ich habe analyzeTopology AUFGERUFEN und alle
+      vier erzeugt:
+        4x TRAUFE, Rechteck        -> grat    (aussen)
+        Traufe/Giebel wechselnd    -> ortgang
+        4x GIEBEL                  -> neutral
+        L-Form, 6x TRAUFE          -> kehle an der einspringenden Ecke, cornerType 'innen'
+      Erreichte Ausgaenge: grat, kehle, neutral, ortgang — deckungsgleich mit dem Typ. Die
+      Innenecke der L-Form wird korrekt als einzige mit cornerType 'innen' erkannt."
+
+  W-27_1_3_namensgrenze:
+    urteil: ERFUELLT
+    die_stelle_zitiert: "dachTopologie.ts:4-17. Der Dateikopf nennt BEIDE Seiten:
+      'geometry/schifterListe.ts -> klassifiziereSchifter(...) fragt, ob ein STAB angeschnitten
+      ist ... Das ist eine Sparren-Klassifikation.' gegen 'Diese Datei fragt, was an einer ECKE
+      des Grundrisses entsteht ... Das ist eine Ecken-Klassifikation.' Mit dem Satz 'Gleiche
+      Woerter, andere Sache.' Die Gegenseite habe ich geoeffnet: schifterListe.ts:58 traegt
+      klassifiziereSchifter tatsaechlich mit der Signatur (vStart, vEnd, vMax, tol)."
+
+  W-27_1_4_drei_fangproben_gefahren_und_gefallen:
+    urteil: ERFUELLT
+    ALLE_DREI_SELBST_GEFAHREN: "Je mit Anker (Treffer genau 1x) und md5-Ruecksetzung auf
+      bfc684226f02161448ef02d20b7629f3:
+        1) Umlaufsinn weglassen (isCCW aus isInnerReflex entfernt)
+           -> 1707 pass, 2 FAIL: 'K-4 TRAGEND: der Umlaufsinn — dasselbe Polygon in beiden
+              Richtungen ergibt dieselben Ecken' und 'K-4: die L-Form hat GENAU EINE
+              einspringende Ecke, in beiden Umlaufrichtungen'
+        2) prevIsTraufe auf 'TRAUFE' verengt
+           -> 1708 pass, 1 FAIL: 'WALM und TEILWALM zaehlen als Traufe im weiteren Sinn'
+        3) joinType-Vorbelegung 'neutral' entfernt
+           -> 1707 pass, 2 FAIL: 'der VIERTE Ausgang ... ist neutral — nicht undefined' und
+              'jede Ecke traegt IMMER einen der vier Ausgaenge'
+      Alle drei FALLEN. md5 nach jeder Ruecksetzung identisch. Seine Angaben 2/1/2 decken sich
+      zeichengenau mit meinen Laeufen.
+      Das ist der Punkt, an dem W-34-1 und W-39-5 an einem Tag gescheitert sind — hier haelt er."
+
+  W-27_1_5_tests_und_suite:
+    urteil: ERFUELLT
+    an_BEIDEN_staenden_gemessen: "BAU a2b63a1f: 1709 tests, 1709 pass, 0 fail.
+      ELTER 044f78a3: 1698 tests, 1698 pass, 0 fail. Differenz +11, und dachTopologie.test.ts
+      traegt genau 11 test()-Bloecke — die neuen Tests sind vollstaendig die eigenen, und es gibt
+      keine Regression. Zaehler am Bau-Stand genannt, nicht aus dem Blatt uebernommen."
+
+  W-27_1_6_uebergangspruefung:
+    urteil: ERFUELLT
+    beleg: "Der Bericht traegt die Tabelle 'Vorgabe (W-27) gegen Gebaut' mit sechs Zeilen und
+      zwei markierten Abweichungen, eingeleitet mit dem woertlichen Satz aus der Registerlegende.
+      Die Ablesung ist am gebauten Code gemacht und nicht aus dem Entwurf fortgeschrieben."
+
+  W-27_1_7_blaetter_nachgezogen:
+    urteil: ERFUELLT
+    gemessen: "REGISTER.md: W-27 von ENTWORFEN auf GEBAUT (Diff geoeffnet). 5-CODE/LIESMICH.md
+      nennt dachTopologie.ts mit 183 Zeilen — ich habe die Datei gezaehlt, es sind 183 — und den
+      Test mit elf Tests. 6-PRUEFUNG traegt die drei Fangproben mit der Spalte 'Gefahren?' und
+      den Zaehlern 2/1/2 sowie der Grundlinie 1709."
+
+  W-27_1_8_nichts_fremdes_beruehrt:
+    urteil: ERFUELLT
+    am_commit_gemessen: "git show a2b63a1f --name-only: genau sieben Dateien — die neue
+      Geometrie, ihr Test, W-27s zwei Blaetter, REGISTER.md, der Bericht und docs/STATUS.md.
+      Der Prototyp ist unberuehrt (0 Treffer). In STATUS.md habe ich jede geaenderte Zeile auf
+      ihren umgebenden Auftragsblock zurueckgefuehrt: FREMDE Zustandsaenderungen 0 — die einzige
+      ist W-27/1s eigene Fertigmeldung, und die ist ausdruecklich erlaubt."
+
+meine_eigenen_messfehler_in_dieser_runde: "Keine, die das Urteil beruehrt haetten. Zwei Punkte mit
+  erhoehter Gefahr habe ich ausdruecklich geprueft statt angenommen: die parallel gebauten
+  W-41-Dateien im Scope (0 Treffer) und der Vergleichsstand fuer die Suitezahl (zweiter Pruefstand
+  auf dem Elter, statt 1709 allein zu melden)."
+
+was_diesen_bau_traegt: "Er ist der erste mit Produktivcode, und er haelt genau an der Stelle, an
+  der heute zwei Blaetter gescheitert sind: die Fangproben sind GEFAHREN und FALLEN, nicht
+  abgelesen. Dazu zwei Dinge, die ein Bauender nicht tun muss — er folgt bei der Rueckgabe der
+  QUELLE statt der Verkuerzung im eigenen Auftragsblatt und sagt es, und er benennt eine dritte
+  Aenderung, die gar keine Schnittstellen-Abweichung ist."
+```
