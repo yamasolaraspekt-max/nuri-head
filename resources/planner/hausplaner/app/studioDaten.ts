@@ -151,8 +151,18 @@ export interface ZuletztEintrag { name: string; meta: string; icon: string; goto
  * über den eigenen Bestand.**
  *
  * Sie bleiben als Beleg dessen stehen, was vorher behauptet wurde, und als Vergleichsgrundlage für
- * den Test. **Nichts rendert sie mehr.** Die echte Liste kommt aus dem Bestand und braucht eine
- * Route — das ist **Teil B** und liegt bei Yama.
+ * den Test. **Nichts rendert sie mehr.**
+ *
+ * **ÜBERHOLT (A-23, 13.08.), und nicht gelöscht.** *Hier stand: „Die echte Liste kommt aus dem
+ * Bestand und braucht eine Route — das ist **Teil B** und liegt bei Yama."*
+ * **Gemeint ist die PROJEKTLISTE, und sie ist gebaut (AUF-78):**
+ * `HausplanerController.php:101` → `:55` → `objekt.blade.php:141` → `main.tsx:82`.
+ * *Sie braucht keine Route — sie kommt über das Mount-Attribut, ohne Lade-Fetch (`:57`).*
+ *
+ * **Die zweite Hälfte, die Paketspeicherung, ist ebenfalls gebaut** (AUF-81, Tor 1, 26.07.):
+ * `web.php:5016/5018/5020` → `objekt.blade.php:144` → `main.tsx:89` → `paketSpeichern.ts:45` →
+ * benutzt in `ConfigWizard.tsx:255`. *Dort GIBT es eine Route — sie wird nur als Attribut gereicht
+ * statt in der Insel gebaut.*
  */
 export const ZULETZT_STILLGELEGT: readonly ZuletztEintrag[] = [
   { name: 'EFH Mustermann', meta: 'Rev. 42 · Schritt 2/11', icon: '<path d="M3 21h18M5 21V8l7-4 7 4v13"/>', goto: 1 },

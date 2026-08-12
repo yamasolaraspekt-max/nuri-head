@@ -12,9 +12,17 @@
  * Versprechen, ein Ziel. „Weiterarbeiten" öffnete kein Bestandsprojekt, sondern begann bei
  * Schritt 1.
  *
- * **Was dieser Test NICHT prüft:** ob die echte Projektliste ankommt. Sie braucht eine Route und
- * ist **Teil B** — der liegt bei Yama. Geprüft wird, dass die Fläche ohne Liste **ehrlich** ist:
- * der Leerzustand ist heute der Normalfall, nicht die Ausnahme.
+ * **Was dieser Test NICHT prüft:** ob die echte Projektliste ankommt. Geprüft wird, dass die Fläche
+ * ohne Liste **ehrlich** ist: der Leerzustand ist heute der Normalfall, nicht die Ausnahme.
+ *
+ * **ÜBERHOLT (A-23, 13.08.), und nicht gelöscht.** *Hier stand: „Sie braucht eine Route und ist
+ * **Teil B** — der liegt bei Yama."* **Die PROJEKTLISTE ist gebaut (AUF-78)** und kommt über
+ * `data-projekte` herein: `HausplanerController.php:101` → `:55` → `objekt.blade.php:141` →
+ * `main.tsx:82`. *Eine Route gibt es dafür nicht; sie wird auch nicht gebraucht (Controller `:57`:
+ * „kein Lade-Fetch aus der Insel").*
+ *
+ * **Der Satz „was dieser Test nicht prüft" bleibt trotzdem wahr** — *er prüft die Zulieferung
+ * weiterhin nicht, sie ist nur inzwischen da.*
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -114,10 +122,20 @@ test('die Karte MIT Ziel ist unverändert bedienbar', () => {
   assert.match(mitZiel, /if \(istAusloeser\(e\)\) onClick\(\)/, 'Enter und Leertaste, wie AUF-49 es verlangt');
 });
 
-// --- Was NICHT angefasst wurde ------------------------------------------------------------------
-test('Teil A hat weder Route noch Controller berührt — das ist Teil B', () => {
-  // Der Auftrag verbietet es ausdrücklich: alles, was `routes/` oder `app/Http/` berührt, liegt
-  // hinter Yamas Freigabe. Die Zulieferung der Liste bleibt deshalb offen.
+// --- Die Grenze der Insel: StartView holt sich nichts, es BEKOMMT --------------------------------
+test('StartView holt sich die Liste NICHT selbst — kein fetch, kein dataset', () => {
+  // **ÜBERHOLT (A-23, 13.08.), und nicht gelöscht.** Der Test hieß: „Teil A hat weder Route noch
+  // Controller berührt — das ist Teil B", und hier stand: „Der Auftrag verbietet es ausdrücklich:
+  // alles, was `routes/` oder `app/Http/` berührt, liegt hinter Yamas Entscheidung. Die Zulieferung
+  // der Liste bleibt deshalb offen."
+  //
+  // **Die Zulieferung ist NICHT mehr offen** — die PROJEKTLISTE ist gebaut (AUF-78):
+  // `HausplanerController.php:101` → `:55` → `objekt.blade.php:141` → `main.tsx:82`.
+  //
+  // **Die ZUSAGE unten ist davon unberührt und soll halten.** Sie ist keine Übergangsregel, sondern
+  // die Architekturgrenze: die Naht läuft über `main.tsx`, nicht über `StartView`. Der Bildschirm
+  // holt sich nichts, er bekommt. *Wer diesen Test wegen seines alten Namens entfernt, reißt einen
+  // gültigen Wächter ab* — deshalb wurde er umbenannt und sein Rumpf nicht angefasst (A-23-1).
   assert.doesNotMatch(start, /fetch\(|axios|\/admin\/hausplaner/, 'die Insel holt sich die Liste nicht selbst');
   assert.doesNotMatch(start, /dataset\./, 'auch nicht über eine Naht, die es noch nicht gibt');
 });

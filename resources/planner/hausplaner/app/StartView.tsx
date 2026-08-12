@@ -15,7 +15,16 @@ interface Props {
    * AUF-40 Teil A — **die zuletzt bearbeiteten Projekte des Nutzers.** Leer heißt leer: dann steht
    * dort „Noch kein Projekt geöffnet.", **keine Beispielzeile**, die wie ein Projekt aussieht.
    * Der Grundzustand ist bewusst die leere Liste — beim ersten Start ist sie der Normalfall.
-   * Gefüllt wird sie in **Teil B** (Route + Controller, bei Yama).
+   *
+   * **ÜBERHOLT (A-23, 13.08.), und nicht gelöscht.** *Hier stand: „Gefüllt wird sie in **Teil B**
+   * (Route + Controller, bei Yama)."* **Diese Hälfte — die PROJEKTLISTE — ist gebaut (AUF-78).**
+   * Der Weg, jede Stelle geöffnet:
+   * `HausplanerController.php:101` (`hausplanerProjekte`) → `:55` (`hpProjekte`) →
+   * `objekt.blade.php:141` (`data-projekte`) → `main.tsx:82` (`leseProjekte`).
+   *
+   * **Es gibt KEINE Route, und das ist kein Mangel:** die Liste kommt über das Mount-Attribut,
+   * ohne Lade-Fetch — der Controller sagt es in `:57` wörtlich. *Wer „Route" misst, findet 0 und
+   * schließt falsch.*
    */
   projekte?: readonly ProjektEintrag[];
 }
@@ -202,7 +211,12 @@ export function StartView({ onGuided, onKonfigurator, projekte = [] }: Props): R
             Hier standen „EFH Mustermann", „Fenster-Angebot Hahn" und „Sanierung Musterstr. 5" —
             bei jedem Nutzer, auch beim allerersten Start. Die Liste kommt jetzt herein; solange
             sie leer ist, sagt die Fläche das, statt Beispiele zu zeigen, die wie Projekte aussehen.
-            **Die echte Liste braucht eine Route und ist Teil B** (bei Yama). */}
+
+            **ÜBERHOLT (A-23, 13.08.), und nicht gelöscht.** Hier stand: „**Die echte Liste braucht
+            eine Route und ist Teil B** (bei Yama)." Die PROJEKTLISTE ist gebaut (AUF-78) und kommt
+            über `data-projekte` am Mount-Knoten herein — `HausplanerController.php:101` → `:55` →
+            `objekt.blade.php:141` → `main.tsx:82`. **Eine Route gibt es dafür nicht und braucht es
+            nicht.** */}
         {projekte.length === 0 ? (
           <div className="hp-start-hinweiskasten">
             <div className="hp-start-hinweistitel">Noch kein Projekt geöffnet.</div>

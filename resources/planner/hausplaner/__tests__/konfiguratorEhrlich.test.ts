@@ -7,8 +7,19 @@
  * Nutzer dabei „als ConfiguratorPackage **speicherbar**", „später **verlustfrei ins Projekt**" und
  * „**gespeichert** (Download)".
  *
- * **Yamas Entscheidung:** nicht bauen, sondern den Satz wahr machen. Die echte Speicherung bleibt
- * als AUF-40 Teil B stehen — nicht gestrichen, nur nicht dran.
+ * **Yamas Entscheidung:** nicht bauen, sondern den Satz wahr machen.
+ *
+ * **ÜBERHOLT (A-23, 13.08.), und nicht gelöscht.** *Hier stand: „Die echte Speicherung bleibt als
+ * AUF-40 Teil B stehen — nicht gestrichen, nur nicht dran."* **Diese Stelle meint als EINZIGE der
+ * sieben die zweite Hälfte: die PAKETSPEICHERUNG. Und sie ist gebaut** (AUF-81, Tor 1, 26.07.):
+ * `web.php:5016` (POST) · `:5018` (Liste) · `:5020` (einzeln), je mit `permission:Hausplaner` →
+ * `objekt.blade.php:144` (`data-pakete-url`) → `main.tsx:89` (`setzePaketZiel`) →
+ * `paketSpeichern.ts:45` (`fetch`) → benutzt in `ConfigWizard.tsx:255`.
+ *
+ * **Hier GIBT es eine Route** — anders als bei der Projektliste. *Sie wird nur als Attribut
+ * gereicht statt in der Insel zusammengebaut.* **Die Zusagen unten sind davon unberührt: sie
+ * halten fest, dass die Fläche sagt, was wirklich geschieht — und seit AUF-81 ist „gespeichert in
+ * deiner Paketliste" wahr.**
  *
  * **Warum die Prüfungen hier eng sind:** Ein breiter `grep` auf „speichern" findet den Zweig, der
  * die **Wahrheit** sagt („als ein Command ins Gebäudemodell"), und meldet ihn als Fehler. Geprüft
