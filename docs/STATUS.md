@@ -2175,6 +2175,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## Kenntnis: Rollenwechsel + ein Befund, der MEINE Messmethode trifft (plan-pruefer 12.08.)
+
+```yaml
+rollenwechsel_zur_kenntnis: "Der Planner uebernimmt auf Yamas ausdrueckliche Freigabe die GENERATOR-Rolle fuer W-07N — nur fuer diesen einen Auftrag, und er nimmt ausdruecklich NICHT ab (Evaluator und Release-Pruefer bleiben unabhaengig). Das ist nach §1 gedeckt (Yamas Weisung steht ueber der Rollentrennung) und sauber angesagt statt stillschweigend genommen. FUER MICH aendert es nichts: ich pruefe den AUFTRAG, nicht den Bauenden — und W-07N habe ich bereits BEREIT gesetzt, bevor der Wechsel angesagt war. Die §3-Belege hat er an beiden Orten unmittelbar vor dem Setzen gefahren (0 vorher, 1 nachher)."
+sein_befund_trifft_meine_methode: "Er meldet: 'MEINE SPEC WAR FALSCH — W-07 ist nicht 6/7 sondern 4/7. Ursache ist das Messverfahren, nicht der Gegenstand: die Platzhalter-Zaehlung sucht spitze Klammern und ist BLIND fuer eine unveraenderte Vorlage, die keine traegt.' DAS TRIFFT MICH MIT: meine W-07N-DoR hat die Rot-Lage genau so gemessen (neun Klammern in 2-FUNKTION) und die Registerangabe '6/7' uebernommen statt sie gegen die Vorlage zu pruefen. Eine Vorlage, die keine spitzen Klammern enthaelt, ist fuer diese Zaehlung unsichtbar — dieselbe Klasse wie meine drei Zaehl-Irrtuemer von heute: das Verfahren, nicht der Gegenstand."
+die_bessere_methode_und_ihre_grenze: "Die richtige Probe ist der DIREKTE VERGLEICH mit _VORLAGE/ statt einer Klammer-Zaehlung. Ich habe sie gefahren — und melde zugleich ihre Grenze, weil ich sie MITTEN IM BAU gefahren habe: alle sieben W-07-Blaetter weichen jetzt von der Vorlage ab (21 bis 91 neue Zeilen), aber W-07N steht auf IN_ARBEIT, der Planner baut GERADE. Meine Zahl misst also seinen Zwischenstand, nicht die Ausgangslage — sie taugt als Verfahrensbeleg, nicht als Rot-Lage. Wer die Ausgangslage braucht, misst gegen den Basis-SHA."
+was_ich_daraus_uebernehme: "Fuer jede kuenftige W-DoR: die Rot-Lage 'Blatt ist leer' wird gegen die VORLAGE gemessen (diff), nicht ueber Platzhalter-Zeichen. Eine Zaehlung, die ein Muster sucht, findet nur Blaetter, die das Muster tragen — und genau die unveraenderte Vorlage traegt es nicht."
+sammel_release_schwelle_noch_nicht: "Drei Auftraege stehen auf ABGENOMMEN (A-05, A-12, W-09/1), aber nur EINER davon wartet auf Release: A-05 und A-12 sind MESSAUFTRAEGE mit Ball beim Planner (kein Release-Kandidat, A-12-Praezedenz). Fuer die Sammel-Kontrolle ab DREI zaehlt allein W-09/1 — die Schwelle ist NICHT erreicht, ich stosse nichts an."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
