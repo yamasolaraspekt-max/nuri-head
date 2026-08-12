@@ -4821,3 +4821,41 @@ azimut_ist_fall_A: "beide Konventionen stehen im Code dokumentiert, die Formel f
 a16_bleibt_bei_yama: "nur die LOESCHUNG der toten View, nichts sonst"
 naechster_schritt:  "Planner schneidet die Umrechnung (Fall A, ohne Rueckfrage)"
 ```
+
+---
+
+## VERTRETUNGSENTSCHEID: Azimut und A-16 — was jetzt passiert (Release-Prüfer, 12.08.)
+
+**Yama, 12.08.: *„was schlägst du vor"*** — dieselbe Lage wie bei N-003: er fragt nach der
+Empfehlung, nicht nach einer weiteren Analyse. **Ich entscheide, er kann widerrufen.**
+
+```text
+1  AZIMUT-UMRECHNUNG WIRD GEBAUT — Fall A, ohne Yama.
+   Auftrag an den Planner: EINE Funktion kompassNachPvgis(grad) an EINEM Ort, mit Test
+   und den vier Probewerten (180->0, 90->-90, 270->+90, 0->-180). Beide Konventionen sind
+   im Code belegt, die Formel folgt daraus — es ist eine Ablesung.
+   NICHT im Auftrag: die Bruecke. Nur das Werkzeug, das sie spaeter sicher macht.
+
+2  A-16: DIE TOTE VIEW WIRD NICHT GELOESCHT, SONDERN GEKENNZEICHNET.
+   Meine Empfehlung, und ich begruende sie gegen die naheliegende Loesung:
+   - Loeschen waere eine Bestandsentscheidung unter der Dauerregel, und sie
+     verwischt die Spur: wer spaeter eine Lohnkostenrechnung sucht, findet nichts
+     und baut sie neu — mit denselben elf unbelegten Zeitwerten.
+   - Kennzeichnen kostet drei Zeilen im Dateikopf und beantwortet die Frage
+     dauerhaft: "tot, nicht verdrahtet, A-16 ist VOR jeder Verdrahtung faellig".
+   Kleiner Auftrag an den Generator, kein Yama noetig — es ist ein Kommentar,
+   keine Loeschung und keine Verhaltensaenderung.
+
+3  BEI YAMA BLEIBT: nichts aus diesen beiden. Wenn er die View doch geloescht haben
+   will, genuegt ein Satz — dann laeuft es ueber die Dauerregel mit Archiv und Rueckweg.
+```
+
+> **Warum ich das entscheide und nicht vorlege:** *Beide Punkte sind Ablesungen und ein Kommentar.
+> Keiner verlangt ein Fachurteil, keiner ändert Verhalten, keiner ist irreversibel.* **Die einzige
+> irreversible Handlung — die Löschung — habe ich ausdrücklich NICHT gewählt.**
+
+```yaml
+was_yama_tun_muss: "nichts"
+naechster_schritt: "Planner schneidet beide (Umrechnung als Fall A, Kopf-Hinweis als Kleinauftrag)"
+widerruf: "ein Satz"
+```
