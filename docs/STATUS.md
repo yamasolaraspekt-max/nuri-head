@@ -8464,6 +8464,32 @@ A_23_schliesst_AUF_40_NICHT: "Ob AUF-40 Teil B geschlossen ist, sagt Yama. Der r
   Posten in dd0fee90 als gegenstandslos gemeldet; dieser Auftrag raeumt nur die Zettel weg, die den
   falschen Stand behaupten."
 bau_sha: 3ad920b1
+bau_sha_zeigt_auf_den_UEBERHOLTEN_stand: "plan-pruefer 13.08. — BEFUND, und er ist zeitkritisch,
+  weil zwei Claims schon stehen. A-23 ist nach der Nachbesserung erneut CODE_FERTIG. Die
+  Nachbesserung ist 9d800094 (eine Zeile in startEhrlich.test.ts). Der Datensatz nennt sie NICHT:
+  bau_sha steht unveraendert auf 3ad920b1, dem Stand VOR der Korrektur, und die Zeichenfolge
+  9d800094 kommt im ganzen Block NULL Mal vor — blockgenau gezaehlt.
+  DIE FOLGE IST KONKRET: §12.4 verlangt, dass die Wieder-Abnahme ALLE Kriterien faehrt, und E1
+  verlangt, am COMMIT zu messen. Wer beides befolgt und den Commit aus dem Datensatz nimmt, misst an
+  3ad920b1 — dort ist das korrigierte Wort noch nicht da. Der Evaluator wuerde die Nachbesserung
+  gegen den Stand vor der Nachbesserung pruefen und zu Recht rot melden.
+  UND ES IST KEIN EINZELFALL — ich habe die Reichweite gemessen, bevor ich es eine Klasse nenne, an
+  ALLEN DREI Auftraegen, die gerade auf Abnahme warten. Gefragt: nennt ein FELD des Blocks den
+  Commit, an dem gemessen werden muss?
+    A-23  massgeblich 9d800094  im Block 0x, in einem Feld 0x  — bau_sha zeigt auf den alten Bau
+    A-25  massgeblich c8dd6d49  im Block 4x, in einem Feld 0x  — nur im Fliesstext; das sha-Feld
+          werkzeug_und_bericht_sha nennt 83ad35e1, und das ist NICHT der Bau
+    A-26  massgeblich c059c019  im Block 1x, in einem Feld 0x  — und dieses eine Vorkommen ist
+          mein eigener Prueftext, keine Meldung des Bauenden
+  DREI AUFTRAEGE, DREI FORMEN, EINE KLASSE: in keinem der drei nennt ein FELD den massgeblichen
+  Commit. Einmal zeigt es auf den ueberholten Stand, einmal auf ein anderes Artefakt, einmal fehlt es.
+  WARUM DAS GERADE JETZT ZAEHLT: E1 ist die Regel, die Aussagen ueber den Bau an den Commit bindet —
+  und sie ist wertlos, wenn der Commit nicht auffindbar ist. Die Botschaften nennen ihn; die
+  Statuswahrheit nicht. Nach §16 liest der Naechste den Block.
+  WAS ICH NICHT TUE: die Felder selbst nachtragen. Der Bau gehoert dem Generator, und ein
+  Bau-SHA, den der Pruefer eintraegt, ist kein Beleg des Bauenden. Ball fuer den Nachtrag beim
+  Generator; die Abnahme bleibt beim Evaluator, der bis dahin den Commit aus der Botschaft nehmen
+  muss und wissen sollte, dass der Datensatz ihn in die Irre fuehrt."
 meldepflichten_geprueft: "plan-pruefer 13.08. — sie halten, am Bau-Commit gemessen. bau_sha
   3ad920b1 existiert, Bericht vorhanden, Ball beim Evaluator. Scope selbst erhoben: sechs Dateien,
   darunter ein Hilfsskript scripts/a23-sieben-stellen.mjs.
