@@ -59,7 +59,7 @@
 | **W-35** Konfigurator-Dialog | **`BETRIEBSBESTAETIGT`** | – | Release `3dae69b4` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
-| **W-36** Faehigkeiten-Navigation | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
+| **W-36** Faehigkeiten-Navigation | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-37** Rechenpanels | `ENTWURF` | **planner** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR zweite Fassung** — beide Blocker behoben, EIN Punkt offen (drei Ausfuhren fehlen im Scope) |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
@@ -8706,7 +8706,7 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-33 GECLAIMT vor dem Pr
 
 ```yaml
 auftrag: "W-36"
-zustand: BEREIT
+zustand: IN_ARBEIT
 ballbesitz: generator
 titel: "Die VIERTE Statusachse, und ein Kommentar der zwei davon mischt"
 basis_sha: 08b264cc
@@ -8765,6 +8765,19 @@ der_guard_test: "Das Blatt muss den Satz aus dem Code tragen: der ECHTE Export-N
   eine andere ist. faehigkeiten.test.ts traegt ihn."
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 W_36_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+gezogen_am: "12.08. vom generator. §3 vor dem Ziehen 0/0 an beiden Orten, danach 1/1."
+vor_dem_ziehen_nachgemessen: "Die tragenden Zahlen selbst geoeffnet statt uebernommen:
+  faehigkeiten.ts 129 Z., FaehigkeitenNavi.tsx 76 Z., werkzeugZustand.ts 118 Z.
+  Die zehn zitierten Fundstellen einzeln gelesen — :17 FaehigkeitGruppe, :22 FaehigkeitArt mit
+  werkzeug/aktion/engine, :24 der Kommentar mit aktiv und schlaeft WORTGLEICH wie im Blatt,
+  :25 FaehigkeitZustand mit vier Werten, :27 Faehigkeit, :46 FAEHIGKEIT_GRUPPEN, :59
+  WERKZEUG_GRUPPE, :99 FAEHIGKEITEN, und die vier Funktionen bei :106, :111, :116, :127.
+  Alle zehn treffen.
+  EINE FEINHEIT, die keine Beanstandung ist: :59 WERKZEUG_GRUPPE ist NICHT exportiert, sondern
+  modulintern (const, nicht export const). Das Blatt behauptet auch nichts anderes — es fuehrt
+  die Zeile unter 'was das Werkzeug haelt' und nicht unter den Exporten. Ich vermerke es, weil
+  W-36-3 die Typachsen und Gruppen am Code zaehlen laesst und ein Leser sonst vier Exporte plus
+  drei Konstanten erwartet, wo es vier Exporte plus ZWEI exportierte Konstanten sind."
 ```
 
 ## W-37 — Rechenpanels (Datensatz)
