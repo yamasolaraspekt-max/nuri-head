@@ -35,17 +35,36 @@ geprüft — **und `bestanden` bleibt `true`**, obwohl die Treppe zu schmal sein
 
 ## Was bei einer Normverletzung passiert — kein stilles Nichts
 
-**Gemessen an `resources/planner/hausplaner/geometry/treppenBerechnung.ts:83-99`:** jede verletzte Regel erzeugt einen
-Prüfeintrag **mit Klartext, Ist-Wert, Sollwert und Nutzungsbereich**, zum Beispiel:
+**Selbst ausgeführt**, nicht abgeschrieben: `berechneTreppe` mit Geschosshöhe 2900 mm, Laufbreite
+700 mm, Durchgangshöhe 1900 mm, Bereich `wohnung`. **Ergebnis `bestanden = false`**, und die
+Prüfliste im Wortlaut, wie sie herauskommt:
 
 ```text
-"Steigung 205,0 mm > zulaessig 200 mm (wohnung)."
-"Auftritt 215,0 mm unter Mindestmass 230 mm (wohnung)."
+[fehler]  steigung-max:     Steigung 170.6 mm ≤ zulaessig 200 mm (wohnung).
+[fehler]  auftritt-min:     Auftritt 288.8 mm ≥ Mindestmass 230 mm (wohnung).
+[warnung] schrittmass:      Schrittmass 630 mm (Soll 590–650, ideal 630).
+[warnung] bequemlichkeit:   Bequemlichkeitsregel (Auftritt−Steigung) = 118.2 mm (Ziel ~120).
+[warnung] sicherheit:       Sicherheitsregel (Auftritt+Steigung) = 459.4 mm (Ziel ~460).
+[fehler]  laufbreite:       Laufbreite 700 mm < Mindestmass 800 mm (wohnung).
+[fehler]  durchgangshoehe:  Durchgangshoehe 1900 mm < 2000 mm.
 ```
 
-**Kein Default, keine stille Korrektur, kein Zurechtbiegen.** *Die Auflage ist damit erfüllt, ohne
-dass etwas gebaut werden muss — das gehört gesagt, weil ein erfüllter Auftrag ohne Bau leicht wie
-ein übersehener aussieht.*
+### Zwei Dinge, die man erst am echten Lauf sieht
+
+**1 · Die Meldung erscheint bei JEDER Prüfung, nicht nur bei einer Verletzung.** Sie nennt den
+Vergleich in beide Richtungen — „kleiner-gleich zulässig" bei bestandener, „kleiner Mindestmaß" bei verletzter Prüfung.
+*Das Feld `schwere` ist die Einstufung der Regel, `bestanden` das Ergebnis dieser einen Prüfung.*
+**Eine Zeile mit `[fehler]` heißt also nicht, dass sie verletzt ist** — sie heißt, dass eine
+Verletzung dieser Regel ein Fehler wäre.
+
+**2 · Die eingegebene Wunsch-Steigung ist nicht die gerechnete.** Aus 2900 mm Geschosshöhe und einer
+Wunsch-Steigung von 205 mm werden **170,6 mm** — die Rechnung wählt die Stufenzahl und leitet die
+Steigung daraus ab. *Wer eine unzulässige Steigung erzwingen will, muss die Geschosshöhe treffen,
+nicht den Wunschwert.*
+
+**Kein Default, keine stille Korrektur, kein Zurechtbiegen des Ergebnisses.** *Die Auflage ist damit
+erfüllt, ohne dass etwas gebaut werden muss — das gehört gesagt, weil ein erfüllter Auftrag ohne Bau
+leicht wie ein übersehener aussieht.*
 
 ## Der Nutzungsbereich ist eine Normwahl
 
