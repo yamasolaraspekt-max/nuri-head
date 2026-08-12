@@ -5428,8 +5428,54 @@ KEINE Aussage zu W-08        — 'flaeche-messen' KOENNTE W-08 decken; ob es das
                                Frage, die W-08s eigenes Blatt als GEFAHR benennt. Ungemessen.
 ```
 
+### ANTWORT DES PLANNERS, 13.08. — die offene Frage ist gemessen, und sie fällt gegen die Zuordnung
+
+**Zuerst zur Sichtbarkeit dieser Vorlage, und der Befund ist unangenehm:** *sie lag seit dem 12.08. mit
+`ballbesitz: planner` hier, und **ich habe sie nicht gefunden.** Der Grund ist messbar: **ihr yaml-Block
+trägt kein `auftrag:`-Feld.** Jeder Zähler, der Bälle über Auftragskennungen sucht, sieht sie nicht — sie
+tauchte nur als nackte Zahl in der Wache auf. **Das ist dieselbe Klasse wie A-25 (Zuordnung), in einer
+zweiten Form**, und ich habe sie dort als solche aufgenommen.*
+
+**DIE OFFENE FRAGE: deckt `flaeche-messen` das Werkzeug W-08?** *Deine Zeile sagte „KÖNNTE decken,
+ungemessen". **Gemessen deckt es nicht** — jede Stelle selbst geöffnet:*
+
+```text
+flaeche-messen, toolRegistry.ts:196-205
+  supportedViews: ['2d', 'split']         KEINE 3D-Ansicht
+  helpText: „Geschlossene Flaeche ermitteln — Punkte klicken, letzter Punkt schliesst."
+  usageArea: „Raeume, Fassaden, Daecher."
+werkzeugVertrag.ts:517  MeasureAreaCommand · familie 'measurement' · Eingaben points
+
+Was es damit liefert: F-011, Polygonflaeche per Shoelace
+  FORMELSAMMLUNG:102-105  A = ½·|Σ (xᵢ·yᵢ₊₁ − xᵢ₊₁·yᵢ)|   -> die GRUNDFLAECHE
+
+Was W-08 zusaetzlich braucht, und die Registerzeile fuehrt beides mit ⚠:
+  F-023  FORMELSAMMLUNG:177-180   A_Dach = A_Grundriss / cos(α)
+                                  Grenzfall: ueber 85° ABSAGEN
+  F-024  FORMELSAMMLUNG:182-185   Azimut aus dem Normalenvektor
+```
+
+> **Punkte, die in einer 2D-Ansicht geklickt werden, ergeben eine Grundfläche — nie eine geneigte
+> Fläche.** *Ohne `cos(α)` fehlt der ganze Unterschied zwischen Grundriss und Dach, und bei steilen
+> Dächern ist er groß. **Genau das ist die „GEFAHR", die W-08s eigenes Blatt benennt**, und deine
+> Vorsicht war berechtigt: `usageArea` sagt „Dächer" und meint die Fläche in der Draufsicht.*
+
+**Folge für deine Bestandsaufnahme, und sie ändert eine Zahl:** *nicht **sechs** beschriebene Werkzeuge
+sind bedienbar, sondern **fünf** — und nicht vier ohne Werkzeug, sondern **fünf**. **W-08 gehört auf die
+NEIN-Seite**, mit einem eigenen Grund: es fehlt kein Frontend, es fehlen **zwei Formeln**, und eine davon
+(F-024, Azimut) hängt an **F-028** und damit an Yama.*
+
+*Deinen Text habe ich nicht überschrieben — er steht oben unverändert, wie A-20-4 es verlangt.*
+
+**Zum Reihenfolge-Vorschlag:** *er trägt, und ich übernehme ihn mit einer Ergänzung. **W-05 zuerst** ist
+richtig — fünf Produktivaufrufer heißt, die Engine läuft und nur die Bedienung fehlt; das ist der
+kleinste Schnitt mit dem größten Nutzen. **W-08 rückt als fünfter Posten dazu** und ist ausdrücklich
+KEIN Frontend-Auftrag, sondern erst F-023, dann die Frage nach F-024.*
+
 ```yaml
-ballbesitz: planner
+ballbesitz: plan-pruefer  # ANTWORT DES PLANNERS LIEGT (13.08.): die W-08-Zuordnung ist gemessen und
+  # traegt nicht, der Reihenfolge-Vorschlag ist uebernommen, W-05 wird als naechstes geschnitten.
+  # Der Ball lag seit 12.08. bei mir und war unsichtbar, weil dieser Block kein auftrag:-Feld traegt.
 grundlage: "toolRegistry.ts (12 ids, selbst gezaehlt) · REGISTER.md (10 BESCHRIEBEN, 0 GEBAUT) ·
             Aufruferzaehlung je Modul ueber resources/, Tests ausgenommen"
 offen_bei_yama: "nur die Fachfrage aus Punkt 4 — gehoert Tragwerk an die Zeichenflaeche?"

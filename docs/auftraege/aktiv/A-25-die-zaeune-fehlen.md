@@ -45,6 +45,24 @@ ZWEI Bereiche tragen mehr als einen Datensatz:
 Datensaetze ausserhalb jedes Blocks: 0
 ```
 
+**ZWEITE FORM DERSELBEN KLASSE, nachgetragen 13.08.** *— sie hat mich einen ganzen Tag gekostet:*
+
+```text
+Zeile 5431  ein ```yaml-Block, der mit `ballbesitz: planner` BEGINNT
+            und KEIN auftrag:-Feld traegt.
+            Inhalt: der Fuss der 'VORLAGE AN DEN PLANNER' des Release-Pruefers
+            vom 12.08. (Ueberschrift Zeile 5355).
+```
+
+> **Ein Ball, den kein Zähler findet.** *Die Vorlage lag seit dem 12.08. mit `ballbesitz: planner` in der
+> Statuswahrheit, und ich habe sie nicht gefunden — **jeder Zähler, der Bälle über Auftragskennungen
+> sucht, sieht sie nicht.** Sie tauchte nur als nackte Zahl in der Wache auf („Bälle beim Planner: 1"),
+> und ich habe die Zahl zweimal den historischen Prüfaufzeichnungen zugeschrieben, bis ich den Block
+> geöffnet habe.*
+
+**Für A-25 folgt daraus ein zweites Kriterium** — *nicht nur „ein Datensatz je Block", sondern auch
+**„jeder Block, der Zustandsfelder trägt, nennt seinen Auftrag".***
+
 **Und mein erster Zähler hätte den Befund halbiert** — *das gehört hierher, weil es die Fangprobe
 bestimmt:*
 
@@ -131,6 +149,21 @@ A-25-4  Der Bau nennt die HERKUNFT der zwei Bereiche und unterscheidet sie, weil
 A-25-5  Die Fangprobe wird GEFAHREN und belegt: einen der neuen Zaeune wieder
         entfernen und zeigen, dass A-25-1 rot wird. Nicht gefahren heisst
         'nicht gefahren' im Bericht, nicht Schweigen.
+A-25-1b (P1) NACHGETRAGEN 13.08.: jeder yaml-Block, der ZUSTANDSFELDER traegt
+        (zustand: oder ballbesitz:), nennt auch seinen auftrag: — oder er nennt
+        ausdruecklich, zu welchem Vorgang er gehoert.
+        DER BELEGTE FALL: Zeile 5431 traegt einen Block, der mit ballbesitz:
+        planner BEGINNT und keine Auftragskennung hat. Es ist der Fuss der
+        'VORLAGE AN DEN PLANNER' des Release-Pruefers vom 12.08. Der Ball lag
+        einen Tag beim Planner und WAR UNSICHTBAR: jeder Zaehler, der Baelle
+        ueber Auftragskennungen sucht, findet ihn nicht.
+        Das ist nicht dieselbe Fehlerform wie A-25-1 (mehrere Datensaetze in
+        einem Block), aber dieselbe Klasse: ein Zustandsfeld, das maschinell
+        nicht zuordenbar ist. Wer nur die Zaeune setzt, laesst diesen Fall
+        stehen.
+        NICHT VERLANGT: eine Auftragsnummer zu erfinden. Eine Vorlage ist kein
+        Auftrag. Es genuegt ein Feld, das den Vorgang benennt — der Bauende
+        waehlt die Form, das Kriterium verlangt die Zuordenbarkeit.
 A-25-6  NEBENLAEUFIGKEIT: der Lauf misst den HEAD vor und nach dem Schreiben und
         bricht ab, wenn er sich bewegt hat. Fuenf Rollen schreiben in diese Datei;
         ein Skript, das 559 Zeilen umschreibt, waehrend eine andere Rolle darin
