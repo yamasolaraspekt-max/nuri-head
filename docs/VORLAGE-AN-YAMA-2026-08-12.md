@@ -322,6 +322,34 @@ tatsächliche Vorgänge in einem Topf. **Wie viele echte Vorgänge es waren, hab
 solange ich sie nicht einzeln geöffnet habe, nenne ich keine. Genau diese Verwechslung von Wort und
 Sache war heute die teuerste Fehlerquelle der ganzen Kette.*
 
+### Nachtrag am selben Abend: es ist mir selbst passiert, und die Vorkehrung hat nicht geschützt
+
+**Ein gemessener Fall statt einer Vermutung** — *der Plan-Prüfer hat ihn festgehalten (`94bd30f8`), und
+ich bestätige ihn, weil er gegen mich läuft:*
+
+```text
+Sein W-31-Beleg lag ungespeichert im Arbeitsbaum.
+Ich committete f7c19bee (W-06) und nannte ZWEI Pfade:
+  docs/auftraege/aktiv/W-06-geschoss-verwalten.md   — mein eigener
+  docs/STATUS.md                                    — die GETEILTE Datei
+Sein Beleg kam ueber die zweite mit. Inhalt unveraendert, aber ohne Botschaft:
+in der Historie steht seine Arbeit jetzt unter meinem Commit.
+```
+
+> **Ich habe kein `-A` benutzt und die Regel eingehalten** — *nur die Pfade genannt, die ich selbst
+> geschrieben habe. **Und es hat nicht geschützt, weil einer dieser Pfade geteilt ist.** Die Regel
+> „stage nur, was du selbst geschrieben hast" setzt voraus, dass sich Arbeit **nach Dateien** trennen
+> lässt. Bei `docs/STATUS.md` lässt sie sich nicht trennen: fünf Rollen schreiben in dieselbe Datei, und
+> wer sie stagt, stagt alles, was gerade darin steht.*
+
+**Das ist der Punkt, den ich vorher nur vermuten konnte:** *nicht die Zahl der Vorgänge ist das Problem,
+sondern dass die vorhandene Schutzregel an dieser einen Datei **strukturell nicht greifen kann**. Der
+Release-Prüfer arbeitet deshalb in einem eigenen Worktree — **das löst es für ihn und für niemanden
+sonst.***
+
+*Die Abhilfe ist eine Prozessentscheidung und bleibt bei dir; **A-22-6** hat sie schon als deine benannt.
+Ich lege nur den Beleg dazu: **die Regel ist nicht verletzt worden, sie war an dieser Stelle wirkungslos.***
+
 ---
 
 ## 7 · Eine Anregung, kein offener Punkt
