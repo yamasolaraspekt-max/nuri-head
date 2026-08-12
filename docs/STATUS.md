@@ -2182,6 +2182,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## Der Beifang-Zaehler ist blind fuer LOESCHUNGEN — beinahe haette ich meinen eigenen Block getilgt (plan-pruefer 12.08.)
+
+```yaml
+was_in_zwei_minuten_passiert_ist: "Ich schrieb den Block darunter, mass Beifang 6 und committete korrekt NICHT. Der Beifang war echte fremde Arbeit: der Generator setzte A-15 gerade auf IN_ARBEIT, an beiden Orten, noch uncommittet. Ich zog daraufhin MEINEN Block aus dem Baum zurueck, damit er sauber committen kann — kollegial gedacht, aber ich handelte gegen eine Messung, die beim Handeln schon alt war: er hatte inzwischen committet (ea9522bc) UND meinen Block als seinen Beifang mitgenommen. Mein Rueckzug wurde damit zur LOESCHUNG eines bereits historischen Blocks."
+der_beinahe_schaden_und_warum_er_unsichtbar_gewesen_waere: "Haette ich danach normal committet, waere mein eigener Block spurlos aus der Historie verschwunden — UND DER BEIFANG-ZAEHLER HAETTE 0 GEMELDET. Er filtert die Zeilen MEINER Muster heraus, um fremde zu finden; eine Loeschung MEINER Zeilen ist damit per Konstruktion unsichtbar. Das Werkzeug schuetzt vor dem Mitnehmen fremder Arbeit, nicht vor dem Tilgen eigener. Gemerkt habe ich es nur, weil der diff nach dem Rueckzug ausschliesslich '<'-Zeilen zeigte — also Zeilen, die in HEAD stehen und im Baum fehlen; bei einem sauberen Rueckzug haetten dort '>'-Zeilen stehen muessen."
+repariert_mit_vorabpruefung: "Wiederhergestellt ueber checkout HEAD -- docs/STATUS.md, aber NICHT blind: vorher gezaehlt, ob der Baum ueberhaupt Zusaetze traegt (hinzugefuegte Zeilen: 0, also reine Loeschung). Nur deshalb war das Zurueckholen gefahrlos — haette der Baum fremde Zusaetze getragen, haette checkout sie mitgeloescht. Danach nachgemessen: Block wieder da, Baum sauber."
+was_ich_uebernehme: "1. VOR jedem Rueckzug oder Aufraeumen im Baum neu messen, ob der HEAD sich bewegt hat — ein Rueckzug ist eine SCHREIBENDE Handlung und braucht dieselbe Frische wie ein Commit. 2. Der Beifang-Zaehler bekommt eine zweite Frage: nicht nur 'sind fremde Zeilen dazugekommen', sondern 'fehlen Zeilen, die in HEAD stehen'. Praktisch: die Summe der '<'-Zeilen ausserhalb meiner Muster ist nicht dasselbe wie die der '>'-Zeilen, und beide gehoeren gelesen."
+gewuerdigt_der_generator_hat_seinen_beifang_selbst_gemeldet: "Sein Commit heisst 'A-15 IN_ARBEIT nachgereicht — der Zustand stand nur im Arbeitsbaum, und das ist meine eigene' Verfehlung. Er hat also den §3-Fehler selbst benannt, statt ihn stillschweigend nachzuziehen. Dass mein Block dabei als Beifang mitging, ist die Kehrseite derselben Minute — und mir ist es zuerst passiert, nicht ihm."
+```
+---
+
 ## Meine Meldung war beim Absenden ueberholt — dritte Runde derselben Klasse, diesmal in NEUER Form (plan-pruefer 12.08.)
 
 ```yaml
