@@ -54,6 +54,7 @@
 | **A-23** Sechs Zettel an einer erledigten Sperre | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. SIEBEN Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung, und die siebte trug die Zeichenfolge gar nicht: `startEhrlich.test.ts:120` sagt *„Die Zulieferung der Liste bleibt deshalb offen“* im Rumpf des geschützten Tests — H-9 an meinem eigenen Suchmuster. **DoR NICHT erteilt (`2772c198`), zwei Fehler in meinen eigenen Kriterien behoben:** A-23-1 und A-23-2 kollidierten (md5 über den Rohtext gegen die Pflicht, überholte Sätze zu berichtigen — jetzt md5 **ohne Kommentare**, mit dem Werkzeug der Insel), und meine Gegenprobe nannte **kommentarblinde** Wächter: `startEhrlich` und `konfiguratorEhrlich` lesen über `ohneKommentare`. Der einzige, der greifen kann, fehlte — `gefuehrteEhrlich:30` liest `studioDaten.ts` **roh** und prüft ein Statuswort in der ganzen Datei; **mein A-23-3 trieb den Bauenden genau in dessen Wortsperre.** Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
 | **A-24** Panel-Zusage trifft das Tor nicht | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
 | **W-31** PV-Schnellbelegung | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `6ace6f3e` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Widerlegt meine eigene Behauptung, der Vorrat sei erschöpft.** Die Registerzeile `REGISTER.md:98` sagt im selben Satz *gesperrt bis F-028* **und** *autarke Schnellstufe gebaut (`pvBelegung.ts`, KEIN Azimut → kein F-028-Fall)* — ich hatte das Wort **gesperrt** gelesen und die Sache nicht gemessen, dieselbe Ursache wie bei AUF-40 heute. `pvBelegung.ts` hat 75 Z. und **drei** Exporte (`:10`, `:26`, `:46`), und es ist **angeschlossen** — anders als W-27/1: `enginePanels.ts:32` Einfuhr, `:380 engineId`, `:403` Aufruf über `alsPvEingabe`, `faehigkeiten.ts:80` Registry mit `zustand: verfuegbar`. **Erster Beleg, dass die Stufe-6-Kette zusammenhängt:** der Bedienweg läuft über W-36 und W-37, und `alsPvEingabe` ist einer der acht Adapter, deren Zahl W-37 zwei Runden gekostet hat. Die Grenze steht im Dateikopf `:6-7` — *Ertrag/Verschattung/Strings bleiben der Fach-Engine (wberechnung) vorbehalten*, also Arbeitsteilung zwischen zwei Apps. |
+| **W-06** Geschoss verwalten | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `acb3d494` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Die größte Ablesung des Vorrats: DREI Module, 355 Z., zehn Exporte** — `geometry/geschossVorlage.ts` (78) · `app/dashboard/geschossStapel.ts` (104) · `GeschossFlaeche.tsx` (173), alle drei angeschlossen. **Tragend ist der ID-Remap** (`geschossVorlage.ts:5-7`): Öffnungen werden auf die **neuen** Wand-IDs umgehängt — wer das bricht, hängt Türen des Duplikats an die Wände des Ursprungsgeschosses, und **das fällt erst auf, wenn unten eine Wand geändert wird**. Die Generics `<N extends NodeBasis, R extends RoofBasis>` verankern die Schichttrennung **im Typsystem** statt in einer Absprache. AUF-43s stiller Befund steht im Dateikopf: *die Höhenlage wird im Modell geführt, aber nirgends gezeigt* — kein falscher Wert, ein vorhandener der nie erscheint. **Dritter Fall der NUR-QUELLE-Wächterklasse:** `geschossFlaeche.test.ts` heißt nach der Komponente, importiert das Datenmodul und verriegelt die Komponente über ihre Quelle (`:27`) — strenger als ein Import, denn `:125` schließt eine zweite Definition aus. **Und F-032 ist eine FORMEL, keine Sperre** (`FORMELSAMMLUNG.md:218`); vier LEER-Werkzeuge tragen die Referenz und das sieht wie ein gemeinsamer Blocker aus. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7522,6 +7523,29 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 ```
 
 ```yaml
+auftrag: "W-06"
+zustand: ENTWURF
+ballbesitz: plan-pruefer  # DoR steht aus
+titel: "Geschoss verwalten — drei Schichten, ein ID-Remap, und ein Wert der nie erschien"
+basis_sha: acb3d494
+spur: A
+prioritaet: P2
+blatt: "docs/auftraege/aktiv/W-06-geschoss-verwalten.md"
+warum_nach_W_31: "W-31 war die kleinste Ablesung des Vorrats (75 Zeilen, drei Exporte), W-06 ist die
+  groesste (355 Zeilen, drei Schichten, zehn Exporte). Sie ist deshalb die naechste, weil sie belegt,
+  dass der Vorrat nicht aus Restposten besteht: ein Werkzeug mit drei sauber getrennten Schichten, einem
+  typverankerten Zugriffsschutz und einem id-Remap mit Schadenspotenzial ist kein Rest."
+die_falle_die_ich_vermieden_habe: "F-032 steht bei W-06, W-12, W-14 und W-16 in derselben
+  Register-Spalte. Vier Werkzeuge, eine Referenz, alle LEER — daraus haette ich eine gemeinsame Sperre
+  lesen koennen. Nachgesehen ist es eine FORMEL, Transformation eines Punktes, FORMELSAMMLUNG.md:218.
+  Haette ich es fuer eine Sperre gehalten, waeren vier Werkzeuge weiter unbeschrieben geblieben, aus
+  demselben Grund wie W-31: ein Wort gelesen statt die Sache gemessen. W-06-7 stellt es klar, weil ein
+  Satz dort spaeter viermal Messzeit spart."
+was_selbst_gemessen: "Alle drei Dateien geoeffnet, Zeilen und Exporte VOR dem Scope gezaehlt
+  (Pflichtpruefung 7, dritter Schritt), die Aufrufer je Modul ueber IMPORTZEILEN erhoben, die drei
+  Waechter geoeffnet und ihre Zugriffsart bestimmt, F-032 in der Formelsammlung nachgesehen, und
+  geprueft dass kein aktiver Auftrag W-06 abdeckt (Pflichtpruefung 1)."
+
 auftrag: "W-31"
 zustand: ENTWURF
 ballbesitz: plan-pruefer  # DoR steht aus
@@ -7531,6 +7555,48 @@ basis_sha: 6ace6f3e
 spur: A
 prioritaet: P2
 blatt: "docs/auftraege/aktiv/W-31-pv-schnellbelegung.md"
+dor_beleg: "plan-pruefer 12.08. — DoR NICHT ERTEILT, EIN Punkt. Die Sperrfrage ist sauber
+  beantwortet, der Vollstaendigkeitsanspruch nicht.
+  DIE SPERRE ZUERST, weil davon alles abhaengt: F-028 ist eine ECHTE, noch rote Sperre auf Yamas
+  ausdrueckliche Auflage (FORMELSAMMLUNG.md:522, 'GESPERRT fuer das DURCHREICHEN' eines Azimutwerts
+  zwischen Kompass- und PVGIS-Konvention). Die Behauptung des Blattes, die Schnellstufe sei kein
+  F-028-Fall, habe ich SELBST am Code gemessen und sie traegt: PvEingabe (:10-24) hat SIEBEN Felder —
+  dachLaenge, dachBreite, modulBreite, modulHoehe, modulLeistung, randabstand, modulabstand. Keine
+  Richtung, kein Azimut, kein aspect.
+  UND DIE WORTFALLE HABE ICH GEPRUEFT STATT SIE ZU UEBERSEHEN: ein Muster auf 'Orientier' liefert VIER
+  Treffer in der Datei (:5, :27, :45, :66) — sie meinen alle hochkant gegen quer, also die MODUL-Lage
+  und keine Himmelsrichtung. Wer nach dem Wort sucht, findet einen Azimut, der keiner ist. Dieselbe
+  Klasse, die heute die Route und die Waechter gekostet hat, hier zugunsten des Auftrags.
+  DAMIT IST DER SCHNITT ZULAESSIG: eine Ablesung beschreibt den Bestand und reicht keinen Wert durch.
+  DER OFFENE PUNKT, W-31-2 (P1): das Kriterium sagt, der Bedienweg stehe VOLLSTAENDIG mit Fundstelle,
+  und nennt vier Stellen. Gemessen ueber alle Nennungen von pvBelegung/pvSchnellBelegung/PvEingabe/
+  PvBelegung ausserhalb der Tests gibt es eine FUENFTE, und sie ist live:
+    app/dashboard/fachFlaechen.ts:240-258 — der Fachflaechen-Eintrag 'fach-pv-module' mit
+    engine: 'engine-pv', :248 typ 'PvEingabe' als Eingang, :255 typ 'PvBelegung' als Ausgang.
+    Der Katalog wird eingefuehrt von app/FachFlaeche.tsx:34 und app/HausplanerStudio.tsx:18,
+    ist also gerendert und keine Notiz.
+  UND DIESE STELLE IST NICHT IRGENDEINE: sie fuehrt unter den Eingaengen bei :252
+  { label: 'Ausrichtung und Neigung', einheit: '°' }. Der Kern dieser DoR ist der Satz 'kein Azimut'.
+  Fuer pvBelegung.ts habe ich ihn bestaetigt — aber die FLAECHE, die dieselbe Engine traegt, nennt dem
+  Nutzer eine Ausrichtung in Grad, die die Engine nicht entgegennimmt. Ein Blatt, das den Bedienweg
+  als vollstaendig beschreibt und genau diese Stelle auslaesst, sagt 'kein Azimut' und laesst die
+  einzige Stelle weg, an der eine Richtung steht.
+  WAS ICH NICHT BEHAUPTE: dass pvBelegung.ts einen Azimut hat — hat es nicht, siebenmal nachgezaehlt.
+  Und nicht, dass hier ein F-028-Verstoss vorliegt; es wird nichts durchgereicht. Es ist eine
+  Vollstaendigkeitsluecke an der empfindlichsten Stelle des Blattes, und die Entscheidung, ob
+  fachFlaechen in den Scope kommt oder ausdruecklich heraus, gehoert dem Planner.
+  ALLES UEBRIGE GEMESSEN UND RICHTIG: 75 Zeilen, drei Exporte an :10, :26, :46 · enginePanels.ts:32
+  Einfuhr, :380 engineId 'engine-pv', :403 der Aufruf ueber alsPvEingabe · faehigkeiten.ts:80 mit
+  zustand 'verfuegbar', engineModul 'geometry/pvBelegung' UND engineExport 'pvSchnellBelegung' (also
+  von W-36s Guard-Test verriegelt) · genau ZWEI Importeure, pvBelegung.test.ts:6 und
+  enginePanelRest.test.ts:18 · der Dateikopf :4-7 wortgleich, samt Yamas Satz und der Grenze zu
+  wberechnung · Registerzeile 98 wortgleich.
+  GEWUERDIGT: der Planner hat seine EIGENE Behauptung widerlegt, nach W-37 sei der Vorrat erschoepft —
+  gemessen statt wiederholt, und die Ursache benannt: er hatte ein WORT gelesen (gesperrt) statt die
+  Sache zu messen. Das ist die Lehre dieses Abends auf die eigene Arbeit angewandt. Und er hat die
+  fuenf weiteren Module, die er dabei fand, ausdruecklich NICHT mitgeschnitten, mit dem richtigen
+  Grund: dass eine Datei existiert, ist nach H-8 kein Beleg fuer ein beschreibbares Werkzeug.
+  Ball beim Planner. Zustand bleibt ENTWURF."
 es_widerlegt_meine_eigene_behauptung: "Ich habe im Fuss von W-37 geschrieben, nach der siebten Ablesung
   trage jedes Werkzeug mit vorhandenem Code ein Blatt oder einen laufenden Auftrag und alles Weitere
   brauche eine Entscheidung Yamas. Diesen Satz habe ich geprueft statt ihn zu wiederholen — er traegt
