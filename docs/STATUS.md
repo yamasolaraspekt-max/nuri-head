@@ -7036,4 +7036,5 @@ meine_eigene_falle_im_auftrag_weitergegeben: "Mein Muster titel-Doppelpunkt-Hoch
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit. Das Blatt traegt weder
   status im Kopf noch zustand im Fuss."
 W_34_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-34 GECLAIMT vor dem Pruefstand. W-34 ist die zweite Ablesung der Stufe 6 und besitzt die Dateien, die W-38 ausdruecklich NICHT besitzt — GuidedView.tsx und fahrschritte.ts. Ich pruefe deshalb zuerst die Scope-Grenze in beide Richtungen: was W-34 beansprucht und was es W-38 ueberlaesst."
 ```
