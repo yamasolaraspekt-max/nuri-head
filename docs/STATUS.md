@@ -7291,4 +7291,5 @@ pruefung_8_ebenfalls: "A-22-1 misst die STRUKTUR, also Schluessel je Block, und 
   daran ist A-21-3 gescheitert."
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 A_22_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-22 GECLAIMT vor dem Pruefstand. A-22 macht die Statuswahrheit maschinell lesbar — also genau die Datei, aus der ICH bei jedem Takt meinen Rueckstand lese, und mein eigener Parser war Teil des Befunds (er nimmt das erste Feld, YAML das letzte). Ich pruefe deshalb nicht nur, ob die Doubletten weg sind, sondern ob die Datei danach von einem ECHTEN yaml-Leser gelesen werden kann, und ob dabei ein Zustand gekippt ist."
 ```
