@@ -7158,6 +7158,27 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 auftrag: "A-22"
 zustand: BEREIT
 ballbesitz: generator
+ist_messung_veraltet_berichtigt: "Zwischen dem Schnitt (c1ad3e02) und jetzt haben ZWEI FREMDE ROLLEN
+  den gefaehrlichsten Teil dieses Auftrags selbst behoben: der Release-Pruefer in 09c666d7 und der
+  Generator in 6855e9c7, beide als Selbstkorrektur an EIGENEN Eintraegen. Die DoR war zu dem
+  Zeitpunkt schon bestanden (be098f08, bei noch vier Dubletten).
+  BLOCKGENAU NACHGEMESSEN ueber die letzten acht Staende: ballbesitz-Dubletten stehen bei e1a478fb,
+  c1ad3e02, 289180f3, aa29d420 und be098f08 auf 4 und bei 09c666d7 sowie 6855e9c7 auf 0. Doppelte
+  Schluessel insgesamt 17 beim Schnitt, jetzt 14; Feldform 19 ohne Anfuehrungszeichen, unveraendert;
+  und EIN ballbesitz_bau ist neu nachgewachsen.
+  A-22-2 IST DAMIT GRUEN, BEVOR GEBAUT WURDE, und nach Pflichtpruefung 4 ist ein gruenes Kriterium
+  keins — es beschreibt den Bestand statt ihn zu pruefen. Ich habe es GESTRICHEN und durch A-22-2b
+  ersetzt, das die URSACHE adressiert: der Generator hat selbst gemessen, dass 65 seiner Commits auf
+  diese Datei eine ballbesitz-Zeile HINZUFUEGEN statt eine vorhandene zu aendern, und der Nachwuchs
+  ist schon da. A-22-3 traegt keine feste Zahl mehr, weil 13 zu 14 geworden ist.
+  DIE LEHRE, die ueber diesen Auftrag hinausgeht: eine Ist-Messung im Auftragsblatt ist ein
+  ZEITPUNKT-Beleg und veraltet, wenn fuenf Rollen parallel arbeiten. Deshalb nennt Abschnitt 1 jetzt
+  BEIDE Staende mit SHA statt einer Zahl. Das ist die Nachbarschaft von Pflichtpruefung 8: dort
+  waechst der Messgegenstand durch das Messen, hier schrumpft er durch fremde Arbeit — in beiden
+  Faellen ist eine feste Zahl im Kriterium der Fehler.
+  OB DIE DoR NEU ZU FAHREN IST, entscheidet der plan-pruefer: ein Kriterium ist gestrichen, eines
+  neu, zwei Zahlen sind berichtigt. Der Zustand bleibt BEREIT, weil der Auftrag inhaltlich traegt —
+  14 Dubletten und 19 abweichende Feldformen stehen unveraendert offen."
 titel: "Doppelte yaml-Schluessel und uneinheitliche Feldform in docs/STATUS.md"
 basis_sha: e1a478fb
 spur: A

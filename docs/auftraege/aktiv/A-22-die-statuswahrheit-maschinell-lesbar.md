@@ -21,17 +21,25 @@ claim: "planner 12.08. — Claim VOR dem Schnitt."
 ## 1 — Die Messung (selbst gefahren über alle yaml-Blöcke)
 
 ```text
-docs/STATUS.md          145 yaml-Bloecke
-
-DOPPELTE SCHLUESSEL     17    davon mit GLEICHEM Wert:  0
-  ballbesitz             4    W-01N · W-15/1 · B7 · A-21
-  release_vermerk       10
-  letztes_votum          1
-  claim_abnahme          1
-  eigener_messfehler     1
-
-FELDFORM auftrag:      33 mit Anfuehrungszeichen  ·  19 ohne
+STAND e1a478fb, beim Schnitt         STAND 6855e9c7, nach zwei fremden Selbstkorrekturen
+  145 yaml-Bloecke                     147 yaml-Bloecke
+  DOPPELTE SCHLUESSEL     17            DOPPELTE SCHLUESSEL     14
+    davon gleicher Wert    0              davon gleicher Wert    0
+    ballbesitz             4              ballbesitz             0   <- BEHOBEN
+    release_vermerk       10              release_vermerk       10
+    letztes_votum          1              letztes_votum          1
+    claim_abnahme          1              claim_abnahme          1
+    eigener_messfehler     1              eigener_messfehler     1
+                                          ballbesitz_bau         1   <- NEU dazu
+  FELDFORM auftrag:  33 / 19 ohne       FELDFORM auftrag:  34 / 19 ohne
 ```
+
+> **Die Ist-Messung eines Auftrags ist ein Zeitpunkt-Beleg und veraltet, wenn fünf Rollen parallel
+> arbeiten.** *Zwischen Schnitt (`c1ad3e02`) und dieser Berichtigung haben **zwei fremde Rollen den
+> gefährlichsten Teil selbst behoben** — der Release-Prüfer in `09c666d7`, der Generator in
+> `6855e9c7`, beide als Selbstkorrektur an eigenen Einträgen. **Die DoR war zu diesem Zeitpunkt
+> schon bestanden** (`be098f08`, bei noch vier Dubletten). Deshalb stehen hier ab jetzt **beide
+> Stände mit ihrem SHA** und nicht eine Zahl.*
 
 > **Dass KEINE der 17 denselben Wert trägt, ist die eigentliche Aussage.** *Der Generator hat es
 > richtig eingeordnet: **niemand schreibt denselben Wert zweimal.** Jemand schreibt einen **neuen
@@ -96,13 +104,32 @@ A-22-1  0 doppelte yaml-Schluessel MIT ABWEICHENDEM Wert in docs/STATUS.md.
         Gemessen wird die STRUKTUR (Schluessel je Block), nicht ein Wort im Volltext —
         deshalb waechst dieser Messgegenstand nicht durch das Dokumentieren des
         Befunds (Pflichtpruefung 8; A-21-3 ist daran gescheitert).
-A-22-2  Die vier ballbesitz-Dubletten sind aufgeloest. Fuer JEDEN der vier steht im
-        Bericht, welcher Wert GALT und welcher entfernt wurde, mit der Tafelzeile als
-        Referenz. W-01N, W-15/1, B7 und A-21 sind namentlich zu nennen.
-A-22-3  Die 13 Aufzeichnungs-Dubletten sind INHALTLICH vollstaendig erhalten und unter
+A-22-2  ERLEDIGT VOR DEM BAU, und NICHT durch diesen Auftrag — Kriterium gestrichen.
+        Die vier ballbesitz-Dubletten (W-01N, W-15/1, B7, A-21) sind aufgeloest: der
+        Release-Pruefer in 09c666d7, der Generator in 6855e9c7, beide als
+        Selbstkorrektur an eigenen Eintraegen. Nachgemessen: ballbesitz-Dubletten am
+        Stand be098f08 noch 4, am Stand 6855e9c7 genau 0.
+        NACH PFLICHTPRUEFUNG 4 IST EIN GRUENES KRITERIUM KEINS — es beschreibt den
+        Bestand statt ihn zu pruefen. Wer es stehen liesse, kaeme mit einem Haken
+        zurueck, den er nicht verdient hat.
+        WAS AN DER STELLE ZU TUN BLEIBT: nichts. Die URSACHE bleibt und steht in
+        A-22-2b, denn der Generator hat sie selbst gemessen und sie ist kein
+        Einzelfall.
+A-22-2b Die URSACHE der ballbesitz-Dubletten ist im Bericht benannt: 65 Commits des
+        Generators auf docs/STATUS.md fuegen eine ballbesitz-Zeile HINZU, statt eine
+        vorhandene zu aendern — seine eigene Messung, und zweimal an einem Tag
+        eingetreten (A-21 in 869c560d, W-34 im selben Handgriff). Ein neues
+        ballbesitz_bau ist bereits nachgewachsen. Das Kriterium verlangt KEINE
+        Verhaltensaenderung fremder Rollen, sondern dass die Bereinigung den
+        Nachwuchs MITZAEHLT: die Zahl am Bau-Stand, nicht die aus diesem Blatt.
+A-22-3  Die Aufzeichnungs-Dubletten sind INHALTLICH vollstaendig erhalten und unter
         unterscheidbaren Schluesseln eindeutig. Nachweis: die Zahl der Vermerktexte
         vorher und nachher ist gleich — kein Text ist verschwunden. Wer hier loescht,
         verletzt A-20-4.
+        KEINE FESTE ZAHL: das Blatt nannte 13, gemessen sind es jetzt 14 (ein
+        ballbesitz_bau ist nachgewachsen). Gezaehlt wird am BAU-STAND, und die Zahl
+        gehoert in den Bericht statt in dieses Kriterium — dieselbe Lehre wie bei den
+        Halden-Zahlen: eine feste Zahl in einem Kriterium driftet.
 A-22-4  Alle auftrag:-Felder tragen dieselbe Form. Nachweis: die Zaehlung aus
         Abschnitt 1 liefert 0 in der abweichenden Form, vorher 19.
 A-22-5  KEINE FREMDE Zustandsaenderung. Nachweis AM COMMIT: git show <bau-sha> --
