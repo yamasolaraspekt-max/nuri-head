@@ -16,7 +16,7 @@ anlass: "Sechste Ablesung der Stufe 6. Nach W-40s Auflösung ist die Abgrenzung 
 ballbesitz: "plan-pruefer (DoR)"
 claim: "planner 12.08. — Claim VOR dem Schnitt."
 grundlage: "app/tools/faehigkeiten.ts (129 Z.) · app/FaehigkeitenNavi.tsx (76 Z.) ·
-            app/tools/werkzeugZustand.ts als Nachbarachse · vier Wächtertests"
+            app/tools/werkzeugZustand.ts als Nachbarachse · zwölf Testdateien in DREI Zugriffsarten"
 ```
 
 ## 1 — Der tragende Punkt: VIER Statusachsen an VIER Trägern
@@ -83,10 +83,22 @@ faehigkeiten.ts
   :46  FAEHIGKEIT_GRUPPEN  Gruppen mit Label
   :59  WERKZEUG_GRUPPE     Record<string, FaehigkeitGruppe>
   :99  FAEHIGKEITEN        readonly Faehigkeit[]
-  :106 faehigkeitenNach(gruppe)
+
+VIER exportierte FUNKTIONEN, nicht eine — nachgetragen nach e5285913:
+  :106 faehigkeitenNach(gruppe)   -> Faehigkeit[]
+  :111 alleFaehigkeiten()         -> Faehigkeit[]
+  :116 doppelteIds()              -> string[]   der Doppel-ID-Waechter
+  :127 faehigkeitNach(id)         -> Faehigkeit | undefined
+       in Gebrauch: HausplanerApp:39 und FussUndUeberlagerungen:26
 
 FaehigkeitenNavi.tsx:16   EIN Export, 76 Zeilen
 ```
+
+> **Mein Blatt nannte nur `faehigkeitenNach` — und zwar in Abschnitt 3 UND im Scope.** *Die anderen
+> drei sind in Gebrauch und standen in keinem der beiden Blöcke; **`doppelteIds` ist sogar ein
+> Wächter gegen doppelte Kennungen**, also selbst eine Ehrlichkeitsfunktion. Der Plan-Prüfer hat es
+> über die Vollständigkeitsfrage gefunden: „eine von vier genannt, drei in Gebrauch und in keinem
+> Scope-Block entschieden."*
 
 **Die artabhängigen Felder sind der Kern der Struktur** (`:19-26`, wörtlich aus den Kommentaren):
 
@@ -103,28 +115,47 @@ nur art:'werkzeug'|'aktion' die TOOL_DEFINITIONS-id, die aktiviert wird
 > wie die Sache aussieht, aber eine andere ist.** Das Blatt muss diesen Guard-Test benennen und
 > sagen, was er verriegelt.*
 
-## 4 — Die Wächter: vier, nicht zwölf
+## 4 — Die Wächter: DREI Zugriffsarten, und keine Zahl in diesem Blatt
+
+**BERICHTIGT nach der Nicht-Freigabe `e5285913`.** *Hier stand „vier, nicht zwölf" mit einer Liste,
+in der drei Tests falsch unter NEIN standen. Beides war falsch.*
 
 ```text
-Ein grep auf 'FaehigkeitenNavi|faehigkeiten' ueber __tests__ liefert ZWOELF Dateien.
-GEMESSEN, welche W-36 wirklich importieren (from '…faehigkeiten'):
-  faehigkeiten.test.ts        JA — und traegt den Guard-Test (7 Treffer auf export/Modul)
-  toolPresentation.test.ts    JA
-  schienenReiter.test.ts      JA
-  enginePanelRest.test.ts     JA — gehoert aber zu W-37, importiert W-36 nur
+Ein grep auf 'FaehigkeitenNavi|faehigkeiten' ueber __tests__ liefert ZWOELF Dateien,
+und sie zerfallen in DREI Zugriffsarten:
 
-  keineKappung · ansichtBereit · werkzeugRegistry · gruppenzeileUndSchiene   NEIN
+IMPORT       der Test importiert aus faehigkeiten oder FaehigkeitenNavi.
+             Darunter faehigkeiten.test.ts mit dem Guard-Test (:38) und die VIER
+             enginePanel-Tests — Rest, Sparren, Treppe, TgaHeizung — die WORTGLEICH
+             dieselbe Importzeile tragen. Ich hatte nur enginePanelRest gefunden,
+             weil ich nur ACHT der zwoelf Dateien geprueft habe.
+
+NUR QUELLE   der Test liest die DATEI und prueft Markenstrings darin, ohne zu
+             importieren — gruppenzeileUndSchiene:102 prueft '<FaehigkeitenNavi',
+             und diese Klasse hatte mein Blatt GAR NICHT.
+
+WORTZUFALL   das Wort steht dort und meint etwas anderes — werkzeugRegistry:14
+             traegt ein FELD namens faehigkeiten.
 ```
 
-*Mein erster grep war zu weit: er fand jede Datei, die das Wort enthält. **„Zwölf Wächter" wäre eine
-falsche Zahl gewesen** — und genau die Sorte, die heute mehrfach teuer war.*
+> **Die Zahl je Klasse steht ABSICHTLICH nicht hier.** *Der Plan-Prüfer hat sie gemessen und ich habe
+> nachgemessen; unsere Aufteilungen der Nicht-Import-Fälle wichen noch voneinander ab, weil mein
+> Quelle-Muster nur `readFileSync` und Pfade erfasste und keine Markenstrings. **Solange zwei
+> sorgfältige Messungen verschieden ausfallen, gehört keine Zahl in ein Kriterium** — sie wird am
+> Bau-Stand erhoben (W-36-5).*
+
+**Der Weg dahin war ein Fehler in zwei Schritten:** *erst ein zu weiter grep (zwölf), dann eine
+Überkorrektur in die Gegenrichtung (vier) — und die Gegenkorrektur beruhte auf einer **Stichprobe von
+acht**, die ich als Vollzählung ausgegeben habe. **Zwei Drittel geprüft ist nicht gemessen.***
 
 ## 5 — Scope
 
 ```text
 W-36 IST   faehigkeiten.ts und FaehigkeitenNavi.tsx: die drei Typachsen, die neun
-           Gruppen, die artabhaengigen Felder, die Faehigkeitenliste und
-           faehigkeitenNach.
+           Gruppen, die artabhaengigen Felder, die Faehigkeitenliste und ALLE VIER
+           exportierten Funktionen: faehigkeitenNach, alleFaehigkeiten, doppelteIds
+           und faehigkeitNach. Die drei zuletzt genannten standen in KEINEM Scope-Block
+           — nachgetragen nach e5285913.
 
 W-36 IST NICHT
            werkzeugZustand.ts mit WerkzeugAnzeige -> eigene Achse, KEIN Werkzeug
@@ -151,9 +182,30 @@ W-36-3  Die drei Typachsen mit ihren Werten und Fundstellen, und die neun Gruppe
 W-36-4  (P1) Die ARTABHAENGIGEN Felder sind beschrieben, samt dem Satz aus dem Code:
         der ECHTE Export-Name im Modul ist ungleich dem Modulnamen und vom GUARD-TEST
         verriegelt. Das Blatt nennt den Test und was er verriegelt.
-W-36-5  Die Waechter: VIER importieren W-36 wirklich, nicht zwoelf. Je Test die Zusage.
-        Ein grep auf das Wort liefert zwoelf Dateien — das ist als Fehlerquelle im Blatt
-        zu benennen, weil es die naechste Rolle sonst wiederholt.
+W-36-5  BERICHTIGT nach der Nicht-Freigabe (e5285913) — hier stand 'VIER importieren
+        W-36 wirklich'. Das war FALSCH und es war BLOCKIEREND: wer ehrlich messt,
+        verletzt das Kriterium; wer VIER schreibt, macht das Blatt falsch. Dieselbe
+        Klasse wie A-21-3, wo eine Zahl im Kriterienwortlaut stand.
+        DAS KRITERIUM TRAEGT AB JETZT KEINE ZAHL, sondern die KLASSEN. Ein grep auf
+        'faehigkeiten' oder 'FaehigkeitenNavi' ueber die Testdateien liefert zwoelf
+        Treffer, und die zerfallen in DREI Zugriffsarten:
+          IMPORT       der Test importiert aus faehigkeiten oder FaehigkeitenNavi
+          NUR QUELLE   der Test liest die DATEI und prueft Markenstrings darin —
+                       etwa gruppenzeileUndSchiene:102 mit '<FaehigkeitenNavi'
+          WORTZUFALL   das Wort steht dort, meint aber etwas anderes — etwa
+                       werkzeugRegistry:14 mit einem FELD namens faehigkeiten
+        Verlangt wird: je Test die ART des Zugriffs und die Zusage, die er haelt.
+        Die ZAHL je Klasse wird am BAU-STAND gezaehlt und NICHT aus diesem Blatt
+        uebernommen — Pflichtpruefung 8.
+        MEIN FEHLER IN ZWEI SCHRITTEN, und beide stehen hier: erstens habe ich nur
+        ACHT der zwoelf Dateien geprueft und das Ergebnis als Vollzaehlung
+        ausgegeben — die drei enginePanel-Tests fuer Sparren, Treppe und TgaHeizung
+        tragen WORTGLEICH dieselbe Importzeile wie enginePanelRest, das ich unter JA
+        gefuehrt habe. Zweitens hat mein Quelle-Muster nur readFileSync und Dateipfade
+        erfasst, nicht Markenstrings — deshalb landeten Quelle-Verriegelungen bei mir
+        unter Wortzufall. Der plan-pruefer hat es zusammengefasst: der erste zu weite
+        grep wurde in die GEGENRICHTUNG ueberkorrigiert. Eine Stichprobe ist keine
+        Vollzaehlung, auch wenn sie zwei Drittel abdeckt.
 W-36-6  7-GRENZEN nennt WerkzeugAnzeige als Achse OHNE Registereintrag — eine
         Anschlussluecke der Stufe, nicht dieses Blattes.
 W-36-7  Die Scope-Grenze zu W-37 steht in 2-FUNKTION: enginePanelRest importiert W-36,
