@@ -28,7 +28,15 @@ bleibt es.*
 
 **Gegenstandslos.** *Drei Zeichenketten haben keine Genauigkeit.*
 
-> **Die einzige Ungenauigkeit ist keine Zahl, sondern eine Zählung — und sie steht in
-> `7-GRENZEN.md`:** *das Zielbild führt **acht** Stufen, vier sind gebaut, drei sind als fehlend
-> benannt.* **4 + 3 = 7.** *Die achte fällt aus der Rechnung, und dieses Blatt beantwortet nicht,
-> warum.*
+**Auch die Zählung ist keine** — *das war mein Fehler und Yama hat ihn am 12.08. berichtigt.*
+
+> **ÜBERHOLT (W-40/1, 12.08.), und nicht gelöscht.** *Hier stand:* **„Die einzige Ungenauigkeit ist
+> keine Zahl, sondern eine Zählung: das Zielbild führt acht Stufen, vier sind gebaut, drei sind als
+> fehlend benannt. 4 + 3 = 7. Die achte fällt aus der Rechnung, und dieses Blatt beantwortet nicht,
+> warum."**
+>
+> **Es fällt nichts aus der Rechnung, weil es keine Rechnung ist.** *Die vier (`SchrittStatus`) und
+> die drei liegen **nicht auf derselben Achse** — die einen sind Fortschritt, die anderen
+> Gültigkeit.* **Wer sie addiert, addiert Äpfel und Birnen; `4 + 3` muss nicht `8` ergeben.**
+> *`review-required` ist gebaut und heißt `checked` (`geometry/configuratorPackage.ts:26`).*
+> **Ausführlich in `7-GRENZEN.md`.**

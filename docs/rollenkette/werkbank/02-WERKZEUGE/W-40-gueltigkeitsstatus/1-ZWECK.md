@@ -1,8 +1,15 @@
 # W-40 · Gültigkeitsstatus — ZWECK
 
-> **VORGABE, keine Ablesung.** *Für `SchrittStatus` gibt es die drei Stufen nicht. Dieses Blatt gibt
-> vor, was gebaut werden soll — wie W-15, W-23 und W-27.* **Was es dabei NICHT tun darf, steht in
-> `7-GRENZEN.md`: eine Gültigkeitsachse existiert im Bestand bereits an anderer Stelle.**
+> **ABLESUNG MIT EINER ERWEITERUNG** *(Yamas Einordnung vom 12.08., W-40/1).* **Drei der vier Stufen
+> sind gebaut** — *`checked`, `approved`, `outdated` in `geometry/configuratorPackage.ts:26`, samt
+> Übergangstabelle und Tests.* **Einzig `blocked` fehlt: 0 Treffer auf der ganzen Insel.**
+>
+> **BERICHTIGT, und die alte Fassung bleibt lesbar.** *Hier stand:* **„VORGABE, keine Ablesung. Für
+> `SchrittStatus` gibt es die drei Stufen nicht. Dieses Blatt gibt vor, was gebaut werden soll — wie
+> W-15, W-23 und W-27."** *Der Nebensatz über `SchrittStatus` stimmt bis heute; falsch war der
+> Schluss davon auf die ganze Insel.* **Und der Nachsatz von damals — „eine Gültigkeitsachse
+> existiert im Bestand bereits an anderer Stelle" — stand die ganze Zeit direkt darunter.** *Ich habe
+> ihn als Warnung geführt statt als Widerlegung der eigenen Überschrift.*
 
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
@@ -25,12 +32,18 @@ Das sind zwei Achsen, nicht eine laengere Liste.
 > verbietet.* **Es sind zwei Achsen und keine zwei Wahrheiten:**
 
 ```text
-FORTSCHRITT (W-38, gebaut)     open · prog · warn · ok
-GUELTIGKEIT (W-40, Vorgabe)    confirmed · outdated · blocked
+FORTSCHRITT   am SCHRITT   open · prog · warn · ok        W-38, gebaut
+GUELTIGKEIT   am PAKET     checked · approved · outdated  W-40, GEBAUT
+                           blocked                        W-40, die EINE Erweiterung
 
 Ein Schritt kann ok sein — gerechnet, alle Pruefpunkte erfuellt —
-und trotzdem NICHT confirmed: der Nutzer hat ihn nicht bestaetigt.
+und das PAKET ist trotzdem nicht approved: der Nutzer hat es nicht bestaetigt.
 ```
+
+**BERICHTIGT (W-40/1).** *Hier stand `GUELTIGKEIT (W-40, Vorgabe) confirmed · outdated · blocked` und
+der Satz endete mit* **„und trotzdem NICHT confirmed"** *— beides an DEMSELBEN Träger.* **Die zwei
+Achsen liegen an zwei verschiedenen Gegenständen, und die Namen sind nicht meine, sondern die des
+gebauten Codes.**
 
 **Damit ist eine Frage beantwortet, die W-38s eigenes `7-GRENZEN` offen gelassen hat.** *Dort steht,
 es stehe im Raum, ob W-40 ein zweites Statussystem einführt; die Antwort der Quelle ist: nein, es
