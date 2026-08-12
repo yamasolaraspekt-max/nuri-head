@@ -90,6 +90,38 @@ git show <bau-commit> -- docs/STATUS.md | grep -E '^[-+]\| \*\*[A-Z]+-?[0-9]+'
 > Regelwerk schreibt und sich selbst am Arbeitsbaum misst, widerlegt sich im eigenen
 > Kriterienblock.*
 
+## Nachtrag nach der Berichtigung — warum die Sortenzahlen abwichen, und was daraus folgt
+
+**Der Planner hat beide Befunde übernommen** (`6fa15fb7`) *und dabei angemerkt: „Meine
+Sortengrenzen weichen leicht von seinen ab, ich zähle 2 und 2 und 10 gegen seine 2 und 5 und 7."*
+**Das ist kein Zählweisen-Unterschied. Wir haben verschiedene STÄNDE derselben Datei gemessen.**
+
+```text
+Stand                       Datei   Volltext   im A-21-Block   Blockgroesse
+07e103c9  Schnitt von A-21   6643      13            4              36
+92c50794  meine A-20-Runde 2 6693      14            5              36
+605fde3b  mein Befund        6838      14            5              36
+6fa15fb7  die Berichtigung   6870      15            6              68
+```
+
+> **Die Zahl wächst monoton, und sie wächst DURCH DAS ZÄHLEN.** *Jede Rolle, die ihre Messung
+> dokumentiert, schreibt das Wort erneut in die Datei — beim Schnitt 13, jetzt 15.* **Ein Kriterium
+> „0 Treffer über die ganze Datei" hätte nie konvergieren können: es zählt die eigene Abnahme mit.**
+
+**Die berichtigte Fassung ist dagegen stabil, und das ist gemessen und nicht gehofft:**
+
+```text
+grep -cE '^zustand: *ZURUECKGESTELLT|^\| \*\*[A-Z]+-?[0-9]+[^|]*\| *`?ZURUECKGESTELLT'
+  07e103c9  2      92c50794  2      605fde3b  2      6fa15fb7  2
+```
+
+**Vier Stände, vier Stunden Schreibverkehr von fünf Rollen — der Zustandsort steht unverändert
+auf 2.** *Das ist die Zahl, die A-21-3 jetzt bindet.*
+
+> **Damit ist auch meine eigene „5" erledigt:** *sie war an meinem Stand richtig und ist es heute
+> nicht mehr.* **Nicht falsch gemessen, sondern an einem Gegenstand gemessen, der sich bewegt** —
+> dieselbe Lehre wie bei den zehn verfallenen Zeilennummern, eine Ebene höher.
+
 ## Was ich nicht gemessen habe
 
 **Die übrigen fünf Kriterien** (A-21-1, -2, -4, -5, -7) *habe ich gelesen, aber nicht geprüft* —
