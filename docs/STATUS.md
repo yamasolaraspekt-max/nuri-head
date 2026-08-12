@@ -2010,6 +2010,35 @@ naechster_schritt: "Generator zieht W-07N (§3 beachten)"
 ```
 ---
 
+## BEREIT — W-15/1 · DECISION_BLOCKED — W-21L (Bloecke angelegt; die letzten zwei der neun unsichtbaren)
+
+```yaml
+auftrag: "W-15/1"
+titel: "Vier Vertragswerkzeuge ohne Implementierung — und der Vertrag liefert die Blattinhalte"
+datei: docs/auftraege/aktiv/W-15-material-und-farbe-entwerfen.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 57e582af
+prioritaet: P2
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): die Ist-Messung SELBST nachgefahren und exakt bestaetigt — kein Modul in geometry/ mit material/farbe/textur (0 Treffer), und MaterialCommand kommt im GANZEN Repo genau EINMAL vor: werkzeugVertrag.ts:887, also im Vertrag selbst. Zehn Kriterien. DIE EINORDNUNG IST DER WERT DIESES BLATTS: 'W-15 ist nicht KEIN CODE, es ist ein VERTRAG ohne Implementierung' — das ist eine dritte Lage, die die bisherige Klassifikation (beschrieben / nicht beschrieben) nicht kennt, und sie aendert die Quelle: nicht der Code liefert die Blattinhalte, sondern der Vertrag. Damit ist es das erste Klasse-C-Blatt und ein anderer Auftragstyp als die neun Klasse-A-Blaetter: dort wurde aus VORHANDENEM abgeleitet, hier wird ENTWORFEN, was noch niemand gebaut hat."
+was_der_bau_beachten_muss: "Genau deshalb faellt hier die Sicherheit weg, die Klasse A hatte: bei W-01 bis W-22 war jede Blattaussage am Code pruefbar, hier ist der Vertrag die einzige Quelle. Der Bericht muss je Blattinhalt sagen, ob er AUS DEM VERTRAG stammt oder ENTWORFEN ist — sonst entsteht eine Beschreibung, die wie eine Messung aussieht. Das ist dieselbe Trennung, die A-15-4 fuer Fachurteile verlangt (Urteil als Urteil kennzeichnen), nur auf der Doku-Ebene."
+naechster_schritt: "Generator zieht W-15/1 (§3 beachten)"
+```
+
+```yaml
+auftrag: "W-21L"
+titel: "Niemand leitet den Lattenabstand aus der Deckungsart ab. Und die Daten dafuer fehlen."
+datei: docs/auftraege/aktiv/W-21L-lattung-der-fehlende-schritt.md
+zustand: DECISION_BLOCKED
+ballbesitz: yama
+basis_sha: 4f0d4584
+prioritaet: P2
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): KEINE DoR — der Auftrag geht NICHT in die Pruefung, und das ist richtig so. Das Blatt setzt sich selbst auf 'blockiert_durch: OPERANDEN-GATE, ballbesitz: YAMA' und begruendet es mit den fehlenden Fachdaten. ICH HABE DIE OPERANDEN-LAGE NACHGEMESSEN und bestaetige sie: in geometry/ traegt genau EINE Datei ueberhaupt einen Lattenbegriff — dachWerte.ts, und dort steht nur 'battenDist: 0.05 // Lattenabstand min 5 cm', also eine SCHUTZSCHRANKE (Mindestwert), keine Zuordnung Deckungsart -> Lattweite. Es gibt keine Tabelle, aus der ein Lattenabstand fuer eine Deckungsart folgt."
+warum_ich_es_nicht_bereit_setze: "§5 verlangt, dass jedes Kriterium messbar ist; ein Kriterium ueber eine Ableitung, deren Eingangsdaten nicht existieren, ist nicht messbar, sondern eine Absichtserklaerung. Und CLAUDE.md ist an dieser Stelle eindeutig: fehlende Operanden fuehren zur RUECKFRAGE, nicht zur stillen Annahme. Ein BEREIT waere hier der Fehler, den A-12 verhindert hat (F-026 durfte keinen Auftrag begruenden, bevor sie ausgefuehrt war) — nur eine Ebene frueher: hier fehlt nicht die Ausfuehrung, sondern die Zahl selbst."
+was_yama_entscheiden_muss: "Zwei Wege, beide zulaessig, keiner von mir zu waehlen: (a) die Fachdaten liefern (Deckungsart -> Lattweite, mit Herkunft — Hersteller, Regelwerk oder eigene Erfahrung; dann wird daraus eine N-Zeile wie N-001/N-002 mit Fassung und Geltungsbereich), oder (b) den Auftrag ausdruecklich zurueckstellen, bis die Daten anfallen. Solange keiner von beiden gewaehlt ist, bleibt W-21L liegen — sichtbar, nicht vergessen: dafuer ist dieser Block da."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
