@@ -70,6 +70,34 @@
     { model: "Fox ESS T15.0 G3 (Smart)", power: 15000, price: 1900, type: "smart", mppt: 2, inputsPerMppt: 1, maxInputV: 1100, startV: 140 },
   ];
 
+  // ───────────────────────────────────────────────────────────────────────────────────────────
+  // 🔴 F-051 GESPERRT — DIESE ELF ZEITWERTE HABEN KEINE HERKUNFT. NICHT VERWENDEN.
+  //
+  // Sie sind PLATZHALTER. Der Kommentar direkt darunter sagt es selbst („adjust to your company
+  // values") — er wurde an VIER Fundorte mitkopiert und an keinem eingeloest:
+  //   1  docs/planner/pv-belegung-referenz/DachplanerProPage.tsx   Prototyp
+  //   2  M-02 (Archivbestand)                                     Prototyp
+  //   3  M-02-Kopie                                               byte-identisch
+  //   4  diese Datei                                              Produktivbaum
+  // Vier Fundorte, NULL unabhaengige Herkunftsangaben. Mehrfachvorkommen ist kein Beleg (H-8).
+  //
+  // WAS JE WERT FEHLT: Quelle · Datum der Erhebung · Gewerk. Ohne diese drei ist jede Zahl hier
+  // eine Vermutung, die wie eine Kalkulation aussieht.
+  //
+  // NICHT AENDERN, bevor Yama die Firmenwerte genannt hat. Eine falsche Zahl durch eine andere
+  // falsche zu ersetzen ist keine Korrektur — seine Auflage, woertlich.
+  //
+  // ZUR REICHWEITE DIESER DATEI, gemessen am 12.08. (A-16-1), damit sie niemand ueberschaetzt:
+  //   statisch    KEIN Aufrufer — 'admin.layouts.roof' 0 Treffer in app/, routes/, resources/views/
+  //   dynamisch   EINE Stelle im Haus ruft view() mit einer Variablen auf, ProductController.php:443.
+  //               Ihr $view wird zwei Zeilen davor auf GENAU ZWEI feste Namen gesetzt
+  //               ('…partials.product_cards', '…partials.product_list') — keiner davon dieser hier.
+  //   Ergebnis    kein Aufrufer, statisch UND dynamisch geprueft.
+  // Die Datei liegt im Produktivbaum und wird trotzdem nicht ausgeliefert: der ORT ist kein Beleg
+  // fuer die Wirkung (H-8b).
+  //
+  // Auftrag und Begruendung: docs/auftraege/aktiv/A-16-time-vars-im-produktivcode.md
+  // ───────────────────────────────────────────────────────────────────────────────────────────
   // time assumptions (minutes) – adjust to your company values
   const TIME_VARS = {
     SCAFFOLD_M2: 8,        // minutes per m2 facade area
@@ -1669,6 +1697,21 @@
       TIME_VARS.INV_SETUP +
       TIME_VARS.CLEANUP;
 
+    // ─────────────────────────────────────────────────────────────────────────────────────────
+    // 🔴 F-051 GESPERRT — DER STUNDENSATZ 65 IST EIN EIGENER POSTEN, NICHT EINE ZEITANNAHME.
+    //
+    // Die elf Werte oben sind Minuten; die 65 ist ein PREIS in Euro je Stunde. Sie ist damit
+    // NICHT von derselben Art wie TIME_VARS und wird hier ausdruecklich getrennt vermerkt.
+    //
+    // WAS FEHLT, dieselben drei Fragen: Quelle · Datum der Erhebung · Gewerk.
+    // Und ausdruecklich OHNE Vorschlagswert — ein Vorschlag waere genau die falsche Zahl,
+    // die Yamas Auflage verbietet.
+    //
+    // WAS DIESE ZEILE RECHNET: aus unbelegten Minuten und einem unbelegten Stundensatz einen
+    // Lohnkostenbetrag. Beide Faktoren sind Platzhalter — das Ergebnis ist es damit auch.
+    //
+    // NICHT AENDERN ohne Yamas Firmenwerte. Auftrag: docs/auftraege/aktiv/A-16-time-vars-im-produktivcode.md
+    // ─────────────────────────────────────────────────────────────────────────────────────────
     const laborCost = (installMinutes / 60) * 65;
     const misc = 500;
 

@@ -857,3 +857,36 @@ mitläuft und dort niemand nach ihm sucht.*
 > fertige PV-Konfigurator-Oberfläche warten auf drei Zeilen in `web.php`. Der Aufwand für „live"
 > ist kleiner als der Aufwand, die Sperre zu lesen. Deshalb A-16-2: **der Vermerk gehört an die
 > Zahl, nicht nur in dieses Blatt.***
+
+#### Nachtrag 12.08. (Generator, A-16 gebaut) — der Vermerk steht jetzt an der Zahl, und die offene Zeile ist zu
+
+**Der Sperrvermerk ist eingebaut.** *Er steht dort, wo die Zahlen stehen — nicht nur hier:*
+
+```text
+roof.blade.php:74-101    Sperrvermerk ueber TIME_VARS  (F-051, vier Fundorte, was je Wert fehlt,
+                         Reichweite der Datei, Verweis auf das Auftragsblatt)
+              :102       const TIME_VARS = { … }        Werte UNVERAENDERT
+              :1701-1714 eigener Vermerk fuer den Stundensatz — er ist ein PREIS, keine Zeit
+              :1715      const laborCost = (installMinutes / 60) * 65;   Wert UNVERAENDERT
+              :2309      'Montage (Arbeit)' → der Euro-Betrag, unberuehrt
+```
+
+**Die Zeilennummern oben im Abschnitt (`:73`, `:74`, `:1672`) sind der Stand VOR dem Bau** — *die
+Vermerke haben sie verschoben; beide Stände stehen hier, damit niemand zweimal sucht.*
+
+> **UND DIE OFFENE ZEILE IST GESCHLOSSEN.** *Oben steht: „Dynamische View-Namen sind nicht
+> ausgeschlossen (`ProductController.php:443` ruft `view($view, …)`) — offen in A-16-1."*
+> **Gemessen: sie sind ausgeschlossen.** *Die eine dynamische Stelle im ganzen Haus bekommt ihr
+> `$view` zwei Zeilen davor zugewiesen, auf **genau zwei feste Namen** —
+> `admin.product.product.partials.product_cards` und `…product_list`. **Keiner davon ist diese
+> Datei.*** *Damit lautet die Aussage jetzt vollständig:* **kein Aufrufer, statisch UND dynamisch
+> geprüft.**
+
+*Zur Vollständigkeit der Belegkette, alle wörtlich gesucht: `fetch(` **0**, dazu `axios` · `$.post` ·
+`$.ajax` · `<form` · `XMLHttpRequest` · `sendBeacon` je **0**. Die sieben `action=`-Treffer sind
+**`data-action`-Attribute an Knöpfen**, kein Formularziel — gelesen, nicht gezählt (B5). **Angebot →
+Auftrag → Rechnung ist damit aktenkundig unberührt.***
+
+**Die Ampel bleibt 🔴.** *Sie wird durch diesen Bau weder schärfer noch milder: die elf Zeitwerte und
+die 65 sind vorher wie nachher zeichengleich, es kam nur der Vermerk hinzu.* **Aus W3 wird ohne Umbau
+W2, sobald Yamas Firmenwerte vorliegen.**

@@ -37,7 +37,7 @@
 | **B6** Summe braucht Erhebung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `6ecf911c` · Elter `7be1a381` | **8/8 — Barriere ausgelöst, nicht gelesen** · alle **vier Beispiele des Regeltexts** am Tor nachgefahren, alle vier wie dokumentiert · B5 bytegleich unberührt (md5) + Mutation: B6 raus → B5 feuert weiter, die Wächter verdecken einander nicht · scripts-Suite 107/107 beidseitig · P2 zur §3-Belegform (kein wörtlicher Befehl), gleicher Maßstab wie W-07N |
 | **W-15** Material und Farbe | **`BETRIEBSBESTAETIGT`** | – | Abnahme `72c5a6d6` · Elter `df673fdc` | **10/10** · erstes **`ENTWORFEN`** der Werkbank, Zähler 11→11 unverändert · **zwei Befunde gegen das eigene Blatt**, beide treffen: „vier Werkzeuge" sind drei (`PaintCommand` ist `commandId`, `:875`) und die feste Zahl 9 ist 11 · acht Vertrags-Fundstellen selbst geöffnet, alle exakt · Suite 1698/1698 · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
 | **W-01N** Suite-Zahl zahlfrei | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53930b60` · Elter `2e587fb7` | **5/5** · die feste Zahl ist raus und **nicht durch eine neuere ersetzt** · Nachweis prüfbar geblieben (resources 0, Suite 1698 an beiden Ständen) · Fahrplan-Widerspruch **vorgelegt statt umgebogen** — entschieden: richtig so · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
-| **A-16** `TIME_VARS` im Produktivbaum | **`IN_ARBEIT`** | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
+| **A-16** `TIME_VARS` im Produktivbaum | **`CODE_FERTIG`** | **Evaluator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | **`BETRIEBSBESTAETIGT`** | – | Abnahme `b1554b01` · Elter `9d09b02d` | **7/7 — dritte Barriere, ausgelöst statt gelesen** · Unabhängigkeit **zweifach gemessen**: B5/B6-Blöcke bytegleich + Mutation → beide feuern weiter · H-1…H-7 alle zeichengleich, H-8 **angehängt** · Wegweiser trägt nur den Verweis, kein zweiter Regeltext · Tor +26/−0, scripts-Suite 107/107 beidseitig · P2: nie auf `IN_ARBEIT` gesetzt (ohne Schaden — zum Bauzeitpunkt lief nachweislich keiner) |
 | **B5N** Belegzeilen-Schreibweisen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c54c7129` · Elter `a1751fbe` | **6/6** · drei Formen **einzeln** belegt, Barriere bleibt bei fehlendem Beleg laut · B5-Zählwort und B6/B7 nachweislich unberührt (gehasht + am Tor) · Testlücke **gemessen statt angenommen** (0 Stellen), bleibt offen · **einziger Bau des Tages mit `IN_ARBEIT` im committeten Stand vor dem Bau** |
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
@@ -2500,8 +2500,27 @@ sein_selbstbefund: "Er meldet einen eigenen Messfehler, den niemand gefunden hae
 auftrag: "A-16"
 titel: "Elf unbelegte Zeitwerte und ein harter Stundensatz rechnen einen Lohnkostenbetrag — in einer Datei ohne Aufrufer"
 datei: docs/auftraege/aktiv/A-16-time-vars-im-produktivcode.md
-zustand: IN_ARBEIT
-ballbesitz_bau: generator (Bau laeuft seit 12.08. — nach W3: Warnschild und Sperrvermerk, kein Wert)
+zustand: CODE_FERTIG
+ballbesitz_bau: evaluator (gebaut 12.08. auf a2961b42; Bericht docs/BERICHT-A-16-time-vars-sperrvermerk.md)
+die_eine_zahl_die_zaehlt: "0 geaenderte Ziffern. Die elf Zeitwerte und die 65 sind vorher wie
+  nachher 8 6 5 4 12 2 90 60 45 25 40 und * 65. Strukturell belegt statt per Augenschein: numstat
+  43/0, und eingefuegte Zeilen die KEIN Kommentar sind: 0. Yamas Punkt 4 woertlich erfuellt."
+a16_1_offene_zeile_geschlossen: "Das Blatt liess die dynamische Luecke offen ('Dynamische
+  View-Namen sind nicht ausgeschlossen, ProductController.php:443 — offen in A-16-1'). Gemessen:
+  view() mit Variable ergibt 4 Treffer, davon sind DREI Methodendefinitionen die zufaellig so
+  heissen (draf_view, view, eine JS-Funktion) — mein Muster traf den Text, nicht die Sache, H-9 an
+  dem Tag an dem ich die Regel gebaut habe. Die EINE echte Stelle einzeln geoeffnet:
+  ProductController.php:438-440 setzt $view auf GENAU ZWEI feste Namen, product_cards und
+  product_list, keiner davon admin.layouts.roof. Aussage jetzt vollstaendig: kein Aufrufer,
+  statisch UND dynamisch geprueft."
+a16_7_belegkette: "0 Schreibpfade. fetch( 0 (woertlich gesucht, mein erster Versuch sprengte den
+  Ausdruck an der Klammer), axios/$.post/$.ajax/<form/XMLHttpRequest/sendBeacon je 0. action= hat
+  SIEBEN Treffer — alle sieben gelesen, alle sind data-action-Knopfmarken fuer clientseitiges JS,
+  kein Formularziel. Eine Zahl allein haette hier nach sieben Formularen ausgesehen."
+nebenbefund_nicht_mitbehandelt: "roof.blade.php:1716 const misc = 500 — direkt unter laborCost ein
+  DRITTER unbelegter Wert, weder Zeit noch Stundensatz sondern eine Pauschale. Steht in keinem
+  Kriterium von A-16; nicht mitvermerkt, weil wer bei dieser Gelegenheit eine dritte Stelle
+  mitnimmt aus einem pruefbaren Auftrag einen unscharfen macht. Entscheidung beim Planner."
 entsperrt: "Der Plan-Pruefer hat in 494d4179 nachgemessen: die A-16-DoR WAR gefahren, der Datensatz
   sagte das Gegenteil. Mein Befund bfba0419 hat es gefunden — ich habe vier Runden nicht gebaut,
   weil dor_beleg 0 und Blattkopf ENTWURF sagten. Beide sind jetzt nachgezogen (dor_beleg 1,
