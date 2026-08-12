@@ -118,7 +118,7 @@ und Lichtkuppel. **Die Trennlinie zieht der Code selbst** — `aufbauOrientierun
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln / Fundstelle |
 |---|---|---|---|---|
 | W-33 | **Start und Projektwahl** | LEER | alle | ungeprüft — `app/StartView.tsx` (267 Z) |
-| W-34 | **Geführte Planung** (Stepper, elf Schritte) | LEER | alle | ungeprüft — `app/GuidedView.tsx` (165 Z) + `app/dashboard/fahrschritte.ts` (202 Z) |
+| W-34 | **Geführte Planung** (Stepper, elf Schritte) | **BESCHRIEBEN** | **W-38** *(Typquelle, `GuidedView.tsx:4`)* | **keine** ⓝ — gezählt, nicht gerechnet: 17 Zählungen über `zaehle()`; `statusAus` `fahrschritte.ts:43-49` · **6 der 11 Schritte haben keine Modellgrundlage** |
 | W-35 | **Konfigurator-Dialog** Fenster·Tür·Treppe | LEER | W-04, W-09 | ungeprüft — `app/ConfigWizard.tsx` (271 Z) · **schreibt NICHT ins Gebäudemodell** |
 | W-36 | **Fähigkeiten-Navigation** | LEER | alle | ungeprüft — `app/FaehigkeitenNavi.tsx` (76 Z) + `app/tools/faehigkeiten.ts` |
 | W-37 | **Rechenpanels (Engine-Flächen)** | LEER | N-001…N-003 | **N-003** — `app/EngineFlaeche.tsx` (196 Z) + `app/dashboard/enginePanels.ts`; trägt die **A-14**-Ausgabeauflage |
