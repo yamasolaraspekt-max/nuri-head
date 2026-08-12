@@ -39,6 +39,7 @@
 | **A-16** `TIME_VARS` im Produktivbaum | `ENTWURF` | **YAMA** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
 | **A-17** Zwei Engines schweigen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
+| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `ea9522bc` | **löst A-15s letzte offene Achse-2-Zeile auf, ohne Fachurteil** — die `Schicht` hat drei Felder (`name?`, `dicke`, `lambda`), für Glaser fehlen μ/s_d **und** Klima: der Taupunkt ist **nicht rechenbar**, nicht »nicht implementiert« · 10 Feuchte-Begriffe = 0 in der Datei · Pflichtfeld nach A-14/A-17-Muster · **kein Panel, keine Plakette zu streichen** · 2. Posten: »speist Heizlast« gegen **0** Aufrufe aus `app/` |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -4168,3 +4169,37 @@ GEMESSEN, was W-07N blockiert — und es ist WENIGER als ich vermutet hatte:
 Reifegrad von W-07 richtig (`6/7 BLÄTTER` → `BESCHRIEBEN`). Der Zähler springt also **erst mit dem
 Bau** auf 11 — er zählt heute 10 korrekt, nicht zu wenig. Wer nach dem Bau 11 messen will, misst
 `grep -cE '^\| W-[0-9]+ .*BESCHRIEBEN'` gegen REGISTER.md, dieselbe Zeile wie in jedem Rundgang.*
+
+
+## A-18 — `wandaufbau`: der U-Wert trägt seinen Vorbehalt (Datensatz, einziger Zustandsort neben der Tafelzeile)
+
+```yaml
+auftrag: "A-18"
+datei: docs/auftraege/aktiv/A-18-wandaufbau-vorbehalt-uwert.md
+zustand: ENTWURF
+ballbesitz: "plan-pruefer (DoR)"
+basis_sha: ea9522bc
+anlass: "Yamas Auftrag 12.08. — 'bitte das loesen, das ist dein Auftrag konzeptionell', auf die
+         vorgelegte Analyse zur letzten offenen Achse-2-Zeile."
+kern: "Die Frage 'Bauschaden oder Fehlauslegung?' war FALSCH GESTELLT. Die Engine behauptet keine
+       Feuchteschutz-Aussage — sie kann sie nicht behaupten. Entschieden hat das die
+       DATENSTRUKTUR, nicht ein Fachurteil."
+selbst_nachgemessen: "alle fuenf Kernaussagen der Analyse halten:
+  (1) wandaufbau.ts:9-15  Schicht = name?, dicke, lambda — mu/sd und Klima fehlen
+  (2) zehn Feuchte-Begriffe in der Datei: je 0
+  (3) Dateikopf:4 nennt DIN EN ISO 6946 (U-Wert), nicht DIN 4108-3 (Feuchteschutz)
+  (4) berechneUWert: EIN Aufrufer, faehigkeiten.ts:81, zustand in_entwicklung — kein Panel
+  (5) app/ ruft die Engine 0x auf"
+eine_praezisierung: "'null Treffer im ganzen Haus' ist zu stark: feuchte hat ZWEI Fundstellen —
+       fachFlaechen.ts:149 'Feuchtelast g/h' und dachformVorlagen.ts:105 holzfeuchteProzent.
+       Beide sind ANDERE Feuchtegroessen, keine Tauwasserrechnung. Die Aussage gilt fuer DIESE
+       Engine; die Begruendung muss das sagen."
+warum_kein_fachurteil_noetig: "anders als bei N-003, wo Yama den GELTUNGSBEREICH festlegen musste,
+       ist hier jeder Satzteil eine Ablesung: die Norm steht im Dateikopf, die fehlenden Groessen
+       stehen im Datentyp, der Schlusssatz ist die Folge daraus."
+zweiter_posten_nicht_erledigt: "Dateikopf:2 sagt 'speist Heizlast & Dach' — gemessen 0 Aufrufe aus
+       app/. Dieselbe Klasse wie die fehlende Azimut-Bruecke und W-15s Vertrag ohne
+       Implementierung. KEIN Brueckenbau in diesem Auftrag."
+abhaengigkeit: "A-18 darf erst BAUEN, wenn A-15 abgeschlossen ist — sonst baut es auf einem
+       Vorschlag. A-15 ist IN_ARBEIT beim Generator; ich habe es NICHT angefasst."
+```
