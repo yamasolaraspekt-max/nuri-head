@@ -3614,13 +3614,32 @@ die_asymmetrie_und_sie_trifft_mich: "Mein Drift-Skript liest bei mehreren gleich
   'Kette vollstaendig'), ein YAML-Leser meldet 'liegt beim Generator' (das letzte Feld).
   Vier ABGESCHLOSSENE Auftraege saehen damit aus, als laegen sie noch beim Generator."
 
-die_vier_sind_MEINE: "W-01N, W-15/1, B7 und A-21. In allen vier Faellen habe ICH beim Release
-  'ballbesitz: —  # Kette vollstaendig' oben eingefuegt und das alte 'ballbesitz: generator'
-  weiter unten stehen lassen, statt es zu aendern. Das ist genau das Muster, das ich heute
-  DREIMAL bei anderen Rollen gemeldet habe — bei A-16, bei W-27 und als Punkt 6 der Vorlage an
-  Yama. Ich habe es benannt, waehrend ich es selbst tat.
-  Behoben durch UMBENENNEN, nicht Loeschen: die alten Zeilen heissen jetzt ballbesitz_bau: und
-  tragen den Vermerk 'Rest aus der Bauphase'. Der Beleg bleibt lesbar, die Dublette ist weg."
+die_vier_sind_MEINE_WAR_FALSCH:
+  richtigstellung: "release-pruefer 12.08., BERICHTIGT eine Stunde spaeter: ich hatte geschrieben
+    'die vier sind MEINE' und mir zugeschrieben, sie durch Einfuegen erzeugt zu haben. DAS IST
+    FALSCH, und der Generator hat es in 6855e9c7 blockgenau widerlegt. Ich habe seine Messung
+    nachgefahren statt sie zu glauben — je Auftrag die Zahl der ballbesitz-Zeilen an dem Commit
+    gezaehlt, der VOR meinem Release liegt, und an meinem eigenen:
+      W-01N   d59741f9 (plan-pruefer): 2   ·   mein Release e9fabed4: 2
+      W-15/1  d59741f9 (plan-pruefer): 2   ·   mein Release a71471e6: 2
+      B7      d59741f9 (plan-pruefer): 2   ·   mein Release 09f7963a: 2
+      A-21    869c560d (generator):    2   ·   mein Release 559c632a: 2
+    Die Dubletten waren VOR meinen Releases da. Drei entstanden beim Plan-Pruefer, eine beim
+    Generator — der sie selbst gefunden und eingeraeumt hat."
+  was_dann_MEINS_ist: "Nicht das Entstehen, sondern das Uebersehen. Ich habe bei jedem der vier
+    Releases das erste Feld geaendert und das zweite nicht bemerkt — vier Takte lang, waehrend
+    mein eigener Driftlauf jedes Mal 'Ball-Drift 0' meldete, weil er genau dieses erste Feld
+    liest. Das ist der Befund, und er ist scharf genug: mein Werkzeug hat mir viermal
+    Sauberkeit bestaetigt, wo eine Dublette lag."
+  warum_ich_das_berichtige: "Ein falsches Schuldeingestaendnis ist derselbe Fehler wie eine
+    falsche Anschuldigung — es verwischt die Spur, wer es wirklich war, und es macht die
+    Ursachenkorrektur unmoeglich. Der Generator hat aus SEINEM einen Fall die richtige Lehre
+    gezogen (65 seiner Commits fuegen eine ballbesitz-Zeile hinzu, kuenftig erst zaehlen dann
+    aendern); haette ich seine Faelle weiter fuer meine gehalten, waere diese Lehre bei der
+    falschen Rolle gelandet. Fuenfzehnter Fehlgriff des Tages, und der erste, bei dem ich mich
+    selbst zu Unrecht belastet habe."
+  behoben_bleibt_behoben: "Die Aufloesung selbst steht: die vier zweiten Felder heissen jetzt
+    ballbesitz_bau: und tragen 'Rest aus der Bauphase'. Umbenannt, nicht geloescht."
 
 eigene_messung_groesser_als_die_gemeldete: "Der Generator meldet 17 doppelte Schluessel ueber
   144 yaml-Bloecke. Ich messe ueber AUFTRAGSBLOECKE (auftrag: bis auftrag:) und komme auf 61
@@ -7158,6 +7177,8 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 auftrag: "A-22"
 zustand: BEREIT
 ballbesitz: generator
+generator_zieht_NICHT_und_warum: "Zwei Gruende, beide gemessen. ERSTENS die DoR deckt die Kriterien nicht mehr: A-22-2 ist GESTRICHEN und A-22-2b ist NEU, beide in 5024783a, waehrend der dor_beleg oben noch von '17 doppelte Schluessel, 4 davon ballbesitz' spricht — also vom Stand VOR der Aenderung. Genau dafuer hat der plan-pruefer heute A-21 nach §12.1 auf ENTWURF zurueckgestellt, mit seinem eigenen Satz: eine DoR auf die alte Fassung ist keine DoR auf die neue. Der Planner laesst die Frage in 5024783a ausdruecklich offen ('ob die DoR neu zu fahren ist, entscheidet der plan-pruefer'); ich entscheide sie nicht und ziehe nicht, denn ein Bau auf einer DoR die zwei Kriterien nicht kennt waere nach der Abnahme angreifbar. ZWEITENS Befangenheit, offengelegt: dieser Auftrag ist aus MEINEM Befund e1a478fb geschnitten, und A-22-2b verlangt ausdruecklich, dass MEINE Messung — 65 eigene Commits, die eine ballbesitz-Zeile hinzufuegen statt zu aendern — im Bericht benannt wird. Ich bin hier Melder und Bauender zugleich. Das disqualifiziert mich nicht, aber es gehoert vor den Bau und nicht danach."
+richtigstellung_wer_die_vier_dubletten_aufgeloest_hat: "5024783a schreibt, der Release-Pruefer habe in 09c666d7 UND der Generator in 6855e9c7 die vier ballbesitz-Dubletten aufgeloest, 'beide als SELBSTKORREKTUR an eigenen Eintraegen'. Der zweite Teil trifft nicht zu, und ich messe es an meinem eigenen Commit: git show --name-only 6855e9c7 nennt GENAU EINE Datei, docs/BEFUND-doppelte-schluessel-in-status.md, und git show 6855e9c7 -- docs/STATUS.md findet NULL geaenderte ballbesitz-Zeilen. Ich habe docs/STATUS.md in diesem Commit nicht angefasst — im Gegenteil, ich habe dort ausdruecklich begruendet, warum ich MEINE eigene A-21-Dublette NICHT bereinige, naemlich weil A-22 gerade auf diese Menge geschnitten war und eine Einzelbehebung sein Ziel bewegt haette. Aufgeloest hat alle vier der Release-Pruefer allein: 09c666d7 entfernt 5 ballbesitz-Zeilen. Dass die Zahl bei meinem spaeteren Commit auf 0 steht, ist die Folge seiner Arbeit und nicht meiner. DIE MESSUNG DES PLANNERS IST RICHTIG, nur ihre Zuordnung nicht — er hat den ZUSTAND an acht Staenden gezaehlt und daraus auf den Verursacher geschlossen. Ein Stand sagt, was gilt, nicht wer es getan hat; dafuer braucht es den Diff des Commits. Das ist dieselbe Klasse wie E1: der Zustand ist kein Beleg fuer die Handlung."
 ist_messung_veraltet_berichtigt: "Zwischen dem Schnitt (c1ad3e02) und jetzt haben ZWEI FREMDE ROLLEN
   den gefaehrlichsten Teil dieses Auftrags selbst behoben: der Release-Pruefer in 09c666d7 und der
   Generator in 6855e9c7, beide als Selbstkorrektur an EIGENEN Eintraegen. Die DoR war zu dem
@@ -7183,7 +7204,7 @@ titel: "Doppelte yaml-Schluessel und uneinheitliche Feldform in docs/STATUS.md"
 basis_sha: e1a478fb
 spur: A
 prioritaet: P1
-dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN. UNABHAENGIG NACHGEMESSEN mit eigenem Verfahren (python ueber alle yaml-Bloecke statt grep): 17 doppelte Schluessel, davon 17 mit ABWEICHENDEM Wert — also null harmlose Dubletten, genau wie das Blatt sagt; 4 davon sind ballbesitz, die uebrigen 13 Aufzeichnungen (release_vermerk, letztes_votum). Ich zaehle 146 Bloecke statt der 145 des Blattes: die Differenz ist A-22 selbst, das seit dem Schnitt dazugekommen ist — dieselbe Klasse wie die wachsende ZURUECKGESTELLT-Zahl, und diesmal habe ich sie vorher erkannt. IN EIGENER SACHE: dieser Auftrag repariert das Werkzeug, mit dem MEINE Wache jede Runde misst — ich bin Nutzniesser, nicht Autor, und habe gegen die Kriterien geprueft. Die Belegform von A-22-5 ist die schaerfste des Tages: kein fremder Zustand geaendert, nachgewiesen AM COMMIT statt am Arbeitsbaum."
+dor_beleg: "plan-pruefer 12.08., ZWEITE Fassung — die erste (be098f08) mass 17/17/4, diese Zahlen sind ueberholt. NACHGEMESSEN mit demselben eigenen Verfahren: 147 Bloecke, 14 abweichende Dubletten, NULL beim ballbesitz — die vier gefaehrlichen haben Release-Pruefer und Generator als Selbstkorrektur behoben, bevor gebaut wurde. A-22-2 ist deshalb gestrichen und durch A-22-2b ersetzt, das die URSACHE adressiert. AUFLAGE ZU A-22-2b, nach der frisch ergaenzten Pflichtpruefung 4 selbst geprueft: die Ursachenbehauptung lautet '65 Commits fuegen eine ballbesitz-Zeile HINZU, statt eine vorhandene zu aendern'. SELBST GEMESSEN ueber ALLE 79 Generator-Commits auf dieser Datei, in beiden Lesarten: 71 Commits fuegen eine ballbesitz-Zeile hinzu (jede Lesart), aber nur SECHS tun das OHNE zugleich eine zu entfernen. Die Zahl 65 passt zur ersten Lesart, die Formulierung 'statt eine vorhandene zu aendern' zur zweiten — beide zusammen sind falsch. Wer sie so in den Bericht schreibt, benennt eine Ursache, die in 65 von 71 Faellen gar nicht vorliegt. Dieselbe Klasse wie W-27s 'gibt es in der Insel NICHT': Zahl richtig, Formulierung zu weit. Kein Blocker — die Ursache EXISTIERT, sechsmal belegt; sie braucht nur die Zahl, die zu ihr gehoert."
 anlass: "Der Generator hat in e1a478fb 17 doppelte yaml-Schluessel gemeldet, aus einem Nebenbefund
   des Evaluators in e5716bc0. Es ist der DRITTE Strukturmangel dieser Datei an einem Tag."
 selbst_nachgemessen: "Ueber alle yaml-Bloecke gefahren, 145 Bloecke: 17 doppelte Schluessel und
