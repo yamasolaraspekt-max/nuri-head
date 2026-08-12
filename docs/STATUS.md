@@ -1880,6 +1880,18 @@ was_wirklich_offen_ist_gemessen: "Nach frischer Messung bleiben bei Yama nur zwe
 ```
 ---
 
+## ⚠ NEUN BLAETTER SIND IN DER STATUSWAHRHEIT UNSICHTBAR — und deshalb sah ich "nichts in meiner Bahn"
+
+```yaml
+wie_es_aufgefallen_ist: "Meine Wache hat den Zustand gemessen: 19 BETRIEBSBESTAETIGT, 2 ABGENOMMEN, KEIN einziger ENTWURF/BEREIT/CODE_FERTIG — Ergebnis 'nichts in meiner Bahn'. Der Planner meldet im selben Zeitfenster: 'Alle sieben Blaetter auf ENTWURF beim Plan-Pruefer.' Zwei Rollen, dieselbe Datei, entgegengesetzte Antwort auf dieselbe Frage."
+gemessen: "32 Blaetter liegen in docs/auftraege/aktiv/. ZEHN davon haben KEINEN Block in docs/STATUS.md — je Blatt geprueft, ob sein auftrag-Feld dort vorkommt: A-06 (erledigt, unkritisch), A-14, A-15, B5, B6, W-01N, W-07N, W-09/1, W-15/1, W-21L. NEUN davon tragen im Blattkopf 'status: ENTWURF' und warten damit auf die DoR — bei MIR. In der §16-Statuswahrheit existieren sie nicht."
+warum_das_schwerer_wiegt_als_die_bisherige_doppelfuehrung: "Bisher war die Doppelfuehrung ein WIDERSPRUCH (Blatt sagt ENTWURF, Block sagt BEREIT) — beide Orte trugen etwas, und der Vergleich fand den Fehler. Hier ist der zweite Ort LEER: die Statuswahrheit sagt nicht das Falsche, sie sagt GAR NICHTS. Ein Widerspruch faellt auf, eine Leerstelle nicht. Meine Wache misst genau das Feld, das fehlt, und meldet folgerichtig 'nichts offen' — waehrend neun Auftraege auf mich warten. Das ist die gefaehrlichste Bauart der drei."
+mein_anteil: "Meine Wache-Anweisung sagt 'miss den Zustand, lies keine Notiz' und meint damit docs/STATUS.md. Sie hat keine Zeile fuer den Fall, dass die Statuswahrheit UNVOLLSTAENDIG ist. Ich habe sie selbst geschrieben, heute, und den Fall nicht bedacht — obwohl ich bei W-08/1 schon einmal einen fehlenden Block angelegt habe. Einen Einzelfall behoben, das Muster nicht gesehen."
+sofort_geaendert: "Meine Wache misst ab jetzt BEIDE Seiten: die Zustandsfelder UND die Blaetter in docs/auftraege/aktiv/ gegen ihre Bloecke. Ein Blatt ohne Block ist ein offener Auftrag, kein Nichts."
+was_ich_jetzt_tue: "Ich lege die neun fehlenden Bloecke NICHT im Alleingang an — Zustand und Ballbesitz gehoeren dem, der den Auftrag schneidet (§16, B5-Regel: fremde Zeilen). Ich melde die Luecke hier mit der vollstaendigen Liste, damit der Planner sie in einem Zug schliesst, und beginne parallel mit der DoR der Blaetter in der Reihenfolge, in der sie geschnitten wurden — beginnend mit A-14 und A-15, weil beide am Fach-Gate N-003 haengen, das bei Yama offen ist."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
