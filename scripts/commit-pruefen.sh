@@ -510,6 +510,36 @@ if [ "$FEHLER" -ne 0 ]; then
   exit 1
 fi
 
+# ── B5: EIN ZAEHLERGEBNIS, DAS EINEN BEFUND TRAEGT, BRAUCHT SEINE TREFFERZEILEN ─────────────
+# Yamas Auflage 0b vom 11.08.: *wer `-c` benutzt, um etwas zu behaupten, faehrt denselben Lauf
+# ohne `-c` und liest, was er gezaehlt hat.* Fuenf Faelle an EINEM Tag, alle beim Planner; der
+# vierte zaehlte einen VERGLEICHSOPERATOR `< 1 mm²` als Platzhalter, der fuenfte verlor beim
+# "Beheben" des vierten drei echte Treffer. **Beide Male haette `-n` es in einem Lauf gezeigt.**
+#
+# WAS DAS TOR KANN UND WAS NICHT — die Grenze gehoert hierher, nicht in den Bericht:
+#   KANN     sehen, ob eine Botschaft ein ZAEHLWORT traegt und dazu KEINE Belegzeile.
+#   KANN NICHT  beurteilen, ob die Messung inhaltlich stimmt. Das kann kein Tor (Nicht-Ziel).
+#
+# Die Unterscheidung ist der Kern der Regel, und sie steht in der Warnung selbst, damit B5 nicht
+# als "nie `-c` benutzen" gelesen wird — das machte jede Suite-Meldung unlesbar:
+#   ZAHL ALS GEGENSTAND   "Suite 1692/1692", "0 Platzhalter"  -> Trefferzeilen waeren sinnlos.
+#   BEFUND AUS EINER ZAHL "kommt einmal vor, also gebaut"     -> dort ist die Zeile alles.
+#
+# FORM: **Warnung, kein Abbruch.** Bewusst Stufe 1 der Leiter. Eine harte Sperre auf Zahlen in
+# Commit-Botschaften blockierte jeden legitimen Bericht; was bei jedem zweiten Aufruf falsch
+# anschlaegt, wird umgangen — an A-03 belegt (Riegel um `artisan serve`, benutzt wurde `php -S`).
+# Deshalb kein `FEHLER=1`, kein `exit`, und die Stelle ist NACH dem Fehler-Riegel: die Warnung
+# kann den Rueckgabewert nicht einmal versehentlich beruehren.
+B5_ZAEHLWORT='grep[^|]*-[A-Za-z]*c|--count|[Tt]reffer|[Vv]orkommen|[Ff]undstelle|[Zz](ae|ä)hl|kommt [a-zA-Zäöü]+ vor|mal vor'
+B5_BELEGZEILE='[A-Za-z0-9_./-]+\.[A-Za-z]{1,5}:[0-9]+|:[0-9]+:|Trefferzeile'
+if printf '%s' "$BOTSCHAFT" | grep -qE "$B5_ZAEHLWORT" \
+   && ! printf '%s' "$BOTSCHAFT" | grep -qE "$B5_BELEGZEILE"; then
+  echo "B5-WARNUNG  Zaehlwort in der Botschaft, aber keine Belegzeile (datei.ext:zeile)." >&2
+  echo "            Zahl als Gegenstand ist in Ordnung. Traegt die Zahl einen BEFUND," >&2
+  echo "            fahre denselben Lauf ohne -c und nimm die Zeilen mit, die du gezaehlt hast." >&2
+  echo "            Warnung, kein Abbruch — der Commit laeuft weiter." >&2
+fi
+
 # ── W-04 ────────────────────────────────────────────────────────────────────────────────────
 # Das Tor konnte keine NEUE Datei verbuchen: `git commit -- <pfad>` kennt nichts, was nie im
 # Index war. Gemessen am 03.08.: **31 von 98 Commits** dieser zwei Tage fuehrten mindestens eine

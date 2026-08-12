@@ -33,7 +33,7 @@
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
 | W-01 | Raster und Fang | **BESCHRIEBEN** | — | F-040 ✓, F-041 ✓, F-001 ✓, F-003 ✓, ~~F-004~~ ⓝ |
-| W-02 | Wand zeichnen | **BESCHRIEBEN** | W-01 | F-001, F-002, F-030 |
+| W-02 | Wand zeichnen | **BESCHRIEBEN** | W-01 | **F-001 ✓** (`wallGeometry.ts:14` `Math.hypot`), **F-002 ✓** (`:46` `Math.atan2`, auch `:305-306`), **F-030 ✓** (`:60` Wand = gefülltes Band der Breite `thickness`, `:74`, `:181`) — **hier ist F-030 RICHTIG**; von hier wurde die Paarung zu W-09/W-21 kopiert, wo sie nicht passt |
 | W-13 | Auswahl und Griffe | **BESCHRIEBEN** | W-02 | **keine** ⓝ (~~F-012~~, ~~F-003~~) |
 | W-12 | Ansicht und Kamera | LEER | — | F-032 |
 
@@ -43,7 +43,7 @@
 |---|---|---|---|---|
 | W-03 | Wand bearbeiten | LEER | W-02, W-13 | F-003, F-004, F-030 |
 | W-04 | Öffnung (Tür/Fenster) | **BESCHRIEBEN** | W-02 | **keine** ⓝ (~~F-003~~, ~~F-031~~) |
-| W-05 | Raum erkennen | **BESCHRIEBEN** | W-02 | F-010, F-011 (ohne Betrag), F-012 ⚠, F-013 ⚠, **F-001** |
+| W-05 | Raum erkennen | **BESCHRIEBEN** | W-02 | **F-010 ✓ + F-011 ✓ in EINER Funktion** — `roomDetection.ts:70` `signierteFlaeche()` gibt `summe/2` **mit Vorzeichen**: das Vorzeichen ist die Orientierung, der Betrag die Fläche (`:38 flaecheMm2`), **F-001 ✓** (`:88`, `:95` `Math.hypot`), F-012 ⚠, F-013 ⚠ · **fehlte in der Spalte: F-002 ✓** (`:120` `Math.atan2`, Halbkanten-Sortierung) |
 | W-10 | Decke und Boden | LEER | W-05 | F-011, F-030 |
 | W-16 | Grundriss unterlegen | LEER | W-12 | F-032 |
 
@@ -52,9 +52,9 @@
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
 | W-06 | Geschoss verwalten | LEER | W-02 | F-032 |
-| W-07 | **Dach aus Kontur** | **BESCHRIEBEN** | W-05, W-06 | F-010, F-013, **F-014, F-025, F-026**, F-020, F-021, F-022 |
-| W-08 | Dachfläche messen | **BESCHRIEBEN** | W-07 | F-011, F-023 ⚠, F-024 ⚠ |
-| W-09 | Treppe | **BESCHRIEBEN** | W-06 | F-001, F-030 |
+| W-07 | **Dach aus Kontur** | **BESCHRIEBEN** | W-05, W-06 | F-010 ✓ (`dachAusschnitt.ts:103,154` `Math.sign(area)` — **nicht** in `dachGeometrie.ts:46`, dort `Math.abs`), F-013 ✓ (`dachAusschnitt.ts:136` Außenwinkelsumme ±2π statt Kantenschnitt-Test), **F-014 ⚠** (Konvexität wird geprüft, die **Erkennung** einspringender Ecken fehlt — die V1-Grenze **lehnt ab statt zu erkennen**), **F-025 ✓** (grat 49 · kehle 57 · ortgang 12 Treffer), **F-026 ✓**, ~~F-020~~ ⓝ **0 Treffer** (`skelett` in allen acht Modulen), ~~F-021~~ ⓝ (kein Skelett zum Anheben), F-022 ✓ Grad→Radiant (`PI/180`, 4 Module) · **Prozent nicht gefunden** |
+| W-08 | Dachfläche messen | **BESCHRIEBEN** | W-07 | **F-011 ✓** (`polygonFlaeche.ts:44-46` Shoelace + `Math.abs(summe)/2`), F-023 ⚠, F-024 ⚠ |
+| W-09 | Treppe | **BESCHRIEBEN** | W-06 | **F-001 ✓** (`treppe2D.ts:47`, `treppeSvg.ts:125` — `Math.hypot(dx,dy)`), ~~F-030~~ ⓝ **0 Treffer in allen sieben Treppen-Modulen** · Rechenkern sind **normative Größen**, keine Geometrieformel |
 | W-21 | **Sparren und Lattung** | **BESCHRIEBEN** | W-07 | **N-001…N-003** ✓ (~~F-001~~, ~~F-030~~ ⓝ) · Quelle M-01/**M-02 ungelesen** |
 | W-22 | **Gaube** | **BESCHRIEBEN** | W-07 | **F-027** ✓ (Thema ja, Formel ⚠), ~~F-031~~ ⓝ |
 | W-23 | **Deckung und Material** | LEER | W-07, W-08 | **F-050** |
