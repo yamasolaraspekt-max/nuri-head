@@ -52,7 +52,7 @@
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
-| **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
+| **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `ff7e23ec` | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
@@ -7715,7 +7715,7 @@ mein_anteil: "In Runde 1 habe ich die erste Zusage widerlegt und die zweite steh
 
 ```yaml
 auftrag: "W-40"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 bericht: "docs/BERICHT-W-40-gueltigkeitsstatus.md"
 ICH_HATTE_ANGEHALTEN_UND_DAS_WAR_ZU_VIEL: "In der Runde davor habe ich geschrieben 'ich baue nicht weiter, bevor das geklaert ist'. Revidiert, und der Grund ist messbar: KEIN EINZIGES der sieben Kriterien wird durch meinen Befund unerfuellbar. Er trifft das ZIEL — ENTWORFEN gegen Ablesung, eine Planner-Frage —, nicht die Kriterien. Einen erfuellbaren Auftrag anzuhalten blockiert §3 fuer alle fuenf Rollen, und die richtige Form ist die, die W-40-5 selbst vorgibt: bauen, und das Fehlende BENENNEN statt es zu erfinden. Die Frage steht unveraendert offen — sie steht jetzt in einem fertigen Blatt statt in einer Wartezeit."
 sieben_kriterien_je_am_BAU_STAND_belegt: "W-40-1 die zwei Achsen mit dem Zitat aus :130-132, Zeile selbst gemessen und nicht aus dem Auftragsblatt uebernommen (Pflichtpruefung 8). W-40-2 je Stufe NUR was die Quelle sagt — zu blocked sind das vier Woerter, also stehen im Blatt auch nur vier. W-40-3 die Zahlenluecke GESTELLT und nicht beantwortet: Zielbild acht in :117, gebaut vier, als fehlend drei, und :121 fuehrt review-required mit einem GEDANKENSTRICH statt mit 'fehlt'. W-40-4 blocked gegen DECISION_BLOCKED als offene Frage. W-40-5 die Uebergaenge: die Quelle gibt keine her, ausdruecklich festgestellt statt erfunden, und nur das logisch Erzwungene benannt. W-40-6 der W-38-Bezug mit studioDaten.ts:163 und :255, am Bau-Stand gemessen. W-40-7 sieben Blaetter, keines gleicht der Vorlage oder einem der 27 fremden Werkzeugordner."
@@ -7723,7 +7723,7 @@ was_dieses_blatt_fuer_W_38_schliesst: "W-38s eigenes 7-GRENZEN hat die Frage off
 warum_W_40_zuerst_und_nicht_W_41_oder_W_42: "Drei Auftraege stehen zugleich BEREIT bei mir, §3 laesst einen IN_ARBEIT zu. Die Reihenfolge ergibt sich aus der Abhaengigkeitskette und nicht aus meiner Wahl: das REGISTER fuehrt W-41 mit 'braucht W-38, W-40' — es haengt an diesem hier. W-42 traegt ausserdem eine vom Planner selbst benannte Abweichung von Yamas Freigabe (Ziel BESCHRIEBEN statt ENTWORFEN, weil dort Code existiert), und die gehoert geklaert bevor gebaut wird, nicht waehrenddessen. W-40 haengt nur an W-38, und das ist BETRIEBSBESTAETIGT."
 BEFUND_VOR_DEM_BAU_die_praemisse_traegt_so_nicht: "W-40s art-Feld sagt 'Es gibt KEINEN Code: die drei Stufen fehlen im Bestand', und die Quelle sagt es auch. Fuer SchrittStatus stimmt das. FUER DIE INSEL NICHT. Gemessen mit grep auf die drei Woerter und dann JEDE Stelle geoeffnet, weil ein Wort kein Beleg ist: resources/planner/hausplaner/geometry/configuratorPackage.ts traegt eine vollstaendige GUELTIGKEITSACHSE — export type ConfiguratorStatus mit SIEBEN Stufen (draft, incomplete, generated, checked, approved, integrated, outdated), dazu STATUS_UEBERGAENGE als vollstaendige Uebergangstabelle mit dem ausdruecklichen Grundsatz 'bewusst streng: aus approved/integrated geht es nur ueber outdated zurueck in die Bearbeitung, Freigabe-Schutz, keine stille Rueckstufung', die Waechterfunktion statusUebergangErlaubt, das Tor kannIntegrieren (nur approved darf uebernommen werden) und markiereVeraltet als Invalidierung. Es ist GEBAUT, GETESTET und IN GEBRAUCH: configuratorPackage.test.ts prueft Uebergaenge, Tor und Invalidierung einzeln, und geometry/integrationAbgleich.ts:13 und :134 benutzt kannIntegrieren ausserhalb der Tests. WAS DAS BEDEUTET, dreifach: ERSTENS outdated existiert bereits samt Uebergaengen — die Vorgabe darf keine zweite Tabelle daneben erfinden, sonst entsteht genau die zweite Wahrheit, die W-40 laut seinem eigenen tragenden Punkt verhindern soll. ZWEITENS approved spielt fachlich die Rolle, die die Quelle confirmed zuschreibt: nur ein approved-Paket darf uebernommen werden, das ist 'PV erst nach bestaetigter Geometrie' eine Ebene tiefer. DRITTENS beruehrt es W-41: markiereVeraltet IST die Invalidierung fuer Pakete, also ist auch dessen 'kein Code' zu weit gefasst. ICH ENTSCHEIDE DAS NICHT und deute kein Kriterium um. W-40-5 verlangt die Uebergaenge als Vorgabe ODER die ausdrueckliche Feststellung, dass die Quelle sie nicht hergibt — sie gibt sie nicht her, aber der Bestand hat einen Praezedenzfall, und den in 7-GRENZEN zu verschweigen waere derselbe Fehler wie eine erfundene Tabelle. FRAGE AN PLANNER UND PLAN-PRUEFER: traegt das Ziel ENTWORFEN noch, wenn eine Gueltigkeitsachse mit Uebergaengen bereits gebaut ist, oder ist W-40 in Wahrheit eine ABLESUNG mit Erweiterung? Das ist dieselbe Klasse wie die Abweichung, die der Planner bei W-42 selbst benannt hat. Ich baue nicht weiter, bevor das geklaert ist — ein Blatt auf einer zu weiten Praemisse waere nach der Abnahme angreifbar."
 operand_am_BAU_STAND_gemessen_nicht_uebernommen: "Das Blatt verlangt es ausdruecklich (Pflichtpruefung 8): seine Zeilenangaben koennen bis zum Bau gewandert sein. Gemessen: docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md traegt 194 Zeilen, exakt wie im Blatt. Der tragende Zwei-Achsen-Satz steht am Bau-Stand in :131-132 — 'Die vier vorhandenen Stufen beschreiben Fortschritt; die drei fehlenden beschreiben Gueltigkeit. Das sind zwei Achsen, nicht eine laengere Liste.' Die Gegenueberstellung liegt in :115-124, und die ZAHLENLUECKE ist dort unmittelbar sichtbar: :121 fuehrt review-required mit einem Gedankenstrich statt mit 'fehlt', waehrend die drei anderen als fehlend markiert sind. Vier plus drei ist sieben, das Zielbild nennt acht. Auch :179 und :190 treffen. Keine Fundstelle aus dem Blatt uebernommen."
-ballbesitz: evaluator
+ballbesitz: release-pruefer
 titel: "Die zweite Achse, ohne die erst nach Bestaetigung nicht pruefbar ist"
 basis_sha: c9ac316d
 spur: A
@@ -7758,6 +7758,26 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-40 GECLAIMT vor dem Pr
   ACHTUNG BEIM SCOPE: der Generator baut parallel W-27/1; im Baum liegen zwei ungetrackte
   Code-Dateien (dachTopologie.ts und ihr Test). Sie gehoeren NICHT zu W-40 und duerfen in keinen
   meiner Scope-Diffs geraten."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an 1eedb9cf, Elter 1eaa94fc, SIEBEN von sieben. Reine
+  Vorgabe ohne Code; alle Fundstellen am BAU-STAND nachgemessen statt aus dem Blatt uebernommen —
+  Quellzeilen :130 und :132 einzeln geoeffnet, studioDaten.ts:163 und :255 zeichengenau, die
+  Gegenueberstellung maschinell ausgelesen (8 Stufen, 3 fehlend, review-required mit Gedankenstrich)."
+die_grenze_zur_quelle_haelt: "Zu blocked sagt die Quelle genau vier Woerter, und das Blatt schreibt
+  nichts weiter als 'die SPERRE'. Bei den Uebergaengen die zweite zulaessige Form: die Quelle gibt
+  keine her, also steht keine da — und der Praezedenzfall configuratorPackage.ts:100-114 traegt."
+BEFUND_DES_GENERATORS_GEGEN_DIE_EIGENE_PRAEMISSE_BESTAETIGT: "Das Blatt sagt 'Es gibt KEINEN Code'.
+  Nachgemessen und getrennt: confirmed 0, blocked 0, outdated 5 Treffer im Produktivcode. Und
+  outdated steht nicht allein — configuratorPackage.ts:26 fuehrt SIEBEN Stufen, :103 eine volle
+  Uebergangstabelle, :114 den Waechter, :120 das Tor, :125 die Invalidierung; in Gebrauch
+  (integrationAbgleich.ts:47), getestet (configuratorPackage.test.ts:42/43/49/58). Jede Stelle
+  geoeffnet. KEIN ROT: die sieben Kriterien verlangen die Beschreibung der Vorgabe und die ist
+  erfuellt. DIE FRAGE GEHOERT DEM PLANNER — ob W-40 angesichts einer vorhandenen Gueltigkeitsachse
+  so gebaut werden soll, steht jetzt BELEGT da statt vermutet."
+was_dem_generator_zusteht: "Er hat gebaut UND gemeldet, statt anzuhalten, und schreibt selbst warum:
+  ein erfuellbarer Auftrag angehalten blockiert §3 fuer alle fuenf Rollen. Seine Einordnung
+  'approved spielt die Rolle von confirmed' stellt er als Frage und nicht als Feststellung."
+zum_scope: "Der Generator baut parallel W-27/1; zwei ungetrackte Code-Dateien lagen im Baum. Ich habe
+  ausdruecklich geprueft, dass sie NICHT im Scope-Diff sind (0 Treffer), statt es anzunehmen."
 ```
 
 ```yaml

@@ -151,3 +151,118 @@ was_dieses_blatt_NICHT_entscheidet: "Ob review-required zur Gueltigkeitsachse ge
         steht als offene Frage im Blatt statt als stille Annahme."
 W_40_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+
+## §11 — Votum W-40 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-40"
+votum: ABGENOMMEN
+geprueft_an: "1eedb9cf"
+elter: "1eaa94fc"
+scope_diff: "10 Dateien, +686/-4: sieben Werkzeugblaetter neu, REGISTER.md, Bericht, STATUS.md.
+  0 Code-Dateien. Ausdruecklich geprueft: die beiden ungetrackten W-27/1-Dateien (dachTopologie.ts
+  und ihr Test) sind NICHT im Scope — 0 Treffer. Der Generator baut parallel, und ein Scope-Diff,
+  der fremde Baustellen einsammelt, waere kein Scope-Diff."
+pruefstand: "git worktree add -q --detach auf 1eedb9cf. Reine Vorgabe, 0 Code — Suite nicht
+  einschlaegig, Browserabnahme entfaellt, §15 gegenstandslos."
+
+messtisch:
+
+  W-40-1_zwei_achsen_mit_zitat:
+    urteil: ERFUELLT
+    fundstelle_am_bau_stand_selbst_gemessen: "Das Blatt nennt
+      BERICHT-PROZESSEBENE-DREI-FRAGEN.md:130-132 und schreibt dazu 'am Bau-Stand nachgemessen
+      und nicht aus dem Auftragsblatt uebernommen'. Ich habe die Zeilen einzeln geoeffnet:
+      :130 traegt 'blocked ist die Sperre. Die vier', :132 'sind zwei Achsen, nicht eine
+      laengere Liste.' Der Satz steht dort, und die Angabe stimmt."
+    das_tragende_daran: "1-ZWECK stellt die beiden Achsen daneben — FORTSCHRITT (W-38, gebaut)
+      gegen GUELTIGKEIT (W-40, Vorgabe) — mit dem Fall, der sie unterscheidet: ein Schritt kann
+      ok sein und trotzdem nicht confirmed. Genau der Satz, ohne den die naechste Rolle die drei
+      Stufen in SchrittStatus hineinbaut."
+
+  W-40-2_je_stufe_nur_was_die_quelle_sagt:
+    urteil: ERFUELLT
+    gegen_die_quelle_geprueft: "Alle drei Kernaussagen stammen aus der Quelle: confirmed trennt
+      'gerechnet' von 'bestaetigt' und traegt L-9 (:128-129), outdated ist die Invalidierung
+      (:129-130), blocked ist die Sperre (:130). Ich habe die Quellzeilen geoeffnet."
+    die_grenze_wird_eingehalten: "Zu blocked sagt die Quelle GENAU VIER WOERTER — 'blocked ist
+      die Sperre' — und das Blatt schreibt in seiner Tabelle nichts weiter als 'die SPERRE'.
+      Alles Weitere steht in 7-GRENZEN als offene Frage statt als Erfindung. Das ist der Punkt,
+      an dem eine Vorgabe am leichtesten ueber ihre Quelle hinauswaechst; hier tut sie es nicht."
+
+  W-40-3_die_zahlenluecke:
+    urteil: ERFUELLT
+    selbst_nachgezaehlt: "Ich habe die Gegenueberstellung der Quelle maschinell ausgelesen:
+      8 Stufenzeilen (:118-125), davon 3 mit 'fehlt' (confirmed, outdated, blocked), 1 mit
+      Gedankenstrich (review-required, :121), 4 mit gebauter Entsprechung. Die Quellzeile :117
+      nennt 'Stufen | acht | vier'. Alle Zahlen des Kriteriums treffen zu."
+    der_bau_geht_darueber_hinaus_und_zu_recht: "7-GRENZEN rechnet 4 + 3 = 7, nicht 8, und macht
+      daraus die Frage, ob review-required zur Gueltigkeitsachse gehoert oder die DREI zu niedrig
+      ist. Sie wird GESTELLT und nicht beantwortet — woertlich 'sie gehoert Yama', mit dem Satz
+      'Beides ist moeglich, und ich erfinde keine Erklaerung.' Das Kriterium verlangt genau das."
+
+  W-40-4_blocked_und_DECISION_BLOCKED:
+    urteil: ERFUELLT
+    beleg: "7-GRENZEN traegt beides: dass die Quelle blocked nicht weiter beziffert ('vier Woerter
+      Quelle, keine Abgrenzung'), und dass die Abgrenzung zu DECISION_BLOCKED im Prozess nicht
+      belegt ist — mit §3s Wortlaut daneben und den drei offenen Fragen 'wer sperrt, wer
+      entsperrt, woran haengt die Sperre'. Als Luecke der VORGABE benannt, nicht als Luecke des
+      Blattes."
+
+  W-40-5_uebergaenge:
+    urteil: ERFUELLT
+    die_zweite_zulaessige_form_gewaehlt: "Das Kriterium laesst zwei Wege: Uebergaenge beschreiben
+      ODER ausdruecklich sagen, dass die Quelle sie nicht hergibt. Das Blatt waehlt den zweiten,
+      woertlich: 'Die Quelle gibt sie NICHT her … Deshalb steht hier keine.' Und es nennt, was
+      logisch erzwungen ist (outdated braucht einen gueltigen Ausgangszustand; confirmed muss
+      pruefbar sein) und was ausdruecklich NICHT folgt."
+    der_verweis_traegt: "Es nennt geometry/configuratorPackage.ts als Praezedenzfall. Ich habe
+      die Datei geoeffnet: 170 Zeilen, und sie traegt bei :100-114 tatsaechlich eine ausdrueckliche
+      Uebergangsregel mit statusUebergangErlaubt. Der Verweis ist kein Wort, sondern eine Stelle."
+
+  W-40-6_bezug_zu_W38:
+    urteil: ERFUELLT
+    fundstellen_gegengeprueft: "2-FUNKTION nennt studioDaten.ts:163 und :255. Beide geoeffnet:
+      :163 'export type SchrittStatus = ok | prog | warn | open', :255 'export const STATUS_LABEL:
+      Record<SchrittStatus, string>'. Zeichengenau. Und das Blatt fuehrt Record<SchrittStatus,
+      string> selbst als Beleg dafuer, warum die Trennung noetig ist: kaeme confirmed hinzu,
+      brauchte es dort ein deutsches Wort — an einer Stelle, die Fortschritt beschriftet."
+
+  W-40-7_sieben_blaetter_und_md5:
+    urteil: ERFUELLT
+    selbst_gefahren: "Sieben Blaetter, alle gefuellt (70/117/34/55/59/76/120 Zeilen). md5-Gegenprobe
+      unabhaengig ueber alle 29 Werkzeugordner: Dubletten MIT W-40 beteiligt: 0."
+
+DER_BEFUND_DES_GENERATORS_GEGEN_DIE_EIGENE_PRAEMISSE:
+  urteil: "BESTAETIGT — vollstaendig, und er gehoert dem Planner."
+  was_er_meldet: "Das Auftragsblatt sagt 'Es gibt KEINEN Code: die drei Stufen fehlen im Bestand.'
+    Er meldet: fuer SchrittStatus stimmt das, fuer die Insel nicht."
+  ich_habe_es_nachgemessen_und_getrennt: "Von den DREI Stufen existiert im Produktivcode genau
+    EINE:
+      'confirmed'  0 Treffer
+      'outdated'   5 Treffer
+      'blocked'    0 Treffer
+    Und outdated steht nicht allein da: geometry/configuratorPackage.ts:26 fuehrt
+    ConfiguratorStatus mit SIEBEN Stufen, :103 STATUS_UEBERGAENGE als volle Uebergangstabelle,
+    :114 statusUebergangErlaubt als Waechter, :120 kannIntegrieren als Tor, :125 markiereVeraltet
+    als Invalidierung. In Gebrauch (integrationAbgleich.ts:47) und getestet
+    (configuratorPackage.test.ts:42, :43, :49, :58). Jede dieser Stellen habe ich geoeffnet."
+  was_daraus_folgt_und_was_nicht: "Seine erste Folge traegt: outdated existiert samt Uebergaengen,
+    eine zweite Tabelle daneben waere die zweite Wahrheit, die W-40 verhindern soll. Seine zweite
+    Folge — 'approved spielt fachlich die Rolle von confirmed' — ist eine EINORDNUNG und keine
+    Messung; er stellt sie auch als Folge zur Entscheidung und nicht als Feststellung, und das ist
+    richtig so. Die dritte (W-41s 'kein Code' sei zu weit) betrifft einen anderen Auftrag."
+  warum_das_KEIN_rot_ist: "Die sieben Kriterien verlangen die Beschreibung der Vorgabe aus der
+    Quelle, und die ist erfuellt. Der Prämissenbefund macht den Auftrag nicht unerfuellbar — er
+    macht die naechste Entscheidung zu einer Planner-Frage: ob W-40 angesichts einer vorhandenen
+    Gueltigkeitsachse so gebaut werden soll. Diese Frage steht jetzt BELEGT da statt vermutet."
+  und_er_hat_daraus_die_richtige_lehre_gezogen: "Er schreibt, dass er in der Runde davor angehalten
+    hatte ('ich baue nicht weiter, bevor das geklaert ist') und dass das zu viel war, weil ein
+    erfuellbarer Auftrag angehalten §3 fuer alle fuenf Rollen blockiert. Gebaut UND gemeldet ist
+    die richtige Form — und sie ist teurer als beides einzeln."
+
+meine_eigenen_messfehler_in_dieser_runde: "Keine, die das Urteil beruehrt haetten. Der Scope-Diff
+  war der einzige Punkt mit erhoehter Gefahr, weil zwei fremde Code-Dateien uncommittet im Baum
+  liegen; ich habe ausdruecklich auf sie geprueft (0 Treffer) statt es anzunehmen."
+```
