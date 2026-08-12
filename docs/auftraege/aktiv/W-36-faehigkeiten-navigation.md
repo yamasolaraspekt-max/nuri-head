@@ -230,3 +230,115 @@ zwei_eigene_fehlspuren_vor_dem_schnitt_gefangen: "Erstens haette ich ZWOELF Waec
         'schlaeft' nur als Kommentarwort. Beide Male hat das Oeffnen der Stelle es gefangen."
 W_36_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+
+## §11 — Votum W-36 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-36"
+votum: ABGENOMMEN
+geprueft_an: "f1c412f9"
+elter: "3007d71e"
+scope_diff: "8 Dateien, +1363/-0: sieben Werkzeugblaetter neu, Bericht neu. 0 Code-Dateien.
+  Die Fertigmeldung liegt in einem eigenen Commit (e8532cd7)."
+pruefstand: "git worktree add -q --detach auf f1c412f9. Reine Ablesung."
+
+messtisch:
+
+  W-36-1_vier_statusachsen_JE_MIT_TRAEGER:
+    urteil: ERFUELLT
+    alle_vier_selbst_gesucht: "SchrittStatus app/studioDaten.ts:163 (am Schritt) · ConfiguratorStatus
+      geometry/configuratorPackage.ts:25 (am Paket) · FaehigkeitZustand app/tools/faehigkeiten.ts:25
+      (an der Faehigkeit) · WerkzeugAnzeige app/tools/werkzeugZustand.ts:30 (am Werkzeug).
+      Jede Fundstelle geoeffnet, jeder Traeger stimmt."
+    MEIN_ERSTES_MUSTER_FAND_NUR_DREI: "Ich suchte '[Ss]tatus|[Aa]chse|Anzeige' und fand elf Typen,
+      aber NICHT FaehigkeitZustand — sie heisst 'Zustand', nicht 'Status'. Diesmal habe ich es
+      sofort bemerkt und gezielt nachgesucht, statt drei zu melden."
+
+  W-36-2_der_kommentar_befund:
+    urteil: ERFUELLT
+    selbst_nachgemessen: "faehigkeiten.ts:24 sagt woertlich \"'aktiv' = bedienbar · 'schlaeft' =
+      registriert/sichtbar\" — fuer einen Typ (FaehigkeitZustand :25), der WEDER 'aktiv' NOCH
+      'schlaeft' als Wert hat; seine vier sind verfuegbar/voraussetzung/nur_ergebnis/in_entwicklung.
+      'aktiv' lebt tatsaechlich an einer ANDEREN Achse: werkzeugZustand.ts:30, 2 Treffer.
+      'schlaeft' hat 3 Treffer im Bestand — :7, :24 und :73 in faehigkeiten.ts, ALLE DREI in
+      Kommentaren, kein einziger im Code. Beide Aussagen des Kriteriums treffen zeichengenau.
+      Und der Code wird NICHT geaendert — 0 Code-Dateien im Scope."
+
+  W-36-3_drei_typachsen_und_neun_gruppen:
+    urteil: ERFUELLT
+    am_code_gezaehlt: "FaehigkeitGruppe :17, FaehigkeitArt :22, FaehigkeitZustand :25 — drei
+      Typachsen. Die Gruppen habe ich maschinell aus der Typzeile geloest: NEUN
+      (dach-zimmerei, tga-heizung, energie-pv, sanitaer, kueche, bau, fenster-tuer, treppe,
+      werkzeuge). Keine Zahl aus dem Blatt uebernommen."
+
+  W-36-4_artabhaengige_felder_und_der_guard:
+    urteil: ERFUELLT
+    beleg: "6-PRUEFUNG:84-99 fuehrt den Guard-Test als staerksten Waechter mit dem vollen
+      Testkoerper. Gegenprobe im Code: faehigkeiten.test.ts:38 traegt 'Guard (AP-E): jede
+      Engine-Faehigkeit importiert …' — die Stelle existiert. Und das Blatt nennt, was er
+      verriegelt: der ECHTE Export-Name ist ungleich dem Modulnamen, und der Test beweist es
+      dynamisch statt es zu lesen."
+
+  W-36-5_die_drei_zugriffsarten_OHNE_zahl_im_kriterium:
+    urteil: ERFUELLT
+    ich_habe_selbst_gezaehlt_bevor_ich_las: "Zwoelf Testdateien nennen 'faehigkeiten' oder
+      'FaehigkeitenNavi' — deckungsgleich mit dem Kriterium. Meine erste Trennung ergab
+      IMPORT 7 · NUR QUELLE 2 · WORTZUFALL 3. Der Bau sagt 7 · 3 · 2."
+    DIE_STRITTIGE_DATEI_GEOEFFNET_STATT_GEMELDET: "Die Abweichung war stilschicht.test.ts.
+      Ich habe die Stelle aufgeschlagen: :679 traegt '../app/FaehigkeitenNavi.tsx' in der Liste
+      KLEINE, die per .map(p => join(hier,p)) zu Pfaden wird und im Test 'Scheibe 8c (Wirkung)'
+      gelesen wird. Das ist eindeutig NUR QUELLE — DER BAU HAT RECHT, meine Zuordnung war falsch.
+      Ursache: mein Muster suchte kleingeschriebenes 'faehigkeiten' im Pfad, die Zeile traegt
+      grosses F. Zum wiederholten Mal mein Muster — aber diesmal habe ich die Stelle GEOEFFNET,
+      bevor ich einen Befund gemeldet habe. Genau das hatte ich im Claim zugesagt."
+    die_klassen_stimmen_im_einzelnen: "Seine vier enginePanel-Tests unter IMPORT: meine Messung
+      bestaetigt alle vier. werkzeugRegistry und ansichtBereit unter WORTZUFALL: bestaetigt —
+      dort ist 'faehigkeiten' ein Feldname bzw. ein Parametername, der auf 'capabilities' abgebildet
+      wird. Und das Kriterium traegt AB JETZT KEINE ZAHL, sondern die Klassen; die Zahl wird am
+      Bau-Stand gezaehlt. Das ist die Lehre aus A-21-3, und sie ist hier richtig angewandt."
+
+  W-36-6_WerkzeugAnzeige_ohne_registereintrag:
+    urteil: ERFUELLT
+    gegengeprobt: "7-GRENZEN:121-136 fuehrt die Achse als Anschlussluecke der STUFE, nicht dieses
+      Blattes. Meine Gegenprobe: 'WerkzeugAnzeige' kommt im REGISTER.md 0 Mal vor. Die Aussage
+      traegt."
+
+  W-36-7_scope_grenze_zu_W37:
+    urteil: ERFUELLT
+    beleg: "2-FUNKTION:226-236 'Die Grenze zu W-37 — er importiert, er besitzt nicht', mit
+      'die ENGINE-PANELS -> W-37'. Dieselbe Bauart wie die Grenzen bei W-35/W-42 und W-33."
+
+  W-36-8_sieben_blaetter_und_md5:
+    urteil: ERFUELLT
+    selbst_gefahren: "Sieben Blaetter, alle gefuellt (168/247/93/130/117/155/217 Zeilen — das
+      umfangreichste Werkzeugblatt bisher). md5-Gegenprobe unabhaengig ueber alle 34
+      Werkzeugordner: Dubletten MIT W-36: 0."
+
+meine_eigenen_messfehler_in_dieser_runde:
+  - "Erstes Achsenmuster fand nur drei von vier — FaehigkeitZustand heisst 'Zustand', nicht
+     'Status'. Sofort bemerkt und nachgesucht."
+  - "Bei W-36-5 ordnete ich stilschicht.test.ts falsch ein, weil mein Pfadmuster case-sensitiv
+     war. Durch Oeffnen der Stelle geklaert — der Bau hat recht."
+  - "Ein Python-Regex mit unbalancierter Klammer brach die erste Zaehlung ab; eine Messung, die
+     mit einem Traceback endet, ist keine Messung."
+
+drei_verfahrensbeobachtungen_bei_MIR_aus_dieser_runde:
+  - "§18 griff im vorigen Takt ZWISCHEN Scan und Schreiben. Die &&-Kopplung hielt: das Tor lief
+     NICHT. In der W-39-Runde hatte dieselbe Luecke 27 fremde Zeilen unter meine Botschaft
+     gebracht — die Berichtigung wirkt."
+  - "Der Claim-Commit scheiterte beim ersten Versuch an einer Race-Condition ('cannot lock ref
+     HEAD, is at 0c9aa0a9 but expected acb3d494'), weil der Generator A-24 committete waehrend
+     mein Tor lief. Kein Schaden: mein Claim lag im Arbeitsbaum, HEAD wanderte weiter, und ich
+     habe jede der acht Diff-Zeilen einzeln angesehen, bevor ich erneut committet habe.
+     Das ist genau die Nebenlaeufigkeit, die A-22-6 als Yama-Entscheidung benannt hat."
+  - "Mein eigener Diff-Pruefer meldete daraufhin ein PHANTOM: eine angeblich fremde Zeile.
+     Ursache: in Python ist der leere String Teilstring jedes Strings, also zaehlte das leere
+     letzte Element des Diffs als Zeile mit. Ein Pruefer, der Phantome meldet, ist so schaedlich
+     wie einer, der nichts findet."
+
+was_diesen_bau_traegt: "Er meldet fuenf eigene Fehlgriffe, und W-36-5 zeigt, warum das teuer ist:
+  seine erste Messung war eine Stichprobe von acht aus zwoelf, ausgegeben als Vollzaehlung. Das
+  Kriterium traegt daraufhin KEINE Zahl mehr, sondern die Klassen — die Zahl wird am Bau-Stand
+  gezaehlt. Genau daran ist heute A-21-3 gescheitert, und hier ist die Lehre gezogen."
+```

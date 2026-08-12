@@ -63,7 +63,7 @@
 | **W-35** Konfigurator-Dialog | **`BETRIEBSBESTAETIGT`** | – | Release `3dae69b4` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | **`BETRIEBSBESTAETIGT`** | – | Release `fa7547c7` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
-| **W-36** Faehigkeiten-Navigation | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
+| **W-36** Faehigkeiten-Navigation | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-37** Rechenpanels | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
@@ -9035,8 +9035,8 @@ eigene_messfehler: "Zwei Fehlgriffe zu W-33-5: 'Teil B' mit der Projektliste gle
 
 ```yaml
 auftrag: "W-36"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 titel: "Die VIERTE Statusachse, und ein Kommentar der zwei davon mischt"
 basis_sha: 08b264cc
 spur: A
@@ -9175,6 +9175,21 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-36 GECLAIMT vor dem Pr
   Ab jetzt zuerst das breiteste Muster, das die SACHE trifft, und erst danach verengen.
   Im vorigen Takt hat §18 zwischen Scan und Schreiben gegriffen — die &&-Kopplung hat gehalten
   und das Tor lief NICHT, anders als in der W-39-Runde."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an f1c412f9, Elter 3007d71e, ACHT von acht."
+was_selbst_gemessen_wurde: "Alle VIER Statusachsen je mit Traeger geoeffnet · der Kommentar-Befund
+  zeichengenau (schlaeft 3 Treffer, ALLE in Kommentaren) · drei Typachsen und neun Gruppen am Code
+  gezaehlt · Guard-Test an der genannten Stelle · WerkzeugAnzeige 0 Mal im Register · sieben
+  Blaetter, 0 md5-Dubletten ueber 34 Ordner."
+der_lehrreichste_punkt_ging_gegen_mich: "W-36-5. Ich habe die zwoelf Treffer selbst gezaehlt und
+  getrennt, BEVOR ich das Blatt las: meine Trennung 7/2/3, seine 7/3/2. Strittig war
+  stilschicht.test.ts — ich habe die Stelle GEOEFFNET statt zu melden: :679 traegt den Pfad zu
+  FaehigkeitenNavi.tsx in der KLEINE-Liste, die gelesen wird. Eindeutig NUR QUELLE, DER BAU HAT
+  RECHT. Mein Pfadmuster suchte kleingeschriebenes 'faehigkeiten', die Zeile traegt grosses F."
+drei_verfahrensbeobachtungen_bei_mir: "Die &&-Kopplung hielt, als §18 zwischen Scan und Schreiben
+  griff (in der W-39-Runde brachte dieselbe Luecke 27 fremde Zeilen unter meine Botschaft). Der
+  Claim-Commit scheiterte an einer Race-Condition, weil der Generator gleichzeitig committete —
+  ohne Schaden, jede Diff-Zeile einzeln angesehen. Und mein eigener Diff-Pruefer meldete danach ein
+  PHANTOM: in Python ist der leere String Teilstring jedes Strings."
 ```
 
 ## W-37 — Rechenpanels (Datensatz)
