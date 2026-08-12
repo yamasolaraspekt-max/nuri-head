@@ -35,10 +35,31 @@ export function statusAus(checks: readonly Pruefpunkt[]): SchrittStatus {
 }
 ```
 
-> **Die Reihenfolge ist die Aussage, nicht die Zweige.** *`warn` schlägt alles — ein einziger
-> Warnpunkt macht den ganzen Schritt gelb, egal wie viele grün sind. Und `prog` ist **kein
-> eigener Test**, sondern der Rest: was weder ganz grün noch ganz offen ist. Wer die Zweige
-> aufzählt, ohne die Reihenfolge zu nennen, beschreibt eine andere Funktion.*
+> **BERICHTIGT 12.08. nach dem Befund des Evaluators (`e5716bc0`) — und meine Aussage zeigte auf
+> die falsche Stelle.** *Hier stand: „Die Reihenfolge ist die Aussage… `warn` schlägt alles."
+> **Die Wirkung ist richtig, die Begründung war falsch:** dass Zweig 2 vor den `every`-Prüfungen
+> steht, bewirkt **nichts** — ein `warn` bricht beide `every`-Bedingungen ohnehin, die Mengen sind
+> disjunkt. Der Evaluator hat es über alle 85 Kombinationen gemessen, ich habe es selbst
+> nachgerechnet: **0 Abweichungen.***
+
+**Die Reihenfolge IST tragend — aber bei Zweig 1.** Selbst nachgerechnet, dieselben 85
+Kombinationen:
+
+```text
+Mutation A   warn-Zweig NACH die every-Pruefungen      0 Abweichungen   (wirkungslos)
+Mutation B   laengen-Zweig NACH die every-Pruefungen   1 Abweichung
+
+  checks = []        original: 'open'        mutiert: 'ok'
+```
+
+> **`[].every(...)` ist `true`** — die leere Allaussage. *Stünde `checks.length === 0` nicht
+> **zuerst**, würde ein Schritt **ohne einen einzigen Prüfpunkt** `ok` melden. **Das ist genau das
+> falsche grüne Häkchen, das dieses Werkzeug verhindert** — dieselbe Klasse wie
+> `bebauteGeschosse` in Abschnitt 3. Die tragende Reihenfolge-Aussage lautet also: Zweig 1 schützt
+> gegen die vacuous truth, nicht Zweig 2 gegen die `every`-Prüfungen.*
+
+*Und `prog` bleibt, was es war: **kein eigener Test**, sondern der Rest — was weder ganz grün noch
+ganz offen ist.*
 
 ## 2 — Der fachliche Befund: sechs von elf Schritten haben keine Modellgrundlage
 
@@ -115,8 +136,26 @@ ist gerade abgenommen. Fehlt ohne Nachbardatei ein Blatt, ist das eine Meldung a
 ## 6 — Abnahmekriterien
 
 ```text
-W-34-1  (P1, TRAGEND) statusAus mit allen fünf Zweigen UND der Reihenfolge: warn schlägt
-        alles, prog ist der Rest und kein eigener Test. Fundstelle :43-49, Zeilen zeigen.
+W-34-1  (P1, TRAGEND) BERICHTIGT nach dem Befund des Evaluators e5716bc0 — die erste
+        Fassung verlangte eine Reihenfolge-Aussage, die auf die WIRKUNGSLOSE Stelle zeigte.
+        statusAus mit allen fuenf Zweigen (Fundstelle :43-49, Zeilen zeigen), und die
+        Reihenfolge-Aussage GENAU DORT, wo sie wirkt:
+          NICHT bei Zweig 2. Dass some(warn) vor den every-Pruefungen steht, bewirkt
+          nichts — ein warn bricht beide every-Bedingungen ohnehin, die Mengen sind
+          disjunkt. Gemessen ueber alle 85 Kombinationen (vier Statuswerte, Laenge 0
+          bis 3): 0 Abweichungen. Wer hier eine Kausalitaet behauptet, behauptet sie
+          gegen die Messung.
+          SONDERN bei Zweig 1. checks.length === 0 MUSS vor den every-Pruefungen
+          stehen, weil [].every(...) TRUE ist. Verschoben liefert checks = [] den Wert
+          'ok' statt 'open' — 1 Abweichung in denselben 85 Kombinationen. Fachlich:
+          ein Schritt OHNE Pruefpunkt wuerde gruen melden, also genau das falsche
+          Haekchen, das dieses Werkzeug verhindert (wie bebauteGeschosse).
+        prog bleibt der Rest und kein eigener Test.
+        FANGPROBE in 6-PRUEFUNG: die Verschiebung des warn-Zweigs ist WIRKUNGSLOS und
+        taugt nicht — der Evaluator hat sie gefahren, 1698 pass und 0 fail. Tauglich
+        sind zwei, beide belegt: den warn-Zweig ENTFERNEN (er hat 3 fail gemessen) oder
+        den laengen-Zweig verschieben (1 Abweichung, oben). Eine Fangprobe muss am
+        ZWEIG ansetzen oder an der Position, die WIRKT — nicht an einer beliebigen.
 W-34-2  Die Schritte mit Titel und Reihenfolge, und die ANZAHL am Code gezählt — nicht aus
         fahrschritte.test.ts übernommen. Der Weg dorthin ist schrittTitel() :201.
 W-34-3  (P1) SCHRITTE_OHNE_GRUNDLAGE vollständig: je Eintrag der Titel UND was fehlt, plus
