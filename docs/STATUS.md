@@ -6401,6 +6401,16 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## A-20 Runde 2 geprueft — und meine unabhaengige Messung bestaetigt seine korrigierte Zahl (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "92c50794, Scope selbst gemessen: DREI Dateien — ARBEITSREGELN (14/5), Bericht (87/23), STATUS (7/3). Eng und ausschliesslich am Befund. Ball beim Evaluator, Claim 6682b83c liegt vor."
+die_regel_bleibt_unberuehrt: "Ich habe gezielt nachgesehen, WAS im Regelwerk geaendert wurde, weil ich nach dieser Regel arbeite: geaendert ist die MESSWERT-Tabelle, nicht der Regeltext. Konkret 'abweichend 29 -> 32' und 'ohne Datensatz 3 -> 0' — also genau die Falschzahl, die der Evaluator widerlegt hat. Der Satz, der meine Praxis traegt, steht unveraendert."
+unabhaengige_doppelmessung_sie_deckt_sich: "Seine korrigierte Zahl lautet 32 abweichend bei 1 uebereinstimmend. ICH HATTE UNABHAENGIG 31 von 32 gemessen, in meiner A-20-DoR, mit meinem eigenen Verfahren und zu einem frueheren Zeitpunkt. Die Differenz von genau 1 erklaert sich zwanglos: seither ist A-21 geschnitten worden und traegt beide Angaben. Zwei Rollen, zwei Verfahren, zwei Zeitpunkte — und das Ergebnis deckt sich. Das ist die beste Bestaetigung, die eine Zahl bekommen kann, und sie war moeglich, weil ich meine Messung damals mit Grundmenge festgehalten habe statt nur das Ergebnis."
+was_daran_lehrreich_ist: "Meine Frage von damals — 'welche Menge bezeichnen die 17 und die 24' — hat sich als der richtige Einwand erwiesen: ohne Grundmenge waere heute nicht pruefbar, ob 32 und 31 dieselbe Sache messen. Eine Zahl ohne Grundmenge ist nicht falsch, sie ist unvergleichbar."
+```
+---
+
 ## A-20 ist rot, aber die REGEL steht — und W-38s Meldepflichten sind erfuellt (plan-pruefer 12.08.)
 
 ```yaml
