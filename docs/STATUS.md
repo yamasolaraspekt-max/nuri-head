@@ -8,9 +8,9 @@
 |---|---|---|---|---|
 | **A-01** Dach aus Kontur | `BETRIEBSBESTAETIGT` | – | Bau `94b58aaf` · Abnahme `42c0320f` | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-02** Lock-Halter | `BETRIEBSBESTAETIGT` | – | Bau `6953198a` · Abnahme `ee5a07ec` | bleibt **ABGENOMMEN** (§12.5); der P0 läuft als **A-08**, Nachbesserung setzt auf `6953198a` auf |
-| **A-03** Bühnen-Riegel | `BETRIEBSBESTAETIGT` | – | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
+| **A-03** Bühnen-Riegel | `BETRIEBSBESTAETIGT` | **Planner** (§15-Befund offen) | Bau `26e378a5` · Abnahme 09:2x | ✅ **auf dem Zweig** seit `27a61da9` |
 | **A-04** Bühnen-Wächter | `BETRIEBSBESTAETIGT` | – | `c3d52f09` · Votum `b6a63e3e` · §10 im Blatt | Fehlerklasse **KEINE** · §10 alle Punkte grün (Kette per is-ancestor, 7/7+7/7 am HEAD selbst, Revert-Probe sauber) · **Realfund PID 48098** läuft weiter — Beenden entscheidet Yama |
-| **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | – | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
+| **A-05** Messauftrag L-Kontur | **`ABGENOMMEN`** | **Planner** (Messergebnis) | Bericht `BERICHT-A-05-l-kontur.md` · Votum `b29bb79d` | Entscheidung gefallen (`bd1383c8`): **A-01s Nicht-Ziel bleibt** |
 | **A-06** Probedaten Arbeits-DB | **ERLEDIGT** | – | ausgeführt `880eb726` · gegengeprüft | – |
 | **A-07** Index-Divergenz | `BETRIEBSBESTAETIGT` | – | `c512f931` · §10 `850b6ece` | Kette 6× `is-ancestor` · 42/42 am HEAD selbst · Rest B: 0 Phantome (Ist war 52) |
 | **A-09** Repo-Bezug über `--git-dir` | `BETRIEBSBESTAETIGT` | – | Bau `12ca3798` · Votum `e53e3cfb` an `af8f2054` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 50/50 am Prüf-SHA selbst (Worktree) · Scope exakt 2 Dateien +316/−7, Hunks @@68/@@107 · Revert-Probe sauber · Drift auf `scripts/` seit Prüf-SHA: 0 |
@@ -23,7 +23,7 @@
 | **W-05** Raum erkennen | `BETRIEBSBESTAETIGT` | – | Bau `34ecf8a4` · Votum `af98d7b6` · §10 im Blatt (`35687019`) | Fehlerklasse **KEINE** · Kette 5× `is-ancestor` · Scope exakt 8 Dateien, **0 Nicht-Doku-Pfade** · **gemeldeter Fremdzugriff am Release-Kandidaten nachgemessen: 0 geänderte Blätter** · Platzhalter 0 · Votum belegt `-1` bis `-10` einzeln · 1692/1692 selbst · 0/0/0 in drei Richtungen · `signierteFlaeche` ist **weder F-010 noch F-011, sondern beider Kern** (ohne Betrag) · F-012/F-013 **0 Treffer**, F-001 im Code aber nicht im Register · zweite Shoelace in `polygonFlaeche.ts` · **-1 mit zwei Zahlen gemeldet** (1 wörtlich / 0 Platzhalter) · 0/0/0 · 1692/1692 |
 | **W-21** Sparren und Lattung | `BETRIEBSBESTAETIGT` | – | `992d5d76` · Basis `c9325929` | 12/12 · **Vorbemessung ≠ Statik** als erste Zeile · **Auftragsvermutung zur Lattung widerlegt** (Menge IST gebaut) · F-001/F-030 nicht im Code, dafür zwei Normgrößen ohne Nummer · `OFFENE_HOLZBAUTEILE` ausgelesen · M-02 ungelesen benannt · 0/0/0 |
 | **W-22** Gaube | `BETRIEBSBESTAETIGT` | – | `8a3acb53` · Basis `95fe1b88` | 11/11 · **AK4 ist absichtlich nicht kritisch** (schiefe Front = gelb) · AK1 beim Kamin **gesetzt statt gemessen** · F-027: **Thema ja, Formel nein** (Belegstelle zeigt auf M-01) · fünf Module 975 Z, `auswechslung.ts` heimatlos · 0/0/0 |
-| **A-13** `roof_azimuth` absichern | `BETRIEBSBESTAETIGT` | – | `a09b69af` · Basis `783d47c1` | 8/8 · Wächter am **Model** (greift auch bei `create()`) · Grenze `0 ≤ x < 360` **am Hausmuster belegt** · **keine Factory** (gemessen entschieden) · Mutationsprobe + Wegwerf-Probe gegen `ticket_testing`, **0 Zeilen geschrieben** · Unit 278/278 (8 neu) · **Verhaltensänderung im Bericht benannt** |
+| **A-13** `roof_azimuth` absichern | `BETRIEBSBESTAETIGT` | **Generator** (P2-Nachforderung) | `a09b69af` · Basis `783d47c1` | 8/8 · Wächter am **Model** (greift auch bei `create()`) · Grenze `0 ≤ x < 360` **am Hausmuster belegt** · **keine Factory** (gemessen entschieden) · Mutationsprobe + Wegwerf-Probe gegen `ticket_testing`, **0 Zeilen geschrieben** · Unit 278/278 (8 neu) · **Verhaltensänderung im Bericht benannt** |
 | **W-08** Dachfläche messen | `BETRIEBSBESTAETIGT` | – | `7aa49e33` · Basis `b202ad7c` | 12/12 · **`0` bedeutet dreierlei** (A-10-Klasse, bewusst) · Eingabe-**Ebene** entscheidet, Modul kann sie nicht prüfen · **Shoelace dreimal im Haus, zwei Fassungen heißen gleich** — m gegen mm · zwei Auftragsangaben widerlegt · 0/0/0 |
 | **W-13** Auswahl und Griffe | `BETRIEBSBESTAETIGT` | – | `a62ae7c6` · Basis `193681cd` | 10/10 · **oben schlägt nah** (Zeichenreihenfolge vor Distanz) · `waehlbar !== false`, nicht `=== true` · Modifikator-Vorrang als Kette · **einziges Klasse-A-Werkzeug mit Registry** · **0 dedizierte Zusagen** bei 321 Z · 0/0/0 |
 | **A-08** Halter nach Kommando | `BETRIEBSBESTAETIGT` | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
@@ -38,7 +38,8 @@
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
-| **A-17** Zwei Engines schweigen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
+| **B5N** Belegzeilen-Schreibweisen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `8870387a` | **Nachbesserung §12.5 zu B5** — `B5_BELEGZEILE` (`commit-pruefen.sh:534`) erkennt nur `datei.ext:zeile`; **erhoben über 40 Botschaften: 20 Vorkommen fallen durch** (`Z.NNN` 12×, `Z.NNN-NNN` 4×, »Zeile NNN« 4×) · **dreimal gemeldet** (Evaluator, Release-Prüfer, Plan-Prüfer) — A-03-Klasse: eine Warnung, die bei richtiger Arbeit anschlägt, wird weggeklickt · tragend ist **B5N-2**: sie muss weiter anschlagen, wo kein Beleg steht |
+| **A-17** Zwei Engines schweigen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
@@ -2321,8 +2322,25 @@ naechster_schritt: "Yama entscheidet die Weiche. Danach: Plan-Pruefer DoR."
 auftrag: "A-17"
 titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach dem A-14-Muster, mit vorhandenem Bauteil"
 datei: docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft — A-17-7 verlangt eine echte Browserabnahme mit md5 des Buendels)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08. auf 05c6536b; Bericht docs/BERICHT-A-17-zwei-engines-schweigen.md)
+browserabnahme_gefahren: "A-17-7 voll erfuellt, nicht ersetzt: Buehne scripts/browser-buehne.sh
+  --port 8099 (Datenbank am Kindprozess geprueft, ticket_testing), Chrome headful, vier Flaechen
+  nach dem Rechnen gemessen. engine-abwasser und engine-fbh: Plakette gruen 0, rot 0, Label
+  'Vorbehalt' je 1. Gegenprobe engine-kueche: gruene Plakette 1. SCHAERFERE Gegenprobe
+  engine-heizkoerper: ROTE Plakette 1 — dieselbe Engine, an der der Release-Pruefer A-14 geprueft
+  hat. Buendel md5 62d7be7eac45f91b2d90147f740a01fa, identisch als Datei, ueber curl UND aus der
+  Netzwerkantwort des Browserlaufs. Elter-Buendel a5ea0056 traegt die zwei Saetze je 0x.
+  Fuer die Anmeldung wurde EIN Nutzer in ticket_testing angelegt und danach entfernt (users
+  wieder 0). Niemals gegen ticket."
+mein_gefaehrlichster_messfehler: "Ich habe zuerst nur die GRUENE Plakette gezaehlt. engine-heizkoerper
+  meldete damit 0 und sah aus wie 'unterdrueckt' — das Gegenteil der Wahrheit, und ausgerechnet an
+  der Gegenprobe, die den Auftrag traegt. Die rote Plakette heisst anders (EngineFlaeche.tsx:146).
+  Ein Zaehler, der nur eine von zwei moeglichen Antworten kennt, misst nicht."
+wegbefund_fuer_alle: "Die Fachplaner-Chips der Startseite oeffnen NICHT die Engine-Flaeche, sondern
+  die L4-Vorschau — dort steht woertlich 'die Rechnung ist noch nicht angeschlossen'. Die zu
+  messende Flaeche haengt am Fachplaner-Reiter der linken Schiene im EXPERTENMODUS
+  (FussUndUeberlagerungen.tsx:209). Wer am falschen Ort misst, misst eine Flaeche die nichts rechnet."
 basis_sha: 3678d1de
 warum_A17_und_nicht_B7: "B7 ist die naechste Barriere und fasst wieder scripts/commit-pruefen.sh an.
   B6 liegt dort seit 6ecf911c auf CODE_FERTIG zur Abnahme — noch OHNE Claim, aber nach der am
@@ -5242,4 +5260,31 @@ was_sich_geaendert_hat: "meine gestrige Begruendung ('Spur verwischt') war schwa
                          liefert die starke: 2688 Zeilen mit computeBOMAndTime und computeHeizlast,
                          also Loesungsansaetze fuer die zwei fehlenden Bruecken"
 wenn_yama_trotzdem_loescht: "Archiv + Manifest + Rueckweg nach der Dauerregel, kein rm"
+```
+
+
+## B5N — Belegzeilen-Schreibweisen (Datensatz, EINZIGER Zustandsort neben der Tafelzeile)
+
+```yaml
+auftrag: "B5N"
+datei: docs/auftraege/aktiv/B5N-belegzeilen-schreibweisen.md
+zustand: ENTWURF
+ballbesitz: "plan-pruefer (DoR)"
+basis_sha: 8870387a
+anlass: "Plan-Pruefer 8870387a: 'Inzwischen DREIMAL gemeldet … gehoert aber in einen Auftrag statt
+         in eine vierte Meldung.' Vorher Evaluator (B5-Abnahme) und Release-Pruefer (B6-Lauf)."
+befund_erhoben: "ueber die letzten 40 Commit-Botschaften, je Schreibweise gezaehlt und die erste
+         Fundstelle gelesen: datei.ext:zeile 40 (erkannt) · Trefferzeile 13 (erkannt) · :NNN: 1
+         (erkannt) · Z.NNN 12 (FAELLT DURCH) · Z.NNN-NNN 4 (FAELLT DURCH) · Zeile NNN 4 (FAELLT
+         DURCH). Zwanzig von vierzig Botschaften tragen eine Form, die die Barriere nicht kennt."
+ich_bin_selbst_der_beleg: "ich habe Z.NNN heute ACHTMAL benutzt, jedes Mal mit gelesenen
+         Trefferzeilen daneben. Die Barriere haette achtmal gewarnt und keinmal zu Recht."
+tragender_punkt: "B5N-2 — die Warnung muss weiterhin anschlagen, wo KEIN Beleg steht. Ohne diesen
+         Gegenbeleg waere die Nachbesserung eine Abschaltung mit anderem Namen."
+zweiter_posten_NICHT_erledigt: "B5N-5 — der Release-Pruefer meldet, dass B6 dem Tor Code hinzufuegt
+         und keinen Test mitbringt (Suite Elter 107/107, Bau 107/107, diff auf scripts/__tests__
+         leer). Das gilt fuer B5 genauso: eine Barriere ohne Test ist eine Behauptung ueber sich
+         selbst. Eigener Vorgang, hier nur benannt."
+sperre_ohne_zutun: "scripts/commit-pruefen.sh liegt auch im Scope von B7 (BEREIT). B5N und B7
+         koennen nicht gleichzeitig laufen — wer zuerst zieht, hat die Datei."
 ```
