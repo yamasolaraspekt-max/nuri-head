@@ -4729,6 +4729,7 @@ zweiter_posten_nicht_erledigt: "Dateikopf:2 sagt 'speist Heizlast & Dach' — ge
        Implementierung. KEIN Brueckenbau in diesem Auftrag."
 abhaengigkeit: "A-18 darf erst BAUEN, wenn A-15 abgeschlossen ist — sonst baut es auf einem
        Vorschlag. A-15 ist IN_ARBEIT beim Generator; ich habe es NICHT angefasst."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-18 GECLAIMT vor dem Pruefstand. Erster Produktivcode seit A-14, also Pruefstand mit node_modules UND vendor — bei B5 habe ich vendor vergessen und beinahe eine Regression gemeldet. Der Kern ist A-18-1 (Pflichtfeld, nicht optional): das messe ich mit tsc und einer Mutation, nicht am Text. Und die Kernbehauptung des Auftrags — die Engine KANN den Taupunkt nicht rechnen, weil mu/sd und Klima im Datentyp fehlen — pruefe ich am Datentyp selbst nach, bevor ich den Bericht lese."
 ```
 
 ---
