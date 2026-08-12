@@ -4739,3 +4739,85 @@ gemessen:  "sieben von sieben geprueften Engines nennen ihre Grenze selbst -> he
 widerruf:  "jederzeit formlos durch Yama, ein Satz genuegt"
 was_yama_jetzt_tun_muss: "nichts"
 ```
+
+---
+
+## AZIMUT UND A-16 — beide gelöst, und es ist DIESELBE Klasse (Release-Prüfer, 12.08.)
+
+**Yama, 12.08.:** *„was ist mit Azimut-Winkel und A-16, kannst du beide fundiert und fachlich sauber
+lösen?"* **Ja — und die Lösung ist für beide dieselbe, weil der Fehler derselbe ist.**
+
+### Der Azimut: BEIDE Konventionen stehen im Code, nur die Umrechnung fehlt
+
+```text
+HAUS / INSEL / DB    roof_azimuth   0=N · 90=E · 180=S · 270=W       Wertebereich 0…360
+                     Beleg: Migration 2024_06_04_103808:67 (Kommentar an der Spalte)
+                            wallGeometry.ts:3-4 "Nord = +y, im Uhrzeigersinn von Nord"
+PVGIS                aspect         0=SÜD · -90=Ost · +90=West       Wertebereich -180…+180
+                     Beleg: PvgisErtragService.php:41 (Docblock, woertlich)
+                            EnergiekonzeptController.php:184 min:-180 max:180
+UMRECHNUNG           0 Treffer. Es gibt keine.
+```
+
+> **Der Beweis steht in den Wertebereichen selbst: 0…360 gegen −180…+180 sind zwei verschiedene
+> Zahlenräume.** *Ein Süddach trägt im Haus **180**. Gäbe man diese Zahl an PVGIS, läge sie am Rand
+> des gültigen Bereichs und bedeutete dort **Nord** — die Anlage würde mit dem Ertrag eines
+> Norddachs gerechnet.* **Das ist kein Fachurteil, das ist eine Ablesung aus zwei Docblocks.**
+
+**Die gute Nachricht, ebenfalls gemessen: Der Fehler ist heute NICHT aktiv.**
+
+```text
+firstAzimutGrad in app/ und database/     0 Treffer  -> die Bruecke existiert nicht
+roof_azimuth an PVGIS uebergeben          0 Treffer  -> die Zahl geht diesen Weg nicht
+```
+
+### A-16 ist exakt dieselbe Klasse
+
+```text
+A-16   elf TIME_VARS + harter Lohnfaktor "* 65" in roof.blade.php:1672
+       -> ein Euro-Betrag ohne Quelle, ABER 0 Aufrufer: die View ist tot
+AZIMUT zwei unvereinbare Konventionen ohne Umrechnung
+       -> ein Ertrag ohne Sinn, ABER 0 Bruecke: der Weg existiert nicht
+```
+
+> **Beides sind Fehler, die erst beim VERDRAHTEN scharf werden — und beide würden dann nicht
+> auffallen, sondern eine plausible Zahl liefern.** *Der Lohnbetrag sieht aus wie ein Preis, der
+> Norddach-Ertrag sieht aus wie ein Ertrag. Das ist die A-10-Klasse, eine Ebene höher: nicht eine
+> stille Null, sondern eine stille **falsche** Zahl.*
+
+### DIE LÖSUNG — für den Azimut baubar, für A-16 bereits gültig
+
+**Azimut (Vorschlag an den Planner, Fall A nach der Sortierregel — jeder Satzteil ist abgelesen):**
+
+```text
+EINE benannte Umrechnung, an EINEM Ort, mit Test:
+
+  kompassNachPvgis(azimutKompass: float): float
+    aspect = azimutKompass - 180, normalisiert auf [-180, +180]
+    Probe:  180 (Sued) -> 0     90 (Ost) -> -90
+            270 (West) -> +90    0 (Nord) -> -180
+  Beleg je Zeile: Migration:67 fuer die Quelle, PvgisErtragService:41 fuer das Ziel.
+
+WARUM JETZT und nicht beim Brueckenbau: die Umrechnung kostet fuenf Zeilen und einen Test.
+Wer sie erst baut, wenn er die Bruecke braucht, erfindet sie unter Zeitdruck — und die
+Richtung ist genau dann nicht mehr offensichtlich, weil beide Zahlen "Grad" heissen.
+NICHT im Auftrag: die Bruecke selbst. Nur das Werkzeug, das sie sicher macht.
+```
+
+**A-16 bleibt wie entschieden — ZURÜCKGESTELLT mit Vorbedingung**, und die Vorbedingung ist jetzt
+schärfer formuliert:
+
+```text
+Wird roof.blade.php je verdrahtet, ist A-16 VOR der Verdrahtung faellig.
+Die Loeschung der toten View entscheidet Yama (Dauerregel: kein Loeschen ohne Freigabe).
+```
+
+```yaml
+gemeinsame_lehre: "Ein Fehler in totem Code ist kein Nicht-Fehler, sondern ein VERTAGTER —
+                   und er wird beim Verdrahten von jemandem gefunden, der den Kontext nicht mehr hat.
+                   Deshalb: das WERKZEUG bauen (Umrechnung), die BRUECKE nicht."
+azimut_ist_fall_A: "beide Konventionen stehen im Code dokumentiert, die Formel folgt daraus —
+                    keine Fachentscheidung, kein Yama noetig"
+a16_bleibt_bei_yama: "nur die LOESCHUNG der toten View, nichts sonst"
+naechster_schritt:  "Planner schneidet die Umrechnung (Fall A, ohne Rueckfrage)"
+```
