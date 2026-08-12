@@ -23,7 +23,7 @@
 | **W-05** Raum erkennen | `BETRIEBSBESTAETIGT` | – | Bau `34ecf8a4` · Votum `af98d7b6` · §10 im Blatt (`35687019`) | Fehlerklasse **KEINE** · Kette 5× `is-ancestor` · Scope exakt 8 Dateien, **0 Nicht-Doku-Pfade** · **gemeldeter Fremdzugriff am Release-Kandidaten nachgemessen: 0 geänderte Blätter** · Platzhalter 0 · Votum belegt `-1` bis `-10` einzeln · 1692/1692 selbst · 0/0/0 in drei Richtungen · `signierteFlaeche` ist **weder F-010 noch F-011, sondern beider Kern** (ohne Betrag) · F-012/F-013 **0 Treffer**, F-001 im Code aber nicht im Register · zweite Shoelace in `polygonFlaeche.ts` · **-1 mit zwei Zahlen gemeldet** (1 wörtlich / 0 Platzhalter) · 0/0/0 · 1692/1692 |
 | **W-21** Sparren und Lattung | `BETRIEBSBESTAETIGT` | – | `992d5d76` · Basis `c9325929` | 12/12 · **Vorbemessung ≠ Statik** als erste Zeile · **Auftragsvermutung zur Lattung widerlegt** (Menge IST gebaut) · F-001/F-030 nicht im Code, dafür zwei Normgrößen ohne Nummer · `OFFENE_HOLZBAUTEILE` ausgelesen · M-02 ungelesen benannt · 0/0/0 |
 | **W-22** Gaube | `BETRIEBSBESTAETIGT` | – | `8a3acb53` · Basis `95fe1b88` | 11/11 · **AK4 ist absichtlich nicht kritisch** (schiefe Front = gelb) · AK1 beim Kamin **gesetzt statt gemessen** · F-027: **Thema ja, Formel nein** (Belegstelle zeigt auf M-01) · fünf Module 975 Z, `auswechslung.ts` heimatlos · 0/0/0 |
-| **A-13** `roof_azimuth` absichern | `BETRIEBSBESTAETIGT` | **Generator** (P2-Nachforderung) | `a09b69af` · Basis `783d47c1` | 8/8 · Wächter am **Model** (greift auch bei `create()`) · Grenze `0 ≤ x < 360` **am Hausmuster belegt** · **keine Factory** (gemessen entschieden) · Mutationsprobe + Wegwerf-Probe gegen `ticket_testing`, **0 Zeilen geschrieben** · Unit 278/278 (8 neu) · **Verhaltensänderung im Bericht benannt** |
+| **A-13** `roof_azimuth` absichern | `BETRIEBSBESTAETIGT` | **Evaluator** (P2 erledigt `2e587fb7`) | `a09b69af` · Basis `783d47c1` | 8/8 · Wächter am **Model** (greift auch bei `create()`) · Grenze `0 ≤ x < 360` **am Hausmuster belegt** · **keine Factory** (gemessen entschieden) · Mutationsprobe + Wegwerf-Probe gegen `ticket_testing`, **0 Zeilen geschrieben** · Unit 278/278 (8 neu) · **Verhaltensänderung im Bericht benannt** |
 | **A-12** Messauftrag F-026 ausführen | **`ABGENOMMEN`** | **Planner** | Bau `d1d716c8` · Votum im Block | Messauftrag, kein Release-Kandidat · **Tafelzeile nachgetragen** (release-pruefer 12.08.): der Datensatz existierte seit dem 10.08., die Tafelzeile fehlte — der Auftrag war in der Übersicht unsichtbar |
 | **W-08** Dachfläche messen | `BETRIEBSBESTAETIGT` | – | `7aa49e33` · Basis `b202ad7c` | 12/12 · **`0` bedeutet dreierlei** (A-10-Klasse, bewusst) · Eingabe-**Ebene** entscheidet, Modul kann sie nicht prüfen · **Shoelace dreimal im Haus, zwei Fassungen heißen gleich** — m gegen mm · zwei Auftragsangaben widerlegt · 0/0/0 |
 | **W-13** Auswahl und Griffe | `BETRIEBSBESTAETIGT` | – | `a62ae7c6` · Basis `193681cd` | 10/10 · **oben schlägt nah** (Zeichenreihenfolge vor Distanz) · `waehlbar !== false`, nicht `=== true` · Modifikator-Vorrang als Kette · **einziges Klasse-A-Werkzeug mit Registry** · **0 dedizierte Zusagen** bei 321 Z · 0/0/0 |
@@ -35,12 +35,12 @@
 | **A-15** Fachaussage oder Hinweis | `BETRIEBSBESTAETIGT` | – | Abnahme `8aded3b2` · Runde 1 `60d62d74` | **14/14 nach §12.4 neu gemessen** · P1 vorbildlich behoben: der überholte Abschnitt ist **als überholt markiert**, nicht gelöscht (Datum, Grund, Verweis) · Bilanz jetzt `6 + 4 + 1 = 11` · `__tests__` 15 · DIN-Stufung adressiert · Menge 13 und drei A-Fundstellen **erneut** selbst geöffnet |
 | **B5** Zählergebnis mit Trefferzeilen | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `157576c2` · Elter `2a95ab40` | **7/7 — die Barriere AUSGELÖST, nicht gelesen**: Wegwerf-Repo, drei Probeläufe (feuert · schweigt bei Suite 1692/1692 · schweigt mit Belegzeile) + Mutation (Block raus → 0 Warnungen) · kein Abbruch, exit=0 beidseitig · scripts-Suite 107/107 an Bau **und** Elter · **P2: Belegmuster erkennt `Z.157` / `treppenTypen:4` nicht** (4 von 17 warnenden Botschaften) |
 | **B6** Summe braucht Erhebung | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `6ecf911c` · Elter `7be1a381` | **8/8 — Barriere ausgelöst, nicht gelesen** · alle **vier Beispiele des Regeltexts** am Tor nachgefahren, alle vier wie dokumentiert · B5 bytegleich unberührt (md5) + Mutation: B6 raus → B5 feuert weiter, die Wächter verdecken einander nicht · scripts-Suite 107/107 beidseitig · P2 zur §3-Belegform (kein wörtlicher Befehl), gleicher Maßstab wie W-07N |
-| **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
-| **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
+| **W-15** Material und Farbe | **`CODE_FERTIG`** | **Evaluator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
+| **W-01N** Suite-Zahl zahlfrei | **`CODE_FERTIG`** | **Evaluator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
-| **B7** Mehrfachvorkommen ist kein Beleg | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
+| **B7** Mehrfachvorkommen ist kein Beleg | **`CODE_FERTIG`** | **Evaluator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
 | **B5N** Belegzeilen-Schreibweisen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `8870387a` | **Nachbesserung §12.5 zu B5** — `B5_BELEGZEILE` (`commit-pruefen.sh:534`) erkennt nur `datei.ext:zeile`; **erhoben über 40 Botschaften: 20 Vorkommen fallen durch** (`Z.NNN` 12×, `Z.NNN-NNN` 4×, »Zeile NNN« 4×) · **dreimal gemeldet** (Evaluator, Release-Prüfer, Plan-Prüfer) — A-03-Klasse: eine Warnung, die bei richtiger Arbeit anschlägt, wird weggeklickt · tragend ist **B5N-2**: sie muss weiter anschlagen, wo kein Beleg steht |
-| **A-17** Zwei Engines schweigen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
+| **A-17** Zwei Engines schweigen | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
@@ -2369,10 +2369,32 @@ naechster_schritt: "Yama entscheidet die Weiche. Danach: Plan-Pruefer DoR."
 
 ```yaml
 auftrag: "A-17"
+abnahme_nachgezogen: "release-pruefer 12.08.: der Evaluator hat in cde221fd ABGENOMMEN gevotet
+  (sieben von sieben) und den Zustand bewusst offen gelassen — er nennt den Grund selbst:
+  'an docs/STATUS.md liegt fremde ungespeicherte Arbeit (A-13-Nachtrag des Release-Pruefers)'.
+  Das war meine Arbeit. Dieselbe Ruecksicht wie bei A-18, zum zweiten Mal. Ich ziehe nach."
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 9d79b1ca, Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen (A-17-1 bis A-17-7). VOLLES Grundtor, weil Produktivcode:
+  tsc clean, Insel-Suite 1698/1698, Bundle neu gebaut und sha256 byte-gleich (1b409f33...),
+  php artisan test 888 passed / 3119 assertions, Kette Vorfahr.
+  GEHEIMNISPRUEFUNG SCHLUG AN — 4 Treffer, zum ersten Mal ueberhaupt, und sie sind falsch:
+  das Muster faengt 'token', im Bau sind es DESIGN-Tokens des Hausplaners (rahmenToken
+  'brandInk', grundToken 'surface', iconToken), alle im minifizierten Bundle. Ausserhalb des
+  Bundles 0 Treffer, gegengeprueft mit ':(exclude)public/hausplaner/hausplaner.js'. Gelesen
+  statt gezaehlt — eine 4 im Geheimnisfeld haette den Release gestoppt.
+  BEFUND AN MEINEM EIGENEN VERFAHREN: mein Muster 'token' ist zu grob, dieselbe Klasse wie die
+  Belegzeilen-Luecke aus B5N. Ein echtes Geheimnis steht als Zuweisung mit langem Wert; ein
+  Design-Token als Feldname. Ich melde es hier, statt es still zu verschaerfen — wer sein
+  eigenes Pruefmuster im Vorbeigehen aendert, hat die Aenderung nicht geprueft."
+offener_punkt_bei_yama: "Der Evaluator hat einen EINGRIFF offengelegt: ticket_testing hatte
+  0 Nutzer, ohne Anmeldung keine Browserabnahme, also hat er einen Probenutzer angelegt (§15 vor
+  dem Schreiben belegt: getDatabaseName ticket_testing, vorher 0, nachher 1). Der Nutzer STEHT
+  NOCH. Raeumen ist eine produktive Datenoperation und braucht Yamas Freigabe — dieselbe Form
+  wie bei den zwei Testnutzern am 10.08. ('raeum die nutzer'). Ich raeume nicht von mir aus."
 titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach dem A-14-Muster, mit vorhandenem Bauteil"
 datei: docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md
-zustand: CODE_FERTIG
-ballbesitz: evaluator (gebaut 12.08. auf 05c6536b; Bericht docs/BERICHT-A-17-zwei-engines-schweigen.md)
+zustand: RELEASE_FREI
+ballbesitz: yama (TRANSPORTSPERRE — wie B5, B6 und A-18)
 browserabnahme_gefahren: "A-17-7 voll erfuellt, nicht ersetzt: Buehne scripts/browser-buehne.sh
   --port 8099 (Datenbank am Kindprozess geprueft, ticket_testing), Chrome headful, vier Flaechen
   nach dem Rechnen gemessen. engine-abwasser und engine-fbh: Plakette gruen 0, rot 0, Label
