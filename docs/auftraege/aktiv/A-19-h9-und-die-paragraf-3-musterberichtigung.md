@@ -208,3 +208,102 @@ warum_keine_barriere: "B5, B6, B7 in derselben Datei; dreimal gemeldet, dass ein
 der_fehler_ist_meiner: "ich habe das §3-Muster am 12.08. verankert, die linke Seite erweitert
        und die rechte nicht angesehen. H-9 an der Regel, die H-9 verankern soll."
 ```
+
+## §11 — Votum A-19 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "A-19"
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+abnahme_commit: "0ab70812"
+elter: "4632d032"
+in_arbeit_commit: "27665a19"
+pruefstand: "worktree --detach auf 0ab70812 und 4632d032, node_modules UND vendor"
+befangenheit: "Zwei der drei Fehlalarme, die dieser Auftrag behebt, stammen aus MEINEN eigenen
+     Votumszeilen — B7 und B5N tragen 'IN_ARBEIT' in der Notizspalte, weil ich es dort
+     hineingeschrieben habe. Ich pruefe also eine Berichtigung, die meine Schreibweise
+     ausgeloest hat. Gebaut hat der Generator; ich messe gegen die Kriterien."
+
+messtisch_alle_sieben:
+  A-19-1: GRUEN
+    beleg: "H-9 steht in §18a bei Z.854, ANGEHAENGT hinter H-8 (Z.824) und vor §18b.
+            Elter 0 Treffer, Bau 1. Rot-Lage des Blattes selbst nachgemessen: 'misst die
+            Schreibweise' am Elter 0."
+    regel_und_pruefform: "Beides steht drin — die Regel ('Ein Muster, das eine Schreibweise
+            voraussetzt, misst die Schreibweise und nicht die Sache') UND die Pruefform
+            ('Findet der Befehl die Zeile, die ich mit eigenen Augen gelesen habe? Erst
+            danach zaehlen')."
+  A-19-2: GRUEN
+    beleg: "Die Abgrenzung steht IM Regeltext als Tabelle mit zwei Richtungen:
+              H-6 'Triffst du, was du meinst?'      -> Fehltreffer
+              H-9 'Setzt du an, wo die Sache steht?' -> richtiger Treffer, falsche Sache
+            H-6 wird im H-9-Block dreimal genannt, mit je einem Beispiel. Und der Satz, der
+            die Trennung traegt: 'Ein Muster kann H-6 bestehen und an H-9 scheitern.'"
+  A-19-3: GRUEN — die dreifache Gegenprobe habe ich SELBST gefahren
+    a_fehlalarm: "Die B7-Tafelzeile traegt BETRIEBSBESTAETIGT und nennt IN_ARBEIT nur im
+            Fliesstext. Altes Muster: trifft sie (1). Neues Muster: trifft sie NICHT (0)."
+    b_echte_zeile: "Der entscheidende Teil, und ohne ihn waere die Berichtigung eine
+            Abschaltung. Da heute kein Auftrag laeuft, habe ich eine ECHTE IN_ARBEIT-Zeile
+            aus der Historie genommen (30457e2b, B6 auf IN_ARBEIT):
+              altes Muster 1 · NEUES Muster 1 · Zustandsfeld 1
+            Das neue Muster zaehlt eine echte laufende Zeile. Es meldet nicht immer frei."
+    c_deckungsgleich: "Am selben Stand: Tafelzeile neu 1, Zustandsfeld 1 — gleiche Zahl."
+    heute: "Am Stand der Abnahme: altes Muster 3, neues 0, Zustandsfeld 0. Die drei
+            Fehlalarme sind B7, B5N und A-19 selbst — alle drei mit einem Zustand, der
+            NICHT IN_ARBEIT ist."
+  A-19-4: GRUEN
+    beleg: "§3 nennt weiter BEIDE Befehle, Tafelzeile und Zustandsfeld, mit dem Satz
+            'Beide werden gemessen'. Keine Verkuerzung auf einen Ort."
+  A-19-5: GRUEN
+    beleg: "H-1 bis H-8 einzeln gehasht: ALLE ACHT identisch an Elter und Bau.
+            ARBEITSREGELN.md +49/-1 — die EINE geloeschte Zeile ist die alte Musterzeile
+            selbst, ich habe sie gelesen. Die §3-Regel ('hoechstens ein') unveraendert 1 -> 1.
+            scripts/ 0 Dateien, resources/ und app/ 0 Dateien. scripts-Suite 107/107/0."
+  A-19-6: GRUEN — und sein Selbstbefund ist der bemerkenswerte Teil
+    das_blatt_sagt_vier: "Gemessen sind DREI Auftragsblaetter (W-01N, B5N, A-19 selbst) und
+            insgesamt NEUN Dateien im ganzen docs/. Ich habe woertlich gesucht (grep -rlF)
+            und komme auf dieselbe Neun."
+    als_pruftext_zwei: "Er trennt sauber: als KRITERIUMSTEXT tragen ihn zwei (W-01N und B5N),
+            das dritte ist A-19 selbst, das den Ausdruck als seinen Gegenstand zitiert.
+            Beide Zahlen stehen im Bericht, geaendert hat er nichts."
+    sein_selbstbefund: "'Und hier hat mich der eigene Auftrag erwischt.' Seine erste Suche
+            lief mit escapten Zeichenklassen und meldete 0 Dateien — bei einem Blatt, das von
+            vieren spricht. Er nennt es beim Namen: 'Der Fehler war mein Suchmuster, nicht das
+            Ergebnis: ich hatte eine Schreibweise vorausgesetzt.' Das ist H-9, angewandt auf
+            den Auftrag, der H-9 baut."
+  A-19-7: GRUEN
+    beleg: "27665a19 (11:32:04) setzt beide Orte, Bau 11:36:49 — vier Minuten spaeter, und am
+            Elter des Baus steht A-19 an beiden Orten auf IN_ARBEIT."
+    seine_zahlen_selbst_nachgemessen: |
+      am Elter des Baus:  Tafelzeile ALT 3  (er sagt 3)
+                          Tafelzeile NEU 1  (er sagt 1)
+                          Zustandsfeld   1
+      Und die eine Zeile, die das neue Muster trifft, ist A-19 selbst. Alle drei exakt.
+
+was_diesen_bau_heraushebt:
+  - "Der Auftrag ist sein eigener erster Anwendungsfall, und der Bauende hat das nicht nur
+     behauptet, sondern beide Fassungen nebeneinander gemessen."
+  - "Er meldet ZWEI eigene Fehler derselben Klasse in zwei Runden — die escapte Suche hier und
+     der Sucher, der beim B7-P2 dieselbe Prosa traf, die er messen sollte — und nennt sie
+     'kein Argument gegen die Regel, sondern fuer sie'."
+  - "KEINE Barriere im Tor, mit Begruendung: B5, B6 und B7 stehen schon dort, und dreimal an
+     einem Tag wurde gemeldet, dass eine Warnung bei richtiger Arbeit weggeklickt wird. Eine
+     vierte Barriere gegen falsche Muster waere selbst ein Muster."
+
+mein_anteil_am_befund:
+  was: "Zwei der drei Fehlalarme (B7, B5N) entstanden, weil ICH in die Notizspalte der
+        Tafelzeile 'IN_ARBEIT' geschrieben habe — im Votumstext, als Beschreibung eines
+        P2. Der dritte ist A-19 selbst."
+  lehre_fuer_mich: "Die Tafelzeile ist kein Fliesstext. Was ich dort in die Notizspalte
+        schreibe, wird von Mustern gelesen, die die Zustandsspalte meinen. Ich fasse mich
+        dort ab jetzt kuerzer und schreibe Zustandswoerter nicht aus, wenn sie nicht der
+        Zustand sind."
+
+zusammenfassung: "Sieben von sieben. Die Berichtigung ist keine Abschaltung — das habe ich an
+     einer echten IN_ARBEIT-Zeile aus der Historie geprueft, und das neue Muster zaehlt sie.
+     H-1 bis H-8 sind unangetastet, die §3-Regel selbst auch; berichtigt ist nur die
+     Pruefmethode. Und der Auftrag hat seine eigene Regel zweimal am eigenen Bau vorgefuehrt:
+     einmal geplant im §3-Beleg, einmal ungeplant, als die escapte Suche 0 statt 9 meldete."
+
+ballbesitz: release-pruefer
+```
