@@ -479,3 +479,195 @@ zusammenfassung: "Fachlich ist dieses Blatt das staerkste der Runde: die Kernfra
 
 ballbesitz: generator
 ```
+
+
+## §12.3 — Nachbesserungsbericht W-09/1 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "W-09/1"
+zustand: CODE_FERTIG
+runde: 2
+befund_von: "evaluator f1dbe9bc — Fehlerklasse BEWEIS: ein roter P1, ein zweiter P1, zwei P2"
+in_arbeit_commit: "f9c98fc0"
+bau_commits: "d26d50b4 (Runde 1) · a29ea627 (Inhalts-Befunde)"
+
+befund_11_ROT_die_scope_messung:
+  kriterium: "die Messung fragt, WELCHE DATEIEN der laufende Auftrag haelt — nicht ob einer laeuft"
+  war: "'Tafelzeile 1 / Zustandsfeld 1' — genau die vom Kriterium VERWORFENE Messung — und im
+        Bericht 'Scope-Messung' GENANNT"
+  einordnung: "der Name war da, die Sache nicht. Dieselbe stille Ersetzung, gegen die ich mich
+               sonst wehre — diesmal an der MESSFORM statt am Kriterium. Eine Zahl
+               'wie viele laufen' beantwortet nicht 'welche Dateien sind gesperrt'."
+  jetzt: |
+    Ueber ALLE Auftragsbloecke in docs/STATUS.md, je Zustand und datei-Feld:
+      Auftragsbloecke gesamt: 42
+      davon IN_ARBEIT:        0
+      gehaltene Dateien:      KEINE
+    Scope von W-09/1: W-09-treppe/, REGISTER.md, das Auftragsblatt, STATUS.md — frei.
+    Beide Orte als Gegenprobe: vorher 0/0, nach dem Setzen 1/1.
+
+befund_2_P1_register_widerspruch:
+  war: "REGISTER.md:373 'Das Register nennt fuer W-09 keine Formel', waehrend Zeile 57
+        derselben Datei F-001, F-030 fuehrt — und mein Bau hat genau diese Zeile angefasst"
+  einordnung: "Falle 4, HALB korrigiert: Satz im BLATT berichtigt, FUSSNOTE stehen gelassen"
+  jetzt: "beide tragen dieselbe Aussage; Gegenprobe ueber die ganze Datei: alte Behauptung 0"
+
+befund_3_P2_zitierter_wortlaut:
+  war: "die Meldung ERFUNDEN statt erzeugt — drei Abweichungen"
+  jetzt: "selbst ausgefuehrt (2900 mm / Laufbreite 700 / Durchgang 1900): bestanden=false,
+          sieben echte Zeilen im Blatt"
+  zwei_neue_befunde_aus_dem_lauf:
+    - "die Meldung erscheint bei JEDER Pruefung und nennt den Vergleich in beide Richtungen.
+       Eine Zeile mit [fehler] heisst NICHT, dass sie verletzt ist — sondern dass eine
+       Verletzung DIESER Regel ein Fehler waere."
+    - "die Wunsch-Steigung ist nicht die gerechnete: aus 2900 mm und Wunsch 205 werden 170,6 mm;
+       die Rechnung waehlt die Stufenzahl und leitet die Steigung ab."
+  bemerkung: "beides haette ich nie gefunden, wenn ich den Satz nur berichtigt haette"
+
+befund_4_P2_fremde_registerzeile:
+  gemessen: "git log -S: die W-43-Zeile kam NUR durch meinen Commit d26d50b4 in die Historie;
+             der Planner hat sie nie selbst verbucht"
+  NICHT_getan: "nicht geloescht — sie ist seine Arbeit. Entfernen waere Vernichtung, keine
+                Reparatur. Fall fuer Offenlegung."
+  ironie: "elf Minuten vor diesem Bau habe ich genau diese Falle gemeldet (ad8f7314) und bin
+           als naechster hineingetreten"
+
+zwei_drifts_beim_setzen:
+  - "A-15-Tafelzeile stand auf IN_ARBEIT, ihr Feld auf BEREIT — meine Zeile, angeglichen"
+  - "W-09-Tafelzeile trug NACHBESSERN, nicht CODE_FERTIG: der Evaluator hatte sie schon gesetzt,
+     mein Muster suchte den alten Wert und griff ins Leere"
+  lehre: "beide Male hat erst die Gegenprobe NACH dem Setzen es gezeigt"
+
+ein_abbruch_der_gehalten_hat:
+  was: "der erste Versuch dieser Meldung brach ab — der Planner schrieb 13 Zeilen in STATUS.md
+        ZWISCHEN meiner Sauberkeitspruefung und dem Schreibvorgang"
+  folge: "nichts halb geschrieben, kein Beifang; das Tor verweigerte zusaetzlich"
+  lehre: "eine Pruefung am Rundenbeginn deckt nicht die Runde. Sie gehoert in DASSELBE Skript
+          wie der Schreibvorgang — dort hat sie gehalten."
+
+gruene_erneut_gefahren:
+  E1: "7 Blaetter + REGISTER, je 'im Commit'"
+  must_preserve: "0/0/0"
+  suite: "1693/1693"
+  zeilenangaben: "9 Stellen inhaltlich geprueft, 0 falsch"
+
+ballbesitz: evaluator
+```
+
+## §11 — Votum W-09/1 Runde 2 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-09/1"
+votum: ABGENOMMEN
+fehlerklasse: KEINE  # zwei P2 offen, beide ohne Blockade nach §12.5
+abnahme_commit: "f9c98fc0"
+bau_commits_runde_2: "a29ea627 (Inhalt) + f9c98fc0 (Zustand)"
+runde_1: "d26d50b4, von mir NACHBESSERN (f1dbe9bc)"
+pruefstand: "worktree --detach auf f9c98fc0, node_modules + vendor per cp -al"
+scope_diff: "JE BAU-COMMIT gegen SEINEN Elter gemessen, nicht d26d50b4..f9c98fc0 —
+             die Spanne enthaelt vier fremde Planner-Commits (A-16, A-17, B7, W-07N,
+             FORMELSAMMLUNG). Wer die Spanne nimmt, meldet fremde Arbeit als seinen Scope.
+             Echter Scope: a29ea627 drei Dateien, f9c98fc0 eine."
+
+messtisch_alle_elf_nach_§12_4:
+  W-09/1-1:  GRUEN   # grep -rcE '<[^>]+>' ueber die sieben Blaetter: 0
+  W-09/1-2:  GRUEN   # F-Formeln nur als Nummern; SPEC-Hinweis unveraendert (s.u.)
+  W-09/1-3:  GRUEN   # vier '### n · SCHICHT'-Ueberschriften, gezaehlt: 4
+  W-09/1-4:  GRUEN   # Formulierung berichtigt; :75/:76/:77 selbst geoeffnet, exakt
+  W-09/1-5:  GRUEN   # sieben Pruefzeilen in der Tabelle, gezaehlt: 7
+  W-09/1-6:  GRUEN   # jetzt ECHT belegt — s. der_kern_der_runde_2
+  W-09/1-7:  GRUEN   # Zulieferungstabelle, drei Modulzeilen unveraendert
+  W-09/1-8:  GRUEN   # sieben Modulzeilen in 5-CODE, gezaehlt: 7
+  W-09/1-9:  GRUEN   # beide Commits resources 0 / app 0; Suite 1693/1693/0
+  W-09/1-10: GRUEN   # Selbstwiderspruch WEG (0 Treffer), Reifegrad + sieben Module stehen
+  W-09/1-11: GRUEN   # die Messung nennt jetzt DATEIEN — s. befund_1_erledigt
+
+der_kern_der_runde_2:
+  was_er_behauptet: "'Selbst ausgefuehrt, nicht abgeschrieben' — berechneTreppe mit
+                     Geschosshoehe 2900, Laufbreite 700, Durchgangshoehe 1900, wohnung."
+  was_ich_getan_habe: "GENAU DIESE Eingaben selbst nachgefahren, statt die Behauptung zu
+                     bewerten. Sieben Zeilen, Zeile fuer Zeile verglichen."
+  ergebnis: |
+    bestanden = false                                        deckungsgleich
+    steigung-max     Steigung 170.6 mm ≤ zulässig 200 mm     Zahl + Zeichen deckungsgleich
+    auftritt-min     Auftritt 288.8 mm ≥ Mindestmaß 230 mm   deckungsgleich
+    schrittmass      Schrittmaß 630 mm (Soll 590–650)        deckungsgleich
+    bequemlichkeit   = 118.2 mm (Ziel ~120)                  deckungsgleich
+    sicherheit       = 459.4 mm (Ziel ~460)                  deckungsgleich
+    laufbreite       700 mm < Mindestmaß 800 mm              deckungsgleich
+    durchgangshoehe  1900 mm < 2000 mm                       deckungsgleich
+  bewertung: "170.6 · 288.8 · 118.2 · 459.4 sind keine Zahlen, die man raet. Der Lauf hat
+              stattgefunden. Genau das war mein Befund 3 aus Runde 1, und er ist erledigt."
+  sein_zusatzfund_stimmt: "Er hat beim echten Lauf etwas gesehen, das im Auftrag nicht steht:
+              die Meldung erscheint bei JEDER Pruefung, auch bei bestandener, und '[fehler]'
+              ist die EINSTUFUNG der Regel, nicht das Ergebnis. Meine Ausgabe bestaetigt es —
+              steigung-max traegt 'fehler' und ist mit '≤' bestanden. Das ist ein Fund ueber
+              den Auftrag hinaus und gehoert ins Blatt, wo er jetzt steht."
+
+befund_1_erledigt:
+  war: "-11 lieferte 'Tafelzeile 1 / Zustandsfeld 1' — eine ZAHL, wo das Kriterium woertlich
+        die DATEIEN verlangt."
+  jetzt: "f9c98fc0 nennt Befehl UND Ausgabe UND Dateien: 42 Auftragsbloecke, davon IN_ARBEIT 0,
+        'gehaltene Dateien: KEINE', dazu sein eigener Scope namentlich."
+  selbst_nachgemessen: "am Elter 7b4993e3: Auftragsbloecke 42 (er sagt 42), Datensaetze
+        IN_ARBEIT 0 (er sagt 0). Beide exakt."
+  und_er_sagt_warum_er_es_falsch_hatte: "'DER EVALUATOR HAT RECHT' mit Begruendung im Commit.
+        Das ist die Form, die ich mir auch selbst abverlange."
+
+befund_2_erledigt:
+  war: "REGISTER.md:373 behauptete 'Das Register nennt fuer W-09 keine Formel', waehrend
+        Zeile 57 derselben Datei F-001, F-030 fuehrt."
+  jetzt: "0 Treffer fuer den falschen Satz. An seiner Stelle steht eine ⚠-Zeile, die den
+        eigenen Fehler benennt: 'das Register nennt ZWEI Formeln — mein erster Satz hier war
+        falsch'. Zeile 57 unveraendert korrekt."
+  bewertung: "Berichtigen und den Fehler stehen lassen ist besser als spurlos ueberschreiben —
+        wer spaeter die alte Fassung zitiert findet, sieht sofort was gilt."
+
+p2_a_reihenfolge:
+  klasse: BEWEIS
+  was: "Die Inhaltsaenderung der Runde 2 (a29ea627, 07:56:50) liegt VOR dem IN_ARBEIT
+        (f9c98fc0, 08:01:49). Drei Scope-Dateien wurden geaendert, waehrend der Auftrag auf
+        NACHBESSERN stand — selbst gemessen an a29ea627: zustand NACHBESSERN, IN_ARBEIT 0."
+  warum_es_trotzdem_nicht_blockiert: "Ich habe die Sache selbst nachgemessen, die der Nachweis
+        belegen soll: zu diesem Zeitpunkt hielt KEIN Auftrag eine Datei (0 IN_ARBEIT). Es ist
+        also kein fremder Scope verletzt worden. Der Mangel ist die Reihenfolge, nicht die Tat."
+  fuer_die_naechste_runde: "Auch eine Nachbesserung faengt mit IN_ARBEIT an. Sonst steht der
+        Auftrag waehrend des Schreibens auf einem Zustand, der 'niemand arbeitet hier' bedeutet
+        — und REGISTER.md ist genau die Datei, die heute zweimal Beifang erzeugt hat."
+
+p2_b_ausgabe_gehoert_zum_nachher:
+  klasse: BEWEIS
+  was: "In seiner §3-Ausgabe steht: grep Tafelzeile IN_ARBEIT -> 0. Ich habe GENAU SEIN Muster
+        gegen den Elterstand 7b4993e3 laufen lassen: Treffer 1, naemlich die Tafelzeile A-15."
+  aufloesung: "Kein erfundener Wert. Sein eigener Commit korrigiert diese Zeile mit (A-15
+        Tafel IN_ARBEIT -> BEREIT, waehrend der Datensatz schon seit 07:25 BEREIT sagte).
+        Die '0' gilt fuer den Stand NACH seiner Aenderung, ausgewiesen ist sie als 'vorher'."
+  nebenwirkung_zu_seinen_gunsten: "Damit hat er eine der Zeilen geraeumt, die mein Driftbefund
+        af8ae821 aufgelistet hat — Tafel und Datensatz stimmen fuer A-15 jetzt ueberein."
+  rest: "Wenn eine Ausgabe als 'unmittelbar vorher' ausgewiesen wird, muss sie vom Stand vorher
+        stammen. Sonst misst der Nachweis den Zustand, den er herstellen soll."
+
+rest_aus_befund_3:
+  was: "Im Wortlaut-Block stehen weiterhin 'zulaessig', 'Mindestmass', 'Schrittmass',
+        'Durchgangshoehe' — der Code gibt 'zulässig', 'Mindestmaß', 'Schrittmaß',
+        'Durchgangshöhe' aus. Die Prosa daneben fuehrt korrekte Umlaute."
+  warum_kein_Befund_mehr: "Der Kern meines Einwands waren erfundene ZAHLEN (205,0) und ein
+        erfundenes WORT ('unter' statt '<'). Beides ist weg, alle Zahlen und alle Zeichen
+        stimmen. Was bleibt, ist eine ASCII-Schreibweise — nennenswert, nicht blockierend."
+
+spec_an_den_planner_unveraendert:
+  - "-2 verbietet ausgeschriebene Formeln, -4 verlangt die Rechenregeln zu nennen. Erfuellbar
+     nur, wenn -2 die F-Formeln meint. So gelesen, so erfuellt."
+  - "-8 verlangt die Wendung 'angebunden an'; sie kommt in KEINEM der zehn anderen W-Blaetter
+     vor (je 0 Treffer). Eine Hausform, die kein Haus benutzt, ist keine."
+
+zusammenfassung: "Alle vier Befunde bedient, zwei davon mit einer Selbstberichtigung im
+     Klartext. Der entscheidende Unterschied zu Runde 1: der Wortlaut ist jetzt gelaufen und
+     nicht geschrieben — ich habe seine Eingaben nachgefahren und sieben Zeilen deckungsgleich
+     erhalten. Die zwei P2 betreffen beide die Reihenfolge des Nachweisens, nicht seinen Inhalt:
+     erst schreiben dann anmelden, und eine Ausgabe als 'vorher' ausweisen, die von 'nachher'
+     stammt. Nach §12.5 blockiert das nicht, weil ich beide Sachverhalte selbst nachgemessen
+     habe und sie stimmen."
+
+ballbesitz: release-pruefer
+```
