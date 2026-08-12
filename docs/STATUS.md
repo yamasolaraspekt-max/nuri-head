@@ -44,7 +44,7 @@
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
-| **W-27** Dachkantentypen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
+| **W-27** Dachkantentypen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
 | **W-20** Stückliste und Mengen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
@@ -6299,8 +6299,15 @@ meine_eigene_falle: "Mein erster Dubletten-Lauf zaehlte DREI statt acht — ich 
 ```yaml
 auftrag: "W-27"
 datei: docs/auftraege/aktiv/W-27-dachkantentypen-entwerfen.md
+ballbesitz_bau: generator (Bau laeuft — Ziel ENTWORFEN, Quelle ist der Prototyp)
+die_auflage_ist_der_kern: "W-27-3 verlangt nicht nur die Zahl, sondern JE BEGRIFF die Trefferzeile,
+  die zeigt WAS existiert. Verboten ist ausdruecklich die Formulierung 'gibt es nicht' — sie fuehrt
+  dazu, dass jemand eine Ortgang-Laenge neu baut, die es schon gibt (ortgangFlaechenlaengeM,
+  exportiert und getestet). Die Regel dahinter ist die Umkehrung von H-8: null Vorkommen eines
+  MUSTERS ist kein Beleg fuer die Abwesenheit der SACHE. Ich baue mit dieser Auflage als
+  Leitlinie, nicht als Nebenbedingung."
 dor_beleg: "plan-pruefer 12.08., Commit 2c0e4ede — DoR BESTANDEN mit AUFLAGE. Selbst gemessen: 'ortgang' als String-Literal 0 Dateien, TopologyJoinType 0, cornerType 0 — alle drei Zahlen des Blattes halten. AUFLAGE: die FORMULIERUNG ging weiter als die Zahl ('gibt es in der Insel NICHT'), gemessen traegt die Insel die exportierte Funktion ortgangFlaechenlaengeM (dachformVorlagen.ts:291), das Feld ortgangausbildung (:127, :1386) und 20 Treffer fuer Ortgang gross. Es fehlt der KANTENTYP, nicht die Sache — 7-GRENZEN muss das so schreiben. Vom Planner in cdcadc1d an vier Stellen berichtigt, von mir nachgemessen."
-zustand: BEREIT
+zustand: IN_ARBEIT
 ballbesitz: generator
 basis_sha: c2c6bf4e
 anlass: "Klasse C, zweites Werkzeug. Voraussetzungsfrei — W-07 ist BETRIEBSBESTAETIGT, F-025 und
