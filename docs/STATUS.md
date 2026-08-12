@@ -36,6 +36,9 @@
 | **B6** Summe braucht Erhebung | `BEREIT` | **Generator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
+| **A-16** `TIME_VARS` im Produktivbaum | `ENTWURF` | **YAMA** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
+| **B7** Mehrfachvorkommen ist kein Beleg | `ENTWURF` | **Plan-Prüfer** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
+| **A-17** Zwei Engines schweigen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -3932,3 +3935,66 @@ folgeauftrag: "zwei Engines nach A-14-Muster zum Schweigen bringen — Schnitt b
 grenze_die_ich_ziehe: "ich bestaetige, was der Code ueber sich selbst sagt. Ich ordne NICHT zu,
                        was nur ein Fachmann wissen kann — deshalb bleibt wandaufbau offen."
 ```
+
+## A-17 — Zwei Engines schweigen (Datensatz, zweiter Ort nach §16)
+
+```yaml
+auftrag: "A-17"
+datei: docs/auftraege/aktiv/A-17-zwei-engines-schweigen.md
+zustand: ENTWURF
+ballbesitz: "plan-pruefer (DoR)"
+basis_sha: 3678d1de
+anlass: "Plan-Pruefer 7b7f1dcc woertlich: 'FOLGE: zwei Engines muessen zusaetzlich schweigen
+         (abwassergefaelle, fbhAuslegung) — Schnitt beim Planner, nicht bei mir.'"
+beleg_aus_dem_code: "beide Dateien nennen ihre Grenze SELBST — abwassergefaelle.ts:1-7
+         'DIN 1986-100 (VEREINFACHT)', fbhAuslegung.ts:1-7 'GRENZE: hydraulischer Abgleich und
+         normative Auslegung bleiben Fach-Engine'. Darueber steht heute EngineFlaeche.tsx:146
+         '✓ Alle Pruefungen bestanden'."
+wiederverwendung_geprueft: "§5 — keinGesamturteil (enginePanels:176 + EngineFlaeche.tsx:138),
+         Feld 'vorbehalt' (enginePanels:225) und die grundlage-Zeile stammen VOLLSTAENDIG aus
+         A-14. Kein neues Bauteil. Der Auftrag ist dreimal 'Flag setzen und einen Satz schreiben'."
+zusatzbefund_A_17_6: "ERHOBEN, nicht geschaetzt: vier Dateien tragen
+         'bestanden: !p.some(x => x.schwere === fehler && !x.bestanden)' (abwassergefaelle:49,
+         fbhAuslegung:73, kuecheArbeitsdreieck:50, treppenBerechnung:112). Davon haben DREI
+         mindestens eine Warnung im selben Pruefarray. Folge: 150 W/m2 spezifische Leistung
+         faellt durch spez-leistung (:59), das ist eine WARNUNG, also bleibt bestanden=true —
+         und darueber steht 'Alle Pruefungen bestanden'. NICHT in diesem Auftrag geaendert:
+         der Satz steht an EINER Stelle und wirkt auf ALLE Panels, das waere Beifang in der Sache."
+abhaengigkeit: "A-15 muss die Klassifikation abschliessen. Die offene wandaufbau-Zeile bei Yama
+         ist fuer A-17 NICHT noetig — beide Engines hier sind bestaetigt."
+```
+
+## ⚠ BEFUND — zwei Tafelzeilen sind in einem Merge still verschwunden (§16)
+
+*Planner 12.08., beim Einreihen von A-17 gemessen. **Kein Vorwurf an eine Rolle** — eine
+Merge-Auflösung, bei der eine Seite gewann.*
+
+```text
+Vorkommen von '| **A-16** …' in docs/STATUS.md, Commit fuer Commit:
+  7d6c39cf  (planner, Schnitt)                         1
+  8b1b9d05  (plan-pruefer, B7-DoR)                     1
+  6e3f2408  "Merge commit '8b1b9d05' into HEAD"        0   <- hier
+  … alle folgenden                                     0
+Dasselbe fuer '| **B7** …'.
+```
+
+**Überlebensprobe aller sechs Änderungen aus `7d6c39cf` — nur die zwei Tabellenzeilen fielen:**
+
+```text
+W-43 Registerzeile                    1  ueberlebt
+F-051 vierter Fundort                 1  ueberlebt
+OFFENE POSTEN aus dem M-02-Bericht    1  ueberlebt
+A-16 Blatt + B7 Blatt (Dateien)       da ueberlebt
+A-16 Tafelzeile                       0  VERLOREN
+B7  Tafelzeile                        0  VERLOREN
+```
+
+> **Die Lehre ist eng und brauchbar:** *was ich **mitten in eine geteilte Tabelle** einschiebe, ist
+> die verlustanfälligste Stelle im ganzen Dokument — was ich als **eigenen Abschnitt anhänge**, hat
+> überlebt. Fünf von sechs Änderungen standen an Dateienden oder in eigenen Blöcken. Deshalb steht
+> der A-17-Datensatz oben als angehängter Abschnitt und nicht nur als Tabellenzeile.*
+
+**Und es ist genau die Leerstelle, die der Plan-Prüfer in `2a07d70c` in umgekehrter Richtung
+behoben hat:** *er fand „Tafelzeile ohne Datensatz" und legte den Datensatz an. Jetzt war es
+„Datensatz ohne Tafelzeile". Beide Hälften desselben §16-Bruchs an einem Tag — die Ursache ist
+nicht Nachlässigkeit, sondern **dass zwei Orte gepflegt werden müssen und Merges nur einen treffen.***

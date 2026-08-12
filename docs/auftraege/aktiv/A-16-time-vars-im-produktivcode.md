@@ -166,8 +166,16 @@ A-16-7  DIE BELEGKETTE wird ausdruecklich freigemessen: 0 Schreibpfade zum Serve
 RUECKWEG      reiner Revert. Der Bau fuegt ausschliesslich Kommentarzeilen ein — kein Wert, kein
               Datenpfad, keine Migration, kein Template-Ausdruck. Rueckwaerts-Patch via
               git apply --check -R muss Exit 0 liefern, OHNE den Arbeitsbaum anzufassen.
-KOPIE AUSSERHALB DER MASCHINE  vorhanden: fork/main + backup-private/main. origin ist 341 Commits
-              zurueck und zaehlt fuer diesen Auftrag NICHT als Kopie.
+KOPIE AUSSERHALB DER MASCHINE  ZUM BAUZEITPUNKT ZU PRUEFEN, hier NICHT behauptet.
+              BERICHTIGUNG meiner ersten Fassung ("vorhanden: fork/main + backup-private/main"):
+              selbst nachgemessen, nachdem der Release-Pruefer den abgelehnten Push gemeldet hatte
+              (95b98707: PUSH ABGELEHNT, non-fast-forward, nicht forciert):
+                7d6c39cf (der Commit, der dieses Blatt traegt)
+                  fork/main  NEIN   ·   backup-private/main  NEIN   ·   origin/main  NEIN
+              Die Zusage war zum Zeitpunkt des Schreibens falsch — ich habe eine Kopie behauptet
+              statt sie zu messen. Der Bau setzt voraus, dass der Rueckfallpunkt AM BAUTAG auf
+              einem Fernziel liegt und das mit Befehl belegt ist. origin zaehlt weiterhin NICHT
+              als Kopie (Rueckstand).
 ENTDECKUNG    woran man merkt, dass es schiefging: die elf Ziffern in Zeile 74-86 und die 65 in
               Zeile 1672 sind das Signal. Weicht EINE davon ab, ist Punkt 4 gebrochen — messbar
               mit einem einzigen git diff, ohne Fachwissen.
