@@ -2135,6 +2135,24 @@ naechster_schritt: "Yama entscheidet die Weiche. Danach: Plan-Pruefer DoR."
 ```
 ---
 
+## BEREIT — A-17 (zwei weitere Engines muessen schweigen)
+
+```yaml
+auftrag: "A-17"
+titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach dem A-14-Muster, mit vorhandenem Bauteil"
+datei: docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 3678d1de
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): JEDE Behauptung selbst gemessen, und eine davon haette ich beinahe falsch beanstandet. GEMESSEN: keinGesamturteil steht heute genau EINMAL in enginePanels.ts, beim Panel engine-sparren (A-14) — die beiden Kandidaten engine-fbh (Z.231) und engine-abwasser (Z.323) tragen es NICHT, die Rot-Lage haelt also. Beide Dateikoepfe habe ich selbst gelesen: abwassergefaelle.ts nennt 'Reine Pruef-/Rechenlogik nach DIN 1986-100 (VEREINFACHT)', fbhAuslegung.ts nennt 'GRENZE: hydraulischer Abgleich und normative Auslegung bleiben Fach-Engine — hier Rohrlaengen/Kreise/Plausibilitaet'. Beide Zitate stehen woertlich so im Code. Neun Kriterien."
+mein_fuenfter_beinahe_fehlbefund: "Meine erste Messung suchte in beiden Modulen nach 'DIN |EN 1' und fand bei fbhAuslegung NULL — ich war im Begriff zu beanstanden, dass ein Auftrag eine Engine schweigen laesst, die gar keine Norm nennt. FALSCH IN DER PRAEMISSE: A-17 begruendet die FBH-Engine NICHT mit einer Normnennung, sondern mit ihrem SELBSTBENANNTEN Geltungsbereich ('normative Auslegung bleibt Fach-Engine'). Das ist die staerkere Begruendung, nicht die schwaechere — eine Engine, die selbst sagt, dass die normative Auslegung woanders passiert, darf erst recht nicht 'alle Pruefungen bestanden' behaupten. Fuenfter Beinahe-Fehlbefund heute, und zum zweiten Mal in Folge VOR dem Melden bemerkt."
+warum_der_auftrag_traegt: "Er nutzt das VORHANDENE Bauteil (das keinGesamturteil-Flag aus A-14) statt ein zweites zu bauen, und er beruft sich auf drei belegte Vorentscheidungen: A-15 Achse 2 (die Klassifikation), A-14 als Praezedenzfall, AUF-52 Scheibe C (die Plakette nur bei echtem Bestehens-Merkmal). Damit ist er die konsequente Anwendung einer Regel, die dreimal unabhaengig bestaetigt wurde — kein neuer Gedanke, sondern die Reichweite eines alten."
+fuer_den_bau: "Die A-14-Gegenprobe des Release-Pruefers ist die Messlatte: er hat die Renderbedingung fuer JEDES Panel ausgefuehrt und belegt, dass heizkoerper mit bestanden=false weiterhin die ROTE Plakette zeigt. A-17 muss dasselbe zeigen — nach dem Bau tragen DREI Panels das Flag, und alle uebrigen behalten ihre Plakette, positive wie negative."
+naechster_schritt: "Generator zieht A-17 (§3 beachten; die Schlange ist lang, aber A-17 ist P1 und nutzt vorhandenes Bauteil)"
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
