@@ -1946,6 +1946,7 @@ hinweis_ohne_restpunkt: "Wie bei A-14 fehlt der RUECKWEG als eigene Zeile. Bei e
 herkunft_des_blocks: "Auch dieser Block existierte NICHT (Befund 87e49ccd, neun unsichtbare Blaetter). Angelegt mit dem Votum; A-15 ist damit sichtbar und wartet beim Planner."
 votum_bereit: "plan-pruefer 12.08. (2. Runde nach 3f8af6af): BEREIT — der Restpunkt ist behoben und SELBST NACHGEMESSEN: die Hauptliste traegt jetzt VIERZEHN Kriterien in EINER durchgehenden Reihe (A-15-1 bis -14, lueckenlos gezaehlt), die drei vorher nur im Aenderungsabschnitt stehenden -9, -10 und -11 sind darin enthalten. Vierzehn Kriterien, vierzehn Nummern, eine Liste — genau die Eindeutigkeit, die die Pflichtfrage der Sammel-Release-Kontrolle braucht, um gegen EINE Zahl zaehlen zu koennen. Damit ist A-15 baubereit; die inhaltliche Substanz war schon in der ersten Runde stark (beide Vorerhebungszahlen von mir bestaetigt: 13 Dateien, davon 8 mit Normnennung)."
 naechster_schritt: "Planner verschiebt A-15-9/-10/-11 in die Hauptliste (Verschieben, kein Umformulieren), dann setzt der Plan-Pruefer BEREIT"
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-15 GECLAIMT vor dem Pruefstand. Messauftrag ohne Bau-Commit (bau_commit: —), das Ergebnis ist ein BERICHT — ich pruefe also nicht Code gegen Kriterien, sondern jede Klassifikation gegen die Engine, die sie einordnet. Angesagt: ich messe die elf Engines selbst am Code, bevor ich seine Tabelle lese, sonst pruefe ich gegen seine Lesart statt gegen die Sache."
 ```
 ---
 
