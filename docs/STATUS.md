@@ -4870,3 +4870,67 @@ was_yama_tun_muss: "nichts"
 naechster_schritt: "Planner schneidet beide (Umrechnung als Fall A, Kopf-Hinweis als Kleinauftrag)"
 widerruf: "ein Satz"
 ```
+
+---
+
+## LÖSCHUNG roof.blade.php: NEIN — und meine erste Begründung war zu schwach
+
+**Yama, 12.08.:** *„hältst du es für notwendig und richtig, die Löschung? Dann machen wir das in
+diesem Fall."* **Er ist bereit. Ich rate ab — und zwar aus einem stärkeren Grund als gestern.**
+
+### Ich habe die Datei gemessen, bevor ich antworte. Sie ist kein toter Rest
+
+```text
+UMFANG          2.688 Zeilen · 418 Script-/Funktions-/const-Zeilen
+INHALT          React-artige Komponenten (Label, ModeBtn, NavBtn, ObsBtn, Range,
+                ToolBtn, WizardNav) UND drei Rechenkerne:
+                   computeAll · computeBOMAndTime · computeHeizlast
+HISTORIE        GENAU EIN Commit, 26.06., Botschaft "Checkpoint: save WIP"
+                -> einmal hereingelegt, nie wieder angefasst
+AUFRUFER        0, in drei Suchformen bestaetigt
+```
+
+> **Das ist kein Rest, das ist ein vollständiger Prototyp** — Dach-/PV-Konfigurator mit
+> **Stückliste, Zeitrechnung und Heizlast** in einer Datei. *Genau die Sorte Quelle, aus der der
+> Planner bei M-01 und M-02 die wertvollsten Funde gezogen hat.*
+
+### Warum das meine gestrige Begründung ersetzt
+
+*Gestern schrieb ich „Löschen verwischt die Spur". **Das war schwach** — Git behält gelöschte
+Dateien, die Spur bliebe technisch erhalten.* **Der wirkliche Grund ist ein anderer und er ist
+messbar:**
+
+```text
+computeBOMAndTime   eine Stueckliste MIT Zeitwerten
+computeHeizlast     eine Heizlastrechnung im Frontend
+```
+
+**Das sind zwei Bruecken, die im Haus GEMESSEN FEHLEN:** *der Dach-Azimut erreicht die
+Ertragsrechnung nicht, `wandaufbau` erreicht die Heizlast nicht, `firstAzimutGrad` kommt in `app/`
+null Mal vor.* **Wer diese Datei löscht, löscht einen unausgewerteten Lösungsansatz für genau die
+Lücken, die diese Woche dreimal aufgefallen sind.**
+
+### Was ich stattdessen vorschlage — dasselbe Verfahren wie bei M-01/M-02
+
+```text
+1  NICHT LOESCHEN.
+2  KENNZEICHNEN (wie beschlossen): drei Zeilen im Kopf — "nicht verdrahtet, 0 Aufrufer,
+   A-16 ist VOR jeder Verdrahtung faellig, die elf TIME_VARS und '* 65' sind unbelegt".
+3  ALS QUELLE AUFNEHMEN: ins Wissensregister neben M-01 und M-02, mit dem Vermerk
+   "unausgewertet". Dann findet sie, wer die Heizlast-Bruecke baut — und muss sie
+   nicht neu erfinden.
+4  AUSWERTEN spaeter, nach dem bewaehrten Muster: erst messen, dann das Delta,
+   nichts kopieren ohne vorherige Messung (Yamas eigene Vorgabe).
+```
+
+> **Wenn du sie trotzdem gelöscht haben willst, ist das dein gutes Recht — aber dann bitte mit
+> Archiv und Manifest nach der Dauerregel, nicht mit `rm`.** *Ich führe es aus, wenn du es sagst;
+> ich rate nur davon ab, solange sie ungemessen ist.*
+
+```yaml
+meine_empfehlung: "NICHT loeschen — kennzeichnen und als unausgewertete Quelle registrieren"
+was_sich_geaendert_hat: "meine gestrige Begruendung ('Spur verwischt') war schwach; die Messung
+                         liefert die starke: 2688 Zeilen mit computeBOMAndTime und computeHeizlast,
+                         also Loesungsansaetze fuer die zwei fehlenden Bruecken"
+wenn_yama_trotzdem_loescht: "Archiv + Manifest + Rueckweg nach der Dauerregel, kein rm"
+```
