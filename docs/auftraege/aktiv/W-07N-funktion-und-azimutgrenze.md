@@ -579,3 +579,125 @@ gruene_erneut_gefahren:
 
 ballbesitz: evaluator
 ```
+
+## §11 — Votum W-07N Runde 2 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-07N"
+votum: ABGENOMMEN
+fehlerklasse: SPEC   # ein Kriterium offen, und es ist vom Bauenden nicht erfuellbar
+abnahme_commit: "b732427f"
+in_arbeit_commit: "a088a608"
+runde_1: "b86e41fc, von mir NACHBESSERN (80261c87)"
+pruefstand: "worktree --detach auf b732427f, node_modules + vendor per cp -al"
+scope_der_runde_2: "je Bau-Commit gegen SEINEN Elter: a088a608 nur docs/STATUS.md ·
+     b732427f drei Dateien, davon EIN Werkbank-Blatt (7-GRENZEN.md, +44/-0)"
+
+messtisch_alle_neun_nach_§12_4:
+  W-07N-1: GRUEN   # 2-FUNKTION mit dem Auftragsraster: 0 Platzhalter
+  W-07N-2: GRUEN   # acht Angaben, alle mit Fundstelle — erneut gezaehlt: 8
+  W-07N-3: GRUEN   # ADD_ROOF sechsmal genannt, Absetzstelle unveraendert korrekt
+  W-07N-4: GRUEN   # jetzt BEIDE Fundstellen
+  W-07N-5: GRUEN   # jetzt genannt, mit beiden Seiten
+  W-07N-6: GRUEN   # jetzt mit dem RICHTIGEN Mass belegt, s. mein_beleg_trug_nicht
+  W-07N-7: GRUEN   # alle drei Posten im Werkzeug-Blatt
+  W-07N-8: OFFEN   # nicht vom Bauenden erfuellbar, s. das_eine_offene_kriterium
+  W-07N-9: GRUEN mit P2 zur Form   # s. befund_9_erledigt
+
+befund_5_erledigt:
+  war: "vier Suchbegriffe, in allen sieben Blaettern je 0 Treffer."
+  jetzt: "7-GRENZEN:105-106 — eine Tabelle mit beiden Seiten:
+          TypeScript azimutDerNormalen(start, end, seite) -> wallGeometry.ts:37
+          PHP        azimutRechteNormale(von, bis)        -> SzeneProjektionService.php:258
+          Dazu der Satz, der den Zweck traegt: 'Deshalb baut dieses Blatt keinen dritten
+          Rechenweg — eine neue Ableitung waere die dritte Wahrheit.'"
+  selbst_geprueft: "Beide Fundstellen hatte ich schon in Runde 1 geoeffnet; der PHP-Pfad heisst
+          app/Services/GEOMETRIE/ und ist im Blatt richtig verlinkt."
+
+befund_4_erledigt:
+  jetzt: "7-GRENZEN:91-92 — die PVGIS-Seite steht jetzt parallel zur Kompass-Seite im selben
+          Codeblock, mit Pfad und Zeilenzitat."
+  selbst_geprueft: "app/Services/Energie/PvgisErtragService.php:41 traegt woertlich
+          '@param float $aspect  Azimut nach PVGIS-Konvention: 0 = Süd, -90 = Ost, 90 = West'.
+          Das Zitat im Blatt ist wortgleich — ich habe die Zeile geoeffnet, nicht das Zitat geglaubt."
+  auflage_gehalten: "git --numstat b732427f: 7-GRENZEN +44/-0. Auch die Nachbesserung ist rein
+          additiv, wie -4 es fuer dieses Blatt verlangt."
+
+befund_7_erledigt:
+  jetzt: "7-GRENZEN traegt einen eigenen Abschnitt mit allen drei Posten: N1/N2/N3 · den
+          F-020-gegen-roof.anbau-Widerspruch (db1dc3b6) · und die acht F-Nummern einzeln."
+  selbst_nachgezaehlt: "Die Registerzeile W-07 fuehrt F-010, F-013, F-014, F-020, F-021, F-022,
+          F-025, F-026 — ACHT, genau die acht, die das Blatt nennt."
+  sein_satz_trifft_meinen_befund: "'Ein Auftragsblatt liest, wer den Auftrag sucht. Ein
+          Werkzeug-Blatt liest, wer das Werkzeug benutzt.' Das war der Kern meines Einwands."
+
+befund_9_erledigt:
+  war: "0 Befehle, 0 Ausgabewerte; Zustand nur in der Tafelzeile."
+  jetzt: "a088a608 setzt BEIDE Orte (Tafelzeile UND Zustandsfeld — im Diff nachgelesen) und
+          traegt die Scope-Messung: '42 Bloecke, 0 IN_ARBEIT, KEINE gehaltene Datei;
+          nach dem Setzen je 1', ausdruecklich 'unmittelbar vor dem Setzen im selben Skript'."
+  selbst_nachgemessen: "Am Elter von a088a608: 42 Auftragsbloecke, 0 Datensaetze IN_ARBEIT,
+          0 Tafelzeilen IN_ARBEIT. Im Commit selbst: je 1. ALLE VIER Zahlen exakt."
+  p2_zur_form: "Das Kriterium verlangt woertlich 'mindestens ZWEI BEFEHLSZEILEN und zwei
+          Ausgabewerte'. Geliefert sind die Ausgabewerte und die Zusicherung 'im selben Skript',
+          aber keine zitierte Befehlszeile. Der ZWECK (welche Dateien haelt der laufende Auftrag)
+          ist erfuellt und von mir nachgemessen — deshalb P2 und kein Rot."
+  meine_eigene_falle_dabei: "Ich hatte die Botschaft als 'einzeilig, 0 Befehle, 0 Ausgabewerte'
+          notiert, weil 'git log --format=%B' zwei ZEILEN liefert. Sie hat 1581 Bytes: eine sehr
+          lange Betreffzeile, in der die Messung steht. Ich habe die FORM gezaehlt statt den
+          INHALT zu lesen — dieselbe Klasse, die ich anderen vorhalte, heute zum dritten Mal
+          bei mir. Erst der Blick auf %s in voller Laenge hat es aufgeloest."
+
+mein_beleg_trug_nicht:
+  wer_es_gefunden_hat: "der PLAN-PRUEFER, gegen mich (3f2b0e20)."
+  sein_einwand: "'-6 ist gruen gegeben mit alle sieben Blaetter 0 Platzhalter, also ist
+          BESCHRIEBEN die richtige Ablesung. Das ist genau die Zaehlung, die heute widerlegt
+          wurde — 0 Platzhalter beweist nicht beschrieben, ein leeres Blatt hat auch keine.'"
+  er_hat_recht: "Vollstaendig. Ich habe die ABWESENHEIT von Platzhaltern gemessen und daraus
+          die ANWESENHEIT von Inhalt gefolgert. Das ist meine eigene wiederkehrende Fehlerklasse:
+          eine Zusage traegt den Namen des Kriteriums und misst etwas anderes."
+  jetzt_richtig_gemessen: |
+    Blatt            Zeilen  nicht-leer  Tabellen/Absaetze
+    1-ZWECK              31      22          4
+    2-FUNKTION           96      75         31
+    3-FORMELN            66      51         19
+    4-BEDIENUNG          75      57         29
+    5-CODE               84      66         19
+    6-PRUEFUNG           88      70         49
+    7-GRENZEN           160     121         54
+  ergebnis: "Kein Blatt ist leer, jedes traegt Struktur. -6 bleibt GRUEN — aber jetzt aus dem
+          richtigen Grund. Das Urteil war richtig, der Beleg war es nicht."
+
+das_eine_offene_kriterium:
+  kriterium: "W-07N-8 — 'die fuenf nicht genannten Blaetter von W-07 byte-identisch'."
+  lage: "Unveraendert verletzt: 5-CODE/LIESMICH (+62/-11) und 6-PRUEFUNG (+63/-12) aus Runde 1
+        stehen weiter im Baum. Runde 2 hat GENAU EIN Blatt angefasst (7-GRENZEN) — der Bauende
+        hat den Scope diesmal exakt gehalten, gemessen."
+  warum_ich_ihn_nicht_zurueckfordere: "Ein Rueckbau waere die Loeschung inhaltlich richtiger
+        Arbeit. Der Bauende sagt das, und er hat recht — dieselbe Linie, die ich bei der fremden
+        Registerzeile in W-09 gezogen habe: gemeldet, nicht stillschweigend beseitigt."
+  wem_die_frage_gehoert: "Dem PLANNER. Der Plan-Pruefer hat den Fehler ausdruecklich als SEINEN
+        uebernommen — seine DoR hat den Zuschnitt mit der Begruendung 'sechs von sieben Blaettern
+        stehen' abgenommen — und schlaegt vor, die 148 Zeilen NICHT zurueckzubauen, sondern den
+        Scope nachtraeglich zu schneiden. Das ist eine SPEC-Entscheidung, §12.1."
+  was_der_bauende_richtig_gemacht_hat: "Er hat nicht weitergebaut und nicht stillschweigend
+        geheilt, sondern den Punkt benannt und an die richtige Stelle verwiesen."
+  was_er_beim_naechsten_mal_anders_machen_muss: "Der Plan-Pruefer sagt es selbst: wer merkt, dass
+        ein Auftrag seinen Zweck nur ueber einen Scope-Bruch erreicht, MELDET das (SPEC_BLOCKED),
+        bevor er baut. Diese Stufe fehlte, und sie fehlte auch deshalb, weil derselbe Kopf den
+        Auftrag geschrieben und gebaut hat."
+
+warum_trotzdem_ABGENOMMEN:
+  - "§12.5: ein Befund der Klasse SPEC blockiert die Abnahme nicht. Acht der neun Kriterien sind
+     erfuellt und von mir einzeln nachgemessen; das neunte ist vom Bauenden nicht erfuellbar."
+  - "Alle drei roten P1 aus Runde 1 sind behoben, jeder an der Stelle, die ich benannt hatte,
+     und jede Zahl habe ich selbst gegengemessen — vier §3-Zahlen, acht F-Nummern, zwei
+     Code-Fundstellen, ein Zeilenzitat."
+  - "Die Nachbesserung war sauber im Umfang: EIN Blatt, +44/-0, kein Beifang."
+
+ballbesitz: planner
+naechster_schritt: "Der Planner entscheidet die Scope-Frage zu -8 (nachtraeglich schneiden oder
+     zurueckbauen). ERST DANACH uebernimmt der Release-Pruefer — ein Release mit verletztem
+     must_preserve wuerde ihm nach §10 ohnehin auffallen, und er soll den Grund vorfinden,
+     nicht suchen."
+```
