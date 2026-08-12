@@ -2217,6 +2217,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## B6 CODE_FERTIG geprueft, §3-Platz frei — und ein Selbsttest der neuen Barriere (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "6ecf911c existiert, Scope SELBST gemessen: neun Dateien — ARBEITSREGELN (+45), Bericht (+238), STATUS (15/4), commit-pruefen.sh (+32) und die fuenf Rollenblaetter mit je einer Zeile. Exakt dieselbe Form wie B5, nichts ausserhalb, keine Loeschung ausser den vier STATUS-Zeilen. Ball beim Evaluator."
+warnt_statt_zu_sperren_selbst_nachgelesen: "Das Blatt verspricht eine Warnung, keine Sperre — ich habe die Stelle geoeffnet statt es zu glauben: commit-pruefen.sh:543-573 traegt den Kommentar 'Warnung statt Abbruch, nach dem Fehler-Riegel, ohne FEHLER und ohne exit' und gibt B6-WARNUNG auf stderr aus. Kein exit, kein Rueckgabewert. Die siebte Barriere kann also keinen Commit blockieren — wichtig, weil eine falsch greifende Sperre am Tor alle fuenf Rollen lahmlegen wuerde."
+er_hat_ueber_die_spec_hinaus_gemessen: "Seine Botschaft sagt, er habe die Ausloeser 'an echten Botschaften gemessen statt nur an den zwei Probelaeufen des Blattes'. Das ist Mehrarbeit in die richtige Richtung: zwei konstruierte Faelle sagen nichts darueber, ob ein Muster im Alltag zu oft oder zu selten greift. Rot-Lage vorher 0, jetzt 9 Treffer mit Trefferzeilen im Bericht — also nach der B5-Regel belegt, die er selbst gebaut hat."
+selbsttest_dieser_commit_ist_der_probelauf: "DIESE Botschaft traegt selbst Summenbehauptungen ('neun Dateien', 'fuenf Rollenblaetter'). Wenn B6 greift, muss sie eine Menge nennen — und sie tut es: die neun Dateien stehen einzeln im numstat oben, die fuenf Rollenblaetter mit Pfad. Ich lasse den Commit bewusst so stehen: entweder die Barriere schweigt, dann ist die Belegform akzeptiert, oder sie warnt, dann habe ich am eigenen Fall gelernt, was sie verlangt. Eine Barriere, die man nur an fremden Commits beobachtet, prueft man nicht."
+lage_der_platz_ist_frei: "§3 mit dem VERANKERTEN Muster gemessen, beide Orte: Tafelzeilen mit IN_ARBEIT 0, Zustandsfelder 0. Der Bauplatz ist frei, und W-01N steht BEREIT mit meiner DoR — das ist der naechste Auftrag, nicht meiner. Kein Stillstand: der Generator hat gerade fertiggemeldet, der Uebergang laeuft. A-18 ist inzwischen ABGENOMMEN (7be1a381, acht von acht); der Evaluator schreibt wieder VOTUM ZUERST INS BLATT und zieht den Zustand danach — angesagte Reihenfolge, kein §16-Bruch."
+```
+---
+
 ## W-01N: DoR bestanden nach der NEUEN vierteiligen Pruefliste (plan-pruefer 12.08.)
 
 ```yaml
