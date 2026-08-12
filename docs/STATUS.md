@@ -7733,6 +7733,7 @@ was_selbst_gemessen_und_was_nur_gelesen: "SELBST: Panel-Text :300, Feldbedingung
   leer). Torcode gelesen statt Probe gefahren — fuer einen Auftragsschnitt genug, fuer eine Abnahme
   nicht."
 bau_sha: 0c9aa0a9
+buendel_sha: 532c1220
 meldepflichten_geprueft_und_EIN_BEFUND: "plan-pruefer 12.08. — Meldepflichten halten, und ich habe
   die Zusage nachgemessen, auf die ich die DoR erteilt habe. AM BAU-COMMIT gemessen (E1), nicht am
   Baum: bau_sha 0c9aa0a9 existiert, Bericht vorhanden, Ball beim Evaluator. Scope-Diff selbst
@@ -7810,6 +7811,23 @@ was_der_evaluator_zuerst_pruefen_sollte: "Ob der Waechter wirklich die KOPPLUNG 
   Wortlaut. Der Test anbauTorZusage.test.ts vergleicht die Feldmengen beider Orte sortiert; wer ihn
   fuer einen Textpruefer haelt, hat den Auftrag nicht getroffen. Gegenprobe: das istU in der
   fehlt-Zeile wieder einsetzen — zwei Zusagen muessen rot werden, nicht eine."
+DAS_BUENDEL_FEHLTE_und_der_befund_ist_nicht_meiner: "Der plan-pruefer hat in 46f766bf gemeldet, dass
+  das ausgelieferte Buendel in keinem Commit steht. Nachgemessen: public/hausplaner/hausplaner.js
+  ist VERFOLGT, war nach meinem Bau VERAENDERT und lag uncommittet im Baum. Wer den Zweig
+  ausgecheckt haette, bekaeme den Quelltext von A-24 und das Buendel vom 4. Juli — meine
+  Browserabnahme belegte einen Stand, den die Historie nicht traegt.
+  DAS IST DIE ZWEITE HAELFTE MEINES EIGENEN FUNDES: ich habe gesehen, dass das Buendel alt war, es
+  neu gebaut, die Abnahme gefahren — und dann nur die QUELLE gemeldet. Der Schritt vom Bauen zum
+  AUSLIEFERN fehlte, und genau der ist bei einer Insel mit eigenem Bau-Befehl der, den man vergisst.
+  NACHGETRAGEN in 532c1220. Vorher geprueft, ob das Buendel fremde Arbeit mittraegt — es ist ein
+  Erzeugnis der GANZEN Insel: seit seinem letzten Commit (9d79b1ca) gibt es GENAU ZWEI Quellcommits
+  unter resources/planner/hausplaner, beide meine (0c9aa0a9 A-24 und a2b63a1f W-27/1). Kein fremder
+  Beifang. Inhaltlich gegengeprobt: der neue Panel-Satz einmal drin, der W-27/1-Code
+  (dachTopologie) ebenfalls.
+  WAS DARAUS FOLGT UND NICHT NUR MICH BETRIFFT: bei UI-Arbeit an der Insel gehoert das Buendel in
+  den Bau-Commit. Ein gruener Test und eine gruene Browserabnahme belegen den ARBEITSBAUM, nicht die
+  HISTORIE — und das Buendel ist die einzige Datei, die beide auseinanderfallen laesst, ohne dass es
+  jemand sieht."
 gezogen_am: "12.08. vom generator. §3 vor dem Ziehen 0/0 an beiden Orten, danach 1/1."
 warum_A_24_und_nicht_A_23_oder_W_37: "DREI Auftraege standen zugleich BEREIT bei mir, §3 laesst
   einen zu. Gemessen statt gewaehlt: A-24 traegt P1, A-23 und W-37 tragen P2. A-24 ist ausserdem der
