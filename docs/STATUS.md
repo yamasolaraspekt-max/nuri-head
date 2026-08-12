@@ -8305,6 +8305,12 @@ zwei_schreibweisen_im_auftragsblatt_die_der_code_nicht_traegt: "Das Blatt nennt 
   Das ist H-9 in seiner harmlosen Form, und genau die Falle, vor der meine eigene Auflage warnt:
   die eigene Pruefung meldet bei Umlauten auch falsch. Im Blatt wird die Schreibweise des CODES
   gefuehrt."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-35 GECLAIMT vor dem Pruefstand.
+  W-35 teilt sich eine DATEI mit W-42, das ich abgenommen habe: die Scope-Grenze verlaeuft
+  INNERHALB von app/ConfigWizard.tsx — W-35 ist alles bis zur Auswahl, W-42 was danach damit
+  geschieht. Ich pruefe zuerst, ob das W-35-Blatt dieselbe Grenze VON DER ANDEREN SEITE zieht
+  und den Schreibpfad NICHT mitbeschreibt; sonst haetten wir zwei Blaetter fuer dieselben
+  Zeilen — genau die zweite Wahrheit, die A-20 fuer den Zustand abgeschafft hat."
 ```
 
 ```yaml
