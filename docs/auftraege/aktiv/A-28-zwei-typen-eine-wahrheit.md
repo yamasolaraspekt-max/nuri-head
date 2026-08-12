@@ -1,8 +1,8 @@
-# A-28 — Zwei Typen, eine Wahrheit. Neun Aufbauarten stehen zweimal, zeichengleich
+# A-28 — VIER Deklarationen, zwei Längen. Die Teilmenge wird abgeleitet, nicht wiederholt
 
 ```yaml
 auftrag: "A-28"
-titel: "AufbauArt und VorlagenAufbauArt sind zeichengleich — ein Typ gehört an einen Ort"
+titel: "Die neun Aufbauarten werden aus ObstacleType ABGELEITET statt dreifach wiederholt"
 art: "BAU — eine Typ-Dublette auflösen. Kein Verhalten ändert sich, kein Wert."
 spur: A
 heimat_app: ticket
@@ -141,11 +141,15 @@ domain/ enthaelt:        commands.types.ts · roofShape.ts · scene.types.ts ·
 ## 4 — Scope
 
 ```text
-A-28 IST   die Aufbauart als EIN Typ an EINEM Ort in domain/, und beide
-           bisherigen Deklarationen zeigen darauf.
-           Der bisherige Name AufbauArt bleibt der Name — VorlagenAufbauArt
-           wird zum Alias oder verschwindet, je nachdem was die Aufrufstellen
-           verlangen; der Bauende entscheidet die Form, nicht den Ort.
+A-28 IST   die NEUN als ABLEITUNG aus ObstacleType statt als eigene
+           Aufzaehlung — die Dublette AufbauArt/VorlagenAufbauArt verschwindet,
+           und die Teilmengen-Beziehung steht im Typsystem.
+           BERICHTIGT nach d0c429fa: meine erste Fassung sagte 'ein Typ an EINEM
+           Ort in domain/'. Das war falsch — in domain/ liegen die Arten schon
+           zweimal (ObstacleType und das z.enum), je mit ZEHN Werten. Ein Umzug
+           haette dort drei Listen mit zwei Laengen erzeugt.
+           Der bisherige Name AufbauArt bleibt der Name; die FORM der Ableitung
+           entscheidet der Bauende, nicht ich.
 
 A-28 IST NICHT
            eine Aenderung der WERTE. Neun Arten bleiben neun Arten, zeichengleich.
