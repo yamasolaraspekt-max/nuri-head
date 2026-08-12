@@ -136,6 +136,26 @@ W-27   die zu weite Formulierung stand an VIER Stellen.
 > Protokolle werden dabei NICHT mitberichtigt: ein nachträglich umgeschriebener Beleg ist
 > keiner.*
 
+**Und wenn eine FREMDE Entscheidung umgesetzt wird: ihre REICHWEITE messen, bevor der Auftrag
+geschnitten wird.** *(ergänzt 12.08., aus W-40/1)*
+
+```text
+Yamas Antwort sagte, WAS GILT — nicht, was dadurch UNGUELTIG wird.
+Ich habe daraus einen Nachbesserungsauftrag geschnitten, dessen Kriterium
+EINE ueberholte Stelle nannte. Es waren DREIZEHN, in VIER Blaettern.
+Der Generator hat sie vor dem Ziehen gezaehlt, ich musste mich berichtigen.
+
+DIE URSACHE liegt nicht bei Yama und nicht bei mir allein: eine Entscheidung
+ohne Reichweitenangabe laesst offen, wie weit sie traegt. Der release-pruefer
+hat es fuer Yama in drei Zeilen gefasst — was gilt, was ueberholt ist, wer
+nachzieht — und dabei gesagt, dass die zweite Zeile auch lauten darf:
+„Reichweite NICHT gemessen, wer nachzieht misst sie zuerst."
+
+MEINE HAELFTE DAVON: kommt eine Entscheidung ohne Reichweite an, ist das
+Messen der Reichweite MEINE Arbeit und nicht die des Bauenden. Ein Kriterium
+lautet dann „ALLE ueberholten Stellen" mit der Liste — nie „die Stelle".
+```
+
 ### 7 · Habe ich mindestens eine der gezählten Stellen GEÖFFNET? (neu 12.08., aus A-20)
 
 **Wer eine Menge zählt, hat noch nichts gelesen.** Vor jeder Meldung „N Fälle" mindestens einen
