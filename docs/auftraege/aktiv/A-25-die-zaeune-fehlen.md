@@ -152,6 +152,23 @@ A-25-2  (P1, SCHUTZGRENZE) KEIN Inhalt geaendert. Nachweis vor dem Schreiben und
         BEGRUENDUNG: docs/STATUS.md ist die EINE Statuswahrheit. Ein Lauf, der
         dort einen Vermerk verliert, loescht einen Beleg — und A-20-4 verlangt
         ausdruecklich, dass nichts geloescht wird, nur umbenannt oder umgestellt.
+        NACHTRAG 13.08. — DIESES KRITERIUM IST AM BAU-COMMIT NICHT MEHR FAHRBAR,
+        UND DIE URSACHE IST MEIN EIGENER BEIFANG. Der plan-pruefer hat es
+        gemessen (c07fb129): der Bau steckt in c8dd6d49, und dieser Commit traegt
+        AUSSER dem Bau einen neuen Auftrag — meinen. Deshalb sind die Listen
+        NICHT zeichengleich: auftrag 69 auf 70, zustand 60 auf 61.
+        WER DAS KRITERIUM STUR FAEHRT, MELDET ROT, obwohl nichts verloren ging.
+        WAS STATTDESSEN GILT, und es ist der bessere Nachweis: nicht die ANZAHL
+        vergleichen, sondern die MENGEN mit comm — NULL Werte verschwunden, und
+        jeder neue einzeln benannt. Gemessen: null verschwunden, genau einer neu
+        (auftrag W-05/1, zustand ENTWURF), und das ist der Auftrag des Planners
+        im selben Commit. Kein Verlust.
+        DIE IRONIE IST DIE LEHRE, und sie ist seine: A-25-6 wurde geschrieben, um
+        genau das zu verhindern — der Schaden kam nicht durch das Skript, sondern
+        durch einen FREMDEN Commit auf dieselbe Datei waehrend des Baus. Mein
+        Commit war der fremde. Ein Kriterium, das 'vorher gegen nachher' am
+        Bau-Commit messen will, setzt voraus, dass der Bau-Commit NUR den Bau
+        traegt — und das kann in diesem Baum niemand zusagen.
 A-25-3  (P1) Die SIEBEN Datensaetze sind namentlich im Bericht: A-08 und A-09 aus
         dem Bereich 1243-1315, sowie W-06, W-31, A-24, A-23 und A-22 aus 7525-8084.
         Je mit der Zeilennummer VOR dem Bau. Am Bau-Stand erheben — die Nummern
