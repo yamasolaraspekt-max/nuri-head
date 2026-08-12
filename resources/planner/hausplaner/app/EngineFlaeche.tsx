@@ -132,7 +132,10 @@ export function EngineFlaeche({ panel, gruppe, zustand, zurueck, onZurueck }: Pr
                     liefert.** `berechneUw` und `pvSchnellBelegung` rechnen Werte aus — sie bestehen
                     nichts. Eine Plakette „nicht bestanden" waere dort eine **erfundene Bewertung**;
                     die Huelle zeigt, was da ist, und wo nichts ist, steht nichts. */}
-                {typeof ergebnis.bestanden === 'boolean' && (
+                {/* A-14: `keinGesamturteil` unterdrueckt die Plakette fuer EINE Engine (N-003).
+                    Nicht `bestanden` entfernen — das Feld traegt Information; nur die Plakette,
+                    die daraus einen NACHWEIS macht, faellt ersatzlos weg. */}
+                {!panel.keinGesamturteil && typeof ergebnis.bestanden === 'boolean' && (
                   <div style={{
                     display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 12,
                     padding: '9px 12px', borderRadius: 10,
