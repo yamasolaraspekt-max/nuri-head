@@ -7176,7 +7176,7 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 ```yaml
 auftrag: "A-22"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner
 zurueck_auf_ENTWURF_nach_paragraf_12_1: "Der Generator hat A-22 BEREIT bei sich gehabt und NICHT
   gezogen, mit dem richtigen Grund: die DoR deckt die Kriterien nicht mehr. A-22-2 ist GESTRICHEN
   und A-22-2b ist NEU, beide in 5024783a, waehrend der dor_beleg noch von 17 doppelten Schluesseln
@@ -7232,7 +7232,7 @@ titel: "Doppelte yaml-Schluessel und uneinheitliche Feldform in docs/STATUS.md"
 basis_sha: e1a478fb
 spur: A
 prioritaet: P1
-dor_beleg: "plan-pruefer 12.08., ZWEITE Fassung — die erste (be098f08) mass 17/17/4, diese Zahlen sind ueberholt. NACHGEMESSEN mit demselben eigenen Verfahren: 147 Bloecke, 14 abweichende Dubletten, NULL beim ballbesitz — die vier gefaehrlichen haben Release-Pruefer und Generator als Selbstkorrektur behoben, bevor gebaut wurde. A-22-2 ist deshalb gestrichen und durch A-22-2b ersetzt, das die URSACHE adressiert. AUFLAGE ZU A-22-2b, nach der frisch ergaenzten Pflichtpruefung 4 selbst geprueft: die Ursachenbehauptung lautet '65 Commits fuegen eine ballbesitz-Zeile HINZU, statt eine vorhandene zu aendern'. SELBST GEMESSEN ueber ALLE 79 Generator-Commits auf dieser Datei, in beiden Lesarten: 71 Commits fuegen eine ballbesitz-Zeile hinzu (jede Lesart), aber nur SECHS tun das OHNE zugleich eine zu entfernen. Die Zahl 65 passt zur ersten Lesart, die Formulierung 'statt eine vorhandene zu aendern' zur zweiten — beide zusammen sind falsch. Wer sie so in den Bericht schreibt, benennt eine Ursache, die in 65 von 71 Faellen gar nicht vorliegt. Dieselbe Klasse wie W-27s 'gibt es in der Insel NICHT': Zahl richtig, Formulierung zu weit. Kein Blocker — die Ursache EXISTIERT, sechsmal belegt; sie braucht nur die Zahl, die zu ihr gehoert."
+dor_beleg: "plan-pruefer 12.08., DRITTE Fassung — NICHT FREIGEGEBEN. A-22-2b verlangt, eine Ursachenbehauptung in den Bericht zu schreiben, die MEINE MESSUNG UMKEHRT. Das Kriterium lautet: 65 Commits des Generators fuegen eine ballbesitz-Zeile HINZU, statt eine vorhandene zu aendern. SELBST GEMESSEN ueber alle 79 Generator-Commits auf dieser Datei, dreifach: 71 fuegen eine Zeile hinzu; davon 6 OHNE zugleich eine zu entfernen; und 65 mit +ballbesitz UND -ballbesitz zugleich. Die Rechnung schliesst: 71 minus 6 ist 65, und die Gegenprobe zaehlt unabhaengig 65. DIE ZAHL 65 BEZEICHNET ALSO GENAU DIE COMMITS, DIE KORREKT AENDERN — die problematischen sind die SECHS. Wer A-22-2b woertlich erfuellt, schreibt eine Ursache fest, die das Gegenteil der Messung sagt, und sie steht dann dauerhaft im Bericht. NACH MEINER DRITTEN PRUEFFRAGE (Beweiskraft) ist das kein Formfehler: die Erfuellung des Kriteriums beweist nicht das Gemeinte, sie widerlegt es. ZURUECK AN DEN PLANNER mit dem Vorschlag, die Zahl auf SECHS zu berichtigen und die 65 als das zu benennen, was sie ist — der Beleg dafuer, dass der Generator ueberwiegend richtig aendert. Ich habe die Auflage schon in der zweiten Fassung gegeben; sie ist nicht ins Blatt gelangt, deshalb jetzt als Blocker."
 anlass: "Der Generator hat in e1a478fb 17 doppelte yaml-Schluessel gemeldet, aus einem Nebenbefund
   des Evaluators in e5716bc0. Es ist der DRITTE Strukturmangel dieser Datei an einem Tag."
 selbst_nachgemessen: "Ueber alle yaml-Bloecke gefahren, 145 Bloecke: 17 doppelte Schluessel und
