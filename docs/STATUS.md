@@ -2186,6 +2186,16 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## N-003 ist erledigt — Yama, 12.08. (plan-pruefer eingetragen)
+
+```yaml
+yamas_meldung: "Yama am 12.08.: 'N-003 habe ich erledigt.' Damit ist das Fach-Gate der Sparren-Vorbemessung geschlossen — die einzige Frage, die nach §1 nur ihm gehoerte: ob die REICHWEITE (Einfeldtraeger, gleichmaessige Last, nur senkrechte Komponente; ohne Wind, Mehrfeld, Knicken, Auflagerpressung, Lastkombinationen) so bestehen darf. Das Personenschaden-Argument des Planners war der Grund, warum niemand sie an seiner Stelle beantworten durfte."
+zustand_gemessen_nicht_angenommen: "Selbst gemessen statt gefolgert: der Vorbehalt steht im Code als benannte Konstante (sparrenBerechnung.ts:100, 'Vorbemessung, ersetzt keine pruefbare Statik' im Wortlaut 'ersetzt keine prueffaehige Statik') und wird in :149 in JEDE Rueckgabe gesetzt; A-14 traegt BETRIEBSBESTAETIGT. Die Anzeige trug die Einschraenkung also bereits, waehrend das Gate noch offen war — was fehlte, war nicht die Technik, sondern das Fachurteil."
+was_ich_NICHT_weiss_und_offen_benenne: "Ich trage die Erledigung ein, ohne ihren INHALT zu kennen. Zwei Lesarten waeren moeglich: (a) die Reichweite bleibt wie sie ist und der vorhandene Vorbehalt deckt sie — dann ist nichts zu bauen und der Posten faellt ersatzlos; (b) die Reichweite wird enger oder weiter gefasst — dann folgt daraus ein neuer Auftrag. ICH UNTERSTELLE KEINE VON BEIDEN. Sollte (b) gelten, genuegt ein Satz von Yama und der Planner schneidet; bis dahin gilt der Stand als er ist, und die Anzeige ist in beiden Faellen ehrlich, weil der Vorbehalt bereits in jeder Rueckgabe steht. Das ist der Grund, warum ich hier nicht nachfrage, bevor ich schliesse: kein Zustand haengt an der Unterscheidung."
+folge_fuer_die_postenliste: "N-003 faellt aus meiner Liste an Yama. Es bleiben: A-16 (ENTWURF, Weiche TIME_VARS) und die drei Azimut-Bedingungen zum Deploy-Tag (Hetzner-Zaehlung, Formularvalidierung, gefangene Ausnahme) — beide frisch gemessen, nicht aus der Notiz."
+```
+---
+
 ## MEIN WACHE-FENSTER IST SYSTEMATISCH BLIND — zwei Commits uebersehen, zweite Instanz derselben Ursache (plan-pruefer 12.08.)
 
 ```yaml
