@@ -696,3 +696,77 @@ gruene_erneut_gefahren:
 
 ballbesitz: evaluator
 ```
+
+## §11 — Votum A-15 Runde 2 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "A-15"
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+abnahme_commit: "8aded3b2"
+runde_1: "60d62d74, von mir NACHBESSERN (a704fb1d)"
+pruefstand: "worktree --detach auf 8aded3b2"
+claim_nachgereicht: "Ich habe diesmal OHNE vorherigen Claim gemessen. Grund: docs/STATUS.md
+     trug ueber mehrere Takte fremde ungespeicherte Arbeit, und ein Claim-Commit haette sie
+     mitgenommen. Ich sage es, statt es zu verschweigen — die Reihenfolge Claim-vor-Pruefstand
+     ist meine eigene Regel, und ich habe sie hier gebrochen. Kollisionsrisiko war null:
+     der Datensatz nennt seit 09:00 ausschliesslich mich."
+
+messtisch_alle_vierzehn_nach_§12_4:
+  A-15-1:  GRUEN   # Menge erneut selbst gezaehlt: 13 · Ausschluesse renderers 0, app/tools 0
+  A-15-2:  GRUEN   # Achse-1-Tabelle unveraendert, und die DIN-Stufung jetzt adressiert
+  A-15-3:  GRUEN   # beide Unschaerfen unveraendert belegt
+  A-15-4:  GRUEN   # 'vorgeschlagen' 12x, 'nicht entschieden' 11x, in jeder Tabellenzeile
+  A-15-5:  GRUEN   # 8 Panels, keinGesamturteil genau 1x — erneut gezaehlt
+  A-15-6:  GRUEN   # die fuenf ohne Norm unveraendert, ohne den bequemen Fehlschluss
+  A-15-7:  GRUEN   # 8aded3b2 fasst 0 Dateien unter resources/ und app/ an
+  A-15-8:  GRUEN   # §3-Zahlen in Runde 1 am Elter nachgemessen, Runde 2 aendert daran nichts
+  A-15-9:  GRUEN   # alle drei A-Fundstellen ERNEUT geoeffnet, alle drei woertlich getroffen
+  A-15-10: GRUEN   # 'nicht unterscheidbar' bleibt stehen, wo es nicht messbar ist
+  A-15-11: GRUEN   # ein gueltiger Abschnitt, der alte als UEBERHOLT markiert
+  A-15-12: GRUEN   # drei Zweifelsfaelle, einer bewusst NICHT hoeher
+  A-15-13: GRUEN   # '6 + 4 + 1 = 11' steht jetzt woertlich in der Bilanz
+  A-15-14: GRUEN   # drei REGEL-Zeilen, gegen das Auftragsblatt geprueft
+
+die_vier_befunde:
+  P1_erledigt_und_zwar_vorbildlich:
+    war: "ZWEI Abschnitte A-15-11 mit gegensaetzlicher Aussage, der aeltere zuerst, unmarkiert."
+    jetzt: "Ein gueltiger Abschnitt (Z.211). An der alten Stelle steht:
+            '## ⚠ UEBERHOLT — dieser Abschnitt stand hier und war ab 08:19 falsch',
+            mit dem zitierten alten Satz, dem Datum, dem Grund und dem Verweis auf den
+            gueltigen Abschnitt. Suche nach 'existiert also noch nicht': 0 Treffer."
+    warum_ich_das_hervorhebe: "Das ist genau die Form, die ich als Vorbild aus SEINER eigenen
+            W-09-Korrektur genannt hatte. Loeschen waere billiger gewesen und schlechter:
+            wer die alte Fassung zitiert findet, sieht jetzt sofort, was gilt und seit wann."
+  P2_testzahl_erledigt:
+    jetzt: "'__tests__/** (15 Dateien)'. Selbst nachgezaehlt: 15."
+  P2_bilanzzeile_erledigt:
+    jetzt: |
+      FACHAUSSAGE (6)  sparrenBerechnung · abwassergefaelle · wandaufbau · fbhAuslegung
+                       heizkreisVerteiler · treppenBerechnung
+      HINWEIS (4)      kuecheArbeitsdreieck · treppe2D · treppe3D · treppenTypen
+      KEINE ENGINE (1) configuratorPackage
+                       6 + 4 + 1 = 11 — die elf sind vollstaendig verteilt
+    bewertung: "Die Rechnung steht jetzt in der Zeile. Wer sie nachrechnet, braucht den Bericht
+            nicht zu durchsuchen."
+  P2_din_stufung_erledigt:
+    jetzt: "Zwei Stellen: Z.53 zitiert 'DIN-Stufung aus dem getesteten berechneTreppe' und sagt
+            'Das ist keine eigene Normnennung'; Z.224 fuehrt es in der Klassifikationszeile mit.
+            Damit findet der Nachgrepende die Zeile im Bericht wieder — das war der Punkt."
+
+was_ich_erneut_selbst_gemessen_habe:
+  - "Die Menge: 13 Dateien, unabhaengig gezaehlt, nicht aus Runde 1 uebernommen."
+  - "Die Ausschluesse: renderers/ 0, app/tools/ 0."
+  - "Die drei A-Fundstellen ERNEUT geoeffnet — sparrenBerechnung:11, fbhAuslegung:6,
+     heizkreisVerteiler:6 tragen woertlich, was der Bericht zitiert."
+  - "Die Panel-Zuordnung: 8 engineId-Bloecke, keinGesamturteil genau einmal."
+  - "must_preserve: 0 Dateien unter resources/ und app/ im Bau-Commit."
+
+zusammenfassung: "Alle vier Befunde bedient, der P1 in der besten der moeglichen Formen —
+     nicht geloescht, sondern als ueberholt markiert mit Datum und Grund. Vierzehn von
+     vierzehn, und die tragenden Zahlen habe ich in dieser Runde neu gemessen statt sie aus
+     meinem eigenen Runde-1-Votum zu uebernehmen; ein Umbau kann ein gruenes Kriterium
+     zerschlagen, und §12.4 verlangt genau deshalb alle."
+
+ballbesitz: release-pruefer
+```
