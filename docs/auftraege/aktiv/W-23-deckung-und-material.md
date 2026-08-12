@@ -412,3 +412,85 @@ zusammenfassung: "Sechs von sieben tragen, und der fachliche Kern ist der staerk
 
 ballbesitz: generator
 ```
+
+## §11 — Votum W-23 Runde 2 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-23"
+votum: ABGENOMMEN
+fehlerklasse: KEINE   # ein P2, blockiert nicht
+abnahme_commit: "53060551"
+runde_1: "2143c5db, von mir NACHBESSERN (30cc04c5)"
+pruefstand: "worktree --detach auf 53060551"
+neues_kriterium: "W-23-8 kam vom PLANNER (3a94fe59), nicht vom Bauenden — §12.2 gewahrt.
+     Ich habe es mitgemessen, weil §12.4 alle Kriterien der HEUTIGEN Fassung verlangt."
+
+der_p1_ist_behoben:
+  was_war: "Seine als Abweichung gemeldete Namenskorrektur war selbst der Fehler: die Zeile
+        mit 372/405 heisst in der Quelle 'Harzer Pfanne 7'."
+  jetzt: "Alle Blaetter tragen den richtigen Namen — 1-ZWECK:22, 3-FORMELN:36, 6-PRUEFUNG:16
+        und :40, 5-CODE:41 je 'Harzer Pfanne 7' (Variante 'Big'). An der Quelle gegengeprueft."
+  die_form_ist_die_richtige: "Der falsche Vermerk wurde NICHT geloescht, sondern als
+        ZURUECKGEZOGEN stehen gelassen, mit Ursache und Wirkung — dieselbe Form, die ich bei
+        A-15 als vorbildlich bezeichnet habe."
+  seine_ursache_nachgemessen: "Er sagt: 'mein Ausleseskript kuerzte die Spalte auf 14 Zeichen,
+        und Harzer Pfanne 7 hat 15'. Selbst gezaehlt: 'Harzer Pfanne' 13, 'Harzer Pfanne 7' 15.
+        Bei Kuerzung auf 14 bleibt 'Harzer Pfanne ' — nach dem Strippen genau der falsche Name.
+        Die Erklaerung traegt, und sie erklaert auch, warum die Variante 'Big' richtig war:
+        drei Zeichen, nicht betroffen."
+  und_er_nennt_die_klasse: "'H-9 an dem Tag, an dem ich die Regel formuliert habe.' Dieselbe
+        Einordnung, die ich im Runde-1-Votum getroffen habe — unabhaengig."
+
+messtisch_alle_acht_nach_§12_4:
+  W-23-1: GRUEN   # Quellangaben unveraendert, Name jetzt richtig
+  W-23-2: GRUEN   # n_min/n_max dreimal genannt, verworfene Fassung zweimal als verworfen
+  W-23-3: GRUEN   # Fuellquote ungeschoent, unveraendert
+  W-23-4: GRUEN   # Verschiebespiel-Kriterium steht, in Runde 1 an der Quelle nachgerechnet
+  W-23-5: GRUEN   # neun Statusangaben fuer neun uebernommene Zeilen
+  W-23-6: GRUEN   # resources/app 0 Dateien; Quelldatei unveraendert 718.574 Byte
+  W-23-7: GRUEN   # am Elter des Nachbesserungs-Baus steht W-23 an beiden Orten auf IN_ARBEIT
+  W-23-8: GRUEN in der Sache — P2 zum ORT (s. befund)
+
+w23_8_zahlen_selbst_nachgemessen:
+  seine_angabe: "114 verschiedene Modellnamen bei 127 Zeilen · 8 Namen mit Dubletten ·
+        5 davon ohne jede gefuellte Zeile — Namen normalisiert (Braas-Praefix und
+        Klammerzusaetze entfernt)."
+  meine_messung: |
+    verschiedene Namen  114   stimmt
+    mit Dubletten         8   stimmt
+    davon 0 gefuellt      5   stimmt
+    und die acht einzeln, mit Zeilenzahl und Fuellstand:
+      Frankfurter Pfanne 2/0 · Harzer Pfanne 2/0 · Harzer Pfanne 7 2/1 · Opal Standard 5/0
+      Rubin 11V 3/0 · Rubin 13V 3/2 · Taunus Pfanne 2/0 · Topas 13V 2/2
+    Alle acht Namen, alle Zahlen deckungsgleich.
+  meine_eigene_falle: "Mein erster Lauf zaehlte DREI Dubletten statt acht — ich hatte die
+        NORMALISIERUNG uebersehen, die er im Klammerzusatz ausdruecklich nennt. Beinahe haette
+        ich 'die Zahlen stimmen nicht' gemeldet. Erst mit seiner Definition (Braas-Praefix und
+        Klammern entfernt) kam ich auf dieselben acht. Sein Beleg war vollstaendig, mein Lesen
+        nicht."
+
+befund_p2_der_ort:
+  klasse: BEWEIS
+  schwere: P2
+  was: "W-23-8 sagt woertlich: 'Die Adressierung steht IN 2-FUNKTION.' Gemessen steht sie in
+        5-CODE/LIESMICH.md (:60, :71-77); 2-FUNKTION.md ist im Nachbesserungs-Commit
+        0-mal angefasst und traegt 0 Treffer fuer Modell_Typ, Variante, Adresse oder Dublette."
+  warum_kein_rot: "Die Sache ist vollstaendig belegt, und die vom Kriterium verlangte
+        Gegenprobe steht ausgeschrieben: 'Zugriff Harzer Pfanne -> Zeile 9, Lattmass LEER,
+        KEIN Bereich' gegen 'Harzer Pfanne 7 + Big -> Zeile 10, 372-405'. Es fehlt nicht der
+        Inhalt, sondern der Ort."
+  warum_der_ort_zaehlt: "2-FUNKTION ist das Blatt, das ein Bauender von Stufe 2 liest, wenn er
+        die Eingaben umsetzt. Dort steht heute nur 'modellId muss ein Modell mit beiden
+        Lattmassen sein' (:12) — nicht, dass der Name allein keine Adresse ist. Genau dieser
+        Leser braucht den Satz."
+  behebung: "Zwei Zeilen in 2-FUNKTION bei der modellId-Zeile, Inhalt existiert bereits."
+
+zusammenfassung: "Acht von acht in der Sache. Der P1 ist behoben, und zwar in der besten Form:
+     der falsche Vermerk steht als ZURUECKGEZOGEN da, mit Ursache (14-Zeichen-Kuerzung, von mir
+     nachgezaehlt) und mit der Wirkung, die er gehabt haette. Die Zahlen des neuen Kriteriums
+     habe ich alle acht an der Quelle nachgemessen — deckungsgleich, nachdem ich meine eigene
+     Zaehlfalle behoben hatte. Ein P2 zum ORT der Adressierung: sie steht in 5-CODE statt in
+     2-FUNKTION, wo das Kriterium sie verlangt und wo Stufe 2 sie braucht."
+
+ballbesitz: release-pruefer
+```
