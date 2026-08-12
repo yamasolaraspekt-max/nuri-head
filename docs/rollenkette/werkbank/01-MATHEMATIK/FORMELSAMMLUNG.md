@@ -302,6 +302,7 @@
 > | **F-026** | 🟢 | **ausgeführt 11.08.** (A-12, `docs/BERICHT-A-12-f026.md`, doppelt abgenommen). Es kam ein L-Dach mit vier benannten Flächen heraus. **Grün gilt für die PARAMETERGEOMETRIE, nicht für die Kantentopologie-Beschreibung unten** — siehe Berichtigung am Formelblatt |
 > | **F-050** | 🟡 | **nur als Näherung.** Nicht für Angebote — 12 Stück/m² ist modellabhängig |
 > | **F-051** | 🔴 | **GESPERRT.** Zeitwerte ohne jede Herkunft. Nicht verwenden |
+> | **F-053** | 🟡 | **Lattmass-Teilung.** Rechnet die REGELFLAECHE richtig — Traufreihe, Firstanschluss, Ortgang und der Restausgleich sind NICHT erfasst. Vertretungsentscheid 12.08. |
 > | **F-028** | 🔴 | **GESPERRT fuer das DURCHREICHEN.** Ein Azimutwert 0…180 ist in ZWEI Konventionen gueltig und bedeutet Entgegengesetztes. Ohne mitgelieferte Konvention und ohne Umrechnung an der Systemgrenze darf kein Azimut weitergegeben werden |
 >
 > Prüfraster und Begründung: `../05-MATERIALQUELLEN/VORGEHEN.md`
@@ -890,3 +891,71 @@ Auftrag → Rechnung ist damit aktenkundig unberührt.***
 **Die Ampel bleibt 🔴.** *Sie wird durch diesen Bau weder schärfer noch milder: die elf Zeitwerte und
 die 65 sind vorher wie nachher zeichengleich, es kam nur der Vermerk hinzu.* **Aus W3 wird ohne Umbau
 W2, sobald Yamas Firmenwerte vorliegen.**
+
+
+### F-053 · Lattmaß-Teilung (Eindecklattung aus Sparrenlänge und Ziegelbereich) · 🟡
+
+- **Zweck:** Aus einer Sparrenlänge und dem Lattmaß-**Bereich** eines Ziegels die Reihenzahl und das
+  tatsächliche Lattmaß bestimmen — oder feststellen, dass es keine gleichmäßige Teilung gibt.
+- **Grundlage — Yamas Fachaussage, 12.08., wörtlich:**
+
+  > *„die eindecklattung ist abhängig von dach neigung und dach maße und zulässig überlappung der ziegel"*
+
+  *Alle drei Größen stehen in der Formel: die Neigung als Schranke, das Dachmaß als `L`, die zulässige
+  Überlappung als der Bereich `[min, max]`.*
+- **Eingabe:**
+  ```text
+  L         Sparrenlaenge Traufe -> First, IN DER DACHFLAECHE gemessen (mm)
+  min, max  Lattmass_min_mm, Lattmass_max_mm des gewaehlten Ziegels
+  neigung   Dachneigung (Grad) · rdn = Regeldachneigung des Ziegels (Grad)
+  ```
+- **Formel:**
+  ```text
+  SCHRANKE   neigung >= rdn        sonst: Ziegel nicht zulaessig, KEINE Rechnung
+
+  n_min = ⌈ L / max ⌉
+  n_max = ⌊ L / min ⌋
+
+  n_min <= n_max   ->  TEILBAR.  Lattmass = L / n  fuer jedes ganzzahlige n im Bereich.
+                       n = n_min  groesstes Lattmass (wenigste Reihen)
+                       n = n_max  kleinstes Lattmass (meiste Reihen, mehr Ueberdeckung)
+
+  n_min >  n_max   ->  KEINE gleichmaessige Teilung. Die Formel gibt KEINEN Wert zurueck,
+                       sondern DIESEN FALL.
+  ```
+- **Ausgabe:** Reihenzahl `n` und Lattmaß in mm — **oder** die Aussage „nicht gleichmäßig teilbar"
+- **Grenzfall — und er ist der Kern dieser Formel:** *`n_min > n_max` ist **kein Rechenfehler, sondern
+  ein echter Fall.** Zwischen zwei aufeinanderfolgenden Reihenzahlen liegt eine Lücke: bei
+  `Harzer Pfanne 7` (372–405 mm) und `L = 1.000 mm` ergibt `n = 2` ein Lattmaß von 500 mm (zu groß) und
+  `n = 3` eines von 333 mm (zu klein). **Es gibt dort keine gleichmäßige Teilung** — die Restlänge muss
+  an Traufe und First ausgeglichen werden, und **wie**, ist Handwerkspraxis und steht in keiner
+  verfügbaren Quelle. Deshalb gibt die Formel hier keinen Wert.
+
+> **Die verworfene Fassung, damit sie niemand wieder einbaut:** *`n = ⌈L/max⌉`, dann `Lattmaß = L/n`
+> — **ohne** die Prüfung `n_min <= n_max`. Gemessen an sieben Braas-Modellen × 801 Sparrenlängen
+> (**5.607 Fälle**) liefert sie in **2,6 % bis 18,2 %** einen Wert **außerhalb** des erlaubten
+> Bereichs, und zwar **leise**: Rubin 9V 146/801 · Harzer Pfanne 7 136 · Achat 12V und Rubin 13V je
+> 100 · Granat 11V 63 · Topas 13V 55 · Topas 11V 21. **Sie war mein eigener Vorschlag in W-23 und ist
+> verworfen** — vier grüne Stichproben (28 von 28) hatten wie ein Beleg ausgesehen.*
+
+- **Geltungsbereich — der Grund für 🟡:**
+  ```text
+  ERFASST        die REGELFLAECHE: gleichmaessige Reihen zwischen Traufe und First
+
+  NICHT ERFASST  Traufreihe (eigener Ueberstand, eigenes Mass)
+                 Firstanschluss (Firstabstand nach Ziegel- und Firstsystem)
+                 Ortgang und Grat (seitliche Anschluesse)
+                 Restausgleich bei n_min > n_max — Handwerkspraxis, nicht belegt
+                 die Anwendung des Verschiebespiels auf die RANDreihen
+  ```
+  *Dieselbe Begründung wie bei N-003: nicht die Rechenqualität ist begrenzt, sondern die
+  **Vollständigkeit des Geltungsbereichs**. Ein Dach besteht nicht nur aus Regelfläche.*
+
+- **Datenquelle für `min`, `max`, `rdn`:** `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`
+  (Spalten 26/27/33). **Neun von 127 Zeilen tragen einen vollständigen Bereich = sieben Modelle, alle
+  Braas.** Prüfbar durch Redundanz: `Verschiebespiel_mm` **ist** `max − min` — sechs von sechs stimmen.
+- **Belegstelle des Entscheids:** `docs/VERTRETUNGSENTSCHEID-F053-LATTMASS.md` (Planner in Yamas
+  Vertretung, Vollmacht ausdrücklich für diese Frage)
+- **Offen und ausdrücklich NICHT entschieden:** die Restausgleich-Regel · und welches `n` gilt, wenn
+  mehrere zulässig sind (die Praxis wählt bei geringer Neigung das kleinere Lattmaß — **dort wirkt
+  Yamas „abhängig von der Dachneigung" ein zweites Mal**, und die Quelle beziffert es nicht).
