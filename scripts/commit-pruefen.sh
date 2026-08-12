@@ -531,7 +531,17 @@ fi
 # Deshalb kein `FEHLER=1`, kein `exit`, und die Stelle ist NACH dem Fehler-Riegel: die Warnung
 # kann den Rueckgabewert nicht einmal versehentlich beruehren.
 B5_ZAEHLWORT='grep[^|]*-[A-Za-z]*c|--count|[Tt]reffer|[Vv]orkommen|[Ff]undstelle|[Zz](ae|ä)hl|kommt [a-zA-Zäöü]+ vor|mal vor'
-B5_BELEGZEILE='[A-Za-z0-9_./-]+\.[A-Za-z]{1,5}:[0-9]+|:[0-9]+:|Trefferzeile'
+# B5N (12.08.): `Z\.[0-9]+` und `Zeile [0-9]+` ANGEHAENGT — die drei vorhandenen Alternativen
+# stehen zeichengleich davor. Grund, gemessen ueber die letzten 40 Botschaften: NEUN tragen die
+# Form `Z.217`, und nur ZWEI davon zusaetzlich eine erkannte Form — sieben Botschaften MIT
+# gelesenen Trefferzeilen waeren zu Unrecht gewarnt worden. `Z.` ist keine Randform, sondern die
+# gaengige Schreibweise, wenn die Datei im Satz vorher genannt wurde ("STATUS.md, Z.217-268" ist
+# PRAEZISER als eine Wiederholung des Dateinamens) — und genau sie wurde bestraft.
+# Drei Formen, zwei Alternativen: `Z.217-268` beginnt mit `Z.217` und ist damit mit abgedeckt.
+# Dreimal gemeldet (Evaluator in der B5-Abnahme, Release-Pruefer im B6-Lauf, Plan-Pruefer aus der
+# Wache), bevor daraus ein Auftrag wurde. **Eine Warnung, die bei RICHTIGER Arbeit anschlaegt, wird
+# weggeklickt** — A-03. Die Barriere wird hier LEISER, nicht lauter; B5_ZAEHLWORT bleibt unberuehrt.
+B5_BELEGZEILE='[A-Za-z0-9_./-]+\.[A-Za-z]{1,5}:[0-9]+|:[0-9]+:|Trefferzeile|Z\.[0-9]+|Zeile [0-9]+'
 if printf '%s' "$BOTSCHAFT" | grep -qE "$B5_ZAEHLWORT" \
    && ! printf '%s' "$BOTSCHAFT" | grep -qE "$B5_BELEGZEILE"; then
   echo "B5-WARNUNG  Zaehlwort in der Botschaft, aber keine Belegzeile (datei.ext:zeile)." >&2

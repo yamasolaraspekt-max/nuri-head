@@ -39,7 +39,7 @@
 | **W-01N** Suite-Zahl zahlfrei | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `53930b60` · Elter `2e587fb7` | **5/5** · die feste Zahl ist raus und **nicht durch eine neuere ersetzt** · Nachweis prüfbar geblieben (resources 0, Suite 1698 an beiden Ständen) · Fahrplan-Widerspruch **vorgelegt statt umgebogen** — entschieden: richtig so · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | **`CODE_FERTIG`** | **Evaluator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
-| **B5N** Belegzeilen-Schreibweisen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `8870387a` | **Nachbesserung §12.5 zu B5** — `B5_BELEGZEILE` (`commit-pruefen.sh:534`) erkennt nur `datei.ext:zeile`; **erhoben über 40 Botschaften: 20 Vorkommen fallen durch** (`Z.NNN` 12×, `Z.NNN-NNN` 4×, »Zeile NNN« 4×) · **dreimal gemeldet** (Evaluator, Release-Prüfer, Plan-Prüfer) — A-03-Klasse: eine Warnung, die bei richtiger Arbeit anschlägt, wird weggeklickt · tragend ist **B5N-2**: sie muss weiter anschlagen, wo kein Beleg steht |
+| **B5N** Belegzeilen-Schreibweisen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `8870387a` | **Nachbesserung §12.5 zu B5** — `B5_BELEGZEILE` (`commit-pruefen.sh:534`) erkennt nur `datei.ext:zeile`; **erhoben über 40 Botschaften: 20 Vorkommen fallen durch** (`Z.NNN` 12×, `Z.NNN-NNN` 4×, »Zeile NNN« 4×) · **dreimal gemeldet** (Evaluator, Release-Prüfer, Plan-Prüfer) — A-03-Klasse: eine Warnung, die bei richtiger Arbeit anschlägt, wird weggeklickt · tragend ist **B5N-2**: sie muss weiter anschlagen, wo kein Beleg steht |
 | **A-17** Zwei Engines schweigen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
@@ -5464,8 +5464,30 @@ wenn_yama_trotzdem_loescht: "Archiv + Manifest + Rueckweg nach der Dauerregel, k
 ```yaml
 auftrag: "B5N"
 datei: docs/auftraege/aktiv/B5N-belegzeilen-schreibweisen.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft — die Nachbesserung MEINER eigenen Barriere)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08.; Bericht docs/BERICHT-B5N-belegzeilen-schreibweisen.md)
+gebaut: "EINE Musterzeile, drei Formen, zwei Alternativen (Z.217-268 beginnt mit Z.217).
+  B5N-1 je Form EINZELN gefahren, alle drei schweigen. B5N-2 der tragende Punkt: dieselbe Probe
+  ohne Beleg warnt weiter (1), mit Z.217 schweigt sie (0) — die Nachbesserung ist keine
+  Abschaltung. B5N-3 die drei erkannten Formen bleiben still. Tor-Suite 61 pass 0 fail,
+  resources/ und app/ 0 Dateien, Rueckweg git apply --check -R Exit 0."
+zwei_zahlen_die_der_evaluator_lesen_muss: "(1) numstat sagt 11/1. Die 1 IST die geaenderte
+  Musterzeile, keine entfernte — numstat kann eine geaenderte Zeile nur als Loeschung plus
+  Einfuegung zeigen. Die geloeschte Zeile steht im Bericht ausgeschrieben. Von den 11
+  Einfuegungen sind 10 Kommentar (Begruendung im Stil der drei Barrierenbloecke daneben).
+  (2) Meine eigene must_preserve-Pruefung meldete B5_ZAEHLWORT 2 -> 3 — FEHLALARM: der dritte
+  Treffer steht in meinem neuen Kommentar (Zeile 543), die Zuweisung selbst (533) ist
+  zeichengleich. H-6 gegen mein eigenes Messwerkzeug."
+B5N_5_gemessen: "Es gibt in scripts/__tests__ KEINE Stelle, die B5s Muster prueft — grep auf
+  B5_BELEGZEILE/B5-WARNUNG/BELEGZEILE ueber alle fuenf Testdateien: 0 Treffer. Die Luecke wird
+  durch diesen Auftrag nicht groesser, bleibt aber offen: keine der 61 Tor-Zusagen prueft B5, B6
+  oder B7. Vierter Bericht in Folge mit diesem Satz."
+befund_nicht_hier_behoben: "B7 hat beim Commit der vorigen Runde bei MIR angeschlagen — auf einem
+  ZITAT: meine Botschaft zitierte den Titel des zurueckgenommenen Sonden-Commits ('an vier
+  Fundorten') und trug das Wort Herkunft null Mal. Dieselbe Klasse wie B5s eigener Fall 1 (CSG-
+  Treffer im Dateikopf): die Barriere kann Zitat und Behauptung nicht unterscheiden. NICHT hier
+  behoben — das Blatt verbietet Verschaerfungen bei dieser Gelegenheit ausdruecklich, und es
+  betrifft B7, nicht B5. Gemeldet, damit es nicht als vierte Meldung endet."
 befund_selbst_nachgemessen: "Ich habe den Befund gegen mein eigenes Muster gemessen, bevor ich ihn
   uebernommen habe: die Form Z.NNN kommt in 9 der letzten 40 Botschaften vor, und nur 2 davon
   tragen zusaetzlich eine Form, die B5_BELEGZEILE kennt. Sieben Botschaften MIT gelesenen
