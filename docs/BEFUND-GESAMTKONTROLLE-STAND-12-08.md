@@ -73,3 +73,56 @@ awk -F'|' '/^\| W-[0-9]+ /{gsub(/[* ]/,"",$4); print $4}' REGISTER.md | sort | u
 > **H-10 ist damit nicht mehr nur an meinen Abwesenheitsfehlern belegt, sondern auch an einem
 > Zählfehler gegen eine fremde, richtige Angabe.** *Das ist ein dritter Fall in eine dritte Richtung
 > — und er stützt die Regel.*
+
+---
+
+## Nachtrag: die origin-Zahl, zum dritten Mal gemessen — und ein praktischer Fund
+
+> **Deine Meldung:** *„origin wächst wieder — 36 → 74. Fork und backup-private stehen auf 0, der
+> Hauptstand hängt hinterher."*
+
+**Deine Beobachtung trifft zu, der Name täuscht.** Frisch gefetcht gemessen:
+
+```text
+origin   https://github.com/yamasolaraspekt-max/nuri-head.git   \  DIESELBE
+fork     https://github.com/yamasolaraspekt-max/nuri-head.git   /  URL
+
+origin/auto/hausplaner-integration    929d1ea0   behind 0
+fork/auto/hausplaner-integration      929d1ea0   behind 0
+backup-private/auto/...               929d1ea0   behind 0
+-> auf dem ARBEITSZWEIG haengt origin NICHT hinterher. Es IST fork.
+
+origin/main                           4ed11218   343 Commits hinter dem Arbeitszweig
+main (lokal)                          8648a4cb   807 Commits hinter
+-> DER HAUPTSTAND haengt hinterher. Genau das sagst du, und es stimmt.
+```
+
+**Die Zahl 74 kann ich nicht reproduzieren.** Damit du siehst, was ich messe:
+
+```text
+Commits origin/main..HEAD   343 gesamt · 338 nur docs/ · 13 ohne docs/ · 3 nur Insel-Code
+Dateien origin/main...HEAD  198 gesamt · 186 docs/ · 12 ohne docs/ · 125 davon neu
+```
+
+*Keine dieser Zahlen ist 74. Wenn deine Anzeige etwas anderes zählt — einen Zeitraum, einen Pfad —
+sag mir welches, dann messe ich gegen dieselbe Größe. **Was ich nicht tue: eine Zahl bestätigen, die
+ich nicht nachvollziehen kann.***
+
+### Der praktische Fund: der Merge nach `main` wäre ein reiner Fast-Forward
+
+```text
+git merge-base origin/main HEAD   ->   4ed11218  =  origin/main SELBST
+Commits, die main seit der Basis eigenstaendig hat:   0
+-> origin/main ist DIREKTER VORFAHRE von HEAD.
+```
+
+**Es gibt nichts zusammenzuführen.** Kein Konflikt ist möglich, weil auf `main` seit der Verzweigung
+nichts passiert ist. Der Schritt wäre technisch trivial — 343 Commits, 198 Dateien, davon 125 neu.
+
+**Und der Stand, der dabei ginge, ist geprüft:** dieselbe Kontrolle weiter oben — `tsc` grün,
+**1709/1709**, Bundle byte-gleich zum W-27/1-Stand.
+
+> **Ich führe ihn nicht aus.** *Tor 2 ist deine Entscheidung, und `main` ist der Hauptstand — beides
+> steht ausdrücklich außerhalb dessen, was ich vertrete.* **Was ich beitragen kann, ist die
+> Feststellung, dass die Entscheidung rein fachlich ist und nicht technisch:** *es gibt keinen
+> Merge-Aufwand, der noch zu klären wäre.*
