@@ -233,3 +233,60 @@ Auftragsdatensatz), ein Diff-Filter (der einen Zeilenverlust vortäuschte), mein
 (das auf Design-Tokens ansprang) und diese Vorlage (zwei erledigte Fragen). Alle fünf fielen
 **vor** der Meldung auf, weil ich die Trefferzeilen gelesen habe statt die Zahl zu nehmen — das
 ist genau, was die Barriere B5 verlangt, die ich am selben Tag freigegeben habe.
+
+---
+
+## 7 · Sechs Lücken im Hausplaner, die der Code selbst benennt — **neu, aus W-34**
+
+**Das ist keine Frage nach einem Fehler, sondern eine Liste, die im Code steht und auf eine
+Entscheidung wartet.** W-34 (Geführte Planung) ist abgenommen, acht von acht. Beim Ablesen kam
+`SCHRITTE_OHNE_GRUNDLAGE` zum Vorschein — eine Konstante, die **sechs von elf Schritten** des
+Steppers benennt, die heute **nichts bestätigen können**, samt dem Satz, *welche* Angabe fehlt.
+
+**Der Dateikommentar sagt selbst, warum sie beieinander stehen** (wörtlich): *„Sie stehen hier
+zusammen und nicht verstreut, damit die Lücke **zählbar** ist. Jeder Eintrag sagt, **was es
+bräuchte** — das ist der Anfang des nächsten Postens."*
+
+**Frisch aus dem Code gemessen, alle sechs wörtlich:**
+
+| Schritt | Was fehlt (Wortlaut aus dem Code) |
+|---|---|
+| **Projektgrundlagen** | Bauherr, Adresse und Grundstück stehen **im CRM, nicht im Gebäudemodell**. Solange der Planer sie nicht liest, kann dieser Schritt nichts bestätigen. |
+| **Import oder Grundriss** | Ob eine Vorlage importiert und ihr **Maßstab bestätigt** wurde, führt das Dokument nicht. Sichtbar ist nur, ob Wände vorhanden sind. |
+| **Räume und Einrichtung** | Raumnutzung und Möblierung sind **im Schema nicht als Eigenschaft** geführt; Räume entstehen abgeleitet aus der Raumerkennung. |
+| **Küche und Bad** | Küchen- und Bad-Ausstattung hat **keine eigene Objektart**; nur Sanitärobjekte sind zählbar. |
+| **Prüfung und Koordination** | Es gibt **keinen gespeicherten Prüflauf und keine Freigabe** im Dokument. |
+| **Dokumentation und Rendering** | Erzeugte Pläne, Listen und Renderings werden **nicht im Dokument vermerkt**. |
+
+### Meine Einordnung — und zwei davon sind längst erfasst
+
+```text
+CRM-ANSCHLUSS       Projektgrundlagen
+                    Keine Hausplaner-Luecke, sondern eine Anschlussluecke zum CRM.
+                    Passt genau in dein objekt-zentriertes Zielbild.
+
+SCHON ALS WERKZEUG  Pruefung und Koordination   -> W-40 (Gueltigkeitsstatus:
+ERFASST                                            confirmed/outdated/blocked) und W-41
+                                                   (Abhaengigkeitsgraph, keine stille Loeschung)
+                    Import oder Grundriss       -> beruehrt W-42 (Schreibpfad Wizard ->
+                                                   Gebaeudemodell), heute schreibt der
+                                                   Wizard NICHT ins Modell
+
+SCHEMA-ERWEITERUNG  Raeume und Einrichtung · Kueche und Bad
+                    Beide brauchen eine neue Eigenschaft bzw. Objektart im Gebaeudemodell.
+                    Das ist eine DATENENTSCHEIDUNG und keine Ansichtssache.
+
+DOKUMENTENFUEHRUNG  Dokumentation und Rendering
+                    Was erzeugt wurde, wird nicht vermerkt.
+```
+
+> **Was ich NICHT entschieden habe:** *ob überhaupt eine davon angegangen wird und in welcher
+> Reihenfolge. **Vier der sechs berühren das Datenmodell oder das CRM**, und beides ist deine
+> Entscheidung — nach den Schutzgrenzen sind Datenbank- und Fachentscheidungen ausdrücklich nicht
+> still zu automatisieren.*
+
+**Was von mir aus möglich wäre, ohne dich zu fragen:** W-40, W-41 und W-42 sind bereits im Register
+und ohne Code — sie lassen sich als **Vorgabe** (`ENTWORFEN`) schneiden, so wie W-15, W-23 und W-27.
+Damit wäre beschrieben, was gebaut werden *soll*, ohne dass eine Zeile Produktivcode entsteht. **Sag
+Bescheid, ob ich das anfangen soll** — die vier Stufe-6-Ablesungen (W-33, W-35, W-36, W-37, W-39)
+laufen ohnehin weiter und brauchen dich nicht.
