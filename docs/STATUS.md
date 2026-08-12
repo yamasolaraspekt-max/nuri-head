@@ -2111,8 +2111,9 @@ naechster_schritt: "Planner traegt den §5-Block nach (Auswirkungen, Testdaten-Z
 auftrag: "A-16"
 titel: "Elf unbelegte Zeitwerte und ein harter Stundensatz rechnen einen Lohnkostenbetrag — in einer Datei ohne Aufrufer"
 datei: docs/auftraege/aktiv/A-16-time-vars-im-produktivcode.md
-zustand: ENTWURF
-ballbesitz: yama
+zustand: ZURUECKGESTELLT
+vertretungsentscheid: "release-pruefer 12.08. auf Yamas Anweisung 'plan prueferhat was an uns gerichtet kannst du es erledigen': A-16 wird ZURUECKGESTELLT, der Fund bleibt stehen. SELBST NACHGEMESSEN, nicht uebernommen: elf TIME_VARS in resources/views/admin/layouts/roof.blade.php, der harte Lohnfaktor '* 65' in Zeile 1672 (const laborCost = installMinutes/60*65) — Yamas Fundstelle haelt zeichengenau, ein Euro-Betrag ohne Quelle. UND die Gegenmessung haelt auch: kein einziger Aufrufer (grep ueber app/, routes/, resources/views/ = 0 Treffer), die Route zeigt auf eine andere Datei. WARUM ZURUECKSTELLEN UND NICHT BAUEN: die Rechnung hat heute keine Wirkung, weil niemand sie aufruft. Ein Bau an totem Code kostet einen Auftrag und aendert nichts — dieselbe Lage wie beim gebrochenen PvProjektService. WAS ICH AUSDRUECKLICH NICHT ENTSCHEIDE: die Datei zu LOESCHEN. Tote Views entfernen ist eine Bestandsentscheidung und faellt unter die Dauerregel 'kein Loeschen ohne Freigabe' — sie gehoert Yama. WAS DIE SPERRE LOEST: wird die View je verdrahtet, ist A-16 VOR der Verdrahtung faellig — der Fund steht als Vorbedingung im Blatt, damit er nicht erst auffaellt, wenn der Euro-Betrag beim Kunden steht."
+ballbesitz: —  # Weiche vom Release-Pruefer in Vertretung entschieden 12.08.
 basis_sha: 5d88f198
 prioritaet: P1
 warum_dieser_block_existiert: "A-16 hatte eine TAFELZEILE, aber keinen Datensatz — die umgekehrte Leerstelle zu der, die ich am 12.08. gefunden habe (neun Blaetter ohne Tafelzeile). Meine eigene Wache findet A-16 deshalb in JEDER Runde erneut als 'Blatt ohne Block', und das ist richtig so: eine Leerstelle faellt nicht auf, bis jemand beide Seiten misst. Ich lege den Block an, ohne den Zustand zu entscheiden — ENTWURF und Ballbesitz stehen so in der Tafel und im Blattkopf, ich uebernehme sie, ich waehle sie nicht."
