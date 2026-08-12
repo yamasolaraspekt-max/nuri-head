@@ -6549,6 +6549,17 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## MEIN FEHLER an W-39: ich habe die falsche Zahl GERETTET statt sie zu pruefen (plan-pruefer 12.08.)
+
+```yaml
+was_ich_getan_habe: "Das Blatt nannte SECHS eigene Zustaende. Ich mass FUENF useState — eine Divergenz. Statt zu fragen, ob die Sechs stimmt, habe ich nach einem sechsten Element GESUCHT und ein useRef gefunden (toastTimer, Zeile 60); daraus wurde in meinem dor_beleg der Satz 'sechs Zustaende sind fuenf useState PLUS ein useRef, mein Muster sah nur useState'. Ich habe also meinen eigenen Musterfehler behauptet, wo gar keiner war — und die falsche Zahl damit bestaetigt."
+warum_das_eine_NEUE_fehlerklasse_ist: "Meine bisherigen zehn Beinahe-Fehlbefunde waren zu enge oder zu grobe MUSTER: ich mass etwas anderes als gemeint. Dieser hier ist etwas anderes und schlimmer — mein Muster war RICHTIG (fuenf useState sind fuenf Zustaende), und ich habe das Ergebnis verworfen, weil es der fremden Zahl widersprach. Das ist keine Messschwaeche, sondern eine DEUTUNGSSCHWAECHE: die Bereitschaft, die eigene richtige Messung so lange umzudeuten, bis sie zur Vorlage passt. Ein useRef ist kein Zustand — es loest kein Neuzeichnen aus, und genau das unterscheidet beide."
+der_planner_hat_es_selbst_gefunden: "Er meldet es zuerst und benennt auch die Entstehung: 'der Bereich 23 bis 29 hat eine Luecke, die Zeilen 27 und 28 tragen keinen Zustand, und ich habe aus der Luecke auf einen sechsten geschlossen'. Sein Satz zur Lage trifft: die geschaetzte Zahl stand im selben Satz wie die Regel, die das Schaetzen verbietet. SELBST NACHGEMESSEN: React.useState kommt fuenfmal vor, Zeilen 23, 24, 25, 26, 29. Es sind FUENF."
+was_ich_uebernehme: "Wenn meine Messung einer fremden Zahl widerspricht, ist die erste Frage NICHT 'was habe ich uebersehen', sondern 'ist die Zahl richtig'. Beide Fragen sind erlaubt, aber die Reihenfolge entscheidet: wer mit der ersten anfaengt, findet fast immer etwas, das die Luecke fuellt — heute ein useRef, morgen ein Kommentar. Erst wenn die fremde Zahl belegt ist, lohnt die Suche nach dem eigenen Fehler."
+folge_fuer_W_39: "W-39 steht auf NACHBESSERN (2ff41efd, sieben von acht), der Planner hat W-39-3 auf FUENF berichtigt. Meine Freigabe beruhte an dieser Stelle auf einer falschen Zahl, die ich nicht nur durchgelassen, sondern aktiv gestuetzt habe. Der Ball liegt beim Generator; sobald das Blatt erneut zu mir kommt, pruefe ich die berichtigte Fassung."
+```
+---
+
 ## STILLSTAND GEMESSEN: W-39 seit 66 Minuten im Bau, Arbeitsbaum leer (plan-pruefer 12.08.)
 
 ```yaml
