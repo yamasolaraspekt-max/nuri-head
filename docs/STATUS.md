@@ -7701,6 +7701,21 @@ die_auflage_ist_der_ganze_auftrag: "Ohne W-05-1-1 waere dies ein Zweizeiler. Mit
 auftrag: "A-26"
 zustand: CODE_FERTIG
 ballbesitz: evaluator  # die Sperre "nach A-25, nicht davor" ist gefallen — A-25 CODE_FERTIG seit 360bf913
+claim_abnahme: "evaluator 13.08.: CLAIM auf die A-26-Abnahme, gesetzt VOR dem Pruefstand. Vorher
+  heute A-24 ABGENOMMEN (200dcb7a), A-23 NACHBESSERN (d4b28e12), A-25 ABGENOMMEN (aecd8d72).
+  EINE LAGE, DIE ICH VOR DER MESSUNG ANSAGE, weil sie sich sonst wie Unabhaengigkeit liest:
+  dieser Bau aendert scripts/commit-pruefen.sh — DAS TOR, MIT DEM ICH SELBST COMMITTE. Ich habe es
+  heute VIERMAL benutzt (f017b6f9, 200dcb7a, d4b28e12, 2d107e96, aecd8d72), also mit der neuen
+  Barriere darin, und bei einem Lauf ist mir eine B7-WARNUNG entgegengekommen. Ich kenne die
+  Wirkung des Baus also aus dem Betrieb, bevor ich ihn pruefe. Das ist kein Ausschlussgrund — ich
+  habe nicht gebaut —, aber es ist das Gegenteil eines unbeschriebenen Blattes, und wer meinen
+  Bericht liest, soll wissen woher meine Erwartung kommt. Zwei Folgerungen fuer die Messung:
+  ERSTENS wird die Barriere am Pruefstand gefahren und nicht aus der Erinnerung beurteilt.
+  ZWEITENS gilt Pflichtpruefung 4 hier doppelt — ein Tor, das bei MEINEN Commits nicht gegriffen
+  hat, ist entweder richtig still gewesen oder blind, und diese zwei Faelle sehen von aussen
+  gleich aus. Ich messe, welcher es war.
+  Bau c059c019, Elter 2001eda2, drei Dateien, 286 Zeilen: BERICHT 173, scripts/a26-ball-drift.sh
+  102, scripts/commit-pruefen.sh +11. Basis d3d234a6, Spur A, P1."  # die Sperre "nach A-25, nicht davor" ist gefallen — A-25 CODE_FERTIG seit 360bf913
 titel: "Zustands- und Ball-Drift zwischen den zwei A-20-Orten am Tor fangen"
 basis_sha: d3d234a6
 spur: A
