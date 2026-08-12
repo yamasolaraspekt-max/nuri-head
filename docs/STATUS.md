@@ -36,11 +36,11 @@
 | **B5** Zählergebnis mit Trefferzeilen | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `157576c2` · Elter `2a95ab40` | **7/7 — die Barriere AUSGELÖST, nicht gelesen**: Wegwerf-Repo, drei Probeläufe (feuert · schweigt bei Suite 1692/1692 · schweigt mit Belegzeile) + Mutation (Block raus → 0 Warnungen) · kein Abbruch, exit=0 beidseitig · scripts-Suite 107/107 an Bau **und** Elter · **P2: Belegmuster erkennt `Z.157` / `treppenTypen:4` nicht** (4 von 17 warnenden Botschaften) |
 | **B6** Summe braucht Erhebung | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `6ecf911c` · Elter `7be1a381` | **8/8 — Barriere ausgelöst, nicht gelesen** · alle **vier Beispiele des Regeltexts** am Tor nachgefahren, alle vier wie dokumentiert · B5 bytegleich unberührt (md5) + Mutation: B6 raus → B5 feuert weiter, die Wächter verdecken einander nicht · scripts-Suite 107/107 beidseitig · P2 zur §3-Belegform (kein wörtlicher Befehl), gleicher Maßstab wie W-07N |
 | **W-15** Material und Farbe | **`CODE_FERTIG`** | **Evaluator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
-| **W-01N** Suite-Zahl zahlfrei | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `53930b60` · Elter `2e587fb7` | **5/5** · die feste Zahl ist raus und **nicht durch eine neuere ersetzt** · Nachweis prüfbar geblieben (resources 0, Suite 1698 an beiden Ständen) · Fahrplan-Widerspruch **vorgelegt statt umgebogen** — entschieden: richtig so · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
+| **W-01N** Suite-Zahl zahlfrei | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `53930b60` · Elter `2e587fb7` | **5/5** · die feste Zahl ist raus und **nicht durch eine neuere ersetzt** · Nachweis prüfbar geblieben (resources 0, Suite 1698 an beiden Ständen) · Fahrplan-Widerspruch **vorgelegt statt umgebogen** — entschieden: richtig so · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | **`CODE_FERTIG`** | **Evaluator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
 | **B5N** Belegzeilen-Schreibweisen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `8870387a` | **Nachbesserung §12.5 zu B5** — `B5_BELEGZEILE` (`commit-pruefen.sh:534`) erkennt nur `datei.ext:zeile`; **erhoben über 40 Botschaften: 20 Vorkommen fallen durch** (`Z.NNN` 12×, `Z.NNN-NNN` 4×, »Zeile NNN« 4×) · **dreimal gemeldet** (Evaluator, Release-Prüfer, Plan-Prüfer) — A-03-Klasse: eine Warnung, die bei richtiger Arbeit anschlägt, wird weggeklickt · tragend ist **B5N-2**: sie muss weiter anschlagen, wo kein Beleg steht |
-| **A-17** Zwei Engines schweigen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
+| **A-17** Zwei Engines schweigen | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
@@ -2177,8 +2177,25 @@ sein_beleg_bestaetigt_meinen_b5_befund: "Sein §3-Beleg ist der erste mit dem br
 auftrag: "W-01N"
 titel: "W-01/1-6 traegt die Zahl 1689/1689, gemessen sind 1692 — zahlfreie Form wie in W-02"
 datei: docs/auftraege/aktiv/W-01N-suitezahl-zahlfrei.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama (TRANSPORTSPERRE — der fuenfte, wie B5, B6, A-18, A-17)
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 53930b60, Fehlerklasse KEINE.
+  Messtisch 5/5 im Blatt gegengelesen (W-01N-1 bis W-01N-5). REINER DOKU-SCOPE, deshalb kein
+  volles Grundtor: zwei Dateien, docs/FAHRPLAN-KLASSE-A.md und W-01-fang-beschreiben.md.
+  must_preserve SELBST nachgemessen statt uebernommen — resources/ 0, app/ 0. Kette Vorfahr,
+  Geheimnisse 0. Der Kern haelt: die feste Suite-Zahl ist aus dem Kriterium heraus und NICHT
+  durch eine neuere ersetzt; die Begruendung des Bauenden ('das waere derselbe Fehler mit
+  frischerem Datum') ist die richtige."
+p2_uebernommen_und_ergaenzt: "Der Evaluator meldet einen P2 am §3-Beleg: die Null des Bauenden
+  gilt fuer den ARBEITSBAUM, gegen den committeten Elterstand 2e587fb7 stand A-17 an beiden
+  Orten auf IN_ARBEIT. Gruen bleibt es wegen H-4 (disjunkte Scopes). ICH UEBERNEHME IHN UND
+  TRAGE NACH, was er nicht benannt hat: diese Messung IST E1 — 'Aussagen ueber den Bau werden
+  am COMMIT gemessen, nicht am Arbeitsbaum', angenommen am 10.08. Er hat die Regel angewandt,
+  ohne sie zu nennen. DAS BERICHTIGT MEINE EIGENE VORLAGE AN YAMA, die 'E1 wird nicht befolgt'
+  meldete: richtig ist, E1 wird der FORM nach nie zitiert und der SACHE nach genau einmal in
+  60 Commits angewandt — und dieser eine Fall hat sofort einen von aussen nicht nachpruefbaren
+  Beleg aufgedeckt. Eine Regel, die beim ersten Gebrauch etwas findet, gehoert nicht
+  gestrichen, sondern bekannt gemacht. Vorlage entsprechend geaendert."
 was_der_evaluator_entscheiden_muss: "W-01N-4 nennt docs/FAHRPLAN-KLASSE-A.md. Diese Datei ist seit
   12.08. AUFGEHOBEN (Z.1-16: 'DIESER PLAN IST NICHT MEHR DER PLAN ... als Beleg, nicht als
   Anweisung'); gueltig ist docs/FAHRPLAN-WERKZEUGKASTEN.md, und der hat keine Runden sondern Stufen
@@ -2396,8 +2413,14 @@ offener_punkt_bei_yama: "Der Evaluator hat einen EINGRIFF offengelegt: ticket_te
   wie bei den zwei Testnutzern am 10.08. ('raeum die nutzer'). Ich raeume nicht von mir aus."
 titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach dem A-14-Muster, mit vorhandenem Bauteil"
 datei: docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama (TRANSPORTSPERRE — wie B5, B6 und A-18)
+zustand_wiederhergestellt: "release-pruefer 12.08.: mein RELEASE_FREI von 27c88c20 wurde in
+  a1751fbe auf ABGENOMMEN zurueckgesetzt — der Evaluator hat 'zwei ausstehende Zustaende
+  nachgezogen' und dabei nicht gesehen, dass dieser hier schon weiter war. Mein release_vermerk
+  stand die ganze Zeit unveraendert daneben, nur das Zustandsfeld fiel zurueck. KEIN VORWURF:
+  dieselbe Kollision ist mir heute bei A-18 in die andere Richtung passiert, und der Grund ist
+  beide Male derselbe — zwei Rollen pflegen dasselbe Feld, ohne voneinander zu wissen."
 browserabnahme_gefahren: "A-17-7 voll erfuellt, nicht ersetzt: Buehne scripts/browser-buehne.sh
   --port 8099 (Datenbank am Kindprozess geprueft, ticket_testing), Chrome headful, vier Flaechen
   nach dem Rechnen gemessen. engine-abwasser und engine-fbh: Plakette gruen 0, rot 0, Label

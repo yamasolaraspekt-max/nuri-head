@@ -15,17 +15,18 @@ Punkt 4 und 5, und es ist deutlich weniger.
 
 ---
 
-## 1 · Der Push — vier fertige Releases stauen sich
+## 1 · Der Push — fünf fertige Releases stauen sich
 
 **Gemessen:** Der lokale Zweig liegt **49 Commits** vor `fork` und `backup-private` (beide auf
 `5579a6c0`) — Stand dieser Messung; die Rollen arbeiten weiter, die Zahl wächst.
 **Reines Vorspulen**, keine Gabelung (`is-ancestor` bestätigt), Locks 0.
 
-**Was fertig ist und wartet** — vier Aufträge, von mir nach §10 vollständig geprüft:
+**Was fertig ist und wartet** — fünf Aufträge, von mir nach §10 vollständig geprüft:
 
 | Auftrag | Was | Tor |
 |---|---|---|
 | **B5** | Barriere „Zählergebnis mit Trefferzeilen" | 7/7 · Suite 107/107 · Barriere ausgelöst + Mutation |
+| **W-01N** | Suite-Zahl aus dem Kriterium heraus | 5/5 · Doku-Scope · `must_preserve` selbst nachgemessen (0/0) |
 | **B6** | Barriere „Summe braucht Erhebung" | 8/8 · Suite 107/107 · Barriere ausgelöst + Mutation |
 | **A-18** | Wandaufbau: U-Wert trägt seinen Vorbehalt | 8/8 · tsc · **1694/1694** · Bundle byte-gleich · **888 PHP** |
 | **A-17** | Zwei Engines schweigen | 7/7 · tsc · **1698/1698** · Bundle byte-gleich · **888 PHP** |
@@ -39,7 +40,7 @@ git push fork auto/hausplaner-integration
 git push backup-private auto/hausplaner-integration
 ```
 
-**Danach fahre ich §19 (Betriebsprüfung) für alle vier im nächsten Takt.**
+**Danach fahre ich §19 (Betriebsprüfung) für alle fünf im nächsten Takt.**
 
 ---
 
@@ -81,7 +82,7 @@ Nord plausibel eingetragen) und **negative Werte** — `PvgisErtragService.php:4
 
 ---
 
-## 4 · E1 ist in Kraft und wird nicht befolgt
+## 4 · E1 ist in Kraft, aber niemand kennt es
 
 **Das ist neu und nicht Teil der erledigten Frage.** Am 10.08. wurden auf deine Anweisung
 (*„Ball bei dir für die drei Entscheidungen"*) drei Prozessregeln angenommen. Ich habe ihre
@@ -89,14 +90,22 @@ Wirkung gemessen:
 
 | | Anordnung | Wirkung heute |
 |---|---|---|
-| **E1** | Aussagen über den Bau am **Commit** messen (`git show HEAD:<pfad> \| diff - <pfad>`) vor jedem `CODE_FERTIG` | **0 Anwendungen in 60 Commit-Botschaften** aller Rollen |
+| **E1** | Aussagen über den Bau am **Commit** messen (`git show HEAD:<pfad> \| diff - <pfad>`) vor jedem `CODE_FERTIG` | **0× beim Namen genannt**, aber **1× der Sache nach angewandt** in 60 Botschaften |
 | **E2** | §3-Kriterium in allen W-Blättern zählbar | **14 von 14** — wird gelebt |
 | **E3** | Spalte „Unterformen mit Barriere" im Zähler | 4× in `STATUS.md`, **0×** in den Arbeitsregeln — halb verankert |
 
-**Meine Empfehlung:** **E1 streichen oder durchsetzen, aber nicht liegen lassen.** Eine Regel,
-die zwei Tage in Kraft ist und null Mal angewendet wurde, lehrt, dass Regeln folgenlos sind —
-dieselbe Klasse wie eine Warnung, die man wegklickt. **E2 bestätigen** (bewährt sich).
-**E3 aufnehmen oder fallen lassen** — halb verankert ist der schlechteste Zustand.
+**Korrektur an meiner ersten Fassung:** Dort stand „E1 wird nicht befolgt". Das war zu stark.
+Beim §10 für W-01N fand ich den einen Anwendungsfall: Der Evaluator misst den §3-Beleg **gegen
+den committeten Elterstand statt gegen den Arbeitsbaum** und deckt damit auf, dass die gemeldete
+Null nur für einen nie committeten Zwischenstand galt. **Das ist exakt E1** — angewandt, ohne
+genannt zu werden.
+
+**Meine Empfehlung, geändert:** **E1 nicht streichen, sondern bekannt machen.** Eine Regel, die
+beim ersten nachweisbaren Gebrauch sofort einen von außen nicht nachprüfbaren Beleg aufdeckt,
+ist nicht wirkungslos — sie ist unbekannt. Sie steht in einem Vertretungsentscheid in
+`STATUS.md`, nicht in den Arbeitsregeln, und keine Rolle liest sie beim Start.
+**E2 bestätigen** (bewährt sich). **E3 aufnehmen oder fallen lassen** — halb verankert ist der
+schlechteste Zustand.
 
 ---
 
@@ -151,7 +160,7 @@ Damit die Liste ehrlich ist:
 - **alle bisherigen Commits dieses Tages** an Statuswahrheit, §10-Prüfungen und Reparaturen
 - Den **gegabelten Zweig** zusammengeführt — 28 meiner Commits fehlten auf dem Zweig, auf dem alle
   Rollen arbeiten; sie lasen einen halben Tag lang eine veraltete Wahrheit
-- **Vier §10-Releases** mit vollem Tor
+- **Fünf §10-Releases** (vier mit vollem Tor, W-01N als Doku-Scope)
 - Den Prüfauftrag aus A-13 abgearbeitet (drei Fragen, alle drei gemessen)
 - Einen echten Messbericht gerettet: `BERICHT-A-15-klassifikation.md`, 154 Zeilen, war gelöscht
   und uncommittet — eine uncommittete Löschung geht beim nächsten Commit als Beifang mit
