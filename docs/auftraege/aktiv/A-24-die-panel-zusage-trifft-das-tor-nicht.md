@@ -198,3 +198,65 @@ und_eine_zeilennummer_die_ich_abgezaehlt_habe: "A-24-2 nannte dachVerschneidung.
         habe nachgemessen und beide Muster stimmen auf :25."
 A_24_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+---
+
+## 5 — Votum des Evaluators (§11)
+
+**ABGENOMMEN.** Bau `0c9aa0a9`, Elter `acb3d494` (als git-Elter nachgemessen, nicht aus dem Blatt
+übernommen), Bündel-Nachtrag `532c1220`. Zwei Prüfstände: `ps-a24` auf dem Bau, `ps-a24e` auf dem
+Elter, beide mit `node_modules` und `vendor` per `cp -al`. Die Blatt-Basis `7b9ad18c` liegt 27
+Commits vor dem Elter; für die zwei berührten Code-Dateien ist der Zwischenraum leer, der
+Scope-Diff also der richtige.
+
+| Kriterium | Befund | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **A-24-1** Panel-Bedingung trifft das Tor, beide Richtungen | **grün** | `fehlt` (Panel :283) und `anbauZuEingabe` (`dachMesh.ts:76-84`) nach Normalisierung **zeichengleich**; beide prüfen `['length','lengthB','width','widthB']`. Am Elter :276 hing die Anbau-Prüfung noch an `istU` |
+| **A-24-2** die zwei Anbaufelder sind für L/T erreichbar | **grün** | Im Browser bei `l-shape` **alle vier** Maßfelder da: `Außenmaß Länge/Breite`, `Anbau Länge/Breite` (:298/:301). Bezeichnung formabhängig: U → `Innenhof/Kerbe`, L/T → `Anbau` |
+| **A-24-3** SCHUTZGRENZE: kein stiller Schreibpfad | **grün** | `useEffect` kommt **0 mal** vor; `setzeAnbau` (:271) hat **4 Aufrufe, alle aus `onChange`** (:288/:291/:299/:302). Kein Aufruf aus einem Rumpf |
+| **A-24-4** das Tor bleibt unberührt | **grün** | `dachMesh.ts` md5 `175a4badad466ab114d8e0577cddcb25` an Bau **und** Elter identisch; 0 Treffer im Bau-Diff |
+| **A-24-5** der Wächter hält die KOPPLUNG, nicht den Wortlaut | **grün** | `anbauTorZusage.test.ts`, 129 Z., 9 Tests; er liest **beide** Dateien (:28 Panel, :29 Tor). Belegt durch A-24-6, nicht durch seinen Namen |
+| **A-24-6** Fangprobe | **grün** | Zweimal selbst gefahren, Anker je genau 1×, md5 danach zurückgesetzt. **Panel** kaputt → *„prüft ALLE VIER"* + *„DIESELBEN vier Felder"* rot. **Tor** kaputt bei heilem Panel → *„DIESELBEN vier Felder"* + *„Tor selbst ist unberührt"* rot. Die Kopplung fällt **in beiden Richtungen** — genau das, was ein Wortlaut-Test nicht könnte |
+| **A-24-7** Browserabnahme | **grün** | Selbst gefahren, nicht das Skript des Generators übernommen. L-Dach angelegt (Wand ziehen → Dach → markieren). **Zwei Außenmaße (9000/7000), Anbau leer:** Warnung **bleibt**, nennt vier, sichtbar bei 1440/1024/375 (nach Bildlauf; das Panel ist eine lange Spalte). 3D zeigt kein Dach und sagt *„liefert keine einzige Fläche"*. **Alle vier (+4000/3000):** Warnung weg, **das L-Dach steht** |
+| **Insel-Suite** | **grün** | Bau **1718/1718**, Elter **1709/1709** — die neun Zusagen kommen dazu, keine Regression |
+
+**Der Bündelbefund, den ich unabhängig bestätige.** Das ausgelieferte `public/hausplaner/hausplaner.js`
+ist am Bau-Commit `0c9aa0a9` **byte-identisch mit dem Elter** (`62d7be7eac45f91b2d90147f740a01fa`) —
+der Bau war in der Quelle fertig und **nicht ausgeliefert**. Erst `532c1220` trägt ihn nach
+(`bec7d9004f04f30394b1d1ba1b667df9`, und das ist der Stand, den die Bühne ausliefert). Der Generator
+hat das selbst gefunden und im Bericht offengelegt, der plan-pruefer hat den fehlenden Commit
+gemeldet, der Nachtrag ist da. **Kein Befund gegen den Bau — aber die Lehre gilt: eine
+Browserabnahme am Bau-Commit allein hätte hier den alten Text gezeigt.**
+
+**Meine eigenen Messfehler in dieser Runde** — alle vor dem Urteil gefunden, keiner ist in einen
+Befund gelaufen:
+
+1. **Beinahe der teuerste:** mein Prüfstand stand auf `0c9aa0a9`, wo das Bündel noch das alte ist.
+   Hätte ich dort den Browser gefahren, hätte ich den alten Text gesehen und einen Fehlbefund gegen
+   einen richtigen Bau gemeldet. Gerettet hat mich nur, dass ich **erst den Bündelstand gemessen
+   habe, bevor ich den Browser aufgemacht habe.**
+2. `grep -c` am **minifizierten** Bündel zählt Zeilen, nicht Treffer — und mein Muster *„alle vier
+   Maße"* trifft am Elter den **U-Text**, den es dort schon gab. Fast hätte ich *„der Elter trägt den
+   neuen Text schon"* gemeldet. Berichtigt mit `grep -oF | wc -l` und dem Muster, das die Sache
+   trifft (`L/T-Dach braucht …`).
+3. Mein Muster `^(Anbau )?Länge` füllte die **Anbau**-Felder, während meine Zusage *„die zwei
+   Außenmaße"* hieß — **die Fehlerklasse, nach der ich im fremden Bau suche, in meiner eigenen
+   Messung.** Berichtigt über die exakte Feldliste.
+4. Danach der exakte Vergleich `label === 'Länge (mm)'`, obwohl das Feld `Außenmaß Länge (mm)` heißt
+   → Absturz statt stiller Fehlmessung; und einmal die Felder gelesen, **bevor** die Dachform auf L
+   stand (bei Satteldach gibt es sie nicht).
+5. Meine erste 3D-Probe las das WebGL-Canvas per `drawImage` — ohne `preserveDrawingBuffer` liefert
+   das **immer Schwarz**. Sie meldete für beide Zustände dasselbe Ergebnis und war wertlos. Ersetzt
+   durch einen Screenshot mit `clip` und **eigene Sicht** auf das Bild.
+6. Sichtbarkeit zuerst **ohne Bildlauf** gemessen → `sichtbar: false` an allen drei Breiten. Das
+   Eigenschaften-Panel ist eine scrollbare Spalte; die A-14-Lehre gilt hier genauso.
+7. **Das kaputte Layout war meine Bühne, nicht der Bau.** Die Zeichenfläche lag bei `y=2005`
+   außerhalb eines 900 px hohen Fensters. Ursache gemessen: die alten `php -S`-Bühnen schreiben eine
+   PHP-`Notice` (*Broken pipe*) **vor** `<!DOCTYPE html>` und werfen den Browser in den Quirks Mode.
+   Frische Bühne über `scripts/browser-buehne.sh --port 8177` → Layout heil, Canvas mittig. **Punkt 4
+   des Takts hat sich hier ausgezahlt: zuerst den eigenen Aufbau prüfen.**
+
+**§15 belegt:** `getDatabaseName()` = `ticket_testing`; Bühnen-Wächter vor der Abnahme gefahren,
+alle Bühnen auf `ticket_testing`, der Kindprozess der neuen Bühne eigens geprüft.
+
+**Weiter an den Release-Prüfer.**
