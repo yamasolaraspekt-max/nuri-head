@@ -126,7 +126,7 @@ und Lichtkuppel. **Die Trennlinie zieht der Code selbst** — `aufbauOrientierun
 | W-39 | **Studio-Rahmen** | **BESCHRIEBEN** | **13 Module** *(benutzt, nicht besessen — 8 ohne eigenes Werkzeug)* | **keine** ⓝ — **ADDITIV**: die `HausplanerApp` bleibt unverändert, einziger Eingriff ist das Flag `imStudio` (`:140`); drei Modi in `:131/:132/:133`, der dritte heißt `imExperte` (`:85`) |
 | W-40 | **Gültigkeitsstatus** `confirmed`·`outdated`·`blocked` | **ENTWORFEN** | W-38 | **keine** ⓝ — **zwei Achsen**: Fortschritt (W-38, gebaut) neben Gültigkeit (Vorgabe). Ohne `confirmed` ist „PV erst nach **bestätigter** Geometrie" nicht prüfbar · **BEFUND: eine Gültigkeitsachse mit Übergängen ist in `geometry/configuratorPackage.ts` bereits gebaut** — siehe `7-GRENZEN` |
 | W-41 | **Abhängigkeitsgraph / Invalidierung** | **ENTWORFEN** | W-38, W-40 | **keine** ⓝ — **kein Code**; „Änderungen propagieren, **niemals** stille Löschung" · **die dünnste Vorgabe**: die Quelle führt den Graphen selbst unter *nicht gemessen*. Von sechs Kandidat-Kanten ist **eine belegt** — Dachfläche → PV-Belegung (`geometry/pvBelegung.ts:10-14`) |
-| W-42 | **Schreibpfad Wizard → Gebäudemodell** | LEER | W-35 | — **kein Code**; im `ConfigWizard`-Dateikopf als **„nächste Scheibe"** benannt |
+| W-42 | **Schreibpfad Wizard → Gebäudemodell** | **BESCHRIEBEN** | W-35 | **keine** ⓝ — **der Pfad IST gebaut**: drei `executeCommand({type:'ADD_NODE'})` in `ConfigWizard.tsx:184/205/226`, vier Bauteilarten, bewacht von `configWizardWrite.test.ts`. Der Dateikopf `:6` („nächste Scheibe") und der Bericht („schreibt NICHTS") sind **überholt** — beide suchten `BuildingDocument`, das dort 0 Mal vorkommt |
 
 ---
 
