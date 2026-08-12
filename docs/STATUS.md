@@ -8028,6 +8028,12 @@ was_das_fuer_yamas_liste_bedeutet: "Eine der sechs Luecken aus Abschnitt 7 der V
   Der Wizard schreibt Fenster, Tuer, Treppe und Heizkoerper ins Modell. Die Aussage im Bericht
   stammt aus einer Messung auf BuildingDocument, und dieses Wort kommt in der Datei nicht vor."
 W_42_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-42 GECLAIMT vor dem Pruefstand.
+  Vierte Vorgabe in Folge. Bei W-40 hat sich die Praemisse 'kein Code' als FALSCH erwiesen, bei
+  W-41 als tragend — ich messe sie deshalb auch hier ZUERST und selbst, bevor ich das Blatt lese.
+  W-42 ist der Schreibpfad vom Wizard ins Gebaeudemodell, und die GEGENRICHTUNG ist nachweislich
+  vorhanden: kannIntegrieren steht in configuratorPackage.ts als Tor. Wer nur nach 'Schreibpfad'
+  sucht, findet nichts; die Frage ist, was von der Uebernahme schon gebaut ist."
 ```
 
 ```yaml
