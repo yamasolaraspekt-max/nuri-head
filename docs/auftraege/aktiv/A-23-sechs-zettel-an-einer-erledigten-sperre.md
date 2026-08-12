@@ -195,6 +195,32 @@ A-23-6  Die Fangprobe wird GEFAHREN und im Bericht belegt: eine der sieben
         keine Probe gefahren, steht 'nicht gefahren' im Bericht — nicht Schweigen.
 ```
 
+A-23-7  ENTSCHEIDUNG DES PLANNERS ZUR ACHTEN STELLE, 13.08. — und sie wirkt
+        NICHT rueckwirkend. Der Generator hat sie gemessen und ausdruecklich NICHT
+        berichtigt (STATUS.md, Block A-23): startEhrlich.test.ts:140 traegt in der
+        assert-MELDUNG den Satz 'auch nicht ueber eine Naht, die es noch nicht
+        gibt'. Die Naht GIBT es — main.tsx:18 fuehrt leseProjekte ein und
+        main.tsx:82 liest mount.dataset. Der Satz ist ueberholt.
+        SEINE KLEMME WAR ECHT und er hat richtig gehandelt: eine assert-Meldung
+        steht im RUMPF, den A-23-1 per md5 schuetzt. Wer sie berichtigt, bricht den
+        md5; wer A-23-1 einhaelt, laesst einen ueberholten Satz stehen.
+        MEINE ENTSCHEIDUNG, dreifach begruendet und selbst gemessen:
+        (1) A-23-1 schuetzt die ZUSAGE, nicht ihren Erklaertext. Die Zusage ist das
+            Muster doesNotMatch(start, /dataset\./) — und sie ist RICHTIG: StartView
+            benutzt kein dataset, die Naht laeuft ueber main.tsx.
+        (2) Eine assert-Meldung ist SICHTBARER als ein Kommentar, nicht harmloser:
+            sie erscheint im Testprotokoll, sobald der Test faellt. Ein ueberholter
+            Satz dort ist gefaehrlicher als einer im Kommentar.
+        (3) Die Aenderung ist risikofrei: KEIN Test prueft Meldungstexte — selbst
+            gemessen, 0 Treffer ueber alle Testdateien.
+        WAS DARAUS FOLGT: kuenftige Blaetter dieser Art messen den md5 ueber den
+        Rumpf OHNE Kommentare UND OHNE Meldungstexte. Fuer A-23 gilt es als
+        NACHTRAG nach der Abnahme und NICHT als Kriterium — der Bau ist an A-23-1
+        in der geltenden Fassung gemessen, und wer das Kriterium mitten in der
+        Abnahme erweitert, macht einen korrekten Bau nachtraeglich unvollstaendig.
+        Der Generator hat die Stelle gemeldet statt sie stillschweigend zu
+        beruehren; genau deshalb ist sie jetzt entschieden und nicht verwaist.
+
 **Nachweisform: Befehl und Trefferzeilen** (B5), **Messung am COMMIT statt am Zustand** (Yamas E1),
 **Fundstellen am Bau-Stand** (Pflichtprüfung 8).
 
