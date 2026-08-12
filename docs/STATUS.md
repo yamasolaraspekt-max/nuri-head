@@ -7484,6 +7484,44 @@ basis_sha: 7b9ad18c
 spur: A
 prioritaet: P1
 blatt: "docs/auftraege/aktiv/A-24-die-panel-zusage-trifft-das-tor-nicht.md"
+dor_beleg: "plan-pruefer 12.08. — DoR NICHT ERTEILT, ZWEI Punkte. Der Auftrag selbst ist der
+  schaerfste Befund des Abends, und der Kern haelt an jeder Stelle, die ich geoeffnet habe.
+  DER KERN, SELBST GEMESSEN, beide Seiten: app/rahmen/EigenschaftenPanel.tsx:300 sagt woertlich
+  'L/T-Dach braucht Aussenmass Laenge und Breite > 0 — sonst rendert es nicht'; :280 und :283 bieten
+  genau diese zwei Felder, und :286-295 zeigt die anderen beiden NUR bei istU. Entscheidend ist :276:
+  fehlt = !a || !(a.length>0) || !(a.width>0) || (istU && ...) — fuer L und T haengt die Warnung also
+  NUR an zwei Massen. Das Tor renderers/three-d/dachMesh.ts:78 verlangt vier und gibt sonst null
+  zurueck. Und der Pfad traegt: :143 ruft anbauZuEingabe VOR der Formverzweigung, :153 setzt
+  form 'l' bzw. 't' — L und T gehen durch dasselbe Vier-Mass-Tor. Der Nutzer erfuellt, was dasteht,
+  die Warnung verschwindet, die Flaeche bleibt leer. P1 ist richtig.
+  PUNKT 1, BLOCKIEREND, A-24-3 (P1, SCHUTZGRENZE): der Nachweis hat keinen Gegenstand. Verlangt wird
+  'ein Bestandsdokument mit l-shape und nur zwei Massen vor und nach dem Bau per md5 gleich'. SELBST
+  GEMESSEN, nur lesend und mit Zielpruefung vor der Abfrage: die Standardverbindung zeigt auf die
+  Datenbank 'ticket' — dort messe ich nach §15 nicht. Gegen das ausdruecklich benannte Testziel
+  gemessen: ticket_testing.hausplaner_documents = 0 Datensaetze. Es gibt kein Bestandsdokument, an dem
+  dieser Nachweis gefahren werden koennte.
+  UND ER WAERE AUCH NICHT HALTBAR, WENN MAN EINES ANLEGTE: heute ist in derselben Kette belegt worden,
+  dass jeder Testlauf diese Datenbank zuruecksetzt (phpunit.xml erzwingt ticket_testing, 70 von 137
+  Testdateien nutzen RefreshDatabase) — genau daran ist Dokument 36 verschwunden, obwohl es am 10.08.
+  ausdruecklich behalten werden sollte. Ein in der Datenbank abgelegter Beleg ist auf dieser Insel
+  strukturell kein Beleg. DIE SCHUTZGRENZE SELBST IST RICHTIG UND WICHTIG — sie ist die Dauergrenze
+  'keine Bestandsdaten als Nebenwirkung'. Zu aendern ist nur die NACHWEISFORM, und diese Entscheidung
+  gehoert dem Planner: entweder ein Vorrichtungs-Dokument im Code statt in der Datenbank, oder ein
+  Nachweis am SCHREIBPFAD (dass das Oeffnen des Panels keinen Schreibvorgang ausloest) statt am
+  gespeicherten Ergebnis. Beides erfuellt den Zweck, der md5 auf einen Datenbanksatz nicht.
+  PUNKT 2, klein, aber es ist der Herkunftsbeleg eines P1-Kriteriums: A-24-2 nennt
+  dachVerschneidung.ts:26 als Quelle fuer 'L_b, W_b (Anbau)'. Gemessen mit ZWEI Mustern (grep auf
+  'lengthB: number' und auf 'L_b, W_b') steht die Zeile an :25; :26 traegt overhang/overhangGable.
+  Eine Zeile daneben, und gerade dieses Kriterium lebt davon, dass die Bezeichnung NICHT erfunden ist
+  sondern belegt.
+  GEWUERDIGT: der Auftrag benennt seine eigene Falle und baut das Kriterium dagegen — wer nur den TEXT
+  ehrlich macht, ist nach A-24-1(a) gruen und der Fehler bleibt, deshalb verlangt A-24-1 beide
+  Richtungen und A-24-5 einen Waechter auf die KOPPLUNG statt auf den Wortlaut. Das ist die Lehre aus
+  W-34 an der eigenen Arbeit angewandt. Er trennt wieder SELBST GEMESSEN von NUR GELESEN (die
+  A-05-Probe 4d hat er nicht wiederholt und sagt es). Und er schreibt hin, dass der Posten vier Tage
+  bei IHM lag und kein fremder Fehler war — 'die Kette hat gemeldet, der Planner hat nicht
+  geschnitten'. Das gehoert zu den Saetzen, die eine Rollenkette ehrlich halten.
+  Ball beim Planner. Zustand bleibt ENTWURF."
 warum_P1: "Es ist die einzige Stelle dieser Insel, an der eine Zusage den Nutzer AKTIV in die Irre
   fuehrt: er erfuellt die genannte Bedingung, die Warnung verschwindet, und die Flaeche bleibt leer.
   Die uebrigen offenen Punkte der A-05-Liste sind FEHLENDE Funktionen — die behaupten nichts. Eine
@@ -7514,7 +7552,7 @@ was_selbst_gemessen_und_was_nur_gelesen: "SELBST: Panel-Text :300, Feldbedingung
 
 auftrag: "A-23"
 zustand: ENTWURF
-ballbesitz: plan-pruefer  # DoR steht aus
+ballbesitz: planner  # DoR nicht erteilt (2772c198) — mein Beleg gab den Ball ab, das Feld nicht
 titel: "Sechs Stellen in der Insel fuehren AUF-40 Teil B als offen — beide Haelften sind gebaut"
 basis_sha: 59c66eb2
 spur: A
