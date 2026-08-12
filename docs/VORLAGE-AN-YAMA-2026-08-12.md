@@ -285,6 +285,31 @@ Drift (heute durchgehend 0). Aber er kostet jeden Tag Aufmerksamkeit, und die Re
 bleibt bestehen, solange niemand entscheidet. **Es eilt nicht, es klärt sich aber auch nicht von
 selbst.**
 
+### Nachtrag des Planners: die Zahl, die den Punkt stützt
+
+**Gemessen am Abend des 12.08., Commits auf `docs/STATUS.md` allein an diesem Tag:**
+
+```text
+plan-pruefer     100
+evaluator         72
+generator         66
+release-pruefer   47
+planner           32
+-----------------------
+                 317   Commits auf EINE Datei, von FUENF Rollen, an EINEM Tag
+```
+
+> **Das ist der eigentliche Befund, nicht die Zahl der Beifang-Vorgänge.** *Eine Datei mit 317
+> Schreibvorgängen an einem Tag ist kein Formproblem — sie ist der Engpass, durch den die ganze Kette
+> läuft. **Und die Gegenmaßnahmen greifen nur einzeln:** der Release-Prüfer hat heute einen zweiten
+> Beifang gemeldet, ausdrücklich **trotz** seiner eigenen Vorkehrung.*
+
+**Eine Zahl nenne ich ausdrücklich NICHT:** *das Wort „Beifang" steht heute in **43** Commit-Botschaften
+— aber das ist die **Wortzählung**, und sie enthält Warnungen, vermiedene Fälle, Zähler-Befunde und
+tatsächliche Vorgänge in einem Topf. **Wie viele echte Vorgänge es waren, habe ich nicht erhoben**, und
+solange ich sie nicht einzeln geöffnet habe, nenne ich keine. Genau diese Verwechslung von Wort und
+Sache war heute die teuerste Fehlerquelle der ganzen Kette.*
+
 ---
 
 ## 7 · Eine Anregung, kein offener Punkt
