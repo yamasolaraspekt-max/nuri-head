@@ -36,7 +36,7 @@
 | **B6** Summe braucht Erhebung | `BEREIT` | **Generator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
-| **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | **Yama** | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
+| **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
 
@@ -1378,7 +1378,7 @@ release_vermerk: "release-pruefer 12.08. (Sammel-Kontrolle 3): RELEASE_FREI an e
 auftrag: "W-13/1"
 datei: docs/auftraege/aktiv/W-13-auswahl-beschreiben.md
 zustand: BETRIEBSBESTAETIGT
-ballbesitz: yama
+ballbesitz: —  # Kette vollstaendig; Ball war ein Rest, geschlossen 12.08. vom Release-Pruefer (Bau a62ae7c6 liegt auf fork/main, §19-Betriebspruefung gefahren)
 basis_sha: 193681cd
 letztes_votum: "plan-pruefer 10.08. (1. DoR-Runde): ENTWURF bleibt, EIN Mini-Rest — sonst BEREIT-reif: Modul-Zeilenzahlen exakt (98/71/77/75 = 321, editierGeometrie 75), der W-14-Ausschluss belegt (versetzen/spiegeln), Registry 'auswahl' da, BEIDE Toleranzbegriffe verifiziert (toleranzAusZoom in fangKern, toleranzInWelt in trefferSuche — der Beruehrungsfund ist echt und die Benennen-statt-zusammenlegen-Regel genau richtig), Platzhalter-Rot zaehlbar. DER REST: die 'EINE Zusage' in P1-Kriterium W-13/1-7 ist zaehlweise-abhaengig — meine Messung findet NULL dedizierte Auswahl-Testdateien und DREI erwaehnende (toolKatalog, activation, pan). Die Substanz (duenne Absicherung) haelt in jeder Zaehlweise, aber eine Zahl, die woertlich in einem P1 steht, muss eine definierte Messweise haben — sonst traegt das fertige Blatt eine anfechtbare Aussage (Zeitbomben-Klasse aus A-09). Ein Satz: Zaehlweise definieren (dediziert vs. erwaehnend), Zahl danach nachmessen und in Kriterium + Befund-Zeile angleichen."
 offene_akzeptanz:
@@ -2041,8 +2041,9 @@ naechster_schritt: "Generator zieht W-15/1 (§3 beachten)"
 auftrag: "W-21L"
 titel: "Niemand leitet den Lattenabstand aus der Deckungsart ab. Und die Daten dafuer fehlen."
 datei: docs/auftraege/aktiv/W-21L-lattung-der-fehlende-schritt.md
-zustand: DECISION_BLOCKED
-ballbesitz: yama
+zustand: ZURUECKGESTELLT
+ballbesitz: —  # bis Yama die Fachdaten liefert oder W-23 sie erzeugt
+vertretungsentscheid: "release-pruefer 12.08. auf Yamas Anweisung 'schau nach ob aufgaben fuer mich da sind welche du erledigen kannst und muss': W-21L wird AUSDRUECKLICH ZURUECKGESTELLT. Das ist die eine der beiden Optionen, die ich vertreten kann — die andere (Fachdaten liefern: welche Deckungsart welche Lattweite traegt) waere das Erfinden von Normwerten und faellt unter das Operanden-Gate, das ich nicht umgehe. GEMESSEN und bestaetigt: in geometry/ traegt genau eine Datei einen Lattenbegriff, dachWerte.ts mit 'battenDist: 0.05 // Lattenabstand min 5 cm' — eine SCHUTZSCHRANKE, keine Zuordnung. WAS DIE SPERRE LOEST, damit sie nicht unbemerkt liegen bleibt: entweder eine Tabelle Deckungsart -> Lattweite von Yama (Quelle nennen, Fachregeln des Dachdeckerhandwerks oder Herstellerangabe), ODER W-23 erzeugt sie als Nebenprodukt. Bis dahin blockiert W-21L NICHTS: der fehlende Schritt ist gemeldet, W-21 selbst ist veroeffentlicht und betriebsbestaetigt. Rueckholbar mit einem Satz."
 basis_sha: 4f0d4584
 prioritaet: P2
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): KEINE DoR — der Auftrag geht NICHT in die Pruefung, und das ist richtig so. Das Blatt setzt sich selbst auf 'blockiert_durch: OPERANDEN-GATE, ballbesitz: YAMA' und begruendet es mit den fehlenden Fachdaten. ICH HABE DIE OPERANDEN-LAGE NACHGEMESSEN und bestaetige sie: in geometry/ traegt genau EINE Datei ueberhaupt einen Lattenbegriff — dachWerte.ts, und dort steht nur 'battenDist: 0.05 // Lattenabstand min 5 cm', also eine SCHUTZSCHRANKE (Mindestwert), keine Zuordnung Deckungsart -> Lattweite. Es gibt keine Tabelle, aus der ein Lattenabstand fuer eine Deckungsart folgt."
