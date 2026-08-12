@@ -46,7 +46,7 @@
 | **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
 | **W-27** Dachkantentypen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
-| **W-38** Schrittstatus und Prüfpunkte | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
+| **W-38** Schrittstatus und Prüfpunkte | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · aus dem Befund des Plan-Prüfers `7b7db5b6` · **Bau erst NACH A-20s Abnahme** (dieselbe Datei) |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
@@ -6475,8 +6475,9 @@ planner_erkennt_die_fehlmessung_an: "Der Generator hat recht, und der Befund tri
         eigenen Zaehlfehler, der Generator hat A-13:227 geoeffnet und fand meinen. Wer eine Menge
         zaehlt, muss mindestens ein Glied ansehen. WAS GILT: von meinen 17 sind 4 echt (A-17, B7,
         W-20, W-27), 13 verglichen einen Blattkopf mit einer Bauaufzeichnung. Mein Vergleich B
-        (Blattkopf gegen STATUS.md) bleibt gueltig und seine Messung ist HAERTER als meine: 29 von
-        33 abweichend und 20 behaupteten ENTWURF waehrend BETRIEBSBESTAETIGT galt.
+        (Blattkopf gegen STATUS.md) bleibt gueltig und seine Messung ist HAERTER als meine — die
+        Zahlen stehen im BERICHT und werden hier ausdruecklich NICHT wiederholt, siehe die
+        Begruendung am Ende dieses Feldes.
         BERICHTIGT 12.08. nach 99fc86cd: hier stand zusaetzlich '3 ohne Datensatz' — das ist FALSCH,
         und der Fehler ist MEINER, obwohl die Zahl von ihm kam. A-09, A-11 und A-12 haben alle drei
         einen Datensatz UND eine Tafelzeile; der Evaluator hat sie einzeln geoeffnet und an allen
@@ -6494,7 +6495,15 @@ planner_erkennt_die_fehlmessung_an: "Der Generator hat recht, und der Befund tri
         in derselben Datei haben heute DREI Rollen falsch messen lassen — den Generator (3 ohne
         Datensatz), den Evaluator (sein erstes Raster loeste die /1-Form nicht auf und meldete 11)
         und mich (Uebernahme). Das ist H-9 in der Datenhaltung statt im Suchmuster. Ich schneide
-        dafuer JETZT nichts: A-20 bessert nach, A-21 wartet auf dessen Abnahme. DAS BLATT FASSE ICH NICHT AN, solange die Abnahme laeuft: der Evaluator
+        dafuer JETZT nichts: A-20 bessert nach, A-21 wartet auf dessen Abnahme.
+        WARUM HIER KEINE ZAHLEN MEHR STEHEN — die Lehre aus DREI Runden an derselben Stelle: ich
+        hatte 29/3/20 aus dem Baubericht kopiert. Die 3 war falsch und wurde zurueckgezogen, dann
+        hat der Generator in Runde 2 (92c50794) an drei Orten berichtigt und aus 29/3/20 wurde
+        32/0/22 — womit MEINE beiden anderen Zahlen ebenfalls veralteten, ohne dass sie falsch
+        gemessen waren. EINE FREMDE MESSZAHL IN MEINEM FELD IST EINE KOPIE, und Kopien veralten:
+        genau das, was A-20 fuer den Zustand abgeschafft hat, hatte ich fuer Messzahlen weiter
+        getan, im Datensatz desselben Auftrags. Deshalb steht hier ab jetzt der VERWEIS auf den
+        Bericht statt der Zahl. Nicht gemessen, nicht behauptet, nicht veraltend. DAS BLATT FASSE ICH NICHT AN, solange die Abnahme laeuft: der Evaluator
         prueft gegen dieses Blatt, und ein bewegtes Ziel ist keine Pruefgrundlage. Diese Zeile ist
         der Ort dafuer."
 basis_sha: f1296de8
@@ -6532,14 +6541,14 @@ eigener_messfehler: "Mein erstes Raster loeste die Auftrags-ID ohne die /1-Form 
 
 ```yaml
 auftrag: "W-38"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 ballbesitz_bau: generator (Bau fertig — sieben Werkbankblaetter neu, REGISTER.md Zeile 125 LEER -> BESCHRIEBEN)
 bericht: "docs/BERICHT-W-38-schrittstatus-und-pruefpunkte.md"
 zwei_fehltreffer_gemeldet: "(1) IM AUFTRAGSBLATT: dessen Abschnitt 2 nennt app/dashboard/enginePanels.ts als Pruefpunkt-Nutzer. Gemessen nennt diese Datei studioDaten an keiner Stelle und importiert nichts daraus; ihr einziger Treffer ist enginePanels.ts:235, ein deutscher Anzeigetext 'Auslegung nach Verlegeabstand … Pruefpunkte zu Leistung'. Die beiden dort ebenfalls genannten Testdateien sind derselbe Fall — das Wort im Testnamen, nicht der Typ. H-6. Kein Vorwurf: das Blatt schreibt zu Abschnitt 2 selbst 'meine Erhebung, nachzumessen', und W-38-4 hat den Fund erzwungen, weil es die Trefferzeile verlangt statt des Wortes 'wird verwendet'. (2) MEINER: ich wollte die Rechenfreiheit der Datei mit einem Rechenausdruck-Muster belegen und bekam 6 Treffer, von denen KEINER eine Rechnung ist — vier SVG-Pfade (6-4 sind zwei Koordinaten) und zwei Anzeigetexte. H-9 an mir selbst. Der tragende Beleg ist die 0 bei 'export function'; die Fehlmessung steht in 3-FORMELN.md, statt geloescht zu sein."
 nebenbefund_neun_vorlagen: "Die W-38-8-Gegenprobe ueber alle 26 Werkzeugordner zeigt neun Werkzeuge, die ihre Blaetter noch unveraendert als Vorlage tragen: W-03 W-06 W-10 W-12 W-14 W-16 W-17 W-18 W-19. Alle neun stehen im Register auf LEER — konsistent, kein Mangel. Genannt, damit die Zahl '10 gleiche Hashes' niemanden erschreckt. Kein W-38-Blatt ist darunter, und keines gleicht einem fremden Werkzeug."
 aufgefallen_am_eigenen_werkzeug: "Zwei meiner Gegenproben schrieben \"$w1-ZWECK.md\" — die Shell liest darin die Variable w1, nicht $w gefolgt von 1. Beide Laeufe prueften eine Datei die es nicht gab und meldeten 'keine Dublette'. Aufgefallen, weil derselbe Bestand zwei Saetze vorher '1 Dublette' gesagt hatte; korrigiert mit ${w}1-ZWECK.md. Zwei Messungen die sich widersprechen sind ein Pruefanlass, keine Auswahl."
 dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN, jede Behauptung selbst gemessen: studioDaten.ts traegt 257 Zeilen (exakt wie im Blatt), STATUS_LABEL existiert, SchrittStatus definiert VIER Stufen ('ok'|'prog'|'warn'|'open', Z.163). Bei den _STILLGELEGT-Konstanten zeigte mein Zaehler DREI, das Blatt sagt ZWEI — GELESEN statt gezaehlt: Z.157 ZULETZT_STILLGELEGT und Z.186 STEPS_STILLGELEGT sind Konstanten, Z.146 ist ein Kommentarverweis. Das Blatt hat recht."
-ballbesitz: evaluator
+ballbesitz: release-pruefer
 titel: "Vier Stufen, vier Datenformen, zwei stillgelegte Konstanten — Ablesung aus dem Bestand"
 basis_sha: fb1a396d
 spur: A
@@ -6547,6 +6556,28 @@ leerstelle_geschlossen: "Das Blatt existierte mit status ENTWURF und ballbesitz 
 die_alte_offene_frage_ist_damit_beantwortet: "Seit dem A-17-Doppelblock steht die Frage offen, WER den Block anlegt — Planner beim Schnitt oder Plan-Pruefer bei der DoR. Sie ist nie entschieden worden. Faktisch ist es beide Male der Plan-Pruefer gewesen: bei den neun unsichtbaren Blaettern und jetzt hier. ICH SCHLAGE VOR, es dabei zu belassen und es als Regel zu schreiben: der Planner schneidet das Blatt, der Plan-Pruefer legt den Block bei der DoR an — dann entsteht der Block genau dann, wenn es einen geprueften Zustand zu tragen gibt, und ein Doppelblock wie bei A-17 kann nicht mehr entstehen. Entscheidung gehoert dem Planner oder Yama, nicht mir."
 gewuerdigt_meine_lehre_ist_ein_kriterium_geworden: "W-38-8 verlangt die Gegenprobe 'tail -n +2 <blatt> | md5 je Blatt, keine zwei Werkzeuge mit gleichem Hash' — und begruendet sie woertlich mit MEINEM Fehler: 'weil meine erste W-07N-SPEC 6/7 zaehlte, wo 4/7 standen — Platzhalterzaehlung ist blind fuer unveraenderte Vorlagen'. Aus einem Fehlbefund von heute Vormittag ist eine stehende Pruefung geworden, und sie ist schaerfer als beide Verfahren, die ich damals hatte: ein Hash-Vergleich findet die unveraenderte Vorlage UND die minimal veraenderte."
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-38 GECLAIMT vor dem Pruefstand. W-38 ist das Blatt, das im A-20-Verfahren als Fenster-Beleg diente (Blatt committet, null Bloecke, null Tafelzeilen) — ich pruefe es deshalb ohne jede Anleihe bei dem, was ueber es geschrieben wurde, und messe jede Zahl des Blattes selbst nach."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an fa83a2dc, Elter 184963e3, ACHT von acht. Messtisch
+  vollstaendig im Blatt. Ablesung belegt: studioDaten.ts md5-identisch an Basis, Elter und Bau
+  (b1e4942e21bd9ba56c3993ca388cdf87). Suite am Bau 1698/1698."
+was_ich_selbst_gemessen_habe: "Jede Fundstelle der sieben Blaetter einzeln geoeffnet; die Nutzer je
+  Typ UNABHAENGIG erhoben, bevor ich 5-CODE/LIESMICH gelesen habe — deckungsgleich; die sieben
+  md5-Werte der Berichtstabelle zeichengenau nachgerechnet; die md5-Gegenprobe ueber alle 26
+  Werkzeugordner selbst gefahren, 0 Dubletten mit W-38."
+die_probe_die_das_urteil_traegt: "Drei Mutationen mit Anker und md5-Ruecksetzung, weil W-38-5 die
+  Waechter als BELEG fuehrt und ein zitierter Test noch kein wachender Test ist. Fuenfte Stufe in
+  STATUS_LABEL -> 1 fail; zwoelfter Eintrag in STEPS_STILLGELEGT -> 1 fail; Produktivcode
+  importiert STEPS_STILLGELEGT -> 2 fail. Alle drei md5 identisch zurueckgesetzt."
+zwei_befunde_an_den_PLANNER_nicht_an_den_generator: "1) Auftragsblatt-Abschnitt 2 nennt
+  enginePanels.ts als Pruefpunkt-Nutzer; die Datei hat 0 Vorkommen von studioDaten und keinen
+  Import daraus, der einzige Treffer ist der Anzeigetext in :235 — vom Generator gemeldet, von mir
+  first-hand bestaetigt. 2) NEU VON MIR: derselbe Abschnitt nennt Statuszuweisungen 9/6/14/31; an
+  keiner von fuenf geprueften Mengen reproduzierbar, ich messe durchgehend 14/1/7/27. Der Generator
+  hat sie NICHT uebernommen (0 Treffer in allen sieben Bau-Blaettern) — richtig gehandelt."
+eigener_messfehler: "Ich habe den Generatorbericht vor der eigenen Messung gesehen, weil mein
+  git log --name-only die volle Betreffzeile ausgab — genau das, was das -q am worktree verhindern
+  soll. Ich habe daraufhin jede Zahl unabhaengig nachgemessen statt abgehakt; der Aufbaufehler
+  steht im Blatt. Zweitens lieferte ein grep mit zsh-Globbing-Fehler 0 Treffer fuer cfg: true,
+  richtig ist 1 (Z.206)."
 ```
 ---
 
