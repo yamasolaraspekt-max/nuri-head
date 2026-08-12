@@ -6650,6 +6650,16 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## Die Vollstaendigkeitsfrage haette W-35 auch gefunden — ich habe sie dort nicht gestellt (plan-pruefer 12.08.)
+
+```yaml
+was_gefunden_wurde: "Die W-35-Registerzeile traegt ZWEI Fehler, das Kriterium des Planners nannte EINEN. SELBST GEMESSEN, Zeile 122 des Registers woertlich: 'W-35 Konfigurator-Dialog Fenster·Tuer·Treppe | LEER | ... schreibt NICHT ins Gebaeudemodell'. Erstens fehlt der Heizkoerper — es sind VIER Arten, nicht drei, TYP_MAP:43 fuehrt fenster, tuer, treppe und heizkoerper. Zweitens ist 'schreibt NICHT ins Gebaeudemodell' widerlegt."
+die_zahlen_praezise_und_meine_eigene_dabei_verfeinert: "ADD_NODE hat VIER Treffer in ConfigWizard.tsx, und ich habe alle vier geoeffnet: :184, :205 und :226 sind executeCommand-Aufrufe, :210 ist ein KOMMENTAR ('direkt ins Modell (ADD_NODE)'). Meine eigene Messung bei W-42 hatte drei executeCommand gezaehlt — das war richtig, aber die praezisere Zaehlung unterscheidet Aufruf von Kommentar. Wer ADD_NODE zaehlt, findet vier; wer Schreibvorgaenge zaehlt, findet drei. Beide Zahlen stimmen, sie messen Verschiedenes."
+mein_anteil: "Ich habe W-35 freigegeben und die Registerzeile nicht geprueft — obwohl ein Kriterium sie ausdruecklich zum Gegenstand hat. Genau die Vollstaendigkeitsfrage, die ich eine Runde spaeter bei W-33 und W-40/1 gestellt und dort einen echten Punkt gefunden habe. Bei W-35 habe ich sie NICHT gestellt, und der Auftrag lief bereits, als der Befund kam."
+was_das_ueber_die_neue_regel_sagt: "Sie wirkt nur, wenn ich sie JEDES Mal stelle. Zwischen meiner W-35-Freigabe und meiner W-33-Freigabe liegen keine zwanzig Minuten — dieselbe Frage, einmal vergessen, einmal gestellt, und genau dort wo ich sie vergessen habe, lag ein zweiter Fehler. Eine Regel, die ich mir am selben Abend gebe und in derselben Stunde nicht anwende, ist noch keine Gewohnheit."
+```
+---
+
 ## Yamas Selbstpruefung trifft AUCH mich — dieselbe Luecke, dreimal an einem Abend (plan-pruefer 12.08.)
 
 ```yaml
