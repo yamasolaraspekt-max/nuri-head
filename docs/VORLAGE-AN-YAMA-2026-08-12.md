@@ -488,3 +488,112 @@ review-required   Dein Zielbild 3.6 fuehrt ACHT Stufen. Vier sind gebaut, drei s
 blocked           Die Quelle beziffert sie nicht. Wie grenzt sie sich von
                   DECISION_BLOCKED im Prozess ab?
 ```
+
+---
+
+## 10 · W-42 soll nach deiner eigenen Regel anders geschnitten werden, als deine Zusage lautet
+
+**NEU am 12.08. — und ich trage einen Vorwurf mit, der berechtigt ist.** Der Plan-Prüfer hat in
+`a482d437` festgestellt, dass diese Frage seit heute Mittag in jedem seiner Berichte steht, aber
+**nirgends im Repositorium** — und dass meine Meldung „alle Fragen an dich beantwortet oder
+entscheidungsreif" sie nicht enthielt. Das stimmt: `W-42` kommt in dieser Vorlage dreimal vor,
+dreimal als Nebensatz, **keinmal als offene Frage**. Nachgemessen, nicht eingeräumt aus Höflichkeit.
+
+### Der Widerspruch besteht zwischen zwei Aussagen von dir vom selben Tag
+
+```text
+DEINE ZUSAGE      "ich sage zu diesen sachen ja W-40, W-41, W-42 warten auf dich"
+                  — zugestimmt hast du dem ANGEBOT des Planners, alle drei als
+                  VORGABE mit Ziel ENTWORFEN zu schneiden. Eine Gattungszusage
+                  fuer drei Auftraege, kein Einzelurteil ueber W-42.
+
+DEINE LEGENDE     REGISTER.md Z.10-11, ausdruecklich als "Yamas Entscheidung 12.08."
+                  markiert: ENTWORFEN ist "fuer Werkzeuge, deren Code noch nicht
+                  existiert (Klasse C)". Und im Textblock Z.15-16:
+                  "ENTWORFEN  die Blaetter GEBEN VOR, was gebaut werden soll.
+                              Quelle: Vertrag, Fachregel oder Zielbild — KEIN Code."
+```
+
+**Und der Code von W-42 existiert.** Selbst gemessen, jede Datei geöffnet:
+
+```text
+resources/planner/hausplaner/app/ConfigWizard.tsx              271 Zeilen
+resources/planner/hausplaner/geometry/configuratorPackage.ts   170 Zeilen
+resources/planner/hausplaner/app/state/paketSpeichern.ts        64 Zeilen
+resources/planner/hausplaner/__tests__/paketSpeichern.test.ts  126 Zeilen
+```
+
+Damit fällt W-42 nach **deiner eigenen Legende** nicht unter ENTWORFEN. Der Planner hat deshalb
+`BESCHRIEBEN` gesetzt, die Abweichung **gemeldet statt still vollzogen**, und dazugeschrieben:
+*„will Yama es anders, gilt seine Fassung."*
+
+### Der Präzedenzfall ist schon da, und er ist abgeschlossen
+
+Das ist keine Hypothese. **W-40 trägt heute `ENTWORFEN` im Register und ist `BETRIEBSBESTAETIGT`** —
+und in derselben Registerzeile steht der Befund:
+
+> **BEFUND: eine Gültigkeitsachse mit Übergängen ist in `geometry/configuratorPackage.ts` bereits
+> gebaut**
+
+Ein Werkzeug, dessen Code existiert, trägt also bereits die Stufe, die deine Legende für Werkzeuge
+ohne Code reserviert. Vier Rollen sind daran vorbeigegangen, ich eingeschlossen. Bei W-42 ist es
+noch aufzuhalten, weil der Auftrag `BEREIT` steht: **heute kostet die Änderung eine Zeile, nach dem
+Bau sind es sieben Blätter.**
+
+### Meine Ablesung — und warum ich sie nicht vollziehe
+
+Ich lese ab, dass die **speziellere** deiner beiden Aussagen für `BESCHRIEBEN` spricht: die Legende
+ist schriftlich, nennt das Merkmal (Code ja/nein), und die Zusage war eine Gattungszustimmung zu
+einem Vorschlag über drei Aufträge auf einmal. Der Weg des Planners deckt sich damit.
+
+**Ich fasse W-42 trotzdem nicht an**, und zwar nicht aus Vorsicht, sondern weil es nichts zu
+reparieren gibt: der Planner hat bereits `BESCHRIEBEN` gesetzt, der Bau ist nicht blockiert, und die
+einzige Lücke war die **Sichtbarkeit** — die schließe ich hiermit. Es fehlt allein dein Wort dazu,
+ob deine Zusage oder deine Legende gelten soll.
+
+```text
+ENTSCHEIDUNGSREIF, drei Zeilen:
+  a) Legende gilt  -> W-42 bleibt BESCHRIEBEN. Nichts zu tun. (meine Ablesung)
+  b) Zusage gilt   -> W-42 auf ENTWORFEN. Kostet heute eine Zeile im Blatt.
+  c) Und unabhaengig davon: soll W-40 nachgezogen werden? Es ist abgeschlossen,
+     traegt ENTWORFEN und seinen eigenen Gegenbefund in derselben Zeile.
+```
+
+### Nachtrag, eine Stunde später: es geht nicht um W-42, es geht um die Quelle
+
+Während ich diesen Punkt schrieb, haben Generator und Planner unabhängig voneinander dasselbe
+gefunden. Ich habe beide Befunde **selbst nachgemessen**, nicht übernommen:
+
+```text
+DIE QUELLE       docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md — sie traegt ALLE DREI
+                 Vorgaben: W-40 (BETRIEBSBESTAETIGT), W-41 (CODE_FERTIG), W-42 (BEREIT).
+
+IHRE AUSSAGE     Z.184-185 woertlich: "ConfigWizard 271 Z ... schreibt NICHTS ins
+                 BuildingDocument, laedt JSON herunter."
+
+DER CODE         grep executeCommand ConfigWizard.tsx -> DREI Treffer, selbst geoeffnet:
+                   :184  ADD_NODE  radiator
+                   :205  ADD_NODE  treppe
+                   :226  ADD_NODE  knoten (Fenster oder Tuer)
+                 Er schreibt dreimal ins Gebaeudemodell. Der JSON-Download ist der
+                 Rueckfall, nicht der Regelfall.
+```
+
+**Damit ist die Abwesenheitsaussage dieser Quelle zweimal nachweislich falsch** — bei W-40
+(`outdated` existiert samt Übergangstabelle) und bei W-42 (der Schreibpfad existiert dreifach).
+Der Verfasser hat vier Punkte ausdrücklich als *„nicht gemessen"* gekennzeichnet; **diese beiden
+gehörten nicht dazu, sie standen als Ergebnis da.**
+
+Der Planner hat daraufhin bei `W-15` zum ersten Mal **vor** dem Schnitt gemessen — und auch dort
+trägt die Prämisse zur Hälfte nicht (Wand→Mauerwerk ist gebaut mit Schema, Validierung, Katalog und
+Oberfläche; Raum→Belag fehlt). Vier Fälle, dreimal falsche Prämisse, und **nur der letzte hat
+nichts gekostet, weil vorher gemessen wurde.**
+
+**Was das für deine Entscheidung ändert:** Die Frage ist nicht mehr „welches Wort trägt W-42 im
+Register". Sie lautet: *ein einziger Bericht hat drei Vorgaben getragen, und seine „gibt es
+nicht"-Sätze waren Suchraum statt Bestand.* W-40 ist damit schon durch die ganze Kette gelaufen.
+
+```text
+DAZU BRAUCHT ES VON DIR NICHTS — es ist gemessen und die Rollen haben reagiert.
+Es steht hier, damit du es weisst, bevor du ueber a) b) c) oben entscheidest.
+```
