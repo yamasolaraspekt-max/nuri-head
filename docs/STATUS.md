@@ -43,7 +43,7 @@
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
-| **W-23** Deckung und Material | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
+| **W-23** Deckung und Material | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `e9f370f1` | **der Operand ist da** — Yamas Freigabe + seine Fachaussage: die Lattung hängt an **Neigung, Dachmaß und zulässiger Überlappung**, ist also **keine Tabellenzahl, sondern eine Rechnung** · Quelle `braas_dachziegel_datenbank_v14.xlsx`, Blatt `DB_Produkte`, **127 Zeilen · 48 Spalten** · **Füllquote ungeschönt: 9 von 127** tragen `Lattmass_min`+`max` = **7 Modelle, alle Braas** · Fund: `Verschiebespiel` **ist** `max−min`, **6 von 6 stimmen** → prüfbar · entsperrt W-21L **für sieben Modelle**, nicht mehr |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6045,8 +6045,13 @@ mein_anteil_am_befund: "Zwei der drei Fehlalarme entstanden durch MEINE Votumsze
 ```yaml
 auftrag: "W-23"
 datei: docs/auftraege/aktiv/W-23-deckung-und-material.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft — sieben Blaetter aus der Quelle abgelesen, nicht entworfen)
+quelle_vor_dem_ziehen_geprueft: "braas_dachziegel_datenbank_v14.xlsx liegt am genannten Pfad,
+  718574 Byte — die Groesse des Blattes auf das Byte. openpyxl fehlt in dieser Umgebung; eine xlsx
+  ist ein ZIP mit XML, gelesen wird deshalb mit Bordmitteln (zipfile + ElementTree). Blatt
+  DB_Produkte im Archiv bestaetigt. Ich habe das VOR dem Ziehen geprueft, statt einen Auftrag
+  anzunehmen, dessen Operand vielleicht nicht lesbar ist."
 basis_sha: e9f370f1
 anlass: "Yamas Freigabe 12.08. ('bedien dich nach Hersteller Typ Format') und unmittelbar danach
          seine Fachaussage: 'die eindecklattung ist abhaengig von dach neigung und dach maße und
