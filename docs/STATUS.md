@@ -52,9 +52,9 @@
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **W-39** Studio-Rahmen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
-| **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
-| **W-41** Abhaengigkeitsgraph / Invalidierung | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
-| **W-42** Schreibpfad Wizard zum Gebaeudemodell | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
+| **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
+| **W-41** Abhaengigkeitsgraph / Invalidierung | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
+| **W-42** Schreibpfad Wizard zum Gebaeudemodell | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7631,13 +7631,13 @@ claim_abnahme_runde2: "evaluator (Erstinstanz) 12.08.: Abnahme W-39 RUNDE 2 GECL
 
 ```yaml
 auftrag: "W-40"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "Die zweite Achse, ohne die erst nach Bestaetigung nicht pruefbar ist"
 basis_sha: c9ac316d
 spur: A
 prioritaet: P1
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN. Quelle SELBST gemessen: BERICHT-PROZESSEBENE-DREI-FRAGEN.md existiert, 194 Zeilen exakt wie im Blatt. Die Zahlen der Zahlenluecke (acht, vier, drei) sind in der Quelle belegt — mein erstes Muster fand 0, weil es die Wortfolge suchte und die Quelle sie in einer TABELLE fuehrt; Muster geprueft statt Zahl bezweifelt. BESONDERS GUT: W-40-3 stellt die Zahlenluecke ausdruecklich als FRAGE und beantwortet sie NICHT — sie gehoert Yama. Ein Blatt, das eine offene Fachfrage als offen kennzeichnet statt sie zu fuellen, ist genau das, was CLAUDE.md verlangt."
 freigabe: "Yama 12.08.: ich sage zu diesen sachen ja W-40, W-41, W-42 warten auf dich — das Angebot
   des Planners, sie als Vorgabe mit Ziel ENTWORFEN zu schneiden."
 operand_gemessen: "docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md, 194 Zeilen, Markdown, direkt lesbar.
@@ -7663,13 +7663,13 @@ W_40_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 
 ```yaml
 auftrag: "W-41"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "Aenderungen propagieren, niemals stille Loeschung"
 basis_sha: c9ac316d
 spur: A
 prioritaet: P1
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN. Dieselbe Quelle, selbst gemessen. Die Grenze zu W-40 ist im Kriterium W-41-2 sauber gezogen (W-40 sagt DASS und WAS BEDEUTET, W-41 sagt WORAUS FOLGT), und W-41-3 nennt woertlich, was die Quelle NICHT deckt. Der tragende Punkt ist ein VERBOT — niemals stille Loeschung — und ein Verbot ist pruefbar, weil sein Bruch sichtbar ist."
 freigabe: "Yama 12.08., dieselbe Freigabe wie W-40 und W-42."
 der_kern_ist_das_VERBOT: "Propagieren allein ist gewoehnliche Technik. Die Leistung ist die Zusage,
   dass bei einer Invalidierung nichts STILL verschwindet — ein abgeleiteter Wert darf seinen ZUSTAND
@@ -7692,13 +7692,13 @@ W_41_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 
 ```yaml
 auftrag: "W-42"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "Der Schreibpfad ist gebaut, und zwei Quellen sagen das Gegenteil"
 basis_sha: c9ac316d
 spur: A
 prioritaet: P1
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN, MIT ABWEICHUNG VON YAMAS FREIGABE, die der Planner selbst meldet. Yama gab W-42 als VORGABE mit Ziel ENTWORFEN frei; das Blatt setzt BESCHRIEBEN, weil der Code EXISTIERT. SACHLICH GEPRUEFT, alle drei Quellen: ConfigWizard.tsx 271 Zeilen exakt wie genannt, configuratorPackage.ts 170 Zeilen, paketSpeichern.ts vorhanden unter app/state/ — das Blatt kuerzt den Pfad, mein Suchpfad war zu eng, kein Fehler des Blattes. Die Begruendung traegt: wer eine VORGABE fuer vorhandenen Code schreibt, baut einen zweiten Schreibpfad. DIE ABWEICHUNG IST GEMELDET UND NICHT STILL VOLLZOGEN, mit dem Satz 'wenn Yama sie anders will, gilt seine Fassung' — damit ist §1 gewahrt. AN YAMA: eine Zeile von dir genuegt, wenn du bei ENTWORFEN bleiben willst."
 ABWEICHUNG_VON_YAMAS_FREIGABE_GEMELDET: "Yama hat alle drei als VORGABE mit Ziel ENTWORFEN
   freigegeben. Fuer W-40 und W-41 trifft das zu. Fuer W-42 NICHT: der Code existiert, und die
   Legende des Registers reserviert ENTWORFEN ausdruecklich fuer Werkzeuge, deren Code noch nicht
