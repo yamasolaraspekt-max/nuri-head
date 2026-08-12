@@ -91,7 +91,7 @@ Richtungen nicht.*
 REGEL 1  IM ZWEIFEL DIE HOEHERE KLASSE.
          "eine zu strenge kostet eine Rueckfrage, eine zu milde den Schaden."
 REGEL 2  JEDE ZEILE MIT BEGRUENDUNG UND FUNDSTELLE.
-         kein "vermutlich Bauschaden", sondern "Bauschaden, weil <Datei:Zeile> sagt <X>"
+         kein "vermutlich Bauschaden", sondern "Bauschaden, weil Datei:Zeile sagt X"
 REGEL 3  EIN VORSCHLAG JE ENGINE, nicht eine offene Frage je Engine.
          "dann ist es fuer dich ein Blick auf eine Liste, keine Sitzung."
 ```
@@ -185,6 +185,8 @@ nicht entscheidbar — siehe A-15-10.
 
 ## A-15-5 · Die Auswirkung je Zeile — wer müsste nach A-14s Muster schweigen
 
+> **Auch hier: die Klassen sind die vorgeschlagenen, nicht entschiedene.**
+
 | Engine | Klasse | Plakette heute | müsste schweigen? |
 |---|---|---|---|
 | `sparrenBerechnung` | FACHAUSSAGE | **schon weg** (A-14) | erledigt |
@@ -197,39 +199,68 @@ nicht entscheidbar — siehe A-15-10.
 **Nach diesem Vorschlag müssten ZWEI Engines zusätzlich schweigen** (`abwassergefaelle`,
 `fbhAuslegung`) — *vorbehaltlich Yamas Bestätigung von Achse 2.*
 
-## Die Sperre — A-15 kann nicht abschließen, und der Grund ist keine Nachlässigkeit
+## A-15-11 · Die vier Treppen-Zeilen — ZULIEFERUNG aus W-09/1, nicht neu gemessen
 
-**`A-15-13` verlangt: „Jede der elf Engines bekommt genau einen Vorschlag."**
-**`A-15-11` verlangt zugleich: die vier Treppen-Dateien werden NICHT hier gemessen**, sondern aus
-`W-09/1-5` übernommen, mit Commit-Verweis.
+**Die Sperre ist aufgelöst.** `W-09/1` ist **ABGENOMMEN** (Bau `d26d50b4` + `a29ea627`, §3-Nachbesserung
+`f9c98fc0`, Wieder-Abnahme durch den Evaluator nach §12.4 über alle elf Kriterien).
+
+**Übernommen aus `W-09/1-7`, Blatt `W-09-treppe/7-GRENZEN.md`, Abschnitt „Zulieferung an A-15"** —
+**wörtlich, nicht nachgemessen**, wie die Auflage es verlangt:
+
+| Engine | nennt eine Norm? | was eine Verletzung bedeutet | Achse 2 · **vorgeschlagen, nicht entschieden** | Klasse |
+|---|---|---|---|---|
+| `treppenBerechnung.ts` | **ja** — `:5`, `:58` (DIN 18065) | **Sturzgefahr**: Steigung, Auftritt, Laufbreite, Durchgangshöhe sind Sicherheitsmaße | **PERSONENSCHADEN** | **FACHAUSSAGE** |
+| `treppe2D.ts` | **ja** — `:6`, verweist auf `berechneTreppe` | zeichnet nur; eine Verletzung **entsteht** hier nicht, sie wird **abgebildet** | **KOMFORT** | **HINWEIS** |
+| `treppe3D.ts` | **nein** | dieselbe Lage: Darstellung, keine Prüfung | **KOMFORT** | **HINWEIS** |
+| `treppenTypen.ts` | **nein** | Katalog der Grundriss-Geometrie; prüft nichts | **KOMFORT** | **HINWEIS** |
+
+### Die Begründung der Klassen — und wo ich aus Zweifel die höhere gesetzt habe
+
+**`treppenBerechnung` ist PERSONENSCHADEN und nicht FEHLAUSLEGUNG.** *Eine zu steile Treppe ist kein
+Komfortmangel.* Und W-09 hat den Grund noch geschärft: **`bestanden` ist eine Teilaussage** —
+Warnungen zählen nicht, und zwei Prüfungen laufen nur bei vorhandener Eingabe. **Eine Engine, deren
+Urteil weniger weiß, als es klingt, und deren Gegenstand ein Sturzrisiko ist, gehört in die höchste
+Klasse.**
+
+**Die drei Darstellungs-Module sind HINWEIS, und das ist keine Milde.** Sie **erzeugen** keine
+Verletzung, sie zeigen eine. *Regel 1 („im Zweifel die höhere") greift hier nicht, weil kein Zweifel
+besteht: ein Modul, das nichts prüft, kann keine Prüfung falsch bestehen lassen.* **Wäre eines von
+ihnen zugleich Prüfstelle, stünde FACHAUSSAGE.**
+
+## A-15-13 · Elf von elf — die Tabelle ist vollständig
 
 ```text
-W-09/1   zustand: BEREIT     ballbesitz: generator     basis_sha 65f3ece4
-         -> NICHT gebaut. Die Zulieferung existiert nicht.
+FACHAUSSAGE (7)  sparrenBerechnung · abwassergefaelle · wandaufbau · fbhAuslegung
+                 heizkreisVerteiler · treppenBerechnung
+                 (+ configuratorPackage: KEINE Engine, siehe oben)
+HINWEIS (4)      kuecheArbeitsdreieck · treppe2D · treppe3D · treppenTypen
 ```
 
-**Damit sind die beiden Kriterien heute nicht gleichzeitig erfüllbar.** Diese Tabelle steht bei
-**sieben von elf**, und die fehlenden vier darf ich nicht selbst messen — *„zwei Aufträge, die
-dieselbe Datei messen, erzeugen zwei Zahlen und eine Diskussion."*
+**Sechs Engines mit einer Norm, fünf ohne — und die Klasse folgt nicht der Norm.** *`fbhAuslegung`
+nennt keine und ist FACHAUSSAGE; `treppe2D` nennt eine und ist HINWEIS. Genau dafür gibt es Achse 2.*
 
-### Was A-15 löst — zwei Wege, beide nicht meine Entscheidung
+## Die Auswirkung — wer müsste nach A-14s Muster schweigen
 
-1. **W-09/1 läuft zuerst** und liefert seine vier Zeilen. *Dann trägt A-15-11, und A-15 schließt ab.*
-2. **Die Auflage wird geändert:** A-15 misst die vier selbst, W-09/1 übernimmt sie später von hier.
-   *Dann kehrt sich die Richtung um, und A-15-11 muss neu formuliert werden.*
+> **Alle Klassen in dieser und der folgenden Tabelle sind die oben VORGESCHLAGENEN, nicht
+> entschiedene.** *Sie werden hier nur wiederholt, um die Folge sichtbar zu machen — die
+> Kennzeichnung steht an der Folgestufe, wo die Entscheidung fällt.*
 
-**Der erste Weg ist der billigere, weil W-09/1 ohnehin geschnitten und BEREIT ist.**
-*Aber die Reihenfolge zweier Aufträge gehört dem Planner, nicht mir.*
+| Engine | Klasse | Plakette heute | müsste schweigen? |
+|---|---|---|---|
+| `sparrenBerechnung` | FACHAUSSAGE | **schon weg** (A-14) | erledigt |
+| `treppenBerechnung` | FACHAUSSAGE | **ja** — im Browser gesehen, „Alle Prüfungen bestanden" (y=413) | **ja** |
+| `abwassergefaelle` | FACHAUSSAGE | ja, wenn `bestanden` | **ja** |
+| `fbhAuslegung` | FACHAUSSAGE | ja | **ja** |
+| `wandaufbau` | FACHAUSSAGE | **keine — es gibt kein Panel dafür** | nein, kommt nie zu Wort |
+| `heizkreisVerteiler` | FACHAUSSAGE | kein eigenes Panel | entfällt |
+| `kuecheArbeitsdreieck` · `treppe2D` · `treppe3D` · `treppenTypen` | HINWEIS | teils | **nein** |
 
-### Was NICHT der Grund ist
+**Nach diesem Vorschlag müssten DREI Engines zusätzlich schweigen** — `treppenBerechnung`,
+`abwassergefaelle`, `fbhAuslegung`. *Vorbehaltlich Yamas Bestätigung von Achse 2.*
 
-**Nicht Zeitmangel, nicht Umfang.** Die sieben messbaren Zeilen stehen vollständig, mit Fundstelle,
-Begründung und der höheren Klasse im Zweifel. **Es fehlt eine Eingabe, die ein anderer Auftrag
-liefern soll — und der ist nicht gelaufen.**
-
-## A-15-7 · must_preserve
-
-**Kein Code angefasst** — Nachweis im Abschlussbericht.
+> **Die Treppe ist der schwerste Fall der drei.** Ihre Plakette sagt „Alle Prüfungen bestanden",
+> während W-09 belegt hat, dass sie **zweimal** weniger meint: Warnungen zählen nicht, und was nicht
+> eingegeben wurde, wird nicht geprüft. *Das ist genau die Lage, für die A-14 gebaut wurde.*
 
 ## Zwei Messfehler von mir, vor dem Melden gefunden
 
