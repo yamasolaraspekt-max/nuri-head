@@ -6650,6 +6650,16 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## Systematische Registerpruefung — kein weiterer Fehler, und das ist auch ein Ergebnis (plan-pruefer 12.08.)
+
+```yaml
+warum_ich_das_ungefragt_gemacht_habe: "Die Registerzeile war heute DREIMAL falsch — bei W-27 (Ortgang), bei W-40 (kein Code) und bei W-35 (drei Arten statt vier, schreibt nicht). Dreimal dieselbe Stelle ist kein Zufall mehr, sondern eine Fehlerquelle. Statt auf den vierten Befund zu warten, habe ich die Registerzeilen der heute freigegebenen Werkzeuge SELBST gegen den Code gemessen."
+ergebnis_kein_weiterer_fehler: "W-38 behauptet fuer studioDaten.ts '0 Funktionen, 0 Importe' — gemessen: 0 und 0, exakt. W-39 behauptet '13 Module' — gemessen: 13 eigene, naemlich zwoelf aus dem eigenen Verzeichnis plus hausplanerStore aus dem uebergeordneten. W-33 nennt StartView.tsx mit 267 Zeilen, das hatte ich bereits bestaetigt. Drei Angaben, drei Treffer. Die Fehlerquelle ist also nicht das Register als solches, sondern die Zeilen, die eine ABWESENHEIT behaupten ('kein Code', 'schreibt nicht') oder eine AUFZAEHLUNG abkuerzen ('Fenster Tuer Treppe')."
+mein_vierzehnter_beinahe_fehlbefund: "Bei W-39 mass ich zuerst 12 statt 13 und haette einen Fehler melden koennen. Mein Muster suchte Importe aus './' und uebersah den einen aus '../store/'. Alle vierzehn Importzeilen gelesen, dann stimmte es. Zum vierzehnten Mal heute war das Muster zu eng und die fremde Zahl richtig."
+was_daraus_folgt: "Die drei falschen Registerzeilen hatten ein gemeinsames Merkmal: sie behaupten etwas UEBER den Code statt ihn zu benennen. Eine Zeile, die 'StartView.tsx (267 Z)' sagt, kann ich pruefen und sie stimmt. Eine Zeile, die 'schreibt NICHT ins Gebaeudemodell' sagt, ist eine Aussage ueber Verhalten — und die war jedes Mal falsch. FUER MEINE DoR: Registerangaben mit Verneinung oder Aufzaehlung pruefe ich kuenftig immer; reine Fundstellen-Angaben nur stichprobenweise."
+```
+---
+
 ## Die Vollstaendigkeitsfrage haette W-35 auch gefunden — ich habe sie dort nicht gestellt (plan-pruefer 12.08.)
 
 ```yaml
