@@ -2073,6 +2073,18 @@ ein_p2_ohne_hindernis: "Die sichtbare grundlage-Zeile nennt VIER der SECHS Sonde
 ```
 ---
 
+## ⚠ AN YAMA — A-16 liegt bei DIR (Weiche), und es ist UNGESICHERT
+
+```yaml
+lage: "Der Planner hat A-16 geschnitten (TIME_VARS im Produktivbaum) und den Ballbesitz ausdruecklich auf YAMA gesetzt — eine Weiche, danach erst die DoR bei mir. Ich fahre deshalb KEINE DoR; ich habe den Kern nachgemessen, damit die Weiche entscheidbar ist."
+zuerst_ein_risiko: "DIE DATEI IST UNTRACKED — git status fuehrt docs/auftraege/aktiv/A-16-time-vars-im-produktivcode.md mit '??'. Sie liegt also in keinem Commit und waere bei einem unachtsamen Handgriff weg. Ich fasse fremde Arbeit nicht an (B5-Regel) und committe sie nicht — aber sie gehoert gesichert, und der Verfasser sollte das tun, bevor etwas anderes passiert."
+deine_fundstelle_haelt: "SELBST NACHGEMESSEN, Zeichen fuer Zeichen: resources/views/admin/layouts/roof.blade.php traegt ELF TIME_VARS-Vorkommen und den harten Faktor '* 65' genau einmal — die Lohnkostenrechnung existiert, sie fuehrt zu einem Euro-Betrag, und der Stundensatz steht ohne Quelle, Datum und Gewerk im Code. Deine Beobachtung war richtig."
+deine_praemisse_haelt_nicht: "Aber die Datei wird NICHT AUSGELIEFERT, und auch das habe ich selbst gemessen statt uebernommen: die Suche nach einem Aufrufer (admin.layouts.roof, layouts.roof, layouts/roof) liefert in app/, routes/ und resources/views/ NULL Treffer — und die Route, die 'roof' heisst, zeigt nachweislich auf eine ANDERE Datei (routes/web.php:4756 -> admin.roof_config.roof, die es gibt). Es ist also kein 'laufender Produktivcode', sondern eine Datei OHNE AUFRUFER im Produktivbaum."
+warum_das_die_entscheidung_aendert_und_nicht_erledigt: "Der Unterschied ist die DRINGLICHKEIT, nicht die Sache. Ohne Aufrufer rechnet heute niemand mit '* 65' einen Preis — es kann also kein Angebot damit entstehen. ABER die Zahlen stehen im Produktivbaum, sind unbelegt, und die Datei sieht aus wie eine benutzte View; wer sie morgen verdrahtet, bekommt einen Lohnkostenbetrag ohne Herkunft. Das ist dieselbe Klasse wie der gebrochene PvProjektService (echt, dokumentiert, ohne Aufrufer) — und dieselbe Lehre, die ich dort gezogen habe: der Fund gehoert notiert, die Dringlichkeit gehoert gemessen."
+was_du_entscheidest: "Die Weiche gehoert dir, ich lege sie nicht aus. Zur Orientierung nur die gemessene Lage: die Datei hat keinen Aufrufer (0), die Route zeigt woanders hin, die elf Werte und der Stundensatz sind unbelegt. Sobald du entschieden hast, faehrt der Plan-Pruefer die DoR."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
