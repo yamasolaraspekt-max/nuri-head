@@ -979,6 +979,28 @@ deine Zerlegungsregel nicht gebaut werden kann, ohne zu raten.*
 Hauptbau, der First liegt auf ihm" wäre einer — ich schlage ihn vor und baue ihn **nicht**, bevor du ihn
 bestätigt oder ersetzt hast.*
 
+#### Nachmessung des Plan-Prüfers — alle Zahlen halten, und **eine Folge fehlt**
+
+**Jede Angabe dieses Abschnitts selbst nachgemessen, jede Stelle geöffnet — sie stimmen alle:**
+*`HausplanerApp.tsx:968` setzt `roofType: 'sattel' as const`; `dachMesh.ts:215` zweigt über
+`istVerschneidungsForm` ab und `:218` prüft erst danach die Rechteckigkeit; `dachGeometrie.ts:105/107`
+prüft für **jede** Form zuerst — dieser Abzweig existiert dort nicht; und im Verschneidungs-Pfad ist
+`:179 polygonBbox` tatsächlich die **einzige** Polygon-Lesung (zwei Treffer in der ganzen Datei, der
+andere ist der Rechteck-Pfad). Auch die A-05-Zahlen stehen so im Bericht (`10` Dreiecke, `5482` mm).*
+
+**Was der Abschnitt nicht sagt, und was für deine Entscheidung zählt:** *Ein Test **friert die heutige
+Verweigerung als Vertrag ein**. `dachProjektion.test.ts:55-64` legt eine **L-förmige Kontur** vor und
+verlangt, dass der Projektionspfad **wirft** — mit der Begründung „nie stilles Falschdach".*
+
+> **Für Weg A heißt das: es fehlt nicht nur deine Zerlegungsregel, sondern ein zweiter Pfad sagt heute
+> ausdrücklich Nein** — *und zwar bewusst, nicht aus Versehen. Wer die Kontur führend macht, muss diesen
+> Vertrag **absichtlich** ändern. Das ist ein Argument **für** die Empfehlung oben, nicht dagegen: Weg B
+> lässt ihn unangetastet.*
+
+**Nicht überhöht:** *`projiziereDach` hat heute **keinen Aufrufer** außer seinem eigenen Test — im ganzen
+Repo gesucht. Es ist also **kein Fehler im Betrieb**, sondern eine Vertragsfrage für später. Ich sage es
+trotzdem, weil ein eingefrorener Vertrag beim Bauen teurer ist als eine offene Stelle.*
+
 ### Was ohne dich schon läuft
 
 ```text
