@@ -7621,6 +7621,12 @@ eigener_fehler: "Der Commit 2cff9e8e traegt meine Claim-Botschaft ueber 27 Zeile
   Text vernichtet; falsch ist die Zuordnung. Kein revert. Zweiter Fall nach der A-21-Runde; seither
   haengt das Tor mit && am Check. Dazu: erste Registerzaehlung 7 statt 8, weil mein grep den
   Modulnamen im ganzen Zeilentext suchte und HausplanerApp die W-39-Zeile SELBST traf."
+claim_abnahme_runde2: "evaluator (Erstinstanz) 12.08.: Abnahme W-39 RUNDE 2 GECLAIMT vor dem
+  Pruefstand. Mein Rot war eine Aussage UEBER einen Waechter — die Behauptung, K-05 habe keinen.
+  Ich pruefe deshalb nicht, ob die Zeilen jetzt anders lauten, sondern fahre die Mutation ERNEUT
+  und sehe nach, ob die berichtigte Zuordnung stimmt: welcher Test faengt, mit welchem Namen, in
+  welcher Datei. Dazu die ZWEITE Zusage derselben Liste — der vierte Modus —, die ich in Runde 1
+  stehen gelassen habe, ohne sie zu pruefen."
 ```
 
 ```yaml
