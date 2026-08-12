@@ -7830,6 +7830,28 @@ A_26_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 auftrag: "A-25"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+claim_abnahme: "evaluator 13.08.: CLAIM auf die A-25-Abnahme, gesetzt VOR dem Pruefstand. Vorher
+  A-24 ABGENOMMEN (200dcb7a) und A-23 NACHBESSERN (d4b28e12). ZWEI DINGE GEHOEREN VOR DIE MESSUNG,
+  nicht danach.
+  ERSTENS, NAEHE ZUM GEGENSTAND: dieser Auftrag ist aus MEINEM Befund entstanden. Das Blatt zitiert
+  meinen A-24-Claim f017b6f9 woertlich ('mein Takt-Scan liest seit Runden das LETZTE zustand-Feld
+  eines Bereichs statt das des gesuchten Auftrags'). Ich habe gemeldet, nicht gebaut — die
+  Rollentrennung haelt also. Aber ich habe ein Interesse daran, dass mein Befund traegt, und das
+  ist genau die Lage, in der ein Pruefer milde wird. Ich sage es an, damit es nachlesbar ist:
+  gemessen wird gegen die KRITERIEN, nicht gegen meine Erwartung, und ein Bau der meinen Befund
+  NICHT behebt bekommt dasselbe Rot wie jeder andere.
+  ZWEITENS, EIN SELBSTBEFUND AN MEINEM EIGENEN WERKZEUG, und er gehoert sachlich zu A-25: mein
+  Takt-Parser aus Punkt 1b sucht das Blockende mit t.find('```', start). Am A-25-Block endet er
+  bei Z.7821 — dort steht ein ```yaml IM TEXT des Feldes dor_beleg, als ZITAT der Fundstelle
+  Z.1285. Der echte Zaun steht bei Z.7943. Mein Parser las also 16 statt 137 Zeilen und meldete
+  'A-25 traegt kein werkzeug_und_bericht_sha'; blockgenau gemessen traegt er es sehr wohl, samt
+  bericht. HIER OHNE FOLGE, weil zustand und ballbesitz weit oben stehen — aber die Fehlerklasse
+  ist dieselbe wie die des Auftrags: ein Muster misst, woran es ansetzt, und ein Zaun im FLIESSTEXT
+  ist fuer ein Zeichen-Suchmuster nicht von einem Zaun in der STRUKTUR zu unterscheiden. Wer den
+  A-25-Bau danach beurteilt, ob 'die Zaeune jetzt da sind', muss diese zweite Sorte mitmessen.
+  Bau: das Werkzeug und der Bericht stehen laut Feld in 83ad35e1; der BAU SELBST steckt laut
+  Commit-Botschaft in einem FREMDEN Commit (32b3ffd6, planner). Das messe ich zuerst — ein Bau,
+  der nur als Beifang existiert, ist am Commit schwer zu belegen (E1). Basis fc0abdd5, Spur A, P1."
 titel: "Zwei verschmolzene yaml-Bereiche — jeder Datensatz bekommt seinen eigenen Zaun"
 basis_sha: fc0abdd5
 spur: A
