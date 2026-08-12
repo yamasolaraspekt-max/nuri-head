@@ -51,6 +51,7 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
+| **W-39** Studio-Rahmen | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7357,4 +7358,47 @@ eigener_messfehler: "Mein erstes Raster war doppelt zu eng und haette den Bau fa
   dem Takt. Der Fehler in meinem Raster IST der Befund, den ich danach gefunden habe. Dazu ein
   relativer require-Pfad in der PHP-Probe — dieselbe Falle wie in der W-34-Runde, zwei Runden
   hintereinander."
+```
+
+```yaml
+auftrag: "W-39"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "Ein additiver Rahmen um eine App, die er nicht anfasst"
+basis_sha: d53806f6
+spur: A
+prioritaet: P2
+dor_beleg: "steht aus — plan-pruefer."
+warum_jetzt: "Alle fuenf heute geschnittenen Auftraege sind durch die Abnahme: A-20, A-21 und A-22
+  am Regelwerk und an der Datenform, W-38 und W-34 als Ablesungen der Stufe 6. Die Kette ist leer,
+  Paragraf 3 steht auf 0."
+warum_W_39_zuerst: "Es ist der RAHMEN und importiert alle anderen — 13 Importe, ein Export. Wer ihn
+  zuerst beschreibt, hat die Grenzen der Nachbarn gemessen, bevor sie an die Reihe kommen; bei W-33
+  und W-35 steht dann schon im Blatt, wo ihre Zustaendigkeit endet. Nach Umfang ist er ausserdem der
+  kleinste der fuenf verbleibenden, 159 Zeilen gegen 739 bei W-37."
+der_tragende_punkt: "Der Dateikopf sagt es selbst in Zeile 4 bis 5: Additiv, die HausplanerApp bleibt
+  UNVERAENDERT, der einzige Eingriff ist ein optionales Flag imStudio in Zeile 140, das eine
+  Markenzeile ausblendet. W-39 ist eine KLAMMER und kein Umbau. Wer es als neue Oberflaeche
+  beschreibt, verfehlt genau das, was es auszeichnet — und es ist derselbe Bautyp wie W-20, W-38 und
+  W-34: die Stufe-6-Bausteine greifen nicht in den Bestand ein, sie machen ihn ehrlich sichtbar."
+die_falle_im_blatt_benannt: "Drei Modi, drei Render-Zweige, aber der dritte heisst imExperte und
+  nicht modus gleich expert. Ich bin fast darauf getreten: meine erste Messung ergab, start und
+  guided haetten Zweige und expert nicht, und daraus waere die Aussage geworden der Expertenmodus
+  rendere nichts. Gefangen durch Oeffnen der Zeile — H-9 und Pflichtpruefung 7. Eine zweite
+  Fehlspur derselben Art: Zeile 89 sieht wie ein zweiter Rueckgabepfad aus, gehoert aber zu
+  modeBtn; das Studio hat genau EINEN return in Zeile 97. Beide Fallen stehen im Blatt, damit der
+  Generator sie nicht tritt, und W-39-2 verbietet ein Suchmuster auf expert als Nachweis."
+was_der_code_besser_macht_als_ich_heute: "Der Waechter fussleistenEhrlich.test.ts traegt Yamas
+  Massstab vom 26.07. woertlich — sagen was da ist statt zu versprechen was kommt — und den Satz:
+  die Studio-Navigation ZAEHLT aus PROJ und FACH, eine gezaehlte Zahl kann nicht veralten. Das ist
+  die Umkehrung dessen, was mich heute dreimal eingeholt hat: A-21-3 wuchs von 13 auf 15, A-22 fiel
+  von 17 auf 14, A-22-2b brauchte drei Fassungen. Der Code macht es richtig vor, und deshalb
+  verlangt W-39-5 das Zitat und W-39-3 die Zaehlung am Code statt einer Zahl im Kriterium."
+pruefungen_auf_die_eigenen_kriterien_angewandt: "Pflichtpruefung 8: kein Kriterium traegt eine feste
+  Zahl, die durch die Arbeit driften kann. Pflichtpruefung 7: W-39-2 verlangt ausdruecklich die
+  Zeile statt des Suchmusters. Pflichtpruefung 9: kein Kriterium verbietet dem Bauenden seine
+  eigene Fertigmeldung."
+regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit; das Blatt traegt weder
+  status im Kopf noch zustand im Fuss."
+W_39_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
