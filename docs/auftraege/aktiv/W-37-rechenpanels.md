@@ -136,6 +136,11 @@ W-37 IST   enginePanels.ts und EngineFlaeche.tsx: die ACHT Adapter (Klassenmerkm
            die SIGNATUR Record<string,string> -> Engine-Eingabetyp, NICHT der
            Namensteil Eingabe), die Panelliste, die vier Typen, die Schwere-Anzeige,
            und die A-14-Ausgabeauflage samt ihrem Waechter sparrenVorbehalt.
+           UND DIE BEDIENFLAECHE DES MODULS, nachgetragen nach 1faea789 — sie stand in
+           keinem Scope-Block, obwohl sie die am breitesten benutzte Ausfuhr enthaelt:
+             :522 enginePanel(engineId)                -> EnginePanel | undefined
+             :527 startwerte(panel)                    -> Record<string,string>
+             :538 fehlendePflichtfelder(panel, werte)  -> EngineFeld[]
 
 W-37 IST NICHT
            die RECHNUNGEN selbst -> geometry/ (sparrenBerechnung, treppe*, fbhAuslegung
@@ -188,6 +193,21 @@ W-37-6  Die REGISTERZEILE wird nachgezogen: sie nennt EngineFlaeche.tsx mit 196 
         Zeilenangaben des Registers ergibt fuenf richtige, es ist kein Sammelbefund.
 W-37-7  Die Scope-Grenze zu geometry/ steht in 2-FUNKTION: die Rechnungen werden
         aufgerufen, nicht beschrieben.
+W-37-7b NACHGETRAGEN nach 1faea789, und es ist der DRITTE Vollstaendigkeitsfund an
+        meinen Blaettern heute — nach W-36 (eine von vier Funktionen genannt) und
+        W-37-1/W-37-5. DIE BEDIENFLAECHE DES MODULS steht im Blatt, mit Fundstelle:
+        :522 enginePanel, :527 startwerte, :538 fehlendePflichtfelder. Sie standen in
+        KEINEM Scope-Block.
+        UND enginePanel IST DIE BREITEST BENUTZTE AUSFUHR DES MODULS. Selbst gemessen
+        an den Importzeilen, nicht an Wortvorkommen: SECHS Testdateien importieren aus
+        dashboard/enginePanels, und enginePanel steht in ALLEN SECHS —
+        enginePanelRest, enginePanelSparren, enginePanelTgaHeizung, enginePanelTreppe,
+        sparrenVorbehalt, zweiEnginesSchweigen. Vier davon importieren zusaetzlich
+        startwerte UND fehlendePflichtfelder zusammen.
+        MEINE ERSTE ZAHL WAR WIEDER ZU WEIT: ein Muster auf Wortvorkommen ergab SIEBEN
+        Dateien. Erst die Messung an den IMPORTZEILEN ergab sechs. Zwei-Muster-Regel,
+        und diesmal hat sie vor dem Schreiben gegriffen statt danach.
+        Am Bau-Stand zaehlen.
 W-37-8  Alle sieben Blaetter gefuellt, Gegenprobe `tail -n +2 <blatt> | md5` je Blatt,
         keine zwei Werkzeuge mit gleichem Hash.
 ```
@@ -217,6 +237,14 @@ mein_A_20_verstoss_und_er_ist_der_erste_seit_die_regel_steht: "Ich habe dieses B
         einen zweiten Pfad mitgenommen, ohne die Pflichten dieses zweiten Pfades zu erfuellen. Der
         plan-pruefer hat beides angelegt und den Verstoss dazugeschrieben statt ihn auszubuegeln; das ist
         richtig, die Pflicht bleibt beim Schneidenden."
+der_dritte_vollstaendigkeitsfund_am_selben_blatt: "Der plan-pruefer nennt es sein Versaeumnis, weil er
+        die Vollstaendigkeitsfrage bei W-36 gestellt und bei W-37 nicht gestellt hat. Der SCOPE ist aber
+        meiner, und das Muster ist jetzt dreimal dasselbe: ich nenne die Ausfuhr, die ich beschreibe, und
+        nicht die Ausfuhren, die es GIBT. In W-36 war es faehigkeitenNach von vier, hier enginePanel und
+        zwei weitere von sechzehn Exporten. Der Unterschied zu einer falschen Zahl ist, dass eine fehlende
+        Ausfuhr NICHT auffaellt: sie widerspricht nichts, sie fehlt nur. Deshalb gehoert sie in die
+        Pruefung und nicht in die Aufmerksamkeit — ich zaehle ab jetzt die Exporte der Datei, bevor ich den
+        Scope schreibe, und nicht danach."
 was_dieses_blatt_ueber_mein_messen_sagt: "Beide Blocker sind Klasse W-36-5, und W-36 war eine Stunde
         vorher. Ich habe die Lehre in W-36 aufgeschrieben und im naechsten Blatt denselben Fehler
         zweimal gemacht — einmal an den Adaptern, einmal an den Waechtern. Aufschreiben ist nicht

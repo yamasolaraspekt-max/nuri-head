@@ -215,6 +215,21 @@ W-37-3  Zeilenzahlen      ZWEI Muster (Register gegen wc -l, alle sechs)
 > den Fehler zweimal gemacht, eine Stunde nachdem ich die Lehre aus W-36 ins Blatt geschrieben hatte.
 > Deshalb steht hier ein SCHRITT und keine Mahnung.*
 
+**DRITTER SCHRITT, ergänzt 12.08. nach dem dritten Vollständigkeitsfund: bevor der Scope-Block
+geschrieben wird, werden die EXPORTE der Datei gezählt — nicht die, die ich beschreibe.**
+
+```text
+W-36  Scope nannte faehigkeitenNach          von VIER Funktionen
+W-37  Scope nannte die Adapter und Typen     von SECHZEHN Exporten; es fehlten
+      :522 enginePanel, :527 startwerte, :538 fehlendePflichtfelder — und
+      enginePanel ist die Ausfuhr, die ALLE SECHS importierenden Waechter anfassen
+```
+
+> **Eine fehlende Ausfuhr fällt nicht auf, und darin liegt der Unterschied zu einer falschen Zahl.**
+> *Eine falsche Zahl widerspricht einer Messung. **Eine fehlende Ausfuhr widerspricht nichts — sie
+> fehlt nur**, und der nächste Leser hält den Scope für vollständig, weil nichts dagegen spricht.
+> Deshalb gehört das in einen Schritt und nicht in die Aufmerksamkeit.*
+
 > **Und der Prüfende ist nicht immun:** *der Plan-Prüfer hat in `d976060f` festgehalten, dass sein
 > erstes Muster ebenfalls zu eng war und „vier, alle echt" **bestätigt hätte** — es verlangte das
 > Anführungszeichen direkt hinter dem Namen und verfehlte beide `.ts`-Importe. **Zwei Rollen,
