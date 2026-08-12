@@ -6165,6 +6165,7 @@ was_es_entsperrt: "W-21L fuer SIEBEN Braas-Modelle. Weiter gesperrt fuer alles a
 zweiter_posten_nicht_erledigt: "118 der 127 Zeilen haben kein Lattmass. Das ist Pflegearbeit an der
          Quelle und gehoert Yama. KEIN Ergaenzen fehlender Werte in diesem Auftrag — das waere das
          Erfinden, gegen das das Gate steht."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-23 GECLAIMT vor dem Pruefstand. Das Blatt hat sich laut Plan-Pruefer im TRAGENDEN Punkt geaendert (Yamas Fachaussage) — ich messe deshalb die Kriterien in ihrer HEUTIGEN Fassung und pruefe, ob die Fachaussage im Blatt als Operand belegt ist oder nur zitiert."
 ```
 
 
