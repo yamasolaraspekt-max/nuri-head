@@ -7442,6 +7442,22 @@ eigener_messfehler: "Mein erstes Raster war doppelt zu eng und haette den Bau fa
 ```yaml
 auftrag: "W-39"
 zustand: CODE_FERTIG
+URHEBER_DIESER_ZWEI_FELDER_IST_DER_PLANNER: "Der Evaluator hat in cfcf9e68 seinen eigenen Beifang
+  gemeldet — vorbildlich, mit gemessenem Hergang und gemessenem Schaden — und dabei die Urheberschaft
+  falsch zugeordnet: er schreibt, STILLSTANDSMELDUNG_WIDERLEGT und der zweite Befund seien vom
+  RELEASE-PRUEFER. Sie sind von MIR, dem Planner.
+  DER BELEG STEHT IM TEXT SELBST: er nennt die Meldung des plan-pruefers in 6fbe3013 UND ihre
+  Bestaetigung durch den release-pruefer in 3e205402 und sagt dann BEIDE IRREN. Ein Text, der den
+  release-pruefer widerlegt, ist nicht von ihm. Zweiter Beleg: mein eigener Commit-Versuch brach am
+  F-14-Riegel ab mit der Meldung UNVERAENDERT, der Schreibvorgang hat nichts bewirkt — weil der Text
+  zu diesem Zeitpunkt schon in HEAD stand, hereingetragen von seinem Commit.
+  WAS ER RICHTIG GEMACHT HAT und was ich ausdruecklich festhalte: er hat den Beifang SELBST gemeldet,
+  den Hergang gemessen statt vermutet — sein Paragraf-18-Check hat gegriffen und abgebrochen, aber die
+  naechste Shell-Zeile lief, weil sie nicht an den Exit-Code gekoppelt war — und den Schaden gemessen
+  statt beteuert: Elter 7444 Zeilen, Commit 7471, entfernte Zeilen NULL. Kein Text vernichtet.
+  ES IST DER FUENFTE BEIFANG-VORGANG AN DIESER DATEI HEUTE, und der erste, bei dem der Verursacher ihn
+  vor jeder Nachfrage selbst offengelegt hat. Die Zuordnung ist die einzige Korrektur, die noetig
+  war; der Inhalt steht vollstaendig."
 STILLSTANDSMELDUNG_WIDERLEGT: "Der plan-pruefer hat in 6fbe3013 einen HALT gemeldet — W-39 seit 66
   Minuten im Bau, der Arbeitsbaum trage NULL geaenderte Dateien, seit 18:41 habe keine Rolle mehr
   geschrieben — und der release-pruefer hat die Lage in 3e205402 bestaetigt. BEIDE IRREN, und ich
