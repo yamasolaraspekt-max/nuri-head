@@ -58,7 +58,7 @@
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-35** Konfigurator-Dialog | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
-| **W-33** Start und Projektwahl | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
+| **W-33** Start und Projektwahl | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-36** Faehigkeiten-Navigation | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-37** Rechenpanels | `ENTWURF` | **planner** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR nicht erteilt** — zwei Kriterienzahlen verfehlt (fuenf/acht Adapter, vier/sechs Waechter) |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
@@ -8469,8 +8469,8 @@ drei_eigene_messfehler: "Jeder haette einen Fehlbefund gegen einen richtigen Bau
 dor_nachtrag: "plan-pruefer 12.08., NACHTRAG ZU MEINER FREIGABE — der Generator hat einen Befund vor dem Ziehen gemeldet (ea418041) und er trifft MEINE Pruefung: W-40/1-1 nennt EINE ueberholte Stelle, ueberholt sind aber VIER BLAETTER an dreizehn Stellen. Ich habe die genannten Zeilen einzeln GEOEFFNET und alle bestaetigt: 3-FORMELN:33 rechnet 4+3=7 und sagt die achte falle aus der Rechnung; 6-PRUEFUNG:12 und :13 fuehren K-3 und K-4, die ausdruecklich verlangen, die Fragen NICHT zu beantworten; 2-FUNKTION:18 sagt was blocked von DECISION_BLOCKED unterscheide stehe nicht hier; 7-GRENZEN traegt es in :48, :54, :56, :61, :65, :73 und in :106/:107 sogar als Tabelle mit Yama als Adressat. MEIN ANTEIL: ich habe die Kernbehauptungen am Gegenstand gemessen und die VOLLSTAENDIGKEIT der Berichtigung nicht gefragt — genau die Frage, die ich heute dreimal bei anderen gestellt habe (die widerlegte Zahl an vier Stationen). Sein Satz nennt den Grund praeziser als ich es koennte: wer nur 7-GRENZEN anfasst, laesst K-3 und K-4 stehen, und die verlangen dann weiterhin, die Fragen offen zu lassen — zwei Wahrheiten, beide belegt aussehend. ZAEHL-FEINHEIT ohne Folge: der Titel nennt dreizehn, die Aufzaehlung neun plus fuenf; die Differenz sind zwei Zeilenbereiche (:65-66, :73-74), die einmal als Stelle und einmal als zwei Zeilen gezaehlt sind. Die Liste selbst ist vollstaendig und jede Stelle von mir belegt."
 ```yaml
 auftrag: "W-33"
-zustand: IN_ARBEIT
-ballbesitz: generator  # Bau laeuft; meine Auflage ist durch seinen Befund ueberholt
+zustand: CODE_FERTIG
+ballbesitz: evaluator  # der plan-pruefer notierte hier: "Bau laeuft; meine Auflage ist durch seinen Befund ueberholt" — Wortlaut erhalten, nur der Traeger gewechselt
 entscheidung_zu_seinem_befund: "plan-pruefer 12.08. — ER HAT RECHT UND MEIN BEFUND EINE RUNDE
   VORHER WAR ZU ENG. Seine Kette selbst nachgemessen, jede Stelle geoeffnet:
     HausplanerController.php:101  hausplanerProjekte() — LeadAlternativeAdd, select auf id,
@@ -8577,6 +8577,66 @@ acht_waechter: "startEhrlich, rohwertZusage, konfiguratorEhrlich, projektKlick, 
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 W_33_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 gezogen_am: "12.08. vom generator. §3 vor dem Ziehen 0/0 an beiden Orten gemessen, danach 1/1."
+bau_sha: fa7547c7
+bericht: docs/BERICHT-W-33-start-und-projektwahl.md
+E1_gefahren: "9 von 9 GLEICH, git show fa7547c7:<pfad> | diff - <pfad>."
+alle_acht_kriterien: "W-33-1 der Anlass woertlich aus startEhrlich, beide Befunde. W-33-2 Befund b
+  mit projektKlick — UND der Messung, dass es heute ZWEI Karten sind und nicht drei. W-33-3 der
+  Leerzustand als NORMALFALL, mit :206 und dem Dateikommentar. W-33-4 vier Komponenten mit
+  Fundstelle, DREI mit eigenem hover, am Code gezaehlt. W-33-5 AUF-40 Teil B woertlich als Zitat
+  samt Herkunft, plus die Messung dass er ueberholt ist. W-33-6 acht Waechter je mit Zusage, drei
+  woertlich. W-33-7 die Grenzen zu W-39, W-38 und W-35 in 2-FUNKTION, gespiegelt nicht neu gezogen.
+  W-33-8 sieben Hashes, 0 Kollisionen gegen alle uebrigen Werkzeugblaetter."
+EINE_GRUENE_ZUSAGE_DIE_ICH_BEINAHE_ALS_FALSCH_GEMELDET_HAETTE: "startEhrlich.test.ts:118 heisst
+  'Teil A hat weder Route noch Controller beruehrt — das ist Teil B' und prueft, dass StartView
+  weder fetch noch axios noch dataset benutzt. Nach meinem Befund sah das aus wie ein ueberholter
+  Test. Selbst nachgemessen: 0 Treffer. Die Zusage HAELT und sie SOLL halten — die Naht laeuft ueber
+  main.tsx, nicht ueber StartView; der Bildschirm holt sich nichts, er bekommt. Ueberholt ist NUR
+  der Begleitkommentar 'Die Zulieferung der Liste bleibt deshalb offen'. Ein richtiger Test mit
+  altem Kommentar ist etwas anderes als ein falscher Test. Wer den Unterschied nicht macht, meldet
+  einen gruenen Ehrlichkeitswaechter als falsch — hier der teuerste Fehlbefund, den man bauen kann."
+W_33_2_ist_anders_behoben_als_das_kriterium_beschreibt: "Der Auftrag nennt drei Projektkarten, die
+  alle onGuided(1) riefen. Gemessen: grep -c '<Karte ' StartView.tsx = 2. Die dritte
+  ('Weiterarbeiten') ist FORT und nicht umgehaengt, :241-249 nennt den Grund — fortsetzen geht jetzt
+  oben am Projekt selbst, und zwei Wege zu derselben Handlung sind kein Angebot sondern eine Frage,
+  die der Nutzer beantworten muss bevor er arbeiten darf. Von den zwei verbliebenen traegt eine gar
+  kein Ziel und sagt warum. Beide Zahlen stehen im Blatt, je mit dem was sie messen; der Kommentar
+  :234-237 traegt die alte Fassung noch und bleibt stehen — eine Ablesung aendert ihre Quelle nicht."
+ein_namenszusammenstoss_beim_oeffnen_von_PROJ_gefunden: "ProjektEintrag ist ZWEIMAL deklariert:
+  app/studioDaten.ts:136 als { name; icon } und app/state/projekte.ts:22 als
+  { id; name; ort; datum; adresse? }. StartView fuehrt BEIDE Module ein (:4 und :5). Es geht heute
+  gut, weil nur :5 den Namen holt und PROJ nur ueber PROJ[0].icon und PROJ[1].icon benutzt wird.
+  Die Gefahr ist der naechste Griff: wer ProjektEintrag aus :4 mitzieht, bekommt einen Konflikt oder
+  den falschen Typ — einmal eine Startkarte mit Bildzeichen, einmal ein echtes Objekt mit Kennung,
+  Ort, Datum und Adresse. Dieselbe Klasse wie Yamas Namenswarnung zu blocked gegen
+  DECISION_BLOCKED, hier ohne Auflage. Benannt, nicht behoben: ein Umbenennen waere ein Bau in zwei
+  fremden Werkzeugen."
+zwei_eigene_fehlgriffe_beim_gegenlesen_gefunden: "Beide stehen im BLATT und nicht nur im Bericht.
+  (1) Ich schrieb 'projektKlick ist der einzige Waechter, der rendert' — falsch:
+  elevationTokens.test.ts:23 importiert StartView und :76 rendert es. Zwei von acht rendern.
+  (2) Ich tat stilschicht pauschal als 'inselweit, eine Datei unter mehreren' ab — fuer breiten und
+  dialogFokus trifft das, fuer stilschicht nicht: VIER Stellen, drei davon eigene Tests, darunter
+  ':162 jeder verbliebene Inline-Stil in StartView HAT EINEN GRUND' und ':429 der Schwebezustand
+  bleibt inline'. Beide Male habe ich eine Testdatei nach ihrer Ueberschrift eingeordnet statt sie
+  zu oeffnen — derselbe Griff wie bei W-39. Er kommt zurueck, sobald ich nicht daran denke."
+eigene_zahl_korrigiert_bevor_sie_im_blatt_stand: "'Sieben import-Zeilen' waren sechs. Die Spanne
+  :2-7 verfuehrt zur Sieben — derselbe Fehler wie bei W-35, wo ich :9-19 gezaehlt habe statt der
+  Zeilen. Dazu eine Feinheit, die im Blatt steht: sechs Zeilen, aber FUENF Module, weil :6 und :7
+  beide aus studioUi holen. Wer Module zaehlt, bekommt eine andere Zahl als wer Zeilen zaehlt."
+PROJ_2_ist_stillgelegt: "studioDaten.ts:137-141 traegt DREI PROJ-Eintraege, StartView benutzt
+  PROJ[0] und PROJ[1]. PROJ[2] ('Weiterarbeiten') ist stillgelegt, nicht geloescht. Wer PROJ zaehlt
+  findet drei Karten, wer die Flaeche liest findet zwei — beide Zahlen stimmen und messen
+  Verschiedenes. Steht das nicht im Blatt, meldet die naechste Rolle eine fehlende dritte Karte."
+was_NICHT_gefahren_wurde: "Keine Mutationsprobe gesetzt, die Fangtabelle sagt es bei jeder Zeile.
+  Insel-Suite nicht gefahren, kein Produktivcode beruehrt. Browserabnahme offen — und hier NICHT
+  nebensaechlich: projektKlick.test.ts sagt selbst, die Sichtprobe sei Teil der Abnahme und nicht
+  ein Anhang, und die einzige offene MESSUNG dieses Werkzeugs ist, ob die echte Liste im Browser
+  ankommt. Ich habe die Naht gelesen, nicht ausgefuehrt."
+was_der_evaluator_zuerst_pruefen_sollte: "W-33-5. Das Kriterium verlangt einen Wortlaut, den ich als
+  ueberholt gemessen habe — ich erfuelle es buchstaeblich (Zitat samt Herkunft) und stelle die
+  Messung daneben. Wenn diese Loesung nicht traegt, traegt das Blatt an seiner tragendsten Stelle
+  entweder einen falschen Stand oder ein unerfuelltes Kriterium; eine dritte Moeglichkeit sehe ich
+  nicht, und die Entscheidung ist nicht meine."
 BEFUND_VOR_DEM_ZIEHEN_AUF_40_TEIL_B_IST_GEBAUT: "W-33-5 verlangt, 7-GRENZEN trage WOERTLICH 'die
   echte Projektliste braucht eine ROUTE und ist TEIL B — der liegt bei Yama'. Ich habe das vor dem
   Ziehen gemessen, weil der release-pruefer in 5e9c8b08 bereits gemeldet hat, AUF-40 Teil B sei zur
