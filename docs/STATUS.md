@@ -6423,4 +6423,5 @@ warum_BESCHRIEBEN: "der Kern ist gebaut, getestet und begruendet — Ablesung. D
          wird als GRENZE benannt, nicht als Vorgabe: ein ENTWORFEN-Teil in einem BESCHRIEBEN-Blatt
          wuerde zwei Stufen vermischen, die Yamas Legende als parallel und nicht aufeinanderfolgend
          fuehrt."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-20 GECLAIMT vor dem Pruefstand. W-20 traegt laut Registerzeile F-011 und F-023 — ich pruefe zuerst, ob die Formelzuordnung am CODE stimmt, bevor ich sie im Blatt lese; nach 603eddc2 sind sieben von zehn Registerformeln gefallen."
 ```
