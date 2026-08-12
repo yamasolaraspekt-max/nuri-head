@@ -60,6 +60,36 @@ Ein Kriterium, das schon grün ist, prüft nichts. Vor dem Auftrag messen:
 läuft es rot? Wenn nicht, ist es kein Kriterium, sondern eine Beschreibung
 des Bestands.
 
+### 5 · Ist der Operand LESBAR? (neu 12.08., aus W-23)
+
+Wenn ein Auftrag Daten von außerhalb des Repos braucht — eine Tabelle, ein Schema, eine
+Fremddatei — dann nennt das Blatt nicht nur **wo** sie liegt, sondern **wie sie zu öffnen
+ist**. Pfad, Größe, und bei Binärformaten das Werkzeug.
+
+> **Der Generator hat diese Prüfung bei W-23 selbst ergänzt, weil sie im Blatt fehlte:**
+> *„Ein Auftrag, dessen Operand nicht lesbar ist, wäre nach dem Ziehen ein `SPEC_BLOCKED` —
+> und ich hätte §3 belegt, ohne bauen zu können."* **Er hat die Datei vor dem Ziehen
+> geöffnet:** 718.574 Byte auf das Byte wie im Blatt, `openpyxl` fehlt in der Umgebung, also
+> gelesen mit `zipfile` und `ElementTree`. *Das gehört in den Auftrag, nicht in die
+> Findigkeit des Bauenden.*
+
+### 6 · An WIE VIELEN Stellen steht die Angabe, die ich ändere? (neu 12.08.)
+
+Vor jeder Berichtigung **zählen**, nicht beheben. Ein Zustand steht an bis zu **vier**
+Orten: Tafelzeile, Datensatz-Feld, Blattkopf, Blattfuß. Eine Zahl steht in Überschrift,
+Fließtext, Tabelle und Kriterium.
+
+```text
+A-16   vier Orte, ich traf DREI. Der vierte fiel nur der Gegenprobe auf.
+W-07N  Ueberschrift und art trugen die widerlegte Zahl an dritter und vierter Station.
+W-27   die zu weite Formulierung stand an VIER Stellen.
+```
+
+> **Eine Berichtigung an einer Stelle ist gefährlicher als keine** — danach trägt das Blatt
+> zwei sich widersprechende Aussagen, und **beide sehen belegt aus**. *Belege, Zitate und
+> Protokolle werden dabei NICHT mitberichtigt: ein nachträglich umgeschriebener Beleg ist
+> keiner.*
+
 ---
 
 ## Was der Planner niemals behauptet
@@ -70,6 +100,10 @@ des Bestands.
 | „ungefähr / mehrfach / einige" | zählen und die Zahl nennen |
 | „das ist trivial" | die Formel und ihren Grenzfall nennen |
 | „der Fehler ist behoben" | den Rot-Beleg vorher und den Grün-Beleg nachher zeigen |
+| **„gibt es nicht" / „fehlt vollständig"** | *das Muster fand 0 — und was **existiert**, ist folgende Trefferzeile.* **Null Vorkommen eines MUSTERS ist kein Beleg für die Abwesenheit der SACHE** (W-27, 12.08.: `'ortgang'` als Literal 0 Treffer, während `ortgangFlaechenlaengeM` eine exportierte, getestete Funktion ist). Das ist die Umkehrung von H-8 |
+| **eine gekürzte Anzeige als Wert** | *ungekürzt lesen.* Ein `cut -c1-14` oder `[:14]` schnitt bei W-23 die Ziffer aus `Harzer Pfanne 7` — und die Kürzung wurde als Befund gegen das Auftragsblatt gemeldet |
+| **„der Rückweg steht im Blatt"** (im Fließtext) | *als eigene §5-Zeile.* Dreimal in Folge gemeldet (A-14, A-15, W-09), bis es als Vorlagen-Mangel erkannt war |
+| **„die Kopie liegt außerhalb der Maschine"** | *messen, nicht behaupten.* Ich hatte es in A-16 und B7 zugesagt; gemessen lag der Commit auf **keinem** der drei Fernziele |
 
 ---
 
