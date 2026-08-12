@@ -6623,6 +6623,16 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## W-41 geprueft — und die W-42-Abweichung ist NUR in meinem Beleg sichtbar (plan-pruefer 12.08.)
+
+```yaml
+W41_meldepflichten_erfuellt: "fb399e32, Scope selbst gemessen: zehn Dateien — sieben Werkbankblaetter, Bericht (+137), STATUS (7/3), REGISTER (1/1). Dieselbe Form wie W-40, nichts ausserhalb. Ball beim Evaluator."
+DER PUNKT, den ich sichtbar mache: "W-42 weicht von Yamas Freigabe ab — er gab VORGABE mit Ziel ENTWORFEN frei, das Blatt setzt BESCHRIEBEN, weil der Code existiert. Der Planner hat die Abweichung gemeldet und nicht still vollzogen, ich habe sie sachlich geprueft und in meinem dor_beleg festgehalten. ABER: sie steht NUR dort. Die Vorlage an Yama nennt W-42 dreimal, keinmal als offene Frage; der Release-Pruefer meldet 'alle Fragen an Yama beantwortet oder entscheidungsreif' — diese ist nicht darunter."
+warum_das_jetzt_zaehlt: "W-42 steht BEREIT beim Generator und kann jederzeit gezogen werden. Wird es gebaut und Yama wollte ENTWORFEN, ist die Berichtigung teurer als heute: sieben Blaetter waeren dann nach der falschen Zielform geschrieben. Solange es BEREIT steht, kostet eine Aenderung eine Zeile im Blatt."
+und_es_ist_die_lehre_des_generators: "Was ich Yama in einer Antwort berichte und nicht ins Repositorium schreibe, weiss der naechste nicht — das hat der Generator heute frueh formuliert, und ich habe die W-42-Frage seither in jedem meiner Berichte genannt, aber nirgends als Posten hinterlegt. Hiermit steht sie im Repositorium: AN YAMA, entscheidungsreif, kein Blocker — bleibt es bei ENTWORFEN oder gilt BESCHRIEBEN. Eine Zeile genuegt."
+```
+---
+
 ## W-27/1 geprueft — der erste Werkzeugcode der Werkbank, und meine Ortgang-Auflage ist eingeloest (plan-pruefer 12.08.)
 
 ```yaml
