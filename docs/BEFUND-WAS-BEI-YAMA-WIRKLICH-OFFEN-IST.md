@@ -202,3 +202,70 @@ ZoneNode    Produktentscheid, drei Wege liegen vor
 F-028       Produktion, SELECT liegt fertig
 Nebenlaeuf. entscheidungsreif, fuer mich selbst bereits gezogen
 ```
+
+---
+
+## Nachtrag 2: die L-Form-Zerlegung aus Abschnitt 13 — **der Code hat die Regel bereits, und sie lautet anders**
+
+> **Der Planner schreibt:** *„Was ich brauche, wenn du A willst: einen Satz zur Zuordnung. **„Der
+> längere Schenkel ist der Hauptbau, der First liegt auf ihm"** wäre einer — ich schlage ihn vor und
+> baue ihn **nicht**, bevor du ihn bestätigt oder ersetzt hast."*
+
+**Erste Suche nach `lForm`, `Hauptbau`, `Schenkel`, `zerleg`: 0 Dateien.** Ich hätte fast „gibt es
+nicht" geschlossen — **dieselbe Falle wie bei AUF-40, diesmal von mir selbst gefangen**, weil H-10
+verlangt, eine zweite Bauform zu nennen. Die zweite Bauform heißt `dachVerschneidung`, **8 Dateien**.
+
+### Die Regel steht im Code, und sie ist ein harter Wächter
+
+```text
+geometry/dachVerschneidung.ts:22-27
+  form: 'l' | 't' | 'u'
+  length, width       L, W       -> HAUPTDACH
+  lengthB, widthB     L_b, W_b   -> ANBAU
+
+:165  lTBauGueltig:
+      if (W_b >= W) return false;      // Anbau >= Hauptdach
+      ^ die Zuordnung ist ERZWUNGEN, nicht dokumentiert:
+        ist der "Anbau" nicht schmaeler, gilt die Verschneidung als
+        degeneriert und dachMesh gibt LEER zurueck (:154 "return leer").
+
+domain/scene.types.ts:285-286
+  "length/width = Hauptbau, lengthB/widthB = Anbau"
+Dateikopf :9
+  "Der schmaelere Anbaufirst trifft die Hauptdachflaeche bei y = ..."
+
+Gesichert:  dachVerschneidung.test.ts  11 Tests
+            dachLTPlatzierung.test.ts:12  "Hauptbalken 12x8, Anbau oben-rechts 4x4"
+```
+
+### Damit ist deine Antwort nicht mehr nötig — und der Vorschlag wäre eine zweite Wahrheit
+
+```text
+Vorschlag Planner   "der LAENGERE Schenkel ist der Hauptbau"     -> Groesse: LAENGE
+Code seit langem    "der SCHMAELERE ist der Anbau"  (W_b < W)    -> Groesse: BREITE
+```
+
+**Das ist nicht dieselbe Regel.** Ein L mit langem, schmalem Schenkel und kurzem, breitem Schenkel
+bekäme nach dem Vorschlag den langen als Hauptbau, nach dem Code den breiten. **Wer den Satz so
+bestätigt, setzt eine zweite Zuordnung neben die gebaute** — genau das, was der Wächter „keine
+zweiten Wahrheiten" verbietet.
+
+> **Meine Antwort auf die Frage: du musst nichts bestätigen. Die Zuordnungsregel ist gebaut,
+> erzwungen und getestet — sie lautet `W_b < W`, Breite entscheidet.** *Wer Weg A baut, liest sie ab,
+> statt sie neu zu setzen.*
+
+### Was wirklich offen bleibt — und es ist kleiner
+
+**Nicht die Zuordnung, sondern die Herkunft der Maße.** Heute kommen `width`/`widthB` aus dem
+`RoofNode` — sie werden **eingegeben**, nicht aus dem gezeichneten Grundriss abgeleitet. Und der Code
+rät dabei nicht:
+
+```text
+dachMesh.ts:73-78   fehlen die Anbau-Masse -> KEINE Eingabe, leer/Marker
+                    (der Kommentar sagt es woertlich: "fehlen sie, gibt es KEINE Eingabe")
+```
+
+**Die offene Frage lautet also nicht „welcher Schenkel ist Hauptbau", sondern „soll aus einem
+gezeichneten L-Polygon automatisch `W`/`W_b` abgeleitet werden".** Das ist eine Produktentscheidung
+(Weg A gegen Weg B des Planners) — **aber sie braucht keine neue Regel von dir, weil die Zuordnung
+beim Ableiten aus `W_b < W` von selbst folgt.**
