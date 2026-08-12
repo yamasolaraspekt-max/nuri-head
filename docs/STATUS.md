@@ -56,8 +56,8 @@
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
-| **W-35** Konfigurator-Dialog | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
-| **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `2e7504ec` | **NACHBESSERUNG §12** auf Yamas Entscheidung: drei Stufen sind GEBAUT (checked/approved/outdated), nur `blocked` ist Erweiterung · **Traeger ist das PAKET, nicht der Schritt** |
+| **W-35** Konfigurator-Dialog | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
+| **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `2e7504ec` | **NACHBESSERUNG §12** auf Yamas Entscheidung: drei Stufen sind GEBAUT (checked/approved/outdated), nur `blocked` ist Erweiterung · **Traeger ist das PAKET, nicht der Schritt** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -8154,13 +8154,13 @@ gefahrenstellen_ausdruecklich_geprueft: "Die parallel gebauten W-41-Dateien sind
 
 ```yaml
 auftrag: "W-35"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "Vier Arten, nicht drei — und die Registerzeile sagt drei"
 basis_sha: 0474f53b
 spur: A
 prioritaet: P2
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN. Alle Zahlen selbst gemessen und die zitierten Zeilen GEOEFFNET: ConfigWizard.tsx 271 Zeilen exakt; :34 traegt die fuenf Schritte (Bauart, Masse, Material, Pruefung, Uebernehmen); :43 TYP_MAP bildet vier Bedienarten auf ConfiguratorType ab; :45 traegt den standalone-Zweig in der Signatur. Die sechs Waechtertests selbst gezaehlt: sechs Testdateien nennen ConfigWizard. DIE ABGRENZUNG ZU W-42 ist der heikle Punkt, weil beide dieselbe Datei beschreiben — das Blatt nennt W-42 sechzehnmal und zieht die Grenze in W-35-5 ausdruecklich: der Schreibpfad gehoert DORT, der Dialog HIER. Zwei Blaetter ueber eine Datei sind nur dann keine zweite Wahrheit, wenn die Grenze in beiden steht."
 warum_jetzt_und_warum_W_35: "Alle drei von Yama freigegebenen Auftraege sind gebaut, Paragraf 3 steht
   auf 0. W-35 ist die richtige naechste Ablesung, weil W-42 GERADE den Schreibpfad aus derselben
   Datei abgelesen hat — die Grenze zwischen Dialog und Schreibpfad ist damit frisch gemessen und in
@@ -8189,13 +8189,13 @@ W_35_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 
 ```yaml
 auftrag: "W-40/1"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "W-40 ist eine Ablesung mit EINER Erweiterung, und der Traeger ist das Paket"
 basis_sha: 2e7504ec
 spur: A
 prioritaet: P1
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN. Diese Nachbesserung repariert den Auftrag, bei dem ICH die falsche Praemisse durchgelassen habe; ich habe die Kernbehauptungen deshalb AM GEGENSTAND gemessen, nicht an der Quelle. W-40/1-1: die Gueltigkeitsachse haengt wirklich am PAKET — configuratorPackage.ts:72 traegt status: ConfiguratorStatus im Pakettyp. W-40/1-6, beide Pfadberichtigungen selbst geprueft: statusAus liegt in app/dashboard/fahrschritte.ts (der dashboard-Teil fehlte tatsaechlich), und STATUS_UEBERGAENGE beginnt bei Zeile 103, nicht 101. Beide Berichtigungen treffen. BESONDERS GUT: W-40/1-1 verlangt, die ueberholte Stelle NICHT zu loeschen sondern zu kennzeichnen, mit der Begruendung -ein nachtraeglich umgeschriebenes Blatt ist kein Beleg mehr-. Genau die Praxis, die sich heute den ganzen Tag bewaehrt hat."
 anlass: "Yamas Antwort auf beide Fachfragen, eingetragen in 2e7504ec, und der Ball ausdruecklich an
   mich: der release-pruefer schreibt, der Reifegrad ENTWORFEN trage nicht mehr, er aendere die
   Registerzeile aber NICHT selbst, weil das Register meine Arbeit ist."
