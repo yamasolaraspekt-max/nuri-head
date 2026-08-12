@@ -56,6 +56,7 @@
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
+| **W-35** Konfigurator-Dialog | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7924,6 +7925,8 @@ release_vermerk: "Release-Pruefer 12.08., §10 am Abnahme-Commit fb399e32. DOKU-
 
 betriebspruefung: "§19 im selben Arbeitsgang, 12.08. — bei einer reinen Vorgabe ist der Gegenstand nicht Lauffaehigkeit sondern die PRAEMISSE, und die habe ich unabhaengig gegengelesen. SIE TRAEGT: Gueltigkeitsstatus 0 Dateien, invalidier 0, markiereVeraltet existiert in genau zwei Dateien und die eine davon ist ihr eigener Test — Aufrufer ausserhalb Tests und ausserhalb der eigenen Datei genau 0. Der Zustand existiert, die Markierfunktion existiert ohne Aufrufer, der Graph und die Fortsetzung nicht. Migrationen 0, §15 gegenstandslos, kein Bundle beruehrt. DIE VOM EVALUATOR GEMELDETE FALLE NACHGEPRUEFT: dependentResults steht in app/tools/werkzeugVertrag.ts und ausserhalb dieser Datei 0 mal — es ist eine Vertragsbeschreibung und kein zweiter Ausfuehrungsweg, wie er sagt. UND ICH HABE EINE ZWEITE FALLE DERSELBEN ART GEFUNDEN, die niemand genannt hat: sein Bericht fuehrt propagier mit 0 Dateien, mein Muster findet ZWEI — dachProjektion.ts:10 und dachProjektion.test.ts:55. Geoeffnet statt gezaehlt: beide sprechen von der Propagierung einer AUSNAHME, DachGeometrieUngueltig aus dachFlaechen, und nicht von der Propagierung einer Abhaengigkeit. Sein Befund traegt also inhaltlich, aber seine Null ist mit meinem Muster nicht reproduzierbar, und das sage ich lieber als es zu glaetten. FUER DIE NAECHSTE ROLLE IST DAS DER PUNKT: wer W-41s Praemisse per Wortzaehlung prueft, stolpert an ZWEI Stellen ueber Woerter, die etwas anderes meinen — dependentResults als Zeichenkette und propagier als Fehlerweiterleitung. Beide Male ist Oeffnen noetig und Zaehlen genuegt nicht. WAS BESTAETIGT IST: die sieben Blaetter liegen im veroeffentlichten Stand beider Fernzweige, REGISTER.md traegt W-41 mit ENTWORFEN und dem Verbot. WAS NICHT BESTAETIGT IST und was ich nicht behaupte: dass irgendetwas davon laeuft — W-41 hat wie W-40 null Code erzeugt, es ist eine Vorgabe, und der Betrieb beginnt erst mit ihrem Bau. Betriebsbestaetigt ist die AUSLIEFERUNG DER VORGABE, nicht ihre Wirkung."
 bericht: "docs/BERICHT-W-41-abhaengigkeitsgraph.md"
+
+ZUORDNUNG_NACHGETRAGEN_der_release_liegt_in_einem_FREMDEN_commit: "Die zwei Zeilen darueber sind meine Arbeit, aber sie stehen in 0474f53b, und das ist ein Generator-Commit ueber W-42, dessen Botschaft W-41 kein einziges Mal nennt. STILLER BEIFANG, in beide Richtungen gepruefft: er hat es nicht bemerkt, und ich sage ausdruecklich dass ihn dafuer keine Schuld trifft — wir arbeiten im selben Arbeitsbaum, meine Aenderung lag dort offen, und sein git-Griff auf docs/STATUS.md nimmt die Datei wie sie ist. DER FEHLER IST MEINER, und er hat einen Namen: zwischen meinem Patch und meinem Commit lagen SECHS Messbefehle — Drift, Zustandszeilen, Tafelzeilenvergleich, Spaltenzahl, Umfang, Arbeitsbaum. In genau diesem Fenster hat er committet. Meine eigene Regel sagt Patch-Erfolg verifizieren BEVOR gepusht wird, in getrennten Befehlsbloecken; sie sagt NICHT, dass zwischen Schreiben und Commit ein Fenster von sechs Befehlen liegen darf, und bei fuenf schreibenden Rollen an EINER Datei ist jedes Fenster eines zu viel. WAS ICH DARAUS ZIEHE: die Pruefung gehoert VOR den Patch, soweit sie ohne ihn moeglich ist — Messtisch, Zitate, Praemisse, Geheimnisse waren alle vorher fertig. Was zwingend nach dem Patch kommt, Drift und Diff-Umfang, gehoert in DENSELBEN Befehlsblock wie der Commit. WAS DER VORFALL NICHT IST: kein Schaden. Der Release ist inhaltlich vollstaendig, an beiden Orten, Drift 0, und er liegt auf fork und backup-private. Verloren ist nur die SPUR — wer sucht wer W-41 freigegeben hat, findet einen Commit ueber W-42. Diese Zeile stellt sie wieder her. UND ER IST DER ERSTE BELEGTE FALL zu Punkt 6 meiner Vorlage an Yama: dort habe ich gemessen, dass fuenf Rollen in eine Datei schreiben und jede sechste Botschaft Beifang benennt. Bisher war das eine Zahl. Jetzt ist es ein Vorgang, in dem eine RELEASE-ENTSCHEIDUNG ihre Zuordnung verloren hat — und zwar nicht durch Nachlaessigkeit, sondern durch ein Zeitfenster von wenigen Sekunden, das die Bauart offen laesst."
 sechs_kriterien_je_am_BAU_STAND_belegt: "W-41-1 das VERBOT als Kern mit dem Zitat aus REGISTER.md:128 — ein Graph der Aenderungen weitertraegt ist gewoehnliche Technik, einer der nichts stillschweigend wegwirft ist eine Ehrlichkeitskonstruktion. W-41-2 die Grenze zu W-40: W-40 sagt DASS und WAS BEDEUTET, W-41 sagt WANN und WORAUF und WAS BLEIBT; outdated wird NICHT neu definiert. W-41-3 die Quelle fuehrt den Graphen unter NICHT GEMESSEN, beide Fundstellen am Bau-Stand gelesen, :147 und :191, samt dem Satz des Verfassers dass er lieber vier Luecken hinschreibt als eine Vermutung. W-41-4 die Anschlussliste als FRAGE. W-41-5 was erhalten bleibt: alter Wert, Zeitpunkt und GRUND. W-41-6 sieben Blaetter, keines gleicht der Vorlage oder einem der 28 fremden Werkzeugordner."
 EINE_KANTE_BELEGT_FUENF_KANDIDATEN: "W-41-4 verlangt je Abhaengigkeit entweder eine Fundstelle oder die ausdrueckliche Kennzeichnung als Kandidat. Ich habe im Bestand gesucht statt nur zu vermuten und GENAU EINE belegen koennen: geometry/pvBelegung.ts:10-14, pvSchnellBelegung nimmt eine PvEingabe mit dachLaenge und dachBreite entgegen — die PV-Belegung beruht nachweislich auf den Massen der Dachflaeche. Und das ist ausgerechnet die Kante, an der Yamas L-9 haengt: PV erst nach BESTAETIGTER Dachgeometrie. Die Bedingung liefert W-40 mit confirmed, die Kante dieser Beleg, der Mechanismus dazwischen fehlt und das ist W-41. Die uebrigen fuenf sind als Kandidaten gekennzeichnet und nicht als Ergebnis — eine erfundene Struktur waere der schwerere Fehler als eine kurze Liste."
 der_GRUND_ist_Vorgabe_und_nicht_Quelle: "W-41-5 verlangt, dass benannt ist was bei einer Invalidierung erhalten bleibt. Alter Wert und Zeitpunkt folgen aus dem Verbot; der GRUND nicht — niemals stille Loeschung sagt, dass nichts verschwindet, nicht dass jemand erfaehrt warum. Ohne den Grund waere outdated aber eine Absage ohne Erklaerung, also die Form des teuersten Fehlers dieses Projekts. Als VORGABE aufgenommen, weil das Kriterium sonst nicht pruefbar waere, und als BELEGLUECKE in 7-GRENZEN benannt. Ein Vorbild fuer die Form steht im Bestand: markiereVeraltet fuehrt updatedAt und updatedBy — der Grund fehlt auch dort."
@@ -8119,4 +8122,39 @@ zu_den_abweichungen: "Der Bau traegt VIER Strukturen, wo die Vorgabe zwei nennt.
 gefahrenstellen_ausdruecklich_geprueft: "Die parallel gebauten W-41-Dateien sind NICHT im Scope
   (0 Treffer), der Prototyp ist unberuehrt, und fremde Zustandsaenderungen in STATUS.md: 0 —
   jede geaenderte Zeile auf ihren Auftragsblock zurueckgefuehrt."
+```
+
+```yaml
+auftrag: "W-35"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "Vier Arten, nicht drei — und die Registerzeile sagt drei"
+basis_sha: 0474f53b
+spur: A
+prioritaet: P2
+dor_beleg: "steht aus — plan-pruefer."
+warum_jetzt_und_warum_W_35: "Alle drei von Yama freigegebenen Auftraege sind gebaut, Paragraf 3 steht
+  auf 0. W-35 ist die richtige naechste Ablesung, weil W-42 GERADE den Schreibpfad aus derselben
+  Datei abgelesen hat — die Grenze zwischen Dialog und Schreibpfad ist damit frisch gemessen und in
+  W-42s Blatt schon gezogen; sie muss hier nur gespiegelt werden. Dasselbe Argument wie bei W-34
+  direkt nach W-38, und es hat dort getragen."
+die_praemisse_ist_diesmal_unstrittig: "Anders als bei W-40, W-42 und W-15 muss ich hier keine
+  Abwesenheit messen. W-35 ist eine ABLESUNG, der Code existiert mit 271 Zeilen, und W-42 hat gerade
+  daraus gelesen — es gibt nichts zu widerlegen."
+DER_BEFUND_DER_MIR_GEHOERT: "Die Registerzeile 122 nennt den Konfigurator-Dialog mit Fenster, Tuer
+  und Treppe — also DREI Arten. Der Code traegt in Zeile 23 VIER: KonfigArt ist fenster, tuer, treppe
+  ODER heizkoerper. heizkoerper fehlt in der Registerzeile, und die Zeile stammt aus MEINER Erhebung;
+  sie war von Anfang an unvollstaendig. Aufgefallen ist es erst, weil W-42s Ablesung den
+  heizkoerper-Schreibpfad gefunden hat — ConfigWizard.tsx:184 schreibt einen radiator ueber
+  executeCommand ins Modell. Kriterium W-35-1 verlangt die Korrektur der Registerzeile mit Beleg."
+der_tragende_punkt: "TYP_MAP in Zeile 43 ist ein Record von KonfigArt auf ConfiguratorType und damit
+  die Bruecke zwischen der Bedienung und dem Paket, das sie erzeugt — also zu genau dem Typ, dessen
+  Freigabegrade in W-40s Aufloesung die eigene Achse tragen. Wer W-35 beschreibt ohne diese Abbildung
+  zu nennen, trennt die Bedienung von ihrem Ergebnis."
+sechs_waechter_einer_mit_namen: "konfiguratorEhrlich, configWizardWrite, paketSpeichern, breiten,
+  dialogFokus, stilschicht. konfiguratorEhrlich ist der DRITTE Ehrlichkeitswaechter dieser Stufe nach
+  fussleistenEhrlich in W-39 und gefuehrteEhrlich in W-34 und W-38 — Kriterium W-35-6 verlangt
+  woertlich, welche Zusage er haelt, denn ein Name ist keine Aussage."
+regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
+W_35_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
