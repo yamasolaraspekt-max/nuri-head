@@ -3928,3 +3928,88 @@ folgeauftrag: "zwei Engines nach A-14-Muster zum Schweigen bringen — Schnitt b
 grenze_die_ich_ziehe: "ich bestaetige, was der Code ueber sich selbst sagt. Ich ordne NICHT zu,
                        was nur ein Fachmann wissen kann — deshalb bleibt wandaufbau offen."
 ```
+
+---
+
+## VORLAGE AN DEN PLANNER — Frontend-Bestandsaufnahme nach Klasse A (Release-Prüfer, 12.08.)
+
+**Anlass, im Wortlaut:** Yama, 12.08. — *„sind für alle diese Aufgaben auch Frontend und Backend
+gebaut, konzipiert, designt?"* und auf meinen Vorschlag hin *„mach das bitte"*. **Ich messe und lege
+vor; den Schnitt macht der Planner.**
+
+### Die Antwort auf Yamas Frage, in drei Zeilen
+
+```text
+BACKEND / RECHENKERN   gebaut und abgesichert — 1693 Insel-Zusagen, 888 PHP-Zusagen
+KONZEPTION             fertig fuer zehn Werkzeuge — je sieben Blaetter, jede Zahl am Code gemessen
+FRONTEND               12 bedienbare Werkzeuge in der Registry; Stufe 2 "GEBAUT" steht bei NULL
+DESIGN                 keine Arbeit in dieser Runde — es gab keinen Auftrag dafuer
+```
+
+### Gemessen: welches beschriebene Werkzeug ist bedienbar?
+
+```text
+W-02 Wand zeichnen        JA   Registry 'wand'
+W-13 Auswahl und Griffe   JA   Registry 'auswahl'
+W-04 Oeffnung             JA   Registry 'fenster' + 'tuer'
+W-09 Treppe               JA   Registry 'treppe'
+W-11 Mass und Bemassung   JA   Registry 'bemassen'
+W-08 Dachflaeche messen   JA   Registry 'flaeche-messen'  (Zuordnung pruefen — s.u.)
+
+W-05 Raum erkennen        NEIN  4 Exporte · 5 Aufrufer im Produktivcode
+W-21 Sparren und Lattung  NEIN  8 Exporte · 1 Aufrufer (nur enginePanels)
+W-22 Gaube                NEIN  26 Exporte · 2 Aufrufer (dachAufbautenMesh, dachAusschnitt)
+W-01 Raster und Fang      NEIN  11 Exporte · 1 Aufrufer — und das ist RICHTIG SO
+```
+
+### Die vier ohne Werkzeug sind NICHT dieselbe Lage — das ist der Kern der Vorlage
+
+```text
+W-01 Raster und Fang    KEIN Frontend noetig. Fang ist Infrastruktur, kein Werkzeug —
+                        er wirkt IN den anderen Werkzeugen. Sein eigenes Blatt sagt es.
+                        -> nichts zu bauen, Zeile im Register klarstellen.
+
+W-05 Raum erkennen      FUENF Aufrufer im Produktivcode: die Raumerkennung LAEUFT bereits
+                        automatisch (szene, ableitungen, HausplanerApp, raumProjektion,
+                        kontur). Was fehlt, ist keine Engine, sondern die BEDIENUNG:
+                        Raum anwaehlen, benennen, Flaeche ablesen.
+                        -> kleinster Schnitt, groesster Nutzen.
+
+W-22 Gaube              26 Exporte, zwei Renderer-Aufrufer — die Geometrie ist da und
+                        wird gezeichnet, aber niemand kann eine Gaube SETZEN.
+                        -> echtes neues Werkzeug (Platzieren, Orientieren, Pruefen).
+                        pruefeAufbau existiert bereits als Ampel.
+
+W-21 Sparren/Lattung    EIN Aufrufer, und der ist ein ENGINE-PANEL, keine Zeichenflaeche.
+                        Das ist eine ANZEIGE, kein Werkzeug — und nach A-14 traegt sie
+                        jetzt den N-003-Vorbehalt.
+                        -> ZULETZT, und die Frage lautet nicht "Werkzeug bauen", sondern
+                           "gehoert Tragwerk ueberhaupt an die Zeichenflaeche?"
+```
+
+### Reihenfolge-VORSCHLAG (nicht Entscheidung)
+
+```text
+1  W-05  Raum benennen und ablesen   — Engine laeuft schon, reine Bedienung, kleinster Schnitt
+2  W-22  Gaube setzen                — Geometrie fertig, Ampel vorhanden, echtes Werkzeug
+3  W-01  Register-Zeile klarstellen  — kein Bau, eine Zeile: Fang ist Infrastruktur
+4  W-21  Fachfrage VOR dem Schnitt   — Anzeige oder Werkzeug? Nicht vom Frontend her zu klaeren
+```
+
+### Was ich ausdrücklich NICHT tue
+
+```text
+KEIN Auftrag geschnitten     — das ist der Planner, ich messe und lege vor (Rollengrenze)
+KEINE Designentscheidung     — Werkzeugsymbol, Panel-Ort, Bedienfolge gehoeren in die
+                               UI-Bauordnung und brauchen den Styleguide, nicht mich
+KEINE Aussage zu W-08        — 'flaeche-messen' KOENNTE W-08 decken; ob es dasselbe misst
+                               (Grundflaeche gegen geneigte Dachflaeche) ist genau die
+                               Frage, die W-08s eigenes Blatt als GEFAHR benennt. Ungemessen.
+```
+
+```yaml
+ballbesitz: planner
+grundlage: "toolRegistry.ts (12 ids, selbst gezaehlt) · REGISTER.md (10 BESCHRIEBEN, 0 GEBAUT) ·
+            Aufruferzaehlung je Modul ueber resources/, Tests ausgenommen"
+offen_bei_yama: "nur die Fachfrage aus Punkt 4 — gehoert Tragwerk an die Zeichenflaeche?"
+```
