@@ -6,9 +6,15 @@ art: "Nachbesserung nach §12.5 — W-01/1 bleibt ABGENOMMEN, der Befund wirkt n
 titel: "W-01/1-6 traegt die Zahl 1689/1689, gemessen sind 1692 — zahlfreie Form wie in W-02"
 spur: A
 heimat_app: ticket
-status: ENTWURF
+status: BEREIT
 status_steht_in: docs/STATUS.md
-basis_sha: 548bef5c
+dor_beleg: "a5aab234 — plan-pruefer: 'W-01N und W-07N BEREIT beim ersten Review, beide Rot-Lagen
+         selbst gemessen'. Angeglichen 12.08. vom Planner: der Blattkopf hing auf ENTWURF, waehrend
+         Tafelzeile und DoR BEREIT sagten — der Pruefer hatte die Datei nicht angefasst."
+basis_sha: ed7ccb70
+basis_aktualisiert: "12.08. — vorher 548bef5c. Zwischen Schnitt und Bau liegen zwei WURZELFIXE und
+         die gesamte Klasse-A-Schlussrunde; eine Basis von gestern haette den Bau auf einen Stand
+         gestellt, den es nicht mehr gibt." 
 prioritaet: P2
 anlass: "SPEC-Rest aus der W-01/1-Abnahme (320a95c8), vom Evaluator verbucht"
 verursacher: planner
@@ -42,6 +48,32 @@ Ursache                      A-10 hat drei Zusagen hinzugefuegt (dbb7ff66) — V
 > **Ich habe den Grundsatz aufgeschrieben und im nächsten Blatt gebrochen.** *Zehnter Fall meiner
 > Klasse — und diesmal nicht „Stellvertreter statt Quelle", sondern schlichter: eine Zahl behauptet,
 > die zwei Commits vorher schon anders war.*
+
+## NACHTRAG 12.08. — der Befund ist stärker geworden, ohne dass jemand etwas getan hat
+
+**Beim Schnitt lautete er „1689 im Blatt gegen 1692 gemessen". Heute sind es vier Zahlen für
+dieselbe Sache:**
+
+```text
+1689/1689   steht im Blatt W-01-fang-beschreiben.md, Z.135 und Z.177   (Kriterium W-01/1-6)
+1692/1692   Messung des Evaluators bei der W-01/1-Abnahme (320a95c8)   ZWEIMAL in Commits genannt
+1693/1693   der heutige Stand — FUENFMAL unabhaengig genannt:
+              Generator beim A-18-Bau · RELEASE+BETRIEBSPRUEFUNG A-15 · dieselbe fuer W-07N ·
+              plan-pruefer bei W-07N Runde 2
+1668        meine eigene Zaehlung per grep -cE '^\s*(test|it)\(' ueber 166 Testdateien
+```
+
+> **Der letzte Wert ist der interessanteste, und er gehört ins Blatt:** *ich habe **1668** gemessen,
+> während die Suite **1693** meldet. Beide Zahlen sind richtig — sie messen Verschiedenes: `grep`
+> zählt geschriebene `test(`-Aufrufe, der Lauf zählt **ausgeführte** Zusagen, und parametrisierte
+> Tests erzeugen mehr Läufe als Zeilen. **Eine feste Zahl in einem Kriterium ist damit nicht nur
+> veraltet, sobald jemand einen Test schreibt — sie ist schon in dem Moment unbestimmt, in dem zwei
+> Rollen mit verschiedenen Werkzeugen messen.***
+
+**Das ist der eigentliche Grund für die zahlfreie Form, und er ist stärker als der ursprüngliche:**
+*nicht „die Zahl driftet" (das tut sie, dreimal in zwei Tagen), sondern **„die Zahl hat gar keinen
+eindeutigen Wert"**, solange die Messmethode nicht mitgenannt wird. Genau das ist B5 und B6 in einem
+Fall — und beide Barrieren sind inzwischen gebaut beziehungsweise in Arbeit.*
 
 ## Die Lehre ist schon gezogen — nur nicht in W-01
 
@@ -140,6 +172,13 @@ wird geändert**, und die Änderung wird im Blatt als §12.5-Nachbesserung geken
 **W-01N-5 (P1, §3 wird BELEGT):** Befehl mit Ausgabe für „kein anderer Auftrag auf `IN_ARBEIT`", an
 beiden Orten, **mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer**. *E2 aus
 Prüfung 03, angenommen in `b9dc3c35`.*
+
+> **Aktualisiert 12.08.: die Prüfmethode ist inzwischen VERANKERT** — `docs/ARBEITSREGELN.md`, §3,
+> Abschnitt „Die Prüfmethode". *Es gilt der dort stehende Ausdruck `^\| \*\*[A-Z]+-?[0-9]+.*IN_ARBEIT`
+> und **nicht** das alte `[AW]`-Muster: es war blind für `B-`, `M-` und `P-`-Aufträge, und genau so
+> ist `B5` durch die Schranke gefallen. **Wer hier noch das alte Muster benutzt, belegt §3 nicht,
+> sondern täuscht es.** Und weil `B6` gerade läuft — ein `B-`Auftrag — ist dieser Auftrag der erste,
+> bei dem der Unterschied unmittelbar wirkt.*
 
 ## Kantenliste
 
