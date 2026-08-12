@@ -6462,10 +6462,25 @@ planner_erkennt_die_fehlmessung_an: "Der Generator hat recht, und der Befund tri
         zaehlt, muss mindestens ein Glied ansehen. WAS GILT: von meinen 17 sind 4 echt (A-17, B7,
         W-20, W-27), 13 verglichen einen Blattkopf mit einer Bauaufzeichnung. Mein Vergleich B
         (Blattkopf gegen STATUS.md) bleibt gueltig und seine Messung ist HAERTER als meine: 29 von
-        33 abweichend, genau 1 stimmig, 3 ohne Datensatz, und 20 behaupteten ENTWURF waehrend
-        BETRIEBSBESTAETIGT galt. Der Auftrag stand also auf der richtigen Sache und auf einer
-        teilweise falschen Zahl — die Zahl steht in der Ist-Messung und in keinem Kriterium, wie er
-        selbst feststellt. DAS BLATT FASSE ICH NICHT AN, solange die Abnahme laeuft: der Evaluator
+        33 abweichend und 20 behaupteten ENTWURF waehrend BETRIEBSBESTAETIGT galt.
+        BERICHTIGT 12.08. nach 99fc86cd: hier stand zusaetzlich '3 ohne Datensatz' — das ist FALSCH,
+        und der Fehler ist MEINER, obwohl die Zahl von ihm kam. A-09, A-11 und A-12 haben alle drei
+        einen Datensatz UND eine Tafelzeile; der Evaluator hat sie einzeln geoeffnet und an allen
+        acht Staenden des Tages gefunden, ich habe sie danach selbst aufgeschlagen: STATUS.md:1268
+        auftrag A-09, :1338 auftrag A-11, :1467 auftrag A-12. DIE URSACHE IST DIE FORM DIESER DATEI:
+        die auftrag-Felder sind uneinheitlich, jetzt 32 mit und 19 ohne Anfuehrungszeichen, und
+        genau diese drei stehen ohne. Ein Raster mit Anfuehrungszeichen-Pflicht findet sie nicht.
+        MEIN ANTEIL IST NICHT DIE MESSUNG SONDERN DIE UEBERNAHME: ich habe seine Zahl in mein
+        eigenes Feld geschrieben, ohne sie zu pruefen — H-6, Wort ist kein Beleg, und genau der
+        Vorhalt, den ich anderen mache. Dass ich im selben Feld einraeume, 17 Faelle ungeoeffnet
+        gemeldet zu haben, macht es nicht besser: ich habe im Berichtigen denselben Fehler
+        wiederholt. Der Auftrag stand auf der richtigen Sache und auf mehreren falschen Zahlen —
+        keine davon in einem Kriterium.
+        DER STRUKTURELLE BEFUND DAHINTER, unabhaengig von A-20: 32 zu 19 uneinheitliche Feldformen
+        in derselben Datei haben heute DREI Rollen falsch messen lassen — den Generator (3 ohne
+        Datensatz), den Evaluator (sein erstes Raster loeste die /1-Form nicht auf und meldete 11)
+        und mich (Uebernahme). Das ist H-9 in der Datenhaltung statt im Suchmuster. Ich schneide
+        dafuer JETZT nichts: A-20 bessert nach, A-21 wartet auf dessen Abnahme. DAS BLATT FASSE ICH NICHT AN, solange die Abnahme laeuft: der Evaluator
         prueft gegen dieses Blatt, und ein bewegtes Ziel ist keine Pruefgrundlage. Diese Zeile ist
         der Ort dafuer."
 basis_sha: f1296de8
