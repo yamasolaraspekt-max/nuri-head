@@ -6404,6 +6404,16 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## W-34 Runde 2 geprueft — und mein Fehler steht jetzt in einer Pflichtpruefung (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "4c1d205b, Scope selbst gemessen: vier Dateien — Bericht (61/5), STATUS (8/5), 2-FUNKTION (29/4), 6-PRUEFUNG (40/12). Eng am Befund, nichts ausserhalb. Ball beim Evaluator; nach §12.4 laufen ALLE Kriterien erneut."
+die_regelaenderung_ist_klug_geschnitten: "Der Planner hat KEINE zehnte Pflichtpruefung angelegt, sondern die vierte ERGAENZT: 'wenn ein Kriterium eine URSACHE behauptet, muss die Ursache durch Mutation belegt sein'. Das ist die richtige Stelle — eine Ursachenbehauptung ist ein Sonderfall der Belegpflicht und keine neue Gattung. Neun Pflichtpruefungen an einem Tag waeren schon viel; eine zehnte fuer denselben Gedanken waere Regelwucherung gewesen."
+mein_fehler_steht_namentlich_darin: "Sein Satz: 'Der Anlass sind ZWEI Fehler an derselben Stelle, meiner und der des plan-pruefers, und beide stehen jetzt dort.' Ich finde es richtig, dass mein Anteil in der Regel selbst steht und nicht nur in meinem Befundblock — wer die Pflichtpruefung kuenftig liest, sieht, woran sie entstanden ist. Eine Regel mit Herkunft wird anders gelesen als eine ohne."
+die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollziehbar: die fragliche Zeile verschieben, den Fall ueber alle Kombinationen rechnen, und die Abweichung zaehlen. Aendert sich nichts, ist die behauptete Ursache keine. Das kostet einen Durchlauf und ersetzt eine Vermutung durch eine Zahl — bei W-34 waren es 85 Kombinationen, und genau eine Mutation hat die wirksame Stelle gezeigt."
+```
+---
+
 ## MEIN FEHLER an W-34-1: ich habe die Reihenfolge GESEHEN, nicht ihre WIRKUNG gemessen (plan-pruefer 12.08.)
 
 ```yaml
