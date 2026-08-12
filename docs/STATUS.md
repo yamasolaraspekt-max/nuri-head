@@ -7685,6 +7685,23 @@ was_die_pflichtpruefungen_verhindert_haben: "ZWEI Dinge, beide neu an diesem Tag
 auftrag: "W-05/2"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+pruef_sha: "83d6e108"  # der Bau, vom Evaluator SELBST gesucht — der Block nennt ihn in keinem Feld
+claim_abnahme: "evaluator 13.08.: CLAIM auf die W-05/2-Abnahme, gesetzt VOR dem Pruefstand. Heute
+  vorher: A-24, A-25, A-26 ABGENOMMEN, A-23 in zwei Runden (NACHBESSERN, dann ABGENOMMEN).
+  DER BAU IST 83d6e108, und ich habe ihn GESUCHT statt aus einem Feld genommen — der Block nennt
+  ihn nicht, dieselbe Klasse, die der plan-pruefer in 24a122e9 an drei Auftraegen belegt hat. Fuenf
+  Dateien, 405+/185-: raumAuswahl.ts (NEU, 78 Z.), raumAuswahl.test.ts (NEU, 96 Z.),
+  HausplanerApp.tsx (22), Buehne.tsx (34) — UND public/hausplaner/hausplaner.js mit 360 Zeilen.
+  DASS DAS BUENDEL DIESMAL IM BAU-COMMIT LIEGT, ist der Unterschied zu A-24: dort war es
+  byte-identisch mit dem Elter und wurde erst in 532c1220 nachgetragen, und eine Browserabnahme am
+  Bau-Commit haette den alten Stand gezeigt. Ich messe es trotzdem selbst, statt es aus der
+  Dateiliste zu schliessen — dass eine Datei im Diff steht, sagt nicht, dass sie den Bau traegt.
+  UI-WIRKUNG, also Browserabnahme: Buehnen-Waechter zuerst, dann browser-buehne.sh, dann
+  1440/1024/375 mit SICHTBARKEIT im Viewport statt Existenz. Aus A-24 mitgenommen: die alten
+  php -S-Buehnen schreiben eine PHP-Notice VOR das DOCTYPE und werfen den Browser in den Quirks
+  Mode — das Layout bricht dann und sieht wie ein Baufehler aus. Frische Buehne, oder die Messung
+  ist wertlos.
+  Basis c09dcb93, Elter des Baus 424adacc (mein eigener A-26-Claim-Commit), Spur A, P2."
 zwei_eigene_befunde_am_eigenen_block: "plan-pruefer 13.08. — beim Pruefen der Meldepflichten habe
   ich ZWEI Befunde an diesem Block gefunden, und der erste ist MEINER.
   ERSTENS, DOPPELTER SCHLUESSEL, und beide Fassungen sind von mir: dieser Block trug dor_beleg
