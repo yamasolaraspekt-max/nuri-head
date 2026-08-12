@@ -42,7 +42,7 @@
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
 | W-03 | Wand bearbeiten | LEER | W-02, W-13 | F-003, F-004, F-030 |
-| W-04 | Öffnung (Tür/Fenster) | **BESCHRIEBEN** | W-02 | **keine** ⓝ (~~F-003~~, ~~F-031~~) |
+| W-04 | Öffnung (Tür/Fenster) | **BESCHRIEBEN** | W-02 | **keine** ⓝ (~~F-001 ✓, F-002 ✓~~, ~~F-031~~) | · **F-ZUORDNUNG BERICHTIGT vom planner 13.08.** Der Generator meldete, W-04 enthalte **keine Rechnung** (`Math.` 0× in `oeffnungsBauarten.ts`/`oeffnungsTypen.ts`) — **das war zu eng gemessen:** diese zwei sind die **Katalogmodule**, und das Werkzeug hat fünf. `geometry/wallGeometry.ts` (317 Z.) rechnet **15×** mit `Math.`, `wandFlaeche.ts` 2×. **Seine Schlussfolgerung trägt trotzdem, nur anders begründet:** F-003 (Lotfußpunkt) und F-031 (CSG-Differenz) haben über **alle fünf** Module **0 Treffer** — sie werden nicht benutzt und sind gestrichen. **Belegt sind stattdessen F-001 und F-002**, je selbst geöffnet: F-001 Abstand an `wallGeometry.ts:14` und `:87` (`Math.hypot`), F-002 Richtungswinkel an `:46`, `:305`, `:306` (`Math.atan2`). Die Spalte beschreibt nach `LIESMICH.md:69` was **benutzt** wird — also das Ist, nicht das Soll; eine falsche Nummer behauptet eine Benutzung, die es nicht gibt.
 | W-05 | Raum erkennen | **BESCHRIEBEN** | W-02 | **F-010 ✓ + F-011 ✓ in EINER Funktion** — `roomDetection.ts:70` `signierteFlaeche()` gibt `summe/2` **mit Vorzeichen**: das Vorzeichen ist die Orientierung, der Betrag die Fläche (`:38 flaecheMm2`), **F-001 ✓** (`:88`, `:95` `Math.hypot`), F-012 ⚠, F-013 ⚠ · **fehlte in der Spalte: F-002 ✓** (`:120` `Math.atan2`, Halbkanten-Sortierung) |
 | W-10 | Decke und Boden | LEER | W-05 | F-011, F-030 |
 | W-16 | Grundriss unterlegen | LEER | W-12 | F-032 |
@@ -63,7 +63,7 @@
 
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
-| W-11 | Maß und Bemaßung | **BESCHRIEBEN** | ~~W-13~~ ⓝ | F-001 ✓, ~~F-002~~ ⓝ, ~~F-003~~ ⓝ |
+| W-11 | Maß und Bemaßung | **BESCHRIEBEN** | ~~W-13~~ ⓝ | F-001 ✓, ~~F-002~~ ⓝ, ~~F-003~~ ⓝ | · **BEIDE BEFUNDE BESTÄTIGT UND BERICHTIGT (planner 13.08.), je selbst nachgemessen.** **(1) F-002 und F-003 gestrichen:** `atan2` und `lotAufGerade` kommen in `bemassung.ts`, `masskette.ts` und `masseingabe.ts` **null mal** vor. Belegt bleibt **F-001** (`Math.hypot`/`sqrt` je 1× in `bemassung.ts` und `masseingabe.ts`) — Bemassung misst **Abstände**, keine Richtungen und keine Lotfußpunkte. **(2) Die Abhängigkeit „braucht W-13" gestrichen:** `auswahl`/`select`/`markiert` kommen in `bemassung.ts` und `masskette.ts` **null mal** vor, und die Signatur `bemassung(waende, oeffnungen, toleranz)` (`:52-55`) hat **keinen Auswahl-Parameter** — sie bekommt *alle* Wände und *alle* Öffnungen. Ein Werkzeug, das alles bemaßt, braucht keine Auswahl.
 | W-14 | Kopieren/Spiegeln/Drehen | LEER | W-13 | F-032 |
 | W-15 | Material und Farbe | **ENTWORFEN** | W-13 | **keine** ⓝ — zugewiesen wird, nicht gerechnet |
 | W-17 | Export und Speichern | LEER | alle | — |
