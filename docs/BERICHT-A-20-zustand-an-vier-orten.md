@@ -8,12 +8,27 @@ basis_sha: 6af2572d
 gebaut_am: "12.08.2026"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+fassung: "2 — nachgebessert nach dem NACHBESSERN des Evaluators (99fc86cd)"
 ```
 
-> **Ein Fehlgriff steckt in diesem Bau, und er steht nicht am Ende, sondern hier oben:** *mein
-> erster Lauf hat bei `A-15` eine Zeile entfernt, die **kein Blattfuß** war, sondern ein datierter
-> Meldeblock.* **Die Gegenprobe je Datei hat ihn gefangen, sechs Dateien weit** — und ich habe alles
-> zurückgesetzt und mit einer anderen Regel neu gebaut. *Abschnitt „Der Fehlgriff" unten.*
+> **Fassung 2. Der Evaluator hat A-20-4 verworfen und A-20-5s Nachweis, und beide Male zu Recht.**
+> *Was hier zuerst stand, ist **zurückgezogen und nicht gelöscht** — die falschen Zahlen samt ihrer
+> Ursache stehen weiter im Text, weil eine stille Berichtigung genau den Befund vernichtet, den
+> dieser Auftrag schützen soll.*
+
+```text
+A-20-4   "3 Blaetter ohne Datensatz" + Auftrag an den Planner   -> ZURUECKGEZOGEN, ohne Grundlage
+         29 abweichend / 3 ohne / 20 ENTWURF                    -> 32 / 0 / 22
+A-20-1   dieselben Zahlen im gueltigen Regelwerk                -> berichtigt, §16
+A-20-5   Nachweis war eine Baummessung                          -> am COMMIT neu gemessen
+```
+
+> **Drei Fehlgriffe stehen in diesem Bericht, und alle drei sind dieselbe Sorte:** *ein Muster, das
+> eine Schreibweise voraussetzt, misst die Schreibweise und nicht die Sache.* **Zwei habe ich selbst
+> gefunden, den dritten und teuersten der Evaluator.** *Der erste steht gleich unten, weil ein
+> Bericht seine Fehlgriffe nicht ans Ende stellt:* **mein erster Lauf entfernte bei `A-15` eine
+> Zeile, die kein Blattfuß war, sondern ein datierter Meldeblock — die Gegenprobe je Datei fing ihn
+> nach sechs Dateien.**
 
 ## A-20-1 · §16 nennt die vier Orte
 
@@ -135,7 +150,7 @@ W-20, Zeile 185-187   ```yaml / zustand: ENTWURF / ballbesitz: "plan-pruefer (Do
 > **Das ändert am Auftrag nichts und schmälert ihn nicht.** *Die 17/24 stehen in der **Ist-Messung**
 > des Blattes, in keinem Kriterium.* **A-20-3 verlangt alle Kopien — entfernt sind 33 Köpfe und 10
 > Füße, also mehr als jede der beiden Lesarten umfasst.** *Und der eigentliche Schaden liegt gar
-> nicht hier: **29 der 33 Köpfe wichen von `docs/STATUS.md` ab** — das ist die größere Zahl und die
+> nicht hier: **32 der 33 Köpfe wichen von `docs/STATUS.md` ab** — das ist die größere Zahl und die
 > nächste Tabelle.*
 
 **Beide Lesarten stehen hier mit ihrer Zahl. Welche das Blatt gemeint hat, entscheidet der
@@ -143,10 +158,17 @@ Evaluator, nicht ich.**
 
 ## A-20-4 · Jede entfernte Kopie, die abwich — was stand, was gilt
 
-**29 abweichend · 1 übereinstimmend · 3 ohne Datensatz** *(Summe 33)*
+> **BERICHTIGT nach dem Befund des Evaluators (`99fc86cd`).** *Die erste Fassung nannte hier
+> „29 abweichend · 1 übereinstimmend · **3 ohne Datensatz**" und leitete daraus einen Auftrag an den
+> Planner ab, dem nichts zugrunde lag. Was falsch war und warum, steht unten unter „Der
+> zurückgezogene Befund" — **nicht gelöscht, damit die Ursache lesbar bleibt.***
+
+**32 abweichend · 1 übereinstimmend · 0 ohne Datensatz** *(Summe 33)*
 
 | Blatt | Kopf stand | Fuß stand | **GILT** |
 |---|---|---|---|
+| **A-09 · A-11** | `ENTWURF` | — | **BETRIEBSBESTAETIGT** |
+| **A-12** | `ENTWURF` | — | **ABGENOMMEN** |
 | A-13 · A-14 · A-15 | `ENTWURF` | — | **BETRIEBSBESTAETIGT** |
 | A-16 | `BEREIT` | `BEREIT` | **BETRIEBSBESTAETIGT** |
 | A-17 · B7 · W-27 | `BEREIT` | `ENTWURF` | **BETRIEBSBESTAETIGT** |
@@ -159,34 +181,76 @@ Evaluator, nicht ich.**
 | W-20 | `CODE_FERTIG` | `ENTWURF` | **BETRIEBSBESTAETIGT** |
 | W-21L | `ENTWURF` | — | **ZURUECKGESTELLT** |
 
-**Gezählt statt eingestuft:** *über alle Zeilen hinweg standen **20 der 33 Köpfe** auf `ENTWURF`,
-während `BETRIEBSBESTAETIGT` galt* — **A-13 A-14 A-15 A-18 A-19 B5 B5N B6 W-01 W-02 W-04 W-05 W-08
-W-09 W-11 W-13 W-15 W-21 W-22 W-23.** *Das ist die größte einzelne Falle des Bestands gewesen, und
-**nur ein einziger Kopf von 33 stimmte**.*
+**Gezählt statt eingestuft:** *über alle Zeilen hinweg standen **22 der 33 Köpfe** auf `ENTWURF`,
+während `BETRIEBSBESTAETIGT` galt* — **A-09 A-11 A-13 A-14 A-15 A-18 A-19 B5 B5N B6 W-01 W-02 W-04
+W-05 W-08 W-09 W-11 W-13 W-15 W-21 W-22 W-23.** *Das ist die größte einzelne Falle des Bestands
+gewesen, und **nur ein einziger Kopf von 33 stimmte**.*
 
-**Drei Blätter haben KEINEN Datensatz in `docs/STATUS.md`** — *dort ist kein Vergleich möglich:*
+## Der zurückgezogene Befund — und die Falle, die ihn erzeugt hat
+
+> **ZURÜCKGEZOGEN.** *Hier stand: „Drei Blätter haben KEINEN Datensatz in `docs/STATUS.md`" —
+> `A-09`, `A-11`, `A-12` — und daraus abgeleitet: „**die Lücke gehört dem Planner**".* **Alle drei
+> haben einen Datensatz UND eine Tafelzeile.** *Der Auftrag an den Planner hatte keine Grundlage
+> und ist damit gegenstandslos.*
 
 ```text
-A-09-repo-bezug-nicht-nur-cwd.md    Kopf stand auf ENTWURF
-A-11-rollenmarke-im-tor.md          Kopf stand auf ENTWURF
-A-12-f026-ausfuehren.md             Kopf stand auf ENTWURF
+Gemessen am Elter 6af2572d, mit einem Raster das BEIDE Schreibweisen aufloest:
+  A-09  BETRIEBSBESTAETIGT      A-11  BETRIEBSBESTAETIGT      A-12  ABGENOMMEN
+Der Evaluator hat sie einzeln geoeffnet: Z.1268 · Z.1338 · Z.1467, an allen acht
+Staenden des Tages vorhanden. Kein Zeitpunkt-Effekt.
 ```
 
-> **Das ist ein Befund, kein Nebensatz:** *nach der Regel, die dieser Auftrag gerade in §5 schreibt,
-> muss jeder geschnittene Auftrag einen Block haben.* **Diese drei haben keinen — ihre Kopie war die
-> einzige Zustandsangabe, die es zu ihnen gab, und sie ist jetzt fort.** *Ich habe sie trotzdem
-> entfernt, weil A-20-3 alle Kopien verlangt; **die Lücke gehört dem Planner**, und sie ist hier
-> benannt statt stillschweigend geschlossen.*
+**Die Ursache steckt in meinem Raster, nicht in der Datei:**
+
+```python
+re.match(r'^auftrag: "([^"]+)"', l)      # verlangt Anfuehrungszeichen
+```
+
+```text
+auftrag:-Felder in docs/STATUS.md:   31 MIT Anfuehrungszeichen · 19 OHNE
+A-09, A-11 und A-12 stehen OHNE  ->  fielen aus der Erfassung  ->  "ohne Datensatz"
+```
+
+> **Warum genau diese drei und keine weiteren:** *von den 19 unzitierten Feldern haben nur sie ein
+> Blatt mit `status:` im Kopf.* **Das erklärt die Zahl 3 exakt — sie war kein Zufallstreffer,
+> sondern das saubere Ergebnis einer falschen Frage.**
+
+**Das ist H-9 in der DATENHALTUNG statt im Suchmuster.** *Und es ist derselbe Fehlertyp, den ich in
+diesem Bericht schon zweimal an mir gefunden habe: ein Muster, das eine Schreibweise voraussetzt,
+misst die Schreibweise und nicht die Sache.* **Diesmal hat es nicht meine Gegenprobe gefunden,
+sondern der Evaluator.**
+
+> **Die härtere Lehre ist nicht das Raster, sondern das Weitergehen:** *ich habe aus drei Zahlen
+> einen **Auftrag an eine andere Rolle** abgeleitet, ohne eine der drei Stellen zu öffnen.* **Genau
+> das habe ich in diesem Bericht dem Auftragsblatt vorgehalten („17 Widersprüche ungeöffnet
+> gemeldet") — und eine Seite weiter selbst getan.** *Wer eine Menge zählt, muss mindestens ein
+> Glied ansehen; wer daraus einen Auftrag ableitet, jedes.*
+>
+> **Der Evaluator ist derselben Fallenklasse spiegelverkehrt aufgesessen** — *sein erstes Raster
+> löste die `/1`-Form nicht auf und meldete 11 Blätter „ohne Datensatz".* **Ich habe die
+> unzitierten übersehen, er die zitierten.** *Beide Male war die uneinheitliche Schreibweise der
+> `auftrag:`-Felder die Ursache. Sie gehört nicht zu A-20 und wird hier nur benannt.*
 
 ## A-20-5 · Kein Zustand in `STATUS.md` geändert
 
+> **Der Nachweis, der hier zuerst stand, war wertlos, und der Evaluator hat es gesehen:**
+> *`git diff --name-only -- docs/STATUS.md → 0` misst den **Arbeitsbaum** zu einem Zeitpunkt.* **Nach
+> dem Commit ist diese Zahl zwangsläufig 0 — sie wäre auch dann 0 gewesen, wenn ich zwanzig fremde
+> Zustände geändert hätte.** *E1 sagt genau das: der Arbeitsbaum ist kein Beleg. Ich habe die Regel
+> im selben Bericht angewandt und an dieser Stelle vergessen.*
+
+**Am COMMIT gemessen — `git show 48fac1f0 -- docs/STATUS.md`:**
+
 ```text
-git diff --name-only -- docs/STATUS.md   ->   0
+geaenderte Zustandszeilen        4      -zustand: IN_ARBEIT     +zustand: CODE_FERTIG
+                                        -ballbesitz: generator  +ballbesitz: evaluator
+geaenderte Tafelzeilen           1      A-20, IN_ARBEIT -> CODE_FERTIG
+fremde Zustaende beruehrt        0
 ```
 
-*Die einzige Statusänderung dieses Auftrags ist meine eigene §3-Markierung (`A-20` auf `IN_ARBEIT`),
-und sie steht in einem **eigenen** Commit vor dem Bau (`6af2572d`). **Die Bereinigung selbst hat
-keine Tafelzeile und kein `zustand`-Feld angefasst.***
+**Alle fünf Zeilen gehören A-20 selbst.** *Die §3-Markierung steht in einem eigenen Commit davor
+(`6af2572d`); die Bereinigung der 33 Blätter hat keine Tafelzeile und kein `zustand`-Feld eines
+anderen Auftrags angefasst.*
 
 ## A-20-6 · Die Rollenvorlagen — erhoben, eine umgestellt
 

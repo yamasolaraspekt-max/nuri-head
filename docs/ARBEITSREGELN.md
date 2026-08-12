@@ -659,12 +659,21 @@ BLEIBT     Auftragsblatt  · status_steht_in: docs/STATUS.md
 43 Auftragsblaetter · 33 mit status: im Kopf · 10 mit zustand: im echten Blattfuss
 
 Blattkopf gegen die Statuswahrheit in docs/STATUS.md:
-  abweichend        29        uebereinstimmend  1        ohne Datensatz  3
-  davon: Kopf ENTWURF, waehrend BETRIEBSBESTAETIGT gilt  20
+  abweichend        32        uebereinstimmend  1        ohne Datensatz  0
+  davon: Kopf ENTWURF, waehrend BETRIEBSBESTAETIGT gilt  22
 ```
 
-**Zwanzig von 33 Blättern behaupteten `ENTWURF`, während der Auftrag abgenommen und im Betrieb
-bestätigt war.** *Nur ein einziger Kopf stimmte.*
+**Zweiundzwanzig von 33 Blättern behaupteten `ENTWURF`, während der Auftrag abgenommen und im
+Betrieb bestätigt war.** *Nur ein einziger Kopf von 33 stimmte — und **jedes** Blatt hatte einen
+Datensatz.*
+
+> **Diese drei Zahlen standen hier zuerst falsch (29 · 3 · 20), und der Fehler saß in meinem
+> Raster:** *es las die Auftragskennung mit `^auftrag: "([^"]+)"` und verlangte damit
+> Anführungszeichen.* **In `docs/STATUS.md` sind die Felder uneinheitlich geschrieben — 31 mit, 19
+> ohne** *— und ausgerechnet `A-09`, `A-11` und `A-12` stehen ohne.* **Sie fielen aus der Messung
+> und erschienen als „ohne Datensatz", obwohl alle drei einen haben.** *Gefunden hat es der
+> Evaluator (`99fc86cd`); die uneinheitliche Schreibweise ist die eigentliche Falle und hat an
+> einem Tag drei Rollen falsch messen lassen.*
 
 > **Zur Herkunft der Zahlen, weil eine ältere Fassung dieses Absatzes „24 mit zustand: im Fuss" und
 > „17 Widersprüche" nannte:** *beide stammten aus der Regel „die erste `^zustand:`-Zeile ist der
@@ -679,7 +688,7 @@ hängt, ist bei 43 Blättern und fünf Rollen keines.*
 
 > **Der belegte Beinahe-Schaden:** *beim Bau von W-20 stand im Blattkopf `status: ENTWURF`, während
 > `BEREIT` galt. Der Generator ist nur deshalb nicht gescheitert, weil er den DoR-Beleg woanders
-> gesucht hat.* **Das war Findigkeit, kein Verfahren — 29 Blätter waren Fallen dieser Art.**
+> gesucht hat.* **Das war Findigkeit, kein Verfahren — 32 Blätter waren Fallen dieser Art.**
 
 **Der Statusträger ist `docs/STATUS.md`** — namentlich. *Fassung 1.3 nannte hier
 `docs/AKTUELLER_AUFTRAG.yaml`; P-01 mit Yamas Weisung (Fassung 1.2.2, Commit `8fc5edb8`) hat den
