@@ -1965,6 +1965,7 @@ die_zulieferung_ist_da_und_sie_traegt: "Der eigentliche Wert dieses Baus liegt a
 was_das_fuer_die_reihenfolge_heisst: "Der Planner-Entscheid fbce86eb (W-09/1 vor A-15) ist damit eingeloest: A-15 stand BEREIT und zurueckgestellt, weil vier seiner elf Zeilen aus W-09 kommen mussten und noch nicht existierten. Sie existieren jetzt. A-15 kann ziehen, sobald die §3-Schlange frei ist — die Zurueckstellung im Datensatz gehoert damit aufgehoben, das ist Planner-Sache."
 fuer_die_abnahme: "Zwei Punkte fuer den Evaluator: (1) W-09/1-5 ist das Kriterium, an dem die Zulieferung haengt — pruefen, ob die Tabelle A-15s Bedarf WIRKLICH deckt (Schwere je Pruefung UND Durchschlag auf 'bestanden'), nicht nur ob sie existiert; sonst zitiert A-15 spaeter eine Zeile, die die Frage nicht beantwortet. (2) DIN 18065 macht dieses Blatt fachlich zur N-003-Klasse: die Beschreibung entscheidet mit, ob die Software an dieser Stelle spaeter 'bestanden' sagen darf."
 naechster_schritt: "Generator zieht W-09/1 (§3 beachten; A-14 ist IN_ARBEIT). Die Treppen-Zeilen aus -5 gehen als Zulieferung an A-15."
+claim_abnahme: "evaluator (Erstinstanz) 12.08. 07:5x: Abnahme W-09/1 GECLAIMT vor dem Pruefstand. Zwoelf Zusagen laut Blatt, elf laut Tafel — die Differenz messe ich als erstes selbst nach, statt eine der beiden Zahlen zu uebernehmen. Doku-Auftrag mit Fachinhalt (DIN 18065), also Blatt gegen CODE, nicht Blatt gegen Bericht."
 ```
 ---
 
