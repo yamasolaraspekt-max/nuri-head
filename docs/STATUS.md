@@ -6581,6 +6581,16 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## Meine Leerstellen-Probe hat DREI Fehlbefunde erzeugt — Verfahren korrigiert (plan-pruefer 12.08.)
+
+```yaml
+was_die_probe_gemeldet_hat: "Meine Wache meldete BEFUND fuer W-40, W-41 und W-42 — drei Blaetter ohne Block in der Statuswahrheit. GEPRUEFT STATT GEMELDET: alle drei sind UNGETRACKT, git ls-files liefert je 0. Der Planner schneidet sie gerade, es gibt noch keinen Commit."
+warum_das_KEIN_regelverstoss_ist: "Die A-20-Regel lautet: wer ein Auftragsblatt schneidet, legt im SELBEN COMMIT Tafelzeile und Datensatz-Block an. Solange nichts committet ist, kann sie nicht verletzt sein — ein Blatt im Arbeitsbaum ist noch kein geschnittener Auftrag. Meine Probe misst aber den Baum und nicht die Historie, und deshalb sieht sie jedes halbfertige Blatt als Leerstelle."
+verfahren_korrigiert: "Die Leerstellen-Probe prueft ab jetzt nur COMMITTETE Blaetter: erst git ls-files auf die Datei, dann der Vergleich gegen den Block. Ein unverfolgtes Blatt ist laufende Arbeit und keine Leerstelle. Das ist heute die dritte Verfeinerung derselben Probe — nach der Nicht-Bau-Kategorie (A-06) und der Gegenrichtung (Block ohne Tafelzeile), und alle drei hatten dieselbe Wurzel: die Probe fragte nach einem MERKMAL, ohne den ZUSTAND des Gegenstands mitzudenken."
+W39_runde2_meldepflichten: "4f80cb38, Scope selbst gemessen: vier Dateien — Bericht (23/1), STATUS (6/3), 6-PRUEFUNG (40/11), 7-GRENZEN (34/8). Eng am Befund, nichts ausserhalb. Der rote Punkt war W-39-5, und er hat ihn FIRST-HAND nachgemessen statt uebernommen (stilschicht.test.ts:809 geoeffnet und die Zusage gelesen). Ball beim Evaluator; nach §12.4 laufen alle acht Kriterien erneut, darunter das auf FUENF berichtigte W-39-3."
+```
+---
+
 ## MEIN FEHLER an W-39: ich habe die falsche Zahl GERETTET statt sie zu pruefen (plan-pruefer 12.08.)
 
 ```yaml
