@@ -98,7 +98,7 @@ Eine gezaehlte Zahl kann nicht veralten.
 ## 5 — Scope: der Rahmen, nicht die dreizehn Module
 
 ```text
-W-39 IST      app/HausplanerStudio.tsx — die Modus-Verwaltung, die sechs Zustaende,
+W-39 IST      app/HausplanerStudio.tsx — die Modus-Verwaltung, die fuenf Zustaende,
               die zwei Store-Anbindungen, der Modusschalter, und die ADDITIVE
               Einbettung der HausplanerApp per Flag.
 
