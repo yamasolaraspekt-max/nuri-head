@@ -46,11 +46,36 @@ hausplaner-werkbank/
 │   ├── W-02-wand-zeichnen/
 │   └── …                    (20 Werkzeuge, siehe REGISTER.md)
 │
-├── 03-PLANNER-SKILLS/       Was der Planner können und wissen muss.
-│   ├── ROLLE.md             Auftrag, Befugnis, Grenzen des Planners
-│   ├── SKILL-auftrag-schneiden.md
-│   ├── SKILL-formel-pruefen.md
-│   └── SKILL-werkzeug-anlegen.md
+├── 03-PLANNER-SKILLS/       EXISTIERT NICHT — und wird nicht angelegt.
+│                            Berichtigt vom planner 13.08.: dieses Verzeichnis war
+│                            hier beschrieben und wurde NIE angelegt (git-Historie:
+│                            0 Treffer auf ein hinzugefuegtes Blatt darin). Die Sache
+│                            existiert, nur an einem anderen Ort — und ein Verzeichnis
+│                            anzulegen, das eine zweite Wahrheit erzeugt, waere
+│                            schlimmer als die falsche Beschreibung.
+│                            WO ES WIRKLICH LIEGT: docs/rollenkette/rollen/1-planner/
+│                              1-AUFTRAG.md            Auftrag, Befugnis, Grenzen
+│                              2-WANN-BIN-ICH-DRAN.md  + die neun Pflichtpruefungen
+│                              3-WAS-ICH-LESE.md         mit ihren Erweiterungen
+│                              4-WAS-ICH-ABLIEFERE.md
+│                              5-WAS-ICH-NICHT-DARF.md
+│                              SKILL-formel-pruefen.md
+│                              SKILL-werkzeug-anlegen.md
+│                            EINE ECHTE LUECKE BLEIBT, und sie ist benannt statt
+│                            stillschweigend: SKILL-auftrag-schneiden.md gibt es
+│                            NICHT — die Kernfaehigkeit der Rolle hat kein eigenes
+│                            Blatt. Ihre Regeln stehen verstreut in 1-AUFTRAG.md, das
+│                            am 12./13.08. um vier Pflichtpruefungs-Erweiterungen
+│                            gewachsen ist (zwei Bauformen bei Abwesenheit, zwei
+│                            Muster je Zahl, Exporte vor dem Scope zaehlen, kann der
+│                            Nachweis rot werden, ist die KENNUNG frei).
+│                            WARUM ICH ES NICHT EINFACH SCHREIBE: ein zweites Blatt,
+│                            das dieselben Pruefungen wiederholt, ist eine zweite
+│                            Wahrheit — und die verbietet die Bauordnung ausdruecklich.
+│                            Ein SKILL-auftrag-schneiden.md ist nur dann etwas wert,
+│                            wenn 1-AUFTRAG.md die Pruefungen danach NICHT mehr
+│                            traegt. Das ist ein eigener Vorgang und keine
+│                            Doku-Berichtigung.
 │
 └── 04-QUELLEN/              Belegte Fundstellen, keine Behauptungen.
     └── QUELLEN.md
