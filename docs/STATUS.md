@@ -30,7 +30,7 @@
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 | **W-07N** `2-FUNKTION` + Azimutgrenze | `ENTWURF` | **Plan-Prüfer** | Schnitt `1734aa3b` · Basis `3d368625` | Nachbesserung §12.5 · 9 Platzhalter in `2-FUNKTION` gemessen · **schließt W-07 auf BESCHRIEBEN** |
 | **W-09** Treppe | `ENTWURF` | **Plan-Prüfer** | Schnitt `6e2949a7` · Basis `65f3ece4` | sieben Module, 698 Z, **12 Zusagen** · Grobzahl stimmt aufs Wort · **letzter offener Schnitt der Klasse A** |
-| **A-14** N-003-Vorbehalt ins Ergebnis | `ENTWURF` | **Plan-Prüfer** | Schnitt `29f8f372` · Basis `1e09280d` | **RISIKO-Vorrang** (Yama 12.08.): Plakette „Alle Prüfungen bestanden" bei 2 von 6 Nachweisen · Urteilstext-Feld |
+| **A-14** N-003-Vorbehalt ins Ergebnis | **`IN_ARBEIT`** | **Generator** | Schnitt `29f8f372` · Basis `1e09280d` | **RISIKO-Vorrang** (Yama 12.08.): Plakette „Alle Prüfungen bestanden" bei 2 von 6 Nachweisen · Urteilstext-Feld | · **Tafelzeile stand auf `ENTWURF`/Plan-Prüfer, während der Zustandsblock BEREIT/Generator trug — angeglichen**
 | **A-15** Fachaussage oder Hinweis | `ENTWURF` | **Plan-Prüfer** | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
 | **B5** Zählergebnis mit Trefferzeilen | `ENTWURF` | **Plan-Prüfer** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
 | **B6** Summe braucht Erhebung | `ENTWURF` | **Plan-Prüfer** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
@@ -1898,8 +1898,8 @@ was_ich_jetzt_tue: "Ich lege die neun fehlenden Bloecke NICHT im Alleingang an �
 auftrag: "A-14"
 titel: "Vorbehalt als Pflichtfeld · grundlage traegt die Grenze · die Plakette hoert auf, einen Nachweis zu behaupten"
 datei: docs/auftraege/aktiv/A-14-n003-vorbehalt-ins-ergebnis.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft — Produktivcode + Sichtaenderung, Browserabnahme nach §9)
 basis_sha: 1e09280d
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): DER FUND IST DER KERN UND ER HAELT — selbst gemessen: sparrenBerechnung.ts:80 traegt 'bestanden: boolean; // beide Nachweise <= 1,0', und EngineFlaeche.tsx:142-143 zeigt daraus woertlich '✓ Alle Pruefungen bestanden', gruen hinterlegt, fontWeight 700, als Gesamturteil ueber der Zahlenliste — fuer eine Rechnung, die Wind, Mehrfeld, Knicken, Auflagerpressung und Lastkombinationen NICHT kennt (N-003 Geltungsbereich, von Yama festgelegt, DAUERGELB). Das ist die Nachweissprache, die Yamas Auflage verbietet, an einer Stelle, die WEDER Yama NOCH der Planner in ihrer Auflage genannt hatten. UND DER PRAEZEDENZFALL STEHT IM CODE SELBST: EngineFlaeche.tsx:131-135 (AUF-52) sagt woertlich 'sie bestehen nichts... eine Plakette waere dort eine ERFUNDENE BEWERTUNG; die Huelle zeigt, was da ist, und wo nichts ist, steht nichts'. Jemand hat die Frage schon entschieden — die Antwort trifft N-003 genauso, und A-14-3 zieht sie konsequent (Plakette WEG, ersatzlos, nicht umformuliert)."
@@ -1908,6 +1908,24 @@ neun_kriterien_geprueft: "A-14-1 bis -9, jedes P1 mit benannter Rot-Lage; -7 als
 ein_hinweis_ohne_restpunkt: "Der §5-Block nennt keinen RUECKWEG als eigene Zeile. Kein Restpunkt, weil die Sache trivial und im Blatt implizit ist (Aenderung an resources/ + Bundle, git revert genuegt, keine Migration, keine Bestandsdaten) — aber die Zeile fehlt formal, und bei einem Auftrag, der SICHTBARES VERHALTEN aendert, ist sie nicht rein formal: wer die Plakette vermisst, muss wissen, wie er sie zurueckholt. Der Bericht soll den Rueckweg ausdruecklich nennen."
 herkunft_des_blocks: "Dieser Block existierte NICHT — A-14 war eines der neun Blaetter, die in der Statuswahrheit unsichtbar waren (Befund 87e49ccd). Ich lege ihn mit dem Votum an, weil ein BEREIT ohne Block genau die Leerstelle waere, die den Befund ausgeloest hat. Zustand und Ballbesitz folgen meiner Pruefung, nicht meiner Wahl."
 naechster_schritt: "Generator zieht A-14 (§3 beachten); Browserabnahme nach §9 mit Waechter-Vorlauf, Rueckweg im Bericht nennen"
+```
+---
+
+## In Planprüfung — A-15 (Block angelegt; EIN Restpunkt)
+
+```yaml
+auftrag: "A-15"
+titel: "Wo eine Rechnung eine Norm nennt, darf die Software nicht 'bestanden' sagen — gemessen, nicht eingeschaetzt"
+datei: docs/auftraege/aktiv/A-15-fachaussage-oder-hinweis.md
+zustand: ENTWURF
+ballbesitz: planner
+basis_sha: d814be02
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde): ENTWURF bleibt, EIN Restpunkt — sonst ist das Blatt stark. BEIDE VORERHEBUNGS-ZAHLEN SELBST GEMESSEN UND EXAKT BESTAETIGT: 13 Dateien in geometry/ und app/dashboard/ tragen \bbestanden\b, davon nennen 8 eine Norm (DIN/EN 199x/Eurocode). Die Selbstkorrektur des Planners ist vorbildlich und benennt die Klasse genau: 'ich hatte die Liste gemessen und die REICHWEITE geschaetzt' — mit ausdruecklichem Bezug auf meine eigene Selbstkorrektur a1d29aed, nur in die andere Richtung (zu eng statt zu weit). Dass unsere Fehlerklassen inzwischen eine gemeinsame Sprache haben, ist der eigentliche Fortschritt dieser Runde. Die Trennung zu A-14 ist sauber: A-14 baut die Mechanik fuer N-003 und laeuft zuerst (Risiko), A-15 klassifiziert die uebrigen zwoelf. §5-Block, Erstnutzer, Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden; A-15-4 (Fachurteil als Urteil kennzeichnen) steht zusaetzlich als Hausregel — richtig, denn ein Kriterium gilt fuer einen Auftrag, eine Hausregel fuer alle."
+restpunkt: "DIE KRITERIENLISTE IST ZWEIGETEILT, und das ist keine Formalie: die Hauptliste traegt A-15-1 bis -8 sowie -12, -13, -14 in der ueblichen Form (**A-15-x**); die drei Kriterien A-15-9, -10 und -11 stehen NUR im Abschnitt 'Was sich an den Kriterien aendert' als Tabellenzeilen mit dem Wort NEU. Wer die Liste abarbeitet, findet sie nicht — und die Zaehlung wird mehrdeutig: elf Eintraege in der Liste, vierzehn Nummern insgesamt. GENAU DIESE KLASSE hat die Sammel-Release-Kontrolle 1 gefunden (W-04: sieben Zeilen im Messtisch gegen zehn im Blatt), und die Pflichtfrage der neuen Regel ('traegt jeder Messtisch JEDE Kriterienzeile, gezaehlt') braucht eine eindeutige Liste, sonst zaehlt sie gegen eine Zahl, die es zweimal gibt. Die drei gehoeren in die Hauptliste — inhaltlich sind sie fertig formuliert, es ist ein Verschieben, keine Arbeit."
+hinweis_ohne_restpunkt: "Wie bei A-14 fehlt der RUECKWEG als eigene Zeile. Bei einem MESSAUFTRAG ist er trivial (ein Bericht, git revert genuegt) — deshalb kein Restpunkt, aber der Bericht soll ihn nennen, damit die Form bei Bau- und Messauftraegen dieselbe bleibt."
+herkunft_des_blocks: "Auch dieser Block existierte NICHT (Befund 87e49ccd, neun unsichtbare Blaetter). Angelegt mit dem Votum; A-15 ist damit sichtbar und wartet beim Planner."
+naechster_schritt: "Planner verschiebt A-15-9/-10/-11 in die Hauptliste (Verschieben, kein Umformulieren), dann setzt der Plan-Pruefer BEREIT"
 ```
 ---
 
