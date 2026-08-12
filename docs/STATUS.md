@@ -2380,6 +2380,18 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## B5N: DoR bestanden — die beste Spezifikation, die ich heute geprueft habe (plan-pruefer 12.08.)
+
+```yaml
+1_ZUSTAND: "Rot-Lage SELBST im Tor gelesen: scripts/commit-pruefen.sh:534 setzt B5_BELEGZEILE auf drei Alternativen — datei.ext:zeile, :NNN: und das Wort Trefferzeile. Die Schreibweise 'Z.217-268' ist keine davon, die Warnung schlaegt also bei korrekt belegter Arbeit an. Haelt."
+2_ZIEL: "B5_BELEGZEILE existiert an der genannten Stelle (Z.534), der Rueckweg ist ein Revert EINER Zeile. Kein Datenpfad, keine Migration."
+3_BEWEISKRAFT_und_hier_ist_das_blatt_besser_als_ich: "B5N-2 ist als DER TRAGENDE PUNKT markiert und verlangt den Gegenbeleg: eine Botschaft mit Zaehlwort und OHNE jede Belegzeile muss WEITERHIN warnen. Der Satz dazu: 'Ohne diesen Gegenbeleg waere die Nachbesserung eine Abschaltung mit anderem Namen.' Das ist exakt die Pruefung, die mir heute DREIMAL gefehlt hat — der Planner hat sie von sich aus eingebaut, mit der Belegform 'dieselbe Probe zweimal, einmal mit und einmal ohne Beleg'. Dazu B5N-1: drei Schreibweisen, jede EINZELN belegt, denn 'eine Sammelaussage erkennt jetzt alles genuegt nicht' — meine eigene B5-Lehre, gegen den Auftrag angewandt der sie erzeugt hat."
+4_GANZER_GEGENSTAND: "Zweigprobe gefahren: fork und backup-private null voraus. Und die Baumprobe VOR dem Schreiben, die mich zwei Runden am Verbuchen gehindert hat."
+warum_dieser_block_zwei_runden_zu_spaet_kommt: "Die DoR war schon fertig, verbuchen konnte ich sie nicht: in docs/STATUS.md lagen 51 Zeilen fremder ungespeicherter Arbeit, jeder Commit haette sie mitgenommen. Der Befund ueber die Verklemmung fiel damit der Verklemmung selbst zum Opfer. Aufgeloest habe ich sie mit einem reinen Sicherungs-Commit (2cbd79e3), der KEINE eigene Zeile enthielt — erst danach dieser Block. Die Trennung ist Absicht: sichern und behaupten gehoeren nicht in denselben Commit."
+ergebnis: "B5N BEREIT beim Generator. §3 ist frei (A-17 steht CODE_FERTIG, kein IN_ARBEIT an beiden Orten) — baubar sofort."
+```
+---
+
 ## Zwei Befunde aus der Wache: haengende Probendateien und eine Musterluecke, die dreimal gemeldet ist (plan-pruefer 12.08.)
 
 ```yaml
@@ -5268,8 +5280,8 @@ wenn_yama_trotzdem_loescht: "Archiv + Manifest + Rueckweg nach der Dauerregel, k
 ```yaml
 auftrag: "B5N"
 datei: docs/auftraege/aktiv/B5N-belegzeilen-schreibweisen.md
-zustand: ENTWURF
-ballbesitz: "plan-pruefer (DoR)"
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: 8870387a
 anlass: "Plan-Pruefer 8870387a: 'Inzwischen DREIMAL gemeldet … gehoert aber in einen Auftrag statt
          in eine vierte Meldung.' Vorher Evaluator (B5-Abnahme) und Release-Pruefer (B6-Lauf)."
