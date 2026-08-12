@@ -37,7 +37,7 @@
 | **B6** Summe braucht Erhebung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `6ecf911c` · Elter `7be1a381` | **8/8 — Barriere ausgelöst, nicht gelesen** · alle **vier Beispiele des Regeltexts** am Tor nachgefahren, alle vier wie dokumentiert · B5 bytegleich unberührt (md5) + Mutation: B6 raus → B5 feuert weiter, die Wächter verdecken einander nicht · scripts-Suite 107/107 beidseitig · P2 zur §3-Belegform (kein wörtlicher Befehl), gleicher Maßstab wie W-07N |
 | **W-15** Material und Farbe | **`BETRIEBSBESTAETIGT`** | – | Abnahme `72c5a6d6` · Elter `df673fdc` | **10/10** · erstes **`ENTWORFEN`** der Werkbank, Zähler 11→11 unverändert · **zwei Befunde gegen das eigene Blatt**, beide treffen: „vier Werkzeuge" sind drei (`PaintCommand` ist `commandId`, `:875`) und die feste Zahl 9 ist 11 · acht Vertrags-Fundstellen selbst geöffnet, alle exakt · Suite 1698/1698 · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
 | **W-01N** Suite-Zahl zahlfrei | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53930b60` · Elter `2e587fb7` | **5/5** · die feste Zahl ist raus und **nicht durch eine neuere ersetzt** · Nachweis prüfbar geblieben (resources 0, Suite 1698 an beiden Ständen) · Fahrplan-Widerspruch **vorgelegt statt umgebogen** — entschieden: richtig so · P2 am §3-Beleg (Arbeitsbaum statt Commit) |
-| **A-16** `TIME_VARS` im Produktivbaum | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `ad13b732` · Elter `f37423fa` | **7/7** · Kern belegt wie ein `must_preserve` sein soll: **0 Löschungen**, elf Werte gehasht und identisch, die 65 zeichengleich · Aufrufer-Frage in **beiden** Richtungen nachgefahren: der einzige dynamische `view()`-Aufruf des Hauses zeigt nachweislich woanders hin · Belegkette frei (7 `action=` **gelesen**: Knopf-Attribute) |
+| **A-16** `TIME_VARS` im Produktivbaum | **`BETRIEBSBESTAETIGT`** | – | Abnahme `ad13b732` · Elter `f37423fa` | **7/7** · Kern belegt wie ein `must_preserve` sein soll: **0 Löschungen**, elf Werte gehasht und identisch, die 65 zeichengleich · Aufrufer-Frage in **beiden** Richtungen nachgefahren: der einzige dynamische `view()`-Aufruf des Hauses zeigt nachweislich woanders hin · Belegkette frei (7 `action=` **gelesen**: Knopf-Attribute) |
 | **B7** Mehrfachvorkommen ist kein Beleg | **`BETRIEBSBESTAETIGT`** | – | Abnahme `b1554b01` · Elter `9d09b02d` | **7/7 — dritte Barriere, ausgelöst statt gelesen** · Unabhängigkeit **zweifach gemessen**: B5/B6-Blöcke bytegleich + Mutation → beide feuern weiter · H-1…H-7 alle zeichengleich, H-8 **angehängt** · Wegweiser trägt nur den Verweis, kein zweiter Regeltext · Tor +26/−0, scripts-Suite 107/107 beidseitig · P2: nie auf `IN_ARBEIT` gesetzt (ohne Schaden — zum Bauzeitpunkt lief nachweislich keiner) |
 | **B5N** Belegzeilen-Schreibweisen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c54c7129` · Elter `a1751fbe` | **6/6** · drei Formen **einzeln** belegt, Barriere bleibt bei fehlendem Beleg laut · B5-Zählwort und B6/B7 nachweislich unberührt (gehasht + am Tor) · Testlücke **gemessen statt angenommen** (0 Stellen), bleibt offen · **einziger Bau des Tages mit `IN_ARBEIT` im committeten Stand vor dem Bau** |
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
@@ -2501,7 +2501,7 @@ sein_selbstbefund: "Er meldet einen eigenen Messfehler, den niemand gefunden hae
 auftrag: "A-16"
 titel: "Elf unbelegte Zeitwerte und ein harter Stundensatz rechnen einen Lohnkostenbetrag — in einer Datei ohne Aufrufer"
 datei: docs/auftraege/aktiv/A-16-time-vars-im-produktivcode.md
-zustand: ABGENOMMEN
+zustand: BETRIEBSBESTAETIGT
 ballbesitz_bau: evaluator (gebaut 12.08. auf a2961b42; Bericht docs/BERICHT-A-16-time-vars-sperrvermerk.md)
 die_eine_zahl_die_zaehlt: "0 geaenderte Ziffern. Die elf Zeitwerte und die 65 sind vorher wie
   nachher 8 6 5 4 12 2 90 60 45 25 40 und * 65. Strukturell belegt statt per Augenschein: numstat
@@ -2535,7 +2535,42 @@ ballbesitz_weiche: "—  # die WEICHE ist entschieden (Release-Pruefer in Vertre
   auch sachlich falsch: entschieden ist die Weiche, gebaut ist nichts — BEREIT heisst, der
   Ball liegt beim Generator. Der geltende Ballbesitz steht unten."
 # (doppeltes zustand-Feld entfernt — identisch BEREIT, der geltende steht oben in Z.2183)
-ballbesitz: release-pruefer
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an ad13b732, Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen. VOLLES Grundtor, weil Produktivcode beruehrt ist
+  (resources/views/admin/layouts/roof.blade.php): php artisan test 890 passed / 3121 assertions.
+  Die Hausplaner-Insel ist NICHT beruehrt, gemessen mit 0 Dateien unter resources/planner —
+  deshalb entfaellt der Buendel-Vergleich, und das ist gemessen, nicht angenommen.
+  Kette Vorfahr, Geheimnisse 0.
+  DEN KERN UNABHAENGIG NACHGEFAHREN, denn er ist die ganze Zusage: die Blade-Datei hat
+  43 Einfuegungen und NULL Loeschungen — es KANN keine Ziffer bewegt worden sein, weil keine
+  Zeile ersetzt wurde. Zeilenzahl 2688 auf 2731. Von den 43 neuen Zeilen sind 0 Nicht-Kommentar.
+  Und die Ziffernprobe: alle Ziffernfolgen der NICHT-Kommentarzeilen an Elter und Bau ergeben
+  dieselbe Pruefsumme 027a403028aa239a4a26. Keine Zahl im Code hat sich bewegt.
+  A-16-1 gegengeprueft: 0 echte Aufrufer der Datei in resources und app."
+
+mein_zehnter_beinahe_fehlbefund_heute: "Meine erste Ziffernprobe verglich die GANZE Datei und
+  meldete verschiedene Pruefsummen — ich war im Begriff, den Kern des Auftrags zu widerlegen.
+  Der Grund: die 43 neuen KOMMENTARZEILEN tragen selbst Zahlen und die Suchbegriffe. Erst der
+  Lauf ohne Kommentarzeilen zeigte die Gleichheit. Der Evaluator hat exakt dieselbe Falle in
+  seinem Votum offengelegt ('mein erster Ziffernvergleich fing die neuen Kommentarzeilen mit
+  und meldete verschiedene md5') — ich bin unabhaengig in dieselbe getappt, und das ist der
+  beste Beleg dafuer, dass seine Offenlegung kein Schmuck war. Zugleich ist es genau die Klasse,
+  die H-9 seit heute benennt: ein Muster misst, woran es ansetzt."
+
+fachlicher_bezug_zu_yamas_frage: "Diese Datei ist die, ueber deren LOESCHUNG Yama mich am
+  12.08. gefragt hat ('haelst du es fuer notwendig und richtig die loeschung dann machen wir das
+  in diesem Fall'). Ich hatte abgeraten, weil 2.688 Zeilen mit computeBOMAndTime und
+  computeHeizlast Loesungsansaetze fuer zwei gemessene fehlende Bruecken enthalten, und Yama
+  hat entschieden: 'alles gut es bleibt wie es ist'. A-16 ist die Alternative in Reinform —
+  der Sperrvermerk steht jetzt AN der Zahl, die Datei bleibt, und niemand rechnet mehr
+  versehentlich mit elf unbelegten Zeitwerten. Aus der Nichtloeschung ist Absicherung geworden."
+
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau ad13b732 ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt (Insel 0 Dateien), Smoke-Test
+  php artisan test 890 passed am Bau. WILDBETRIEBS-BELEG: die Sperrvermerke stehen im
+  ausgelieferten Blade, und die elf Zeitwerte sind zeichengenau dieselben wie vor dem Bau —
+  ein Vermerk, der nichts verstellt, ist im Betrieb genau das, was er sein soll."
 drei_ballfelder_berichtigt: "release-pruefer 12.08.: DIESER BLOCK TRUG DREI ballbesitz-artige
   Felder und sie widersprachen sich. ballbesitz_bau sagte evaluator (vom Generator beim
   Fertigmelden angelegt), ballbesitz_weiche sagte — (meine eigene Umbenennung von heute frueh),
