@@ -483,3 +483,225 @@ nicht_gemessen:
 
 ballbesitz: release-pruefer
 ```
+
+---
+
+## Release-Prüfung A-14 (§10) — 12.08.2026, Release-Prüfer
+
+**Urteil: `RELEASE_FREI`.** Produktivcode mit Sichtwirkung, §10 voll gefahren — nicht die
+Doku-Sammelform. Alle Zahlen unten sind an HEAD `a2385d35` selbst gemessen, jede mit Befehl.
+
+```yaml
+auftrag: "A-14"
+inhalt_sha: "21940d33"          # das Buendel; enthaelt den Quellbau e0722979 als Vorfahr
+status_commit: "a2385d35"       # Zweigspitze zum Pruefzeitpunkt
+merge_ziel: "auto/hausplaner-integration (Arbeitszweig, KEIN main-Merge)"
+merge_basis_sha: "efca1899"     # Elter des Quellbaus
+merge_verfahren: nicht_anwendbar  # kein PR, kein main-Merge; Sicherungs-Push auf fork
+merge_sha: null
+votum: RELEASE_FREI
+ci: pass
+artefakte_reproduzierbar: true
+migration: nicht_anwendbar
+rueckweg: pass
+smoke_test_plan: "Buehne starten (bash scripts/buehnen-waechter.sh), Sparren-Vorbemessung oeffnen,
+                  berechnen: KEINE gruene Plakette, dafuer die Zeile 'Vorbehalt — Vorbemessung,
+                  ersetzt keine prueffaehige Statik' in DERSELBEN Werteliste unter den beiden
+                  Ausnutzungen; Treppen-Auslegung zur Gegenprobe: Plakette da."
+befunde:
+  - "P2/SPEC (nicht blockierend): die sichtbare grundlage-Zeile nennt VIER der sechs Sonderlasten
+     aus Yamas NICHT-ERLAUBT-Liste. Schnee-Verwehung und Lastkombinationen fehlen. Details unten."
+regel_version: "1.4.2, sha256 285c9830…, 884 Zeilen, gelesen"
+```
+
+### Frage 1 — Liegt das gebaute Bündel im Kandidaten, und passt es zum Quellstand?
+
+**Ja, byte-gleich, und der Neubau bestätigt es.**
+
+```text
+git log -1 --oneline -- public/hausplaner/hausplaner.js   -> 21940d33 (der Bau selbst)
+md5 Arbeitsbaum      a5ea00566991cf15a5ce2a83c15e08f1
+md5 git show HEAD:…  a5ea00566991cf15a5ce2a83c15e08f1   identisch
+npm run build:hausplaner   (schema:check + tsc --noEmit + vite build, exit 0, 356 Module)
+md5 NACH dem Neubau  a5ea00566991cf15a5ce2a83c15e08f1   UNVERAENDERT
+git status --short public/                                leer
+```
+
+Der Arbeitsbaum ist damit nach dem Neubau ohne Zutun wiederhergestellt — der Neubau erzeugte
+denselben Stand. **Das Bündel trägt die Änderung auch tatsächlich:**
+
+```text
+Kandidat: "Vorbemessung, ersetzt keine prüffähige Statik"  1×
+          "keinGesamturteil"                               2×
+          "keine Genehmigungsunterlage"                     1×
+Elter efca1899 (md5 57314651…): alle drei 0×
+```
+
+Zusatzschluss, der die Kette schließt: `a5ea0056` ist genau die md5, die der Evaluator im
+Browserlauf ausgeliefert bekam (curl+md5, Votum `2d8592ab`). **Das Artefakt, das am Bildschirm
+gemessen wurde, ist Byte für Byte das Artefakt im Release-Kandidaten.**
+
+### Frage 2 — Ist der Rückweg bei einer SICHTänderung wirklich ein reiner `git revert`?
+
+**Ja — zerstörungsfrei belegt, ohne den Arbeitsbaum anzufassen.**
+
+```text
+git diff efca1899 21940d33 -- resources/planner/hausplaner public/…/hausplaner.js  (168 Zeilen)
+  | git apply --check -R          -> exit 0   "laesst sich sauber zuruecknehmen"
+git log 21940d33..HEAD -- <alle 5 A-14-Pfade>   -> 0 Commits (nichts kreuzt den Rueckweg)
+git diff --name-only efca1899 21940d33 -- database/         -> 0
+git diff --name-only … -- app/ routes/ config/              -> 0
+git diff … -- resources/ | grep -iE "migration|schema|localStorage|fetch|DB::|persist|revision" -> leer
+git diff … -- resources/ | grep -iE "password|secret|token|api_key|\.env|DB_"                    -> leer
+git diff … -- resources/ | grep -iE "permission|policy|auth|organisation|tenant|csrf"            -> leer
+```
+
+Kein Schema, keine Migration, kein Datenpfad, keine Rechte-/Mandantengrenze berührt. Das Bündel ist
+**mitcommittet**, der Revert stellt also Quelle *und* Auslieferung in einem Zug her; ein Neubau ist
+Kür, nicht Pflicht. `migration: nicht_anwendbar`, `rueckweg: pass`.
+
+**Und weiß ein Nutzer, der die Plakette vermisst, warum sie weg ist?** Ja — sie verschwindet nicht
+stumm, sie wird ersetzt. An ihre Stelle treten zwei sichtbare Texte im selben Panel: die
+`grundlage`-Zeile mit der Reichweitengrenze und der Ergebniseintrag „Vorbehalt" **in derselben
+Werteliste** wie die beiden Ausnutzungen (`enginePanels.ts:223`, Pixellage vom Evaluator gemessen:
+y=532 unter y=429/506, gleiche Spalte x=728).
+
+**DoR-Hinweis des Plan-Prüfers, hiermit ausdrücklich genannt statt geschluckt:** *Der §5-Block des
+Blattes führt den Rückweg NICHT als eigene Zeile.* Er steht nur im Abschnitt „Rückweg und
+Entdeckung". Bei einem Auftrag, der sichtbares Verhalten ändert, ist das nicht rein formal — wer die
+Plakette vermisst, muss den Weg zurück in der Auswirkungstabelle finden, nicht im Fließtext. Der
+Plan-Prüfer hat es dreimal in Folge (A-14, A-15, W-09) gemeldet; es ist ein **Muster der
+Blattvorlage**, kein Versehen dieses Schnitts. Sachlich blockiert es nicht: ich habe den Rückweg
+oben gemessen, er ist ein reiner Revert.
+
+### Frage 3 — Die richtige Lesart von A-14-3, selbst nachgeprüft
+
+Ich habe die Angabe des Plan-Prüfers **nicht übernommen**, sondern die *Renderbedingung selbst
+ausgeführt*. `EngineFlaeche.tsx:138` lautet `{!panel.keinGesamturteil && typeof ergebnis.bestanden
+=== 'boolean' && (` — also habe ich für **jedes** Panel die Engine mit ihren Startwerten gerechnet
+und genau diesen Ausdruck ausgewertet (Runner wie `test:hausplaner`, Skript im Scratchpad):
+
+```text
+engine-treppe          keinGesamturteil=false  bestanden=true       => PLAKETTE JA
+engine-sparren         keinGesamturteil=true   bestanden=false      => PLAKETTE NEIN
+engine-fbh             keinGesamturteil=false  bestanden=true       => PLAKETTE JA
+engine-heizkoerper     keinGesamturteil=false  bestanden=false      => PLAKETTE JA
+engine-fensterprodukt  keinGesamturteil=false  bestanden=undefined  => PLAKETTE NEIN
+engine-abwasser        keinGesamturteil=false  bestanden=true       => PLAKETTE JA
+engine-kueche          keinGesamturteil=false  bestanden=true       => PLAKETTE JA
+engine-pv              keinGesamturteil=false  bestanden=undefined  => PLAKETTE NEIN
+```
+
+**Die Lesart hält, und die Gegenprobe ist stärker als verlangt.** `keinGesamturteil: true` steht
+genau einmal im Repo (`enginePanels.ts:176`), im Block `engine-sparren` (Zeile 169, Titel
+„Sparren-Vorbemessung"; der nächste Panelblock beginnt bei 229). **Fünf** Engines mit echtem
+Bestehens-Merkmal behalten ihre Plakette — darunter `engine-heizkoerper`, die mit den Startwerten
+`bestanden=false` liefert und die **rote** Plakette zeigt. Das ist die schärfere Gegenprobe: das
+Flag unterdrückt *diese eine Engine*, nicht etwa „negative Urteile" allgemein. Die zwei ohne
+Plakette (`fensterprodukt`, `pv`) haben **gar kein** `bestanden` — das ist der AUF-52-Präzedenzfall
+und von A-14 unberührt. `bestanden` bleibt bei Sparren erhalten (Nicht-Ziel eingehalten), nur die
+Plakette darüber fällt.
+
+### Standard-§10
+
+**Kette** (jeweils `git merge-base --is-ancestor`, Exit 0):
+
+```text
+1e09280d (Basis) -> f4441c36 (IN_ARBEIT, §3-Beleg) -> efca1899 (Elter) -> e0722979 (Bau Quelle)
+ -> 21940d33 (Bau Buendel) -> 1643409d (CODE_FERTIG) -> 8a1603e9 (Claim) -> 2d8592ab (ABGENOMMEN)
+ -> 5238cc5d (Release-Claim) -> a2385d35 (HEAD)
+```
+
+Lückenlos, linear, keine Rückwärtssprünge. *Anmerkung ohne Befund:* zwischen `e0722979` und
+`21940d33` liegen zwei fremde Plan-Prüfer-Commits (`73888d10`, `a5aab234`, beide nur `docs/`) — der
+Quellbau ist also nicht der unmittelbare Elter des Bündels. Das kreuzt den A-14-Scope nicht
+(gemessen: 0 Berührungen), und §3 war eingehalten, weil A-14 das einzige `IN_ARBEIT` war.
+
+**Scope-Reinheit** — beide Bau-Commits sauber:
+
+```text
+git show e0722979 --stat -> 4 Dateien, alle im Blatt-Scope bzw. dessen Zusage:
+    __tests__/sparrenVorbehalt.test.ts (+34)  app/EngineFlaeche.tsx (+5/-1)
+    app/dashboard/enginePanels.ts (+19/-1)    geometry/sparrenBerechnung.ts (+20)
+git show 21940d33 --stat -> 1 Datei: public/hausplaner/hausplaner.js
+git diff --stat efca1899 21940d33 -- resources/…/geometry/  -> GENAU EINE Datei (A-14-7)
+git diff --name-only efca1899 21940d33 -- app/              -> 0 (PHP-Seite unberuehrt)
+```
+
+`sparrenBerechnung.test.ts` ist in keinem der beiden Commits — A-14-5 hält am Release-Stand.
+
+**Insel-Suite selbst gefahren** (`npm run test:hausplaner`, Runner aus `package.json:10`, kein bares
+`node --test` auf `.ts`): **1693 pass / 0 fail / 1693 tests.** Deckt sich mit dem Bau- und dem
+Abnahmelauf.
+
+**`must_preserve` in allen drei Richtungen, einzeln je Verzeichnis** (A=hinzugefügt, M=geändert,
+D=gelöscht, `git diff --diff-filter=…`):
+
+```text
+resources/   21940d33..HEAD  A=0 M=0 D=0     scripts/   21940d33..HEAD  A=0 M=0 D=0
+             1643409d..HEAD  A=0 M=0 D=0                1643409d..HEAD  A=0 M=0 D=0
+             2d8592ab..HEAD  A=0 M=0 D=0                2d8592ab..HEAD  A=0 M=0 D=0
+             Arbeitsbaum     A=0 M=0 D=0                Arbeitsbaum     A=0 M=0 D=0
+```
+
+**Beifang-Kontrolle ab CODE_FERTIG:** `git diff --stat 21940d33 HEAD` zeigt **ausschließlich
+`docs/`** (STATUS.md, das A-14-Blatt, zwei A-15-Berichte). Kein `resources/`, kein `public/`, kein
+`app/`, kein `scripts/`. Der geprüfte Produktivstand ist seit dem Bau unberührt.
+
+### Der fachliche Blick — verändert die Umsetzung die Reichweitengrenze?
+
+Das war meine Abbruchbedingung. **Nein — sie trägt sie, sie verschiebt sie nicht.** Der Vorbehalt
+im Pflichtfeld ist Yamas Wortlaut **zeichengenau**:
+
+```text
+Code    sparrenBerechnung.ts:  N003_VORBEHALT = 'Vorbemessung, ersetzt keine prüffähige Statik'
+Quelle  FORMELSAMMLUNG.md:729  „Wer die Zahl sieht, sieht den Satz ‚Vorbemessung, ersetzt keine
+                                prüffähige Statik'. Nicht als Fußnote …, sondern am Wert."
+```
+
+Die drei **NICHT-ERLAUBT-Verwendungen** (FORMELSAMMLUNG 707–710) stehen vollständig in der
+sichtbaren `grundlage`-Zeile: kein Ausführungsnachweis, keine Genehmigungsunterlage, keine Freigabe
+zur Ausführung. Nichts wird erlaubt, was Yama verboten hat.
+
+**P2/SPEC-Befund, nicht blockierend — die Sonderlastenliste ist verkürzt:**
+
+```text
+Yama (FORMELSAMMLUNG 711-712):  Wind · Schnee-Verwehung · Mehrfeld · Knicken ·
+                                Auflagerpressung · Lastkombinationen        (sechs)
+Dateikopf sparrenBerechnung.ts: Wind · Mehrfeld · Knicken · Auflagerpressung ·
+                                Lastkombinationen                           (fuenf, unveraendert)
+grundlage-Zeile (A-14, neu):    Wind · Mehrfeld · Knicken · Auflagerpressung (vier)
+```
+
+Es fehlen **Schnee-Verwehung** und **Lastkombinationen**. Warum das **kein** Blocker ist: die
+`grundlage`-Zeile trug vor A-14 **null** Reichweitenangabe (nur „Eurocode 5 … DIN EN 1991-1-3") —
+die Änderung ist auf dieser Achse rein **additiv**, es wurde nichts weggenommen. Die verbindliche
+Aussage ist der Totalausschluss „ersetzt keine prüffähige Statik", und der steht wortgleich als
+Pflichtfeld am Wert. Niemand gewinnt eine Erlaubnis. **Aber:** da die Plakette nun fällt, ist diese
+Zeile der sichtbare Träger der Grenze, und zwei Fassungen derselben Warnung sind genau die zweite
+Wahrheit, vor der der Code-Kommentar in `sparrenBerechnung.ts` selbst warnt. **Erledigt-Kriterium:**
+die `grundlage`-Zeile nennt alle sechs Posten aus FORMELSAMMLUNG 711–712, oder das Blatt begründet
+die Auswahl. Ball beim Planner, eigener Schnitt.
+
+### Übrige §10-Punkte
+
+```text
+Qualitaetstore am Kandidaten neu gruen  schema:hausplaner:check + tsc --noEmit + vite build (exit 0)
+                                        npm run test:hausplaner 1693/1693
+Artefakte frisch/reproduzierbar         ja, md5 nach Neubau unveraendert
+Konfiguration/Umgebung/Abhaengigkeiten  unveraendert (0 Dateien in config/ routes/ app/ database/)
+Sicherheit/Rechte/Mandant/Datenschutz   unberuehrt (Scans leer)
+§15 Testdaten                           keine DB im Diff; die neue Zusage ist reines TS
+offene P0/P1                            keine
+```
+
+**Nicht von mir gemessen, bewusst:** die Browserabnahme selbst (§9, gehört dem Evaluator; gefahren
+mit Wächter-Vorlauf an genau diesem Bündel-md5, deshalb übernehme ich die Pixellagen als belegt).
+
+**Fremde Arbeit im Baum, nicht angefasst** (§14): eine uncommittete Löschung von
+`docs/BERICHT-A-15-klassifikation.md` sowie die Streudateien `1692` und `zz-unlink-probe`. Die
+Löschung gehört zu A-15: `git mv` wurde in `82d7c31e` nur zur Hälfte committet — der neue Pfad ist
+drin, der alte ist **weiterhin getrackt**. Berührt A-14 nicht, gemeldet an den Generator.
+
+**Nächster Schritt: Yama.** Nach §10 darf nur er die Veröffentlichung genehmigen. Ein main-Merge
+steht hier nicht an; der Sicherungs-Push auf `fork/auto/hausplaner-integration` ist unten verbucht.

@@ -153,42 +153,6 @@ docs/FAHRPLAN-KLASSE-A.md   bleibt als BELEG stehen (drei Runden, sechs Grobzahl
       Fahrplaene liest. Das ist Teil dieses Auftrags, nicht spaeter.
 ```
 
-## REIHENFOLGE-ENTSCHEIDUNG 12.08. — W-09/1 läuft vor A-15
-
-**Anlass: der Generator hat eine Sperre gemeldet statt sie zu umgehen** (`bd011a06`), und die
-Entscheidung ausdrücklich mir überlassen: *„die Reihenfolge zweier Aufträge gehört dem Planner."*
-
-```text
-DIE SPERRE, seine Messung:
-  A-15-13 verlangt einen Vorschlag fuer JEDE der elf Engines.
-  A-15-11 verlangt, dass die VIER Treppen-Dateien NICHT dort gemessen, sondern aus
-          W-09/1-5 uebernommen werden.
-  W-09/1 steht auf BEREIT und ist NICHT gebaut -> die Zulieferung existiert nicht.
-  -> beide Kriterien sind heute nicht gleichzeitig erfuellbar.
-```
-
-**ENTSCHEIDUNG: W-09/1 läuft zuerst.** *Vier Gründe, und der billigere ist nicht der erste:*
-
-```text
-1  A-15-11 ist INHALTLICH richtig. Die Auflage umzukehren hiesse, den Fehler zuzulassen,
-   den sie verhindert: zwei Auftraege, die dieselbe Datei messen, erzeugen zwei Zahlen.
-2  W-09/1 schliesst KLASSE A ab. Mit W-07N steigt der Zaehler von 9 auf 11 — und er
-   steigt nur durch Bauten (H-3).
-3  A-15 verliert NICHTS. Die sieben messbaren Zeilen stehen vollstaendig; die vier
-   Treppen-Zeilen kommen als ZULIEFERUNG dazu, nicht als Nacharbeit.
-4  Es kostet keine zusaetzliche Runde: W-09/1 muss ohnehin gebaut werden.
-```
-
-**Was dem Generator freibleibt** — es ist Bauweise, nicht Reihenfolge: *A-15 mit den sieben Zeilen
-abschließen und die vier als ausstehende Zulieferung führen, **oder** A-15 zurückstellen, bis W-09
-gebaut ist.* **Beides ist mit dieser Entscheidung vereinbar.**
-
-**Und der Mangel, der die Sperre erst möglich gemacht hat, ist meiner:** *ich habe `A-15-11`
-geschnitten, ohne A-15 in der Konfliktprüfung **hinter** W-09 zu stellen.* **Ein Blatt, das eine
-Zulieferung aus einem anderen Auftrag zitiert, braucht eine Reihenfolge-Zeile — nicht nur den
-Verweis.** *Das ist derselbe Vorlagen-Mangel wie der fehlende Rückweg: **die Vorlage kennt das Feld
-nicht.** Beide werden in den nächsten Schnitt eingebaut, nicht rückwirkend in laufende Blätter.*
-
 ```yaml
 stufen: 5
 zeilen_gesamt: 42

@@ -197,35 +197,10 @@ nicht entscheidbar — siehe A-15-10.
 **Nach diesem Vorschlag müssten ZWEI Engines zusätzlich schweigen** (`abwassergefaelle`,
 `fbhAuslegung`) — *vorbehaltlich Yamas Bestätigung von Achse 2.*
 
-## Die Sperre — A-15 kann nicht abschließen, und der Grund ist keine Nachlässigkeit
+## Noch offen
 
-**`A-15-13` verlangt: „Jede der elf Engines bekommt genau einen Vorschlag."**
-**`A-15-11` verlangt zugleich: die vier Treppen-Dateien werden NICHT hier gemessen**, sondern aus
-`W-09/1-5` übernommen, mit Commit-Verweis.
-
-```text
-W-09/1   zustand: BEREIT     ballbesitz: generator     basis_sha 65f3ece4
-         -> NICHT gebaut. Die Zulieferung existiert nicht.
-```
-
-**Damit sind die beiden Kriterien heute nicht gleichzeitig erfüllbar.** Diese Tabelle steht bei
-**sieben von elf**, und die fehlenden vier darf ich nicht selbst messen — *„zwei Aufträge, die
-dieselbe Datei messen, erzeugen zwei Zahlen und eine Diskussion."*
-
-### Was A-15 löst — zwei Wege, beide nicht meine Entscheidung
-
-1. **W-09/1 läuft zuerst** und liefert seine vier Zeilen. *Dann trägt A-15-11, und A-15 schließt ab.*
-2. **Die Auflage wird geändert:** A-15 misst die vier selbst, W-09/1 übernimmt sie später von hier.
-   *Dann kehrt sich die Richtung um, und A-15-11 muss neu formuliert werden.*
-
-**Der erste Weg ist der billigere, weil W-09/1 ohnehin geschnitten und BEREIT ist.**
-*Aber die Reihenfolge zweier Aufträge gehört dem Planner, nicht mir.*
-
-### Was NICHT der Grund ist
-
-**Nicht Zeitmangel, nicht Umfang.** Die sieben messbaren Zeilen stehen vollständig, mit Fundstelle,
-Begründung und der höheren Klasse im Zweifel. **Es fehlt eine Eingabe, die ein anderer Auftrag
-liefern soll — und der ist nicht gelaufen.**
+**Die Treppen-Zulieferung aus `W-09/1-5`** — vier Zeilen, siehe A-15-11. Solange sie fehlt, ist
+diese Tabelle **sieben von elf**.
 
 ## A-15-7 · must_preserve
 
