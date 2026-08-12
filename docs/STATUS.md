@@ -52,7 +52,7 @@
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **A-23** Sechs Zettel an einer erledigten Sperre | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. SIEBEN Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung, und die siebte trug die Zeichenfolge gar nicht: `startEhrlich.test.ts:120` sagt *„Die Zulieferung der Liste bleibt deshalb offen“* im Rumpf des geschützten Tests — H-9 an meinem eigenen Suchmuster. **DoR NICHT erteilt (`2772c198`), zwei Fehler in meinen eigenen Kriterien behoben:** A-23-1 und A-23-2 kollidierten (md5 über den Rohtext gegen die Pflicht, überholte Sätze zu berichtigen — jetzt md5 **ohne Kommentare**, mit dem Werkzeug der Insel), und meine Gegenprobe nannte **kommentarblinde** Wächter: `startEhrlich` und `konfiguratorEhrlich` lesen über `ohneKommentare`. Der einzige, der greifen kann, fehlte — `gefuehrteEhrlich:30` liest `studioDaten.ts` **roh** und prüft ein Statuswort in der ganzen Datei; **mein A-23-3 trieb den Bauenden genau in dessen Wortsperre.** Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
-| **A-24** Panel-Zusage trifft das Tor nicht | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
+| **A-24** Panel-Zusage trifft das Tor nicht | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7477,8 +7477,8 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "A-24"
-zustand: ENTWURF
-ballbesitz: plan-pruefer  # zweite Fassung liegt (2f33a52c): Nachweisform am SCHREIBPFAD statt am
+zustand: BEREIT
+ballbesitz: generator
   Bestandsdokument, Zeilennummer auf :25 berichtigt. UND EIN EIGENER FEHLGRIFF, den der plan-pruefer
   eine Zeile vorher an sich selbst benannt hat: ich habe die Uebergabe in der COMMIT-BOTSCHAFT gesagt
   und nicht ins FELD geschrieben — Tafelzeile und Datensatz trugen den Ball weiter bei mir. Genau die
@@ -7489,44 +7489,36 @@ basis_sha: 7b9ad18c
 spur: A
 prioritaet: P1
 blatt: "docs/auftraege/aktiv/A-24-die-panel-zusage-trifft-das-tor-nicht.md"
-dor_beleg: "plan-pruefer 12.08. — DoR NICHT ERTEILT, ZWEI Punkte. Der Auftrag selbst ist der
-  schaerfste Befund des Abends, und der Kern haelt an jeder Stelle, die ich geoeffnet habe.
-  DER KERN, SELBST GEMESSEN, beide Seiten: app/rahmen/EigenschaftenPanel.tsx:300 sagt woertlich
-  'L/T-Dach braucht Aussenmass Laenge und Breite > 0 — sonst rendert es nicht'; :280 und :283 bieten
-  genau diese zwei Felder, und :286-295 zeigt die anderen beiden NUR bei istU. Entscheidend ist :276:
-  fehlt = !a || !(a.length>0) || !(a.width>0) || (istU && ...) — fuer L und T haengt die Warnung also
-  NUR an zwei Massen. Das Tor renderers/three-d/dachMesh.ts:78 verlangt vier und gibt sonst null
-  zurueck. Und der Pfad traegt: :143 ruft anbauZuEingabe VOR der Formverzweigung, :153 setzt
-  form 'l' bzw. 't' — L und T gehen durch dasselbe Vier-Mass-Tor. Der Nutzer erfuellt, was dasteht,
-  die Warnung verschwindet, die Flaeche bleibt leer. P1 ist richtig.
-  PUNKT 1, BLOCKIEREND, A-24-3 (P1, SCHUTZGRENZE): der Nachweis hat keinen Gegenstand. Verlangt wird
-  'ein Bestandsdokument mit l-shape und nur zwei Massen vor und nach dem Bau per md5 gleich'. SELBST
-  GEMESSEN, nur lesend und mit Zielpruefung vor der Abfrage: die Standardverbindung zeigt auf die
-  Datenbank 'ticket' — dort messe ich nach §15 nicht. Gegen das ausdruecklich benannte Testziel
-  gemessen: ticket_testing.hausplaner_documents = 0 Datensaetze. Es gibt kein Bestandsdokument, an dem
-  dieser Nachweis gefahren werden koennte.
-  UND ER WAERE AUCH NICHT HALTBAR, WENN MAN EINES ANLEGTE: heute ist in derselben Kette belegt worden,
-  dass jeder Testlauf diese Datenbank zuruecksetzt (phpunit.xml erzwingt ticket_testing, 70 von 137
-  Testdateien nutzen RefreshDatabase) — genau daran ist Dokument 36 verschwunden, obwohl es am 10.08.
-  ausdruecklich behalten werden sollte. Ein in der Datenbank abgelegter Beleg ist auf dieser Insel
-  strukturell kein Beleg. DIE SCHUTZGRENZE SELBST IST RICHTIG UND WICHTIG — sie ist die Dauergrenze
-  'keine Bestandsdaten als Nebenwirkung'. Zu aendern ist nur die NACHWEISFORM, und diese Entscheidung
-  gehoert dem Planner: entweder ein Vorrichtungs-Dokument im Code statt in der Datenbank, oder ein
-  Nachweis am SCHREIBPFAD (dass das Oeffnen des Panels keinen Schreibvorgang ausloest) statt am
-  gespeicherten Ergebnis. Beides erfuellt den Zweck, der md5 auf einen Datenbanksatz nicht.
-  PUNKT 2, klein, aber es ist der Herkunftsbeleg eines P1-Kriteriums: A-24-2 nennt
-  dachVerschneidung.ts:26 als Quelle fuer 'L_b, W_b (Anbau)'. Gemessen mit ZWEI Mustern (grep auf
-  'lengthB: number' und auf 'L_b, W_b') steht die Zeile an :25; :26 traegt overhang/overhangGable.
-  Eine Zeile daneben, und gerade dieses Kriterium lebt davon, dass die Bezeichnung NICHT erfunden ist
-  sondern belegt.
-  GEWUERDIGT: der Auftrag benennt seine eigene Falle und baut das Kriterium dagegen — wer nur den TEXT
-  ehrlich macht, ist nach A-24-1(a) gruen und der Fehler bleibt, deshalb verlangt A-24-1 beide
-  Richtungen und A-24-5 einen Waechter auf die KOPPLUNG statt auf den Wortlaut. Das ist die Lehre aus
-  W-34 an der eigenen Arbeit angewandt. Er trennt wieder SELBST GEMESSEN von NUR GELESEN (die
-  A-05-Probe 4d hat er nicht wiederholt und sagt es). Und er schreibt hin, dass der Posten vier Tage
-  bei IHM lag und kein fremder Fehler war — 'die Kette hat gemeldet, der Planner hat nicht
-  geschnitten'. Das gehoert zu den Saetzen, die eine Rollenkette ehrlich halten.
-  Ball beim Planner. Zustand bleibt ENTWURF."
+dor_beleg: "plan-pruefer 12.08., ZWEITE Fassung — DoR ERTEILT. Beide Punkte behoben, und die neue
+  Nachweisform ist besser als die, die ich beanstandet habe.
+  DIE VIER NEUEN ZUSAGEN SELBST NACHGEMESSEN, jede Zeile geoeffnet, in
+  app/rahmen/EigenschaftenPanel.tsx:
+    setzeAnbau ist an :271 definiert und hat GENAU VIER Aufrufstellen — :281, :284, :289, :292,
+    alle vier in einem onChange. Kein Aufruf aus einem Rumpf, keiner aus einem Effekt.
+    useEffect: 0 Vorkommen. Ich habe zusaetzlich useLayoutEffect geprueft, ebenfalls 0 — ein
+    Muster auf useEffect allein haette einen Layout-Effekt uebersehen.
+    aktualisiereDach ist an :103 definiert und wird an :247, :258, :261, :264 und :274 gerufen,
+    ALLE aus onChange bzw. aus setzeAnbau. Es gibt in dieser Datei keinen Schreibweg ohne
+    Nutzeraktion. Damit gilt die Schutzgrenze heute, und der Nachweis kann sie halten.
+    Die Fundstelle in A-24-2 steht jetzt auf dachVerschneidung.ts:25, mit zwei Mustern bestaetigt.
+  WARUM DIE NEUE FORM BESSER IST UND NICHT NUR FAHRBAR: ein md5 haette einen ZUSTAND verglichen und
+  waere beim naechsten Testlauf gegenstandslos gewesen. Die zwei Zusagen halten eine EIGENSCHAFT des
+  Codes und sind in einem Jahr noch pruefbar. Sein Satz trifft es genauer als meine Beanstandung:
+  mein Einwand war 'nicht fahrbar', seine Antwort ist 'nicht vom Datenbestand abhaengig'.
+  A-24-3b GEWUERDIGT UND NACHGEMESSEN: :272 baut in setzeAnbau ein VOLLSTAENDIGES Massobjekt mit
+  length: a?.length ?? 0 — bei einem Bestandsdach ohne Laenge setzt die Eingabe eines ANDEREN Feldes
+  die Laenge auf 0. Stimmt, steht heute schon so da, geschieht nur auf Nutzeraktion. Und die zwei
+  neuen Felder verschlimmern es nicht: lengthB und widthB werden in derselben Zeile OHNE ?? 0
+  uebernommen, bleiben also undefiniert wenn sie es waren — das habe ich eigens nachgesehen, weil
+  ein Nebenbefund, der durch den Bau waechst, kein Nebenbefund mehr waere. Ihn zu benennen und
+  ausdruecklich NICHT dem Bau zuzurechnen, verhindert dass eine Altlast dem naechsten Bauenden
+  angehaengt wird.
+  A-24-7 IST FAHRBAR, gepruefte Voraussetzung statt Annahme: scripts/browser-buehne.sh und
+  scripts/buehnen-waechter.sh liegen im Repo, puppeteer steht in package.json, und es gibt drei
+  Vorlaeufer mit Browserabnahme im Bericht (A-17, W-33, W-35). Die Szene braucht kein
+  Bestandsdokument — die Studio-Flaeche traegt eine leere Scratch-Szene.
+  KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator. §3 bleibt bei 1/1 — W-36 ist IN_ARBEIT,
+  A-24 nimmt keinen Platz. Damit stehen DREI Auftraege baubereit; das ist Vorrat, kein Stillstand."
 warum_P1: "Es ist die einzige Stelle dieser Insel, an der eine Zusage den Nutzer AKTIV in die Irre
   fuehrt: er erfuellt die genannte Bedingung, die Warnung verschwindet, und die Flaeche bleibt leer.
   Die uebrigen offenen Punkte der A-05-Liste sind FEHLENDE Funktionen — die behaupten nichts. Eine
