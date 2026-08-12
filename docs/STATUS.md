@@ -58,6 +58,7 @@
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-35** Konfigurator-Dialog | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `2e7504ec` | **NACHBESSERUNG §12** auf Yamas Entscheidung: drei Stufen sind GEBAUT (checked/approved/outdated), nur `blocked` ist Erweiterung · **Traeger ist das PAKET, nicht der Schritt** |
+| **W-33** Start und Projektwahl | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -8263,3 +8264,44 @@ W_40_1_nimmt_den_paragraf3_platz: "Sobald gezogen: IN_ARBEIT. Paragraf 3 steht b
 ```
 
 dor_nachtrag: "plan-pruefer 12.08., NACHTRAG ZU MEINER FREIGABE — der Generator hat einen Befund vor dem Ziehen gemeldet (ea418041) und er trifft MEINE Pruefung: W-40/1-1 nennt EINE ueberholte Stelle, ueberholt sind aber VIER BLAETTER an dreizehn Stellen. Ich habe die genannten Zeilen einzeln GEOEFFNET und alle bestaetigt: 3-FORMELN:33 rechnet 4+3=7 und sagt die achte falle aus der Rechnung; 6-PRUEFUNG:12 und :13 fuehren K-3 und K-4, die ausdruecklich verlangen, die Fragen NICHT zu beantworten; 2-FUNKTION:18 sagt was blocked von DECISION_BLOCKED unterscheide stehe nicht hier; 7-GRENZEN traegt es in :48, :54, :56, :61, :65, :73 und in :106/:107 sogar als Tabelle mit Yama als Adressat. MEIN ANTEIL: ich habe die Kernbehauptungen am Gegenstand gemessen und die VOLLSTAENDIGKEIT der Berichtigung nicht gefragt — genau die Frage, die ich heute dreimal bei anderen gestellt habe (die widerlegte Zahl an vier Stationen). Sein Satz nennt den Grund praeziser als ich es koennte: wer nur 7-GRENZEN anfasst, laesst K-3 und K-4 stehen, und die verlangen dann weiterhin, die Fragen offen zu lassen — zwei Wahrheiten, beide belegt aussehend. ZAEHL-FEINHEIT ohne Folge: der Titel nennt dreizehn, die Aufzaehlung neun plus fuenf; die Differenz sind zwei Zeilenbereiche (:65-66, :73-74), die einmal als Stelle und einmal als zwei Zeilen gezaehlt sind. Die Liste selbst ist vollstaendig und jede Stelle von mir belegt."
+```yaml
+auftrag: "W-33"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "Ein Startbildschirm, der fremde Projekte zeigt, ist eine Falschauskunft"
+basis_sha: 75ad92eb
+spur: A
+prioritaet: P2
+dor_beleg: "steht aus — plan-pruefer."
+warum_jetzt: "Fuenfte Ablesung der Stufe 6, und die Kette braucht Vorrat: W-40/1 laeuft, W-35 ist in
+  der DoR, danach waere sie leer. W-39 rendert StartView im Modus start und ist BETRIEBSBESTAETIGT —
+  die Grenze ist dort gezogen und wird hier nur gespiegelt."
+der_tragende_punkt: "startEhrlich.test.ts nennt ZWEI gemessene Befunde im Testkopf. Erstens zeigte der
+  Startbildschirm ERFUNDENE Projekte — EFH Mustermann, Fenster-Angebot Hahn, Sanierung Musterstr. 5 —
+  bei JEDEM Nutzer, auch beim allerersten Start und ohne ein einziges eigenes Projekt; woertlich: ein
+  Startbildschirm der fremde Projekte zeigt ist keine Vorschau, er ist eine FALSCHAUSKUNFT ueber den
+  eigenen Bestand. Zweitens waren die drei Projektkarten DIESELBE Karte, alle drei riefen onGuided(1)
+  — drei Versprechen, ein Ziel, und Weiterarbeiten oeffnete kein Bestandsprojekt sondern begann bei
+  Schritt 1. Das ist der VIERTE Ehrlichkeitswaechter dieser Stufe nach fussleistenEhrlich,
+  gefuehrteEhrlich und konfiguratorEhrlich, und der schaerfste: er entfernt keine Vertroestung sondern
+  eine Falschauskunft ueber den Bestand des Nutzers."
+wie_es_geloest_ist: "projekte ist ein optionaler Parameter mit Standard leer (:20), von aussen
+  uebergeben; :206 unterscheidet Leerzustand und Liste; :221 hebt den ersten Eintrag als dominant
+  hervor. Der Dateikommentar sagt es selbst: die zuletzt bearbeiteten Projekte des NUTZERS, leer
+  heisst leer. Der Leerzustand ist nach dem Testkopf heute der NORMALFALL und nicht die Ausnahme."
+EIN_OFFENER_POSTEN_BEI_YAMA_DEN_ICH_IM_TEST_GEFUNDEN_HABE: "startEhrlich.test.ts sagt woertlich, was
+  er NICHT pruefe: ob die ECHTE Projektliste ankommt. Sie brauche eine ROUTE und sei TEIL B, und der
+  liege bei Yama. AUF-40 TEIL B stand auf KEINER meiner Vorlagen — ich habe ihn nicht abgeleitet
+  sondern im Testkopf gefunden. Kriterium W-33-5 verlangt, dass er in 7-GRENZEN steht, damit er nicht
+  in einer Testdatei verwaist; und ich lege ihn Yama vor, sobald das Blatt ihn belegt — dieselbe
+  Zurueckhaltung wie bei W-34s sechs Luecken."
+was_das_werkzeug_haelt: "VIER Komponenten in einer Datei mit EINEM Export: Karte (:52),
+  ProjektKachel (:104), HubKarte (:165) und StartView (:193). DREI davon halten einen eigenen
+  hover-Zustand — keine gemeinsame Auswahl, keine Hochhebung in den Rahmen; das ist eine Aussage
+  ueber die Bauart. Drei Datenquellen kommen aus W-38s studioDaten (T, FACH, PROJ), eine von aussen."
+acht_waechter: "startEhrlich, rohwertZusage, konfiguratorEhrlich, projektKlick, breiten, dialogFokus,
+  stilschicht, elevationTokens. projektKlick ist der Waechter zu Befund b. W-33-6 verlangt je Waechter
+  die Zusage, denn acht Namen sind keine Aussage."
+regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
+W_33_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+```
