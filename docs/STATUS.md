@@ -50,7 +50,7 @@
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
-| **A-22** Statuswahrheit maschinell lesbar | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
+| **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7185,14 +7185,51 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "A-22"
-zustand: ABGENOMMEN
+zustand: BETRIEBSBESTAETIGT
 bericht: "docs/BERICHT-A-22-statuswahrheit-maschinell-lesbar.md"
 bau_am_stand_gemessen_nicht_aus_dem_blatt: "Alle Zahlen VOR dem Bau frisch erhoben, weil die Kriterien meine eigenen Zahlen tragen und ich sie sonst nur wiedererkannt haette. EINE ABWEICHUNG gefunden und NICHT geglaettet: A-22-1 nennt 17 doppelte Schluessel, am Bau-Stand sind es 14 — der Release-Pruefer hat in 09c666d7 die vier ballbesitz-Dubletten aufgeloest und ein ballbesitz_bau ist nachgewachsen, 17 minus 4 plus 1 gleich 14. Und die Grundmenge von A-22-2b ist von 81 auf 82 Generator-Commits gewachsen, durch meinen eigenen IN_ARBEIT-Commit 9c243ee2; die tragenden Zahlen 65, 63 und 2 sind unveraendert. Beides ist genau die Drift, vor der das Blatt selbst warnt, deshalb stehen die Gesamtzahlen im Bericht und nicht im Kriterium."
 was_gebaut_wurde: "docs/STATUS.md, 47 Zeilen: 19 auftrag:-Felder in die zitierte Form gebracht (A-22-4, vorher 19 ohne, jetzt 0) und 28 Zeilen mit doppeltem Schluessel umbenannt in schluessel_1 und schluessel_2 nach Dokumentreihenfolge (A-22-1, 14 Dubletten auf 0). NULL zustand:-Zeilen, NULL Tafelzeilen und NULL Werte veraendert — das Skript hat beide Listen vor dem Schreiben zeichengleich gegengeprobt und haette sonst abgebrochen. A-22-3: 28 Vermerktexte vorher, 28 nachher, sortiert identisch; nichts geloescht, nur umbenannt, wie A-20-4 es verlangt."
 fehlgriff_im_bau_von_der_eigenen_gegenprobe_gefangen: "Mein erster Lauf brach mit 'TEXTE VERAENDERT' ab, und der Fehler lag IN DER GEGENPROBE statt im Bau: ich erkannte die umbenannten Zeilen am Muster _[0-9]+ am Wortende, und gemessen enden 14 Schluessel bereits von sich aus so — nachbesserung_runde_2, sammel_kontrolle_3, erledigt_05_08, offene_akzeptanz_4 und weitere. Dieselbe Klasse wie der Auftrag selbst: ein Muster misst die Schreibweise und nicht die Sache. Behoben, indem der Lauf sich die umbenannten Zeilen MERKT statt sie hinterher am Namen wiederzuerkennen; und weil dabei die Kollisionsgefahr sichtbar wurde, prueft das Skript zusaetzlich, dass kein neuer Name einen im Block vorhandenen ueberschreibt."
 A_22_6_NICHT_entschieden_gehoert_YAMA: "Der Nebenlaeufigkeits-Befund ist im Bericht als YAMA-ENTSCHEIDUNG benannt und ausdruecklich nicht mitentschieden: vier Beifang-Vorgaenge an dieser Datei an einem Tag, dazu die von mir in 4d52f778 gemessene Regelkollision zwischen 'zweiter Commit unmittelbar' und 'nie fremde unverfolgte Arbeit einsammeln'. Jede Abhilfe — eigene Dateien je Auftrag, Schreibsperre, andere Zerlegung — aendert die Arbeitsweise aller fuenf Rollen. Ich loese sie nicht."
 gezogen_mit_offengelegter_befangenheit: "Gezogen an Elter 6e0bcd38, nachdem die DoR in FUENFTER Fassung nach der letzten Kriterienaenderung erteilt wurde — das war der Grund, aus dem ich in 50f6f166 nicht gezogen habe, und er ist jetzt entfallen: f7986c44 aendert die Kriterien, 6e0bcd38 erteilt die Freigabe danach. Beides am Commit geprueft, nicht am Blatt. DIE BEFANGENHEIT BLEIBT UND ICH WIEDERHOLE SIE: A-22 ist aus meinem Befund e1a478fb geschnitten, und seine Kriterien tragen MEINE Zahlen — 65 Commits, 63 Aenderungen, 2 Einfuegungen, davon eine falsch. Ich baue also gegen Kriterien, die auf meiner eigenen Messung beruhen. Planner und plan-pruefer haben das gewusst und trotzdem freigegeben; das ist ihre Entscheidung und ich fuehre sie aus. Was ich dagegen tun kann: jede Zahl des Blattes VOR dem Bau noch einmal frisch messen statt sie als meine wiederzuerkennen, und jede Abweichung melden statt sie stillschweigend zu glaetten. §3 vor dem Ziehen 0 Tafelzeilen und 0 Zustandsfelder, nach dem Ziehen 1 und 1."
-ballbesitz: release-pruefer
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 0c53eb7e, Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen (A-22-1, -2, -2b, -3, -4, -5, -6, je eigener Abschnitt).
+  Reiner Doku-Scope; must_preserve SELBST nachgemessen mit resources/ 0, app/ 0, database/ 0.
+  Kette Vorfahr, Geheimnisse 0.
+  MIT EINEM ECHTEN YAML-PARSER GEMESSEN, nicht mit meinem Raster — der Auftrag heisst
+  'maschinell lesbar', und ein Raster kann das nicht belegen. Symfony Yaml aus dem vendor des
+  Repos, ueber jeden yaml-Block einzeln, Elter gegen Bau:
+    Elter: 132 Bloecke lesbar · 12 Duplikat-Fehler · 3 Strukturfehler
+    Bau:   143 Bloecke lesbar ·  0 Duplikat-Fehler · 4 Strukturfehler
+  A-22-1 ist damit erfuellt, und zwar schaerfer als das Kriterium verlangt: nicht 'mein Raster
+  findet keine mehr', sondern ein echter Parser wirft keinen mehr."
+
+abweichung_zu_seiner_zahl_benannt_statt_geglaettet: "Der Evaluator meldet FUENF unlesbare
+  Bloecke, ich messe VIER Strukturfehler. Die Abweichung liegt in der Messmethode, nicht in der
+  Datei: mein Ausdruck fasst einen yaml-Block non-greedy bis zum naechsten Schlusszaun, und wo
+  ein Zaun fehlt, verschluckt er den Folgeblock — genau die Stelle, die er als fuenfte nennt
+  (Z.5606). Zwei Messungen, ein Unterschied, und nach seinem eigenen Satz von heute frueh ist
+  das ein Pruefanlass und keine Auswahl. Der Kern ist von beiden Seiten gleich: die
+  Duplikat-Fehler sind weg."
+
+seinen_befund_bestaetigt: "Die Datei ist NOCH NICHT vollstaendig maschinell lesbar, obwohl
+  A-22-1 erfuellt ist — vier bis fuenf Bloecke werfen Strukturfehler (fehlende Schlusszaeune
+  Z.1230 und Z.5606, unbekannte Escape-Zeichen Z.1795 und Z.2804, unerwartete Zeichen Z.1470).
+  UND SEINE URSACHENAUSSAGE TRAEGT, von mir gegengeprueft: Z.1230 meldet am ELTER 'Duplicate
+  key' und am BAU 'Multiple documents' — dieselbe Stelle, anderer Fehler. Die Bereinigung hat
+  den Strukturfehler FREIGELEGT und nicht erzeugt."
+
+was_das_fuer_mein_werkzeug_heisst: "Mein Driftlauf liest mit einem Ausdruck, nicht mit einem
+  Parser. Solange diese vier bis fuenf Stellen stehen, KANN kein echter Parser die Datei ganz
+  lesen — meine Messung bleibt also die einzige, die ueber alle Bloecke laeuft, und sie ist die
+  schwaechere. Das ist kein Grund, sie im Vorbeigehen zu ersetzen; es ist ein Grund, die Grenze
+  zu kennen und zu nennen."
+
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau 0c53eb7e ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt (resources/ 0 Dateien).
+  WILDBETRIEBS-BELEG: die Wirkung ist an der laufenden Statusdatei selbst gemessen, mit dem
+  Parser, den der Auftrag zum Massstab macht — 12 Duplikat-Fehler vorher, 0 nachher."
 ball_nachgezogen: "release-pruefer 12.08.: A-22 steht auf CODE_FERTIG, die Tafelzeile trug
   bereits Evaluator, der Datensatz noch generator. Ein Feld, keine Dublette — nur nicht
   nachgezogen. Angeglichen auf evaluator, wohin die Abnahme gehoert."

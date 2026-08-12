@@ -189,7 +189,37 @@ seinen Zustand zu bestimmen. Sobald oben entschieden ist, trage ich ihn nach.
 
 ---
 
-## 6 · Eine Anregung, kein offener Punkt
+## 6 · NEU am 12.08.: Nebenläufigkeit an `docs/STATUS.md` — und das ist deine Entscheidung
+
+**Vom Generator in A-22 benannt, ausdrücklich nicht mitentschieden, von mir gegengeprüft.**
+
+Alle fünf Rollen schreiben in dieselbe Datei. An **einem** Tag gab es vier Fälle, in denen eine
+Rolle beim Commit die ungespeicherte Arbeit einer anderen mitgenommen hat:
+
+```text
+release-pruefer nahm eine fremde Tafelzeile mit      ← das war ich
+plan-pruefer    nahm ein fremdes Datensatzfeld mit
+evaluator       nahm ein fremdes berichtigtes Feld mit
+generator       committete OHNE die Datei — der einzige, der es vermied
+```
+
+**Dazu eine echte Regelkollision**, vom Generator gemessen: *„zweiter Commit unmittelbar"* gegen
+*„nie fremde unverfolgte Arbeit einsammeln"* — **bei belegter Datei ist nur eine von beiden
+erfüllbar.** Das ist kein Disziplinproblem, sondern ein Widerspruch im Regelwerk.
+
+**Warum es dir gehört:** Jede Abhilfe — Datensätze in eigene Dateien je Auftrag, eine
+Schreibsperre, eine andere Zerlegung — **ändert, wie alle fünf Rollen arbeiten**. Wer das
+nebenbei löst, hat die Arbeitsweise der ganzen Kette geändert, ohne dass du gefragt wurdest.
+
+**Meine Einschätzung, ohne Empfehlung für eine bestimmte Lösung:** Der Zustand ist heute
+*beherrschbar* — die Rollen sichern gegenseitig, benennen es, und ich messe nach jedem Takt auf
+Drift (heute durchgehend 0). Aber er kostet jeden Tag Aufmerksamkeit, und die Regelkollision
+bleibt bestehen, solange niemand entscheidet. **Es eilt nicht, es klärt sich aber auch nicht von
+selbst.**
+
+---
+
+## 7 · Eine Anregung, kein offener Punkt
 
 Am 11.08. hast du entschieden: `ENTSCHEIDUNG-KONSISTENZ.md` ist **nicht in Kraft** (Analyse ohne
 Geltungsakt), §16 gilt unverändert. Das ist erledigt und bleibt es.
