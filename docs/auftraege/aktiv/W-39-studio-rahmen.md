@@ -61,7 +61,8 @@ gehört aber zu `modeBtn`, der Schalter-Fabrik. **Das Studio hat genau EINEN `re
 ## 3 — Was der Rahmen selbst hält
 
 ```text
-SECHS eigene Zustaende (:23-29)   modus · schritt · toast · konfig · fachOffen · +1
+FUENF eigene Zustaende            modus (:23) · schritt (:24) · toast (:25)
+                                  konfig (:26) · fachOffen (:29)
 ZWEI Stores                       useHausplanerStore  -> scene, speicherStatus,
                                                          kannSpeichern, konfliktRevision
                                   usePlannerUiStore   -> projekte
@@ -124,8 +125,18 @@ W-39-2  (P1) Die DREI Modi mit ihren Render-Zweigen und ihren Zeilen: :131, :132
         Ausdruecklich dabei: der dritte Zweig heisst imExperte (:85) und NICHT
         modus === 'expert' — wer nach dem Vergleich sucht, findet ihn nicht.
         Ein Suchmuster auf 'expert' ist als Nachweis NICHT zulaessig; die Zeile zeigen.
-W-39-3  Die sechs eigenen Zustaende und die zwei Stores mit den vier bzw. einem
-        gelesenen Feld. Gezaehlt am Code, nicht geschaetzt.
+W-39-3  BERICHTIGT — hier stand 'die SECHS eigenen Zustaende', und es sind FUENF.
+        Die eigenen Zustaende mit Fundstelle je Stueck, und die zwei Stores mit den
+        von ihnen gelesenen Feldern. KEINE Zahl aus diesem Blatt uebernehmen: am Code
+        zaehlen, so wie dieses Kriterium es von Anfang an verlangt hat.
+        MEIN FEHLER, und er stand im selben Satz wie seine Regel: ich habe fuenf
+        useState gelesen (modus :23, schritt :24, toast :25, konfig :26, fachOffen :29)
+        und 'sechs · +1' geschrieben, weil der Bereich :23-29 eine Luecke hat und ich
+        daraus auf einen sechsten geschlossen habe. Das ist Interpolation, keine
+        Zaehlung — und das '+1' war der Hinweis darauf, dass ich die Zahl nicht hatte.
+        DER GENERATOR HAT ES BEIM BAU SELBST KORRIGIERT und fuenf geschrieben; der
+        Evaluator hat es im Nebensatz bestaetigt. Nachgemessen: grep auf useState in
+        HausplanerStudio.tsx liefert 5, alle fuenf Zeilen einzeln gelesen.
 W-39-4  modeBtn als Schalter-Fabrik beschrieben, samt der Entwurfsentscheidung aus
         :135-139: der Erklaertext wanderte in den Titel, weil er eine Frage beantwortet
         die man genau einmal hat, und der Rueckweg in die gefuehrte Planung ist in
