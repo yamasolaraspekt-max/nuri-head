@@ -5482,7 +5482,26 @@ KEIN Frontend-Auftrag, sondern erst F-023, dann die Frage nach F-024.*
 
 ```yaml
 vorgang: "VORLAGE AN DEN PLANNER — Frontend-Bestandsaufnahme Klasse A (release-pruefer, 12.08.)"
-ballbesitz: plan-pruefer  # ANTWORT DES PLANNERS LIEGT (13.08.): die W-08-Zuordnung ist gemessen und
+ballbesitz: —  # plan-pruefer 13.08.: Kenntnis genommen, Zahlen nachgemessen (Feld darunter)
+nachgemessen_vom_plan_pruefer: "plan-pruefer 13.08. — Kenntnis genommen. Weil diese Vorlage aus
+  Yamas Frage entstanden ist, habe ich ihre Zahlen frisch gemessen statt sie weiterzureichen.
+  ES HALTEN: toolRegistry.ts traegt 12 ids, an zwei Mustern gezaehlt (id-Zeilen und id-Werte, beide
+  12). W-05 hat VIER Exporte, genau wie angegeben.
+  ZWEI ZAHLEN SIND GEWACHSEN, nicht falsch: die Vorlage nennt 10 BESCHRIEBEN und 0 GEBAUT; gemessen
+  sind es heute 21 BESCHRIEBEN und 1 GEBAUT, dazu 19 LEER und 2 ENTWORFEN. Der Zuwachs ist die Arbeit
+  der Nacht. Wer die Vorlage unveraendert an Yama weiterreicht, reicht eine halbierte Zahl weiter —
+  dieselbe Klasse wie die zwei Sperrgruende, die heute ueberholt waren.
+  EINE ABWEICHUNG ZWISCHEN VORLAGE UND SCHNITT, beide richtig: die Vorlage nennt fuer W-05 FUENF
+  Aufrufer, das daraus geschnittene Blatt nennt SECHS. Gemessen sind es fuenf DATEIEN und sechs
+  IMPORTZEILEN — raumProjektion.ts fuehrt zweimal ein (:12 Typ, :13 Funktion). Ohne Traeger
+  widersprechen sich zwei richtige Zahlen.
+  DER BALL LAG SEIT DEM 12.08. UNSICHTBAR, und der Grund ist messbar: dieser Block traegt kein
+  auftrag:-Feld, also findet ihn keine Probe, die ueber Auftragskennungen laeuft. Meine eigene ordnete
+  ihn dem darueberliegenden Auftrag zu — falsch, und nur aufgefallen, weil ich die Zeile geoeffnet
+  habe. Ich habe meine Rundgangsprobe darauf umgestellt: sie liest jetzt die Ballzeilen selbst statt
+  sie ueber Auftragskennungen zu suchen.
+  OFFEN BEI YAMA bleibt aus dieser Vorlage genau eine Fachfrage: gehoert Tragwerk an die
+  Zeichenflaeche."
   # traegt nicht, der Reihenfolge-Vorschlag ist uebernommen, W-05 wird als naechstes geschnitten.
   # Der Ball lag seit 12.08. bei mir und war unsichtbar, weil dieser Block kein auftrag:-Feld traegt.
 grundlage: "toolRegistry.ts (12 ids, selbst gezaehlt) · REGISTER.md (10 BESCHRIEBEN, 0 GEBAUT) ·
@@ -7805,6 +7824,37 @@ die_falle_im_pruefmuster: "Mein erster Zaehler zaehlte jeden ```-Zaun als Toggle
   und gruen sein kann."
 werkzeug_und_bericht_sha: 83ad35e1
 bericht: docs/BERICHT-A-25-die-zaeune.md
+meldepflichten_geprueft_plan_pruefer: "plan-pruefer 13.08. — sie halten, und der Bau ist BELEGT
+  WIRKSAM. Beide SHAs existieren: 83ad35e1 traegt Werkzeug und Bericht (scripts/a25-zaeune.mjs 126 Z.,
+  BERICHT 189 Z.), der Bau selbst steckt in c8dd6d49 des Planners — der Generator meldet das selbst,
+  statt es zu verschweigen.
+  DIE WIRKUNG SELBST NACHGEMESSEN mit meinem eigenen CommonMark-treuen Zaehler, drei Staende:
+    vor dem Bau (c8dd6d49~1)  310 Bereiche · ZWEI mit mehr als einem Datensatz (Z.1245 mit 2,
+                              Z.7726 mit 5) · 0 ausserhalb · 69 Datensaetze
+    Bau-Commit  (c8dd6d49)    316 Bereiche · NULL mit mehr als einem · 0 ausserhalb · 70 Datensaetze
+    HEAD                      unveraendert NULL
+  A-25-1 ist damit erfuellt, und zwar an meinem Muster und nicht an seinem.
+  DIE SCHUTZGRENZE A-25-2 HAELT IN DER SACHE, und ich habe sie ehrlich zerlegt statt sie an der
+  Gesamtzahl abzulesen: die Listen sind NICHT zeichengleich (auftrag 69->70, zustand 60->61). Aber
+  gemessen mit comm sind NULL Werte verschwunden und genau EINER ist neu — auftrag: 'W-05/1' und
+  zustand: ENTWURF. Es ist kein Verlust, es ist der neue Auftrag des Planners, der im selben Commit
+  liegt.
+  UND GENAU DAS IST DER BEFUND FUER DEN EVALUATOR: A-25-2 verlangt den Nachweis 'vorher und nachher
+  zeichengleich' AM BAU. Dieser Nachweis ist am Bau-Commit NICHT REPRODUZIERBAR, weil der Commit
+  ausser dem Bau auch einen neuen Auftrag traegt. Wer ihn stur faehrt, bekommt ABWEICHUNG und muesste
+  rot melden, obwohl nichts verloren ging. Der Nachweis ist nur ueber das Skript des Generators
+  fahrbar, das vorher/nachher im eigenen Lauf vergleicht — oder ueber die Zerlegung, die ich hier
+  gefahren habe.
+  DIE IRONIE GEHOERT DAZU, weil sie eine Lehre ist: A-25-6 wurde geschrieben, um genau das zu
+  verhindern — HEAD vor und nach dem Schreiben messen, abbrechen wenn er sich bewegt. Der Schaden kam
+  nicht durch das Skript, sondern durch einen FREMDEN Commit, der waehrend des Laufs auf dieselbe
+  Datei landete. Gegen den schuetzt die eigene HEAD-Probe nicht; sie merkt es hinterher.
+  MEIN EIGENER MESSFEHLER STEHT HIER, weil er die Klasse dieses Auftrags ist: mein erster Griff las
+  die Felder ab 'auftrag: A-25' bis zum naechsten Zaun und fand bau_sha 0c9aa0a9 — das ist A-24s Bau.
+  A-25 hat gar kein Feld bau_sha, sondern werkzeug_und_bericht_sha. Ich haette einen falschen SHA
+  gemeldet, und zwar durch genau den Lesefehler, den A-25 behebt: ueber die Blockgrenze hinweg. Erst
+  blockgenau gemessen war es richtig. Der Auftrag hat mich beim Pruefen des Auftrags erwischt.
+  Ball bleibt beim Evaluator."
 DER_BAU_SELBST_STECKT_IN_EINEM_FREMDEN_COMMIT: "Waehrend ich baute hat der planner docs/STATUS.md
   committet (c8dd6d49, W-05/1) und meine 20 Zeilen als Beifang mitgenommen. Gemessen: git diff
   docs/STATUS.md ist LEER, HEAD traegt alle fuenf vorgang-Felder und alle fuenf neuen Zaeune.
@@ -8212,6 +8262,19 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-24 GECLAIMT vor dem Pr
 auftrag: "A-23"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+claim_abnahme: "evaluator 13.08.: CLAIM auf die A-23-Abnahme, gesetzt VOR dem Pruefstand-Aufbau.
+  Vorher A-24 abgenommen (Votum 200dcb7a). UND EIN BEFUND AUS DEM CLAIM-LESEN, bevor ich messe:
+  DAS BLATT ZAEHLT SIEBEN, DIE TAFEL ZAEHLT SECHS. Blatt-Ueberschrift 'SIEBEN Zettel an einer
+  erledigten Sperre', A-23-2 woertlich 'Alle SIEBEN Stellen sind berichtigt'; Tafelzeile 'Sechs
+  Zettel', Datensatz-titel 'Sechs Stellen', Dateiname A-23-sechs-zettel-....md. Die siebte ist
+  startEhrlich.test.ts:120 — die Stelle OHNE die Zeichenfolge 'Teil B', die der Planner nach
+  2772c198 selbst nachgetragen hat, weil sein Suchmuster die Schreibweise gesucht hat und nicht
+  die Sache (H-9 an seinem eigenen Muster). WARUM DAS ZAEHLT: wer die Abnahme nach der TAFEL
+  aufsetzt, misst sechs Stellen, findet sie alle berichtigt und stempelt gruen — waehrend genau
+  die Stelle offen bleibt, die uebersehen zu werden das Kriterium ueberhaupt erst erzeugt hat.
+  Ich messe gegen SIEBEN, weil die Abnahmekriterien der Traeger sind und nicht die Tafelzeile.
+  Der Dateiname und die zwei Titel gehoeren dem Planner — ich trage keine fremden Zustaende nach
+  und benenne nichts um. Bau 3ad920b1, Basis 59c66eb2, Spur A, P2."
 titel: "Sechs Stellen in der Insel fuehren AUF-40 Teil B als offen — beide Haelften sind gebaut"
 basis_sha: 59c66eb2
 spur: A
