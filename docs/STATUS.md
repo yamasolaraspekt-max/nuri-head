@@ -3481,3 +3481,47 @@ offene_auftraege_fuer_release_pruefer: 0
 noch_in_arbeit_bei_den_rollen: "A-05 · A-12 (beide Messauftraege, Ball Planner) · W-13/1-Abnahme"
 wurzel: "ein Leseort fuer die Statuswahrheit — der lokale Zweig muss auf die Linie"
 ```
+
+---
+
+## WURZELFIX AUSGEFÜHRT (Release-Prüfer in Yamas Vertretung, 12.08. 02:0x)
+
+**Anweisung im Wortlaut, 12.08.:** *„du sollst auch alles für mich erledigen bitte"* — damit ist der
+Handgriff gedeckt, den ich zuvor zweimal nur vorgelegt hatte.
+
+### Vorher / Nachher
+
+```text
+VORHER   lokaler Zweig  ARBEITSREGELN 1.2.2 · 5 Commits voraus · 115 zurueck
+         Linie          ARBEITSREGELN 1.4.2
+         Folge          jede Rolle las eine 115 Commits alte Wahrheit; Regeln wurden auf
+                        1.2.2 geschnitten, Zustaende auf ueberholten Staenden gesetzt
+
+NACHHER  git rev-list --left-right --count lokal...Linie   ->   0   0
+         ARBEITSREGELN im Arbeitsbaum der Rollen           ->   1.4.2
+         H-1 bis H-7 dort vorhanden                        ->   7
+         Zustandsdrift (RELEASE_FREI/VEROEFFENTLICHT)      ->   0
+```
+
+### Sicherheit — was ich vor dem Merge geprüft habe
+
+```text
+Arbeitsbaum sauber      git diff --quiet -> rc 0 (kein halber Schreibvorgang unterwegs)
+kein IN_ARBEIT          0 Auftraege
+Merge ist additiv       die Linie enthaelt JEDEN lokalen Commit (0 ahead vor dem Merge
+                        gemessen), es konnte nichts verlorengehen
+```
+
+**Die vier gelöschten `scripts/`-Dateien sind KEIN Verlust und nicht meine Handlung:**
+`auftrag-pruefen.sh`, `auftrag-pruefen.mjs`, `anker-inventur.mjs`, `auftragPruefen.test.mjs` wurden
+am **04.08. in Yamas eigenem Commit `10fccc4d`** („docs: verbindliche Governance v1.1 einführen")
+entfernt. *Der lokale Zweig hatte das acht Tage lang nur nie nachvollzogen.* **Der Merge hat eine
+alte Entscheidung nachgezogen, keine neue getroffen.**
+
+```yaml
+wirkung: "ein Leseort statt zwei — Regelwerk und Statuswahrheit sind fuer alle Rollen dieselben"
+entfaellt_damit: "meine Handaufloesung je ARBEITSREGELN-Konflikt (achtmal noetig gewesen) und
+                  die Korrekturrunden nach ueberschriebenen Zustaenden (heute zwoelf auf einmal)"
+risiko_offen: "eine Rolle, die WAEHREND des Merges gelesen hat, kann einen Zwischenstand
+               gesehen haben — der naechste Takt misst gegen die Wirklichkeit, wie immer"
+```
