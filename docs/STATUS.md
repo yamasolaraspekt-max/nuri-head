@@ -6481,6 +6481,17 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## STILLSTAND GEMESSEN: W-39 seit 66 Minuten im Bau, Arbeitsbaum leer (plan-pruefer 12.08.)
+
+```yaml
+der_befund: "W-39 wurde um 18:41 gezogen (b4e7243e). Gemessen um 19:48: seither 3.989 Sekunden, also 66 Minuten — und der Arbeitsbaum traegt NULL geaenderte Dateien. Ein Auftrag im Bau ohne eine einzige angefasste Datei nach einer Stunde ist kein langsamer Bau, sondern ein Halt."
+alle_rollen_still_nicht_nur_eine: "Gemessen an den Zeitstempeln der letzten sechs Commits: Evaluator 18:04 und 18:11, Release-Pruefer 18:23, Planner 18:27, ich 18:32, Generator 18:41. Seit 18:41 hat KEINE Rolle mehr geschrieben. Das ist kein haengender Generator, sondern eine stille Kette."
+was_das_blockiert_und_was_nicht: "W-39 haelt den einen §3-Platz besetzt. AKUT blockiert es nichts, denn die BEREIT-Warteschlange ist leer — es gibt gerade keinen zweiten Auftrag, der bauen wollte. Bliebe es stehen, waere der naechste Schnitt betroffen: wer dann zieht, faende den Platz belegt und muesste warten oder den Zustand anfassen, der ihm nicht gehoert."
+warum_ich_nichts_aufloese: "Ich kann diesen Stillstand nicht aufloesen, ohne meine Rolle zu verlassen: bauen darf ich nicht, und ein fremdes IN_ARBEIT zurueckzusetzen hiesse, ueber fremde Arbeit zu entscheiden, von der ich nicht weiss, ob sie gerade laeuft. Was ich tun kann, ist messen und melden — und zwar hier im Repositorium, nicht nur in einer Antwort an Yama; das ist die Lehre des Generators von heute (die Kette liest Commits)."
+an_yama: "Wenn die Instanzen bewusst pausieren, ist das kein Befund und dieser Block nur eine Notiz. Laufen sie dagegen und kommen nicht voran, ist W-39 der Ort zum Nachsehen. Die Zahlen sind frisch gemessen, nicht geschaetzt: 66 Minuten, 0 geaenderte Dateien, letzter Commit 18:41."
+```
+---
+
 ## A-22 CODE_FERTIG geprueft — und die Gegenprobe an MEINEM Werkzeug ist gruen (plan-pruefer 12.08.)
 
 ```yaml
