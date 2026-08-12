@@ -8429,12 +8429,64 @@ W_33_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```yaml
 auftrag: "W-36"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner  # DoR nicht erteilt, W-36-5 traegt eine falsche Zahl
 titel: "Die VIERTE Statusachse, und ein Kommentar der zwei davon mischt"
 basis_sha: 08b264cc
 spur: A
 prioritaet: P2
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR NICHT ERTEILT. Ein Kriterium traegt eine falsche Zahl,
+  und zwar die, die das Blatt selbst als Fehlerquelle ausweist.
+  W-36-5 SAGT VIER, GEMESSEN SIND SIEBEN. Befehl:
+  grep -rlE \"from '[^']*(faehigkeiten|FaehigkeitenNavi)'\" __tests__ — und danach ALLE ZWOELF
+  Dateien einzeln geoeffnet (Pflichtpruefung 7), weil genau dieser Auftrag zeigt, wie teuer ein
+  Muster ohne geoeffnete Stelle ist. Es importieren wirklich:
+    faehigkeiten.test.ts:7 · schienenReiter.test.ts:21 · toolPresentation.test.ts:25 ·
+    enginePanelRest.test.ts:19        (die vier aus dem Blatt)
+    enginePanelTgaHeizung.test.ts:17 · enginePanelSparren.test.ts:19 ·
+    enginePanelTreppe.test.ts:21      (im Blatt NICHT genannt)
+  Die drei fehlenden tragen WORTGLEICH dieselbe Zeile wie enginePanelRest, das im Blatt unter JA
+  steht: import { FAEHIGKEITEN } from '../app/tools/faehigkeiten'. Es gibt keinen Unterschied,
+  an dem eine Trennung haengen koennte.
+  UND ES FEHLT EINE DRITTE KLASSE, die das Blatt gar nicht kennt: Tests, die die Navi-QUELLE
+  lesen statt sie zu importieren — keineKappung.test.ts:22 (readFileSync auf
+  app/FaehigkeitenNavi.tsx), gruppenzeileUndSchiene.test.ts:102 (Marke '<FaehigkeitenNavi'),
+  stilschicht.test.ts:679 (fuehrt die Navi-Datei in seiner Dateiliste), schienenReiter.test.ts:32
+  (tut beides). Das Blatt fuehrt keineKappung und gruppenzeileUndSchiene unter NEIN — sie
+  verriegeln die Datei aber sehr wohl, nur ohne Import.
+  DIE AUFTEILUNG GEHT AUF, zwoelf ohne Rest: 7 importieren (davon schienenReiter auch Quelle),
+  3 lesen nur die Quelle, 2 sind echte Wortzufaelle — ansichtBereit.test.ts:96 ist ein lokaler
+  Parametername, werkzeugRegistry.test.ts:14 ein Objektschluessel. Nur diese zwei gehoeren unter
+  NEIN, das Blatt nennt dort vier.
+  WARUM DAS BLOCKIERT und keine Auflage ist: die Zahl steht im KRITERIENWORTLAUT ('VIER
+  importieren W-36 wirklich, nicht zwoelf'). Wer ehrlich misst, findet sieben und verletzt das
+  Kriterium; wer VIER schreibt, macht das Blatt falsch. Dieselbe Klasse wie A-21-3, und die
+  Entscheidung gehoert dem Planner, nicht dem Beschreiber.
+  DER PLANNER HAT DEN FEHLER IN DIE GEGENRICHTUNG KORRIGIERT: sein erster grep war zu weit
+  (zwoelf), die Korrektur ist zu eng (vier). Der Absatz, in dem er das zu weite Muster als
+  Fehlerquelle benennt, steht ueber einer Liste, die dasselbe Muster in der anderen Richtung
+  verfehlt. Das ist kein Vorwurf, sondern der Grund, warum die Zahl aus dem Kriterienwortlaut
+  heraus gehoert und in eine Klassifizierung mit drei Faechern hinein.
+  ZWEITER BEFUND, VOLLSTAENDIGKEITSFRAGE, nicht blockierend aber zu entscheiden: Abschnitt 3 und
+  der Scope nennen EINE von VIER exportierten Funktionen. Gemessen an faehigkeiten.ts: :106
+  faehigkeitenNach (genannt), :111 alleFaehigkeiten, :116 doppelteIds, :127 faehigkeitNach (alle
+  drei nicht genannt). Sie sind nicht tot — faehigkeitNach laeuft in app/HausplanerApp.tsx:39 und
+  app/rahmen/FussUndUeberlagerungen.tsx:26, alleFaehigkeiten in schienenReiter.test.ts:21,
+  doppelteIds in faehigkeiten.test.ts:7 und toolPresentation.test.ts:25, wo es einen
+  Doppel-ID-Waechter traegt. Weder der IST- noch der IST-NICHT-Block erwaehnt sie, also muss der
+  Beschreiber raten. Ich habe diese Frage bei W-35 einmal vergessen und sie haette dort beide
+  Registerfehler gefunden; deshalb steht sie hier vor der Freigabe.
+  WAS ICH GEMESSEN HABE UND WAS STIMMT, damit der Planner nichts doppelt misst: 129 Z. und 76 Z.
+  exakt · die Fundstellen :17 :22 :25 :27 :46 :59 :99 :106 alle acht · neun Gruppen · WerkzeugAnzeige
+  an werkzeugZustand.ts:30 · der Kommentar :24 wortgleich zitiert · 'aktiv' 7 Treffer und
+  'schlaeft' 3, letztere an :7 :24 :73 und ALLE in Kommentaren · FaehigkeitenNavi.tsx genau ein
+  Export an :16 · der Guard-Test ist faehigkeiten.test.ts:38 ('Guard (AP-E)'), er importiert das
+  Modul zur Laufzeit und prueft, dass engineExport darin existiert · zwoelf Wort-Treffer-Dateien ·
+  Registerzeile REGISTER.md:123 mit 76 Z. Von den geprueften Zahlen ist nur die Waechterzahl falsch.
+  W-36-1 TRAEGT und ist der beste Teil des Blattes: vier Achsen je mit Traeger, Yamas Aufloesung zu
+  W-40 als Regel statt als Einzelfall. Genau deshalb darf das Blatt nicht mit einer falschen
+  Aufzaehlung danebenstehen — es ist dasselbe Fehlerbild eine Ebene tiefer.
+  Ball beim Planner: W-36-5 auf die drei Klassen umstellen, Scope um die drei Funktionen
+  entscheiden. Zustand bleibt ENTWURF."
 warum_jetzt: "Sechste Ablesung der Stufe 6, und die Kette braucht Vorrat: W-35 laeuft, W-33 ist in
   der DoR, W-40/1 in der Freigabe. Danach waere sie leer."
 DER_TRAGENDE_PUNKT_VIER_STATUSACHSEN: "Gemessen und jede Stelle geoeffnet: SchrittStatus mit ok, prog,
