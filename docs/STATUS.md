@@ -3698,3 +3698,106 @@ offene_auftraege_fuer_release_pruefer: 0
 noch_in_arbeit_bei_den_rollen: "A-05 · A-12 (beide Messauftraege, Ball Planner) · W-13/1-Abnahme"
 wurzel: "ein Leseort fuer die Statuswahrheit — der lokale Zweig muss auf die Linie"
 ```
+
+---
+
+## BEFUND DES EVALUATORS (12.08., nach A-14) — die Massenkorrektur war einseitig: 14 von 18 Tafelzeilen widersprechen ihrem eigenen Datensatz
+
+**Anlass:** Nach der A-14-Abnahme habe ich turnusmäßig **beide** Statusorte gelesen — und in der
+Tafel stand ein Ball bei mir (`W-04`, `RELEASE_BLOCKED`, Ball **Evaluator**), während der Datensatz
+denselben Auftrag als `BETRIEBSBESTAETIGT`, `ballbesitz: —  # Kette vollstaendig` führt.
+**Nachgemessen: das ist kein Einzelfall.**
+
+```text
+$ python3 tafeldrift.py     # Tafelzeile gegen 'zustand:' im Auftragsdatensatz, beide aus docs/STATUS.md
+A-09     Tafel=RELEASE_FREI      Datensatz(A-09)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+A-11     Tafel=RELEASE_FREI      Datensatz(A-11)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+A-13     Tafel=RELEASE_FREI      Datensatz(A-13)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+W-01     Tafel=RELEASE_FREI      Datensatz(W-01/1)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+W-02     Tafel=RELEASE_FREI      Datensatz(W-02/1)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+W-04     Tafel=RELEASE_BLOCKED   Datensatz(W-04/1)=BETRIEBSBESTAETIGT  Tafel-Ball=Evaluator
+W-05     Tafel=RELEASE_FREI      Datensatz(W-05/1)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+W-08     Tafel=RELEASE_FREI      Datensatz(W-08/1)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+W-09     Tafel=ENTWURF           Datensatz(W-09/1)=BEREIT              Tafel-Ball=Plan-Prüfer
+W-11     Tafel=RELEASE_FREI      Datensatz(W-11/1)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+W-13     Tafel=RELEASE_FREI      Datensatz(W-13/1)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+W-15     Tafel=ENTWURF           Datensatz(W-15/1)=BEREIT              Tafel-Ball=Plan-Prüfer
+W-21     Tafel=RELEASE_FREI      Datensatz(W-21/1)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+W-22     Tafel=RELEASE_FREI      Datensatz(W-22/1)=BETRIEBSBESTAETIGT  Tafel-Ball=Yama
+--- 14 von 18 Tafelzeilen divergent
+```
+
+### Warum das genau die Wirkung hat, die der Abschnitt darüber beenden wollte
+
+Der Abschnitt **„STATUSDRIFT MASSENHAFT KORRIGIERT"** schließt mit
+`offene_auftraege_fuer_yama: 0`. **Die Tafel darüber zeigt elf Zeilen „Ball bei Yama" und eine
+„Ball beim Evaluator".** Der Anlass jener Korrektur war Yamas Satz *„es liegen 4 Aufträge für uns
+beide"* — **und die Zeilen, die diesen Eindruck erzeugen, stehen unverändert dort.** Wer die Datei
+von oben liest, liest zuerst die Tafel.
+
+> **H-3 sagt: „Die Tafel ist das Instrument, kein Zeugnis. Ein Instrument, das schont, zeigt
+> falsch."** *Hier zeigt es nicht zu milde, sondern schlicht den Stand von vor der Korrektur.*
+> **§16 sagt: „Es gibt keine zweite manuelle Statuswahrheit."** *Die zweite steht nicht in einer
+> anderen Datei, sondern siebzehn Zeilen über der ersten.*
+
+### Datiert — die Korrektur hat den einen Ort angefasst und den anderen nicht
+
+```text
+b929def8  12.08. 00:09  release-pruefer: Zustandswechsel §10 — ... W-04/1 RELEASE_BLOCKED
+                        (letzte Berührung der W-04-TAFELZEILE)
+a819804d  12.08. 00:45  BETRIEBSPRUEFUNG §19: fuenfzehn Auftraege auf BETRIEBSBESTAETIGT
+                        (setzt die DATENSAETZE — 36 Minuten spaeter, Tafel unberuehrt)
+```
+
+### Ballbesitz und was ich ausdrücklich NICHT getan habe
+
+```yaml
+klasse: BEWEIS
+schwere: P1   # nicht weil Code falsch waere, sondern weil der meistgelesene Ort falsch fuehrt
+ball:
+  release_pruefer: "zwoelf Zeilen (A-09 A-11 A-13 W-01 W-02 W-04 W-05 W-08 W-11 W-13 W-21 W-22) —
+                    §16-Tabelle: der Uebergang VEROEFFENTLICHT -> BETRIEBSBESTAETIGT gehoert ihm,
+                    und §16 verlangt den Zustandswechsel in GENAU DIESER Datei, nicht in einer
+                    ihrer beiden Haelften"
+  planner_oder_plan_pruefer: "zwei Zeilen (W-09, W-15): Tafel ENTWURF, Datensatz BEREIT"
+nicht_getan: "Ich habe KEINE Tafelzeile angefasst. Eine davon (W-04) traegt MEINEN Namen als
+              Ballbesitzer — sie selbst zu raeumen hiesse, den eigenen Ball zu klaeren. Das ist
+              genau die Trennung, wegen der ein Votum etwas wert ist."
+gegenprobe_zur_eigenen_messung: "Ich habe nicht nur gezaehlt, sondern beide Orte fuer W-04 im
+              Wortlaut gelesen und die Kette geprueft: fd076dc5 (meine erfuellte Nachforderung)
+              existiert, das Blatt traegt den Nachtrag, der Datensatz quittiert ihn mit
+              'beweis_vorbehalt: ERLEDIGT'. In der SACHE liegt bei mir nichts offen —
+              der Ball in der Tafelzeile ist ein Ueberbleibsel, keine Aufgabe."
+```
+
+---
+
+## PROZESSQUITTUNG (Evaluator, 12.08.2026, 03:5x) — §16 nach Kontextkürzung
+
+**§16 verlangt sie ausdrücklich** *(„Vor jedem Start, Wiederanlauf, Rollenwechsel und **nach jeder
+Kontextkürzung** … Die Prozessquittung nennt Rolle, gelesene Versionen/Hashes und Zeitpunkt")*.
+**Meine Sitzung wurde gekürzt; hier ist sie.**
+
+```yaml
+rolle: evaluator (Erstinstanz)
+zeitpunkt: "12.08.2026, 03:5x"
+gelesen_in_dieser_reihenfolge:
+  - CLAUDE.md
+  - docs/ARBEITSREGELN.md
+  - docs/STATUS.md (beide Orte: Tafel + Auftragsdatensaetze)
+  - docs/auftraege/aktiv/A-14-n003-vorbehalt-ins-ergebnis.md
+regel_version: "1.4.2"
+regel_sha256: "285c9830e8e7a83aa3698cc8abb95a475c0ff61a17e725ac1b81e2438f60364c"
+regel_zeilen: 884
+was_sich_seit_meiner_letzten_bestaetigung_geaendert_hat:
+  vorher: "1.2.2, 644 Zeilen, Yamas Weisung 8fc5edb8 — dagegen hatte ich bestaetigt"
+  jetzt:  "1.4.2, 884 Zeilen (Merge 76ce1746 der veroeffentlichten 1.3-Linie mit der lokalen
+           1.2.2) PLUS §18a mit den Hausregeln H-1 bis H-7 (57e582af, 12.08. 01:47)"
+  fuer_mich_neu_und_gelesen: "§18a H-1 bis H-7 vollstaendig. H-5 betrifft A-14 unmittelbar und
+           nennt sparrenBerechnung als Beispielfall — der Auftrag, den ich soeben abgenommen habe,
+           ist die Behebung genau dieses Falls. H-3 traegt den Befund oben. H-6 deckt sich mit B5
+           und mit meiner Zaehlfalle bei A-14-3."
+befund_zur_quittung_selbst: "grep -ci prozessquittung docs/STATUS.md -> 0. Vor dieser hier gab es
+           KEINE, von keiner Rolle. Ich melde das als Beobachtung, nicht als Vorwurf: die Pflicht
+           steht seit 1.4.2 im Text, und der Text ist erst seit heute frueh so."
+```
