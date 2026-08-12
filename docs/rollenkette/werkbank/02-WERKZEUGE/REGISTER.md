@@ -129,6 +129,66 @@ und Lichtkuppel. **Die Trennlinie zieht der Code selbst** — `aufbauOrientierun
 
 ---
 
+## Bekannt, außerhalb des Umfangs — Fachgewerke und Infrastruktur
+
+> **Vertretungsentscheid `4c241a6c` (Yama-Übergabe 12.08.), Einarbeitung beim Planner:**
+> *„Die Werkbank bleibt auf **Architektur/Rohbau/Dach** begrenzt … sie in die W-Reihe zu pressen
+> würde die Zuordnungsfehler multiplizieren, die diese Runde dreimal hatte. **Aber sichtbar statt
+> unsichtbar.**"*
+>
+> **Diese Module sind gebaut, geprüft und im Betrieb — sie haben nur keine W-Zeile, und das ist eine
+> Entscheidung, kein Versehen.** *Eigene Kennung `FG-` (Fachgewerk) bzw. `IN-` (Infrastruktur), damit
+> sie später beschrieben werden können, ohne die W-Reihe zu verwässern.*
+
+### Fachgewerke — eigene Normlage, eigenes Handwerk
+
+| Kennung | Modul | Zeilen | Gewerk | Normlage |
+|---|---|---|---|---|
+| `FG-01` | `wandaufbau.ts` | 72 | Bauphysik | DIN EN ISO 6946 · GEG |
+| `FG-02` | `abwassergefaelle.ts` | 58 | Sanitär/Entwässerung | DIN 1986-100 |
+| `FG-03` | `fbhAuslegung.ts` | 75 | Heizung (Flächenheizung) | — *(Grenze selbst benannt)* |
+| `FG-04` | `heizkreisVerteiler.ts` | 58 | Heizung (Hydraulik) | — *(Grenze selbst benannt)* |
+| `FG-05` | `heizkoerperLeistung.ts` | 65 | Heizung (Heizkörper) | ungeprüft |
+| `FG-06` | `heizkoerperTypen.ts` | 25 | Heizung (Katalog) | ungeprüft |
+| `FG-07` | `kuecheArbeitsdreieck.ts` | 51 | Küchenergonomie | DIN 18022 *(Komfort)* |
+| | **Summe** | **404** | | |
+
+### Infrastruktur — kein Werkzeug, sondern Unterbau
+
+| Kennung | Modul | Zeilen | Aufgabe |
+|---|---|---|---|
+| `IN-01` | `integrationAbgleich.ts` | 135 | Abgleich zwischen Teilsystemen |
+| `IN-02` | `freigabe.ts` | 135 | Freigabelogik |
+| `IN-03` | `geschossVorlage.ts` | 78 | Vorlagen für Geschosse |
+| `IN-04` | `dachVorlage.ts` | 34 | Vorlagen für Dächer |
+| | **Summe** | **382** | |
+
+**Zur Differenz gegenüber dem Entscheid, ausdrücklich (B6):**
+
+```text
+Der Entscheid nennt 407 Z Fachgewerke und 305 Z Infrastruktur.
+MEINE Messung: 404 Z und 382 Z.
+-> Die MENGE ist anders geschnitten, nicht die Zaehlung falsch. Ich habe je Modul
+   die Zeilen selbst gemessen; welche Module der Entscheid in welche Gruppe zaehlt,
+   ist mir nicht bekannt und ich rate es nicht.
+-> Zwei Module habe ich AUSGESCHLOSSEN, weil sie NICHT heimatlos sind:
+     treppeSvg.ts   142 Z   gehoert zu W-09 (eines seiner sieben Module)
+     linienBauteile.ts 167 Z gehoert laut Anschlussmatrix zum Dach-Zubehoer
+   Waeren sie mitgezaehlt, kaeme eine dritte Summe heraus — deshalb stehen sie hier
+   mit Grund, nicht stillschweigend fehlend (H-1).
+```
+
+> **Was diese Tabellen NICHT sind:** *keine Aufgabenliste.* **`FG-` und `IN-` begründen keinen
+> Auftrag** — sie machen sichtbar, was existiert und bewusst außerhalb der W-Reihe bleibt. *Wer eines
+> davon beschreiben will, braucht einen eigenen Auftrag und eine Entscheidung Yamas über den Umfang.*
+>
+> **Und zwei davon berühren A-15 unmittelbar:** *`FG-01` bis `FG-07` sind sieben der elf Engines, die
+> A-15 klassifizieren soll. **Die Kennung hier und die Klassifikation dort sind zwei Sichten auf
+> dieselben Dateien** — A-15 fragt „darf sie urteilen?", diese Tabelle fragt „gehört sie in die
+> W-Reihe?". Die Antworten sind unabhängig voneinander.*
+
+---
+
 ## Abhängigkeitskette — die Reihenfolge, in der gebaut werden muss
 
 ```

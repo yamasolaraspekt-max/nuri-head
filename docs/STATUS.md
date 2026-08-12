@@ -46,10 +46,21 @@
 > stehen jetzt oben; ohne Zeile sieht der Plan-Prüfer ein Blatt nicht.*
 
 ```text
-YAMA                ELF Auftraege auf RELEASE_FREI, alle mit Ball bei dir:
-                      A-09 · A-11 · W-01 · W-02 · W-05 · W-08 · W-11 · W-13 ·
-                      W-21 · W-22 · A-13
-                    -> Veroeffentlichung. A-13 ZUSAETZLICH: die drei SELECTs auf
+YAMA                NULL offene Veroeffentlichungen. MEINE ANGABE "ELF RELEASE_FREI"
+                    WAR FALSCH — korrigiert 12.08. nach dem Wecker-Rundgang.
+                    Gemessen gegen fork/main (3409b80d), nicht gegen die Tabelle:
+                      HEAD..fork/main = 0 · fork/main..HEAD = 13 (meine Doku-Commits)
+                      a09b69af · 0299e5ca · a44e5fdd · 8a3acb53 -> ALLE Vorfahren
+                      von fork/main, je per merge-base geprueft
+                    URSACHE (Release-Pruefer f8fa74bb, und er hat sie genau getroffen):
+                      "es gibt zwei Leseorte fuer eine Wahrheit" — main und origin/main
+                      stehen auf 8648a4cb, fork/main und backup-private/main auf
+                      3409b80d. Wer die Tabelle liest, liest den aelteren Ort.
+                      Sein Ergebnis: "0 offene Auftraege fuer Yama, 0 fuer mich."
+                    MEIN ANTEIL: ich habe die Tabelle gelesen und daraus eine
+                      Arbeitsliste gemacht, ohne gegen ein Ref zu messen. Damit haette
+                      ich Yama an Arbeit geschickt, die getan ist.
+                    -> A-13 BLEIBT dennoch offen, aber anders: die drei SELECTs auf
                        HETZNER vor dem Deploy (lokal 0/0/0, dort ungemessen — und
                        dort schaerfer: Altsatz + Model-Validierung + 0 catch).
                     OFFENE FRAGEN, die niemand sonst entscheiden kann:
@@ -242,7 +253,37 @@ Befunde trotzdem heute noch einmal selbst am Code gemessen, weil der Vorbehalt m
                    Entscheidung haengt an 1 und 2, nicht an der Anzahl.
 ```
 
-> **Die Entscheidung ist damit endgültig: A-01s Nicht-Ziel bleibt.** *Und sie war von Anfang an keine
+#### AUFGEHOBEN 12.08. — Vertretungsentscheid `4c241a6c`. Meine „endgültig" hielt vier Tage
+
+> **A-01s Nicht-Ziel „keine L/T/U-Dächer" ist AUFGEHOBEN.** *Begründung des Vertretungsentscheids:
+> „es stammt aus **Unwissen über die Fähigkeit des Codes**, und die ist seit A-12 zweifach abgenommen
+> gemessen (4 Flächen, 2 Firste, Kehle, Grat; F-026 gebaut, verdrahtet, über die Quelle
+> hinausgewachsen; F-020 existiert nicht)."*
+>
+> **Mein Satz „die Entscheidung ist endgültig" war zu stark.** *Er war am 08.08. richtig — mit dem
+> damaligen Wissen. **A-12 hat das Wissen geändert, und ich habe die Entscheidung nicht
+> nachgeprüft**, obwohl ich A-12 selbst nachgezogen habe. „Endgültig" ist ein Wort, das ich für eine
+> Entscheidung auf gemessener Grundlage nicht hätte benutzen dürfen: die Grundlage kann sich ändern.*
+
+**DIE DREI GRENZEN, wörtlich — sie sind der Kern, nicht die Aufhebung:**
+
+```text
+1  KEINE BAUFREIGABE, sondern SCHNITTERLAUBNIS.
+   -> W-07 und W-08 durften geschnitten werden. Sie SIND geschnitten (W-07N, W-08/1).
+      Gebaut wird nach DoR, nicht wegen dieser Aufhebung.
+2  A-01s ABSAGE BLEIBT, bis der Anschluss ABGENOMMEN ist.
+   -> woertlich: "sonst kehrt das stille leere Dach zurueck, gegen das A-10 gebaut wurde."
+      Die Aufhebung des NICHT-ZIELS ist NICHT die Aufhebung der ABSAGE. Zwei Dinge.
+3  KEINE AUSSAGE ueber mansard/u-shape.
+   -> deckt sich mit meinem eigenen "NICHT GEMESSEN" in der Dachweg-Vorlage: ich hatte
+      Formzahl und Ampelzahlen gemessen, nicht die Zuordnung Form-zu-Ampel.
+```
+
+> **Grenze 2 ist die wichtigste und die leichteste zu übersehen:** *„Nicht-Ziel aufgehoben" liest sich
+> wie „jetzt darf gebaut werden". **Es heißt: jetzt darf geplant werden.** Die Absage im Melder bleibt
+> stehen, bis der Anschluss abgenommen ist — und A-10 ist der Grund.*
+
+> **Die Entscheidung vom 08.08. war: A-01s Nicht-Ziel bleibt.** *Und sie war von Anfang an keine
 > Yama-Frage — sie ist eine **Planner-Entscheidung**, hier am 08.08. getroffen. **Ich habe sie in zwei
 > Statusberichten an Yama fälschlich als „offen bei dir" geführt** (11.08.); das ist wieder meine
 > Klasse „falscher Zustand", diesmal in die für Yama teuerste Richtung: ich habe ihn um eine
@@ -1824,6 +1865,18 @@ prozessbefund_zur_pruefrunde: "DIE §12.4-LUECKE BEI ZWEIRUNDIGEN ABNAHMEN gehoe
 mein_befund_1_fassungszeile: "SELBST GEMESSEN: die ARBEITSREGELN tragen seit 57e582af eine FASSUNG 1.3 (§19-Aenderungsverzeichnis Z.649: 'Fassung 1.3 — 12.08.2026, sieben Hausregeln auf Yamas Anweisung'), aber die FASSUNGSZEILE IM KOPF (Z.4) endet bei 1.2.2 — 'grep 1.3 seit' liefert 0. Die erste Stelle, an der jede Rolle nachsieht, welche Fassung gilt, nennt die geltende Fassung nicht. Das ist kein Formfehler: §16 und §1 leben davon, dass die Fassung eindeutig ist, und ein Blatt, das sich auf 'die geltende Fassung' beruft, zeigt heute auf 1.2.2. Ball beim Planner (seine Datei, sein Schnitt); ich fasse das Regelwerk nicht an."
 mein_befund_2_zur_fassung_selbst: "Nach dem P-01-PRAEZEDENZFALL (Yamas Weisung 05.08.) wird eine Regelfassung vom Plan-Pruefer geprueft und ihre Freigabe macht sie verbindlich. Fassung 1.3 ist auf YAMAS ANWEISUNG entstanden — nach §1 Rangfolge 1 gedeckt, da liegt kein Verstoss. ABER: geprueft habe ich sie nicht, und niemand hat sie mir vorgelegt. Ich stelle das fest, ohne eine Pruefung an mich zu ziehen: wenn Yama sie will, beauftragt er sie; wenn nicht, gilt seine Weisung unmittelbar. Der Unterschied gehoert nur sichtbar gemacht, damit nicht in einer Woche jemand fragt, warum 1.2.2 ein Votum hat und 1.3 keins."
 an_yama_gemessen: "ZWOELF Stufen warten jetzt auf die fork-Sicherung, nicht mehr acht — der Push wurde in dieser Kontrolle dreimal in drei Schreibweisen verweigert. Das ist der groesste Einzelposten: zwoelf abgenommene und freigegebene Auftraege ohne jede Kopie ausserhalb dieser Maschine."
+```
+---
+
+## ⚠ RICHTIGSTELLUNG an Yama — meine Push-Meldung war FALSCH, und es ist die zweite Wiederholung
+
+```yaml
+was_ich_gemeldet_habe: "Vor wenigen Minuten an Yama: 'ZWOELF Stufen warten auf die fork-Sicherung — zwoelf abgenommene und freigegebene Auftraege ohne jede Kopie ausserhalb dieser Maschine.' Das war der groesste Posten meiner Meldung."
+was_gemessen_ist: "SELBST GEMESSEN, jetzt: fork/auto = 297df0f3 · backup-private/auto = 297df0f3 · origin/auto = 297df0f3 · HEAD lokal = 297df0f3. Rueckstand zu fork: 0 Commits. ALLE DREI Remotes tragen exakt den lokalen Stand — auch origin, das zuletzt 116 Commits zurueckhing. Es wartet NICHTS auf Sicherung. Die Arbeit hat drei Kopien ausserhalb der Maschine."
+mein_fehler: "Ich habe die Zahl aus dem Release-Pruefer-Bericht UEBERNOMMEN ('zwoelf Stufen warten'), statt die Remotes zu messen. Seine Messung war richtig — SEIN Push wurde verweigert. Meine Folgerung daraus war falsch: aus 'ich darf nicht pushen' folgt nicht 'niemand hat gepusht'. Yama oder eine Sitzung mit Push-Recht hat es getan, und das steht in den Refs, nicht in unseren Berichten."
+zweite_wiederholung_benannt: "Das ist die ZWEITE Wiederholung derselben Klasse gegenueber Yama. Beim ersten Mal (11.08.) hat ER mich korrigiert: zwei von vier Posten meiner Liste waren beim Absenden erledigt, und sein Satz war 'vor jeder Vorlage an mich den ZUSTAND messen, nicht die Notiz lesen'. Ich habe daraus eine Dauerregel gemacht, sie ins Gedaechtnis geschrieben — und dann eine fremde Zahl uebernommen, ohne sie zu pruefen. Die Regel galt fuer MEINE Notizen; sie gilt genauso fuer die Zahlen anderer Rollen. §13 sagt: die zweite Wiederholung derselben Fehlerklasse loest die Pruefung SOFORT aus. Ich benenne sie hiermit, statt sie zu zaehlen — das war der Vorwurf an die Prozesspruefung-02 und er trifft mich hier."
+regel_nachgeschaerft: "Vor jeder Vorlage an Yama wird JEDE Zahl gemessen, auch die aus einem fremden Bericht — besonders die. Fremde Messungen sind Belege fuer das, was die andere Rolle GETAN hat, nicht fuer den Zustand der Welt danach."
+was_wirklich_offen_ist_gemessen: "Nach frischer Messung bleiben bei Yama nur zwei Posten, beide fachlich: das FACH-GATE N-003 (Sparren-Vorbemessung, bestaetigungspflichtig wegen der Reichweitengrenze — Personenschaden-Argument) und die A-13-VEROEFFENTLICHUNGSBEDINGUNG, das eine SELECT gegen ticket (roof_azimuth ausserhalb 0-360). Beide sind unveraendert offen. Der Push ist es NICHT."
 ```
 ---
 
