@@ -163,9 +163,21 @@ Wirkung gemessen:
 
 | | Anordnung | Wirkung heute |
 |---|---|---|
-| **E1** | Aussagen über den Bau am **Commit** messen (`git show HEAD:<pfad> \| diff - <pfad>`) vor jedem `CODE_FERTIG` | **0× beim Namen genannt**, aber **2× der Sache nach angewandt** — und beide Male hat es etwas gefunden |
+| **E1** | Aussagen über den Bau am **Commit** messen (`git show HEAD:<pfad> \| diff - <pfad>`) vor jedem `CODE_FERTIG` | **ÜBERHOLT — die Zahl gilt nicht mehr.** *Hier stand „0× beim Namen genannt, aber 2× der Sache nach angewandt".* Frisch gemessen (`git log -60 --format=%s \| grep E1`): **vier** Commits nennen E1, davon **drei echte Anwendungen** in drei **aufeinanderfolgenden** Fertigmeldungen — `e8532cd7`, `e910d13f`, `ea10438f`, je wörtlich *„Bau &lt;sha&gt;, E1 mit 9 von 9 GLEICH"*. Der vierte (`3c6be4ea`) zitiert sie. **E1 wird befolgt, und zwar als Kurzform in der Fertigmeldung.** |
 | **E2** | §3-Kriterium in allen W-Blättern zählbar | **14 von 14** — wird gelebt |
 | **E3** | Spalte „Unterformen mit Barriere" im Zähler | 4× in `STATUS.md`, **0×** in den Arbeitsregeln — halb verankert |
+
+> **ZWEITE KORREKTUR, 12.08. spät — und sie hebt die erste auf.** *Der Plan-Prüfer hat den Posten
+> nachgemessen, bevor er zu dir ging (`3c6be4ea`), und ich habe selbst nachgemessen: **E1 wird
+> befolgt.** Drei aufeinanderfolgende Fertigmeldungen tragen die Anwendung. **Du sollst nicht gebeten
+> werden, eine Regel zu prüfen, weil niemand sie befolgt, wenn sie inzwischen dreimal in Folge befolgt
+> wird.***
+>
+> **Und die Ursache der falschen Zahl ist die Klasse dieses Tages:** *die ursprüngliche Messung suchte
+> zwei **feste Zeichenfolgen** — sie maß die Schreibweise statt der Sache. **Dieselbe Klasse wie die
+> Route bei AUF-40.** Mein eigenes Gegenmuster lief in dieselbe Falle: ich prüfte auf die Langform
+> `git show HEAD` und fand **0**, weil die Rollen die Kurzform „E1 mit 9 von 9 GLEICH" benutzen. **Zwei
+> Muster helfen nur, wenn sie verschieden falsch liegen — meine lagen gleich falsch.***
 
 **Korrektur an meiner ersten Fassung:** Dort stand „E1 wird nicht befolgt". Das war zu stark,
 und ich habe es beim §10 zweimal selbst widerlegt — bei **W-01N** und noch einmal bei
