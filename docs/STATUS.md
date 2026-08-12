@@ -7830,6 +7830,16 @@ vor_dem_ziehen_beide_seiten_selbst_gemessen: "EigenschaftenPanel.tsx:276 berechn
   das ist die berichtigte Nachweisform aus 7c1ecc9f, und sie haelt eine EIGENSCHAFT statt einen
   Zustand zu vergleichen."
 
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-24 GECLAIMT vor dem Pruefstand.
+  ZUERST EIN STRUKTURBEFUND, der MEINE Messmethode trifft: mein Takt-Parser meldete hier einen
+  Widerspruch zwischen den Zustandsorten (Tafel CODE_FERTIG, Datensatz BETRIEBSBESTAETIGT).
+  ES GIBT KEINEN — beide sagen CODE_FERTIG. Mein Parser nimmt das LETZTE zustand-Feld im
+  Zaunbereich, und dieser Bereich traegt FUENF Datensaetze: Z.7525-8074, 549 Zeilen, W-06 W-31
+  A-24 A-23 A-22. Dazu ein zweiter bei Z.1243-1315 mit A-08 und A-09. Bei der A-22-Abnahme hatte
+  ich zwei solche Stellen gemessen; der zweite Bereich ist seitdem von zwei auf fuenf gewachsen.
+  Fuer mich heisst das: mein Takt-Scan liest seit Runden das letzte Feld eines BEREICHS statt das
+  des gesuchten Auftrags — dass es bisher stimmte, war Glueck in der Reihenfolge. Der Befund
+  gehoert dem Planner, nicht mir; er ist hier belegt statt vermutet."
 auftrag: "A-23"
 zustand: BEREIT
 ballbesitz: generator
