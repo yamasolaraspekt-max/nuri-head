@@ -105,11 +105,36 @@ Ursache.*
 ## 5 — Abnahmekriterien
 
 ```text
-W-40/1-1  (P1, TRAGEND) Der TRAEGER ist berichtigt: die Gueltigkeitsachse haengt am
-          PAKET (ConfiguratorPackage), nicht am Schritt. Die ueberholte Stelle in
-          2-FUNKTION wird NICHT geloescht, sondern als ueberholt gekennzeichnet, mit
+W-40/1-1  (P1, TRAGEND) BERICHTIGT nach dem Befund des Generators (ea418041): hier
+          stand 'die ueberholte Stelle in 2-FUNKTION' — SINGULAR. Es sind DREIZEHN
+          Stellen in VIER Blaettern, und wer eine berichtigt, haelt zwoelf
+          Widersprueche fest, die alle belegt aussehen. Das ist H-8.
+          SEINE LISTE, von ihm je mit Zeile gemessen:
+            Entscheidung 1 (review-required) — NEUN Stellen:
+              3-FORMELN:33 · 6-PRUEFUNG:12 · 7-GRENZEN:48, :54, :56, :61, :65-66, :106
+            Entscheidung 2 (blocked gegen DECISION_BLOCKED) — FUENF Stellen:
+              2-FUNKTION:18 · 6-PRUEFUNG:13 · 7-GRENZEN:73-74, :107
+          ZWEI ZAEHLWEISEN, und die inhaltliche gilt: mein Wortmuster auf
+          review-required oder DECISION_BLOCKED findet 9 Treffer (2-FUNKTION 1,
+          6-PRUEFUNG 2, 7-GRENZEN 6). Seine 13 zaehlt auch Stellen, die die Sache
+          ohne diese Woerter tragen — etwa 3-FORMELN:33 mit der Rechnung 4+3. Wer nach
+          dem Wort sucht, findet die Rechnung nicht. Gezaehlt wird am BAU-STAND und
+          nach INHALT, nicht nach Muster.
+          Der TRAEGER ist dabei zu berichtigen: die Gueltigkeitsachse haengt am PAKET
+          (ConfiguratorPackage), nicht am Schritt.
+          KEINE Stelle wird geloescht, jede wird als ueberholt gekennzeichnet, mit
           Yamas Zuordnung und dem Datum — ein nachtraeglich umgeschriebenes Blatt ist
-          kein Beleg mehr.
+          kein Beleg mehr (A-20-4).
+W-40/1-1b (P1, DER GEFAEHRLICHSTE TEIL) Die KRITERIEN K-3 und K-4 in 6-PRUEFUNG sind
+          mitzuberichtigen. Sie lauten heute woertlich: K-3 'Die Zahlenluecke ist
+          gestellt, nicht beantwortet' mit dem Fehlerfall 'eine Erklaerung fuer
+          review-required erfinden', und K-4 'blocked gegen DECISION_BLOCKED als
+          OFFENE FRAGE' mit dem Fehlerfall 'eine Abgrenzung behaupten'.
+          YAMAS ANTWORT IST DIE ERKLAERUNG UND IST DIE ABGRENZUNG. Wer K-3 und K-4
+          stehen laesst, verlangt vom naechsten Bauenden, Yamas Entscheidung zu
+          IGNORIEREN — und ein Blatt, dessen Kriterien der eigenen Vorgabe
+          widersprechen, ist an dieser Stelle unbaubar. Beide Kriterien werden
+          umgestellt: von 'Frage stellen' auf 'Yamas Antwort tragen, mit Fundstelle'.
 W-40/1-2  (P1) Die DREI vorhandenen Stufen sind als ABLESUNG beschrieben, je mit
           Fundstelle am Bau-Stand: review-required als checked, confirmed als approved
           mit kannIntegrieren, outdated als outdated mit markiereVeraltet.
