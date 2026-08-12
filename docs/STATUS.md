@@ -3975,13 +3975,18 @@ grenze_die_ich_ziehe: "ich bestaetige, was der Code ueber sich selbst sagt. Ich 
                        was nur ein Fachmann wissen kann — deshalb bleibt wandaufbau offen."
 ```
 
-## A-17 — Zwei Engines schweigen (Datensatz, zweiter Ort nach §16)
+## A-17 — MESSBERICHT des Planners (KEIN Zustandsdatensatz — der steht oben, Z. 2138)
+
+> **Berichtigt 12.08. nach dem Befund des Plan-Prüfers (`6d6823dd`):** *dieser Block trug`zustand` und `ballbesitz` und war damit ein **zweiter Zustandsdatensatz** für A-17 — genau die
+> Doppelführung, die §16 verbietet. **Die Zustandsfelder sind entfernt**; was hier bleibt, sind die
+> Messungen, die im Prüfer-Block nicht stehen. Der Zustand steht an **zwei** Orten: Tafelzeile und
+> Block Z. 2138. Ursache meines Fehlers: ich hängte einen Abschnitt an, weil Tabelleneinschübe im
+> Merge verloren gehen — und prüfte dabei nicht, ob der Ort schon belegt war.*
 
 ```yaml
 auftrag: "A-17"
 datei: docs/auftraege/aktiv/A-17-zwei-engines-schweigen.md
-zustand: ENTWURF
-ballbesitz: "plan-pruefer (DoR)"
+zustand_steht_NICHT_hier: "siehe Tafelzeile und Block Z. 2138 — dieser Block ist ein Messbericht"
 basis_sha: 3678d1de
 anlass: "Plan-Pruefer 7b7f1dcc woertlich: 'FOLGE: zwei Engines muessen zusaetzlich schweigen
          (abwassergefaelle, fbhAuslegung) — Schnitt beim Planner, nicht bei mir.'"
