@@ -6623,6 +6623,17 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## MEIN SCHWERSTER DoR-FEHLER: ich habe die Quelle geprueft und die KERNBEHAUPTUNG nicht (plan-pruefer 12.08.)
+
+```yaml
+was_ich_durchgelassen_habe: "W-40s Blatt sagt woertlich: 'Es gibt KEINEN Code, die drei Stufen fehlen im Bestand.' Das ist die ROT-LAGE des ganzen Auftrags — und sie ist FALSCH. Ich habe in meiner DoR die QUELLE gemessen (194 Zeilen, die Zahlen der Zahlenluecke belegt) und die Kernbehauptung NICHT. W-40 ist inzwischen BETRIEBSBESTAETIGT."
+SELBST NACHGEMESSEN, jede Stelle geoeffnet: "geometry/configuratorPackage.ts:25-26 fuehrt ConfiguratorStatus mit SIEBEN Stufen — draft, incomplete, generated, checked, approved, integrated, outdated. Und :105-111 traegt eine vollstaendige UEBERGANGSTABELLE, die fuer jede Stufe die erlaubten Nachfolger nennt. Im Produktivcode ohne Tests: approved in 4 Dateien, integrated in 3, outdated in 2, checked in 1. Es gibt also nicht nur Code, sondern genau das, was W-40 als VORGABE erst schaffen sollte."
+mein_anteil_und_er_ist_die_erste_prueffrage: "Meine vier Prueffragen beginnen mit ZUSTAND — stimmt der Ausgangszustand. Genau die habe ich nicht gestellt. Ich habe geprueft, ob die QUELLE existiert und ob ihre ZAHLEN stimmen, und daraus geschlossen, das Blatt sei belegt. Aber eine belegte Quelle sagt nichts darueber, ob die Rot-Lage stimmt: das Blatt zitiert einen Bericht ueber die PROZESSEBENE und behauptet daraus etwas ueber den BESTAND. Zwei verschiedene Gegenstaende, und ich habe den einen fuer den Beleg des anderen genommen."
+warum_es_schwerer_wiegt_als_meine_anderen_fehler: "Meine bisherigen Fehler betrafen einzelne Zahlen oder Formulierungen. Dieser betrifft die TRAGENDE PRAEMISSE eines Auftrags, der bereits gebaut, abgenommen, freigegeben und betriebsbestaetigt ist. Vier Rollen sind daran vorbeigegangen — ich als erste. Gefunden hat es der Generator BEIM BAU, der Release-Pruefer hat unabhaengig nachgemessen, und der Planner hat es SELBST nachgemessen statt es zu uebernehmen."
+was_daraus_folgt: "Fuer mich: bei jeder Rot-Lage, die eine ABWESENHEIT behauptet ('es gibt keinen Code', 'die Stufen fehlen', 'null Treffer'), messe ich AM GEGENSTAND und nicht an der Quelle, die darueber spricht. Eine Abwesenheitsbehauptung ist nur so gut wie die Suche, die sie stuetzt — das habe ich heute frueh beim Release-Fehlbefund selbst formuliert und hier nicht angewandt. Fuer W-40: der Auftrag ist durch, sein Ergebnis steht; ob die VORGABE jetzt neben einer vorhandenen Achse steht und was damit geschieht, gehoert dem Planner und Yama, nicht mir."
+```
+---
+
 ## Meine Leerstellen-Probe hat DREI Fehlbefunde erzeugt — Verfahren korrigiert (plan-pruefer 12.08.)
 
 ```yaml
