@@ -45,7 +45,7 @@
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | **`CODE_FERTIG`** | **Evaluator** | Bau `2143c5db` · Elter `c2c6bf4e` | **6/7** · Fachkern stark und **nachgerechnet** (Teilbarkeitsfalle: `n_min 3 > n_max 2`, verworfene Fassung liefert 333,3 statt 372–405) · Quelle selbst geöffnet, alle Zahlen treffen · **P1: die als Abweichung gemeldete Namenskorrektur ist selbst der Fehler** — die Zeile mit 372/405 heißt in der Quelle `Harzer Pfanne 7` |
 | **W-27** Dachkantentypen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
-| **W-20** Stückliste und Mengen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
+| **W-20** Stückliste und Mengen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -2697,6 +2697,16 @@ DRITTE_MESSUNG_UND_JETZT_STIMMT_SIE: "Meine zweite Zaehlung war auch nicht praez
 die_eigentliche_lehre: "Dreimal dieselbe Frage, drei verschiedene Zahlen — und der Unterschied lag jedes Mal im MESSVERFAHREN, nie im Gegenstand. Erste Messung: grep auf die Zeile (zaehlte Befund-Bloecke mit). Zweite: awk ohne Blockgrenze (zaehlte ueber Blockgrenzen hinweg). Dritte: Fenstergrenze je Vorkommen. Das ist B5 und B6 in einem Fall: wer eine Zahl behauptet, muss sagen, WIE er gezaehlt hat — und wer eine Summe meldet, muss die MENGE definieren. Beide Barrieren stehen als Auftrag BEREIT und sind noch nicht gebaut; heute war ich ihr Anwendungsfall."
 GESCHLOSSEN: "plan-pruefer 12.08. — SELBST NACHGEMESSEN mit der praezisen Methode (zustand-Feld innerhalb von 12 Zeilen nach der auftrag-Zeile): A-17 traegt jetzt genau EINEN Zustandsdatensatz (Z.2141, BEREIT); der zweite Eintrag bei Z.3987 hat kein zustand-Feld mehr und ist damit ein Befund-Block wie bei A-02/A-07/A-08/A-09. Der Planner hat den Befund angenommen ('trifft mich, behoben') und die richtige Seite entfernt — meinen BEREIT-Block hat er stehen lassen. Damit ist die dritte Bauart nicht nur benannt, sondern einmal durchgespielt: gefunden durch Zaehlen, behoben von dem, dem die Zeile gehoerte."
 was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwortet: wer legt den Block an, Planner beim Schnitt oder Plan-Pruefer bei der DoR? Solange das offen ist, kann derselbe Fall beim naechsten Auftrag wieder entstehen — behoben ist der Fall, nicht die Ursache."
+```
+---
+
+## Meine W-27-Auflage ist vollstaendig umgesetzt, W-23 nachgebessert — und eine Ursache, die ein Werkzeug entlarvt (plan-pruefer 12.08.)
+
+```yaml
+meine_auflage_umgesetzt_und_nachgemessen: "Der Planner hat W-27 berichtigt und benennt es selbst: 'meine Zahl war richtig, meine FORMULIERUNG war falsch, und sie stand an VIER Stellen'. SELBST NACHGEMESSEN, weil genau diese Vollstaendigkeit heute dreimal das Problem war: die zu weite Aussage steht nirgends mehr als Behauptung — an ihrer Stelle ein Ueberholt-Vermerk ('Hier stand: gibt es in der Insel NICHT. Das ist falsch. Die Insel hat den Ortgang'), und die Zahl ist praezisiert auf 'als STRING-LITERAL'. Der einzige verbliebene Treffer im Repositorium ist mein eigenes Zitat in meinem Befundblock. Zurueckgezogen statt geloescht, wie es sich eingespielt hat."
+W23_meldepflichten_erfuellt: "53060551 existiert, Scope selbst gemessen: sechs Dateien — Bericht (61/8), STATUS (22/3) und vier W-23-Blaetter mit kleinen Aenderungen (1/1, 1/1, 43/5, 3/3). Nichts ausserhalb des Auftragsbereichs. Ball beim Evaluator; nach §12.4 laufen ALLE Kriterien erneut, nicht nur das eine rote."
+die_ursache_ist_das_bemerkenswerte: "Er hat nicht nur den Fehler behoben, sondern seine URSACHE gemessen: 'mein Ausleseskript kuerzte die Spalte auf 14 Zeichen, Harzer Pfanne 7 hat 15'. Aus einer stillen Zeichenkuerzung wurde ein Dublettenbefund — zwei Modelle sahen gleich aus, weil ihr Name abgeschnitten war. DAS IST DIESELBE FAMILIE wie alle Befunde des Tages: nicht der Gegenstand war falsch, sondern das WERKZEUG, mit dem gemessen wurde. Heute waren es die Platzhalter-Zaehlung, der Vorlagen-Vergleich, das §3-Zeilenmuster, das Belegmuster, die Geheimnispruefung, mein A-06-Kategorienfehler — und jetzt eine Spaltenbreite."
+lage: "W-23 CODE_FERTIG beim Evaluator, W-20 und W-27 BEREIT, §3 frei (Tafel 0, Datensatz 0, im Baum gemessen). Zweigprobe sauber. Der Planner hat die Lehren des Tages in seine eigene Vorlage uebernommen — zwei neue Pflichtpruefungen und vier Nie-sagen-Zeilen. In meiner Bahn liegt nichts."
 ```
 ---
 
@@ -6259,8 +6269,16 @@ der_stille_fehler_dieses_werkzeugs: "Kriterium W-27-2 verlangt ALLE VIER joinTyp
 ```yaml
 auftrag: "W-20"
 datei: docs/auftraege/aktiv/W-20-stueckliste-und-mengen.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft — Ziel BESCHRIEBEN, also Ablesung statt Vorgabe)
+dor_gefunden_wo_sie_steht: "Blattkopf sagt status: ENTWURF und dor_beleg 0 — die DoR IST aber
+  gefahren und steht in 2c0e4ede ('W-20 UND W-27 DoR BESTANDEN, beide BEREIT'). Dieselbe Lage wie
+  bei A-16: der Zustand hinkt im Blatt nach. Diesmal habe ich NICHT blockiert, weil die DoR
+  belegbar ist — der Unterschied zu A-16 ist, dass es dort keinen einzigen Beleg gab."
+warum_W20_vor_W27: "Beide sind P2 und beide DoR-bestanden. W-20 ist eine ABLESUNG vorhandenen Codes
+  (holzMengen.ts) und setzt auf der W-23-Quelle auf, die ich gerade gemessen habe — Ziegelmenge
+  ueber F-011 mal Bedarf_Stk_m2. W-27 traegt zudem eine AUFLAGE des Plan-Pruefers, die Sorgfalt
+  verlangt: null Treffer eines MUSTERS belegt nicht die Abwesenheit der SACHE."
 basis_sha: 8300aa59
 anlass: "Klasse C, letztes voraussetzungsfreies Werkzeug — und der Zeitpunkt ist kein Zufall: W-23
          ist gerade gebaut (BESCHRIEBEN) und F-053 eingetragen, genau die zwei Zulieferungen, die
