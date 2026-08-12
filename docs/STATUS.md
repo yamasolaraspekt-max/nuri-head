@@ -1930,6 +1930,24 @@ naechster_schritt: "Planner verschiebt A-15-9/-10/-11 in die Hauptliste (Verschi
 ```
 ---
 
+## BEREIT — W-09/1 (Block angelegt; dritter der neun unsichtbaren)
+
+```yaml
+auftrag: "W-09/1"
+titel: "Sieben Module, 698 Zeilen, ZWOELF Zusagen — und DIN 18065 mitten drin"
+datei: docs/auftraege/aktiv/W-09-treppe-beschreiben.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 65f3ece4
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): ALLE ZAHLEN EINZELN NACHGEZAEHLT UND EXAKT — treppenBerechnung 114/6, treppenTypen 153/4, treppenBauarten 38/3, treppe2D 93/4, treppe3D 74/4, treppeSvg 142/5, treppeObjekt 84/4; Summe 698 Zeilen und 30 Exporte, beide gehen auf; zwoelf Zusagen im Testverzeichnis, und DIN 18065 steht zweimal woertlich in treppenBerechnung.ts. Elf Kriterien, §5-Block, Erstnutzer, zwei Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden. DIE ZULIEFERBEZIEHUNG IST SAUBER GESCHNITTEN: das Blatt nennt A-15 an sieben Stellen und ordnet sich richtig ein — W-09/1-5 LIEFERT die Treppen-Zeilen, A-15-11 ZITIERT sie mit Commit-Verweis statt sie zu wiederholen. Zwei Auftraege, eine Messung, keine zweite Wahrheit; genau die Form, die bei den Typ-Doppelungen gefehlt hat."
+fachliche_bedeutung: "Dieses Blatt ist keine Doku-Uebung wie die uebrigen W-Blaetter: die Treppe traegt DIN 18065, und Yamas eigenes Gegenbeispiel gegen den zu engen Planner-Satz lautete 'Treppe -> DIN 18065, Sturzrisiko'. Damit steht W-09 in derselben Reihe wie N-003: eine Rechnung, deren Ergebnis in einem Bauwerk landet. Der Bau BESCHREIBT nur — aber was er beschreibt, entscheidet spaeter, ob die Software an dieser Stelle 'bestanden' sagen darf."
+hinweis_ohne_restpunkt: "Zum dritten Mal in Folge (A-14, A-15, W-09) fehlt der RUECKWEG als eigene Zeile im §5-Block. Einzeln ist es trivial (Doku, git revert), dreimal ist es ein MUSTER der Blattvorlage, kein Versehen des einzelnen Schnitts. Kein Restpunkt — aber der Planner sollte die Zeile in die Vorlage nehmen, sonst korrigiert sie jede Runde jemand anders im Kopf."
+herkunft_des_blocks: "Dritter der neun unsichtbaren Blaetter (Befund 87e49ccd), Block mit dem Votum angelegt."
+naechster_schritt: "Generator zieht W-09/1 (§3 beachten; A-14 ist IN_ARBEIT). Die Treppen-Zeilen aus -5 gehen als Zulieferung an A-15."
+```
+---
+
 ## Ballbesitz-Uhr — Stand 05.08. 00:0x
 
 | Rolle | Gegenstand | seit | läuft oder still |
