@@ -187,7 +187,12 @@ Der `IN_ARBEIT`-Commit enthält den **Befehl mit Ausgabe**, der zeigt, dass kein
 `IN_ARBEIT` stand **Zählbare Form (E2 aus Prüfung 03): mindestens zwei Befehlszeilen und zwei Ausgabewerte, je Ort einer.** — **an beiden Orten geprüft**, weil der Zustand heute doppelt geführt wird:
 
 ```text
-Tafelzeile      grep -cE '^\| \*\*[AW]-[0-9]+.*`IN_ARBEIT`' docs/STATUS.md
+Tafelzeile      grep -cE '^\| \*\*[A-Z]+-?[0-9]+.*`IN_ARBEIT`' docs/STATUS.md
+                (BERICHTIGT 12.08.: das Muster [AW] war blind fuer B-, M- und P-Auftraege —
+                 fuenf Tafelzeilen. Befund des Generators c528161c, entschieden in
+                 docs/ENTSCHEIDUNG-PARAGRAF-3-SCHRANKE-BERICHTIGT.md. Die zwei NACHHER-
+                 Protokolle weiter unten bleiben UNANGETASTET: sie sind Belege einer
+                 gefahrenen Messung, und ein nachtraeglich umgeschriebener Beleg ist keiner.)
 Zustandsfeld    grep -c '^zustand: IN_ARBEIT' docs/STATUS.md
 beide 0  ->  frei.   Der Beleg gehoert in DENSELBEN Commit, der IN_ARBEIT setzt.
 ```
