@@ -330,3 +330,133 @@ wirkung: "Das Commit-Tor traegt jetzt: Drei-Nein-Regel (A-08), Index-Waechter (A
   (A-04) und Melder am leeren Ergebnis (A-10). §13 ist ab jetzt zaehlbar."
 naechster_zustand: "BETRIEBSBESTAETIGT — gehoert Yama (9 Auftraege offen)"
 ```
+
+---
+
+## §10 B5 — RELEASE_FREI (release-pruefer, 12.08.)
+
+```yaml
+auftrag: "B5"
+abnahme_commit: "157576c2"
+elter: "2a95ab40"
+evaluator_votum: "b7ab49c5 — sieben von sieben"
+votum: RELEASE_FREI
+fehlerklasse: KEINE
+veroeffentlichung: "AUSGESETZT — der Push wird abgelehnt, siehe Abschnitt Transportsperre"
+
+messtisch_gegengelesen:
+  kriterien_im_blatt: "sieben, B5-1 bis B5-7 (grep -oE, eindeutige Nummern gelesen)"
+  belegt_im_blatt: "sieben, Zeilen 219-262, jedes mit eigener Rohausgabe"
+  deckung: "7 von 7 — vollstaendig. Die Lehre aus W-04 (Kriterienzahl gegen belegte
+    Zeilen zaehlen) ist hier ohne Beanstandung: der Messtisch traegt Mutation,
+    Gegenproben und einen selbst offengelegten P2."
+  wo_das_votum_steht: "Die COMMIT-BOTSCHAFT nennt keine Kriteriennummer — mein Muster
+    fand 0 von 7. Das war MEIN Fehler in der Suchrichtung, nicht ein Mangel des Votums:
+    der Messtisch steht im BLATT, nicht in der Botschaft. Ich habe die Null gelesen
+    statt gemeldet — genau das, was B5 verlangt, angewandt auf B5."
+
+grundtor:
+  kette: "157576c2 ist Vorfahr von auto/hausplaner-integration — is-ancestor, exit 0"
+  scope: "9 Dateien, 341+/4-"
+  must_preserve: "resources/ 0 Dateien · app/ 0 · database/ 0 — drei Richtungen"
+  geheimnisse: "0 (api_key|secret|password|token|PRIVATE KEY ueber den ganzen Diff)"
+  bash_n: "scripts/commit-pruefen.sh — exit 0"
+  scripts_suite: "107/107, fail 0, ueber alle fuenf Testdateien einzeln aufgerufen"
+
+barriere_selbst_ausgeloest:
+  warum: "B5 BAUT eine Barriere. Sie zu lesen belegt nicht, dass sie feuert."
+  probe_1: "'der Begriff kommt zweimal vor, also ist er gebaut' -> B5-WARNUNG erschienen,
+    exit=0, Commit 047fe693 ENTSTANDEN. Warnung, keine Sperre — wie das Blatt sagt."
+  probe_2: "'Suite 1692/1692 gruen, 0 Platzhalter' -> 0 Warnungen, Commit 826e721d entstanden."
+  probe_3: "'drei Treffer gemessen, Trefferzeilen: geometry/treppe.ts:42, :57, :91'
+    -> 0 Warnungen, Commit 3e0d9287 entstanden."
+  meine_erste_probenreihe_war_wertlos: "Ich rief das Tor dreimal mit docs/x.md auf — eine
+    Datei, die es nicht gibt. Das Tor brach mit 'FEHLT' ab, VOR der B5-Pruefung. Die zwei
+    'schweigenden' Gegenproben schwiegen also nicht, sie liefen nie. Danach mit
+    docs/STATUS.md: 'UNVERAENDERT', wieder Abbruch vor der Pruefung. Erst eine echt neue
+    Datei hat gemessen. Ich haette drei Nullen als Beleg genommen, die nichts belegen —
+    dieselbe Klasse wie der Befund, den B5 abstellt, bei der Pruefung von B5."
+  aufgeraeumt: "reset --hard 157576c2 + clean, 0 offene Eintraege, Wegwerf-Commits weg"
+
+prozessrecht_geprueft:
+  frage: "Der Bau aendert docs/ARBEITSREGELN.md und hebt auf Fassung 1.5. §1 nennt in
+    Zeile 7 'Autoritaet: Yama'; alle frueheren Fassungen tragen einen Yama-Bezug
+    ('auf Yamas Anweisung', 'auf ausdrueckliche Anweisung Yamas'). 1.5 traegt in der
+    Fassungszeile nur '(Generator, Auftrag B5)'. Das sah nach Eigenmacht aus."
+  gemessen: "Das Blatt sagt anlass: 'Yamas Auflage 0b vom 11.08. 22:12' und ueberschreibt
+    den Regeltext mit 'Die Regel, woertlich wie Yama sie gesetzt hat'."
+  ergebnis: "Der Geltungsakt LIEGT VOR. Der Generator hat verankert, was Yama gesetzt hat,
+    im Wortlaut — das ist Ausfuehrung, nicht Rechtsetzung. Kein Blocker."
+  hinweis_ohne_schwere: "Die Fassungszeile selbst nennt die Herkunft nicht; sie steht nur
+    im Auftragsblatt. Wer spaeter nur das Regelwerk liest, sieht eine Fassung ohne
+    Autoritaet. Ein Satz 'auf Yamas Auflage 0b vom 11.08.' wuerde das schliessen.
+    Kein Befund, ein Hinweis — und er gehoert dem Planner, nicht mir."
+  meine_eigene_lage: "Ich habe Fassung 1.4/1.4.1/1.4.2 selbst gehoben. Bevor ich dem
+    Generator etwas vorwerfe, habe ich das nachgesehen: 1.4 war die Vertretungsregel,
+    und die traegt in Zeile 171 'auf Yamas muendliche Weisung vom 05.08.2026'.
+    Ebenfalls gedeckt. Geprueft, weil der Vorwurf sonst auf mich selbst zurueckfaellt."
+
+offen_ohne_blockade:
+  p2_musterluecke: "Das Belegmuster verlangt eine Dateiendung und erkennt 'Z.157',
+    'treppenTypen:4', 'Zeile 39' nicht — vier vermeidbare Warnungen in dreissig Commits.
+    Vom Evaluator gemessen und offengelegt. Ball beim Generator/Planner, blockiert nicht."
+```
+
+## §10 A-18 — RELEASE_FREI (release-pruefer, 12.08.)
+
+```yaml
+auftrag: "A-18"
+abnahme_commit: "492a6a71"
+evaluator_votum: "7be1a381 — acht von acht"
+votum: RELEASE_FREI
+fehlerklasse: KEINE
+veroeffentlichung: "AUSGESETZT — Push abgelehnt"
+
+messtisch_gegengelesen:
+  kriterien_im_blatt: "acht, A-18-1 bis A-18-8"
+  belegt_im_blatt: "acht, Zeilen 231-287, messtisch_alle_acht"
+  deckung: "8 von 8 — vollstaendig"
+
+grundtor_voll_weil_produktivcode:
+  beruehrter_produktivcode: "resources/planner/hausplaner/geometry/wandaufbau.ts (+24)
+    und __tests__/wandaufbau.test.ts (+17) — deshalb das ganze Tor, nicht der Doku-Scope"
+  kette: "492a6a71 ist Vorfahr des Zweigs — is-ancestor, exit 0"
+  tsc_hausplaner: "clean, keine Ausgabe"
+  insel_suite: "1694/1694, fail 0 (Elter 1693 — der neue Test ist der Zuwachs)"
+  bundle: "neu gebaut, sha256 vor und nach identisch (1ae9d8c98a89210d…) — byte-gleich"
+  php_artisan_test: "888 passed, 3119 assertions"
+  geheimnisse: "0"
+
+fachlicher_bezug: "A-18 ist der Vorbehalt, den ich Yama am 12.08. auf seine Frage
+  'wie loesen wir gemeinsam fachlich die Aufgabe mit Wandaufbau' vorgeschlagen habe:
+  der U-Wert nennt seine eigene Grenze, statt dass ein Taupunkt gerechnet wird, den
+  die Datenstruktur nicht hergibt (Schicht kennt dicke und lambda, keine Feuchtegroesse).
+  Aus dem Vorschlag ist ein Auftrag geworden, aus dem Auftrag Code. Ich pruefe ihn
+  als Release-Pruefer und nehme ihn NICHT ab — das hat der Evaluator getan."
+
+zustandsluecke_die_ich_NICHT_selbst_schliesse:
+  befund: "A-18 steht in docs/STATUS.md auf CODE_FERTIG, obwohl das Votum ABGENOMMEN
+    lautet. Der Evaluator hat das bewusst so gelassen und es in 7be1a381 gesagt:
+    'VOTUM ZUERST INS BLATT, Zustand folgt — der Generator meldet in diesem Moment
+    ungespeichert B6 fertig, und mein Commit wuerde seine Arbeit mitnehmen.'"
+  meine_lage: "Dieselbe. docs/STATUS.md traegt seit Stunden durchgehend fremde offene
+    Aenderungen; jeder Commit von mir naehme sie mit. Deshalb steht dieses Protokoll
+    hier und nicht dort. Nachgezogen wird, sobald die Datei ruhig ist —
+    beide Orte, Tafelzeile UND Datensatz."
+```
+
+## Transportsperre — 12.08., der eigentliche Blocker
+
+```yaml
+lage: "Der Push auf fork und backup-private wird abgelehnt. Drei Versuche in drei
+  Formen (HEAD:refs/heads/…, Zweigname, aus dem Pruef-Worktree mit SHA), alle drei
+  abgewiesen. Danach habe ich aufgehoert — eine abgelehnte Ausfuehrung ist eine
+  Entscheidung, kein Hindernis, das man umgeht."
+stand: "lokal 11 Commits vor fork/backup-private (beide auf 5579a6c0). Reines
+  Vorspulen, keine Gabelung — is-ancestor bestaetigt."
+was_sich_staut: "Zwei fertige Releases (B5, A-18) mit vollem gruenen Tor, der Wurzelfix
+  des gegabelten Zweigs, elf nachgezogene Tafelzeilen, und die laufende Arbeit von
+  Generator, Planner, Plan-Pruefer und Evaluator."
+gehoert_yama: "git push fork auto/hausplaner-integration
+                git push backup-private auto/hausplaner-integration"
+```
