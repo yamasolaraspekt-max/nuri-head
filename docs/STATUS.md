@@ -2153,7 +2153,7 @@ naechster_schritt: "Generator zieht A-17 (§3 beachten; die Schlange ist lang, a
 ```
 ---
 
-## ⚠ ZWEI DATENSAETZE FUER EINEN AUFTRAG — A-17, und es ist die dritte Bauart der Doppelfuehrung
+## ✅ GESCHLOSSEN 12.08. — ZWEI DATENSAETZE FUER EINEN AUFTRAG (A-17), die dritte Bauart der Doppelfuehrung
 
 ```yaml
 gemessen: "A-17 hat ZWEI Bloecke in docs/STATUS.md: Zeile 2141 traegt 'zustand: BEREIT / ballbesitz: generator' (meiner, aus der DoR-Runde 8c2272cd), Zeile 3965 traegt 'zustand: ENTWURF / ballbesitz: plan-pruefer (DoR)' — angelegt vom Planner beim Schnitt (7d83978e), mit der Ueberschrift 'Datensatz, zweiter Ort nach §16'. Tafelzeile und Blattkopf sagen beide BEREIT; nur dieser eine Block sagt ENTWURF."
@@ -2166,6 +2166,8 @@ RICHTIGSTELLUNG_SOFORT: "MEIN SATZ 'A-17 ist der einzige Fall' IST FALSCH und st
 was_ich_daraus_lerne: "Die richtige Zaehlung ist nicht 'wie oft kommt auftrag: X vor', sondern 'wie viele ZUSTANDSDATENSAETZE (Bloecke mit einem zustand-Feld) gibt es je Auftrag'. Meine Wache misst ab jetzt das. Und die Reihenfolge: erst messen, dann committen — bei einer Zahl, die ich in einer Botschaft behaupte, IMMER."
 DRITTE_MESSUNG_UND_JETZT_STIMMT_SIE: "Meine zweite Zaehlung war auch nicht praezise — mein awk suchte das naechste zustand-Feld ohne Blockgrenze und meldete fuer ALLE fuenf Auftraege 'zwei'. DRITTE MESSUNG, je Vorkommen mit Fenstergrenze (zustand innerhalb von 12 Zeilen nach der auftrag-Zeile): A-02 hat EINEN Datensatz (der zweite Eintrag bei Z.2689 traegt kein zustand), ebenso A-07, A-08 und A-09 — je genau EINER. A-17 hat ZWEI: Z.2141 -> BEREIT (Z.2144), Z.3979 -> ENTWURF (Z.3981). MEIN URSPRUENGLICHER SATZ WAR ALSO RICHTIG, meine erste Richtigstellung war UEBEREILT, und erst die dritte Messung traegt. Ich lasse beide Korrekturen stehen, statt die Spur zu glaetten: die Kette 'Behauptung -> zu breite Widerlegung -> praezise Messung' ist genau das, was ein Pruefer nachvollziehbar halten muss, auch wenn sie ihn schlecht aussehen laesst."
 die_eigentliche_lehre: "Dreimal dieselbe Frage, drei verschiedene Zahlen — und der Unterschied lag jedes Mal im MESSVERFAHREN, nie im Gegenstand. Erste Messung: grep auf die Zeile (zaehlte Befund-Bloecke mit). Zweite: awk ohne Blockgrenze (zaehlte ueber Blockgrenzen hinweg). Dritte: Fenstergrenze je Vorkommen. Das ist B5 und B6 in einem Fall: wer eine Zahl behauptet, muss sagen, WIE er gezaehlt hat — und wer eine Summe meldet, muss die MENGE definieren. Beide Barrieren stehen als Auftrag BEREIT und sind noch nicht gebaut; heute war ich ihr Anwendungsfall."
+GESCHLOSSEN: "plan-pruefer 12.08. — SELBST NACHGEMESSEN mit der praezisen Methode (zustand-Feld innerhalb von 12 Zeilen nach der auftrag-Zeile): A-17 traegt jetzt genau EINEN Zustandsdatensatz (Z.2141, BEREIT); der zweite Eintrag bei Z.3987 hat kein zustand-Feld mehr und ist damit ein Befund-Block wie bei A-02/A-07/A-08/A-09. Der Planner hat den Befund angenommen ('trifft mich, behoben') und die richtige Seite entfernt — meinen BEREIT-Block hat er stehen lassen. Damit ist die dritte Bauart nicht nur benannt, sondern einmal durchgespielt: gefunden durch Zaehlen, behoben von dem, dem die Zeile gehoerte."
+was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwortet: wer legt den Block an, Planner beim Schnitt oder Plan-Pruefer bei der DoR? Solange das offen ist, kann derselbe Fall beim naechsten Auftrag wieder entstehen — behoben ist der Fall, nicht die Ursache."
 ```
 ---
 
