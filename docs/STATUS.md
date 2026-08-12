@@ -28,6 +28,75 @@
 | **W-13** Auswahl und Griffe | **`RELEASE_FREI`** | Yama | `a62ae7c6` · Basis `193681cd` | 10/10 · **oben schlägt nah** (Zeichenreihenfolge vor Distanz) · `waehlbar !== false`, nicht `=== true` · Modifikator-Vorrang als Kette · **einziges Klasse-A-Werkzeug mit Registry** · **0 dedizierte Zusagen** bei 321 Z · 0/0/0 |
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
+| **W-07N** `2-FUNKTION` + Azimutgrenze | `ENTWURF` | **Plan-Prüfer** | Schnitt `1734aa3b` · Basis `3d368625` | Nachbesserung §12.5 · 9 Platzhalter in `2-FUNKTION` gemessen · **schließt W-07 auf BESCHRIEBEN** |
+| **W-09** Treppe | `ENTWURF` | **Plan-Prüfer** | Schnitt `6e2949a7` · Basis `65f3ece4` | sieben Module, 698 Z, **12 Zusagen** · Grobzahl stimmt aufs Wort · **letzter offener Schnitt der Klasse A** |
+| **A-14** N-003-Vorbehalt ins Ergebnis | `ENTWURF` | **Plan-Prüfer** | Schnitt `29f8f372` · Basis `1e09280d` | **RISIKO-Vorrang** (Yama 12.08.): Plakette „Alle Prüfungen bestanden" bei 2 von 6 Nachweisen · Urteilstext-Feld |
+| **A-15** Fachaussage oder Hinweis | `ENTWURF` | **Plan-Prüfer** | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
+| **B5** Zählergebnis mit Trefferzeilen | `ENTWURF` | **Plan-Prüfer** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
+| **B6** Summe braucht Erhebung | `ENTWURF` | **Plan-Prüfer** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
+| **W-15** Material und Farbe | `ENTWURF` | **Plan-Prüfer** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
+| **W-01N** Suite-Zahl zahlfrei | `ENTWURF` | **Plan-Prüfer** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
+| **W-21L** Lattung, fehlender Schritt | `ENTWURF` **BLOCKIERT** | **Yama** | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
+
+### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
+
+> **Anlass: Yamas Auftrag „gib dir und den anderen Aufgaben".** *Grundlage ist ausschließlich die
+> Tabelle oben — nicht meine Notizen. **Und der Befund, der die Verteilung überhaupt nötig machte:
+> NEUN geschnittene Blätter hatten keine Statuszeile** und waren damit nach §16 nicht übergeben. Sie
+> stehen jetzt oben; ohne Zeile sieht der Plan-Prüfer ein Blatt nicht.*
+
+```text
+YAMA                ELF Auftraege auf RELEASE_FREI, alle mit Ball bei dir:
+                      A-09 · A-11 · W-01 · W-02 · W-05 · W-08 · W-11 · W-13 ·
+                      W-21 · W-22 · A-13
+                    -> Veroeffentlichung. A-13 ZUSAETZLICH: die drei SELECTs auf
+                       HETZNER vor dem Deploy (lokal 0/0/0, dort ungemessen — und
+                       dort schaerfer: Altsatz + Model-Validierung + 0 catch).
+                    OFFENE FRAGEN, die niemand sonst entscheiden kann:
+                      · Achse 2 je Engine (A-15) — mit deiner Regel jetzt als Liste
+                      · brauchen wir die sieben Archiv-Services? (Extraktoren-Bericht)
+                      · Deckungsart-/Lattweiten-Tabelle -> entsperrt W-21L und W-23
+                      · Tafel-Inventur 111 gegen 42: vor oder nach dem C-Weg?
+
+PLAN-PRUEFER        NEUN DoR, Reihenfolge nach Wirkung, nicht nach Alter:
+                      1  A-14   RISIKO — Plakette behauptet einen Nachweis (Yamas Vorrang)
+                      2  W-07N  schliesst W-07 -> Zaehler 10, entsperrt VIER C-Werkzeuge
+                      3  W-09   letzter offener Schnitt der Klasse A -> Zaehler 11
+                      4  B5+B6  EMPFEHLUNG: EIN Bau. Geteilte Datei, Form, Pruefweg.
+                      5  A-15   Messauftrag, darf nach §3 Satz 2 parallel laufen
+                      6  W-01N  klein, SPEC-Rest
+                      7  W-15   erst NACH W-07N und W-09 (Zaehler soll 11 erreichen,
+                                bevor die erste ENTWORFEN-Zeile dazukommt)
+                    DAZU: §18a (Fassung 1.3, sieben Hausregeln) GEGENLESEN — Yamas
+                    Vorgabe: "Planner legt vor, Plan-Pruefer liest gegen."
+
+GENERATOR           wartet auf DoR. §3 ist frei (0 IN_ARBEIT).
+                    Wenn A-14 freigegeben ist: es beruehrt geometry/ + app/dashboard/
+                    und ist disjunkt zu allem anderen Geschnittenen.
+
+EVALUATOR           W-04 steht auf RELEASE_BLOCKED mit Ball bei dir — der einzige
+                    blockierte Auftrag der Tafel. Das ist die dringendste Abnahmearbeit.
+
+RELEASE-PRUEFER     DIE SAMMEL-KONTROLLE IST FAELLIG. Meine Entscheidung vom 12.08.
+                    (docs/ENTSCHEIDUNG-RELEASE-STATION-FUER-DOKU.md, von Yama
+                    angenommen) loest sie ab DREI abgenommenen Doku-Stufen aus.
+                    Gemessen: W-05, W-08, W-11, W-13, W-21, W-22 stehen auf
+                    RELEASE_FREI — SECHS, also doppelt ueber der Schwelle.
+                    Die EINE Pflichtfrage: "Traegt jeder Messtisch JEDE Kriterienzeile
+                    seines Auftrags — gezaehlt, nicht ueberflogen?" Antwortform: Zahl
+                    je Bericht plus die fehlenden Nummern (B5: die Zahl allein reicht
+                    nicht).
+
+PLANNER (ich)       Wecker laeuft, alle 10 Minuten Rundgang: neue Commits, §3-Stand,
+                    Abschlusszaehler, Zustand der neun. NUR messen und melden.
+                    Eigene Arbeit: keine offene. Alles Geschnittene liegt bei anderen
+                    Stationen; die vier offenen Fragen liegen bei Yama.
+                    Wenn Yama die Tafel-Inventur freigibt, ist das mein naechster Schnitt.
+```
+
+> **Was ich ausdrücklich NICHT verteile:** *die Reihenfolge der Veröffentlichungen (Yamas Sache), die
+> Abnahmereihenfolge des Evaluators (seine Station), und ob die Sammel-Kontrolle heute oder morgen
+> läuft.* **Ich sage, dass sie fällig ist und warum — nicht wann.**
 
 ### ⚠ MITTEILUNG AN ALLE ROLLEN — das Commit-Tor verlangt ab `28760966` eine Rollenmarke (A-11)
 
@@ -1687,6 +1756,20 @@ warum_ich_das_richtigstelle: "Nicht um den Fund kleinzureden — er gehoert noti
 sammel_kontrolle_3: "GEMESSEN unmittelbar davor: VIER Doku-Stufen stehen ABGENOMMEN beim Release-Pruefer (W-01/1, W-02/1, W-08/1, W-13/1), claim_release je 0. Die Schwelle der Planner-Regel (ab DREI) ist ueberschritten. Mit W-13/1 ist die KLASSE A vollstaendig durchgelaufen: neun Blaetter geprueft, gebaut, abgenommen."
 claim_release: "plan-pruefer 12.08.: Release-Station fuer W-01/1 + W-02/1 + W-08/1 + W-13/1 besetzt (Sammel-Kontrolle 3). NEUE REGEL AUS DER ACHTEN KOLLISION ANGEWANDT: die Instanz wird ERST GESTARTET, NACHDEM dieser Tor-Commit durch ist — ein Claim im Arbeitsbaum ist fuer andere Instanzen unsichtbar und damit kein Claim."
 eigener_werkzeugfehler: "Dieser Block musste zweimal geschrieben werden: mein erster Versuch enthielt einen Shell-Syntaxfehler (fehlendes fi), der die GANZE Kommandozeile verwarf — auch das Schreiben. Ich hielt ihn faelschlich fuer geschrieben, bis das Tor 'UNVERAENDERT' meldete und ich nachmass. Das Tor hat den Irrtum gefangen, nicht ich; ohne seine Meldung haette ich einen Block fuer gesetzt gehalten, der nie existierte."
+```
+---
+
+## Kontrolle 3: der DRITTE Ausgang + zwei Befunde von mir (plan-pruefer 12.08.)
+
+```yaml
+ergebnis: "Alle VIER Doku-Stufen RELEASE_FREI (W-01/1, W-02/1, W-08/1, W-13/1). Damit ist die Klasse A vollstaendig durchgelaufen: neun Blaetter geprueft, gebaut, abgenommen, freigegeben."
+der_dritte_ausgang: "Die Pflichtfrage hat einen Ausgang geliefert, den weder Kontrolle 1 (ein Fund) noch Kontrolle 2 (kein Fund) hatte: die Trennlinie ist nicht SORGFALT, sondern die RUNDENZAHL. Beide vollstaendigen Messtische gehoeren zu EINRUNDIGEN Auftraegen (W-08 12/12, W-13 10/10), beide unvollstaendigen zu Auftraegen MIT NACHBESSERUNG (W-01 5 von 8, W-02 6 von 9). Das ist kein Zufall zweier Instanzen, sondern ein Muster mit einer benennbaren Ursache."
+paragraf_12_4_selbst_gelesen: "§12.4 ist eindeutig und ich habe den Wortlaut nachgeschlagen: 'die vorher gruenen — Pruefbefehle erneut fahren (sie sind Befehle, das kostet wenig)', mit der Begruendung 'eine Reparatur ist eine Aenderung, und Aenderungen brechen Nachbarn'. Der W-02-Abschnitt traegt sogar die Ueberschrift 'alle Kriterien erneut, nicht nur das rote' und liefert sechs von neun. Bei W-01 ist es schaerfer, und der Release-Pruefer hat den Punkt praezise getroffen: die Nachbesserung aenderte GENAU die Datei, die Kriterium -2 beschraenkt (3-FORMELN.md, 29 -> 38 Zeilen) — der von §12.4 selbst genannte Grund, und ausgerechnet dieser Nachbar wurde nicht nachgemessen."
+warum_es_trotzdem_frei_ist: "Er hat alle SECHS fehlenden Zeilen selbst gemessen, alle sechs halten. Damit ist es eine Luecke des NACHWEISES, nicht der Sache: P2 BEWEIS, mit seiner Messung geschlossen, kein Block. Genau die Unterscheidung, die er schon bei W-04 getroffen hat ('es steht da' ist nicht 'das Kriterium ist erfuellt') — nur diesmal in die andere Richtung aufgeloest, weil er selbst gemessen hat statt es der Abnahme zurueckzugeben."
+prozessbefund_zur_pruefrunde: "DIE §12.4-LUECKE BEI ZWEIRUNDIGEN ABNAHMEN gehoert in die naechste Prozesspruefung, und zwar mit seiner Diagnose: 'die Kriterienliste existiert, niemand hakt sie ab'. Es ist dieselbe Bauart wie die must_preserve-Beweisform: die Regel steht, der NACHWEIS ihrer Anwendung fehlt. Und die Gegenform ist erprobt — die Pflichtfrage der Sammel-Kontrolle hat sie gefunden, obwohl beide Voten selbst 'alle Kriterien' behaupten."
+mein_befund_1_fassungszeile: "SELBST GEMESSEN: die ARBEITSREGELN tragen seit 57e582af eine FASSUNG 1.3 (§19-Aenderungsverzeichnis Z.649: 'Fassung 1.3 — 12.08.2026, sieben Hausregeln auf Yamas Anweisung'), aber die FASSUNGSZEILE IM KOPF (Z.4) endet bei 1.2.2 — 'grep 1.3 seit' liefert 0. Die erste Stelle, an der jede Rolle nachsieht, welche Fassung gilt, nennt die geltende Fassung nicht. Das ist kein Formfehler: §16 und §1 leben davon, dass die Fassung eindeutig ist, und ein Blatt, das sich auf 'die geltende Fassung' beruft, zeigt heute auf 1.2.2. Ball beim Planner (seine Datei, sein Schnitt); ich fasse das Regelwerk nicht an."
+mein_befund_2_zur_fassung_selbst: "Nach dem P-01-PRAEZEDENZFALL (Yamas Weisung 05.08.) wird eine Regelfassung vom Plan-Pruefer geprueft und ihre Freigabe macht sie verbindlich. Fassung 1.3 ist auf YAMAS ANWEISUNG entstanden — nach §1 Rangfolge 1 gedeckt, da liegt kein Verstoss. ABER: geprueft habe ich sie nicht, und niemand hat sie mir vorgelegt. Ich stelle das fest, ohne eine Pruefung an mich zu ziehen: wenn Yama sie will, beauftragt er sie; wenn nicht, gilt seine Weisung unmittelbar. Der Unterschied gehoert nur sichtbar gemacht, damit nicht in einer Woche jemand fragt, warum 1.2.2 ein Votum hat und 1.3 keins."
+an_yama_gemessen: "ZWOELF Stufen warten jetzt auf die fork-Sicherung, nicht mehr acht — der Push wurde in dieser Kontrolle dreimal in drei Schreibweisen verweigert. Das ist der groesste Einzelposten: zwoelf abgenommene und freigegebene Auftraege ohne jede Kopie ausserhalb dieser Maschine."
 ```
 ---
 
