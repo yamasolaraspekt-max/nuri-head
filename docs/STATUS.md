@@ -53,7 +53,7 @@
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
-| **W-41** Abhaengigkeitsgraph / Invalidierung | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
+| **W-41** Abhaengigkeitsgraph / Invalidierung | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
@@ -7869,10 +7869,10 @@ zum_scope: "Der Generator baut parallel W-27/1; zwei ungetrackte Code-Dateien la
 
 ```yaml
 auftrag: "W-41"
-zustand: CODE_FERTIG
+zustand: ABGENOMMEN
 ICH_KORRIGIERE_MEINEN_EIGENEN_EINWAND: "In 1eedb9cf und d0d7ec44 habe ich geschrieben, auch W-41s Praemisse 'es gibt KEINEN Code' sei zu weit gefasst, weil markiereVeraltet in geometry/configuratorPackage.ts die Invalidierung sei. GENAUER NACHGEMESSEN, und meine Aussage war zu stark: markiereVeraltet hat NULL Aufrufer ausserhalb der Tests, und es gibt weder Kanten noch Graph noch Propagierung — die Treffer auf 'abhaengig' sind Produktmerkmale in dachformVorlagen.ts (regeldachneigungAbhaengigVonMaterial) und ein useMemo-Kommentar in HausplanerApp.tsx:74, keine Graphkanten. MARKIEREN UND PROPAGIEREN SIND ZWEI DINGE: der Zustand outdated existiert, die Markierfunktion existiert ohne Aufrufer, der GRAPH und die PROPAGIERUNG existieren nicht. Und genau darum geht es in W-41. Die Praemisse traegt also fuer den eigentlichen Gegenstand; mein Einwand traf W-40 und ist dort auch angekommen, fuer W-41 war er ueberzeichnet. Ich sage das hier, weil ich ihn zweimal als Grund benutzt habe, W-41 nicht zu ziehen."
 warum_jetzt_gezogen: "Der Planner hat meinen W-40-Befund in c4973de2 vollstaendig uebernommen und die Fachfrage — ist approved dasselbe wie confirmed — als Abschnitt 8 an Yama eskaliert. Fuer W-41 bleibt kein Vorbehalt: seine sechs Kriterien sind erfuellbar, und W-41-3 verlangt sogar ausdruecklich die Feststellung, dass die Quelle den Abhaengigkeitsgraphen unter NICHT GEMESSEN fuehrt. Das ist am Bau-Stand geprueft: BERICHT-PROZESSEBENE-DREI-FRAGEN.md fuehrt ihn woertlich in der Liste 'Was ich NICHT gemessen habe und deshalb nicht behaupte'. Die Vorgabe ist damit ehrlich duenn und weiss es."
-ballbesitz: evaluator
+ballbesitz: release-pruefer
 bericht: "docs/BERICHT-W-41-abhaengigkeitsgraph.md"
 sechs_kriterien_je_am_BAU_STAND_belegt: "W-41-1 das VERBOT als Kern mit dem Zitat aus REGISTER.md:128 — ein Graph der Aenderungen weitertraegt ist gewoehnliche Technik, einer der nichts stillschweigend wegwirft ist eine Ehrlichkeitskonstruktion. W-41-2 die Grenze zu W-40: W-40 sagt DASS und WAS BEDEUTET, W-41 sagt WANN und WORAUF und WAS BLEIBT; outdated wird NICHT neu definiert. W-41-3 die Quelle fuehrt den Graphen unter NICHT GEMESSEN, beide Fundstellen am Bau-Stand gelesen, :147 und :191, samt dem Satz des Verfassers dass er lieber vier Luecken hinschreibt als eine Vermutung. W-41-4 die Anschlussliste als FRAGE. W-41-5 was erhalten bleibt: alter Wert, Zeitpunkt und GRUND. W-41-6 sieben Blaetter, keines gleicht der Vorlage oder einem der 28 fremden Werkzeugordner."
 EINE_KANTE_BELEGT_FUENF_KANDIDATEN: "W-41-4 verlangt je Abhaengigkeit entweder eine Fundstelle oder die ausdrueckliche Kennzeichnung als Kandidat. Ich habe im Bestand gesucht statt nur zu vermuten und GENAU EINE belegen koennen: geometry/pvBelegung.ts:10-14, pvSchnellBelegung nimmt eine PvEingabe mit dachLaenge und dachBreite entgegen — die PV-Belegung beruht nachweislich auf den Massen der Dachflaeche. Und das ist ausgerechnet die Kante, an der Yamas L-9 haengt: PV erst nach BESTAETIGTER Dachgeometrie. Die Bedingung liefert W-40 mit confirmed, die Kante dieser Beleg, der Mechanismus dazwischen fehlt und das ist W-41. Die uebrigen fuenf sind als Kandidaten gekennzeichnet und nicht als Ergebnis — eine erfundene Struktur waere der schwerere Fehler als eine kurze Liste."
@@ -7906,6 +7906,23 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-41 GECLAIMT vor dem Pr
   der Generator hat damals aus eigenem Antrieb angemerkt, W-41s 'kein Code' sei ebenfalls zu
   weit. Ich messe deshalb ZUERST den Bestand gegen die Praemisse und erst danach die Kriterien,
   und ich zaehle nicht Woerter, sondern oeffne die Stellen."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an fb399e32, Elter e29d8c4d, SECHS von sechs."
+die_praemisse_zuerst: "Wie im Claim zugesagt VOR den Kriterien gemessen, Stellen geoeffnet statt
+  Woerter gezaehlt. DIE PRAEMISSE TRAEGT, anders als bei W-40: markiereVeraltet existiert
+  (configuratorPackage.ts:125), hat aber ausserhalb der Tests 0 Aufrufer; invalidier/propagier 0;
+  Kanten/Graph 0; die 'Abhaengig'-Treffer sind Produktmerkmale in dachformVorlagen.ts plus ein
+  useMemo-Kommentar. Markieren und propagieren sind zwei Dinge."
+falle_die_der_bericht_nicht_nennt: "Wer die Praemisse per grep prueft, stolpert ueber
+  'dependentResults' — ueber achtzigmal in app/tools/werkzeugVertrag.ts. Geoeffnet: eine
+  ZEICHENKETTE in seiteneffekte-Listen, und die Datei sagt selbst 'Es ist eine Beschreibung, keine
+  Ausfuehrung'. Ausserhalb der Deklarationen 0 Auswertungen. Kein Mangel — aber die Stelle, an der
+  die naechste Wortzaehlung einen Graphen zu finden glaubt."
+was_selbst_geoeffnet_wurde: "REGISTER.md:128 (das Verbot woertlich), Quellzeile :147 (NICHT
+  GEMESSEN), pvBelegung.ts:10-14 und :46 (die eine belegte Kante). Sieben Blaetter, 0 md5-Dubletten
+  ueber 30 Werkzeugordner."
+was_dem_generator_zusteht: "Er hat seinen EIGENEN Einwand zurueckgenommen, nachdem er ihn zweimal als
+  Grund benutzt hatte, W-41 nicht zu ziehen — gemessen statt eingeraeumt. Meine unabhaengige Messung
+  ergibt dieselben Zahlen."
 ```
 
 ```yaml

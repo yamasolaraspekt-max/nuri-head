@@ -121,3 +121,98 @@ was_dieses_blatt_NICHT_tut: "Es erfindet keine Abhaengigkeitsstruktur. Kandidate
         stehen als Frage und nicht als Ergebnis."
 W_41_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+
+## §11 — Votum W-41 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-41"
+votum: ABGENOMMEN
+geprueft_an: "fb399e32"
+elter: "e29d8c4d"
+scope_diff: "10 Dateien, +679/-4: sieben Werkzeugblaetter neu, REGISTER.md, Bericht, STATUS.md.
+  0 Code-Dateien."
+pruefstand: "git worktree add -q --detach auf fb399e32. Reine Vorgabe — Suite nicht einschlaegig,
+  Browserabnahme entfaellt, §15 gegenstandslos."
+
+DIE_PRAEMISSE_ZUERST_wie_im_claim_zugesagt:
+  warum: "Bei W-40 habe ich die Praemisse 'kein Code' selbst widerlegt, und der Generator hatte
+    damals angemerkt, W-41s 'kein Code' sei ebenfalls zu weit. Ich habe deshalb VOR den Kriterien
+    den Bestand gemessen — und nicht Woerter gezaehlt, sondern die Stellen geoeffnet."
+  ergebnis: "DIE PRAEMISSE TRAEGT, anders als bei W-40.
+      markiereVeraltet          existiert (configuratorPackage.ts:125), Aufrufer AUSSERHALB
+                                der Tests: 0 — nur configuratorPackage.test.ts:57 und :61
+      invalidier/propagier      0 Dateien
+      Kanten / Graph            0
+      'Abhaengig'               dachformVorlagen.ts:117-118 und :1376-1403 — das sind
+                                PRODUKTMERKMALE (regeldachneigungAbhaengigVonMaterial), plus
+                                ein useMemo-Kommentar in HausplanerApp.tsx:74
+    Markieren und propagieren sind zwei Dinge: der Zustand existiert, die Markierfunktion
+    existiert ohne Aufrufer, der Graph und die Fortsetzung nicht."
+  EINE_FALLE_DIE_DER_BERICHT_NICHT_NENNT: "Wer die Praemisse per grep prueft, stolpert ueber
+    'dependentResults' — es steht in app/tools/werkzeugVertrag.ts ueber achtzigmal. Ich habe es
+    geoeffnet: es ist eine ZEICHENKETTE in seiteneffekte-Listen, und die Datei sagt in ihrem
+    eigenen Kopf, was sie ist — 'Es ist eine Beschreibung, keine Ausfuehrung. Hier entsteht kein
+    zweiter Ausfuehrungsweg.' Gegenprobe: 'dependentResults' wird AUSSERHALB dieser Deklarationen
+    an KEINER Stelle ausgewertet, 0 Treffer; 'dependencyReport' steht genau einmal, ebenfalls nur
+    als Ergebnisname. Kein Mangel des Baus — aber die Stelle, an der die naechste Wortzaehlung
+    einen Abhaengigkeitsgraphen zu finden glaubt, wo eine Vertragsbeschreibung steht."
+
+messtisch:
+
+  W-41-1_das_verbot_als_kern:
+    urteil: ERFUELLT
+    woertlich_mit_fundstelle_am_bau_stand: "1-ZWECK zitiert 'REGISTER.md:128 am Bau-Stand':
+      'Aenderungen propagieren, niemals stille Loeschung.' Ich habe Zeile 128 geoeffnet — sie
+      traegt den Satz. Und das Blatt trennt sauber, was der Kern ist: PROPAGIEREN ist gewoehnliche
+      Technik, STILLE LOESCHUNG ist der verbotene Fall. Dazu der Satz, der es tragfaehig macht:
+      'Am schlimmsten daran, dass er es NICHT merkt.'"
+
+  W-41-2_grenze_zu_W40:
+    urteil: ERFUELLT
+    beleg: "2-FUNKTION:3-15. 'W-40 sagt DASS es outdated gibt und was der Zustand BEDEUTET.
+      W-41 sagt WANN er eintritt, WORAUF er sich fortsetzt, und WAS dabei erhalten bleibt.'
+      Mit dem ausdruecklichen Verweis statt einer zweiten Definition und der Begruendung aus
+      A-20: zwei Orte fuer eine Wahrheit veralten unabhaengig."
+
+  W-41-3_NICHT_GEMESSEN_woertlich:
+    urteil: ERFUELLT
+    gegengeprobt: "7-GRENZEN:6 nennt die Ueberschrift 'Die Quelle fuehrt den Abhaengigkeitsgraphen
+      unter NICHT GEMESSEN' und zitiert :147. Ich habe die Quellzeile geoeffnet: 'Ob es einen
+      Abhaengigkeitsgraphen gibt. Ich habe nach status/revision gesucht, nicht nach Kanten
+      zwischen Bauteilen.' Trifft zu. Und der Satz 'W-41 ist die duennste der drei Vorgaben, und
+      wer das nicht liest, haelt sie fuer eine Erhebung' steht gleich im Kopf des Blattes."
+
+  W-41-4_anschlussliste_als_frage:
+    urteil: ERFUELLT
+    selbst_geprueft: "Sechs Kanten, davon EINE belegt und fuenf ausdruecklich als Kandidat
+      gekennzeichnet. Die belegte habe ich geoeffnet: pvBelegung.ts fuehrt PvEingabe mit
+      dachLaenge und dachBreite (:10-14), und pvSchnellBelegung(e: PvEingabe) steht bei :46 —
+      die Kante Dachflaeche -> PV-Belegung traegt. Die fuenf Kandidaten stehen je mit 'nicht
+      gemessen' statt mit erfundener Fundstelle.
+      Das Blatt sagt dazu selbst den richtigen Satz: 'Sie stehen hier, damit die Erhebung weiss,
+      wo sie anfangen kann — nicht, damit jemand sie fuer gemessen haelt.'"
+
+  W-41-5_was_erhalten_bleibt:
+    urteil: ERFUELLT
+    beleg: "2-FUNKTION:44 fuehrt Schritt 5 'ERHALTEN — der alte Wert, der Zeitpunkt und der Grund
+      bleiben', und :61-63 gibt jedem der drei seine Begruendung: ohne den alten Wert ist es eine
+      Loeschung, ohne den Zeitpunkt laesst sich nichts nachvollziehen, ohne den Grund fehlt die
+      ausloesende Aenderung. Alle drei geforderten stehen benannt."
+
+  W-41-6_sieben_blaetter_und_md5:
+    urteil: ERFUELLT
+    selbst_gefahren: "Sieben Blaetter, alle gefuellt (63/103/56/65/67/78/102 Zeilen). md5-Gegenprobe
+      unabhaengig ueber alle 30 Werkzeugordner: Dubletten MIT W-41 beteiligt: 0."
+
+was_dem_generator_zusteht: "Er hat seinen EIGENEN Einwand zurueckgenommen, nachdem er ihn zweimal
+  als Grund benutzt hatte, W-41 nicht zu ziehen — und zwar gemessen statt eingeraeumt: 'markiereVeraltet,
+  Aufrufer ausserhalb der Tests 0 · Kanten/Graph/Propagierung 0'. Meine unabhaengige Messung
+  ergibt dieselben Zahlen. Sein Satz dazu trifft die Sache: 'Markieren und propagieren sind zwei
+  Dinge.' Einen eigenen Einwand zurueckzunehmen ist teurer, als ihn stehen zu lassen."
+
+meine_eigenen_messfehler_in_dieser_runde: "Keine, die das Urteil beruehrt haetten. Der einzige
+  Punkt, an dem ich haette danebengreifen koennen, war die 'dependentResults'-Haeufung — 80 Treffer
+  sehen nach einem gebauten Abhaengigkeitssystem aus. Ich habe die Datei geoeffnet statt gezaehlt;
+  sie erklaert sich selbst als Beschreibung ohne Ausfuehrung."
+```
