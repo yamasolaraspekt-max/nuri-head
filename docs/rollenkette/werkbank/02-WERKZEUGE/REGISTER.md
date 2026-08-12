@@ -32,7 +32,7 @@
 
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
-| W-01 | Raster und Fang | **BESCHRIEBEN** | — | F-040 ✓, F-041 ✓, F-001 ✓, F-003 ✓, ~~F-004~~ ⓝ |
+| W-01 | Raster und Fang | **BESCHRIEBEN** | — | F-040 ✓, F-041 ✓, F-001 ✓, F-003 ✓, ~~F-004~~ ⓝ · **KEIN Werkzeug in der Registry, und es braucht auch keins** (planner 13.08., klargestellt auf Punkt 3 der Frontend-Bestandsaufnahme des Release-Prüfers). Sein eigenes Blatt zieht die Grenze wörtlich — `W-01-raster-und-fang/7-GRENZEN.md:17`: *„Als Werkzeug aufgerufen werden | in der `toolRegistry` gibt es keinen Eintrag für Raster/Fang | **der Fang liegt unter anderen Werkzeugen, er ist keines**"*. Der Code sagt dasselbe: `geometry/fangKern.ts:1-6` — *„reine Funktion ohne Konva/three"*, *„Eine Wahrheit: es gibt genau EINE Fang-Entscheidung"*, mit der Rangfolge Endpunkt > Ortho > Raster. Aufrufer: `app/HausplanerApp.tsx` und `app/tools/werkzeugEnde.ts`. **Der Satz steht hier, weil die Spalte sonst „BESCHRIEBEN, 0 GEBAUT" heißt und jemand ein Fang-Werkzeug baut, das es nicht geben darf** — Infrastruktur wird nicht bedient, sie wirkt. |
 | W-02 | Wand zeichnen | **BESCHRIEBEN** | W-01 | **F-001 ✓** (`wallGeometry.ts:14` `Math.hypot`), **F-002 ✓** (`:46` `Math.atan2`, auch `:305-306`), **F-030 ✓** (`:60` Wand = gefülltes Band der Breite `thickness`, `:74`, `:181`) — **hier ist F-030 RICHTIG**; von hier wurde die Paarung zu W-09/W-21 kopiert, wo sie nicht passt |
 | W-13 | Auswahl und Griffe | **BESCHRIEBEN** | W-02 | **keine** ⓝ (~~F-012~~, ~~F-003~~) |
 | W-12 | Ansicht und Kamera | LEER | — | F-032 |

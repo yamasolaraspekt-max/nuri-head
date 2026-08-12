@@ -1075,3 +1075,60 @@ W-27/1         Ecken-Erkennung            -> gebaut, OHNE Aufrufer, und heute ka
 
 *Diese Vorlage ist **kein neuer Posten**, sondern die Fortsetzung deiner eigenen Aufhebung. Sie wartet
 nur auf einen Satz.*
+
+---
+
+## 14 · NEU am 13.08.: eine Fachfrage aus der Frontend-Bestandsaufnahme — gehört Tragwerk an die Zeichenfläche?
+
+**Herkunft:** *der Release-Prüfer hat auf deine Frage „sind für alle diese Aufgaben auch Frontend und
+Backend gebaut, konzipiert, designt?" gemessen und vorgelegt (`STATUS.md:5355`). Vier Werkzeuge sind
+beschrieben, aber nicht bedienbar. **Drei davon habe ich eingeordnet, ohne dich zu fragen — der vierte
+geht nicht ohne dich.***
+
+### Was ich ohne dich entschieden habe
+
+```text
+W-05 Raum erkennen     -> W-05/1 geschnitten. Und die Messung machte ihn KLEINER:
+                          die Flaechenanzeige ist gebaut (Buehne.tsx:152), das
+                          Anwaehlen ist klein, und der NAME braucht eine Identitaet,
+                          die es nicht gibt -> unten als deine Frage.
+W-01 Raster und Fang    -> KEIN Bau. Registerzeile klargestellt: sein eigenes Blatt
+                          sagt „der Fang liegt unter anderen Werkzeugen, er ist
+                          keines". Infrastruktur wird nicht bedient, sie wirkt.
+W-08 Dachflaeche messen -> KEIN Frontend-Auftrag. Es fehlen zwei FORMELN: F-023
+                          (A_Dach = A_Grundriss / cos α) und F-024 (Azimut) — und
+                          F-024 haengt an F-028, also an dir.
+```
+
+### Was bei dir liegt: W-21 Sparren und Lattung
+
+**Wörtlich sein Befund, und ich habe ihn nachgemessen:** *W-21 hat **einen** Aufrufer, und der ist ein
+**Engine-Panel**, keine Zeichenfläche. **Das ist eine Anzeige, kein Werkzeug** — und nach A-14 trägt sie
+den `N-003`-Vorbehalt.*
+
+> **Seine Frage, und sie ist die richtige:** *„gehört Tragwerk überhaupt an die Zeichenfläche?"* **Nicht
+> „sollen wir ein Werkzeug bauen", sondern ob Sparren und Lattung ein Gegenstand des Zeichnens sind oder
+> eine Auswertung.** *Das ist Handwerkspraxis und keine Frontend-Frage — vom Bildschirm her ist sie nicht
+> zu klären.*
+
+**Warum ich sie nicht selbst beantworte:** *ein Werkzeug, das Sparren einzeln setzen lässt, ist ein
+anderes Produkt als eine Sparrenliste, die aus dem Dach folgt. **Wer das falsch schneidet, baut Monate in
+die falsche Richtung** — und die Antwort steckt in der Arbeitsweise eines Zimmerers, nicht im Code.*
+
+### Und eine zweite Frage, die aus W-05 dazukam
+
+**Woran hängt die Identität eines ABGELEITETEN Objekts, wenn es einen dauerhaften Namen tragen soll?**
+
+```text
+ErkannterRaum (roomDetection.ts:35-40)  polygon · kanten · flaecheMm2 · volumenMm3
+                                        KEINE id
+Buehne.tsx:147                          key={`raum${i}`}  -> der INDEX
+```
+
+*Räume werden **erkannt**, nicht gezeichnet. Wer eine Wand verschiebt, ändert die Liste — **ein Name
+hängt danach am falschen Raum.** Das ist **dieselbe Frage wie ZoneNode** (`materialId` an einem
+abgeleiteten Knoten), jetzt an einem zweiten Fall belegt. **Zwei Fälle, eine Entscheidung** — und
+deshalb lege ich sie zusammen vor statt zweimal.*
+
+**Bis dahin gebaut wird nur die flüchtige Auswahl** — *W-05/1 sagt ausdrücklich: kein Name, kein Feld am
+Szenendokument, keine Migration.*
