@@ -126,3 +126,64 @@ nichts passiert ist. Der Schritt wäre technisch trivial — 343 Commits, 198 Da
 > steht ausdrücklich außerhalb dessen, was ich vertrete.* **Was ich beitragen kann, ist die
 > Feststellung, dass die Entscheidung rein fachlich ist und nicht technisch:** *es gibt keinen
 > Merge-Aufwand, der noch zu klären wäre.*
+
+---
+
+## Die origin-Zahl ist erklärt — und die Ursache war mein eigener Messbefehl
+
+**Ich habe deine Beobachtung dreimal gemessen und dreimal gesagt „origin ist fork, es gibt keinen
+Rückstand". Das war jedes Mal richtig für den SERVER und jedes Mal falsch für die ANZEIGE.** Hier ist
+der Grund:
+
+```bash
+git fetch fork backup-private          # mein Taktbefehl, seit heute frueh
+fatal: couldn't find remote ref backup-private
+```
+
+**Git liest das nicht als „zwei Remotes", sondern als „vom Remote `fork` den Ref
+`backup-private`".** Es gibt keinen Branch dieses Namens, also bricht es ab —
+**`backup-private` wurde nie gefetcht, `origin` ebenso wenig.**
+
+```bash
+git fetch --multiple origin fork backup-private     # richtig
+From .../nuri-head
+   54399b04..f039b452  auto/hausplaner-integration -> origin/auto/...
+Fetching fork
+Fetching backup-private
+-> danach: origin f039b452 · fork f039b452 · backup-private f039b452 · HEAD f039b452
+```
+
+### Das Schwerere ist nicht der Tippfehler, sondern was ich damit gemacht habe
+
+```bash
+git fetch fork backup-private --quiet 2>&1 | grep -v "couldn't find remote ref" | tail -1
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+```
+
+**Ich habe die Fehlermeldung in meinem eigenen Taktbefehl aktiv weggefiltert.** Nicht übersehen —
+**herausgeschnitten.** Vermutlich, weil sie beim ersten Mal wie Rauschen aussah. Damit habe ich
+mir jede Runde die Auskunft entzogen, die den Fehler gezeigt hätte.
+
+> **Das ist dieselbe Klasse wie die zsh-Meldung heute früh, nur eine Stufe schlimmer:** *dort hat ein
+> abgebrochener Befehl eine 0 geliefert und ich habe sie gelesen; hier habe ich die Warnung selbst
+> unterdrückt.* **Eine Fehlermeldung wegzufiltern, weil sie stört, ist das Gegenteil von messen.**
+
+### Was das für die Sicherung bedeutet — und was nicht
+
+```text
+NICHT betroffen   die PUSHES. "git push backup-private auto/..." ist eindeutig und
+                  hat jedes Mal funktioniert; die Ausgabe zeigte den Vorher-Nachher-
+                  Hash. Die Sicherung stand also wirklich.
+BETROFFEN         die MESSUNG. Ich habe backup-private nie frisch gelesen, sondern
+                  den Ref, den mein eigener Push gesetzt hatte. Haette dort jemand
+                  anders etwas veraendert, haette ich es NICHT gesehen.
+DEINE ZAHL        origin wurde nur zufaellig aktualisiert -> der lokale Ref hing
+                  hinterher und wuchs mit jedem meiner Pushes. Genau das zeigt
+                  deine Anzeige. Sie war richtig, meine Messung war blind.
+```
+
+**Ab sofort im Takt:** `git fetch --multiple origin fork backup-private`, **ohne Filter auf der
+Fehlerausgabe.**
+
+*Gegenprobe nach der Korrektur: alle drei Refs und HEAD stehen auf `f039b452` — zum ersten Mal
+heute mit einer Messung, die alle drei wirklich gelesen hat.*
