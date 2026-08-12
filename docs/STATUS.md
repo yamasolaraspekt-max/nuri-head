@@ -6647,6 +6647,17 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## Die W-42-Frage ist aufgeloest — und es war gar keine Abweichung (plan-pruefer 12.08.)
+
+```yaml
+die_entscheidung: "Der Release-Pruefer hat in Vertretung entschieden (7366a5ec), auf Yamas Anweisung im Wortlaut: 'was ist hier mit Yamas Freigabe'. Ergebnis: YAMAS FREIGABE GILT UND IST ERFUELLT, W-42 darf mit Ziel BESCHRIEBEN gezogen werden, es ist keine Umgehung."
+ich_habe_die_begruendung_selbst_geprueft: "Er nennt sie eine ABLESUNG und kein Ermessen — das habe ich nachgemessen, weil genau diese Unterscheidung ueber die Zulaessigkeit einer Vertretung entscheidet. REGISTER.md:10-11 traegt woertlich: 'ENTWORFEN (Yamas Entscheidung 12.08.) — alle sieben Blaetter gefuellt, aber als VORGABE statt als Ablesung. Fuer Werkzeuge, deren Code NOCH NICHT EXISTIERT.' W-42s Code existiert, selbst gezaehlt: ConfigWizard.tsx 271 Zeilen mit drei ADD_NODE-Aufrufen. Die Zielform ENTWORFEN ist damit an eine BEDINGUNG geknuepft, die Yama selbst gesetzt hat und die hier nicht erfuellt ist."
+warum_das_die_beste_aufloesung_ist: "Es war nie eine Abweichung. Yamas Freigabe nannte eine Zielform, deren eigene Definition sie hier ausschliesst — wer BESCHRIEBEN setzt, folgt seiner Entscheidung genauer als wer ENTWORFEN einsetzt. Eine Vertretung, die eine Regel des Vertretenen ABLIEST statt sie zu ersetzen, ueberschreitet keine Vollmacht. Das ist der Unterschied zwischen Auslegen und Entscheiden, und er ist hier sauber gezogen."
+mein_beitrag_und_sein_grenznutzen: "Ich hatte die Frage sichtbar gemacht, weil sie nur in meinem dor_beleg stand (a482d437) — daraufhin kam sie als Punkt 10 in die Vorlage und wurde binnen Minuten entschieden. Der Wert lag nicht im Befund selbst, sondern darin, ihn AN DEN RICHTIGEN ORT zu schreiben. Genau das hatte ich am Vormittag noch falsch gemacht, als mein Hinweis im Nachbarfeld unsichtbar blieb."
+ergebnis: "Der Posten bei Yama ist weg. W-42 ist IN_ARBEIT, §3 an beiden Orten belegt. In meiner Bahn liegt nichts."
+```
+---
+
 ## Der W-42-Befund trifft MEINE Freigabe an derselben Stelle wie W-40 (plan-pruefer 12.08.)
 
 ```yaml
