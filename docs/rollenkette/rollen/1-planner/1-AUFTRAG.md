@@ -133,6 +133,44 @@ TRUE ist. Ein Schritt ohne Pruefpunkt haette gruen gemeldet.
 die Reihenfolge GESEHEN, nicht ihre WIRKUNG gemessen." **Zwei Rollen, eine Stelle, dieselbe
 Verwechslung von Ort und Wirkung — H-8.***
 
+**UND DIE ZWEITE HÄLFTE DERSELBEN FRAGE, ergänzt 12.08. nach A-23 und A-24: KANN mein Nachweis
+überhaupt rot werden?** *Nicht „ist das Kriterium richtig", sondern **trägt die Form, in der es geprüft
+wird**. Zweimal an einem Abend hat nicht das Kriterium versagt, sondern der Nachweis:*
+
+```text
+A-23-5  Gegenprobe: „die Ehrlichkeitswaechter laufen gruen"
+        Genannt waren startEhrlich und konfiguratorEhrlich — BEIDE lesen ueber
+        ohneKommentare. Der Auftrag aendert KOMMENTARE. Zwei blinde Zeugen.
+        Der einzige, der greifen konnte, stand nicht drin: gefuehrteEhrlich:30
+        liest studioDaten.ts ROH. -> DoR nicht erteilt.
+
+A-24-3  Schutz-Nachweis: „Bestandsdokument per md5 vorher/nachher"
+        ticket_testing.hausplaner_documents = 0 Datensaetze; und 70 von 137
+        Testdateien setzen die DB per RefreshDatabase zurueck. Ein Beleg IN der
+        Datenbank ist auf dieser Insel strukturell kein Beleg. -> DoR nicht erteilt.
+```
+
+**Drei Fragen, bevor eine Nachweisform ins Blatt kommt:**
+
+```text
+1  WORAUF ist der Zeuge empfindlich?   Ein Waechter, der die Datei anfasst, bewacht
+                                       nicht die Aenderung. Bei Textaenderungen an
+                                       einer Zeile ablesbar: liest der Test roh oder
+                                       ueber ohneKommentare.
+2  EXISTIERT der Gegenstand?           Ein Nachweis an einem Datensatz, den es nicht
+                                       gibt, laeuft nie — auch nicht rot.
+3  UEBERLEBT der Beleg?                Was jeder Testlauf zuruecksetzt, ist kein Beleg.
+                                       Dann am SCHREIBPFAD messen statt am Ergebnis:
+                                       das haelt eine EIGENSCHAFT statt einen Zustand.
+```
+
+> **Beide Male war die Sache richtig und nur der Beweis untauglich** — *und beide Male hätte der
+> Bauende es ausgebadet: er wäre grün geworden, ohne dass etwas geprüft war, oder er hätte einen
+> Nachweis erbringen sollen, den die Insel nicht tragen kann. **Der Plan-Prüfer hat zu A-24 gesagt, die
+> berichtigte Form sei besser als die beanstandete, nicht nur fahrbar.** Das ist der Hinweis darauf,
+> wohin die Frage führt: **ein Nachweis am Schreibpfad gilt beim nächsten Umbau noch, ein `md5` auf
+> einen Zustand nicht.***
+
 ### 5 · Ist der Operand LESBAR? (neu 12.08., aus W-23)
 
 Wenn ein Auftrag Daten von außerhalb des Repos braucht — eine Tabelle, ein Schema, eine
