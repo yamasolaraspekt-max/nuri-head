@@ -7771,6 +7771,29 @@ mein_anteil: "In Runde 1 habe ich die erste Zusage widerlegt und die zweite steh
 ```yaml
 auftrag: "W-40"
 zustand: BETRIEBSBESTAETIGT
+REIFEGRAD_STRITTIG_UND_ICH_AENDERE_IHN_NICHT: "Der release-pruefer hat in c002574b belegt, dass
+  W-40 ENTWORFEN traegt, waehrend Yamas Legende in REGISTER.md:10-11 diese Stufe ausdruecklich fuer
+  Werkzeuge reserviert, deren Code NOCH NICHT existiert. Und in derselben Registerzeile steht mein
+  eigener Befund, dass die Gueltigkeitsachse in configuratorPackage.ts bereits gebaut ist. Sein Satz
+  trifft: ein Werkzeug mit Code traegt die Stufe, die fuer Werkzeuge ohne Code gedacht ist, und vier
+  Rollen sind vorbeigegangen — ich als erster.
+  SELBST NACHGEMESSEN: Legende Zeile 10 bis 11 sagt woertlich 'Fuer Werkzeuge, deren Code noch nicht
+  existiert (Klasse C)'. W-40s Registerzeile 127 traegt ENTWORFEN. Beides steht so da.
+  ABER DIE FRAGE IST NICHT DER REIFEGRAD, SIE IST DER GEGENSTAND: ENTWORFEN ist falsch, WENN der
+  vorhandene ConfiguratorStatus dasselbe beschreibt wie W-40s Vorgabe. Ist es ein anderer
+  Gegenstand — Freigabegrad eines KONFIGURATIONSPAKETS gegen Gueltigkeit einer GEOMETRIE —, dann ist
+  ENTWORFEN richtig und der Code ist nur namensgleich, wie klassifiziereSchifter gegen W-27s Ecken.
+  GENAU DAS IST DIE FRAGE AUS ABSCHNITT 8 DER VORLAGE, und sie liegt bei Yama: ist approved aus
+  seinem Abschnitt 18/3 dasselbe wie confirmed aus Zielbild 3.6.
+  ICH AENDERE DEN REIFEGRAD DESHALB NICHT. Ihn jetzt auf BESCHRIEBEN zu setzen hiesse, die offene
+  Fachfrage still zu entscheiden — und zwar in die Richtung 'es ist derselbe Gegenstand', ohne dass
+  das gemessen oder entschieden ist. Der Streit ist damit sichtbar und nicht geglaettet; wer ihn
+  aufloest, braucht Yamas Antwort und nicht ein Argument.
+  UNSTRITTIG IST DAGEGEN W-42: dort IST der Schreibpfad der Gegenstand, und er ist gebaut — drei
+  executeCommand-Stellen, vier Bauteilarten. Mein Auftragsziel BESCHRIEBEN folgt der Legende und
+  nicht der Gattungszusage. Der release-pruefer nennt es richtig einen Widerspruch zwischen zwei
+  Aussagen Yamas vom selben Tag und nicht zwischen Planner und Yama: die Zusage galt dem ANGEBOT
+  ueber drei Auftraege, die Legende gilt je Werkzeug."
 bericht: "docs/BERICHT-W-40-gueltigkeitsstatus.md"
 ICH_HATTE_ANGEHALTEN_UND_DAS_WAR_ZU_VIEL: "In der Runde davor habe ich geschrieben 'ich baue nicht weiter, bevor das geklaert ist'. Revidiert, und der Grund ist messbar: KEIN EINZIGES der sieben Kriterien wird durch meinen Befund unerfuellbar. Er trifft das ZIEL — ENTWORFEN gegen Ablesung, eine Planner-Frage —, nicht die Kriterien. Einen erfuellbaren Auftrag anzuhalten blockiert §3 fuer alle fuenf Rollen, und die richtige Form ist die, die W-40-5 selbst vorgibt: bauen, und das Fehlende BENENNEN statt es zu erfinden. Die Frage steht unveraendert offen — sie steht jetzt in einem fertigen Blatt statt in einer Wartezeit."
 sieben_kriterien_je_am_BAU_STAND_belegt: "W-40-1 die zwei Achsen mit dem Zitat aus :130-132, Zeile selbst gemessen und nicht aus dem Auftragsblatt uebernommen (Pflichtpruefung 8). W-40-2 je Stufe NUR was die Quelle sagt — zu blocked sind das vier Woerter, also stehen im Blatt auch nur vier. W-40-3 die Zahlenluecke GESTELLT und nicht beantwortet: Zielbild acht in :117, gebaut vier, als fehlend drei, und :121 fuehrt review-required mit einem GEDANKENSTRICH statt mit 'fehlt'. W-40-4 blocked gegen DECISION_BLOCKED als offene Frage. W-40-5 die Uebergaenge: die Quelle gibt keine her, ausdruecklich festgestellt statt erfunden, und nur das logisch Erzwungene benannt. W-40-6 der W-38-Bezug mit studioDaten.ts:163 und :255, am Bau-Stand gemessen. W-40-7 sieben Blaetter, keines gleicht der Vorlage oder einem der 27 fremden Werkzeugordner."
