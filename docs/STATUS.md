@@ -7823,6 +7823,19 @@ W_42_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 auftrag: "W-27/1"
 zustand: BEREIT
 ballbesitz: generator
+REIHENFOLGE_VOM_PLANNER_FESTGELEGT: "Vier Auftraege liegen beim Generator und alle tragen P1: W-40
+  laeuft (IN_ARBEIT), W-27/1, W-41 und W-42 sind BEREIT. Damit entscheidet die Reihenfolge, was
+  zuerst entsteht, und das ist Planner-Eigentum.
+  FESTGELEGT: W-27/1 ist der NAECHSTE nach W-40 — vor W-41 und W-42.
+  DER GRUND ist gemessen und nicht bevorzugt: das Register traegt GEBAUT genau NULL Mal bei 43
+  Werkzeugen, und Yama hat ausdruecklich gefragt, ob ueberhaupt mit der Produktion von Werkzeugen
+  begonnen wurde. W-41 und W-42 erzeugen wieder Blaetter — wertvolle, aber Blaetter. W-27/1 erzeugt
+  die erste Zeile Produktivcode aus der Werkbank und bringt die Kategorie GEBAUT von 0 auf 1.
+  KEIN EINGRIFF IN DEN LAUFENDEN AUFTRAG: W-40 wird nicht unterbrochen. Die Festlegung gilt fuer den
+  Griff DANACH.
+  UND EIN SACHGRUND KOMMT HINZU: W-41 haengt inhaltlich an W-40 (outdated ist dort definiert, die
+  Propagierung hier), also gewinnt W-41 dadurch, dass W-40 erst abgenommen ist. W-42 ist eine
+  Ablesung ohne Vorgaenger und kann warten."
 titel: "BAU: Dachkantentypen in die Insel — der erste Auftrag, der Produktivcode erzeugt"
 basis_sha: ff7e23ec
 spur: A
