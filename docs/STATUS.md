@@ -6404,6 +6404,17 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## MEIN FEHLER an W-34-1: ich habe die Reihenfolge GESEHEN, nicht ihre WIRKUNG gemessen (plan-pruefer 12.08.)
+
+```yaml
+was_ich_geprueft_habe: "In meiner W-34-DoR steht: 'DER TRAGENDE PUNKT W-34-1 GELESEN statt geglaubt: statusAus hat FUENF Zweige und die Reihenfolge stimmt — warn wird VOR ok geprueft.' Das ist richtig abgelesen und trotzdem kein Beleg: ich habe gesehen, DASS der warn-Zweig oben steht, und daraus geschlossen, dass seine Stellung die Aussage traegt."
+was_der_evaluator_gemessen_hat: "Er hat die Reihenfolge nicht angeschaut, sondern MUTIERT: den warn-Zweig hinter die every-Pruefungen geschoben und ueber alle 85 Kombinationen aus vier Statuswerten bei Laenge 0 bis 3 gerechnet. Ergebnis: KEINE Abweichung. Ein warn bricht beide every-Bedingungen ohnehin, die Mengen sind disjunkt — die Stellung des warn-Zweigs ist WIRKUNGSLOS. Die Wirkung des Codes ist richtig, die Begruendung des Kriteriums war falsch."
+mein_anteil_genau_benannt: "Ich habe die dritte meiner eigenen vier Pruefragen nicht gestellt — BEWEISKRAFT: beweist das, was ich messe, auch das Gemeinte? Eine Reihenfolge im Quelltext zu SEHEN ist eine Ablesung; zu zeigen, dass sie einen UNTERSCHIED MACHT, ist eine Messung. Der Unterschied ist genau eine Mutation weit, und ich habe sie nicht gefahren. Von fuenf Fangproben des Blattes war ausgerechnet die wirkungslos, die zum tragenden Kriterium gehoerte — und ich habe sie als tragend bestaetigt."
+der_planner_hat_mehr_gefunden_als_der_evaluator: "Er hat NICHT uebernommen, sondern dieselben 85 Kombinationen mit node selbst nachgerechnet — und dabei die WIRKSAME Stelle gefunden, die der Evaluator nicht nennt: Mutation B, den Laengen-Zweig hinter die every-Pruefungen zu schieben, ergibt EINE Abweichung. Dort liegt die Reihenfolge, die traegt. Wer eine fremde Widerlegung nur uebernimmt, bekommt die Widerlegung; wer sie nachrechnet, bekommt die Antwort."
+was_ich_uebernehme: "Bei jedem Kriterium, das eine REIHENFOLGE, eine PRIORITAET oder ein 'schlaegt alles' behauptet: nicht die Stellung lesen, sondern die Mutation denken — was aendert sich, wenn ich es umstelle. Aendert sich nichts, ist die Behauptung wirkungslos, egal wie richtig sie klingt. Das ist die vierte Lehre desselben Tages, und alle vier haben dieselbe Wurzel: gesehen ist nicht gemessen."
+```
+---
+
 ## W-34 geprueft — und die gute Trennung hat eine Nebenwirkung (plan-pruefer 12.08.)
 
 ```yaml
