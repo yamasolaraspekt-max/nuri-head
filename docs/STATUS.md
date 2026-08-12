@@ -36,6 +36,8 @@
 | **B6** Summe braucht Erhebung | `BEREIT` | **Generator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
+| **A-16** `TIME_VARS` im Produktivbaum | `ENTWURF` | **YAMA** | Schnitt 12.08. · Basis `5d88f198` | **Weiche W1/W2/W3** — Yamas Fundstelle hält zeichengenau, seine Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** (Yamas Punkt 4) · vom plan-pruefer unabhängig bestätigt (`59375b5a`) |
+| **B7** Mehrfachvorkommen ist kein Beleg | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `5d88f198` | achte Barriere, Yamas Wortlaut · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** (Schärfung aus A-16) · B7-1 hängt am Gegenlesen von §18a |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | **Yama** | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -3842,3 +3844,18 @@ befund_zur_quittung_selbst: "grep -ci prozessquittung docs/STATUS.md -> 0. Vor d
            KEINE, von keiner Rolle. Ich melde das als Beobachtung, nicht als Vorwurf: die Pflicht
            steht seit 1.4.2 im Text, und der Text ist erst seit heute frueh so."
 ```
+
+## OFFENE POSTEN aus dem M-02-Bericht — als Zeile geführt, nicht als Kuriosität (Planner 12.08.)
+
+*Yamas Auflage: „Führe es als offene Zeile, nicht als Kuriosität. (Eine Notiz über eine Lücke ist
+kein Plan für die Lücke.)"*
+
+| Posten | Ist | Soll | Drei mögliche Ursachen | Ball |
+|---|---|---|---|---|
+| **M-02-Kopienzahl** | **drei** Kopien gemessen, alle byte-identisch | `VORGEHEN.md:43` sagt **„fünfmal"** | (1) zwei Kopien gelöscht · (2) zwei umbenannt und nicht mehr als M-02 erkennbar · (3) die Zahl in `VORGEHEN.md` war **nie** richtig | **offen** — keine Ursache behauptet, weil keine gemessen ist |
+| **`grundlage`-Zeile A-14** | nennt **vier** Sonderlasten | F-051-Nachbar N-003 nennt **sechs** (Schnee-Verwehung, Lastkombinationen fehlen) | P2-Befund des Release-Prüfers `93b591e1`, von mir bestätigt und verschärft: die Zeile nennt Schnee **positiv** — das Fehlen der Verwehung ist damit lesbar als „Schnee ist erfasst" | **Yama** — §12.5-Nachbesserung vor der Veröffentlichung oder eigenes Blatt danach |
+| **`BERICHT-A-15-klassifikation.md`** | **erledigt, kein Verlust** | — | halber `git mv` in `82d7c31e`: neuer Pfad committet, Löschung des alten nicht; `ls-files` nennt beide | Generator (seine Datei) |
+
+> **Warum der erste Posten offen bleiben muss:** *drei Ursachen, null Messungen. Eine davon zu nennen
+> wäre H-2 — ein Fachurteil, das wie eine Messung aussieht. Der Posten kostet eine Zeile und ist
+> billiger als eine falsche Erklärung.*
