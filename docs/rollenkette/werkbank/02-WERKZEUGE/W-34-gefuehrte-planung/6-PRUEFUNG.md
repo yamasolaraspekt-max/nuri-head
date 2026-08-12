@@ -7,7 +7,7 @@
 
 | Nr | Kriterium | Wodurch wäre es rot | Wie gemessen |
 |---|---|---|---|
-| K-1 | `statusAus` mit **allen fünf** Zweigen **und der Reihenfolge** | die Zweige aufzählen, ohne zu sagen, dass `warn` vor den `every`-Prüfungen steht | `fahrschritte.ts:43-49` gezeigt, nicht beschrieben |
+| K-1 | `statusAus` mit **allen fünf** Zweigen **und der Reihenfolge an der Stelle, wo sie wirkt** | eine Wirkung behaupten, wo keine ist — *die Position des `warn`-Zweigs ist **wirkungslos**, gemessen 0 von 85* | `fahrschritte.ts:43-49` gezeigt, nicht beschrieben; die tragende Stelle (`length === 0` vor `every`) über 85 Kombinationen **und** eine gefahrene Mutation belegt |
 | K-2 | **elf** Schritte, am Code gezählt | die Zahl aus `fahrschritte.test.ts` übernehmen | Einträge des `return`-Arrays `:124-196`, Kommentarzeilen ausgenommen |
 | K-3 | **sechs** Lücken vollständig, je mit „was fehlt" | „sechs Schritte ohne Grundlage" ohne die sechs Sätze | `Object.keys(SCHRITTE_OHNE_GRUNDLAGE)`, alle sechs in `7-GRENZEN.md` |
 | K-4 | `bebauteGeschosse` mit **Begründung aus dem Code** | die Regel nennen, ohne zu sagen, warum sie nötig ist | `:77-88`, wörtlich zitiert |
@@ -73,17 +73,45 @@ K4  die CSS-Quelle enthaelt in KEINER Regel einen Farbwert
 
 ## Fangprobe (Mutationsprobe)
 
-| Mutation | Muss erkannt werden von |
-|---|---|
-| in `statusAus` Zweig 2 (`warn`) **hinter** die `every`-Prüfungen schieben | *ein Schritt mit einem `warn` und sonst `ok` meldete `ok`* — `fahrschritte.test.ts` K5 |
-| einen Eintrag aus `SCHRITTE_OHNE_GRUNDLAGE` entfernen | `fahrschritte.test.ts:98` (`… .length === 6`) |
-| einen zwölften Schritt ergänzen | `fahrschritte.test.ts:37` und `:71` (je `11`) |
-| `bebauteGeschosse` durch `geschosse` ersetzen | *ein leeres Projekt meldete „1 Geschoss bebaut"* — K5 |
-| `checks: []` durch einen erfundenen `ok`-Punkt ersetzen | K6 (`checks` muss leer sein) |
+> **ZURÜCKGEZOGEN: die erste Zeile dieser Tabelle war eine WIRKUNGSLOSE Fangprobe** — *„Zweig 2
+> (`warn`) hinter die `every`-Prüfungen schieben".* **Der Evaluator hat sie gefahren: 1698 pass,
+> 0 fail** (`e5716bc0`). *Sie gehörte ausgerechnet zum tragenden Kriterium und hätte nichts
+> gefangen. Die Begründung steht in `2-FUNKTION.md`.*
 
-> **Diese fünf sind ABGELESEN, nicht gefahren.** *Ich habe die Wächterzeilen gelesen und benannt,
-> welche Mutation sie fangen **würden** — eine Mutationsprobe im Code habe ich für W-34 **nicht**
-> ausgeführt.* **Wer den Unterschied nicht kennzeichnet, verkauft eine Herleitung als Messung.**
+**Ersetzt durch die Verschiebung, die WIRKT — und diesmal GEFAHREN, nicht abgelesen:**
+
+| Mutation | Gefahren? | Ergebnis |
+|---|---|---|
+| **`checks.length === 0` hinter die `every`-Prüfungen schieben** | **ja** | **1698 Tests, 1693 pass, 5 fail** |
+| einen Eintrag aus `SCHRITTE_OHNE_GRUNDLAGE` entfernen | nein — *abgelesen* | `fahrschritte.test.ts:98` (`… .length === 6`) |
+| einen zwölften Schritt ergänzen | nein — *abgelesen* | `fahrschritte.test.ts:37` und `:71` (je `11`) |
+| `bebauteGeschosse` durch `geschosse` ersetzen | nein — *abgelesen* | *ein leeres Projekt meldete „1 Geschoss bebaut"* — K5 |
+| `checks: []` durch einen erfundenen `ok`-Punkt ersetzen | nein — *abgelesen* | K6 (`checks` muss leer sein) |
+
+**Die gefahrene Probe, mit Anker und Rücksetzung:**
+
+```text
+Anker md5 vor der Probe   ace90cf96cb559da4849d4cf458cac44
+Grundlinie                1698 Tests · 1698 pass · 0 fail
+unter der Mutation        1698 Tests · 1693 pass · 5 fail
+
+  ✖ K5: ein LEERES Dokument liefert keinen gruenen Schritt und keinen gruenen Pruefpunkt
+  ✖ K6: ein Schritt ohne Modellgrundlage sagt WAS fehlt — und traegt keine erfundenen Pruefpunkte
+  ✖ statusAus: alle erfuellt ⇒ ok · alle offen ⇒ open · gemischt ⇒ prog · ein warn ⇒ warn
+  ✖ K4: die SCHLUESSEL sind unveraendert — geaendert wurde das Wort, nicht der Wert
+  ✖ K4: kein Schritt hat seinen Status gewechselt
+
+md5 nach dem Ruecksetzen  ace90cf96cb559da4849d4cf458cac44   IDENTISCH
+git status resources/     0 geaenderte Dateien
+```
+
+> **Fünf Wächter fangen sie, über zwei Testdateien hinweg** — *`fahrschritte.test.ts` und
+> `gefuehrteEhrlich.test.ts`.* **Das ist der Unterschied zwischen einer Fangprobe und einer
+> Behauptung über eine Fangprobe.**
+
+**Die vier übrigen sind weiterhin ABGELESEN und als solche gekennzeichnet.** *Ich habe sie nicht
+gefahren; die Spalte sagt es je Zeile.* **Wer den Unterschied nicht kennzeichnet, verkauft eine
+Herleitung als Messung — und genau daran ist die erste Zeile gescheitert.**
 
 ## Automatische Tests
 

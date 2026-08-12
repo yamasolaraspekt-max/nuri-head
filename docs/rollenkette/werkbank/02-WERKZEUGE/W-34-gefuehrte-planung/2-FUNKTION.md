@@ -32,10 +32,35 @@ export function statusAus(checks: readonly Pruefpunkt[]): SchrittStatus {
 | 4 | **alle** `open` | `open` | nicht begonnen |
 | 5 | sonst | `prog` | **kein eigener Test, sondern der REST** |
 
-> **Wer die Zweige aufzählt, ohne die Reihenfolge zu nennen, beschreibt eine andere Funktion.**
-> *Zwei Stellen tragen die ganze Aussage:* **Zweig 2 steht VOR den `every`-Prüfungen** — *deshalb
-> gewinnt `warn` gegen neunmal `ok`.* **Und Zweig 5 hat keine Bedingung** — *`prog` bedeutet „weder
-> ganz grün noch ganz offen", es wird nie geprüft, sondern übrig gelassen.*
+> **ZURÜCKGEZOGEN, und der Fehler ist meiner.** *Hier stand: „Zweig 2 steht VOR den
+> `every`-Prüfungen — **deshalb** gewinnt `warn` gegen neunmal `ok`."* **Diese Ursache gibt es
+> nicht.** *Ein `warn` bricht beide `every`-Bedingungen ohnehin; die Mengen sind disjunkt.* **Der
+> Evaluator hat es gefunden (`e5716bc0`), und ich habe es selbst nachgemessen — beide Fassungen
+> über alle 85 Kombinationen aus vier Statuswerten bei Länge 0 bis 3:**
+
+```text
+M1  der warn-Zweig HINTER die every-Pruefungen verschoben   0 Abweichungen von 85
+```
+
+**Die Reihenfolge trägt trotzdem — nur an einer anderen Stelle, und die ist gemessen:**
+
+```text
+M2  der LEER-Zweig HINTER die every-Pruefungen verschoben   1 Abweichung von 85
+      []   original 'open'   ->   mutiert 'ok'
+```
+
+> **`checks.length === 0` MUSS vor den `every`-Prüfungen stehen, weil `[].every(...)` WAHR ist.**
+> *Steht der Leer-Zweig dahinter, liefert eine leere Prüfpunktliste `ok`.* **Fachlich ist das genau
+> die Lüge, die dieses Werkzeug abschafft: ein Schritt OHNE Prüfpunkt meldete „Vollständig"** — *und
+> die sechs Schritte ohne Modellgrundlage haben alle `checks: []`.*
+
+**Und Zweig 5 hat keine Bedingung** — *`prog` bedeutet „weder ganz grün noch ganz offen", es wird
+nie geprüft, sondern übrig gelassen.*
+
+> **Was ich daraus mitnehme:** *ich hatte eine Reihenfolge gesehen und ihr eine Wirkung
+> **zugeschrieben**, statt sie zu messen.* **Die Aussage klang tragend und war es nicht — und die
+> tragende Stelle stand direkt daneben.** *Der Dateikopf `:40-41` hatte sie sogar benannt: „**Leere
+> Liste ⇒ `open`** — ein Schritt ohne prüfbare Aussage ist nicht fertig, er ist unbekannt."*
 >
 > *Der Dateikopf sagt dasselbe kürzer (`:23-24`): „`status` folgt aus den Prüfpunkten, nicht
 > umgekehrt: alle erfüllt → `ok`, keiner → `open`, gemischt → `prog`, ein verletzter Zwang →

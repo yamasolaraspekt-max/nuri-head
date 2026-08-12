@@ -8,6 +8,17 @@ art: "STUFE 6 · ABLESUNG — der Code existiert, es wird nichts vorgegeben"
 gebaut_am: "12.08.2026"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+fassung: "2 — nachgebessert nach dem NACHBESSERN des Evaluators (e5716bc0)"
+```
+
+> **Fassung 2. Sieben von acht Kriterien waren erfüllt; rot war ausgerechnet W-34-1, das sich
+> selbst als P1 TRAGEND markiert — und der Fehler war meiner.** *Berichtigt an drei Stellen, das
+> Falsche jeweils **zurückgezogen und nicht gelöscht**:*
+
+```text
+2-FUNKTION.md   die widerlegte Kausalaussage     -> zurueckgezogen, 85-Kombinationen-Messung
+6-PRUEFUNG.md   die WIRKUNGSLOSE Fangprobe       -> ersetzt durch eine GEFAHRENE (5 fail)
+6-PRUEFUNG.md   K-1 der Kriterientabelle          -> trug dieselbe Aussage ein zweites Mal
 ```
 
 > **Drei Zählfehler stecken in diesem Bau, alle drei von meiner eigenen Gegenprobe gefangen, und
@@ -28,15 +39,32 @@ gelesen, nicht geändert; `studioDaten.ts` blieb unberührt — es ist gerade ab
 
 ## W-34-1 · `statusAus`, fünf Zweige UND die Reihenfolge
 
-**Die Zeilen gezeigt, nicht beschrieben** (`fahrschritte.ts:43-49`). *Die Aussage steckt an zwei
-Stellen:*
+> **NACHGEBESSERT, Runde 2 — hier stand der einzige rote Punkt der Abnahme, und er ist meiner.**
+> *Ich hatte behauptet: „Zweig 2 (`warn`) steht VOR den `every`-Prüfungen, **deshalb** schlägt
+> `warn` neunmal `ok`."* **Diese Ursache gibt es nicht** — *ein `warn` bricht beide
+> `every`-Bedingungen ohnehin, die Mengen sind disjunkt.*
+
+**Die Zeilen gezeigt, nicht beschrieben** (`fahrschritte.ts:43-49`). **Selbst nachgemessen über alle
+85 Kombinationen aus vier Statuswerten bei Länge 0 bis 3:**
 
 ```text
-Zweig 2 (warn) steht VOR den every-Pruefungen   ->  warn schlaegt neunmal ok
-Zweig 5 (prog) hat KEINE Bedingung              ->  prog wird nie geprueft, sondern uebrig gelassen
+M1  warn-Zweig HINTER die every-Pruefungen   0 Abweichungen von 85   -> WIRKUNGSLOS
+M2  LEER-Zweig HINTER die every-Pruefungen   1 Abweichung  von 85   -> TRAGEND
+      []   original 'open'   ->   mutiert 'ok'
 ```
 
-**Wer die Zweige aufzählt, ohne die Reihenfolge zu nennen, beschreibt eine andere Funktion.**
+**Die tragende Reihenfolge ist `checks.length === 0` VOR den `every`-Prüfungen, weil
+`[].every(...)` WAHR ist.** *Fachlich ist das genau die Lüge, die dieses Werkzeug abschafft: ein
+Schritt ohne Prüfpunkt meldete „Vollständig" — und alle sechs Schritte ohne Modellgrundlage haben
+`checks: []`.*
+
+```text
+Zweig 5 (prog) hat KEINE Bedingung   ->  prog wird nie geprueft, sondern uebrig gelassen
+```
+
+> **Was ich daraus mitnehme:** *ich hatte eine Reihenfolge gesehen und ihr eine Wirkung
+> **zugeschrieben**, statt sie zu messen.* **Die Aussage klang tragend und war es nicht — die
+> tragende Stelle stand direkt daneben, und der Dateikopf `:40-41` hatte sie sogar benannt.**
 
 ## W-34-2 · Elf Schritte, am Code gezählt — und zwei Fehlzählungen unterwegs
 
@@ -134,6 +162,34 @@ Blatt                W-34      Vorlage   gleich?   Dublette unter 25 Werkzeugen?
 6-PRUEFUNG.md        b4c60d15  719012f0  nein      keine
 7-GRENZEN.md         afd6cd40  a5b225f8  nein      keine
 ```
+
+## Die Fangprobe, die nichts fing — und ihr Ersatz, gefahren
+
+**Meine erste Mutationsprobe war „den `warn`-Zweig hinter die `every`-Prüfungen schieben".** *Der
+Evaluator hat sie gefahren: **1698 pass, 0 fail**.* **Von fünf Fangproben war ausgerechnet die
+wirkungslos, die zum tragenden Kriterium gehörte.**
+
+**Ersetzt und diesmal selbst gefahren, mit Anker und Rücksetzung:**
+
+```text
+Anker md5 vor der Probe   ace90cf96cb559da4849d4cf458cac44
+Grundlinie                1698 Tests · 1698 pass · 0 fail
+Mutation: checks.length === 0 hinter die every-Pruefungen
+                          1698 Tests · 1693 pass · 5 fail
+
+  ✖ K5  ein LEERES Dokument liefert keinen gruenen Schritt und keinen gruenen Pruefpunkt
+  ✖ K6  ein Schritt ohne Modellgrundlage sagt WAS fehlt und traegt keine erfundenen Pruefpunkte
+  ✖     statusAus: alle erfuellt ⇒ ok · alle offen ⇒ open · gemischt ⇒ prog · ein warn ⇒ warn
+  ✖ K4  die SCHLUESSEL sind unveraendert
+  ✖ K4  kein Schritt hat seinen Status gewechselt
+
+md5 nach dem Ruecksetzen  ace90cf96cb559da4849d4cf458cac44   IDENTISCH
+git status resources/     0
+```
+
+**Fünf Wächter über zwei Testdateien.** *Die vier übrigen Fangproben bleiben **abgelesen** und sind
+in `6-PRUEFUNG.md` je Zeile als solche gekennzeichnet — die Spalte „Gefahren?" macht den Unterschied
+sichtbar, statt ihn in einen Satz darunter zu schieben.*
 
 ## Der dritte Zählfehler — in `3-FORMELN`
 
