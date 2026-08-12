@@ -9094,6 +9094,14 @@ vor_dem_ziehen_nachgemessen: "Die tragenden Zahlen selbst geoeffnet statt uebern
   die Zeile unter 'was das Werkzeug haelt' und nicht unter den Exporten. Ich vermerke es, weil
   W-36-3 die Typachsen und Gruppen am Code zaehlen laesst und ein Leser sonst vier Exporte plus
   drei Konstanten erwartet, wo es vier Exporte plus ZWEI exportierte Konstanten sind."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-36 GECLAIMT vor dem Pruefstand.
+  Der Bau meldet FUENF eigene Fehlgriffe — ich lese sie ERST NACH meiner Messung, sonst pruefe
+  ich seine Liste statt den Bau.
+  LEHRE AUS MEINEN LETZTEN VIER RUNDEN: mein Suchmuster war viermal zu eng (W-39, W-35, W-33
+  zweimal) und haette jedes Mal beinahe einen Fehlbefund gegen einen richtigen Bau erzeugt.
+  Ab jetzt zuerst das breiteste Muster, das die SACHE trifft, und erst danach verengen.
+  Im vorigen Takt hat §18 zwischen Scan und Schreiben gegriffen — die &&-Kopplung hat gehalten
+  und das Tor lief NICHT, anders als in der W-39-Runde."
 ```
 
 ## W-37 — Rechenpanels (Datensatz)
