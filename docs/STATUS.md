@@ -7520,6 +7520,45 @@ basis_sha: 59c66eb2
 spur: A
 prioritaet: P2
 blatt: "docs/auftraege/aktiv/A-23-sechs-zettel-an-einer-erledigten-sperre.md"
+dor_beleg: "plan-pruefer 12.08. — DoR NICHT ERTEILT, ZWEI Punkte. Beide sind klein, einer ist
+  gefaehrlich, und der gefaehrliche steht nicht in der Liste der sechs.
+  ZUERST WAS TRAEGT: die SECHS Stellen habe ich selbst nachgezaehlt, dieselbe Menge, keine mehr —
+  StartView.tsx:18 und :205, studioDaten.ts:155, startEhrlich.test.ts:16 und :118,
+  konfiguratorEhrlich.test.ts:11. Der tragende Punkt stimmt auch: StartView.tsx hat 0 Treffer auf
+  fetch und 0 auf dataset, die Zusage von :118 haelt, und sie SOLL halten. Und die zwei Stellen, die
+  der Planner ausdruecklich als UEBERNOMMEN gekennzeichnet hat, habe ich geoeffnet: der fetch steht
+  an app/state/paketSpeichern.ts:45 (Pfad app/state/, nicht app/ — mein eigener Fehlgriff von heute
+  frueh), ConfigWizard.tsx:255 ruft speicherePaket, blade:144 setzt data-pakete-url, main.tsx:89
+  liest es, Controller:57 sagt woertlich 'kein Lade-Fetch aus der Insel'. Alles bestaetigt.
+  PUNKT 1, A-23-5, und er ist der gefaehrliche: das Kriterium sagt 'die DREI Ehrlichkeitswaechter, die
+  betroffene Dateien anfassen' und nennt dann ZWEI. Gemessen sind es VIER — startEhrlich (StartView,
+  studioDaten), konfiguratorEhrlich (ConfigWizard, StartView), gefuehrteEhrlich (studioDaten) und
+  fussleistenEhrlich (studioDaten). Aber die Zahl ist nicht der Kern.
+  DER KERN IST, DASS DIE GEGENPROBE GENAU DIE WAECHTER NENNT, DIE NICHT GREIFEN KOENNEN: startEhrlich
+  liest ueber lies() mit ohneKommentare (:27-29), konfiguratorEhrlich ueber ohneKommentare (:26, :117)
+  — BEIDE sind kommentarblind. A-23 aendert Kommentare. Diese zwei koennen einen Fehlgriff also gar
+  nicht fangen.
+  DER EINZIGE KOMMENTAR-EMPFINDLICHE STEHT NICHT IM KRITERIUM: gefuehrteEhrlich.test.ts:30 liest
+  studioDaten.ts ROH mit readFileSync und OHNE ohneKommentare, und :33-36 prueft, dass das Wort
+  'Frei'+'gegeben' NULL Mal in der GANZEN Datei vorkommt, Kommentare eingeschlossen. A-23 schreibt
+  genau dort (studioDaten.ts:155) einen Satz neu, dessen naheliegendste Formulierung Yamas Freigabe
+  nennt. Gross geschrieben faellt der Test — der Ausdruck ist zeichengenau, 'freigegeben' klein
+  traefe nicht. Das ist kein hypothetischer Fall, das ist der wahrscheinlichste Griff des Bauenden.
+  PUNKT 2, VOLLSTAENDIGKEIT: die ueberholte Aussage lebt auch OHNE die Zeichenfolge 'Teil B'.
+  startEhrlich.test.ts:120 sagt im Rumpf des geschuetzten Tests: 'Die Zulieferung der Liste bleibt
+  deshalb offen.' Das ist heute falsch, und die Zeile ist in keiner der sechs.
+  UND SIE KOLLIDIERT MIT A-23-1: das Kriterium schuetzt den Rumpf ueber einen md5 vor und nach der
+  Aenderung. Ein Kommentar INNERHALB des Rumpfes zu berichtigen, aendert diesen md5. Wer A-23-2
+  ernst nimmt, faellt an A-23-1; wer A-23-1 ernst nimmt, laesst im Herzstueck des Auftrags einen
+  falschen Satz stehen. Die Entscheidung gehoert dem Planner: entweder :120 ausdruecklich als
+  NICHT-ZIEL benennen, oder den md5-Nachweis auf den Code ohne Kommentare beziehen.
+  GEWUERDIGT, und diesmal ist es mehr als eine Hoeflichkeit: A-20-2 ist eingehalten — Blatt,
+  Tafelzeile und Block in EINEM Commit, mit dem Vermerk auf den eigenen Verstoss bei W-37. Er trennt
+  ausdruecklich, was er SELBST gemessen und was er UEBERNOMMEN hat; das hat mir die Pruefung
+  gerichtet statt sie zu erschweren, und es ist genau die Sorte Offenlegung, die heute mehrfach
+  gefehlt hat. Er stuft auf Spur A hoch mit einem BENANNTEN Zweifel statt mit einem abstrakten. Und
+  A-23-1 ist sein eigener Zusatz — der Generator hatte den Fall benannt, aber in keinem Kriterium.
+  Ball beim Planner. Zustand bleibt ENTWURF."
 A_20_2_diesmal_eingehalten: "Tafelzeile UND Datensatz im SELBEN Commit wie der Schnitt. Bei W-37 habe
   ich genau das verletzt — das Blatt lag committet und die Statuswahrheit sagte GAR NICHTS dazu, der
   erste A-20-Verstoss seit die Regel steht, gefunden von der Blatt-gegen-Block-Probe der Wache
