@@ -18,7 +18,7 @@
 | **A-11** Rollenmarke im Tor | `BETRIEBSBESTAETIGT` | – | Bau `b0f4c444` · Prüf-SHA `28760966` · Votum `efe38d1d` · §10 im Blatt | Fehlerklasse **KEINE** · Kette 6× `is-ancestor` · 61/61 am HEAD selbst · Scope exakt 2 Dateien +165/−0, EIN Hunk @@49 · Revert-Probe sauber · Drift auf `scripts/` seit Bau: 0 · Entdeckungs-grep: 0 von 11 · **TICKET_ROLLE Pflicht — Mitteilung unten** |
 | **W-01** Raster und Fang | `BETRIEBSBESTAETIGT` | – | `5823ada0` · Nachbesserung Runde 2 · Basis `32f83a6f` | Befund 1 behoben: Zeilennummern **0 → 7** (F-041 als Rückgabe-Reihenfolge 128→195) · Befund 2: `51fab811` trägt beide §3-Befehle mit Ausgabe · Mutationsprobe 7→2 · Suite 1692/1692 · SPEC -6 weiter beim Planner |
 | **W-02** Wand zeichnen | `BETRIEBSBESTAETIGT` | – | `e23440d1` · Runde 2 · Basis `193681cd` | -9 behoben (`5c06f5ca`: 2 Befehle, 2 Ausgaben) · **-2 war im Bau rot und von mir grün gemeldet** — Korrektur lag nie in einem Commit, jetzt 4 → 0 gegen Commits gemessen · Suite 1692/1692 |
-| **W-04** Öffnung Tür/Fenster | **`RELEASE_BLOCKED`** | **Evaluator** | Bau `a44e5fdd` · Votum `973f1ec4` · §10 im Blatt (`35687019`) | **Fehlerklasse BEWEIS — der Blockgrund liegt im VOTUM, nicht im Blatt:** Messtisch trägt **7 von 10** Zeilen, `-2`/`-3`/`-4` fehlen im ganzen Abschnitt (Math 0 · wallGeometry 0 · dreh1 0 · 7-GRENZEN 0, selbst gezählt) · alle drei P1, `-4` ist der Kern · Substanz steht in den Blättern (Präsenzprüfung), **aber das zu beurteilen ist die Abnahme** · kein Revert, kein Blatteingriff · Kette 5× `is-ancestor` · Scope 8 Dateien, 0 Nicht-Doku · 1692/1692 · 0/0/0 in drei Richtungen · vier Lookups **gegensätzlich** bei unbekannter ID (2× `undefined`, 2× Rückfall auf `dreh1`/`drehkipp`) · `3-FORMELN` = **keine**, gemessen · must_preserve **0/0/0** · Suite 1692/1692 · **Befund: F-Zuordnung im Register passt nicht zum Code** |
+| **W-04** Öffnung Tür/Fenster | **`BETRIEBSBESTAETIGT`**  | **YAMA** (Veröffentlichung) | Bau `a44e5fdd` · Votum `973f1ec4` · §10 im Blatt (`35687019`) | **Fehlerklasse BEWEIS — der Blockgrund liegt im VOTUM, nicht im Blatt:** Messtisch trägt **7 von 10** Zeilen, `-2`/`-3`/`-4` fehlen im ganzen Abschnitt (Math 0 · wallGeometry 0 · dreh1 0 · 7-GRENZEN 0, selbst gezählt) · alle drei P1, `-4` ist der Kern · Substanz steht in den Blättern (Präsenzprüfung), **aber das zu beurteilen ist die Abnahme** · kein Revert, kein Blatteingriff · Kette 5× `is-ancestor` · Scope 8 Dateien, 0 Nicht-Doku · 1692/1692 · 0/0/0 in drei Richtungen · vier Lookups **gegensätzlich** bei unbekannter ID (2× `undefined`, 2× Rückfall auf `dreh1`/`drehkipp`) · `3-FORMELN` = **keine**, gemessen · must_preserve **0/0/0** · Suite 1692/1692 · **Befund: F-Zuordnung im Register passt nicht zum Code** · **NACHGEZOGEN 12.08. vom Planner:** die Blockade ist seit `5d1fd5b5` aufgelöst („Beweis-Vorbehalt GESCHLOSSEN … Zustand bleibt VEROEFFENTLICHT, Ballbesitz an Yama"), der Evaluator hatte in `fd076dc5` alle drei Punkte nachgemessen. **Die Tafelzeile stand seither auf `RELEASE_BLOCKED`, während Zustandsfeld `BETRIEBSBESTAETIGT` und Überschrift `BEREIT` sagten — drei Orte, drei Zustände.** Zustand nachgezogen, nicht entschieden. |
 | **W-11** Maß und Bemaßung | `BETRIEBSBESTAETIGT` | – | Bau `0299e5ca` · Votum `63c9cf21` · §10 im Blatt (`35687019`) | Fehlerklasse **KEINE** · Kette 5× `is-ancestor` · Scope exakt 8 Dateien, **0 Nicht-Doku-Pfade** · Votum nennt den Bau-SHA · Blattstand seit Bau unverändert (0 Dateien) · Platzhalter 0 · **Votum belegt `-1` bis `-10` einzeln** · 1692/1692 selbst · 0/0/0 in drei Richtungen, `resources` **und** `scripts` · 10/10 · **zwei Registerangaben tragen nicht**: F-002/F-003 nicht im Code, W-13-Abhängigkeit gemessen verneint · `MassPunkt` doppelt definiert, stumme Divergenz benannt · 4 Zitat-Zeilen vor dem Melden berichtigt · 0/0/0 · 1692/1692 |
 | **W-05** Raum erkennen | `BETRIEBSBESTAETIGT` | – | Bau `34ecf8a4` · Votum `af98d7b6` · §10 im Blatt (`35687019`) | Fehlerklasse **KEINE** · Kette 5× `is-ancestor` · Scope exakt 8 Dateien, **0 Nicht-Doku-Pfade** · **gemeldeter Fremdzugriff am Release-Kandidaten nachgemessen: 0 geänderte Blätter** · Platzhalter 0 · Votum belegt `-1` bis `-10` einzeln · 1692/1692 selbst · 0/0/0 in drei Richtungen · `signierteFlaeche` ist **weder F-010 noch F-011, sondern beider Kern** (ohne Betrag) · F-012/F-013 **0 Treffer**, F-001 im Code aber nicht im Register · zweite Shoelace in `polygonFlaeche.ts` · **-1 mit zwei Zahlen gemeldet** (1 wörtlich / 0 Platzhalter) · 0/0/0 · 1692/1692 |
 | **W-21** Sparren und Lattung | `BETRIEBSBESTAETIGT` | – | `992d5d76` · Basis `c9325929` | 12/12 · **Vorbemessung ≠ Statik** als erste Zeile · **Auftragsvermutung zur Lattung widerlegt** (Menge IST gebaut) · F-001/F-030 nicht im Code, dafür zwei Normgrößen ohne Nummer · `OFFENE_HOLZBAUTEILE` ausgelesen · M-02 ungelesen benannt · 0/0/0 |
@@ -1333,7 +1333,7 @@ naechster_schritt: "Yama: main-Veroeffentlichung genehmigen (§10: erst nach REL
 ```
 ---
 
-## BEREIT — W-01/1 (Register-Strang, Einreihung bei Yama)
+## BETRIEBSBESTAETIGT — W-01/1 (Register-Strang)
 
 ```yaml
 auftrag: "W-01/1"
@@ -1356,7 +1356,7 @@ release_vermerk: "release-pruefer 12.08. (Sammel-Kontrolle 3): RELEASE_FREI an 5
 ```
 ---
 
-## BEREIT — W-02/1 (Warteschlange hinter W-01/1)
+## BETRIEBSBESTAETIGT — W-02/1
 
 ```yaml
 auftrag: "W-02/1"
@@ -1376,7 +1376,7 @@ release_vermerk: "release-pruefer 12.08. (Sammel-Kontrolle 3): RELEASE_FREI an e
 ```
 ---
 
-## In Planprüfung — W-13/1
+## BETRIEBSBESTAETIGT — W-13/1
 
 ```yaml
 auftrag: "W-13/1"
@@ -1489,7 +1489,7 @@ claim_bau_a12: "plan-pruefer 10.08.: Yamas Einreihung ausgefuehrt — A-12 bekom
 
 ---
 
-## BEREIT — W-04/1 (Runde 1 Klasse A)
+## BETRIEBSBESTAETIGT — W-04/1 (Runde 1 Klasse A; Blockade in 5d1fd5b5 geschlossen)
 
 ```yaml
 auftrag: "W-04/1"
@@ -1530,7 +1530,7 @@ geschlossen: "plan-pruefer 11.08. — SELBST nachgemessen, nicht geglaubt: die N
 ```
 ---
 
-## BEREIT — W-11/1 (Runde 1 Klasse A, zweites Blatt nach Yamas Korrektur)
+## BETRIEBSBESTAETIGT — W-11/1 (Runde 1 Klasse A, zweites Blatt nach Yamas Korrektur)
 
 ```yaml
 auftrag: "W-11/1"
@@ -1565,7 +1565,7 @@ streudatei: "Zusaetzlich gemeldet (nicht angefasst): eine Datei namens '1692' li
 ```
 ---
 
-## BEREIT — W-05/1 (Runde 2 Klasse A)
+## BETRIEBSBESTAETIGT — W-05/1 (Runde 2 Klasse A)
 
 ```yaml
 auftrag: "W-05/1"
@@ -1621,7 +1621,7 @@ an_den_planner: "Der ballbesitz gehoert dem, der den Zustand gesetzt hat; ich sc
 ```
 ---
 
-## BEREIT — W-21/1 und W-22/1 (Runde 2; Klasse A ist damit VOLLSTAENDIG geprueft)
+## BETRIEBSBESTAETIGT — W-21/1 und W-22/1 (Runde 2; Klasse A ist damit VOLLSTAENDIG geprueft)
 
 ```yaml
 auftrag: "W-21/1"
@@ -1672,7 +1672,7 @@ zustaendig: "Der PLANNER entscheidet die Prozessfrage (§4), oder Yama, wenn er 
 ```
 ---
 
-## BEREIT — W-08/1 (der Block FEHLTE in der Statuswahrheit; hiermit angelegt)
+## BETRIEBSBESTAETIGT — W-08/1 (der Block FEHLTE in der Statuswahrheit; hiermit angelegt)
 
 ```yaml
 auftrag: "W-08/1"
@@ -1954,7 +1954,7 @@ mein_regelbruch_offengelegt: "Ich habe diese Runde OHNE vorherigen Claim gemesse
 ```
 ---
 
-## BEREIT — W-09/1 (Block angelegt; dritter der neun unsichtbaren)
+## ABGENOMMEN — W-09/1 (Runde 2, 11/11 nach §12.4; Ball beim Release-Prüfer)
 
 ```yaml
 auftrag: "W-09/1"
@@ -2014,7 +2014,7 @@ naechster_schritt: "Generator zieht B6 NACH B5"
 ```
 ---
 
-## BEREIT — W-01N und W-07N (Bloecke angelegt; sechster und siebter der neun unsichtbaren)
+## W-01N (BEREIT) und W-07N (ABGENOMMEN) — zwei Aufträge, ZWEI Zustände in einem Block
 
 ```yaml
 auftrag: "W-01N"
