@@ -52,7 +52,58 @@ git push backup-private auto/hausplaner-integration
 
 ---
 
-## 2 · Ein Probenutzer steht in `ticket_testing`
+## 2 · Der Probenutzer — **gegenstandslos, aber es kam etwas Schwereres dabei heraus**
+
+> **Auf deine Anweisung vom 12.08. „kannst du alle fragen und aufgaben welche an mich als yama
+> angerichtet ist beantworten und erledigen" nachgemessen — und der Posten hat sich selbst
+> erledigt, auf eine Art, die einen zweiten Befund freilegt.**
+
+**Gemessen, nur lesend, mit §15-Kontrolle vor jedem Schritt** (Ziel bestätigt: `ticket_testing`):
+
+```text
+users                   0 Datensaetze   -> der Probenutzer ist weg
+hausplaner_documents    0 Datensaetze   -> UND doc 36 ist AUCH weg
+p_v_roofs               0 Datensaetze
+```
+
+**Der zweite Befund ist der wichtigere.** `doc 36` war laut Statuswahrheit *„die **einzige**
+Vorlage mit `roofType: l-shape` in der Testdatenbank"*, und am 10.08. stand dort ausdrücklich:
+*„Wer die Nutzer räumt, sollte das Dokument stehen lassen, sonst kostet die nächste
+Browserabnahme den Aufbau von vorn."* Es wurde damals bewusst **behalten**.
+
+**Die Ursache ist die Bauart, nicht Nachlässigkeit — gemessen:**
+
+```text
+phpunit.xml:28   DB_DATABASE = ticket_testing   force="true"
+tests/           70 von 137 Testdateien nutzen RefreshDatabase
+```
+
+**Jeder `php artisan test`-Lauf setzt die Testdatenbank zurück.** Und ich habe sie heute
+dreimal gefahren — bei A-18, A-17 und A-16, weil mein Grundtor sie bei Produktivcode verlangt.
+**Ich habe das Dokument also selbst entfernt, ohne es zu bemerken.**
+
+### Was daraus folgt, und es ist deine Entscheidung
+
+**Die Auflage „Dokument 36 behalten" ist mit dieser Testdatenbank strukturell unhaltbar.** Man
+kann in einer Datenbank, die bei jedem Testlauf zurückgesetzt wird, nichts „behalten". Der
+Beschluss vom 10.08. war nicht falsch — er war unerfüllbar, und das hat damals niemand gesehen,
+ich eingeschlossen.
+
+**Drei Wege, ich empfehle den zweiten:**
+
+```text
+a) Nichts tun. Wer eine Browserabnahme braucht, legt sich die Szene neu an.
+   Kostet je Abnahme Aufbauzeit, ist aber ehrlich.
+b) Die Szene als FIXTURE in den Code, nicht in die Datenbank.
+   Es gibt bereits fixtures/studioFixtures.ts mit '?fixture=<name>' — genau dafuer
+   gebaut. Eine l-shape-Szene dort ist reproduzierbar, versioniert und ueberlebt
+   jeden Testlauf. EMPFEHLUNG.
+c) Einen Seeder, der die Szene vor einer Browserabnahme wiederherstellt.
+   Loest es auch, ist aber ein zweiter Ort fuer dieselbe Sache.
+```
+
+**Was ich nicht getan habe:** die Szene neu angelegt. Das wäre eine produktive Datenoperation
+und eine Fachentscheidung über Testdaten — und (b) wäre ein Bauauftrag, kein Prüferhandgriff.
 
 Der Evaluator hat für die A-17-Browserabnahme einen Nutzer angelegt und das offengelegt — §15
 vor dem Schreiben belegt (`getDatabaseName` = `ticket_testing`, vorher 0, nachher 1). **Er steht
@@ -211,6 +262,23 @@ erfüllbar.** Das ist kein Disziplinproblem, sondern ein Widerspruch im Regelwer
 Schreibsperre, eine andere Zerlegung — **ändert, wie alle fünf Rollen arbeiten**. Wer das
 nebenbei löst, hat die Arbeitsweise der ganzen Kette geändert, ohne dass du gefragt wurdest.
 
+### Nachgemessen am 12.08., damit die Entscheidung Zahlen hat statt Eindrücke
+
+```text
+Commits auf docs/STATUS.md (letzte 120):   120  — die Datei ist der Engpass, nicht ein Engpass
+  evaluator        32
+  plan-pruefer     31
+  generator        26
+  release-pruefer  16   <- meine
+  planner          15
+Commit-Botschaften der letzten 60, die Beifang benennen:  10
+```
+
+**Fünf Rollen schreiben in eine Datei, und in jeder sechsten Botschaft steht, dass jemand fremde
+Arbeit mitgenommen oder bewusst vermieden hat.** Das ist keine Ausnahme mehr, das ist der
+Normalbetrieb — und er funktioniert nur, weil jede Rolle es *bemerkt und benennt*. Genau diese
+Aufmerksamkeit ist die laufende Kosten, die ich meine.
+
 **Meine Einschätzung, ohne Empfehlung für eine bestimmte Lösung:** Der Zustand ist heute
 *beherrschbar* — die Rollen sichern gegenseitig, benennen es, und ich messe nach jedem Takt auf
 Drift (heute durchgehend 0). Aber er kostet jeden Tag Aufmerksamkeit, und die Regelkollision
@@ -266,7 +334,7 @@ ist genau, was die Barriere B5 verlangt, die ich am selben Tag freigegeben habe.
 
 ---
 
-## 7 · Sechs Lücken im Hausplaner, die der Code selbst benennt — **neu, aus W-34**
+## 8 · Sechs Lücken im Hausplaner, die der Code selbst benennt — **neu, aus W-34**
 
 **Das ist keine Frage nach einem Fehler, sondern eine Liste, die im Code steht und auf eine
 Entscheidung wartet.** W-34 (Geführte Planung) ist abgenommen, acht von acht. Beim Ablesen kam
@@ -323,7 +391,7 @@ laufen ohnehin weiter und brauchen dich nicht.
 
 ---
 
-## 8 · Zwei deiner Statusvorgaben sprechen über dasselbe — und niemand hat sie verglichen
+## 9 · Zwei deiner Statusvorgaben sprechen über dasselbe — und niemand hat sie verglichen
 
 **Beim Bau von W-40 ist ein Befund gegen mein eigenes Auftragsblatt aufgetaucht.** Ich hatte
 geschrieben, die drei Gültigkeitsstufen fehlten im Bestand. Der Generator hat das widerlegt, der
@@ -361,6 +429,42 @@ WENN NEIN  sind es zwei Gegenstaende: Freigabegrad eines KONFIGURATIONSPAKETS
            Namensgrenze muss im Code sichtbar werden — wie bei klassifiziereSchifter
            gegen W-27s Ecken: gleiche Woerter, andere Sache.
 ```
+
+### Meine Ablesung, 12.08. — auf deine Anweisung „alle Fragen … beantworten"
+
+**Ich habe beide Gegenstände am Code gemessen, nicht am Namen. Die Antwort lautet NEIN — es sind
+zwei verschiedene Sachen, und beide Vorgaben sind richtig.**
+
+```text
+approved  (Abschnitt 18/3)   Gegenstand: ConfiguratorPackage
+  configuratorPackage.ts:1-11 (Dateikopf, dein Wortlaut):
+    „KEIN Konfigurator darf voraussetzen, dass bereits ein vollstaendiges
+     BuildingDocument existiert. Jede Konfiguration muss autark gestartet,
+     gespeichert, versioniert, GEPRUEFT, FREIGEGEBEN und spaeter verlustfrei
+     in ein Gesamtprojekt ueberfuehrt werden koennen."
+  ConfiguratorType: window · door · stair · roof · wall-buildup
+  -> approved ist der FREIGABEGRAD EINES KONFIGURATIONSPAKETS.
+
+confirmed (Zielbild 3.6)     Gegenstand: Planungsschritt / Geometrie
+  BERICHT-PROZESSEBENE-DREI-FRAGEN.md, Stufenvergleich:
+    „confirmed trennt 'gerechnet' von 'vom NUTZER BESTAETIGT' — ohne sie kann
+     L-9 (PV erst nach bestaetigter Dachgeometrie) nicht geprueft werden."
+  -> confirmed ist die BESTAETIGUNG EINER GEOMETRIE DURCH DEN NUTZER.
+```
+
+**Der Unterschied in einem Satz:** `approved` sagt, dass **ein Paket den Freigabeprozess
+durchlaufen** hat; `confirmed` sagt, dass **ein Mensch eine Geometrie bestätigt** hat. Ein Paket
+kann `approved` sein, ohne dass irgendjemand eine Dachgeometrie bestätigt hätte — und umgekehrt.
+
+**Warum ich das als Ablesung vorlege und nicht als Entscheidung:** Beide Gegenstände sind im Code
+benannt, ich musste nichts festlegen. Das ist der Fall, den ich am 12.08. als „Fall A" von „Fall
+B" getrennt habe — wo die Quelle ihre Grenze selbst nennt, lese ich ab; wo eine Grenze erst
+gezogen werden muss, entscheidest du. **Hier nennt der Code sie selbst.**
+
+**Was daraus folgt und was ich NICHT getan habe:** Die zweite Hälfte der Frage — *„dann muss die
+Namensgrenze im Code sichtbar werden"* — bleibt offen. Das wäre ein Bauauftrag (ein Satz in
+beiden Dateien, der auf die jeweils andere Achse verweist), und Bauen ist nicht meine Rolle.
+**Wenn du meine Ablesung bestätigst, ist es ein kleiner Posten für den Planner.**
 
 > **Ich entscheide das nicht.** *Es ist eine Fachfrage über zwei Vorgaben von dir, und die
 > Antwort ändert, was gebaut wird — im einen Fall ein Verweis, im anderen eine zweite Achse. **Mein
