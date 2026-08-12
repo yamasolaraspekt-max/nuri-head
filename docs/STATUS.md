@@ -61,7 +61,7 @@
 | **W-35** Konfigurator-Dialog | **`BETRIEBSBESTAETIGT`** | – | Release `3dae69b4` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | **`BETRIEBSBESTAETIGT`** | – | Release `fa7547c7` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
-| **W-36** Faehigkeiten-Navigation | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
+| **W-36** Faehigkeiten-Navigation | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-37** Rechenpanels | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
@@ -8868,8 +8868,8 @@ eigene_messfehler: "Zwei Fehlgriffe zu W-33-5: 'Teil B' mit der Projektliste gle
 
 ```yaml
 auftrag: "W-36"
-zustand: IN_ARBEIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 titel: "Die VIERTE Statusachse, und ein Kommentar der zwei davon mischt"
 basis_sha: 08b264cc
 spur: A
@@ -8928,6 +8928,66 @@ der_guard_test: "Das Blatt muss den Satz aus dem Code tragen: der ECHTE Export-N
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 W_36_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 gezogen_am: "12.08. vom generator. §3 vor dem Ziehen 0/0 an beiden Orten, danach 1/1."
+bau_sha: f1c412f9
+bericht: docs/BERICHT-W-36-faehigkeiten-navigation.md
+E1_gefahren: "9 von 9 GLEICH — die acht eigenen Pfade plus REGISTER.md, das ein fremder Commit
+  mitgenommen hat."
+registerzeile_als_beifang_in_fremdem_commit: "Meine Aenderung an REGISTER.md Zeile 123 ist in
+  10463142 des Planners gelandet, bevor ich committen konnte. Der Arbeitsbaum ist dort
+  hash-identisch mit HEAD; ich habe nichts nachzutragen und trage auch nichts nach. Gemeldet, weil
+  der Evaluator die Zeile sonst in meinem Bau-Commit sucht und nicht findet — sie steht in
+  10463142."
+FUENF_EIGENE_FEHLGRIFFE_alle_vor_der_meldung_gefunden: "Alle fuenf stehen auch im BLATT.
+  (1) Ich habe die vier Zustaende ERKLAERT — erfunden. (2) Daraufhin schrieb ich, die Bedeutung
+  stehe NIRGENDS — auch falsch, sie steht in studioUi.tsx:32-37 mit kurz, lang, Farbe und Punkt.
+  Der Griff ist bei beiden derselbe und er ist der Kern: ich habe den Suchbereich des AUFTRAGS
+  fuer den Suchbereich der SACHE gehalten. Der Auftrag nennt zwei Dateien, die Beschriftung liegt
+  in einer dritten. Erst erfinden, dann eine Abwesenheit behaupten.
+  (3) '9 verfuegbar / 5 in_entwicklung' waren TEXTVORKOMMEN, keine Faehigkeiten — eines der neun
+  steht in einer .map() und erzeugt so viele Eintraege wie TOOL_DEFINITIONS lang ist. Die echte
+  Zahl steht in schienenReiter.test.ts:95: 22 + EIGENE_WERKZEUGE + AUS_PAKET_GEHOBEN = 25.
+  (4) 'Die Engines tragen in_entwicklung' war falsch: 8 von 13 tragen verfuegbar, sind also
+  klickbar. Der Dateikopf sagt, die Panels folgten in Batch 1-3 — fuer die Mehrzahl sind sie da.
+  (5) Ich habe nur die Wortform 'schläft' gezaehlt: sieben. Mit dem Verb sind es neun. H-9 an mir
+  selbst, das Muster misst die Schreibweise und nicht die Sache.
+  Dazu zwei falsche Zeilenangaben, beim Nachmessen der eigenen Angaben gefunden."
+W_36_2_ist_groesser_als_der_auftrag_ihn_schneidet: "Der Auftrag nennt DREI schlaeft-Treffer in
+  einer Datei. Gemessen: SIEBEN in DREI Dateien, neun mit Verbformen — und studioUi steht in keinem
+  Scope-Block. Die schwerste ist FaehigkeitenNavi.tsx:72, die FUSSZEILE, also auf dem BILDSCHIRM:
+  'Jeder Eintrag sichtbar · schläft = Bedien-Panel folgt (Batch 1-3).' Der Anwender bekommt die
+  Erklaerung einer Marke, die er nirgends sieht — sie heisst 'in Entwicklung' (studioUi:36).
+  Ein Kommentar verwirrt die naechste Rolle, eine Bildschirmzeile verwirrt den Nutzer.
+  studioUi:30 habe ich als REDEWENDUNG gekennzeichnet statt mitgezaehlt: 'kein schläft ohne Grund'
+  benutzt das Wort nicht als Wert. Sechs problematische, eine Redewendung."
+drei_funde_ueber_den_auftrag_hinaus: "ERSTENS die dritte Achse ist ZWEIMAL deklariert:
+  FaehigkeitZustand (faehigkeiten.ts:25) und StudioZustand (studioUi.tsx:28) sind zeichengleich.
+  Sie treffen sich in FaehigkeitenNavi:64 und uebersetzen, weil TypeScript Werte prueft und nicht
+  Namen. Die Sicherung wirkt nur in EINER Richtung — ein fuenfter Wert in FaehigkeitZustand bricht
+  die Badge-Zeile, einer in StudioZustand bricht nichts. Und die Beschriftung haengt an der
+  ZWEITEN, ZUSTAND ist ein Record<StudioZustand,…>: ein neuer Faehigkeitszustand waere ein Zustand
+  ohne Wort. StudioZustand wird auch von panelTabs:30, fachFlaechen:68 und FachFlaeche:111 benutzt,
+  also weit ausserhalb von W-36.
+  ZWEITENS eine FUENFTE Statusgroesse ohne Typ: toolTypes.ts:108-109 fuehrt projectState mit vier
+  Werten im Kommentar und string im Typ; arbeitsbereiche.test.ts:120 benutzt bereits 'planung', und
+  nichts haelt es auf. Dieselbe Lage wie TYP_MAP gegen katalogFür in W-35.
+  DRITTENS ein toter Import: HausplanerApp.tsx:39 fuehrt faehigkeitNach ein und benutzt es nie.
+  Der einzige echte Aufrufer ist FussUndUeberlagerungen:212 und :213."
+W_36_5_am_bau_stand_erhoben: "Zwoelf Dateien, jede einzeln geoeffnet: 7 IMPORT, 3 NUR QUELLE,
+  2 WORTZUFALL. Keine Zahl aus dem Auftragsblatt uebernommen. Die vier enginePanel-Tests tragen
+  wortgleich dieselbe Importzeile — daran ist die erste Fassung des Auftrags gescheitert.
+  gruppenzeileUndSchiene:102 prueft in BEIDE Richtungen, mit dem Grund im Kommentar: 'Ohne diesen
+  Partner bliebe die Zusage oben gruen, wenn beides nebeneinander stuende.' Das ist B4 in Testform."
+der_guard_test_ist_der_staerkste_waechter_dieser_werkbank: "faehigkeiten.test.ts:38 importiert
+  jedes Engine-Modul WIRKLICH (await import) und prueft, dass der deklarierte Export existiert und
+  eine Funktion ist. Er beweist statt zu lesen — und das ist noetig, weil faehigkeiten.ts die
+  dreizehn Engines nur als ZEICHENKETTEN referenziert und keine davon importiert. Was der Compiler
+  dort nicht kann, holt der Test zur Laufzeit nach. Der Test daneben (:21-34) nagelt 13 Engines
+  fest und listet die 8 angeschlossenen NAMENTLICH, sortiert verglichen — 'damit die Zusage nicht
+  an der Zeilennummer im Register haengt'."
+was_der_evaluator_zuerst_pruefen_sollte: "Ob wirklich KEIN Produktivcode angefasst ist. Dieser Bau
+  meldet sieben schlaeft-Stellen, einen toten Import und zwei ueberholte Dateikoepfe — die
+  Versuchung, eine davon 'schnell' zu berichtigen, war da, und keine ist berichtigt.
+  git show f1c412f9 --stat zeigt neun Dokumentdateien und 0 unter resources/."
 vor_dem_ziehen_nachgemessen: "Die tragenden Zahlen selbst geoeffnet statt uebernommen:
   faehigkeiten.ts 129 Z., FaehigkeitenNavi.tsx 76 Z., werkzeugZustand.ts 118 Z.
   Die zehn zitierten Fundstellen einzeln gelesen — :17 FaehigkeitGruppe, :22 FaehigkeitArt mit
