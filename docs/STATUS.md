@@ -50,7 +50,7 @@
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
-| **A-22** Statuswahrheit maschinell lesbar | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
+| **A-22** Statuswahrheit maschinell lesbar | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7175,8 +7175,8 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "A-22"
-zustand: ENTWURF
-ballbesitz: planner
+zustand: BEREIT
+ballbesitz: generator
 zurueck_auf_ENTWURF_nach_paragraf_12_1: "Der Generator hat A-22 BEREIT bei sich gehabt und NICHT
   gezogen, mit dem richtigen Grund: die DoR deckt die Kriterien nicht mehr. A-22-2 ist GESTRICHEN
   und A-22-2b ist NEU, beide in 5024783a, waehrend der dor_beleg noch von 17 doppelten Schluesseln
@@ -7232,7 +7232,7 @@ titel: "Doppelte yaml-Schluessel und uneinheitliche Feldform in docs/STATUS.md"
 basis_sha: e1a478fb
 spur: A
 prioritaet: P1
-dor_beleg: "plan-pruefer 12.08., DRITTE Fassung — NICHT FREIGEGEBEN. A-22-2b verlangt, eine Ursachenbehauptung in den Bericht zu schreiben, die MEINE MESSUNG UMKEHRT. Das Kriterium lautet: 65 Commits des Generators fuegen eine ballbesitz-Zeile HINZU, statt eine vorhandene zu aendern. SELBST GEMESSEN ueber alle 79 Generator-Commits auf dieser Datei, dreifach: 71 fuegen eine Zeile hinzu; davon 6 OHNE zugleich eine zu entfernen; und 65 mit +ballbesitz UND -ballbesitz zugleich. Die Rechnung schliesst: 71 minus 6 ist 65, und die Gegenprobe zaehlt unabhaengig 65. DIE ZAHL 65 BEZEICHNET ALSO GENAU DIE COMMITS, DIE KORREKT AENDERN — die problematischen sind die SECHS. Wer A-22-2b woertlich erfuellt, schreibt eine Ursache fest, die das Gegenteil der Messung sagt, und sie steht dann dauerhaft im Bericht. NACH MEINER DRITTEN PRUEFFRAGE (Beweiskraft) ist das kein Formfehler: die Erfuellung des Kriteriums beweist nicht das Gemeinte, sie widerlegt es. ZURUECK AN DEN PLANNER mit dem Vorschlag, die Zahl auf SECHS zu berichtigen und die 65 als das zu benennen, was sie ist — der Beleg dafuer, dass der Generator ueberwiegend richtig aendert. Ich habe die Auflage schon in der zweiten Fassung gegeben; sie ist nicht ins Blatt gelangt, deshalb jetzt als Blocker."
+dor_beleg: "plan-pruefer 12.08., VIERTE Fassung — FREIGEGEBEN. Die Berichtigung von A-22-2b uebernimmt meine Messung vollstaendig und richtig. FRISCH NACHGEMESSEN, alle vier Zahlen: 80 Generator-Commits auf dieser Datei, 71 mit hinzugefuegter ballbesitz-Zeile, davon 65 mit gleichzeitiger Entfernung (korrektes Aendern) und 6 ohne (die Ursache). Rechnung schliesst: 71 minus 6 gleich 65. Das Kriterium nennt jetzt die SECHS als Ursache und die 65 als Beleg dafuer, dass ueberwiegend richtig geaendert wird — genau umgekehrt zur ersten Fassung. Die Zahl der Generator-Commits ist seit meiner Blocker-Messung von 79 auf 80 gewachsen, durch seinen eigenen Berichtigungs-Commit; beide Zahlen waren zu ihrer Zeit richtig. FREIGABE ERTEILT, Ball beim Generator."
 anlass: "Der Generator hat in e1a478fb 17 doppelte yaml-Schluessel gemeldet, aus einem Nebenbefund
   des Evaluators in e5716bc0. Es ist der DRITTE Strukturmangel dieser Datei an einem Tag."
 selbst_nachgemessen: "Ueber alle yaml-Bloecke gefahren, 145 Bloecke: 17 doppelte Schluessel und
