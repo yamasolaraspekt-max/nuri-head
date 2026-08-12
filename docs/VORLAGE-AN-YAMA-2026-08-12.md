@@ -367,8 +367,16 @@ SCHON ALS WERKZEUG  Pruefung und Koordination   -> W-40 (Gueltigkeitsstatus:
 ERFASST                                            confirmed/outdated/blocked) und W-41
                                                    (Abhaengigkeitsgraph, keine stille Loeschung)
                     Import oder Grundriss       -> beruehrt W-42 (Schreibpfad Wizard ->
-                                                   Gebaeudemodell), heute schreibt der
-                                                   Wizard NICHT ins Modell
+                                                   Gebaeudemodell)
+                    BERICHTIGT 12.08.: hier stand „heute schreibt der Wizard NICHT ins
+                    Modell". FALSCH. Beim Schneiden von W-42 gemessen und jede Stelle
+                    geoeffnet: ConfigWizard.tsx schreibt an DREI Stellen ueber
+                    executeCommand ADD_NODE ins Modell — Heizkoerper (:184), Treppe
+                    (:205), Fenster UND Tuer (:226). Der Dateikopf und der Bericht sagen
+                    beide das Gegenteil, weil beide auf BuildingDocument gemessen haben,
+                    und dieses Wort kommt in der Datei NULL Mal vor. Was an diesem
+                    Schritt wirklich fehlt, ist die Bestaetigung des MASSSTABS beim
+                    Import — nicht der Schreibpfad.
 
 SCHEMA-ERWEITERUNG  Raeume und Einrichtung · Kueche und Bad
                     Beide brauchen eine neue Eigenschaft bzw. Objektart im Gebaeudemodell.
