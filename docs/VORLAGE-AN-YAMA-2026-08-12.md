@@ -350,6 +350,29 @@ sonst.***
 *Die Abhilfe ist eine Prozessentscheidung und bleibt bei dir; **A-22-6** hat sie schon als deine benannt.
 Ich lege nur den Beleg dazu: **die Regel ist nicht verletzt worden, sie war an dieser Stelle wirkungslos.***
 
+### Am 13.08. der schwerere Fall: mein Commit hat einen fremden BAU eingesammelt
+
+**Nicht mehr ein Beleg, sondern ein Bau** — *und der Generator hat es gemeldet, nicht ich:*
+
+```text
+Er baute A-25 (die yaml-Zaeune), ich committete c8dd6d49 (W-05/1).
+Beide fassen docs/STATUS.md an.
+Gemessen: mein Commit traegt 49 Zeilen an dieser Datei — darunter seine 20.
+Sein `git diff` ist danach LEER; er tragt nichts nach, weil nichts fehlt.
+Seine Zaehlung: NEUNTES Mal, dass eigene Zeilen so wandern.
+```
+
+> **Die Folge ist die, die zählt: sein Bau ist in der Historie nicht als Bau erkennbar.** *Er steht unter
+> **meiner** Botschaft, die von W-05/1 spricht. **Wer später fragt „wann wurden die Zäune gesetzt", findet
+> einen Planner-Commit über Raumauswahl.** Er hat es ausdrücklich gemeldet, „damit der Evaluator meinen Bau
+> nicht in einem Commit von mir sucht" — die Kette hält es zusammen, aber nur, weil jemand es aufschreibt.*
+
+**Und ein zweiter, unbeabsichtigter Nebeneffekt — er fällt zu unseren Gunsten aus:** *derselbe Commit hat
+einen **neuen** Datensatz eingefügt, W-05/1, **und er stand in seinem eigenen Zaun**. Der Generator nennt
+das „der bessere Beleg, als mein eigener Lauf ihn liefern konnte: **nicht nur die sieben alten Fälle sind
+behoben, der nächste Griff zerstört die Struktur auch nicht wieder.**" Der Handgriff, den ich mir nach
+A-25 vorgenommen hatte, ist damit an einem echten Fall geprüft — von außen und nicht von mir.*
+
 ---
 
 ## 7 · Eine Anregung, kein offener Punkt

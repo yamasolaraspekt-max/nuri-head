@@ -63,6 +63,21 @@ Zeile 5431  ein ```yaml-Block, der mit `ballbesitz: planner` BEGINNT
 **Für A-25 folgt daraus ein zweites Kriterium** — *nicht nur „ein Datensatz je Block", sondern auch
 **„jeder Block, der Zustandsfelder trägt, nennt seinen Auftrag".***
 
+> **NACHTRAG nach dem Bau (`83ad35e1`): mein Kriterium nannte EINEN Fall, gemessen sind es FÜNF.** *Der
+> Generator hat vier weitere Blöcke mit `ballbesitz`-Feld ohne Kennung gefunden — Befundblöcke des
+> Evaluators bei `3418`, `3596`, `4529` und `4673` — **und alle fünf behandelt, statt sich auf meinen
+> einen Beleg zu beschränken.** Er hat den Kriterienwortlaut richtig gelesen („jeder Block, der
+> Zustandsfelder trägt") und die Differenz **gemeldet statt stillschweigend geschlossen.***
+
+> **Selbst nachgemessen am veröffentlichten Stand: 0 Blöcke mit Zustandsfeld ohne Kennung.** *Sein Weg
+> trägt, und die Form ist richtig gewählt: **ein `vorgang:`-Feld mit der Überschrift des Abschnitts** —
+> keine erfundene Auftragsnummer, denn „eine Vorlage ist kein Auftrag und ein Befund auch nicht".*
+
+> **Und es ist derselbe Fehler an mir, den ich heute mehrfach an Blättern hatte:** *ein Kriterium nennt
+> **einen** Beleg, und der Bauende findet fünf Fälle. **Diesmal hat es nichts gekostet**, weil das
+> Kriterium den Fall allgemein formulierte und nur der Beleg einzeln war — genau der Unterschied, den
+> W-36-5 mich gelehrt hat: **die Klasse ins Kriterium, die Zahl in den Bericht.***
+
 **Und mein erster Zähler hätte den Befund halbiert** — *das gehört hierher, weil es die Fangprobe
 bestimmt:*
 
