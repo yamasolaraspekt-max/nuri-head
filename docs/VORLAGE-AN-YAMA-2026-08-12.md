@@ -15,7 +15,15 @@ Punkt 4 und 5, und es ist deutlich weniger.
 
 ---
 
-## 1 · Der Push — fünf fertige Releases stauen sich
+## 1 · Der Push — **ERLEDIGT am 12.08.**
+
+> **Nachtrag:** Dieser Punkt ist weg. Du hast Weg c freigegeben, die Sperre ist durch acht enge
+> Regeln ersetzt, und seither läuft der Transport in jedem Takt. Stand jetzt: alle drei Zweige
+> identisch, **0 Aufträge auf `RELEASE_FREI` ohne Veröffentlichung** — vom Plan-Prüfer unabhängig
+> nachgemessen und von mir gegengeprüft. Was unten steht, ist die Lage von vorher und bleibt als
+> Beleg stehen.
+
+## 1a · Der Stau, wie er war
 
 **Gemessen:** Der lokale Zweig liegt **49 Commits** vor `fork` und `backup-private` (beide auf
 `5579a6c0`) — Stand dieser Messung; die Rollen arbeiten weiter, die Zahl wächst.
@@ -104,7 +112,12 @@ kennen, die ihn beschreibt.
 
 **Meine Empfehlung, geändert:** **E1 nicht streichen, sondern bekannt machen.** Eine Regel, die
 bei **jedem** nachweisbaren Gebrauch sofort einen von außen nicht nachprüfbaren Beleg aufdeckt —
-zwei Fälle, zwei Treffer —, ist nicht wirkungslos, sondern unbekannt. Sie steht in einem Vertretungsentscheid in
+zwei Fälle, zwei Treffer —, ist nicht wirkungslos, sondern unbekannt.
+
+> **Der Plan-Prüfer hat das unabhängig zugespitzt, und sein Satz trifft es besser als meiner:**
+> `E1` kommt in `docs/ARBEITSREGELN.md` **0 mal** vor und in den fünf Rollenblättern **0 mal** —
+> beides habe ich nachgemessen und bestätige es. *„Eine Entscheidung, die gilt und nirgends
+> steht, wo die Rollen sie lesen, ist praktisch keine."* Sie steht in einem Vertretungsentscheid in
 `STATUS.md`, nicht in den Arbeitsregeln, und keine Rolle liest sie beim Start.
 **E2 bestätigen** (bewährt sich). **E3 aufnehmen oder fallen lassen** — halb verankert ist der
 schlechteste Zustand.
@@ -127,6 +140,13 @@ Kettenzustand; sie tragen `ERLEDIGT`, `VORLAGE` oder `ZURUECKGESTELLT` und zähl
 
 **Angehängt:** A-06 hat Blatt und Tafelzeile, aber keinen Datensatz. Einen anzulegen hieße,
 seinen Zustand zu bestimmen. Sobald oben entschieden ist, trage ich ihn nach.
+
+> **Nachtrag 12.08., und er macht den Punkt dringlicher:** A-20 hat inzwischen genau dieses Feld
+> beackert — der Zustand steht jetzt an **zwei** Orten statt vier, 33 Auftragsblätter bereinigt.
+> **Die drei Worte sind trotzdem nicht ins Regelwerk gekommen**, je 0 Treffer, von mir nach dem
+> Umbau nachgemessen. Der Plan-Prüfer schreibt dazu den Satz, den ich mir merke:
+> *„Wer daraus schließt, A-20 habe das mitgelöst, irrt; ein benachbarter Auftrag löst nicht,
+> was er nur berührt."* Die Lücke überlebt also selbst den Auftrag, der ihr am nächsten kam.
 
 ---
 
