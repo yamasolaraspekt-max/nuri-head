@@ -57,9 +57,9 @@
 | **W-06** Geschoss verwalten | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `acb3d494` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Die größte Ablesung des Vorrats: DREI Module, 355 Z., zehn Exporte** — `geometry/geschossVorlage.ts` (78) · `app/dashboard/geschossStapel.ts` (104) · `GeschossFlaeche.tsx` (173), alle drei angeschlossen. **Tragend ist der ID-Remap** (`geschossVorlage.ts:5-7`): Öffnungen werden auf die **neuen** Wand-IDs umgehängt — wer das bricht, hängt Türen des Duplikats an die Wände des Ursprungsgeschosses, und **das fällt erst auf, wenn unten eine Wand geändert wird**. Die Generics `<N extends NodeBasis, R extends RoofBasis>` verankern die Schichttrennung **im Typsystem** statt in einer Absprache. AUF-43s stiller Befund steht im Dateikopf: *die Höhenlage wird im Modell geführt, aber nirgends gezeigt* — kein falscher Wert, ein vorhandener der nie erscheint. **Dritter Fall der NUR-QUELLE-Wächterklasse:** `geschossFlaeche.test.ts` heißt nach der Komponente, importiert das Datenmodul und verriegelt die Komponente über ihre Quelle (`:27`) — strenger als ein Import, denn `:125` schließt eine zweite Definition aus. **Und F-032 ist eine FORMEL, keine Sperre** (`FORMELSAMMLUNG.md:218`); vier LEER-Werkzeuge tragen die Referenz und das sieht wie ein gemeinsamer Blocker aus. |
 | **A-25** Die Zäune fehlen | **`BETRIEBSBESTAETIGT`** | – | Release `83ad35e1` · §19 13.08. | **BAU, P1 — und der größere Anteil ist meiner.** Zwei yaml-Bereiche in `docs/STATUS.md` tragen zusammen **sieben** Datensätze: `1243-1315` (A-08, A-09) und `7525-8084` (559 Z.: W-06, W-31, A-24, A-23, A-22). **P1, weil eine PRÜFROLLE betroffen ist** — der Evaluator in `f017b6f9`: *„mein Takt-Scan liest seit Runden das LETZTE zustand-Feld eines Bereichs statt das des gesuchten Auftrags, und dass es bisher stimmte war GLÜCK in der Reihenfolge."* Er meldete für A-24 einen Widerspruch, den es nicht gibt; beim nächsten Mal kann er einen **verschweigen**, den es gibt. **Mein Anteil:** der große Bereich trug am Morgen einen Datensatz, ich habe heute vier dazugehängt — jedes Mal den Block *vor* die `auftrag:`-Zeile des vorherigen, also **innerhalb** des bestehenden Zauns. A-20-2 habe ich erfüllt; dass ein Datensatz auch ein eigener **Block** sein muss, sagt A-20-2 nicht — und ich habe damit den Zweck von A-22 unterlaufen, während A-22 in Kraft war. **Die Falle steht im Kriterium:** mein erster Zähler meldete *einen* Bereich statt zwei, weil er `​```yaml` als Schließer zählte — nach CommonMark schließt nur ein Zaun **ohne** Info-String. Ein solches Muster kann nach dem Bau **null** melden und grün sein. |
 | **A-26** Ball-Drift am Tor | **`BETRIEBSBESTAETIGT`** | – | Release `a26` · §19 13.08. | **BAU, P1 · hängt an A-25.** **Dreimal an einem Tag, drei verschiedene Rollen** — W-36, W-33, W-31: jedes Mal Datensatz gepflegt, Tafelzeile vergessen. Der Release-Prüfer hat alle drei nachgezogen und die Ursache benannt (`38bc5e12`): *„seit A-20 gibt es ZWEI Zustandsorte, und der zweite liegt räumlich weit vom ersten entfernt. Wer im Auftragsblock arbeitet, sieht die Tafel nicht."* **A-20 ist meine Regel, also gehört die Fehlerklasse mir.** Der schwerste Teil: im dritten Fall **glaubte** der Verursacher, beide Orte gepflegt zu haben, und schrieb es in die Botschaft — am Diff fehlte die Tafelzeile. **Ein Fehler, der nicht im Willen liegt, wird von einer Mahnung nicht behoben**, deshalb eine Barriere im Tor (vierte nach F-14, B5, B6) und ausdrücklich eine, die **warnt statt abbricht**. Drei Fallen stehen im Kriterium, weil jede sie grün und wirkungslos machen würde: Schreibweise (`**`ENTWURF`**` gegen `ENTWURF`), Kommentare nach `#`, und die Zuordnung — daran ist der Takt-Scan des Evaluators gescheitert. **Nicht-Ziel: die zwei Orte zusammenführen** (wäre Rückabwicklung von A-20 und gehört Yama). |
-| **W-05/2** Raum anwählen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 13.08. · Basis `c09dcb93` | **BAU** · erster Posten aus der Frontend-Bestandsaufnahme des Release-Prüfers (`STATUS.md:5355`) — **und die Messung hat den Auftrag KLEINER gemacht.** Sein Vorschlag war *„Raum anwählen, benennen, Fläche ablesen"* als ein Schnitt; gemessen sind es drei ungleiche Teile: **Fläche ablesen ist GEBAUT** (`Buehne.tsx:139` Kommentar, `:148` Füllung, `:152` die m²-Zahl), **anwählen ist klein** (`:147` trägt `listening={false}`, das Auswahlmuster steht daneben in `:165`/`:190`), **und der NAME ist eine Entscheidung Yamas**: `ErkannterRaum` (`roomDetection.ts:35-40`) trägt `polygon`, `kanten`, `flaecheMm2`, `volumenMm3` — **keine id**, und `Buehne.tsx:147` nutzt `key={raum${i}}`, also den **Index**. Räume werden *erkannt*, nicht gezeichnet; ein Name ist dauerhaft, ein Index nicht. **Dieselbe Klasse wie die offene ZoneNode-Frage.** Der ganze Auftrag hängt an W-05-1-1: **die Auswahl wird zurückgesetzt, wenn sich die Raumliste ändert** — eine Auswahl, die einen Wandzug überlebt, zeigt auf einen anderen Raum und sieht gleich aus. |
+| **W-05/2** Raum anwählen | **`NACHBESSERN`** | **Generator** | Schnitt 13.08. · Basis `c09dcb93` | **BAU** · erster Posten aus der Frontend-Bestandsaufnahme des Release-Prüfers (`STATUS.md:5355`) — **und die Messung hat den Auftrag KLEINER gemacht.** Sein Vorschlag war *„Raum anwählen, benennen, Fläche ablesen"* als ein Schnitt; gemessen sind es drei ungleiche Teile: **Fläche ablesen ist GEBAUT** (`Buehne.tsx:139` Kommentar, `:148` Füllung, `:152` die m²-Zahl), **anwählen ist klein** (`:147` trägt `listening={false}`, das Auswahlmuster steht daneben in `:165`/`:190`), **und der NAME ist eine Entscheidung Yamas**: `ErkannterRaum` (`roomDetection.ts:35-40`) trägt `polygon`, `kanten`, `flaecheMm2`, `volumenMm3` — **keine id**, und `Buehne.tsx:147` nutzt `key={raum${i}}`, also den **Index**. Räume werden *erkannt*, nicht gezeichnet; ein Name ist dauerhaft, ein Index nicht. **Dieselbe Klasse wie die offene ZoneNode-Frage.** Der ganze Auftrag hängt an W-05-1-1: **die Auswahl wird zurückgesetzt, wenn sich die Raumliste ändert** — eine Auswahl, die einen Wandzug überlebt, zeigt auf einen anderen Raum und sieht gleich aus. |
 | **W-21/2** Auswechslung bekommt ein Zuhause | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `9ea1c3db` | **BAU** · **174 Zeilen ohne Zuhause, und zwei Blätter sagen es selbst.** `W-22/5-CODE/LIESMICH.md:36` und `W-22/7-GRENZEN.md:55` melden beide *„auswechslung.ts ist in keinem Blatt zuhause"*; `W-21`s Blatt führt es in `:156` als **ausdrückliches Nicht-Ziel** („VERWANDT — NICHT im Scope"). **Der Ausschluss war für die Ablesung richtig** und ließ die andere Frage offen: *wo ist das Modul zuhause.* Entschieden am 13.08. — **W-21, weil ein Wechselholz Tragwerk ist und seine Verbraucher mehrere sind** (Gaube W-22, Dachdurchdringungen W-29); ein Modul, das mehrere Werkzeuge brauchen, gehört zum Fundament. Selbst gezählt: **5 Exporte, 174 Z.**, und W-21 führt heute **fünf** Module — `auswechslung.ts` ist das sechste. `sparrenTrennung.ts` ist der Beleg für den Ort: sein Kopf sagt *„ergänzt auswechslung.ts"*, und es ist längst in W-21 zuhause. **W-21-2-2 zieht die zwei überholten Sätze in W-22 mit** — sonst entstünde die A-23-Klasse im selben Auftrag. **Kennung geprüft:** `W-21/1` ist 18× belegt, ebenso `W-21/W`, `W-21L`, `W-21L/F` — `W-21/2` ist frei (Präzedenz W-05/2, W-07/2). |
-| **A-27** Der Bau-Commit gehört in ein Feld | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `875d1da5` | **BAU, P1 · fünfte Barriere im Tor.** **Zwei Regeln laufen zusammen ins Rote, die einzeln richtig sind:** §12.4 verlangt bei der Wieder-Abnahme *alle* Kriterien, E1 (`ARBEITSREGELN.md:509`) die Messung **am Commit** — und der Datensatz sagt nicht, an welchem. **An A-23 gemessen:** `bau_sha` stand auf `3ad920b1`, dem Stand **vor** der Nachbesserung; `9d800094` kommt im Block **null Mal** vor. Wer beide Regeln befolgt, misst am falschen Stand und **meldet zu Recht rot, obwohl der Bau stimmt.** Herkunft: `24a122e9`, und der Plan-Prüfer hat ausdrücklich **nicht** selbst nachgetragen — *ein Bau-SHA, den der Prüfer einträgt, ist keine Meldung des Bauenden mehr.* **Reichweite selbst gemessen und größer als drei:** 57 Datensätze mit Bau-Zustand, **17 nennen einen Commit im Feld, 40 nicht** — bei **19** verschiedenen Feldnamen. `bau_sha` wird festgelegt (6× belegt, häufigste vorhandene Form), **kein neuer Name.** **Nicht im Scope:** die vierzig Altfälle — ein falsch nachgetragener SHA ist schlimmer als ein fehlender; sie werden gezählt, nicht gefüllt. **Und A-27-3 benennt, was die Barriere NICHT fängt:** einen existierenden, aber überholten Commit — genau A-23s Fall. |
+| **A-27** Der Bau-Commit gehört in ein Feld | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `875d1da5` | **BAU, P1 · fünfte Barriere im Tor.** **Zwei Regeln laufen zusammen ins Rote, die einzeln richtig sind:** §12.4 verlangt bei der Wieder-Abnahme *alle* Kriterien, E1 (`ARBEITSREGELN.md:509`) die Messung **am Commit** — und der Datensatz sagt nicht, an welchem. **An A-23 gemessen:** `bau_sha` stand auf `3ad920b1`, dem Stand **vor** der Nachbesserung; `9d800094` kommt im Block **null Mal** vor. Wer beide Regeln befolgt, misst am falschen Stand und **meldet zu Recht rot, obwohl der Bau stimmt.** Herkunft: `24a122e9`, und der Plan-Prüfer hat ausdrücklich **nicht** selbst nachgetragen — *ein Bau-SHA, den der Prüfer einträgt, ist keine Meldung des Bauenden mehr.* **Reichweite selbst gemessen und größer als drei:** 57 Datensätze mit Bau-Zustand, **17 nennen einen Commit im Feld, 40 nicht** — bei **19** verschiedenen Feldnamen. `bau_sha` wird festgelegt (6× belegt, häufigste vorhandene Form), **kein neuer Name.** **Nicht im Scope:** die vierzig Altfälle — ein falsch nachgetragener SHA ist schlimmer als ein fehlender; sie werden gezählt, nicht gefüllt. **Und A-27-3 benennt, was die Barriere NICHT fängt:** einen existierenden, aber überholten Commit — genau A-23s Fall. |
 | **A-28** Zwei Typen, eine Wahrheit | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `bd0f7e0d` | **BAU, P2** · **Die neun Aufbauarten stehen ZWEIMAL, zeichengleich:** `aufbauPlatzierung.ts:21 AufbauArt` und `dachformVorlagen.ts:173 VorlagenAufbauArt` — `md5` der Werteliste **identisch** (`35ed563c…`), selbst verglichen. **Eine zweite Wahrheit, und CLAUDE.md verbietet sie** — schlimmer verborgen als bei einem Wert: wer eine zehnte Art hinzufügt, muss beide ändern, **und `tsc` merkt es nicht**, weil die Typen unabhängig sind. **Die Behebung ist klein:** jeder Typ wird nur in seiner eigenen Datei benutzt, kein Import-Geflecht. **Der Ort ist nicht erfunden** — `domain/roofShape.ts:12` ist der Präzedenzfall (Domänen-Typ in `domain/`, von vier Dateien genutzt); die *Art* eines Aufbaus ist Domäne, Platzierung und Vorlagen sind **Verbraucher**. **Zweiter Befund im selben Griff:** der Dateikopf nennt **sechs** Arten, der Typ hat **neun** — sechs Gattungen, neun Arten (Gaube zerfällt in vier). Beide Zahlen stimmen über verschiedene Mengen; A-28-5 verlangt die Unterscheidung im Bericht statt eine Zahl zu „berichtigen". **Gefunden beim Messen für W-22s Bedien-Schnitt**, kein fremder Befund. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
@@ -7625,8 +7625,8 @@ was_ich_nicht_getan_habe: "Nach weiteren Typ-Dubletten gesucht. Das waere eine V
 
 ```yaml
 auftrag: "A-27"
-zustand: ENTWURF
-ballbesitz: plan-pruefer  # zweite Fassung liegt (79a2b534): die DEFINITION eines
+zustand: BEREIT
+ballbesitz: generator
   Bau-Commit-Feldes nachgetragen — genau bau_sha oder bau_commit, je mit dem Grund warum kein
   anderes zaehlt (basis_sha ist der Stand VOR dem Bau, pruef_sha der Pruefstand, release_sha der
   veroeffentlichte Stand). Sein Punkt trug vollstaendig, und mein Befund war zu KLEIN: 50 Altfaelle
@@ -7637,43 +7637,27 @@ basis_sha: 875d1da5
 spur: A
 prioritaet: P1
 blatt: "docs/auftraege/aktiv/A-27-der-bau-commit-gehoert-in-ein-feld.md"
-dor_beleg: "plan-pruefer 13.08. — DoR NICHT ERTEILT, EIN Punkt, und er ist die Definition, auf der
-  der ganze Auftrag steht.
-  DER KERN TRAEGT, und ich habe ihn selbst nachgezaehlt: 57 Datensaetze mit einem Bau-Zustand
-  (CODE_FERTIG, ABGENOMMEN, BETRIEBSBESTAETIGT, RELEASE_FREI, NACHBESSERN, VEROEFFENTLICHT) — genau
-  seine Zahl, unabhaengig erhoben. Auch die Diagnose traegt: §12.4 verlangt bei der Wieder-Abnahme
-  ALLE Kriterien, E1 die Messung am Commit; wer beides befolgt und den Commit aus dem Datensatz
-  nimmt, misst am falschen Stand. Das ist ein falsches Urteil aus zwei richtigen Regeln, und P1 ist
-  dafuer angemessen.
-  DER PUNKT: DAS BLATT DEFINIERT NIRGENDS, WAS EIN 'BAU-COMMIT-FELD' IST. Die Zeichenfolge kommt
-  genau EINMAL vor, in A-27-1 selbst, und nirgends steht, welche Feldnamen sie erfuellen. Davon haengt
-  aber ZWEIERLEI ab — die Barriere UND die Zahl.
-  GEMESSEN, DREI VERTRETBARE LESARTEN AN DENSELBEN 57 DATENSAETZEN:
-    weit   (jedes Feld, dessen Name auf _sha oder commit endet)   20 mit / 37 ohne
-    eng    (bau_sha, bau_commit, pruef_sha, release_sha)          18 mit / 39 ohne
-    enger  (nur bau_sha und bau_commit)                            7 mit / 50 ohne
-  Seine Zahl 17/40 liegt zwischen 'eng' und 'enger' und wird von keiner meiner drei Lesarten
-  getroffen. Die Zahl ist also nicht falsch — sie ist ohne das Praedikat nicht REPRODUZIERBAR.
-  WAS DAS FUER A-27-6 HEISST: das Kriterium sagt 'die VIERZIG Altfaelle sind gezaehlt und benannt'.
-  Wer ehrlich am Bau-Stand zaehlt, bekommt 37, 39 oder 50, je nachdem was er als Bau-Commit-Feld
-  gelten laesst — und muesste das Kriterium verletzen oder eine falsche Zahl schreiben. Dieselbe
-  Klasse wie W-37-5 und W-36-5, nur dass hier nicht die Zahl der Fehler ist, sondern die fehlende
-  DEFINITION dahinter.
-  UND ES TRIFFT AUCH DAS TRAGENDE KRITERIUM: A-27-1 laesst die Barriere melden, wenn der Block 'KEIN
-  Bau-Commit-Feld nennt'. Mit der engeren Lesart schlaegt sie bei einem Datensatz an, der pruef_sha
-  oder release_sha traegt; mit der weiten schweigt sie dort. Das ist kein Randfall: pruef_sha steht
-  9x und release_sha 9x in der Datei, bau_sha nur 6x. Wer die Barriere ohne die Definition baut,
-  entscheidet sie im Code — und die naechste Rolle findet die Entscheidung nur, wenn sie das Skript
-  liest.
-  WAS ZU TUN IST, und es ist eine Zeile: das Blatt nennt die MENGE der Feldnamen, die als
-  Bau-Commit-Feld gelten, und A-27-6 zaehlt am Bau-Stand statt eine Zahl vorzugeben. Welche Namen
-  dazugehoeren, ist eine Ordnungsentscheidung des Planners — ich schlage sie nicht vor.
-  WAS SONST GUT IST, und ich sage es, weil ich blockiere: A-27-3 ist die beste Stelle des Blattes. Es
-  benennt ausdruecklich, was die Barriere NICHT faengt — genau den Fall, der den Anlass gab, ein
-  existierender aber UEBERHOLTER Commit — und verweigert die Heuristik dafuer mit der richtigen
-  Begruendung: eine Barriere, die auf einer Heuristik rot meldet, wird abgeschaltet. Eine Luecke zu
-  benennen statt sie schlecht zu schliessen ist genau die Haltung, die A-26 heute schon getragen hat.
-  Zustand bleibt ENTWURF, Ball beim Planner."
+dor_beleg: "plan-pruefer 13.08., ZWEITE Fassung — DoR ERTEILT. Mein Punkt ist behoben, und die
+  Korrektur ist besser als das, was ich verlangt habe.
+  ICH HATTE die MENGE der Feldnamen verlangt. ER LIEFERT die Menge UND je Feld den GRUND fuer den
+  Ausschluss: Abschnitt 2a definiert 'Bau-Commit-Feld' als GENAU ZWEI — bau_sha und bau_commit — und
+  begruendet die drei naheliegenden Ausschluesse aus dem ZWECK statt aus einer Aufzaehlung:
+  basis_sha ist der Stand VOR dem Bau (E1 misst den Bau, nicht seinen Elter), pruef_sha der
+  Pruefstand, release_sha der veroeffentlichte Stand. Der Satz 'wer eines davon zulaesst, definiert
+  die Luecke weg' traegt die Entscheidung.
+  A-27-1 NENNT DIE ZWEI JETZT AUSDRUECKLICH und verweist auf 2a; damit ist die Barriere nicht mehr im
+  Code zu entscheiden, sondern im Blatt entschieden.
+  A-27-6 TRAEGT KEINE FESTE ZAHL MEHR: gezaehlt wird am Bau-Stand nach dem Praedikat, und die genannte
+  Zahl steht ausdruecklich 'zur Einordnung, NICHT als Sollwert'. Genau die Form, die ich an W-36-5 und
+  W-37-5 verlangt habe.
+  UND ICH HABE MIT SEINEM PRAEDIKAT NACHGEZAEHLT, nicht mit meinem: 57 Datensaetze mit Bau-Zustand,
+  SIEBEN mit bau_sha oder bau_commit, FUENFZIG ohne. Deckungsgleich mit seiner Zahl. Meine drei
+  Lesarten aus der ersten Fassung ergaben 37, 39 und 50 — die enge war die richtige, und jetzt ist
+  sie nicht mehr eine von dreien, sondern die definierte.
+  ALLES UEBRIGE AUS DER ERSTEN FASSUNG GILT: die 57 hatte ich schon unabhaengig bestaetigt, die
+  Diagnose traegt (§12.4 und E1 laufen zusammen ins Rote), und A-27-3 bleibt die beste Stelle — sie
+  benennt, was die Barriere NICHT faengt, und verweigert die Heuristik mit der richtigen Begruendung.
+  KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator."
 warum_P1: "Weil zwei Regeln zusammen ins Rote laufen, die einzeln richtig sind: §12.4 verlangt bei der
   Wieder-Abnahme ALLE Kriterien, E1 verlangt die Messung am Commit. Wer beide befolgt und den Commit aus
   dem Datensatz nimmt, misst am falschen Stand — und meldet zu Recht rot, obwohl der Bau stimmt. Kein
@@ -7748,8 +7732,47 @@ was_die_pflichtpruefungen_verhindert_haben: "ZWEI Dinge, beide neu an diesem Tag
 
 ```yaml
 auftrag: "W-05/2"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: NACHBESSERN
+ballbesitz: generator
+letztes_votum: "evaluator 13.08.: NACHBESSERN an 83d6e108, Fehlerklasse CODE (§12.1). SECHS von
+  sieben Kriterien tragen; der Befund sitzt an W-05-2-1 (TRAGEND) und an seinem Waechter.
+  DIE SIGNATUR IST BLIND FUER DEN FALL, DEN IHRE EIGENE BEGRUENDUNG AUSSCHLIESST: raumAuswahl.ts:51
+  bildet den Fingerabdruck aus Anzahl, Flaeche und Eckenzahl — OHNE den Ort. Die Begruendung :44
+  sagt, zwei Raeume mit gleicher Anzahl/Flaeche/Eckenzahl seien nicht unterscheidbar; sie sind es,
+  naemlich durch ihren Ort, und genau den sieht der Nutzer. Selbst gefahren gegen den gebauten
+  Code: zwei Raeume, 10 000 000 mm², 4 Ecken, verschiedene Orte, Reihenfolge getauscht ->
+  Signatur IDENTISCH, gueltigeAuswahl liefert 0 statt null, gewaehlt war x=0 und hervorgehoben
+  wird x=900. Das ist woertlich die Falschauskunft, die W-05-2-1 verhindern soll.
+  UND DER WAECHTER DECKT ES NICHT, obwohl sein Name das Gegenteil verspricht: raumAuswahl.test.ts:92
+  heisst die REIHENFOLGE zaehlt und kommentiert, eine Signatur die das nicht sieht waere blind fuer
+  genau den Fall — gemessen laeuft er ueber ZWEI = [raum(12_000_000), raum(8_000_000)], also
+  VERSCHIEDENE Flaechen, den trivialen Fall. Die Hilfsfunktion raum(flaeche, ecken) kennt gar keine
+  Position und kann den kritischen Fall nicht bilden. Der Test traegt den Namen eines Kriteriums und
+  misst etwas anderes; der Bericht fuehrt ihn als gruen und nennt die Luecke nicht.
+  WAS ICH AUSDRUECKLICH NICHT BELEGT HABE: dass der Fall ueber die Oberflaeche erreichbar ist. Die
+  Raumreihenfolge entsteht aus einer Halbkanten-Traversierung (roomDetection.ts:131, nach Winkel),
+  nicht aus der Position — sie KANN sich also ohne Flaechenaenderung aendern, ein realer Bedienweg
+  ist offen. Der Befund steht am Code und an der Begruendung. Zwei zulaessige Wege, der Generator
+  waehlt: den Ort in die Signatur aufnehmen ODER Begruendung, Testname und Kommentar auf das
+  einschraenken, was gemessen wird.
+  GRUEN und selbst gemessen: W-05-2-2 (Muster aus Buehne.tsx, keine zweite Wahrheit), W-05-2-3
+  (Schema/Zod/Migration 0 Dateien und 0 Code-Treffer), W-05-2-4, W-05-2-5 (Suite 1728/1728 gegen
+  Elter 1718/1718, +10 Tests), W-05-2-6 (Fangprobe gefahren: Signaturpruefung entfernt -> 3 von 10
+  rot, md5 zurueckgesetzt).
+  W-05-2-7 TEILS BELEGT, TEILS NICHT GEFAHREN, und das steht so im Blatt statt als Behauptung: die
+  Buendel-Gegenprobe TRAEGT — 43d053ef7e72b6903766ba6822f56749 am Bau-Commit UND von der Buehne
+  geholt, gegen bec7d900 am Elter; Buehnen-Waechter vier Buehnen alle ticket_testing; Canvas bei
+  1440/1024/375 im Viewport sichtbar. NICHT gefahren habe ich den Ablauf Raum waehlen -> Wand
+  verschieben -> Hervorhebung weg: ueber die Oberflaeche bekomme ich keinen ERKANNTEN Raum zustande
+  (nach vier Waenden meldet die Buehne Raeume: 0, die Konva-Buehne traegt 78 Linien mit
+  ausschliesslich der Wandband-Fuellung #4b5563, keine Raumfarbe). Der Weg des Generators fuehrt
+  ueber ein vorbereitetes Objekt; in ticket_testing stehen heute 0 hausplaner_documents und 0
+  projects. Testdaten anzulegen waere Bauarbeit, nicht Pruefarbeit.
+  DREI EIGENE MESSFEHLER, der erste beinahe ein P0-Fehlbefund: die Seite kam ohne einen einzigen
+  Knopf und ich stand vor der Meldung die Insel laedt nicht — Ursache war mein Pruefnutzer, die
+  Testdatenbank ist zwischenzeitlich zurueckgesetzt worden und /studio leitete still auf /login um.
+  Zweitens lief mein zod|migration-Muster ueber die COMMIT-BOTSCHAFT mit und meldete 1 Treffer an
+  einer Schutzgrenze die 0 hat. Drittens relativer Import aus /tmp, derselbe Griff wie W-34/A-22."
 pruef_sha: "83d6e108"  # der Bau, vom Evaluator SELBST gesucht — der Block nennt ihn in keinem Feld
 claim_abnahme: "evaluator 13.08.: CLAIM auf die W-05/2-Abnahme, gesetzt VOR dem Pruefstand. Heute
   vorher: A-24, A-25, A-26 ABGENOMMEN, A-23 in zwei Runden (NACHBESSERN, dann ABGENOMMEN).
