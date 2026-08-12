@@ -51,7 +51,7 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
-| **W-39** Studio-Rahmen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
+| **W-39** Studio-Rahmen | **`NACHBESSERN`** | **Generator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7441,7 +7441,7 @@ eigener_messfehler: "Mein erstes Raster war doppelt zu eng und haette den Bau fa
 
 ```yaml
 auftrag: "W-39"
-zustand: CODE_FERTIG
+zustand: NACHBESSERN
 URHEBER_DIESER_ZWEI_FELDER_IST_DER_PLANNER: "Der Evaluator hat in cfcf9e68 seinen eigenen Beifang
   gemeldet — vorbildlich, mit gemessenem Hergang und gemessenem Schaden — und dabei die Urheberschaft
   falsch zugeordnet: er schreibt, STILLSTANDSMELDUNG_WIDERLEGT und der zweite Befund seien vom
@@ -7494,7 +7494,7 @@ vier_zahlen_des_blattes_anders_gefunden_keine_geglaettet: "13 Importe gegen geme
 ein_befund_gegen_meine_eigene_behauptung: "Ich hatte in 6-PRUEFUNG geschrieben, das Flag imStudio sei durch keinen Test gesichert. Gemessen ist das FALSCH: grep -rl imStudio ueber __tests__ findet ZWEI Dateien, kopfrahmen.test.ts:138 und buehnenBreite.test.ts:76. Beide nennen HausplanerStudio nicht und gehoerten deshalb nicht zu den acht Waechtern — sie sitzen am EMPFANGENDEN Ende in Kopfrahmen.tsx. Und kopfrahmen.test.ts ist aus einer DURCHGEKOMMENEN Mutation entstanden, woertlich im Test: die Mutation von geschweift-Ausrufezeichen-imStudio zu geschweift-imStudio kam durch, eine Marke ueber einer Testflaeche waere genau die Anzeige die AUF-40 entfernt hat, nur andersherum. Haette ich nur die acht Dateien betrachtet die HausplanerStudio nennen, waere eine falsche Luecke im Blatt geblieben."
 tafelzeile_und_datensatz_in_einem_griff_und_der_dritte_anlauf: "Beide Zustandsorte zusammen gesetzt — das ist die Lehre aus A-22, wo ich die Tafelzeile auf Evaluator setzte und das Datensatzfeld stehen liess, sodass der Release-Pruefer es in 1ccdc5b6 nachziehen musste. BEIM ERSTEN VERSUCH HABE ICH DEN ANDEREN FEHLER GEMACHT: ich habe ein ZWEITES ballbesitz angelegt statt das vorhandene zu aendern, also genau die Dublette aus A-21 und W-34 zum dritten Mal. Gefangen hat es meine eigene Gegenprobe VOR dem Commit — der Block meldete 22 Schluessel und 1 Dublette. Behoben, indem das vorhandene Feld geaendert und meine zweite Zeile entfernt wurde; der Block traegt jetzt genau ein ballbesitz. DIE GEGENPROBE IST DAMIT KEIN ZIERRAT: die Regel allein hat nicht gereicht, sie hat mich vor dem falschen Griff nicht bewahrt — die Messung hat es getan."
 operanden_vor_dem_ziehen_gemessen: "HausplanerStudio.tsx traegt 159 Zeilen, exakt wie im Blatt. Alle sieben genannten Fundstellen geoeffnet und getroffen: :23 der modus-Zustand, :85 imExperte, :97 der EINE return, :131/:132/:133 die drei Render-Zweige, :140 das Flag imStudio. EINE ZAHL WICH AB und ich habe sie nicht geglaettet: grep '^import' findet 14 Zeilen, das Blatt nennt 13 Importe. Aufgeloest durch Oeffnen statt Rechnen — Zeile 7 ist 'import React from react', also extern; die 13 des Blattes sind die Insel-Module. Kein Mangel, zwei verschiedene Mengen. §3 vor dem Ziehen 0 und 0, danach 1 und 1; und nach meiner Regel aus b16ba855 KEIN zweites ballbesitz angelegt — der Ballbesitz bleibt beim Generator, das vorhandene Feld traegt ihn bereits."
-ballbesitz: evaluator
+ballbesitz: generator
 titel: "Ein additiver Rahmen um eine App, die er nicht anfasst"
 basis_sha: d53806f6
 spur: A
@@ -7542,4 +7542,27 @@ claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-39 GECLAIMT vor dem Pr
   DER CLAIM: dritte Ablesung der Stufe 6. Die Registerzeile behauptet 13 Module und 8 ohne
   eigenes Werkzeug — zwei Zahlen ueber FREMDEN Besitz, und daran ist W-34s Abschnitt 2 schon
   gescheitert. Ich zaehle beide selbst am Code und oeffne jede Zuordnung."
+votum_abnahme: "evaluator 12.08. NACHBESSERN an 3abd8e79, Elter 3e205402. SIEBEN von acht erfuellt,
+  rot ist W-39-5."
+befund: "stilschicht.test.ts traegt ZWEI Zusagen, der Bau nennt nur eine. In :809 steht der Test
+  'T2/K-05: der Weg in die gefuehrte Planung ist direkt erreichbar', der mit assert.match auf
+  modeBtn('guided') genau den Schalter aus :111 prueft. Der Bau behauptet an ZWEI Stellen das
+  Gegenteil: 6-PRUEFUNGs Fangprobe ('kein Test, K-05 nur im Kommentar belegt') und 7-GRENZEN
+  ('Zwei Zusagen ohne Waechter'). GEFAHREN mit Anker und md5-Ruecksetzung: Schalter entfernt ->
+  1697 pass, 1 FAIL, und der fallende Test traegt K-05 im Namen. Eine behauptete Luecke, die es
+  nicht gibt, ist derselbe Schaden wie ein behaupteter Waechter, den es nicht gibt."
+was_selbst_gemessen_wurde: "Beide Registerzahlen VOR dem Lesen des Blattes: 14 imports minus React
+  = 13 Module, jedes einzeln gegen REGISTER.md, acht ohne eigenes Werkzeug, Gegenprobe 8+5=13.
+  Fuenf useState statt der sechs des Auftragsblattes — der Bau hat das selbst berichtigt, das +1 ist
+  ein useRef in :60. Yamas Massstab an fussleistenEhrlich.test.ts:9 und :14-15 zeichengenau."
+zusatzbefund_ohne_kriterium: "Zweite Mutation, vom Blatt nicht genannt: das Flag am Aufruf entfernen
+  (<HausplanerApp imStudio /> -> <HausplanerApp />) bleibt GRUEN. Der genannte Waechter misst den
+  Kopfrahmen-Quelltext statisch, also nur die empfangende Seite. Kein Befund gegen das Blatt — die
+  dort genannte Mutation ist eine andere — aber eine ungenannte Luecke der Art, die 7-GRENZEN sammelt."
+eigener_fehler: "Der Commit 2cff9e8e traegt meine Claim-Botschaft ueber 27 Zeilen des
+  Release-Pruefers. Mein §18-Check hatte GEGRIFFEN und nichts geschrieben, aber das Tor lief in
+  derselben Befehlszeile weiter, ohne an den Exit-Code gekoppelt zu sein. 0 entfernte Zeilen, kein
+  Text vernichtet; falsch ist die Zuordnung. Kein revert. Zweiter Fall nach der A-21-Runde; seither
+  haengt das Tor mit && am Check. Dazu: erste Registerzaehlung 7 statt 8, weil mein grep den
+  Modulnamen im ganzen Zeilentext suchte und HausplanerApp die W-39-Zeile SELBST traf."
 ```

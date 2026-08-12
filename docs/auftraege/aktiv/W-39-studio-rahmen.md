@@ -159,3 +159,135 @@ kein_eingriff_in_die_app: "Dass die HausplanerApp unveraendert bleibt, ist der K
         Code; hier waere es ausserdem inhaltlich falsch."
 W_39_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+
+## §11 — Votum W-39 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-39"
+votum: NACHBESSERN
+geprueft_an: "3abd8e79"
+elter: "3e205402"
+scope_diff: "9 Dateien, +942/-1: sieben Werkzeugblaetter neu, REGISTER.md eine Zeile, Bericht neu.
+  0 Code-Dateien."
+pruefstand: "git worktree add -q --detach auf 3abd8e79, node_modules UND vendor per cp -al."
+ablesung_belegt: "HausplanerStudio.tsx md5-identisch zwischen Elter und Bau (a38cf55d), 159 Zeilen."
+suite: "npm run test:hausplaner am Bau: 1698 tests, 1698 pass, 0 fail."
+browserabnahme: "ENTFAELLT — 0 Code-Dateien. §15 gegenstandslos, kein DB-Zugriff."
+
+messtisch:
+
+  W-39-1_additive_bauart:
+    urteil: ERFUELLT
+    selbst_geoeffnet: "Dateikopf :5 woertlich: 'Additiv: die HausplanerApp bleibt unveraendert (nur
+      ein optionales Flag blendet ihre Markenzeile aus).' 1-ZWECK traegt es."
+
+  W-39-2_drei_modi_mit_render_zweigen:
+    urteil: ERFUELLT
+    selbst_geoeffnet: ":131 modus === 'start' && <StartView …>, :132 modus === 'guided' &&
+      <GuidedView …>, :133 imExperte &&. Die Typquelle studioDaten.ts:97 nennt genau drei:
+      'start' | 'guided' | 'expert'."
+
+  W-39-3_zustaende_und_stores:
+    urteil: ERFUELLT
+    die_blattzahl_ist_falsch_und_der_bau_sagt_es: "Das Auftragsblatt nennt SECHS Zustaende
+      (:23-29) mit '+1'. Gemessen sind es FUENF useState: :23 modus, :24 schritt, :25 toast,
+      :26 konfig, :29 fachOffen. Das '+1' ist toastTimer, ein useRef in :60 — ausserhalb des
+      genannten Bereichs und kein Zustand, denn ein Ref loest kein Neuzeichnen aus.
+      DER BAU HAT DAS SELBST GEMESSEN und in 2-FUNKTION offengelegt, statt eine sechste zu
+      erfinden. Ich bestaetige die Zahl unabhaengig: 5 useState, 2 useMemo (:36, :40), 1 useRef."
+    stores: "useHausplanerStore 4 Selektoren (:30, :31, :55, :56), usePlannerUiStore 1 (:39) —
+      'vier bzw. einem' trifft zeichengenau."
+
+  W-39-4_modeBtn_als_schalter_fabrik:
+    urteil: ERFUELLT
+    selbst_geoeffnet: ":87 const modeBtn = (m: StudioModus, label, ico, titel?) => …, aufgerufen
+      dreimal in :110, :111, :112 — je einmal pro Modus. Die Entwurfsentscheidung zu den zwei
+      inline bleibenden Farben steht in :114-115 und ist im Blatt begruendet."
+
+  W-39-5_acht_waechter_je_mit_ihrer_zusage:
+    urteil: NICHT ERFUELLT
+    was_stimmt: "Die acht sind vollstaendig und decken sich mit meiner EIGENEN Erhebung:
+      grep -rl 'HausplanerStudio' __tests__/ liefert genau diese acht Dateien. Und der zweite
+      Teil des Kriteriums ist erfuellt — Yamas Massstab steht woertlich mit beiden Saetzen, und
+      ich habe die Fundstellen geoeffnet: fussleistenEhrlich.test.ts:9 'Der Massstab ist
+      derselbe: sagen, was da ist, statt zu versprechen, was kommt' und :14-15 'Eine gezaehlte
+      Zahl kann nicht veralten; eine abgetippte schon.' Beide zeichengenau."
+    der_befund: "Bei `stilschicht.test.ts` ist die Zusage unvollstaendig zugeordnet — der Bau
+      nennt sie mit 'Farben nur aus Tokens' und als 'geteilter Waechter'. Diese Datei enthaelt
+      aber in :809 den Test `T2/K-05: der Weg in die gefuehrte Planung ist direkt erreichbar`,
+      und der prueft mit assert.match(studio, /modeBtn\\('guided', 'Geführte Planung'/) genau
+      den Modusschalter aus :111.
+      DARAUS FOLGEN ZWEI FALSCHE AUSSAGEN IM BAU:
+        6-PRUEFUNG, Fangprobe: 'den guided-Schalter aus :111 entfernen -> KEIN TEST —
+          K-05 ist nur im Kommentar belegt'
+        7-GRENZEN, 'Zwei Zusagen ohne Waechter': 'K-05 … belegt NUR im Kommentar :138-139
+          und durch die Bauart. KEIN Test.'
+      ICH HABE ES GEFAHREN, mit Anker (Treffer genau 1x) und md5-Ruecksetzung: den
+      guided-Schalter aus :111 entfernt -> 1698 tests, 1697 pass, 1 FAIL, und der fallende Test
+      ist woertlich 'T2/K-05: der Weg in die gefuehrte Planung ist direkt erreichbar'.
+      Es gibt den Waechter, er traegt K-05 sogar im Namen, und er sitzt in einer Datei, die der
+      Bau selbst unter seinen acht auffuehrt."
+    warum_das_kein_wortklauben_ist: "7-GRENZEN ist die Anschlussliste fuer den, der spaeter
+      erweitert. Wer dort 'K-05 ist ungesichert' liest, baut entweder einen zweiten Waechter
+      neben den vorhandenen — oder aendert den Schalter im Vertrauen darauf, dass nichts faengt.
+      Eine behauptete Luecke, die es nicht gibt, ist derselbe Schaden wie ein behaupteter
+      Waechter, den es nicht gibt; W-34 war der andere Fall derselben Klasse."
+
+  W-39-6_scope_grenze_mit_modul_zuordnung:
+    urteil: ERFUELLT
+    eigene_gegenprobe_vor_dem_lesen: "Ich habe die beiden Registerzahlen SELBST gezaehlt, bevor
+      ich das Blatt geoeffnet habe. 14 import-Zeilen minus React = 13 Module — die Registerzahl
+      stimmt. Dann jedes Modul einzeln gegen REGISTER.md: StartView -> W-33, GuidedView und
+      fahrschritte -> W-34, ConfigWizard -> W-35, studioDaten -> W-38; ohne eigenes Werkzeug
+      bleiben dialogFokus, HausplanerApp, FachFlaeche, uiState, speicherAnzeige, fachFlaechen,
+      studioUi, hausplanerStore = ACHT. 8 + 5 = 13, die Gegenprobe schliesst. Beide Zahlen der
+      Registerzeile sind damit unabhaengig bestaetigt, und 2-FUNKTION:Scope traegt dieselbe
+      Zuordnung."
+
+  W-39-7_grenzen_und_anschlussliste:
+    urteil: "ERFUELLT IM AUFBAU, aber es traegt die falsche Aussage aus W-39-5"
+    was_steht: "Fuenf Faelle 'Was dieses Werkzeug NICHT kann' mit Fundstellen, die Absagekette,
+      bekannte Ungenauigkeiten, und der Abschnitt 'Offener Anschluss — die Werkzeug-Luecke der
+      Stufe 6'. Der Aufbau erfuellt das Kriterium."
+    mangel: "Der Abschnitt 'Zwei Zusagen ohne Waechter' nennt K-05 als ungesichert. Gemessen
+      falsch, siehe W-39-5. Die zweite der beiden — 'niemand prueft, dass jeder Modus einen
+      Schalter und einen Render-Zweig hat' — habe ich nicht widerlegen koennen und lasse sie
+      stehen."
+
+  W-39-8_sieben_blaetter_und_md5:
+    urteil: ERFUELLT
+    selbst_gefahren: "Sieben Blaetter, alle gefuellt (68/153/55/101/108/167/116 Zeilen).
+      md5-Gegenprobe unabhaengig ueber alle 28 Werkzeugordner: Dubletten MIT W-39 beteiligt: 0."
+
+zusatzbefund_kein_kriterium_verlangt_ihn: "Ich habe eine zweite Mutation gefahren, die das Blatt
+  NICHT nennt: das Flag am Aufruf entfernen, <HausplanerApp imStudio /> -> <HausplanerApp /> in
+  :140. Ergebnis 1698 pass, 0 fail. Der genannte Waechter kopfrahmen.test.ts:138 (K-03) misst den
+  QUELLTEXT DES KOPFRAHMENS statisch (kopf.indexOf('{!imStudio && (')) und damit die empfangende
+  Seite; die sendende ist ungesichert. DAS IST KEIN BEFUND GEGEN DAS BLATT — die dort genannte
+  Mutation ist eine andere (die Markenzeile IM Kopfrahmen einblenden), und dafuer faengt der Test.
+  Es ist eine ungenannte Luecke derselben Art, wie 7-GRENZEN sie sammelt, und sie ist gemessen."
+
+was_zu_tun_ist:
+  - "6-PRUEFUNG Fangprobe: die Zeile 'guided-Schalter entfernen -> kein Test' berichtigen. Der
+     Waechter ist stilschicht.test.ts:809, gemessen 1 fail."
+  - "7-GRENZEN: 'Zwei Zusagen ohne Waechter' auf EINE reduzieren — der vierte Modus bleibt
+     ungesichert, K-05 nicht."
+  - "6-PRUEFUNG: stilschicht.test.ts traegt zwei Zusagen, nicht eine. Neben 'Farben nur aus
+     Tokens' haelt sie in :809 den direkten Weg in die gefuehrte Planung."
+  - "NICHT anzufassen: die uebrigen sieben Kriterien. Der Bau ist eine saubere Ablesung, und die
+     Selbstberichtigung der Blattzahl bei W-39-3 sowie die zurueckgezogene imStudio-Fehlmessung
+     sind genau die Haltung, die diese Blaetter tragen soll."
+
+meine_eigenen_messfehler_in_dieser_runde:
+  - "SCHWERER ALS EINE MESSUNG: der Commit 2cff9e8e traegt meine Claim-Botschaft ueber 27 Zeilen,
+     die dem Release-Pruefer gehoeren. Mein §18-Check hatte GEGRIFFEN und nichts geschrieben, aber
+     das Tor lief in derselben Befehlszeile weiter, ohne an den Exit-Code gekoppelt zu sein.
+     Gemessen: 0 entfernte Zeilen, kein Text vernichtet — falsch ist die Zuordnung, nicht der
+     Inhalt. Kein revert, das haette seinen Text geloescht. Zweiter Fall derselben Kopplungsluecke
+     nach der A-21-Runde; ab dem Folgecommit haengt das Tor mit && am Check."
+  - "Meine erste Registerzaehlung ergab 7 statt 8 Module ohne eigenes Werkzeug, weil mein grep den
+     Modulnamen im GANZEN Zeilentext suchte und 'HausplanerApp' die W-39-Zeile SELBST traf. H-9 an
+     mir: das Muster traf seine eigene Fundstelle. Nach dem Oeffnen der Treffer: 8, und die
+     Gegenprobe 8 + 5 = 13 schliesst."
+```
