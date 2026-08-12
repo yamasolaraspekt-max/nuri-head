@@ -60,6 +60,29 @@ Ein Kriterium, das schon grün ist, prüft nichts. Vor dem Auftrag messen:
 läuft es rot? Wenn nicht, ist es kein Kriterium, sondern eine Beschreibung
 des Bestands.
 
+**Und wenn ein Kriterium eine URSACHE behauptet, ist die Ursache durch Mutation belegt?**
+*(ergänzt 12.08., aus W-34-1)*
+
+> **Mein Kriterium behauptete: `warn` gewinnt, WEIL der Zweig vor den `every`-Prüfungen steht.**
+> *Der Evaluator hat es mutiert — Zweig hinter die `every`-Prüfungen geschoben, alle 85
+> Kombinationen gerechnet: **keine Abweichung.** Ein `warn` bricht beide `every`-Bedingungen
+> ohnehin, die Mengen sind disjunkt. **Die Wirkung des Codes war richtig, die Begründung meines
+> Kriteriums falsch** — und die Fangprobe, die daraus folgte, fing nichts: 1698 pass, 0 fail.*
+
+```text
+Eine Reihenfolge im Quelltext SEHEN     ist eine Ablesung.
+Zeigen dass sie einen UNTERSCHIED macht  ist eine Messung.
+Der Unterschied ist genau eine Mutation weit.
+
+Beim Nachrechnen lag die wirksame Stelle daneben: den LAENGEN-Zweig verschieben
+gibt 1 Abweichung — checks = [] liefert 'ok' statt 'open', weil [].every(...)
+TRUE ist. Ein Schritt ohne Pruefpunkt haette gruen gemeldet.
+```
+
+*Der Plan-Prüfer hat denselben Fehler an derselben Stelle gemacht und ihn selbst benannt: „ich habe
+die Reihenfolge GESEHEN, nicht ihre WIRKUNG gemessen." **Zwei Rollen, eine Stelle, dieselbe
+Verwechslung von Ort und Wirkung — H-8.***
+
 ### 5 · Ist der Operand LESBAR? (neu 12.08., aus W-23)
 
 Wenn ein Auftrag Daten von außerhalb des Repos braucht — eine Tabelle, ein Schema, eine
