@@ -222,3 +222,91 @@ was_es_anschliesst: "F-014s Warnung aus meiner Registermessung 12.08. — W-07 l
 nicht_der_skelettweg: "F-020 und F-021 sind nach meiner Messung 12.08. NICHT ZUTREFFEND — 0 Treffer
         auf 'skelett' in allen acht Dachmodulen. W-27 arbeitet auf dem Kanten-/Eckenweg."
 ```
+
+## §11 — Votum W-27 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-27"
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+abnahme_commit: "c3bc1169"
+pruefstand: "worktree --detach auf c3bc1169"
+
+messtisch_alle_sieben:
+  W-27-1: GRUEN
+    beleg: "Alle ACHT Fundstellen im Prototyp selbst geoeffnet, alle exakt:
+              :85 type EdgeTopologyType   ·  :86 TopologyCornerType  ·  :87 TopologyJoinType
+              :128 interface EdgeTopologyConfig · :135 interface TopologyCornerInfo
+              :155 buildTopologyPolygon · :182 getDefaultEdgeTopologyConfigs · :193 analyzeTopology
+            Und die Zeilenzahl nachgezaehlt: 3786, wie das Blatt sagt."
+  W-27-2: GRUEN — der tragende Punkt, gegen den Prototyp gelegt
+    beleg: "2-FUNKTION:53-56 gibt die Regel mit ALLEN VIER Ausgaengen wieder. Ich habe
+            analyzeTopology (:193-230) danebengelegt:
+              let joinType = 'neutral'                                   -> Blatt :215
+              if (prevIsTraufe && nextIsTraufe) -> 'kehle' : 'grat'      -> Blatt :216
+              else if (Traufe + GIEBEL)         -> 'ortgang'             -> Blatt :217
+              sonst bleibt 'neutral'                                     -> Blatt
+            Die Zuordnung stimmt Zeile fuer Zeile."
+    und_der_satz_der_zaehlt: "'neutral ist kein Restfall, sondern der haeufigste — er gilt fuer
+            JEDE Ecke ohne traufseitige Beteiligung.' Genau der vierte Ausgang, den das
+            Kriterium einfordert, weil er sonst dem Bauenden ueberlassen bliebe."
+  W-27-3: GRUEN — und die Form ist die vom Kriterium verlangte
+    beleg: "7-GRENZEN:22 sagt es im Kopf: 'Was DA IST — je Begriff die TREFFERZEILE, nicht die
+            Zahl.' Die drei genannten Stellen selbst geoeffnet:
+              dachformVorlagen.ts:291  export function ortgangFlaechenlaengeM(...)
+              dachformVorlagen.ts:127  ortgangausbildung: string;
+              schifterListe.ts:58      export function klassifiziereSchifter(...): SchifterArt
+            Alle drei tragen, was das Blatt behauptet."
+    das_verbot_eingehalten: "'gibt es nicht' kommt zweimal vor — beide gelesen: einmal ist es
+            das ZITIERTE Verbot selbst (1-ZWECK:44), einmal 'Halbfertiges gibt es nicht'
+            (4-BEDIENUNG:48) ueber Zwischenzustaende. Kein Satz behauptet, ein vorhandenes
+            Bauteil existiere nicht."
+    seine_zahlenklaerung: "Das Blatt nennt grat 17 / kehle 33, er misst 195 / 157 und LOEST ES
+            AUF statt eine Zahl zu melden: verschiedene Mengen und Schreibweisen, 'beide Zahlen
+            sind fuer ihr Muster richtig; keine widerlegt die andere'. Mit seiner Definition
+            nachgemessen: 195 und 157, exakt."
+  W-27-4: GRUEN
+    beleg: "Im REGISTER ist genau der Reifegrad geaendert (LEER -> ENTWORFEN); die Namensliste
+            'First·Grat·Kehle·Traufe·Ortgang' steht unveraendert, wie das Kriterium verlangt.
+            Die Trennung Kanten/Ecken ist im Blatt benannt, nicht im Register nachgezogen."
+  W-27-5: GRUEN
+    beleg: "Der W-07-Anschluss steht in 1-ZWECK:21-37 und 2-FUNKTION:99, mit der Zuordnung
+            'dessen V1-Grenze bleibt, bis W-27 gebaut ist'. W-07-Blaetter im Bau angefasst: 0.
+            Benannt, nicht gebaut — genau die Trennung, die das Kriterium fordert."
+  W-27-6: GRUEN
+    beleg: "resources/ und app/ 0 Dateien. Der Prototyp (docs/planner/) 0 Dateien — nur gelesen."
+  W-27-7: GRUEN
+    beleg: "Am Elter des Baus steht W-27 an beiden Orten auf IN_ARBEIT (Tafel 1 / Feld 1).
+            REGISTER.md war frei — kein zweiter Auftrag im Zugriff."
+
+meine_zwei_fallen:
+  zahlen: "Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157 gegen die Blattzahlen
+        20/17/33 — ich haette 'drei Zahlen stimmen nicht' schreiben koennen. Ursache: ich mass
+        case-INSENSITIV ueber resources/planner/hausplaner inklusive .tsx, das Blatt misst
+        anders. Mit SEINER Definition (resources/planner/**/*.ts, case-insensitiv) messe ich
+        195 und 157 — seine Zahlen exakt. Und er hatte die Differenz selbst schon aufgeloest,
+        bevor ich sie fand."
+  raster: "Mein Platzhalter-Raster meldete einen Treffer. Gelesen: '<Kantentyp>' in
+        5-CODE:60 — ein TypeScript-Generic in einer Signatur, kein Doku-Platzhalter.
+        Und mein 'gibt es nicht'-Raster meldete zwei Verstoesse; gelesen war einer das
+        zitierte Verbot selbst. Dreimal Lesen statt Zaehlen, dreimal kein Befund."
+
+was_diesen_bau_heraushebt:
+  - "Er haelt die Auflage in der schwersten Form ein: die Luecke ist als KANTENTYP benannt, und
+     daneben steht je Begriff die Trefferzeile, die zeigt, was es GIBT. Ortganglaenge,
+     Ortgangausbildung und die Schifter-Klassifikation sind einzeln belegt — wer das Blatt
+     liest, baut nichts neu, das schon existiert."
+  - "Er praezisiert die eigene Auflage nach unten: 'die Klassifikation fehlt' sei zu weit
+     formuliert, es fehle die ECKEN-Klassifikation — weil klassifiziereSchifter Grat und Kehle
+     bereits am Sparren unterscheidet. Dieselbe Fehlerklasse, eine Ebene tiefer, selbst gefunden."
+  - "Die Zahlendifferenz zum eigenen Auftragsblatt hat er gemeldet und aufgeloest, statt eine
+     der beiden Zahlen zu uebernehmen oder stillschweigend anzupassen."
+
+zusammenfassung: "Sieben von sieben. Der tragende Punkt ist gegen den Prototyp gelegt und stimmt
+     Zeile fuer Zeile, einschliesslich des vierten Ausgangs 'neutral'. Die acht Fundstellen
+     habe ich einzeln geoeffnet, die drei Belegstellen der Luecke ebenso. Das Verbot ist
+     eingehalten: kein Satz behauptet, etwas Vorhandenes existiere nicht — und genau das war
+     der Grund fuer die Berichtigung des Kriteriums."
+
+ballbesitz: release-pruefer
+```
