@@ -1,33 +1,22 @@
-# W-xx · CODE
+# W-09 · Treppe — CODE
 
-## Wo der Code wirklich lebt
+**Angebunden an sieben vorhandene Module** — 698 Zeilen, jede Zahl einzeln nachgezählt.
 
-| Schicht | Datei im Repo | Zweck |
-|---|---|---|
-| 1 Domäne | `resources/planner/hausplaner/domain/…` | |
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | |
-| 3 Werkzeug | `resources/planner/hausplaner/app/tools/…` | |
-| 4 Darstellung | `resources/planner/hausplaner/renderers/…` | |
-| 5 Oberfläche | `resources/planner/hausplaner/ui/…` | |
+| Modul | Zeilen | Ausfuhren | Schicht |
+|---|---|---|---|
+| `resources/planner/hausplaner/geometry/treppenBerechnung.ts` | 114 | 6 | Auslegung |
+| `resources/planner/hausplaner/geometry/treppenTypen.ts` | 153 | 4 | Katalog |
+| `resources/planner/hausplaner/geometry/treppenBauarten.ts` | 38 | 3 | Katalog |
+| `resources/planner/hausplaner/geometry/treppe2D.ts` | 93 | 4 | Darstellung |
+| `resources/planner/hausplaner/geometry/treppe3D.ts` | 74 | 4 | Darstellung |
+| `resources/planner/hausplaner/geometry/treppeSvg.ts` | 142 | 5 | Darstellung |
+| `resources/planner/hausplaner/geometry/treppeObjekt.ts` | 84 | 4 | Objekt |
+| | **698** | **30** | |
 
-> **Der Code steht im Repo, nicht in diesem Ordner.** Hier liegen nur
-> Schnittstellenbeschreibung, Ablaufskizze und — wo nötig — ein kurzer
-> Auszug der Kernstelle mit Zeilennummer, damit man beim Lesen nicht springen muss.
+**Werkzeugschicht:** `app/dashboard/enginePanels.ts:121` — `engine-treppe`.
 
-## Schnittstelle
+## Was gebaut ist und was nicht
 
-```ts
-// Signatur der öffentlichen Funktion(en) dieses Werkzeugs
-```
-
-## Kernstelle
-
-```ts
-// Der eine Ausschnitt, auf den es ankommt — mit Datei:Zeile
-```
-
-## Abhängigkeiten
-
-| Braucht | Warum | Richtung geprüft? |
-|---|---|---|
-| | | ja/nein — kein Kreis |
+**Gebaut:** alle vier Schichten, einschließlich Werkzeug. *W-09 ist damit — neben W-13 — eines der
+wenigen Werkzeuge der Klasse A, das vollständig ist.*
+**Nicht Gegenstand dieser Stufe:** Stufe 2 (`GEBAUT`).

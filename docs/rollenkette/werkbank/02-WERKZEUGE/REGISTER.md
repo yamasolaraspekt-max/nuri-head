@@ -54,7 +54,7 @@
 | W-06 | Geschoss verwalten | LEER | W-02 | F-032 |
 | W-07 | **Dach aus Kontur** | **6/7 BLÄTTER** ⓝ | W-05, W-06 | F-010, F-013, **F-014, F-025, F-026**, F-020, F-021, F-022 |
 | W-08 | Dachfläche messen | **BESCHRIEBEN** | W-07 | F-011, F-023 ⚠, F-024 ⚠ |
-| W-09 | Treppe | LEER | W-06 | F-001, F-030 |
+| W-09 | Treppe | **BESCHRIEBEN** | W-06 | F-001, F-030 |
 | W-21 | **Sparren und Lattung** | **BESCHRIEBEN** | W-07 | **N-001…N-003** ✓ (~~F-001~~, ~~F-030~~ ⓝ) · Quelle M-01/**M-02 ungelesen** |
 | W-22 | **Gaube** | **BESCHRIEBEN** | W-07 | **F-027** ✓ (Thema ja, Formel ⚠), ~~F-031~~ ⓝ |
 | W-23 | **Deckung und Material** | LEER | W-07, W-08 | **F-050** |
@@ -67,6 +67,7 @@
 | W-14 | Kopieren/Spiegeln/Drehen | LEER | W-13 | F-032 |
 | W-15 | Material und Farbe | LEER | W-13 | — |
 | W-17 | Export und Speichern | LEER | alle | — |
+| W-43 | **Abbund-Zeichnung** | LEER | **W-07, W-21** | — · Darstellungslogik liegt in **M-02**, Fachwissen im Feld **`abbundhinweis`** ([dachformVorlagen.ts:107](../../../../resources/planner/hausplaner/geometry/dachformVorlagen.ts#L107), 2.399 Z) — **die Insel kennt ihre eigene Lücke**: `:2051` *„Geplant — Abbund erst nach sauberer Geometrie-/Tragwerksumsetzung."* **Ausschluss mit Zieladresse, nicht schneiden** (Yama 12.08.) |
 
 ## Stufe 5 — Prüfung und Auswertung
 
@@ -239,6 +240,13 @@ eingearbeitet**, das ist der nächste Schritt:
 | `resources/planner/hausplaner/geometry/holzBauteile.ts` | **W-21** — 82 Zeilen, 4 Ausfuhren; trägt `OFFENE_HOLZBAUTEILE` — gebaute Selbstauskunft über die Grenzen; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/geometry/holzMengen.ts` | **W-21** — 64 Zeilen, 3 Ausfuhren; Mengen aus der **echten** 3D-Holzliste statt geschätzt; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/geometry/gaubeGeometrie.ts` | **W-22** — 498 Zeilen, 26 Ausfuhren; **Gaube, Kamin UND Ampel-Prüfung**; kein Registry-Werkzeug; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/treppenBerechnung.ts` | **W-09** — 114 Zeilen, 6 Ausfuhren; **die einzige Stelle mit DIN 18065 im Code** — sieben Prüfungen, drei davon `fehler`; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/treppenTypen.ts` | **W-09** — 153 Zeilen, 4 Ausfuhren; Katalog der Grundriss-Geometrie; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/treppenBauarten.ts` | **W-09** — 38 Zeilen, 3 Ausfuhren; SVG-Bauarten; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/treppe2D.ts` | **W-09** — 93 Zeilen, 4 Ausfuhren; 2D-Symbol; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/treppe3D.ts` | **W-09** — 74 Zeilen, 4 Ausfuhren; 3D-Körper; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/treppeSvg.ts` | **W-09** — 142 Zeilen, 5 Ausfuhren; maßstäbliche Grundriss-Zeichnung; **eingearbeitet 12.08.2026** |
+| `resources/planner/hausplaner/geometry/treppeObjekt.ts` | **W-09** — 84 Zeilen, 4 Ausfuhren; Treppe als `ObjectNode`; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/geometry/polygonFlaeche.ts` | **W-08** — 48 Zeilen, 2 Ausfuhren; Shoelace in m²; **`0` ist Ergebnis UND Fehlersignal**; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/app/tools/auswahlModus.ts` | **W-13** — 98 Zeilen, 7 Ausfuhren; vier Modi, Modifikator-Vorrang alt vor ctrl/meta vor shift; **eingearbeitet 12.08.2026** |
 | `resources/planner/hausplaner/app/tools/trefferSuche.ts` | **W-13** — 75 Zeilen, 4 Ausfuhren; **oben schlägt nah** — Zeichenreihenfolge vor Distanz; **eingearbeitet 12.08.2026** |
@@ -361,3 +369,5 @@ werden nicht durch meine Korrektur unsichtbar gemacht.
 > ✓ **W-13: das Register sagt bereits „keine" — die Messung BESTAETIGT das und korrigiert nichts.** In allen vier Modulen wird genau eine Sache gerechnet: `toleranzInWelt(pixel, zoom)` (`trefferSuche.ts:72-74`), eine **Einheitenumrechnung**. Sie hat keine Nummer in der Sammlung und braucht keine — *eine Division ist keine Formel, die man nachschlägt*. Nach `W-13/1-3` als **Befund gemeldet, nicht eingetragen**. Abstände werden hier nicht berechnet: `TrefferKandidat` bringt seine `distanz` mit.
 
 > **Und: W-13 ist das einzige Klasse-A-Werkzeug MIT Registry-Eintrag** (`app/tools/toolRegistry.ts:39`, `id: 'auswahl'`) — bei W-01, W-05, W-08, W-21 und W-22 steht die Rechenschicht ohne Werkzeugschicht. **Dafür hat es NULL dedizierte Zusagen** (W-01: 2, W-02: 1) bei 321 Zeilen; erwähnend sind zwei Testdateien mit 36 Zusagen. *Messweise steht im `6-PRUEFUNG`-Blatt, damit die Zahl nachrechenbar ist.*
+
+> **W-09: keine F-Nummer, und das ist die richtige Antwort.** Das Register nennt für W-09 keine Formel. Gemessen sind die Rechenregeln **normative Größen** (Schrittmaß `:75`, Bequemlichkeit `:76`, Sicherheit `:77`, Grenzmaße `:52-55`, lichte Höhe `:58`) — **keine Geometrieformel, die man nachschlägt.** *Eine leere Formelspalte ist besser als eine geratene; nach `603eddc2`, wo sieben von zehn Zuordnungen fielen, ist das die Lehre und keine Bequemlichkeit.*
