@@ -7750,6 +7750,14 @@ eine_zahlenluecke_die_ich_nicht_glaette: "Das Zielbild fuehrt ACHT Stufen, vorha
   Entweder gehoert sie nicht zur Gueltigkeitsachse oder die Zahl drei ist zu niedrig. Kriterium
   W-40-3 verlangt, die Frage zu STELLEN und nicht zu beantworten — sie gehoert Yama."
 W_40_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-40 GECLAIMT vor dem Pruefstand.
+  W-40 ist der offene Anschluss, den W-38s Blatt selbst benannt hat: zwei Wortschaetze fuer
+  Zustand — confirmed/outdated/blocked gegen ok/prog/warn/open — und die Frage, ob das ein
+  ZWEITES Statussystem ist. Ich pruefe zuerst, ob das Blatt sie BEANTWORTET oder nur wiederholt,
+  und messe die Abgrenzung an beiden Seiten.
+  ACHTUNG BEIM SCOPE: der Generator baut parallel W-27/1; im Baum liegen zwei ungetrackte
+  Code-Dateien (dachTopologie.ts und ihr Test). Sie gehoeren NICHT zu W-40 und duerfen in keinen
+  meiner Scope-Diffs geraten."
 ```
 
 ```yaml
