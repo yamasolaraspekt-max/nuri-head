@@ -114,6 +114,57 @@ Harzer Pfanne 7   405 - 372 = 33   Verschiebespiel —    (fehlt, aus dem Bereic
 > übereinstimmen, ist einer falsch — und wo einer fehlt, ist er ableitbar. Das ist die
 > Eingangsprüfung dieses Werkzeugs, und sie kostet eine Subtraktion.*
 
+## 4b · NACHTRAG 12.08. — die Quelle hat MODELL-DUBLETTEN, und der Name ist keine Adresse
+
+*Anlass: der Evaluator hat den Bau auf `NACHBESSERN` gesetzt, weil eine Namenskorrektur des
+Generators selbst der Fehler war. Beim Nachmessen ist ein größerer Befund aufgefallen.*
+
+**Fünf Zeilen tragen „Harzer" im Modellnamen — nur EINE hat Lattmaße:**
+
+```text
+Zeile   9   'Harzer Pfanne'                  Variante —      Lattmass  fehlt
+Zeile  10   'Harzer Pfanne 7'                Variante Big    Lattmass  372-405   <- die EINZIGE
+Zeile  11   'Harzer Pfanne F+'               Variante —      Lattmass  fehlt
+Zeile 102   'Braas Harzer Pfanne'            Variante —      Lattmass  fehlt
+Zeile 104   'Braas Harzer Pfanne 7 (BIG)'    Variante —      Lattmass  fehlt
+```
+
+> **Wer mit „Harzer Pfanne" sucht, landet auf Zeile 9 — ohne Lattmaße.** *Genau das war die
+> vorgeschlagene „Korrektur": der Modellname `Harzer Pfanne 7` sei falsch, in der Quelle stehe nur
+> `Harzer Pfanne`. **Beides steht dort, und nur der längere Name trägt Werte.** Der Evaluator nennt
+> es H-9 — richtiges Muster, falsche Zeile.*
+
+**Und das ist kein Einzelfall. Über alle 127 Zeilen gemessen, Namen normalisiert (Braas-Präfix und
+Klammerzusätze entfernt):**
+
+```text
+114 verschiedene Modellnamen bei 127 Zeilen
+  8 Namen haben DUBLETTEN:
+      5x  Opal Standard          davon mit Lattmass: 0
+      3x  Rubin 11V              davon mit Lattmass: 0
+      3x  Rubin 13V              davon mit Lattmass: 2
+      2x  Frankfurter Pfanne     davon mit Lattmass: 0
+      2x  Harzer Pfanne          davon mit Lattmass: 0
+      2x  Harzer Pfanne 7        davon mit Lattmass: 1
+      2x  Taunus Pfanne          davon mit Lattmass: 0
+      2x  Topas 13V              davon mit Lattmass: 2
+```
+
+**Die Folge für das Werkzeug, und sie ist eine Zusage, keine Bemerkung:**
+
+```text
+DER MODELLNAME IST KEINE EINDEUTIGE ADRESSE.
+  Ein Zugriff ueber 'Modell_Typ' allein kann auf eine Dublette OHNE Werte treffen.
+  Adressiert wird ueber Modell_Typ PLUS Variante_Ausfuehrung — und wo auch das nicht
+  eindeutig ist, ueber die ZEILE mit gefuellten Lattmassen.
+  Bei fuenf der acht Dubletten traegt KEINE Zeile Lattmasse: dort gibt es keine
+  Auswahl, sondern nur die Feststellung "kein Wert vorhanden".
+```
+
+> **Warum das der gefährlichere Befund ist als eine fehlende Zahl:** *eine leere Zelle merkt man. Eine
+> **gefundene, aber leere Dublette** sieht wie ein Treffer aus — das Werkzeug meldet „Modell bekannt"
+> und liefert keinen Bereich, und der Bauende sucht den Fehler in der Rechnung statt in der Adresse.*
+
 ## 5 · DECISION
 
 ```text
@@ -200,6 +251,13 @@ W-23-5  (P1) KEIN Wert ohne Herkunft: jede uebernommene Zahl traegt Datenstatus 
 W-23-6  (must_preserve) resources/** und app/** byte-identisch — reine Doku-Stufe.
         Die Quelldatei auf dem Desktop wird NICHT verandert, nur gelesen.
         Kein Import, kein Schema, keine Migration, kein Seeder.
+
+W-23-8  (P1, NEU 12.08.) Die Adressierung steht in 2-FUNKTION: Modell_Typ ALLEIN ist
+        keine eindeutige Adresse. Acht Namen haben Dubletten, bei fuenf davon traegt
+        KEINE Zeile Lattmasse. Adressiert wird ueber Modell_Typ plus
+        Variante_Ausfuehrung, und die Zeile mit gefuellten Lattmassen entscheidet.
+        Gegenprobe im Bericht: der Zugriff auf 'Harzer Pfanne' liefert KEINEN Bereich,
+        der auf 'Harzer Pfanne 7' + Variante 'Big' liefert 372-405.
 
 W-23-7  (P1, §3 wird BELEGT) Beide Orte nach ARBEITSREGELN §3, beide Zahlen genannt,
         Messung unmittelbar vor der ersten Aenderung.
