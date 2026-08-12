@@ -52,6 +52,7 @@
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
 | **A-23** Sechs Zettel an einer erledigten Sperre | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `59c66eb2` | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. Sechs Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung. Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
+| **A-24** Panel-Zusage trifft das Tor nicht | **`ENTWURF`** | `plan-pruefer` | Schnitt 12.08. · Basis `7b9ad18c` | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)`. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7475,6 +7476,42 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 ```
 
 ```yaml
+auftrag: "A-24"
+zustand: ENTWURF
+ballbesitz: plan-pruefer  # DoR steht aus
+titel: "L/T-Dach: das Panel verlangt zwei Masse, das Mesh-Tor verlangt vier"
+basis_sha: 7b9ad18c
+spur: A
+prioritaet: P1
+blatt: "docs/auftraege/aktiv/A-24-die-panel-zusage-trifft-das-tor-nicht.md"
+warum_P1: "Es ist die einzige Stelle dieser Insel, an der eine Zusage den Nutzer AKTIV in die Irre
+  fuehrt: er erfuellt die genannte Bedingung, die Warnung verschwindet, und die Flaeche bleibt leer.
+  Die uebrigen offenen Punkte der A-05-Liste sind FEHLENDE Funktionen — die behaupten nichts. Eine
+  Zusage, die den Erfuellenden im Stich laesst, ist teurer als eine fehlende Funktion, und genau
+  dagegen halten hier fuenf Ehrlichkeitswaechter."
+warum_es_vier_tage_gelegen_hat: "Der A-05-Bericht uebergibt Punkt 7 woertlich an den Planner mit dem
+  Satz 'Einordnung und ggf. Auftrag: Sache des Planners'. Die Uebergabe war korrekt und eindeutig,
+  A-05 ist seit 08.08. ABGENOMMEN. Es lag bei mir und ich habe nicht geschnitten — kein fremder Fehler
+  und keine Prozessluecke, sonst sucht der naechste Leser eine, wo keine ist."
+der_pfad_am_code_geprueft_nicht_am_namen: "anbauZuEingabe gibt UFormEingabe zurueck, was nach U klingt.
+  Gemessen: dachMesh.ts:143 ruft sie fuer ALLE Verschneidungsformen, :153 baut daraus
+  VerschneidungEingabe mit form t oder l. Haette ich vom Namen geschlossen, waere der Befund falsch
+  gewesen — H-9, diesmal in der richtigen Richtung gemessen."
+die_falle_und_deshalb_A_24_5: "Wer nur den TEXT ehrlich macht, ist nach A-24-1a gruen und der Fehler
+  bleibt: die Warnung verschwindet weiterhin, sobald zwei Masse gefuellt sind. Deshalb verlangt A-24-1
+  BEIDE Richtungen — Text UND die Bedingung, die fehlt berechnet — und A-24-5 einen Waechter auf die
+  KOPPLUNG statt auf den Wortlaut. Die Lehre aus W-34, wo mein Kriterium auf die wirkungslose Stelle
+  zeigte."
+schutzgrenze_in_A_24_3: "KEINE Vorbelegung, KEINE Migration, KEIN stiller Schreibvorgang. Bestehende
+  L/T-Daecher ohne lengthB/widthB bleiben zeichengleich, bis ein Nutzer selbst etwas eingibt — Nachweis
+  per md5 an einem Bestandsdokument. Ein Feld, das beim Oeffnen des Panels eine 0 schreibt, veraendert
+  Bestandsdaten, und das ist eine Dauergrenze und keine Vorsicht."
+was_selbst_gemessen_und_was_nur_gelesen: "SELBST: Panel-Text :300, Feldbedingungen :280/:283/:288/:291,
+  Tor dachMesh.ts:76-84, der Pfad :143/:153, die Eingabe-Semantik dachVerschneidung.ts:22-30. NUR
+  GELESEN, nicht wiederholt: die A-05-Probe 4d des Generators (l-shape mit zwei Massen ergibt dreiecke
+  leer). Torcode gelesen statt Probe gefahren — fuer einen Auftragsschnitt genug, fuer eine Abnahme
+  nicht."
+
 auftrag: "A-23"
 zustand: ENTWURF
 ballbesitz: plan-pruefer  # DoR steht aus
