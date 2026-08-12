@@ -6,12 +6,20 @@ titel: "Elf unbelegte Zeitwerte und ein harter Stundensatz rechnen einen Lohnkos
 art: "MESSEN + ENTSCHEIDEN. Kein Bau am Wert (Yamas Punkt 4)."
 spur: A
 heimat_app: ticket
-status: ENTWURF
+status: BEREIT
+dor_beleg: "95b4de4f — plan-pruefer 12.08.: 'A-16 DoR BESTANDEN, BEREIT beim Generator: alle
+         Zeilenangaben treffen exakt' + 'MACHBARKEIT GEMESSEN, der Punkt an dem eine DoR faellt:
+         A-16-1 verlangt jede view()-Stelle mit Variable einzeln zu oeffnen — es sind VIER, machbar.'
+         NACHGEZOGEN 12.08. vom Planner auf den Befund des Generators (bfba0419): das Blatt trug
+         weiter ENTWURF und ballbesitz YAMA, waehrend Tafelzeile und STATUS-Datensatz BEREIT sagten
+         und die DoR seit Stunden belegt war. Der Generator hat NICHT gebaut, und das war richtig —
+         er hat die Reihenfolge des Blattes gelesen statt sie zu erraten."
 status_steht_in: docs/STATUS.md
 basis_sha: 5d88f198
 prioritaet: P1
 anlass: "Yamas Antwort 12.08. Punkt 1 ('TIME_VARS steht im laufenden Produktivcode'), Vorrang vor der Werkzeugarbeit"
-ballbesitz: "YAMA — eine Weiche, siehe Abschnitt 3. Danach plan-pruefer (DoR)."
+ballbesitz: "GENERATOR — Weiche und DoR sind beide durch. Yama hat W3 gewaehlt (eingetragen in
+         95b4de4f), der plan-pruefer hat die DoR im selben Commit bestanden gemeldet."
 claim: "planner 12.08. — Claim VOR dem Schnitt."
 grundlage: "F-051 🔴 (FORMELSAMMLUNG) · docs/BERICHT-M02-AUSGEWERTET.md · Yamas Fundstelle roof.blade.php:73"
 praemisse_geaendert: "ja — siehe Abschnitt 1. Die Fundstelle haelt zeichengenau, der Weg zum Bildschirm nicht."
@@ -204,8 +212,14 @@ neue Hausregel eine Stufe weiter: nicht nur *Mehrfachvorkommen* ist kein Beleg, 
 ist kein Beleg für die Wirkung**. Beides gehört in B7; die Schärfung steht dort.
 
 ```yaml
-zustand: ENTWURF
-ballbesitz: "YAMA — Weiche W1/W2/W3 in Abschnitt 3. Ohne sie ist A-16-2 nicht schneidbar."
+zustand: BEREIT
+ballbesitz: "GENERATOR — Bau. Weiche und DoR sind durch (95b4de4f)."
+ueberholt_12_08: "Hier stand: 'YAMA — Weiche W1/W2/W3. Ohne sie ist A-16-2 nicht schneidbar.'
+         Der Satz war richtig, als das Blatt geschnitten wurde, und ist seit Yamas W3-Entscheidung
+         ueberholt: A-16-2 IST geschnitten (Sperrvermerk am Ort der Zahlen, Abschnitt 5).
+         Der Generator hat ihn gelesen und deshalb NICHT gebaut — die Reihenfolge im Blattfuss
+         wiegt fuer ihn schwerer als die Tafelzeile, und das ist richtig herum. Ein ueberholter
+         Satz im Fuss hat einen fertigen Auftrag stundenlang aufgehalten."
 naechster_schritt: "Yamas Weiche, danach plan-pruefer DoR"
 messung_liegt_vor: "Aufrufer 0/0/0 statisch · Route zeigt auf andere Datei · 0 Serverschreibpfade
                     · Einheit Geruest korrekt · Vorbehalt vorhanden aber an falscher Groesse"
