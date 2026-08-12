@@ -280,3 +280,74 @@ hausweiter_befund_an_yama: "'bestanden' ist ein Muster ueber ELF Engines, alle a
 anbinden_statt_bauen: "drei von vier Teilen nutzen vorhandene Mechanismen (pruefungen+schwere,
                        panel.grundlage, Plakettenlogik). Neu ist ein Feld und ein Text."
 ```
+
+
+## §11 — Bericht A-14 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "A-14"
+zustand: CODE_FERTIG
+bau_commit: "e0722979"
+buendel_commit: "21940d33"
+in_arbeit_commit: "f4441c36"
+basis: "1e09280d"
+
+kriterien:
+  A-14-1: GRUEN   # SparrenErgebnis.vorbehalt ist Pflichtfeld, gespeist aus N003_VORBEHALT
+  A-14-2: GRUEN   # Probelauf zeigt das Feld NACH dem Cast — und ist zum Dauertest geworden
+  A-14-3: GRUEN   # Plakette beim Sparren NICHT IM DOM; Treppe und Heizkoerper zeigen ihre
+  A-14-4: GRUEN   # Pixellage gemessen, s. u.
+  A-14-5: GRUEN   # sparrenBerechnung.test.ts 0 geaenderte Zeilen
+  A-14-6: GRUEN   # grundlage nennt Norm UND Reichweite, im Browser sichtbar
+  A-14-7: GRUEN   # geometry/ genau EINE Datei, PHP-app/ 0, resources/ 0/0/0, Suite gruen
+  A-14-8: GRUEN   # Browserabnahme, Waechter VOR der Messung mit exit 0
+  A-14-9: GRUEN   # f4441c36: beide Orte, Befehl mit Ausgabe, vor der ersten Aenderung
+
+browserabnahme:
+  waechter_vorher: "bash scripts/buehnen-waechter.sh -> exit 0
+                    'BUEHNE OK  PID 68498 (php -S) — Datenbank ticket_testing'"
+  weg: "/login -> /admin/hausplaner/studio -> Experte -> Fachplaner -> Sparren-Vorbemessung
+        -> Auslegung berechnen"
+  viewport: "1700 x 1200"
+  A-14-4_pixellage:
+    ausnutzung_biegung:      "x=861  y=456  h=19"
+    ausnutzung_durchbiegung: "x=861  y=533  h=19"
+    vorbehalt:               "x=861  y=586  h=19  'Vorbemessung, ersetzt keine prüffähige Statik'"
+    befund: "alle drei in DERSELBEN Spalte, der Vorbehalt 53 px unter der zweiten Ausnutzung,
+             alle innerhalb der 1200 px Bildhoehe — EIN Blick, kein Tooltip, keine eigene Zeile darueber."
+  A-14-3_plakette:
+    sparren: "NICHT IM DOM — kein Element mit 'Alle Prüfungen bestanden'. Ersatzlos, nicht versteckt."
+    treppe: "'Alle Prüfungen bestanden' bei y=413 — unveraendert"
+    heizkoerper: "'Eine Prüfung ist nicht bestanden' bei y=380 — die ANDERE Fassung, also ist
+                  nicht nur der Gruen-, sondern auch der Rot-Fall anderswo unberuehrt"
+  bilder: "a14-sparren-ergebnis.png · a14-treppe2.png · a14-zweite.png (Kratzverzeichnis)"
+
+was_ich_dem_auftrag_widerspreche:
+  zahl_der_engines:
+    auftrag: "A-14-3 sagt 'die zwoelf anderen Engines', A-14-7 sagt 'die zehn anderen'"
+    gemessen: "ACHT Engines insgesamt (engine-treppe, -sparren, -fbh, -heizkoerper,
+               -fensterprodukt, -abwasser, -kueche, -pv) — also SIEBEN andere."
+    bemerkung: "die beiden Zahlen widersprechen sich zudem untereinander. Die Sichtprobe habe
+                ich an den REAL vorhandenen gefahren, nicht an der Zahl."
+
+eingriff_in_die_testdatenbank:
+  was: "Probenutzer angelegt — id 268, a14-probe@example.test, is_admin=1"
+  wo: "ticket_testing, vorher 0 Nutzer, nachher 1"
+  warum: "die Route liegt hinter auth; ticket_testing hatte KEINEN Nutzer"
+  kanal: "ueber PHPUnit, das laut phpunit.xml DB_DATABASE=ticket_testing erzwingt; der Test hat
+          die Datenbank vor dem Schreiben selbst zugesichert"
+  bemerkung: "scripts/browser-buehne.sh haelt fest, dass der fehlende Testbenutzer damals
+              'Glueck war, nicht Vorsicht' — der Schutz ist die DB-Pruefung, nicht die leere Tabelle."
+
+nicht_gemessen:
+  - "die uebrigen fuenf Engines — A-14-3 verlangt mindestens zwei, ich habe zwei gefahren"
+  - "ob der Vorbehalt in Export/Stueckliste/PDF ankommt — es gibt heute keinen solchen Weg
+     (0 Treffer ausserhalb enginePanels/EngineFlaeche). Genau dafuer steht er im ERGEBNIS."
+
+nebenbefund_nicht_meiner:
+  - "die Buehne wirft bei jedem Aufruf ein Notice aus Laravels server.php:21 —
+     'file_put_contents(): Write of N bytes failed with errno=32 Broken pipe'.
+     Nicht meine Aenderung, nicht behoben, hier gemeldet."
+
+ballbesitz: evaluator
+```

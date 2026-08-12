@@ -30,7 +30,7 @@
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 | **W-07N** `2-FUNKTION` + Azimutgrenze | `ENTWURF` | **Plan-Prüfer** | Schnitt `1734aa3b` · Basis `3d368625` | Nachbesserung §12.5 · 9 Platzhalter in `2-FUNKTION` gemessen · **schließt W-07 auf BESCHRIEBEN** |
 | **W-09** Treppe | `ENTWURF` | **Plan-Prüfer** | Schnitt `6e2949a7` · Basis `65f3ece4` | sieben Module, 698 Z, **12 Zusagen** · Grobzahl stimmt aufs Wort · **letzter offener Schnitt der Klasse A** |
-| **A-14** N-003-Vorbehalt ins Ergebnis | **`IN_ARBEIT`** | **Generator** | Schnitt `29f8f372` · Basis `1e09280d` | **RISIKO-Vorrang** (Yama 12.08.): Plakette „Alle Prüfungen bestanden" bei 2 von 6 Nachweisen · Urteilstext-Feld | · **Tafelzeile stand auf `ENTWURF`/Plan-Prüfer, während der Zustandsblock BEREIT/Generator trug — angeglichen**
+| **A-14** N-003-Vorbehalt ins Ergebnis | **`CODE_FERTIG`** | Evaluator | `e0722979` + Bündel `21940d33` · Basis `1e09280d` | 9/9 · Vorbehalt als **Pflichtfeld im Ergebnis** · Plakette beim Sparren **nicht im DOM**, Treppe (y=413) und Heizkörper (y=380) unberührt · Vorbehalt y=586 unter den Ausnutzungen y=456/533 · Wächter exit 0 · **Auftragszahl „zwölf/zehn Engines" gemessen widerlegt: acht** |
 | **A-15** Fachaussage oder Hinweis | `ENTWURF` | **Plan-Prüfer** | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
 | **B5** Zählergebnis mit Trefferzeilen | `ENTWURF` | **Plan-Prüfer** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
 | **B6** Summe braucht Erhebung | `ENTWURF` | **Plan-Prüfer** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
@@ -1898,8 +1898,8 @@ was_ich_jetzt_tue: "Ich lege die neun fehlenden Bloecke NICHT im Alleingang an �
 auftrag: "A-14"
 titel: "Vorbehalt als Pflichtfeld · grundlage traegt die Grenze · die Plakette hoert auf, einen Nachweis zu behaupten"
 datei: docs/auftraege/aktiv/A-14-n003-vorbehalt-ins-ergebnis.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft — Produktivcode + Sichtaenderung, Browserabnahme nach §9)
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 basis_sha: 1e09280d
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): DER FUND IST DER KERN UND ER HAELT — selbst gemessen: sparrenBerechnung.ts:80 traegt 'bestanden: boolean; // beide Nachweise <= 1,0', und EngineFlaeche.tsx:142-143 zeigt daraus woertlich '✓ Alle Pruefungen bestanden', gruen hinterlegt, fontWeight 700, als Gesamturteil ueber der Zahlenliste — fuer eine Rechnung, die Wind, Mehrfeld, Knicken, Auflagerpressung und Lastkombinationen NICHT kennt (N-003 Geltungsbereich, von Yama festgelegt, DAUERGELB). Das ist die Nachweissprache, die Yamas Auflage verbietet, an einer Stelle, die WEDER Yama NOCH der Planner in ihrer Auflage genannt hatten. UND DER PRAEZEDENZFALL STEHT IM CODE SELBST: EngineFlaeche.tsx:131-135 (AUF-52) sagt woertlich 'sie bestehen nichts... eine Plakette waere dort eine ERFUNDENE BEWERTUNG; die Huelle zeigt, was da ist, und wo nichts ist, steht nichts'. Jemand hat die Frage schon entschieden — die Antwort trifft N-003 genauso, und A-14-3 zieht sie konsequent (Plakette WEG, ersatzlos, nicht umformuliert)."
@@ -1974,6 +1974,35 @@ prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — grep auf B6/Summe-Menge im Tor: 0 Treffer. Acht Kriterien, §5-Block vollstaendig. B6-2 ist die wertvollste Zeile: die Warnung muss NACHWEISLICH SCHWEIGEN, wenn Menge und Summe genannt sind, belegt durch ZWEI Probelaeufe mit beiden Ausgaben im Bericht — 'ohne diesen Gegenbeleg ist die Barriere eine Belaestigung'. Genau die Gegenrichtung, die bei must_preserve-Kriterien so oft fehlt. Die Trennung von B5 ist sauber und stammt von Yama selbst: B5 fragt 'hast du gelesen, was du gezaehlt hast', B6 fragt 'weisst du, WORUEBER du gezaehlt hast' — der Planner-Fehler dahinter ist belegt (640 gemeldet, 1.593 erhoben)."
 konfliktpruefung_ergaenzt: "Von mir gemessen, weil beide Blaetter dieselbe Datei anfassen: B5 und B6 aendern BEIDE scripts/commit-pruefen.sh (heute 610 Zeilen, 78 Zusagen in der Suite). Sie sind zeilenweise disjunkt (Zahlenbehauptung gegen Summenbehauptung), aber §3 loest es ohnehin — REIHENFOLGE B5 dann B6, damit der zweite Bau auf dem ersten aufsetzt statt gegen ihn."
 naechster_schritt: "Generator zieht B6 NACH B5"
+```
+---
+
+## BEREIT — W-01N und W-07N (Bloecke angelegt; sechster und siebter der neun unsichtbaren)
+
+```yaml
+auftrag: "W-01N"
+titel: "W-01/1-6 traegt die Zahl 1689/1689, gemessen sind 1692 — zahlfreie Form wie in W-02"
+datei: docs/auftraege/aktiv/W-01N-suitezahl-zahlfrei.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 548bef5c
+prioritaet: P2
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — die Zahl 1689 steht ACHTMAL im W-01-Blatt, darunter woertlich im Kriterium W-01/1-6 (Z.177: 'bleibt bei 1689/1689'), waehrend die Suite heute 1692 traegt. Der Befund ist damit nicht nur belegt, sondern in seiner Reichweite gemessen: es ist keine einzelne Zeile, sondern acht Fundstellen in einem freigegebenen Blatt. Sauber nach §12.5 geschnitten — W-01/1 bleibt ABGENOMMEN, der Befund wirkt nicht rueckwirkend, und die Loesung uebernimmt die ZAHLFREIE Form, die W-02 bereits traegt (kein neues Muster erfinden, das vorhandene anwenden)."
+warum_das_mehr_ist_als_kosmetik: "Eine feste Zahl in einem must_preserve-Kriterium ist eine ZEITBOMBE derselben Klasse wie A-09s widerlegte Begruendung: sie ist heute falsch und wird morgen wieder falsch, sobald jemand eine Zusage hinzufuegt — und dann steht ein freigegebenes Blatt gegen die Wirklichkeit. Genau das ist bei W-01 passiert: die Zahl war beim Schnitt richtig."
+naechster_schritt: "Generator zieht W-01N (§3 beachten)"
+```
+
+```yaml
+auftrag: "W-07N"
+titel: "2-FUNKTION.md ist ein leeres Formular, waehrend W-07 im Register BESCHRIEBEN traegt"
+datei: docs/auftraege/aktiv/W-07N-funktion-und-azimutgrenze.md
+zustand: BEREIT
+ballbesitz: generator
+basis_sha: 3d368625
+prioritaet: P1
+letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen und der Befund haelt genau in der Form, in der er geschnitten ist — W-07/2-FUNKTION.md traegt 37 Zeilen mit NEUN Platzhaltern, ist also ein leeres Formular; das REGISTER fuehrt W-07 folgerichtig nicht mehr als BESCHRIEBEN, sondern als '6/7 BLAETTER' (selbst nachgelesen). Damit ist die Registerzeile bereits ehrlich und der Auftrag schliesst die letzte Luecke, statt einen falschen Zustand zu kaschieren. Der Zuschnitt ist richtig: NACHBESSERUNG eines Altstandes, kein neuer Stufe-1-Auftrag — sechs von sieben Blaettern stehen, sie werden nicht neu geschnitten."
+gewuerdigt: "Dass die Registerzeile die Zwischenstufe '6/7 BLAETTER' traegt, ist die Frucht eines frueheren Befunds: der Zaehlbefehl trifft nur '^\\| W-[0-9]+ .*BESCHRIEBEN' und haette 'BESCHRIEBEN (6/7)' weitergezaehlt — die Legende wurde deshalb um die Zwischenstufe ergaenzt statt das Wort zu behalten. Eine Korrektur, die den ZAEHLER respektiert statt nur den Leser."
+naechster_schritt: "Generator zieht W-07N (§3 beachten)"
 ```
 ---
 
