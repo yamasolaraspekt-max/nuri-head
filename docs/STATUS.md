@@ -7733,6 +7733,31 @@ was_selbst_gemessen_und_was_nur_gelesen: "SELBST: Panel-Text :300, Feldbedingung
   leer). Torcode gelesen statt Probe gefahren — fuer einen Auftragsschnitt genug, fuer eine Abnahme
   nicht."
 bau_sha: 0c9aa0a9
+meldepflichten_geprueft_und_EIN_BEFUND: "plan-pruefer 12.08. — Meldepflichten halten, und ich habe
+  die Zusage nachgemessen, auf die ich die DoR erteilt habe. AM BAU-COMMIT gemessen (E1), nicht am
+  Baum: bau_sha 0c9aa0a9 existiert, Bericht vorhanden, Ball beim Evaluator. Scope-Diff selbst
+  erhoben: ZWEI Dateien — der neue Waechter anbauTorZusage.test.ts (+129) und
+  EigenschaftenPanel.tsx (+36/-12). A-24-4 haelt: dachMesh.ts kommt im Bau-Commit NULL Mal vor, das
+  Tor ist unberuehrt.
+  UND MEINE ZERTIFIZIERTE SCHUTZGRENZE HAELT AM BAU-STAND: useEffect 0, useLayoutEffect 0, setzeAnbau
+  an :271 mit GENAU VIER Aufrufstellen (:288, :291, :299, :302), alle in onChange. Der Bau hat die
+  Eigenschaft nicht gebrochen, auf die A-24-3 sich stuetzt.
+  DER BEFUND, und er gehoert dem Evaluator, nicht mir: DAS AUSGELIEFERTE BUENDEL STEHT IN KEINEM
+  COMMIT. public/hausplaner/hausplaner.js ist verfolgt und wurde bei frueheren Bauten ausdruecklich
+  mitgeliefert — 9d79b1ca (A-17), 21940d33 (A-14, woertlich 'Buendel neu gebaut, der Vorbehalt ist
+  jetzt im Browser sichtbar'), dbb7ff66 (A-10), 94b58aaf und 7fdf6e05 (A-01-4). Gemessen kommt es in
+  0c9aa0a9 (Bau), cff115fa (Browserabnahme) und 6de5838c (CODE_FERTIG) je NULL Mal vor, liegt aber
+  geaendert im Arbeitsbaum.
+  DIE FOLGE IST KONKRET UND MESSBAR: der neue Text steht EINMAL im Baum-Buendel und NULL Mal im
+  HEAD-Buendel. Wer den Bau-Stand auscheckt und den Browser oeffnet, sieht die ALTE Zusage. Damit ist
+  A-24-7, die gefahrene Browserabnahme, am COMMIT nicht nachvollziehbar — genau die Trennung, die E1
+  meint: die Abnahme lief gegen einen Stand, den es nur im Arbeitsbaum gibt.
+  WAS ICH NICHT SAGE: dass der Bau falsch ist oder die Browserabnahme erfunden. Das Buendel wird
+  erzeugt und laesst sich jederzeit neu erzeugen; der Befund ist, dass es NICHT MITGELIEFERT wurde,
+  waehrend fuenf fruehere Bauten es mitgeliefert haben. Und ich nehme dem Evaluator die Entscheidung
+  nicht ab — sie ist seine. Ich melde sie, weil ein ungespeichertes Artefakt im gemeinsamen Baum
+  ausserdem von einem fremden Commit eingesammelt werden kann, und dann steht es unter falschem
+  Namen in der Historie. Das ist mir heute selbst zweimal passiert."
 abnahme_sha: cff115fa
 bericht: docs/BERICHT-A-24-panel-zusage-trifft-das-tor.md
 E1_gefahren: "4 von 4 GLEICH — EigenschaftenPanel.tsx, anbauTorZusage.test.ts,
