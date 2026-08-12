@@ -50,7 +50,8 @@
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
-| **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
+| **A-22** Statuswahrheit maschinell lesbar | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · 17 doppelte yaml-Schlüssel, **0 mit gleichem Wert** · 4× `ballbesitz` auf abgeschlossenen Aufträgen · Feldform 33/19 |
+| **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
 
@@ -7063,4 +7064,53 @@ regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit. Das B
 W_34_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-34 GECLAIMT vor dem Pruefstand. W-34 ist die zweite Ablesung der Stufe 6 und besitzt die Dateien, die W-38 ausdruecklich NICHT besitzt — GuidedView.tsx und fahrschritte.ts. Ich pruefe deshalb zuerst die Scope-Grenze in beide Richtungen: was W-34 beansprucht und was es W-38 ueberlaesst."
 claim_abnahme_runde2: "evaluator (Erstinstanz) 12.08.: Abnahme W-34 RUNDE 2 GECLAIMT vor dem Pruefstand. Mein Rot hing an EINER Aussage, und der Planner hat das Kriterium daraufhin nicht nur berichtigt, sondern auf eine andere Stelle gelegt: Zweig 1 statt Zweig 2, weil [].every(...) true ist. Diese Verschaerfung habe ich NICHT gemessen — sie ist seine Rechnung, nicht meine. Ich messe sie deshalb zuerst und von vorn, bevor ich pruefe, ob der Bau sie einhaelt."
+```
+
+```yaml
+auftrag: "A-22"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "Doppelte yaml-Schluessel und uneinheitliche Feldform in docs/STATUS.md"
+basis_sha: e1a478fb
+spur: A
+prioritaet: P1
+dor_beleg: "steht aus — plan-pruefer."
+anlass: "Der Generator hat in e1a478fb 17 doppelte yaml-Schluessel gemeldet, aus einem Nebenbefund
+  des Evaluators in e5716bc0. Es ist der DRITTE Strukturmangel dieser Datei an einem Tag."
+selbst_nachgemessen: "Ueber alle yaml-Bloecke gefahren, 145 Bloecke: 17 doppelte Schluessel und
+  NULL davon mit gleichem Wert. Vier sind ballbesitz auf abgeschlossenen Auftraegen — W-01N,
+  W-15/1, B7 und A-21 — die uebrigen 13 sind Aufzeichnungen: release_vermerk 10 mal,
+  letztes_votum, claim_abnahme und eigener_messfehler je einmal. Feldform der auftrag-Felder 33
+  mit und 19 ohne Anfuehrungszeichen. Kleine Abweichungen zu seinen Zahlen bei release_vermerk und
+  der Blockzahl, weil die Datei zwischen den Messungen gewachsen ist; die tragenden Zahlen 17, 4
+  und 0 sind identisch."
+die_eigentliche_aussage: "Dass KEINE der 17 denselben Wert traegt, ist der Kern. Niemand schreibt
+  denselben Wert zweimal — jemand schreibt einen NEUEN neben den alten, statt den alten zu
+  aendern. Jede Dublette ist ein ueberholter Wert der stehen geblieben ist, keine Redundanz."
+die_vier_gefaehrlichen: "W-01N, W-15/1, B7 und A-21 tragen als erste Zeile ballbesitz Kette
+  vollstaendig und als letzte ballbesitz generator. Der Takt-Parser nimmt das ERSTE Vorkommen und
+  liest richtig, YAML nimmt das LETZTE und liest falsch — ein YAML-Leser sieht VIER abgeschlossene
+  Auftraege beim Generator liegen. Das ist die Richtung, die BELEGT meldet wo FREI ist.
+  EINEN FALL GEOEFFNET nach Pflichtpruefung 7: A-21 traegt zustand BETRIEBSBESTAETIGT, seine
+  Tafelzeile einen Gedankenstrich als Ballbesitz, die erste Blockzeile Kette vollstaendig — allein
+  die letzte weicht ab, und ausgerechnet die liest YAML."
+die_dreizehn_bleiben: "Sie sind Belege und keine Statusbehauptungen: je ein Vermerk der
+  Stamm-Instanz neben einem einer frischen Instanz. Der zweite widerlegt den ersten nicht, er kommt
+  aus einem anderen Lauf. A-20-4 gilt woertlich — wer loescht ohne zu sagen was gegolten hat,
+  vernichtet einen Befund. Die Abhilfe ist EINDEUTIGKEIT, nicht Entfernung."
+was_NICHT_in_diesem_auftrag_steht: "Der dritte Befund des Tages, die Nebenlaeufigkeit: heute VIER
+  Beifang-Vorgaenge an dieser Datei, und die Regelkollision die der Generator gemessen hat —
+  zweiter Commit unmittelbar gegen nie fremde unverfolgte Arbeit einsammeln, bei belegter Datei ist
+  nur EINE von beiden erfuellbar. Jede Abhilfe dafuer aendert, wie ALLE FUENF Rollen arbeiten. Das
+  ist YAMAS Entscheidung und steht als benannter offener Punkt in Abschnitt 4 des Blattes, nicht
+  als Kriterium."
+pruefung_9_auf_die_eigenen_kriterien_angewandt: "A-22-5 verlangt keine FREMDE Zustandsaenderung und
+  erlaubt die EIGENE Fertigmeldung ausdruecklich. A-21-6 hatte das verboten und damit ein zweites
+  Zeitfenster erzwungen, das sich prompt gefuellt hat — die Lehre von vor einer Stunde, hier
+  angewandt."
+pruefung_8_ebenfalls: "A-22-1 misst die STRUKTUR, also Schluessel je Block, und nicht ein Wort im
+  Volltext. Deshalb waechst dieser Messgegenstand nicht durch das Dokumentieren des Befunds — genau
+  daran ist A-21-3 gescheitert."
+regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
+A_22_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
