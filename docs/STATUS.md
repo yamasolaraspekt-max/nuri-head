@@ -56,7 +56,7 @@
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`BETRIEBSBESTAETIGT`** | – | Release `0474f53b` · §19 12.08. | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
-| **W-35** Konfigurator-Dialog | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
+| **W-35** Konfigurator-Dialog | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`CODE_FERTIG`** | **Evaluator** | Bau `53142fc2` · Basis `2e7504ec` | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
@@ -8172,7 +8172,7 @@ gefahrenstellen_ausdruecklich_geprueft: "Die parallel gebauten W-41-Dateien sind
 
 ```yaml
 auftrag: "W-35"
-zustand: BEREIT
+zustand: IN_ARBEIT
 ballbesitz: generator
 titel: "Vier Arten, nicht drei — und die Registerzeile sagt drei"
 basis_sha: 0474f53b
@@ -8203,6 +8203,29 @@ sechs_waechter_einer_mit_namen: "konfiguratorEhrlich, configWizardWrite, paketSp
   woertlich, welche Zusage er haelt, denn ein Name ist keine Aussage."
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 W_35_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+gezogen_am: "12.08. vom generator. §3 vor dem Ziehen 0/0 an beiden Orten gemessen, danach 1/1."
+BEFUND_VOR_DEM_ZIEHEN_die_registerzeile_traegt_ZWEI_fehler: "W-35-1 nennt EINEN: sie sagt drei Arten,
+  der Code traegt vier. Der stimmt, ich habe ihn geoeffnet — REGISTER.md:122 'Konfigurator-Dialog
+  Fenster·Tür·Treppe', ConfigWizard.tsx:23 KonfigArt = fenster | tuer | treppe | heizkoerper.
+  DIESELBE ZEILE traegt aber einen ZWEITEN, und der ist gefaehrlicher: sie sagt woertlich
+  'schreibt NICHT ins Gebäudemodell'. Selbst nachgemessen, nicht von W-42 uebernommen:
+  grep -n ADD_NODE ConfigWizard.tsx liefert :184 radiator, :205 treppe, :226 knoten — drei
+  executeCommand-Aufrufe, plus :210 als Kommentar. Der Dialog schreibt sehr wohl ins Modell.
+  W-42 hat genau das abgelesen und sein Blatt ist ABGENOMMEN; die Registerzeile ist bei der
+  Abnahme nicht mitgezogen worden, weil W-42s Zeile die 129 ist und nicht die 122.
+  WARUM ICH ES MELDE STATT ES STILL MITZUNEHMEN: wer nur die Arten korrigiert, ist nach W-35-1
+  gruen — und die Zeile behauptet weiter das Gegenteil dessen, was zwei Auftraege vorher gemessen
+  wurde. Das ist Pflichtpruefung 4, ein gruenes Kriterium ist keins.
+  WAS ICH TUE: ich korrigiere BEIDES in derselben Zeile und melde die zweite Korrektur
+  ausdruecklich als UEBER das Kriterium hinausgehend. Die Entscheidung, ob das im Scope war,
+  gehoert dem Evaluator — ich ersetze das Kriterium nicht still."
+zwei_schreibweisen_im_auftragsblatt_die_der_code_nicht_traegt: "Das Blatt nennt :36 katalogFuer(art)
+  und :45 onUebernehmen. Gemessen: grep -c 'katalogFuer\\|onUebernehmen' ConfigWizard.tsx = 0.
+  Der Code schreibt katalogFür und onÜbernehmen, mit Umlaut. Der INHALT beider Angaben stimmt und
+  die Zeilennummern treffen — nur wer nach der Schreibweise des Blattes sucht, findet nichts.
+  Das ist H-9 in seiner harmlosen Form, und genau die Falle, vor der meine eigene Auflage warnt:
+  die eigene Pruefung meldet bei Umlauten auch falsch. Im Blatt wird die Schreibweise des CODES
+  gefuehrt."
 ```
 
 ```yaml
