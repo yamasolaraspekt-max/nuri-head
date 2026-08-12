@@ -56,7 +56,75 @@ Wer nutzt welchen Typ? Selbst gemessen, Tests ausgenommen:
 *Kein Import-Geflecht, keine dritte Stelle. **Die Dublette ist bequem entstanden und lässt sich
 entsprechend einfach auflösen.***
 
-## 3 — Der Ort ist nicht erfunden, er hat einen Präzedenzfall
+## 2b — NEU GESCHNITTEN nach `d0c429fa`: es sind VIER Deklarationen, und sie sind NICHT alle gleich
+
+**Der Plan-Prüfer hat den Befund vergrößert, und er hat recht.** *Ich habe zwei Deklarationen gemessen
+und nicht weiter gesucht — obwohl ich im Fuß selbst geschrieben habe, dass ich nicht gesucht habe.
+**Das war keine Grenze, das war eine Lücke:** wer eine Dublette meldet, muss ALLE Deklarationen derselben
+Sache kennen, sonst ist der vorgeschlagene Ort falsch.*
+
+```text
+VIER Stellen, selbst geoeffnet:
+  aufbauPlatzierung.ts:21   AufbauArt          NEUN Werte
+  dachformVorlagen.ts:173   VorlagenAufbauArt  NEUN Werte   (md5 identisch)
+  domain/scene.types.ts:248 ObstacleType       ZEHN Werte   (+ 'spitzgaube')
+  domain/validation.ts:187  z.enum([…])        ZEHN Werte   (Zod-Laufzeitpruefung)
+```
+
+**UND DER SATZ, DER ALLES ERKLÄRT, stand die ganze Zeit im Code** — *`dachformVorlagen.ts:172`,
+wörtlich:*
+
+```text
+// Aufbau-Auto-Platzierung: Arten exakt wie ObstacleType im Planer
+// (nur sicher unterstuetzte).
+```
+
+> **Die Neun sind keine Dublette der Zehn — sie sind eine bewusste TEILMENGE.** *Der Klammerzusatz ist
+> die Begründung, und sie ist fachlich: das **Szenenmodell** kennt alle Arten, die **Auto-Platzierung**
+> nur die, für die sie sicher platzieren kann. **Damit war mein Vorschlag „ein Typ an einem Ort" falsch:**
+> in `domain/` liegen die Arten längst, mit einer mehr — wer die Neun dorthin zieht, hat drei Listen mit
+> zwei Längen; wer auf Zehn vereinheitlicht, ändert Verhalten und verletzt A-28-2.*
+
+**Meine zwei Kriterien schlossen sich also gegenseitig aus** — *und zwar genau dann, wenn `spitzgaube`
+nicht entschieden ist. Das stand im Blatt nicht, weil ich die vierte und dritte Stelle nicht kannte.*
+
+### Die Lösung ist ABLEITUNG statt Verschieben
+
+```text
+Die Teilmenge wird AUS der Obermenge gebildet, statt sie zu wiederholen:
+  type AufbauArt = Exclude<ObstacleType, 'spitzgaube'>
+  (Form ist Bauform — Exclude, Extract oder ein benannter Satz, egal;
+   verlangt ist die ABLEITUNG.)
+
+Was das leistet, und was ein Verschieben nicht leisten koennte:
+  · die Dublette AufbauArt/VorlagenAufbauArt verschwindet     (eine Aufzaehlung weniger)
+  · die Neun bleiben zeichengleich neun                        (A-28-2 haelt)
+  · und die TEILMENGEN-BEZIEHUNG ist im TYPSYSTEM verankert:
+    verliert ObstacleType eine Art, bricht tsc — heute merkt es niemand.
+```
+
+> **Das ist besser als mein erster Vorschlag und nicht nur anders:** *„ein Typ an einem Ort" hätte die
+> Wiederholung an einen anderen Platz gelegt. **Die Ableitung macht die Wiederholung unmöglich** — und
+> genau das war der Zweck.*
+
+### Und `spitzgaube` bleibt außen — mit Grund, nicht aus Bequemlichkeit
+
+```text
+spitzgaube lebt an 21 Stellen. Im Produktivcode, vom plan-pruefer gemessen:
+  gaubeGeometrie:247/:375/:418   ECHTE Geometrie
+  dachAufbautenMesh:137          Darstellung
+  dachAusschnitt:281 · aufbauOrientierung:60
+  dachformVorlagen:2379          echte Vorlage 'sattel-spitzgaube'
+Das Szenenmodell kennt die Art; Platzierung und Vorlagen-Typ kennen sie nicht.
+```
+
+> **Das ist ein eigener Befund und keine Aufgabe dieses Auftrags** — *eine Art mit Geometrie und Vorlage,
+> die die Auto-Platzierung nicht platzieren kann. **Ob das ein Mangel ist, ist eine Fachfrage:** der
+> Klammerzusatz „nur sicher unterstützte" liest sich wie eine bewusste Auslassung, und H-7 verbietet mir,
+> aus dem Ist ein Soll zu machen. **Benannt, nicht entschieden** — und `spitzgaube` hinzuzufügen wäre
+> ohnehin eine Verhaltensänderung an sechs Modulen.*
+
+## 3 — Der Präzedenzfall für Domänen-Typen (gilt weiter, aber nicht als Umzugsziel)
 
 ```text
 domain/roofShape.ts:12   export type RoofShape = …
@@ -92,9 +160,25 @@ A-28 IST NICHT
 ## 5 — Abnahmekriterien
 
 ```text
-A-28-1  (P1, TRAGEND) Nach dem Bau gibt es GENAU EINE Deklaration der Aufbauarten,
-        und sie liegt in domain/. Nachweis: die Werteliste kommt im Repo genau
-        einmal als Typdeklaration vor — Befehl und Trefferzeilen im Bericht.
+A-28-1  (P1, TRAGEND) NEU GESCHNITTEN nach d0c429fa. Meine erste Fassung verlangte
+        GENAU EINE Deklaration in domain/ — das war falsch, weil dort schon zwei
+        liegen und sie eine Art MEHR fuehren (ObstacleType und das z.enum in
+        validation.ts, je zehn Werte mit 'spitzgaube').
+        WAS JETZT GILT: die NEUN werden AUS ObstacleType ABGELEITET statt
+        wiederholt. Nach dem Bau gibt es fuer die Aufbauarten genau EINE
+        Aufzaehlung im Repo — die in ObstacleType — und AufbauArt entsteht daraus
+        durch Ausschluss.
+        DIE FORM IST BAUFORM: Exclude, Extract oder ein benannter Satz, das
+        entscheidet der Bauende. VERLANGT ist die Ableitung, nicht ein Schlüsselwort.
+        WAS DAS LEISTET und ein Verschieben nicht leisten koennte: die Dublette
+        AufbauArt/VorlagenAufbauArt verschwindet, die neun bleiben zeichengleich
+        neun (A-28-2 haelt), UND die Teilmengen-Beziehung ist im TYPSYSTEM
+        verankert — verliert ObstacleType eine Art, bricht tsc. Heute merkt es
+        niemand.
+        Nachweis: Befehl und Trefferzeilen, dass die Werteliste als Aufzaehlung
+        genau einmal vorkommt; das z.enum in validation.ts darf bleiben oder
+        abgeleitet werden (Zod braucht Literale) — beides ist zulaessig, die
+        Entscheidung gehoert in den Bericht.
 A-28-2  (P1, SCHUTZGRENZE) KEIN Wert geaendert. Nachweis: die Werteliste vorher und
         nachher per md5 IDENTISCH, beide Werte im Bericht. Der Anker vorher ist
         35ed563ca78ba859647d598daab5dac6 — am Bau-Stand neu erheben, weil ein
@@ -107,6 +191,16 @@ A-28-3  (P1) tsc ist gruen, und das ist hier der eigentliche Waechter: eine
         nachher im Bericht.
 A-28-4  Die Suite bleibt gruen, Zaehler vorher = nachher. KEIN Test wird geaendert;
         wenn einer faellt, ist die Umstellung falsch und nicht der Test.
+A-28-5b (P1) DER SPITZGAUBE-BEFUND steht im Bericht und wird NICHT behoben:
+        spitzgaube lebt an 21 Stellen, im Produktivcode gaubeGeometrie:247/:375/:418
+        als echte Geometrie, dachAufbautenMesh:137 als Darstellung,
+        dachAusschnitt:281, aufbauOrientierung:60 und dachformVorlagen:2379 als
+        echte Vorlage 'sattel-spitzgaube'. Das Szenenmodell kennt die Art,
+        Platzierung und Vorlagen-Typ kennen sie nicht.
+        NICHT HINZUFUEGEN: der Klammerzusatz in dachformVorlagen.ts:172 liest sich
+        als bewusste Auslassung ('nur sicher unterstuetzte'), und H-7 verbietet, aus
+        dem Ist ein Soll zu machen. Sie hinzuzufuegen waere eine
+        Verhaltensaenderung an sechs Modulen und ein eigener Auftrag.
 A-28-5  Der ZWEITE BEFUND steht im Bericht: der Dateikopf von aufbauPlatzierung.ts:3
         nennt SECHS Arten, der Typ hat NEUN — sechs Gattungen, neun Arten, weil
         Gaube in Schlepp, Trapez, Flach und Giebel zerfaellt. Beide Zahlen stimmen
