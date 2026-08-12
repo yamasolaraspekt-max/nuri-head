@@ -20,6 +20,61 @@ grundlage: "docs/BERICHT-PROZESSEBENE-DREI-FRAGEN.md (194 Z.) als Quelle · Yama
             W-38 (BETRIEBSBESTAETIGT) als vorhandene Fortschrittsachse"
 ```
 
+## 0 — BERICHTIGT: meine Prämisse „es gibt keinen Code" trägt nicht
+
+**Das Blatt sagt oben „Es gibt KEINEN Code: die drei Stufen fehlen im Bestand."** *Der Generator hat
+das beim Bau widerlegt, der Release-Prüfer hat es unabhängig nachgemessen, und ich habe es selbst
+nachgemessen — **es trifft für zwei der drei Stufen zu und für die dritte nicht:***
+
+```text
+confirmed    0 Treffer im Produktivcode    -> fehlt, Vorgabe richtig
+blocked      0 Treffer                     -> fehlt, Vorgabe richtig
+outdated     5 Treffer im Produktivcode    -> EXISTIERT
+             10 mit Testdateien
+
+UND MEHR ALS DAS — geometry/configuratorPackage.ts:
+  :25-26   ConfiguratorStatus mit SIEBEN Stufen
+           draft · incomplete · generated · checked · approved · integrated · outdated
+  :105-111 eine vollstaendige UEBERGANGSTABELLE je Stufe
+  :125-128 markiereVeraltet() — nur approved und integrated werden outdated
+  :21      Dateikopf: „Freigabegrade (Yamas Abschnitt 18/3)"
+
+  approved   5 Treffer im Produktivcode, 14 mit Tests
+  integrated 4 / 9      checked 5 / 10      -> IN GEBRAUCH, nicht Attrappe
+```
+
+> **Es gibt eine vollständige Gültigkeitsachse: gebaut, getestet, in Gebrauch** — *nur unter anderen
+> Namen und für **Konfigurationspakete** statt für Wizard-Schritte. `approved` ist funktional das,
+> was ich als `confirmed` vorgegeben habe.*
+
+**Mein Fehler ist H-6 und nicht H-9:** *ich habe die Aussage der Quelle („`confirmed` **fehlt**,
+`outdated` **fehlt**, `blocked` **fehlt**") **übernommen, ohne im Code zu messen**. Die Quelle hatte
+`SchrittStatus` in `studioDaten.ts` vor sich und nicht `ConfiguratorStatus` in
+`configuratorPackage.ts` — ein zu enger Suchraum, und ich habe ihn nicht nachgeprüft. **Das ist heute
+der vierte Fall derselben Klasse**, und der erste, in dem ich eine Abwesenheit nicht selbst gemessen,
+sondern geglaubt habe.
+
+**Was daraus für die Vorgabe folgt — und es ist eine Frage, keine Antwort:**
+
+```text
+ZWEI YAMA-VORGABEN sprechen beide ueber Gueltigkeit, und niemand hat sie zueinander
+in Beziehung gesetzt:
+  Abschnitt 18/3   Freigabegrade fuer KONFIGURATIONEN   -> gebaut (7 Stufen)
+  Zielbild 3.6     acht Schrittstufen                    -> vier gebaut, drei benannt
+
+IST approved (18/3) dasselbe wie confirmed (3.6)?
+  WENN JA   erzeugt W-40s Vorgabe eine ZWEITE WAHRHEIT — genau das, was das Blatt
+            in Abschnitt 2 zu verhindern versucht.
+  WENN NEIN sind es zwei Gegenstaende (Konfigurationspaket gegen Geometrie/Schritt),
+            wie klassifiziereSchifter gegen W-27s Ecken: gleiche Woerter, andere Sache.
+
+-> Das ist eine FACHENTSCHEIDUNG und gehoert Yama. Sie steht in der Vorlage.
+```
+
+*Die Zahlendifferenz zwischen Evaluator (5) und Release-Prüfer (10) für `outdated` ist kein
+Widerspruch: **zwei Grundmengen**, Produktivcode gegen Produktivcode plus Tests. Selbst nachgemessen,
+beide Zahlen sind für ihre Menge richtig.*
+
 ## 1 — Der Operand ist lesbar und liegt im Repo (Pflichtprüfung 5)
 
 ```text

@@ -320,3 +320,59 @@ und ohne Code — sie lassen sich als **Vorgabe** (`ENTWORFEN`) schneiden, so wi
 Damit wäre beschrieben, was gebaut werden *soll*, ohne dass eine Zeile Produktivcode entsteht. **Sag
 Bescheid, ob ich das anfangen soll** — die vier Stufe-6-Ablesungen (W-33, W-35, W-36, W-37, W-39)
 laufen ohnehin weiter und brauchen dich nicht.
+
+---
+
+## 8 · Zwei deiner Statusvorgaben sprechen über dasselbe — und niemand hat sie verglichen
+
+**Beim Bau von W-40 ist ein Befund gegen mein eigenes Auftragsblatt aufgetaucht.** Ich hatte
+geschrieben, die drei Gültigkeitsstufen fehlten im Bestand. Der Generator hat das widerlegt, der
+Release-Prüfer unabhängig nachgemessen, und ich habe es selbst nachgeprüft:
+
+```text
+confirmed    0 Treffer im Produktivcode    -> fehlt wirklich
+blocked      0 Treffer                     -> fehlt wirklich
+outdated     5 Treffer                     -> EXISTIERT
+
+geometry/configuratorPackage.ts
+  :25-26   ConfiguratorStatus mit SIEBEN Stufen:
+           draft · incomplete · generated · checked · approved · integrated · outdated
+  :105-111 vollstaendige Uebergangstabelle je Stufe
+  :125-128 markiereVeraltet() — nur approved und integrated werden outdated
+  :21      Dateikopf: „Freigabegrade (Yamas Abschnitt 18/3)"
+
+  approved 5 Treffer · integrated 4 · checked 5   -> in Gebrauch, keine Attrappe
+```
+
+**Es gibt also eine vollständige Gültigkeitsachse: gebaut, getestet, in Gebrauch.** Und sie stammt
+aus **deinem Abschnitt 18/3**, während W-40s Vorgabe aus **deinem Zielbild 3.6** kommt.
+
+### Die Frage, die nur du entscheiden kannst
+
+```text
+IST approved (18/3) dasselbe wie confirmed (3.6)?
+
+WENN JA    hat W-40 eine ZWEITE WAHRHEIT vorgegeben — genau das, was das Blatt
+           selbst zu verhindern versucht. Dann muesste W-40 auf die vorhandene
+           Achse verweisen statt eine neue zu beschreiben.
+
+WENN NEIN  sind es zwei Gegenstaende: Freigabegrad eines KONFIGURATIONSPAKETS
+           gegen Gueltigkeit einer GEOMETRIE. Dann ist beides richtig und die
+           Namensgrenze muss im Code sichtbar werden — wie bei klassifiziereSchifter
+           gegen W-27s Ecken: gleiche Woerter, andere Sache.
+```
+
+> **Ich entscheide das nicht.** *Es ist eine Fachfrage über zwei Vorgaben von dir, und die
+> Antwort ändert, was gebaut wird — im einen Fall ein Verweis, im anderen eine zweite Achse. **Mein
+> Anteil am Fehler ist benannt:** ich habe die Abwesenheitsaussage der Quelle übernommen, statt im
+> Code zu messen. Die Quelle hatte `SchrittStatus` vor sich und nicht `ConfiguratorStatus`.*
+
+**Zwei kleinere Fragen aus W-40 hängen daran:**
+
+```text
+review-required   Dein Zielbild 3.6 fuehrt ACHT Stufen. Vier sind gebaut, drei sind
+                  als fehlend benannt — 4 + 3 = 7. Gehoert die achte zur
+                  Gueltigkeitsachse oder nicht?
+blocked           Die Quelle beziffert sie nicht. Wie grenzt sie sich von
+                  DECISION_BLOCKED im Prozess ab?
+```
