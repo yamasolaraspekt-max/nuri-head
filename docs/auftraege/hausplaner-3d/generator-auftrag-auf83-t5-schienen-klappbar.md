@@ -5,7 +5,15 @@
 um 08:20 freigegeben — Punkt 4 seines Auftrags: **„beide Sidebars unabhängig klappbar als Overlay,
 Escape schließt das oberste, Zustand pro Nutzer und Workspace".***
 
-> **GESPERRT — und die Sperre ist diesmal ausdrücklich enger geschnitten als „bis T3 abgenommen".**
+> **NACHTRAG 12.08. — DIE SPERRE IST GEFALLEN UND DER BAU IST GELAUFEN.** *`74ad1075` (30.07.) baut
+> beide Teile, `44fce81c` quittiert, `6cafeffd` belegt „serviert == gemessen". Die Sache wirkt:
+> `app/state/schienenSpeicher.ts` (Kopf: „AUF-83-T5 / K-04") wird von `HausplanerApp.tsx:71` importiert
+> und in `:425/:427/:432` benutzt. **Dieser Satz hier stand 13 Tage falsch, und die Tafelzeile mit ihm**
+> — zwei Orte, ein Zustand, unabhängig veraltet: genau der Befund aus A-20. **Was ich NICHT sage: dass
+> es abgenommen ist.** Ich sehe eine Prüfer-Messung, keine Evaluator-Quittung.*
+
+> **DER ALTE SATZ, als Beleg des Fehlers stehen gelassen:** *„GESPERRT — und die Sperre ist diesmal
+> ausdrücklich enger geschnitten als „bis T3 abgenommen"."*
 > Sie endet mit dem **Bau von T3 UND dem Eintrag der K-08-Messung** (Vorher- und Nachher-Wert der
 > Bühnenhöhe) in der T3-Quittung. **Grund, gemessen und nicht vermutet:** T5 verändert die Breite
 > derselben Bühne, deren Höhengewinn T3/K-08 belegen soll. Ohne festgehaltene Zahl wäre das die
