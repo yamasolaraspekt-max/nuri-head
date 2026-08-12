@@ -39,7 +39,7 @@
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
 | **A-17** Zwei Engines schweigen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
-| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
+| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -4738,7 +4738,11 @@ status_korrektur: "der Eintrag 'FACH-GATE N-003 offen bei Yama' ist ueberholt un
 ```yaml
 auftrag: "A-18"
 datei: docs/auftraege/aktiv/A-18-wandaufbau-vorbehalt-uwert.md
-abnahme_nachgezogen: "release-pruefer 12.08.: der Evaluator hat in 7be1a381 ABGENOMMEN
+abnahme_nachgezogen: "GEGENSTANDSLOS, vom Evaluator selbst erledigt — ich hatte geschrieben,
+  ich zoege den Zwischenschritt nach, und 20 Sekunden vor meinem Commit hat er ihn in 68306f58
+  selbst gesetzt. Sein Commit nahm meine gleichzeitigen Zeilen mit und setzte den Zustand
+  zurueck auf ABGENOMMEN; ich setze ihn auf mein Votum RELEASE_FREI und lasse den Vorgang
+  sichtbar statt ihn glattzuziehen. Urspruenglicher Wortlaut: der Evaluator hat in 7be1a381 ABGENOMMEN
   gevotet (acht von acht) und den Zustand BEWUSST nicht gesetzt — er schreibt es selbst:
   'VOTUM ZUERST INS BLATT, Zustand folgt, der Generator meldet in diesem Moment
   ungespeichert B6 fertig und mein Commit wuerde seine Arbeit mitnehmen.' Ich ziehe den
@@ -4751,8 +4755,8 @@ release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 492a6a71, Fehlerklasse
   Vorbehalt, den ich Yama am 12.08. vorgeschlagen habe — der U-Wert nennt seine eigene
   Grenze, statt einen Taupunkt zu rechnen, den die Datenstruktur nicht hergibt. Ich pruefe
   ihn und nehme ihn NICHT ab; das hat der Evaluator getan."
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama (TRANSPORTSPERRE — wie B5: mein Votum RELEASE_FREI steht, der Push wird abgelehnt)
 zwei_punkte_fuer_den_evaluator: "Beide sind Zahlen, die ich NICHT passend gemacht habe.
   (1) A-18-2 sagt 'die Konstante kommt genau einmal vor' — der Wortlaut kommt ZWEIMAL vor:
       wandaufbau.ts:58 (die Konstante) und wandaufbau.test.ts:58 (ausgeschrieben in der Zusage).
