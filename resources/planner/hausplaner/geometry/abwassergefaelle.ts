@@ -29,7 +29,28 @@ export interface AbwasserErgebnis {
   hoehenverlust: number;   // mm über die Länge
   pruefungen: AbwasserPruefung[];
   bestanden: boolean;
+  /**
+   * A-17 — Pflichtfeld, kein Kommentar und kein optionales Anzeigefeld.
+   *
+   * Der Wortlaut ist aus dem Dateikopf abgelesen, nicht erfunden: dort steht „nach DIN 1986-100
+   * (vereinfacht)". **Eine Datei, die „vereinfacht" über sich schreibt, darf nicht „alle Prüfungen
+   * bestanden" unter sich stehen haben** — deshalb verliert dieses Panel sein Gesamturteil
+   * (`keinGesamturteil`) und bekommt an dessen Stelle diesen Satz.
+   *
+   * `bestanden` bleibt im Datensatz: es wird weiter für die einzelnen Prüfzeilen gebraucht und ist
+   * eine **Teilaussage** — es zählt nur Prüfungen der Schwere `fehler`. Genau deshalb darf daraus
+   * keine Plakette werden.
+   */
+  vorbehalt: string;
 }
+
+/**
+ * Abgelesen aus dem Dateikopf (Zeile 4-6), einmal im Haus und zitierbar — Muster
+ * `N003_VORBEHALT` (sparrenBerechnung.ts:100).
+ */
+export const ABWASSER_VORBEHALT =
+  'DIN 1986-100 vereinfacht — Mindestgefaelle und Fallstrang-Distanz. '
+  + 'Kein Entwaesserungsnachweis, keine Genehmigungsunterlage.';
 
 const r1 = (x: number): number => Math.round(x * 10) / 10;
 
@@ -46,7 +67,8 @@ export function pruefeAbwasser(e: AbwasserEingabe): AbwasserErgebnis {
   ];
 
   return { gefaelle: r1(gef), mindestGefaelle: min, hoehenverlust, pruefungen: p,
-    bestanden: !p.some((x) => x.schwere === 'fehler' && !x.bestanden) };
+    bestanden: !p.some((x) => x.schwere === 'fehler' && !x.bestanden),
+    vorbehalt: ABWASSER_VORBEHALT };
 }
 
 /** Maximale horizontale Distanz (m), die eine verfügbare Fallhöhe beim Mindestgefälle erlaubt. */

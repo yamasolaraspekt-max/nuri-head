@@ -232,7 +232,13 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
     titel: 'Fussbodenheizung-Auslegung',
     zweck: 'Ermittelt Rohrlaenge, Anzahl und Laenge der Heizkreise sowie die spezifische Leistung '
       + 'aus Flaeche, Heizlast und Verlegeabstand.',
-    grundlage: 'Auslegung nach Verlegeabstand und maximaler Heizkreislaenge; Pruefpunkte zu Leistung und Kreislaenge',
+    grundlage: 'Auslegung nach Verlegeabstand und maximaler Heizkreislaenge; Pruefpunkte zu Leistung '
+      + 'und Kreislaenge — Rohrlaengen, Kreise und Plausibilitaet. Hydraulischer Abgleich und '
+      + 'normative Auslegung sind NICHT erfasst.',
+    // A-17: die Engine nennt ihre Grenze im eigenen Dateikopf ("GRENZE: hydraulischer Abgleich und
+    // normative Auslegung bleiben Fach-Engine"). Ueber so einer Rechnung darf keine Plakette
+    // "Alle Pruefungen bestanden" stehen. Das Flag stammt aus A-14 und wird hier nur GESETZT.
+    keinGesamturteil: true,
     felder: [
       { schluessel: 'flaeche', label: 'Beheizbare Grundflaeche', einheit: 'm²', pflicht: true, vorgabe: 20 },
       { schluessel: 'heizlast', label: 'Raumheizlast', einheit: 'W', pflicht: true, vorgabe: 1400 },
@@ -253,6 +259,9 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
       { schluessel: 'anzahlHeizkreise', label: 'Heizkreise' },
       { schluessel: 'rohrProKreis', label: 'Rohr je Kreis (laengster)', einheit: 'm' },
       { schluessel: 'spezifischeLeistung', label: 'Spezifische Leistung', einheit: 'W/m²' },
+      // A-17: der Vorbehalt steht IM SELBEN BLICK wie die spezifische Leistung — genau die Zahl,
+      // die ohne ihn wie ein Auslegungsergebnis aussieht.
+      { schluessel: 'vorbehalt', label: 'Vorbehalt' },
     ],
     berechne: (werte) => fbhAuslegung(alsFbhEingabe(werte)) as unknown as EngineErgebnis,
   },
@@ -324,7 +333,11 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
     titel: 'Abwasser-Gefaelle',
     zweck: 'Prueft das Gefaelle einer liegenden Leitung gegen das Mindestgefaelle ihrer Nennweite '
       + 'und nennt den Hoehenverlust ueber die Laenge.',
-    grundlage: 'Mindestgefaelle je Nennweite; Hoehenverlust = Gefaelle x Laenge',
+    grundlage: 'Mindestgefaelle je Nennweite; Hoehenverlust = Gefaelle x Laenge — DIN 1986-100 '
+      + 'vereinfacht. Kein Entwaesserungsnachweis, keine Genehmigungsunterlage.',
+    // A-17: der Dateikopf der Engine sagt "nach DIN 1986-100 (vereinfacht)". Ueber einer
+    // vereinfachten Rechnung darf keine Plakette "Alle Pruefungen bestanden" stehen.
+    keinGesamturteil: true,
     felder: [
       { schluessel: 'dn', label: 'Nennweite DN', pflicht: true, vorgabe: 100 },
       { schluessel: 'laenge', label: 'Leitungslaenge horizontal', einheit: 'm', pflicht: true, vorgabe: 8 },
@@ -337,6 +350,8 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
       { schluessel: 'gefaelle', label: 'Verwendetes Gefaelle', einheit: '%' },
       { schluessel: 'mindestGefaelle', label: 'Mindestgefaelle', einheit: '%' },
       { schluessel: 'hoehenverlust', label: 'Hoehenverlust', einheit: 'mm' },
+      // A-17: im selben Blick wie das verwendete Gefaelle, nicht in einer Fussnote.
+      { schluessel: 'vorbehalt', label: 'Vorbehalt' },
     ],
     berechne: (werte) => pruefeAbwasser(alsAbwasserEingabe(werte)) as unknown as EngineErgebnis,
   },

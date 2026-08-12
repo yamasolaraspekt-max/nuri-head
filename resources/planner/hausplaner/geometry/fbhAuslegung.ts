@@ -33,7 +33,29 @@ export interface FbhErgebnis {
   spezifischeLeistung: number;  // W/m²
   pruefungen: FbhPruefung[];
   bestanden: boolean;
+  /**
+   * A-17 — Pflichtfeld, kein Kommentar und kein optionales Anzeigefeld.
+   *
+   * Der Wortlaut ist aus dem Dateikopf abgelesen, nicht erfunden: dort steht „GRENZE: hydraulischer
+   * Abgleich und normative Auslegung bleiben Fach-Engine — hier Rohrlängen/Kreise/Plausibilität."
+   * **Eine Datei, die ihre Grenze selbst so benennt, darf nicht „alle Prüfungen bestanden" unter
+   * sich stehen haben** — deshalb verliert dieses Panel sein Gesamturteil (`keinGesamturteil`) und
+   * bekommt an dessen Stelle diesen Satz.
+   *
+   * `bestanden` bleibt im Datensatz und bleibt eine **Teilaussage**: es zählt nur Prüfungen der
+   * Schwere `fehler`. Hier ist das belegt spürbar — `spez-leistung` ist eine **Warnung**, also
+   * bleibt `bestanden: true`, auch wenn die spezifische Leistung über dem Prüfwert liegt.
+   */
+  vorbehalt: string;
 }
+
+/**
+ * Abgelesen aus dem Dateikopf (Zeile 5-7), einmal im Haus und zitierbar — Muster
+ * `N003_VORBEHALT` (sparrenBerechnung.ts:100).
+ */
+export const FBH_VORBEHALT =
+  'Rohrlaengen, Kreise und Plausibilitaet. Hydraulischer Abgleich und '
+  + 'normative Auslegung sind NICHT erfasst.';
 
 const r1 = (x: number): number => Math.round(x * 10) / 10;
 
@@ -71,5 +93,6 @@ export function fbhAuslegung(e: FbhEingabe): FbhErgebnis {
     spezifischeLeistung: r1(spez),
     pruefungen: p,
     bestanden: !p.some((x) => x.schwere === 'fehler' && !x.bestanden),
+    vorbehalt: FBH_VORBEHALT,
   };
 }
