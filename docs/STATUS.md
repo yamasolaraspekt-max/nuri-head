@@ -57,7 +57,7 @@
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`BETRIEBSBESTAETIGT`** | – | Release `0474f53b` · §19 12.08. | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-35** Konfigurator-Dialog | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
-| **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `2e7504ec` | **NACHBESSERUNG §12** auf Yamas Entscheidung: drei Stufen sind GEBAUT (checked/approved/outdated), nur `blocked` ist Erweiterung · **Traeger ist das PAKET, nicht der Schritt** |
+| **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`CODE_FERTIG`** | **Evaluator** | Bau `53142fc2` · Basis `2e7504ec` | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
@@ -8207,10 +8207,56 @@ W_35_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 
 ```yaml
 auftrag: "W-40/1"
-zustand: IN_ARBEIT
+zustand: CODE_FERTIG
 warum_W_40_1_vor_W_35: "Zwei Auftraege standen zugleich BEREIT bei mir, §3 laesst einen zu. W-40/1 berichtigt etwas, das in der Werkbank gerade FALSCH steht — dreizehn ueberholte Stellen in vier Blaettern, die ich in ea418041 einzeln gemessen und aufgelistet habe. W-35 ist neue Beschreibung. Ein bekannt falsches Blatt stehen zu lassen und daneben ein neues zu schreiben, waere die Reihenfolge, die §12.1 fuer NACHBESSERN gerade verbietet; ich wende denselben Vorrang hier an, obwohl der Zustand formal BEREIT und nicht NACHBESSERN heisst."
 es_ist_meine_eigene_arbeit_die_berichtigt_wird: "W-40s sieben Blaetter sind von mir, und beide Fehler, die dieser Auftrag behebt, sind meine: die Praemisse 'kein Code' habe ich aus der Quelle uebernommen statt sie zu messen — den Teil hat der Planner in c4973de2 bereits als seinen eigenen H-6-Fall eingeraeumt, und ich habe ihn beim Bau selbst gemeldet —, und den TRAEGER habe ich an den Schritt gehaengt, weil W-38s SchrittStatus dort haengt, ohne zu pruefen woran die VORHANDENE Achse haengt. Der zweite Teil ist ungeteilt meiner. Die dreizehn Stellen liegen bereits gemessen vor; ich baue gegen meine eigene Liste."
-ballbesitz: generator
+ballbesitz: evaluator
+bau_sha: 53142fc2
+bericht: docs/BERICHT-W-40-1-ablesung-mit-einer-erweiterung.md
+E1_gefahren: "9 von 9 Dateien GLEICH, gemessen mit git show 53142fc2:<pfad> | diff - <pfad>. Der
+  Arbeitsbaum ist kein Beleg."
+alle_acht_kriterien: "W-40/1-1 dreizehn Stellen berichtigt, KEINE geloescht, jede mit altem Wortlaut
+  plus Datum plus Yamas Zuordnung. W-40/1-1b K-3 und K-4 UMGESTELLT statt gestrichen, je mit neuem
+  Fehlerfall. W-40/1-2 drei Stufen als Ablesung mit Fundstelle: checked :26 und :107, approved mit
+  kannIntegrieren :120, outdated mit markiereVeraltet :125-128. W-40/1-3 blocked als einzige
+  Erweiterung, 0 Treffer. W-40/1-4 beide Auflagen woertlich in 7-GRENZEN und 4-BEDIENUNG.
+  W-40/1-5 alle vier Merkmale inklusive ORT, Namenswarnung und der mitzufuehrende Satz.
+  W-40/1-6 beide Pfade geradegezogen in 5-CODE. W-40/1-7 Registerzeile als LETZTER Schritt.
+  W-40/1-8 kein Produktivcode, drei Richtungen einzeln 0/0/0."
+zwei_eigene_fehlgriffe_vor_der_meldung_gefunden: "ERSTENS: W-40/1-1b verlangt K-3 und K-4
+  UMZUSTELLEN — von Frage stellen auf Yamas Antwort tragen mit Fundstelle. Mein erster Griff war
+  Durchstreichen plus ERLEDIGT. Ein gestrichenes Kriterium prueft nichts; ein umgestelltes faengt
+  genau den Zustand, aus dem dieser Auftrag entstanden ist. ZWEITENS: W-40/1-5 nennt als drittes
+  Merkmal ORT, meine Tabelle fuehrte Adressat. Der steht bei Yama, aber nicht unter den vier
+  geforderten. Jetzt vier geliefert und das fuenfte danebengestellt, statt eines ausgetauscht.
+  Beide Male habe ich sinngemaess gelesen und dabei das Verb verloren — Kriterien woertlich lesen
+  und nie still ersetzen, gegen mich selbst."
+meine_eigene_fehlerliste_war_unvollstaendig: "ea418041 nennt dreizehn Stellen in VIER Blaettern; es
+  sind FUENF. 5-CODE/LIESMICH fehlte und trug die Praemisse am dicksten — Tabellenzeile 'noch keine'
+  Code, dazu ein VORGABE-Typ Gueltigkeitsstatus neben dem gebauten und ein interface mit beiden
+  Feldern an einem Traeger. Grund ist H-9 an meinem eigenen Befund: ich habe nach den zwei
+  FACHWOERTERN gesucht, review-required und DECISION_BLOCKED, und 5-CODE nennt keines von beiden —
+  es traegt die Praemisse, nicht die Fragen. Der plan-pruefer hat meine Liste Zeile fuer Zeile
+  nachgemessen und jede Stelle bestaetigt; geprueft wurde, ob die genannten Stellen stimmen, nicht
+  ob die Liste vollstaendig ist. Die Frage ist zweimal hintereinander nicht gestellt worden.
+  Der Vermerk steht im BLATT selbst, oben in 5-CODE, nicht nur im Bericht — wo ihn beim Weiterbauen
+  niemand liest."
+eine_null_zweimal_gemessen: "Der erste grep-Lauf fuer blocked meldete 0. Die zsh hatte --include=*.ts
+  als Glob gefressen, der Befehl ist nie richtig gelaufen, und die Ausgabe sah aus wie ein
+  Messergebnis. Zweiter Lauf mit gequotetem Muster: ebenfalls 0. Die Zahl in den Blaettern steht auf
+  dem zweiten. Eine Null aus einem kaputten Befehl ist von einer Null aus dem Code nicht zu
+  unterscheiden, wenn man nur die Zahl anschaut."
+nebenbefund_gemessen_statt_offen_gelassen: "In 7-GRENZEN stand die Frage, ob markiereVeraltet den
+  Grund mitfuehrt. Ich habe sie aufgemacht statt sie als ungemessen stehen zu lassen:
+  configuratorPackage.ts:125-128 nimmt durch und schreibt es nach updatedBy. Das ist WER, nicht
+  WARUM. 'outdated ohne Grund' ist damit halb geschlossen — der Urheber steht fest, die Ursache
+  nicht. Dieselbe Auflage, die Yama fuer blocked als blockiert_durch gemacht hat, ist auf der
+  Invalidierungsseite noch nicht erfuellt. Benannt, nicht behoben; das ist W-41."
+was_der_evaluator_zuerst_pruefen_sollte: "Ob wirklich KEINE Stelle geloescht ist. Der Auftrag steht
+  und faellt damit — dreizehn Berichtigungen, und wer eine davon still umschreibt, hat den Beleg
+  vernichtet, den die Berichtigung tragen sollte. git show 53142fc2 -- <blatt> zeigt jede
+  Entfernung. Zweitens die Registerzeile: sie darf erst gruen sein, WEIL das Blatt abliest, nicht
+  damit es abliest."
 titel: "W-40 ist eine Ablesung mit EINER Erweiterung, und der Traeger ist das Paket"
 basis_sha: 2e7504ec
 spur: A
