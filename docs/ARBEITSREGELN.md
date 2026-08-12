@@ -94,6 +94,40 @@ Es darf gleichzeitig höchstens einen Auftrag im Zustand `IN_ARBEIT` geben. Prü
 festgeschriebenen Commits dürfen parallel laufen, wenn sie keinen gemeinsamen veränderlichen
 Zustand benutzen.
 
+#### Die Prüfmethode — verankert 12.08., weil sie es vorher nicht war
+
+`IN_ARBEIT` steht an **zwei** Orten in `docs/STATUS.md`: in der Tafelzeile und im Zustandsfeld des
+Auftragsblocks. **Beide werden gemessen, und zwar mit diesen zwei Befehlen:**
+
+```text
+Tafelzeile      grep -cE '^\| \*\*[A-Z]+-?[0-9]+.*IN_ARBEIT' docs/STATUS.md
+Zustandsfeld    grep -cE '^zustand: *IN_ARBEIT' docs/STATUS.md
+```
+
+**Die Messung fällt unmittelbar vor der ersten Änderung** (H-4), und **beide Zahlen werden genannt**.
+Weichen sie voneinander ab, ist das ein Befund und keine Nebensache: dann behauptet einer der beiden
+Orte etwas Falsches, und welcher es ist, entscheidet die Messung — nicht die Erwartung.
+
+> **Warum der Ausdruck `[A-Z]+-?[0-9]+` und nicht `[AW]-[0-9]+`:** *bis zum 12.08. war ein Muster im
+> Umlauf, das nur auf `A-` und `W-`-Aufträge passte. Gemessen trägt die Tafel aber auch `B-`, `M-`
+> und `P-`-Zeilen — **fünf Aufträge waren für den ersten §3-Ort unsichtbar.** Der Fall ist
+> eingetreten: `B5` stand sichtbar auf `IN_ARBEIT`, und die Schranke meldete **frei**. Das ist die
+> gefährliche Richtung — sie sagt „frei", während gebaut wird. Gefunden hat es der Generator
+> (`c528161c`) an seinem eigenen §3-Beleg; er hat den Befehl **nicht** eigenmächtig geändert, sondern
+> beide Zahlen und das berichtigte Muster gemeldet. Entschieden vom Planner
+> (`docs/ENTSCHEIDUNG-PARAGRAF-3-SCHRANKE-BERICHTIGT.md`), nachgemessen und bestätigt vom
+> Plan-Prüfer (`50505407`: `[AW]` findet 31 Tafelzeilen, `[A-Z]+-?[0-9]+` findet 36).*
+
+**Und der Grund, warum diese Methode hier steht und nicht nur in Auftragsblättern:** *sie stand
+vorher in vier Dateien und in dieser Regel **null Mal**. Der Zustand `IN_ARBEIT` war verankert, die
+Prüfmethode war eine Gewohnheit — von Blatt zu Blatt kopiert und nie geprüft. Eine Schranke, deren
+Messvorschrift nirgends verbindlich steht, ist so stark wie die zuletzt kopierte Fassung.*
+
+**Was die Schranke NICHT erfasst, ausdrücklich:** *eine laufende **Abnahme**. `IN_ARBEIT` zählt den
+Bau, nicht die Prüfung. Wer eine Datei anfassen will, auf der ein Evaluator- oder Release-Claim
+liegt, muss das selbst prüfen — §3 meldet dort frei. Vorbild ist die Zurückstellung von `B6` durch
+den Generator (`ee2dad24`): „während eine Abnahme auf einer Datei läuft, verschiebe ich sie nicht."*
+
 ## 4. Rollen und Verantwortungen
 
 ### Planner
