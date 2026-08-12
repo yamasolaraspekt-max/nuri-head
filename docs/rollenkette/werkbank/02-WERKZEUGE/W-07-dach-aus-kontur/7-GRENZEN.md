@@ -88,11 +88,28 @@ Kompass  0 = Nord, 90 = Ost, 180 = Sued, 270 = West      0 … 360
           -> belegt in database/migrations/…create_p_v_roofs_table.php:67
              $table->float('roof_azimuth')->nullable(); // 0=N, 90=E, 180=S, 270=W
 PVGIS    0 = Sued, negativ = Ost, positiv = West         -180 … +180
+          -> belegt in app/Services/Energie/PvgisErtragService.php:41
+             @param float $aspect  Azimut nach PVGIS-Konvention: 0 = Süd, -90 = Ost, 90 = West
 
 -> "90" heisst im einen OST, im anderen WEST-SUEDWEST. "180" heisst SUED oder NORD.
    Ein Wert zwischen 0 und 180 ist in BEIDEN Konventionen gueltig und bedeutet
    Entgegengesetztes. Es gibt keinen Wert, an dem der Fehler auffaellt.
 ```
+
+### Die Ableitung ist da — zweisprachig und konsistent. Sie wird GENANNT, nicht gebaut
+
+**Wer aus einer Fläche einen Azimut braucht, findet ihn zweimal im Haus — und beide rechnen dasselbe:**
+
+| Seite | Funktion | Fundstelle |
+|---|---|---|
+| TypeScript | `azimutDerNormalen(start, end, seite)` | [`wallGeometry.ts:37`](../../../../../resources/planner/hausplaner/geometry/wallGeometry.ts#L37) |
+| PHP | `azimutRechteNormale(von, bis)` | [`SzeneProjektionService.php:258`](../../../../../app/Services/Geometrie/SzeneProjektionService.php#L258) |
+
+**Beide tragen die Kompass-Konvention `Nord = +y`** und liefern ganzzahlig `0…359` bzw. `0…360`.
+*Sie sind die einzige gepflegte Ableitung im Haus, und sie widersprechen einander nicht.*
+
+> **Deshalb baut dieses Blatt keinen dritten Rechenweg.** *Eine neue Ableitung wäre die dritte
+> Wahrheit — und der Bereich `0…180` zeigt gerade, was zwei schon anrichten.*
 
 **Was W-07 selbst benutzt** — [`dachGeometrie.ts:4`](../../../../../resources/planner/hausplaner/geometry/dachGeometrie.ts#L4):
 `Nord = +y`, und der Flächenazimut wird **nie gepflegt**, sondern aus `roof.firstAzimutGrad`
@@ -114,3 +131,30 @@ abgeleitet (Satteldach: First ± 90°).
 (belegt in `docs/auftraege/aktiv/A-13-roof-azimuth-absichern.md:613`). **Es gibt keine Altdaten mit
 Azimut** — das nimmt der Grenze die Rückwirkung, nicht die Gültigkeit: sie betrifft künftige
 Eingaben. Ein leerer Bestand ist keine Freigabe.*
+
+## Was an W-07 NICHT erledigt ist — und trotzdem `BESCHRIEBEN` danebensteht
+
+**Die Registerzeile trägt `BESCHRIEBEN`. Das heißt „Blätter gefüllt", nicht „Sache geklärt."**
+*Diese drei Posten sind offen, und sie stehen hier, damit der nächste Leser sie nicht für erledigt
+hält, weil das Wort danebensteht.*
+
+**1 · Die drei Werkbank-Nachträge N1, N2 und N3.** Sie betreffen die Formeln dieses Werkzeugs und
+sind nicht eingearbeitet.
+
+**2 · Der Widerspruch F-020-Weg gegen `roof.anbau`-Weg** (`db1dc3b6`). Dieses Blatt beschreibt den
+**F-020-Weg**, während die Insel `roof.anbau` baut. **Zwei Wege, ein Werkzeug — und keiner ist als
+der gültige benannt.**
+
+**3 · Die acht F-Nummern der Registerzeile sind UNGEPRÜFT:**
+
+```text
+F-010 · F-013 · F-014 · F-025 · F-026 · F-020 · F-021 · F-022
+```
+
+**Keine einzige davon ist gegen den Code gemessen worden.** *Nach `603eddc2` ist bewiesen, dass
+Registerformeln falsch zugeordnet sein können — dort fielen sieben von zehn. Bei W-07 sind es acht,
+und die Trefferquote von damals ist kein Grund zur Beruhigung.*
+
+> **Warum das hier steht und nicht nur im Auftragsblatt:** *ein Auftragsblatt liest, wer den Auftrag
+> sucht. Ein Werkzeug-Blatt liest, wer das Werkzeug benutzt.* **Die zweite Gruppe ist die, die von
+> einem ungeprüften F-Verweis überrascht wird.**

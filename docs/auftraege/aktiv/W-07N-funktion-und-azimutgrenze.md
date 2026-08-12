@@ -513,3 +513,69 @@ behebung_billig:
 
 ballbesitz: generator
 ```
+
+
+## §12.3 — Nachbesserungsbericht W-07N (Generator, 12.08.2026)
+
+```yaml
+auftrag: "W-07N"
+zustand: CODE_FERTIG
+runde: 2
+befund_von: "evaluator 80261c87 — Fehlerklasse CODE, drei rote P1 + ein teilweiser"
+in_arbeit_commit: "a088a608"
+bemerkung_zur_uebernahme: |
+  Ich hatte die Nachbesserung zunaechst NICHT angenommen — mit der Begruendung, der Ball liege
+  beim Planner, der W-07N in Generator-Rolle gebaut hat. Yama hat gefragt, warum ich die Arbeit
+  nicht annehme. Er hatte recht: das Feld sagt `ballbesitz: generator`, der naechste_schritt sagt
+  woertlich "Generator zieht W-07N", und ich BIN der Generator. Ich hatte aus einem Klammerzusatz
+  der Tafelzeile eine Zustaendigkeit abgeleitet, die dort nicht steht — eine Auslegung zu meinen
+  Gunsten, die einen fertigen Befund hat liegen lassen.
+
+befund_5_ROT_die_ableitung_wird_genannt:
+  war: "vier Suchbegriffe, in allen sieben Blaettern je 0 Treffer — obwohl die Stellen existieren"
+  jetzt: "eigener Abschnitt in 7-GRENZEN mit beiden Seiten:
+          azimutDerNormalen (wallGeometry.ts:37) und azimutRechteNormale
+          (SzeneProjektionService.php:258), als vorhandene, zweisprachig konsistente Ableitung"
+  kein_neuer_rechenweg: "ausdruecklich im Blatt: eine neue Ableitung waere die DRITTE Wahrheit —
+                         und der Bereich 0…180 zeigt gerade, was zwei schon anrichten"
+  beide_fundstellen_am_code_geprueft: "Z.37 traegt azimutDerNormalen, Z.258 azimutRechteNormale"
+
+befund_4_TEILWEISE_die_pvgis_fundstelle:
+  war: "der Kompass-Beleg stand da (create_p_v_roofs_table.php:67), die PVGIS-Seite fehlte"
+  jetzt: "PvgisErtragService.php:41 im selben Codeblock, parallel zur Kompass-Zeile —
+          '@param float $aspect  Azimut nach PVGIS-Konvention: 0 = Süd, -90 = Ost, 90 = West'"
+  auflage_erfuellt: "git diff --numstat: 44 Einfuegungen, 0 Loeschungen. Der bestehende Inhalt
+                     ist byte-identisch erhalten, wie -4 es verlangt."
+
+befund_7_ROT_die_offenen_posten:
+  war: "N1/N2/N3, der F-020-Widerspruch (db1dc3b6) und die acht ungeprueften F-Nummern standen
+        im AUFTRAGSBLATT statt im WERKZEUG-Blatt — waehrend W-07 ab jetzt BESCHRIEBEN traegt"
+  jetzt: "eigener Abschnitt in 7-GRENZEN: 'Was an W-07 NICHT erledigt ist — und trotzdem
+          BESCHRIEBEN danebensteht'. Alle drei Posten, die acht F-Nummern einzeln genannt."
+  der_satz_der_es_traegt: "ein Auftragsblatt liest, wer den Auftrag sucht. Ein Werkzeug-Blatt
+                           liest, wer das Werkzeug benutzt — und die zweite Gruppe ist die, die
+                           von einem ungeprueften F-Verweis ueberrascht wird."
+
+befund_9_ROT_der_§3_beleg:
+  war: "einzeilige Botschaft, 0 Befehle, 0 Ausgabewerte; Zustand nur in der Tafelzeile gesetzt —
+        deshalb hat der Evaluator den Auftrag nur ueber die Tafel gefunden"
+  jetzt: "a088a608 traegt die SCOPE-Messung ueber 42 Bloecke (0 IN_ARBEIT, keine gehaltene Datei),
+          beide Orte vorher 0/0 und nachher 1/1, unmittelbar vor der ersten Aenderung im selben Skript"
+
+befund_8_scope_NICHT_von_mir_behebbar:
+  was: "der Bau b86e41fc hat VIER Blaetter geaendert, der Scope nennt nur 2-FUNKTION und
+        7-GRENZEN — 5-CODE/LIESMICH (+62/-11) und 6-PRUEFUNG (+63/-12) lagen ausserhalb"
+  meine_nachbesserung: "beruehrt GENAU EIN Blatt — 7-GRENZEN.md, +44/-0"
+  warum_ich_es_nicht_zurueckdrehe: "die beiden Blaetter tragen inzwischen echten Inhalt. Ein
+    Rueckbau waere Loeschung fremder Arbeit, keine Reparatur — dieselbe Linie wie bei der
+    fremden Registerzeile in W-09. Der Scope-Verstoss steht in der Historie und gehoert dem
+    Planner und dem Plan-Pruefer, nicht meiner Nachbesserung."
+
+gruene_erneut_gefahren:
+  must_preserve: "resources/ 0/0/0 · app/ 0/0/0"
+  suite: "1693/1693"
+  scope_meiner_runde: "1 Datei"
+  zeilenangaben: "4 Stellen inhaltlich am Code geprueft, 0 falsch"
+
+ballbesitz: evaluator
+```
