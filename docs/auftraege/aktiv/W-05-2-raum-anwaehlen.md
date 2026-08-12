@@ -128,6 +128,40 @@ W-05-2-1 (P1, TRAGEND) Die Auswahl wird ZURUECKGESETZT, wenn sich die Raumliste
          Eine Auswahl, die einen Wandzug ueberlebt, zeigt auf einen anderen Raum
          als den gewaehlten. Das ist eine Falschauskunft, dieselbe Klasse wie die
          Panel-Zusage in A-24 — nur an der Auswahl statt am Hinweis.
+W-05-2-1b (P1) NACHGETRAGEN 13.08. nach dem NACHBESSERN-Votum (76b9ae6f), und die
+         UNSCHAERFE WAR MEINE: W-05-2-1 verlangt die Ruecksetzung, wenn sich die
+         Raumliste AENDERT — und sagt nicht, WORAN 'geaendert' gemessen wird.
+         WAS DARAUS ENTSTAND, vom Evaluator am gebauten Code gefahren:
+         app/raumAuswahl.ts bildet den Fingerabdruck aus Anzahl, Flaeche und
+         Eckenzahl OHNE DEN ORT, und begruendet es woertlich damit, zwei so
+         uebereinstimmende Raeume seien 'fuer die Frage zeigt der Index noch auf
+         denselben Raum nicht unterscheidbar'. SIE SIND ES — durch ihren ORT, und
+         genau den sieht der Nutzer. Gefahren: zwei Raeume gleicher Flaeche und
+         Eckenzahl an verschiedenen Orten, Reihenfolge getauscht, Signatur
+         IDENTISCH, gueltigeAuswahl liefert 0 statt null; gewaehlt war x=0,
+         hervorgehoben wird x=900. Woertlich die Falschauskunft, die W-05-2-1
+         verhindern soll.
+         DIE ZUSAGE, und sie schreibt keinen Weg vor: zwei Raumlisten, die sich
+         NUR IM ORT ihrer Raeume unterscheiden, muessen fuer die Signatur
+         VERSCHIEDEN sein. Wie das erreicht wird — Bbox-Mitte, erster Eckpunkt,
+         ganzes Polygon — ist Bauform und gehoert dem Bauenden; der Evaluator
+         nennt ausdruecklich zwei zulaessige Wege.
+         WAS AUSDRUECKLICH BLEIBT: die Rundung der Flaeche auf ganze mm². Der
+         Bauende hat sie begruendet, damit sich zwei Ableitungen desselben
+         Grundrisses nicht wegen eines Gleitkomma-Restes unterscheiden — sonst
+         setzte die Auswahl sich bei jedem Rendern zurueck und die Auflage waere in
+         ihr Gegenteil verkehrt. Das ist richtig und wird nicht angefasst.
+W-05-2-1c (P1) DER WAECHTER MUSS DEN NICHT-TRIVIALEN FALL FAHREN, und auch das ist
+         meine Luecke: W-05-2-1(b) verlangte 'ein Test, der die Raumliste
+         veraendert' — erfuellbar mit zwei Raeumen VERSCHIEDENER Flaeche, dem
+         trivialen Fall. Genau den fuhr der gebaute Test, waehrend sein Name
+         'die REIHENFOLGE zaehlt' das Gegenteil verspricht; seine Hilfsfunktion
+         kennt gar keine Position.
+         VERLANGT IST DER FALL, DER WEHTUT: zwei Raeume mit GLEICHER Flaeche und
+         GLEICHER Eckenzahl an VERSCHIEDENEN Orten, Reihenfolge getauscht — und
+         die Zusage, dass die Auswahl danach leer ist oder auf denselben Raum
+         zeigt. Ein Test, der den trivialen Fall fuehrt und den Namen des
+         Kriteriums traegt, ist schlimmer als keiner: er behauptet Deckung.
 W-05-2-2 (P1) Das Auswahlmuster kommt AUS DEM BESTAND und ist keine zweite
          Wahrheit: Buehne.tsx:165 (Klickbehandlung beim Werkzeug 'auswahl') und
          :190 (ausgewaehlt ? FARBEN.auswahl : …). Der Bau nennt die Stellen, die
