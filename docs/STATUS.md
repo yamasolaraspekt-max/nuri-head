@@ -48,7 +48,7 @@
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
-| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
+| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
@@ -6817,8 +6817,8 @@ meine_dritte_falle: "Mein Suchmuster meldete zuerst EINEN Math-Treffer in holzMe
 
 ```yaml
 auftrag: "A-21"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 spec_berichtigt_nach_befund: "605fde3b — der Generator hat VOR dem Ziehen gegengelesen und NICHT
   gezogen, und beide Befunde treffen. Zurueck auf ENTWURF, weil sich KRITERIEN geaendert haben und
   eine DoR auf die alte Fassung keine DoR auf die neue ist. §12.1.
@@ -6855,7 +6855,7 @@ titel: "E1 und E3 verankern · ZURUECKGESTELLT abschaffen · ERLEDIGT und VORLAG
 basis_sha: 7b7db5b6
 spur: A
 prioritaet: P1
-dor_beleg: "plan-pruefer 12.08., ZWEITE FASSUNG nach MEINEM Fehler. Erste DoR (45babc3a) hat A-21-3 durchgelassen, weil ich 14 Treffer von ZURUECKGESTELLT GEZAEHLT und als Rot-Lage bestaetigt habe, OHNE SIE ZU LESEN. Der Generator hat sie nach Sorte getrennt und JEDE Stelle geoeffnet: nur ZWEI sind der echte Zustand von W-21L, die uebrigen sind Belege, Zitate und Befundtexte — darunter meine eigene Bestandsaufnahme. Ein Kriterium mit 0 Treffern haette verlangt, Historie zu vernichten. JETZT MIT GEBUNDENEM MUSTER GEMESSEN, wie die berichtigte Fassung es verlangt: Tafelzeile W-21L mit ZURUECKGESTELLT = 1, Zustandsfeld = 1, Volltext zum Vergleich = 16. Genau zwei Zustandsorte, wie das Blatt sagt. WARTEBEDINGUNG A-21-7 verschaerft: A-20 muss BETRIEBSBESTAETIGT sein, nicht nur abgenommen — gemessen steht A-20 auf ABGENOMMEN. Noch nicht baubar."
+dor_beleg: "plan-pruefer 12.08., DRITTE Fassung — DoR BESTANDEN, WARTEBEDINGUNG ERFUELLT. Selbst gemessen: E1 in ARBEITSREGELN.md 0 Treffer, E3 0 — Rot-Lage haelt. A-21-3 mit GEBUNDENEM Muster: Tafelzeile W-21L 1, Zustandsfeld 1 — genau zwei Zustandsorte, erfuellbar ohne Belege zu vernichten. A-21-7 (verschaerft auf BETRIEBSBESTAETIGT): A-20 steht am HEAD auf BETRIEBSBESTAETIGT, gerade gemessen — der Auftrag ist BAUBAR. HINWEIS OHNE BLOCKER: das Blatt nennt als Kontextzahl Volltext 14, heute sind es 17 — die Zahl waechst weiter, auch durch meine eigenen Befundcommits. Sie ist im Kriterium ausdruecklich KONTEXT und nicht Pruefbedingung; die Pruefbedingung ist das gebundene Muster, und das ist stabil."
 anlass: "Der plan-pruefer hat in 7b7db5b6 die Vorlage an Yama Punkt fuer Punkt frisch nachgemessen
   und zwei Punkte als OFFEN belegt. Sein Satz zu A-20: Wer daraus schliesst A-20 habe das
   mitgeloest, irrt; ein benachbarter Auftrag loest nicht, was er nur beruehrt."
