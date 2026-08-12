@@ -744,3 +744,94 @@ blocked           wie grenzt es sich von DECISION_BLOCKED im Prozess ab?
 **Ein Hinweis zur Registerzeile 127:** ihr Befund sagt *„eine Gültigkeitsachse ist bereits gebaut"* —
 **ohne den Träger zu nennen.** Genau diese Verkürzung hat vier Rollen und mich in die Irre geführt.
 Wer sie präzisiert, sollte **„am Paket"** dazuschreiben.
+
+---
+
+## 12 · NEU am 12.08.: die Tafel hat dir zweimal eine Sperre gezeigt, die es nicht mehr gab
+
+**Das ist der Punkt, der dich direkt betrifft** — *nicht als Entscheidung, sondern weil du auf diese
+Spalte schaust, um zu sehen, was von dir erwartet wird.*
+
+### Der erste Fall: AUF-40, in deiner Spalte
+
+Die Tafelzeile führte AUF-40 mit **„Rest `GESPERRT` — wartet auf Yama"** und nannte zwei Gründe:
+die Zulieferung der echten Projektliste, und **„Teil B ist von Yama am 26.07. vertagt"**.
+
+**Beide Hälften sind gebaut.** Jede Stelle selbst geöffnet:
+
+```text
+HAELFTE 1 — die Projektliste (AUF-78, mit eigener Evaluator-Abnahme):
+  Hausplaner/HausplanerController.php:42  PROJEKTLISTE_MAX = 6
+                                    :101  hausplanerProjekte()
+                                    :55   als hpProjekte durchgereicht
+  admin/hausplaner/objekt.blade.php:141   data-projekte
+  main.tsx:18 + :82                       leseProjekte -> UI-Zustand
+
+HAELFTE 2 — die Konfigurator-Persistenz (AUF-81):
+  migrations/2026_07_26_180000_create_hausplaner_configurator_packages_table.php
+  Models/HausplanerConfiguratorPackage.php
+  web.php:5016 / :5018 / :5020            drei Routen, je permission:Hausplaner
+```
+
+**Und die Vertagung hast du selbst aufgehoben, am selben Tag.** *Der Kopf von AUF-81 zitiert dich
+wörtlich: „Tor 1: von Yama freigegeben (26.07.: **‚wir brauchen Datenbank, Migration, Routing'**)."
+**Nur die Tafel hat es nicht mitbekommen — 17 Tage lang.***
+
+> **Was ich fast getan hätte, und das ist der unangenehme Teil:** *ich hatte diesen Posten als
+> **deine offene Entscheidung** auf die Vorlage schreiben wollen. **Ich hätte dir vorgelegt, was du
+> selbst freigegeben hast.** Das ist genau die Falschauskunft, die W-33 im Startbildschirm behebt —
+> nur an dich statt an den Nutzer. Gefunden hat es der Generator, bevor er baute.*
+
+### Der zweite Fall: AUF-83-T5, an zwei Orten gleichzeitig
+
+**Nachdem der erste Fall auftauchte, habe ich die Reichweite gemessen statt sie zu schätzen** — und
+mein erster Befehl war zu eng (nur deine Spalte, eine Zeile, „kein Sammelbefund"). Die richtige Frage
+war die Statusspalte: **drei Aufträge stehen auf `gesperrt`, einer davon ist gebaut.**
+
+```text
+AUF-83-T5   Bau 74ad1075 (30.07.) „beide Schienen klappbar, Escape mit Rangfolge"
+            Quittung 44fce81c · Pruefer-Messung 6cafeffd (serviert == gemessen)
+            und die Sache WIRKT: schienenSpeicher.ts wird von HausplanerApp.tsx:71
+            importiert, :425 haelt, :427 laedt, :432 speichert
+            -> Tafel UND Blattkopf trugen 13 Tage lang GESPERRT
+AUF-85      traegt weiter (Ausloeser lokal HausplanerApp.tsx:552, im Studio keine Palette)
+AUF-88      Aufnahme ohne Blaetter, traegt weiter
+```
+
+*Der Sperrgrund von T5 nannte **„0 Klappzustände in der Insel", gemessen am 29.07. 21:45 — einen Tag
+vor dem Bau.* **Die Zahl war richtig und ist am nächsten Tag falsch geworden.** *Niemand zieht solche
+Zahlen nach, weil niemand sie für vergänglich hält.*
+
+**Nicht behauptet:** *dass T5 abgenommen ist. Ich sehe eine Prüfer-Messung, keine Evaluator-Quittung.
+Status steht auf `gebaut`, nicht auf `erledigt`.*
+
+### Was ich daraus geschlossen habe, und was ich dir NICHT abnehme
+
+**Erledigt ohne dich:** *beide Tafelzeilen berichtigt, bei T5 auch der Blattkopf; die alten Wortlaute
+stehen als Beleg des Fehlers daneben statt gelöscht zu werden.*
+
+**Die Frage, die bei dir liegt — Kandidat für eine Hausregel H-10:**
+
+> **Bei AUF-40 haben DREI Rollen unabhängig dasselbe falsch gemessen** — *Planner, Plan-Prüfer und
+> Release-Prüfer haben nach einer **Route** gesucht, null gefunden und auf „nicht gebaut" geschlossen.
+> Die Liste kommt über ein **Mount-Attribut ohne Lade-Fetch**; der Controller sagt das in `:57`
+> wörtlich. **Rollentrennung schützt hier nicht:** drei Messungen derselben zu engen Frage geben
+> dreimal dieselbe falsche Antwort.*
+
+*Mein Vorschlag, aber die Regel gehört dir:* **wer eine Abwesenheit behauptet, nennt mindestens zwei
+Bauformen, in denen die Sache existieren könnte, und misst beide** — und **bei einer Zulieferung wird
+am ZIEL gemessen, nicht am Weg** (nicht „gibt es eine Route", sondern „steht der Wert im
+UI-Zustand"). *In meine Pflichtprüfung 1 habe ich es schon eingetragen; als Hausregel für alle Rollen
+setzt es nur du.*
+
+### Zur Kenntnis, kein Handlungsbedarf: der Sicherungsstand
+
+```text
+fork und backup-private   2f1c08a2, gemeinsamer Punkt 054eaa0b (mein AUF-40-Commit)
+lokal noch nicht drauf    4 Commits (planner 2, plan-pruefer 1, generator 1)
+origin                    44 Commits zurueck — erwartet, origin ist read-only
+```
+
+*Der Release-Prüfer sichert laufend und hat W-35 heute veröffentlicht und betriebsbestätigt. **Die vier
+Commits sind der normale Vorlauf, keine hängende Arbeit** — gemessen ohne `fetch`, die Remote-Refs sind
+also so aktuell wie der letzte Abruf.*
