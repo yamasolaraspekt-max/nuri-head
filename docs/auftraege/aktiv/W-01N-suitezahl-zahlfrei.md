@@ -233,3 +233,89 @@ warteschlange: "nach A-12; vor oder parallel zu Runde 2 — er beruehrt keine ge
 kern: "eine Zahl in einem Ist-Beleg ist richtig und datiert; eine Zahl in einem
        Soll-Kriterium ist eine Zeitbombe"
 ```
+
+## §11 — Votum W-01N (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-01N"
+votum: ABGENOMMEN
+fehlerklasse: KEINE   # ein P2, blockiert nicht
+abnahme_commit: "53930b60"
+elter: "2e587fb7"
+pruefstand: "worktree --detach auf 53930b60 und 2e587fb7, node_modules UND vendor an beiden"
+
+messtisch_alle_fuenf:
+  W-01N-1: GRUEN
+    beleg: "grep -c '1689' im W-01-Blatt: Elter 8, Bau 7. Die beiden KRITERIUMSSTELLEN (Z.135
+            in der Werkzeugspalte, Z.177 in W-01/1-6) sind weg — ich habe den Diff gelesen,
+            nicht die Zahl verglichen. Die sieben verbliebenen sind Befund-ZITATE; eine davon
+            (:183) ist seine neue §12.5-Kennzeichnung, also 8 - 2 + 1 = 7. Rechnung geht auf."
+    nicht_ersetzt: "Er hat die Zahl NICHT durch 1692 oder 1693 ersetzt und sagt warum:
+            'das waere derselbe Fehler mit frischerem Datum'. Das ist die richtige Antwort."
+  W-01N-2: GRUEN
+    beleg: "Die neue Fassung von W-01/1-6 lautet 'die Insel-Suite bleibt unveraendert gruen —
+            ohne feste Zahl im Kriterium' und nennt als Nachweis: git diff --stat auf
+            resources/ leer, Suite mit derselben Zahl wie VOR dem Bau, Zahl im BERICHT.
+            Selbst nachgemessen: resources/ und app/ 0 Dateien im Bau-Diff; Suite an Elter
+            und Pruefstand je 1698/1698/0 — dieselbe Zahl, wie das Kriterium es jetzt sagt."
+  W-01N-3: GRUEN
+    beleg: "git diff --numstat: FAHRPLAN-KLASSE-A.md +32/-0, W-01-Blatt +19/-7. Im Blatt ist
+            GENAU EIN Kriterium beruehrt — ich habe alle Kriteriumszeilen im Diff gefiltert,
+            es erscheint nur W-01/1-6. Kein anderes Blatt angefasst."
+    §12_5_kennzeichnung: "Steht im Blatt als eigener Absatz, mit dem Satz, der die Sache traegt:
+            'Eine Zahl in einem Ist-Beleg ist richtig und datiert; eine Zahl in einem
+            Soll-Kriterium ist eine Zeitbombe.'"
+  W-01N-4: GRUEN — und seine vorgelegte Entscheidung fällt so aus
+    seine_vorlage: "Kriterium und Scope nennen docs/FAHRPLAN-KLASSE-A.md. Diese Datei ist seit
+            12.08. AUFGEHOBEN. Er hat die Regel dort eingetragen, wo Kriterium und Scope sie
+            verlangen, den Widerspruch im Regeltext sichtbar gemacht und die Uebernahme in den
+            gueltigen Plan als Ball beim Planner benannt — statt eine Datei ausserhalb der
+            Scope anzufassen."
+    selbst_geprueft: "FAHRPLAN-KLASSE-A.md:1-16 traegt woertlich 'DIESER PLAN IST NICHT MEHR
+            DER PLAN' und verweist auf docs/FAHRPLAN-WERKZEUGKASTEN.md; die Datei existiert
+            (12383 Bytes, 10:35) und sagt in ihrem Kopf 'Ersetzt FAHRPLAN-KLASSE-A.md'."
+    meine_entscheidung: "RICHTIG SO. Wer den Scope verlaesst, um eine Regel an den besseren Ort
+            zu schreiben, baut Beifang — und zwar in genau der Datei, die der Planner gerade
+            fuehrt. Die Regel steht jetzt im Beleg-Dokument und ist als unvollstaendig
+            gekennzeichnet; das ist ein sichtbarer offener Posten statt einer stillen Luecke.
+            Das Kriterium verlangt woertlich diese Datei, und er hat es woertlich erfuellt.
+            Der Uebertrag in den gueltigen Plan gehoert dem Planner — ich reiche ihn weiter."
+  W-01N-5: GRUEN mit P2
+    beleg: "Die Bau-Botschaft traegt: 'W-01N-5 §3 an beiden Orten, mit der verankerten Methode:
+            Tafelzeile 0, Zustandsfeld 0. Kein Auftrag IN_ARBEIT.'"
+    p2: "Gegen den COMMITTETEN Elterstand (2e587fb7) messe ich etwas anderes:
+              Tafelzeilen IN_ARBEIT: ['A-17']
+              Datensaetze IN_ARBEIT: ['A-17']
+            Seine Null gilt fuer den ARBEITSBAUM, in dem die ungespeicherte Arbeit des
+            Plan-Pruefers lag (A-17 dort schon weitergesetzt). Ein §3-Beleg, der einen nie
+            committeten Zwischenstand misst, ist von aussen nicht nachpruefbar."
+    warum_trotzdem_gruen: "Weil H-4 die Frage entscheidet: §3 sperrt die DATEIEN des laufenden
+            Auftrags. A-17-Scope ist enginePanels.ts, abwassergefaelle.ts, fbhAuslegung.ts,
+            das Buendel und eine Testdatei — W-01N-Scope ist FAHRPLAN-KLASSE-A.md und das
+            W-01-Blatt. DISJUNKT, von mir gegengeprueft. Kein Schaden, und er hat den Grund
+            fuer die Nichtberuehrung von STATUS.md ausdruecklich benannt statt ihn zu verschweigen."
+    und_der_zustand_fehlt: "W-01N wurde NIE auf IN_ARBEIT gesetzt — die ganze Historie kennt
+            keinen solchen Commit. Er nennt den Grund (STATUS.md drei Runden fremd belegt) und
+            kuendigt das Nachziehen an. Ich halte denselben Massstab, den ich fuer mich selbst
+            in Anspruch genommen habe: heute habe ich dreimal ein Votum nur ins Blatt
+            geschrieben, weil die Datei fremd belegt war, und es jedes Mal offengelegt.
+            Was fuer mich vertretbar war, ist es fuer ihn auch."
+
+was_diesen_bau_heraushebt:
+  - "Er hat den B5N-Befund GEGEN SEINE EIGENE Barriere nachgemessen statt ihn zu uebernehmen:
+     'die Form Z.NNN kommt in 9 der letzten 40 Botschaften vor, davon tragen nur 2 zusaetzlich
+     eine Form die B5_BELEGZEILE kennt' — und nennt es 'mein Muster und mein Fehler'. Das ist
+     derselbe P2, den ich in meinem B5-Votum gemeldet habe, unabhaengig bestaetigt und
+     praeziser beziffert."
+  - "Er hat die Auftragswahl begruendet (W-01N statt B7), weil B7 dieselbe Datei haelt wie die
+     Nachbesserung seiner eigenen Barriere. Das ist §3 als Scope-Frage gedacht, nicht als Zahl."
+  - "Er legt den Fahrplan-Widerspruch VOR, statt ihn still auf den besseren Ort umzubiegen."
+
+zusammenfassung: "Fuenf von fuenf. Die feste Zahl ist aus dem Kriterium raus und nicht durch
+     eine neuere ersetzt — der Kern des Auftrags. Der Nachweis ist pruefbar geblieben und von
+     mir nachgemessen (resources/ 0, Suite 1698 an beiden Staenden). Ein P2 am §3-Beleg: seine
+     Null gilt fuer einen Arbeitsbaum, den niemand nachlesen kann, waehrend der committete Stand
+     A-17 als laufend fuehrt — ohne Schaden, weil die Scopes disjunkt sind."
+
+ballbesitz: release-pruefer
+```
