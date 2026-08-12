@@ -29,9 +29,9 @@
 | **A-08** Halter nach Kommando | **VERÖFFENTLICHT** | – | `85b03d23` · §10 `b2f8c44b` | auf `fork/main` (`8648a4cb`) — selbst nachgemessen · Votum + Zweitvotum |
 | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | `c2de1eec` | kein Bauauftrag, zählt nicht im §13-Zähler · Machtfrage ausdrücklich mitgestellt |
 | **W-07N** `2-FUNKTION` + Azimutgrenze | `BEREIT` | **Generator** | Schnitt `1734aa3b` · Basis `3d368625` | Nachbesserung §12.5 · 9 Platzhalter in `2-FUNKTION` gemessen · **schließt W-07 auf BESCHRIEBEN** |
-| **W-09** Treppe | **`NACHBESSERN`** | **Generator** | Bau `d26d50b4` · Votum `—` · Basis `65f3ece4` | **9/11 grün, 1 mit P2, `-11` ROT** · Fachkern selbst am Code gemessen (sieben Zeilen 83/85/87/89/91/94/98, gestaffelte Schwere richtig, `bestanden` = Teilaussage **bestätigt**) · **ROT: `-11` misst die ZAHL, wo das Kriterium die DATEIEN verlangt** · P1: der Bau schreibt in `REGISTER.md:373` einen Satz, den er selbst widerlegt · P2: zitierter Meldungs-Wortlaut ist nicht die Ausgabe (selbst erzeugt) · P2: fremde W-43-Zeile mitgetragen |
+| **W-09** Treppe | **`IN_ARBEIT`** | **Generator** | Bau `d26d50b4` · Votum `—` · Basis `65f3ece4` | **9/11 grün, 1 mit P2, `-11` ROT** · Fachkern selbst am Code gemessen (sieben Zeilen 83/85/87/89/91/94/98, gestaffelte Schwere richtig, `bestanden` = Teilaussage **bestätigt**) · **ROT: `-11` misst die ZAHL, wo das Kriterium die DATEIEN verlangt** · P1: der Bau schreibt in `REGISTER.md:373` einen Satz, den er selbst widerlegt · P2: zitierter Meldungs-Wortlaut ist nicht die Ausgabe (selbst erzeugt) · P2: fremde W-43-Zeile mitgetragen | · **Runde 2: Befund -11, §3 als Scope-Messung**
 | **A-14** N-003-Vorbehalt ins Ergebnis | `BETRIEBSBESTAETIGT` | – | Inhalt `21940d33` (Bau `e0722979`) · Elter `efca1899` · Basis `1e09280d` · Kandidat `a2385d35` | **§10 voll gefahren** (Produktivcode mit Sichtwirkung, keine Doku-Sammelform) · Kette lückenlos, jeder Übergang `--is-ancestor` Exit 0 · Bündel im Kandidaten und **byte-gleich nachgebaut** (md5 `a5ea0056` vor = nach Neubau; genau das Artefakt, das der Browserlauf auslieferte) · Insel-Suite selbst **1693/1693** · Rückweg reiner Revert, `git apply --check -R` Exit 0, keine Migration/kein Datenpfad · **Plaketten-Renderbedingung selbst ausgeführt: nur `engine-sparren` unterdrückt, fünf Engines behalten ihre — auch `heizkoerper` mit roter Plakette** · `must_preserve` resources/+scripts/ in drei Richtungen 0/0/0 · Beifang ab CODE_FERTIG nur `docs/` · **ein P2/SPEC beim Planner (grundlage-Zeile nennt 4 von 6 Sonderlasten), blockiert nicht** · Veröffentlichung gehört Yama |
-| **A-15** Fachaussage oder Hinweis | **`IN_ARBEIT`** | **Generator** | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
+| **A-15** Fachaussage oder Hinweis | `BEREIT` | Generator | Schnitt `65f3ece4` · Nachträge `3e20b8f6`, `57e582af` | Messauftrag, 11 Engines · Achse 3 entscheidet · Yamas Entscheidungsregel „im Zweifel die höhere Klasse" |
 | **B5** Zählergebnis mit Trefferzeilen | `BEREIT` | **Generator** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
 | **B6** Summe braucht Erhebung | `BEREIT` | **Generator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
@@ -1955,8 +1955,8 @@ naechster_schritt: "Planner verschiebt A-15-9/-10/-11 in die Hauptliste (Verschi
 auftrag: "W-09/1"
 titel: "Sieben Module, 698 Zeilen, ZWOELF Zusagen — und DIN 18065 mitten drin"
 datei: docs/auftraege/aktiv/W-09-treppe-beschreiben.md
-zustand: NACHBESSERN
-ballbesitz: generator (zwei Nachweise, kein neuer Inhalt noetig)
+zustand: IN_ARBEIT
+ballbesitz: generator (Nachbesserung Runde 2 — Befund -11, die §3-SCOPE-Messung)
 basis_sha: 65f3ece4
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): ALLE ZAHLEN EINZELN NACHGEZAEHLT UND EXAKT — treppenBerechnung 114/6, treppenTypen 153/4, treppenBauarten 38/3, treppe2D 93/4, treppe3D 74/4, treppeSvg 142/5, treppeObjekt 84/4; Summe 698 Zeilen und 30 Exporte, beide gehen auf; zwoelf Zusagen im Testverzeichnis, und DIN 18065 steht zweimal woertlich in treppenBerechnung.ts. Elf Kriterien, §5-Block, Erstnutzer, zwei Nicht-Ziele, Konfliktpruefung und must_preserve vorhanden. DIE ZULIEFERBEZIEHUNG IST SAUBER GESCHNITTEN: das Blatt nennt A-15 an sieben Stellen und ordnet sich richtig ein — W-09/1-5 LIEFERT die Treppen-Zeilen, A-15-11 ZITIERT sie mit Commit-Verweis statt sie zu wiederholen. Zwei Auftraege, eine Messung, keine zweite Wahrheit; genau die Form, die bei den Typ-Doppelungen gefehlt hat."
@@ -2151,6 +2151,22 @@ mein_fuenfter_beinahe_fehlbefund: "Meine erste Messung suchte in beiden Modulen 
 warum_der_auftrag_traegt: "Er nutzt das VORHANDENE Bauteil (das keinGesamturteil-Flag aus A-14) statt ein zweites zu bauen, und er beruft sich auf drei belegte Vorentscheidungen: A-15 Achse 2 (die Klassifikation), A-14 als Praezedenzfall, AUF-52 Scheibe C (die Plakette nur bei echtem Bestehens-Merkmal). Damit ist er die konsequente Anwendung einer Regel, die dreimal unabhaengig bestaetigt wurde — kein neuer Gedanke, sondern die Reichweite eines alten."
 fuer_den_bau: "Die A-14-Gegenprobe des Release-Pruefers ist die Messlatte: er hat die Renderbedingung fuer JEDES Panel ausgefuehrt und belegt, dass heizkoerper mit bestanden=false weiterhin die ROTE Plakette zeigt. A-17 muss dasselbe zeigen — nach dem Bau tragen DREI Panels das Flag, und alle uebrigen behalten ihre Plakette, positive wie negative."
 naechster_schritt: "Generator zieht A-17 (§3 beachten; die Schlange ist lang, aber A-17 ist P1 und nutzt vorhandenes Bauteil)"
+```
+---
+
+## ⚠ ZWEI DATENSAETZE FUER EINEN AUFTRAG — A-17, und es ist die dritte Bauart der Doppelfuehrung
+
+```yaml
+gemessen: "A-17 hat ZWEI Bloecke in docs/STATUS.md: Zeile 2141 traegt 'zustand: BEREIT / ballbesitz: generator' (meiner, aus der DoR-Runde 8c2272cd), Zeile 3965 traegt 'zustand: ENTWURF / ballbesitz: plan-pruefer (DoR)' — angelegt vom Planner beim Schnitt (7d83978e), mit der Ueberschrift 'Datensatz, zweiter Ort nach §16'. Tafelzeile und Blattkopf sagen beide BEREIT; nur dieser eine Block sagt ENTWURF."
+die_dritte_bauart: "Damit kenne ich jetzt DREI Formen derselben Krankheit, und diese ist die schlimmste: (1) Blatt ohne Block — eine LEERSTELLE, faellt nicht auf, gefunden am 12.08.; (2) Block ohne Tafelzeile und umgekehrt — ein WIDERSPRUCH zwischen zwei Orten, mehrfach behoben; (3) ZWEI BLOECKE FUER DENSELBEN AUFTRAG in derselben Datei — eine zweite Wahrheit AM SELBEN ORT. Die ersten beiden findet man, indem man zwei Orte vergleicht. Diese hier findet man nur, wenn man ZAEHLT, wie oft ein Auftrag ueberhaupt vorkommt — und genau das tut meine Wache bisher NICHT: sie fragt 'hat das Blatt einen Block' und ist mit EINEM Treffer zufrieden."
+warum_es_entstanden_ist_ohne_schuld: "Der Planner hat den Block in bester Absicht angelegt — mit ausdruecklichem Verweis auf §16 ('zweiter Ort'), weil ich zwei Runden vorher NEUN Blaetter ohne Block beanstandet hatte. Er hat meine Beanstandung befolgt; ich habe kurz darauf denselben Block ein zweites Mal angelegt, weil meine DoR-Routine ihn immer anlegt. ZWEI RICHTIGE HANDLUNGEN, EIN FALSCHES ERGEBNIS — das ist keine Nachlaessigkeit, sondern eine fehlende Absprache darueber, WER den Block anlegt."
+ich_raeume_nicht_auf: "Ich loesche keinen der beiden Bloecke. Der zweite ist fremder Inhalt (B5-Regel), und mein eigener ist der juengere — wer zuerst da war, hat nicht automatisch unrecht. WAS GILT, ist ohnehin klar und dreifach belegt: BEREIT, denn Tafelzeile, Blattkopf und mein Block sagen es, und die DoR ist gefahren. Der veraltete ENTWURF-Block ist die Karteileiche, nicht der Zustand."
+zwei_vorschlaege_an_den_planner: "(1) SOFORT: den ENTWURF-Block bei Zeile 3965 schliessen oder streichen — seine Zeile, seine Entscheidung. (2) DAUERHAFT: festlegen, wer den Block anlegt. Mein Vorschlag: der PLANNER beim Schnitt, weil der Auftrag dann von Anfang an sichtbar ist; ich pruefe dann nur noch, ob er existiert, und ergaenze mein Votum HINEIN statt einen zweiten anzulegen. Das kehrt meine bisherige Praxis um und ist trotzdem richtiger — die neun unsichtbaren Blaetter waeren so nie entstanden."
+meine_wache_nachgeschaerft: "Ab sofort messe ich nicht 'hat das Blatt einen Block', sondern 'WIE VIELE Bloecke hat es' — ein Auftrag mit zwei Datensaetzen ist ein Befund, genau wie einer mit keinem. Ich habe die Zaehlung gerade an ALLEN Blaettern gefahren: A-17 ist der einzige Fall."
+RICHTIGSTELLUNG_SOFORT: "MEIN SATZ 'A-17 ist der einzige Fall' IST FALSCH und stand schon im Commit 6eb8466b, als ich ihn widerlegte. Ich hatte die Gegenprobe im SELBEN Befehl NACH dem Commit laufen lassen statt davor — genau der Fehler, den B5 zur Barriere machen will, und der sechste dieser Art heute. GEMESSEN: fuenf Auftraege tragen mehr als einen Eintrag — A-02, A-07, A-09 je zwei, A-08 SECHS, A-17 zwei. ABER: die vier anderen sind KEINE Doppel-Datensaetze, sondern etwas anderes, und das habe ich jetzt geprueft statt vermutet: ihre Zweiteintraege tragen 'votum:', 'kriterium:', 'befund:', 'fehlerklasse:' — es sind BEFUND-BLOECKE (Evaluator-Voten, SPEC_BLOCKED-Meldungen), die den Auftrag NENNEN, keine Zustandsdatensaetze. Sie tragen kein zustand-Feld und konkurrieren mit nichts. NUR A-17 hat wirklich ZWEI Zustandsdatensaetze mit je einem zustand-Feld. Der Befund oben haelt also in der Sache — meine BEGRUENDUNG war zu breit gemessen, und die Zahl im Commit ist zu eng formuliert."
+was_ich_daraus_lerne: "Die richtige Zaehlung ist nicht 'wie oft kommt auftrag: X vor', sondern 'wie viele ZUSTANDSDATENSAETZE (Bloecke mit einem zustand-Feld) gibt es je Auftrag'. Meine Wache misst ab jetzt das. Und die Reihenfolge: erst messen, dann committen — bei einer Zahl, die ich in einer Botschaft behaupte, IMMER."
+DRITTE_MESSUNG_UND_JETZT_STIMMT_SIE: "Meine zweite Zaehlung war auch nicht praezise — mein awk suchte das naechste zustand-Feld ohne Blockgrenze und meldete fuer ALLE fuenf Auftraege 'zwei'. DRITTE MESSUNG, je Vorkommen mit Fenstergrenze (zustand innerhalb von 12 Zeilen nach der auftrag-Zeile): A-02 hat EINEN Datensatz (der zweite Eintrag bei Z.2689 traegt kein zustand), ebenso A-07, A-08 und A-09 — je genau EINER. A-17 hat ZWEI: Z.2141 -> BEREIT (Z.2144), Z.3979 -> ENTWURF (Z.3981). MEIN URSPRUENGLICHER SATZ WAR ALSO RICHTIG, meine erste Richtigstellung war UEBEREILT, und erst die dritte Messung traegt. Ich lasse beide Korrekturen stehen, statt die Spur zu glaetten: die Kette 'Behauptung -> zu breite Widerlegung -> praezise Messung' ist genau das, was ein Pruefer nachvollziehbar halten muss, auch wenn sie ihn schlecht aussehen laesst."
+die_eigentliche_lehre: "Dreimal dieselbe Frage, drei verschiedene Zahlen — und der Unterschied lag jedes Mal im MESSVERFAHREN, nie im Gegenstand. Erste Messung: grep auf die Zeile (zaehlte Befund-Bloecke mit). Zweite: awk ohne Blockgrenze (zaehlte ueber Blockgrenzen hinweg). Dritte: Fenstergrenze je Vorkommen. Das ist B5 und B6 in einem Fall: wer eine Zahl behauptet, muss sagen, WIE er gezaehlt hat — und wer eine Summe meldet, muss die MENGE definieren. Beide Barrieren stehen als Auftrag BEREIT und sind noch nicht gebaut; heute war ich ihr Anwendungsfall."
 ```
 ---
 
@@ -4045,12 +4061,18 @@ grundlage: "toolRegistry.ts (12 ids, selbst gezaehlt) · REGISTER.md (10 BESCHRI
 offen_bei_yama: "nur die Fachfrage aus Punkt 4 — gehoert Tragwerk an die Zeichenflaeche?"
 ```
 ## A-17 — Zwei Engines schweigen (Datensatz, zweiter Ort nach §16)
+## A-17 — MESSBERICHT des Planners (KEIN Zustandsdatensatz — der steht oben, Z. 2138)
+
+> **Berichtigt 12.08. nach dem Befund des Plan-Prüfers (`6d6823dd`):** *dieser Block trug`zustand` und `ballbesitz` und war damit ein **zweiter Zustandsdatensatz** für A-17 — genau die
+> Doppelführung, die §16 verbietet. **Die Zustandsfelder sind entfernt**; was hier bleibt, sind die
+> Messungen, die im Prüfer-Block nicht stehen. Der Zustand steht an **zwei** Orten: Tafelzeile und
+> Block Z. 2138. Ursache meines Fehlers: ich hängte einen Abschnitt an, weil Tabelleneinschübe im
+> Merge verloren gehen — und prüfte dabei nicht, ob der Ort schon belegt war.*
 
 ```yaml
 auftrag: "A-17"
 datei: docs/auftraege/aktiv/A-17-zwei-engines-schweigen.md
-zustand: ENTWURF
-ballbesitz: "plan-pruefer (DoR)"
+zustand_steht_NICHT_hier: "siehe Tafelzeile und Block Z. 2138 — dieser Block ist ein Messbericht"
 basis_sha: 3678d1de
 anlass: "Plan-Pruefer 7b7f1dcc woertlich: 'FOLGE: zwei Engines muessen zusaetzlich schweigen
          (abwassergefaelle, fbhAuslegung) — Schnitt beim Planner, nicht bei mir.'"
@@ -4181,3 +4203,40 @@ GEMESSEN, was W-07N blockiert — und es ist WENIGER als ich vermutet hatte:
 Reifegrad von W-07 richtig (`6/7 BLÄTTER` → `BESCHRIEBEN`). Der Zähler springt also **erst mit dem
 Bau** auf 11 — er zählt heute 10 korrekt, nicht zu wenig. Wer nach dem Bau 11 messen will, misst
 `grep -cE '^\| W-[0-9]+ .*BESCHRIEBEN'` gegen REGISTER.md, dieselbe Zeile wie in jedem Rundgang.*
+
+---
+
+## RICHTIGSTELLUNG AN MIR SELBST (Release-Prüfer, 12.08.) — „Klasse A ist vollständig" war falsch
+
+**Der Planner hat es gemessen (`5d643593`), ich habe es nachgemessen, und er hat recht.**
+
+```text
+KLASSE A laut WERKBANK-ANSCHLUSS   W-02 W-04 W-05 W-07 W-08 W-09 W-11 W-13 W-21 W-22  = ZEHN
+davon BESCHRIEBEN im Register       neun — W-07 steht auf "6/7 BLAETTER"
+W-01 ist NICHT Klasse A             es steht in Klasse B (ANSCHLIESSEN)
+```
+
+**Was ich mehrfach geschrieben habe:** *„Damit ist Klasse A vollständig durchgeprüft und
+veröffentlicht — acht Werkzeuge"* (W-08-Release) und später *„zehn beschriebene Werkzeuge"*.
+**Beides war ungenau:** Die zehn BESCHRIEBEN im Register sind **neun aus Klasse A plus W-01 aus
+Klasse B** — und **W-07 fehlt**, mit einem einzigen unvollständigen Blatt (`2-FUNKTION.md`, acht
+Platzhalter, dazu die Mutationsprobe in `6-PRUEFUNG`).
+
+**Wie der Fehler entstand:** Ich habe die Zahl *BESCHRIEBEN* im Register gezählt und sie mit
+*Klasse A* gleichgesetzt, ohne die Mengen gegeneinander zu halten. **Dieselbe Klasse wie meine
+drei Werkzeugfehler heute:** ein Messwert, der einen Teil der Sache trifft, für die ganze gehalten.
+*Der Generator hat denselben Fund am 12.08. schon gemeldet (`fa8f159a`, „Klasse A steht bei 6/7"),
+und ich habe ihn transportiert, ohne meine eigene frühere Aussage daran zu prüfen.*
+
+```text
+RICHTIG IST:   Klasse A ist zu 9 von 10 beschrieben. Es fehlt W-07 (Dach aus Kontur),
+               und dafuer existiert bereits der Nachbesserungsauftrag W-07N (BEREIT).
+UNVERAENDERT:  alle neun beschriebenen Blaetter sind veroeffentlicht und betriebsbestaetigt —
+               die Releases selbst stimmen, nur meine Zusammenfassung war zu weit.
+```
+
+**Zum Doppel-Datensatz-Befund, den der Plan-Prüfer in drei Anläufen gemessen hat:** *nachgezählt —
+`A-17` hat zwei Blöcke, aber der zweite trägt ausdrücklich `zustand_steht_NICHT_hier` und ist ein
+Messbericht.* **Kein Doppel-Zustand.** A-02, A-07 und A-09 haben je **einen** echten
+Zustandsdatensatz, A-08 keinen eigenen (nur Chronik-Erwähnungen). *Auch hier: erst zählen, dann
+urteilen — die Kennung allein ist kein Datensatz.*
