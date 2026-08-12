@@ -47,7 +47,7 @@
 | **W-27** Dachkantentypen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
-| **A-20** Zustand an vier Orten | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
+| **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
@@ -6470,8 +6470,58 @@ meine_frage_wurde_beantwortet: "Der Planner hat die Grundmengen zu '17 von 24' n
 
 ```yaml
 auftrag: "A-20"
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 92c50794 (Runde 2), Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen (A-20-1 bis A-20-7, je eigener Abschnitt im Votum).
+  Reiner Doku-Scope; must_preserve SELBST nachgemessen mit resources/ 0, app/ 0, database/ 0.
+  Kette Vorfahr, Geheimnisse 0.
+  DEN KERN SELBST NACHGEMESSEN: 44 Auftragsblaetter, davon 0 mit status: im Kopf und 43 mit
+  status_steht_in: docs/STATUS.md. Die Kopien sind weg, der Verweis steht.
+
+  DIESER AUFTRAG BETRIFFT MEIN EIGENES PRUEFVERFAHREN, und deshalb sage ich es ausdruecklich:
+  §16 fuehrt jetzt zwei Orte statt vier — Tafelzeile und Datensatz in docs/STATUS.md — und genau
+  diese zwei vergleiche ich seit heute frueh in jedem Takt. Mein Verfahren war vorher eine
+  Gewohnheit; es ist jetzt die Regel. Aus meinen Einzelbefunden (elf hinterherhinkende
+  Tafelzeilen, zwei doppelte Zustandsfelder, vier auseinanderlaufende Baelle, drei
+  widersprechende Ballfelder) ist ueber A-20 ein Regelwerkstext geworden."
+
+mein_vierzehnter_beinahe_fehlbefund_heute: "A-20-3 verlangt 0 Blaetter mit zustand: im Fuss.
+  Ich messe 14 Blaetter mit einer zustand:-Zeile und war im Begriff, das Kriterium fuer verletzt
+  zu erklaeren. GELESEN statt gemeldet: alle 14 stehen in §11-BERICHTSBLOECKEN — datierte
+  Berichte des Generators, die den Zustand zum Zeitpunkt der Fertigmeldung festhalten, kein
+  Blattfuss. Der Evaluator hat es mit 'null ECHTE Blattfuesse' genau getroffen; das Wort ECHTE
+  traegt die ganze Unterscheidung. Wieder ein Muster, das am Text ansetzt statt am Gegenstand."
+
+hinweis_ohne_schwere_und_ohne_blockade:
+  klasse: SPEC
+  schwere: P3
+  was: "§16 nennt die zwei bleibenden und die zwei entfallenden Orte, sagt aber NICHT, wie
+    zustand:-Zeilen in §11-Berichtsbloecken zu lesen sind. Gemessen: 14 Blaetter tragen solche
+    Zeilen, alle als Historie. Wer kuenftig 'grep ^zustand: docs/auftraege/' faehrt — und das
+    ist der naheliegende Kontrollbefehl zur neuen Regel —, bekommt 14 Treffer und muss selbst
+    herausfinden, dass sie nicht gemeint sind."
+  warum_kein_befund: "Die Regel ist inhaltlich vollstaendig: ein Bericht ist Historie und kein
+    Statustraeger, das folgt aus §16s eigenem Satz 'docs/STATUS.md ist die einzige
+    Statuswahrheit'. Es fehlt kein Inhalt, es fehlt eine Abgrenzung fuer den Pruefenden."
+  vorschlag: "Ein Halbsatz in §16: zustand:-Zeilen in §11-Berichtsbloecken sind Historie und
+    zaehlen nicht als Zustandsort. Entscheidet der Planner, nicht ich."
+
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau 92c50794 ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt (resources/ 0 Dateien).
+  WILDBETRIEBS-BELEG in der besten Form, die dieser Auftrag zulaesst: die neue Regel ist an
+  der laufenden Statusdatei selbst geprueft — meine Driftmessung vergleicht genau die zwei
+  Orte, die §16 jetzt fuehrt, und meldet ueber 47 Tafelzeilen Zustands-Drift 0 und Ball-Drift 0."
+
+gewuerdigt_am_bau: "Der Generator hat in Runde 2 den teuersten Fehler seiner Runde 1 selbst
+  benannt: er hatte aus drei Zahlen einen AUFTRAG AN EINE ANDERE ROLLE abgeleitet, ohne eine
+  der drei Stellen zu oeffnen. Ursache war ein Parser, der Anfuehrungszeichen um die Kennung
+  verlangte — 31 Felder tragen sie, 19 nicht. Er hat die falschen Zahlen ZURUECKGEZOGEN statt
+  geloescht, nach dem W-23-Vorbild, mit der richtigen Begruendung: eine stille Berichtigung
+  haette genau den Befund vernichtet, den A-20-4 schuetzt.
+  Und der Evaluator hat fuer die Bestaetigung ein DRITTES Messverfahren gebaut, damit sie nicht
+  aus derselben Quelle kommt wie der Befund — und dabei einen eigenen Fehler gefunden, der das
+  berichtigte Regelwerk faelschlich als falsch gemeldet haette."
 nachbesserung_runde_2: "Der Befund des Evaluators (99fc86cd) trifft, und er trifft an der teuersten Stelle. SELBST NACHGEMESSEN am Elter 6af2572d mit einem Raster das BEIDE Schreibweisen aufloest: A-09 BETRIEBSBESTAETIGT, A-11 BETRIEBSBESTAETIGT, A-12 ABGENOMMEN — alle drei haben einen Datensatz, mein Auftrag an den Planner hatte keine Grundlage und ist zurueckgezogen. URSACHE bestaetigt: mein Parser las die Kennung mit ^auftrag: \"([^\"]+)\" und verlangte damit Anfuehrungszeichen; gemessen stehen 31 Felder MIT und 19 OHNE, und von den 19 unzitierten haben nur diese drei ein Blatt mit status: im Kopf — das erklaert die 3 exakt. BERICHTIGT an drei Orten: A-20-4 im Bericht (Tabelle jetzt 32 Namen, gegengeprobt gegen die gemessene Menge, 0 fehlen 0 zuviel), A-20-1 in ARBEITSREGELN §16 (29/3/20 -> 32/0/22, und '29 Blaetter waren Fallen' -> 32), und A-20-5 dessen Nachweis eine BAUMMESSUNG war: git diff --name-only ist nach einem Commit zwangslaeufig 0 und waere auch bei zwanzig fremden Zustaenden 0 gewesen. Am COMMIT neu gemessen: 48fac1f0 aendert in STATUS.md genau 4 Zustandszeilen und 1 Tafelzeile, alle A-20s eigene, 0 fremde. Das ist E1 woertlich, angewandt im selben Bericht und an dieser Stelle vergessen."
 zurueckgezogen_nicht_geloescht: "Die falschen Zahlen und der gegenstandslose Planner-Auftrag stehen weiter im Bericht, als ZURUECKGEZOGEN gekennzeichnet und mit Ursache — nach dem Vorbild von W-23. Eine stille Berichtigung haette genau den Befund vernichtet, den A-20-4 schuetzt. Die Gegenprobe auf '3 ohne Datensatz' im Bericht findet deshalb weiter Treffer, und die sind Zitat und keine Behauptung."
 die_haertere_lehre: "Nicht das Raster ist der eigentliche Fehler, sondern das Weitergehen: ich habe aus drei Zahlen einen AUFTRAG AN EINE ANDERE ROLLE abgeleitet, ohne eine der drei Stellen zu oeffnen. Genau diesen Vorhalt mache ich im selben Bericht dem Auftragsblatt (17 Widersprueche ungeoeffnet gemeldet) — und habe ihn eine Seite weiter selbst begangen. Wer eine Menge zaehlt, muss mindestens ein Glied ansehen; wer daraus einen Auftrag ableitet, jedes."
