@@ -824,17 +824,43 @@ am ZIEL gemessen, nicht am Weg** (nicht „gibt es eine Route", sondern „steht
 UI-Zustand"). *In meine Pflichtprüfung 1 habe ich es schon eingetragen; als Hausregel für alle Rollen
 setzt es nur du.*
 
-### Zur Kenntnis, kein Handlungsbedarf: der Sicherungsstand
+### Der Sicherungsstand — **und hier habe ich dir eine falsche Beruhigung geschrieben**
+
+**Meine erste Fassung sagte „Zur Kenntnis, kein Handlungsbedarf" und nannte vier Commits Vorlauf.**
+*Ich hatte ohne `fetch` gemessen, **den Vorbehalt sogar hingeschrieben — und trotzdem beruhigt.** Der
+Plan-Prüfer hat den Vorbehalt eingelöst statt ihn zu wiederholen (`a4617241`), und was er fand, war
+nicht eine andere Zahl, sondern eine andere **Art**:*
 
 ```text
-fork und backup-private   2f1c08a2, gemeinsamer Punkt 054eaa0b (mein AUF-40-Commit)
-lokal noch nicht drauf    4 Commits (planner 2, plan-pruefer 1, generator 1)
-origin                    44 Commits zurueck — erwartet, origin ist read-only
+seine Messung (live, ls-remote):   fern 4403f52e · lokal 63c474ff · Basis e910d13f
+                                   3 nur lokal, ZEHN nur entfernt -> DIVERGENT
+                                   der Fernstand war KEIN Vorfahr des lokalen
+                                   die drei lokalen einzeln geprueft: auf KEINER Kopie
+                                   ausserhalb dieses Rechners
+
+meine Nachmessung, Minuten spaeter: fork 3f167037 · backup-private bca7f5d8
+                                   fork IST Vorfahr des lokalen -> NICHT divergent
+                                   1 Commit nur lokal
 ```
 
-*Der Release-Prüfer sichert laufend und hat W-35 heute veröffentlicht und betriebsbestätigt. **Die vier
-Commits sind der normale Vorlauf, keine hängende Arbeit** — gemessen ohne `fetch`, die Remote-Refs sind
-also so aktuell wie der letzte Abruf.*
+> **Beide Messungen waren zu ihrem Zeitpunkt richtig.** *Zwischen ihnen hat der Release-Prüfer
+> zusammengeführt und gepusht — bis auf meinen W-37-Commit. **Und genau das ist der Punkt, nicht die
+> Zahl:** ein Sicherungsstand ist eine Momentaufnahme, und „kein Handlungsbedarf" ist keine
+> Momentaufnahme, sondern ein Urteil über die Zukunft. **Dieselbe Klasse wie die Sperrgründe eine Seite
+> vorher:** „0 Klappzustände", richtig gemessen, einen Tag später falsch.*
+
+**Was stabil gilt, ohne Verfallsdatum:**
+
+- **Es gibt immer einen ungesicherten Vorlauf**, weil hier laufend committet wird. Die Frage ist nie
+  „ob", sondern „wie viel gerade" — *und solange nichts deployt ist, ist der gepushte Stand die einzige
+  Kopie außerhalb dieser Maschine.*
+- **Zwei Linien sind die Bauart, nicht ein Fehler**: der Release-Prüfer arbeitet auf eigener Linie und
+  führt zusammen. *Divergenz ist dort normal; ein Push holt sie nicht ein, sie braucht eine bewusste
+  Zusammenführung.*
+- **`origin` ist read-only** und wächst zurück — *44 in meiner Messung, 49 in seiner. Erwartet.*
+
+*Kein Handlungsbedarf **für dich** — aber das ist mein Urteil und nicht die Messung, und diesmal steht
+der Unterschied da.*
 
 #### Nachmessung des Plan-Prüfers, 12.08. — es ist **kein** reiner Vorlauf
 
