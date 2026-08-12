@@ -40,6 +40,38 @@ neben den alten, statt den alten zu ändern.*
 Generator lag.* **Ein YAML-Leser sieht vier abgeschlossene Aufträge beim Generator liegen — die
 Richtung, die „belegt" meldet, wo frei ist.**
 
+### Nachtrag: EINE der vier ist meine, und das stand hier zuerst falsch
+
+> **Ich hatte unten geschrieben „die 17 fremden Stellen" und die Bereinigung dem Planner
+> zugeordnet.** *Für 16 stimmt das. Für **A-21** nicht — die Dublette ist meine.*
+
+**Blockgenau nachgemessen: für jeden der vier Blöcke der Commit gesucht, in dem die Zahl der
+`ballbesitz`-Zeilen von 1 auf 2 stieg:**
+
+```text
+W-01N    1 -> 2   d59741f9   plan-pruefer
+W-15/1   1 -> 2   d59741f9   plan-pruefer
+B7       1 -> 2   d59741f9   plan-pruefer
+A-21     1 -> 2   869c560d   GENERATOR — mein eigener CODE_FERTIG-Commit
+```
+
+**Es ist derselbe Handgriff wie bei W-34:** *der Block trug bereits ein `ballbesitz` vor
+`basis_sha:`, und ich habe beim Fertigmelden ein zweites direkt hinter `zustand:` gesetzt, statt das
+vorhandene zu ändern.* **Zweimal am selben Tag, und beim zweiten Mal hatte ich den ersten schon
+eingeräumt.**
+
+> **Gemessen ist das kein Ausrutscher, sondern ein Muster:** *`65` meiner Commits auf
+> `docs/STATUS.md` fügen eine `ballbesitz:`-Zeile hinzu.* **Wo der Block noch keine hatte, ist das
+> richtig; wo er eine hatte, entsteht genau diese Dublette.** *Die Regel für mich lautet ab jetzt:
+> vor dem Setzen zählen, ob das Feld schon existiert — und dann ändern statt anlegen.*
+
+**Ich habe A-21s Dublette trotzdem NICHT bereinigt**, *obwohl sie meine ist und ich sie bei W-34
+selbst entfernt habe.* **Grund: `A-22` ist inzwischen auf genau diese Menge geschnitten
+(`ENTWURF`, Plan-Prüfer, Basis `e1a478fb` — dieser Befund).** *Eine Stelle jetzt zu beheben würde
+seine Rot-Lage von 17 auf 16 verschieben, während seine DoR läuft.* **Ein bewegtes Ziel ist keine
+Prüfgrundlage — dieselbe Zurückhaltung, die der Planner heute bei A-20 geübt hat.** *Sobald A-22
+entschieden ist, gehört meine Zeile zu den ersten, die weg können.*
+
 **Geöffnet und gelesen statt gezählt** (Pflichtprüfung 7): *`A-21` trägt `zustand:
 BETRIEBSBESTAETIGT`, seine Tafelzeile trägt Ballbesitz `–`, die erste Blockzeile `— # Kette
 vollstaendig` und die letzte `generator`.* **Die Tafelzeile und die erste Zeile stimmen überein;
@@ -69,9 +101,11 @@ GETAN     gemessen, alle 144 Bloecke, und einen Fall geoeffnet statt ihn zu zaeh
           MEINE eigene Dublette bei W-34 in 4c1d205b entfernt — sie war meine: der Block
           trug schon ein ballbesitz, ich habe beim Fertigmelden ein zweites eingefuegt.
 
-NICHT     die 17 fremden Stellen angefasst. Datensatzpflege gehoert dem Planner, und
-          bei den dreizehn Aufzeichnungen ist die richtige Form eine Entscheidung und
-          keine Reparatur.
+NICHT     die 17 Stellen angefasst — 16 fremde und EINE eigene (A-21, siehe Nachtrag).
+          Datensatzpflege gehoert dem Planner; bei den dreizehn Aufzeichnungen ist die
+          richtige Form ohnehin eine Entscheidung und keine Reparatur. Und seit A-22
+          auf diese Menge geschnitten ist, waere jede Einzelbehebung ein bewegtes Ziel
+          fuer seine DoR — auch meine eigene.
 ```
 
 > **Ein Hinweis zur Reihenfolge, falls jemand bereinigt:** *bei den vier `ballbesitz`-Fällen ist die
