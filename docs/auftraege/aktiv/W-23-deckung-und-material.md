@@ -240,3 +240,117 @@ zweiter_posten: "118 der 127 Zeilen haben KEIN Lattmass. Das ist Pflegearbeit an
        gehoert Yama, nicht diesem Auftrag."
 was_dieser_auftrag_entsperrt: "W-21L fuer SIEBEN Braas-Modelle. Nicht mehr, und das ist richtig."
 ```
+
+## §11 — Votum W-23 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-23"
+votum: NACHBESSERN
+fehlerklasse: BEWEIS
+bau_commit: "2143c5db"
+elter: "c2c6bf4e"
+in_arbeit_commit: "39270fab"
+pruefstand: "worktree --detach auf 2143c5db und c2c6bf4e"
+zum_bau_commit: "Der Datensatz nennt 39270fab als Bau. Das ist der IN_ARBEIT-Commit (nur
+     docs/STATUS.md); gebaut wurde in 2143c5db (elf Dateien). Ich habe gegen 2143c5db geprueft."
+besonderheit: "Die Quelle liegt AUSSERHALB des Repos. Ich habe sie selbst geoeffnet, nicht
+     seine Tabelle nachgelesen — das ist bei einer externen Quelle der einzige Weg."
+
+messtisch_alle_sieben:
+  W-23-1: ROT — die Zahlen stimmen, ein NAME nicht (s. befund)
+    was_stimmt: "Ich habe die Quelle mit Bordmitteln selbst geoeffnet (zipfile + ElementTree)
+            und jede Angabe aus 5-CODE nachgemessen:
+              Groesse        718.574 Byte        stimmt
+              sharedStrings  nicht vorhanden     stimmt (die Texte stehen inline)
+              Blatt          sheet11.xml         stimmt
+              Umfang         128 Zeilen, 48 Sp.  stimmt
+              Lattmass-Zeilen 9 von 127          stimmt, alle Hersteller 'Braas'
+              Modelle         neun Zeilen, sieben Modelle (Rubin 13V und Topas 13V je zweimal)
+                                                 stimmt"
+  W-23-2: GRUEN — und der Kern ist rechnerisch belegt
+    beleg: "3-FORMELN traegt die entschiedene Fassung: SCHRANKE (Neigung >= Regeldachneigung),
+            n_min/n_max mit Existenzpruefung, und 'n_min > n_max -> KEINE gleichmaessige
+            Teilung, KEIN Wert' als eigener Fall. Die verworfene erste Fassung steht daneben,
+            ausdruecklich als verworfen."
+    selbst_nachgerechnet: |
+      Harzer, L=1000, Bereich 372-405:
+        n_min = aufrunden(1000/405) = 3
+        n_max = abrunden (1000/372) = 2      ->  n_min > n_max, kein Wert          RICHTIG
+      die verworfene Fassung:
+        n = aufrunden(1000/405) = 3  ->  1000/3 = 333,3 mm  ->  AUSSERHALB 372-405 RICHTIG
+    bewertung: "Der geforderte Fall mit n_min > n_max steht ausgeschrieben im Bericht, und
+            ich habe ihn nachgerechnet statt ihn zu lesen. Beide Zahlen treffen."
+  W-23-3: GRUEN
+    beleg: "7-GRENZEN nennt '118 von 127 Zeilen' ohne Lattmass und den Satz 'fuer jedes andere
+            Modell kann dieses Werkzeug NICHTS sagen'. Selbst gemessen: 9 mit, 118 ohne — und
+            alle neun tragen Hersteller 'Braas'. Ungeschoent, wie verlangt."
+  W-23-4: GRUEN
+    beleg: "Die Eingangspruefung steht in 6-PRUEFUNG als K-Kriterium. Ich habe sie an der
+            Quelle nachgerechnet, Zeile fuer Zeile:
+              Achat 12V 360-330=30 · Granat 11V 380-338=42 · Rubin 13V HA 30 · OG 30
+              Rubin 9V 400-370=30 · Topas 11V 380-320=60 · Topas 13V HA 40 · OG 40
+              Harzer Pfanne 7  405-372=33  ->  Spiel FEHLT in der Quelle
+            Acht gehen auf, bei der Harzer fehlt der Wert — genau die Rot-Lage des Kriteriums."
+  W-23-5: ROT — dieselbe Stelle wie -1
+    was_stimmt: "Alle neun Zeilen tragen Datenstatus (verifiziert / teilweise verifiziert) und
+            Quelle. Die Zaehlung geht auf."
+    was_nicht: "Ein uebernommener WERT — der Modellname — traegt die falsche Herkunft."
+  W-23-6: GRUEN
+    beleg: "resources/ und app/ 0 Dateien. Die Quelldatei ist unveraendert: 718.574 Byte,
+            Zeitstempel 25. Maerz — der Bau hat nur gelesen."
+  W-23-7: GRUEN
+    beleg: "Am Elter des Baus steht W-23 an beiden Orten auf IN_ARBEIT (Tafel 1 / Feld 1).
+            Reihenfolge stimmt: 39270fab 12:02:10, Bau 12:11:10."
+
+befund_der_modellname:
+  klasse: BEWEIS
+  schwere: P1
+  was_er_meldet: "Als eigene Abweichung (1): 'Das Blatt schreibt Harzer Pfanne 7. In der Quelle
+        heisst es Modell_Typ = \"Harzer Pfanne\", Variante_Ausfuehrung = \"Big\" — eine 7 steht
+        dort nicht.' Danach traegt 5-CODE:41 den Namen ohne die 7."
+  was_ich_messe: |
+    Die Quelle hat FUENF Harzer-Zeilen, und nur EINE traegt Lattmasse:
+      Zeile   9  Modell_Typ 'Harzer Pfanne'                Z/AA leer
+      Zeile  10  Modell_Typ 'Harzer Pfanne 7'  Var 'Big'   Z=372  AA=405   <- diese
+      Zeile  11  Modell_Typ 'Harzer Pfanne F+'             Z/AA leer
+      Zeile 102  'Braas Harzer Pfanne'                     Z/AA leer
+      Zeile 104  'Braas Harzer Pfanne 7 (BIG)'             Z/AA leer
+    Gezielt gesucht: die Zeile mit 372/405 ist Zeile 10, und ihr Modell_Typ lautet
+    'Harzer Pfanne 7'. DIE 7 STEHT DORT.
+  warum_das_zaehlt: "Seine Berichtigung dreht die Sache um: das AUFTRAGSBLATT hatte recht, und
+        die Korrektur macht das Werkzeug-Blatt falsch. Wer spaeter mit 'Harzer Pfanne' in die
+        Quelle geht, landet auf Zeile 9 — OHNE Lattmasse. Das ist genau die Verwechslung, die
+        W-23-1 ('jede genannte Zahl ist in der Tabelle nachlesbar') verhindern soll."
+  fehlerklasse_im_haus: "H-9, seine eigene frisch gebaute Regel: das Muster war richtig, es
+        setzte an der falschen ZEILE an. Fuenf Kandidaten, einer davon traegt die Masse."
+  behebung: "Zwei Stellen: 5-CODE:41 (Modellname) und 5-CODE:54-55 (die Abweichungsmeldung
+        streichen oder umdrehen). Kein neuer Inhalt."
+
+zweite_abweichung_bestaetigt:
+  was_er_meldet: "'Rubin 13V hat KEINE Regeldachneigung — in beiden Zeilen', und das ist nicht
+        kosmetisch, weil die Schranke des Werkzeugs genau gegen diesen Wert prueft."
+  selbst_gemessen: |
+    Achat 12V 16 · Granat 11V 25 · Harzer Pfanne 7 22 · Rubin 13V HA '' · Rubin 13V OG ''
+    Rubin 9V 16 · Topas 11V 25 · Topas 13V HA 25 · Topas 13V OG 25
+  bewertung: "Stimmt exakt, in beiden Zeilen leer. Und seine Folgerung trifft: ausgerechnet das
+        Modell mit doppelter Datenlage kann die Schranke nicht passieren."
+
+was_diesen_bau_heraushebt:
+  - "Die Quelle ist wirklich gelesen worden, nicht zitiert: 5-CODE nennt Datei, Groesse, Blatt,
+     Spaltennummern und je Modell die QUELLZEILE. Ich konnte jede Angabe an der Datei nachpruefen
+     — das ist bei einer Quelle ausserhalb des Repos die einzige belastbare Form."
+  - "Er meldet seinen eigenen ersten Fehlversuch: 'Mein erster Leseversuch setzte
+     sharedStrings.xml voraus und brach ab; der zweite sieht nach.' Gemessen: die Mappe hat
+     wirklich keine."
+  - "Die verworfene Formelfassung steht MIT ihrer Fehlerquote im Blatt, statt weggelassen zu
+     werden — 2,6 % bis 18,2 % ueber 5.607 gerechnete Faelle."
+
+zusammenfassung: "Sechs von sieben tragen, und der fachliche Kern ist der staerkste Teil: die
+     Teilbarkeitsfalle ist erkannt, ausgerechnet und im Blatt belegt — ich habe sie nachgerechnet
+     und komme auf dieselben Zahlen. Zurueck geht der Auftrag wegen EINER Stelle: die als
+     Abweichung gemeldete Namenskorrektur ist selbst der Fehler. Die Quelle hat fuenf
+     Harzer-Zeilen, und die eine mit den Lattmassen heisst 'Harzer Pfanne 7'. Zwei Zeilen
+     Korrektur, kein neuer Inhalt."
+
+ballbesitz: generator
+```
