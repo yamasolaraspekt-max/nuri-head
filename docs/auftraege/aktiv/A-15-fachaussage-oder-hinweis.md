@@ -490,3 +490,155 @@ eigene_fehler_in_diesem_auftrag:
 
 ballbesitz: evaluator
 ```
+
+## §11 — Votum A-15 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "A-15"
+votum: NACHBESSERN
+fehlerklasse: BEWEIS
+abnahme_commit: "60d62d74"
+artefakt: "docs/BERICHT-A-15-fachaussage-oder-hinweis.md (289 Zeilen)"
+in_arbeit_commit: "473d1441"
+pruefstand: "worktree --detach auf 60d62d74"
+reihenfolge: "Menge, Normnennungen und Panel-Zuordnung habe ich SELBST gemessen, BEVOR ich
+     seine Tabellen gelesen habe — bei einem Messauftrag ist die Reihenfolge der einzige
+     Unterschied zwischen Pruefen und Nachlesen."
+
+messtisch_alle_vierzehn:
+  A-15-1:  GRUEN
+    beleg: "Eigene Messung VOR dem Lesen: grep -rlE '\\bbestanden\\b' ueber geometry/ +
+            app/dashboard/ -> 13 Dateien. Seine Liste ist Datei fuer Datei dieselbe.
+            Die Ausschluesse habe ich einzeln gegengeprueft: renderers/ 0, app/tools/ 0,
+            und die drei Darstellungs-Dateien (EngineFlaeche.tsx, Buehne.tsx,
+            EigenschaftenPanel.tsx) habe ich unabhaengig als die einzigen Traeger ausserhalb
+            der beiden Pfade gefunden — genau die drei, die er nennt."
+  A-15-2:  GRUEN — mit P2 (befund_2)
+    beleg: "Eigene Normmessung ueber alle dreizehn, Trefferzeilen gelesen. Seine acht mit Norm
+            und die Zeilennummern stimmen: sparren 2/7, treppenBerechnung 5/58, treppe2D 6,
+            wandaufbau 4/19, abwasser 4, kueche 4, enginePanels 124/125, werkzeugRegistry 13."
+  A-15-3:  GRUEN
+    beleg: "Beide Unschaerfen selbst nachgemessen: kuecheArbeitsdreieck:4 nennt DIN 18022
+            woertlich; fbhAuslegung und heizkreisVerteiler je 0 Normtreffer. Bestaetigt."
+  A-15-4:  GRUEN
+    beleg: "'vorgeschlagen' 14 Treffer, 'nicht entschieden' 12 — und die Kennzeichnung steht
+            IN JEDER Tabellenzeile der Achse-2-Tabelle, nicht nur in der Ueberschrift."
+  A-15-5:  GRUEN
+    beleg: "Ich habe die Panel-Zuordnung BLOCKGENAU selbst gezogen (Split an engineId, je Block
+            das berechne-Feld) — alle acht Zuordnungen identisch mit seiner Tabelle, inklusive
+            des mehrzeiligen heizkoerper-Blocks, an dem sein erstes Muster gescheitert war.
+            Seine Aussage 'engine-fensterprodukt liefert kein bestanden' habe ich nachgeprueft:
+            berechneUw liegt in fensterProdukt.ts, 0 Treffer fuer 'bestanden'. Stimmt.
+            keinGesamturteil ist genau einmal gesetzt (engine-sparren) — deckt sich mit meiner
+            A-14-Messung, wo ich Treppe, FBH und Abwasser mit Plakette im Browser gesehen habe."
+  A-15-6:  GRUEN
+    beleg: "Die fuenf ohne Norm decken sich mit meiner Messung. Und der Bericht zieht NICHT den
+            naheliegenden Fehlschluss: fbhAuslegung und heizkreisVerteiler nennen keine Norm und
+            stehen trotzdem als FACHAUSSAGE. Genau das verlangt das Kriterium."
+  A-15-7:  GRUEN
+    beleg: "git diff --name-only 60d62d74^ 60d62d74 -- resources/ app/ -> 0 Dateien."
+  A-15-8:  GRUEN
+    beleg: "SELBST am Elter von 473d1441 nachgemessen: Tafelzeilen IN_ARBEIT 0, Datensaetze
+            IN_ARBEIT 0 — beide Zahlen exakt wie veroeffentlicht. IN_ARBEIT 03:11:39, erste
+            inhaltliche Aenderung 03:32. Reihenfolge stimmt."
+  A-15-9:  GRUEN
+    beleg: "Alle drei A-Fundstellen selbst geoeffnet und woertlich getroffen:
+            sparrenBerechnung:10-12 'Ersetzt KEINE prueffaehige Statik' ·
+            fbhAuslegung:6-7 'GRENZE: hydraulischer Abgleich und normative Auslegung bleiben
+            Fach-Engine' · heizkreisVerteiler:6 'GRENZE: hydraulischer Abgleich/Rohrnetz'."
+  A-15-10: GRUEN
+    beleg: "Bei zweien steht 'nicht unterscheidbar (B/C)' statt einer Vermutung, mit dem Satz
+            welches Fachwissen fehlt. Das ist die geforderte Form — und die schwerere."
+  A-15-11: GRUEN in der Sache — P1 am Artefakt (befund_1)
+    beleg: "Die vier Treppen-Zeilen sind woertlich aus W-09/1-7 uebernommen, nicht neu gemessen,
+            und als Zulieferung gekennzeichnet. Ich habe die Quelle selbst abgenommen (8825f428),
+            die Zeilen decken sich."
+  A-15-12: GRUEN
+    beleg: "Drei Zweifelsfaelle mit erwogen/gesetzt/warum — und bei heizkreisVerteiler steht
+            ausdruecklich, dass er die hoehere NICHT gesetzt hat, mit Begruendung. Eine Regel,
+            die immer nach oben zeigt, waere keine Abwaegung."
+  A-15-13: GRUEN in der Sache — P2 an der Bilanzzeile (befund_3)
+    beleg: "Nachgezaehlt: Haupttabelle 7 Zeilen + Zulieferungstabelle 4 Zeilen = ELF, jede
+            Engine genau einmal, keine Zeile 'zu klaeren'."
+  A-15-14: GRUEN
+    beleg: "Die drei Regeln stehen woertlich — gegen das Auftragsblatt geprueft, Zeilen 384,
+            389, 391, Wortlaut identisch."
+
+befund_1:
+  klasse: BEWEIS
+  schwere: P1
+  was: "Der Bericht traegt ZWEI Abschnitte mit der Nummer A-15-11, und der erste sagt das
+        Gegenteil des zweiten."
+  gemessen: |
+    Z.135  "## A-15-11 · Die vier Treppen-Dateien — ZULIEFERUNG, und sie fehlt noch"
+           "W-09/1 steht heute auf BEREIT und ist nicht gebaut — die Zulieferung
+            existiert also noch nicht."
+    Z.202  "## A-15-11 · Die vier Treppen-Zeilen — ZULIEFERUNG aus W-09/1, nicht neu gemessen"
+           "Die Sperre ist aufgeloest. W-09/1 ist ABGENOMMEN."
+    Suche nach einem Ueberholt-Vermerk im ganzen Bericht: 0 Treffer.
+  warum_das_zaehlt: "Der erste Satz war um 08:38 nachweislich falsch: W-09/1 ist seit 08:19
+        ABGENOMMEN (mein Votum 8825f428, neunzehn Minuten vorher), und die Betreffzeile seines
+        eigenen Commits sagt 'DIE ZULIEFERUNG IST DA'. Ein Bericht, der auf derselben Frage zwei
+        Antworten gibt, laesst den Leser waehlen — und die falsche steht zuerst."
+  vergleich_zur_guten_form: "Der Generator hat denselben Fehlertyp bei W-09 vorbildlich geloest:
+        dort steht eine ⚠-Zeile 'mein erster Satz hier war falsch' statt einer spurlosen
+        Ueberschreibung. Genau diese Form fehlt hier."
+  behebung: "Den ersten Abschnitt streichen oder mit einem Satz als ueberholt markieren."
+
+befund_2:
+  klasse: BEWEIS
+  schwere: P2
+  was: "treppenTypen.ts steht unter 'FUENF nennen keine Norm'. Die Datei traegt in Zeile 4
+        'DIN-Stufung aus dem getesteten berechneTreppe'."
+  einordnung: "Seine Einstufung ist VERTRETBAR — 'DIN-Stufung' ist keine zitierbare Norm, und
+        treppe2D nennt im Unterschied dazu die Nummer. Aber A-15-2 verlangt B5 woertlich:
+        Trefferzeilen lesen. Wer nachgrept, findet die Zeile und findet sie im Bericht nicht
+        wieder — weder als Normnennung noch als bewusst nicht gezaehlt."
+  behebung: "Eine Halbzeile: 'treppenTypen:4 nennt DIN ohne Nummer und verweisend — nicht als
+        Normnennung gezaehlt, weil ...'"
+
+befund_3:
+  klasse: BEWEIS
+  schwere: P2
+  was: "Die Bilanzzeile sagt 'FACHAUSSAGE (7)' und listet SECHS Namen, plus
+        '(+ configuratorPackage: KEINE Engine)'."
+  gemessen: "sparrenBerechnung, abwassergefaelle, wandaufbau, fbhAuslegung, heizkreisVerteiler,
+        treppenBerechnung = sechs. configuratorPackage steht in derselben Klammer und traegt in
+        der Haupttabelle 'keine Engine / keine Klasse'. Die Sieben zaehlt es also mit, waehrend
+        der Text daneben sagt, es sei keine."
+  keine_folge_fuer_die_sache: "Die Gesamtzahl ELF stimmt (7 Tabellenzeilen + 4 Zulieferung), und
+        jede Engine traegt genau einen Vorschlag. Es ist die Bilanzzeile, nicht die Tabelle."
+
+befund_4:
+  klasse: BEWEIS
+  schwere: P2
+  was: "Die Ausschlusstabelle nennt '__tests__/** (14 Dateien)'. Selbst gezaehlt: 15."
+  beleg: "grep -rlE '\\bbestanden\\b' __tests__ -> 15, aufgelistet: abwassergefaelle,
+        enginePanelRest, enginePanelSparren, enginePanelTgaHeizung, enginePanelTreppe,
+        fbhAuslegung, heizkreisVerteiler, kuecheArbeitsdreieck, sparrenBerechnung,
+        sparrenVorbehalt, treppeKonsistenz, treppeValidierung, treppenBerechnung, wandaufbau,
+        werkzeugRegistry."
+  vermutung_ohne_gewicht: "sparrenVorbehalt.test.ts ist mit A-14 neu dazugekommen — vermutlich
+        stammt die 14 aus einer aelteren Messung. Nenne ich als Vermutung, nicht als Befund."
+
+was_ich_ausdruecklich_hervorhebe:
+  - "Jede einzelne Fundstelle, die ich geoeffnet habe, hat getroffen — drei A-Faelle, acht
+     Normzeilen, die Panel-Zuordnung, die Ausschluesse, die §3-Zahlen. Das ist bei einem Bericht
+     dieser Laenge nicht selbstverstaendlich."
+  - "Er meldet ZWEI eigene Messfehler vor dem Melden, darunter den mehrzeiligen berechne-Block,
+     ueber den sein Muster hinweglief. Ich habe genau dort blockgenau gegengemessen — seine
+     Korrektur ist richtig."
+  - "Er zieht den bequemen Fehlschluss NICHT: 'keine Norm, also Hinweis' waere leicht gewesen und
+     falsch. fbhAuslegung und heizkreisVerteiler stehen ohne Norm als FACHAUSSAGE."
+  - "Bei zwei Engines steht 'nicht unterscheidbar' statt einer Vermutung. Das ist die unbequeme
+     und die richtige Antwort."
+
+zusammenfassung: "Fachlich ist der Bericht vollstaendig und belastbar: alle vierzehn Kriterien
+     sind der Sache nach erfuellt, und ich habe die tragenden Zahlen unabhaengig nachgemessen
+     statt sie zu lesen — Menge 13, Normzeilen, Panel-Zuordnung, §3-Zahlen, alle drei A-Faelle.
+     Zurueck geht er wegen EINER Stelle: zwei Abschnitte derselben Nummer mit gegensaetzlicher
+     Aussage, die aeltere zuerst und unmarkiert. Das ist in einer Minute behoben, und ich halte
+     denselben Massstab wie bei W-09, wo ich denselben Fehlertyp beanstandet habe."
+
+ballbesitz: generator
+```
