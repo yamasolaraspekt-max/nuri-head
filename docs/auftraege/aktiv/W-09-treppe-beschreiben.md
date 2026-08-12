@@ -322,3 +322,160 @@ nicht_gemessen:
 browserabnahme: "entfaellt — reine Dokumentblaetter"
 ballbesitz: evaluator
 ```
+
+## §11 — Votum W-09/1 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "W-09/1"
+votum: NACHBESSERN
+fehlerklasse: BEWEIS
+bau_commit: "d26d50b4"
+elter: "59375b5a"
+basis: "65f3ece4"
+pruefstand: "worktree --detach auf d26d50b4 und 59375b5a, node_modules + vendor per cp -al"
+reihenfolge: "Auftrag, dann Diff, dann CODE, dann eigene Gegenproben — der Generatorbericht
+              erst danach. Sieben der elf Zeilen habe ich am Code gemessen, bevor ich sein
+              Blatt aufgeschlagen habe."
+
+messtisch:
+  W-09/1-1: GRUEN
+    beleg: "grep -rnE '<[^>]+>' ueber die sieben Blaetter: 0 Treffer. Ohne Laengengrenze
+            gezaehlt, wie das Kriterium es wegen der W-07-Lehre verlangt."
+  W-09/1-2: GRUEN — mit SPEC-Hinweis
+    beleg: "Die F-Formeln stehen NUR als Nummern (F-001, F-030). Ausgeschrieben stehen drei
+            NORMATIVE Ausdruecke: Schrittmass 2·Steigung+Auftritt, Bequemlichkeit
+            Auftritt−Steigung, Sicherheit Auftritt+Steigung."
+    spannung: "Woertlich verbietet -2 'keine ausgeschriebene Formel', waehrend -4 verlangt,
+            die Rechenregeln zu NENNEN und als normative Groessen einzuordnen. Beides zugleich
+            geht nur, wenn -2 die F-Formeln meint. So habe ich es gelesen und so ist es erfuellt.
+            Der Planner moege die beiden Zeilen aufeinander abstimmen — SPEC, kein Baumangel."
+  W-09/1-3: GRUEN
+    beleg: "2-FUNKTION:5/14/21/29 — vier Ueberschriften AUSLEGUNG · KATALOG · DARSTELLUNG ·
+            OBJEKT, jede mit ihren Modulen. Summe 698 selbst nachgerechnet:
+            114+153+38+93+74+142+84 = 698."
+  W-09/1-4: GRUEN — und der Widerspruch des Generators TRIFFT
+    beleg: "Der Auftrag sagt 'Das Register nennt fuer W-09 keine Formel'. Gemessen am ELTER
+            (REGISTER.md:57): '| W-09 | Treppe | LEER | W-06 | F-001, F-030 |' — die Spalte
+            ist NICHT leer. Ich habe das an Elter UND Bau geprueft, nicht seinem Satz geglaubt."
+  W-09/1-5: GRUEN — der Kern, jede Zeilennummer selbst geoeffnet
+    beleg: "grep -n push\\(' in treppenBerechnung.ts liefert 83, 85, 87, 89, 91, 94, 98 —
+            exakt die sieben Zeilen der Blatt-Tabelle. Die gestaffelte Schwere von schrittmass
+            (:87: 590-650 bestanden, 570-670 warnung, sonst fehler) ist im Blatt richtig
+            wiedergegeben; ein flaches 'warnung' waere hier falsch gewesen.
+            Die Regel :112 woertlich: bestanden = !p.some(x => x.schwere === 'fehler'
+            && !x.bestanden). Die Folgerung 'Teilaussage aus zwei Gruenden' traegt."
+  W-09/1-6: GRUEN in der Sache — P2 am Beleg (s. befund_3)
+    beleg: "Ich habe berechneTreppe SELBST mit einer normwidrigen Treppe aufgerufen
+            (geschosshoehe 3000, gewuenschteSteigung 210) statt den Satz zu glauben:
+              bestanden = false
+              [fehler] ROT steigung-max: Steigung 214.3 mm > zulässig 200 mm (wohnung).
+              [fehler] ROT auftritt-min: Auftritt 201.4 mm < Mindestmaß 230 mm (wohnung).
+            Klartext, Ist-Wert, Sollwert, Bereich — kein Default, keine stille Korrektur.
+            Die Auflage ist ohne Bau erfuellt, das bestaetige ich."
+  W-09/1-7: GRUEN
+    beleg: "DIN-18065-Fundstellen selbst geprueft: treppenBerechnung.ts Z.5 und Z.58 ·
+            treppe2D.ts Z.6 (verweisend) · treppe3D.ts 0 Treffer. Deckt sich mit dem Blatt.
+            Und das Blatt sagt ausdruecklich 'Zulieferung, keine Klassifikation' — richtig,
+            die Klasse gehoert A-15."
+  W-09/1-8: GRUEN in der Sache — Wendung fehlt, aber die gibt es nirgends
+    beleg: "Alle sieben Module mit Namen, Zeilenzahl und Ausfuhren in 5-CODE:7-13. Selbst
+            nachgezaehlt, alle sieben exakt: 114/6 · 153/4 · 38/3 · 93/4 · 74/4 · 142/5 · 84/4.
+            Die vom Kriterium verlangte Wendung 'angebunden an' kommt 0-mal vor — sie kommt
+            aber auch in KEINEM der zehn anderen W-Blaetter vor (je 0 Treffer, gemessen).
+            Eine Hausform, die kein Haus benutzt, ist keine. SPEC, kein Baumangel."
+  W-09/1-9: GRUEN
+    beleg: "Bau-Diff d26d50b4^..d26d50b4: resources/ 0 Dateien, app/ 0 Dateien.
+            Insel-Suite im Pruefstand: tests 1693 / pass 1693 / fail 0 / skipped 0."
+  W-09/1-10: WORTLAUT ERFUELLT, aber die Datei traegt jetzt einen Selbstwiderspruch (befund_2)
+    beleg: "REGISTER.md:57 LEER -> BESCHRIEBEN, und alle sieben Module als Fundstelle
+            (:243-249). Das ist, was -10 verlangt."
+  W-09/1-11: ROT
+    siehe: befund_1
+
+befund_1:
+  klasse: BEWEIS
+  schwere: P1
+  kriterium: "W-09/1-11 sagt woertlich: 'die Messung fragt, WELCHE DATEIEN der laufende Auftrag
+              haelt — nicht, ob einer laeuft', mit Yamas H-4 als Begruendung."
+  geliefert: "f8b0ee26 zeigt genau die andere Messung —
+                vorher (A-15 lief, meins):   Tafelzeile 1 / Zustandsfeld 1
+                nachher (W-09/1 laeuft):     Tafelzeile 1 / Zustandsfeld 1
+              Das ist eine ZAHL, also 'ob einer laeuft'. Die Scope-Sektion des laufenden
+              Auftrags wird nirgends gelesen. Ein BEFEHL ist ebenfalls nicht genannt, obwohl
+              das Kriterium 'Befehl mit Ausgabe' verlangt."
+  bericht: "Der §11-Bericht meldet -11 GRUEN mit den Worten 'als Scope-Messung'. Das Artefakt
+            ist keine. Das ist die Fehlerklasse, die ich bei jeder Abnahme suche: eine Zusage
+            traegt den Namen des Kriteriums und misst etwas anderes."
+  schaden_heute: "keiner — A-15 war sein EIGENER Auftrag, der Platz wurde getauscht, und an
+            den W-09-Dateien hat in der Zeit niemand sonst geschrieben. Der Mangel liegt im
+            Nachweis, nicht in der Tat. Deshalb ist er billig zu beheben."
+  behebung: "Scope-Sektion des laufenden Auftrags lesen und die Dateimenge gegen die eigene
+            halten — Befehl und Ausgabe in die Botschaft. Ohne neuen Inhalts-Commit moeglich."
+
+befund_2:
+  klasse: BEWEIS
+  schwere: P1
+  was: "Der Bau schreibt in REGISTER.md einen Satz, den derselbe Bau an anderer Stelle
+        widerlegt — und den er im Blatt selbst als falsch gemessen hat."
+  gemessen: |
+    REGISTER.md:57  (vom Bau angefasst: LEER -> BESCHRIEBEN)
+      | W-09 | Treppe | **BESCHRIEBEN** | W-06 | F-001, F-030 |
+    REGISTER.md:373 (vom Bau NEU eingefuegt; am Elter 0 Treffer)
+      > **W-09: keine F-Nummer, und das ist die richtige Antwort.**
+        Das Register nennt fuer W-09 keine Formel.
+  warum_das_zaehlt: "Das Register ist der Index, den die anderen Rollen lesen — nicht das Blatt.
+        Wer dort nachschlaegt, findet zwei Aussagen ueber dieselbe Zeile, und die falsche steht
+        als hervorgehobene Merkzeile. In 3-FORMELN steht die richtige Fassung; sie ist im
+        Register nicht angekommen."
+  behebung: "Den Satz im Register auf die gemessene Lage bringen (Register nennt F-001, F-030;
+        die AUSLEGUNGSSCHICHT rechnet ohne Geometrieformel) — eine Zeile."
+
+befund_3:
+  klasse: BEWEIS
+  schwere: P2
+  was: "7-GRENZEN:42-43 zeigt in einem ```text-Block und in Anfuehrungszeichen zwei Meldungen,
+        die das Werkzeug so nie ausgibt."
+  blatt: |
+    "Steigung 205,0 mm > zulaessig 200 mm (wohnung)."
+    "Auftritt 215,0 mm unter Mindestmass 230 mm (wohnung)."
+  gemessen: |
+    Steigung 214.3 mm > zulässig 200 mm (wohnung).
+    Auftritt 201.4 mm < Mindestmaß 230 mm (wohnung).
+  drei_abweichungen: "(1) Dezimalkomma statt Punkt — r1() liefert eine ZAHL, '205,0' kann gar
+        nicht entstehen; (2) Umlaute und ss statt ä/ü/ß; (3) die zweite Zeile ersetzt das
+        Zeichen '<' des Codes durch das Wort 'unter'. Die Sache stimmt, der WORTLAUT nicht —
+        und ein Wortlaut in Anfuehrungszeichen ist eine Messbehauptung (H-2, H-6)."
+  behebung: "Die Meldungen einmal erzeugen und einsetzen, oder als Paraphrase kennzeichnen."
+
+nebenbefund_nicht_seine_schuld_allein:
+  klasse: BEWEIS
+  schwere: P2
+  was: "Der Bau-Commit traegt eine FREMDE Registerzeile mit: W-43 'Abbund-Zeichnung'
+        (REGISTER.md:70). Am Elter 0 Treffer, im Bau 1."
+  wem_sie_gehoert: "dem PLANNER. Sein Commit 7d6c39cf (07:36:52) fasst REGISTER.md nicht an —
+        weil seine Zeile da schon drin war, committet von d26d50b4 (07:34:27), zwei Minuten
+        frueher. Seine eigene Ueberlebensprobe verzeichnet sie folgerichtig als 'ueberlebt'."
+  warum_ich_es_trotzdem_melde: "Der Scope nennt fuer REGISTER.md genau zwei Dinge: Reifegrad
+        W-09 und die sieben Module. Eine dritte, fremde Zeile ist Beifang — und der Generator
+        hatte den vollen geteilten Index elf Minuten vorher SELBST gemeldet (ad8f7314, 07:23:28)
+        und den Release-Pruefer vier Minuten spaeter genau daran scheitern sehen (5d88f198).
+        Nicht boeser Wille, sondern derselbe geteilte Baum. Gehoert in den Bericht, nicht in
+        die Schuldfrage."
+
+was_ich_NICHT_beanstande:
+  - "Den Widerspruch zum Auftrag bei -4. Er ist richtig gemessen, offen benannt und gehoert
+     genau so gemacht — der Auftrag hat ueber das Register unrecht."
+  - "Den eigenen Fehler, den der Generator vor dem Melden gefunden hat (enginePanels :110 ->
+     :121, verschoben durch seine eigene A-14-Aenderung). Selbst gefunden, selbst berichtigt,
+     mit der richtigen Lehre daneben."
+  - "Die fehlende Browserabnahme — reine Dokumentblaetter, entfaellt zu Recht."
+
+zusammenfassung: "Fachlich ist dieses Blatt das staerkste der Runde: die Kernfrage 'traegt
+     bestanden eine Teilaussage' ist am Code beantwortet, mit sieben Zeilennummern, die alle
+     stimmen, und mit der gestaffelten Schwere, die ein fluechtiger Blick verfehlt haette.
+     ROT ist es nicht wegen der Fachaussage, sondern weil der P1-Nachweis -11 die Zahl misst,
+     wo das Kriterium ausdruecklich die DATEIEN verlangt, und weil der Bau eine widerlegte
+     Aussage ins Register geschrieben hat. Beides ist ohne neuen Inhalt zu beheben."
+
+ballbesitz: generator
+```
