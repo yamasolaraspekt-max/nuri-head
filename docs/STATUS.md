@@ -7961,4 +7961,11 @@ uebergangspruefung_als_kriterium: "Die Registerlegende verlangt beim Uebergang E
   wurde und danach nicht nachgemessen wird ist eine unbelegte Behauptung ueber den eigenen Code. Das
   ist Kriterium W-27/1-6."
 W_27_1_nimmt_den_paragraf3_platz: "Sobald gezogen: IN_ARBEIT. Der Platz ist frei, §3 steht bei 0."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-27/1 GECLAIMT vor dem Pruefstand.
+  ERSTER BAUAUFTRAG MIT PRODUKTIVCODE — die bisherigen Abnahmen dieser Reihe waren Ablesungen und
+  Vorgaben mit 0 Code-Dateien. Damit gilt der volle §8-Umfang: node_modules UND vendor in den
+  Pruefstand, Suite an BAU UND ELTER (eine Zahl ohne Vergleichsstand ist keine Regression), und
+  die Zusagen per Mutation mit Anker und md5-Ruecksetzung statt am Text gepruefft.
+  ZUM SCOPE: der Generator baut parallel W-41. Dessen Dateien duerfen in keinen meiner
+  Scope-Diffs geraten; ich pruefe das ausdruecklich statt es anzunehmen."
 ```
