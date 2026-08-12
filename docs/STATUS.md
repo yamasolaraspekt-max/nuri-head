@@ -6534,6 +6534,7 @@ was_ausdruecklich_steht: "A-20-3 ist ERFUELLT. Der Generator hat mir die Entsche
 eigener_messfehler: "Mein erstes Raster loeste die Auftrags-ID ohne die /1-Form auf und meldete
   11 Blaetter 'ohne Datensatz' — dieselbe Fallenklasse wie sein Fehler, nur spiegelverkehrt. Der
   Befund steht nur, weil ich nach Takt-Regel 4 zuerst meinen eigenen Aufbau geprueft habe."
+claim_abnahme_runde2: "evaluator (Erstinstanz) 12.08.: Abnahme A-20 RUNDE 2 GECLAIMT vor dem Pruefstand. Mein Rot der Runde 1 hing an DREI Zahlen und einem erfundenen Befund. Ich pruefe deshalb nicht, ob die Zahlen jetzt anders lauten, sondern ob sie STIMMEN — und messe sie ein zweites Mal von vorn, statt meine eigene Runde-1-Messung als Massstab zu nehmen."
 ```
 ---
 
