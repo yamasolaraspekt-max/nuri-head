@@ -38,7 +38,7 @@
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
-| **A-17** Zwei Engines schweigen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
+| **A-17** Zwei Engines schweigen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `ea9522bc` | **löst A-15s letzte offene Achse-2-Zeile auf, ohne Fachurteil** — die `Schicht` hat drei Felder (`name?`, `dicke`, `lambda`), für Glaser fehlen μ/s_d **und** Klima: der Taupunkt ist **nicht rechenbar**, nicht »nicht implementiert« · 10 Feuchte-Begriffe = 0 in der Datei · Pflichtfeld nach A-14/A-17-Muster · **kein Panel, keine Plakette zu streichen** · 2. Posten: »speist Heizlast« gegen **0** Aufrufe aus `app/` |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
@@ -2187,9 +2187,20 @@ naechster_schritt: "Yama entscheidet die Weiche. Danach: Plan-Pruefer DoR."
 auftrag: "A-17"
 titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach dem A-14-Muster, mit vorhandenem Bauteil"
 datei: docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft — A-17-7 verlangt eine echte Browserabnahme mit md5 des Buendels)
 basis_sha: 3678d1de
+warum_A17_und_nicht_B7: "B7 ist die naechste Barriere und fasst wieder scripts/commit-pruefen.sh an.
+  B6 liegt dort seit 6ecf911c auf CODE_FERTIG zur Abnahme — noch OHNE Claim, aber nach der am
+  12.08. verankerten Regel ('§3 zaehlt den Bau, nicht die Pruefung') pruefe ich das selbst, statt
+  mich auf die Schranke zu verlassen. Zweitens ist B7 P2, A-17 ist P1. Zurueckgestellt, nicht
+  uebersprungen — wie B6 in der Runde davor.
+BEFUND ZU A-16, den ich beim Waehlen gemessen habe: der A-16-Block widerspricht sich SELBST.
+  Zustandsfeld sagt 'BEREIT / ballbesitz generator', zwei Zeilen darunter steht
+  keine_dor_von_mir: 'Der Ballbesitz liegt bei YAMA' und naechster_schritt: 'Yama entscheidet die
+  Weiche. Danach: Plan-Pruefer DoR.' Ein DoR-Feld gibt es im Block nicht. Entweder ist BEREIT zu
+  frueh gesetzt oder die zwei Felder sind veraltet — ich fasse A-16 deshalb NICHT an. Wer es
+  aufloest, spart sich einen Bau auf ungepruefter Grundlage."
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): JEDE Behauptung selbst gemessen, und eine davon haette ich beinahe falsch beanstandet. GEMESSEN: keinGesamturteil steht heute genau EINMAL in enginePanels.ts, beim Panel engine-sparren (A-14) — die beiden Kandidaten engine-fbh (Z.231) und engine-abwasser (Z.323) tragen es NICHT, die Rot-Lage haelt also. Beide Dateikoepfe habe ich selbst gelesen: abwassergefaelle.ts nennt 'Reine Pruef-/Rechenlogik nach DIN 1986-100 (VEREINFACHT)', fbhAuslegung.ts nennt 'GRENZE: hydraulischer Abgleich und normative Auslegung bleiben Fach-Engine — hier Rohrlaengen/Kreise/Plausibilitaet'. Beide Zitate stehen woertlich so im Code. Neun Kriterien."
 mein_fuenfter_beinahe_fehlbefund: "Meine erste Messung suchte in beiden Modulen nach 'DIN |EN 1' und fand bei fbhAuslegung NULL — ich war im Begriff zu beanstanden, dass ein Auftrag eine Engine schweigen laesst, die gar keine Norm nennt. FALSCH IN DER PRAEMISSE: A-17 begruendet die FBH-Engine NICHT mit einer Normnennung, sondern mit ihrem SELBSTBENANNTEN Geltungsbereich ('normative Auslegung bleibt Fach-Engine'). Das ist die staerkere Begruendung, nicht die schwaechere — eine Engine, die selbst sagt, dass die normative Auslegung woanders passiert, darf erst recht nicht 'alle Pruefungen bestanden' behaupten. Fuenfter Beinahe-Fehlbefund heute, und zum zweiten Mal in Folge VOR dem Melden bemerkt."
