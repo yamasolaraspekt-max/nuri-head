@@ -2183,6 +2183,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## A-18: DoR bestanden, BEREIT — und ein Befund an meiner EIGENEN Leerstellen-Probe (plan-pruefer 12.08.)
+
+```yaml
+dor_ergebnis: "A-18 (Vorbehalt ins UErgebnis) ist BEREIT. Spur A, Ball beim Generator. NEUN Behauptungen des Blattes selbst nachgemessen, alle halten: Schicht traegt genau name?/dicke/lambda (Z.9-15, kein mu, kein sd) · die zehn Feuchte-Begriffe je 0 Treffer · Dateikopf nennt DIN EN ISO 6946, nicht 4108-3 · genau EIN Aufrufer ausserhalb der Tests (faehigkeiten.ts:81, zustand in_entwicklung, kein Panel — also kein Gesamturteil zu streichen wie bei A-14/A-17) · Rot-Lage haelt: 'vorbehalt' in UErgebnis 0 Treffer · das Muster N003_VORBEHALT existiert wirklich (sparrenBerechnung.ts:100 und :149) · der Wortlaut steht zeichengenau im Blatt · A-18-8 haelt (Dateikopf Z.2 verspricht 'speist Heizlast & Dach', Aufrufe aus app/: 0) · Rueckweg reiner Revert, Entdeckung ueber tsc, weil das Feld PFLICHT ist."
+die_w07n_lehre_angewandt_und_sie_haelt_hier: "Mein W-07N-Fehler war ein zu enger Scope, weil ich die Rot-Lage falsch mass. Also habe ich hier GENAU DAS geprueft, was dort fehlte: ein PFLICHTfeld zwingt JEDE Stelle, die den Typ konstruiert, es zu setzen — gaebe es mehrere, waere der Scope wieder zu eng und der Generator stuende erneut vor der Wahl zwischen Zweck und Wortlaut. GEMESSEN: UErgebnis wird an GENAU EINER Stelle gebaut (wandaufbau.ts:64), der Typ kommt sonst nur in seiner eigenen Definition und als String in der Registerzeile vor. Der Scope ist vollstaendig."
+mein_beinahe_fehlbefund_und_warum_ich_ihn_nenne: "Ich habe 'zehn Testzusagen' zuerst widerlegt geglaubt: gezaehlt wurden SECHS test()-Faelle, und expect() kommt 0 mal vor. Weitergemessen statt gemeldet — die Datei nutzt node:assert, und die assert-Aufrufe sind exakt ZEHN (Z.14,15,16,21,22,28,29,35,42,47; die elfte assert-Zeile ist der Import). Beide Zahlen stimmen, sie messen Verschiedenes. Das waere mein sechster Beinahe-Fehlbefund dieser Klasse gewesen, und wieder war die Ursache das Verfahren, nicht der Gegenstand."
+scheinwiderspruch_geprueft_und_aufgeloest: "A-18-5 verlangt die zehn Feuchte-Begriffe bei 0, waehrend der Vorbehaltstext 'Tauwasser', 'Schimmelrisiko', '4108' und 'Diffusionswiderstaende' NENNEN muss. Das sieht nach einem Selbstwiderspruch der Kriterien aus — das Blatt loest ihn ausdruecklich auf: die Engine SPRICHT ueber die Groessen, sie RECHNET sie nicht, und geprueft wird, dass kein Rechenausdruck hinzugekommen ist. Ich habe den Punkt gesucht, um ihn als SPEC-Luecke zurueckzugeben; er ist bereits beantwortet."
+BEFUND_an_meiner_eigenen_probe: "A-18 hat KEINE Zeile in der AUFTRAGSTAFEL — selbst gezaehlt: 0 Treffer. Und das faellt meiner Wache-Probe NICHT auf, weil sie nur EINE Richtung prueft: fuer jedes BLATT, ob ein BLOCK existiert. Die Gegenrichtung (fuer jeden Block eine Tafelzeile) fehlt — dieselbe Einseitigkeit, die ich heute frueh schon bei der Doppelfuehrung hatte. Ich lege die Zeile NICHT selbst an: eine fehlende Zeile NACHZIEHEN ist etwas anderes als eine neue ANLEGEN, und die Tafel gehoert dem Planner. Ball dafuer beim Planner; meine Probe erweitere ich um die Gegenrichtung."
+```
+---
+
 ## Der Beifang-Zaehler ist blind fuer LOESCHUNGEN — beinahe haette ich meinen eigenen Block getilgt (plan-pruefer 12.08.)
 
 ```yaml
@@ -4176,8 +4187,8 @@ Bau** auf 11 — er zählt heute 10 korrekt, nicht zu wenig. Wer nach dem Bau 11
 ```yaml
 auftrag: "A-18"
 datei: docs/auftraege/aktiv/A-18-wandaufbau-vorbehalt-uwert.md
-zustand: ENTWURF
-ballbesitz: "plan-pruefer (DoR)"
+zustand: BEREIT
+ballbesitz: "generator"
 basis_sha: ea9522bc
 anlass: "Yamas Auftrag 12.08. — 'bitte das loesen, das ist dein Auftrag konzeptionell', auf die
          vorgelegte Analyse zur letzten offenen Achse-2-Zeile."
