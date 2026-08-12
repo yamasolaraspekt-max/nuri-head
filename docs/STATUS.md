@@ -44,7 +44,7 @@
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | **`BETRIEBSBESTAETIGT`** | – | Abnahme `53060551` · Runde 1 `2143c5db` | **8/8** · P1 behoben, falscher Vermerk als **ZURÜCKGEZOGEN** stehen gelassen mit Ursache (14-Zeichen-Kürzung, nachgezählt) · die acht Dubletten-Zahlen des neuen Kriteriums an der Quelle nachgemessen, deckungsgleich · P2: Adressierung steht in `5-CODE` statt in `2-FUNKTION` |
-| **W-27** Dachkantentypen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
+| **W-27** Dachkantentypen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c3bc1169` | **7/7** · acht Prototyp-Fundstellen einzeln geöffnet, alle exakt · Entscheidungsregel **gegen den Prototyp gelegt**, alle vier Ausgänge inkl. `neutral` · Lücke als **Kantentyp** benannt, daneben je Begriff die Trefferzeile des Vorhandenen · Prototyp und `resources/` unberührt |
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
@@ -6331,8 +6331,34 @@ die_auflage_ist_der_kern: "W-27-3 verlangt nicht nur die Zahl, sondern JE BEGRIF
   MUSTERS ist kein Beleg fuer die Abwesenheit der SACHE. Ich baue mit dieser Auflage als
   Leitlinie, nicht als Nebenbedingung."
 dor_beleg: "plan-pruefer 12.08., Commit 2c0e4ede — DoR BESTANDEN mit AUFLAGE. Selbst gemessen: 'ortgang' als String-Literal 0 Dateien, TopologyJoinType 0, cornerType 0 — alle drei Zahlen des Blattes halten. AUFLAGE: die FORMULIERUNG ging weiter als die Zahl ('gibt es in der Insel NICHT'), gemessen traegt die Insel die exportierte Funktion ortgangFlaechenlaengeM (dachformVorlagen.ts:291), das Feld ortgangausbildung (:127, :1386) und 20 Treffer fuer Ortgang gross. Es fehlt der KANTENTYP, nicht die Sache — 7-GRENZEN muss das so schreiben. Vom Planner in cdcadc1d an vier Stellen berichtigt, von mir nachgemessen."
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an c3bc1169, Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen. Reiner Doku-Scope, neun Werkbank-Blaetter; must_preserve
+  SELBST nachgemessen mit resources/ 0, app/ 0, database/ 0. Kette Vorfahr, Geheimnisse 0.
+  DEN TRAGENDEN PUNKT W-27-2 SELBST GEGEN DEN PROTOTYP GELEGT: die Beschreibung in 2-FUNKTION
+  deckt sich Zeile fuer Zeile mit analyzeTopology — Default neutral (:215), bei zwei Traufen
+  kehle wenn innen sonst grat (:216), ortgang bei Traufe an Giebel (:217), Zaehlung :224-228.
+  Alle VIER Ausgaenge beschrieben, auch der stille vierte, und das Blatt sagt dazu den richtigen
+  Satz: neutral ist kein Restfall, sondern der haeufigste. Zeilenzahl des Prototyps eigens
+  nachgezaehlt: 3786, exakt. Die drei Belegstellen aus W-27-3 einzeln geoeffnet und gelesen —
+  dachformVorlagen.ts:291 ortgangFlaechenlaengeM, :127 das Feld ortgangausbildung,
+  schifterListe.ts:58 klassifiziereSchifter. Alle drei tragen, was das Blatt ihnen zuschreibt."
+was_dieses_blatt_NICHT_ist: "W-27 beschreibt einen PROTOTYP, keinen Bau in der Insel. Das ist
+  kein Mangel, sondern der Zweck eines C-Blattes mit Ziel ENTWORFEN — und der Grund, warum das
+  Grundtor hier Doku-Scope ist: der Prototyp selbst wurde 0-mal angefasst."
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt. WILDBETRIEBS-BELEG: die
+  Beschreibung ist gegen den echten Prototypcode gehalten, nicht gegen eine Kopie — dieselbe
+  Datei, die der naechste Bau als Vorlage liest."
+mein_zwoelfter_beinahe_fehlbefund: "Mein erster Schreibversuch traf den Anker nicht, weil der
+  Evaluator das Feld zwischenzeitlich von evaluator auf release-pruefer gesetzt hatte. Die
+  Zustandsersetzung lief, die Ballersetzung nicht — und die naechste Driftmessung zeigte
+  Tafel Strich gegen Datensatz release-pruefer. Ich war im Begriff zu melden, ich haette selbst
+  ein doppeltes Ballfeld erzeugt, also genau den Fehler den ich heute zweimal bei anderen
+  gemeldet habe. Gelesen statt geschlossen: es gab keine Dublette, mein Vermerk war schlicht
+  NICHT eingefuegt worden. Ein Skript, dessen Anker nicht trifft, schweigt — und Schweigen sieht
+  aus wie Erfolg. Deshalb steht die Gegenprobe jetzt vor dem Bericht, nicht danach."
 zweites_ballfeld_berichtigt: "release-pruefer 12.08.: derselbe Fall wie bei A-16, keine zwei
   Stunden spaeter. Der Generator hat beim Fertigmelden ein NEUES Feld ballbesitz_bau mit
   evaluator angelegt, waehrend das massgebliche ballbesitz noch generator trug; die Tafelzeile
