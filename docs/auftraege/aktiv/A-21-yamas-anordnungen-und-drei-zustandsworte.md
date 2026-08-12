@@ -171,3 +171,151 @@ was_dieser_auftrag_NICHT_ist: "Keine Aenderung an einem Auftragsstand ausser W-2
 E2_bleibt_unberuehrt: "14 von 14 gemessen vom plan-pruefer — eine Regel, die gelebt wird, braucht
         keinen Auftrag."
 ```
+
+
+## §11 — Votum A-21 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "A-21"
+votum: ABGENOMMEN
+geprueft_an: "74efb8c2"
+elter: "3026456e"
+scope_diff: "3 Dateien, +251/-3: ARBEITSREGELN.md, BERICHT-A-21 (neu), STATUS.md.
+  0 Code-Dateien. Der Bau-Commit traegt AUSDRUECKLICH NICHT die Fertigmeldung — das ist
+  richtig gedacht, denn A-21-6 misst genau diesen Commit, und die eigene CODE_FERTIG-Zeile
+  waere darin eine geaenderte Zustandszeile ausserhalb von W-21L gewesen."
+pruefstand: "git worktree add -q --detach auf 74efb8c2."
+browserabnahme: "ENTFAELLT — keine sichtbare Wirkung, 0 Code-Dateien."
+paragraf_15: "GEGENSTANDSLOS — kein DB-Zugriff im Scope."
+
+messtisch:
+
+  A-21-1_E1_in_ARBEITSREGELN:
+    urteil: ERFUELLT
+    vorher_nachher: "E1 im Regelwerk: Elter 3026456e 0 Treffer, Bau 2. Trefferzeilen Z.504
+      (Ueberschrift) und Z.675 (Zeile der E3-Tabelle, die auf E1 verweist)."
+    steht_es_im_richtigen_paragrafen: "Z.504 liegt unter '## 11. Kurze Beweisberichte' (Z.419) —
+      ich habe die umgebende Ueberschrift maschinell bestimmt, nicht geschaetzt."
+    der_befehl_woertlich: "`git show HEAD:<pfad> | diff - <pfad>` steht als Codeblock da, dazu
+      die Umkehrung `git show <bau-sha> -- <pfad>` mit der Begruendung, dass auch ein LEERER
+      git diff kein Beleg ist. Das ist mehr als A-21-1 verlangt und genau die Lehre aus meinem
+      A-20-5-Befund."
+    yamas_herkunft: "'Yamas Anordnung vom 10.08., erteilt durch den Release-Pruefer in seinem
+      Namen (Prozesspruefung 03)'. Ich habe docs/PROZESSPRUEFUNG-03.md geoeffnet: 168 Zeilen,
+      E1 in Z.131, E3 in Z.142, Empfehlung beider in Z.147. Die Herkunft traegt."
+
+  A-21-2_E3_beim_zaehler:
+    urteil: ERFUELLT
+    vorher_nachher: "E3: Elter 0, Bau 1 (Z.663)."
+    steht_es_beim_zaehler: "Z.663 liegt unter '## 13. Pflichtpruefung nach jeweils zehn Aufgaben'
+      (Z.618) — das IST der Zaehler. Die Unterform steht als Spalte in einer Tabelle mit drei
+      Zeilen (Ort/V2, Zeitpunkt/V1, Zustand/NEU), nicht als fuenfte Klasse."
+
+  A-21-3_ZURUECKGESTELLT_am_zustandsort_abgeschafft:
+    urteil: ERFUELLT
+    teil_a_zustandsort: "Mit einem Muster gemessen, das den Zustandsort BINDET, wie das Kriterium
+      es verlangt: Tafelzeilen mit ZURUECKGESTELLT in der Zustandsspalte und `^zustand:
+      ZURUECKGESTELLT`. Elter 1 + 1, Bau 0 + 0. W-21L traegt DECISION_BLOCKED an beiden Orten."
+    teil_b_die_belege_bleiben: "Das ist der zweite Teil des Kriteriums, und er ist der wichtigere.
+      Gemessen am Diff: der Bau entfernt GENAU 2 Vorkommen von ZURUECKGESTELLT, und beide sind
+      die Zustandsorte (Tafelzeile und zustand:-Feld von W-21L). Entfernte Belege oder
+      Fliesstextstellen: 0. Kein Beleg ist vernichtet worden."
+    BEFUND_OHNE_ROT_die_volltextzahl: "Bericht und Statusfeld behaupten 'Volltext bleibt bei 14'
+      mit der Rechnung '15 am Elter − 2 umgestellte + 1 neuer = 14'. GEMESSEN: der Bau fuegt
+      DREI neue Vorkommen ein, nicht eines — 15 − 2 + 3 = 16, und ich messe am Bau-Stand
+      tatsaechlich 16. Die zwei nicht mitgezaehlten sind seine eigenen Erlaeuterungsfelder in
+      docs/STATUS.md: `ZWEI_KRITERIEN_STOSSEN_ANEINANDER...` (enthaelt 'ZURUECKGESTELLT ->
+      DECISION_BLOCKED') und — daran liegt die Pointe — das Feld
+      `volltext_bleibt_14_und_das_ist_absicht` SELBST. Die Behauptung erhoeht den Zaehler, den
+      sie beziffert.
+      KEIN ROT, und zwar aus drei Gruenden: das Kriterium misst ausdruecklich NICHT ueber
+      Volltext, sondern zustandsortgebunden; sein sachlicher Kern (die Belege bleiben stehen)
+      ist gemessen richtig; und die Zahl steht im Bericht, nicht im Regelwerk. Ich habe
+      dieselbe Klasse eine Runde zuvor bei A-20 als Hinweis behandelt (die '31 mit
+      Anfuehrungszeichen', am eigenen Commit schon 32) und bleibe dabei.
+      Der Planner hat es im selben Blatt schon richtig benannt: 'in einer Datei, in die fuenf
+      Rollen gleichzeitig schreiben, ist eine Zeilennummer kein Beleg sondern ein
+      Verfallsdatum'. Fuer eine Volltextzahl in derselben Datei gilt das genauso — die 14 des
+      Blattes stimmte fuer den DoR-Stand 45babc3a, den ich nachgemessen habe, und war bei
+      Baubeginn bereits 15."
+
+  A-21-4_ERLEDIGT_und_VORLAGE_in_paragraf3:
+    urteil: ERFUELLT
+    vorher_nachher: "Im Regelwerk am Elter: ERLEDIGT 0, VORLAGE 0. Am Bau je 2."
+    die_geforderte_angabe_ist_da: "Beide tragen sie woertlich und nicht als Anhang:
+      ERLEDIGT — 'Belegt eine IN_ARBEIT-Stelle nach §3: NEIN', Realfall A-06 (ausgefuehrt
+      880eb726). VORLAGE — 'Belegt eine IN_ARBEIT-Stelle nach §3: NEIN', dazu 'zaehlt auch nicht
+      im §13-Zaehler', Realfall P-02 (c2de1eec). Das Kriterium sagt, ohne diese Angabe sei die
+      Definition unbrauchbar — sie steht in beiden."
+
+  A-21-5_P02_tafelzeile:
+    urteil: ERFUELLT
+    gemessen: "Elter: '| **P-02** … | `VORLAGE` | … | kein Bauauftrag, zaehlt nicht im
+      §13-Zaehler · Machtfrage …'. Bau: '… **`VORLAGE` ist seit A-21 in §3 definiert** — dort
+      steht, was es heisst und dass es keinen §3-Platz belegt · *als BELEG, hier stand die Regel
+      vorher ad hoc: „kein Bauauftrag, zaehlt nicht im §13-Zaehler"* · Machtfrage …'.
+      Die alte Fassung ist NICHT geloescht, sondern woertlich als BELEG gekennzeichnet stehen
+      geblieben — genau die zweite Variante, die das Kriterium zulaesst."
+
+  A-21-6_kein_anderer_auftragszustand_geaendert:
+    urteil: "ERFUELLT — und die Kriterienkollision, die der Generator mir VORGELEGT hat, ist
+      hiermit entschieden."
+    was_er_vorgelegt_hat: "Er meldet, A-21-5 und A-21-6 seien woertlich zugleich unerfuellbar:
+      A-21-5 fordert genau die P-02-Tafelzeilenaenderung, die A-21-6s Nachweissatz ausschliesst.
+      Er hat nichts umgedeutet, beide Zahlen genannt und den Rueckweg beziffert."
+    meine_eigene_messung_am_commit: "`git show 74efb8c2 -- docs/STATUS.md`:
+        geaenderte zustand:-Zeilen   1 Paar, ausschliesslich W-21L (ZURUECKGESTELLT ->
+                                     DECISION_BLOCKED). FREMDE zustand:-Aenderungen: 0 —
+                                     ich habe jede geaenderte Zeile auf ihren umgebenden
+                                     Auftragsblock zurueckgefuehrt, nicht nur gezaehlt.
+        beruehrte Tafelzeilen        2: W-21L in der ZUSTANDSSPALTE, P-02 NUR in der
+                                     KOMMENTARSPALTE. P-02s Zustand ist an beiden Orten
+                                     unveraendert VORLAGE."
+    ENTSCHEIDUNG: "A-21-6 ist ERFUELLT. Der erste Satz des Kriteriums nennt den Zweck — 'KEIN
+      anderer Auftragszustand wurde geaendert' —, und dieser Zweck ist gemessen erfuellt: kein
+      fremder Zustand ist beruehrt. Der Nachweissatz danach ('zustand:-Zeilen UND Tafelzeilen
+      ausschliesslich bei W-21L') ist ZU WEIT GEFASST, weil eine Tafelzeile mehr traegt als
+      einen Zustand: sie hat eine Kommentarspalte, und genau dort verlangt A-21-5 die Aenderung.
+      DAS IST DIE WIEDERKEHRENDE FEHLERKLASSE, diesmal im KRITERIUM statt in der Zusage: der
+      Nachweis traegt den Namen des Kriteriums, misst aber etwas anderes als der Kriteriensatz
+      sagt. Ich loese den Widerspruch zugunsten des belegten Zwecks und nicht zugunsten des
+      weiteren Wortlauts — der Rueckweg des Generators (P-02s Tafelzeile zurueck) haette
+      A-21-5 rot gemacht, und er hat zu Recht angemerkt, dass es umgekehrt nicht geht.
+      AN DEN PLANNER, ohne Rot: der Nachweissatz gehoert auf 'geaenderte ZUSTANDSANGABEN
+      ausschliesslich bei W-21L' verengt. Eine Tafelzeilenberuehrung ist nicht dasselbe wie
+      eine Zustandsaenderung."
+
+  A-21-7_wartebedingung:
+    urteil: ERFUELLT
+    selbst_gemessen: "Ich habe den IN_ARBEIT-Commit SELBST bestimmt statt ihn zu uebernehmen:
+      durchgehend rueckwaerts den A-21-Zustand je Commit gelesen — IN_ARBEIT wird in 96b588e0
+      gesetzt, dessen Elter ist 877f81ee, und dort steht A-21 noch auf BEREIT. Das deckt sich
+      mit seiner Angabe.
+      Am Elter 877f81ee, BEIDE Zustandsorte: Tafelzeile '**A-20** … **`BETRIEBSBESTAETIGT`**'
+      und Datensatzfeld 'zustand: BETRIEBSBESTAETIGT'. Die verschaerfte Wartebedingung
+      (BETRIEBSBESTAETIGT statt ABGENOMMEN) ist erfuellt, gemessen am Commit."
+
+ohne_kriterium_eingetragen_und_gemeldet:
+  fortsetzung_zustand: "Er traegt bei W-21L `fortsetzung_zustand: ENTWURF` ein, weil §3 beim
+    Eintritt in DECISION_BLOCKED den vorherigen Pruefzustand verlangt, und meldet es
+    ausdruecklich als 'ohne Kriterium, gemeldet statt stillschweigend'. Ich habe nachgesehen:
+    W-21L traegt in den letzten 200 STATUS.md-Commits NUR ZURUECKGESTELLT und DECISION_BLOCKED —
+    einen frueheren Pruefzustand gibt es am Zustandsort gar nicht. ENTWURF ist die richtige
+    Ableitung (der Blattkopf trug ENTWURF, belegt in meiner A-20-Messung), aber sie ist
+    abgeleitet und nicht am Zustandsort gemessen. Kein Mangel: kein Kriterium verlangt es, die
+    Ableitung ist sachlich richtig, und er hat sie offengelegt statt sie einzuschmuggeln."
+
+meine_eigenen_messfehler_in_dieser_runde:
+  - "`grep -c 'ZURUECKGESTELLT'` zaehlt ZEILEN, nicht Treffer. Ich habe damit zuerst 15 und 16
+     gemeldet und erst danach mit `grep -o | wc -l` gegengeprueft. Hier war beides gleich, weil
+     keine Zeile das Wort zweimal traegt — aber die Zahl war Glueck und nicht Messung, und
+     genau darum geht es in diesem Auftrag."
+
+was_dem_generator_zusteht: "Zweimal hat er in diesem Bau etwas getan, was ein Bauender nicht tun
+  muss. Erstens hat er den Bau-Commit ohne die eigene Fertigmeldung geschnitten, weil A-21-6
+  genau diesen Commit misst — er hat das Kriterium auf sich selbst angewandt, bevor er gemessen
+  hat. Zweitens hat er die Kriterienkollision nicht aufgeloest, sondern mir vorgelegt, mit beiden
+  Zahlen und einem bezifferten Rueckweg, und den Satz dazu geschrieben: welche Menge gemeint ist,
+  entscheidet nicht der Bauende. Dass die Volltextzahl daneben liegt, aendert daran nichts — sie
+  ist eine Nebenrechnung zu einem Kriterium, das ausdruecklich anders misst."
+```
