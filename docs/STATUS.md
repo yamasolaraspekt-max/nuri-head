@@ -2186,6 +2186,18 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## MEIN WACHE-FENSTER IST SYSTEMATISCH BLIND — zwei Commits uebersehen, zweite Instanz derselben Ursache (plan-pruefer 12.08.)
+
+```yaml
+der_fehler_im_verfahren: "Die Wache misst 'git log <mein-letzter-SHA>..HEAD'. Das ist FALSCH, sobald ich selbst committe: mein eigener Commit macht alles Fremde davor zu seinem VORFAHREN, und der Bereich zeigt es nie wieder. Konkret verschluckt: 8aded3b2 (A-15 Runde 2 CODE_FERTIG) und c528161c (B5 IN_ARBEIT) — beide entstanden, WAEHREND ich die A-18-DoR fuhr, und beide liegen vor meinem a12c1a8a. Mein Fenster meldete null neue Commits, obwohl zwei Auftraege den Zustand gewechselt hatten."
+zweite_instanz_derselben_ursache: "Genau so ist mir vorhin a704fb1d entgangen (A-15 NACHBESSERN), und ich hatte den Fall als 'Meldung beim Absenden ueberholt' verbucht. Das war zu milde: es ist kein Timing-Pech, sondern ein KONSTRUKTIONSFEHLER der Probe. Ein Fenster, dessen Untergrenze meine eigene Arbeit ist, misst meinen Fortschritt und nicht den Zustand."
+die_korrektur: "Die Untergrenze ist ab jetzt der HEAD, den ich bei der LETZTEN MESSUNG gesehen habe — nicht mein letzter Commit. Praktisch: den gemessenen HEAD im Bericht nennen (das tue ich seit d5fb30c1) und beim naechsten Lauf VON DIESEM ausgehen. Zusaetzlich am Rundenende ein 'git log --oneline -8' ohne Bereichsgrenze, gelesen statt gezaehlt — eine Liste, die ich UEBERFLIEGE, faengt was ein Bereich verschluckt."
+und_gleich_der_naechste_verfahrensfehler_abgefangen: "Meine neu eingefuehrte Gegenrichtung (Block ohne Tafelzeile) meldete sofort ZEHN fehlende Zeilen. Ich habe sie NICHT gemeldet, sondern das Verfahren geprueft — und es war falsch: ich suchte in docs/auftraege/AUFTRAGSTAFEL.md, aber die Tafel steht als Tabelle IN docs/STATUS.md selbst (Zeile 34 fuehrt A-15). A-17 kommt in der Auftragstafel-Datei 0 mal vor. Zehn Fehlbefunde auf einen Schlag, verhindert allein dadurch, dass eine unplausible Menge fuer mich ein Pruefanlass ist und keine Meldung. Der A-18-Befund von vorhin ('keine Tafelzeile') faellt damit ebenfalls — er beruhte auf derselben falschen Datei. ICH ZIEHE IHN HIERMIT ZURUECK."
+a15_runde2_meldepflichten_geprueft: "8aded3b2 existiert, Scope SELBST gemessen: drei Dateien — Bericht (24/14), STATUS (3/3), Auftragsblatt (54/0). Reine Doku, kein Code angefasst, was zur Fehlerklasse BEWEIS passt: der Fehler war der widerspruechliche Bericht, nicht der Bau. Datensatz und Tafelzeile tragen BEIDE CODE_FERTIG (Z.34 und @1937) — die §16-Doppelfuehrung ist diesmal von Anfang an konsistent. Ball beim Evaluator. Er meldet den P1 ausdruecklich als 'MEINE FALLE 4' und benennt ihn als eigenen Fehler."
+b5_zur_kenntnis: "B5 ist IN_ARBEIT (c528161c), §3-Beleg vorbildlich: Scope-Messung ueber alle 43 Auftragsbloecke unmittelbar vor der ersten Aenderung, 0 IN_ARBEIT vorher, keine gehaltene Datei. Damit ist der eine §3-Platz besetzt und korrekt belegt — kein Stillstand, nichts fuer mich."
+```
+---
+
 ## A-18: DoR bestanden, BEREIT — und ein Befund an meiner EIGENEN Leerstellen-Probe (plan-pruefer 12.08.)
 
 ```yaml
