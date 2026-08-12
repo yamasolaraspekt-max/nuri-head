@@ -45,7 +45,38 @@ W-42   Praemisse beim Operandenmessen widerlegt -> der Schreibpfad ist gebaut.
        Gefunden beim SCHNEIDEN, also frueh genug fuer eine Abweichung.
 W-15   Praemisse VOR dem Schnitt gemessen -> traegt zur Haelfte: Wand zu Mauerwerk
        ist gebaut (Schema, Validierung, Katalog, Oberflaeche), Raum zu Belag fehlt.
+W-33   Praemisse war ein ZITAT aus einem Test -> traegt NICHT, und ich habe sie
+       weniger geprueft als eine eigene Annahme. AUF-40 Teil B ist gebaut, BEIDE
+       Haelften. Gefunden hat es der GENERATOR vor dem Ziehen — nach DoR und Schnitt.
 ```
+
+**DIE GEMEINSAME URSACHE, gemessen über zwei der vier Fälle** *(ergänzt 12.08. nach W-33)*:
+
+```text
+W-42  gesucht wurde der TYP BuildingDocument       -> 0 Treffer -> „nicht gebaut"
+      gebaut war es unter einem anderen Namen
+W-33  gesucht wurde eine ROUTE                     -> 0 Treffer -> „nicht gebaut"
+      gebaut war es als Mount-Attribut ohne Fetch
+```
+
+**Beide Male wurde die BAUFORM gesucht, die der Messende erwartete — nicht die SACHE.**
+*Das ist H-9 auf eine **Abwesenheit** angewandt: „Ein Muster, das eine Schreibweise
+voraussetzt, misst die Schreibweise und nicht die Sache." **Bei einer Abwesenheit ist es
+gefährlicher als bei einem Vorkommen**, denn ein falsch positives Vorkommen fällt beim
+Öffnen auf, und null Treffer öffnet niemand.*
+
+**Die Regel daraus:** *Wer eine Abwesenheit behauptet, nennt **mindestens zwei Bauformen**,
+in denen die Sache existieren könnte, und misst beide. Bei W-33 wären das „Route" **und**
+„die Daten kommen am Mount an" gewesen — die zweite Form hätte sofort getroffen. **Und wenn
+die Sache eine Zulieferung ist, wird am ZIEL gemessen, nicht am Weg:** nicht „gibt es eine
+Route", sondern „steht der Wert im UI-Zustand".*
+
+> **W-33 traf DREI Rollen gleichzeitig** — *Planner, Plan-Prüfer und Release-Prüfer haben
+> unabhängig nach einer Route gesucht und dasselbe falsche Ergebnis gemeldet. **Das ist keine
+> Schwäche einer Rolle, sondern eine Regelmäßigkeit der Kette**, und unabhängige Prüfung
+> schützt nicht davor: drei Messungen derselben zu engen Frage geben dreimal dieselbe falsche
+> Antwort. **Kandidat für eine Hausregel H-10** — die setze ich nicht selbst, sie liegt bei
+> Yama.*
 
 > **Nur der letzte Weg kostet nichts.** *Eine `ENTWORFEN`-Vorgabe stützt sich auf ein Fehlen, und
 > ein Fehlen ist die schwerste Aussage überhaupt: **man kann es nicht sehen, nur nicht finden.**
