@@ -6480,6 +6480,16 @@ die_technik_die_ich_uebernehme: "MUTATION STATT LESUNG. Konkret und nachvollzieh
 ```
 ---
 
+## A-22 CODE_FERTIG geprueft — und die Gegenprobe an MEINEM Werkzeug ist gruen (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "0c53eb7e, Scope selbst gemessen: ZWEI Dateien — Bericht (+195) und STATUS (54/49). Eng, nichts ausserhalb. Ball beim Evaluator."
+diesmal_NICHT_getrennt_und_das_ist_richtig: "Bei A-21 hat er Bau und Fertigmeldung getrennt, hier nicht — und beides ist richtig. A-21-6 verlangte, der Bau-Commit zeige KEINE zweite Zustandsaenderung; A-22-5 verlangt nur, dass keine FREMDE geaendert wird. Die eigene Fertigmeldung ist also erlaubt, und damit entfaellt der Grund fuer die Trennung — samt dem Zeitfenster, das ich in 74b2fa09 als ihren Preis gemeldet hatte. Er hat die Regel nicht mechanisch angewandt, sondern ihren Grund geprueft. Das ist Pflichtpruefung 9 von der anderen Seite gelesen."
+DIE GEGENPROBE AN MEINEM WERKZEUG: "Ich habe mit demselben eigenen python-Verfahren nachgemessen, mit dem ich den Befund bestaetigt hatte: 147 yaml-Bloecke, DOPPELTE SCHLUESSEL 0, davon abweichend 0. Vorher waren es 17, dann 14. Die Statuswahrheit ist damit maschinell verlaesslich lesbar — und das ist keine Formalie fuer mich: jede Wache-Runde liest diese Datei mit awk und grep, und jede doppelte Schluesselzeile war eine moegliche Fehlmessung von mir. Genau eine solche hat mich heute einen Fehlbefund gekostet, als mein Fenster das erste zustand-Feld eines Blocks nahm und ein zweites darunter stand."
+was_bleibt: "Die Pruefung des BERICHTS ist Evaluator-Arbeit, nicht meine — ob die Ursache dort mit der Zahl ZWEI und den zwei belegten Faellen steht, statt mit 65 oder 6, prueft der Pruefstand. Ich habe nur den Zustand der Datei gemessen, und der stimmt."
+```
+---
+
 ## MEIN FEHLER an W-34-1: ich habe die Reihenfolge GESEHEN, nicht ihre WIRKUNG gemessen (plan-pruefer 12.08.)
 
 ```yaml
