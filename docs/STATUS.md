@@ -32,7 +32,7 @@
 | **W-09** Treppe | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `f9c98fc0` (Inhalt `a29ea627`) · Runde 1 `d26d50b4` · Basis `65f3ece4` | **11/11 nach §12.4 alle neu gemessen** · der Wortlaut ist jetzt **gelaufen, nicht geschrieben**: seine Eingaben nachgefahren, sieben Zeilen deckungsgleich (170.6 · 288.8 · 118.2 · 459.4) · `-11` nennt jetzt **Dateien** statt Zahlen · Register-Selbstwiderspruch weg · Suite 1693/1693 · **zwei P2 zur Reihenfolge des Nachweisens, §12.5** |
 | **A-14** N-003-Vorbehalt ins Ergebnis | `BETRIEBSBESTAETIGT` | – | Inhalt `21940d33` (Bau `e0722979`) · Elter `efca1899` · Basis `1e09280d` · Kandidat `a2385d35` | **§10 voll gefahren** (Produktivcode mit Sichtwirkung, keine Doku-Sammelform) · Kette lückenlos, jeder Übergang `--is-ancestor` Exit 0 · Bündel im Kandidaten und **byte-gleich nachgebaut** (md5 `a5ea0056` vor = nach Neubau; genau das Artefakt, das der Browserlauf auslieferte) · Insel-Suite selbst **1693/1693** · Rückweg reiner Revert, `git apply --check -R` Exit 0, keine Migration/kein Datenpfad · **Plaketten-Renderbedingung selbst ausgeführt: nur `engine-sparren` unterdrückt, fünf Engines behalten ihre — auch `heizkoerper` mit roter Plakette** · `must_preserve` resources/+scripts/ in drei Richtungen 0/0/0 · Beifang ab CODE_FERTIG nur `docs/` · **ein P2/SPEC beim Planner (grundlage-Zeile nennt 4 von 6 Sonderlasten), blockiert nicht** · Veröffentlichung gehört Yama |
 | **A-15** Fachaussage oder Hinweis | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `8aded3b2` · Runde 1 `60d62d74` | **14/14 nach §12.4 neu gemessen** · P1 vorbildlich behoben: der überholte Abschnitt ist **als überholt markiert**, nicht gelöscht (Datum, Grund, Verweis) · Bilanz jetzt `6 + 4 + 1 = 11` · `__tests__` 15 · DIN-Stufung adressiert · Menge 13 und drei A-Fundstellen **erneut** selbst geöffnet |
-| **B5** Zählergebnis mit Trefferzeilen | **`IN_ARBEIT`** | **Generator** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
+| **B5** Zählergebnis mit Trefferzeilen | **`CODE_FERTIG`** | **Evaluator** | Schnitt `4f0d4584` | sechste Barriere · **Empfehlung: mit B6 in EINEM Bau** (geteilte Datei, Form, Prüfweg) |
 | **B6** Summe braucht Erhebung | `BEREIT` | **Generator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
@@ -1990,13 +1990,13 @@ rest_ohne_befund: "Im Wortlaut-Block stehen weiter zulaessig/Mindestmass/Durchga
 auftrag: "B5"
 titel: "Wer mit -c etwas behauptet, faehrt denselben Lauf ohne -c und liest, was er gezaehlt hat"
 datei: docs/auftraege/aktiv/B5-zaehlergebnis-mit-trefferzeilen.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft — sechste Barriere im Tor)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08., Bericht docs/BERICHT-B5-zaehlergebnis-mit-trefferzeilen.md)
 basis_sha: 1734aa3b
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — grep auf B5/Trefferzeile in scripts/commit-pruefen.sh: 0 Treffer, das Tor kennt die Pruefung nicht. Sieben Kriterien, §5-Block, Erstnutzer, zwei Nicht-Ziele, Konfliktpruefung, must_preserve. DIE FORM IST DER KERN UND SIE IST RICHTIG GEWAEHLT: Warnung statt Abbruch, mit ausdruecklicher Begruendung ('eine harte Sperre auf Zahlen in Commit-Botschaften wuerde jeden legitimen Bericht blockieren — Suite 1692/1692, 0 Platzhalter, 5 von 10'). Das ist Stufe 1 der Barrierenleiter und die einzige, die hier traegt: das Tor kann nicht pruefen WIE gemessen wurde, nur ob eine Zahlenbehauptung ohne Beleg dasteht. Ein Auftrag, der seine eigene Wirkungsgrenze benennt, statt sie zu ueberschaetzen."
 mein_eigener_bezug: "Dieser Auftrag trifft MICH als Rolle direkt — ich habe heute zweimal mit einem grep -c gezaehlt und die Trefferzeilen nicht gelesen: der Glob ohne Rekursion (Punkt2D 'fehlt ueberall') und die sieben Schreibpfade, deren siebter ein Kommentar war. Beide Male hat mich nur das Weitermessen gerettet. Ich bin damit Erstnutzer im Wortsinn, nicht nur der Form nach."
-naechster_schritt: "Generator zieht B5 (§3 beachten; A-14 ist IN_ARBEIT)"
+naechster_schritt: "Evaluator prueft B5 gegen sieben Kriterien. ZWEI Punkte, die er entscheiden muss, nicht ich: (1) B5-4 nennt eine 'Barrierenliste' — die gibt es nicht, gemessen mit grep -n 'Barrierenliste' ueber docs/, kein Treffer. Verankert ist B5 stattdessen als Abschnitt 18b neben den Hausregeln, weil ARBEITSREGELN.md:767 (H-6) B5 dort bereits aufruft. Ich habe keine Liste erfunden, um woertlich gruen zu sein. (2) B5-7: der kanonische §3-Befehl meldet 0 IN_ARBEIT, WAEHREND B5 laeuft — Muster [AW]-[0-9]+ fasst ein Blatt namens B5 nicht. Beide Zahlen im Bericht, die Messform habe ich nicht still ersetzt."
 ```
 
 ```yaml

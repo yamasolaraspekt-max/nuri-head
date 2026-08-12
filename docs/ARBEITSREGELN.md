@@ -777,7 +777,46 @@ Etikett „Fachregel" ist F-051 in neuer Gestalt, nur mit echten Zahlen.*
 
 ---
 
+## 18b. Die Barriere B5 — Zählergebnis und Trefferzeilen
+
+> **B5 · Ein Zählergebnis, das einen Befund trägt, wird nie ohne seine Trefferzeilen gemeldet.**
+> *Wer `-c` benutzt, um etwas zu behaupten, führt denselben Lauf ohne `-c` und liest, was er gezählt
+> hat. Gilt für alle fünf Rollen, gilt auch für Messungen über die eigene Werkbank.*
+
+**Der Unterschied trägt die Regel.** Ohne ihn wird B5 als „nie `-c` benutzen" gelesen — und das
+machte jede Suite-Meldung unlesbar:
+
+| | Beispiel | Was die Trefferzeilen leisten |
+|---|---|---|
+| **Zahl als Gegenstand** | „Die Suite zählt 1692" · „0 Platzhalter" | **nichts** — die Zahl *ist* die Aussage |
+| **Befund aus einer Zahl** | „CSG kommt einmal vor, **also ist es gebaut**" | **alles** — die Zeile entscheidet über den Befund |
+
+*Der belegte Fall: der eine CSG-Treffer stand im Dateikopf — `dachAusschnitt.ts:10`, „Stufe C (NICHT
+hier): … CSG". **Ein Treffer im Kommentar ist kein Code.** Und der Gegenfall aus demselben Tag:
+ein Filter, der einen Fehlertyp ausschließt, erzeugt leicht einen anderen — `{2,40}` entfernte einen
+falschen Treffer und verlor dabei drei echte.*
+
+**Die Regel wirkt beim Schreiben, das Tor erinnert beim Committen.** `scripts/commit-pruefen.sh`
+gibt eine **Warnung** aus, wenn eine Botschaft ein Zählwort ohne Belegzeile trägt. Bewusst keine
+Sperre: eine harte Sperre auf Zahlen in Commit-Botschaften blockierte jeden legitimen Bericht, und
+was bei jedem zweiten Aufruf falsch anschlägt, wird umgangen (an A-03 belegt). **Das Tor kann nicht
+prüfen, ob die Messung inhaltlich stimmt — das kann kein Tor.** Es sieht nur, ob die Zeilen fehlen.
+
+*Ort dieser Verankerung: neben den Hausregeln, weil **H-6 die Barriere dort bereits aufruft** —
+„B5 verlangt, die Trefferzeilen zu lesen, H-6 sagt, warum". Eine „Barrierenliste" gibt es in diesem
+Dokument nicht: `grep -n 'Barrierenliste' docs/ARBEITSREGELN.md` läuft ins Leere (A-10 — das leere
+Ergebnis wird gemeldet, nicht überschrieben).*
+
+---
+
 ## 19. Änderungsverzeichnis
+
+### Fassung 1.5 — 12.08.2026, Barriere B5 verankert (Generator, Auftrag B5)
+
+**Abschnitt 18b aufgenommen** mit dem Unterschied „Zahl als Gegenstand" ↔ „Befund aus einer Zahl"
+(B5-4). *Zur Nummer: §19 ist in sich uneinheitlich — Fassung 1.4.2 trägt den 05.08., Fassung 1.3
+den 12.08. Ich habe das gemessen und nicht begradigt; das Regelwerk gehört nicht dem Generator.
+1.5 ist deshalb als nächstfreie Nummer gewählt, nicht als Aussage über die Reihenfolge.*
 
 ### Fassung 1.3 — 12.08.2026, sieben Hausregeln auf Yamas Anweisung
 
