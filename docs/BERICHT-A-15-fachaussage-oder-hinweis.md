@@ -151,21 +151,21 @@ und eine Diskussion.**
 
 | Engine | Achse 2 · **vorgeschlagen** | Klasse | Begründung **mit Fundstelle** |
 |---|---|---|---|
-| `sparrenBerechnung.ts` | **PERSONENSCHADEN** | FACHAUSSAGE | Standsicherheit. `10-12`: *„Ersetzt KEINE prüffähige Statik … Wind, Mehrfeld, Knicken bleiben dem Tragwerksplaner"* — **A-14 hat es bereits umgesetzt** |
-| `abwassergefaelle.ts` | **BAUSCHADEN** | FACHAUSSAGE | Rückstau. `4`: DIN 1986-100 **(vereinfacht)** — zu geringes Gefälle führt zu stehendem Abwasser |
-| `wandaufbau.ts` | **BAUSCHADEN** | FACHAUSSAGE | Feuchte. `4`: DIN EN ISO 6946 — ein falscher U-Wert verschiebt den Taupunkt in die Konstruktion |
-| `fbhAuslegung.ts` | **FEHLAUSLEGUNG** | FACHAUSSAGE | `6-7`: *„GRENZE: hydraulischer Abgleich und normative Auslegung bleiben Fach-Engine"* — Anlage zu klein/groß |
-| `heizkreisVerteiler.ts` | **FEHLAUSLEGUNG** | FACHAUSSAGE | `6`: dieselbe GRENZE-Zeile — Durchfluss und Verteilergröße |
-| `kuecheArbeitsdreieck.ts` | **KOMFORT** | **HINWEIS** | `4`: *„Reine **Ergonomie**-Prüfung nach **DIN 18022**"* — Norm und Ergonomie stehen in **derselben** Zeile; DIN 18022 ist eine **Komfortnorm**. *Die einzige Zeile, die auf HINWEIS fällt.* |
+| `sparrenBerechnung.ts` | **PERSONENSCHADEN** · *vorgeschlagen, nicht entschieden* | FACHAUSSAGE | Standsicherheit. `10-12`: *„Ersetzt KEINE prüffähige Statik … Wind, Mehrfeld, Knicken bleiben dem Tragwerksplaner"* — **A-14 hat es bereits umgesetzt** |
+| `abwassergefaelle.ts` | **BAUSCHADEN** · *vorgeschlagen, nicht entschieden* | FACHAUSSAGE | Rückstau. `4`: DIN 1986-100 **(vereinfacht)** — zu geringes Gefälle führt zu stehendem Abwasser |
+| `wandaufbau.ts` | **BAUSCHADEN** · *vorgeschlagen, nicht entschieden* | FACHAUSSAGE | Feuchte. `4`: DIN EN ISO 6946 — ein falscher U-Wert verschiebt den Taupunkt in die Konstruktion |
+| `fbhAuslegung.ts` | **FEHLAUSLEGUNG** · *vorgeschlagen, nicht entschieden* | FACHAUSSAGE | `6-7`: *„GRENZE: hydraulischer Abgleich und normative Auslegung bleiben Fach-Engine"* — Anlage zu klein/groß |
+| `heizkreisVerteiler.ts` | **FEHLAUSLEGUNG** · *vorgeschlagen, nicht entschieden* | FACHAUSSAGE | `6`: dieselbe GRENZE-Zeile — Durchfluss und Verteilergröße |
+| `kuecheArbeitsdreieck.ts` | **KOMFORT** · *vorgeschlagen, nicht entschieden* | **HINWEIS** | `4`: *„Reine **Ergonomie**-Prüfung nach **DIN 18022**"* — Norm und Ergonomie stehen in **derselben** Zeile; DIN 18022 ist eine **Komfortnorm**. *Die einzige Zeile, die auf HINWEIS fällt.* |
 | `configuratorPackage.ts` | **keine** | **keine Engine** | `100-101`: `bestanden` steht im **Freigabe-Status**, nicht in einem Fachurteil — sie rechnet nichts |
 
 ### Wo ich aus ZWEIFEL die höhere Klasse gesetzt habe (Regel 1)
 
 | Engine | erwogen | gesetzt | warum die höhere |
 |---|---|---|---|
-| `wandaufbau.ts` | FEHLAUSLEGUNG ↔ **BAUSCHADEN** | **BAUSCHADEN** | Ein zu hoher U-Wert ist zunächst nur Energie — **aber derselbe Rechenweg trägt den Taupunkt.** Ob die Engine das abdeckt, ist Zustand *nicht unterscheidbar* (A-15-10). *Solange das offen ist, kostet die strengere Klasse eine Rückfrage, die mildere den Schimmel.* |
-| `abwassergefaelle.ts` | FEHLAUSLEGUNG ↔ **BAUSCHADEN** | **BAUSCHADEN** | „vereinfacht" (Z.4) sagt, dass Fälle fehlen. **Rückstau ist ein Wasserschaden, keine Fehldimensionierung.** |
-| `heizkreisVerteiler.ts` | FEHLAUSLEGUNG ↔ BAUSCHADEN | **FEHLAUSLEGUNG** | *Hier ist die höhere Klasse NICHT gesetzt* — die Engine rechnet Durchfluss, und ein falscher Durchfluss macht die Anlage schlecht, nicht das Gebäude nass. **Das ist eine Entscheidung, kein Zweifel;** wäre sie zweifelhaft, stünde BAUSCHADEN. |
+| `wandaufbau.ts` | FEHLAUSLEGUNG ↔ **BAUSCHADEN** | **BAUSCHADEN** · *vorgeschlagen, nicht entschieden* | Ein zu hoher U-Wert ist zunächst nur Energie — **aber derselbe Rechenweg trägt den Taupunkt.** Ob die Engine das abdeckt, ist Zustand *nicht unterscheidbar* (A-15-10). *Solange das offen ist, kostet die strengere Klasse eine Rückfrage, die mildere den Schimmel.* |
+| `abwassergefaelle.ts` | FEHLAUSLEGUNG ↔ **BAUSCHADEN** | **BAUSCHADEN** · *vorgeschlagen, nicht entschieden* | „vereinfacht" (Z.4) sagt, dass Fälle fehlen. **Rückstau ist ein Wasserschaden, keine Fehldimensionierung.** |
+| `heizkreisVerteiler.ts` | FEHLAUSLEGUNG ↔ BAUSCHADEN | **FEHLAUSLEGUNG** · *vorgeschlagen, nicht entschieden* | *Hier ist die höhere Klasse NICHT gesetzt* — die Engine rechnet Durchfluss, und ein falscher Durchfluss macht die Anlage schlecht, nicht das Gebäude nass. **Das ist eine Entscheidung, kein Zweifel;** wäre sie zweifelhaft, stünde BAUSCHADEN. |
 
 ### Was fehlen würde, um eine Klasse zu senken (Regel 3, zweiter Teil)
 
@@ -189,7 +189,7 @@ nicht entscheidbar — siehe A-15-10.
 |---|---|---|---|
 | `sparrenBerechnung` | FACHAUSSAGE | **schon weg** (A-14) | erledigt |
 | `abwassergefaelle` | FACHAUSSAGE | ja, wenn `bestanden` | **ja** |
-| `wandaufbau` | FACHAUSSAGE | über `engine-fensterprodukt`: **nein** (kein `bestanden`) | nein — zeigt heute keine |
+| `wandaufbau` | FACHAUSSAGE | **keine — es gibt gar kein Panel dafür** | nein, **aber aus einem anderen Grund**: nicht weil es schweigt, sondern weil es nie zu Wort kommt |
 | `fbhAuslegung` | FACHAUSSAGE | ja | **ja** |
 | `heizkreisVerteiler` | FACHAUSSAGE | kein eigenes Panel | entfällt |
 | `kuecheArbeitsdreieck` | HINWEIS | ja | **nein** — Hinweise dürfen urteilen |
@@ -205,3 +205,29 @@ diese Tabelle **sieben von elf**.
 ## A-15-7 · must_preserve
 
 **Kein Code angefasst** — Nachweis im Abschlussbericht.
+
+## Zwei Messfehler von mir, vor dem Melden gefunden
+
+**1 · `berechneUw` gehört NICHT zu `wandaufbau`.** Ich hatte die Auswirkungszeile über
+`engine-fensterprodukt` geführt. Gemessen: `berechneUw` steht in
+`geometry/fensterProdukt.ts:94`, und **kein Panel benutzt `wandaufbau` überhaupt**.
+*`wandaufbau` zeigt heute keine Plakette — nicht weil es schweigt, sondern weil es nie zu Wort kommt.*
+
+**2 · Mein Zählmuster für `bestanden` war blind für einzeilige Schnittstellen.** Ich hatte
+`^\s+bestanden` benutzt; in `wandaufbau.ts:28` steht es **inline**:
+`export interface UPruefung { id: string; …; bestanden: boolean; }`. **Meine erste Messung meldete
+dort 0 und war falsch.**
+
+**Neu gezählt, alle elf, ohne Zeilenanfangs-Bedingung:**
+
+```text
+abwassergefaelle 5 · configuratorPackage 1 · fbhAuslegung 6 · heizkreisVerteiler 3
+kuecheArbeitsdreieck 5 · sparrenBerechnung 2 · treppe2D 2 · treppe3D 2
+treppenBerechnung 4 · treppenTypen 2 · wandaufbau 2
+```
+
+**Das ändert die Klassifikation nicht** — die Einordnung hängt an Achse 2 und 3, nicht an der Zahl.
+*Aber eine Zahl, die ich gemeldet hätte, wäre falsch gewesen, und das gehört hierher.*
+
+> **Die Klasse ist dieselbe wie bei den Zeilennummern:** *ein Muster, das eine Schreibweise
+> voraussetzt, misst die Schreibweise und nicht die Sache.*
