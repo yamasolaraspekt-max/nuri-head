@@ -2452,6 +2452,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## Eine Vorlage an Yama liegt UNGESICHERT im Baum — und mein Befund wurde revertiert (plan-pruefer 12.08.)
+
+```yaml
+DRINGEND_fuer_yama_ungesichert: "docs/VORLAGE-AN-YAMA-2026-08-12.md liegt UNVERFOLGT im Arbeitsbaum, 199 Zeilen, vom Release-Pruefer auf Yamas Anweisung 'kannst du alles was mich betrifft fundiert sorgfaeltig abarbeiten'. SECHS Punkte, VIER davon kann er nicht selbst entscheiden: (1) der Push — vier fertige Releases stauen sich und haengen an Yamas Zugang, (2) gilt ENTSCHEIDUNG-KONSISTENZ.md oder §16, (3) durfte die Vertretung E1/E2/E3 beschliessen — eine Vollmachtsfrage, (4) die Zustandsworte ausserhalb der Kette, (5) zwei Fragen an der PRODUKTION die nur Yama messen darf, (6) was er ohne Yama erledigt hat. Als unverfolgte Datei geht sie bei keinem fremden Commit als Beifang mit, ist also nicht in fremder Bahn — aber sie ist auch NICHT GESICHERT: bei einem Absturz ist die Vorlage weg, samt der Arbeit, die in ihr steckt. Ich committe sie NICHT (fremde Datei, und ihr Verfasser kann sie besser einordnen als ich), ich melde sie."
+mein_befund_wurde_revertiert: "9df633c2 revertiert 'generator: TIME_VARS steht an vier Fundorten' — den Commit, der ausschliesslich a.txt anfasste und dessen Messaussage keinen Beleg hatte. Damit ist mein Befund von der letzten Runde erledigt, und zwar auf dem richtigen Weg: nicht nachgebessert, sondern zurueckgenommen, weil an dem Commit nichts zu retten war. Der Baum ist um das Artefakt leichter."
+meine_korrigierte_probe_greift: "Die Blatt-gegen-Block-Probe fuehrt A-06 ab dieser Runde als [A-06=ERLEDIGT] statt als OFFEN — der zwanzigfache Fehlbefund ist weg, ohne dass ein echter Fall dadurch verdeckt wuerde: die Probe meldet weiterhin OFFEN, wenn ein Blatt WEDER Block NOCH ein Zustandswort ausserhalb der Kette traegt."
+drei_fertigmeldungen_scope_gemessen: "W-01N 2 Dateien (+51/-7), W-15/1 8 Dateien (+298/-88), B7 4 Dateien (+197/0). Alle drei mit Ball beim Evaluator; W-01N ist bereits ABGENOMMEN (57468e9d, fuenf von fuenf) und traegt CODE_FERTIG im Datensatz — angesagte Reihenfolge, Votum zuerst ins Blatt. Nichts fuer mich."
+geheimnispruefung_zur_kenntnis: "Die neue Geheimnispruefung des Release-Pruefers hat zum ersten Mal angeschlagen — VIER Treffer, alle falsch: das Muster faengt das Wort token, gemeint waren DESIGN-Tokens des Hausplaners (rahmenToken, brandInk, grundToken). Ausserhalb des Buendels 0 Treffer, mit exclude gegengeprueft. Dieselbe Klasse wie die B5-Musterluecke: eine Pruefung, die bei RICHTIGER Arbeit anschlaegt, wird weggeklickt — und er hat es wieder nachgesehen statt weggeklickt."
+```
+---
+
 ## Zwanzig Runden denselben Fehlbefund gemeldet — und ein Commit, dessen Aussage keinen Beleg hat (plan-pruefer 12.08.)
 
 ```yaml
