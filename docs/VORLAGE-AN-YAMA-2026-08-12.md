@@ -90,7 +90,7 @@ Nord plausibel eingetragen) und **negative Werte** — `PvgisErtragService.php:4
 
 ---
 
-## 4 · E1 ist in Kraft, aber niemand kennt es
+## 4 · E1 ist in Kraft, aber niemand kennt es — **A-21 ist dafür geschnitten**
 
 **Das ist neu und nicht Teil der erledigten Frage.** Am 10.08. wurden auf deine Anweisung
 (*„Ball bei dir für die drei Entscheidungen"*) drei Prozessregeln angenommen. Ich habe ihre
@@ -124,7 +124,7 @@ schlechteste Zustand.
 
 ---
 
-## 5 · Drei Zustandsworte, die das Regelwerk nicht kennt
+## 5 · Drei Zustandsworte, die das Regelwerk nicht kennt — **A-21 ist dafür geschnitten**
 
 **Gemessen:** Die Auftragstafel führt `ERLEDIGT` (A-06), `VORLAGE` (P-02) und `ZURUECKGESTELLT`
 (W-21L) — alle drei haben in `ARBEITSREGELN.md` **je 0 Treffer**. Zum Vergleich am selben
@@ -134,9 +134,21 @@ Dokument: `ENTWURF` 4, `BEREIT` 9.
 **Bau**. Wer keinen Bau führt — Messauftrag, Vorlage, zurückgestellter Posten — findet in ihr
 kein Wort.
 
-**Meine Empfehlung:** ein Satz in die Arbeitsregeln: *Vorgänge ohne Bau führen keinen
-Kettenzustand; sie tragen `ERLEDIGT`, `VORLAGE` oder `ZURUECKGESTELLT` und zählen nicht im
-§13-Zähler.* Das beschreibt, was ohnehin geschieht.
+**Meine ursprüngliche Empfehlung war:** ein Satz in die Arbeitsregeln, der die drei Worte
+aufnimmt. **Der Planner hat sie beim Schneiden von A-21 verbessert, und ich übernehme seine
+Fassung** — sie ist schärfer als meine:
+
+> **`ZURUECKGESTELLT` braucht keine Definition, sondern eine Abschaffung.** §3 führt bereits
+> `DECISION_BLOCKED` wörtlich als *„eine ausdrücklich Yama vorbehaltene Entscheidung fehlt"* —
+> von mir nachgemessen, **10 Fundstellen im Regelwerk, Definition in Z.79**. Genau das ist
+> W-21Ls Lage: es wartet auf zwei Fachfragen aus F-053. Ein drittes Wort für einen bereits
+> definierten Zustand macht das Regelwerk nicht vollständiger, sondern mehrdeutig.
+
+Damit bleiben **zwei** Worte zu klären statt drei — und bei einem davon liegt ein zweiter Befund,
+den ich ebenfalls nachgemessen habe: **P-02s Bedeutung steht im Kommentarfeld seiner
+Tafelzeile** (*„kein Bauauftrag, zählt nicht im §13-Zähler"*). Damit steht eine Zustandsregel an
+einem Ort, den nur findet, wer genau diese Zeile liest — derselbe Fehlertyp wie A-20s vier
+Zustandsorte, eine Ebene tiefer.
 
 **Angehängt:** A-06 hat Blatt und Tafelzeile, aber keinen Datensatz. Einen anzulegen hieße,
 seinen Zustand zu bestimmen. Sobald oben entschieden ist, trage ich ihn nach.
