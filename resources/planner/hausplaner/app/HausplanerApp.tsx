@@ -7,7 +7,7 @@
  * Farbe + TEXT; Tastatur: V/W/F/T Werkzeuge, Esc Abbruch, Entf Löschen, Strg+Z/Y, Strg+S.
  * Zustände gestaltet: gespeichert/ungespeichert/speichert/KONFLIKT (409)/Ablehnung.
  */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 // AUF-48 Scheibe 4c: Stage/Layer/Rect/Group/Circle sind mit der Buehne umgezogen.
 // `Line` und `Text` bleiben: `rasterLinien` und `massElemente` werden HIER gebaut und der
 // Buehne als fertige Elemente uebergeben.
@@ -77,6 +77,10 @@ import {
   knotenImGeschoss, waendeAus, raeumeAus, leisteMitAngehefteten, werkzeugKontextAus,
   ermittleWegweiser, fremderBereichVon, palettenGruppenFuer,
 } from './ableitungen';
+// W-05/2: der Kern der Raumauswahl steht als reine Funktion daneben, damit ein Waechter ihn ohne
+// Rendern messen kann — die Zusage „eine Auswahl ueberlebt keinen Wandzug" ist ein Test und keine
+// Sichtprobe (W-05-2-1b).
+import { gueltigeAuswahl, waehleRaum, type RaumAuswahl } from './raumAuswahl';
 import { gruppenFuer } from './dashboard/werkzeugGruppen';
 import { ladeArbeitsbereich, speichereArbeitsbereich } from './state/arbeitsbereichSpeicher';
 import {
@@ -560,6 +564,20 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     setPaletteOffen(false);
   }, []);
   const raeume = useMemo(() => raeumeAus(waende, level), [waende, level]);
+
+  // W-05/2 — die Auswahl eines ERKANNTEN Raums. Sie ist fluechtig: sie lebt in der Sitzung, wird
+  // nicht gespeichert und gehoert nicht ins Szenendokument.
+  //
+  // Erkannte Raeume haben KEINE Kennung (roomDetection.ts:35-40) — ihre Identitaet ist der Index
+  // in der Liste. Deshalb wird die Signatur der Liste MITGEMERKT und bei jedem Rendern geprueft:
+  // aendert sich die Raumliste, ist die Auswahl im SELBEN Durchlauf keine mehr. Ein `useEffect`
+  // haette erst NACH dem Rendern aufgeraeumt, und fuer einen Bilddurchlauf staende die
+  // Hervorhebung auf dem falschen Raum — eine Falschauskunft, dieselbe Klasse wie A-24.
+  const [raumAuswahl, setRaumAuswahl] = useState<RaumAuswahl | null>(null);
+  const gewaehlterRaum = gueltigeAuswahl(raumAuswahl, raeume);
+  const waehleRaumAn = useCallback((index: number) => {
+    setRaumAuswahl((vorher) => (vorher && vorher.index === index ? null : waehleRaum(index, raeume)));
+  }, [raeume]);
   // P2b-2: Wandbaender (gefuellte Polygone mit Gehrung an 2-Wand-Ecken).
   const bandVon = useMemo(() => {
     const m = new Map<string, ReturnType<typeof wandBaender>[number]>();
@@ -1426,6 +1444,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
           weltPunkt={weltPunkt}
           mitWinkelSnap={mitWinkelSnap}
           waehleAn={waehleAn}
+          gewaehlterRaum={gewaehlterRaum}
+          waehleRaumAn={waehleRaumAn}
         />
         </div>
         <DreiDBereich sichtbar={modus !== '2d'} />

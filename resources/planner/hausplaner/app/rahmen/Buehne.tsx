@@ -88,13 +88,23 @@ export interface BuehneEigenschaften {
   weltPunkt: (e: Konva.KonvaEventObject<MouseEvent>) => Punkt;
   mitWinkelSnap: (start: Punkt, p: Punkt) => Punkt;
   waehleAn: (id: string, ev: MouseEvent) => void;
+  /**
+   * W-05/2: der GUELTIGE Auswahlindex eines erkannten Raums, oder `null`.
+   *
+   * Erkannte Raeume haben keine Kennung — ihre Identitaet ist der Index in der Liste. Ob dieser
+   * Index heute noch auf denselben Raum zeigt, entscheidet `app/raumAuswahl.ts` in der
+   * Hauptfunktion; die Buehne bekommt das Ergebnis und prueft nichts nach (K-03).
+   */
+  gewaehlterRaum: number | null;
+  /** W-05/2: der Klick auf einen Raum. Die Buehne MELDET nur — der Zustand wohnt oben. */
+  waehleRaumAn: (index: number) => void;
 }
 
 export function Buehne({
   stageBreite, hoehe, zoom, setZoom, pan, setPan, rasterAn, rasterLinien, stageRef,
   scene, level, nodes, waende, raeume, bandVon, massElemente, selectedNodeIds, unterlage,
   werkzeug, cursor, setCursor, wandStart, treppeStart, konturPunkte, zeigerDrinnen, beiZeigerAus, beiZeigerEin,
-  klick, weltPunkt, mitWinkelSnap, waehleAn,
+  klick, weltPunkt, mitWinkelSnap, waehleAn, gewaehlterRaum, waehleRaumAn,
 }: BuehneEigenschaften): React.ReactElement {
   return (
     <Stage
@@ -136,16 +146,32 @@ export function Buehne({
         {rasterAn && rasterLinien}
         {massElemente}
 
-        {/* Räume: Füllung + Fläche (m², aus mm² gerundet auf 2 Stellen) */}
+        {/* Räume: Füllung + Fläche (m², aus mm² gerundet auf 2 Stellen)
+            W-05/2: die Gruppe trug `listening={false}` — der Raum war sichtbar und tot. Jetzt
+            hört sie zu, aber NUR beim Werkzeug 'auswahl'; dasselbe Muster wie die Wände (:165).
+            Die Auswahl selbst wohnt NICHT hier (K-03: kein Zustand auf der Bühne), sondern in der
+            Hauptfunktion — die Bühne bekommt den gültigen Index und meldet den Klick. */}
         {raeume.map((raum, i) => {
           const xs = raum.polygon.map((p) => p.x);
           const ys = raum.polygon.map((p) => p.y);
           const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
           const cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+          const ausgewaehlt = gewaehlterRaum === i;
 
           return (
-            <Group key={`raum${i}`} listening={false}>
-              <Line points={raum.polygon.flatMap((p) => [p.x, p.y])} closed fill={FARBEN.raum} stroke="transparent" />
+            <Group key={`raum${i}`} listening={werkzeug === 'auswahl'}>
+              <Line
+                points={raum.polygon.flatMap((p) => [p.x, p.y])}
+                closed
+                fill={ausgewaehlt ? FARBEN.auswahl : FARBEN.raum}
+                stroke={ausgewaehlt ? FARBEN.auswahl : 'transparent'}
+                strokeWidth={1.5 / zoom}
+                onClick={(e) => {
+                  if (werkzeug !== 'auswahl') return;
+                  e.cancelBubble = true;
+                  waehleRaumAn(i);
+                }}
+              />
               <Text
                 x={cx - 600} y={cy + 150} width={1200} align="center"
                 scaleY={-1}
