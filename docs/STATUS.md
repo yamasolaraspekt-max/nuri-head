@@ -48,7 +48,7 @@
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`NACHBESSERN`** | **Generator** | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
-| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · aus dem Befund des Plan-Prüfers `7b7db5b6` · **Bau erst NACH A-20s Abnahme** (dieselbe Datei) |
+| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · aus dem Befund des Plan-Prüfers `7b7db5b6` · **Bau erst NACH A-20s Abnahme** (dieselbe Datei) |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6624,13 +6624,13 @@ meine_dritte_falle: "Mein Suchmuster meldete zuerst EINEN Math-Treffer in holzMe
 
 ```yaml
 auftrag: "A-21"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "E1 und E3 verankern · ZURUECKGESTELLT abschaffen · ERLEDIGT und VORLAGE definieren"
 basis_sha: 7b7db5b6
 spur: A
 prioritaet: P1
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN mit WARTEBEDINGUNG. Rot-Lage vollstaendig selbst gemessen: E1 in ARBEITSREGELN.md 0 Treffer, E3 0 Treffer, ERLEDIGT/VORLAGE in §3 0 Treffer, ZURUECKGESTELLT in docs/STATUS.md 14 Treffer. Alle vier Zahlen des Blattes halten — und zwei davon sind MEINE eigenen Befunde aus der Bestandsaufnahme 7b7db5b6. BEFANGENHEIT OFFENGELEGT: dieser Auftrag setzt um, was ich gemeldet habe; geprueft habe ich gegen die Kriterien, nicht gegen meine Erwartung. WARTEBEDINGUNG A-21-7: der Bau darf erst starten, wenn A-20 ABGENOMMEN ist — heute steht A-20 auf CODE_FERTIG, gerade gemessen. Die Bedingung steht im Blatt und ist keine Auflage von mir; ich stelle nur fest, dass sie noch nicht erfuellt ist."
 anlass: "Der plan-pruefer hat in 7b7db5b6 die Vorlage an Yama Punkt fuer Punkt frisch nachgemessen
   und zwei Punkte als OFFEN belegt. Sein Satz zu A-20: Wer daraus schliesst A-20 habe das
   mitgeloest, irrt; ein benachbarter Auftrag loest nicht, was er nur beruehrt."
