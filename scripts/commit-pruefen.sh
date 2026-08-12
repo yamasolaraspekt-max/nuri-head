@@ -540,6 +540,38 @@ if printf '%s' "$BOTSCHAFT" | grep -qE "$B5_ZAEHLWORT" \
   echo "            Warnung, kein Abbruch — der Commit laeuft weiter." >&2
 fi
 
+# ── B6: EINE SUMME BRAUCHT EINE ERHEBUNG, KEINE SAMMLUNG ────────────────────────────────────
+# Yamas Auflage 12.08.: *wer eine Gesamtzahl ueber eine Menge meldet, definiert zuerst die MENGE
+# (Pfad, Muster, Abgrenzung), erhebt sie vollstaendig und meldet Menge UND Summe.* Der Vorfall:
+# "ueber 640 Zeilen Prozessebene" gemeldet, 1.593 Zeilen in acht Bausteinen erhoben — fuenf
+# Dateien waren nie in der Menge.
+#
+# NICHT DIESELBE KLASSE WIE B5, und Yama hat das ausdruecklich getrennt:
+#   B5  gezaehlt und die Zeilen nicht GELESEN   -> Gegenmittel: derselbe Lauf ohne -c
+#   B6  nie gesagt, WORUEBER gezaehlt wird      -> Gegenmittel: die Menge zuerst benennen
+# *B5 haette hier NICHT geholfen: jede einzelne Zeilenzahl war richtig. Falsch war die Menge.*
+#
+# ERLAUBT  "StartView.tsx 267 Zeilen"          eine Zahl ueber EIN Ding
+# ERLAUBT  "acht Bausteine, zusammen 1.593:    Summe MIT Menge
+#           StartView 267 · ConfigWizard 271"
+# VERBOTEN "ueber 640 Zeilen Prozessebene"     Summe OHNE Menge
+#
+# Das Tor kann die Menge nicht pruefen — es kann nur fragen, ob eine GENANNT wurde. Deshalb
+# braucht das Summenwort eine Zahl in der Naehe (sonst faengt "insgesamt" jeden Fliesstext),
+# und als Mengennennung zaehlt ein Pfad, eine Dateiendung, ein Suchbefehl, eine Aufzaehlung
+# oder das ausdrueckliche Wort. Form und Stelle sind von B5 uebernommen, nichts neu erfunden:
+# Warnung statt Abbruch, nach dem Fehler-Riegel, ohne FEHLER und ohne exit.
+B6_SUMMENWORT='([Ii]nsgesamt|[Zz]usammen|[Ss]umme|[Gg]esamtzahl)[^0-9]{0,40}[0-9]|[0-9][^ ]* *([Ii]nsgesamt|[Zz]usammen)|(ueber|über|rund|etwa|ca\.) *[0-9][0-9.,]* *(Zeilen|Dateien|Bausteine|Module|Komponenten|Eintraege|Einträge)'
+B6_MENGE='[A-Za-z0-9_./-]+\.[A-Za-z]{1,5}|[a-z_]+/[a-z_]|grep|find|[Mm]enge|[Ee]rhebung|erhoben|[Pp]fad|[Mm]uster| · |, je |je [A-Z]'
+if printf '%s' "$BOTSCHAFT" | grep -qE "$B6_SUMMENWORT" \
+   && ! printf '%s' "$BOTSCHAFT" | grep -qE "$B6_MENGE"; then
+  echo "B6-WARNUNG  Summenbehauptung ohne genannte Menge (Pfad, Muster, Aufzaehlung)." >&2
+  echo "            Eine Zahl ueber EIN Ding ist in Ordnung. Eine Zahl ueber eine MENGE" >&2
+  echo "            braucht die Menge dazu: worueber wurde erhoben, und war es vollstaendig?" >&2
+  echo "            Was beim Suchen nebenbei auffiel, ist ein FUND — dann sag Fund, nicht Summe." >&2
+  echo "            Warnung, kein Abbruch — der Commit laeuft weiter." >&2
+fi
+
 # ── W-04 ────────────────────────────────────────────────────────────────────────────────────
 # Das Tor konnte keine NEUE Datei verbuchen: `git commit -- <pfad>` kennt nichts, was nie im
 # Index war. Gemessen am 03.08.: **31 von 98 Commits** dieser zwei Tage fuehrten mindestens eine

@@ -843,7 +843,52 @@ Ergebnis wird gemeldet, nicht überschrieben).*
 
 ---
 
+## 18c. Die Barriere B6 — Summe und Menge, und die Abgrenzung zu B5
+
+> **B6 · Eine Summe braucht eine Erhebung, keine Sammlung.**
+> *Wer eine Gesamtzahl über eine Menge meldet, definiert zuerst die Menge (Pfad, Muster,
+> Abgrenzung), erhebt sie vollständig und meldet Menge **und** Summe. Was beim Suchen nebenbei
+> aufgefallen ist, ist ein **Fund**, keine Summe — und wird als Fund gemeldet.*
+
+**B5 und B6 sind nicht dieselbe Klasse, und die Trennung ist ausdrücklich gesetzt.** *Ohne sie
+verschmelzen die beiden, und eine von ihnen wird nicht mehr angewandt:*
+
+| | Der Fehler | Das Gegenmittel |
+|---|---|---|
+| **B5** | ich habe **gezählt** und die Zeilen nicht **gelesen** | denselben Lauf ohne `-c` fahren |
+| **B6** | ich habe nie gesagt, **worüber** ich zähle | die Menge zuerst benennen, dann erheben |
+
+**Der belegte Vorfall zeigt, warum B5 hier nicht geholfen hätte:** *gemeldet waren „über 640 Zeilen
+Prozessebene", erhoben wurden **1.593 Zeilen in acht Bausteinen**. **Jede einzelne Zeilenzahl war
+richtig.** Falsch war, dass fünf von acht Dateien nie in der Menge waren — zwei ganz übersehen, zwei
+als „(Teil)" geführt statt gezählt.* **Eine Sammlung ist ein Nebenprodukt einer anderen Suche; eine
+Summe ist eine Behauptung über eine vollständige Menge.**
+
+Was erlaubt bleibt — B6 verbietet keine Zahlen, sondern Summen ohne Menge:
+
+```text
+ERLAUBT   "StartView.tsx 267 Zeilen"                      eine Zahl über EIN Ding
+ERLAUBT   "acht Bausteine, zusammen 1.593 Zeilen:         Summe MIT Menge
+           StartView 267 · ConfigWizard 271 · …"
+ERLAUBT   "gefunden beim Suchen: ConfigWizard (271 Z)"    als FUND gekennzeichnet
+VERBOTEN  "über 640 Zeilen Prozessebene"                  Summe OHNE Menge
+```
+
+**Das Tor warnt** (`scripts/commit-pruefen.sh`), wenn eine Botschaft ein Summenwort mit einer Zahl
+trägt und keine Menge nennt — Warnung, kein Abbruch, dieselbe Stufe und dieselbe Begründung wie bei
+B5. *Es kann nicht prüfen, ob die Menge **vollständig** ist; es kann nur fragen, ob eine genannt
+wurde. Das Summenwort braucht dabei eine Zahl in Reichweite, sonst fängt „insgesamt" jeden
+Fließtext.*
+
+---
+
 ## 19. Änderungsverzeichnis
+
+### Fassung 1.6 — 12.08.2026, Barriere B6 verankert (Generator, Auftrag B6)
+
+**Abschnitt 18c aufgenommen**, mit der Abgrenzung zu B5 als Tabelle (B6-5) und dem Vorfall, der
+zeigt, warum B5 dort nicht geholfen hätte. *Rein additiv, wie 18b: `git diff` zeigt für dieses
+Dokument 0 gelöschte Zeilen.*
 
 ### Fassung 1.5 — 12.08.2026, Barriere B5 verankert (Generator, Auftrag B5)
 

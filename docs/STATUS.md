@@ -33,7 +33,7 @@
 | **A-14** N-003-Vorbehalt ins Ergebnis | `BETRIEBSBESTAETIGT` | – | Inhalt `21940d33` (Bau `e0722979`) · Elter `efca1899` · Basis `1e09280d` · Kandidat `a2385d35` | **§10 voll gefahren** (Produktivcode mit Sichtwirkung, keine Doku-Sammelform) · Kette lückenlos, jeder Übergang `--is-ancestor` Exit 0 · Bündel im Kandidaten und **byte-gleich nachgebaut** (md5 `a5ea0056` vor = nach Neubau; genau das Artefakt, das der Browserlauf auslieferte) · Insel-Suite selbst **1693/1693** · Rückweg reiner Revert, `git apply --check -R` Exit 0, keine Migration/kein Datenpfad · **Plaketten-Renderbedingung selbst ausgeführt: nur `engine-sparren` unterdrückt, fünf Engines behalten ihre — auch `heizkoerper` mit roter Plakette** · `must_preserve` resources/+scripts/ in drei Richtungen 0/0/0 · Beifang ab CODE_FERTIG nur `docs/` · **ein P2/SPEC beim Planner (grundlage-Zeile nennt 4 von 6 Sonderlasten), blockiert nicht** · Veröffentlichung gehört Yama |
 | **A-15** Fachaussage oder Hinweis | `BETRIEBSBESTAETIGT` | – | Abnahme `8aded3b2` · Runde 1 `60d62d74` | **14/14 nach §12.4 neu gemessen** · P1 vorbildlich behoben: der überholte Abschnitt ist **als überholt markiert**, nicht gelöscht (Datum, Grund, Verweis) · Bilanz jetzt `6 + 4 + 1 = 11` · `__tests__` 15 · DIN-Stufung adressiert · Menge 13 und drei A-Fundstellen **erneut** selbst geöffnet |
 | **B5** Zählergebnis mit Trefferzeilen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `157576c2` · Elter `2a95ab40` | **7/7 — die Barriere AUSGELÖST, nicht gelesen**: Wegwerf-Repo, drei Probeläufe (feuert · schweigt bei Suite 1692/1692 · schweigt mit Belegzeile) + Mutation (Block raus → 0 Warnungen) · kein Abbruch, exit=0 beidseitig · scripts-Suite 107/107 an Bau **und** Elter · **P2: Belegmuster erkennt `Z.157` / `treppenTypen:4` nicht** (4 von 17 warnenden Botschaften) |
-| **B6** Summe braucht Erhebung | **`IN_ARBEIT`** | **Generator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
+| **B6** Summe braucht Erhebung | **`CODE_FERTIG`** | **Evaluator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
@@ -2012,9 +2012,20 @@ zwei_eigene_fallen: "(1) VENDOR VERGESSEN: mein erster Suite-Lauf meldete 106/10
 auftrag: "B6"
 titel: "Wer eine Gesamtzahl ueber eine Menge meldet, definiert zuerst die MENGE"
 datei: docs/auftraege/aktiv/B6-summe-braucht-erhebung.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft — die Reihenfolgebedingung ist erfuellt: B5 ist ABGENOMMEN
-  an b7ab49c5, die Abnahme auf scripts/commit-pruefen.sh ist durch, die Datei ist frei)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08. auf 30457e2b; Bericht docs/BERICHT-B6-summe-braucht-erhebung.md)
+haertetest_statt_behauptung: "Nicht nur die zwei Probelaeufe des Blattes, sondern eine Messung an
+  echten Botschaften — Menge ausdruecklich: die letzten 60 Commits von HEAD auf
+  auto/hausplaner-integration, alle fuenf Rollen. Summenwort getroffen 5, davon ohne Mengennennung
+  und damit warnend 2. Beide GELESEN statt gezaehlt (a088a608, 80261c87): beide feuern auf
+  dieselbe Wendung 'rund 148 Zeilen' im Satz 'geaendert sind zwei davon mit rund 148 Zeilen' —
+  eine Summe ueber eine Menge, deren Glieder nicht genannt sind. Echte Treffer, keine Fehlalarme,
+  und ausgerechnet der Satz, um den sich der Scope-Streit -8 gedreht hat. 2 von 60 ist eine
+  Messung an dieser Stichprobe, keine Quote; ich rechne sie nicht hoch."
+merge_waehrend_des_baus: "ed7ccb70 (WURZELFIX 2) hat waehrend des Baus 35 Commits eingespielt.
+  Nachgemessen statt angenommen: mein Bau im Arbeitsbaum unversehrt, STATUS.md hash-identisch mit
+  HEAD, §3 weiterhin 1 und 1 auf B6. Die Zustandszeile ist dabei von 2011 auf 2015 gewandert —
+  die Zeilenangabe im Bericht traegt den Nachtrag."
 basis_sha: 1e09280d
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — grep auf B6/Summe-Menge im Tor: 0 Treffer. Acht Kriterien, §5-Block vollstaendig. B6-2 ist die wertvollste Zeile: die Warnung muss NACHWEISLICH SCHWEIGEN, wenn Menge und Summe genannt sind, belegt durch ZWEI Probelaeufe mit beiden Ausgaben im Bericht — 'ohne diesen Gegenbeleg ist die Barriere eine Belaestigung'. Genau die Gegenrichtung, die bei must_preserve-Kriterien so oft fehlt. Die Trennung von B5 ist sauber und stammt von Yama selbst: B5 fragt 'hast du gelesen, was du gezaehlt hast', B6 fragt 'weisst du, WORUEBER du gezaehlt hast' — der Planner-Fehler dahinter ist belegt (640 gemeldet, 1.593 erhoben)."
