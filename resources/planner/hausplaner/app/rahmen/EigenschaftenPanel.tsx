@@ -273,7 +273,14 @@ export function EigenschaftenPanel({
               basis[feld] = Math.max(0, Math.round(wert));
               aktualisiereDach({ anbau: basis });
             };
-            const fehlt = !a || !(a.length > 0) || !(a.width > 0) || (istU && (!(a.lengthB && a.lengthB > 0) || !(a.widthB && a.widthB > 0)));
+            // A-24: die Bedingung ist für ALLE Verschneidungsformen dieselbe wie im Tor.
+            // Vorher stand hier `(istU && (…lengthB… || …widthB…))` — die zwei Anbaumaße wurden nur
+            // bei U geprüft. Das Tor `anbauZuEingabe` (renderers/three-d/dachMesh.ts:78) verlangt
+            // sie aber für JEDE Form: L und T gehen über `:143` durch dieselbe Funktion.
+            // Folge des alten Standes: der Nutzer füllte die zwei genannten Maße, die Warnung
+            // VERSCHWAND — und die Fläche blieb leer. Eine Zusage, die den Erfüllenden im Stich
+            // lässt. Der Wächter `anbauTorZusage.test.ts` hält Text UND Bedingung an das Tor.
+            const fehlt = !a || !(a.length > 0) || !(a.width > 0) || !(a.lengthB && a.lengthB > 0) || !(a.widthB && a.widthB > 0);
             return (
               <>
                 <div className="hp-ep-untertitel">Anbau / Verschneidung</div>
@@ -283,21 +290,26 @@ export function EigenschaftenPanel({
                 <label style={panelLabel}>Außenmaß Breite (mm)
                   <input type="number" min={0} value={a?.width ?? ''} onChange={(e) => setzeAnbau('width', Number(e.target.value))} style={panelInput} />
                 </label>
-                {istU && (
-                  <>
-                    <label style={panelLabel}>Innenhof/Kerbe Länge (mm)
-                      <input type="number" min={0} value={a?.lengthB ?? ''} onChange={(e) => setzeAnbau('lengthB', Number(e.target.value))} style={panelInput} />
-                    </label>
-                    <label style={panelLabel}>Innenhof/Kerbe Breite (mm)
-                      <input type="number" min={0} value={a?.widthB ?? ''} onChange={(e) => setzeAnbau('widthB', Number(e.target.value))} style={panelInput} />
-                    </label>
-                  </>
-                )}
+                {/* A-24: die zwei Felder gab es bisher NUR bei U. Sie sind dieselben Werte
+                    (`lengthB`/`widthB`), nur mit anderer fachlicher Lesart: bei U ist es der
+                    Innenhof bzw. die Kerbe, bei L und T der ANBAU. Die Bezeichnung ist nicht
+                    erfunden — sie steht in `geometry/dachVerschneidung.ts:25` als
+                    `lengthB: number; widthB: number;  // L_b, W_b (Anbau)`. */}
+                <label style={panelLabel}>{istU ? 'Innenhof/Kerbe Länge (mm)' : 'Anbau Länge (mm)'}
+                  <input type="number" min={0} value={a?.lengthB ?? ''} onChange={(e) => setzeAnbau('lengthB', Number(e.target.value))} style={panelInput} />
+                </label>
+                <label style={panelLabel}>{istU ? 'Innenhof/Kerbe Breite (mm)' : 'Anbau Breite (mm)'}
+                  <input type="number" min={0} value={a?.widthB ?? ''} onChange={(e) => setzeAnbau('widthB', Number(e.target.value))} style={panelInput} />
+                </label>
                 {fehlt && (
                   <div style={{ fontSize: 11, color: FARBEN.warnung, marginTop: 2 }}>
+                    {/* A-24: der Text nennt jetzt die TATSÄCHLICHE Torbedingung — alle vier Maße,
+                        für JEDE Verschneidungsform. Vorher stand für L/T „braucht Außenmaß Länge
+                        und Breite > 0"; wer das erfüllte, sah die Warnung verschwinden und bekam
+                        trotzdem kein Dach. */}
                     ⚠ {istU
                       ? 'U-Dach braucht alle vier Maße > 0 (Außen Länge/Breite + Innenhof/Kerbe Länge/Breite) — sonst rendert es nicht.'
-                      : 'L/T-Dach braucht Außenmaß Länge und Breite > 0 — sonst rendert es nicht.'}
+                      : 'L/T-Dach braucht alle vier Maße > 0 (Außen Länge/Breite + Anbau Länge/Breite) — sonst rendert es nicht.'}
                   </div>
                 )}
               </>
