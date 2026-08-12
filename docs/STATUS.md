@@ -56,7 +56,7 @@
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`BETRIEBSBESTAETIGT`** | – | Release `0474f53b` · §19 12.08. | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
-| **W-35** Konfigurator-Dialog | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
+| **W-35** Konfigurator-Dialog | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `75ad92eb` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-36** Faehigkeiten-Navigation | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `08b264cc` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
@@ -8195,8 +8195,8 @@ gefahrenstellen_ausdruecklich_geprueft: "Die parallel gebauten W-41-Dateien sind
 
 ```yaml
 auftrag: "W-35"
-zustand: IN_ARBEIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+ballbesitz: evaluator
 titel: "Vier Arten, nicht drei — und die Registerzeile sagt drei"
 basis_sha: 0474f53b
 spur: A
@@ -8227,6 +8227,62 @@ sechs_waechter_einer_mit_namen: "konfiguratorEhrlich, configWizardWrite, paketSp
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 W_35_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 gezogen_am: "12.08. vom generator. §3 vor dem Ziehen 0/0 an beiden Orten gemessen, danach 1/1."
+bau_sha: 3dae69b4
+bericht: docs/BERICHT-W-35-konfigurator-dialog.md
+E1_gefahren: "9 von 9 GLEICH, git show 3dae69b4:<pfad> | diff - <pfad>."
+alle_neun_kriterien: "W-35-1 BEIDE Registerfehler korrigiert, vorher/nachher im Bericht.
+  W-35-1b die Blatt-Schreibweisen auf die des Codes gezogen, drei Zaehlungen selbst nachgemessen
+  (ohne Umlaut 0, katalogFür 2, onÜbernehmen 6). W-35-2 fuenf Schritte am Code gezaehlt plus die
+  Schrittnavigation. W-35-3 TYP_MAP :43 mit seiner einzigen Benutzung :233 und dem Anschluss an
+  W-40. W-35-4 die Vorbelegungen VOLLSTAENDIG als Tabelle. W-35-5 die Grenze zu W-42 gespiegelt.
+  W-35-6 sechs Waechter je mit Zusage, konfiguratorEhrlich woertlich. W-35-7 sechs Grenzen plus
+  der standalone-Zweig. W-35-8 sieben Hashes, 0 Kollisionen gegen alle uebrigen Werkzeugblaetter."
+ZWEI_FUNDE_BEIM_ABLESEN_die_nicht_im_auftrag_standen: "Beide betreffen die Ehrlichkeit der Flaeche,
+  beide sind gemessen und KEINER ist behoben — W-35 ist eine Ablesung.
+  ERSTENS: Schritt 2 heisst Material und nimmt nichts auf. Die beiden select in :124-127 tragen
+  weder value noch onChange; :47-50 fuehrt vier Zustaende, Material ist keiner. Alle VIER Ausgaenge
+  einzeln geoeffnet: paket.parameters :234, radiator.parameters :182, treppe.parameters :203,
+  knoten.produkt :224 — viermal kein Material. Der Anwender waehlt 3-fach Waermeschutz, und das
+  Wort taucht danach nirgends wieder auf. Kein Waechter deckt es ab: grep auf Verglasung,
+  Profilsystem, Rastermass, Stahlwange ueber __tests__ = 0 Treffer.
+  ZWEITENS: Schritt 3 heisst Pruefung und prueft nichts. :133-135 lesen breite und hoehe nicht,
+  die Zeichen ✓ ✓ ! sind fest verdrahtet. Beim Gegenlesen praezisiert, weil es sonst falsch waere:
+  :134 haengt sehr wohl an art === treppe, aber nur der TEXT. Die Aussage lautet nicht 'nichts ist
+  bedingt', sondern 'nichts ist gemessen'.
+  DAS SCHWERSTE IST :134: 'DIN 18065 Schrittmass' steht als Haken da, ohne dass etwas dagegen
+  geprueft wuerde. Eine Norm zu nennen ist eine fachliche Zusage. Ob und wie gerechnet wird,
+  gehoert Yama — es steht in 7-GRENZEN als Frage, nicht als Vorgabe."
+die_ursache_der_falschen_registerzeile_ist_eine_quelle: "Der Dateikopf ConfigWizard.tsx:2 sagt
+  'fuer Fenster/Tuer/Treppe' und :5-6 'der Schreibpfad bleibt die naechste Scheibe' — BEIDE Fehler
+  der Registerzeile stehen dort, und der Kopf ist der aeltere. Ich habe ihn bei der Erhebung
+  gelesen und abgeschrieben, waehrend der Typ vier Zeilen weiter unten widersprochen haette.
+  H-6 in der unangenehmen Form: nicht ein Wort fuer einen Beleg gehalten, sondern einen ganzen
+  Satz. Der Kopf bleibt unangetastet, wie W-42 es fuer :6 entschieden hat — eine Ablesung aendert
+  ihre Quelle nicht."
+ein_zweiter_abbildungsweg_ohne_schutz: "Beim Oeffnen der Nachbarzeilen von TYP_MAP gefunden:
+  katalogFür :36-41 hat drei if und einen return OHNE if. Eine fuenfte KonfigArt wuerde von
+  TYP_MAP gestoppt, weil es ein Record<KonfigArt, …> ist — und von katalogFür stillschweigend mit
+  dem Heizkoerper-Katalog bedient. Am Code ablesbar, dort steht kein if; keine Mutation noetig."
+zwei_zahlen_nachgezaehlt_statt_uebernommen: "Die Vorbelegungen stehen VOLLSTAENDIG im Blatt: das
+  Auftragsblatt nennt Treppe 1000, Heizkoerper 1000/600, Fenster 1360 — richtig, aber die
+  Rueckfaelle 1010 und 2010 fehlen darin und gelten genau fuer die TUER, die dort nicht vorkommt.
+  Und konfiguratorEhrlich ist nicht mehr 'der dritte Ehrlichkeitswaechter dieser Stufe':
+  ls __tests__ | grep -i ehrlich liefert FUENF — fussleisten, gefuehrte, konfigurator,
+  snapshotFlaeche, start. Beim Schnitt waren es drei. Pflichtpruefung 8, feste Zahlen driften."
+eigene_zahl_korrigiert: "In 2-FUNKTION stand zuerst 'elf Einfuhren'. Ich hatte die Zeilenspanne
+  :9-19 gezaehlt statt die Zeilen; grep -c '^import ' = 12, react in :8 fiel heraus. Klein und
+  trotzdem gemeldet — eine Zahl, die ich abschaetze statt zu zaehlen, wird spaeter als Beleg
+  zitiert."
+was_NICHT_gefahren_wurde: "KEINE Mutationsprobe gesetzt. Die Fangtabelle in 6-PRUEFUNG sagt das
+  bei jeder Zeile einzeln. Eine Fangprobe, die ich nicht setze, ist keine Messung, sondern eine
+  Erwartung. Einzige Ausnahme: die Zeile 'fuenfte KonfigArt ohne katalogFür-Zweig' traegt ohne
+  Mutation, weil dort kein if steht. Insel-Suite nicht gefahren, kein Produktivcode beruehrt.
+  Browserabnahme offen, drei Punkte dafuer stehen in 4-BEDIENUNG."
+was_der_evaluator_zuerst_pruefen_sollte: "Die beiden Funde. Sie sind der Teil dieses Blattes, der
+  ueber die Ablesung hinausweist, und sie stehen bewusst als GRENZE und nicht als Mangel. Wenn
+  einer davon nicht traegt, faellt eine Aussage, die sonst in die naechste Stufe wandert.
+  Nachweis fuer Fund 1 ist die Abwesenheit von value/onChange in :124-127 PLUS die vier
+  Parameterlisten; wer nur die selects ansieht, hat die Haelfte."
 BEFUND_VOR_DEM_ZIEHEN_die_registerzeile_traegt_ZWEI_fehler: "W-35-1 nennt EINEN: sie sagt drei Arten,
   der Code traegt vier. Der stimmt, ich habe ihn geoeffnet — REGISTER.md:122 'Konfigurator-Dialog
   Fenster·Tür·Treppe', ConfigWizard.tsx:23 KonfigArt = fenster | tuer | treppe | heizkoerper.
