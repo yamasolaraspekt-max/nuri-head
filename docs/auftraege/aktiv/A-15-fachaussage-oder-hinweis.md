@@ -437,3 +437,56 @@ wirkung: "der Auftrag steht nicht still, obwohl Yama Achse 2 nicht vertritt. Aus
 verschaerft: "A-15-4 bleibt (Urteil kennzeichnen), genuegt aber nicht mehr — eine als
               'vorgeschlagen' gekennzeichnete Leerstelle ist eine zurueckgegebene Aufgabe."
 ```
+
+
+## §11 — Bericht A-15 (Generator, 12.08.2026)
+
+```yaml
+auftrag: "A-15"
+zustand: CODE_FERTIG
+bericht: "docs/BERICHT-A-15-fachaussage-oder-hinweis.md"
+bau_commits: "18a33858 · b5b490c8 · 82d7c31e · a2385d35 · (Abschluss)"
+in_arbeit_commit: "95cafb1b"
+
+kriterien:
+  A-15-1:  GRUEN   # Menge 13, Pfad + Muster + Summe, Ausschluesse gemessen begruendet
+  A-15-2:  GRUEN   # Achse 1 je Datei mit Zeile: acht mit Norm, fuenf ohne
+  A-15-3:  GRUEN   # beide Unschaerfen BESTAETIGT
+  A-15-4:  GRUEN   # jede Folgestufe traegt "vorgeschlagen, nicht entschieden" (10x)
+  A-15-5:  GRUEN   # Plakette je Engine gemessen, blockgenau
+  A-15-6:  GRUEN   # die fuenf ohne Norm ausdruecklich; KEIN "keine Norm also Hinweis"
+  A-15-7:  GRUEN   # 0 geaenderte Dateien in resources/ und app/
+  A-15-8:  GRUEN   # 95cafb1b: Scope-Messung ueber 42 Bloecke, 0 IN_ARBEIT, keine Datei gehalten
+  A-15-9:  GRUEN   # Achse 3 je Engine mit Zustand und Fundstelle
+  A-15-10: GRUEN   # zweimal "nicht unterscheidbar" statt geraten
+  A-15-11: GRUEN   # vier Treppen-Zeilen als ZULIEFERUNG aus W-09/1-7, nicht neu gemessen
+  A-15-12: GRUEN   # drei Faelle mit beiden erwogenen Klassen und Begruendung
+  A-15-13: GRUEN   # elf von elf, keine Zeile lautet "zu klaeren"
+  A-15-14: GRUEN   # Yamas drei Regeln woertlich, dazu sein Grund fuer die Nichtvertretung
+
+ergebnis:
+  fachaussage: "sparrenBerechnung · treppenBerechnung · abwassergefaelle · wandaufbau ·
+                fbhAuslegung · heizkreisVerteiler"
+  hinweis: "kuecheArbeitsdreieck · treppe2D · treppe3D · treppenTypen"
+  keine_engine: "configuratorPackage (bestanden steht im Freigabe-Status)"
+  kernsatz: "Die Klasse folgt NICHT der Norm: fbhAuslegung nennt keine und ist FACHAUSSAGE,
+             treppe2D nennt eine und ist HINWEIS. Genau dafuer gibt es Achse 2."
+  auswirkung: "DREI Engines muessten zusaetzlich schweigen — treppenBerechnung, abwassergefaelle,
+               fbhAuslegung. Vorbehaltlich Yamas Bestaetigung."
+  schwerster_fall: "die Treppe. Ihre Plakette sagt 'Alle Pruefungen bestanden', waehrend W-09
+                    belegt hat, dass sie ZWEIMAL weniger meint — Warnungen zaehlen nicht, und was
+                    nicht eingegeben wurde, wird nicht geprueft."
+
+was_ich_NICHT_entschieden_habe:
+  - "Achse 2 selbst — jede Zeile ist ein Vorschlag, gekennzeichnet, nach Yamas drei Regeln"
+  - "ob eine Engine schweigen SOLL — das ist ein Bau-Auftrag nach Yamas Bestaetigung"
+
+eigene_fehler_in_diesem_auftrag:
+  - "Scope-Abweichung: Bericht unter falschem Dateinamen angelegt, per git mv berichtigt"
+  - "Zeilenangabe 6 statt 4 bei kuecheArbeitsdreieck"
+  - "berechneUw faelschlich wandaufbau zugeordnet; kein Panel benutzt wandaufbau"
+  - "Zaehlmuster fuer bestanden war blind fuer einzeilige Schnittstellen"
+  alle: "vor dem Melden gefunden und im Bericht benannt"
+
+ballbesitz: evaluator
+```
