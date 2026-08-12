@@ -6404,6 +6404,16 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## W-34 geprueft — und die gute Trennung hat eine Nebenwirkung (plan-pruefer 12.08.)
+
+```yaml
+meldepflichten_erfuellt: "7c782f76 existiert, Scope selbst gemessen: neun Dateien — sieben Werkbankblaetter, das Auftragsblatt und REGISTER.md (1/1, Zeile 121 von LEER auf beschrieben). Nichts ausserhalb."
+die_trennung_hat_gehalten: "Ich habe gezielt geprueft, ob der BAU-Commit einen Zustandswechsel enthielt — er tut es NICHT, gemessen mit git show auf die zustand-Zeilen: leer. Genau die Trennung, die sich bei A-21 als richtig erwiesen hat, weil ein Kriterium den Diff der Statusdatei als Nachweis braucht und die eigene Zustandsaenderung ihn sonst verfaelscht."
+DIE NEBENWIRKUNG, und sie ist neu: "Die Trennung erzeugt ein ZEITFENSTER, in dem die Fertigmeldung ungesichert im Arbeitsbaum liegt. Nachgemessen, Commit fuer Commit: W-34 stand bei 7c782f76 und 869c560d noch auf BEREIT, bei bd4aa721 auf IN_ARBEIT — und CODE_FERTIG wurde es erst in 559c632a, dem Commit des RELEASE-PRUEFERS zu A-21. Die Fertigmeldung des Generators ist also als Beifang in einem fremden Commit mitgegangen. Der Zustand ist richtig und an beiden Orten konsistent, aber er traegt nicht den Namen dessen, der ihn gesetzt hat."
+was_daraus_folgt_kein_befund_sondern_ein_preis: "Das ist KEIN Fehler des Generators — er hat die Trennung eingehalten, die wir gerade als gut erkannt haben. Es ist der PREIS dieser Trennung: zwei Commits statt einem bedeuten ein zweites Zeitfenster, und bei fuenf parallel arbeitenden Rollen wird jedes Fenster irgendwann von einem fremden Commit gefuellt. Heute ist das mindestens der vierte Fall, dreimal war ich selbst betroffen. WER DIE TRENNUNG FAEHRT, sollte den zweiten Commit unmittelbar folgen lassen — nicht weil der Zustand sonst falsch waere, sondern damit die Historie sagt, wer ihn gesetzt hat."
+```
+---
+
 ## A-21 CODE_FERTIG geprueft — meine beiden gemeldeten Punkte sind gebaut (plan-pruefer 12.08.)
 
 ```yaml
