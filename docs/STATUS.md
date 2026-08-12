@@ -59,7 +59,7 @@
 | **A-26** Ball-Drift am Tor | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 13.08. · Basis `d3d234a6` | **BAU, P1 · hängt an A-25.** **Dreimal an einem Tag, drei verschiedene Rollen** — W-36, W-33, W-31: jedes Mal Datensatz gepflegt, Tafelzeile vergessen. Der Release-Prüfer hat alle drei nachgezogen und die Ursache benannt (`38bc5e12`): *„seit A-20 gibt es ZWEI Zustandsorte, und der zweite liegt räumlich weit vom ersten entfernt. Wer im Auftragsblock arbeitet, sieht die Tafel nicht."* **A-20 ist meine Regel, also gehört die Fehlerklasse mir.** Der schwerste Teil: im dritten Fall **glaubte** der Verursacher, beide Orte gepflegt zu haben, und schrieb es in die Botschaft — am Diff fehlte die Tafelzeile. **Ein Fehler, der nicht im Willen liegt, wird von einer Mahnung nicht behoben**, deshalb eine Barriere im Tor (vierte nach F-14, B5, B6) und ausdrücklich eine, die **warnt statt abbricht**. Drei Fallen stehen im Kriterium, weil jede sie grün und wirkungslos machen würde: Schreibweise (`**`ENTWURF`**` gegen `ENTWURF`), Kommentare nach `#`, und die Zuordnung — daran ist der Takt-Scan des Evaluators gescheitert. **Nicht-Ziel: die zwei Orte zusammenführen** (wäre Rückabwicklung von A-20 und gehört Yama). |
 | **W-05/2** Raum anwählen | **`CODE_FERTIG`** | **Evaluator** | Schnitt 13.08. · Basis `c09dcb93` | **BAU** · erster Posten aus der Frontend-Bestandsaufnahme des Release-Prüfers (`STATUS.md:5355`) — **und die Messung hat den Auftrag KLEINER gemacht.** Sein Vorschlag war *„Raum anwählen, benennen, Fläche ablesen"* als ein Schnitt; gemessen sind es drei ungleiche Teile: **Fläche ablesen ist GEBAUT** (`Buehne.tsx:139` Kommentar, `:148` Füllung, `:152` die m²-Zahl), **anwählen ist klein** (`:147` trägt `listening={false}`, das Auswahlmuster steht daneben in `:165`/`:190`), **und der NAME ist eine Entscheidung Yamas**: `ErkannterRaum` (`roomDetection.ts:35-40`) trägt `polygon`, `kanten`, `flaecheMm2`, `volumenMm3` — **keine id**, und `Buehne.tsx:147` nutzt `key={raum${i}}`, also den **Index**. Räume werden *erkannt*, nicht gezeichnet; ein Name ist dauerhaft, ein Index nicht. **Dieselbe Klasse wie die offene ZoneNode-Frage.** Der ganze Auftrag hängt an W-05-1-1: **die Auswahl wird zurückgesetzt, wenn sich die Raumliste ändert** — eine Auswahl, die einen Wandzug überlebt, zeigt auf einen anderen Raum und sieht gleich aus. |
 | **W-21/2** Auswechslung bekommt ein Zuhause | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `9ea1c3db` | **BAU** · **174 Zeilen ohne Zuhause, und zwei Blätter sagen es selbst.** `W-22/5-CODE/LIESMICH.md:36` und `W-22/7-GRENZEN.md:55` melden beide *„auswechslung.ts ist in keinem Blatt zuhause"*; `W-21`s Blatt führt es in `:156` als **ausdrückliches Nicht-Ziel** („VERWANDT — NICHT im Scope"). **Der Ausschluss war für die Ablesung richtig** und ließ die andere Frage offen: *wo ist das Modul zuhause.* Entschieden am 13.08. — **W-21, weil ein Wechselholz Tragwerk ist und seine Verbraucher mehrere sind** (Gaube W-22, Dachdurchdringungen W-29); ein Modul, das mehrere Werkzeuge brauchen, gehört zum Fundament. Selbst gezählt: **5 Exporte, 174 Z.**, und W-21 führt heute **fünf** Module — `auswechslung.ts` ist das sechste. `sparrenTrennung.ts` ist der Beleg für den Ort: sein Kopf sagt *„ergänzt auswechslung.ts"*, und es ist längst in W-21 zuhause. **W-21-2-2 zieht die zwei überholten Sätze in W-22 mit** — sonst entstünde die A-23-Klasse im selben Auftrag. **Kennung geprüft:** `W-21/1` ist 18× belegt, ebenso `W-21/W`, `W-21L`, `W-21L/F` — `W-21/2` ist frei (Präzedenz W-05/2, W-07/2). |
-| **A-27** Der Bau-Commit gehört in ein Feld | **`ENTWURF`** | `plan-pruefer` | Schnitt 13.08. · Basis `875d1da5` | **BAU, P1 · fünfte Barriere im Tor.** **Zwei Regeln laufen zusammen ins Rote, die einzeln richtig sind:** §12.4 verlangt bei der Wieder-Abnahme *alle* Kriterien, E1 (`ARBEITSREGELN.md:509`) die Messung **am Commit** — und der Datensatz sagt nicht, an welchem. **An A-23 gemessen:** `bau_sha` stand auf `3ad920b1`, dem Stand **vor** der Nachbesserung; `9d800094` kommt im Block **null Mal** vor. Wer beide Regeln befolgt, misst am falschen Stand und **meldet zu Recht rot, obwohl der Bau stimmt.** Herkunft: `24a122e9`, und der Plan-Prüfer hat ausdrücklich **nicht** selbst nachgetragen — *ein Bau-SHA, den der Prüfer einträgt, ist keine Meldung des Bauenden mehr.* **Reichweite selbst gemessen und größer als drei:** 57 Datensätze mit Bau-Zustand, **17 nennen einen Commit im Feld, 40 nicht** — bei **19** verschiedenen Feldnamen. `bau_sha` wird festgelegt (6× belegt, häufigste vorhandene Form), **kein neuer Name.** **Nicht im Scope:** die vierzig Altfälle — ein falsch nachgetragener SHA ist schlimmer als ein fehlender; sie werden gezählt, nicht gefüllt. **Und A-27-3 benennt, was die Barriere NICHT fängt:** einen existierenden, aber überholten Commit — genau A-23s Fall. |
+| **A-27** Der Bau-Commit gehört in ein Feld | **`ENTWURF`** | **planner** | Schnitt 13.08. · Basis `875d1da5` | **BAU, P1 · fünfte Barriere im Tor.** **Zwei Regeln laufen zusammen ins Rote, die einzeln richtig sind:** §12.4 verlangt bei der Wieder-Abnahme *alle* Kriterien, E1 (`ARBEITSREGELN.md:509`) die Messung **am Commit** — und der Datensatz sagt nicht, an welchem. **An A-23 gemessen:** `bau_sha` stand auf `3ad920b1`, dem Stand **vor** der Nachbesserung; `9d800094` kommt im Block **null Mal** vor. Wer beide Regeln befolgt, misst am falschen Stand und **meldet zu Recht rot, obwohl der Bau stimmt.** Herkunft: `24a122e9`, und der Plan-Prüfer hat ausdrücklich **nicht** selbst nachgetragen — *ein Bau-SHA, den der Prüfer einträgt, ist keine Meldung des Bauenden mehr.* **Reichweite selbst gemessen und größer als drei:** 57 Datensätze mit Bau-Zustand, **17 nennen einen Commit im Feld, 40 nicht** — bei **19** verschiedenen Feldnamen. `bau_sha` wird festgelegt (6× belegt, häufigste vorhandene Form), **kein neuer Name.** **Nicht im Scope:** die vierzig Altfälle — ein falsch nachgetragener SHA ist schlimmer als ein fehlender; sie werden gezählt, nicht gefüllt. **Und A-27-3 benennt, was die Barriere NICHT fängt:** einen existierenden, aber überholten Commit — genau A-23s Fall. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -7603,12 +7603,49 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 ```yaml
 auftrag: "A-27"
 zustand: ENTWURF
-ballbesitz: plan-pruefer  # DoR steht aus
+ballbesitz: planner  # DoR nicht erteilt: Bau-Commit-Feld ist nirgends definiert
 titel: "Wer CODE_FERTIG schreibt, nennt den Bau-Commit in einem FELD"
 basis_sha: 875d1da5
 spur: A
 prioritaet: P1
 blatt: "docs/auftraege/aktiv/A-27-der-bau-commit-gehoert-in-ein-feld.md"
+dor_beleg: "plan-pruefer 13.08. — DoR NICHT ERTEILT, EIN Punkt, und er ist die Definition, auf der
+  der ganze Auftrag steht.
+  DER KERN TRAEGT, und ich habe ihn selbst nachgezaehlt: 57 Datensaetze mit einem Bau-Zustand
+  (CODE_FERTIG, ABGENOMMEN, BETRIEBSBESTAETIGT, RELEASE_FREI, NACHBESSERN, VEROEFFENTLICHT) — genau
+  seine Zahl, unabhaengig erhoben. Auch die Diagnose traegt: §12.4 verlangt bei der Wieder-Abnahme
+  ALLE Kriterien, E1 die Messung am Commit; wer beides befolgt und den Commit aus dem Datensatz
+  nimmt, misst am falschen Stand. Das ist ein falsches Urteil aus zwei richtigen Regeln, und P1 ist
+  dafuer angemessen.
+  DER PUNKT: DAS BLATT DEFINIERT NIRGENDS, WAS EIN 'BAU-COMMIT-FELD' IST. Die Zeichenfolge kommt
+  genau EINMAL vor, in A-27-1 selbst, und nirgends steht, welche Feldnamen sie erfuellen. Davon haengt
+  aber ZWEIERLEI ab — die Barriere UND die Zahl.
+  GEMESSEN, DREI VERTRETBARE LESARTEN AN DENSELBEN 57 DATENSAETZEN:
+    weit   (jedes Feld, dessen Name auf _sha oder commit endet)   20 mit / 37 ohne
+    eng    (bau_sha, bau_commit, pruef_sha, release_sha)          18 mit / 39 ohne
+    enger  (nur bau_sha und bau_commit)                            7 mit / 50 ohne
+  Seine Zahl 17/40 liegt zwischen 'eng' und 'enger' und wird von keiner meiner drei Lesarten
+  getroffen. Die Zahl ist also nicht falsch — sie ist ohne das Praedikat nicht REPRODUZIERBAR.
+  WAS DAS FUER A-27-6 HEISST: das Kriterium sagt 'die VIERZIG Altfaelle sind gezaehlt und benannt'.
+  Wer ehrlich am Bau-Stand zaehlt, bekommt 37, 39 oder 50, je nachdem was er als Bau-Commit-Feld
+  gelten laesst — und muesste das Kriterium verletzen oder eine falsche Zahl schreiben. Dieselbe
+  Klasse wie W-37-5 und W-36-5, nur dass hier nicht die Zahl der Fehler ist, sondern die fehlende
+  DEFINITION dahinter.
+  UND ES TRIFFT AUCH DAS TRAGENDE KRITERIUM: A-27-1 laesst die Barriere melden, wenn der Block 'KEIN
+  Bau-Commit-Feld nennt'. Mit der engeren Lesart schlaegt sie bei einem Datensatz an, der pruef_sha
+  oder release_sha traegt; mit der weiten schweigt sie dort. Das ist kein Randfall: pruef_sha steht
+  9x und release_sha 9x in der Datei, bau_sha nur 6x. Wer die Barriere ohne die Definition baut,
+  entscheidet sie im Code — und die naechste Rolle findet die Entscheidung nur, wenn sie das Skript
+  liest.
+  WAS ZU TUN IST, und es ist eine Zeile: das Blatt nennt die MENGE der Feldnamen, die als
+  Bau-Commit-Feld gelten, und A-27-6 zaehlt am Bau-Stand statt eine Zahl vorzugeben. Welche Namen
+  dazugehoeren, ist eine Ordnungsentscheidung des Planners — ich schlage sie nicht vor.
+  WAS SONST GUT IST, und ich sage es, weil ich blockiere: A-27-3 ist die beste Stelle des Blattes. Es
+  benennt ausdruecklich, was die Barriere NICHT faengt — genau den Fall, der den Anlass gab, ein
+  existierender aber UEBERHOLTER Commit — und verweigert die Heuristik dafuer mit der richtigen
+  Begruendung: eine Barriere, die auf einer Heuristik rot meldet, wird abgeschaltet. Eine Luecke zu
+  benennen statt sie schlecht zu schliessen ist genau die Haltung, die A-26 heute schon getragen hat.
+  Zustand bleibt ENTWURF, Ball beim Planner."
 warum_P1: "Weil zwei Regeln zusammen ins Rote laufen, die einzeln richtig sind: §12.4 verlangt bei der
   Wieder-Abnahme ALLE Kriterien, E1 verlangt die Messung am Commit. Wer beide befolgt und den Commit aus
   dem Datensatz nimmt, misst am falschen Stand — und meldet zu Recht rot, obwohl der Bau stimmt. Kein
