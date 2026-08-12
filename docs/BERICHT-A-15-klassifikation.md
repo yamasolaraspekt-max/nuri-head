@@ -85,10 +85,69 @@ Richtungen nicht.*
 `engine-heizkoerper` hat einen **mehrzeiligen** `berechne:`-Block, über den das Muster hinweglief.
 *Blockgenau nachgemessen — acht Panels, jede Zuordnung einzeln.*
 
+## A-15-14 · Yamas drei Regeln — wörtlich, damit die nächste Klassifikation sie anwenden kann
+
+```text
+REGEL 1  IM ZWEIFEL DIE HOEHERE KLASSE.
+         "eine zu strenge kostet eine Rueckfrage, eine zu milde den Schaden."
+REGEL 2  JEDE ZEILE MIT BEGRUENDUNG UND FUNDSTELLE.
+         kein "vermutlich Bauschaden", sondern "Bauschaden, weil <Datei:Zeile> sagt <X>"
+REGEL 3  EIN VORSCHLAG JE ENGINE, nicht eine offene Frage je Engine.
+         "dann ist es fuer dich ein Blick auf eine Liste, keine Sitzung."
+```
+
+**Dazu Yamas Grund, warum er Achse 2 nicht selbst vertritt** — er gehört in denselben Bericht:
+
+> *„Dort wird einer Fehlfunktion eine **Schadensklasse** zugeordnet. Das ist eine Fach- und
+> Haftungsentscheidung … **Eine Vollmacht, Aufgaben zu erledigen, ist keine Vollmacht, Fachwissen
+> zu ersetzen, das ich nicht habe.**"*
+
+## Die elf Engines — und woher die Zahl kommt
+
+**13 (die Menge) − `enginePanels.ts` − `werkzeugRegistry.ts` = 11.** *Die beiden sind keine
+Rechnungen: die eine beschreibt Panels, die andere führt ein Feld. Sie könnten gar keine Plakette
+zeigen.* **Damit ist auch die „elf" des Auftrags gedeckt.**
+
+## A-15-9 · Achse 3 — die drei A-Fälle NACHGEPRÜFT, nicht neu gesucht
+
+| Engine | Zustand | Fundstelle | Wortlaut |
+|---|---|---|---|
+| `sparrenBerechnung.ts` | **A** | **10-12** | *„WICHTIG: VORBEMESSUNG … Ersetzt KEINE prüffähige Statik"* |
+| `fbhAuslegung.ts` | **A** | **6-7** | *„GRENZE: hydraulischer Abgleich und normative Auslegung bleiben Fach-Engine"* |
+| `heizkreisVerteiler.ts` | **A** | **6** | *„GRENZE: hydraulischer Abgleich/Rohrnetz bleibt Fach-Engine"* |
+
+**Alle drei bestätigt.** *Sie benennen ihre Grenze selbst — und urteilen trotzdem. Genau das ist
+Zustand A.*
+
+## A-15-10 · B gegen C — wo es NICHT unterscheidbar ist, steht das
+
+| Engine | Zustand | Fundstelle | Begründung |
+|---|---|---|---|
+| `abwassergefaelle.ts` | **A** | **4** | sagt selbst *„nach DIN 1986-100 **(vereinfacht)**"* — die Einschränkung steht im Kopf |
+| `kuecheArbeitsdreieck.ts` | **nicht unterscheidbar (B/C)** | 6 | *„nur Punkte → Wege → Bewertung"* beschreibt den Umfang, **nicht die Vollständigkeit gegenüber DIN 18022** |
+| `wandaufbau.ts` | **nicht unterscheidbar (B/C)** | 6 | *„nur die Übergangswiderstände unterscheiden sich"* ist eine Bauteil-Aussage, **keine Aussage über die Vollständigkeit nach DIN EN ISO 6946** |
+| `configuratorPackage.ts` | **keine Rechnung** | 100-101 | `bestanden` steht dort im **Freigabe-Status**, nicht in einem Fachurteil — **keine Engine im Sinne dieses Auftrags** |
+
+> **Zustand C ist der gefährlichste, weil er sich wie B liest.** *Deshalb steht bei zweien
+> „nicht unterscheidbar" statt einer Vermutung — der Unterschied ist am Code nicht messbar und
+> braucht Fachprüfung.*
+
+## A-15-11 · Die vier Treppen-Dateien — ZULIEFERUNG, und sie fehlt noch
+
+`treppenBerechnung.ts` · `treppe2D.ts` · `treppe3D.ts` · `treppenTypen.ts` werden **nicht hier
+gemessen**, sondern aus `W-09/1-5` übernommen.
+
+**W-09/1 steht heute auf `BEREIT` und ist nicht gebaut** — die Zulieferung existiert also noch
+nicht. **Das ist keine Lücke dieses Berichts, sondern eine Reihenfolge:** *A-15 kann erst
+abschließen, wenn W-09/1 seine vier Zeilen geliefert hat, oder die Auflage wird geändert.*
+**Ich messe sie NICHT ersatzweise — zwei Aufträge, die dieselbe Datei messen, erzeugen zwei Zahlen
+und eine Diskussion.**
+
 ## Noch offen
 
-**A-15-4, -6, -9 bis -14** — Achse 2 und 3, die Klassifikation je Engine, Yamas drei Regeln im
-Wortlaut. **Diese Seite wird fortgeschrieben; sie ist noch kein Ergebnis.**
+**A-15-4, -6, -12, -13** — Achse 2 (Schadensklasse je Engine) mit der höheren Klasse im Zweifel,
+je Zeile Begründung und Fundstelle, ein Vorschlag je Engine. **Und die Treppen-Zulieferung aus
+W-09/1.** *Diese Seite ist noch kein Ergebnis.*
 
 ## A-15-7 · must_preserve
 
