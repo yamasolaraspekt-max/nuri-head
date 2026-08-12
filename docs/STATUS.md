@@ -2179,6 +2179,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## Ich habe meine eigene neue Messmethode widerlegt — in der Runde nach ihrer Einfuehrung (plan-pruefer 12.08.)
+
+```yaml
+was_ich_zwei_stunden_vorher_geschrieben_habe: "In 430aacb8 habe ich die Platzhalter-Zaehlung als blind verworfen und geschrieben: 'Die richtige Probe ist der DIREKTE VERGLEICH mit _VORLAGE statt einer Klammer-Zaehlung.' Das war zu schnell. Ich habe die neue Methode gefeiert, ohne sie gegen einen bekannten Fall zu pruefen."
+die_widerlegung_gefahren_an_der_ausgangslage: "Weil ich fremde Zahlen selbst messen muss, habe ich die 4/7 des Planners gegen den Stand VOR seinem Bau (7fbdaafe) nachgemessen. Meine neue Methode ergab 7/7 — im Widerspruch zum Register (6/7) UND zum Planner (4/7). Drei Verfahren, drei Zahlen: damit war nicht die Zahl verdaechtig, sondern MEIN Verfahren. Die scharfe Messung zaehlt EIGENE ZEILEN (diff gegen die Vorlage, nicht Gleichheit): 1-ZWECK 21, 3-FORMELN 51, 4-BEDIENUNG 49, 7-GRENZEN 52 — beschrieben. 2-FUNKTION 1 von 37, 6-PRUEFUNG 1 von 37, 5-CODE 1 von 33 — je EINE eigene Zeile, und das ist der eingesetzte Titel. ERGEBNIS 4/7. Der Planner hat recht, selbst nachgemessen."
+die_eigentliche_lehre_beide_methoden_sind_blind: "Die Klammer-Zaehlung ist blind fuer die UNVERAENDERTE Vorlage. Mein Vorlagen-Vergleich ist blind fuer die MINIMAL veraenderte Vorlage — ein eingesetzter Titel genuegt, und das leere Blatt zaehlt als beschrieben. Ich habe die eine Blindheit gegen die andere getauscht und das fuer Fortschritt gehalten. Die tragfaehige Frage ist nicht OB ein Blatt abweicht, sondern WIE VIEL eigener Inhalt darin steht — eine SCHWELLE statt eines Ja/Nein. Genau diese Form haben meine Zaehlfehler alle: ein Merkmal wird gesucht, das mit dem Gemeinten korreliert, aber nicht dasselbe ist."
+warum_das_ohne_die_pflicht_nicht_aufgefallen_waere: "Aufgefallen ist es NUR, weil die Wache verlangt, auch fremde Zahlen selbst zu messen. Haette ich die 4/7 des Planners geglaubt — sie war ja richtig — waere meine kaputte Methode unentdeckt im STATUS stehen geblieben und haette den naechsten W-Auftrag falsch eingestuft. Eine fremde Zahl nachzumessen prueft nicht nur die Zahl, sondern das eigene Werkzeug."
+zweiter_befund_die_alte_zahl_steht_noch_an_der_quelle: "Der korrigierte Wert 4/7 steht in einem Befundpapier und in meinem Block — die ALTE Zahl 6/7 steht weiter an der Stelle, aus der Instanzen sie ABLESEN: FAHRPLAN-WERKZEUGKASTEN.md Zeile 39 ('6/7 BLAETTER 1 W-07') und Zeile 65 ('W-07 (6/7, W-07N geschnitten)'). Selbst gezaehlt. Dieselbe Zeile 81 fuehrt W-07N als 'wartet auf DoR', obwohl die DoR durch ist und der Datensatz auf BEREIT steht. Halb korrigiert — die Klasse, die Yama mir am 10.08. schon einmal vorgehalten hat. ICH ZIEHE ES NICHT NACH: der Fahrplan gehoert dem Planner, und ich korrigiere fremde Zeilen nicht still. Ball beim Planner, mit der Bitte, die Quelle zu berichtigen und nicht nur den Befund."
+```
+---
+
 ## Zwei Postenmessungen — und ein Fehlbefund, den ich um Haaresbreite verfehlt habe (plan-pruefer 12.08.)
 
 ```yaml
