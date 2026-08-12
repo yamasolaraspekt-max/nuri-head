@@ -44,8 +44,8 @@
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **A-19** H-9 + §3-Musterberichtigung | **`BETRIEBSBESTAETIGT`** | – | Abnahme `0ab70812` · Elter `4632d032` | **7/7** · Berichtigung ist **keine Abschaltung**: an einer echten laufenden Zeile aus der Historie geprüft, das neue Muster zählt sie · H-1…H-8 alle zeichengleich, §3-Regel selbst unberührt (nur die Prüfmethode) · sein Selbstbefund: die eigene Suche meldete 0 statt 9 |
 | **W-23** Deckung und Material | **`IN_ARBEIT`** | **Generator** | Bau `2143c5db` · Elter `c2c6bf4e` | **6/7** · Fachkern stark und **nachgerechnet** (Teilbarkeitsfalle: `n_min 3 > n_max 2`, verworfene Fassung liefert 333,3 statt 372–405) · Quelle selbst geöffnet, alle Zahlen treffen · **P1: die als Abweichung gemeldete Namenskorrektur ist selbst der Fehler** — die Zeile mit 372/405 heißt in der Quelle `Harzer Pfanne 7` |
-| **W-27** Dachkantentypen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
-| **W-20** Stückliste und Mengen | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
+| **W-27** Dachkantentypen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c2c6bf4e` | **zweites C-Werkzeug, Ziel `ENTWORFEN`** — die Regel ist ausformuliert, sie steht nur im falschen Baum: `DachplanerProPage.tsx:85-87` trennt **Kanten** (TRAUFE·GIEBEL·PULT_WAND·WALM·TEILWALM) von **Ecken** (grat·kehle·ortgang·neutral), `analyzeTopology:193` entscheidet. **Insel-Lücke gemessen:** `ortgang` **0**, `TopologyJoinType` **0**, `cornerType` **0** — `grat` 17 und `kehle` 33 sind **nur Wörter, keine Erkennung** · **löst F-014s ⚠ aus meiner Registermessung**: W-07 lehnt einspringende Ecken ab, der Prototyp erkennt sie |
+| **W-20** Stückliste und Mengen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `8300aa59` | **Ziel `BESCHRIEBEN`** (Ablesung, anders als W-15/W-27) — `holzMengen.ts` 64 Z., 3 Exporte, **6 Testzusagen** · der Dateikopf nennt den Grund: die Stückliste **schätzte** vorher aus dem Rechteck-Rahmen, die Engine zeichnete geclippt — **zwei Wahrheiten** · **einzige Lücke: die Ziegelmenge** (`stueck.*m2` **0** Treffer), ab heute schließbar über F-011 × `Bedarf_Stk_m2` aus W-23 · **meine Fehlmessung berichtigt:** `lattenMengen` 0 war die falsche Schreibweise — das Feld heißt `lattenLaenge` und ist gefüllt |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -2697,6 +2697,18 @@ DRITTE_MESSUNG_UND_JETZT_STIMMT_SIE: "Meine zweite Zaehlung war auch nicht praez
 die_eigentliche_lehre: "Dreimal dieselbe Frage, drei verschiedene Zahlen — und der Unterschied lag jedes Mal im MESSVERFAHREN, nie im Gegenstand. Erste Messung: grep auf die Zeile (zaehlte Befund-Bloecke mit). Zweite: awk ohne Blockgrenze (zaehlte ueber Blockgrenzen hinweg). Dritte: Fenstergrenze je Vorkommen. Das ist B5 und B6 in einem Fall: wer eine Zahl behauptet, muss sagen, WIE er gezaehlt hat — und wer eine Summe meldet, muss die MENGE definieren. Beide Barrieren stehen als Auftrag BEREIT und sind noch nicht gebaut; heute war ich ihr Anwendungsfall."
 GESCHLOSSEN: "plan-pruefer 12.08. — SELBST NACHGEMESSEN mit der praezisen Methode (zustand-Feld innerhalb von 12 Zeilen nach der auftrag-Zeile): A-17 traegt jetzt genau EINEN Zustandsdatensatz (Z.2141, BEREIT); der zweite Eintrag bei Z.3987 hat kein zustand-Feld mehr und ist damit ein Befund-Block wie bei A-02/A-07/A-08/A-09. Der Planner hat den Befund angenommen ('trifft mich, behoben') und die richtige Seite entfernt — meinen BEREIT-Block hat er stehen lassen. Damit ist die dritte Bauart nicht nur benannt, sondern einmal durchgespielt: gefunden durch Zaehlen, behoben von dem, dem die Zeile gehoerte."
 was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwortet: wer legt den Block an, Planner beim Schnitt oder Plan-Pruefer bei der DoR? Solange das offen ist, kann derselbe Fall beim naechsten Auftrag wieder entstehen — behoben ist der Fall, nicht die Ursache."
+```
+---
+
+## W-20 und W-27: beide DoR bestanden — eine mit Auflage, weil eine Null keine Abwesenheit beweist (plan-pruefer 12.08.)
+
+```yaml
+W20_alle_zahlen_selbst_gemessen: "holzMengen.ts: 64 Zeilen, 3 Exporte — beide exakt wie im Blatt. Bei 'sechs Testzusagen' hatte ich zuerst 25 gemessen und NICHT gemeldet, sondern nachgesehen was gezaehlt wird: 25 assert-Aufrufe in SECHS test-Bloecken. Das Blatt zaehlt Bloecke, ich zaehlte Zusagen — beide Zahlen richtig, sie messen Verschiedenes. Zweites Mal heute derselbe Beinahe-Fehlbefund, zweites Mal durch Weitermessen verhindert."
+W20_scheinwiderspruch_geprueft_und_aufgeloest: "Die Grundlage nennt 'W-23 (BESCHRIEBEN)', waehrend W-23 als Auftrag auf NACHBESSERN steht — das sah nach instabiler Grundlage aus. GEMESSEN: das REGISTER fuehrt W-23 als BESCHRIEBEN (Werkzeug-Zustand), der Datensatz als NACHBESSERN (Auftrags-Zustand). Zwei Ebenen, kein Widerspruch. Und die Nachbesserung ist Fehlerklasse BEWEIS wegen EINER Stelle — der Bau stimmt, der Beleg nicht; die Blaetter, auf die W-20 aufbaut, aendern sich dadurch nicht. Grundlage stabil."
+W27_die_drei_zahlen_halten: "'ortgang' als String-Literal: 0 Dateien. TopologyJoinType: 0. cornerType: 0. Alle drei selbst gemessen, alle drei richtig."
+W27_AUFLAGE_eine_null_beweist_keine_abwesenheit: "ABER die Formulierung des Blattes geht weiter als seine Zahl: es schreibt \"'ortgang' 0 Treffer <- gibt es in der Insel NICHT\". GEMESSEN, mit Trefferzeilen: die Insel traegt eine EXPORTIERTE FUNKTION ortgangFlaechenlaengeM (dachformVorlagen.ts:291), ein Feld ortgangausbildung (:127 und :1386) und 20 Treffer fuer 'Ortgang' gross geschrieben. Was fehlt, ist der Ortgang als KANTENTYP — nicht der Ortgang als Sache. AUFLAGE FUER DEN BAU: W-27-3 schreibt in 7-GRENZEN, dass der Kantentyp fehlt, NICHT dass es Ortgang in der Insel nicht gibt. Wer den weiteren Satz uebernimmt, setzt eine falsche Grenzaussage ins Werkzeug — und der naechste, der eine Ortgang-Laenge braucht, baut sie neu, obwohl sie da ist."
+warum_das_die_umkehrung_von_H8_ist: "H-8 sagt: Mehrfachvorkommen ist kein Beleg. Hier ist die Kehrseite und sie ist gefaehrlicher: NULL Vorkommen eines MUSTERS ist kein Beleg fuer die Abwesenheit der SACHE. Ein zu enges Suchmuster findet nichts und liest sich wie ein Beweis. Genau das ist mir heute selbst passiert, als ich 'A-06' zwanzig Runden lang als Leerstelle meldete."
+ergebnis: "Beide BEREIT beim Generator, an beiden Orten gesetzt. §3 frei (Tafel 0, Datensatz 0, im Baum gemessen). W-23 liegt beim Generator zur Nachbesserung — Fehlerklasse BEWEIS, blockiert nach §12.5 nichts."
 ```
 ---
 
@@ -6193,8 +6205,8 @@ zum_bau_commit: "Der Datensatz nannte 39270fab als Bau; das ist der IN_ARBEIT-Co
 ```yaml
 auftrag: "W-27"
 datei: docs/auftraege/aktiv/W-27-dachkantentypen-entwerfen.md
-zustand: ENTWURF
-ballbesitz: "plan-pruefer (DoR)"
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: c2c6bf4e
 anlass: "Klasse C, zweites Werkzeug. Voraussetzungsfrei — W-07 ist BETRIEBSBESTAETIGT, F-025 und
          F-026 sind 🟢 nach A-12."
@@ -6228,8 +6240,8 @@ der_stille_fehler_dieses_werkzeugs: "Kriterium W-27-2 verlangt ALLE VIER joinTyp
 ```yaml
 auftrag: "W-20"
 datei: docs/auftraege/aktiv/W-20-stueckliste-und-mengen.md
-zustand: ENTWURF
-ballbesitz: "plan-pruefer (DoR)"
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: 8300aa59
 anlass: "Klasse C, letztes voraussetzungsfreies Werkzeug — und der Zeitpunkt ist kein Zufall: W-23
          ist gerade gebaut (BESCHRIEBEN) und F-053 eingetragen, genau die zwei Zulieferungen, die
