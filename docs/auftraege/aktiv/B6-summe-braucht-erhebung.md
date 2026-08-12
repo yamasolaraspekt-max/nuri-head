@@ -196,3 +196,108 @@ abgrenzung_zu_b5: "B5 = gezaehlt, aber nicht gelesen. B6 = nie gesagt, worueber.
 kern: "eine Sammlung ist ein Nebenprodukt einer anderen Suche. Eine Summe ist eine
        Behauptung ueber eine vollstaendige Menge. Ich habe das erste als das zweite gemeldet."
 ```
+
+## §11 — Votum B6 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "B6"
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+abnahme_commit: "6ecf911c"
+elter: "7be1a381"
+in_arbeit_commit: "30457e2b"
+pruefstand: "worktree --detach auf 6ecf911c und 7be1a381, node_modules UND vendor an BEIDEN
+     Staenden — die scripts-Suite braucht vendor, sonst faellt A-03-4 und ich melde meinen
+     eigenen Aufbau als Regression (bei B5 passiert)."
+pruefform: "Wie bei B5: die Barriere AUSLOESEN, nicht ihren Code lesen. Zusaetzlich zwei Fragen,
+     die B5 nicht hatte — verdecken sich die beiden Waechter, und stimmt das Werkzeug mit dem
+     Regeltext ueberein, der es beschreibt."
+
+messtisch_alle_acht:
+  B6-1: GRUEN
+    rot_lage: "grep -cE 'B6|Summe.*Menge' scripts/commit-pruefen.sh — Elter 0 (wie das Blatt
+            sagt), Bau 9."
+    ausgeloest: |
+      $ TICKET_ROLLE=evaluator bash scripts/commit-pruefen.sh \
+          "insgesamt 47 Treffer im Haus, damit ist die Lage klar" docs/a.md
+      B6-WARNUNG  Summenbehauptung ohne genannte Menge (Pfad, Muster, Aufzaehlung).
+                  Eine Zahl ueber EIN Ding ist in Ordnung. Eine Zahl ueber eine MENGE
+                  braucht die Menge dazu: worueber wurde erhoben, und war es vollstaendig?
+                  Was beim Suchen nebenbei auffiel, ist ein FUND — dann sag Fund, nicht Summe.
+                  Warnung, kein Abbruch — der Commit laeuft weiter.
+      exit=0
+  B6-2: GRUEN
+    beleg: "'ueber alle 13 Dateien in geometry/ mit Muster bestanden gemessen: insgesamt 47
+            Treffer, Trefferzeilen in wandaufbau.ts:41' -> B6 0 Warnungen (und B5 ebenfalls 0)."
+  B6-3: GRUEN
+    beleg: "Alle drei Einzelzahlen des Kriteriums einzeln gefahren:
+              'Suite 1692/1692'          -> B6 0, exit 0
+              '0 Platzhalter'            -> B6 0, exit 0
+              'StartView.tsx 267 Zeilen' -> B6 0, exit 0"
+  B6-4: GRUEN
+    beleg: "exit=0 bei feuernder wie bei schweigender Botschaft, jeweils direkt nach dem
+            Tor-Aufruf gemessen."
+    mein_messfehler_dabei: "Mein erster Durchgang meldete exit=1 bei allen drei B6-3-Proben.
+            Ursache war MEIN Aufbau: das $? stand in der printf-Zeile NACH zwei grep -c-Aufrufen
+            und trug deren Rueckgabewert (grep gibt 1 bei null Treffern). Direkt nach dem Tor
+            gemessen: exit=0. Beinahe haette ich 'die Barriere sperrt' gemeldet — der Befund
+            waere frei erfunden gewesen."
+  B6-5: GRUEN — und die Abgrenzung ist am Werkzeug nachgemessen, nicht nur gelesen
+    beleg: "ARBEITSREGELN §18c, neu (Elter: 1 B6-Erwaehnung, Bau: der ganze Abschnitt).
+            Die Trennung steht als Tabelle:
+              B5 | ich habe GEZAEHLT und die Zeilen nicht GELESEN | denselben Lauf ohne -c
+              B6 | ich habe nie gesagt, WORUEBER ich zaehle      | Menge zuerst benennen"
+    die_vier_regelbeispiele_selbst_gefahren: |
+      "StartView.tsx 267 Zeilen"                          ERLAUBT  -> B6 0  ✓
+      "acht Bausteine, zusammen 1593 Zeilen: StartView…"  ERLAUBT  -> B6 0  ✓
+      "gefunden beim Suchen: ConfigWizard (271 Z)"        ERLAUBT  -> B6 0  ✓
+      "ueber 640 Zeilen Prozessebene"                     VERBOTEN -> B6 1  ✓
+    warum_das_zaehlt: "Der Regeltext beschreibt vier Faelle. Alle vier verhalten sich am Tor
+            genau so. Regel und Werkzeug sagen dasselbe — gemessen, nicht angenommen."
+  B6-6: GRUEN
+    beleg: "Die B6-Zeile steht in allen fuenf 4-WAS-ICH-ABLIEFERE.md (je 1 Treffer, einzeln
+            gezaehlt). Beim Evaluator-Blatt Zeile 15: '| Menge je Summe | B6: Summe? Dann Menge
+            zuerst benennen (Pfad, Muster, Abgrenzung) und vollstaendig erheben …'"
+  B6-7: GRUEN
+    beleg: "resources/ und app/ 0 Dateien · Tor +32/-0 · scripts-Suite Bau 107/107/0,
+            Elter 107/107/0."
+    b5_unversehrt: "Der B5-Block ist an Elter und Bau BYTEGLEICH (md5 ee42893e… beide).
+            Zusaetzlich die Mutation: B6-Block entfernt (Anker genau 1x), dieselbe Botschaft
+            -> B6 0 Warnungen, B5 feuert WEITER. Die beiden Waechter verdecken einander nicht.
+            Zurueckgestellt, md5 identisch."
+  B6-8: GRUEN mit P2 zur Form
+    beleg: "30457e2b (09:36:28) setzt BEIDE Orte, 13,5 Minuten vor dem Bau (09:50:00).
+            Die Botschaft nennt beide Zahlen UND beide Trefferzeilen mit Zeilennummer:
+            Tafelzeile 1 (STATUS.md:36), Zustandsfeld 1 (STATUS.md:2011).
+            SELBST nachgeschlagen im Commit: :36 ist die B6-Tafelzeile, :2011 ist
+            'zustand: IN_ARBEIT'. Beide Zahlen nachgemessen: je 1. Alles exakt."
+    p2: "Ein woertlicher BEFEHL ist nicht zitiert — die Botschaft nennt 'nach der frisch
+            verankerten Methode gemessen' statt '$ grep -cE …'. Dieselbe schmale Luecke, die ich
+            bei W-07N Runde 2 als P2 geführt habe; ich halte denselben Massstab. Der Zweck des
+            Kriteriums ist erfuellt und von mir nachgemessen."
+
+was_diesen_bau_heraushebt:
+  - "Er hat die Barriere an ECHTEN Botschaften gemessen, nicht an erfundenen — und der Regeltext
+     traegt vier Beispiele, die ich alle vier am Tor nachfahren konnte."
+  - "Sein §3-Beleg ist der erste, bei dem das breite Muster benutzt wird — mit der Bemerkung, dass
+     mit dem alten [AW]-Muster 'die Tafelzeile hier wieder 0 gemeldet haette und B6 unsichtbar
+     gewesen waere wie B5'. Das ist derselbe Befund, den ich in meinem B5-Votum an meinem eigenen
+     Takt-Werkzeug festgestellt habe, eine Runde spaeter unabhaengig bestaetigt."
+  - "Die Reihenfolge B5-dann-B6 hat er GEMESSEN statt abgewartet: 'B5 steht seit b7ab49c5 auf
+     ABGENOMMEN, damit ist die Datei frei'."
+
+meine_eigene_falle:
+  was: "exit=1 bei drei Proben gemeldet — Ursache war mein $? nach zwei grep-Aufrufen, nicht das
+        Tor. Direkt gemessen: exit=0. Das waere ein Befund gegen B6-4 gewesen, also gegen das
+        Kriterium 'kein Abbruch' — der schwerste, den man einer Warn-Barriere machen kann."
+  lehre: "Bei jeder Abweichung zuerst den eigenen Aufbau. Heute zum dritten Mal, und jedes Mal
+        war es mein Aufbau."
+
+zusammenfassung: "Acht von acht. Die Barriere feuert bei der Summe ohne Menge, schweigt bei
+     Summe MIT Menge und bei allen drei Einzelzahlen, und sperrt nicht — alles ausgeloest, nicht
+     gelesen. Der Regeltext und das Werkzeug stimmen in allen vier dokumentierten Faellen
+     ueberein. B5 ist bytegleich unberuehrt, und die Mutation zeigt, dass die beiden Waechter
+     unabhaengig voneinander feuern. Ein P2 zur Belegform des §3, derselbe Massstab wie bei W-07N."
+
+ballbesitz: release-pruefer
+```
