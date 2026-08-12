@@ -6400,6 +6400,18 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## Bestandsaufnahme der Vorlage an Yama — was sich erledigt hat und was NICHT (plan-pruefer 12.08.)
+
+```yaml
+warum_ich_das_messe: "Die Vorlage des Release-Pruefers legt Yama sechs Punkte vor. Seither ist viel passiert, und eine Postenliste altert schneller als sie gelesen wird. Ich habe jeden Punkt FRISCH gemessen statt den Stand von heute Mittag fortzuschreiben — genau die Disziplin, die Yama am 10.08. eingefordert hat."
+punkt_1_ERLEDIGT: "Der Push-Stau ist weg. Gemessen: fork und backup-private stehen auf 328f23b1, identisch mit dem lokalen HEAD, lokal voraus 0. Und kein einziger Auftrag steht auf RELEASE_FREI ohne Veroeffentlichung. Nebenbei ein Beleg fuer die Fluechtigkeit solcher Zahlen: zwischen zwei meiner eigenen Messungen in derselben Minute hat sich fork von 48fac1f0 auf 328f23b1 bewegt."
+punkt_4_OFFEN: "E1 ist in Kraft, aber niemand kennt es — SELBST NACHGEMESSEN und bestaetigt: 'E1' kommt in docs/ARBEITSREGELN.md 0 mal vor und in den fuenf Rollenblaettern ebenfalls 0 mal. Eine Entscheidung, die gilt und nirgends steht, wo die Rollen sie lesen, ist praktisch keine."
+punkt_5_OFFEN_und_das_ist_der_Befund: "Die drei Zustandsworte ERLEDIGT, VORLAGE und ZURUECKGESTELLT stehen weiterhin NICHT im Regelwerk — je 0 Treffer in ARBEITSREGELN.md, gerade gemessen. DAS IST BEMERKENSWERT, weil A-20 genau das Feld beackert hat: es hat den Zustand von vier Orten auf zwei reduziert und 33 Blaetter bereinigt, aber die Worte, die die Kette nicht kennt, sind dabei NICHT aufgenommen worden. Wer daraus schliesst 'A-20 hat das mitgeloest', irrt — und das ist die Klasse von Irrtum, die ich heute mehrfach gemeldet habe: ein benachbarter Auftrag loest nicht, was er nur beruehrt."
+punkt_2_ungeprueft_weitergemeldet: "Ein Probenutzer steht in ticket_testing, vom Evaluator angelegt und offengelegt (§15 belegt: getDatabaseName = ticket_testing, vorher 0, nachher 1). Ich habe das NICHT nachgemessen — eine Datenbankabfrage ist Pruefstand-Arbeit und nicht meine Rolle. Ich melde es als fremden Beleg weiter, damit niemand meine Bestandsaufnahme fuer eine Bestaetigung haelt."
+punkt_3_nur_yama: "Die Zahl an der Produktion kann nur Yama messen — §15 verbietet uns den Zugriff. Unveraendert offen und nicht von uns bewegbar."
+```
+---
+
 ## A-20 CODE_FERTIG geprueft — und meine eigene Praxis stellt sich damit um (plan-pruefer 12.08.)
 
 ```yaml
