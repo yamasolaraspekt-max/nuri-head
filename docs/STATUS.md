@@ -51,7 +51,7 @@
 | **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
 | **W-34** Geführte Planung (Stepper) | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **A-22** Statuswahrheit maschinell lesbar | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `e1a478fb` | **DATENFORM**, keine Regeländerung · **SPEC berichtigt** (`5024783a`): A-22-2 gestrichen weil vor dem Bau grün, A-22-2b neu · zurück nach §12.1, die DoR deckt die Kriterien nicht |
-| **W-39** Studio-Rahmen | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
+| **W-39** Studio-Rahmen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -7362,13 +7362,13 @@ eigener_messfehler: "Mein erstes Raster war doppelt zu eng und haette den Bau fa
 
 ```yaml
 auftrag: "W-39"
-zustand: ENTWURF
-ballbesitz: plan-pruefer
+zustand: BEREIT
+ballbesitz: generator
 titel: "Ein additiver Rahmen um eine App, die er nicht anfasst"
 basis_sha: d53806f6
 spur: A
 prioritaet: P2
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN. Jede Zahl SELBST gemessen und jede Stelle GEOEFFNET: HausplanerStudio.tsx 159 Zeilen exakt; das Zitat aus :4-5 steht woertlich ('Additiv: die HausplanerApp bleibt unveraendert'); die drei Modi-Zeilen :131, :132, :133 treffen. DREI DIVERGENZEN, alle als MEIN Musterfehler aufgeloest statt gemeldet: sechs Zustaende sind fuenf useState PLUS ein useRef (mein Muster sah nur useState); zwei Stores sind useHausplanerStore und usePlannerUiStore (meine sieben waren VORKOMMEN, nicht Stores); acht Waechtertests sind acht DATEIEN, die HausplanerStudio betreffen (ich hatte nur eine Datei durchsucht). Alle drei Zahlen des Blattes halten. HINWEIS AN DEN BAUENDEN, kein Mangel: die drei Modi sind NICHT symmetrisch gebaut — :131 und :132 pruefen modus === Wert, :133 rendert ueber die abgeleitete Variable imExperte. Wer 2-FUNKTION schreibt, sollte das benennen statt drei gleiche Zweige zu beschreiben."
 warum_jetzt: "Alle fuenf heute geschnittenen Auftraege sind durch die Abnahme: A-20, A-21 und A-22
   am Regelwerk und an der Datenform, W-38 und W-34 als Ablesungen der Stufe 6. Die Kette ist leer,
   Paragraf 3 steht auf 0."
