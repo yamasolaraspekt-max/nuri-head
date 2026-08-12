@@ -6369,6 +6369,7 @@ der_stille_fehler_dieses_werkzeugs: "Kriterium W-27-2 verlangt ALLE VIER joinTyp
          'neutral'. Wer nur drei nennt, laesst den haeufigsten dem Bauenden — und das gebaute
          Werkzeug klassifiziert dann jede gewoehnliche Kante als Grat oder Kehle. Das faellt erst
          am Dach auf."
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme W-27 GECLAIMT vor dem Pruefstand. Das Blatt heisst laut Schnitt 'die Regel ist ausformuliert, sie steht nur im falschen Baum' — ich pruefe deshalb zuerst, WO die Regel heute steht und ob der Bau sie verschoben oder verdoppelt hat."
 ```
 
 
