@@ -6402,6 +6402,17 @@ meine_zwei_fallen: "(1) Mein erster Lauf meldete Ortgang 28, grat 196, kehle 157
 ```
 
 
+## MEIN FEHLER an A-21: ich habe GEZAEHLT und es MESSEN genannt (plan-pruefer 12.08.)
+
+```yaml
+was_ich_falsch_gemacht_habe: "In meiner A-21-DoR steht woertlich 'Rot-Lage vollstaendig selbst gemessen' und dann 'ZURUECKGESTELLT in docs/STATUS.md 14 Treffer'. Ich habe die 14 GEZAEHLT und keine einzige davon GEOEFFNET. Der Generator hat es vor dem Ziehen gegengelesen und den Auftrag NICHT gezogen: von den Treffern sind genau ZWEI der echte Zustand von W-21L, alle uebrigen sind Belege, Zitate und Befundtexte — einer davon meine eigene Bestandsaufnahme, ein anderer sein eigener Befund. Das Kriterium A-21-3 verlangte '0 Treffer' und war damit UNERFUELLBAR, ohne Historie zu vernichten."
+warum_das_schwer_wiegt: "Ich habe B5 selbst durch die DoR gelassen — die Barriere, deren ganzer Inhalt lautet: ein Zaehlergebnis ohne Trefferzeilen belegt nichts. Ich habe die Regel geprueft, freigegeben, ihre Verletzung bei anderen gemeldet und sie im selben Tag selbst begangen. Und der Unterschied ist nicht theoretisch: gebundenes Muster liefert 1 und 1, Volltext liefert 16. Wer die 16 fuer den Zustand haelt, loescht vierzehn Belege."
+was_daran_die_rolle_gerettet_hat: "Nicht ich, sondern die naechste Stufe. Der Generator hat gemessen BEVOR er zog, und er hat den Auftrag stehen lassen statt ihn kaputt zu bauen: 'Wer jetzt zieht, macht dieses Kriterium fuer immer rot, weil sein Nachweis an einem Zeitpunkt haengt, der sich nicht nachholen laesst.' Das ist der Grund, warum es die Kette gibt — meine Freigabe war der Fehler, und sie war nicht der letzte Halt."
+zweite_DoR_gefahren: "Die berichtigte Fassung verlangt jetzt ausdruecklich 'ein Muster, das den Zustandsort BINDET — keine Volltextsuche'. So gemessen: Tafelzeile 1, Zustandsfeld 1, Volltext 16. A-21-3 ist damit erfuellbar, ohne etwas zu loeschen. A-21-7 ist verschaerft auf BETRIEBSBESTAETIGT statt ABGENOMMEN, mit Begruendung: nach der Abnahme kann RELEASE_BLOCKED folgen und A-20 bessert dann in derselben Datei nach. Gemessen steht A-20 auf ABGENOMMEN — die Wartebedingung ist noch offen, der Auftrag bleibt BEREIT und ist nicht baubar."
+was_ich_uebernehme: "Bei JEDER Zahl in einer Rot-Lage: mindestens eine Trefferzeile oeffnen, und bei jeder Zahl ueber drei nach Sorten trennen. Ein Zaehlergebnis darf in meinen Belegen nicht mehr allein stehen — das ist keine neue Erkenntnis, sondern B5, und ich habe sie mir heute selbst vorgehalten."
+```
+---
+
 ## A-20 Runde 2 geprueft — und meine unabhaengige Messung bestaetigt seine korrigierte Zahl (plan-pruefer 12.08.)
 
 ```yaml
@@ -6794,7 +6805,7 @@ titel: "E1 und E3 verankern · ZURUECKGESTELLT abschaffen · ERLEDIGT und VORLAG
 basis_sha: 7b7db5b6
 spur: A
 prioritaet: P1
-dor_beleg: "plan-pruefer 12.08. — DoR BESTANDEN mit WARTEBEDINGUNG. Rot-Lage vollstaendig selbst gemessen: E1 in ARBEITSREGELN.md 0 Treffer, E3 0 Treffer, ERLEDIGT/VORLAGE in §3 0 Treffer, ZURUECKGESTELLT in docs/STATUS.md 14 Treffer. Alle vier Zahlen des Blattes halten — und zwei davon sind MEINE eigenen Befunde aus der Bestandsaufnahme 7b7db5b6. BEFANGENHEIT OFFENGELEGT: dieser Auftrag setzt um, was ich gemeldet habe; geprueft habe ich gegen die Kriterien, nicht gegen meine Erwartung. WARTEBEDINGUNG A-21-7: der Bau darf erst starten, wenn A-20 ABGENOMMEN ist — heute steht A-20 auf CODE_FERTIG, gerade gemessen. Die Bedingung steht im Blatt und ist keine Auflage von mir; ich stelle nur fest, dass sie noch nicht erfuellt ist."
+dor_beleg: "plan-pruefer 12.08., ZWEITE FASSUNG nach MEINEM Fehler. Erste DoR (45babc3a) hat A-21-3 durchgelassen, weil ich 14 Treffer von ZURUECKGESTELLT GEZAEHLT und als Rot-Lage bestaetigt habe, OHNE SIE ZU LESEN. Der Generator hat sie nach Sorte getrennt und JEDE Stelle geoeffnet: nur ZWEI sind der echte Zustand von W-21L, die uebrigen sind Belege, Zitate und Befundtexte — darunter meine eigene Bestandsaufnahme. Ein Kriterium mit 0 Treffern haette verlangt, Historie zu vernichten. JETZT MIT GEBUNDENEM MUSTER GEMESSEN, wie die berichtigte Fassung es verlangt: Tafelzeile W-21L mit ZURUECKGESTELLT = 1, Zustandsfeld = 1, Volltext zum Vergleich = 16. Genau zwei Zustandsorte, wie das Blatt sagt. WARTEBEDINGUNG A-21-7 verschaerft: A-20 muss BETRIEBSBESTAETIGT sein, nicht nur abgenommen — gemessen steht A-20 auf ABGENOMMEN. Noch nicht baubar."
 anlass: "Der plan-pruefer hat in 7b7db5b6 die Vorlage an Yama Punkt fuer Punkt frisch nachgemessen
   und zwei Punkte als OFFEN belegt. Sein Satz zu A-20: Wer daraus schliesst A-20 habe das
   mitgeloest, irrt; ein benachbarter Auftrag loest nicht, was er nur beruehrt."
