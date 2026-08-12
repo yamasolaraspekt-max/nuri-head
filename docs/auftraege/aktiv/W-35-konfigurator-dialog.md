@@ -40,10 +40,10 @@ ConfigWizard.tsx:23
 ```text
 :23   KonfigArt      fenster · tuer · treppe · heizkoerper
 :34   SCHRITTE       Bauart · Masse · Material · Pruefung · Uebernehmen   (fuenf, as const)
-:36   katalogFuer(art)  -> { ordner, titel, kacheln }
+:36   katalogFür(art)  -> { ordner, titel, kacheln }
 :43   TYP_MAP: Record<KonfigArt, ConfiguratorType>
         fenster -> 'window' · tuer -> 'door' · treppe -> …
-:45   ConfigWizard({ art, standalone = true, onClose, onUebernehmen })
+:45   ConfigWizard({ art, standalone = true, onClose, onÜbernehmen })
 :47-50  VIER eigene Zustaende: schritt · wahl · breite · hoehe
         mit artabhaengigen Vorbelegungen (Treppe 1000, Heizkoerper 1000/600, Fenster 1360)
 :53   letzter = schritt === SCHRITTE.length - 1
@@ -87,9 +87,35 @@ er hält** — „sechs Tests" allein genügt nicht, und der Name allein ist kei
 ## 5 — Abnahmekriterien
 
 ```text
-W-35-1  (P1) Die VIER Arten stehen im Blatt, mit der Zeile als Beleg, und die
-        REGISTERZEILE wird korrigiert: sie nennt drei, der Code traegt vier.
-        heizkoerper fehlt. Nachweis: die Zeile vorher und nachher.
+W-35-1  (P1) ERWEITERT nach dem Befund des Generators (99aa4a03): die Registerzeile
+        122 traegt ZWEI Fehler, mein Kriterium nannte nur EINEN.
+        FEHLER 1, der genannte: sie sagt Fenster, Tuer, Treppe — also DREI Arten.
+        ConfigWizard.tsx:23 traegt VIER, heizkoerper fehlt.
+        FEHLER 2, und er ist der GEFAEHRLICHERE: dieselbe Zeile sagt 'schreibt NICHT
+        ins Gebaeudemodell'. Das ist widerlegt. Selbst gemessen: ADD_NODE hat vier
+        Treffer in ConfigWizard.tsx, davon drei executeCommand-Aufrufe (:184 radiator,
+        :205 treppe, :226 knoten) und einer ein Kommentar (:210).
+        ZWEI ZEILEN IM SELBEN REGISTER WIDERSPRECHEN SICH: Zeile 129 (W-42,
+        BESCHRIEBEN) sagt woertlich 'der Pfad IST gebaut' mit denselben drei
+        Fundstellen. Zeile 122 sagt das Gegenteil, ueber DIESELBE Datei. Bei W-42s
+        Abnahme wurde nur die 129 gezogen.
+        BEIDE Fehler werden korrigiert, Nachweis je vorher und nachher. Wer nur die
+        Arten korrigiert, ist nach der alten Fassung GRUEN, waehrend die Zeile weiter
+        das Gegenteil dessen behauptet, was zwei Auftraege vorher gemessen wurde —
+        Pflichtpruefung 4: ein gruenes Kriterium ist keins.
+        Die zweite Korrektur ist damit IM SCOPE und keine Erweiterung des Bauenden.
+W-35-1b Die Blatt-Schreibweisen sind auf die des CODES gezogen: katalogFür und
+        onÜbernehmen MIT Umlaut. Gemessen: die Fassung ohne Umlaut (Schreibung
+        katalogF-u-e-r und onU-e-bernehmen) hat im Code 0 Treffer, die Fassung mit
+        Umlaut 2 bzw. 6.
+        Inhalt und Zeilennummern des Blattes treffen — nur die Schreibweise nicht.
+        H-9 in der harmlosen Form, und genau die Umlaut-Falle, vor der meine eigene
+        Auflage warnt. Im Blatt gilt die Schreibweise des Codes.
+        UND EIN EIGENER FEHLER BEIM BERICHTIGEN, der hier stehen bleibt: ich habe die
+        Umlaute mit einem DATEIWEITEN Replace gezogen und damit auch dieses Kriterium
+        umgeschrieben — es behauptete danach, meine Fassung MIT Umlaut habe 0 Treffer,
+        also Unsinn. Das ist B6: kein dateiweites Muster, blockweise mit Gegenprobe.
+        Ein Replace, das den BELEG mitverändert, vernichtet ihn.
 W-35-2  (P1) Die fuenf Schritte mit ihren Namen aus :34, und die Schrittnavigation
         (:53 letzter, :84-86 die Kopfzeile). Am Code gezaehlt, keine Zahl aus diesem
         Blatt uebernehmen.
