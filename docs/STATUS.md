@@ -48,8 +48,8 @@
 | **W-20** Stückliste und Mengen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `65358372` · Elter `a146e0b3` | **7/7** · Code **zitiert statt paraphrasiert** (Dateikopf + EA28-Kommentar danebengelegt, wortgleich) · vier Messzahlen selbst nachgemessen (0 · 1 · 16 · 79) · Registerformeln genannt, **heute keine benutzt** — am Code bestätigt · Suite 1698/1698 |
 | **W-38** Schrittstatus und Prüfpunkte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `fb1a396d` | **Ziel `BESCHRIEBEN`** (Ablesung) · DoR `plan-pruefer` 12.08. · Leerstelle beim Schnitt, Block vom Plan-Prüfer angelegt |
 | **A-20** Zustand an vier Orten | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `f1296de8` | **REGELWERK** §16+§5 · DoR `plan-pruefer` 12.08. mit **offengelegter Befangenheit** · Leerstelle beim Schnitt, Block vom Plan-Prüfer |
-| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
-| **W-34** Geführte Planung (Stepper) | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
+| **A-21** Yamas Anordnungen E1/E3 + drei Zustandsworte | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `7b7db5b6` | **REGELWERK** §3+§11 · **SPEC berichtigt** nach dem Befund des Generators `605fde3b` (A-21-3 und A-21-6 trugen nicht) · Bau erst wenn A-20 **`BETRIEBSBESTAETIGT`** ist |
+| **W-34** Geführte Planung (Stepper) | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `6682b83c` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `GuidedView.tsx` 165 Z. + `fahrschritte.ts` 202 Z. · **sechs von elf Schritten ohne Modellgrundlage** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · **wird durch A-21 auf `DECISION_BLOCKED` umgestellt** |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -6829,8 +6829,56 @@ meine_dritte_falle: "Mein Suchmuster meldete zuerst EINEN Math-Treffer in holzMe
 
 ```yaml
 auftrag: "A-21"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig
+abnahme_nachgezogen: "release-pruefer 12.08.: der Evaluator hat in 3452aa5f ABGENOMMEN gevotet
+  (sieben von sieben) und den Zustand ausdruecklich offen gelassen — 'Votum ins Blatt, Zustand
+  steht noch aus'. Ich ziehe nach; das ist §16-Statuswahrheit, keine zweite Abnahme."
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 74efb8c2, Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen (A-21-1 bis A-21-7, je eigener Abschnitt ab Z.193).
+  Reiner Doku-Scope, drei Dateien; must_preserve SELBST nachgemessen mit resources/ 0, app/ 0,
+  database/ 0. Kette Vorfahr, Geheimnisse 0.
+  DEN KERN AM BAU-STAND SELBST NACHGEZAEHLT statt aus dem Votum uebernommen — es ist die
+  Umsetzung von Punkt 4 und 5 meiner eigenen Vorlage an Yama, und gerade deshalb habe ich jede
+  Zahl geoeffnet: E1 in ARBEITSREGELN.md von 0 auf 2, E3 von 0 auf 1, ERLEDIGT von 0 auf 2,
+  VORLAGE von 0 auf 2, ZURUECKGESTELLT am Zustandsort von 1+1 auf 0+0.
+  Und die HERKUNFT gegengeprueft, weil E1 Yamas Anordnung ist und nicht die des Generators:
+  docs/PROZESSPRUEFUNG-03.md Z.131 traegt E1 im Wortlaut, Z.142 E3. Beide Zeilen aufgeschlagen."
+
+meine_erste_anwendung_von_E1_und_sie_hat_sofort_gegriffen: "release-pruefer 12.08.: Ich habe
+  in diesem Takt zuerst am ARBEITSBAUM gemessen und dort A-21 auf ABGENOMMEN gefunden. Am
+  COMMIT stand es auf CODE_FERTIG, und ein Votum gab es dort noch nicht — die Abnahme war
+  ungespeichert. Haette ich der ersten Zahl geglaubt, haette ich §10 auf eine Abnahme gefahren,
+  die es zu diesem Zeitpunkt nicht gab. Das ist E1 woertlich: Aussagen ueber den Bau werden am
+  COMMIT gemessen. Die Regel steht seit einer Stunde im Regelwerk, ich habe sie zum ersten Mal
+  angewandt, und sie hat beim ersten Gebrauch etwas gefunden — genau das, was ich Yama als
+  Empfehlung geschrieben hatte: nicht streichen, bekannt machen."
+
+p2_des_evaluators_unabhaengig_bestaetigt:
+  klasse: BEWEIS
+  schwere: P2
+  blockiert: nein
+  was: "Bau-Botschaft und Statusfeld sagen 'Volltext bleibt bei 14' mit der Rechnung 15 minus 2
+    plus 1. Selbst nachgemessen am Diff: 15 am Elter, 2 entfernt, DREI eingefuegt, 16 am
+    Bau-Stand. Die Rechnung nennt einen Summanden zu wenig."
+  warum_kein_rot: "Betroffen ist nur der BELEGTEXT. Die Zustandsorte sind das Kriterium, und die
+    stehen bei 0+0 — von mir einzeln nachgezaehlt. §12.5."
+  ball: generator (Zahl im Bericht berichtigen)
+
+gewuerdigt_am_bau: "Zwei Dinge heben diesen Bau heraus. Erstens hat der Generator seine eigene
+  Fertigmeldung BEWUSST vom Bau getrennt, weil A-21-6 genau diesen Commit misst und seine eigene
+  CODE_FERTIG-Zeile eine zweite geaenderte Zustandszeile gewesen waere — er hat das Kriterium
+  gelesen, bevor er es verletzt. Zweitens hat er eine KRITERIENKOLLISION vorgelegt statt sie
+  umzudeuten: A-21-5 fordert genau die Tafelzeilen-Aenderung bei P-02, die A-21-6 woertlich
+  ausschliesst; er hat beide Zahlen in den Bericht geschrieben und die Entscheidung dem
+  Evaluator ueberlassen. Der hat sie entschieden und den Kriterienwortlaut zur Nachbesserung
+  an den Planner gegeben — ohne Rot."
+
+betriebspruefung: "release-pruefer 12.08., §19 im selben Arbeitsgang: der Bau 74efb8c2 ist im
+  veroeffentlichten Stand, Migrationen 0, Artefakt unberuehrt (resources/ 0 Dateien).
+  WILDBETRIEBS-BELEG: die verankerten Regeln wirken bereits — E1 hat in DIESEM Takt meinen
+  eigenen Fehlgriff gefangen, und ZURUECKGESTELLT ist nicht nur definiert sondern verschwunden,
+  W-21L traegt DECISION_BLOCKED an beiden Orten."
 bau_commit: "74efb8c2  # OHNE die Fertigmeldung: A-21-6 misst diesen Commit, und meine eigene CODE_FERTIG-Zeile waere dort eine zweite geaenderte zustand:-Zeile gewesen. E1 am Bau-Commit gefahren, 3 Dateien, 0 Abweichungen."
 ballbesitz_bau: generator (Bau fertig — ARBEITSREGELN §3, §11 und §13, dazu W-21L und P-02 in docs/STATUS.md)
 bericht: "docs/BERICHT-A-21-anordnungen-und-zustandsworte.md"
@@ -6905,11 +6953,40 @@ regel_A_20_2_auf_mich_selbst_angewandt: "Blatt, Tafelzeile und dieser Block in E
   Entscheidung aus A-20-2 gilt fuer den Schneidenden, und der bin hier ich. Bei W-38 habe ich es
   noch falsch gemacht und die Tafelzeile aufgeschoben; der plan-pruefer musste sie anlegen."
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-21 GECLAIMT vor dem Pruefstand. A-21 verankert ZWEI ANORDNUNGEN YAMAS im Regelwerk und schafft ein Zustandswort ab. Beides sind Aussagen ueber den Bestand, die man behaupten kann ohne sie zu belegen — ich messe deshalb jede Vorkommenszahl selbst und pruefe bei jedem Zustandswort, ob es WIRKLICH nirgends mehr steht, statt zu zaehlen dass es im Regelwerk definiert ist."
+votum_abnahme: "evaluator 12.08. ABGENOMMEN an 74efb8c2, Elter 3026456e, SIEBEN von sieben.
+  Messtisch vollstaendig im Blatt. E1 im Regelwerk 0 -> 2 (§11, Befehl woertlich, Yamas Datum
+  10.08., PROZESSPRUEFUNG-03 geoeffnet), E3 0 -> 1 (§13, wo der Zaehler steht), ERLEDIGT und
+  VORLAGE je 0 -> 2 mit der §3-Platz-Angabe, ZURUECKGESTELLT am Zustandsort 1+1 -> 0+0."
+die_kollision_ist_entschieden: "Der Generator hat mir A-21-5 gegen A-21-6 VORGELEGT statt sie
+  umzudeuten. ENTSCHIEDEN: A-21-6 ist erfuellt. Sein erster Satz nennt den Zweck — kein anderer
+  Auftragszustand geaendert —, und der ist am Commit belegt: 1 zustand:-Paar, ausschliesslich
+  W-21L, fremde Zustandsaenderungen 0 (jede Zeile auf ihren Auftragsblock zurueckgefuehrt).
+  P-02 ist nur in der KOMMENTARSPALTE beruehrt, sein Zustand bleibt an beiden Orten VORLAGE.
+  Der Nachweissatz ist zu weit gefasst: eine Tafelzeile traegt mehr als einen Zustand. AN DEN
+  PLANNER ohne Rot: auf 'geaenderte ZUSTANDSANGABEN ausschliesslich bei W-21L' verengen."
+befund_ohne_rot: "Bericht und Statusfeld sagen 'Volltext bleibt bei 14' mit der Rechnung
+  15 − 2 + 1. Gemessen: der Bau fuegt DREI Vorkommen ein, 15 − 2 + 3 = 16, und am Bau-Stand
+  messe ich 16. Die zwei nicht mitgezaehlten sind seine eigenen Erlaeuterungsfelder — darunter
+  das Feld volltext_bleibt_14 selbst, das den Zaehler erhoeht, den es beziffert. KEIN ROT:
+  A-21-3 misst ausdruecklich zustandsortgebunden und nicht ueber Volltext, sein sachlicher Kern
+  ist richtig (entfernte Belege: 0, nur die 2 Zustandsorte), und die Zahl steht im Bericht statt
+  im Regelwerk. Dieselbe Klasse habe ich bei A-20 als Hinweis behandelt."
+was_ich_selbst_bestimmt_habe: "Den IN_ARBEIT-Commit fuer A-21-7 habe ich nicht uebernommen,
+  sondern rueckwaerts je Commit den A-21-Zustand gelesen: 96b588e0 setzt IN_ARBEIT, Elter
+  877f81ee, dort A-20 BETRIEBSBESTAETIGT an BEIDEN Zustandsorten."
+eigener_messfehler: "grep -c zaehlt Zeilen, nicht Treffer — ich habe erst danach mit grep -o
+  gegengeprueft. Hier war beides gleich, aber die Zahl war Glueck und nicht Messung."
 ```
 
 ```yaml
 auftrag: "W-34"
-zustand: IN_ARBEIT
+zustand: CODE_FERTIG
+ballbesitz: evaluator
+ballbesitz_bau: generator (Bau fertig — sieben Werkbankblaetter neu, REGISTER.md Zeile 121 LEER -> BESCHRIEBEN)
+bericht: "docs/BERICHT-W-34-gefuehrte-planung.md"
+drei_zaehlfehler_alle_selbst_gefangen: "Alle drei sind dieselbe Sorte — ein Muster misst die Schreibweise und nicht die Sache — und alle drei stehen in den Blaettern statt geloescht zu sein. (1) Die Schrittzahl: mein erstes Muster zaehlte 16, weil es schritt( und ohneGrundlage( auch INNERHALB der Ternaerausdruecke traf; mein zweites zaehlte 13 ueber die Einrueckung, weil zwei Kommentarzeilen (:127, :161) auf derselben Ebene stehen. Erst 'genau vier Leerzeichen UND keine Kommentarzeile' ergibt die 11. (2) Die Zaehlungen in 3-FORMELN: ich schrieb 16, gemessen sind es 17 — grep -c 'zaehle(nodes' meldet 14, weil die DEFINITIONSZEILE function zaehle(nodes: …) dasselbe Muster traegt; mit '= zaehle(nodes' sind es 13 Aufrufe plus 4 direkte .length. Eine Funktion zaehlt sich sonst selbst mit. (3) Die Vergleichsmenge der md5-Gegenprobe: ich schrieb 27 Werkzeuge, gemessen sind es 25 ohne _VORLAGE und ohne W-34 selbst."
+befund_am_dateikommentar_NICHT_behoben: "W-34-3 verlangt das WOERTLICHE Zitat des Dateikommentars, und beim Zitieren faellt auf, dass ein Satz darin nicht traegt: 'SCHRITTE_OHNE_GRUNDLAGE.length ist die Laenge der Rueckgabe-Liste an den Planner'. Gemessen ist SCHRITTE_OHNE_GRUNDLAGE ein Readonly<Record<string, string>> (:56), also ein Objekt — .length darauf ist undefined; und die Rueckgabe-Liste hat 11 Eintraege, nicht 6. Zwei Fehler in einem Satz. WIRKUNG NULL: der Ausdruck steht nur im Kommentar, ausserhalb der Datei wird die Konstante allein im Test benutzt und dort korrekt mit Object.keys (:91, :98). Der Gedanke stimmt, nur sein Beleg nicht. Ich habe es NICHT behoben — eine Ablesung aendert ihre Quelle nicht — sondern zitiert und danebengestellt, weil ich sonst eine Falschaussage in Anfuehrungszeichen weitergetragen haette."
+blattkopf_war_veraltet: "Das Auftragsblatt trug im Kopf noch dor_beleg 'steht aus — plan-pruefer' und ballbesitz 'plan-pruefer (DoR)', obwohl die DoR hier bestanden vermerkt ist. Seit A-20 ist docs/STATUS.md die Wahrheit; ich habe danach gehandelt und den veralteten Kopf beim Ziehen gemeldet statt ihn fuer eine Sperre zu halten."
 operanden_vor_dem_ziehen_geprueft: "Beide Quellen gemessen statt geglaubt: GuidedView.tsx 165 Zeilen, fahrschritte.ts 202 — beide exakt wie im Blatt. statusAus an :43-49 woertlich gelesen, fuenf Zweige in der genannten Reihenfolge, und SCHRITTE_OHNE_GRUNDLAGE beginnt an :56. Der BLATTKOPF traegt noch dor_beleg 'steht aus — plan-pruefer' und ballbesitz 'plan-pruefer (DoR)'; das ist ein veralteter Stand aus dem Schnitt, seit A-20 ist docs/STATUS.md die Wahrheit und hier steht die bestandene DoR. Kein Mangel, nur benannt, damit niemand den Blattkopf fuer eine Sperre haelt."
 ballbesitz: generator
 titel: "Elf Schritte, und sechs von ihnen koennen nichts bestaetigen"

@@ -90,7 +90,7 @@ Nord plausibel eingetragen) und **negative Werte** — `PvgisErtragService.php:4
 
 ---
 
-## 4 · E1 ist in Kraft, aber niemand kennt es — **gebaut, in Abnahme**
+## 4 · E1 ist in Kraft, aber niemand kennt es — **ERLEDIGT am 12.08.**
 
 > **Stand 12.08., von mir nach dem Bau nachgemessen:** A-21 ist `CODE_FERTIG` und liegt beim
 > Evaluator. Im Regelwerk steht jetzt: **`E1` als eigener Abschnitt in §11** (Z.504) und
@@ -98,6 +98,13 @@ Nord plausibel eingetragen) und **negative Werte** — `PvgisErtragService.php:4
 > **je 0 Treffer**. Damit ist genau das behoben, was der Plan-Prüfer benannt hatte — eine
 > Entscheidung, die gilt und nirgends steht, wo die Rollen sie lesen. **Endgültig erst nach
 > der Abnahme**; ich melde den Stand, nicht das Ergebnis.
+>
+> **Nachtrag, gleicher Tag:** A-21 ist abgenommen (7/7), von mir nach §10 freigegeben und
+> betriebsbestätigt. **Und E1 hat bei meiner ersten Anwendung sofort gegriffen:** Ich maß in
+> diesem Takt zuerst am Arbeitsbaum und fand A-21 auf `ABGENOMMEN`; am Commit stand es auf
+> `CODE_FERTIG` ohne Votum — die Abnahme war ungespeichert. Hätte ich der ersten Zahl geglaubt,
+> hätte ich einen Release auf eine Abnahme gefahren, die es nicht gab. Genau dafür ist die Regel
+> da, und genau deshalb war „bekannt machen" richtig und „streichen" falsch.
 
 **Das ist neu und nicht Teil der erledigten Frage.** Am 10.08. wurden auf deine Anweisung
 (*„Ball bei dir für die drei Entscheidungen"*) drei Prozessregeln angenommen. Ich habe ihre
@@ -131,7 +138,7 @@ schlechteste Zustand.
 
 ---
 
-## 5 · Drei Zustandsworte, die das Regelwerk nicht kennt — **gebaut, in Abnahme**
+## 5 · Drei Zustandsworte, die das Regelwerk nicht kennt — **ERLEDIGT am 12.08.**
 
 > **Stand 12.08., von mir nach dem Bau nachgemessen — und die Lösung folgt genau der schärferen
 > Fassung:** `ERLEDIGT` ist in Z.86 definiert (*„ausgeführt und gegengeprüft, ohne jemals Code
@@ -141,6 +148,10 @@ schlechteste Zustand.
 > den Zustand, den §3 für genau diesen Fall schon führte. Auch der zweite Befund ist mit
 > aufgenommen: das Regelwerk hält fest, dass P-02 seine Bedeutung im Kommentarfeld einer
 > Tabellenzeile definierte. **Endgültig erst nach der Abnahme.**
+>
+> **Nachtrag, gleicher Tag:** abgenommen, freigegeben, betriebsbestätigt. Am Bau-Stand selbst
+> nachgezählt: `ZURUECKGESTELLT` am Zustandsort von **1+1 auf 0+0**, W-21L trägt
+> `DECISION_BLOCKED` an beiden Orten.
 
 **Gemessen:** Die Auftragstafel führt `ERLEDIGT` (A-06), `VORLAGE` (P-02) und `ZURUECKGESTELLT`
 (W-21L) — alle drei haben in `ARBEITSREGELN.md` **je 0 Treffer**. Zum Vergleich am selben
