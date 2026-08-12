@@ -19,9 +19,9 @@ grundlage: "F-025 🟢 · F-026 🟢 · F-014 ⚠ (die Warnung aus meiner Regist
             · docs/planner/pv-belegung-referenz/DachplanerProPage.tsx (3.786 Z.) als Quelle"
 ```
 
-## 1 · Der Befund — die Regel existiert, ausformuliert, und die Insel kennt sie nicht
+## 1 · Der Befund — die Regel existiert ausformuliert, und der Insel fehlt die ERKENNUNG
 
-**Gemessen: die vollständige Kantentopologie steht im Prototyp und mit null Treffern in der Insel.**
+**Gemessen: die vollständige Kantentopologie steht im Prototyp; in der Insel fehlen die Typen und die Ableitung.**
 
 ```text
 QUELLE   docs/planner/pv-belegung-referenz/DachplanerProPage.tsx   3.786 Zeilen
@@ -38,15 +38,42 @@ QUELLE   docs/planner/pv-belegung-referenz/DachplanerProPage.tsx   3.786 Zeilen
 GEGENPROBE in resources/planner/ — was die Insel hat und was nicht:
   'grat'              17 Treffer     (als Wort, in Geometriecode)
   'kehle'             33 Treffer     (als Wort)
-  'ortgang'            0 Treffer     <- gibt es in der Insel NICHT
+  'ortgang'            0 Treffer     <- als STRING-LITERAL, siehe Berichtigung unten
   TopologyJoinType     0 Treffer     <- die ERKENNUNG fehlt
   cornerType           0 Treffer     <- die Innen/Aussen-Unterscheidung fehlt
 ```
 
-> **Der Unterschied, auf den es ankommt: die Insel hat die BEGRIFFE, nicht die ERKENNUNG.** *`grat`
-> und `kehle` kommen 50 Mal vor — als Wörter in Kommentaren und Bezeichnern. Was fehlt, ist die
-> Funktion, die aus einer Ecke **ableitet**, welcher Typ dort entsteht. Und `ortgang` fehlt
-> vollständig: null Treffer.*
+> ## ⚠ BERICHTIGT 12.08. — meine Zahl war richtig, meine FORMULIERUNG war falsch
+>
+> **Auflage des Plan-Prüfers (`2c0e4ede`), selbst nachgemessen und bestätigt:**
+>
+> ```text
+> 'ortgang' als String-Literal        0 Treffer      <- meine Messung, richtig
+> 'ortgang' klein, ueberall           9 Treffer
+> 'Ortgang' gross                    20 Treffer
+> ortgangFlaechenlaengeM              EXPORTIERTE Funktion, dachformVorlagen.ts,
+>                                     mit eigener Testzusage (:151-152)
+> ortgangausbildung                   FELD mit Werten (:127, :1386, :1410)
+> ```
+>
+> **Hier stand: „gibt es in der Insel NICHT".** *Das ist falsch. Die Insel hat den Ortgang — als
+> **Längenrechnung** (`ortgangFlaechenlaengeM(10, 0.3) = 10.6`, getestet) und als **Ausbildungstext**
+> je Dachform. **Was fehlt, ist der KANTENTYP, nicht die Sache.***
+>
+> **Warum das kein Formfehler ist:** *wer den weiteren Satz in `7-GRENZEN` übernimmt, setzt eine
+> falsche Grenzaussage ins Werkzeug — und der Nächste baut eine Ortgang-Länge neu, **die es schon
+> gibt**. Aus einer zu weiten Formulierung wird doppelter Code.*
+>
+> **Und die Regel dahinter ist die Umkehrung von H-8, in seinen Worten:** *„**null Vorkommen eines
+> MUSTERS ist kein Beleg für die Abwesenheit der SACHE**." H-8 sagt, dass viele Vorkommen keine
+> Herkunft belegen; hier belegt keines keine Abwesenheit. **Beides ist derselbe Denkfehler in zwei
+> Richtungen** — und er hat ihn nach eigener Aussage zwanzig Runden lang mit A-06 selbst gemacht.*
+
+> **Der Unterschied, auf den es ankommt: die Insel hat die BEGRIFFE und einzelne RECHNUNGEN, nicht
+> die ERKENNUNG.** *`grat` und `kehle` kommen 50 Mal vor, `Ortgang` 20 Mal — als Wörter, als Feld
+> (`ortgangausbildung`) und als getestete Längenrechnung (`ortgangFlaechenlaengeM`). **Was fehlt, ist
+> die Funktion, die aus einer Ecke ableitet, welcher Typ dort entsteht** — der Kantentyp, nicht die
+> Sache.*
 
 ## 2 · Die Regel im Wortlaut, aus `analyzeTopology` gelesen
 
@@ -122,10 +149,15 @@ W-27-2  (P1, DER TRAGENDE PUNKT) 2-FUNKTION traegt die Entscheidungsregel aus Ab
         vier Ausgaengen nennt, laesst den vierten dem Bauenden; und 'neutral' ist der
         haeufigste, weil er fuer jede Kante ohne Traufe-Beteiligung gilt.
 
-W-27-3  (P1) 7-GRENZEN nennt die Insel-Luecke UNGESCHOENT und mit Zahlen: 'ortgang' 0
-        Treffer, TopologyJoinType 0, cornerType 0 — und dass 'grat' 17 und 'kehle' 33
-        Treffer NUR Woerter sind, keine Erkennung. Wer die 50 Treffer fuer Umsetzung
-        haelt, baut nichts und glaubt, es sei da.
+W-27-3  (P1, BERICHTIGT 12.08.) 7-GRENZEN nennt die Luecke als KANTENTYP, nicht als
+        Sache. Die Zahlen: TopologyJoinType 0, cornerType 0 — das ist die fehlende
+        ERKENNUNG. Aber der Ortgang SELBST ist da: ortgangFlaechenlaengeM ist eine
+        exportierte, getestete Laengenrechnung und ortgangausbildung ein Feld mit
+        Werten; 'Ortgang' hat 20 Treffer. VERBOTEN ist die Formulierung 'gibt es nicht'
+        — sie fuehrt dazu, dass jemand eine Ortgang-Laenge neu baut, die es gibt.
+        Ebenso bei 'grat' (17) und 'kehle' (33): Woerter und Rechnungen sind da, die
+        KLASSIFIKATION fehlt. Gegenprobe im Bericht: je Begriff die Trefferzeile, die
+        zeigt WAS existiert — nicht nur die Zahl, die zeigt was das Muster nicht fand.
 
 W-27-4  (P1) Die Abweichung zur Registerzeile steht im Blatt: das Register nennt fuenf
         Namen in EINER Liste, der Prototyp trennt Kanten von Ecken. Die Trennung wird
