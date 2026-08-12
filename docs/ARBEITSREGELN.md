@@ -100,9 +100,21 @@ Zustand benutzen.
 Auftragsblocks. **Beide werden gemessen, und zwar mit diesen zwei Befehlen:**
 
 ```text
-Tafelzeile      grep -cE '^\| \*\*[A-Z]+-?[0-9]+.*IN_ARBEIT' docs/STATUS.md
+Tafelzeile      grep -cE '^\| \*\*[A-Z]+-?[0-9]+[^|]*\| *\*{0,2}`?IN_ARBEIT' docs/STATUS.md
 Zustandsfeld    grep -cE '^zustand: *IN_ARBEIT' docs/STATUS.md
 ```
+
+> **Warum `[^|]*\| *\*{0,2}`?` und nicht `.*` (berichtigt 12.08., A-19):** *die erste Fassung ließ
+> nach der Auftragsnummer `.*` folgen — und das reicht **bis zum Zeilenende, über alle Spalten
+> hinweg**. Damit zählte **jede Tafelzeile, die das Wort `IN_ARBEIT` irgendwo im Fließtext
+> erwähnt**, als laufender Auftrag.* **Gemessen am Tag der Berichtigung: die alte Fassung meldete
+> `3`, die neue `0` — und `0` war richtig, es lief keiner.** *Die drei Treffer waren `B7`
+> (`BETRIEBSBESTAETIGT`), `B5N` (`ABGENOMMEN`) und `A-19` selbst (`BEREIT`); alle drei trugen in
+> ihrer Notizspalte einen Satz **über** `IN_ARBEIT.` **Die neue Fassung greift auf die
+> Zustandsspalte: Nummer, dann alles bis zum nächsten `|`, dann die Spalte selbst.***
+>
+> *Das Muster wuchs also mit jedem Auftrag, der über `IN_ARBEIT` **berichtet** — und das sind genau
+> die sorgfältigen. **Ein Befund über einen Zustand ist nicht dieser Zustand** (H-9).*
 
 **Die Messung fällt unmittelbar vor der ersten Änderung** (H-4), und **beide Zahlen werden genannt**.
 Weichen sie voneinander ab, ist das ein Befund und keine Nebensache: dann behauptet einer der beiden
@@ -838,6 +850,42 @@ statt sie wegzulassen.**
 *Das Tor erinnert daran (`scripts/commit-pruefen.sh`): eine Botschaft, die mehrere Fundorte nennt
 und keine Herkunft, bekommt eine **Warnung**. Kein Abbruch — Mehrfachvorkommen ist meistens harmlos,
 jede Konstante kommt mehrfach vor.*
+
+### H-9 · Ein Muster misst, woran es ansetzt
+
+> **Ein Muster, das eine Schreibweise voraussetzt, misst die Schreibweise und nicht die Sache.**
+
+**Die Prüfform, und sie ist dreifach erprobt statt erfunden:**
+
+> **„Findet der Befehl die Zeile, die ich mit eigenen Augen gelesen habe? Erst danach zählen."**
+
+**Die Abgrenzung zu H-6 ist der Kern — zwei Richtungen brauchen zwei Regeln:**
+
+| | Die Frage | Der Fehler | Beispiel |
+|---|---|---|---|
+| **H-6** | *„Triffst du, was du meinst?"* | **Fehltreffer** — das Muster trifft, was es nicht meint | `material` traf jedes `THREE.Material`; `GEG` traf „gegeben" |
+| **H-9** | *„Setzt du an, wo die Sache steht?"* | **richtiger Treffer, falsche Sache** | die `B7`-Zeile steht auf `ABGENOMMEN` und enthält den Satz „nie auf `IN_ARBEIT` gesetzt" — der Treffer stimmt, die Zählung nicht |
+
+> **Ein Muster kann H-6 bestehen und an H-9 scheitern.** *Der §3-Fall ist genau das: der Ausdruck
+> war syntaktisch korrekt und traf **genau, was dort stand** — er nahm nur einen **Befund über einen
+> Zustand** für **diesen Zustand**.*
+
+**Warum das eine eigene Regel ist und kein Einzelfall:** *am 12.08. wurden **neun** Fälle derselben
+Klasse gemeldet, von **vier Rollen unabhängig** — B5s Belegzeilen, die Geheimnisprüfung auf
+Token-Namen, eine Berechtigungsregel gegen den ganzen Befehlstext, das §3-Tafelzeilenmuster,
+`--diff-filter=D`, die Platzhalterzählung mit spitzen Klammern, `[AW]` statt `[A-Z]+`, das erste
+`zustand:`-Feld je Block, und das Zählen nur der grünen Plakette.* **In jedem einzelnen Fall war das
+Muster syntaktisch korrekt. Falsch war, woran es ansetzte.**
+
+**Keine Barriere im Tor, und das ist eine Entscheidung mit Grund:** *B5, B6 und B7 stehen bereits in
+derselben Datei, und am selben Tag wurde **dreimal** gemeldet, dass eine Warnung, die bei richtiger
+Arbeit anschlägt, weggeklickt wird.* **Eine Barriere gegen falsche Muster wäre selbst ein Muster —
+und könnte denselben Fehler machen.** *H-9 wirkt über die DoR: eine Frage in einer vorhandenen
+Liste, kein neuer Schritt.*
+
+*Was die Regel **nicht** kann, der Ehrlichkeit halber: sie verhindert keinen falschen Ausdruck. Sie
+macht die Frage danach zur Pflicht. **Alle neun Fälle wurden erst nach dem Schaden gefunden — H-9
+verschiebt den Fund nach vorn, sie ersetzt ihn nicht.***
 
 ---
 

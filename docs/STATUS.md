@@ -42,7 +42,7 @@
 | **B5N** Belegzeilen-Schreibweisen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `c54c7129` · Elter `a1751fbe` | **6/6** · drei Formen **einzeln** belegt, Barriere bleibt bei fehlendem Beleg laut · B5-Zählwort und B6/B7 nachweislich unberührt (gehasht + am Tor) · Testlücke **gemessen statt angenommen** (0 Stellen), bleibt offen · **einziger Bau des Tages mit `IN_ARBEIT` im committeten Stand vor dem Bau** |
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
-| **A-19** H-9 + §3-Musterberichtigung | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `c89e9096` | **neun Belege an einem Tag, vier Rollen**: ein Prüfmuster setzt am TEXT an statt am GEGENSTAND · H-9 im Wortlaut des Generators (»misst die Schreibweise und nicht die Sache«) plus die dreifach erprobte Kontrollprobe · **KEINE achte Barriere** (B5/B6/B7 in derselben Datei, dreimal »wird weggeklickt« gemeldet) · zweiter Teil: `ARBEITSREGELN.md:103` — `.*IN_ARBEIT` reicht über alle Spalten, die B7-Zeile (ABGENOMMEN) wird als laufend gezählt · **der Fehler ist meiner**: linke Seite erweitert, rechte nicht angesehen |
+| **A-19** H-9 + §3-Musterberichtigung | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c89e9096` | **neun Belege an einem Tag, vier Rollen**: ein Prüfmuster setzt am TEXT an statt am GEGENSTAND · H-9 im Wortlaut des Generators (»misst die Schreibweise und nicht die Sache«) plus die dreifach erprobte Kontrollprobe · **KEINE achte Barriere** (B5/B6/B7 in derselben Datei, dreimal »wird weggeklickt« gemeldet) · zweiter Teil: `ARBEITSREGELN.md:103` — `.*IN_ARBEIT` reicht über alle Spalten, die B7-Zeile (ABGENOMMEN) wird als laufend gezählt · **der Fehler ist meiner**: linke Seite erweitert, rechte nicht angesehen |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -5847,8 +5847,26 @@ zu_meinem_eigenen_befund: "Meine B5-Messung: von 17 warnenden Botschaften trugen
 ```yaml
 auftrag: "A-19"
 datei: docs/auftraege/aktiv/A-19-h9-und-die-paragraf-3-musterberichtigung.md
-zustand: IN_ARBEIT
-ballbesitz: generator (Bau laeuft — der Auftrag ist sein eigener erster Anwendungsfall)
+zustand: CODE_FERTIG
+ballbesitz: evaluator (gebaut 12.08.; Bericht docs/BERICHT-A-19-h9-und-paragraf-3-muster.md)
+gebaut: "H-9 in §18a hinter H-8, Regel UND Pruefform im Wortlaut, Abgrenzung zu H-6 als Tabelle IM
+  Regeltext. Musterzeile in §3 auf die Zustandsspalte begrenzt. A-19-3 dreifach am LEBENDEN Fall:
+  Fehlalarm-Zeilen Z.41 B7 und Z.42 B5N (beide BETRIEBSBESTAETIGT) nicht gezaehlt, echte
+  IN_ARBEIT-Zeile Z.45 (A-19 selbst) gezaehlt 1, Zustandsfeld 1 — gleiche Zahl. Altes Muster
+  zaehlte in derselben Datei 3. Doppelort erhalten, beide Befehle stehen weiter nebeneinander.
+  H-1 bis H-8 zeichengleich, §3-Regel selbst unveraendert, scripts/ 0, resources/ und app/ 0,
+  Rueckweg git apply --check -R Exit 0."
+zwei_zahlen_fuer_den_evaluator: "(1) A-19-6 sagt VIER Auftragsblaetter tragen das alte Muster.
+  Woertlich gemessen (grep -rlF) sind es DREI — W-01N:177 (Zitat der Methode), B5N:127 und :147
+  (Kriteriumstext und Konfliktpruefung), und A-19 selbst, das den Ausdruck als Gegenstand zitiert.
+  Als PRUEFTEXT tragen ihn damit zwei. Sechs weitere Dateien nennen ihn ausserhalb der
+  Auftragsblaetter. Nichts davon angefasst — die Entscheidung gehoert dem Planner.
+  (2) Die Rot-Lage war groesser als im Blatt: es nennt EINEN Fehlalarm, gemessen waren es DREI."
+mein_eigener_fall_beim_bauen: "A-19-6 hat mich erwischt: meine erste Suche lief mit escapten
+  Zeichenklassen und meldete 0 Dateien — bei einem Blatt, das von vieren spricht. Der Fehler war
+  mein Suchmuster, nicht das Ergebnis; ich hatte eine Schreibweise vorausgesetzt. Woertlich gesucht
+  ergab 9. Das ist H-9 beim Bau von H-9, und gewarnt hat nicht das Muster, sondern die Pruefform:
+  'Findet der Befehl die Zeile, die ich mit eigenen Augen gelesen habe?'"
 rot_lage_heute_deutlicher_als_im_blatt: "Das Blatt nennt EINEN Fehlalarm (die B7-Zeile). Unmittelbar
   vor der ersten Aenderung gemessen sind es DREI, und keiner davon laeuft: Z.41 B7
   (BETRIEBSBESTAETIGT), Z.42 B5N (ABGENOMMEN), Z.45 A-19 selbst (BEREIT). Alle drei erwaehnen
