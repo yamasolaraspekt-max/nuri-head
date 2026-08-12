@@ -39,7 +39,7 @@
 | **W-01N** Suite-Zahl zahlfrei | **`CODE_FERTIG`** | **Evaluator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | **`CODE_FERTIG`** | **Evaluator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
-| **B5N** Belegzeilen-Schreibweisen | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `8870387a` | **Nachbesserung §12.5 zu B5** — `B5_BELEGZEILE` (`commit-pruefen.sh:534`) erkennt nur `datei.ext:zeile`; **erhoben über 40 Botschaften: 20 Vorkommen fallen durch** (`Z.NNN` 12×, `Z.NNN-NNN` 4×, »Zeile NNN« 4×) · **dreimal gemeldet** (Evaluator, Release-Prüfer, Plan-Prüfer) — A-03-Klasse: eine Warnung, die bei richtiger Arbeit anschlägt, wird weggeklickt · tragend ist **B5N-2**: sie muss weiter anschlagen, wo kein Beleg steht |
+| **B5N** Belegzeilen-Schreibweisen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `8870387a` | **Nachbesserung §12.5 zu B5** — `B5_BELEGZEILE` (`commit-pruefen.sh:534`) erkennt nur `datei.ext:zeile`; **erhoben über 40 Botschaften: 20 Vorkommen fallen durch** (`Z.NNN` 12×, `Z.NNN-NNN` 4×, »Zeile NNN« 4×) · **dreimal gemeldet** (Evaluator, Release-Prüfer, Plan-Prüfer) — A-03-Klasse: eine Warnung, die bei richtiger Arbeit anschlägt, wird weggeklickt · tragend ist **B5N-2**: sie muss weiter anschlagen, wo kein Beleg steht |
 | **A-17** Zwei Engines schweigen | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
@@ -3808,7 +3808,23 @@ Kopf der Datei                        "Yamas Frage: ... Gemessen am eigenen Repo
 fehlerklasse: SPEC
 befund: "Empfehlung ohne Geltungsakt wird wie geltendes Recht behandelt und verdraengt §16"
 gegenprobe: "Wortlaut §1/§16 gegen Wortlaut und Kopf der Entscheidung · 0 Erwaehnungen in beiden Regelquellen"
-ballbesitz: yama
+ballbesitz: —  # ERLEDIGT 11.08., Feld am 12.08. nachgezogen
+erledigt_nachgezogen: "release-pruefer 12.08.: DIESER BALL WAR SEIT DEM 11.08. GESCHLOSSEN und das
+  Feld stand trotzdem noch auf yama. Nachgewiesen im selben Dokument: der Abschnitt 'Zum
+  Konsistenz-Befund' sagt woertlich 'Erledigt am 11.08. — auf Yamas Anweisung lies mal den Bericht
+  von Evaluator gruendlich bevor du handelst habe ich festgestellt: die Datei ist eine Analyse ohne
+  Inkraftsetzungsakt, §16 gilt unveraendert, die Statusfelder wurden nachgetragen. Der Befund des
+  Evaluators war in jedem Punkt richtig. Ball geschlossen.' Zusaetzlich tragen SIEBEN
+  Auftragsdatensaetze den Nachtrag 'ENTSCHEIDUNG-KONSISTENZ.md ist NICHT in Kraft (Analyse ohne
+  Geltungsakt); bis zur Aufnahme in die ARBEITSREGELN gilt §16 unveraendert.'
+  WIE ICH ES GEFUNDEN HABE, und es ist mir peinlich genug um es aufzuschreiben: ich habe auf Yamas
+  Anweisung 'kannst du alles was mich betrifft fundiert sorgfaeltig abarbeiten' eine Vorlage
+  gebaut und diesen Punkt als OFFENE FRAGE hineingeschrieben. Beim Nachpruefen der eigenen Zahlen
+  fiel auf, dass die Datei in STATUS.md nicht 0 sondern 10 Mal vorkommt — sieben davon sind ihre
+  ERLEDIGUNG. Ich haette Yama eine Frage vorgelegt, die er vor einem Tag beantwortet hat.
+  UND DIE IRONIE GEHOERT DAZU: dieser Fehler ist selbst ein Beleg fuer die These der Datei, die
+  ich vorlegen wollte — ein Ballbesitz-Feld, das von Hand gefuehrt wird, driftet, und zwar auch
+  dann noch, wenn der Vorgang laengst entschieden ist."
 ```
 
 **Was daraus folgt, ist kleiner als es klingt — und es entlastet den Planner:**
@@ -3937,7 +3953,32 @@ fehlerklasse: SPEC
 befund: "Vertretung ueber die Veroeffentlichung hinaus auf Prozessentscheidungen ausgedehnt"
 gegenprobe: "§4-Wortlaut gegen den Entscheid · die Pruefung nennt selbst ballbesitz: yama ·
   im Pruefdokument 1 Treffer fuer RELEASE_FREI/Push/Merge/Tag/Deployment, keiner davon ein Stand"
-ballbesitz: yama
+ballbesitz: plan-pruefer  # ERLEDIGT 11.08. in der Sache; offen nur die §4-Frage, und die
+                          # gehoert dem Plan-Pruefer, NICHT Yama. Feld am 12.08. nachgezogen.
+erledigt_nachgezogen: "release-pruefer 12.08.: AUCH DIESER BALL LAG SEIT DEM 11.08. FALSCH.
+  Beantwortet wurde er so: der berechtigte Kern ist die FORM, nicht die Befugnis — Rechtsgrundlage
+  ist §1 Nr.1 (Einzelanweisung), nicht §4. Yama hatte woertlich gesagt 'Ball bei dir fuer die drei
+  Entscheidungen'; geschrieben wurde 'Vertretung', richtig gewesen waere 'auf Yamas ausdrueckliche
+  Anweisung vom <Datum>'. Rueckwirkend fuer alle fuenf Vorgaenge nachgeholt, und seither nennt
+  jeder Entscheid ausserhalb §4 die Einzelanweisung im Wortlaut mit Datum — auch meine heutigen.
+  OFFEN BLEIBT genau eine Teilfrage, und sie liegt beim PLAN-PRUEFER: soll §4 um 'Prozess- und
+  Zuordnungsentscheidungen nach ausdruecklicher Einzelanweisung' ergaenzt werden? Empfehlung im
+  Text: NEIN, es kostet Yama einen Satz je Vorgang und haelt die Grenze sichtbar. Ich schliesse
+  mich dem an und aendere nichts daran — eine Regel, die meine eigene Vollmacht vergroessert,
+  pruefe ich nicht selbst."
+
+neuer_befund_dazu_E1_wird_nicht_befolgt:
+  klasse: SPEC
+  schwere: P2
+  was: "E1 ist seit dem 10.08. in Kraft und wird NICHT angewendet. Gemessen ueber die letzten 60
+    Commit-Botschaften aller Rollen: 'git show HEAD:' 0 Treffer, 'am COMMIT gemessen' 0 Treffer,
+    'E1' genau 1 Treffer — und der ist meiner, aus einem Bericht ueber diesen Befund, keine
+    Anwendung. Zum Vergleich am selben Tag: E2 wird gelebt, 14 von 14 W-Blaettern tragen das
+    §3-Kriterium; E3 ist halb verankert, 4 Erwaehnungen in STATUS.md und 0 in den ARBEITSREGELN."
+  warum_das_zaehlt: "Eine Regel, die niemand befolgt, beschaedigt das Regelwerk mehr als sie nuetzt
+    — sie lehrt, dass Regeln folgenlos sind. Das ist dieselbe Klasse wie die Falschmeldungen der
+    B5-Barriere: was bei richtiger Arbeit anschlaegt oder bei falscher schweigt, wird weggeklickt."
+  ball: planner (Vorlage an Yama) — E1 streichen oder durchsetzen, aber nicht liegen lassen
 ```
 
 **Was ich ausdrücklich NICHT sage:** dass die drei Entscheidungen falsch sind. *Sie sind sachlich
@@ -5406,8 +5447,14 @@ wenn_yama_trotzdem_loescht: "Archiv + Manifest + Rueckweg nach der Dauerregel, k
 ```yaml
 auftrag: "B5N"
 datei: docs/auftraege/aktiv/B5N-belegzeilen-schreibweisen.md
-zustand: BEREIT
-ballbesitz: generator
+zustand: IN_ARBEIT
+ballbesitz: generator (Bau laeuft — die Nachbesserung MEINER eigenen Barriere)
+befund_selbst_nachgemessen: "Ich habe den Befund gegen mein eigenes Muster gemessen, bevor ich ihn
+  uebernommen habe: die Form Z.NNN kommt in 9 der letzten 40 Botschaften vor, und nur 2 davon
+  tragen zusaetzlich eine Form, die B5_BELEGZEILE kennt. Sieben Botschaften MIT gelesenen
+  Trefferzeilen waeren also zu Unrecht gewarnt worden. Mein Muster, mein Fehler — und es ist die
+  gefaehrliche Richtung: eine Barriere, die falsch anschlaegt, wird abgeschaltet. Genau die
+  A-03-Lehre, die ich selbst in den Kommentar geschrieben habe."
 basis_sha: 8870387a
 anlass: "Plan-Pruefer 8870387a: 'Inzwischen DREIMAL gemeldet … gehoert aber in einen Auftrag statt
          in eine vierte Meldung.' Vorher Evaluator (B5-Abnahme) und Release-Pruefer (B6-Lauf)."
