@@ -32,14 +32,14 @@
 | **W-09** Treppe | `BETRIEBSBESTAETIGT` | – | Abnahme `f9c98fc0` (Inhalt `a29ea627`) · Runde 1 `d26d50b4` · Basis `65f3ece4` | **11/11 nach §12.4 alle neu gemessen** · der Wortlaut ist jetzt **gelaufen, nicht geschrieben**: seine Eingaben nachgefahren, sieben Zeilen deckungsgleich (170.6 · 288.8 · 118.2 · 459.4) · `-11` nennt jetzt **Dateien** statt Zahlen · Register-Selbstwiderspruch weg · Suite 1693/1693 · **zwei P2 zur Reihenfolge des Nachweisens, §12.5** |
 | **A-14** N-003-Vorbehalt ins Ergebnis | `BETRIEBSBESTAETIGT` | – | Inhalt `21940d33` (Bau `e0722979`) · Elter `efca1899` · Basis `1e09280d` · Kandidat `a2385d35` | **§10 voll gefahren** (Produktivcode mit Sichtwirkung, keine Doku-Sammelform) · Kette lückenlos, jeder Übergang `--is-ancestor` Exit 0 · Bündel im Kandidaten und **byte-gleich nachgebaut** (md5 `a5ea0056` vor = nach Neubau; genau das Artefakt, das der Browserlauf auslieferte) · Insel-Suite selbst **1693/1693** · Rückweg reiner Revert, `git apply --check -R` Exit 0, keine Migration/kein Datenpfad · **Plaketten-Renderbedingung selbst ausgeführt: nur `engine-sparren` unterdrückt, fünf Engines behalten ihre — auch `heizkoerper` mit roter Plakette** · `must_preserve` resources/+scripts/ in drei Richtungen 0/0/0 · Beifang ab CODE_FERTIG nur `docs/` · **ein P2/SPEC beim Planner (grundlage-Zeile nennt 4 von 6 Sonderlasten), blockiert nicht** · Veröffentlichung gehört Yama |
 | **A-15** Fachaussage oder Hinweis | `BETRIEBSBESTAETIGT` | – | Abnahme `8aded3b2` · Runde 1 `60d62d74` | **14/14 nach §12.4 neu gemessen** · P1 vorbildlich behoben: der überholte Abschnitt ist **als überholt markiert**, nicht gelöscht (Datum, Grund, Verweis) · Bilanz jetzt `6 + 4 + 1 = 11` · `__tests__` 15 · DIN-Stufung adressiert · Menge 13 und drei A-Fundstellen **erneut** selbst geöffnet |
-| **B5** Zählergebnis mit Trefferzeilen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `157576c2` · Elter `2a95ab40` | **7/7 — die Barriere AUSGELÖST, nicht gelesen**: Wegwerf-Repo, drei Probeläufe (feuert · schweigt bei Suite 1692/1692 · schweigt mit Belegzeile) + Mutation (Block raus → 0 Warnungen) · kein Abbruch, exit=0 beidseitig · scripts-Suite 107/107 an Bau **und** Elter · **P2: Belegmuster erkennt `Z.157` / `treppenTypen:4` nicht** (4 von 17 warnenden Botschaften) |
+| **B5** Zählergebnis mit Trefferzeilen | **`RELEASE_FREI`** | **YAMA** (Transportsperre) | Abnahme `157576c2` · Elter `2a95ab40` | **7/7 — die Barriere AUSGELÖST, nicht gelesen**: Wegwerf-Repo, drei Probeläufe (feuert · schweigt bei Suite 1692/1692 · schweigt mit Belegzeile) + Mutation (Block raus → 0 Warnungen) · kein Abbruch, exit=0 beidseitig · scripts-Suite 107/107 an Bau **und** Elter · **P2: Belegmuster erkennt `Z.157` / `treppenTypen:4` nicht** (4 von 17 warnenden Botschaften) |
 | **B6** Summe braucht Erhebung | **`CODE_FERTIG`** | **Evaluator** | Schnitt `29f8f372` | siebte Barriere · eigene Klasse, NICHT B5 · Abgrenzung als `B6-5` im Kriterium |
 | **W-15** Material und Farbe | `BEREIT` | **Generator** | Schnitt `a1cda36b` · Basis `57e582af` | **erstes C-Blatt**, Ziel `ENTWORFEN` · Vertrag ohne Implementierung (`werkzeugVertrag.ts:874-908`) · **nach W-07N/W-09** |
 | **W-01N** Suite-Zahl zahlfrei | `BEREIT` | **Generator** | Schnitt 10.08. | SPEC-Rest aus W-01/1 · kleinster Auftrag der Gruppe |
 | **A-16** `TIME_VARS` im Produktivbaum | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · **im Merge `6e3f2408` verloren, wiederhergestellt** | **Weiche W1/W2/W3** — Fundstelle hält zeichengenau, Prämisse nicht: **0 Aufrufer** (3 Suchformen), Route `roof` zeigt auf andere Datei, 0 Serverschreibpfade · 7 Kriterien · **kein Wert wird angefasst** · Datensatz Z. 2113 (`2a07d70c`) |
 | **B7** Mehrfachvorkommen ist kein Beleg | `BEREIT` | **Generator** | Schnitt `7d6c39cf` · DoR-Runde 1 `8b1b9d05` · **im Merge verloren, wiederhergestellt** | achte Barriere · **zwei Teile**: (a) wie oft ≠ Herkunft, (b) **der Ort ≠ die Wirkung** · **DoR-Restpunkt erledigt**: §5-`must_preserve` mit vier Zusagen nachgetragen, Kern ist (2) — B5/B6 sind unbebaut und dürfen nicht verdrängt werden |
 | **A-17** Zwei Engines schweigen | **`IN_ARBEIT`** | **Generator** | Schnitt 12.08. · Basis `3678d1de` | **Folge aus A-15 Achse 2** (`7b7f1dcc`: „Schnitt beim Planner") · `abwassergefaelle` + `fbhAuslegung` verlieren das Gesamturteil · **Bauteil aus A-14 wiederverwendet**, nichts neu erfunden · Zusatzbefund A-17-6 erhoben: **das Flag zählt nur `fehler`**, „Alle Prüfungen bestanden" ist in **drei** Engines irreführend |
-| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `ea9522bc` | **löst A-15s letzte offene Achse-2-Zeile auf, ohne Fachurteil** — die `Schicht` hat drei Felder (`name?`, `dicke`, `lambda`), für Glaser fehlen μ/s_d **und** Klima: der Taupunkt ist **nicht rechenbar**, nicht »nicht implementiert« · 10 Feuchte-Begriffe = 0 in der Datei · Pflichtfeld nach A-14/A-17-Muster · **kein Panel, keine Plakette zu streichen** · 2. Posten: »speist Heizlast« gegen **0** Aufrufe aus `app/` |
+| **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -1994,8 +1994,21 @@ rest_ohne_befund: "Im Wortlaut-Block stehen weiter zulaessig/Mindestmass/Durchga
 auftrag: "B5"
 titel: "Wer mit -c etwas behauptet, faehrt denselben Lauf ohne -c und liest, was er gezaehlt hat"
 datei: docs/auftraege/aktiv/B5-zaehlergebnis-mit-trefferzeilen.md
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer
+zustand: RELEASE_FREI
+ballbesitz: yama (TRANSPORTSPERRE — mein Votum ist RELEASE_FREI, die Veroeffentlichung
+  scheitert am abgelehnten Push; drei Versuche in drei Formen. Nur Yama loest das.)
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 157576c2, Fehlerklasse KEINE.
+  Messtisch 7/7 im Blatt gegengelesen (Z.219-262). Grundtor: Kette Vorfahr, must_preserve
+  resources/app/database 0/0/0, Geheimnisse 0, bash -n exit 0, scripts-Suite 107/107 ueber
+  fuenf Testdateien. BARRIERE SELBST AUSGELOEST statt gelesen: Probe 1 warnt (047fe693),
+  Proben 2/3 schweigen (826e721d, 3e0d9287), Commit entsteht jedesmal — Warnung, keine
+  Sperre. MEINE ERSTE PROBENREIHE WAR WERTLOS und ich sage es: docs/x.md gibt es nicht,
+  das Tor brach mit FEHLT ab VOR der B5-Pruefung, danach docs/STATUS.md mit UNVERAENDERT —
+  drei Nullen ohne Beweiswert, bei der Pruefung genau der Barriere, die das abstellt.
+  Prozessrecht geprueft: die Aenderung an ARBEITSREGELN (Fassung 1.5) ist durch Yamas
+  Auflage 0b vom 11.08. 22:12 gedeckt, das Blatt traegt den Regeltext woertlich wie Yama
+  ihn gesetzt hat — Ausfuehrung, nicht Rechtsetzung. Volles Protokoll in
+  docs/release/release-vorbereitung.md"
 basis_sha: 1734aa3b
 prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — grep auf B5/Trefferzeile in scripts/commit-pruefen.sh: 0 Treffer, das Tor kennt die Pruefung nicht. Sieben Kriterien, §5-Block, Erstnutzer, zwei Nicht-Ziele, Konfliktpruefung, must_preserve. DIE FORM IST DER KERN UND SIE IST RICHTIG GEWAEHLT: Warnung statt Abbruch, mit ausdruecklicher Begruendung ('eine harte Sperre auf Zahlen in Commit-Botschaften wuerde jeden legitimen Bericht blockieren — Suite 1692/1692, 0 Platzhalter, 5 von 10'). Das ist Stufe 1 der Barrierenleiter und die einzige, die hier traegt: das Tor kann nicht pruefen WIE gemessen wurde, nur ob eine Zahlenbehauptung ohne Beleg dasteht. Ein Auftrag, der seine eigene Wirkungsgrenze benennt, statt sie zu ueberschaetzen."
@@ -2031,6 +2044,7 @@ prioritaet: P1
 letztes_votum: "plan-pruefer 12.08. (1. DoR-Runde, BEREIT beim ersten Review): Rot-Lage SELBST gemessen — grep auf B6/Summe-Menge im Tor: 0 Treffer. Acht Kriterien, §5-Block vollstaendig. B6-2 ist die wertvollste Zeile: die Warnung muss NACHWEISLICH SCHWEIGEN, wenn Menge und Summe genannt sind, belegt durch ZWEI Probelaeufe mit beiden Ausgaben im Bericht — 'ohne diesen Gegenbeleg ist die Barriere eine Belaestigung'. Genau die Gegenrichtung, die bei must_preserve-Kriterien so oft fehlt. Die Trennung von B5 ist sauber und stammt von Yama selbst: B5 fragt 'hast du gelesen, was du gezaehlt hast', B6 fragt 'weisst du, WORUEBER du gezaehlt hast' — der Planner-Fehler dahinter ist belegt (640 gemeldet, 1.593 erhoben)."
 konfliktpruefung_ergaenzt: "Von mir gemessen, weil beide Blaetter dieselbe Datei anfassen: B5 und B6 aendern BEIDE scripts/commit-pruefen.sh (heute 610 Zeilen, 78 Zusagen in der Suite). Sie sind zeilenweise disjunkt (Zahlenbehauptung gegen Summenbehauptung), aber §3 loest es ohnehin — REIHENFOLGE B5 dann B6, damit der zweite Bau auf dem ersten aufsetzt statt gegen ihn."
 naechster_schritt: "Generator zieht B6 NACH B5"
+claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme B6 GECLAIMT vor dem Pruefstand. Siebte Barriere, dieselbe Datei wie B5 — ich werde sie AUSLOESEN wie B5 und zusaetzlich pruefen, dass B5 dabei unberuehrt bleibt: zwei Waechter in einem Tor koennen einander verdecken."
 ```
 ---
 
@@ -4724,8 +4738,21 @@ status_korrektur: "der Eintrag 'FACH-GATE N-003 offen bei Yama' ist ueberholt un
 ```yaml
 auftrag: "A-18"
 datei: docs/auftraege/aktiv/A-18-wandaufbau-vorbehalt-uwert.md
-zustand: CODE_FERTIG
-ballbesitz: "evaluator (gebaut 12.08. auf ee2dad24; Bericht docs/BERICHT-A-18-wandaufbau-vorbehalt-uwert.md)"
+abnahme_nachgezogen: "release-pruefer 12.08.: der Evaluator hat in 7be1a381 ABGENOMMEN
+  gevotet (acht von acht) und den Zustand BEWUSST nicht gesetzt — er schreibt es selbst:
+  'VOTUM ZUERST INS BLATT, Zustand folgt, der Generator meldet in diesem Moment
+  ungespeichert B6 fertig und mein Commit wuerde seine Arbeit mitnehmen.' Ich ziehe den
+  Zwischenschritt ABGENOMMEN nach; das ist Statuswahrheit nach §16, keine zweite Abnahme."
+release_vermerk: "release-pruefer 12.08.: RELEASE_FREI an 492a6a71, Fehlerklasse KEINE.
+  Messtisch 8/8 im Blatt gegengelesen (Z.231-287). VOLLES Grundtor, weil Produktivcode
+  beruehrt ist (wandaufbau.ts +24, wandaufbau.test.ts +17): tsc clean, Insel-Suite
+  1694/1694 bei Elter 1693, Bundle neu gebaut und sha256 byte-gleich, php artisan test
+  888 passed / 3119 assertions, Kette Vorfahr, Geheimnisse 0. Fachlich ist das der
+  Vorbehalt, den ich Yama am 12.08. vorgeschlagen habe — der U-Wert nennt seine eigene
+  Grenze, statt einen Taupunkt zu rechnen, den die Datenstruktur nicht hergibt. Ich pruefe
+  ihn und nehme ihn NICHT ab; das hat der Evaluator getan."
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer
 zwei_punkte_fuer_den_evaluator: "Beide sind Zahlen, die ich NICHT passend gemacht habe.
   (1) A-18-2 sagt 'die Konstante kommt genau einmal vor' — der Wortlaut kommt ZWEIMAL vor:
       wandaufbau.ts:58 (die Konstante) und wandaufbau.test.ts:58 (ausgeschrieben in der Zusage).
@@ -4776,6 +4803,9 @@ zweiter_posten_nicht_erledigt: "Dateikopf:2 sagt 'speist Heizlast & Dach' — ge
 abhaengigkeit: "A-18 darf erst BAUEN, wenn A-15 abgeschlossen ist — sonst baut es auf einem
        Vorschlag. A-15 ist IN_ARBEIT beim Generator; ich habe es NICHT angefasst."
 claim_abnahme: "evaluator (Erstinstanz) 12.08.: Abnahme A-18 GECLAIMT vor dem Pruefstand. Erster Produktivcode seit A-14, also Pruefstand mit node_modules UND vendor — bei B5 habe ich vendor vergessen und beinahe eine Regression gemeldet. Der Kern ist A-18-1 (Pflichtfeld, nicht optional): das messe ich mit tsc und einer Mutation, nicht am Text. Und die Kernbehauptung des Auftrags — die Engine KANN den Taupunkt nicht rechnen, weil mu/sd und Klima im Datentyp fehlen — pruefe ich am Datentyp selbst nach, bevor ich den Bericht lese."
+evaluator_votum: "evaluator 12.08.: ABGENOMMEN an 492a6a71, acht von acht — Votum seit 7be1a381 im Blatt, der Zustand kommt erst jetzt nach, weil der Generator zum Votumszeitpunkt ungespeichert B6 meldete. Der Kern A-18-1 ist BEWIESEN, nicht behauptet: Feld aus dem Rueckgabeblock mutiert, tsc bricht mit TS2741 Property vorbehalt is missing ab; ein optionales Feld haette diesen Fehler nicht erzeugt. Wortlaut maschinell verglichen: 258 gegen 258 Zeichen, identisch. Keine Rechenaenderung, weil es 0 LOESCHUNGEN gibt. Die zehn Feuchte-Begriffe: Trefferzeilen gelesen statt gezaehlt, alle im Kommentar und im Vorbehaltstext, keiner im Rechenweg. Suite 1694/1694 gegen Elter 1693, tsc clean. SEINE VORGELEGTE FRAGE ENTSCHIEDEN durch Messen: der Wortlaut kommt zweimal vor, Konstante und ausgeschrieben in der Zusage. Ich habe die Konstante still umformuliert — die Zusage faellt. Der ausgeschriebene Vergleich ist der Waechter gegen genau die Umformulierung, die A-18-3 verbietet; ein Test auf r.vorbehalt === UWERT_VORBEHALT waere tautologisch. Die zweite Stelle BLEIBT."
+meine_zwei_fallen: "Beide beinahe Fehlbefunde gegen den Auftrag, beide durch Lesen statt Zaehlen aufgeloest: (1) ich zaehlte test-Bloecke (6) statt Assertions (10) und haette die Zehn des Auftrags widerlegt; beide Zaehlweisen gefahren, die Zahl stimmt. (2) berechneUWert in app/ ergab 1 Datei — die Trefferzeile gelesen: eine ZEICHENKETTE in der Faehigkeitsliste, echte Aufrufe 0. Das ist B5, auf mich angewandt, zum zweiten Mal in zwei Abnahmen."
+beobachtung_zum_release: "Der Release-Pruefer hat §10 fuer A-18 bereits gefahren (72a90ed0, RELEASE_FREI) — geschrieben nur in docs/release/release-vorbereitung.md, der Statustraeger blieb auf CODE_FERTIG. Er ist damit meinem Zustandswechsel vorausgeeilt; mein Anteil ist, dass ich den Zustand wegen fremder Arbeit im Baum zurueckgehalten habe. Keine Blockade — die Sache stimmt in beide Richtungen —, aber §16 sagt, der Zustand gehoert in GENAU DIESE Datei, und ein §10 an einem Auftrag, der dort noch CODE_FERTIG traegt, ist von aussen nicht nachvollziehbar."
 ```
 
 ---
