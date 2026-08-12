@@ -3626,6 +3626,47 @@ die Lücke, benannt an der Stelle, an der ich sie gelassen habe.
 
 ---
 
+## Mein Prüfwerkzeug hat eine Drift gemeldet, die es nicht gab (Release-Prüfer, 12.08.)
+
+```yaml
+befund: "release-pruefer 12.08., an MEINEM eigenen Driftlauf"
+klasse: BEWEIS
+schwere: P2
+blockiert: nein
+
+was_passiert_ist: "Nach der W-39-Freigabe meldete mein Lauf 'B-DRIFT W-27'. Ich habe die
+  Trefferzeilen GELESEN statt die Meldung zu uebernehmen: es gibt ZWEI Auftraege, W-27
+  (BETRIEBSBESTAETIGT, Ball —) und das gerade geschnittene W-27/1 (BEREIT, Ball generator).
+  Beide stimmen mit ihrer Tafelzeile ueberein. Es gab keine Drift."
+
+die_ursache_in_meinem_werkzeug: "Mein Skript normalisierte jeden Auftragsnamen auf seine Wurzel
+  — W-27/1 wurde zu W-27 — und liess damit zwei ECHTE Auftraege auf denselben Schluessel fallen.
+  Der zuletzt gelesene gewann, und der Ballvergleich lief gegen die Tafelzeile des anderen.
+  Zwei Laeufe kurz nacheinander meldeten sogar VERSCHIEDENE falsche Werte (plan-pruefer, dann
+  generator), weil die Rollen dazwischen geschrieben haben — eine Meldung, die sich aendert,
+  ohne dass sich die Sache aendert, ist kein Befund, sondern ein Werkzeugfehler."
+
+und_es_ist_dieselbe_klasse_wie_mein_erster_fehlbefund_heute: "Heute frueh suchte ich eine
+  Tafelzeile 'W-04/1', die 'W-04' heisst, und war im Begriff einen Verlust zu melden. Ich habe
+  damals die SUCHE berichtigt und den VERGLEICH nicht — derselbe Namensraum, dieselbe Klasse,
+  zwoelf Stunden und achtzehn Fehlgriffe spaeter an der anderen Stelle desselben Werkzeugs.
+  H-9 in Reinform: das Muster misst, woran es ansetzt."
+
+behoben: "Das Werkzeug ordnet jetzt EXAKT zu und faellt nur dann auf die Wurzel zurueck, wenn
+  es zu einem Datensatz keine gleichnamige Tafelzeile gibt UND die Wurzel nicht selbst ein
+  Auftrag ist. Der Fall W-04/1 -> W-04 funktioniert weiter, der Fall W-27/1 kollidiert nicht
+  mehr. Nachher: 49 Auftraege geprueft statt 47 — die zwei, die vorher verschluckt wurden,
+  werden jetzt gemessen. Zustands-Drift 0, Ball-Drift 0."
+
+warum_ich_es_DIESMAL_geaendert_habe: "Heute frueh habe ich zweimal geschrieben, dass ich mein
+  Pruefmuster nicht im Vorbeigehen verschaerfe — beim Geheimnismuster und beim yaml-Parser.
+  Das gilt weiter und ist hier nicht der Fall: dort ging es um einen strengeren MASSSTAB, hier
+  um einen FEHLER. Ein Werkzeug, das falsche Drift meldet, ist schlechter als keines; es
+  erzeugt Arbeit an Stellen, die in Ordnung sind, und verdeckt beim naechsten Mal die echte.
+  Instandsetzung ist keine Massstabsaenderung. Der Lauf liegt im Sitzungsordner, nicht im
+  Repositorium — er ist mein Arbeitsmittel und kein Bestandteil des Prozesses."
+```
+
 ## §19-Gesamtkontrolle: liegen ALLE betriebsbestätigten Bauten im veröffentlichten Stand? (12.08.)
 
 ```yaml
