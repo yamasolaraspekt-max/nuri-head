@@ -171,3 +171,112 @@ wiederverwendung: "keinGesamturteil, vorbehalt-Feld und grundlage-Zeile stammen 
                    aus A-14 — nichts davon wird neu erfunden"
 zusatzbefund: "A-17-6, erhoben: drei Engines mit Warnung + Gesamtflag, das nur Fehler zaehlt"
 ```
+
+## §11 — Votum A-17 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "A-17"
+votum: ABGENOMMEN
+fehlerklasse: KEINE
+abnahme_commit: "9d79b1ca"
+elter: "8870387a"
+pruefstand: "worktree --detach auf 9d79b1ca und 8870387a, node_modules UND vendor"
+
+messtisch_alle_sieben:
+  A-17-1: GRUEN — mit der SCHAERFEREN Gegenprobe
+    code: "keinGesamturteil: true — Elter 1x (engine-sparren), Bau 3x: engine-sparren,
+            engine-fbh, engine-abwasser. Genau die beiden neuen, kein drittes."
+    browser: "engine-abwasser nach Berechnen: plakette = [] — kein Element mit
+            'Alle Pruefungen bestanden' und keines mit 'Eine Pruefung ist ...'."
+    die_drei_anderen: "Treppen-Auslegung 'Alle Pruefungen bestanden' y=263 sichtbar ·
+            Kuechen-Arbeitsdreieck y=300 sichtbar · Heizkoerper-Leistung
+            'EINE PRUEFUNG IST NICHT BESTANDEN' y=230 sichtbar."
+    warum_die_dritte_zaehlt: "Das Kriterium verlangt ausdruecklich ein Panel mit
+            bestanden=false und ROTER Plakette. Die habe ich: heizkoerper zeigt den
+            NEGATIVEN Urteilstext weiter. Damit ist belegt, dass das Flag EINE Engine
+            unterdrueckt und nicht negative Urteile allgemein — die Probe, die der
+            Release-Pruefer bei A-14 gefahren hat."
+  A-17-2: GRUEN
+    browser: "engine-fbh nach Berechnen: plakette = []. Vorbehalt-Label sichtbar y=413."
+  A-17-3: GRUEN
+    feld: "{ schluessel: 'vorbehalt', label: 'Vorbehalt' } steht dreimal in enginePanels.ts
+            (:225 sparren aus A-14, :264 und :354 neu) — in DERSELBEN felder-Liste."
+    browser_abwasser: "Vorbehalt-Label y=484, x=731 — sichtbar, in derselben Spalte wie die
+            Werte, keine Fussnote."
+    grundlage_abwasser: "'Grundlage: Mindestgefaelle je Nennweite; Hoehenverlust = Gefaelle x
+            Laenge — DIN 1986-100 vereinfacht. Kein Entwaesserungsnachweis, keine
+            Genehmigungsunterlage.' — sichtbar, nennt die Reichweitengrenze."
+    grundlage_fbh: "'... Pruefpunkte zu Leistung und Kreislaenge — Rohrlaengen, Kreise und
+            Plausibilitaet. Hydraulischer Abgleich und normative Auslegung sind NICHT erfasst.'"
+    herkunft_geprueft: "Der Auftrag verlangt den Wortlaut AUS DEM DATEIKOPF. Ich habe beide
+            Koepfe geoeffnet: abwassergefaelle.ts:4-6 traegt 'nach DIN 1986-100 (vereinfacht):
+            Mindestgefaelle je Nennweite, Hoehenverlust aus Laenge x Gefaelle' — die Konstante
+            ABWASSER_VORBEHALT (:51) gibt das wieder. Nicht aus eigener Feder."
+  A-17-4: GRUEN
+    beleg: "geometry/: abwassergefaelle +23/-1, fbhAuslegung +23/-0.
+            Die EINE Loeschung habe ich gelesen statt gezaehlt:
+              -    bestanden: !p.some((x) => x.schwere === 'fehler' && !x.bestanden) };
+              +    bestanden: !p.some((x) => x.schwere === 'fehler' && !x.bestanden),
+              +    vorbehalt: ABWASSER_VORBEHALT };
+            Derselbe Ausdruck, nur umgebrochen, damit das Feld dahinter passt. Kein geaenderter
+            Vergleichsoperator, kein geaenderter Grenzwert."
+    enginePanels: "+17/-2 — die zwei Loeschungen sind die beiden grundlage-Zeilen, ersetzt
+            durch die laengeren mit Reichweitengrenze. Genau was -3 verlangt."
+  A-17-5: GRUEN — die Gegenprobe im Browser gefahren, nicht abgeleitet
+    was_ich_getan_habe: "Ich habe die Fehlerpruefung ABSICHTLICH reissen lassen: Gefaelle 0.2 %
+            gesetzt (unter dem Mindestgefaelle DN100) und neu gerechnet."
+    ergebnis: |
+      plakette   = []                       <- kein Summen-Urteil
+      Prüfungen (2)
+        ✕ Fehler   Gefälle 0.2 % < Mindestgefälle 1 % (DN100).
+        ✓ erfüllt  Gefälle 0.2 % ≤ empfohlenes Maximum 5 %.
+    bewertung: "Die Meldung bleibt vollstaendig, mit Schwere und Zahlen. Was faellt, ist das
+            Summen-Urteil. Der Bericht nennt nur den GRUENEN Fall — ich habe den roten gefahren,
+            weil das Kriterium ihn woertlich verlangt."
+  A-17-6: GRUEN
+    beleg: "EngineFlaeche.tsx ist im Bau 0-mal angefasst; md5 an Elter und Bau IDENTISCH
+            (14bbe543…). Zeile 146 traegt den Wortlaut unveraendert. Der Bericht benennt den
+            Posten mit Fundstelle und begruendet das Nicht-Aendern als Beifang-Vermeidung."
+    was_offen_bleibt: "Der Posten ist BENANNT, aber noch nicht als Auftrag eingereiht —
+            in der Tafel gibt es keine Zeile dafuer (selbst gesucht: 0 Treffer). Kein Befund
+            gegen diesen Bau, das Kriterium verlangt nur die Benennung. Aber er sollte nicht
+            im Bericht versanden; der Planner moege ihn schneiden."
+  A-17-7: GRUEN
+    waechter_vorher: "bash scripts/buehnen-waechter.sh -> 'BUEHNE OK PID 68498 (php -S) —
+            Datenbank ticket_testing' · 'ALLE BUEHNEN OK'. VOR der ersten Messung."
+    buendel_identitaet: "Arbeitsbaum, Commit 9d79b1ca und die HTTP-Antwort der Buehne tragen
+            alle drei md5 62d7be7eac45f91b2d90147f740a01fa. Gemessen wurde der Bau."
+    reproduzierbar: "npm run build:hausplaner im Pruefstand erzeugt dieselbe md5 — das Buendel
+            stammt aus genau diesen Quellen."
+
+must_preserve:
+  suite: "1698/1698/0 (A-18-Stand war 1694 — vier neue Zusagen aus zweiEnginesSchweigen.test.ts)"
+  code_ausserhalb: "EngineFlaeche.tsx unberuehrt (md5 gleich), keine weitere app/-Datei"
+
+eingriff_von_mir_offengelegt:
+  was: "ticket_testing hatte 0 Nutzer — der A-14-Probenutzer war verschwunden, und ohne
+        Anmeldung gibt es keine Browserabnahme. Ich habe EINEN Nutzer angelegt:
+        id 269, a17-probe@example.test, is_admin=1."
+  §15_vor_dem_schreiben_belegt: |
+    getDatabaseName(): ticket_testing
+    Nutzer vorher: 0    -> angelegt id=269 -> Nutzer nachher: 1
+  bemerkung: "Er steht noch. Das Raeumen von Testnutzern ist eine Datenoperation und braucht
+        Yamas Freigabe — ich melde ihn, statt ihn stillschweigend zu loeschen."
+
+meine_drei_fallen_in_dieser_abnahme:
+  - "Erster Browserlauf brach ab: '#hausplaner-root ist null'. Nicht der Bau — der LOGIN
+     schlug fehl, weil die Testdatenbank leer war. Diagnose statt Befund."
+  - "Mein Pruefzeilen-Raster fing 'Heizkreis-Verteiler' bei x=1396 — das ist die
+     Fachplaner-Schiene, nicht die Flaeche. Falsches Element, nicht falscher Bau."
+  - "'^Pruefungen' traf den REITER der rechten Schiene statt der Pruefliste. Mit
+     'Pruefungen \\(' war es die richtige. Dreimal mein Aufbau, kein einziges Mal der Bau."
+
+zusammenfassung: "Sieben von sieben. Das A-14-Muster ist auf zwei weitere Engines uebertragen,
+     ohne die uebrigen zu beruehren — und die schaerfste Probe des Auftrags ist erfuellt:
+     ein Panel mit ROTER Plakette zeigt sie weiter. Die Rot-Probe fuer -5 habe ich selbst
+     ausgeloest statt sie abzuleiten; die Meldung bleibt vollstaendig stehen, nur das
+     Summen-Urteil faellt. Das Buendel ist in drei Richtungen dasselbe: Arbeitsbaum, Commit
+     und HTTP-Antwort."
+
+ballbesitz: release-pruefer
+```
