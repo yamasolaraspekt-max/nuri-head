@@ -57,6 +57,7 @@
 | **W-42** Schreibpfad Wizard zum Gebaeudemodell | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `BESCHRIEBEN`** — ABWEICHUNG von der Freigabe: der Schreibpfad ist **GEBAUT** (3x `executeCommand`, 4 Bauteilarten) · zwei Quellen im Repo sagen das Gegenteil |
 | **W-27/1** BAU Dachkantentypen in die Insel | **`BETRIEBSBESTAETIGT`** | – | Release `a2b63a1f` · §19 12.08. | **ERSTER BAUAUFTRAG** — Ziel `GEBAUT`, heute tragen **0 von 43** Werkzeugen GEBAUT · neue Datei `geometry/dachTopologie.ts` · Yamas Freigabe 12.08. |
 | **W-35** Konfigurator-Dialog | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `0474f53b` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `ConfigWizard.tsx` 271 Z. · **BEFUND: die Registerzeile nennt DREI Arten, der Code traegt VIER** (heizkoerper fehlt) |
+| **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | `ENTWURF` | **plan-pruefer** | Schnitt 12.08. · Basis `2e7504ec` | **NACHBESSERUNG §12** auf Yamas Entscheidung: drei Stufen sind GEBAUT (checked/approved/outdated), nur `blocked` ist Erweiterung · **Traeger ist das PAKET, nicht der Schritt** |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE hat sich VERSCHOBEN**: die Datenlücke ist geschlossen (W-23 `BETRIEBSBESTAETIGT`, F-053 eingetragen) · offen sind jetzt allein **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` · durch A-21 auf `DECISION_BLOCKED` umgestellt |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -8167,4 +8168,60 @@ sechs_waechter_einer_mit_namen: "konfiguratorEhrlich, configWizardWrite, paketSp
   woertlich, welche Zusage er haelt, denn ein Name ist keine Aussage."
 regel_A_20_2_befolgt: "Blatt, Tafelzeile und dieser Block in EINEM Commit."
 W_35_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+```
+
+```yaml
+auftrag: "W-40/1"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+titel: "W-40 ist eine Ablesung mit EINER Erweiterung, und der Traeger ist das Paket"
+basis_sha: 2e7504ec
+spur: A
+prioritaet: P1
+dor_beleg: "steht aus — plan-pruefer."
+anlass: "Yamas Antwort auf beide Fachfragen, eingetragen in 2e7504ec, und der Ball ausdruecklich an
+  mich: der release-pruefer schreibt, der Reifegrad ENTWORFEN trage nicht mehr, er aendere die
+  Registerzeile aber NICHT selbst, weil das Register meine Arbeit ist."
+yamas_entscheidung_selbst_nachgemessen: "Drei der vier Stufen sind GEBAUT und nur eine fehlt.
+  configuratorPackage.ts:107 traegt checked mit draft, approved und generated — der einzige Weg nach
+  approved fuehrt ueber checked, also entspricht review-required dem checked. :120-122 kannIntegrieren
+  gibt true genau bei status approved, also entspricht confirmed dem approved. outdated entspricht
+  outdated, markiereVeraltet setzt es. blocked hat im ganzen Hausplaner 0 Treffer und ist die EINZIGE
+  Erweiterung. Yamas Folge: W-40 ist eine ABLESUNG MIT EINER ERWEITERUNG und keine Vorgabe.
+  Und seine Aufloesung der Zahlenluecke traegt: 4 plus 3 muss nicht 8 ergeben, weil die vier und die
+  drei nicht auf DERSELBEN Achse liegen. Meine Frage war falsch gestellt."
+der_traeger_ist_die_zweite_haelfte_meines_fehlers: "W-40s 2-FUNKTION stellt gueltigkeit NEBEN
+  fortschritt an den SCHRITT, mit dem Satz ein Schritt kann ok UND confirmed sein. Nach Yamas
+  Zuordnung haengt die Achse am PAKET. Der release-pruefer hat dabei seine eigene fruehere Ablesung
+  zurueckgezogen und die Trennung klar benannt: die MESSUNG steht, die beiden Traeger sind im Code
+  getrennt mit Import-Zaehler 0 in beide Richtungen, aber der SCHLUSS traegt nicht mehr.
+  MEIN ANTEIL: ich habe die Achse an den Schritt gehaengt, weil W-38s SchrittStatus dort haengt, ohne
+  zu pruefen woran die VORHANDENE Achse haengt. Zusammen mit der uebernommenen Praemisse kein Code
+  ist das derselbe Fehler zweimal am selben Blatt."
+das_baurisiko_woertlich_von_ihm: "Wer das Blatt liest und baut ohne diese Zeile zu kennen, baut die
+  Achse ein zweites Mal am falschen Traeger — und DAS waere die zweite Wahrheit, die es heute noch
+  nicht gibt. Der Satz gehoert ins Blatt, BEVOR gebaut wird. Genau darum P1."
+yamas_zwei_auflagen_und_die_namenswarnung: "blocked traegt seinen GRUND mit, ein blocked ohne
+  blockiert_durch ist eine Absage ohne Erklaerung. Und blocked wird NIE von Hand gesetzt oder
+  geloest, wer das will meint DECISION_BLOCKED und gehoert in die Rollenkette statt ins Modell.
+  Die Unterscheidung, die beides traegt, ist WORAUF gewartet wird: DECISION_BLOCKED wartet auf einen
+  MENSCHEN, Ebene Prozess, Ort STATUS.md, Aufhebung nur durch Yama und nie maschinell; blocked wartet
+  auf eine BEDINGUNG, Ebene Produkt, Ort Gebaeudemodell, Adressat das naechste Werkzeug, Aufhebung
+  automatisch sobald die Vorbedingung messbar erfuellt ist. Sein Beispiel: PV-Belegung auf einer
+  Dachflaeche ohne bestaetigte Geometrie — niemand entscheidet etwas, die Sperre faellt von selbst.
+  Namenswarnung: zwei Zustaende die beide blockiert heissen und GEGENSAETZLICH aufgeloest werden,
+  werden verwechselt; beim Bau traegt blocked den Satz mit, nicht DECISION_BLOCKED, dieser hier loest
+  sich ohne mich."
+DER_REIFEGRAD_FOLGT_DEM_BLATT_UND_NICHT_UMGEKEHRT: "Die Registerzeile 127 traegt ENTWORFEN. Yamas
+  Entscheidung sagt Ablesung mit einer Erweiterung — aber BESCHRIEBEN waere HEUTE falsch, denn das
+  Blatt liest nichts ab, es gibt vor. Deshalb bleibt die Zeile ENTWORFEN, BIS das Blatt tatsaechlich
+  abliest, und wird als LETZTER Schritt dieses Auftrags nachgezogen (Kriterium W-40/1-7). Wer sie
+  vorher aendert, behauptet eine Ablesung die es nicht gibt. Ich hatte in 5028375e gesagt, ich aendere
+  den Reifegrad nicht bis Yamas Antwort da ist; sie ist da und sie sagt, dass zuerst das Blatt zu
+  aendern ist."
+zwei_pfadangaben_geradegezogen: "Aus Yamas Belegen, beide vom release-pruefer gemeldet und von mir
+  bestaetigt: statusAus liegt in app/dashboard/fahrschritte.ts, der dashboard-Teil fehlte im Pfad; und
+  der Uebergangsblock beginnt bei :103 und nicht bei :101. Der INHALT beider Angaben stimmt
+  zeichengenau — nur die Fundstelle wird geradegezogen, damit sie beim Nachschlagen nicht aufhaelt."
+W_40_1_nimmt_den_paragraf3_platz: "Sobald gezogen: IN_ARBEIT. Paragraf 3 steht bei 0."
 ```
