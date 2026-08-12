@@ -2398,7 +2398,13 @@ ein_p2_ohne_hindernis: "Die sichtbare grundlage-Zeile nennt VIER der SECHS Sonde
 ```
 ---
 
-## ⚠ AN YAMA — A-16 liegt bei DIR (Weiche), und es ist UNGESICHERT
+## ✅ ERLEDIGT 12.08. — war: "AN YAMA — A-16 liegt bei DIR (Weiche), und es ist UNGESICHERT"
+
+> **UEBERHOLT, Vermerk vom Plan-Pruefer selbst nachgetragen.** *Alle drei Aussagen dieses Blocks
+> sind eingeholt: (1) Yama hat die Weiche am 12.08. auf **W3** entschieden. (2) Die DoR ist danach
+> gefahren und BESTANDEN (`95b4de4f`), das Ergebnis steht im A-16-Datensatz. (3) Die Datei ist
+> nicht mehr ungesichert — sie ist committet und mit `ls-files` nachgemessen. A-16 steht BEREIT
+> beim Generator und liegt NICHT mehr bei Yama. Der Text bleibt als Historie stehen.*
 
 ```yaml
 lage: "Der Planner hat A-16 geschnitten (TIME_VARS im Produktivbaum) und den Ballbesitz ausdruecklich auf YAMA gesetzt — eine Weiche, danach erst die DoR bei mir. Ich fahre deshalb KEINE DoR; ich habe den Kern nachgemessen, damit die Weiche entscheidbar ist."
@@ -2621,6 +2627,17 @@ DRITTE_MESSUNG_UND_JETZT_STIMMT_SIE: "Meine zweite Zaehlung war auch nicht praez
 die_eigentliche_lehre: "Dreimal dieselbe Frage, drei verschiedene Zahlen — und der Unterschied lag jedes Mal im MESSVERFAHREN, nie im Gegenstand. Erste Messung: grep auf die Zeile (zaehlte Befund-Bloecke mit). Zweite: awk ohne Blockgrenze (zaehlte ueber Blockgrenzen hinweg). Dritte: Fenstergrenze je Vorkommen. Das ist B5 und B6 in einem Fall: wer eine Zahl behauptet, muss sagen, WIE er gezaehlt hat — und wer eine Summe meldet, muss die MENGE definieren. Beide Barrieren stehen als Auftrag BEREIT und sind noch nicht gebaut; heute war ich ihr Anwendungsfall."
 GESCHLOSSEN: "plan-pruefer 12.08. — SELBST NACHGEMESSEN mit der praezisen Methode (zustand-Feld innerhalb von 12 Zeilen nach der auftrag-Zeile): A-17 traegt jetzt genau EINEN Zustandsdatensatz (Z.2141, BEREIT); der zweite Eintrag bei Z.3987 hat kein zustand-Feld mehr und ist damit ein Befund-Block wie bei A-02/A-07/A-08/A-09. Der Planner hat den Befund angenommen ('trifft mich, behoben') und die richtige Seite entfernt — meinen BEREIT-Block hat er stehen lassen. Damit ist die dritte Bauart nicht nur benannt, sondern einmal durchgespielt: gefunden durch Zaehlen, behoben von dem, dem die Zeile gehoerte."
 was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwortet: wer legt den Block an, Planner beim Schnitt oder Plan-Pruefer bei der DoR? Solange das offen ist, kann derselbe Fall beim naechsten Auftrag wieder entstehen — behoben ist der Fall, nicht die Ursache."
+```
+---
+
+## DERSELBE FEHLER ZWEIMAL IN EINER STUNDE — der fuenfte Ort war mein eigener Warnblock (plan-pruefer 12.08.)
+
+```yaml
+was_ich_uebersehen_habe: "Eine Runde nachdem ich den A-16-Datensatz berichtigt habe, habe ich alle Orte durchgezaehlt, die A-16 einen Stand zuschreiben — und einen FUENFTEN gefunden, den weder ich noch der Planner erwischt hatten: docs/STATUS.md trug einen Block mit der Ueberschrift 'AN YAMA — A-16 liegt bei DIR (Weiche), und es ist UNGESICHERT'. ER IST MEINER (59375b5a). Alle drei Aussagen darin sind ueberholt: die Weiche ist entschieden, die DoR gefahren, und die Datei ist committet — mit ls-files nachgemessen, 1 Treffer."
+warum_das_schwerer_wiegt_als_der_erste_fall: "Der erste Fall war ein Feld im Datensatz, das nur liest wer A-16 aufschlaegt. DIESER Block ist als Warnung an Yama formatiert, mit Warnzeichen in der Ueberschrift — also genau das, was jemand zuerst sieht, der die Statuswahrheit ueberfliegt. Eine ueberholte Aussage wiegt schwerer, je prominenter sie steht."
+und_es_ist_derselbe_fehler_zum_zweiten_mal: "Vor einer Stunde habe ich beim Planner gemeldet, seine Berichtigung habe nicht JEDE abhaengige Stelle erreicht, und er hat daraus den Vorlagen-Mangel notiert. Dann habe ich meinen eigenen A-16-Datensatz berichtigt — und meinen eigenen Warnblock uebersehen. ICH HABE DIE LEHRE GEMELDET UND SIE IM SELBEN ATEMZUG NICHT ANGEWANDT. Der Unterschied zwischen Kennen und Anwenden ist genau diese Stunde."
+was_ich_jetzt_anders_mache: "Eine Berichtigung ist erst fertig, wenn ich REPO-WEIT nach dem alten Sachverhalt gesucht habe — nicht nach dem Auftragsnamen, sondern nach der AUSSAGE ('liegt bei Yama', 'keine DoR', 'ungesichert'). Der Auftragsname findet den Datensatz; die Aussage findet den Warnblock, das Blatt und den Fahrplan. Bei A-16 habe ich das jetzt gefahren: Blatt Z.10 traegt den dor_beleg, Z.217 den Ueberholt-Vermerk, die Tafelzeile BEREIT/Generator, der Datensatz das DoR-Ergebnis, und dieser Block den Vermerk. Fuenf Orte, alle gemessen."
+gekennzeichnet_nicht_geloescht: "Die Ueberschrift heisst jetzt 'ERLEDIGT 12.08. — war: ...' mit einem Vermerk, der die drei eingeholten Aussagen einzeln benennt. Der Text bleibt stehen: wer die Historie liest, soll sehen, dass die Warnung berechtigt war, als sie geschrieben wurde."
 ```
 ---
 
