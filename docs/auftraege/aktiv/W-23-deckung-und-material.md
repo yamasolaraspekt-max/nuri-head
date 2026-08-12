@@ -120,14 +120,26 @@ Harzer Pfanne 7   405 - 372 = 33   Verschiebespiel —    (fehlt, aus dem Bereic
 W-23 BESCHREIBT den Deckungskatalog als BEREICHSQUELLE, nicht als Wertetabelle:
      je Modell ein Lattmass-BEREICH, eine Neigungsschranke und die Deckmasse.
 
-DIE RECHNUNG gehoert in eine eigene Formel (Vorschlag F-053, Nummer beim Planner):
-     Sparrenlaenge L (Traufe -> First, IN DER DACHFLAECHE, nicht horizontal)
-     Reihen n     = aufrunden( L / Lattmass_max )
-     Lattmass     = L / n
-     ZULAESSIG wenn Lattmass_min <= L/n <= Lattmass_max
-     UND Dachneigung >= Regeldachneigung
-     -> Das ist die Umsetzung von Yamas Satz. Sie steht hier als VORSCHLAG und
-        braucht seine Bestaetigung, bevor sie als Formel eingetragen wird.
+DIE RECHNUNG ist ENTSCHIEDEN — Vertretungsentscheid 12.08., Yamas Vollmacht
+     ausdruecklich fuer DIESE Frage. Vollstaendig in
+     docs/VERTRETUNGSENTSCHEID-F053-LATTMASS.md; hier die Fassung, die gilt:
+
+     SCHRANKE  Dachneigung >= Regeldachneigung, sonst KEINE Rechnung
+     TEILUNG   n_min = aufrunden(L / Lattmass_max)
+               n_max = abrunden (L / Lattmass_min)
+               n_min <= n_max  -> TEILBAR, Lattmass = L/n fuer jedes n im Bereich
+               n_min >  n_max  -> KEINE gleichmaessige Teilung; die Formel gibt
+                                  KEINEN Wert, sondern diesen Fall zurueck
+     AMPEL     🟡 mit Geltungsbereich: rechnet die REGELFLAECHE. Traufreihe,
+               Firstanschluss, Ortgang und der Restausgleich sind NICHT erfasst.
+
+     DIE ERSTE FASSUNG DIESES BLATTES IST VERWORFEN. Sie lautete
+     'n = aufrunden(L/max), Lattmass = L/n' — gemessen an den sieben Modellen und
+     801 Sparrenlaengen je Modell (5.607 Faelle) liefert sie in 2,6 % bis 18,2 %
+     einen Wert AUSSERHALB des Bereichs, und zwar leise. Beispiel Harzer Pfanne 7
+     bei L=1000: sie rechnet 333,3 mm, der Ziegel erlaubt 372-405.
+     Der Grund ist Teilbarkeit, nicht Fachwissen: zwischen zwei Reihenzahlen liegt
+     eine Luecke — n=2 gibt 500 mm (zu gross), n=3 gibt 333 mm (zu klein).
 
 QUELLE MIT HERKUNFT: jeder uebernommene Wert traegt Datenstatus und Quelle_1_URL mit.
      Ein Wert ohne Datenstatus wird NICHT uebernommen — das ist F-051s Lehre
@@ -164,10 +176,14 @@ W-23-1  (P1) Die sieben Blaetter von W-23 werden aus der QUELLE abgelesen, nicht
         entworfen — Datei, Blatt, Spaltennummern und Zeilenzahl stehen in 5-CODE.
         Gegenprobe: jede genannte Zahl ist in der Tabelle nachlesbar.
 
-W-23-2  (P1, DER TRAGENDE PUNKT) 3-FORMELN traegt die Rechnung aus Abschnitt 5 als
-        VORSCHLAG mit dem Vermerk "vorgeschlagen, nicht entschieden" — und Yamas
-        Fachaussage WOERTLICH als ihre Grundlage. Ohne diesen Vermerk waere es eine
-        erfundene Fachregel; mit ihm ist es eine Ableitung aus seinem Satz.
+W-23-2  (P1, DER TRAGENDE PUNKT) 3-FORMELN traegt die ENTSCHIEDENE Fassung aus
+        Abschnitt 5 — Neigungsschranke, n_min/n_max-Existenzpruefung, und den Fall
+        "nicht gleichmaessig teilbar" als ECHTE Ausgabe statt als Zahl. Dazu Yamas
+        Fachaussage woertlich als Grundlage und die Ampel 🟡 mit Geltungsbereich.
+        AUSDRUECKLICH NICHT die verworfene erste Fassung: wer 'n = aufrunden(L/max)'
+        allein einbaut, baut einen Fehler ein, der in bis zu 18,2 % der Faelle eine
+        falsche Zahl liefert. Gegenprobe im Bericht: mindestens EIN Fall mit
+        n_min > n_max, an dem das Werkzeug KEINEN Wert liefert.
 
 W-23-3  (P1) 7-GRENZEN nennt die Fuellquote UNGESCHOENT: 9 von 127 Zeilen tragen ein
         vollstaendiges Lattmass, alle sieben Modelle sind von EINEM Hersteller.
