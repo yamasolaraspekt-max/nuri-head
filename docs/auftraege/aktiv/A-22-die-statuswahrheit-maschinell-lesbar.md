@@ -251,3 +251,123 @@ was_dieser_auftrag_NICHT_ist: "Keine Zerlegung von docs/STATUS.md, keine neue Sc
         Eingriff in die Arbeitsweise der Rollen. Genau das ist Abschnitt 4 und gehoert Yama."
 A_22_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+
+## §11 — Votum A-22 (Evaluator, Erstinstanz, 12.08.2026)
+
+```yaml
+auftrag: "A-22"
+votum: ABGENOMMEN
+geprueft_an: "0c53eb7e"
+elter: "9c243ee2"
+scope_diff: "2 Dateien, +249/-49: BERICHT (neu) und docs/STATUS.md. 0 Code-Dateien.
+  Der Bau-Commit traegt die eigene Fertigmeldung — A-22-5 erlaubt das ausdruecklich, und
+  Pflichtpruefung 9 nennt den Grund: A-21-6 verbot sie und erzwang damit ein Zeitfenster."
+pruefstand: "git worktree add -q --detach auf 0c53eb7e."
+browserabnahme: "ENTFAELLT — 0 Code-Dateien."
+paragraf_15: "GEGENSTANDSLOS — kein DB-Zugriff."
+
+wie_ich_gemessen_habe: "Der Auftrag heisst 'maschinell lesbar'. Ein Raster, das Schluessel zaehlt,
+  beantwortet das nicht — es beantwortet, was das Raster sieht. Ich habe deshalb einen ECHTEN
+  yaml-Leser genommen: Symfony\\Component\\Yaml aus dem vendor des Repos, ueber jeden ```yaml-Block
+  einzeln. Das ist die Messung, die dem Auftragsnamen entspricht."
+
+messtisch:
+
+  A-22-1_null_doppelte_schluessel:
+    urteil: ERFUELLT
+    mit_echtem_yaml_leser: "Symfony-Yaml je Block, Fehler nach Klassen getrennt:
+        Schnitt e1a478fb  126 gelesen · Duplicate key 15
+        Elter   9c243ee2  131 gelesen · Duplicate key 12
+        BAU     0c53eb7e  142 gelesen · Duplicate key  0
+      Das ist mehr als das Kriterium verlangt: nicht 'mein Raster findet keine mehr', sondern
+      'ein echter Parser wirft keinen Duplicate-key-Fehler mehr'."
+    BEFUND_OHNE_ROT_der_auftragsname_ist_weiter_gefasst_als_die_kriterien: "Nach dem Bau bleiben
+      FUENF Bloecke, die derselbe Parser NICHT lesen kann — die Datei ist also noch nicht
+      maschinell lesbar, obwohl A-22-1 erfuellt ist:
+        Z.1229  'Multiple documents are not supported'  <- dem A-08-Block fehlt der Schlusszaun,
+                der A-09-Block haengt darin. Am Schnitt meldete dieselbe Stelle 'Duplicate key';
+                die Bereinigung hat den darunterliegenden Strukturfehler FREIGELEGT, nicht erzeugt.
+        Z.5606  'Unable to parse near ```yaml'          <- zweiter fehlender Schlusszaun
+        Z.1794 · Z.2803  'unknown escape character'      <- \\$ und \\. in Vermerktexten
+        Z.1469  'Unexpected characters'
+      Alle fuenf sind VORBESTEHEND (am Schnitt ebenso vorhanden, teils von den Duplicate-key-
+      Fehlern verdeckt) und von keinem Kriterium erfasst. KEIN ROT — aber wer A-22 als 'die
+      Statuswahrheit ist jetzt maschinell lesbar' liest, liest mehr, als gebaut wurde. Die
+      Zaun-Bilanz belegt es unabhaengig: 284 oeffnende gegen 282 schliessende Zaeune, Differenz
+      genau die zwei fehlenden."
+
+  A-22-2_gestrichenes_kriterium:
+    urteil: "KEINE MESSUNG NOETIG — das Kriterium ist im Blatt selbst gestrichen, weil es vor dem
+      Bau von fremder Hand erledigt war. Ich fuehre die Zeile trotzdem, weil ein Messtisch, der
+      eine Kriterienzeile weglaesst, dieselbe Luecke hat wie ein Kopf, der 'alle erfuellt' sagt.
+      Gegengeprobt: ballbesitz-Dubletten am Elter 1, am Bau 0."
+
+  A-22-2b_die_ursache_an_den_belegten_faellen:
+    urteil: ERFUELLT
+    zaehlung_selbst_nachgefahren: "Mit gebundenem Feldnamen ^[+-]ballbesitz: je Commit-Diff auf
+      docs/STATUS.md, Generator-Commits gefiltert:
+        mit echtem ballbesitz:   65   (Blatt: 65)  ✓
+        davon AENDERUNGEN        63   (Blatt: 63)  ✓
+        davon EINFUEGUNGEN        2   (Blatt:  2)  ✓
+        Gegenprobe 63 + 2 = 65 schliesst."
+    beide_einfuegungen_einzeln_geoeffnet: "9e97d274 (A-05): der Block hatte vorher KEIN
+      ballbesitz-Feld, nachher 1 — richtig, kein Mangel. 869c560d (A-21): vorher 1, nachher 2 —
+      DAS ist die Dublette. Beide Aussagen des Blattes treffen zeichengenau."
+    zur_81: "Ich messe 82 Generator-Commits bis zum Elter und 83 bis HEAD, das Blatt nennt 81.
+      Die Zahl driftet mit jedem weiteren Generator-Commit — dieselbe Klasse, die das Blatt bei
+      A-22-3 selbst benennt ('eine feste Zahl in einem Kriterium driftet'). Die TRAGENDEN Zahlen
+      65/63/2 stimmen exakt, und das Kriterium verlangt ausdruecklich die Messung am Bau-Stand.
+      Kein Mangel, nur benannt."
+
+  A-22-3_aufzeichnungen_inhaltlich_erhalten:
+    urteil: ERFUELLT
+    nicht_nur_gezaehlt_sondern_verglichen: "Eine gleiche ANZAHL waere kein Beleg — ein Text kann
+      verschwinden, waehrend ein anderer dazukommt. Ich habe deshalb jeden Feldwert ueber 40
+      Zeichen aus Elter und Bau als Menge verglichen: 1285 gegen 1290 lange Werte, im Bau
+      FEHLENDE Texte des Elters: 0. Die fuenf neuen stammen alle aus dem Bau selbst (Berichtpfad,
+      Messvermerke). Kein Vermerk ist vernichtet worden — A-20-4 gewahrt."
+
+  A-22-4_einheitliche_feldform:
+    urteil: ERFUELLT
+    gemessen: "auftrag:-Felder OHNE Anfuehrungszeichen: Schnitt 19 · Elter 19 · BAU 0.
+      Mit Anfuehrungszeichen 33 / 34 / 53. Die Summe geht auf: 34 + 19 = 53."
+
+  A-22-5_keine_fremde_zustandsaenderung:
+    urteil: ERFUELLT
+    am_commit_gemessen: "git show 0c53eb7e -- docs/STATUS.md: ein zustand:-Paar (IN_ARBEIT ->
+      CODE_FERTIG) und ein Tafelzeilen-Paar, beide A-22 selbst. Ich habe jede geaenderte Zeile
+      auf ihren umgebenden Auftragsblock zurueckgefuehrt statt sie nur zu zaehlen: FREMDE
+      Zustandsaenderungen 0."
+
+  A-22-6_nebenlaeufigkeit_gehoert_yama:
+    urteil: ERFUELLT
+    beleg: "Der Bericht traegt den Abschnitt 'Der Nebenlaeufigkeits-Befund gehoert Yama' mit den
+      vier Beifang-Vorgaengen, der Regelkollision aus 4d52f778 und dem Satz, dass jede Abhilfe
+      die Arbeitsweise von fuenf Rollen aendert. Benannt, nicht mitentschieden — genau das
+      verlangt das Kriterium."
+    ZU_DEM_PUNKT_DER_MICH_NENNT: "Die Liste fuehrt 'evaluator nahm mein berichtigtes Feld mit'.
+      Ich habe das an mir selbst nachgemessen, weil ein Vorwurf gegen mich nicht ungeprueft
+      stehenbleiben soll: alle acht meiner docs/STATUS.md-Commits der letzten 40 (6682b83c,
+      603b875d, bd4aa721, 5a1a3db5, e5716bc0, c05213bb, 289180f3, e067e76a) beruehren
+      AUSSCHLIESSLICH den eigenen Auftragsblock — geprueft nicht nur auf Zustandsfelder, sondern
+      auf JEDE geaenderte Zeile samt Feldnamen. Welchen Fall er meint, kann ich nicht zuordnen;
+      moeglich ist ein aelterer Commit ausserhalb dieses Fensters. Das ist keine Bestreitung
+      seines Befunds an Yama, sondern die Messung meines eigenen Anteils daran."
+
+meine_eigenen_messfehler_in_dieser_runde:
+  - "MEIN ERSTES RASTER WAR DOPPELT ZU ENG und haette den Bau faelschlich entlastet: es nahm nur
+     Bloecke MIT auftrag: und paarte die Zaeune stur von ``` zu ```. Ergebnis: 18 statt 145
+     Bloecke und 5 statt 17 Dubletten. Die Datei hat ZWEI unbalancierte Zaeune, und ab dem ersten
+     laeuft eine stumpfe Paarung aus dem Takt. Berichtigt auf 'starte nur bei ```yaml' — dann
+     stimmt die Blockzahl 145 mit dem Blatt zeichengenau. Die Ironie gehoert dazu: der Fehler in
+     meinem Raster IST der Befund, den ich anschliessend gefunden habe."
+  - "Die PHP-Probe scheiterte zuerst an einem relativen require-Pfad — dieselbe Falle wie in der
+     W-34-Runde, zwei Runden hintereinander. Ein Skript, das nicht im Repo liegt, darf keinen
+     relativen Pfad ins Repo nehmen."
+
+was_dem_generator_zusteht: "Er hat drei eigene Fehlmessungen offengelegt statt sie zu glaetten —
+  die 65 und die 6, beide in entgegengesetzte Richtung falsch, und den Schluss vom ZUSTAND auf den
+  VERURSACHER ('ein Stand sagt, was gilt, nicht wer es getan hat'). Und er hat ein GRUENES
+  Kriterium gestrichen statt es als Haken mitzunehmen. Beides ist teurer als der bequeme Weg."
+```
