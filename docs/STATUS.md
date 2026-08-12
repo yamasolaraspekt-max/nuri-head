@@ -42,7 +42,7 @@
 | **B5N** Belegzeilen-Schreibweisen | **`ABGENOMMEN`** | Release-Prüfer | Abnahme `c54c7129` · Elter `a1751fbe` | **6/6** · drei Formen **einzeln** belegt, Barriere bleibt bei fehlendem Beleg laut · B5-Zählwort und B6/B7 nachweislich unberührt (gehasht + am Tor) · Testlücke **gemessen statt angenommen** (0 Stellen), bleibt offen · **einziger Bau des Tages mit `IN_ARBEIT` im committeten Stand vor dem Bau** |
 | **A-17** Zwei Engines schweigen | **`BETRIEBSBESTAETIGT`** | – | Abnahme `9d79b1ca` · Elter `8870387a` | **7/7** · schärfste Probe erfüllt: **Heizkörper behält die ROTE Plakette** (y=230) · Rot-Probe selbst ausgelöst (Gefälle 0.2 %): Meldung bleibt, Summen-Urteil fällt · Bündel in drei Richtungen `62d7be7e` · Suite 1698/1698 |
 | **A-18** `wandaufbau`: U-Wert trägt seinen Vorbehalt | **`BETRIEBSBESTAETIGT`** | – | Abnahme `492a6a71` · Elter `b7ab49c5` | **8/8** · Kern **bewiesen statt behauptet**: Mutation → `tsc TS2741 Property vorbehalt is missing` · Wortlaut maschinell zeichengenau (258=258) · **0 Löschungen** im Produktivcode · Suite 1694/1694, tsc clean · seine vorgelegte Frage entschieden: Konstante umformuliert → Zusage fällt, der ausgeschriebene Vergleich **bleibt** als Wächter |
-| **A-19** H-9 + §3-Musterberichtigung | `ENTWURF` | **Plan-Prüfer** | Schnitt 12.08. · Basis `c89e9096` | **neun Belege an einem Tag, vier Rollen**: ein Prüfmuster setzt am TEXT an statt am GEGENSTAND · H-9 im Wortlaut des Generators (»misst die Schreibweise und nicht die Sache«) plus die dreifach erprobte Kontrollprobe · **KEINE achte Barriere** (B5/B6/B7 in derselben Datei, dreimal »wird weggeklickt« gemeldet) · zweiter Teil: `ARBEITSREGELN.md:103` — `.*IN_ARBEIT` reicht über alle Spalten, die B7-Zeile (ABGENOMMEN) wird als laufend gezählt · **der Fehler ist meiner**: linke Seite erweitert, rechte nicht angesehen |
+| **A-19** H-9 + §3-Musterberichtigung | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `c89e9096` | **neun Belege an einem Tag, vier Rollen**: ein Prüfmuster setzt am TEXT an statt am GEGENSTAND · H-9 im Wortlaut des Generators (»misst die Schreibweise und nicht die Sache«) plus die dreifach erprobte Kontrollprobe · **KEINE achte Barriere** (B5/B6/B7 in derselben Datei, dreimal »wird weggeklickt« gemeldet) · zweiter Teil: `ARBEITSREGELN.md:103` — `.*IN_ARBEIT` reicht über alle Spalten, die B7-Zeile (ABGENOMMEN) wird als laufend gezählt · **der Fehler ist meiner**: linke Seite erweitert, rechte nicht angesehen |
 | **W-21L** Lattung, fehlender Schritt | `ZURUECKGESTELLT` | – | Schnitt `717eb11c` | **OPERANDEN-GATE**: keine Deckungsart-/Lattweiten-Daten im Repo (0 Treffer) · wartet auf W-23 oder Yamas Tabelle |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -2593,6 +2593,19 @@ DRITTE_MESSUNG_UND_JETZT_STIMMT_SIE: "Meine zweite Zaehlung war auch nicht praez
 die_eigentliche_lehre: "Dreimal dieselbe Frage, drei verschiedene Zahlen — und der Unterschied lag jedes Mal im MESSVERFAHREN, nie im Gegenstand. Erste Messung: grep auf die Zeile (zaehlte Befund-Bloecke mit). Zweite: awk ohne Blockgrenze (zaehlte ueber Blockgrenzen hinweg). Dritte: Fenstergrenze je Vorkommen. Das ist B5 und B6 in einem Fall: wer eine Zahl behauptet, muss sagen, WIE er gezaehlt hat — und wer eine Summe meldet, muss die MENGE definieren. Beide Barrieren stehen als Auftrag BEREIT und sind noch nicht gebaut; heute war ich ihr Anwendungsfall."
 GESCHLOSSEN: "plan-pruefer 12.08. — SELBST NACHGEMESSEN mit der praezisen Methode (zustand-Feld innerhalb von 12 Zeilen nach der auftrag-Zeile): A-17 traegt jetzt genau EINEN Zustandsdatensatz (Z.2141, BEREIT); der zweite Eintrag bei Z.3987 hat kein zustand-Feld mehr und ist damit ein Befund-Block wie bei A-02/A-07/A-08/A-09. Der Planner hat den Befund angenommen ('trifft mich, behoben') und die richtige Seite entfernt — meinen BEREIT-Block hat er stehen lassen. Damit ist die dritte Bauart nicht nur benannt, sondern einmal durchgespielt: gefunden durch Zaehlen, behoben von dem, dem die Zeile gehoerte."
 was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwortet: wer legt den Block an, Planner beim Schnitt oder Plan-Pruefer bei der DoR? Solange das offen ist, kann derselbe Fall beim naechsten Auftrag wieder entstehen — behoben ist der Fall, nicht die Ursache."
+```
+---
+
+## A-19: DoR bestanden — der Auftrag berichtigt das Muster, das MEINE Wache benutzt (plan-pruefer 12.08.)
+
+```yaml
+1_ZUSTAND: "Rot-Lage SELBST gelesen: ARBEITSREGELN.md:103 traegt woertlich grep -cE '^\\| \\*\\*[A-Z]+-?[0-9]+.*IN_ARBEIT'. Das .* nach der Auftragsnummer laeuft ueber die GANZE Zeile, also auch ueber den Fliesstext der letzten Spalte. Gegenprobe an den zwei aktuellen Treffern, gelesen statt gezaehlt: B7 (BETRIEBSBESTAETIGT) und A-19 selbst (ENTWURF) — beide nennen IN_ARBEIT nur im Beschreibungstext. Zwei Fehlalarme, null echte."
+2_ZIEL: "§18a existiert (ARBEITSREGELN.md:739), H-8 als letzte Hausregel ebenfalls (:812) — H-9 kann angehaengt werden, ohne dass etwas erfunden werden muss."
+3_BEWEISKRAFT_dreifach_und_das_ist_die_staerke: "A-19-3 verlangt die Gegenprobe DREIFACH: (a) die B7-Zeile darf NICHT gezaehlt werden, (b) eine ECHTE IN_ARBEIT-Tafelzeile MUSS gezaehlt werden, (c) das Zustandsfeld-Muster muss dieselbe Zahl liefern wie (b). Der Satz dazu: 'Ohne (b) waere die Berichtigung eine Abschaltung: ein Muster das NIE zaehlt meldet immer frei, und das ist die gefaehrliche Richtung.' Dazu A-19-4, das den DOPPELORT ausdruecklich schuetzt — 'wer bei dieser Gelegenheit auf EINEN Ort verkuerzt, nimmt die Kontrolle heraus, die den Fall ueberhaupt sichtbar gemacht hat'. Zum zweiten Mal heute baut der Planner die Beweiskraft-Pruefung von sich aus ein."
+4_GANZER_GEGENSTAND: "Zweigprobe: fork und backup-private stehen auf dem lokalen HEAD — der Push ist durch, der Stau von sechs Auftraegen aufgeloest. Baumprobe vor dem Schreiben: sauber bis auf die zwei bekannten Artefakte."
+mein_eigener_zaehlfehler_im_selben_atemzug: "A-19-6 nennt VIER Auftragsblaetter, die das alte Muster als Kriteriumstext tragen. Meine erste Zaehlung ergab 29 — mein Suchmuster war zu weit. Praezise gemessen sind es VIER, die Zahl des Blattes haelt. Ich habe also einen Auftrag ueber ein ZU WEITES MUSTER mit einem zu weiten Muster gemessen; das ist keine Ironie, sondern der Beleg dafuer, wie alltaeglich der Fehler ist, den H-9 benennen soll."
+FOLGE_FUER_MICH_nach_dem_bau: "Meine Wache misst §3 mit GENAU DIESEM Muster. Sobald A-19 gebaut ist, ziehe ich meinen Wache-Befehl nach — sonst melde ich weiter zwei Auftraege im Bau, wo keiner laeuft. Das ist kein Nebenpunkt: eine Schranke, die grundlos anschlaegt, wird weggeklickt, und dann faellt sie auch dort aus, wo sie zaehlt."
+ergebnis: "A-19 BEREIT beim Generator, an beiden Orten gesetzt. §3 ist frei — echte IN_ARBEIT-Zustandsfelder: 0."
 ```
 ---
 
@@ -5790,8 +5803,8 @@ zu_meinem_eigenen_befund: "Meine B5-Messung: von 17 warnenden Botschaften trugen
 ```yaml
 auftrag: "A-19"
 datei: docs/auftraege/aktiv/A-19-h9-und-die-paragraf-3-musterberichtigung.md
-zustand: ENTWURF
-ballbesitz: "plan-pruefer (DoR)"
+zustand: BEREIT
+ballbesitz: generator
 basis_sha: c89e9096
 anlass: "Yamas Freigabe 12.08. mit Bedingung: 'wenn du sicher bist dass das die beste Loesung ist
          und wir damit Qualitaet verbessern und der Workflow effizienter wird'."
