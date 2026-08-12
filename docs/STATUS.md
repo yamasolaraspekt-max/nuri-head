@@ -2484,6 +2484,17 @@ was_offen_bleibt: "Die DAUERFRAGE aus meinem Vorschlag ist damit NICHT beantwort
 ```
 ---
 
+## Ein Zustand ist ZURUECKGEFALLEN — die siebte Blindstelle trifft jeden, der nachzieht (plan-pruefer 12.08.)
+
+```yaml
+was_passiert_ist: "A-17 stand nach 27c88c20 auf RELEASE_FREI. In a1751fbe hat der Evaluator zwei ausstehende Zustaende nachgezogen — und dabei A-17 auf ABGENOMMEN ZURUECKGESETZT, weil er nicht gesehen hat, dass der Zustand inzwischen WEITER war. Der Release-Pruefer hat es gefunden und wiederhergestellt (e9fabed4); sein Satz benennt die Tuecke genau: 'Mein release_vermerk stand die ganze Zeit daneben, nur das Zustandsfeld fiel zurueck.' Der Block sah also richtig aus, das eine Feld war falsch."
+die_siebte_blindstelle_und_sie_trifft_MICH: "NACHZIEHEN IST EIN SCHREIBVORGANG MIT RICHTUNG. Wer einen ausstehenden Zustand nachtraegt, setzt einen Wert, den er fuer aktuell haelt — ist der wirkliche Zustand inzwischen weiter, ist das kein Nachziehen mehr, sondern ein RUECKSCHRITT. Das trifft mich unmittelbar: ich habe in dieser Wache selbst nachgezogen (W-07Ns ballbesitz von planner auf release-pruefer). Dort ist nichts passiert, weil ich den Zustand vorher gemessen und nur das Ballbesitzfeld angefasst habe — aber das war Sorgfalt im Einzelfall, keine Regel. AB JETZT ALS REGEL: vor jedem Nachziehen den IST-Wert lesen und pruefen, ob er in der Kette VOR dem liegt, was ich setzen will. Liegt er dahinter, ist mein Wert veraltet und nicht seiner."
+warum_gerade_dieses_feld_gefaehrlich_ist: "Ein Zustandsrueckfall ist schlimmer als eine Leerstelle: die Leerstelle sagt nichts und faellt bei genauem Hinsehen auf, der Rueckfall sagt etwas FALSCHES und sieht dabei vollstaendig aus. Und er laedt zur Doppelarbeit ein — ein RELEASE_FREI, das auf ABGENOMMEN zurueckfaellt, holt eine bereits gefahrene Release-Pruefung zurueck in die Warteschlange."
+b5n_gebaut_und_selbst_nachgelesen: "c54c7129, 3 Dateien (+194/-4). Ich habe das Ergebnis im Tor GELESEN statt die Meldung zu glauben: B5_BELEGZEILE traegt jetzt fuenf Alternativen — die drei alten (datei.ext:zeile, :NNN:, Trefferzeile) stehen ZEICHENGLEICH davor, angehaengt sind 'Z\.[0-9]+' und 'Zeile [0-9]+'. Damit ist B5N-3 erfuellt (nur angehaengt, nichts ersetzt) und die Grundlogik unangetastet — die Barriere ist leiser, nicht stumm. Ob sie bei FEHLENDEM Beleg noch anschlaegt (B5N-2, der tragende Punkt), prueft der Evaluator am Pruefstand; das ist nicht meine Rolle."
+vorlage_an_yama_ist_gesichert: "docs/VORLAGE-AN-YAMA-2026-08-12.md ist mit c1d7e026 committet — mein Hinweis von der letzten Runde ist erledigt, die 199 Zeilen sind nicht mehr nur im Baum. Zwei weitere Fertigmeldungen im Scope gemessen: W-15/1 8 Dateien (+298/-88), B7 4 Dateien (+197/0). Alle beim Evaluator, nichts in meiner Bahn."
+```
+---
+
 ## Eine Vorlage an Yama liegt UNGESICHERT im Baum — und mein Befund wurde revertiert (plan-pruefer 12.08.)
 
 ```yaml
