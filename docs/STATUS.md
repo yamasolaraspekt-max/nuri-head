@@ -7685,6 +7685,33 @@ was_die_pflichtpruefungen_verhindert_haben: "ZWEI Dinge, beide neu an diesem Tag
 auftrag: "W-05/2"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+zwei_eigene_befunde_am_eigenen_block: "plan-pruefer 13.08. — beim Pruefen der Meldepflichten habe
+  ich ZWEI Befunde an diesem Block gefunden, und der erste ist MEINER.
+  ERSTENS, DOPPELTER SCHLUESSEL, und beide Fassungen sind von mir: dieser Block trug dor_beleg
+  ZWEIMAL — Z.7675 'DoR ERTEILT. Die Kennung ist berichtigt' (die gueltige, zweite Fassung) und
+  Z.7701 'DoR NICHT ERTEILT' (meine erste, aus der Zeit als der Auftrag noch W-05/1 hiess). Ein
+  Parser nimmt einen Schluessel und verwirft den anderen STILL — und die zwei sagen das Gegenteil
+  voneinander. Faellt die zweite Fassung weg, sagt die Statuswahrheit ueber einen CODE_FERTIGen
+  Auftrag 'DoR nicht erteilt'.
+  WIE ES ENTSTAND: beim Umzug W-05/1 -> W-05/2 wurde der Block mitsamt meinem alten Beleg
+  uebernommen; ich habe meinen neuen davor eingefuegt, ohne zu pruefen, ob schon einer da ist. Mein
+  Einfuegemuster setzt am Feld blatt: an und fragt nicht nach Eindeutigkeit. Das ist genau die
+  Klasse, die A-22 behoben hat (doppelte yaml-Schluessel) — und sie ist an MEINER Hand
+  wiedergekommen, waehrend A-22 betriebsbestaetigt ist.
+  BEHOBEN OHNE ZU LOESCHEN, nach A-20-4: die alte Fassung heisst jetzt
+  dor_beleg_erste_fassung_ueberholt und bleibt vollstaendig lesbar; der Schluessel dor_beleg ist
+  wieder eindeutig. KUENFTIG pruefe ich vor jedem Einfuegen, ob der Schluessel im Block schon
+  existiert — dieselbe Frage, die ich an fremden Blaettern seit gestern stelle.
+  ZWEITENS, VIERTER FALL DERSELBEN KLASSE: der Block nennt seinen Bau nicht. 83d6e108 kommt im
+  ganzen Block NULL Mal vor, es gibt weder bau_sha noch bericht. Nach A-23, A-25 und A-26 ist das
+  der vierte wartende Auftrag ohne auffindbaren Bau-Commit im Feld. Ball dafuer beim Generator.
+  WAS DAGEGEN VORBILDLICH IST, und es ist der Punkt, den ich am hoechsten haenge: W-05-2-7 ist die
+  Buendel-Gegenprobe AM COMMIT, die aus meinem A-24-Befund entstanden ist — und sie GREIFT, von mir
+  unabhaengig nachgefahren. Die Marke 'signatur' steht im ausgelieferten public/hausplaner.js beim
+  Bau-Commit EINMAL und am Elter NULL Mal; im Quelltext des Baus viermal. Und das Buendel liegt
+  diesmal IM Bau-Commit (360 geaenderte Zeilen), nicht ungespeichert im Baum. Der Befund aus A-24 ist
+  damit nicht nur behoben, sondern in ein Kriterium verwandelt, das bei seiner ersten Anwendung
+  belegt hat, was es belegen soll."
   vergeben — STATUS.md:1621 traegt W-05/1 als BETRIEBSBESTAETIGT, Die sieben Blaetter von W-05
   ableiten. Zwei Auftraege, eine Kennung, zwei widersprechende Zustaende: §16 im Kern. Der Suffix /1
   ist der NACHBESSERUNGS-Suffix (W-40/1, W-27/1, W-09/1, W-13/1) und der alte W-05/1 IST die
@@ -7723,7 +7750,9 @@ dor_beleg: "plan-pruefer 13.08. — DoR ERTEILT. Die Kennung ist berichtigt, und
   Werkzeug angewandt und nicht auf die KENNUNG.' Das ist die Ursache benannt statt der Fehler
   entschuldigt, und es ist genau die Erweiterung, die eine Pflichtpruefung braucht.
   KEINE ROT-LAGE. Zustand auf BEREIT, Ball beim Generator."
-dor_beleg: "plan-pruefer 13.08. — DoR NICHT ERTEILT, und der Grund liegt nicht im Inhalt: DIE
+# UMBENANNT statt geloescht (A-20-4), plan-pruefer 13.08.: dieser Block trug ZWEI dor_beleg — beide meine,
+# und sie sagen das Gegenteil voneinander. Die gueltige Fassung steht oben. Belegkette siehe Feld darunter.
+dor_beleg_erste_fassung_ueberholt: "plan-pruefer 13.08. — DoR NICHT ERTEILT, und der Grund liegt nicht im Inhalt: DIE
   AUFTRAGSKENNUNG IST SCHON VERGEBEN.
   GEMESSEN, mit demselben Zaehler, den ich vor einer Stunde ueber dieselbe Datei laufen liess und der
   damals NULL meldete: es gibt jetzt GENAU EINEN Auftrag mit zwei Zustandsfeldern, und das ist
