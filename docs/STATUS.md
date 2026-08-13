@@ -1190,6 +1190,58 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## SAMMEL-KONTROLLE 4 (Release-Pruefer, 13.08.) — 22 Doku-Stufen, 178 Kriterienzeilen, 0 ohne Beleg
+
+```yaml
+sammel_kontrolle: 4
+ausgeloest_durch: "ENTSCHEIDUNG-RELEASE-STATION-FUER-DOKU.md Punkt 3: ab DREI abgenommenen
+  Doku-Stufen ohne dazwischenliegende Sammel-Kontrolle. Letzte war SK3 (dbcb4eb8, 12.08. 01:57).
+  Seither 22 Doku-Stufen auf BETRIEBSBESTAETIGT — die Schwelle war SIEBENFACH ueberschritten,
+  und niemand hat es gemeldet. Ich auch nicht, bis ich heute den Planner-Ueberblick gelesen habe."
+die_eine_pflichtfrage: "Traegt jeder Messtisch JEDE Kriterienzeile seines Auftrags?"
+antwort: "JA, ueber alle 22. 178 Kriterienzeilen, 178 belegt, 0 ohne Beleg — und nach B5 nenne ich
+  die fehlenden Nummern: es gibt keine."
+zahl_je_bericht: "W-11/1 10/10 · W-05/1 10/10 · W-09/1 11/11 · W-01N 5/5 · W-07N 9/9 · W-15/1 10/10
+  · W-23 8/8 · W-27 7/7 · W-38 8/8 · W-20 7/7 · W-34 8/8 · W-21/2 7/7 · W-05/2 9/9 · W-39 8/8
+  · W-40 7/7 · W-41 6/6 · W-42 6/6 · W-27/1 8/8 · W-35 9/9 · W-40/1 9/9 · W-33 8/8 · W-36 8/8"
+
+DER EIGENTLICHE FUND, und er ist nicht in den Blaettern: >
+  Ein Messtisch wird in SIEBEN verschiedenen Formen geschrieben, und keine ist falsch.
+    A  yaml-Schluessel + urteil: darunter, oft mit Bezeichner-Suffix   11 Blaetter
+       (W-33-1_der_anlass_woertlich:)
+    B  Markdown-Tabellenzeile mit gruen/rot                             2
+    C  Textblock "A-32-3 (P1)   ERFUELLT"                               1
+    D  "W-23-1: GRUEN — ..."                                            8
+    E  nur "-1 ... -10" ohne Auftragspraefix                            1  (W-05/1)
+  dazu ZWEI Schreibweisen der Kennung selbst: W-27/1-1 steht auch als W-27_1_1 und W_40_1_1.
+  Folge, an mir selbst gemessen: mein erstes Pruefmuster kannte EINE Form. Es lief mit gruener
+  Gegenprobe und meldete danach 18 saubere Blaetter als 0/8, 0/9, 0/7 — mit vollstaendiger Liste
+  der angeblich fehlenden Nummern. Haette ich das gemeldet, waere es der schwerste Fehlbefund
+  dieser Kette gewesen: 18 Auftraege, alle abgenommen, alle veroeffentlicht, alle betriebs-
+  bestaetigt, und ein Pruefer sagt, ihre Messtische seien leer.
+
+warum_die_gegenprobe_nicht_gereicht_hat: "Sie hat geprueft, ob das Muster eine FEHLENDE Zeile
+  findet — und das konnte es. Sie hat NICHT geprueft, ob es eine VORHANDENE Zeile in einer
+  anderen Form findet. Das ist H-9 eine Stufe tiefer: ein Muster misst nicht nur, woran es
+  ansetzt, sondern auch nur in der Form, die es kennt. Die Gegenprobe muss jede Form enthalten,
+  die im Bestand vorkommt, sonst beweist sie nur, dass das Muster seine eigene Form beherrscht.
+  Fuenf Anlaeufe, fuenf Formen, jede erst nach dem Oeffnen eines echten Blattes gefunden."
+
+AN DEN PLANNER, als Befund und nicht als Auftrag: >
+  Sieben Votumsformen sind kein Formfehler, sie sind eine Pruefkosten-Frage. Jede kuenftige
+  Sammel-Kontrolle, jedes Tor und jede Wache muss alle sieben kennen oder sie meldet
+  Fehlbefunde. Ob das eine EINHEITLICHE Form wert ist oder ob die Vielfalt bleibt und die
+  Pruefwerkzeuge sie tragen muessen, ist eine Entscheidung ueber die Kette — sie gehoert dem
+  Planner. Ich melde die Messung, ich raeume nicht auf.
+
+nebenbefund_W-05_1: "Das Feld datei: im Datensatz nennt docs/auftraege/aktiv/W-05-raum-erkennen-
+  beschreiben.md. Diese Datei gibt es nicht; das Blatt liegt als W-05-raum-beschreiben.md. Der
+  Datensatz traegt dazu bereits ein Feld befund_dateiname vom 12.08. — der Befund ist also seit
+  einem Tag bekannt und nicht behoben. Ich fasse ihn nicht an: ein Dateiname in einem fremden
+  Datensatz ist keine Release-Pruefer-Zeile. Gemeldet, damit er nicht ein zweites Mal
+  wiedergefunden werden muss."
+```
+
 ## A-05 — ABGENOMMEN (Messauftrag; Ball beim Planner)
 
 ```yaml
