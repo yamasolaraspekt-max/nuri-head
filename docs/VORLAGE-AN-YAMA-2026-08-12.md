@@ -1291,3 +1291,85 @@ Zeilen sind damit erledigt statt eingeordnet.*
 genau bezeichnet** — die zehn B-Zeilen des Fahrplans, oder etwas anderes. Ich habe deshalb die zehn
 B-Zeilen vollständig gemessen, weil das unter jeder Lesart nützlich ist. **Wenn du etwas anderes
 gemeint hast, sag es, dann drehe ich die Reihenfolge.** Ich habe nicht geraten.*
+
+---
+
+## 16 · NEU am 13.08.: W-24 ist kein Werkzeug-Problem. Der Code wartet an DREI Stellen auf deine Entscheidung
+
+**Ich hatte dir W-24 zweimal falsch beschrieben, beide Male zu klein.** *Zuerst als „Bau, kein Modul,
+Bodenplatte nur ein Tooltip". Dann als „Anschluss — modellseitig gedeckt, nur die Oberfläche fehlt".
+**Gemessen ist es etwas Drittes**, und es gehört zu deiner Heizlast-Arbeit.*
+
+### Was die Registerzeile behauptet und was dasteht
+
+```text
+REGISTER.md:91  „ungeprueft — Registry-Werkzeug `Bodenplatte`, kein Geometriemodul"
+
+GEMESSEN: es gibt KEIN Registry-Werkzeug „Bodenplatte".
+  Der einzige Treffer im ganzen Register ist der TOOLTIP-TITEL des
+  Decken-Werkzeugs:  toolRegistry.ts:147  'Decke / Bodenplatte'
+  In Paket, Vertraegen und Landkarte: kein Treffer auf Bodenplatte oder Fundament.
+
+UND „FUNDAMENT" GIBT ES IM GEBAEUDEMODELL GAR NICHT.
+  Die drei Treffer im ganzen Hausplaner sind alle etwas anderes:
+    fachFlaechen.ts:338   „Pfosten- und Fundamentliste" — beim SOLARZAUN
+    scene.types.ts:2      p0-spec-foundation.md — ein DATEINAME
+    scene.types.ts:375    grenzflaeche '… erdreich' — ein KOMMENTAR-Beispiel
+```
+
+### Der eigentliche Gegenstand: die Unterscheidung Decke ↔ Boden, und sie hängt an der Heizlast
+
+*Das Szenenmodell kennt **eine** Decke pro Geschoss (`CeilingNode`) — mit Umriss, Dicke, Durchbrüchen
+und Schichten. **Was ihr fehlt, ist der Erdkontakt.** Und genau den braucht die Heizlast:*
+
+```text
+domain/scene.types.ts:368  RaumGeometrieProjektion — „feldgleich mit
+                           raum_geometrien (wberechnung/ticket)"
+                     :385    decke: { grenzflaeche, bauteil_typ } | null
+                     :386    boden: { grenzflaeche, bauteil_typ } | null
+                     :375    grenzflaeche  z.B. 'aussen' | 'innen' | 'erdreich'
+
+-> Die HEIZLAST-Seite unterscheidet Decke und Boden bereits und will wissen,
+   ob der Boden gegen ERDREICH liegt. Das Szenenmodell kann es nicht sagen.
+```
+
+**Und der Code hat das nicht übersehen — er hat es dreimal ausdrücklich offen gelassen:**
+
+```text
+projection/raumProjektion.ts:7   „decke/boden: in P0 ehrlich null (kein
+                                  erfundener bauteil_typ — OPERANDEN-GATE)"
+                          :96    boden: null,
+projection/dachProjektion.ts:8   „BEWUSST nicht hier
+                                  (RaumGeometrieProjektion.decke bleibt null);
+                                  kein stilles Befuellen"
+domain/scene.types.ts:393        „ist BEWUSST NICHT hier — decke bleibt null,
+                                  BIS DIESE REGEL ENTSCHIEDEN IST"
+```
+
+> ***Damit ist W-24 dieselbe Sorte Posten wie W-21L und W-31:*** *ein Operanden-Gate, an dem eine
+> vorhergehende Runde bewusst angehalten hat, statt einen Wert zu erfinden. **Das ist gute Arbeit, und
+> sie wartet auf dich** — nicht auf einen Bau.*
+
+### Was du entscheiden müsstest, in einem Satz
+
+**Woran erkennt das Modell, dass ein Boden gegen Erdreich liegt?** *Drei Wege sind denkbar, und ich
+empfehle den ersten:*
+
+1. **Am Geschoss.** *Der Boden des untersten Geschosses liegt gegen Erdreich, alle darüber gegen den
+   Raum darunter. **Kein neues Feld**, die Regel ergibt sich aus `level.elevation`. Sie ist bei
+   Kellern und Hanglagen zu grob — aber sie ist ehrlich ableitbar und deckt Typ 1 bis 4 deiner
+   Projekte.*
+2. **Ein Feld am `CeilingNode`.** *Genau, aber es ist eine Schema-Änderung und muss gepflegt werden —
+   und es kann der Geschoss-Regel widersprechen, also eine zweite Wahrheit.*
+3. **Gar nicht — `null` bleiben lassen.** *Dann bleibt die Heizlast an dieser Stelle unbestimmt. Das
+   ist der heutige Zustand und er ist tragfähig, solange die Heizlast nicht darauf zugreift.*
+
+> ***Warum ich es nicht selbst entscheide:*** *es ist eine **Fachentscheidung mit Rechenwirkung** — der
+> Wärmestrom gegen Erdreich rechnet anders als gegen einen Raum. Nach deinen Schutzgrenzen wird so
+> etwas nicht still gesetzt. **Und sie berührt das wberechnung-Transplantat** (deine Phase 1.4): das
+> Zielformat `raum_geometrien` ist genau das, was hier befüllt würde.*
+
+**Was das für die B-Zeile heißt:** *W-24 ist **keine Ablesung und kein Anschluss**, sondern ein
+Entscheidungsposten. **Ich habe die Fahrplan-Einordnung entsprechend gezogen** — sie stand zweimal zu
+klein da, und das ist beim vierten Mal an einem Tag ein Muster, das ich benannt habe statt es zu
+glätten.*

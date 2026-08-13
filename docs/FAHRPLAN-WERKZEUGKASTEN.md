@@ -249,11 +249,25 @@ CLUSTER 3 — BERICHTIGT AM 13.08., meine erste Fassung war FALSCH
 > — „`UPDATE_NODE` kann `transform.rotation` eines ObjectNode setzen, aber Wände …". **Zwei
 > unabhängige Wege, dasselbe Ergebnis** (Prüfung 7).*
 
-> **W-24 „Bodenplatte" ist kleiner als gedacht.** *Ich hatte „Indikation BAU" notiert (kein Modul,
-> „Bodenplatte" nur als Tooltip in `toolRegistry.ts:147`). Die Landkarte führt `boden` (`:117`) als
-> **`deckt` — `ADD_CEILING`**. Die **Modellseite ist da**; was fehlt, ist der Werkzeug-Anschluss.
-> Auch das rückt von C näher an B — **aber es bleibt zu messen**, weil `deckt` über den Befehl
-> spricht und nicht über die Oberfläche.*
+> **W-24 — BERICHTIGT 13.08. zum zweiten Mal, und diesmal aus der Messung heraus.** *Ich hatte erst
+> „Indikation BAU" notiert, dann „Anschluss, nur die Oberfläche fehlt". **Beides war zu klein.**
+> Vollgemessen ist W-24 ein **OPERANDEN-GATE**, und der Code markiert es dreimal selbst:
+> `projection/raumProjektion.ts:7` schreibt „decke/boden: in P0 ehrlich null (kein erfundener
+> bauteil_typ — **Operanden-Gate**)", `:96` setzt `boden: null`, `projection/dachProjektion.ts:8` sagt
+> „BEWUSST nicht hier; kein stilles Befüllen", und `domain/scene.types.ts:393` sagt „bleibt null, **bis
+> diese Regel entschieden ist**".*
+>
+> ***Der Gegenstand ist nicht ein Werkzeug, sondern die Unterscheidung Decke ↔ Boden mit Erdkontakt.***
+> *`RaumGeometrieProjektion` (`:385/:386`) führt `decke` und `boden` je mit `grenzflaeche`, und
+> `'erdreich'` ist ein erlaubter Wert — die **Heizlast** braucht ihn. `CeilingNode` kann ihn nicht
+> liefern. **Und ein Registry-Werkzeug „Bodenplatte" gibt es nicht:** der einzige Treffer im ganzen
+> Register ist der Tooltip-Titel von `decke` (`toolRegistry.ts:147`). „Fundament" existiert im
+> Gebäudemodell überhaupt nicht — die drei Treffer sind Solarzaun-Liste, ein Dateiname und ein
+> Kommentar-Beispiel.*
+>
+> **Einordnung: nicht Ablesung, nicht Anschluss, nicht Bau — ENTSCHEIDUNGSPOSTEN.** *Dieselbe Sorte wie
+> W-21L (F-053) und W-31 (F-028). Bei Yama, Abschnitt 16 der Vorlage, mit drei Wegen und einer
+> Empfehlung.**
 
 **Reihenfolge-Folgerung für die B-Session — nach der Berichtigung:** *die drei Fundamente sind
 **billiger als die 14 Einzelwerkzeuge** und sie sind Voraussetzung, nicht Beigabe. **Aber keines ist
