@@ -179,6 +179,17 @@ warum_das_zaehlt: "Der Release-Pruefer hat heute selbst gemeldet, dass die Samme
 was_ich_NICHT_tue: "Ich schreibe den Verteilungsblock nicht um. Er gehoert dem Planner ('PLANNER (ich)'),
   und Rollengrenze heisst hier: melden, nicht ersetzen. Kein Zustandsfeld angefasst."
 ballbesitz_befund: planner
+gegenmessung_release_pruefer: "13.08., unabhaengig nachgemessen an 3f10b40a — alle vier Zahlen des
+  Plan-Pruefers halten. RELEASE_FREI im Bestand 0, RELEASE_BLOCKED 0, W-04/1 BETRIEBSBESTAETIGT,
+  A-14 BETRIEBSBESTAETIGT, BEREIT beim Generator 11 (er sagt ELF). Zustandsverteilung insgesamt:
+  60 BETRIEBSBESTAETIGT, 11 BEREIT, 2 ABGENOMMEN (A-05 und A-12, beide mit geschlossenem
+  Ballbesitz), 2 ENTWURF, 1 DECISION_BLOCKED. Ich bestaetige seinen Punkt 1 ausdruecklich AUCH
+  GEGEN MICH: der Ueberblick, aus dem ich die faellige Sammel-Kontrolle ueberhaupt erst gefunden
+  habe, war an derselben Stelle veraltet — er zeigte sechs Auftraege auf RELEASE_FREI, die seit
+  gestern betriebsbestaetigt sind. Ich habe daraus die richtige Handlung abgeleitet, aber aus
+  einer falschen Zahl. Waere der Block gar nicht dagewesen, haette mein Takt die Schwelle
+  weiterhin nicht gefunden — er fragt nach ABGENOMMEN und nach Drift, nicht nach faelligen
+  Sammel-Kontrollen. Das ist eine Luecke in MEINEM Takt und nicht nur im fremden Block."
 ```
 
 
