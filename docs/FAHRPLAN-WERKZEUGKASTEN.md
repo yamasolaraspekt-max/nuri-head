@@ -549,13 +549,19 @@ Operanden oder einen ausdruecklich bestaetigten Vorschlag. Dasselbe Gate, an dem
 W-21L als DECISION_BLOCKED steht.
 ```
 
-> **Bilanz der zehn B-Zeilen — Yamas Kriterium ist damit erfüllt:** *er hat gesagt, bei B gelte zuerst
-> die Messung, und erst danach stehe fest, ob eine Zeile Ablesung oder Bau ist. **Alle zehn sind jetzt
-> gemessen.** **Ablesung (schnell):** W-06, W-18, W-12 — je gemessen, zwei davon als Blatt schon
-> geschnitten. **Indikation Ablesung:** W-16, W-10. **Anschluss:** W-24 (modellseitig gedeckt, nur Oberfläche fehlt) — **W-03 gehört nach der
-> Berichtigung nicht mehr hierher.**
-> **Bau:** W-03 (zwei Fundamente, siehe Berichtigung), W-26, W-28 — und W-14 fehlt nur `drehen`.
-> **W-26 und W-28 gehen nicht ohne dich:** Schema-Feld bzw. Normgröße.*
+> **Bilanz der zehn B-Zeilen — ENDSTAND 13.08. nachts.** *Yamas Kriterium war: bei B gilt zuerst die
+> Messung, und erst danach steht fest, ob eine Zeile Ablesung oder Bau ist. **Alle zehn sind gemessen,
+> und alle sieben Ablesungen sind geschnitten:***
+>
+> | | Zeilen | Zustand |
+> |---|---|---|
+> | **ABLESUNG** | W-06 · W-18/1 · W-12/1 · W-16/1 · W-10/1 · W-14/1 · W-03/1 | **sieben, alle `BEREIT`** |
+> | **ENTSCHEIDUNG bei Yama** | W-24 (Erdkontakt) · W-26 (Schema-Feld) · W-28 (Normgröße) | drei, kein Blatt |
+>
+> ***Weder „Anschluss" noch „Bau" ist am Ende übriggeblieben.*** *Eine frühere Fassung dieses Absatzes
+> führte W-16 und W-10 als bloße „Indikation", W-24 als „Anschluss" und W-03 als „Bau" — **alle vier
+> Einordnungen sind durch die Vollmessung überholt worden.** Die abschließende Antwort mit den Belegen
+> steht im Abschnitt „YAMAS VORBEHALT ZU KLASSE B".*
 
 
 ## YAMAS VORBEHALT ZU KLASSE B — gestellt 13.08., BEANTWORTET 13.08. nachts
@@ -658,7 +664,10 @@ GEMESSEN UND GESCHNITTEN — ABLESUNG (drei):
   W-06  Geschoss verwalten    3 Module, 355 Z., 10 Exporte, alle angeschlossen
   W-18  Topologie pruefen     F-013 gebaut MIT Nutzermeldung (kontur.ts:63),
                               F-004 als Gehrungsdetail (wallGeometry.ts:62/:106)
-  W-12  Ansicht und Kamera    Zustand + Kamera + Raster in BEIDEN Renderern + F-032
+  W-12  Ansicht und Kamera    Zustand + Kamera + Raster + F-032
+        ^ die alte Fassung sagte hier „Raster in BEIDEN Renderern" — FALSCH,
+          es gibt nur renderers/three-d/; der 2D-Weg ist die Konva-Buehne in
+          der App-Schicht. Berichtigt am 13.08. in W-12/1.
 
 INDIKATION ABLESUNG (zwei) — Modul bzw. Verzeichnis vorhanden:
   W-16  Grundriss unterlegen  app/unterlage/ mit DREI Dateien:

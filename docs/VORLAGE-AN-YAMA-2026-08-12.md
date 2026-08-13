@@ -1289,8 +1289,8 @@ danach steht fest, ob eine B-Zeile eine Ablesung (schnell) oder ein Bau (langsam
 | **W-06** | Ablesung | gemessen 13.08. |
 | **W-18** | **Ablesung** | F-013 gebaut mit Nutzermeldung `kontur.ts:63`; Blatt geschnitten |
 | **W-12** | **Ablesung** | Zustand, Kamera, Raster, F-032 alle gebaut; Blatt **BEREIT** |
-| **W-16** | Indikation Ablesung | `app/unterlage/` mit drei Dateien |
-| **W-10** | Indikation Ablesung | `deckenMesh.ts` vorhanden |
+| **W-16** | **Ablesung**, geschnitten | *war nur „Indikation“ — gemessen kam die **Serverhälfte** dazu: sechs Routen, Controller, zwei Migrationen* |
+| **W-10** | **Ablesung**, geschnitten | *war nur „Indikation“ — Modul 35 Z., **Test 242 Z.**: die Sache steckt in Schema und Reducer* |
 | **W-14** | Ablesung **plus ein kleiner Bau** | Bewegen/Duplizieren/Spiegeln gebaut, **`drehen` fehlt** — aus zwei Richtungen bestätigt |
 | **W-24** | **Anschluss** (war: Bau) | `boden` ist modellseitig **gedeckt** (`ADD_CEILING`); nur die Oberfläche fehlt — **der einzige echte Anschluss der zehn** |
 | **W-03** | **Bau** (⚠ berichtigt, siehe unten) | zwei verschiedene Fundamente fehlen — Geometrie für `trimmen`/`versatz`, Mehrfach-Befehl für `teilen`/`verbinden` |
