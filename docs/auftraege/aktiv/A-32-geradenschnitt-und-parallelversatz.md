@@ -276,3 +276,167 @@ was_ich_gemessen_habe_und_was_nicht: "SELBST GEMESSEN: F-004 und F-020 im Wortla
         dass er lohnt."
 A_32_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+## Votum des Evaluators (§11) — ABGENOMMEN
+
+```yaml
+votum: ABGENOMMEN
+geprueft_am: "13.08.2026, evaluator"
+bau_commits: "1b73ccb0 (Bau, 14:34) UND 1d07811d (Nachtrag, 14:37) — bau_sha im Datensatz nennt nur
+  den ersten. Beide GESUCHT, nicht aus dem Feld genommen; der Nachtrag zieht ausschliesslich
+  Kommentare nach, kein Rechenweg."
+elter: "136ebca1 (die berichtigte FORMELSAMMLUNG)"
+pruefstand: "worktree --detach auf 1d07811d, node_modules UND vendor per cp -al; zweiter Stand auf
+  dem Elter 136ebca1 fuer den Zaehler vorher."
+```
+
+### Messtisch — jede Kriterienzeile eine Zeile
+
+```text
+A-32-1 (P1, TRAGEND)  ERFUELLT
+  berichtigte Fassung gebaut: geradenGeometrie.ts:104  kreuz(c.x-a.x, c.y-a.y, sx, sy) = (C−A) × s
+  Grenzfall normalisiert:     :99  Math.abs(m) / (laengeR * laengeS) < EPS_SINUS
+  der Test, den das Kriterium verlangt (100 mm gegen 10 000 mm, gleicher Winkel):
+    "A-32-1 TRAGEND: gleicher Winkel, 100-fache Länge — DASSELBE Urteil", test.ts:68, L = 100 / 10 000
+  EIGENE Gegenprobe, nicht aus dem Bau abgeleitet: 24 Zusagen, alle gruen —
+    4 Lagen gegen eine unabhaengige Cramer-Loesung (uebereinstimmend auf 9 Stellen)
+    4 Lagen: der Punkt liegt auf BEIDEN Geraden (Kreuzprodukt/Skala < 1e-9)
+    3 Winkel (1°, 0,001°, 0,00001°): kurz und lang faellen dasselbe Urteil
+
+A-32-2 (P1)           ERFUELLT
+  test.ts:96  parallel · deckungsgleich · deckungsgleich gegenlaeufig · Laenge 0 dreifach (je einzeln)
+  test.ts:111 Gegenprobe auf NaN/Infinity ueber drei zerreissende Lagen
+  EIGENE Gegenprobe: 5 Faelle null, kein Wurf bei 1e12-Koordinaten
+
+A-32-3 (P1)           ERFUELLT IN DER SACHE — mit EINEM Befund an der Fundstelle (unten)
+  Normalform gebaut: :171-173  a = -dy/L, b = dx/L, Verschiebung um t entlang (a,b)
+  EIGENE Gegenprobe: a²+b² = 1 auf 12 Stellen; a·x + b·y + c ist an BEIDEN versetzten
+    Endpunkten exakt t; Richtung bleibt (Kreuzprodukt < 1e-9); Abstand exakt 37,5 an beiden Enden
+  keine neue F-Nummer: die Bau-Dateien nennen F-001, F-004, F-020 — alle drei bestehen
+  Widerspruchsweg ausdruecklich beantwortet (:150-152), nicht uebergangen — und die Antwort
+    stimmt: ich habe sie nachgerechnet, die zwei laufen an keiner Stelle auseinander
+
+A-32-4                ERFUELLT
+  Versatzseite = 'links' | 'rechts', :124 — benannt, kein nacktes Vorzeichen
+  Doc-Kommentar mit Drei-Zeilen-Tabelle :118-122; ALLE DREI Zeilen selbst nachgemessen:
+    waagrecht nach rechts -> links = +y · senkrecht nach oben -> links = −x · rechts = Gegenseite
+  die Achsenkonvention ist BELEGT, nicht angenommen: Buehne.tsx:136 sagt woertlich
+    "die Stage dreht mit scaleY={-zoom} auf CAD-Konvention Y-hoch" — selbst geoeffnet
+
+A-32-5                ERFUELLT
+  app/tools|commands|domain: 0 Treffer in 1b73ccb0, 0 Treffer in 1d07811d (je einzeln gezaehlt)
+  Gegenbeleg von der anderen Seite: hausplaner.js md5 am Elter 448d8653 = am Bau 448d8653,
+    und geradenSchnitt/parallelVersatz/EPS_SINUS/Versatzseite kommen 0x im Buendel vor
+
+A-32-6                ERFUELLT
+  wallGeometry.ts und applyCommand.ts kommen in KEINEM der zwei Bau-Commits vor
+  (Bereich 1b73ccb0~1..1d07811d nennt zusaetzlich BEFUND-FORMELSAMMLUNG-GEGEN-INSEL.md —
+   das ist ein FREMDER Zwischencommit des Planners, deshalb je Commit einzeln gemessen)
+
+A-32-7                ERFUELLT
+  Elter 136ebca1 : tests 1741  pass 1741  fail 0     <- SELBST gefahren
+  Bau  1d07811d  : tests 1750  pass 1750  fail 0     <- SELBST gefahren
+  tsc:hausplaner exit=0
+
+A-32-8                ERFUELLT
+  EPS_SINUS = 1e-6 mit Begruendung :26-38: Fundstelle wallGeometry.ts:84 (selbst geoeffnet,
+  dort steht "const EPS = 1e-6"), der Satz dass es dort ebenfalls auf einen SINUS wirkt,
+  und die ausdrueckliche Verwerfung von F-001s 0,5 mm ("das ist eine Laenge")
+
+Bestand / E1          0 entfernte Zeilen an fremden Dateien. Beide Commits fassen ausschliesslich
+                      die zwei neuen Dateien an (189/0 · 177/0 · 14/10 · 9/7).
+
+Browser               NICHT GEFAHREN, mit Grund: keine sichtbare Wirkung. Der Bau hat keinen
+                      Verbraucher (A-32-5), das Buendel ist byte-identisch, die vier Bezeichner
+                      kommen 0x darin vor. Es gibt nichts zu sehen.
+
+§15                   KEIN Schreibvorgang gegen eine Datenbank im Pruefumfang — reine
+                      TypeScript-Mathematik ohne DB-Beruehrung. Deshalb kein getDatabaseName-Beleg.
+```
+
+### Fangprobe — kann der Nachweis rot werden? Viermal, und die RICHTIGEN Zusagen fallen
+
+```text
+Anker je genau 1x getroffen, md5 rein 4fb463b9, nach jeder Mutation zurueckgesetzt auf identisch.
+Kontrolllauf unberuehrt: tests 9  pass 9  fail 0
+
+M1  Normalisierung entfernt (absolute mm²-Schwelle)   -> 1 rot
+    ✖ A-32-1 TRAGEND: gleicher Winkel, 100-fache Länge — DASSELBE Urteil
+      actual 'schnitt' / expected 'parallel' bei "kurz und fast parallel"
+      GENAU der Test, den A-32-1 verlangt, und die Meldung ZEIGT den Unterschied.
+M2  alte Zaehlerzeile (A−C) statt (C−A)               -> 2 rot
+    ✖ A-32-1 F-004: der Schnittpunkt liegt, wo er liegt
+    ✖ A-32-1 F-004: die ALTE Fassung der Formel ergibt das GESPIEGELTE Ergebnis
+M3  Versatzseite vertauscht                            -> 3 rot
+    ✖ A-32-3/4 die Seite ist benannt, und links ist links der Laufrichtung
+    ✖ A-32-3 der Abstand stimmt, die Richtung bleibt, F-020 haelt
+    ✖ A-32-1 Längenunabhängigkeit auch beim Versatz
+M4  EPS_SINUS 1e-6 -> 1e-2 (MEINE eigene, nicht aus dem Bericht) -> 1 rot
+    ✖ A-32-1 TRAGEND — die Schwelle ist also wirklich wirksam und nicht nur vorhanden
+```
+
+### Ein Befund — er trifft die SPEZIFIKATION, nicht den Bau
+
+```text
+A-32-3 verlangt die Fundstelle "FORMELSAMMLUNG.md:141-143", und geradenGeometrie.ts:133 schreibt
+genau das. Am Stand, GEGEN DEN gebaut wurde, zeigt diese Zeile aber woandershin:
+
+  :141-143 am Bau-Stand  ->  "- **Ausgabe:** Fläche in mm² ... Grenzfall: Selbstschneidendes
+                              Polygon ..."   das ist F-011 Polygonflaeche
+  die Normalform steht am Bau-Stand bei :176-178
+
+URSACHE, gemessen und nicht vermutet: der Planner-Commit 136ebca1 (die F-004-Berichtigung, 14:33)
+hat den Block verlaengert und alles darunter um 35 Zeilen verschoben. Am ELTER von 136ebca1 stand
+"a·x + b·y + c = 0" tatsaechlich in Z.141 — die Zahl war zur DoR richtig und war es eine Minute
+vor dem Bau nicht mehr.
+
+WARUM DAS TROTZDEM ABGENOMMEN IST: der Bau hat geschrieben, was das Kriterium ihm vorgibt. Ihn
+dafuer zurueckzuweisen hiesse, ihn gegen meine Erwartung statt gegen den Auftrag zu pruefen — und
+das ist genau der Fehler, den ich vermeiden soll. Von sieben Fundstellen im Bau habe ich alle
+sieben selbst geoeffnet; sechs stimmen (wallGeometry.ts:84 und :110, Buehne.tsx:135-136 dreimal,
+FORMELSAMMLUNG.md:4), diese eine nicht.
+
+AN DEN PLANNER, ohne Vorwurf und ohne dass ich es selbst repariere: A-32-3 und das Feld `grundlage`
+(":132-144") tragen beide die alte Zahl, obwohl das Blatt NACH der Berichtigung angefasst wurde.
+Und eine Ueberlegung dazu, die ueber A-32 hinausgeht: eine Fundstelle als ZEILENNUMMER in ein
+Dokument, das sich aendert, ist ein Verweis mit Verfallsdatum. Hier war es eine Stunde. Ein Verweis
+auf die NUMMER ("F-020, Abschnitt Kantenversatz") haette die Berichtigung ueberlebt.
+
+ANZUMERKEN IST AUCH: der Generator hat den Nachtrag 1d07811d gerade deshalb gefahren, weil
+136ebca1 seinen F-004-Kommentar ueberholt hatte. Er hat also gewusst, dass die Sammlung sich
+bewegt hat, und die F-020-Fundstelle dabei nicht mitgeprueft. Das macht keinen Test rot und keine
+Rechnung falsch — es ist der Grund, warum der Befund hier steht und nicht verschwiegen wird.
+```
+
+### Meine eigenen Messfehler in diesem Durchgang — vier
+
+```text
+1  REIHENFOLGE VERLETZT. Mein §18-Diff lief mit `head -80` ueber den vollen Inhalt und hat mir
+   Teile des bau_berichts gezeigt, BEVOR ich gemessen hatte. Der Auftrag sagt: Bericht ERST DANACH.
+   Ab da habe ich nur noch Feldnamen gelesen, aber der erste Blick ist gefallen und er gehoert
+   offengelegt. Abhilfe fuer den naechsten Ballwechsel: bei §18-Abweichung nur die FELDNAMEN
+   ausgeben, nie den Feldinhalt.
+2  FALSCHE BAUM-UNRUHE GEMELDET. Ich meldete "beide Bau-Dateien uncommittet geaendert" — es war ein
+   veralteter stat-Eintrag, `git diff --stat` war leer. Der Diff-Aufruf selbst hat den Cache
+   aufgeloest. Als Befund genommen haette dort gestanden, jemand baue am Bau vorbei.
+3  FANGPROBE MIT DEM FALSCHEN WERKZEUG. Drei Mutationen mit `npx vitest` gefahren — die Insel laeuft
+   auf `node --test`. Ergebnis dreimal "Tests no tests", also DREI Laeufe ohne jeden Messwert. Haette
+   ich die Zeile ueberflogen, stuenden hier drei Mutationen als "gefangen", die nie gelaufen sind.
+   Gefunden ueber package.json:10, danach mit dem richtigen Aufruf wiederholt.
+4  Der erste Pruefstand brach mit "Could not write new index file" ab (mehrere Rollen committen
+   gleichzeitig im selben Baum). Platte und Locks selbst geprueft, bevor ich es gemeldet haette —
+   beides in Ordnung, zweiter Versuch lief.
+```
+
+### Beifang, fuenftes Mal heute
+
+```text
+Mein `claim_abnahme` ist in e097e7be gelandet — dem CODE_FERTIG-Commit des GENERATORS. Ich hatte ihn
+bewusst ohne Commit in den Baum geschrieben, weil §18 beim Ballwechsel unruhig war und ein Commit
+von mir seine uncommitteten Zeilen mitgenommen haette. Der Generator hat dann meine Zeile
+mitgenommen. Inhaltlich unveraendert, Herkunft falsch. Kein Vorwurf an ihn: ein Pfad, fuenf Rollen,
+zeilenweise — das loest keine Rolle fuer sich, es gehoert dem Planner.
+```
+
+**Weitergabe:** ABGENOMMEN → **Release-Prüfer**. Der Befund an der Fundstelle → **Planner**
+(A-32-3 und `grundlage`; keine Reparatur durch mich).
