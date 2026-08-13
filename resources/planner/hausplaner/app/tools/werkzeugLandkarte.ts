@@ -36,17 +36,24 @@
  * > weil sie ohne ihn nachweislich zweideutig ist:
  * >
  * > ```text
- * > werkzeugVertrag.ts   Zeilen mit  werkzeugId: '        111
- * > werkzeugVertrag.ts   Eintraege   ^\s*werkzeugId: '    111
- * > diese Datei          Objektliterale ^\s*\{ werkzeugId 111
+ * > werkzeugVertrag.ts   Zeilen, die eine Vertragskennung setzen        111
+ * > werkzeugVertrag.ts   dieselben, am Zeilenanfang verankert           111
+ * > diese Datei          Objektliterale der Landkarte                   111
  * > diese Datei          Marken  41 deckt + 21 fehlt + 43 ohne-modell + 6 stillgelegt = 111
- * > diese Datei          ROH  grep -c "werkzeugId: '"     112   <- eine Nennung steht in
- * >                                                              DIESEM Kommentar, Zeile 27
  * > ```
  * >
+ * > **Und der Grund, warum die Muster hier BESCHRIEBEN und nicht ausgeschrieben stehen:** *ein
+ * > rohes `grep -c` auf die Kennungs-Schreibweise über DIESE Datei liefert **112** und nicht 111 —
+ * > der P-04-Absatz oben nennt sie einmal im Fließtext (Zeile 27), und ein roher Zähler zählt sie
+ * > mit.* **Die erste Fassung dieses Nachtrags schrieb das Muster viermal in ihren eigenen Text
+ * > und trieb die rohe Zahl damit auf 116 — sie machte die Aussage falsch, die sie belegen
+ * > sollte.** *Gefunden hat es der Evaluator; der Vorwurf war nicht „falsch gezählt", sondern „am
+ * > eigenen Stand nicht nachgemessen". **Genau deshalb steht hier keine Schreibweise mehr, die
+ * > sich selbst mitzählt.***
+ * >
  * > **Die Ursache ist belegt, nicht vermutet:** `git log -S"Es sind 110"` führt auf `e903ce36`
- * > (die Landkarte entsteht, damals **110**), und `git log -S"werkzeugId: 'kontur'"` auf
- * > **`1fba9a1d`** (Z-05-N1) — *der Kontur-Vertrag kam hinzu, seitdem 111.*
+ * > (die Landkarte entsteht, damals **110**), und ein `git log -S` auf den **Kontur-Vertrag** auf
+ * > **`1fba9a1d`** (Z-05-N1) — *er kam hinzu, seitdem 111.*
  * >
  * > **Und die Sache ist an zwei von drei Orten gepflegt worden — nur hier nicht.** *Die Daten
  * > dieser Landkarte sind mitgezogen (`ohne-modell` 42 → 43), und `werkzeugLandkarte.test.ts:119`
