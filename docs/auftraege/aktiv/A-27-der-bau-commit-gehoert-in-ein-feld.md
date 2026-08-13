@@ -204,3 +204,60 @@ die_luecke_die_ich_offen_lasse_und_warum: "A-23s Fall — ein EXISTIERENDER, abe
         Klasse, wo ich ebenfalls keine tragfaehige Barriere hatte und es gesagt habe."
 A_27_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+---
+
+## 5 — Votum des Evaluators (§11)
+
+**ABGENOMMEN.** Bau `c23a3b8b`, Elter `b0ff1f0f`, von mir gesucht und dann gegen das Feld gehalten —
+`bau_sha` nennt denselben Stand; das Feld trägt zum ersten Mal, was der Auftrag verlangt.
+
+**Vorab die drei Lagen aus meinem Claim, weil sie das Ergebnis färben:** der Bau ändert erneut das
+Tor, mit dem ich selbst committe; die drei Nachweisfälle sind **meine eigenen Abnahmen**; und ich
+habe den Anlass mitzuverantworten. Was daraus folgt, steht unten — es ist kein Lob für den Bau,
+sondern ein Befund über meine eigenen Datensätze.
+
+| Kriterium | Befund | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **A-27-1** (TRAGEND) | **grün** | Die drei Stände selbst hergestellt (Worktree auf den **Elter**, `docs/STATUS.md` aus dem CODE_FERTIG-Commit — die andere Richtung als bei A-26). **A-25** (`360bf913`) und **A-26** (`333c7cb5`) → beide gemeldet. **A-23** → **keine** Meldung, und das ist richtig: der Block trug dort `bau_sha: 3ad920b1`, ein vorhandenes Feld. Genau die in A-27-3 benannte Lücke, kein Fehlschlag |
+| **A-27-2** | **grün** | `bau_sha: deadbeef` gesetzt → *„ist KEIN Commit dieses Repositoriums"*. Anker geprüft, md5 vorher/nachher, zurückgesetzt |
+| **A-27-3** | **grün** | Die Lücke ist benannt — im Skript selbst (`:23`) **und** im Datensatz (`die_luecke_die_ich_offen_lasse`), mit der Begründung, warum sie nicht geschlossen wird: die Gegenprüfung wäre eine Heuristik, und eine Barriere, die auf einer Heuristik rot meldet, ist nach A-03 in drei Tagen abgeschaltet |
+| **A-27-4** (WIRKSAMKEIT) | **grün** | A-23 (**mit** `bau_sha`) auf `CODE_FERTIG` gesetzt → **0 Warnungen**, still |
+| **A-27-5** | **grün** | Bei **50** Altfällen im Baum und einer Berührung meldet sie genau **1** — den berührten. *Hinweis:* Laufzeit **1,1 s** gegen **0,018 s** der A-26-Barriere, Faktor 60. Das Kriterium setzt keine Schranke und die Reichweite stimmt; ich nenne es, weil das Tor bei **jedem** Commit läuft |
+| **A-27-6** | **grün** | **Selbst gezählt**, nach der Definition des Skripts: 75 Datensätze, davon **57** mit Bau-Zustand, **7** mit Feld, **50** ohne. Deckungsgleich mit der Einordnung im Kriterium — und ich habe sie *nicht* als Sollwert genommen, sondern unabhängig erhoben. Die Feststellung „werden **nicht** gefüllt" steht im Datensatz |
+| **A-27-7** | **grün** | Fangprobe gefahren: `bau_sha` bei A-23 entfernt → Warnung. **md5 vor dem Lauf geprüft** und zurückgesetzt |
+| **A-27-8** | **grün** | F-14, B5, B6 und die A-26-Ball-Drift unverändert; der Tor-Diff trägt **nur Zusätze**, keine einzige entfernte Zeile |
+
+**Der Befund gehört mir, nicht dem Bau.** Der Generator meldet, die Barriere habe seinen eigenen
+Datensatz gefangen — gemeint ist **W-05/2**, den *ich* geschrieben habe. Nachgemessen an meinem
+eigenen Commit `971720c2`: der Block trug `nachbesserung_sha` und `pruef_sha`, aber **kein**
+`bau_sha`. Das ist exakt die Klasse, die dieser Auftrag behandelt — ein Einzelfall-Feldname, unter
+dem der Bau-Commit für jeden Zähler unsichtbar ist. Er hat `bau_sha` nachgetragen und den alten
+Namen **stehen lassen** (A-20-4: nicht löschen). *Ich habe im Claim geschrieben, ein Rot wäre hier
+ein Befund über meine Datensätze — es ist einer.*
+
+**Eine Formabweichung, die ich nenne statt sie zu übersehen:** A-27-3 und A-27-6 verlangen die
+Angaben **„im Bericht"**. Einen Bericht als Datei gibt es zu A-27 **nicht** — der Inhalt steht
+vollständig im **Datensatz**, in eigenen Feldern. Sachlich ist der Zweck erfüllt, und zwar an der
+Stelle, die §16 als maßgeblich nennt und die der nächste Leser ohnehin öffnet; die vier anderen
+Aufträge dieser Nacht hatten jedoch je eine Berichtsdatei. Das ist kein Rot — die Angaben sind
+auffindbar und vollständig —, aber es ist eine Abweichung vom Wortlaut, und wer sie später sucht,
+soll wissen, wo sie liegt.
+
+**Meine eigenen Messfehler in dieser Runde:**
+
+1. **Der erste Durchgang von A-27-1 war verkehrt herum.** Ich habe den Stand *vor* der
+   CODE_FERTIG-Meldung hergestellt — dort steht `IN_ARBEIT`, und die Barriere sucht Blöcke *mit*
+   `CODE_FERTIG`. Ergebnis: dreimal keine Meldung. Hätte ich das als Befund genommen, stünde hier
+   „die Barriere fängt keinen der drei Fälle". Bei A-26 war die Richtung umgekehrt richtig; ich habe
+   sie übernommen, ohne zu prüfen, ob sie zu *dieser* Barriere passt.
+2. **Mein „sauberer" Testfall für A-27-4 war keiner:** ich wählte A-26, und A-26 hat gar kein
+   `bau_sha` — die Meldung war also korrekt, nicht ein Fehlalarm. Dieselbe Fehlwahl ließ die
+   Fangprobe ins Leere laufen (`bau_sha-Zeile nicht gefunden`).
+3. Beide Male hat mich **die md5-Prüfung vor dem Lauf** gerettet, die ich mir nach W-05/2 Runde 2
+   vorgenommen hatte: `md5 geaendert? NEIN — wirkungslos` stand da, bevor ich ein Ergebnis
+   gelesen habe.
+
+**§15:** keine Datenbankschreibung in dieser Abnahme.
+
+**Weiter an den Release-Prüfer.**
