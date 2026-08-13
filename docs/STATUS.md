@@ -1249,6 +1249,52 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## BEDIENMODELL NACHGEMESSEN (Release-Pruefer, 13.08. nachts) — drei der vier Voraussetzungen sind GEBAUT
+
+```yaml
+anlass: "Yama 13.08.: 'schau was an yama gerichtet ist ob fragen oder aufgaben bitte fundert
+  beantworten bzw erledigen'. Seit meiner letzten repo-weiten Suche (c8e5f4d1) sind 34 Commits
+  gelaufen; die drei neuen Yama-Nennungen darin sind Rueckblicke auf eine zurueckgezogene Zusage,
+  keine neuen Fragen. NEU in der Vorlage ist genau EIN Posten: das Bedienmodell fuer
+  parametrische Werkzeuge. Der Planner sagt dazu 'Im Haus gibt es dafuer kein Muster' und
+  'das blockiert alle acht Werkzeuge'. Genau das habe ich gemessen."
+
+ergebnis: "DREI der vier Voraussetzungen sind gebaut. Die Frage bleibt eine Produktentscheidung,
+  aber sie ist eine in einem Satz statt einer Grundsatzfrage."
+
+im_einzelnen: >
+  1  minSelectionCount — die Aussage 'die Registry kennt nur 1' trifft, aber sie fuehrt in die
+     Irre. Das Feld steht ZWEIMAL in der AKTIVEN toolRegistry.ts (:257 loeschen, :281
+     duplizieren) und sonst nur im STILLGELEGTEN Katalog (toolCatalogStillgelegt.ts, Kopf:
+     'stillgelegter InDesign-Katalog, Stand bis 25.07.2026'). Es fehlt also kein MUSTER,
+     sondern ein WERT. Der Vertrag fuehrt dazu 29 Mal die Vorbedingung selection.count >= 1.
+  2  MEHRFACHAUSWAHL IST GEBAUT. selectedNodeIds kommt 44 Mal im Inselcode vor (ohne Tests),
+     und A-31 hat heute die Sammelbefehle auf readonly string[] umgestellt — befehleLoeschen,
+     befehleDuplizieren, befehleSpiegeln arbeiten auf MEHREREN Knoten in EINEM Undo-Schritt.
+  3  DIE ROLLEN-UNTERSCHEIDUNG IST GEBAUT, und das ist der eigentliche Fund. Der Store fuehrt
+     primaerId (AUF-35a) mit dem Kommentar: 'das Primaerobjekt der Auswahl — dessen
+     Eigenschaften zeigt das Panel, und nur an ihm haengen die Griffe. Additiv ergaenzt;
+     selectedNodeIds bleibt die Liste, hier steht nur, welches davon fuehrt. Kein zweiter
+     Auswahlzustand.' Gemessen: 30 Vorkommen im Inselcode, 18 in Tests. Genau diese Trennung —
+     eine Liste plus ein fuehrendes Element — ist das, was Trimmen braucht.
+  4  ZAHLENEINGABE IST GEBAUT. 22 Mal type="number" in vier Dateien, darunter
+     app/rahmen/EigenschaftenPanel.tsx — also im Werkzeug-Kontext und nicht nur im Wizard.
+     prompt() kommt 0 Mal vor; es gibt also auch schon eine Entscheidung GEGEN den Dialog.
+
+was_uebrig_bleibt_und_wirklich_Yama_gehoert: >
+  Welche ROLLE traegt primaerId beim Trimmen — die Schnittkante oder die zu kuerzende Wand?
+  Und kommt der Abstand VOR der Auswahl (Werkzeug fragt, dann waehlen) oder DANACH (waehlen,
+  dann Zahl im Panel)? Das ist Bedienphilosophie und keine Ablesung; ich entscheide es nicht.
+  Aber es ist EIN Satz, kein fehlendes Fundament.
+
+gegenprobe_zu_den_zahlen: "Der Zaehler findet ein erfundenes Feld 0 Mal und selectedNodeIds 44
+  Mal — die Zahlen oben sind Ergebnisse und keine blinden Flecken."
+
+was_ich_NICHT_tue: "Bauen. minSelectionCount auf 2 zu setzen waere Generator-Arbeit, und die
+  Rollenzuordnung ist Yamas Entscheidung. Ich habe gemessen, was da ist."
+ballbesitz: yama
+```
+
 ## SCHADEN DURCH MEIN EIGENES KONFLIKTWERKZEUG (Release-Pruefer, 13.08. nachts) — 24 Zeilen geloescht, wiederhergestellt, Werkzeug gehaertet
 
 ```yaml
