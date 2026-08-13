@@ -25,6 +25,25 @@
 > *Die Zwischenstufe trägt das Wort `BESCHRIEBEN` absichtlich NICHT: der Abschlussbefehl
 > `grep -cE '^\| W-[0-9]+ .*BESCHRIEBEN'` würde es sonst mitzählen, und der Zähler soll nur
 > Vollständiges zählen (Yamas Bedingung vom 11.08.).*
+>
+> ---
+>
+> **WER DEN REIFEGRAD ZIEHT — Planner-Festlegung 13.08., auf Yamas „ok".**
+>
+> Der Reifegrad ist **kein Auftragszustand** (Satz 2 dieses Kopfes) und gehört deshalb in
+> **kein Auftragskriterium**. Er wird vom **Planner** nachgezogen, sobald ein Blatt-Auftrag
+> `ABGENOMMEN` ist — als Pflege dieser Planungsquelle, nicht als Arbeitsschritt des Generators.
+>
+> **Der Anlass, damit es niemand für Bürokratie hält:** W-06 war am 13.08. abgenommen, die
+> sieben Blätter standen (468 Z., Bau `a05d6d12`, Abnahme `8f213aa0`) — und diese Zeile sagte
+> weiter `LEER`. Der Generator hat es gesehen und korrekt **nicht** angefasst: *„KEIN Kriterium
+> und KEIN Scope-Punkt nennt das Register"* (`W-06-geschoss-verwalten.md:319`). Nachgemessen
+> galt dasselbe für **alle acht** damals offenen Ablesungsaufträge — W-03/1, W-10/1, W-12/1,
+> W-14/1, W-16/1, W-18/1, W-31, W-37: **null** von acht nannten das Register in einem Kriterium.
+> Sie hätten vollständig durchlaufen können, ohne dass die Zahl sich bewegt. **Der Mangel lag
+> in den Auftragsblättern des Planners, nicht in der Ausführung** — und er wird hier oben
+> behoben statt in acht laufenden Blättern, weil ein Blatt zu ändern, an dem gerade gearbeitet
+> wird, den Boden unter dem Bearbeiter verschiebt.
 
 ---
 
@@ -51,7 +70,7 @@
 
 | Nr | Werkzeug | Reifegrad | Braucht | Formeln |
 |---|---|---|---|---|
-| W-06 | Geschoss verwalten | LEER | W-02 | F-032 |
+| W-06 | Geschoss verwalten | **BESCHRIEBEN** | W-02 | F-032 · **Reifegrad vom Planner nachgezogen 13.08.** (LEER → BESCHRIEBEN). Beleg selbst gezählt: die sieben Blätter stehen in `W-06-geschoss-verwalten/` — `1-ZWECK` 101 Z., `2-FUNKTION` 89, `3-FORMELN` 59, `4-BEDIENUNG` 77, `6-PRUEFUNG` 70, `7-GRENZEN` 72, Ordner `5-CODE` gefüllt (468 Z. gesamt). Bau `a05d6d12`, Abnahme durch den Evaluator `8f213aa0` über acht Kriterien. **Die F-Spalte ist NICHT angefasst:** F-032 steht bei W-06, W-12, W-14 und W-16, das Auftragsblatt nennt diese Häufung ausdrücklich als Falle (`:208-211`) — ich habe sie hier nicht nachgemessen und ziehe deshalb nur den Reifegrad. |
 | W-07 | **Dach aus Kontur** | **BESCHRIEBEN** | W-05, W-06 | F-010 ✓ (`dachAusschnitt.ts:103,154` `Math.sign(area)` — **nicht** in `dachGeometrie.ts:46`, dort `Math.abs`), F-013 ✓ (`dachAusschnitt.ts:136` Außenwinkelsumme ±2π statt Kantenschnitt-Test), **F-014 ⚠** (Konvexität wird geprüft, die **Erkennung** einspringender Ecken fehlt — die V1-Grenze **lehnt ab statt zu erkennen**), **F-025 ✓** (grat 49 · kehle 57 · ortgang 12 Treffer), **F-026 ✓**, ~~F-020~~ ⓝ **0 Treffer** (`skelett` in allen acht Modulen), ~~F-021~~ ⓝ (kein Skelett zum Anheben), F-022 ✓ Grad→Radiant (`PI/180`, 4 Module) · **Prozent nicht gefunden** |
 | W-08 | Dachfläche messen | **BESCHRIEBEN** | W-07 | **F-011 ✓** (`polygonFlaeche.ts:44-46` Shoelace + `Math.abs(summe)/2`), F-023 ⚠, F-024 ⚠ |
 | W-09 | Treppe | **BESCHRIEBEN** | W-06 | **F-001 ✓** (`treppe2D.ts:47`, `treppeSvg.ts:125` — `Math.hypot(dx,dy)`), ~~F-030~~ ⓝ **0 Treffer in allen sieben Treppen-Modulen** · Rechenkern sind **normative Größen**, keine Geometrieformel |
