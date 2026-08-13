@@ -1245,6 +1245,56 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## VORRATSMESSUNG 13.08. nachts (Release-Pruefer) — was der Stillstand KOSTET, gemessen statt vermutet
+
+```yaml
+anlass: "Der Planner hat 13.08. nachts gemeldet, der Generator sei seit sieben Stunden still und
+  elf Auftraege lagen BEREIT — mit dem ehrlichen Zusatz 'die Ursache kenne ich nicht und behaupte
+  sie nicht'. Die Ursache ist auch nicht meine Spalte. Was in meine Spalte faellt: liegt die
+  Sperre IN DER KETTE, und was kostet das Liegen."
+
+frisch_gemessen: "generator zuletzt e097e7be 14:38, also vor 6h49 — nicht sieben, sechs.
+  evaluator 7994539d 14:50, vor 6h36, und bei ihm ist die Stille erklaert: 0 CODE_FERTIG.
+  plan-pruefer, planner und ich: vor ein bis zwei Minuten. BEREIT beim Generator sind inzwischen
+  DREIZEHN, nicht elf — in der Zwischenzeit haben A-30 und A-33 ihre DoR bekommen."
+
+in_der_kette_liegt_die_sperre_NICHT: "IN_ARBEIT 0, CODE_FERTIG 0, §3 also frei. Kein Auftrag
+  blockiert einen anderen, keine Vorbedingung steht offen. Der Generator koennte jeden der
+  dreizehn sofort ziehen. Das ist alles, was ich zur Ursache sagen kann — und es ist eine
+  Ausschlussaussage, keine Erklaerung."
+
+WAS DAS LIEGEN KOSTET, und das ist der Teil, den noch niemand gemessen hat: >
+  Ein geschnittener Auftrag altert, waehrend er BEREIT liegt — das ist heute DREIMAL aufgetreten
+  (A-32-3, A-34, A-29). Also habe ich den ganzen Vorrat daraufhin vermessen:
+    106 Zeilenverweise auf Produktivcode ueber 13 Blaetter
+      0 davon zeigen ueber ein Dateiende
+      4 von 13 Blaettern beschreiben eine Datei, die SEIT DEM SCHNITT geaendert wurde
+        W-12/1  19 Verweise · HausplanerApp.tsx, hausplanerStore.ts
+        W-18/1   6 Verweise · HausplanerApp.tsx
+        W-14/1  20 Verweise · HausplanerApp.tsx
+        W-10/1  20 Verweise · HausplanerApp.tsx
+    Aeltester Vorrat: W-37, 1370 Minuten und 285 Commits seit dem Schnitt.
+  Die Lage ist also NICHT dramatisch — kein einziger Verweis zeigt ins Leere. Aber vier Blaetter
+  beschreiben Dateien, die sich unter ihnen bewegt haben, und die Bewegung war A-31 (mein
+  eigenes Grundtor hat sie gebaut und freigegeben). Wer diese vier zieht, misst beim Ziehen
+  gegen den Stand — genau der Schritt, den der Planner heute Nacht als Pruefung 7 Schritt 6
+  aufgenommen hat.
+
+GRENZE DIESER MESSUNG, selbst benannt: >
+  Sie prueft Aenderungen an den GENANNTEN Dateien. A-29s Alterung faengt sie NICHT: dort ist das
+  Problem eine NEUE Datei, die das Blatt gar nicht nennt — geradenGeometrie.ts kommt in A-29
+  null Mal vor, weil sie beim Schnitt um 08:13 noch nicht existierte. Eine Messung, die nur
+  bekannte Namen verfolgt, sieht das Entstehen nicht. Der A-29-Befund von heute Abend steht
+  deshalb weiterhin einzeln und ist durch diese 4-von-13 nicht abgedeckt.
+  Gegenprobe zur 0: ein Verweis auf Zeile n+1 einer Datei mit n Zeilen wird als ueber dem
+  Dateiende erkannt, einer auf Zeile n nicht. Die 0 ist ein Ergebnis und kein blinder Fleck.
+
+nicht_meine_spalte: "Warum der Generator still ist, kann ich nicht messen und behaupte es nicht.
+  Ihn zu starten ist Yamas Infrastruktur, seine Auftraege selbst zu bauen waere ein
+  Rollenbruch. Ich melde, was in der Statuswahrheit steht."
+ballbesitz_befund: yama
+```
+
 ## NACHMESSUNG zur Identitaetsfrage (Release-Pruefer, 13.08. nachts) — es bleiben ZWEI Faelle, kein dritter
 
 ```yaml
