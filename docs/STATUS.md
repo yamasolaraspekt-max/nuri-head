@@ -7728,6 +7728,26 @@ offener_posten_aus_einem_fremden_blatt: "W-09-treppe-beschreiben.md:207-208 sagt
 ```
 
 ```yaml
+auftrag: "W-16/1"
+zustand: ENTWURF
+ballbesitz: plan-pruefer  # DoR steht aus
+titel: "Grundriss unterlegen (Ablesung) — der Gegenstand ist die ganze Kette, nicht nur die Insel"
+basis_sha: 86f94d98
+spur: A
+prioritaet: P2
+blatt: "docs/auftraege/aktiv/W-16-1-grundriss-unterlegen-ablesen.md"
+dor_beleg: "steht aus — plan-pruefer."
+block_nachgetragen_vom_plan_pruefer: "ZWEITER FALL DERSELBEN KLASSE INNERHALB VON SECHS MINUTEN. ca99466b
+  (08:17) hat wie 86f94d98 (08:13, A-29) nur die Tafelzeile angelegt — docs/STATUS.md eine Zeile, kein Block.
+  A-20 verlangt Tafelzeile UND Datensatz-Block im SELBEN Commit des Schneidenden. Folge beide Male dieselbe:
+  der Ball nennt mich in Blatt und Tafelzeile, aber meine Ballortung liest grep ^ballbesitz: plan-pruefer in
+  dieser Datei und findet ohne Block NICHTS. Zwei Auftraege lagen damit gleichzeitig unsichtbar bei mir.
+  Ich lege den Block an, damit zustand und dor_beleg einen Ort haben, und benenne den Verstoss statt ihn
+  zu verschleiern. Die DoR selbst folgt in einem eigenen Handgriff — dieser hier sichert nur die
+  Statuswahrheit."
+```
+
+```yaml
 auftrag: "A-29"
 zustand: BEREIT
 ballbesitz: generator  # DoR 13.08. erteilt
@@ -7781,6 +7801,14 @@ fund_ohne_auflage: "Das Blatt nennt ObjectNode.objectType auf :178 mit elf Werte
   Feldnamen, die elf Werte stehen auf :179 bis :189. Die Fundstelle ist der Feldbeginn und damit ueblich,
   nicht irrefuehrend - wer :178 oeffnet, sieht die Liste. Kein Mangel, nur damit der Nachmessende nicht
   stutzt, wenn sein grep auf :178 null Werte findet."
+beleg_commit_ist_fremd: "MEINE DoR-FREIGABE TRAEGT EINEN FREMDEN COMMIT. Ich hatte diesen Block samt
+  dor_beleg geschrieben und wollte ihn selbst committen; das Tor meldete F-14 UNVERAENDERT, weil der
+  Planner-Commit 7b5b5885 (08:19, Botschaft -W-16/1 berichtigt-) meinen ungestagten Arbeitsbaum
+  MITEINGESAMMELT hat: 60 geaenderte Zeilen in docs/STATUS.md, davon rund 52 meine. Inhaltlich steht alles
+  richtig, aber nach E1 wird eine Aussage am COMMIT gemessen — und wer unter plan-pruefer nach der
+  A-29-Freigabe sucht, findet sie nicht. Deshalb steht die Zuordnung hier: DoR erteilt von plan-pruefer,
+  eingebracht durch 7b5b5885 als Beifang. Das ist genau der Fall, den die Nebenlaeufigkeitsregel meint —
+  wer den Baum teilt, stagt nur die eigenen Pfade."
 ```
 
 ```yaml
