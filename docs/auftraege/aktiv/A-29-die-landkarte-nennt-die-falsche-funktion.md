@@ -192,3 +192,132 @@ warum_dieser_auftrag_klein_bleibt: "Die Versuchung war, versatz gleich mitzubaue
         dieselbe Falle laeuft. Nicht mehr."
 A_29_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+## Votum des Evaluators (§11) — NACHBESSERN
+
+```yaml
+votum: NACHBESSERN
+fehlerklasse: CODE   # §12.1 -> Generator
+umfang: "EIN Punkt (§12.2). Fuenf der sechs Kriterien sind erfuellt, das sechste in seinen
+  geforderten Zusagen ebenfalls — der Befund trifft eine ZUSATZZAHL, die der Bau freiwillig
+  aufgenommen und nicht am eigenen Stand gemessen hat."
+geprueft_am: "13.08.2026, evaluator"
+bau_commit: "4654687f (22:11) — GESUCHT: der einzige Bau-Commit, eine Datei, zwei Hunks."
+elter: "1de986de"
+```
+
+### Der Befund: die Roh-Zahl im Nachtrag stimmt am Bau-Stand nicht — und der Nachtrag hat sie selbst verschoben
+
+```text
+Der neue Kopf-Nachtrag stellt eine Tabelle auf, die zeigen soll, WARUM eine Zahl hier ihren
+Traeger braucht. Die letzte Zeile lautet:
+
+    diese Datei   ROH  grep -c "werkzeugId: '"   112   <- eine Nennung steht in
+                                                          DIESEM Kommentar, Zeile 27
+
+SELBST GEMESSEN, mit Befehl und Zahl:
+    grep -c "werkzeugId: '"  am ELTER 1de986de  ->  112     die Zahl stimmt DORT
+    grep -c "werkzeugId: '"  am BAU   4654687f  ->  116     am eigenen Stand nicht mehr
+
+URSACHE, gemessen und nicht vermutet — der Nachtrag hat die Zahl selbst erhoeht, weil er das
+Muster VIERMAL in seinen eigenen Text schreibt. Die Trefferzeilen ausserhalb der Eintraege:
+    Z.27   `grep -c "werkzeugId: '"` liefert **110** …        (die eine, die der Nachtrag nennt)
+    Z.39    werkzeugVertrag.ts   Zeilen mit  werkzeugId: '    111
+    Z.40    werkzeugVertrag.ts   Eintraege   ^\s*werkzeugId: ' 111
+    Z.43    diese Datei          ROH  grep -c "werkzeugId: '"  112
+    Z.48   `git log -S"werkzeugId: 'kontur'"` auf …
+-> Es sind FUENF Nennungen, nicht eine. Damit sind BEIDE Aussagen der Zeile falsch: die Zahl
+   112 und der Zusatz "eine Nennung … Zeile 27".
+
+WARUM DAS NICHT KLEINLICH IST — drei Gruende, und der dritte ist der eigentliche:
+ (1) A-29-3 sagt woertlich: "Die Zahl wird AM BAU-STAND erhoben und nicht aus diesem Blatt
+     uebernommen (E1)." Die 112 steht im Blatt (Abschnitt 3) und ist von dort uebernommen.
+ (2) Der Nachtrag FORDERT ZUM NACHFAHREN AUF, indem er den grep-Befehl mitliefert. Wer ihn
+     faehrt, bekommt 116 und muss der ganzen Tabelle misstrauen — auch den vier Zahlen, die
+     stimmen.
+ (3) A-29 ist ein Auftrag, dessen einziger Zweck die Berichtigung einer falschen Selbstauskunft
+     im Code ist. Der Bau hinterlaesst an derselben Stelle eine neue falsche Selbstauskunft.
+     Das ist derselbe Fehler in klein.
+
+WAS ICH AUSDRUECKLICH NICHT BEANSTANDE: die vier tragenden Zahlen sind richtig und alle vier
+von mir nachgezaehlt (unten). Der Nachtrag ist im Uebrigen mustergueltig — er nennt zu jeder
+Zahl Datei und Muster, genau wie Pruefung 7 es verlangt.
+
+VORSCHLAG ZUR BEHEBUNG, aber die Form entscheidet der Generator: die Zeile misst etwas
+Selbstbezuegliches. Entweder die Zahl am Bau-Stand erheben UND sagen, dass der Kommentar selbst
+mitzaehlt (dann wandert sie bei jeder weiteren Zeile wieder), oder die Aussage ohne feste Zahl
+fuehren — etwa "die rohe grep-Zahl ist GROESSER als 111, weil dieser Kommentar das Muster selbst
+enthaelt; deshalb zaehlt man Eintraege, nicht Nennungen". Die zweite Fassung kann nicht veralten.
+```
+
+### Messtisch — jede Kriterienzeile eine Zeile
+
+```text
+A-29-1 (P1, TRAGEND)  ERFUELLT
+  Die alte Zuschreibung ist raus; der neue Text sagt, `versetzteWand` verschiebe BEIDE Endpunkte
+  um denselben Vektor (Translation) und sei NICHT dasselbe.
+  Der alte Wortlaut steht als "UEBERHOLT:" an derselben Stelle lesbar — nicht geloescht.
+  UND DER BAU GEHT WEITER ALS DAS KRITERIUM, zu Recht: er sagt nicht "die Rechnung fehlt",
+  sondern dass sie seit A-32 in `geradenGeometrie.parallelVersatz` liegt und nur noch der
+  Modellbefehl fehlt. SELBST GEPRUEFT: die Funktion existiert am Bau-Stand
+  (geradenGeometrie.ts:157). Haette der Bau den Wortlaut des Kriteriums abgeschrieben, waere die
+  Landkarte ab heute wieder falsch — ich werte das als richtig, nicht als Abweichung.
+
+A-29-2 (P1)           ERFUELLT
+  Die Wortfalle ist ausdruecklich benannt: "`versetzen` (bewegen) und `Versatz` (offset) sind
+  DASSELBE WORT und ZWEI VORGAENGE", mit dem Grund (die Normale kommt in versetzteWand nicht vor)
+  und mit dem Preis (Fahrplan-Einordnung und Zusage an Yama, zurueckgezogen in 485004c4).
+
+A-29-3 (P1)           NICHT VOLLSTAENDIG — der Befund oben
+  Die DREI geforderten Dinge sind da und richtig:
+    heutige Zahl 111   — von mir an VIER Mustern nachgezaehlt, alle 111:
+                          werkzeugVertrag.ts  "werkzeugId: '"            111
+                          werkzeugVertrag.ts  ^\s*werkzeugId: '          111
+                          werkzeugLandkarte.ts ^\s*\{ werkzeugId         111
+                          Marken 41 deckt + 21 fehlt + 43 ohne-modell + 6 stillgelegt = 111
+    Ursache mit Commit — BEIDE selbst nachgemessen: e903ce36 (30.07.) traegt 110 werkzeugId-
+                          Zeilen; 1fba9a1d (01.08.) hebt 110 -> 111 und fuegt genau
+                          `werkzeugId: 'kontur'` ein. Die Behauptung traegt.
+    "an SEINEM Tag korrekt" — steht da, und der P-04-Absatz ist NICHT umgeschrieben.
+  ABER die freiwillig aufgenommene ROH-Zahl 112 ist am Bau-Stand 116 (Befund oben).
+
+A-29-4                ERFUELLT
+  werkzeugLandkarte.test.ts SELBST gefahren: tests 12, pass 12, fail 0 — einschliesslich
+  ':119 ERGEBNIS der Stufe' (die harte Verteilung) und ':90' (40-Zeichen-Schwelle).
+  Marken gegen den Elter einzeln: deckt 41->41 · fehlt 21->21 · ohne-modell 43->43 ·
+  stillgelegt 6->6. KEINE geaendert.
+  Die neue Begruendung ist 362 Zeichen lang, die Schwelle ist 40.
+  FANGPROBE, Anker je 1x, md5 zurueck auf cd8139a2:
+    Marke versatz fehlt->deckt  -> ':119 ERGEBNIS der Stufe' ROT (und K-03 dazu)
+    Begruendung auf 8 Zeichen   -> ':90 jede fehlt-Begruendung …' ROT
+  Beide Waechter greifen also wirklich und sind nicht nur vorhanden.
+
+A-29-5                ERFUELLT
+  WERKZEUG_LANDKARTE wird ausserhalb der eigenen Datei NUR von __tests__/werkzeugLandkarte.test.ts
+  gelesen (7 Fundstellen, alle im Test). `.begruendung` kommt in 0 .tsx-Dateien vor.
+  Gegenbeleg von der anderen Seite: das Buendel public/hausplaner/hausplaner.js ist am Elter und
+  am Bau byte-identisch (448d8653), und der neue Satz kommt 0x darin vor.
+
+A-29-6                ERFUELLT
+  Der Bau fasst genau EINE Datei an, mit GENAU ZWEI Hunks: @@ -28,6 +28,31 @@ (Kopf) und
+  @@ -77,7 +102,28 @@ (versatz). Die 17 uebrigen Begruendungen sind unberuehrt.
+
+Suite / tsc          Insel-Suite am Bau-Stand: tests 1750, pass 1750, fail 0. tsc exit=0.
+                     (Kein Kriterium verlangt es; gefahren, weil der Bau in die Insel schreibt.)
+Browser              NICHT GEFAHREN, mit Grund: keine sichtbare Wirkung. A-29-5 belegt es von
+                     zwei Seiten — kein .tsx liest das Feld, das Buendel aendert sich nicht.
+§15                  Kein Schreibvorgang gegen eine Datenbank im Pruefumfang.
+```
+
+### Meine eigenen Messfehler in diesem Durchgang — einer
+
+```text
+1  Beim ersten Blick auf die Roh-Zahl war meine Reaktion "der Bau zaehlt falsch". Erst die Messung
+   am ELTER (112) hat gezeigt, dass die Zahl dort richtig WAR und der Bau sie selbst verschoben
+   hat. Ohne diesen zweiten Schritt haette der Befund den falschen Vorwurf getragen — nicht
+   "falsch gezaehlt", sondern "am eigenen Stand nicht nachgemessen". Das ist ein Unterschied, und
+   er gehoert in den Befund.
+```
+
+**Weitergabe:** NACHBESSERN → **Generator**. Nach §12.3/§12.4 fahre ich bei der Wiederabnahme
+ALLE sechs Kriterien erneut, nicht nur den Befund.
