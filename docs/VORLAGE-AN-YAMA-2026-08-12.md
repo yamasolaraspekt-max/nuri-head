@@ -25,7 +25,8 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 | | Posten | Was du entscheidest | Warum es nicht ohne dich geht |
 |---|---|---|---|
 | **17** | **Prüfbühne ohne Boden** | Dauerhafter Seed mit Prüfnutzer und Prüfobjekt? | Prüfinfrastruktur; **drei von vier Befunden verschwinden auf einmal** · **13.08. nachts frisch gemessen: 0/0/0 — geräumt vom Release-Prüfer-Grundtor selbst. Dritter Weg C (Skript sät idempotent) in Abschnitt 17 daneben gelegt.** |
-| **16+15** | **W-24 und W-26 GEHÖREN ZUSAMMEN** | *Nicht zwei Schema-Fragen, sondern **ein** Vorgang: die Naht `UebernehmeSzeneInAuslegung` (`:84-88`) markiert selbst `u_werte => unbelegt` und „U-Werte/Konstruktionen sind ein eigener Schritt". **Genau dort sitzen beide** — `boden.grenzflaeche` (W-24) und `schichten` (W-26). Die Heizlast-Seite hat das Konzept bereits (`HeizlastBauteil`, `Konstruktion`, `HeizlastProjektService:318`). **Statt zwei Schema-Entscheidungen brauche ich eine Messung der Naht** — was verlangt die Heizlast, was liefert die Insel, was fehlt wirklich. Die mache ich; danach ist es eine Frage statt zwei.* |
+| **✅ 16+15** | **W-24 und W-26 — GEMESSEN, beide erledigt sich als Entscheidung** | ***Du musst hier nichts entscheiden.*** **W-24:** die Regel existiert bereits — `GeometrieAbleitungService:61` setzt für `boden` den Fallback **`erdreich`**. Was fehlt, ist ein Bau: die Projektion liefert `null`, und `:58` (`if (! empty($def))`) legt dann **gar kein Bauteil an** — Boden und Decke fehlen in der Heizlast **vollständig**. **W-26:** die Heizlast liest **keine Schichten** — `opakeUQuelle` nutzt `u_wert` oder `konstruktion_id`. **Ein Feld `RoofNode.schichten` würde ihr nicht helfen; die Frage war falsch gestellt.** *(Details unten in 16.)* |
+| **16+15 (alt)** | **W-24 und W-26 GEHÖREN ZUSAMMEN** | *Nicht zwei Schema-Fragen, sondern **ein** Vorgang: die Naht `UebernehmeSzeneInAuslegung` (`:84-88`) markiert selbst `u_werte => unbelegt` und „U-Werte/Konstruktionen sind ein eigener Schritt". **Genau dort sitzen beide** — `boden.grenzflaeche` (W-24) und `schichten` (W-26). Die Heizlast-Seite hat das Konzept bereits (`HeizlastBauteil`, `Konstruktion`, `HeizlastProjektService:318`). **Statt zwei Schema-Entscheidungen brauche ich eine Messung der Naht** — was verlangt die Heizlast, was liefert die Insel, was fehlt wirklich. Die mache ich; danach ist es eine Frage statt zwei.* |
 | **16** | **W-24 Boden/Erdkontakt** | Woran erkennt das Modell Erdreich? *(Empfehlung: am Geschoss)* | Fachentscheidung mit **Rechenwirkung**, berührt das wberechnung-Transplantat |
 | **15** | **W-26 Dachschichten** | Darf `RoofNode` ein Feld `schichten` bekommen? | **Schema**-Entscheidung; das Muster steht schon zweimal · **ENTSCHIEDEN 13.08. in Vertretung: JA, additiv.** Das Muster steht zweimal zeichengleich (`WallNode:98`, `CeilingNode:348`), beide `.optional()`, im JSON-Schema nicht `required` — die dritte Anwendung bricht kein bestehendes Dokument. |
 | **15** | **W-28 Entwässerung** | Rinnenbemessung — Operanden oder vertagen? *(Empfehlung: vertagen)* | **Normgröße** (DIN 1986-100) |
@@ -1400,6 +1401,70 @@ B-Zeilen vollständig gemessen, weil das unter jeder Lesart nützlich ist. **Wen
 gemeint hast, sag es, dann drehe ich die Reihenfolge.** Ich habe nicht geraten.*
 
 ---
+
+## 16a · NACHTRAG 13.08. nachts — die Naht ist gemessen. W-24 und W-26 sind KEINE Entscheidungen mehr
+
+**Auf deine Frage „wie lösen wir das" habe ich die Naht Insel→Heizlast vollständig gemessen.** *Ergebnis:
+von den drei Posten bleibt **ein Wort** und **ein Bau** — und zwei Fragen erledigen sich.*
+
+### W-24 Erdkontakt — die Regel gibt es schon, es fehlt der Wert
+
+```text
+DIE KETTE, ganz gemessen:
+  Insel  -> SzeneProjektionService -> RaumGeometrie (polygon, wand_segmente,
+                                                     decke, boden)
+  RaumGeometrie -> GeometrieAbleitungService::ausGeometrie() -> Bauteile
+  Bauteile -> heizlast_bauteile
+
+DIE REGEL EXISTIERT BEREITS, GeometrieAbleitungService:61:
+  'grenzflaeche' => $def['grenzflaeche'] ?? ($flaeche === 'boden'
+                                             ? 'erdreich' : 'aussen')
+  -> Kommt ein boden-Objekt OHNE grenzflaeche, nimmt der Server 'erdreich'.
+     Genau der Weg, den ich als Empfehlung vorgelegt hatte — er ist gebaut.
+
+WAS WIRKLICH FEHLT, Zeile 58:
+  foreach (['decke','boden'] as $flaeche) {
+      $def = $geometrie->{$flaeche};
+      if (! empty($def)) { ... }      <- und die Projektion liefert NULL
+  }
+  -> Es wird KEIN Bauteil angelegt. Nicht falsch gerechnet — Boden und Decke
+     FEHLEN in der Heizlast vollstaendig.
+```
+
+> ***Damit ist W-24 keine Fachentscheidung mehr, sondern ein Bau:*** *die Projektion muss `decke` und
+> `boden` füllen statt `null` zu liefern. **Und sie braucht dafür kein neues Schema** —
+> `RaumGeometrieProjektion` hat die Felder bereits (`decke`, `boden`, je mit `grenzflaeche` und
+> `bauteil_typ`). Liefert sie auch nur `{bauteil_typ: 'boden'}`, greift der vorhandene Fallback.*
+
+### W-26 Schichten — die Frage war falsch gestellt
+
+```text
+opakeUQuelle($def) kennt DREI Wege, und keiner davon sind Schichten:
+  1. $def['u_wert'] > 0            -> Strategie A
+  2. $def['konstruktion_id']       -> Konstruktion::u_wert_berechnet, Strategie A
+  3. sonst                         -> Strategie C UND u_wert_datenlage 'fehlt'
+     mit dem Kommentar: „kein erfundener U-Wert; … die Belastbarkeit ehrlich
+     herabstufen statt still 0-Transmission zu rechnen" (Operanden-Gate U-a)
+```
+
+> ***Die Heizlast liest keine rohen Schichten.*** *Sie will einen `u_wert` oder eine
+> `konstruktion_id`; der Weg über Schichten läuft über die Tabelle `konstruktionen`, wo
+> `u_wert_berechnet` gecacht wird. **Ein Feld `RoofNode.schichten` in der Insel würde der Heizlast
+> nicht helfen.** Die nützliche Frage wäre eine andere: *wie kommt eine Konstruktion an ein Bauteil?*
+> — und die stellt sich erst, wenn die Bauteile überhaupt entstehen (W-24).*
+
+### Was das für dich übriglässt
+
+```text
+W-28  Rinnenbemessung  -> EIN WORT: vertagen. Haengt an nichts, blockiert nichts.
+W-24  Boden/Decke      -> EIN BAU, ohne Schema und ohne Gate. Kann ich schneiden.
+W-26  Schichten        -> ERLEDIGT als Frage. Wird zur Folgefrage von W-24.
+```
+
+> ***Und die Grenze dieser Messung, damit sie nicht mehr behauptet als sie zeigt:*** *ich habe die
+> **Kette** gemessen und die tragenden Stellen geöffnet — **nicht** nachgerechnet, wie stark die
+> Heizlast ohne Boden- und Deckenbauteil danebenliegt. **Dass sie zu niedrig ausfällt, folgt aus der
+> Bauteil-Liste, nicht aus einem Rechenlauf.** Wenn du die Zahl willst, ist das ein eigener Messgang.*
 
 ## 16 · NEU am 13.08.: W-24 ist kein Werkzeug-Problem. Der Code wartet an DREI Stellen auf deine Entscheidung
 
