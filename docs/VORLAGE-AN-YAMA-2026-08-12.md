@@ -61,8 +61,23 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 > laufende claude-Prozesse 20
 > ```
 >
-> **Es ist also nichts blockiert, und Instanzen laufen.** *Warum der Generator trotzdem schweigt, kann
-> ich von hier aus nicht sagen — und ich rate es nicht.*
+> ***Auch die naheliegende Erklärung trägt nicht — er arbeitet nicht woanders:***
+>
+> ```text
+> Worktrees                12 vorhanden
+> frischer Zweig           NUR auto/hausplaner-integration (vor Minuten)
+>                          jeder andere: 3 Tage bis 3 Wochen alt
+> Commits ausserhalb
+> meines Zweigs, 7 h       KEINE
+> ```
+>
+> *Zwei Scratchpad-Worktrees (`ps-a31`, `ps-a31e`) stehen auf `8275ddea` und `c3d2b527` — das sind die
+> **A-31-Fangproben** des Generators von vor sieben Stunden. **Sie sind nicht aufgeräumt worden**; das
+> ist ein kleiner Rest und nicht meine Rolle, ich nenne ihn nur.*
+>
+> **Es ist also nichts blockiert, Instanzen laufen, und er arbeitet auch nicht auf einem anderen Zweig.**
+> *Warum der Generator trotzdem schweigt, kann ich von hier aus nicht sagen — **drei Erklärungen geprüft,
+> alle drei widerlegt.** Ich rate die vierte nicht.*
 >
 > **Starten kann ich ihn nicht** — *das ist eine andere Instanz und nicht meine Rolle. Deshalb steht es
 > hier statt in einem Auftrag.*
