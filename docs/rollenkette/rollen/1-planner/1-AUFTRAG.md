@@ -309,6 +309,45 @@ W-37-3  Zeilenzahlen      ZWEI Muster (Register gegen wc -l, alle sechs)
 > den Fehler zweimal gemacht, eine Stunde nachdem ich die Lehre aus W-36 ins Blatt geschrieben hatte.
 > Deshalb steht hier ein SCHRITT und keine Mahnung.*
 
+**VIERTER SCHRITT, ergänzt 13.08. nach Cluster 3: geöffnet werden muss die Stelle, auf die sich der
+TRAGENDE SCHLUSS stützt — und „abgeschnitten gelesen" ist nicht gelesen.**
+
+*Ich hatte an dem Tag mehrere Stellen geöffnet und Schritt 1 damit formal erfüllt. Nur die eine nicht,
+an der alles hing.*
+
+```text
+DER FALL: die werkzeugLandkarte begruendet je Werkzeug, was fehlt. Ich habe die
+Begruendungen mit `cut -c1-158` gelesen und daraus geschlossen, drei Werkzeuge
+seien blosse ANSCHLUSSARBEIT, weil die Geometrie „bereits in editierGeometrie"
+liege. Beim Oeffnen:
+  versetzteWand (editierGeometrie.ts:20)  verschiebt BEIDE Endpunkte um denselben
+                                          Vektor = Translation. Ein Parallel-
+                                          versatz braucht die Normale. Andere
+                                          Rechnung. -> Stuetze weg.
+  Geradenschnitt als Funktion             existiert nicht. gehrungsEcken
+                                          (wallGeometry.ts:110, nicht exportiert)
+                                          loest den Fall mit GEMEINSAMEM Scheitel
+                                          ueber die Winkelhalbierende; beim
+                                          Trimmen beruehren sich die Waende
+                                          gerade NICHT. -> Stuetze weg.
+DIE FOLGE: eine falsche Einordnung im Fahrplan UND eine falsche Zusage an Yama
+(„laeuft ohne dich, sofort"). Beides gezogen, bevor gebaut wurde.
+```
+
+**Die drei Handgriffe, die daraus folgen:**
+
+1. **Kein `cut`/`head` auf einer Zeile, die zum Beleg wird.** *Wer eine Begründung als Stütze
+   benutzt, liest sie ganz. Abschneiden ist ein Werkzeug zum Suchen, nicht zum Belegen.*
+2. **Eine Selbstauskunft des Codes ist kein Beleg, solange die darin GENANNTE Funktion nicht offen
+   war.** *Register, Landkarten, Doc-Kommentare sind Hinweise mit Fundstelle — H-6, Wort ≠ Beleg. Sie
+   sind oft richtig; hier war es sogar die Landkarte, die recht hatte, und ich lag daneben.*
+3. **Beim Zitieren eines EIGENEN Blattes die Stelle aufmachen.** *Der Kern des Fehlers war, dass ich
+   meine W-18-Notiz „F-004 als Gehrungsdetail" als „F-004 ist gebaut" gelesen habe. Das Blatt sagt in
+   `W-18-1:128` wörtlich das Gegenteil, und drei weitere Stellen bestätigen es — `REGISTER.md:35`
+   streicht die Formel sogar durch. **Der Bestand war einstimmig richtig; falsch war nur meine
+   Erinnerung an ihn.** Deshalb gilt die DAUERregel „Postenlisten nur aus frischer Messung" auch für
+   Zitate aus eigenen Blättern.*
+
 **DRITTER SCHRITT, ergänzt 12.08. nach dem dritten Vollständigkeitsfund: bevor der Scope-Block
 geschrieben wird, werden die EXPORTE der Datei gezählt — nicht die, die ich beschreibe.**
 
