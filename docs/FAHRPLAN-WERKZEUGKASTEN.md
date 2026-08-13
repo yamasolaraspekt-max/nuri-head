@@ -230,6 +230,49 @@ Grundlage vorhanden: F-024 Azimut ist als `azimutDerNormalen` gebaut.
 **Berührt Phase 1.4 (wberechnung-Transplantat).** Wandert wberechnung nach ticket, wandert die
 Zuständigkeit mit — dann ist W-19 **immer noch keine Insel-Zeile**, sondern eine Fachmodul-Zeile.
 
+#### ⚠ BEGRÜNDUNG BERICHTIGT — Yama hat den Blick in wberechnung erlaubt, und er kippt meine Prämisse
+
+**Ich hatte W-19 einer Rechnung zugewiesen, die es dort nicht gibt.** Der Satz *„gehört zu
+wberechnung"* war eine **Annahme über eine fremde App, die ich nicht gemessen hatte** — genau der
+Fehler, vor dem H-6 warnt, nur eine App weiter. Yamas Erlaubnis kam zwanzig Minuten nach meiner
+Entscheidung; gemessen in `/Users/yamanuri/Herd/wberechnung`, **nur lesend** (Mehr-App-Regel: Lesen
+frei, Schreiben nur in der Heimat-App):
+
+**`verschattung|shading` trifft im ganzen Repo genau zweimal — beide in `INVENTUR_BERICHT.md`, und
+dort steht die Sache als ❌ GEFÜHRT:** *„Solare Gewinne / Verschattung / Orientierungsfaktoren in
+der Heizlast"* (`:76` und `:218`). **wberechnung rechnet Verschattung also selbst nicht und weiß
+das von sich.** Meine Zuweisung wäre ins Leere gegangen.
+
+**Was dort stattdessen steht, ist besser als jede eigene Rechnung — zwei fertige Anschlüsse an
+externe Referenzen**, `app/Http/Controllers/PvgisController.php` (202 Z.):
+
+| Quelle | Aufruf | liefert |
+|---|---|---|
+| **PVGIS** (EU-Referenz) | `:41` `re.jrc.ec.europa.eu/api/v5_2/PVcalc` | Ertrag aus `angle` (Neigung), `aspect` (Azimut −180…180), `loss` |
+| **Google Solar** | `:103` `solar.googleapis.com/v1/buildingInsights:findClosest` | je Dachsegment `azimuth_deg`, `pitch_deg`, `area_m2`, **`yearly_kwh`**, dazu `sunshine_hours` |
+
+**Der tragende Punkt: `yearlyEnergyDcKwh` je Segment ist bereits verschattungsbereinigt** — Google
+rechnet gegen das 3D-Modell der realen Umgebung (Nachbarbebauung, Bäume). **Eine selbstgebaute
+Verschattungsrechnung wäre damit eine dritte, schlechtere Wahrheit** neben PVGIS und Google Solar.
+
+**Eine Verwechslung, die naheliegend gewesen wäre und die ich ausdrücklich ausschließe:** `loss`
+(Default 14) ist **kein** Verschattungswert, sondern **pauschaler Systemverlust**. Wer ihn als
+Verschattung liest, hat eine Zahl ohne Gegenstand.
+
+**Die Entscheidung bleibt, die Begründung wird schärfer:** W-19 ist keine Bauzeile — **nicht weil
+eine andere App es rechnet, sondern weil es niemand rechnet und auch niemand soll. Es wird
+eingekauft.** Die Insel liefert dabei genau das, was die Schnittstellen als Eingang verlangen:
+**Azimut und Neigung** — F-024 ist als `azimutDerNormalen` gebaut, `neigungGrad` steht am
+`RoofNode`. **Die Naht ist damit vollständig benannt:** Insel → Geometrie · PVGIS/Google Solar →
+Ertrag und Verlust · `fachFlaechen.ts:358` → Anzeige *Verschattungsverlust %*.
+
+**⚠ Und ein Konflikt, der dabei aufgefallen ist und den Yama kennen muss:** **Google Solar liefert
+die Dachsegmente selbst** (aus Luftbild, mit eigenem `azimuth_deg`/`pitch_deg`/`area_m2`) — und die
+Insel modelliert dasselbe Dach. **Das sind zwei Quellen für dieselbe Geometrie.** Wer beides
+nebeneinander benutzt, ohne zu bestimmen, welche führt, baut die zweite Wahrheit an genau der
+Stelle, an der W-19 sie vermeiden sollte. **Das ist keine Entscheidung für heute** — aber sie
+gehört auf den Tisch, bevor jemand die Solar-API an die Insel hängt.
+
 ### W-32 Giebelwand-Bindung → **Ableitung statt Feld. Und der Umfang ist größer, als ich gestern sagte.**
 
 **Meine gestrige Einordnung („ein Feld oder eine Ableitung, Schema-nah") war zu klein — die
