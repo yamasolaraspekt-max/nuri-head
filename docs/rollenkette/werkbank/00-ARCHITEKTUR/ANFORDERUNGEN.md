@@ -87,6 +87,49 @@ Bestandsdokumente müssen nach jeder Schemaänderung nachweislich noch ladbar se
 
 ---
 
+### A7 · Wie werden Werkzeuge mit ZWEI Objekten bedient?
+
+**Entscheidung: über die vorhandene Mehrfachauswahl — alle vorgewählten Objekte sind die
+Nebenrolle, das ZULETZT angeklickte ist die Hauptrolle. Parameter kommen aus dem
+Eigenschaften-Panel. Kein eigener Dialog.**
+
+*Von Yama bestätigt am 13.08.2026, vorgelegt vom Planner nach den Messungen M-1 und M-2.*
+
+Betrifft **acht** Werkzeuge, die zwei Objekte in verschiedenen Rollen brauchen (trimmen,
+verlängern, ausrichten, verschneiden …). Bis hierher galten sie als *nicht baubar, weil ein
+Bedienmuster fehlt*. **Das Muster fehlte nicht — es war nur nie von einem Werkzeug benutzt
+worden.** Vier Belege, je an der tragenden Stelle geöffnet:
+
+- **Die Auswahl ist eine geordnete Liste, kein Set** — `store/hausplanerStore.ts:30`
+  `selectedNodeIds: string[]`. Mit Modifikator wird **angehängt**, die Klickreihenfolge bleibt
+  erhalten (`app/tools/auswahlModus.ts`, Fall `add`), und `primaerId` ist der **zuletzt**
+  geklickte.
+- **Die Regel ist im Code bereits begründet**, wörtlich in `auswahlModus.ts`: beim Abwählen
+  rückt *„das zuletzt verbliebene"* nach, denn *„die Auswahlreihenfolge bildet ab, woran der
+  Nutzer zuletzt gearbeitet hat"*.
+- **Es gibt genau EINE Auswahlstelle** — `app/HausplanerApp.tsx:815 waehleAn`, von zwei Stellen
+  aufgerufen; Modifikatortasten werden dort schon gelesen.
+- **Das Panel hängt an der Auswahl und kann Mehrfachauswahl bereits darstellen** — es führt
+  18 Zahlenfelder, bekommt die Auswahlwerte laut eigenem Dateikopf *„als Eigenschaften herein"*,
+  und importiert `mehrfachUebersicht` (Mehrfachauswahl-Übersicht, AUF-35a).
+
+**Das ist zugleich das CAD-Standardmuster** (Trimmen: Schnittkanten vorwählen, dann das zu
+kürzende Objekt klicken) — die Bedienung, die Anwender aus jedem anderen Planungswerkzeug kennen.
+
+*Konsequenz 1:* **Ein `ConfigWizard`-Dialog ist für diese acht Werkzeuge NICHT zu bauen.** Er
+bleibt die teuerste Variante und damit die letzte; wer ihn zieht, braucht dafür einen Grund,
+der über „zwei Objekte" hinausgeht.
+
+*Konsequenz 2 — die eine Zeile, die die Übersetzung festschreibt:*
+> **`selectionIds` (Werkzeugvertrag) und `selectedNodeIds` (Store) sind DIESELBE Größe.**
+> Der Vertrag nennt sie `selectionIds` — **21 Vorkommen, alle in `app/tools/werkzeugVertrag.ts`**;
+> der Store nennt sie `selectedNodeIds` — **20 Dateien**. Die Reihenfolge ist in beiden
+> bedeutungstragend, das **letzte** Element ist die Hauptrolle. **Wer ein Werkzeug anschließt,
+> übersetzt an der Vertragsgrenze und nirgends sonst.**
+
+*Konsequenz 3:* Ein Werkzeug, das **mehr** als Auswahl + Zahlenfelder braucht, ist damit **nicht**
+abgedeckt — das ist dann eine eigene Entscheidung und keine Auslegung dieser hier.
+
 ## B. Funktionale Anforderungen — was der Planer können muss
 
 | Nr | Anforderung | Werkzeug |
