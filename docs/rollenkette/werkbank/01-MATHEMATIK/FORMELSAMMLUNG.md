@@ -994,3 +994,28 @@ W2, sobald Yamas Firmenwerte vorliegen.**
 - **Offen und ausdrücklich NICHT entschieden:** die Restausgleich-Regel · und welches `n` gilt, wenn
   mehrere zulässig sind (die Praxis wählt bei geringer Neigung das kleinere Lattmaß — **dort wirkt
   Yamas „abhängig von der Dachneigung" ein zweites Mal**, und die Quelle beziffert es nicht).
+
+---
+
+## Reihe `S-` — Sonnenstand, Einstrahlung, Verschattung → **eigenes Dokument**
+
+**Die Formeln stehen NICHT hier, sondern in
+[`SOLAR-REGELWERK.md`](SOLAR-REGELWERK.md)** — angelegt vom Planner am 13.08.2026 auf Yamas
+Auftrag, mit Netzrecherche und Leseerlaubnis in `wberechnung`.
+
+**Warum getrennt und nicht eingereiht:** Die `F-`-Reihe führt **Planungsgeometrie** (Punkte,
+Strecken, Flächen, Körper). Sonnenstand und Einstrahlung sind ein **anderes Fachgebiet** mit
+eigener Normlage (DIN 5034-2, VDI 6007-3, DIN EN 17037, DIN EN 12831, DIN V 18599) und eigenen
+Datenquellen. Eine Vermischung hätte die F-Reihe unlesbar gemacht. **Der Grundsatz „eine Formel
+steht genau einmal" gilt weiter — hier steht deshalb kein einziger Formelrumpf, nur der Verweis.**
+
+**Inhalt in einem Satz:** `S-001…S-006` Sonnenstand (rechnen) · `S-010…S-011` Einstrahlungs-
+angebot (**messen, nicht rechnen**) · `S-020…S-022` Transposition auf die geneigte Fläche ·
+`S-030…S-032` Verschattungsgeometrie (**das kann nur die Insel**) · `S-040` elektrische Wirkung
+(**nicht-linear — 10 % Fläche sind nicht 10 % Verlust**) · `S-050…S-051` Zeit und Jahreszeiten ·
+`S-060…S-062` Anwendungsfall, darunter der Befund, dass **DIN EN 12831 solare Gewinne bewusst
+nicht ansetzt**.
+
+*Dieser Abschnitt steht am Dateiende und nicht bei den Gruppen — auf diese Datei zeigen
+**48 Zeilenverweise** `FORMELSAMMLUNG.md:<zeile>`, und ein Einschub weiter oben hätte jeden
+davon verschoben. Dieselbe Regel wie im `REGISTER.md`, und aus demselben Anlass (A-34).*
