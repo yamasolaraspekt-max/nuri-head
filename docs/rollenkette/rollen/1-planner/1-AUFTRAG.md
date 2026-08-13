@@ -245,6 +245,34 @@ ist**. Pfad, Größe, und bei Binärformaten das Werkzeug.
 Vor jeder Berichtigung **zählen**, nicht beheben. Eine Zahl steht in Überschrift,
 Fließtext, Tabelle und Kriterium.
 
+**HANDGRIFF, ergänzt 13.08. abends: `git mv` überlebt den Commit-Durchgang NICHT — die Löschung
+braucht einen eigenen Commit.**
+
+*Gemessen an A-33: ich habe die Blattdatei umbenannt (`git mv`, Historie erhalten) und mit dem neuen
+Pfad committet. Danach stand in **HEAD beides**, im Arbeitsbaum nur die neue Datei, und die Löschung
+lag uncommittet im Status.*
+
+```text
+URSACHE, aus der Tor-Ausgabe: das Tor gleicht den Standard-Index an HEAD an
+  („INDEX ANGEGLICHEN … der Arbeitsbaum ist unberuehrt") und stagt dann die
+  genannten Pfade einzeln. Der Rename-Stage von `git mv` ist dabei weg; die neue
+  Datei kommt als „NEU — ungetrackt, einzeln gestagt" durch, die Loeschung des
+  alten Pfads gar nicht.
+
+UND DER ERSTE VERSUCH WAR AUCH SCHON FALSCH: ich hatte BEIDE Pfade genannt.
+  F-14 hat abgewiesen — der alte Pfad hat nach dem Umbenennen keine
+  Schreibwirkung mehr. Die Abweisung war richtig.
+
+DER HANDGRIFF: nach einem `git mv` den NEUEN Pfad committen, danach die
+  Loeschung des alten in einem ZWEITEN Commit — und dazwischen nichts anderes
+  anfassen. Sonst geht die Loeschung beim naechsten Commit als BEIFANG mit,
+  und das ist genau der Fall, den Abschnitt 6 der Vorlage an Yama nennt.
+```
+
+> **Warum das hier steht und nicht im Kopf behalten wird:** *zwei Blätter mit derselben Kennung sind
+> eine Dublette an der Statuswahrheit — dieselbe Klasse wie §16. **Wer es nicht bemerkt, hat den
+> Auftrag doppelt im Verzeichnis**, und die nächste Rolle liest den falschen.*
+
 **HANDGRIFF, ergänzt 13.08. nach zwei Ausfällen: Tafelzeile und Datensatz-Block entstehen im
 SELBEN Schreibvorgang — nie nacheinander.**
 
