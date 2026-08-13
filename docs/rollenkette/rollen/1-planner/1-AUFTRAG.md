@@ -245,6 +245,40 @@ ist**. Pfad, Größe, und bei Binärformaten das Werkzeug.
 Vor jeder Berichtigung **zählen**, nicht beheben. Eine Zahl steht in Überschrift,
 Fließtext, Tabelle und Kriterium.
 
+**HANDGRIFF, ergänzt 13.08. nachts: ein wartendes KRITERIUM kann von einem ANDEREN Auftrag überholt
+werden. Wer zwei Aufträge zum selben Gegenstand schneidet, zieht den wartenden nach.**
+
+*Gemessen an A-29 und A-32, und der Fehler ist meiner: **A-29-1 verlangt wörtlich**, die berichtigte
+Begründung solle sagen, dass „eine Rechnung, die aus Achse und Abstand d eine parallele Wand erzeugt,
+**fehlt**". **Als der Generator A-29 zog, fehlte sie nicht mehr** — er hatte sie eine Stunde vorher
+selbst gebaut (`parallelVersatz`, A-32, inzwischen `BETRIEBSBESTAETIGT`).*
+
+```text
+WAS BEINAHE PASSIERT WAERE, in seinen Worten: „Haette ich das Kriterium
+woertlich befolgt, haette ich eine NEUE falsche Aussage in genau die Datei
+geschrieben, die A-29 von einer falschen Aussage befreien soll."
+
+WARUM DAS SCHLIMMER IST ALS EIN VERALTETER TEXT: ein Befund wird gelesen, ein
+KRITERIUM wird BEFOLGT. Ein ueberholter Befund fuehrt in die Irre; ein
+ueberholtes Kriterium erzeugt den Fehler, den es verhindern sollte.
+
+DIE URSACHE IST DIE REIHENFOLGE, nicht die Sorgfalt: A-29 (13.08., Basis
+84c57085) und A-32 (spaeter) beruehren DENSELBEN Gegenstand — den
+Parallelversatz. A-29 lag als BEREIT und wartete, waehrend A-32 gebaut,
+abgenommen und freigegeben wurde. Ich habe A-29 nicht nachgezogen.
+```
+
+> ***Der Handgriff:*** *wer einen zweiten Auftrag zu einem Gegenstand schneidet, an dem schon einer
+> wartet, **notiert die Abhängigkeit in beiden** — und zieht den wartenden nach, sobald der andere
+> abgenommen ist. **Eine Zeile im Datensatz reicht:** „berührt A-32; wenn dessen Bau steht, ist
+> A-29-1 zu prüfen."*
+
+> ***Und was der Generator richtig gemacht hat, gehört dazu:*** *er ist **nach dem Zweck** gebaut, nicht
+> nach dem Buchstaben, hat **beide Lesarten in den Bericht** gelegt und die Entscheidung dem Evaluator
+> überlassen. **Er hat das Blatt nicht selbst geändert** — und ich ändere es jetzt auch nicht, solange
+> die Abnahme läuft: einem Prüfer mitten in der Prüfung den Boden zu verschieben ist derselbe Fehler
+> in der anderen Richtung.*
+
 **HANDGRIFF, ergänzt 13.08. nachts: „Ball zurück an X" in der COMMIT-BOTSCHAFT ist KEINE Übergabe.
 Der Ball wandert nur, wenn `ballbesitz:` es sagt — im Datensatz UND in der Tafelzeile.**
 
