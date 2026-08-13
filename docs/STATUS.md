@@ -1245,6 +1245,38 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## BUEHNENMESSUNG 13.08. nachts (Release-Pruefer) — 0/0/0, und geraeumt hat mein eigenes Grundtor
+
+```yaml
+gemessen: "ticket_testing, nur lesend, ueber Laravels Konfiguration mit Vorpruefung
+  getDatabaseName() === 'ticket_testing' VOR der ersten Abfrage — die Datenbank wurde benannt und
+  nicht angenommen. users 0 · hausplaner_documents 0 · plan_uploads 0."
+vergleich: "Der Planner hat am 13.08. um 10:39 gemessen: 2 Nutzer, 1 Dokument. Dazwischen liegt
+  mein php artisan test im Grundtor fuer A-31/A-32, unmittelbar vor 3661cd49 (20:59)."
+mein_anteil: "Ich habe geraeumt. Das Grundtor bei Insel-Code verlangt die PHP-Suite, 70 von 137
+  Testdateien tragen RefreshDatabase — vermeiden konnte ich es nicht, verschweigen schon.
+  DRITTER belegter Durchlauf desselben Musters an einem Tag, und diesmal war die raeumende Rolle
+  der Release-Pruefer im selben Arbeitsgang, in dem er ein Grundtor gefahren hat."
+was_sich_dadurch_aendert: "Abschnitt 17 der Vorlage sagte 'der naechste Suite-Lauf raeumt beides
+  wieder weg' — im Futur. Er hat es getan, zwei Stunden nach der Messung. Die naechste
+  Browserabnahme fiele heute aus. Die Frage steht damit schaerfer, nicht anders."
+
+dritter_weg_vorgelegt_nicht_entschieden: >
+  Die Vorlage stellt zwei Wege gegenueber, Seed oder nichts. Ein dritter beruehrt Yamas
+  Schutzgrenze nicht, weil er bei Suite-Laeufen NICHTS tut: das Pruefskript stellt seine eigene
+  Vorbedingung her, idempotent, nur wenn es laeuft, nur gegen ticket_testing.
+  Gemessen, warum das heute nicht schon gilt: beide Browserskripte saeen NULL Mal. Sie melden
+  sich an (w052-browserabnahme.mjs:59-61) und pruefen, ob die URL /login verlassen hat (:63).
+  Fehlt der Nutzer, scheitert Schritt "Anmeldung" und das Skript endet mit Exit 1 — korrekt
+  gemeldet, aber als ENV-Blocker statt als Befund. Zaehler gegengeprobt: eine eingeschleuste
+  db:seed-Zeile wird gefunden, die 0 ist also ein Ergebnis.
+  ICH ENTSCHEIDE DAS NICHT. Ein Seed schreibt in eine Datenbank, und Datenbankentscheidungen
+  werden nach CLAUDE.md nicht still automatisiert — daran aendert Yamas Vertretungsanweisung
+  nichts, weil sie mir Fragen uebertraegt und keine Schutzgrenzen aufhebt. Weg C ist ausserdem
+  Code und damit Generator-Arbeit. Ich lege ihn daneben, weil die Vorlage ihn nicht nannte.
+ballbesitz: yama
+```
+
 ## VERTRETUNGSENTSCHEID `versatz` (Release-Pruefer in Yamas Namen, 13.08.) — ERZEUGEND
 
 ```yaml

@@ -24,7 +24,7 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 
 | | Posten | Was du entscheidest | Warum es nicht ohne dich geht |
 |---|---|---|---|
-| **17** | **Prüfbühne ohne Boden** | Dauerhafter Seed mit Prüfnutzer und Prüfobjekt? | Prüfinfrastruktur; **drei von vier Befunden verschwinden auf einmal** |
+| **17** | **Prüfbühne ohne Boden** | Dauerhafter Seed mit Prüfnutzer und Prüfobjekt? | Prüfinfrastruktur; **drei von vier Befunden verschwinden auf einmal** · **13.08. nachts frisch gemessen: 0/0/0 — geräumt vom Release-Prüfer-Grundtor selbst. Dritter Weg C (Skript sät idempotent) in Abschnitt 17 daneben gelegt.** |
 | **16** | **W-24 Boden/Erdkontakt** | Woran erkennt das Modell Erdreich? *(Empfehlung: am Geschoss)* | Fachentscheidung mit **Rechenwirkung**, berührt das wberechnung-Transplantat |
 | **15** | **W-26 Dachschichten** | Darf `RoofNode` ein Feld `schichten` bekommen? | **Schema**-Entscheidung; das Muster steht schon zweimal |
 | **15** | **W-28 Entwässerung** | Rinnenbemessung — Operanden oder vertagen? *(Empfehlung: vertagen)* | **Normgröße** (DIN 1986-100) |
@@ -1475,6 +1475,52 @@ gepflegt werden will, und bei falschem Schnitt entsteht eine **zweite Wahrheit**
 > **Prüfinfrastruktur** — und sie berührt deine Schutzgrenze „Tests und Test-Seeds laufen nur gegen
 > eindeutig benannte Testdatenbanken". **Ein Seed, der bei jedem Lauf schreibt, ist genau die Art
 > Automatik, die nicht still eingeführt wird.***
+
+### ⚠ Nachgemessen vom Release-Prüfer, 13.08. nachts — die Bühne ist WIEDER leer, und diesmal war ich es
+
+*Die Zahlen oben (2 Nutzer, 1 Dokument) stammen vom 13.08. um 10:39. **Frisch gemessen, nur lesend,
+über Laravels eigene Konfiguration mit ausdrücklicher Prüfung `getDatabaseName() === 'ticket_testing'`
+vor der ersten Abfrage:***
+
+```text
+ticket_testing        users 0 · hausplaner_documents 0 · plan_uploads 0
+```
+
+> ***Geräumt hat es mein eigener `php artisan test`-Lauf*** *im Grundtor für A-31/A-32, unmittelbar vor
+> Commit `3661cd49` (13.08. 20:59). **Das ist der dritte belegte Durchlauf desselben Musters an einem
+> Tag** — und diesmal war die räumende Rolle der Release-Prüfer, im selben Arbeitsgang, in dem er ein
+> Grundtor gefahren hat. Ich konnte es nicht vermeiden: das Grundtor bei Insel-Code verlangt die
+> PHP-Suite, und 70 von 137 Testdateien tragen `RefreshDatabase`.*
+
+**Damit steht die Frage schärfer als in der Fassung oben.** *Dort heißt es „der nächste Suite-Lauf räumt
+beides wieder weg" — im Futur. **Er hat es getan**, zwei Stunden nach der Messung, und die nächste
+Browserabnahme fiele heute aus.*
+
+### Ein dritter Weg, den ich vorlege statt ihn zu entscheiden
+
+*Die Fassung oben stellt zwei Möglichkeiten gegenüber: Seed ja oder nein. **Es gibt einen dritten, und
+er berührt deine Schutzgrenze nicht** — weil er nichts bei jedem Suite-Lauf tut:*
+
+```text
+Weg A  globaler Seed        laeuft bei jedem Lauf, ist Automatik an der DB
+                            -> genau das, was nicht still eingefuehrt wird
+Weg B  nichts tun           jede Rolle saet sich ihren Nutzer von Hand
+                            -> funktioniert, kostet jedes Mal denselben Handgriff
+Weg C  das Pruefskript      das Browserskript stellt seine eigene Vorbedingung her,
+       saet selbst          idempotent, NUR wenn es laeuft, NUR gegen ticket_testing
+                            -> keine Automatik bei Suite-Laeufen, kein zweiter SSOT
+```
+
+**Gemessen, warum C heute nicht schon gilt:** *beide Skripte säen **null** Mal —
+`scripts/a24-browserabnahme.mjs` und `scripts/w052-browserabnahme.mjs` melden sich nur an
+(`:59-61`) und prüfen, ob die URL `/login` verlassen hat (`:63`). Fehlt der Nutzer, scheitert Schritt
+„Anmeldung" und das Skript endet mit Exit 1 — **korrekt gemeldet, aber als ENV-Blocker statt als
+Befund**. Zähler gegengeprobt: eine eingeschleuste `db:seed`-Zeile findet mein Muster.*
+
+> ***Ich entscheide das nicht.*** *Weg C ist Code und damit Generator-Arbeit; ob er dir lieber ist als
+> A, ist deine Entscheidung über die Prüfinfrastruktur. **Ich lege ihn nur daneben, weil die Vorlage
+> ihn nicht nannte und er deine Schutzgrenze „Test-Seeds nur gegen benannte Testdatenbanken" einhält,
+> ohne etwas zu automatisieren.***
 
 **Was in der Zwischenzeit gilt, damit nichts steht:** *wer eine Browserabnahme braucht, sät sich seinen
 Nutzer selbst und belegt es mit §15 (vorher/nachher). **Das funktioniert** — der Generator hat es heute
