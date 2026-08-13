@@ -34,10 +34,34 @@ FAHRPLAN-KLASSE-A.md:148   "NICHT IN A   W-09 (Treppe, 698 Z) — war nie in den
 
 ```text
 MENGE     alle Zeilen '^| W-[0-9]+ |' in docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md
+
+STAND 10.08. (diese Zaehlung, historisch — NICHT loeschen, sie datiert den Fortschritt):
 SUMME     42 Zeilen
   BESCHRIEBEN      7   W-01 W-02 W-04 W-05 W-11 W-21 W-22
   6/7 BLAETTER     1   W-07
   LEER            34
+
+STAND 13.08., HEUTE NACHGEMESSEN (Reifegrad-Spalte je Zeile ausgezaehlt):
+SUMME     43 Zeilen
+  BESCHRIEBEN     21
+  LEER            19
+  ENTWORFEN        2
+  GEBAUT           1
+
+  -> BESCHRIEBEN von 7 auf 21, LEER von 34 auf 19. In drei Tagen.
+  -> Und das ist der Grund, warum diese Zaehlung ein Datum braucht: wer mit der
+     Zahl 34 plant, haelt die Restarbeit fuer fast doppelt so gross wie sie ist.
+     Yamas DAUERregel „Postenlisten nur aus frischer Messung" gilt auch fuer die
+     Zaehlungen in diesem Dokument — die alte Zahl war am 10.08. richtig.
+
+  ACHTUNG BEI DER LESART VON 'LEER', und das hat mich am 13.08. selbst erwischt:
+  die Spalte heisst REIFEGRAD und meint die SIEBEN BLAETTER, nicht den Code.
+  REGISTER.md:6 definiert LEER als „nur Ordner", und :87 sagt es woertlich:
+  „LEER heisst hier kein Blatt gefuellt, nicht kein Code vorhanden."
+  Die Gegenprobe steht in derselben Tabelle: mehrere LEER-Zeilen tragen im
+  Nachbarfeld „stark gebaut" (W-29) oder nennen Module mit Zeilenzahl (W-37:
+  app/EngineFlaeche.tsx, 196 Z.). Eine Spalte, die LEER sagt und daneben
+  „stark gebaut", kann nicht den Code meinen.
 ```
 
 ## Klassifikation — NEU, mit drei Korrekturen an der Fassung vom 10.08.
