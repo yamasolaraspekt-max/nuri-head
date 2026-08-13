@@ -1245,6 +1245,41 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## NACHMESSUNG zur Identitaetsfrage (Release-Pruefer, 13.08. nachts) — es bleiben ZWEI Faelle, kein dritter
+
+```yaml
+anlass: "Vorlage Abschnitt 14 legt Yama zwei Faelle zusammen vor — ZoneNode (materialId an einem
+  abgeleiteten Knoten) und ErkannterRaum (Name an einem erkannten Raum) — mit dem Satz 'zwei
+  Faelle, eine Entscheidung'. Ob es ein dritter ist, ist eine ABLESUNG und keine Entscheidung.
+  Also gemessen, statt die Zahl stehenzulassen."
+
+ergebnis: "ZWEI bleibt richtig. 55 key-Attribute im Inselcode, davon 10 index-basiert. Die acht
+  ausser den beiden bekannten sind Zeichenelemente OHNE Identitaet: HausplanerApp.tsx:1287-1297
+  sechsmal Bemassungslinien, -pfeile und -texte; Buehne.tsx:369 die Stufen einer Treppe;
+  Buehne.tsx:432 die Griffpunkte einer Auswahl. Alle drei Stellen einzeln geoeffnet und im
+  Zusammenhang gelesen, nicht abgeschnitten. Keines dieser Dinge traegt je einen Namen."
+
+schaerfung_die_dabei_abfiel: "Buehne.tsx:161 sagt gewaehlterRaum === i — nicht nur ein KUENFTIGER
+  Name haengt am Index, die HEUTE GEBAUTE Auswahl tut es bereits. W-05/2 hat das bewusst so
+  gebaut und im Blatt begruendet (fluechtige Auswahl, kein Feld am Szenendokument, keine
+  Migration). Der Befund ist damit kein Widerspruch zu W-05/2, sondern seine Begruendung —
+  aber er zeigt, dass die Entscheidung nicht auf ein leeres Feld trifft, sondern auf gebauten
+  Code, der heute schon die Position als Identitaet benutzt."
+
+nebenbefund_driftende_zeilennummer: "app/raumAuswahl.ts:8 nennt Buehne.tsx:147 als Fundstelle
+  des key-Attributs. Heute steht es auf :162 — die Datei ist gewachsen. Auf :147 steht jetzt
+  eine Mittelpunktrechnung. Genau die Klasse, die der Planner heute Nacht als Schritt 6 seiner
+  Pruefung 7 aufgenommen hat: Anker statt Zeilennummer, eine Nummer driftet lautlos. Ich melde
+  sie und fasse sie nicht an — es ist ein Kommentar in fremdem Produktivcode."
+
+mein_werkzeugfehler_in_dieser_messung: "Mein erster key-Zaehler fand 2 index-basierte Stellen.
+  Die Gegenprobe an einer erfundenen Zeile key={`raum${i}`} fand sie NICHT — mein Regex brach am
+  schliessenden } von ${i} ab und verlor genau die Form, um die es geht. Mit Klammerzaehlung
+  statt Regex-Ende: 10 statt 2. Haette ich die Gegenprobe weggelassen, haette ich gemeldet, der
+  Fall des Planners existiere gar nicht."
+ballbesitz: yama
+```
+
 ## BUEHNENMESSUNG 13.08. nachts (Release-Pruefer) — 0/0/0, und geraeumt hat mein eigenes Grundtor
 
 ```yaml
