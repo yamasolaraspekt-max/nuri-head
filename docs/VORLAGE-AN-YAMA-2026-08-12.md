@@ -33,8 +33,9 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 
 > ### ⚠ Betriebsmeldung, 13.08. nachts — der Vorrat wird nicht abgearbeitet
 >
-> **Elf Aufträge stehen `BEREIT` beim Generator, und der Generator ist seit sieben Stunden still.**
-> *Gemessen an den Commits, je Rolle:*
+> **Der Vorrat wächst, und er wird nicht abgearbeitet.** *Beim Schreiben dieser Meldung standen **elf**
+> Aufträge `BEREIT`; eine Viertelstunde später sind es **dreizehn** (A-30 und A-33 haben ihre DoR
+> bekommen). **Der Generator ist seit sieben Stunden still.** Gemessen an den Commits, je Rolle:*
 >
 > | Rolle | letzte Meldung |
 > |---|---|
@@ -50,7 +51,20 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 > **Elf Blätter liegen fertig geschnitten da, darunter alle zehn B-Zeilen.** Beim Evaluator ist die
 > Stille erklärbar; beim Generator nicht.*
 >
-> **Ich kann ihn nicht starten** — *das ist eine andere Instanz und nicht meine Rolle. Deshalb steht es
+> ***Und es liegt nicht am Repo — das habe ich geprüft, weil Repo-Aufsicht meine Rolle ist:***
+>
+> ```text
+> .git/index.lock          existiert NICHT (das eine Lock liegt in
+>                          .git/_locks_beiseite/ — von A-02 korrekt beiseitegelegt)
+> Arbeitsbaum              sauber, kein uncommittetes Beifang-Risiko
+> Tor-Index-Halde in /tmp  0 Dateien
+> laufende claude-Prozesse 20
+> ```
+>
+> **Es ist also nichts blockiert, und Instanzen laufen.** *Warum der Generator trotzdem schweigt, kann
+> ich von hier aus nicht sagen — und ich rate es nicht.*
+>
+> **Starten kann ich ihn nicht** — *das ist eine andere Instanz und nicht meine Rolle. Deshalb steht es
 > hier statt in einem Auftrag.*
 
 **Zwei Posten, die NACH der B-Session kommen** — *sie stehen hier, damit du sie kennst, nicht damit du
