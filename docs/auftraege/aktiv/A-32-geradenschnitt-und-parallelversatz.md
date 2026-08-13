@@ -26,7 +26,8 @@ anlass: "Cluster 3 des Fahrplans (trimmen, verlaengern, versatz) haengt daran, u
          eingeordnet und musste das zurueckziehen (485004c4). Nach A-31 (Klammer im Store) ist DIES
          der zweite und letzte Baustein — und er ist von A-31 UNABHAENGIG: trimmen aendert EINEN
          Knoten und braucht keine Klammer."
-grundlage: "FORMELSAMMLUNG.md:75-87 (F-004, vollstaendig spezifiziert) und :132-144 (F-020, die
+grundlage: "FORMELSAMMLUNG.md:75-87 (F-004 — Zaehlerzeile am 13.08. berichtigt, siehe Abschnitt 1)
+            und :132-144 (F-020, die
             Kantenversatz-Formel) und :4 ('Eine Formel steht genau einmal') ·
             geometry/wallGeometry.ts:84 (EPS = 1e-6) und :110-152 (gehrungsEcken, loest den
             Sonderfall) · commands/applyCommand.ts:129 (die Normale, eingebettet) ·
@@ -40,7 +41,7 @@ FORMELSAMMLUNG.md:75-87, vollstaendig:
   ### F-004 · Schnittpunkt zweier Geraden
   - Zweck:   Wandachsen verschneiden, Ecke bilden
   - Eingabe: Gerade 1 durch A,B · Gerade 2 durch C,D
-  - Formel:  n = (Ax−Cx)(Dy−Cy) − (Ay−Cy)(Dx−Cx)
+  - Formel:  n = (Cx−Ax)(Dy−Cy) − (Cy−Ay)(Dx−Cx)      <- BERICHTIGT 13.08.
              m = (Bx−Ax)(Dy−Cy) − (By−Ay)(Dx−Cx)
              t = n / m              (m ≠ 0)
              S = A + t·(B−A)
@@ -48,6 +49,25 @@ FORMELSAMMLUNG.md:75-87, vollstaendig:
   - Grenzfall: |m| < ε → parallel oder deckungsgleich, kein Schnittpunkt.
                „Das ist der haeufigste Absturzgrund in Wandverschneidungen.
                 Immer pruefen."
+
+DIE ZAEHLERZEILE WAR FALSCH — gefunden VOM GENERATOR beim Ziehen dieses
+Auftrags (5bf61e54), nicht von mir beim Schneiden:
+  alte Fassung   n = (Ax−Cx)(Dy−Cy) − (Ay−Cy)(Dx−Cx)   also (A−C) kreuz s
+  richtig        n = (Cx−Ax)(Dy−Cy) − (Cy−Ay)(Dx−Cx)   also (C−A) kreuz s
+  Sie liefert −t und damit einen Punkt auf der FALSCHEN SEITE von A;
+  S = A + t·(B−A) legt die Bedeutung von t eindeutig fest.
+NACHGERECHNET, vier Faelle, zwei unabhaengige Muster:
+  waagrecht x senkrecht  alt (−5,0)   richtig (5,0)    Soll (5,0)
+  kurz, versetzt         alt (−1,0)   richtig (1,0)    Soll (1,0)
+  zwei Diagonalen        alt (−2,−2)  richtig (2,2)    Soll (2,2)
+  schief ohne Symmetrie  alt (−2.625, 0.1875)  richtig (4.625, 3.8125)
+  -> t-Summe alt+richtig ist in JEDEM Fall exakt 0.000000000000
+  -> und die Probe OHNE Soll-Wert von Hand, beim schiefen Fall: liegt S auf
+     BEIDEN Geraden? alter Punkt auf A−B JA, auf C−D NEIN (Kreuzprodukt −58).
+     Der alte Punkt ist also KEIN Schnittpunkt.
+FORMELSAMMLUNG.md:80 ist berichtigt, mit der alten Fassung daneben und dem
+Beleg. Reichweite gemessen: die Formelzeile stand an ZWEI Stellen, hier und
+dort; in zehn weiteren Dokumenten wird F-004 nur GENANNT.
 
 GEBAUT IST SIE NICHT. Was existiert, loest einen ANDEREN Fall:
   geometry/wallGeometry.ts:110  gehrungsEcken(V, p, q, h)  — NICHT exportiert
@@ -57,9 +77,16 @@ GEBAUT IST SIE NICHT. Was existiert, loest einen ANDEREN Fall:
     die sich gerade NICHT beruehren.
 ```
 
-> **Das ist ein Bau nach Spezifikation, kein Neuentwurf.** *Formel, Ausgabe und Grenzfall stehen; die
-> Sammlung sagt sogar, wo später der Fehler sitzt. **Was fehlt, ist die Umsetzung** — und ohne sie
-> bleiben `trimmen` und `verlaengern` zu.*
+> **Das ist ein Bau nach Spezifikation — aber die Spezifikation musste erst berichtigt werden.** *Formel,
+> Ausgabe und Grenzfall standen da, und die Sammlung sagt sogar, wo später der Fehler sitzt. **Nur die
+> Zählerzeile selbst war falsch** (oben). **Was fehlt, ist die Umsetzung** — und ohne sie bleiben
+> `trimmen` und `verlaengern` zu.*
+
+> ***Und das ist die Lehre, die über diesen Auftrag hinausgeht:*** *die Formel stand seit ihrer Aufnahme
+> unangefochten da und wurde mehrfach geprüft — aber auf **Vorhandensein und Wortlaut**, nie auf
+> **Richtigkeit**. Auch ich habe sie beim Schneiden zitiert und nicht gerechnet. **Aufgefallen ist sie
+> erst, als jemand sie bauen sollte.** Eine Formel, die niemand rechnet, ist nicht geprüft, sondern nur
+> abgeschrieben.*
 
 ## 2 — Der Parallelversatz braucht KEINE neue Nummer: die Formel steht in F-020
 
@@ -180,7 +207,10 @@ A-32 IST NICHT
 ## 6 — Abnahmekriterien
 
 ```text
-A-32-1 (P1, TRAGEND) Der Schnittpunkt rechnet nach F-004 und der Grenzfall ist
+A-32-1 (P1, TRAGEND) Der Schnittpunkt rechnet nach F-004 IN DER BERICHTIGTEN
+       FASSUNG — n = (Cx−Ax)(Dy−Cy) − (Cy−Ay)(Dx−Cx). Die alte Zaehlerzeile
+       liefert −t; wer sie abschreibt, baut den gespiegelten Punkt. Und der
+       Grenzfall ist
        NORMALISIERT geprueft, nicht absolut. Der Nachweis ist ein Test, der ROT
        werden kann und den Unterschied ZEIGT: zwei Segmente von 100 mm und zwei
        von 10 000 mm mit DEMSELBEN Zwischenwinkel ergeben dasselbe Urteil

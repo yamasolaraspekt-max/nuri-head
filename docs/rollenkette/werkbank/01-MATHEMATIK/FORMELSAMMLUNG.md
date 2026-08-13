@@ -77,7 +77,7 @@
 - **Eingabe:** Gerade 1 durch A,B · Gerade 2 durch C,D
 - **Formel:**
   ```
-  n = (Ax−Cx)(Dy−Cy) − (Ay−Cy)(Dx−Cx)
+  n = (Cx−Ax)(Dy−Cy) − (Cy−Ay)(Dx−Cx)
   m = (Bx−Ax)(Dy−Cy) − (By−Ay)(Dx−Cx)
   t = n / m              (m ≠ 0)
   S = A + t·(B−A)
@@ -85,6 +85,41 @@
 - **Ausgabe:** Schnittpunkt S
 - **Grenzfall:** `|m| < ε` → **parallel oder deckungsgleich**, kein Schnittpunkt.
   Das ist der häufigste Absturzgrund in Wandverschneidungen. Immer prüfen.
+  Zur Schwelle: `m` ist ein Kreuzprodukt und hat die Einheit mm². Ein absoluter
+  Wert wäre **längenabhängig** — `m` durch das Produkt der Segmentlängen teilen
+  ergibt den Sinus des Zwischenwinkels, dimensionslos und vergleichbar (A-32).
+
+> **⚠ BERICHTIGT am 13.08.2026 — die Zählerzeile trug ein vertauschtes Vorzeichen.**
+>
+> **Alte Fassung:** `n = (Ax−Cx)(Dy−Cy) − (Ay−Cy)(Dx−Cx)` — also `(A−C) × s`.
+> **Richtig ist** `(C−A) × s`, weil `S = A + t·(B−A)` die Bedeutung von `t` eindeutig festlegt.
+> Die alte Fassung liefert `−t` und damit einen Punkt, der auf der **falschen Seite von A** liegt.
+>
+> **Gefunden vom Generator beim Ziehen von A-32** (`5bf61e54`) — er hat die Spezifikation vor dem
+> Bauen nachgerechnet, statt sie abzuschreiben. **Selbst nachgerechnet und bestätigt**, vier Fälle,
+> zwei unabhängige Muster:
+>
+> ```text
+> waagrecht × senkrecht   alt S=(−5, 0)      richtig S=(5, 0)      Soll (5,0)
+> kurz, versetzt          alt S=(−1, 0)      richtig S=(1, 0)      Soll (1,0)
+> zwei Diagonalen         alt S=(−2,−2)      richtig S=(2, 2)      Soll (2,2)
+> schief, ohne Symmetrie  alt S=(−2.625, 0.1875)  richtig S=(4.625, 3.8125)
+>   -> die t-Summe alt+richtig ist in JEDEM Fall exakt 0.000000000000
+>   -> UNABHAENGIGE PROBE beim schiefen Fall, ohne Soll-Wert von Hand:
+>      liegt S auf BEIDEN Geraden? Kreuzprodukt-Test
+>        alter Punkt:     auf A−B JA   ·  auf C−D NEIN (−58)
+>        richtiger Punkt: auf A−B JA   ·  auf C−D JA  (0)
+>      Der alte Punkt ist also KEIN Schnittpunkt.
+> ```
+>
+> ***Was daran lehrreich ist:*** *die Formel stand seit ihrer Aufnahme unangefochten da und wurde
+> mehrfach geprüft — aber auf **Vorhandensein und Wortlaut**, nie auf **Richtigkeit**. Der Fehler ist
+> aufgefallen, als jemand sie **bauen** sollte. **Eine Formel, die niemand rechnet, ist nicht geprüft,
+> sondern nur abgeschrieben.***
+>
+> *Reichweite gemessen: die Formelzeile stand an **zwei** Stellen — hier und im Auftragsblatt A-32,
+> das sie zitiert. Beide sind berichtigt. In zehn weiteren Dokumenten wird F-004 nur **genannt**, ohne
+> die Formel.*
 
 ---
 
