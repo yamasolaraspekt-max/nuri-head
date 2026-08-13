@@ -1,0 +1,40 @@
+// 1 TREFFER: klassische for-Schleife
+function a(ids: string[]) {
+  for (const id of ids) {
+    store.getState().executeCommand({ type: 'REMOVE_NODE', nodeId: id });
+  }
+}
+// 2 TREFFER: forEach mit Rumpfklammern
+function b(ids: string[]) {
+  ids.forEach((id) => {
+    const x = 1;
+    store.getState().executeCommand({ type: 'REMOVE_NODE', nodeId: id });
+  });
+}
+// 3 TREFFER: map mit KURZEM Rumpf, laeuft trotzdem je Element
+function c(ids: string[]) {
+  ids.map((id) => store.getState().executeCommand({ type: 'REMOVE_NODE', nodeId: id }));
+}
+// 4 TREFFER: while, mit Zwischenzuweisung wie die Falle des planners
+function d(ids: string[]) {
+  let i = 0;
+  while (i < ids.length) {
+    const g = versetzteWand(1, 2);
+    store.getState().executeCommand({ type: 'MOVE_NODE', nodeId: ids[i] });
+    i++;
+  }
+}
+// KEIN Treffer: Handler in einem Render-map
+function e(waende: any[]) {
+  return waende.map((w) => (
+    <Group key={w.id} onDragEnd={(ev) => { store.getState().executeCommand({ type: 'MOVE_NODE', nodeId: w.id }); }} />
+  ));
+}
+// KEIN Treffer: kurzer Handler ohne Rumpfklammern in einem Render-map
+function f(objs: any[]) {
+  return objs.map((o) => <input key={o.id} onChange={(ev) => store.getState().executeCommand({ type: 'UPDATE_NODE', nodeId: o.id })} />);
+}
+// KEIN Treffer: einzelner Aufruf ausserhalb jeder Schleife
+function g() {
+  store.getState().executeCommand({ type: 'ADD_ROOF', roof: null });
+}

@@ -22,6 +22,16 @@
  * Ohne zweites Argument meldet es die Fundstellen und endet mit 1, sobald es welche gibt.
  * MIT erwarteten Zeilennummern prüft es sich selbst: findet es genau diese, ist das Muster
  * belegt — das ist der Lauf am Stand VOR dem Bau (Pflichtprüfung 4).
+ *
+ * **Die Fangprobe liegt im Repo und ist jederzeit nachfahrbar** — vier Treffer, drei
+ * Nicht-Treffer, und sie deckt genau die Fälle ab, an denen die ersten drei Fassungen dieses
+ * Skripts gescheitert sind:
+ *
+ *   node scripts/a31-schleifenprobe.mjs \
+ *     resources/planner/hausplaner/__proben__/a31-schleifenprobe-fangprobe.txt 4,11,16,23
+ *
+ * *Die Datei trägt `.txt` und keine Endung, die der Testlauf oder `tsc` einsammelt — sie ist
+ * Prüfstoff für dieses Skript und kein Inselcode.*
  */
 import { readFileSync } from 'node:fs';
 
@@ -75,18 +85,36 @@ function entkerne(text) {
 
 const src = entkerne(roh);
 
-/** Ist der Text VOR dieser `{` ein Schleifenkopf? */
-function istSchleifenkopf(vorText) {
+/**
+ * Was ist dieser Block: `schleife`, `funktion` oder `sonst`?
+ *
+ * **Die Unterscheidung, an der meine erste Fassung gescheitert ist.** Sie fragte nur „steht
+ * irgendwo darüber eine Schleife" — und meldete damit in `Buehne.tsx` VIER und in
+ * `EigenschaftenPanel.tsx` ZWEI Stellen. *Alle sechs sind `onDragEnd`/`onChange`-Handler innerhalb
+ * eines Render-`map`.* **Ein Handler läuft pro Benutzer-Geste, nicht pro Schleifendurchlauf** — er
+ * löst EINEN Befehl aus und ist genau das, was A-31 herstellen will.
+ *
+ * Ein Funktionsrumpf **schirmt** die Schleifen über ihm ab: der Aufruf ist aufgeschoben, nicht
+ * wiederholt. **Ausnahme ist der Rückruf der Schleife selbst** (`.map(x => { … })`) — der läuft
+ * je Element und zählt als Schleife.
+ *
+ * *Eine Barriere, die zu oft warnt, wird weggeklickt.*
+ */
+/** Ein Pfeil, der UNMITTELBAR das Argument einer laufenden Sammlung ist. */
+const SAMMEL_RUECKRUF = /\.(forEach|map|flatMap|filter|reduce)\s*\(\s*(\([^()]*\)|[A-Za-z_$][\w$]*)\s*$/;
+
+function blockArt(vorText) {
   // Rückwärts bis zum Ende der vorigen Anweisung — mehr braucht die Frage nicht.
   const schnitt = Math.max(
     vorText.lastIndexOf(';'), vorText.lastIndexOf('{'), vorText.lastIndexOf('}'),
   );
   const kopf = vorText.slice(schnitt + 1);
-  if (/\b(for|while)\s*\(/.test(kopf)) return true;
-  // Rumpf einer Rückruffunktion, die über eine Sammlung läuft.
-  if (/=>\s*$/.test(kopf) && /\.(forEach|map|flatMap|filter|reduce)\s*\(/.test(kopf)) return true;
+  if (/\b(for|while)\s*\([^;]*\)\s*$/.test(kopf)) return 'schleife';
+  // Rückruf einer Sammlung: der Pfeil muss UNMITTELBAR das Argument des Aufrufs sein.
+  if (SAMMEL_RUECKRUF.test(kopf.replace(/=>\s*$/, ''))) return 'schleife';
+  if (/(=>|\bfunction\b[^()]*\([^()]*\))\s*$/.test(kopf)) return 'funktion';
 
-  return false;
+  return 'sonst';
 }
 
 const stapel = [];
@@ -97,12 +125,33 @@ for (let i = 0; i < src.length; i += 1) {
   const z = src[i];
   if (z === '\n') { zeile += 1; continue; }
   if (z === '{') {
-    stapel.push(istSchleifenkopf(src.slice(0, i)));
+    stapel.push({ art: blockArt(src.slice(0, i)), pos: i });
     continue;
   }
   if (z === '}') { stapel.pop(); continue; }
   if (src.startsWith('executeCommand(', i)) {
-    if (stapel.some(Boolean)) {
+    // Ein Pfeil OHNE Rumpfklammern wirft keinen Block auf den Stapel und ist für die Klammern
+    // allein unsichtbar — `ids.map((id) => …executeCommand(…))` genauso wie
+    // `onChange={(e) => …executeCommand(…)}`. Steht ein solcher Pfeil zwischen der innersten
+    // Klammer und dem Aufruf, ist er die INNERSTE Ebene und entscheidet allein:
+    // Sammlungs-Rückruf ⇒ läuft je Element; jeder andere ⇒ aufgeschobener Handler.
+    const zwischen = stapel.length ? src.slice(stapel[stapel.length - 1].pos + 1, i) : src.slice(0, i);
+    const seitAnweisung = zwischen.slice(zwischen.lastIndexOf(';') + 1);
+    const pfeil = seitAnweisung.lastIndexOf('=>');
+
+    let inSchleife;
+    if (pfeil !== -1) {
+      inSchleife = SAMMEL_RUECKRUF.test(seitAnweisung.slice(0, pfeil));
+    } else {
+      // Sonst entscheiden die Klammern: von innen nach aussen, und der erste Funktionsrumpf
+      // beendet die Frage — was dahinter liegt, wiederholt den Aufruf nicht.
+      inSchleife = false;
+      for (let k = stapel.length - 1; k >= 0; k -= 1) {
+        if (stapel[k].art === 'funktion') break;
+        if (stapel[k].art === 'schleife') { inSchleife = true; break; }
+      }
+    }
+    if (inSchleife) {
       treffer.push({ zeile, text: roh.split('\n')[zeile - 1].trim().slice(0, 96) });
     }
     i += 'executeCommand'.length;
