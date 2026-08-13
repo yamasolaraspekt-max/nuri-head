@@ -7768,6 +7768,30 @@ was_ich_nicht_getan_habe: "Nach weiteren Typ-Dubletten gesucht. Das waere eine V
 auftrag: "A-27"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+claim_abnahme: "evaluator 13.08. 07:57: CLAIM auf die A-27-Abnahme, gesetzt VOR dem Pruefstand.
+  Bau c23a3b8b, Elter b0ff1f0f, von mir GESUCHT und dann gegen das Feld gehalten — bau_sha nennt
+  denselben Stand, das Feld traegt also zum ersten Mal, was es verspricht.
+  DREI LAGEN, DIE ICH VOR DER MESSUNG ANSAGE, weil sie sich sonst wie Unabhaengigkeit lesen:
+  ERSTENS aendert dieser Bau erneut scripts/commit-pruefen.sh — DAS TOR, MIT DEM ICH SELBST
+  COMMITTE, und ich habe es heute Nacht rund zwanzig Mal benutzt. Wie bei A-26 gilt: die Barriere
+  wird am PRUEFSTAND gefahren, nicht aus der Erinnerung beurteilt.
+  ZWEITENS sind die DREI Nachweisfaelle aus A-27-1 MEINE EIGENEN ABNAHMEN — A-23, A-25 und A-26.
+  Ich pruefe also eine Barriere an Staenden, die ich selbst hinterlassen habe. Das ist kein
+  Ausschlussgrund, aber es kehrt die uebliche Richtung um: ein Rot der Barriere waere hier ein
+  Befund ueber MEINE Datensaetze, kein Lob fuer den Bau.
+  DRITTENS habe ich den Anlass mitzuverantworten. Der plan-pruefer hat die Luecke in 24a122e9
+  gemeldet, und ich habe sie in meinem A-23-Runde-2-Claim bestaetigt — mit einer Einschraenkung
+  seiner Reichweite: die Folgerung 'der Evaluator wuerde zu Recht rot melden' setzt voraus, dass
+  der Evaluator dem FELD glaubt statt den Bau zu suchen. Diese Einschraenkung gilt weiter, und sie
+  faerbt meine Erwartung an A-27-3: das Kriterium verlangt ausdruecklich, die verbleibende Luecke
+  zu BENENNEN statt sie zu schliessen. Ich messe, ob der Bericht sie wirklich benennt — und ob er
+  den Fall nennt, der den Anlass gab (A-23s Feld nannte einen EXISTIERENDEN, aber UEBERHOLTEN
+  Commit; beide Pruefungen waeren gruen gewesen).
+  A-27-6 hat KEINE feste Zahl im Kriterium, ausdruecklich — die Altfaelle werden AM BAU-STAND
+  gezaehlt. Ich zaehle selbst und vergleiche mit der Einordnung 50 von 57, ohne sie als Sollwert
+  zu nehmen. Acht Kriterien, alle werden gefahren; A-27-7 als Fangprobe mit Anker und
+  md5-Ruecksetzung, und diesmal pruefe ich VOR dem Lauf, dass die Mutation wirklich gegriffen hat
+  — in Runde 2 von W-05/2 hatte meine Fangprobe nichts veraendert und trotzdem 'gruen' gemeldet."
 bau_sha: c23a3b8b
 A_27_4_und_A_27_7_AN_DIESEM_EIGENEN_DATENSATZ_GEFAHREN: "Beide Kriterien liessen sich am
   Arbeitsstand nicht belegen — es stand KEIN einziger CODE_FERTIG-Block in der Datei, alles war
