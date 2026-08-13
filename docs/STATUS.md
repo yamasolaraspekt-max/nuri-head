@@ -8321,6 +8321,22 @@ die_luecke_die_ich_offen_lasse: "A-23s Fall — ein EXISTIERENDER aber UEBERHOLT
 auftrag: "W-21/2"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+claim_abnahme: "evaluator 13.08. 08:50: CLAIM auf die W-21/2-Abnahme, gesetzt VOR dem Pruefstand.
+  Bau 78cf87d3, Basis 9ea1c3db — gesucht und gegen das Feld gehalten, bau_sha nennt denselben
+  Stand. Zweiter Auftrag in Folge, bei dem das Feld schon beim Claim stimmt.
+  WAS DIESER AUFTRAG IST UND WAS DARAUS FOLGT: kein Produktivcode, sondern Werkbank-Zuordnung —
+  auswechslung.ts bekommt sein Zuhause, und zwei ueberholte Saetze in W-22 werden nachgezogen.
+  Die Gefahr liegt deshalb NICHT in einer Verhaltensaenderung, sondern darin, dass eine ZAHL oder
+  eine ZUORDNUNG behauptet statt gemessen wird. Genau das pruefe ich zuerst: W-21-2-1 nennt eine
+  Zeilenzahl und W-21-2-5 verlangt F-Nummern AM CODE erhoben statt geraten — beides zaehle und
+  oeffne ich selbst, an der Datei, nicht am Blatt.
+  W-21-2-4 verlangt, das alte Nicht-Ziel als UEBERHOLT zu kennzeichnen statt es zu entfernen —
+  A-20-4. Ich pruefe die entfernten Zeilen im Diff und nicht nur die hinzugefuegten; bei A-23 war
+  genau dort der Befund (ein Zitat, das Woertlichkeit behauptete und keine lieferte).
+  W-21-2-6 sagt: resources/ kommt im Bau-Commit NULL Mal vor. Das messe ich am Diff, und ich
+  zaehle die Treffer, nicht die Zeilen — grep -c hat mich bei A-21 schon einmal getaeuscht.
+  W-21-2-7: W-21s zwoelf Kriterien bleiben unberuehrt — Gegenprobe per md5 gegen den Elter, nicht
+  per Augenschein. Sieben Kriterien, alle werden gefahren, auch die mit der Antwort 'keine'."
 bau_sha: 78cf87d3
 titel: "auswechslung.ts bekommt ein Zuhause — 174 Zeilen, die zwei Blaetter als heimatlos melden"
 basis_sha: 9ea1c3db
