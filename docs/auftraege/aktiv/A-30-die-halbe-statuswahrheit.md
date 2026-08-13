@@ -132,6 +132,10 @@ A-30 IST  (1) eine SECHSTE Tor-Barriere: wer in docs/STATUS.md eine NEUE
               Tafelzeile mit Auftragskennung anlegt, legt im SELBEN Commit den
               Datensatz-Block mit derselben Kennung an — und umgekehrt.
               Nur NEUE Kennungen im Commit, nicht der Bestand.
+              AUFTRAGSKENNUNG IST FESTGELEGT (nachgetragen 13.08. nach 9e9e736e):
+              die Praefixe A- und W-, je gefolgt von Ziffern und optional einem
+              /Suffix. Das Muster steht in A-30-8, weil eine Zahl ohne Muster
+              nachweislich zwei Zahlen ist.
           (2) das Sichtbarkeitsloch in scripts/a26-ball-drift.sh:56 schliessen:
               eine ID ohne Gegenstueck wird GEMELDET, und zwar als eigene
               Klasse ('nicht geprueft'), NICHT als Drift-Befund. Der Lauf darf
@@ -139,6 +143,23 @@ A-30 IST  (1) eine SECHSTE Tor-Barriere: wer in docs/STATUS.md eine NEUE
               Hintertuer.
 
 A-30 IST NICHT
+          eine Pruefung der Praefixe P- und M-. AUSDRUECKLICHES NICHT-ZIEL, und
+          zwar aus zwei verschiedenen Gruenden — gemessen 13.08.:
+            P-02 (docs/STATUS.md:31) 'parallele Instanzen' traegt den Zustand
+                 VORLAGE. Eine VORLAGE ist kein Bauauftrag; §3 definiert das
+                 Wort seit A-21. Sie hat legitim keinen Datensatz-Block, und
+                 eine Barriere, die sie meldet, ist genau der Fehlalarm auf
+                 einer legitimen Zeile, vor dem a26-ball-drift.sh:73 warnt.
+            M-02 (docs/STATUS.md:5302) ist UEBERHAUPT KEINE Auftragszeile,
+                 sondern eine Zeile in einer BEFUNDTABELLE: '| **M-02-Kopienzahl**
+                 | drei Kopien gemessen … | VORGEHEN.md:43 sagt fuenfmal | …'.
+                 Ein Muster, das M- einschliesst, liest Befundtabellen als
+                 Auftraege. DAS ist der staerkere Grund gegen ein breites
+                 Praefix-Muster: es greift nicht nur zu weit, es greift in eine
+                 andere Art Tabelle.
+          Die Zahl der Praefixe ist gemessen: W- 36x, A- 30x, P- 1x, M- 1x.
+          Kaeme spaeter ein P- oder M-Auftrag MIT Bau-Zustand in die Kette, ist
+          das eine Erweiterung dieser Barriere und kein stiller Einschluss.
           die BERICHTIGUNG der elf Schreibweisen-Divergenzen. Das sind elf
           Zeilen im Altbestand, alle BETRIEBSBESTAETIGT; das ist ein eigener
           Vorgang mit eigener Groesse und faellt unter die Rueckfall-Regeln
@@ -165,11 +186,23 @@ A-30-1 (P1, TRAGEND) Die Barriere ist AN DEN ECHTEN STAENDEN geprobt, in BEIDEN
        echten Stand aufgefallen und waere an einem erfundenen nie sichtbar
        geworden.
 A-30-2 (P1) KEIN FEHLALARM AUF DEM BESTAND. Gegenprobe, die rot werden kann: ein
-       Lauf gegen den aktuellen HEAD, in dem die zwoelf Tafelzeilen ohne
-       Datensatz vorhanden sind, meldet KEINEN Befund der Klasse (1) — weil
-       keine von ihnen im Commit NEU ist. Die zwoelf sind im Bericht namentlich
-       zu nennen, damit belegt ist, dass sie geprueft und bewusst nicht gemeldet
-       wurden.
+       Lauf gegen den aktuellen HEAD meldet KEINEN Befund der Klasse (1) — weil
+       keine der Bestandszeilen im Commit NEU ist.
+       DIE ZAHL WIRD MIT IHREM MUSTER GENANNT, sonst sind es zwei Zahlen:
+         unter dem Muster A-/W-      12 Tafelzeilen ohne Datensatz
+         unter allen Grossbuchstaben 13 — die dreizehnte ist P-02, VORLAGE,
+                                     und nach dem Nicht-Ziel oben legitim
+       Die Liste ist im Bericht namentlich zu nennen, damit belegt ist, dass sie
+       geprueft und bewusst nicht gemeldet wurde. AM BAU-STAND erheben (E1):
+       meine Zahlen sind vom 13.08. am Stand d8fd395d.
+       WARUM DIESE KLARSTELLUNG NACHGETRAGEN IST: der plan-pruefer hat in
+       9e9e736e gemessen, dass meine erste Fassung 'die zwoelf' als P1-Gegenprobe
+       nennt, ohne das Muster festzulegen — mit der naheliegenden breiten Fassung
+       zaehlt der Bauende 13 und das Kriterium ist verfehlt. Nach §5 ist jede
+       Anforderung Kriterium ODER ausdrueckliches Nicht-Ziel; das Muster war
+       beides nicht. Der Befund trifft, und er ist meine eigene Lehre gegen mich:
+       Pruefung 7 verlangt jede Zahl MIT TRAEGER, und ich habe die Datei genannt
+       und das Muster weggelassen.
 A-30-3 (P1) Die Meldung aus (2) unterscheidet ZWEI KLASSEN und wirft sie nicht
        zusammen: 'Drift' (beide Orte da, Werte verschieden) und 'nicht geprueft'
        (ein Ort fehlt). Wer beides gleich meldet, macht aus einer Deckungsluecke
@@ -188,6 +221,15 @@ A-30-6 Die elf Schreibweisen-Divergenzen sind NICHT beruehrt. Gegenprobe: der
        scripts/** an. Wenn doch, ist das Beifang.
 A-30-7 Kein Produktivcode. Gegenprobe: resources/ und app/ kommen im Bau-Commit
        null Mal vor.
+A-30-8 (P1) DAS KENNUNGSMUSTER STEHT IM CODE, nicht nur im Blatt: die Barriere
+       liest Tafelzeilen und Datensaetze mit den Praefixen A- und W-, je Ziffern
+       und optional ein /Suffix. Ein Kommentar an der Stelle nennt den Grund fuer
+       den Ausschluss von P- und M- mit Fundstelle (docs/STATUS.md:31 VORLAGE,
+       :5302 Befundtabelle) — sonst erweitert die naechste Rolle das Muster in
+       gutem Glauben und baut den Fehlalarm ein, den A-30-2 ausschliesst.
+       GEGENPROBE, die rot werden kann: ein Lauf mit kuenstlich breitem Muster
+       ueber den Bestand meldet P-02, der Lauf mit dem festgelegten Muster nicht.
+       Beide Rohausgaben in den Bericht — der Unterschied IST der Nachweis.
 ```
 
 **Nachweisform: Befehl und Trefferzeilen** (B5), **Messung am COMMIT** (E1),

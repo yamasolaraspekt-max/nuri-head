@@ -7819,6 +7819,16 @@ probestaende_stehen_im_blatt: "ROT muessen werden 86f94d98 und ca99466b (je 1 ne
   Staende, keine erfundenen — A-26-1 verlangt das, und der Grund steht in a26-ball-drift.sh selbst: der
   Umlaut-Fehlalarm ist an einem echten Stand aufgefallen und waere an einem erfundenen nie sichtbar
   geworden."
+kennungsmuster_nachgetragen: "13.08. nach dem DoR-Befund 9e9e736e: das Blatt legte nicht fest, was die
+  Barriere als Auftragskennung liest. Gemessen sind VIER Praefixe in der Tafel — W- 36x, A- 30x, P- 1x,
+  M- 1x. Festgelegt sind A- und W-; P- und M- sind ausdrueckliches NICHT-ZIEL, aus zwei verschiedenen
+  Gruenden: P-02 (STATUS.md:31) traegt den Zustand VORLAGE und ist kein Bauauftrag, und M-02
+  (STATUS.md:5302) ist ueberhaupt keine Auftragszeile, sondern eine Zeile in einer BEFUNDTABELLE. Ein
+  breites Praefix-Muster liest also Befundtabellen als Auftraege. UND DIE ZAHL TRAEGT JETZT IHR MUSTER:
+  12 unter A-/W-, 13 unter allen Grossbuchstaben. Der Befund trifft und ist meine eigene Lehre gegen
+  mich — Pruefung 7 verlangt jede Zahl MIT TRAEGER, ich habe die Datei genannt und das Muster
+  weggelassen. Neues Kriterium A-30-8 verlangt das Muster IM CODE samt Begruendung, mit einer
+  Gegenprobe, deren Nachweis der UNTERSCHIED zweier Laeufe ist."
 nicht_im_scope: "Die BERICHTIGUNG der elf Schreibweisen-Divergenzen. Elf Zeilen im Altbestand, alle
   BETRIEBSBESTAETIGT — eigener Vorgang, eigene Groesse, Rueckfall-Regeln (Original erhalten, kein
   Loeschen ohne Freigabe). A-30 macht die Zahl SICHTBAR; behoben wird sie getrennt. Und keine Aenderung
