@@ -125,9 +125,62 @@ NACHGEMESSEN 13.08. GEGEN DIE TAFEL — die Liste ist ueberwiegend abgearbeitet:
     REGISTER.md:99  W-32 Giebelwand-Bindung Wall.topConstraint  LEER ·
                     braucht W-02, W-03, W-07 · 'kein Modul, 0 Treffer auf
                     topconstraint'
-  -> Beide sind ungemessen. Nach der heutigen Erfahrung (dreimal war mein
-     Eintrag zu klein) gilt fuer sie dasselbe: vor dem Blatt eine Messung ueber
-     ALLE Schichten, nicht nach dem Fahrplan-Eintrag schneiden.
+  -> BEIDE JETZT GEMESSEN, 13.08. abends. Und keine der zwei ist eine
+     Klasse-C-Bauzeile in dem Sinn, in dem die Liste sie fuehrt:
+
+  W-19 SONNE UND VERSCHATTUNG — eine ZUSTAENDIGKEITSFRAGE, kein Bau
+    Gebaut ist NICHTS davon: kein Registry-Werkzeug (grep auf id sonne /
+    verschattung / sonnenstand = 0), kein Vertrag, kein Landkarten-Eintrag.
+    Was das Wort traegt, sind vier Nennungen und keine Rechnung:
+      app/tools/werkzeugPaket.ts:245   'Import, PV, Verschattung' als
+                                      Einsatz-TEXT eines anderen Werkzeugs
+      app/tools/werkzeugLandkarte.ts:114  nordrichtung-setzen nennt PV und
+                                      Verschattung als Zweck der Nordrichtung
+      app/dashboard/fachFlaechen.ts:358  Label 'Verschattungsverlust' in %,
+                                      im Block mit zustand 'in_entwicklung'
+                                      (:361) — also gekennzeichnet, KEIN
+                                      unerfuelltes Versprechen
+      geometry/pvBelegung.ts:6-7      'GRENZE: Ertrag/Verschattung/Strings
+                                      bleiben der Fach-Engine (wberechnung)
+                                      vorbehalten — hier nur
+                                      Geometrie/Anzahl/Leistung.'
+    -> DER CODE HAT DIE ZUSTAENDIGKEIT SCHON ENTSCHIEDEN: Verschattung gehoert
+       laut dieser Grenze NICHT in die Insel, sondern in wberechnung. Damit ist
+       W-19 keine Bauzeile des Werkzeugkastens, sondern die Frage, ob diese
+       Grenze bleibt. Das beruehrt das wberechnung-Transplantat (Yamas
+       Phase 1.4) und liegt damit bei ihm — wie W-24.
+    Und die Grundlage waere da: F-024 Azimut ist gebaut
+    (azimutDerNormalen, geometry/wallGeometry.ts).
+
+  W-32 GIEBELWAND-BINDUNG — BAU, und die Registerzeile traegt, aber nicht ihr
+                            Feldname
+    Wall.topConstraint EXISTIERT NICHT: topConstraint, topconstraint und
+    top_constraint liefern je 0 Dateien. Auch giebelHoehe, giebelFlaeche,
+    wandUnterDach und beschnitt sind 0.
+    'Giebel' trifft dagegen 21 Dateien — und ALLE VIERZEHN relevanten sind
+    DACH-Dateien (dachMesh, dachGeometrie, dachformVorlagen, dachUForm,
+    gaubeGeometrie, dachTopologie, dachVerschneidung, dachAusschnitt,
+    schifterListe, aufbauOrientierung, aufbauPlatzierung, dachAufbautenMesh,
+    validation, scene.types). Keine einzige betrifft die WAND.
+    -> Giebel existiert als DACH-Begriff (Giebelseite, Ortgang), nicht als
+       Wand-Eigenschaft. H-9: dasselbe Wort, zwei Bauteile.
+    WAS DIE WAND HEUTE TRAEGT: WallNode hat height als feste Zahl, und ihr
+    einziger Bezug ist levelId — KEIN roofId, kein dachId, kein hostRoof.
+    Eine Wand weiss also nicht, welches Dach ueber ihr liegt.
+    -> Die Wand bleibt rechteckig, auch wo das Dach schraeg darueber laeuft.
+       Das ist der Gegenstand von W-32, und er ist SCHEMA-NAH: entweder ein
+       Feld an der Wand (zweite Wahrheit-Risiko) oder eine Ableitung, die
+       erst einen Bezug Wand->Dach braucht. Dieselbe Sorte Frage wie W-26.
+
+  UND EINE EIGENE FEHLMESSUNG, die neunte des Tages und selbst gefangen:
+    mein erster Zaehler meldete '5 Verschattungs-Dateien, 7 mit shadow' und
+    sah nach Substanz aus. Beim OEFFNEN waren die meisten shadow-Treffer
+    `boxShadow` — CSS in React-Komponenten (StartView, ConfigWizard,
+    FachFlaeche, HausplanerStudio, GuidedView, SchienenSchalter) — und
+    szene.ts:145 ist shadowMap, also Schlagschatten der 3D-Darstellung.
+    Keine Verschattungsrechnung. Gefangen hat es der VIERTE Schritt von
+    Pruefung 7: die tragende Stelle oeffnen. Haette ich die Zahl genommen,
+    waere W-19 als 'teilweise gebaut' in den Fahrplan gekommen.
 
   UND EINE FEHLMESSUNG VON MIR GEHOERT DAZU, weil sie fast in dieses Blatt
   gekommen waere: mein erster Befehl las den Titel je Auftrag mit einem Muster,
