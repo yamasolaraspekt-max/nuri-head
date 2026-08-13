@@ -26,8 +26,8 @@ anlass: "Cluster 3 des Fahrplans (trimmen, verlaengern, versatz) haengt daran, u
          eingeordnet und musste das zurueckziehen (485004c4). Nach A-31 (Klammer im Store) ist DIES
          der zweite und letzte Baustein — und er ist von A-31 UNABHAENGIG: trimmen aendert EINEN
          Knoten und braucht keine Klammer."
-grundlage: "FORMELSAMMLUNG.md:75-87 (F-004 — Zaehlerzeile am 13.08. berichtigt, siehe Abschnitt 1)
-            und :132-144 (F-020, die
+grundlage: "FORMELSAMMLUNG.md, F-004 (Zaehlerzeile am 13.08. berichtigt, siehe Abschnitt 1)
+            und F-020 (die
             Kantenversatz-Formel) und :4 ('Eine Formel steht genau einmal') ·
             geometry/wallGeometry.ts:84 (EPS = 1e-6) und :110-152 (gehrungsEcken, loest den
             Sonderfall) · commands/applyCommand.ts:129 (die Normale, eingebettet) ·
@@ -224,8 +224,14 @@ A-32-2 (P1) Bei parallel oder deckungsgleich kommt `null` zurueck — kein NaN,
        W-16/1 als Vertrag an die Aufrufer festhaelt: „ein Aufrufer muss nicht
        selbst darauf pruefen".
 A-32-3 (P1) Der Parallelversatz ist als F-020s NORMALFORM umgesetzt und die
-       Zuordnung steht als Kommentar an der Funktion, mit Fundstelle
-       (FORMELSAMMLUNG.md:141-143). KEINE neue F-Nummer.
+       Zuordnung steht als Kommentar an der Funktion, mit Fundstelle.
+       DIE FUNDSTELLE WIRD ALS ANKER GENANNT, NICHT ALS ZEILENNUMMER:
+       „FORMELSAMMLUNG.md, F-020, Abschnitt Kantenversatz". Beim Schnitt stand
+       sie auf :141-143; heute steht sie auf :176-178, weil meine eigene
+       F-004-Berichtigung (136ebca1) 35 Zeilen eingefuegt hat — und auf
+       :141-143 steht jetzt F-011 Polygonflaeche. Eine Zeilennummer in einem
+       Kriterium ist eine DRIFTENDE ZAHL: sie zeigt auf die falsche Formel,
+       sobald jemand dieselbe Datei anfasst. KEINE neue F-Nummer.
        WIDERSPRUCHSWEG: haelt der Bauende es beim Rechnen fuer eine ANDERE
        Formel, meldet er es als Befund mit der Stelle, an der die zwei
        auseinanderlaufen — er erfindet keine Nummer und er schweigt nicht.

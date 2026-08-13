@@ -369,6 +369,35 @@ W-37-3  Zeilenzahlen      ZWEI Muster (Register gegen wc -l, alle sechs)
 > den Fehler zweimal gemacht, eine Stunde nachdem ich die Lehre aus W-36 ins Blatt geschrieben hatte.
 > Deshalb steht hier ein SCHRITT und keine Mahnung.*
 
+**SECHSTER SCHRITT, ergänzt 13.08. nachts: eine ZEILENNUMMER in einem Kriterium ist eine driftende
+Zahl. Fundstellen in Kriterien werden als ANKER genannt.**
+
+*Gemessen an A-32, und die Ursache war ich selbst: das Kriterium A-32-3 verlangte die Fundstelle
+`FORMELSAMMLUNG.md:141-143` für F-020s Normalform. **Meine eigene F-004-Berichtigung hat 35 Zeilen in
+dieselbe Datei eingefügt** — heute steht die Normalform auf `:176-178`, und auf `:141-143` steht
+**F-011 Polygonfläche**.*
+
+```text
+DIE FOLGE: der Bau schreibt die Fundstelle, die das Kriterium verlangt — also
+  die falsche. Der Evaluator hat es beim Oeffnen aller sieben Fundstellen
+  gefunden und RICHTIG entschieden: den Bau nicht zurueckweisen, denn er folgt
+  dem Auftrag. „Den Bau dafuer zurueckzuweisen hiesse, ihn gegen meine
+  Erwartung statt gegen den Auftrag zu pruefen." Der Befund geht an den Planner.
+
+UND ES IST NICHT DER ERSTE FALL AM SELBEN TAG: der plan-pruefer hat bei A-30
+  gemessen, dass die Zeilennummer 437 fuer A-20-2 am Basis-Stand stimmt und
+  heute :459 ist, weil die Datei um 22 Zeilen gewachsen ist. Dort war es kein
+  Mangel, weil der Auftrag SEINEN STAND nennt.
+
+DER HANDGRIFF: in einem KRITERIUM steht der Anker, nicht die Nummer —
+  „FORMELSAMMLUNG.md, F-020, Abschnitt Kantenversatz" statt „:141-143".
+  Ein Anker ueberlebt jede Einfuegung; eine Nummer zeigt danach auf eine
+  andere Formel, und zwar lautlos.
+  IM BEFUND-TEXT ist die Nummer weiter richtig — dort belegt sie einen Stand
+  und traegt ihr Datum. Der Unterschied ist die WIRKUNG: ein Befund wird
+  gelesen, ein Kriterium wird BEFOLGT.
+```
+
 **FÜNFTER SCHRITT, ergänzt 13.08. abends: ein MESSMUSTER braucht eine FANGPROBE, bevor seine Zahl in
 ein Blatt kommt.** *Bekannte Treffer und bekannte Nicht-Treffer, gegen die das Muster laufen muss.*
 
