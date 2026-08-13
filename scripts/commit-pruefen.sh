@@ -619,6 +619,15 @@ if printf '%s\n' "$@" | grep -qx 'docs/STATUS.md' && [ -f scripts/a26-ball-drift
   bash scripts/a26-ball-drift.sh docs/STATUS.md || true
 fi
 
+# ── A-27: WER `CODE_FERTIG` SCHREIBT, NENNT DEN BAU-COMMIT IN EINEM FELD ─────────────────────
+# E1 verlangt die Messung AM COMMIT und ist wertlos, wenn dieser Commit im Datensatz nicht
+# auffindbar ist — nach §16 liest der Naechste den BLOCK, nicht die Botschaft.
+# Die Barriere steht als eigenes Skript, aus demselben Grund wie A-26: sie muss an historischen
+# Staenden fahrbar sein, ohne einen Commit zu erzeugen. WARNUNG, KEIN ABBRUCH.
+if printf '%s\n' "$@" | grep -qx 'docs/STATUS.md' && [ -f scripts/a27-bau-commit.sh ]; then
+  bash scripts/a27-bau-commit.sh docs/STATUS.md || true
+fi
+
 # ── W-04 ────────────────────────────────────────────────────────────────────────────────────
 # Das Tor konnte keine NEUE Datei verbuchen: `git commit -- <pfad>` kennt nichts, was nie im
 # Index war. Gemessen am 03.08.: **31 von 98 Commits** dieser zwei Tage fuehrten mindestens eine
