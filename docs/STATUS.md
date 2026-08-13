@@ -13087,3 +13087,50 @@ dor_beleg: "plan-pruefer 12.08., DRITTE Fassung — DoR ERTEILT. Der letzte Punk
   keinen §3-Platz."
 ```
 
+## BEFUND — VERWEISDRIFT IM BEREIT-VORRAT (Plan-Pruefer, 13.08. 22:56)
+
+```yaml
+verweisdrift_im_vorrat: "Erste Runde der VORRATSPRUEFUNG nach Yamas Anweisung 13.08.: der Wecker
+  soll verhindern, dass die Plan-Pruefung in leeren Phasen stehenbleibt. Statt einer Zeile Stand
+  wird der BEREIT-Vorrat geprueft. Gemessen an 92b4b2f2, Baum sauber, kein Zustand angefasst."
+was_gemessen_wurde: "Fuer JEDEN der neun BEREIT-Auftraege jeder Verweis der Form <datei>:<zeile>
+  im Blatt: steht an dieser Zeile HEUTE noch dasselbe wie am basis_sha des Blattes? Nicht
+  -zeigt ins Leere-, sondern -zeigt auf etwas ANDERES-. Das ist die schaerfere Frage: ein Verweis
+  ueber dem Dateiende faellt auf, ein verschobener sieht aus wie vorher."
+ergebnis: "72 pruefbare Verweise · ZEHN zeigen heute auf etwas anderes · NULL ueber dem Dateiende.
+    W-14/1 (Basis 78c09e1b)  6 von 18   HausplanerApp.tsx :110 :601 :621 :671 :703 · werkzeugLandkarte.ts:63
+    W-10/1 (Basis 18fe2deb)  2 von 17   HausplanerApp.tsx:1042 · werkzeugLandkarte.ts:117
+    W-12/1 (Basis b778152b)  1 von 15   HausplanerApp.tsx:1274
+    W-03/1 (Basis e097e7be)  1 von  4   werkzeugLandkarte.ts:76
+  Die uebrigen fuenf BEREIT-Auftraege sind unauffaellig."
+drei_stichproben_einzeln_geoeffnet: "Nicht nur gezaehlt, sondern angesehen — und der Inhalt ist
+  jedesmal ein ANDERER Gegenstand, nicht eine verschobene Fassung desselben:
+    W-14/1 HausplanerApp.tsx:110   Basis: import { versetzteWand, spiegelteWand, bbox, achsenMitte }
+                                   heute: ein KOMMENTAR, dass genau diese vier nach A-31 umgezogen sind
+    W-03/1 werkzeugLandkarte.ts:76 Basis: { werkzeugId: 'teilen', marke: 'fehlt', begruendung: ... }
+                                   heute: eine Kommentarzeile ueber Marken
+    W-10/1 HausplanerApp.tsx:1042  Basis: type: 'ADD_CEILING',
+                                   heute: eine schliessende Klammer"
+warum_das_zaehlt: "Genau diese Klasse hat heute A-34 ausgeloest: ein Verweis, der lautlos falsch
+  wird, sieht aus wie vorher und fuehrt woanders hin. A-34 hat sie im Produktivcode behoben
+  (Anker statt Zeilennummer, 2f8cf32d, abgenommen 79bb3030). In den BEREIT-BLAETTERN steht sie
+  zehnmal noch. Wer eines der vier Blaetter zieht, misst gegen einen Stand, den das Blatt nicht
+  mehr beschreibt — und bewegt hat die Dateien zum grossen Teil A-31, also die eigene Kette."
+abgrenzung_zur_messung_des_release_pruefers: "Er hat in cd58f1b7 gemessen: 106 Verweise, 0 ueber
+  Dateiende, 4 von 13 Blaettern beschreiben eine GEAENDERTE DATEI. Das ist die Frage nach der
+  DATEI. Meine ist die nach der ZEILE, und sie trennt schaerfer: von seinen vier nenne ich drei
+  wieder (W-12/1, W-14/1, W-10/1), W-18/1 ist bei mir unauffaellig — dort hat sich die Datei
+  bewegt, aber keine genannte Zeile. Dafuer kommt W-03/1 dazu, das bei ihm nicht auffiel. Seine
+  Null bleibt richtig; sie beantwortet eine andere Frage. Beide Zahlen sind selbst erhoben."
+zweiter_kleiner_fund: "Der W-37-Block nennt SEIN BLATT NICHT: die Felder sind auftrag, zustand,
+  ballbesitz, titel, basis_sha, spur, prioritaet, dor_beleg — kein blatt: und kein datei:. Das
+  Blatt existiert (docs/auftraege/aktiv/W-37-rechenpanels.md). Die Statuswahrheit sagt dort nicht
+  das Falsche, sie sagt nichts — dieselbe Klasse wie eine Leerstelle, nur andersherum. Kein
+  Zustandsmangel, eine fehlende Zeile."
+was_ich_NICHT_tue: "Ich fasse kein Blatt an — Blaetter gehoeren dem Planner. Ich setze keinen
+  Zustand und keinen Ball. Ob die vier Blaetter auf Anker umgestellt werden (wie A-34 es im Code
+  getan hat) oder ob es genuegt, beim Ziehen am Bau-Stand zu messen (E1 verlangt es ohnehin),
+  entscheidet der Planner."
+ballbesitz_befund: planner
+```
+
