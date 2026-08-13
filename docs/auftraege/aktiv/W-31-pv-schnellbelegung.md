@@ -251,4 +251,120 @@ mein_beifang_in_f7c19bee: "Der plan-pruefer haelt fest, dass sein W-31-Beleg ung
         Datei, und der Pfad allein schuetzt nicht, wenn der Pfad geteilt ist. Es gehoert in die Vorlage
         als gemessener Fall und nicht als Vermutung."
 W_31_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+votum_evaluator_13_08: "ABGENOMMEN — siehe Abschnitt 'Votum des Evaluators (§11)' am Ende."
 ```
+
+## Votum des Evaluators (§11) — ABGENOMMEN
+
+```yaml
+votum: ABGENOMMEN
+geprueft_am: "13.08.2026, evaluator"
+bau_commit: "584e6a4d (23:02) — GESUCHT, der einzige. Sieben Dateien, alle neu, alle unter
+  02-WERKZEUGE/W-31-pv-schnellbelegung/."
+elter: "a4c7f415"
+```
+
+### Messtisch — jede Kriterienzeile eine Zeile
+
+```text
+W-31-1 (P1, TRAGEND)  ERFUELLT — und ich habe die Unterscheidung an der Quelle nachgerechnet
+  Die Registerzeile selbst geoeffnet (REGISTER.md:98): "LEER | W-07, W-08, W-19 | gesperrt bis
+  F-028 🟢 — autarke Schnellstufe gebaut". Das Blatt zitiert sie richtig.
+  DIE UNTERSCHEIDUNG TRAEGT, weil ich sie NICHT aus dem Blatt genommen habe: PvEingabe hat
+  SIEBEN Felder (dachLaenge, dachBreite, modulBreite, modulHoehe, modulLeistung, randabstand?,
+  modulabstand?) — einzeln gezaehlt, KEINES davon eine Richtung. Und F-028 selbst nachgesehen:
+  FORMELSAMMLUNG.md:557 "### F-028 · Azimut-Konvention an der Systemgrenze · 🔴" — Ampel rot.
+  Gesperrt ist also das Durchreichen eines Azimut, und den gibt es hier nicht.
+  DIE WORTFALLE MITGEPRUEFT: ein Muster auf "Orientier" liefert VIER Treffer in pvBelegung.ts
+  (:5, :27, :45, :66) — alle meinen die Modul-LAGE hochkant/quer, keiner eine Himmelsrichtung.
+  Wer nach dem Wort sucht, findet einen Azimut, der keiner ist.
+
+W-31-2 (P1)           ERFUELLT — ALLE FUENF Stellen einzeln geoeffnet, jede Zeilennummer trifft
+  enginePanels.ts:32   import { pvSchnellBelegung, type PvEingabe } ...
+  enginePanels.ts:380  engineId: 'engine-pv'
+  enginePanels.ts:403  berechne: (werte) => pvSchnellBelegung(alsPvEingabe(werte)) ...
+  faehigkeiten.ts:80   { id: 'engine-pv', ... zustand: 'verfuegbar' ... }
+  fachFlaechen.ts:240-258  Eintrag fach-pv-module, engine 'engine-pv',
+                           :248 typ 'PvEingabe' · :255 typ 'PvBelegung'
+  UND SIE IST WIRKLICH LIVE, von der anderen Seite belegt: FachFlaeche.tsx:34 und
+  HausplanerStudio.tsx:18 fuehren fachFlaechen ein — also gerendert, nicht nur vorhanden.
+
+W-31-3 (P1)           ERFUELLT
+  pvBelegung.ts:6-7 sagt woertlich: "GRENZE: Ertrag/Verschattung/Strings bleiben der Fach-Engine
+  (wberechnung) vorbehalten — hier nur Geometrie/Anzahl/Leistung." Steht so in 7-GRENZEN.
+
+W-31-4                ERFUELLT
+  1-ZWECK:10 traegt Yamas Satz woertlich als Zitat: "Für PV muss man nicht das ganze Haus
+  modellieren." Am Quelltext gegengelesen — pvBelegung.ts:4 sagt denselben Satz.
+
+W-31-5                ERFUELLT — die Zahl SELBST erhoben, nicht aus dem Blatt genommen
+  grep -nE '^export ' geometry/pvBelegung.ts:
+    :10 export interface PvEingabe · :26 export interface PvBelegung
+    :46 export function pvSchnellBelegung
+  DREI Exporte, genau auf den drei genannten Zeilen. Datei 75 Zeilen.
+
+W-31-6                ERFUELLT — Zugriffsart je Waechter selbst gemessen
+  pvBelegung.test.ts        import=1  readFileSync=0   -> reiner IMPORT
+  enginePanelRest.test.ts   import=1  readFileSync=0   -> reiner IMPORT
+  faehigkeiten.ts:80 nennt 'geometry/pvBelegung' als STRING und importiert es NICHT
+  (grep auf eine Importzeile: 0 Treffer). Genau die Unterscheidung, die das Kriterium verlangt:
+  Registry-Verdrahtung ist keine Verriegelung.
+
+W-31-7                ERFUELLT
+  2-FUNKTION:86-88 grenzt einzeln ab: W-36 fuehrt den Registry-Eintrag (faehigkeiten.ts:80),
+  W-37 die Adapter (alsPvEingabe), W-19 Ertrag und Verschattung "ausdruecklich ausserhalb".
+
+W-31-7b (P1)          ERFUELLT — der heikelste Punkt, und er ist sauber geloest
+  7-GRENZEN:35-36 nennt fachFlaechen.ts:252 und zitiert die Zeile:
+    { label: 'Ausrichtung und Neigung', einheit: '°' }
+  :30 sagt "hat sieben Felder und keine Richtung" — von mir nachgezaehlt: sieben, stimmt.
+  :43 haengt die Verwirklichung an F-028 (Ampel rot, selbst nachgesehen).
+  UND ES BEWERTET NICHT, wie das Kriterium ausdruecklich verlangt: die Angabe steht in einer
+  VORSCHAU (FachFlaeche.tsx:4-6 nennt sich selbst Feldstruktur-Vorschau), und eine Vorschau darf
+  kuenftige Felder zeigen. Die Spannung ist benannt, nicht entschieden.
+
+W-31-8                ERFUELLT — Gegenprobe wieder weiter gefasst als das Kriterium
+  Sieben Blaetter: 1-ZWECK 76 · 2-FUNKTION 89 · 3-FORMELN 50 · 4-BEDIENUNG 78 ·
+  5-CODE/LIESMICH 41 · 6-PRUEFUNG 54 · 7-GRENZEN 75 Zeilen, sieben verschiedene md5.
+  Nicht nur W-31 gegen sich selbst geprueft, sondern ALLE 246 Blattdateien unter 02-WERKZEUGE:
+    Blattnamen mit identischem Rumpf in mehreren Werkzeugen: 7   (Altbestand, unveraendert)
+    davon betreffen W-31:                                    0
+
+Suite / tsc           1750 / 1750 / fail 0, tsc exit=0. Der Bau fasst 0 Dateien unter
+                      resources/ oder app/ an — reiner Dokumentationsbau.
+Browser               NICHT GEFAHREN, mit Grund: kein Verhalten, kein Produktivcode.
+§15                   Kein Schreibvorgang gegen eine Datenbank im Pruefumfang.
+```
+
+### Eine Beobachtung, die MEINE eigene vorige Abnahme betrifft
+
+```text
+REGISTER.md:390-398 nimmt meine W-06-Beobachtung auf und macht daraus einen strukturellen Befund:
+alle acht damals offenen Ablesungsauftraege nannten das Register in KEINEM Kriterium, der Mangel
+lag in den Auftragsblaettern und nicht in der Ausfuehrung. Das ist richtig gemessen und ich habe
+es gegengeprueft — bei W-31 nennt ebenfalls kein Kriterium das Register.
+
+DABEI EINE ZAHL, DIE ICH NACHGEZAEHLT HABE, weil sie MEINE Abnahme zitiert: der Abschnitt sagt zu
+W-06 "die sieben Blaetter standen (468 Z.)". Ich messe:
+  alle SIEBEN Blaetter zusammen        519 Zeilen
+  insertions im Bau-Commit a05d6d12    427
+  netto (427 - 157 deletions)          270
+  die SECHS ohne 5-CODE/LIESMICH.md    468   <- das ist die genannte Zahl
+Die Zahl ist also richtig, aber ihr Traeger fehlt: sie meint sechs von sieben Blaettern, nicht
+"die sieben Blaetter". KEIN Befund gegen W-31 — der Satz steht in einem fremden Commit des
+Planners. Ich melde es, weil es meine eigene Abnahme betrifft und weil es genau die Traeger-Frage
+ist, die heute schon zweimal Thema war.
+```
+
+### Eigene Messfehler in diesem Durchgang
+
+```text
+KEINE, die ein Ergebnis verfaelscht haetten. Anzumerken: beim Suchen der enginePanels-Stellen habe
+ich zuerst mit einem Pfadmuster gearbeitet, das zwei Verzeichnistiefen gleichzeitig abdeckte
+(app/*/enginePanels.ts app/enginePanels.ts) — das lieferte Treffer, haette aber bei einer anderen
+Ablage still nichts gefunden. Die Zeilennummern habe ich deshalb einzeln gegengelesen statt der
+Trefferliste zu vertrauen.
+```
+
+**Weitergabe:** ABGENOMMEN → **Release-Prüfer**. Die Zahl-ohne-Träger im Register (`468 Z.`)
+→ ohne Auflage, zur Kenntnis an den **Planner**.
