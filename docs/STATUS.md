@@ -156,6 +156,32 @@ PLANNER (ich)       Wecker laeuft, alle 10 Minuten Rundgang: neue Commits, §3-S
 > Abnahmereihenfolge des Evaluators (seine Station), und ob die Sammel-Kontrolle heute oder morgen
 > läuft.* **Ich sage, dass sie fällig ist und warum — nicht wann.**
 
+```yaml
+befund: verteilungsblock_veraltet
+gefunden_von: plan-pruefer 13.08. 21:14
+gegenstand: "Der Rollen-Verteilungsblock oben (Z. 131-153) stammt aus 093d8ae6 (planner, 12.08. 02:00)
+  und widerspricht an DREI Stellen den Datensatz-Bloecken derselben Datei. §16: eine Statuswahrheit."
+gemessen_am_commit: e9cabec3
+punkt_1_release_pruefer: "Der Block sagt 'DIE SAMMEL-KONTROLLE IST FAELLIG ... W-05, W-08, W-11,
+  W-13, W-21, W-22 stehen auf RELEASE_FREI — SECHS'. Gemessen an HEAD: RELEASE_FREI im ganzen
+  Bestand = KEINER; alle sechs stehen auf BETRIEBSBESTAETIGT. Und SK4 ist um 21:10 gelaufen (1e3b733f)."
+punkt_2_evaluator: "Der Block sagt 'W-04 steht auf RELEASE_BLOCKED mit Ball bei dir — der einzige
+  blockierte Auftrag der Tafel. Das ist die dringendste Abnahmearbeit.' Gemessen: W-04/1 ist
+  BETRIEBSBESTAETIGT, RELEASE_BLOCKED existiert im Bestand NICHT, und der einzige blockierte
+  Auftrag ist W-21L (DECISION_BLOCKED, Ball bei Yama). Der Evaluator wird auf eine Arbeit gezeigt,
+  die es nicht mehr gibt."
+punkt_3_generator: "Der Block sagt 'wartet auf DoR' und 'wenn A-14 freigegeben ist'. Gemessen:
+  A-14 ist BETRIEBSBESTAETIGT, und vor dem Generator liegen ELF Auftraege auf BEREIT."
+warum_das_zaehlt: "Der Release-Pruefer hat heute selbst gemeldet, dass die Sammel-Schwelle
+  SIEBENFACH ueberfaellig war und er sie erst im Planner-Ueberblick fand. Genau dieser Ueberblick
+  zeigt jetzt drei Rollen auf falsche Arbeit. Eine Verteilung, die zu oft daneben liegt, wird
+  weggeklickt (A-03) — und dann wird auch die richtige weggeklickt."
+was_ich_NICHT_tue: "Ich schreibe den Verteilungsblock nicht um. Er gehoert dem Planner ('PLANNER (ich)'),
+  und Rollengrenze heisst hier: melden, nicht ersetzen. Kein Zustandsfeld angefasst."
+ballbesitz_befund: planner
+```
+
+
 ### ⚠ MITTEILUNG AN ALLE ROLLEN — das Commit-Tor verlangt ab `28760966` eine Rollenmarke (A-11)
 
 > **Ab dem Prüf-SHA `28760966` (Bau `b0f4c444`) committet das Tor NUR noch mit gesetzter
