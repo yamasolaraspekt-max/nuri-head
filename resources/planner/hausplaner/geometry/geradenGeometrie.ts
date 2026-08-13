@@ -53,15 +53,15 @@ function kreuz(ux: number, uy: number, vx: number, vy: number): number {
  *
  * ---
  *
- * ## BEFUND: die Formelzeile in F-004 verfehlt ihre eigene Ausgabe (generator, 13.08.)
+ * ## BEFUND und Erledigung: F-004 trug ein vertauschtes Vorzeichen (generator, 13.08.)
  *
- * `FORMELSAMMLUNG.md:75-87` schreibt den Zähler als
+ * **Bis zum 13.08.2026** schrieb `FORMELSAMMLUNG.md` (F-004) den Zähler als
  *
  * ```text
  * n = (Ax−Cx)(Dy−Cy) − (Ay−Cy)(Dx−Cx)      also  (A−C) × s
  * ```
  *
- * **Richtig ist `(C−A) × s`** — das Vorzeichen ist vertauscht, und damit liegt der berechnete Punkt
+ * **Richtig ist `(C−A) × s`** — das Vorzeichen war vertauscht, und damit lag der berechnete Punkt
  * **auf der falschen Seite von `A`**. *An zwei unabhängigen Mustern gemessen, bevor gebaut wurde:*
  *
  * ```text
@@ -75,9 +75,11 @@ function kreuz(ux: number, uy: number, vx: number, vy: number): number {
  * *Kein Rundungseffekt und keine andere Konvention:* **`S = A + t·(B−A)` legt die Bedeutung von `t`
  * eindeutig fest**, und F-004s eigener Zweck und ihre eigene Ausgabe sagen „Schnittpunkt S".
  *
- * **Hier steht der Zähler deshalb richtig.** *Die Formelsammlung ist NICHT angefasst — sie gehört
- * nicht zum Scope von A-32, und ihre Berichtigung ist ein eigener Vorgang.* **Beide Fassungen
- * stehen hier, damit die nächste Umsetzung die falsche nicht wieder abschreibt.**
+ * **ERLEDIGT: der Planner hat F-004 am 13.08. berichtigt** (`136ebca1`) und die alte Fassung an
+ * derselben Stelle als überholt gekennzeichnet. *Ich habe die Sammlung nicht angefasst — sie gehört
+ * nicht zum Scope von A-32; gemeldet statt selbst repariert.* **Beide Fassungen bleiben hier
+ * stehen**, weil eine Zeile, die einmal falsch abgeschrieben wurde, es wieder wird — und weil die
+ * Zusage darunter (`geradenGeometrie.test.ts`) genau diesen Rückfall rot werden lässt.
  */
 export function geradenSchnitt(a: Punkt, b: Punkt, c: Punkt, d: Punkt): Punkt | null {
   const rx = b.x - a.x;
@@ -98,7 +100,7 @@ export function geradenSchnitt(a: Punkt, b: Punkt, c: Punkt, d: Punkt): Punkt | 
     return null; // parallel oder deckungsgleich
   }
 
-  // BERICHTIGT gegenüber FORMELSAMMLUNG.md:80 — dort steht (A−C) × s, siehe Befund oben.
+  // (C−A) × s — die Fassung, die F-004 seit der Berichtigung vom 13.08. trägt. Siehe Befund oben.
   const n = kreuz(c.x - a.x, c.y - a.y, sx, sy);
   const t = n / m;
 

@@ -32,12 +32,16 @@ test('A-32-1 F-004: der Schnittpunkt liegt, wo er liegt — drei Lagen von Hand 
   assert.ok(s3); nahe(s3.x, 2, 'zwei Diagonalen x'); nahe(s3.y, 2, 'y');
 });
 
-test('A-32-1 F-004: die Formelzeile der Sammlung ergibt das GESPIEGELTE Ergebnis', () => {
-  // DER BEFUND, ALS ZUSAGE FESTGEHALTEN. FORMELSAMMLUNG.md:80 schreibt n = (A−C) × s.
-  // Richtig ist (C−A) × s. Wer die Zeile abschreibt, bekommt den an A gespiegelten Punkt.
-  // Diese Zusage wird ROT, sobald jemand geradenSchnitt auf die Fassung der Sammlung umstellt —
-  // und sie ist der Grund, warum der Befund nicht nur in einem Kommentar steht.
-  const woertlichNachSammlung = (a: Punkt, b: Punkt, c: Punkt, d: Punkt): Punkt => {
+test('A-32-1 F-004: die ALTE Fassung der Formel ergibt das GESPIEGELTE Ergebnis', () => {
+  // DER BEFUND, ALS ZUSAGE FESTGEHALTEN. F-004 trug bis zum 13.08.2026 den Zaehler
+  // n = (A−C) × s; richtig ist (C−A) × s. Wer die alte Zeile abschreibt, bekommt den an A
+  // gespiegelten Punkt. Der Planner hat die Sammlung inzwischen berichtigt (136ebca1) und die
+  // alte Fassung dort als ueberholt gekennzeichnet.
+  //
+  // WARUM DIESE ZUSAGE TROTZDEM BLEIBT: der Befund ist behoben, der RUECKFALL nicht ausgeschlossen.
+  // Sie wird ROT, sobald jemand geradenSchnitt auf die alte Fassung umstellt — und genau deshalb
+  // steht der Befund nicht nur in einem Kommentar.
+  const woertlichNachAlterFassung = (a: Punkt, b: Punkt, c: Punkt, d: Punkt): Punkt => {
     const n = (a.x - c.x) * (d.y - c.y) - (a.y - c.y) * (d.x - c.x);
     const m = (b.x - a.x) * (d.y - c.y) - (b.y - a.y) * (d.x - c.x);
     const t = n / m;
@@ -53,11 +57,11 @@ test('A-32-1 F-004: die Formelzeile der Sammlung ergibt das GESPIEGELTE Ergebnis
   ];
   for (const [a, b, c, d] of faelle) {
     const richtig = geradenSchnitt(a, b, c, d);
-    const nachBlatt = woertlichNachSammlung(a, b, c, d);
+    const nachAlterFassung = woertlichNachAlterFassung(a, b, c, d);
     assert.ok(richtig);
-    // Der Punkt der Sammlung ist der an A gespiegelte: (S_falsch + S_richtig)/2 == A.
-    nahe((nachBlatt.x + richtig.x) / 2, a.x, 'Spiegelung an A, x');
-    nahe((nachBlatt.y + richtig.y) / 2, a.y, 'Spiegelung an A, y');
+    // Der Punkt der alten Fassung ist der an A gespiegelte: (S_falsch + S_richtig)/2 == A.
+    nahe((nachAlterFassung.x + richtig.x) / 2, a.x, 'Spiegelung an A, x');
+    nahe((nachAlterFassung.y + richtig.y) / 2, a.y, 'Spiegelung an A, y');
   }
 });
 
