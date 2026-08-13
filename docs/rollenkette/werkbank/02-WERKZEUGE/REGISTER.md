@@ -1,7 +1,7 @@
 # REGISTER DER WERKZEUGE
 
 > Eine Zeile je Werkzeug. **Hier steht, was es gibt und woran es hängt** —
-> nicht, wie weit es ist. Der Auftragszustand steht in `docs/STATUS.md`.
+> nicht, wie weit es ist. Der Auftragszustand steht in `docs/STATUS.md`. **Wer den Reifegrad zieht, steht am DATEIENDE** unter „WER DEN REIFEGRAD ZIEHT" — dort und nicht hier, weil ein Einschub im Kopf jede Zeilennummer darunter verschiebt und **45 Verweise `REGISTER.md:<zeile>`** auf diese Datei zeigen; `grep -n 'WER DEN REIFEGRAD ZIEHT'` findet es.
 >
 > Reifegrad: `LEER` (nur Ordner) · **`n/7 BLÄTTER`** (Zwischenstufe: teilweise gefüllt — zählt
 > **NICHT** als `BESCHRIEBEN`; die Zahl nennt, wie viele stehen) · `BESCHRIEBEN` (**alle sieben**
@@ -25,25 +25,6 @@
 > *Die Zwischenstufe trägt das Wort `BESCHRIEBEN` absichtlich NICHT: der Abschlussbefehl
 > `grep -cE '^\| W-[0-9]+ .*BESCHRIEBEN'` würde es sonst mitzählen, und der Zähler soll nur
 > Vollständiges zählen (Yamas Bedingung vom 11.08.).*
->
-> ---
->
-> **WER DEN REIFEGRAD ZIEHT — Planner-Festlegung 13.08., auf Yamas „ok".**
->
-> Der Reifegrad ist **kein Auftragszustand** (Satz 2 dieses Kopfes) und gehört deshalb in
-> **kein Auftragskriterium**. Er wird vom **Planner** nachgezogen, sobald ein Blatt-Auftrag
-> `ABGENOMMEN` ist — als Pflege dieser Planungsquelle, nicht als Arbeitsschritt des Generators.
->
-> **Der Anlass, damit es niemand für Bürokratie hält:** W-06 war am 13.08. abgenommen, die
-> sieben Blätter standen (468 Z., Bau `a05d6d12`, Abnahme `8f213aa0`) — und diese Zeile sagte
-> weiter `LEER`. Der Generator hat es gesehen und korrekt **nicht** angefasst: *„KEIN Kriterium
-> und KEIN Scope-Punkt nennt das Register"* (`W-06-geschoss-verwalten.md:319`). Nachgemessen
-> galt dasselbe für **alle acht** damals offenen Ablesungsaufträge — W-03/1, W-10/1, W-12/1,
-> W-14/1, W-16/1, W-18/1, W-31, W-37: **null** von acht nannten das Register in einem Kriterium.
-> Sie hätten vollständig durchlaufen können, ohne dass die Zahl sich bewegt. **Der Mangel lag
-> in den Auftragsblättern des Planners, nicht in der Ausführung** — und er wird hier oben
-> behoben statt in acht laufenden Blättern, weil ein Blatt zu ändern, an dem gerade gearbeitet
-> wird, den Boden unter dem Bearbeiter verschiebt.
 
 ---
 
@@ -393,3 +374,39 @@ werden nicht durch meine Korrektur unsichtbar gemacht.
 > **Und: W-13 ist das einzige Klasse-A-Werkzeug MIT Registry-Eintrag** (`app/tools/toolRegistry.ts:39`, `id: 'auswahl'`) — bei W-01, W-05, W-08, W-21 und W-22 steht die Rechenschicht ohne Werkzeugschicht. **Dafür hat es NULL dedizierte Zusagen** (W-01: 2, W-02: 1) bei 321 Zeilen; erwähnend sind zwei Testdateien mit 36 Zusagen. *Messweise steht im `6-PRUEFUNG`-Blatt, damit die Zahl nachrechenbar ist.*
 
 > ⚠ **W-09: das Register nennt ZWEI Formeln — mein erster Satz hier war falsch.** Die Zeile oben führt `F-001, F-030`, und mein Bau hat genau diese Zeile angefasst. **Gemessen:** F-001 steht im Code, aber **nicht in der Auslegung** — `treppe2D.ts:47` und `treppeSvg.ts:125` (je `Math.hypot`), `treppenBerechnung.ts` **0 Treffer**; F-030 ist als Aufruf nicht messbar. **Die Auslegungsschicht rechnet ohne Geometrieformel** — und nur für sie gilt der Satz. Gemessen sind die Rechenregeln **normative Größen** (Schrittmaß `:75`, Bequemlichkeit `:76`, Sicherheit `:77`, Grenzmaße `:52-55`, lichte Höhe `:58`) — **keine Geometrieformel, die man nachschlägt.** *Eine leere Formelspalte ist besser als eine geratene; nach `603eddc2`, wo sieben von zehn Zuordnungen fielen, ist das die Lehre und keine Bequemlichkeit.*
+
+---
+
+## WER DEN REIFEGRAD ZIEHT — Planner-Festlegung 13.08., auf Yamas „ok"
+
+**Steht hier unten und nicht im Kopf, und der Grund ist ein Fehler von mir** — siehe den letzten
+Absatz. Inhaltlich gehört sie zum Kopf; `grep -n 'WER DEN REIFEGRAD ZIEHT'` verbindet beide.
+
+**Die Festlegung:** Der Reifegrad ist **kein Auftragszustand** — Satz 2 des Kopfes sagt das selbst
+(*„nicht, wie weit es ist. Der Auftragszustand steht in `docs/STATUS.md`"*). Er gehört deshalb in
+**kein Auftragskriterium**, sondern wird vom **Planner** nachgezogen, sobald ein Blatt-Auftrag
+`ABGENOMMEN` ist — Pflege dieser Planungsquelle, kein Arbeitsschritt des Generators.
+
+**Der Anlass, damit es niemand für Bürokratie hält:** W-06 war am 13.08. abgenommen, die sieben
+Blätter standen (468 Z., Bau `a05d6d12`, Abnahme `8f213aa0`) — und seine Registerzeile sagte weiter
+`LEER`. Der Generator hat es gesehen und korrekt **nicht** angefasst: *„KEIN Kriterium und KEIN
+Scope-Punkt nennt das Register"* (`W-06-geschoss-verwalten.md:319`). Nachgemessen galt dasselbe für
+**alle acht** damals offenen Ablesungsaufträge — W-03/1, W-10/1, W-12/1, W-14/1, W-16/1, W-18/1,
+W-31, W-37: **null** von acht nannten das Register in einem Kriterium. Sie hätten vollständig
+durchlaufen können, ohne dass die Zahl sich bewegt. **Der Mangel lag in den Auftragsblättern des
+Planners, nicht in der Ausführung** — und er wird hier behoben statt in acht Blättern, weil ein
+Blatt zu ändern, an dem gearbeitet wird, den Boden unter dem Bearbeiter verschiebt.
+
+**⚠ Und der Grund, warum dieser Abschnitt unten steht — mein eigener Fehler, gemessen und behoben
+(`f4bda8e9` → berichtigt):** Ich hatte ihn zuerst in den **Kopf** geschrieben, 20 Zeilen. Damit
+wanderte jede Zeilennummer ab Zeile 28. Auf diese Datei zeigen **45 Verweisstellen**
+`REGISTER.md:<zeile>` (61 Vorkommen), davon **41 mit einer Zahl ≥ 28** — alle 41 zeigten danach auf
+etwas anderes. W-06 war `:54` und wurde `:73`. **Das ist exakt die Klasse, die am selben Tag A-34
+ausgelöst hat**, und der Plan-Prüfer hatte sie Stunden vorher in zehn BEREIT-Verweisen gemeldet;
+ich habe sie behoben und dabei erzeugt. Behebung: der Kopfhinweis steht jetzt **in einer bestehenden
+Zeile** statt in einer neuen, der Volltext hier unten — **Zeilenzuwachs oberhalb der Tabelle: 0**.
+
+**Regel daraus für jeden, der diese Datei anfasst:** oberhalb der letzten Tabellenzeile wird
+**keine Zeile eingefügt**. Ergänzungen gehen ans Dateiende oder in eine bestehende Zeile. Wer den
+Kopf doch erweitern muss, zählt vorher
+`grep -rn 'REGISTER\.md:[0-9]' docs/ --include='*.md'` und zieht jeden Treffer nach.
