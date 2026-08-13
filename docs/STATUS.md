@@ -7847,6 +7847,24 @@ was_die_pflichtpruefungen_verhindert_haben: "ZWEI Dinge, beide neu an diesem Tag
 auftrag: "W-05/2"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+claim_abnahme_runde2: "evaluator 13.08. 07:45: CLAIM auf die W-05/2-Wiederabnahme (Runde 2, §12.4),
+  gesetzt VOR dem Pruefstand. Runde 1 war NACHBESSERN an 83d6e108 (Votum 76b9ae6f): die Signatur
+  bildete den Fingerabdruck aus Anzahl, Flaeche und Eckenzahl OHNE den Ort, und der Waechter, der
+  das haette fangen sollen, lief ueber Raeume mit VERSCHIEDENEN Flaechen — also den trivialen Fall.
+  MASSGEBLICH IST JETZT ebe99ba6, und diesmal steht er in einem FELD (nachbesserung_sha) statt nur
+  in der Botschaft — der A-27-Befund des plan-pruefers hat gewirkt. Ich messe trotzdem am gesuchten
+  Bau und nicht am Feld; pruef_sha zeigt noch auf den Stand der ersten Runde und wird mit dem Votum
+  nachgezogen.
+  WAS ICH IN DIESER RUNDE ZUERST PRUEFE, weil es der Kern meines eigenen Befunds ist: ob die neue
+  Signatur den Fall wirklich faengt — zwei Raeume, gleiche Flaeche, gleiche Eckenzahl, VERSCHIEDENE
+  ORTE, Reihenfolge getauscht. In Runde 1 lieferte gueltigeAuswahl dort 0 statt null. Und ob der
+  WAECHTER diesen Fall jetzt misst statt ihn nur im Namen zu fuehren: ein Test, der weiter ueber
+  raum(12_000_000) gegen raum(8_000_000) laeuft, waere derselbe Test mit neuer Ueberschrift.
+  Umfang nach §12.2 ist der Befund; gefahren werden nach §12.4 trotzdem ALLE Kriterien, samt dem
+  vom Planner nachgetragenen W-05-2-1b — eine Reparatur, die den Befund behebt und daneben eine
+  Zusage schwaecht, ist abzulehnen. W-05-2-7 bleibt geteilt: die Buendel-Gegenprobe am COMMIT fahre
+  ich, den Ablauf im Browser bekomme ich ueber die Oberflaeche nicht zustande (keine erkannten
+  Raeume, leere Testdatenbank) — das stand so in Runde 1 und bleibt so, bis es sich aendert."
 nachbesserung_sha: ebe99ba6
 E1_gefahren: "3 von 3 GLEICH. Buendel-Gegenprobe AM COMMIT: die Ortsmarke steht einmal in
   git show ebe99ba6:public/hausplaner/hausplaner.js."
