@@ -1688,3 +1688,72 @@ Befund**. Zähler gegengeprobt: eine eingeschleuste `db:seed`-Zeile findet mein 
 Nutzer selbst und belegt es mit §15 (vorher/nachher). **Das funktioniert** — der Generator hat es heute
 zweimal so gemacht. Es kostet nur jedes Mal denselben Handgriff, und wer ihn vergisst, meldet einen
 ENV-Blocker statt einen Befund.*
+
+---
+
+## 18 · M-1 und M-2 GEMESSEN — beide fallen positiv aus. Du kannst in einem Satz entscheiden
+
+*Yamas Auftrag vom 13.08.: erst zwei Messungen, dann die Bedienentscheidung. **Beide liegen vor, und
+beide sagen: es ist alles da.***
+
+### M-1 — Behält `selectedNodeIds` die Reihenfolge? **JA, und mehr als das.**
+
+```text
+store/hausplanerStore.ts:30   selectedNodeIds: string[]      <- ARRAY, kein Set
+app/tools/auswahlModus.ts:68  ohne Modifikator: { ids: [trefferId], primaerId: trefferId }
+                        :71   MIT  Modifikator: { ids: [...vorher.ids, trefferId],
+                                                  primaerId: trefferId }
+                                  -> ANGEHAENGT. Die Reihenfolge der Klicks bleibt.
+                        :85   primaerId = ids[ids.length - 1]
+                                  -> der ZULETZT geklickte fuehrt.
+app/HausplanerApp.tsx:815     waehleAn(id, ev) — „DIE eine Stelle, an der ein Klick zur
+                              Auswahl wird" (AUF-35a). Modifikatortasten werden dort
+                              bereits gelesen (aufloeseAuswahlmodus).
+```
+
+> ***Damit ist „erste Wahl = Schnittkante, zweite = zu kürzende Wand" ohne einen einzigen neuen
+> Bedienschritt zu haben*** — *und es gibt sogar die bessere Variante: **`primaerId` ist der zuletzt
+> Geklickte.** Also „alles Vorgewählte sind Schnittkanten, der letzte Klick ist das, was gekürzt wird"
+> — das CAD-Standardmuster, und es liegt fertig da.*
+
+> **Und es gibt genau EINEN Ort dafür.** *`waehleAn` ist ausdrücklich als „die eine Stelle" gebaut,
+> mit dem Kommentar „Keine zweite Auswahl-Logik in den Renderer-Zweigen". **Ein Werkzeug muss dort
+> nichts ändern — es liest nur, was schon steht.***
+
+### M-2 — Gibt es eine Fläche, die heute schon eine Eingabe trägt? **JA, zwei.**
+
+```text
+app/rahmen/EigenschaftenPanel.tsx    28 Eingabefelder, darunter type="number":
+                              :258   Neigung   :261 Azimut   :264 Ueberstand
+                              :288   Anbau-Laenge
+                              -> UND ES IST AN DIE AUSWAHL GEBUNDEN: es zeigt die
+                                 Werte des gewaehlten Objekts. Genau dort sieht der
+                                 Nutzer ohnehin hin.
+
+app/EngineFlaeche.tsx:4       „Eingabefelder -> Knopf -> Ergebnisblock + Pruefliste"
+                       :68    panel.felder.map(...)   <- GENERISCHE Feldliste
+                       :50    fehlendePflichtfelder(panel, werte)
+                              -> ein fertiges Muster fuer „Werkzeug braucht Parameter",
+                                 inklusive Pflichtfeld-Pruefung.
+
+app/ConfigWizard.tsx          4 Felder — ein eigener Dialog. Die teuerste Variante,
+                              und nach deiner Richtung die letzte.
+```
+
+> ***Deine Richtung trägt: es muss nichts Neues gebaut werden.*** *Für den **Abstand d** beim Versatz
+> bietet sich das Eigenschaften-Panel an — es ist auswahlgebunden und hat schon Zahlenfelder. Für
+> Werkzeuge mit mehreren Parametern liegt in `EngineFlaeche` eine generische Feldliste **mit
+> Pflichtfeld-Prüfung** bereit.*
+
+### Was das zusammen heißt
+
+```text
+Auswahl von zwei Waenden   -> vorhanden, mit Rollen-Unterscheidung (primaerId)
+Zahleneingabe              -> vorhanden, auswahlgebunden (Eigenschaften-Panel)
+Mehrere Parameter          -> vorhanden, generisch (EngineFlaeche)
+Ein eigener Dialog         -> NICHT noetig
+```
+
+> **Beide Messungen fielen positiv aus, und das ist selten genug, um es zu sagen:** *ich hatte mit
+> mindestens einem Hindernis gerechnet. **Die Bedienung ist gebaut — sie ist nur noch nie von einem
+> Werkzeug benutzt worden.***
