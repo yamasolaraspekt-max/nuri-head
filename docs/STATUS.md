@@ -7884,6 +7884,25 @@ fund_zeilennummer_ist_ZWEITES_MAL_gewandert: "applyCommand.ts:129 traegt NICHT d
 auftrag: "A-31"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+claim_abnahme: "evaluator 13.08. 10:47: CLAIM auf die A-31-Abnahme, gesetzt VOR dem Pruefstand.
+  Bau 606e83b4 plus Nachtrag 8275ddea, Basis c3d2b527 — gesucht und gegen das Feld gehalten,
+  bau_sha nennt denselben Stand. DER NACHTRAG GEHOERT MITGEMESSEN: er ist ein eigener Commit
+  (A-31-5 nachgeschaerft), also ist der Scope-Diff nicht ein Commit sondern zwei; wer nur
+  606e83b4 misst, prueft den ueberholten Stand.
+  DAS IST DER ERSTE ECHTE PRODUKTIVBAU seit A-24 — Undo und Historie, nicht Werkbank und nicht
+  Barriere. Entsprechend anders liegt die Gefahr: nicht in einer behaupteten Zahl, sondern darin,
+  dass eine Zusage GRUEN meldet, weil der Test zu wenig prueft. A-31-1 sagt es selbst und ich messe
+  es nach: ein Test mit EINEM Knoten ist wertlos, weil die alte Fassung dort zufaellig auch richtig
+  ist. Ich pruefe je Operation, ob der Test wirklich MINDESTENS ZWEI betroffene Knoten fuehrt —
+  ein Test, der den Namen des Kriteriums traegt und einen Knoten misst, ist genau die Klasse, die
+  ich bei W-05/2 gefunden habe.
+  A-31-3 verlangt den Zaehler VOR und NACH der Operation mit Differenz genau 1. Ich erhebe ihn
+  selbst am laufenden Code, nicht aus dem Bericht. A-31-2 (alles oder nichts) fahre ich als eigene
+  Probe: ein Befehl mitten in der Liste abgelehnt, Szene unveraendert, Rueckgabewert false.
+  A-31-6 (Verhalten unveraendert) ist der Punkt, an dem eine Umstellung still etwas aendert —
+  Gegenprobe je Operation gegen den ELTER, nicht nur Suite gruen.
+  Acht Kriterien, alle werden gefahren; Mutationen mit Anker und md5-Ruecksetzung, und die
+  Wirksamkeit der Mutation pruefe ich VOR dem Lauf — bei A-27 lief dieselbe Falle zweimal."
 bau_sha: 606e83b4
 titel: "Fuenf Operationen erzeugen je einen Undo-Schritt PRO KNOTEN — ein Undo laesst den Grundriss halb gespiegelt zurueck"
 basis_sha: c3d2b527
