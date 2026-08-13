@@ -15,6 +15,33 @@ Punkt 4 und 5, und es ist deutlich weniger.
 
 ---
 
+---
+
+## ⇢ ÜBERBLICK, Stand 13.08. abends — was von dir eine Entscheidung braucht
+
+*Dieses Dokument ist auf **17 Abschnitte** gewachsen. Damit du nicht suchen musst: hier stehen die
+Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht deine Pflicht.*
+
+| | Posten | Was du entscheidest | Warum es nicht ohne dich geht |
+|---|---|---|---|
+| **17** | **Prüfbühne ohne Boden** | Dauerhafter Seed mit Prüfnutzer und Prüfobjekt? | Prüfinfrastruktur; **drei von vier Befunden verschwinden auf einmal** |
+| **16** | **W-24 Boden/Erdkontakt** | Woran erkennt das Modell Erdreich? *(Empfehlung: am Geschoss)* | Fachentscheidung mit **Rechenwirkung**, berührt das wberechnung-Transplantat |
+| **15** | **W-26 Dachschichten** | Darf `RoofNode` ein Feld `schichten` bekommen? | **Schema**-Entscheidung; das Muster steht schon zweimal |
+| **15** | **W-28 Entwässerung** | Rinnenbemessung — Operanden oder vertagen? *(Empfehlung: vertagen)* | **Normgröße** (DIN 1986-100) |
+| **15** | **Sechs Objekttypen** | Pumpe, Leuchte, Schalter, Steckdose, Verteiler, **PV-Modul** | **Schema**; sechs Werkzeuge an einem Feld |
+| **14** | **Tragwerk sichtbar?** | Gehört Tragwerk an die Zeichenfläche? | Produktentscheidung |
+
+> **Und eine Frage, die ich nicht geraten habe:** *du hast geschrieben, wir sollen „morgen bei B Session"
+> sein. **Ich weiß nicht, was „B Session" genau bezeichnet.** Ich habe deshalb die zehn B-Zeilen des
+> Fahrplans vollständig gemessen — das ist unter jeder Lesart nützlich. Wenn du etwas anderes gemeint
+> hast, drehe ich die Reihenfolge.*
+
+**Die Abschnitte 1, 4, 5 und 9 sind erledigt** *(so markiert in ihrer Überschrift)*. **2 ist
+gegenstandslos, 7 eine Anregung.** *Bei den Abschnitten **3, 6, 8, 10, 11, 12 und 13** habe ich den
+Zustand **heute nicht neu gemessen** — sie stammen aus früheren Runden, und ich sage nicht „offen", wo
+ich nicht nachgesehen habe. Wenn einer davon für dich noch aussteht, sag es, dann messe ich ihn frisch.*
+
+
 ## 1 · Der Push — **ERLEDIGT am 12.08.**
 
 > **Nachtrag:** Dieser Punkt ist weg. Du hast Weg c freigegeben, die Sperre ist durch acht enge
