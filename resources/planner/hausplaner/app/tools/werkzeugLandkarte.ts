@@ -28,6 +28,31 @@
  * **Es sind 110 Verträge — der ursprüngliche Stufenplan hatte recht, die Korrektur auf 111 war
  * der Zählfehler.** Diese Landkarte führt 110 Einträge; der Test prüft gegen
  * `WERKZEUG_VERTRAEGE.length`, nicht gegen eine abgeschriebene Zahl.
+ *
+ * > **NACHTRAG 13.08.2026 (A-29) — der Absatz darüber war an SEINEM Tag richtig und ist es heute
+ * > nicht mehr. Er wird deshalb nicht umgeschrieben: er ist ein datierter Messbefund.**
+ * >
+ * > **Heute sind es 111** — am Bau-Stand erhoben, und die Zahl braucht hier zwingend ihren Träger,
+ * > weil sie ohne ihn nachweislich zweideutig ist:
+ * >
+ * > ```text
+ * > werkzeugVertrag.ts   Zeilen mit  werkzeugId: '        111
+ * > werkzeugVertrag.ts   Eintraege   ^\s*werkzeugId: '    111
+ * > diese Datei          Objektliterale ^\s*\{ werkzeugId 111
+ * > diese Datei          Marken  41 deckt + 21 fehlt + 43 ohne-modell + 6 stillgelegt = 111
+ * > diese Datei          ROH  grep -c "werkzeugId: '"     112   <- eine Nennung steht in
+ * >                                                              DIESEM Kommentar, Zeile 27
+ * > ```
+ * >
+ * > **Die Ursache ist belegt, nicht vermutet:** `git log -S"Es sind 110"` führt auf `e903ce36`
+ * > (die Landkarte entsteht, damals **110**), und `git log -S"werkzeugId: 'kontur'"` auf
+ * > **`1fba9a1d`** (Z-05-N1) — *der Kontur-Vertrag kam hinzu, seitdem 111.*
+ * >
+ * > **Und die Sache ist an zwei von drei Orten gepflegt worden — nur hier nicht.** *Die Daten
+ * > dieser Landkarte sind mitgezogen (`ohne-modell` 42 → 43), und `werkzeugLandkarte.test.ts:119`
+ * > hält die Verteilung hart und kommentiert die Änderung selbst. **Der Bau war sauber; stehen
+ * > geblieben ist die Prosa** — und die ist der erste Text, den ein Leser sieht, und sie begründete
+ * > ausführlich, warum 111 falsch sei.*
  */
 import { WERKZEUG_VERTRAEGE } from './werkzeugVertrag';
 
@@ -77,7 +102,28 @@ export const WERKZEUG_LANDKARTE: readonly LandkartenEintrag[] = [
   { werkzeugId: 'trimmen', marke: 'fehlt', begruendung: 'Braucht Schnittpunktrechnung zweier Wände und ein Kürzen auf den Schnittpunkt — `UPDATE_NODE` könnte das Ergebnis setzen, aber der Befehl, der es rechnet, fehlt.' },
   { werkzeugId: 'verbinden', marke: 'fehlt', begruendung: 'Zwei Wände zu einer zu verschmelzen heißt: einen ändern, einen entfernen, in EINEM Schritt. Dieselbe Klasse wie `teilen`.' },
   { werkzeugId: 'verlaengern', marke: 'fehlt', begruendung: 'Wie `trimmen`, andere Richtung — Schnittpunkt rechnen und den Endpunkt dorthin ziehen.' },
-  { werkzeugId: 'versatz', marke: 'fehlt', begruendung: 'Parallelversatz erzeugt eine NEUE Wand im Abstand d — die Geometrie dafür liegt bereits in `editierGeometrie.versetzteWand`, der Befehl, der sie anlegt, fehlt.' },
+  // A-29 (13.08.2026) — BERICHTIGT. Der alte Wortlaut bleibt hier lesbar und wird NICHT gelöscht:
+  //
+  //   ÜBERHOLT: 'Parallelversatz erzeugt eine NEUE Wand im Abstand d — die Geometrie dafür liegt
+  //              bereits in `editierGeometrie.versetzteWand`, der Befehl, der sie anlegt, fehlt.'
+  //
+  // DIE WORTFALLE, und sie ist der eigentliche Grund für diesen Eintrag: `versetzen` (bewegen) und
+  // `Versatz` (offset) sind DASSELBE WORT und ZWEI VORGÄNGE. `versetzteWand` schiebt BEIDE
+  // Endpunkte um denselben Vektor (dx,dy) — eine TRANSLATION; ihr eigener Doc-Kommentar sagt
+  // „bewegen/duplizieren mit Versatz". Der Parallelversatz legt eine neue Achse im SENKRECHTEN
+  // Abstand d daneben und braucht dafür die NORMALE — eine Größe, die in `versetzteWand` nicht
+  // vorkommt. *Ohne diesen Satz trägt die nächste Rolle dieselbe Verwechslung beim nächsten Anlass
+  // wieder ein.*
+  //
+  // WAS DIE FALSCHE ZUSCHREIBUNG GEKOSTET HAT: aus ihr wurde am 13.08. eine Fahrplan-Einordnung
+  // („die Geometrie IST DA, es fehlt nur der Anschluss") und eine Zusage an Yama. Beides
+  // zurückgezogen in `485004c4` — und nur, weil die Funktion nachträglich geöffnet wurde.
+  //
+  // DER HEUTIGE STAND, gemessen und nicht aus dem Auftrag übernommen: die Rechnung FEHLT NICHT
+  // MEHR. `geometry/geradenGeometrie.parallelVersatz(start, ende, abstandMm, seite)` leistet
+  // genau das (A-32, BETRIEBSBESTAETIGT) — F-020s Normalform, Seite benannt statt Vorzeichen.
+  // Was fehlt, ist NUR noch der Modellbefehl, der die Achse als Wand anlegt.
+  { werkzeugId: 'versatz', marke: 'fehlt', begruendung: 'Parallelversatz legt eine NEUE Wand im SENKRECHTEN Abstand d neben die Achse — NICHT dasselbe wie `editierGeometrie.versetzteWand`, das beide Endpunkte um denselben Vektor verschiebt (Translation). Die Rechnung dafür liegt seit A-32 in `geradenGeometrie.parallelVersatz` (F-020 Normalform); es fehlt der Modellbefehl, der die versetzte Achse als Wand anlegt.' },
 
   // --- create: 2D-Grundformen (6) — der Bauplaner kennt keine freien Zeichenprimitive -------------
   { werkzeugId: 'bogen', marke: 'stillgelegt', begruendung: 'Freie 2D-Zeichenprimitive gibt es im Gebäudemodell nicht — jeder Knoten ist ein Bauteil. Ein Bogen ohne Bauteilbezug hätte keine Fachbedeutung. MELDUNG an den Planner, nicht entfernt.' },
