@@ -1820,3 +1820,59 @@ DER MANGEL IST DORT, WO GEBAUT WERDEN SOLL — und dort ist er VOLLSTAENDIG:
 > Vorausspezifikation und tun, was eine solche tut.** Was fehlt, ist die **Übersetzung** zwischen ihrer
 > Sprache und der des Codes — und die brauchst du erst dort, wo tatsächlich gebaut wird. **Das ist
 > genau die eine Zeile, die du unabhängig von der Bedienentscheidung festgeschrieben haben willst.***
+
+## 20 · Die BEREIT-Aufträge — wer hängt an wem. *Liste, wie verlangt*
+
+```text
+KENNUNG   ART                SCHREIBT NACH                          KOLLIDIERT MIT
+--------  -----------------  -------------------------------------  --------------
+A-33      Datenberichtigung  docs/STATUS.md (11 Tafelzeilen)        >> ALLEN <<
+W-31      Stufe 6 / Bau      Insel-Code (PV-Schnellbelegung)        —
+W-06      Ablesung           werkbank/02-WERKZEUGE/W-06/            —
+W-10/1    Ablesung           werkbank/02-WERKZEUGE/W-10/            —
+W-12/1    Ablesung           werkbank/02-WERKZEUGE/W-12/            —
+W-14/1    Ablesung           werkbank/02-WERKZEUGE/W-14/            —
+W-16/1    Ablesung           werkbank/02-WERKZEUGE/W-16/            —
+W-18/1    Ablesung           werkbank/02-WERKZEUGE/W-18/            —
+W-03/1    Ablesung           werkbank/02-WERKZEUGE/W-03/            —
+W-37      Ablesung           werkbank/02-WERKZEUGE/W-37/            —
+```
+
+**Die einzige echte Kollision ist A-33.**
+
+```text
+A-33 aendert ELF Tafelzeilen in docs/STATUS.md.
+JEDER andere Auftrag schreibt beim Zustandswechsel ebenfalls dorthin
+(Tafelzeile + Datensatz, A-20).
+-> Waehrend A-33 laeuft, kollidiert jeder Zustandswechsel mit ihm.
+-> EMPFEHLUNG: A-33 ALLEIN laufen lassen. Es ist klein (elf Zeilen,
+   kein Code) und danach ist die Bahn wieder frei.
+```
+
+**Die acht Ablesungen laufen parallel — sie schreiben in je eigene Verzeichnisse.**
+
+```text
+Jede schreibt nur ihre SIEBEN Blaetter unter
+werkbank/02-WERKZEUGE/<ihr Werkzeug>/ — kein gemeinsamer Pfad.
+Beruehrungspunkt ist allein die Tafelzeile in docs/STATUS.md, und die
+ist eine Zeile je Auftrag. Das ist der bekannte Beifang-Punkt, kein
+inhaltlicher Konflikt.
+```
+
+**W-31 ist der einzige mit Insel-Code** — *läuft parallel zu allen Ablesungen, aber nicht neben einem
+zweiten Code-Auftrag.*
+
+### Ein Nebenbefund aus dieser Messung
+
+```text
+VIER Blaetter haben KEIN Kriterium, das Produktivcode ausschliesst:
+  W-06 · W-12/1 · W-18/1 · W-37
+Die vier neueren haben es (W-10/1, W-14/1, W-16/1, W-03/1: „Kein
+Produktivcode. Gegenprobe: resources/planner/** kommt null Mal vor").
+-> Kein Beleg fuer eine Absicht — es sind Ablesungen. Aber ohne den
+   Ausschluss steht nirgends, dass sie keinen Code anfassen duerfen,
+   und der Evaluator hat kein Kriterium dafuer.
+   Ich ziehe es NICHT nach: drei der vier liegen beim Generator, und
+   ein Blatt zu aendern, das gerade gebaut wird, verschiebt den Boden.
+   Beim naechsten Anfassen mitnehmen.
+```
