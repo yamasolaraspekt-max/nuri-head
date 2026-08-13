@@ -149,3 +149,105 @@ was_ich_gemessen_habe_und_was_nicht: "SELBST GEMESSEN: alle 52 Verweise eingesam
         Einordnung je Stelle zu treffen ist und eine falsche ein abgenommenes Blatt aendern wuerde."
 A_34_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+## Votum des Evaluators (§11) — ABGENOMMEN
+
+```yaml
+votum: ABGENOMMEN
+geprueft_am: "13.08.2026, evaluator"
+bau_commit: "2f8cf32d (22:21) — GESUCHT, der einzige. Zwei Dateien, kein Nachtrag."
+elter: "5c0a7e12"
+BEFANGENHEIT_OFFENGELEGT: "DIESER AUFTRAG IST AUS MEINEM EIGENEN BEFUND ENTSTANDEN. Ich habe die
+  verschobene Fundstelle bei der A-32-Abnahme gefunden (7994539d), weil ich alle sieben
+  Fundstellen des Baus geoeffnet habe; der Planner hat daraus A-34 geschnitten. Ich pruefe hier
+  also die Behebung meines eigenen Funds. Deshalb habe ich JEDE Zahl und JEDEN Anker neu gemessen
+  statt sie aus meinem eigenen Befund zu uebernehmen — und die Gegenprobe von A-34-1 ausdruecklich
+  mutiert, um zu sehen, ob sie ueberhaupt anschlagen kann."
+```
+
+### Messtisch — jede Kriterienzeile eine Zeile
+
+```text
+A-34-1 (P1, TRAGEND)  ERFUELLT — beide Zahlen selbst gemessen, nicht uebernommen
+  am ELTER 5c0a7e12:  grep -rE 'FORMELSAMMLUNG[^ ]*:[0-9]' resources/planner/  -> 2 Treffer
+                      geradenGeometrie.ts:133 (`FORMELSAMMLUNG.md:141-143`)
+                      geradenGeometrie.ts:146 (`FORMELSAMMLUNG.md:4`)
+  am BAU   2f8cf32d:  derselbe Befehl                                          -> 0 Treffer
+  FANGPROBE (Anker 1x, md5 zurueck auf 06221d20): eine Zeilennummer wieder eingebaut
+                   -> die Gegenprobe meldet 1 statt 0. Sie kann also rot werden.
+
+A-34-2 (P1)           ERFUELLT — alle drei Anker SELBST in der Sammlung gezaehlt
+  '### F-020 · Straight Skeleton (Grundgleichung)'   1x   (Z.167)
+  'Formel (Kantenversatz zur Zeit t)'                1x   (Z.174)
+  'Eine Formel steht genau einmal'                   1x   (Z.4)
+  UND SIE FUEHREN ZUM RICHTIGEN: direkt unter dem Kantenversatz-Anker steht
+    Kante als Gerade:  a·x + b·y + c = 0    mit a²+b² = 1
+    Versetzte Kante:   a·x + b·y + c − t = 0
+  — genau die Normalform, die der Kommentar meint. Der Anker ist auffindbar UND richtig.
+  FANGPROBE: den Anker-Text verfaelscht (Grundgleichung -> Grundformel)
+                   -> kommt 0x statt 1x in der Sammlung vor. Auch diese Probe traegt.
+
+A-34-3 (P1)           ERFUELLT
+  Alle geaenderten Zeilen in geradenGeometrie.ts ohne Kommentarzeichen aufgelistet: LEER.
+  Es ist ausschliesslich Kommentar.
+  Insel-Suite am Bau-Stand SELBST gefahren: tests 1750, pass 1750, fail 0. tsc exit=0.
+  (1750 ist derselbe Stand wie bei A-32 und A-29 — der Bau aendert die Zahl nicht, und das ist
+  die Zusage.)
+
+A-34-4                ERFUELLT — und ich habe die Menge SELBST eingesammelt, nicht die Liste geprueft
+  Alle Blaetter in docs/auftraege/aktiv/ mit einem Zeilenverweis: NEUN.
+  Davon abgeschlossen und nach A-34-5 ausgeschlossen: A-14, A-20, A-32 (alle BETRIEBSBESTAETIGT).
+  Von den sechs aktiven traegt GENAU EINES einen Verweis INNERHALB des Kriterien-Zauns:
+    W-06  Z.184  'FORMELSAMMLUNG.md:218' fuer F-032   -> vom Bau auf den Anker umgestellt
+  Die drei Behauptungen des W-06-Nachtrags einzeln nachgemessen:
+    '### F-032 · Transformation eines Punktes' kommt 1x vor, auf Zeile 253  -> stimmt
+    Zeile 218 traegt heute '- **Zweck:** PV-Ertrag, Verschattung'           -> stimmt woertlich
+    F-032 liegt auf 253                                                     -> stimmt
+  Die uebrigen Verweise (W-12/1, W-16/1, W-18/1, W-31, und A-34 selbst) stehen in
+  grundlage-Feldern, Befundlisten und Belegtexten — dort belegt die Nummer einen STAND und ist
+  nach Abschnitt 2 des Auftrags legitim. Unberuehrt, richtig so.
+
+A-34-5                ERFUELLT
+  Am Commit gemessen: FORMELSAMMLUNG 0 · docs/STATUS.md 0 · kein BETRIEBSBESTAETIGT- oder
+  ABGENOMMEN-Blatt beruehrt. Der Commit fasst genau zwei Dateien an, und W-06 ist BEREIT.
+
+Browser               NICHT GEFAHREN, mit Grund: reine Kommentaraenderung, kein Verhalten.
+§15                   Kein Schreibvorgang gegen eine Datenbank im Pruefumfang.
+```
+
+### Zwei Stellen, an denen der Bau mehr getan hat als abzuhaken — beide zu Recht
+
+```text
+1  DIE GEGENPROBE HAT IHN SELBST ERWISCHT. Nach der ersten Umstellung meldete
+   grep -rE 'FORMELSAMMLUNG[^ ]*:[0-9]' noch EINEN Treffer: sein eigener Erklaersatz zitierte die
+   alte Nummer in VERWEISFORM. Er haette '1 statt 0' melden und begruenden koennen — stattdessen
+   hat er den Satz umformuliert, sodass die alte Zahl ausgeschrieben dasteht. AM BAU-STAND
+   NACHGEPRUEFT: der Beleg ist erhalten ("zeigte auf die Zeilen 141 bis 143 jener Datei"), und die
+   mechanische Gegenprobe traegt trotzdem. Das ist die bessere Loesung, nicht die bequemere.
+2  DER ZWEITE VERWEIS WAR RICHTIG UND WURDE TROTZDEM UMGESTELLT. `FORMELSAMMLUNG.md:4` zeigte auf
+   den Kopf und liegt VOR der Einfuegung — selbst nachgemessen, Zeile 4 traegt weiter
+   "Eine Formel steht genau einmal". Der Scope verlangt die Umstellung ausdruecklich, damit
+   dieselbe Falle dort nicht beim naechsten Mal zuschlaegt. Erfuellt.
+```
+
+### Mein eigener Messfehler — und er ist derselbe, den der Generator vor mir gemacht hat
+
+```text
+Beim Einsammeln der Kriterien-Verweise (A-34-4) meldete mein erstes Muster ZWEI Treffer in aktiven
+Blaettern: W-06 und W-31. Ich war einen Schritt davon entfernt, "der Bau hat W-31 uebersehen" als
+Befund zu schreiben.
+
+URSACHE, an meinem eigenen Werkzeug gefunden: ich habe "liegt der Treffer nach der
+Kriterien-Ueberschrift" gemessen — und in W-31 folgt dem Kriterienblock ein nachgestellter
+yaml-Block. Die Trefferzeile Z.240 steht dort im Feld
+`zur_sperre_und_was_der_plan_pruefer_dazu_gemessen_hat`, also in einem BELEGTEXT. Erst die
+Abgrenzung am ```-ZAUN statt an der Ueberschrift hat es sauber getrennt: dann bleibt W-06 allein
+uebrig.
+
+DASS DER GENERATOR IN DIESELBE FALLE GELAUFEN IST UND SIE SELBST GEMELDET HAT, habe ich erst
+DANACH gelesen — die Reihenfolge war eingehalten. Es ist trotzdem der Hinweis wert: dieselbe
+Ueberschriften-Heuristik hat zwei Rollen unabhaengig voneinander in denselben Fehlgriff gefuehrt.
+Wer kuenftig Kriterien von Belegen trennt, grenzt am Zaun ab, nicht an der Ueberschrift.
+```
+
+**Weitergabe:** ABGENOMMEN → **Release-Prüfer**.

@@ -321,3 +321,61 @@ Browser              NICHT GEFAHREN, mit Grund: keine sichtbare Wirkung. A-29-5 
 
 **Weitergabe:** NACHBESSERN → **Generator**. Nach §12.3/§12.4 fahre ich bei der Wiederabnahme
 ALLE sechs Kriterien erneut, nicht nur den Befund.
+
+## Votum des Evaluators (§11), RUNDE 2 — ABGENOMMEN
+
+```yaml
+votum: ABGENOMMEN
+geprueft_am: "13.08.2026, evaluator — Wiederabnahme"
+nachbesserung_commit: "d21dd083 (22:24), GESUCHT. Eine Datei, ein Hunk (der Kopf)."
+elter_der_nachbesserung: "24204aa0"
+paragraf_12_4: "ALLE SECHS Kriterien erneut gefahren, nicht nur der Befund — am neuen Stand."
+```
+
+### Der Befund von Runde 1 — behoben, und zwar an der Wurzel
+
+```text
+GEMESSEN am Nachbesserungs-Stand d21dd083:
+  grep -c "werkzeugId: '"  ueber werkzeugLandkarte.ts   ->  112
+  Nennungen AUSSERHALB der Eintraege                    ->  1, naemlich Z.27
+      27: * `grep -c "werkzeugId: '"` liefert **110**, ebenso das Auszaehlen der Objektliterale.
+  111 Eintraege + diese eine = 112. Die Zahl im Nachtrag stimmt jetzt, und der Satz
+  "der P-04-Absatz oben nennt sie einmal im Fliesstext (Zeile 27)" stimmt woertlich.
+
+DIE LOESUNG IST BESSER ALS DIE ZAHL ZU BERICHTIGEN, und das ist anzuerkennen: der Bau hat die
+Muster in seiner Tabelle BESCHRIEBEN statt sie auszuschreiben ("Zeilen, die eine Vertragskennung
+setzen" statt der Schreibweise selbst). Damit kann der Kommentar sich nicht mehr selbst mitzaehlen
+— nicht heute und nicht bei der naechsten Erweiterung. Eine berichtigte Zahl waere beim naechsten
+Satz wieder falsch geworden; diese Fassung kann es nicht mehr.
+EIGENE GEGENPROBE dazu: ich habe gezaehlt, wie viele Nennungen der Kennungs-Schreibweise heute
+ausserhalb der Eintraege stehen — genau EINE, und die stammt aus dem alten P-04-Absatz, den A-29-3
+ausdruecklich NICHT umschreiben laesst. Die Selbstbezueglichkeit ist raus.
+```
+
+### Messtisch Runde 2 — alle sechs, am neuen Stand (§12.4)
+
+```text
+A-29-1 (P1, TRAGEND)  ERFUELLT   "die Geometrie dafuer liegt bereits" kommt in 0 aktiven
+                                 begruendung-Feldern vor; der alte Wortlaut steht 1x als
+                                 "UEBERHOLT:" lesbar. Unveraendert gegenueber Runde 1.
+A-29-2 (P1)           ERFUELLT   "DASSELBE WORT und ZWEI VORGAENGE" 1x. Unveraendert.
+A-29-3 (P1)           ERFUELLT   die vier tragenden Zahlen erneut gezaehlt, je 111:
+                                 werkzeugVertrag Kennungszeilen 111 · am Zeilenanfang 111 ·
+                                 Landkarten-Objektliterale 111 · Markensumme 41+21+43+6 = 111.
+                                 UND die Roh-Zahl stimmt jetzt (oben).
+A-29-4                ERFUELLT   werkzeugLandkarte.test.ts: tests 12, pass 12, fail 0.
+                                 Marken deckt 41 · fehlt 21 · ohne-modell 43 · stillgelegt 6 —
+                                 unveraendert.
+                                 FANGPROBE ERNEUT, Anker je 1x, md5 zurueck auf 7db42e60:
+                                   Marke fehlt->deckt      -> ':119 ERGEBNIS der Stufe' ROT
+                                   Begruendung auf 8 Zeichen -> ':90 fehlt-Begruendung' ROT
+A-29-5                ERFUELLT   .begruendung in 0 .tsx; WERKZEUG_LANDKARTE hat 7 Fundstellen
+                                 ausserhalb der eigenen Datei, davon 0 ausserhalb des Tests.
+A-29-6                ERFUELLT   Bau 2 Hunks + Nachbesserung 1 Hunk; ueber BEIDE Commits gegen
+                                 die Basis 84c57085 sind es genau ZWEI Bereiche (@@ -28 Kopf,
+                                 @@ -77 versatz). Die Nachbesserung fasst nur den Kopf an und
+                                 keine weitere Datei.
+Suite / tsc                      1750 / 1750 / fail 0, tsc exit=0 — unveraendert.
+```
+
+**Weitergabe Runde 2:** ABGENOMMEN → **Release-Prüfer**.

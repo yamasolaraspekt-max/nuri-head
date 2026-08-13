@@ -24,7 +24,7 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 
 | | Posten | Was du entscheidest | Warum es nicht ohne dich geht |
 |---|---|---|---|
-| **17** | **Prüfbühne ohne Boden** | Dauerhafter Seed mit Prüfnutzer und Prüfobjekt? | Prüfinfrastruktur; **drei von vier Befunden verschwinden auf einmal** · **13.08. nachts frisch gemessen: 0/0/0 — geräumt vom Release-Prüfer-Grundtor selbst. Dritter Weg C (Skript sät idempotent) in Abschnitt 17 daneben gelegt.** |
+| ~~**17**~~ | ~~Prüfbühne ohne Boden~~ **✅ ENTSCHIEDEN: Weg C** | *Skript sät idempotent, fail closed, nur `ticket_testing`. Drei Auflagen in 17. Blatt folgt, wenn der Vorrat sinkt.* | Prüfinfrastruktur; **drei von vier Befunden verschwinden auf einmal** · **13.08. nachts frisch gemessen: 0/0/0 — geräumt vom Release-Prüfer-Grundtor selbst. Dritter Weg C (Skript sät idempotent) in Abschnitt 17 daneben gelegt.** |
 | **✅ 16+15** | **W-24 und W-26 — GEMESSEN, beide erledigt sich als Entscheidung** | ***Du musst hier nichts entscheiden.*** **W-24:** die Regel existiert bereits — `GeometrieAbleitungService:61` setzt für `boden` den Fallback **`erdreich`**. Was fehlt, ist ein Bau: die Projektion liefert `null`, und `:58` (`if (! empty($def))`) legt dann **gar kein Bauteil an** — Boden und Decke fehlen in der Heizlast **vollständig**. **W-26:** die Heizlast liest **keine Schichten** — `opakeUQuelle` nutzt `u_wert` oder `konstruktion_id`. **Ein Feld `RoofNode.schichten` würde ihr nicht helfen; die Frage war falsch gestellt.** *(Details unten in 16.)* |
 | **16+15 (alt)** | **W-24 und W-26 GEHÖREN ZUSAMMEN** | *Nicht zwei Schema-Fragen, sondern **ein** Vorgang: die Naht `UebernehmeSzeneInAuslegung` (`:84-88`) markiert selbst `u_werte => unbelegt` und „U-Werte/Konstruktionen sind ein eigener Schritt". **Genau dort sitzen beide** — `boden.grenzflaeche` (W-24) und `schichten` (W-26). Die Heizlast-Seite hat das Konzept bereits (`HeizlastBauteil`, `Konstruktion`, `HeizlastProjektService:318`). **Statt zwei Schema-Entscheidungen brauche ich eine Messung der Naht** — was verlangt die Heizlast, was liefert die Insel, was fehlt wirklich. Die mache ich; danach ist es eine Frage statt zwei.* |
 | **16** | **W-24 Boden/Erdkontakt** | Woran erkennt das Modell Erdreich? *(Empfehlung: am Geschoss)* | Fachentscheidung mit **Rechenwirkung**, berührt das wberechnung-Transplantat |
@@ -1578,7 +1578,48 @@ glätten.*
 
 ---
 
-## 17 · NEU am 13.08.: die Prüfbühne hat keinen Boden — und das ist die dringendste Frage
+## 17 · ✅ ENTSCHIEDEN 13.08.: **Weg C** — das Prüfskript stellt seine Vorbedingung selbst her
+
+> **Yamas Entscheidung im Wortlaut:** *„Entschieden: C. Das Prüfskript stellt seine Vorbedingung selbst
+> her — idempotent, nur wenn es läuft, nur gegen `ticket_testing`."*
+>
+> **Seine Begründung gegen A:** *ein dauerhafter Seed ist eine **zweite Wahrheit** — genau die, die
+> A-20 und A-22 diese Woche aus dem Haus geräumt haben. Er driftet von dem weg, was der Prüflauf
+> erwartet, und **die Drift ist still**. **Und A trägt eine ungemessene Voraussetzung:** die Bühne ist
+> vom **Grundtor** geräumt worden; ein Seed liegt in derselben Datenbank. Überlebt er das Grundtor?
+> **Diese Frage wird nicht beantwortet, sie fällt weg** — was bei jedem Lauf neu hergestellt wird, kann
+> nicht weggeräumt werden.*
+>
+> **Gegen B:** *B funktioniert und kostet jedes Mal denselben Handgriff. „Ein Verfahren, das auf
+> Disziplin statt auf Mechanik beruht, hat in diesem Haus eine gemessene Trefferquote."*
+
+### Die drei Auflagen — wörtlich, für das Blatt
+
+```text
+1  FAIL CLOSED, nicht fail silent.
+   Das Skript prueft den Datenbanknamen BEVOR es irgendetwas schreibt.
+   Stimmt er nicht exakt -> Abbruch mit Wortlaut, Rueckgabewert ungleich 0.
+   Kein Default, keine Annahme, kein "vermutlich Test".
+   §15 gilt woertlich: keine Seeds gegen Produktivdaten.
+
+2  IDEMPOTENT heisst nachgemessen, nicht behauptet.
+   Zweimal laufen lassen, danach zaehlen: die Menge muss identisch sein.
+   Das ist ein Kriterium im Blatt, kein Satz in der Botschaft.
+
+3  DAS SKRIPT SAET NUR, WAS DER PRUEFLAUF BRAUCHT.
+   Pruefnutzer und Pruefobjekt. Nichts darueber hinaus.
+   Wer spaeter mehr braucht, erweitert das Skript — nicht die Datenbank
+   nebenher.
+```
+
+> **Status: entschieden, noch nicht geschnitten.** *Yamas Anweisung war ausdrücklich „keinen zwölften
+> Auftrag — arbeitet die elf ab". **Das Blatt wird geschnitten, sobald der Vorrat sinkt**, mit den drei
+> Auflagen als Kriterien. Der Release-Prüfer hat den Weg vorgelegt und **nicht entschieden** — das war
+> richtig, er hätte über sein eigenes Grundtor entschieden.*
+
+---
+
+## 17a · Der Befund, der zu dieser Entscheidung geführt hat *(Stand bei der Vorlage)*
 
 **Sie stand bisher in keiner Vorlage**, *nur in Commit-Botschaften. Der Release-Prüfer hat sie gestellt,
 nachdem er **vier Befunde zu einem zusammengefasst** hat. Ich habe die Lage selbst nachgemessen, weil
@@ -1757,3 +1798,122 @@ Ein eigener Dialog         -> NICHT noetig
 > **Beide Messungen fielen positiv aus, und das ist selten genug, um es zu sagen:** *ich hatte mit
 > mindestens einem Hindernis gerechnet. **Die Bedienung ist gebaut — sie ist nur noch nie von einem
 > Werkzeug benutzt worden.***
+
+## 19 · Die 134 Eingabe-Namen, an der Stelle geöffnet — *der Mangel ist eng, aber nicht so, wie die Zahl es sagt*
+
+*Yamas Auftrag: „Sagt mir, wieviele davon ECHTE Treffer sind, an der Stelle geöffnet. Ich will wissen,
+ob der Mangel wirklich eng ist oder nur eng aussieht."*
+
+### Zuerst: die Zahl ist nicht belastbar, und das ist das erste Ergebnis
+
+```text
+Lauf 1  blosses Vorkommen im Code            35 von 134
+Lauf 2  Kriterium „Objektschluessel oder Property-Zugriff"   20 von 134
+Lauf 3  die 20 einzeln geoeffnet, Grenzfaelle an der BESTEN
+        statt der ersten Stelle geprueft     ~18 von 134
+
+UND DIE FANGPROBE ZU LAUF 2 IST GESCHEITERT: mein Kriterium hielt
+`height: 26` in einem style={{}} fuer einen echten Treffer. Ich habe es
+nicht geflickt, sondern die Grenzfaelle von Hand nachgesehen.
+```
+
+> ***Eine trennscharfe automatische Messung ist hier nicht zu haben,*** *und der Grund ist der
+> Gegenstand: die Vertragsnamen sind **Allerweltswörter** — `axis`, `name`, `size`, `width`, `format`,
+> `source`. Jedes Muster trifft entweder zu viel (CSS, Kommentare, fremde APIs) oder zu wenig. **Wer
+> hier eine genaue Zahl nennt, hat geraten.***
+
+### Was die Handprüfung ergeben hat
+
+```text
+ECHTE Entsprechungen, Stelle geoeffnet (~18):
+  activeLevelId · angleDeg · depth · elevation · height · hostWallId ·
+  name · offset · overhang · parameters · pitch · points · position ·
+  projectId · roofType · sillHeight · thickness · width
+  -> die Grenzfaelle height/position/width/offset/name stehen als
+     Schema-Felder in domain/scene.types.ts bzw. domain/validation.ts —
+     der erste Treffer war CSS, die Sache existiert trotzdem.
+
+FREMD-API, kein Vertragsbezug (2):  size (JS Set.size) · path (Zod-Fehler)
+NUR ZUFALLSTREFFER (~15):  axis · comment · delta · dimension · format ·
+  options · pivot · reference · scope · slope · source · spacing · unit …
+GAR NICHT IM CODE (99)
+```
+
+### Die Antwort auf deine Frage: **eng — aber nicht wegen der Zahl**
+
+```text
+DIE 99 FEHLENDEN sind ueberwiegend Namen fuer Werkzeuge, die es NICHT GIBT
+(airChangeRate, circuitId, boundaryType, cascadePolicy …). Bei einer
+VORAUSspezifikation ist das normal und kein Mangel.
+
+DER MANGEL IST DORT, WO GEBAUT WERDEN SOLL — und dort ist er VOLLSTAENDIG:
+  selectionIds          0 Treffer   (7 der 8 Werkzeuge nennen es)
+  operationParameters   0 Treffer   (5 der 8)
+  BEIDE sind eindeutige Namen — kein Allerweltswort, kein Zufallstreffer
+  moeglich, keine Grenzfallfrage. Die Null ist hier belastbar.
+```
+
+> ***Also: eng im Sinne von „klar abgegrenzt", total im Sinne von „innerhalb dieser Grenze fehlt
+> alles".*** *Der Rest der 134 sagt über die acht Werkzeuge nichts — er beschreibt Werkzeuge, die
+> niemand gebaut hat.*
+
+> ***Und was ich daraus NICHT ableite:*** *dass die 111 Verträge unbrauchbar wären. **Sie sind eine
+> Vorausspezifikation und tun, was eine solche tut.** Was fehlt, ist die **Übersetzung** zwischen ihrer
+> Sprache und der des Codes — und die brauchst du erst dort, wo tatsächlich gebaut wird. **Das ist
+> genau die eine Zeile, die du unabhängig von der Bedienentscheidung festgeschrieben haben willst.***
+
+## 20 · Die BEREIT-Aufträge — wer hängt an wem. *Liste, wie verlangt*
+
+```text
+KENNUNG   ART                SCHREIBT NACH                          KOLLIDIERT MIT
+--------  -----------------  -------------------------------------  --------------
+A-33      Datenberichtigung  docs/STATUS.md (11 Tafelzeilen)        >> ALLEN <<
+W-31      Stufe 6 / Bau      Insel-Code (PV-Schnellbelegung)        —
+W-06      Ablesung           werkbank/02-WERKZEUGE/W-06/            —
+W-10/1    Ablesung           werkbank/02-WERKZEUGE/W-10/            —
+W-12/1    Ablesung           werkbank/02-WERKZEUGE/W-12/            —
+W-14/1    Ablesung           werkbank/02-WERKZEUGE/W-14/            —
+W-16/1    Ablesung           werkbank/02-WERKZEUGE/W-16/            —
+W-18/1    Ablesung           werkbank/02-WERKZEUGE/W-18/            —
+W-03/1    Ablesung           werkbank/02-WERKZEUGE/W-03/            —
+W-37      Ablesung           werkbank/02-WERKZEUGE/W-37/            —
+```
+
+**Die einzige echte Kollision ist A-33.**
+
+```text
+A-33 aendert ELF Tafelzeilen in docs/STATUS.md.
+JEDER andere Auftrag schreibt beim Zustandswechsel ebenfalls dorthin
+(Tafelzeile + Datensatz, A-20).
+-> Waehrend A-33 laeuft, kollidiert jeder Zustandswechsel mit ihm.
+-> EMPFEHLUNG: A-33 ALLEIN laufen lassen. Es ist klein (elf Zeilen,
+   kein Code) und danach ist die Bahn wieder frei.
+```
+
+**Die acht Ablesungen laufen parallel — sie schreiben in je eigene Verzeichnisse.**
+
+```text
+Jede schreibt nur ihre SIEBEN Blaetter unter
+werkbank/02-WERKZEUGE/<ihr Werkzeug>/ — kein gemeinsamer Pfad.
+Beruehrungspunkt ist allein die Tafelzeile in docs/STATUS.md, und die
+ist eine Zeile je Auftrag. Das ist der bekannte Beifang-Punkt, kein
+inhaltlicher Konflikt.
+```
+
+**W-31 ist der einzige mit Insel-Code** — *läuft parallel zu allen Ablesungen, aber nicht neben einem
+zweiten Code-Auftrag.*
+
+### Ein Nebenbefund aus dieser Messung
+
+```text
+VIER Blaetter haben KEIN Kriterium, das Produktivcode ausschliesst:
+  W-06 · W-12/1 · W-18/1 · W-37
+Die vier neueren haben es (W-10/1, W-14/1, W-16/1, W-03/1: „Kein
+Produktivcode. Gegenprobe: resources/planner/** kommt null Mal vor").
+-> Kein Beleg fuer eine Absicht — es sind Ablesungen. Aber ohne den
+   Ausschluss steht nirgends, dass sie keinen Code anfassen duerfen,
+   und der Evaluator hat kein Kriterium dafuer.
+   Ich ziehe es NICHT nach: drei der vier liegen beim Generator, und
+   ein Blatt zu aendern, das gerade gebaut wird, verschiebt den Boden.
+   Beim naechsten Anfassen mitnehmen.
+```
