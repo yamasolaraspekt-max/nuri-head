@@ -84,6 +84,7 @@
 | **W-36** Faehigkeiten-Navigation | **`BETRIEBSBESTAETIGT`** | – | Release `f1c412f9` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-37** Rechenpanels | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben | · **EVALUATOR 13.08.: NACHBESSERN, EIN Punkt (§12.2) — `W-37-6`.** **Acht der neun Kriterien sind erfüllt**, jedes einzeln nachgemessen. **Der Befund trifft eine verlangte HANDLUNG, die nicht ausgeführt wurde:** das Kriterium sagt wörtlich *„Die REGISTERZEILE wird nachgezogen"* — am Commit gemessen enthält `225a7f1a` **0** Treffer für `REGISTER.md`, und `:124` nennt weiterhin **196 Z**, während `EngineFlaeche.tsx` an **drei** Ständen (Basis, Bau, HEAD) je **199** hat. *Der Bericht sagt es selbst:* „die Berichtigung gehört ins Register" — der Bau hat den Befund gesehen, richtig gemessen und bewusst nicht ausgeführt. **Warum ich das nicht durchgehen lasse:** der Scope nennt das Register **weder** als Ziel **noch** als Nicht-Ziel (beide Listen gelesen; nach §5 gilt dann das Kriterium), die Handlung ist an **vier** echten Ständen üblich und möglich (`fa7547c7` W-33, `3dae69b4` W-35, `3abd8e79` W-39, `7c782f76` W-34 — alle enthalten `REGISTER.md`), und W-37 ist nach eigener Aussage die **letzte freie Ablesung**. **Ausdrücklich nicht beanstandet:** die Messung 196↔199 stimmt. **Was erfüllt ist:** die **acht** Adapter nach **Signatur** gezählt (das Namensmuster `als*Eingabe` findet nur sechs — das Klassenmerkmal trägt), `SCHWERE_ANZEIGE` mit drei Graden je Zeichen **und** Wort (`EngineFlaeche.tsx:31-35`), sechs Import-Wächter namentlich plus drei **Nur-Quelle**-Fälle getrennt, `:522/:527/:538` selbst geöffnet, und 0 Doppel über **253** Blattdateien. Suite **1750/1750**, tsc exit=0. **Die Gegenprobe des Kriteriums nachgefahren:** am Bau-Stand sind es **vier** von sechs richtigen Registerzahlen, nicht fünf — *kein Befund gegen das Blatt*, denn `StartView.tsx` hatte am Basis-Stand `a94d91ac` wirklich 267 und wuchs erst danach. **Drei eigene Messfehler offengelegt**, darunter ein vertippter Basis-SHA, dessen stiller Fehlschlag dreimal „0 Zeilen" ergab. · **Der Generator schrieb: acht Kriterien belegt, sieben Blätter, Stufe 6 vollständig.**
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
+| **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | `BEREIT` | **plan-pruefer** | Schnitt `1df82ee1` · Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` | **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
 
@@ -13355,3 +13356,49 @@ was_ich_NICHT_tue: "Ich fasse kein Blatt an — Blaetter gehoeren dem Planner. I
 ballbesitz_befund: planner
 ```
 
+
+### A-35 — Datensatz (eigener Zaun nach A-25)
+
+```yaml
+auftrag: "A-35"
+zustand: BEREIT
+ballbesitz: plan-pruefer
+blatt: "docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md"
+basis_sha: 1df82ee1
+art: "BAU — erstes Werkzeug nach ANFORDERUNGEN.md A7. Kein neues Schema, keine neue
+  Mathematik, kein neuer Dialog."
+spur: A
+prioritaet: P2
+claim: "planner 13.08. — Claim VOR dem Schnitt. Kennung geprueft: A-35 hat NULL Treffer
+  in docs/STATUS.md und NULL Blaetter in docs/auftraege/aktiv/; A-01 bis A-34 sind vergeben."
+anlass: "Yama hat das Bedienmodell bestaetigt und auf die Frage 'naechster Schritt' geantwortet:
+  Bedienmodell entscheiden, dann bauen. Register: 23 von 43 BESCHRIEBEN, EINS GEBAUT."
+vorbedingungen_gemessen: "Alle vier erfuellt, je am Stand 1df82ee1 selbst nachgemessen:
+  (1) Mathematik liegt — geometry/geradenGeometrie.ts:84 geradenSchnitt, 196 Z., 9 Tests, und
+      NULL Produktivaufrufer ausser der Landkarte.
+  (2) Bedienmuster entschieden — ANFORDERUNGEN.md A7, von Yama bestaetigt 13.08.
+  (3) Auswahl mit Rollen gebaut — hausplanerStore.ts:30 selectedNodeIds als string[],
+      auswahlModus.ts haengt mit Modifikator an, primaerId ist der zuletzt geklickte.
+  (4) Undo-Klammer gebaut — executeCommands aus A-31.
+  Es fehlt GENAU das Werkzeug: toolRegistry.ts hat 0 Treffer auf 'trimmen'."
+keine_dublette: "'trimmen' kommt in sechs Dateien vor, alle geoeffnet — Vertrag, Themen, Paket,
+  Praesentation, Landkarte und der Kopfkommentar der Geometrie. Keine davon ist eine
+  Implementierung. Dasselbe gilt fuer teilen, verbinden, verlaengern, versatz."
+nicht_ziele: "KEIN ConfigWizard (A7 Konsequenz 1) · KEINE neue Geometriefunktion · KEINE der vier
+  Geschwister · KEINE Aenderung an docs/rollenkette/ · KEIN Schema · KEINE Aenderung an
+  auswahlModus.ts oder waehleAn (beide koennen was A7 verlangt, gemessen)."
+kanten: "K1 nur EIN Objekt gewaehlt · K2 parallele Geraden (geradenSchnitt liefert null) ·
+  K3 Schnittpunkt AUSSERHALB der Strecke — Geradenschnitt ist nicht Streckenschnitt ·
+  K4 primaerId ist auch in ids · K5 gesperrtes Objekt · K6 mehrere Schnittkanten treffen.
+  K3 und K6 verlangen eine BENANNTE Entscheidung im Bau-Bericht; eine stille Annahme ist ein
+  Mangel, auch wenn sie sich vernuenftig verhaelt."
+kriterien: "A-35-1 bis A-35-8 im Blatt, alle mit genanntem Messbefehl und Zahl vorher/nachher.
+  Tragend sind A-35-3 (Hauptrolle ist primaerId, NICHT ids[0]) und A-35-5 (die Uebersetzung
+  selectionIds<->selectedNodeIds steht an GENAU EINER Stelle, A7 Konsequenz 2)."
+warum_A_und_nicht_W03_2: "W-03/1 liegt als Ablesung auf BEREIT. Ein zweiter Auftrag am selben
+  Blattordner wuerde kollidieren. Ob trimmen eine eigene Registerzeile bekommt, ist eine
+  Registerfrage und wird NACH dem Bau entschieden — gemessen: trimmen, verlaengern und versatz
+  haben heute keinen Eintrag im REGISTER.md."
+rueckweg: "Der Bau fuegt hinzu und aendert nichts Bestehendes. Ruecknahme = Commit zurueckdrehen,
+  keine Datenmigration, kein Schema, keine Bestandsdokumente betroffen."
+```
