@@ -117,7 +117,7 @@ ist per Test an `WERKZEUG_VERTRAEGE.length` gekoppelt (`__tests__/werkzeugLandka
 **Die 21 `fehlt`-Marken fallen in drei Cluster — und zwei davon sind EIN Bau, nicht sechs:**
 
 ```text
-CLUSTER 1 — es fehlt EIN Befehl, der MEHRERE Knoten in EINEM umkehrbaren Schritt aendert
+CLUSTER 1 — BERICHTIGT 13.08.: es fehlt KEIN Befehl, sondern eine KLAMMER
   betroffen: ausrichten (:62) · verteilen (:74) · teilen (:76) · verbinden (:78)
              erkennung-bestaetigen (:110)                              = FUENF
   AM CODE NACHGEMESSEN, nicht uebernommen:
@@ -125,7 +125,30 @@ CLUSTER 1 — es fehlt EIN Befehl, der MEHRERE Knoten in EINEM umkehrbaren Schri
     UPDATE_NODE                        :208  nimmt EIN command.nodeId
     die einzigen Mehrfach-Befehle sind SET_NODES_SICHTBAR (:231) und
     SET_NODES_GESPERRT (:239) — beide setzen nur FLAGS, keine Geometrie.
-  -> Die Behauptung der Landkarte traegt. Ein Fundament, fuenf Werkzeuge.
+  -> Die Behauptung der Landkarte traegt in der SACHE (es gibt keinen Weg,
+     mehrere Knoten in einem Schritt zu aendern) — aber nicht in der URSACHE.
+
+  NACHGEMESSEN AM STORE (A-31, de80b734), und das aendert die Groesse:
+    store/hausplanerStore.ts:114-130  executeCommand fuehrt EIN
+                                      produceWithPatches aus und schreibt in
+                                      :122 EINEN historie.push.
+    -> produceWithPatches kann BELIEBIG VIELE applyCommand-Aufrufe in EINEM
+       Patch-Satz buendeln. Der Mechanismus ist da; er wird nur nie mit mehr
+       als einem Befehl benutzt.
+    -> Es fehlt also kein Befehlstyp, sondern eine Sammel-Ausfuehrung im STORE.
+       Kein Eintrag in domain/commands.types.ts, keine Schema-Aenderung.
+
+  UND DER MANGEL IST NICHT NUR EINE LUECKE, ER IST IM BESTAND WIRKSAM: fuenf
+  Stellen in app/HausplanerApp.tsx rufen executeCommand in einer Schleife und
+  erzeugen je Knoten einen Undo-Schritt — loescheAuswahl :623, dupliziere :680
+  und :686, spiegeleGrundriss :709, dupliziereGeschossJetzt :726 (dort N+2 fuer
+  EIN Geschoss) und :1153. Ein Undo nach dem Spiegeln laesst den Grundriss HALB
+  GESPIEGELT zurueck. Das ist A-31, P1, geschnitten am 13.08.
+
+  FOLGE FUER DIE GROESSE: der teure Teil von Cluster 1 ist die Store-Methode,
+  und die behebt gleichzeitig die fuenf Bestandsmaengel. Die fuenf Werkzeuge
+  sind DANACH je ein eigener, kleiner Vorgang. Mein W-27-Massstab von etwa
+  zweieinhalb Stunden gilt fuer die Klammer, nicht fuer jedes Werkzeug.
 
 CLUSTER 2 — es fehlen OBJEKTTYPEN, sonst deckt ADD_NODE schon
   betroffen: pumpe (:152) · leuchte (:165) · schalter (:166) · steckdose (:167)
