@@ -32,7 +32,7 @@
 
 import { polygonFlaecheM2, type Punkt2D } from './polygonFlaeche';
 import { sichererCos, cmZuMFloor, DACH_FLOOR_CM } from './dachWerte';
-import { platziereAufbauten, type DachflaecheInfo, type PlatzierterAufbau } from './aufbauPlatzierung';
+import { platziereAufbauten, type AufbauArt, type DachflaecheInfo, type PlatzierterAufbau } from './aufbauPlatzierung';
 import { platziereSchneefang, SCHNEEFANG_HINWEIS, type DachLinienBauteil } from './linienBauteile';
 
 export type { Punkt2D };
@@ -170,9 +170,12 @@ export interface VorlagenApply {
 }
 
 // Aufbau-Auto-Platzierung: Arten exakt wie ObstacleType im Planer (nur sicher unterstützte).
-export type VorlagenAufbauArt =
-  | 'chimney' | 'window' | 'vent' | 'sat' | 'lichtkuppel'
-  | 'schleppgaube' | 'trapezgaube' | 'flachgaube' | 'giebelgaube';
+// A-28: hier stand dieselbe Aufzaehlung ein zweites Mal, zeichengleich mit `AufbauArt`
+// (md5 der Werteliste beide 35ed563c…). Der Kommentar darueber hat es die ganze Zeit gesagt —
+// „Arten exakt wie ObstacleType (nur sicher unterstuetzte)" —, nur stand daneben eine eigene
+// Liste statt einer Ableitung. Jetzt ist `AufbauArt` selbst aus `ObstacleType` abgeleitet, und
+// dieser Name ist nur noch ein Verweis darauf. Der NAME bleibt, weil ihn die Vorlagen benutzen.
+export type VorlagenAufbauArt = AufbauArt;
 
 /**
  * Ein beim Anwenden automatisch zu setzender Standard-Aufbau (Obstacle).

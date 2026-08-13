@@ -18,9 +18,38 @@
  * Rein (keine React-/THREE-Abhängigkeit). KEINE Dacheindeckung/Material.
  */
 
-export type AufbauArt =
-  | 'chimney' | 'window' | 'vent' | 'sat' | 'lichtkuppel'
-  | 'schleppgaube' | 'trapezgaube' | 'flachgaube' | 'giebelgaube';
+import type { ObstacleType } from '../domain/scene.types';
+
+/**
+ * A-28 — **die Arten der Auto-Platzierung, ABGELEITET statt wiederholt.**
+ *
+ * Hier stand eine eigene Aufzählung derselben neun Werte; `dachformVorlagen.ts:173` trug sie ein
+ * zweites Mal, zeichengleich (md5 der Werteliste beide `35ed563c…`). **Das ist eine zweite
+ * Wahrheit, und die Bauordnung verbietet sie** — *„kein zweiter Ort, der denselben abgeleiteten
+ * Wert erneut berechnet"*.
+ *
+ * **Und `tsc` hat es nicht gemerkt**: zwei unabhängige Aufzählungen sind für den Übersetzer zwei
+ * Typen. Der Fehler wäre erst aufgefallen, wenn eine Vorlage eine Art nennt, die die Platzierung
+ * nicht kennt.
+ *
+ * **Die NEUN sind keine Dublette der ZEHN, sondern eine bewusste TEILMENGE** — der Satz stand die
+ * ganze Zeit im Code (`dachformVorlagen.ts:172`): *„Arten exakt wie ObstacleType im Planer (nur
+ * sicher unterstützte)."* Das Szenenmodell kennt alle Arten, die Auto-Platzierung nur die, für die
+ * sie sicher platzieren kann.
+ *
+ * **Deshalb Ableitung und kein Umzug.** *Ein Umzug nach `domain/` hätte dort eine dritte Liste
+ * erzeugt — `ObstacleType` und das `z.enum` in `validation.ts` führen die Arten bereits, je mit
+ * zehn Werten.* **`Exclude` macht die Wiederholung unmöglich, statt sie zu verschieben — und
+ * verankert die Teilmengen-Beziehung im Typsystem: verliert `ObstacleType` eine Art, bricht `tsc`.
+ * Heute merkt es niemand.**
+ *
+ * **`spitzgaube` bleibt außen, und das ist nicht Bequemlichkeit:** die Art lebt an 21 Stellen, im
+ * Produktivcode mit echter Geometrie (`gaubeGeometrie:247/:375/:418`), Darstellung
+ * (`dachAufbautenMesh:137`) und einer echten Vorlage (`dachformVorlagen:2379`). *Ob ihr Fehlen in
+ * der Auto-Platzierung ein Mangel ist, ist eine Fachfrage — der Klammerzusatz liest sich als
+ * bewusste Auslassung, und aus dem Ist ein Soll zu machen steht mir nicht zu (H-7).*
+ */
+export type AufbauArt = Exclude<ObstacleType, 'spitzgaube'>;
 
 export type DachflaecheForm = 'rechteck' | 'trapez' | 'dreieck';
 
