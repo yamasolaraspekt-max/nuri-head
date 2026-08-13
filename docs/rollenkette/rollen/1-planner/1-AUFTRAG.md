@@ -331,6 +331,54 @@ W-37-3  Zeilenzahlen      ZWEI Muster (Register gegen wc -l, alle sechs)
 > den Fehler zweimal gemacht, eine Stunde nachdem ich die Lehre aus W-36 ins Blatt geschrieben hatte.
 > Deshalb steht hier ein SCHRITT und keine Mahnung.*
 
+**FÜNFTER SCHRITT, ergänzt 13.08. abends: ein MESSMUSTER braucht eine FANGPROBE, bevor seine Zahl in
+ein Blatt kommt.** *Bekannte Treffer und bekannte Nicht-Treffer, gegen die das Muster laufen muss.*
+
+*Der Anlass sind **sieben** eigene Fehlmessungen an einem Tag — nicht sieben Nachlässigkeiten, sondern
+siebenmal dieselbe Ursache: **das Muster misst die FORM und nicht die SACHE.***
+
+```text
+ 1  --include=*.ts unquotiert        -> 0 Dateien (zsh expandiert vorher)
+ 2  Rueckwaerts-Scan zur Schleife     -> 3 von 5, Abbruch bei jedem `const`
+ 3  Funktionsverfolgung, 2. Versuch   -> 3 von 5, `const` setzte den Kontext zurueck
+ 4  'transform.rotation' als Pfad     -> 0 Treffer; die Felder stehen VERSCHACHTELT
+ 5  yaml-Zaun-Zaehler (A-25)          -> 1 Bereich statt 2; ```yaml schliesst nicht
+ 6  'Aussparung' fuer die Zusage      -> 0 Treffer; die Sache heisst 'Durchbruch'
+ 7  Praefix [AW]- in der Tafel        -> 12 statt 13; P- und M- fehlten
+```
+
+> ***Und der Generator hat den Handgriff vorgemacht, an meinem eigenen Auftrag.*** *A-31-5 verlangte, die
+> vier anderen Dateien mitzumessen. Sein erstes Muster fand **sechs** Treffer — und **keiner war ein
+> Befund**: alle sechs sind `onDragEnd`/`onChange`-Handler, die pro Benutzer-Geste **einen** Befehl
+> auslösen. Seine Worte: „Mein Muster hat die **Verschachtelung** gemessen und nicht die
+> **Wiederholung** — dieselbe Klasse wie die Falle des Planners, nur eine Ebene höher." **Hätte er die
+> sechs gemeldet, hätte er vier Rollen auf eine Suche geschickt, die es nicht gibt.***
+
+**Was die Fangprobe leistet, und warum sie billig ist:**
+
+```text
+Er hat sieben Faelle hingeschrieben — VIER Treffer, DREI Nicht-Treffer —
+und das Muster dagegen laufen lassen:
+  resources/planner/hausplaner/__proben__/a31-schleifenprobe-fangprobe.txt
+  scripts/a31-schleifenprobe.mjs   meldet SELBSTPRUEFUNG BESTANDEN
+Fall 4 heisst dort woertlich „while, mit Zwischenzuweisung wie die Falle des
+planners" — meine Nummer 2 und 3 von oben, als Probefall festgehalten.
+
+UND DIE SELBSTPRUEFUNG HAT IHN SELBST GEFANGEN: seine Erwartungsliste sagte
+19, das Skript meldete GESCHEITERT, nachgezaehlt war SEINE Liste falsch und
+nicht das Werkzeug. Genau dafuer ist sie da.
+```
+
+> **Der Handgriff, in einem Satz:** *wer eine Zahl aus einem Muster in ein Blatt schreibt, schreibt
+> vorher **zwei Fälle hin, die treffen müssen, und einen, der nicht treffen darf** — und lässt das Muster
+> dagegen laufen. **Bei den sieben Fällen oben hätte das jeden einzelnen gefangen.** Es kostet Minuten;
+> eine falsche Zahl in einem Kriterium kostet eine Runde.*
+
+> ***Und die Grenze gehört dazu:*** *der Generator schreibt sie selbst hin — „die Probe misst
+> **lexikalisch**. Ein Aufruf in einer Hilfsfunktion, die ihrerseits aus einer Schleife gerufen wird,
+> sieht sie nicht — das ist keine Zusage, die ich hier gebe." **Eine Fangprobe macht ein Muster
+> belastbar, nicht allwissend.** Wer das verwechselt, hat nur die Sorte Vertrauen gewechselt.*
+
 **VIERTER SCHRITT, ergänzt 13.08. nach Cluster 3: geöffnet werden muss die Stelle, auf die sich der
 TRAGENDE SCHLUSS stützt — und „abgeschnitten gelesen" ist nicht gelesen.**
 
