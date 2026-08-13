@@ -1249,6 +1249,50 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## SCHADEN DURCH MEIN EIGENES KONFLIKTWERKZEUG (Release-Pruefer, 13.08. nachts) — 24 Zeilen geloescht, wiederhergestellt, Werkzeug gehaertet
+
+```yaml
+was_passiert_ist: "Beim ZWOELFTEN Merge-Konflikt hat mein Aufloesungsmuster den gesamten
+  Konfliktbereich durch NICHTS ersetzt. Verloren gingen 24 Zeilen: der vollstaendige
+  release_pruefung-Block von A-29, den ich eine Runde vorher selbst geschrieben hatte."
+
+die_ursache_genau: >
+  Das Muster ist fuer TAFELZEILEN gebaut. Es sammelt aus beiden Seiten die Zeilen der Form
+  | **KENNUNG** ..., waehlt je Kennung die Fassung, die ihren Datensatz trifft, und schreibt
+  das Ergebnis in den Bereich zurueck. Beim zwoelften Konflikt standen ZWEI DATENSATZ-BLOECKE
+  gegeneinander — kein einziger Tafelzeilen-Treffer. Die Schleife lief null Mal, die Ergebnis-
+  liste blieb leer, und die Zuweisung z[a:e+1] = [] loeschte beide Seiten.
+
+warum_es_nicht_aufgefallen_ist: "Beide Kontrollen, die ich danach fahre, meldeten SAUBER:
+  Konfliktmarker 0 — richtig, sie waren ja mitgeloescht. Drift 0 — richtig, denn Drift
+  vergleicht Tafelzeile gegen Datensatz, und beide standen unveraendert. KEINE von beiden
+  misst, ob INHALT fehlt. Gefunden habe ich es erst, weil mir die Zeilenzahl des Konflikts
+  auffiel: 24 gegen 34, und danach 47 insertions gegen 27 deletions."
+
+wiederhergestellt: "Die 24 Zeilen aus dem Konflikt-Commit zurueckgeholt und in den A-29-Block
+  eingesetzt. Kontrolle: die Kennzeile WERKZEUG_VERTRAEGE.length = 111 steht wieder genau
+  einmal, Datei 12999 -> 13023 Zeilen. KEIN --force und kein amend: der fehlerhafte Commit
+  bleibt in der Historie stehen, die Berichtigung kommt als eigener Schritt darueber."
+
+gehaertet: >
+  Das Muster ist jetzt ein Werkzeug mit Namen und drei Regeln, statt eines Einzeilers, den ich
+  je Konflikt neu tippe:
+    1  Kein Tafelzeilen-Treffer im Konflikt -> ABBRUCH mit Meldung. Ein Textblock-Konflikt
+       wird von Hand gelesen, nicht automatisch aufgeloest.
+    2  Ein Ergebnis mit WENIGER Zeilen als die groessere Seite ist ein Abbruch, kein Ergebnis.
+    3  Jede Kennung braucht einen Datensatz als Massstab; ohne Massstab wird nicht gewaehlt.
+  Gegenprobe in beide Richtungen gefahren: ein Konflikt ohne Tafelzeile bricht ab und laesst
+  die Datei UNVERAENDERT (10 Zeilen vorher, 10 nachher); ein Konflikt mit Tafelzeilen wird
+  aufgeloest, Marker 0. Ein Werkzeug, das nur abbricht, waere so wertlos wie eines, das nie
+  abbricht.
+
+was_ich_daraus_ziehe: "Zwoelf Konflikte lang war der Einzeiler richtig, weil zwoelf Mal
+  Tafelzeilen im Konflikt standen. Ein Muster, das elf Mal stimmt, ist nicht geprueft — es hat
+  nur elf Mal denselben Fall gesehen. Und meine zwei Kontrollen danach pruefen die FORM
+  (Marker, Drift), nicht die MENGE. Das ist dieselbe Luecke wie heute Nacht beim Arbeitsbaum:
+  ich messe, was ich zu messen gewohnt bin."
+```
+
 ## BEFUND GEGEN MEIN EIGENES MESSWERKZEUG (Release-Pruefer, 13.08. nachts) — ich habe den Arbeitsbaum gelesen und ihn fuer den Stand gehalten
 
 ```yaml
@@ -9741,6 +9785,30 @@ beleg_commit_ist_fremd: "MEINE DoR-FREIGABE TRAEGT EINEN FREMDEN COMMIT. Ich hat
   A-29-Freigabe sucht, findet sie nicht. Deshalb steht die Zuordnung hier: DoR erteilt von plan-pruefer,
   eingebracht durch 7b5b5885 als Beifang. Das ist genau der Fall, den die Nebenlaeufigkeitsregel meint —
   wer den Baum teilt, stagt nur die eigenen Pfade."
+release_pruefung: "release-pruefer 13.08.: RELEASE_FREI und bis BETRIEBSBESTAETIGT an 79bb3030
+  (Bau 4654687f, Nachbesserung d21dd083 nach NACHBESSERN in Runde 1). Grundtor im selben Lauf
+  wie A-34: tsc 0, 1750/1750, Bundle byte-gleich, PHP 890/890.
+  ZWEI RUNDEN GEGENGELESEN: Runde 1 fuehrt 5 von 6 ERFUELLT — A-29-3 fehlt, das IST der Befund.
+  Runde 2 fuehrt alle sechs. Der eine ROT-Treffer meines Musters ist KEIN Votum, sondern der
+  KRITERIENTEXT selbst (A-29-4: 'Gegenprobe, die ROT werden kann'); vor der Meldung geoeffnet.
+  MEIN BEINAHE-FEHLBEFUND, und er ist der lehrreichste dieser Pruefung: der Kopf der Landkarte
+  sagt in einem Absatz 'Es sind 110 Vertraege'. Gemessen habe ich 111 — ueber den Uebersetzer,
+  nicht gezaehlt: WERKZEUG_VERTRAEGE.length = 111. Das sah nach einem verletzten P1 aus in genau
+  dem Auftrag, dessen Gegenstand eine falsche Kopfzahl ist. ZWEI Zeilen weiter steht der
+  NACHTRAG, den A-29-2 verlangt, und er ist praeziser als meine Messung: er sagt 'Heute sind es
+  111', nennt vier Traeger einzeln, und er nennt sogar MEINE Falle — dass ein rohes grep -c ueber
+  diese Datei 112 liefert, weil der alte Absatz das Suchmuster im Fliesstext nennt und ein roher
+  Zaehler sich selbst mitzaehlt. Genau 112 hatte ich gemessen. Der alte Absatz bleibt stehen,
+  weil er an SEINEM Tag richtig war — ein datierter Messbefund wird nicht umgeschrieben.
+  Ich hatte abgeschnitten gelesen. Zweiter Fall derselben Art heute.
+  GEGENGEPRUEFT: die Markensumme des Nachtrags 41 deckt + 21 fehlt + 43 ohne-modell + 6
+  stillgelegt = 111, zeichengenau. A-29-4 haelt: 111 Marken, keine geaendert.
+  UND MEIN EIGENER BEFUND VON GESTERN ABEND IST EINGEARBEITET: ich hatte gemeldet, A-29 kenne
+  parallelVersatz nicht, weil es beim Schnitt um 08:13 noch nicht existierte. Die Landkarte
+  nennt es jetzt zweimal und sagt ausdruecklich, versatz sei NICHT dasselbe wie versetzteWand.
+  §19: LAEUFT — 1750/1750. AUSGELIEFERT — beide Bauten und die Abnahme sind Vorfahr von fork und
+  backup-private. werkzeugLandkarte steht 0 Mal im Bundle: das Modul hat NULL Importeure,
+  auch keinen Test — es ist eine reine Selbstauskunft. Die 0 ist Lage, nicht Fehlen."
 ```
 
 ```yaml
