@@ -212,3 +212,129 @@ die_falle_die_ich_vermieden_habe: "F-032 steht bei W-06, W-12, W-14 und W-16 in 
         W-31: ein Wort gelesen statt die Sache gemessen."
 W_06_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+## Votum des Evaluators (§11) — ABGENOMMEN
+
+```yaml
+votum: ABGENOMMEN
+geprueft_am: "13.08.2026, evaluator"
+bau_commit: "a05d6d12 (22:42) — GESUCHT, der einzige. Sieben Dateien, alle unter
+  02-WERKZEUGE/W-06-geschoss-verwalten/."
+elter: "543a6b2e"
+```
+
+### Messtisch — jede Kriterienzeile eine Zeile
+
+```text
+W-06-1 (P1, TRAGEND)  ERFUELLT — die QUELLE zuerst geoeffnet, dann das Blatt
+  geschossVorlage.ts:5-7 sagt woertlich "Oeffnungen werden auf die NEUEN Wand-IDs umgehaengt
+  (id-Remap), damit Tueren/Fenster an ihren kopierten Waenden haengen — nicht an den alten."
+  1-ZWECK:15 traegt es als eigene Ueberschrift, :21 im Zitat, :25 den SCHADENSFALL getrennt
+  ("wer den Remap bricht ..."). Beides da, nicht nur die Implementierungsnotiz.
+
+W-06-2 (P1)           ERFUELLT
+  Die Grenze steht woertlich in 2-FUNKTION:15 — "Kein Schreibpfad, keine Szene-Mutation; das
+  Ergebnis fuettert die Commands (ADD_LEVEL + ADD_NODE + ADD_ROOF)". Am Quelltext gegengelesen:
+  geschossVorlage.ts:7-8 sagt denselben Satz. :76 haelt zusaetzlich fest, dass W-06 keinen
+  eigenen Befehl mitbringt.
+
+W-06-3 (P1)           ERFUELLT — die Zahlen SELBST gezaehlt, nicht aus dem Blatt genommen
+  geometry/geschossVorlage.ts        78 Zeilen · 3 Exporte
+  app/dashboard/geschossStapel.ts   104 Zeilen · 6 Exporte
+  app/dashboard/GeschossFlaeche.tsx 173 Zeilen · 1 Export
+  SUMME                             355 Zeilen · 10 Exporte
+  2-FUNKTION:5 sagt "355 Zeilen, ZEHN Ausfuhren" — beide Zahlen treffen exakt.
+  Die GENERICS als Aussage: 2-FUNKTION:27 ("Die Generics sind eine AUSSAGE, keine Verzierung"),
+  :36 die Begruendung ueber Mindestanforderungen, :39 "im Typsystem verankert und nicht in einer
+  Absprache". Am Code belegt: geschossVorlage.ts:32 und :43 tragen
+  <N extends NodeBasis, R extends RoofBasis>.
+
+W-06-4 (P1)           ERFUELLT
+  AUF-43s Befund steht in 1-ZWECK:39 mit eigener Ueberschrift ("ein Wert, der im Modell lebte und
+  nie erschien") — die STILLE Falschauskunft ist als solche benannt.
+  Das FORMAT ist am Code gelesen und nicht geraten. Ich habe geschossStapel.ts:46-58 selbst
+  geoeffnet: '±0 mm' bei 0, Vorzeichen explizit, U+202F als Tausendertrennung, U+2212 als Minus.
+  1-ZWECK:59-62 fuehrt genau diese vier Faelle als Tabelle, 7-GRENZEN:60/63 nennt U+2212 und das
+  schmale geschuetzte Leerzeichen mit dem Hinweis, was ein Parser damit zu tun hat.
+
+W-06-5                ERFUELLT — und das Kriterium beschreibt eine Falle, die ich nachgestellt habe
+  Die drei Waechter mit ihrer Zugriffsart, von mir einzeln gemessen:
+    geschossVorlage.test.ts    import=1  readFileSync=0   -> reiner IMPORT
+    geschossFlaeche.test.ts    import=1  readFileSync=2   -> GEMISCHT
+    paletteNavigation.test.ts  import=1  readFileSync=2   -> GEMISCHT
+  Der gemischte Fall im Einzelnen nachgeprueft: geschossFlaeche.test.ts:16 importiert das
+  DATENMODUL (stapel, kurzfassung, hoehenLabel, nachbar aus geschossStapel), :27 liest die
+  KOMPONENTE ueber readFileSync aus GeschossFlaeche.tsx.
+  DIE FALLE IST ECHT: `grep -rE "^import .*GeschossFlaeche" __tests__/` liefert 0 Treffer. Wer so
+  sucht, haelt die Komponente fuer ungetestet. Gemessen ist sie STRENGER verriegelt:
+    :111  assert.equal((app.match(/<GeschossFlaeche/g) ?? []).length, 1  -> genau eine Verwendung
+    :125  assert.doesNotMatch(app, /function GeschossFlaeche/)           -> keine zweite Definition
+  Beide Zeilen selbst geoeffnet, beide sagen wortwoertlich, was das Kriterium behauptet.
+
+W-06-6                ERFUELLT
+  app/dashboard/palette.ts:38 importiert `Stapel` aus './geschossStapel', :25 nennt die Geschosse
+  im Kopfkommentar. Der zweite Bedienweg ist damit belegt und nicht behauptet.
+
+W-06-7                ERFUELLT — die Zahl "vier" selbst nachgezaehlt
+  7-GRENZEN:3 stellt es als ERSTES klar ("F-032 ist eine FORMEL und keine Sperre"), :15-16 mit dem
+  ANKER statt einer Zeilennummer (die A-34-Lehre ist hier schon angewandt).
+  Im REGISTER selbst gezaehlt — vier Werkzeuge mit F-032, alle auf LEER:
+    :38 W-12 Ansicht und Kamera · :48 W-16 Grundriss unterlegen
+    :54 W-06 Geschoss verwalten · :67 W-14 Kopieren/Spiegeln/Drehen
+  Genau vier, wie das Kriterium sagt.
+
+W-06-8                ERFUELLT — und ich habe die Gegenprobe WEITER gefasst als das Kriterium
+  Alle sieben Blaetter gefuellt: 1-ZWECK 101 · 2-FUNKTION 89 · 3-FORMELN 59 · 4-BEDIENUNG 77 ·
+  5-CODE/LIESMICH 51 · 6-PRUEFUNG 70 · 7-GRENZEN 72 Zeilen, sieben verschiedene md5.
+  Das Kriterium verlangt "keine zwei Werkzeuge mit gleichem Hash". Ich habe deshalb nicht nur
+  W-06 gegen sich selbst geprueft, sondern ALLE 239 Blattdateien unter 02-WERKZEUGE nach
+  gleichnamigen Blaettern mit identischem Rumpf durchsucht:
+    Blattnamen mit identischem Rumpf in mehreren Werkzeugen: 7   (Altbestand)
+    davon betreffen W-06:                                    0
+  DASS DIE PROBE SIEBEN ECHTE DOPPEL IM ALTBESTAND FINDET, IST IHR WIRKSAMKEITSNACHWEIS: sie ist
+  nicht blind, sie findet Kopiervorlagen — und bei W-06 findet sie keine.
+
+Suite / tsc           1750 / 1750 / fail 0, tsc exit=0 — und der Bau fasst 0 Dateien unter
+                      resources/ oder app/ an. Kein Produktivcode, wie der Scope sagt.
+Browser               NICHT GEFAHREN, mit Grund: reiner Dokumentationsbau, kein Verhalten.
+§15                   Kein Schreibvorgang gegen eine Datenbank im Pruefumfang.
+```
+
+### Was mir positiv aufgefallen ist, weil es genau die Lehre der letzten Abnahme aufnimmt
+
+```text
+Die Blaetter fuehren eine ZITIERTE Zahl mit ihrer Herkunft statt sie als heutige auszugeben.
+1-ZWECK:80 zitiert "34 der 110 Werkzeuge" aus GeschossFlaeche.tsx:5-7 und setzt :83-85 daneben:
+  "Der Nenner 110 ist der Stand jenes Textes; heute sind es 111 — der Kontur-Vertrag kam mit
+   1fba9a1d hinzu (A-29). Zitat unveraendert gelassen, weil es einen Stand belegt; der Zaehler 34
+   ist hier nicht nachgemessen und wird deshalb nicht als heutige Zahl gefuehrt."
+7-GRENZEN:69-72 sagt dasselbe unter der Ueberschrift "Nicht ausgewertet".
+Das ist genau die Trennung, deren Fehlen ich heute bei A-29 beanstandet habe — hier steht sie von
+selbst da, samt Verweis auf den Auftrag, der die Zahl berichtigt hat.
+```
+
+### Eine Beobachtung ohne Befund — sie gehoert dem Release-Prüfer, nicht dem Bau
+
+```text
+Das REGISTER (02-WERKZEUGE/REGISTER.md:54) fuehrt W-06 weiterhin als LEER, obwohl die sieben
+Blaetter jetzt gefuellt sind. KEIN Kriterium und KEIN Scope-Punkt nennt das Register — der Scope
+zaehlt die drei Module, die Aufrufer und den Bedienweg auf, sonst nichts. Der Bau hat es also zu
+Recht nicht angefasst; ich melde es, damit die Divergenz nicht unbemerkt bleibt.
+Zweitens, aus demselben Grund ohne Befund: Abschnitt 6 dieses Blattes (Scope, Z.142) nennt
+weiterhin "FORMELSAMMLUNG.md:218", waehrend das KRITERIUM W-06-7 durch A-34 auf den Anker
+umgestellt wurde. A-34s eigener Scope sagt ausdruecklich "Nur Kriterien — nicht Befund- und
+Belegtexte", und ein Scope-Abschnitt ist keines von beiden. Auch das gehoert gemeldet und nicht
+still entschieden.
+```
+
+### Eigene Messfehler in diesem Durchgang
+
+```text
+KEINE, die ein Ergebnis verfaelscht haetten. Anzumerken ist ein Aufbau-Detail: mein erster Lauf
+zum Zaehlen der Exporte lieferte fuer eine gesuchte Datei nichts, weil ich mit einem
+find-Muster ohne Endungs-Alternative suchte (GeschossFlaeche ist .tsx, nicht .ts). Gemerkt am
+leeren Ergebnis, nicht an einer Zahl — und vor jeder Wertung behoben.
+```
+
+**Weitergabe:** ABGENOMMEN → **Release-Prüfer**. Die zwei Beobachtungen (Register-Zustand,
+Scope-Zeile 142) → ohne Auflage, zur Kenntnis.
