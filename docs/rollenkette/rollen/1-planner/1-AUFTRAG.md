@@ -245,8 +245,8 @@ ist**. Pfad, Größe, und bei Binärformaten das Werkzeug.
 Vor jeder Berichtigung **zählen**, nicht beheben. Eine Zahl steht in Überschrift,
 Fließtext, Tabelle und Kriterium.
 
-**HANDGRIFF, ergänzt 13.08. abends: `git mv` überlebt den Commit-Durchgang NICHT — die Löschung
-braucht einen eigenen Commit.**
+**HANDGRIFF, ergänzt 13.08. abends: nach einem `git mv` wird der alte Pfad STILLGELEGT, nicht
+gelöscht — das Tor lässt eine Löschung gar nicht zu, und das ist richtig so.**
 
 *Gemessen an A-33: ich habe die Blattdatei umbenannt (`git mv`, Historie erhalten) und mit dem neuen
 Pfad committet. Danach stand in **HEAD beides**, im Arbeitsbaum nur die neue Datei, und die Löschung
@@ -263,10 +263,20 @@ UND DER ERSTE VERSUCH WAR AUCH SCHON FALSCH: ich hatte BEIDE Pfade genannt.
   F-14 hat abgewiesen — der alte Pfad hat nach dem Umbenennen keine
   Schreibwirkung mehr. Die Abweisung war richtig.
 
-DER HANDGRIFF: nach einem `git mv` den NEUEN Pfad committen, danach die
-  Loeschung des alten in einem ZWEITEN Commit — und dazwischen nichts anderes
-  anfassen. Sonst geht die Loeschung beim naechsten Commit als BEIFANG mit,
-  und das ist genau der Fall, den Abschnitt 6 der Vorlage an Yama nennt.
+ZWEITER VERSUCH, AUCH FALSCH: die Loeschung per `git rm --cached` gestagt und
+  nur sie genannt -> F-14 meldet FEHLT und weist wieder ab. DAS TOR KANN EINE
+  LOESCHUNG NICHT COMMITTEN, weil es Schreibwirkung je genanntem Pfad verlangt.
+
+DER HANDGRIFF, und er kommt nicht aus dem Werkzeug sondern aus der Hausregel:
+  nach einem `git mv` den NEUEN Pfad committen und den ALTEN STILLLEGEN — eine
+  Ueberschrift 'STILLGELEGT', ein Verweis auf das gueltige Blatt, der Grund mit
+  Fundstelle. Dann hat der alte Pfad Schreibwirkung, das Tor laesst ihn durch,
+  und die DAUERregel ist eingehalten: kein Loeschen, Original erhalten.
+  Praezedenz im eigenen Haus: W-05/1 wurde am 13.08. genauso behandelt.
+  -> Ich habe die zwei Abweisungen zuerst fuer eine Werkzeuggrenze gehalten, die
+     man umgehen muesste. Sie waren ein HINWEIS auf die Regel.
+  -> Und die uncommittete Loeschung dazwischen ist gefaehrlich: sie geht beim
+     naechsten FREMDEN Commit als Beifang mit (Abschnitt 6 der Vorlage).
 ```
 
 > **Warum das hier steht und nicht im Kopf behalten wird:** *zwei Blätter mit derselben Kennung sind
