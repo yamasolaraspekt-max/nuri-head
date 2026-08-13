@@ -241,6 +241,59 @@ schnelle Teil der B-Session.*
 
 
 
+
+### ⚠ NACHTRAG 13.08. — meine eigene Klassifikation schätzt systematisch zu KLEIN. Dreimal belegt
+
+*Die drei Ablesungen aus Klasse B sind geschnitten. **Bei allen drei war mein Fahrplan-Eintrag richtig
+und zu klein** — nicht falsch in der Einordnung, sondern zu klein im Gegenstand:*
+
+```text
+W-16  mein Eintrag  „app/unterlage/ mit drei Dateien"           349 Zeilen Insel
+      gemessen      + PlanUpload.php (88 Z.) + PlanUploadController (178 Z.)
+                    + SECHS Routen + ZWEI Migrationen
+                    -> die halbe Wahrheit liegt auf dem SERVER, unter Energie
+
+W-10  mein Eintrag  „deckenMesh.ts vorhanden"                    35 Zeilen
+      gemessen      + Registry-Eintrag + CeilingNode/CeilingOeffnung
+                    + DREI Befehle + treppenDurchbrueche + Fixtures
+                    -> der TEST allein hat 242 Zeilen. Verhaeltnis 7:1.
+
+W-14  mein Eintrag  „Bewegen/Duplizieren/Spiegeln gebaut, Drehen fehlt"
+      gemessen      stimmt — verschweigt aber, dass die vier Operationen DREI
+                    verschiedene Bezugsrahmen haben und Spiegeln gar kein
+                    Registry-Werkzeug ist, sondern zwei Kopfrahmen-Knoepfe auf
+                    dem GANZEN Grundriss
+```
+
+> **Das Muster ist stabil und benennbar: ein Eintrag nennt EIN Modul, und der Gegenstand hat vier
+> Schichten** — Oberfläche, Schema, Befehl, Darstellung, oft dazu Server und Test. *Bei drei von drei
+> gemessenen Zeilen war das so. **Die Einordnung „Ablesung" hat trotzdem jedes Mal gehalten** — was zu
+> klein war, ist der Umfang des Blattes, nicht die Klasse.*
+
+**Was daraus für die verbleibenden Zeilen folgt — und das ist keine Vermutung, sondern eine
+Reichweitenaussage über meine eigenen Einträge:**
+
+```text
+W-06  bereits geschnitten und BEREIT — nicht mehr betroffen.
+W-03  „0 Treffer fuer ein Werkzeug"     -> vier Verträge betroffen (trimmen,
+      verlaengern, versatz, teilen/verbinden), zwei verschiedene Fundamente.
+      Der Eintrag war schon einmal zu grob und ist berichtigt.
+W-24  „kein Modul, Bodenplatte nur Tooltip"  -> gemessen bei W-10/1: `boden`
+      hat Vertrag (FloorCommand) UND Paket-Eintrag, nur keinen Registry-Eintrag,
+      und die Landkarte fuehrt ihn als `deckt`/ADD_CEILING. Groesser als notiert.
+W-26  „kein Modul"                      -> gemessen: RoofNode ohne `schichten`,
+      aber das Feldmuster steht zweimal. Plus die Aufbau-Namensfalle.
+W-28  „nur Linientyp + Hinweistext"     -> hier hat die Messung den Eintrag
+      BESTAETIGT. Der einzige der fuenf.
+```
+
+> ***Die praktische Folge für die B-Session:*** *jede B-Zeile braucht vor dem Blatt eine Messung über
+> **alle Schichten** — Oberfläche, Schema, Befehl, Darstellung, Server, Test. **Wer nach dem
+> Fahrplan-Eintrag schneidet, schneidet zu klein.** Das kostet keine Zeit im Vergleich zum Nacharbeiten:
+> bei W-16 kam der ganze Fund aus einer einzigen Frage — „warum nimmt `UnterlagenWerkzeuge` einen
+> `csrfToken`?"*
+
+
 ### W-26 und W-28 gemessen — damit sind ALLE ZEHN B-Zeilen gemessen
 
 **W-26 Dachschichten — BAU, und zwar eine ÜBERTRAGUNG statt eines Neuentwurfs**
