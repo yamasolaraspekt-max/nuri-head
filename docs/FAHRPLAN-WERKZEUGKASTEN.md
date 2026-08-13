@@ -193,6 +193,92 @@ NACHGEMESSEN 13.08. GEGEN DIE TAFEL — die Liste ist ueberwiegend abgearbeitet:
   anwenden.
 ```
 
+---
+
+## ✅ W-19 UND W-32 ENTSCHIEDEN — Planner 13.08., auf Yamas „dann mach das ohne mich"
+
+> **Yamas Auftrag war wörtlich, beide ohne ihn zu entscheiden.** Ich habe deshalb **den Status quo
+> gewählt, wo der Code die Frage schon beantwortet hat**, und **den Umfang gemeldet, wo meine eigene
+> frühere Einordnung zu klein war.** Beide Festlegungen sind **Planner-Entscheidungen, kein Bau** —
+> es ist keine Zeile Produktivcode angefasst. **Rückweg: ein Satz von Yama dreht jede von beiden**,
+> und solange nichts gebaut ist, kostet das Drehen nichts.
+
+### W-19 Sonne und Verschattung → **die Grenze bleibt. Keine Bauzeile des Werkzeugkastens.**
+
+**Ist-Stand, am 13.08. frisch nachgemessen:** `toolRegistry.ts` führt **0** Einträge für
+`sonne`/`verschattung`. Die fünf Dateien mit dem Wort sind **ausnahmslos Beschreibungstexte oder
+Labels** — je geöffnet, nicht nur gezählt: `werkzeugPaket.ts:245` (*„Einsatz: Import, PV,
+Verschattung"*), `werkzeugLandkarte.ts:167` (Begründung zur Nordrichtung),
+`fachFlaechen.ts:346/:358`, `dachformVorlagen.ts` (vier Vorlagen**namen**). **Keine Rechnung,
+nirgends.**
+
+**Die Entscheidung trifft der Code selbst** — `pvBelegung.ts:6-7`: *„GRENZE: Ertrag/Verschattung/
+Strings bleiben der Fach-Engine (wberechnung) vorbehalten — hier nur Geometrie/Anzahl/Leistung."*
+Das ist eine **Arbeitsteilung zwischen zwei Apps**, keine Lücke. Ich bestätige sie, weil das die
+einzige Wahl ist, die **keine zweite Wahrheit erzeugt**: eine Verschattungsrechnung in der Insel
+stünde neben der von wberechnung, und die Insel hätte die schlechteren Operanden.
+
+**Folge für das Register:** `REGISTER.md:77` bleibt `LEER` und bekommt den Zuständigkeitsvermerk.
+**W-19 zählt nicht mehr als offene Werkzeugkasten-Bauzeile** — der Werkzeugkasten hat damit
+**42 eigene Zeilen**, nicht 43. Die Zeile wird **nicht gelöscht**; sie ist die Andockstelle.
+
+**Und die Andockstelle ist benannt, das ist der eigentliche Ertrag:** `fachFlaechen.ts:358` zeigt
+**bereits ein Ausgabefeld `Verschattungsverlust %`** — die Anzeige steht und wartet auf einen Wert.
+Wer W-19 später doch braucht, baut **kein Werkzeug**, sondern **füllt dieses Feld aus wberechnung**.
+Grundlage vorhanden: F-024 Azimut ist als `azimutDerNormalen` gebaut.
+
+**Berührt Phase 1.4 (wberechnung-Transplantat).** Wandert wberechnung nach ticket, wandert die
+Zuständigkeit mit — dann ist W-19 **immer noch keine Insel-Zeile**, sondern eine Fachmodul-Zeile.
+
+### W-32 Giebelwand-Bindung → **Ableitung statt Feld. Und der Umfang ist größer, als ich gestern sagte.**
+
+**Meine gestrige Einordnung („ein Feld oder eine Ableitung, Schema-nah") war zu klein — die
+tragende Stelle geöffnet, nicht nur gegrept:**
+
+`renderers/three-d/segmentierung.ts` ist der eine Ort, an dem Wandhöhe zu Geometrie wird
+(`:60 const hoehe = wand.height;`). Seine Ausgabe ist **`WandQuader`** — `:26` ausdrücklich *„ein
+**axis-aligned** Quader"*, mit `untenMm: number` und **`obenMm: number`**. **Eine einzelne Zahl.**
+**Damit ist eine Giebelwand per Konstruktion nicht darstellbar, auch mit einem `roofId` an der
+Wand nicht** — der Ausgabetyp kann keine Schräge tragen. W-32 ist also **kein fehlendes Feld,
+sondern ein Eingriff in die Renderkette: der W-27-Maßstab, ~2½ h, gilt hier.**
+
+**Zwei Fallen unterwegs, beide gefangen:**
+1. Der rohe Zähler meldete **29 Treffer** auf `roofId|topConstraint|dachId`. **Alle 29 geöffnet:
+   ausnahmslos Command-Parameter** (*welches* Dach wird geändert) in `applyCommand.ts`,
+   `commands.types.ts` und Tests. **Kein einziges Feld an der Wand.** `topConstraint` und `dachId`:
+   **0**. Hätte ich gezählt statt geöffnet, wäre W-32 als „Bezug existiert schon" durchgegangen.
+2. **H-9 bestätigt:** alle „Giebel"-Treffer sind **Giebelgaube** (Dachaufbau) oder **`GIEBEL` als
+   Dachkantentyp** (Topologie). Dasselbe Wort, zwei Bauteile.
+
+**Die Festlegung, und sie folgt einer Regel, die im selben File schon steht:**
+**Die Wand bekommt KEIN Dachfeld.** `WallNode.height` bleibt die eine Wahrheit für die Wandhöhe —
+genau wie `thickness` bei `WallNode.schichten` unberührt bleibt (`scene.types.ts:115-124`, AUF-76:
+*„zwei Schreibweisen für dieselbe Sache wären der Anfang der zweiten Wahrheit"*). Ein
+`topConstraint` an der Wand stünde **neben `RoofNode.traufhoeheMm`**, und das Dach leitet seine
+Traufhöhe heute schon aus `level.elevation + defaultWallHeight` ab — **der Bezug läuft Dach → Wand.
+Ihn umzudrehen erzeugt einen Zyklus.**
+
+**Träger ist stattdessen der Ausgabetyp:** `WandQuader` wird **additiv** um eine zweite Oberkante
+erweitert (Arbeitsname `obenMmBis?`), aus dem Quader wird ein Prisma. **Optional und ohne
+Vorbelegung** — jeder heutige Quader bleibt ohne das Feld gültig, dasselbe Muster, das `schichten?`
+für Bestandsdokumente trägt. Die Giebelschräge entsteht **beim Segmentieren aus dem Dach**, nicht
+als gespeicherte Zahl an der Wand.
+
+**Was das für den Auftrag heißt, wenn er geschnitten wird** (heute **nicht** — meine Zusage gilt,
+solange BEREIT-Aufträge liegen): er ist **Klasse C, Bau, W-27-Maßstab**, und er braucht **vorher**
+den Bezug Wand → Dach als **Ableitung** (welches Dach liegt über dieser Wand — aus `levelId` und
+Dach-Polygon, nicht aus einem Feld). **Das ist die Vorarbeit, und sie ist der eigentliche Aufwand.**
+
+### Was sich am Fahrplan ändert
+
+- **Klasse C ist damit vollständig durchgemessen: 9 von 9.** Sieben abgelesen/entworfen/gebaut,
+  **W-19 ausgetragen** (Zuständigkeit wberechnung), **W-32 als Bau bestätigt** und nach hinten
+  gestellt, weil er die Renderkette berührt.
+- **Zielzahl des Werkzeugkastens: 42 statt 43.**
+- **Meine gestrige Aussage „W-32 ist eine Schema-Entscheidung" ist damit berichtigt** — sie war
+  eine Grep-Einordnung. Geöffnet ist es ein Bau. **Yamas Vorbehalt vom 12.08. (W-27-Maßstab) trifft
+  bei keiner B-Zeile zu, aber bei dieser C-Zeile trifft er.**
+
 
 ---
 
