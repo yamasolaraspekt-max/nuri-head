@@ -1,0 +1,170 @@
+# W-12/1 — Ansicht und Kamera. Alles gebaut, kein Werkzeug — und `modus` heißt zweimal etwas anderes
+
+```yaml
+auftrag: "W-12/1"
+werkzeug: "W-12 Ansicht und Kamera"
+art: "STUFE B — Blatt schneiden, Ziel BESCHRIEBEN (Ablesung). Die Einordnung ist GEMESSEN:
+      Zustand, Kamera, Raster und F-032 sind gebaut."
+spur: A
+heimat_app: ticket
+dor_beleg: "steht aus — plan-pruefer."
+status_steht_in: docs/STATUS.md
+basis_sha: b778152b
+prioritaet: P2
+ballbesitz: "plan-pruefer (DoR)"
+claim: "planner 13.08. — Claim VOR dem Schnitt."
+kennung_geprueft: "Vergeben sind W-12 und W-12/W; W-12/1 ist frei, 0 Blaetter."
+einwand_erledigt: "W-02:206 und W-13:239 fuehren beide 'W-12 zurueckgehalten, Einwand bei Yama'.
+                   Yama hat es am 13.08. entschieden: W-12 und W-18 bleiben. Damit ist der Einwand
+                   erledigt und der Schnitt frei — das steht hier, weil zwei Blaetter sonst weiter
+                   eine Zurueckhaltung behaupten, die nicht mehr gilt."
+anlass: "Yamas Regel fuer Klasse B, 13.08.: erst die Messung, dann die Einordnung. W-18 war die erste
+         Zeile, das ist die zweite — und damit sind beide, die er genannt hat, gemessen."
+grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.ts:100/:101/:170/:212-215/
+            :621/:627 · app/rahmen/Buehne.tsx:62 · app/state/uiState.ts:5/:10/:11 · FORMELSAMMLUNG:218"
+```
+
+## 1 — Die Einordnung ist gemessen: ABLESUNG. Alle vier Gegenstände sind gebaut
+
+```text
+(1) ANSICHTSZUSTAND
+    store/hausplanerStore.ts:20  export type HausplanerModus = '2d' | 'split' | '3d'
+                            :28  modus: HausplanerModus
+                            :45  setModus: (modus) => void
+                            :72  modus: '2d'                 <- Standard
+    Und app/state/uiState.ts:10 sagt, WO er wohnt und warum:
+      „Ansicht (2d/split/3d) bleibt im Modell-Store (modus) — die Activation-Engine
+       liest sie von dort."
+
+(2) KAMERA UND STEUERUNG
+    renderers/three-d/szene.ts:23   import { OrbitControls }
+                              :100  private readonly kamera: THREE.PerspectiveCamera
+                              :101  private readonly steuerung: OrbitControls
+                              :170  new THREE.PerspectiveCamera(…)
+
+(3) RASTER — und damit ist eine Frage aus W-01 beantwortet
+    szene.ts:212  new THREE.GridHelper(80, 80, 0xcfd6de, 0xe2e6ea)
+           :213-214  transparent, opacity 0.5
+           :215  this.szene.add(raster)
+    Buehne.tsx:62  rasterAn: boolean            <- der 2D-Schalter
+
+(4) F-032 Transformation eines Punktes (FORMELSAMMLUNG:218, homogene 4x4-Matrix)
+    szene.ts:621  new THREE.Matrix4().makeBasis(…)
+           :627  geometrie.applyMatrix4(m)
+    Also EIGENE Matrix-Anwendung, nicht nur three.js-Internes — die
+    Registerzuordnung F-032 traegt.
+```
+
+> **Damit ist W-12 eine ABLESUNG** — *es fehlen die Blätter, nicht der Code. **Zweite gemessene B-Zeile
+> nach W-18, und beide fallen auf die schnelle Seite.** Für Yamas Vorbehalt heißt das: an diesen zwei
+> Zeilen greift der W-27-Maßstab nicht — was über die übrigen acht B-Zeilen nichts sagt.*
+
+**Die Frage aus W-01 ist mitbeantwortet:** *`W-01-fang-beschreiben.md:94` schließt aus: „Ob ein sichtbares
+Raster gezeichnet wird, ist eine Renderer-Frage und steht in W-12/Schicht 4, nicht hier." **Gemessen: es
+wird gezeichnet, in beiden Renderern** — 3D als `GridHelper`, 2D über den Schalter `rasterAn`.*
+
+## 2 — Der tragende Punkt: `modus` heißt ZWEIMAL etwas anderes
+
+```text
+store/hausplanerStore.ts:20  HausplanerModus = '2d' | 'split' | '3d'      ANSICHT
+app/studioDaten.ts:97        StudioModus     = 'start' | 'guided' | 'expert'  STUDIO
+```
+
+> **Beide heißen `modus`, beide haben ein `setModus`, und sie bedeuten Verschiedenes.** *`HausplanerStudio.tsx:23`
+> hält `const [modus, setModus] = React.useState<StudioModus>('start')` und prüft in `:85`
+> `imExperte = modus === 'expert'` — **das ist W-39s Studio-Rahmen, nicht die Ansicht.** Wer nach `modus`
+> greppt, findet zwei Zustände und hält sie für einen. **Das Blatt muss beide nennen und je den Träger** —
+> genau die Lehre aus W-36, wo vier Statusachsen an vier Trägern hingen.*
+
+**Und ein benannter Hygiene-Posten gehört dazu:** *`uiState.ts:11` sagt selbst „(Rename `modus→viewMode`
+ist ein eigener Hygiene-Slice.)" — **die Namensgleichheit ist also bekannt und als eigener Vorgang
+vorgemerkt.** Das Blatt nennt sie, ändert sie nicht.*
+
+## 3 — Kein Werkzeug, und das ist RICHTIG so
+
+```text
+Registry-Eintraege fuer 'ansicht' / '2d' / '3d' / 'split':   0
+Werkzeuge MIT supportedViews:                               12
+```
+
+> **Die Ansicht ist eine EIGENSCHAFT, an der sich Werkzeuge ausrichten — kein Werkzeug.** *Zwölf
+> Registry-Einträge tragen `supportedViews`; das Fang-Werkzeug W-01 hat dieselbe Lage und sein Blatt sagt
+> es wörtlich: „der Fang liegt unter anderen Werkzeugen, er ist keines." **Ansicht und Kamera sind
+> Infrastruktur.** Das Blatt muss es sagen, sonst liest die nächste Rolle „LEER, 0 GEBAUT" und baut ein
+> Ansichts-Werkzeug, das es nicht geben darf.*
+
+## 4 — Scope
+
+```text
+W-12/1 IST  die Ablesung des Gebauten: der Ansichtszustand mit seinen drei Werten
+            und seinem Ort, Kamera und OrbitControls, das Raster in beiden
+            Renderern, F-032 mit zwei Fundstellen, die H-9-Grenze zwischen den
+            zwei `modus`, und die Feststellung, dass es KEIN Werkzeug gibt und
+            keines geben soll.
+
+W-12/1 IST NICHT
+            der RENAME modus->viewMode. uiState.ts:11 fuehrt ihn als eigenen
+            Hygiene-Slice; das Blatt nennt ihn und fasst ihn nicht an.
+            StudioModus -> W-39 (Studio-Rahmen, BETRIEBSBESTAETIGT). Nur zur
+            Abgrenzung genannt.
+            szene.ts als Ganzes -> der 3D-Renderer ist ein eigener Gegenstand;
+            hier werden nur die Ansicht-, Kamera-, Raster- und F-032-Stellen
+            genannt.
+            ein WERKZEUG 'Ansicht'. Es gibt keines und soll keines geben —
+            siehe Abschnitt 3.
+```
+
+## 5 — Abnahmekriterien
+
+```text
+W-12-1-1 (P1, TRAGEND) Die ZWEI `modus` stehen im Blatt, JE MIT TRAEGER und
+         Fundstelle: HausplanerModus ('2d'|'split'|'3d') im Modell-Store
+         (hausplanerStore.ts:20), StudioModus ('start'|'guided'|'expert') in
+         studioDaten.ts:97 und benutzt in HausplanerStudio.tsx:23/:85.
+         Ohne beide Traeger haelt die naechste Rolle sie fuer einen Zustand — und
+         `setModus` gibt es zweimal. Das ist die Lehre aus W-36, wo vier
+         Statusachsen an vier Traegern hingen.
+W-12-1-2 (P1) Die VIER Gegenstaende mit Fundstelle: Ansichtszustand, Kamera samt
+         OrbitControls, Raster in BEIDEN Renderern, F-032 mit
+         szene.ts:621 und :627. Am Bau-Stand erheben, keine Zahl aus diesem Blatt.
+W-12-1-3 (P1) 7-GRENZEN sagt, dass es KEIN Werkzeug gibt UND keines geben soll,
+         mit dem Beleg: 0 Registry-Eintraege gegen 12 Werkzeuge mit
+         supportedViews. Die Ansicht ist eine Eigenschaft, an der sich Werkzeuge
+         ausrichten — dieselbe Lage wie W-01s Fang, dessen Blatt sagt „er liegt
+         unter anderen Werkzeugen, er ist keines".
+         Ohne diesen Satz liest die naechste Rolle 'LEER, 0 GEBAUT' als Auftrag.
+W-12-1-4 Die Frage aus W-01-fang-beschreiben.md:94 ist im Blatt beantwortet: das
+         sichtbare Raster WIRD gezeichnet — 3D als GridHelper (szene.ts:212-215),
+         2D ueber den Schalter rasterAn (Buehne.tsx:62). W-01 hat sie ausdruecklich
+         hierher verwiesen; sie darf nicht zwischen zwei Blaettern verschwinden.
+W-12-1-5 Der HYGIENE-POSTEN steht als Grenze: uiState.ts:11 nennt den Rename
+         modus->viewMode als eigenen Slice. Das Blatt nennt ihn und aendert nichts.
+W-12-1-6 Die Waechter je mit ZUGRIFFSART, getrennt nach IMPORT und QUELLE, und
+         KEINE nackte Zahl im Kriterium — am Bau-Stand erheben. Grund: bei W-18
+         lieferte das Wort 'kontur' zwoelf Testdateien und der Import EINE, weil
+         elf die Werkzeug-ID trafen. Hier ist dieselbe Falle zu erwarten, weil
+         'modus' zweimal vorkommt.
+W-12-1-7 Alle sieben Blaetter gefuellt, Gegenprobe `tail -n +2 <blatt> | md5` je
+         Blatt, keine zwei Werkzeuge mit gleichem Hash.
+```
+
+**Nachweisform: Befehl und Trefferzeilen** (B5), **Fundstellen am Bau-Stand** (Pflichtprüfung 8),
+**jede Zahl an zwei Mustern** (Prüfung 7), **Nachweis muss rot werden können** (Prüfung 4).
+
+```yaml
+was_diese_messung_fuer_yamas_vorbehalt_bedeutet: "Er hat gefragt, ob B-Zeilen Ablesungen oder Bauten sind,
+        und gewarnt, dass bei Bauten der W-27-Maszstab von etwa zweieinhalb Stunden gilt. Beide Zeilen, die
+        er genannt hat, sind jetzt gemessen und BEIDE sind Ablesungen: W-18 mit gebauter Selbstschnitt-
+        pruefung samt Nutzermeldung, W-12 mit Zustand und Kamera und Raster und F-032. Dazu W-06, das
+        ebenfalls in B stand und eine Ablesung war. DREI von zehn B-Zeilen sind damit gemessen, alle drei
+        Ablesungen — was ueber die restlichen SIEBEN nichts sagt. Seine Regel bleibt richtig: erst messen."
+die_h9_falle_ist_hier_die_schaerfste_bisher: "Zwei Zustaende heissen `modus`, beide haben ein setModus, und
+        sie bedeuten Verschiedenes — Ansicht gegen Studio-Modus. Bei W-18 waren es ein Werkzeug und ein
+        Modul mit demselben Namen; hier sind es zwei Zustaende in derselben Anwendung. Wer nach modus
+        greppt, bekommt beide und haelt sie fuer einen. Deshalb ist W-12-1-1 tragend und verlangt je den
+        TRAEGER, nicht nur den Namen."
+was_ich_NICHT_gemessen_habe: "Ob der Rename modus->viewMode noetig ist. uiState.ts:11 fuehrt ihn als
+        eigenen Hygiene-Slice, also ist er bekannt und vorgemerkt; ihn zu bewerten waere eine
+        Zuschnittsfrage und keine Ablesung."
+W_12_1_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
+```
