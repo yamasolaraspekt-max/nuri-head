@@ -39,18 +39,40 @@ export interface RaumAuswahl {
 /**
  * Der Fingerabdruck der Raumliste.
  *
- * **Anzahl, Fläche und Eckenzahl je Raum** — das genügt, um jede Änderung zu bemerken, die die
- * Zuordnung Index → Raum verschieben kann. *Die vollen Polygone zu hashen wäre teurer und nicht
- * sicherer: zwei Räume, die in Anzahl, Fläche und Eckenzahl übereinstimmen, sind für die Frage
- * „zeigt der Index noch auf denselben Raum?" nicht unterscheidbar.*
+ * **Anzahl, Fläche, Eckenzahl UND ORT je Raum.**
  *
- * **Die Fläche wird auf ganze mm² gerundet.** Zwei Ableitungen desselben Grundrisses dürfen sich
- * nicht wegen eines Gleitkomma-Restes unterscheiden — sonst setzte die Auswahl sich bei jedem
- * Rendern zurück, und die Auflage wäre in ihr Gegenteil verkehrt.
+ * **BERICHTIGT (W-05/2, Runde 2), und die alte Begründung war sachlich falsch.** *Hier stand:
+ * „zwei Räume, die in Anzahl, Fläche und Eckenzahl übereinstimmen, sind für die Frage ‚zeigt der
+ * Index noch auf denselben Raum?' nicht unterscheidbar."* **Sie sind es — durch ihren ORT, und
+ * genau den sieht der Nutzer.**
+ *
+ * Der Evaluator hat es am gebauten Code gefahren, ich habe es nachgefahren:
+ *
+ * ```text
+ * zwei Raeume, je 10 000 000 mm², 4 Ecken, verschiedene Orte, Reihenfolge getauscht
+ *   Signatur vorher  2|10000000:4,10000000:4   fuer BEIDE Listen — identisch
+ *   gewaehlt         Raum bei x = 0
+ *   hervorgehoben    Raum bei x = 900
+ * ```
+ *
+ * **Das ist wörtlich die Falschauskunft, die diese Datei verhindern soll** — *meine Signatur war
+ * blind für genau den Fall, den ihre eigene Begründung ausgeschlossen hat.*
+ *
+ * **Der Ort ist der erste Polygonpunkt, auf ganze mm gerundet.** *Er genügt: zwei Räume, die in
+ * Anzahl, Fläche, Eckenzahl **und** Startpunkt übereinstimmen, sind an derselben Stelle — dann ist
+ * es derselbe Raum, und ein Tausch wäre keiner.*
+ *
+ * **Gerundet wird bei Fläche und Ort aus demselben Grund:** *zwei Ableitungen desselben Grundrisses
+ * dürfen sich nicht wegen eines Gleitkomma-Restes unterscheiden — sonst setzte die Auswahl sich bei
+ * jedem Rendern zurück, und die Auflage wäre in ihr Gegenteil verkehrt.*
  */
 export function raumSignatur(raeume: ReadonlyArray<RaumFuerAuswahl>): string {
   return `${raeume.length}|` + raeume
-    .map((r) => `${Math.round(r.flaecheMm2)}:${r.polygon.length}`)
+    .map((r) => {
+      const p = r.polygon[0];
+      const ort = p ? `${Math.round(p.x)}/${Math.round(p.y)}` : '-';
+      return `${Math.round(r.flaecheMm2)}:${r.polygon.length}@${ort}`;
+    })
     .join(',');
 }
 
