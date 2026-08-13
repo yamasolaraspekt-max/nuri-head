@@ -426,6 +426,63 @@ W-28  „nur Linientyp + Hinweistext"     -> hier hat die Messung den Eintrag
 > `csrfToken`?"*
 
 
+
+---
+
+## ⚑ 13.08. nachts — A-31 und A-32 sind FREIGEGEBEN. Und drei der acht Werkzeuge haben einen Vertragswiderspruch
+
+**Der Release-Prüfer hat A-31 und A-32 bis `BETRIEBSBESTAETIGT` gebracht.** *Damit stehen beide
+Fundamente nicht nur gebaut, sondern freigegeben — die acht Werkzeuge aus Cluster 1 und 3 wären jetzt
+baubar, ohne Schema- oder Normfrage.*
+
+> ***Ich hatte kurz zuvor geschrieben, ohne Yamas Entscheidungen gehe nichts weiter. Das war zu
+> pauschal*** *— die acht hängen an keinem seiner sechs Posten. **Bevor ich sie geschnitten habe, habe
+> ich die Verträge gegen die Landkarte gehalten. Bei dreien widersprechen sie sich.***
+
+```text
+WERKZEUG               Vertrag (werkzeugVertrag.ts)      Landkarte sagt
+  trimmen              modify / updatedObjectIds          Schnittpunkt, kuerzen      ✔ passt
+  verlaengern          modify / updatedObjectIds          wie trimmen                ✔ passt
+  ausrichten           modify / updatedObjectIds          mehrere Knoten ausrichten  ✔ passt
+  verteilen            modify / updatedObjectIds          gleichmaessig verteilen    ✔ passt
+  erkennung-best.      import / integratedObjectIds       Mehrfach-Anlegen           ✔ eigene Familie
+
+  versatz              modify / updatedObjectIds          „erzeugt eine NEUE Wand"   ✘ WIDERSPRUCH
+  teilen               modify / updatedObjectIds          „einen aendern UND einen
+                                                           ANLEGEN"                  ✘ WIDERSPRUCH
+  verbinden            modify / updatedObjectIds          „einen aendern, einen
+                                                           ENTFERNEN"                ✘ WIDERSPRUCH
+```
+
+> **Wer nach dem Vertrag baut, baut etwas anderes als die Landkarte beschreibt.** *`updatedObjectIds`
+> meldet **geänderte** Objekte — ein `versatz`, das eine **neue** Wand erzeugt, müsste
+> `createdObjectIds` melden, und `verbinden` zusätzlich `removedObjectIds`. **Der Bauende würde die
+> Lücke bemerken oder sie stillschweigend füllen; beides ist teuer.***
+
+**Die Frage dahinter ist eine Produktfrage und keine Formsache:**
+
+```text
+SOLL `versatz` eine NEUE Wand erzeugen (parallele Kopie) oder die vorhandene
+VERSCHIEBEN?
+  Fuer NEU spricht: in CAD ist Offset ueblicherweise erzeugend, und die
+    Landkarte ist die neuere und ausfuehrlichere Quelle.
+  Fuer VERSCHIEBEN spricht: der Vertrag sagt familie 'modify', und ein
+    Verschieben braucht keinen neuen Knoten.
+  -> ICH ENTSCHEIDE ES NICHT. „Wahrscheinlich erzeugend" ist keine
+     Spezifikation, und A-32s parallelVersatz liefert die Achse — was damit
+     geschieht, ist die offene Frage.
+
+DASSELBE bei `teilen` (aus einer Wand werden zwei — der zweite Knoten ist neu)
+und `verbinden` (aus zwei wird eine — einer verschwindet). Dort ist die Sache
+sachlich klarer, aber der Vertrag sagt es trotzdem nicht.
+```
+
+> ***Was das für die Reihenfolge heißt:*** ***fünf** der acht sind ohne Klärung baubar — `trimmen`,
+> `verlaengern`, `ausrichten`, `verteilen`, `erkennung-bestaetigen`. **Drei warten** auf eine
+> Entscheidung, die in einem Satz zu treffen ist. **Und keiner der fünf ist geschnitten**, weil der
+> Generator zwölf BEREIT-Zeilen hat; Vorrat auf Vorrat verdünnt nur.*
+
+
 ### W-26 und W-28 gemessen — damit sind ALLE ZEHN B-Zeilen gemessen
 
 **W-26 Dachschichten — BAU, und zwar eine ÜBERTRAGUNG statt eines Neuentwurfs**
