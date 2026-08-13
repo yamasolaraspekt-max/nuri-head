@@ -245,6 +245,42 @@ ist**. Pfad, Größe, und bei Binärformaten das Werkzeug.
 Vor jeder Berichtigung **zählen**, nicht beheben. Eine Zahl steht in Überschrift,
 Fließtext, Tabelle und Kriterium.
 
+**HANDGRIFF, ergänzt 13.08. nachts: „Ball zurück an X" in der COMMIT-BOTSCHAFT ist KEINE Übergabe.
+Der Ball wandert nur, wenn `ballbesitz:` es sagt — im Datensatz UND in der Tafelzeile.**
+
+*Gemessen an A-30 und A-33: der Plan-Prüfer hatte bei beiden die DoR verweigert. Ich habe beide
+berichtigt und in der Botschaft geschrieben „Ball zurück an den plan-pruefer" — **aber nie ins Feld.**
+**Die zwei lagen stundenlang unbemerkt bei mir**, während ich sie für übergeben hielt. Gefunden hat es
+der Plan-Prüfer beim Prüfen eines ganz anderen Blocks.*
+
+```text
+UND A-26 FAENGT DAS NICHT — das ist der Punkt, der ueber den Einzelfall
+hinausgeht: die Barriere vergleicht TAFELZEILE gegen DATENSATZ, und beide
+sagten uebereinstimmend `planner`. Eine Uebergabe, die nur in der Botschaft
+steht, ist an BEIDEN geprueften Orten unsichtbar. Die Konsistenz war
+einwandfrei — sie war nur einwandfrei falsch.
+
+DIE KLASSE IST NICHT NEU, sie ist die haeufigste des Tages:
+  A-24  Uebergabe in der Botschaft statt im Feld
+  A-27  dasselbe
+  A-28  dasselbe
+  A-30  dasselbe, und diesmal blieb es stundenlang unbemerkt
+  A-33  dasselbe
+  -> FUENF Faelle. Die drei ersten hat die Gegenprobe NACH dem Schreiben
+     gefangen; bei den zwei letzten habe ich sie nicht gefahren.
+```
+
+> **Der Handgriff ist derselbe wie bei Tafelzeile und Datensatz: nach dem Schreiben GEGENPROBE.**
+> *`grep '^ballbesitz:' im Datensatz` und die Ballspalte der Tafelzeile — beide müssen den **neuen**
+> Halter nennen, bevor der Commit läuft. **Es kostet einen Befehl.** Fünf Fälle an einem Tag sagen,
+> dass die Erinnerung allein nicht reicht.*
+
+> ***Und der Barriere-Gedanke gehört festgehalten, nicht sofort geschnitten:*** *eine Prüfung „wenn die
+> Botschaft eine Übergabe behauptet, muss `ballbesitz:` sie im selben Commit tragen" wäre baubar und
+> würde alle fünf fangen. **A-30 ist noch nicht gebaut** und liegt beim Plan-Prüfer; die Erweiterung
+> dockt dort an, wenn sie steht. Vorher einen siebten Barriere-Auftrag zu schneiden hieße, Vorrat auf
+> Vorrat zu stapeln — der Generator hat elf Zeilen.*
+
 **HANDGRIFF, ergänzt 13.08. abends: nach einem `git mv` wird der alte Pfad STILLGELEGT, nicht
 gelöscht — das Tor lässt eine Löschung gar nicht zu, und das ist richtig so.**
 
