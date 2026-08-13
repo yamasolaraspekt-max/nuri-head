@@ -185,7 +185,27 @@ CLUSTER 3 — BERICHTIGT AM 13.08., meine erste Fassung war FALSCH
   WAS CLUSTER 3 WIRKLICH IST: ein BAU, und ein lohnender.
     F-004 als aufrufbare Funktion herausziehen  -> schaltet trimmen +
                                                    verlaengern frei
-    Parallelversatz neu rechnen (Normale, Abstand d) -> schaltet versatz frei
+    Parallelversatz: die NORMALE existiert schon, sie ist nur nirgends
+    aufrufbar  -> schaltet versatz frei
+      NACHTRAG 13.08., beim Messen von W-10/1 gefunden: ich hatte hier
+      'Parallelversatz NEU rechnen' geschrieben. Die Rechnung steht bereits
+      an ZWEI Stellen im Haus, je eingebettet und nicht exportiert:
+        commands/applyCommand.ts:129   nx = -dy/len, ny = dx/len
+                                      (in treppenDurchbrueche, Normale zur
+                                       Treppen-Lauflinie, mit Math.hypot und
+                                       halber Laufbreite zum Loch-Polygon)
+        geometry/wallGeometry.ts:110   gehrungsEcken, Winkelhalbierende und
+                                      Miter-Limit — anderer Fall, aber dasselbe
+                                      Umfeld: EPS, Entartung, Rundung.
+      -> Der Bau ist damit KLEINER als in meiner ersten Fassung, und er ist
+         keine Erfindung: die Mathematik ist zweimal erprobt. Was fehlt, ist
+         eine aufrufbare Geometrie-Funktion und der Modellbefehl, der die neue
+         Wand anlegt.
+      -> UND DAS IST EIN MUSTER, nicht ein Einzelfall: F-004 sitzt in
+         gehrungsEcken, die Normale in treppenDurchbrueche. Beide Male ist die
+         Rechnung im VERBRAUCHER eingebaut statt in geometry/ zu liegen. Wer
+         Cluster 3 baut, sollte das als Frage mitnehmen — nicht als Auflage,
+         aber als Beobachtung, die zwei Stellen deckt.
   Das ist kein Anschluss und laeuft nicht „sofort". Es ist aber auch keine
   Erfindung: die Gehrungsrechnung zeigt, dass das Umfeld (EPS, Miter-Limit,
   Entartungsfaelle) im Haus schon durchdacht ist.
