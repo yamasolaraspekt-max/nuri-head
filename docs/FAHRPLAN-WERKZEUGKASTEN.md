@@ -558,7 +558,11 @@ W-21L als DECISION_BLOCKED steht.
 > **W-26 und W-28 gehen nicht ohne dich:** Schema-Feld bzw. Normgröße.*
 
 
-## YAMAS VORBEHALT ZU KLASSE B, 13.08. — erst die Messung, dann die Einordnung
+## YAMAS VORBEHALT ZU KLASSE B — gestellt 13.08., BEANTWORTET 13.08. nachts
+
+> **Die abschliessende Antwort steht gleich unten** („✅ ABSCHLIESSENDE ANTWORT“). **Kurz:** *sieben der
+> zehn Zeilen sind Ablesungen und geschnitten, drei sind Entscheidungen bei Yama — **der W-27-Maßstab
+> greift bei keiner.** Der Vorbehalt war berechtigt und hat sich nicht bestätigt.*
 
 **Sein Wortlaut:** *„bei B gilt laut Fahrplan zuerst die Messung: was ist gebaut, was fehlt. Erst danach
 steht fest, ob eine B-Zeile eine Ablesung (schnell) oder ein Bau (langsam) wird. … Wenn sich mehrere
@@ -584,6 +588,10 @@ W-27 Kantentypen          KLASSE C, und es war ein BAU: etwa zweieinhalb Stunden
 > **B ist also nicht „schnell" und nicht „langsam", sondern UNGEMESSEN.** *Das ist der Grund, warum jede
 > Zeitschätzung über B ohne Messung eine Vermutung ist — und der W-27-Maßstab ist die richtige Obergrenze
 > für den Fall, dass eine B-Zeile sich als Bau entpuppt.*
+
+> ***Seit dem 13.08. nachts gilt dieser Satz in der VERGANGENHEITSFORM:*** *alle zehn sind gemessen.
+> **Was er weiterhin trägt, ist die Regel dahinter** — eine Klasse ist keine Zusage, und wer aus „B“ eine
+> Zeitangabe macht, hat geraten.*
 
 ### ✅ ABSCHLIESSENDE ANTWORT AUF DEN VORBEHALT — 13.08. nachts, alle zehn zu Ende gemessen
 
@@ -726,6 +734,23 @@ Richtung die Einordnung wahrscheinlich fällt.*
    (belegt an W-31s fuenfter Bedienstelle).
 3  Erst dann sagen: Ablesung oder Bau. Vorher steht nur die Klasse fest.
 4  Und wenn Bau: der W-27-Maszstab gilt, nicht der Ablesungs-Takt.
+
+5  NEU nach der Durchmessung, 13.08. nachts — ueber ALLE SCHICHTEN messen,
+   nicht ueber das eine Modul, das im Fahrplan-Eintrag steht:
+     Oberflaeche (Registry/Panel) · Schema · Modellbefehl · Darstellung ·
+     Server (Route/Controller/Migration) · Test
+   BELEG: bei VIER von vier vollgemessenen Zeilen war mein eigener Eintrag
+   richtig in der KLASSE und zu klein im GEGENSTAND — W-16 (die halbe Wahrheit
+   liegt auf dem Server, sechs Routen und zwei Migrationen), W-10 (Modul 35 Z.,
+   Test 242 Z.), W-14 (DREI Bezugsrahmen statt einer Gruppe), W-03 (ueber das
+   Eigenschaften-Panel laengst bedienbar).
+   Bei W-16 kam der ganze Fund aus EINER Frage: warum nimmt
+   UnterlagenWerkzeuge einen csrfToken?
+
+6  Und die Einordnung kann ein DRITTES ergeben: weder Ablesung noch Bau,
+   sondern eine ENTSCHEIDUNG. Drei der zehn sind so ausgegangen — W-24, W-26,
+   W-28 — und bei W-24 hatte der Code es dreimal SELBST als Operanden-Gate
+   markiert. Wer nur zwei Ausgaenge kennt, presst die Zeile in den falschen.
 ```
 
 ## Die Reihenfolge — nach ENTSPERRUNG, nicht nach Aufwand
