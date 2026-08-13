@@ -156,3 +156,38 @@ was_ich_gemessen_habe_und_was_nicht: "SELBST GEMESSEN: die fuenf Exporte und 174
         gemeldete Luecke."
 W_21_2_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT. W-05/2 haelt den Platz."
 ```
+
+---
+
+## 5 — Votum des Evaluators (§11)
+
+**ABGENOMMEN.** Bau `78cf87d3`, Elter `1045c5a7`, Basis `9ea1c3db` — gesucht und gegen das Feld
+gehalten; `bau_sha` nennt denselben Stand. Acht Dateien, alle unter `docs/`.
+
+| Kriterium | Befund | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **W-21-2-1** (TRAGEND) | **grün** | `wc -l` an der Datei: **174** Zeilen — dieselbe Zahl, die das Blatt nennt (`5-CODE/LIESMICH.md:31`). Selbst gezählt, nicht abgeschrieben |
+| **W-21-2-2** | **grün** | Beide W-22-Stellen geöffnet: `5-CODE/LIESMICH.md:36` und `7-GRENZEN.md:55` tragen den alten Satz **durchgestrichen** (`~~…~~`) mit *„ÜBERHOLT seit 13.08."* — an derselben Stelle, nicht einen Absatz weiter. Die Diff-Entfernungen an diesen Zeilen sind **Modifikationen**, keine Löschungen |
+| **W-21-2-3** | **grün** | Der Grund steht in `1-ZWECK.md:15-20` und ist ein Grund, keine Behauptung: *„Ein Wechselholz ist Tragwerk, und seine Verbraucher sind mehrere … Ein Modul, das mehrere Werkzeuge brauchen, gehört zum Fundament und nicht zu einem seiner Verbraucher"* |
+| **W-21-2-4** | **grün** | Das alte Nicht-Ziel (`W-21-sparren-beschreiben.md:156`) ist **erhalten**; darunter acht neue Zeilen *„ÜBERHOLT 13.08. durch W-21/2"* mit Datum. An diesem Blatt: **0 entfernte Zeilen** |
+| **W-21-2-5** | **grün** | Im Code selbst: **keine** F-/N-Nummer. Das Blatt sagt es ausdrücklich — *„KEINE F-Nummer, und das ist gemessen"* und *„keine N-Nummer: `auswechslung.ts` rechnet keine normative Größe"*. Die Lücke ist **gemeldet statt erfunden**, genau wie das Kriterium verlangt |
+| **W-21-2-6** | **grün dem Zweck nach, mit Hinweis** | `resources/` in der **Dateiliste** des Bau-Commits: **0** — kein Produktivcode, und das ist der Zweck. **Wörtlich** genommen („kommt im Bau-Commit NULL Mal vor") stimmt es nicht: im Diff-**Text** stehen **17** Treffer, sämtlich Pfadangaben in Werkbank-Blättern. Ein Blatt, das Code beschreibt, *muss* Pfade nennen; die Unschärfe liegt im Kriterium, nicht im Bau |
+| **W-21-2-7** | **grün** | Der Abschnitt „Akzeptanzkriterien" von W-21 ist an Bau und Elter **md5-identisch** (`249c43c490c974fd5d9988614b684a1b`, 58 Zeilen). Die zwölf Kriterien selbst gezählt: `W-21/1-1` … `W-21/1-12` = **12**, wie das Kriterium sagt |
+
+**Die elf entfernten Zeilen des Bau-Diffs habe ich einzeln geprüft** (A-20-4), weil „entfernt" hier
+der gefährliche Fall wäre: eine Zeile in `1-ZWECK`, drei in `2-FUNKTION`, drei in
+`5-CODE/LIESMICH`, drei plus eine in W-22. **Keine davon ist ein Verlust** — es sind
+Zählangaben („Fünf Module", „496 Zeilen"), die durch die neuen ersetzt wurden, und die zwei
+W-22-Sätze, die als durchgestrichenes Zitat an ihrer Stelle stehen bleiben.
+
+**Mein eigener Messfehler in dieser Runde, und er ist eine alte Bekannte.** Für W-21-2-7 suchte ich
+die Kriterien mit `^W-21-[0-9]+` und bekam **0 an beiden Ständen** — daraus las mein Skript
+„zeichengleich: **True**". Das ist eine Zusage, die **Leere** vergleicht: W-21s Kriterien heißen
+`W-21/1-1` mit **Schrägstrich**, mein Muster konnte sie nie treffen. Dieselbe Falle wie bei A-24,
+wo ich zwei leere `sed`-Ausgaben verglichen und daraus „identisch" gelesen hatte. Aufgefallen ist
+es nur, weil `0 = 0` als Ergebnis nicht zu „zwölf Kriterien" passte. Berichtigt über den
+Abschnitts-md5 und eine Zählung, die die echte Schreibweise trifft.
+
+**§15:** keine Datenbankschreibung in dieser Abnahme.
+
+**Weiter an den Release-Prüfer.**
