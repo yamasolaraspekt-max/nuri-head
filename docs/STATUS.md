@@ -1190,6 +1190,59 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## VERTRETUNGSENTSCHEID `versatz` (Release-Pruefer in Yamas Namen, 13.08.) — ERZEUGEND
+
+```yaml
+grundlage: "Yamas Anweisung 13.08. im Wortlaut: 'du uebernimmt alle fragen und aufgaben in namen
+  von Yama'. Der Planner hat die Frage am 13.08. in die Vorlage gelegt (5c7eb4e5), ausdruecklich
+  mit Empfehlung und ausdruecklich ohne Entscheid: 'Ich empfehle erzeugend (so ist Offset in CAD
+  ueblich), entscheide es aber nicht — wahrscheinlich ist keine Spezifikation.'"
+
+DIE ENTSCHEIDUNG: "versatz ist ERZEUGEND. Ein Parallelversatz legt eine NEUE Wand im Abstand d
+  neben die vorhandene; die vorhandene bleibt unveraendert stehen."
+
+WORAUF SIE SICH STUETZT, selbst gemessen und nicht aus der Vorlage uebernommen: >
+  1  DIE GEBAUTE RECHNUNG IST BEREITS ERZEUGEND. geradenGeometrie.parallelVersatz (:157, seit
+     A-32 heute 14:34) gibt eine NEUE VersetzteAchse {start, ende} zurueck und fasst die
+     Eingabe-Punkte nicht an. Wer sie verdrahtet, hat die neue Achse in der Hand und muss sich
+     aktiv entscheiden, die alte zu loeschen. Der Weg des geringeren Eingriffs ist erzeugend.
+  2  DIE VERTRAGSFORM STEHT NICHT IM WEG. werkzeugVertrag.ts fuehrt duplizieren mit
+     familie: 'modify' UND ergebnisse: ['createdObjectIds'] — die Kombination ist im Vertrag
+     selbst belegt, und der Code dahinter erzeugt nachweislich (befehleDuplizieren pusht zwei
+     ADD_NODE und fuehrt neueIds). EIN Beleg, nicht zwanzig: von 21 Werkzeugen mit
+     createdObjectIds traegt genau dieses eine familie: 'modify'. Das ist ein Praezedenzfall,
+     kein Muster — ich sage es so, weil die staerkere Formulierung nicht traegt.
+  3  Die CAD-Konvention, die der Planner nennt. Sie stuetzt, sie traegt nicht allein.
+
+DER WIDERSPRUCH SITZT EINE EBENE TIEFER ALS DIE VORLAGE SAGT: >
+  Die Vorlage stellt 'der Vertrag sagt modify/updatedObjectIds' gegen 'die Landkarte sagt NEUE
+  Wand'. Gemessen ist familie NICHT die Stelle, an der die Frage haengt — sonst waere
+  duplizieren mit familie 'modify' und createdObjectIds selbst ein Bruch, und das ist es nicht.
+  Die Frage haengt allein an ergebnisse. Die Umsetzung ist damit EINE Zeile:
+  werkzeugVertrag.ts:331  ergebnisse: ['updatedObjectIds'] -> ['createdObjectIds'].
+
+NICHT MITENTSCHIEDEN, und zwar mit Grund: >
+  teilen und verbinden tragen dasselbe ergebnisse: ['updatedObjectIds'], aber ihre Lage ist eine
+  andere: teilen aendert EINEN Knoten UND legt EINEN an, verbinden aendert einen und entfernt
+  einen. Beide brauchen ZWEI Ergebnisfelder, nicht ein anderes. Das ist eine Formfrage am
+  Vertrag und kein Ja/Nein — sie gehoert geschnitten, nicht per Vertretung entschieden.
+
+BEFUND AN DEN PLANNER, dritter Fall derselben Familie an einem Tag: >
+  A-29 'Die Landkarte nennt bei versatz die falsche Funktion' wurde am 13.08. um 08:13
+  geschnitten (86f94d98) und steht seither BEREIT. Sein tragender Satz lautet, versetzteWand sei
+  eine Translation um (dx,dy) und der Parallelversatz brauche 'eine neue Rechnung' — beides
+  richtig gemessen. Sechs Stunden spaeter, um 14:34, hat A-32 genau diese Rechnung gebaut.
+  A-29 nennt parallelVersatz 0 Mal. Wer A-29 heute zieht, korrigiert die Landkarte auf 'die
+  Rechnung fehlt', waehrend sie seit dem Nachmittag im Repository liegt.
+  Das ist dieselbe Klasse wie A-32-3 (Zeilennummer driftete durch einen fremden Commit) und wie
+  A-34 (Kriterium ueberholt, bevor es gezogen wurde): ein geschnittener Auftrag altert, waehrend
+  er BEREIT liegt, und niemand misst ihn beim Ziehen erneut gegen den Stand.
+
+revidierbar: "Diese Entscheidung ist eine Vertretung, kein Fachurteil. Yama kann sie mit einem
+  Satz umdrehen; dann aendert sich EIN Feld im Vertrag und A-29s Soll-Text. Nichts ist gebaut,
+  ich habe keinen Code angefasst — das waere die Rolle des Generators."
+```
+
 ## SAMMEL-KONTROLLE 4 (Release-Pruefer, 13.08.) — 22 Doku-Stufen, 178 Kriterienzeilen, 0 ohne Beleg
 
 ```yaml
