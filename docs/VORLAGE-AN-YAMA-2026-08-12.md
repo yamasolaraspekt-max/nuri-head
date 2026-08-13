@@ -1917,3 +1917,81 @@ Produktivcode. Gegenprobe: resources/planner/** kommt null Mal vor").
    ein Blatt zu aendern, das gerade gebaut wird, verschiebt den Boden.
    Beim naechsten Anfassen mitnehmen.
 ```
+
+## 21 · DREI REGELN KOLLIDIEREN — und bei fünf Instanzen auf einem Baum ist das der Normalfall
+
+*Vom Plan-Prüfer gemeldet, nachdem er **seinen eigenen Befund zurückgezogen** hat: was er zweimal als
+„§3-Verletzung des Generators" an dich gemeldet hatte, ist keine. **Es ist eine Regelkollision.***
+
+### Die Kollision, an einem Beleg gemessen
+
+```text
+DREI REGELN, alle gleichzeitig bindend:
+  §3            Zustandswechsel VOR der ersten Scope-Aenderung
+  E1            Bau-Aussagen werden AM COMMIT gemessen
+  Beifang       im geteilten Baum stagt niemand fremde Pfade
+
+DER FALL, selbst nachgemessen (A-29-Bau 4654687f):
+  Commit faesst NUR werkzeugLandkarte.ts an — 47 Zeilen Produktivcode
+  Tafelzeilen auf IN_ARBEIT am Bau-Commit: 0
+  -> nach E1 sieht das aus wie ein uebersprungener Zustandswechsel.
+
+DIE ERKLAERUNG STEHT IN SEINER EIGENEN BOTSCHAFT, woertlich geprueft:
+  „docs/STATUS.md NICHT gestagt: dort liegt die unfertige
+   claim_abnahme-Zeile des Evaluators — meine IN_ARBEIT-Zeilen stehen,
+   kommen aber erst mit der Meldung"
+  -> Er HATTE gesetzt. Er hat nur nicht committet, weil fremde unfertige
+     Arbeit in derselben Datei lag. Also genau die Beifang-Disziplin.
+```
+
+> ***Wenn eine andere Rolle unfertige Arbeit in `docs/STATUS.md` hält, sind die drei Regeln nicht
+> gleichzeitig erfüllbar.*** *Und **bei fünf Instanzen auf einem Baum ist das der Normalfall**, nicht
+> die Ausnahme.*
+
+### Die Kette hat sich an einem Abend dreimal verschieden beholfen
+
+```text
+GENERATOR   setzt im Arbeitsbaum, committet nicht  -> §3 + Beifang erfuellt,
+            (4654687f und 2f8cf32d, beide woertlich    E1 verletzt
+             in der Botschaft erklaert)
+EVALUATOR   nimmt die fremden Zeilen als BENANNTEN  -> §3 + E1 erfuellt,
+            Beifang mit (79bb3030)                     Beifang gebeugt
+PLAN-PRUEFER haelt seinen Befund fuenf Wachrunden   -> keine Regel verletzt,
+            zurueck, weil die Datei nie sauber war     die Meldung verspaetet
+```
+
+> **Keine der drei Lösungen ist regelkonform, und alle drei sind vertretbar.** *Das ist das Kennzeichen
+> einer Kollision — nicht der Nachlässigkeit.*
+
+### Vier Wege. Ich entscheide keinen — §1 behält die Arbeitsregeln dir vor
+
+```text
+A  E1 GIBT NACH.  „§3 gilt im Arbeitsbaum, E1 gilt fuer den BAU."
+   dafuer: kein Beifang, kein Warten.
+   dagegen: der Zustand ist zwischenzeitlich nicht messbar — genau das,
+            was E1 verhindern soll.
+
+B  BEIFANG BEKOMMT EINE ENGE AUSNAHME.  Zustandszeilen in docs/STATUS.md
+   duerfen mitgenommen werden, WENN sie in der Botschaft benannt sind.
+   dafuer: §3 und E1 bleiben scharf; der Evaluator macht es bereits so.
+   dagegen: benannter Beifang ist Beifang, und die Grenze ist weich.
+
+C  DER ZUSTAND ZIEHT AUS.  Je Auftrag eine eigene Datei.
+   dafuer: die Ursache verschwindet.
+   dagegen: grosser Umbau — und A-20 hat den Zustand gerade erst von vier
+            Orten auf zwei gebracht. Das waere eine Rolle rueckwaerts.
+
+D  REIHENFOLGE STATT REGEL.  Wer docs/STATUS.md anfassen will, wartet,
+   bis sie sauber ist.
+   dagegen: das ist Disziplin statt Mechanik — und dazu hast du dich
+            heute bei der Pruefbuehne schon geaeussert.
+```
+
+> ***Meine Empfehlung ist B***, *und zwar mit harter Grenze: **nur Zustandszeilen, nur benannt, nur in
+> `docs/STATUS.md`.** Es ist die kleinste Änderung, eine Rolle löst es bereits so, und es hält die
+> beiden Regeln scharf, die den Prüfwert tragen.*
+
+> ***Und zur Einordnung nach deiner Kurskorrektur:*** *das ist **Governance, nicht Werkzeugkasten** —
+> nach deiner Regel wartet es. **Ich lege es trotzdem vor, weil es aktiv Fehlbefunde erzeugt:** zwei
+> Meldungen an dich haben eine „§3-Verletzung" behauptet, die keine war. **Solange die Kollision steht,
+> wird sie wieder als Verletzung gemeldet.** Ob dir das die Unterbrechung wert ist, entscheidest du.*
