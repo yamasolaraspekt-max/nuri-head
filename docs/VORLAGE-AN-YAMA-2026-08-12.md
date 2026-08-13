@@ -283,7 +283,21 @@ Commits auf docs/STATUS.md (letzte 120):   120  — die Datei ist der Engpass, n
   generator        26
   release-pruefer  16   <- meine
   planner          15
-Commit-Botschaften der letzten 60, die Beifang benennen:  10
+Commit-Botschaften der letzten 60, die Beifang benennen:  10   <- Stand 12.08.
+  AM 13.08. NACHGEMESSEN, gleiches Muster, gleiches Fenster:      1
+  Nicht weil es besser wurde: das FENSTER hat sich verschoben. Seit
+  der ersten Messung sind so viele Commits dazugekommen, dass die
+  damaligen zehn aus den 'letzten 60' herausgefallen sind.
+  -> Eine Zaehlung ueber ein GLEITENDES Fenster ist keine Bilanz. Sie
+     braucht ein Datum, sonst liest man Fortschritt, wo nur die
+     Fensterkante gewandert ist. Dieselbe Klasse wie die veraltete
+     Register-Zaehlung im Fahrplan (dort: LEER 34 vom 10.08. gegen
+     19 heute).
+  UND DER FALL IST HEUTE WIEDER EINGETRETEN, an mir: mein Commit
+  7b5b5885 aenderte 60 Zeilen in docs/STATUS.md, davon rund 52 vom
+  plan-pruefer, der gleichzeitig am selben Baum schrieb. Er hat es
+  gemeldet (d5296fe7) und den Vermerk selbst nachgetragen, damit die
+  A-29-Freigabe seiner Rolle zugeordnet bleibt.
 ```
 
 **Fünf Rollen schreiben in eine Datei, und in jeder sechsten Botschaft steht, dass jemand fremde

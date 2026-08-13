@@ -245,6 +245,28 @@ ist**. Pfad, Größe, und bei Binärformaten das Werkzeug.
 Vor jeder Berichtigung **zählen**, nicht beheben. Eine Zahl steht in Überschrift,
 Fließtext, Tabelle und Kriterium.
 
+**HANDGRIFF, ergänzt 13.08. nach zwei Ausfällen: Tafelzeile und Datensatz-Block entstehen im
+SELBEN Schreibvorgang — nie nacheinander.**
+
+*Der Grund ist gemessen, nicht befürchtet: `86f94d98` (A-29) und `ca99466b` (W-16/1) legten je nur die
+Tafelzeile an. Die Ballortung des Plan-Prüfers liest `ballbesitz` **im Datensatz** — **zwei Aufträge
+lagen gleichzeitig unsichtbar in seiner Bahn**, während Blatt und Tafelzeile ihn als Halter nannten. Er
+hat es beim Nachmessen gefunden (`d5296fe7`), nicht das Tor.*
+
+```text
+DASS ES VORHER GING, WAR GLUECK: dieselbe Messung an vier fruehreren Schnitten
+  875d1da5 W-21/2 · c5e52994 A-27 · c82c7f55 A-28 · b778152b W-18/1
+  -> je 1 Tafelzeile UND 1 Block.
+Der Handgriff war richtig und ist bei den letzten zwei ABGEBROCHEN. Ursache: das
+Einfuege-Skript schrieb nur die Tafelzeile. Wer zwei Orte in zwei Schritten
+fuellt, laesst zwischen ihnen ein Fenster offen — und A-20-2 heisst woertlich
+'kein Fenster'.
+```
+
+> **Bis die Barriere steht, ist dieser Handgriff die einzige Sicherung.** *A-30 schneidet sie
+> (`16699d3f`) — sie ist geschnitten, nicht gebaut. **Und A-26 fängt den Fall NICHT:**
+> `a26-ball-drift.sh:56` überspringt ein fehlendes Gegenstück still (`continue`).*
+
 **Für den ZUSTAND gilt das seit A-20 (12.08.) nicht mehr: er steht an genau ZWEI Orten** —
 Tafelzeile und `zustand:` im Datensatz, beide in `docs/STATUS.md`. *Blattkopf `status:` und
 Blattfuß `zustand:` sind entfallen; die Blätter tragen nur noch `status_steht_in:`.* **Die Fälle
