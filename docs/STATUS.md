@@ -1249,6 +1249,45 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## W-19-BEGRUENDUNG GEGENGELESEN (Release-Pruefer, 13.08. nachts) — sechs Zahlen halten, eine Aussage ist nicht am Code messbar
+
+```yaml
+anlass: "Der Planner hat W-19 nach Yamas ausdruecklicher Blick-Erlaubnis in der fremden App
+  wberechnung neu gemessen und seine eigene Praemisse gekippt: 'gehoert zu wberechnung' war eine
+  Annahme ueber eine fremde App, die er nicht gemessen hatte. Auf dieser Messung baut jetzt eine
+  Entscheidung auf — also lese ich sie gegen. NUR LESEND, die Mehr-App-Regel eingehalten:
+  Lesen frei, Schreiben nur in der Heimat-App. Ich habe in wberechnung keine Datei angefasst."
+
+was_haelt: >
+  Alle sechs pruefbaren Zahlen, je einzeln nachgemessen:
+    verschattung|shading im ganzen Repo   GENAU 2 Treffer, beide INVENTUR_BERICHT.md :76 und :218
+                                          und beide fuehren die Sache als ❌ NICHT vorhanden
+    PvgisController.php                   202 Zeilen — die genannte Zahl
+    :41                                   re.jrc.ec.europa.eu/api/v5_2/PVcalc, der PVGIS-Aufruf
+    :103                                  solar.googleapis.com/v1/buildingInsights:findClosest
+    yearlyEnergyDcKwh                     vorhanden, :157, wird zu yearly_kwh gerundet
+    angle/aspect 6 Treffer · azimuth_deg/pitch_deg 10
+  Der tragende Schluss haelt damit ebenfalls: wberechnung rechnet Verschattung NICHT selbst und
+  weiss das von sich. Eine Zuweisung von W-19 dorthin waere ins Leere gegangen.
+
+WAS ICH NICHT BESTAETIGEN KANN, und ich sage es, weil die Entscheidung darauf steht: >
+  Der Satz 'yearlyEnergyDcKwh je Segment ist bereits verschattungsbereinigt — Google rechnet
+  gegen das 3D-Modell der realen Umgebung' ist eine Aussage ueber einen FREMDEN DIENST, nicht
+  ueber Code in diesem oder jenem Repo. Am Code messbar ist nur, DASS das Feld gelesen wird
+  (:157). OB es verschattungsbereinigt ist, steht in Googles API-Zusage und in keiner Datei, die
+  ich oeffnen kann.
+  Das entwertet den Schluss nicht — es macht ihn nur zu einer Fremdquellen-Annahme statt zu einer
+  Messung. Wer darauf baut, sollte die Zusage einmal an Googles Dokumentation belegen, so wie
+  wir hier jede Fundstelle belegen. Ich melde die Luecke; sie zu schliessen ist keine
+  Release-Pruefer-Zeile.
+
+warum_ich_es_ueberhaupt_gegengelesen_habe: "Weil der Planner selbst den richtigen Grund nennt:
+  seine erste Fassung war eine Annahme ueber eine fremde App. Eine Berichtigung, die aus einer
+  fremden App kommt, verdient dieselbe Gegenlesung wie die Annahme, die sie ersetzt — sonst
+  tauscht man nur die Quelle der Ungewissheit."
+ballbesitz_befund: planner
+```
+
 ## BEDIENMODELL NACHGEMESSEN (Release-Pruefer, 13.08. nachts) — drei der vier Voraussetzungen sind GEBAUT
 
 ```yaml
