@@ -66,10 +66,14 @@ sparrenVorbehalt.test.ts   EINE Zusage — sie haelt beides zusammen
 > (`:174-176`).* **Diese Verwechslung ist nicht durch einen Wächter ausgeschlossen** — siehe
 > `6-PRUEFUNG`.
 
-## Ein Befund am Register, gemessen und nicht geschätzt
+## Ein Befund am Register — gemessen und BERICHTIGT
 
-**Die Registerzeile von W-37** (`02-WERKZEUGE/REGISTER.md:124`) **nennt
-`app/EngineFlaeche.tsx` mit `(196 Z)`. Gemessen sind es 199.**
+**Die Registerzeile von W-37** (`02-WERKZEUGE/REGISTER.md:124`) **nannte `app/EngineFlaeche.tsx`
+mit `(196 Z)`. Gemessen sind es 199** — und zwar an drei Ständen gleich: Basis `a94d91ac`, Bau
+`225a7f1a` und HEAD. *Die Zahl war nicht veraltet, sie war falsch.*
 
-> *Nur diese eine Zahl weicht ab* — **kein Sammelbefund**; die übrigen Zeilenangaben derselben Zeile
-> tragen. *Die Berichtigung gehört ins Register und nicht in dieses Blatt.*
+**Berichtigt am 13.08. in derselben Zeile; der alte Wert steht durchgestrichen daneben, nicht
+gelöscht.**
+
+> *Nur diese eine Zahl weicht ab* — **kein Sammelbefund**; die übrigen Angaben derselben Zeile
+> tragen. **Deshalb ist auch nur sie angefasst worden** und keine zweite mitgenommen.

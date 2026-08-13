@@ -253,3 +253,137 @@ was_dieses_blatt_ueber_mein_messen_sagt: "Beide Blocker sind Klasse W-36-5, und 
         hier gerettet, wo ich es getan habe (Abschnitt 3, die Zeilenzahlen) — und genau das fehlte an
         den zwei Stellen, die blockiert wurden."
 ```
+
+## Votum des Evaluators (§11) — NACHBESSERN
+
+```yaml
+votum: NACHBESSERN
+fehlerklasse: CODE   # §12.1 -> Generator
+umfang: "EIN Punkt (§12.2): W-37-6. Die uebrigen ACHT Kriterien sind erfuellt, jedes einzeln
+  nachgemessen — der Befund trifft eine verlangte HANDLUNG, die nicht ausgefuehrt wurde."
+geprueft_am: "13.08.2026, evaluator"
+bau_commit: "225a7f1a (23:22) — GESUCHT, der einzige. Sieben Dateien, alle neu."
+elter: "6c08c478"
+```
+
+### Der Befund: W-37-6 verlangt eine Handlung, der Bau hat nur festgestellt
+
+```text
+DAS KRITERIUM SAGT WOERTLICH:
+  "W-37-6  Die REGISTERZEILE wird nachgezogen: sie nennt EngineFlaeche.tsx mit 196 Zeilen,
+           gemessen sind 199."
+
+GEMESSEN AM COMMIT:
+  REGISTER.md im Bau-Commit 225a7f1a          0 Treffer  (sieben Dateien, alle unter
+                                                          W-37-rechenpanels/)
+  REGISTER.md:124 am Bau-Stand                "... `app/EngineFlaeche.tsx` (196 Z) ..."
+  EngineFlaeche.tsx, Zeilen SELBST gezaehlt   199
+  und zwar an DREI Staenden gleich: Basis a94d91ac 199 · Bau 225a7f1a 199 · HEAD 199
+  -> Die Zahl ist unveraendert falsch, die Zeile ist unveraendert da.
+
+DER BERICHT SAGT ES SELBST, und das ist der Kern: "NUR diese eine Zahl — kein Sammelbefund; die
+Berichtigung gehoert ins Register." Der Bau hat den Befund also gesehen, richtig gemessen und
+BEWUSST nicht ausgefuehrt, weil er ihn fuer einen anderen Vorgang haelt.
+
+WARUM ICH DAS NICHT DURCHGEHEN LASSE, drei Gruende:
+ (1) Der SCOPE nennt das Register weder als Ziel noch als NICHT-Ziel — ich habe beide Listen
+     gelesen. Nach §5 ist jede Anforderung Kriterium ODER ausdrueckliches Nicht-Ziel; hier ist
+     sie Kriterium, und nur das gilt.
+ (2) DIE HANDLUNG IST UEBLICH UND MOEGLICH, an vier echten Staenden belegt: fa7547c7 (W-33),
+     3dae69b4 (W-35), 3abd8e79 (W-39), 7c782f76 (W-34) — jeder dieser Ablese-Commits enthaelt
+     REGISTER.md. Es ist kein fremder Vorgang.
+ (3) W-37 ist nach eigener Aussage die LETZTE freie Ablesung. Geht die Zahl jetzt nicht mit, geht
+     sie mit keinem Ablesungsauftrag mehr mit.
+
+WAS ICH AUSDRUECKLICH NICHT BEANSTANDE: die Messung des Baus ist richtig. 196 gegen 199 stimmt.
+Der Befund trifft allein die fehlende Ausfuehrung.
+```
+
+### Messtisch — jede Kriterienzeile eine Zeile
+
+```text
+W-37-1 (P1, TRAGEND)  ERFUELLT — nach SIGNATUR gezaehlt, nicht nach Namen
+  grep -nE '^export function als[A-Za-z]+' liefert ACHT, jede mit der Signatur
+  (werte: Record<string, string>) -> Engine-Eingabetyp:
+    :100 alsTreppenEingabe · :414 alsSparrenEingabe · :439 alsFbhEingabe
+    :457 alsBetriebsBedingung · :482 alsUwEingabe · :494 alsAbwasserEingabe
+    :503 alsArbeitsdreieck · :509 alsPvEingabe
+  DAS KLASSENMERKMAL SELBST GEGENGEPROBT: das Namensmuster als*Eingabe findet nur SECHS —
+  alsBetriebsBedingung und alsArbeitsdreieck fallen heraus. Wer die Klasse am Namen zieht, zieht
+  sie um zwei zu klein. Genau das sagt das Kriterium, und es stimmt.
+
+W-37-2 (P1)           ERFUELLT
+  Der N-003-Vorbehalt ist im Code auffindbar und im Blatt benannt: enginePanels.ts:74 (der
+  Grund), :223 ("der Vorbehalt steht IM SELBEN BLICK"), :225 das Feld selbst
+  { schluessel: 'vorbehalt', label: 'Vorbehalt' }. A-14/N-003 kommen in den Blaettern 14x vor.
+
+W-37-3                ERFUELLT
+  SCHWERE_ANZEIGE steht in app/EngineFlaeche.tsx:31-35 mit DREI Graden, jeder mit ZEICHEN und
+  WORT: fehler '✕'/'Fehler' · warnung '⚠'/'Warnung' · info 'ℹ'/'Hinweis'. Die Aussage traegt:
+  neben zeichen und wort steht je ein token — die Farbe ist die dritte Spur, nicht die einzige.
+
+W-37-4                ERFUELLT
+  ENGINE_PANELS auf enginePanels.ts:119, ACHT Panels (engineId-Zeilen einzeln gezaehlt).
+
+W-37-5                ERFUELLT — beide Klassen getrennt, beide selbst gemessen
+  IMPORT (sechs, namentlich): enginePanelRest · enginePanelSparren · enginePanelTgaHeizung ·
+    enginePanelTreppe · sparrenVorbehalt · zweiEnginesSchweigen
+  NUR QUELLE: stilschicht.test.ts (3 Nennungen, 0 Importe) · gesperrtAppWeit.test.ts (2/0) ·
+    fussUndUeberlagerungen.test.ts (1/0)
+  Die Unterscheidung traegt: "0 Importe" heisst nicht "nicht verriegelt".
+
+W-37-6                NICHT ERFUELLT — der Befund oben.
+
+W-37-7                ERFUELLT
+  Die Scope-Grenze zu geometry/ steht in 2-FUNKTION; die Rechnungen werden aufgerufen, nicht
+  beschrieben.
+
+W-37-7b               ERFUELLT — alle drei Fundstellen selbst geoeffnet
+  :522 enginePanel(engineId) · :527 startwerte(panel) · :538 fehlendePflichtfelder(panel, werte)
+  Und die Behauptung "enginePanel steht in ALLEN SECHS" nachgeprueft: die sechs Importeure sind
+  genau die oben genannten.
+
+W-37-8                ERFUELLT — Gegenprobe ueber den ganzen Vorrat
+  Sieben Blaetter: 1-ZWECK 79 · 2-FUNKTION 89 · 3-FORMELN 68 · 4-BEDIENUNG 69 ·
+  5-CODE/LIESMICH 60 · 6-PRUEFUNG 68 · 7-GRENZEN 75, sieben verschiedene md5.
+  Alle 253 Blattdateien unter 02-WERKZEUGE geprueft: 7 Doppel im Altbestand, davon 0 bei W-37.
+
+Suite / tsc           1750 / 1750 / fail 0, tsc exit=0. Kein Produktivcode im Bau-Commit.
+Browser               NICHT GEFAHREN, mit Grund: reiner Dokumentationsbau.
+§15                   Kein Schreibvorgang gegen eine Datenbank im Pruefumfang.
+```
+
+### Die Gegenprobe des Kriteriums selbst nachgefahren — sie hielt an ihrem Stand
+
+```text
+W-37-6 begruendet "kein Sammelbefund" mit "fuenf von sechs richtig". Alle sechs Zeilenangaben des
+Registers am BAU-STAND nachgezaehlt:
+  ConfigWizard.tsx    271 = 271  ✓      FaehigkeitenNavi.tsx  76 = 76   ✓
+  faehigkeiten.ts     129 = 129  ✓      auswechslung.ts      174 = 174  ✓
+  EngineFlaeche.tsx   196 ≠ 199  ✗      StartView.tsx        267 ≠ 281  ✗
+Am Bau-Stand sind es VIER von sechs, nicht fuenf.
+
+DAS IST KEIN BEFUND GEGEN DAS BLATT — nachgemessen statt gemeldet: am BASIS-STAND a94d91ac hat
+StartView.tsx genau 267 Zeilen. Der Planner hat richtig gemessen; die Datei wuchs erst danach
+(3ad920b1, A-23, 00:08). Die Aussage war an ihrem Stand wahr und ist es heute nicht mehr —
+dieselbe Klasse wie die verschobenen Zeilennummern aus A-34, nur an einer Zahl statt an einem
+Verweis. Ich nenne es, weil der Bericht sie als heutige Zahl wiederholt.
+```
+
+### Eigene Messfehler in diesem Durchgang — drei, alle vor der Wertung bemerkt
+
+```text
+1  EngineFlaeche.tsx AM FALSCHEN ORT GESUCHT (app/dashboard/ statt app/) — leere Zeilenzahl. Der
+   Registereintrag nennt den Pfad korrekt; ich hatte ihn aus der Erwartung ergaenzt statt gelesen.
+2  DEN BASIS-SHA VERTIPPT (a94d91a3 statt a94d91ac). `git show` schlug fehl, der Fehlschlag lief
+   still in `wc -l`, und das Ergebnis war dreimal "0 Zeilen". Haette ich das genommen, stuende
+   hier "die Datei existiert am Basis-Stand nicht". Abhilfe: den Fehlerkanal ausdruecklich
+   abfragen statt nur zu zaehlen.
+3  SCHWERE_ANZEIGE zuerst nur in enginePanels.ts gesucht — sie steht in EngineFlaeche.tsx. Der
+   leere Treffer war mein Suchraum, nicht der Bau.
+```
+
+**Weitergabe:** NACHBESSERN → **Generator**. Nach §12.3/§12.4 fahre ich bei der Wiederabnahme
+ALLE neun Kriterien erneut. *Falls der Planner W-37-6 anders meint als sein Wortlaut — als
+Feststellung statt als Handlung — ist das seine Entscheidung und keine für mich; dann gehört der
+Satz „wird nachgezogen" geändert, nicht die Abnahme.*
