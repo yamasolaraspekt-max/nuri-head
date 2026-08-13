@@ -240,3 +240,61 @@ was_ich_NICHT_getan_habe: "Nach weiteren Typ-Dubletten gesucht. Das waere naheli
         jemand sie sucht, ist das ein eigener Vorgang mit eigenem Zuschnitt."
 A_28_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+---
+
+## 5 — Votum des Evaluators (§11)
+
+**ABGENOMMEN.** Bau `2a06907d`, Elter `77f625ba`. Zwei Prüfstände mit `node_modules` und `vendor`.
+Der Bau war schon beim Claim im Feld `bau_sha` auffindbar — **der erste Auftrag, bei dem das gilt**;
+A-27 wirkt.
+
+| Kriterium | Befund | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **A-28-1** (TRAGEND) | **grün** | Die Ableitung ist gebaut: `AufbauArt = Exclude<ObstacleType, 'spitzgaube'>` (`aufbauPlatzierung.ts:52`), `VorlagenAufbauArt = AufbauArt` (`dachformVorlagen.ts:178`). Aufzählungen der Werteliste im Repo selbst gezählt: **am Elter 4** (`aufbauPlatzierung:22`, `dachformVorlagen:174`, `validation:188`, `scene.types:249`) → **am Bau 2** (`scene.types:249` und das `z.enum` in `validation:188`). Die zweite ist ausdrücklich zulässig, und die Entscheidung steht im Datensatz |
+| **A-28-2** (SCHUTZGRENZE) | **grün** | Die neun Werte **selbst erhoben** und den Ausschluss selbst nachgerechnet, statt der Zusage zu glauben: Elter `AufbauArt` = Elter `VorlagenAufbauArt` = Bau `Exclude<ObstacleType,'spitzgaube'>` — **zeichengleich und in derselben Reihenfolge**. Kein Wert geändert |
+| **A-28-3** | **grün** | `npm run tsc:hausplaner` **gefahren**, nicht zitiert: Bau **exit 0, 0 Fehler**; Elter ebenso |
+| **A-28-4** | **grün** | Insel-Suite **1731/1731 an beiden Ständen** — Zähler vorher = nachher, kein Test geändert |
+| **A-28-5** | **grün** | Der Dateikopf-Befund (sechs Gattungen / neun Arten) steht im Datensatz, Feld `A_28_5_sechs_gattungen_neun_arten` |
+| **A-28-5b** | **grün** | Der Spitzgaube-Befund steht im Datensatz und wird ausdrücklich **nicht behoben** (`A_28_5b_spitzgaube_bleibt_unbehoben`) — mit H-7 als Begründung |
+| **A-28-6** | **grün** | Fangprobe gefahren, Anker genau 1×, md5 **vor** dem Lauf als geändert bestätigt: `giebelgaube` aus `ObstacleType` entfernt → **tsc exit 2, 3 Fehler** in `aufbauPlatzierung` und `dachformVorlagen`. Zurückgesetzt, md5 identisch |
+| **A-28-7** | **grün** | `dachAusschnitt.ts`, `aufbauOrientierung.ts`, `dachAufbautenMesh.ts` **md5-identisch** mit dem Elter; der Bau berührt genau 2 Dateien |
+
+**Die Gegenprobe, die den Gewinn erst belegt.** A-28-1 verspricht: *„verliert `ObstacleType` eine
+Art, bricht tsc. Heute merkt es niemand."* Das habe ich **an beiden Ständen** gefahren — dieselbe
+Mutation, derselbe Anker:
+
+```text
+giebelgaube aus ObstacleType entfernt
+  BAU   -> tsc exit 2, 3 Fehler   (aufbauPlatzierung:97, dachformVorlagen:918, :990)
+  ELTER -> tsc exit 0, 0 Fehler
+```
+
+**Am Elter wäre der Verlust einer Art durchgerutscht.** Das ist nicht der Nachweis, dass der Bau
+funktioniert, sondern dass er etwas *ändert* — und genau das war die Zusage.
+
+**Ein Hinweis zum md5 aus A-28-2, und er trifft beide Seiten.** Der Anker im Blatt
+(`35ed563c…`) stammt aus dem Quelltext der alten Deklaration und kann nach dem Bau nicht mehr
+entstehen; das hat der Bauende selbst erkannt und eine eigene Form gewählt (*„die neun Werte,
+sortiert, mit Trennzeichen verbunden"*, `e6d11215…`). **Diese Zahl konnte ich nicht reproduzieren** —
+ich habe vier Trennzeichen durchprobiert, keines trifft. Ein md5 ohne genannte Bildungsvorschrift
+ist für den Nächsten nicht nachprüfbar; das ist dieselbe Klasse wie B5 („ein Zählergebnis braucht
+Trefferzeilen"). **Sachlich ist das Kriterium trotzdem erfüllt**, weil ich die Werte selbst erhoben
+und verglichen habe — der Beleg liegt in der Sache, nicht in seiner Zahl.
+
+**Und die Formabweichung aus A-27 wiederholt sich, damit ist sie eine Klasse und kein Einzelfall:**
+A-28-5 und A-28-5b verlangen die Befunde **„im Bericht"** — einen Bericht als Datei gibt es zu A-28
+**nicht**, der Inhalt steht vollständig im **Datensatz**, in benannten Feldern. Wie bei A-27:
+sachlich erfüllt an der Stelle, die §16 als maßgeblich nennt, aber vom Wortlaut abweichend. **Zwei
+Aufträge hintereinander** — wenn das die neue Form sein soll, gehört sie in die Kriterien statt in
+die Auslegung; das ist eine Frage an den Planner, nicht an den Bauenden.
+
+**Meine eigenen Messfehler in dieser Runde:** ich habe den tsconfig-Pfad **geraten**
+(`resources/planner/hausplaner/tsconfig.json`) — er heißt `tsconfig.hausplaner.json` und liegt in
+der Wurzel. `tsc` meldete „path does not exist", und mein erster Lauf las daraus ein `exit=0`. Ein
+Werkzeug, das nichts prüft, meldet keinen Fehler; ich habe den Aufruf über die `package.json`
+gesucht und mit echtem Exit-Code wiederholt.
+
+**§15:** keine Datenbankschreibung in dieser Abnahme.
+
+**Weiter an den Release-Prüfer.**
