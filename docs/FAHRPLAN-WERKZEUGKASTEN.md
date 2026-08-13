@@ -477,10 +477,42 @@ und `verbinden` (aus zwei wird eine — einer verschwindet). Dort ist die Sache
 sachlich klarer, aber der Vertrag sagt es trotzdem nicht.
 ```
 
-> ***Was das für die Reihenfolge heißt:*** ***fünf** der acht sind ohne Klärung baubar — `trimmen`,
-> `verlaengern`, `ausrichten`, `verteilen`, `erkennung-bestaetigen`. **Drei warten** auf eine
-> Entscheidung, die in einem Satz zu treffen ist. **Und keiner der fünf ist geschnitten**, weil der
-> Generator zwölf BEREIT-Zeilen hat; Vorrat auf Vorrat verdünnt nur.*
+> ***BERICHTIGT, keine Stunde später — KEINES der acht ist heute klärungsfrei baubar.*** *Ich hatte hier
+> geschrieben, fünf seien es. **Beim Messen der Bedienung fiel das dritte Hindernis auf**, und es liegt
+> weder in der Geometrie (A-32, steht) noch in der Klammer (A-31, steht), sondern in der **Eingabe**:*
+>
+> ```text
+> WAS DIE VERTRAEGE ALS EINGABE NENNEN — und was davon im Code existiert:
+>   selectionIds          0 Dateien ausserhalb des Vertrags   (7 der 8 nennen es)
+>   operationParameters   0 Dateien ausserhalb des Vertrags   (5 der 8 nennen es)
+>   alignment · reference · axis · spacingMode · detectionIds ·
+>   approvalMode          -> die restlichen drei, ebenfalls ohne Entsprechung
+>
+> UND `selectionIds` IST EIN H-9-FALL: die Auswahl GIBT es — sie heisst im Store
+> `selectedNodeIds`. Der Vertrag spricht eine eigene Sprache, und die
+> Uebersetzung ist nirgends festgelegt.
+>
+> DAZU DIE BEDIENFRAGE: trimmen braucht ZWEI Waende (Schnittkante und die zu
+> kuerzende), verbinden auch; versatz und teilen brauchen eine Wand PLUS einen
+> Parameter. Die Registry kennt aber nur `minSelectionCount: 1` — an zwei
+> Stellen, bei `loeschen` und `duplizieren`. Ein Muster fuer
+> Zwei-Objekt-Bedienung oder fuer Parameter-Eingabe existiert im Haus NICHT.
+> ```
+>
+> ***Was das NICHT heißt:*** *die 111 Verträge sind eine **Voraus**spezifikation; dass ihre Eingabenamen
+> für nicht gebaute Werkzeuge nicht im Code stehen, ist normal und kein Mangel. **Der Mangel ist eng:**
+> er trifft genau die acht, die jetzt an der Reihe wären.*
+>
+> ***Und es ist die dritte Korrektur derselben Aussage an einem Abend:*** *erst „ohne Yamas
+> Entscheidungen geht nichts weiter" — zu pauschal. Dann „acht sind baubar" — drei haben einen
+> Vertragswiderspruch. Dann „fünf sind baubar" — und jetzt: **keines**, weil die Bedienung fehlt.
+> **Jedes Mal hat erst die nächste Messschicht es gezeigt** — genau das, was Schritt 5 der B-Regel
+> verlangt: über alle Schichten messen, nicht über die, die man schon kennt. **Ich habe die Regel für
+> B-Zeilen geschrieben und bei den Werkzeugen zunächst nicht angewandt.***
+>
+> **Deshalb ist KEIN Werkzeug-Auftrag geschnitten.** *Das Bedienmodell — wie wählt man zwei Wände, wie
+> gibt man einen Abstand ein — ist eine **Produktentscheidung** und gehört Yama; sie steht als vierter
+> später Posten in der Vorlage.
 
 
 ### W-26 und W-28 gemessen — damit sind ALLE ZEHN B-Zeilen gemessen
