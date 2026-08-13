@@ -1245,6 +1245,123 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## YAMAS POSTENLISTE DURCHGEARBEITET (Release-Pruefer, 13.08. nachts) — fuenf erledigt, einer entschieden, einer verkleinert
+
+```yaml
+anweisung_im_wortlaut: "Yama 13.08.: 'kannst du alle Fragen und Aufgaben, welche an mich gerichtet
+  ist uebernehmen und sehr sorgfaeltig und fundiert beantworten bzw erledigen'. Davor 13.08.
+  'du uebernimmt alle fragen und aufgaben in namen von Yama' und 12.08. 'du sollst die Aufgaben,
+  welche an mich gerichtet sind, erledigen'. Anlass war zusaetzlich der Satz des Planners in der
+  Vorlage: 'Bei den Abschnitten 3, 6, 8, 10, 11, 12 und 13 habe ich den Zustand heute nicht neu
+  gemessen ... wenn einer davon fuer dich noch aussteht, sag es, dann messe ich ihn frisch.'
+  Genau diese sieben habe ich gemessen, plus die sechs Posten des Ueberblicks."
+
+## A — ERLEDIGT, weil die Messung sie gegenstandslos macht
+
+abschnitt_11_W_40: "GEGENSTANDSLOS. Der Abschnitt legt Yama zwei Fachfragen vor — ob
+  review-required zur Gueltigkeitsachse gehoert (4+3=7 gegen acht Stufen im Zielbild) und wie
+  blocked sich von DECISION_BLOCKED abgrenzt. BEIDE hat Yama am 12.08. selbst beantwortet, und
+  zwar am Code statt am Zielbild. Beleg: STATUS.md, W-40-Datensatz, Feld
+  YAMAS_ANTWORT_AUF_BEIDE_FACHFRAGEN_12_08_EINGETRAGEN — der Planner hat seine fuenf Belege
+  einzeln nachgemessen (configuratorPackage.ts:25-26 sieben Freigabegrade, kannIntegrieren :120,
+  checked-Uebergang :107, blocked 0 Treffer). ENTSCHEIDUNG 1 steht woertlich im W-40/1-Blatt:
+  'review-required ist KEINE Zahlenluecke, die vier und die drei liegen nicht auf derselben
+  Achse'. Die Vorlage zeigt Yama also zwei Fragen, die er beantwortet hat."
+
+abschnitt_10_W_42: "GEGENSTANDSLOS. W-42 steht BETRIEBSBESTAETIGT, ballbesitz frei."
+
+abschnitt_12_sperren: "GEGENSTANDSLOS. Der Abschnitt beschreibt, dass die Tafel zweimal eine
+  Sperre zeigte, die es nicht mehr gab. Heute gemessen: RELEASE_BLOCKED 0, SPEC_BLOCKED 0,
+  ENV_BLOCKED 0. Der EINZIGE blockierte Auftrag ist W-21L (DECISION_BLOCKED) und der ist echt.
+  A-23, der Auftrag ueber die sieben Zettel an der erledigten Sperre, ist BETRIEBSBESTAETIGT."
+
+abschnitt_3_produktionszahl: "BLEIBT BEI YAMA, aber alle fuenf lokalen Voraussetzungen frisch
+  nachgemessen und unveraendert gueltig: (1) DB::table('p_v_roofs') an VIER Stellen, alle rein
+  lesend — drei Controller plus roof_info.blade.php, jede mit ->get() bzw. ->select();
+  meine erste Zaehlung fand nur drei, weil ich die Blade-View ausserhalb von app/ nicht
+  durchsucht hatte, die Vorlage hatte recht. (2) Der Waechter haengt an static::saving in
+  PVRoof.php:161-165, greift also auch beim Mass-Assignment-Pfad. (3) 0 catch in PVRoof.php.
+  (4) roof_azimuth in app/Http/Requests/: 0. (5) lokal p_v_roofs 0 Datensaetze, 0 ausserhalb
+  [0,360) — Nullbefund wie beschrieben. Die SELECT-Zahl auf Hetzner kann und darf ich nicht
+  messen: Produktion bleibt bei Yama."
+
+abschnitt_6_nebenlaeufigkeit: "FUER DIE SCHREIBENDE ROLLE FAKTISCH GELOEST, ohne dass die
+  Arbeitsweise der Kette geaendert wurde. Der Abschnitt sagt, jede Abhilfe — eigene Dateien je
+  Auftrag, Schreibsperre, andere Zerlegung — aendere wie alle fuenf Rollen arbeiten. Gemessen:
+  seit ich am 13.08. um 08:49 auf einen EIGENEN WORKTREE umgestellt habe, sind elf
+  release-pruefer-Commits gelaufen und KEINER hat fremde Arbeit eingesammelt. Der Worktree
+  loest die Kollision fuer den, der ihn benutzt, und aendert fuer die anderen nichts. Das ist
+  keine Entscheidung ueber die Kette, sondern ein Beleg, dass die teuerste der drei genannten
+  Abhilfen nicht noetig war. Die Regelkollision im Regelwerk selbst — zweiter Commit unmittelbar
+  gegen nie fremde Arbeit einsammeln — bleibt bestehen und bleibt Yamas, weil sie das Regelwerk
+  aendert."
+
+## B — ENTSCHIEDEN in Vertretung, weil die Messung eindeutig ist
+
+W_26_dachschichten: >
+  FRAGE: Darf RoofNode ein Feld schichten bekommen?
+  ENTSCHEIDUNG: JA. Und es ist die konservativste denkbare Schema-Aenderung.
+  GEMESSEN, nicht aus der Vorlage uebernommen:
+    WallNode.schichten?    scene.types.ts:98    Array<{ materialId?: string; dickeMm: number }>
+    CeilingNode.schichten? scene.types.ts:348   Array<{ materialId?: string; dickeMm: number }>
+    RoofNode               fuehrt es nicht
+  Die zwei vorhandenen Formen sind ZEICHENGLEICH, nicht nur aehnlich. In der Zod-Spiegelung
+  stehen sie ebenfalls zweimal identisch (validation.ts:58 und :271) und BEIDE tragen
+  .optional(). Im erzeugten scene-document-v2.schema.json ist schichten an beiden Orten
+  vorhanden und an KEINEM required.
+  DARAUS FOLGT DER ENTSCHEIDENDE PUNKT: eine dritte Anwendung ist ADDITIV. Bestehende
+  Szenendokumente ohne das Feld bleiben gueltig, kein 422, keine Migration, kein Bestandsbruch —
+  genau die Schutzgrenze, die Yamas CLAUDE.md an erster Stelle nennt.
+  WARUM ICH SIE VERTRETE: es ist keine Fach-, Norm- oder Haftungsfrage. Es ist die dritte
+  Anwendung eines zweimal belegten Musters an einem optionalen Feld.
+  WAS ICH NICHT TUE: bauen. Kein Zod, kein Schema, kein Regenerieren — das ist Generator-Arbeit,
+  und wer es baut, laesst schema:hausplaner mitlaufen, sonst faellt der PHP-Validator auf 422.
+  REVIDIERBAR mit einem Satz.
+
+## C — VERKLEINERT durch Messung: es sind FUENF Objekttypen, nicht sechs
+
+sechs_objekttypen: >
+  Die Vorlage nennt Pumpe, Leuchte, Schalter, Steckdose, Verteiler und PV-Modul.
+  Fuer FUENF stimmt die Begruendung woertlich und ich habe sie einzeln geoeffnet
+  (werkzeugLandkarte.ts:152, :165, :166, :167, :168): "ObjectNode.objectType kennt keine X.
+  Braucht einen Typ, dann deckt ADD_NODE." Das ist je EIN Enum-Wert, danach traegt der
+  bestehende Befehl — additiv, kein neuer Befehlstyp.
+  FUER PV-MODUL TRAEGT SIE NICHT. werkzeugLandkarte.ts:170 sagt dasselbe, aber:
+    paketAdapter.ts:190   'pv-modul': { feld: 'zoneType', wert: 'pv_area' }
+    scene.types.ts        zoneType kennt pv_area — es EXISTIERT, in 4 Dateien in Gebrauch
+  Der Weg ist also gebaut, nur an einer anderen Achse: PV wird als FLAECHE modelliert, nicht als
+  Objekt. Und die Rechnung dazu steht ebenfalls: pvSchnellBelegung (geometry/pvBelegung.ts:46)
+  liefert aus einer Flaeche Modulzahl, kWp und Flaechennutzung. Ein einzelnes Modul als Knoten
+  haette heute keinen Verbraucher.
+  DAS IST DIESELBE KLASSE WIE A-29: die Landkarte nennt die falsche Achse und verschweigt einen
+  vorhandenen Weg. Wer den Eintrag liest, plant einen Objekttyp, wo eine Zone schon da ist.
+  ICH ENTSCHEIDE HIER NICHTS und sage warum: ob ein PV-Modul EINZELN modellierbar sein soll oder
+  ob Flaeche plus gerechnete Anzahl reicht, ist eine Produktfrage. Aber sie ist eine ANDERE Frage
+  als die der fuenf, und sie sollte nicht mit ihnen zusammen entschieden werden.
+
+## D — BLEIBT BEI YAMA, mit Begruendung je Posten
+
+bleibt: >
+  17  Pruefbuehnen-Seed        Datenbank-Automatik. CLAUDE.md: nicht still automatisiert.
+                               Weg C liegt daneben (13.08., eigener Abschnitt).
+  16  W-24 Erdkontakt          Fachentscheidung MIT Rechenwirkung, beruehrt das
+                               wberechnung-Heizlast-Transplantat.
+  15  W-28 Rinnenbemessung     Normgroesse DIN 1986-100.
+  14  Tragwerk an die Flaeche  Handwerkspraxis. Vom Bildschirm nicht zu klaeren.
+   8  Sechs Luecken            SCHRITTE_OHNE_GRUNDLAGE steht unveraendert im Code
+                               (fahrschritte.ts, sechs Eintraege heute nachgezaehlt).
+                               Produktumfang, keine Ablesung.
+  13  L/T/U-Daecher            Handwerkspraxis; die Faehigkeit ist da, die
+                               Arbeitsweise ist die Frage.
+     W-19 Verschattung         pvBelegung.ts:6 zieht die Grenze zur Fach-Engine
+                               ausdruecklich. Beruehrt das Transplantat.
+     W-32 Giebelwand           Gemessen: WallNode fuehrt roofId NULL Mal, der Bezug
+                               Wand->Dach fehlt tatsaechlich. Die Empfehlung Ableitung
+                               setzt einen Bezug voraus, den es nicht gibt — das ist
+                               mehr als ein Satz und mehr als Schema.
+     W-21L                     Fachdaten (Deckungsart-/Lattweiten-Tabelle).
+```
+
 ## VORRATSMESSUNG 13.08. nachts (Release-Pruefer) — was der Stillstand KOSTET, gemessen statt vermutet
 
 ```yaml

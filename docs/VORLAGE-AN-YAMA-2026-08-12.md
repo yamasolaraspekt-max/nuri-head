@@ -26,9 +26,9 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 |---|---|---|---|
 | **17** | **Prüfbühne ohne Boden** | Dauerhafter Seed mit Prüfnutzer und Prüfobjekt? | Prüfinfrastruktur; **drei von vier Befunden verschwinden auf einmal** · **13.08. nachts frisch gemessen: 0/0/0 — geräumt vom Release-Prüfer-Grundtor selbst. Dritter Weg C (Skript sät idempotent) in Abschnitt 17 daneben gelegt.** |
 | **16** | **W-24 Boden/Erdkontakt** | Woran erkennt das Modell Erdreich? *(Empfehlung: am Geschoss)* | Fachentscheidung mit **Rechenwirkung**, berührt das wberechnung-Transplantat |
-| **15** | **W-26 Dachschichten** | Darf `RoofNode` ein Feld `schichten` bekommen? | **Schema**-Entscheidung; das Muster steht schon zweimal |
+| **15** | **W-26 Dachschichten** | Darf `RoofNode` ein Feld `schichten` bekommen? | **Schema**-Entscheidung; das Muster steht schon zweimal · **ENTSCHIEDEN 13.08. in Vertretung: JA, additiv.** Das Muster steht zweimal zeichengleich (`WallNode:98`, `CeilingNode:348`), beide `.optional()`, im JSON-Schema nicht `required` — die dritte Anwendung bricht kein bestehendes Dokument. |
 | **15** | **W-28 Entwässerung** | Rinnenbemessung — Operanden oder vertagen? *(Empfehlung: vertagen)* | **Normgröße** (DIN 1986-100) |
-| **15** | **Sechs Objekttypen** | Pumpe, Leuchte, Schalter, Steckdose, Verteiler, **PV-Modul** | **Schema**; sechs Werkzeuge an einem Feld |
+| **15** | **Sechs Objekttypen** | Pumpe, Leuchte, Schalter, Steckdose, Verteiler, **PV-Modul** | **Schema**; sechs Werkzeuge an einem Feld · **13.08. auf FÜNF verkleinert:** PV-Modul hat bereits einen Weg — `paketAdapter.ts:190` mappt auf `zoneType: pv_area`, den es im Schema gibt. Die Landkarte nennt dort die falsche Achse (Klasse A-29). Die anderen fünf brauchen je einen Enum-Wert, dann deckt `ADD_NODE`. |
 | **14** | **Tragwerk sichtbar?** | Gehört Tragwerk an die Zeichenfläche? | Produktentscheidung |
 
 > ### ✅ ERLEDIGT — die Stille ist vorbei. *(Meldung bleibt als Beleg stehen)*
@@ -357,7 +357,7 @@ seinen Zustand zu bestimmen. Sobald oben entschieden ist, trage ich ihn nach.
 
 ---
 
-## 6 · NEU am 12.08.: Nebenläufigkeit an `docs/STATUS.md` — und das ist deine Entscheidung
+## 6 · Nebenläufigkeit an `docs/STATUS.md` — **für die schreibende Rolle 13.08. faktisch gelöst: eigener Worktree, 11 Commits, 0 Beifang. Die Regelkollision im Regelwerk bleibt deine.**
 
 **Vom Generator in A-22 benannt, ausdrücklich nicht mitentschieden, von mir gegengeprüft.**
 
@@ -721,7 +721,7 @@ blocked           Die Quelle beziffert sie nicht. Wie grenzt sie sich von
 
 ---
 
-## 10 · W-42 soll nach deiner eigenen Regel anders geschnitten werden, als deine Zusage lautet
+## 10 · W-42 — **ERLEDIGT 13.08. (Release-Prüfer, Ablesung): W-42 ist BETRIEBSBESTAETIGT, Ballbesitz frei.** Ursprünglicher Titel: W-42 soll nach deiner eigenen Regel anders geschnitten werden, als deine Zusage lautet
 
 **NEU am 12.08. — und ich trage einen Vorwurf mit, der berechtigt ist.** Der Plan-Prüfer hat in
 `a482d437` festgestellt, dass diese Frage seit heute Mittag in jedem seiner Berichte steht, aber
@@ -830,7 +830,7 @@ Es steht hier, damit du es weisst, bevor du ueber a) b) c) oben entscheidest.
 
 ---
 
-## 11 · W-40 aufgelöst — Reifegrad, Bau und zweite Wahrheit, auf deine Anweisung beantwortet
+## 11 · W-40 — **ERLEDIGT 13.08.: die zwei Fachfragen unter „Was bei dir bleibt" hast du am 12.08. SELBST beantwortet** (STATUS.md, W-40-Datensatz, Feld `YAMAS_ANTWORT_AUF_BEIDE_FACHFRAGEN_12_08_EINGETRAGEN`; ENTSCHEIDUNG 1 wörtlich im W-40/1-Blatt). Ursprünglich: W-40 aufgelöst — Reifegrad, Bau und zweite Wahrheit, auf deine Anweisung beantwortet
 
 **Dein Auftrag, 12.08. wörtlich:** *„Eine Antwort von dir löst jetzt drei Dinge auf einmal: W-40s
 Reifegrad, W-40s Bau und die Frage, ob dort eine zweite Wahrheit entstanden ist. diese Frage war an
@@ -929,7 +929,7 @@ Wer sie präzisiert, sollte **„am Paket"** dazuschreiben.
 
 ---
 
-## 12 · NEU am 12.08.: die Tafel hat dir zweimal eine Sperre gezeigt, die es nicht mehr gab
+## 12 · **ERLEDIGT 13.08. (Ablesung): heute 0 RELEASE_BLOCKED, 0 SPEC_BLOCKED, 0 ENV_BLOCKED; der einzige blockierte Auftrag ist W-21L und der ist echt.** Ursprünglich: die Tafel hat dir zweimal eine Sperre gezeigt, die es nicht mehr gab
 
 **Das ist der Punkt, der dich direkt betrifft** — *nicht als Entscheidung, sondern weil du auf diese
 Spalte schaust, um zu sehen, was von dir erwartet wird.*
