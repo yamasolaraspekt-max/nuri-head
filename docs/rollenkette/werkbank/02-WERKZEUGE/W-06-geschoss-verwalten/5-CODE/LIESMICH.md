@@ -1,33 +1,51 @@
-# W-xx · CODE
+# W-06 · Geschoss verwalten — CODE
 
-## Wo der Code wirklich lebt
+**Angebunden aus DREI vorhandenen Modulen** — Stand 13.08.: **355 Zeilen, 10 Ausfuhren**. *Jede
+Zeilenzahl und jede Ausfuhr einzeln am Bau-Stand gezählt, nicht aus dem Auftrag übernommen und nicht
+aus der Summe abgeleitet.*
 
-| Schicht | Datei im Repo | Zweck |
-|---|---|---|
-| 1 Domäne | `resources/planner/hausplaner/domain/…` | |
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | |
-| 3 Werkzeug | `resources/planner/hausplaner/app/tools/…` | |
-| 4 Darstellung | `resources/planner/hausplaner/renderers/…` | |
-| 5 Oberfläche | `resources/planner/hausplaner/ui/…` | |
+| Schicht | Modul | Z | Ausfuhren |
+|---|---|---|---|
+| reine Geometrie | `resources/planner/hausplaner/geometry/geschossVorlage.ts` | 78 | `LevelVorlage` (11) · `GeschossDuplikat` (32) · `dupliziereGeschoss()` (43) |
+| Daten | `resources/planner/hausplaner/app/dashboard/geschossStapel.ts` | 104 | `StapelEintrag` (22) · `Stapel` (34) · `hoehenLabel()` (51) · `stapel()` (66) · `kurzfassung()` (94) · `nachbar()` (100) |
+| Oberfläche | `resources/planner/hausplaner/app/dashboard/GeschossFlaeche.tsx` | 173 | `GeschossFlaeche()` (56) |
 
-> **Der Code steht im Repo, nicht in diesem Ordner.** Hier liegen nur
-> Schnittstellenbeschreibung, Ablaufskizze und — wo nötig — ein kurzer
-> Auszug der Kernstelle mit Zeilennummer, damit man beim Lesen nicht springen muss.
+## Zwei Typen, die absichtlich NICHT ausgeführt werden
 
-## Schnittstelle
+`NodeBasis` (`geschossVorlage.ts:20`) und `RoofBasis` (`:27`) sind **nicht exportiert**. *Sie sind die
+Innenseite des Vertrags: die Geometrieschicht sagt damit, welche vier bzw. zwei Felder sie braucht —
+und mehr sieht sie nicht.* **Der Aufrufer nennt seinen eigenen Typ und bekommt ihn zurück**
+(`N[]`, `R | null`), er muss nichts umdeuten. *Siehe `2-FUNKTION`, „Die Generics sind eine Aussage".*
 
-```ts
-// Signatur der öffentlichen Funktion(en) dieses Werkzeugs
+## Die Aufrufer, je Modul über die Importzeile erhoben
+
+```text
+geschossVorlage.ts    app/HausplanerApp.tsx:113          dupliziereGeschoss
+geschossStapel.ts     app/HausplanerApp.tsx:93           stapel
+                      app/dashboard/GeschossFlaeche.tsx:29  stapel · kurzfassung · StapelEintrag
+                      app/dashboard/palette.ts:38        type Stapel
+GeschossFlaeche.tsx   app/dashboard/Kopfrahmen.tsx:38    GeschossFlaeche
 ```
 
-## Kernstelle
+> **Alle drei Module sind angeschlossen** — *das ist der Punkt, den die Registerzeile verschweigt.
+> Sie nennt keinen Code und behauptet damit nichts Falsches; sie lässt nur offen, dass W-06 gebaut
+> und verdrahtet ist.*
 
-```ts
-// Der eine Ausschnitt, auf den es ankommt — mit Datei:Zeile
+## Der Weg vom Duplikat zum Befehl — seit A-31 EIN Undo-Schritt
+
+```text
+GeschossFlaeche  -> onDuplizieren
+HausplanerApp    -> dupliziereGeschoss(...)                geometry, rein
+                 -> befehleGeschossDuplizieren(dup)        app/sammelBefehle.ts
+                 -> executeCommands([ADD_LEVEL, ...ADD_NODE, ADD_ROOF?])
+                    EIN produceWithPatches, EIN historie.push
 ```
 
-## Abhängigkeiten
+*Vorher waren es `N+2` Undo-Schritte für **ein** Geschoss.* **Die Klammer sitzt im Store, nicht in
+diesem Werkzeug** — W-06 liefert die Daten, A-31 hat die Ausführung gebündelt.
 
-| Braucht | Warum | Richtung geprüft? |
-|---|---|---|
-| | | ja/nein — kein Kreis |
+## Was gebaut ist und was nicht
+
+**Gebaut:** alle drei Schichten, rein getrennt, mit Wächtern (siehe `6-PRUEFUNG`).
+**Nicht vorhanden:** ein eigener Modellbefehl. *W-06 kommt mit `ADD_LEVEL`, `ADD_NODE`, `ADD_ROOF`
+und `UPDATE_LEVEL` aus — vier Befehle, die es schon gab.*
