@@ -628,6 +628,21 @@ if printf '%s\n' "$@" | grep -qx 'docs/STATUS.md' && [ -f scripts/a27-bau-commit
   bash scripts/a27-bau-commit.sh docs/STATUS.md || true
 fi
 
+# ── A-30: EINE NEUE TAFELZEILE OHNE DATENSATZ IST UNSICHTBAR ─────────────────────────────────
+# A-20-2 verlangt beide Orte im SELBEN Commit, und nichts hat es geprueft. Zwei Auftraege lagen
+# dadurch gleichzeitig unsichtbar in der Bahn des Plan-Pruefers — gefunden hat es nicht das Tor,
+# sondern eine fremde Rolle beim Nachmessen.
+#
+# Geprueft wird NUR, was im Commit NEU dazukommt. Die naive Fassung „jede Tafelzeile braucht einen
+# Datensatz" erzeugte sofort ZWOELF Fehlalarme auf legitimen Altbestands-Zeilen — und genau so
+# wird eine Barriere weggeklickt (A-03).
+#
+# Eigenes Skript aus demselben Grund wie A-26/A-27: fahrbar an historischen Staenden ohne Commit.
+# WARNUNG, KEIN ABBRUCH — dieselbe Ordnung wie die zwei davor.
+if printf '%s\n' "$@" | grep -qx 'docs/STATUS.md' && [ -f scripts/a30-datensatz-paar.sh ]; then
+  bash scripts/a30-datensatz-paar.sh docs/STATUS.md || true
+fi
+
 # ── W-04 ────────────────────────────────────────────────────────────────────────────────────
 # Das Tor konnte keine NEUE Datei verbuchen: `git commit -- <pfad>` kennt nichts, was nie im
 # Index war. Gemessen am 03.08.: **31 von 98 Commits** dieser zwei Tage fuehrten mindestens eine

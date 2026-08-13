@@ -585,11 +585,65 @@ W-27 Kantentypen          KLASSE C, und es war ein BAU: etwa zweieinhalb Stunden
 > Zeitschätzung über B ohne Messung eine Vermutung ist — und der W-27-Maßstab ist die richtige Obergrenze
 > für den Fall, dass eine B-Zeile sich als Bau entpuppt.*
 
-### ALLE ZEHN B-ZEILEN durchgemessen, 13.08. — und Yamas Sorge ist berechtigt
+### ✅ ABSCHLIESSENDE ANTWORT AUF DEN VORBEHALT — 13.08. nachts, alle zehn zu Ende gemessen
 
-**Stand nach der Durchmessung.** *Drei Zeilen sind zu Ende gemessen und geschnitten, sieben liegen als
-Indikation vor. **Vier davon deuten auf BAUTEN** — damit greift der W-27-Maßstab, und die Annahme
-„B = Ablesung" trägt für die Hälfte der Zeilen nicht.*
+*Yama hat den Vorbehalt am 13.08. gestellt und am Ende des Tages noch einmal darauf gezeigt, weil dieser
+Abschnitt einen **Zwischenstand** trug. **Hier ist die abschließende Antwort; der Zwischenstand steht
+darunter und ist als solcher gekennzeichnet.***
+
+```text
+SEINE FRAGE:  Wenn sich mehrere B-Zeilen als BAUTEN entpuppen, gilt eher der
+              W-27-Maszstab (etwa zweieinhalb Stunden je Bau).
+
+DIE ANTWORT, am Bestand gemessen und in der Tafel belegt:
+
+  SIEBEN Zeilen sind ABLESUNGEN — alle geschnitten, alle mit DoR, alle BEREIT:
+    W-06     Geschoss verwalten
+    W-18/1   Topologie pruefen
+    W-12/1   Ansicht und Kamera
+    W-16/1   Grundriss unterlegen
+    W-10/1   Decke und Boden
+    W-14/1   Kopieren/Spiegeln/Drehen
+    W-03/1   Wand bearbeiten
+
+  DREI Zeilen sind WEDER Ablesung NOCH Bau, sondern ENTSCHEIDUNGEN bei Yama:
+    W-24  Boden/Erdkontakt — der Code markiert es DREIMAL selbst als
+          Operanden-Gate (raumProjektion.ts:7 und :96, dachProjektion.ts:8,
+          scene.types.ts:393: „bleibt null, bis diese Regel entschieden ist")
+    W-26  Dachschichten — RoofNode fehlt das Feld `schichten`. Schema.
+    W-28  Dachentwaesserung — Rinnenbemessung ist eine Normgroesse
+          (DIN 1986-100). Empfehlung: vertagen.
+
+  -> DER W-27-MASZSTAB GREIFT BEI KEINER DER ZEHN.
+     Die Sorge war berechtigt und hat sich NICHT bestaetigt.
+```
+
+> ***Und die ehrliche Kehrseite, ohne die die Antwort geschönt wäre:*** *die Ablesungen waren **größer
+> als meine eigenen Fahrplan-Einträge sagten — bei vier von vier gemessenen Zeilen.** W-16s halbe
+> Wahrheit liegt auf dem **Server** (sechs Routen, Controller, zwei Migrationen); W-10s Modul hat 35
+> Zeilen und sein Test 242; W-14 hat **drei verschiedene Bezugsrahmen** statt einer Gruppe; W-03 ist
+> über das Eigenschaften-Panel längst bedienbar. **Nicht der Maßstab war falsch, sondern die Größe des
+> Gegenstands** — und das steht als Regel im Nachtrag weiter oben: *wer nach dem Eintrag schneidet,
+> schneidet zu klein.**
+
+> ***Wo Bauten wirklich anfielen, waren es keine B-Zeilen:*** *A-31 (Sammel-Klammer im Store) und A-32
+> (Geradenschnitt und Parallelversatz) — **beide heute Nacht gebaut, abgenommen und freigegeben.** Sie
+> sind das Fundament für acht Werkzeuge, und **fünf davon sind jetzt ohne weitere Klärung baubar**;
+> drei warten auf eine Vertragsfrage (`versatz`: neu oder verschoben?).*
+
+---
+
+### ⓘ ZWISCHENSTAND VOM 13.08. VORMITTAG — ÜBERHOLT, bleibt als Beleg stehen
+
+> **⚠ Alles ab hier bis zur Regel am Ende ist der Stand, als erst DREI Zeilen gemessen waren.** *Er sagt
+> „vier deuten auf Bauten" — gemessen sind es null. Er nennt W-16 und W-10 „Indikation" — beide sind
+> vollgemessen und geschnitten. Er nennt W-14 „offen, Vollmessung nötig" — erledigt. **Und er trägt in
+> der W-12-Zeile den Fehler „Raster in BEIDEN Renderern", den ich am selben Tag berichtigt habe: es gibt
+> nur `renderers/three-d/`.** Nicht gelöscht, weil er den Weg der Messung belegt — aber **er ist nicht
+> der Stand.***
+
+**Der Zwischenstand im Wortlaut.** *Drei Zeilen zu Ende gemessen und geschnitten, sieben als
+Indikation. Vier davon deuteten auf Bauten.*
 
 ```text
 GEMESSEN UND GESCHNITTEN — ABLESUNG (drei):

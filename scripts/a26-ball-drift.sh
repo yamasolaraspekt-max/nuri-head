@@ -21,12 +21,33 @@
 # im Tor ist es KEINER (A-26-5): eine Rueckgabe darf bewusst zwischen zwei Commits liegen.
 set -uo pipefail
 
-DATEI="${1:-docs/STATUS.md}"
-[ -f "$DATEI" ] || exit 0
+DATEI="docs/STATUS.md"
+STAND=""
+# `--stand <sha>` liest den Diff DIESES Commits gegen seinen Elter und die Datei an DIESEM Stand.
+# NACHGETRAGEN 13.08. (A-30): der Kopf oben sagt seit A-26, die Barriere muesse an historischen
+# Staenden fahrbar sein — sie war es bisher nur ueber eine KOPIE der Datei, und damit lief sie
+# gegen den falschen Diff. *Ein Nachweis, der den Stand nur halb herstellt, belegt die halbe
+# Sache.* Dieselbe Fahrweise wie `a30-datensatz-paar.sh`; zwei Barrieren, eine Bedienung.
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --stand) STAND="${2:-}"; shift 2 ;;
+    *)       DATEI="$1"; shift ;;
+  esac
+done
 
 # Nur die BERUEHRTEN Auftraege (A-26-4). Das Tor laeuft bei jedem Commit; 56 Auftraege je Lauf zu
 # lesen ist der Weg, auf dem eine Barriere langsam und dann abgeschaltet wird.
-DIFF="$(git diff HEAD -- "$DATEI" 2>/dev/null || true)"
+if [ -n "$STAND" ]; then
+  DIFF="$(git diff "${STAND}^" "${STAND}" -- "$DATEI" 2>/dev/null || true)"
+  # Die Datei am Stand selbst — sonst laese die Pruefung den heutigen Text zu einem alten Diff.
+  DATEI_INHALT="$(git show "${STAND}:${DATEI}" 2>/dev/null || true)"
+  DATEI="$(mktemp)"
+  printf '%s\n' "$DATEI_INHALT" > "$DATEI"
+  trap 'rm -f "$DATEI"' EXIT
+else
+  [ -f "$DATEI" ] || exit 0
+  DIFF="$(git diff HEAD -- "$DATEI" 2>/dev/null || true)"
+fi
 KENNUNGEN="$(printf '%s' "$DIFF" \
   | grep -E '^[+-]' \
   | grep -oE '(\| \*\*[AW]-[0-9]+(/[0-9]+[a-z]?)?\*\*|auftrag: "?[AW]-[0-9]+(/[0-9]+[a-z]?)?)' \
@@ -39,11 +60,31 @@ KENNUNGEN="$(printf '%s' "$DIFF" \
 SAEUBERE='s/[`*]//g; s/^[[:space:]]*//; s/[[:space:]]*$//'
 
 MELDUNGEN=""
+# ── A-30: WAS NICHT GEPRUEFT WERDEN KONNTE, WIRD GESAGT ──────────────────────────────────────
+# Bis A-30 sprang diese Schleife an zwei Stellen STILL ab, wenn ein Ort fehlte (:46 und :56 der
+# damaligen Fassung). *Eine Barriere, die schweigt, wo sie nicht pruefen kann, meldet dasselbe wie
+# eine, die prueft und nichts findet: nichts.* Von aussen sind die beiden nicht unterscheidbar —
+# genau die Klasse, gegen die B5 („Zaehlwort braucht Belegzeile") gebaut wurde.
+#
+# Der Umfang war nicht klein: am Stand 13.08. tragen ELF Vorgaenge ihre zwei Orte unter
+# VERSCHIEDENEN Kennungen (Tafel `W-01`, Datensatz `W-01/1`) — fuer die lief die Pruefung zweimal
+# leer, in beide Richtungen, und niemand sah es.
+#
+# ZWEI KLASSEN, GETRENNT (A-30-3): 'Drift' heisst beide Orte da und die Werte laufen auseinander —
+# das ist ein BEFUND. 'nicht geprueft' heisst ein Ort fehlt — das ist eine DECKUNGSLUECKE. Wer
+# beides gleich meldet, macht aus einer Luecke einen Befund und aus einem Befund Rauschen.
+# Deshalb hebt 'nicht geprueft' den Rueckgabewert NICHT — sonst waere es die naive Fassung durch
+# die Hintertuer.
+UNGEPRUEFT=""
 while IFS= read -r ID; do
   [ -z "$ID" ] && continue
 
   TAFEL="$(grep -m1 -E "^\| \*\*${ID}\*\*" "$DATEI" || true)"
-  [ -z "$TAFEL" ] && continue
+  if [ -z "$TAFEL" ]; then
+    UNGEPRUEFT="${UNGEPRUEFT}  ${ID}: keine Tafelzeile — Ball und Zustand nicht vergleichbar
+"
+    continue
+  fi
   T_ZUSTAND="$(printf '%s' "$TAFEL" | awk -F'|' '{print $3}' | sed "$SAEUBERE")"
   T_BALL="$(printf '%s' "$TAFEL" | awk -F'|' '{print $4}' | sed "$SAEUBERE")"
 
@@ -53,7 +94,11 @@ while IFS= read -r ID; do
   #     'nicht zuordenbar' gemeldet statt geraten (A-26-2): eine falsche Zuordnung ist schlimmer
   #     als eine ausgelassene.
   START="$(grep -n -m1 -E "^auftrag: \"?${ID}\"?[[:space:]]*$" "$DATEI" | cut -d: -f1 || true)"
-  [ -z "$START" ] && continue
+  if [ -z "$START" ]; then
+    UNGEPRUEFT="${UNGEPRUEFT}  ${ID}: kein Datensatz-Block — Ball und Zustand nicht vergleichbar
+"
+    continue
+  fi
   BLOCK="$(awk -v s="$START" 'NR>=s { if (NR>s && ($0=="```" || $0=="```yaml")) exit; print }' "$DATEI")"
   if [ "$(printf '%s\n' "$BLOCK" | grep -cE '^auftrag: ')" -gt 1 ]; then
     MELDUNGEN="${MELDUNGEN}  ${ID}: nicht zuordenbar — mehrere Datensaetze in einem yaml-Block (A-25).
@@ -91,6 +136,17 @@ while IFS= read -r ID; do
 done <<EOF
 $KENNUNGEN
 EOF
+
+# DECKUNGSLUECKE zuerst, und ausdruecklich NICHT als Befund (A-30-3). Sie steht auch dann da,
+# wenn kein Drift gefunden wurde — sonst waere das Schweigen wieder mehrdeutig.
+if [ -n "$UNGEPRUEFT" ]; then
+  echo "A-26-HINWEIS  NICHT GEPRUEFT — eine Kennung steht nur an EINEM der zwei A-20-Orte:" >&2
+  printf '%s' "$UNGEPRUEFT" >&2
+  echo "            Das ist KEIN Drift-Befund, sondern eine Deckungsluecke: hier konnte nicht" >&2
+  echo "            verglichen werden. Haeufigster Grund im Altbestand sind zwei Schreibweisen" >&2
+  echo "            fuer EINEN Vorgang (Tafel 'W-01', Datensatz 'W-01/1')." >&2
+  echo "            Bei einer NEUEN Kennung meldet A-30 denselben Fall als Befund." >&2
+fi
 
 [ -z "$MELDUNGEN" ] && exit 0
 
