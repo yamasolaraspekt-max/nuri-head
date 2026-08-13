@@ -179,7 +179,13 @@ W-06-6  Der zweite Bedienweg steht im Blatt: palette.ts fuehrt geschossStapel ei
         die Geschossnavigation ist also auch ueber die Befehlspalette erreichbar und
         nicht nur ueber die Flaeche.
 W-06-7  7-GRENZEN stellt klar, dass F-032 eine FORMEL ist und keine Sperre
-        (FORMELSAMMLUNG.md:218, Transformation eines Punktes). Vier LEER-Werkzeuge
+        (FORMELSAMMLUNG.md, Abschnitt "### F-032 · Transformation eines Punktes").
+        ANKER STATT NUMMER, berichtigt durch A-34 am 13.08.: hier stand
+        "FORMELSAMMLUNG.md:218" — die F-004-Berichtigung (136ebca1) hat rund 35
+        Zeilen davor eingefuegt, seitdem traegt jene Zeile "Zweck: PV-Ertrag,
+        Verschattung" und F-032 liegt auf 253. Ein Kriterium wird BEFOLGT, nicht
+        nur gelesen; eine verschobene Zahl darin schickt den Bauenden zur
+        falschen Formel. Vier LEER-Werkzeuge
         tragen dieselbe Referenz — das sieht wie ein gemeinsamer Blocker aus und ist
         keiner. Ein Satz, der spaeter viermal Messzeit spart.
 W-06-8  Alle sieben Blaetter gefuellt, Gegenprobe `tail -n +2 <blatt> | md5` je Blatt,

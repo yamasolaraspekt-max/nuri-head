@@ -130,7 +130,21 @@ export interface VersetzteAchse {
 }
 
 /**
- * **Parallelversatz einer Achse — F-020s Normalform** (`FORMELSAMMLUNG.md:141-143`).
+ * **Parallelversatz einer Achse — F-020s Normalform.**
+ *
+ * *Fundstelle als **Anker**, nicht als Zeilennummer:* `FORMELSAMMLUNG.md`, Abschnitt
+ * **`### F-020 · Straight Skeleton (Grundgleichung)`**, Unterpunkt
+ * **`Formel (Kantenversatz zur Zeit t)`**. **Beide Texte kommen dort genau einmal vor** — eine
+ * Suche findet die Stelle, eine Zahl nicht.
+ *
+ * > **Warum hier keine Zeilennummer steht (A-34).** *Diese Zeile zeigte auf die Zeilen 141 bis 143
+ * > jener Datei. Die Berichtigung von F-004 (`136ebca1`) hat rund 35 Zeilen davor eingefügt —
+ * > seitdem steht dort die **Ausgabe von F-011 (Polygonfläche)**. **Der Verweis war lautlos
+ * > falsch:** er sah aus wie vorher und führte zu einer anderen Formel. Gefunden hat es der
+ * > Evaluator bei der A-32-Abnahme, weil er alle sieben Fundstellen des Baus geöffnet hat.*
+ * >
+ * > *Die alte Zahl steht hier ausgeschrieben und nicht in der Verweisform — sie ist ein **Beleg**
+ * > für das, was dastand, und darf nicht wie ein lebender Zeiger aussehen.*
  *
  * ```text
  * Kante als Gerade:  a·x + b·y + c = 0    mit a² + b² = 1
@@ -143,7 +157,10 @@ export interface VersetzteAchse {
  * genau das: jeder Endpunkt wandert um `abstandMm` entlang der Einheitsnormalen der gewählten
  * Seite.
  *
- * **KEINE neue F-Nummer.** *`FORMELSAMMLUNG.md:4` sagt „Eine Formel steht genau einmal", und diese
+ * **KEINE neue F-Nummer.** *Der Kopf von `FORMELSAMMLUNG.md` sagt **„Eine Formel steht genau
+ * einmal"** — auch dieser Verweis steht als Anker und nicht als Zeile. Er zeigte auf `:4` und war
+ * dort **richtig**, weil Zeile 4 vor der Einfügung liegt; er wird trotzdem umgestellt, weil dieselbe
+ * Falle sonst beim nächsten Mal hier zuschlägt. Und diese Formel
  * steht in F-020. F-020 versetzt **alle** Kanten eines Polygons nach innen, hier wird **eine**
  * Gerade auf eine benannte Seite versetzt — dieselbe Mathematik, anderer Zweck.*
  *
