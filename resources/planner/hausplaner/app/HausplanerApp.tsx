@@ -107,8 +107,11 @@ import { ladeAngeheftet, speichereAngeheftet, umschalten } from './state/angehef
 import { resolveToolState } from './tools/activation';
 import { baueAktivierungsKontext } from './tools/toolContext';
 import type { ObjectType, ViewType } from './tools/toolTypes';
-import { versetzteWand, spiegelteWand, bbox as punkteBbox, achsenMitte, type Achse } from '../geometry/editierGeometrie';
+// A-31: versetzteWand/spiegelteWand/bbox/achsenMitte sind mit den Befehlslisten nach
+// `sammelBefehle.ts` gezogen; hier bleibt nur noch der Achsen-Typ.
+import { type Achse } from '../geometry/editierGeometrie';
 import { dupliziereGeschoss } from '../geometry/geschossVorlage';
+import { befehleLoeschen, befehleDuplizieren, befehleSpiegeln, befehleGeschossDuplizieren } from './sammelBefehle';
 import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
 
 // Basis-URL der Icon-Assets — aus dem Bundle-Standort abgeleitet (traegt Subpfad/Domain).
@@ -618,10 +621,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const selectedStairParams: TreppeParams | null = selectedStair ? parametereZuTreppe(selectedStair.parameters) : null;
   // AUF-48 Scheibe 4d: `aktTreppe` ist mit dem Eigenschaften-Panel umgezogen.
   // Editier-Operationen: Bewegen laeuft ueber das Ziehen (unten am Node); hier Loeschen/Duplizieren/Spiegeln.
+  // A-31: EIN Undo-Schritt für die ganze Auswahl. Vorher lief hier eine Schleife, und jeder
+  // Durchgang schrieb einen eigenen Historien-Eintrag.
   function loescheAuswahl(): void {
-    for (const id of selectedNodeIds) {
-      store.getState().executeCommand({ type: 'REMOVE_NODE', nodeId: id });
-    }
+    store.getState().executeCommands(befehleLoeschen(selectedNodeIds, nodes));
     store.getState().selectNodes([]);
   }
   function exportPng(): void {
@@ -668,25 +671,12 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     else if (tool.id === 'duplizieren') dupliziere();
   }
   // AUF-48 Scheibe 4a: `opSep` und `OpGruppe` sind mit der Bedien-Werkzeugleiste umgezogen.
+  // A-31: die ganze Auswahl in EINEM Schritt. Die neuen IDs werden nur dann ausgewählt, wenn die
+  // Liste durchgelaufen ist — bei einer Ablehnung ist nichts entstanden, was man auswählen könnte.
   function dupliziere(): void {
-    const jetzt = new Date().toISOString();
-    const neu: string[] = [];
-    for (const id of selectedNodeIds) {
-      const n = nodes.find((x) => x.id === id);
-      if (!n) continue;
-      const neueId = uuid();
-      if (n.type === 'wall') {
-        const g = versetzteWand(n.start, n.end, 500, 500);
-        if (store.getState().executeCommand({ type: 'ADD_NODE', node: { ...n, id: neueId, start: g.start, end: g.end, createdAt: jetzt, updatedAt: jetzt } })) neu.push(neueId);
-      } else if (istOeffnung(n)) {
-        const wand = waende.find((w) => w.id === n.hostWallId);
-        if (!wand) continue;
-        const laenge = wandLaenge(wand.start, wand.end);
-        const off = Math.round(Math.max(0, Math.min(n.offsetFromWallStart + n.width + 100, laenge - n.width)));
-        if (store.getState().executeCommand({ type: 'ADD_NODE', node: { ...n, id: neueId, offsetFromWallStart: off, createdAt: jetzt, updatedAt: jetzt } })) neu.push(neueId);
-      }
-    }
-    if (neu.length) store.getState().selectNodes(neu);
+    const { befehle, neueIds } = befehleDuplizieren(selectedNodeIds, nodes, waende, uuid, new Date().toISOString());
+    if (!befehle.length) return;
+    if (store.getState().executeCommands(befehle) && neueIds.length) store.getState().selectNodes(neueIds);
   }
   /**
    * AUF-62 — „Ansicht einpassen". **Anzeige, kein Modellzustand:** setzt `zoom` und `pan`, löst
@@ -700,14 +690,10 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     setPan(e.pan);
   }
 
+  // A-31: Spiegeln ist EINE Handlung — ein Knopfdruck auf den ganzen Grundriss — und seit hier auch
+  // EIN Undo-Schritt. Vorher drehte ein Undo genau eine Wand zurück.
   function spiegeleGrundriss(achse: Achse): void {
-    const b = punkteBbox(waende.flatMap((w) => [w.start, w.end]));
-    if (!b) return;
-    const pos = achsenMitte(b, achse);
-    for (const w of waende) {
-      const g = spiegelteWand(w.start, w.end, achse, pos);
-      store.getState().executeCommand({ type: 'MOVE_NODE', nodeId: w.id, position: { start: g.start, end: g.end } });
-    }
+    store.getState().executeCommands(befehleSpiegeln(waende, achse));
   }
   // Geschoss als Vorlage duplizieren (aktiviert die getestete Logik dupliziereGeschoss):
   // neues Geschoss darueber, Waende/Oeffnungen/Dach kopiert, Oeffnungen an die neuen Waende umgehaengt.
@@ -721,10 +707,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       uuid,
       `${level.name} (Kopie)`,
     );
+    // A-31: vorher N+2 Undo-Schritte für EIN Geschoss — Geschoss, jede Wand einzeln, Dach.
     const st = store.getState();
-    if (!st.executeCommand({ type: 'ADD_LEVEL', level: dup.level })) return;
-    for (const n of dup.nodes) { st.executeCommand({ type: 'ADD_NODE', node: n }); }
-    if (dup.roof) { st.executeCommand({ type: 'ADD_ROOF', roof: dup.roof }); }
+    if (!st.executeCommands(befehleGeschossDuplizieren(dup))) return;
     st.setActiveLevel(dup.level.id);
   }
 
@@ -1149,9 +1134,11 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
       }
       switch (absicht.art) {
         case 'loeschen':
-          for (const id of store.getState().selectedNodeIds) {
-            store.getState().executeCommand({ type: 'REMOVE_NODE', nodeId: id });
-          }
+          // A-31: dieselbe Klasse wie `loescheAuswahl`, aber bewusst ueber den FRISCHEN Store-Stand
+          // — im Tastaturweg darf keine Auswahl aus dem Schliessungsstand gelesen werden.
+          store.getState().executeCommands(
+            befehleLoeschen(store.getState().selectedNodeIds, store.getState().scene?.nodes ?? []),
+          );
           store.getState().selectNodes([]);
           break;
         case 'rueckgaengig':

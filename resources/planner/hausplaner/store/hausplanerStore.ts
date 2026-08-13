@@ -49,6 +49,20 @@ export interface HausplanerState {
   setUeberfahren: (id: string | null) => void;
 
   executeCommand: (command: HausplanerCommand) => boolean;
+  /**
+   * A-31 — **eine zusammengehörige Änderung ist EIN Undo-Schritt.** Führt die ganze Liste in
+   * **einem** `produceWithPatches` aus und schreibt **einen** Historien-Eintrag.
+   *
+   * **Alles oder nichts:** lehnt ein Befehl mitten in der Liste ab, wird der ganze Draft verworfen
+   * — die Szene bleibt unverändert, `letzteAblehnung` trägt die Meldung, Rückgabe `false`. *Das
+   * kostet nichts extra: `produceWithPatches` verwirft den Draft ohnehin, es gibt keinen
+   * Zwischenzustand, den man aufräumen müsste.* **Und die Alternative wäre ein Zustand, den keine
+   * Zusage beschreiben kann** — „N−1 von N Wänden gespiegelt" ist keine Aussage.
+   *
+   * Eine **leere** Liste tut nichts und meldet `true`: kein Historien-Eintrag, keine Szene-Änderung.
+   * *Sonst hinterließe eine Operation ohne Auswahl einen Undo-Schritt, der nichts zurücknimmt.*
+   */
+  executeCommands: (commands: HausplanerCommand[]) => boolean;
   undo: () => void;
   redo: () => void;
   kannUndo: () => boolean;
@@ -62,6 +76,20 @@ const historie = new Historie();
 
 function wendePatchesAn(scene: SceneDocument, patches: Patch[]): SceneDocument {
   return applyPatches(scene, patches) as SceneDocument;
+}
+
+/**
+ * Beschriftung des Historien-Eintrags. Ein einzelner Befehl behält seinen Typ als Text — genau wie
+ * vor A-31, damit die Umstellung an der Beschriftung nichts ändert. Mehrere gleichartige Befehle
+ * werden gezählt, gemischte aufgezählt.
+ */
+function beschreibe(commands: HausplanerCommand[]): string {
+  if (commands.length === 1) {
+    return commands[0].type;
+  }
+  const arten = [...new Set(commands.map((c) => c.type))];
+
+  return arten.length === 1 ? `${commands.length}× ${arten[0]}` : arten.join(' + ');
 }
 
 export const useHausplanerStore = create<HausplanerState>((set, get) => ({
@@ -111,16 +139,28 @@ export const useHausplanerStore = create<HausplanerState>((set, get) => ({
 
   setUeberfahren: (id) => set({ ueberfahrenId: id }),
 
-  executeCommand: (command) => {
+  // Ein Befehl ist der Sonderfall einer Liste mit einem Eintrag — NICHT eine zweite Fassung
+  // derselben Logik. Zwei Ausführungswege wären zwei Wahrheiten, und die eine bekäme irgendwann
+  // eine Korrektur, die der anderen fehlt.
+  executeCommand: (command) => get().executeCommands([command]),
+
+  executeCommands: (commands) => {
     const { scene } = get();
     if (!scene) {
       return false;
     }
+    if (commands.length === 0) {
+      return true; // nichts zu tun — und deshalb auch kein Undo-Schritt
+    }
     try {
+      const jetzt = new Date().toISOString();
       const [neueScene, patches, inversePatches] = produceWithPatches(scene, (draft) => {
-        applyCommand(draft, command, new Date().toISOString());
+        // ALLE Befehle in EINEM Draft: wirft einer, verwirft Immer den ganzen Entwurf.
+        for (const command of commands) {
+          applyCommand(draft, command, jetzt);
+        }
       });
-      historie.push({ patches, inversePatches, beschreibung: command.type });
+      historie.push({ patches, inversePatches, beschreibung: beschreibe(commands) });
       set({
         scene: neueScene as SceneDocument,
         speicherStatus: 'ungespeichert',
