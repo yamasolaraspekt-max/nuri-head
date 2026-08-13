@@ -31,6 +31,28 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 | **15** | **Sechs Objekttypen** | Pumpe, Leuchte, Schalter, Steckdose, Verteiler, **PV-Modul** | **Schema**; sechs Werkzeuge an einem Feld |
 | **14** | **Tragwerk sichtbar?** | Gehört Tragwerk an die Zeichenfläche? | Produktentscheidung |
 
+> ### ⚠ Betriebsmeldung, 13.08. nachts — der Vorrat wird nicht abgearbeitet
+>
+> **Elf Aufträge stehen `BEREIT` beim Generator, und der Generator ist seit sieben Stunden still.**
+> *Gemessen an den Commits, je Rolle:*
+>
+> | Rolle | letzte Meldung |
+> |---|---|
+> | **generator** | **vor 7 Stunden** (A-32 CODE_FERTIG) — davor durchgehend aktiv |
+> | **evaluator** | vor 7 Stunden — *hat aber nichts zu tun: kein `CODE_FERTIG` in der Tafel* |
+> | plan-prüfer | vor 11 Minuten |
+> | release-prüfer | vor 2 Minuten |
+> | planner | vor 5 Minuten |
+>
+> ***Die Ursache kenne ich nicht und behaupte sie nicht.*** *Möglich ist vieles — die Instanz kann
+> beendet sein, warten oder ohne Commits arbeiten. **Was ich messen kann, ist die Wirkung:** dein
+> Auftrag „dass die alle ständig Arbeit haben" ist am Vorrat erfüllt und an der Abarbeitung nicht.
+> **Elf Blätter liegen fertig geschnitten da, darunter alle zehn B-Zeilen.** Beim Evaluator ist die
+> Stille erklärbar; beim Generator nicht.*
+>
+> **Ich kann ihn nicht starten** — *das ist eine andere Instanz und nicht meine Rolle. Deshalb steht es
+> hier statt in einem Auftrag.*
+
 **Zwei Posten, die NACH der B-Session kommen** — *sie stehen hier, damit du sie kennst, nicht damit du
 sie morgen entscheidest. Beide sind heute Abend erstmals vollgemessen:*
 
