@@ -1,4 +1,4 @@
-# W-16/1 — Grundriss unterlegen. Das Register sagt LEER, gebaut ist die ganze Kette von der Migration bis zur Bühne
+# W-16/1 — Grundriss unterlegen. Der Gegenstand ist doppelt so groß wie mein eigener Fahrplan-Eintrag: die ganze Kette von der Migration bis zur Bühne
 
 ```yaml
 auftrag: "W-16/1"
@@ -18,7 +18,10 @@ kennung_geprueft: "W-16/1 und W-16/W haben NULL Treffer in docs/STATUS.md; W-16 
                    Frei."
 anlass: "Yamas Regel fuer Klasse B: erst die Messung, dann die Einordnung. W-16 stand als
          'Indikation Ablesung' im Fahrplan, gestuetzt auf drei Dateien in app/unterlage/. Beim
-         Vollmessen ist der Gegenstand deutlich GROESSER geworden — und die Registerzeile falsch."
+         Vollmessen ist der Gegenstand deutlich GROESSER geworden: die Serverhaelfte liegt unter
+         Energie und war in meinem Eintrag nicht enthalten. Die Registerzeile ist dabei RICHTIG —
+         ihre Spalte heisst Reifegrad und meint die Blaetter, nicht den Code (:6 und :87). Meine
+         erste Fassung dieses Blattes hat das falsch gelesen und ist berichtigt."
 grundlage: "app/unterlage/UnterlagenEbene.tsx (66 Z.) · UnterlagenWerkzeuge.tsx (239 Z.) ·
             kalibrierung.ts (44 Z.) · app/Http/Controllers/Energie/PlanUploadController.php (178 Z.) ·
             app/Models/PlanUpload.php:82-83 · routes/web.php:5679-5692 ·
@@ -27,10 +30,12 @@ grundlage: "app/unterlage/UnterlagenEbene.tsx (66 Z.) · UnterlagenWerkzeuge.tsx
             REGISTER.md:48 · __tests__/kalibrierung.test.ts · __tests__/unterlage.test.ts"
 ```
 
-## 1 — Der tragende Punkt: „LEER" steht an einer Zeile, unter der eine vollständige Kette liegt
+## 1 — Der tragende Punkt: der Gegenstand ist doppelt so groß wie mein eigener Fahrplan-Eintrag
 
 ```text
-REGISTER.md:48   | W-16 | Grundriss unterlegen | LEER | W-12 | F-032 |
+MEIN FAHRPLAN-EINTRAG sagte: „Indikation Ablesung, app/unterlage/ mit drei
+Dateien". Haette ich danach geschnitten, waere ein Blatt entstanden, das 349
+Zeilen Insel beschreibt und die Serverhaelfte NICHT ERWAEHNT.
 
 WAS GEMESSEN DASTEHT — die ganze Kette, von unten nach oben:
 
@@ -59,11 +64,18 @@ WAS GEMESSEN DASTEHT — die ganze Kette, von unten nach oben:
               selbst gefahren am 13.08.: fail 0.
 ```
 
-> **Das ist derselbe Fall wie AUF-40, nur umgedreht.** *Dort haben drei Rollen eine **Route** gesucht
-> und nicht gefunden, weil die Liste über ein Mount-Attribut kommt. **Hier ist die Route da — gesucht
-> wurde am falschen Ort.** Der Bau liegt unter `Energie` (`energie.plan-upload.*`), nicht unter
-> Hausplaner, und die Registerzeile hat „LEER" behauptet. **Wer diese Zeile liest, baut ein Feature
-> nach, das von der Migration bis zur Bühne fertig ist.***
+> **Der AUF-40-Bezug trägt, aber nur für MEINE Suche — nicht als Registerfehler.** *Ich hatte zuerst
+> geschrieben, `REGISTER.md:48` behaupte mit „LEER" fälschlich, es sei nichts gebaut. **Das war falsch,
+> und die Erklärung stand 39 Zeilen tiefer im selben Dokument:** `REGISTER.md:6` nennt die Spalte
+> **Reifegrad** („`LEER` (nur Ordner)"), und `REGISTER.md:87` sagt es wörtlich — **„`LEER` heißt hier
+> ‚kein Blatt gefüllt', nicht ‚kein Code vorhanden'".** Das Register hat recht; **falsch war meine
+> Lesart der Spalte.***
+
+> ***Was vom Vergleich bleibt:*** *bei AUF-40 haben drei Rollen eine Route gesucht und am falschen Ort
+> nicht gefunden. **Hier habe ich nur in der Insel gesucht** und deshalb einen Fahrplan-Eintrag
+> geschrieben, der die halbe Sache nennt. Der Bau liegt unter `Energie` (`energie.plan-upload.*`).
+> **Der Fehler war meiner, nicht der des Registers** — und er ist genau deshalb erwähnenswert, weil ein
+> zu kleiner Eintrag zu einem zu kleinen Auftrag führt.*
 
 **Die Naht zwischen den beiden Hälften ist belegt und sauber:** *`app/Models/PlanUpload.php:82-83`
 erzeugt `massstabUrl` und `statusUrl` per `route(...)` und gibt sie an die Insel; die Insel ruft sie in
@@ -127,7 +139,10 @@ W-16/1 IST  die Ablesung des Gebauten, ueber BEIDE Haelften:
                                 wird sie als LUECKE gemeldet, nicht erfunden.
             7-GRENZEN           was es NICHT kann, und die null-Zusage von
                                 berechneMassstab als Vertrag an die Aufrufer.
-            Und die REGISTERZEILE 48 wird nachgezogen: LEER ist falsch.
+            Und der REIFEGRAD in REGISTER.md:48 wandert von LEER auf die
+            Stufe, die den gefuellten Blaettern entspricht — nach der
+            Legende in :6. NICHT weil LEER falsch war (es ist richtig, :87
+            sagt es woertlich), sondern weil dann Blaetter da sind.
 
 W-16/1 IST NICHT
             eine Aenderung an PlanUploadController, PlanUpload, den Routen oder
@@ -147,15 +162,20 @@ W-16/1 IST NICHT
 
 ```text
 W-16-1-1 (P1, TRAGEND) Das Blatt fuehrt BEIDE HAELFTEN mit Fundstelle: die drei
-         Insel-Module UND Controller, Modell, Routen, Migrationen. Die
-         Registerzeile REGISTER.md:48 sagt danach nicht mehr LEER.
-         DER ALTE WORTLAUT WIRD NICHT GELOESCHT, sondern an derselben Stelle als
-         ueberholt gekennzeichnet — die Bedingung, die der plan-pruefer an W-33-5
-         gesetzt hat (baa785a2). Ein Satz, dessen Kennzeichnung woanders steht,
-         wird spaeter als Beleg gelesen.
-         WARUM P1: eine LEER-Zeile ueber einem fertigen Feature erzeugt einen
-         Nachbau. Das ist die AUF-40-Klasse, und die hat schon einmal drei Rollen
-         gekostet.
+         Insel-Module UND Controller, Modell, sechs Routen, zwei Migrationen.
+         WARUM P1: ein Blatt, das nur app/unterlage/ beschreibt, verschweigt die
+         Haelfte des Werkzeugs — und die naechste Rolle sucht die Speicherung
+         dann in der Insel, wo sie nicht ist.
+         AUSDRUECKLICH NICHT VERLANGT: eine Aenderung an der Registerzeile mit
+         der Begruendung, LEER sei falsch. LEER IST RICHTIG. REGISTER.md:6 nennt
+         die Spalte Reifegrad ('LEER (nur Ordner)') und :87 sagt woertlich, LEER
+         heisse 'kein Blatt gefuellt' und nicht 'kein Code vorhanden'. Meine
+         erste Fassung dieses Kriteriums hat die Spalte falsch gelesen.
+         WAS STATTDESSEN GILT: der Reifegrad wandert nach dieser Ablesung von
+         LEER auf die Stufe, die den gefuellten Blaettern entspricht — nach der
+         Legende in REGISTER.md:6, also 'n/7 BLAETTER' oder BESCHRIEBEN, je
+         nachdem wie viele Blaetter gefuellt sind. Am Bau-Stand ablesen, nicht
+         aus diesem Blatt uebernehmen.
 W-16-1-2 (P1) Die Formelzuordnung ist AM CODE erhoben und F-032 ist berichtigt:
          abstand ist Math.hypot (F-001), berechneMassstab ist eine
          Verhaeltnisrechnung. Wenn die Massstabsrechnung in der FORMELSAMMLUNG
