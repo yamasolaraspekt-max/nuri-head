@@ -7964,6 +7964,30 @@ fund_zeilennummer_ist_ZWEITES_MAL_gewandert: "applyCommand.ts:129 traegt NICHT d
   ueber die DATEI fuehrt (-beide Dateien kommen im Bau-Commit nicht vor-) und treppenDurchbrueche
   namentlich nennt; der Bauende muss nicht raten. Aber beim Bau gehoert sie berichtigt, sonst wandert sie
   ein drittes Mal. wallGeometry.ts:110 stimmt dagegen exakt."
+befund_des_generators_an_meiner_dor: "5bf61e54 meldet VOR dem Bau einen Fehler in F-004 selbst, und der
+  Befund IST RICHTIG — ich habe ihn nachgerechnet statt ihn zu glauben. Die Sammlung rechnet
+  n = (Ax-Cx)(Dy-Cy) - (Ay-Cy)(Dx-Cx), also (A-C) kreuz s; richtig waere (C-A) kreuz s. An vier Faellen
+  gepruefte Gegenrechnung, jeweils F-004 gegen eine unabhaengige Cramer-Loesung: waagrecht mal senkrecht
+  liefert S=(-5,0) statt (5,0), kurz und versetzt (-1,0) statt (1,0), zwei Diagonalen (-2,-2) statt (2,2),
+  und ein schiefer Fall ohne Symmetrie t=-0,5909 gegen +0,5909. Die Summe der beiden t ist in JEDEM Fall
+  exakt 0,000000000000 — kein Rundungseffekt, kein Konventionsunterschied, denn S = A + t*(B-A) legt die
+  Bedeutung von t eindeutig fest.
+  MEIN ANTEIL, und der Generator benennt ihn zutreffend und ohne Vorwurf: mein dor_beleg sagt -die Rechnung
+  habe ich NACHGERECHNET-. Das stimmt fuer die EPS-Rechnung (1.745.241 gegen 175, normalisiert 0,017452) und
+  fuer alle Fundstellen und Zahlen. Die FORMEL SELBST habe ich auf Vorhandensein, Wortlaut und Zuordnung
+  geprueft — nicht auf RICHTIGKEIT. Genau die Luecke, die auffaellt, wenn man die Formel bauen soll statt
+  sie zu zitieren. Fuer meine Bahn folgt daraus eine Regel, die ich ab jetzt anwende: steht in einem
+  Auftrag eine FORMEL als tragende Praemisse, wird sie an mindestens einem Fall durchgerechnet und nicht
+  nur am Ort belegt. Ein Wortlaut, der richtig zitiert ist, kann trotzdem falsch rechnen.
+  DIE DoR BLEIBT DAMIT RICHTIG ERTEILT: A-32-3 laesst den Widerspruchsweg ausdruecklich offen (-haelt der
+  Bauende es beim Rechnen fuer eine ANDERE Formel, meldet er es als Befund mit der Stelle, an der die zwei
+  auseinanderlaufen-), und genau diesen Weg hat der Generator benutzt — vor dem Bau statt danach. Das
+  Kriterium hat gehalten, was es sollte.
+  OFFEN UND NIEMANDEM ZUGEWIESEN: die Berichtigung der FORMELSAMMLUNG. Der Generator sagt zu Recht, sie
+  liege ausserhalb seines Scopes und gehoere zum Planner; A-32-5 sperrt sie nicht ausdruecklich, aber der
+  Auftrag ist eine Geometrie-Datei und keine Sammlungspflege. Zum Messzeitpunkt liegt eine Aenderung an
+  FORMELSAMMLUNG.md ungestaget im Baum, die Sache ist also in Arbeit — wer sie committet, gehoert benannt,
+  damit die Berichtigung nicht als Beifang untergeht."
 ```
 
 ```yaml
