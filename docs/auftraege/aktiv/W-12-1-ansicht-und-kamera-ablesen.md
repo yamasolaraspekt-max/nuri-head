@@ -21,7 +21,8 @@ einwand_erledigt: "W-02:206 und W-13:239 fuehren beide 'W-12 zurueckgehalten, Ei
 anlass: "Yamas Regel fuer Klasse B, 13.08.: erst die Messung, dann die Einordnung. W-18 war die erste
          Zeile, das ist die zweite — und damit sind beide, die er genannt hat, gemessen."
 grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.ts:100/:101/:170/:212-215/
-            :621/:627 · app/rahmen/Buehne.tsx:62 · app/state/uiState.ts:5/:10/:11 · FORMELSAMMLUNG:218"
+            :621/:627 · app/rahmen/Buehne.tsx:146 (gezeichnet) mit app/HausplanerApp.tsx:1274-1281/:1423/:346
+            und app/dashboard/Kopfrahmen.tsx:304 · app/state/uiState.ts:5/:10/:11 · FORMELSAMMLUNG:218"
 ```
 
 ## 1 — Die Einordnung ist gemessen: ABLESUNG. Alle vier Gegenstände sind gebaut
@@ -77,7 +78,13 @@ grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.t
 
 **Die Frage aus W-01 ist mitbeantwortet:** *`W-01-fang-beschreiben.md:94` schließt aus: „Ob ein sichtbares
 Raster gezeichnet wird, ist eine Renderer-Frage und steht in W-12/Schicht 4, nicht hier." **Gemessen: es
-wird gezeichnet, in beiden Renderern** — 3D als `GridHelper`, 2D über den Schalter `rasterAn`.*
+wird gezeichnet — 3D als `GridHelper` (`szene.ts:212-215`), 2D über die Konva-Bühne** (`Buehne.tsx:146`
+zeichnet, `HausplanerApp.tsx:1274-1281` erzeugt).*
+
+> *Und **die Renderer-Frage selbst hat eine andere Antwort als W-01 vermutet:** es gibt nur **einen**
+> Renderer-Ordner, `renderers/three-d/`. Der 2D-Weg liegt in der App-Schicht. **Meine erste Fassung
+> sagte „in beiden Renderern" und belegte 2D mit `Buehne.tsx:62` — einer Props-Typzeile.** Berichtigt
+> nach `800a6075`; H-8, der Ort ist nicht die Wirkung.*
 
 ## 2 — Der tragende Punkt: `modus` heißt ZWEIMAL etwas anderes
 
@@ -99,22 +106,40 @@ vorgemerkt.** Das Blatt nennt sie, ändert sie nicht.*
 ## 3 — Kein Werkzeug, und das ist RICHTIG so
 
 ```text
-Registry-Eintraege fuer 'ansicht' / '2d' / '3d' / 'split':   0
-Werkzeuge MIT supportedViews:                               12
+BERICHTIGT nach 800a6075 — meine erste Fassung stellte hier '0 gegen 12'
+gegenueber. Das ist eine nackte Zahl ohne Traeger, und W-12-1-6 im selben Blatt
+verbietet sie. Was gemessen ist:
+
+  ZUGRIFFSART, und darauf kommt es an:
+    als Werkzeug-ID  'ansicht'/'2d'/'3d'/'split'          KEIN Eintrag
+    als WERT von supportedViews                           es gibt sie,
+                                                          im selben Register
+  ZAHLEN, je mit Traeger:
+    supportedViews in app/tools/toolRegistry.ts                       12
+    supportedViews im GANZEN Hausplaner                              75
+    '2d' oder 'split' als supportedViews-WERT in toolRegistry.ts       9
 ```
 
-> **Die Ansicht ist eine EIGENSCHAFT, an der sich Werkzeuge ausrichten — kein Werkzeug.** *Zwölf
-> Registry-Einträge tragen `supportedViews`; das Fang-Werkzeug W-01 hat dieselbe Lage und sein Blatt sagt
-> es wörtlich: „der Fang liegt unter anderen Werkzeugen, er ist keines." **Ansicht und Kamera sind
-> Infrastruktur.** Das Blatt muss es sagen, sonst liest die nächste Rolle „LEER, 0 GEBAUT" und baut ein
-> Ansichts-Werkzeug, das es nicht geben darf.*
+> **Die Ansicht ist eine EIGENSCHAFT, an der sich Werkzeuge ausrichten — kein Werkzeug.** *Und der
+> tragende Beleg ist nicht die Anzahl, sondern **die Zugriffsart: `'2d'` und `'split'` stehen im selben
+> Register — als Werte einer Eigenschaft, nie als Werkzeug-ID.** Neun Zeilen führen sie so. Das
+> Fang-Werkzeug W-01 hat dieselbe Lage und sein Blatt sagt es wörtlich: „der Fang liegt unter anderen
+> Werkzeugen, er ist keines." **Ansicht und Kamera sind Infrastruktur.** Das Blatt muss es sagen, sonst
+> liest die nächste Rolle „LEER, 0 GEBAUT" und baut ein Ansichts-Werkzeug, das es nicht geben darf.*
+
+> ***Warum die Zahl allein nicht getragen hätte:*** *die 12 gilt nur für `toolRegistry.ts`; im ganzen
+> Hausplaner sind es 75, davon nach der Messung des plan-prüfers 54 im stillgelegten Katalog. Wer „12"
+> ohne Datei schreibt, gibt der nächsten Rolle eine Zahl, die sie nicht wiederfindet — **genau der
+> Mangel, den ich heute schon an W-36-5, W-37-5 und A-27-6 behoben habe** und hier zwei Absätze nach
+> meinem eigenen Verbot wieder gesetzt hatte.*
 
 ## 4 — Scope
 
 ```text
 W-12/1 IST  die Ablesung des Gebauten: der Ansichtszustand mit seinen drei Werten
-            und seinem Ort, Kamera und OrbitControls, das Raster in beiden
-            Renderern, F-032 mit zwei Fundstellen, die H-9-Grenze zwischen den
+            und seinem Ort, Kamera und OrbitControls, das Raster in der
+            3D-Szene UND auf der 2D-Konva-Buehne (zwei Schichten, nicht zwei
+            Renderer — es gibt nur renderers/three-d/), F-032 mit zwei Fundstellen, die H-9-Grenze zwischen den
             zwei `modus`, und die Feststellung, dass es KEIN Werkzeug gibt und
             keines geben soll.
 
@@ -141,8 +166,14 @@ W-12-1-1 (P1, TRAGEND) Die ZWEI `modus` stehen im Blatt, JE MIT TRAEGER und
          `setModus` gibt es zweimal. Das ist die Lehre aus W-36, wo vier
          Statusachsen an vier Traegern hingen.
 W-12-1-2 (P1) Die VIER Gegenstaende mit Fundstelle: Ansichtszustand, Kamera samt
-         OrbitControls, Raster in BEIDEN Renderern, F-032 mit
+         OrbitControls, Raster in BEIDEN SCHICHTEN, F-032 mit
          szene.ts:621 und :627. Am Bau-Stand erheben, keine Zahl aus diesem Blatt.
+         BEIM RASTER GILT DIE SCHICHT, NICHT DER RENDERER: 3D szene.ts:212-215,
+         2D die Konva-Buehne mit Buehne.tsx:146 als Zeichenstelle und
+         HausplanerApp.tsx:1274-1281 als Erzeugung. Buehne.tsx:62 ist als Beleg
+         NICHT zulaessig (Props-Typzeile), und 'beide Renderer' ist falsch, weil
+         renderers/ nur three-d/ enthaelt. Beides war der Mangel meiner ersten
+         Fassung (800a6075).
 W-12-1-3 (P1) BERICHTIGT nach 800a6075, UND DER WIDERSPRUCH WAR IM SELBEN BLATT:
          meine erste Fassung fixierte '0 gegen 12' im Kriterium — waehrend
          W-12-1-6 zwei Absaetze weiter die nackte Zahl VERBIETET. Ein Blatt, das
