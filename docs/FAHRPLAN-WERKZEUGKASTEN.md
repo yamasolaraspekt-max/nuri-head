@@ -101,6 +101,58 @@ W-27 Kantentypen          KLASSE C, und es war ein BAU: etwa zweieinhalb Stunden
 > Zeitschätzung über B ohne Messung eine Vermutung ist — und der W-27-Maßstab ist die richtige Obergrenze
 > für den Fall, dass eine B-Zeile sich als Bau entpuppt.*
 
+### ALLE ZEHN B-ZEILEN durchgemessen, 13.08. — und Yamas Sorge ist berechtigt
+
+**Stand nach der Durchmessung.** *Drei Zeilen sind zu Ende gemessen und geschnitten, sieben liegen als
+Indikation vor. **Vier davon deuten auf BAUTEN** — damit greift der W-27-Maßstab, und die Annahme
+„B = Ablesung" trägt für die Hälfte der Zeilen nicht.*
+
+```text
+GEMESSEN UND GESCHNITTEN — ABLESUNG (drei):
+  W-06  Geschoss verwalten    3 Module, 355 Z., 10 Exporte, alle angeschlossen
+  W-18  Topologie pruefen     F-013 gebaut MIT Nutzermeldung (kontur.ts:63),
+                              F-004 als Gehrungsdetail (wallGeometry.ts:62/:106)
+  W-12  Ansicht und Kamera    Zustand + Kamera + Raster in BEIDEN Renderern + F-032
+
+INDIKATION ABLESUNG (zwei) — Modul bzw. Verzeichnis vorhanden:
+  W-16  Grundriss unterlegen  app/unterlage/ mit DREI Dateien:
+                              UnterlagenEbene.tsx · UnterlagenWerkzeuge.tsx ·
+                              kalibrierung.ts
+  W-10  Decke und Boden       renderers/three-d/deckenMesh.ts
+
+OFFEN (eine) — verstreut, kein Modul:
+  W-14  Kopieren/Spiegeln/    'spiegele|mirror|rotiere' -> reineHelfer.tsx,
+        Drehen                HausplanerApp.tsx, werkzeugVertrag.ts
+                              'dupliziere|kopiere'      -> HausplanerApp.tsx,
+                              EngineFlaeche.tsx, werkzeugThemen.ts
+                              -> vorhanden, aber ohne Ort. Vollmessung noetig.
+
+INDIKATION BAU (vier) — und hier greift der W-27-Maszstab:
+  W-03  Wand bearbeiten       'wandTeilen|wandVerschieben|wandLoeschen' -> 0 Treffer.
+                              Kein Modul, keine verstreuten Funktionen dieses Namens.
+  W-24  Fundament/Bodenplatte kein Modul. UND EIN ZUORDNUNGSBEFUND: das Register
+                              nennt ein Registry-Werkzeug 'Bodenplatte' — gemessen
+                              ist das der TOOLTIP des DECKEN-Werkzeugs
+                              (toolRegistry.ts:147, „Decke / Bodenplatte"). W-24 hat
+                              kein eigenes Werkzeug, es teilt eines mit W-10.
+  W-26  Dachschichten         kein Modul; konterlattungMm in dachformVorlagen ist
+                              laut Register ein TOTER VERTRAG.
+  W-28  Dachentwaesserung     linienBauteile fuehrt 'dachrinne' als Linientyp,
+                              die BEMESSUNG fehlt.
+```
+
+> **Was das für eine Zeitannahme bedeutet, ohne selbst eine zu machen:** *drei Zeilen sind Ablesungen,
+> zwei wahrscheinlich, eine offen — **und vier deuten auf Bauten.** Bei Yamas Maßstab von etwa
+> zweieinhalb Stunden je Bau ist das eine andere Größenordnung als ein Ablesungs-Takt. **Ich nenne keine
+> Gesamtzahl:** vier mal ein Maßstab ist eine Multiplikation, keine Messung, und die vier sind
+> Indikationen und keine Einordnungen.*
+
+**Und ein Nebenbefund, der einer Zeile ihren Gegenstand nimmt:** *`W-24`s „Registry-Werkzeug Bodenplatte"
+existiert nicht als eigenes Werkzeug — **es ist der Tooltip des Decken-Werkzeugs** („Decke /
+Bodenplatte", `toolRegistry.ts:147`). Wer die Registerzeile liest, hält ein Werkzeug für vorhanden, das
+einem anderen gehört. **Dieselbe Klasse wie `auswechslung.ts`** (W-21/2): ein Gegenstand ohne eigenes
+Zuhause.*
+
 ### Erste Messung an den zwei Zeilen, die Yama nennt — INDIKATION, keine Einordnung
 
 ```text
