@@ -1249,6 +1249,48 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 
 ---
 
+## BEFUND GEGEN MEIN EIGENES MESSWERKZEUG (Release-Pruefer, 13.08. nachts) — ich habe den Arbeitsbaum gelesen und ihn fuer den Stand gehalten
+
+```yaml
+was_passiert_ist: "In diesem Takt habe ich gemeldet: 'A-30 ABGENOMMEN, Ball beim Release-Pruefer'
+  und war im Begriff, §10 zu fahren. Beim Oeffnen des Datensatzes im eigenen Worktree stand dort
+  CODE_FERTIG. Das sah nach einer Drift zwischen zwei Staenden aus. Es war keine."
+
+die_ursache: "Meine Zustandsmessung liest docs/STATUS.md aus dem ARBEITSBAUM des Hauptrepos.
+  Solange der sauber ist, ist das dasselbe wie HEAD. Der Evaluator schrieb aber gerade die
+  A-30-Abnahme — 89 Zeilen eingefuegt, NICHT committet. Ich habe seine unfertige Arbeit gelesen
+  und als Tatsache gemeldet."
+
+gemessen_wie_gross_der_unterschied_war: >
+  Zustaende in HEAD gegen Zustaende im Arbeitsbaum, alle 76 Auftraege verglichen:
+    A-30   HEAD CODE_FERTIG  <->  Arbeitsbaum ABGENOMMEN
+    A-29   HEAD BEREIT       <->  Arbeitsbaum CODE_FERTIG
+  ZWEI von 76 wichen ab, und beide waren fremde laufende Arbeit. In derselben Runde.
+
+warum_das_schwer_wiegt: "Haette ich nicht zufaellig den Datensatz im Worktree geoeffnet, waere
+  ich in §10 gelaufen — mit einem PRUEFSTAND, den es im committeten Stand nicht gibt. Das ist
+  eine E1-Verletzung an der Wurzel: E1 verlangt die Messung AM COMMIT, und ich haette an einem
+  Zustand gemessen, den kein Commit traegt. Der Evaluator haette danach seine eigene Abnahme
+  committet und einen Release vorgefunden, den er nie freigegeben hat.
+  Es ist ausserdem GENAU der Fehler, vor dem ich andere Rollen warne: die Statuswahrheit hat zwei
+  Leseorte. Ich kannte den Fall Tafelzeile gegen Datensatz. Der dritte Leseort ist der
+  Arbeitsbaum, und den hatte ich nicht auf der Rechnung."
+
+behoben: "Mein Drift-Werkzeug misst weiterhin den Arbeitsbaum — im eigenen Worktree ist das
+  richtig, weil ich dort schreibe. NEU: es zieht zusaetzlich HEAD und meldet JEDE Abweichung
+  einzeln mit beiden Werten, bevor es die Driftzahlen ausgibt. Gegenprobe in beide Richtungen
+  gefahren: im Hauptrepo mit fremder Arbeit schlaegt es an (zwei Zeilen), im sauberen Worktree
+  schweigt es. Eine Warnung, die immer kaeme, waere so wertlos wie keine."
+
+folge_fuer_den_takt: "Punkt 1 des Taktes misst Zustaende in docs/STATUS.md. Ab jetzt gilt: der
+  PRUEFSTAND ist HEAD. Ein Zustand, der nur im Arbeitsbaum steht, ist eine Ankuendigung und kein
+  Ball. Der Arbeitsbaum wird getrennt gemeldet — als 'laeuft gerade', nicht als 'liegt an'."
+
+was_A_30_wirklich_ist: "CODE_FERTIG beim Evaluator, Bau 0aceee01. Der Evaluator schreibt die
+  Abnahme in diesem Moment. Ich fasse nichts an und warte den Commit ab — kein Ball beim
+  Release-Pruefer."
+```
+
 ## REPO-WEITE SUCHE NACH YAMA-POSTEN (Release-Pruefer, 13.08. nachts) — 47 Fundstellen, 6 erledigt, 2 verkleinert
 
 ```yaml
