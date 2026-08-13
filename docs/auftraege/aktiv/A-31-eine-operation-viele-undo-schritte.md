@@ -240,3 +240,58 @@ was_ich_nicht_gemessen_habe: "Ob es weitere Aufrufstellen AUSSERHALB von app/Hau
         sie als Befund statt sie stillschweigend mitzunehmen."
 A_31_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+---
+
+## 5 — Votum des Evaluators (§11)
+
+**ABGENOMMEN.** Bau `606e83b4` **plus Nachtrag** `8275ddea`, Basis `c3d2b527`. Zwei Prüfstände mit
+`node_modules` und `vendor`.
+
+**Zum Scope, und das war mein erster Griff daneben:** `git diff c3d2b527..8275ddea` liefert **zwölf**
+Dateien — darunter `STATUS.md`, die A-32-Blätter und die Vorlage an Yama, alles aus **fremden
+Zwischencommits**. Genau davor warnt der Takt. Die zwei Bau-Commits einzeln gemessen: **6 Dateien**
+im Bau, **2** im Nachtrag. Hätte ich den Bereich genommen, stünde hier ein Beifang-Befund, der
+keiner ist.
+
+| Kriterium | Befund | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **A-31-1** (TRAGEND) | **grün** | Die Tests führen wirklich **zwei** Knoten — und sie prüfen es **selbst**: `assert.equal(waende.length, 2, 'die Zusage braucht ZWEI Wände, sonst prüft sie nichts')`, dazu ein `assert` auf **beide** bewegten Wände. Das ist kein Test, der den Namen des Kriteriums trägt und einen Knoten misst |
+| **A-31-2** | **grün** | Eigener Test vorhanden; belegt durch meine Fangprobe (unten), die ihn **rot** macht |
+| **A-31-3** | **grün** | Die Zähler-Zusage steckt in den Tests (`historienTiefe() - tiefeVorher === 1`) und fällt in der Fangprobe **als erste** |
+| **A-31-4** | **grün** | Die fünf verwendeten Befehlstypen (`ADD_LEVEL`, `ADD_NODE`, `ADD_ROOF`, `MOVE_NODE`, `REMOVE_NODE`) sind am Elter **alle bekannt** (3–8 Dateien je Typ). Schema-Dateien im Diff: **0** |
+| **A-31-5** | **grün** | Elter → Bau: fünf Schleifen-Aufrufe (`:623/:680/:686/:709/:725-727`) sind auf `executeCommands` umgestellt (`:627/:679/:696/:712/:1139`). Die **fünf verbliebenen** `executeCommand`-Aufrufe habe ich **geöffnet** statt gerastert — `:898` Wand, `:941` Fenster/Tür, `:1002` Dach, `:1026` Decke, `:1056` Treppe: sämtlich Einzelaufrufe nach einem Klick, **keine Schleife**. Das Kriterium warnt vor Zeilen-Heuristik; ich habe erst gerastert und dann gelesen |
+| **A-31-6** | **grün** | Zwei eigene Tests dafür (`executeCommand` bleibt Sonderfall einer Liste; Öffnungs-Versetzung bleibt erhalten), und die Suite ist an beiden Ständen grün |
+| **A-31-7** | **grün** | Insel-Suite **selbst gefahren**: Elter **1731/1731** → Bau **1741/1741**, exakt **+10** — die zehn neuen Tests, keine Regression |
+| **A-31-8** | **grün** | `app/tools/**` und `werkzeugLandkarte.ts` in **beiden** Bau-Commits: **0** Treffer. Der Auftrag nennt den Grund selbst — A-29 fasst dieselbe Datei an |
+| *(Bündel)* | **grün** | Am Commit gemessen: `74b5fb9b…` → `448d8653…`, `executeCommands` im Bündel **0 → 7**. Der Bau ist ausgeliefert |
+
+**Die Fangprobe, und sie belegt den Kern.** Ich habe die Sammel-Logik durch die **alte Schleife**
+ersetzt — je Befehl ein eigener Draft und ein eigener `historie.push`:
+
+```text
+Anker 1x getroffen · md5 geaendert: JA
+  10 tests, 5 pass, 5 fail
+  ROT: spiegeleGrundriss · loescheAuswahl · dupliziere · dupliziereGeschoss · alles-oder-nichts
+md5 danach zurueckgesetzt: identisch
+```
+
+**Fünf von zehn fallen, und zwar genau die fünf Zusagen.** Die Tests messen also die Umstellung und
+nicht sich selbst.
+
+**Mein eigener Messfehler — und diesmal hat die Vorsichtsmaßnahme gegriffen.** Mein **erster**
+Fangproben-Anker traf **nicht** (falsche Einrückung, `Anker 0`). Die Tests liefen daraufhin
+erwartungsgemäß **10/10 grün** — und genau das habe ich **nicht** als Beleg genommen, weil die
+md5-Prüfung *vor* dem Lauf `NEIN — wirkungslos` meldete. Bei W-05/2 und A-27 ist mir dieselbe Falle
+dreimal gestellt worden; hier hat sie zum ersten Mal gehalten, ohne dass ein falsches Ergebnis in
+den Bericht kam. Zweiter Anlauf mit der echten Einrückung: 5 von 10 rot.
+
+**Ein zweiter eigener Fehlgriff, der beinahe teuer war:** meine erste A-31-4-Messung suchte die
+Befehlstypen in `scene.types.ts` und `hausplanerStore.ts` und meldete *„alle fünf am Elter
+unbekannt"*. Das hätte hier als **fünf neue Befehlstypen** gestanden — ein schwerer Fehlbefund
+gegen eine Schutzgrenze. Die Typen stehen woanders; richtig gesucht sind sie am Elter in 3 bis 8
+Dateien vorhanden.
+
+**§15:** keine Datenbankschreibung in dieser Abnahme.
+
+**Weiter an den Release-Prüfer.**
