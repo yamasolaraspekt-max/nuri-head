@@ -24,7 +24,7 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 
 | | Posten | Was du entscheidest | Warum es nicht ohne dich geht |
 |---|---|---|---|
-| **17** | **Prüfbühne ohne Boden** | Dauerhafter Seed mit Prüfnutzer und Prüfobjekt? | Prüfinfrastruktur; **drei von vier Befunden verschwinden auf einmal** · **13.08. nachts frisch gemessen: 0/0/0 — geräumt vom Release-Prüfer-Grundtor selbst. Dritter Weg C (Skript sät idempotent) in Abschnitt 17 daneben gelegt.** |
+| ~~**17**~~ | ~~Prüfbühne ohne Boden~~ **✅ ENTSCHIEDEN: Weg C** | *Skript sät idempotent, fail closed, nur `ticket_testing`. Drei Auflagen in 17. Blatt folgt, wenn der Vorrat sinkt.* | Prüfinfrastruktur; **drei von vier Befunden verschwinden auf einmal** · **13.08. nachts frisch gemessen: 0/0/0 — geräumt vom Release-Prüfer-Grundtor selbst. Dritter Weg C (Skript sät idempotent) in Abschnitt 17 daneben gelegt.** |
 | **✅ 16+15** | **W-24 und W-26 — GEMESSEN, beide erledigt sich als Entscheidung** | ***Du musst hier nichts entscheiden.*** **W-24:** die Regel existiert bereits — `GeometrieAbleitungService:61` setzt für `boden` den Fallback **`erdreich`**. Was fehlt, ist ein Bau: die Projektion liefert `null`, und `:58` (`if (! empty($def))`) legt dann **gar kein Bauteil an** — Boden und Decke fehlen in der Heizlast **vollständig**. **W-26:** die Heizlast liest **keine Schichten** — `opakeUQuelle` nutzt `u_wert` oder `konstruktion_id`. **Ein Feld `RoofNode.schichten` würde ihr nicht helfen; die Frage war falsch gestellt.** *(Details unten in 16.)* |
 | **16+15 (alt)** | **W-24 und W-26 GEHÖREN ZUSAMMEN** | *Nicht zwei Schema-Fragen, sondern **ein** Vorgang: die Naht `UebernehmeSzeneInAuslegung` (`:84-88`) markiert selbst `u_werte => unbelegt` und „U-Werte/Konstruktionen sind ein eigener Schritt". **Genau dort sitzen beide** — `boden.grenzflaeche` (W-24) und `schichten` (W-26). Die Heizlast-Seite hat das Konzept bereits (`HeizlastBauteil`, `Konstruktion`, `HeizlastProjektService:318`). **Statt zwei Schema-Entscheidungen brauche ich eine Messung der Naht** — was verlangt die Heizlast, was liefert die Insel, was fehlt wirklich. Die mache ich; danach ist es eine Frage statt zwei.* |
 | **16** | **W-24 Boden/Erdkontakt** | Woran erkennt das Modell Erdreich? *(Empfehlung: am Geschoss)* | Fachentscheidung mit **Rechenwirkung**, berührt das wberechnung-Transplantat |
@@ -1578,7 +1578,48 @@ glätten.*
 
 ---
 
-## 17 · NEU am 13.08.: die Prüfbühne hat keinen Boden — und das ist die dringendste Frage
+## 17 · ✅ ENTSCHIEDEN 13.08.: **Weg C** — das Prüfskript stellt seine Vorbedingung selbst her
+
+> **Yamas Entscheidung im Wortlaut:** *„Entschieden: C. Das Prüfskript stellt seine Vorbedingung selbst
+> her — idempotent, nur wenn es läuft, nur gegen `ticket_testing`."*
+>
+> **Seine Begründung gegen A:** *ein dauerhafter Seed ist eine **zweite Wahrheit** — genau die, die
+> A-20 und A-22 diese Woche aus dem Haus geräumt haben. Er driftet von dem weg, was der Prüflauf
+> erwartet, und **die Drift ist still**. **Und A trägt eine ungemessene Voraussetzung:** die Bühne ist
+> vom **Grundtor** geräumt worden; ein Seed liegt in derselben Datenbank. Überlebt er das Grundtor?
+> **Diese Frage wird nicht beantwortet, sie fällt weg** — was bei jedem Lauf neu hergestellt wird, kann
+> nicht weggeräumt werden.*
+>
+> **Gegen B:** *B funktioniert und kostet jedes Mal denselben Handgriff. „Ein Verfahren, das auf
+> Disziplin statt auf Mechanik beruht, hat in diesem Haus eine gemessene Trefferquote."*
+
+### Die drei Auflagen — wörtlich, für das Blatt
+
+```text
+1  FAIL CLOSED, nicht fail silent.
+   Das Skript prueft den Datenbanknamen BEVOR es irgendetwas schreibt.
+   Stimmt er nicht exakt -> Abbruch mit Wortlaut, Rueckgabewert ungleich 0.
+   Kein Default, keine Annahme, kein "vermutlich Test".
+   §15 gilt woertlich: keine Seeds gegen Produktivdaten.
+
+2  IDEMPOTENT heisst nachgemessen, nicht behauptet.
+   Zweimal laufen lassen, danach zaehlen: die Menge muss identisch sein.
+   Das ist ein Kriterium im Blatt, kein Satz in der Botschaft.
+
+3  DAS SKRIPT SAET NUR, WAS DER PRUEFLAUF BRAUCHT.
+   Pruefnutzer und Pruefobjekt. Nichts darueber hinaus.
+   Wer spaeter mehr braucht, erweitert das Skript — nicht die Datenbank
+   nebenher.
+```
+
+> **Status: entschieden, noch nicht geschnitten.** *Yamas Anweisung war ausdrücklich „keinen zwölften
+> Auftrag — arbeitet die elf ab". **Das Blatt wird geschnitten, sobald der Vorrat sinkt**, mit den drei
+> Auflagen als Kriterien. Der Release-Prüfer hat den Weg vorgelegt und **nicht entschieden** — das war
+> richtig, er hätte über sein eigenes Grundtor entschieden.*
+
+---
+
+## 17a · Der Befund, der zu dieser Entscheidung geführt hat *(Stand bei der Vorlage)*
 
 **Sie stand bisher in keiner Vorlage**, *nur in Commit-Botschaften. Der Release-Prüfer hat sie gestellt,
 nachdem er **vier Befunde zu einem zusammengefasst** hat. Ich habe die Lage selbst nachgemessen, weil
