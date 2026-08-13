@@ -377,7 +377,30 @@ Messen der Reichweite MEINE Arbeit und nicht die des Bauenden. Ein Kriterium
 lautet dann „ALLE ueberholten Stellen" mit der Liste — nie „die Stelle".
 ```
 
-### 7 · Habe ich mindestens eine der gezählten Stellen GEÖFFNET? (neu 12.08., aus A-20)
+### 7 · MESSEN — sechs Schritte. Öffnen · zwei Muster · Exporte · die tragende Stelle · Fangprobe · Anker
+
+> **Was hier drinsteht, in einer Zeile je Schritt** *(die Prüfung ist heute Nacht von einem auf sechs
+> Schritte gewachsen — wer einen bestimmten sucht, soll ihn finden, ohne alles zu lesen):*
+>
+> | | Schritt | Kurz |
+> |---|---|---|
+> | **1** | eine gezählte Stelle öffnen | wer zählt, hat noch nichts gelesen |
+> | **2** | Zahlen im Kriterium an **zwei** Mustern | eines am Namen, eines an der Struktur |
+> | **3** | **Exporte** zählen, bevor der Scope steht | nicht nur die, die ich beschreibe |
+> | **4** | die **tragende** Stelle öffnen · nicht abgeschnitten lesen | `cut`/`head` sucht, belegt nicht |
+> | **5** | **Fangprobe** für jedes Messmuster | zwei Treffer, ein Nicht-Treffer |
+> | **6** | **Anker** statt Zeilennummer — im Kriterium | eine Nummer driftet lautlos |
+>
+> ***Und ein Befund über diese Prüfung selbst, 13.08.:*** *das Blatt ist heute von 461 auf über 670
+> Zeilen gewachsen, und **alle** Schritte hängen hier. Prüfung 7 ist die Sammelstelle für alles
+> geworden, was mit Messen zu tun hat — der alte Titel („eine Stelle geöffnet?") kündigte nur den
+> ersten an. **Umgebaut wird sie nicht mitten in der Nacht:** sie hat heute mehrfach gegriffen, und ein
+> Umbau am funktionierenden Werkzeug ohne Not ist die Sorte Änderung, die man später bereut. **Der
+> Titel und diese Übersicht sind die kleine Abhilfe; ob die sechs Schritte auf mehrere Prüfungen
+> gehören, ist eine eigene Frage.***
+
+**Der Ursprungstitel, damit die Herkunft lesbar bleibt:** *„Habe ich mindestens eine der gezählten
+Stellen GEÖFFNET?" (neu 12.08., aus A-20).*
 
 **Wer eine Menge zählt, hat noch nichts gelesen.** Vor jeder Meldung „N Fälle" mindestens einen
 Fall öffnen und die Zeile mit eigenen Augen lesen — und zwar einen, der in die Zählung fällt.
