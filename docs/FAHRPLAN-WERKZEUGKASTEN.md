@@ -152,6 +152,81 @@ kann sofort laufen. Cluster 1 ist ein echter Bau (W-27-Maßstab, ~2,5 h) und **s
 frei**. **Cluster 2 geht nicht ohne Yama** — Schema.*
 
 
+
+### W-26 und W-28 gemessen — damit sind ALLE ZEHN B-Zeilen gemessen
+
+**W-26 Dachschichten — BAU, und zwar eine ÜBERTRAGUNG statt eines Neuentwurfs**
+
+```text
+DER GEGENSTAND FEHLT IM SCHEMA. RoofNode traegt (domain/scene.types.ts, Felder
+einzeln gelesen): polygon, roofType, neigungGrad, firstAzimutGrad, ueberstandMm,
+traufhoeheMm, aufbauten?, anbau?  —  KEIN schichten.
+
+ABER DAS FELDMUSTER STEHT SCHON ZWEIMAL, wortgleich:
+  scene.types.ts:133  WallNode.schichten?:    Array<{ materialId?; dickeMm }>
+  scene.types.ts:357  CeilingNode.schichten?: Array<{ materialId?; dickeMm }>
+  und :115 sagt es selbst: „Feldgleich mit CeilingNode.schichten".
+-> Kein Neuentwurf. Ein drittes Mal dasselbe Muster.
+
+UND EINE NAMENSFALLE, DIESELBE KLASSE WIE `modus` BEI W-12/1:
+  'Aufbau' heisst hier DREI verschiedene Dinge —
+    RoofAufbau (scene.types.ts:265, Doku :244)  STEHENDE Aufbauten auf der
+                                                Dachflaeche: Gauben, Dachfenster,
+                                                Kamin. Also OBJEKTE.
+    WallNode.schichten / CeilingNode.schichten  die SCHICHTENFOLGE (AUF-76, M0)
+    geometry/wandaufbau.Schicht                 ein RECHENTYP mit dicke+lambda
+  Und das Schema WARNT SELBST davor, bei :126: „Nicht geometry/wandaufbau.Schicht:
+  das ist ein Rechentyp mit dicke und lambda, dies ist [ein anderes]".
+-> WER W-26 MIT ADD_ROOF_AUFBAU BAUT, BAUT DAS FALSCHE. Der Befehl haengt
+   Gauben ans Dach (applyCommand.ts:332, roof.aufbauten.push) und hat mit
+   Schichten nichts zu tun. Die Landkarte bestaetigt es aus der anderen
+   Richtung: dachfenster -> 'deckt', Begruendung ADD_ROOF_AUFBAU (:119).
+
+DER TOTE VERTRAG IST BESTAETIGT, mit Gegenprobe:
+  konterlattungMm steht an DREI Stellen und hat NULL Leser —
+    geometry/dachformVorlagen.ts:122   die Typzeile
+                             :1384   Wert [24, 48]
+                             :1410   Wert [0, 0]
+  Gegenprobe: grep ueber alle .ts/.tsx ausserhalb dieser drei Zeilen = LEER.
+-> Er ist der Rest eines Dachschicht-Gedankens, der nie im Schema angekommen ist.
+   Das ERKLAERT die Registerzeile und ist selbst kein Bauteil.
+
+SCHUTZGRENZE: ein neues Schema-Feld ist eine Datenbank-/Modellentscheidung und
+geht nicht still durch. VORLAGE AN YAMA, kein Auftrag den ich schneide. Der
+Vorschlag ist billig zu prüfen, weil er nur ein vorhandenes Muster wiederholt.
+```
+
+**W-28 Dachentwässerung — BAU, und die Bemessung ist eine FACHFRAGE**
+
+```text
+GEMESSEN, alle drei Wege:
+  geometry/linienBauteile.ts:22   'dachrinne' ist ein WERT im Linientyp-Union
+                                  (neben 'firstlinie', 'modulsperrlinie')
+  app/tools/werkzeugVertrag.ts    KEIN Vertrag mit rinne/entwaesser
+  linienBauteile.ts:83            die einzige Platzierungsfunktion heisst
+                                  platziereSchneefang — Schneefang, nicht Rinne
+  dachformVorlagen.ts:1391        entwaesserungHinweis: 'Vorgehaengte Rinne +
+                                  Fallrohr, Bemessung nach Dachflaeche
+                                  (Richtwert)'  <- PROSA, keine Rechnung
+
+-> Es gibt einen Linientyp-WERT und einen Hinweistext. Kein Werkzeug, kein
+   Vertrag, keine Bemessung. Die Registerzeile („Bemessung fehlt") traegt.
+
+UND DIE BEMESSUNG IST NICHT MEIN OPERAND: Rinnen- und Fallrohrquerschnitt nach
+Dachflaeche ist eine NORMGROESSE (DIN 1986-100 / EN 12056). Nach den
+Schutzgrenzen wird eine solche Groesse nicht still gesetzt — sie braucht Yamas
+Operanden oder einen ausdruecklich bestaetigten Vorschlag. Dasselbe Gate, an dem
+W-21L als DECISION_BLOCKED steht.
+```
+
+> **Bilanz der zehn B-Zeilen — Yamas Kriterium ist damit erfüllt:** *er hat gesagt, bei B gelte zuerst
+> die Messung, und erst danach stehe fest, ob eine Zeile Ablesung oder Bau ist. **Alle zehn sind jetzt
+> gemessen.** **Ablesung (schnell):** W-06, W-18, W-12 — je gemessen, zwei davon als Blatt schon
+> geschnitten. **Indikation Ablesung:** W-16, W-10. **Anschluss (Cluster 3):** W-03 teilweise, W-24.
+> **Bau:** W-03 teilweise (hängt an Cluster 1), W-26, W-28 — und W-14 fehlt nur `drehen`.
+> **W-26 und W-28 gehen nicht ohne dich:** Schema-Feld bzw. Normgröße.*
+
+
 ## YAMAS VORBEHALT ZU KLASSE B, 13.08. — erst die Messung, dann die Einordnung
 
 **Sein Wortlaut:** *„bei B gilt laut Fahrplan zuerst die Messung: was ist gebaut, was fehlt. Erst danach
