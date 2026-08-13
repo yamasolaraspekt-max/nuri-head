@@ -141,3 +141,77 @@ gewuerdigt: "der Generator hat gemessen, gemeldet und NICHT korrigiert. Haette e
 kern: "eine F-Nummer im Register ohne Modulangabe ist eine Absichtserklaerung, die wie
        ein Beleg aussieht"
 ```
+
+---
+
+## ⚑ NACHTRAG 13.08. — der vorgeschlagene Auftrag hat sich selbst erledigt. Und F-004 war falsch
+
+**Der Vorschlag oben lautete:** *„EIN Auftrag, klein, Spur A, nur Doku: die F-Spalte des Registers um
+die dritte Angabe erweitern"* — mit der Sperre „JETZT NICHT, W-11 ist IN_ARBEIT".
+
+**Die Sperre ist gefallen** *(W-11 steht heute auf `BETRIEBSBESTAETIGT`, das einzige `IN_ARBEIT` ist
+A-32)*. **Bevor ich den Auftrag geschnitten habe, habe ich gemessen, was er noch zu tun hätte:**
+
+```text
+Registerzeilen mit F-/N-Nummer                24
+  davon MIT dritter Angabe (Modul + Stelle)   13
+  davon OHNE                                  11
+
+DIE ELF, gegen den Auftragsstand gehalten:
+  W-12 W-10 W-16 W-06 W-14 W-18   -> BEREIT, Blatt liegt beim Generator
+  W-13 W-23 W-20                  -> BETRIEBSBESTAETIGT
+  W-03 W-19                       -> KEIN Auftrag
+```
+
+> **Die sechs BEREIT-Zeilen lösen sich von selbst** — *ich habe in jedes der Ablesungsblätter
+> geschrieben, dass die Formeln **am Code zu erheben** sind und die Registerzeile **geprüft statt
+> übernommen** wird (`W-10-1-4`, `W-14-1-7`, `W-16-1-2`). **Die dritte Angabe entsteht also beim
+> Schneiden** — genau so, wie sie bei den dreizehn entstanden ist, die sie schon tragen.*
+
+**Und drei der elf tragen sie doch — mein Muster war zu streng.** *Es verlangte einen `.ts`-Dateinamen.
+`W-13` führt **„keine ⓝ"**, `W-20` „heute keine benutzt", `W-23` einen Bereichsvermerk. **Das sind
+dritte Angaben in Worten**, nur ohne Fundstelle. Die Klasse ist dieselbe, die mich heute mehrfach
+erwischt hat: das Muster misst die Form und nicht die Sache.*
+
+```text
+ECHTE LUECKE: ZWEI Zeilen — W-03 und W-19, beide ohne Auftrag.
+  W-03  F-003, F-004, F-030
+        Heute eingeordnet: BAU mit ZWEI verschiedenen Fundamenten. Und F-004 ist
+        jetzt gebaut (A-32, geometry/geradenGeometrie.ts) — die dritte Angabe
+        entsteht mit dem W-03-Blatt.
+  W-19  F-024
+        Heute eingeordnet: ZUSTAENDIGKEITSFRAGE, nicht Bau. pvBelegung.ts:6 sagt
+        'GRENZE: Ertrag/Verschattung/Strings bleiben der Fach-Engine
+        (wberechnung) vorbehalten'. Die dritte Angabe waere hier genau der
+        Grund-Zitat-Fall, den die Folgerung oben vorsieht.
+```
+
+> ***Ergebnis: ich schneide den Auftrag NICHT.*** *Zwei Zeilen, deren Blätter ohnehin kommen müssen, sind
+> kein eigener Auftrag — das wäre ein Vorgang, der zwei Zellen füllt und zwei weitere Blätter davon
+> abhängig macht. **Der Vorschlag war richtig und ist durch die Blätter eingelöst worden**, nicht durch
+> einen Doku-Auftrag. Er gilt damit als erledigt und liegt nicht mehr offen.*
+
+### Der Nachtrag, der die Folgerung oben SCHÄRFER macht: F-004 war falsch
+
+*Die Folgerung sagte, ohne dritte Angabe sei eine F-Nummer „eine Absichtserklärung, die wie ein Beleg
+aussieht". **Am 13.08. hat sich gezeigt, dass es schlimmer ist:*
+
+```text
+F-004s ZAEHLERZEILE WAR FALSCH — vertauschtes Vorzeichen.
+  alt      n = (Ax−Cx)(Dy−Cy) − (Ay−Cy)(Dx−Cx)     also (A−C) kreuz s
+  richtig  n = (Cx−Ax)(Dy−Cy) − (Cy−Ay)(Dx−Cx)     also (C−A) kreuz s
+  Die alte Fassung liefert −t; der Punkt liegt auf der falschen Seite von A und
+  ist KEIN Schnittpunkt (Probe: er liegt nicht auf der zweiten Geraden).
+GEFUNDEN vom Generator beim ZIEHEN von A-32 (5bf61e54), nachgerechnet von mir
+und vom plan-pruefer — drei unabhaengige Rechnungen.
+BERICHTIGT in FORMELSAMMLUNG.md:80, alte Fassung daneben mit Beleg.
+```
+
+> ***Und das ist der Punkt:*** *F-004 war eine der **drei** F-Nummern, die im Insel-Code überhaupt
+> genannt werden (von 26 — selbst gemessen). Sie stand mehrfach in Prüfungen — aber immer auf
+> **Vorhandensein und Wortlaut**. Auch ich habe sie beim Schneiden von A-32 zitiert und **nicht
+> gerechnet**. **Aufgefallen ist sie erst, als jemand sie bauen sollte.***
+
+> **Die Folgerung oben bleibt richtig und bekommt einen Satz dazu:** *eine F-Nummer ohne dritte Angabe
+> ist nicht nur eine Absichtserklärung — **sie ist auch eine ungerechnete Formel.** Die dritte Angabe
+> erzwingt den Bau, und der Bau erzwingt die Rechnung. **Das ist der eigentliche Wert dieser Spalte.***
