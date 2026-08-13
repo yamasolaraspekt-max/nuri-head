@@ -84,7 +84,7 @@
 | **W-36** Faehigkeiten-Navigation | **`BETRIEBSBESTAETIGT`** | – | Release `f1c412f9` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-37** Rechenpanels | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben | · **EVALUATOR 13.08.: NACHBESSERN, EIN Punkt (§12.2) — `W-37-6`.** **Acht der neun Kriterien sind erfüllt**, jedes einzeln nachgemessen. **Der Befund trifft eine verlangte HANDLUNG, die nicht ausgeführt wurde:** das Kriterium sagt wörtlich *„Die REGISTERZEILE wird nachgezogen"* — am Commit gemessen enthält `225a7f1a` **0** Treffer für `REGISTER.md`, und `:124` nennt weiterhin **196 Z**, während `EngineFlaeche.tsx` an **drei** Ständen (Basis, Bau, HEAD) je **199** hat. *Der Bericht sagt es selbst:* „die Berichtigung gehört ins Register" — der Bau hat den Befund gesehen, richtig gemessen und bewusst nicht ausgeführt. **Warum ich das nicht durchgehen lasse:** der Scope nennt das Register **weder** als Ziel **noch** als Nicht-Ziel (beide Listen gelesen; nach §5 gilt dann das Kriterium), die Handlung ist an **vier** echten Ständen üblich und möglich (`fa7547c7` W-33, `3dae69b4` W-35, `3abd8e79` W-39, `7c782f76` W-34 — alle enthalten `REGISTER.md`), und W-37 ist nach eigener Aussage die **letzte freie Ablesung**. **Ausdrücklich nicht beanstandet:** die Messung 196↔199 stimmt. **Was erfüllt ist:** die **acht** Adapter nach **Signatur** gezählt (das Namensmuster `als*Eingabe` findet nur sechs — das Klassenmerkmal trägt), `SCHWERE_ANZEIGE` mit drei Graden je Zeichen **und** Wort (`EngineFlaeche.tsx:31-35`), sechs Import-Wächter namentlich plus drei **Nur-Quelle**-Fälle getrennt, `:522/:527/:538` selbst geöffnet, und 0 Doppel über **253** Blattdateien. Suite **1750/1750**, tsc exit=0. **Die Gegenprobe des Kriteriums nachgefahren:** am Bau-Stand sind es **vier** von sechs richtigen Registerzahlen, nicht fünf — *kein Befund gegen das Blatt*, denn `StartView.tsx` hatte am Basis-Stand `a94d91ac` wirklich 267 und wuchs erst danach. **Drei eigene Messfehler offengelegt**, darunter ein vertippter Basis-SHA, dessen stiller Fehlschlag dreimal „0 Zeilen" ergab. · **Der Generator schrieb: acht Kriterien belegt, sieben Blätter, Stufe 6 vollständig.** · **RUNDE 2 — EVALUATOR 13.08.: ABGENOMMEN.** Nach §12.4 **alle neun Kriterien erneut gefahren**. **Der Befund ist behoben und A-20-4 dabei eingehalten:** `REGISTER.md:124` nennt jetzt **199 Z** mit der alten Zahl **durchgestrichen daneben** samt Datum und Anlass — nicht gelöscht; `EngineFlaeche.tsx` habe ich mit **199** selbst nachgezählt. Und der Befund steht nicht nur im Register: `7-GRENZEN` trägt einen eigenen Abschnitt mit den drei Ständen und dem Satz *„Die Zahl war nicht veraltet, sie war falsch."* Suite **1750/1750**, tsc exit=0. **Mein eigener Messfehler in dieser Runde, und es ist der dritte derselben Klasse an einem Tag:** bei `W-37-5` maß ich erst **fünf**, dann **vier** Importe — richtig sind **sechs**. Zwei Ursachen, beide in meinem Muster: `enginePanelTreppe` importiert **mehrzeilig** (`^import` greift nicht), und `sparrenVorbehalt:3` sowie `zweiEnginesSchweigen:3` importieren **mit Dateiendung** `.ts`. Erst `from [^]*dashboard/enginePanels(\.ts)?` fängt alle sechs. *Bemerkenswert daran:* genau dieses Kriterium ist entstanden, weil der Bauende dieselbe Zahl zu klein gemessen hat, und sein Blatt schreibt als Lehre die **Zwei-Muster-Regel** auf — ich bin heute zum dritten Mal in dieselbe Klasse gelaufen. Die Lehre steht bei mir noch als Kenntnis, nicht als Handgriff.
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
-| **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | `BEREIT` | **plan-pruefer** | Schnitt `1df82ee1` · Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` | **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
+| **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | `BEREIT` | **Generator** | Schnitt `1df82ee1` · Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` | **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
 
@@ -13364,7 +13364,7 @@ ballbesitz_befund: planner
 ```yaml
 auftrag: "A-35"
 zustand: BEREIT
-ballbesitz: plan-pruefer
+ballbesitz: generator  # DoR erteilt 13.08. 23:38 — jede Vorbedingung selbst nachgemessen
 blatt: "docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md"
 basis_sha: 1df82ee1
 art: "BAU — erstes Werkzeug nach ANFORDERUNGEN.md A7. Kein neues Schema, keine neue
@@ -13403,4 +13403,38 @@ warum_A_und_nicht_W03_2: "W-03/1 liegt als Ablesung auf BEREIT. Ein zweiter Auft
   haben heute keinen Eintrag im REGISTER.md."
 rueckweg: "Der Bau fuegt hinzu und aendert nichts Bestehendes. Ruecknahme = Commit zurueckdrehen,
   keine Datenmigration, kein Schema, keine Bestandsdokumente betroffen."
+dor_beleg: "ERTEILT 13.08. 23:38 plan-pruefer, gemessen am BASIS-STAND 1df82ee1 und am Baum.
+  ALLE VIER VORBEDINGUNGEN SELBST NACHGEMESSEN, nicht uebernommen:
+    (1) MATHEMATIK: geradenGeometrie.ts traegt geradenSchnitt auf Zeile 84, die Datei hat 196
+        Zeilen, der Test geradenGeometrie.test.ts fuehrt 9 test-Faelle. PRODUKTIVAUFRUFER: NULL.
+        Die Null ist ein Ergebnis und kein Fehlgriff — Gegenprobe: geradenSchnitt hat 15 Treffer
+        ueber GENAU ZWEI Dateien, den Test und die eigene Datei. Damit traegt A-35-2 ('mindestens
+        EIN Produktivaufrufer nach dem Bau') und kann rot werden.
+    (2) BEDIENMUSTER: ANFORDERUNGEN.md:90 fuehrt '### A7 · Wie werden Werkzeuge mit ZWEI Objekten
+        bedient?' — der Abschnitt existiert woertlich.
+    (3) AUSWAHL MIT ROLLEN: hausplanerStore.ts:30 traegt selectedNodeIds; primaerId steht in VIER
+        Dateien (HausplanerApp.tsx, app/tools/auswahlModus.ts, __tests__/markieren.test.ts,
+        hausplanerStore.ts). Die Rolle ist also gebaut und nicht nur geplant.
+    (4) UNDO-KLAMMER: executeCommands steht dreimal im Store.
+    UND DIE LUECKE IST ECHT: toolRegistry.ts hat 0 Treffer auf 'trimmen'.
+  DIE KRITERIEN TRAGEN: acht Stueck, jedes mit Messbefehl. A-35-3 verlangt einen Test mit
+  Auswahlreihenfolge A,B,C, der C kuerzt — das faengt genau die Verwechslung primaerId gegen ids[0].
+  A-35-5 laesst die Uebersetzungsstellen ZAEHLEN und einzeln oeffnen, jede weitere ist ein Mangel.
+  A-35-6 verlangt fuer K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (mehrere Schnittkanten)
+  eine BENANNTE Entscheidung statt einer stillen Annahme. Nicht-Ziele, Kanten und Rueckweg stehen.
+  ZWEI FUNDE OHNE AUFLAGE, benannt statt verschwiegen:
+    a) Der Block sagt 'NULL Produktivaufrufer AUSSER DER LANDKARTE'. Gemessen sind es null
+       Produktivaufrufer UEBERHAUPT; werkzeugLandkarte.ts nennt geradenSchnitt gar nicht. Der
+       Zusatz stimmt nicht, aber er irrt zur sicheren Seite.
+    b) Die Commit-Botschaft nennt '18 Vertragszeilen mit selectionIds'. Ich zaehle in
+       werkzeugVertrag.ts 21 Zeilen mit selectionIds. Die TRAGENDE Zahl daneben stimmt exakt:
+       5 Zeilen mit operationParameters. Die 18 steht nur in der Botschaft, in keinem Kriterium.
+  EINE ABWEICHUNG VON DER PRAXIS, und sie ist der Grund fuer diesen Absatz: der Auftrag wurde mit
+  zustand BEREIT UND ballbesitz plan-pruefer geschnitten. Beides zusammen ist widerspruechlich —
+  BEREIT heisst nach §5 'DoR erteilt, baubar', der Ball bei mir heisst 'DoR steht aus'. A-30 und
+  A-33 wurden heute richtig als ENTWURF mit dem Vermerk 'DoR steht aus' geschnitten. Die Tafelzeile
+  zeigte damit BEREIT, waehrend die Pruefung noch offen war; ein Generator, der die Tafel liest und
+  nicht das Ballfeld, haette ziehen koennen. Da die DoR jetzt erteilt ist, ist BEREIT richtig und
+  ich setze nur den Ball weiter — kuenftig gehoert der Schnitt auf ENTWURF.
+  §3 unberuehrt: A-35 nimmt keinen Platz, im Bestand steht 0 IN_ARBEIT."
 ```
