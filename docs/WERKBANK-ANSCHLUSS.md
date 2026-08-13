@@ -44,15 +44,15 @@ die diese Gruppe siebenmal getroffen hat.*
 | W | Werkzeug | Registry | Code-Kandidaten | Lage |
 |---|---|---|---|---|
 | **W-01** | Raster und Fang | — | `fangKern` | **Kern da**, Werkzeug-Anschluss offen |
-| **W-02** | Wand zeichnen | `wand` | `wallGeometry` · `wandaufbau` · `wandFlaeche` · `linienBauteile` | **vier Module + Registry** |
-| **W-13** | Auswahl und Griffe | `auswahl` | `editierGeometrie` · `auswahlModus` · `auswahlDarstellung` · `trefferSuche` | **breit gebaut** |
+| **W-02** | Wand zeichnen | `wand` | `wallGeometry` · ~~`wandaufbau`~~ · `wandFlaeche` · ~~`linienBauteile`~~ | **vier Module + Registry** — ⚠ **zwei davon widerlegt, siehe NACHTRAG 10.08.** |
+| **W-13** | Auswahl und Griffe | `auswahl` | ~~`editierGeometrie`~~ · `auswahlModus` · `auswahlDarstellung` · `trefferSuche` | **breit gebaut** — ⚠ `editierGeometrie` **widerlegt, siehe NACHTRAG 10.08. + Messung 13.08.**: keine der drei Auswahl-Dateien importiert es |
 | **W-12** | Ansicht und Kamera | — | `capture` (Renderer) | dünn |
 
 ### Stufe 2 — Grundriss
 
 | W | Werkzeug | Registry | Code-Kandidaten | Lage |
 |---|---|---|---|---|
-| **W-03** | Wand bearbeiten | — | `editierGeometrie` · `wallGeometry` | teilweise |
+| **W-03** | Wand bearbeiten | — | `editierGeometrie` (Heimat W-14) · `wallGeometry` | teilweise — ⚠ **vierte Nennung von `editierGeometrie`, im NACHTRAG 10.08. nicht erfasst; W-03 ist ungemessen** |
 | **W-04** | Öffnung Tür/Fenster | `fenster` `tuer` | `oeffnungsBauarten` · `oeffnungsTypen` · `fensterProdukt` | **drei Module + zwei Registry-Einträge** |
 | **W-05** | Raum erkennen | — | `roomDetection` · `polygonFlaeche` · `grundriss` | **gebaut** |
 | **W-10** | Decke und Boden | `decke` | `deckenMesh` (Renderer) | **Registry + Mesh** |
@@ -66,7 +66,7 @@ die diese Gruppe siebenmal getroffen hat.*
 | **W-08** | Dachfläche messen | `flaeche-messen` | `polygonFlaeche` · `wandFlaeche` | **Registry + Module** |
 | **W-09** | Treppe | `treppe` | `treppe2D` · `treppe3D` · `treppeObjekt` · `treppeSvg` · `treppenBauarten` · `treppenBerechnung` · `treppenTypen` | **SIEBEN Module** |
 | **W-11** | Maß und Bemaßung | `bemassen` | `bemassung` · `masskette` · `masseingabe` | **drei Module** |
-| **W-14** | Kopieren/Spiegeln/Drehen | `duplizieren` `loeschen` | `editierGeometrie` | teilweise |
+| **W-14** | Kopieren/Spiegeln/Drehen | `duplizieren` `loeschen` | `editierGeometrie` ← **Heimat, belegt** | teilweise — Bewegen/Duplizieren/Spiegeln gebaut, **Drehen fehlt** (Messung 13.08.) |
 | **W-21** | Sparren und Lattung | — | `sparrenBerechnung` · `sparrenTrennung` · `schifterListe` · `holzBauteile` · `holzMengen` | **FÜNF Module, kein Werkzeug** |
 | **W-22** | Gaube | — | `gaubeGeometrie` · `dachAufbautenMesh` | **gebaut, kein Werkzeug** |
 | **W-06** | Geschoss verwalten | — | `geschossVorlage` | dünn |
@@ -168,6 +168,24 @@ editierGeometrie.ts    W-13               W-14 (Kopieren·Spiegeln·Drehen) — 
                                           W-13 ist Auswahl und GRIFFE, nicht Verschieben.
                                           bbox/achsenMitte brauchen BEIDE; sie liegen richtig
                                           in geometry/, gehoeren im Register aber zu W-14.
+
+  ^ DIESER SATZ IST AM 13.08. BERICHTIGT WORDEN — 'brauchen BEIDE' meinte W-13
+    und W-14, und W-13 ist der falsche Zweite. An den Importen gemessen:
+      W-13s drei Auswahl-Module importieren editierGeometrie NULL Mal
+        (auswahlModus, auswahlDarstellung, trefferSuche — je kein Import)
+      versetzteWand / spiegelteWand -> app/HausplanerApp.tsx:110
+                                       app/rahmen/Buehne.tsx:40        = W-14
+      bbox                          -> app/dashboard/einpassen.ts:21/:87
+      achsenMitte / Achse           -> app/HausplanerApp.tsx:110
+                                       app/dashboard/Kopfrahmen.tsx:30
+    Der ZWEITE Verbraucher ist also die ANSICHT-EINPASSUNG (AUF-62, Nachbarschaft
+    W-12), nicht die Auswahl. Der Schluss bleibt: die Heimat ist W-14. Aber die
+    BEGRUENDUNG war falsch, und eine falsche Begruendung haelt beim naechsten
+    Anlass nicht — wer W-13 aufschlaegt und keinen Import findet, verschiebt sie
+    zurueck.
+    UND EINE VIERTE NENNUNG FEHLTE HIER GANZ: W-03 (Zeile 55) fuehrt
+    editierGeometrie ebenfalls als Kandidat. W-03 ist ungemessen; die Nennung ist
+    darum markiert und nicht entschieden.
 ```
 
 > **Alle drei stehen namentlich in den betroffenen Blättern als Nicht-Gegenstand** (`W-02/1-6`,
