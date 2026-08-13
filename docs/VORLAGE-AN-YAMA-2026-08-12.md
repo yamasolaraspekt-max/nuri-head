@@ -1173,8 +1173,8 @@ danach steht fest, ob eine B-Zeile eine Ablesung (schnell) oder ein Bau (langsam
 | **W-16** | Indikation Ablesung | `app/unterlage/` mit drei Dateien |
 | **W-10** | Indikation Ablesung | `deckenMesh.ts` vorhanden |
 | **W-14** | Ablesung **plus ein kleiner Bau** | Bewegen/Duplizieren/Spiegeln gebaut, **`drehen` fehlt** — aus zwei Richtungen bestätigt |
-| **W-24** | **Anschluss** (war: Bau) | `boden` ist modellseitig **gedeckt** (`ADD_CEILING`); nur die Oberfläche fehlt |
-| **W-03** | **gemischt** | `trimmen`/`verlaengern`/`versatz` = Anschluss · `teilen`/`verbinden` = warten auf ein Fundament |
+| **W-24** | **Anschluss** (war: Bau) | `boden` ist modellseitig **gedeckt** (`ADD_CEILING`); nur die Oberfläche fehlt — **der einzige echte Anschluss der zehn** |
+| **W-03** | **Bau** (⚠ berichtigt, siehe unten) | zwei verschiedene Fundamente fehlen — Geometrie für `trimmen`/`versatz`, Mehrfach-Befehl für `teilen`/`verbinden` |
 | **W-26** | **Bau** — ⚠ braucht dich | dem Dach fehlt das Feld `schichten` |
 | **W-28** | **Bau** — ⚠ braucht dich | Rinne existiert nur als Wort, die Bemessung ist eine Norm |
 
@@ -1197,8 +1197,8 @@ EIN Befehl fuer MEHRERE Knoten     ->  schaltet FUENF Werkzeuge frei
 SECHS neue Objekttypen             ->  schaltet SECHS frei — braucht DICH
                                        Pumpe, Leuchte, Schalter, Steckdose,
                                        Verteiler, PV-Modul
-DIE RECHNUNG IST DA, es fehlt der  ->  schaltet DREI frei, SOFORT machbar
-Anschluss                              trimmen, verlaengern, versatz
+ZWEI GEOMETRIE-FUNKTIONEN fehlen   ->  schaltet DREI frei — ein BAU, nicht
+                                       sofort: trimmen, verlaengern, versatz
 ```
 
 ### Entscheidung 1 — darf das Dach ein Feld `schichten` bekommen? (W-26)
@@ -1238,11 +1238,38 @@ Steckdose, Verteiler und PV-Modul fehlen** — und für alle sechs sagt der Code
 **Bemerkenswert:** *Wechselrichter und Batterie sind da, **das PV-Modul nicht.** Für dein Geschäft ist
 das die auffälligste der sechs Lücken — deshalb nenne ich sie zuerst, entscheide sie aber nicht.*
 
-### Was ich jetzt ohne dich weitermache
+### ⚠ Eine Berichtigung, noch am selben Abend — und sie betrifft genau den Satz „was ich ohne dich weitermache"
 
-*Cluster 3 — den **Anschluss** von `trimmen`, `verlaengern`, `versatz`. Da ist nichts zu entscheiden:
-die Schnittpunktrechnung ist gebaut (ich habe sie bei W-18 gemessen), die Versatz-Geometrie ebenfalls,
-und der Code sagt es an einer Stelle selbst. **Kein Schema, keine Norm, kein Geld.***
+**Ich hatte hier geschrieben:** *„Cluster 3 — den Anschluss von `trimmen`, `verlaengern`, `versatz`. Da
+ist nichts zu entscheiden: die Schnittpunktrechnung ist gebaut, die Versatz-Geometrie ebenfalls."*
+**Das war falsch, und ich habe es selbst gefunden, bevor ich damit angefangen habe.**
+
+*Ursache in einem Satz: **ich habe die Begründungen des Codes abgeschnitten gelesen und die genannten
+Funktionen nicht aufgemacht.** Als ich sie aufgemacht habe:*
+
+- ***Die „Versatz-Geometrie" ist keine.** `versetzteWand` verschiebt eine Wand — beide Endpunkte um
+  denselben Vektor. Ein Parallelversatz legt eine Wand im senkrechten Abstand daneben, das ist eine
+  andere Rechnung. **Die Wortgleichheit „versetzen"/„Versatz" hat mich getäuscht** — dieselbe Falle wie
+  bei „Aufbau" und bei „modus".*
+- ***Eine aufrufbare Schnittpunkt-Funktion gibt es nicht.** Was es gibt, rechnet die Gehrung an einer
+  Ecke, wo zwei Wände sich schon **berühren**. Beim Trimmen berühren sie sich gerade nicht — das ist
+  der ganze Punkt.*
+
+> ***Und der eigentliche Fehler war, dass ich mein eigenes Blatt falsch zitiert habe.*** *W-18 sagt
+> wörtlich, F-004 sei **nicht** gebaut; drei weitere Stellen sagen dasselbe, eine davon streicht die
+> Formel im Register durch. **Der Bestand war einstimmig richtig — die einzige falsche Aussage war
+> meine von heute.** Ich schreibe das hin, weil du sonst morgen einen Fortschritt liest, den es nicht
+> gibt.*
+
+**Was daraus folgt:** *Cluster 3 ist ein **Bau** (zwei Geometrie-Funktionen), kein Anschluss. Er bleibt
+lohnend — er schaltet drei Werkzeuge frei, und das Umfeld im Code ist schon durchdacht. Aber er läuft
+nicht „sofort", und ich habe ihn deshalb **nicht** angefangen.*
+
+### Was ich jetzt stattdessen ohne dich weitermache
+
+*Die **Ablesungen** — das ist der Teil, der wirklich ohne Gate läuft und der deinen Zeitplan trägt:
+W-16, W-10 und der Ablesungsteil von W-14. Kein Schema, keine Norm, kein Geld, und drei der zehn
+Zeilen sind damit erledigt statt eingeordnet.*
 
 ### Und eine Frage, die ich nicht rate
 

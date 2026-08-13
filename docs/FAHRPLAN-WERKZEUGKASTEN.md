@@ -116,24 +116,66 @@ CLUSTER 2 — es fehlen OBJEKTTYPEN, sonst deckt ADD_NODE schon
      Entscheidung und geht nach den Schutzgrenzen NICHT still durch.
      Das ist eine Vorlage an Yama, kein Auftrag den ich schneide.
 
-CLUSTER 3 — die Geometrie IST DA, es fehlt der ANSCHLUSS. Das ist Klasse B
+CLUSTER 3 — BERICHTIGT AM 13.08., meine erste Fassung war FALSCH
   betroffen: trimmen (:77) · verlaengern (:79) · versatz (:80)         = DREI
-  Die Landkarte begruendet mit „braucht Schnittpunktrechnung zweier Waende".
-  DIE GIBT ES: F-004 Geradenschnitt ist gebaut, gemessen bei W-18/1 als
-  Gehrungsdetail in geometry/wallGeometry.ts:62 und :106. Und die Landkarte
-  sagt bei versatz selbst, die Geometrie liege „bereits in editierGeometrie".
-  -> Nicht bauen, ANSCHLIESSEN. Was fehlt, ist der Weg von der vorhandenen
-     Rechnung zum Modellbefehl, nicht die Rechnung.
+
+  ICH HABE ZUERST GESCHRIEBEN: „die Geometrie IST DA, es fehlt nur der
+  ANSCHLUSS, das ist Klasse B und sofort machbar." DAS TRAEGT NICHT. Ich hatte
+  die Landkarten-Begruendungen ABGESCHNITTEN gelesen (cut auf 158 Zeichen) und
+  die genannten Funktionen NICHT GEOEFFNET — Pflichtpruefung 7 verlangt genau
+  das, „mindestens eine Stelle geoeffnet". Nachgemessen:
+
+  (a) versetzteWand ist KEIN Parallelversatz, sondern eine TRANSLATION.
+      geometry/editierGeometrie.ts:20 — der Rumpf ist
+        { start: versetzePunkt(start,dx,dy), end: versetzePunkt(end,dx,dy) }
+      also BEIDE Endpunkte um DENSELBEN Vektor. Der Doc-Kommentar in :19 sagt
+      es selbst: „Wand-Endpunkte um (dx,dy) versetzen (bewegen/duplizieren mit
+      Versatz)". Ein Parallelversatz erzeugt eine Wand im SENKRECHTEN Abstand d
+      und braucht die Normale — andere Rechnung.
+      -> Die Landkarten-Begruendung bei versatz nennt die FALSCHE Funktion.
+         Ursache: H-9. „versetzen" (bewegen) und „Versatz" (offset) sind
+         dasselbe Wort und zwei Sachen.
+
+  (b) EINE AUFRUFBARE GERADENSCHNITT-FUNKTION EXISTIERT NICHT.
+      Gegenprobe: grep auf exportierte schnitt/intersect/kreuz-Funktionen im
+      ganzen Hausplaner liefert nur berechneAusschnitt und flaechenBilanz
+      (geometry/dachAusschnitt.ts) — Dachausschnitt, nicht Geradenschnitt.
+      Was es gibt, ist gehrungsEcken (geometry/wallGeometry.ts:110,
+      NICHT EXPORTIERT), und die loest einen ANDEREN Fall: sie bekommt einen
+      GEMEINSAMEN Scheitel V uebergeben und rechnet ueber die
+      Winkelhalbierende (t = einheit(p+q), len = h/sinHalb) mit GLEICHER
+      Halbdicke h. Fuer `trimmen` braucht man den Schnittpunkt zweier Waende,
+      die sich NICHT beruehren — genau den Fall, den sie nicht kennt.
+      -> DIE LANDKARTE HAT RECHT: „der Befehl, der es rechnet, fehlt."
+
+  UND MEIN FEHLER WAR EIN FALSCHZITAT MEINES EIGENEN BLATTES: ich habe meine
+  W-18-Notiz „F-004 als Gehrungsdetail" als „F-004 ist gebaut" gelesen. Das
+  Blatt sagt das GEGENTEIL, wortwoertlich in W-18-1:128: „der Satz, dass F-004
+  NICHT als Topologie-Formel gebaut ist, sondern als [Gehrungsdetail]". Und
+  drei weitere Stellen sagen es auch: REGISTER.md:35 fuehrt F-004 bei W-01
+  DURCHGESTRICHEN, W-02/7-GRENZEN.md:14 sagt „F-004 ist im Code nicht
+  angebunden", UEBERNAHME-PLAYGROUND-DACH.md:88 sagt „die Datei nennt F-004
+  null mal". Der Bestand war also einstimmig richtig; die einzige falsche
+  Stelle war die, die ich heute geschrieben habe.
+
+  WAS CLUSTER 3 WIRKLICH IST: ein BAU, und ein lohnender.
+    F-004 als aufrufbare Funktion herausziehen  -> schaltet trimmen +
+                                                   verlaengern frei
+    Parallelversatz neu rechnen (Normale, Abstand d) -> schaltet versatz frei
+  Das ist kein Anschluss und laeuft nicht „sofort". Es ist aber auch keine
+  Erfindung: die Gehrungsrechnung zeigt, dass das Umfeld (EPS, Miter-Limit,
+  Entartungsfaelle) im Haus schon durchdacht ist.
 ```
 
 ### Was das für die B-Zeilen heißt — W-03 ist neu eingeordnet
 
-> **W-03 „Wand bearbeiten" war als „Indikation BAU" geführt (0 Treffer für ein Werkzeug). Das war zu
-> grob.** *Gemessen ist W-03 **gemischt**: `trimmen`, `verlaengern`, `versatz` sind **Cluster 3 —
-> Anschluss, Klasse B**, weil Schnittpunkt und Versatz-Geometrie vorhanden sind. `teilen` und
-> `verbinden` hängen an **Cluster 1** und sind erst nach dem Fundament baubar. **Ein Auftrag „W-03
-> bauen" würde also zwei verschiedene Dinge in einen Zug legen** und am fehlenden Mehrfach-Befehl
-> stehenbleiben.*
+> **W-03 „Wand bearbeiten" bleibt BAU — meine Zwischenfassung „gemischt, teils Anschluss" ist
+> zurückgezogen.** *Sie stützte sich auf Cluster 3, und Cluster 3 war falsch gemessen (siehe oben).
+> **Gemessen ist W-03 durchgehend Bau**, aber in **zwei verschiedenen Abhängigkeiten:** `trimmen`,
+> `verlaengern`, `versatz` brauchen **Geometrie, die nicht existiert** (Geradenschnitt als Funktion;
+> Parallelversatz); `teilen` und `verbinden` brauchen den **Mehrfach-Befehl aus Cluster 1**. **Ein
+> Auftrag „W-03 bauen" würde also zwei verschiedene Fundamente in einen Zug legen** — die Warnung
+> gilt weiter, nur mit dem richtigen Grund.*
 
 > **W-14 ist damit unabhängig bestätigt.** *Meine Messung sagte „Bewegen/Duplizieren/Spiegeln gebaut,
 > **Drehen fehlt**". Die Landkarte sagt es aus dem Code heraus und nennt den Grund: `drehen` (`:63`)
@@ -146,10 +188,12 @@ CLUSTER 3 — die Geometrie IST DA, es fehlt der ANSCHLUSS. Das ist Klasse B
 > Auch das rückt von C näher an B — **aber es bleibt zu messen**, weil `deckt` über den Befehl
 > spricht und nicht über die Oberfläche.*
 
-**Reihenfolge-Folgerung für die B-Session:** *die drei Fundamente sind **billiger als die 14
-Einzelwerkzeuge** und sie sind Voraussetzung, nicht Beigabe. Cluster 3 ist reine Anschlussarbeit und
-kann sofort laufen. Cluster 1 ist ein echter Bau (W-27-Maßstab, ~2,5 h) und **schaltet fünf Zeilen
-frei**. **Cluster 2 geht nicht ohne Yama** — Schema.*
+**Reihenfolge-Folgerung für die B-Session — nach der Berichtigung:** *die drei Fundamente sind
+**billiger als die 14 Einzelwerkzeuge** und sie sind Voraussetzung, nicht Beigabe. **Aber keines ist
+„sofort":** Cluster 1 ist ein echter Bau (W-27-Maßstab, ~2,5 h) und schaltet **fünf** Zeilen frei;
+Cluster 3 ist **auch** ein Bau — zwei Geometrie-Funktionen — und schaltet **drei** frei; **Cluster 2
+geht nicht ohne Yama** (Schema). **Was wirklich sofort läuft, sind die Ablesungen**, und die sind der
+schnelle Teil der B-Session.*
 
 
 
@@ -222,8 +266,9 @@ W-21L als DECISION_BLOCKED steht.
 > **Bilanz der zehn B-Zeilen — Yamas Kriterium ist damit erfüllt:** *er hat gesagt, bei B gelte zuerst
 > die Messung, und erst danach stehe fest, ob eine Zeile Ablesung oder Bau ist. **Alle zehn sind jetzt
 > gemessen.** **Ablesung (schnell):** W-06, W-18, W-12 — je gemessen, zwei davon als Blatt schon
-> geschnitten. **Indikation Ablesung:** W-16, W-10. **Anschluss (Cluster 3):** W-03 teilweise, W-24.
-> **Bau:** W-03 teilweise (hängt an Cluster 1), W-26, W-28 — und W-14 fehlt nur `drehen`.
+> geschnitten. **Indikation Ablesung:** W-16, W-10. **Anschluss:** W-24 (modellseitig gedeckt, nur Oberfläche fehlt) — **W-03 gehört nach der
+> Berichtigung nicht mehr hierher.**
+> **Bau:** W-03 (zwei Fundamente, siehe Berichtigung), W-26, W-28 — und W-14 fehlt nur `drehen`.
 > **W-26 und W-28 gehen nicht ohne dich:** Schema-Feld bzw. Normgröße.*
 
 
