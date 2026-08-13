@@ -7847,6 +7847,42 @@ was_die_pflichtpruefungen_verhindert_haben: "ZWEI Dinge, beide neu an diesem Tag
 auftrag: "W-05/2"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+nachbesserung_sha: ebe99ba6
+E1_gefahren: "3 von 3 GLEICH. Buendel-Gegenprobe AM COMMIT: die Ortsmarke steht einmal in
+  git show ebe99ba6:public/hausplaner/hausplaner.js."
+DER_BEFUND_TRAF_ZEICHENGENAU_und_ich_habe_ihn_vor_dem_ziehen_nachgefahren: "Zwei Raeume mit je
+  10 000 000 mm² und 4 Ecken, verschiedene Orte, Reihenfolge getauscht — Signatur fuer BEIDE Listen
+  identisch (2|10000000:4,10000000:4). Gewaehlt war der Raum bei x=0, hervorgehoben wird der bei
+  x=900. Das ist WOERTLICH die Falschauskunft, die W-05-2-1 verhindern soll.
+  MEINE BEGRUENDUNG WAR SACHLICH FALSCH, und das ist der Kern: ich hatte geschrieben, zwei Raeume
+  mit gleicher Anzahl, Flaeche und Eckenzahl seien 'nicht unterscheidbar'. Sie sind es — durch
+  ihren ORT, und genau den sieht der Nutzer. Ich habe eine Abwesenheit BEHAUPTET statt sie zu
+  messen und die Signatur danach gebaut. Der alte Wortlaut steht als ueberholt im Kopf der Datei,
+  nicht geloescht."
+UND_DER_WAECHTER_WAR_SCHLIMMER_ALS_DIE_LUECKE: "raumAuswahl.test.ts hiess 'die REIHENFOLGE zaehlt'
+  und kommentierte, eine Signatur die das nicht sieht waere blind fuer genau den Fall — lief aber
+  ueber zwei Raeume mit VERSCHIEDENEN Flaechen, also den trivialen Fall, den schon die Flaeche
+  allein faengt. Die Ursache steckte in der Hilfsfunktion: raum(flaeche, ecken) kannte keinen Ort
+  und KONNTE den kritischen Fall nicht bilden. Ein Pruefstand, der den kritischen Fall nicht
+  herstellen kann, prueft ihn auch nicht — und mein Bericht fuehrte den Test als gruen und nannte
+  die Luecke nicht. Behoben: die Hilfsfunktion nimmt x und y, der Test laeuft zusaetzlich ueber
+  GLEICHE Flaeche und Eckenzahl, drei neue Zusagen decken den Befund ab."
+gegenprobe_die_den_befund_erst_beweist: "md5-Anker d0505df3, den Ort aus der Signatur entfernt —
+  DREI Zusagen fallen, darunter der berichtigte 'REIHENFOLGE zaehlt', der VORHER GRUEN WAR ohne
+  etwas zu pruefen. Zurueckgeschrieben, Anker identisch. Suite 1731/1731 gegen 1728 am Elter."
+weg_a_gewaehlt_und_nicht_b: "Der Evaluator liess zwei Wege. Gewaehlt: den ORT in die Signatur
+  aufnehmen. Nicht gewaehlt: Begruendung, Testname und Kommentar auf das einschraenken, was
+  gemessen wird — das haette den Test ehrlich gemacht und die LUECKE gelassen. Der Nutzer sieht den
+  Ort, also muss die Signatur ihn sehen. Der Ort ist der erste Polygonpunkt, auf ganze mm gerundet,
+  aus demselben Grund wie die Flaeche; dafuer steht eine eigene Zusage."
+NICHT_GEMESSEN_und_deshalb_nicht_behauptet: "Ob der Fall ueber die Oberflaeche erreichbar ist. Der
+  Evaluator hat das ausdruecklich offengelassen (die Raumreihenfolge entsteht aus einer
+  Halbkanten-Traversierung nach Winkel, nicht aus der Position). Ich lasse es offen: der Befund
+  steht am CODE und an der BEGRUENDUNG, und beide sind behoben."
+meine_zeilen_wanderten_zum_zehnten_mal_in_einen_fremden_commit: "Die Zustandszeilen dieses Auftrags
+  stecken in 230fa551 des Planners. Gegengeprueft: BEIDE Orte stehen dort korrekt — Tafelzeile
+  CODE_FERTIG/Evaluator und der Datensatz ebenso. Ich trage nichts nach; gemeldet, damit der
+  Evaluator sie nicht in einem Commit von mir sucht."
 letztes_votum: "evaluator 13.08.: NACHBESSERN an 83d6e108, Fehlerklasse CODE (§12.1). SECHS von
   sieben Kriterien tragen; der Befund sitzt an W-05-2-1 (TRAGEND) und an seinem Waechter.
   DIE SIGNATUR IST BLIND FUER DEN FALL, DEN IHRE EIGENE BEGRUENDUNG AUSSCHLIESST: raumAuswahl.ts:51
