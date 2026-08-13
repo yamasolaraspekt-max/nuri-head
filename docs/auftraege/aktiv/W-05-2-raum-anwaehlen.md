@@ -285,3 +285,51 @@ Testkommentar auf das einschränken, was tatsächlich gemessen wird.
 **§15 belegt:** `getDatabaseName()` = `ticket_testing`, vor dem Anlegen des Prüfnutzers gemessen.
 
 **Weiter an den Generator**, Umfang **genau dieser Befund** (§12.2).
+
+---
+
+## 7 — Votum des Evaluators, RUNDE 2 (§11, Wiederabnahme nach §12.4)
+
+**ABGENOMMEN.** Nachbesserung `ebe99ba6`, Elter `28599a07`. Prüfstand mit `node_modules` und
+`vendor`. Der Bau steht diesmal in einem **Feld** (`nachbesserung_sha`) und nicht nur in der
+Botschaft — der A-27-Befund des plan-pruefers hat gewirkt; gemessen habe ich trotzdem am gesuchten
+Commit.
+
+**Der Befund aus Runde 1 ist behoben, und ich habe genau dieselbe Probe erneut gefahren:**
+
+```text
+zwei Raeume, 10 000 000 mm², 4 Ecken, verschiedene Orte, Reihenfolge getauscht
+  Signatur vorher : 2|10000000:4@0/0,10000000:4@900/0
+  Signatur nachher: 2|10000000:4@900/0,10000000:4@0/0
+  gleich?                     false      (Runde 1: true — das WAR der Befund)
+  gueltigeAuswahl nach Tausch: null      (Runde 1: 0 statt null)
+dieselbe Liste erneut        -> 1        (keine Uebervorsicht: die Auswahl BLEIBT)
+ein Raum verschoben, Flaeche gleich -> null
+```
+
+**§12.2 — der Umfang ist der Befund.** Drei Dateien: `raumAuswahl.ts`, sein Test, das Bündel.
+`Buehne.tsx` und `HausplanerApp.tsx` sind **md5-identisch** mit dem Stand aus Runde 1 — die dort
+geprüften Kriterien W-05-2-2 und W-05-2-4 gelten unverändert, belegt statt angenommen.
+
+| Kriterium | Runde 2 | Wie ich es selbst gemessen habe |
+|---|---|---|
+| **W-05-2-1** (TRAGEND) | **grün** | Mechanismus und Wächter tragen; die Rücksetzung greift jetzt auch im Fall, der sie vorher unterlief |
+| **W-05-2-1b** (neu) | **grün** | Zwei Listen, die sich **nur im Ort** unterscheiden, haben verschiedene Signaturen — oben gefahren. Die Flächen-Rundung ist **geblieben**, wie das Kriterium es ausdrücklich verlangt (`Math.round(r.flaecheMm2)`, `:74`), und der Ort wird ebenso gerundet |
+| **W-05-2-1c** (neu) | **grün** | Der Wächter fährt den **nicht-trivialen** Fall: `raum(10_000_000, 4, 0, 0)` gegen `raum(10_000_000, 4, 900, 0)`, getauscht → `null`, mit Gegenprobe an derselben Liste. Und der alte Test „die REIHENFOLGE zählt" wurde **berichtigt** statt umbenannt — er prüft jetzt beide Fälle, den trivialen und den, der wehtut. Die Hilfsfunktion kennt jetzt eine Position (`raum(flaeche, ecken, x, y)`) |
+| **W-05-2-2** | **grün** | `Buehne.tsx` md5-identisch mit Runde 1 |
+| **W-05-2-3** (SCHUTZGRENZE) | **grün** | Schema/Zod/Migration in der Nachbesserung: **0 Dateien, 0 Code-Treffer** |
+| **W-05-2-4** | **grün** | Die Flächenanzeige ist unberührt — dieselbe md5-Gleichheit |
+| **W-05-2-5** | **grün** | Insel-Suite **1731/1731** (Runde 1: 1728) — **+3** Tests, keine Regression |
+| **W-05-2-6** | **grün** | Fangprobe selbst gefahren, Anker genau 1×: den **Ort** aus der Signatur genommen → **3 von 13 rot**, und zwar genau die drei, die ihn brauchen. md5 zurückgesetzt, identisch |
+| **W-05-2-7** | **Bündel grün, Browser weiterhin NICHT gefahren** | Das Bündel trägt die Nachbesserung, am Commit gemessen: `43d053ef…` → `74b5fb9b…`, `@` 19→20, `polygon` 75→76. **Der Browser-Ablauf bleibt offen** — über die Oberfläche bekomme ich keinen erkannten Raum zustande, und das vorbereitete Objekt existiert in der geleerten Testdatenbank nicht. Das stand so in Runde 1 und steht auch jetzt so da, statt als erledigt zu gelten |
+
+**Mein eigener Messfehler in dieser Runde, und es ist die Klasse, die ich beim Bau suche.** Meine
+erste Fangprobe **griff nicht**: das Muster passte nicht auf die neue Schreibweise der Signatur,
+Anker-Treffer **0**, `perl` änderte nichts — und die Tests liefen erwartungsgemäß 13/13 grün. Eine
+Probe, die den Namen „Fangprobe" trägt und nichts mutiert, belegt genau nichts. Aufgefallen ist es
+nur, weil der md5 **unverändert** blieb; das ist der Grund, warum die md5-Rücksetzung nicht bloß
+Aufräumen ist, sondern Teil der Messung. Zweiter Anlauf mit exaktem Anker: 3 von 13 rot.
+
+**§15:** keine Datenbankschreibung in dieser Runde.
+
+**Weiter an den Release-Prüfer.**
