@@ -92,10 +92,52 @@ KLASSE A  EINTRAGEN — Code existiert, Blatt fehlt
   neu dazu    W-17 · W-25 W-29 W-30 W-31 · W-33…W-39                    (12, keine Blaetter)
 KLASSE B  ANSCHLIESSEN — teils gebaut, Anschluss unklar
   W-03 W-06 W-10 W-12 W-14 W-16 W-18 · W-24 W-26 W-28                   (10)
-KLASSE C  BAUEN — kein Modul, gemessen
+KLASSE C  BAUEN — kein Modul, gemessen   <- STAND DER LISTE, historisch
   W-15 Material/Farbe · W-19 Sonne/Verschattung · W-20 Mengen (nur Holz
   vorhanden) · W-23 Deckung/Material · W-27 Kantentypen · W-32
   Giebelbindung · W-40 W-41 W-42 (Fuehrung)                             (9)
+
+NACHGEMESSEN 13.08. GEGEN DIE TAFEL — die Liste ist ueberwiegend abgearbeitet:
+  W-15  Tafelzeile, Zustand BETRIEBSBESTAETIGT
+  W-20  Tafelzeile, Zustand BETRIEBSBESTAETIGT
+  W-23  Tafelzeile, Zustand BETRIEBSBESTAETIGT
+  W-27  Tafelzeile, BETRIEBSBESTAETIGT  — und W-27/1 ebenso
+  W-40  Tafelzeile, BETRIEBSBESTAETIGT  — und W-40/1 ebenso
+  W-41  Tafelzeile, BETRIEBSBESTAETIGT
+  W-42  Tafelzeile, BETRIEBSBESTAETIGT
+  W-19  KEINE Tafelzeile      <- echter Rest
+  W-32  KEINE Tafelzeile      <- echter Rest
+
+  -> SIEBEN von neun haben einen abgeschlossenen Auftrag. ZWEI sind offen.
+     Die Restarbeit nach Klasse B ist zwei Zeilen, nicht neun.
+
+  VORBEHALT, und er ist wichtig: BETRIEBSBESTAETIGT ist der Zustand des
+  AUFTRAGS, nicht die Aussage 'das Werkzeug ist vollstaendig'. Was der jeweilige
+  Auftrag umfasste, ist verschieden — W-27/1 war ein BAU ('Dachkantentypen in
+  die Insel — der erste Auftrag, der Produktivcode erzeugt'), W-40/1 eine
+  'Ablesung mit EINER Erweiterung'. Wer die sieben als 'fertig gebaut' liest,
+  liest mehr, als hier steht. Und drei der Bloecke (W-20, W-23, W-27) tragen
+  KEIN titel-Feld, also laesst sich der Umfang nicht aus der Tafel ablesen —
+  er steht je im Blatt.
+
+  DIE ZWEI RESTE, aus dem Register:
+    REGISTER.md:77  W-19 Sonne und Verschattung  LEER · braucht W-07, W-08 · F-024
+    REGISTER.md:99  W-32 Giebelwand-Bindung Wall.topConstraint  LEER ·
+                    braucht W-02, W-03, W-07 · 'kein Modul, 0 Treffer auf
+                    topconstraint'
+  -> Beide sind ungemessen. Nach der heutigen Erfahrung (dreimal war mein
+     Eintrag zu klein) gilt fuer sie dasselbe: vor dem Blatt eine Messung ueber
+     ALLE Schichten, nicht nach dem Fahrplan-Eintrag schneiden.
+
+  UND EINE FEHLMESSUNG VON MIR GEHOERT DAZU, weil sie fast in dieses Blatt
+  gekommen waere: mein erster Befehl las den Titel je Auftrag mit einem Muster,
+  das ueber Blockgrenzen laeuft, wenn ein Block kein titel-Feld hat. Er lieferte
+  fuer W-23 UND W-27 denselben Titel — den eines dritten Blocks. Aufgefallen ist
+  es nur, weil zwei verschiedene Auftraege gleich hiessen. Die zweite Fassung
+  begrenzt am Zaun UND am naechsten auftrag-Feld. Das ist die ACHTE
+  Fehlmessung des Tages, und die erste NACH dem fuenften Schritt von
+  Pruefung 7 — den ich hier nicht angewandt habe. Aufschreiben ist nicht
+  anwenden.
 ```
 
 
