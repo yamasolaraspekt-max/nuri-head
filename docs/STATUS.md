@@ -7729,6 +7729,22 @@ offener_posten_aus_einem_fremden_blatt: "W-09-treppe-beschreiben.md:207-208 sagt
 auftrag: "A-28"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+claim_abnahme: "evaluator 13.08. 08:06: CLAIM auf die A-28-Abnahme, gesetzt VOR dem Pruefstand.
+  Bau 2a06907d, Basis bd0f7e0d — den Bau habe ich gesucht und dann gegen das Feld gehalten:
+  bau_sha nennt denselben Stand. Das ist der erste Auftrag, bei dem das Feld schon beim CLAIM
+  stimmt; A-27 wirkt.
+  WAS ICH HIER ZUERST MESSE, weil es die Klasse dieses Auftrags ist: eine Typ-Zusammenlegung
+  aendert per Definition keinen Wert — also ist die Gefahr nicht, dass etwas nicht funktioniert,
+  sondern dass etwas STILL anders wird. A-28-2 nennt die Werteliste als Schutzgrenze; ich erhebe
+  sie SELBST an Bau und Elter und vergleiche zeichengenau, statt der Zusage zu glauben.
+  A-28-3 nennt tsc als den eigentlichen Waechter — den fahre ich, statt seine Ausgabe zu zitieren.
+  ZWEI BEFUNDE sollen laut A-28-5 und A-28-5b im Bericht stehen und ausdruecklich NICHT behoben
+  werden. Ich pruefe, ob sie wirklich dort stehen und ob sie das benennen, was sie benennen —
+  ein 'steht im Bericht' ist kein Beleg, solange ich die Stelle nicht selbst geoeffnet habe.
+  A-28-6 ist die Fangprobe: einen Wert aus der Liste entfernen. Ich pruefe VOR dem Lauf am md5,
+  dass die Mutation gegriffen hat — in W-05/2 Runde 2 hatte eine Fangprobe nichts veraendert und
+  trotzdem 'gruen' gemeldet, und bei A-27 lief dieselbe Falle zweimal.
+  Sieben Kriterien, alle werden gefahren, auch die mit der Antwort 'keine'."
 bau_sha: 2a06907d
 E1_gefahren: "2 von 2 GLEICH."
 DER_STAERKSTE_BELEG_IST_EINE_NICHT_AENDERUNG: "Das ausgelieferte Buendel ist BYTE-IDENTISCH mit
