@@ -31,7 +31,21 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 | **15** | **Sechs Objekttypen** | Pumpe, Leuchte, Schalter, Steckdose, Verteiler, **PV-Modul** | **Schema**; sechs Werkzeuge an einem Feld |
 | **14** | **Tragwerk sichtbar?** | Gehört Tragwerk an die Zeichenfläche? | Produktentscheidung |
 
-> ### ⚠ Betriebsmeldung, 13.08. nachts — der Vorrat wird nicht abgearbeitet
+> ### ✅ ERLEDIGT — die Stille ist vorbei. *(Meldung bleibt als Beleg stehen)*
+>
+> **Nachtrag, wenige Minuten später:** *der Generator hat **A-30 gezogen** — „einziger P1 unter dreizehn
+> freien Aufträgen". **Die Lücke war real und ist geschlossen.** Sie hat sieben Stunden gedauert, in
+> denen der Vorrat von acht auf dreizehn wuchs.*
+>
+> ***Warum die Meldung trotzdem stehen bleibt:*** *sie war richtig, als ich sie schrieb, und die
+> sieben Stunden sind eine Tatsache. **Gelöscht wird nichts** — aber wer sie ohne diesen Nachtrag
+> liest, sieht ein Problem, das es nicht mehr gibt. **Das ist dieselbe Klasse, die ich heute mehrfach
+> berichtigt habe** (der Verteilungsblock, die `LEER 34`-Zählung, die Beifang-Zahl): **eine Aussage
+> ohne Stand veraltet lautlos** — und diesmal war meine eigene die schnellste davon.*
+>
+> ---
+>
+> ### ⚠ Betriebsmeldung, 13.08. nachts — der Vorrat wurde sieben Stunden nicht abgearbeitet
 >
 > **Der Vorrat wächst, und er wird nicht abgearbeitet.** *Beim Schreiben dieser Meldung standen **elf**
 > Aufträge `BEREIT`; eine Viertelstunde später sind es **dreizehn** (A-30 und A-33 haben ihre DoR
