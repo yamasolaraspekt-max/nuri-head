@@ -42,11 +42,27 @@ grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.t
                               :101  private readonly steuerung: OrbitControls
                               :170  new THREE.PerspectiveCamera(…)
 
-(3) RASTER — und damit ist eine Frage aus W-01 beantwortet
-    szene.ts:212  new THREE.GridHelper(80, 80, 0xcfd6de, 0xe2e6ea)
-           :213-214  transparent, opacity 0.5
-           :215  this.szene.add(raster)
-    Buehne.tsx:62  rasterAn: boolean            <- der 2D-Schalter
+(3) RASTER — BERICHTIGT nach 800a6075, und mein Beleg war eine TYPZEILE
+    3D-SZENE:
+      szene.ts:212  new THREE.GridHelper(80, 80, 0xcfd6de, 0xe2e6ea)
+             :213-214  transparent, opacity 0.5
+             :215  this.szene.add(raster)
+    2D-BUEHNE (Konva), die ganze Kette — selbst nachgemessen:
+      HausplanerApp.tsx:1274-1281  die Linien ENTSTEHEN hier
+                                   (const rasterLinien … for-Schleife ueber
+                                   weltBreite/weltHoehe mit rasterSchritt)
+                            :1423  durchgereicht
+                            :346   geschaltet
+      Kopfrahmen.tsx:304           der Knopf
+      Buehne.tsx:146               GEZEICHNET: {rasterAn && rasterLinien}
+      Buehne.tsx:62                rasterAn: boolean — das ist die PROPS-TYPZEILE
+                                   im Interface, neben pan, setPan und
+                                   rasterLinien. KEIN Zeichencode.
+
+    UND ES GIBT KEINEN '2D-RENDERER': der einzige Renderer-Ordner ist
+    renderers/three-d/. Der 2D-Weg ist die Konva-Buehne in der APP-Schicht.
+    Meine Formulierung 'Raster in BEIDEN Renderern' war deshalb doppelt falsch —
+    der Beleg war eine Typzeile, und die Schicht hiess anders.
 
 (4) F-032 Transformation eines Punktes (FORMELSAMMLUNG:218, homogene 4x4-Matrix)
     szene.ts:621  new THREE.Matrix4().makeBasis(…)
@@ -127,15 +143,37 @@ W-12-1-1 (P1, TRAGEND) Die ZWEI `modus` stehen im Blatt, JE MIT TRAEGER und
 W-12-1-2 (P1) Die VIER Gegenstaende mit Fundstelle: Ansichtszustand, Kamera samt
          OrbitControls, Raster in BEIDEN Renderern, F-032 mit
          szene.ts:621 und :627. Am Bau-Stand erheben, keine Zahl aus diesem Blatt.
-W-12-1-3 (P1) 7-GRENZEN sagt, dass es KEIN Werkzeug gibt UND keines geben soll,
-         mit dem Beleg: 0 Registry-Eintraege gegen 12 Werkzeuge mit
-         supportedViews. Die Ansicht ist eine Eigenschaft, an der sich Werkzeuge
-         ausrichten — dieselbe Lage wie W-01s Fang, dessen Blatt sagt „er liegt
-         unter anderen Werkzeugen, er ist keines".
-         Ohne diesen Satz liest die naechste Rolle 'LEER, 0 GEBAUT' als Auftrag.
+W-12-1-3 (P1) BERICHTIGT nach 800a6075, UND DER WIDERSPRUCH WAR IM SELBEN BLATT:
+         meine erste Fassung fixierte '0 gegen 12' im Kriterium — waehrend
+         W-12-1-6 zwei Absaetze weiter die nackte Zahl VERBIETET. Ein Blatt, das
+         sich selbst widerspricht, ist fuer den Bauenden unerfuellbar.
+         WAS DIE ZAHLEN WIRKLICH SIND, selbst nachgemessen:
+           supportedViews in app/tools/toolRegistry.ts        12
+           supportedViews im GANZEN Hausplaner                75
+             davon nach seiner Messung 54 im stillgelegten Katalog
+           '2d' oder 'split' als supportedViews-WERTE in toolRegistry  9
+         Die 12 gilt also NUR fuer eine Datei, und die 0 braucht die ZUGRIFFSART:
+         '2d' und 'split' kommen im selben Register neun Mal vor — als WERTE einer
+         Eigenschaft, nicht als Werkzeug-ID.
+         WAS JETZT VERLANGT IST: 7-GRENZEN sagt, dass es KEIN Werkzeug gibt und
+         keines geben soll, und belegt es mit der ZUGRIFFSART statt mit einer Zahl:
+         kein Registry-Eintrag hat 'ansicht'/'2d'/'3d'/'split' als ID, waehrend
+         Werkzeuge sie als supportedViews-WERTE fuehren. Die Zahlen werden am
+         Bau-Stand erhoben und je mit ihrem Traeger genannt (welche Datei).
+         Die Ansicht ist eine Eigenschaft, an der sich Werkzeuge ausrichten —
+         dieselbe Lage wie W-01s Fang, dessen Blatt sagt er liege unter anderen
+         Werkzeugen und sei keines. Ohne diesen Satz liest die naechste Rolle
+         'LEER, 0 GEBAUT' als Auftrag.
 W-12-1-4 Die Frage aus W-01-fang-beschreiben.md:94 ist im Blatt beantwortet: das
          sichtbare Raster WIRD gezeichnet — 3D als GridHelper (szene.ts:212-215),
-         2D ueber den Schalter rasterAn (Buehne.tsx:62). W-01 hat sie ausdruecklich
+         2D ueber die Konva-Buehne, und zwar mit der GANZEN Kette statt mit einer
+         Typzeile: HausplanerApp.tsx:1274-1281 erzeugt die Linien, :1423 reicht sie
+         durch, :346 schaltet, Kopfrahmen.tsx:304 traegt den Knopf, und
+         Buehne.tsx:146 zeichnet ({rasterAn && rasterLinien}).
+         NICHT als Beleg zulaessig: Buehne.tsx:62. Das ist die Props-Typzeile —
+         H-8, der Ort ist nicht die Wirkung. Mein erster Beleg war genau diese
+         Zeile, und W-01 hat die Frage ausdruecklich hierher verwiesen; ein
+         Typeintrag beantwortet sie nicht. W-01 hat sie ausdruecklich
          hierher verwiesen; sie darf nicht zwischen zwei Blaettern verschwinden.
 W-12-1-5 Der HYGIENE-POSTEN steht als Grenze: uiState.ts:11 nennt den Rename
          modus->viewMode als eigenen Slice. Das Blatt nennt ihn und aendert nichts.
