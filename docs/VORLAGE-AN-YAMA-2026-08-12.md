@@ -1757,3 +1757,66 @@ Ein eigener Dialog         -> NICHT noetig
 > **Beide Messungen fielen positiv aus, und das ist selten genug, um es zu sagen:** *ich hatte mit
 > mindestens einem Hindernis gerechnet. **Die Bedienung ist gebaut — sie ist nur noch nie von einem
 > Werkzeug benutzt worden.***
+
+## 19 · Die 134 Eingabe-Namen, an der Stelle geöffnet — *der Mangel ist eng, aber nicht so, wie die Zahl es sagt*
+
+*Yamas Auftrag: „Sagt mir, wieviele davon ECHTE Treffer sind, an der Stelle geöffnet. Ich will wissen,
+ob der Mangel wirklich eng ist oder nur eng aussieht."*
+
+### Zuerst: die Zahl ist nicht belastbar, und das ist das erste Ergebnis
+
+```text
+Lauf 1  blosses Vorkommen im Code            35 von 134
+Lauf 2  Kriterium „Objektschluessel oder Property-Zugriff"   20 von 134
+Lauf 3  die 20 einzeln geoeffnet, Grenzfaelle an der BESTEN
+        statt der ersten Stelle geprueft     ~18 von 134
+
+UND DIE FANGPROBE ZU LAUF 2 IST GESCHEITERT: mein Kriterium hielt
+`height: 26` in einem style={{}} fuer einen echten Treffer. Ich habe es
+nicht geflickt, sondern die Grenzfaelle von Hand nachgesehen.
+```
+
+> ***Eine trennscharfe automatische Messung ist hier nicht zu haben,*** *und der Grund ist der
+> Gegenstand: die Vertragsnamen sind **Allerweltswörter** — `axis`, `name`, `size`, `width`, `format`,
+> `source`. Jedes Muster trifft entweder zu viel (CSS, Kommentare, fremde APIs) oder zu wenig. **Wer
+> hier eine genaue Zahl nennt, hat geraten.***
+
+### Was die Handprüfung ergeben hat
+
+```text
+ECHTE Entsprechungen, Stelle geoeffnet (~18):
+  activeLevelId · angleDeg · depth · elevation · height · hostWallId ·
+  name · offset · overhang · parameters · pitch · points · position ·
+  projectId · roofType · sillHeight · thickness · width
+  -> die Grenzfaelle height/position/width/offset/name stehen als
+     Schema-Felder in domain/scene.types.ts bzw. domain/validation.ts —
+     der erste Treffer war CSS, die Sache existiert trotzdem.
+
+FREMD-API, kein Vertragsbezug (2):  size (JS Set.size) · path (Zod-Fehler)
+NUR ZUFALLSTREFFER (~15):  axis · comment · delta · dimension · format ·
+  options · pivot · reference · scope · slope · source · spacing · unit …
+GAR NICHT IM CODE (99)
+```
+
+### Die Antwort auf deine Frage: **eng — aber nicht wegen der Zahl**
+
+```text
+DIE 99 FEHLENDEN sind ueberwiegend Namen fuer Werkzeuge, die es NICHT GIBT
+(airChangeRate, circuitId, boundaryType, cascadePolicy …). Bei einer
+VORAUSspezifikation ist das normal und kein Mangel.
+
+DER MANGEL IST DORT, WO GEBAUT WERDEN SOLL — und dort ist er VOLLSTAENDIG:
+  selectionIds          0 Treffer   (7 der 8 Werkzeuge nennen es)
+  operationParameters   0 Treffer   (5 der 8)
+  BEIDE sind eindeutige Namen — kein Allerweltswort, kein Zufallstreffer
+  moeglich, keine Grenzfallfrage. Die Null ist hier belastbar.
+```
+
+> ***Also: eng im Sinne von „klar abgegrenzt", total im Sinne von „innerhalb dieser Grenze fehlt
+> alles".*** *Der Rest der 134 sagt über die acht Werkzeuge nichts — er beschreibt Werkzeuge, die
+> niemand gebaut hat.*
+
+> ***Und was ich daraus NICHT ableite:*** *dass die 111 Verträge unbrauchbar wären. **Sie sind eine
+> Vorausspezifikation und tun, was eine solche tut.** Was fehlt, ist die **Übersetzung** zwischen ihrer
+> Sprache und der des Codes — und die brauchst du erst dort, wo tatsächlich gebaut wird. **Das ist
+> genau die eine Zeile, die du unabhängig von der Bedienentscheidung festgeschrieben haben willst.***
