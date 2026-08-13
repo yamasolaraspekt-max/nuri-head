@@ -31,6 +31,18 @@ Posten, die auf dich warten. **Die Reihenfolge ist meine Empfehlung**, nicht dei
 | **15** | **Sechs Objekttypen** | Pumpe, Leuchte, Schalter, Steckdose, Verteiler, **PV-Modul** | **Schema**; sechs Werkzeuge an einem Feld |
 | **14** | **Tragwerk sichtbar?** | Gehört Tragwerk an die Zeichenfläche? | Produktentscheidung |
 
+**Zwei Posten, die NACH der B-Session kommen** — *sie stehen hier, damit du sie kennst, nicht damit du
+sie morgen entscheidest. Beide sind heute Abend erstmals vollgemessen:*
+
+| | Posten | Was zu klären ist |
+|---|---|---|
+| **Fahrplan** | **W-19 Sonne/Verschattung** | *Gehört Verschattung überhaupt in die Insel?* **`geometry/pvBelegung.ts:6` sagt nein** — „GRENZE: Ertrag/Verschattung/Strings bleiben der Fach-Engine (**wberechnung**) vorbehalten". Gebaut ist nichts; die Frage ist, ob diese Grenze bleibt. **Berührt dein wberechnung-Transplantat.** |
+| **Fahrplan** | **W-32 Giebelwand** | Eine Wand trägt `height` als feste Zahl und kennt **kein Dach** (nur `levelId`) — sie bleibt rechteckig, auch wo das Dach schräg darüberläuft. *Feld an der Wand oder Ableitung?* Ich empfehle **Ableitung**, aber sie braucht erst einen Bezug Wand→Dach. Schema-nah, deshalb bei dir. |
+
+> ***Und die gute Nachricht dazu:*** *die Klasse-C-Liste des Fahrplans nennt neun Bauzeilen — **sieben
+> davon haben einen abgeschlossenen Auftrag**. Diese zwei sind die einzigen Reste, und **keine von beiden
+> ist ein Bau in dem Sinn, in dem die Liste sie führt.***
+
 > **Und eine Frage, die ich nicht geraten habe:** *du hast geschrieben, wir sollen „morgen bei B Session"
 > sein. **Ich weiß nicht, was „B Session" genau bezeichnet.** Ich habe deshalb die zehn B-Zeilen des
 > Fahrplans vollständig gemessen — das ist unter jeder Lesart nützlich. Wenn du etwas anderes gemeint
