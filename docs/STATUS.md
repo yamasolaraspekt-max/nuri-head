@@ -564,7 +564,11 @@ vermuten:*
 > `??`-Eintrag, untracked und damit nicht im Index. **Die Zahlen widersprechen sich nicht, sie
 > messen Verschiedenes** — damit daraus niemand einen Off-by-one-Befund macht.*
 
-### ⚠ AN YAMA — 211 Dateien liegen NUR im Index
+### ✅ ERLEDIGT 13.08. — war: "⚠ AN YAMA — 211 Dateien liegen NUR im Index"
+
+> **Gemessen vom Release-Prüfer:** `docs/rollenkette/` trägt heute **281** Dateien, **alle** in HEAD committet, **0** im Index hängend, und alle 281 liegen auf `fork` **und** `backup-private`. Der ungesicherte Stand von damals existiert nicht mehr. *Der ursprüngliche Text bleibt darunter stehen, weil er die Lage von damals richtig beschrieb.*
+
+### ⚠ (überholt) AN YAMA — 211 Dateien liegen NUR im Index
 
 **`docs/rollenkette/`** — ein vollständiger Rollen- und Werkbank-Baum: Rollenbeschreibungen,
 **23 Werkzeugmappen**, Übergabeformulare. **In keinem Commit.**
@@ -1244,6 +1248,124 @@ naechster_schritt: "Yama: Veroeffentlichung genehmigen + Entscheidung PID 48098 
 ```
 
 ---
+
+## REPO-WEITE SUCHE NACH YAMA-POSTEN (Release-Pruefer, 13.08. nachts) — 47 Fundstellen, 6 erledigt, 2 verkleinert
+
+```yaml
+anweisung_im_wortlaut: "Yama 13.08.: 'kannst du alle fragen und aufgaben, welche an yama bzw mich
+  gerichtet ueber all suchen und beantworten und erledigen aber bitte sehr sorgsam und fundiert'.
+  Das UEBERALL ist neu — bisher hatte ich nur die Vorlage und STATUS.md geprueft."
+
+wie_gesucht: "648 Dateien nennen den Namen Yama; das ist keine brauchbare Menge, weil das meiste
+  Rueckblick ist ('auf Yamas Anweisung', 'Yama hat entschieden'). Gefiltert auf ECHTE
+  Adressierungen — ballbesitz mit yama, FRAGE AN YAMA, Ueberschriften mit AN YAMA: 47 Dateien,
+  164 Treffer. Muster gegengeprobt an einer erfundenen Zeile: gefunden. Jede der 47 gegen die
+  Statuswahrheit gehalten; die 45 ohne Auftragsbezug einzeln geoeffnet."
+
+## ERLEDIGT — sechs Zettel, jeder am Bestand nachgemessen
+
+zettel_1_211_dateien_im_index: "STATUS.md:567 fuehrt '⚠ AN YAMA — 211 Dateien liegen NUR im
+  Index'. GEMESSEN: docs/rollenkette/ traegt heute 281 Dateien, ALLE in HEAD committet, 0 im
+  Index haengend, und alle 281 liegen auf fork UND backup-private. Der Zettel ist gegenstandslos."
+
+zettel_2_beschaedigter_sicherungsstand: "STATUS.md:2875 '⚠ AN YAMA — A-14 ist RELEASE_FREI, aber
+  auf der SICHERUNG liegt ein beschaedigter Stand'. Der Befund war konkret: auf fork trage
+  BEFUND-GETEILTER-INDEX-STEHT-VOLL.md NULL Zeilen und FAHRPLAN-WERKZEUGKASTEN.md 166 statt 202.
+  HEUTE GEMESSEN, je einzeln auf allen drei Fernstaenden:
+    BEFUND-GETEILTER-INDEX-STEHT-VOLL.md   lokal 62 · origin 62 · fork 62 · backup-private 62
+    FAHRPLAN-WERKZEUGKASTEN.md             lokal 922 · origin 913 · fork 913 · backup-private 913
+  Keine Datei traegt 0 oder 166. Der Schaden ist behoben, die Sicherung vollstaendig. Der
+  Fahrplan ist seit dem Befund von 202 auf 913 gewachsen — deshalb ist die Sollzahl von damals
+  kein Massstab mehr, wohl aber die Aussage 'nicht leer und nicht abgeschnitten'.
+  Der zweite Teil des Zettels — fork fuehre A-14 als BETRIEBSBESTAETIGT, lokal RELEASE_FREI —
+  ist ebenfalls erledigt: A-14 steht ueberall BETRIEBSBESTAETIGT, Drift 0."
+
+zettel_3_A_16_weiche: "STATUS.md:2887 traegt bereits '✅ ERLEDIGT 12.08.' vom Plan-Pruefer."
+
+zettel_4_A_08_A_04_statuswahrheit: "STATUS.md:4826 meldet einen Widerspruch in einer Datei —
+  Tafelzeile VEROEFFENTLICHT gegen Datensatz RELEASE_FREI mit ballbesitz yama. Heute: A-08 und
+  A-04 stehen BETRIEBSBESTAETIGT, RELEASE_FREI kommt im ganzen Bestand 0 Mal vor."
+
+zettel_5_prozesspruefung_03: "STATUS.md:5071/:5093, §4-Vertretungsfrage. Das Feld traegt selbst
+  'ballbesitz: — # §4-Teilfrage vom plan-pruefer 12.08. beantwortet (NEIN, mit Begruendung)'.
+  Erledigt, und zwar von der richtigen Rolle: eine Frage ueber MEINE Vollmacht entscheidet nicht,
+  wer davon profitiert."
+
+zettel_6_zwei_regelwerke: "docs/BEFUND-ZWEI-REGELWERKE.md:76 'Offene Frage an Yama: welche Fassung
+  gilt ab jetzt — 1.1 oder 1.3?'. BEANTWORTET durch den Bestand: docs/ARBEITSREGELN.md traegt
+  Version 1.4.2, gueltig seit 04.08., Fassung 1.4.2 seit 05.08. CLAUDE.md nennt sie als EINZIGE
+  verbindliche Prozessquelle und hebt alle aelteren Prozessregeln ausdruecklich auf. Yamas eigener
+  Takt nennt ebenfalls 1.4.2. Die Frage stellte sich zwischen 1.1 und 1.3 und ist von 1.4.2
+  ueberholt — keine Entscheidung noetig, nur die Ablesung."
+
+## GEGENSTANDSLOS — der Index-Posten, weil das Tor ihn selbst loest
+
+index_posten: "docs/planner/PRUEFER-BEFUNDE.md:532 'Ballbesitz: Yama (Index raeumen —
+  schreibender Eingriff) · Planner (Barriere schneiden)'. Beide Haelften gemessen:
+  (a) git diff --cached --stat gegen HEAD ist LEER — nichts zu raeumen.
+  (b) Die Barriere ist gebaut, commit-pruefen.sh:699-730, und sie loest es ANDERS als das
+      Kriterium verlangte. Gefordert war 'meldet rot'. Gebaut ist: das Tor sucht Index-Blobs, die
+      in KEINEM Commit liegen (echte ungesicherte Arbeit). Findet es keine, gleicht es den Index
+      selbst an HEAD an (read-tree HEAD). Findet es welche, laesst es den Index STEHEN und meldet.
+      Das ist besser als rot melden, weil der gefaehrliche Fall — fremde ungesicherte Arbeit
+      wegraeumen — konstruktiv ausgeschlossen ist statt nur gewarnt.
+  DIE PROBE MIT ABSICHTLICH ZURUECKGESETZTEM INDEX HABE ICH NICHT GEFAHREN und sage warum: sie
+  ist ein schreibender Eingriff in den Index, und im Hauptbaum liegt laufende fremde Arbeit. Ich
+  habe den Code gelesen statt die Wirkung zu erzwingen."
+
+## VERKLEINERT — zwei Posten sind kleiner als ihre Fassung sagt
+
+posten_das_gruen: >
+  planner-konzept-token-konsolidierung nennt als DIE eine Frage, an der alles haengt: das
+  Auswahl-/Aktiv-Gruen #93c21c — auf brand ziehen, auf accent ziehen, oder als drittes Token
+  aufnehmen. GEMESSEN: die Frage ist zur Haelfte schon beantwortet.
+    studioDaten.ts:79   auswahl: T.brand      <- das Auswahl-Gruen IST auf brand gezogen, Weg (a)
+    studioDaten.ts:62   lauflinie: '#93c21c'  <- die EINZIGE verbliebene Produktivstelle
+  #93c21c kommt im Inselcode noch vier Mal vor: einmal in dieser Zeile, einmal im Kommentar
+  darueber, zweimal im Test, der die Ueberschneidung festhaelt.
+  Uebrig ist damit NICHT die Auswahlfarbe, sondern die Treppen-Lauflinie. Und der Dateikopf sagt
+  zu ihr das Richtige (studioDaten.ts:54-57): 'ob die Lauflinie ueberhaupt Markenfarbe tragen
+  soll, ist nicht entschieden — ein stiller Tausch waere genau die sichtbare Aenderung, die
+  dieser Posten nicht machen darf.' Dem ist nichts hinzuzufuegen; es ist eine Design-Entscheidung
+  ueber Yamas Marke und eine sichtbare Aenderung, die nach CLAUDE.md eine Browserabnahme braucht.
+  ICH ENTSCHEIDE SIE NICHT. Aber sie ist ein Zehntel so gross wie ihre Fassung.
+
+posten_110_dateinamen: "werkzeugPaket.ts:11 nennt eine Eindeutschung der Werkzeug-ids als Frage an
+  Yama, 'mit Wirkung auf 110 Dateinamen'. Gemessen: 111 Icons unter public/hausplaner/icons/tools/
+  und 101 ids im Paket. Die Zahl 110 traf zum Zeitpunkt des Schreibens, heute nicht mehr genau.
+  Wichtiger: es blockiert NICHTS — die ids sind heute konsistent mit den Dateinamen, und der
+  Entscheid 'alles deutsch' ist bei den FELDNAMEN bereits umgesetzt. Es ist ein Vorhaben, kein
+  Hindernis. Bleibt bei Yama, ohne Dringlichkeit."
+
+## WAS BLEIBT — und wo es NICHT hingehoert
+
+bleibt_hausplaner_kette: "W-21L (Fachdaten) · das Gruen der Lauflinie (Marke, sichtbar) · die
+  Eindeutschung der ids (Vorhaben) · dazu die sieben Posten der Vorlage, die ich im vorigen
+  Arbeitsgang eingeordnet habe."
+
+ausserhalb_der_kette_gefunden_und_NICHT_bearbeitet: >
+  Die Suche hat Posten in Bereichen gefunden, die nicht zur Hausplaner-Kette gehoeren und die ich
+  ausdruecklich NICHT anfasse — ich nenne sie, damit sie nicht als uebersehen gelten:
+    docs/bereich2-angebot-auslegung-bewertung.md   SIEBEN offene Entscheidungen (Angebot,
+                                                   Preis-Wahrheit, BivalenzService, PvProjektService)
+    docs/accounting/stufe-ii-...                   SKR03-Default
+    docs/audit/automatisierung-stufe2.md           STOPP 2, Betriebswissen
+    docs/product-data/ (vier Dateien)              Direktiven, Identitaetsspezifikation
+    docs/configuration/ (zwei Dateien)             Freigaben
+    docs/uebernahme/kostenstellen-...              Rollen-Zuordnung
+  Das sind Fach-, Geld- und Datenentscheidungen des CRM-Bestands. Sie liegen ausserhalb meiner
+  Rolle UND ausserhalb dessen, was der Release-Pruefer-Takt abdeckt. Wer sie bearbeitet, braucht
+  einen eigenen Auftrag.
+
+historisch_ohne_prozessautoritaet: "Weitere Fundstellen liegen in Juli-Dokumenten, in
+  PRUEFER-BEFUNDE-ARCHIV-2026-07.md (sechs), in AUFTRAGSTAFEL-HISTORIE und in
+  docs/handoff-status.md (SIEBENUNDSIEBZIG Treffer). Nach CLAUDE.md sind alle aelteren Prozess-,
+  Uebergabe- und Statusquellen aufgehoben; sie duerfen als fachliche Belege gelesen werden,
+  besitzen aber keine Prozessautoritaet. Ich habe sie deshalb NICHT als offene Posten gefuehrt —
+  und sage zugleich: aufgehobene Prozessautoritaet heisst nicht beantwortete Fachfrage. Wer eine
+  dieser Fragen wiederbeleben will, schneidet sie neu."
+ballbesitz: yama
+```
 
 ## YAMAS POSTENLISTE DURCHGEARBEITET (Release-Pruefer, 13.08. nachts) — fuenf erledigt, einer entschieden, einer verkleinert
 
@@ -2872,7 +2994,11 @@ lehre: "Ein Zustandswechsel ist erst vollstaendig, wenn BEIDE Orte ihn tragen. I
 ```
 ---
 
-## ⚠ AN YAMA — A-14 ist RELEASE_FREI, aber auf der SICHERUNG liegt ein beschaedigter Stand
+## ✅ ERLEDIGT 13.08. — war: "⚠ AN YAMA — A-14 ... beschaedigter Stand auf der SICHERUNG"
+
+> **Gemessen vom Release-Prüfer, je einzeln auf allen drei Fernständen:** `BEFUND-GETEILTER-INDEX-STEHT-VOLL.md` **62/62/62/62** Zeilen (lokal/origin/fork/backup-private), `FAHRPLAN-WERKZEUGKASTEN.md` **922/913/913/913**. Keine Datei trägt 0 oder 166 — der beschädigte Stand ist behoben, die Sicherung vollständig. Auch der zweite Teil ist eingeholt: A-14 steht überall `BETRIEBSBESTAETIGT`, Drift 0.
+
+## ⚠ (überholt) AN YAMA — A-14 ist RELEASE_FREI, aber auf der SICHERUNG liegt ein beschaedigter Stand
 
 ```yaml
 das_urteil_zuerst: "A-14 ist RELEASE_FREI, und die Pruefung ist die gruendlichste dieser Runde. Alle drei Kernfragen sind beantwortet, eine davon SCHAERFER als ich sie gestellt hatte: bei der Gegenprobe zu A-14-3 hat er die Renderbedingung fuer JEDES Panel ausgefuehrt — nur engine-sparren verliert die Plakette, treppe/fbh/heizkoerper/abwasser/kueche behalten sie, und heizkoerper zeigt mit bestanden=false die ROTE Plakette. Damit ist belegt, dass das Flag DIESE EINE Engine unterdrueckt und nicht negative Urteile allgemein. Das Buendel ist byte-identisch mit dem, was der Evaluator am Bildschirm gemessen hat (md5 a5ea0056, Neubau aendert nichts). Und fachlich: Yamas Wortlaut ist ZEICHENGENAU uebernommen, die Reichweitengrenze wird getragen, nicht veraendert."

@@ -73,7 +73,11 @@ die §1 abgeschafft hat.
 stimmig. Wer 1.3 übernimmt, erklärt eine Nacht Arbeit nicht für falsch — aber er ändert die
 Buchführung darüber rückwirkend.
 
-## Offene Frage an Yama
+## ~~Offene Frage an Yama~~ — BEANTWORTET 13.08. durch den Bestand
+
+> **Erledigt (Release-Prüfer, Ablesung):** `docs/ARBEITSREGELN.md` trägt **Version 1.4.2**, gültig seit 04.08., Fassung 1.4.2 seit 05.08. `CLAUDE.md` nennt sie als **einzige** verbindliche Prozessquelle und hebt ältere Prozessregeln ausdrücklich auf. Die Frage stellte sich zwischen 1.1 und 1.3 und ist damit überholt — es brauchte keine Entscheidung, nur die Messung.
+
+### ~~Offene Frage an Yama~~ (ursprünglicher Wortlaut, erhalten)
 
 **Welche Fassung gilt ab jetzt — und ab welchem Zeitpunkt?** Solange das offen ist, arbeite ich
 weiter nach der Fassung im Baum (1.1) und kennzeichne jede Statusaussage als unter 1.1 entstanden.
