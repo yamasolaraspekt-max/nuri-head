@@ -34,6 +34,56 @@ UI/Bericht."*
 **Das ist die A-10-Klasse, richtig gelöst:** *nicht das leere Ergebnis ist das Problem, sondern das
 gefüllte, das seine Herkunft verschweigt.*
 
+## `auswechslung.ts` (W-21/2, 13.08.) — was es NICHT kann
+
+**Der Kopf sagt es in einem Satz:** *„**Keine statische Bemessung.**"* (`:19`) — *dieselbe Grenze wie
+`berechneSparren()` oben, nur an einer anderen Stelle des Dachs.*
+
+Die Grenzen im Einzelnen, alle am Code erhoben:
+
+| Fall | was das Modul tut |
+|---|---|
+| Öffnung nahe **First · Traufe · Ortgang** (Vorgabe 0,3 m) | `pruefpflichtig = true`, **wechselAnzahl 0** — kein Wechselholz, obwohl eines nötig ist |
+| **flankierender Sparren** links oder rechts nicht eindeutig | ebenso `pruefpflichtig` — *„Wechsel geometrisch noch nicht vollständig ableitbar"* |
+| Öffnung ragt **über die Fläche hinaus** | ebenso `pruefpflichtig` |
+| Fläche oder Öffnung mit Maß ≤ 0 | leeres Ergebnis, **kein Hinweis** — s.u. |
+| **trapezförmige Fläche** (Walm, Schifter) | **nicht vorgesehen.** Das Raster wird aus **einer** Breite `breiteM` erzeugt; eine oben schmalere Fläche kennt das Modul nicht |
+| **Querschnitt des Wechselholzes** | nie. Es liefert **Länge und Anzahl**, keine Bemessung |
+
+> **`pruefpflichtig = true` heißt NICHT „Fehler", sondern „hier entscheidet ein Mensch".** *Es ist
+> dieselbe Haltung wie `OFFENE_HOLZBAUTEILE` — lieber eine gemeldete Lücke als eine erfundene Menge.*
+
+**Eine Grenze, die man beim Lesen übersieht — gemessen, nicht vermutet:** *bei ungültiger Fläche oder
+Öffnung (`:103`, `:111`) kehrt das Modul mit dem **leeren Ergebnis** zurück, und `hinweise` bleibt
+**leer**.* **Ein Aufrufer, der nur die Hinweise anzeigt, zeigt in diesem Fall nichts an** — dasselbe
+Ergebnis wie „alles in Ordnung, keine Auswechslung nötig". *Der Unterschied steht nirgends im
+Rückgabewert.*
+
+## Und die Grenze, die nicht im Modul steht: es ist nicht angeschlossen
+
+**`OFFENE_HOLZBAUTEILE` oben meldet weiterhin** *„Wechselholz / Auswechslung … nicht eindeutig
+bestimmt"* — **und das bleibt richtig, obwohl es das Modul jetzt gibt.** *Gemessen:*
+
+```text
+auswechslung.ts        importiert NICHTS und wird von KEINEM Produktivcode gelesen.
+                       Einziger Importeur: __tests__/auswechslung.test.ts
+holzBauteile.ts        kennt auswechslung.ts nicht -> die Selbstauskunft stimmt
+```
+
+> *Das ist kein Widerspruch zwischen den zwei Blättern, sondern die genaue Lage: **die Rechnung ist
+> da, der Weg zur Menge nicht.*** **Wer `OFFENE_HOLZBAUTEILE` eines Tages um diesen Eintrag kürzt,
+> muss vorher den Anschluss bauen — nicht umgekehrt.**
+
+**Und eine dritte Stelle sagt heute etwas, das das Modul widerlegen könnte, es aber nie gefragt
+wird:** `dachOeffnung.ts:91` gibt **`auswechslungErforderlich: true` als festen Wert** zurück —
+*einziger Rückgabepfad der Datei (`oeffnungRechteck()`, `:86`), das Feld ist als `boolean` deklariert
+(`:40`), und **`false` kann dort nie herauskommen**.* Kein Import verbindet die zwei Dateien.
+
+> **Das ist die Zwei-Wahrheiten-Klasse:** *ein Modul entscheidet sorgfältig, ob eine Auswechslung
+> nötig ist — und ein anderes sagt der Oberfläche „immer ja", ohne es je zu fragen.* **Hier nur
+> gemeldet: `dachOeffnung.ts` ist Produktivcode und gehört nicht zu W-21** (W-21/2 ändert keinen
+> Produktivcode). *Der Befund gehört zu W-29 „Dachdurchdringungen", das heute leer ist.*
+
 ## Die Lattung — der Werkzeugname verspricht mehr, als ein Modul hält
 
 **Es gibt kein Lattungs-Modul.** Kein Dateiname in `geometry/` enthält `latt`. Das Wort kommt an

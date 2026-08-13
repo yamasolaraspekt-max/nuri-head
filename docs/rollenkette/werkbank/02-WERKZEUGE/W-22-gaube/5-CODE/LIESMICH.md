@@ -33,10 +33,19 @@
 
 **Die Werkbank führt davon nur „Gaube".**
 
-### `auswechslung.ts` ist in keinem Blatt zuhause
+### ~~`auswechslung.ts` ist in keinem Blatt zuhause~~ · ÜBERHOLT seit 13.08.
 
-Sie wird in **W-21 und W-22** als Nachbar genannt und ist **in beiden nur Nachbar**.
-*Ohne diesen Satz verschwinden 174 Zeilen zwischen zwei Blättern.*
+> ~~Sie wird in **W-21 und W-22** als Nachbar genannt und ist **in beiden nur Nachbar**.
+> *Ohne diesen Satz verschwinden 174 Zeilen zwischen zwei Blättern.*~~
+
+**Der alte Wortlaut bleibt hier stehen, weil er richtig war und die Lücke gemeldet hat, die
+geschlossen wurde.** *Erledigt durch **W-21/2** am 13.08.:* `auswechslung.ts` **ist jetzt in W-21
+zuhause** — `W-21/5-CODE/LIESMICH.md` führt es als sechstes Modul, der Grund der Zuordnung steht in
+`W-21/1-ZWECK.md`.
+
+**Für W-22 ändert sich dadurch nichts am Bestand:** *die Datei bleibt Nachbar der Gaube und wird von
+`gaubeGeometrie.ts` weiterhin nicht importiert.* **Was sich ändert, ist nur, wo man sie beschrieben
+findet.**
 
 ### Ein Modulname, der nicht dazugehört
 

@@ -155,6 +155,14 @@ istSicherTrennbar()     VORHANDEN — Grenzfall-Entscheider, gebaut
 OFFENE_HOLZBAUTEILE     VORHANDEN — gebaute Selbstauskunft ueber die eigenen Grenzen
 auswechslung.ts         VERWANDT (Sicher-Entscheidung, laut sparrenTrennung-Kopf) —
                         NICHT im Scope, aber im Blatt zu verlinken
+                        ^ UEBERHOLT 13.08. durch W-21/2. Der Ausschluss stand hier
+                          fuer die ABLESUNG und war dafuer richtig: er hielt den
+                          Scope klein. Offen liess er die andere Frage — nicht
+                          "gehoert es in diese Ablesung", sondern "wo ist das
+                          Modul zuhause". W-22 hat sie gestellt, entschieden am
+                          13.08., umgesetzt durch W-21/2: auswechslung.ts ist das
+                          SECHSTE Modul von W-21. Beides steht nebeneinander,
+                          weil der alte Satz nicht falsch war, sondern erledigt.
 W-01/1, W-05/1          Muster fuer SCHICHT-Blaetter
 ```
 

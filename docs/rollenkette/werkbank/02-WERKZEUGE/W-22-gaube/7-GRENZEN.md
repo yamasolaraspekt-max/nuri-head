@@ -52,6 +52,6 @@ Entwaesserung  h <= d*(tan a - tan(minNeigung))    "sonst h klemmen"
 | Fall | Folge |
 |---|---|
 | echte X-Verschneidung mit Kehlen | nicht Gegenstand — `dachVerschneidung.ts` |
-| Auswechslung am Gaubenrand | **`auswechslung.ts`, 174 Z — in keinem Blatt zuhause** |
+| Auswechslung am Gaubenrand | ~~**`auswechslung.ts`, 174 Z — in keinem Blatt zuhause**~~ **ÜBERHOLT 13.08.** — seit **W-21/2** in **W-21** zuhause (`W-21/5-CODE`, sechstes Modul). *Für W-22 bleibt es außerhalb: die Gaube importiert es nicht.* |
 | Eindeckung, Statik, Schneelast | ausdrücklich außerhalb |
 | ein Werkzeug zum Anfassen | **existiert nicht** — kein Registry-Eintrag |
