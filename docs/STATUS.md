@@ -54,7 +54,7 @@
 | **A-23** SIEBEN Zettel an einer erledigten Sperre | **`BETRIEBSBESTAETIGT`** | – | Release `3ad920b1` · §19 13.08. | **BAU**, nur Begleittexte · **Spur A hochgestuft**, weil ein WÄCHTER berührt wird: `startEhrlich.test.ts:118` ist ein **Testname**, und der Test dahinter ist **richtig** (StartView berührt weder `fetch` noch `dataset`, gemessen 0 Treffer — die Naht läuft über `main.tsx`). **Die naheliegendste Fehlhandlung ist, ihn als überholt zu LÖSCHEN**; A-23-1 verbietet es und verlangt den `md5` des Rumpfs vorher/nachher. SIEBEN Stellen in der Insel führen AUF-40 Teil B als offen, **beide Hälften sind gebaut** — fünf meinen die Projektliste, `konfiguratorEhrlich.test.ts:11` meint die Paketspeicherung, und die siebte trug die Zeichenfolge gar nicht: `startEhrlich.test.ts:120` sagt *„Die Zulieferung der Liste bleibt deshalb offen“* im Rumpf des geschützten Tests — H-9 an meinem eigenen Suchmuster. **DoR NICHT erteilt (`2772c198`), zwei Fehler in meinen eigenen Kriterien behoben:** A-23-1 und A-23-2 kollidierten (md5 über den Rohtext gegen die Pflicht, überholte Sätze zu berichtigen — jetzt md5 **ohne Kommentare**, mit dem Werkzeug der Insel), und meine Gegenprobe nannte **kommentarblinde** Wächter: `startEhrlich` und `konfiguratorEhrlich` lesen über `ohneKommentare`. Der einzige, der greifen kann, fehlte — `gefuehrteEhrlich:30` liest `studioDaten.ts` **roh** und prüft ein Statuswort in der ganzen Datei; **mein A-23-3 trieb den Bauenden genau in dessen Wortsperre.** Befund des **Generators** (`c767426d`), der ausdrücklich nicht geschnitten hat; Stellen vom Planner selbst nachgemessen. Schließt AUF-40 **nicht** — das sagt Yama. |
 | **A-24** Panel-Zusage trifft das Tor nicht | **`BETRIEBSBESTAETIGT`** | – | Release `200dcb7a` · §19 13.08. | **BAU, P1** · **Der Nutzer erfüllt, was das Panel verlangt, und bekommt kein Dach.** `EigenschaftenPanel.tsx:300` sagt *„L/T-Dach braucht Außenmaß Länge und Breite > 0“*, das Tor `renderers/three-d/dachMesh.ts:78` verlangt **alle vier** (`length`, `width`, `lengthB`, `widthB`) und gibt sonst `null` — **und weil `fehlt` dann false ist, verschwindet auch die Warnung**. Pfad am Code geprüft, nicht am Namen: `:143` ruft `anbauZuEingabe` für **alle** Verschneidungsformen, `:153` setzt `form: 'l'|'t'`. Benennung aus dem Bestand statt erfunden — `dachVerschneidung.ts:26` sagt `lengthB, widthB // L_b, W_b (Anbau)` — **an `:25`, nicht `:26`; berichtigt nach `7c1ecc9f`, ich hatte eine nicht numerierte Ausgabe abgezählt.** **DoR NICHT erteilt: mein Schutz-Nachweis hatte keinen Gegenstand.** A-24-3 verlangte einen `md5`-Vergleich an einem Bestandsdokument — gemessen sind in `ticket_testing.hausplaner_documents` **0 Datensätze**, und 70 von 137 Testdateien setzen die Datenbank per `RefreshDatabase` zurück; **ein in der Datenbank abgelegter Beleg ist hier strukturell kein Beleg**. Die Schutzgrenze bleibt, der Nachweis wandert an den **Schreibpfad**: `setzeAnbau` (`:271`) wird ausschließlich aus `onChange` gerufen, und die Datei enthält **0** `useEffect`. Das hält eine **Eigenschaft** statt einen Zustand zu vergleichen — und gilt beim nächsten Umbau noch. **Herkunft: Punkt 7 der Lückenliste aus `BERICHT-A-05-l-kontur.md`, wörtlich „Einordnung und ggf. Auftrag: Sache des Planners“ — vier Tage bei mir gelegen, kein fremder Fehler.** Die Falle: wer nur den Text ehrlich macht, ist grün und der Fehler bleibt; A-24-5 verlangt einen Wächter auf die **Kopplung** von Hinweis und Tor, nicht auf den Wortlaut. |
 | **W-31** PV-Schnellbelegung | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `6ace6f3e` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Widerlegt meine eigene Behauptung, der Vorrat sei erschöpft.** Die Registerzeile `REGISTER.md:98` sagt im selben Satz *gesperrt bis F-028* **und** *autarke Schnellstufe gebaut (`pvBelegung.ts`, KEIN Azimut → kein F-028-Fall)* — ich hatte das Wort **gesperrt** gelesen und die Sache nicht gemessen, dieselbe Ursache wie bei AUF-40 heute. `pvBelegung.ts` hat 75 Z. und **drei** Exporte (`:10`, `:26`, `:46`), und es ist **angeschlossen** — anders als W-27/1: `enginePanels.ts:32` Einfuhr, `:380 engineId`, `:403` Aufruf über `alsPvEingabe`, `faehigkeiten.ts:80` Registry mit `zustand: verfuegbar`. **DoR NICHT erteilt (`94bd30f8`): eine FÜNFTE Bedienstelle fehlte, und sie ist die einzige mit einer RICHTUNG.** `fachFlaechen.ts:240-258` trägt `fach-pv-module` mit `engine: engine-pv`, ist über `FachFlaeche.tsx` und `HausplanerStudio.tsx:18` **gerendert** — und `:252` nennt als Eingang *„Ausrichtung und Neigung"* in Grad, während `PvEingabe` **sieben** Felder hat und keine Richtung. Mein Muster konnte sie nicht finden: ich maß über **Importe**, und `fachFlaechen.ts` verdrahtet über **Strings**. Dieselbe Klasse wie die NUR-QUELLE-Wächter, nur auf der Bedienseite. Die Spannung ist benannt und **nicht** zum Mangel erklärt (H-7: eine Feldvorschau darf künftige Felder zeigen) — als Vormerkung im Fuß, nicht als Auftrag. **Erster Beleg, dass die Stufe-6-Kette zusammenhängt:** der Bedienweg läuft über W-36 und W-37, und `alsPvEingabe` ist einer der acht Adapter, deren Zahl W-37 zwei Runden gekostet hat. Die Grenze steht im Dateikopf `:6-7` — *Ertrag/Verschattung/Strings bleiben der Fach-Engine (wberechnung) vorbehalten*, also Arbeitsteilung zwischen zwei Apps. |
-| **W-06** Geschoss verwalten | `IN_ARBEIT` | **Generator** | Schnitt 12.08. · Basis `acb3d494` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Die größte Ablesung des Vorrats: DREI Module, 355 Z., zehn Exporte** — `geometry/geschossVorlage.ts` (78) · `app/dashboard/geschossStapel.ts` (104) · `GeschossFlaeche.tsx` (173), alle drei angeschlossen. **Tragend ist der ID-Remap** (`geschossVorlage.ts:5-7`): Öffnungen werden auf die **neuen** Wand-IDs umgehängt — wer das bricht, hängt Türen des Duplikats an die Wände des Ursprungsgeschosses, und **das fällt erst auf, wenn unten eine Wand geändert wird**. Die Generics `<N extends NodeBasis, R extends RoofBasis>` verankern die Schichttrennung **im Typsystem** statt in einer Absprache. AUF-43s stiller Befund steht im Dateikopf: *die Höhenlage wird im Modell geführt, aber nirgends gezeigt* — kein falscher Wert, ein vorhandener der nie erscheint. **Dritter Fall der NUR-QUELLE-Wächterklasse:** `geschossFlaeche.test.ts` heißt nach der Komponente, importiert das Datenmodul und verriegelt die Komponente über ihre Quelle (`:27`) — strenger als ein Import, denn `:125` schließt eine zweite Definition aus. **Und F-032 ist eine FORMEL, keine Sperre** (`FORMELSAMMLUNG.md:218`); vier LEER-Werkzeuge tragen die Referenz und das sieht wie ein gemeinsamer Blocker aus. |
+| **W-06** Geschoss verwalten | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `acb3d494` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · **Die größte Ablesung des Vorrats: DREI Module, 355 Z., zehn Exporte** — `geometry/geschossVorlage.ts` (78) · `app/dashboard/geschossStapel.ts` (104) · `GeschossFlaeche.tsx` (173), alle drei angeschlossen. **Tragend ist der ID-Remap** (`geschossVorlage.ts:5-7`): Öffnungen werden auf die **neuen** Wand-IDs umgehängt — wer das bricht, hängt Türen des Duplikats an die Wände des Ursprungsgeschosses, und **das fällt erst auf, wenn unten eine Wand geändert wird**. Die Generics `<N extends NodeBasis, R extends RoofBasis>` verankern die Schichttrennung **im Typsystem** statt in einer Absprache. AUF-43s stiller Befund steht im Dateikopf: *die Höhenlage wird im Modell geführt, aber nirgends gezeigt* — kein falscher Wert, ein vorhandener der nie erscheint. **Dritter Fall der NUR-QUELLE-Wächterklasse:** `geschossFlaeche.test.ts` heißt nach der Komponente, importiert das Datenmodul und verriegelt die Komponente über ihre Quelle (`:27`) — strenger als ein Import, denn `:125` schließt eine zweite Definition aus. **Und F-032 ist eine FORMEL, keine Sperre** (`FORMELSAMMLUNG.md:218`); vier LEER-Werkzeuge tragen die Referenz und das sieht wie ein gemeinsamer Blocker aus. |
 | **A-25** Die Zäune fehlen | **`BETRIEBSBESTAETIGT`** | – | Release `83ad35e1` · §19 13.08. | **BAU, P1 — und der größere Anteil ist meiner.** Zwei yaml-Bereiche in `docs/STATUS.md` tragen zusammen **sieben** Datensätze: `1243-1315` (A-08, A-09) und `7525-8084` (559 Z.: W-06, W-31, A-24, A-23, A-22). **P1, weil eine PRÜFROLLE betroffen ist** — der Evaluator in `f017b6f9`: *„mein Takt-Scan liest seit Runden das LETZTE zustand-Feld eines Bereichs statt das des gesuchten Auftrags, und dass es bisher stimmte war GLÜCK in der Reihenfolge."* Er meldete für A-24 einen Widerspruch, den es nicht gibt; beim nächsten Mal kann er einen **verschweigen**, den es gibt. **Mein Anteil:** der große Bereich trug am Morgen einen Datensatz, ich habe heute vier dazugehängt — jedes Mal den Block *vor* die `auftrag:`-Zeile des vorherigen, also **innerhalb** des bestehenden Zauns. A-20-2 habe ich erfüllt; dass ein Datensatz auch ein eigener **Block** sein muss, sagt A-20-2 nicht — und ich habe damit den Zweck von A-22 unterlaufen, während A-22 in Kraft war. **Die Falle steht im Kriterium:** mein erster Zähler meldete *einen* Bereich statt zwei, weil er `​```yaml` als Schließer zählte — nach CommonMark schließt nur ein Zaun **ohne** Info-String. Ein solches Muster kann nach dem Bau **null** melden und grün sein. |
 | **A-26** Ball-Drift am Tor | **`BETRIEBSBESTAETIGT`** | – | Release `a26` · §19 13.08. | **BAU, P1 · hängt an A-25.** **Dreimal an einem Tag, drei verschiedene Rollen** — W-36, W-33, W-31: jedes Mal Datensatz gepflegt, Tafelzeile vergessen. Der Release-Prüfer hat alle drei nachgezogen und die Ursache benannt (`38bc5e12`): *„seit A-20 gibt es ZWEI Zustandsorte, und der zweite liegt räumlich weit vom ersten entfernt. Wer im Auftragsblock arbeitet, sieht die Tafel nicht."* **A-20 ist meine Regel, also gehört die Fehlerklasse mir.** Der schwerste Teil: im dritten Fall **glaubte** der Verursacher, beide Orte gepflegt zu haben, und schrieb es in die Botschaft — am Diff fehlte die Tafelzeile. **Ein Fehler, der nicht im Willen liegt, wird von einer Mahnung nicht behoben**, deshalb eine Barriere im Tor (vierte nach F-14, B5, B6) und ausdrücklich eine, die **warnt statt abbricht**. Drei Fallen stehen im Kriterium, weil jede sie grün und wirkungslos machen würde: Schreibweise (`**`ENTWURF`**` gegen `ENTWURF`), Kommentare nach `#`, und die Zuordnung — daran ist der Takt-Scan des Evaluators gescheitert. **Nicht-Ziel: die zwei Orte zusammenführen** (wäre Rückabwicklung von A-20 und gehört Yama). |
 | **W-05/2** Raum anwählen | **`BETRIEBSBESTAETIGT`** | – | Release `4ab9b9b9` · §19 13.08. | **BAU** · erster Posten aus der Frontend-Bestandsaufnahme des Release-Prüfers (`STATUS.md:5355`) — **und die Messung hat den Auftrag KLEINER gemacht.** Sein Vorschlag war *„Raum anwählen, benennen, Fläche ablesen"* als ein Schnitt; gemessen sind es drei ungleiche Teile: **Fläche ablesen ist GEBAUT** (`Buehne.tsx:139` Kommentar, `:148` Füllung, `:152` die m²-Zahl), **anwählen ist klein** (`:147` trägt `listening={false}`, das Auswahlmuster steht daneben in `:165`/`:190`), **und der NAME ist eine Entscheidung Yamas**: `ErkannterRaum` (`roomDetection.ts:35-40`) trägt `polygon`, `kanten`, `flaecheMm2`, `volumenMm3` — **keine id**, und `Buehne.tsx:147` nutzt `key={raum${i}}`, also den **Index**. Räume werden *erkannt*, nicht gezeichnet; ein Name ist dauerhaft, ein Index nicht. **Dieselbe Klasse wie die offene ZoneNode-Frage.** Der ganze Auftrag hängt an W-05-1-1: **die Auswahl wird zurückgesetzt, wenn sich die Raumliste ändert** — eine Auswahl, die einen Wandzug überlebt, zeigt auf einen anderen Raum und sieht gleich aus. |
@@ -9533,6 +9533,40 @@ beleg_commit_ist_fremd: "MEINE DoR-FREIGABE TRAEGT EINEN FREMDEN COMMIT. Ich hat
   A-29-Freigabe sucht, findet sie nicht. Deshalb steht die Zuordnung hier: DoR erteilt von plan-pruefer,
   eingebracht durch 7b5b5885 als Beifang. Das ist genau der Fall, den die Nebenlaeufigkeitsregel meint —
   wer den Baum teilt, stagt nur die eigenen Pfade."
+
+paragraf3_am_commit_unsichtbar: "BEFUND des plan-pruefers 13.08. 22:40, gemessen an 543a6b2e —
+  und er hat sich beim Nachmessen GEDREHT, deshalb steht er hier und nicht als Vorwurf.
+  WAS ICH ZUERST SAH: der Bau-Commit 4654687f traegt 47 neue Zeilen Produktivcode
+  (resources/planner/hausplaner/app/tools/werkzeugLandkarte.ts), und an DREI Staenden steht A-29
+  dabei auf BEREIT: im Elter 4654687f~1, IM Bau-Commit selbst, und am damaligen Remote-Stand
+  43f320a6. Der Bestand zeigte an allen dreien 0 IN_ARBEIT. Nach E1 — Aussagen ueber den Bau
+  werden am COMMIT gemessen — sieht das aus wie ein uebersprungener §3-Schritt.
+  WAS DIE PRUEFUNG ERGAB: es war keiner. Der Generator schreibt in derselben Botschaft:
+  'docs/STATUS.md NICHT gestagt: dort liegt die unfertige claim_abnahme-Zeile des Evaluators —
+  meine IN_ARBEIT-Zeilen stehen, kommen aber erst mit der Meldung'. Er HATTE den Zustand gesetzt.
+  Er hat ihn nicht committet, weil in derselben Datei fremde unfertige Arbeit lag — also genau
+  die Beifang-Disziplin, die dieses Repo verlangt.
+  DAS IST EINE REGELKOLLISION, kein Fehlverhalten: §3 will den Zustandswechsel VOR der ersten
+  Scope-Aenderung, E1 misst am Commit, und die Beifang-Regel verbietet, die fremde Zeile
+  mitzunehmen. Sind alle drei gleichzeitig bindend, ist der Zustandswechsel im Commit NICHT
+  darstellbar, solange ein anderer an derselben Datei arbeitet. Bei fuenf Instanzen auf einem
+  Arbeitsbaum ist das der Normalfall und nicht die Ausnahme.
+  BELEG, dass es kein Einzelfall ist: zwei Commits von heute sagen es woertlich — 4654687f und
+  2f8cf32d. Der Evaluator hat es aus der anderen Richtung geloest und in 79bb3030 die
+  IN_ARBEIT-Zeilen des Generators als BENANNTEN Beifang mitgenommen. Und ich selbst sitze seit
+  fuenf Wachrunden in derselben Klemme: dieser Befund lag vorgemerkt, weil docs/STATUS.md
+  durchgehend fremde Arbeit trug. Drei Rollen, ein Abend, dieselbe Wand.
+  MEIN ANTEIL, ausdruecklich: ich habe den Befund in zwei Wachmeldungen an Yama als
+  §3-Verletzung des Generators bezeichnet. Das war zu stark. Ich hatte den Zustand an drei
+  Staenden gemessen, aber die Commit-BOTSCHAFT nicht gelesen, in der die Erklaerung stand — die
+  Bauform gemessen und die Sache nicht (H-9). Hiermit richtiggestellt.
+  WAS ICH NICHT ENTSCHEIDE: welche der drei Regeln nachgibt. §1 behaelt Aenderungen an
+  docs/ARBEITSREGELN.md Yama vor. Denkbar waere, den benannten Beifang fuer reine
+  Zustandszeilen ausdruecklich zu erlauben (das taeten dann alle offen statt jeder anders), oder
+  §3 auf den Arbeitsbaum zu beziehen und E1 nur fuer Bau-Aussagen zu fuehren. Beides ist eine
+  Prozessentscheidung, keine Messung.
+  KEIN ZUSTAND UND KEIN BALL GEAENDERT: A-29 bleibt ABGENOMMEN beim Release-Pruefer."
+regelkollision_ballbesitz: planner  # zur Vorlage an Yama; §1 behaelt die Regelaenderung ihm vor
 ```
 
 ```yaml
@@ -10656,8 +10690,52 @@ was_der_evaluator_zuerst_pruefen_sollte: "Das MUSTER, nicht das Ergebnis. Ein Za
 
 ```yaml
 auftrag: "W-06"
-zustand: IN_ARBEIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+bau_sha: a05d6d12
+bau_bericht: "generator 13.08. Alle ACHT Kriterien belegt, sieben Blaetter gefuellt, jede Zahl AM
+  BAU-STAND gemessen. Kein Produktivcode; Suite 1750 gruen und unveraendert.
+  ZUR AUFTRAGSWAHL, weil Yamas Einwand heute den Kurs setzt: unter zehn freien P2-Auftraegen war
+  A-33 der einzige BAU — aber A-33 gehoert zum Tor- und Statusblatt-Strang, den Yama gerade
+  geruegt hat. Die Werkzeugkasten-Ablesungen SIND die Kernaufgabe, also schlaegt seine
+  Kurskorrektur meinen stehenden Tie-Break 'BAU vor Ablesung'. Und unter den Ablesungen die
+  genommen, die eine STUFE SCHLIESST: von zwoelf Stufe-6-Auftraegen sind neun BETRIEBSBESTAETIGT,
+  offen sind nur W-06, W-31 und W-37.
+  DIE ZAHLEN DES BLATTES TRAGEN, selbst nachgezaehlt: 78 + 104 + 173 = 355 Zeilen; 3 + 6 + 1 = 10
+  Ausfuhren, jede mit Fundstelle.
+  W-06-1 Der id-Remap steht WOERTLICH in 1-ZWECK, mit dem Schadensfall daneben: wer ihn bricht,
+  haengt die Oeffnungen des Duplikats an die Waende des URSPRUNGSgeschosses — beim Duplizieren
+  faellt das NICHT auf, sondern erst wenn unten eine Wand geaendert wird. Dazu die gebaute
+  Haertung (:67-71): haengt eine Oeffnung an einer nicht mitkopierten Wand, wird die Referenz
+  FALLENGELASSEN statt auf die alte id zu zeigen — eine sichtbare Luecke statt eines stillen
+  Fehlers.
+  W-06-4 Der stille AUF-43-Befund steht drin, und das Format von hoehenLabel ist AM CODE gelesen.
+  ZWEI ZEICHEN HABE ICH ZUERST BEHAUPTET UND DANN GEMESSEN: das Minus ist U+2212 und NICHT der
+  Bindestrich U+002D, das Trennzeichen U+202F als Escape. Ein Bindestrich und ein Minus sehen in
+  jedem Blatt gleich aus; wer sie in einem Test vergleicht, misst sonst die Schriftart.
+  W-06-3 Die Generics als AUSSAGE: die Geometrieschicht arbeitet gegen NodeBasis (vier Felder) und
+  RoofBasis (zwei), und BEIDE sind absichtlich NICHT exportiert — was sie nicht kennt, kann sie
+  nicht anfassen. Die Trennung steht im Typsystem und nicht in einer Absprache.
+  W-06-5 Die Waechter mit Zugriffsart, und die betonte Stelle ist belegt: geschossFlaeche.test.ts
+  IMPORTIERT das Datenmodul (:16) und liest die Komponente als QUELLE (:27). Wer mit einem
+  Import-Muster nach GeschossFlaeche sucht, findet NULL und schliesst auf ungetestet — gemessen
+  ist sie STRENGER verriegelt: :111 erzwingt GENAU EINE Verwendung, :125 schliesst eine ZWEITE
+  DEFINITION aus. Ein Import belegt Benutzung; diese zwei Zeilen belegen Einmaligkeit. UND DER
+  DRITTE WAECHTER HEISST GAR NICHT NACH DEM MODUL: paletteNavigation.test.ts importiert stapel
+  (:18, gefuettert :45). Ueber Dateinamen gesucht findet man zwei von drei.
+  W-06-7 F-032 ist eine FORMEL und keine Sperre, mit der Zahl gemessen: VIER Werkzeuge tragen sie
+  im Register — W-12 (:38), W-16 (:48), W-06 (:54), W-14 (:67) — alle vier auf LEER. Das sieht wie
+  ein gemeinsamer Blocker aus und ist keiner. Fundstelle als ANKER, nicht als Zeilennummer, weil
+  A-34 heute genau daran gemessen hat.
+  W-06-8 md5-Gegenprobe ueber ALLE 33 Werkzeuge und ALLE sieben Blaetter: W-06 ist auf jedem
+  eindeutig. Je Blatt gibt es EINEN doppelten Hash, und den habe ich AUFGELOEST statt nur gezaehlt:
+  er gehoert ACHT Werkzeugen mit unberuehrter Vorlage.
+  NEBENBEFUND FUER DEN PLANNER, geprueft und nicht vermutet: sechs dieser acht sind GENAU die
+  offenen Stufe-B-Auftraege (W-03/1, W-10/1, W-12/1, W-14/1, W-16/1, W-18/1). Die zwei restlichen
+  sind W-17 und W-19 — und die haben UEBERHAUPT KEINEN Auftrag. Das ist die einzige Luecke im
+  Vorrat, die ich beim Messen gefunden habe.
+  E1 auf allen sieben Dateien GLEICH. must_preserve in DREI Richtungen einzeln: alle leer.
+  resources/ im Commit: 0."
+ballbesitz: evaluator
 titel: "Geschoss verwalten — drei Schichten, ein ID-Remap, und ein Wert der nie erschien"
 basis_sha: acb3d494
 spur: A
