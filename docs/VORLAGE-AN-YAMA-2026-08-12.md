@@ -1373,3 +1373,70 @@ empfehle den ersten:*
 Entscheidungsposten. **Ich habe die Fahrplan-Einordnung entsprechend gezogen** — sie stand zweimal zu
 klein da, und das ist beim vierten Mal an einem Tag ein Muster, das ich benannt habe statt es zu
 glätten.*
+
+---
+
+## 17 · NEU am 13.08.: die Prüfbühne hat keinen Boden — und das ist die dringendste Frage
+
+**Sie stand bisher in keiner Vorlage**, *nur in Commit-Botschaften. Der Release-Prüfer hat sie gestellt,
+nachdem er **vier Befunde zu einem zusammengefasst** hat. Ich habe die Lage selbst nachgemessen, weil
+sein Wort kein Beleg ist — und sie hat sich seitdem **verändert**, was den Punkt schärft statt ihn zu
+entschärfen.*
+
+### Was ich gerade gemessen habe (13.08., nur lesend, `ticket_testing` ausdrücklich benannt)
+
+```text
+ticket_testing
+  users                 2     id 269  a24-abnahme@example.test
+                              id 268  w052-eval@example.test
+  hausplaner_documents  1
+  plan_uploads          0
+
+Testdateien mit RefreshDatabase:  70 von 137
+Die zwei Browserskripte melden sich mit:
+  scripts/a24-browserabnahme.mjs:17   a24-abnahme@example.test
+  scripts/w052-browserabnahme.mjs:60  a24-abnahme@example.test
+```
+
+> **Im Moment funktioniert es** — *der Nutzer, den beide Skripte erwarten, ist da, und ein Dokument
+> auch. **Der Generator hat ihn gesät, als er die W-05/2-Browserabnahme gefahren hat.** Als der
+> Release-Prüfer vor wenigen Stunden gemessen hat, stand dort **ein** Nutzer und **null** Dokumente,
+> und die Abnahme war unmöglich.*
+
+> ***Genau das ist der Befund: die Bühne ist nicht dauerhaft leer, sie ist unberechenbar.*** *70 von 137
+> Testdateien laufen mit `RefreshDatabase`. **Der nächste Suite-Lauf räumt beides wieder weg**, und die
+> nächste Browserabnahme fällt aus — dieselbe Runde von vorn: eine Rolle sät, eine Suite räumt, die
+> übernächste Rolle findet eine leere Bühne.*
+
+### Was daran vier Befunde auf einmal sind
+
+```text
+(1) Mein doc-36-Befund vom 12.08.: jeder RefreshDatabase-Lauf leert
+    ticket_testing — bei 70 von 137 Testdateien.
+(2) A-17s „Raeum-Posten": ein Probenutzer sei noch da und Raeumen brauche
+    Yamas Freigabe. GEGENSTANDSLOS — die Suite hat ihn laengst geraeumt,
+    ohne dass jemand etwas tun musste.
+(3) W-05/2 war RELEASE_BLOCKED, weil 0 Dokumente keine Browserabnahme
+    zulassen. Der Generator hat es geraeumt, indem er saete.
+(4) Zwei Browserskripte tragen ein Testkennwort auf einen Nutzer, der
+    zwischen zwei Suite-Laeufen existiert und dann nicht.
+```
+
+### Deine Entscheidung, in einem Satz
+
+**Bekommt die Prüfbühne einen dauerhaften Boden — einen Seed mit Prüfnutzer und Prüfobjekt, der jeden
+Suite-Lauf überlebt?**
+
+*Dafür spricht: **drei der vier Befunde verschwinden auf einmal**, Laravel hat Seeder genau dafür, und
+das Muster existiert im Haus (`fixtures/studioFixtures.ts`). Dagegen spricht: ein Seed ist Code, der
+gepflegt werden will, und bei falschem Schnitt entsteht eine **zweite Wahrheit** neben den Fixtures.*
+
+> ***Warum es nicht ohne dich geht:*** *es ist keine Fachfrage, sondern eine Entscheidung über die
+> **Prüfinfrastruktur** — und sie berührt deine Schutzgrenze „Tests und Test-Seeds laufen nur gegen
+> eindeutig benannte Testdatenbanken". **Ein Seed, der bei jedem Lauf schreibt, ist genau die Art
+> Automatik, die nicht still eingeführt wird.***
+
+**Was in der Zwischenzeit gilt, damit nichts steht:** *wer eine Browserabnahme braucht, sät sich seinen
+Nutzer selbst und belegt es mit §15 (vorher/nachher). **Das funktioniert** — der Generator hat es heute
+zweimal so gemacht. Es kostet nur jedes Mal denselben Handgriff, und wer ihn vergisst, meldet einen
+ENV-Blocker statt einen Befund.*
