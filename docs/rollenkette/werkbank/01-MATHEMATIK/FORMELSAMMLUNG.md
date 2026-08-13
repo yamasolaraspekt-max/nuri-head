@@ -1009,12 +1009,16 @@ eigener Normlage (DIN 5034-2, VDI 6007-3, DIN EN 17037, DIN EN 12831, DIN V 1859
 Datenquellen. Eine Vermischung hätte die F-Reihe unlesbar gemacht. **Der Grundsatz „eine Formel
 steht genau einmal" gilt weiter — hier steht deshalb kein einziger Formelrumpf, nur der Verweis.**
 
-**Inhalt in einem Satz:** `S-001…S-006` Sonnenstand (rechnen) · `S-010…S-011` Einstrahlungs-
-angebot (**messen, nicht rechnen**) · `S-020…S-022` Transposition auf die geneigte Fläche ·
-`S-030…S-032` Verschattungsgeometrie (**das kann nur die Insel**) · `S-040` elektrische Wirkung
-(**nicht-linear — 10 % Fläche sind nicht 10 % Verlust**) · `S-050…S-051` Zeit und Jahreszeiten ·
-`S-060…S-062` Anwendungsfall, darunter der Befund, dass **DIN EN 12831 solare Gewinne bewusst
-nicht ansetzt**.
+**Inhalt in einem Satz:** `S-001…S-006` Sonnenstand (rechnen) · `S-007…S-009` **Sonnenbahn:
+Auf-/Untergang, Tageslänge, Jahresgang** — mit der Zahl, die die Alltagsvorstellung widerlegt:
+*die Sonne geht nur an den Tagundnachtgleichen im Osten auf, im Juni im Nordosten (50,8°), im
+Dezember im Südosten (129,2°)* · `S-010…S-011` Einstrahlungsangebot (**messen, nicht rechnen**) ·
+`S-020…S-022` Transposition auf die geneigte Fläche · `S-030…S-032` Verschattungsgeometrie
+(**das kann nur die Insel**) · `S-040` elektrische Wirkung (**nicht-linear — 10 % Fläche sind
+nicht 10 % Verlust**) · `S-050…S-051` Zeit und Jahreszeiten · `S-060…S-062` Anwendungsfall,
+darunter der Befund, dass **DIN EN 12831 solare Gewinne bewusst nicht ansetzt** ·
+`S-070…S-078` **Simulation über Zeiträume** (Tag/Woche/Monat/Jahr) mit der Verschattungsmatrix
+und der Aggregationsregel *Anteile werden ertragsgewichtet, nie ungewichtet gemittelt*.
 
 *Dieser Abschnitt steht am Dateiende und nicht bei den Gruppen — auf diese Datei zeigen
 **48 Zeilenverweise** `FORMELSAMMLUNG.md:<zeile>`, und ein Einschub weiter oben hätte jeden

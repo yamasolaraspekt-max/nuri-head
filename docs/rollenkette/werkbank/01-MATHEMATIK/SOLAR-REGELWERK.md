@@ -28,8 +28,9 @@ oder etwas, das es schon gibt.
 | 3 | **Transposition** | Wie viel davon trifft die geneigte Fläche? | Modell (isotrop/Hay/Perez) | **JA oder einkaufen** |
 | 4 | **Verschattungsgeometrie** | Was steht wann im Weg? | **3D-Modell des Gebäudes** | **JA — und nur die Insel kann es** |
 | 5 | **Elektrische Wirkung** | Was kostet der Schatten an Ertrag? | Modul-/Strangtopologie | **JA, aber nicht-linear** |
+| 6 | **Simulation über Zeiträume** | Tag, Woche, Monat, Jahr — was kommt zusammen? | Schleife um 1–5 | **JA** — kein neuer Rechenweg, aber drei Fallen |
 
-**Die Schichten 1, 4 und 5 sind Rechnung. Schicht 2 ist Messung. Schicht 3 ist beides.**
+**Die Schichten 1, 4, 5 und 6 sind Rechnung. Schicht 2 ist Messung. Schicht 3 ist beides.**
 
 **Und daraus folgt die Zuständigkeit, die meine eigene erste Antwort auf W-19 berichtigt:**
 Ich hatte am 13.08. geschrieben, Verschattung werde *„eingekauft, nicht gerechnet"*. **Das
@@ -111,6 +112,70 @@ Referenz ist und PV*SOL sie neben NREL SPA ausdrücklich als wählbares Verfahre
   Deutschland unmöglich) oder `φ → ±90°` (Pol). Für Deutschland (φ ≈ 47°…55°) unkritisch,
   **aber die Fallunterscheidung nach WOZ ist Pflicht** — ohne sie ist der Nachmittag am
   Vormittag gespiegelt, und der Schatten fällt auf die falsche Seite des Hauses.
+
+### S-007 · Sonnenauf- und -untergang, Tageslänge
+- **Zweck:** Der Rahmen jedes Tageslaufs — **wann beginnt und endet die Rechnung überhaupt**
+- **Eingabe:** Breite φ, Deklination δ (S-002)
+- **Formel:**
+  `cos ω_s = −tan φ · tan δ` → Halbtagsbogen ω_s in Grad
+  Tageslänge `T = 2 · ω_s / 15°/h` [h]
+  Aufgang `WOZ_auf = 12 h − ω_s/15` · Untergang `WOZ_unter = 12 h + ω_s/15`
+- **Ausgabe:** Auf-/Untergangszeit in WOZ, Tageslänge in Stunden
+- **Grenzfall:** **`|tan φ · tan δ| > 1` → die Sonne geht nicht auf oder nicht unter**
+  (Polarnacht/Polartag). **In Deutschland (φ ≤ 55°) tritt das nie ein**, aber die Formel muss
+  es abfangen — `arccos` eines Werts außerhalb [−1, 1] ist sonst ein Absturz, kein Ergebnis.
+  Und: **das ist der geometrische Horizont.** Refraktion und Sonnenscheibendurchmesser
+  verschieben den *sichtbaren* Auf-/Untergang um ca. **4 Minuten** nach außen — für Ertrag
+  bedeutungslos, für eine Uhrzeitanzeige nicht.
+
+### S-008 · Auf- und Untergangs-**Azimut** — „im Osten" stimmt an genau zwei Tagen im Jahr
+- **Zweck:** **Aus welcher Richtung** kommt die erste und geht die letzte Sonne — die Größe,
+  die entscheidet, ob ein Ost- oder Westdach überhaupt Morgen-/Abendsonne bekommt und ob ein
+  Schattenwerfer im Nordosten je eine Rolle spielt
+- **Formel:** S-006 mit `γs = 0` eingesetzt:
+  `cos α = −sin δ / cos φ` → Aufgang `αs = 180° − α`, Untergang `αs = 180° + α`
+- **Eckwerte für φ = 51° (Mitteldeutschland), selbst nachgerechnet:**
+
+| Tag | δ | Aufgang | Untergang | Tageslänge | Mittagshöhe |
+|---|---|---|---|---|---|
+| **21.06.** Sommersonnenwende | +23,44° | **50,8° = NORDOST** | **309,2° = NORDWEST** | **16,32 h** | 62,4° |
+| **21.03. / 23.09.** Tagundnachtgleiche | 0° | **90,0° = OST** | **270,0° = WEST** | 12,00 h | 39,0° |
+| **21.12.** Wintersonnenwende | −23,44° | **129,2° = SÜDOST** | **230,8° = SÜDWEST** | **7,68 h** | 15,6° |
+
+- **Das ist der praktisch folgenreichste Absatz dieses Dokuments:**
+  1. **Die Sonne geht nur an den Tagundnachtgleichen im Osten auf.** Im Sommer geht sie in
+     Deutschland **nordöstlich** auf und **nordwestlich** unter — sie steht morgens und abends
+     **hinter** dem Haus. Im Winter läuft sie in einem schmalen Bogen von **SO nach SW**.
+  2. **Der Azimutbereich schwankt über das Jahr um 78,4°** (50,8° … 129,2°). **Ein Ostdach
+     bekommt im Juni früh Sonne und im Dezember gar keine** — nicht weil es verschattet wäre,
+     sondern weil die Sonne dort nicht steht.
+  3. **Ein Schattenwerfer im Nordosten oder Nordwesten ist ausschließlich im Sommerhalbjahr
+     relevant.** Wer ihn am 21.12. prüft, findet nichts — und übersieht ihn.
+  4. **Umgekehrt: Verschattung aus Süd trifft den Winter am härtesten**, weil die Sonne dort
+     nur 15,6° hoch steht (S-051) und jedes Hindernis einen 3,6-fach so langen Schatten wirft.
+- **Grenzfall:** Die Tabelle gilt für **φ = 51°**. Zwischen Flensburg (55°) und dem Bodensee
+  (47,5°) verschiebt sich alles spürbar — Tageslänge am 21.06. rund **17,3 h** im Norden gegen
+  **15,8 h** im Süden. **Die Breite ist ein Operand, kein Näherungswert.**
+
+### S-009 · Der Jahresgang der Bahn — und die Asymmetrie, die niemand erwartet
+- **Zweck:** Zusammenhang der Tagesbögen über das Jahr — die Grundlage jeder Darstellung
+- **Die Bahnschar:** Alle Tagesbögen sind zueinander **parallel verschobene Kreise**; ihre Höhe
+  ist allein von δ bestimmt (S-002), also von der Jahreszeit. Zwischen Sommer- und
+  Wintersonnenwende liegen **2 × 23,44° = 46,9°** Mittagshöhenunterschied — bei φ = 51° also
+  62,4° gegen 15,6°. **Der Sonnenstand im Winter ist ein Viertel so hoch wie im Sommer.**
+- **⚠ Die Asymmetrie, die fast jede selbstgebaute Darstellung falsch macht:** **Die Bahn ist
+  symmetrisch zur WAHREN Ortszeit, nicht zur Uhr.** Weil die Zeitgleichung (S-003) über ±16
+  Minuten schwankt, fallen **frühester Sonnenuntergang und spätester Sonnenaufgang NICHT auf
+  den 21.12.** — der früheste Untergang liegt rund **zehn Tage vor**, der späteste Aufgang
+  rund **zehn Tage nach** der Wintersonnenwende. **Wer Auf-/Untergang aus dem symmetrischen
+  Halbtagsbogen um 12:00 Uhr Ortszeit rechnet, statt über WOZ, produziert genau diesen Fehler.**
+- **Grenzfall:** Der Jahresgang ist **nicht sinusförmig in der Tageslänge**. Um die
+  Sonnenwenden ändert sie sich kaum (Tage „stehen"), um die Tagundnachtgleichen am
+  schnellsten — bis zu **4 Minuten pro Tag**. Wer zwischen Stützstellen linear interpoliert,
+  trifft im März und September daneben.
+- **Darstellungsempfehlung:** **Sonnenbahndiagramm** (Azimut waagerecht, Höhe senkrecht, je eine
+  Kurve pro Stichtag aus S-051) — und darüber die Verschattungsmatrix als **Iso-Shading-Diagramm**
+  (S-073). Damit steht in **einem** Bild: wann im Jahr, zu welcher Tageszeit, wie stark verschattet.
 
 ---
 
@@ -306,6 +371,153 @@ Direkter Einfluss auf kWh. Alle Schichten 1–5 sind relevant.
 
 ---
 
+## Schicht 6 — Simulation über Zeiträume
+
+> **Yamas Auftrag vom 13.08.:** *„für Ertragsprognose und Verschattungsanalyse brauchen wir auch
+> eine Simulation für bestimmte Zeiträume — beliebiger Tag im Jahr, Monat, oder über die
+> gesamte Woche, Monat, Jahr."*
+>
+> **Die gute Nachricht zuerst: das ist KEIN neuer Rechenweg.** Ein Zeitraum ist eine
+> **Schleife** um die Schichten 1–5. Was neu dazukommt, sind **drei** Dinge, und alle drei sind
+> Fallen: **wie man aggregiert** (S-074), **wie man den Rechenaufwand beherrscht** (S-073), und
+> **welches Wetterjahr man nimmt** (S-077).
+
+### S-070 · Der Simulationskern — ein Zeitschritt
+- **Zweck:** Die kleinste Einheit, aus der jeder Zeitraum zusammengesetzt wird
+- **Ablauf je Zeitschritt `t`:**
+  ```
+  1  Sonnenstand      γs(t), αs(t)                        S-001…S-006
+  2  ABBRUCH wenn     γs ≤ 0  (Nacht → Ertrag 0, kein Schatten, keine Rechnung)
+  3  Verschattung     f_schatt(γs, αs) ∈ [0,1] je Modul   S-030…S-032
+  4  Einstrahlung     GHI(t), DNI(t), DHI(t) aus Wetterreihe   S-010
+  5  Transposition    POA(t) = f(AOI, β, γF, Albedo)      S-020…S-021
+  6  Verschattung an  POA_direkt · (1 − f_schatt) + POA_diffus (siehe Grenzfall!)
+  7  Elektrisch       Ertrag(t) unter Verschaltungsannahme     S-040
+  ```
+- **Ausgabe je Zeitschritt:** `γs`, `αs`, `f_schatt`, `POA`, `Ertrag`
+- **Grenzfall — Schritt 6 ist die Stelle, an der die meisten Simulationen falsch werden:**
+  **Der Verschattungsfaktor wirkt auf die DIREKTstrahlung, nicht auf die gesamte POA.**
+  `POA · (1 − f_schatt)` ist **falsch** und rechnet den Verlust zu groß (S-030). Richtig ist,
+  nur den Direktanteil zu mindern; der Diffusanteil bleibt weitgehend, weil der Himmel
+  weiterhin sichtbar ist.
+
+### S-071 · Zeitraumtypen — vier, und sie haben verschiedene Zwecke
+| Typ | Zeitschritte | wofür er taugt | wofür **nicht** |
+|---|---|---|---|
+| **Zeitpunkt** | 1 | Schattenbild „jetzt", Anschauung | jede Zahl |
+| **Tagesgang** (beliebiger Tag) | ~50–1.440 | **Schattenwanderung**, Verschattungsprüfung, Darstellung | Ertragsprognose |
+| **Woche / Monat** | 168 / ~720 | Teilsumme, saisonaler Vergleich | Jahresaussage |
+| **Jahr** | **8.760** (Schaltjahr 8.784) | **Ertragsprognose**, Verschattungsverlust in % | Momentaussagen |
+- **Grenzfall:** **Ein Tageslauf ist keine Prognose, und ein Jahreslauf ist keine Anschauung.**
+  Yamas vier Zeiträume sind **nicht dieselbe Rechnung in verschiedener Länge**, sondern
+  **verschiedene Fragen**: der Tag beantwortet *„liegt Schatten auf dem Modul, und wann?"*,
+  das Jahr beantwortet *„was kostet er?"*. **Beide Ausgaben müssen unterschiedlich aussehen** —
+  der Tag als Verlauf, das Jahr als Summe mit Monatsaufteilung.
+
+### S-072 · Zeitschrittweite je Zweck
+| Schrittweite | Schritte/Jahr | wofür |
+|---|---|---|
+| **1 min** | 525.600 | Animation der Schattenkante; **nie** für Jahresläufe |
+| **15 min** | 35.040 | Nahverschattung mit scharfen Kanten (Kamin, Mast, Gaubenwange) |
+| **1 h** | **8.760** | **Standard** — alle Ertragsrechner, und die Auflösung der Wetterdaten |
+| **Monatsmittel** | 12 | Überschlag, Angebotsvergleich |
+- **Grenzfall — die Schrittweite darf die Datenlage nicht überholen:** Wetterreihen liegen als
+  **Stundenwerte** vor. Wer mit 1-Minuten-Schritten simuliert, **interpoliert Wetter, das er
+  nicht hat** — die Verschattungsgeometrie wird feiner, die Ertragsaussage nicht besser.
+  **Feine Schritte sind für die Geometrie richtig und für den Ertrag Scheingenauigkeit.**
+  → Empfehlung: **Geometrie fein, Ertrag stündlich** — das ist genau die Trennung, die S-073 möglich macht.
+
+### S-073 · **Die Verschattungsmatrix — der Trick, der Jahresläufe erst bezahlbar macht**
+- **Zweck:** Verschattung für 8.760 Zeitschritte berechnen, ohne 8.760 Geometrieläufe
+- **Die Einsicht:** **Der Verschattungsfaktor hängt NUR vom Sonnenstand ab, nicht vom Wetter
+  und nicht vom Datum.** Zwei Zeitpunkte mit demselben `(γs, αs)` haben **denselben** Schatten —
+  egal ob 15. Februar oder 27. Oktober, egal ob bewölkt oder klar.
+- **Verfahren (so löst es PVsyst):** Den Faktor **einmal** über ein Raster in Sonnenhöhe und
+  Azimut vorberechnen — **PVsyst nutzt 10° in der Höhe und 20° im Azimut** — und im Simulations-
+  lauf je Zeitschritt nur **interpolieren**. PVsyst nennt das den *„Fast calculation"*-Modus;
+  der Gegenmodus *„Slow calculation"* rechnet die Geometrie in jedem Schritt neu und vermeidet
+  den Interpolationsfehler.
+- **Größenordnung:** Ein Raster mit 20°/10° hat ≈ 18 × 9 = **162 Stützstellen**, von denen in
+  Deutschland nur die tatsächlich durchlaufenen Bahnen belegt werden. Gegenüber 8.760 vollen
+  Geometrieläufen ist das rund **eine Größenordnung weniger Arbeit** — und der Lauf lässt sich
+  **wiederholen** (anderes Wetterjahr, andere Modulbelegung), **ohne die Geometrie erneut zu rechnen**.
+- **Das Nebenprodukt ist die beste Darstellung, die es für dieses Thema gibt:** dieselbe Matrix,
+  über das Sonnenbahndiagramm gelegt, ergibt das **Iso-Shading-Diagramm** — Linien gleichen
+  Verschattungsfaktors auf den Sonnenbahnen. **Ein Bild, das gleichzeitig beantwortet:
+  wann im Jahr, zu welcher Tageszeit, wie stark.**
+- **Grenzfall:** **Bei scharfen Schattenkanten ist die Interpolation zwischen Stützstellen der
+  Fehler.** Ein Kamin erzeugt einen harten Sprung von 0 auf 1 — 10°-Schritte glätten den weg.
+  **Für kleine Anlagen mit wenigen Schattenwerfern ist die volle Rechnung je Schritt vorzuziehen**
+  (PVsysts eigene Empfehlung: *„for not too big systems"*). **Die Matrix ist eine Optimierung
+  für große Systeme, kein Genauigkeitsgewinn.**
+
+### S-074 · **Aggregation — hier entsteht die häufigste Falschaussage**
+- **Zweck:** Aus Zeitschritten eine Zahl für Woche/Monat/Jahr machen
+- **Die Regel:** **Energie wird summiert. Anteile werden ertragsgewichtet. Nichts wird
+  ungewichtet gemittelt.**
+  ```
+  Ertrag_Zeitraum   = Σ Ertrag(t)                                  [kWh]
+  Einstrahlung      = Σ POA(t) · Δt                                [kWh/m²]
+  Verschattungs-
+  verlust_Zeitraum  = 1 − ( Σ Ertrag_mit(t) / Σ Ertrag_ohne(t) )   [%]   ← RICHTIG
+                    ≠  Mittelwert( f_schatt(t) )                          ← FALSCH
+  ```
+- **Warum das der Kernfehler ist, an Yamas eigenem Fall:** Ein Kamin verschattet im **Dezember**
+  30 % der Fläche und im **Juni** 2 %. Der ungewichtete Mittelwert sagt **16 %**. Aber der
+  Dezember trägt in Deutschland nur einen **Bruchteil** des Jahresertrags — ertragsgewichtet
+  bleiben vielleicht **4 %** übrig. **Die ungewichtete Zahl ist um das Vierfache zu hoch, und
+  sie ist die Zahl, die ein naiv gebautes Werkzeug ausgibt.**
+- **Der saubere Weg ist ein Doppellauf:** einmal **mit** und einmal **ohne** Schattenwerfer,
+  Differenz der **Ertragssummen**. Das ist die einzige Definition von „Verschattungsverlust",
+  die stimmt — und sie kostet zwei Läufe. **Mit der Matrix aus S-073 ist der zweite fast gratis.**
+- **Grenzfall:** **Nachtstunden gehören nicht in den Nenner.** `γs ≤ 0` heißt kein Ertrag und
+  keine Verschattung — wer über alle 8.760 Stunden mittelt statt über die Sonnenstunden,
+  halbiert jede Prozentzahl.
+
+### S-075 · Was ein Lauf zurückgeben muss
+- **Immer mitzuliefern, sonst ist das Ergebnis nicht prüfbar:**
+  Zeitraum und Schrittweite · Zahl der Zeitschritte **mit `γs > 0`** · Wetterquelle und
+  Zeitbezug (**TMY oder reales Jahr, welches**) · Albedo · Verschaltungsannahme (S-040) ·
+  **ob die Matrix (S-073) benutzt wurde und mit welcher Rasterweite**
+- **Grenzfall:** **Eine Ertragszahl ohne diese Angaben ist nicht nachrechenbar und damit keine
+  Prognose, sondern eine Behauptung.** Zwei Läufe mit verschiedenem Wetterjahr liefern
+  verschiedene Zahlen — ohne Angabe des Jahres ist der Unterschied unerklärbar.
+
+### S-076 · Zeitrechnung im Jahreslauf — drei Stolperstellen
+1. **Sommerzeit.** Im Jahreslauf springt die lokale Uhr zweimal. **Intern wird durchgehend in
+   WOZ (oder UTC) gerechnet**, die lokale Zeit ist reine Anzeige. Wer in Ortszeit schleift,
+   erzeugt eine doppelte und eine fehlende Stunde — und beide fallen in die Ertragsstunden.
+2. **Schaltjahr.** 8.784 statt 8.760 Stunden. Für Summen relevant, für S-001 nicht (dort bleibt
+   der Nenner 365).
+3. **Der Zeitstempel eines Stundenwerts.** Ein Stundenwert kann für den **Anfang**, die **Mitte**
+   oder das **Ende** der Stunde stehen. **Ein halbstündiger Versatz ist ein Fehler von 7,5° im
+   Stundenwinkel** — morgens und abends entscheidet das über verschattet oder nicht.
+   **Die Konvention der Wetterquelle ist zu übernehmen, nicht zu raten.**
+
+### S-077 · Welches Wetterjahr — TMY, nicht ein reales
+- **TMY** (*Typical Meteorological Year*) ist ein **künstliches Jahr aus Stundenwerten**, bei
+  dem die repräsentativsten Monate aus einer langen Messreihe zusammengesetzt werden — PVGIS
+  bildet es aus dem Zeitraum **2005–2020**. Es bildet **langfristig typische Bedingungen** ab.
+- **Regel:** **Für eine Prognose gilt TMY. Ein einzelnes reales Jahr ist keine Prognose,
+  sondern ein Rückblick** — und die Jahre schwanken erheblich (die deutschen Jahressummen
+  1.112 im Jahr 2024 gegen 1.187 kWh/m² im Jahr 2025, S-011). **PVGIS gibt die zu erwartende
+  Schwankung zwischen zwei Jahren selbst mit aus; diese Angabe gehört in jede Ausgabe.**
+- **Grenzfall:** **Ein reales Jahr ist richtig, wenn eine bestehende Anlage nachgerechnet wird**
+  (Soll-Ist-Vergleich). Dann ist TMY falsch. **Der Zweck entscheidet, und der Zweck gehört in
+  die Ausgabe** (S-075).
+
+### S-078 · Was die Simulation nicht darf
+1. **Nicht vom Tag aufs Jahr hochrechnen.** Ein Tageslauf × 365 ist keine Jahresprognose —
+   weder Sonnenstand noch Wetter noch Verschattung sind über das Jahr konstant.
+2. **Nicht Monatsmittel verschatten.** Verschattung ist eine Funktion der **Tageszeit**; ein
+   Monatsmittelwert hat keine Tageszeit mehr (S-050).
+3. **Keine Verschattungszahl ohne den Doppellauf** (S-074). „Geschätzter Verschattungsverlust"
+   ohne Referenzlauf ohne Schattenwerfer ist geraten.
+4. **Nicht die Matrix ohne Vermerk benutzen.** Sie ist eine Näherung mit benannter Rasterweite
+   (S-073) — sie gehört in die Ausgabe, nicht in die stille Voreinstellung.
+
+---
+
 ## Was das für ticket konkret heißt
 
 ### Die Naht, vollständig benannt
@@ -356,6 +568,16 @@ fachFlaechen.ts:358                  →  Anzeige „Verschattungsverlust %"
   [Comparison of Modelled and Measured Tilted Solar Irradiance](https://d-nb.info/1214330517/34)
 - **PVGIS-Horizontdatei: Format, Auflösung, Ostbeginn gegen den Uhrzeigersinn, tan α** —
   [photovoltaik-web: Verschattungsberechnung mit Horizontdatei](https://www.photovoltaik-web.de/photovoltaik/ertragsprognose/pvgis/verschattungsberechnung-mit-horizontdatei)
+- **Verschattungsmatrix: Vorberechnung in 10°-Höhen- und 20°-Azimutschritten, Interpolation,
+  „Fast" gegen „Slow calculation"** —
+  [PVsyst: Shading factor table](https://www.pvsyst.com/help/project-design/shadings/calculation-and-model/shading-factor-table.html) ·
+  [PVsyst: Shading factor (Definition 0…1)](https://www.pvsyst.com/help/glossary/shadings/shading-factor.html)
+- **Iso-Shading-Diagramm: Linien gleichen Verschattungsfaktors über den Sonnenbahnen** —
+  [PVsyst: Iso-shading diagram](https://www.pvsyst.com/help/project-design/shadings/calculation-and-model/iso-shading-diagram.html)
+- **TMY: künstliches Jahr aus Stundenwerten, PVGIS aus 2005–2020, Jahresschwankung wird
+  mitgegeben** —
+  [PVGIS TMY-Generator (JRC)](https://joint-research-centre.ec.europa.eu/photovoltaic-geographical-information-system-pvgis/pvgis-tools/pvgis-typical-meteorological-year-tmy-generator_en) ·
+  [Solargis: Time Series and TMY data](https://kb.solargis.com/docs/time-series-and-tmy-data)
 - **Nicht-Linearität, Bypassdioden, Mismatch, MPPT-Schattenmanagement** —
   [Photovoltaikforum: Wie wirkt sich Verschattung auf PV-Module aus](https://www.photovoltaikforum.com/core/article/13-wie-wirkt-sich-verschattung-auf-pv-module-aus/) ·
   [photovoltaikbuero: Teilverschattung bei Solarmodulen (Messungen)](https://photovoltaikbuero.de/pv-know-how-blog/teilverschattung-bei-solarmodulen-messungen/)

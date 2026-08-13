@@ -82,7 +82,7 @@
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | **`BETRIEBSBESTAETIGT`** | – | Release `fa7547c7` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-36** Faehigkeiten-Navigation | **`BETRIEBSBESTAETIGT`** | – | Release `f1c412f9` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
-| **W-37** Rechenpanels | `BEREIT` | **Generator** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben |
+| **W-37** Rechenpanels | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben |
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 
 ### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
@@ -13193,8 +13193,57 @@ drei_verfahrensbeobachtungen_bei_mir: "Die &&-Kopplung hielt, als §18 zwischen 
 
 ```yaml
 auftrag: "W-37"
-zustand: BEREIT
-ballbesitz: generator
+zustand: CODE_FERTIG
+bau_sha: 225a7f1a
+bau_bericht: "generator 13.08. Acht Kriterien belegt, sieben Blaetter. MIT W-37 IST STUFE 6
+  VOLLSTAENDIG — jedes Werkzeug mit vorhandenem Code ist erfasst. Ordner war neu wie bei W-31.
+  DER TRAGENDE PUNKT IST EINE DEFINITION UND KEINE ZAHL, in BEIDE Richtungen gemessen:
+    ueber die SIGNATUR  (werte: Record<string,string>) -> <Eingabetyp>   ACHT
+    ueber den NAMEN     ^export function als[A-Za-z]+Eingabe\\(           SECHS
+    UEBER-Treffer des Namensmusters                                      NULL
+  Es fehlen alsBetriebsBedingung (:457) und alsArbeitsdreieck (:503) — sie heissen nach ihrer
+  SACHE und nicht nach ihrer ROLLE.
+  ZUR FORMULIERUNG DES AUFTRAGS, gemeldet statt uebergangen: W-37-1 sagt, das Namensmuster habe
+  'zwei Falsche drin' gehabt. GEMESSEN hat es NULL Ueber-Treffer — jeder Treffer IST ein Adapter,
+  es laesst nur weg. Die SUBSTANZ traegt (es sind dieselben zwei Funktionen), die FORMULIERUNG ist
+  verdreht: zwei RICHTIGE draussen, keine zwei Falschen drin. Beide Lesarten hier, Entscheidung
+  beim Evaluator. Und das macht das Muster besonders truegerisch — es steht so im Blatt: die Liste
+  sieht vollstaendig aus, jeder Eintrag darin stimmt, und trotzdem fehlen zwei.
+  MEINE EIGENEN MUSTER WAREN DABEI ZWEIMAL ZU ENG. (1) Ich fand nur VIER importierende Waechter
+  statt sechs — mein Muster verlangte das schliessende Anfuehrungszeichen direkt nach dem Pfad und
+  uebersah, dass sparrenVorbehalt und zweiEnginesSchweigen mit .ts-Endung importieren. (2) Ich
+  zaehlte enginePanel in FUENF statt sechs Dateien, weil ich die Importzeile statt der Benutzung
+  gemessen habe. Beide berichtigt; die Zahlen des Auftrags bestaetigen sich: SECHS Importeure,
+  enginePanel in ALLEN sechs, startwerte und fehlendePflichtfelder in VIEREN und immer zusammen.
+  W-37-2 A-14 mit Fundstelle: N003_VORBEHALT entsteht in sparrenBerechnung.ts:100, das
+  Ergebnisfeld sitzt in enginePanels.ts:225, und sparrenVorbehalt.test.ts haelt beides mit EINER
+  Zusage zusammen — dass der Wert die Wandlung 'as unknown as EngineErgebnis' ueberlebt UND dass
+  das Panel ein Feld dafuer fuehrt. Eines allein genuegt nicht: ein durchgereichter Wert, den kein
+  Feld anzeigt, erreicht den Anwender nicht. WER :225 ENTFERNT, BRICHT KEINE FORMEL UND KEINEN TYP
+  — die Zahl erschiene weiter, nur ohne Vorbehalt. Genau deshalb ist der eine Wächter kein Beiwerk.
+  W-37-3 SCHWERE_ANZEIGE, drei Grade, jeder mit ZEICHEN und WORT — doppelt gesichert gegen
+  Ueberlesen und gegen fehlende Farbe; unbekannter Grad faellt auf 'info'. DAZU EIN VIERTER
+  ZUSTAND, den die Tabelle nicht hat: bestanden ergibt '✓ erfuellt' und NICHT den Schweregrad. Der
+  Code sagt selbst, dass die erste Fassung bestandene Pruefungen als '✕ Fehler' zeigte und die
+  SICHTPROBE es fand, kein Test. Als Grenze benannt: 'schwere' ist die Gewichtung des FALLS und
+  nicht sein ERGEBNIS.
+  W-37-5 BEIDE KLASSEN GETRENNT: sechs ueber IMPORT, drei ueber QUELLE (stilschicht:584/:586/:603,
+  gesperrtAppWeit:41/:134, fussUndUeberlagerungen:175). 'Null Importe' ist richtig gezaehlt, der
+  Schluss 'gehoert nicht dazu' waere falsch — Ort ist nicht Wirkung.
+  W-37-7b Die Bedienflaeche steht im Blatt: :522 enginePanel, :527 startwerte, :538
+  fehlendePflichtfelder.
+  W-37-6 Die Registerzeile (REGISTER.md:124) nennt EngineFlaeche.tsx mit 196 Z., gemessen sind
+  199. NUR diese eine Zahl — kein Sammelbefund; die Berichtigung gehoert ins Register.
+  W-37-4 Acht Panels, vier Typen, alle mit Fundstelle. EIGENER FUND: acht berechne-Zeilen rufen nur
+  SIEBEN Engines. Die achte (:301, engine-heizkoerper) hat als einzige einen mehrzeiligen Rumpf,
+  und ihr Kommentar zieht die Grenze selbst: 'Nichts wird gerechnet, nichts entschieden — waere
+  hier ein eigener Grenzwert, waere es ein Defekt nach AUF-33 §3a.'
+  W-37-3/3-FORMELN: Math.* kommt in BEIDEN Modulen NULL Mal vor — 739 Zeilen ohne eine einzige
+  Rechenoperation. Das ist die Bauart und keine Luecke.
+  W-37-8 md5 ueber alle Werkzeuge und alle sieben Blaetter: W-37 auf jedem eindeutig.
+  E1 auf allen sieben Dateien GLEICH. must_preserve in DREI Richtungen: alle leer. resources/: 0.
+  Suite 1750 gruen und unveraendert."
+ballbesitz: evaluator
 titel: "Fuenf Adapter zwischen Bedienung und echten Engines — gemessen sind es acht"
 basis_sha: a94d91ac
 spur: A
