@@ -74,6 +74,84 @@ KLASSE C  BAUEN — kein Modul, gemessen
   Giebelbindung · W-40 W-41 W-42 (Fuehrung)                             (9)
 ```
 
+
+---
+
+## ⚑ MESSUNG 13.08. — DREI FUNDAMENTE SCHALTEN 14 WERKZEUGE FREI. Und W-03 ist keine Klasse C
+
+**Fund:** `resources/planner/hausplaner/app/tools/werkzeugLandkarte.ts` (211 Z., aus AUF-50 Stufe 1)
+führt **je Vertrag eine Marke**, ob das Gebäudemodell den Werkzeug-Befehl heute leistet. Gemessen:
+**41 `deckt` · 21 `fehlt` · 43 `ohne-modell` · 6 `stillgelegt` = 111**, und `WERKZEUG_LANDKARTE.length`
+ist per Test an `WERKZEUG_VERTRAEGE.length` gekoppelt (`__tests__/werkzeugLandkarte.test.ts:53`,
+**12 Tests grün, selbst gefahren**).
+
+> **Was diese Datei ist und was nicht:** *sie ist eine **Selbstauskunft**, keine unabhängige Messung —
+> H-6, Wort ≠ Beleg. Deshalb habe ich ihre zwei Kernbehauptungen **am Code nachgemessen**, bevor ich
+> darauf plane (unten). Und sie beantwortet eine **andere Frage als Klasse B**: „braucht es einen neuen
+> **Modellbefehl**", nicht „ist das **Werkzeug** gebaut". Wer sie als Bau-Stand liest, liest sie falsch.*
+
+**Die 21 `fehlt`-Marken fallen in drei Cluster — und zwei davon sind EIN Bau, nicht sechs:**
+
+```text
+CLUSTER 1 — es fehlt EIN Befehl, der MEHRERE Knoten in EINEM umkehrbaren Schritt aendert
+  betroffen: ausrichten (:62) · verteilen (:74) · teilen (:76) · verbinden (:78)
+             erkennung-bestaetigen (:110)                              = FUENF
+  AM CODE NACHGEMESSEN, nicht uebernommen:
+    MOVE_NODE   commands/applyCommand.ts:176  nimmt EIN command.nodeId
+    UPDATE_NODE                        :208  nimmt EIN command.nodeId
+    die einzigen Mehrfach-Befehle sind SET_NODES_SICHTBAR (:231) und
+    SET_NODES_GESPERRT (:239) — beide setzen nur FLAGS, keine Geometrie.
+  -> Die Behauptung der Landkarte traegt. Ein Fundament, fuenf Werkzeuge.
+
+CLUSTER 2 — es fehlen OBJEKTTYPEN, sonst deckt ADD_NODE schon
+  betroffen: pumpe (:152) · leuchte (:165) · schalter (:166) · steckdose (:167)
+             verteiler (:168) · pv-modul (:170)                        = SECHS
+  AM CODE NACHGEMESSEN: domain/scene.types.ts:178 fuehrt ELF Werte —
+    radiator, heat_pump_indoor, heat_pump_outdoor, buffer_tank,
+    hot_water_tank, battery, inverter, wallbox, furniture, sanitary, stair.
+    Keine Pumpe, keine Leuchte, kein Schalter, keine Steckdose, kein
+    Verteiler, kein PV-Modul. inverter und battery sind da — genau wie die
+    Landkarte bei pv-modul schreibt.
+  -> Die Behauptung traegt. Aber: ein neuer objectType ist eine SCHEMA-
+     Entscheidung und geht nach den Schutzgrenzen NICHT still durch.
+     Das ist eine Vorlage an Yama, kein Auftrag den ich schneide.
+
+CLUSTER 3 — die Geometrie IST DA, es fehlt der ANSCHLUSS. Das ist Klasse B
+  betroffen: trimmen (:77) · verlaengern (:79) · versatz (:80)         = DREI
+  Die Landkarte begruendet mit „braucht Schnittpunktrechnung zweier Waende".
+  DIE GIBT ES: F-004 Geradenschnitt ist gebaut, gemessen bei W-18/1 als
+  Gehrungsdetail in geometry/wallGeometry.ts:62 und :106. Und die Landkarte
+  sagt bei versatz selbst, die Geometrie liege „bereits in editierGeometrie".
+  -> Nicht bauen, ANSCHLIESSEN. Was fehlt, ist der Weg von der vorhandenen
+     Rechnung zum Modellbefehl, nicht die Rechnung.
+```
+
+### Was das für die B-Zeilen heißt — W-03 ist neu eingeordnet
+
+> **W-03 „Wand bearbeiten" war als „Indikation BAU" geführt (0 Treffer für ein Werkzeug). Das war zu
+> grob.** *Gemessen ist W-03 **gemischt**: `trimmen`, `verlaengern`, `versatz` sind **Cluster 3 —
+> Anschluss, Klasse B**, weil Schnittpunkt und Versatz-Geometrie vorhanden sind. `teilen` und
+> `verbinden` hängen an **Cluster 1** und sind erst nach dem Fundament baubar. **Ein Auftrag „W-03
+> bauen" würde also zwei verschiedene Dinge in einen Zug legen** und am fehlenden Mehrfach-Befehl
+> stehenbleiben.*
+
+> **W-14 ist damit unabhängig bestätigt.** *Meine Messung sagte „Bewegen/Duplizieren/Spiegeln gebaut,
+> **Drehen fehlt**". Die Landkarte sagt es aus dem Code heraus und nennt den Grund: `drehen` (`:63`)
+> — „`UPDATE_NODE` kann `transform.rotation` eines ObjectNode setzen, aber Wände …". **Zwei
+> unabhängige Wege, dasselbe Ergebnis** (Prüfung 7).*
+
+> **W-24 „Bodenplatte" ist kleiner als gedacht.** *Ich hatte „Indikation BAU" notiert (kein Modul,
+> „Bodenplatte" nur als Tooltip in `toolRegistry.ts:147`). Die Landkarte führt `boden` (`:117`) als
+> **`deckt` — `ADD_CEILING`**. Die **Modellseite ist da**; was fehlt, ist der Werkzeug-Anschluss.
+> Auch das rückt von C näher an B — **aber es bleibt zu messen**, weil `deckt` über den Befehl
+> spricht und nicht über die Oberfläche.*
+
+**Reihenfolge-Folgerung für die B-Session:** *die drei Fundamente sind **billiger als die 14
+Einzelwerkzeuge** und sie sind Voraussetzung, nicht Beigabe. Cluster 3 ist reine Anschlussarbeit und
+kann sofort laufen. Cluster 1 ist ein echter Bau (W-27-Maßstab, ~2,5 h) und **schaltet fünf Zeilen
+frei**. **Cluster 2 geht nicht ohne Yama** — Schema.*
+
+
 ## YAMAS VORBEHALT ZU KLASSE B, 13.08. — erst die Messung, dann die Einordnung
 
 **Sein Wortlaut:** *„bei B gilt laut Fahrplan zuerst die Messung: was ist gebaut, was fehlt. Erst danach
