@@ -17277,3 +17277,99 @@ urteil: |
   verwertet habe — sein Ballfeld ist noch nicht nachgezogen.
 ballbesitz: "— (Kenntnisnahme erteilt, kein offener Vorgang)"
 ```
+
+```yaml
+auftrag: "gegenlese_03_berichtigt_siebte_unterform"
+titel: "BERICHTIGUNG meiner Gegenlese — es gibt eine zweite Form, sie steht im Bestand, und ZWEI meiner Faelle gehoeren hinein"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:52"
+stand_kopf: 09cfb3ab
+was_ich_berichtige: |
+  Um 09:48 habe ich zu §13-Pruefung 03 geschrieben: "E3 haelt meine sechs Faelle ohne
+  Aenderung aus. Eine SIEBTE Unterform braucht es nicht." Das war falsch, und der Grund ist
+  derselbe wie schon zweimal heute: ich habe die ZULIEFERUNG nicht gelesen, obwohl ich sie
+  um 09:42 selbst als ungeprueft aufgelistet hatte.
+  PROZESSPRUEFUNG-02-ANTEIL-PLANNER benennt in ihrem Nachtrag eine Form, die weder Pruefung
+  03 noch meine Gegenlese fuehrt, woertlich:
+    "nicht Stellvertreter statt Quelle, sondern DIE RICHTIGE MESSUNG, AUS DER EINE ZU WEITE
+     AUSSAGE FOLGT. Der Messwert war korrekt und vollstaendig — er beantwortete die
+     Dateifrage. Die Behauptung ging darueber hinaus, ohne dass eine zweite Messung dazukam."
+  Und sie nennt den gemeinsamen Kern zweier Faelle: "zwei Faelle, in denen ich eine Aussage
+  ueber einen Regelbereich getroffen habe, ohne die Regel zu lesen — §13-Zaehler und §3. In
+  beiden Faellen lag der Text im Repo und war zwei Zeilen lang."
+zwei_meiner_sechs_gehoeren_dorthin_nicht_zu_stellvertreter: |
+  Ich hatte alle sechs unter "Stellvertreter statt Quelle" eingeordnet. Nachgesehen: ZWEI
+  passen dort nicht, sondern in die zweite Form:
+    A-35 "der Versatz steht NIRGENDS im Blatt" (08:53, zurueckgenommen 09:11)
+      Die Messung war RICHTIG: A-35-9 nennt den Versatz tatsaechlich nicht. Falsch war der
+      Sprung vom KRITERIUM auf das BLATT — eine zweite Messung (grep ueber das ganze
+      Dokument) fehlte, und die 5 mm standen 130 Zeilen weiter oben.
+    W-14/1 "der schlechteste der sieben" (08:57, eingeordnet 09:08)
+      Die Zahlen waren RICHTIG: 24 Zeiger, 13 gleich, 7 anders, 4 fehlende Datei. Falsch war
+      die Folgerung — der Gegenstand des Blatts (neun Exporte) ist zeichengenau, die Drift
+      sitzt vollstaendig bei den Verbrauchern. Auch hier fehlte die zweite Messung.
+  Vier bleiben "Stellvertreter" (Uhr, Muster, Feldform, Exit-Kette), zwei sind die andere
+  Form. Meine Gegenlese hat sie zusammengeworfen, weil ich nur EINE Klasse kannte.
+was_das_fuer_E3_heisst: |
+  E3 in seiner vorgelegten Fassung fuehrt "Ort (V2), Zeitpunkt (V1), Zustand (NEU)" — das
+  sind Unterformen von STELLVERTRETER. Die zweite Form ist keine vierte Spalte dieser Reihe,
+  sondern eine eigene Zeile: dort ist die Quelle richtig und die REICHWEITE der Aussage
+  falsch. Ein Waechter, der Quellen prueft, faengt sie NIE.
+  Ich revidiere also meine Empfehlung: E3 sollte die zweite Form MIT aufnehmen, sonst zaehlt
+  der Zaehler eine Klasse, die es doppelt gibt, als eine.
+und_der_teuerste_beleg_ist_mein_eigener_paragraf13_befund: |
+  Um 09:39 habe ich gemeldet, dass zwei §13-Gruppenpruefungen fehlen. Der Planner hatte
+  DENSELBEN Mechanismus vier Tage vorher an sich beschrieben: eine Aussage ueber einen
+  Regelbereich, ohne die Regel zu lesen; der Text lag im Repo und war zwei Zeilen lang.
+  Mein Befund ist damit nicht nur richtig, er ist die dritte Instanz eines dokumentierten
+  Musters — und ich habe ihn gemeldet, ohne das Dokument zu kennen, das ihn vorhersagt.
+ballbesitz: yama
+bitte: |
+  Zu meiner Gegenlese von 09:48 gilt ab jetzt: E1 in Kraft (unveraendert), E2 offen
+  (unveraendert), E3 EMPFOHLEN MIT ERWEITERUNG um die zweite Form. Die Empfehlung "ohne
+  siebte Unterform" ziehe ich zurueck.
+```
+
+```yaml
+auftrag: "wurzelvorgaenge_bilanz_acht_von_neun"
+titel: "FAHRPLAN-KLASSE-A ist aufgehoben, sein Nachfolger traegt gar keinen Ball — acht der neun sind durch"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:55"
+stand_kopf: 5766f7cc
+dieser_vorgang: |
+  docs/FAHRPLAN-KLASSE-A.md, 246 Zeilen, zuletzt 12.08. Ballfeld: "planner (Schnitt), dann
+  plan-pruefer je Blatt".
+  Er traegt in Zeile 1 seine eigene Aufhebung: "Fahrplan Klasse A — AUFGEHOBEN 12.08. · nur
+  noch Beleg" und darunter "DIESER PLAN IST NICHT MEHR DER PLAN. Gueltig ist
+  docs/FAHRPLAN-WERKZEUGKASTEN.md — er umfasst alle 42 Registerzeilen statt zehn."
+  Mein Ballfeld dort ist ein UEBERBLEIBSEL aus der Zeit vor der Aufhebung. Nichts geschuldet.
+warum_er_aufgehoben_wurde_und_es_ist_lehrreich: |
+  Der Planner nennt den Grund selbst und es ist ein Bauartfehler: der Plan hatte eine FESTE
+  RUNDENZAHL. W-09 Treppe passte in keine der drei Runden, und statt den Plan zu erweitern
+  wurde die Luecke NOTIERT — "NICHT IN A: W-09 (Treppe, 698 Z) — war nie in den drei Runden".
+  Sein Satz dazu: "Weil die Luecke notiert war, sah sie erledigt aus."
+  Der Nachfolger hat deshalb keine Runden, sondern Stufen mit Eintrittsbedingung: "eine
+  Zeile, die in keine Stufe passt, ist ein Befund gegen den PLAN, nicht gegen das Werkzeug."
+  Das ist dieselbe Bauart wie meine eigenen Karteileichen von heute: etwas aufschreiben und
+  es dadurch fuer erledigt halten.
+und_eine_kleine_beobachtung_am_nachfolger: |
+  docs/FAHRPLAN-WERKZEUGKASTEN.md, 1083 Zeilen, zuletzt 13.08. 23:13 — gemessen: NULL
+  ballbesitz-Felder, ueberhaupt keine ^ball-Zeile. Der aufgehobene Plan fuehrt einen Ball,
+  der gueltige keinen. Kein Fund, nur eine Beobachtung: wenn ein Fahrplan die ganze Tafel
+  fuehrt, waere eine Ballzeile nuetzlicher als im abgeloesten.
+bilanz_der_neun: |
+  P-01                     geschlossen, belegt (STATUS.md:647 und :1010)
+  P-02                     geprueft 09:28, berichtigt 09:31 — Ball bei Yama
+  BEFUND-P02-WETTLAUF      inhaltlich verwertet 09:31; Ballfeld nicht nachgezogen
+  PROZESSPRUEFUNG-02-ANTEIL gelesen 09:52 — fuehrte zur Berichtigung meiner Gegenlese
+  PROZESSPRUEFUNG-03       gegengelesen 09:48, berichtigt 09:52 — Ball bei Yama
+  VORLAGE-WERKZEUG-SCHICHT klassifiziert 09:45, vier von vier — Ball bei Yama
+  MELDUNG-INDEX-ANGLEICHUNG Kenntnisnahme 09:50, sachlich erledigt
+  FAHRPLAN-KLASSE-A        aufgehoben, hiermit abgeschlossen
+  WERKBANK-ANSCHLUSS       STEHT NOCH AUS — 244 Zeilen, 13.08., Ball "plan-pruefer (nach
+                           Kenntnisnahme durch Yama)"
+  ACHT von NEUN sind durch. Der neunte ist der einzige, dessen Ball ausdruecklich eine
+  Vorbedingung nennt: Yamas Kenntnisnahme. Ich pruefe ihn als naechstes und melde, ob die
+  Vorbedingung erfuellt ist — messen kann ich sie, entscheiden nicht.
+ballbesitz: plan-pruefer
+```
