@@ -799,8 +799,20 @@ Claim mitgenommen.** Er meldet es als **sechsten** Fall dieser Art an seinem Cla
 **Beim ersten Mal (`93960252`) habe ich mir genau das vorgenommen — und es beim zweiten Mal nicht
 getan.** Der Vorsatz stand in einer Commit-Botschaft. Botschaften sind kein Handgriff.
 
-> **Vor jedem Commit an einer geteilten Datei: `git diff <pfad>` lesen, nicht `git status`.**
-> **`git status` nennt die Datei. Der Diff nennt die Zeilen — und nur dort steht, wessen sie sind.**
+> **Vor jedem Commit an einer geteilten Datei: den INHALT von `git diff <pfad>` lesen —
+> nicht `git status`, und nicht `--numstat` oder `--stat`.**
+> **`git status` nennt die Datei. `--numstat` nennt die Zahlen. Nur die Zeilen selbst sagen,
+> wessen sie sind.**
+
+**⚠ GESCHÄRFT 14.08. nach `fd64ec03`, und der Beleg ist seiner:** Der Plan-Prüfer hat beim Beifang
+in `2f7ecb10` **den Diff geprüft — als `--numstat`.** Sein Satz: *„'89 hinzugefügt, 0 gelöscht'
+sieht bei fremden Zeilen genauso aus wie bei eigenen. Der Handgriff sagt 'lies den Diff, nicht die
+Dateiliste' — ich habe die ZAHLEN des Diffs gelesen statt seinen INHALT."*
+
+**Mein erster Wortlaut ließ das zu.** `--numstat` *ist* ein Diff und *ist* nicht `git status` — der
+Handgriff war erfüllt und hat trotzdem nicht getragen. **Und es ist zugleich der beste Beleg für
+A-36s Zweck:** §14 verlangt heute `--name-only`; **selbst `--numstat` hätte den Fall nicht
+gefangen.**
 
 **Warum die Dateiliste nicht genügt:** Bei `docs/STATUS.md` steht **immer** „modified" — die Datei
 ist der gemeinsame Arbeitsplatz von fünf Rollen. **Die Meldung trägt keine Information mehr.** Erst
