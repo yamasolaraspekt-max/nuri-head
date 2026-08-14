@@ -13625,8 +13625,17 @@ ballbesitz_befund: release-pruefer
 
 ```yaml
 befund: regelkollision_paragraf3_e1_beifang
-zustand: OFFEN
 ballbesitz: yama
+offen_seit: "13.08. 22:42 — unentschieden, kein Kettenzustand."
+warum_kein_zustand_feld: "Hier stand `zustand: OFFEN`. ZWEI Fehler in einem Feld, beide meine,
+  gemeldet vom plan-pruefer in e45ef787: (1) OFFEN ist KEIN Zustandswort der Kette — es kommt in
+  13.000 Zeilen genau EINMAL vor, hier, waehrend alle anderen Kettenzustaende sind. Ich habe ein
+  Wort erfunden und in das Feld gesetzt, das die Kette fuer ihre Zustaende nutzt. (2) Ein Block MIT
+  zustand und OHNE auftrag-Zeile faellt durch BEIDE Scans seiner Ballwache — der Auftragsscan
+  beginnt an auftrag-Zeilen, der Befundscan nimmt Bloecke ohne zustand-Feld. Von 564 yaml-Bloecken
+  war meiner der EINZIGE mit diesem Muster. Heute ging nichts verloren, weil der Ball bei Yama
+  liegt; laege er bei einer Rolle, haette die Wache ihn nicht gefunden. Er stellt seinen Scan um,
+  ich folge dem Befundmuster: Offenheit traegt `ballbesitz`, nicht ein erfundener Zustand." 
 eingebracht: "plan-pruefer 13.08. 22:42 in 64df65df (33 Zeilen, zwei Datensatzfelder)"
 verloren: "im Merge 51fb4d31 (13.08. 22:51). KEIN loeschender Commit — die Konfliktaufloesung von
   Hand hat die Seite OHNE den Block genommen. Deshalb zeigte git log -S nur den einfuegenden.
