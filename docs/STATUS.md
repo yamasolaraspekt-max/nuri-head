@@ -15582,6 +15582,59 @@ folge_fuer_meine_vorlage: |
   gebuendelt zehn Vorgaenge — meine sechs plus die vier Fachentscheidungen.
 ```
 
+## BEFUND + ANTWORT DES RELEASE-PRUEFERS ZUM UMZUG (14.08.) — die vier Worktree-Basen sind SECHZEHN Commits alt
+
+```yaml
+anlass: "Yamas Frage 14.08. im Wortlaut: 'kannst du alle fragen und aufgaben was an Yama gerichtet
+  ist fundiert und sorgfaeltig beantworten bzw erledigen'. Beim Durchsuchen BEIDER Zweige — bisher
+  hatte ich nur auto/hausplaner-integration gemessen — fand ich das neue Regelwerk und die sechste
+  Rolle auf rolle/planner. Damit ist auch die Zustellung erfolgt, die in der Checkliste als
+  P2H-04 BLOCKIERT steht ('nur Yama erreicht die Rollen')."
+
+ZUSTELLUNG BESTAETIGT: "Der Release-Pruefer hat zur Kenntnis genommen: Mechanismuswechsel vom
+  14.08. 22:20 (rollender Umzug statt Schreibstopp), eigener Worktree
+  /Users/yamanuri/Documents/ticket-rolle-release auf Zweig rolle/release-pruefer, Umzugsanleitung
+  mit vier Schritten und NODE_PATH-Pflicht beim Commit. P2A-05 und P2H-05 betreffen mich."
+
+DER BEFUND, und er betrifft ALLE VIER Rollen und nicht nur mich: >
+  Die vier Worktrees stehen auf Basis bc2125d9. Der Fernstand traegt b1d343e6.
+  Dazwischen liegen SECHZEHN Commits, die in keinem der vier Baeume stehen — darunter FUENF
+  eigene Freigaben und Berichtigungen von mir:
+    3a68909a  W-12/1 freigegeben und bis BETRIEBSBESTAETIGT
+    c39fb5d4  A-36s Tafelzeile nachgezogen
+    22cc7207  meine Formulierung zu den Gegenstellen zurueckgezogen
+    6edbcfd1  vierzehnter Merge-Konflikt aufgeloest
+    71509af2  Fernstand-Befund beantwortet
+  MESSBARE FOLGE, nicht theoretisch: auf bc2125d9 steht W-12/1 auf ABGENOMMEN mit Ball beim
+  Release-Pruefer. Auf b1d343e6 steht es auf BETRIEBSBESTAETIGT mit freiem Ball.
+  Wer in seinem Worktree die Statuswahrheit liest, sieht eine Freigabe als offen, die seit
+  Stunden erteilt und auf allen Gegenstellen gesichert ist.
+
+WARUM ICH DESHALB NOCH NICHT UMGEZOGEN BIN: >
+  Die Umzugsanleitung verlangt als ersten Schritt 'Ballbesitz pruefen: kein offener Vorgang'.
+  Am Fernstand ist mein Ballbesitz 0 — die Bedingung ist erfuellt. In der Basis bc2125d9 ist er 1,
+  weil dort meine eigene Freigabe fehlt. Ich haette also in einen Baum umziehen koennen, dessen
+  Statuswahrheit mir einen Ball zuschreibt, den es nicht mehr gibt — und die erste Handlung dort
+  waere gewesen, eine bereits erteilte Freigabe ein zweites Mal zu erteilen.
+  Das ist kein Grund, den Umzug abzulehnen. Es ist ein Grund, die BASIS zu klaeren, bevor die
+  erste Rolle dort schreibt.
+
+WAS ICH VORSCHLAGE UND NICHT ENTSCHEIDE: >
+  Die vier Zweige auf den Fernstand nachziehen, bevor die erste Rolle in ihrem Baum committet.
+  Technisch ist das ein Fast-Forward: bc2125d9 ist Vorfahr von b1d343e6, gemessen mit
+  merge-base --is-ancestor. Kein Merge, kein Konflikt, kein Verlust.
+  ICH FUEHRE ES NICHT AUS. Die vier Zweige gehoeren nicht mir, und ein Fast-Forward auf fremde
+  Rollenzweige ist ein Schreibvorgang in fremdem Namen. Das gehoert dem Planner, der sie angelegt
+  hat, oder dem Integrator. Ich melde die Lage und den Weg.
+
+WAS ICH IN DIESEM ARBEITSGANG GETAN HABE: "Den Transport gefahren, der noch offen war —
+  bc2125d9 trug den Generator-Commit W-16/1 CODE_FERTIG, der auf keiner Gegenstelle lag.
+  Geheimnisprobe ueber 87 Zeilen sauber, Merge konfliktfrei, Drift 0 und Zaunbilanz gerade
+  GELESEN VOR dem Push — die Lehre aus meinem Fehler von heute Vormittag. Alle drei Namen
+  tragen jetzt b1d343e6."
+ballbesitz_befund: yama   # Umzugsbasis der vier Rollenzweige — Entscheidung liegt bei Yama oder Integrator
+```
+
 ## BEFUND — DIE EINE STATUSWAHRHEIT HAT GERADE ZWEI FASSUNGEN (Plan-Pruefer, 14.08. 08:23)
 
 ```yaml
