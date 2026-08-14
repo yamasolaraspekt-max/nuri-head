@@ -365,3 +365,133 @@ Generators, 22:15, derselbe Moment, in dem ich schrieb.*
 
 **Ball an den Generator** (§12.1, CODE-Befund). *Nach der Nachbesserung fährt die Wiederabnahme
 **alle acht** Kriterien erneut (§12.3), nicht nur W-16-1-2.*
+
+---
+
+## Votum des Evaluators (§11) — Runde 2 (Wiederabnahme)
+
+**ABGENOMMEN.** *Der Befund ist an beiden Orten behoben, und die Nachbesserung hat den Punkt
+getroffen, um den es ging: nicht „irgendwo steht jetzt F-001", sondern **die falsche Nummer ist dort
+weg, wo sie gelesen wird**.*
+
+### Der Befund, beidseitig gegengeprüft (Pflichtprüfung 4)
+
+```text
+ALTER Stand cff23c12:
+  REGISTER.md:48   | W-16 | Grundriss unterlegen | LEER | W-12 | F-032 |
+  F-032 in den sieben Blaettern:                          0 Treffer
+
+NEUER Stand 99e8e602:
+  REGISTER.md:48   | W-16 | … | **F-001** ✓, ~~F-032~~ ⓝ · **F-ZUORDNUNG BERICHTIGT …**
+  F-032 in den sieben Blaettern:                          4 Treffer
+```
+
+> **Die Hausform ist eingehalten** — *durchgestrichen mit `ⓝ` und Begründung, wie `W-13` und `W-04`
+> es führen; nicht gelöscht (A-20-4).* **Und der Reifegrad-Vermerk aus `0a297803` ist erhalten
+> geblieben**, *die Zeile wurde ergänzt, nicht ersetzt.* **Spaltenzahl 5, gleich den Nachbarn `W-15`
+> und `W-10`** — *selbst gezählt, die Tabelle bleibt heil.*
+
+**Und das Blatt schweigt nicht mehr:** `3-FORMELN:6-27` trägt den Abschnitt *„Die Registerzeile
+nannte F-032 — sie trägt nicht"* mit Fundort, **plus die Zeile `~~F-032~~ · nicht benutzt` in der
+Formeltabelle**. *Genau der Punkt meines Befundes: wer das Blatt liest, erfährt jetzt, dass die
+Registerzeile etwas anderes behauptet hat.*
+
+### Die drei neuen Behauptungen der Registerzeile — jede selbst nachgemessen
+
+| Behauptung | selbst gemessen |
+|---|---|
+| *„die Insel hat **einen einzigen** `Math.`-Aufruf im ganzen Ordner — `Math.hypot` (`kalibrierung.ts:26`)"* | `grep -rn 'Math\.'` über `app/unterlage/` → **genau eine Zeile**, `:26`, `Math.hypot` |
+| *„Ein Muster auf matrix, transform, skalier, scale: **ein** Treffer, geöffnet, es ist das Wort „skaliert" in einem Doc-Kommentar (`:7`)"* | `grep -rnEi` → **1 Treffer**, `kalibrierung.ts:7`, Zeile geöffnet: `* „eingegeben ÷ gemessen" skaliert.` — **ein Kommentarwort, kein Aufruf** |
+| *„Serverhälfte (Controller + Modell): **0 Treffer**"* | dieselben vier Muster, `-i`: `PlanUploadController.php` **0**, `PlanUpload.php` **0** |
+
+> ***Das ist der Unterschied zwischen „es steht da" und „es stimmt":*** *die Zeile behauptet einen
+> Treffer, wo eine schlampigere Fassung „null Treffer" geschrieben hätte — und der eine Treffer ist
+> geöffnet und eingeordnet, statt weggemessen.*
+
+### Messtisch — alle acht Kriterien erneut gefahren (§12.3), nicht nur das rote
+
+| Kriterium | R1 | R2 | Beleg aus dieser Runde |
+|---|---|---|---|
+| **W-16-1-1** (P1, TRAGEND) beide Hälften + Reifegrad | grün | **grün** | 3 Module `66+239+44 = 349` Z, Controller 178 Z, Modell 88 Z, 6 Routen, 2 Migrationen — alle selbst neu gezählt. Reifegrad `BESCHRIEBEN` steht, sieben Blätter gefüllt (`73/89/87/74/81/74/59`) |
+| **W-16-1-2** (P1) F-032 berichtigt | **ROT** | **grün** | s. o., beidseitig |
+| **W-16-1-3** (P1) null-Vertrag | grün | **grün** | Modul erneut geladen und gefahren: alle drei Wege `null`, kein `NaN` |
+| **W-16-1-4** Naht benannt | grün | **grün** | harte URL in `app/unterlage/`: **0 Treffer** |
+| **W-16-1-5** sechs Exporte | grün | **grün** | `grep -rc '^export '` → **6** |
+| **W-16-1-6** Einordnungsbefund | grün | **grün** | `1-ZWECK:37-43` unverändert, Blatt nicht angefasst |
+| **W-16-1-7** kein Produktivcode | grün | **grün** | `99e8e602`: 2 Dateien, **0** außerhalb `docs/` |
+| **W-16-1-8** zwei Wächter + Lauf | grün | **grün** | selbst gefahren: `tests 18 · pass 18 · fail 0` |
+| **Wächter** Insel-Suite | grün | **grün** | `tests 1750 · pass 1750 · fail 0` |
+| **Wächter** `tsc:hausplaner` | grün | **grün** | keine Ausgabe |
+| **Browser** | — | **nicht gefahren** | *`99e8e602` fasst ausschließlich `docs/` an* |
+| **§15 Datenbank** | — | **nicht berührt** | *kein schreibender Lauf, keine Verbindung* |
+
+### Die Nachbesserung hat nichts abgeräumt — geprüft, nicht angenommen
+
+*Ein Handgriff an einem Blatt, das schon trug, kann Zusagen mitnehmen. Gemessen:*
+
+```text
+Scope-Diff 99e8e602:   REGISTER.md  +1 −1     (die eine ersetzte Zeile)
+                       3-FORMELN.md +21 −0    (rein additiv)
+
+in 3-FORMELN weiterhin vorhanden:  3333 ✓ · 2000 ✓ · „keine Nummer erfunden" ✓
+                                   Math.hypot 3× ✓ · die Muster-Zählung ✓
+```
+
+> **Die Fast-Null-Grenze, die dieses Blatt zu seinem besten Fund gemacht hat, steht unverändert.**
+
+### Ein Nachtrag außerhalb der Kriterien
+
+*Mein Verfahrensfund aus Runde 1 ist im Datensatz angekommen:* `bau_sha_zweiter: 0a297803` mit dem
+Vermerk, dass der Bau zwei Commits sind. **Kein Kriterium verlangte das** — *es schließt die Falle,
+in die der Release-Prüfer sonst gelaufen wäre.*
+
+### Weitergabe
+
+**Ball an den Release-Prüfer** (§11, ABGENOMMEN). *Hinweis ohne Anspruch auf Bewertung: die Rolle
+ist seit `8a417fe0` wieder eindeutig besetzt — Instanz A im eigenen Worktree.*
+
+### Nachtrag zum Votum: mein schwerster eigener Fehler dieser Runde
+
+**Um 22:49 habe ich `docs/STATUS.md` mit einem eigenen Schreibbefehl geleert** — *0 Bytes, 17553
+Zeilen weg.* **Ursache gemessen, nicht vermutet:**
+
+```text
+perl -0777 -pi -e '…  die "Anker Treffer $n\n" unless $n == 1;  …'
+```
+
+> *Greift der Anker nicht, stirbt das Skript **nachdem** `-i` die Zieldatei schon geöffnet hat — und
+> `-i` legt die leer gebliebene Temporärdatei über das Original.* **Der Abbruch, den ich als Schutz
+> eingebaut hatte, war der Schaden.**
+
+*Zwei Schritte davor hatte derselbe Mechanismus die `ballbesitz`-Zeile durch eine **leere** Zeile
+ersetzt, weil der Ersetzungstext aus einer Datei kam, die im `BEGIN`-Block nicht ankam — ein
+`s///` mit leerem Ersatz sieht im `numstat` aus wie eine harmlose `+1 −1`-Änderung.*
+
+**Nichts davon ist committet worden.** *Beides fiel auf, weil ich nach jedem Schreiben messe und
+nicht erst vor dem Commit:*
+
+```text
+git checkout HEAD -- docs/STATUS.md   ->  17553 Zeilen, numstat deckungsgleich mit HEAD
+verloren:  ausschliesslich MEINE uncommitteten Zeilen (Claim, zustand, Tafelzeile)
+fremd:     keine — der Blockvergleich unmittelbar davor zeigte genau EINEN Block, meinen,
+           und seit 7bb10b37 ist kein fremder Commit gekommen
+```
+
+**Was ich daraus mache — der Handgriff, nicht der Vorsatz:**
+
+1. **Kein `die()` mehr in einem schreibenden `-pi`-Lauf.** *Der Schutz gehört vor das Schreiben,
+   nicht hinein.*
+2. **Anker werden in einem eigenen, nicht schreibenden Lauf gezählt** (`perl -0777 -ne`).
+3. **Der Schreiblauf geht in eine NEUE Datei**, wird dort geprüft — Zeilenzahl, entfernte Zeilen
+   namentlich, Blockinhalt, Leerzeilen-Zähler — **und erst danach über das Original gelegt.**
+
+> ***Das Original bleibt bis zur bestandenen Prüfung unberührt.*** *Genau so ist dieser Eintrag
+> entstanden: 17553 → 17600 Zeilen, drei entfernte Zeilen, alle drei namentlich meine eigenen
+> Zustandsersetzungen, null Leerzeilen im Block — gemessen an der Kopie, bevor sie das Original
+> wurde.*
+
+**Zum zweiten Mal in zwei Tagen habe ich fremde Zeilen nur deshalb nicht verloren, weil ich nach
+dem Schreiben gemessen habe** *(das erste Mal: Read-Modify-Write über einen 54-zeiligen
+plan-prüfer-Block)*. **Der Unterschied zwischen beiden Fällen ist Glück, nicht Können** — *diesmal
+lag nichts Fremdes im Baum. Deshalb steht der Handgriff jetzt oben und nicht die Absicht, besser
+aufzupassen.*
