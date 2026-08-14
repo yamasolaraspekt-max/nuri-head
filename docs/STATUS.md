@@ -2323,7 +2323,7 @@ streudatei: "Zusaetzlich gemeldet (nicht angefasst): eine Datei namens '1692' li
 ```yaml
 auftrag: "W-05/1"
 titel: "Die sieben Blaetter von W-05 aus roomDetection.ts ableiten"
-datei: docs/auftraege/aktiv/W-05-raum-erkennen-beschreiben.md
+datei: docs/auftraege/aktiv/W-05-raum-beschreiben.md   # BERICHTIGT vom planner 14.08. — der Befund befund_dateiname darunter (release-pruefer 12.08.) hatte ihn gemeldet und ausdruecklich dem Planner uebergeben; er lag zwei Tage bei mir.
 zustand: BETRIEBSBESTAETIGT
 ballbesitz: —  # Kette vollstaendig
 betriebspruefung: "release-pruefer (Stamm-Instanz) 12.08., §19: der Uebergang VEROEFFENTLICHT -> BETRIEBSBESTAETIGT ist MEINE Zustaendigkeit (unabhaengige Betriebspruefung), nicht Yamas — siehe Sammelbericht am Dateiende."
@@ -3405,7 +3405,7 @@ offener_punkt_bei_yama: "Der Evaluator hat einen EINGRIFF offengelegt: ticket_te
   NOCH. Raeumen ist eine produktive Datenoperation und braucht Yamas Freigabe — dieselbe Form
   wie bei den zwei Testnutzern am 10.08. ('raeum die nutzer'). Ich raeume nicht von mir aus."
 titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach dem A-14-Muster, mit vorhandenem Bauteil"
-datei: docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md
+datei: docs/auftraege/aktiv/A-17-zwei-engines-schweigen.md   # BERICHTIGT vom planner 14.08. nach fbf8be3e — der genannte Name hat in der GESAMTEN Historie null Commits, die echte Datei vier. Kein Umbenennen, keine Drift: beim Schreiben falsch.
 zustand: BETRIEBSBESTAETIGT
 ballbesitz: —  # Kette vollstaendig
 betriebspruefung: "release-pruefer 12.08., §19 im SELBEN Arbeitsgang wie die Veroeffentlichung:
@@ -14653,4 +14653,40 @@ was_ich_NICHT_tue: "Ich fasse die beiden Felder nicht an. Es sind fremde Datensa
   fuer W-31 entschieden hat, gilt auch hier: der richtige Name tritt daneben, der alte bleibt
   als das stehen, was dastand. Kein Zustand, kein Blatt, kein Bau."
 ballbesitz_befund: planner
+```
+
+## BEFUND — ALLE ACHT BEREIT-AUFTRAEGE SIND ZIEHBAR: DIE FEHLENDE HAELFTE DES STILLSTANDS (Plan-Pruefer, 14.08. 06:4x)
+
+```yaml
+acht_bereit_sind_ziehbar: "Mein Stillstands-Befund (3904fce1, Ball bei Yama) sagt, dass seit
+  13.08. 22:24 kein Produktivcode entsteht und alle acht BEREIT-Auftraege beim Generator liegen.
+  Was er NICHT sagt: ob sie ueberhaupt ziehbar waeren. Das ist Punkt 4 der Wache, und ich hatte
+  ihn nie vollstaendig gefahren. Jetzt gefahren, gemessen an fbf8be3e."
+gemessen_je_auftrag: >
+    Auftrag  basis_sha  existiert  Blatt existiert  Kriterien  Ball        Spur
+    W-12/1   b778152b   ja         ja               7          generator   A
+    W-18/1   8c920624   ja         ja               7          generator   A
+    W-16/1   86f94d98   ja         ja               8          generator   A
+    W-03/1   e097e7be   ja         ja               6          generator   A
+    A-33     f9b67b1b   ja         ja               7          generator   A
+    W-14/1   78c09e1b   ja         ja               9          generator   A
+    W-10/1   18fe2deb   ja         ja               8          generator   A
+    A-35     1df82ee1   ja         ja               9          generator   A
+das_ergebnis_in_einem_satz: "ACHT von ACHT sind ziehbar: jeder basis_sha existiert als Commit,
+  jedes Blatt existiert als Datei, jeder Ball liegt beim Generator, jede Spur ist A. Insgesamt
+  61 Abnahmekriterien, und in KEINEM Blatt fehlt eine Nummer — alle acht sind lueckenlos von 1
+  durchnumeriert. Es gibt also keine technische Sperre, es fehlt niemand ausser dem Generator."
+was_dazu_noch_gilt: "Nichts ist unterwegs: 0 IN_ARBEIT und 0 CODE_FERTIG im ganzen Bestand,
+  §3 also frei — der erste Zug braucht auf keinen Vorgaenger zu warten. Und die Blaetter sind
+  heute Nacht durchgehend nachgeschaerft worden: siebzehn Zeiger berichtigt, K3 entschieden,
+  A-33s Kontextzahlen eingeordnet, W-37s Blattfeld nachgetragen. Sie sind in besserem Zustand
+  als vor sieben Stunden."
+eine_eigene_fehlmessung_zuerst: "Mein erster Lauf zaehlte die Kriterien mit dem Muster
+  '- **A-35-N**' und meldete fuer W-12/1 DREI statt sieben — die Ablesungs-Blaetter fuehren ihre
+  Kriterien als 'W-12-1-1 (P1, TRAGEND)' ohne Aufzaehlungsstrich. Verworfen und mit einem
+  Muster neu gezaehlt, das vorher an BEIDEN Schreibweisen geprobt wurde (A-35 -> 9, W-18/1 -> 7)."
+was_ich_NICHT_tue: "Kein Zustand, kein Blatt, kein Bau, kein Instanz-Start — das ist nicht meine
+  Rolle. Diese Messung ergaenzt nur die Vorlage: der Stillstand ist nicht durch fehlende
+  Baubarkeit erklaert."
+ballbesitz_befund: yama
 ```
