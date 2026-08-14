@@ -13425,6 +13425,20 @@ k3_entschieden_14_08: "BERICHTIGUNG meines eigenen Vorschlags von einer Stunde v
   Ja/Nein-Frage an vorhandene Endpunkte, kein Zahlenoperand. AN YAMA geht nur noch die
   ERWEITERUNG: soll spaeter auch verlaengert werden und bis zu welchem Abstand — A-35 wartet
   darauf NICHT. Seine DoR steht, die neun Kriterien bleiben neun."
+k3_praezisiert_14_08: "Nach 0672be59: -liegt auf der Strecke- hat ZWEI Lesarten, die am Rand
+  gegenteilig antworten. Selbst gemessen: geradenGeometrie.ts:105 rechnet t und gibt es NICHT
+  heraus, die Signatur ist Punkt|null. Weg A ueber den Parameter 0<=t<=1 ist exakt und braucht
+  keine Toleranz; Weg B ueber die Koordinate braucht in Gleitkomma ein Epsilon. Am Fall
+  t=1+1e-9 antworten sie GEGENTEILIG. Und schaerfer als gemeldet: t gilt nur fuer die ERSTE
+  Gerade, der Streckentest braucht auch u auf der Schnittkante — u wird heute gar nicht
+  gerechnet. ENTSCHEIDUNG: Weg A, t UND u je im Band [0,1], kein Epsilon und keine neue Zahl.
+  F-001 fuehrt zwar 0,5 mm (auf 6000 mm ein t-Band von 8,3e-05), aber das waere dieselbe Klasse
+  wie der Zuschlag eine Ebene tiefer. t und u sind dimensionslos, die Frage wird exakt
+  beantwortbar. VERFUEGBARKEIT ADDITIV: geradenSchnitt ist betriebsbestaetigt und behaelt seine
+  Signatur; eine ZWEITE exportierte Funktion in derselben Datei liefert t und u, geradenSchnitt
+  ruft sie auf. Eine Rechnung, zwei Sichten, keine zweite Wahrheit. Das Nicht-Ziel -keine neue
+  Geometriefunktion- ist dafuer ausdruecklich praezisiert: es richtet sich gegen das NACHBAUEN,
+  und wer t im Werkzeug erneut rechnet begeht genau den Verstoss, den es verhindern soll."
 rueckweg: "Der Bau fuegt hinzu und aendert nichts Bestehendes. Ruecknahme = Commit zurueckdrehen,
   keine Datenmigration, kein Schema, keine Bestandsdokumente betroffen."
 dor_beleg: "ERTEILT 13.08. 23:38 plan-pruefer, gemessen am BASIS-STAND 1df82ee1 und am Baum.

@@ -78,6 +78,9 @@ mehr als ein einzelnes Werkzeug.**
 - **KEIN `ConfigWizard`-Dialog.** A7 Konsequenz 1 schließt ihn für diese Werkzeugklasse aus.
 - **KEINE neue Geometriefunktion.** `geradenSchnitt` ist gebaut und geprüft; wer sie nachbaut,
   erzeugt die zweite Wahrheit. Fehlt etwas, ist das ein **Befund an den Planner**, kein Zubau.
+  **Ausgenommen und ausdrücklich erlaubt (K3-Präzisierung):** eine zweite exportierte Funktion in
+  `geradenGeometrie.ts`, die `t` und `u` liefert — sie baut nichts nach, sondern gibt eine bereits
+  gerechnete Größe heraus. **Die Signatur von `geradenSchnitt` bleibt unverändert.**
 - **KEINE der vier Geschwister** (teilen, verbinden, verlängern, versatz). Sie folgen dem Muster,
   aber in eigenen Aufträgen — sonst ist der erste Bau nicht mehr prüfbar.
 - **KEINE Änderung an `docs/rollenkette/`.** Die sieben Blätter zu `trimmen` sind eine
@@ -145,6 +148,49 @@ will, ergänzt es dann mit einer entschiedenen Grenze, ohne dass etwas zurückge
 **Es ist außerdem dieselbe Antwort, die K1 und K2 schon geben** — der Fall reiht sich ein, statt
 eine eigene Logik zu erfinden.
 
+### K3-PRÄZISIERUNG 14.08. — welcher der zwei Wege gilt, und warum das keine neue Zahl kostet
+
+**Anlass:** Der Plan-Prüfer meldet (`0672be59`), dass *„liegt auf der Strecke"* **zwei Lesarten**
+hat, die **am Rand gegenteilig antworten** — und er hat recht. Selbst nachgemessen an
+`geradenGeometrie.ts`:
+
+```text
+:105   const t = n / m;          <- wird GERECHNET
+:107   return { x: …, y: … };    <- und NICHT herausgegeben; Signatur ist Punkt | null
+
+Weg A  ueber den Parameter:  0 <= t <= 1   exakt, KEINE Toleranz noetig
+Weg B  ueber die Koordinate: Punkt-in-Strecke — braucht in Gleitkomma ein Epsilon
+
+Gerechnet am selben Fall (Wand 0…6000 mm, Schnitt bei t = 1 + 1e-9):
+  Weg A  weist ab      Weg B  laesst durch      <- gegenteilig
+```
+
+**Und es ist schärfer, als der Befund sagt:** `t` gilt nur für die **erste** Gerade. Für den
+Streckentest beim Trimmen braucht es **beide** Parameter — `t` auf dem zu kürzenden Objekt und
+`u` auf der Schnittkante. **`u` wird heute gar nicht gerechnet.**
+
+> **ENTSCHEIDUNG: Weg A — über die Parameter `t` und `u`, beide im Band `[0, 1]`.**
+> **Kein Epsilon, keine Toleranz, keine neue Zahl.**
+
+**Warum Weg A und nicht B:** Weg B bräuchte ein Abstands-Epsilon — **F-001 führt zwar 0,5 mm, und
+genau deshalb wäre es verführerisch**: auf 6000 mm entspricht das einem t-Band von 8,3e-05.
+**Aber das ist dieselbe Klasse wie der Zuschlag, nur eine Ebene tiefer — eine Größe, die niemand
+benannt hat und die sonst der Generator wählt.** Weg A kommt ohne sie aus, weil `t` und `u`
+**dimensionslos** sind: die Frage „liegt der Punkt auf der Strecke" wird zu „liegt die Zahl
+zwischen 0 und 1", und die ist exakt beantwortbar.
+
+**Wie `t` und `u` verfügbar werden — additiv, ohne Bestand anzufassen:**
+`geradenSchnitt` ist betriebsbestätigt (A-32) und **wird nicht in seiner Signatur geändert**.
+Stattdessen kommt **eine zweite exportierte Funktion in dieselbe Datei**, die `t` und `u` liefert;
+`geradenSchnitt` ruft sie auf und gibt weiterhin nur den Punkt zurück. **Eine Rechnung, zwei
+Sichten — keine zweite Wahrheit, kein Nachrechnen derselben Formel an zweiter Stelle.**
+
+**Das berührt das Nicht-Ziel „KEINE neue Geometriefunktion" und ist trotzdem gedeckt:** Das
+Nicht-Ziel richtet sich gegen das **Nachbauen** vorhandener Mathematik (*„wer sie nachbaut,
+erzeugt die zweite Wahrheit"*). Hier wird nichts nachgebaut — **eine bereits berechnete Größe wird
+sichtbar gemacht.** Der Weg, sie stattdessen im Werkzeug erneut zu rechnen, wäre genau der
+Verstoß, den das Nicht-Ziel verhindern soll.
+
 **Was damit an Yama geht — als Erweiterung, nicht als Blockade:** *Soll das Werkzeug später auch
 verlängern können, und bis zu welchem Abstand?* **A-35 wartet darauf nicht.** Solange die Frage
 offen ist, weist das Werkzeug ab, und das ist ein vollständiges, prüfbares Verhalten.
@@ -186,9 +232,10 @@ den Faktor 10⁸ springt.
   **Messbar, und der Fall ist genau der, den K2 durchlässt:** ein Test mit zwei
   6000-mm-Wänden bei **0,001°** Winkeldifferenz — der Schnittpunkt liegt **286,5 m**
   entfernt, `geradenSchnitt` liefert ihn, K2s Wache greift **nicht**. Das Werkzeug muss
-  **abweisen mit Grund**, nicht verlängern. **Kein Zahlenoperand nötig:** geprüft wird,
-  ob der Schnittpunkt **auf beiden Strecken** liegt — eine Ja/Nein-Frage an vorhandene
-  Endpunkte.
+  **abweisen mit Grund**, nicht verlängern. **Kein Zahlenoperand nötig:** geprüft wird
+  **`0 ≤ t ≤ 1` UND `0 ≤ u ≤ 1`** (K3-Präzisierung) — dimensionslos, ohne Epsilon.
+  **Zusätzlich messbar:** ein Fall bei `t = 1 + 1e-9` muss **abgewiesen** werden; über die
+  Koordinate gerechnet würde er durchlaufen.
 
 ## Rückweg und Entdeckung
 
