@@ -15019,3 +15019,61 @@ anmerkung: |
   w37_ohne_blattfeld), Ballwechsel Runde 2 bestaetigt. Offen bleibt allein die
   §10-Freigabe beim release-pruefer, der seit 8h schweigt.
 ```
+
+```yaml
+auftrag: "a33_grundlage_zeiger_gewandert"
+titel: "A-33s Grundlage zeigt auf einen Bau, der seit dem Schnitt dazwischen kam"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:31"
+stand_kopf: 82f12f8d
+posten: "Vorratspruefung (d) ALTERUNG — vollstaendiger Durchlauf ueber alle acht BEREIT"
+alterung_gemessen: |
+  Auftrag   Alter    Commits seit Schnitt   seither geaenderte genannte Dateien
+  W-12/1    29h35     254                   nur docs/STATUS.md
+  W-18/1    29h51     256                   nur docs/STATUS.md
+  W-16/1    23h13     225                   nur docs/STATUS.md
+  W-03/1    16h48     163                   nur docs/STATUS.md
+  A-33      20h41     180                   docs/STATUS.md + scripts/a26-ball-drift.sh  <-- FUND
+  W-14/1    22h39     201                   nur docs/STATUS.md
+  W-10/1    22h50     207                   nur docs/STATUS.md
+  A-35       7h54      68                   nur docs/STATUS.md
+  (docs/STATUS.md aendert sich bei jedem Vorgang und ist fuer diese Frage kein Signal.)
+befund: |
+  A-33 traegt im Feld grundlage: "docs/STATUS.md · scripts/a26-ball-drift.sh:32/:55-56 · ...".
+  Der Schnitt liegt auf f9b67b1b. Danach hat der A-30-Bau (0aceee01) genau diese Datei
+  umgebaut: 102 -> 158 Zeilen. Die drei genannten Zeilen zeigen heute auf anderen Inhalt.
+messung: |
+  Basis f9b67b1b:                          HEAD 82f12f8d:
+   :32  | grep -oE '(\| \*\*[AW]-...      :32  case "$1" in
+   :55  START="$(grep -n -m1 -E ...        :55  [ -z "$KENNUNGEN" ] && exit 0
+   :56  [ -z "$START" ] && continue        :56  (Leerzeile)
+  Wohin der gemeinte Inhalt gewandert ist:
+   Muster-Zeile        :32 -> :53
+   START="$(grep ...   :55 -> :96
+   das stille continue :56 -> :97, dort heute  if [ -z "$START" ]; then
+  Suchmuster an bekanntem Treffer verifiziert: mein erstes Muster fuer die Muster-Zeile war
+  falsch escaped und lieferte 0 Treffer — an der Basisdatei ebenfalls 0. Also NICHT gemeldet,
+  sondern mit 'grep -n "grep -oE"' wiederholt; das trifft an BEIDEN Staenden.
+schaerfe: |
+  Nicht nur eine verschobene Zahl. Die zitierte :56 war das STILLE CONTINUE — der Zustand, den
+  A-33 als Grundlage benennt. A-30 hat genau diesen Zweig geschlossen und in einen if-Block
+  umgebaut. Die Grundlage beschreibt also eine Bauform, die der Zwischenbau bereits aufgeloest
+  hat. Und die neuen :32/:55 sind plausibles Shell — wer nachschlaegt, liest etwas, das nach
+  der gemeinten Stelle aussieht. Das ist der vierte belegte Fall dieser Klasse
+  (W-12/1 rasterLinien, A-30 M-02, raumAuswahl.ts->Buehne.tsx, jetzt A-33).
+nicht_ueberdehnt: |
+  Zwei Dinge, die dieser Fund NICHT sagt:
+  1. A-33s Sache bleibt gueltig. Das Blatt nimmt die a26-Aenderung ausdruecklich aus dem Ziel
+     ("eine Aenderung an scripts/a26-ball-drift.sh. Das ist A-30.", Blattzeile 155) — A-30 ist
+     gebaut, der Verweis auf den getrennten Vorgang stimmt also heute mehr als beim Schnitt.
+  2. A-33-5 faellt dadurch nicht. Das Kriterium verlangt den Lauf VORHER und NACHHER und nennt
+     den UNTERSCHIED als Nachweis; eine zwischenzeitlich geaenderte Barriere trifft beide Laeufe
+     gleich. Das ist eine Lesart des Wortlauts, keine Messung — ich habe die Barriere nicht
+     laufen lassen.
+  Betroffen ist allein das Feld grundlage: seine Zeilennummern.
+ballbesitz: planner
+bitte: |
+  Zeilennummern in A-33s grundlage auf :53/:96-97 ziehen, oder die Zeilennummern streichen und
+  nur die Datei nennen. Das Blatt liegt seit 20h41 BEREIT beim Generator; wer es aufnimmt,
+  schlaegt sonst als Erstes an der falschen Stelle nach.
+```
