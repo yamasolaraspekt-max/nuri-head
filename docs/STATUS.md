@@ -17154,3 +17154,43 @@ bitte: |
   als offen gekennzeichnet. Die Entscheidung ueber E2 und E3 liegt bei dir; ich empfehle
   beide, E3 ohne die siebte Unterform.
 ```
+
+```yaml
+auftrag: "kenntnisnahme_index_angleichung"
+titel: "Dritter der fuenf: die Antwort auf meinen eigenen Befund vom 06.08. — Kreis geschlossen, Rueckweg lebt"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:50"
+stand_kopf: 31eeea31
+gegenstand: "docs/MELDUNG-INDEX-ANGLEICHUNG-2026-08-06.md, 184 Zeilen, zuletzt 07.08.; Ballfeld: planner (diese Meldung), danach plan-pruefer (Kenntnisnahme)"
+warum_der_hier_besonders_ist: |
+  Es ist die Antwort auf MEINEN Befund. Ich hatte am 06.08. in fb7921bd eine ungemeldete
+  Index-Angleichung an ihren Spuren entdeckt (Phantome 17->0, Divergenz 60->2). Der Planner
+  hat sie am 07.08. nachgereicht — und die Kenntnisnahme, die daraufhin bei MIR lag, habe ich
+  eine Woche lang nicht geleistet, weil das Dokument in der Wurzel von docs/ liegt.
+was_ich_gemessen_habe: |
+  1. DER RUECKWEG LEBT. Die Meldung nennt refs/rueckweg/index-vor-reset-20260806 -> 80948f8d.
+     Heute gemessen: der Ref existiert und zeigt auf 80948f8d. Eine Woche spaeter, unberuehrt.
+     Das ist der Unterschied zwischen einem zugesagten und einem vorhandenen Rueckweg.
+  2. BEIDE SHAs EXISTIEREN: fb7921bd (mein Befund) und c512f931 (die Abhilfe).
+  3. UND DIE DAUERHAFTE ABHILFE IST GEBAUT — das ist der Teil, den ich uebersehen habe:
+     scripts/commit-pruefen.sh:725 gibt aus
+       "INDEX ANGEGLICHEN  Standard-Index an HEAD angeglichen (kein Index-Blob ausserhalb
+        der Historie); der Arbeitsbaum ist unberuehrt"
+     Eingebracht von c512f931 (A-07, "Tor initialisiert und raeumt seinen Wegwerf-Index").
+     Aus einem einmaligen Vorfall ist also eine stehende Meldung geworden.
+die_pointe_gegen_mich: |
+  Diese Zeile steht unter JEDEM meiner Commits heute Nacht — mehr als dreissig Mal habe ich
+  sie gelesen und nie mit meinem eigenen Befund von vor einer Woche verbunden. Ich habe die
+  Wirkung meiner Meldung taeglich vor Augen gehabt und nicht erkannt, dass sie die Antwort
+  darauf ist. Kein Messfehler; ein Lesefehler.
+urteil: |
+  Der Vorgang ist SACHLICH ERLEDIGT und war es seit c512f931: die Meldelücke ist durch eine
+  stehende Ausgabe geschlossen, der Rueckweg ist vorhanden und geprueft. Formal offen war nur
+  meine Kenntnisnahme — hiermit erteilt.
+  Damit sind von den neun Wurzel-Dokumenten drei abgearbeitet (P-02 geprueft, Werkzeug-oder-
+  Schicht klassifiziert, diese Meldung zur Kenntnis genommen), zwei nachweislich geschlossen
+  (P-01, PROZESSPRUEFUNG-03 gegengelesen), und ZWEI stehen aus: FAHRPLAN-KLASSE-A und
+  PROZESSPRUEFUNG-02-ANTEIL-PLANNER. Dazu BEFUND-P02-WETTLAUF, den ich um 09:31 inhaltlich
+  verwertet habe — sein Ballfeld ist noch nicht nachgezogen.
+ballbesitz: "— (Kenntnisnahme erteilt, kein offener Vorgang)"
+```
