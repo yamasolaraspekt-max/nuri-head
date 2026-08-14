@@ -114,6 +114,10 @@ DIE SIEBEN EISERNEN REGELN — gelten für alle Rollen, immer
    Integrations-Checkout mit genau einem Schreiber: dem Integrator.
    Rollen-Worktrees starten am AKTIVIERUNGS_SHA, den der Integrator
    begründet bestimmt — NIE am FORENSISCHEN_SHA (Untersuchungsstand).
+   Fuer die Umstellung vom 14.08. gilt B2: YAMA legt die Rollen-Worktrees
+   an, nicht der Integrator. Dessen Betriebsart BOOTSTRAP ist beschrieben,
+   aber NICHT freigegeben — die Dokumentation einer Betriebsart ist keine
+   Erlaubnis, sie zu benutzen.
    Nur ausdrücklich geprüfte Pfade stagen — NIEMALS git add -A.
    Vor jedem Commit: git diff --cached --name-only prüfen.
    KEINE Locks räumen. Blockiert das Tor → ENV_BLOCKED melden.

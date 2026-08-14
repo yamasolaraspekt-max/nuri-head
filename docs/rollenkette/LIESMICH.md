@@ -6,7 +6,7 @@
 
 ## Der Grundgedanke
 
-Fünf gleich gebaute Wissensordner **driften** — sie müssen gepflegt werden, um
+Sechs gleich gebaute Wissensordner **driften** — sie müssen gepflegt werden, um
 übereinzustimmen. Das ist in diesem Projekt zweimal passiert: die Auftragsblätter
 führten einen zweiten Status neben `STATUS.md`, der Git-Index trug eine zweite
 Wahrheit neben dem Arbeitsbaum. Beide Male war die Lösung nicht „besser abgleichen",
@@ -16,8 +16,8 @@ Deshalb ist es hier umgedreht:
 
 ```
 werkbank/       DER GEGENSTAND — gehört niemandem, alle lesen dasselbe
-rollen/         FÜNF SICHTEN — je 5 Blätter, kein eigenes Sachwissen
-uebergaben/     VIER STAFFELSTÄBE — halten die Kette zusammen
+rollen/         SECHS SICHTEN — je 5 Blätter, kein eigenes Sachwissen
+uebergaben/     FÜNF STAFFELSTÄBE — halten die Kette zusammen
 ```
 
 ---
@@ -48,7 +48,8 @@ rollenkette/
     ├── A-auftragsblatt.md
     ├── B-baubericht.md
     ├── C-abnahmevotum.md
-    └── D-freigabeschein.md
+    ├── D-freigabeschein.md
+    └── E-integrationsprotokoll.md   ← NEU (Integrator)
 ```
 
 ---

@@ -17,7 +17,7 @@ Nachschärfung vom 14.08. löst das — und den Bootstrap-Zirkel gleich mit.)*
 | Betriebsart | ab wann | was erlaubt ist | was verboten bleibt |
 |---|---|---|---|
 | **`NUR_LESEND`** | **sobald die vier Schreibstoppbelege vorliegen** (Schritt D) | Repository und Divergenz prüfen · Ruhephase, Prozesse, Arbeitsbaum messen · **`AKTIVIERUNGS_SHA` bestimmen und begründen** · Ergebnisse **ausschließlich im Sitzungsbericht** ausgeben | jede Dateiänderung · jeder Commit · jede Statusänderung |
-| **`BOOTSTRAP`** | **nur nach Yamas ausdrücklicher Freigabe** (Schritt G) | **ausschließlich** die vom `AKTIVIERUNGS_SHA` abgeleiteten Worktrees anlegen | **keine** Dateiänderung · **kein** Commit · **kein** Merge · **keine** Statusänderung |
+| **`BOOTSTRAP`** ⛔ **für diese Umstellung NICHT freigegeben (B2)** | nur nach Yamas ausdrücklicher Freigabe — **die liegt hier NICHT vor** | **ausschließlich** die vom `AKTIVIERUNGS_SHA` abgeleiteten Worktrees anlegen | **keine** Dateiänderung · **kein** Commit · **kein** Merge · **keine** Statusänderung |
 | **`SCHREIBEND`** | **erst nach unabhängig bestandenen Barriereprüfungen** (Schritt J) | integrieren · `docs/STATUS.md` schreiben · Integrationsprotokolle ablegen — **ausschließlich im Integrations-Checkout** | Push · `main` · Tag · Deploy ohne eigene Freigabe |
 
 **Warum `NUR_LESEND` den `AKTIVIERUNGS_SHA` bestimmen darf:** *„Das bloße Benennen und Begründen
@@ -41,11 +41,16 @@ den Bestand** — das ist der Unterschied, der den Kreis öffnet.
 | **B1** | **Integrator im `BOOTSTRAP`-Modus**, nach Yamas Freigabe | Vorteil: er hat den `AKTIVIERUNGS_SHA` selbst bestimmt und kann sofort belegen, dass jeder Worktree dort steht. Nachteil: eine Rolle handelt vor ihrer Barriere |
 | **B2** | **Yama selbst** | Vorteil: keine Rolle handelt vor ihrer Barriere — der Kreis wird von außen geöffnet, nicht von innen. Nachteil: vier Befehle Handarbeit |
 
-**⚠ ENTSCHEIDUNG OFFEN — sie gehört Yama, nicht mir.** *„Eine dieser beiden Varianten muss
-verbindlich gewählt werden."* **Meine Empfehlung: B2.** Begründung: der ganze Umbau existiert, weil
-Rollen im geteilten Baum gehandelt haben, bevor eine Barriere stand. **B1 wiederholt dieses Muster
-ein letztes Mal — und ausgerechnet an der Rolle, die es künftig verhindern soll.** Vier Befehle
-Handarbeit sind der billigere Preis. *(Checklistenpunkt `P2G-25`.)*
+**✅ ENTSCHIEDEN von Yama am 14.08.: B2.** *„Yama beziehungsweise eine ausdrücklich von Yama
+autorisierte Infrastrukturhandlung legt die Rollen-Worktrees an. Der Integrator darf vor Aktivierung
+seiner unabhängig geprüften Barriere keine Git-Verwaltungsänderung ausführen. Seine Betriebsart
+BOOTSTRAP bleibt nur als dokumentierter Notfallweg bestehen und ist für diese Umstellung NICHT
+freigegeben."*
+
+**Damit ist `BOOTSTRAP` in diesem Blatt beschrieben, aber gesperrt.** Der Integrator darf sie **nicht
+benutzen** — nicht weil sie fehlerhaft wäre, sondern weil der Kreis von **außen** geöffnet wird.
+**Die bloße Dokumentation einer Betriebsart ist keine Erlaubnis, sie zu benutzen.** *(Checklistenpunkt
+`P2G-25`, `UMGESETZT_UNGEPRUEFT`.)*
 
 ## Der Ablaufplan — Yamas Fassung vom 14.08., elf Schritte
 
@@ -57,7 +62,7 @@ Handarbeit sind der billigere Preis. *(Checklistenpunkt `P2G-25`.)*
 | **D** | Integrator als eigene Instanz **`NUR_LESEND` starten** | Yama | `NUR_LESEND` |
 | **E** | Ruhephase, Prozesse, Arbeitsbaum und Divergenz **lesend** prüfen | Integrator | `NUR_LESEND` |
 | **F** | `AKTIVIERUNGS_SHA` begründet bestimmen und **zunächst nur berichten** | Integrator | `NUR_LESEND` |
-| **G** | getrennte Rollen-Worktrees als **kontrollierter Bootstrap** anlegen | Integrator *(B1)* **oder Yama** *(B2)* | `BOOTSTRAP` |
+| **G** | getrennte Rollen-Worktrees anlegen | **Yama** *(B2 entschieden)* | — *(nicht `BOOTSTRAP`)* |
 | **H** | Generator baut die **technischen Barrieren** im eigenen Worktree | Generator | — |
 | **I** | Evaluator prüft **positive und negative** Sperrfälle unabhängig | Evaluator | — |
 | **J** | Integrator auf **`SCHREIBEND`** freigeben | Yama | `SCHREIBEND` |

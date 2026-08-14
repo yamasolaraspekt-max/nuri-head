@@ -393,15 +393,15 @@ Yamas Trennung der beiden SHAs richtig und `36e60030` als Arbeitsbasis falsch.
 | ID | Punkt | Status |
 |---|---|---|
 | P2G-01 | `docs/rollenkette/rollen/6-integrator/1-AUFTRAG.md` — Kennung, sechster Agent, zehn Festlegungen, sechs Einsatzvoraussetzungen, Verhältnis zu den fünf Rollen | **UMGESETZT_UNGEPRUEFT** |
-| P2G-02 | `2-WANN-BIN-ICH-DRAN.md` — Auslöser, zwei Betriebsarten, Ablaufplan A–J, zwölf Integrationsschritte, Nicht-Zuständigkeit | **UMGESETZT_UNGEPRUEFT** |
-| P2G-03 | `3-WAS-ICH-LESE.md` — zehn Pflichteingaben, Gegenstellen **je Gegenstelle**, sechs Verwechslungen | **UMGESETZT_UNGEPRUEFT** |
+| P2G-02 | `2-WANN-BIN-ICH-DRAN.md` — Auslöser, **DREI Betriebsarten** (`NUR_LESEND` · `BOOTSTRAP` · `SCHREIBEND`), **Ablaufplan A–K mit korrekter Startreihenfolge** (lesend starten **vor** prüfen), zwölf Integrationsschritte, Nicht-Zuständigkeit | **UMGESETZT_UNGEPRUEFT** |
+| P2G-03 | `3-WAS-ICH-LESE.md` — **VIER Vorgangstypen** (A Aktivierung · B Generator-Commit · C reiner Statusübergang · D Prüf-/Freigabedokument) statt zehn pauschaler Pflichteingaben, Gegenstellen **je Gegenstelle**, sechs Verwechslungen | **UMGESETZT_UNGEPRUEFT** |
 | P2G-04 | `4-WAS-ICH-ABLIEFERE.md` — neun Erzeugnisse, Belegform, Zählstand übernommen/abgelehnt/offen | **UMGESETZT_UNGEPRUEFT** |
 | P2G-05 | `5-WAS-ICH-NICHT-DARF.md` — zwölf harte Grenzen, je begründet | **UMGESETZT_UNGEPRUEFT** |
 | P2G-06 | **Konsistenz `docs/ARBEITSREGELN.md`** — Nachtrag „Integrator" am Dateiende, Hinweis in der Release-Prüfer-Zeile | **UMGESETZT_UNGEPRUEFT** |
-| P2G-07 | **Konsistenz `docs/rollenkette/LIESMICH.md`** — Baum, Übergabestück **E**, Kopfzeile „sechs Sichten, fünf Übergabestücke" | **UMGESETZT_UNGEPRUEFT** |
+| P2G-07 | **Konsistenz `docs/rollenkette/LIESMICH.md`** — Baum **mit `E-integrationsprotokoll.md`**, zwei getrennte Rollen-Einträge, Übergabestück **E** in der Tabelle, **„SECHS SICHTEN" · „FÜNF STAFFELSTÄBE" · „sechs Sichten, fünf Übergabestücke" · „Sechs gleich gebaute Wissensordner"** — alle Mengenangaben des Dokuments geprüft | **UMGESETZT_UNGEPRUEFT** |
 | P2G-08 | **Konsistenz `docs/rollenkette/START-PROMPT.md`** — Rollentrennung und Git-Disziplin um Integrator/Worktrees/Aktivierungs-SHA erweitert | **UMGESETZT_UNGEPRUEFT** |
 | P2G-09 | **Unabhängige Abnahme durch den Plan-Prüfer** — Vollständigkeit, Widerspruchsfreiheit, Zuständigkeitsgrenzen, Trennung Evaluator/Release-Prüfer/Integrator, positive **und** negative Sperrfälle, Konsistenz mit Arbeitsregeln und Checkliste | **OFFEN** |
-| P2G-25 | **⚠ ENTSCHEIDUNG YAMA: Bootstrap-Variante** — **B1** Integrator legt die vier Worktrees im `BOOTSTRAP`-Modus an **oder B2** Yama legt sie selbst an. *(Empfehlung: **B2** — der Umbau existiert, weil Rollen vor ihrer Barriere gehandelt haben; B1 wiederholt das ein letztes Mal an der Rolle, die es verhindern soll.)* | **BLOCKIERT** |
+| P2G-25 | **Bootstrap-Variante ENTSCHIEDEN: B2** — Yama bzw. eine ausdrücklich von Yama autorisierte Infrastrukturhandlung legt die Rollen-Worktrees an. **Begründung: keine Rolle handelt vor Aktivierung ihrer Barriere.** Die Betriebsart `BOOTSTRAP` bleibt **nur als dokumentierter Notfallweg** bestehen und ist für diese Umstellung **NICHT freigegeben** | **UMGESETZT_UNGEPRUEFT** |
 | P2G-26 | **Drei Betriebsarten definiert** — `NUR_LESEND` · `BOOTSTRAP` · `SCHREIBEND`, mit Erlaubt/Verboten je Art | **UMGESETZT_UNGEPRUEFT** |
 | P2G-27 | **Ablauf A–K widerspruchsfrei** — lesend starten (D) **vor** prüfen (E), schreiben (J) **nach** fremder Barriereprüfung (I) | **UMGESETZT_UNGEPRUEFT** |
 | P2G-28 | **Eingaben nach Vorgangstyp getrennt** — A Aktivierung · B Generator-Commit · C reiner Statusübergang · D Prüf-/Freigabedokument | **UMGESETZT_UNGEPRUEFT** |
@@ -515,8 +515,8 @@ Exit-Code · **tatsächliche Ausgabe** · erwartetes Ergebnis · Grün/Rot · Wi
 | P4-02 | `docs/ARBEITSREGELN.md` — §3 für Ablesungen (Yamas Punkt 16) | **OFFEN** |
 | P4-03 | `docs/ARBEITSREGELN.md` — §16 Einzelschreiber | **OFFEN** |
 | P4-04 | `docs/ARBEITSREGELN.md` — **Abschnitt Integrator** | **UMGESETZT_UNGEPRUEFT** — *(vorher „BLOCKIERT (Besetzung)“: überholt, die Rolle ist seit B-2 benannt. Nachtrag am Dateiende, Hinweis in der Release-Prüfer-Zeile, Commit `047fc6fe`.)* |
-| P4-05 | `docs/rollenkette/START-PROMPT.md` | **OFFEN** |
-| P4-06 | `docs/rollenkette/LIESMICH.md` | **OFFEN** |
+| P4-05 | `docs/rollenkette/START-PROMPT.md` | **UMGESETZT_UNGEPRUEFT** — Rollentrennung um Integrator erweitert, Git-Disziplin um Worktrees/Integrations-Checkout/`AKTIVIERUNGS_SHA`, **B2 als verbindliche Bootstrap-Variante** *(Commit `047fc6fe`, ergänzt in der Konsistenzkorrektur)* |
+| P4-06 | `docs/rollenkette/LIESMICH.md` | **UMGESETZT_UNGEPRUEFT** — Baum, Übergabestück **E**, alle Mengenangaben *(Commit `047fc6fe` + Konsistenzkorrektur)* |
 | P4-07..11 | **alle fünf Rollenmappen** — dieselbe verbindliche Aussage | **OFFEN** |
 | P4-12 | Doku Commit-Tor | **OFFEN** |
 | P4-13 | Doku Worktree-Erstellung | **OFFEN** |
@@ -692,9 +692,9 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 
 | Status | Anzahl |
 |---|---|
-| `OFFEN` | **109** |
-| `UMGESETZT_UNGEPRUEFT` | **51** |
-| `BLOCKIERT` | **20** |
+| `OFFEN` | **107** |
+| `UMGESETZT_UNGEPRUEFT` | **54** |
+| `BLOCKIERT` | **19** |
 | `NACHBESSERN` | **1** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
@@ -702,6 +702,9 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
 — `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186.
+**Und das Muster war ein drittes Mal zu eng:** es verlangte eine Ziffer und übersah damit `PAR-RA`.
+**Zusammen mit `P2F` und `P2G` sind das drei Blöcke, die der eigene Prüfer nicht sah** — die Lehre
+steht oben und gilt: das Muster wird beim Anlegen mitgeändert, nicht danach bemerkt.
 **Bei Abweichung gilt der Befehl, nicht die Tabelle.** Und der Befehl selbst war **zweimal** zu eng: sein Muster
 kannte erst `P2F` nicht (`[A-E]`, sechzehn Punkte unsichtbar), dann `P2G` nicht (`[A-F]`, **weitere
 vierundzwanzig**). **Ein Zählskript, das einen ganzen Block nicht sieht, hat denselben Mangel, den es
@@ -715,13 +718,14 @@ das ist an dieser Datei zweimal belegt:
 python3 - <<'EOF'
 import re; from collections import Counter
 L=open('docs/rollenkette/UMSTELLUNG-GETRENNTE-WORKTREES-CHECKLISTE.md',encoding='utf-8').read().split('\n')
-pat=re.compile(r'\b((?:V|P[0-8][A-G]?|T|PAR)-(?:RA)?[0-9]+[a-z]?)\b')
+pat=re.compile(r'^\|\s*\*{0,2}(PAR-RA|(?:V|P[0-8][A-G]?|T|PAR)-(?:RA)?[0-9]+[a-z]?)\*{0,2}\s*\|')  # ID nur aus SPALTE 1; PAR-RA traegt keine Ziffer
 ST=re.compile(r'\*\*(UMGESETZT_UNGEPRUEFT|OFFEN|BLOCKIERT|NACHBESSERN|ENTF\u00c4LLT_MIT_BEGRUENDUNG|UNABHAENGIG_BESTAETIGT)\*\*')
 P3=re.compile(r'\*\*(ENTWURF|BEREIT|IN_ARBEIT|CODE_FERTIG|ABNAHME|ABGENOMMEN|RELEASE_PRUEFUNG|RELEASE_FREI|VEROEFFENTLICHT|BETRIEBSBESTAETIGT|SPEC_BLOCKED|ENV_BLOCKED|DECISION_BLOCKED)\*\*')
 alle=set(); mit={}; fremd=[]
 for l in L:
-    ids=pat.findall(l); alle.update(ids)
-    if l.startswith('| ') and ids:
+    m0=pat.match(l); ids=[m0.group(1)] if m0 else []
+    alle.update(ids)
+    if ids:
         m=ST.search(l)
         if m: mit.setdefault(ids[0],m.group(1))
         fremd += [(ids[0],f.group(1)) for f in P3.finditer(l)]
@@ -756,23 +760,36 @@ entschieden** und darf nicht erneut als offen dargestellt werden.)*
 | **f** | Integrator untersucht die **Divergenz** des gemeinsamen Branches und bestimmt **erst danach** den `AKTIVIERUNGS_SHA` | **Integrator** | wartet auf e |
 | **g** | **Erst vom freigegebenen `AKTIVIERUNGS_SHA`** die vier übrigen Rollen-Worktrees anlegen | Integrator/Planner | wartet auf f |
 
-**Nachgeschärft am 14.08. — Yamas Ablaufplan A–J, der die Schritte a–g umfasst und zwei neue davor setzt:**
+**Nachgeschärft am 14.08. — Yamas Ablaufplan A–K.** *(Er ersetzt den früheren A–J, in dem der
+Integrator bei D prüfte und erst bei E startete — **ein Prüfer, der noch nicht läuft, prüft
+nichts.** Die alte Fassung ist damit überholt; maßgeblich ist ausschließlich diese.)*
 
-| Schritt | Handlung | wer | Zustand |
-|---|---|---|---|
-| **A** | Integrator-**Rollenpaket erstellen** | Planner | **UMGESETZT_UNGEPRUEFT** *(P2G-01..08)* |
-| **B** | Rollenpaket **unabhängig prüfen** | **Plan-Prüfer** | **OFFEN** *(P2G-09)* |
-| **C** | vier Schreibstopps **einzeln** nachweisen | Yama | offen *(P2F-01)* |
-| **D** | Ruhe- und Prozessprüfung | Integrator *(lesend)* | offen *(P2F-02..05)* |
-| **E** | Integrator zunächst **lesend** starten | Yama | offen *(P2F-06)* |
-| **F** | Divergenz untersuchen | Integrator | offen *(P2F-09..14)* |
-| **G** | `AKTIVIERUNGS_SHA` **begründet** bestimmen | Integrator | offen *(P2F-08)* |
-| **H** | Rollen-Worktrees anlegen | Integrator | offen *(P2A-02..06)* |
-| **I** | technische Barrieren **aktivieren und testen** | Generator baut, Evaluator prüft | offen *(P2G-10..24)* |
-| **J** | **erst danach** regulären Rollenbetrieb freigeben | Yama | offen |
+| Schritt | Handlung | wer | Betriebsart | Status wohnt bei |
+|---|---|---|---|---|
+| **A** | Rollenpaket **fertigstellen** | Planner | — | Stand: `P2G-01..08`, `P2G-26..31` |
+| **B** | **unabhängig prüfen** | **Plan-Prüfer** | — | Stand: `P2G-09` |
+| **C** | **vier Schreibstopps einzeln** nachweisen | Yama | — | Stand: `P2F-01`, `P2F-05` |
+| **D** | Integrator **`NUR_LESEND` starten** | Yama | `NUR_LESEND` | Stand: `P2F-06` |
+| **E** | Ruhephase, Prozesse, Arbeitsbaum und **Divergenz** prüfen | Integrator | `NUR_LESEND` | Stand: `P2F-02..05`, `P2F-09..14` |
+| **F** | `AKTIVIERUNGS_SHA` bestimmen und **nur berichten** | Integrator | `NUR_LESEND` | Stand: `P2F-08` |
+| **G** | Worktrees **gemäß B2 durch Yama** anlegen | **Yama** | — *(nicht `BOOTSTRAP`)* | Stand: `P2A-02..06` |
+| **H** | Generator baut die **technischen Barrieren** | Generator | — | Stand: `P2G-10..15` |
+| **I** | Evaluator prüft **positive und negative** Fälle | Evaluator | — | Stand: `P2G-16..24` |
+| **J** | Integrator auf **`SCHREIBEND`** freigeben | Yama | `SCHREIBEND` | offen |
+| **K** | **regulären Rollenbetrieb** freigeben | Yama | — | offen |
 
-**A ist erledigt, B ist der nächste Schritt — und B gehört nicht mir.** Der Planner erstellt das
-Rollenpaket und kennzeichnet es `UMGESETZT_UNGEPRUEFT`; **die Abnahme ist ausdrücklich getrennt.**
+**Die letzte Spalte nennt die Punkte, KEINEN Status.** Die Ablaufschritte A–K sind eine Sicht auf die
+Punkte, keine zweite Buchführung — **ein Status an zwei Orten driftet, und diese Datei hat es dreimal
+vorgeführt.** *(Gefunden vom eigenen Vollständigkeitsprüfer: er meldete `P2G-01`, `P2G-09` und
+`P6-RA1` als mehrfach bestatust. Es waren Querverweise — aber der Prüfer nahm die **erste ID der
+Zeile** statt die **ID in Spalte 1**. Beides ist berichtigt: der Prüfer liest Spalte 1, und die
+Ablaufzeilen tragen keinen Status mehr.)*
+
+**Schritt G trägt die Entscheidung P2G-25:** die Worktrees legt **Yama** an, nicht der Integrator.
+**Die Betriebsart `BOOTSTRAP` bleibt dokumentiert, ist aber für diese Umstellung nicht freigegeben** —
+**die bloße Dokumentation einer Betriebsart ist keine Erlaubnis, sie zu benutzen.**
+
+**A ist erledigt und `UMGESETZT_UNGEPRUEFT`, B ist der nächste Schritt — und B gehört nicht mir.**
 Ein Planner, der sein eigenes Rollenpaket abnimmt, ist genau der Fehler, gegen den die sechste Rolle
 gebaut wird.
 

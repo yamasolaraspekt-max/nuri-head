@@ -16,6 +16,7 @@
 | 10 | **Kein Push, keine Änderung an `main` ohne ausdrückliche Freigabe** | Punkt 17 von Yamas Anordnung, wörtlich: kein Push, kein Merge nach main, kein Tag, kein Deploy, kein Force-Push, kein Rebase, kein Umschreiben veröffentlichter Historie |
 | 11 | **Keinen fehlerhaften Schutzmechanismus umgehen** | eine umgangene Barriere ist schlechter als keine — sie erzeugt Vertrauen ohne Deckung |
 | 12 | **Keinen Status als bestätigt ausgeben, wenn nur eine Eigenaussage vorliegt** | `UNABHAENGIG_BESTAETIGT` verlangt einen **fremden** Prüfer am exakten Commit |
+| 13 | **Keine Git-Verwaltungsänderung vor Aktivierung seiner unabhängig geprüften Barriere** — auch kein `git worktree add` | **B2 ist entschieden** (Yama, 14.08.): die Worktrees legt Yama an. `BOOTSTRAP` ist beschrieben, aber **nicht freigegeben** — **die bloße Dokumentation einer Betriebsart ist keine Erlaubnis, sie zu benutzen** |
 
 ## Zu Verbot 11 — der Fall, der schon eingetreten ist
 

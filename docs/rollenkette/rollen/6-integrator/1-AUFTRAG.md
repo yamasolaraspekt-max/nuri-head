@@ -56,7 +56,7 @@ Richtung B nicht."*
 ## Einsatzvoraussetzungen — vorher arbeitet er ausschließlich lesend
 
 **Er hat DREI Betriebsarten** — `NUR_LESEND`, `BOOTSTRAP`, `SCHREIBEND`; die Abgrenzung steht in
-`2-WANN-BIN-ICH-DRAN.md`. **`SCHREIBEND` darf er erst, wenn ALLE SECHS zugleich belegt sind:**
+`2-WANN-BIN-ICH-DRAN.md`. **⚠ Für DIESE Umstellung gilt B2: Yama bzw. eine ausdrücklich von Yama autorisierte Infrastrukturhandlung legt die Rollen-Worktrees an. Der Integrator erhält KEINE Bootstrap-Freigabe. `BOOTSTRAP` bleibt nur als dokumentierter Notfallweg bestehen — die bloße Dokumentation einer Betriebsart ist keine Erlaubnis, sie zu benutzen.** **`SCHREIBEND` darf er erst, wenn ALLE SECHS zugleich belegt sind:**
 
 | # | Voraussetzung | Beleg |
 |---|---|---|

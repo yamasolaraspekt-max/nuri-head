@@ -1259,3 +1259,13 @@ Plan-Prüfer** abgenommen, nicht vom Planner, der es geschrieben hat.
 
 **Kein Push, kein Merge nach `main`, kein Tag, kein Deploy, kein Force-Push, kein Rebase und kein
 Umschreiben veröffentlichter Historie ohne Yamas ausdrückliche Freigabe.**
+
+**Betriebsarten und die Bootstrap-Entscheidung.** Der Integrator kennt drei Betriebsarten:
+`NUR_LESEND` (messen und berichten, **einschließlich Bestimmung und Begründung des
+`AKTIVIERUNGS_SHA`** — einen vorhandenen Commit zu benennen ist keine Schreibhandlung), `BOOTSTRAP`
+(ausschließlich Worktrees anlegen) und `SCHREIBEND` (integrieren, `docs/STATUS.md` schreiben).
+**Für die Umstellung vom 14.08.2026 gilt B2: Yama bzw. eine ausdrücklich von Yama autorisierte
+Infrastrukturhandlung legt die Rollen-Worktrees an.** Der Integrator führt **vor** Aktivierung seiner
+unabhängig geprüften Barriere **keine Git-Verwaltungsänderung** aus; `BOOTSTRAP` bleibt nur als
+dokumentierter Notfallweg bestehen und ist **nicht freigegeben**. **Die bloße Dokumentation einer
+Betriebsart ist keine Erlaubnis, sie zu benutzen.**
