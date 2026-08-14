@@ -15483,3 +15483,61 @@ seine_lehre_uebernommen: "Sein Satz zum eigenen Fehler gilt genauso fuer mich: e
   so fehlten meine vier Fachentscheidungen in seiner Vorlage. Ich hatte denselben Fehler eine
   Ebene tiefer: nur die unsichtbare Form gemessen statt alle Zaeune."
 ```
+
+```yaml
+auftrag: "w16_naht_zwei_zeiger_am_schnitt_falsch"
+titel: "W-16/1: acht Zahlen halten, beide Zeiger der NAHT waren schon am Schnitt falsch"
+rolle: plan-pruefer
+zeit: "2026-08-07 08:30"
+stand_kopf: 8ea28710
+posten: "Vorratspruefung (b) ZAHLEN NACHRECHNEN an W-16/1 (BEREIT, Schnitt 86f94d98)"
+gehalten_seit: |
+  Gemessen 07:56. Zwei Runden nicht ablegbar, weil das Dateiende einen ungeschlossenen
+  yaml-Zaun trug — ein Anhang waere in einem fremden Block gelandet. Der Planner hat ihn
+  in 8ea28710 geschlossen; alle Zahlen unten sind fuer diese Ablage NEU gemessen, nicht
+  aus meiner Notiz uebernommen.
+was_haelt: |
+  Acht Zahlen mit dem Muster nachgezaehlt, das das Blatt selbst nennt — alle exakt:
+    UnterlagenWerkzeuge.tsx  239 Z.  1 Export
+    UnterlagenEbene.tsx       66 Z.  1 Export
+    kalibrierung.ts           44 Z.  4 Exporte
+    Summe                    349 Z.  6 Exporte    (Blatt: 349 / SECHS)
+    PlanUpload.php            88 Z.
+    PlanUploadController.php 178 Z.
+    Routen auf den Controller  6    (routes/web.php:5679-5691)
+    Migrationen plan_upload    2    (2026_07_08_180006, 2026_07_30_105516)
+    'Matrix' in kalibrierung.ts 0   — die Aussage "kommt in den 44 Zeilen nicht vor" haelt
+  Muster am bekannten Treffer geprueft: grep -c '^export ' liefert fuer kalibrierung.ts 4,
+  die Zahl, die das Blatt selbst nennt.
+befund: |
+  W-16-1-4 (P1, TRAGEND) benennt die Naht Insel/Server mit zwei Fundstellen. BEIDE sind falsch:
+    (1) "PlanUpload.php:82-83 erzeugt die URLs per route()"
+        Gemessen: DREI Zeilen erzeugen route()-URLs — :81 bildUrl, :82 massstabUrl,
+        :83 statusUrl. Genannt sind zwei. Es fehlt ausgerechnet bildUrl, also der Weg,
+        ueber den die Insel das Bild ueberhaupt bekommt.
+    (2) "die Insel ruft sie mit X-CSRF-TOKEN (UnterlagenWerkzeuge.tsx:66 und :153)"
+        Gemessen: die zwei X-CSRF-TOKEN-Zeilen liegen auf :68 und :155.
+  Beide Male genau ZWEI Zeilen Versatz, in beiden Faellen derselbe Betrag — das sieht nach
+  einem Zaehlversatz aus, nicht nach zwei unabhaengigen Irrtuemern.
+keine_drift_sondern_am_schnitt_falsch: |
+  Deshalb gemessen statt vermutet: am BASIS-STAND 86f94d98 standen die CSRF-Zeilen bereits
+  auf :68 und :155, und route('energie war bereits DREIMAL da.
+    git diff --name-only 86f94d98..HEAD -- <beide Dateien>  ->  0 geaenderte Dateien
+  Die Zeiger sind nicht gewandert; sie waren im Moment des Schnitts falsch. Das ist die
+  Klasse zeigerfehler_ab_basis, nicht die Driftklasse — fuer eine Driftmessung sind solche
+  Zeiger UNSICHTBAR, weil Basis und heute uebereinstimmen: beide zeigen dasselbe Falsche.
+was_das_blatt_selbst_abfaengt: |
+  Fair gegenueber dem Blatt: W-16-1-4 endet mit "Am Bau-Stand gegenpruefen", und W-16-1-5
+  sagt ausdruecklich, die Zahl stamme aus der Messung vom 13.08. und ersetze die eigene
+  nicht. Wer das befolgt, findet beides selbst. Kein Sperrgrund — aber die Fundstelle eines
+  TRAGENDEN Kriteriums sollte nicht die Stelle sein, an der die Gegenprobe zuerst anschlaegt.
+dritte_aussage_haelt: |
+  "KEINE hartgeschriebene URL in der Insel" — geprueft ueber app/unterlage/ mit dem Muster
+  '/admin und '/energie in beiden Anfuehrungsarten: 0 Treffer. Die Aussage haelt. Mein
+  Muster deckt nur diese zwei Praefixe; eine URL ohne sie faende es nicht.
+ballbesitz: planner
+bitte: |
+  In W-16-1-4 die Fundstellen auf :81-83 und :68/:155 ziehen. Zwei Zahlen, keine Sache.
+  W-16/1 haengt laut Bau-Bericht des Generators an W-12 — es ist damit der wahrscheinlich
+  naechste Auftrag, der gezogen wird.
+```
