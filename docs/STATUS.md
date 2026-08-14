@@ -16358,3 +16358,63 @@ bitte: |
   In A-35-9 den seitlichen Versatz nennen — "5 mm" genuegt, dann ist die 286,5 m aus dem
   Blatt heraus nachrechenbar. Eine Zahl, kein Bau.
 ```
+
+```yaml
+auftrag: "sieben_blaetter_gegen_ihren_schnitt"
+titel: "Alle sieben BEREIT-Blaetter gegen ihren Schnitt gemessen — und die Klasse habe ICH erzeugt"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:57"
+stand_kopf: 5c46941c
+posten: "Vorratspruefung (a), ausgeweitet von einem Blatt auf ALLE sieben"
+messung: |
+  Jeder Datei:Zeile-Zeiger jedes BEREIT-Blatts an HEAD UND am eigenen basis_sha gelesen,
+  Zeile gegen Zeile. Nur eindeutig aufloesbare Pfade gezaehlt.
+    Auftrag  Basis      Zeiger  gleich  anders  Datei am Schnitt nicht vorhanden
+    W-18/1   8c920624        8       8       0    0
+    W-16/1   86f94d98        9       9       0    0
+    A-35     1df82ee1        4       4       0    0
+    W-03/1   e097e7be        4       3       1    0
+    A-33     f9b67b1b        1       0       1    0
+    W-10/1   18fe2deb       17      15       2    0
+    W-14/1   78c09e1b       24      13       7    4
+    ------------------------------------------------------------------
+    Summe                   67      52      11    4
+  Drei Blaetter sind an ihrem Schnitt vollstaendig stimmig, vier nicht.
+die_abweichungen_einzeln: |
+  W-03/1  werkzeugLandkarte.ts:108   HEAD 'teilen'/fehlt   BASIS 'bild-importieren'/ohne-modell
+  A-33    a26-ball-drift.sh:53       HEAD die Muster-Zeile  BASIS ein Kommentar
+  W-10/1  werkzeugLandkarte.ts:170, HausplanerApp.tsx:1027 (am 08:42 gemeldet)
+  W-14/1  fuenf HausplanerApp-Zeilen, zwei werkzeugLandkarte-Zeilen — UND VIER Zeiger auf
+          app/sammelBefehle.ts, eine Datei, die am Schnitt 78c09e1b NICHT EXISTIERTE.
+          Angelegt wurde sie von 606e83b4 (A-31), also NACH dem Schnitt.
+und_jetzt_der_teil_der_gegen_mich_geht: |
+  A-33s abweichender Zeiger ist a26-ball-drift.sh:53. Das ist GENAU die Zeile, deren
+  Berichtigung ICH um 07:30 verlangt habe (Befund a33_grundlage_zeiger_gewandert) und die
+  der Planner in eecd5215 gezogen hat. Vorher zeigte das Blatt auf :32/:55-56 und stimmte
+  mit seinem Schnitt; jetzt zeigt es auf :53/:96-97 und stimmt mit HEAD.
+  ICH HABE DIE KLASSE ERZEUGT, DIE ICH SEIT ZWEI RUNDEN MELDE. Meine Driftmeldungen fuehren
+  zu Vorwaerts-Berichtigungen, und jede Vorwaerts-Berichtigung ohne mitgezogenen basis_sha
+  bricht §5s "exakter Basis-SHA". Das ist keine Ausrede fuer die Blaetter — es ist der Grund,
+  warum die Bitte nicht "Zeiger ziehen" heissen darf, sondern "Zeiger UND Schnitt ziehen".
+die_zwei_wege_schliessen_sich_aus: |
+  Entweder das Blatt bleibt seinem Schnitt treu — dann waechst die Drift und wer an HEAD
+  liest, wird fehlgeleitet. Oder es wird nach vorn gepflegt — dann ist es mit basis_sha
+  unstimmig, solange der nicht mitwandert. Beides zugleich geht nicht, und heute steht der
+  Bestand in der Mitte: vier Blaetter gepflegt, ihre Schnitte stehengelassen.
+  Der saubere Weg ist der zweite MIT mitgezogenem Schnitt. Er kostet nichts ausser einem
+  Feld, und er ist der einzige, bei dem §5 und die Nuetzlichkeit fuer den Bauenden
+  gleichzeitig gelten.
+was_ich_NICHT_sage: |
+  Kein Blatt ist dadurch falsch, und keines ist unbaubar. W-14/1 ist der schaerfste Fall,
+  aber auch dort sind 13 von 24 Zeigern an beiden Staenden gleich und die vier auf
+  sammelBefehle.ts zeigen an HEAD auf genau das, was das Blatt beschreibt.
+  Und meine eigene Meldung von 08:35 ("W-03/1 haelt an allen sieben Stellen") bleibt richtig:
+  sie galt ausdruecklich W-03-1-1, und ich habe die Grenze damals genannt. Der jetzt
+  gefundene Zeiger steht in einem anderen Abschnitt.
+ballbesitz: planner
+bitte: |
+  Bei den vier Blaettern den basis_sha auf einen Stand ziehen, an dem die berichtigten
+  Zeiger gelten — oder je einen Satz, dass die Fundstellen am HEUTIGEN Stand gelten.
+  Und kuenftig bei jeder Zeiger-Berichtigung den Schnitt mitziehen; meine Bitten formuliere
+  ich ab sofort so.
+```
