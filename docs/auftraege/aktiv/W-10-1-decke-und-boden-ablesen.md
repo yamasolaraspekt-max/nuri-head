@@ -277,3 +277,115 @@ Kriterium:**
 - **`basis_sha` allein genügt NICHT** — das ist der Punkt, den diese Berichtigung beweist: **diese
   drei Zeiger waren schon am Basis-Stand falsch.** Wer nur „am Basis-Stand messen" sagt, fängt
   Drift, aber keinen Schnittfehler.
+
+---
+
+## Votum des Evaluators (§11) — Runde 1
+
+**NACHBESSERN.** *Sieben von acht Kriterien tragen, und die Wortfallen-Auflösung ist die beste
+Einzelleistung des Blattes. **W-10-1-1 (P1, TRAGEND)** hat aber eine Stelle, an der das Blatt eine
+Wirkung behauptet, die es nicht gibt.*
+
+### Der Befund: „das Werkzeug stapelt über `naechsteEtageElevationMm`" — es tut es nicht
+
+**`4-BEDIENUNG:40` sagt:**
+
+> | nächste Etage höhenrichtig stapeln | **das Werkzeug**: `naechsteEtageElevationMm` |
+
+**Gemessen, über die Funktionsnamen statt über den Modulnamen:**
+
+```text
+$ grep -rn 'naechsteEtageElevationMm' resources/planner/hausplaner/
+  renderers/three-d/deckenMesh.ts:32        die Definition
+  __tests__/decke.test.ts:9, :90, :92       der Waechter
+                                            -> KEIN Produktivaufrufer
+
+$ grep -rn 'deckenOberkanteMm' …
+  renderers/three-d/deckenMesh.ts:10        die Definition
+                                            -> NULL Aufrufer, auch kein Test
+
+$ grep -rn "from '.*deckenMesh'" …
+  __tests__/decke.test.ts:9                 der einzige Import im ganzen Repo
+```
+
+**Und wer stapelt dann wirklich?**
+
+```text
+app/dashboard/Kopfrahmen.tsx:172
+  elevation: oben.elevation + oben.defaultWallHeight + oben.floorThickness
+                              ^^^ genau die Rechnung, die naechsteEtageElevationMm kapselt,
+                                  hier von Hand
+renderers/three-d/szene.ts:455   const deckenHoehe = level.elevation + level.defaultWallHeight;
+                        :482     const oberkante   = level.elevation + level.defaultWallHeight;
+                                  ^^^ das ist deckenOberkanteMm, ebenfalls von Hand
+```
+
+> ***Die Schichten-Tabelle führt `deckenMesh.ts` als Schicht „Darstellung" — gemessen zeichnet
+> `szene.ts` die Decke, und zwar ohne `deckenMesh`.*** *Der Dateikopf sagt es selbst: die Datei
+> enthält „reine Kennwerte, kein three/WebGL". **Kennwerte, die niemand abruft.***
+
+**Warum das ein P1-Punkt ist und keine Feinheit:** *Das Kriterium `W-10-1-1` begründet sich damit,
+dass ein zu kleines Blatt „die Darstellung beschreibt und nicht das Werkzeug". **Hier ist es
+umgekehrt eingetreten**: das Blatt führt eine Darstellungs-Schicht auf, die im Produktivweg nicht
+vorkommt — und sagt an einer Stelle sogar, sie leiste das Stapeln.* **Wer `naechsteEtageElevationMm`
+ändert, ändert nichts am Verhalten; wer den Fehler beim Stapeln sucht, sucht in der falschen Datei.**
+
+### Was NICHT verlangt ist
+
+*Kein Umbau. **Der Umfang des Befundes ist der Befund** (§12.2): die Zeile in `4-BEDIENUNG`
+berichtigen und im Blatt festhalten, dass `deckenMesh.ts` keinen Produktivverbraucher hat — mit der
+Angabe, wo stattdessen gerechnet wird.* **Ob das ein Mangel im Code ist, entscheidet dieses Blatt
+nicht; eine Ablesung hält fest, was ist.**
+
+### Messtisch — alle acht Kriterien, jedes selbst gefahren
+
+| Kriterium | Ergebnis | Beleg |
+|---|---|---|
+| **W-10-1-1** (P1, TRAGEND) alle Schichten mit Fundstelle | **ROT** *(eine Schicht)* | Registry `'decke'` **1** (`:132-148`), Schema `CeilingNode`/`CeilingOeffnung` (`scene.types.ts:338`/`:348`), **drei** Befehle (`commands.types.ts:29-31`, `applyCommand.ts:288`/`:305`/`:320`), `treppenDurchbrueche` (`:119`), `deckenMesh.ts` **35 Z / 3 Exporte**, Aufruf `HausplanerApp.tsx:1026` (**geöffnet**, `ADD_CEILING`), Fixtures `fixtures/studioFixtures.ts:58-61` (**geöffnet**), Test **242 Z / 13 Zusagen** — **alle gefunden und belegt, aber der fehlende Produktivverbraucher von `deckenMesh` ist nicht genannt** ✗ |
+| **W-10-1-2** (P1) Tooltip-Zusage erfüllt + Wortfalle | **grün** | `toolRegistry.ts:141` geöffnet: *„(Treppen werden ausgespart)"*. `applyCommand.ts:119` `function treppenDurchbrueche(...)`, Aufruf `:298` — beides geöffnet. **Wortfalle selbst nachgemessen:** `Aussparung` **0**, `aussparung` **0**, `ausgespart` **5**, `Durchbruch` **5** |
+| **W-10-1-3** (P1) zwei Aufrufer-Regeln | **grün** | `pruefeDeckeProLevel` `:112`, gerufen `:296` und `:315`; Test `:50` *„zweite je Level wird abgelehnt"*. Die `oeffnungen`-Unterdrückung an `:298` selbst gelesen: `(ceiling.oeffnungen?.length > 0) ? ceiling.oeffnungen : treppenDurchbrueche(...)` |
+| **W-10-1-4** Formeln am Code, Registerzeile geprüft | **grün** | `treppenDurchbrueche` selbst geöffnet: `Math.hypot(dx,dy) \|\| 1`, dann `nx = -dy/len, ny = dx/len` — **Normale zur Lauflinie**, wie das Blatt sagt. Registerzeile trägt `F-011 ✓` mit Fundstelle |
+| **W-10-1-5** `boden`-Befund ohne Entscheidung | **grün** | `werkzeugVertrag.ts:649` `werkzeugId: 'boden'`, `werkzeugPaket.ts:167` `{ id: 'boden', … }`, `toolRegistry` **0** — alle drei selbst geöffnet |
+| **W-10-1-6** Zahlen am Bau-Stand mit Träger | **grün** | selbst gezählt: **12** Registry-Einträge, **35** Z `deckenMesh.ts`, **242** Z / **13** Zusagen `decke.test.ts` — alle drei mit dem im Kriterium genannten Träger |
+| **W-10-1-7** kein Produktivcode | **grün** | `25db5490`: 8 Dateien, **0** außerhalb `docs/` |
+| **W-10-1-8** Test gefahren | **grün** | selbst gefahren: `tests 13 · pass 13 · fail 0` |
+| **Wächter** Insel-Suite | **grün** | `tests 1750 · pass 1750 · fail 0` |
+| **Wächter** `tsc:hausplaner` | **grün** | Exit 0 |
+| **sieben Blätter** | **grün** | `61/89/117/72/89/101/94` Z, **sieben verschiedene** md5 |
+| **Registerzeile** | **grün** | `LEER → BESCHRIEBEN`, `F-011 ✓` mit Fundstelle, 5 Spalten |
+| **Browser** | **nicht gefahren** | *der Bau-Commit fasst ausschließlich `docs/` an* |
+| **§15 Datenbank** | **nicht berührt** | *kein schreibender Lauf* |
+
+### Die beste Stelle des Blattes — und sie hätte mich fast einen Phantom-Befund gekostet
+
+*Das Blatt löst die Wortfalle `Aussparung` gegen `Durchbruch` auf. **Ich bin genau dort
+hineingelaufen**: mein erster Griff war `grep 'Aussparung'` — **null Treffer**, und nach A-24
+(Oberfläche verspricht, Code hält nicht) wäre das ein P1-Befund gewesen.*
+
+```text
+Aussparung   0        Durchbruch   5        treppenDurchbrueche   gebaut UND gerufen
+```
+
+> **Der Tooltip hält seine Zusage vollständig** — *nur unter einem anderen Wort.* **Ein Blatt, das
+> diese Falle benennt, verhindert einen falschen Befund bei jeder nächsten Rolle, die dasselbe Wort
+> sucht.**
+
+### Zwei Beobachtungen ohne Befundstatus
+
+**1. Eine zweite Wahrheit, die kein Kriterium betrifft.** *Dieselbe Höhenrechnung steht **dreimal**
+von Hand im Produktivcode (`Kopfrahmen.tsx:172`, `szene.ts:455`, `:482`), während die gekapselte
+Fassung in `deckenMesh.ts` nur im Test lebt.* **Das ist ein Fahrplan-Punkt, kein Ablese-Punkt** —
+*hier nur festgehalten, weil er beim Messen des Befundes anfiel.*
+
+**2. `PAKET_WERKZEUGE = 110` gegen 101 Einträge.** *Das Blatt schreibt „Die 110 sind **GEZÄHLT**,
+nicht verdrahtet". Gemessen ist die 110 eine **hartgeschriebene Konstante** (`toolRegistry.ts:316`),
+und `werkzeugPaket.ts` trägt **101** `id:`-Einträge — mit zwei Mustern geprüft.* **Der Zweck des
+Kriteriums ist trotzdem erfüllt** *(niemand liest 110 erreichbare Werkzeuge)*, **und welche Menge die
+110 meint, habe ich nicht abschließend geklärt** — *der Kommentar darüber nennt sie eine Zusage
+gegen verschwundene Paket-Werkzeuge. Ich melde die Differenz, ohne sie zu bewerten; sie gehört nicht
+zu diesem Auftrag.*
+
+### Weitergabe
+
+**Ball an den Generator** (§12.1, CODE-Befund). *Die Wiederabnahme fährt **alle acht** Kriterien
+erneut (§12.3).*
