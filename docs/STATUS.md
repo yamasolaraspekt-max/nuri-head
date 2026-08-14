@@ -16193,7 +16193,7 @@ was_ich_nicht_tue: |
   Kein Push. Die stehende Regel der Wache ist KEIN PUSH, und sie gilt auch dann, wenn die
   Abhilfe naheliegt. Auf Yamas Wort: git push backup-private auto/hausplaner-integration,
   nur dieser Zweig, kein Zwang, kein main.
-ballbesitz: release-pruefer
+ballbesitz: "— # ERLEDIGT 14.08. 08:45, vom plan-pruefer nachgemessen: alle drei Remotes stehen auf 36e60030, der Transport hat backup-private mitgenommen"
 bitte: |
   Beim naechsten Takt backup-private mitnehmen — oder sagen, dass es bewusst nicht mehr
   gefuehrt wird. Beides ist in Ordnung; unbemerkt zurueckhaengen ist es nicht, weil die
@@ -16246,4 +16246,52 @@ nicht_verschwiegen: "Der Plan-Pruefer hat recht mit dem schaerfsten Teil seines 
   Sicherung sind kein Formfehler. Dass mein Takt sie eingeholt hat, macht sie nicht harmlos —
   es macht nur den Schaden endlich."
 ballbesitz_antwort: —  # beantwortet, behoben und entschieden; der Rollengrenzen-Teil bleibt bei Yama
+```
+
+```yaml
+auftrag: "alterung_zwei_fehlalarme_meines_filters"
+titel: "Alterung neu gemessen — kein Fund an den Blaettern, zwei Fehlalarme in meinem eigenen Filter"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:47"
+stand_kopf: 36e60030
+posten: "Vorratspruefung (d) ALTERUNG, vollstaendig ueber alle ZWOELF offenen Auftraege"
+alterung: |
+  Auftrag  Zustand           Alter    Commits seit Schnitt   genannte Dateien seither geaendert
+  A-05     ABGENOMMEN       215h08     1391   nur der eigene Bericht
+  A-12     ABGENOMMEN        84h26     1193   nur eigener Bericht, FORMELSAMMLUNG, VORGEHEN
+  W-21L    DECISION_BLOCKED  56h24     1067   KEINE — alle drei genannten Dateien unberuehrt
+  W-18/1   BEREIT            31h08      298   keine
+  W-12/1   NACHBESSERN       30h53      296   (Fehlalarm, siehe unten)
+  W-10/1   BEREIT            24h08      249   keine
+  W-16/1   BEREIT            24h30      267   keine
+  W-14/1   BEREIT            23h56      243   keine
+  A-33     BEREIT            21h59      222   scripts/a26-ball-drift.sh (bereits gemeldet+behoben)
+  W-03/1   BEREIT            18h06      205   keine
+  A-35     BEREIT             9h11      110   keine
+  A-36     ENTWURF            0h29       19   keine
+das_ergebnis_fuer_yama: |
+  W-21L liegt seit 56 Stunden bei Yama und ist DECISION_BLOCKED. Gemessen: von den DREI
+  Dateien, die sein Blatt nennt, hat sich seit dem Schnitt 4f0d4584 KEINE geaendert. Die
+  Entscheidung ist also nicht schlechter geworden — wenn sie faellt, passt das Blatt noch
+  auf den Code. Das ist die einzige Aussage dieser Runde, die jemand anders braucht.
+zwei_fehlalarme_in_meinem_filter_offengelegt: |
+  (1) DREI Blaetter meldete mein Lauf als "nicht lesbar": A-05, A-12, W-21L. Nachgesehen:
+      alle drei Dateien EXISTIEREN. Ihre Bloecke fuehren das Feld 'datei:' statt 'blatt:',
+      und mein Muster kannte nur 'blatt:'. Kein Fund, mein Filter. Berichtigt und wiederholt.
+      NEBENBEFUND, den ich nicht ueberdehne: die Statuswahrheit fuehrt ZWEI Feldnamen fuer
+      dieselbe Sache. Das ist kein Fehler, solange beide gelesen werden — ich lese ab jetzt
+      beide.
+  (2) W-12/1 meldete "public/hausplaner/hausplaner.js seit dem Schnitt geaendert", bewegt
+      durch 606e83b4 und ebe99ba6. Nachgesehen, wo das Blatt die Datei nennt: EINMAL, in der
+      Pruefteabelle des Evaluators, Zeile 261 — "Buendel public/hausplaner/hausplaner.js |
+      nicht noetig | Scope-Diff am Commit: sieben .md, resources/ 0". Das Blatt haengt also
+      NICHT an der Datei, es stellt fest, dass kein Neubau noetig war. Mein Filter zaehlt
+      Erwaehnungen, nicht Abhaengigkeiten — dieselbe Klasse, die ich an A-35-2 beanstandet
+      und beim Evaluator gelobt habe. Kein Fund.
+kein_fund_an_den_blaettern: |
+  Nach Abzug der zwei Fehlalarme bleibt EIN Treffer, und der ist alt: A-33 nennt
+  scripts/a26-ball-drift.sh, gemeldet 07:30 und vom Planner in eecd5215 behoben.
+  Die sechs uebrigen BEREIT-Auftraege nennen keine Datei, die sich seit ihrem Schnitt
+  bewegt hat — bei 205 bis 298 Commits Abstand.
+ballbesitz: "— (Messung, kein Vorgang)"
 ```
