@@ -13769,3 +13769,51 @@ was_ich_NICHT_tue: "Kein Zustand, kein Blatt, kein Bau. Ob das zustand-Feld aus 
   §1 behaelt Regelaenderungen Yama vor, die Form des Datensatzes gehoert dem Planner."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — ZWEI ZEIGER, DIE JEDE MEINER MESSUNGEN HEUTE NACHT UEBERSEHEN HAT (Plan-Pruefer, 14.08. 05:1x)
+
+```yaml
+zeiger_in_fachdokumente: "VORRATSPRUEFUNG Posten a an den fuenf BEREIT-Blaettern, die der Planner
+  heute Nacht NICHT berichtigt hat (W-16/1, W-18/1, W-03/1, A-33, A-35), gemessen an ded2ff71.
+  Zwei gewanderte Zeiger, beide aus derselben Familie: A-34 hat den Mechanismus im PRODUKTIVCODE
+  behoben (Anker statt Zeilennummer), aber die BEREIT-Blaetter zeigen weiter mit Zeilennummern in
+  genau die Dateien, die A-34 dabei laenger gemacht hat."
+fund_1_W_03_1: "geometry/geradenGeometrie.ts:157 — das Blatt sagt dort 'parallelVersatz(...)'.
+    Basis e097e7be :157 = export function parallelVersatz(
+    heute    ded2ff71 :157 = ein Zeilenkommentar aus der A-34-Erklaerung
+    die Funktion steht heute auf :174 — A-34 (2f8cf32d) hat 17 Kommentarzeilen davor eingefuegt.
+  Der Zeiger steht an ZWEI Stellen im Blatt: im grundlage-Feld (Z.27) und im Codeblock (Z.78).
+  Der Nachbarzeiger :84 geradenSchnitt haelt."
+fund_2_W_18_1: "FORMELSAMMLUNG.md:120 — das Blatt sagt dort 'F-013 Selbstschnitt-Pruefung',
+  ebenfalls an ZWEI Stellen (grundlage-Feld Z.21 und Text Z.30).
+    Basis 8c920624 :120 = ### F-013 · Selbstschnitt-Pruefung
+    heute    ded2ff71 :120 = ein Zitatblock innerhalb des F-004-Abschnitts
+    die Ueberschrift F-013 steht heute auf :155.
+  Derselbe Vorgang, den A-34 selbst dokumentiert: die Berichtigung von F-004 (136ebca1) hat
+  Zeilen eingefuegt. Nachgemessen, wie weit: F-011 102 -> 137, F-013 120 -> 155. Der
+  Nachbarzeiger :75 F-004 haelt, weil er VOR der Einfuegung liegt — genau die Begruendung,
+  die A-34 in geradenGeometrie.ts wortwoertlich hinterlassen hat."
+warum_beide_bisher_unsichtbar_waren: "Zwei verschiedene Luecken in MEINER Extraktion, beide heute
+  Nacht erst durch diesen Posten aufgefallen:
+    W-03/1 :157 steht als 'geradenGeometrie.ts:84 geradenSchnitt, :157 parallelVersatz' — eine
+      KOMMA-Kette, und darunter im Codeblock als nackte :157 unter einer Dateizeile. Mein
+      Kettenmuster von cc6af7ba verlangt '/:' zwischen den Zahlen und fasst beides nicht.
+    W-18/1 :120 zeigt in eine .md-Datei. Ich habe diese Nacht in JEDEM Lauf nur .ts/.tsx/.mjs
+      aufgeloest. Alle Zeiger der Blaetter in FORMELSAMMLUNG.md und REGISTER.md waren nie
+      Gegenstand einer Messung — nicht falsch gemessen, sondern gar nicht."
+was_ich_ausdruecklich_NICHT_melde: "Der breite Lauf ueber alle acht Blaetter meldet 100 gewanderte
+  md-Zeiger. DAS IST KEINE FUNDZAHL. Der Loewenanteil zeigt auf docs/STATUS.md, und dort erzeugt
+  mein positionsgenaues Vorwaertsschleppen Falsch-Positive: nach einer Erwaehnung von
+  docs/STATUS.md wird jede Zahl der Form :NNN im Fliesstext als Zeiger genommen (Zitate wie
+  'Z.517', Auftragsnummern), und die Datei waechst taeglich um Tausende Zeilen, sodass jeder
+  echte Zeiger dorthin ohnehin trivial wandert. Ich melde die zwei Faelle, die ich im Wortlaut
+  des Blattes gegengelesen habe, und keine Sammelzahl."
+eine_probe_die_scheiterte: "Mein erster md-Lauf meldete NULL gewanderte md-Zeiger. Die Musterprobe
+  am bekannten Treffer 'FORMELSAMMLUNG.md:75 F-004 und :120 F-013' ergab nur die 75 — das Muster
+  fasste die 'und :120'-Form nicht. Damit war die Null keine Messung, sondern ein Ausfall; sie ist
+  verworfen und durch die positionsgenaue Zuordnung ersetzt, die die Probe besteht."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Bau. W-03/1 und W-18/1 bleiben BEREIT.
+  Ob die zwei Zeiger auf Anker umgestellt werden — wie A-34 es im Code getan hat — oder ob der
+  Vermerk genuegt, entscheidet der Planner."
+ballbesitz_befund: planner
+```
