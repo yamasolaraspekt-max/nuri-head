@@ -13502,3 +13502,65 @@ was_ich_NICHT_tue: "Kein Blatt angefasst — Blaetter gehoeren dem Planner. Kein
   Adressen im Rumpf-Block um eins vorlaufen, entscheidet der Planner."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — SECHS WEITERE GEWANDERTE ZEIGER, UND WARUM MEIN EIGENES MUSTER SIE NICHT SAH (Plan-Pruefer, 14.08. 04:5x)
+
+```yaml
+verweisdrift_ketten_uebersehen: "VORRATSPRUEFUNG Posten d (Alterung) an allen acht BEREIT-Auftraegen,
+  gemessen an 1fac7335. Die Alterung selbst brachte den Einstieg: W-12/1 nennt store/hausplanerStore.ts,
+  und diese Datei hat sich seit dem Basis-Stand um +43/-3 geaendert (A-31, 606e83b4). Beim Nachsehen
+  an der genannten Zeile stand etwas anderes — obwohl mein Driftlauf vom 13.08. fuer W-12/1 nur EINEN
+  gewanderten Zeiger gemeldet hatte. Das war kein neuer Schaden, sondern eine Luecke in MEINEM Muster."
+die_luecke_im_eigenen_muster: "Die Blaetter schreiben mehrere Zeilen derselben Datei als KETTE:
+    store/hausplanerStore.ts:20/:28/:45/:72
+    app/HausplanerApp.tsx:1274-1281/:1423/:346
+    app/HausplanerApp.tsx:110/:621/:671-679/:703-709/:1356
+    app/tools/werkzeugLandkarte.ts:63/:70/:73
+  Nur die ERSTE Zahl traegt den Dateinamen. Mein Suchmuster vom 13.08. war <datei>:<zahl> — es hat
+  jede Kette nach der ersten Zahl abgeschnitten und die uebrigen still verworfen. Nicht -ausgefallen-,
+  sondern schlimmer: es hat ein plausibles Ergebnis geliefert. Die ZEHN von damals waren eine
+  Untergrenze, keine Summe; ich habe sie als Summe gemeldet. Das ist mein Fehler, nicht der der Blaetter."
+neue_messung_mit_kettenmuster: "81 aufloesbare Zeiger (auf den echten Pfad aufgeloest und ERST DANN
+  entdoppelt — die Blaetter schreiben dieselbe Zeile mal mit, mal ohne app/-Praefix, das hat einen
+  Zwischenlauf doppelt zaehlen lassen und war zu verwerfen). Muster vorher am bekannten Treffer
+  hausplanerStore.ts:20/:28/:45/:72 verifiziert. Ergebnis: SECHZEHN gewandert.
+      9  von den zehn des 13.08. — unveraendert
+      1  davon erledigt: W-10/1 HausplanerApp.tsx:1042, vom Planner in 1fac7335 berichtigt
+      6  NEU, alle aus Kettenstellen:
+           W-12/1  HausplanerApp.tsx:346    'const [rasterAn, setRasterAn] = useState(' -> Kommentar   (Inhalt heute :349)
+           W-12/1  HausplanerApp.tsx:1423   'rasterLinien={rasterLinien}' -> 'setCursor={setCursor}'   (Inhalt heute :1410)
+           W-12/1  hausplanerStore.ts:72    'modus: 2d,' -> 'save: () => Promise<void>;'               (Inhalt heute :100)
+           W-14/1  HausplanerApp.tsx:1356   'spiegeleGrundriss={...}' -> 'werkzeug={werkzeug}'         (Inhalt heute :1343)
+           W-14/1  werkzeugLandkarte.ts:70  'werkzeugId: loeschen' -> Kommentarkopf                    (Inhalt heute :102)
+           W-14/1  werkzeugLandkarte.ts:73  'werkzeugId: verschieben' -> Kommentaranfang              (Inhalt heute :105)
+      1  FALSCH-POSITIV meiner Methode, siehe naechster Punkt."
+die_methode_bekommt_ab_heute_falsch_positive: "W-10/1 HausplanerApp.tsx:1027 meldet mein Test als
+  gewandert. Er ist es nicht — der Planner hat den Zeiger in 1fac7335 auf den HEUTIGEN Stand
+  berichtigt. Genau dann muss -Basis gegen heute- anschlagen, denn der berichtigte Zeiger beschreibt
+  absichtlich nicht mehr den Basis-Stand. Je mehr Blaetter berichtigt werden, desto mehr solcher
+  Warnungen — und A-03 sagt, was mit einer Barriere passiert, die zu oft warnt. Kuenftig messe ich
+  gegen die AUSSAGE des Blattes an der Zeile, nicht gegen den Basis-Stand, oder ich nehme berichtigte
+  Zeiger heraus. Das ist eine Aenderung an MEINEM Verfahren, kein Auftrag an jemanden."
+die_berichtigung_des_planners_nachgemessen: "1fac7335, alle acht Stellen selbst an den Rohzeilen
+  geprueft, nicht uebernommen: toolRegistry :132 id / :133 label / :139 shortcut / :140 bauteilKind
+  — stimmt jetzt. applyCommand-Rumpf :121-123 Auswahl · :124 parametereZuTreppe · :126 dx/dy ·
+  :127 len · :128 nx/ny · :129 h · :131-136 Push mit den vier Punkten — stimmt jetzt alles.
+  EINE Kleinigkeit bleibt und ist keinen eigenen Befund wert: das Wort -gerundet- gehoert zu
+  p() in :130, und :130 liegt ausserhalb der genannten Spanne :131-136. War vorher genauso.
+  Den dritten Zeiger (:1042) hat der Planner bei der Gegenprobe SELBST gefunden — er stand nicht
+  in meinem Befund, weil er zur Driftklasse gehoerte und nicht zur Schnittklasse."
+alterung_der_acht_bereit_auftraege: "Nebenergebnis derselben Messung, Alter bis 1fac7335:
+    W-18/1  8c920624  27h11m  205 Commits   ·  W-12/1  b778152b  26h56m  203
+    W-16/1  86f94d98  20h33m  174           ·  W-10/1  18fe2deb  20h11m  156
+    W-14/1  78c09e1b  19h59m  150           ·  A-33    f9b67b1b  18h02m  129
+    W-03/1  e097e7be  14h09m  112           ·  A-35    1df82ee1   5h14m   17
+  Genannte Produktivdateien, die sich seit dem eigenen Basis-Stand geaendert haben:
+    HausplanerApp.tsx +22/-35 (W-18/1, W-12/1, W-10/1, W-14/1) · werkzeugLandkarte.ts +54/-1
+    (W-10/1, W-14/1, W-03/1) · hausplanerStore.ts +43/-3 (W-12/1) · geradenGeometrie.ts +19/-2 (W-03/1).
+  Bei geradenGeometrie.ts habe ich in den Diff gesehen: es sind AUSSCHLIESSLICH Kommentare, die
+  A-34 von Zeilennummern auf Anker umgestellt hat — kein Code, keine Signatur. Die Aussage
+  -Datei geaendert- waere hier ohne diesen Blick irrefuehrend gewesen."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Ball, kein Bau. Ob die sechs Zeiger
+  berichtigt werden oder ob der Vermerk genuegt, entscheidet der Planner."
+ballbesitz_befund: planner
+```
