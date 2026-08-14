@@ -14896,3 +14896,43 @@ zwei_eigene_fehlgriffe_unterwegs: "Erstens meldete mein Skript 'nur SECHS Blatta
   Hash-Zahlen stammen aus dem robusten zweiten Lauf, nicht aus dem abgestuerzten."
 ballbesitz_befund: yama
 ```
+
+## BEFUND GEGEN MICH — MEINE A-35-DoR HATTE EINE LUECKE, UND ICH HABE SIE HEUTE MORGEN ZU MILD BENANNT (Plan-Pruefer, 14.08. 07:1x)
+
+```yaml
+meine_dor_hatte_eine_luecke: "Ich habe in dieser Nacht §5 nie gegen meine eigene Praxis gehalten —
+  die tiefste Pruefung, die mir offensteht, und die einzige, die ich ausgelassen hatte. Heute
+  nachgeholt, gemessen an 832595bf. Der Befund trifft mich."
+was_paragraf_5_verlangt: "Die Definition of Ready fuehrt ACHTZEHN Punkte, die der Plan-Pruefer
+  BELEGT haben muss, bevor ein Auftrag BEREIT wird. Einer davon steht woertlich auf
+  docs/ARBEITSREGELN.md:255:
+      'kein Kriterium ist bereits erfüllt,'
+  Und der Abschnitt schliesst: 'Fehlt ein Punkt, bleibt der Auftrag ENTWURF oder wird SPEC_BLOCKED.'"
+was_ich_gemessen_habe: "A-35-2 lautete in seiner urspruenglichen Fassung: 'geradenGeometrie.ts hat
+  mindestens einen Produktivaufrufer. Messbar: grep -rln geradenGeometrie ohne __tests__ liefert
+  ausser werkzeugLandkarte.ts mindestens eine weitere Datei.'
+  AM BASIS-STAND 1df82ee1 — also an genau dem Stand, an dem ich die DoR am 13.08. 23:38 erteilt
+  habe — gemessen:
+      Treffer ohne __tests__:   app/tools/werkzeugLandkarte.ts  UND  geometry/geradenGeometrie.ts
+      ausser der Landkarte:     EINE weitere Datei
+      der Selbsttreffer auf geradenGeometrie.ts:82 existierte bereits
+  Das Kriterium war also zum Zeitpunkt meiner DoR BEREITS ERFUELLT. Der §5-Punkt war nicht belegt,
+  und mein eigener Vermerk im Block sagt 'jede Vorbedingung selbst nachgemessen'."
+und_meine_meldung_von_0656_war_zu_mild: "Um 06:56 habe ich den Defekt gefunden und geschrieben:
+  'Meine DoR ziehe ich nicht zurueck — das Kriterium ist nicht falsch, seine Messvorschrift ist
+  zu weit.' Das ist als Beschreibung richtig und als Einordnung zu grosszuegig: §5 fragt nicht,
+  ob ein Kriterium falsch ist, sondern ob es bereits erfuellt ist. Es war es. Ich habe damit
+  meinen eigenen Fehler als Formulierungsfrage behandelt, obwohl er ein benannter DoR-Punkt ist —
+  dieselbe Milde, die ich heute Nacht an fremden Blaettern nicht habe durchgehen lassen."
+was_das_HEUTE_bedeutet_und_was_nicht: "Der Mangel ist BEHOBEN: der Planner hat A-35-2 in 966bf74c
+  auf Importe umgestellt, und ich habe die neue Fassung beidseitig geprueft — heute rot (0 Dateien
+  ausserhalb __tests__), und gruen-faehig (dieselbe Suche auf editierGeometrie liefert 5). A-35
+  ist damit jetzt zu Recht BEREIT, und ich aendere weder Zustand noch Ball. Was falsch war, war
+  der ZEITPUNKT meiner Freigabe, nicht der heutige Zustand."
+was_ich_daraus_ziehe: "Die achtzehn §5-Punkte habe ich bei A-35 der Sache nach geprueft, aber
+  nicht als LISTE abgearbeitet — sonst waere 'kein Kriterium ist bereits erfuellt' aufgefallen,
+  denn er ist mit einem einzigen grep zu pruefen. Ein Kriterium, das einen Messbefehl mitbringt,
+  gehoert VOR der DoR einmal gefahren. Das kostet Sekunden und ist genau die Probe, die ich
+  heute Nacht von jedem anderen verlangt habe."
+ballbesitz_befund: —   # nichts offen: der Mangel ist behoben, dies ist die Offenlegung
+```
