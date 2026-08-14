@@ -92,10 +92,49 @@ mehr als ein einzelnes Werkzeug.**
 |---|---|---|
 | K1 | **Auswahl hat nur EIN Objekt** | Es gibt keine Schnittkante → **abweisen mit Grund**, nicht stillschweigend nichts tun |
 | K2 | **Die Geraden sind parallel** | `geradenSchnitt` liefert `null` → **abweisen mit Grund**, kein Absturz, keine erfundene Ecke |
-| K3 | **Schnittpunkt liegt AUSSERHALB der Wandstrecke** | Der Schnitt zweier *Geraden* ist nicht der Schnitt zweier *Strecken*. **Muss benannt entschieden werden** — verlängern oder abweisen; die Entscheidung gehört ins Blatt, nicht in eine stille Annahme |
+| K3 | **Schnittpunkt liegt AUSSERHALB der Wandstrecke** | Der Schnitt zweier *Geraden* ist nicht der Schnitt zweier *Strecken*. **ZWEI benannte Größen nötig, nicht eine** — siehe K3-Nachtrag unten. |
 | K4 | **Das zu kürzende Objekt ist auch eine Schnittkante** | `primaerId` ist in `ids` enthalten (`auswahlModus.ts` Fall `add` erlaubt das) → **definiert behandeln** |
 | K5 | **Objekt ist gesperrt** | Der Vertrag kennt `sperren`/`entsperren` → **gesperrte Objekte werden nicht getrimmt** |
 | K6 | **Mehrere Schnittkanten treffen** | Welche gewinnt? **Benannt festlegen** (Vorschlag: die nächstgelegene zum Klickpunkt), nicht die erste in der Liste |
+
+### ⚠ K3-NACHTRAG 14.08. — der Fall braucht ZWEI Größen, nicht eine
+
+**Anlass:** Der Plan-Prüfer hat F-004 durchgerechnet (`907aaba2`) — **die Formel stimmt**, fünf
+Fälle je doppelt gerechnet, meine Berichtigung vom 13.08. bestätigt sich. **Aber er hat einen
+Fall gefunden, den mein K3 nicht abdeckt, und ich habe ihn selbst nachgerechnet:**
+
+```text
+EPS_SINUS = 1e-6 wirkt auf den SINUS, nicht auf den Winkel:
+  asin(1e-6) = 5,73e-05 Grad   <- erst darunter blockiert die Wache
+
+Zwei 6000-mm-Waende, 5 mm Versatz — wo liegt der Schnittpunkt?
+   0,01     Grad ->     28,6 m   Wache: laesst durch
+   0,001    Grad ->    286,5 m   Wache: laesst durch
+   0,0001   Grad ->   2864,8 m   Wache: laesst durch
+   0,000057 Grad ->   4999,6 m   Wache: laesst durch  (exakt an der Schwelle)
+```
+
+**Der Kern: K2s Wache ist eine WINKELschwelle, der Schaden ist eine ABSTANDSgröße.** K2 fängt nur
+den *fast exakt* parallelen Fall. **Wer bei K3 „verlängern" wählt, verlängert lautlos eine
+6-Meter-Wand auf 2,9 Kilometer** — mathematisch korrekt, baulich Unsinn, und ohne jede Meldung.
+
+**K3 verlangt deshalb ZWEI benannte Größen:**
+1. **verlängern oder abweisen** (wie bisher)
+2. **bis zu welchem Abstand verlängert wird** — die Größe, die bisher fehlte
+
+**⚠ OPERAND — Fachentscheidung, NICHT vom Generator zu setzen.** Nach der Schutzgrenze wird das
+nicht still automatisiert. **Mein Vorschlag, ausdrücklich als Vorschlag und mit Begründung:**
+der Schnittpunkt muss **innerhalb der Bounding-Box aller Wände des Geschosses zuzüglich eines
+Zuschlags** liegen — *selbstskalierend, kommt ohne erfundene Zahl aus und passt sich an Bungalow
+wie an Hallenbau an.* **Die Alternative wäre ein fester Faktor** (Verlängerung höchstens n × Wand-
+länge), *einfacher, aber willkürlich.* **Der Generator wählt keine der beiden eigenmächtig:** er
+setzt die Größe an EINER benannten Stelle, macht sie im Bau-Bericht sichtbar, und ein
+Überschreiten wird **gemeldet, nicht stillschweigend geklemmt** (dieselbe Regel wie bei den
+geklemmten Öffnungen in `segmentierung.ts`).
+
+**Nicht beanstandet und mitgeprüft:** Die A-32-Normierung ist durch Rechnung gedeckt — bei
+0,001 Grad steht der normierte Wert über drei Größenordnungen still, während der rohe Betrag um
+den Faktor 10⁸ springt.
 
 ## Abnahmekriterien
 
@@ -125,6 +164,12 @@ mehr als ein einzelnes Werkzeug.**
 - **A-35-8** · **Suite grün und Zahl unverändert** (Stand `1df82ee1`: 1750), `tsc exit=0`.
   Neue Tests erhöhen die Zahl — **die Differenz ist zu nennen und muss der Zahl der neuen
   Tests entsprechen.**
+
+- **A-35-9** · **K3 trägt ZWEI Größen** (K3-Nachtrag): Verhalten *und* Abstandsgrenze.
+  **Messbar:** ein Test mit zwei 6000-mm-Wänden bei **0,001°** Winkeldifferenz — der
+  Schnittpunkt liegt dort **286,5 m** entfernt und **passiert K2s Wache**. Das Werkzeug muss
+  diesen Fall **erkennen und melden**, nicht stillschweigend verlängern. Die gewählte Grenze
+  steht an **einer** benannten Stelle und im Bau-Bericht.
 
 ## Rückweg und Entdeckung
 

@@ -13394,13 +13394,24 @@ kanten: "K1 nur EIN Objekt gewaehlt · K2 parallele Geraden (geradenSchnitt lief
   K4 primaerId ist auch in ids · K5 gesperrtes Objekt · K6 mehrere Schnittkanten treffen.
   K3 und K6 verlangen eine BENANNTE Entscheidung im Bau-Bericht; eine stille Annahme ist ein
   Mangel, auch wenn sie sich vernuenftig verhaelt."
-kriterien: "A-35-1 bis A-35-8 im Blatt, alle mit genanntem Messbefehl und Zahl vorher/nachher.
+kriterien: "A-35-1 bis A-35-9 im Blatt, alle mit genanntem Messbefehl und Zahl vorher/nachher.
   Tragend sind A-35-3 (Hauptrolle ist primaerId, NICHT ids[0]) und A-35-5 (die Uebersetzung
   selectionIds<->selectedNodeIds steht an GENAU EINER Stelle, A7 Konsequenz 2)."
 warum_A_und_nicht_W03_2: "W-03/1 liegt als Ablesung auf BEREIT. Ein zweiter Auftrag am selben
   Blattordner wuerde kollidieren. Ob trimmen eine eigene Registerzeile bekommt, ist eine
   Registerfrage und wird NACH dem Bau entschieden — gemessen: trimmen, verlaengern und versatz
   haben heute keinen Eintrag im REGISTER.md."
+k3_geschaerft_14_08: "Der plan-pruefer hat F-004 durchgerechnet (907aaba2): die Formel stimmt,
+  fuenf Faelle je doppelt gerechnet, die Berichtigung vom 13.08. bestaetigt sich — ABER K3
+  entschied ohne einen Operanden. EPS_SINUS 1e-6 wirkt auf den SINUS: die Wache blockiert erst
+  unter 5,73e-05 Grad. Selbst nachgerechnet fuer zwei 6000-mm-Waende mit 5 mm Versatz: bei
+  0,001 Grad liegt der Schnittpunkt 286,5 m entfernt und passiert die Wache; exakt an der
+  Schwelle sind es 5,0 km. K2 ist eine WINKELschwelle, der Schaden eine ABSTANDSgroesse — wer
+  bei K3 verlaengern waehlt, verlaengert lautlos eine 6-Meter-Wand auf Kilometer. K3 verlangt
+  jetzt ZWEI Groessen: Verhalten UND Abstandsgrenze. Die Grenze ist FACHENTSCHEIDUNG und wird
+  nicht vom Generator gesetzt; mein Vorschlag (Bounding-Box des Geschosses plus Zuschlag,
+  selbstskalierend) steht als Vorschlag im Blatt, die Alternative (fester Faktor) daneben.
+  Neues Kriterium A-35-9 mit dem 0,001-Grad-Fall als Messbefehl."
 rueckweg: "Der Bau fuegt hinzu und aendert nichts Bestehendes. Ruecknahme = Commit zurueckdrehen,
   keine Datenmigration, kein Schema, keine Bestandsdokumente betroffen."
 dor_beleg: "ERTEILT 13.08. 23:38 plan-pruefer, gemessen am BASIS-STAND 1df82ee1 und am Baum.
