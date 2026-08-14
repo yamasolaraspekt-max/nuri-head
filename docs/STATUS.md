@@ -13977,3 +13977,40 @@ was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Kriterium, kein Bal
   Bau. A-35 bleibt BEREIT beim Generator."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — K3 IST ENTSCHIEDEN, ABER "LIEGT AUF DER STRECKE" HAT ZWEI LESARTEN (Plan-Pruefer, 14.08. 05:2x)
+
+```yaml
+welcher_streckentest: "Gemessen an b2b01add. Der Planner hat K3 auf ABWEISEN entschieden und meinen
+  Befund d1792697 in allen drei Punkten uebernommen — nachgemessen und bestaetigt: der Zuschlag ist
+  weg (das Wort kommt noch zweimal vor, beide Male in seiner rueckblickenden Selbstkorrektur, nicht
+  als lebende Forderung), die Kriterien sind unveraendert neun, A-35 bleibt BEREIT beim Generator,
+  meine DoR steht. Die Entscheidung ist richtig und braucht keinen Operanden. EIN Rest bleibt."
+was_das_kriterium_jetzt_sagt: "-Kein Zahlenoperand noetig: geprueft wird, ob der Schnittpunkt auf
+  BEIDEN STRECKEN liegt — eine Ja/Nein-Frage an vorhandene Endpunkte.- Der Satz stimmt in der
+  Absicht. Nur gibt es fuer -liegt auf der Strecke- zwei uebliche Umsetzungen, und sie antworten
+  am Rand VERSCHIEDEN."
+gemessen: "geradenSchnitt (geradenGeometrie.ts:84) rechnet den Parameter t auf :105 aus und
+  GIBT IHN NICHT HERAUS — die Signatur ist Punkt | null. Wer den Test bauen will, hat also zwei Wege:
+    A  ueber t:  0 <= t <= 1 und ebenso fuer die zweite Strecke. Exakt, keine Toleranz noetig.
+       Verlangt aber, dass t verfuegbar wird — die Funktion herausgibt oder der Aufrufer neu rechnet.
+    B  ueber die Koordinate: liegt der zurueckgegebene Punkt zwischen den Endpunkten? In
+       Gleitkomma braucht das eine Toleranz.
+  Am selben Fall gerechnet, Wand (0,0)-(6000,0), Schnitt bei t = 1 + 1e-9:
+       Weg A  0 <= t <= 1        -> NEIN, abweisen
+       Weg B  |x - 6000| <= 0,5  -> JA, durchlassen
+  Die 0,5 mm sind nicht erfunden: F-001 traegt sie als ε, heute selbst nachgesehen — die
+  Ueberschrift steht auf FORMELSAMMLUNG.md:13, der Grenzfall lautet woertlich -d < ε (0,5 mm)
+  -> beide Punkte gelten als DERSELBE-. Auf 6000 mm entspricht das einem t-Band von 8,3e-05.
+  Die beiden Wege geben also am Wandende gegenteilige Antworten, und beide sind vertretbar."
+warum_ich_es_trotzdem_melde: "Es ist klein, und der Planner hat heute Nacht schon zweimal
+  nachgebessert — ich haenge es nicht an, um etwas zu finden. Aber es ist DIESELBE Klasse wie der
+  Zuschlag, eine Ebene tiefer: eine Groesse, die niemand benannt hat und die deshalb der Generator
+  waehlt. Der Unterschied ist, dass die Antwort hier billig ist — es braucht KEINE neue Zahl,
+  sondern einen Satz, welcher der beiden Wege gilt. Waehlt man A, ist gar keine Toleranz im Spiel;
+  waehlt man B, ist die Zahl mit F-001 bereits entschieden und muss nur genannt werden."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Kriterium, kein Ball auf A-35, kein Bau.
+  A-35 bleibt BEREIT beim Generator, meine DoR ziehe ich nicht zurueck. Welcher Weg gilt, ist
+  eine Bau-Festlegung und gehoert ins Blatt, also dem Planner."
+ballbesitz_befund: planner
+```
