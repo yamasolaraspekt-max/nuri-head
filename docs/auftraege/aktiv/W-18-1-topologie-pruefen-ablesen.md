@@ -338,3 +338,98 @@ zitieren** — *aber ich habe trotzdem geschrieben, obwohl die Zählung 2 sagte.
 den Anker an den Block zu binden, nicht an das Feld.* **Der neue Handgriff aus 22:49 hat den Schaden
 verhindert** *(erst in eine Kopie, dort prüfen, dann übernehmen)* — **aber er ist ein Netz und kein
 Ersatz für einen eindeutigen Anker.**
+
+---
+
+## Votum des Evaluators (§11) — Runde 2 (Wiederabnahme)
+
+**ABGENOMMEN.** *Beide Befunde sind behoben, beide beidseitig gegengeprüft. Der Umfang der
+Nachbesserung ist genau der Befund geblieben — drei Dateien, `+29 −3`, kein Umbau.*
+
+### Befund 1 beidseitig: der Satz ist jetzt vollständig, vorher an keiner Stelle
+
+*Ich habe nicht nach dem Auge verglichen, sondern den Satz aus dem Code gezogen und ihn
+zeichengenau in den Blättern gesucht — **Markdown-Auszeichnung vorher entfernt**, dazu unten mehr:*
+
+```text
+Code  kontur.ts:63
+  'Die Kontur überschneidet sich selbst — zieh den letzten Punkt so,
+   dass sich keine zwei Kanten kreuzen.'
+
+              ALT (25c98cd6)      NEU (ee2a76d6)
+1-ZWECK             0                  vollstaendig
+3-FORMELN           0                  vollstaendig
+4-BEDIENUNG         0                  vollstaendig
+gekuerzte Fassung „dass sich keine …" im ganzen Ordner:  0 Treffer
+```
+
+> **Der Nachweis kann rot werden** *(Pflichtprüfung 4)* — *am alten Stand ist er es an allen drei
+> Stellen, am neuen an keiner.*
+
+### Befund 2 beidseitig: die Einordnung steht, und sie steht als Schluss aus einer Messung
+
+*Dieselben acht Muster wie in Runde 1, erneut über alle sieben Blätter:*
+
+```text
+                 Runde 1      Runde 2
+ablesung            1 (falsche Bedeutung)   2
+einordnung          0                       1
+kein Bau            0                       1
+nichts zu bauen     0                       1
+```
+
+**Der neue Abschnitt (`1-ZWECK`) nennt beides** — *den Schluss („W-18 war eine ABLESUNG und kein
+Bau") **und** die Messung, aus der er folgt: F-013 gebaut mit Fundstelle, F-004 gebaut aber anderswo
+und als Gehrungsdetail, der Anschluss steht.* **Und er sagt den Satz, um den es dem Kriterium ging:**
+*„damit die nächste Rolle sie nicht wiederholt".*
+
+> ***Ein Satz darin ist mehr als verlangt und er ist der beste:*** *„Die Einordnung entstand aus
+> dieser Messung und nicht umgekehrt — vor dem Öffnen des Codes stand offen, ob F-004 fehlt."*
+> **Das ist die Reihenfolge, die Yamas Verfahren für Klasse B fordert, als Aussage über den eigenen
+> Arbeitsweg.**
+
+### Die eine neue Zahl der Nachbesserung — selbst geöffnet
+
+*Der Abschnitt nennt eine Fundstelle, die im alten Blatt nicht stand:*
+
+```text
+$ sed -n '831p' app/HausplanerApp.tsx
+    const urteil = pruefeKontur(punkte);
+$ grep -c 'pruefeKontur' app/HausplanerApp.tsx   ->  2   (:31 Import, :831 Aufruf)
+```
+
+> **Sie trägt.** *Und sie schließt eine Lücke, die ich in Runde 1 nicht beanstandet hatte: das Blatt
+> nannte den **Import**, aber nicht die Stelle, an der die Prüfung wirklich **läuft**.*
+
+### Messtisch — alle sieben Kriterien erneut gefahren (§12.3)
+
+| Kriterium | R1 | R2 | Beleg aus dieser Runde |
+|---|---|---|---|
+| **W-18-1-1** (P1) beide Formeln, Meldung wörtlich | **ROT** | **grün** | `kontur.ts:109` und `wallGeometry.ts:62` erneut geöffnet; Satz zeichengenau an drei Stellen, s. o. |
+| **W-18-1-2** (P1) acht Exporte | grün | **grün** | `grep -c '^export '` → **8**, Datei **175** Z |
+| **W-18-1-3** (P1) Anschluss | grün | **grün** | `:31` vier Symbole, `:30` Grund, **neu `:831` der Aufruf** |
+| **W-18-1-4** (P1, H-9) Werkzeug vs. Modul, Wächter mit Zugriffsart | grün | **grün** | IMPORT **1** gegen WORT **12** erneut selbst gemessen; `kontur.test.ts` **173 Z, 11 Zusagen** |
+| **W-18-1-5** drei Grenzen | grün | **grün** | `grep -c '^## Grenze'` → **3** |
+| **W-18-1-6** Einordnung | **ROT** | **grün** | s. o., acht Muster beidseitig |
+| **W-18-1-7** sieben Blätter, md5 ohne Kollision | grün | **grün** | `87/87/76/54/49/72/76` Z, **sieben verschiedene** Hashes; Kollisionsprobe gegen den ganzen Werkbank-Bestand: 7 Dubletten, **keine** betrifft W-18 |
+| **Wächter** `kontur.test.ts` | grün | **grün** | `tests 11 · pass 11 · fail 0` |
+| **Wächter** Insel-Suite | grün | **grün** | `tests 1750 · pass 1750 · fail 0` |
+| **Wächter** `tsc:hausplaner` | grün | **grün** | Exit 0, keine Ausgabe |
+| **Registerzeile** | grün | **grün** | unverändert, eine Zeile, 5 Spalten |
+| **Browser** | — | **nicht gefahren** | *die Nachbesserung fasst ausschließlich `docs/` an* |
+| **§15 Datenbank** | — | **nicht berührt** | *kein schreibender Lauf* |
+
+### Mein eigener Messfehler in dieser Runde
+
+**Mein erster zeichengenauer Vergleich meldete `4-BEDIENUNG` als unvollständig — falsch.** *Die
+Stelle trägt den vollen Satz, aber mit `**`-Auszeichnung mitten drin:*
+`„… **zieh den letzten Punkt so, dass sich keine zwei Kanten kreuzen**."` — *mein Vergleich zählte
+die Markdown-Sternchen als Textunterschied.*
+
+> **Ein Prüfwerkzeug, das Auszeichnung für Inhalt hält, erzeugt genau die Sorte Befund, die ich beim
+> Generator beanstande** — *eine Zusage, die den Namen „wörtlich" trägt und etwas anderes misst.*
+> **Vor der Meldung nachgemessen, mit entfernter Auszeichnung: alle drei Stellen vollständig.**
+
+### Weitergabe
+
+**Ball an den Release-Prüfer** (§11, ABGENOMMEN).
