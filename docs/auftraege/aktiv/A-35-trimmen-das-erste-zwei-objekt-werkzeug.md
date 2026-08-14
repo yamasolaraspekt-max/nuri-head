@@ -204,10 +204,23 @@ den Faktor 10⁸ springt.
 - **A-35-1** · `app/tools/toolRegistry.ts` enthält einen Eintrag `trimmen`.
   **Messbar:** `grep -c "'trimmen'" app/tools/toolRegistry.ts` liefert **≥ 1**, vorher **0**
   (Zahl vorher/nachher im Bericht nennen).
-- **A-35-2** · `geradenGeometrie.ts` hat **mindestens einen Produktivaufrufer**.
-  **Messbar:** `grep -rln "geradenGeometrie" --include='*.ts' --include='*.tsx'` ohne
-  `__tests__` liefert außer `werkzeugLandkarte.ts` **mindestens eine weitere Datei**. Vorher
-  war es **nur** die Landkarte — die Zahl vorher/nachher gehört in den Bericht.
+- **A-35-2** · `geradenGeometrie.ts` hat **mindestens einen Produktiv-IMPORT**.
+  **Messbar — auf Importe, NICHT auf Erwähnungen:**
+  `grep -rln "from '.*geradenGeometrie'" --include='*.ts' --include='*.tsx'` liefert
+  **mindestens eine Datei außerhalb `__tests__`**.
+  **Stand vorher, selbst gemessen: genau EIN Import, nämlich `__tests__/geradenGeometrie.test.ts:14`
+  — Produktivimporte NULL.** Die Zahl vorher/nachher gehört in den Bericht.
+  **⚠ NEU GEFASST 14.08. nach `dcf5e772`, und der Befund war schwer:** meine erste Fassung maß
+  **Erwähnungen** und wäre **grün gewesen, bevor irgendjemand etwas baut.** Der alte Befehl
+  lieferte zwei Dateien — `werkzeugLandkarte.ts`, die die Datei nur in einer Begründung **nennt**
+  und **nicht importiert** (`from`-Treffer: 0), und **`geradenGeometrie.ts` selbst**, deren
+  Treffer ein **Kommentar auf Zeile 82** ist. „Außer der Landkarte mindestens eine weitere" war
+  damit durch den **Selbsttreffer** erfüllt. Auch meine Vorher-Zahl stimmte nicht: ich schrieb
+  „nur die Landkarte", gemessen waren es zwei. **Gegenprobe, dass das neue Muster taugt:**
+  dieselbe Import-Suche auf `editierGeometrie` liefert **sechs** Dateien.
+  **Warum es besonders zählt:** A-35 ist der erste Bau nach A7 und ausdrücklich das Muster für
+  vier weitere Werkzeuge — ein Kriterium, das vor dem Bau grün ist, prüft nichts und wird
+  abgehakt, weil der Befehl im Blatt steht und liefert, was er soll.
 - **A-35-3** · Die Rollenzuweisung folgt A7: **die Hauptrolle ist `primaerId`**, nicht
   `ids[0]`. **Messbar:** ein Test, der bei Auswahlreihenfolge A→B→C das Objekt **C** kürzt
   und A, B als Schnittkanten benutzt.

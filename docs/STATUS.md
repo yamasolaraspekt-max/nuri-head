@@ -13433,6 +13433,18 @@ k3_entschieden_14_08: "BERICHTIGUNG meines eigenen Vorschlags von einer Stunde v
   Bau-Bericht und haette sie damit faktisch den Generator waehlen lassen, was zwei Zeilen
   darueber verboten war. ENTSCHEIDUNG: K3 weist AB und verlaengert nicht — messbar ohne jede
   Zahl, sichere Richtung, spaeter nachruestbar, und dieselbe Antwort die K1 und K2 schon geben.
+a35_2_neu_gefasst_14_08: "Nach dcf5e772: mein Kriterium A-35-2 verlangte einen Produktiv-AUFRUFER,
+  mass aber ERWAEHNUNGEN — und waere damit GRUEN gewesen, bevor irgendjemand etwas baut. Der alte
+  Befehl lieferte zwei Dateien: werkzeugLandkarte.ts, die geradenGeometrie nur in einer Begruendung
+  NENNT und nicht importiert (from-Treffer 0), und geradenGeometrie.ts SELBST, deren Treffer ein
+  Kommentar auf Zeile 82 ist. Der Selbsttreffer allein erfuellte die Bedingung. Auch meine
+  Vorher-Zahl war falsch: ich schrieb -nur die Landkarte-, gemessen sind es zwei. NEU: gemessen
+  wird auf IMPORTE; Stand vorher genau EIN Import, der Test auf Zeile 14, Produktivimporte NULL.
+  Gegenprobe dass das Muster taugt: dieselbe Suche auf editierGeometrie liefert sechs Dateien.
+  Es zaehlt besonders, weil A-35 das Muster fuer vier weitere Werkzeuge ist — ein Kriterium das
+  vor dem Bau gruen ist prueft nichts und wird abgehakt, weil der Befehl im Blatt steht und
+  liefert was er soll. Seine DoR steht, das Kriterium war nicht falsch, seine Messvorschrift war
+  zu weit."
   A-35-9 neu gefasst: geprueft wird ob der Schnittpunkt auf BEIDEN Strecken liegt, eine
   Ja/Nein-Frage an vorhandene Endpunkte, kein Zahlenoperand. AN YAMA geht nur noch die
   ERWEITERUNG: soll spaeter auch verlaengert werden und bis zu welchem Abstand — A-35 wartet
