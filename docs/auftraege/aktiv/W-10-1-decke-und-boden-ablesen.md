@@ -18,13 +18,13 @@ kennung_geprueft: "W-10/1 und W-10/W haben NULL Treffer in docs/STATUS.md; W-10 
 anlass: "Yamas Regel fuer Klasse B: erst die Messung, dann die Einordnung. W-10 stand als
          'Indikation Ablesung' im Fahrplan, gestuetzt auf ein Modul (deckenMesh.ts). Beim Vollmessen
          ist der Gegenstand deutlich groesser geworden — wie bei W-16/1 liegt die Haelfte woanders."
-grundlage: "app/tools/toolRegistry.ts:132-147 · domain/scene.types.ts CeilingNode (:350-357) und
+grundlage: "app/tools/toolRegistry.ts:132-147 · domain/scene.types.ts CeilingNode (:348-357, war :350) und
             CeilingOeffnung (:338) · commands/applyCommand.ts:119-139 (treppenDurchbrueche),
             :288-303 (ADD_CEILING), :305 (UPDATE_CEILING), :320 (REMOVE_CEILING) ·
             renderers/three-d/deckenMesh.ts (35 Z., 3 Exporte) · __tests__/decke.test.ts (242 Z.) ·
             app/HausplanerApp.tsx:1027 · fixtures/studioFixtures.ts:60 ·
             app/tools/werkzeugVertrag.ts:649 (boden) · app/tools/werkzeugPaket.ts:167 ·
-            app/tools/werkzeugLandkarte.ts:117 und :120 · REGISTER.md:47"
+            app/tools/werkzeugLandkarte.ts:170 und :173 · REGISTER.md:47"
 ```
 
 ## 1 — Die Einordnung ist gemessen: ABLESUNG. Und der Gegenstand ist größer als das Modul
@@ -104,8 +104,8 @@ ZWEI EINTRAEGE, gemessen:
   app/tools/werkzeugVertrag.ts:649 werkzeugId 'boden', commandId 'FloorCommand'
 
 UND DIE LANDKARTE FUEHRT BEIDE AUF DENSELBEN BEFEHL:
-  :117  { werkzeugId: 'boden', marke: 'deckt', begruendung: 'ADD_CEILING' }
-  :120  { werkzeugId: 'decke', marke: 'deckt', begruendung: 'ADD_CEILING' }
+  :170  { werkzeugId: 'boden', marke: 'deckt', begruendung: 'ADD_CEILING' }   <- BERICHTIGT 14.08. (war :117)
+  :173  { werkzeugId: 'decke', marke: 'deckt', begruendung: 'ADD_CEILING' }   <- BERICHTIGT 14.08. (war :120)
 
 WICHTIG ZUR LESART VON 'PAKET': PAKET_WERKZEUGE ist eine KONSTANTE (110,
 toolRegistry.ts:316), keine Liste. Die 110 sind GEZAEHLT, nicht verdrahtet;

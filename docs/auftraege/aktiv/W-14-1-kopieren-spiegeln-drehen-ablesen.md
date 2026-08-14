@@ -22,7 +22,7 @@ anlass: "Die dritte und letzte der Ablesungen, die ich Yama in der Vorlage zuges
          werkzeugLandkarte unabhaengig bestaetigt hat."
 grundlage: "geometry/editierGeometrie.ts (75 Z., NEUN Exporte) · __tests__/editierGeometrie.test.ts
             (52 Z.) · app/tools/toolRegistry.ts:249 (loeschen) und :273 (duplizieren) ·
-            app/HausplanerApp.tsx:110/:621/:671-679/:703-709/:1356 ·
+            app/HausplanerApp.tsx:110/:621/:671-679/:695-696/:1343 · app/sammelBefehle.ts:103-111 ·
             app/dashboard/Kopfrahmen.tsx:30/:91/:100/:315/:316 · app/rahmen/Buehne.tsx:40/:207-208 ·
             app/rahmen/EigenschaftenPanel.tsx:120 · commands/applyCommand.ts:143/:162/:176/:203 ·
             domain/scene.types.ts:193-196 (transform nur am ObjectNode) ·
@@ -59,10 +59,15 @@ sich beziehen** und **wie man sie erreicht:*
                                icon="mirror-v"
                   :91   Props-Typ  spiegeleGrundriss: (achse: Achse) => void
                   :30   import type { Achse }
-    HausplanerApp.tsx:703  function spiegeleGrundriss(achse: Achse)
-                     :708    spiegelteWand(w.start, w.end, achse, pos)
-                     :709    executeCommand MOVE_NODE je Wand
-                     :1356   durchgereicht
+    HausplanerApp.tsx:695  function spiegeleGrundriss(achse: Achse)   [war :703]
+                     :696    executeCommands(befehleSpiegeln(waende, achse))
+                     :1343   durchgereicht                            [war :1356]
+    sammelBefehle.ts:103   befehleSpiegeln() — die RECHNUNG liegt seit A-31 HIER
+                    :111    spiegelteWand(w.start, w.end, achse, pos)  [war HausplanerApp:708]
+    ^^^^ BERICHTIGT 14.08.: A-31 hat versetzteWand/spiegelteWand/bbox/achsenMitte samt
+         Befehlslisten nach `app/sammelBefehle.ts` gezogen (HausplanerApp.tsx:110-111 sagt es
+         selbst). Das Blatt beschrieb den Stand DAVOR — nicht nur verschobene Zeilen,
+         sondern ein anderer Ort.
     -> UND DAS IST DER UNTERSCHIED, DER INS BLATT GEHOERT: der Knopf ist an
        `waende.length` gebunden, nicht an `selectedNodeIds`. Er spiegelt den
        GANZEN Grundriss. Duplizieren und Loeschen arbeiten auf der Auswahl.
@@ -70,9 +75,9 @@ sich beziehen** und **wie man sie erreicht:*
 (4) VERSCHIEBEN — Bezug wechselt, KEIN Werkzeug, DREI Wege
     Buehne.tsx:40/:207-208     Ziehen auf der Buehne: versetzteWand -> MOVE_NODE
     EigenschaftenPanel.tsx:120 Feld im Panel -> MOVE_NODE
-    HausplanerApp.tsx:601      Wand-Laenge exakt setzen -> Wandende entlang der
+    HausplanerApp.tsx:604      Wand-Laenge exakt setzen   [war :601] -> Wandende entlang der
                                Achse verschieben (MOVE_NODE)
-    Landkarte :73              { 'verschieben', 'deckt', 'MOVE_NODE' }
+    Landkarte :105             { 'verschieben', 'deckt', 'MOVE_NODE' }   [war :73]
 ```
 
 > **Ein Blatt, das die vier in einen Topf wirft, verschweigt genau das, was beim Bauen wehtut.** *Wer
@@ -182,7 +187,7 @@ W-14-1-1 (P1, TRAGEND) Jede der VIER Operationen steht im Blatt MIT IHREM BEZUG
          und findet einen Knopf, der etwas anderes tut als erwartet.
 W-14-1-2 (P1) Der SPIEGEL-BEFUND ist belegt, nicht behauptet: Kopfrahmen.tsx:315
          und :316 tragen `disabled={waende.length === 0}` und die Titel nennen
-         'Grundriss'; der Handler HausplanerApp.tsx:703 laeuft ueber alle Waende,
+         'Grundriss'; der Handler HausplanerApp.tsx:695 laeuft ueber alle Waende,
          nicht ueber selectedNodeIds. UND der Satz, dass 'spiegeln' in
          toolRegistry.ts NULL Mal vorkommt. Am Bau-Stand gegenpruefen.
 W-14-1-3 (P1) DREHEN steht in 7-GRENZEN als fehlend, MIT dem Schema-Grund und
