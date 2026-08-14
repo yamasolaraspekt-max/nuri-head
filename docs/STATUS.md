@@ -16815,3 +16815,83 @@ naechster_schritt: |
   und die Machtfrage, je Punkt und mit Belegzeile. Das ist eine ganze Runde und ich nehme sie
   als naechste. P-01s Zustand messe ich dabei mit.
 ```
+
+```yaml
+auftrag: "p02_geprueft_fuenf_punkte_vier_linsen"
+titel: "P-02 geprueft — vier Punkte tragen, einer ist nicht pruefbar, und die Machtfrage ist gemessen"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:28"
+stand_kopf: bac0d476
+anlass: "Der Ball lag seit 07.08. bei mir; gefunden 09:15, hier eingeloest."
+1_widerspruchsfreiheit: |
+  Gegen den geltenden Text gemessen:
+    'Claim'   in docs/ARBEITSREGELN.md: EINMAL (Z.161, und nur fuer Evaluator- und
+              Release-Claims: "Wer eine Datei anfassen will, auf der ein ... Claim liegt")
+    'Instanz' DREIMAL (Z.93 verweist auf P-02 selbst; Z.175 und Z.186 verlangen, dass
+              Planner/Plan-Pruefer und Generator/Evaluator nicht dieselbe Instanz sind)
+  Also: KEIN Widerspruch. P-02 fuellt eine Luecke — und die ist gross: docs/STATUS.md
+  fuehrt heute 81 claim-Felder. Die Praxis ist 81-fach gelebt, der Regeltext kennt sie
+  einmal und nur fuer zwei Rollen.
+2_pruefbarkeit_je_punkt: |
+  P1 CLAIM GILT      -> beobachtbar: claim-Feld vorhanden UND fremder Commit fasst das
+                        geclaimte Blatt an. Messbar mit git log -- <blatt>.  PRUEFBAR
+  P2 TRENNUNG        -> beobachtbar waere: zwei Instanzen DERSELBEN Rolle aendern beide
+                        Tafel/Entscheidungen. Instanzen sind aber nicht unterscheidbar —
+                        der Auftrag schliesst Nummerierung ausdruecklich aus ("Keine
+                        Instanz-Nummerierung im Regelwerk").  NICHT PRUEFBAR.
+  P3 OPERAND STATT   -> beobachtbar: Entscheidung liegt in STATUS.md statt im Blatt.
+     UMSCHNITT          Messbar am Ablageort.  PRUEFBAR
+  P4 VERLINKEN       -> beobachtbar: derselbe Befund zweimal, ohne Verweis.  PRUEFBAR
+  P5 FRISCH MESSEN   -> beobachtbar: Schreiben ohne unmittelbar vorherige Freiheitspruefung.
+                        PRUEFBAR, aber siehe Kausalitaet.
+3_kausalitaet_an_faellen_dieser_nacht: |
+  Nicht an gedachten Faellen, sondern an gemessenen:
+    P4 HAETTE GEHOLFEN, zweimal, und beide Male war ICH der Fall: mein F-004-Befund (08:18)
+       und mein "5 mm stehen nirgends" (08:53) waren Nachbauten dessen, was A-35 bereits
+       vollstaendig enthielt. Wer verlinkt statt nachzubauen, faellt nicht hinein.
+    P5 HAETTE NICHT GEHOLFEN, und das ist der schaerfere Befund: bei meinem Beifang um
+       08:37 hatte ich den Baum UNMITTELBAR vor dem Schreiben gemessen, Ergebnis 0
+       geaenderte Dateien. Der Evaluator begann dazwischen. P5 wurde BEFOLGT und der
+       Schaden trat trotzdem ein — die Regel ist richtig und nicht hinreichend.
+    P1 hat heute Nacht keinen Gegenfall: A-36 traegt "Claim VOR dem Schnitt", und niemand
+       hat ihn ueberschrieben.
+    P3 kein Fall messbar.
+4_plausibilitaet: |
+  P1, P3, P4 sind lebbar und billig — je ein Feld oder ein Verweis.
+  P5 ist lebbar, aber wer ihn befolgt und trotzdem Beifang erzeugt, wird ihn fuer wertlos
+  halten. Er braucht den Zusatz, den der Planner und ich unabhaengig gefunden haben:
+  Schreiben und Committen als EIN Schritt (Rollendatei des Planners, e370490e).
+  P2 wird nicht umgangen, weil jemand es will, sondern weil niemand sehen kann, ob er
+  eingehalten wird. Eine Regel ohne beobachtbaren Ausloeser ist eine Absichtserklaerung.
+5_die_machtfrage_gemessen: |
+  Der Planner fragt gegen sich selbst: "Punkt 2 behaelt Entscheidungen und die Tafel bei
+  einer Instanz — und das bin im Zweifel ich."
+  GEMESSEN ueber die letzten 200 Commits an docs/STATUS.md, je Rolle die Commits MIT
+  Tafelzeilen-Aenderung:
+    planner          19 von 38
+    generator        16 von 17
+    plan-pruefer     16 von 75
+    evaluator        13 von 19
+    release-pruefer  10 von 32
+  Die Tafel wird von ALLEN FUENF Rollen geschrieben, und der Generator fasst sie in fast
+  jedem seiner Commits an — weil A-20 es verlangt: Tafelzeile und Datensatz in EINEM
+  Commit. Punkt 2 kann die Tafel also gar nicht bei einer Rolle buendeln; er buendelt sie
+  bei einer INSTANZ, wenn zwei Instanzen DERSELBEN Rolle laufen.
+  URTEIL: der Machtverdacht ist unbegruendet, so wie bei P-01. Punkt 2 verschiebt
+  Koordination innerhalb einer Rolle, nicht Autoritaet zwischen Rollen — §1 haelt Regeln
+  bei Yama, §5-DoR liegt bei mir, nicht beim Planner.
+gesamturteil: |
+  VIER von fuenf Punkten tragen und sollten aufgeschrieben werden (P1, P3, P4, P5 mit
+  Zusatz). P2 traegt in der Sache, ist aber in der vorgelegten Form NICHT PRUEFBAR, weil
+  der Auftrag Instanz-Kennzeichnung ausdruecklich ausschliesst. Entweder bekommt P2 einen
+  beobachtbaren Ausloeser, oder er wird als Absichtserklaerung gekennzeichnet statt als
+  Absprache.
+  Ich entscheide nichts davon: §1 haelt Regeltext bei Yama, und P-02 ist eine VORLAGE.
+ballbesitz: yama
+bitte: |
+  P-02 ist geprueft und entscheidungsreif. Offen ist EINE Frage an dich: soll P2 einen
+  beobachtbaren Ausloeser bekommen (dann braucht es ein Instanz-Merkmal, das der Auftrag
+  heute ausschliesst), oder bleibt er ohne — dann bitte als Absichtserklaerung kenntlich.
+  Die uebrigen vier koennen aus meiner Sicht so uebernommen werden, P5 mit dem Zusatz
+  "Schreiben und Committen sind EIN Schritt".
+```
