@@ -14401,3 +14401,39 @@ eine_eigene_fehlmessung_unterwegs: "Mein erster Lauf meldete 16 Kennungen im Reg
   W-07N. Beide verworfen, nicht nachgebessert."
 ballbesitz_befund: planner
 ```
+
+### W-19 Zuständigkeit — Datensatz nachgetragen 14.08., und die Regel dazu (eigener Zaun nach A-25)
+
+```yaml
+befund: w19_zustaendigkeit_entschieden_ohne_datensatz
+ballbesitz: "— (entschieden, kein offener Ball; Umkehr durch Yama jederzeit)"
+entschieden_am: "14.08. vom planner, auf Yamas 'mach das ohne mich'"
+entscheidung: "W-19 Sonne und Verschattung ist KEINE Bauzeile des Werkzeugkastens. Die
+  Verschattung wird nicht gerechnet, sondern EINGEKAUFT — PVGIS und Google Solar liefern sie,
+  wberechnung hat beide Anschluesse. Die Registerzeile bleibt als ANDOCKSTELLE stehen:
+  fachFlaechen.ts:358 zeigt bereits das Ausgabefeld Verschattungsverlust Prozent."
+warum_dieser_eintrag: "Der plan-pruefer hat in c8c34cee gemessen, dass ZEHN Registerkennungen in
+  der Statuswahrheit fehlen — vier hatte ich in 30c9ab3f erfasst, sechs standen noch. W-19 ist
+  darunter der schaerfste Fall, und er hat recht: die Registerzeile traegt woertlich
+  'ZUSTAENDIGKEIT ENTSCHIEDEN vom planner' — eine GETROFFENE ENTSCHEIDUNG ohne Datensatz.
+  Dieselbe §16-Lage, die ich in dieser Nacht schon zweimal behoben habe."
+einschraenkung_wichtig: "Die spaetere Praezisierung gilt mit: Schicht 4 (Verschattungs-GEOMETRIE)
+  kann nur die Insel — Google Solar sieht den Ist-Zustand aus dem Luftbild, nicht die geplante
+  Gaube. Volltext in SOLAR-REGELWERK.md, Abschnitt 0 und S-030/S-031."
+
+# --- Und die Regel, damit die Frage nicht jede Runde wiederkommt ---
+regel_wer_einen_datensatz_braucht: "PLANNER-FESTLEGUNG 14.08.: Ein Datensatz gehoert dorthin, wo
+  ein VORGANG, ein BALL oder eine GETROFFENE ENTSCHEIDUNG ist. Eine unbeschriebene Registerzeile
+  ist VORRAT und braucht keinen.
+  DAMIT BEKOMMEN KEINEN: W-17, W-25, W-29, W-30, W-43 — Reifegrad LEER, kein Auftrag, kein Ball,
+  keine Entscheidung. Sie stehen im Register, und das ist der richtige Ort: das Register ist die
+  Landkarte dessen, WAS ES GIBT (LIESMICH-Kopf), die Statuswahrheit fuehrt, WORAN GEARBEITET WIRD.
+  BEGRUENDUNG GEGEN DIE ALTERNATIVE: fuenf Datensaetze ohne Gegenstand waeren genau das, was der
+  plan-pruefer in 45172ea7 an Yamas Postenliste kritisiert hat — Posten, die Aufmerksamkeit binden
+  ohne dass es etwas zu tun gibt. Sein eigener Satz deckt es: 'LEER heisst unbeschrieben, und ein
+  unbeschriebenes Werkzeug braucht keinen Datensatz.'
+  SEIN SICHERUNGSPUNKT BLEIBT TROTZDEM RICHTIG und ist hier ausdruecklich notiert: W-25 und W-30
+  existieren NUR im Register — ginge die Datei verloren, waeren sie weg und keine Wache merkte es.
+  Das ist ein SICHERUNGS-Problem der einen Datei, kein Status-Problem der Zeilen; es gehoert zur
+  Push- und Backup-Lage und nicht in fuenf Datensaetze."
+```
