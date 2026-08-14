@@ -14114,3 +14114,43 @@ was_KEIN_fund_ist_und_warum_ich_es_sage: "Mein breites Muster liefert einen DREI
 was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Kriterium, kein Bau. A-33 bleibt BEREIT."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — DREI ROLLEN STEHEN SEIT SECHS STUNDEN, UND SEIT SIEBEN ENTSTEHT KEIN PRODUKTIVCODE (Plan-Pruefer, 14.08. 05:4x)
+
+```yaml
+stillstand_der_bauenden_rollen: "Die Wache verlangt bei Stillstand: aufloesen. Ich kann ihn nicht
+  aufloesen — eine Instanz zu starten ist nicht meine Rolle, und ich verlasse sie nicht ohne Yamas
+  Wort. Was ich kann, ist ihn messen und vorlegen. Gemessen an 1d98843e, 05:44."
+stillstand_je_rolle: "Zeit seit dem letzten Commit der Rolle:
+    generator        13.08. 23:34   6 h 10 min
+    evaluator        13.08. 23:37   6 h 07 min
+    release-pruefer  13.08. 23:18   6 h 26 min
+    planner          14.08. 05:32   0 h 12 min
+    plan-pruefer     14.08. 05:43   0 h 01 min"
+was_bei_den_stillen_liegt: "ALLE ACHT BEREIT-Auftraege haben den Ball beim Generator:
+    W-18/1  28h09   ·  W-12/1  27h53  ·  W-16/1  21h31  ·  W-10/1  21h08
+    W-14/1  20h57   ·  A-33    18h59  ·  W-03/1  15h06  ·  A-35     6h12
+  (Alter je ab dem eigenen basis_sha.) Dazu W-37: ABGENOMMEN, Ball beim Release-Pruefer seit
+  13.08. 23:38 — also 6 h 06 min. Und nichts ist unterwegs: 0 IN_ARBEIT, 0 CODE_FERTIG im
+  ganzen Bestand. Es wartet also nichts auf eine Abnahme; es wartet alles auf einen Zug."
+die_zahl_die_es_am_klarsten_sagt: "Der letzte Commit, der Produktivcode angefasst hat, ist
+  d21dd083 vom 13.08. 22:24 (generator, A-29-Nachbesserung). Seither sind 83 Commits gelaufen und
+  KEINER hat resources/ oder app/ beruehrt. Von den 27 ungesicherten Commits auf diesem Zweig sind
+  14 vom Planner, 13 von mir, 1 vom Evaluator — und NULL enthalten Produktivcode."
+mein_eigener_anteil_ehrlich: "Dreizehn dieser Commits sind meine. Die Nacht war nicht unnuetz —
+  die Blaetter tragen heute Zeiger, die vorher woandershin fuehrten, und drei Fehlerklassen sind
+  benannt, die vorher keine Pruefung gesehen hat. Aber sie war Arbeit AN den Auftraegen, nicht
+  IN ihnen. Acht geschliffene Blaetter, die niemand zieht, sind acht geschliffene Blaetter."
+was_ich_ausdruecklich_NICHT_sage: "Ich sage nicht, dass eine Rolle etwas versaeumt hat. Ich weiss
+  nicht, ob Generator, Evaluator und Release-Pruefer ueberhaupt laufen — ihr Schweigen kann
+  bedeuten, dass sie nichts zu tun haben, dass sie nicht gestartet sind, oder dass sie haengen.
+  Diese drei Faelle kann ich am Repo nicht unterscheiden, und ich rate nicht. Was ich messe,
+  ist der Zustand, nicht die Ursache."
+was_daraus_folgt_und_wem_es_gehoert: "Ob eine Bau-Instanz gestartet wird, ist Yamas Entscheidung.
+  Falls sie ansteht: nach Punkt 4 der Wache gilt vor jedem Instanz-Start, dass Commits UND
+  Claim-Felder gemessen werden und ein Claim erst zaehlt, wenn sein Tor-Commit durch ist.
+  Der Bestand traegt heute 104 claim-Zeilen; die juengsten sind die zwei Abnahme-Claims des
+  Evaluators zu W-37 (13.08. 23:23 und 23:33) und der Schnitt-Claim des Planners zu A-35.
+  Ein Generator-Start muesste gegen diese messen, nicht gegen meine Zaehlung hier."
+ballbesitz_befund: yama
+```
