@@ -389,3 +389,80 @@ zu diesem Auftrag.*
 
 **Ball an den Generator** (§12.1, CODE-Befund). *Die Wiederabnahme fährt **alle acht** Kriterien
 erneut (§12.3).*
+
+---
+
+## Votum des Evaluators (§11) — Runde 2 (Wiederabnahme)
+
+**ABGENOMMEN.** *Der Befund ist behoben, und zwar an **fünf** Stellen statt an der einen, die ich
+beanstandet hatte. Der Umfang blieb trotzdem der Befund: fünf Dateien, `+59 −10`, kein Umbau.*
+
+### Der Befund beidseitig
+
+```text
+4-BEDIENUNG:40
+  ALT (25db5490)  | naechste Etage hoehenrichtig stapeln | **das Werkzeug**:
+                                                            `naechsteEtageElevationMm` |
+  NEU (d145ea0e)  | naechste Etage hoehenrichtig stapeln | **NICHT dieses Werkzeug** —
+                    `Kopfrahmen.tsx:172` rechnet es beim Anlegen des Geschosses selbst |
+```
+
+**Und die fehlende Aussage steht jetzt an vier weiteren Stellen** — `1-ZWECK:13`
+(*„KEIN Verbraucher"*), `2-FUNKTION:28` (*„niemand ruft sie ab"*), `5-CODE:17` (Schichtname von
+*„Darstellung"* auf **„Kennwerte, unbenutzt"** geändert) und der neue Abschnitt `5-CODE:35-60`.
+
+> ***Die Schichtbezeichnung selbst zu ändern, war nicht verlangt*** — *ich hatte nur den einen Satz
+> beanstandet.* **Aber genau dort saß die Irreführung: eine Tabellenzeile „Darstellung" für eine
+> Datei, die nichts darstellt.**
+
+### Die neuen Zahlen — jede selbst nachgemessen
+
+| Behauptung des Blattes | selbst gemessen |
+|---|---|
+| *„Importe von `deckenMesh` im GANZEN Repo: **GENAU EINER**"* | `grep -rn "from '.*deckenMesh'"` → **1** (`decke.test.ts:9`) |
+| *`naechsteEtageElevationMm` Produktivaufrufer **0*** | 3 Verweise, **alle 3** im Test → **0** |
+| *`deckenNettoFlaecheM2` Produktivaufrufer **0*** | 5 Verweise, **alle 5** im Test → **0** |
+| *`deckenOberkanteMm` Verweise **überhaupt 0**, nicht einmal im Test* | **0** — bestätigt |
+| *`Kopfrahmen.tsx:172` rechnet es selbst* | geöffnet: `elevation: oben.elevation + oben.defaultWallHeight + oben.floorThickness` |
+| *`szene.ts:483` — hier wird gezeichnet* | **neu im Blatt, von mir geöffnet:** `const aussen = bodenPunkteThree(decke.polygon, oberkante);` — trägt |
+
+> **Das Blatt sagt jetzt mehr, als der Befund verlangt hat, und jede Zusatzangabe hält.** *Die Zeile
+> `szene.ts:483` beantwortet die Frage, die mein Befund offen ließ: **wo** die Decke stattdessen
+> gezeichnet wird.*
+
+### Messtisch — alle acht Kriterien erneut gefahren (§12.3)
+
+| Kriterium | R1 | R2 | Beleg aus dieser Runde |
+|---|---|---|---|
+| **W-10-1-1** (P1, TRAGEND) alle Schichten mit Fundstelle | **ROT** | **grün** | Registry `'decke'` **1**, `deckenMesh` **35 Z / 3 Exporte**, Test **242 Z / 13 Zusagen**, drei Befehle `commands.types.ts:29-31` **geöffnet**, `treppenDurchbrueche` `:119` mit Aufruf `:298` — und die fehlende Verbraucher-Aussage steht (s. o.) |
+| **W-10-1-2** (P1) Tooltip + Wortfalle | grün | **grün** | `:141` trägt *„ausgespart"*; `Aussparung` **0 Dateien**, `Durchbruch` **5** — sauber nachgemessen |
+| **W-10-1-3** (P1) zwei Aufrufer-Regeln | grün | **grün** | `pruefeDeckeProLevel` an `:112`, `:296`, `:315` — alle drei Zeilen einzeln geprüft |
+| **W-10-1-4** Formeln am Code | grün | **grün** | unverändert; `Math.hypot` + Normale in `treppenDurchbrueche` |
+| **W-10-1-5** `boden`-Befund | grün | **grün** | Vertrag **1**, Paket **1**, Registry **0** — sauber nachgemessen |
+| **W-10-1-6** Zahlen mit Träger | grün | **grün** | Registry **12**, `deckenMesh` **35 Z**, Test **242 Z** |
+| **W-10-1-7** kein Produktivcode | grün | **grün** | `d145ea0e`: 5 Dateien, **0** außerhalb `docs/` |
+| **W-10-1-8** Test gefahren | grün | **grün** | `tests 13 · pass 13 · fail 0` |
+| **Wächter** Insel-Suite | grün | **grün** | `tests 1750 · pass 1750 · fail 0` |
+| **Wächter** `tsc:hausplaner` | grün | **grün** | Exit 0 |
+| **sieben Blätter** | grün | **grün** | `62/99/117/72/127/101/94` Z, **sieben verschiedene** md5 |
+| **Registerzeile** | grün | **grün** | 5 Spalten |
+| **Browser** | — | **nicht gefahren** | *nur `docs/` im Commit* |
+| **§15 Datenbank** | — | **nicht berührt** | *kein schreibender Lauf* |
+
+### Mein eigener Messfehler in dieser Runde
+
+**Drei meiner Messungen sind an der eigenen Shell-Quotierung zerbrochen, nicht am Bau.** *Ich hatte
+`grep`-Muster mit Anführungszeichen in `printf`-Argumente verschachtelt; das Ergebnis meldete
+`drei Befehle: 0`, `Aussparung 1 / Durchbruch 0` und `boden: 0/0/0` — **alle drei falsch**, und zwei
+davon hätten wie schwere Befunde ausgesehen.*
+
+> **Die Warnung stand in der Ausgabe** (`ugrep: warning: boden": No such file or directory`) — *das
+> Muster war zerlegt worden.* **Nachgemessen ohne Verschachtelung: 3 Befehle, `Aussparung` 0 gegen
+> `Durchbruch` 5, `boden` 1/1/0 — alles wie in Runde 1.**
+>
+> ***Ein Prüfergebnis, das aus einem kaputten Befehl kommt, ist kein Prüfergebnis*** — *und es sieht
+> genauso aus wie eines. Der einzige Schutz ist, die Ausgabe selbst zu lesen statt nur die Zahl.*
+
+### Weitergabe
+
+**Ball an den Release-Prüfer** (§11, ABGENOMMEN).
