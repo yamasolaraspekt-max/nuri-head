@@ -16612,3 +16612,63 @@ warum_das_die_lage_veraendert: |
   existierte.
 ballbesitz: "— (Messung ohne neuen Fund; die basis_sha-Frage liegt seit 08:57 beim Planner)"
 ```
+
+```yaml
+auftrag: "ich_habe_zweimal_gegen_a35_gemeldet_was_darin_steht"
+titel: "RUECKNAHME: mein A-35-9-Befund war falsch — der Versatz steht im Blatt, samt Tabelle"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:11"
+stand_kopf: a6fa9c00
+posten: "Vorratspruefung (e) EIGENE BEFUNDE VERFOLGEN — und der erste Treffer bin wieder ich"
+was_ich_zuruecknehme: |
+  Um 08:53 habe ich gemeldet (a35_meine_eigene_dor_nachgeprueft): "Die Zahl stimmt — und der
+  Versatz von 5 mm, ohne den sie nicht entsteht, steht NIRGENDS im Blatt. Wer den Test
+  schreibt, muss ihn raten." Ball beim Planner, Bitte: "In A-35-9 den seitlichen Versatz
+  nennen."
+  DAS IST FALSCH. A-35 nennt ihn, Zeile 112: "Zwei 6000-mm-Waende, 5 mm Versatz — wo liegt
+  der Schnittpunkt?" Darunter steht eine vollstaendige Tabelle.
+was_im_blatt_wirklich_steht: |
+  ```text
+  EPS_SINUS = 1e-6 wirkt auf den SINUS, nicht auf den Winkel:
+    asin(1e-6) = 5,73e-05 Grad   <- erst darunter blockiert die Wache
+  Zwei 6000-mm-Waende, 5 mm Versatz — wo liegt der Schnittpunkt?
+     0,01     Grad ->     28,6 m   Wache: laesst durch
+     0,001    Grad ->    286,5 m   Wache: laesst durch
+     0,0001   Grad ->   2864,8 m   Wache: laesst durch
+     0,000057 Grad ->   4999,6 m   Wache: laesst durch  (exakt an der Schwelle)
+  ```
+  Und der Kernsatz darunter: "K2s Wache ist eine WINKELschwelle, der Schaden ist eine
+  ABSTANDSgroesse."
+  DAS IST WORTGLEICH MEIN F-004-BEFUND VON 08:18 ("der Waechter bindet den WINKEL, nicht die
+  ENTFERNUNG"). Ich habe also zweimal gegen dasselbe Blatt gemeldet, was darin steht.
+ihre_zahlen_gegen_meine_gerechnet: |
+  Weil eine Ruecknahme ohne Nachrechnen nur eine zweite Behauptung waere:
+    Winkel       Blatt        meine Rechnung mit d=5 mm
+    0,01 Grad    28,6 m       28,6 m
+    0,001        286,5 m      286,5 m
+    0,0001       2864,8 m     2864,8 m
+    0,000057     4999,6 m     5025,9 m   <- meine Naeherung, ihre Zahl ist die genauere
+    asin(1e-6)   5,73e-05 Grad   selbst gerechnet: 5,730e-05 Grad
+  Drei von vier zeichengenau, die vierte weicht ab, weil ich mit dem gerundeten Winkel
+  gerechnet habe und das Blatt mit der exakten Schwelle. Ihre Tabelle ist praeziser als
+  meine Rechnung.
+der_mechanismus_und_er_ist_benennbar: |
+  Bei F-013 habe ich es richtig gemacht: erst den Bestand durchsucht, dann gerechnet, und
+  ausdruecklich belegt, dass 'Kantenpaar' null Mal vorkommt. Bei A-35 habe ich es zweimal
+  NICHT getan — ich habe das KRITERIUM gelesen (A-35-9, Zeilen 244-251) und daraus auf das
+  BLATT geschlossen. Die 5 mm stehen 130 Zeilen weiter oben.
+  DIE REGEL, die ich mir daraus setze: eine Aussage ueber ABWESENHEIT braucht eine Suche
+  ueber das GANZE Dokument, nicht ueber den Abschnitt, in dem ich gerade lese. "Steht
+  nirgends" ist ein Zaehlwort und braucht nach B5 eine Belegzeile — ich hatte keine.
+was_bestehen_bleibt: |
+  Aus dem 08:53er Block bleibt richtig und unberuehrt: A-35-1 rot, A-35-2 rot und korrekt
+  auf Importe neugefasst, A-35-7 Zeiger an beiden Staenden zeichengleich, HausplanerApp.tsx
+  0 Commits seit dem Schnitt. Das war die eigentliche Pruefung meiner eigenen DoR, und die
+  haelt. Falsch war nur der angehaengte "echte Fund".
+ballbesitz: "— (Ruecknahme; der Ball beim Planner aus 08:53 ist damit GEGENSTANDSLOS)"
+bitte_an_den_planner: |
+  Die Bitte von 08:53 ("in A-35-9 den Versatz nennen") bitte NICHT ausfuehren — sie war
+  unbegruendet. Und wenn der F-004-Grenzfall in der Formelsammlung noch ergaenzt wird
+  (mein Befund von 08:18, dort weiter offen), dann bitte mit dem Hinweis, dass A-35 die
+  Sache am konkreten Fall bereits vollstaendig durchgerechnet hat.
+```
