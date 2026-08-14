@@ -15839,6 +15839,41 @@ nicht_im_scope: "Die Aufteilung auf 97 Dateien — Yama entscheidet sie ausdruec
 tragende_kante: "K5 — der Waechter MELDET und sperrt nicht. A-30 hat an zwoelf Fehlalarmen auf
   Altbestand gemessen, was eine zu scharfe Barriere kostet, und A-03 sagt was danach passiert:
   sie wird weggeklickt, und dann auch die richtige."
+dor_zwischenstand_plan_pruefer: "plan-pruefer 14.08. 09:12 — DoR NOCH NICHT ERTEILT, und ein
+  Widerspruch steht davor. GEPRUEFT UND EXAKT sind die tragenden Messungen des Blatts, alle selbst
+  am Basis-Stand 80ab2d8d bzw. am Code nachgezaehlt:
+    Lesestellen: sechs Skripte NENNEN docs/STATUS.md, aber das Blatt hat recht und mein
+      Rohzaehler haette falsch angeklagt. Die vier genannten Stellen sind je eine PFADKONSTANTE —
+      a25-zaeune.mjs:19 const DATEI, a26:24, a27:34, a30:55 je DATEI= — und die uebrigen
+      Vorkommen sind Kommentarzeilen (a25:2, a26:18, a30:31, a30:34).
+    commit-pruefen.sh liest wirklich nicht: seine sechs Vorkommen (618/619/627/628/642/643) sind
+      Waechter auf die ARGUMENTLISTE, printf '%s' \"$@\" | grep -qx 'docs/STATUS.md', und rufen
+      dann die Barriere auf.
+    w212-nachweis.sh:169-170 sind tatsaechlich ZWEI strukturelle Muster ueber git show, tafel()
+      und datensatz() — keine Pfadkonstante.
+    §14-Zeiger stimmt woertlich: ARBEITSREGELN.md:693 traegt 'Vor jedem Commit wird
+      git diff --cached --name-only geprueft.' Das ist die DATEI-Ebene, die A-36 vertiefen will.
+  DER WIDERSPRUCH: der Datensatz traegt zustand: BEREIT, das Blatt traegt dor_beleg: 'steht aus —
+  plan-pruefer.' und ballbesitz: 'plan-pruefer (DoR)'. §5 schliesst mit 'Fehlt ein Punkt, bleibt
+  der Auftrag ENTWURF oder wird SPEC_BLOCKED' — ein Auftrag kann nicht BEREIT sein, waehrend seine
+  DoR ausdruecklich aussteht. Ich fasse KEIN Zustandsfeld an; die Berichtigung gehoert dem Planner.
+  WAS NOCH AUSSTEHT: der vollstaendige §5-Durchgang ueber alle achtzehn Punkte. Bis dahin ist
+  hier nichts erteilt, und der Ball bleibt bei mir."
+mein_beifang_offengelegt: "plan-pruefer: A-36s Tafelzeile und Datensatz sind in MEINEM Commit
+  2f7ecb10 gelandet. Gemessen: der Commit fuegte 86 Zeilen an docs/STATUS.md an, davon gehoeren
+  die ersten rund 34 dem Planner (ab '### A-36 — Datensatz'), mein eigener Block beginnt erst bei
+  Zeile 58 des Diffs. Der Planner hat den Vorgang bereits von seiner Seite offengelegt und die
+  Ursache benannt: sein erster Commit-Versuch wurde vom Tor mit ENV_BLOCKED abgewiesen, weil eine
+  fremde Instanz den Index-Lock hielt, und in genau diesem Fenster hat mein Commit seine Bloecke
+  eingesammelt.
+  MEIN ANTEIL, praezise: ich habe vor dem Commit den Diff geprueft — aber als NUMSTAT, also als
+  Zusammenfassung. '89 hinzugefuegt, 0 geloescht' sieht bei fremden Zeilen genauso aus wie bei
+  eigenen. Der Handgriff des Planners sagt 'lies den Diff, nicht die Dateiliste'; ich habe die
+  ZAHLEN des Diffs gelesen statt seinen INHALT. Das ist dieselbe Klasse eine Stufe feiner, und sie
+  ist der beste Beleg fuer A-36s Zweck, den dieser Auftrag haben kann: §14 verlangt heute
+  --name-only, und selbst die naechstfeinere Stufe --numstat haette mich nicht gerettet.
+  ICH RAEUME NICHT: der Inhalt ist im Bestand, verloren ist die Zuordnung. Gemeldet, nicht
+  geraeumt — nach der Lehre, die ich um 08:44 selbst aufgeschrieben habe."
 ```
 
 ```yaml
