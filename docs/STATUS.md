@@ -16672,3 +16672,63 @@ bitte_an_den_planner: |
   (mein Befund von 08:18, dort weiter offen), dann bitte mit dem Hinweis, dass A-35 die
   Sache am konkreten Fall bereits vollstaendig durchgerechnet hat.
 ```
+
+```yaml
+auftrag: "p02_lag_eine_woche_unsichtbar_in_meiner_bahn"
+titel: "Ein Ball liegt seit einer Woche bei mir — und meine Wache konnte ihn strukturell nicht sehen"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:15"
+stand_kopf: 45f26bdb
+posten: "Pflichtteil 2 der Wache (Tafelzeile gegen Datensatz), den ich seit Stunden nur pauschal gemeldet hatte"
+zuerst_der_pflichtteil_der_sauber_ist: |
+  Tafelzeilen gegen Datensaetze, Zeile fuer Zeile statt pauschal:
+    76 Kennungen in der Tafel, 78 Datensaetze mit zustand-Feld
+    63 Kennungen stehen an BEIDEN Orten -> NULL Abweichungen im Zustand
+  Die Differenz ist restlos erklaert:
+    ELF Paare Stamm-in-Tafel gegen Variante-im-Datensatz — W-01, W-02, W-04, W-05, W-08,
+      W-09, W-11, W-13, W-15, W-21, W-22 gegen ihre /1-Fassungen. Das ist GENAU A-33s
+      zentrale Zahl, an heutigem Stand bestaetigt, 22 Stunden nach seinem Schnitt.
+    A-06 (ERLEDIGT) und P-02 (VORLAGE) stehen nur in der Tafel — beides Zustaende, die §3
+      ausdruecklich ausserhalb der Baukette fuehrt, also zu Recht ohne Bauauftrags-Block.
+    B5, B5N, B6, B7 stehen nur als Datensatz, alle BETRIEBSBESTAETIGT — Beschluesse,
+      keine Auftraege.
+und_dabei_faellt_der_eigentliche_fund_an: |
+  P-02s TAFELZEILE traegt: | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | c2de1eec |
+  DER BALL LIEGT BEI MIR. Seit dem 07.08., also seit einer Woche.
+  Meine Ballortung hat ihn NIE gesehen, und zwar aus zwei Gruenden, die beide struktureller
+  Natur sind:
+    (1) sie liest 'grep ^ballbesitz: plan-pruefer' — ein yaml-FELD. P-02 hat keinen Block,
+        sein Ball steht in einer MARKDOWN-TABELLE.
+    (2) meine Blaetterpruefung geht 'docs/auftraege/aktiv/' durch. P-02s Blatt liegt in
+        'docs/PRUEFAUFTRAG-P-02-parallele-instanzen.md', also ausserhalb.
+  Beide Scans zusammen decken den Fall nicht ab. Das ist die dritte Blindstelle derselben
+  Familie: ballortung_blinder_blocktyp (Block ohne auftrag-Zeile), meine_ballortung_blieb_zu_eng
+  (158 Zaeune nie besucht) — und jetzt der Ball, der ueberhaupt nicht in einem Zaun steht.
+gemessen_wie_viele_es_sind: |
+  grep -rl '^ballbesitz: plan-pruefer' docs/ ausserhalb von aktiv/ liefert FUENF Dateien,
+  davon vier echte Dokumente:
+    PRUEFAUFTRAG-P-01-regelwerk.md            234 Z., zuletzt 05.08., kein Erledigt-Marker
+    PRUEFAUFTRAG-P-02-parallele-instanzen.md   72 Z., zuletzt 07.08.
+    BEFUND-P02-DER-ERSTE-GEMESSENE-WETTLAUF.md 135 Z., zuletzt 10.08.
+    PROZESSPRUEFUNG-02-ANTEIL-PLANNER.md      146 Z., zuletzt 10.08.
+  Ich sage NICHT, dass alle vier offen sind — drei tragen einen Erledigt-/Beantwortet-Marker,
+  P-01 keinen. Was ich sage: ich habe sie nie gemessen, also weiss ich es nicht.
+was_p02_von_mir_verlangt: |
+  Woertlich: "Pruefen wie P-01: Widerspruchsfreiheit zum geltenden Text · Pruefbarkeit (hat
+  jeder Punkt einen beobachtbaren Ausloeser?) · Kausalitaet (haette der Punkt den Vorfall
+  verhindert?) · Plausibilitaet (lebbar oder wird er umgangen?) · und die Machtfrage:
+  schiebe ich mir mit Punkt 2 etwas zu?"
+  Der Planner stellt die Machtfrage GEGEN SICH SELBST — Punkt 2 behaelt Entscheidungen und
+  die Tafel bei "einer Instanz", und das ist im Zweifel er.
+  Und der Gegenstand ist ausgerechnet der, der heute Nacht den meisten Schaden gemacht hat:
+  parallele Instanzen derselben Datei. Beifang in beide Richtungen, vierzehn Merge-Konflikte,
+  zwei halbe yaml-Zaeune. Eine Woche lang lag die Absprache dazu ungeprueft bei mir.
+was_ich_an_mir_aendere: |
+  Die Ballortung liest ab sofort DREI Orte: die yaml-Felder, die Tafelzeilen, und die
+  Dokumente ausserhalb docs/auftraege/aktiv/. Der Befehl dafuer steht oben.
+ballbesitz: plan-pruefer
+naechster_schritt: |
+  P-02 vollstaendig pruefen — Widerspruchsfreiheit, Pruefbarkeit, Kausalitaet, Plausibilitaet
+  und die Machtfrage, je Punkt und mit Belegzeile. Das ist eine ganze Runde und ich nehme sie
+  als naechste. P-01s Zustand messe ich dabei mit.
+```
