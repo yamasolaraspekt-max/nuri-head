@@ -16155,3 +16155,48 @@ bitte: |
   taeten es), oder im Blatt einen Satz, dass die Fundstellen am HEUTIGEN Stand gelten und
   nicht am Schnitt. Ein Satz oder ein Feld — die Sache selbst ist in Ordnung.
 ```
+
+```yaml
+auftrag: "backup_private_ist_die_aelteste_kopie"
+titel: "Die drei Remotes stehen zum ersten Mal nicht gleich — und zurueck haengt ausgerechnet das Backup"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:43"
+stand_kopf: 6e1c2fde
+posten: "Zweigprobe der Wache — kein Vorratspruefungs-Posten, sondern der Pflichtteil"
+messung: |
+  ls-remote gegen alle drei, voll ausgeschrieben:
+    fork            54a56c15ff1fedf7a43022ba331beba0a070c7bb
+    origin          54a56c15ff1fedf7a43022ba331beba0a070c7bb
+    backup-private  b66402355b28927a613bedc41831aeded11d5dab
+  backup-private haengt DREI Commits zurueck. Es sind genau meine letzten drei:
+    c2489db4  Vorratspruefung (e), vier Karteileichen geschlossen
+    358f0b59  Fernstand-Befund erledigt, W-03/1 nachgemessen
+    54a56c15  dreizehn falsche Zeitstempel berichtigt
+  Abstaende vom Arbeitsbaum aus: HEAD ist EINS voraus gegen fork und origin, VIER gegen
+  backup-private.
+warum_das_zaehlt: |
+  Bis heute standen die drei bei jeder meiner Proben auf demselben Wert — b15c1cb7,
+  21d7b675, 9aa76c5b, e3856ab6, 56d61ddd, b6640235. Der letzte Transport hat zum ersten Mal
+  nur ZWEI von drei erreicht.
+  Und es haengt nicht irgendeiner zurueck: solange nichts deployt ist, ist der Fernstand die
+  einzige Kopie ausserhalb dieser Maschine, und der Zweig, der ausdruecklich 'backup' heisst,
+  ist heute die AELTESTE davon. Wer im Schadensfall dorthin greift, greift vier Commits
+  hinter den Arbeitsbaum.
+was_ich_NICHT_behaupte: |
+  Kein Datenverlust und keine Divergenz: b6640235 ist ein echter Vorfahr von 54a56c15,
+  gemessen ueber rev-list, kein eigener Ast. Es fehlt nur der Transport. Und die drei
+  fehlenden Commits sind samt und sonders MEINE Befundbloecke — kein Produktivcode, kein
+  Zustandswechsel eines Auftrags haengt daran.
+  Ich habe NICHT gemessen, warum der Transport nur zwei erreicht hat. Das kann ein
+  abgewiesener Push sein, ein Takt, der backup-private nicht fuehrt, oder Absicht.
+was_ich_nicht_tue: |
+  Kein Push. Die stehende Regel der Wache ist KEIN PUSH, und sie gilt auch dann, wenn die
+  Abhilfe naheliegt. Auf Yamas Wort: git push backup-private auto/hausplaner-integration,
+  nur dieser Zweig, kein Zwang, kein main.
+ballbesitz: release-pruefer
+bitte: |
+  Beim naechsten Takt backup-private mitnehmen — oder sagen, dass es bewusst nicht mehr
+  gefuehrt wird. Beides ist in Ordnung; unbemerkt zurueckhaengen ist es nicht, weil die
+  Zweigprobe der Wache seit Stunden 'alle drei gleich' gemeldet hat und dieser Satz ab
+  heute nicht mehr stimmt.
+```
