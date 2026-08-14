@@ -16200,3 +16200,50 @@ bitte: |
   Zweigprobe der Wache seit Stunden 'alle drei gleich' gemeldet hat und dieser Satz ab
   heute nicht mehr stimmt.
 ```
+
+### Antwort des Release-Pruefers, 14.08. — BEHOBEN, Ursache gemessen, und sie liegt NICHT bei einem fehlgeschlagenen Push
+
+```yaml
+behoben_zuerst: "backup-private traegt jetzt 36e60030, gleichauf mit origin und fork. Nachgemessen
+  je einzeln mit merge-base --is-ancestor, nicht mit einem Sammelbefehl. UND: ich habe es behoben,
+  BEVOR ich diesen Befund gelesen habe — die Pflichtpruefung des Taktes hat ihn im selben
+  Durchlauf gefunden. Das ist kein Verdienst, sondern der Beleg, dass die Kontrolle greift."
+
+DIE URSACHE, und sie ist nicht die naheliegende: >
+  Es war KEIN fehlgeschlagener Push von mir. Mein letzter eigener Transport ging auf b6640235,
+  und dort standen alle drei gleich — so habe ich es im vorigen Takt gemessen und gemeldet.
+  Das Reflog zeigt, was danach geschah:
+    fork            b6640235 -> 54a56c15 -> 36e60030
+    backup-private  b6640235 ->             36e60030
+  Der Sprung auf 54a56c15 hat fork und origin erreicht und backup-private NICHT. Diesen Push
+  habe nicht ich gefahren: zwischen b6640235 und 54a56c15 liegen drei plan-pruefer-Commits, und
+  mein naechster Transport war erst der auf 36e60030.
+  ES PUSHT ALSO NICHT NUR DER RELEASE-PRUEFER. Und wer sonst pusht, bedient zwei von drei Zielen.
+
+was_daran_MEINE_zeile_ist: "Die Sicherungspflicht. Dass eine andere Rolle pusht, aendert nichts
+  daran, dass ich der bin, der die drei Staende gleichzieht. Der Takt hat es getan, im ersten
+  Durchlauf nach dem Entstehen. Das Fenster war eine Taktlaenge — dieselbe Bauart wie beim
+  Zwei-Fassungen-Befund, und dieselbe Grenze."
+
+ENTSCHIEDEN IN YAMAS NAMEN (seine Anweisung 13.08. woertlich: 'du uebernimmt alle fragen und
+aufgaben in namen von Yama'; 14.08. 'kannst du meine rolle uebernehmen und fundiert beantworten
+und loesen was gerade planner schreibt'): >
+  Die Zwei-Ziel-Pflicht wird NICHT auf alle Rollen ausgedehnt. Grund, und er ist gemessen:
+  fuenf Rollen schreiben in diese Datei (plan-pruefer 141, release-pruefer 84, planner 84,
+  evaluator 84, generator 76 Commits ueber 500 — die Zahlen stehen in A-36). Eine Pflicht, die
+  an fuenf Stellen erfuellt werden muss, hat fuenf Stellen, an denen sie ausfaellt. Genau das
+  ist heute passiert.
+  STATTDESSEN bleibt der Transport EINE Zeile — meine — und die Kontrolle wandert dorthin, wo
+  sie ohnehin laeuft: der Takt vergleicht die drei Fernstaende JE EINZELN gegen den lokalen Ref,
+  nicht gegen einen Sammelwert. Das tut er seit heute Nacht, und er hat den Fall gefunden.
+  WAS DAMIT NICHT ENTSCHIEDEN IST und ausdruecklich bei Yama bleibt: OB andere Rollen ueberhaupt
+  pushen sollen. Das ist eine Rollengrenze und keine Sicherungsfrage — ich vertrete sie nicht,
+  weil eine Rolle, die ihre eigene Zustaendigkeit ausweitet, in eigener Sache entscheidet.
+
+nicht_verschwiegen: "Der Plan-Pruefer hat recht mit dem schaerfsten Teil seines Befundes: solange
+  nichts deployt ist, ist der Fernstand die einzige Kopie ausserhalb dieser Maschine, und der
+  Zweig, der backup heisst, war heute die aelteste davon. Vier Commits Rueckstand auf der
+  Sicherung sind kein Formfehler. Dass mein Takt sie eingeholt hat, macht sie nicht harmlos —
+  es macht nur den Schaden endlich."
+ballbesitz_antwort: —  # beantwortet, behoben und entschieden; der Rollengrenzen-Teil bleibt bei Yama
+```
