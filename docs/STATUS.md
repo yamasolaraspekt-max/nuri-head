@@ -13438,3 +13438,67 @@ dor_beleg: "ERTEILT 13.08. 23:38 plan-pruefer, gemessen am BASIS-STAND 1df82ee1 
   ich setze nur den Ball weiter — kuenftig gehoert der Schnitt auf ENTWURF.
   §3 unberuehrt: A-35 nimmt keinen Platz, im Bestand steht 0 IN_ARBEIT."
 ```
+
+## BEFUND — ZEIGER, DIE SCHON AM BASIS-STAND FALSCH WAREN (Plan-Pruefer, 14.08. 04:5x)
+
+```yaml
+zeigerfehler_ab_basis: "VORRATSPRUEFUNG, Posten b (Zahlen nachrechnen) an W-14/1 und W-10/1.
+  Die Zahlen halten beide, aber beim Nachzaehlen faellt eine ANDERE Klasse auf als die aus
+  verweisdrift_im_vorrat: dort war die Frage -zeigt die Zeile heute auf etwas anderes als am
+  basis_sha-. Diese hier ist -zeigt sie schon AM BASIS-STAND auf etwas anderes als das Blatt
+  behauptet-. Solche Zeiger sind fuer die Driftmessung UNSICHTBAR, weil Basis und heute
+  uebereinstimmen: beide zeigen dasselbe Falsche. Gemessen an cd98e371, Baum sauber."
+was_zuerst_gemessen_wurde: "Posten b, und der ist SAUBER — nichts daran ist ein Fund:
+    W-14/1 (Basis 78c09e1b)  editierGeometrie.ts 75 Zeilen · 9 Exporte · Test 52 Zeilen
+    W-10/1 (Basis 18fe2deb)  deckenMesh.ts 35 Zeilen · 3 Exporte · decke.test.ts 242 Zeilen
+  Alle sechs Zahlen stimmen am Basis-Stand UND heute. Die neun Exportzeiger von W-14/1
+  (:7 :12 :15 :20 :34 :46 :55 :63 :73) und die drei von W-10/1 (:10 :18 :32) treffen exakt."
+fund_1_zwei_zeiger_vertauscht: "W-10/1, Blatt Zeile 38 und 40, Block OBERFLAECHE:
+    Blatt:  :139  bauteilKind: 'ceiling'      ·  :140  shortcut 'K'
+    Datei:  :139  shortcut: 'K',              ·  :140  bauteilKind: 'ceiling',
+  Die beiden Nummern sind gekreuzt. Gemessen an app/tools/toolRegistry.ts, an BEIDEN Staenden
+  gleich (18fe2deb und cd98e371) — also kein Drift, sondern von Anfang an verdreht.
+  :132 :138 :147 im selben Block treffen."
+fund_2_ein_listenblock_laeuft_um_eine_zeile_vor: "W-10/1, Blatt Zeile 76-81, der Rumpf von
+  treppenDurchbrueche in commands/applyCommand.ts. Der Einstieg :119 stimmt, danach laeuft die
+  Liste vor — an beiden Staenden identisch, also wieder kein Drift:
+    Blatt :122-124 waehlt Knoten           tatsaechlich :122-123  (:124 ist schon der naechste Schritt)
+    Blatt :125     parametereZuTreppe      tatsaechlich :124      (:125 ist 'if (!tp) continue;')
+    Blatt :127     dx/dy UND len           tatsaechlich dx/dy :126, len :127 (zwei Zeilen unter einer Nummer)
+    Blatt :129     nx = -dy/len, ny = dx/len   tatsaechlich :128
+    Blatt :130     h = tp.laufbreite / 2       tatsaechlich :129
+    Blatt :132-137 vier Punkte -> Loch-Polygon  tatsaechlich :132-135 (:136 schliesst, :137 ist das
+                                                Schleifenende) — die Spanne greift zwei Zeilen zu weit.
+  Sechs von sieben Zeilen des Blocks zeigen daneben."
+und_die_formel_selbst_ist_richtig: "Posten c am selben Blatt, damit der Fund nicht groesser
+  klingt als er ist: die tragende Formel des Blocks habe ich an zwei Faellen DURCHGERECHNET, nicht
+  nur gelesen. nx=-dy/len, ny=dx/len ist die Normale, h=laufbreite/2, vier Punkte start/ende +- n*h.
+    achsparallel  (0,0)->(3000,0), laufbreite 1000  ->  [(0,500),(3000,500),(3000,-500),(0,-500)]
+                  Flaeche 3 000 000 mm2 = Laenge x Laufbreite            PASST
+    schraeg 3-4-5 (1000,1000)->(4000,5000), laufbreite 1200, len 5000
+                  -> [(520,1360),(3520,5360),(4480,4640),(1480,640)]
+                  Flaeche 6 000 000 mm2 = 5000 x 1200                     PASST
+  Das Rechteck ist nicht selbstschneidend, die Umlaufordnung stimmt. Die SACHE ist richtig
+  beschrieben, nur ihre ADRESSEN sind es nicht."
+warum_das_zaehlt: "W-10/1 ist BEREIT. Wer es zieht, schlaegt die genannten Zeilen auf und findet
+  bei sechs von sieben Zeilen des Rumpf-Blocks etwas anderes — bei :139/:140 sogar etwas, das
+  plausibel aussieht (beide Zeilen existieren, beide Werte stimmen, nur die Nummern sind getauscht).
+  Das ist die schlechtere Sorte Fehler: sie faellt nicht auf, sie fuehrt nur woanders hin.
+  A-34 hat dieselbe Klasse im Produktivcode behoben, indem Anker die Zeilennummern ersetzt haben."
+abgrenzung_zu_meinem_eigenen_befund: "verweisdrift_im_vorrat (13.08. 22:56, liegt beim Planner)
+  bleibt unveraendert gueltig — heute nachgemessen: 74 aufloesbare Verweise, ZEHN gewandert,
+  dieselben zehn wie damals, keiner dazu, keiner weg. Aber DIESE zehn und die hier sind disjunkt:
+  Drift vergleicht Basis gegen heute, dieser Fund vergleicht Blatt gegen Basis. Meine Messung vom
+  13.08. konnte ihn strukturell nicht sehen."
+was_ich_verworfen_habe: "Ein erster, breiter Durchlauf ueber alle BEREIT-Blaetter meldete 64 von
+  112 Marke/Zeile-Paaren als unstimmig. Das war KEIN Ergebnis, sondern mein Suchmuster: es hat
+  Fliesstext-Woerter ('importiert', 'verspricht', 'Material') als Code-Marken genommen und den
+  Dateinamen zeilenuebergreifend mitgeschleppt. Verworfen und eng neu gemessen — nur Listenzeilen
+  in Codebloecken, Marke nur als Code-Bezeichner. Uebrig blieben die zwei Funde oben, beide von
+  Hand an den Rohzeilen nachgesehen. Die anderen sechs BEREIT-Blaetter sind in dieser Klasse
+  unauffaellig."
+was_ich_NICHT_tue: "Kein Blatt angefasst — Blaetter gehoeren dem Planner. Kein Zustand, kein Ball,
+  kein Bau. Ob W-10/1 vor dem Ziehen berichtigt wird oder ob der Vermerk genuegt, dass die
+  Adressen im Rumpf-Block um eins vorlaufen, entscheidet der Planner."
+ballbesitz_befund: planner
+```
