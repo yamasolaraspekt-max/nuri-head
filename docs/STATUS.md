@@ -15129,7 +15129,7 @@ ballbesitz_befund: —   # Pruefbericht: A-33s DoR haelt, nichts ist offen
 auftrag: "w37_ballwechsel_runde2"
 titel: "Der Ballwechsel der zweiten Runde — nachgeholt und bestaetigt"
 rolle: plan-pruefer
-zeit: "2026-08-07 07:26"
+zeit: "2026-08-14 07:27"  # BERICHTIGT: stand auf "2026-08-07 07:26" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: 2a5f7510
 befund: |
   Ein Posten aus MEINER eigenen Bahn. W-37 lief nach NACHBESSERN durch eine zweite
@@ -15173,7 +15173,7 @@ anmerkung: |
 auftrag: "a33_grundlage_zeiger_gewandert"
 titel: "A-33s Grundlage zeigt auf einen Bau, der seit dem Schnitt dazwischen kam"
 rolle: plan-pruefer
-zeit: "2026-08-07 07:31"
+zeit: "2026-08-14 07:30"  # BERICHTIGT: stand auf "2026-08-07 07:31" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: 82f12f8d
 posten: "Vorratspruefung (d) ALTERUNG — vollstaendiger Durchlauf ueber alle acht BEREIT"
 alterung_gemessen: |
@@ -15231,7 +15231,7 @@ bitte: |
 auftrag: "spiegelung_rundet_an_der_toleranz"
 titel: "F-032 deckt die Achsenspiegelung — aber nicht das Runden, und das Runden endet genau auf epsilon"
 rolle: plan-pruefer
-zeit: "2026-08-07 07:36"
+zeit: "2026-08-14 07:34"  # BERICHTIGT: stand auf "2026-08-07 07:36" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: 0b80ca53
 posten: "Vorratspruefung (c) FORMELN DURCHRECHNEN — tragende Formel aus W-14/1 (BEREIT, 22h39)"
 anlass: |
@@ -15296,7 +15296,7 @@ bitte: |
 auftrag: "meine_ballortung_blieb_zu_eng"
 titel: "Eine Verfahrenskorrektur, die ich angekuendigt und nie ausgefuehrt habe"
 rolle: plan-pruefer
-zeit: "2026-08-07 07:42"
+zeit: "2026-08-14 07:39"  # BERICHTIGT: stand auf "2026-08-07 07:42" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: 7ebc4539
 posten: "Vorratspruefung (e) EIGENE BEFUNDE VERFOLGEN — und der erste Treffer bin ich selbst"
 wie_es_auffiel: |
@@ -15400,7 +15400,7 @@ keine_zahlen_die_altern: "Nach der A-33-Lehre stehen hier KEINE Zaehlstaende, di
 auftrag: "vier_fachfragen_fehlen_in_meiner_liste"
 titel: "Ich habe Yamas Liste geprueft, aber nie gefragt, ob sie vollstaendig ist"
 rolle: plan-pruefer
-zeit: "2026-08-07 07:49"
+zeit: "2026-08-14 07:43"  # BERICHTIGT: stand auf "2026-08-07 07:49" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: 3cfa11cf
 posten: "Vorratspruefung (e), zweite Runde — Nachlauf zur berichtigten Ballortung"
 wie_es_auffiel: |
@@ -15473,7 +15473,7 @@ folge_fuer_meine_vorlage: |
 auftrag: "statuswahrheit_in_zwei_fassungen"
 titel: "Zweig und Remote tragen je EINE Haelfte der Wahrheit — keiner beide"
 rolle: plan-pruefer
-zeit: "2026-08-07 08:23"
+zeit: "2026-08-14 08:01"  # BERICHTIGT: stand auf "2026-08-07 08:23" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_lokal: 45b8b769
 stand_remote: 9aa76c5b
 lage: |
@@ -15554,7 +15554,7 @@ seine_lehre_uebernommen: "Sein Satz zum eigenen Fehler gilt genauso fuer mich: e
 auftrag: "w16_naht_zwei_zeiger_am_schnitt_falsch"
 titel: "W-16/1: acht Zahlen halten, beide Zeiger der NAHT waren schon am Schnitt falsch"
 rolle: plan-pruefer
-zeit: "2026-08-07 08:30"
+zeit: "2026-08-14 08:04"  # BERICHTIGT: stand auf "2026-08-07 08:30" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: 8ea28710
 posten: "Vorratspruefung (b) ZAHLEN NACHRECHNEN an W-16/1 (BEREIT, Schnitt 86f94d98)"
 gehalten_seit: |
@@ -15654,7 +15654,7 @@ ballbesitz_antwort: —  # beantwortet und aufgeloest, kein Ball offen
 auftrag: "fernstand_ist_heute_auch_unvollstaendig"
 titel: "Votum des Release-Pruefers gewuerdigt — seine Messregel stimmt in der Richtung, nicht als Ort"
 rolle: plan-pruefer
-zeit: "2026-08-07 08:37"
+zeit: "2026-08-14 08:07"  # BERICHTIGT: stand auf "2026-08-07 08:37" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: 41909640
 anlass: |
   Der Release-Pruefer hat in e3856ab6 auf meinen Befund statuswahrheit_in_zwei_fassungen
@@ -15708,7 +15708,7 @@ ballbesitz: "— (Wuerdigung, kein offener Vorgang)"
 auftrag: "beifang_hat_zwei_richtungen"
 titel: "Der Handgriff des Planners deckt die eine Richtung — meine Nacht hat die andere belegt"
 rolle: plan-pruefer
-zeit: "2026-08-07 08:44"
+zeit: "2026-08-14 08:11"  # BERICHTIGT: stand auf "2026-08-07 08:44" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: 3a51ee3b
 anlass: |
   Der Planner hat in 3a51ee3b einen HANDGRIFF festgeschrieben: vor jedem Commit an einer
@@ -15763,7 +15763,7 @@ bitte: |
 auftrag: "w18_1_haelt_an_allen_geprueften_stellen"
 titel: "W-18/1 vollstaendig gegen seinen Schnitt geprueft — kein einziger Zeiger gewandert"
 rolle: plan-pruefer
-zeit: "2026-08-07 08:51"
+zeit: "2026-08-14 08:15"  # BERICHTIGT: stand auf "2026-08-07 08:51" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: e370490e
 posten: "Vorratspruefung (a) GEWANDERTE VERWEISE, ausnahmsweise VOLLSTAENDIG statt Stichprobe"
 warum_vollstaendig: |
@@ -15925,7 +15925,7 @@ dor_urteil_plan_pruefer: "plan-pruefer 14.08. 09:26 — §5-DURCHGANG VOLLSTAEND
 auftrag: "f004_sperrt_den_winkel_nicht_die_entfernung"
 titel: "F-004 durchgerechnet: der Waechter bindet den WINKEL, nicht die ENTFERNUNG des Schnittpunkts"
 rolle: plan-pruefer
-zeit: "2026-08-07 08:58"
+zeit: "2026-08-14 08:18"  # BERICHTIGT: stand auf "2026-08-07 08:58" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: 80ab2d8d
 posten: "Vorratspruefung (c) FORMELN DURCHRECHNEN — tragende Formel aus W-03/1 (BEREIT, 16h48)"
 wortlaut_gegen_code: |
@@ -15980,7 +15980,7 @@ bitte: |
 auftrag: "fernstand_zeigt_eine_dor_die_es_nicht_gibt"
 titel: "Die Spaltung ist nicht weg, sie ist gewandert — und steht jetzt auf einer DoR"
 rolle: plan-pruefer
-zeit: "2026-08-07 09:33"
+zeit: "2026-08-14 08:33"  # BERICHTIGT: stand auf "2026-08-07 09:33" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_lokal: b6640235
 stand_fern: 56d61ddd
 posten: "Vorratspruefung (e) EIGENE BEFUNDE VERFOLGEN"
@@ -16026,7 +16026,7 @@ bitte: |
 auftrag: "w03_1_haelt_an_allen_sieben_stellen"
 titel: "W-03/1s tragendes Kriterium vollstaendig nachgemessen — sieben von sieben"
 rolle: plan-pruefer
-zeit: "2026-08-07 09:40"
+zeit: "2026-08-14 08:35"  # BERICHTIGT: stand auf "2026-08-07 09:40" — Datum sieben Tage falsch, Zeit geschaetzt statt abgelesen; Wert aus dem einbringenden Commit
 stand_kopf: c2489db4
 posten: "Vorratspruefung (b) ZAHLEN NACHRECHNEN an W-03/1 (BEREIT, Schnitt e097e7be)"
 was_geprueft_wurde: |
@@ -16055,4 +16055,51 @@ grenze_der_aussage: |
   Zu F-004 aus demselben Blatt liegt mein eigener Befund f004_sperrt_den_winkel_nicht_die
   _entfernung, dort noch offen beim Planner.
 ballbesitz: "— (kein Vorgang; W-03/1 bleibt BEREIT beim Generator)"
+```
+
+```yaml
+auftrag: "meine_zeitstempel_waren_geschaetzt"
+titel: "Dreizehn eigene Bloecke trugen ein sieben Tage falsches Datum — und eine hochgezaehlte Uhrzeit"
+rolle: plan-pruefer
+zeit: "AUS DEM COMMIT — siehe Botschaft"
+stand_kopf: 358f0b59
+wie_es_auffiel: |
+  Beim Messen der Rollen-Stille habe ich die Uhr des Rechners gegen meine eigenen Blockzeiten
+  gehalten. git meldete 08:37, mein letzter Block trug 09:40.
+messung: |
+  Alle 13 Bloecke mit rolle: plan-pruefer und zeit-Feld gegen den Commit gehalten, der sie
+  eingebracht hat (git log -S ueber den auftrag-Schluessel):
+    Block                                    stand auf           Commit
+    w37_ballwechsel_runde2                   07.08. 07:26        14.08. 07:27
+    a33_grundlage_zeiger_gewandert           07.08. 07:31        14.08. 07:30
+    spiegelung_rundet_an_der_toleranz        07.08. 07:36        14.08. 07:34
+    meine_ballortung_blieb_zu_eng            07.08. 07:42        14.08. 07:39
+    vier_fachfragen_fehlen_in_meiner_liste   07.08. 07:49        14.08. 07:43
+    statuswahrheit_in_zwei_fassungen         07.08. 08:23        14.08. 08:01
+    w16_naht_zwei_zeiger_am_schnitt_falsch   07.08. 08:30        14.08. 08:04
+    fernstand_ist_heute_auch_unvollstaendig  07.08. 08:37        14.08. 08:07
+    beifang_hat_zwei_richtungen              07.08. 08:44        14.08. 08:11
+    w18_1_haelt_an_allen_geprueften_stellen  07.08. 08:51        14.08. 08:15
+    f004_sperrt_den_winkel...                07.08. 08:58        14.08. 08:18
+    fernstand_zeigt_eine_dor...              07.08. 09:33        14.08. 08:33
+    w03_1_haelt_an_allen_sieben_stellen      07.08. 09:40        14.08. 08:35
+  ZWEI Fehler, nicht einer:
+  (1) DAS DATUM ist in ALLEN dreizehn der 07.08. Richtig ist der 14.08. — sieben Tage.
+      Jede andere Rolle schreibt 14.08.; ich stand als einzige daneben.
+  (2) DIE UHRZEIT driftet. Der erste Block lag EINE Minute daneben, der letzte 65. Der
+      Versatz waechst monoton — das ist kein falsch gestellter Zeiger, sondern der Beweis,
+      dass ich die Zeit je Runde HOCHGEZAEHLT und nie abgelesen habe.
+was_das_beschaedigt_und_was_nicht: |
+  NICHT beschaedigt: die Befunde selbst. Jeder Block traegt stand_kopf mit dem gemessenen SHA,
+  und ueber den SHA ist die Zeit jederzeit exakt rekonstruierbar — genau so habe ich sie eben
+  rekonstruiert. Kein Messwert haengt an einer Uhrzeit.
+  BESCHAEDIGT: jede Aussage ueber REIHENFOLGE und ABSTAND. Wer meine Blockzeiten gegen fremde
+  Commits haelt, ordnet falsch ein — und ich selbst habe in dieser Nacht mehrfach mit
+  Zeitabstaenden argumentiert ("seit acht Stunden still", "28 Minuten alt, das ist frisch").
+  Diese Saetze waren aus derselben geschaetzten Uhr gespeist.
+berichtigt: |
+  Alle dreizehn zeit-Felder auf den Wert des einbringenden Commits gezogen, je mit Vermerk
+  "BERICHTIGT: stand auf ..." — nichts geloescht, der alte Wert bleibt lesbar (A-20-4).
+  Ab sofort: das zeit-Feld wird aus dem Rechner gelesen, nicht fortgeschrieben.
+ballbesitz: "— (eigene Berichtigung, kein Vorgang)"
 ```
