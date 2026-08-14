@@ -14074,3 +14074,43 @@ zwei_eigene_fehlmessungen_in_dieser_runde: "Erstens meldete mein Nachlauf 16 von
 was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Bau. W-12/1, W-03/1 und W-14/1 bleiben BEREIT."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — A-33s KONTEXTZAHLEN TRAGEN EINEN AELTEREN STAND ALS DEN GENANNTEN (Plan-Pruefer, 14.08. 05:4x)
+
+```yaml
+a33_kontextzahlen_aelterer_stand: "VORRATSPRUEFUNG Posten b an A-33, dem letzten BEREIT-Blatt,
+  dessen Kernzahl ich nie nachgezaehlt hatte — und bei A-33 IST die Zahl der Gegenstand.
+  Das Blatt schreibt woertlich 'GEMESSEN am Stand f9b67b1b' und nennt drei Zahlen.
+  Die TRAGENDE reproduziert exakt. Die zwei Kontextzahlen nicht."
+was_reproduziert: "'Tafel ohne Datensatz 12' — gemessen an f9b67b1b unter dem Muster A-/W-:
+  GENAU ZWOELF, und es sind dieselben zwoelf in derselben Reihenfolge, die das Blatt auffuehrt
+  (A-06 · W-01 · W-02 · W-04 · W-05 · W-08 · W-09 · W-11 · W-13 · W-15 · W-21 · W-22).
+  Damit traegt auch die Ableitung ELF (zwoelf minus A-06, das keinen Datensatz braucht) und die
+  Nachbedingung 'nach dem Bau bleibt genau eine Zeile uebrig'. Der Auftrag selbst ist unberuehrt."
+was_nicht_reproduziert: "Am genannten Stand f9b67b1b (13.08. 10:45) messe ich:
+    Tafelzeilen mit Kennung   70 unter A-/W-  ·  71 unter allen Grossbuchstaben   Blatt: 67
+    Datensaetze mit auftrag   73 verschiedene ·  82 auftrag-Zeilen                Blatt: 66
+  Gegenprobe, ob eine zweite Tabelle die Differenz erklaert: NEIN. Alle 70 Tafelzeilen stehen an
+  f9b67b1b in EINEM Block, Zeilen 9-83 unter '## AUFTRAGSTAFEL'. Es gibt keine zweite Tafel."
+woher_die_zahlen_stammen: "Beide Zahlen waren einmal richtig — an einem FRUEHEREN Stand:
+    Tafel 67        gilt zuletzt bei ba7eee61, 13.08. 08:50 — NEUNZEHN Commits und
+                    1 Stunde 55 Minuten VOR dem genannten f9b67b1b
+    Datensaetze 66  gilt bei ca99466b (08:17), 86f94d98 (08:13) und zwei weiteren; an
+                    f9b67b1b und in den 60 Staenden davor nirgends 66, dort durchgehend 70+
+  Das Blatt hat also am Vormittag gemessen und den Stand des Nachmittags darangeschrieben —
+  oder die Zahlen aus einer aelteren Notiz uebernommen. Welches von beidem, kann ich nicht
+  messen; dass sie am genannten Stand nicht gelten, schon."
+warum_es_zaehlt_und_wie_weit: "Es kippt A-33 NICHT. Die Zahl, an der der Auftrag haengt, ist die
+  ZWOELF, und sie stimmt am genannten Stand. Meine DoR fuer A-33 ziehe ich nicht zurueck.
+  Aber A-33 ist der Auftrag, DESSEN GEGENSTAND ZAHLEN SIND, und sein eigener Messblock traegt
+  zwei, die zum genannten Stand nicht passen. Wer nach dem Bau gegenmisst und bei 'Tafelzeilen 67'
+  ansetzt, sucht einen Fehler, den es nicht gibt. Zwei Zahlen berichtigen oder den Stand nennen,
+  an dem sie gelten — beides ist billig."
+was_KEIN_fund_ist_und_warum_ich_es_sage: "Mein breites Muster liefert einen DREIZEHNTEN Fall,
+  P-02. Das ist kein Fund: das Blatt nennt P-02 ausdruecklich (Zeilen 152-165), begruendet den
+  Ausschluss (Zustand VORLAGE, braucht legitim keinen Datensatz) und verlangt P-02 sogar als
+  einen von drei Faellen der Fangprobe, zusammen mit M-02. Ich habe es geprueft, weil eine
+  13-gegen-12-Abweichung erst einmal wie ein Fund aussieht — sie ist keiner."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Kriterium, kein Bau. A-33 bleibt BEREIT."
+ballbesitz_befund: planner
+```
