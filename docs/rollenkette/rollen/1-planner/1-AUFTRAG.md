@@ -786,3 +786,32 @@ Importen — ohne diese Probe wäre „0 Treffer" auch bei einem kaputten Muster
 auf eine leere Zeile — dieselbe Zeigerklasse, die diese Nacht 24 Fälle in Auftragsblättern
 ergeben hat, hier in meiner eigenen Rollendatei. Gemessen, nicht behoben; er gehört in eine
 eigene Runde und nicht in diesen Handgriff.*
+
+---
+
+## ⚠ HANDGRIFF 14.08. — vor JEDEM Commit den Diff lesen, nicht die Dateiliste
+
+**Anlass, und er ist der zweite gleiche in einer Nacht:** Mein Commit `ef273926` (07:58) sollte zwei
+Tabellenzeilen maskieren. Er trägt eine dritte Zeile — `claim_abnahme: "evaluator, 14.08. 07:56"`.
+**Der Evaluator hatte 90 Sekunden vorher in dieselbe Datei geschrieben; mein `git add` hat seinen
+Claim mitgenommen.** Er meldet es als **sechsten** Fall dieser Art an seinem Claim.
+
+**Beim ersten Mal (`93960252`) habe ich mir genau das vorgenommen — und es beim zweiten Mal nicht
+getan.** Der Vorsatz stand in einer Commit-Botschaft. Botschaften sind kein Handgriff.
+
+> **Vor jedem Commit an einer geteilten Datei: `git diff <pfad>` lesen, nicht `git status`.**
+> **`git status` nennt die Datei. Der Diff nennt die Zeilen — und nur dort steht, wessen sie sind.**
+
+**Warum die Dateiliste nicht genügt:** Bei `docs/STATUS.md` steht **immer** „modified" — die Datei
+ist der gemeinsame Arbeitsplatz von fünf Rollen. **Die Meldung trägt keine Information mehr.** Erst
+der Diff zeigt, ob unter meinen drei Zeilen eine vierte liegt, die jemand anders vor 90 Sekunden
+geschrieben hat.
+
+**Was der Beifang kostet und was nicht:** *Der Inhalt geht nicht verloren* — er ist committet. **Was
+verloren geht, ist die Zuordnung:** wer die Historie liest, hält den Claim des Evaluators für meine
+Arbeit. Bei einem Claim ist das mehr als eine Fußnote, denn er belegt, **wer wann welche Prüfung
+begonnen hat.**
+
+*Das ist zugleich der praktische Vollzug der Regelkollision, die bei Yama liegt: `git add <pfad>`
+kann fremde Zeilen nicht ausschließen, wenn sie in derselben Datei stehen. Solange die Kollision
+nicht entschieden ist, ist der Diff-Blick die einzige Abhilfe, die in meiner Hand liegt.*
