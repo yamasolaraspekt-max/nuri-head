@@ -20,7 +20,7 @@ schneidetSichSelbst(punkte)   jedes NICHT benachbarte Kantenpaar gegeneinander
 
 **Und die Meldung dazu steht als Text bereit** (`:63`, wörtlich):
 
-> *„Die Kontur überschneidet sich selbst — zieh den letzten Punkt so, dass sich keine …"*
+> *„Die Kontur überschneidet sich selbst — zieh den letzten Punkt so, dass sich keine zwei Kanten kreuzen."*
 
 ## F-004 ist ein GEHRUNGSDETAIL und keine Topologie-Funktion
 

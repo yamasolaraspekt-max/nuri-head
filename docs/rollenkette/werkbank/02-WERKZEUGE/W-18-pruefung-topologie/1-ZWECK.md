@@ -1,5 +1,31 @@
 # W-18 · Topologie prüfen — ZWECK
 
+> ***EINORDNUNG: W-18 war eine ABLESUNG und kein Bau*** — *und das ist gemessen, nicht angenommen.*
+> **Nach Yamas Verfahren für Klasse B gilt zuerst die Messung, dann die Einordnung**; hier steht sie,
+> damit die nächste Rolle sie nicht wiederholt.
+
+```text
+F-013 (Selbstschnitt)  GEBAUT   geometry/kontur.ts:109  schneidetSichSelbst
+                                acht Exporte, eigener Test
+                                UND eine Nutzermeldung   :63
+F-004 (Geradenschnitt) GEBAUT   ABER ANDERSWO und als GEHRUNGSDETAIL:
+                                wallGeometry.ts:62 (Bandkanten bis zum
+                                Schnittpunkt) und :106 — nicht als
+                                Topologie-Formel
+ANSCHLUSS              STEHT    HausplanerApp.tsx:31 fuehrt vier Symbole ein,
+                                :30 nennt den Grund; pruefeKontur laeuft
+                                auf :831
+```
+
+> ***Beide Formeln sind gebaut und die Prüfung ist angeschlossen — deshalb war hier nichts zu bauen,
+> sondern zu lesen.*** *Was blieb, waren die Grenzen (`7-GRENZEN`): der dritte Topologie-Fall
+> „Treppe ohne Zielgeschoss" ist **nicht** gebaut, und W-18 hat **kein eigenes Werkzeug** in der
+> Registry — `'kontur'` dort (`toolRegistry.ts:230`) ist das **Zeichnen**-Werkzeug, nicht die
+> Prüfung.*
+>
+> **Die Einordnung entstand aus dieser Messung und nicht umgekehrt** — *vor dem Öffnen des Codes
+> stand offen, ob F-004 fehlt.*
+
 ## Welches Problem des Anwenders löst dieses Werkzeug?
 
 **Er soll keine Fläche zeichnen können, die es geometrisch nicht gibt** — und wenn er es versucht,
@@ -10,7 +36,7 @@ Drei Fälle, und für jeden steht ein Satz bereit (`kontur.ts:61-64`, wörtlich)
 ```text
 zu-wenig-punkte   'Eine Fläche braucht mindestens drei Punkte — setze noch einen.'
 selbstschnitt     'Die Kontur überschneidet sich selbst — zieh den letzten Punkt so,
-                   dass sich keine …'
+                   dass sich keine zwei Kanten kreuzen.'
 keine-flaeche     'Alle Punkte liegen auf einer Linie — das umschließt keine Fläche.'
 ```
 

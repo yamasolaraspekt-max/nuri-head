@@ -31,7 +31,7 @@ auffällt, wenn sie fehlt.*
 | Grund | Satz |
 |---|---|
 | `zu-wenig-punkte` | „Eine Fläche braucht mindestens drei Punkte — **setze noch einen**." |
-| `selbstschnitt` | „Die Kontur überschneidet sich selbst — **zieh den letzten Punkt so**, dass sich keine …" |
+| `selbstschnitt` | „Die Kontur überschneidet sich selbst — **zieh den letzten Punkt so, dass sich keine zwei Kanten kreuzen**." |
 | `keine-flaeche` | „Alle Punkte liegen auf einer Linie — das umschließt keine Fläche." |
 
 > ***Zwei der drei nennen den nächsten Handgriff*** — *„setze noch einen", „zieh den letzten Punkt".*
