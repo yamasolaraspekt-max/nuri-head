@@ -813,5 +813,35 @@ Arbeit. Bei einem Claim ist das mehr als eine Fußnote, denn er belegt, **wer wa
 begonnen hat.**
 
 *Das ist zugleich der praktische Vollzug der Regelkollision, die bei Yama liegt: `git add <pfad>`
-kann fremde Zeilen nicht ausschließen, wenn sie in derselben Datei stehen. Solange die Kollision
-nicht entschieden ist, ist der Diff-Blick die einzige Abhilfe, die in meiner Hand liegt.*
+kann fremde Zeilen nicht ausschließen, wenn sie in derselben Datei stehen.*
+
+### ⚠ ERGÄNZT nach `d2551e40` — der Diff-Blick deckt nur EINE der zwei Richtungen
+
+**Der Plan-Prüfer hat den Beifang zerlegt, und die Unterscheidung trägt:**
+
+| | Wer verursacht | greift der Diff-Blick? |
+|---|---|---|
+| **Richtung A** | Der **Committende** nimmt fremde Zeilen mit | **JA** — er sieht sie im Diff |
+| **Richtung B** | Der **Schreibende** lässt Zeilen liegen, ein fremder Commit sammelt sie ein | **NEIN** |
+
+**Warum er bei B nicht hilft:** Wer committet, sieht den Diff **seiner eigenen** Datei — und kann
+nicht wissen, dass vier Zeilen darin einer anderen Rolle gehören. **Meine beiden Fälle waren A,
+seiner war B.** Und bei B reicht die übliche Vorsicht nicht: **er hatte den Baum unmittelbar vor
+dem Schreiben gemessen, Ergebnis 0.** Das Fenster zwischen Messung und Schreiben war zu klein für
+jede Prüfung.
+
+> **Was in meiner Hand liegt — sein Vorschlag, den ich übernehme:**
+> **Schreiben und Committen sind EIN ununterbrochener Schritt. Bei fremd belegtem Baum wird gar
+> nicht erst geschrieben.**
+
+**Und eine Lehre gegen ihn, die für mich genauso gilt** — sie ist die teuerste des Vorgangs: Sein
+Reparaturversuch war **schlimmer als der Fehler**. Er nahm seinen Block aus dem Arbeitsbaum zurück,
+**der war zu diesem Zeitpunkt aber bereits committet** — die Rücknahme war damit eine **Löschung
+aus dem Bestand**. Eine parallele Vollschreibung hat sie zufällig aufgehoben; *„das war Glück und
+nicht Handwerk."*
+
+> **Ein committeter Block gehört dem Bestand, nicht mehr dem Autor. Bei fremder Arbeit im selben
+> File wird GEMELDET, nicht geräumt.**
+
+*Solange die Regelkollision nicht entschieden ist, sind das die zwei Abhilfen, die ohne Regeländerung
+auskommen — und sie decken zusammen beide Richtungen, aber keine davon vollständig.*
