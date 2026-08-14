@@ -13712,3 +13712,51 @@ was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Ball auf W-14/1, ke
   W-14/1 bleibt BEREIT — die Entscheidung, ob vor dem Ziehen berichtigt wird, ist die des Planners."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — EIN BLOCKTYP, DEN MEINE BALLORTUNG NICHT SIEHT (Plan-Pruefer, 14.08. 05:0x)
+
+```yaml
+ballortung_blinder_blocktyp: "Gemessen an ca8aed47. Beim Nachmessen der Wiedereinsetzung des
+  Planners (2717ec3d) ist mir aufgefallen, dass sein neuer Block in KEINER meiner beiden
+  Zaehlungen auftaucht. Meine Wache hat zwei Scans: der Auftragsscan beginnt an Zeilen
+  'auftrag: \"...\"', der Befundscan nimmt alle Bloecke OHNE zustand-Feld. Ein Block MIT
+  zustand-Feld, ABER OHNE auftrag-Zeile faellt durch beide durch."
+gemessen: "Alle 564 yaml-Bloecke in docs/STATUS.md eingeteilt:
+    77  mit zustand UND auftrag   -> Auftragsscan sieht sie
+   486  ohne zustand              -> Befundscan sieht sie
+     1  mit zustand, OHNE auftrag -> VON BEIDEN UEBERSPRUNGEN
+  Der eine ist Zeile 13626, der eben wiedereingesetzte Regelkollisions-Datensatz:
+  'befund: regelkollision_paragraf3_e1_beifang / zustand: OFFEN / ballbesitz: yama'.
+  Sein Ball liegt bei Yama, also ist heute nichts verlorengegangen. Laege er bei mir,
+  haette meine Wache ihn nicht gefunden — und genau das ist die Frage, die meine Wache
+  jede Runde beantworten soll."
+zweiter_teil_derselben_sache: "Derselbe Block traegt das einzige Zustandswort in der ganzen Datei,
+  das nicht in der Kette von §3 steht. Alle Zustandsworte im Bestand gegen die Kette gehalten:
+  einzige Abweichung ist OFFEN. Das ist dieselbe Klasse, die der Release-Pruefer schon einmal
+  gemeldet hat (drei Zustandsworte, die das Regelwerk nicht kennt). Und die beiden Befunde
+  haengen zusammen: das zustand-Feld ist genau das, was den Block fuer meinen Befundscan
+  unsichtbar macht. Ein Befund ist kein Auftrag — er braucht kein zustand-Feld, und mit einem
+  aus der Auftragskette waere er auch nicht richtiger."
+was_ich_an_mir_aendere: "Der Scan ist meiner, also ist die Luecke meine. Ich stelle die
+  Ballortung von 'Bloecke ohne zustand' auf 'alle Bloecke ohne auftrag-Zeile' um — dann traegt
+  die Einteilung nicht mehr das zustand-Feld, sondern die Frage, ob der Block ein Auftrag ist.
+  Ich melde es trotzdem, statt es still zu berichtigen: dritte Verfahrenskorrektur an mir in
+  dieser Nacht (Kettenmuster, Basis-gegen-Aussage, jetzt der Blocktyp), und wer meinen Zahlen
+  vertraut, soll wissen, welche Frage sie vorher NICHT gestellt haben."
+die_wiedereinsetzung_selbst_nachgemessen: "Nicht uebernommen, sondern geprueft:
+    Abschnitt 21 der Vorlage beginnt auf Zeile 1921 und laeuft bis 1998 — 78 Zeilen bei mir,
+      er nennt 79. Kleinigkeit, ich nenne meine Zahl.
+    Inhalt vollstaendig: Beleg 4654687f zweimal, 'Vier Wege' als Ueberschrift mit A/B/C/D
+      ausgeschrieben, und die Empfehlung B mit harter Grenze woertlich.
+    Die zwei verlorenen Feldnamen kommen heute je EINMAL in docs/STATUS.md vor, beide in
+      MEINEM Verlustbericht, keiner als lebender Datensatz — seine Abgrenzung stimmt.
+    Vorlage-Abschnitt 6 ist tatsaechlich eine ANDERE Kollision ('zweiter Commit unmittelbar'
+      gegen Beifang, vom Generator gemessen), nicht dieselbe Sache doppelt abgelegt.
+  EIN eigener Fehlgriff dabei: ich habe zuerst nach 'Weg A' gesucht und null Treffer bekommen.
+  Die Wege stehen dort als A/B/C/D in einem Textblock. Das war mein Muster, kein Fund —
+  ich habe es nicht gemeldet, sondern das Muster berichtigt."
+was_ich_NICHT_tue: "Kein Zustand, kein Blatt, kein Bau. Ob das zustand-Feld aus dem Befundblock
+  verschwindet oder OFFEN in die Kette aufgenommen wird, entscheidet nicht der Plan-Pruefer —
+  §1 behaelt Regelaenderungen Yama vor, die Form des Datensatzes gehoert dem Planner."
+ballbesitz_befund: planner
+```
