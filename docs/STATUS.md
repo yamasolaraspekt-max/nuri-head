@@ -13925,3 +13925,42 @@ und_was_ich_bestaetige: "Die vier Berichtigungen aus e063479d halten, einzeln an
   meinem Befund."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — DIE ABHILFE FUER K3 FUEHRT EINEN NEUEN UNBENANNTEN OPERANDEN EIN (Plan-Pruefer, 14.08. 05:2x)
+
+```yaml
+zuschlag_ist_selbst_ein_operand: "Gemessen an 974d2bd2 gegen cc505a13. Der Planner hat A-35s K3
+  nach meinem Befund geschaerft — richtig, und seine Rechnung habe ich vollstaendig nachgeprueft.
+  Der Nachtrag schafft aber genau die Luecke wieder, die er schliesst, eine Ebene tiefer."
+seine_zahlen_nachgerechnet: "Jede Zahl des Nachtrags selbst gerechnet, keine uebernommen:
+    asin(1e-6) in Grad   er: 5,73e-05    ich: 5,7296e-05    stimmt
+    0,01   Grad             er: 28,6 m      ich: 28,6 m        stimmt
+    0,001  Grad             er: 286,5 m     ich: 286,5 m       stimmt
+    0,0001 Grad             er: 2864,8 m    ich: 2864,8 m      stimmt
+    an der Schwelle         er: 4999,6 m    ich: 5000,0 m      Abweichung aus der Rundung der
+                            Schwelle selbst (5,73e-05 gegen asin(1e-6)); sachlich dasselbe.
+  Auch seine Einordnung stimmt: K2 ist eine Winkelschwelle, der Schaden eine Abstandsgroesse."
+der_fund: "Der Nachtrag verlangt fuer K3 ZWEI benannte Groessen und nennt die zweite als Vorschlag:
+  der Schnittpunkt muss -innerhalb der Bounding-Box aller Waende des Geschosses ZUZUEGLICH EINES
+  ZUSCHLAGS- liegen. Der Zuschlag hat keinen Wert. Er kommt im ganzen Blatt genau EINMAL vor
+  (Z.128), ohne Zahl, ohne Bezugsgroesse, ohne Entscheidung. Der Satz daneben sagt woertlich, der
+  Vorschlag -kommt ohne erfundene Zahl aus- — der Zuschlag IST aber eine solche Zahl, nur eine
+  Ebene tiefer. Das Kriterium verlangt zugleich, die gewaehlte Grenze stehe -an EINER benannten
+  Stelle und im Bau-Bericht-. Damit waehlt sie faktisch der Generator, und genau das verbietet
+  der Nachtrag zwei Zeilen darueber: -OPERAND — Fachentscheidung, NICHT vom Generator zu setzen.-"
+warum_ich_das_melde_und_nicht_die_dor_zurueckziehe: "Die Schaerfung ist eine VERBESSERUNG, und ich
+  ziehe meine DoR nicht zurueck: A-35 bleibt BEREIT, Ball beim Generator, die neun Kriterien sind
+  unveraendert neun. Der Zustand ist auch nicht durch mich zu aendern. Aber die Schutzgrenze im
+  Hausvertrag ist eindeutig — fehlende Operanden fuehren zu Rueckfrage oder einem ausdruecklich
+  bestaetigten Vorschlag, nicht zu stiller Automatisierung. Solange der Zuschlag keinen Wert hat,
+  ist K3 fuer den Bau nicht entscheidbar, ohne dass jemand die Zahl erfindet."
+der_kleinste_ausweg_als_vorschlag: "Bis der Zuschlag entschieden ist, traegt K3 auch OHNE ihn:
+  ABWEISEN als Standardverhalten. Ein Trimmen, dessen Schnittpunkt ausserhalb der Bounding-Box
+  liegt, wird mit Grund abgewiesen — das ist messbar, braucht keine Zahl, und verliert nichts,
+  was spaeter mit einer entschiedenen Zahl nachgeruestet werden koennte. Das ist ein Vorschlag
+  und keine Festlegung; die Entscheidung ist eine Fachentscheidung und damit Yamas, ueber den
+  Planner."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Kriterium, kein Ball auf A-35, kein
+  Bau. A-35 bleibt BEREIT beim Generator."
+ballbesitz_befund: planner
+```
