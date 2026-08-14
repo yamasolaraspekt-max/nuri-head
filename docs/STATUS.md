@@ -14856,3 +14856,43 @@ was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Kriterium, kein Bau. A-35 ble
   Messvorschrift ist zu weit. Ob und wie sie verengt wird, entscheidet der Planner."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — ACHTUNDVIERZIG WERKBANK-BLAETTER SIND BYTE-GLEICHE SCHABLONEN, UND DIE ZUORDNUNG IST KEIN ZUFALL (Plan-Pruefer, 14.08. 07:0x)
+
+```yaml
+werkbank_acht_schablonen: "VORRATSPRUEFUNG Posten b an W-18-1-7, dem einzigen Ablesungs-Kriterium
+  mit einem ausfuehrbaren Messbefehl: 'Alle sieben Blaetter gefuellt, Gegenprobe tail -n +2
+  <blatt> | md5 je Blatt, keine zwei Werkzeuge mit gleichem Hash.' Ich habe genau das gefahren,
+  ueber ALLE 36 Werkzeug-Ordner. Gemessen an 966bf74c."
+gemessen: "Sechs Blattarten je Werkzeug (1-ZWECK, 2-FUNKTION, 3-FORMELN, 4-BEDIENUNG, 6-PRUEFUNG,
+  7-GRENZEN; 5-CODE ist ein VERZEICHNIS, kein Blatt). Ergebnis fuer JEDE der sechs Arten identisch:
+    28 verschiedene Hashes bei 36 Blaettern · EINE Kollisionsgruppe · NEUN Blaetter darin
+  Die Neun sind ueberall dieselben:
+    W-03 · W-10 · W-12 · W-14 · W-16 · W-17 · W-18 · W-19 · _VORLAGE
+  Der 1-ZWECK-Hash ist e921aa0846c2… — genau der, den W-12/1s Tafelzeile nennt. Meine Messung
+  bestaetigt ihn und erweitert ihn: es ist nicht nur 1-ZWECK, es sind ALLE SECHS."
+die_zuordnung_ist_der_eigentliche_befund: "Acht Werkzeuge tragen die Vorlage byte-gleich, und
+  sie zerfallen sauber in zwei bekannte Gruppen:
+    SECHS sind exakt die BEREIT-Ablesungen — W-03/1, W-10/1, W-12/1, W-14/1, W-16/1, W-18/1.
+      Deren Werkbank-Ordner sind unausgefuellt. Das ist KEIN Mangel, sondern der GEGENSTAND
+      dieser Auftraege: sie sollen die Blaetter fuellen. Die Messung belegt damit, dass die
+      acht BEREIT-Auftraege echte, unerledigte Arbeit sind und kein Papier.
+    ZWEI sind W-17 und W-19 — genau die zwei aus meinem Befund von 06:15, die im Register
+      stehen und in der Statuswahrheit NIRGENDS. Sie sind also doppelt leer: kein Datensatz,
+      und ein Werkbank-Ordner, der nur die Vorlage kopiert."
+was_das_fuer_W_18_1_7_heisst: "Das Kriterium ist heute korrekt ROT — W-18 liegt selbst in der
+  Gruppe. Es kann nur gruen werden, wenn die Blaetter wirklich gefuellt sind, und es faellt
+  nicht auf eine halbe Fuellung herein, weil es HASHGLEICHHEIT prueft und nicht Laenge.
+  Das ist ein gut gebautes Kriterium, und ich sage das ausdruecklich, weil ich heute Nacht
+  eines beanstandet habe, das gruen war, bevor gebaut wurde."
+die_zahl_fuer_den_stillstand: "Acht Werkzeuge mal sechs Blattarten = 48 Blaetter, die heute
+  byte-gleich mit _VORLAGE sind. Das ist der Umfang dessen, was die sechs BEREIT-Ablesungen
+  plus zwei unerfasste Werkzeuge an Werkbank-Arbeit vor sich haben. Es gehoert zur
+  Stillstands-Vorlage (3904fce1): dort steht, dass nichts gebaut wird — hier steht, wieviel."
+zwei_eigene_fehlgriffe_unterwegs: "Erstens meldete mein Skript 'nur SECHS Blattarten statt
+  sieben' — das war mein .md-Filter: 5-CODE ist ein Verzeichnis und existiert in allen 36
+  Ordnern. Vierter Fast-Fehlbefund dieser Nacht, vor dem Melden gefangen. Zweitens ist ein
+  Lauf an einem Ordnernamen abgestuerzt (_VORLAGE hat keinen zweiten Bindestrich); die
+  Hash-Zahlen stammen aus dem robusten zweiten Lauf, nicht aus dem abgestuerzten."
+ballbesitz_befund: yama
+```
