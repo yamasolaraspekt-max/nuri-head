@@ -14154,3 +14154,48 @@ was_daraus_folgt_und_wem_es_gehoert: "Ob eine Bau-Instanz gestartet wird, ist Ya
   Ein Generator-Start muesste gegen diese messen, nicht gegen meine Zaehlung hier."
 ballbesitz_befund: yama
 ```
+
+## BEFUND — DER DOPPELTE SCHLUESSEL IN A-09 VERDECKT EINEN OFFENGELEGTEN VERSTOSS (Plan-Pruefer, 14.08. 05:5x)
+
+```yaml
+doppelter_schluessel_a09: "Meine Wache meldet seit Beginn dieser Nacht in JEDER Runde denselben
+  einen doppelten Schluessel — ('A-09', ['release_vermerk']) — und ich habe ihn nie geoeffnet.
+  Heute geoeffnet, gemessen an 3904fce1. Er ist kein Formfehler."
+was_doppelt_ist: "Der A-09-Block (Zeilen 1994-2023) traegt release_vermerk ZWEIMAL:
+    Z.2001  release-pruefer (STAMM-Instanz) 10.08. — §10 an af8f2054, Tor-Suite 50/50, Waechter 7/7,
+            main-Integration als FF auf fork UND backup-private. UND DARIN, woertlich:
+            'OFFENGELEGT: der Zustandseintrag kam einen Commit NACH dem Push statt im selben
+            Arbeitsgang (Patch-Skript griff nicht, Release lief weiter) — Verstoss gegen die
+            eigene Regel vom 05.08., hier transparent nachgeholt.'
+    Z.2022  release-pruefer 10.08. — RELEASE_FREI an af8f2054, sechsmal is-ancestor, Suite 50/50
+            im eigenen Worktree, Rueckweg per git apply --check -R, Randnotizen gewuerdigt.
+  Die beiden sind NICHT dieselbe Aussage in zwei Fassungen. Der zweite ist der vollstaendige
+  §10-Vermerk; der erste traegt zusaetzlich einen SELBST OFFENGELEGTEN Regelverstoss, der
+  sonst nirgends unter einem eigenen Schluessel steht."
+warum_das_mehr_als_form_ist: "In einer YAML-Abbildung ist ein doppelter Schluessel kein Zusatz,
+  sondern eine Ueberschreibung. Am echten Modul geprobt, nicht behauptet:
+    node -e 'yaml.load(\"k: erster\\nx: 1\\nk: zweiter\")'
+    -> WIRFT: YAMLException — duplicated mapping key (3:1)
+  Wer den Block also maschinell liest, bekommt entweder einen Fehler oder — mit toleranterem
+  Parser — nur den ZWEITEN Vermerk. Die Offenlegung des Verstosses ist dann weg. Das ist
+  dieselbe Klasse wie der Merge-Verlust von heute Nacht, nur ohne Merge."
+die_datei_kann_es_besser_und_tut_es_sonst_auch: "Fuer genau diesen Fall — zwei Release-Instanzen
+  pruefen unabhaengig dasselbe — hat der Bestand einen EIGENEN Schluessel, siebenmal benutzt:
+  zweitpruefung (Z.1226, 2296, 2331) · zweitpruefung_a07 (Z.1918) · zweitpruefung_kontrolle2
+  (Z.2257, 2388, 2406). A-09 ist die einzige Stelle, an der die zweite Instanz denselben
+  Schluessel noch einmal verwendet hat statt eines eigenen."
+warum_es_bisher_niemand_gefangen_hat: "Das Commit-Tor prueft .md-Dateien mit js-yaml, aber nur den
+  ERSTEN yaml-Block: die Regex in scripts/commit-pruefen.sh:501 ist ohne g-Flag, und die Meldung
+  heisst folgerichtig 'YAML-KOPF ... der Kopf parst nicht'. Gemessen: der erste Zaun beginnt auf
+  Zeile 178 und ist 34 Zeilen lang; A-09 liegt auf 1994, also AUSSERHALB. docs/STATUS.md hat
+  225 yaml-Zaeune — geprueft wird einer. DAS IST KEIN MANGEL DES TORS: es sagt Kopf und prueft
+  Kopf. Ich nenne es, damit niemand annimmt, ein gruener Tor-Lauf hiesse, die Datei parse."
+was_ich_NICHT_tue: "Ich fasse den Block nicht an. Beide Vermerke gehoeren dem Release-Pruefer,
+  A-09 ist BETRIEBSBESTAETIGT, und A-20-4 verbietet, einen Beleg umzuschreiben. Der Weg, der
+  beides erhaelt, steht in der Datei selbst: den zweiten Schluessel umbenennen — nicht loeschen,
+  nicht zusammenfassen. Ob und wie, entscheidet er."
+anmerkung_zum_zeitpunkt: "Der Release-Pruefer ist seit 13.08. 23:18 still, also 6 h 30 min.
+  Dieser Befund liegt damit bei einer Rolle, die gerade nicht laeuft — das ist im
+  Stillstands-Befund (3904fce1, Ball bei Yama) bereits benannt und wird hier nicht wiederholt."
+ballbesitz_befund: release-pruefer
+```
