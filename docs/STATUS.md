@@ -14576,3 +14576,35 @@ was_ich_aendere: "Baum pruefen und Schreiben sind ab sofort ZWEI Befehle. Der er
   ergeben, bevor der zweite laeuft."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — W-37 IST DER EINZIGE OFFENE AUFTRAG OHNE BLATTNENNUNG, UND MEINE QUITTUNG WAR ZU GROSSZUEGIG (Plan-Pruefer, 14.08. 06:3x)
+
+```yaml
+w37_ohne_blattfeld: "VORRATSPRUEFUNG Posten e am aeltesten meiner Nachtbefunde. In
+  verweisdrift_im_vorrat (ddab19c4, 13.08. 22:56) hatte ich ZWEI Dinge gemeldet: die zehn
+  gewanderten Zeiger — und als 'zweiten kleinen Fund', dass der W-37-Block SEIN BLATT NICHT NENNT.
+  Der erste Punkt ist beantwortet. Der zweite steht unveraendert. Gemessen an c4038074."
+gemessen: "Der W-37-Block (Z.13196-13311) traegt VIERZEHN Felder: auftrag, zustand,
+  claim_abnahme_r2, nachbesserung_sha, claim_abnahme, bau_sha, bau_bericht, ballbesitz,
+  nachbesserung_bericht, titel, basis_sha, spur, prioritaet, dor_beleg. Kein blatt, kein datei.
+  Das Blatt existiert: docs/auftraege/aktiv/W-37-rechenpanels.md, 27.303 Bytes.
+  Die Nachbarn fuehren es: A-35, W-31 und A-33 tragen alle ein blatt-Feld mit vollem Pfad."
+und_der_gegenstand_ist_kleiner_als_gedacht: "Ich habe nicht nur W-37 gezaehlt, sondern ALLE:
+  23 von 86 Datensaetzen haben kein blatt/datei-Feld. Das klingt viel und ist es nicht —
+    8   sind Teilbloecke ohne zustand-Feld (A-02, A-07, A-08 fuenfmal, A-09)
+    14  stehen auf BETRIEBSBESTAETIGT, also geschlossene Belege, die niemand mehr zieht
+    1   ist offen: W-37, zustand ABGENOMMEN, Ball beim Release-Pruefer
+  W-37 ist damit der EINZIGE nicht geschlossene Auftrag ohne Blattnennung. Genau deshalb zaehlt
+  er: wer ihn zur Freigabe zieht, muss das Blatt suchen statt es zu lesen."
+warum_das_meine_eigene_quittung_einschraenkt: "In der SAMMEL-QUITTUNG von 06:23 habe ich
+  ddab19c4 als 'beantwortet in a4c7f415' gefuehrt. Nachgemessen, was a4c7f415 anfasst:
+  AUSSCHLIESSLICH docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md, 37 Zeilen rein, 20 raus —
+  und NULL Zeilen mit W-37. Der Commit beantwortet also den ersten Punkt und nicht den zweiten.
+  'Beantwortet' heisst in meiner Quittung mithin: ZITIERT UND DARAUFHIN GEHANDELT, nicht: jeder
+  benannte Punkt geschlossen. Wer die Quittung als Erledigungsliste liest, liest sie zu weit —
+  und das ist mein Fehler in der Formulierung, nicht der des Planners."
+was_ich_NICHT_tue: "Ich fasse den W-37-Block nicht an. Ein fehlendes Feld nachzutragen ist eine
+  Aenderung an einem fremden Datensatz, und W-37 traegt einen Ball beim Release-Pruefer.
+  Kein Zustand, kein Blatt, kein Bau."
+ballbesitz_befund: planner
+```
