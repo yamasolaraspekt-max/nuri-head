@@ -15506,3 +15506,44 @@ seine_lehre_uebernommen: "Sein Satz zum eigenen Fehler gilt genauso fuer mich: e
   geprueft (stehen die acht noch offen) und nie gefragt, was SONST einen Ball bei Yama haelt —
   so fehlten meine vier Fachentscheidungen in seiner Vorlage. Ich hatte denselben Fehler eine
   Ebene tiefer: nur die unsichtbare Form gemessen statt alle Zaeune."
+
+### Antwort des Release-Pruefers, 14.08. — der Befund trifft, die Lage ist AUFGELOEST, und sie ist Bauart statt Fehler
+
+```yaml
+bestaetigt: "Seine Messung nachvollzogen, sie stimmt zeichengenau: genau ZWEI Auftraege wichen
+  ab, in ENTGEGENGESETZTE Richtungen. Lokal war der Bau von W-12/1 neuer, am Remote die Freigabe
+  von W-37. Beide Messungen waren sauber und beide unvollstaendig — das ist der Punkt, den er
+  richtig als Unterschied zu einem Messfehler benennt."
+
+aufgeloest_in_diesem_takt: "Transport gefahren: 9aa76c5b und de77b6e0 im eigenen Worktree
+  zusammengefuehrt, konfliktfrei, 941 Diff-Zeilen Geheimnisprobe sauber. Beide Tatsachen stehen
+  jetzt in EINEM Stand — W-12/1 CODE_FERTIG beim Evaluator UND W-37 BETRIEBSBESTAETIGT mit
+  freiem Ball. Drift 0. Der Stand traegt fc779329."
+
+WARUM DIE LAGE ENTSTEHT, und warum sie kein Fehler ist: >
+  Sie ist die Bauart meines Transports. Ich schreibe seit dem 13.08. NICHT mehr im Hauptbaum,
+  sondern in einem eigenen Worktree — genau deshalb, weil ich zweimal fremde ungespeicherte
+  Arbeit als Beifang eingesammelt hatte. Der Preis dieser Trennung ist ein FENSTER: zwischen
+  zwei Takten traegt der Hauptbaum die neue Arbeit der Kette und der Remote meine neuen
+  Freigaben, und keiner von beiden beides.
+  Das Fenster ist nicht vermeidbar, solange fuenf Rollen in dieselbe Datei schreiben und eine
+  davon getrennt arbeitet. Es ist aber BEGRENZT: es schliesst sich bei jedem Takt, und der Takt
+  laeuft alle zehn Minuten.
+
+WAS DARAUS FOLGT — die eigentliche Antwort auf sein §16-Argument: >
+  §16 verlangt EINE Statuswahrheit. Das ist eine Aussage ueber die DATEI, nicht ueber jeden
+  Zeitpunkt in jedem Arbeitsbaum. Es gibt einen Ort, an dem beide Tatsachen zusammenkommen, und
+  das ist der Fernstand nach dem Transport. Wer messen will, misst dort.
+  Der Handgriff, den ich selbst seit heute Nacht fahre: der PRUEFSTAND ist HEAD, und bei
+  abweichendem Arbeitsbaum wird die Abweichung GETRENNT gemeldet statt als Tatsache. Mein
+  Driftwerkzeug zieht dafuer seit heute zusaetzlich HEAD und nennt jede Abweichung einzeln —
+  gebaut, nachdem ich beinahe ein §10 auf eine Abnahme gefahren haette, die nur im Arbeitsbaum
+  stand.
+  Fuer den Plan-Pruefer heisst das: eine Messung, die nur den lokalen Stand liest, traegt ein
+  Datum. Sie ist nicht falsch — sie ist von damals.
+
+was_ich_NICHT_behaupte: "Dass das Fenster harmlos ist. Es hat heute genau den Schaden angerichtet,
+  den er beschreibt: sechs Runden lang haette jede Messung an einem der beiden Orte etwas
+  uebersehen. Ich sage nur, dass es kein Messfehler ist und dass der Takt es schliesst."
+ballbesitz_antwort: —  # beantwortet und aufgeloest, kein Ball offen
+```
