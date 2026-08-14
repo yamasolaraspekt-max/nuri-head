@@ -16984,3 +16984,59 @@ zusatz_planner: |
   Zur Kenntnis an den Planner, weil die Durchfuehrung bisher bei ihm lag (02: ausgeloest_von
   planner; 03: durchfuehrung planner nach P-02-Praezedenz).
 ```
+
+```yaml
+auftrag: "neun_dokumente_ohne_datensatz"
+titel: "Die ganze Flaeche gemessen statt der naechsten Einzelstelle — es sind NEUN, nicht vier"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:42"
+stand_kopf: c5c6ac57
+warum_flaechig_statt_einzeln: |
+  In zwei Stunden habe ich vier Blindstellen meiner Wache gefunden, jede beim Stolpern ueber
+  einen Einzelfall. Statt auf die fuenfte zu warten, habe ich die FLAECHE gemessen: jeden
+  Ball bei mir, in jeder Schreibweise, im ganzen docs/-Baum.
+zuerst_die_entwarnung_die_wichtig_ist: |
+  Die Suche liefert 80+ Treffer in docs/auftraege/aktiv/ — fast jedes Blatt traegt
+  ballbesitz: "plan-pruefer (DoR)". Das sind KEINE offenen Baelle: es ist die
+  Rollenzuweisung im Blattkopf, sie steht auch in laengst abgeschlossenen Blaettern
+  (A-12, A-18, W-37). Ob so ein Auftrag offen ist, sagt sein DATENSATZ in docs/STATUS.md.
+  Meine Ballortung liest deshalb zu Recht den Datensatz und nicht den Blattkopf.
+und_jetzt_die_luecke_praezise: |
+  Sie betrifft ausschliesslich Dokumente in der WURZEL von docs/ — die haben naemlich
+  keinen Datensatz, also ist ihr Kopffeld die einzige Ballfuehrung. Gemessen: NEUN Stueck.
+    BEFUND-P02-DER-ERSTE-GEMESSENE-WETTLAUF.md
+    FAHRPLAN-KLASSE-A.md
+    MELDUNG-INDEX-ANGLEICHUNG-2026-08-06.md
+    PROZESSPRUEFUNG-02-ANTEIL-PLANNER.md
+    PROZESSPRUEFUNG-03.md
+    PRUEFAUFTRAG-P-01-regelwerk.md
+    PRUEFAUFTRAG-P-02-parallele-instanzen.md
+    VORLAGE-WERKZEUG-ODER-SCHICHT.md
+    WERKBANK-ANSCHLUSS.md
+  Gegengeprueft, dass keines einen Auftragsblock hat: grep '^auftrag: "P-01' / "P-02" /
+  "FAHRPLAN" / "WERKBANK-ANSCHLUSS" / "PROZESSPRUEFUNG" liefert je NULL. Eine Tafelzeile
+  gibt es fuer genau eines: P-02. P-01 hat nicht einmal die.
+meine_eigene_zahl_von_0915_war_falsch: |
+  Um 09:15 habe ich VIER gemeldet. Das Muster war '^ballbesitz: plan-pruefer' — es trifft
+  nur die UNZITIERTE Form. Fuenf weitere schreiben zitiert, etwa
+  ballbesitz: "plan-pruefer (Klassifizierung), Yama (…)". Die fielen durch.
+  Das ist dieselbe Klasse wie meine anderen Fehlgriffe heute: das Muster entscheidet ueber
+  das Ergebnis, und ein zu enges Muster liefert eine plausible, falsche Zahl. Ich habe sie
+  drei Runden lang weitergetragen.
+was_ich_NICHT_behaupte: |
+  Nicht alle neun sind offen. Drei tragen einen Erledigt-Vermerk, P-01 ist nachweislich
+  geschlossen (STATUS.md:647 und :1010), P-02 habe ich heute geprueft und an Yama gegeben.
+  Ungeprueft sind damit: FAHRPLAN-KLASSE-A, MELDUNG-INDEX-ANGLEICHUNG, VORLAGE-WERKZEUG-
+  ODER-SCHICHT, WERKBANK-ANSCHLUSS und PROZESSPRUEFUNG-03 (dort steht mein Ball
+  ausdruecklich als "Gegenlese").
+  VORLAGE-WERKZEUG-ODER-SCHICHT ist der schaerfste Fall: sie kommt in docs/STATUS.md
+  ueberhaupt nicht vor — die Statuswahrheit kennt sie nicht, und ihr Ball liegt bei mir.
+was_die_wache_ab_jetzt_misst: |
+  Vier Orte statt drei: yaml-Felder in STATUS.md, Tafelzeilen, Blaetter in aktiv/ (nur zur
+  Zuordnung, nicht als Ball), und die Dokumente in der WURZEL von docs/ mit dem WEITEN
+  Muster '^ball[a-z_]*:.*plan-pruefer'.
+ballbesitz: plan-pruefer
+naechste_schritte: |
+  Die fuenf ungeprueften der Reihe nach durchgehen, je eine Runde, beginnend mit dem, das
+  die Statuswahrheit gar nicht kennt. Kein neuer Ball fuer andere — das ist meine Bahn.
+```
