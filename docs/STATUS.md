@@ -16569,3 +16569,46 @@ die_eine_grenze_die_ich_nenne: |
   nirgends zusammen steht.
 ballbesitz: "— (Messung ohne Fund; W-18/1 bleibt BEREIT beim Generator)"
 ```
+
+```yaml
+auftrag: "w14_kernmodul_exakt_drift_nur_bei_verbrauchern"
+titel: "W-14/1: neun von neun Exporten zeichengenau — die Drift sitzt ausschliesslich bei den Verbrauchern"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:08"
+stand_kopf: dee54aca
+posten: "Vorratspruefung (b) ZAHLEN NACHRECHNEN an W-14/1 (BEREIT, 24h, Schnitt 78c09e1b)"
+gemessen: |
+  W-14-1-4 verlangt: "Die NEUN Exporte von editierGeometrie.ts sind vollstaendig genannt,
+  mit Fundstelle. Am Bau-Stand zaehlen; meine Zahl ist vom 13.08. und ersetzt die eigene
+  nicht." Also gezaehlt, an HEAD UND am Schnitt:
+    editierGeometrie.ts   75 Zeilen an beiden Staenden
+    Exporte               9 an beiden Staenden
+  Und die Liste im Blatt Zeile fuer Zeile gegen den Code gehalten:
+    Blatt  :7 Punkt · :12 Achse · :15 versetzePunkt · :20 versetzteWand · :34 spiegelePunkt
+           :46 spiegelteWand · :55 Bbox · :63 bbox · :73 achsenMitte
+    Code   :7 Punkt · :12 Achse · :15 versetzePunkt · :20 versetzteWand · :34 spiegelePunkt
+           :46 spiegelteWand · :55 Bbox · :63 bbox · :73 achsenMitte
+  NEUN VON NEUN, Name und Zeilennummer zeichengenau. Kein Export fehlt, keiner ist zuviel.
+und_das_ordnet_meinen_eigenen_befund_von_0857_ein: |
+  In sieben_blaetter_gegen_ihren_schnitt hatte ich fuer W-14/1 die schaerfste Bilanz
+  gemeldet: 24 Zeiger, 13 gleich, 7 anders, 4 auf eine am Schnitt fehlende Datei. Diese
+  Runde zeigt, WO das sitzt — und wo nicht:
+    editierGeometrie.ts   0 Commits seit dem Schnitt, 9 von 9 Zeigern exakt   DAS KERNMODUL
+    HausplanerApp.tsx     5 abweichende Zeiger                                Verbraucher
+    werkzeugLandkarte.ts  2 abweichende Zeiger                                Verbraucher
+    sammelBefehle.ts      4 Zeiger auf eine Datei, die es am Schnitt nicht gab Verbraucher
+  Die Drift liegt ZU HUNDERT PROZENT bei den Verbrauchern, und zwar genau in den Dateien,
+  die A-31 (606e83b4) und A-29 (4654687f/d21dd083) nach dem Schnitt angefasst haben. Das
+  Modul, das W-14 beschreibt, hat sich nicht bewegt.
+warum_das_die_lage_veraendert: |
+  Meine 08:57er Meldung liest sich als "W-14/1 ist der schlechteste der sieben". Das ist
+  nach Zahlen richtig und nach Sache irrefuehrend: der GEGENSTAND des Blatts — die neun
+  Exporte, ihre Bedeutungen, ihre Fundstellen — ist an beiden Staenden exakt. Was gewandert
+  ist, sind die Stellen, an denen ANDERE Aufträge das Modul benutzen, und genau die hat der
+  Planner mit sichtbaren Vermerken nachgezogen ("[war :671]", "[war :1356]",
+  "[war HausplanerApp:708]").
+  Fuer den Bauenden heisst das: W-14/1 ist ziehbar, und die einzige offene Frage bleibt die
+  aus 08:57 — der basis_sha beschreibt einen Stand, an dem sammelBefehle.ts noch nicht
+  existierte.
+ballbesitz: "— (Messung ohne neuen Fund; die basis_sha-Frage liegt seit 08:57 beim Planner)"
+```
