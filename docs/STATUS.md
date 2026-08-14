@@ -16726,7 +16726,7 @@ was_p02_von_mir_verlangt: |
 was_ich_an_mir_aendere: |
   Die Ballortung liest ab sofort DREI Orte: die yaml-Felder, die Tafelzeilen, und die
   Dokumente ausserhalb docs/auftraege/aktiv/. Der Befehl dafuer steht oben.
-ballbesitz: plan-pruefer
+ballbesitz: "— # ERLEDIGT 14.08. 09:45: der naechste Schritt war die P-02-Pruefung, abgelegt 09:28 und berichtigt 09:31"
 naechster_schritt: |
   P-02 vollstaendig pruefen — Widerspruchsfreiheit, Pruefbarkeit, Kausalitaet, Plausibilitaet
   und die Machtfrage, je Punkt und mit Belegzeile. Das ist eine ganze Runde und ich nehme sie
@@ -17039,4 +17039,62 @@ ballbesitz: plan-pruefer
 naechste_schritte: |
   Die fuenf ungeprueften der Reihe nach durchgehen, je eine Runde, beginnend mit dem, das
   die Statuswahrheit gar nicht kennt. Kein neuer Ball fuer andere — das ist meine Bahn.
+```
+
+```yaml
+auftrag: "werkzeug_oder_schicht_klassifizierung_gemessen"
+titel: "Der erste der fuenf ungeprueften Vorgaenge: alle VIER Kandidaten sind Schichten, der vierte von mir gemessen"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:45"
+stand_kopf: e6c4f7a2
+gegenstand: "docs/VORLAGE-WERKZEUG-ODER-SCHICHT.md — 124 Zeilen, zuletzt 10.08., ballbesitz: plan-pruefer (Klassifizierung), Yama (zweite Kategorie)"
+warum_dieser_zuerst: |
+  Von den neun Wurzel-Dokumenten mit Ball bei mir ist dieses der schaerfste Fall: es kommt in
+  docs/STATUS.md UEBERHAUPT NICHT vor. Die Statuswahrheit kennt es nicht, und es sagt von sich
+  selbst, dass es etwas BLOCKIERT.
+die_blockade_ist_echt_und_aktuell: |
+  Die Vorlage schreibt: "Entscheidung noetig, bevor W-01 Stufe 2 schneidbar ist" und
+  "blockiert: W-01 Stufe 2 — der Reifegrad GEBAUT ist fuer diesen Fall nicht definiert".
+  Gemessen:
+    W-01/1  zustand BETRIEBSBESTAETIGT   -> Stufe 1 ist fertig und bestaetigt
+    W-01/2  als Datensatz: 0             -> Stufe 2 existiert nicht
+    W-01-Blatt fuer Stufe 2 in aktiv/: 0
+  Die Blockade besteht seit dem 10.08. und hat gehalten: Stufe 2 ist nie geschnitten worden.
+meine_klassifizierung_am_code: |
+  Der Ball bei mir heisst "Klassifizierung". Testbar ist sie an genau einer Frage: gibt es
+  einen toolRegistry-Eintrag? Gemessen, Muster an einem bekannten Treffer verifiziert
+  (id: 'kontur' -> 1, Zeile 230):
+    id 'fang'       0        W-01 Raster und Fang    -> SCHICHT
+    id 'raster'     0
+    id 'ansicht'    0        W-12 Ansicht und Kamera -> SCHICHT
+    id 'kamera'     0
+    id 'topologie'  0        W-18 Pruefung Topologie -> SCHICHT
+  Drei von vier bestaetigt. Die Vorlage hatte sie schon so eingeordnet; meine Messung ist die
+  unabhaengige Gegenprobe, nicht die Erstbehauptung.
+die_vierte_frage_war_offen_und_ist_jetzt_gemessen: |
+  Die Vorlage laesst W-05 ausdruecklich offen: "roomDetection laeuft automatisch aus Waenden;
+  klickt der Nutzer 'Raum erkennen' oder entsteht der Raum von selbst? -> das muss gemessen
+  werden, nicht geraten."
+  GEMESSEN:
+    toolRegistry, id 'raum...'                          0 Treffer
+    app/ableitungen.ts:61  export function raeumeAus(waende, level)
+    HausplanerApp.tsx:569  const raeume = useMemo(() => raeumeAus(waende, level), ...)
+  Ein useMemo ist eine ABLEITUNG, kein Knopf-Handler. Die Raeume werden neu berechnet, sobald
+  sich die Waende aendern; der Nutzer loest nichts aus. Und die Datei heisst ableitungen.ts.
+  ERGEBNIS: W-05 "Raum erkennen" ist ebenfalls eine SCHICHT. Alle VIER Kandidaten sind es.
+was_damit_bei_mir_erledigt_ist_und_was_nicht: |
+  ERLEDIGT ist mein Teil: die Klassifizierung ist gemessen, vier von vier.
+  NICHT erledigt und ausdruecklich nicht meins: ob die Werkbank eine ZWEITE KATEGORIE
+  bekommt. Das ist die zweite Haelfte des Ballfelds und steht dort woertlich bei Yama.
+  Solange sie fehlt, bleibt W-01 Stufe 2 blockiert — und mit ihr die Frage, was der
+  Reifegrad GEBAUT fuer eine Schicht ueberhaupt heissen soll.
+nebenbei_geschlossen: |
+  Mein eigener Ball p02_lag_eine_woche_unsichtbar_in_meiner_bahn: sein naechster Schritt war
+  die P-02-Pruefung, abgelegt 09:28 und berichtigt 09:31. Geschlossen mit Beleg, damit ich
+  keine Karteileiche der Art erzeuge, die ich um 09:33 selbst beanstandet habe.
+ballbesitz: yama
+bitte: |
+  Eine Entscheidung: bekommt die Werkbank eine zweite Kategorie fuer Schichten, oder bleiben
+  die vier als "Werkzeuge" mit einer Sonderregel fuer ihren Reifegrad? Vier von vier sind
+  gemessen; es fehlt nur noch das Wort. Danach ist W-01 Stufe 2 schneidbar.
 ```
