@@ -13,8 +13,8 @@
 | **Planner-Branch** | `rolle/planner` |
 | Gemeinsamer Checkout | `/Users/yamanuri/Documents/ticket` · `auto/hausplaner-integration` |
 | **FORENSISCHER_SHA** | **`36e600308890ba600757162cfab7a9903f3393bb`** — unveränderlicher Bezug für Ursachen- und Rückprüfung. **Nicht** der Arbeits-SHA. |
-| **AKTIVIERUNGS_SHA** | **noch nicht bestimmt** — legt der **Integrator** nach belegtem Schreibstopp fest. Die vier neuen Rollen-Worktrees starten **hier**, nicht bei `36e60030`. |
-| **Status der Umstellung** | **`UMSTELLUNG_OFFEN`** — die drei Blocker sind entschieden (B-1, B-2, V-02); die Aktivierung steht aus. |
+| **AKTIVIERUNGS_SHA** | **ENTFÄLLT als Konstrukt** *(14.08. 22:20)*. Er setzte einen Stand voraus, der stillsteht — den gab es an keinem Punkt dieses Tages. Ersetzt durch **den Umzugs-SHA je Rolle**; die vier Worktrees stehen auf `bc2125d9`. |
+| **Status der Umstellung** | **`UMSTELLUNG_LAEUFT`** — **rollender Umzug seit 14.08. 22:20.** Fünf Worktrees stehen; es fehlt die Zustellung an die vier Rollen (`P2H-04`). |
 
 **Zulässige Statuswerte — und ausschließlich diese:** `OFFEN` · `BLOCKIERT` ·
 `UMGESETZT_UNGEPRUEFT` · `NACHBESSERN` · `UNABHAENGIG_BESTAETIGT` · `ENTFÄLLT_MIT_BEGRUENDUNG`
@@ -271,6 +271,70 @@ nicht stillschweigend hineinrutschen** — Yama hat ausdrücklich gegen den Rele
 | P2E-10 | Integrationscommit mit Ursprung und Übergang | **OFFEN** |
 | P2E-11 | Nachprüfung | **OFFEN** |
 | P2E-12 | Checkliste aktualisieren | **OFFEN** |
+
+---
+
+## ⇄ MECHANISMUSWECHSEL — 14.08., 22:20: ROLLENDER UMZUG STATT SCHREIBSTOPP
+
+**Yama hat den Schreibstopp aufgehoben und den Mechanismus gewechselt.** Statt Stillstand →
+Aktivierungs-SHA → Umzug aller auf einmal gilt jetzt: **jede Rolle zieht einzeln um, sobald sie
+gerade keinen offenen Vorgang hat.** Kein Stillstand, kein gemeinsamer Aktivierungspunkt.
+
+**Warum der alte Weg nicht getragen hat — gemessen, nicht vermutet:**
+
+| Befund | Beleg |
+|---|---|
+| Der Stopp war **nie zustellbar** | 11 Commits von 3 Rollen in den 29 Minuten nach der Anordnung |
+| Er wirkte trotzdem — **zwölf Stunden Stille** | letzter fremder Commit 10:13:43, nächster 22:13:18 |
+| **Und kippte binnen einer Minute** | Aufhebung 22:12, Generator-Commit 22:13:18 |
+| Ein fester Aktivierungsstand ist **nicht haltbar** | zwischen zwei meiner Befehle wanderte HEAD von `0a297803` auf `bc2125d9` |
+
+**Der letzte Punkt ist der entscheidende.** Ein `AKTIVIERUNGS_SHA` setzt voraus, dass der Stand
+stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der Fall.**
+
+### Was jetzt gilt
+
+| ID | Punkt | Status |
+|---|---|---|
+| P2H-01 | **Vier Rollen-Worktrees angelegt**, Basis `bc2125d9`, Branches `rolle/plan-pruefer` · `rolle/generator` · `rolle/evaluator` · `rolle/release-pruefer` | **UMGESETZT_UNGEPRUEFT** |
+| P2H-02 | **Umzugsregel je Rolle** — einzeln, bei leerem Ballbesitz | **UMGESETZT_UNGEPRUEFT** |
+| P2H-03 | **`NODE_PATH` in jeder Umzugsanleitung** — sonst weist das Tor jeden Commit mit falscher Ursache ab | **UMGESETZT_UNGEPRUEFT** |
+| P2H-04 | **Zustellung an die vier Rollen** — sie müssen erfahren, dass ihr Baum existiert | **BLOCKIERT** — nur Yama erreicht die Instanzen |
+| P2H-05 | **Erste Rolle umgezogen** und dort committet | **OFFEN** |
+| P2H-06 | **Alle vier umgezogen** — erst danach wird der gemeinsame Checkout zum Integrations-Checkout | **OFFEN** |
+| P2H-07 | **`AKTIVIERUNGS_SHA` entfällt als Konstrukt** — jede Rolle trägt ihren eigenen Umzugs-SHA | **UMGESETZT_UNGEPRUEFT** |
+
+### Die Umzugsanleitung — vier Zeilen je Rolle
+
+```
+1. Ballbesitz prüfen: kein offener Vorgang, nichts uncommittiert im gemeinsamen Checkout.
+2. In den eigenen Worktree wechseln:  /Users/yamanuri/Documents/ticket-rolle-<rolle>
+3. Ab sofort dort arbeiten und committen. NIE mehr im gemeinsamen Checkout schreiben.
+4. Commit-Befehl (das NODE_PATH ist PFLICHT, sonst weist das Tor mit falscher Ursache ab):
+     TICKET_ROLLE=<rolle> NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules \
+       bash scripts/commit-pruefen.sh '<Botschaft>' <pfade>
+```
+
+**Zu Schritt 4, und es ist kein Schönheitsfehler:** Ein frischer Worktree hat **kein**
+`node_modules`. `commit-pruefen.sh:503` meldet dann *„der Kopf parst nicht"* — **eine Ursache, die
+nicht zutrifft.** Ohne diese Zeile scheitert die erste Rolle beim ersten Commit und hält den Umzug
+für kaputt. *(Gemessen mit Gegenprobe, siehe P2A-11/P2A-12.)*
+
+### Was der Wechsel nicht ändert
+
+- **`docs/STATUS.md` bleibt die eine Statuswahrheit** und bekommt am Ende genau einen Schreiber.
+- **Der Integrator bleibt beschlossen** (B-2) und kommt **zuletzt** — wenn alle vier umgezogen sind.
+- **`BOOTSTRAP` bleibt gesperrt.** Die Worktrees hat **Yama autorisiert** (B2) und der Planner als
+  Infrastrukturhandlung ausgeführt, nicht der Integrator.
+- **`FORENSISCHER_SHA` `36e60030` bleibt Untersuchungsstand.**
+
+### Was der Wechsel kostet — ehrlich benannt
+
+**Während des Umzugs gibt es zwei Wahrheiten:** wer schon umgezogen ist, schreibt in seinem Baum;
+wer noch nicht, im gemeinsamen. **Die Kollision ist in dieser Phase nicht kleiner, sondern
+unübersichtlicher.** Der Preis ist bewusst gewählt: **kein Stillstand.** Gegenmittel ist die
+Reihenfolge — **die Rolle mit dem meisten Schreibverkehr zuerst** (gemessen: Plan-Prüfer, 141 von
+500 Commits), damit die größte Quelle als erste aus dem gemeinsamen Baum verschwindet.
 
 ---
 
@@ -692,16 +756,16 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 
 | Status | Anzahl |
 |---|---|
-| `OFFEN` | **107** |
-| `UMGESETZT_UNGEPRUEFT` | **54** |
-| `BLOCKIERT` | **19** |
+| `OFFEN` | **109** |
+| `UMGESETZT_UNGEPRUEFT` | **58** |
+| `BLOCKIERT` | **20** |
 | `NACHBESSERN` | **1** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **186 = alle IDs** |
+| **Summe** | **193 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
-— `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186.
+— `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186, der Mechanismuswechsel `P2H` daraus 193. **Diesmal wurde das Muster BEIM Anlegen mitgeändert** (`[A-G]`→`[A-H]`), nicht hinterher bemerkt — die Lehre aus drei Fehlversuchen hat gehalten.
 **Und das Muster war ein drittes Mal zu eng:** es verlangte eine Ziffer und übersah damit `PAR-RA`.
 **Zusammen mit `P2F` und `P2G` sind das drei Blöcke, die der eigene Prüfer nicht sah** — die Lehre
 steht oben und gilt: das Muster wird beim Anlegen mitgeändert, nicht danach bemerkt.
@@ -718,7 +782,7 @@ das ist an dieser Datei zweimal belegt:
 python3 - <<'EOF'
 import re; from collections import Counter
 L=open('docs/rollenkette/UMSTELLUNG-GETRENNTE-WORKTREES-CHECKLISTE.md',encoding='utf-8').read().split('\n')
-pat=re.compile(r'^\|\s*\*{0,2}(PAR-RA|(?:V|P[0-8][A-G]?|T|PAR)-(?:RA)?[0-9]+[a-z]?)\*{0,2}\s*\|')  # ID nur aus SPALTE 1; PAR-RA traegt keine Ziffer
+pat=re.compile(r'^\|\s*\*{0,2}(PAR-RA|(?:V|P[0-8][A-H]?|T|PAR)-(?:RA)?[0-9]+[a-z]?)\*{0,2}\s*\|')  # ID nur aus SPALTE 1; PAR-RA traegt keine Ziffer
 ST=re.compile(r'\*\*(UMGESETZT_UNGEPRUEFT|OFFEN|BLOCKIERT|NACHBESSERN|ENTF\u00c4LLT_MIT_BEGRUENDUNG|UNABHAENGIG_BESTAETIGT)\*\*')
 P3=re.compile(r'\*\*(ENTWURF|BEREIT|IN_ARBEIT|CODE_FERTIG|ABNAHME|ABGENOMMEN|RELEASE_PRUEFUNG|RELEASE_FREI|VEROEFFENTLICHT|BETRIEBSBESTAETIGT|SPEC_BLOCKED|ENV_BLOCKED|DECISION_BLOCKED)\*\*')
 alle=set(); mit={}; fremd=[]
