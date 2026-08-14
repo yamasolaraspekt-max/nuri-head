@@ -24,7 +24,7 @@ anlass: "Yamas Regel fuer Klasse B: erst die Messung, dann die Einordnung. W-16 
          erste Fassung dieses Blattes hat das falsch gelesen und ist berichtigt."
 grundlage: "app/unterlage/UnterlagenEbene.tsx (66 Z.) · UnterlagenWerkzeuge.tsx (239 Z.) ·
             kalibrierung.ts (44 Z.) · app/Http/Controllers/Energie/PlanUploadController.php (178 Z.) ·
-            app/Models/PlanUpload.php:82-83 · routes/web.php:5679-5692 ·
+            app/Models/PlanUpload.php:81-83 (war :82-83) · routes/web.php:5679-5692 ·
             database/migrations/2026_07_08_180006_create_plan_uploads_table.php und
             2026_07_30_105516_add_projektbezug_to_plan_uploads.php ·
             REGISTER.md:48 · __tests__/kalibrierung.test.ts · __tests__/unterlage.test.ts"
@@ -77,9 +77,9 @@ WAS GEMESSEN DASTEHT — die ganze Kette, von unten nach oben:
 > **Der Fehler war meiner, nicht der des Registers** — und er ist genau deshalb erwähnenswert, weil ein
 > zu kleiner Eintrag zu einem zu kleinen Auftrag führt.*
 
-**Die Naht zwischen den beiden Hälften ist belegt und sauber:** *`app/Models/PlanUpload.php:82-83`
+**Die Naht zwischen den beiden Hälften ist belegt und sauber:** *`app/Models/PlanUpload.php:81-83`
 erzeugt `massstabUrl` und `statusUrl` per `route(...)` und gibt sie an die Insel; die Insel ruft sie in
-`UnterlagenWerkzeuge.tsx:66/:153` mit `X-CSRF-TOKEN` auf. **Kein zweiter Weg, keine hartgeschriebene
+`UnterlagenWerkzeuge.tsx:68/:155` mit `X-CSRF-TOKEN` auf. **Kein zweiter Weg, keine hartgeschriebene
 URL** — die Schutzgrenze „React/TypeScript bleibt auf die Insel begrenzt" ist eingehalten, die
 Serverseite ist Laravel.*
 
@@ -186,9 +186,9 @@ W-16-1-3 (P1) Die null-Zusage von berechneMassstab steht in 7-GRENZEN als Vertra
          null bei Laenge <= 0, bei altem Massstab <= 0 und bei identischen
          Punkten — kein NaN, keine Division durch 0. Mit der Begruendung, dass
          Aufrufer sich darauf verlassen.
-W-16-1-4 Die Naht zwischen Insel und Server ist benannt: PlanUpload.php:82-83
+W-16-1-4 Die Naht zwischen Insel und Server ist benannt: PlanUpload.php:81-83
          erzeugt die URLs per route(), die Insel ruft sie mit X-CSRF-TOKEN
-         (UnterlagenWerkzeuge.tsx:66 und :153). Und ausdruecklich der Satz, dass
+         (UnterlagenWerkzeuge.tsx:68 und :155). Und ausdruecklich der Satz, dass
          es KEINE hartgeschriebene URL in der Insel gibt — sonst sucht die
          naechste Rolle einen zweiten Weg. Am Bau-Stand gegenpruefen.
 W-16-1-5 Die SECHS Exporte der drei Module sind vollstaendig genannt, mit
