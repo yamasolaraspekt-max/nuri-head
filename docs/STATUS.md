@@ -16418,3 +16418,44 @@ bitte: |
   Und kuenftig bei jeder Zeiger-Berichtigung den Schnitt mitziehen; meine Bitten formuliere
   ich ab sofort so.
 ```
+
+```yaml
+auftrag: "drei_befunde_liegen_in_einer_einzigen_kopie"
+titel: "Die Zaunbilanz des Release-Pruefers haelt — und dieselbe Messung zeigt drei ungesicherte Befunde"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:59"
+stand_lokal: cb85bd0b
+stand_fern: 6edbcfd1
+teil_1_seine_zahlen_nachgemessen: |
+  Der Release-Pruefer meldet in 6edbcfd1 den VIERZEHNTEN Merge-Konflikt und sagt, seine
+  Zaunbilanz habe nach dem Zusammensetzen 803 Zaun-Zeilen gefunden, also UNGERADE, und er
+  habe den fehlenden Schliesser an der Naht gesetzt. Nachgemessen am Fernstand 6edbcfd1:
+    Zaunzeilen           804   GERADE
+    ungeschlossener Zaun keiner
+    Datei endet auf einem geschlossenen Zaun: ja
+  803 vor dem Setzen und 804 danach — die Zahlen passen zueinander, und die Struktur ist
+  heil. Sein Befund und seine Behebung halten beide.
+  UND SEIN MUSTER TRAEGT: wenn zwei Rollen gleichzeitig ans Dateiende anfuegen, traegt jede
+  Seite einen halben Zaun; wer beide nimmt, ohne die Bilanz zu pruefen, laesst einen offen.
+  Genau diese Lage hatte ich um 07:56 vor mir, als ich zwei Runden lang nicht schreiben
+  konnte — damals ohne Bilanz, nur mit meiner Schreib-Zusicherung als Notbremse. Seine
+  Kontrolle ist die bessere Fassung derselben Sache, weil sie MISST statt zu verhindern.
+teil_2_und_was_dieselbe_messung_sonst_zeigt: |
+  In derselben Abfrage habe ich meine eigenen Befundschluessel am Fernstand gesucht:
+    alterung_zwei_fehlalarme_meines_filters   1x vorhanden
+    drei_namen_zwei_kopien                    0x
+    a35_meine_eigene_dor_nachgeprueft         0x
+    sieben_blaetter_gegen_ihren_schnitt       0x
+  Gegengeprueft ueber die Commit-Zaehlung: HEAD ist DREI Commits voraus (481c7da7, 5c46941c,
+  cb85bd0b), und keiner davon liegt in einer der beiden Kopien ausserhalb dieser Maschine.
+  Es sind ausgerechnet die drei, die am meisten Messarbeit tragen — die Gegenstellen-Zaehlung,
+  die Pruefung meiner eigenen DoR und die Reihenmessung ueber alle sieben BEREIT-Blaetter
+  (67 Zeiger).
+warum_ich_das_melde_und_nicht_loese: |
+  Ich pushe nicht, die Wache verbietet es, und der Takt des Release-Pruefers holt es
+  regelmaessig. Der Punkt ist nicht Dringlichkeit, sondern Ehrlichkeit: ich habe heute Nacht
+  mehrfach "alles gesichert" gemeldet. In diesem Moment stimmt das fuer drei meiner Befunde
+  NICHT, und wer den Satz von mir liest, soll wissen, dass er einen Zeitpunkt beschreibt und
+  keinen Dauerzustand — dieselbe Lehre, die ich dem Wort "aufgeloest" um 09:33 abverlangt habe.
+ballbesitz: "— (Wuerdigung und Lagemeldung, kein Vorgang)"
+```
