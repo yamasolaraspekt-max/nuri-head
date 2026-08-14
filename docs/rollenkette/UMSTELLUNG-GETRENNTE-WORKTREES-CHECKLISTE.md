@@ -401,6 +401,13 @@ Yamas Trennung der beiden SHAs richtig und `36e60030` als Arbeitsbasis falsch.
 | P2G-07 | **Konsistenz `docs/rollenkette/LIESMICH.md`** — Baum, Übergabestück **E**, Kopfzeile „sechs Sichten, fünf Übergabestücke" | **UMGESETZT_UNGEPRUEFT** |
 | P2G-08 | **Konsistenz `docs/rollenkette/START-PROMPT.md`** — Rollentrennung und Git-Disziplin um Integrator/Worktrees/Aktivierungs-SHA erweitert | **UMGESETZT_UNGEPRUEFT** |
 | P2G-09 | **Unabhängige Abnahme durch den Plan-Prüfer** — Vollständigkeit, Widerspruchsfreiheit, Zuständigkeitsgrenzen, Trennung Evaluator/Release-Prüfer/Integrator, positive **und** negative Sperrfälle, Konsistenz mit Arbeitsregeln und Checkliste | **OFFEN** |
+| P2G-25 | **⚠ ENTSCHEIDUNG YAMA: Bootstrap-Variante** — **B1** Integrator legt die vier Worktrees im `BOOTSTRAP`-Modus an **oder B2** Yama legt sie selbst an. *(Empfehlung: **B2** — der Umbau existiert, weil Rollen vor ihrer Barriere gehandelt haben; B1 wiederholt das ein letztes Mal an der Rolle, die es verhindern soll.)* | **BLOCKIERT** |
+| P2G-26 | **Drei Betriebsarten definiert** — `NUR_LESEND` · `BOOTSTRAP` · `SCHREIBEND`, mit Erlaubt/Verboten je Art | **UMGESETZT_UNGEPRUEFT** |
+| P2G-27 | **Ablauf A–K widerspruchsfrei** — lesend starten (D) **vor** prüfen (E), schreiben (J) **nach** fremder Barriereprüfung (I) | **UMGESETZT_UNGEPRUEFT** |
+| P2G-28 | **Eingaben nach Vorgangstyp getrennt** — A Aktivierung · B Generator-Commit · C reiner Statusübergang · D Prüf-/Freigabedokument | **UMGESETZT_UNGEPRUEFT** |
+| P2G-29 | **Eigentumsregel berichtigt** — uncommittiert ≠ committiert; ein committierter Block gehört dem Bestand | **UMGESETZT_UNGEPRUEFT** |
+| P2G-30 | **Übergabevorlage `uebergaben/E-integrationsprotokoll.md`** — 19 Pflichtfelder, Vorgangstyp, Betriebsart, zwei Pflichtsätze am Ende | **UMGESETZT_UNGEPRUEFT** |
+| P2G-31 | **`LIESMICH.md`-Baum: zwei getrennte Verzeichniseinträge** für `5-release-pruefer/` und `6-integrator/` | **UMGESETZT_UNGEPRUEFT** |
 
 **Zeilenverweise geschützt, und der erste Versuch ging schief.** `docs/ARBEITSREGELN.md` trägt **22**
 Zeilenverweise aus dem Bestand, 15 davon **hinter** der Einfügestelle. Mein erster Hinweis war über
@@ -410,6 +417,24 @@ durch eine einzeilige Fassung; **alle neun geprüften Anker tragen wieder ihren 
 das Repo hat **39** Dateien namens `LIESMICH.md` — die Verweise `:88-104` und `:98-104` gehören zu
 `werkbank/` und `5-CODE/`, nicht hierher. Eine Zählung über den Dateinamen misst den falschen
 Gegenstand.)*
+
+**Nachbesserung vom 14.08. — vier Logikfehler, alle vier echt.** Vorgelegt von Yamas Prüfer,
+behoben in Commit **`f3e7659e`**; das Rollenpaket selbst steht in **`047fc6fe`**.
+
+| # | Fehler | Behebung |
+|---|---|---|
+| 1 | **Ablauf widersprüchlich** — Integrator prüfte bei D, startete bei E | Ablauf **A–K**: `NUR_LESEND` starten (D), dann prüfen (E), `SCHREIBEND` erst nach fremder Barriereprüfung (J) |
+| 2 | **Bootstrap-Zirkel** — Schutz vor dem Schreiben, Schutz aber erst nach den Worktrees, Worktrees aber vom nicht-schreibberechtigten Integrator | **drei Betriebsarten** statt einer Ausnahme. `BOOTSTRAP` darf **genau eine** Sache: Worktrees anlegen. `git worktree add` schreibt in die **Verwaltung**, nicht in den Bestand |
+| 3 | **Eingaben-Zirkel** — ein Release-Votum hätte ein Release-Votum vorausgesetzt | **vier Vorgangstypen.** Typ C verlangt **genau einen** zuständigen Rollenbeleg; Typ D darf nicht seine eigene Freigabe voraussetzen |
+| 4 | **Eigentumsregel falsch** — *„fremde Arbeit gehört ihrem Autor“* | berichtigt: **uncommittiert** bleibt der Instanz zugeordnet *(Verlust irreversibel)*, **committiert** gehört dem Bestand *(Änderung nur durch beauftragten Korrekturvorgang)* |
+
+**Zu Fehler 4, und es ist der schwerste:** Der Satz *„Ein committeter Block gehört dem Bestand, nicht
+mehr dem Autor“* steht wörtlich in `rollen/1-planner/1-AUFTRAG.md` — **ich habe ihn selbst dorthin
+geschrieben und im Integrator-Paket dagegen formuliert.** Eine Lehre, die an einer Stelle steht und
+an der nächsten verletzt wird, ist keine Lehre, sondern eine Notiz.
+
+**`UNABHAENGIG_BESTAETIGT` bleibt ausdrücklich ungesetzt** — bei allen 31 P2G-Punkten. Die Abnahme
+ist P2G-09 und gehört dem Plan-Prüfer.
 
 ### Technische Rollenbarriere — **Bau: Generator, Prüfung: Evaluator**
 
@@ -489,7 +514,7 @@ Exit-Code · **tatsächliche Ausgabe** · erwartetes Ergebnis · Grün/Rot · Wi
 | P4-01 | `docs/ARBEITSREGELN.md` — §14 auf Hunk-Ebene | **OFFEN** |
 | P4-02 | `docs/ARBEITSREGELN.md` — §3 für Ablesungen (Yamas Punkt 16) | **OFFEN** |
 | P4-03 | `docs/ARBEITSREGELN.md` — §16 Einzelschreiber | **OFFEN** |
-| P4-04 | `docs/ARBEITSREGELN.md` — **neuer Abschnitt Integrator** | **BLOCKIERT** (Besetzung) |
+| P4-04 | `docs/ARBEITSREGELN.md` — **Abschnitt Integrator** | **UMGESETZT_UNGEPRUEFT** — *(vorher „BLOCKIERT (Besetzung)“: überholt, die Rolle ist seit B-2 benannt. Nachtrag am Dateiende, Hinweis in der Release-Prüfer-Zeile, Commit `047fc6fe`.)* |
 | P4-05 | `docs/rollenkette/START-PROMPT.md` | **OFFEN** |
 | P4-06 | `docs/rollenkette/LIESMICH.md` | **OFFEN** |
 | P4-07..11 | **alle fünf Rollenmappen** — dieselbe verbindliche Aussage | **OFFEN** |
@@ -668,15 +693,15 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 | Status | Anzahl |
 |---|---|
 | `OFFEN` | **109** |
-| `UMGESETZT_UNGEPRUEFT` | **44** |
+| `UMGESETZT_UNGEPRUEFT` | **51** |
 | `BLOCKIERT` | **20** |
 | `NACHBESSERN` | **1** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **179 = alle IDs** |
+| **Summe** | **186 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
-— `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179.
+— `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186.
 **Bei Abweichung gilt der Befehl, nicht die Tabelle.** Und der Befehl selbst war **zweimal** zu eng: sein Muster
 kannte erst `P2F` nicht (`[A-E]`, sechzehn Punkte unsichtbar), dann `P2G` nicht (`[A-F]`, **weitere
 vierundzwanzig**). **Ein Zählskript, das einen ganzen Block nicht sieht, hat denselben Mangel, den es
