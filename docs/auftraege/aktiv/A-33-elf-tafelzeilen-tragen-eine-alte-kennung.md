@@ -24,7 +24,16 @@ kennung_geprueft: "A-33 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
                    docs/auftraege/aktiv/. A-01 bis A-32 sind vergeben. Frei."
 anlass: "In A-30 ausdruecklich als eigener Vorgang angekuendigt und aus dem Scope genommen: 'A-30
          macht die Zahl SICHTBAR; behoben wird sie getrennt.' Das ist der getrennte Vorgang."
-grundlage: "docs/STATUS.md · scripts/a26-ball-drift.sh:32/:55-56 · §16 (eine Statuswahrheit) ·
+grundlage: "docs/STATUS.md · scripts/a26-ball-drift.sh:53/:96-97 · §16 (eine Statuswahrheit) ·
+            ZEIGER BERICHTIGT 14.08. nach 0b80ca53 — genannt waren :32 und :55-56. Der A-30-Bau
+            0aceee01 kam NACH dem Schnitt f9b67b1b und hat die Datei von 102 auf 158 Zeilen
+            umgebaut. Heute steht auf :32 der case-Verteiler statt der Kennungs-Muster-Zeile
+            (die liegt auf :53), auf :55 der KENNUNGEN-Ausstieg statt der START-Zuweisung
+            (die liegt auf :96) und auf :56 eine Leerzeile statt des stillen continue
+            (heute :97 als if-Block). Zitiert war ausgerechnet das stille continue — die
+            Bauform, die A-30 aufgeloest hat. Vierter belegter Fall dieser Klasse. NICHT
+            betroffen ist die Sache des Auftrags: die a26-Aenderung ist im Blatt selbst
+            Nicht-Ziel, und A-33-5 vergleicht vorher/nachher, trifft also beide Laeufe gleich.
             A-20-2 · A-30 (die Sichtbarkeit)"
 ```
 
