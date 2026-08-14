@@ -14690,3 +14690,46 @@ was_ich_NICHT_tue: "Kein Zustand, kein Blatt, kein Bau, kein Instanz-Start — d
   Baubarkeit erklaert."
 ballbesitz_befund: yama
 ```
+
+## PRUEFBERICHT — DIE DREI STILLEN BARRIEREN DES COMMIT-TORS LEBEN, MIT POSITIVPROBE (Plan-Pruefer, 14.08. 06:4x)
+
+```yaml
+tor_barrieren_leben: "Das Commit-Tor hat heute Nacht jeden einzelnen Commit dieser Kette
+  geschuetzt, und niemand hat es geprueft — ich am wenigsten, obwohl ich es 23-mal benutzt habe.
+  Nachgeholt, read-only, gemessen an 9f71cba2. Ergebnis: kein Mangel, aber die Stille ist jetzt
+  BELEGT statt angenommen."
+was_das_tor_ueberhaupt_tut: "743 Zeilen, DREIZEHN benannte Barrieren — und nur ZWEI echte
+  Abbruchpfade in der Prueflogik (Z.264 Stufe 5, Z.510 F-14), dazu zwei betriebliche (Stagen
+  gescheitert, git commit gescheitert). B5, B6 und B7 sind ausdrueckliche Warnungen
+  ('Warnung, kein Abbruch — der Commit laeuft weiter'), und A-26, A-27, A-30 rufen je ein
+  EIGENES Skript und verwerfen dessen Rueckgabewert bewusst mit '|| true'."
+und_das_ist_kein_mangel_sondern_begruendet: "Im Skript steht der Grund, nicht nur die Bauart:
+    A-26-5: 'eine Rueckgabe darf bewusst zwischen zwei Commits liegen; ein Abbruch wuerde
+            legitime Arbeit blockieren.'
+    A-30:   'die naive Fassung erzeugte sofort ZWOELF Fehlalarme auf legitimen
+            Altbestands-Zeilen — und genau so wird eine Barriere weggeklickt (A-03).'
+  Wer die Stufenleiter kennt, erkennt Stufe 1. Ich beanstande sie nicht."
+die_eigentliche_frage_und_ihre_probe: "Alle drei liefen heute Nacht bei 23 meiner Commits und
+  gaben JEDESMAL null Bytes aus, exit 0. Eine Barriere, die man nie hat sprechen sehen, ist von
+  einer kaputten nicht zu unterscheiden — deshalb die POSITIVPROBE an historischen Staenden,
+  wofuer die Skripte ausdruecklich gebaut sind (A-26-1: fahrbar ohne Commit):
+    a27 --altfaelle              520 Bytes · 68 Datensaetze mit Bau-Zustand, 19 mit bau_sha,
+                                 49 OHNE — und dazu der Satz, dass Altfaelle nach A-27-Scope
+                                 bewusst NICHT gefuellt werden.
+    a26 --stand 86f94d98         469 Bytes · 'A-26-HINWEIS NICHT GEPRUEFT — eine Kennung steht
+    a26 --stand ca99466b         471 Bytes    nur an EINEM der zwei Orte'
+    a26 --stand b778152b         0 Bytes   · dort war nichts
+    a26 --stand 8c920624         0 Bytes   · dort war nichts
+  Die Barrieren SPRECHEN also, wenn es etwas zu sagen gibt. Ihre Stille an den heutigen
+  Commits ist ein Ergebnis, kein Ausfall."
+was_das_fuer_die_nacht_bedeutet: "Vierundvierzig Commits sind durch dieses Tor gegangen. Dass
+  A-26, A-27 und A-30 dabei nie angeschlagen haben, heisst jetzt nachweislich: keine Ball-Drift
+  zwischen den zwei A-20-Orten, kein CODE_FERTIG ohne Bau-Commit im Feld, keine neue Tafelzeile
+  ohne Datensatz. Vorher war es eine Annahme."
+was_ich_NICHT_geprueft_habe: "Die zwei ABBRUCH-Barrieren (Stufe 5 und F-14) habe ich NICHT
+  positiv geprobt — dazu muesste ich einen fehlerhaften Commit versuchen, und das ist eine
+  schreibende Handlung mit unklarem Rest. Ich sage also nicht, dass sie greifen; ich sage, dass
+  sie da sind und dass F-14 heute Nacht mehrfach sichtbar gearbeitet hat (die INDEX-ANGEGLICHEN-
+  Meldung nach jedem meiner Commits stammt aus A-07-1a/1b)."
+ballbesitz_befund: —   # Pruefbericht, kein Vorgang
+```
