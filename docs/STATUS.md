@@ -13817,3 +13817,56 @@ was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Bau. W-03/1 und W-1
   Vermerk genuegt, entscheidet der Planner."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — A-35 K3 ENTSCHEIDET OHNE DEN OPERANDEN, DEN ICH JETZT GEMESSEN HABE (Plan-Pruefer, 14.08. 05:1x)
+
+```yaml
+k3_braucht_eine_abstandsgrenze: "VORRATSPRUEFUNG Posten c an aa9fc005: die tragende Formel von
+  A-35 und W-03/1 DURCHGERECHNET, nicht nur zitiert — F-004, Schnittpunkt zweier Geraden.
+  Die Formel ist richtig und der Code setzt sie richtig um. Beim Durchrechnen der Grenzfaelle
+  faellt aber eine Zahl an, die A-35 fuer seine eigene Kantenentscheidung K3 braucht und nicht hat."
+formel_durchgerechnet: "Fuenf Faelle, jeder doppelt gerechnet: einmal nach dem Wortlaut von
+  F-004 (FORMELSAMMLUNG.md:75 ff.), einmal ueber ein 2x2-Gleichungssystem — ein voellig anderer
+  Weg, damit die Probe nicht dieselbe Annahme wiederholt.
+    waagrecht x senkrecht   (0,0)-(10,0) x (5,-5)-(5,5)          -> (5,0)        beide gleich
+    kurz versetzt           (0,0)-(2,0)  x (1,-1)-(1,1)          -> (1,0)        beide gleich
+    schraeg 45 Grad         (0,0)-(4,4)  x (0,4)-(4,0)           -> (2,2)        beide gleich
+    mm-Massstab Wand        (0,0)-(6000,0) x (4500,-3000)-(4500,2000) -> (4500,0) beide gleich
+    Schnitt ausserhalb      (0,0)-(1000,0) x (3000,-500)-(3000,500)   -> (3000,0) beide gleich
+  Auch die Berichtigung vom 13.08. bestaetigt: die alte Fassung (A−C)×s liefert an ALLEN FUENF
+  den gespiegelten Punkt (−5,0) · (−1,0) · (−2,−2) · (−4500,0) · (−3000,0). Der Code traegt die
+  richtige Fassung (geradenGeometrie.ts:104, (C−A)×s)."
+und_die_a32_normierung_stimmt_auch: "Die Begruendung im Blatt — |m| sei laengenabhaengig, geteilt
+  durch die Segmentlaengen ergebe es den Sinus — habe ich an drei Groessenordnungen geprueft.
+  Bei 0,001 Grad Zwischenwinkel:
+    Laenge     10  |m| =      0,0017   normiert 1,745e-05
+    Laenge   1000  |m| =     17,45     normiert 1,745e-05
+    Laenge 100000  |m| = 174532,9      normiert 1,745e-05
+  Roh springt der Wert um den Faktor 10^8, normiert steht er still. Die A-32-Entscheidung ist
+  durch die Rechnung gedeckt, nicht nur durch den Satz."
+der_fund: "EPS_SINUS ist 1e-6 (geradenGeometrie.ts:38) und wird auf den SINUS angewendet. Die
+  Wache blockiert also erst unterhalb von rund 0,000057 Grad — gemessen: 5,8e-5 Grad geht durch,
+  5,7e-5 Grad wird blockiert. Was das fuer zwei 6000 mm lange Waende mit 5 mm Versatz bedeutet:
+    Winkel 1 Grad      Schnittpunkt      0,3 m vom Bau
+    Winkel 0,1 Grad                      2,9 m
+    Winkel 0,01 Grad                    28,6 m
+    Winkel 0,001 Grad                  286,5 m
+    Winkel 0,0001 Grad                2864,8 m   <- Wache laesst es DURCH
+    Winkel 0,00001 Grad               blockiert
+  K2 (parallel -> null) faengt also nur den fast exakt parallelen Fall. Knapp darueber liefert
+  geradenSchnitt einen voellig gueltigen Punkt fast drei Kilometer neben dem Gebaeude."
+warum_das_K3_betrifft: "A-35 nennt beide Faelle — K2 parallel, K3 -Schnittpunkt liegt AUSSERHALB
+  der Wandstrecke, muss benannt entschieden werden: verlaengern oder abweisen-. Der Fall ist also
+  NICHT vergessen, und meine DoR fuer A-35 steht. Aber K3 laesst -verlaengern- ausdruecklich zu,
+  und die Entscheidung faellt ohne die Zahl: wer -verlaengern- waehlt, verlaengert bei 0,0001 Grad
+  eine 6-Meter-Wand auf 2,9 Kilometer, lautlos und geometrisch korrekt. K2s Wache haelt das nicht
+  auf, weil sie eine WINKEL-Schwelle ist und keine ABSTANDS-Schwelle."
+was_ich_vorschlage_und_nicht_entscheide: "K3 braucht neben -verlaengern oder abweisen- eine
+  zweite, benannte Groesse: bis zu welchem Abstand verlaengert wird. Ob das eine feste Zahl ist,
+  ein Vielfaches der Wandlaenge oder die Gebaeudehuelle, ist eine Fachentscheidung und gehoert
+  dem Planner — der Plan-Pruefer liefert die Zahl, nicht die Grenze."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Bau, kein Kriterium geaendert.
+  A-35 bleibt BEREIT. Ich ziehe meine DoR NICHT zurueck: K3 verlangt bereits eine benannte
+  Entscheidung, ich schaerfe nur, worueber sie entscheiden muss."
+ballbesitz_befund: planner
+```
