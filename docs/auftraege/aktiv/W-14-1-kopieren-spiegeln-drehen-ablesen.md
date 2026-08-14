@@ -22,11 +22,16 @@ anlass: "Die dritte und letzte der Ablesungen, die ich Yama in der Vorlage zuges
          werkzeugLandkarte unabhaengig bestaetigt hat."
 grundlage: "geometry/editierGeometrie.ts (75 Z., NEUN Exporte) · __tests__/editierGeometrie.test.ts
             (52 Z.) · app/tools/toolRegistry.ts:249 (loeschen) und :273 (duplizieren) ·
-            app/HausplanerApp.tsx:110/:621/:671-679/:695-696/:1343 · app/sammelBefehle.ts:103-111 ·
+            app/HausplanerApp.tsx:110/:626-627/:671/:676-677/:695-696/:1343 ·
+            app/sammelBefehle.ts:39/:68/:82/:103/:111 ·
             app/dashboard/Kopfrahmen.tsx:30/:91/:100/:315/:316 · app/rahmen/Buehne.tsx:40/:207-208 ·
             app/rahmen/EigenschaftenPanel.tsx:120 · commands/applyCommand.ts:143/:162/:176/:203 ·
             domain/scene.types.ts:193-196 (transform nur am ObjectNode) ·
-            app/tools/werkzeugLandkarte.ts:63/:70/:73 · REGISTER.md:67"
+            app/tools/werkzeugLandkarte.ts:96 (duplizieren)/:102 (loeschen)/:105 (verschieben)/
+            :133 (versatz, marke 'fehlt') · REGISTER.md:67"
+landkarten_verweise_berichtigt_14_08: "Das Feld nannte :63/:70/:73 — dort stehen heute
+            Kommentarzeichen und eine Typzeile, KEIN Landkarteneintrag. Die vier Eintraege, die
+            W-14 betreffen, einzeln geoeffnet und auf ihre heutige Zeile gesetzt."
 ```
 
 ## 1 — Der tragende Punkt: DREI Operationen, DREI Bezugsrahmen, DREI Erreichbarkeitswege
@@ -38,17 +43,23 @@ sich beziehen** und **wie man sie erreicht:*
 ```text
 (1) DUPLIZIEREN — Bezug AUSWAHL, erreichbar als REGISTRY-WERKZEUG
     toolRegistry.ts:273        id: 'duplizieren'
-    HausplanerApp.tsx:671      function dupliziere()
-                       :674      for (const id of selectedNodeIds)
-                       :679      versetzteWand(n.start, n.end, 500, 500)
+    HausplanerApp.tsx:671      Aufruf: else if (tool.id === 'duplizieren') dupliziere()
+                       :676      function dupliziere()                    [war :671]
+                       :677      executeCommands(befehleDuplizieren(...))  [ersetzt die
+                                 fruehere for-Schleife :674, die es NICHT MEHR GIBT]
+    sammelBefehle.ts:68        befehleDuplizieren() — die RECHNUNG liegt seit A-31 HIER
+                    :82          versetzteWand(n.start, n.end, 500, 500)  [war HausplanerApp:679;
+                                 in HausplanerApp.tsx kommt versetzteWand NULL Mal vor]
                                  -> die Kopie liegt 500/500 versetzt
     Landkarte: nicht als eigene fehlt-Marke; ADD_NODE deckt das Anlegen.
 
 (2) LOESCHEN — Bezug AUSWAHL, erreichbar als REGISTRY-WERKZEUG
     toolRegistry.ts:249        id: 'loeschen'
-    HausplanerApp.tsx:621      function loescheAuswahl()
-    applyCommand.ts:162        case 'REMOVE_NODE'
-    Landkarte :70              { 'loeschen', 'deckt', 'REMOVE_NODE' }
+    HausplanerApp.tsx:626      function loescheAuswahl()                  [war :621]
+                       :627      executeCommands(befehleLoeschen(selectedNodeIds, nodes))
+    sammelBefehle.ts:39        befehleLoeschen() — die RECHNUNG liegt seit A-31 HIER
+    applyCommand.ts:162        case 'REMOVE_NODE'                          [richtig]
+    Landkarte :102             { 'loeschen', 'deckt', 'REMOVE_NODE' }      [war :70]
     -> steht NICHT in der Registerzeile, ist aber Teil derselben Knopfgruppe.
 
 (3) SPIEGELN — Bezug GANZER GRUNDRISS, erreichbar als KOPFRAHMEN-KNOPF.
@@ -89,7 +100,7 @@ sich beziehen** und **wie man sie erreicht:*
 ## 2 — Drehen fehlt, und der Grund ist ein Schema-Grund (kein Vergessen)
 
 ```text
-app/tools/werkzeugLandkarte.ts:63, Begruendung VOLLSTAENDIG gelesen:
+app/tools/werkzeugLandkarte.ts:95, Begruendung VOLLSTAENDIG gelesen:   [war :63]
   { werkzeugId: 'drehen', marke: 'fehlt', begruendung: 'Braucht Drehung um
     einen Bezugspunkt. `UPDATE_NODE` kann `transform.rotation` eines ObjectNode
     setzen, aber Wände/Öffnungen/Zonen haben keine Rotation — ihre Punkte
