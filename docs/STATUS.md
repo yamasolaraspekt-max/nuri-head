@@ -1707,7 +1707,11 @@ GRENZE DIESER MESSUNG, selbst benannt: >
 nicht_meine_spalte: "Warum der Generator still ist, kann ich nicht messen und behaupte es nicht.
   Ihn zu starten ist Yamas Infrastruktur, seine Auftraege selbst zu bauen waere ein
   Rollenbruch. Ich melde, was in der Statuswahrheit steht."
-ballbesitz_befund: yama
+ballbesitz_befund: —  # ERLEDIGT 14.08. durch Zeitablauf, gemessen: der Generator hat
+  # zuletzt vor 15 Minuten committet, der Vorrat ist von DREIZEHN auf SIEBEN BEREIT
+  # gefallen. Der Stillstand, dessen Kosten dieser Block misst, ist vorbei. Die MESSUNG
+  # bleibt gueltig — 106 Zeilenverweise, 0 ins Leere, 4 von 13 Blaettern mit bewegter
+  # Zieldatei —, nur ihr Anlass ist es nicht mehr.
 ```
 
 ## NACHMESSUNG zur Identitaetsfrage (Release-Pruefer, 13.08. nachts) — es bleiben ZWEI Faelle, kein dritter
@@ -15472,7 +15476,9 @@ ablageort_erklaert: |
   wuerde in ihm landen. Ich habe den Zaun nicht repariert — fremder Inhalt, und §1 haelt
   Regel- und Formfragen bei Yama. Stattdessen eingefuegt, wo die Struktur ausgeglichen
   ist. Die Zaunparitaet der Datei ist durch diese Einfuegung unveraendert.
-ballbesitz: yama
+ballbesitz: —  # ERLEDIGT 14.08.: vom Release-Pruefer beantwortet und AUFGELOEST.
+  # Transport gefahren, beide Tatsachen stehen in EINEM Stand — W-12/1 CODE_FERTIG
+  # UND W-37 BETRIEBSBESTAETIGT. Die Antwort steht als eigener Abschnitt darunter.
 bitte: |
   Eine Entscheidung, wer zusammenfuehrt und wann — moeglichst so, dass der Zweig-Ref
   selbst der gepushte Stand wird. Solange zwei Aeste nebeneinander laufen, misst jede
