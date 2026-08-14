@@ -1,19 +1,60 @@
 # WAS ICH LESE · Integrator
 
-## Pflichteingaben — fehlt eine, wird nicht integriert
+## Pflichteingaben — **je Vorgangstyp**, nicht pauschal
+
+*(Die erste Fassung verlangte alle zehn Eingaben für **jede** Integration. Das erzeugt einen Zirkel,
+den Yama am 14.08. benannt hat: **ein Release-Prüfer-Votum könnte erst integriert werden, wenn schon
+ein Release-Prüfer-Votum vorliegt.** Ein Dokument darf nicht seine eigene, bereits integrierte
+Freigabe voraussetzen.)*
+
+### A · Aktivierungsprüfung
 
 | # | Eingabe | woran er es erkennt |
 |---|---|---|
-| 1 | **individuelle Schreibstoppbelege aller vier Rollen** | vier getrennte Nachweise, je Rolle einer — eine Sammelaussage ist **kein** Beleg |
-| 2 | **Planner-Auftrag und freigegebene Checkliste** | Blatt mit Kriterien, Checkliste mit Statuswerten je Punkt |
-| 3 | **Plan-Prüfer-Votum** | DoR erteilt oder nicht erteilt; „bleibt ENTWURF" ist ein Votum |
-| 4 | **Generator-Commit mit vollständiger Ursprungsangabe** | Commit-SHA, Basis-SHA, berührte Pfade |
-| 5 | **unabhängiges Evaluator-Votum** | selbst gemessen, mit Rohausgabe — nicht die Zusage des Generators |
-| 6 | **Release-Prüfer-Votum** | Kandidat, Drift, Rückweg benannt |
-| 7 | **Git-Historie und Divergenzmessung** | Ahead/Behind in **beide** Richtungen, je Gegenstelle |
-| 8 | **uncommittierte und unverfolgte Bestände** | `git status --porcelain` — beides, `??` zählt mit |
-| 9 | **`FORENSISCHER_SHA`** | als Bezug, **nie** als Basis |
-| 10 | **technische Prüfprotokolle** | positive und negative Sperrfälle, mit Ausgabe |
+| A1 | **vier Schreibstoppbelege** | vier **getrennte** Nachweise, je Rolle einer — eine Sammelaussage ist **kein** Beleg |
+| A2 | **Git-Historie und Divergenz** | Ahead/Behind in **beide** Richtungen, **je Gegenstelle** |
+| A3 | **Arbeitsbaum und Prozesse** | `git status --porcelain` (uncommittiert **und** untracked) · Lock-Dateien **und** laufende `git`-Prozesse |
+| A4 | **`FORENSISCHER_SHA`** | als Bezug, **nie** als Basis |
+| A5 | **Ruhephasennachweis** | Beginn, Ende, HEAD vorher/nachher |
+
+### B · Integration eines Generator-Commits
+
+| # | Eingabe |
+|---|---|
+| B1 | **Planner-Auftrag** (Blatt mit Kriterien) |
+| B2 | **DoR des Plan-Prüfers** |
+| B3 | **Generator-Commit und Übergabe** (Commit-SHA, Basis-SHA, berührte Pfade) |
+| B4 | **unabhängige Evaluator-Abnahme** — selbst gemessen, mit Rohausgabe |
+| B5 | **erforderliches Release-Votum** — *sofern für diesen Vorgang erforderlich* |
+
+### C · Reiner Statusübergang
+
+| # | Eingabe |
+|---|---|
+| C1 | **der für genau diesen Übergang zuständige Rollenbeleg** — und **nur** dieser |
+
+**Beispiele:** `ENTWURF → BEREIT` braucht die **DoR des Plan-Prüfers**. `CODE_FERTIG → ABGENOMMEN`
+braucht die **Abnahme des Evaluators**. **Kein späteres Release-Votum verlangen, das zu diesem
+Zeitpunkt noch nicht existieren kann** — ein Übergang, der seine eigene Zukunft als Voraussetzung
+hat, ist unerfüllbar.
+
+### D · Integration eines Prüf- oder Freigabedokuments
+
+| # | Eingabe |
+|---|---|
+| D1 | **Ursprungscommit** |
+| D2 | **zuständige Rolle** |
+| D3 | **vollständiger Beleg** *(des Dokuments selbst, nicht seiner Wirkung)* |
+| D4 | **zulässiger Pfad** |
+
+**Das Dokument darf nicht seine eigene, bereits integrierte Freigabe voraussetzen.** Ein
+Release-Freigabeschein ist selbst kein freigegebener Release — er **ist** die Freigabe. Wer für seine
+Integration eine Freigabe verlangt, verlangt sie von sich selbst.
+
+### Was in **jedem** Vorgangstyp gilt
+
+**Technische Prüfprotokolle** — positive **und** negative Sperrfälle, mit Ausgabe. Diese Eingabe ist
+nicht vorgangsspezifisch, sondern die Voraussetzung dafür, dass er überhaupt schreibend arbeitet.
 
 ## Wie er Gegenstellen zählt
 

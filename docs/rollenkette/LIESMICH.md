@@ -39,7 +39,8 @@ rollenkette/
 │   ├── 2-plan-pruefer/
 │   ├── 3-generator/
 │   ├── 4-evaluator/
-│   ├── 5-release-pruefer/   └── 6-integrator/   ← NEU, Entscheidung B-2 (14.08.)
+│   ├── 5-release-pruefer/
+│   └── 6-integrator/         ← NEU, Entscheidung B-2 (14.08.)
 │       je: 1-AUFTRAG · 2-WANN-BIN-ICH-DRAN · 3-WAS-ICH-LESE
 │           · 4-WAS-ICH-ABLIEFERE · 5-WAS-ICH-NICHT-DARF
 │

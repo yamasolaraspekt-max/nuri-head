@@ -9,7 +9,7 @@
 | 3 | **Keine fehlende Freigabe ersetzen** | „das passt schon" ist kein Release-Votum |
 | 4 | **Keine Commits pauschal oder gesammelt übernehmen** | Sammelübernahme ist genau der Beifang, gegen den die Rolle existiert |
 | 5 | **Keine Konflikte still oder nach eigenem Geschmack lösen** | ein still gelöster Konflikt ist eine unsichtbare fachliche Entscheidung |
-| 6 | **Keine fremden Änderungen löschen, zurücksetzen oder überschreiben** | fremde Arbeit gehört ihrem Autor; Verlust ist irreversibel |
+| 6 | **Keine fremden Änderungen löschen, zurücksetzen oder überschreiben** | siehe die Eigentumsregel unten — sie unterscheidet **uncommittiert** von **committiert**, und die erste Fassung dieser Zeile tat das nicht |
 | 7 | **Den `FORENSISCHEN_SHA` nicht als Aktivierungsbasis ausgeben** | er ist Untersuchungsstand. Wer auf ihm startet, beginnt mit einem veralteten Stand und erzeugt sofort eine zweite Wahrheit |
 | 8 | **Keine Rolle gleichzeitig evaluieren und integrieren** | wer abnimmt und zusammenführt, prüft sein eigenes Ergebnis |
 | 9 | **Im selben Vorgang weder Evaluator noch Release-Prüfer sein** | Yamas Entscheidung B-2, ausdrücklich gegen den Release-Prüfer |
@@ -29,12 +29,27 @@ Barriere, die aus dem falschen Grund sperrt, weggeklickt; A-30 hat das an zwölf
 gemessen. **Ein Wächter, den man nie hat sprechen sehen, ist von einem kaputten nicht zu
 unterscheiden** — und einer, der bei jedem Commit falsch spricht, ist schlimmer als beides.
 
-## Zu Verbot 6 — was „nicht löschen" praktisch heißt
+## Zu Verbot 6 — die Eigentumsregel, in vier Sätzen
 
-Am 14.08. lag im gemeinsamen Checkout eine uncommittierte fremde Änderung an `docs/STATUS.md`
-(`1 +, 1 −`). **Der Integrator nimmt sie auf, benennt sie und lässt sie liegen.** Er committet sie
-nicht für den Autor, er verwirft sie nicht, und er zieht sie nicht in seinen eigenen Commit.
-**Aufnehmen ist die Handlung, nicht Aufräumen.**
+**⚠ BERICHTIGT am 14.08. Die erste Fassung schrieb *„fremde Arbeit gehört ihrem Autor"* — das ist
+falsch und widerspricht einer Lehre, die in diesem Haus längst gezogen ist** und wörtlich in
+`rollen/1-planner/1-AUFTRAG.md` steht: **„Ein committeter Block gehört dem Bestand, nicht mehr dem
+Autor."** Ich habe sie selbst dorthin geschrieben und hier dagegen formuliert.
+
+| Art | Zuordnung | was der Integrator darf |
+|---|---|---|
+| **uncommittierte** fremde Arbeit | bleibt **der jeweiligen Arbeitsinstanz** zugeordnet | **aufnehmen und benennen** — nicht übernehmen, nicht entfernen, nicht für den Autor committen |
+| **committierter** Block | gehört **dem Bestand**, nicht mehr seinem Autor | lesen, zitieren, integrieren — **verändern oder entfernen nur** durch einen **neuen, ausdrücklich beauftragten und geprüften Korrekturvorgang** |
+
+**Der Integrator räumt weder die eine noch die andere Art eigenmächtig auf.**
+
+**Warum der Unterschied zählt:** Bei uncommittierter Arbeit ist der Verlust **irreversibel** — es
+gibt keine Kopie. Bei committierter Arbeit ist er **reversibel**, aber die Änderung ist eine Aussage
+über den Bestand und braucht deshalb einen Auftrag. **Der erste Fall ist ein Datenverlust, der zweite
+eine unbelegte Behauptung.** Beides ist verboten, aber aus verschiedenen Gründen.
+
+**Der konkrete Fall vom 14.08.:** Im gemeinsamen Checkout lag eine **uncommittierte** fremde Änderung
+an `docs/STATUS.md` (`1 +, 1 −`). **Aufnehmen ist die Handlung, nicht Aufräumen.**
 
 ## Die Grenze, die am leichtesten rutscht
 

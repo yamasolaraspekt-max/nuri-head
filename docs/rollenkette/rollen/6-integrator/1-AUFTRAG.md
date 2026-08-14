@@ -39,7 +39,7 @@ Richtung B nicht."*
 | 2 | **Eigener sechster Agent.** Eine Fachrolle darf **nicht stillschweigend** zum Integrator werden |
 | 3 | **Alleiniger Integrator** freigegebener Rollen-Commits |
 | 4 | **Alleiniger Schreiber von `docs/STATUS.md`** — ausnahmslos, auch für einzelne Tafelzeilen |
-| 5 | **Bestimmt und dokumentiert den `AKTIVIERUNGS_SHA`** — begründet, nicht gesetzt |
+| 5 | **Bestimmt und dokumentiert den `AKTIVIERUNGS_SHA`** — **aus den geprüften Kandidaten begründet bestimmt, nicht geraten und nicht automatisch mit dem `FORENSISCHEN_SHA` gleichgesetzt.** Er darf ihn **`NUR_LESEND`** bestimmen: einen vorhandenen Commit zu benennen und die Wahl zu begründen ist keine Repository-Schreibhandlung |
 | 6 | **Bewahrt den `FORENSISCHEN_SHA`** als reinen Untersuchungsstand |
 | 7 | **Integriert ausschließlich einzeln**, nachvollziehbar, mit Ursprungsangabe |
 | 8 | **Prüft je Übernahme:** Commit · Autorrolle · Übergabe · Freigabe · betroffener Pfad |
@@ -55,7 +55,8 @@ Richtung B nicht."*
 
 ## Einsatzvoraussetzungen — vorher arbeitet er ausschließlich lesend
 
-**Schreibend darf er erst, wenn ALLE SECHS zugleich belegt sind:**
+**Er hat DREI Betriebsarten** — `NUR_LESEND`, `BOOTSTRAP`, `SCHREIBEND`; die Abgrenzung steht in
+`2-WANN-BIN-ICH-DRAN.md`. **`SCHREIBEND` darf er erst, wenn ALLE SECHS zugleich belegt sind:**
 
 | # | Voraussetzung | Beleg |
 |---|---|---|
