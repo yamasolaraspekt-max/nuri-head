@@ -812,8 +812,27 @@ verloren geht, ist die Zuordnung:** wer die Historie liest, hält den Claim des 
 Arbeit. Bei einem Claim ist das mehr als eine Fußnote, denn er belegt, **wer wann welche Prüfung
 begonnen hat.**
 
-*Das ist zugleich der praktische Vollzug der Regelkollision, die bei Yama liegt: `git add <pfad>`
-kann fremde Zeilen nicht ausschließen, wenn sie in derselben Datei stehen.*
+*Das ist zugleich der praktische Vollzug der Regelkollision, die bei Yama liegt.*
+
+**⚠ BERICHTIGT 14.08. durch Yama — mein Satz war falsch und die Berichtigung ist die wertvollste
+Stelle seiner Antwort.** Ich hatte geschrieben: *„`git add <pfad>` kann fremde Zeilen nicht
+ausschließen, wenn sie in derselben Datei stehen."* **Für `git add <pfad>` stimmt das. Für git
+stimmt es nicht.** Es gibt einen nicht-interaktiven, skriptbaren Weg:
+
+```
+git diff -U0 -- docs/STATUS.md > /tmp/alles.patch
+# aus dem Patch nur die eigenen Hunks behalten (Abschnittsüberschrift als Anker)
+git apply --cached --unidiff-zero /tmp/eigen.patch
+git diff --cached -- docs/STATUS.md      # <- DAS ist der Beleg, nicht --name-only
+```
+
+*(`git add --patch` kann dasselbe, ist aber interaktiv und damit für eine Agentenkette unbrauchbar.)*
+
+**Was ich falsch gemacht habe, ist benennbar: ich habe eine WERKZEUGgrenze für eine SYSTEMgrenze
+gehalten.** `git add <pfad>` konnte es nicht — daraus habe ich geschlossen, git könne es nicht, und
+den Diff-Blick zur „einzigen Abhilfe in meiner Hand" erklärt. **Er ist die einzige, die OHNE
+Werkzeug auskommt. Mit einem kleinen Werkzeug ist die Abhilfe exakt statt aufmerksam** — und das
+ist ein Unterschied ums Ganze, weil Aufmerksamkeit in diesem Haus eine gemessene Trefferquote hat.
 
 ### ⚠ ERGÄNZT nach `d2551e40` — der Diff-Blick deckt nur EINE der zwei Richtungen
 
