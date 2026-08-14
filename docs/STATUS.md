@@ -13620,3 +13620,39 @@ zwei_getrennte_baelle: "Die MERGE-DISZIPLIN — wie verhindert die Kette, dass e
   Die REGELKOLLISION selbst liegt unveraendert bei Yama, ueber die Vorlage."
 ballbesitz_befund: release-pruefer
 ```
+
+### Regelkollision §3 / E1 / Beifang — WIEDEREINGESETZT 14.08. vom Planner (eigener Zaun nach A-25)
+
+```yaml
+befund: regelkollision_paragraf3_e1_beifang
+zustand: OFFEN
+ballbesitz: yama
+eingebracht: "plan-pruefer 13.08. 22:42 in 64df65df (33 Zeilen, zwei Datensatzfelder)"
+verloren: "im Merge 51fb4d31 (13.08. 22:51). KEIN loeschender Commit — die Konfliktaufloesung von
+  Hand hat die Seite OHNE den Block genommen. Deshalb zeigte git log -S nur den einfuegenden.
+  Gemeldet vom plan-pruefer in cef48ca0 (Posten e, eigene Befunde verfolgen)."
+wiedereingesetzt_von: "planner 14.08. — SCHLANK und mit Verweis, NICHT im Volltext.
+  Begruendung: der plan-pruefer hat ausdruecklich darauf verzichtet, ihn selbst wieder
+  einzusetzen, weil das neben der Vorlage eine zweite Wahrheit gaebe. Der Einwand ist richtig.
+  §16 verlangt aber, dass ein offener Befund MIT BALL in der Statuswahrheit steht — also steht
+  hier der Eintrag und dort die Sache."
+die_sache_steht_in: "docs/VORLAGE-AN-YAMA-2026-08-12.md Abschnitt 21 (ab Z.1921), eingebracht
+  vom planner in 7c70fa39, 79 Zeilen. SELBST NACHGEMESSEN 14.08. und VOLLSTAENDIG: die Kollision
+  an einem Beleg (A-29-Bau 4654687f), die drei verschiedenen Behelfe eines Abends, die VIER WEGE,
+  und die Empfehlung B mit harter Grenze."
+eigene_fehlmessung_offengelegt: "Mein erster Pruefgriff meldete, auch Abschnitt 21 sei verloren.
+  Das war falsch — ich hatte nach Formulierungen gesucht, die ich aus dem Gedaechtnis
+  rekonstruiert hatte ('E1 gibt nach', 'Zustand zieht aus'), statt nach dem was dasteht.
+  Genau die Falle, die ich anderen vorhalte: am Wort gemessen statt an der Sache. Der
+  plan-pruefer hatte recht, die Vorlage traegt sie."
+kern: "§3 verlangt den Zustandswechsel VOR der Scope-Aenderung · E1 verlangt dass er AM COMMIT
+  messbar ist · die Beifang-Regel verbietet fremde Pfade zu stagen. Haelt eine andere Rolle
+  unfertige Arbeit in docs/STATUS.md, sind sie nicht gleichzeitig erfuellbar."
+warum_es_zaehlt: "Solange die Kollision steht, erzeugt sie AKTIV Fehlbefunde — zwei Meldungen an
+  Yama haben eine §3-Verletzung behauptet, die keine war. Sie kommt wieder."
+nicht_entschieden: "§1 behaelt die Arbeitsregeln Yama vor. Der Planner empfiehlt Weg B und
+  entscheidet nichts."
+merge_disziplin: "Der Ball dafuer liegt beim Release-Pruefer (cef48ca0), nicht hier. Zur
+  Gesamtlage behauptet der plan-pruefer ausdruecklich nichts: die 1313 Zeilen ueber 184 Merges
+  sind KEINE Verlustzahl, weil das Mass rechtmaessig abgeloeste Tafelzeilen mitzaehlt."
+```
