@@ -13881,3 +13881,47 @@ was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Bau, kein Kriterium
   Entscheidung, ich schaerfe nur, worueber sie entscheiden muss."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — EIN BLATT NENNT DIESELBE ROTE SPERRE MIT ZWEI ZAHLEN (Plan-Pruefer, 14.08. 05:2x)
+
+```yaml
+zwei_zahlen_fuer_eine_sperre: "Gemessen an 907aaba2. Beim Nachmessen der vier md-Berichtigungen
+  des Planners (e063479d) habe ich den Restbestand aller FORMELSAMMLUNG-Zeiger durchgesehen. Die
+  BEREIT-Blaetter sind danach sauber. Aber W-31 nennt die rote Sperre F-028 an ZWEI Stellen mit
+  ZWEI verschiedenen Zeilennummern, und eine davon ist gewandert."
+die_zwei_stellen: "docs/auftraege/aktiv/W-31-pv-schnellbelegung.md
+    Z.240  '...F-028 ist eine ECHTE, noch rote Sperre auf Yamas ausdrueckliche Auflage
+            (FORMELSAMMLUNG.md:522)'
+    Z.276  'FORMELSAMMLUNG.md:557  ### F-028 · Azimut-Konvention an der Systemgrenze · 🔴'
+  Heute steht die F-028-Ueberschrift auf :557. Auf :522 steht eine grep-Zeile innerhalb eines
+  ANDEREN Formelblocks. Wer der ersten Zahl folgt, um die Sperre nachzulesen, landet auf einem
+  Suchbefehl zu Straight Skeleton."
+meine_erste_annahme_war_falsch_und_ich_sage_es: "Ich hatte zuerst vermutet, :522 sei — wie die
+  W-10/1-Faelle von 04:44 — schon beim Schreiben falsch gewesen. Am Stand gemessen, an dem sie
+  geschrieben wurde, stimmt das NICHT:
+    b39f3845 (planner, 12.08. 23:41, schreibt :522)   F-028 steht dort auf :522   RICHTIG
+    c11433d2 (evaluator, 13.08. 23:09, schreibt :557) F-028 steht dort auf :557   RICHTIG
+    907aaba2 (heute)                                  F-028 steht auf :557
+  Beide Zahlen waren zum Zeitpunkt ihres Schreibens richtig. Es ist also DRIFT, nicht die
+  Schnittklasse — und ohne die Messung am Entstehungsstand haette ich es falsch eingeordnet.
+  Das ist derselbe Fehler, den ich am 13.08. beim A-29-§3-Vorwurf schon einmal gemacht habe:
+  am heutigen Stand messen und daraus auf die Absicht von damals schliessen."
+warum_es_trotzdem_zaehlt: "W-31 ist BETRIEBSBESTAETIGT, das Blatt ist also ein BELEG und keine
+  Bauanweisung — ein geschlossenes Blatt darf einen Stand von damals beschreiben. ABER die Sperre
+  F-028 ist LEBEND und rot, und W-31s Text benutzt die Zahl nicht als Historie, sondern als
+  Fundstelle zum Nachschlagen ('auf Yamas ausdrueckliche Auflage (FORMELSAMMLUNG.md:522)').
+  Zwei verschiedene Zahlen fuer denselben Anker im selben Block sind ausserdem unabhaengig vom
+  Wandern ein Mangel: eine davon muss falsch sein, sobald sich die Datei bewegt — und sie hat
+  sich bewegt (996 -> 1025 Zeilen)."
+was_ich_ausdruecklich_offen_lasse: "Ob ein BETRIEBSBESTAETIGTES Blatt ueberhaupt berichtigt wird,
+  ist nicht meine Entscheidung. A-20-4 spricht dagegen, einen Beleg umzuschreiben; A-34 hat fuer
+  den Produktivcode den Ausweg gezeigt, der beides erhaelt: den ANKER danebenstellen und die alte
+  Zahl als Beleg kenntlich lassen. Welcher Weg hier gilt, gehoert dem Planner."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Bau. W-31 bleibt BETRIEBSBESTAETIGT."
+und_was_ich_bestaetige: "Die vier Berichtigungen aus e063479d halten, einzeln an den Rohzeilen
+  nachgemessen: geradenGeometrie.ts:174 parallelVersatz · FORMELSAMMLUNG.md:75 F-004 ·
+  :155 F-013 · :253 F-032. Damit ist der Fund aus aa9fc005 erledigt, und die vierte Zahl (F-032
+  :218 -> :253 in W-12/1 und W-16/1) hat der Planner selbst gefunden — sie stand nicht in
+  meinem Befund."
+ballbesitz_befund: planner
+```
