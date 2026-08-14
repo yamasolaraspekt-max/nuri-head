@@ -16513,3 +16513,59 @@ bitte: |
   §5-Punkt "kein Kriterium ist unerfuellbar" fuer A-36 abgeschlossen; die uebrigen Punkte
   habe ich in b6640235 bereits gemessen.
 ```
+
+```yaml
+auftrag: "f013_deckung_exakt_und_wirkung_gerechnet"
+titel: "F-013 durchgerechnet — Abdeckung exakt n(n-3)/2, Wirkung an sieben Faellen richtig"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:05"
+stand_kopf: 902c83f3
+posten: "Vorratspruefung (c) FORMELN DURCHRECHNEN — tragende Formel aus W-18/1 (BEREIT, 31h)"
+vorher_den_bestand_durchsucht: |
+  Lehre aus 08:53, wo ich einen Befund als neu meldete, den A-35-9 laengst trug: erst
+  gesucht, dann gerechnet. F-013 kommt 13x in docs/STATUS.md vor und in vier aktiven
+  Blaettern — aber ausschliesslich als ZEIGER-Frage (A-34: "gemeint war F-013") und in
+  Registerzeilen. 'Kantenpaar' und 'n(n-3)' kommen NULL Mal vor. Die Rechnung unten ist neu.
+wortlaut_gegen_code: |
+  F-013 (FORMELSAMMLUNG.md:155): "Jedes Kantenpaar, das nicht benachbart ist, auf
+  Streckenschnitt pruefen." Grenzfall: "Aufwand waechst quadratisch; bis ~200 Punkte
+  unproblematisch."
+  geometry/kontur.ts:109 schneidetSichSelbst setzt genau das um, mit der Nachbarschaft
+  j === i+1 ODER (i === 0 && j === n-1) — die zweite Haelfte ist die geschlossene Kontur,
+  letzte Kante neben erster.
+abdeckung_gezaehlt: |
+  Die Schleife simuliert und die getesteten Paare gezaehlt, gegen die geschlossene Form
+  n(n-3)/2 fuer ein geschlossenes n-Eck:
+    n= 3 ->  0 Paare, Formel  0   stimmt   (fruehes return, ein Dreieck kann nicht)
+    n= 4 ->  2 Paare, Formel  2   stimmt   (0/2, 1/3)
+    n= 5 ->  5,        Formel  5   stimmt
+    n= 6 ->  9,        Formel  9   stimmt
+    n= 8 -> 20,        Formel 20   stimmt
+    n=12 -> 54,        Formel 54   stimmt
+  Keine Luecke und keine Doppelpruefung. Die Umlauf-Nachbarschaft ist korrekt behandelt —
+  genau der Punkt, den der Code-Kommentar als "beim Zaehlen leicht vergessen" benennt.
+  Aufwand zur Kontrolle: 200 Punkte -> 19 700 Paare, 500 Punkte -> 124 250. Der Grenzfall
+  "bis ~200 unproblematisch" ist damit eine vernuenftige Marke, keine willkuerliche.
+wirkung_gerechnet: |
+  streckenSchneiden wortgetreu nachgebildet (kreuz ueber drei Punkte, imKasten fuer den
+  kollinearen Zweig) und sieben Faelle gefahren:
+    Quadrat 1000x1000                 false   erwartet false
+    Schleife / bowtie                 true    erwartet true
+    Dreieck n=3                       false   erwartet false
+    L-Form, 6 Punkte                  false   erwartet false
+    Ruecklaeufer kollinear            true    erwartet true
+    Ecke beruehrt fremde Kante        true    erwartet true
+    U-Form, 8 Punkte                  false   erwartet false
+  SIEBEN VON SIEBEN. Besonders der kollineare Ruecklaeufer und die Ecke, die auf einer
+  fremden Kante liegt — beides Faelle, die eine reine Vorzeichenpruefung durchliesse und
+  die der Code ausdruecklich abfaengt.
+die_eine_grenze_die_ich_nenne: |
+  Die kollinearen Zweige vergleichen EXAKT auf null (d1 === 0). Bei ganzzahligen
+  mm-Koordinaten ist das exakt richtig. Bei nicht ganzzahligen Koordinaten wuerde ein
+  fast-kollinearer Ruecklaeufer durchrutschen — dieselbe Bedingung wie in F-032s
+  Rundungs-Grenzfall. Das ist KEIN Befund: der Planner hat dort selbst gemessen, dass
+  fangKern.ts:76 jeden Fangpunkt rundet und Geometrie und Befehle 57 Math.round-Stellen
+  tragen. Ich nenne es, weil beide Formeln an derselben Voraussetzung haengen und das
+  nirgends zusammen steht.
+ballbesitz: "— (Messung ohne Fund; W-18/1 bleibt BEREIT beim Generator)"
+```
