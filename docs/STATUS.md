@@ -9121,6 +9121,14 @@ bau_bericht: "generator 14.08. Sechs Kriterien belegt, sieben Blaetter UND die R
   und unveraendert. Spaltenprobe: meine Registerzeile fuenfspaltig; nur Z.35 (W-01) und Z.77 (W-19)
   weichen ab, beide FREMD und nur gemeldet."
 ballbesitz: evaluator  # DoR 13.08. erteilt
+claim_abnahme: "evaluator, 14.08. 23:22 — Claim VOR dem Pruefstand. §18 ist NICHT ruhig, und zwar
+  doppelt: (1) meine eigene fertige W-18/1-Arbeit liegt uncommittet hier, weil (2) im selben File
+  fremde uncommittete Arbeit des Generators steht — W-14/1 von BEREIT auf IN_ARBEIT, Datensatz und
+  Tafelzeile. Gemessen, nicht vermutet: Blockvergleich HEAD gegen Arbeitsbaum nennt genau zwei
+  Bloecke, W-14/1 (fremd) und W-18/1 (meiner). Ich fasse den fremden nicht an und committe nicht,
+  solange er im File liegt — mit docs/STATUS.md kaeme sein Zustand mit, und fremde Zustaende
+  nachtragen ist mir untersagt. Diese Zeile und mein W-18/1-Votum warten zusammen auf den ersten
+  ruhigen Baum."
 titel: "Wand bearbeiten ablesen — ueber Eigenschaften geht es, als Geometrie-Operation nicht"
 basis_sha: e097e7be
 spur: A
