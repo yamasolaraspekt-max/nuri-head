@@ -14239,3 +14239,43 @@ warum_ich_den_alten_block_NICHT_aendere: "A-20-4 und der Weg, den der Planner he
   Block bleibt, wie er ist; dieser hier ordnet ihn ein."
 ballbesitz_befund: —   # kein Halter, weil nichts offen ist — und DAS ist der Unterschied zum Block von 12.08., wo ein Ball benannt war, aber nur im Fliesstext
 ```
+
+## BEFUND — DREI VON YAMAS ACHT POSTEN NACHGEMESSEN, UND EIN FAST-FEHLBEFUND (Plan-Pruefer, 14.08. 06:0x)
+
+```yaml
+yamas_posten_nachgemessen: "Die Wache traegt in JEDER Runde dieselbe Liste von acht offenen Posten
+  bei Yama, und ich habe sie nie nachgemessen — ich habe sie weitergereicht. Heute drei davon
+  geprueft, gemessen an 682fc024. Alle drei sind noch offen; keiner ist im Schlaf erledigt worden."
+posten_7_driftender_zeiger_raumauswahl: "OFFEN, und er steht im PRODUKTIVCODE, nicht in einem Blatt.
+  app/raumAuswahl.ts:7 sagt: 'Ihre heutige Identitaet ist der Index in der Liste (Buehne.tsx:147,
+  key=raum${i})'. Gemessen an Buehne.tsx — der Datei gibt es nur eine, die Aufloesung ist eindeutig:
+    :147 traegt heute {massElemente}
+    key={`raum${i}`} steht auf :162
+  Der Verweis zeigt also auf etwas anderes, nicht ins Leere. Unveraendert seit der Meldung."
+posten_4_W_21L: "OFFEN. zustand DECISION_BLOCKED. ABER: das Feld sagt 'ballbesitz: —', der Halter
+  steht nur im KOMMENTAR dahinter ('# bis Yama die Fachdaten liefert oder W-23 sie erzeugt').
+  Meine Wache meldet seit Wochen 'W-21L bei Yama' — sachlich richtig, aber die Quelle dafuer ist
+  ein Kommentar, kein Feld. Dieselbe Klasse wie 682fc024, diesmal an einem AUFTRAG statt an einem
+  Befundblock. Kein neuer Befund, eine Beobachtung an derselben Sache."
+posten_8_regelkollision: "OFFEN und jetzt korrekt gefuehrt: der Datensatz steht seit 2717ec3d
+  wieder in docs/STATUS.md, ballbesitz yama, mit Verweis auf Vorlage-Abschnitt 21. Zweimal im
+  Bestand genannt, kein Doppel-Datensatz."
+was_A_34_wirklich_erreicht_hat: "Weil Posten 7 dieselbe Klasse ist, die A-34 behoben hat, habe ich
+  A-34s Reichweite gemessen statt sie anzunehmen. Sein Bau-Commit 2f8cf32d fasst GENAU ZWEI Dateien
+  an: geometry/geradenGeometrie.ts und das Blatt W-06-geschoss-verwalten.md. Der uebrige
+  Produktivcode war nicht im Scope — und dort stehen heute 42 Verweise der Form `datei.ts:zahl`
+  in 21 Zeilen (Tests und app/). Das ist eine MESSUNG, keine Anklage: A-34 hat nie behauptet,
+  mehr abzudecken, und ob die 42 stimmen, ist damit NICHT gesagt."
+mein_eigener_fast_fehlbefund: "Beim Versuch, die 42 aufzuloesen, hatte ich sieben davon schon als
+  gewandert notiert — objekt.blade.php:141 und :144 zeigten auf CSS-Regeln statt auf die
+  behaupteten data-Attribute, an sechs verschiedenen Fundstellen. FALSCH: es gibt DREI Dateien
+  namens objekt.blade.php (admin/hausplaner/, admin/konfiguration/, admin/new_leads/layouts/),
+  und meine Aufloesung nach dem blossen Dateinamen nahm die letzte. In der richtigen steht auf
+  :141 data-projekte und auf :144 data-pakete-url — die sieben Verweise sind KORREKT.
+  Ich melde es, weil es der zweite Fall heute Nacht ist, in dem meine Aufloesung nach Dateiname
+  beinahe eine Mehrfach-Anklage erzeugt haette (der erste war app/unterlagen statt app/unterlage).
+  Eine Aufloesung nach Basisnamen taugt in diesem Repo nicht."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Bau. Die drei Posten bleiben bei Yama, wo sie
+  stehen; ich habe sie nur bestaetigt statt sie weiterzureichen."
+ballbesitz_befund: yama
+```
