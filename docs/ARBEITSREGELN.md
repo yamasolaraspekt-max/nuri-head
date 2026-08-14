@@ -190,7 +190,7 @@ Evaluator dürfen nicht dieselbe Instanz sein.
 Der Release-Prüfer prüft, dass exakt der abgenommene Commit veröffentlicht werden soll, alle
 Artefakte reproduzierbar sind, Migration und Rückweg tragen und keine fremden Änderungen in den
 Release geraten. Er veröffentlicht nicht selbst und darf beim selben Auftrag weder Generator noch
-Evaluator gewesen sein.
+Evaluator gewesen sein. **Er darf für denselben Vorgang auch nicht Integrator sein** — zur sechsten Rolle siehe den **Nachtrag „Integrator" am Dateiende** (Entscheidung B-2 vom 14.08.2026; der Abschnitt steht am Ende, damit kein Zeilenverweis wandert).
 
 ### Yama / Veröffentlichung
 
@@ -1227,3 +1227,45 @@ damit ist die veröffentlichte Linie die Basis. Darauf:
 | **1.4** | Vertretungsregel: der Release-Prüfer genehmigt und führt in Yamas Namen aus (Push, Merge nach `main`, Tags, Deployments außer Produktion) — **ausschließlich für Stände mit `RELEASE_FREI`**; Produktion, produktive Datenoperationen, Force und endgültige Löschung bleiben bei Yama | Yamas mündliche Weisung 05.08. |
 | **1.4.1** | §12.1–12.5 („der rote Weg") aus der lokalen 1.2.1 übernommen | lokale Linie |
 | **1.4.2** | die vier P-01-Auflagen aus 1.2.2 eingearbeitet: §3 `SPEC_BLOCKED` eine Lage/zwei Wege · §5 benannter Erstnutzer für neue Werkzeuge (samt der drei 1.1-Punkte, die der 1.3 fehlten) · §16 Statusträger namentlich `docs/STATUS.md` (ersetzt die 1.3-Nennung `AKTUELLER_AUFTRAG.yaml` — Beleg `8fc5edb8`) mit 1.3-Ernte und dokumentierter Abschwächung · §19 vollständiges Änderungsverzeichnis | lokale 1.2.2 (P-01, Yamas Weisung), zusammengeführt vom Release-Prüfer |
+
+---
+
+## NACHTRAG · Integrator *(sechste Rolle, Yamas Entscheidung B-2 vom 14.08.2026)*
+
+**Rollenkennung `TICKET_ROLLE=integrator`. Eigener sechster Agent — eine Fachrolle darf nicht
+stillschweigend zum Integrator werden.**
+
+Der Integrator führt fremde, freigegebene Arbeit zusammen: **einzeln, mit Ursprungsangabe, ohne eine
+fachliche Entscheidung dabei zu treffen.** Er arbeitet ausschließlich im **Integrations-Checkout**
+und ist **alleiniger Schreiber von `docs/STATUS.md`** — ausnahmslos, auch für eine einzelne
+Tafelzeile.
+
+**Er darf beim selben Vorgang weder Evaluator noch Release-Prüfer sein oder gewesen sein.** Er
+ersetzt keine fehlende Freigabe, verändert keine Kriterien, löst keinen Konflikt still und
+übernimmt keine Commits gesammelt. Bei Konflikten, fremden Änderungen oder unklarer Herkunft
+**bricht er ab und meldet** — der Abbruch ist ein Ergebnis, keine Störung.
+
+**Er bestimmt und begründet den `AKTIVIERUNGS_SHA`** und bewahrt den `FORENSISCHEN_SHA` als reinen
+Untersuchungsstand. **Den forensischen Stand als Aktivierungsbasis auszugeben ist ihm untersagt:**
+wer darauf startet, beginnt mit einem veralteten Stand und erzeugt sofort eine zweite Wahrheit.
+
+**Bis alle sechs Einsatzvoraussetzungen belegt sind, arbeitet er ausschließlich lesend** — vier
+einzelne Schreibstoppbelege · keine schreibende Altinstanz · vollständig aufgenommener
+Arbeitsbaum · ausgeschlossene Schreibprozesse · gemessene Ruhephase · aktiver eigener Rollen- und
+Checkoutschutz. **Eine commitfreie Zeit allein genügt nicht.**
+
+**Sein Rollenpaket** liegt in `docs/rollenkette/rollen/6-integrator/` und wird **unabhängig vom
+Plan-Prüfer** abgenommen, nicht vom Planner, der es geschrieben hat.
+
+**Kein Push, kein Merge nach `main`, kein Tag, kein Deploy, kein Force-Push, kein Rebase und kein
+Umschreiben veröffentlichter Historie ohne Yamas ausdrückliche Freigabe.**
+
+**Betriebsarten und die Bootstrap-Entscheidung.** Der Integrator kennt drei Betriebsarten:
+`NUR_LESEND` (messen und berichten, **einschließlich Bestimmung und Begründung des
+`AKTIVIERUNGS_SHA`** — einen vorhandenen Commit zu benennen ist keine Schreibhandlung), `BOOTSTRAP`
+(ausschließlich Worktrees anlegen) und `SCHREIBEND` (integrieren, `docs/STATUS.md` schreiben).
+**Für die Umstellung vom 14.08.2026 gilt B2: Yama bzw. eine ausdrücklich von Yama autorisierte
+Infrastrukturhandlung legt die Rollen-Worktrees an.** Der Integrator führt **vor** Aktivierung seiner
+unabhängig geprüften Barriere **keine Git-Verwaltungsänderung** aus; `BOOTSTRAP` bleibt nur als
+dokumentierter Notfallweg bestehen und ist **nicht freigegeben**. **Die bloße Dokumentation einer
+Betriebsart ist keine Erlaubnis, sie zu benutzen.**

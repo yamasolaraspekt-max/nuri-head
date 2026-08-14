@@ -1,12 +1,12 @@
 # ROLLENKETTE 3D-HAUSPLANER
 
-> Ein Wissensspeicher, fünf Sichten, vier Übergabestücke.
+> Ein Wissensspeicher, **sechs** Sichten, **fünf** Übergabestücke.
 
 ---
 
 ## Der Grundgedanke
 
-Fünf gleich gebaute Wissensordner **driften** — sie müssen gepflegt werden, um
+Sechs gleich gebaute Wissensordner **driften** — sie müssen gepflegt werden, um
 übereinzustimmen. Das ist in diesem Projekt zweimal passiert: die Auftragsblätter
 führten einen zweiten Status neben `STATUS.md`, der Git-Index trug eine zweite
 Wahrheit neben dem Arbeitsbaum. Beide Male war die Lösung nicht „besser abgleichen",
@@ -16,8 +16,8 @@ Deshalb ist es hier umgedreht:
 
 ```
 werkbank/       DER GEGENSTAND — gehört niemandem, alle lesen dasselbe
-rollen/         FÜNF SICHTEN — je 5 Blätter, kein eigenes Sachwissen
-uebergaben/     VIER STAFFELSTÄBE — halten die Kette zusammen
+rollen/         SECHS SICHTEN — je 5 Blätter, kein eigenes Sachwissen
+uebergaben/     FÜNF STAFFELSTÄBE — halten die Kette zusammen
 ```
 
 ---
@@ -39,7 +39,8 @@ rollenkette/
 │   ├── 2-plan-pruefer/
 │   ├── 3-generator/
 │   ├── 4-evaluator/
-│   └── 5-release-pruefer/
+│   ├── 5-release-pruefer/
+│   └── 6-integrator/         ← NEU, Entscheidung B-2 (14.08.)
 │       je: 1-AUFTRAG · 2-WANN-BIN-ICH-DRAN · 3-WAS-ICH-LESE
 │           · 4-WAS-ICH-ABLIEFERE · 5-WAS-ICH-NICHT-DARF
 │
@@ -47,7 +48,8 @@ rollenkette/
     ├── A-auftragsblatt.md
     ├── B-baubericht.md
     ├── C-abnahmevotum.md
-    └── D-freigabeschein.md
+    ├── D-freigabeschein.md
+    └── E-integrationsprotokoll.md   ← NEU (Integrator)
 ```
 
 ---
@@ -72,6 +74,7 @@ es ist dasselbe Dokument.
 | **B** Baubericht | Generator | Evaluator | Was gebaut wurde, Bau-SHA, Selbstmessung, offene Punkte |
 | **C** Abnahmevotum | Evaluator | Release-Prüfer | Grün/Rot je Kriterium mit Beleg, Fehlerklasse, Prüf-SHA |
 | **D** Freigabeschein | Release-Prüfer | Yama | Release-SHA, §10-Prüfung, Rückweg, Restrisiko |
+| **E** Integrationsprotokoll | **Integrator** | Yama | Ursprungscommit, Ziel-HEAD vorher/nachher, berührte Pfade, Übernahmen **und** Ablehnungen |
 
 ---
 

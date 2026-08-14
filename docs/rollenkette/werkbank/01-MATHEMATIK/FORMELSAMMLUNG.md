@@ -121,6 +121,59 @@
 > das sie zitiert. Beide sind berichtigt. In zehn weiteren Dokumenten wird F-004 nur **genannt**, ohne
 > die Formel.*
 
+> **⚠ ERGÄNZT am 14.08.2026 — der Winkeltest allein reicht nicht. `t` gehört zur Ausgabe.**
+>
+> **Befund des Plan-Prüfers:** *„Der Wächter tut, was F-004 verlangt, und er tut es
+> längenunabhängig — aber er bindet NUR den Winkel. Direkt oberhalb der Schwelle liefert die Formel
+> einen Schnittpunkt, der hunderte Kilometer neben dem Haus liegt, und sie liefert ihn als gültigen
+> Punkt, nicht als null."*
+>
+> **Selbst nachgerechnet**, waagrechte 10-m-Wand gegen eine um δ verkippte, 1000 mm versetzte Achse:
+>
+> ```text
+>    δ [mm]        sin             t          S.x [mm]   S.x [km]   Lage
+>     0.005    5.0e-07    -200000.0      -2000000000    -2000.0    AUSSERHALB
+>     0.020    2.0e-06     -50000.0       -500000000     -500.0    AUSSERHALB
+>     1.000    1.0e-04      -1000.0        -10000000      -10.0    AUSSERHALB
+>    10.000    1.0e-03       -100.0         -1000000       -1.0    AUSSERHALB
+>
+>   Gegenprobe bei δ = 0.020 — liegt S auf BEIDEN Geraden?
+>     auf A-B: 0.000e+00    auf C-D: 0.000e+00
+> ```
+>
+> **S ist ein echter Schnittpunkt. Die Formel hat recht; die Antwort ist unbrauchbar.** Kein
+> Vorzeichen-, Rundungs- oder Rechenfehler — die Geraden schneiden sich dort wirklich, nur eben
+> 500 km neben dem Haus.
+>
+> **Die Regel, und sie braucht keinen freien Operanden:**
+>
+> **`t` ist Teil der Ausgabe, nicht ein Zwischenwert.** `t` misst dimensionslos in **Segmentlängen
+> von A→B**: `0 ≤ t ≤ 1` liegt im Segment, `t = −50000` liegt fünfzigtausend Segmentlängen daneben.
+> **Kein Aufrufer darf `S` verwenden, ohne `t` (und für die zweite Gerade `u`) geprüft zu haben.**
+>
+> **Warum das die Schwelle NICHT ersetzt, sondern ergänzt** — beide fangen verschiedene Fälle:
+>
+> | Prüfung | fängt | fängt NICHT |
+> |---|---|---|
+> | `\|sin\| < ε` *(A-32)* | parallel und deckungsgleich — dort gibt es **keinen** Punkt | den fernen Punkt: bei sin = 2e-6 ist die Schwelle passiert und `t` = −50000 |
+> | `t`/`u` geprüft | den fernen Punkt, **längen- und winkelunabhängig** | Parallelität — dort ist `m = 0` und `t` existiert nicht |
+>
+> **Wer die fachliche Grenze für `t` setzt:** **nicht die Formel.** Sie hängt am Anwendungsfall und
+> ist ein **Operand**, der dort hingehört, wo der Fachkontext ist:
+>
+> | Anwendungsfall | erlaubter `t`-Bereich | Begründung |
+> |---|---|---|
+> | **Ecke bilden** aus zwei Wandachsen | `0 ≤ t ≤ 1` an **beiden** Geraden | die Ecke liegt zwischen den Endpunkten, sonst ist es keine Ecke |
+> | **Trimmen / Verlängern** *(A-35)* | `t` **darf** außerhalb liegen — **die Grenze ist ein benannter Operand des Auftrags**, kein Formelwert | eine Wand auf eine Zielkante zu verlängern heißt gerade, `t > 1` zuzulassen |
+> | **Fangen** *(F-032)* | `0 ≤ t ≤ 1`, danach Rundung nach F-032 | ein Fangpunkt außerhalb des Segments ist kein Fangpunkt |
+>
+> ***Was daran lehrreich ist, und es ist die zweite Lehre derselben Formel:*** *beim ersten Mal war
+> die **Formel** falsch und der **Grenzfall** richtig zitiert. Diesmal ist die Formel richtig und der
+> Grenzfall **unvollständig** — er prüft die Größe, die man leicht prüfen kann (den Winkel), und
+> nicht die, an der die Antwort scheitert (die Entfernung). **Ein richtig zitierter Wortlaut, der
+> eine Größe ohne Aussage zurückgibt** — die Formulierung stammt vom Plan-Prüfer und trifft es
+> genauer als meine.*
+
 ---
 
 ## Gruppe 2 — Polygone
