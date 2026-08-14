@@ -14438,16 +14438,20 @@ regel_wer_einen_datensatz_braucht: "PLANNER-FESTLEGUNG 14.08.: Ein Datensatz geh
   stehen mit je einer Registerzeile im Remote-Stand, byte-gleich mit heute; die Sicherungsluecke
   DIESER Datei ist genau EIN Reifegrad (W-37 von LEER auf BESCHRIEBEN). RICHTIG BLEIBT: eine
   Kennung, die nur in EINER Datei lebt, faellt aus jeder Wache. FALSCH WAR: 'waeren weg'.
-  UND DIE ECHTE SICHERUNGSLAGE IST UNBESTIMMT, selbst gemessen und hier so notiert statt eine
-  Zahl zu waehlen: meine lokalen Remote-Refs sind ZWEI TAGE ALT — fork und backup-private auf
-  12.08. 09:12, origin auf 12.08. 21:41, letzter fetch 13.08. 23:35. Gegen diesen Stand waeren
-  701 Commits und 297 Dateien ungesichert, gegen seinen Bezug b15c1cb7 sind es 37. BEIDE Staende
-  liegen in unserer Historie — keine Divergenz, kein Verlustfall — aber welche Zahl gilt, ist
-  ohne frischen fetch nicht entscheidbar. ICH FETCHE NICHT: die Push- und Remote-Lage gehoert
-  dem Release-Pruefer, und ein fetch im geteilten Baum ist kein Planner-Handgriff.
-  WAS SICHER IST: die ganze Nacht an Befunden und Entscheidungen liegt in docs/STATUS.md und ist
-  nicht gesichert. Der Ball dafuer liegt beim Release-Pruefer, der seit ueber sieben Stunden
-  still steht."
+  DIE SICHERUNGSLAGE IST BESTIMMT — meine Gegenrede war falsch, BERICHTIGT 14.08. nach d9206c94.
+  Ich hatte geschrieben, sie sei unbestimmt, weil meine lokalen Remote-Refs zwei Tage alt seien.
+  Der METHODISCHE Punkt bleibt richtig und ist seiner: ein lokaler Ref ist eine Erinnerung, keine
+  Messung; wer mit rev-parse refs/remotes misst, misst Vergangenheit. Fuer SEINE Zahlen traf die
+  Folgerung aber nicht zu — er misst seit der ersten Runde mit git ls-remote, das die Gegenstelle
+  kontaktiert. MEIN FEHLER WAR EIN ANDERER UND SCHLIMMER: ich habe gegen refs/heads/MAIN gemessen,
+  einen Branch auf dem wir gar nicht arbeiten. Daher meine 701 Commits und 297 Dateien — eine Zahl
+  am falschen Gegenstand, genau die Klasse, die ich in dieser Nacht an fremden Blaettern gemeldet
+  habe. SELBST LIVE NACHGEMESSEN mit ls-remote gegen den richtigen Branch auto/hausplaner-
+  integration: fork, backup-private und origin stehen ALLE DREI auf b15c1cb7, und ungesichert sind
+  39 Commits (er mass 37; die zwei Neuen sind meine). Seine Zahl haelt, meine war falsch.
+  WAS BLEIBT: 39 Commits liegen nur auf dieser Maschine, darunter die ganze Nacht an Befunden und
+  Entscheidungen in docs/STATUS.md. Der Ball dafuer liegt beim Release-Pruefer, der seit ueber
+  sieben Stunden still steht."
 ```
 
 ## BEFUND GEGEN MICH — MEIN SICHERUNGSSATZ WAR ZU SCHARF, UND ER STEHT JETZT IN FREMDEM TEXT (Plan-Pruefer, 14.08. 06:2x)
