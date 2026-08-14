@@ -224,3 +224,144 @@ was_ich_gemessen_habe_und_was_nicht: "SELBST GEMESSEN: die drei Dateien mit Zeil
         was die Queue-Klassifizierung aus AUF-88-P1 leistet; sie ist ausdruecklich ausserhalb."
 W_16_1_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+---
+
+## Votum des Evaluators (§11) — Runde 1
+
+**NACHBESSERN.** *Sieben von acht Kriterien tragen, und zwei davon tragen besser als verlangt. Das
+achte — **W-16-1-2, P1** — ist zur Hälfte erfüllt: die Formelzuordnung ist am Code erhoben, aber
+**F-032 ist nicht berichtigt**.*
+
+### Der Befund: die falsche Zuordnung steht unverändert an dem Ort, den der Auftrag benennt
+
+Der Auftrag sagt im Befundtext wörtlich, **wo** die Zuordnung steht:
+
+```text
+Auftragsblatt, Abschnitt 2:
+  "REGISTER.md:48 fuehrt fuer W-16 die Formel F-032 (Transformation eines
+   Punktes, homogene 4x4-Matrix, FORMELSAMMLUNG:253)."
+```
+
+**Am Bau-Stand `0a297803` gemessen — die Zeile führt sie weiter:**
+
+```text
+$ sed -n '48p' docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md
+| W-16 | Grundriss unterlegen | **BESCHRIEBEN** | W-12 | F-032 · **Reifegrad
+  nachgezogen 14.08. mit W-16/1** (~~LEER~~ → BESCHRIEBEN): …
+```
+
+**Und kein Blatt erwähnt sie** — auch nicht als gemeldete Abweichung:
+
+```text
+$ grep -rn 'F-032' W-16-import-grundriss/
+(keine Ausgabe)
+```
+
+> ***Das ist der harte Teil: es ist nicht „gemeldet statt gehandelt", sondern gar nicht adressiert.***
+> *Wer `3-FORMELN` liest, erfährt, dass F-001 gilt und die Maßstabsrechnung keine Nummer hat — aber
+> nicht, dass die Registerzeile eine andere Nummer führt. Und wer die Registerzeile liest — der Ort,
+> an dem andere Rollen die Formeln **ablesen** — bekommt weiterhin F-032.*
+
+**Dass F-032 nicht trägt, habe ich selbst gemessen, in beiden Hälften:**
+
+```text
+$ grep -rn 'Math\.' resources/planner/hausplaner/app/unterlage/
+kalibrierung.ts:26:  return Math.hypot(b.x - a.x, b.y - a.y);
+        -> EIN einziger Rechenaufruf im ganzen Ordner, und das ist F-001.
+   zoom 0 · scale 0 · Math.pow 0 · Math.log 0 · Math.exp 0 · clamp 0
+$ grep -ci 'matrix\|transform\|skalier\|scale'  PlanUploadController.php -> 0
+                                                PlanUpload.php           -> 0
+```
+
+**Die Hausform der Berichtigung steht in derselben Datei, siebenmal** — `W-13` *„**keine** ⓝ
+(~~F-012~~, ~~F-003~~)"*, `W-04` *„**F-ZUORDNUNG BERICHTIGT vom planner 13.08.**"*, dazu `W-01`,
+`W-11`, `W-21`, `W-22`. **Es fehlt kein Werkzeug, nur der Handgriff.**
+
+**Und der Handgriff war in Reichweite:** *derselbe Commit `0a297803` hat genau diese Zeile
+angefasst, um den Reifegrad nachzuziehen — die Formelspalte steht unmittelbar daneben.*
+
+### Was NICHT verlangt ist
+
+*Kein Umbau der sieben Blätter — sie tragen.* **Der Umfang des Befundes ist der Befund** (§12.2):
+die Formelspalte der Zeile `REGISTER.md:48` und ein Satz im Blatt, der die Berichtigung festhält.
+*Ob `F-032` bei `W-12` zu Recht steht, ist **nicht** Gegenstand dieses Auftrags und wird hier nicht
+mitentschieden.*
+
+### Messtisch — alle acht Kriterien, jedes selbst gefahren
+
+| Kriterium | Ergebnis | Wie ich es gemessen habe |
+|---|---|---|
+| **W-16-1-1** (P1, TRAGEND) beide Hälften + Reifegrad | **grün** | Insel selbst gezählt: 3 Module, `44+66+239 = 349` Z. Server selbst gezählt: `PlanUploadController.php` 178 Z, `PlanUpload.php` 88 Z, **sechs** Routen `web.php:5679-5692`, **zwei** Migrationen. Alle im Blatt mit Fundstelle (`1-ZWECK:19-29`, `5-CODE:16-28`). Reifegrad: Legende `:6-8` selbst gelesen (*„BESCHRIEBEN (alle sieben Blätter gefüllt)"*), Füllstand selbst gezählt (59–89 Z, sieben von sieben), Zeile steht auf **BESCHRIEBEN**, Spaltenzahl 5 = Nachbar `W-10`. Das ausdrückliche Nicht-Ziel ist eingehalten: `LEER` wird in `1-ZWECK:45-52` als **richtig** erklärt, mit `REGISTER.md:87` im Wortlaut |
+| **W-16-1-2** (P1) F-032 berichtigt | **ROT** | s. o. — am Code erhoben ✓, Lücke gemeldet statt Nummer erfunden ✓, **Berichtigung nicht ausgeführt ✗** |
+| **W-16-1-3** (P1) null-Vertrag in 7-GRENZEN | **grün** | Vertrag steht `7-GRENZEN:3-22` mit allen drei Bedingungen **und** der Begründung *„ein Aufrufer muss nicht selbst darauf prüfen"*. **Selbst gefahren** am echten Modul: Länge ≤ 0 → `null`/`null`, alterMassstab ≤ 0 → `null`/`null`, identische Punkte → `null`, `NaN` nirgends (`false`) |
+| **W-16-1-4** Naht benannt | **grün** | `PlanUpload.php:81-83` selbst geöffnet — drei `route()`-Aufrufe. `UnterlagenWerkzeuge.tsx:68` und `:155` tragen `X-CSRF-TOKEN`. **Gegenprobe selbst gefahren:** `/admin`, `plan-upload`, `http(s)://` in `app/unterlage/` → **0 Treffer**; alle drei `fetch()` nehmen die URL aus dem Datensatz |
+| **W-16-1-5** sechs Exporte mit Fundstelle | **grün** | `grep -rn '^export '` → **6**, und die Blatt-Tabelle `2-FUNKTION:5-9` nennt genau diese sechs mit den Zeilen 16/22/25/33/51/29 — jede einzeln nachgeschlagen |
+| **W-16-1-6** Einordnungsbefund ohne Entscheidung | **grün** | `1-ZWECK:37-43`: beide Tatsachen genannt (`energie.plan-upload.*` + Controller unter `Energie/` gegen Register-Führung als Hausplaner-Werkzeug), ausdrücklich *„dieses Blatt entscheidet nicht"* |
+| **W-16-1-7** kein Produktivcode | **grün** | **beide** Bau-Commits gemessen: `cff23c12` 7 Dateien, `0a297803` 1 Datei — außerhalb `docs/` zusammen **0**; Muster `resources/`, `app/`, `routes/`, `database/` → 0 |
+| **W-16-1-8** zwei Wächter benannt + Lauf | **grün** | `6-PRUEFUNG:7-8` nennt beide mit 51 Z/7 Zusagen und 91 Z/11 — **selbst nachgezählt, beides stimmt**. Lauf selbst gefahren: `tests 18 · pass 18 · fail 0` |
+| **Wächter** Insel-Suite | **grün** | selbst gefahren: `tests 1750 · pass 1750 · fail 0 · skipped 0` |
+| **Wächter** `tsc:hausplaner` | **grün** | selbst gefahren, keine Ausgabe |
+| **Browser** | **nicht gefahren** | *keine sichtbare Wirkung: beide Bau-Commits fassen ausschließlich `docs/` an* |
+| **§15 Datenbank** | **nicht berührt** | *kein schreibender Lauf, keine DB-Verbindung; `tests/Feature/PlanUploadTest.php` bewusst nicht gefahren (s. u.)* |
+
+### Zwei Zusagen, die besser tragen als verlangt — beide selbst nachgerechnet
+
+**1. Die Lücken-Meldung hält auch gegen ein fünftes Muster.** *Der Bericht nennt vier Muster mit
+null Treffern. Ich habe ein fünftes gefahren — und es hatte einen Treffer:*
+
+```text
+$ grep -ic … FORMELSAMMLUNG.md
+  massstab 0 · kalibrier 0 · verhaeltnis 0 · verhältnis 0 · skalier 1
+$ grep -in 'skalier' FORMELSAMMLUNG.md
+  258:  Skalieren    S(sx,sy,sz)
+```
+
+> *Geöffnet: Zeile 258 gehört zu **F-032 selbst** — die Skalierungsmatrix der Transformation, nicht
+> die Verhältnisrechnung des Maßstabs.* **Die gemeldete Lücke bleibt eine Lücke, und sie ist jetzt
+> gegen fünf Muster geprüft statt gegen vier.**
+
+**2. Die Fast-Null-Grenze stimmt auf die Nachkommastelle.** *Nicht nachgelesen, sondern das echte
+Modul geladen und gerechnet:*
+
+```text
+Abstand 0,3 mm  ->  3333.3333333333335      (Blatt: 3333,33)
+Abstand 0,5 mm  ->  2000                    (Blatt: 2000,00)
+Abstand 0   mm  ->  null                    (Blatt: null)
+```
+
+> ***Das ist die Sorte Fund, die ein Ablese-Blatt wertvoll macht:*** *keine Beanstandung — F-001s ε
+> gilt für Wandanlagen —, aber die Stelle, an der fachliche und rechnerische Schwelle auseinander-
+> gehen, steht jetzt geschrieben statt unbemerkt.*
+
+**Der gemeldete dritte Wächter existiert:** `tests/Feature/PlanUploadTest.php`, **255 Zeilen, 12
+Zusagen** — selbst gezählt. *Ich habe ihn **nicht** gefahren, aus demselben Grund wie der Generator:
+kein Kriterium verlangt ihn, und ein PHP-Feature-Lauf leert `ticket_testing`, worin andere Instanzen
+arbeiten könnten. Ich übernehme die Begründung nicht ungeprüft — ich teile sie.*
+
+### Zwei eigene Funde am Verfahren, die nicht ins Votum zählen, aber gemeldet gehören
+
+**1. `bau_sha` nennt einen von zwei Bau-Commits.** *Der Datensatz sagt `bau_sha: cff23c12`. Der Bau
+sind aber zwei: `cff23c12` (10:13, sieben Blätter) und `0a297803` (22:13, die Registerzeile). Ich
+habe den Bau nach §9 **gesucht** statt das Feld zu glauben — hätte ich das Feld genommen, wäre mein
+Prüfstand auf `cff23c12` stehengeblieben und ich hätte den Reifegrad von **W-16-1-1** als ROT
+gemeldet, obwohl er erfüllt ist.* **Ein falsch-rotes P1 auf einem tragenden Kriterium, aus einem
+Feld heraus, das wie eine Abkürzung aussieht.** *Der Release-Prüfer greift nach demselben Feld.*
+
+**2. Meine eigene Zeile ist mir aus der Hand genommen worden — Beifang in der anderen Richtung.**
+*Ich hatte im Claim geschrieben, ich committe nicht, solange die fremde Übergabe uncommittet im Baum
+liegt. Gemessen: `git log -S` findet meinen `claim_abnahme` in `bc2125d9` — dem Übergabe-Commit des
+Generators, 22:15, derselbe Moment, in dem ich schrieb.*
+
+> **Warten schützt den anderen vor mir, aber es schützt meine Zeile nicht vor ihm.** *Im gemeinsamen
+> Baum sind beide Beifang-Richtungen gleichzeitig offen, und „ich committe später" ist gegen
+> Richtung B kein Schutz, sondern das Gegenteil: je länger meine Zeile ungebunden liegt, desto
+> größer das Fenster, in dem ein fremdes `git add` sie einsammelt.* **Nichts zurückgedreht — ein
+> committeter Block gehört dem Bestand.** *Die Lehre für mich: eine Zeile, die ich schreibe und noch
+> nicht binden kann, ist keine Notiz im Baum, sondern ein offener Posten — entweder binde ich sie
+> sofort, oder ich schreibe sie noch nicht.*
+
+### Weitergabe
+
+**Ball an den Generator** (§12.1, CODE-Befund). *Nach der Nachbesserung fährt die Wiederabnahme
+**alle acht** Kriterien erneut (§12.3), nicht nur W-16-1-2.*
