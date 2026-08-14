@@ -16809,7 +16809,7 @@ was_p02_von_mir_verlangt: |
 was_ich_an_mir_aendere: |
   Die Ballortung liest ab sofort DREI Orte: die yaml-Felder, die Tafelzeilen, und die
   Dokumente ausserhalb docs/auftraege/aktiv/. Der Befehl dafuer steht oben.
-ballbesitz: plan-pruefer
+ballbesitz: "— # ERLEDIGT 14.08. 09:45: der naechste Schritt war die P-02-Pruefung, abgelegt 09:28 und berichtigt 09:31"
 naechster_schritt: |
   P-02 vollstaendig pruefen — Widerspruchsfreiheit, Pruefbarkeit, Kausalitaet, Plausibilitaet
   und die Machtfrage, je Punkt und mit Belegzeile. Das ist eine ganze Runde und ich nehme sie
@@ -17066,4 +17066,214 @@ ballbesitz: yama
 zusatz_planner: |
   Zur Kenntnis an den Planner, weil die Durchfuehrung bisher bei ihm lag (02: ausgeloest_von
   planner; 03: durchfuehrung planner nach P-02-Praezedenz).
+```
+
+```yaml
+auftrag: "neun_dokumente_ohne_datensatz"
+titel: "Die ganze Flaeche gemessen statt der naechsten Einzelstelle — es sind NEUN, nicht vier"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:42"
+stand_kopf: c5c6ac57
+warum_flaechig_statt_einzeln: |
+  In zwei Stunden habe ich vier Blindstellen meiner Wache gefunden, jede beim Stolpern ueber
+  einen Einzelfall. Statt auf die fuenfte zu warten, habe ich die FLAECHE gemessen: jeden
+  Ball bei mir, in jeder Schreibweise, im ganzen docs/-Baum.
+zuerst_die_entwarnung_die_wichtig_ist: |
+  Die Suche liefert 80+ Treffer in docs/auftraege/aktiv/ — fast jedes Blatt traegt
+  ballbesitz: "plan-pruefer (DoR)". Das sind KEINE offenen Baelle: es ist die
+  Rollenzuweisung im Blattkopf, sie steht auch in laengst abgeschlossenen Blaettern
+  (A-12, A-18, W-37). Ob so ein Auftrag offen ist, sagt sein DATENSATZ in docs/STATUS.md.
+  Meine Ballortung liest deshalb zu Recht den Datensatz und nicht den Blattkopf.
+und_jetzt_die_luecke_praezise: |
+  Sie betrifft ausschliesslich Dokumente in der WURZEL von docs/ — die haben naemlich
+  keinen Datensatz, also ist ihr Kopffeld die einzige Ballfuehrung. Gemessen: NEUN Stueck.
+    BEFUND-P02-DER-ERSTE-GEMESSENE-WETTLAUF.md
+    FAHRPLAN-KLASSE-A.md
+    MELDUNG-INDEX-ANGLEICHUNG-2026-08-06.md
+    PROZESSPRUEFUNG-02-ANTEIL-PLANNER.md
+    PROZESSPRUEFUNG-03.md
+    PRUEFAUFTRAG-P-01-regelwerk.md
+    PRUEFAUFTRAG-P-02-parallele-instanzen.md
+    VORLAGE-WERKZEUG-ODER-SCHICHT.md
+    WERKBANK-ANSCHLUSS.md
+  Gegengeprueft, dass keines einen Auftragsblock hat: grep '^auftrag: "P-01' / "P-02" /
+  "FAHRPLAN" / "WERKBANK-ANSCHLUSS" / "PROZESSPRUEFUNG" liefert je NULL. Eine Tafelzeile
+  gibt es fuer genau eines: P-02. P-01 hat nicht einmal die.
+meine_eigene_zahl_von_0915_war_falsch: |
+  Um 09:15 habe ich VIER gemeldet. Das Muster war '^ballbesitz: plan-pruefer' — es trifft
+  nur die UNZITIERTE Form. Fuenf weitere schreiben zitiert, etwa
+  ballbesitz: "plan-pruefer (Klassifizierung), Yama (…)". Die fielen durch.
+  Das ist dieselbe Klasse wie meine anderen Fehlgriffe heute: das Muster entscheidet ueber
+  das Ergebnis, und ein zu enges Muster liefert eine plausible, falsche Zahl. Ich habe sie
+  drei Runden lang weitergetragen.
+was_ich_NICHT_behaupte: |
+  Nicht alle neun sind offen. Drei tragen einen Erledigt-Vermerk, P-01 ist nachweislich
+  geschlossen (STATUS.md:647 und :1010), P-02 habe ich heute geprueft und an Yama gegeben.
+  Ungeprueft sind damit: FAHRPLAN-KLASSE-A, MELDUNG-INDEX-ANGLEICHUNG, VORLAGE-WERKZEUG-
+  ODER-SCHICHT, WERKBANK-ANSCHLUSS und PROZESSPRUEFUNG-03 (dort steht mein Ball
+  ausdruecklich als "Gegenlese").
+  VORLAGE-WERKZEUG-ODER-SCHICHT ist der schaerfste Fall: sie kommt in docs/STATUS.md
+  ueberhaupt nicht vor — die Statuswahrheit kennt sie nicht, und ihr Ball liegt bei mir.
+was_die_wache_ab_jetzt_misst: |
+  Vier Orte statt drei: yaml-Felder in STATUS.md, Tafelzeilen, Blaetter in aktiv/ (nur zur
+  Zuordnung, nicht als Ball), und die Dokumente in der WURZEL von docs/ mit dem WEITEN
+  Muster '^ball[a-z_]*:.*plan-pruefer'.
+ballbesitz: plan-pruefer
+naechste_schritte: |
+  Die fuenf ungeprueften der Reihe nach durchgehen, je eine Runde, beginnend mit dem, das
+  die Statuswahrheit gar nicht kennt. Kein neuer Ball fuer andere — das ist meine Bahn.
+```
+
+```yaml
+auftrag: "werkzeug_oder_schicht_klassifizierung_gemessen"
+titel: "Der erste der fuenf ungeprueften Vorgaenge: alle VIER Kandidaten sind Schichten, der vierte von mir gemessen"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:45"
+stand_kopf: e6c4f7a2
+gegenstand: "docs/VORLAGE-WERKZEUG-ODER-SCHICHT.md — 124 Zeilen, zuletzt 10.08., ballbesitz: plan-pruefer (Klassifizierung), Yama (zweite Kategorie)"
+warum_dieser_zuerst: |
+  Von den neun Wurzel-Dokumenten mit Ball bei mir ist dieses der schaerfste Fall: es kommt in
+  docs/STATUS.md UEBERHAUPT NICHT vor. Die Statuswahrheit kennt es nicht, und es sagt von sich
+  selbst, dass es etwas BLOCKIERT.
+die_blockade_ist_echt_und_aktuell: |
+  Die Vorlage schreibt: "Entscheidung noetig, bevor W-01 Stufe 2 schneidbar ist" und
+  "blockiert: W-01 Stufe 2 — der Reifegrad GEBAUT ist fuer diesen Fall nicht definiert".
+  Gemessen:
+    W-01/1  zustand BETRIEBSBESTAETIGT   -> Stufe 1 ist fertig und bestaetigt
+    W-01/2  als Datensatz: 0             -> Stufe 2 existiert nicht
+    W-01-Blatt fuer Stufe 2 in aktiv/: 0
+  Die Blockade besteht seit dem 10.08. und hat gehalten: Stufe 2 ist nie geschnitten worden.
+meine_klassifizierung_am_code: |
+  Der Ball bei mir heisst "Klassifizierung". Testbar ist sie an genau einer Frage: gibt es
+  einen toolRegistry-Eintrag? Gemessen, Muster an einem bekannten Treffer verifiziert
+  (id: 'kontur' -> 1, Zeile 230):
+    id 'fang'       0        W-01 Raster und Fang    -> SCHICHT
+    id 'raster'     0
+    id 'ansicht'    0        W-12 Ansicht und Kamera -> SCHICHT
+    id 'kamera'     0
+    id 'topologie'  0        W-18 Pruefung Topologie -> SCHICHT
+  Drei von vier bestaetigt. Die Vorlage hatte sie schon so eingeordnet; meine Messung ist die
+  unabhaengige Gegenprobe, nicht die Erstbehauptung.
+die_vierte_frage_war_offen_und_ist_jetzt_gemessen: |
+  Die Vorlage laesst W-05 ausdruecklich offen: "roomDetection laeuft automatisch aus Waenden;
+  klickt der Nutzer 'Raum erkennen' oder entsteht der Raum von selbst? -> das muss gemessen
+  werden, nicht geraten."
+  GEMESSEN:
+    toolRegistry, id 'raum...'                          0 Treffer
+    app/ableitungen.ts:61  export function raeumeAus(waende, level)
+    HausplanerApp.tsx:569  const raeume = useMemo(() => raeumeAus(waende, level), ...)
+  Ein useMemo ist eine ABLEITUNG, kein Knopf-Handler. Die Raeume werden neu berechnet, sobald
+  sich die Waende aendern; der Nutzer loest nichts aus. Und die Datei heisst ableitungen.ts.
+  ERGEBNIS: W-05 "Raum erkennen" ist ebenfalls eine SCHICHT. Alle VIER Kandidaten sind es.
+was_damit_bei_mir_erledigt_ist_und_was_nicht: |
+  ERLEDIGT ist mein Teil: die Klassifizierung ist gemessen, vier von vier.
+  NICHT erledigt und ausdruecklich nicht meins: ob die Werkbank eine ZWEITE KATEGORIE
+  bekommt. Das ist die zweite Haelfte des Ballfelds und steht dort woertlich bei Yama.
+  Solange sie fehlt, bleibt W-01 Stufe 2 blockiert — und mit ihr die Frage, was der
+  Reifegrad GEBAUT fuer eine Schicht ueberhaupt heissen soll.
+nebenbei_geschlossen: |
+  Mein eigener Ball p02_lag_eine_woche_unsichtbar_in_meiner_bahn: sein naechster Schritt war
+  die P-02-Pruefung, abgelegt 09:28 und berichtigt 09:31. Geschlossen mit Beleg, damit ich
+  keine Karteileiche der Art erzeuge, die ich um 09:33 selbst beanstandet habe.
+ballbesitz: yama
+bitte: |
+  Eine Entscheidung: bekommt die Werkbank eine zweite Kategorie fuer Schichten, oder bleiben
+  die vier als "Werkzeuge" mit einer Sonderregel fuer ihren Reifegrad? Vier von vier sind
+  gemessen; es fehlt nur noch das Wort. Danach ist W-01 Stufe 2 schneidbar.
+```
+
+```yaml
+auftrag: "gegenlese_pruefung_03"
+titel: "Gegenlese zu §13-Pruefung 03 — E1 ist in Kraft, E3 nicht gebaut, und die geprüfte Klasse hat heute Nacht SECHS neue Faelle, alle von mir"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:48"
+stand_kopf: f9057e9a
+gegenstand: "docs/PROZESSPRUEFUNG-03.md, 168 Zeilen, ballbesitz: yama (Entscheidung), plan-pruefer (Gegenlese) — zweiter der fuenf ungeprueften Wurzel-Vorgaenge"
+was_ich_gemessen_habe_statt_zugestimmt: |
+  E1 "Aussagen ueber den Bau werden am COMMIT gemessen, nicht am Arbeitsbaum":
+    IST IN KRAFT. docs/ARBEITSREGELN.md:504 fuehrt es als eigenen Abschnitt. Die Empfehlung
+    der Pruefung ist also uebernommen worden, und ich fahre sie taeglich — bei W-12/1 heute
+    frueh habe ich genau so gemessen (Scope-Diff am Commit, nicht im Baum).
+  E3 "Unterformen-Spalte im Auftragszaehler":
+    NICHT GEBAUT. docs/AUFTRAGSZAEHLER.md hat 154 Zeilen und NULL Treffer auf 'Unterform'.
+  E2 "das §3-Kriterium zaehlbar machen, sechs W-Blaetter":
+    NICHT BEANTWORTET. Mein erster Versuch zaehlte 'IN_ARBEIT'-Vorkommen je Blatt (W-05: 0,
+    W-21: 1, W-22: 4). Das ist ein STELLVERTRETER fuer E2s Frage nach Befehlszeilen UND
+    Ausgabewerten je Ort — also genau die Klasse, die diese Pruefung behandelt. Ich gebe die
+    Zahl nicht als Antwort aus.
+und_hier_ist_die_substanz_die_ich_beitrage: |
+  Die Pruefung nennt die vierte Klasse "Stellvertreter statt Quelle" mit vier Unterformen:
+  Wegwerf-Repo statt Repo (Ort), $TMPDIR statt Unterordner (Ort), Tracking-Ref statt Remote
+  (Zeitpunkt), Arbeitsbaum statt Commit (Zustand).
+  IN DEN LETZTEN DREI STUNDEN habe ich SECHS neue Faelle derselben Klasse produziert und je
+  einzeln offengelegt:
+    1  Zeitstempel      Gedaechtnis statt Uhr        13 Bloecke, Datum sieben Tage falsch,
+                                                     Versatz bis 65 Minuten
+    2  Ballzaehlung     enges Muster statt Feldform  4 gemeldet, tatsaechlich 9
+    3  Abschnitte       Etikett statt Ding           zwei Ueberschriften ohne Kennung fielen
+                                                     auf einen Wert zusammen (A-36-3)
+    4  Blattpfade       eine Feldform statt beider   'blatt:' gelesen, 'datei:' nicht ->
+                                                     drei Blaetter als "nicht lesbar"
+    5  Bundle           Erwaehnung statt Bauschritt  grep -c auf package.json lieferte 7
+    6  E3 soeben        Exit-Kette statt Ergebnis    meine &&-Kette meldete "Datei fehlt",
+                                                     waehrend sie 154 Zeilen hat
+  ALLE SECHS SIND MEINE. Die Pruefung sagt, ihre Substanz komme von den anderen drei Rollen —
+  fuer diese Gegenlese gilt das Gegenteil: die neuen Faelle kommen ausschliesslich von mir.
+was_das_fuer_die_vorgelegten_entscheidungen_heisst: |
+  E1 braucht keine Entscheidung mehr, es steht im Regelwerk.
+  E3 haelt meine sechs Faelle ohne Aenderung aus: Ort, Zeitpunkt und Zustand decken sie ab
+  (1 = Zeitpunkt, 2/3/4/5 = Ort im weiteren Sinn "falsche Quelle", 6 = Zustand). Eine SIEBTE
+  Unterform braucht es nicht — was es braeuchte, waere die Zaehlung selbst, und die ist
+  Befund 0 der Pruefung 02 und weiter ungebaut.
+  E2 kann ich nicht beurteilen, ohne die sechs Blaetter einzeln gegen ihren Wortlaut zu
+  messen. Das ist eine eigene Runde und ich sage es, statt zu nicken.
+zur_ehrlichkeit_der_pruefung: |
+  Sie benennt ihren eigenen Interessenkonflikt: geschrieben von der Rolle, die die meisten
+  Faelle der geprueften Klasse produziert hat. Das ist richtig benannt — und nach dieser
+  Nacht gilt es fuer mich genauso. Wer die Klasse prueft, gehoert selbst hinein.
+ballbesitz: yama
+bitte: |
+  Meine Gegenlese ist geliefert: E1 in Kraft (belegt), E3 nicht gebaut (belegt), E2 offen und
+  als offen gekennzeichnet. Die Entscheidung ueber E2 und E3 liegt bei dir; ich empfehle
+  beide, E3 ohne die siebte Unterform.
+```
+
+```yaml
+auftrag: "kenntnisnahme_index_angleichung"
+titel: "Dritter der fuenf: die Antwort auf meinen eigenen Befund vom 06.08. — Kreis geschlossen, Rueckweg lebt"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:50"
+stand_kopf: 31eeea31
+gegenstand: "docs/MELDUNG-INDEX-ANGLEICHUNG-2026-08-06.md, 184 Zeilen, zuletzt 07.08.; Ballfeld: planner (diese Meldung), danach plan-pruefer (Kenntnisnahme)"
+warum_der_hier_besonders_ist: |
+  Es ist die Antwort auf MEINEN Befund. Ich hatte am 06.08. in fb7921bd eine ungemeldete
+  Index-Angleichung an ihren Spuren entdeckt (Phantome 17->0, Divergenz 60->2). Der Planner
+  hat sie am 07.08. nachgereicht — und die Kenntnisnahme, die daraufhin bei MIR lag, habe ich
+  eine Woche lang nicht geleistet, weil das Dokument in der Wurzel von docs/ liegt.
+was_ich_gemessen_habe: |
+  1. DER RUECKWEG LEBT. Die Meldung nennt refs/rueckweg/index-vor-reset-20260806 -> 80948f8d.
+     Heute gemessen: der Ref existiert und zeigt auf 80948f8d. Eine Woche spaeter, unberuehrt.
+     Das ist der Unterschied zwischen einem zugesagten und einem vorhandenen Rueckweg.
+  2. BEIDE SHAs EXISTIEREN: fb7921bd (mein Befund) und c512f931 (die Abhilfe).
+  3. UND DIE DAUERHAFTE ABHILFE IST GEBAUT — das ist der Teil, den ich uebersehen habe:
+     scripts/commit-pruefen.sh:725 gibt aus
+       "INDEX ANGEGLICHEN  Standard-Index an HEAD angeglichen (kein Index-Blob ausserhalb
+        der Historie); der Arbeitsbaum ist unberuehrt"
+     Eingebracht von c512f931 (A-07, "Tor initialisiert und raeumt seinen Wegwerf-Index").
+     Aus einem einmaligen Vorfall ist also eine stehende Meldung geworden.
+die_pointe_gegen_mich: |
+  Diese Zeile steht unter JEDEM meiner Commits heute Nacht — mehr als dreissig Mal habe ich
+  sie gelesen und nie mit meinem eigenen Befund von vor einer Woche verbunden. Ich habe die
+  Wirkung meiner Meldung taeglich vor Augen gehabt und nicht erkannt, dass sie die Antwort
+  darauf ist. Kein Messfehler; ein Lesefehler.
+urteil: |
+  Der Vorgang ist SACHLICH ERLEDIGT und war es seit c512f931: die Meldelücke ist durch eine
+  stehende Ausgabe geschlossen, der Rueckweg ist vorhanden und geprueft. Formal offen war nur
+  meine Kenntnisnahme — hiermit erteilt.
+  Damit sind von den neun Wurzel-Dokumenten drei abgearbeitet (P-02 geprueft, Werkzeug-oder-
+  Schicht klassifiziert, diese Meldung zur Kenntnis genommen), zwei nachweislich geschlossen
+  (P-01, PROZESSPRUEFUNG-03 gegengelesen), und ZWEI stehen aus: FAHRPLAN-KLASSE-A und
+  PROZESSPRUEFUNG-02-ANTEIL-PLANNER. Dazu BEFUND-P02-WETTLAUF, den ich um 09:31 inhaltlich
+  verwertet habe — sein Ballfeld ist noch nicht nachgezogen.
+ballbesitz: "— (Kenntnisnahme erteilt, kein offener Vorgang)"
 ```
