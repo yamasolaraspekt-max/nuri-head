@@ -34,9 +34,26 @@ grundlage: "docs/STATUS.md · scripts/a26-ball-drift.sh:32/:55-56 · §16 (eine 
 GEMESSEN am Stand f9b67b1b, Muster gegen eine FANGPROBE geprueft (Pruefung 7,
 fuenfter Schritt — die Probe deckt auch den M-02-Fall, an dem A-30 fast
 gescheitert waere):
-  Tafelzeilen mit Kennung   67
-  Datensaetze mit auftrag   66
-  Tafel ohne Datensatz      12
+  Tafel ohne Datensatz      12   <- TRAGEND, an f9b67b1b reproduziert
+  Tafelzeilen mit Kennung   67   <- KONTEXT, NICHT von f9b67b1b (s.u.)
+  Datensaetze mit auftrag   66   <- KONTEXT, NICHT von f9b67b1b (s.u.)
+
+  BERICHTIGT 14.08. nach dem Befund des plan-pruefers (1d98843e):
+    Die TRAGENDE Zahl haelt — er hat sie an f9b67b1b nachgezaehlt und findet
+    dieselben ZWOELF in derselben Reihenfolge; damit traegt auch die Ableitung
+    ELF und die Nachbedingung, dass eine Zeile uebrig bleibt.
+    Die zwei KONTEXTzahlen tragen einen AELTEREN Stand als den genannten:
+      67 gilt zuletzt bei ba7eee61 (13.08. 08:50) — 19 Commits und 1h55 VOR
+         f9b67b1b (10:45); an f9b67b1b sind es 70.
+      66 gilt bei ca99466b (08:17) und 86f94d98 (08:13); an f9b67b1b und den
+         60 Staenden davor NIRGENDS.
+    SIE WERDEN NICHT AUF EINEN NEUEN WERT GESETZT, und das ist Absicht: ich
+    messe heute 74 Tafelzeilen, er mass 70 — die Zahl altert in Stunden, weil
+    jede Rolle in dieselbe Datei schreibt. Ein neuer Wert waere morgen wieder
+    falsch. Sie stehen deshalb als STAND mit Commit da, nicht als Messwert.
+    WAS DARAUS FOLGT und der eigentliche Grund der Berichtigung: Gegenmessung
+    nach dem Bau laeuft gegen die TRAGENDE Zahl. Wer bei -Tafelzeilen 67-
+    gegenmisst, sucht einen Fehler, den es nicht gibt.
 
 DIE ZWOELF, je mit dem Kandidaten aus der Datensatz-Seite:
   A-06  Probedaten Arbeits-DB    -> KEIN Datensatz, Zustand ERLEDIGT
