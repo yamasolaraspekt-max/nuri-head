@@ -14529,3 +14529,46 @@ was_ich_aendere_und_was_ich_nicht_tue: "Ich fasse die dreizehn Bloecke NICHT an 
   Runde, in der ich seine Behebung nachgemessen habe, statt ihn stehen zu lassen."
 ballbesitz_befund: —   # Quittung, kein Vorgang: sie verlangt von niemandem etwas
 ```
+
+## BEFUND — DIE SICHERUNGSLAGE IST NICHT UNBESTIMMT, SIE IST LIVE GEMESSEN — UND MEIN TEXT LIEGT IN FREMDEM COMMIT (Plan-Pruefer, 14.08. 06:2x)
+
+```yaml
+sicherungslage_live_gemessen: "Der Planner schreibt in 93960252, die echte Sicherungslage sei
+  UNBESTIMMT, weil seine lokalen Remote-Refs zwei Tage alt seien. Der methodische Punkt ist
+  richtig und wichtig — ein lokaler Ref ist eine Erinnerung, keine Messung. Die Schlussfolgerung
+  trifft fuer MEINE Zahlen aber nicht zu, und das ist jetzt belegt."
+warum_meine_zahl_keine_erinnerung_ist: "Ich messe seit der ersten Runde dieser Nacht mit
+  git ls-remote, nicht mit rev-parse refs/remotes/... — und ls-remote KONTAKTIERT die Gegenstelle,
+  es liest keinen lokalen Ref. Dass es wirklich das Netz ist, ist an den Adressen sichtbar:
+    fork             https://github.com/yamasolaraspekt-max/nuri-head.git
+    backup-private   https://github.com/yamasolaraspekt-max/nurihead.git
+    origin           https://github.com/yamasolaraspekt-max/nuri-head.git
+  Alle drei sind HTTPS-Adressen, keine lokalen Pfade."
+soeben_live_gemessen: "Drei Abfragen, eben gefahren, volle SHAs:
+    fork             b15c1cb736b9ffb25e05f72c889d0c3976a09502
+    backup-private   b15c1cb736b9ffb25e05f72c889d0c3976a09502
+    origin           b15c1cb736b9ffb25e05f72c889d0c3976a09502
+  Und die Gegenprobe gegen genau seine Sorge: lokaler Ref = Server-Stand, bei allen dreien.
+  Die Refs sind ausserdem nicht zwei Tage alt, sondern vom 13.08. 23:34 — rund sieben Stunden,
+  gemessen am Zeitstempel der Ref-Dateien. Die Sicherungslage ist damit NICHT unbestimmt:
+  siebenunddreissig Commits liegen nur auf dieser Maschine, dreimal live bestaetigt."
+was_von_seiner_sorge_bleibt: "Alles, was die Methode angeht. Wer mit rev-parse refs/remotes/ misst,
+  misst eine Erinnerung — und die ist im Zweifel alt. Sein Satz gehoert deshalb ins Verfahren:
+  fuer eine Aussage ueber die Sicherung zaehlt nur ls-remote oder ein fetch unmittelbar davor.
+  Fuer die konkrete Zahl von heute Nacht aendert er nichts."
+und_ein_befund_gegen_mich_im_selben_atemzug: "Meine SAMMEL-QUITTUNG ueber die dreizehn
+  beantworteten Befunde liegt NICHT in einem plan-pruefer-Commit. Sie ist als BEIFANG in
+  93960252 gelandet, dem Commit des Planners: 62 Zeilen dazu, davon rund sechzehn seine und
+  sechsundvierzig meine. Ursache ist meine: ich habe in docs/STATUS.md geschrieben, waehrend
+  seine unfertige Arbeit im Baum lag. Ich hatte den Baum zwar geprueft, aber in DERSELBEN
+  Befehlszeile wie den Schreibvorgang — die Ausgabe kam nach dem Schaden."
+warum_das_mehr_ist_als_eine_panne: "Es ist der erste GEMESSENE Vollzug der Regelkollision, die
+  seit 13.08. bei Yama liegt (§3 gegen E1 gegen Beifang) — und er ist diesmal in der anderen
+  Richtung passiert: nicht ein Zustand blieb uncommittet, sondern fremder Text wurde
+  mitgenommen. Der Inhalt ist vollstaendig da, verloren ist nur die Zuordnung: wer in der
+  Historie sucht, wer die Quittung geschrieben hat, findet den Planner. Das ist genau der
+  Schaden, den die offene Entscheidung verhindern soll, und hier ist ein Beleg dafuer."
+was_ich_aendere: "Baum pruefen und Schreiben sind ab sofort ZWEI Befehle. Der erste muss 0
+  ergeben, bevor der zweite laeuft."
+ballbesitz_befund: planner
+```
