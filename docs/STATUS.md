@@ -15878,6 +15878,47 @@ mein_beifang_offengelegt: "plan-pruefer: A-36s Tafelzeile und Datensatz sind in 
   --name-only, und selbst die naechstfeinere Stufe --numstat haette mich nicht gerettet.
   ICH RAEUME NICHT: der Inhalt ist im Bestand, verloren ist die Zuordnung. Gemeldet, nicht
   geraeumt — nach der Lehre, die ich um 08:44 selbst aufgeschrieben habe."
+dor_urteil_plan_pruefer: "plan-pruefer 14.08. 09:26 — §5-DURCHGANG VOLLSTAENDIG, DoR NICHT
+  ERTEILT. Vier Punkte fehlen, keiner davon in der Sache; drei sind je ein Satz, einer ist
+  materiell. Der Auftrag ist inhaltlich der bestbelegte, den ich in dieser Nacht geprueft habe.
+  WAS HAELT — alles selbst gemessen, nichts uebernommen:
+    Basis-SHA 80ab2d8d existiert und ist das Feld des Datensatzes.
+    Ist-Beleg am Code: vier Pfadkonstanten (a25:19, a26:24, a27:34, a30:55), commit-pruefen.sh
+      prueft nur die Argumentliste, w212:169-170 zwei Muster ueber git show, §14 auf :693
+      woertlich 'git diff --cached --name-only'.
+    KEIN KRITERIUM IST BEREITS ERFUELLT — der Punkt, an dem ich bei A-35 selbst gefehlt habe:
+      A-36-1  test -x scripts/wer-schreibt.sh  -> Datei existiert nicht        ROT
+      A-36-6  grep -c 'wer-schreibt' commit-pruefen.sh -> 0                    ROT
+      A-36-5  grep -c 'name-only' ARBEITSREGELN.md -> 2 an HEAD UND an 80ab2d8d,
+              auf :529 (Falldarstellung, bleibt) und :693 (Regel, wird geaendert)  ROT
+    Positivprobe traegt: die drei genannten Beifang-Commits ef273926, 93960252 und 5ac659bf
+      existieren alle drei. A-36-3 ist damit an echten Staenden fahrbar.
+    A-36-8 BASISZAHL SELBST GELAUFEN statt uebernommen: npm run test:hausplaner ->
+      tests 1750, pass 1750, fail 0. Die Zahl des Blatts stimmt zeichengenau.
+    Pruefbefehle auf Syntax und Aussagekraft: test -x, grep -c und cat-file selbst ausgefuehrt,
+      alle liefern das, was das Kriterium behauptet.
+    Nicht-Ziele sechs und ausdruecklich, Kanten K1-K6 mit verlangtem Verhalten, Rueckweg und
+      Entdeckung ausformuliert, jede Anforderung ist Kriterium ODER Nicht-Ziel.
+  WAS FEHLT — gemessen an der Abwesenheit im Blatt, jeweils 0 Treffer:
+    (1) FORMAL, ein Satz: Testdaten, Benutzerrolle, Route, Browserpfad. Vermutlich n.z., weil
+        weder Oberflaeche noch Serverprozess — aber §5 verlangt sie BENANNT, auch als n.z.
+    (2) FORMAL, ein Satz: Auswirkungen auf API, Server, Schema, Migration, Bestandsdaten und
+        Bundle. A-36-8 deckt Suite und tsc, das Uebrige steht nirgends.
+    (3) MATERIELL: der BENANNTE ERSTNUTZER. §5 verlangt fuer ein NEU ZU BAUENDES Werkzeug
+        ausdruecklich, welche Rolle es ab wann in welchem Ablauf benutzt. Ueber
+        commit-pruefen.sh ist es impliziert, benannt ist es nicht — und genau dieser Punkt
+        ist die Stelle, an der A-04-6 haengengeblieben ist.
+    (4) FORMAL: die vollstaendige Abhaengigkeitskette. Der Auftrag ist additiv, aber das
+        steht als Folgerung im Nicht-Ziel und nicht als Kette.
+  ZUM ZUSTAND: der Planner hat ihn in 891a2650 auf ENTWURF berichtigt — richtig, §5 schreibt
+  fuer den Schnitt ausdruecklich ENTWURF und dor_beleg 'steht aus' vor. Nachgemessen: der
+  Datensatz traegt jetzt ENTWURF mit Berichtigungsvermerk. Sein Commit hat das BLATT nicht
+  angefasst, die vier Luecken stehen also unveraendert.
+  MEIN EIGENER FEHLGRIFF, nicht als Ergebnis ausgegeben: mein Zaehler fuer 'tsc' meldete elf
+  Treffer im Blatt. Artefakt — 'tsc' steckt in 'entschieden'. Der Wert ist 1. Berichtigt statt
+  gemeldet.
+  BALL BLEIBT BEI MIR. Sobald die vier Punkte im Blatt stehen, erteile ich die DoR ohne weitere
+  Runde — die Sache selbst ist geprueft und traegt."
 ```
 
 ```yaml
