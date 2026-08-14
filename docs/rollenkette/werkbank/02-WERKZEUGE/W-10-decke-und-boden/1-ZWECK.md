@@ -9,7 +9,8 @@ OBERFLAECHE   GEBAUT   toolRegistry.ts:132  id 'decke'  — einer von ZWOELF
 SCHEMA        GEBAUT   scene.types.ts:348 CeilingNode · :338 CeilingOeffnung
 BEFEHLE       GEBAUT   applyCommand.ts:288 ADD · :305 UPDATE · :320 REMOVE
 RECHNUNG      GEBAUT   applyCommand.ts:119 treppenDurchbrueche, aufgerufen :298
-DARSTELLUNG   GEBAUT   deckenMesh.ts  35 Z., DREI Ausfuhren
+DARSTELLUNG   GEBAUT   szene.ts:482-483 zeichnet die Decke
+              (deckenMesh.ts: 35 Z., DREI Ausfuhren, KEIN Verbraucher)
 AUFRUF        GEBAUT   HausplanerApp.tsx:1027
 PROBEDATEN    GEBAUT   studioFixtures.ts:63 deckeTreppe()
 WAECHTER      GEBAUT   __tests__/decke.test.ts  242 Z., DREIZEHN Zusagen, alle gruen
@@ -34,7 +35,7 @@ Treppenloch von Hand aussparen.*
 > |---|---|
 > | **„aus dem Grundriss"** | `HausplanerApp.tsx:1031` — `polygon: ausKontur ? letzteKontur : gebaeudeUmriss()` |
 > | **„Treppen werden ausgespart"** | `applyCommand.ts:119` `treppenDurchbrueche`, aufgerufen auf `:298` |
-> | **„Etagen-Basis"** | `deckenMesh.ts:32` `naechsteEtageElevationMm` |
+> | **„Etagen-Basis"** | **von Hand in `Kopfrahmen.tsx:172`** — *`deckenMesh.ts:32` kapselt dieselbe Rechnung und wird nicht gerufen, s. `5-CODE`* |
 
 ## Der tragende Punkt: die Aussparung ist AUTOMATISCH, aber nicht bedingungslos
 

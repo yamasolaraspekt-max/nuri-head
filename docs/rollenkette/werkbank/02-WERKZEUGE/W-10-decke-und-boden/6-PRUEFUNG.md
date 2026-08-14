@@ -83,7 +83,7 @@ ZUSAGE        decke.test.ts:62      „Treppe im Level ⇒ automatische Öffnung
 | **die Ganzzahligkeits-REIHENFOLGE** (`:300` nach `:298`) | wer die zwei Zeilen tauscht, prüft die Eingabe statt des Ergebnisses — `:57` bleibt grün, weil die Testdicke schon vor der Automatik krumm ist |
 | **`pruefeDeckeProLevel` in `UPDATE_CEILING`** (`:315`) | `:50` prüft nur den ADD-Weg; eine zweite Decke per Level-Umhängung fängt niemand |
 | **der Ersatzwert 1 bei Länge null** (`:127`) | eine Treppe mit `start === end` ist von keiner Zusage berührt |
-| **`deckenOberkanteMm`** (`deckenMesh.ts:10`) | die einzige der drei Ausfuhren ohne eigene Zusage |
+| **`deckenOberkanteMm`** (`deckenMesh.ts:10`) | ohne eigene Zusage — und **ohne jeden Verweis im ganzen Repo** (R1) |
 
 > ***Die erste Zeile ist die wichtigste.*** *Die Reihenfolge auf `:298`–`:300` ist eine echte
 > Zusage an Aufrufer (siehe `2-FUNKTION`), und sie ist durch keinen Wächter gesichert.* **Ein Test

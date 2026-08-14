@@ -24,7 +24,8 @@
                 :300  pruefeDeckeGanzzahlig(GESPEICHERT)
                 :301  push
 
-4  DARSTELLUNG  deckenMesh.ts  reine Kennwerte, kein three/WebGL (Dateikopf :1-5)
+4  DARSTELLUNG  szene.ts:482-483  Shape-mit-Loechern auf der Oberkante
+                deckenMesh.ts  reine Kennwerte — und niemand ruft sie ab (5-CODE)
 ```
 
 > ***Die Reihenfolge auf `:298` bis `:300` ist der tragende Punkt dieses Werkzeugs.*** *Erst werden
@@ -76,14 +77,23 @@ applyCommand.ts:119  function treppenDurchbrueche(draft, levelId): CeilingOeffnu
 :320 REMOVE_CEILING   :324 vorher = laenge  ->  :325 filter auf id
 ```
 
-## Etagen-Stapel: eine Ableitung, kein zweiter Rechenweg
+## Etagen-Stapel: die Ableitung will die eine Wahrheit sein — gerufen wird sie nicht
 
 ```text
 deckenMesh.ts:32  naechsteEtageElevationMm(level, decke)
              :33  deckeDickeMm = decke ? decke.dickeMm : level.floorThickness
              :34  Math.round(elevation + defaultWallHeight + deckeDickeMm)
+
+GERECHNET WIRD ABER HIER:
+Kopfrahmen.tsx:172  oben.elevation + oben.defaultWallHeight + oben.floorThickness
 ```
 
-> **Der Dateikopf sagt den Grund** (`:4`): *„die EINE Etagen-Stapel-Ableitung (eine Wahrheit, kein
-> zweiter Rechenweg)".* **Und der Rückfall ist benannt statt geraten** (`:29-30`): *fehlt die Decke,
-> gilt `level.floorThickness` — „dokumentierter Rückfall, kein Rateswert der Höhe selbst".*
+> **Der Dateikopf sagt den Anspruch** (`:4`): *„die EINE Etagen-Stapel-Ableitung (eine Wahrheit,
+> kein zweiter Rechenweg)".* **Gemessen ist der zweite Rechenweg der einzige, der läuft** —
+> *`naechsteEtageElevationMm` hat keinen Produktivaufrufer (`5-CODE`), gestapelt wird von Hand beim
+> Anlegen des Geschosses.*
+>
+> **Berichtigt mit W-10/1 R1.** *Hier stand „eine Ableitung, kein zweiter Rechenweg" — das war der
+> Dateikopf, nicht die Messung.* **Und der Rückfall ist trotzdem benannt statt geraten** (`:29-30`):
+> *fehlt die Decke, gilt `level.floorThickness` — „dokumentierter Rückfall, kein Rateswert der Höhe
+> selbst".* *Der einzige Unterschied zur Handrechnung: `Math.round` und der Decken-Vorrang.*

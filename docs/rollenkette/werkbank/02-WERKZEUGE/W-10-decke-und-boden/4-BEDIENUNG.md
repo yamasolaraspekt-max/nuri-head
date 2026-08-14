@@ -37,7 +37,7 @@ toolRegistry.ts:132   id 'decke'
 | Umriss festlegen | **wahlweise**: Kontur zeichnen **oder** nichts tun |
 | Treppenloch aussparen | **das Werkzeug**, ohne Zutun |
 | Dicke wählen | **das Werkzeug**: `level.floorThickness` (`HausplanerApp.tsx:1031`) |
-| nächste Etage höhenrichtig stapeln | **das Werkzeug**: `naechsteEtageElevationMm` |
+| nächste Etage höhenrichtig stapeln | **NICHT dieses Werkzeug** — `Kopfrahmen.tsx:172` rechnet es beim Anlegen des Geschosses selbst (s. `5-CODE`) |
 
 **Der Umriss-Fall ist ausdrücklich gewollt** — *der Kommentar auf `HausplanerApp.tsx:1018-1021` sagt
 warum:*

@@ -13,7 +13,8 @@
 | **Befehlstypen** | `domain/commands.types.ts` | `:29` `ADD_CEILING` |
 | **Befehle** | `commands/applyCommand.ts` | `:288` ADD · `:305` UPDATE · `:320` REMOVE |
 | **Rechnung** | `commands/applyCommand.ts` | `:119` `treppenDurchbrueche`, aufgerufen `:298` |
-| **Darstellung** | `renderers/three-d/deckenMesh.ts` | 35 Z., **DREI** Ausfuhren |
+| **Darstellung** | `renderers/three-d/szene.ts` | `:482-483` — Oberkante selbst gerechnet, `bodenPunkteThree(decke.polygon, …)` |
+| **Kennwerte, unbenutzt** | `renderers/three-d/deckenMesh.ts` | 35 Z., **DREI** Ausfuhren, **kein Produktivverbraucher** — s. u. |
 | **Aufruf** | `app/HausplanerApp.tsx` | `:1026-1035` |
 | **Probedaten** | `fixtures/studioFixtures.ts` | `:63` `deckeTreppe()` |
 | **Wächter** | `__tests__/decke.test.ts` | 242 Z., **DREIZEHN** Zusagen |
@@ -30,6 +31,43 @@
 > three/WebGL). Der three-Aufsatz (`szene.ts`) baut aus dem Decken-Polygon minus `oeffnungen` eine
 > Shape-mit-Löchern".* **Die Datei liegt unter `renderers/three-d/` und enthält kein `three`** —
 > *dieselbe Trennung wie bei `kontur.ts` (W-18).*
+
+### Und KEINE dieser drei Ausfuhren hat einen Produktivverbraucher
+
+**Berichtigt mit W-10/1, Nachbesserung R1 — über die FUNKTIONSNAMEN gemessen, nicht über den
+Modulnamen:**
+
+```text
+Importe von 'deckenMesh' im GANZEN Repo:   GENAU EINER
+  __tests__/decke.test.ts:9   { deckenNettoFlaecheM2, naechsteEtageElevationMm }
+
+naechsteEtageElevationMm   Produktivaufrufer  0   (nur decke.test.ts:90 und :92)
+deckenNettoFlaecheM2       Produktivaufrufer  0   (nur decke.test.ts:69/:72/:73/:75)
+deckenOberkanteMm          Verweise UEBERHAUPT 0  — nicht einmal im Test
+```
+
+**Gerechnet wird stattdessen von Hand, an drei Stellen selbst geöffnet:**
+
+```text
+Kopfrahmen.tsx:172   oben.elevation + oben.defaultWallHeight + oben.floorThickness
+                     ^^^ das ist naechsteEtageElevationMm, beim Anlegen eines Geschosses
+szene.ts:455         level.elevation + level.defaultWallHeight     (dekorative Raum-Decke)
+szene.ts:482         level.elevation + level.defaultWallHeight     (die MODELLIERTE Decke)
+                     ^^^ das ist deckenOberkanteMm
+szene.ts:483         bodenPunkteThree(decke.polygon, oberkante)    <- hier wird gezeichnet
+```
+
+> ***Der Dateikopf sagt „reine Kennwerte" — und niemand ruft sie ab.*** *Die Datei liegt in der
+> Darstellungs-Schicht und stellt nichts dar;* **gezeichnet wird die Decke in `szene.ts`, ohne
+> `deckenMesh` anzufassen.**
+>
+> **Was das für den Leser heißt, und deshalb steht es hier:** *wer `naechsteEtageElevationMm`
+> ändert, ändert **nichts** am Verhalten — und wer einen Stapelfehler sucht, sucht in der falschen
+> Datei.* **Er sitzt in `Kopfrahmen.tsx:172`.**
+>
+> ***Ob das ein Mangel im Code ist, entscheidet eine Ablesung nicht.*** *Festgehalten ist, was
+> gemessen ist: dieselbe Höhenrechnung steht dreimal von Hand im Produktivcode, während die
+> gekapselte Fassung nur im Test lebt.*
 
 ## Das Schema
 
