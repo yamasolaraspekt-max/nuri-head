@@ -92,7 +92,7 @@ mehr als ein einzelnes Werkzeug.**
 |---|---|---|
 | K1 | **Auswahl hat nur EIN Objekt** | Es gibt keine Schnittkante → **abweisen mit Grund**, nicht stillschweigend nichts tun |
 | K2 | **Die Geraden sind parallel** | `geradenSchnitt` liefert `null` → **abweisen mit Grund**, kein Absturz, keine erfundene Ecke |
-| K3 | **Schnittpunkt liegt AUSSERHALB der Wandstrecke** | Der Schnitt zweier *Geraden* ist nicht der Schnitt zweier *Strecken*. **ZWEI benannte Größen nötig, nicht eine** — siehe K3-Nachtrag unten. |
+| K3 | **Schnittpunkt liegt AUSSERHALB der Wandstrecke** | Der Schnitt zweier *Geraden* ist nicht der Schnitt zweier *Strecken*. **ABWEISEN mit Grund — es wird NICHT verlängert.** Entschieden 14.08., ohne Zahlenoperanden; Begründung im K3-Nachtrag unten. |
 | K4 | **Das zu kürzende Objekt ist auch eine Schnittkante** | `primaerId` ist in `ids` enthalten (`auswahlModus.ts` Fall `add` erlaubt das) → **definiert behandeln** |
 | K5 | **Objekt ist gesperrt** | Der Vertrag kennt `sperren`/`entsperren` → **gesperrte Objekte werden nicht getrimmt** |
 | K6 | **Mehrere Schnittkanten treffen** | Welche gewinnt? **Benannt festlegen** (Vorschlag: die nächstgelegene zum Klickpunkt), nicht die erste in der Liste |
@@ -122,15 +122,32 @@ den *fast exakt* parallelen Fall. **Wer bei K3 „verlängern" wählt, verlänge
 1. **verlängern oder abweisen** (wie bisher)
 2. **bis zu welchem Abstand verlängert wird** — die Größe, die bisher fehlte
 
-**⚠ OPERAND — Fachentscheidung, NICHT vom Generator zu setzen.** Nach der Schutzgrenze wird das
-nicht still automatisiert. **Mein Vorschlag, ausdrücklich als Vorschlag und mit Begründung:**
-der Schnittpunkt muss **innerhalb der Bounding-Box aller Wände des Geschosses zuzüglich eines
-Zuschlags** liegen — *selbstskalierend, kommt ohne erfundene Zahl aus und passt sich an Bungalow
-wie an Hallenbau an.* **Die Alternative wäre ein fester Faktor** (Verlängerung höchstens n × Wand-
-länge), *einfacher, aber willkürlich.* **Der Generator wählt keine der beiden eigenmächtig:** er
-setzt die Größe an EINER benannten Stelle, macht sie im Bau-Bericht sichtbar, und ein
-Überschreiten wird **gemeldet, nicht stillschweigend geklemmt** (dieselbe Regel wie bei den
-geklemmten Öffnungen in `segmentierung.ts`).
+**⚠ K3 IST ENTSCHIEDEN — und zwar so, dass es KEINEN Operanden braucht: ABWEISEN.**
+
+> **Liegt der Schnittpunkt außerhalb beider Strecken, wird der Trimmvorgang abgewiesen — mit
+> Grund, wie bei K1 und K2. Es wird nicht verlängert.**
+
+**Das ist eine Berichtigung meines eigenen Vorschlags von vor einer Stunde, und der Plan-Prüfer
+hat ihn in drei Punkten zerlegt** (`d1792697`) — **alle drei treffen:**
+
+1. **Mein „Bounding-Box **plus Zuschlag**" hatte selbst keinen Wert.** Der Zuschlag kam im ganzen
+   Blatt **einmal** vor — ohne Zahl, ohne Bezugsgröße, ohne Entscheidung.
+2. **Mein Satz „kommt ohne erfundene Zahl aus" war damit falsch.** Der Zuschlag *ist* genau eine
+   solche, nur eine Ebene tiefer versteckt. **Ich habe den Operanden verschoben, nicht vermieden.**
+3. **Und mein eigenes Kriterium widersprach meinem eigenen Nachtrag:** es verlangte, die gewählte
+   Grenze stehe im Bau-Bericht — **damit hätte sie faktisch der Generator gewählt**, was zwei
+   Zeilen darüber ausdrücklich verboten war.
+
+**Warum ABWEISEN der richtige Standard ist und nicht nur der bequeme:** Es ist **messbar ohne
+jede Zahl**, es ist **die sichere Richtung** (ein abgewiesener Trimmvorgang kostet einen Klick,
+eine 2,9-km-Wand kostet eine Fehlersuche), und es ist **später nachrüstbar** — wer Verlängern
+will, ergänzt es dann mit einer entschiedenen Grenze, ohne dass etwas zurückgebaut werden muss.
+**Es ist außerdem dieselbe Antwort, die K1 und K2 schon geben** — der Fall reiht sich ein, statt
+eine eigene Logik zu erfinden.
+
+**Was damit an Yama geht — als Erweiterung, nicht als Blockade:** *Soll das Werkzeug später auch
+verlängern können, und bis zu welchem Abstand?* **A-35 wartet darauf nicht.** Solange die Frage
+offen ist, weist das Werkzeug ab, und das ist ein vollständiges, prüfbares Verhalten.
 
 **Nicht beanstandet und mitgeprüft:** Die A-32-Normierung ist durch Rechnung gedeckt — bei
 0,001 Grad steht der normierte Wert über drei Größenordnungen still, während der rohe Betrag um
@@ -165,11 +182,13 @@ den Faktor 10⁸ springt.
   Neue Tests erhöhen die Zahl — **die Differenz ist zu nennen und muss der Zahl der neuen
   Tests entsprechen.**
 
-- **A-35-9** · **K3 trägt ZWEI Größen** (K3-Nachtrag): Verhalten *und* Abstandsgrenze.
-  **Messbar:** ein Test mit zwei 6000-mm-Wänden bei **0,001°** Winkeldifferenz — der
-  Schnittpunkt liegt dort **286,5 m** entfernt und **passiert K2s Wache**. Das Werkzeug muss
-  diesen Fall **erkennen und melden**, nicht stillschweigend verlängern. Die gewählte Grenze
-  steht an **einer** benannten Stelle und im Bau-Bericht.
+- **A-35-9** · **K3 weist ab und verlängert nicht.**
+  **Messbar, und der Fall ist genau der, den K2 durchlässt:** ein Test mit zwei
+  6000-mm-Wänden bei **0,001°** Winkeldifferenz — der Schnittpunkt liegt **286,5 m**
+  entfernt, `geradenSchnitt` liefert ihn, K2s Wache greift **nicht**. Das Werkzeug muss
+  **abweisen mit Grund**, nicht verlängern. **Kein Zahlenoperand nötig:** geprüft wird,
+  ob der Schnittpunkt **auf beiden Strecken** liegt — eine Ja/Nein-Frage an vorhandene
+  Endpunkte.
 
 ## Rückweg und Entdeckung
 

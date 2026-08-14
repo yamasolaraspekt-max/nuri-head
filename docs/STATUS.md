@@ -13412,6 +13412,19 @@ k3_geschaerft_14_08: "Der plan-pruefer hat F-004 durchgerechnet (907aaba2): die 
   nicht vom Generator gesetzt; mein Vorschlag (Bounding-Box des Geschosses plus Zuschlag,
   selbstskalierend) steht als Vorschlag im Blatt, die Alternative (fester Faktor) daneben.
   Neues Kriterium A-35-9 mit dem 0,001-Grad-Fall als Messbefehl."
+k3_entschieden_14_08: "BERICHTIGUNG meines eigenen Vorschlags von einer Stunde vorher, nach
+  d1792697. Der plan-pruefer hat ihn in DREI Punkten zerlegt, alle drei treffen: (1) mein
+  -Bounding-Box plus ZUSCHLAG- hatte selbst keinen Wert, der Zuschlag kam einmal vor ohne Zahl
+  und ohne Bezugsgroesse; (2) mein Satz -kommt ohne erfundene Zahl aus- war damit falsch, der
+  Zuschlag IST eine, nur eine Ebene tiefer — ich habe den Operanden verschoben statt vermieden;
+  (3) mein eigenes Kriterium widersprach meinem eigenen Nachtrag, es verlangte die Grenze im
+  Bau-Bericht und haette sie damit faktisch den Generator waehlen lassen, was zwei Zeilen
+  darueber verboten war. ENTSCHEIDUNG: K3 weist AB und verlaengert nicht — messbar ohne jede
+  Zahl, sichere Richtung, spaeter nachruestbar, und dieselbe Antwort die K1 und K2 schon geben.
+  A-35-9 neu gefasst: geprueft wird ob der Schnittpunkt auf BEIDEN Strecken liegt, eine
+  Ja/Nein-Frage an vorhandene Endpunkte, kein Zahlenoperand. AN YAMA geht nur noch die
+  ERWEITERUNG: soll spaeter auch verlaengert werden und bis zu welchem Abstand — A-35 wartet
+  darauf NICHT. Seine DoR steht, die neun Kriterien bleiben neun."
 rueckweg: "Der Bau fuegt hinzu und aendert nichts Bestehendes. Ruecknahme = Commit zurueckdrehen,
   keine Datenmigration, kein Schema, keine Bestandsdokumente betroffen."
 dor_beleg: "ERTEILT 13.08. 23:38 plan-pruefer, gemessen am BASIS-STAND 1df82ee1 und am Baum.
