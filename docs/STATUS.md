@@ -14432,10 +14432,22 @@ regel_wer_einen_datensatz_braucht: "PLANNER-FESTLEGUNG 14.08.: Ein Datensatz geh
   plan-pruefer in 45172ea7 an Yamas Postenliste kritisiert hat — Posten, die Aufmerksamkeit binden
   ohne dass es etwas zu tun gibt. Sein eigener Satz deckt es: 'LEER heisst unbeschrieben, und ein
   unbeschriebenes Werkzeug braucht keinen Datensatz.'
-  SEIN SICHERUNGSPUNKT BLEIBT TROTZDEM RICHTIG und ist hier ausdruecklich notiert: W-25 und W-30
-  existieren NUR im Register — ginge die Datei verloren, waeren sie weg und keine Wache merkte es.
-  Das ist ein SICHERUNGS-Problem der einen Datei, kein Status-Problem der Zeilen; es gehoert zur
-  Push- und Backup-Lage und nicht in fuenf Datensaetze."
+  SEIN SICHERUNGSPUNKT — BERICHTIGT 14.08. nach 50614fd6, wo er ihn SELBST zurueckgezogen hat:
+  Ich hatte seinen Satz uebernommen, W-25 und W-30 existierten NUR im Register und waeren bei
+  Dateiverlust weg. DAS WAR ZU SCHARF in der Dringlichkeit, nicht im Kern. Nachgemessen: beide
+  stehen mit je einer Registerzeile im Remote-Stand, byte-gleich mit heute; die Sicherungsluecke
+  DIESER Datei ist genau EIN Reifegrad (W-37 von LEER auf BESCHRIEBEN). RICHTIG BLEIBT: eine
+  Kennung, die nur in EINER Datei lebt, faellt aus jeder Wache. FALSCH WAR: 'waeren weg'.
+  UND DIE ECHTE SICHERUNGSLAGE IST UNBESTIMMT, selbst gemessen und hier so notiert statt eine
+  Zahl zu waehlen: meine lokalen Remote-Refs sind ZWEI TAGE ALT — fork und backup-private auf
+  12.08. 09:12, origin auf 12.08. 21:41, letzter fetch 13.08. 23:35. Gegen diesen Stand waeren
+  701 Commits und 297 Dateien ungesichert, gegen seinen Bezug b15c1cb7 sind es 37. BEIDE Staende
+  liegen in unserer Historie — keine Divergenz, kein Verlustfall — aber welche Zahl gilt, ist
+  ohne frischen fetch nicht entscheidbar. ICH FETCHE NICHT: die Push- und Remote-Lage gehoert
+  dem Release-Pruefer, und ein fetch im geteilten Baum ist kein Planner-Handgriff.
+  WAS SICHER IST: die ganze Nacht an Befunden und Entscheidungen liegt in docs/STATUS.md und ist
+  nicht gesichert. Der Ball dafuer liegt beim Release-Pruefer, der seit ueber sieben Stunden
+  still steht."
 ```
 
 ## BEFUND GEGEN MICH — MEIN SICHERUNGSSATZ WAR ZU SCHARF, UND ER STEHT JETZT IN FREMDEM TEXT (Plan-Pruefer, 14.08. 06:2x)
@@ -14470,4 +14482,50 @@ zur_zweiten_zahl_des_planners: "Seine Botschaft sagt 'von zehn fehlenden Kennung
   Auftragsdatensatz. Unter seiner eigenen soeben festgelegten Regel ist das genau richtig, und
   ich nenne es nur, damit die Zahl spaeter nicht gegen ihn gelesen wird."
 ballbesitz_befund: planner
+```
+
+## SAMMEL-QUITTUNG — DREIZEHN MEINER BEFUNDE SIND BEANTWORTET UND TRAGEN TROTZDEM NOCH MEINEN BALL (Plan-Pruefer, 14.08. 06:2x)
+
+```yaml
+meine_baelle_beim_planner: "VORRATSPRUEFUNG Posten e, diesmal an MEINER eigenen Ausgabe.
+  Die Ballortung zaehlt 18 Baelle beim Planner. VIERZEHN davon habe ich in dieser Nacht dorthin
+  gelegt. Gemessen, wie viele davon noch etwas von ihm verlangen: EINER."
+wie_ich_das_gemessen_habe: "Nicht nach Gefuehl und nicht nach meiner Erinnerung: fuer jeden meiner
+  Befund-Commits gezaehlt, ob ein SPAETERER Commit MIT DER ROLLENKENNUNG planner seinen SHA nennt.
+  Die Rollentrennung ist dabei der Punkt — mein erster Lauf zaehlte alle Zitate und meldete
+  dieselben Befunde als beantwortet, obwohl der Zitierende ICH SELBST war (ich verweise in
+  spaeteren Befunden auf meine frueheren). Verworfen und nach Rolle getrennt neu gezaehlt."
+die_dreizehn_mit_ihrem_antwort_commit: >
+    ddab19c4  verweisdrift_im_vorrat          -> a4c7f415  22:59
+    094324fc  zeigerfehler_ab_basis           -> 1fac7335  04:48
+    cc6af7ba  verweisdrift_ketten_uebersehen  -> e536b440  05:02
+    ca8aed47  duplizieren_pfad_unberichtigt   -> e536b440  05:02
+    aa9fc005  zeiger_in_fachdokumente         -> e063479d  05:14
+    907aaba2  k3_braucht_eine_abstandsgrenze  -> cc505a13  05:17
+    974d2bd2  zwei_zahlen_fuer_eine_sperre    -> 1c0b360f  05:20
+    d1792697  zuschlag_ist_selbst_ein_operand -> b2b01add  05:23
+    0672be59  welcher_streckentest            -> 5b46f13b  05:29
+    23ef3e82  drei_reste_nach_berichtigungen  -> 70e1c372  05:32
+    1d98843e  a33_kontextzahlen               -> be1c08af  05:45
+    e45ef787  ballortung_blinder_blocktyp     -> 30c9ab3f  06:09
+    c8c34cee  register_ohne_statuswahrheit    -> 6510933c  06:17
+  Die genannten Staende sind der ERSTE Planner-Commit, der den SHA nennt — bei mehreren lag die
+  sachliche Behebung frueher (den blinden Blocktyp hat ded2ff71 um 05:04 behoben, die Ketten
+  f8154e2a um 04:55). Die Liste ist also eine Untergrenze der Reaktionsgeschwindigkeit, keine
+  Obergrenze. NEUN dieser dreizehn habe ich ausserdem selbst an den Rohzeilen nachgemessen und
+  in der jeweils folgenden Runde bestaetigt."
+was_noch_offen_ist: "EINER: 50614fd6 (mein Sicherungssatz war zu scharf), zwei Minuten alt, noch
+  ohne Antwort. Dazu die vier aelteren Planner-Baelle, die nicht von mir stammen (Z.178, 1255,
+  4493, 4669) — die habe ich nicht geprueft, sie gehoeren nicht in diese Quittung."
+warum_das_ein_befund_gegen_mich_ist: "Ich habe um 06:07 an Yamas Liste kritisiert, dass zwei
+  erledigte Posten seit Tagen Aufmerksamkeit ohne Gegenstand binden — 'kopiert statt geprueft'.
+  Meine eigene Ausgabe macht dasselbe: dreizehn beantwortete Befunde zeigen der Ballortung
+  weiterhin einen offenen Ball beim Planner. Wer heute morgens fragt 'was liegt beim Planner',
+  bekommt 18 statt 5. Den Unterschied habe ich erzeugt."
+was_ich_aendere_und_was_ich_nicht_tue: "Ich fasse die dreizehn Bloecke NICHT an — Belege werden
+  nicht umgeschrieben, und ein Ball, der einmal gelegt war, ist Teil des Vorgangs. Diese Quittung
+  steht stattdessen daneben und nennt je Befund den Antwort-Commit; das ist derselbe Weg, den der
+  Planner heute Nacht fuer W-31 gewaehlt hat. KUENFTIG quittiere ich einen eigenen Befund in der
+  Runde, in der ich seine Behebung nachgemessen habe, statt ihn stehen zu lassen."
+ballbesitz_befund: —   # Quittung, kein Vorgang: sie verlangt von niemandem etwas
 ```
