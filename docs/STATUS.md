@@ -14324,3 +14324,36 @@ was_ich_NICHT_tue: "Ich streiche nichts. Die Liste steht in der Wache, und die g
   ich lege die Messung daneben. Kein Blatt, kein Zustand, kein Bau."
 ballbesitz_befund: yama
 ```
+
+### Vier offene Fachentscheidungen bei Yama — Datensatz angelegt 14.08. (eigener Zaun nach A-25)
+
+```yaml
+befund: vier_werkzeugzeilen_warten_auf_yama
+ballbesitz: yama
+offen_seit: "W-24/W-26/W-28 seit 13.08. (Klasse-B-Messung), W-32 seit 14.08. 00:xx"
+anlass_des_eintrags: "Der plan-pruefer hat in 45172ea7 Yamas Postenliste zum ersten Mal
+  vollstaendig gegen den Bestand gehalten und dabei zwei erledigte Posten gefunden, die
+  Aufmerksamkeit ohne Gegenstand gebunden haben — sein Wort: kopiert statt geprueft. Ich habe
+  daraufhin MEINE eigene Liste gemessen, die ich Yama in jeder Antwort weiterreiche.
+  BEFUND GEGEN MICH: diese vier Posten stehen im Fahrplan und im Register, aber sie hatten
+  KEINE Tafelzeile und KEINEN Datensatz — sie lebten nur in meinen Antworten. Haette ich
+  aufgehoert sie zu nennen, waeren sie weg. Das ist dieselbe §16-Lage, die ich drei Stunden
+  vorher fuer die Regelkollision behoben habe, nur bei meinen eigenen Fachfragen."
+posten:
+  W-24: "Fundament und Bodenplatte — der Erdkontakt. Der Code markiert ihn DREIMAL selbst als
+    Operanden-Gate. Registerzeile LEER."
+  W-26: "Dachschichten (Aufbau) — das Feld `schichten` fehlt am RoofNode, waehrend WallNode und
+    CeilingNode es feldgleich fuehren (scene.types.ts:133 und :357, AUF-76). Schema-Entscheidung."
+  W-28: "Dachentwaesserung — Rinnenbemessung als Normgroesse nach DIN 1986-100.
+    PLANNER EMPFIEHLT VERTAGEN."
+  W-32: "Giebelwand-Bindung — am 14.08. entschieden als ABLEITUNG statt Feld; offen ist nur noch,
+    ob der Bau ueberhaupt gewollt ist. Er traegt den W-27-Massstab, weil der Ausgabetyp
+    WandQuader eine Schraege nicht tragen kann (segmentierung.ts:26)."
+kein_zustand_feld: "Nach dem Befundmuster und e45ef787: die Offenheit traegt ballbesitz. Ein
+  erfundenes Zustandswort macht den Block fuer beide Scans der Ballwache unsichtbar."
+die_sache_steht_in: "docs/FAHRPLAN-WERKZEUGKASTEN.md (Klassenzuordnung und Messung je Zeile)
+  und docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md (je eine Zeile, Reifegrad LEER).
+  Hier steht NUR der Eintrag mit Ball — kein Volltext, keine zweite Wahrheit."
+nicht_entschieden: "Alle vier sind Fachentscheidungen. Der Planner misst und empfiehlt,
+  entscheidet aber keine davon."
+```
