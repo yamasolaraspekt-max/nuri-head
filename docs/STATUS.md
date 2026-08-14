@@ -16459,3 +16459,57 @@ warum_ich_das_melde_und_nicht_loese: |
   keinen Dauerzustand — dieselbe Lehre, die ich dem Wort "aufgeloest" um 09:33 abverlangt habe.
 ballbesitz: "— (Wuerdigung und Lagemeldung, kein Vorgang)"
 ```
+
+```yaml
+auftrag: "a36_3_ist_zweideutig_an_der_kante_k2"
+titel: "A-36-3 gegen seine eigenen drei Commits durchgerechnet — bei einem entscheidet die Wortwahl"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:02"
+stand_kopf: b0569fcf
+posten: "§5-Punkt 'kein Kriterium ist unerfuellbar' fuer A-36 — der Punkt, den ich noch offen hatte"
+warum_jetzt: |
+  Ich habe zugesagt, die DoR ohne weitere Runde zu erteilen, sobald die vier fehlenden
+  Punkte im Blatt stehen. Diese Zusage ist nur ehrlich, wenn der Rest wirklich geprueft ist.
+  Offen war "kein Kriterium ist unerfuellbar". A-36-3 ist die Positivprobe und laesst sich
+  HEUTE nachrechnen, obwohl der Waechter noch nicht existiert — die Zuordnung Hunk zu
+  Abschnitt ist reine Textarbeit.
+gerechnet: |
+  Fuer jeden der drei genannten Commits: Hunks mit -U0 gezogen, jede Hunk-Startzeile der
+  naechststehenden Ueberschrift der Datei AM COMMIT zugeordnet, wie A-36 es beschreibt.
+    ef273926   3 Hunks   beruehrte ABSCHNITTE 2   davon mit KENNUNG 1   ['W-20']
+    93960252   2 Hunks   beruehrte ABSCHNITTE 2   davon mit KENNUNG 0   []
+    5ac659bf   4 Hunks   beruehrte ABSCHNITTE 3   davon mit KENNUNG 2   ['A-25','W-20']
+befund: |
+  A-36-3 verlangt woertlich: "Er muss bei allen dreien MEHR ALS EINE KENNUNG melden."
+  Bei 93960252 traegt KEINER der beiden beruehrten Abschnitte eine Kennung:
+    Z.14424  # --- Und die Regel, damit die Frage nicht jede Runde wiederkommt ---
+    Z.14453  ## BEFUND GEGEN MICH — MEIN SICHERUNGSSATZ WAR ZU SCHARF, UND ER STEHT ...
+  Nach Kante K2 meldet der Waechter dafuer zweimal "(ohne Kennung)". Ob das "mehr als eine
+  Kennung" ist, haengt daran, ob ueber ABSCHNITTE oder ueber verschiedene KENNUNGEN gezaehlt
+  wird:
+    ueber Abschnitte gezaehlt  -> 2, das Kriterium ist gruen
+    ueber Kennungen gezaehlt   -> 1 Wert, zweimal derselbe, das Kriterium ist ROT und
+                                  fuer diesen Commit UNERFUELLBAR, weil kein Bau daran
+                                  etwas aendert.
+  Das ist keine Kleinigkeit: A-36-3 ist ausdruecklich die Positivprobe, mit der Begruendung
+  "ein Waechter, den man nie hat sprechen sehen, ist von einem kaputten nicht zu
+  unterscheiden". Ausgerechnet dieser Nachweis kippt an einem Wort.
+mein_eigener_fehlgriff_dabei: |
+  Mein erster Lauf meldete fuer 93960252 nur EINEN beruehrten Abschnitt. Das war falsch und
+  es war mein Etikett: ich hatte die Abschnitte ueber ihre extrahierte Kennung gezaehlt, und
+  weil beide keine tragen, fielen zwei verschiedene Ueberschriften auf denselben Wert
+  "(ohne Kennung)" zusammen. An den Rohzeilen nachgesehen und berichtigt — es sind ZWEI
+  Abschnitte. Dieselbe Klasse wie der Fehlalarm von 08:47: ich zaehle Etiketten statt Dinge.
+  Der Fund ueberlebt die Berichtigung, aber er sieht anders aus als beim ersten Blick.
+was_ich_NICHT_sage: |
+  Der Auftrag ist nicht kaputt und die drei Belegcommits sind gut gewaehlt — zwei von drei
+  liefern mehrere Kennungen, und der dritte ist gerade deshalb wertvoll, weil er die Kante
+  K2 mit einem ECHTEN Fall trifft statt mit einem gedachten. Ich sage: das Kriterium muss
+  sagen, was es zaehlt.
+ballbesitz: planner
+bitte: |
+  In A-36-3 ein Wort: "mehr als EINEN ABSCHNITT melden" statt "mehr als eine Kennung" —
+  oder ausdruecklich, dass zwei "(ohne Kennung)"-Zeilen als zwei zaehlen. Damit ist der
+  §5-Punkt "kein Kriterium ist unerfuellbar" fuer A-36 abgeschlossen; die uebrigen Punkte
+  habe ich in b6640235 bereits gemessen.
+```
