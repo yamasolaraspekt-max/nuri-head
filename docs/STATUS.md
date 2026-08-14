@@ -16306,3 +16306,55 @@ ballbesitz_zusatz_yama: |
   Fuer Yama zur Kenntnis, ohne Entscheidungsbedarf: die Arbeit dieser Nacht liegt in ZWEI
   Kopien ausserhalb dieser Maschine, nicht in drei.
 ```
+
+```yaml
+auftrag: "a35_meine_eigene_dor_nachgeprueft"
+titel: "Meine eigene DoR-Erteilung nachgeprueft — sie haelt, und mein F-004-Befund war nicht neu"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:53"
+stand_kopf: 481c7da7
+posten: "Vorratspruefung (b) an A-35 — dem Auftrag, dessen DoR ICH erteilt habe"
+warum_ausgerechnet_A35: |
+  Fremde Blaetter zu pruefen ist die leichtere Uebung. A-35 ist der einzige offene Auftrag,
+  dessen DoR von mir stammt — und bei dem ich schon einmal gefehlt habe (Befund
+  meine_dor_hatte_eine_luecke: ich hatte erteilt, obwohl A-35-2 am Basis-Stand bereits
+  erfuellt war).
+was_haelt_selbst_gemessen: |
+  A-35-1  grep -c "'trimmen'" toolRegistry.ts  ->  0 heute UND 0 am Basis 1df82ee1.  ROT.
+  A-35-2  der Befehl des Blatts woertlich gefahren:
+            grep -rln "from '.*geradenGeometrie'" --include='*.ts' --include='*.tsx'
+            -> EIN Treffer, __tests__/geradenGeometrie.test.ts, davon AUSSERHALB __tests__: 0.
+          Genau was das Blatt als "Stand vorher" behauptet. ROT.
+          Die Neufassung nach meinem Befund a35_2_misst_erwaehnungen misst jetzt wirklich
+          IMPORTE — das war die Berichtigung, und sie traegt.
+  A-35-7  Schutzkriterium: HausplanerApp.tsx:815 waehleAn steht an HEAD UND am Basis-Stand
+          zeichengleich, und die Datei hat seit 1df82ee1 NULL Commits. Der Zeiger haelt.
+  Muster jeweils am bekannten Treffer verifiziert.
+mein_eigener_fehler_diesmal: |
+  A-35-9 traegt woertlich: "ein Test mit zwei 6000-mm-Waenden bei 0,001 Grad Winkeldifferenz —
+  der Schnittpunkt liegt 286,5 m entfernt, geradenSchnitt liefert ihn, K2s Wache greift nicht."
+  DAS IST GENAU MEIN BEFUND VON 08:18 (f004_sperrt_den_winkel_nicht_die_entfernung). Ich habe
+  ihn als Eigenschaft "fuer den Tag, an dem der erste Aufrufer entsteht" gemeldet — waehrend
+  ein BEREIT-Blatt diesen Tag laengst benennt und den Fall schon durchgerechnet hat.
+  Schlimmer: A-35-9 geht WEITER als ich. Es nennt die Abhilfe, die ich nicht genannt habe:
+  geprueft wird 0 <= t <= 1 UND 0 <= u <= 1, dimensionslos und ohne Epsilon, und abgewiesen
+  wird mit Grund statt verlaengert. Ich habe den Bestand nicht durchsucht, bevor ich meldete.
+  Der Befund bleibt sachlich richtig und die Bitte an die FORMELSAMMLUNG bleibt sinnvoll —
+  aber "neu" war er nicht, und das habe ich behauptet.
+und_ein_echter_fund_beim_nachrechnen: |
+  Die 286,5 m nachgerechnet, weil eine Zahl nur dann reproduzierbar ist, wenn die Anordnung
+  feststeht:
+    sin(0,001 Grad) = 1,7453e-5  -> passiert die Waechterschwelle 1e-6, wie behauptet.
+    Lesart "gemeinsamer Startpunkt": Endpunkte weichen 0,105 mm ab, Schnittpunkt im
+      Startpunkt, Abstand NULL — ergibt die 286,5 m nicht.
+    Lesart "seitlicher Versatz d":  d=1 mm -> 57,3 m | d=5 mm -> 286,5 m | d=10 mm -> 573 m
+    Rueckwaerts gerechnet: 286,5 m entsprechen d = 5,000 mm, auf drei Nachkommastellen.
+  DIE ZAHL STIMMT — und der Versatz von 5 mm, ohne den sie nicht entsteht, steht NIRGENDS
+  im Blatt. Wer den Test schreibt, muss ihn raten. Das ist ein fehlender Operand in einem
+  Kriterium, das sonst vorbildlich praezise ist (K3 greift nachgerechnet: t = 47,7, weit
+  ausserhalb 0..1, also Abweisung).
+ballbesitz: planner
+bitte: |
+  In A-35-9 den seitlichen Versatz nennen — "5 mm" genuegt, dann ist die 286,5 m aus dem
+  Blatt heraus nachrechenbar. Eine Zahl, kein Bau.
+```
