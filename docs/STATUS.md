@@ -13656,3 +13656,59 @@ merge_disziplin: "Der Ball dafuer liegt beim Release-Pruefer (cef48ca0), nicht h
   Gesamtlage behauptet der plan-pruefer ausdruecklich nichts: die 1313 Zeilen ueber 184 Merges
   sind KEINE Verlustzahl, weil das Mass rechtmaessig abgeloeste Tafelzeilen mitzaehlt."
 ```
+
+## BEFUND — DIE BERICHTIGUNG VON W-14/1 HAT EINEN PFAD AUSGELASSEN (Plan-Pruefer, 14.08. 05:0x)
+
+```yaml
+duplizieren_pfad_unberichtigt: "Gemessen an cef48ca0, mit dem Verfahren, das ich in cc6af7ba
+  angekuendigt habe: nicht mehr -Basis gegen heute- (das erzeugt bei jedem berichtigten Zeiger
+  einen Fehlalarm), sondern -enthaelt die Zeile HEUTE das, was das Blatt an dieser Stelle
+  behauptet-. Der Planner hat in f8154e2a drei Blaetter berichtigt und siebzehn Zeiger genannt.
+  Vierzehn davon habe ich einzeln nachgemessen, sie halten. Aber in W-14/1 ist ein Pfad
+  ausgelassen worden."
+was_haelt: "Selbst an den Rohzeilen geprueft, alles am heutigen Stand:
+    W-10/1  Landkarte :170 'boden' · :173 'decke' · CeilingNode :348-357 (die Berichtigung von
+            :350 auf :348 ist richtig: :348 ist die interface-Zeile, :357 das letzte Feld)
+    W-12/1  hausplanerStore :100 modus '2d' · rasterLinien :1261 · rasterAn :1337 und :1409 ·
+            geschaltet :349
+    W-14/1  spiegeleGrundriss :695 · sammelBefehle :103 befehleSpiegeln, :111 spiegelteWand ·
+            :1343 durchgereicht · Landkarte :105 'verschieben' · :604
+  Und die Behauptung -0 Zeiger ins Leere- habe ich selbst nachgezaehlt: 91 aufloesbare Zeiger
+  ueber die drei Blaetter (W-10/1 20, W-12/1 32, W-14/1 39), NULL ueber Dateiende, NULL Pfad
+  nicht aufloesbar. Seine Zahl 214 ist groesser, weil sein Skript den zuletzt gesehenen
+  Dateinamen zeilenweise fortschreibt und damit auch nackte :139-Angaben mitnimmt; meine
+  Kettenauswertung verlangt den Dateinamen im selben Ausdruck. Meine ist eine Teilmenge
+  seiner, kein Widerspruch — beide Zahlen sind selbst erhoben."
+was_ausgelassen_wurde: "W-14/1, der Block '(1) DUPLIZIEREN' und '(2) LOESCHEN', Blattzeilen 39-50.
+  Vier Zeiger stehen dort unveraendert, und die Kette in Zeile 25 nennt sie ebenfalls noch
+  (:621/:671-679):
+    Blatt: HausplanerApp.tsx:671  function dupliziere()
+      heute :671 = else if (tool.id === 'duplizieren') dupliziere();  — die Funktion steht auf :676
+    Blatt: :674  for (const id of selectedNodeIds)
+      heute :674 = ein A-31-Kommentar. Die Schleife EXISTIERT IN DER DATEI NICHT MEHR — A-31 hat sie
+      durch befehleDuplizieren(...) auf :677 ersetzt, ein Befehlspaket statt Schleife.
+    Blatt: :679  versetzteWand(n.start, n.end, 500, 500)
+      heute :679 = store.getState().executeCommands(befehle). versetzteWand( kommt in
+      HausplanerApp.tsx NULL Mal vor; der Aufruf steht in app/sammelBefehle.ts:82.
+    Blatt: HausplanerApp.tsx:621  function loescheAuswahl()
+      heute :621 = const selectedStairParams... — die Funktion steht auf :626, und die Rechnung
+      liegt in sammelBefehle.ts:39 befehleLoeschen."
+warum_das_dieselbe_klasse_ist: "Der Planner hat in seiner eigenen Botschaft genau diese Klasse
+  benannt und fuer den SPIEGELN-Pfad geloest: 'A-31 hat versetzteWand, spiegelteWand, bbox und
+  achsenMitte nach app/sammelBefehle.ts gezogen. Das Blatt beschrieb den Stand DAVOR — nicht
+  verschobene Zeilen, sondern ein anderer ORT.' Fuer den DUPLIZIEREN- und den LOESCHEN-Pfad gilt
+  wortgleich dasselbe, und dort steht es noch. Er hat im selben Commit vor der Gefahr gewarnt
+  ('ohne die waere es die naechste halbe Berichtigung geworden') — an dieser Stelle ist sie es
+  geworden. Zwei der vier sind die schwerere Sorte: die genannte Sache ist nicht verschoben,
+  sie ist in dieser Datei nicht mehr vorhanden."
+was_richtig_ist_im_selben_block: "Damit der Befund nicht groesser wirkt als er ist — die drei
+  uebrigen Zeiger des Blocks treffen: toolRegistry.ts:273 id 'duplizieren', :249 id 'loeschen',
+  applyCommand.ts:162 case 'REMOVE_NODE'."
+eine_messung_die_ausfiel: "Ein Aufruf lief mir mit unquotiertem $S:resources/... in den
+  zsh-Modifikator und lieferte 'cef48ca0esources/...' — kein Ergebnis, sondern ein Ausfall.
+  Mit ${S}:${P} wiederholt. Ich nenne es, weil derselbe Fehler mir heute Nacht schon zweimal
+  passiert ist."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Ball auf W-14/1, kein Bau.
+  W-14/1 bleibt BEREIT — die Entscheidung, ob vor dem Ziehen berichtigt wird, ist die des Planners."
+ballbesitz_befund: planner
+```
