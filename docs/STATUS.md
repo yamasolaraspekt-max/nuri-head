@@ -13564,3 +13564,59 @@ was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Ball, kein Bau. Ob 
   berichtigt werden oder ob der Vermerk genuegt, entscheidet der Planner."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — EIN BEFUNDBLOCK IST IN EINER MERGE-AUFLOESUNG VERSCHWUNDEN (Plan-Pruefer, 14.08. 05:0x)
+
+```yaml
+befund_im_merge_verloren: "VORRATSPRUEFUNG Posten e (eigene Befunde verfolgen), gemessen an cc6af7ba.
+  Ich wollte pruefen, ob meine offenen Befunde noch bei ihrem Halter liegen. Zwei davon sind heute
+  NICHT MEHR IM BESTAND: paragraf3_am_commit_unsichtbar und regelkollision_ballbesitz — die
+  Regelkollision zwischen §3, E1 und der Beifang-Regel, die ich am 13.08. um 22:42 in 64df65df
+  eingebracht hatte, nachdem sich mein eigener §3-Vorwurf gegen den Generator beim Nachmessen
+  gedreht hatte."
+was_genau_verloren_ist: "Der Block umfasste 33 Zeilen (in 8f213aa0 die Zeilen 9537-9569). Heute
+  steht KEINE EINZIGE davon mehr irgendwo in docs/STATUS.md — nicht verschoben, nicht umbenannt,
+  nicht gekuerzt: vollstaendig weg. Zeile fuer Zeile gegen den heutigen Bestand geprueft, 33 von 33
+  fehlen, 0 von 33 stehen noch irgendwo."
+wo_es_passiert_ist: "Nicht durch einen Commit, der loescht — deshalb hat -git log -S- nur den
+  EINFUEGENDEN Commit gezeigt und keinen entfernenden. Es ist in einer MERGE-AUFLOESUNG passiert:
+    8f213aa0 (evaluator, 22:49)   Block vorhanden
+    e26cdc76 (release-pruefer, 22:51) Block nicht vorhanden — andere Linie, hatte ihn nie
+    51fb4d31 (Merge von 8f213aa0, 22:51) Block WEG
+  Der Merge hat die Seite ohne den Block gewinnen lassen. Der zugehoerige Commit des
+  Release-Pruefers heisst -mein eigenes Konfliktwerkzeug hat 2...-, es war also eine
+  Konfliktaufloesung von Hand. Kein Vorwurf: wer einen Konflikt in einer 13000-Zeilen-Datei
+  aufloest, sieht nicht, was auf der verworfenen Seite an fremdem Inhalt mitfaellt. Genau
+  DESHALB ist es ein Befund und keine Schuldfrage."
+die_sache_selbst_ist_nicht_verloren: "Bevor das groesser klingt als es ist — nachgemessen:
+  docs/VORLAGE-AN-YAMA-2026-08-12.md traegt die Kollision in HEAD achtmal, u.a. Abschnitt 6
+  (Nebenlaeufigkeit) und woertlich in Zeile 1924: -was er zweimal als §3-Verletzung des Generators
+  an dich gemeldet hatte, ist keine. Es ist eine Regelkollision.- Der Planner hat sie in 7c70fa39
+  mit 78 Zeilen dort eingebracht, samt der vier Wege und seiner Empfehlung B. Verloren ist der
+  EINTRAG IN DER STATUSWAHRHEIT, nicht die Vorlage an Yama. Nach §16 ist das trotzdem der Ort,
+  an dem ein offener Befund mit Ball stehen muss — wer heute nur docs/STATUS.md liest, findet
+  die Kollision nicht."
+was_ich_zur_gesamtlage_NICHT_behaupte: "Ich habe versucht, dieselbe Frage ueber ALLE 184 Merges der
+  Kette zu stellen: wie viele Zeilen liegen in einem Merge-Elter, aber weder im Merge noch heute?
+  Die Zahl waere 1313. SIE IST KEINE VERLUSTZAHL und ich melde sie nicht als eine: das Mass zaehlt
+  auch jede rechtmaessig ABGELOESTE Zeile mit — eine Tafelzeile, deren Zustand von ABGENOMMEN auf
+  BETRIEBSBESTAETIGT weitergerueckt ist, sieht darin genauso aus wie ein verlorener Absatz.
+  Belegt an genau diesem Merge: von seinen 42 gezaehlten Zeilen sind 33 mein Block (echter
+  Verlust), drei sind Tafelzeilen A-29/A-30/A-34, die heute korrekt auf BETRIEBSBESTAETIGT stehen
+  (kein Verlust), und zwei Yama-Ueberschriften stehen heute wieder im Bestand (kein Verlust).
+  Ein belastbares Mass muesste Abloesung von Verlust trennen; das habe ich nicht. Was ich habe,
+  ist EIN bewiesener Fall — und der Hinweis, dass die Klasse existiert."
+ein_vorheriger_durchlauf_war_falsch: "Mein erster Durchlauf dieser Frage lief in der Shell und
+  meldete fuer 51fb4d31 EINE verlorene Zeile. Ich kannte den Fall von Hand mit 33 — die Messung
+  war damit widerlegt und ist vollstaendig verworfen, nicht nachgebessert. Alle Zahlen oben
+  stammen aus dem zweiten, in Python geschriebenen Lauf, dessen Bezugsfall vorher gegen die
+  Handmessung gehalten wurde."
+was_ich_NICHT_tue: "Ich setze den Block nicht eigenmaechtig wieder ein. Er traegt einen Ball und
+  eine Vorlage-Bindung; ihn heute neu einzufuegen wuerde neben der Vorlage eine zweite Wahrheit
+  aufmachen, und genau das verbietet §16. Kein Zustand, kein Blatt, kein Bau."
+zwei_getrennte_baelle: "Die MERGE-DISZIPLIN — wie verhindert die Kette, dass eine
+  Konfliktaufloesung fremde Absaetze still verschluckt — liegt beim Release-Pruefer, weil sie
+  seine Arbeitsweise betrifft und er der einzige ist, der die Konflikte aufloest.
+  Die REGELKOLLISION selbst liegt unveraendert bei Yama, ueber die Vorlage."
+ballbesitz_befund: release-pruefer
+```
