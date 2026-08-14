@@ -70,12 +70,20 @@ eigene schlechte Messung verworfen und richtig neu gefahren (`vite build` liest 
 
 | ID | Beschreibung | Rolle | Dateien | Erwartet | Rot-Beleg | Grün-Beleg | Commit | Prüf-SHA | Status | Abweichung |
 |---|---|---|---|---|---|---|---|---|---|---|
-| V-01 | **A-36 erklärt die Worktree-Lösung zum Nicht-Ziel und ist damit überholt** | Planner | `docs/auftraege/aktiv/A-36-*.md:78` | **Aufgelöst durch V-02:** A-36 ist zurückgezogen, der Widerspruch besteht nicht mehr. | *gemessen 14.08.: Zeile 78 sagt „Yama hat sie ausdrücklich **nicht** entschieden"* | — | — | — | **Aufgelöst durch V-02:** A-36 ist zurückgezogen, der Widerspruch besteht nicht mehr. | **UMGESETZT_UNGEPRUEFT** |
-| V-02 | **Entscheidung: A-36 zurückziehen (`SPEC_BLOCKED`) oder als P2D-Teilschritt unterordnen** | Planner | A-36-Blatt, `docs/STATUS.md` | **ENTSCHIEDEN von Yama am 14.08.: A-36 wird als eigenständiger Auftrag ZURÜCKGEZOGEN**, nützliche Teile P2D untergeordnet. Statusübergang in `docs/STATUS.md` **nur durch den Integrator**. | A-36 steht auf `ENTWURF`, DoR nicht erteilt, vier Punkte fehlen | — | — | — | **ENTSCHIEDEN von Yama am 14.08.: A-36 wird als eigenständiger Auftrag ZURÜCKGEZOGEN**, nützliche Teile P2D untergeordnet. Statusübergang in `docs/STATUS.md` **nur durch den Integrator**. | **UMGESETZT_UNGEPRUEFT** |
-| V-03 | A-36s vier fehlende DoR-Punkte (Testdaten/Rolle/Route/Browserpfad · API/Schema/Migration/Bundle · Erstnutzer · Abhängigkeitskette) | Planner | A-36-Blatt | **Gegenstandslos mit der Rücknahme.** Die Messung des Plan-Prüfers (`774854ef`, 09:35) hat drei der vier Punkte erledigt; der vierte (**Erstnutzer**) ist eine Festlegung, keine Messung. **Für einen zurückgezogenen Auftrag wird keine DoR mehr erteilt.** Die Messung selbst bleibt für die P2D-Teile gültig — sie ist nicht verloren, nur nicht mehr Voraussetzung. | Befund des Plan-Prüfers in `docs/STATUS.md` | — | — | — | **Gegenstandslos mit der Rücknahme.** Die Messung des Plan-Prüfers (`774854ef`, 09:35) hat drei der vier Punkte erledigt; der vierte (**Erstnutzer**) ist eine Festlegung, keine Messung. **Für einen zurückgezogenen Auftrag wird keine DoR mehr erteilt.** Die Messung selbst bleibt für die P2D-Teile gültig — sie ist nicht verloren, nur nicht mehr Voraussetzung. | **ENTFÄLLT_MIT_BEGRUENDUNG** |
-| V-04 | **A-36-3 ist an einem Wort unerfüllbar** — es verlangt „mehr als eine KENNUNG", richtig ist „mehr als ein ABSCHNITT" | Planner | A-36-Blatt, Kriterium A-36-3 | **Gegenstandslos mit der Rücknahme.** Das Kriterium A-36-3 wird nicht mehr gebaut. **Die Sache dahinter bleibt richtig und wandert nach P2D:** ein Wächter, der „mehr als eine KENNUNG" verlangt, misst etwas anderes als „mehr als einen ABSCHNITT". | **gemeldet `902c83f3`, nachgerechnet: bei `93960252` trägt KEINER der zwei berührten Abschnitte eine Kennung** — über Abschnitte gezählt zwei (grün), über Kennungen ein Wert (**rot und durch keinen Bau behebbar**) | — | — | — | **Gegenstandslos mit der Rücknahme.** Das Kriterium A-36-3 wird nicht mehr gebaut. **Die Sache dahinter bleibt richtig und wandert nach P2D:** ein Wächter, der „mehr als eine KENNUNG" verlangt, misst etwas anderes als „mehr als einen ABSCHNITT". | **ENTFÄLLT_MIT_BEGRUENDUNG** |
+| V-01 | **A-36 erklärt die Worktree-Lösung zum Nicht-Ziel und ist damit überholt** | Planner | `docs/auftraege/aktiv/A-36-*.md:78` | Widerspruch aufgelöst | *gemessen 14.08.: Zeile 78 sagt „Yama hat sie ausdrücklich **nicht** entschieden"* | — | — | — | **UMGESETZT_UNGEPRUEFT** | **Aufgelöst durch V-02:** A-36 ist zurückgezogen, der Widerspruch besteht nicht mehr. |
+| V-02 | **Entscheidung: A-36 zurückziehen (`SPEC_BLOCKED`) oder als P2D-Teilschritt unterordnen** | Planner | A-36-Blatt, `docs/STATUS.md` | eine benannte Wahl | A-36 steht auf `ENTWURF`, DoR nicht erteilt, vier Punkte fehlen | — | — | — | **UMGESETZT_UNGEPRUEFT** | **ENTSCHIEDEN von Yama, 14.08.: A-36 wird als eigenständiger Auftrag ZURÜCKGEZOGEN.** Verwertbare Teile P2D untergeordnet. Statusübergang in `docs/STATUS.md` **nur durch den Integrator**. |
+| V-03 | A-36s vier fehlende DoR-Punkte (Testdaten/Rolle/Route/Browserpfad · API/Schema/Migration/Bundle · Erstnutzer · Abhängigkeitskette) | Planner | A-36-Blatt | ergänzt **oder** entfällt mit V-02 | Befund des Plan-Prüfers in `docs/STATUS.md` | — | — | — | **ENTFÄLLT_MIT_BEGRUENDUNG** | **Gegenstandslos mit der Rücknahme.** Die Messung des Plan-Prüfers (`774854ef`) erledigte drei der vier Punkte; der vierte (**Erstnutzer**) ist eine Festlegung, keine Messung. **Für einen zurückgezogenen Auftrag wird keine DoR erteilt.** Die Messung gilt für die P2D-Teile weiter. |
+| V-04 | **A-36-3 ist an einem Wort unerfüllbar** — es verlangt „mehr als eine KENNUNG", richtig ist „mehr als ein ABSCHNITT" | Planner | A-36-Blatt, Kriterium A-36-3 | ein Wort getauscht | **gemeldet `902c83f3`, nachgerechnet: bei `93960252` trägt KEINER der zwei berührten Abschnitte eine Kennung** — über Abschnitte gezählt zwei (grün), über Kennungen ein Wert (**rot und durch keinen Bau behebbar**) | — | — | — | **ENTFÄLLT_MIT_BEGRUENDUNG** | **Gegenstandslos mit der Rücknahme** — A-36-3 wird nicht gebaut. **Die Sache wandert nach `P2D-05`:** ein Wächter, der „mehr als eine KENNUNG" verlangt, misst etwas anderes als „mehr als einen ABSCHNITT". |
 
-**Planner-Vorschlag zu V-02, zur Entscheidung durch Yama:** **Unterordnen, nicht zurückziehen.**
+**⛔ HISTORISCH / ÜBERHOLT — der folgende Absatz ist NICHT mehr maßgeblich.**
+**Maßgeblich ist Yamas Entscheidung V-02 vom 14.08.: A-36 wird als eigenständiger Punkt
+ZURÜCKGEZOGEN; verwertbare Teile werden P2D untergeordnet.** Der Absatz bleibt als Beleg stehen
+(A-20-4: einen Beleg schreibt man nicht um), **er begründet nichts mehr.** Er zeigt auch, wie nah
+mein Vorschlag daran war, das Falsche zu empfehlen: ich hielt „unterordnen" für richtig und
+„zurückziehen" nur für *vertretbar* — Yamas Begründung nennt den Grund, den ich nicht gewichtet
+hatte: **ein nur meldender Hunk-Wächter verhindert Richtung B nicht.**
+
+> *(historisch, 14.08. vor der Entscheidung)* **Planner-Vorschlag zu V-02:** **Unterordnen, nicht zurückziehen.**
 Der Hunk-Wächter bleibt in P2D nützlich (er misst, wie oft die Kollision auftritt, und §14 ist
 ohnehin zu ändern) — **aber seine drei Nicht-Ziele zur Aufteilung, zum Claim und zur Sperrdatei
 fallen, und K5 „meldet, sperrt nicht" gilt nur noch für den Wächter, nicht für die Barriere.**
@@ -224,15 +232,17 @@ deshalb weiter auf `UMGESETZT_UNGEPRUEFT` und **nicht** höher.
 
 | ID | Sperre | Status |
 |---|---|---|
-| P2C-01 | Änderung an `STATUS.md` außerhalb der Integration → abgelehnt | **BLOCKIERT** — Integrator nicht benannt |
+| P2C-01 | Änderung an `STATUS.md` außerhalb der Integration → abgelehnt | **BLOCKIERT** — Integrator benannt, Instanz nicht gestartet |
 | P2C-02 | Commit mit `STATUS.md` von normaler Rolle → abgelehnt | **BLOCKIERT** |
 | P2C-03 | im Integrations-Checkout nur Integrator | **BLOCKIERT** |
 | P2C-04 | Statusübergang ohne Übergabestück + Ursprungscommit → abgelehnt | **BLOCKIERT** |
 | P2C-05 | Integrationscommit ohne benannte Fremdpfade → abgelehnt | **BLOCKIERT** |
 
-**Blocker für P2C-01..05:** **Der Integrator ist nicht besetzt.** Yamas Text nennt ihn oder einen
-eigenen Agenten; **eine Fachrolle darf nicht stillschweigend hineinrutschen.** Ohne Besetzung ist
-die Sperre nicht baubar, weil ihr Subjekt fehlt.
+**Blocker für P2C-01..05:** **Die Rolle ist entschieden und benannt** — eigener sechster Agent,
+`TICKET_ROLLE=integrator` (B-2, 14.08.) —, **aber die Instanz läuft nicht und der
+Integrations-Checkout ist nicht aktiviert.** Die Sperre ist damit **spezifizierbar, aber nicht
+belegbar**: ihr Subjekt existiert als Festlegung, noch nicht als Betrieb. **Eine Fachrolle darf
+nicht stillschweigend hineinrutschen** — Yama hat ausdrücklich gegen den Release-Prüfer entschieden.
 
 ### P2D · Commit-Tor und Hook
 
@@ -271,8 +281,8 @@ die Sperre nicht baubar, weil ihr Subjekt fehlt.
 | P2F-01 | **Schreibstopp B-1 ZUGESTELLT** — die vier Rollen-Instanzen haben die Anweisung empfangen | **BLOCKIERT** |
 | P2F-02 | Schreibstopp gemessen: **gemeinsamer Arbeitsbaum sauber** | **UMGESETZT_UNGEPRUEFT** |
 | P2F-03 | Schreibstopp gemessen: **keine uncommittierten/untracked Rollenänderungen** | **UMGESETZT_UNGEPRUEFT** |
-| P2F-04 | Schreibstopp gemessen: **keine laufenden Git-Schreibvorgänge** | **UMGESETZT_UNGEPRUEFT** |
-| P2F-05 | Schreibstopp gemessen: **letzter fremder Commit VOR dem festgestellten Stopp** | **NACHBESSERN** |
+| P2F-04 | Schreibstopp gemessen: **keine laufenden Git-Schreibvorgänge** — Lock-Dateien **und** Prozesse | **UMGESETZT_UNGEPRUEFT** |
+| P2F-05 | Schreibstopp **wirksam** — alle vier Bedingungen zugleich: Instanzbestätigung je Rolle · sauberer Baum · keine aktiven Git-Schreiber · Ruhephase | **NACHBESSERN** |
 | P2F-06 | **Integrator-Agent gestartet** mit `TICKET_ROLLE=integrator` | **BLOCKIERT** |
 | P2F-07 | **Integrations-Checkout aktiviert** — erst **nach** belegtem Schreibstopp | **BLOCKIERT** |
 | P2F-08 | **`AKTIVIERUNGS_SHA` bestimmt** durch den Integrator | **BLOCKIERT** |
@@ -297,6 +307,19 @@ letzter Commit je Rolle:
   release-pruefer  6aff69ea  08:12:17
 ```
 
+**Nachgemessen um 10:08 — Bedingung 3 jetzt VOLLSTÄNDIG, denn die erste Messung war unvollständig:**
+
+```
+Lock-Dateien (index/HEAD/refs)      ->  keine
+laufende git-Prozesse auf dem Repo  ->  0        <- das fehlte am 09:39
+git status --porcelain              ->  0
+```
+
+**Mein Fehler dabei, benannt:** Um 09:39 habe ich P2F-04 auf `UMGESETZT_UNGEPRUEFT` gesetzt und dabei
+**nur Lock-Dateien** geprüft. Yamas Bedingung lautet „aktive Git-Schreiber" — das sind **zwei** Dinge:
+Locks **und** Prozesse. Ein Lock kann fehlen, während ein `git`-Prozess läuft und gleich eines
+anlegt. **Der Punkt war nicht falsch, aber nur halb belegt.**
+
 **P2F-05 steht auf `NACHBESSERN`, und das ist der wichtigste Punkt dieses Blocks.** Yamas Kriterium:
 *„letzter fremder Commit zeitlich vor dem festgestellten Stopp"*, und ausdrücklich: *„eine bloße
 Mitteilung ‚die Rollen wurden gestoppt' genügt nicht."* **Gemessen: der Plan-Prüfer schreibt weiter**
@@ -312,15 +335,48 @@ Anordnung ohne Adressaten.
 **Nachgemessen um 09:44, und die Lage ist schärfer als ein Nachzügler:** In den **4,5 Minuten** nach
 der Stopp-Feststellung um 09:39:31 sind **zwei** weitere fremde Commits gefallen (`c5c6ac57` 09:40:15,
 `e6c4f7a2` 09:42:59) — **und beide schreiben in `docs/STATUS.md`**, genau die Datei, für die B-2 den
-Integrator zum **alleinigen** Schreiber macht. `e6c4f7a2` besteht ausschließlich daraus:
-`docs/STATUS.md | 56 ++++++`. **Das ist kein Auslaufen, das ist laufender Betrieb.** Ich nenne hier
-keine feste Gesamtzahl, weil sie mit jeder Minute driftet — die Messung ist die **Rate**, nicht der
-Stand: **zwei Commits in 4,5 Minuten, beide in der Datei mit dem künftigen Einzelschreiber.**
+Integrator zum **alleinigen** Schreiber macht.
 
-**Ein Nachweis, der nicht durch Zufall grün wird:** P2F-05 gilt erst, wenn nach dem **zugestellten**
-Stopp eine **benannte Zeitspanne ohne fremden Commit** vergangen ist. Ein einzelner sauberer Blick
-genügt nicht — er trifft nur die Pause zwischen zwei Commits. **Vorschlag: 20 Minuten, gemessen mit
-`git log --since`, Rohausgabe in den Beleg.**
+**Nachgemessen um 10:08, und die Lage ist breiter als angenommen — es ist nicht eine Rolle, es sind
+drei:**
+
+```
+Rollen-Commits seit 09:39:31:
+   8  plan-pruefer
+   2  generator
+   1  evaluator
+  --  release-pruefer  (0)
+```
+
+**Elf Commits von drei Rollen in 29 Minuten.** Meine Meldung von 09:44 nannte nur den Plan-Prüfer und
+war damit **zu eng** — ich hatte den einen gemessen, der mich weckte, nicht die Fläche. *(Dieselbe
+Lehre, die der Plan-Prüfer heute selbst gezogen hat: „die ganze Fläche gemessen statt der nächsten
+Einzelstelle".)*
+
+**Und der Betrieb läuft nicht nur weiter, er wechselt Zustände:** `039aa7c4` um 10:08:10 setzt
+**W-12/1 auf `ABGENOMMEN`** (Evaluator Runde 2, Ball an den Release-Prüfer). **Das ist genau der
+Vorgang, den B-2 künftig dem Integrator allein zuweist** — und er ist heute Nacht einmal an dieser
+Datei kollidiert.
+
+**Ich nenne die Rate, nicht den Stand:** eine feste Gesamtzahl driftet mit jeder Minute; **drei von
+vier Rollen, elf Commits in 29 Minuten, darunter ein Zustandswechsel** bleibt auch später wahr.
+
+**Ein Nachweis, der nicht durch Zufall grün wird — und die Ruhephase allein genügt NICHT.**
+*(Yamas Nachschärfung vom 14.08.: eine commitfreie Zeit ist ein **Indiz**, kein Beleg. Eine Instanz,
+die gerade liest oder nachdenkt, erzeugt zwanzig Minuten Stille und schreibt danach weiter.)*
+**P2F-05 gilt erst, wenn ALLE VIER Bedingungen zugleich belegt sind:**
+
+| # | Bedingung | Beleg |
+|---|---|---|
+| 1 | **Bestätigung oder Beendigung ALLER VIER Rolleninstanzen**, je einzeln | Zustellungs- oder Beendigungsnachweis je Instanz — **nicht** eine Sammelaussage |
+| 2 | **Sauberer gemeinsamer Arbeitsbaum** | `git status --porcelain` → 0 Zeilen, Rohausgabe |
+| 3 | **Keine aktiven Git-Schreiber** | keine `index.lock`/`HEAD.lock`/`refs/**.lock`; **zusätzlich** kein laufender `git`-Prozess auf dem Repo |
+| 4 | **Ruhephase ohne Rollen-Commit** | 20 Minuten, `git log --since`, Rohausgabe |
+
+**Bedingung 1 ist die tragende, und sie ist die einzige, die ich nicht messen kann.** Die anderen
+drei kann ich lesend belegen; ob eine fremde Instanz die Anweisung *empfangen* hat, sieht man an
+keinem Git-Zustand. **Deshalb steht P2F-01 vor P2F-05 und nicht daneben.** Und deshalb ist
+„die Rollen wurden gestoppt" nach Yamas Wortlaut ausdrücklich **kein** Beleg.
 
 **Und ein Zweites, das der Aktivierungs-SHA erben wird:** Zwischen `36e60030` und jetzt liegen die
 Commits des Plan-Prüfers von heute Morgen — darunter die **Rücknahme** eines eigenen Fehlbefunds
@@ -409,11 +465,11 @@ nicht von Altfehler betroffen · §3 korrekt eingeordnet).
 | P5-02b | **RUECKNAHME: A-35-9 fehlt KEIN Operand** | **ENTFÄLLT_MIT_BEGRUENDUNG** | Der Befund `5c46941c` („die 5 mm stehen nirgends im Blatt") ist vom Plan-Prüfer in `45f26bdb` **selbst zurückgenommen**: **A-35 nennt sie auf Zeile 113** — *„Zwei 6000-mm-Wände, 5 mm Versatz"* —, dazu eine Tabelle mit vier Winkel/Abstands-Paaren und dem Kernsatz zur Winkel-gegen-Abstands-Schwelle. **Von mir in einem Aufruf gegengeprüft: die Zeile steht da.** **MEIN ANTEIL, und er ist der schwerere:** ich habe die 5 mm *nachgerechnet und bestätigt* — aber **nicht nachgesehen, ob sie schon im Blatt stehen.** Ich habe eine Abwesenheits-Behauptung übernommen und mit einer Rechnung untermauert. **Seine Regel daraus gilt für mich genauso:** *eine Aussage über Abwesenheit braucht eine Suche über das GANZE Dokument, nicht über den Abschnitt — „steht nirgends" ist ein Zählwort und braucht nach B5 eine Belegzeile.* Seine Tabelle ist dabei **präziser als seine eigene Nachrechnung** (bei 0,000057° rechnet er mit gerundetem Winkel, das Blatt mit der exakten Schwelle). |
 | P5-03 | **W-03/1** | **OFFEN** | Zeiger vollständig geprüft, 0 Funde |
 | P5-04 | **W-10/1** | **BLOCKIERT** | **Blatt beschreibt HEAD, `basis_sha` beschreibt `18fe2deb`** — Punkt 5 der Freigabe nicht erfüllbar |
-| P5-05 | **W-12/1** | **NACHBESSERN** | läuft, Ball beim Generator |
+| P5-05 | **W-12/1** | **ENTFÄLLT_MIT_BEGRUENDUNG** | **Erledigt außerhalb der Umstellung:** `039aa7c4` (14.08. 10:08) setzt W-12/1 auf `ABGENOMMEN` — Evaluator Runde 2, Ball beim Release-Prüfer, `basis_sha: b778152b`. **Eine Startfreigabe ist gegenstandslos, wenn der Auftrag durch ist.** *(Gemessen in `docs/STATUS.md`, nicht aus der Commit-Botschaft geschlossen.)* |
 | P5-06 | **W-14/1** | **OFFEN** | Zeiger berichtigt · **Kernmodul 9/9 zeichengenau an beiden Ständen** (`a6fa9c00`) — die 13/24 aus P5-10 betrifft ausschließlich Verbraucherdateien, **nicht den Gegenstand**. Ziehbar. |
 | P5-07 | **W-16/1** | **OFFEN** | tragendes Kriterium berichtigt |
 | P5-08 | **W-18/1** | **OFFEN** | vollständig geprüft, 0 Funde |
-| P5-09 | **A-36** | **BLOCKIERT** | siehe V-01..V-03 |
+| P5-09 | **A-36** | **ENTFÄLLT_MIT_BEGRUENDUNG** | **Zurückgezogen durch V-02** (Yama, 14.08.). Es gibt keine Startfreigabe für einen zurückgezogenen Auftrag. **Verwertbare Inhalte laufen weiter unter `P2D-05`** (Hunk-Erkennung, §14-Verschärfung, historische Positivproben, Unterscheidung Dateiliste / `--numstat` / tatsächlicher Diff-Inhalt). Der Statusübergang im Blatt und in `docs/STATUS.md` erfolgt **ausschließlich durch den Integrator**. |
 | P5-10 | **Zeigerprüfung aller sieben BEREIT-Blätter** | **UMGESETZT_UNGEPRUEFT** | vom Plan-Prüfer in `cb85bd0b`, 67 Zeiger gegen den je eigenen Schnitt. Ergebnistabelle steht unten. |
 | P5-11 | **Regel: Vorwärts-Berichtigung zieht den `basis_sha` mit** | **UMGESETZT_UNGEPRUEFT** | Regeltext steht unten. Gilt ab sofort; die Aufnahme in `docs/ARBEITSREGELN.md` §5 ist **P4-24**. |
 | P5-12 | **sechs `basis_sha` nachziehen** (W-10/1, W-12/1, W-14/1, W-16/1, W-03/1, A-33) | **BLOCKIERT** | Schreibzugriff auf fremde Blätter im gemeinsamen Checkout — hängt an **B-1**. |
@@ -521,12 +577,21 @@ gemeinsame veränderliche Datenbank · **kein Zugriff auf `docs/STATUS.md`** · 
 
 ---
 
-## ⛔ ZWEI BLOCKER, die ich nicht selbst auflösen kann
+## ⛔ WAS OFFEN IST — und in welchem Zustand genau
 
-| # | Blocker | Warum ich es nicht kann | Wirkt auf |
+*(Die frühere Fassung dieses Blocks nannte B-1 „nicht angeordnet" und B-2 „nicht besetzt". **Beides
+ist überholt:** Yama hat am 14.08. entschieden. Was fehlt, ist nicht die Entscheidung, sondern der
+Vollzug — und das ist ein anderer Zustand, der anders zu belegen ist.)*
+
+| # | tatsächlicher Zustand | was fehlt | wirkt auf |
 |---|---|---|---|
-| **B-1** | **Der Schreibstopp für die vier anderen Rollen ist nicht angeordnet** | *„Vor der Trennung schreibt nur der Planner"* — vier Rollen schreiben in diesem Moment weiter (letzter fremder Commit `36e60030`). **Ich kann keine Instanz anhalten.** | Welle 1→2, P0-08, PAR-02 |
-| **B-2** | **Der Integrator ist nicht besetzt** | Yamas Text nennt ihn **oder** einen eigenen Agenten; **eine Fachrolle darf nicht stillschweigend hineinrutschen.** | **P2C-01..05, P4-04, Welle 6** |
+| **B-1** | **Schreibstopp beschlossen, aber noch nicht vollständig zugestellt und nicht wirksam nachgewiesen.** | Zustellung an vier Instanzen · Einzelbeleg je Instanz · Ruhephase · sauberer Baum · keine aktiven Git-Schreiber | P2F-01..05, P5-12, alle Worktree-Punkte |
+| **B-2** | **Eigener sechster Integrator beschlossen und benannt** (`TICKET_ROLLE=integrator`), **aber die Instanz ist nicht gestartet und der Integrations-Checkout nicht aktiviert.** | Instanzstart · Aktivierung des Checkouts · Trennungsbeleg gegen Evaluator/Release-Prüfer | P2C-01..05, P2E-01..12, P2F-06..14 |
+
+**Was ich selbst nicht kann, und warum es keine Ausrede ist:** Die vier Rollen sind eigene
+Instanzen. Mein einziger Kanal zu ihnen wäre ein Commit im gemeinsamen Checkout — genau dort darf
+ich nicht schreiben. **Die Zustellung liegt bei Yama, der die Instanzen fährt.** Alles, was ich
+danach brauche, ist vorbereitet.
 
 ---
 
@@ -543,9 +608,9 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 |---|---|
 | `OFFEN` | **93** |
 | `UMGESETZT_UNGEPRUEFT` | **36** |
-| `BLOCKIERT` | **21** |
-| `NACHBESSERN` | **2** |
-| `ENTFÄLLT_MIT_BEGRUENDUNG` | **3** |
+| `BLOCKIERT` | **20** |
+| `NACHBESSERN` | **1** |
+| `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
 | **Summe** | **155 = alle IDs** |
 
@@ -588,6 +653,25 @@ gestiegen sind:** Sie sind nicht neu entstanden. **36 Pflichtpunkte standen als 
 **Dieselbe Fehlerfamilie**, die der Plan-Prüfer am selben Tag dreimal an seiner eigenen Ballortung
 fand: ein Punkt, den das Suchmuster nicht sieht, ist für den Betrieb nicht vorhanden.
 
-**Nächster konkreter Punkt: V-02** — Yamas Entscheidung, ob A-36 zurückgezogen oder untergeordnet
-wird. **Danach P2A-02..06** (die vier fehlenden Rollen-Worktrees und der Integrations-Checkout),
-**sobald B-1 und B-2 aufgelöst sind.**
+## VERBINDLICHE REIHENFOLGE — Yamas Festlegung vom 14.08.
+
+*(Die frühere Fassung dieses Abschnitts verlangte hier eine Entscheidung zu V-02. **V-02 ist
+entschieden** und darf nicht erneut als offen dargestellt werden.)*
+
+| Schritt | Handlung | wer | Zustand |
+|---|---|---|---|
+| **a** | Schreibstopp an Plan-Prüfer, Generator, Evaluator, Release-Prüfer **zustellen** | **Yama** | **offen — der Engpass** |
+| **b** | Zustellung **oder Beendigung** jeder Rolleninstanz **einzeln** belegen | Yama | offen |
+| **c** | Gemeinsamen Checkout prüfen: sauberer Arbeitsbaum · **aktive Git-Schreiber** · neue Rollen-Commits | Planner *(lesend)* | wartet auf a/b |
+| **d** | Festgelegte **Ruhephase ohne Rollen-Commit** nachweisen | Planner *(lesend)* | wartet auf a/b |
+| **e** | Eigenen sechsten **Integrator starten** | Yama | offen |
+| **f** | Integrator untersucht die **Divergenz** des gemeinsamen Branches und bestimmt **erst danach** den `AKTIVIERUNGS_SHA` | **Integrator** | wartet auf e |
+| **g** | **Erst vom freigegebenen `AKTIVIERUNGS_SHA`** die vier übrigen Rollen-Worktrees anlegen | Integrator/Planner | wartet auf f |
+
+**Der Engpass liegt nicht mehr beim Planen.** Schritte a, b und e kann nur Yama vollziehen; c und d
+sind rein lesende Messungen, die ich sofort fahre, sobald a/b vorliegen; f gehört dem Integrator.
+**Nichts davon wartet auf eine weitere Planungsrunde.**
+
+**Was ich in der Zwischenzeit NICHT tue:** keine Worktrees anlegen · nicht in den gemeinsamen
+Checkout schreiben · keine Rolle aktivieren · **den `FORENSISCHEN_SHA` nicht als Arbeitsbasis
+verwenden.**
