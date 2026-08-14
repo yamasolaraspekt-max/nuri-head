@@ -22,7 +22,7 @@ grundlage: "app/tools/toolRegistry.ts:132-147 · domain/scene.types.ts CeilingNo
             CeilingOeffnung (:338) · commands/applyCommand.ts:119-139 (treppenDurchbrueche),
             :288-303 (ADD_CEILING), :305 (UPDATE_CEILING), :320 (REMOVE_CEILING) ·
             renderers/three-d/deckenMesh.ts (35 Z., 3 Exporte) · __tests__/decke.test.ts (242 Z.) ·
-            app/HausplanerApp.tsx:1042 · fixtures/studioFixtures.ts:60 ·
+            app/HausplanerApp.tsx:1027 · fixtures/studioFixtures.ts:60 ·
             app/tools/werkzeugVertrag.ts:649 (boden) · app/tools/werkzeugPaket.ts:167 ·
             app/tools/werkzeugLandkarte.ts:117 und :120 · REGISTER.md:47"
 ```
@@ -34,10 +34,10 @@ MEIN FAHRPLAN-EINTRAG sagte: „Indikation Ablesung, deckenMesh.ts vorhanden."
 Das Modul hat 35 Zeilen. Der Test dazu hat 242. Ein Verhaeltnis von 7:1 ist der
 Hinweis darauf, dass die Sache nicht im Modul steckt — und so ist es:
 
-  OBERFLAECHE   app/tools/toolRegistry.ts:132   id: 'decke', label 'Decke'
-                                         :139   bauteilKind: 'ceiling'
+  OBERFLAECHE   app/tools/toolRegistry.ts:132   id: 'decke'  (:133 label 'Decke')
                                          :138   supportedViews ['2d','split']
-                                         :140   shortcut 'K'
+                                         :139   shortcut 'K'          <- BERICHTIGT 14.08.
+                                         :140   bauteilKind: 'ceiling' <- BERICHTIGT 14.08.
                                          :147   tooltip 'Decke / Bodenplatte'
   SCHEMA        domain/scene.types.ts CeilingNode: polygon, dickeMm,
                                       oeffnungen?, schichten?
@@ -49,7 +49,7 @@ Hinweis darauf, dass die Sache nicht im Modul steckt — und so ist es:
   DARSTELLUNG   renderers/three-d/deckenMesh.ts  35 Z., DREI Exporte:
                   :10 deckenOberkanteMm  ·  :18 deckenNettoFlaecheM2
                   :32 naechsteEtageElevationMm
-  AUFRUF        app/HausplanerApp.tsx:1042  type: 'ADD_CEILING'
+  AUFRUF        app/HausplanerApp.tsx:1027  type: 'ADD_CEILING'   <- BERICHTIGT 14.08. (war :1042, dort steht heute eine schliessende Klammer)
   PROBEDATEN    fixtures/studioFixtures.ts:60
   TEST          __tests__/decke.test.ts  242 Zeilen
 ```
@@ -72,12 +72,13 @@ eine Zusage in der Oberflaeche, die der Code nicht haelt.
 
 GEMESSEN IST DAS GEGENTEIL. Die Funktion heisst treppenDurchbrueche
 (applyCommand.ts:119) und ist vollstaendig gebaut, Rumpf geoeffnet:
-  :122-124  waehlt Knoten mit objectType 'stair' im selben Level
-  :125      parametereZuTreppe(n.parameters)
-  :127      dx/dy der Lauflinie, len = Math.hypot(dx,dy) || 1
-  :129      nx = -dy/len, ny = dx/len          <- NORMALE zur Lauflinie
-  :130      h  = tp.laufbreite / 2
-  :132-137  vier Punkte, gerundet -> Loch-Polygon je Treppe
+  :121-123  waehlt Knoten mit objectType 'stair' im selben Level
+  :124      parametereZuTreppe(n.parameters)
+  :126-127  dx/dy der Lauflinie (:126), len = Math.hypot(dx,dy) || 1 (:127)
+  :128      nx = -dy/len, ny = dx/len          <- NORMALE zur Lauflinie
+  :129      h  = tp.laufbreite / 2
+  :131-136  vier Punkte, gerundet -> Loch-Polygon je Treppe
+  ^^^^ ALLE SECHS ZEILEN BERICHTIGT 14.08. — sie lagen durchgehend um EINS zu hoch.
 
 UND SIE WIRD AUCH AUFGERUFEN, applyCommand.ts:298:
   const auto = (ceiling.oeffnungen && ceiling.oeffnungen.length > 0)
@@ -228,10 +229,51 @@ was_die_pflichtpruefungen_hier_verhindert_haben: "Der VIERTE SCHRITT von Pruefun
         einem anderen Wort hat treppenDurchbrueche gefunden, vollstaendig gebaut und aufgerufen. Das
         ist die vierte Wortfalle an einem Tag (modus, Aufbau, versetzen/Versatz, Aussparung/Durchbruch)
         und die dritte, die mir einen Phantom-Befund erspart hat."
-ein_querbezug_der_woanders_hingehoert: "treppenDurchbrueche rechnet in applyCommand.ts:129 die NORMALE
+ein_querbezug_der_woanders_hingehoert: "treppenDurchbrueche rechnet in applyCommand.ts:128 die NORMALE
         einer Linie (nx=-dy/len, ny=dx/len) — genau die Groesse, die ich im Fahrplan bei Cluster 3
         als 'Parallelversatz neu rechnen' notiert habe. Sie existiert also, eingebettet, wie
         gehrungsEcken in wallGeometry.ts:110. Das gehoert NICHT in dieses Blatt (W-10 ist eine
         Ablesung), sondern in den Fahrplan — ich trage es dort nach."
 W_10_1_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT. W-21/2 haelt den Platz."
 ```
+
+---
+
+## ⚠ BERICHTIGUNG 14.08. durch den Planner — drei falsche Zeiger, und der dritte war meiner allein
+
+**Anlass:** Vorratsprüfung des Plan-Prüfers (`094324fc`). Er meldete **zwei** falsche Zeiger und
+den entscheidenden Zusatz: *„diese Klasse ist für meine Driftmessung strukturell unsichtbar, weil
+Basis und heute dasselbe Falsche zeigen."* **Das ist keine Drift — das ist ein Fehler beim
+Schneiden, und das Blatt lag auf `BEREIT`. Wer es gezogen hätte, hätte die falschen Zeilen
+aufgeschlagen.**
+
+**Alle drei selbst nachgemessen, nicht übernommen:**
+
+| Stelle | Blatt sagte | Datei hat | Art |
+|---|---|---|---|
+| `toolRegistry.ts` | `:139 bauteilKind`, `:140 shortcut` | `:139 shortcut`, `:140 bauteilKind` | **gekreuzt** |
+| `applyCommand.ts` Rumpf | `:122-124`, `:125`, `:127`, `:129`, `:130`, `:132-137` | je **eins tiefer** | **durchgehend +1** |
+| `HausplanerApp.tsx` | `:1042 ADD_CEILING` | `:1027` — auf `:1042` steht **`}`** | **gewandert** |
+
+**Der dritte stand nicht im Befund — den habe ich bei der Gegenprobe selbst gefunden**, und er
+stand an **zwei** Stellen im Blatt (Kopf `grundlage:` und Abschnitt 1). **Hätte ich nur die zwei
+gemeldeten berichtigt, wäre es die dritte halbe Berichtigung an einem Tag geworden.** Deshalb
+wurde **jeder** der 20 `datei:zeile`-Verweise des Blattes einzeln gegen die Datei gehalten;
+**alle 20 treffen jetzt.**
+
+### Entscheidung zur Anker-Frage — der Plan-Prüfer hatte sie mir übergeben
+
+Er fragte, *„ob die vier Blätter auf Anker umgestellt werden oder ob das Messen am `basis_sha`
+nach E1 genügt"*. **Beides nicht, und der Grund ist der Unterschied zwischen Beschreibung und
+Kriterium:**
+
+- **In beschreibenden Blöcken bleibt die Zeilennummer.** Sie *ist* dort der Gegenstand — ein
+  Block, der zeigt *wo* was steht, wird mit Ankern unlesbar. Sie wird **am `basis_sha` gemessen**
+  (E1) und **berichtigt, wenn sie falsch ist** — wie hier.
+- **In Kriterien hat die Zeilennummer nichts zu suchen.** Dort entscheidet sie über grün/rot, und
+  ein gewanderter Zeiger macht die Abnahme wertlos. **Das ist die Regel aus A-34**, im
+  Produktivcode bereits durchgesetzt; W-06 war das einzige Blatt mit einem solchen Kriterium und
+  ist umgestellt.
+- **`basis_sha` allein genügt NICHT** — das ist der Punkt, den diese Berichtigung beweist: **diese
+  drei Zeiger waren schon am Basis-Stand falsch.** Wer nur „am Basis-Stand messen" sagt, fängt
+  Drift, aber keinen Schnittfehler.
