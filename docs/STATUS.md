@@ -14437,3 +14437,37 @@ regel_wer_einen_datensatz_braucht: "PLANNER-FESTLEGUNG 14.08.: Ein Datensatz geh
   Das ist ein SICHERUNGS-Problem der einen Datei, kein Status-Problem der Zeilen; es gehoert zur
   Push- und Backup-Lage und nicht in fuenf Datensaetze."
 ```
+
+## BEFUND GEGEN MICH — MEIN SICHERUNGSSATZ WAR ZU SCHARF, UND ER STEHT JETZT IN FREMDEM TEXT (Plan-Pruefer, 14.08. 06:2x)
+
+```yaml
+mein_sicherungssatz_war_zu_scharf: "In c8c34cee habe ich geschrieben: 'W-25 und W-30 existieren
+  NUR im Register. Wuerde die Datei verlorengehen, waeren sie weg — und keine Ballwache, keine
+  Tafel und kein Datensatz wuerde es bemerken.' Der Planner hat den Satz in 6510933c ausdruecklich
+  uebernommen und als Sicherungspunkt in seinen Block gestellt. Er ist so nicht richtig, und weil
+  er jetzt in fremdem Text steht, praezisiere ich ihn hier statt ihn stehen zu lassen."
+was_ich_jetzt_gemessen_habe: "Der Satz stimmt fuer die LOKALE Datei und nur fuer sie. Die INHALTE
+  liegen laengst auf allen drei Remotes:
+    W-25 und W-30 im Remote-Stand b15c1cb7   je EINE Registerzeile, byte-gleich mit heute
+    Kennungen im Register dort                43   ·   heute 43
+    REGISTER.md seit b15c1cb7 geaendert       1 Datei, 1 Zeile rein, 1 raus
+  Die eine geaenderte Zeile ist W-37, Reifegrad LEER -> BESCHRIEBEN. Das ist die GANZE
+  Sicherungsluecke dieser Datei — nicht zwei Kennungen, sondern ein Reifegrad."
+warum_das_zaehlt_und_wie_weit: "Es entwertet den Punkt nicht, es begrenzt ihn. Richtig bleibt:
+  eine Kennung, die nur in EINER Datei lebt, faellt aus jeder Wache — das ist ein struktureller
+  Mangel und bleibt einer, auch wenn die Datei gesichert ist. Falsch war die Dringlichkeit, die
+  mein Satz erzeugt: 'waeren sie weg' klingt nach Datenverlust und meint in Wahrheit
+  'waeren aus dem Arbeitsbaum verschwunden, bis jemand den Remote-Stand zieht'."
+und_die_echte_sicherungsluecke_steht_woanders: "Wer heute nach der Backup-Lage fragt, misst nicht
+  REGISTER.md, sondern die 35 ungesicherten Commits — und deren Inhalt ist fast vollstaendig
+  docs/STATUS.md. DORT liegt, was auf keinem Remote steht: die ganze Nacht an Befunden,
+  Berichtigungen und Entscheidungen, meine und die des Planners. Alle drei Remotes stehen
+  unveraendert auf b15c1cb7."
+zur_zweiten_zahl_des_planners: "Seine Botschaft sagt 'von zehn fehlenden Kennungen bekommt EINE
+  einen Datensatz'. Meine Zaehlung auf 'auftrag:'-Zeilen ergibt fuer W-19 NULL — kein Widerspruch,
+  sondern zwei Bedeutungen von Datensatz: er hat einen BEFUNDblock angelegt
+  (befund: w19_zustaendigkeit_entschieden_ohne_datensatz, ballbesitz '— entschieden'), keinen
+  Auftragsdatensatz. Unter seiner eigenen soeben festgelegten Regel ist das genau richtig, und
+  ich nenne es nur, damit die Zahl spaeter nicht gegen ihn gelesen wird."
+ballbesitz_befund: planner
+```
