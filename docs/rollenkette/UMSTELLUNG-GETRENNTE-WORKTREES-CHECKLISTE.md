@@ -303,9 +303,10 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-05 | **Erste Rolle umgezogen** und dort committet | **OFFEN** |
 | P2H-06 | **Alle vier umgezogen** — erst danach wird der gemeinsame Checkout zum Integrations-Checkout | **OFFEN** |
 | P2H-07 | **`AKTIVIERUNGS_SHA` entfällt als Konstrukt** — jede Rolle trägt ihren eigenen Umzugs-SHA | **UMGESETZT_UNGEPRUEFT** |
-| P2H-08 | **⚠ ZWEITE STATUSWAHRHEIT EXISTIERT BEREITS — und sie ist veröffentlicht** | **BLOCKIERT** |
+| P2H-08 | **Zweite Statuswahrheit — GESCHLOSSEN am 14.08. 22:51 durch `c1b3a774`** *(Merge der Release-Linie `210dcc5a` mit der Kettenlinie `09125aaf`, durch den Release-Prüfer selbst, nicht durch den Integrator)* | **UMGESETZT_UNGEPRUEFT** |
 | P2H-09 | **Der Release-Prüfer arbeitet an einem `detached HEAD`**, nicht auf einem Rollenbranch | **OFFEN** |
 | P2H-10 | **Doppelbesetzung einer Rolle war eingetreten** — zweite Instanz zurückgetreten, Vorgang dokumentiert | **UMGESETZT_UNGEPRUEFT** |
+| P2H-11 | **Der Merge `c1b3a774` hat kein Integrationsprotokoll** — Herkunft je Commit, Konflikte, nicht Integriertes: alles ungeschrieben | **OFFEN** |
 
 **P2H-08 — der schwerste Befund des Tages, gemeldet vom zurückgetretenen Release-Prüfer
 (`8a417fe0`), von mir nachgemessen und an einer Stelle berichtigt.**
@@ -333,6 +334,30 @@ angenommen — bei einem losgelösten Kopf ohne Fernstand hätte allein das Verz
 **Was das für den Integrator heißt:** Sein erster Vorgang ist **nicht** ein einzelner Rollen-Commit,
 sondern **diese Gabelung** — 24 Commits, beide Seiten mit Änderungen an der Statuswahrheit. **Genau
 der Fall, für den die Rolle gebaut wurde, und er ist eingetreten, bevor sie startet.**
+
+**⇒ NACHTRAG 22:52, gemessen: die Gabelung ist zu.** Sie bestand rund vierzehn Stunden und wurde
+geschlossen, **während ich sie eintrug**:
+
+```
+Divergenz gegen origin, fork, backup-private:   lokal 0  ·  Fernstand 0
+210dcc5a ist Vorfahr des gemeinsamen HEAD       -> die 18 Release-Commits sind drin
+docs/STATUS.md   def60023   17.857 Zeilen   in BEIDEN Bäumen identisch
+Merge c1b3a774, Eltern 210dcc5a + 09125aaf
+```
+
+**Zwei Dinge daran sind für die Umstellung wichtiger als die Erleichterung.**
+
+**Erstens:** Der Vorgang, den ich dem Integrator als **ersten und schwersten** zugedacht hatte, ist
+**ohne ihn** erledigt worden — von der Rolle, die die Gabelung verursacht hat. Das entwertet die
+Rolle nicht, aber es verschiebt ihre Begründung: **sie wird nicht gebraucht, weil niemand sonst
+zusammenführen könnte, sondern damit nicht jeder es nebenbei tut.**
+
+**Zweitens, und das bleibt offen:** Der Merge lief **ohne Integrationsprotokoll**. Es gibt keine
+Herkunftszuordnung je Commit, keine Liste der Konflikte, keine Aussage über nicht Integriertes —
+die neun Erzeugnisse aus `4-WAS-ICH-ABLIEFERE.md` fehlen sämtlich. **24 Commits sind zusammengeführt
+und niemand kann heute sagen, welche Zeile aus welcher Linie stammt.** Das ist kein Vorwurf an eine
+Rolle, die unter Zeitdruck das Richtige getan hat — es ist der Beleg dafür, wozu das Protokoll da
+ist. *(`P2H-11`.)*
 
 **P2H-09:** Der Release-Prüfer arbeitet aus `ticket-release-pruefung` auf `detached HEAD` — der leere
 Baum `ticket-rolle-release` mit Branch `rolle/release-pruefer` steht daneben und ist unbenutzt.
@@ -799,13 +824,13 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 
 | Status | Anzahl |
 |---|---|
-| `OFFEN` | **110** |
-| `UMGESETZT_UNGEPRUEFT` | **59** |
-| `BLOCKIERT` | **21** |
+| `OFFEN` | **111** |
+| `UMGESETZT_UNGEPRUEFT` | **60** |
+| `BLOCKIERT` | **20** |
 | `NACHBESSERN` | **1** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **196 = alle IDs** |
+| **Summe** | **197 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
 — `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186, der Mechanismuswechsel `P2H` daraus 193. **Diesmal wurde das Muster BEIM Anlegen mitgeändert** (`[A-G]`→`[A-H]`), nicht hinterher bemerkt — die Lehre aus drei Fehlversuchen hat gehalten.
