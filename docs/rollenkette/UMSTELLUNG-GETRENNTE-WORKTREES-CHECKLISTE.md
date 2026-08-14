@@ -303,6 +303,49 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-05 | **Erste Rolle umgezogen** und dort committet | **OFFEN** |
 | P2H-06 | **Alle vier umgezogen** — erst danach wird der gemeinsame Checkout zum Integrations-Checkout | **OFFEN** |
 | P2H-07 | **`AKTIVIERUNGS_SHA` entfällt als Konstrukt** — jede Rolle trägt ihren eigenen Umzugs-SHA | **UMGESETZT_UNGEPRUEFT** |
+| P2H-08 | **⚠ ZWEITE STATUSWAHRHEIT EXISTIERT BEREITS — und sie ist veröffentlicht** | **BLOCKIERT** |
+| P2H-09 | **Der Release-Prüfer arbeitet an einem `detached HEAD`**, nicht auf einem Rollenbranch | **OFFEN** |
+| P2H-10 | **Doppelbesetzung einer Rolle war eingetreten** — zweite Instanz zurückgetreten, Vorgang dokumentiert | **UMGESETZT_UNGEPRUEFT** |
+
+**P2H-08 — der schwerste Befund des Tages, gemeldet vom zurückgetretenen Release-Prüfer
+(`8a417fe0`), von mir nachgemessen und an einer Stelle berichtigt.**
+
+```
+Divergenz gegen ALLE drei Fernstände (origin, fork, backup-private), identisch:
+    lokal voraus:      6 Commits   (W-16/1-Runden, Rücktritt — 22:27 bis 22:46)
+    Fernstand voraus: 18 Commits   (Release-Linie — 08:48 bis 22:34)
+
+docs/STATUS.md:
+    gemeinsam  2898c5cc   17.600 Zeilen   zuletzt 22:46
+    Release    1b2f7397   17.737 Zeilen   zuletzt 22:34
+    -> VERSCHIEDEN.  Alle 18 Release-Commits berühren docs/STATUS.md.
+```
+
+**Seine Formulierung war „die Fassung, die alle anderen lesen, ist die veraltete". Das trifft es
+nicht:** die lokale Fassung ist die **neuere** (22:46 gegen 22:34). **Es sind zwei Linien, die beide
+neue Inhalte tragen — das ist schlimmer als veraltet.** Ein Zusammenführen erzeugt sicher Konflikte
+in `docs/STATUS.md`, und zwar in beiden Richtungen.
+
+**Was NICHT verloren ist:** `210dcc5a` liegt auf **drei** Fernständen. Die 18 Commits sind gesichert,
+obwohl der Worktree einen `detached HEAD` trägt. *(Gemessen mit `branch -a --contains`, nicht
+angenommen — bei einem losgelösten Kopf ohne Fernstand hätte allein das Verzeichnis sie gehalten.)*
+
+**Was das für den Integrator heißt:** Sein erster Vorgang ist **nicht** ein einzelner Rollen-Commit,
+sondern **diese Gabelung** — 24 Commits, beide Seiten mit Änderungen an der Statuswahrheit. **Genau
+der Fall, für den die Rolle gebaut wurde, und er ist eingetreten, bevor sie startet.**
+
+**P2H-09:** Der Release-Prüfer arbeitet aus `ticket-release-pruefung` auf `detached HEAD` — der leere
+Baum `ticket-rolle-release` mit Branch `rolle/release-pruefer` steht daneben und ist unbenutzt.
+**Zwei Bäume für eine Rolle**, einer davon ohne Branch. Der Umzug für diese Rolle ist damit nicht
+„noch nicht erfolgt", sondern **an den falschen Ort erfolgt**.
+
+**P2H-10:** Eine **zweite Instanz derselben Rolle** war aktiv und hat einen Phantom-Ball vorgeprüft.
+Sie ist zurückgetreten und hat die Entscheidung **gemessen statt bevorzugt** begründet: Instanz A
+hat einen eigenen Worktree, 8 Rollen-Commits, 15 Merges und zwei Aufträge bis `BETRIEBSBESTAETIGT`
+durchgezogen; sie selbst hatte null. **Ihr Satz gehört in dieses Blatt:** *„Der Grenznutzen einer
+zweiten schreibenden Instanz ist nicht null, sondern NEGATIV: zwei Release-Prüfer erzeugen die
+zweite Wahrheit, gegen die die Rolle gebaut ist."* — **Das ist die Begründung der ganzen Umstellung,
+unabhängig hergeleitet von einer Rolle, die dabei ihren eigenen Platz aufgibt.**
 
 ### Die Umzugsanleitung — vier Zeilen je Rolle
 
@@ -756,13 +799,13 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 
 | Status | Anzahl |
 |---|---|
-| `OFFEN` | **109** |
-| `UMGESETZT_UNGEPRUEFT` | **58** |
-| `BLOCKIERT` | **20** |
+| `OFFEN` | **110** |
+| `UMGESETZT_UNGEPRUEFT` | **59** |
+| `BLOCKIERT` | **21** |
 | `NACHBESSERN` | **1** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **193 = alle IDs** |
+| **Summe** | **196 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
 — `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186, der Mechanismuswechsel `P2H` daraus 193. **Diesmal wurde das Muster BEIM Anlegen mitgeändert** (`[A-G]`→`[A-H]`), nicht hinterher bemerkt — die Lehre aus drei Fehlversuchen hat gehalten.
