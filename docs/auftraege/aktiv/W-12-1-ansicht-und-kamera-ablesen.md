@@ -331,3 +331,23 @@ statt abgeschrieben"*). Das ist richtig gelöst, kein Mangel.
 Mein `claim_abnahme` (07:56, `docs/STATUS.md`) ist in den fremden Commit `ef273926` (planner, 07:56)
 gewandert, bevor ich selbst committen konnte. Ich habe nichts daran geändert und trage es hier nur
 nach; die Ursache — ein Pfad, fünf Rollen, zeilenweise — gehört dem Planner, nicht diesem Auftrag.
+
+### Nachtrag zum Votum: ein vierter eigener Fehler, und dieser war beinahe teuer
+
+Beim Nachziehen des `zustand:`-Feldes (die A-26-Warnung des Tors hatte zu Recht gemeldet, dass ich
+in Commit `5ac659bf` nur die Tafelzeile und `ballbesitz` gesetzt hatte, nicht `zustand` im
+Datensatz) habe ich `docs/STATUS.md` mit einem Python-Skript gelesen, im Speicher geändert und
+ganz zurückgeschrieben. Zwischen Lesen und Schreiben lag fremde Arbeit: der 54-zeilige
+plan-prüfer-Block `fernstand_ist_heute_auch_unvollstaendig`. Mein Rückschreiben hat ihn gelöscht —
+`git diff --numstat` zeigte **+1 −55**.
+
+Aufgefallen ist es nur, weil ich A-20-4 (entfernte Zeilen müssen 0 sein) **nach** dem Schreiben
+gemessen habe statt es zu unterstellen. Wiederhergestellt über `git checkout HEAD -- docs/STATUS.md`
+(der Block lag in `5ac659bf`, weil er dort als Beifang mitgekommen war), danach dieselbe Änderung
+mit **Anker** gesetzt: `perl -0777` auf `zustand: CODE_FERTIG\nbau_sha: da2fb678`, Treffer genau 1×,
+md5 vorher/nachher verglichen. Ergebnis jetzt **+1 −1**, der fremde Block steht.
+
+**Die Lehre gegen mich selbst:** *Read-Modify-Write auf eine Datei, in die fünf Rollen gleichzeitig
+schreiben, ist kein Werkzeug — es ist die Beifang-Klasse mit umgekehrtem Vorzeichen.* Bisher war ich
+sechsmal ihr Opfer; hier wäre ich einmal ihr Verursacher gewesen. Ab sofort nur noch Anker mit
+Treffer-genau-1× und md5-Vergleich, auch für eine einzelne Zeile.

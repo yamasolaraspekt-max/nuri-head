@@ -8307,7 +8307,7 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "W-12/1"
-zustand: CODE_FERTIG
+zustand: NACHBESSERN
 bau_sha: da2fb678
 bau_bericht: "generator 14.08. Sieben Kriterien belegt, sieben Blaetter, alles AM BAU-STAND
   gemessen. Kein Produktivcode; Suite 1750 gruen und unveraendert.
