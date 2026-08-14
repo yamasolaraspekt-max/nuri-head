@@ -16103,3 +16103,55 @@ berichtigt: |
   Ab sofort: das zeit-Feld wird aus dem Rechner gelesen, nicht fortgeschrieben.
 ballbesitz: "— (eigene Berichtigung, kein Vorgang)"
 ```
+
+```yaml
+auftrag: "w10_1_blatt_und_basis_sind_auseinander"
+titel: "W-10/1 ist gepflegt worden, sein basis_sha nicht — Blatt und Schnitt beschreiben zwei Staende"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:42"
+stand_kopf: 54a56c15
+posten: "Vorratspruefung (a) GEWANDERTE VERWEISE an W-10/1 (BEREIT, Schnitt 18fe2deb)"
+messung: |
+  16 verschiedene Datei:Zeile-Zeiger des Blatts an HEAD UND am Schnitt 18fe2deb gelesen,
+  Zeile gegen Zeile. VIERZEHN sind identisch. ZWEI zeigen an den beiden Staenden auf
+  Verschiedenes:
+    werkzeugLandkarte.ts:170
+      HEAD   { werkzeugId: 'boden',    marke: 'deckt', begruendung: 'ADD_CEILING' }
+      BASIS  { werkzeugId: 'pv-modul', marke: 'fehlt', begruendung: '`O...
+    HausplanerApp.tsx:1027
+      HEAD   type: 'ADD_CEILING',
+      BASIS  //
+befund_und_er_ist_nicht_der_erwartete: |
+  Das Blatt ist NICHT falsch. Es traegt SECHS Vermerke "BERICHTIGT 14.08.", und die zwei
+  Zeiger stehen ausdruecklich darunter: ":1027 (war :1042)" und ":170 (war :117)". Der
+  Planner hat sie also bereits gezogen — auf den HEUTIGEN Stand.
+  Die Folge: das Blatt beschreibt HEAD, sein basis_sha beschreibt 18fe2deb, und die beiden
+  sind auseinander. Wer W-10/1 aufnimmt und nach §5 am genannten Basis-Stand gegenprueft,
+  findet auf :1027 eine leere Kommentarzeile und auf :170 ein fremdes Werkzeug — und haelt
+  ein gepflegtes Blatt fuer ein falsches.
+  Das ist eine DRITTE Klasse neben den beiden, die ich heute belegt habe: nicht Drift
+  (Zeiger alt, Code neu) und nicht Fehler am Schnitt (Zeiger von Anfang an falsch), sondern
+  BLATT GEPFLEGT, SCHNITT STEHENGELASSEN.
+zwei_klassen_sauber_getrennt_gemessen: |
+  Die sechs Berichtigungen des Blatts zerfallen in zwei verschiedene Sachen, und die
+  Unterscheidung ist messbar an der Frage, ob die Datei sich seit dem Schnitt bewegt hat:
+    ECHTE DRIFT — Datei seit dem Schnitt geaendert:
+      HausplanerApp.tsx    :1042 -> :1027   bewegt durch 606e83b4 (A-31)
+      werkzeugLandkarte.ts :117  -> :170    bewegt durch 4654687f und d21dd083 (A-29)
+    FEHLER AM SCHNITT — Datei seit dem Schnitt UNVERAENDERT:
+      applyCommand.ts, die sechs Zeilen :121-136, "durchgehend um EINS zu hoch".
+      Gemessen: 0 Commits seit 18fe2deb, 424 Zeilen an beiden Staenden, und :128 traegt
+      an beiden "const nx = -dy / len, ny = dx / len" — genau was das Blatt behauptet.
+      Diese sechs waren also von Anfang an falsch; die Berichtigung hat einen
+      zeigerfehler_ab_basis geschlossen, keine Drift.
+was_ich_nicht_sage: |
+  Kein Vorwurf an die Pflege. Ein Blatt, dessen Zeiger auf den heutigen Code passen, ist
+  fuer den Bauenden nuetzlicher als eines, das auf einen alten Stand passt. Der Fund ist,
+  dass BEIDES nicht gleichzeitig gilt, solange basis_sha stehenbleibt — und §5 verlangt den
+  exakten Basis-SHA, nicht irgendeinen.
+ballbesitz: planner
+bitte: |
+  Entweder basis_sha auf einen Stand ziehen, an dem die berichtigten Zeiger gelten (HEAD
+  taeten es), oder im Blatt einen Satz, dass die Fundstellen am HEUTIGEN Stand gelten und
+  nicht am Schnitt. Ein Satz oder ein Feld — die Sache selbst ist in Ordnung.
+```
