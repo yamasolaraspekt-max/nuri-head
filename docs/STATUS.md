@@ -14936,3 +14936,42 @@ was_ich_daraus_ziehe: "Die achtzehn §5-Punkte habe ich bei A-35 der Sache nach 
   heute Nacht von jedem anderen verlangt habe."
 ballbesitz_befund: —   # nichts offen: der Mangel ist behoben, dies ist die Offenlegung
 ```
+
+## PRUEFBERICHT — WARUM A-33s DoR HAELT, OBWOHL FUENF SEINER KRITERIEN HEUTE WAHR SIND (Plan-Pruefer, 14.08. 07:2x)
+
+```yaml
+drei_arten_von_kriterien: "Nach dem Befund gegen meine A-35-DoR (ed72ad66) musste ich dieselbe
+  Frage an meine ANDERE DoR dieser Nacht stellen: ist bei A-33 ein Kriterium schon erfuellt?
+  Fuenf von sieben sind es — und die DoR haelt trotzdem. Der Unterschied ist benennbar, und ich
+  schreibe ihn auf, damit mein eigener Befund nicht mechanisch ueberdehnt wird."
+gemessen_an_A_33: "Die sieben Kriterien, einzeln gelesen und heute gemessen:
+    A-33-1  PRODUKT      'Nach dem Bau enthaelt die Menge Tafelzeile-ohne-Datensatz KEINE
+                         Verkuerzung mehr.' -> heute ROT: 12 Zeilen ohne Datensatz, davon 11
+                         Verkuerzungen (A-06 ist der legitime ERLEDIGT-Fall). Selbst gefahren
+                         mit a30-datensatz-paar.sh --bestand.
+    A-33-5  VERGLEICH    'a26-ball-drift.sh laeuft nach dem Bau ohne neue Meldung, der Lauf
+                         VORHER ist mitzuliefern.' -> heute still (0 Bytes, exit 0). Der Wert
+                         entsteht aus der Gegenueberstellung, nicht aus dem Einzellauf.
+    A-33-2  SCHUTZ       'W-27, W-27/1, W-40, W-40/1 sind UNBERUEHRT'
+    A-33-3  SCHUTZ       'KEIN Zustand und KEIN Ballbesitz geaendert'
+    A-33-4  SCHUTZ       'Der KLARTEXT ist wortgleich erhalten'
+    A-33-6  SCHUTZ       'Nichts geloescht'
+    A-33-7  SCHUTZ       'Kein Code — der Bau-Commit fasst NUR docs/STATUS.md an'"
+warum_das_kein_paragraf_5_verstoss_ist: "Ein SCHUTZkriterium ist vor dem Bau notwendigerweise
+  wahr — es sagt ja gerade, dass etwas UNBERUEHRT bleiben soll. Es traegt seinen Wert im
+  Nachher, nicht im Vorher. Wer §5s 'kein Kriterium ist bereits erfuellt' woertlich auf solche
+  Saetze anwendet, macht jeden Auftrag mit Nicht-Zielen unmoeglich — und §5 verlangt Nicht-Ziele
+  im selben Atemzug ausdruecklich ('jede Anforderung ist entweder ein Kriterium oder ein
+  ausdrueckliches Nicht-Ziel')."
+und_warum_A_35_2_trotzdem_einer_war: "A-35-2 war kein Schutzkriterium, sondern ein PRODUKTkriterium:
+  'geradenGeometrie.ts hat mindestens einen Produktivaufrufer' behauptet ein ERGEBNIS des Baus.
+  Ein Produktkriterium, das vor dem Bau gruen ist, misst nichts — genau darauf zielt der
+  §5-Punkt. Die Trennlinie ist also nicht 'wahr oder falsch', sondern: BEHAUPTET DAS KRITERIUM
+  EIN ERGEBNIS DES BAUS ODER EINE GRENZE DES BAUS?"
+was_ich_daraus_fuer_meine_pruefung_mache: "Bei jeder kuenftigen DoR ordne ich jedes Kriterium
+  einer der drei Arten zu und pruefe den §5-Punkt NUR an den Produktkriterien — dort aber mit
+  ausgefuehrtem Messbefehl, nicht nach Augenschein. Bei A-35 waere das ein einziger grep gewesen.
+  Das ist keine Regelaenderung — §1 behaelt die ARBEITSREGELN Yama vor —, sondern die Angabe,
+  wie ich den vorhandenen Punkt anwende."
+ballbesitz_befund: —   # Pruefbericht: A-33s DoR haelt, nichts ist offen
+```
