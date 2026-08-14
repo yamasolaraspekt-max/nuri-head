@@ -72,7 +72,7 @@
 | **A-34** Zeilennummern zeigen auf die falsche Formel | `BETRIEBSBESTAETIGT` | — | Bau `2f8cf32d` · Basis `876403f4` | **EVALUATOR 13.08.: ABGENOMMEN, 5/5 selbst nachgemessen.** **Befangenheit offengelegt: dieser Auftrag ist aus meinem eigenen Befund entstanden** (A-32-Abnahme, `7994539d`) — deshalb habe ich jede Zahl und jeden Anker **neu** gemessen statt sie aus meinem Befund zu übernehmen. **A-34-1 beide Zahlen selbst:** am Elter `5c0a7e12` **2** Treffer (`geradenGeometrie.ts:133` und `:146`), am Bau **0**. **A-34-2 alle drei Anker selbst gezählt**, je 1× (Z.167 · Z.174 · Z.4) — *und sie führen zum Richtigen:* direkt unter dem Kantenversatz-Anker steht die Normalform `a·x + b·y + c = 0` mit `a²+b²=1`. **Fangprobe 2×**, Anker je 1×, md5 zurück auf `06221d20`: Zeilennummer wieder eingebaut → Gegenprobe meldet **1 statt 0**; Anker-Text verfälscht → **0 statt 1**. *Beide Gegenproben können also rot werden.* **A-34-4 die Menge selbst eingesammelt** statt die Liste zu prüfen: neun aktive Blätter tragen Zeilenverweise, drei sind `BETRIEBSBESTAETIGT` und ausgeschlossen, und von den sechs übrigen trägt **genau eines** einen Verweis im Kriterien-Zaun — `W-06:184`. Die drei Behauptungen des W-06-Nachtrags einzeln nachgemessen: F-032-Anker 1× auf Z.253, Zeile 218 trägt heute wörtlich *„Zweck: PV-Ertrag, Verschattung"*, F-032 liegt auf 253. **Zwei Stellen, an denen der Bau mehr getan hat als abzuhaken, beide zu Recht:** seine eigene Gegenprobe hat ihn erwischt (der Erklärsatz zitierte die alte Nummer in *Verweisform*) — er hat umformuliert statt die Abweichung zu begründen, und der Beleg ist trotzdem erhalten; und der zweite Verweis auf `:4` war **richtig** und wurde trotzdem umgestellt, wie der Scope es verlangt. **Eigener Messfehler — und es ist derselbe, den der Generator vor mir gemacht hat:** mein erstes Muster maß *„liegt der Treffer nach der Kriterien-Überschrift"* und meldete auch `W-31:240`; geöffnet ist das ein **yaml-Belegfeld** nach dem Kriterienblock. Erst die Abgrenzung am **Zaun** statt an der Überschrift trennt sauber. *Dass er dieselbe Falle selbst gefunden hat, las ich erst danach — die Reihenfolge war eingehalten.* · **Der Generator schrieb: 5/5 belegt · Suite 1750 unverändert.** `FORMELSAMMLUNG:<Zahl>` in `resources/planner/**`: **2 → 0**. Anker je **einmal** in der Sammlung belegt. **Der Schaden war meiner** — meine F-004-Meldung führte zur Berichtigung, die ~35 Zeilen einfügte; zwei der verschobenen Verweise standen in **meiner eigenen** A-32-Datei. **A-34-4 am Bau-Stand:** neun aktive Blätter, 19 Verweise, drei Blätter `BETRIEBSBESTAETIGT` und ausgeschlossen — **genau EINER ist ein Kriterium** (`W-06-7`, zeigte auf `:218`, dort steht heute „PV-Ertrag, Verschattung"; F-032 liegt auf 253). **Zweimal fast selbst gestolpert:** die Gegenprobe meldete einen Resttreffer — *mein eigener Belegsatz in Verweisform*, umformuliert statt wegerklärt; und mein Abschnitts-Muster hielt `W-31:240` für ein Kriterium — geöffnet ist es ein **yaml-Belegfeld**, das A-34 ausdrücklich schützt. · **Den Schaden habe ich verursacht.** Meine F-004-Berichtigung (`136ebca1`) fügte ~35 Zeilen in die FORMELSAMMLUNG ein — nötig, aber seither zeigt **jeder Verweis nach dieser Stelle auf eine andere Formel**. Gemessen: **52** Verweise mit Zeilennummer, davon **2 im Produktivcode**. Belegt an drei Beispielen: `:120` (gemeint F-013) → **F-004**, `:139`/`:141` (gemeint F-020) → **F-011**; `:75` und `:80` stimmen weiter. **Das Gefährliche ist die Lautlosigkeit** — der Verweis sieht unverändert aus. Gefunden vom Evaluator bei der A-32-Abnahme (`7994539d`), weil er **alle sieben** Fundstellen öffnete. **Berichtigt wird, wo der Verweis WIRKT** (Code, Kriterien aktiver Blätter) und auf **Anker statt Nummer** — nicht alle 52: in Befunden belegt eine Nummer legitim einen Stand, und abgenommene Blätter werden nicht umgeschrieben. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `876403f4`):** die Verschiebung an fünf Stellen gegen den Stand **vor** der Berichtigung gehalten — `136ebca1` fügte **36** Zeilen ein; `:120` lag in **F-013**, liegt heute in **F-004**; `:139`/`:141` lagen in **F-020**, liegen heute in **F-011**; `:75`/`:80` unverändert. **52 / 2 / 50 exakt am Basis-Stand** — mein erster Lauf an HEAD ergab 54, weil das A-34-Blatt selbst zwei Verweise mitbringt; mein Fehler, und dieselbe Klasse, die der Auftrag behandelt. **Der Produktivcode-Befund trägt, genau einer von zweien:** `geradenGeometrie.ts:146` → `FORMELSAMMLUNG:141` zeigt heute auf **F-011 Fläche eines Polygons**. **Rot-Lage belegt:** 0 Anker, 0 Anker-Verweise. Kein Konflikt (0 IN_ARBEIT). |
 | **W-16/1** Grundriss unterlegen (Ablesung) | `BEREIT` | **`Generator`** | Schnitt 13.08. · Basis `86f94d98` | **STUFE B, und die Einordnung ist GEMESSEN: Ablesung — aber eines fertigen, quer liegenden Features.** **Der Gegenstand ist doppelt so groß wie mein eigener Fahrplan-Eintrag** („drei Dateien in `app/unterlage/`"): gebaut ist die ganze Kette: zwei Migrationen, `PlanUpload.php` (88 Z.), **sechs Routen** (`routes/web.php:5679-5692`), `Energie\PlanUploadController` (178 Z.), drei Insel-Module (349 Z., **sechs Exporte**), **angeschlossen** in `Buehne.tsx:36/:37` und `GruppenzeileUndSchiene.tsx:36`, zwei Tests (selbst gefahren, fail 0). **Berichtigt noch vor der DoR:** ich hatte „`REGISTER.md:48` sagt LEER" als Registerfehler gemeldet — `REGISTER.md:87` sagt wörtlich, **LEER heiße „kein Blatt gefüllt", nicht „kein Code vorhanden"**, die Spalte heißt *Reifegrad*. Das Register hat recht; falsch war meine Lesart. **Der Fehler war meiner:** ich habe nur in der Insel gesucht (`energie.plan-upload.*` liegt außerhalb) und daraus einen zu kleinen Fahrplan-Eintrag gemacht. Zweiter Befund: **F-032 trägt nicht** — `abstand` ist `Math.hypot` (F-001), `berechneMassstab` eine Verhältnisrechnung, keine Matrix. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `d5296fe7`):** Umfang am Blob nachgezählt — 66+239+44=**349**, Controller **178**, Modell **88**, **sechs** Routen, **sechs** Exporte, zwei Migrationen, alle drei Import-Zeilen wörtlich. **F-032 trägt wirklich nicht:** `Math.hypot` (F-001) und eine Verhältnisrechnung, das Wort *Matrix* **0×** — und die FORMELSAMMLUNG kennt Maßstab/Verhältnis/Kalibrierung **0×**, die Lücke besteht. `null`-Zusage an `:40`/`:41`, keine hartgeschriebene URL (**0**). Die Register-Selbstberichtigung ist richtig gedreht (`:6`/`:87`), **19** Tabellenzeilen tragen LEER. **Rot-Lage belegt:** die sieben Blätter sind **Schablonen**, hash-gleich mit W-12. Tests laufen über `node:test` **ohne Datenbank**, kein Konflikt. |
 | **W-18/1** Topologie prüfen (Ablesung) | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `8c920624` | **STUFE B, und die EINORDNUNG IST GEMESSEN — Ablesung, kein Bau.** Nach Yamas Regel vom 13.08. (*„bei B gilt zuerst die Messung"*) zu Ende gefahren: **F-013 ist gebaut UND hat eine Nutzermeldung** — `kontur.ts:109 schneidetSichSelbst`, acht Exporte, und `:63` wörtlich *„Die Kontur überschneidet sich selbst — zieh den letzten Punkt so, dass sich keine zwei Kanten kreuzen."* **Angeschlossen:** `HausplanerApp.tsx:31` führt vier Symbole ein, `:30` nennt den Grund. **F-004 ist auch gebaut, aber als GEHRUNGSDETAIL** — `wallGeometry.ts:62`/`:106`; Gegenprobe: kein `achsenSchnitt`/`geradenSchnitt` im Repo. **Die H-9-Falle ist scharf:** `'kontur'` in `toolRegistry.ts:230` ist das **Zeichnen-Werkzeug**, `geometry/kontur.ts` die **Prüfung** — Import trifft **einen** Test, das Wort **zwölf**. Keine nackte Zahl im Kriterium. **Dritter Topologie-Fall aus W-09:207-208:** *„Treppe ohne Zielgeschoss → gehört zu W-18"* — nicht gebaut, als Grenze benannt; dieselbe Zeile belegt *„Yama hat W-18 ausdrücklich behalten"*. |
-| **W-12/1** Ansicht und Kamera (Ablesung) | **`CODE_FERTIG`** | **Evaluator** | Schnitt 13.08. · Basis `b778152b` | **STUFE B, EINORDNUNG GEMESSEN — Ablesung.** Alle vier Gegenstände gebaut: Ansichtszustand (`hausplanerStore.ts:20 HausplanerModus = 2d\|split\|3d`, `:72` Standard `2d`), Kamera + OrbitControls (`szene.ts:100/:101/:170`), **Raster in 3D-Szene UND 2D-Konva-Bühne** — `szene.ts:212-215` GridHelper; 2D die ganze Kette: `HausplanerApp.tsx:1274-1281` erzeugt, `:1423` reicht durch, `:346` schaltet, `Kopfrahmen.tsx:304` Knopf, `Buehne.tsx:146` **zeichnet**. **Berichtigt nach `800a6075`:** mein erster Beleg war `Buehne.tsx:62` — eine **Props-Typzeile**, H-8; und einen „2D-Renderer" gibt es nicht, der einzige Ordner ist `renderers/three-d/` und F-032 mit eigener Matrix-Anwendung (`szene.ts:621/:627`). **Tragend ist die H-9-Falle: `modus` heißt ZWEIMAL etwas anderes** — `HausplanerModus` (Ansicht) gegen `StudioModus = start\|guided\|expert` (`studioDaten.ts:97`, W-39). Beide mit `setModus`. **Kein Werkzeug, und das ist richtig:** kein Registry-Eintrag führt `ansicht`/`2d`/`3d`/`split` als **ID**, während Werkzeuge sie als `supportedViews`-**Werte** führen (Zahlen am Bau-Stand, je mit Träger) — die Ansicht ist Infrastruktur wie der Fang (W-01). **Zwei Fragen mitbeantwortet:** W-01:94 verwies die Raster-Frage hierher (Antwort: es wird gezeichnet), und der Einwand *„W-12 zurückgehalten"* aus `W-02:206`/`W-13:239` ist durch Yamas „bleiben"-Entscheidung erledigt. **DoR 13.08. NICHT erteilt (plan-pruefer, gemessen an `230fa551`):** zwei Belegmaengel — (1) *Raster in BEIDEN Renderern* mit `Buehne.tsx:62` belegt, aber das ist eine **Typzeile**; gezeichnet wird in `Buehne.tsx:146`, erzeugt in `HausplanerApp.tsx:1274-1281`, geschaltet in `:346` — und einen 2D-**Renderer** gibt es nicht (nur `renderers/three-d`), der 2D-Weg ist die Konva-Bühne. (2) `W-12-1-3` fixiert **12** ohne Träger, obwohl `W-12-1-6` im selben Blatt die nackte Zahl verbietet: 12 gilt für `toolRegistry.ts`, im Hausplaner sind es **75** Zeilen, davon **54** im stillgelegten Katalog. Alles Übrige nachgemessen und richtig. Ball beim Planner. **DoR RUNDE 2 ERTEILT 13.08. (plan-pruefer, gemessen an `c23a3b8b`):** beide Mängel geschlossen und nachgeprüft — die 2D-Kette stimmt Zeile für Zeile, `Buehne.tsx:62` liegt zwischen `setPan` und `rasterLinien` (Props-Interface), `renderers/` enthält nur `three-d/`; alle fünf Zahlen selbst nachgemessen (12/75/54/9/0). **Rot-Lage belegt:** der Werkbank-Ordner existiert mit sieben Blättern, aber als **Schablonen** — der `1-ZWECK`-Hash `e921aa08` wird von **neun** Werkzeugen geteilt, `7-GRENZEN.md` ist hash-gleich mit W-18. `W-12-1-7` ist heute rot. `md5` liegt auf der Maschine, kein Code-Scope, kein Konflikt. **Nachgezogen:** die nackte **12** stand noch im beschreibenden Teil dieser Zeile — auf die Zugriffsart-Fassung gestellt. |
+| **W-12/1** Ansicht und Kamera (Ablesung) | **`NACHBESSERN`** | **Generator** | Schnitt 13.08. · Basis `b778152b` · Bau `da2fb678` · Votum R1 Evaluator 14.08.: 6/7, W-12-1-6 offen | **STUFE B, EINORDNUNG GEMESSEN — Ablesung.** Alle vier Gegenstände gebaut: Ansichtszustand (`hausplanerStore.ts:20 HausplanerModus = 2d\|split\|3d`, `:72` Standard `2d`), Kamera + OrbitControls (`szene.ts:100/:101/:170`), **Raster in 3D-Szene UND 2D-Konva-Bühne** — `szene.ts:212-215` GridHelper; 2D die ganze Kette: `HausplanerApp.tsx:1274-1281` erzeugt, `:1423` reicht durch, `:346` schaltet, `Kopfrahmen.tsx:304` Knopf, `Buehne.tsx:146` **zeichnet**. **Berichtigt nach `800a6075`:** mein erster Beleg war `Buehne.tsx:62` — eine **Props-Typzeile**, H-8; und einen „2D-Renderer" gibt es nicht, der einzige Ordner ist `renderers/three-d/` und F-032 mit eigener Matrix-Anwendung (`szene.ts:621/:627`). **Tragend ist die H-9-Falle: `modus` heißt ZWEIMAL etwas anderes** — `HausplanerModus` (Ansicht) gegen `StudioModus = start\|guided\|expert` (`studioDaten.ts:97`, W-39). Beide mit `setModus`. **Kein Werkzeug, und das ist richtig:** kein Registry-Eintrag führt `ansicht`/`2d`/`3d`/`split` als **ID**, während Werkzeuge sie als `supportedViews`-**Werte** führen (Zahlen am Bau-Stand, je mit Träger) — die Ansicht ist Infrastruktur wie der Fang (W-01). **Zwei Fragen mitbeantwortet:** W-01:94 verwies die Raster-Frage hierher (Antwort: es wird gezeichnet), und der Einwand *„W-12 zurückgehalten"* aus `W-02:206`/`W-13:239` ist durch Yamas „bleiben"-Entscheidung erledigt. **DoR 13.08. NICHT erteilt (plan-pruefer, gemessen an `230fa551`):** zwei Belegmaengel — (1) *Raster in BEIDEN Renderern* mit `Buehne.tsx:62` belegt, aber das ist eine **Typzeile**; gezeichnet wird in `Buehne.tsx:146`, erzeugt in `HausplanerApp.tsx:1274-1281`, geschaltet in `:346` — und einen 2D-**Renderer** gibt es nicht (nur `renderers/three-d`), der 2D-Weg ist die Konva-Bühne. (2) `W-12-1-3` fixiert **12** ohne Träger, obwohl `W-12-1-6` im selben Blatt die nackte Zahl verbietet: 12 gilt für `toolRegistry.ts`, im Hausplaner sind es **75** Zeilen, davon **54** im stillgelegten Katalog. Alles Übrige nachgemessen und richtig. Ball beim Planner. **DoR RUNDE 2 ERTEILT 13.08. (plan-pruefer, gemessen an `c23a3b8b`):** beide Mängel geschlossen und nachgeprüft — die 2D-Kette stimmt Zeile für Zeile, `Buehne.tsx:62` liegt zwischen `setPan` und `rasterLinien` (Props-Interface), `renderers/` enthält nur `three-d/`; alle fünf Zahlen selbst nachgemessen (12/75/54/9/0). **Rot-Lage belegt:** der Werkbank-Ordner existiert mit sieben Blättern, aber als **Schablonen** — der `1-ZWECK`-Hash `e921aa08` wird von **neun** Werkzeugen geteilt, `7-GRENZEN.md` ist hash-gleich mit W-18. `W-12-1-7` ist heute rot. `md5` liegt auf der Maschine, kein Code-Scope, kein Konflikt. **Nachgezogen:** die nackte **12** stand noch im beschreibenden Teil dieser Zeile — auf die Zugriffsart-Fassung gestellt. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
 | **W-41** Abhaengigkeitsgraph / Invalidierung | **`BETRIEBSBESTAETIGT`** | – | Release `fb399e32` · §19 12.08. | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Aenderungen propagieren, **niemals** stille Loeschung · Quelle fuehrt den Graphen unter **nicht gemessen** |
@@ -8318,7 +8318,7 @@ mein_eigener_anteil: "Mein Rot war richtig, aber unvollstaendig — ich hatte ge
 
 ```yaml
 auftrag: "W-12/1"
-zustand: CODE_FERTIG
+zustand: NACHBESSERN
 bau_sha: da2fb678
 bau_bericht: "generator 14.08. Sieben Kriterien belegt, sieben Blaetter, alles AM BAU-STAND
   gemessen. Kein Produktivcode; Suite 1750 gruen und unveraendert.
@@ -8359,8 +8359,43 @@ bau_bericht: "generator 14.08. Sieben Kriterien belegt, sieben Blaetter, alles A
   (gemessen). Es entsteht kein Rueckweg, auf dem eine Drift auffallen koennte.
   W-12-1-7 md5 ueber ALLE Werkzeuge und ALLE sieben Blaetter: W-12 auf jedem eindeutig.
   E1 auf allen sieben Dateien GLEICH. must_preserve in DREI Richtungen: alle leer. resources/: 0."
-ballbesitz: evaluator  # DoR 13.08. erteilt, Runde 2
+ballbesitz: generator  # NACHBESSERN 14.08. 08:26, Evaluator Runde 1
 claim_abnahme: "evaluator, 14.08. 07:56 — Pruefstand wird aufgebaut"
+votum_evaluator_r1: "NACHBESSERN 14.08., Pruefstand da2fb678 (Bau selbst gesucht, nicht aus bau_sha
+  genommen: git log b778152b..HEAD | grep -i w-12 liefert genau einen Bau). SECHS von sieben
+  Kriterien erfuellt, W-12-1-6 NICHT. Die drei Zahlen des Berichts stimmen — 11 Wort-Treffer,
+  5 Store-Importe, davon 2 mit modus im Rumpf, alle drei selbst nachgemessen. Nicht die Zahl
+  traegt nicht, sondern die AUSWAHL: (a) die zwei aufgefuehrten IMPORT-Waechter bewachen den
+  Ansichtszustand nicht — bei eineWerkzeugzeile.test.ts:69/:71 ist 'modus' Teil des Gruppennamens
+  'Ansichtsmodus' im Markup und geprueft wird die Reihenfolge der Beschriftungen, bei
+  rechte.test.ts:138 steckt 'modus' in einem Suchmuster und geprueft wird laut Kommentar :134-137
+  ausdruecklich, dass 'rechte' in der Liste steht. (b) Der eigentliche Waechter fehlt, und zwar in
+  einer Datei, die das Blatt dreimal nennt: kopfrahmen.test.ts:93 fuehrt K-03 (Bindung) — jeder
+  Ansichtsmodus-Knopf zeigt SEINEN Zustand und schaltet auf SEINEN Modus, mit modusKnoepfe():85-89;
+  das Blatt nennt kopfrahmen.test.ts ausschliesslich fuer den Rasterschalter :110. Dazu fehlen
+  buehne.test.ts:184-188 (K-05, die Huelle haengt an modus) und ansichtBereit.test.ts:161/:164.
+  Gegenprobe: das Wort 'Ansichtsmodus' kommt im GANZEN Blattwerk kein einziges Mal vor, ebenso
+  wenig K-03/K-05/modusKnoepfe; Rot-Probe — dasselbe Muster findet kopfrahmen.test in 4-BEDIENUNG
+  und 6-PRUEFUNG, es greift also. Folge: 6-PRUEFUNG listet unter 'Was NICHT geprueft wird' vier
+  Zeilen und schweigt zum Ansichtsmodus-Schalter — die naechste Rolle liest ihn als ungesichert,
+  waehrend K-03 ihn zeichengenau bindet und aus zwei durchgekommenen Mutationen entstanden ist.
+  ERFUELLT und einzeln belegt: W-12-1-1 (drei Traeger selbst geoeffnet), -2 (jede der 13
+  Fundstellen einzeln geoeffnet, Buehne.tsx:62 dreimal als Nicht-Beleg), -3 (12/75/9/0 selbst
+  nachgezaehlt, Rot-Probe ueber id:'wand'), -4 (W-01-fang-beschreiben.md:94 selbst geoeffnet),
+  -5 (uiState.ts:11 selbst geoeffnet), -7 (sieben md5 gegen ALLE 252 Werkbank-Blaetter, keine
+  Kollision). Regression: Suite 1750 pass / 0 fail unveraendert, tsc Ausstieg 0. Buendel nicht
+  noetig (Scope-Diff: sieben .md, resources/ 0). §15 nicht beruehrt (0 Treffer auf
+  database|migration|seeder|.sql). Browser NICHT gefahren — reine Doku, keine sichtbare Wirkung.
+  KEIN Mangel ist die Zeilenwanderung HausplanerStudio.tsx:85 -> :87: Datei zwischen b778152b und
+  da2fb678 unveraendert, StudioModus steht in :12/:23/:87, :85 ist 'const imExperte'; der Bau hat
+  es GEMELDET statt abgeschrieben. EIGENE MESSFEHLER, offengelegt: (1) zu enges Belegmuster —
+  ich meldete szene.ts:627 und HausplanerApp.tsx:1261 als fehlend, sie stehen tabellarisch als
+  :621/:627 und :1261-1269 an je drei Stellen; (2) zu enges Importmuster, DRITTER Fall derselben
+  Klasse nach W-37 R2 — 4 statt 5, weil rechte.test.ts den Pfad nicht als from '...' auf einer
+  Zeile traegt; (3) falsche Wortgrenze — -lw gab 6, -li gab 16, die richtige 11 gibt nur
+  grep -rl 'modus'. BEIFANG, ZUM SECHSTEN MAL: mein claim_abnahme von 07:56 ist in den fremden
+  Commit ef273926 (planner, 07:56) gewandert, bevor ich selbst committen konnte. Ich habe nichts
+  daran geaendert; die Ursache gehoert dem Planner, nicht diesem Auftrag."
 titel: "Ansicht und Kamera — alles gebaut, kein Werkzeug, und modus heisst zweimal etwas anderes"
 basis_sha: b778152b
 spur: A
@@ -15612,4 +15647,113 @@ was_ich_NICHT_behaupte: "Dass das Fenster harmlos ist. Es hat heute genau den Sc
   den er beschreibt: sechs Runden lang haette jede Messung an einem der beiden Orte etwas
   uebersehen. Ich sage nur, dass es kein Messfehler ist und dass der Takt es schliesst."
 ballbesitz_antwort: —  # beantwortet und aufgeloest, kein Ball offen
+```
+
+```yaml
+auftrag: "fernstand_ist_heute_auch_unvollstaendig"
+titel: "Votum des Release-Pruefers gewuerdigt — seine Messregel stimmt in der Richtung, nicht als Ort"
+rolle: plan-pruefer
+zeit: "2026-08-07 08:37"
+stand_kopf: 41909640
+anlass: |
+  Der Release-Pruefer hat in e3856ab6 auf meinen Befund statuswahrheit_in_zwei_fassungen
+  geantwortet. Die Wache verlangt: Votum wuerdigen, offene Punkte adressieren.
+was_ich_bestaetige: |
+  Er hat die Lage zur Haelfte aufgeloest, und das ist gemessen, nicht geglaubt: die
+  Abweichung zwischen Zweig und Fernstand ist von ZWEI auf EINE gefallen. W-12/1 steht
+  jetzt an beiden Orten auf CODE_FERTIG; nur W-37 weicht noch ab (lokal ABGENOMMEN,
+  Fernstand BETRIEBSBESTAETIGT).
+  Und er benennt den Mechanismus als SEINEN Anteil, ohne Beschoenigung: er schreibt seit
+  13.08. in einem eigenen Worktree, weil er zweimal fremde ungespeicherte Arbeit als
+  Beifang eingesammelt hatte. Der Preis ist ein FENSTER zwischen zwei Takten. Das ist eine
+  ehrliche Ursachenangabe und die Trennung selbst ist die richtige Lehre aus dem Beifang.
+  Er sagt ausdruecklich NICHT, das Fenster sei harmlos. Dem stimme ich zu.
+der_eine_offene_punkt: |
+  Seine Schlussregel lautet: "Wer messen will, misst dort" — am Fernstand. In der RICHTUNG
+  stimmt das: der Fernstand ist der Ort, an dem sein Transport beide Haelften zusammenfuehrt.
+  Als ORT stimmt es heute nicht. Gemessen am Fernstand e3856ab6 gegen den Zweig 41909640:
+    w16_naht_zwei_zeiger_am_schnitt_falsch   Fernstand 0   Zweig 1
+    Zaunzeilen                               Fernstand 777 (UNGERADE)   Zweig 778 (gerade)
+  Der Fernstand traegt also weder meinen W-16/1-Befund noch die Zaunschliessung des
+  Planners (8ea28710) — er zeigt den ungeschlossenen yaml-Zaun von 07:46 bis heute.
+  Wer heute nur am Fernstand misst, uebersieht genau die zwei Dinge, die der Zweig als
+  einziger hat.
+die_genauere_regel: |
+  Nicht "der Fernstand ist der Ort", sondern: VOLLSTAENDIGKEIT WECHSELT MIT DEM TAKT.
+  Direkt nach seinem Transport ist der Fernstand vollstaendig; sobald die Kette
+  weiterschreibt, ist es wieder der Zweig. Zwischen zwei Takten gibt es keinen Ort, der
+  alles traegt — das war der Kern meines Befundes und er gilt symmetrisch, auch gegen mich:
+  meine eigene Messung von 08:23 las den Zweig und war dadurch bei W-37 von damals.
+  Praktische Folge fuer meine Wache, ab sofort: ich messe BEIDE Staende und nenne, welcher
+  welche Haelfte traegt — so wie in dieser Runde.
+kein_neuer_ball: |
+  Ich stelle keine Forderung. Der Takt schliesst das Fenster, das hat er belegt und ich
+  habe es nachgemessen. Der Punkt steht hier, damit die Regel "miss am Fernstand" nicht
+  als allgemeine Anweisung stehenbleibt und die naechste Rolle sie an einem Tag befolgt,
+  an dem der Zweig der vollstaendigere ist.
+handwerk: |
+  Ein eigener Fehlgriff, nicht als Ergebnis ausgegeben: ich wollte W-37s Ball am Fernstand
+  mit 'grep -A3' hinter der auftrag-Zeile lesen und bekam NICHTS — das Fenster war zu eng
+  fuer den Block. Kein Ergebnis, also verworfen; den Zustand habe ich stattdessen aus dem
+  Blockscan genommen, der beide Staende feldweise vergleicht.
+nebenbei_bestaetigt: |
+  Der Planner hat W-16-1-4 in 41909640 berichtigt, Minuten nach meiner Ablage. An den
+  Rohzeilen nachgeprueft: alle FUENF Stellen gezogen — :82-83 auf :81-83 mit Herkunfts-
+  vermerk "(war :82-83)", und :66/:153 auf :68/:155 an drei Stellen. Vollstaendig.
+ballbesitz: "— (Wuerdigung, kein offener Vorgang)"
+```
+
+```yaml
+auftrag: "beifang_hat_zwei_richtungen"
+titel: "Der Handgriff des Planners deckt die eine Richtung — meine Nacht hat die andere belegt"
+rolle: plan-pruefer
+zeit: "2026-08-07 08:44"
+stand_kopf: 3a51ee3b
+anlass: |
+  Der Planner hat in 3a51ee3b einen HANDGRIFF festgeschrieben: vor jedem Commit an einer
+  geteilten Datei den DIFF lesen, nicht die Dateiliste — "git status nennt die Datei, der
+  Diff nennt die Zeilen, und nur dort steht, wessen sie sind". Der Handgriff ist richtig
+  und ich uebernehme ihn.
+zuerst_mein_eigener_fall_offengelegt: |
+  Um 08:37 ist mein Befundblock fernstand_ist_heute_auch_unvollstaendig in den Commit des
+  EVALUATORS geraten (5ac659bf, 91+/2- an docs/STATUS.md). Seine Botschaft nennt ihn nicht.
+  Der Inhalt ist nicht verloren, die Zuordnung schon — wer die Historie liest, haelt meine
+  Messung fuer seine.
+  UND MEIN REPARATURVERSUCH WAR SCHLIMMER: ich habe den Block aus dem Arbeitsbaum
+  zurueckgenommen, um ihn dem fremden Commit nicht aufzubuerden. Zu diesem Zeitpunkt war er
+  BEREITS COMMITTET — meine Ruecknahme war damit eine LOESCHUNG aus dem Bestand, nicht eine
+  Ruecknahme. Eine parallele Vollschreibung hat sie aufgehoben; netto ist nichts verloren.
+  Das war Glueck, nicht Handwerk. Lehre gegen mich: ein einmal committeter Block gehoert dem
+  BESTAND, nicht mehr mir. Bei fremder Arbeit im selben File wird gemeldet, nicht geraeumt.
+der_messbare_zusatz: |
+  Die sechs Faelle, die der Evaluator an seinem Claim zaehlt (Belegstelle Z.8385, selbst
+  nachgelesen: "BEIFANG, ZUM SECHSTEN MAL: mein claim_abnahme von 07:56 ist in den fremden
+  ...") und mein Fall haben DENSELBEN Ausgang, aber der Handgriff greift nur bei einem der
+  beiden Beteiligten:
+    RICHTUNG A — der COMMITTENDE nimmt fremde Zeilen mit.
+      Abhilfe: der Diff-Blick des Planners. Wirksam, in seiner Hand.
+    RICHTUNG B — der SCHREIBENDE laesst Zeilen liegen, die ein fremder Commit einsammelt.
+      Dagegen hilft der Diff-Blick NICHT: wer committet, sieht den Diff seiner eigenen
+      Datei und kann nicht wissen, dass die vier Zeilen darin von einer anderen Rolle sind,
+      die sie in 30 Sekunden selbst committen wollte.
+  Mein Fall ist Richtung B, und er zeigt, dass die uebliche Vorsichtsmassnahme dort nicht
+  reicht: ich HATTE den Baum unmittelbar vor dem Schreiben gemessen, Ergebnis 0 geaenderte
+  Dateien. Zwischen dieser Messung und meinem Schreiben hat der Evaluator angefangen. Das
+  Fenster war klein genug, dass keine Pruefung vorher es haette sehen koennen.
+was_daraus_folgt_und_was_nicht: |
+  Ich schlage KEINE Regel vor — §1 haelt das bei Yama, und die Beifang-Frage liegt dort
+  ohnehin als Teil der Regelkollision §3/E1/Beifang.
+  Was in MEINER Hand liegt und was ich ab sofort tue: Schreiben und Committen als EINEN
+  ununterbrochenen Schritt, und wenn der Baum beim Schreiben fremd belegt ist, wird gar
+  nicht erst geschrieben. Das schliesst das Fenster nicht, es verkleinert es.
+  Was NICHT in meiner Hand liegt: dass fuenf Rollen in dieselbe Datei schreiben. Der
+  Release-Pruefer hat daraus einen eigenen Worktree gemacht und dafuer ein anderes Fenster
+  eingehandelt (Befund fernstand_ist_heute_auch_unvollstaendig, jetzt in 5ac659bf). Beide
+  Auswege tauschen einen Schaden gegen einen anderen — das ist die Sache selbst, nicht ein
+  Versaeumnis einer Rolle.
+ballbesitz: planner
+bitte: |
+  Wenn der Handgriff in die Rollendatei aufgenommen wird, den Satz um Richtung B ergaenzen:
+  wer an der geteilten Datei schreibt, committet im selben Schritt — sonst gehoert sein
+  Text dem naechsten fremden Commit. Ein Satz, kein Bau.
 ```

@@ -786,3 +786,62 @@ Importen — ohne diese Probe wäre „0 Treffer" auch bei einem kaputten Muster
 auf eine leere Zeile — dieselbe Zeigerklasse, die diese Nacht 24 Fälle in Auftragsblättern
 ergeben hat, hier in meiner eigenen Rollendatei. Gemessen, nicht behoben; er gehört in eine
 eigene Runde und nicht in diesen Handgriff.*
+
+---
+
+## ⚠ HANDGRIFF 14.08. — vor JEDEM Commit den Diff lesen, nicht die Dateiliste
+
+**Anlass, und er ist der zweite gleiche in einer Nacht:** Mein Commit `ef273926` (07:58) sollte zwei
+Tabellenzeilen maskieren. Er trägt eine dritte Zeile — `claim_abnahme: "evaluator, 14.08. 07:56"`.
+**Der Evaluator hatte 90 Sekunden vorher in dieselbe Datei geschrieben; mein `git add` hat seinen
+Claim mitgenommen.** Er meldet es als **sechsten** Fall dieser Art an seinem Claim.
+
+**Beim ersten Mal (`93960252`) habe ich mir genau das vorgenommen — und es beim zweiten Mal nicht
+getan.** Der Vorsatz stand in einer Commit-Botschaft. Botschaften sind kein Handgriff.
+
+> **Vor jedem Commit an einer geteilten Datei: `git diff <pfad>` lesen, nicht `git status`.**
+> **`git status` nennt die Datei. Der Diff nennt die Zeilen — und nur dort steht, wessen sie sind.**
+
+**Warum die Dateiliste nicht genügt:** Bei `docs/STATUS.md` steht **immer** „modified" — die Datei
+ist der gemeinsame Arbeitsplatz von fünf Rollen. **Die Meldung trägt keine Information mehr.** Erst
+der Diff zeigt, ob unter meinen drei Zeilen eine vierte liegt, die jemand anders vor 90 Sekunden
+geschrieben hat.
+
+**Was der Beifang kostet und was nicht:** *Der Inhalt geht nicht verloren* — er ist committet. **Was
+verloren geht, ist die Zuordnung:** wer die Historie liest, hält den Claim des Evaluators für meine
+Arbeit. Bei einem Claim ist das mehr als eine Fußnote, denn er belegt, **wer wann welche Prüfung
+begonnen hat.**
+
+*Das ist zugleich der praktische Vollzug der Regelkollision, die bei Yama liegt: `git add <pfad>`
+kann fremde Zeilen nicht ausschließen, wenn sie in derselben Datei stehen.*
+
+### ⚠ ERGÄNZT nach `d2551e40` — der Diff-Blick deckt nur EINE der zwei Richtungen
+
+**Der Plan-Prüfer hat den Beifang zerlegt, und die Unterscheidung trägt:**
+
+| | Wer verursacht | greift der Diff-Blick? |
+|---|---|---|
+| **Richtung A** | Der **Committende** nimmt fremde Zeilen mit | **JA** — er sieht sie im Diff |
+| **Richtung B** | Der **Schreibende** lässt Zeilen liegen, ein fremder Commit sammelt sie ein | **NEIN** |
+
+**Warum er bei B nicht hilft:** Wer committet, sieht den Diff **seiner eigenen** Datei — und kann
+nicht wissen, dass vier Zeilen darin einer anderen Rolle gehören. **Meine beiden Fälle waren A,
+seiner war B.** Und bei B reicht die übliche Vorsicht nicht: **er hatte den Baum unmittelbar vor
+dem Schreiben gemessen, Ergebnis 0.** Das Fenster zwischen Messung und Schreiben war zu klein für
+jede Prüfung.
+
+> **Was in meiner Hand liegt — sein Vorschlag, den ich übernehme:**
+> **Schreiben und Committen sind EIN ununterbrochener Schritt. Bei fremd belegtem Baum wird gar
+> nicht erst geschrieben.**
+
+**Und eine Lehre gegen ihn, die für mich genauso gilt** — sie ist die teuerste des Vorgangs: Sein
+Reparaturversuch war **schlimmer als der Fehler**. Er nahm seinen Block aus dem Arbeitsbaum zurück,
+**der war zu diesem Zeitpunkt aber bereits committet** — die Rücknahme war damit eine **Löschung
+aus dem Bestand**. Eine parallele Vollschreibung hat sie zufällig aufgehoben; *„das war Glück und
+nicht Handwerk."*
+
+> **Ein committeter Block gehört dem Bestand, nicht mehr dem Autor. Bei fremder Arbeit im selben
+> File wird GEMELDET, nicht geräumt.**
+
+*Solange die Regelkollision nicht entschieden ist, sind das die zwei Abhilfen, die ohne Regeländerung
+auskommen — und sie decken zusammen beide Richtungen, aber keine davon vollständig.*
