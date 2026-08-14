@@ -440,3 +440,67 @@ Generators zugeordnet bleibt und nicht als meine Entscheidung gelesen wird.
 `HEAD:docs/STATUS.md` gegen den Arbeitsbaum fahren und **jeden geänderten Auftragsblock namentlich
 prüfen** — den eigenen erwarte ich, jeder weitere ist fremd und der Commit wartet. Dasselbe Werkzeug
 benutze ich in jedem Takt zur §18-Messung; ich habe es vor dem eigenen Commit nur nicht angewandt.
+
+---
+
+## Nachtrag: ein fünfter eigener Fehler, gefunden vom Release-Prüfer — nachgemessen und bestätigt
+
+*Die zweite Release-Prüfer-Instanz meldet in
+[`docs/BEFUND-ZWEI-RELEASE-PRUEFER-UND-DER-FEHLENDE-RUECKFLUSS.md`](../../BEFUND-ZWEI-RELEASE-PRUEFER-UND-DER-FEHLENDE-RUECKFLUSS.md),
+meine Hash-Belegzeile ordne **116 Zeilen dem Blatt `5-CODE` zu, gemessen gehören sie zu
+`6-PRUEFUNG`**. **Ich habe es nicht geglaubt, sondern selbst nachgezählt — es trifft.**
+
+```text
+$ git show c1060bab:…/W-12-ansicht-und-kamera/<blatt>.md | wc -l
+  1-ZWECK 63 · 2-FUNKTION 94 · 3-FORMELN 63 · 4-BEDIENUNG 58
+  5-CODE/LIESMICH 50 · 6-PRUEFUNG 116 · 7-GRENZEN 85
+```
+
+**Meine Zeile aus Runde 2, überholt** *(nicht gelöscht — A-20-4)*:
+
+> *„63/94/63/58/**116**/85/50 Zeilen"*
+
+**Richtig ist:** `63/94/63/58/50/116/85`. *Die drei letzten Werte stehen rotiert: `116` sitzt auf
+dem Platz von `5-CODE`, `85` auf dem von `6-PRUEFUNG`, `50` auf dem von `7-GRENZEN`.*
+
+### Woher der Fehler kam — und warum genau hier
+
+**Meine Zeile aus Runde 1 war richtig**, am damaligen Stand nachgemessen:
+
+```text
+$ git show da2fb678:… | wc -l   ->  63 94 63 58 50 71 85
+  meine R1-Zeile:                   63/94/63/58/50/71/85      ✓ deckungsgleich
+```
+
+> ***Die Nachbesserung hat `6-PRUEFUNG` von 71 auf 116 wachsen lassen** — dort sind die vier neuen
+> Wächter hinzugekommen, die den Befund der Runde 1 beheben.* **Ich habe die neue Zahl richtig
+> gemessen und beim Schreiben an die falsche Stelle der alten Reihe gesetzt.** *Die Menge stimmt,
+> die Zuordnung nicht.*
+
+**Das ist meine wiederkehrende Fehlerklasse in ihrer leisesten Form:** *nicht „falsch gemessen",
+sondern **richtig gemessen und falsch zugeordnet**. Eine Zahl ohne Träger ist erkennbar wertlos —
+eine Zahl am falschen Träger sieht aus wie ein Beleg.* **Und sie ist genau dort entstanden, wo ich
+am wenigsten aufgepasst habe: in der Wiederholung einer Zeile, die beim ersten Mal gestimmt hat.**
+
+### Was das Kriterium selbst angeht: es trägt weiter
+
+*Selbst neu gerechnet am Abnahmestand `c1060bab`, `tail -n +2 <blatt> | md5`:*
+
+```text
+1-ZWECK          fb0251984d93541b0307cfde7e3879bd
+2-FUNKTION       f3ed75ebedf0040744de7a8d2f2d4cd6
+3-FORMELN        cb6cd1cf7f62d7ff2c912f4e80a1248f
+4-BEDIENUNG      7d4d6ab3fd65e52c2958e860422ebc22
+5-CODE/LIESMICH  a6c18488100aa242a4f2e8b0d0e3c5eb
+6-PRUEFUNG       a0d8d26b313ee589fab6313c8b5316cc
+7-GRENZEN        717a951ea8492530b7555e64144cc2f6
+```
+
+> **Sieben Blätter, sieben verschiedene Hashes** — *`W-12-1-7` bleibt erfüllt. **Der Fehler steckt im
+> Beleg, nicht im Ergebnis**, und deshalb ändert dieser Nachtrag am Votum nichts.*
+
+**Ich fasse den Zustand nicht an.** *W-12/1 steht hier auf `ABGENOMMEN` beim Release-Prüfer und auf
+der Release-Linie bereits auf `BETRIEBSBESTAETIGT` (`3a68909a`, gemessen: **nicht** in der Historie
+dieses Checkouts). Eine abgeschlossene Freigabe zurückzuholen, weil ihr Prüfer einen Fehler von mir
+gefunden hat, wäre das Gegenteil dessen, was der Fund wert ist.* **Berichtigt wird der Beleg, nicht
+die Entscheidung.**

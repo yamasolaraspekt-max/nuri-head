@@ -3,11 +3,32 @@
 > **Regel: hier werden nur F-Nummern aus `01-MATHEMATIK/FORMELSAMMLUNG.md` genannt. Keine
 > abgeschriebenen Formeln.**
 
+## Die Registerzeile nannte F-032 — sie trägt nicht
+
+**`02-WERKZEUGE/REGISTER.md:48` führte W-16 unter `F-032` (Transformation eines Punktes).
+Berichtigt am 14.08. mit W-16/1 auf `F-001 ✓, ~~F-032~~ ⓝ`** — *am Code gemessen, in **beiden**
+Hälften:*
+
+```text
+INSEL   alle Math.-Aufrufe im GANZEN Ordner app/unterlage/     EINER: Math.hypot
+        matrix|transform|skalier|scale                          EIN Treffer — geoeffnet:
+        kalibrierung.ts:7  „eingegeben ÷ gemessen" skaliert     das WORT in einem
+                                                                Doc-Kommentar, keine
+                                                                Transformation
+SERVER  Controller + Modell, dieselben vier Muster              0 Treffer
+```
+
+> ***Warum das hier steht und nicht nur im Register:*** *wer dieses Blatt liest, erfährt sonst, dass
+> F-001 gilt — aber nicht, dass die Registerzeile etwas **anderes** behauptet hat.* **Und die
+> Registerzeile ist der Ort, an dem andere Rollen die Formelzuordnung ABLESEN.** *Ein Blatt, das die
+> Berichtigung verschweigt, lässt die falsche Nummer dort stehen, wo sie gelesen wird.*
+
 ## Benutzte Formeln
 
 | F-Nr | Wofür in diesem Werkzeug | Grenzfall betrifft uns? |
 |---|---|---|
 | **F-001** Abstand zweier Punkte | die geklickte Strecke messen | **ja, aber anders** — s. u. |
+| ~~F-032~~ Transformation eines Punktes | **nicht benutzt** — s. o. | — |
 
 **Am Code erhoben:**
 
