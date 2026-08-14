@@ -237,3 +237,97 @@ was_ich_NICHT_gemessen_habe: "Ob der Rename modus->viewMode noetig ist. uiState.
         Zuschnittsfrage und keine Ablesung."
 W_12_1_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+## Votum des Evaluators (§11) — Runde 1
+
+**NACHBESSERN.** Sechs von sieben Kriterien erfüllt, **W-12-1-6 nicht**. Gemessen im Prüfstand
+`da2fb678` (worktree, `node_modules` + `vendor` per `cp -al`), Bau selbst gesucht statt aus
+`bau_sha` genommen: `git log b778152b..HEAD | grep -i w-12` liefert genau einen Bau — `da2fb678`
+(07:53), Meldung `9d83bde6` (07:55). Scope: sieben `.md`, kein Produktivcode.
+
+### Messtisch — jede Kriterienzeile
+
+| Kriterium | Urteil | womit gemessen |
+|---|---|---|
+| **W-12-1-1** zwei `modus` je mit Träger | **erfüllt** | `hausplanerStore.ts:20` = `export type HausplanerModus`, `studioDaten.ts:97` = `export type StudioModus`, `HausplanerStudio.tsx:23` = `useState<StudioModus>` — alle drei am Bau-Stand selbst geöffnet. `setModus` gibt es zweimal: Store `:45`/`:126`, React-useState `:23`. |
+| **W-12-1-2** vier Gegenstände mit Fundstelle | **erfüllt** | `szene.ts:23/:100/:101/:170/:178` (Kamera + OrbitControls), `:621` `makeBasis` / `:627` `applyMatrix4` (F-032), `:212-215` GridHelper, 2D-Kette `HausplanerApp.tsx:349/:1261-1269/:1337/:1409` → `Kopfrahmen.tsx:304` → `Buehne.tsx:146` — jede Zeile einzeln geöffnet. `Buehne.tsx:62` steht dreimal ausdrücklich als **Nicht**-Beleg; „beide Renderer" nur in der Verneinung. |
+| **W-12-1-3** Zugriffsart statt Zahl, Zahlen mit Träger | **erfüllt** | selbst nachgezählt: `supportedViews` in `toolRegistry.ts` **12**, im ganzen Hausplaner **75** Zeilen (76 Vorkommen — eine Zeile doppelt), davon **54** in `toolCatalogStillgelegt.ts`; `'2d'`/`'split'` als Wert **9**; Registry-Einträge mit `id: 'ansicht'/'2d'/'3d'/'split'` **0**. Rot-Probe: dasselbe Muster findet `id: 'wand'` — es greift. |
+| **W-12-1-4** W-01-Frage beantwortet | **erfüllt** | `W-01-fang-beschreiben.md:94` selbst geöffnet: verweist die Rasterfrage tatsächlich hierher. Die ganze Kette steht in `7-GRENZEN`, `Buehne.tsx:62` als H-8-Nichtbeleg daneben. |
+| **W-12-1-5** Hygiene-Posten als Grenze | **erfüllt** | `uiState.ts:11` selbst geöffnet, Wortlaut deckt sich; an drei Blattstellen als *benannt und nicht angefasst* geführt. |
+| **W-12-1-6** Wächter je mit Zugriffsart | **NICHT erfüllt** | siehe Befund unten. Die drei **Zahlen** stimmen (11/5/2, selbst nachgemessen), die **Wächterauswahl** trägt nicht. |
+| **W-12-1-7** sieben Blätter, md5 je Blatt | **erfüllt** | 63/94/63/58/50/71/85 Zeilen, sieben verschiedene `tail -n +2 … \| md5`, gegen **alle 252** Werkbank-Blätter geprüft: keine Kollision. |
+| Regression Insel-Suite | **grün** | `npm run test:hausplaner` im Prüfstand: `pass 1750`, `fail 0` — Zählerstand unverändert. |
+| Regression `tsc` | **grün** | `npm run tsc:hausplaner`: Ausstieg 0, keine Ausgabe. |
+| Bündel `public/hausplaner/hausplaner.js` | **nicht nötig** | Scope-Diff am Commit: sieben `.md`, `resources/` 0 — es gibt nichts zu bündeln. |
+| §15 Testdatenbank | **nicht berührt** | Scope-Diff: 0 Treffer auf `database\|migration\|seeder\|.sql`; meine eigenen Schreibvorgänge sind zwei `.md`. |
+| Browser | **nicht gefahren** | keine sichtbare Wirkung — der Bau ändert ausschließlich Dokumentation. |
+
+### Der Befund zu W-12-1-6
+
+**Die Falle ist nur auf der Zählebene abgewehrt worden, nicht in der Auswahl.** Der Bericht meldet
+„DIE ERWARTETE FALLE IST EINGETRETEN und gemessen: elf gegen zwei" — das stimmt, ich habe 11/5/2
+selbst nachgemessen (`grep -rl 'modus' __tests__` = **11**, Import `hausplanerStore` = **5**, davon
+mit `modus` im Rumpf = **2**). Aber die daraus gebaute Wächtertabelle in `6-PRUEFUNG` misst etwas
+anderes, als sie behauptet:
+
+**(a) Die zwei aufgeführten IMPORT-Wächter bewachen den Ansichtszustand nicht.**
+
+- `eineWerkzeugzeile.test.ts` steht mit *„`modus` 2× — die Ansicht als Bedingung für die
+  Werkzeugzeile"*. Die zwei Treffer sind `:69` (Testname) und `:71`
+  `assert.deepEqual(namen, ['Verlauf', 'Ansichtsmodus', 'Ansicht', …])` — beide Male ist `modus`
+  Teil des **Gruppennamens „Ansichtsmodus" im Markup**. Geprüft wird die Reihenfolge der
+  Gruppenbeschriftungen, nicht die Ansicht als Bedingung. Das ist H-8 in derselben Form, die das
+  Blatt bei `Buehne.tsx:62` selbst zurückweist.
+- `rechte.test.ts` steht mit *„`modus` 1×"*. Der Treffer ist `:138`
+  `app.match(/\[activeWorkspace, modus, selectedNodeIds[^\]]*\]/)` — `modus` ist Teil eines
+  Suchmusters für die Abhängigkeitsliste; der Kommentar `:134-137` sagt ausdrücklich, geprüft
+  werde, **dass `rechte` in der Liste steht**.
+
+**(b) Der eigentliche Wächter des Ansichtszustands fehlt — in einer Datei, die das Blatt dreimal
+nennt.** `kopfrahmen.test.ts:93` führt
+`test('K-03 (Bindung): jeder Ansichtsmodus-Knopf zeigt SEINEN Zustand und schaltet auf SEINEN Modus')`
+mit `modusKnoepfe()` (`:85-89`, liest die `<OpGruppe name="Ansichtsmodus">`) und
+`assert.equal(zeilen.length, 3, …)`. Der Kopfkommentar `:18` nennt die durchgekommenen Mutationen,
+aus denen die Zusage entstanden ist: *„Ansichtsmodus 2D/Split zeigen fremden Zustand · 3D-Knopf
+schaltet auf 2D"*. Das Blatt nennt `kopfrahmen.test.ts` an drei Stellen — **ausschließlich für den
+Rasterschalter `:110`**. Dazu fehlen zwei weitere echte Zusagen:
+`buehne.test.ts:184-188` (*„K-05 (Grenze): die Hülle um die Bühne … hängt an `modus`"*, mit
+`assert.match(app, /display: modus === '3d' \? 'none' : 'block'/)` und
+`assert.doesNotMatch(buehne, /modus/)`) und `ansichtBereit.test.ts:161/:164`
+(`assert.doesNotMatch(zeile, /modus/, 'die Breite darf nicht am Modus haengen')`).
+
+Gegenprobe: das Wort **`Ansichtsmodus` kommt im gesamten Blattwerk kein einziges Mal vor**, ebenso
+wenig `K-03`, `K-05`, `modusKnoepfe`. Rot-Probe dazu — dasselbe Suchmuster findet `kopfrahmen.test`
+in `4-BEDIENUNG` (1×) und `6-PRUEFUNG` (2×), es greift also.
+
+**Warum das trägt und nicht Geschmack ist:** `6-PRUEFUNG` führt unter *„Was NICHT geprüft wird"*
+vier Zeilen (Kamera/OrbitControls, GridHelper 3D, 2D-Rasterkette, `setModus`-Verwechslung) und
+schweigt zum Ansichtsmodus-Schalter. Die nächste Rolle liest daraus, der Ansichtszustand sei
+allenfalls schwach verriegelt — während `K-03` ihn zeichengenau bindet und aus zwei durchgekommenen
+Mutationen entstanden ist. Genau die Fehlerklasse, die W-12-1-6 verhindern soll: nicht die Zahl war
+falsch, sondern die Zuordnung *„was er berührt"*.
+
+**Nicht Teil des Befundes:** die Zeilenangabe `HausplanerStudio.tsx:85` → `:87`. Ich habe es
+nachgemessen — die Datei ist zwischen `b778152b` und `da2fb678` unverändert, `StudioModus` steht in
+`:12`, `:23`, `:87`, nicht in `:85`; `:85` ist `const imExperte = modus === 'expert';`. Der Bau hat
+die Wanderung **gemeldet statt abgeschrieben** (Bericht: *„EINE ZEILENANGABE IST GEWANDERT, gemeldet
+statt abgeschrieben"*). Das ist richtig gelöst, kein Mangel.
+
+### Eigene Messfehler dieser Runde
+
+1. **Zu enges Belegmuster.** Mein erster Durchgang suchte `szene.ts:627` und `HausplanerApp.tsx:1261`
+   als Zeichenkette und meldete „fehlt". Das Blatt schreibt sie tabellarisch als `szene.ts:621/:627`
+   und `:1261-1269`. Beide stehen an je drei Stellen — mein Fehler, nicht der des Baus.
+2. **Zu enges Importmuster, dritter Fall derselben Klasse.** `grep -rl "from '…store/hausplanerStore'"`
+   lieferte 4 statt 5, weil `rechte.test.ts` den Pfad nicht in dieser Form auf einer Zeile trägt.
+   Erst `grep -rl 'store/hausplanerStore'` (ohne `from '…'`) ergab die richtigen **5**. Denselben
+   Fehler hatte ich bei W-37 Runde 2 schon einmal gemacht.
+3. **Falsche Wortgrenze.** `grep -rlw 'modus'` ergab 6, `grep -rli` 16 — die Blattzahl **11** trifft
+   `grep -rl 'modus'` (Teilwort, groß-/kleinschreibungsgenau). Erst der Vergleich von fünf Mustern
+   hat das geklärt; ich hätte sonst eine richtige Zahl als falsch gemeldet.
+
+### Beifang, zum sechsten Mal
+
+Mein `claim_abnahme` (07:56, `docs/STATUS.md`) ist in den fremden Commit `ef273926` (planner, 07:56)
+gewandert, bevor ich selbst committen konnte. Ich habe nichts daran geändert und trage es hier nur
+nach; die Ursache — ein Pfad, fünf Rollen, zeilenweise — gehört dem Planner, nicht diesem Auftrag.
