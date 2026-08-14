@@ -12,10 +12,19 @@
 | **Planner-Worktree** | `/Users/yamanuri/Documents/ticket-rolle-planner` |
 | **Planner-Branch** | `rolle/planner` |
 | Gemeinsamer Checkout | `/Users/yamanuri/Documents/ticket` · `auto/hausplaner-integration` |
-| **Status der Umstellung** | **`UMSTELLUNG_OFFEN`** |
+| **FORENSISCHER_SHA** | **`36e600308890ba600757162cfab7a9903f3393bb`** — unveränderlicher Bezug für Ursachen- und Rückprüfung. **Nicht** der Arbeits-SHA. |
+| **AKTIVIERUNGS_SHA** | **noch nicht bestimmt** — legt der **Integrator** nach belegtem Schreibstopp fest. Die vier neuen Rollen-Worktrees starten **hier**, nicht bei `36e60030`. |
+| **Status der Umstellung** | **`UMSTELLUNG_OFFEN`** — die drei Blocker sind entschieden (B-1, B-2, V-02); die Aktivierung steht aus. |
 
-**Zulässige Statuswerte:** `OFFEN` · `IN_ARBEIT` · `BLOCKIERT` · `UMGESETZT_UNGEPRUEFT` ·
-`NACHBESSERN` · `UNABHAENGIG_BESTAETIGT` · `ENTFÄLLT_MIT_BEGRUENDUNG`
+**Zulässige Statuswerte — und ausschließlich diese:** `OFFEN` · `BLOCKIERT` ·
+`UMGESETZT_UNGEPRUEFT` · `NACHBESSERN` · `UNABHAENGIG_BESTAETIGT` · `ENTFÄLLT_MIT_BEGRUENDUNG`
+
+**`IN_ARBEIT` ist hier KEIN zulässiger Wert und stand irrtümlich in dieser Liste.** Es ist ein
+**§3-Zustand für Aufträge**, nicht für Checklistenpunkte. **Das war die Wurzel des PAR-01-Fehlers:**
+die Zeile trug `IN_ARBEIT`, weil diese Definition es erlaubte. Yamas Anordnung vom 14.08.:
+*„Die Master-Checkliste verwendet ausschließlich ihre eigenen Statuswerte. §3-Zustände wie
+IN_ARBEIT gehören nicht in dieselbe Statusspalte."* **Prüfbar:** kein §3-Zustandswort darf in
+**fetter** Schreibweise in einer Punktzeile stehen (Messbefehl am Dateiende).
 
 **`UNABHAENGIG_BESTAETIGT` darf nur stehen, wenn ein anderer Prüfer den exakten Umsetzungscommit
 geprüft und den tatsächlichen Beleg eingetragen hat.**
@@ -24,12 +33,47 @@ geprüft und den tatsächlichen Beleg eingetragen hat.**
 
 ## ⚠ V-BLOCK — Vorbelastung: A-36 widerspricht dieser Entscheidung
 
+## YAMAS ENTSCHEIDUNGEN — 14.08., verbindlich nach §1
+
+| Kennung | Entschieden | Inhalt |
+|---|---|---|
+| **B-1** | **JA — Schreibstopp** | Plan-Prüfer, Generator, Evaluator, Release-Prüfer schreiben **nicht mehr** in `/Users/yamanuri/Documents/ticket`. Verboten: Dateiänderung · Staging · Commit · Statusübergang · Lock-Räumen · Merge/Rebase/Reset. **Lesende Messungen bleiben erlaubt.** |
+| **B-2** | **eigener sechster Agent** | Rollenmarke **`TICKET_ROLLE=integrator`**. Alleiniger Schreiber von `docs/STATUS.md`. Integriert freigegebene Rollencommits **einzeln**. Trifft **keine** fachlichen Entscheidungen, verändert **keine** Kriterien oder Prüfergebnisse, löst **keine** Konflikte still. **Darf für denselben Vorgang weder Evaluator noch Release-Prüfer sein.** Push/`main` nur nach weiterer ausdrücklicher Freigabe. |
+| **V-02** | **A-36 wird zurückgezogen** | Als **eigenständiger Auftrag** zurückgezogen. Grund: A-36 erklärt die Worktree-Trennung zum **Nicht-Ziel** (Blattzeile 78) und widerspricht damit der späteren, verbindlichen Entscheidung; **ein nur meldender Hunk-Wächter verhindert Richtung B nicht.** |
+
+**Der bisherige gemeinsame Checkout wird erst NACH belegtem Schreibstopp zum exklusiven
+Integrations-Checkout.**
+
+### Was aus A-36 erhalten bleibt — P2D untergeordnet, nicht verworfen
+
+| aus A-36 | wohin |
+|---|---|
+| Hunk-Erkennung | **P2D** — ergänzende Diagnose |
+| Verschärfung von §14 | **P2D** — Kontrollmechanismus |
+| historische Positivproben *(die drei Nacht-Beifänge)* | **P2D** — Nachweismittel |
+| Unterscheidung Dateiliste / `--numstat` / **tatsächlicher Diff-Inhalt** | **P2D** — bleibt als Handgriff |
+
+**Die eigentliche Barriere sind getrennte Worktrees und ein einzelner Integrationsschreiber.**
+A-36s Teile sind Diagnose, nicht Schutz. **Kein History-Rewrite:** die Rücknahme wird als **neuer**
+Vorgang dokumentiert, bereits committete Inhalte bleiben stehen. **Den Statusübergang in
+`docs/STATUS.md` vollzieht ausschließlich der Integrator.**
+
+**Was dabei nicht verloren geht, und es ist unmittelbar zu bergen:** Der Plan-Prüfer hat A-36s drei
+fehlende §5-Formalien um **09:35** vollständig gemessen (`774854ef`) — Scope ohne Route/Oberfläche/
+Serverprozess, null Migrationen, Abhängigkeit auf genau zwei Dinge, und beim Bundle hat er eine
+eigene schlechte Messung verworfen und richtig neu gefahren (`vite build` liest kein `scripts/*.sh`).
+**Diese Messung gilt weiter für die P2D-Teile.** Er wartete auf drei Sätze von mir und hätte
+**ohne weitere Runde DoR erteilt** — für einen Auftrag, der in derselben Minute zurückgezogen wurde.
+**Ihn erreicht das nur über Yama; ich schreibe nicht in den Integrations-Checkout.**
+
+
+
 | ID | Beschreibung | Rolle | Dateien | Erwartet | Rot-Beleg | Grün-Beleg | Commit | Prüf-SHA | Status | Abweichung |
 |---|---|---|---|---|---|---|---|---|---|---|
-| V-01 | **A-36 erklärt die Worktree-Lösung zum Nicht-Ziel und ist damit überholt** | Planner | `docs/auftraege/aktiv/A-36-*.md:78` | Widerspruch aufgelöst | *gemessen 14.08.: Zeile 78 sagt „Yama hat sie ausdrücklich **nicht** entschieden"* | — | — | — | **OFFEN** | Entscheidung V-02 nötig |
-| V-02 | **Entscheidung: A-36 zurückziehen (`SPEC_BLOCKED`) oder als P2D-Teilschritt unterordnen** | Planner | A-36-Blatt, `docs/STATUS.md` | eine benannte Wahl | A-36 steht auf `ENTWURF`, DoR nicht erteilt, vier Punkte fehlen | — | — | — | **OFFEN** | siehe Vorschlag unten |
-| V-03 | A-36s vier fehlende DoR-Punkte (Testdaten/Rolle/Route/Browserpfad · API/Schema/Migration/Bundle · Erstnutzer · Abhängigkeitskette) | Planner | A-36-Blatt | ergänzt **oder** entfällt mit V-02 | Befund des Plan-Prüfers in `docs/STATUS.md` | — | — | — | **BLOCKIERT** | hängt an V-02 |
-| V-04 | **A-36-3 ist an einem Wort unerfüllbar** — es verlangt „mehr als eine KENNUNG", richtig ist „mehr als ein ABSCHNITT" | Planner | A-36-Blatt, Kriterium A-36-3 | ein Wort getauscht | **gemeldet `902c83f3`, nachgerechnet: bei `93960252` trägt KEINER der zwei berührten Abschnitte eine Kennung** — über Abschnitte gezählt zwei (grün), über Kennungen ein Wert (**rot und durch keinen Bau behebbar**) | — | — | — | **BLOCKIERT** | dieselben drei Wege wie P5-02b |
+| V-01 | **A-36 erklärt die Worktree-Lösung zum Nicht-Ziel und ist damit überholt** | Planner | `docs/auftraege/aktiv/A-36-*.md:78` | **Aufgelöst durch V-02:** A-36 ist zurückgezogen, der Widerspruch besteht nicht mehr. | *gemessen 14.08.: Zeile 78 sagt „Yama hat sie ausdrücklich **nicht** entschieden"* | — | — | — | **Aufgelöst durch V-02:** A-36 ist zurückgezogen, der Widerspruch besteht nicht mehr. | **UMGESETZT_UNGEPRUEFT** |
+| V-02 | **Entscheidung: A-36 zurückziehen (`SPEC_BLOCKED`) oder als P2D-Teilschritt unterordnen** | Planner | A-36-Blatt, `docs/STATUS.md` | **ENTSCHIEDEN von Yama am 14.08.: A-36 wird als eigenständiger Auftrag ZURÜCKGEZOGEN**, nützliche Teile P2D untergeordnet. Statusübergang in `docs/STATUS.md` **nur durch den Integrator**. | A-36 steht auf `ENTWURF`, DoR nicht erteilt, vier Punkte fehlen | — | — | — | **ENTSCHIEDEN von Yama am 14.08.: A-36 wird als eigenständiger Auftrag ZURÜCKGEZOGEN**, nützliche Teile P2D untergeordnet. Statusübergang in `docs/STATUS.md` **nur durch den Integrator**. | **UMGESETZT_UNGEPRUEFT** |
+| V-03 | A-36s vier fehlende DoR-Punkte (Testdaten/Rolle/Route/Browserpfad · API/Schema/Migration/Bundle · Erstnutzer · Abhängigkeitskette) | Planner | A-36-Blatt | **Gegenstandslos mit der Rücknahme.** Die Messung des Plan-Prüfers (`774854ef`, 09:35) hat drei der vier Punkte erledigt; der vierte (**Erstnutzer**) ist eine Festlegung, keine Messung. **Für einen zurückgezogenen Auftrag wird keine DoR mehr erteilt.** Die Messung selbst bleibt für die P2D-Teile gültig — sie ist nicht verloren, nur nicht mehr Voraussetzung. | Befund des Plan-Prüfers in `docs/STATUS.md` | — | — | — | **Gegenstandslos mit der Rücknahme.** Die Messung des Plan-Prüfers (`774854ef`, 09:35) hat drei der vier Punkte erledigt; der vierte (**Erstnutzer**) ist eine Festlegung, keine Messung. **Für einen zurückgezogenen Auftrag wird keine DoR mehr erteilt.** Die Messung selbst bleibt für die P2D-Teile gültig — sie ist nicht verloren, nur nicht mehr Voraussetzung. | **ENTFÄLLT_MIT_BEGRUENDUNG** |
+| V-04 | **A-36-3 ist an einem Wort unerfüllbar** — es verlangt „mehr als eine KENNUNG", richtig ist „mehr als ein ABSCHNITT" | Planner | A-36-Blatt, Kriterium A-36-3 | **Gegenstandslos mit der Rücknahme.** Das Kriterium A-36-3 wird nicht mehr gebaut. **Die Sache dahinter bleibt richtig und wandert nach P2D:** ein Wächter, der „mehr als eine KENNUNG" verlangt, misst etwas anderes als „mehr als einen ABSCHNITT". | **gemeldet `902c83f3`, nachgerechnet: bei `93960252` trägt KEINER der zwei berührten Abschnitte eine Kennung** — über Abschnitte gezählt zwei (grün), über Kennungen ein Wert (**rot und durch keinen Bau behebbar**) | — | — | — | **Gegenstandslos mit der Rücknahme.** Das Kriterium A-36-3 wird nicht mehr gebaut. **Die Sache dahinter bleibt richtig und wandert nach P2D:** ein Wächter, der „mehr als eine KENNUNG" verlangt, misst etwas anderes als „mehr als einen ABSCHNITT". | **ENTFÄLLT_MIT_BEGRUENDUNG** |
 
 **Planner-Vorschlag zu V-02, zur Entscheidung durch Yama:** **Unterordnen, nicht zurückziehen.**
 Der Hunk-Wächter bleibt in P2D nützlich (er misst, wie oft die Kollision auftritt, und §14 ist
@@ -145,6 +189,25 @@ ziehen, meldet das Tor **jedem** von ihnen bei **jedem** Commit einen Kopf-Fehle
 an zwölf Fehlalarmen gemessen. **Der Mangel ist also nicht, dass sie sperrt, sondern dass sie beim
 Sperren lügt.** Das Tor ist Bau des Generators; **Planner meldet, Generator behebt.**
 
+**Yamas Anordnung dazu (14.08.):** Die Meldung *„der Kopf parst nicht"* darf **nicht für jeden
+Node-Fehler** verwendet werden. Der Generator muss **drei Fälle unterscheidbar** melden:
+
+| # | Fall | verlangte Meldung |
+|---|---|---|
+| 1 | **Syntaxfehler** im YAML-Kopf | „der Kopf parst nicht" — **nur hier** |
+| 2 | **fehlende Modulauflösung** (`js-yaml` nicht gefunden) | **eigener, wahrer Fehlergrund** — nicht als Kopf-Fehler getarnt |
+| 3 | **sonstiger Laufzeitfehler** | als solcher benannt |
+
+**Der Evaluator prüft diese drei Fälle unabhängig.**
+
+**Und P2A-11 gilt erst als belegt, wenn es in getrennten Wegwerf-Worktrees gezeigt ist** — Yamas
+sechs Bedingungen: gültiger Kopf `exit 0` · **tatsächlich** syntaktisch kaputter Kopf `exit ≠ 0` ·
+fehlende Modulauflösung mit **eigenem wahren Grund** · **keine** Symlinks · **keine** Modulkopie je
+Worktree · **keine** Abschwächung bestehender Barrieren. **Meine Messung von 09:36 deckt zwei davon
+ab, den dritten nicht** — er verlangt genau die Änderung aus P2A-12, die noch nicht gebaut ist.
+**Reihenfolge daher: erst P2A-12 bauen, dann P2A-11 in Wegwerf-Worktrees belegen.** P2A-11 steht
+deshalb weiter auf `UMGESETZT_UNGEPRUEFT` und **nicht** höher.
+
 ### P2B · Rollen- und Worktree-Prüfung — `scripts/rolle-und-worktree.sh`
 
 | ID | Kontrolle | Status |
@@ -198,6 +261,64 @@ die Sperre nicht baubar, weil ihr Subjekt fehlt.
 | P2E-10 | Integrationscommit mit Ursprung und Übergang | **OFFEN** |
 | P2E-11 | Nachprüfung | **OFFEN** |
 | P2E-12 | Checkliste aktualisieren | **OFFEN** |
+
+---
+
+## P2F — SCHREIBSTOPP, INTEGRATOR, AKTIVIERUNGS-SHA *(neu nach Yamas Entscheidungen)*
+
+| ID | Punkt | Status |
+|---|---|---|
+| P2F-01 | **Schreibstopp B-1 ZUGESTELLT** — die vier Rollen-Instanzen haben die Anweisung empfangen | **BLOCKIERT** |
+| P2F-02 | Schreibstopp gemessen: **gemeinsamer Arbeitsbaum sauber** | **UMGESETZT_UNGEPRUEFT** |
+| P2F-03 | Schreibstopp gemessen: **keine uncommittierten/untracked Rollenänderungen** | **UMGESETZT_UNGEPRUEFT** |
+| P2F-04 | Schreibstopp gemessen: **keine laufenden Git-Schreibvorgänge** | **UMGESETZT_UNGEPRUEFT** |
+| P2F-05 | Schreibstopp gemessen: **letzter fremder Commit VOR dem festgestellten Stopp** | **NACHBESSERN** |
+| P2F-06 | **Integrator-Agent gestartet** mit `TICKET_ROLLE=integrator` | **BLOCKIERT** |
+| P2F-07 | **Integrations-Checkout aktiviert** — erst **nach** belegtem Schreibstopp | **BLOCKIERT** |
+| P2F-08 | **`AKTIVIERUNGS_SHA` bestimmt** durch den Integrator | **BLOCKIERT** |
+| P2F-09 | vorher gemessen: **lokaler HEAD** | **BLOCKIERT** |
+| P2F-10 | vorher gemessen: **alle eigenen Gegenstellen** *(`fork`=`origin` sind **eine** Kopie, `upstream` ist fremd — P0-03b)* | **BLOCKIERT** |
+| P2F-11 | vorher gemessen: **Ahead/Behind in BEIDE Richtungen** | **BLOCKIERT** |
+| P2F-12 | vorher gemessen: **Inhalte der auseinanderliegenden Commits** | **BLOCKIERT** |
+| P2F-13 | vorher gemessen: **Statusabweichungen** | **BLOCKIERT** |
+| P2F-14 | vorher gemessen: **uncommittierte und untracked Arbeit** | **BLOCKIERT** |
+| P2F-15 | **keine Seite automatisch bevorzugt · kein Merge/Rebase/Push ohne eigenen belegten Integrationsplan** | **OFFEN** |
+| P2F-16 | **Integrator ist für denselben Vorgang weder Evaluator noch Release-Prüfer** — Trennung belegt, nicht zugesagt | **OFFEN** |
+
+**P2F-02 bis P2F-04 — gemessen am 14.08. um 09:39 im gemeinsamen Checkout:**
+
+```
+git status --porcelain | wc -l   ->  0        Arbeitsbaum sauber
+Lock-Dateien (index/HEAD/refs)   ->  keine
+letzter Commit je Rolle:
+  plan-pruefer     774854ef  09:35:46
+  generator        9d83bde6  07:55:13
+  evaluator        66167298  08:08:52
+  release-pruefer  6aff69ea  08:12:17
+```
+
+**P2F-05 steht auf `NACHBESSERN`, und das ist der wichtigste Punkt dieses Blocks.** Yamas Kriterium:
+*„letzter fremder Commit zeitlich vor dem festgestellten Stopp"*, und ausdrücklich: *„eine bloße
+Mitteilung ‚die Rollen wurden gestoppt' genügt nicht."* **Gemessen: der Plan-Prüfer schreibt weiter**
+— `774854ef` um 09:35:46, danach `c5c6ac57` um 09:40:15. **Der Stopp ist erlassen, aber nicht
+zugestellt.**
+
+**Warum ich ihn nicht zustellen kann:** Die vier Rollen sind **eigene Instanzen**, nicht meine
+Unteragenten. Der einzige Kanal zu ihnen sind Commits im gemeinsamen Checkout — und genau dorthin
+darf ich nicht schreiben, weil er alleiniger Schreibraum des Integrators wird. **Die Zustellung ist
+P2F-01 und liegt bei Yama, der die Instanzen fährt.** Solange sie fehlt, ist der Schreibstopp eine
+Anordnung ohne Adressaten.
+
+**Ein Nachweis, der nicht durch Zufall grün wird:** P2F-05 gilt erst, wenn nach dem **zugestellten**
+Stopp eine **benannte Zeitspanne ohne fremden Commit** vergangen ist. Ein einzelner sauberer Blick
+genügt nicht — er trifft nur die Pause zwischen zwei Commits. **Vorschlag: 20 Minuten, gemessen mit
+`git log --since`, Rohausgabe in den Beleg.**
+
+**Und ein Zweites, das der Aktivierungs-SHA erben wird:** Zwischen `36e60030` und jetzt liegen die
+Commits des Plan-Prüfers von heute Morgen — darunter die **Rücknahme** eines eigenen Fehlbefunds
+(`45f26bdb`), zwei **Berichtigungen** (`bdf44881`, `c5c6ac57`) und die P-02-Prüfung, deren Ball
+**eine Woche** unentdeckt lag. **Der Aktivierungs-SHA muss diese Stände tragen** — genau deshalb ist
+Yamas Trennung der beiden SHAs richtig und `36e60030` als Arbeitsbasis falsch.
 
 ---
 
@@ -413,16 +534,18 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 | Status | Anzahl |
 |---|---|
 | `OFFEN` | **93** |
-| `UMGESETZT_UNGEPRUEFT` | **31** |
-| `BLOCKIERT` | **13** |
-| `NACHBESSERN` | **1** |
-| `ENTFÄLLT_MIT_BEGRUENDUNG` | **1** |
+| `UMGESETZT_UNGEPRUEFT` | **36** |
+| `BLOCKIERT` | **21** |
+| `NACHBESSERN` | **2** |
+| `ENTFÄLLT_MIT_BEGRUENDUNG` | **3** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **139 = alle IDs** |
+| **Summe** | **155 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
-— `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139. **Bei Abweichung gilt der Befehl,
-nicht die Tabelle.**
+— `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155.
+**Bei Abweichung gilt der Befehl, nicht die Tabelle.** Und der Befehl selbst war einmal zu eng: sein
+Muster kannte `P2F` nicht (`[A-E]` statt `[A-F]`) und hätte **sechzehn** Punkte übersehen — **ein
+Zählskript, das einen ganzen Block nicht sieht, hat denselben Mangel, den es finden soll.**
 
 **Der Messbefehl steht hier, damit niemand einer festen Zahl glauben muss** — feste Zahlen driften,
 das ist an dieser Datei zweimal belegt:
@@ -431,15 +554,18 @@ das ist an dieser Datei zweimal belegt:
 python3 - <<'EOF'
 import re; from collections import Counter
 L=open('docs/rollenkette/UMSTELLUNG-GETRENNTE-WORKTREES-CHECKLISTE.md',encoding='utf-8').read().split('\n')
-pat=re.compile(r'\b((?:V|P[0-8][A-E]?|T|PAR)-(?:RA)?[0-9]+[a-z]?)\b')
+pat=re.compile(r'\b((?:V|P[0-8][A-F]?|T|PAR)-(?:RA)?[0-9]+[a-z]?)\b')
 ST=re.compile(r'\*\*(UMGESETZT_UNGEPRUEFT|OFFEN|BLOCKIERT|NACHBESSERN|ENTF\u00c4LLT_MIT_BEGRUENDUNG|UNABHAENGIG_BESTAETIGT)\*\*')
-alle=set(); mit={}
+P3=re.compile(r'\*\*(ENTWURF|BEREIT|IN_ARBEIT|CODE_FERTIG|ABNAHME|ABGENOMMEN|RELEASE_PRUEFUNG|RELEASE_FREI|VEROEFFENTLICHT|BETRIEBSBESTAETIGT|SPEC_BLOCKED|ENV_BLOCKED|DECISION_BLOCKED)\*\*')
+alle=set(); mit={}; fremd=[]
 for l in L:
     ids=pat.findall(l); alle.update(ids)
     if l.startswith('| ') and ids:
         m=ST.search(l)
         if m: mit.setdefault(ids[0],m.group(1))
+        fremd += [(ids[0],f.group(1)) for f in P3.finditer(l)]
 print('IDs',len(alle),'mit Status',len(mit),'ohne',sorted(alle-set(mit)))
+print('§3-Wort ALS STATUS:',fremd)   # muss [] sein
 print(Counter(mit.values()))
 EOF
 ```
