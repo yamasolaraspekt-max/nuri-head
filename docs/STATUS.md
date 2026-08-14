@@ -15403,6 +15403,58 @@ folge_fuer_meine_vorlage: |
   gebuendelt zehn Vorgaenge — meine sechs plus die vier Fachentscheidungen.
 ```
 
+## BEFUND — DIE EINE STATUSWAHRHEIT HAT GERADE ZWEI FASSUNGEN (Plan-Pruefer, 14.08. 08:23)
+
+```yaml
+auftrag: "statuswahrheit_in_zwei_fassungen"
+titel: "Zweig und Remote tragen je EINE Haelfte der Wahrheit — keiner beide"
+rolle: plan-pruefer
+zeit: "2026-08-07 08:23"
+stand_lokal: 45b8b769
+stand_remote: 9aa76c5b
+lage: |
+  Der Arbeitszweig ist auseinandergelaufen: HEAD ist VIER Commits voraus und DREI zurueck
+  gegenueber dem Stand auf fork, backup-private und origin. Beide Staende fuehren 77
+  Auftraege, keiner hat einen zuviel oder zuwenig.
+messung: |
+  Zustandsfelder beider Staende Auftrag fuer Auftrag verglichen (77 gegen 77).
+  GENAU ZWEI weichen ab, in ENTGEGENGESETZTE Richtungen:
+    W-12/1   lokal CODE_FERTIG (ball evaluator)   |  Remote BEREIT (ball generator)
+    W-37     lokal ABGENOMMEN (ball release-pr.)  |  Remote BETRIEBSBESTAETIGT (ball —)
+  Lokal ist der Bau von W-12/1 neuer; am Remote ist die Freigabe von W-37 neuer.
+warum_das_zaehlt: |
+  §16 verlangt EINE Statuswahrheit. Es gibt heute keinen Stand, an dem beide Tatsachen
+  zugleich stehen. Wer lokal misst, sieht W-37 als nicht freigegeben; wer den Remote
+  misst, sieht W-12/1 als nicht gebaut. BEIDE Messungen sind sauber ausgefuehrt und
+  BEIDE unvollstaendig — das unterscheidet die Lage von einem Messfehler.
+  Selbst erlebt in dieser Runde: meine Ballzaehlung ergab lokal 12 Baelle bei Yama, am
+  Remote-Stand 10. Dieselbe Frage, dasselbe Muster, zwei Antworten.
+wie_es_entstand: |
+  Kein Vorwurf, die Kette gemessen:
+    07:46:13  planner          4b703665
+    07:46:50  release-pruefer  246fea71  (auf einem Stand OHNE 4b703665)
+    07:47:53  Merge 21d7b675, gepusht — NEBEN dem Zweig-Ref
+    danach    release-pruefer  9aa76c5b  (W-37-Freigabe), gepusht
+    08:0x     generator        da2fb678 + 9d83bde6 auf 4b703665, also DREI Commits
+              hinter dem gepushten Stand gebaut
+  Der Merge wanderte auf den Remote, der Zweig-Ref blieb zurueck; wer danach lokal
+  weiterarbeitete, baute auf dem alten Ast.
+was_ich_NICHT_tue: |
+  Kein fetch, kein merge, kein rebase, kein push. Zwei Aeste zusammenzufuehren ist keine
+  Messung, und wer es tut, entscheidet ueber fremde Arbeit. Ich melde die Lage.
+ablageort_erklaert: |
+  Dieser Block steht NICHT am Dateiende, obwohl das die uebliche Stelle ist. Der letzte
+  Abschnitt der Datei traegt seit 07:46 einen UNGESCHLOSSENEN yaml-Zaun; ein Anhang
+  wuerde in ihm landen. Ich habe den Zaun nicht repariert — fremder Inhalt, und §1 haelt
+  Regel- und Formfragen bei Yama. Stattdessen eingefuegt, wo die Struktur ausgeglichen
+  ist. Die Zaunparitaet der Datei ist durch diese Einfuegung unveraendert.
+ballbesitz: yama
+bitte: |
+  Eine Entscheidung, wer zusammenfuehrt und wann — moeglichst so, dass der Zweig-Ref
+  selbst der gepushte Stand wird. Solange zwei Aeste nebeneinander laufen, misst jede
+  Rolle an dem, auf dem sie zufaellig sitzt.
+```
+
 ### Gegenprüfung: liegt ein Planner-Ball unbemerkt? — Ergebnis NEIN (eigener Zaun nach A-25)
 
 ```yaml
