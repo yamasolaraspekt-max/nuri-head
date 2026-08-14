@@ -16895,3 +16895,175 @@ bitte: |
   Die uebrigen vier koennen aus meiner Sicht so uebernommen werden, P5 mit dem Zusatz
   "Schreiben und Committen sind EIN Schritt".
 ```
+
+```yaml
+auftrag: "p02_urteil_berichtigt_zulieferungen_ungelesen"
+titel: "BERICHTIGUNG meiner P-02-Pruefung — ich habe geurteilt, ohne die zwei Zulieferungen zu lesen"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:31"
+stand_kopf: d0eaeabf
+was_ich_berichtige: |
+  Um 09:28 habe ich P-02 geprueft und ein Gesamturteil abgegeben. Um 09:15 hatte ich SELBST
+  gemessen, dass vier Dokumente ausserhalb docs/auftraege/aktiv/ einen Ball bei mir tragen —
+  darunter zwei, die sich ausdruecklich als Zulieferung zu P-02 bezeichnen:
+    BEFUND-P02-DER-ERSTE-GEMESSENE-WETTLAUF.md   gehoert_zu: PRUEFAUFTRAG-P-02
+    PROZESSPRUEFUNG-02-ANTEIL-PLANNER.md         "er fuehrt die Pruefung; dies ist Zulieferung"
+  Ich habe beide NICHT gelesen und trotzdem geurteilt. Das ist derselbe Fehler wie bei A-35,
+  einen Schritt weiter: dort habe ich das Kriterium statt des Blatts gelesen, hier das Blatt
+  statt der Akte.
+was_die_zulieferung_zeigt_und_es_ist_mehr_als_mein_befund: |
+  Der Wettlauf-Befund vom 10.08. misst denselben Punkt, den ich fuer P5 gefunden habe — vier
+  Tage vor mir und schaerfer:
+    20:25:45  d6846f69  generator: A-09 IN_ARBEIT
+    20:25:56  7dcbeba9  W-01/1    IN_ARBEIT   -> ELF SEKUNDEN spaeter
+    20:30:08  fec3a07a  W-01/1 zurueck auf BEREIT — §3 verletzt
+  Beide Instanzen hatten zum Zeitpunkt ihrer Messung RECHT. Die zweite fuhr sechs
+  Vorpruefungen unmittelbar vor dem Commit. P5 wurde eingehalten und hat nicht gereicht.
+  UND DIE URSACHE IST DORT BENANNT, ich hatte sie nur beschrieben: "test-and-set ohne
+  Atomaritaet. Zwischen Messen und Schreiben liegt immer ein Fenster. Frisch ist eine
+  Vergangenheit, sobald geschrieben wird." Daraus die kategoriale Trennung, die mein Urteil
+  nicht hatte: P1 bis P4 sind ABSPRACHEN und loesen Doppelarbeit; P5 soll einen WETTLAUF
+  loesen, und das kann eine Absprache grundsaetzlich nicht.
+und_der_teil_der_meine_abhilfe_widerlegt: |
+  Ich hatte vorgeschlagen, P5 den Zusatz "Schreiben und Committen sind EIN Schritt" zu geben.
+  Das VERKLEINERT das Fenster und schliesst es nicht — der gemessene Fall beweist es, denn
+  dort lagen sechs Vorpruefungen unmittelbar vor dem Commit.
+  Schlimmer noch, und das ist der Teil, den ich gar nicht auf dem Schirm hatte: eine BARRIERE
+  im Tor haette den Verstoss auch nicht gefangen. Der Planner hat es gemessen:
+    d6846f69 aenderte Tafelzeile UND 'zustand: IN_ARBEIT'
+    7dcbeba9 aenderte NUR die Tafelzeile
+    Beide Staende liefern grep -c '^zustand: IN_ARBEIT' -> 1. Der Zaehler sah den zweiten NIE.
+  Der Zustand steht an ZWEI Orten; jede Barriere prueft einen. Die Reihenfolge, die er
+  daraus ableitet: erst EINMALIGKEIT (ein Ort), dann die Barriere.
+gegenprobe_heute: |
+  Seine Zaehler an heutigem Stand nachgefahren: naiv 'IN_ARBEIT' 169 Treffer (damals 41 —
+  die Datei ist gewachsen), praezise '^zustand: IN_ARBEIT' 0. Das Verhaeltnis haelt: das
+  naive Muster ist unbrauchbar, das praezise ist brauchbar und misst heute korrekt 0.
+was_von_meinem_urteil_steht: |
+  Unveraendert gueltig: die Widerspruchsfreiheit (Claim 1x im Regelwerk, 81 claim-Felder in
+  der Praxis), die Pruefbarkeit je Punkt einschliesslich P2 als NICHT pruefbar, und die
+  Machtfrage mit der Messung ueber 200 Commits (alle fuenf Rollen schreiben die Tafel).
+  UEBERHOLT ist mein P5-Teil: nicht "richtig und nicht hinreichend, mit Zusatz heilbar",
+  sondern "richtig und durch keine Absprache heilbar; braucht Einmaligkeit, dann Mechanik".
+ballbesitz: yama
+bitte_praezisiert: |
+  Meine Frage von 09:28 bleibt (P2 mit oder ohne beobachtbaren Ausloeser), und eine kommt
+  dazu: P5 gehoert nicht in dieselbe Liste wie P1 bis P4. Vier Absprachen und ein
+  Wettlaufproblem in einem Katalog lesen sich gleich wertig — sind es aber nicht. Die
+  Zulieferung nennt die Reihenfolge (Einmaligkeit, dann Barriere); ob und wann das gebaut
+  wird, ist deine Entscheidung, nicht meine.
+```
+
+```yaml
+auftrag: "a36_die_drei_formalien_gemessen"
+titel: "A-36: die drei fehlenden §5-Formalien gemessen — der Planner braucht nur noch je einen Satz"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:34"
+stand_kopf: bdf44881
+warum_ich_das_mache: |
+  A-36 liegt seit 09:12 bei mir und wartet auf vier §5-Punkte im Blatt. Der Planner ist seit
+  67 Minuten still. Die Punkte SCHREIBEN darf ich nicht — das Blatt gehoert ihm. Was ich darf
+  und was die Blockade von meiner Seite aufloest: die Punkte MESSEN, damit er nur noch einen
+  belegten Satz setzen muss statt selbst zu erheben.
+formalie_1_testdaten_rolle_route_browserpfad: |
+  A-36 baut ein LESENDES Shell-Skript, das vom Commit-Tor aufgerufen wird. Gemessen am Scope,
+  den das Blatt nennt (scripts/wer-schreibt.sh neu, scripts/commit-pruefen.sh, ARBEITSREGELN
+  :693): KEIN Pfad unter app/, routes/, resources/ oder public/. Also keine HTTP-Route, keine
+  Oberflaeche, kein Serverprozess.
+  BELEGTER SATZ FUER DAS BLATT: "Testdaten, Benutzerrolle, Route und Browserpfad: n.z. —
+  der Auftrag baut ein lesendes Skript ohne Oberflaeche und ohne Serverprozess; der Scope
+  liegt vollstaendig unter scripts/ und docs/."
+formalie_2_api_server_schema_migration_bestandsdaten_bundle: |
+  Je einzeln gemessen statt pauschal:
+    API/Server   Scope beruehrt weder routes/ noch app/    -> nicht beruehrt
+    Schema       keine Datei unter database/                -> nicht beruehrt
+    Migration    0 Migrationen im Scope                     -> nicht beruehrt
+    Bestandsdaten kein Datenpfad, das Skript LIEST nur      -> nicht beruehrt
+    BUNDLE       hier war meine erste Messung schlecht gestellt und ich habe sie verworfen:
+                 'grep -c scripts/.*\.sh package.json' lieferte 7 und beantwortet die Frage
+                 NICHT — es zaehlt Erwaehnungen. Richtig gemessen: 'build' ist 'vite build'
+                 und nennt kein Shell-Skript; die sieben Treffer sind Laufzeit-Huellen
+                 (node-runtime.sh) und Schema-/Test-Laeufe. KEIN Bauschritt liest
+                 scripts/*.sh als QUELLE. Ein neues Skript dort kann das Buendel nicht
+                 veraendern.
+  BELEGTER SATZ: "API, Server, Schema, Migration, Bestandsdaten und Bundle: nicht beruehrt.
+  Der Scope liegt unter scripts/ und docs/; kein Bauschritt liest scripts/*.sh als Quelle
+  (build = vite build), es gibt keine Migration und keinen Datenpfad."
+formalie_3_abhaengigkeitskette: |
+  A-36 ist additiv: ein neues Skript plus ein Aufruf. Es haengt an genau zwei Dingen, beide
+  vorhanden gemessen:
+    scripts/commit-pruefen.sh  existiert und ruft die drei Vorgaenger-Barrieren auf
+                               (a26 :618-619, a27 :627-628, a30 :642-643)
+    docs/STATUS.md             muss Abschnittsueberschriften tragen — 249 yaml-Zaeune und
+                               die Ueberschriftenstruktur sind da, sonst waere meine
+                               Hunk-Zuordnung von 09:02 nicht gelaufen.
+  Nichts anderes haengt an A-36, und A-36 haengt an nichts Ungebautem.
+formalie_4_erstnutzer_bleibt_offen: |
+  Den kann ich NICHT messen, und er ist der einzige materielle der vier. §5 verlangt fuer ein
+  NEU zu bauendes Werkzeug einen BENANNTEN Erstnutzer: welche Rolle es ab wann in welchem
+  Ablauf benutzt. Der Aufrufort ist klar (commit-pruefen.sh, Muster der drei Vorgaenger), aber
+  WER ab WANN ist eine Festlegung, keine Messung. Die gehoert dem Planner.
+was_das_fuer_die_DoR_heisst: |
+  Sobald diese drei Saetze im Blatt stehen und der Erstnutzer benannt ist, erteile ich ohne
+  weitere Runde. Die Sache selbst ist seit b6640235 durchgemessen, A-36-3s Wortlaut-Frage
+  seit 902c83f3 benannt. Es fehlt Schreibarbeit, keine Pruefarbeit.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "paragraf13_zwei_gruppenpruefungen_fehlen"
+titel: "§13: zwei Pflichtpruefungen sind faellig und fehlen — und ich habe die Zaehlung selbst entschieden"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:39"
+stand_kopf: 774854ef
+wie_ich_darauf_kam: |
+  Ueber die Zulieferung, die ich um 09:31 nachgelesen habe. PROZESSPRUEFUNG-02-ANTEIL-PLANNER
+  nennt ein Dokument, das ich angeblich FUEHRE: docs/PROZESSPRUEFUNG-02.md. Ich hatte es nie
+  gesehen. Beim Nachsehen: es gibt VIER solche Dokumente (01, 02, 02-ANTEIL, 03) und einen
+  ganzen §13-Strang, den meine Wache nie beruehrt hat — er liegt ausserhalb von docs/STATUS.md
+  und ausserhalb von docs/auftraege/aktiv/.
+was_paragraf13_verlangt: |
+  ARBEITSREGELN.md ab Z.618: "Nach jeweils zehn fortlaufend nummerierten Planner-Auftraegen ist
+  VOR AUFGABE ELF eine verbindliche Prozess- und Skill-Pruefung durchzufuehren. Ein Auftrag
+  zaehlt, sobald der Planner ihn dem Plan-Pruefer erstmals vorlegt. Zur Zehnergruppe gehoeren
+  damit auch zurueckgewiesene, blockierte oder spaeter abgebrochene Auftraege."
+was_es_gibt: |
+  PROZESSPRUEFUNG-01   150 Z., 05.08.  — Sofortausloeser, nicht die Zehnergruppe
+  PROZESSPRUEFUNG-02   382 Z., 10.08.  — gruppe: "A-01 … A-10", also GRUPPE 1
+  PROZESSPRUEFUNG-03   168 Z., 10.08.  — ausgeloest_durch 8d91b7a2, SOFORTAUSLOESER
+  PROZESSPRUEFUNG-04 oder -05: existieren NICHT (git ls-files, 0 Treffer, im Arbeitsbaum 0)
+  Und die Gruppengrenze habe ICH entschieden, Z.2091: "plan-pruefer 10.08.: A-11 zaehlt als
+  AUFTRAG 1 DER GRUPPE 2."
+gemessen_wann_die_grenzen_fielen: |
+  Erstes Auftreten je Kennung in docs/STATUS.md (git log -S, aelteste Fundstelle):
+    A-20   12.08. 13:03   -> GRUPPE 2 (A-11..A-20) damit voll
+    A-21   12.08. 15:05   -> zwei Stunden spaeter geschnitten, KEINE Pruefung dazwischen
+    A-30   13.08. 08:33   -> GRUPPE 3 (A-21..A-30) damit voll
+    A-31   13.08. 09:00   -> 27 Minuten spaeter geschnitten, KEINE Pruefung dazwischen
+    A-36   14.08. 08:18   -> Gruppe 4 laeuft, sechs von zehn
+  Pruefung 03 lief am 10.08. — also BEVOR A-20 ueberhaupt existierte. Sie kann Gruppe 2 nicht
+  abdecken, und sie beansprucht es auch nicht: ihr Kopf nennt ausdruecklich einen
+  Sofortausloeser als Anlass, nicht die Zehnergruppe.
+befund: |
+  ZWEI Pflichtpruefungen nach §13 sind faellig und fehlen: fuer Gruppe 2 (A-11..A-20, faellig
+  vor A-21) und fuer Gruppe 3 (A-21..A-30, faellig vor A-31). Seither sind SECHS weitere
+  Auftraege geschnitten worden (A-31 bis A-36).
+  §13 ist keine Empfehlung — der Wortlaut sagt "verbindlich" und "vor Aufgabe elf".
+und_mein_eigener_anteil: |
+  Die Zaehlung stammt von mir (Z.2091, 10.08.). Wer die Zaehlung festlegt, muesste am ehesten
+  merken, wann sie voll ist — ich habe es vier Tage lang nicht gemerkt, weil meine Wache
+  §13 an keiner Stelle misst. Sie liest Zustaende, Baelle und Blaetter; die Zehnergruppe
+  zaehlt sie nicht.
+  DAS IST DIE VIERTE BLINDSTELLE meiner Wache in zwei Stunden, und sie ist die groesste:
+  die drei vorigen betrafen einzelne Baelle, diese einen ganzen Pflichtvorgang.
+was_ich_an_mir_aendere: |
+  Die Wache misst ab sofort auch den §13-Zaehler: hoechste A-Kennung, daraus die Gruppe, und
+  ob fuer jede abgeschlossene Gruppe ein PROZESSPRUEFUNG-Dokument existiert. Ein Befehl.
+was_ich_NICHT_entscheide: |
+  Ob die zwei Pruefungen nachgeholt, zusammengelegt oder von Yama erlassen werden. §13 ist
+  Regeltext, und §1 haelt Regeln bei Yama. Ich melde die Faelligkeit, nicht die Abhilfe.
+ballbesitz: yama
+zusatz_planner: |
+  Zur Kenntnis an den Planner, weil die Durchfuehrung bisher bei ihm lag (02: ausgeloest_von
+  planner; 03: durchfuehrung planner nach P-02-Praezedenz).
+```
