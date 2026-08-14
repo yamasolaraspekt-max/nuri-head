@@ -17290,3 +17290,51 @@ bilanz_der_neun: |
   Vorbedingung erfuellt ist — messen kann ich sie, entscheiden nicht.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "werkbank_anschluss_geprueft_neun_von_neun"
+titel: "WERKBANK-ANSCHLUSS geprueft — vier Zahlen exakt, Zuwachs Datei fuer Datei erklaert, neun von neun durch"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:59"
+stand_kopf: b1d85daf
+gegenstand: "docs/WERKBANK-ANSCHLUSS.md, 244 Zeilen, 13.08.; zustand ENTWURF, ballbesitz 'plan-pruefer (nach Kenntnisnahme durch Yama)', auftrag_von Yama 10.08."
+was_der_ball_von_mir_verlangte: |
+  Das Kopffeld sagt: "ENTWURF — der Plan-Pruefer entscheidet, ob daraus Auftraege werden."
+  Gemessen, ob das faktisch laengst geschehen ist:
+    STATUS.md:6381 leitet die Klasse A aus dieser Matrix ab:
+      "KLASSE A laut WERKBANK-ANSCHLUSS  W-02 W-04 W-05 W-07 W-08 W-09 W-11 W-13 W-21 W-22 = ZEHN"
+    Und jede der zehn hat heute einen Datensatz — je einzeln gezaehlt, ZEHN von ZEHN
+    (W-05 und W-21 sogar zwei, ihre Stufen).
+  Die Matrix HAT also Auftraege erzeugt. Meine Entscheidung ist de facto gefallen; ich mache
+  sie hiermit formal, statt sie weiter als offen zu fuehren.
+die_vier_zahlen_nachgezaehlt: |
+  Die Matrix nennt vier Grobzahlen vom 10.08. Heute gemessen:
+    Geometrie-Module   behauptet 53   heute 55   (+2)
+    Renderer-Module    behauptet  9   heute  9   exakt
+    Testdateien        behauptet 165  heute 172  (+7)
+    Werkzeuge Registry behauptet 12   heute 12   exakt
+  UND DER ZUWACHS IST DATEI FUER DATEI ERKLAERT, nicht weggewunken:
+    Geometrie +2:  dachTopologie.ts (12.08.), geradenGeometrie.ts (13.08.)
+    Tests     +7:  anbauTorZusage, dachTopologie, geradenGeometrie, raumAuswahl,
+                   sammelBefehle, sparrenVorbehalt, zweiEnginesSchweigen — alle 12./13.08.
+  Damit waren alle VIER Zahlen zu ihrem Zeitpunkt richtig. Eine Abweichung, die sich durch
+  benannte Dateien erklaert, ist kein Fund — das ist der Unterschied zu einer Zahl, die
+  einfach nicht mehr stimmt.
+was_ich_zur_vorbedingung_sage: |
+  Der Ball nennt "nach Kenntnisnahme durch Yama". Ob die erfolgt ist, kann ich NICHT messen —
+  eine Kenntnisnahme hinterlaesst keine Spur im Repo. Sie ist aber gegenstandslos geworden:
+  die zehn Auftraege existieren, die Matrix ist verbraucht, und der Fahrplan, der sie abloest
+  (FAHRPLAN-WERKZEUGKASTEN, 1083 Zeilen) fuehrt heute 42 Registerzeilen statt zehn.
+  Ich melde das, statt eine Vorbedingung als erfuellt zu behaupten, die ich nicht sehen kann.
+und_die_selbstkorrektur_darin_ist_bemerkenswert: |
+  Das Dokument beginnt mit "Zuerst: ich habe die Lage vorhin falsch dargestellt" und nimmt
+  zwei eigene Saetze zurueck: die 23 W-Blaetter seien Beschreibungen (sie sind LEERE
+  FORMULARE) und es sei nichts gebaut (53 Module, 165 Tests, 12 Werkzeuge). Es korrigiert
+  also nach OBEN und nach UNTEN zugleich — genau die Bauart, die ich heute Nacht sechsmal an
+  mir selbst gebraucht habe.
+bilanz: |
+  NEUN VON NEUN Wurzel-Vorgaengen sind durch. Von den drei Baellen, die heute frueh in
+  STATUS.md bei mir lagen, bleibt einer: A-36, und der wartet nicht auf mich, sondern auf
+  vier Saetze im Blatt.
+ballbesitz: "— (geprueft; die Matrix ist verbraucht, die zehn Auftraege existieren)"
+```
