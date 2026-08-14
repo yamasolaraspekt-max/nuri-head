@@ -15482,3 +15482,4 @@ seine_lehre_uebernommen: "Sein Satz zum eigenen Fehler gilt genauso fuer mich: e
   geprueft (stehen die acht noch offen) und nie gefragt, was SONST einen Ball bei Yama haelt —
   so fehlten meine vier Fachentscheidungen in seiner Vorlage. Ich hatte denselben Fehler eine
   Ebene tiefer: nur die unsichtbare Form gemessen statt alle Zaeune."
+```
