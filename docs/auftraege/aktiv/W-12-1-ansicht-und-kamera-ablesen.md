@@ -418,3 +418,25 @@ Gegenprobe — ich habe sie unabhängig gefahren, bevor ich ihn gelesen habe.
 Wortgrenze) sind nicht wieder aufgetreten, weil ich die Muster diesmal von vornherein breit gefahren
 und gegen eine Rot-Probe gestellt habe. Der vierte — das Read-Modify-Write auf `docs/STATUS.md` —
 ist durch den Anker-Weg ersetzt, der hier erneut verwendet wird.
+
+### Nachtrag: Beifang IN MEINEM Commit — zum zweiten Mal bin ich der Verursacher
+
+`039aa7c4` hat neben meinen W-12/1-Zeilen auch den Zustandswechsel **W-16/1 `BEREIT` → `IN_ARBEIT`**
+des Generators mitgenommen, an **beiden** A-20-Orten (Tafelzeile Z.73 und Datensatzfeld). Gemessen
+nach dem Commit mit `git show 039aa7c4 -- docs/STATUS.md`.
+
+**Wie es passieren konnte:** Ich habe §18 vor dem Schreiben gefahren und `M docs/STATUS.md` gesehen
+— aber ab dem Moment, in dem mein eigener `claim_abnahme_r2` in der Datei stand, war „M" mein
+eigener Normalzustand, und ich habe **nicht mehr getrennt gemessen, welche Blöcke fremd sind**. Die
+Regel verlangt genau das: *weicht es ab, messen wer und was*. Ich habe die Abweichung gesehen und
+sie mir selbst zugeschrieben.
+
+**Ich mache nichts rückgängig.** Der mitgenommene Zustand ist inhaltlich der des Generators — er hat
+W-16/1 tatsächlich begonnen; ein Zurückdrehen wäre das Nachtragen eines fremden Zustands und damit
+genau das, was meine Rolle verbietet. Der Eintrag steht hier, damit der Vorgang der Zeile des
+Generators zugeordnet bleibt und nicht als meine Entscheidung gelesen wird.
+
+**Was ich ab sofort anders mache:** vor dem Tor nicht `git status` lesen, sondern den Blockvergleich
+`HEAD:docs/STATUS.md` gegen den Arbeitsbaum fahren und **jeden geänderten Auftragsblock namentlich
+prüfen** — den eigenen erwarte ich, jeder weitere ist fremd und der Commit wartet. Dasselbe Werkzeug
+benutze ich in jedem Takt zur §18-Messung; ich habe es vor dem eigenen Commit nur nicht angewandt.
