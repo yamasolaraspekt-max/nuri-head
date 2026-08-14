@@ -82,10 +82,11 @@
 | **W-40/1** Nachbesserung: Ablesung mit EINER Erweiterung | **`BETRIEBSBESTAETIGT`** | – | Release `53142fc2` · §19 12.08. | **alle SIEBEN Blaetter berichtigt**, keine Stelle geloescht · Register 127 `ENTWORFEN`→`BESCHRIEBEN` (Zaehler 17→18) · **meine eigene Fehlerliste war unvollstaendig: FUENF Blaetter, nicht vier** · kein Produktivcode (0/0/0) |
 | **W-33** Start und Projektwahl | **`BETRIEBSBESTAETIGT`** | – | Release `fa7547c7` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `StartView.tsx` 267 Z. · behebt eine **Falschauskunft ueber den Bestand** (AUF-40 Teil A) · **Teil B liegt bei Yama** |
 | **W-36** Faehigkeiten-Navigation | **`BETRIEBSBESTAETIGT`** | – | Release `f1c412f9` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
-| **W-37** Rechenpanels | **`CODE_FERTIG`** | **Evaluator** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben | · **EVALUATOR 13.08.: NACHBESSERN, EIN Punkt (§12.2) — `W-37-6`.** **Acht der neun Kriterien sind erfüllt**, jedes einzeln nachgemessen. **Der Befund trifft eine verlangte HANDLUNG, die nicht ausgeführt wurde:** das Kriterium sagt wörtlich *„Die REGISTERZEILE wird nachgezogen"* — am Commit gemessen enthält `225a7f1a` **0** Treffer für `REGISTER.md`, und `:124` nennt weiterhin **196 Z**, während `EngineFlaeche.tsx` an **drei** Ständen (Basis, Bau, HEAD) je **199** hat. *Der Bericht sagt es selbst:* „die Berichtigung gehört ins Register" — der Bau hat den Befund gesehen, richtig gemessen und bewusst nicht ausgeführt. **Warum ich das nicht durchgehen lasse:** der Scope nennt das Register **weder** als Ziel **noch** als Nicht-Ziel (beide Listen gelesen; nach §5 gilt dann das Kriterium), die Handlung ist an **vier** echten Ständen üblich und möglich (`fa7547c7` W-33, `3dae69b4` W-35, `3abd8e79` W-39, `7c782f76` W-34 — alle enthalten `REGISTER.md`), und W-37 ist nach eigener Aussage die **letzte freie Ablesung**. **Ausdrücklich nicht beanstandet:** die Messung 196↔199 stimmt. **Was erfüllt ist:** die **acht** Adapter nach **Signatur** gezählt (das Namensmuster `als*Eingabe` findet nur sechs — das Klassenmerkmal trägt), `SCHWERE_ANZEIGE` mit drei Graden je Zeichen **und** Wort (`EngineFlaeche.tsx:31-35`), sechs Import-Wächter namentlich plus drei **Nur-Quelle**-Fälle getrennt, `:522/:527/:538` selbst geöffnet, und 0 Doppel über **253** Blattdateien. Suite **1750/1750**, tsc exit=0. **Die Gegenprobe des Kriteriums nachgefahren:** am Bau-Stand sind es **vier** von sechs richtigen Registerzahlen, nicht fünf — *kein Befund gegen das Blatt*, denn `StartView.tsx` hatte am Basis-Stand `a94d91ac` wirklich 267 und wuchs erst danach. **Drei eigene Messfehler offengelegt**, darunter ein vertippter Basis-SHA, dessen stiller Fehlschlag dreimal „0 Zeilen" ergab. · **Der Generator schrieb: acht Kriterien belegt, sieben Blätter, Stufe 6 vollständig.**
+| **W-37** Rechenpanels | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben | · **EVALUATOR 13.08.: NACHBESSERN, EIN Punkt (§12.2) — `W-37-6`.** **Acht der neun Kriterien sind erfüllt**, jedes einzeln nachgemessen. **Der Befund trifft eine verlangte HANDLUNG, die nicht ausgeführt wurde:** das Kriterium sagt wörtlich *„Die REGISTERZEILE wird nachgezogen"* — am Commit gemessen enthält `225a7f1a` **0** Treffer für `REGISTER.md`, und `:124` nennt weiterhin **196 Z**, während `EngineFlaeche.tsx` an **drei** Ständen (Basis, Bau, HEAD) je **199** hat. *Der Bericht sagt es selbst:* „die Berichtigung gehört ins Register" — der Bau hat den Befund gesehen, richtig gemessen und bewusst nicht ausgeführt. **Warum ich das nicht durchgehen lasse:** der Scope nennt das Register **weder** als Ziel **noch** als Nicht-Ziel (beide Listen gelesen; nach §5 gilt dann das Kriterium), die Handlung ist an **vier** echten Ständen üblich und möglich (`fa7547c7` W-33, `3dae69b4` W-35, `3abd8e79` W-39, `7c782f76` W-34 — alle enthalten `REGISTER.md`), und W-37 ist nach eigener Aussage die **letzte freie Ablesung**. **Ausdrücklich nicht beanstandet:** die Messung 196↔199 stimmt. **Was erfüllt ist:** die **acht** Adapter nach **Signatur** gezählt (das Namensmuster `als*Eingabe` findet nur sechs — das Klassenmerkmal trägt), `SCHWERE_ANZEIGE` mit drei Graden je Zeichen **und** Wort (`EngineFlaeche.tsx:31-35`), sechs Import-Wächter namentlich plus drei **Nur-Quelle**-Fälle getrennt, `:522/:527/:538` selbst geöffnet, und 0 Doppel über **253** Blattdateien. Suite **1750/1750**, tsc exit=0. **Die Gegenprobe des Kriteriums nachgefahren:** am Bau-Stand sind es **vier** von sechs richtigen Registerzahlen, nicht fünf — *kein Befund gegen das Blatt*, denn `StartView.tsx` hatte am Basis-Stand `a94d91ac` wirklich 267 und wuchs erst danach. **Drei eigene Messfehler offengelegt**, darunter ein vertippter Basis-SHA, dessen stiller Fehlschlag dreimal „0 Zeilen" ergab. · **Der Generator schrieb: acht Kriterien belegt, sieben Blätter, Stufe 6 vollständig.** · **RUNDE 2 — EVALUATOR 13.08.: ABGENOMMEN.** Nach §12.4 **alle neun Kriterien erneut gefahren**. **Der Befund ist behoben und A-20-4 dabei eingehalten:** `REGISTER.md:124` nennt jetzt **199 Z** mit der alten Zahl **durchgestrichen daneben** samt Datum und Anlass — nicht gelöscht; `EngineFlaeche.tsx` habe ich mit **199** selbst nachgezählt. Und der Befund steht nicht nur im Register: `7-GRENZEN` trägt einen eigenen Abschnitt mit den drei Ständen und dem Satz *„Die Zahl war nicht veraltet, sie war falsch."* Suite **1750/1750**, tsc exit=0. **Mein eigener Messfehler in dieser Runde, und es ist der dritte derselben Klasse an einem Tag:** bei `W-37-5` maß ich erst **fünf**, dann **vier** Importe — richtig sind **sechs**. Zwei Ursachen, beide in meinem Muster: `enginePanelTreppe` importiert **mehrzeilig** (`^import` greift nicht), und `sparrenVorbehalt:3` sowie `zweiEnginesSchweigen:3` importieren **mit Dateiendung** `.ts`. Erst `from [^]*dashboard/enginePanels(\.ts)?` fängt alle sechs. *Bemerkenswert daran:* genau dieses Kriterium ist entstanden, weil der Bauende dieselbe Zahl zu klein gemessen hat, und sein Blatt schreibt als Lehre die **Zwei-Muster-Regel** auf — ich bin heute zum dritten Mal in dieselbe Klasse gelaufen. Die Lehre steht bei mir noch als Kenntnis, nicht als Handgriff.
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
+| **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | `BEREIT` | **Generator** | Schnitt `1df82ee1` · Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` | **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
-### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
+### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
 > **Anlass: Yamas Auftrag „gib dir und den anderen Aufgaben".** *Grundlage ist ausschließlich die
 > Tabelle oben — nicht meine Notizen. **Und der Befund, der die Verteilung überhaupt nötig machte:
@@ -2329,7 +2330,7 @@ streudatei: "Zusaetzlich gemeldet (nicht angefasst): eine Datei namens '1692' li
 ```yaml
 auftrag: "W-05/1"
 titel: "Die sieben Blaetter von W-05 aus roomDetection.ts ableiten"
-datei: docs/auftraege/aktiv/W-05-raum-erkennen-beschreiben.md
+datei: docs/auftraege/aktiv/W-05-raum-beschreiben.md   # BERICHTIGT vom planner 14.08. — der Befund befund_dateiname darunter (release-pruefer 12.08.) hatte ihn gemeldet und ausdruecklich dem Planner uebergeben; er lag zwei Tage bei mir.
 zustand: BETRIEBSBESTAETIGT
 ballbesitz: —  # Kette vollstaendig
 betriebspruefung: "release-pruefer (Stamm-Instanz) 12.08., §19: der Uebergang VEROEFFENTLICHT -> BETRIEBSBESTAETIGT ist MEINE Zustaendigkeit (unabhaengige Betriebspruefung), nicht Yamas — siehe Sammelbericht am Dateiende."
@@ -3411,7 +3412,7 @@ offener_punkt_bei_yama: "Der Evaluator hat einen EINGRIFF offengelegt: ticket_te
   NOCH. Raeumen ist eine produktive Datenoperation und braucht Yamas Freigabe — dieselbe Form
   wie bei den zwei Testnutzern am 10.08. ('raeum die nutzer'). Ich raeume nicht von mir aus."
 titel: "abwassergefaelle und fbhAuslegung verlieren das Gesamturteil — nach dem A-14-Muster, mit vorhandenem Bauteil"
-datei: docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md
+datei: docs/auftraege/aktiv/A-17-zwei-engines-schweigen.md   # BERICHTIGT vom planner 14.08. nach fbf8be3e — der genannte Name hat in der GESAMTEN Historie null Commits, die echte Datei vier. Kein Umbenennen, keine Drift: beim Schreiben falsch.
 zustand: BETRIEBSBESTAETIGT
 ballbesitz: —  # Kette vollstaendig
 betriebspruefung: "release-pruefer 12.08., §19 im SELBEN Arbeitsgang wie die Veroeffentlichung:
@@ -13200,7 +13201,19 @@ drei_verfahrensbeobachtungen_bei_mir: "Die &&-Kopplung hielt, als §18 zwischen 
 
 ```yaml
 auftrag: "W-37"
-zustand: CODE_FERTIG
+blatt: "docs/auftraege/aktiv/W-37-rechenpanels.md"   # nachgetragen vom planner 14.08.
+blatt_nachgetragen: "NUR dieses eine Feld ergaenzt, KEINE Aussage geaendert — nach 5fefca12.
+  Der plan-pruefer hat gemessen: dieser Block trug vierzehn Felder und weder blatt noch datei,
+  waehrend das Blatt mit 27303 Bytes existiert; von 23 Datensaetzen ohne blatt-Feld sind 22
+  geschlossene Belege oder Teilbloecke — W-37 ist der EINZIGE nicht geschlossene. Selbst
+  nachgemessen ueber alle Datensaetze mit Zustand: er stimmt, es ist genau einer.
+  WARUM ICH EINEN FREMDEN DATENSATZ ANFASSE, obwohl er es ausdruecklich nicht getan hat:
+  ein fehlendes Feld ist eine Luecke in der AUFFINDBARKEIT, keine Aussage — nichts wird
+  umgeschrieben, kein Zustand, kein Ball, kein Beleg. Wer W-37 zur Freigabe zieht, muesste
+  sonst das Blatt SUCHEN statt es zu lesen, und der Ball-Halter steht seit ueber sieben
+  Stunden still. Derselbe Grundsatz wie bei W-31 heute Nacht: Auffindbarkeit herstellen,
+  ohne einen Beleg zu faelschen."
+zustand: ABGENOMMEN
 claim_abnahme_r2: "evaluator 13.08. 23:33 — Claim VOR dem Pruefstand der WIEDERABNAHME. Nach
   §12.3/§12.4 fahre ich ALLE NEUN Kriterien erneut, nicht nur den Befund."
 nachbesserung_sha: 1df82ee1
@@ -13254,7 +13267,9 @@ bau_bericht: "generator 13.08. Acht Kriterien belegt, sieben Blaetter. MIT W-37 
   W-37-8 md5 ueber alle Werkzeuge und alle sieben Blaetter: W-37 auf jedem eindeutig.
   E1 auf allen sieben Dateien GLEICH. must_preserve in DREI Richtungen: alle leer. resources/: 0.
   Suite 1750 gruen und unveraendert."
-ballbesitz: evaluator  # generator 13.08. Runde 2 zurueckgegeben, Nachbesserung 1df82ee1.
+ballbesitz: release-pruefer  # evaluator 13.08. 23:38 nach ABGENOMMEN in RUNDE 2
+  weitergegeben. UEBERHOLT ist der vorige Wert "generator 13.08. Runde 2 zurueckgegeben, Nachbesserung 1df82ee1."
+  — er bleibt als Herkunft stehen (A-20-4).
   UEBERHOLT ist 'generator  # evaluator 13.08. 23:32 NACHBESSERN, EIN Punkt (W-37-6)', davor
   'evaluator' — beide bleiben als Herkunft stehen (A-20-4 kennzeichnen, nicht loeschen).
 nachbesserung_bericht: "generator 13.08. RUNDE 2. DER BEFUND TRIFFT, und er trifft eine
@@ -13362,3 +13377,1978 @@ was_ich_NICHT_tue: "Ich fasse kein Blatt an — Blaetter gehoeren dem Planner. I
 ballbesitz_befund: planner
 ```
 
+
+### A-35 — Datensatz (eigener Zaun nach A-25)
+
+```yaml
+auftrag: "A-35"
+zustand: BEREIT
+ballbesitz: generator  # DoR erteilt 13.08. 23:38 — jede Vorbedingung selbst nachgemessen
+blatt: "docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md"
+basis_sha: 1df82ee1
+art: "BAU — erstes Werkzeug nach ANFORDERUNGEN.md A7. Kein neues Schema, keine neue
+  Mathematik, kein neuer Dialog."
+spur: A
+prioritaet: P2
+claim: "planner 13.08. — Claim VOR dem Schnitt. Kennung geprueft: A-35 hat NULL Treffer
+  in docs/STATUS.md und NULL Blaetter in docs/auftraege/aktiv/; A-01 bis A-34 sind vergeben."
+anlass: "Yama hat das Bedienmodell bestaetigt und auf die Frage 'naechster Schritt' geantwortet:
+  Bedienmodell entscheiden, dann bauen. Register: 23 von 43 BESCHRIEBEN, EINS GEBAUT."
+vorbedingungen_gemessen: "Alle vier erfuellt, je am Stand 1df82ee1 selbst nachgemessen:
+  (1) Mathematik liegt — geometry/geradenGeometrie.ts:84 geradenSchnitt, 196 Z., 9 Tests, und
+      NULL Produktivaufrufer ausser der Landkarte.
+  (2) Bedienmuster entschieden — ANFORDERUNGEN.md A7, von Yama bestaetigt 13.08.
+  (3) Auswahl mit Rollen gebaut — hausplanerStore.ts:30 selectedNodeIds als string[],
+      auswahlModus.ts haengt mit Modifikator an, primaerId ist der zuletzt geklickte.
+  (4) Undo-Klammer gebaut — executeCommands aus A-31.
+  Es fehlt GENAU das Werkzeug: toolRegistry.ts hat 0 Treffer auf 'trimmen'."
+keine_dublette: "'trimmen' kommt in sechs Dateien vor, alle geoeffnet — Vertrag, Themen, Paket,
+  Praesentation, Landkarte und der Kopfkommentar der Geometrie. Keine davon ist eine
+  Implementierung. Dasselbe gilt fuer teilen, verbinden, verlaengern, versatz."
+nicht_ziele: "KEIN ConfigWizard (A7 Konsequenz 1) · KEINE neue Geometriefunktion · KEINE der vier
+  Geschwister · KEINE Aenderung an docs/rollenkette/ · KEIN Schema · KEINE Aenderung an
+  auswahlModus.ts oder waehleAn (beide koennen was A7 verlangt, gemessen)."
+kanten: "K1 nur EIN Objekt gewaehlt · K2 parallele Geraden (geradenSchnitt liefert null) ·
+  K3 Schnittpunkt AUSSERHALB der Strecke — Geradenschnitt ist nicht Streckenschnitt ·
+  K4 primaerId ist auch in ids · K5 gesperrtes Objekt · K6 mehrere Schnittkanten treffen.
+  K3 und K6 verlangen eine BENANNTE Entscheidung im Bau-Bericht; eine stille Annahme ist ein
+  Mangel, auch wenn sie sich vernuenftig verhaelt."
+kriterien: "A-35-1 bis A-35-9 im Blatt, alle mit genanntem Messbefehl und Zahl vorher/nachher.
+  Tragend sind A-35-3 (Hauptrolle ist primaerId, NICHT ids[0]) und A-35-5 (die Uebersetzung
+  selectionIds<->selectedNodeIds steht an GENAU EINER Stelle, A7 Konsequenz 2)."
+warum_A_und_nicht_W03_2: "W-03/1 liegt als Ablesung auf BEREIT. Ein zweiter Auftrag am selben
+  Blattordner wuerde kollidieren. Ob trimmen eine eigene Registerzeile bekommt, ist eine
+  Registerfrage und wird NACH dem Bau entschieden — gemessen: trimmen, verlaengern und versatz
+  haben heute keinen Eintrag im REGISTER.md."
+k3_geschaerft_14_08: "Der plan-pruefer hat F-004 durchgerechnet (907aaba2): die Formel stimmt,
+  fuenf Faelle je doppelt gerechnet, die Berichtigung vom 13.08. bestaetigt sich — ABER K3
+  entschied ohne einen Operanden. EPS_SINUS 1e-6 wirkt auf den SINUS: die Wache blockiert erst
+  unter 5,73e-05 Grad. Selbst nachgerechnet fuer zwei 6000-mm-Waende mit 5 mm Versatz: bei
+  0,001 Grad liegt der Schnittpunkt 286,5 m entfernt und passiert die Wache; exakt an der
+  Schwelle sind es 5,0 km. K2 ist eine WINKELschwelle, der Schaden eine ABSTANDSgroesse — wer
+  bei K3 verlaengern waehlt, verlaengert lautlos eine 6-Meter-Wand auf Kilometer. K3 verlangt
+  jetzt ZWEI Groessen: Verhalten UND Abstandsgrenze. Die Grenze ist FACHENTSCHEIDUNG und wird
+  nicht vom Generator gesetzt; mein Vorschlag (Bounding-Box des Geschosses plus Zuschlag,
+  selbstskalierend) steht als Vorschlag im Blatt, die Alternative (fester Faktor) daneben.
+  Neues Kriterium A-35-9 mit dem 0,001-Grad-Fall als Messbefehl."
+k3_entschieden_14_08: "BERICHTIGUNG meines eigenen Vorschlags von einer Stunde vorher, nach
+  d1792697. Der plan-pruefer hat ihn in DREI Punkten zerlegt, alle drei treffen: (1) mein
+  -Bounding-Box plus ZUSCHLAG- hatte selbst keinen Wert, der Zuschlag kam einmal vor ohne Zahl
+  und ohne Bezugsgroesse; (2) mein Satz -kommt ohne erfundene Zahl aus- war damit falsch, der
+  Zuschlag IST eine, nur eine Ebene tiefer — ich habe den Operanden verschoben statt vermieden;
+  (3) mein eigenes Kriterium widersprach meinem eigenen Nachtrag, es verlangte die Grenze im
+  Bau-Bericht und haette sie damit faktisch den Generator waehlen lassen, was zwei Zeilen
+  darueber verboten war. ENTSCHEIDUNG: K3 weist AB und verlaengert nicht — messbar ohne jede
+  Zahl, sichere Richtung, spaeter nachruestbar, und dieselbe Antwort die K1 und K2 schon geben.
+a35_2_neu_gefasst_14_08: "Nach dcf5e772: mein Kriterium A-35-2 verlangte einen Produktiv-AUFRUFER,
+  mass aber ERWAEHNUNGEN — und waere damit GRUEN gewesen, bevor irgendjemand etwas baut. Der alte
+  Befehl lieferte zwei Dateien: werkzeugLandkarte.ts, die geradenGeometrie nur in einer Begruendung
+  NENNT und nicht importiert (from-Treffer 0), und geradenGeometrie.ts SELBST, deren Treffer ein
+  Kommentar auf Zeile 82 ist. Der Selbsttreffer allein erfuellte die Bedingung. Auch meine
+  Vorher-Zahl war falsch: ich schrieb -nur die Landkarte-, gemessen sind es zwei. NEU: gemessen
+  wird auf IMPORTE; Stand vorher genau EIN Import, der Test auf Zeile 14, Produktivimporte NULL.
+  Gegenprobe dass das Muster taugt: dieselbe Suche auf editierGeometrie liefert sechs Dateien.
+  Es zaehlt besonders, weil A-35 das Muster fuer vier weitere Werkzeuge ist — ein Kriterium das
+  vor dem Bau gruen ist prueft nichts und wird abgehakt, weil der Befehl im Blatt steht und
+  liefert was er soll. Seine DoR steht, das Kriterium war nicht falsch, seine Messvorschrift war
+  zu weit."
+  A-35-9 neu gefasst: geprueft wird ob der Schnittpunkt auf BEIDEN Strecken liegt, eine
+  Ja/Nein-Frage an vorhandene Endpunkte, kein Zahlenoperand. AN YAMA geht nur noch die
+  ERWEITERUNG: soll spaeter auch verlaengert werden und bis zu welchem Abstand — A-35 wartet
+  darauf NICHT. Seine DoR steht, die neun Kriterien bleiben neun."
+k3_praezisiert_14_08: "Nach 0672be59: -liegt auf der Strecke- hat ZWEI Lesarten, die am Rand
+  gegenteilig antworten. Selbst gemessen: geradenGeometrie.ts:105 rechnet t und gibt es NICHT
+  heraus, die Signatur ist Punkt|null. Weg A ueber den Parameter 0<=t<=1 ist exakt und braucht
+  keine Toleranz; Weg B ueber die Koordinate braucht in Gleitkomma ein Epsilon. Am Fall
+  t=1+1e-9 antworten sie GEGENTEILIG. Und schaerfer als gemeldet: t gilt nur fuer die ERSTE
+  Gerade, der Streckentest braucht auch u auf der Schnittkante — u wird heute gar nicht
+  gerechnet. ENTSCHEIDUNG: Weg A, t UND u je im Band [0,1], kein Epsilon und keine neue Zahl.
+  F-001 fuehrt zwar 0,5 mm (auf 6000 mm ein t-Band von 8,3e-05), aber das waere dieselbe Klasse
+  wie der Zuschlag eine Ebene tiefer. t und u sind dimensionslos, die Frage wird exakt
+  beantwortbar. VERFUEGBARKEIT ADDITIV: geradenSchnitt ist betriebsbestaetigt und behaelt seine
+  Signatur; eine ZWEITE exportierte Funktion in derselben Datei liefert t und u, geradenSchnitt
+  ruft sie auf. Eine Rechnung, zwei Sichten, keine zweite Wahrheit. Das Nicht-Ziel -keine neue
+  Geometriefunktion- ist dafuer ausdruecklich praezisiert: es richtet sich gegen das NACHBAUEN,
+  und wer t im Werkzeug erneut rechnet begeht genau den Verstoss, den es verhindern soll."
+rueckweg: "Der Bau fuegt hinzu und aendert nichts Bestehendes. Ruecknahme = Commit zurueckdrehen,
+  keine Datenmigration, kein Schema, keine Bestandsdokumente betroffen."
+dor_beleg: "ERTEILT 13.08. 23:38 plan-pruefer, gemessen am BASIS-STAND 1df82ee1 und am Baum.
+  ALLE VIER VORBEDINGUNGEN SELBST NACHGEMESSEN, nicht uebernommen:
+    (1) MATHEMATIK: geradenGeometrie.ts traegt geradenSchnitt auf Zeile 84, die Datei hat 196
+        Zeilen, der Test geradenGeometrie.test.ts fuehrt 9 test-Faelle. PRODUKTIVAUFRUFER: NULL.
+        Die Null ist ein Ergebnis und kein Fehlgriff — Gegenprobe: geradenSchnitt hat 15 Treffer
+        ueber GENAU ZWEI Dateien, den Test und die eigene Datei. Damit traegt A-35-2 ('mindestens
+        EIN Produktivaufrufer nach dem Bau') und kann rot werden.
+    (2) BEDIENMUSTER: ANFORDERUNGEN.md:90 fuehrt '### A7 · Wie werden Werkzeuge mit ZWEI Objekten
+        bedient?' — der Abschnitt existiert woertlich.
+    (3) AUSWAHL MIT ROLLEN: hausplanerStore.ts:30 traegt selectedNodeIds; primaerId steht in VIER
+        Dateien (HausplanerApp.tsx, app/tools/auswahlModus.ts, __tests__/markieren.test.ts,
+        hausplanerStore.ts). Die Rolle ist also gebaut und nicht nur geplant.
+    (4) UNDO-KLAMMER: executeCommands steht dreimal im Store.
+    UND DIE LUECKE IST ECHT: toolRegistry.ts hat 0 Treffer auf 'trimmen'.
+  DIE KRITERIEN TRAGEN: acht Stueck, jedes mit Messbefehl. A-35-3 verlangt einen Test mit
+  Auswahlreihenfolge A,B,C, der C kuerzt — das faengt genau die Verwechslung primaerId gegen ids[0].
+  A-35-5 laesst die Uebersetzungsstellen ZAEHLEN und einzeln oeffnen, jede weitere ist ein Mangel.
+  A-35-6 verlangt fuer K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (mehrere Schnittkanten)
+  eine BENANNTE Entscheidung statt einer stillen Annahme. Nicht-Ziele, Kanten und Rueckweg stehen.
+  ZWEI FUNDE OHNE AUFLAGE, benannt statt verschwiegen:
+    a) Der Block sagt 'NULL Produktivaufrufer AUSSER DER LANDKARTE'. Gemessen sind es null
+       Produktivaufrufer UEBERHAUPT; werkzeugLandkarte.ts nennt geradenSchnitt gar nicht. Der
+       Zusatz stimmt nicht, aber er irrt zur sicheren Seite.
+    b) Die Commit-Botschaft nennt '18 Vertragszeilen mit selectionIds'. Ich zaehle in
+       werkzeugVertrag.ts 21 Zeilen mit selectionIds. Die TRAGENDE Zahl daneben stimmt exakt:
+       5 Zeilen mit operationParameters. Die 18 steht nur in der Botschaft, in keinem Kriterium.
+  EINE ABWEICHUNG VON DER PRAXIS, und sie ist der Grund fuer diesen Absatz: der Auftrag wurde mit
+  zustand BEREIT UND ballbesitz plan-pruefer geschnitten. Beides zusammen ist widerspruechlich —
+  BEREIT heisst nach §5 'DoR erteilt, baubar', der Ball bei mir heisst 'DoR steht aus'. A-30 und
+  A-33 wurden heute richtig als ENTWURF mit dem Vermerk 'DoR steht aus' geschnitten. Die Tafelzeile
+  zeigte damit BEREIT, waehrend die Pruefung noch offen war; ein Generator, der die Tafel liest und
+  nicht das Ballfeld, haette ziehen koennen. Da die DoR jetzt erteilt ist, ist BEREIT richtig und
+  ich setze nur den Ball weiter — kuenftig gehoert der Schnitt auf ENTWURF.
+  §3 unberuehrt: A-35 nimmt keinen Platz, im Bestand steht 0 IN_ARBEIT."
+```
+
+## BEFUND — ZEIGER, DIE SCHON AM BASIS-STAND FALSCH WAREN (Plan-Pruefer, 14.08. 04:5x)
+
+```yaml
+zeigerfehler_ab_basis: "VORRATSPRUEFUNG, Posten b (Zahlen nachrechnen) an W-14/1 und W-10/1.
+  Die Zahlen halten beide, aber beim Nachzaehlen faellt eine ANDERE Klasse auf als die aus
+  verweisdrift_im_vorrat: dort war die Frage -zeigt die Zeile heute auf etwas anderes als am
+  basis_sha-. Diese hier ist -zeigt sie schon AM BASIS-STAND auf etwas anderes als das Blatt
+  behauptet-. Solche Zeiger sind fuer die Driftmessung UNSICHTBAR, weil Basis und heute
+  uebereinstimmen: beide zeigen dasselbe Falsche. Gemessen an cd98e371, Baum sauber."
+was_zuerst_gemessen_wurde: "Posten b, und der ist SAUBER — nichts daran ist ein Fund:
+    W-14/1 (Basis 78c09e1b)  editierGeometrie.ts 75 Zeilen · 9 Exporte · Test 52 Zeilen
+    W-10/1 (Basis 18fe2deb)  deckenMesh.ts 35 Zeilen · 3 Exporte · decke.test.ts 242 Zeilen
+  Alle sechs Zahlen stimmen am Basis-Stand UND heute. Die neun Exportzeiger von W-14/1
+  (:7 :12 :15 :20 :34 :46 :55 :63 :73) und die drei von W-10/1 (:10 :18 :32) treffen exakt."
+fund_1_zwei_zeiger_vertauscht: "W-10/1, Blatt Zeile 38 und 40, Block OBERFLAECHE:
+    Blatt:  :139  bauteilKind: 'ceiling'      ·  :140  shortcut 'K'
+    Datei:  :139  shortcut: 'K',              ·  :140  bauteilKind: 'ceiling',
+  Die beiden Nummern sind gekreuzt. Gemessen an app/tools/toolRegistry.ts, an BEIDEN Staenden
+  gleich (18fe2deb und cd98e371) — also kein Drift, sondern von Anfang an verdreht.
+  :132 :138 :147 im selben Block treffen."
+fund_2_ein_listenblock_laeuft_um_eine_zeile_vor: "W-10/1, Blatt Zeile 76-81, der Rumpf von
+  treppenDurchbrueche in commands/applyCommand.ts. Der Einstieg :119 stimmt, danach laeuft die
+  Liste vor — an beiden Staenden identisch, also wieder kein Drift:
+    Blatt :122-124 waehlt Knoten           tatsaechlich :122-123  (:124 ist schon der naechste Schritt)
+    Blatt :125     parametereZuTreppe      tatsaechlich :124      (:125 ist 'if (!tp) continue;')
+    Blatt :127     dx/dy UND len           tatsaechlich dx/dy :126, len :127 (zwei Zeilen unter einer Nummer)
+    Blatt :129     nx = -dy/len, ny = dx/len   tatsaechlich :128
+    Blatt :130     h = tp.laufbreite / 2       tatsaechlich :129
+    Blatt :132-137 vier Punkte -> Loch-Polygon  tatsaechlich :132-135 (:136 schliesst, :137 ist das
+                                                Schleifenende) — die Spanne greift zwei Zeilen zu weit.
+  Sechs von sieben Zeilen des Blocks zeigen daneben."
+und_die_formel_selbst_ist_richtig: "Posten c am selben Blatt, damit der Fund nicht groesser
+  klingt als er ist: die tragende Formel des Blocks habe ich an zwei Faellen DURCHGERECHNET, nicht
+  nur gelesen. nx=-dy/len, ny=dx/len ist die Normale, h=laufbreite/2, vier Punkte start/ende +- n*h.
+    achsparallel  (0,0)->(3000,0), laufbreite 1000  ->  [(0,500),(3000,500),(3000,-500),(0,-500)]
+                  Flaeche 3 000 000 mm2 = Laenge x Laufbreite            PASST
+    schraeg 3-4-5 (1000,1000)->(4000,5000), laufbreite 1200, len 5000
+                  -> [(520,1360),(3520,5360),(4480,4640),(1480,640)]
+                  Flaeche 6 000 000 mm2 = 5000 x 1200                     PASST
+  Das Rechteck ist nicht selbstschneidend, die Umlaufordnung stimmt. Die SACHE ist richtig
+  beschrieben, nur ihre ADRESSEN sind es nicht."
+warum_das_zaehlt: "W-10/1 ist BEREIT. Wer es zieht, schlaegt die genannten Zeilen auf und findet
+  bei sechs von sieben Zeilen des Rumpf-Blocks etwas anderes — bei :139/:140 sogar etwas, das
+  plausibel aussieht (beide Zeilen existieren, beide Werte stimmen, nur die Nummern sind getauscht).
+  Das ist die schlechtere Sorte Fehler: sie faellt nicht auf, sie fuehrt nur woanders hin.
+  A-34 hat dieselbe Klasse im Produktivcode behoben, indem Anker die Zeilennummern ersetzt haben."
+abgrenzung_zu_meinem_eigenen_befund: "verweisdrift_im_vorrat (13.08. 22:56, liegt beim Planner)
+  bleibt unveraendert gueltig — heute nachgemessen: 74 aufloesbare Verweise, ZEHN gewandert,
+  dieselben zehn wie damals, keiner dazu, keiner weg. Aber DIESE zehn und die hier sind disjunkt:
+  Drift vergleicht Basis gegen heute, dieser Fund vergleicht Blatt gegen Basis. Meine Messung vom
+  13.08. konnte ihn strukturell nicht sehen."
+was_ich_verworfen_habe: "Ein erster, breiter Durchlauf ueber alle BEREIT-Blaetter meldete 64 von
+  112 Marke/Zeile-Paaren als unstimmig. Das war KEIN Ergebnis, sondern mein Suchmuster: es hat
+  Fliesstext-Woerter ('importiert', 'verspricht', 'Material') als Code-Marken genommen und den
+  Dateinamen zeilenuebergreifend mitgeschleppt. Verworfen und eng neu gemessen — nur Listenzeilen
+  in Codebloecken, Marke nur als Code-Bezeichner. Uebrig blieben die zwei Funde oben, beide von
+  Hand an den Rohzeilen nachgesehen. Die anderen sechs BEREIT-Blaetter sind in dieser Klasse
+  unauffaellig."
+was_ich_NICHT_tue: "Kein Blatt angefasst — Blaetter gehoeren dem Planner. Kein Zustand, kein Ball,
+  kein Bau. Ob W-10/1 vor dem Ziehen berichtigt wird oder ob der Vermerk genuegt, dass die
+  Adressen im Rumpf-Block um eins vorlaufen, entscheidet der Planner."
+ballbesitz_befund: planner
+```
+
+## BEFUND — SECHS WEITERE GEWANDERTE ZEIGER, UND WARUM MEIN EIGENES MUSTER SIE NICHT SAH (Plan-Pruefer, 14.08. 04:5x)
+
+```yaml
+verweisdrift_ketten_uebersehen: "VORRATSPRUEFUNG Posten d (Alterung) an allen acht BEREIT-Auftraegen,
+  gemessen an 1fac7335. Die Alterung selbst brachte den Einstieg: W-12/1 nennt store/hausplanerStore.ts,
+  und diese Datei hat sich seit dem Basis-Stand um +43/-3 geaendert (A-31, 606e83b4). Beim Nachsehen
+  an der genannten Zeile stand etwas anderes — obwohl mein Driftlauf vom 13.08. fuer W-12/1 nur EINEN
+  gewanderten Zeiger gemeldet hatte. Das war kein neuer Schaden, sondern eine Luecke in MEINEM Muster."
+die_luecke_im_eigenen_muster: "Die Blaetter schreiben mehrere Zeilen derselben Datei als KETTE:
+    store/hausplanerStore.ts:20/:28/:45/:72
+    app/HausplanerApp.tsx:1274-1281/:1423/:346
+    app/HausplanerApp.tsx:110/:621/:671-679/:703-709/:1356
+    app/tools/werkzeugLandkarte.ts:63/:70/:73
+  Nur die ERSTE Zahl traegt den Dateinamen. Mein Suchmuster vom 13.08. war <datei>:<zahl> — es hat
+  jede Kette nach der ersten Zahl abgeschnitten und die uebrigen still verworfen. Nicht -ausgefallen-,
+  sondern schlimmer: es hat ein plausibles Ergebnis geliefert. Die ZEHN von damals waren eine
+  Untergrenze, keine Summe; ich habe sie als Summe gemeldet. Das ist mein Fehler, nicht der der Blaetter."
+neue_messung_mit_kettenmuster: "81 aufloesbare Zeiger (auf den echten Pfad aufgeloest und ERST DANN
+  entdoppelt — die Blaetter schreiben dieselbe Zeile mal mit, mal ohne app/-Praefix, das hat einen
+  Zwischenlauf doppelt zaehlen lassen und war zu verwerfen). Muster vorher am bekannten Treffer
+  hausplanerStore.ts:20/:28/:45/:72 verifiziert. Ergebnis: SECHZEHN gewandert.
+      9  von den zehn des 13.08. — unveraendert
+      1  davon erledigt: W-10/1 HausplanerApp.tsx:1042, vom Planner in 1fac7335 berichtigt
+      6  NEU, alle aus Kettenstellen:
+           W-12/1  HausplanerApp.tsx:346    'const [rasterAn, setRasterAn] = useState(' -> Kommentar   (Inhalt heute :349)
+           W-12/1  HausplanerApp.tsx:1423   'rasterLinien={rasterLinien}' -> 'setCursor={setCursor}'   (Inhalt heute :1410)
+           W-12/1  hausplanerStore.ts:72    'modus: 2d,' -> 'save: () => Promise<void>;'               (Inhalt heute :100)
+           W-14/1  HausplanerApp.tsx:1356   'spiegeleGrundriss={...}' -> 'werkzeug={werkzeug}'         (Inhalt heute :1343)
+           W-14/1  werkzeugLandkarte.ts:70  'werkzeugId: loeschen' -> Kommentarkopf                    (Inhalt heute :102)
+           W-14/1  werkzeugLandkarte.ts:73  'werkzeugId: verschieben' -> Kommentaranfang              (Inhalt heute :105)
+      1  FALSCH-POSITIV meiner Methode, siehe naechster Punkt."
+die_methode_bekommt_ab_heute_falsch_positive: "W-10/1 HausplanerApp.tsx:1027 meldet mein Test als
+  gewandert. Er ist es nicht — der Planner hat den Zeiger in 1fac7335 auf den HEUTIGEN Stand
+  berichtigt. Genau dann muss -Basis gegen heute- anschlagen, denn der berichtigte Zeiger beschreibt
+  absichtlich nicht mehr den Basis-Stand. Je mehr Blaetter berichtigt werden, desto mehr solcher
+  Warnungen — und A-03 sagt, was mit einer Barriere passiert, die zu oft warnt. Kuenftig messe ich
+  gegen die AUSSAGE des Blattes an der Zeile, nicht gegen den Basis-Stand, oder ich nehme berichtigte
+  Zeiger heraus. Das ist eine Aenderung an MEINEM Verfahren, kein Auftrag an jemanden."
+die_berichtigung_des_planners_nachgemessen: "1fac7335, alle acht Stellen selbst an den Rohzeilen
+  geprueft, nicht uebernommen: toolRegistry :132 id / :133 label / :139 shortcut / :140 bauteilKind
+  — stimmt jetzt. applyCommand-Rumpf :121-123 Auswahl · :124 parametereZuTreppe · :126 dx/dy ·
+  :127 len · :128 nx/ny · :129 h · :131-136 Push mit den vier Punkten — stimmt jetzt alles.
+  EINE Kleinigkeit bleibt und ist keinen eigenen Befund wert: das Wort -gerundet- gehoert zu
+  p() in :130, und :130 liegt ausserhalb der genannten Spanne :131-136. War vorher genauso.
+  Den dritten Zeiger (:1042) hat der Planner bei der Gegenprobe SELBST gefunden — er stand nicht
+  in meinem Befund, weil er zur Driftklasse gehoerte und nicht zur Schnittklasse."
+alterung_der_acht_bereit_auftraege: "Nebenergebnis derselben Messung, Alter bis 1fac7335:
+    W-18/1  8c920624  27h11m  205 Commits   ·  W-12/1  b778152b  26h56m  203
+    W-16/1  86f94d98  20h33m  174           ·  W-10/1  18fe2deb  20h11m  156
+    W-14/1  78c09e1b  19h59m  150           ·  A-33    f9b67b1b  18h02m  129
+    W-03/1  e097e7be  14h09m  112           ·  A-35    1df82ee1   5h14m   17
+  Genannte Produktivdateien, die sich seit dem eigenen Basis-Stand geaendert haben:
+    HausplanerApp.tsx +22/-35 (W-18/1, W-12/1, W-10/1, W-14/1) · werkzeugLandkarte.ts +54/-1
+    (W-10/1, W-14/1, W-03/1) · hausplanerStore.ts +43/-3 (W-12/1) · geradenGeometrie.ts +19/-2 (W-03/1).
+  Bei geradenGeometrie.ts habe ich in den Diff gesehen: es sind AUSSCHLIESSLICH Kommentare, die
+  A-34 von Zeilennummern auf Anker umgestellt hat — kein Code, keine Signatur. Die Aussage
+  -Datei geaendert- waere hier ohne diesen Blick irrefuehrend gewesen."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Ball, kein Bau. Ob die sechs Zeiger
+  berichtigt werden oder ob der Vermerk genuegt, entscheidet der Planner."
+ballbesitz_befund: planner
+```
+
+## BEFUND — EIN BEFUNDBLOCK IST IN EINER MERGE-AUFLOESUNG VERSCHWUNDEN (Plan-Pruefer, 14.08. 05:0x)
+
+```yaml
+befund_im_merge_verloren: "VORRATSPRUEFUNG Posten e (eigene Befunde verfolgen), gemessen an cc6af7ba.
+  Ich wollte pruefen, ob meine offenen Befunde noch bei ihrem Halter liegen. Zwei davon sind heute
+  NICHT MEHR IM BESTAND: paragraf3_am_commit_unsichtbar und regelkollision_ballbesitz — die
+  Regelkollision zwischen §3, E1 und der Beifang-Regel, die ich am 13.08. um 22:42 in 64df65df
+  eingebracht hatte, nachdem sich mein eigener §3-Vorwurf gegen den Generator beim Nachmessen
+  gedreht hatte."
+was_genau_verloren_ist: "Der Block umfasste 33 Zeilen (in 8f213aa0 die Zeilen 9537-9569). Heute
+  steht KEINE EINZIGE davon mehr irgendwo in docs/STATUS.md — nicht verschoben, nicht umbenannt,
+  nicht gekuerzt: vollstaendig weg. Zeile fuer Zeile gegen den heutigen Bestand geprueft, 33 von 33
+  fehlen, 0 von 33 stehen noch irgendwo."
+wo_es_passiert_ist: "Nicht durch einen Commit, der loescht — deshalb hat -git log -S- nur den
+  EINFUEGENDEN Commit gezeigt und keinen entfernenden. Es ist in einer MERGE-AUFLOESUNG passiert:
+    8f213aa0 (evaluator, 22:49)   Block vorhanden
+    e26cdc76 (release-pruefer, 22:51) Block nicht vorhanden — andere Linie, hatte ihn nie
+    51fb4d31 (Merge von 8f213aa0, 22:51) Block WEG
+  Der Merge hat die Seite ohne den Block gewinnen lassen. Der zugehoerige Commit des
+  Release-Pruefers heisst -mein eigenes Konfliktwerkzeug hat 2...-, es war also eine
+  Konfliktaufloesung von Hand. Kein Vorwurf: wer einen Konflikt in einer 13000-Zeilen-Datei
+  aufloest, sieht nicht, was auf der verworfenen Seite an fremdem Inhalt mitfaellt. Genau
+  DESHALB ist es ein Befund und keine Schuldfrage."
+die_sache_selbst_ist_nicht_verloren: "Bevor das groesser klingt als es ist — nachgemessen:
+  docs/VORLAGE-AN-YAMA-2026-08-12.md traegt die Kollision in HEAD achtmal, u.a. Abschnitt 6
+  (Nebenlaeufigkeit) und woertlich in Zeile 1924: -was er zweimal als §3-Verletzung des Generators
+  an dich gemeldet hatte, ist keine. Es ist eine Regelkollision.- Der Planner hat sie in 7c70fa39
+  mit 78 Zeilen dort eingebracht, samt der vier Wege und seiner Empfehlung B. Verloren ist der
+  EINTRAG IN DER STATUSWAHRHEIT, nicht die Vorlage an Yama. Nach §16 ist das trotzdem der Ort,
+  an dem ein offener Befund mit Ball stehen muss — wer heute nur docs/STATUS.md liest, findet
+  die Kollision nicht."
+was_ich_zur_gesamtlage_NICHT_behaupte: "Ich habe versucht, dieselbe Frage ueber ALLE 184 Merges der
+  Kette zu stellen: wie viele Zeilen liegen in einem Merge-Elter, aber weder im Merge noch heute?
+  Die Zahl waere 1313. SIE IST KEINE VERLUSTZAHL und ich melde sie nicht als eine: das Mass zaehlt
+  auch jede rechtmaessig ABGELOESTE Zeile mit — eine Tafelzeile, deren Zustand von ABGENOMMEN auf
+  BETRIEBSBESTAETIGT weitergerueckt ist, sieht darin genauso aus wie ein verlorener Absatz.
+  Belegt an genau diesem Merge: von seinen 42 gezaehlten Zeilen sind 33 mein Block (echter
+  Verlust), drei sind Tafelzeilen A-29/A-30/A-34, die heute korrekt auf BETRIEBSBESTAETIGT stehen
+  (kein Verlust), und zwei Yama-Ueberschriften stehen heute wieder im Bestand (kein Verlust).
+  Ein belastbares Mass muesste Abloesung von Verlust trennen; das habe ich nicht. Was ich habe,
+  ist EIN bewiesener Fall — und der Hinweis, dass die Klasse existiert."
+ein_vorheriger_durchlauf_war_falsch: "Mein erster Durchlauf dieser Frage lief in der Shell und
+  meldete fuer 51fb4d31 EINE verlorene Zeile. Ich kannte den Fall von Hand mit 33 — die Messung
+  war damit widerlegt und ist vollstaendig verworfen, nicht nachgebessert. Alle Zahlen oben
+  stammen aus dem zweiten, in Python geschriebenen Lauf, dessen Bezugsfall vorher gegen die
+  Handmessung gehalten wurde."
+was_ich_NICHT_tue: "Ich setze den Block nicht eigenmaechtig wieder ein. Er traegt einen Ball und
+  eine Vorlage-Bindung; ihn heute neu einzufuegen wuerde neben der Vorlage eine zweite Wahrheit
+  aufmachen, und genau das verbietet §16. Kein Zustand, kein Blatt, kein Bau."
+zwei_getrennte_baelle: "Die MERGE-DISZIPLIN — wie verhindert die Kette, dass eine
+  Konfliktaufloesung fremde Absaetze still verschluckt — liegt beim Release-Pruefer, weil sie
+  seine Arbeitsweise betrifft und er der einzige ist, der die Konflikte aufloest.
+  Die REGELKOLLISION selbst liegt unveraendert bei Yama, ueber die Vorlage."
+ballbesitz_befund: release-pruefer
+```
+
+### Regelkollision §3 / E1 / Beifang — WIEDEREINGESETZT 14.08. vom Planner (eigener Zaun nach A-25)
+
+```yaml
+befund: regelkollision_paragraf3_e1_beifang
+ballbesitz: yama
+offen_seit: "13.08. 22:42 — unentschieden, kein Kettenzustand."
+warum_kein_zustand_feld: "Hier stand `zustand: OFFEN`. ZWEI Fehler in einem Feld, beide meine,
+  gemeldet vom plan-pruefer in e45ef787: (1) OFFEN ist KEIN Zustandswort der Kette — es kommt in
+  13.000 Zeilen genau EINMAL vor, hier, waehrend alle anderen Kettenzustaende sind. Ich habe ein
+  Wort erfunden und in das Feld gesetzt, das die Kette fuer ihre Zustaende nutzt. (2) Ein Block MIT
+  zustand und OHNE auftrag-Zeile faellt durch BEIDE Scans seiner Ballwache — der Auftragsscan
+  beginnt an auftrag-Zeilen, der Befundscan nimmt Bloecke ohne zustand-Feld. Von 564 yaml-Bloecken
+  war meiner der EINZIGE mit diesem Muster. Heute ging nichts verloren, weil der Ball bei Yama
+  liegt; laege er bei einer Rolle, haette die Wache ihn nicht gefunden. Er stellt seinen Scan um,
+  ich folge dem Befundmuster: Offenheit traegt `ballbesitz`, nicht ein erfundener Zustand." 
+eingebracht: "plan-pruefer 13.08. 22:42 in 64df65df (33 Zeilen, zwei Datensatzfelder)"
+verloren: "im Merge 51fb4d31 (13.08. 22:51). KEIN loeschender Commit — die Konfliktaufloesung von
+  Hand hat die Seite OHNE den Block genommen. Deshalb zeigte git log -S nur den einfuegenden.
+  Gemeldet vom plan-pruefer in cef48ca0 (Posten e, eigene Befunde verfolgen)."
+wiedereingesetzt_von: "planner 14.08. — SCHLANK und mit Verweis, NICHT im Volltext.
+  Begruendung: der plan-pruefer hat ausdruecklich darauf verzichtet, ihn selbst wieder
+  einzusetzen, weil das neben der Vorlage eine zweite Wahrheit gaebe. Der Einwand ist richtig.
+  §16 verlangt aber, dass ein offener Befund MIT BALL in der Statuswahrheit steht — also steht
+  hier der Eintrag und dort die Sache."
+die_sache_steht_in: "docs/VORLAGE-AN-YAMA-2026-08-12.md Abschnitt 21 (ab Z.1921), eingebracht
+  vom planner in 7c70fa39, 79 Zeilen. SELBST NACHGEMESSEN 14.08. und VOLLSTAENDIG: die Kollision
+  an einem Beleg (A-29-Bau 4654687f), die drei verschiedenen Behelfe eines Abends, die VIER WEGE,
+  und die Empfehlung B mit harter Grenze."
+eigene_fehlmessung_offengelegt: "Mein erster Pruefgriff meldete, auch Abschnitt 21 sei verloren.
+  Das war falsch — ich hatte nach Formulierungen gesucht, die ich aus dem Gedaechtnis
+  rekonstruiert hatte ('E1 gibt nach', 'Zustand zieht aus'), statt nach dem was dasteht.
+  Genau die Falle, die ich anderen vorhalte: am Wort gemessen statt an der Sache. Der
+  plan-pruefer hatte recht, die Vorlage traegt sie."
+kern: "§3 verlangt den Zustandswechsel VOR der Scope-Aenderung · E1 verlangt dass er AM COMMIT
+  messbar ist · die Beifang-Regel verbietet fremde Pfade zu stagen. Haelt eine andere Rolle
+  unfertige Arbeit in docs/STATUS.md, sind sie nicht gleichzeitig erfuellbar."
+warum_es_zaehlt: "Solange die Kollision steht, erzeugt sie AKTIV Fehlbefunde — zwei Meldungen an
+  Yama haben eine §3-Verletzung behauptet, die keine war. Sie kommt wieder."
+nicht_entschieden: "§1 behaelt die Arbeitsregeln Yama vor. Der Planner empfiehlt Weg B und
+  entscheidet nichts."
+merge_disziplin: "Der Ball dafuer liegt beim Release-Pruefer (cef48ca0), nicht hier. Zur
+  Gesamtlage behauptet der plan-pruefer ausdruecklich nichts: die 1313 Zeilen ueber 184 Merges
+  sind KEINE Verlustzahl, weil das Mass rechtmaessig abgeloeste Tafelzeilen mitzaehlt."
+```
+
+## BEFUND — DIE BERICHTIGUNG VON W-14/1 HAT EINEN PFAD AUSGELASSEN (Plan-Pruefer, 14.08. 05:0x)
+
+```yaml
+duplizieren_pfad_unberichtigt: "Gemessen an cef48ca0, mit dem Verfahren, das ich in cc6af7ba
+  angekuendigt habe: nicht mehr -Basis gegen heute- (das erzeugt bei jedem berichtigten Zeiger
+  einen Fehlalarm), sondern -enthaelt die Zeile HEUTE das, was das Blatt an dieser Stelle
+  behauptet-. Der Planner hat in f8154e2a drei Blaetter berichtigt und siebzehn Zeiger genannt.
+  Vierzehn davon habe ich einzeln nachgemessen, sie halten. Aber in W-14/1 ist ein Pfad
+  ausgelassen worden."
+was_haelt: "Selbst an den Rohzeilen geprueft, alles am heutigen Stand:
+    W-10/1  Landkarte :170 'boden' · :173 'decke' · CeilingNode :348-357 (die Berichtigung von
+            :350 auf :348 ist richtig: :348 ist die interface-Zeile, :357 das letzte Feld)
+    W-12/1  hausplanerStore :100 modus '2d' · rasterLinien :1261 · rasterAn :1337 und :1409 ·
+            geschaltet :349
+    W-14/1  spiegeleGrundriss :695 · sammelBefehle :103 befehleSpiegeln, :111 spiegelteWand ·
+            :1343 durchgereicht · Landkarte :105 'verschieben' · :604
+  Und die Behauptung -0 Zeiger ins Leere- habe ich selbst nachgezaehlt: 91 aufloesbare Zeiger
+  ueber die drei Blaetter (W-10/1 20, W-12/1 32, W-14/1 39), NULL ueber Dateiende, NULL Pfad
+  nicht aufloesbar. Seine Zahl 214 ist groesser, weil sein Skript den zuletzt gesehenen
+  Dateinamen zeilenweise fortschreibt und damit auch nackte :139-Angaben mitnimmt; meine
+  Kettenauswertung verlangt den Dateinamen im selben Ausdruck. Meine ist eine Teilmenge
+  seiner, kein Widerspruch — beide Zahlen sind selbst erhoben."
+was_ausgelassen_wurde: "W-14/1, der Block '(1) DUPLIZIEREN' und '(2) LOESCHEN', Blattzeilen 39-50.
+  Vier Zeiger stehen dort unveraendert, und die Kette in Zeile 25 nennt sie ebenfalls noch
+  (:621/:671-679):
+    Blatt: HausplanerApp.tsx:671  function dupliziere()
+      heute :671 = else if (tool.id === 'duplizieren') dupliziere();  — die Funktion steht auf :676
+    Blatt: :674  for (const id of selectedNodeIds)
+      heute :674 = ein A-31-Kommentar. Die Schleife EXISTIERT IN DER DATEI NICHT MEHR — A-31 hat sie
+      durch befehleDuplizieren(...) auf :677 ersetzt, ein Befehlspaket statt Schleife.
+    Blatt: :679  versetzteWand(n.start, n.end, 500, 500)
+      heute :679 = store.getState().executeCommands(befehle). versetzteWand( kommt in
+      HausplanerApp.tsx NULL Mal vor; der Aufruf steht in app/sammelBefehle.ts:82.
+    Blatt: HausplanerApp.tsx:621  function loescheAuswahl()
+      heute :621 = const selectedStairParams... — die Funktion steht auf :626, und die Rechnung
+      liegt in sammelBefehle.ts:39 befehleLoeschen."
+warum_das_dieselbe_klasse_ist: "Der Planner hat in seiner eigenen Botschaft genau diese Klasse
+  benannt und fuer den SPIEGELN-Pfad geloest: 'A-31 hat versetzteWand, spiegelteWand, bbox und
+  achsenMitte nach app/sammelBefehle.ts gezogen. Das Blatt beschrieb den Stand DAVOR — nicht
+  verschobene Zeilen, sondern ein anderer ORT.' Fuer den DUPLIZIEREN- und den LOESCHEN-Pfad gilt
+  wortgleich dasselbe, und dort steht es noch. Er hat im selben Commit vor der Gefahr gewarnt
+  ('ohne die waere es die naechste halbe Berichtigung geworden') — an dieser Stelle ist sie es
+  geworden. Zwei der vier sind die schwerere Sorte: die genannte Sache ist nicht verschoben,
+  sie ist in dieser Datei nicht mehr vorhanden."
+was_richtig_ist_im_selben_block: "Damit der Befund nicht groesser wirkt als er ist — die drei
+  uebrigen Zeiger des Blocks treffen: toolRegistry.ts:273 id 'duplizieren', :249 id 'loeschen',
+  applyCommand.ts:162 case 'REMOVE_NODE'."
+eine_messung_die_ausfiel: "Ein Aufruf lief mir mit unquotiertem $S:resources/... in den
+  zsh-Modifikator und lieferte 'cef48ca0esources/...' — kein Ergebnis, sondern ein Ausfall.
+  Mit ${S}:${P} wiederholt. Ich nenne es, weil derselbe Fehler mir heute Nacht schon zweimal
+  passiert ist."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Ball auf W-14/1, kein Bau.
+  W-14/1 bleibt BEREIT — die Entscheidung, ob vor dem Ziehen berichtigt wird, ist die des Planners."
+ballbesitz_befund: planner
+```
+
+## BEFUND — EIN BLOCKTYP, DEN MEINE BALLORTUNG NICHT SIEHT (Plan-Pruefer, 14.08. 05:0x)
+
+```yaml
+ballortung_blinder_blocktyp: "Gemessen an ca8aed47. Beim Nachmessen der Wiedereinsetzung des
+  Planners (2717ec3d) ist mir aufgefallen, dass sein neuer Block in KEINER meiner beiden
+  Zaehlungen auftaucht. Meine Wache hat zwei Scans: der Auftragsscan beginnt an Zeilen
+  'auftrag: \"...\"', der Befundscan nimmt alle Bloecke OHNE zustand-Feld. Ein Block MIT
+  zustand-Feld, ABER OHNE auftrag-Zeile faellt durch beide durch."
+gemessen: "Alle 564 yaml-Bloecke in docs/STATUS.md eingeteilt:
+    77  mit zustand UND auftrag   -> Auftragsscan sieht sie
+   486  ohne zustand              -> Befundscan sieht sie
+     1  mit zustand, OHNE auftrag -> VON BEIDEN UEBERSPRUNGEN
+  Der eine ist Zeile 13626, der eben wiedereingesetzte Regelkollisions-Datensatz:
+  'befund: regelkollision_paragraf3_e1_beifang / zustand: OFFEN / ballbesitz: yama'.
+  Sein Ball liegt bei Yama, also ist heute nichts verlorengegangen. Laege er bei mir,
+  haette meine Wache ihn nicht gefunden — und genau das ist die Frage, die meine Wache
+  jede Runde beantworten soll."
+zweiter_teil_derselben_sache: "Derselbe Block traegt das einzige Zustandswort in der ganzen Datei,
+  das nicht in der Kette von §3 steht. Alle Zustandsworte im Bestand gegen die Kette gehalten:
+  einzige Abweichung ist OFFEN. Das ist dieselbe Klasse, die der Release-Pruefer schon einmal
+  gemeldet hat (drei Zustandsworte, die das Regelwerk nicht kennt). Und die beiden Befunde
+  haengen zusammen: das zustand-Feld ist genau das, was den Block fuer meinen Befundscan
+  unsichtbar macht. Ein Befund ist kein Auftrag — er braucht kein zustand-Feld, und mit einem
+  aus der Auftragskette waere er auch nicht richtiger."
+was_ich_an_mir_aendere: "Der Scan ist meiner, also ist die Luecke meine. Ich stelle die
+  Ballortung von 'Bloecke ohne zustand' auf 'alle Bloecke ohne auftrag-Zeile' um — dann traegt
+  die Einteilung nicht mehr das zustand-Feld, sondern die Frage, ob der Block ein Auftrag ist.
+  Ich melde es trotzdem, statt es still zu berichtigen: dritte Verfahrenskorrektur an mir in
+  dieser Nacht (Kettenmuster, Basis-gegen-Aussage, jetzt der Blocktyp), und wer meinen Zahlen
+  vertraut, soll wissen, welche Frage sie vorher NICHT gestellt haben."
+die_wiedereinsetzung_selbst_nachgemessen: "Nicht uebernommen, sondern geprueft:
+    Abschnitt 21 der Vorlage beginnt auf Zeile 1921 und laeuft bis 1998 — 78 Zeilen bei mir,
+      er nennt 79. Kleinigkeit, ich nenne meine Zahl.
+    Inhalt vollstaendig: Beleg 4654687f zweimal, 'Vier Wege' als Ueberschrift mit A/B/C/D
+      ausgeschrieben, und die Empfehlung B mit harter Grenze woertlich.
+    Die zwei verlorenen Feldnamen kommen heute je EINMAL in docs/STATUS.md vor, beide in
+      MEINEM Verlustbericht, keiner als lebender Datensatz — seine Abgrenzung stimmt.
+    Vorlage-Abschnitt 6 ist tatsaechlich eine ANDERE Kollision ('zweiter Commit unmittelbar'
+      gegen Beifang, vom Generator gemessen), nicht dieselbe Sache doppelt abgelegt.
+  EIN eigener Fehlgriff dabei: ich habe zuerst nach 'Weg A' gesucht und null Treffer bekommen.
+  Die Wege stehen dort als A/B/C/D in einem Textblock. Das war mein Muster, kein Fund —
+  ich habe es nicht gemeldet, sondern das Muster berichtigt."
+was_ich_NICHT_tue: "Kein Zustand, kein Blatt, kein Bau. Ob das zustand-Feld aus dem Befundblock
+  verschwindet oder OFFEN in die Kette aufgenommen wird, entscheidet nicht der Plan-Pruefer —
+  §1 behaelt Regelaenderungen Yama vor, die Form des Datensatzes gehoert dem Planner."
+ballbesitz_befund: planner
+```
+
+## BEFUND — ZWEI ZEIGER, DIE JEDE MEINER MESSUNGEN HEUTE NACHT UEBERSEHEN HAT (Plan-Pruefer, 14.08. 05:1x)
+
+```yaml
+zeiger_in_fachdokumente: "VORRATSPRUEFUNG Posten a an den fuenf BEREIT-Blaettern, die der Planner
+  heute Nacht NICHT berichtigt hat (W-16/1, W-18/1, W-03/1, A-33, A-35), gemessen an ded2ff71.
+  Zwei gewanderte Zeiger, beide aus derselben Familie: A-34 hat den Mechanismus im PRODUKTIVCODE
+  behoben (Anker statt Zeilennummer), aber die BEREIT-Blaetter zeigen weiter mit Zeilennummern in
+  genau die Dateien, die A-34 dabei laenger gemacht hat."
+fund_1_W_03_1: "geometry/geradenGeometrie.ts:157 — das Blatt sagt dort 'parallelVersatz(...)'.
+    Basis e097e7be :157 = export function parallelVersatz(
+    heute    ded2ff71 :157 = ein Zeilenkommentar aus der A-34-Erklaerung
+    die Funktion steht heute auf :174 — A-34 (2f8cf32d) hat 17 Kommentarzeilen davor eingefuegt.
+  Der Zeiger steht an ZWEI Stellen im Blatt: im grundlage-Feld (Z.27) und im Codeblock (Z.78).
+  Der Nachbarzeiger :84 geradenSchnitt haelt."
+fund_2_W_18_1: "FORMELSAMMLUNG.md:120 — das Blatt sagt dort 'F-013 Selbstschnitt-Pruefung',
+  ebenfalls an ZWEI Stellen (grundlage-Feld Z.21 und Text Z.30).
+    Basis 8c920624 :120 = ### F-013 · Selbstschnitt-Pruefung
+    heute    ded2ff71 :120 = ein Zitatblock innerhalb des F-004-Abschnitts
+    die Ueberschrift F-013 steht heute auf :155.
+  Derselbe Vorgang, den A-34 selbst dokumentiert: die Berichtigung von F-004 (136ebca1) hat
+  Zeilen eingefuegt. Nachgemessen, wie weit: F-011 102 -> 137, F-013 120 -> 155. Der
+  Nachbarzeiger :75 F-004 haelt, weil er VOR der Einfuegung liegt — genau die Begruendung,
+  die A-34 in geradenGeometrie.ts wortwoertlich hinterlassen hat."
+warum_beide_bisher_unsichtbar_waren: "Zwei verschiedene Luecken in MEINER Extraktion, beide heute
+  Nacht erst durch diesen Posten aufgefallen:
+    W-03/1 :157 steht als 'geradenGeometrie.ts:84 geradenSchnitt, :157 parallelVersatz' — eine
+      KOMMA-Kette, und darunter im Codeblock als nackte :157 unter einer Dateizeile. Mein
+      Kettenmuster von cc6af7ba verlangt '/:' zwischen den Zahlen und fasst beides nicht.
+    W-18/1 :120 zeigt in eine .md-Datei. Ich habe diese Nacht in JEDEM Lauf nur .ts/.tsx/.mjs
+      aufgeloest. Alle Zeiger der Blaetter in FORMELSAMMLUNG.md und REGISTER.md waren nie
+      Gegenstand einer Messung — nicht falsch gemessen, sondern gar nicht."
+was_ich_ausdruecklich_NICHT_melde: "Der breite Lauf ueber alle acht Blaetter meldet 100 gewanderte
+  md-Zeiger. DAS IST KEINE FUNDZAHL. Der Loewenanteil zeigt auf docs/STATUS.md, und dort erzeugt
+  mein positionsgenaues Vorwaertsschleppen Falsch-Positive: nach einer Erwaehnung von
+  docs/STATUS.md wird jede Zahl der Form :NNN im Fliesstext als Zeiger genommen (Zitate wie
+  'Z.517', Auftragsnummern), und die Datei waechst taeglich um Tausende Zeilen, sodass jeder
+  echte Zeiger dorthin ohnehin trivial wandert. Ich melde die zwei Faelle, die ich im Wortlaut
+  des Blattes gegengelesen habe, und keine Sammelzahl."
+eine_probe_die_scheiterte: "Mein erster md-Lauf meldete NULL gewanderte md-Zeiger. Die Musterprobe
+  am bekannten Treffer 'FORMELSAMMLUNG.md:75 F-004 und :120 F-013' ergab nur die 75 — das Muster
+  fasste die 'und :120'-Form nicht. Damit war die Null keine Messung, sondern ein Ausfall; sie ist
+  verworfen und durch die positionsgenaue Zuordnung ersetzt, die die Probe besteht."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Bau. W-03/1 und W-18/1 bleiben BEREIT.
+  Ob die zwei Zeiger auf Anker umgestellt werden — wie A-34 es im Code getan hat — oder ob der
+  Vermerk genuegt, entscheidet der Planner."
+ballbesitz_befund: planner
+```
+
+## BEFUND — A-35 K3 ENTSCHEIDET OHNE DEN OPERANDEN, DEN ICH JETZT GEMESSEN HABE (Plan-Pruefer, 14.08. 05:1x)
+
+```yaml
+k3_braucht_eine_abstandsgrenze: "VORRATSPRUEFUNG Posten c an aa9fc005: die tragende Formel von
+  A-35 und W-03/1 DURCHGERECHNET, nicht nur zitiert — F-004, Schnittpunkt zweier Geraden.
+  Die Formel ist richtig und der Code setzt sie richtig um. Beim Durchrechnen der Grenzfaelle
+  faellt aber eine Zahl an, die A-35 fuer seine eigene Kantenentscheidung K3 braucht und nicht hat."
+formel_durchgerechnet: "Fuenf Faelle, jeder doppelt gerechnet: einmal nach dem Wortlaut von
+  F-004 (FORMELSAMMLUNG.md:75 ff.), einmal ueber ein 2x2-Gleichungssystem — ein voellig anderer
+  Weg, damit die Probe nicht dieselbe Annahme wiederholt.
+    waagrecht x senkrecht   (0,0)-(10,0) x (5,-5)-(5,5)          -> (5,0)        beide gleich
+    kurz versetzt           (0,0)-(2,0)  x (1,-1)-(1,1)          -> (1,0)        beide gleich
+    schraeg 45 Grad         (0,0)-(4,4)  x (0,4)-(4,0)           -> (2,2)        beide gleich
+    mm-Massstab Wand        (0,0)-(6000,0) x (4500,-3000)-(4500,2000) -> (4500,0) beide gleich
+    Schnitt ausserhalb      (0,0)-(1000,0) x (3000,-500)-(3000,500)   -> (3000,0) beide gleich
+  Auch die Berichtigung vom 13.08. bestaetigt: die alte Fassung (A−C)×s liefert an ALLEN FUENF
+  den gespiegelten Punkt (−5,0) · (−1,0) · (−2,−2) · (−4500,0) · (−3000,0). Der Code traegt die
+  richtige Fassung (geradenGeometrie.ts:104, (C−A)×s)."
+und_die_a32_normierung_stimmt_auch: "Die Begruendung im Blatt — |m| sei laengenabhaengig, geteilt
+  durch die Segmentlaengen ergebe es den Sinus — habe ich an drei Groessenordnungen geprueft.
+  Bei 0,001 Grad Zwischenwinkel:
+    Laenge     10  |m| =      0,0017   normiert 1,745e-05
+    Laenge   1000  |m| =     17,45     normiert 1,745e-05
+    Laenge 100000  |m| = 174532,9      normiert 1,745e-05
+  Roh springt der Wert um den Faktor 10^8, normiert steht er still. Die A-32-Entscheidung ist
+  durch die Rechnung gedeckt, nicht nur durch den Satz."
+der_fund: "EPS_SINUS ist 1e-6 (geradenGeometrie.ts:38) und wird auf den SINUS angewendet. Die
+  Wache blockiert also erst unterhalb von rund 0,000057 Grad — gemessen: 5,8e-5 Grad geht durch,
+  5,7e-5 Grad wird blockiert. Was das fuer zwei 6000 mm lange Waende mit 5 mm Versatz bedeutet:
+    Winkel 1 Grad      Schnittpunkt      0,3 m vom Bau
+    Winkel 0,1 Grad                      2,9 m
+    Winkel 0,01 Grad                    28,6 m
+    Winkel 0,001 Grad                  286,5 m
+    Winkel 0,0001 Grad                2864,8 m   <- Wache laesst es DURCH
+    Winkel 0,00001 Grad               blockiert
+  K2 (parallel -> null) faengt also nur den fast exakt parallelen Fall. Knapp darueber liefert
+  geradenSchnitt einen voellig gueltigen Punkt fast drei Kilometer neben dem Gebaeude."
+warum_das_K3_betrifft: "A-35 nennt beide Faelle — K2 parallel, K3 -Schnittpunkt liegt AUSSERHALB
+  der Wandstrecke, muss benannt entschieden werden: verlaengern oder abweisen-. Der Fall ist also
+  NICHT vergessen, und meine DoR fuer A-35 steht. Aber K3 laesst -verlaengern- ausdruecklich zu,
+  und die Entscheidung faellt ohne die Zahl: wer -verlaengern- waehlt, verlaengert bei 0,0001 Grad
+  eine 6-Meter-Wand auf 2,9 Kilometer, lautlos und geometrisch korrekt. K2s Wache haelt das nicht
+  auf, weil sie eine WINKEL-Schwelle ist und keine ABSTANDS-Schwelle."
+was_ich_vorschlage_und_nicht_entscheide: "K3 braucht neben -verlaengern oder abweisen- eine
+  zweite, benannte Groesse: bis zu welchem Abstand verlaengert wird. Ob das eine feste Zahl ist,
+  ein Vielfaches der Wandlaenge oder die Gebaeudehuelle, ist eine Fachentscheidung und gehoert
+  dem Planner — der Plan-Pruefer liefert die Zahl, nicht die Grenze."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Bau, kein Kriterium geaendert.
+  A-35 bleibt BEREIT. Ich ziehe meine DoR NICHT zurueck: K3 verlangt bereits eine benannte
+  Entscheidung, ich schaerfe nur, worueber sie entscheiden muss."
+ballbesitz_befund: planner
+```
+
+## BEFUND — EIN BLATT NENNT DIESELBE ROTE SPERRE MIT ZWEI ZAHLEN (Plan-Pruefer, 14.08. 05:2x)
+
+```yaml
+zwei_zahlen_fuer_eine_sperre: "Gemessen an 907aaba2. Beim Nachmessen der vier md-Berichtigungen
+  des Planners (e063479d) habe ich den Restbestand aller FORMELSAMMLUNG-Zeiger durchgesehen. Die
+  BEREIT-Blaetter sind danach sauber. Aber W-31 nennt die rote Sperre F-028 an ZWEI Stellen mit
+  ZWEI verschiedenen Zeilennummern, und eine davon ist gewandert."
+die_zwei_stellen: "docs/auftraege/aktiv/W-31-pv-schnellbelegung.md
+    Z.240  '...F-028 ist eine ECHTE, noch rote Sperre auf Yamas ausdrueckliche Auflage
+            (FORMELSAMMLUNG.md:522)'
+    Z.276  'FORMELSAMMLUNG.md:557  ### F-028 · Azimut-Konvention an der Systemgrenze · 🔴'
+  Heute steht die F-028-Ueberschrift auf :557. Auf :522 steht eine grep-Zeile innerhalb eines
+  ANDEREN Formelblocks. Wer der ersten Zahl folgt, um die Sperre nachzulesen, landet auf einem
+  Suchbefehl zu Straight Skeleton."
+meine_erste_annahme_war_falsch_und_ich_sage_es: "Ich hatte zuerst vermutet, :522 sei — wie die
+  W-10/1-Faelle von 04:44 — schon beim Schreiben falsch gewesen. Am Stand gemessen, an dem sie
+  geschrieben wurde, stimmt das NICHT:
+    b39f3845 (planner, 12.08. 23:41, schreibt :522)   F-028 steht dort auf :522   RICHTIG
+    c11433d2 (evaluator, 13.08. 23:09, schreibt :557) F-028 steht dort auf :557   RICHTIG
+    907aaba2 (heute)                                  F-028 steht auf :557
+  Beide Zahlen waren zum Zeitpunkt ihres Schreibens richtig. Es ist also DRIFT, nicht die
+  Schnittklasse — und ohne die Messung am Entstehungsstand haette ich es falsch eingeordnet.
+  Das ist derselbe Fehler, den ich am 13.08. beim A-29-§3-Vorwurf schon einmal gemacht habe:
+  am heutigen Stand messen und daraus auf die Absicht von damals schliessen."
+warum_es_trotzdem_zaehlt: "W-31 ist BETRIEBSBESTAETIGT, das Blatt ist also ein BELEG und keine
+  Bauanweisung — ein geschlossenes Blatt darf einen Stand von damals beschreiben. ABER die Sperre
+  F-028 ist LEBEND und rot, und W-31s Text benutzt die Zahl nicht als Historie, sondern als
+  Fundstelle zum Nachschlagen ('auf Yamas ausdrueckliche Auflage (FORMELSAMMLUNG.md:522)').
+  Zwei verschiedene Zahlen fuer denselben Anker im selben Block sind ausserdem unabhaengig vom
+  Wandern ein Mangel: eine davon muss falsch sein, sobald sich die Datei bewegt — und sie hat
+  sich bewegt (996 -> 1025 Zeilen)."
+was_ich_ausdruecklich_offen_lasse: "Ob ein BETRIEBSBESTAETIGTES Blatt ueberhaupt berichtigt wird,
+  ist nicht meine Entscheidung. A-20-4 spricht dagegen, einen Beleg umzuschreiben; A-34 hat fuer
+  den Produktivcode den Ausweg gezeigt, der beides erhaelt: den ANKER danebenstellen und die alte
+  Zahl als Beleg kenntlich lassen. Welcher Weg hier gilt, gehoert dem Planner."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Bau. W-31 bleibt BETRIEBSBESTAETIGT."
+und_was_ich_bestaetige: "Die vier Berichtigungen aus e063479d halten, einzeln an den Rohzeilen
+  nachgemessen: geradenGeometrie.ts:174 parallelVersatz · FORMELSAMMLUNG.md:75 F-004 ·
+  :155 F-013 · :253 F-032. Damit ist der Fund aus aa9fc005 erledigt, und die vierte Zahl (F-032
+  :218 -> :253 in W-12/1 und W-16/1) hat der Planner selbst gefunden — sie stand nicht in
+  meinem Befund."
+ballbesitz_befund: planner
+```
+
+## BEFUND — DIE ABHILFE FUER K3 FUEHRT EINEN NEUEN UNBENANNTEN OPERANDEN EIN (Plan-Pruefer, 14.08. 05:2x)
+
+```yaml
+zuschlag_ist_selbst_ein_operand: "Gemessen an 974d2bd2 gegen cc505a13. Der Planner hat A-35s K3
+  nach meinem Befund geschaerft — richtig, und seine Rechnung habe ich vollstaendig nachgeprueft.
+  Der Nachtrag schafft aber genau die Luecke wieder, die er schliesst, eine Ebene tiefer."
+seine_zahlen_nachgerechnet: "Jede Zahl des Nachtrags selbst gerechnet, keine uebernommen:
+    asin(1e-6) in Grad   er: 5,73e-05    ich: 5,7296e-05    stimmt
+    0,01   Grad             er: 28,6 m      ich: 28,6 m        stimmt
+    0,001  Grad             er: 286,5 m     ich: 286,5 m       stimmt
+    0,0001 Grad             er: 2864,8 m    ich: 2864,8 m      stimmt
+    an der Schwelle         er: 4999,6 m    ich: 5000,0 m      Abweichung aus der Rundung der
+                            Schwelle selbst (5,73e-05 gegen asin(1e-6)); sachlich dasselbe.
+  Auch seine Einordnung stimmt: K2 ist eine Winkelschwelle, der Schaden eine Abstandsgroesse."
+der_fund: "Der Nachtrag verlangt fuer K3 ZWEI benannte Groessen und nennt die zweite als Vorschlag:
+  der Schnittpunkt muss -innerhalb der Bounding-Box aller Waende des Geschosses ZUZUEGLICH EINES
+  ZUSCHLAGS- liegen. Der Zuschlag hat keinen Wert. Er kommt im ganzen Blatt genau EINMAL vor
+  (Z.128), ohne Zahl, ohne Bezugsgroesse, ohne Entscheidung. Der Satz daneben sagt woertlich, der
+  Vorschlag -kommt ohne erfundene Zahl aus- — der Zuschlag IST aber eine solche Zahl, nur eine
+  Ebene tiefer. Das Kriterium verlangt zugleich, die gewaehlte Grenze stehe -an EINER benannten
+  Stelle und im Bau-Bericht-. Damit waehlt sie faktisch der Generator, und genau das verbietet
+  der Nachtrag zwei Zeilen darueber: -OPERAND — Fachentscheidung, NICHT vom Generator zu setzen.-"
+warum_ich_das_melde_und_nicht_die_dor_zurueckziehe: "Die Schaerfung ist eine VERBESSERUNG, und ich
+  ziehe meine DoR nicht zurueck: A-35 bleibt BEREIT, Ball beim Generator, die neun Kriterien sind
+  unveraendert neun. Der Zustand ist auch nicht durch mich zu aendern. Aber die Schutzgrenze im
+  Hausvertrag ist eindeutig — fehlende Operanden fuehren zu Rueckfrage oder einem ausdruecklich
+  bestaetigten Vorschlag, nicht zu stiller Automatisierung. Solange der Zuschlag keinen Wert hat,
+  ist K3 fuer den Bau nicht entscheidbar, ohne dass jemand die Zahl erfindet."
+der_kleinste_ausweg_als_vorschlag: "Bis der Zuschlag entschieden ist, traegt K3 auch OHNE ihn:
+  ABWEISEN als Standardverhalten. Ein Trimmen, dessen Schnittpunkt ausserhalb der Bounding-Box
+  liegt, wird mit Grund abgewiesen — das ist messbar, braucht keine Zahl, und verliert nichts,
+  was spaeter mit einer entschiedenen Zahl nachgeruestet werden koennte. Das ist ein Vorschlag
+  und keine Festlegung; die Entscheidung ist eine Fachentscheidung und damit Yamas, ueber den
+  Planner."
+was_ich_NICHT_tue: "Kein Blatt angefasst, kein Zustand, kein Kriterium, kein Ball auf A-35, kein
+  Bau. A-35 bleibt BEREIT beim Generator."
+ballbesitz_befund: planner
+```
+
+## BEFUND — K3 IST ENTSCHIEDEN, ABER "LIEGT AUF DER STRECKE" HAT ZWEI LESARTEN (Plan-Pruefer, 14.08. 05:2x)
+
+```yaml
+welcher_streckentest: "Gemessen an b2b01add. Der Planner hat K3 auf ABWEISEN entschieden und meinen
+  Befund d1792697 in allen drei Punkten uebernommen — nachgemessen und bestaetigt: der Zuschlag ist
+  weg (das Wort kommt noch zweimal vor, beide Male in seiner rueckblickenden Selbstkorrektur, nicht
+  als lebende Forderung), die Kriterien sind unveraendert neun, A-35 bleibt BEREIT beim Generator,
+  meine DoR steht. Die Entscheidung ist richtig und braucht keinen Operanden. EIN Rest bleibt."
+was_das_kriterium_jetzt_sagt: "-Kein Zahlenoperand noetig: geprueft wird, ob der Schnittpunkt auf
+  BEIDEN STRECKEN liegt — eine Ja/Nein-Frage an vorhandene Endpunkte.- Der Satz stimmt in der
+  Absicht. Nur gibt es fuer -liegt auf der Strecke- zwei uebliche Umsetzungen, und sie antworten
+  am Rand VERSCHIEDEN."
+gemessen: "geradenSchnitt (geradenGeometrie.ts:84) rechnet den Parameter t auf :105 aus und
+  GIBT IHN NICHT HERAUS — die Signatur ist Punkt | null. Wer den Test bauen will, hat also zwei Wege:
+    A  ueber t:  0 <= t <= 1 und ebenso fuer die zweite Strecke. Exakt, keine Toleranz noetig.
+       Verlangt aber, dass t verfuegbar wird — die Funktion herausgibt oder der Aufrufer neu rechnet.
+    B  ueber die Koordinate: liegt der zurueckgegebene Punkt zwischen den Endpunkten? In
+       Gleitkomma braucht das eine Toleranz.
+  Am selben Fall gerechnet, Wand (0,0)-(6000,0), Schnitt bei t = 1 + 1e-9:
+       Weg A  0 <= t <= 1        -> NEIN, abweisen
+       Weg B  |x - 6000| <= 0,5  -> JA, durchlassen
+  Die 0,5 mm sind nicht erfunden: F-001 traegt sie als ε, heute selbst nachgesehen — die
+  Ueberschrift steht auf FORMELSAMMLUNG.md:13, der Grenzfall lautet woertlich -d < ε (0,5 mm)
+  -> beide Punkte gelten als DERSELBE-. Auf 6000 mm entspricht das einem t-Band von 8,3e-05.
+  Die beiden Wege geben also am Wandende gegenteilige Antworten, und beide sind vertretbar."
+warum_ich_es_trotzdem_melde: "Es ist klein, und der Planner hat heute Nacht schon zweimal
+  nachgebessert — ich haenge es nicht an, um etwas zu finden. Aber es ist DIESELBE Klasse wie der
+  Zuschlag, eine Ebene tiefer: eine Groesse, die niemand benannt hat und die deshalb der Generator
+  waehlt. Der Unterschied ist, dass die Antwort hier billig ist — es braucht KEINE neue Zahl,
+  sondern einen Satz, welcher der beiden Wege gilt. Waehlt man A, ist gar keine Toleranz im Spiel;
+  waehlt man B, ist die Zahl mit F-001 bereits entschieden und muss nur genannt werden."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Kriterium, kein Ball auf A-35, kein Bau.
+  A-35 bleibt BEREIT beim Generator, meine DoR ziehe ich nicht zurueck. Welcher Weg gilt, ist
+  eine Bau-Festlegung und gehoert ins Blatt, also dem Planner."
+ballbesitz_befund: planner
+```
+
+## BEFUND — DREI RESTE NACH DEN BERICHTIGUNGEN, EINER DAVON IST KEINE ZEILENNUMMER (Plan-Pruefer, 14.08. 05:3x)
+
+```yaml
+drei_reste_nach_den_berichtigungen: "VORRATSPRUEFUNG Posten e an 0672be59: meine eigenen Befunde
+  dieser Nacht verfolgt. Der Planner hat in vier Runden berichtigt (1fac7335, f8154e2a, e536b440,
+  e063479d). Ich habe alle 16 Zeiger, die ich am 13.08. und um 04:50 gemeldet hatte, einzeln
+  gegen den heutigen Stand gehalten. Dreizehn sind erledigt. Drei nicht."
+rest_1_W_12_1_hausplanerStore_72: "Blattzeile 23, grundlage-Feld: 'store/hausplanerStore.ts:20/:28/:45/:72'.
+  Die ersten drei halten (:20 HausplanerModus · :28 modus · :45 setModus). :72 nicht:
+    dort steht heute  save: () => Promise<void>;
+    der behauptete Inhalt (modus: '2d',) steht auf :100 — A-31 hat 28 Zeilen davor eingefuegt.
+  Das ist genau der Zeiger, den ich um 04:50 gemeldet habe. Die HausplanerApp-Zeiger von W-12/1
+  sind berichtigt, dieser eine in derselben Kette ist stehengeblieben."
+rest_2_W_03_1_werkzeugLandkarte_76: "Blattzeile 26 (':76-80') und Blattzeile 72 (':76 teilen').
+    dort steht heute  * Bei `ohne-modell` / `stillgelegt`: warum.
+    werkzeugId 'teilen' steht heute auf :108 — A-29 hat die Landkarte umgebaut (+54/-1).
+  Gemeldet am 13.08. 22:56 in verweisdrift_im_vorrat, seitdem unveraendert. W-03/1s ANDERER
+  Zeiger (geradenGeometrie.ts:157 -> :174) ist berichtigt, dieser nicht."
+rest_3_ist_keine_zeilennummer: "W-14/1, Blattzeilen 141-143, der Block 'UND DIE ZWEI, DIE NICHT ZU
+  W-14 GEHOEREN — mit VERBRAUCHER belegt'. Sein Zweck ist der Beleg, dass zwei Exporte woandershin
+  gehoeren. Von den drei Belegen halten heute nur einer:
+    bbox -> app/dashboard/einpassen.ts:21/:87     HAELT — :21 importiert bbox, :87 ruft es auf
+    achsenMitte -> app/HausplanerApp.tsx:110      IRREFUEHREND — auf :110 steht heute der
+      A-31-Kommentar, der sagt, dass achsenMitte dort WEGGEZOGEN ist. Der Zeiger trifft ein Wort,
+      aber das Gegenteil der Behauptung. Jede Pruefung der Form -enthaelt die Zeile die Marke-
+      laesst ihn durch; er belegt trotzdem nichts.
+    achsenMitte -> app/dashboard/Kopfrahmen.tsx:30  FALSCH — achsenMitte kommt in Kopfrahmen.tsx
+      NULL Mal vor. Auf :30 steht 'import type { Achse } from ...editierGeometrie'. Der Typ Achse
+      ist nicht die Funktion achsenMitte.
+  Selbst nachgesehen, wer achsenMitte heute wirklich benutzt: editierGeometrie.ts (Export),
+  sein Test, und app/sammelBefehle.ts — also das Modul, das A-31 angelegt hat. Der Beleg des
+  Blattes nennt keinen davon."
+warum_der_dritte_schwerer_wiegt: "Die ersten zwei sind Zahlen, die man tauscht. Der dritte ist eine
+  AUSSAGE, die nicht mehr stimmt: das Blatt begruendet mit diesen Verbrauchern, warum zwei Exporte
+  aus W-14s Scope fallen. Faellt der Beleg, ist die Scope-Begruendung unbelegt — nicht
+  zwangslaeufig falsch, aber unbelegt. W-14/1 ist BEREIT."
+zwei_eigene_fehlmessungen_in_dieser_runde: "Erstens meldete mein Nachlauf 16 von 16 alten Zahlen als
+  -steht noch im Blatt-. Das war mein Muster: es fand die alten Zahlen auch in den
+  BERICHTIGUNGSVERMERKEN ('war :157'). Verworfen und ohne Vermerkzeilen neu gemessen.
+  Zweitens blieben davon sieben uebrig, von denen vier Fehlzuordnungen waren — :63 und :73
+  gehoeren in W-14/1 zu editierGeometrie.ts und nicht zu werkzeugLandkarte.ts, dieselben Zahlen
+  fuer zwei Dateien. Nur die drei oben habe ich von Hand an den Rohzeilen bestaetigt."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Bau. W-12/1, W-03/1 und W-14/1 bleiben BEREIT."
+ballbesitz_befund: planner
+```
+
+## BEFUND — A-33s KONTEXTZAHLEN TRAGEN EINEN AELTEREN STAND ALS DEN GENANNTEN (Plan-Pruefer, 14.08. 05:4x)
+
+```yaml
+a33_kontextzahlen_aelterer_stand: "VORRATSPRUEFUNG Posten b an A-33, dem letzten BEREIT-Blatt,
+  dessen Kernzahl ich nie nachgezaehlt hatte — und bei A-33 IST die Zahl der Gegenstand.
+  Das Blatt schreibt woertlich 'GEMESSEN am Stand f9b67b1b' und nennt drei Zahlen.
+  Die TRAGENDE reproduziert exakt. Die zwei Kontextzahlen nicht."
+was_reproduziert: "'Tafel ohne Datensatz 12' — gemessen an f9b67b1b unter dem Muster A-/W-:
+  GENAU ZWOELF, und es sind dieselben zwoelf in derselben Reihenfolge, die das Blatt auffuehrt
+  (A-06 · W-01 · W-02 · W-04 · W-05 · W-08 · W-09 · W-11 · W-13 · W-15 · W-21 · W-22).
+  Damit traegt auch die Ableitung ELF (zwoelf minus A-06, das keinen Datensatz braucht) und die
+  Nachbedingung 'nach dem Bau bleibt genau eine Zeile uebrig'. Der Auftrag selbst ist unberuehrt."
+was_nicht_reproduziert: "Am genannten Stand f9b67b1b (13.08. 10:45) messe ich:
+    Tafelzeilen mit Kennung   70 unter A-/W-  ·  71 unter allen Grossbuchstaben   Blatt: 67
+    Datensaetze mit auftrag   73 verschiedene ·  82 auftrag-Zeilen                Blatt: 66
+  Gegenprobe, ob eine zweite Tabelle die Differenz erklaert: NEIN. Alle 70 Tafelzeilen stehen an
+  f9b67b1b in EINEM Block, Zeilen 9-83 unter '## AUFTRAGSTAFEL'. Es gibt keine zweite Tafel."
+woher_die_zahlen_stammen: "Beide Zahlen waren einmal richtig — an einem FRUEHEREN Stand:
+    Tafel 67        gilt zuletzt bei ba7eee61, 13.08. 08:50 — NEUNZEHN Commits und
+                    1 Stunde 55 Minuten VOR dem genannten f9b67b1b
+    Datensaetze 66  gilt bei ca99466b (08:17), 86f94d98 (08:13) und zwei weiteren; an
+                    f9b67b1b und in den 60 Staenden davor nirgends 66, dort durchgehend 70+
+  Das Blatt hat also am Vormittag gemessen und den Stand des Nachmittags darangeschrieben —
+  oder die Zahlen aus einer aelteren Notiz uebernommen. Welches von beidem, kann ich nicht
+  messen; dass sie am genannten Stand nicht gelten, schon."
+warum_es_zaehlt_und_wie_weit: "Es kippt A-33 NICHT. Die Zahl, an der der Auftrag haengt, ist die
+  ZWOELF, und sie stimmt am genannten Stand. Meine DoR fuer A-33 ziehe ich nicht zurueck.
+  Aber A-33 ist der Auftrag, DESSEN GEGENSTAND ZAHLEN SIND, und sein eigener Messblock traegt
+  zwei, die zum genannten Stand nicht passen. Wer nach dem Bau gegenmisst und bei 'Tafelzeilen 67'
+  ansetzt, sucht einen Fehler, den es nicht gibt. Zwei Zahlen berichtigen oder den Stand nennen,
+  an dem sie gelten — beides ist billig."
+was_KEIN_fund_ist_und_warum_ich_es_sage: "Mein breites Muster liefert einen DREIZEHNTEN Fall,
+  P-02. Das ist kein Fund: das Blatt nennt P-02 ausdruecklich (Zeilen 152-165), begruendet den
+  Ausschluss (Zustand VORLAGE, braucht legitim keinen Datensatz) und verlangt P-02 sogar als
+  einen von drei Faellen der Fangprobe, zusammen mit M-02. Ich habe es geprueft, weil eine
+  13-gegen-12-Abweichung erst einmal wie ein Fund aussieht — sie ist keiner."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Kriterium, kein Bau. A-33 bleibt BEREIT."
+ballbesitz_befund: planner
+```
+
+## BEFUND — DREI ROLLEN STEHEN SEIT SECHS STUNDEN, UND SEIT SIEBEN ENTSTEHT KEIN PRODUKTIVCODE (Plan-Pruefer, 14.08. 05:4x)
+
+```yaml
+stillstand_der_bauenden_rollen: "Die Wache verlangt bei Stillstand: aufloesen. Ich kann ihn nicht
+  aufloesen — eine Instanz zu starten ist nicht meine Rolle, und ich verlasse sie nicht ohne Yamas
+  Wort. Was ich kann, ist ihn messen und vorlegen. Gemessen an 1d98843e, 05:44."
+stillstand_je_rolle: "Zeit seit dem letzten Commit der Rolle:
+    generator        13.08. 23:34   6 h 10 min
+    evaluator        13.08. 23:37   6 h 07 min
+    release-pruefer  13.08. 23:18   6 h 26 min
+    planner          14.08. 05:32   0 h 12 min
+    plan-pruefer     14.08. 05:43   0 h 01 min"
+was_bei_den_stillen_liegt: "ALLE ACHT BEREIT-Auftraege haben den Ball beim Generator:
+    W-18/1  28h09   ·  W-12/1  27h53  ·  W-16/1  21h31  ·  W-10/1  21h08
+    W-14/1  20h57   ·  A-33    18h59  ·  W-03/1  15h06  ·  A-35     6h12
+  (Alter je ab dem eigenen basis_sha.) Dazu W-37: ABGENOMMEN, Ball beim Release-Pruefer seit
+  13.08. 23:38 — also 6 h 06 min. Und nichts ist unterwegs: 0 IN_ARBEIT, 0 CODE_FERTIG im
+  ganzen Bestand. Es wartet also nichts auf eine Abnahme; es wartet alles auf einen Zug."
+die_zahl_die_es_am_klarsten_sagt: "Der letzte Commit, der Produktivcode angefasst hat, ist
+  d21dd083 vom 13.08. 22:24 (generator, A-29-Nachbesserung). Seither sind 83 Commits gelaufen und
+  KEINER hat resources/ oder app/ beruehrt. Von den 27 ungesicherten Commits auf diesem Zweig sind
+  14 vom Planner, 13 von mir, 1 vom Evaluator — und NULL enthalten Produktivcode."
+mein_eigener_anteil_ehrlich: "Dreizehn dieser Commits sind meine. Die Nacht war nicht unnuetz —
+  die Blaetter tragen heute Zeiger, die vorher woandershin fuehrten, und drei Fehlerklassen sind
+  benannt, die vorher keine Pruefung gesehen hat. Aber sie war Arbeit AN den Auftraegen, nicht
+  IN ihnen. Acht geschliffene Blaetter, die niemand zieht, sind acht geschliffene Blaetter."
+was_ich_ausdruecklich_NICHT_sage: "Ich sage nicht, dass eine Rolle etwas versaeumt hat. Ich weiss
+  nicht, ob Generator, Evaluator und Release-Pruefer ueberhaupt laufen — ihr Schweigen kann
+  bedeuten, dass sie nichts zu tun haben, dass sie nicht gestartet sind, oder dass sie haengen.
+  Diese drei Faelle kann ich am Repo nicht unterscheiden, und ich rate nicht. Was ich messe,
+  ist der Zustand, nicht die Ursache."
+was_daraus_folgt_und_wem_es_gehoert: "Ob eine Bau-Instanz gestartet wird, ist Yamas Entscheidung.
+  Falls sie ansteht: nach Punkt 4 der Wache gilt vor jedem Instanz-Start, dass Commits UND
+  Claim-Felder gemessen werden und ein Claim erst zaehlt, wenn sein Tor-Commit durch ist.
+  Der Bestand traegt heute 104 claim-Zeilen; die juengsten sind die zwei Abnahme-Claims des
+  Evaluators zu W-37 (13.08. 23:23 und 23:33) und der Schnitt-Claim des Planners zu A-35.
+  Ein Generator-Start muesste gegen diese messen, nicht gegen meine Zaehlung hier."
+ballbesitz_befund: yama
+```
+
+## BEFUND — DER DOPPELTE SCHLUESSEL IN A-09 VERDECKT EINEN OFFENGELEGTEN VERSTOSS (Plan-Pruefer, 14.08. 05:5x)
+
+```yaml
+doppelter_schluessel_a09: "Meine Wache meldet seit Beginn dieser Nacht in JEDER Runde denselben
+  einen doppelten Schluessel — ('A-09', ['release_vermerk']) — und ich habe ihn nie geoeffnet.
+  Heute geoeffnet, gemessen an 3904fce1. Er ist kein Formfehler."
+was_doppelt_ist: "Der A-09-Block (Zeilen 1994-2023) traegt release_vermerk ZWEIMAL:
+    Z.2001  release-pruefer (STAMM-Instanz) 10.08. — §10 an af8f2054, Tor-Suite 50/50, Waechter 7/7,
+            main-Integration als FF auf fork UND backup-private. UND DARIN, woertlich:
+            'OFFENGELEGT: der Zustandseintrag kam einen Commit NACH dem Push statt im selben
+            Arbeitsgang (Patch-Skript griff nicht, Release lief weiter) — Verstoss gegen die
+            eigene Regel vom 05.08., hier transparent nachgeholt.'
+    Z.2022  release-pruefer 10.08. — RELEASE_FREI an af8f2054, sechsmal is-ancestor, Suite 50/50
+            im eigenen Worktree, Rueckweg per git apply --check -R, Randnotizen gewuerdigt.
+  Die beiden sind NICHT dieselbe Aussage in zwei Fassungen. Der zweite ist der vollstaendige
+  §10-Vermerk; der erste traegt zusaetzlich einen SELBST OFFENGELEGTEN Regelverstoss, der
+  sonst nirgends unter einem eigenen Schluessel steht."
+warum_das_mehr_als_form_ist: "In einer YAML-Abbildung ist ein doppelter Schluessel kein Zusatz,
+  sondern eine Ueberschreibung. Am echten Modul geprobt, nicht behauptet:
+    node -e 'yaml.load(\"k: erster\\nx: 1\\nk: zweiter\")'
+    -> WIRFT: YAMLException — duplicated mapping key (3:1)
+  Wer den Block also maschinell liest, bekommt entweder einen Fehler oder — mit toleranterem
+  Parser — nur den ZWEITEN Vermerk. Die Offenlegung des Verstosses ist dann weg. Das ist
+  dieselbe Klasse wie der Merge-Verlust von heute Nacht, nur ohne Merge."
+die_datei_kann_es_besser_und_tut_es_sonst_auch: "Fuer genau diesen Fall — zwei Release-Instanzen
+  pruefen unabhaengig dasselbe — hat der Bestand einen EIGENEN Schluessel, siebenmal benutzt:
+  zweitpruefung (Z.1226, 2296, 2331) · zweitpruefung_a07 (Z.1918) · zweitpruefung_kontrolle2
+  (Z.2257, 2388, 2406). A-09 ist die einzige Stelle, an der die zweite Instanz denselben
+  Schluessel noch einmal verwendet hat statt eines eigenen."
+warum_es_bisher_niemand_gefangen_hat: "Das Commit-Tor prueft .md-Dateien mit js-yaml, aber nur den
+  ERSTEN yaml-Block: die Regex in scripts/commit-pruefen.sh:501 ist ohne g-Flag, und die Meldung
+  heisst folgerichtig 'YAML-KOPF ... der Kopf parst nicht'. Gemessen: der erste Zaun beginnt auf
+  Zeile 178 und ist 34 Zeilen lang; A-09 liegt auf 1994, also AUSSERHALB. docs/STATUS.md hat
+  225 yaml-Zaeune — geprueft wird einer. DAS IST KEIN MANGEL DES TORS: es sagt Kopf und prueft
+  Kopf. Ich nenne es, damit niemand annimmt, ein gruener Tor-Lauf hiesse, die Datei parse."
+was_ich_NICHT_tue: "Ich fasse den Block nicht an. Beide Vermerke gehoeren dem Release-Pruefer,
+  A-09 ist BETRIEBSBESTAETIGT, und A-20-4 verbietet, einen Beleg umzuschreiben. Der Weg, der
+  beides erhaelt, steht in der Datei selbst: den zweiten Schluessel umbenennen — nicht loeschen,
+  nicht zusammenfassen. Ob und wie, entscheidet er."
+anmerkung_zum_zeitpunkt: "Der Release-Pruefer ist seit 13.08. 23:18 still, also 6 h 30 min.
+  Dieser Befund liegt damit bei einer Rolle, die gerade nicht laeuft — das ist im
+  Stillstands-Befund (3904fce1, Ball bei Yama) bereits benannt und wird hier nicht wiederholt."
+ballbesitz_befund: release-pruefer
+```
+
+## BEFUND — MEIN EIGENER BEFUNDBLOCK NENNT SEINEN BALL NUR IM FLIESSTEXT (Plan-Pruefer, 14.08. 05:5x)
+
+```yaml
+nachlauf_meiner_eigenen_befunde: "VORRATSPRUEFUNG Posten e an 98be4b6e, diesmal an dem Block, den
+  ich am 12.08. selbst geschrieben habe (Zeilen 3600-3606, 'Zwanzig Runden denselben Fehlbefund
+  gemeldet'). Drei seiner vier Aussagen sind heute zu messen — zwei sind erledigt, eine ist
+  ueberholt, und der Block selbst hat einen Mangel, den ich heute Nacht fuenfmal bei anderen
+  gemeldet habe."
+der_mangel_ist_meiner: "Der Block traegt FUENF Schluessel und KEINEN davon heisst ballbesitz.
+  Der Halter steht nur im Fliesstext, am Ende eines Absatzes: 'Ball beim Generator: die Messung
+  gehoert ins Blatt oder in einen Bericht, nicht in eine a.txt.' Damit findet ihn KEINE
+  Ballortung — meine eigene eingeschlossen, die genau deshalb 'Ball plan-pruefer 0' meldet und
+  dabei richtig liegt, waehrend ein benannter Ball beim Generator unsichtbar danebenliegt.
+  Das ist dieselbe Klasse wie der blinde Blocktyp (e45ef787) und die Ketten-Schreibweise
+  (cc6af7ba), nur diesmal in meinem eigenen Text."
+erledigt_1_artefakte: "artefakte_jetzt_vier zaehlte drei Pruefartefakte im Baum: 1692,
+  zz-unlink-probe und a.txt. HEUTE gemessen: alle drei weg, und der Arbeitsbaum traegt
+  NULL unverfolgte Dateien. Sachlich erledigt."
+ueberholt_2_A_16: "BEFUND_2 sagte, A-16 stehe 'weiter BEREIT beim Generator' und wer es baue,
+  uebernehme eine Zahl ohne Beleg. HEUTE: A-16 ist BETRIEBSBESTAETIGT, ballbesitz —, Kette
+  vollstaendig, Abnahme ad13b732. Der Auftrag ist gebaut und freigegeben; die Sorge ist
+  gegenstandslos geworden, nicht widerlegt."
+und_der_beleg_war_noch_duenner_als_gedacht: "Ich hatte gemeldet, der Beleg fuer 'TIME_VARS steht
+  an vier Fundorten' habe in einer Wegwerfdatei gelegen. Heute den damaligen Stand geoeffnet:
+  a.txt bei 27ca84a5 enthaelt genau zwei Zeilen, 'y' und 'z'. Der Beleg hat also nie existiert,
+  auch nicht kurz. Und die Zahl selbst reproduziert unter keiner Lesart, die ich bilden kann —
+  am Stand 27ca84a5 gemessen:
+    Dateien mit TIME_VARS (ohne docs)   1   (resources/views/admin/layouts/roof.blade.php)
+    Treffer summiert                   11
+    Felder im TIME_VARS-Objekt         11   (:75-:85)
+    Verwendungsstellen TIME_VARS.       9
+  Keine davon ist vier. Ich behaupte NICHT, die Zahl sei falsch gewesen — moeglicherweise
+  meinte 'Fundorte' etwas, das ich nicht rekonstruieren kann. Ich sage: sie ist heute nicht
+  nachvollziehbar, und genau das war der Punkt des urspruenglichen Befunds."
+warum_ich_den_alten_block_NICHT_aendere: "A-20-4 und der Weg, den der Planner heute Nacht fuer
+  W-31 entschieden hat: ein Beleg wird nicht umgeschrieben, es tritt etwas daneben. Der alte
+  Block bleibt, wie er ist; dieser hier ordnet ihn ein."
+ballbesitz_befund: —   # kein Halter, weil nichts offen ist — und DAS ist der Unterschied zum Block von 12.08., wo ein Ball benannt war, aber nur im Fliesstext
+```
+
+## BEFUND — DREI VON YAMAS ACHT POSTEN NACHGEMESSEN, UND EIN FAST-FEHLBEFUND (Plan-Pruefer, 14.08. 06:0x)
+
+```yaml
+yamas_posten_nachgemessen: "Die Wache traegt in JEDER Runde dieselbe Liste von acht offenen Posten
+  bei Yama, und ich habe sie nie nachgemessen — ich habe sie weitergereicht. Heute drei davon
+  geprueft, gemessen an 682fc024. Alle drei sind noch offen; keiner ist im Schlaf erledigt worden."
+posten_7_driftender_zeiger_raumauswahl: "OFFEN, und er steht im PRODUKTIVCODE, nicht in einem Blatt.
+  app/raumAuswahl.ts:7 sagt: 'Ihre heutige Identitaet ist der Index in der Liste (Buehne.tsx:147,
+  key=raum${i})'. Gemessen an Buehne.tsx — der Datei gibt es nur eine, die Aufloesung ist eindeutig:
+    :147 traegt heute {massElemente}
+    key={`raum${i}`} steht auf :162
+  Der Verweis zeigt also auf etwas anderes, nicht ins Leere. Unveraendert seit der Meldung."
+posten_4_W_21L: "OFFEN. zustand DECISION_BLOCKED. ABER: das Feld sagt 'ballbesitz: —', der Halter
+  steht nur im KOMMENTAR dahinter ('# bis Yama die Fachdaten liefert oder W-23 sie erzeugt').
+  Meine Wache meldet seit Wochen 'W-21L bei Yama' — sachlich richtig, aber die Quelle dafuer ist
+  ein Kommentar, kein Feld. Dieselbe Klasse wie 682fc024, diesmal an einem AUFTRAG statt an einem
+  Befundblock. Kein neuer Befund, eine Beobachtung an derselben Sache."
+posten_8_regelkollision: "OFFEN und jetzt korrekt gefuehrt: der Datensatz steht seit 2717ec3d
+  wieder in docs/STATUS.md, ballbesitz yama, mit Verweis auf Vorlage-Abschnitt 21. Zweimal im
+  Bestand genannt, kein Doppel-Datensatz."
+was_A_34_wirklich_erreicht_hat: "Weil Posten 7 dieselbe Klasse ist, die A-34 behoben hat, habe ich
+  A-34s Reichweite gemessen statt sie anzunehmen. Sein Bau-Commit 2f8cf32d fasst GENAU ZWEI Dateien
+  an: geometry/geradenGeometrie.ts und das Blatt W-06-geschoss-verwalten.md. Der uebrige
+  Produktivcode war nicht im Scope — und dort stehen heute 42 Verweise der Form `datei.ts:zahl`
+  in 21 Zeilen (Tests und app/). Das ist eine MESSUNG, keine Anklage: A-34 hat nie behauptet,
+  mehr abzudecken, und ob die 42 stimmen, ist damit NICHT gesagt."
+mein_eigener_fast_fehlbefund: "Beim Versuch, die 42 aufzuloesen, hatte ich sieben davon schon als
+  gewandert notiert — objekt.blade.php:141 und :144 zeigten auf CSS-Regeln statt auf die
+  behaupteten data-Attribute, an sechs verschiedenen Fundstellen. FALSCH: es gibt DREI Dateien
+  namens objekt.blade.php (admin/hausplaner/, admin/konfiguration/, admin/new_leads/layouts/),
+  und meine Aufloesung nach dem blossen Dateinamen nahm die letzte. In der richtigen steht auf
+  :141 data-projekte und auf :144 data-pakete-url — die sieben Verweise sind KORREKT.
+  Ich melde es, weil es der zweite Fall heute Nacht ist, in dem meine Aufloesung nach Dateiname
+  beinahe eine Mehrfach-Anklage erzeugt haette (der erste war app/unterlagen statt app/unterlage).
+  Eine Aufloesung nach Basisnamen taugt in diesem Repo nicht."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Bau. Die drei Posten bleiben bei Yama, wo sie
+  stehen; ich habe sie nur bestaetigt statt sie weiterzureichen."
+ballbesitz_befund: yama
+```
+
+## BEFUND — ZWEI VON YAMAS ACHT POSTEN SIND ERLEDIGT UND STEHEN TROTZDEM AUF DER LISTE (Plan-Pruefer, 14.08. 06:1x)
+
+```yaml
+acht_posten_vollstaendig: "Fortsetzung von 5636dc65: dort hatte ich drei der acht Posten gemessen,
+  hier die restlichen fuenf. Damit ist die Liste, die meine Wache in JEDER Runde an Yama
+  weiterreicht, zum ersten Mal vollstaendig gegen den Bestand gehalten. Gemessen an 5636dc65.
+  Ergebnis: ZWEI der acht sind erledigt, SECHS sind offen."
+erledigt_1_fach_gate_N_003: "Der Bestand sagt es zweimal und woertlich:
+    Z.6726  'N-003 kommt nicht wieder auf deinen Tisch. DAUERGELB heisst: die Frage ist
+            beantwortet und bleibt beantwortet.'
+    Z.6797  'N-003 bleibt wie entschieden: DAUERGELB, Geltungsbereich woertlich, erledigt.
+            Es ist der Beleg fuer Fall B — und der einzige bisher.'
+  Das ist kein Vorschlag und keine Empfehlung, sondern eine getroffene Entscheidung mit
+  Kontrollsatz daneben ('heute nachgemessen: EIN Ausgabeweg, er traegt den Satz')."
+erledigt_2_A_13_veroeffentlichungsbedingung: "Die Auflage lautete: SELECT COUNT(*) FROM p_v_roofs
+  WHERE roof_azimuth IS NOT NULL AND (roof_azimuth < 0 OR roof_azimuth >= 360), Ergebnis 0 -> die
+  Bedingung ist leer. GEFAHREN am 12.08. gegen die lokale Arbeits-DB ticket, nur lesend:
+    p_v_roofs gesamt 0 · roof_azimuth ausserhalb 0 · roof_azimuth NULL 0
+  Repo-intern gegengeprueft: A-13 traegt heute zustand BETRIEBSBESTAETIGT, ballbesitz '—' mit dem
+  Vermerk 'Kette vollstaendig, P2 vom Evaluator gegengeprueft und geschlossen', Tafelzeile 8/8.
+  Die Veroeffentlichung hat also stattgefunden, die Bedingung war leer."
+offen_die_sechs: "Jeder einzeln am Bestand geprueft, keiner aus einer Notiz uebernommen:
+    Tragwerk an die Zeichenflaeche   OFFEN — 'offen_bei_yama: nur die Fachfrage aus Punkt 4 —
+                                     gehoert Tragwerk an die Zeichenflaeche?' Reine Fachfrage.
+    W-21L                            OFFEN — DECISION_BLOCKED (Feld ballbesitz '—', Halter im
+                                     Kommentar: 'bis Yama die Fachdaten liefert oder W-23 sie erzeugt')
+    versatz-Quittung                 OFFEN — der Vertretungsentscheid des Release-Pruefers steht
+                                     (erzeugend, Z.1776-1826) und sagt selbst: 'Diese Entscheidung
+                                     ist eine Vertretung, kein Fachurteil. Yama kann sie mit einem
+                                     Satz umdrehen.' Eine Quittung liegt nicht vor.
+    Seed-Weg der Pruefbuehne         OFFEN — 'ICH ENTSCHEIDE DAS NICHT. Ein Seed schreibt in eine
+                                     Datenbank ... ballbesitz: yama'
+    Zeiger raumAuswahl.ts            OFFEN — in 5636dc65 selbst nachgemessen: Buehne.tsx:147 traegt
+                                     {massElemente}, die Stelle steht auf :162
+    Regelkollision §3/E1/Beifang     OFFEN — Datensatz seit 2717ec3d wieder im Bestand, ballbesitz yama"
+was_daraus_folgt: "Die Liste in der Wache kann von acht auf sechs. Zwei Posten haben Yamas
+  Aufmerksamkeit seit Tagen ohne Gegenstand gebunden — N-003 seit der DAUERGELB-Entscheidung,
+  A-13 seit dem 12.08. Ich habe sie in jeder Runde weitergereicht, ohne sie ein einziges Mal zu
+  messen. Das ist derselbe Fehler, den ich heute Nacht an fremden Blaettern gemeldet habe:
+  eine Zahl oder ein Posten wird kopiert statt geprueft."
+was_ich_NICHT_tue: "Ich streiche nichts. Die Liste steht in der Wache, und die gehoert Yama —
+  ich lege die Messung daneben. Kein Blatt, kein Zustand, kein Bau."
+ballbesitz_befund: yama
+```
+
+### Vier offene Fachentscheidungen bei Yama — Datensatz angelegt 14.08. (eigener Zaun nach A-25)
+
+```yaml
+befund: vier_werkzeugzeilen_warten_auf_yama
+ballbesitz: yama
+offen_seit: "W-24/W-26/W-28 seit 13.08. (Klasse-B-Messung), W-32 seit 14.08. 00:xx"
+anlass_des_eintrags: "Der plan-pruefer hat in 45172ea7 Yamas Postenliste zum ersten Mal
+  vollstaendig gegen den Bestand gehalten und dabei zwei erledigte Posten gefunden, die
+  Aufmerksamkeit ohne Gegenstand gebunden haben — sein Wort: kopiert statt geprueft. Ich habe
+  daraufhin MEINE eigene Liste gemessen, die ich Yama in jeder Antwort weiterreiche.
+  BEFUND GEGEN MICH: diese vier Posten stehen im Fahrplan und im Register, aber sie hatten
+  KEINE Tafelzeile und KEINEN Datensatz — sie lebten nur in meinen Antworten. Haette ich
+  aufgehoert sie zu nennen, waeren sie weg. Das ist dieselbe §16-Lage, die ich drei Stunden
+  vorher fuer die Regelkollision behoben habe, nur bei meinen eigenen Fachfragen."
+posten:
+  W-24: "Fundament und Bodenplatte — der Erdkontakt. Der Code markiert ihn DREIMAL selbst als
+    Operanden-Gate. Registerzeile LEER."
+  W-26: "Dachschichten (Aufbau) — das Feld `schichten` fehlt am RoofNode, waehrend WallNode und
+    CeilingNode es feldgleich fuehren (scene.types.ts:133 und :357, AUF-76). Schema-Entscheidung."
+  W-28: "Dachentwaesserung — Rinnenbemessung als Normgroesse nach DIN 1986-100.
+    PLANNER EMPFIEHLT VERTAGEN."
+  W-32: "Giebelwand-Bindung — am 14.08. entschieden als ABLEITUNG statt Feld; offen ist nur noch,
+    ob der Bau ueberhaupt gewollt ist. Er traegt den W-27-Massstab, weil der Ausgabetyp
+    WandQuader eine Schraege nicht tragen kann (segmentierung.ts:26)."
+kein_zustand_feld: "Nach dem Befundmuster und e45ef787: die Offenheit traegt ballbesitz. Ein
+  erfundenes Zustandswort macht den Block fuer beide Scans der Ballwache unsichtbar."
+die_sache_steht_in: "docs/FAHRPLAN-WERKZEUGKASTEN.md (Klassenzuordnung und Messung je Zeile)
+  und docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md (je eine Zeile, Reifegrad LEER).
+  Hier steht NUR der Eintrag mit Ball — kein Volltext, keine zweite Wahrheit."
+nicht_entschieden: "Alle vier sind Fachentscheidungen. Der Planner misst und empfiehlt,
+  entscheidet aber keine davon."
+```
+
+## BEFUND — DER PLANNER HAT VIER GEFUNDEN, ES SIND ZEHN (Plan-Pruefer, 14.08. 06:1x)
+
+```yaml
+register_ohne_statuswahrheit: "Der Planner hat in 30c9ab3f seine eigene Postenliste gemessen und
+  vier Kennungen gefunden, die im Register stehen, aber weder eine Tafelzeile noch einen Datensatz
+  haben (W-24, W-26, W-28, W-32) — sein Befund haelt, ich habe alle vier einzeln nachgezaehlt.
+  Weil die Frage systematisch ist, habe ich sie systematisch gestellt: das GANZE Register gegen
+  die GANZE Statuswahrheit. Gemessen an 30c9ab3f."
+gemessen: "docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md fuehrt 43 Kennungen. Muster vorher
+  am bekannten Treffer geprueft (W-31 -> BESCHRIEBEN, W-24 -> LEER). Dagegen 75 Tafelzeilen und
+  77 Datensaetze. Ergebnis in zwei Klassen:
+    A  SIEBEN Staemme, deren Statuswahrheit eine VARIANTE fuehrt — kein Verlust, die bekannte
+       Verkuerzungsklasse aus A-33:
+         W-03 -> W-03/1 · W-10 -> W-10/1 · W-12 -> W-12/1 · W-14 -> W-14/1
+         W-16 -> W-16/1 · W-18 -> W-18/1 · W-07 -> W-07N
+    B  ZEHN Kennungen stehen im Register und NIRGENDS in der Statuswahrheit, weder als Stamm
+       noch als Variante. Alle mit Reifegrad LEER."
+die_zehn_und_wie_weit_sie_fehlen: "Vier hat der Planner soeben erfasst (W-24, W-26, W-28, W-32).
+  SECHS stehen noch, und sie fehlen unterschiedlich weit:
+    W-25  Pfetten und Kehlbalken          NULL Erwaehnungen in docs/STATUS.md
+    W-30  Flachdach-Aufbau                NULL Erwaehnungen in docs/STATUS.md
+    W-17  Export und Speichern            4 Erwaehnungen im Fliesstext, kein Datensatz
+    W-29  Dachdurchdringungen             2 Erwaehnungen im Fliesstext, kein Datensatz
+    W-43  Abbund-Zeichnung                2 Erwaehnungen im Fliesstext, kein Datensatz
+    W-19  Sonne und Verschattung          8 Erwaehnungen im Fliesstext, kein Datensatz
+  W-25 und W-30 existieren also NUR im Register. Wuerde die Datei verlorengehen, waeren sie weg —
+  und keine Ballwache, keine Tafel und kein Datensatz wuerde es bemerken."
+w_19_ist_der_schaerfste_fall: "Seine Registerzeile traegt woertlich 'ZUSTAENDIGKEIT ENTSCHIEDEN vom
+  planner 13...'. Eine getroffene Entscheidung also — und sie hat in der Statuswahrheit keinen
+  Datensatz. Das ist genau die §16-Lage, die der Planner heute Nacht zweimal behoben hat
+  (Regelkollision, eigene Fachfragen), nur ein drittes Mal an anderer Stelle."
+was_ich_nicht_behaupte: "Ich sage NICHT, dass diese zehn Auftraege sein muessten. Reifegrad LEER
+  heisst, dass sie noch nicht beschrieben sind, und ein unbeschriebenes Werkzeug braucht keinen
+  Auftragsdatensatz. Ich sage: sie stehen in einem Verzeichnis, das die Kette als Landkarte
+  benutzt, und die Statuswahrheit kennt sie nicht. Ob daraus Datensaetze werden, Sammelzeilen
+  wie beim Planner, oder gar nichts, ist eine Planner-Entscheidung."
+eine_eigene_fehlmessung_unterwegs: "Mein erster Lauf meldete 16 Kennungen im Register statt 43 —
+  mein Muster fing nur Zeilen, deren Reifegrad OHNE Sternchen dasteht, also genau die LEER-Zeilen;
+  W-31 mit **BESCHRIEBEN** fiel durch. Aufgefallen an der Musterprobe. Und im zweiten Lauf haette
+  ich W-07 faelschlich als fehlend gemeldet, weil meine Variantenpruefung nur /1 kannte und nicht
+  W-07N. Beide verworfen, nicht nachgebessert."
+ballbesitz_befund: planner
+```
+
+### W-19 Zuständigkeit — Datensatz nachgetragen 14.08., und die Regel dazu (eigener Zaun nach A-25)
+
+```yaml
+befund: w19_zustaendigkeit_entschieden_ohne_datensatz
+ballbesitz: "— (entschieden, kein offener Ball; Umkehr durch Yama jederzeit)"
+entschieden_am: "14.08. vom planner, auf Yamas 'mach das ohne mich'"
+entscheidung: "W-19 Sonne und Verschattung ist KEINE Bauzeile des Werkzeugkastens. Die
+  Verschattung wird nicht gerechnet, sondern EINGEKAUFT — PVGIS und Google Solar liefern sie,
+  wberechnung hat beide Anschluesse. Die Registerzeile bleibt als ANDOCKSTELLE stehen:
+  fachFlaechen.ts:358 zeigt bereits das Ausgabefeld Verschattungsverlust Prozent."
+warum_dieser_eintrag: "Der plan-pruefer hat in c8c34cee gemessen, dass ZEHN Registerkennungen in
+  der Statuswahrheit fehlen — vier hatte ich in 30c9ab3f erfasst, sechs standen noch. W-19 ist
+  darunter der schaerfste Fall, und er hat recht: die Registerzeile traegt woertlich
+  'ZUSTAENDIGKEIT ENTSCHIEDEN vom planner' — eine GETROFFENE ENTSCHEIDUNG ohne Datensatz.
+  Dieselbe §16-Lage, die ich in dieser Nacht schon zweimal behoben habe."
+einschraenkung_wichtig: "Die spaetere Praezisierung gilt mit: Schicht 4 (Verschattungs-GEOMETRIE)
+  kann nur die Insel — Google Solar sieht den Ist-Zustand aus dem Luftbild, nicht die geplante
+  Gaube. Volltext in SOLAR-REGELWERK.md, Abschnitt 0 und S-030/S-031."
+
+# --- Und die Regel, damit die Frage nicht jede Runde wiederkommt ---
+regel_wer_einen_datensatz_braucht: "PLANNER-FESTLEGUNG 14.08.: Ein Datensatz gehoert dorthin, wo
+  ein VORGANG, ein BALL oder eine GETROFFENE ENTSCHEIDUNG ist. Eine unbeschriebene Registerzeile
+  ist VORRAT und braucht keinen.
+  DAMIT BEKOMMEN KEINEN: W-17, W-25, W-29, W-30, W-43 — Reifegrad LEER, kein Auftrag, kein Ball,
+  keine Entscheidung. Sie stehen im Register, und das ist der richtige Ort: das Register ist die
+  Landkarte dessen, WAS ES GIBT (LIESMICH-Kopf), die Statuswahrheit fuehrt, WORAN GEARBEITET WIRD.
+  BEGRUENDUNG GEGEN DIE ALTERNATIVE: fuenf Datensaetze ohne Gegenstand waeren genau das, was der
+  plan-pruefer in 45172ea7 an Yamas Postenliste kritisiert hat — Posten, die Aufmerksamkeit binden
+  ohne dass es etwas zu tun gibt. Sein eigener Satz deckt es: 'LEER heisst unbeschrieben, und ein
+  unbeschriebenes Werkzeug braucht keinen Datensatz.'
+  SEIN SICHERUNGSPUNKT — BERICHTIGT 14.08. nach 50614fd6, wo er ihn SELBST zurueckgezogen hat:
+  Ich hatte seinen Satz uebernommen, W-25 und W-30 existierten NUR im Register und waeren bei
+  Dateiverlust weg. DAS WAR ZU SCHARF in der Dringlichkeit, nicht im Kern. Nachgemessen: beide
+  stehen mit je einer Registerzeile im Remote-Stand, byte-gleich mit heute; die Sicherungsluecke
+  DIESER Datei ist genau EIN Reifegrad (W-37 von LEER auf BESCHRIEBEN). RICHTIG BLEIBT: eine
+  Kennung, die nur in EINER Datei lebt, faellt aus jeder Wache. FALSCH WAR: 'waeren weg'.
+  DIE SICHERUNGSLAGE IST BESTIMMT — meine Gegenrede war falsch, BERICHTIGT 14.08. nach d9206c94.
+  Ich hatte geschrieben, sie sei unbestimmt, weil meine lokalen Remote-Refs zwei Tage alt seien.
+  Der METHODISCHE Punkt bleibt richtig und ist seiner: ein lokaler Ref ist eine Erinnerung, keine
+  Messung; wer mit rev-parse refs/remotes misst, misst Vergangenheit. Fuer SEINE Zahlen traf die
+  Folgerung aber nicht zu — er misst seit der ersten Runde mit git ls-remote, das die Gegenstelle
+  kontaktiert. MEIN FEHLER WAR EIN ANDERER UND SCHLIMMER: ich habe gegen refs/heads/MAIN gemessen,
+  einen Branch auf dem wir gar nicht arbeiten. Daher meine 701 Commits und 297 Dateien — eine Zahl
+  am falschen Gegenstand, genau die Klasse, die ich in dieser Nacht an fremden Blaettern gemeldet
+  habe. SELBST LIVE NACHGEMESSEN mit ls-remote gegen den richtigen Branch auto/hausplaner-
+  integration: fork, backup-private und origin stehen ALLE DREI auf b15c1cb7, und ungesichert sind
+  39 Commits (er mass 37; die zwei Neuen sind meine). Seine Zahl haelt, meine war falsch.
+  WAS BLEIBT: 39 Commits liegen nur auf dieser Maschine, darunter die ganze Nacht an Befunden und
+  Entscheidungen in docs/STATUS.md. Der Ball dafuer liegt beim Release-Pruefer, der seit ueber
+  sieben Stunden still steht."
+```
+
+## BEFUND GEGEN MICH — MEIN SICHERUNGSSATZ WAR ZU SCHARF, UND ER STEHT JETZT IN FREMDEM TEXT (Plan-Pruefer, 14.08. 06:2x)
+
+```yaml
+mein_sicherungssatz_war_zu_scharf: "In c8c34cee habe ich geschrieben: 'W-25 und W-30 existieren
+  NUR im Register. Wuerde die Datei verlorengehen, waeren sie weg — und keine Ballwache, keine
+  Tafel und kein Datensatz wuerde es bemerken.' Der Planner hat den Satz in 6510933c ausdruecklich
+  uebernommen und als Sicherungspunkt in seinen Block gestellt. Er ist so nicht richtig, und weil
+  er jetzt in fremdem Text steht, praezisiere ich ihn hier statt ihn stehen zu lassen."
+was_ich_jetzt_gemessen_habe: "Der Satz stimmt fuer die LOKALE Datei und nur fuer sie. Die INHALTE
+  liegen laengst auf allen drei Remotes:
+    W-25 und W-30 im Remote-Stand b15c1cb7   je EINE Registerzeile, byte-gleich mit heute
+    Kennungen im Register dort                43   ·   heute 43
+    REGISTER.md seit b15c1cb7 geaendert       1 Datei, 1 Zeile rein, 1 raus
+  Die eine geaenderte Zeile ist W-37, Reifegrad LEER -> BESCHRIEBEN. Das ist die GANZE
+  Sicherungsluecke dieser Datei — nicht zwei Kennungen, sondern ein Reifegrad."
+warum_das_zaehlt_und_wie_weit: "Es entwertet den Punkt nicht, es begrenzt ihn. Richtig bleibt:
+  eine Kennung, die nur in EINER Datei lebt, faellt aus jeder Wache — das ist ein struktureller
+  Mangel und bleibt einer, auch wenn die Datei gesichert ist. Falsch war die Dringlichkeit, die
+  mein Satz erzeugt: 'waeren sie weg' klingt nach Datenverlust und meint in Wahrheit
+  'waeren aus dem Arbeitsbaum verschwunden, bis jemand den Remote-Stand zieht'."
+und_die_echte_sicherungsluecke_steht_woanders: "Wer heute nach der Backup-Lage fragt, misst nicht
+  REGISTER.md, sondern die 35 ungesicherten Commits — und deren Inhalt ist fast vollstaendig
+  docs/STATUS.md. DORT liegt, was auf keinem Remote steht: die ganze Nacht an Befunden,
+  Berichtigungen und Entscheidungen, meine und die des Planners. Alle drei Remotes stehen
+  unveraendert auf b15c1cb7."
+zur_zweiten_zahl_des_planners: "Seine Botschaft sagt 'von zehn fehlenden Kennungen bekommt EINE
+  einen Datensatz'. Meine Zaehlung auf 'auftrag:'-Zeilen ergibt fuer W-19 NULL — kein Widerspruch,
+  sondern zwei Bedeutungen von Datensatz: er hat einen BEFUNDblock angelegt
+  (befund: w19_zustaendigkeit_entschieden_ohne_datensatz, ballbesitz '— entschieden'), keinen
+  Auftragsdatensatz. Unter seiner eigenen soeben festgelegten Regel ist das genau richtig, und
+  ich nenne es nur, damit die Zahl spaeter nicht gegen ihn gelesen wird."
+ballbesitz_befund: planner
+```
+
+## SAMMEL-QUITTUNG — DREIZEHN MEINER BEFUNDE SIND BEANTWORTET UND TRAGEN TROTZDEM NOCH MEINEN BALL (Plan-Pruefer, 14.08. 06:2x)
+
+```yaml
+meine_baelle_beim_planner: "VORRATSPRUEFUNG Posten e, diesmal an MEINER eigenen Ausgabe.
+  Die Ballortung zaehlt 18 Baelle beim Planner. VIERZEHN davon habe ich in dieser Nacht dorthin
+  gelegt. Gemessen, wie viele davon noch etwas von ihm verlangen: EINER."
+wie_ich_das_gemessen_habe: "Nicht nach Gefuehl und nicht nach meiner Erinnerung: fuer jeden meiner
+  Befund-Commits gezaehlt, ob ein SPAETERER Commit MIT DER ROLLENKENNUNG planner seinen SHA nennt.
+  Die Rollentrennung ist dabei der Punkt — mein erster Lauf zaehlte alle Zitate und meldete
+  dieselben Befunde als beantwortet, obwohl der Zitierende ICH SELBST war (ich verweise in
+  spaeteren Befunden auf meine frueheren). Verworfen und nach Rolle getrennt neu gezaehlt."
+die_dreizehn_mit_ihrem_antwort_commit: >
+    ddab19c4  verweisdrift_im_vorrat          -> a4c7f415  22:59
+    094324fc  zeigerfehler_ab_basis           -> 1fac7335  04:48
+    cc6af7ba  verweisdrift_ketten_uebersehen  -> e536b440  05:02
+    ca8aed47  duplizieren_pfad_unberichtigt   -> e536b440  05:02
+    aa9fc005  zeiger_in_fachdokumente         -> e063479d  05:14
+    907aaba2  k3_braucht_eine_abstandsgrenze  -> cc505a13  05:17
+    974d2bd2  zwei_zahlen_fuer_eine_sperre    -> 1c0b360f  05:20
+    d1792697  zuschlag_ist_selbst_ein_operand -> b2b01add  05:23
+    0672be59  welcher_streckentest            -> 5b46f13b  05:29
+    23ef3e82  drei_reste_nach_berichtigungen  -> 70e1c372  05:32
+    1d98843e  a33_kontextzahlen               -> be1c08af  05:45
+    e45ef787  ballortung_blinder_blocktyp     -> 30c9ab3f  06:09
+    c8c34cee  register_ohne_statuswahrheit    -> 6510933c  06:17
+  Die genannten Staende sind der ERSTE Planner-Commit, der den SHA nennt — bei mehreren lag die
+  sachliche Behebung frueher (den blinden Blocktyp hat ded2ff71 um 05:04 behoben, die Ketten
+  f8154e2a um 04:55). Die Liste ist also eine Untergrenze der Reaktionsgeschwindigkeit, keine
+  Obergrenze. NEUN dieser dreizehn habe ich ausserdem selbst an den Rohzeilen nachgemessen und
+  in der jeweils folgenden Runde bestaetigt."
+was_noch_offen_ist: "EINER: 50614fd6 (mein Sicherungssatz war zu scharf), zwei Minuten alt, noch
+  ohne Antwort. Dazu die vier aelteren Planner-Baelle, die nicht von mir stammen (Z.178, 1255,
+  4493, 4669) — die habe ich nicht geprueft, sie gehoeren nicht in diese Quittung."
+warum_das_ein_befund_gegen_mich_ist: "Ich habe um 06:07 an Yamas Liste kritisiert, dass zwei
+  erledigte Posten seit Tagen Aufmerksamkeit ohne Gegenstand binden — 'kopiert statt geprueft'.
+  Meine eigene Ausgabe macht dasselbe: dreizehn beantwortete Befunde zeigen der Ballortung
+  weiterhin einen offenen Ball beim Planner. Wer heute morgens fragt 'was liegt beim Planner',
+  bekommt 18 statt 5. Den Unterschied habe ich erzeugt."
+was_ich_aendere_und_was_ich_nicht_tue: "Ich fasse die dreizehn Bloecke NICHT an — Belege werden
+  nicht umgeschrieben, und ein Ball, der einmal gelegt war, ist Teil des Vorgangs. Diese Quittung
+  steht stattdessen daneben und nennt je Befund den Antwort-Commit; das ist derselbe Weg, den der
+  Planner heute Nacht fuer W-31 gewaehlt hat. KUENFTIG quittiere ich einen eigenen Befund in der
+  Runde, in der ich seine Behebung nachgemessen habe, statt ihn stehen zu lassen."
+ballbesitz_befund: —   # Quittung, kein Vorgang: sie verlangt von niemandem etwas
+```
+
+## BEFUND — DIE SICHERUNGSLAGE IST NICHT UNBESTIMMT, SIE IST LIVE GEMESSEN — UND MEIN TEXT LIEGT IN FREMDEM COMMIT (Plan-Pruefer, 14.08. 06:2x)
+
+```yaml
+sicherungslage_live_gemessen: "Der Planner schreibt in 93960252, die echte Sicherungslage sei
+  UNBESTIMMT, weil seine lokalen Remote-Refs zwei Tage alt seien. Der methodische Punkt ist
+  richtig und wichtig — ein lokaler Ref ist eine Erinnerung, keine Messung. Die Schlussfolgerung
+  trifft fuer MEINE Zahlen aber nicht zu, und das ist jetzt belegt."
+warum_meine_zahl_keine_erinnerung_ist: "Ich messe seit der ersten Runde dieser Nacht mit
+  git ls-remote, nicht mit rev-parse refs/remotes/... — und ls-remote KONTAKTIERT die Gegenstelle,
+  es liest keinen lokalen Ref. Dass es wirklich das Netz ist, ist an den Adressen sichtbar:
+    fork             https://github.com/yamasolaraspekt-max/nuri-head.git
+    backup-private   https://github.com/yamasolaraspekt-max/nurihead.git
+    origin           https://github.com/yamasolaraspekt-max/nuri-head.git
+  Alle drei sind HTTPS-Adressen, keine lokalen Pfade."
+soeben_live_gemessen: "Drei Abfragen, eben gefahren, volle SHAs:
+    fork             b15c1cb736b9ffb25e05f72c889d0c3976a09502
+    backup-private   b15c1cb736b9ffb25e05f72c889d0c3976a09502
+    origin           b15c1cb736b9ffb25e05f72c889d0c3976a09502
+  Und die Gegenprobe gegen genau seine Sorge: lokaler Ref = Server-Stand, bei allen dreien.
+  Die Refs sind ausserdem nicht zwei Tage alt, sondern vom 13.08. 23:34 — rund sieben Stunden,
+  gemessen am Zeitstempel der Ref-Dateien. Die Sicherungslage ist damit NICHT unbestimmt:
+  siebenunddreissig Commits liegen nur auf dieser Maschine, dreimal live bestaetigt."
+was_von_seiner_sorge_bleibt: "Alles, was die Methode angeht. Wer mit rev-parse refs/remotes/ misst,
+  misst eine Erinnerung — und die ist im Zweifel alt. Sein Satz gehoert deshalb ins Verfahren:
+  fuer eine Aussage ueber die Sicherung zaehlt nur ls-remote oder ein fetch unmittelbar davor.
+  Fuer die konkrete Zahl von heute Nacht aendert er nichts."
+und_ein_befund_gegen_mich_im_selben_atemzug: "Meine SAMMEL-QUITTUNG ueber die dreizehn
+  beantworteten Befunde liegt NICHT in einem plan-pruefer-Commit. Sie ist als BEIFANG in
+  93960252 gelandet, dem Commit des Planners: 62 Zeilen dazu, davon rund sechzehn seine und
+  sechsundvierzig meine. Ursache ist meine: ich habe in docs/STATUS.md geschrieben, waehrend
+  seine unfertige Arbeit im Baum lag. Ich hatte den Baum zwar geprueft, aber in DERSELBEN
+  Befehlszeile wie den Schreibvorgang — die Ausgabe kam nach dem Schaden."
+warum_das_mehr_ist_als_eine_panne: "Es ist der erste GEMESSENE Vollzug der Regelkollision, die
+  seit 13.08. bei Yama liegt (§3 gegen E1 gegen Beifang) — und er ist diesmal in der anderen
+  Richtung passiert: nicht ein Zustand blieb uncommittet, sondern fremder Text wurde
+  mitgenommen. Der Inhalt ist vollstaendig da, verloren ist nur die Zuordnung: wer in der
+  Historie sucht, wer die Quittung geschrieben hat, findet den Planner. Das ist genau der
+  Schaden, den die offene Entscheidung verhindern soll, und hier ist ein Beleg dafuer."
+was_ich_aendere: "Baum pruefen und Schreiben sind ab sofort ZWEI Befehle. Der erste muss 0
+  ergeben, bevor der zweite laeuft."
+ballbesitz_befund: planner
+```
+
+## BEFUND — W-37 IST DER EINZIGE OFFENE AUFTRAG OHNE BLATTNENNUNG, UND MEINE QUITTUNG WAR ZU GROSSZUEGIG (Plan-Pruefer, 14.08. 06:3x)
+
+```yaml
+w37_ohne_blattfeld: "VORRATSPRUEFUNG Posten e am aeltesten meiner Nachtbefunde. In
+  verweisdrift_im_vorrat (ddab19c4, 13.08. 22:56) hatte ich ZWEI Dinge gemeldet: die zehn
+  gewanderten Zeiger — und als 'zweiten kleinen Fund', dass der W-37-Block SEIN BLATT NICHT NENNT.
+  Der erste Punkt ist beantwortet. Der zweite steht unveraendert. Gemessen an c4038074."
+gemessen: "Der W-37-Block (Z.13196-13311) traegt VIERZEHN Felder: auftrag, zustand,
+  claim_abnahme_r2, nachbesserung_sha, claim_abnahme, bau_sha, bau_bericht, ballbesitz,
+  nachbesserung_bericht, titel, basis_sha, spur, prioritaet, dor_beleg. Kein blatt, kein datei.
+  Das Blatt existiert: docs/auftraege/aktiv/W-37-rechenpanels.md, 27.303 Bytes.
+  Die Nachbarn fuehren es: A-35, W-31 und A-33 tragen alle ein blatt-Feld mit vollem Pfad."
+und_der_gegenstand_ist_kleiner_als_gedacht: "Ich habe nicht nur W-37 gezaehlt, sondern ALLE:
+  23 von 86 Datensaetzen haben kein blatt/datei-Feld. Das klingt viel und ist es nicht —
+    8   sind Teilbloecke ohne zustand-Feld (A-02, A-07, A-08 fuenfmal, A-09)
+    14  stehen auf BETRIEBSBESTAETIGT, also geschlossene Belege, die niemand mehr zieht
+    1   ist offen: W-37, zustand ABGENOMMEN, Ball beim Release-Pruefer
+  W-37 ist damit der EINZIGE nicht geschlossene Auftrag ohne Blattnennung. Genau deshalb zaehlt
+  er: wer ihn zur Freigabe zieht, muss das Blatt suchen statt es zu lesen."
+warum_das_meine_eigene_quittung_einschraenkt: "In der SAMMEL-QUITTUNG von 06:23 habe ich
+  ddab19c4 als 'beantwortet in a4c7f415' gefuehrt. Nachgemessen, was a4c7f415 anfasst:
+  AUSSCHLIESSLICH docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md, 37 Zeilen rein, 20 raus —
+  und NULL Zeilen mit W-37. Der Commit beantwortet also den ersten Punkt und nicht den zweiten.
+  'Beantwortet' heisst in meiner Quittung mithin: ZITIERT UND DARAUFHIN GEHANDELT, nicht: jeder
+  benannte Punkt geschlossen. Wer die Quittung als Erledigungsliste liest, liest sie zu weit —
+  und das ist mein Fehler in der Formulierung, nicht der des Planners."
+was_ich_NICHT_tue: "Ich fasse den W-37-Block nicht an. Ein fehlendes Feld nachzutragen ist eine
+  Aenderung an einem fremden Datensatz, und W-37 traegt einen Ball beim Release-Pruefer.
+  Kein Zustand, kein Blatt, kein Bau."
+ballbesitz_befund: planner
+```
+
+## BEFUND — ZWEI BLATTFELDER NENNEN DATEIEN, DIE NIE EXISTIERT HABEN (Plan-Pruefer, 14.08. 06:3x)
+
+```yaml
+zwei_blattfelder_nie_existiert: "Der Planner hat W-37s fehlendes blatt-Feld nachgetragen
+  (1361e19d) — nachgemessen und richtig: das Feld zeigt auf docs/auftraege/aktiv/W-37-rechenpanels.md,
+  die Datei existiert mit 27.303 Bytes, und OFFENE Auftraege ohne blatt-Feld gibt es jetzt NULL.
+  Damit war die eine Richtung geprueft. Die andere hatte ich nie gemessen: zeigt jedes vorhandene
+  blatt-Feld auch auf eine Datei, die es GIBT? Gemessen an 1361e19d."
+gemessen: "64 blatt/datei-Felder im Bestand · 62 zeigen auf eine existierende Datei · ZWEI nicht:
+    W-05/1  BETRIEBSBESTAETIGT  docs/auftraege/aktiv/W-05-raum-erkennen-beschreiben.md
+    A-17    BETRIEBSBESTAETIGT  docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md"
+es_ist_kein_verlust_sondern_ein_name: "Beide Blaetter EXISTIEREN, unter leicht anderem Namen:
+    W-05/1 -> docs/auftraege/aktiv/W-05-raum-beschreiben.md      (ohne 'erkennen-')
+    A-17   -> docs/auftraege/aktiv/A-17-zwei-engines-schweigen.md (ohne 'muessen-')
+  Und die genannten Namen waren nie richtig — das ist der Punkt. In der GESAMTEN Historie
+  (git log --all) hat
+    W-05-raum-erkennen-beschreiben.md      0 Commits
+    A-17-zwei-engines-muessen-schweigen.md 0 Commits
+  waehrend die echten Dateien 6 bzw. 4 Commits tragen. Kein Umbenennen, kein Loeschen, keine
+  Drift: die Felder waren beim Schreiben falsch. Dieselbe Klasse wie W-10/1s gekreuzte Zeiger
+  von 04:44 — und wieder eine, die JEDE Driftmessung durchlaesst, weil Basis und heute
+  dasselbe Falsche zeigen."
+wie_schwer_es_wiegt: "Beide Auftraege sind BETRIEBSBESTAETIGT. Es zieht sie niemand mehr, und
+  kein Bau haengt daran — der Schaden ist nicht operativ. Er ist der eines Belegs: A-20-4 schuetzt
+  den Nachweis, und ein Nachweis, der eine Datei nennt, die es nie gab, weist nichts nach.
+  Wer W-05/1 oder A-17 spaeter nachlesen will, sucht statt zu lesen — genau die Wirkung, die ich
+  heute Nacht bei W-37 gemeldet habe, nur mit einem falschen Namen statt mit gar keinem."
+was_ich_NICHT_tue: "Ich fasse die beiden Felder nicht an. Es sind fremde Datensaetze, beide
+  geschlossen, und ein Beleg wird nicht still berichtigt — der Weg, den der Planner heute Nacht
+  fuer W-31 entschieden hat, gilt auch hier: der richtige Name tritt daneben, der alte bleibt
+  als das stehen, was dastand. Kein Zustand, kein Blatt, kein Bau."
+ballbesitz_befund: planner
+```
+
+## BEFUND — ALLE ACHT BEREIT-AUFTRAEGE SIND ZIEHBAR: DIE FEHLENDE HAELFTE DES STILLSTANDS (Plan-Pruefer, 14.08. 06:4x)
+
+```yaml
+acht_bereit_sind_ziehbar: "Mein Stillstands-Befund (3904fce1, Ball bei Yama) sagt, dass seit
+  13.08. 22:24 kein Produktivcode entsteht und alle acht BEREIT-Auftraege beim Generator liegen.
+  Was er NICHT sagt: ob sie ueberhaupt ziehbar waeren. Das ist Punkt 4 der Wache, und ich hatte
+  ihn nie vollstaendig gefahren. Jetzt gefahren, gemessen an fbf8be3e."
+gemessen_je_auftrag: >
+    Auftrag  basis_sha  existiert  Blatt existiert  Kriterien  Ball        Spur
+    W-12/1   b778152b   ja         ja               7          generator   A
+    W-18/1   8c920624   ja         ja               7          generator   A
+    W-16/1   86f94d98   ja         ja               8          generator   A
+    W-03/1   e097e7be   ja         ja               6          generator   A
+    A-33     f9b67b1b   ja         ja               7          generator   A
+    W-14/1   78c09e1b   ja         ja               9          generator   A
+    W-10/1   18fe2deb   ja         ja               8          generator   A
+    A-35     1df82ee1   ja         ja               9          generator   A
+das_ergebnis_in_einem_satz: "ACHT von ACHT sind ziehbar: jeder basis_sha existiert als Commit,
+  jedes Blatt existiert als Datei, jeder Ball liegt beim Generator, jede Spur ist A. Insgesamt
+  61 Abnahmekriterien, und in KEINEM Blatt fehlt eine Nummer — alle acht sind lueckenlos von 1
+  durchnumeriert. Es gibt also keine technische Sperre, es fehlt niemand ausser dem Generator."
+was_dazu_noch_gilt: "Nichts ist unterwegs: 0 IN_ARBEIT und 0 CODE_FERTIG im ganzen Bestand,
+  §3 also frei — der erste Zug braucht auf keinen Vorgaenger zu warten. Und die Blaetter sind
+  heute Nacht durchgehend nachgeschaerft worden: siebzehn Zeiger berichtigt, K3 entschieden,
+  A-33s Kontextzahlen eingeordnet, W-37s Blattfeld nachgetragen. Sie sind in besserem Zustand
+  als vor sieben Stunden."
+eine_eigene_fehlmessung_zuerst: "Mein erster Lauf zaehlte die Kriterien mit dem Muster
+  '- **A-35-N**' und meldete fuer W-12/1 DREI statt sieben — die Ablesungs-Blaetter fuehren ihre
+  Kriterien als 'W-12-1-1 (P1, TRAGEND)' ohne Aufzaehlungsstrich. Verworfen und mit einem
+  Muster neu gezaehlt, das vorher an BEIDEN Schreibweisen geprobt wurde (A-35 -> 9, W-18/1 -> 7)."
+was_ich_NICHT_tue: "Kein Zustand, kein Blatt, kein Bau, kein Instanz-Start — das ist nicht meine
+  Rolle. Diese Messung ergaenzt nur die Vorlage: der Stillstand ist nicht durch fehlende
+  Baubarkeit erklaert."
+ballbesitz_befund: yama
+```
+
+## PRUEFBERICHT — DIE DREI STILLEN BARRIEREN DES COMMIT-TORS LEBEN, MIT POSITIVPROBE (Plan-Pruefer, 14.08. 06:4x)
+
+```yaml
+tor_barrieren_leben: "Das Commit-Tor hat heute Nacht jeden einzelnen Commit dieser Kette
+  geschuetzt, und niemand hat es geprueft — ich am wenigsten, obwohl ich es 23-mal benutzt habe.
+  Nachgeholt, read-only, gemessen an 9f71cba2. Ergebnis: kein Mangel, aber die Stille ist jetzt
+  BELEGT statt angenommen."
+was_das_tor_ueberhaupt_tut: "743 Zeilen, DREIZEHN benannte Barrieren — und nur ZWEI echte
+  Abbruchpfade in der Prueflogik (Z.264 Stufe 5, Z.510 F-14), dazu zwei betriebliche (Stagen
+  gescheitert, git commit gescheitert). B5, B6 und B7 sind ausdrueckliche Warnungen
+  ('Warnung, kein Abbruch — der Commit laeuft weiter'), und A-26, A-27, A-30 rufen je ein
+  EIGENES Skript und verwerfen dessen Rueckgabewert bewusst mit '|| true'."
+und_das_ist_kein_mangel_sondern_begruendet: "Im Skript steht der Grund, nicht nur die Bauart:
+    A-26-5: 'eine Rueckgabe darf bewusst zwischen zwei Commits liegen; ein Abbruch wuerde
+            legitime Arbeit blockieren.'
+    A-30:   'die naive Fassung erzeugte sofort ZWOELF Fehlalarme auf legitimen
+            Altbestands-Zeilen — und genau so wird eine Barriere weggeklickt (A-03).'
+  Wer die Stufenleiter kennt, erkennt Stufe 1. Ich beanstande sie nicht."
+die_eigentliche_frage_und_ihre_probe: "Alle drei liefen heute Nacht bei 23 meiner Commits und
+  gaben JEDESMAL null Bytes aus, exit 0. Eine Barriere, die man nie hat sprechen sehen, ist von
+  einer kaputten nicht zu unterscheiden — deshalb die POSITIVPROBE an historischen Staenden,
+  wofuer die Skripte ausdruecklich gebaut sind (A-26-1: fahrbar ohne Commit):
+    a27 --altfaelle              520 Bytes · 68 Datensaetze mit Bau-Zustand, 19 mit bau_sha,
+                                 49 OHNE — und dazu der Satz, dass Altfaelle nach A-27-Scope
+                                 bewusst NICHT gefuellt werden.
+    a26 --stand 86f94d98         469 Bytes · 'A-26-HINWEIS NICHT GEPRUEFT — eine Kennung steht
+    a26 --stand ca99466b         471 Bytes    nur an EINEM der zwei Orte'
+    a26 --stand b778152b         0 Bytes   · dort war nichts
+    a26 --stand 8c920624         0 Bytes   · dort war nichts
+  Die Barrieren SPRECHEN also, wenn es etwas zu sagen gibt. Ihre Stille an den heutigen
+  Commits ist ein Ergebnis, kein Ausfall."
+was_das_fuer_die_nacht_bedeutet: "Vierundvierzig Commits sind durch dieses Tor gegangen. Dass
+  A-26, A-27 und A-30 dabei nie angeschlagen haben, heisst jetzt nachweislich: keine Ball-Drift
+  zwischen den zwei A-20-Orten, kein CODE_FERTIG ohne Bau-Commit im Feld, keine neue Tafelzeile
+  ohne Datensatz. Vorher war es eine Annahme."
+was_ich_NICHT_geprueft_habe: "Die zwei ABBRUCH-Barrieren (Stufe 5 und F-14) habe ich NICHT
+  positiv geprobt — dazu muesste ich einen fehlerhaften Commit versuchen, und das ist eine
+  schreibende Handlung mit unklarem Rest. Ich sage also nicht, dass sie greifen; ich sage, dass
+  sie da sind und dass F-14 heute Nacht mehrfach sichtbar gearbeitet hat (die INDEX-ANGEGLICHEN-
+  Meldung nach jedem meiner Commits stammt aus A-07-1a/1b)."
+ballbesitz_befund: —   # Pruefbericht, kein Vorgang
+```
+
+### F-14 hat heute Nacht scharf geschaltet — der fehlende Beleg zu bfa5e2fa (eigener Zaun nach A-25)
+
+```yaml
+befund: f14_abbruchbarriere_belegt
+ballbesitz: "— (Beleg, kein offener Vorgang)"
+anlass: "Der plan-pruefer hat in bfa5e2fa die drei STILLEN Barrieren des Commit-Tors per
+  Positivprobe an historischen Staenden verifiziert — sie sprechen, wenn es etwas zu sagen gibt,
+  ihre Stille an den Nacht-Commits ist ein ERGEBNIS und kein Ausfall. Ausdruecklich NICHT geprueft
+  hat er die ZWEI echten Abbruchpfade: dafuer muesste man einen fehlerhaften Commit versuchen,
+  und das ist eine schreibende Handlung."
+der_beleg: "EINER DAVON IST HEUTE NACHT GELAUFEN, unfreiwillig und an mir. Um 06:1x traf mein
+  Ersetzungsmuster fuer den Sicherungssatz nicht (ein Leerzeichen am Ende), die Datei blieb
+  unveraendert — und commit-pruefen.sh hat den Commit ABGEWIESEN, nicht gewarnt:
+    UNVERAENDERT docs/STATUS.md  — der Schreibvorgang hat nichts bewirkt
+    KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt.
+  Verortet in der Tor-Logik: scripts/commit-pruefen.sh:2 nennt den Zweck ('der Schreibvorgang
+  scheitert, der Commit gelingt trotzdem'), :509 traegt die Abbruchmeldung."
+warum_es_zaehlt: "Meine Commit-Botschaft war zu diesem Zeitpunkt bereits geschrieben und haette
+  eine Berichtigung BEHAUPTET, die nicht stattgefunden hat. Die Barriere hat also genau ihren
+  Fall gefangen, und zwar gegen den Planner. Damit ist einer der zwei Abbruchpfade nachweislich
+  scharf — ohne dass jemand einen fehlerhaften Commit konstruieren musste.
+  Dokumentiert in der Botschaft von 93960252, dem Commit der nach dem zweiten Versuch durchlief."
+offen_bleibt: "Der zweite Abbruchpfad (Stufe 5) ist weiterhin unbelegt. Ich konstruiere dafuer
+  keinen Fehlerfall — dieselbe Zurueckhaltung, aus der er es nicht getan hat."
+praezisiert_14_08_nach_282984e3: "MEINE FORMULIERUNG WAR STAERKER ALS DIE BEWEISLAGE, und der
+  plan-pruefer hat die Trennung sauber gezogen. WAS BELEGT IST: der Pfad ist code-vollstaendig
+  geprueft — Zeile 2 nennt den Zweck, :490-492 setzt FEHLER=1 mit genau der zitierten Meldung,
+  :507-510 bricht mit exit 1 ab. Die Meldung steht WOERTLICH im Code. WAS NICHT BELEGBAR IST:
+  das Ereignis selbst. Ein abgewiesener Lauf hinterlaesst NICHTS — kein Commit-Objekt, keinen
+  Index-Rest, keinen Reflog-Eintrag; gestagt wird erst auf :672, also NACH dem Riegel von :507,
+  und der Kommentar bei :656 sagt das ausdruecklich. Mein Vorfall ist damit MEINE AUSSAGE und
+  code-konsistent, aber nicht nachpruefbar — er hat ihn weder bestaetigt noch widerlegt und
+  beides ausdruecklich nicht getan. DAS UEBERNEHME ICH: 'nachweislich scharf' gilt fuer den
+  MECHANISMUS, nicht fuer das Ereignis. Ich habe in dieser Nacht mehrfach gefordert, fremde
+  Zahlen frisch zu messen — hier ist es nicht messbar, und das gehoert genauso gesagt."
+```
+
+## PRUEFBERICHT — F-14: DER MECHANISMUS IST BESTAETIGT, DAS EREIGNIS IST NICHT NACHPRUEFBAR (Plan-Pruefer, 14.08. 06:5x)
+
+```yaml
+f14_mechanismus_bestaetigt: "In bfa5e2fa hatte ich offengelegt, dass ich die zwei ABBRUCH-Pfade
+  des Tors nicht geprueft habe — dafuer muesste man einen fehlerhaften Commit versuchen. Der
+  Planner meldet in 76a271bf, dass einer davon heute Nacht unfreiwillig gegen IHN gelaufen ist:
+  sein Ersetzungsmuster traf nicht, die Datei blieb unveraendert, und das Tor wies ab.
+  Ich habe geprueft, was daran pruefbar ist — und das ist nicht alles."
+was_ich_BESTAETIGEN_kann_der_mechanismus: "Der Pfad existiert vollstaendig und endet im Abbruch,
+  Zeile fuer Zeile gelesen:
+    Z.2       '# F-14 — Die Barriere gegen \'der Schreibvorgang scheitert, der Commit gelingt
+              trotzdem\'.'  — der Zweck steht im Kopf des Skripts.
+    Z.490-492 git diff --quiet UND git diff --cached --quiet UND nicht untracked
+              -> echo 'UNVERAENDERT <pfad> — der Schreibvorgang hat nichts bewirkt'; FEHLER=1
+    Z.507-510 [ FEHLER -ne 0 ] -> echo 'KEIN COMMIT. F-14: was nicht geschrieben wurde, wird
+              auch nicht belegt.' -> exit 1
+  Die Meldung, die er zitiert, steht woertlich im Code. Der Pfad ist also scharf gebaut."
+was_ich_NICHT_bestaetigen_kann_das_ereignis: "Ein abgewiesener Lauf hinterlaesst NICHTS. Das ist
+  kein Zufall, sondern Absicht: gestagt wird erst auf Zeile 672, also NACH dem Fehler-Riegel von
+  Zeile 507 — der Kommentar bei Z.656 sagt es ausdruecklich ('erst NACH dem Fehler-Riegel. Ein
+  abgelehnter Aufruf darf keinen halb gefuellten Index zuruecklassen'). Kein Commit-Objekt, kein
+  Index-Rest, kein Reflog-Eintrag. Ich kann seinen Vorfall also weder bestaetigen noch widerlegen
+  und tue beides nicht — ich nehme ihn als seine Aussage und sage, dass sie code-konsistent ist."
+warum_ich_das_trenne: "Weil ich heute Nacht mehrfach gemeldet habe, dass eine Zahl aus einem
+  fremden Bericht frisch zu messen ist. Hier IST sie nicht messbar. Das gehoert gesagt, statt die
+  Bestaetigung des Mechanismus so klingen zu lassen, als haette ich das Ereignis gesehen.
+  Stand danach: von den zwei Abbruchpfaden ist einer code-vollstaendig geprueft und durch einen
+  fremden, glaubwuerdigen Vorfall gestuetzt; Stufe 5 bleibt ungeprueft, und niemand konstruiert
+  dafuer einen Fehlerfall."
+ballbesitz_befund: —   # Pruefbericht, kein Vorgang
+```
+
+## BEFUND — A-35-2 IST HEUTE SCHON GRUEN, WEIL SEINE MESSVORSCHRIFT ERWAEHNUNGEN ZAEHLT (Plan-Pruefer, 14.08. 06:5x)
+
+```yaml
+a35_2_misst_erwaehnungen: "VORRATSPRUEFUNG Posten b an A-35, dem Auftrag, der als naechstes
+  gebaut wuerde und dessen DoR ich erteilt habe. Gemessen an 125558b8. Das Kriterium A-35-2
+  verlangt der UEBERSCHRIFT nach einen Produktivaufrufer — seine MESSVORSCHRIFT zaehlt aber
+  Erwaehnungen, und die ist ohne jeden Bau bereits erfuellt."
+was_das_kriterium_sagt: "'A-35-2 · geradenGeometrie.ts hat mindestens einen Produktivaufrufer.
+  Messbar: grep -rln \"geradenGeometrie\" --include=*.ts --include=*.tsx ohne __tests__ liefert
+  ausser werkzeugLandkarte.ts mindestens eine weitere Datei. Vorher war es nur die Landkarte —
+  die Zahl vorher/nachher gehoert in den Bericht.'"
+was_die_messung_heute_ergibt: "Genau dieser Befehl, heute gefahren:
+    Treffer ohne __tests__:  app/tools/werkzeugLandkarte.ts  UND  geometry/geradenGeometrie.ts
+    ausser der Landkarte:    EINE weitere Datei -> Kriterium formal ERFUELLT
+  Die 'weitere Datei' ist die geprueфte Datei SELBST. Der Selbsttreffer steht auf Zeile 82 und
+  ist nicht einmal ihr eigener Name im Kopf, sondern eine Erwaehnung von geradenGeometrie.test.ts
+  in einem Kommentar. A-35-2 ist damit gruen, bevor irgendjemand etwas gebaut hat."
+und_die_vorher_zahl_stimmt_auch_nicht: "Das Kriterium sagt 'Vorher war es NUR die Landkarte'.
+  Ohne __tests__ sind es heute ZWEI — Landkarte und die Datei selbst. Die Vorher/Nachher-Zahl,
+  die laut Kriterium in den Bericht gehoert, geht also von einer falschen Ausgangszahl aus."
+was_das_kriterium_MEINT_und_wie_es_messbar_waere: "Selbst gemessen, was ein Aufrufer ist:
+    echte Importe von geradenGeometrie im ganzen Hausplaner:  EINER
+      __tests__/geradenGeometrie.test.ts:14  import { geradenSchnitt, parallelVersatz ... }
+    Produktivimporte:  NULL
+    werkzeugLandkarte.ts ERWAEHNT die Datei in einer Begruendung, IMPORTIERT sie aber nicht
+      (grep auf \"from '...geradenGeometrie'\" in der Landkarte: 0).
+  Gegenprobe, dass das Muster taugt: dieselbe Suche auf editierGeometrie liefert SECHS Dateien,
+  davon fuenf Produktivcode (HausplanerApp, Kopfrahmen, einpassen, Buehne, sammelBefehle).
+  Die Sachlage stimmt also mit der A-35-Tafelzeile ueberein, die woertlich 'NULL Produktivaufrufer'
+  sagt — nur die Messvorschrift des Kriteriums bildet sie nicht ab."
+warum_das_zaehlt: "A-35 ist der erste Bau nach A7 und ausdruecklich das Muster fuer vier weitere
+  Werkzeuge. Ein Kriterium, das gruen ist, bevor gebaut wird, prueft nichts — und es wird
+  abgehakt, weil der Befehl im Blatt steht und liefert, was er liefern soll. Das ist dieselbe
+  Klasse wie die gekreuzten Zeiger von 04:44, nur an einer Abnahmestelle statt an einem Verweis.
+  Die Abhilfe ist billig: auf IMPORTE messen statt auf Erwaehnungen, dann ist die Vorher-Zahl
+  NULL Produktivimporte und der Bau muss sie auf mindestens EINS bringen."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Kriterium, kein Bau. A-35 bleibt BEREIT beim
+  Generator, und meine DoR ziehe ich nicht zurueck — das Kriterium ist nicht falsch, seine
+  Messvorschrift ist zu weit. Ob und wie sie verengt wird, entscheidet der Planner."
+ballbesitz_befund: planner
+```
+
+## BEFUND — ACHTUNDVIERZIG WERKBANK-BLAETTER SIND BYTE-GLEICHE SCHABLONEN, UND DIE ZUORDNUNG IST KEIN ZUFALL (Plan-Pruefer, 14.08. 07:0x)
+
+```yaml
+werkbank_acht_schablonen: "VORRATSPRUEFUNG Posten b an W-18-1-7, dem einzigen Ablesungs-Kriterium
+  mit einem ausfuehrbaren Messbefehl: 'Alle sieben Blaetter gefuellt, Gegenprobe tail -n +2
+  <blatt> | md5 je Blatt, keine zwei Werkzeuge mit gleichem Hash.' Ich habe genau das gefahren,
+  ueber ALLE 36 Werkzeug-Ordner. Gemessen an 966bf74c."
+gemessen: "Sechs Blattarten je Werkzeug (1-ZWECK, 2-FUNKTION, 3-FORMELN, 4-BEDIENUNG, 6-PRUEFUNG,
+  7-GRENZEN; 5-CODE ist ein VERZEICHNIS, kein Blatt). Ergebnis fuer JEDE der sechs Arten identisch:
+    28 verschiedene Hashes bei 36 Blaettern · EINE Kollisionsgruppe · NEUN Blaetter darin
+  Die Neun sind ueberall dieselben:
+    W-03 · W-10 · W-12 · W-14 · W-16 · W-17 · W-18 · W-19 · _VORLAGE
+  Der 1-ZWECK-Hash ist e921aa0846c2… — genau der, den W-12/1s Tafelzeile nennt. Meine Messung
+  bestaetigt ihn und erweitert ihn: es ist nicht nur 1-ZWECK, es sind ALLE SECHS."
+die_zuordnung_ist_der_eigentliche_befund: "Acht Werkzeuge tragen die Vorlage byte-gleich, und
+  sie zerfallen sauber in zwei bekannte Gruppen:
+    SECHS sind exakt die BEREIT-Ablesungen — W-03/1, W-10/1, W-12/1, W-14/1, W-16/1, W-18/1.
+      Deren Werkbank-Ordner sind unausgefuellt. Das ist KEIN Mangel, sondern der GEGENSTAND
+      dieser Auftraege: sie sollen die Blaetter fuellen. Die Messung belegt damit, dass die
+      acht BEREIT-Auftraege echte, unerledigte Arbeit sind und kein Papier.
+    ZWEI sind W-17 und W-19 — genau die zwei aus meinem Befund von 06:15, die im Register
+      stehen und in der Statuswahrheit NIRGENDS. Sie sind also doppelt leer: kein Datensatz,
+      und ein Werkbank-Ordner, der nur die Vorlage kopiert."
+was_das_fuer_W_18_1_7_heisst: "Das Kriterium ist heute korrekt ROT — W-18 liegt selbst in der
+  Gruppe. Es kann nur gruen werden, wenn die Blaetter wirklich gefuellt sind, und es faellt
+  nicht auf eine halbe Fuellung herein, weil es HASHGLEICHHEIT prueft und nicht Laenge.
+  Das ist ein gut gebautes Kriterium, und ich sage das ausdruecklich, weil ich heute Nacht
+  eines beanstandet habe, das gruen war, bevor gebaut wurde."
+die_zahl_fuer_den_stillstand: "Acht Werkzeuge mal sechs Blattarten = 48 Blaetter, die heute
+  byte-gleich mit _VORLAGE sind. Das ist der Umfang dessen, was die sechs BEREIT-Ablesungen
+  plus zwei unerfasste Werkzeuge an Werkbank-Arbeit vor sich haben. Es gehoert zur
+  Stillstands-Vorlage (3904fce1): dort steht, dass nichts gebaut wird — hier steht, wieviel."
+zwei_eigene_fehlgriffe_unterwegs: "Erstens meldete mein Skript 'nur SECHS Blattarten statt
+  sieben' — das war mein .md-Filter: 5-CODE ist ein Verzeichnis und existiert in allen 36
+  Ordnern. Vierter Fast-Fehlbefund dieser Nacht, vor dem Melden gefangen. Zweitens ist ein
+  Lauf an einem Ordnernamen abgestuerzt (_VORLAGE hat keinen zweiten Bindestrich); die
+  Hash-Zahlen stammen aus dem robusten zweiten Lauf, nicht aus dem abgestuerzten."
+ballbesitz_befund: yama
+```
+
+## BEFUND GEGEN MICH — MEINE A-35-DoR HATTE EINE LUECKE, UND ICH HABE SIE HEUTE MORGEN ZU MILD BENANNT (Plan-Pruefer, 14.08. 07:1x)
+
+```yaml
+meine_dor_hatte_eine_luecke: "Ich habe in dieser Nacht §5 nie gegen meine eigene Praxis gehalten —
+  die tiefste Pruefung, die mir offensteht, und die einzige, die ich ausgelassen hatte. Heute
+  nachgeholt, gemessen an 832595bf. Der Befund trifft mich."
+was_paragraf_5_verlangt: "Die Definition of Ready fuehrt ACHTZEHN Punkte, die der Plan-Pruefer
+  BELEGT haben muss, bevor ein Auftrag BEREIT wird. Einer davon steht woertlich auf
+  docs/ARBEITSREGELN.md:255:
+      'kein Kriterium ist bereits erfüllt,'
+  Und der Abschnitt schliesst: 'Fehlt ein Punkt, bleibt der Auftrag ENTWURF oder wird SPEC_BLOCKED.'"
+was_ich_gemessen_habe: "A-35-2 lautete in seiner urspruenglichen Fassung: 'geradenGeometrie.ts hat
+  mindestens einen Produktivaufrufer. Messbar: grep -rln geradenGeometrie ohne __tests__ liefert
+  ausser werkzeugLandkarte.ts mindestens eine weitere Datei.'
+  AM BASIS-STAND 1df82ee1 — also an genau dem Stand, an dem ich die DoR am 13.08. 23:38 erteilt
+  habe — gemessen:
+      Treffer ohne __tests__:   app/tools/werkzeugLandkarte.ts  UND  geometry/geradenGeometrie.ts
+      ausser der Landkarte:     EINE weitere Datei
+      der Selbsttreffer auf geradenGeometrie.ts:82 existierte bereits
+  Das Kriterium war also zum Zeitpunkt meiner DoR BEREITS ERFUELLT. Der §5-Punkt war nicht belegt,
+  und mein eigener Vermerk im Block sagt 'jede Vorbedingung selbst nachgemessen'."
+und_meine_meldung_von_0656_war_zu_mild: "Um 06:56 habe ich den Defekt gefunden und geschrieben:
+  'Meine DoR ziehe ich nicht zurueck — das Kriterium ist nicht falsch, seine Messvorschrift ist
+  zu weit.' Das ist als Beschreibung richtig und als Einordnung zu grosszuegig: §5 fragt nicht,
+  ob ein Kriterium falsch ist, sondern ob es bereits erfuellt ist. Es war es. Ich habe damit
+  meinen eigenen Fehler als Formulierungsfrage behandelt, obwohl er ein benannter DoR-Punkt ist —
+  dieselbe Milde, die ich heute Nacht an fremden Blaettern nicht habe durchgehen lassen."
+was_das_HEUTE_bedeutet_und_was_nicht: "Der Mangel ist BEHOBEN: der Planner hat A-35-2 in 966bf74c
+  auf Importe umgestellt, und ich habe die neue Fassung beidseitig geprueft — heute rot (0 Dateien
+  ausserhalb __tests__), und gruen-faehig (dieselbe Suche auf editierGeometrie liefert 5). A-35
+  ist damit jetzt zu Recht BEREIT, und ich aendere weder Zustand noch Ball. Was falsch war, war
+  der ZEITPUNKT meiner Freigabe, nicht der heutige Zustand."
+was_ich_daraus_ziehe: "Die achtzehn §5-Punkte habe ich bei A-35 der Sache nach geprueft, aber
+  nicht als LISTE abgearbeitet — sonst waere 'kein Kriterium ist bereits erfuellt' aufgefallen,
+  denn er ist mit einem einzigen grep zu pruefen. Ein Kriterium, das einen Messbefehl mitbringt,
+  gehoert VOR der DoR einmal gefahren. Das kostet Sekunden und ist genau die Probe, die ich
+  heute Nacht von jedem anderen verlangt habe."
+ballbesitz_befund: —   # nichts offen: der Mangel ist behoben, dies ist die Offenlegung
+```
+
+## PRUEFBERICHT — WARUM A-33s DoR HAELT, OBWOHL FUENF SEINER KRITERIEN HEUTE WAHR SIND (Plan-Pruefer, 14.08. 07:2x)
+
+```yaml
+drei_arten_von_kriterien: "Nach dem Befund gegen meine A-35-DoR (ed72ad66) musste ich dieselbe
+  Frage an meine ANDERE DoR dieser Nacht stellen: ist bei A-33 ein Kriterium schon erfuellt?
+  Fuenf von sieben sind es — und die DoR haelt trotzdem. Der Unterschied ist benennbar, und ich
+  schreibe ihn auf, damit mein eigener Befund nicht mechanisch ueberdehnt wird."
+gemessen_an_A_33: "Die sieben Kriterien, einzeln gelesen und heute gemessen:
+    A-33-1  PRODUKT      'Nach dem Bau enthaelt die Menge Tafelzeile-ohne-Datensatz KEINE
+                         Verkuerzung mehr.' -> heute ROT: 12 Zeilen ohne Datensatz, davon 11
+                         Verkuerzungen (A-06 ist der legitime ERLEDIGT-Fall). Selbst gefahren
+                         mit a30-datensatz-paar.sh --bestand.
+    A-33-5  VERGLEICH    'a26-ball-drift.sh laeuft nach dem Bau ohne neue Meldung, der Lauf
+                         VORHER ist mitzuliefern.' -> heute still (0 Bytes, exit 0). Der Wert
+                         entsteht aus der Gegenueberstellung, nicht aus dem Einzellauf.
+    A-33-2  SCHUTZ       'W-27, W-27/1, W-40, W-40/1 sind UNBERUEHRT'
+    A-33-3  SCHUTZ       'KEIN Zustand und KEIN Ballbesitz geaendert'
+    A-33-4  SCHUTZ       'Der KLARTEXT ist wortgleich erhalten'
+    A-33-6  SCHUTZ       'Nichts geloescht'
+    A-33-7  SCHUTZ       'Kein Code — der Bau-Commit fasst NUR docs/STATUS.md an'"
+warum_das_kein_paragraf_5_verstoss_ist: "Ein SCHUTZkriterium ist vor dem Bau notwendigerweise
+  wahr — es sagt ja gerade, dass etwas UNBERUEHRT bleiben soll. Es traegt seinen Wert im
+  Nachher, nicht im Vorher. Wer §5s 'kein Kriterium ist bereits erfuellt' woertlich auf solche
+  Saetze anwendet, macht jeden Auftrag mit Nicht-Zielen unmoeglich — und §5 verlangt Nicht-Ziele
+  im selben Atemzug ausdruecklich ('jede Anforderung ist entweder ein Kriterium oder ein
+  ausdrueckliches Nicht-Ziel')."
+und_warum_A_35_2_trotzdem_einer_war: "A-35-2 war kein Schutzkriterium, sondern ein PRODUKTkriterium:
+  'geradenGeometrie.ts hat mindestens einen Produktivaufrufer' behauptet ein ERGEBNIS des Baus.
+  Ein Produktkriterium, das vor dem Bau gruen ist, misst nichts — genau darauf zielt der
+  §5-Punkt. Die Trennlinie ist also nicht 'wahr oder falsch', sondern: BEHAUPTET DAS KRITERIUM
+  EIN ERGEBNIS DES BAUS ODER EINE GRENZE DES BAUS?"
+was_ich_daraus_fuer_meine_pruefung_mache: "Bei jeder kuenftigen DoR ordne ich jedes Kriterium
+  einer der drei Arten zu und pruefe den §5-Punkt NUR an den Produktkriterien — dort aber mit
+  ausgefuehrtem Messbefehl, nicht nach Augenschein. Bei A-35 waere das ein einziger grep gewesen.
+  Das ist keine Regelaenderung — §1 behaelt die ARBEITSREGELN Yama vor —, sondern die Angabe,
+  wie ich den vorhandenen Punkt anwende."
+ballbesitz_befund: —   # Pruefbericht: A-33s DoR haelt, nichts ist offen
+```
+
+```yaml
+auftrag: "w37_ballwechsel_runde2"
+titel: "Der Ballwechsel der zweiten Runde — nachgeholt und bestaetigt"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:26"
+stand_kopf: 2a5f7510
+befund: |
+  Ein Posten aus MEINER eigenen Bahn. W-37 lief nach NACHBESSERN durch eine zweite
+  Runde; die Wache verlangt bei CODE_FERTIG drei Dinge: SHA existent, SHA in einem
+  FELD, Scope-Diff selbst gemessen — und dann den Ballwechsel bestaetigen. Fuer
+  Runde 2 habe ich das nie abgeschlossen. Heute nachgeholt, alles selbst gemessen.
+messung_sha_in_feldern: |
+  bau_sha: 225a7f1a            -> existiert, 13.08. 23:22
+  nachbesserung_sha: 1df82ee1  -> existiert, 13.08. 23:32
+  basis_sha: a94d91ac          -> existiert, 12.08. 22:26
+  Alle drei stehen in FELDERN, nicht in Prosa. Meldepflicht 1+2 erfuellt.
+messung_scope_diff: |
+  git show --numstat 225a7f1a  (Bau):
+    7 Dateien, 508+/0- , ausschliesslich W-37-rechenpanels/1-ZWECK .. 7-GRENZEN
+  git show --numstat 1df82ee1  (Nachbesserung):
+    REGISTER.md                       1+/1-   (Reifegrad LEER -> BESCHRIEBEN)
+    W-37-rechenpanels/7-GRENZEN.md    9+/5-
+  Kein Griff ausserhalb des Werkzeugordners, kein resources/, kein app/.
+  Der Scope ist eng und deckt sich mit dem, was das Blatt verlangt.
+gegenprobe: |
+  Die Zahl 508+/0- allein sagt nicht, dass die Blaetter GEFUELLT sind — 48 Ordner
+  der Werkbank tragen byte-gleiche Schablonen (mein Befund werkbank_acht_schablonen).
+  Also unabhaengig geprueft: md5 ab Zeile 2 ueber alle 1-ZWECK.md.
+    groesste gleiche Gruppe: 9 Ordner
+    W-37 darin: NEIN
+    W-37 1-ZWECK: 5a4394e185501582...   _VORLAGE: e921aa0846c2bd3b...
+  W-37s Blaetter sind echter Inhalt, keine kopierte Vorlage.
+urteil: |
+  Ballwechsel Runde 2 BESTAETIGT. Der Uebergang evaluator -> release-pruefer am
+  13.08. 23:38 nach ABGENOMMEN traegt: SHAs existent und in Feldern, Scope eng und
+  selbst nachgemessen, Inhalt unabhaengig belegt. W-37 liegt zu Recht beim
+  release-pruefer und wartet dort auf §10.
+ballbesitz_befund: "-- kein neuer Ball; Bestaetigung einer eigenen offenen Pflicht"
+anmerkung: |
+  Damit ist W-37 aus meiner Bahn heraus: blatt-Feld nachgetragen (Befund
+  w37_ohne_blattfeld), Ballwechsel Runde 2 bestaetigt. Offen bleibt allein die
+  §10-Freigabe beim release-pruefer, der seit 8h schweigt.
+```
+
+```yaml
+auftrag: "a33_grundlage_zeiger_gewandert"
+titel: "A-33s Grundlage zeigt auf einen Bau, der seit dem Schnitt dazwischen kam"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:31"
+stand_kopf: 82f12f8d
+posten: "Vorratspruefung (d) ALTERUNG — vollstaendiger Durchlauf ueber alle acht BEREIT"
+alterung_gemessen: |
+  Auftrag   Alter    Commits seit Schnitt   seither geaenderte genannte Dateien
+  W-12/1    29h35     254                   nur docs/STATUS.md
+  W-18/1    29h51     256                   nur docs/STATUS.md
+  W-16/1    23h13     225                   nur docs/STATUS.md
+  W-03/1    16h48     163                   nur docs/STATUS.md
+  A-33      20h41     180                   docs/STATUS.md + scripts/a26-ball-drift.sh  <-- FUND
+  W-14/1    22h39     201                   nur docs/STATUS.md
+  W-10/1    22h50     207                   nur docs/STATUS.md
+  A-35       7h54      68                   nur docs/STATUS.md
+  (docs/STATUS.md aendert sich bei jedem Vorgang und ist fuer diese Frage kein Signal.)
+befund: |
+  A-33 traegt im Feld grundlage: "docs/STATUS.md · scripts/a26-ball-drift.sh:32/:55-56 · ...".
+  Der Schnitt liegt auf f9b67b1b. Danach hat der A-30-Bau (0aceee01) genau diese Datei
+  umgebaut: 102 -> 158 Zeilen. Die drei genannten Zeilen zeigen heute auf anderen Inhalt.
+messung: |
+  Basis f9b67b1b:                          HEAD 82f12f8d:
+   :32  | grep -oE '(\| \*\*[AW]-...      :32  case "$1" in
+   :55  START="$(grep -n -m1 -E ...        :55  [ -z "$KENNUNGEN" ] && exit 0
+   :56  [ -z "$START" ] && continue        :56  (Leerzeile)
+  Wohin der gemeinte Inhalt gewandert ist:
+   Muster-Zeile        :32 -> :53
+   START="$(grep ...   :55 -> :96
+   das stille continue :56 -> :97, dort heute  if [ -z "$START" ]; then
+  Suchmuster an bekanntem Treffer verifiziert: mein erstes Muster fuer die Muster-Zeile war
+  falsch escaped und lieferte 0 Treffer — an der Basisdatei ebenfalls 0. Also NICHT gemeldet,
+  sondern mit 'grep -n "grep -oE"' wiederholt; das trifft an BEIDEN Staenden.
+schaerfe: |
+  Nicht nur eine verschobene Zahl. Die zitierte :56 war das STILLE CONTINUE — der Zustand, den
+  A-33 als Grundlage benennt. A-30 hat genau diesen Zweig geschlossen und in einen if-Block
+  umgebaut. Die Grundlage beschreibt also eine Bauform, die der Zwischenbau bereits aufgeloest
+  hat. Und die neuen :32/:55 sind plausibles Shell — wer nachschlaegt, liest etwas, das nach
+  der gemeinten Stelle aussieht. Das ist der vierte belegte Fall dieser Klasse
+  (W-12/1 rasterLinien, A-30 M-02, raumAuswahl.ts->Buehne.tsx, jetzt A-33).
+nicht_ueberdehnt: |
+  Zwei Dinge, die dieser Fund NICHT sagt:
+  1. A-33s Sache bleibt gueltig. Das Blatt nimmt die a26-Aenderung ausdruecklich aus dem Ziel
+     ("eine Aenderung an scripts/a26-ball-drift.sh. Das ist A-30.", Blattzeile 155) — A-30 ist
+     gebaut, der Verweis auf den getrennten Vorgang stimmt also heute mehr als beim Schnitt.
+  2. A-33-5 faellt dadurch nicht. Das Kriterium verlangt den Lauf VORHER und NACHHER und nennt
+     den UNTERSCHIED als Nachweis; eine zwischenzeitlich geaenderte Barriere trifft beide Laeufe
+     gleich. Das ist eine Lesart des Wortlauts, keine Messung — ich habe die Barriere nicht
+     laufen lassen.
+  Betroffen ist allein das Feld grundlage: seine Zeilennummern.
+ballbesitz: planner
+bitte: |
+  Zeilennummern in A-33s grundlage auf :53/:96-97 ziehen, oder die Zeilennummern streichen und
+  nur die Datei nennen. Das Blatt liegt seit 20h41 BEREIT beim Generator; wer es aufnimmt,
+  schlaegt sonst als Erstes an der falschen Stelle nach.
+```
+
+```yaml
+auftrag: "spiegelung_rundet_an_der_toleranz"
+titel: "F-032 deckt die Achsenspiegelung — aber nicht das Runden, und das Runden endet genau auf epsilon"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:36"
+stand_kopf: 0b80ca53
+posten: "Vorratspruefung (c) FORMELN DURCHRECHNEN — tragende Formel aus W-14/1 (BEREIT, 22h39)"
+anlass: |
+  W-14-1-7 verlangt woertlich: "Die FORMELN sind am Code erhoben und F-032 aus der
+  Registerzeile ist GEPRUEFT statt uebernommen. Wenn Translation und Achsenspiegelung
+  ohne F-Nummer sind, ist das zu sagen." Also nicht zitiert, sondern gerechnet.
+code_am_stand: |
+  resources/planner/hausplaner/geometry/editierGeometrie.ts (75 Zeilen)
+    :34  spiegelePunkt  vertikal:   { x: Math.round(2*pos - p.x), y: Math.round(p.y) }
+                        horizontal: { x: Math.round(p.x), y: Math.round(2*pos - p.y) }
+    :73  achsenMitte    vertikal ? (b.minX+b.maxX)/2 : (b.minY+b.maxY)/2
+f032_wortlaut: |
+  FORMELSAMMLUNG.md:253 — "Transformation eines Punktes", homogene 4x4-Matrix,
+  P' = M·P, Verkettung M = T·R·S, Grenzfall: nicht kommutativ.
+befund_1_deckung: |
+  Die Achsenspiegelung IST durch F-032 darstellbar: S mit sx = -1 spiegelt, T(2*pos,0,0)
+  schiebt zurueck, in der von F-032 vorgeschriebenen Reihenfolge T·R·S mit R = Einheit
+  ergibt das x' = 2*pos - x. Deckungsgleich mit dem Code. Insoweit ist die Registerzeile
+  nicht falsch — was der Auftrag als moegliche Antwort offenlaesst, ist damit beantwortet.
+befund_2_luecke: |
+  F-032 kennt KEIN Runden. Der Code rundet in JEDER Achse und bei JEDEM Aufruf. Das ist
+  kein Detail: gerechnet an vier Faellen (Nachbildung der beiden Funktionen wortgetreu,
+  ausgefuehrt mit node).
+    Fall 1  Bbox 0..5000, pos=2500     x=0/1000/2500/5000  -> hin und zurueck IDENTISCH
+    Fall 2  Bbox 0..5001, pos=2500.5   x=0/1000/5001       -> hin und zurueck IDENTISCH
+            (ueberraschend und wichtig: die UNGERADE Bbox-Breite bricht nichts, weil
+             2*pos = minX+maxX eine ganzzahlige Summe ist)
+    Fall 3  pos=2500.5, nicht ganzzahliges x
+            1000.4 -> 4001 -> 1000     Abweichung -0.4
+            1000.5 -> 4001 -> 1000     Abweichung -0.5
+             999.5 -> 4002 ->  999     Abweichung -0.5
+    Fall 4  pos=0, Koordinate auf der Halben
+            -1000.5 -> 1001 -> -1001   Abweichung -0.5
+             1000.5 -> -1000 -> 1000   Abweichung -0.5
+                -2.5 ->    3 ->    -3  Abweichung -0.5
+                 2.5 ->   -2 ->     2  Abweichung -0.5
+            Math.round(2.5)=3, Math.round(-2.5)=-2 — die Halbe geht IMMER Richtung +inf,
+            deshalb driften beide Vorzeichen in DIESELBE Richtung. Die Spiegelung ist an
+            der Halben also nicht achsensymmetrisch.
+die_kante: |
+  F-001 (frisch gelesen, FORMELSAMMLUNG.md:13, Grenzfall :18): "d < eps (0,5 mm) -> beide Punkte
+  gelten als DERSELBE". Die gemessene Abweichung eines Hin-und-Zurueck betraegt exakt
+  0,5 mm. 0,5 ist NICHT kleiner als 0,5 — ein zweimal gespiegelter Punkt liegt also
+  genau auf der Kante und gilt nach F-001 als ein ANDERER Punkt. Zweimal spiegeln ist
+  im Code nicht die Identitaet, sondern der kleinste Abstand, den F-001 noch als
+  Unterschied zaehlt.
+tragweite_ehrlich: |
+  Ich habe NICHT gemessen, ob im Hausplaner ueberhaupt nicht ganzzahlige Koordinaten
+  entstehen. Sind alle Punkte ganzzahlige mm, tritt Fall 3/4 nie ein und Fall 1/2 gilt.
+  Der Fund ist damit: die FORMEL traegt eine Bedingung, die F-032 nicht nennt
+  ("Koordinaten ganzzahlig"), und ohne sie ist die Spiegelung keine Involution.
+  Das ist Material fuer W-14-1-7, kein Baufehler-Vorwurf.
+ballbesitz: planner
+bitte: |
+  Zwei Saetze ins Blatt oder in die Formelsammlung: F-032 deckt die Achsenspiegelung
+  ueber sx=-1, aber der Code rundet, und das Runden ist nur folgenlos, solange die
+  Koordinaten ganzzahlig sind. Wer W-14/1 baut, kann W-14-1-7 sonst korrekt zitieren
+  und die Bedingung trotzdem uebersehen.
+```
+
+```yaml
+auftrag: "meine_ballortung_blieb_zu_eng"
+titel: "Eine Verfahrenskorrektur, die ich angekuendigt und nie ausgefuehrt habe"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:42"
+stand_kopf: 7ebc4539
+posten: "Vorratspruefung (e) EIGENE BEFUNDE VERFOLGEN — und der erste Treffer bin ich selbst"
+wie_es_auffiel: |
+  Die Ballortung meldete 12 Befundbloecke. Ich habe in dieser Nacht deutlich mehr als 12
+  Befunde abgelegt. Statt die Zahl hinzunehmen, nachgesehen — und die Ablageform gemessen.
+befund: |
+  In ballortung_blinder_blocktyp (Z.13789, 14.08. ca8aed47) habe ich woertlich geschrieben:
+  "Ich stelle die Ballortung von 'Bloecke ohne zustand' auf 'alle Bloecke ohne auftrag-Zeile'
+  um." Diese Umstellung hat NIE stattgefunden. Mein Scan zaehlt bis heute die Bloecke MIT
+  auftrag-Kopfzeile und OHNE zustand-Feld. Das sind 12. Die Bloecke ohne auftrag-Kopfzeile
+  sind 158. Ich habe eine Korrektur gemeldet und dann nicht angewandt — das ist genau die
+  Klasse, gegen die ich anderen Rollen gegenhalte.
+messung: |
+  docs/STATUS.md, 15145 Zeilen
+    248  yaml-Zaunanfaenge
+     89  davon mit auftrag-Kopfzeile   -> mein Auftragsscan sieht sie
+    158  davon OHNE auftrag-Kopfzeile  -> mein Befundscan sah sie NIE
+      1  Zaun ohne jeden Schluessel    (89+158=247, der Rest)
+  Meine 28 eigenen Befunde aus dieser Nacht: 28 von 28 liegen in Zaeunen OHNE auftrag-Kopf.
+  Erst die drei Bloecke von heute frueh (w37_ballwechsel_runde2, a33_grundlage_zeiger_gewandert,
+  spiegelung_rundet_an_der_toleranz) tragen eine auftrag-Kopfzeile. Meine eigene Ablageform
+  hat sich also mitten in der Nacht geaendert, und der Bestand liegt jetzt in ZWEI Formen.
+tragweite: |
+  Von den 158 unsichtbaren Zaeunen tragen 49 ein ballbesitz-Feld. Die Datei hat insgesamt
+  100 Zeilen '^ballbesitz:'. Rund die HAELFTE aller Ballzuweisungen in der einen
+  Statuswahrheit liegt damit in Bloecken, die mein Aufzaehl-Scan nie besucht hat — mit
+  Haltern yama, planner und release-pruefer. Und es sind nicht nur meine: die Zaeune bei
+  Z.178, Z.1255, Z.1294, Z.1426, Z.1661, Z.1711, Z.1746, Z.2345, Z.4129, Z.4308, Z.5242,
+  Z.5387, Z.6190, Z.6610 stammen von anderen Rollen und beginnen mit befund/anlass/vorgang/
+  gemessen/anweisung_im_wortlaut/vorschlag.
+was_NICHT_passiert_ist: |
+  Kein Ball von MIR ist verlorengegangen. Die Wache hat zwei Haelften, und die erste ist
+  'grep ^ballbesitz: plan-pruefer direkt gelesen' — grep liest Zeilen, nicht Zaeune, und
+  trifft deshalb unabhaengig von der Kopfzeile. Heute 0, und in jeder Runde 0. Genau
+  deshalb ist die Luecke so lange unbemerkt geblieben: die zu enge Haelfte lieferte fuer
+  MEINE Bahn dieselbe Antwort wie die richtige. Sie haette erst gefehlt, wenn ein Ball
+  ohne das Wort 'ballbesitz:' am Zeilenanfang gelegen haette.
+korrektur_in_dieser_runde_ausgefuehrt: |
+  Ballortung ab sofort: alle yaml-Zaeune, Einteilung nach 'hat auftrag-Kopfzeile' statt nach
+  'hat zustand-Feld'. Mit der berichtigten Fassung heute gemessen: 49 Ballfelder in den 158,
+  davon 0 bei plan-pruefer. Antwort fuer meine Bahn unveraendert 0 — die Korrektur aendert
+  heute nichts am Ergebnis, aber ab heute stimmt die Frage.
+alter_einzelfall_nachgesehen: |
+  Der damals gemeldete Block (zustand OHNE auftrag-Kopf, 'zustand: OFFEN') ist vom Planner
+  ERLEDIGT: das Feld ist raus, an seiner Stelle steht warum_kein_zustand_feld mit der
+  Begruendung, Z.13689ff, ballbesitz weiter yama. Heute traegt genau EIN Zaun noch zustand
+  ohne auftrag-Kopf: der N-003-Block ab Z.6610 mit zustand BETRIEBSBESTAETIGT (Z.6644) und
+  ballbesitz '—'. Der faellt ohnehin in den Negativfilter und haelt keinen Ball. Harmlos,
+  aber die Klasse besteht.
+eigener_zeiger_gewandert: |
+  Mein damaliger Bericht nannte 'Zeile 13626' fuer diesen Datensatz. Heute steht dort Prosa;
+  der Datensatz liegt auf 13689. Der vierte Fall der Zeigerdrift-Klasse — diesmal in MEINEM
+  eigenen Bericht. Wer Zeilennummern schreibt, erzeugt Drift, auch als Pruefer.
+handwerk: |
+  Zwei Einzeiler sind mir zerbrochen, weil ich Backticks in ein zsh-echo geschrieben habe
+  (Kommandoersetzung). Beide Laeufe endeten mit Fehler und OHNE Zahl. Nicht gemeldet,
+  sondern als Heredoc wiederholt. Eine ausgefallene Messung ist kein Ergebnis.
+ballbesitz: "— (die Korrektur ist meine und in dieser Runde ausgefuehrt)"
+fuer_den_planner: |
+  Kein Auftrag, nur eine Beobachtung zur Form: der Bestand fuehrt Befunde in zwei Formen
+  (mit und ohne auftrag-Kopfzeile). Ob das vereinheitlicht wird, gehoert dem Planner —
+  ich messe ab jetzt beide.
+```
+
+### AUFGABENVERTEILUNG 14.08. — löst den überholten Block von Zeile 89 ab (eigener Zaun nach A-25)
+
+```yaml
+befund: aufgabenverteilung_14_08
+ballbesitz: "— (Übersicht, kein eigener Vorgang)"
+anlass: "Der plan-pruefer hat den Verteilungsblock vom 12.08. am 13.08. 21:14 als veraltet
+  gemeldet und den Ball ausdruecklich beim Planner gelassen — 'er gehoert dem Planner, und
+  Rollengrenze heisst hier: melden, nicht ersetzen'. Der Ball lag danach ueber ZEHN STUNDEN bei
+  mir. Gefunden habe ich ihn erst, als er in 3cfa11cf meldete, dass seine eigene Ballortung
+  158 Zaeune ohne auftrag-Kopfzeile nie gesehen hat — 20 davon tragen ballbesitz planner.
+  Achtzehn waren seine Befunde dieser Nacht, alle bearbeitet; DIESER war der Rest.
+  Bitter daran: ich habe in dieser Nacht mehrfach gemeldet, dass veraltete Postenlisten
+  Aufmerksamkeit ohne Gegenstand binden — und meine eigene Verteilung war seit zwei Tagen falsch."
+der_alte_block_bleibt: "Zeile 89 wird NICHT umgeschrieben, A-20-4 schuetzt den Beleg. Die
+  Ueberschrift traegt jetzt den Hinweis auf diesen Block — in der VORHANDENEN Zeile, ohne
+  Zeilenverschiebung."
+verteilung_heute: >
+    GENERATOR         ACHT ziehbare Auftraege, alle mit Ball bei ihm, alle DoR erteilt:
+                      A-35 (erster Bau nach A7) · A-33 (klein, kein Code, raeumt die
+                      STATUS-Kollision) · sechs B-Ablesungen W-03/1 W-10/1 W-12/1 W-14/1
+                      W-16/1 W-18/1. 61 Kriterien, keine Luecke, 0 IN_ARBEIT im Weg.
+    EVALUATOR         Nichts unterwegs. 0 CODE_FERTIG im ganzen Bestand.
+    RELEASE-PRUEFER   DREI Vorgaenge: W-37 ABGENOMMEN seit 13.08. 23:38 · der doppelte
+                      release_vermerk in A-09 (98be4b6e) · 39 ungesicherte Commits auf
+                      auto/hausplaner-integration, live gemessen gegen b15c1cb7.
+    PLAN-PRUEFER      Kein offener Ball; er faehrt Vorratspruefungen.
+    PLANNER (ich)     Kein offener Ball nach dieser Runde.
+    YAMA              Die Regelkollision §3/E1/Beifang (Empfehlung B) · vier Fachentscheidungen
+                      W-24 W-26 W-28 W-32 · fuenf Solar-Operanden · die K3-Erweiterung
+                      (verlaengern ja/nein) · und die Frage, ob eine Bau-Instanz gestartet wird.
+keine_zahlen_die_altern: "Nach der A-33-Lehre stehen hier KEINE Zaehlstaende, die sich stuendlich
+  aendern (Tafelzeilen, Datensaetze, Commits seit X). Was zaehlt, steht in den Datensaetzen; hier
+  steht nur, WER woran ist."
+```
+
+```yaml
+auftrag: "vier_fachfragen_fehlen_in_meiner_liste"
+titel: "Ich habe Yamas Liste geprueft, aber nie gefragt, ob sie vollstaendig ist"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:49"
+stand_kopf: 3cfa11cf
+posten: "Vorratspruefung (e), zweite Runde — Nachlauf zur berichtigten Ballortung"
+wie_es_auffiel: |
+  Mit der in 3cfa11cf berichtigten Einteilung zum ersten Mal ALLE Zaeune nach Ballhaltern
+  gezaehlt statt nur die Auftragsbloecke. Dabei stand eine Zeile, die ich nicht kannte:
+  Z.14354 'Vier offene Fachentscheidungen bei Yama'.
+ballverteilung_exakt_gemessen: |
+  249 Zaeune, 137 Ballfelder (ballbesitz + ballbesitz_befund), Wert exakt verglichen:
+    (kein Halter)     81
+    planner           29
+    yama              12
+    generator         10
+    release-pruefer    3
+    (Prosa)            2
+    plan-pruefer       0
+    evaluator          0
+befund: |
+  Die zwoelf Ballfelder bei Yama namentlich (Ueberschrift des jeweiligen Zauns):
+    Z.1294   Bedienmodell nachgemessen (release-pruefer 13.08.)
+    Z.1426   Repo-weite Suche nach Yama-Posten (release-pruefer)
+    Z.1661   Vorratsmessung — was der Stillstand kostet (release-pruefer)
+    Z.1711   Nachmessung Identitaetsfrage — zwei Faelle (release-pruefer)
+    Z.1746   Buehnenmessung 13.08. (release-pruefer)
+    Z.13688  Regelkollision §3/E1/Beifang (planner)
+    Z.14144  Stillstand dreier Rollen (planner)
+    Z.14269  Drei von Yamas acht Posten nachgemessen (plan-pruefer)
+    Z.14309  Zwei von acht sind erledigt (plan-pruefer)
+    Z.14354  VIER OFFENE FACHENTSCHEIDUNGEN (planner)  <-- fehlt in meiner Meldung
+    Z.14672  Acht BEREIT sind ziehbar (plan-pruefer)
+    Z.14862  Achtundvierzig Werkbank-Schablonen (plan-pruefer)
+  Gegenprobe: in meinen beiden Sammelbloecken Z.14269 und Z.14309, in denen ich Yamas
+  Postenliste gemessen habe, kommen W-24, W-26, W-28 und W-32 zusammen NULL Mal vor.
+  Sie stehen sonst sehr wohl im Bestand (Planner-Zaun Z.166, Vorratsmessung des
+  Release-Pruefers Z.1641/1652) — nur nicht in dem, was ich Yama jede Runde vorlege.
+die_vier: |
+  W-24  Fundament und Bodenplatte — Erdkontakt, der Code markiert ihn dreimal selbst als
+        Operanden-Gate. Fachentscheidung mit Rechenwirkung.
+  W-26  Dachschichten — das Feld schichten fehlt am RoofNode, waehrend WallNode und
+        CeilingNode es feldgleich fuehren. Schema-Entscheidung.
+  W-28  Dachentwaesserung — Rinnenbemessung nach DIN 1986-100. Planner empfiehlt VERTAGEN.
+  W-32  Giebelwand-Bindung — als Ableitung entschieden, offen ist nur noch, ob der Bau
+        gewollt ist.
+  (Wortlaut aus dem Planner-Zaun uebernommen und als Uebernahme gekennzeichnet — ich habe
+  diese vier Fachfragen NICHT selbst am Code nachgemessen. Das waere eine eigene Runde.)
+der_mechanismus: |
+  Ich habe die Liste TOP-DOWN geprueft: stehen Yamas acht Posten noch offen? Zwei waren
+  erledigt, das habe ich gemeldet. Die Gegenrichtung habe ich nie gestellt: was haelt sonst
+  noch einen Ball bei Yama? Eine Liste pruefen und eine Liste vervollstaendigen sind zwei
+  verschiedene Messungen, und ich habe nur die erste gemacht — sechs Runden lang.
+  Es ist dieselbe Bewegung, die der Planner am 14.08. an sich selbst gefunden hat
+  (Z.14354: 'sie lebten nur in meinen Antworten'), nur eine Ebene hoeher: seine vier
+  Fachfragen haben jetzt einen Datensatz, aber meine Vorlage an Yama kannte sie nicht.
+ein_fast_fehlbefund: |
+  Mein erster Abgleich verglich die UEBERSCHRIFTEN der zwoelf mit meinen sechs Posten und
+  fand nur EINE Uebereinstimmung. Das haette geheissen: fuenf meiner sechs Posten sind
+  unbelegt. Falsch — ich hatte Titel gegen Titel gehalten statt Inhalt gegen Inhalt.
+  Nachgesucht: raumAuswahl liegt in Z.1711 mit Ball yama, der Seed-Weg der Pruefbuehne in
+  Z.1746 mit Ball yama, Tragwerk in Z.14309, versatz ueber acht Zaeune. Meine sechs Posten
+  sind belegt. Nicht gemeldet, weil vor dem Melden gegengeprueft.
+ballbesitz: "— (die Korrektur ist meine; die vier tragen ihren Ball bereits im Planner-Zaun Z.14354)"
+folge_fuer_meine_vorlage: |
+  Ab dieser Runde nenne ich Yama nicht mehr die gepflegte Liste, sondern das Messergebnis:
+  alle Zaeune mit Ball yama, frisch gezaehlt. Heute sind das zwoelf Felder, sachlich
+  gebuendelt zehn Vorgaenge — meine sechs plus die vier Fachentscheidungen.
+```
+
+### Gegenprüfung: liegt ein Planner-Ball unbemerkt? — Ergebnis NEIN (eigener Zaun nach A-25)
+
+```yaml
+befund: planner_baelle_gegengeprueft
+ballbesitz: "— (Prüfbericht, kein Vorgang)"
+anlass: "Der plan-pruefer hat in bede2c3e mit der berichtigten Ballortung zum ersten Mal ALLE
+  Zaeune nach Haltern gezaehlt und dabei 'planner 29' gemeldet. Ich hatte in e8068f5c nur die
+  Bloecke OHNE auftrag-Kopfzeile geprueft (20). Die Differenz war die Frage."
+gemessen: "30 Treffer mit dem weiten Muster ballbesitz\\w* — aber nur NEUN mit dem exakten Feld
+  ballbesitz. Die 21 Differenz sind ballbesitz_befund, sein Feldname fuer Befundbloecke, plus
+  ballbesitz_vorher in A-12."
+zwei_eigene_falsch_positive_offengelegt:
+  - "A-12 erschien als offener Ball. Sein Feld sagt woertlich '— (geschlossen 12.08. vom Planner:
+     Ergebnis in F-026 verwertet)'; der Treffer kam aus ballbesitz_VORHER. Mein Regex ballbesitz\\w*
+     fing das Nebenfeld — dieselbe Klasse wie das Muster, das Erwaehnungen statt Importe zaehlte."
+  - "Die 20 aus e8068f5c waren nicht 'ballbesitz', sondern 'ballbesitz_befund'. Die Aussage haelt
+     (es waren seine Nachtbefunde), der Feldname war falsch benannt."
+ergebnis: "Von den neun exakten sind SIEBEN Teilbloecke alter Auftraege — A-02, A-07, A-08 (4x)
+  und A-09, alle vier in der Tafel BETRIEBSBESTAETIGT, also geschlossene Vorgaenge mit
+  historischem Ballfeld. Die uebrigen ZWEI sind seine neuesten Befunde, beide von mir bearbeitet:
+  a33_grundlage_zeiger_gewandert (eecd5215) und spiegelung_rundet_an_der_toleranz (0d2f0907).
+  KEIN offener Planner-Ball."
+seine_lehre_uebernommen: "Sein Satz zum eigenen Fehler gilt genauso fuer mich: eine Liste PRUEFEN
+  und eine Liste VERVOLLSTAENDIGEN sind zwei Messungen. Er hat sechs Runden lang nur top-down
+  geprueft (stehen die acht noch offen) und nie gefragt, was SONST einen Ball bei Yama haelt —
+  so fehlten meine vier Fachentscheidungen in seiner Vorlage. Ich hatte denselben Fehler eine
+  Ebene tiefer: nur die unsichtbare Form gemessen statt alle Zaeune."

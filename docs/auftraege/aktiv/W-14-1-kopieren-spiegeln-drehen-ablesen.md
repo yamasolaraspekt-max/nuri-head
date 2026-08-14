@@ -22,11 +22,16 @@ anlass: "Die dritte und letzte der Ablesungen, die ich Yama in der Vorlage zuges
          werkzeugLandkarte unabhaengig bestaetigt hat."
 grundlage: "geometry/editierGeometrie.ts (75 Z., NEUN Exporte) · __tests__/editierGeometrie.test.ts
             (52 Z.) · app/tools/toolRegistry.ts:249 (loeschen) und :273 (duplizieren) ·
-            app/HausplanerApp.tsx:110/:621/:671-679/:703-709/:1356 ·
+            app/HausplanerApp.tsx:110/:626-627/:671/:676-677/:695-696/:1343 ·
+            app/sammelBefehle.ts:39/:68/:82/:103/:111 ·
             app/dashboard/Kopfrahmen.tsx:30/:91/:100/:315/:316 · app/rahmen/Buehne.tsx:40/:207-208 ·
             app/rahmen/EigenschaftenPanel.tsx:120 · commands/applyCommand.ts:143/:162/:176/:203 ·
             domain/scene.types.ts:193-196 (transform nur am ObjectNode) ·
-            app/tools/werkzeugLandkarte.ts:63/:70/:73 · REGISTER.md:67"
+            app/tools/werkzeugLandkarte.ts:96 (duplizieren)/:102 (loeschen)/:105 (verschieben)/
+            :133 (versatz, marke 'fehlt') · REGISTER.md:67"
+landkarten_verweise_berichtigt_14_08: "Das Feld nannte :63/:70/:73 — dort stehen heute
+            Kommentarzeichen und eine Typzeile, KEIN Landkarteneintrag. Die vier Eintraege, die
+            W-14 betreffen, einzeln geoeffnet und auf ihre heutige Zeile gesetzt."
 ```
 
 ## 1 — Der tragende Punkt: DREI Operationen, DREI Bezugsrahmen, DREI Erreichbarkeitswege
@@ -38,17 +43,23 @@ sich beziehen** und **wie man sie erreicht:*
 ```text
 (1) DUPLIZIEREN — Bezug AUSWAHL, erreichbar als REGISTRY-WERKZEUG
     toolRegistry.ts:273        id: 'duplizieren'
-    HausplanerApp.tsx:671      function dupliziere()
-                       :674      for (const id of selectedNodeIds)
-                       :679      versetzteWand(n.start, n.end, 500, 500)
+    HausplanerApp.tsx:671      Aufruf: else if (tool.id === 'duplizieren') dupliziere()
+                       :676      function dupliziere()                    [war :671]
+                       :677      executeCommands(befehleDuplizieren(...))  [ersetzt die
+                                 fruehere for-Schleife :674, die es NICHT MEHR GIBT]
+    sammelBefehle.ts:68        befehleDuplizieren() — die RECHNUNG liegt seit A-31 HIER
+                    :82          versetzteWand(n.start, n.end, 500, 500)  [war HausplanerApp:679;
+                                 in HausplanerApp.tsx kommt versetzteWand NULL Mal vor]
                                  -> die Kopie liegt 500/500 versetzt
     Landkarte: nicht als eigene fehlt-Marke; ADD_NODE deckt das Anlegen.
 
 (2) LOESCHEN — Bezug AUSWAHL, erreichbar als REGISTRY-WERKZEUG
     toolRegistry.ts:249        id: 'loeschen'
-    HausplanerApp.tsx:621      function loescheAuswahl()
-    applyCommand.ts:162        case 'REMOVE_NODE'
-    Landkarte :70              { 'loeschen', 'deckt', 'REMOVE_NODE' }
+    HausplanerApp.tsx:626      function loescheAuswahl()                  [war :621]
+                       :627      executeCommands(befehleLoeschen(selectedNodeIds, nodes))
+    sammelBefehle.ts:39        befehleLoeschen() — die RECHNUNG liegt seit A-31 HIER
+    applyCommand.ts:162        case 'REMOVE_NODE'                          [richtig]
+    Landkarte :102             { 'loeschen', 'deckt', 'REMOVE_NODE' }      [war :70]
     -> steht NICHT in der Registerzeile, ist aber Teil derselben Knopfgruppe.
 
 (3) SPIEGELN — Bezug GANZER GRUNDRISS, erreichbar als KOPFRAHMEN-KNOPF.
@@ -59,10 +70,15 @@ sich beziehen** und **wie man sie erreicht:*
                                icon="mirror-v"
                   :91   Props-Typ  spiegeleGrundriss: (achse: Achse) => void
                   :30   import type { Achse }
-    HausplanerApp.tsx:703  function spiegeleGrundriss(achse: Achse)
-                     :708    spiegelteWand(w.start, w.end, achse, pos)
-                     :709    executeCommand MOVE_NODE je Wand
-                     :1356   durchgereicht
+    HausplanerApp.tsx:695  function spiegeleGrundriss(achse: Achse)   [war :703]
+                     :696    executeCommands(befehleSpiegeln(waende, achse))
+                     :1343   durchgereicht                            [war :1356]
+    sammelBefehle.ts:103   befehleSpiegeln() — die RECHNUNG liegt seit A-31 HIER
+                    :111    spiegelteWand(w.start, w.end, achse, pos)  [war HausplanerApp:708]
+    ^^^^ BERICHTIGT 14.08.: A-31 hat versetzteWand/spiegelteWand/bbox/achsenMitte samt
+         Befehlslisten nach `app/sammelBefehle.ts` gezogen (HausplanerApp.tsx:110-111 sagt es
+         selbst). Das Blatt beschrieb den Stand DAVOR — nicht nur verschobene Zeilen,
+         sondern ein anderer Ort.
     -> UND DAS IST DER UNTERSCHIED, DER INS BLATT GEHOERT: der Knopf ist an
        `waende.length` gebunden, nicht an `selectedNodeIds`. Er spiegelt den
        GANZEN Grundriss. Duplizieren und Loeschen arbeiten auf der Auswahl.
@@ -70,9 +86,9 @@ sich beziehen** und **wie man sie erreicht:*
 (4) VERSCHIEBEN — Bezug wechselt, KEIN Werkzeug, DREI Wege
     Buehne.tsx:40/:207-208     Ziehen auf der Buehne: versetzteWand -> MOVE_NODE
     EigenschaftenPanel.tsx:120 Feld im Panel -> MOVE_NODE
-    HausplanerApp.tsx:601      Wand-Laenge exakt setzen -> Wandende entlang der
+    HausplanerApp.tsx:604      Wand-Laenge exakt setzen   [war :601] -> Wandende entlang der
                                Achse verschieben (MOVE_NODE)
-    Landkarte :73              { 'verschieben', 'deckt', 'MOVE_NODE' }
+    Landkarte :105             { 'verschieben', 'deckt', 'MOVE_NODE' }   [war :73]
 ```
 
 > **Ein Blatt, das die vier in einen Topf wirft, verschweigt genau das, was beim Bauen wehtut.** *Wer
@@ -84,7 +100,7 @@ sich beziehen** und **wie man sie erreicht:*
 ## 2 — Drehen fehlt, und der Grund ist ein Schema-Grund (kein Vergessen)
 
 ```text
-app/tools/werkzeugLandkarte.ts:63, Begruendung VOLLSTAENDIG gelesen:
+app/tools/werkzeugLandkarte.ts:95, Begruendung VOLLSTAENDIG gelesen:   [war :63]
   { werkzeugId: 'drehen', marke: 'fehlt', begruendung: 'Braucht Drehung um
     einen Bezugspunkt. `UPDATE_NODE` kann `transform.rotation` eines ObjectNode
     setzen, aber Wände/Öffnungen/Zonen haben keine Rotation — ihre Punkte
@@ -123,7 +139,17 @@ TEST  __tests__/editierGeometrie.test.ts  52 Zeilen
 
 UND DIE ZWEI, DIE NICHT ZU W-14 GEHOEREN — mit Verbraucher belegt:
   bbox         -> app/dashboard/einpassen.ts:21/:87   (Ansicht einpassen, AUF-62)
-  achsenMitte  -> app/HausplanerApp.tsx:110, app/dashboard/Kopfrahmen.tsx:30
+  achsenMitte  -> app/sammelBefehle.ts:23 (Einfuhr) und :108 (Aufruf)
+                  sowie __tests__/editierGeometrie.test.ts:12/:43/:46/:47
+  ^^^^ BERICHTIGT 14.08. — die zwei alten Verweise waren BEIDE falsch, und der erste
+       auf eine Art, die jede Marke-in-der-Zeile-Pruefung durchlaesst:
+       HausplanerApp.tsx:110 traegt heute den A-31-Kommentar, der woertlich sagt, dass
+       achsenMitte WEGGEZOGEN ist — der Zeiger trifft das Wort und behauptet das
+       GEGENTEIL dessen, was er belegen soll. Kopfrahmen.tsx:30 ist schlicht falsch:
+       achsenMitte kommt in der Datei NULL Mal vor, dort steht ein Typ-Import von Achse.
+       Die Scope-Begruendung war damit UNBELEGT (nicht zwangslaeufig falsch) — sie ist es
+       jetzt: der echte Verbraucher ist sammelBefehle.ts, also genau das Modul, das A-31
+       angelegt hat, und keiner der beiden gehoert zu W-14.
   Das steht so auch im Nachtrag von docs/WERKBANK-ANSCHLUSS.md, den ich am
   13.08. berichtigt habe: der alte Satz sagte 'bbox/achsenMitte brauchen BEIDE
   (W-13 und W-14)', und W-13 war der falsche Zweite — seine drei
@@ -182,7 +208,7 @@ W-14-1-1 (P1, TRAGEND) Jede der VIER Operationen steht im Blatt MIT IHREM BEZUG
          und findet einen Knopf, der etwas anderes tut als erwartet.
 W-14-1-2 (P1) Der SPIEGEL-BEFUND ist belegt, nicht behauptet: Kopfrahmen.tsx:315
          und :316 tragen `disabled={waende.length === 0}` und die Titel nennen
-         'Grundriss'; der Handler HausplanerApp.tsx:703 laeuft ueber alle Waende,
+         'Grundriss'; der Handler HausplanerApp.tsx:695 laeuft ueber alle Waende,
          nicht ueber selectedNodeIds. UND der Satz, dass 'spiegeln' in
          toolRegistry.ts NULL Mal vorkommt. Am Bau-Stand gegenpruefen.
 W-14-1-3 (P1) DREHEN steht in 7-GRENZEN als fehlend, MIT dem Schema-Grund und

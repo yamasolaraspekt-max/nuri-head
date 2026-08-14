@@ -258,8 +258,8 @@
   Skalieren    S(sx,sy,sz)
   Verkettung:  M = T · R · S        ← Reihenfolge zählt!
   ```
-- **Grenzfall:** Matrixmultiplikation ist **nicht** kommutativ. Erst drehen, dann
-  verschieben ist etwas anderes als umgekehrt. Reihenfolge im Code festschreiben.
+- **Grenzfall 1 — Reihenfolge:** Matrixmultiplikation ist **nicht** kommutativ. Erst drehen, dann verschieben ist etwas anderes als umgekehrt. Reihenfolge im Code festschreiben.
+- **Grenzfall 2 — RUNDUNG, ergänzt 14.08.:** F-032 kennt **kein Runden**; wer das Ergebnis auf ganze mm rundet, verlässt die Formel. Nachgerechnet an der Achsenspiegelung (`editierGeometrie.ts:34`, `x' = 2·pos − x`, von F-032 gedeckt): bei **ganzzahligen** Koordinaten ist zweimaliges Spiegeln eine **exakte Involution**, auch bei **ungerader** Bbox-Breite (`2·pos = minX+maxX` ist dann ganzzahlig). Bei **nicht ganzzahligen** Koordinaten driftet der Rückweg um bis zu **0,5 mm** — und an der Halben rundet `Math.round` **immer Richtung +∞**, sodass **beide Vorzeichen gleichgerichtet driften und die Spiegelung dort nicht achsensymmetrisch ist.** **Die Kante liegt genau auf F-001:** dessen ε ist 0,5 mm mit `d < ε`, und **0,5 ist nicht kleiner als 0,5** — ein zweimal gespiegelter Punkt gilt damit als **anderer** Punkt. *Gemeldet vom plan-pruefer (`7ebc4539`), vier Fälle je selbst nachgerechnet. **Ob im Hausplaner überhaupt nicht ganzzahlige Koordinaten entstehen, ist damit NICHT gesagt** — Hinweis darauf, dass sie es meist nicht tun: `fangKern.ts:76` rundet jeden Fangpunkt, und Geometrie und Befehle tragen 57 `Math.round`-Stellen. Der Fund ist die von F-032 **nicht genannte Bedingung**, kein Baufehler.*
 
 ---
 

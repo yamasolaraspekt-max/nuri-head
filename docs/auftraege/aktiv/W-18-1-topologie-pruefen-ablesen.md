@@ -18,7 +18,7 @@ anlass: "Yamas Vorbehalt vom 13.08.: 'bei B gilt laut Fahrplan zuerst die Messun
          fehlt. Erst danach steht fest, ob eine B-Zeile eine Ablesung (schnell) oder ein Bau (langsam)
          wird'. Das ist die Messung, und sie ist zu Ende gefahren."
 grundlage: "geometry/kontur.ts (175 Z., 8 Exporte) · geometry/wallGeometry.ts (317 Z., 12 Exporte) ·
-            HausplanerApp.tsx:29-31 als Aufrufer · FORMELSAMMLUNG.md:75 F-004 und :120 F-013"
+            HausplanerApp.tsx:29-31 als Aufrufer · FORMELSAMMLUNG.md:75 F-004 und :155 F-013   [F-013 war :120]"
 ```
 
 ## 1 — Die Einordnung ist gemessen: ABLESUNG, nicht Bau
@@ -27,7 +27,7 @@ grundlage: "geometry/kontur.ts (175 Z., 8 Exporte) · geometry/wallGeometry.ts (
 gebaut:*
 
 ```text
-F-013 Selbstschnitt-Pruefung  (FORMELSAMMLUNG:120, „Vorpruefung vor jeder
+F-013 Selbstschnitt-Pruefung  (FORMELSAMMLUNG:155, „Vorpruefung vor jeder
                                Flaechen- oder Dachberechnung")
   geometry/kontur.ts, 175 Z., ACHT Exporte:
     :41  KonturPunkt        :47  KonturGrund ('zu-wenig-punkte'|'selbstschnitt'|

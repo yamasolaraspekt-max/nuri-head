@@ -237,7 +237,10 @@ vormerkung_und_ausdruecklich_KEIN_auftrag: "Die Vorschau kuendigt eine Ausrichtu
         nicht in diesem Blatt verwaist."
 zur_sperre_und_was_der_plan_pruefer_dazu_gemessen_hat: "Meine Praemisse traegt, und er hat sie
         unabhaengig geprueft: F-028 ist eine ECHTE, noch rote Sperre auf Yamas ausdrueckliche Auflage
-        (FORMELSAMMLUNG.md:522), gesperrt fuer das DURCHREICHEN eines Azimut zwischen Kompass- und
+        (FORMELSAMMLUNG.md, Anker "### F-028 · Azimut-Konvention an der Systemgrenze"; beim Schreiben
+        am 12.08. stand sie auf :522, heute auf :557 — die Zahl BLEIBT hier als Beleg des
+        damaligen Standes stehen, der Anker macht sie auffindbar), gesperrt fuer das
+        DURCHREICHEN eines Azimut zwischen Kompass- und
         PVGIS-Konvention — und PvEingabe hat keine Richtung. Er hat dabei eine Wortfalle geprueft statt
         sie zu uebersehen: ein Muster auf 'Orientier' liefert VIER Treffer in pvBelegung.ts, und alle
         meinen hochkant gegen quer, also die Modul-LAGE und keine Himmelsrichtung. Wer nach dem Wort
@@ -368,3 +371,35 @@ Trefferliste zu vertrauen.
 
 **Weitergabe:** ABGENOMMEN → **Release-Prüfer**. Die Zahl-ohne-Träger im Register (`468 Z.`)
 → ohne Auflage, zur Kenntnis an den **Planner**.
+
+
+---
+
+## ⚠ VERMERK 14.08. — Zeiger in einem BETRIEBSBESTAETIGTEN Blatt: Beleg erhalten, Anker ergaenzen
+
+**Anlass:** Der Plan-Prüfer meldete (`974d2bd2`), dass dieses Blatt **dieselbe rote Sperre mit
+zwei verschiedenen Zahlen** nennt — `:522` in Abschnitt 240, `:557` in Abschnitt 276.
+
+**Selbst am Entstehungsstand nachgemessen, und das dreht die Einordnung:** bei `b39f3845`
+(12.08. 23:41) stand F-028 auf **`:522`**, bei `c11433d2` (13.08. 23:09) auf **`:557`**.
+**Beide Zahlen waren zum Zeitpunkt ihres Schreibens richtig.** Das ist **Drift**, nicht die
+Schnittfehler-Klasse aus W-10/1 und W-14/1. *Er hatte zuerst das Gegenteil vermutet und es nach
+eigener Messung zurückgezogen — ohne die Messung am Entstehungsstand wäre es ein Fehlbefund
+geworden.*
+
+**Planner-Entscheidung, weil die Frage offen war (A-20-4 gegen A-34):**
+
+> **Ein betriebsbestätigtes Blatt wird nicht umgeschrieben — aber ein Anker darf danebentreten.**
+> Die alte Zahl **bleibt stehen** und behält, was sie ist: der Beleg eines Standes. **A-20-4 ist
+> gewahrt.** Der Anker daneben stellt die Auffindbarkeit her — **A-34s Weg, der beides erhält.**
+> **Was NICHT passiert: die Zahl gegen die heutige tauschen.** Das würde einen Beleg fälschen,
+> der zum Zeitpunkt seiner Entstehung richtig war.
+
+**Warum es trotz `BETRIEBSBESTAETIGT` zählt:** **die Sperre F-028 ist lebend und rot**, und der
+Text benutzt die Zahl als **Fundstelle zum Nachschlagen**. Wer der alten Zahl folgt, landet in
+einem anderen Formelblock. Die Datei ist seit dem Schnitt von 996 auf über 1.000 Zeilen gewachsen —
+**zwei Zahlen für denselben Anker im selben Blatt sind unabhängig vom Wandern ein Mangel**,
+sobald die Datei sich bewegt.
+
+**Abschnitt 276 war bereits richtig gebaut** — er nennt Zahl **und** Ankertext. Das ist die Form,
+die hier jetzt an beiden Stellen steht.

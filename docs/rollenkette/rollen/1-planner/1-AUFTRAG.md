@@ -728,3 +728,61 @@ sah ein Haus ohne Dach und ohne Erklärung.
   wird — das steht in `docs/ARBEITSREGELN.md` und gilt unabhängig von diesem Ordner.
 - **Der Status.** Wo ein Auftrag gerade steht, steht in `docs/STATUS.md`.
 - **Das Bauen.** Der Generator baut. Der Planner schneidet.
+
+---
+
+## ⚠ HANDGRIFF 14.08. — jeden Messbefehl EINMAL fahren, bevor der Auftrag geschnitten wird
+
+**Anlass:** Der Plan-Prüfer hat seine eigene A-35-DoR gegen §5 geprüft (`ed72ad66`) —
+`ARBEITSREGELN.md:255` verlangt wörtlich *„kein Kriterium ist bereits erfüllt"*, und der Abschnitt
+schließt mit *„fehlt ein Punkt, bleibt der Auftrag ENTWURF oder wird SPEC_BLOCKED"*. Gemessen am
+Basis-Stand: **A-35-2 war zum Zeitpunkt der DoR bereits erfüllt.**
+
+**Seine Lehre lautet: ein Kriterium mit Messbefehl gehört VOR der DoR einmal gefahren.
+Auf der Planner-Seite ist sie schärfer — der Fehler entsteht beim SCHREIBEN.**
+
+> **Wer ein PRODUKTkriterium mit Messbefehl formuliert, fährt den Befehl EINMAL am Basis-Stand,
+> bevor der Auftrag geschnitten wird. Liefert er schon das verlangte Ergebnis, ist das Kriterium
+> untauglich — nicht ungenau, sondern untauglich: es prüft nichts.**
+
+**⚠ PRÄZISIERT 14.08. nach `08d872e8`, und die Präzisierung ist nötig — mein erster Satz war zu
+grob und hätte sofort danebengelegen.** Der Plan-Prüfer hat nach dem Befund gegen seine eigene
+A-35-DoR dieselbe Frage an seine A-33-DoR gestellt: **fünf von sieben A-33-Kriterien sind heute
+wahr, und die DoR hält trotzdem.** Der Grund ist benennbar, und **ohne ihn macht der Handgriff
+oben jeden Auftrag mit Nicht-Zielen unmöglich — obwohl §5 Nicht-Ziele ausdrücklich verlangt.**
+
+| Art | behauptet | vor dem Bau | §5-Punkt anwenden? |
+|---|---|---|---|
+| **Produkt** | ein **Ergebnis** des Baus | **muss rot sein** | **JA** |
+| **Vergleich** | Wert entsteht aus vorher/nachher | still oder wahr | nein |
+| **Schutz** | eine **Grenze** des Baus („bleibt unberührt") | **notwendigerweise wahr** | **NEIN** |
+
+**Die Trennlinie ist nicht wahr-oder-falsch, sondern: behauptet das Kriterium ein ERGEBNIS des
+Baus oder eine GRENZE des Baus?**
+
+**An meinen eigenen A-35-Kriterien nachgeprüft:** `A-35-2` (Produktivimport) ist ein **Produkt**-
+kriterium — es war grün und ist jetzt rot, richtig so. **`A-35-7` („Kein Nicht-Ziel berührt") ist
+ein Schutzkriterium und heute wahr** — nach meinem ersten Satz wäre es „untauglich" gewesen, und
+das ist falsch. **Es trägt seinen Wert im Nachher.**
+
+**Warum das mehr ist als Sorgfalt:** Ein solches Kriterium **wird abgehakt**, und zwar zu Recht —
+der Befehl steht im Blatt und liefert, was er soll. Es fällt keiner Rolle auf, weil alle dasselbe
+Blatt lesen. **Bei A-35-2 hätte der Selbsttreffer** (`geradenGeometrie.ts` fand sich selbst in
+einem Kommentar) **das Kriterium erfüllt, bevor eine Zeile Code entsteht.**
+
+**Der Handgriff kostet einen Aufruf und ist die billigste Prüfung im ganzen Verfahren:**
+```
+1  Messbefehl am basis_sha fahren
+2  Liefert er das SOLL?   -> Kriterium umbauen, es prueft nichts
+   Liefert er das GEGEN-Soll? -> gut, es kann rot werden
+3  Beide Zahlen ins Blatt: Stand vorher UND was nachher gelten soll
+```
+
+**Und die Gegenprobe gehört dazu, sonst prüft man ein Muster, das gar nichts findet:** derselbe
+Befehl auf einen Fall, der ihn erfüllen *muss*. Bei A-35-2 war das `editierGeometrie` mit sechs
+Importen — ohne diese Probe wäre „0 Treffer" auch bei einem kaputten Muster grün gewesen.
+
+*Nebenbefund, nicht bearbeitet: der Verweis `1-AUFTRAG.md:79` aus einer anderen Datei zeigt heute
+auf eine leere Zeile — dieselbe Zeigerklasse, die diese Nacht 24 Fälle in Auftragsblättern
+ergeben hat, hier in meiner eigenen Rollendatei. Gemessen, nicht behoben; er gehört in eine
+eigene Runde und nicht in diesen Handgriff.*

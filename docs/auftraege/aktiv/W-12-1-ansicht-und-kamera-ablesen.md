@@ -20,9 +20,9 @@ einwand_erledigt: "W-02:206 und W-13:239 fuehren beide 'W-12 zurueckgehalten, Ei
                    eine Zurueckhaltung behaupten, die nicht mehr gilt."
 anlass: "Yamas Regel fuer Klasse B, 13.08.: erst die Messung, dann die Einordnung. W-18 war die erste
          Zeile, das ist die zweite — und damit sind beide, die er genannt hat, gemessen."
-grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.ts:100/:101/:170/:212-215/
-            :621/:627 · app/rahmen/Buehne.tsx:146 (gezeichnet) mit app/HausplanerApp.tsx:1274-1281/:1423/:346
-            und app/dashboard/Kopfrahmen.tsx:304 · app/state/uiState.ts:5/:10/:11 · FORMELSAMMLUNG:218"
+grundlage: "store/hausplanerStore.ts:20/:28/:45/:100 (war :72) · renderers/three-d/szene.ts:100/:101/:170/:212-215/
+            :621/:627 · app/rahmen/Buehne.tsx:146 (gezeichnet) mit app/HausplanerApp.tsx:1261-1269/:1337/:1409/:349
+            und app/dashboard/Kopfrahmen.tsx:304 · app/state/uiState.ts:5/:10/:11 · FORMELSAMMLUNG:253 (F-032, war :218)"
 ```
 
 ## 1 — Die Einordnung ist gemessen: ABLESUNG. Alle vier Gegenstände sind gebaut
@@ -32,7 +32,7 @@ grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.t
     store/hausplanerStore.ts:20  export type HausplanerModus = '2d' | 'split' | '3d'
                             :28  modus: HausplanerModus
                             :45  setModus: (modus) => void
-                            :72  modus: '2d'                 <- Standard
+                            :100 modus: '2d'                 <- Standard   [BERICHTIGT 14.08., war :72]
     Und app/state/uiState.ts:10 sagt, WO er wohnt und warum:
       „Ansicht (2d/split/3d) bleibt im Modell-Store (modus) — die Activation-Engine
        liest sie von dort."
@@ -49,11 +49,11 @@ grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.t
              :213-214  transparent, opacity 0.5
              :215  this.szene.add(raster)
     2D-BUEHNE (Konva), die ganze Kette — selbst nachgemessen:
-      HausplanerApp.tsx:1274-1281  die Linien ENTSTEHEN hier
+      HausplanerApp.tsx:1261-1269  die Linien ENTSTEHEN hier   [BERICHTIGT 14.08., war :1274-1281]
                                    (const rasterLinien … for-Schleife ueber
                                    weltBreite/weltHoehe mit rasterSchritt)
-                            :1423  durchgereicht
-                            :346   geschaltet
+                            :1337 und :1409  durchgereicht   [BERICHTIGT 14.08., war :1423 — es sind ZWEI Stellen]
+                            :349   geschaltet   [BERICHTIGT 14.08., war :346]
       Kopfrahmen.tsx:304           der Knopf
       Buehne.tsx:146               GEZEICHNET: {rasterAn && rasterLinien}
       Buehne.tsx:62                rasterAn: boolean — das ist die PROPS-TYPZEILE
@@ -65,7 +65,7 @@ grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.t
     Meine Formulierung 'Raster in BEIDEN Renderern' war deshalb doppelt falsch —
     der Beleg war eine Typzeile, und die Schicht hiess anders.
 
-(4) F-032 Transformation eines Punktes (FORMELSAMMLUNG:218, homogene 4x4-Matrix)
+(4) F-032 Transformation eines Punktes (FORMELSAMMLUNG:253, homogene 4x4-Matrix)
     szene.ts:621  new THREE.Matrix4().makeBasis(…)
            :627  geometrie.applyMatrix4(m)
     Also EIGENE Matrix-Anwendung, nicht nur three.js-Internes — die
@@ -79,7 +79,7 @@ grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.t
 **Die Frage aus W-01 ist mitbeantwortet:** *`W-01-fang-beschreiben.md:94` schließt aus: „Ob ein sichtbares
 Raster gezeichnet wird, ist eine Renderer-Frage und steht in W-12/Schicht 4, nicht hier." **Gemessen: es
 wird gezeichnet — 3D als `GridHelper` (`szene.ts:212-215`), 2D über die Konva-Bühne** (`Buehne.tsx:146`
-zeichnet, `HausplanerApp.tsx:1274-1281` erzeugt).*
+zeichnet, `HausplanerApp.tsx:1261-1269` erzeugt).*
 
 > *Und **die Renderer-Frage selbst hat eine andere Antwort als W-01 vermutet:** es gibt nur **einen**
 > Renderer-Ordner, `renderers/three-d/`. Der 2D-Weg liegt in der App-Schicht. **Meine erste Fassung
@@ -170,7 +170,7 @@ W-12-1-2 (P1) Die VIER Gegenstaende mit Fundstelle: Ansichtszustand, Kamera samt
          szene.ts:621 und :627. Am Bau-Stand erheben, keine Zahl aus diesem Blatt.
          BEIM RASTER GILT DIE SCHICHT, NICHT DER RENDERER: 3D szene.ts:212-215,
          2D die Konva-Buehne mit Buehne.tsx:146 als Zeichenstelle und
-         HausplanerApp.tsx:1274-1281 als Erzeugung. Buehne.tsx:62 ist als Beleg
+         HausplanerApp.tsx:1261-1269 als Erzeugung. Buehne.tsx:62 ist als Beleg
          NICHT zulaessig (Props-Typzeile), und 'beide Renderer' ist falsch, weil
          renderers/ nur three-d/ enthaelt. Beides war der Mangel meiner ersten
          Fassung (800a6075).
@@ -198,8 +198,8 @@ W-12-1-3 (P1) BERICHTIGT nach 800a6075, UND DER WIDERSPRUCH WAR IM SELBEN BLATT:
 W-12-1-4 Die Frage aus W-01-fang-beschreiben.md:94 ist im Blatt beantwortet: das
          sichtbare Raster WIRD gezeichnet — 3D als GridHelper (szene.ts:212-215),
          2D ueber die Konva-Buehne, und zwar mit der GANZEN Kette statt mit einer
-         Typzeile: HausplanerApp.tsx:1274-1281 erzeugt die Linien, :1423 reicht sie
-         durch, :346 schaltet, Kopfrahmen.tsx:304 traegt den Knopf, und
+         Typzeile: HausplanerApp.tsx:1261-1269 erzeugt die Linien, :1337/:1409 reichen sie
+         durch, :349 schaltet, Kopfrahmen.tsx:304 traegt den Knopf, und
          Buehne.tsx:146 zeichnet ({rasterAn && rasterLinien}).
          NICHT als Beleg zulaessig: Buehne.tsx:62. Das ist die Props-Typzeile —
          H-8, der Ort ist nicht die Wirkung. Mein erster Beleg war genau diese

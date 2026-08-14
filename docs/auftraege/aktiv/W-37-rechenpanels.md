@@ -387,3 +387,70 @@ Verweis. Ich nenne es, weil der Bericht sie als heutige Zahl wiederholt.
 ALLE neun Kriterien erneut. *Falls der Planner W-37-6 anders meint als sein Wortlaut — als
 Feststellung statt als Handlung — ist das seine Entscheidung und keine für mich; dann gehört der
 Satz „wird nachgezogen" geändert, nicht die Abnahme.*
+
+## Votum des Evaluators (§11), RUNDE 2 — ABGENOMMEN
+
+```yaml
+votum: ABGENOMMEN
+geprueft_am: "13.08.2026, evaluator — Wiederabnahme"
+nachbesserung_commit: "1df82ee1 (23:32), GESUCHT. Zwei Dateien: REGISTER.md und 7-GRENZEN.md."
+elter_der_nachbesserung: "e860926c"
+paragraf_12_4: "ALLE NEUN Kriterien erneut gefahren, nicht nur der Befund."
+```
+
+### Der Befund von Runde 1 — behoben, und A-20-4 dabei eingehalten
+
+```text
+REGISTER.md:124 am Nachbesserungs-Stand, im Wortlaut:
+  | W-37 | **Rechenpanels (Engine-Flächen)** | LEER | N-001…N-003 | **N-003** —
+    `app/EngineFlaeche.tsx` (**199 Z**, ~~196 Z~~ berichtigt 13.08. mit W-37) + ...
+SELBST GEZAEHLT: EngineFlaeche.tsx hat 199 Zeilen. Die Zahl stimmt jetzt.
+A-20-4 EINGEHALTEN: die alte Zahl ist NICHT geloescht, sie steht durchgestrichen daneben mit
+Datum und Anlass. Gegenprobe: '196' kommt in der Zeile weiterhin vor.
+UND DER BEFUND IST IM BLATT DOKUMENTIERT, nicht nur im Register: 7-GRENZEN traegt jetzt einen
+eigenen Abschnitt "Ein Befund am Register — gemessen und BERICHTIGT" mit den drei Staenden
+(Basis a94d91ac, Bau 225a7f1a, HEAD) und dem Satz "Die Zahl war nicht veraltet, sie war falsch."
+```
+
+### Messtisch Runde 2 — alle neun, am neuen Stand (§12.4)
+
+```text
+W-37-1 (P1)  ERFUELLT   ACHT Adapter nach Signatur; das Namensmuster als*Eingabe findet SECHS.
+W-37-2 (P1)  ERFUELLT   N-003/Vorbehalt an 7 Fundstellen in enginePanels.ts.
+W-37-3       ERFUELLT   SCHWERE_ANZEIGE: DREI Grade, alle drei mit zeichen UND wort.
+W-37-4       ERFUELLT   ENGINE_PANELS mit ACHT Panels.
+W-37-5       ERFUELLT   SECHS Importe (unten, mit eigenem Messfehler) + drei NUR-QUELLE-Faelle.
+W-37-6       ERFUELLT   der Befund oben — Registerzeile nachgezogen, 199 selbst gezaehlt.
+W-37-7       ERFUELLT   Scope-Grenze zu geometry/ in 2-FUNKTION.
+W-37-7b      ERFUELLT   :522 enginePanel · :527 startwerte · :538 fehlendePflichtfelder, alle drei
+                        Zeilen einzeln geoeffnet und getroffen.
+W-37-8       ERFUELLT   sieben Blaetter, und ueber ALLE Blattdateien unter 02-WERKZEUGE: 0 Doppel
+                        bei W-37.
+Suite / tsc  1750 / 1750 / fail 0, tsc exit=0.
+```
+
+### Mein eigener Messfehler in dieser Runde — der dritte derselben Klasse an einem Tag
+
+```text
+Bei W-37-5 mass ich zuerst FUENF Importe, dann VIER — beide Male zu wenig. Das Kriterium sagt
+SECHS, und SECHS ist richtig.
+
+ZWEI URSACHEN, beide in meinem Muster:
+  (1) enginePanelTreppe.test.ts schreibt den Import MEHRZEILIG; Zeile 19 ist nur "} from '...'".
+      Ein Muster mit ^import trifft dort nicht.
+  (2) sparrenVorbehalt.test.ts:3 und zweiEnginesSchweigen.test.ts:3 importieren MIT Dateiendung
+      ('../app/dashboard/enginePanels.ts'). Mein Muster erwartete das schliessende
+      Anfuehrungszeichen direkt hinter "enginePanels" und verfehlte beide.
+Erst das Muster from '[^']*dashboard/enginePanels(\.ts)?' faengt alle sechs:
+  enginePanelRest:14 · enginePanelSparren:17 · enginePanelTgaHeizung:14 · enginePanelTreppe:19 ·
+  sparrenVorbehalt:3 · zweiEnginesSchweigen:3
+
+DAS IST BEMERKENSWERT UND GEHOERT DESHALB HIERHER: das Kriterium W-37-5 ist genau daraus
+entstanden, dass der Bauende dieselbe Zahl zu klein gemessen hat, und sein Blatt schreibt als
+Lehre die Zwei-Muster-Regel auf. Ich bin heute zum dritten Mal in dieselbe Klasse gelaufen —
+nach dem Kriterien-Zaun in A-34 und dem Suchraum bei SCHWERE_ANZEIGE. Die Lehre steht bei mir
+also noch nicht als Handgriff, sondern als Kenntnis: wer eine Menge zaehlt, misst sie an zwei
+Mustern, BEVOR er eine Abweichung meldet — und nicht erst, wenn eine Zahl nicht passt.
+```
+
+**Weitergabe Runde 2:** ABGENOMMEN → **Release-Prüfer**.
