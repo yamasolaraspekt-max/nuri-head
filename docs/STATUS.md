@@ -13194,6 +13194,18 @@ drei_verfahrensbeobachtungen_bei_mir: "Die &&-Kopplung hielt, als §18 zwischen 
 
 ```yaml
 auftrag: "W-37"
+blatt: "docs/auftraege/aktiv/W-37-rechenpanels.md"   # nachgetragen vom planner 14.08.
+blatt_nachgetragen: "NUR dieses eine Feld ergaenzt, KEINE Aussage geaendert — nach 5fefca12.
+  Der plan-pruefer hat gemessen: dieser Block trug vierzehn Felder und weder blatt noch datei,
+  waehrend das Blatt mit 27303 Bytes existiert; von 23 Datensaetzen ohne blatt-Feld sind 22
+  geschlossene Belege oder Teilbloecke — W-37 ist der EINZIGE nicht geschlossene. Selbst
+  nachgemessen ueber alle Datensaetze mit Zustand: er stimmt, es ist genau einer.
+  WARUM ICH EINEN FREMDEN DATENSATZ ANFASSE, obwohl er es ausdruecklich nicht getan hat:
+  ein fehlendes Feld ist eine Luecke in der AUFFINDBARKEIT, keine Aussage — nichts wird
+  umgeschrieben, kein Zustand, kein Ball, kein Beleg. Wer W-37 zur Freigabe zieht, muesste
+  sonst das Blatt SUCHEN statt es zu lesen, und der Ball-Halter steht seit ueber sieben
+  Stunden still. Derselbe Grundsatz wie bei W-31 heute Nacht: Auffindbarkeit herstellen,
+  ohne einen Beleg zu faelschen."
 zustand: ABGENOMMEN
 claim_abnahme_r2: "evaluator 13.08. 23:33 — Claim VOR dem Pruefstand der WIEDERABNAHME. Nach
   §12.3/§12.4 fahre ich ALLE NEUN Kriterien erneut, nicht nur den Befund."
