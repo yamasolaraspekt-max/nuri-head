@@ -16812,3 +16812,61 @@ bitte: |
   Die uebrigen vier koennen aus meiner Sicht so uebernommen werden, P5 mit dem Zusatz
   "Schreiben und Committen sind EIN Schritt".
 ```
+
+```yaml
+auftrag: "p02_urteil_berichtigt_zulieferungen_ungelesen"
+titel: "BERICHTIGUNG meiner P-02-Pruefung — ich habe geurteilt, ohne die zwei Zulieferungen zu lesen"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:31"
+stand_kopf: d0eaeabf
+was_ich_berichtige: |
+  Um 09:28 habe ich P-02 geprueft und ein Gesamturteil abgegeben. Um 09:15 hatte ich SELBST
+  gemessen, dass vier Dokumente ausserhalb docs/auftraege/aktiv/ einen Ball bei mir tragen —
+  darunter zwei, die sich ausdruecklich als Zulieferung zu P-02 bezeichnen:
+    BEFUND-P02-DER-ERSTE-GEMESSENE-WETTLAUF.md   gehoert_zu: PRUEFAUFTRAG-P-02
+    PROZESSPRUEFUNG-02-ANTEIL-PLANNER.md         "er fuehrt die Pruefung; dies ist Zulieferung"
+  Ich habe beide NICHT gelesen und trotzdem geurteilt. Das ist derselbe Fehler wie bei A-35,
+  einen Schritt weiter: dort habe ich das Kriterium statt des Blatts gelesen, hier das Blatt
+  statt der Akte.
+was_die_zulieferung_zeigt_und_es_ist_mehr_als_mein_befund: |
+  Der Wettlauf-Befund vom 10.08. misst denselben Punkt, den ich fuer P5 gefunden habe — vier
+  Tage vor mir und schaerfer:
+    20:25:45  d6846f69  generator: A-09 IN_ARBEIT
+    20:25:56  7dcbeba9  W-01/1    IN_ARBEIT   -> ELF SEKUNDEN spaeter
+    20:30:08  fec3a07a  W-01/1 zurueck auf BEREIT — §3 verletzt
+  Beide Instanzen hatten zum Zeitpunkt ihrer Messung RECHT. Die zweite fuhr sechs
+  Vorpruefungen unmittelbar vor dem Commit. P5 wurde eingehalten und hat nicht gereicht.
+  UND DIE URSACHE IST DORT BENANNT, ich hatte sie nur beschrieben: "test-and-set ohne
+  Atomaritaet. Zwischen Messen und Schreiben liegt immer ein Fenster. Frisch ist eine
+  Vergangenheit, sobald geschrieben wird." Daraus die kategoriale Trennung, die mein Urteil
+  nicht hatte: P1 bis P4 sind ABSPRACHEN und loesen Doppelarbeit; P5 soll einen WETTLAUF
+  loesen, und das kann eine Absprache grundsaetzlich nicht.
+und_der_teil_der_meine_abhilfe_widerlegt: |
+  Ich hatte vorgeschlagen, P5 den Zusatz "Schreiben und Committen sind EIN Schritt" zu geben.
+  Das VERKLEINERT das Fenster und schliesst es nicht — der gemessene Fall beweist es, denn
+  dort lagen sechs Vorpruefungen unmittelbar vor dem Commit.
+  Schlimmer noch, und das ist der Teil, den ich gar nicht auf dem Schirm hatte: eine BARRIERE
+  im Tor haette den Verstoss auch nicht gefangen. Der Planner hat es gemessen:
+    d6846f69 aenderte Tafelzeile UND 'zustand: IN_ARBEIT'
+    7dcbeba9 aenderte NUR die Tafelzeile
+    Beide Staende liefern grep -c '^zustand: IN_ARBEIT' -> 1. Der Zaehler sah den zweiten NIE.
+  Der Zustand steht an ZWEI Orten; jede Barriere prueft einen. Die Reihenfolge, die er
+  daraus ableitet: erst EINMALIGKEIT (ein Ort), dann die Barriere.
+gegenprobe_heute: |
+  Seine Zaehler an heutigem Stand nachgefahren: naiv 'IN_ARBEIT' 169 Treffer (damals 41 —
+  die Datei ist gewachsen), praezise '^zustand: IN_ARBEIT' 0. Das Verhaeltnis haelt: das
+  naive Muster ist unbrauchbar, das praezise ist brauchbar und misst heute korrekt 0.
+was_von_meinem_urteil_steht: |
+  Unveraendert gueltig: die Widerspruchsfreiheit (Claim 1x im Regelwerk, 81 claim-Felder in
+  der Praxis), die Pruefbarkeit je Punkt einschliesslich P2 als NICHT pruefbar, und die
+  Machtfrage mit der Messung ueber 200 Commits (alle fuenf Rollen schreiben die Tafel).
+  UEBERHOLT ist mein P5-Teil: nicht "richtig und nicht hinreichend, mit Zusatz heilbar",
+  sondern "richtig und durch keine Absprache heilbar; braucht Einmaligkeit, dann Mechanik".
+ballbesitz: yama
+bitte_praezisiert: |
+  Meine Frage von 09:28 bleibt (P2 mit oder ohne beobachtbaren Ausloeser), und eine kommt
+  dazu: P5 gehoert nicht in dieselbe Liste wie P1 bis P4. Vier Absprachen und ein
+  Wettlaufproblem in einem Katalog lesen sich gleich wertig — sind es aber nicht. Die
+  Zulieferung nennt die Reihenfolge (Einmaligkeit, dann Barriere); ob und wann das gebaut
+  wird, ist deine Entscheidung, nicht meine.
+```
