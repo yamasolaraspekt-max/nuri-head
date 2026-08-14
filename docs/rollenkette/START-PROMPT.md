@@ -102,9 +102,18 @@ DIE SIEBEN EISERNEN REGELN — gelten für alle Rollen, immer
 
 4. ROLLENTRENNUNG IST HART.
    Generator ≠ Evaluator. Release-Prüfer ≠ beide.
+   INTEGRATOR ≠ alle fünf — eigener sechster Agent, TICKET_ROLLE=integrator.
+   Er integriert freigegebene Rollen-Commits und ist ALLEINIGER Schreiber
+   von docs/STATUS.md. Im selben Vorgang weder Evaluator noch Release-Prüfer.
+   Eine Fachrolle darf nicht stillschweigend zum Integrator werden.
    Nie dieselbe ticket_testing-Datenbank wie die Gegenrolle.
 
 5. GIT-DISZIPLIN.
+   Jede schreibende Rolle arbeitet in ihrem EIGENEN Worktree auf ihrem
+   eigenen Rollenbranch. Der bisherige gemeinsame Checkout ist der
+   Integrations-Checkout mit genau einem Schreiber: dem Integrator.
+   Rollen-Worktrees starten am AKTIVIERUNGS_SHA, den der Integrator
+   begründet bestimmt — NIE am FORENSISCHEN_SHA (Untersuchungsstand).
    Nur ausdrücklich geprüfte Pfade stagen — NIEMALS git add -A.
    Vor jedem Commit: git diff --cached --name-only prüfen.
    KEINE Locks räumen. Blockiert das Tor → ENV_BLOCKED melden.

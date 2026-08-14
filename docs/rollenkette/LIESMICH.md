@@ -1,6 +1,6 @@
 # ROLLENKETTE 3D-HAUSPLANER
 
-> Ein Wissensspeicher, fünf Sichten, vier Übergabestücke.
+> Ein Wissensspeicher, **sechs** Sichten, **fünf** Übergabestücke.
 
 ---
 
@@ -39,7 +39,7 @@ rollenkette/
 │   ├── 2-plan-pruefer/
 │   ├── 3-generator/
 │   ├── 4-evaluator/
-│   └── 5-release-pruefer/
+│   ├── 5-release-pruefer/   └── 6-integrator/   ← NEU, Entscheidung B-2 (14.08.)
 │       je: 1-AUFTRAG · 2-WANN-BIN-ICH-DRAN · 3-WAS-ICH-LESE
 │           · 4-WAS-ICH-ABLIEFERE · 5-WAS-ICH-NICHT-DARF
 │
@@ -72,6 +72,7 @@ es ist dasselbe Dokument.
 | **B** Baubericht | Generator | Evaluator | Was gebaut wurde, Bau-SHA, Selbstmessung, offene Punkte |
 | **C** Abnahmevotum | Evaluator | Release-Prüfer | Grün/Rot je Kriterium mit Beleg, Fehlerklasse, Prüf-SHA |
 | **D** Freigabeschein | Release-Prüfer | Yama | Release-SHA, §10-Prüfung, Rückweg, Restrisiko |
+| **E** Integrationsprotokoll | **Integrator** | Yama | Ursprungscommit, Ziel-HEAD vorher/nachher, berührte Pfade, Übernahmen **und** Ablehnungen |
 
 ---
 
