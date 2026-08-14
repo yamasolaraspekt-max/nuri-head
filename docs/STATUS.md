@@ -15685,3 +15685,52 @@ bitte: |
   wer an der geteilten Datei schreibt, committet im selben Schritt — sonst gehoert sein
   Text dem naechsten fremden Commit. Ein Satz, kein Bau.
 ```
+
+```yaml
+auftrag: "w18_1_haelt_an_allen_geprueften_stellen"
+titel: "W-18/1 vollstaendig gegen seinen Schnitt geprueft — kein einziger Zeiger gewandert"
+rolle: plan-pruefer
+zeit: "2026-08-07 08:51"
+stand_kopf: e370490e
+posten: "Vorratspruefung (a) GEWANDERTE VERWEISE, ausnahmsweise VOLLSTAENDIG statt Stichprobe"
+warum_vollstaendig: |
+  W-18/1 ist das aelteste BEREIT (29h51, 256 Commits seit Schnitt 8c920624) und nennt nur
+  EINE Produktivdatei. Damit waren ALLE Zeiger pruefbar, nicht nur eine Auswahl — und das
+  Ergebnis ist deshalb belastbarer als die bisherigen Stichproben.
+zeiger_beide_staende: |
+  Jeder Zeiger an HEAD UND am Basis-Stand 8c920624 gelesen, Zeile gegen Zeile:
+    HausplanerApp.tsx:31        import { pruefeKontur, konturStatusText, ... }   gleich
+    wallGeometry.ts:62          // Gehrung (mitered): ...                        gleich
+    wallGeometry.ts:106         * Liefert die beiden Schnittpunkte ...           gleich
+    toolRegistry.ts:230         id: 'kontur',                                    gleich
+    geometry/kontur.ts:109      export function schneidetSichSelbst(...)         gleich
+    FORMELSAMMLUNG.md:75        ### F-004 · Schnittpunkt zweier Geraden          gleich
+  SECHS von SECHS unveraendert. Keine Drift.
+eigenschaften_am_selben_ort: |
+  Das Blatt behauptet an toolRegistry.ts:230 mehr als die Zeile — fuenf Eigenschaften.
+  Alle nachgelesen und alle exakt:
+    label 'Kontur' (:231) · icon 'raum' (:232) · art 'werkzeug' (:233)
+    groupId 'gebaeude' (:234) · supportedViews ['2d','split'] (:236)
+zaehlbare_behauptung: |
+  W-18-1-4 sagt: "genau EINER importiert das Modul (kontur.test.ts), die uebrigen nennen
+  die Werkzeug-ID." Gemessen:
+    Testdateien mit Import aus geometry/kontur : 1  (kontur.test.ts)
+    Testdateien, die 'kontur' als ID nennen    : 4  (davon kontur.test.ts selbst)
+    -> also drei "uebrige". Die Behauptung haelt wortgenau.
+  Muster vorher am bekannten Treffer geprueft: kontur.test.ts:41 traegt
+  "} from '../geometry/kontur';" — das Muster trifft dort, also zaehlt es richtig.
+warum_ein_NEGATIVES_ergebnis_hier_steht: |
+  Weil es keins ist. Drei Blaetter dieser Nacht trugen falsche Fundstellen (W-12/1, A-33,
+  W-16/1 mit zwei), und zwei davon waren schon AM SCHNITT falsch. Vor diesem Hintergrund
+  ist "sechs von sechs halten, fuenf Eigenschaften halten, die Zaehlung haelt" eine
+  Aussage ueber die Ziehbarkeit: wer W-18/1 aufnimmt, findet vor, was das Blatt beschreibt.
+  Ein Pruefer, der nur Funde ablegt, hinterlaesst ein Zerrbild des Bestandes.
+grenze_der_aussage: |
+  Geprueft sind die ZEIGER, die EIGENSCHAFTEN am genannten Ort und die EINE zaehlbare
+  Behauptung. NICHT geprueft ist, ob die sieben Kriterien fachlich vollstaendig sind —
+  das ist DoR-Arbeit und die liegt hier nicht an, W-18/1 hat sie am 13.08. bekommen.
+  Ein eigener Fehlgriff unterwegs, nicht als Ergebnis ausgegeben: mein erster Pfad fuer
+  toolRegistry.ts war geraten (app/toolRegistry.ts) und lieferte "No such file". Kein
+  Fund, sondern mein Fehler — Pfad ueber git ls-files aufgeloest und wiederholt.
+ballbesitz: "— (kein Vorgang; W-18/1 bleibt BEREIT beim Generator)"
+```
