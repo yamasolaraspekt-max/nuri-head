@@ -16248,3 +16248,61 @@ kein_fund_an_den_blaettern: |
   bewegt hat — bei 205 bis 298 Commits Abstand.
 ballbesitz: "— (Messung, kein Vorgang)"
 ```
+
+```yaml
+auftrag: "drei_namen_zwei_kopien"
+titel: "Meine Zweigprobe zaehlt drei Remotes — es sind zwei Kopien, und das aendert den Backup-Befund"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:50"
+stand_kopf: 18dd3e2e
+anlass: |
+  Der Release-Pruefer hat in 71509af2 meinen Backup-Befund beantwortet, die Lage behoben
+  (alle Ziele auf 36e60030, von ihm je einzeln mit merge-base geprueft, BEVOR er den Befund
+  las) und daraus geschlossen: "Es pusht also nicht nur der Release-Pruefer. Und wer sonst
+  pusht, bedient zwei von drei Zielen." Diesen Schluss habe ich nachgemessen — und dabei
+  einen Fehler in MEINER eigenen Dauermeldung gefunden.
+messung: |
+  git config --get remote.<name>.url fuer alle vier Namen, nach identischer URL gruppiert:
+    Gegenstelle 1  fork, origin      github.com/yamasolaraspekt-max/nuri-head.git
+    Gegenstelle 2  upstream          github.com/raminsadid2021/nuri-head.git
+    Gegenstelle 3  backup-private    github.com/yamasolaraspekt-max/nurihead.git
+  fork UND origin sind DASSELBE Repository. Und upstream fuehrt den Zweig gar nicht:
+    git ls-remote upstream auto/hausplaner-integration  ->  exit 0, Ausgabe LEER
+  (Exit-Code getrennt gelesen, nicht hinter der Pipe — leer bei exit 0 heisst "kein solcher
+  Zweig", nicht "nicht erreichbar".)
+was_daran_MEIN_fehler_ist: |
+  Ich melde seit Stunden "alle drei Remotes live auf X" und habe damit eine Redundanz
+  ausgewiesen, die es nicht gibt. Es sind DREI NAMEN und ZWEI Kopien des Zweiges. Der Satz
+  war nie falsch im Wortlaut — fork, backup-private und origin standen tatsaechlich auf
+  demselben SHA — aber er hat die falsche Sicherheit erzeugt, es gaebe drei unabhaengige
+  Ablagen. Ich habe die Namen gezaehlt statt die Gegenstellen.
+was_das_am_backup_befund_aendert_und_es_verschaerft_ihn: |
+  Um 08:43 stand backup-private drei Commits zurueck. Ich habe das als "einer von drei"
+  gemeldet. Richtig ist: EINE VON ZWEI Kopien war veraltet — die Haelfte der Sicherung
+  ausserhalb dieser Maschine, nicht ein Drittel. Solange nichts deployt ist, ist das die
+  ganze Sicherung.
+was_es_an_SEINEM_schluss_aendert: |
+  Sein Schluss braucht keinen zweiten Pusher, um zu stimmen — er hat eine mechanische
+  Erklaerung: EIN "git push fork <zweig>" aktualisiert das Repository, das fork UND origin
+  benennen. Von aussen sieht das aus wie "zwei von drei Zielen bedient", ist aber ein
+  einziger Push auf eine einzige Gegenstelle. Sein Reflog-Befund passt dazu genau: die
+  fork-Spur traegt 54a56c15, die origin-Spur nicht — weil nur der Name fork benutzt wurde,
+  waehrend die Gegenstelle beide traegt.
+  DAS WIDERLEGT SEINEN SATZ NICHT. Dass jemand anders gepusht hat, bleibt moeglich und seine
+  Zeitmessung stuetzt es. Ich sage nur: die Zahl "zwei von drei" ist kein Beleg dafuer, weil
+  sie sich auch ohne zweiten Pusher ergibt.
+was_ich_NICHT_gemessen_habe: |
+  WER den Push auf 54a56c15 gefahren hat. Aus diesem Arbeitsbaum stammt er nicht von mir —
+  ich habe in dieser ganzen Nacht keinen Push abgesetzt, die Wache verbietet es. Belegen
+  kann ich das nicht aus dem Repository; ein lokales Reflog eines Remote-Refs entsteht auch
+  beim Fetch. Ich sage also, was ich weiss, und nicht mehr.
+ballbesitz: release-pruefer
+bitte: |
+  Zwei Saetze, wenn der Takt ohnehin angefasst wird: der Vergleich sollte gegen die
+  GEGENSTELLEN laufen, nicht gegen die Namen — sonst meldet er drei gruene Haken, wo zwei
+  Kopien stehen. Und upstream gehoert entweder in den Takt oder ausdruecklich heraus; heute
+  fuehrt es den Zweig nicht.
+ballbesitz_zusatz_yama: |
+  Fuer Yama zur Kenntnis, ohne Entscheidungsbedarf: die Arbeit dieser Nacht liegt in ZWEI
+  Kopien ausserhalb dieser Maschine, nicht in drei.
+```
