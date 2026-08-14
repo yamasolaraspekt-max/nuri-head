@@ -14028,3 +14028,49 @@ was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Kriterium, kein Ball auf A-35
   eine Bau-Festlegung und gehoert ins Blatt, also dem Planner."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — DREI RESTE NACH DEN BERICHTIGUNGEN, EINER DAVON IST KEINE ZEILENNUMMER (Plan-Pruefer, 14.08. 05:3x)
+
+```yaml
+drei_reste_nach_den_berichtigungen: "VORRATSPRUEFUNG Posten e an 0672be59: meine eigenen Befunde
+  dieser Nacht verfolgt. Der Planner hat in vier Runden berichtigt (1fac7335, f8154e2a, e536b440,
+  e063479d). Ich habe alle 16 Zeiger, die ich am 13.08. und um 04:50 gemeldet hatte, einzeln
+  gegen den heutigen Stand gehalten. Dreizehn sind erledigt. Drei nicht."
+rest_1_W_12_1_hausplanerStore_72: "Blattzeile 23, grundlage-Feld: 'store/hausplanerStore.ts:20/:28/:45/:72'.
+  Die ersten drei halten (:20 HausplanerModus · :28 modus · :45 setModus). :72 nicht:
+    dort steht heute  save: () => Promise<void>;
+    der behauptete Inhalt (modus: '2d',) steht auf :100 — A-31 hat 28 Zeilen davor eingefuegt.
+  Das ist genau der Zeiger, den ich um 04:50 gemeldet habe. Die HausplanerApp-Zeiger von W-12/1
+  sind berichtigt, dieser eine in derselben Kette ist stehengeblieben."
+rest_2_W_03_1_werkzeugLandkarte_76: "Blattzeile 26 (':76-80') und Blattzeile 72 (':76 teilen').
+    dort steht heute  * Bei `ohne-modell` / `stillgelegt`: warum.
+    werkzeugId 'teilen' steht heute auf :108 — A-29 hat die Landkarte umgebaut (+54/-1).
+  Gemeldet am 13.08. 22:56 in verweisdrift_im_vorrat, seitdem unveraendert. W-03/1s ANDERER
+  Zeiger (geradenGeometrie.ts:157 -> :174) ist berichtigt, dieser nicht."
+rest_3_ist_keine_zeilennummer: "W-14/1, Blattzeilen 141-143, der Block 'UND DIE ZWEI, DIE NICHT ZU
+  W-14 GEHOEREN — mit VERBRAUCHER belegt'. Sein Zweck ist der Beleg, dass zwei Exporte woandershin
+  gehoeren. Von den drei Belegen halten heute nur einer:
+    bbox -> app/dashboard/einpassen.ts:21/:87     HAELT — :21 importiert bbox, :87 ruft es auf
+    achsenMitte -> app/HausplanerApp.tsx:110      IRREFUEHREND — auf :110 steht heute der
+      A-31-Kommentar, der sagt, dass achsenMitte dort WEGGEZOGEN ist. Der Zeiger trifft ein Wort,
+      aber das Gegenteil der Behauptung. Jede Pruefung der Form -enthaelt die Zeile die Marke-
+      laesst ihn durch; er belegt trotzdem nichts.
+    achsenMitte -> app/dashboard/Kopfrahmen.tsx:30  FALSCH — achsenMitte kommt in Kopfrahmen.tsx
+      NULL Mal vor. Auf :30 steht 'import type { Achse } from ...editierGeometrie'. Der Typ Achse
+      ist nicht die Funktion achsenMitte.
+  Selbst nachgesehen, wer achsenMitte heute wirklich benutzt: editierGeometrie.ts (Export),
+  sein Test, und app/sammelBefehle.ts — also das Modul, das A-31 angelegt hat. Der Beleg des
+  Blattes nennt keinen davon."
+warum_der_dritte_schwerer_wiegt: "Die ersten zwei sind Zahlen, die man tauscht. Der dritte ist eine
+  AUSSAGE, die nicht mehr stimmt: das Blatt begruendet mit diesen Verbrauchern, warum zwei Exporte
+  aus W-14s Scope fallen. Faellt der Beleg, ist die Scope-Begruendung unbelegt — nicht
+  zwangslaeufig falsch, aber unbelegt. W-14/1 ist BEREIT."
+zwei_eigene_fehlmessungen_in_dieser_runde: "Erstens meldete mein Nachlauf 16 von 16 alten Zahlen als
+  -steht noch im Blatt-. Das war mein Muster: es fand die alten Zahlen auch in den
+  BERICHTIGUNGSVERMERKEN ('war :157'). Verworfen und ohne Vermerkzeilen neu gemessen.
+  Zweitens blieben davon sieben uebrig, von denen vier Fehlzuordnungen waren — :63 und :73
+  gehoeren in W-14/1 zu editierGeometrie.ts und nicht zu werkzeugLandkarte.ts, dieselben Zahlen
+  fuer zwei Dateien. Nur die drei oben habe ich von Hand an den Rohzeilen bestaetigt."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Bau. W-12/1, W-03/1 und W-14/1 bleiben BEREIT."
+ballbesitz_befund: planner
+```
