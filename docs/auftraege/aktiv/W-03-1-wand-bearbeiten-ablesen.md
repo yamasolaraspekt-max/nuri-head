@@ -23,7 +23,7 @@ anlass: "Die letzte der zehn B-Zeilen ohne Blatt. Und der Zeitpunkt ist nicht be
          vorhandenen Unterbau."
 grundlage: "app/rahmen/EigenschaftenPanel.tsx (563 Z., 2 Exporte) :108/:120/:324/:330-331/:336 ·
             app/tools/toolRegistry.ts (0 Eintraege fuer die fuenf) · app/tools/werkzeugVertrag.ts
-            (je 1) · app/tools/werkzeugPaket.ts (je 1) · app/tools/werkzeugLandkarte.ts:76-80
+            (je 1) · app/tools/werkzeugPaket.ts (je 1) · app/tools/werkzeugLandkarte.ts:108 (teilen; war :76-80)
             (je 'fehlt') · geometry/geradenGeometrie.ts:84 geradenSchnitt, :174 parallelVersatz   [war :157 — A-34 fuegte 17 Kommentarzeilen davor ein]
             (A-32) · store/hausplanerStore.ts:65/:145/:147 executeCommands (A-31) · REGISTER.md:44"
 ```
@@ -69,7 +69,7 @@ DIE LANDKARTE BEGRUENDET DIE FUENF fehlt-MARKEN, vollstaendig gelesen:
                     setzen, aber der Befehl, der es rechnet, fehlt.'
   :79 verlaengern  'Wie trimmen, andere Richtung.'
   :80 versatz      'Parallelversatz erzeugt eine NEUE Wand im Abstand d …'
-  :76 teilen       'einen Knoten aendern UND einen anlegen, in EINEM
+  :108 teilen      'einen Knoten aendern UND einen anlegen, in EINEM
                     umkehrbaren Schritt.'
   :78 verbinden    'einen aendern, einen entfernen, in EINEM Schritt.'
 

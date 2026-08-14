@@ -20,7 +20,7 @@ einwand_erledigt: "W-02:206 und W-13:239 fuehren beide 'W-12 zurueckgehalten, Ei
                    eine Zurueckhaltung behaupten, die nicht mehr gilt."
 anlass: "Yamas Regel fuer Klasse B, 13.08.: erst die Messung, dann die Einordnung. W-18 war die erste
          Zeile, das ist die zweite — und damit sind beide, die er genannt hat, gemessen."
-grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.ts:100/:101/:170/:212-215/
+grundlage: "store/hausplanerStore.ts:20/:28/:45/:100 (war :72) · renderers/three-d/szene.ts:100/:101/:170/:212-215/
             :621/:627 · app/rahmen/Buehne.tsx:146 (gezeichnet) mit app/HausplanerApp.tsx:1261-1269/:1337/:1409/:349
             und app/dashboard/Kopfrahmen.tsx:304 · app/state/uiState.ts:5/:10/:11 · FORMELSAMMLUNG:253 (F-032, war :218)"
 ```

@@ -139,7 +139,17 @@ TEST  __tests__/editierGeometrie.test.ts  52 Zeilen
 
 UND DIE ZWEI, DIE NICHT ZU W-14 GEHOEREN — mit Verbraucher belegt:
   bbox         -> app/dashboard/einpassen.ts:21/:87   (Ansicht einpassen, AUF-62)
-  achsenMitte  -> app/HausplanerApp.tsx:110, app/dashboard/Kopfrahmen.tsx:30
+  achsenMitte  -> app/sammelBefehle.ts:23 (Einfuhr) und :108 (Aufruf)
+                  sowie __tests__/editierGeometrie.test.ts:12/:43/:46/:47
+  ^^^^ BERICHTIGT 14.08. — die zwei alten Verweise waren BEIDE falsch, und der erste
+       auf eine Art, die jede Marke-in-der-Zeile-Pruefung durchlaesst:
+       HausplanerApp.tsx:110 traegt heute den A-31-Kommentar, der woertlich sagt, dass
+       achsenMitte WEGGEZOGEN ist — der Zeiger trifft das Wort und behauptet das
+       GEGENTEIL dessen, was er belegen soll. Kopfrahmen.tsx:30 ist schlicht falsch:
+       achsenMitte kommt in der Datei NULL Mal vor, dort steht ein Typ-Import von Achse.
+       Die Scope-Begruendung war damit UNBELEGT (nicht zwangslaeufig falsch) — sie ist es
+       jetzt: der echte Verbraucher ist sammelBefehle.ts, also genau das Modul, das A-31
+       angelegt hat, und keiner der beiden gehoert zu W-14.
   Das steht so auch im Nachtrag von docs/WERKBANK-ANSCHLUSS.md, den ich am
   13.08. berichtigt habe: der alte Satz sagte 'bbox/achsenMitte brauchen BEIDE
   (W-13 und W-14)', und W-13 war der falsche Zweite — seine drei
