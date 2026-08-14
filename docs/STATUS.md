@@ -84,6 +84,7 @@
 | **W-36** Faehigkeiten-Navigation | **`BETRIEBSBESTAETIGT`** | – | Release `f1c412f9` · §19 12.08. | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `faehigkeiten.ts` 129 Z. + `FaehigkeitenNavi.tsx` 76 Z. · **VIER Statusachsen** im Hausplaner, je an eigenem Traeger · eine ohne Registereintrag |
 | **W-37** Rechenpanels | `BETRIEBSBESTAETIGT` | — | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben | · **EVALUATOR 13.08.: NACHBESSERN, EIN Punkt (§12.2) — `W-37-6`.** **Acht der neun Kriterien sind erfüllt**, jedes einzeln nachgemessen. **Der Befund trifft eine verlangte HANDLUNG, die nicht ausgeführt wurde:** das Kriterium sagt wörtlich *„Die REGISTERZEILE wird nachgezogen"* — am Commit gemessen enthält `225a7f1a` **0** Treffer für `REGISTER.md`, und `:124` nennt weiterhin **196 Z**, während `EngineFlaeche.tsx` an **drei** Ständen (Basis, Bau, HEAD) je **199** hat. *Der Bericht sagt es selbst:* „die Berichtigung gehört ins Register" — der Bau hat den Befund gesehen, richtig gemessen und bewusst nicht ausgeführt. **Warum ich das nicht durchgehen lasse:** der Scope nennt das Register **weder** als Ziel **noch** als Nicht-Ziel (beide Listen gelesen; nach §5 gilt dann das Kriterium), die Handlung ist an **vier** echten Ständen üblich und möglich (`fa7547c7` W-33, `3dae69b4` W-35, `3abd8e79` W-39, `7c782f76` W-34 — alle enthalten `REGISTER.md`), und W-37 ist nach eigener Aussage die **letzte freie Ablesung**. **Ausdrücklich nicht beanstandet:** die Messung 196↔199 stimmt. **Was erfüllt ist:** die **acht** Adapter nach **Signatur** gezählt (das Namensmuster `als*Eingabe` findet nur sechs — das Klassenmerkmal trägt), `SCHWERE_ANZEIGE` mit drei Graden je Zeichen **und** Wort (`EngineFlaeche.tsx:31-35`), sechs Import-Wächter namentlich plus drei **Nur-Quelle**-Fälle getrennt, `:522/:527/:538` selbst geöffnet, und 0 Doppel über **253** Blattdateien. Suite **1750/1750**, tsc exit=0. **Die Gegenprobe des Kriteriums nachgefahren:** am Bau-Stand sind es **vier** von sechs richtigen Registerzahlen, nicht fünf — *kein Befund gegen das Blatt*, denn `StartView.tsx` hatte am Basis-Stand `a94d91ac` wirklich 267 und wuchs erst danach. **Drei eigene Messfehler offengelegt**, darunter ein vertippter Basis-SHA, dessen stiller Fehlschlag dreimal „0 Zeilen" ergab. · **Der Generator schrieb: acht Kriterien belegt, sieben Blätter, Stufe 6 vollständig.** · **RUNDE 2 — EVALUATOR 13.08.: ABGENOMMEN.** Nach §12.4 **alle neun Kriterien erneut gefahren**. **Der Befund ist behoben und A-20-4 dabei eingehalten:** `REGISTER.md:124` nennt jetzt **199 Z** mit der alten Zahl **durchgestrichen daneben** samt Datum und Anlass — nicht gelöscht; `EngineFlaeche.tsx` habe ich mit **199** selbst nachgezählt. Und der Befund steht nicht nur im Register: `7-GRENZEN` trägt einen eigenen Abschnitt mit den drei Ständen und dem Satz *„Die Zahl war nicht veraltet, sie war falsch."* Suite **1750/1750**, tsc exit=0. **Mein eigener Messfehler in dieser Runde, und es ist der dritte derselben Klasse an einem Tag:** bei `W-37-5` maß ich erst **fünf**, dann **vier** Importe — richtig sind **sechs**. Zwei Ursachen, beide in meinem Muster: `enginePanelTreppe` importiert **mehrzeilig** (`^import` greift nicht), und `sparrenVorbehalt:3` sowie `zweiEnginesSchweigen:3` importieren **mit Dateiendung** `.ts`. Erst `from [^]*dashboard/enginePanels(\.ts)?` fängt alle sechs. *Bemerkenswert daran:* genau dieses Kriterium ist entstanden, weil der Bauende dieselbe Zahl zu klein gemessen hat, und sein Blatt schreibt als Lehre die **Zwei-Muster-Regel** auf — ich bin heute zum dritten Mal in dieselbe Klasse gelaufen. Die Lehre steht bei mir noch als Kenntnis, nicht als Handgriff.
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
+| **A-36** Wer schreibt · §14 auf Hunk-Ebene | `BEREIT` | **plan-pruefer** | Schnitt 14.08. · Basis `80ab2d8d` | **YAMA HAT §14 SELBST ENTSCHIEDEN** (14.08.): *„Das ist eine Regelaenderung, sie liegt bei mir, und ich entscheide sie hiermit: ja. Formuliert sie als Auftrag, ich brauche sie nicht vorgelegt."* Und den Waechter freigegeben: *„klein genug, um neben ihnen zu laufen; alles andere wartet."* **DER GRUND IST GEMESSEN:** `docs/STATUS.md` traegt 15.687 Zeilen und 97 Auftragsdatensaetze, **58 % aller Commits des 13.08. fassen sie an**, und **37 von 40 fassen NUR sie an** — die Kollision entsteht INNERHALB der Datei, nicht zwischen Dateien. Ueber 500 Commits schreiben **fuenf Rollen praktisch gleichauf** (141/84/84/84/76). **Damit ist `--name-only` eine Frage, deren Antwort immer dieselbe ist.** Der Waechter ordnet Hunks der naechststehenden Abschnittsueberschrift zu und meldet `beruehrt: A-33 (11 Z.), W-12/1 (38 Z.)` statt `modified`. **K5 ist die tragende Kante: er MELDET, er sperrt nicht** — A-30 hat an zwoelf Fehlalarmen gemessen, was eine zu scharfe Barriere kostet. **A-36-3 ist die Positivprobe an drei echten Faellen** dieser Nacht (`ef273926`, `93960252`, `5ac659bf`), denn ein Waechter, den man nie sprechen gesehen hat, ist von einem kaputten nicht zu unterscheiden. **NICHT im Scope:** die Aufteilung auf 97 Dateien (Yama entscheidet sie NACH zwei Tagen Waechterlauf), Claim-in-den-Commit, jede Aenderung an `docs/STATUS.md` selbst. |
 | **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | `BEREIT` | **Generator** | Schnitt `1df82ee1` · Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` | **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
@@ -15756,4 +15757,141 @@ bitte: |
   Wenn der Handgriff in die Rollendatei aufgenommen wird, den Satz um Richtung B ergaenzen:
   wer an der geteilten Datei schreibt, committet im selben Schritt — sonst gehoert sein
   Text dem naechsten fremden Commit. Ein Satz, kein Bau.
+```
+
+```yaml
+auftrag: "w18_1_haelt_an_allen_geprueften_stellen"
+titel: "W-18/1 vollstaendig gegen seinen Schnitt geprueft — kein einziger Zeiger gewandert"
+rolle: plan-pruefer
+zeit: "2026-08-07 08:51"
+stand_kopf: e370490e
+posten: "Vorratspruefung (a) GEWANDERTE VERWEISE, ausnahmsweise VOLLSTAENDIG statt Stichprobe"
+warum_vollstaendig: |
+  W-18/1 ist das aelteste BEREIT (29h51, 256 Commits seit Schnitt 8c920624) und nennt nur
+  EINE Produktivdatei. Damit waren ALLE Zeiger pruefbar, nicht nur eine Auswahl — und das
+  Ergebnis ist deshalb belastbarer als die bisherigen Stichproben.
+zeiger_beide_staende: |
+  Jeder Zeiger an HEAD UND am Basis-Stand 8c920624 gelesen, Zeile gegen Zeile:
+    HausplanerApp.tsx:31        import { pruefeKontur, konturStatusText, ... }   gleich
+    wallGeometry.ts:62          // Gehrung (mitered): ...                        gleich
+    wallGeometry.ts:106         * Liefert die beiden Schnittpunkte ...           gleich
+    toolRegistry.ts:230         id: 'kontur',                                    gleich
+    geometry/kontur.ts:109      export function schneidetSichSelbst(...)         gleich
+    FORMELSAMMLUNG.md:75        ### F-004 · Schnittpunkt zweier Geraden          gleich
+  SECHS von SECHS unveraendert. Keine Drift.
+eigenschaften_am_selben_ort: |
+  Das Blatt behauptet an toolRegistry.ts:230 mehr als die Zeile — fuenf Eigenschaften.
+  Alle nachgelesen und alle exakt:
+    label 'Kontur' (:231) · icon 'raum' (:232) · art 'werkzeug' (:233)
+    groupId 'gebaeude' (:234) · supportedViews ['2d','split'] (:236)
+zaehlbare_behauptung: |
+  W-18-1-4 sagt: "genau EINER importiert das Modul (kontur.test.ts), die uebrigen nennen
+  die Werkzeug-ID." Gemessen:
+    Testdateien mit Import aus geometry/kontur : 1  (kontur.test.ts)
+    Testdateien, die 'kontur' als ID nennen    : 4  (davon kontur.test.ts selbst)
+    -> also drei "uebrige". Die Behauptung haelt wortgenau.
+  Muster vorher am bekannten Treffer geprueft: kontur.test.ts:41 traegt
+  "} from '../geometry/kontur';" — das Muster trifft dort, also zaehlt es richtig.
+warum_ein_NEGATIVES_ergebnis_hier_steht: |
+  Weil es keins ist. Drei Blaetter dieser Nacht trugen falsche Fundstellen (W-12/1, A-33,
+  W-16/1 mit zwei), und zwei davon waren schon AM SCHNITT falsch. Vor diesem Hintergrund
+  ist "sechs von sechs halten, fuenf Eigenschaften halten, die Zaehlung haelt" eine
+  Aussage ueber die Ziehbarkeit: wer W-18/1 aufnimmt, findet vor, was das Blatt beschreibt.
+  Ein Pruefer, der nur Funde ablegt, hinterlaesst ein Zerrbild des Bestandes.
+grenze_der_aussage: |
+  Geprueft sind die ZEIGER, die EIGENSCHAFTEN am genannten Ort und die EINE zaehlbare
+  Behauptung. NICHT geprueft ist, ob die sieben Kriterien fachlich vollstaendig sind —
+  das ist DoR-Arbeit und die liegt hier nicht an, W-18/1 hat sie am 13.08. bekommen.
+  Ein eigener Fehlgriff unterwegs, nicht als Ergebnis ausgegeben: mein erster Pfad fuer
+  toolRegistry.ts war geraten (app/toolRegistry.ts) und lieferte "No such file". Kein
+  Fund, sondern mein Fehler — Pfad ueber git ls-files aufgeloest und wiederholt.
+ballbesitz: "— (kein Vorgang; W-18/1 bleibt BEREIT beim Generator)"
+```
+
+### A-36 — Datensatz (eigener Zaun nach A-25)
+
+```yaml
+auftrag: "A-36"
+zustand: BEREIT
+ballbesitz: plan-pruefer
+blatt: "docs/auftraege/aktiv/A-36-wer-schreibt-und-paragraf-14.md"
+basis_sha: 80ab2d8d
+art: "BAU — ein lesendes Skript plus die von Yama entschiedene §14-Aenderung."
+spur: A
+prioritaet: P1
+claim: "planner 14.08. — Claim VOR dem Schnitt; A-36 hatte null Treffer und null Blaetter."
+yama_entscheidung: "Woertlich am 14.08.: 'Das ist eine Regelaenderung, sie liegt bei mir, und ich
+  entscheide sie hiermit: ja. Formuliert sie als Auftrag, ich brauche sie nicht vorgelegt.' Der
+  Waechter ist freigegeben mit 'klein genug, um neben ihnen zu laufen; alles andere wartet.'"
+der_grund_gemessen: "docs/STATUS.md 15.687 Zeilen, 232 Abschnitte, 97 Auftragsdatensaetze. Am 13.08.
+  fassen 166 von 285 Commits sie an (58 Prozent), und 37 von 40 fassen NUR sie an. Ueber 500 Commits
+  schreiben fuenf Rollen gleichauf: plan-pruefer 141, release-pruefer 84, planner 84, evaluator 84,
+  generator 76. Yamas erste Messung ueber nur 60 Commits sah nach zwei Rollen aus — er hat den zu
+  kurzen Fensterausschnitt selbst offengelegt statt ihn stehenzulassen."
+lesestellen_gemessen_fuer_die_naechste_entscheidung: "FUENF Werkzeuge lesen docs/STATUS.md, vier
+  davon an GENAU EINER Zeile: a26-ball-drift.sh:24, a27-bau-commit.sh:34, a30-datensatz-paar.sh:55,
+  a25-zaeune.mjs:19 — je eine Pfadkonstante. Das fuenfte, w212-nachweis.sh:169-170, liest ueber
+  git show mit zwei strukturellen Mustern. commit-pruefen.sh liest NICHT, es ruft nur auf (7 der 17
+  Treffer). Diese Zahl hat Yama VOR der Aufteilungsentscheidung verlangt; sie liegt damit vor."
+nicht_im_scope: "Die Aufteilung auf 97 Dateien — Yama entscheidet sie ausdruecklich NACH zwei Tagen
+  Waechterlauf. Claim-in-den-Commit (dritter Schritt seiner Reihenfolge). Sperrdatei oder Mutex —
+  von ihm ausdruecklich abgelehnt. Jede Aenderung an docs/STATUS.md selbst. Hausplaner-Code."
+tragende_kante: "K5 — der Waechter MELDET und sperrt nicht. A-30 hat an zwoelf Fehlalarmen auf
+  Altbestand gemessen, was eine zu scharfe Barriere kostet, und A-03 sagt was danach passiert:
+  sie wird weggeklickt, und dann auch die richtige."
+```
+
+```yaml
+auftrag: "f004_sperrt_den_winkel_nicht_die_entfernung"
+titel: "F-004 durchgerechnet: der Waechter bindet den WINKEL, nicht die ENTFERNUNG des Schnittpunkts"
+rolle: plan-pruefer
+zeit: "2026-08-07 08:58"
+stand_kopf: 80ab2d8d
+posten: "Vorratspruefung (c) FORMELN DURCHRECHNEN — tragende Formel aus W-03/1 (BEREIT, 16h48)"
+wortlaut_gegen_code: |
+  FORMELSAMMLUNG.md:75ff gegen geradenGeometrie.ts:84ff, Term fuer Term:
+    F-004: n = (Cx-Ax)(Dy-Cy) - (Cy-Ay)(Dx-Cx)
+    Code : n = kreuz(c.x-a.x, c.y-a.y, sx, sy)          deckungsgleich
+    F-004: m = (Bx-Ax)(Dy-Cy) - (By-Ay)(Dx-Cx)
+    Code : m = kreuz(rx, ry, sx, sy)                    deckungsgleich
+  Der Code setzt F-004 also woertlich um. Der Grenzfall ist normalisiert gebaut:
+  |m|/(|r|*|s|) < EPS_SINUS (1e-6) — genau der Sinus des Zwischenwinkels, wie F-004 ihn
+  seit A-32 verlangt.
+gerechnet: |
+  Fall 1, rechtwinklige Wandachsen A(0,0) B(1000,0) gegen C(500,-500) D(500,500):
+    Ergebnis exakt (500, 0), Sinus 1, t = 0,5. Die Formel rechnet richtig.
+  Fall 2, 10-m-Wand, zweite Achse 1000 mm versetzt und um delta verkippt:
+    delta = 0,005 mm  Sinus 5,0e-7  -> GESPERRT
+    delta = 0,010 mm  Sinus 1,0e-6  -> GESPERRT
+    delta = 0,020 mm  Sinus 2,0e-6  -> Schnittpunkt bei x = -500 km
+    delta = 0,100 mm  Sinus 1,0e-5  -> Schnittpunkt bei x = -100 km
+    delta = 1,000 mm  Sinus 1,0e-4  -> Schnittpunkt bei x =  -10 km
+  Fall 3, unmittelbar an der Schwelle: t = -99900, S.x = -999 001 mm, also -999 km.
+befund: |
+  Der Waechter tut, was F-004 verlangt, und er tut es laengenunabhaengig — aber er bindet
+  NUR den Winkel. Direkt oberhalb der Schwelle liefert die Formel einen Schnittpunkt, der
+  hunderte Kilometer neben dem Haus liegt, und sie liefert ihn als gueltigen Punkt, nicht
+  als null. Ein richtig zitierter Wortlaut, der eine Groesse ohne Aussage zurueckgibt.
+  F-004s Grenzfall spricht ueber "parallel oder deckungsgleich" — ueber die PLAUSIBILITAET
+  von S sagt er nichts, und der Code kann darueber auch nichts sagen, weil er den Kontext
+  (wie gross ist das Haus) nicht kennt.
+was_der_vorhandene_test_abdeckt_und_was_nicht: |
+  geradenGeometrie.test.ts:74-94 prueft genau die A-32-Frage und prueft sie gut: dasselbe
+  Urteil bei L=100 und L=10 000 fuer k=1e-9 (parallel) und k=1e-3 (Schnitt), mit den zwei
+  Fallen in verschiedene Richtungen ausgeschrieben. Das ist die LAENGENUNABHAENGIGKEIT.
+  Die ENTFERNUNG des Ergebnispunkts prueft er nicht — meine Achse ist eine andere.
+kein_live_defekt_ausdruecklich: |
+  Gemessen: geradenSchnitt hat NULL Aufrufer ausserhalb seines eigenen Tests
+  (git grep ueber resources/**, einziger Treffer geradenGeometrie.test.ts). Es kann heute
+  also niemand in diese Lage geraten. Der Befund ist eine EIGENSCHAFT der Formel fuer den
+  Tag, an dem der erste Aufrufer entsteht — kein Baufehler und kein Sperrgrund.
+nebenbei_bestaetigt: |
+  W-03-1-4 sagt: "F-004 ist gebaut, aber von W-03 NICHT aufgerufen — dieser Unterschied
+  gehoert benannt, sonst liest die naechste Rolle F-004 ✓". Das haelt, und es haelt
+  staerker als geschrieben: F-004 wird von NIEMANDEM aufgerufen, nicht nur nicht von W-03.
+ballbesitz: planner
+bitte: |
+  Ein Satz an F-004s Grenzfall, wenn er ohnehin angefasst wird: die Schwelle bindet den
+  Winkel, nicht die Entfernung; wer die Funktion verdrahtet, entscheidet, was mit einem
+  Schnittpunkt weit ausserhalb der Zeichenflaeche geschieht. Kein Bau, ein Satz.
 ```
