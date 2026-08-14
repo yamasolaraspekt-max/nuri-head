@@ -16870,3 +16870,59 @@ bitte_praezisiert: |
   Zulieferung nennt die Reihenfolge (Einmaligkeit, dann Barriere); ob und wann das gebaut
   wird, ist deine Entscheidung, nicht meine.
 ```
+
+```yaml
+auftrag: "a36_die_drei_formalien_gemessen"
+titel: "A-36: die drei fehlenden §5-Formalien gemessen — der Planner braucht nur noch je einen Satz"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:34"
+stand_kopf: bdf44881
+warum_ich_das_mache: |
+  A-36 liegt seit 09:12 bei mir und wartet auf vier §5-Punkte im Blatt. Der Planner ist seit
+  67 Minuten still. Die Punkte SCHREIBEN darf ich nicht — das Blatt gehoert ihm. Was ich darf
+  und was die Blockade von meiner Seite aufloest: die Punkte MESSEN, damit er nur noch einen
+  belegten Satz setzen muss statt selbst zu erheben.
+formalie_1_testdaten_rolle_route_browserpfad: |
+  A-36 baut ein LESENDES Shell-Skript, das vom Commit-Tor aufgerufen wird. Gemessen am Scope,
+  den das Blatt nennt (scripts/wer-schreibt.sh neu, scripts/commit-pruefen.sh, ARBEITSREGELN
+  :693): KEIN Pfad unter app/, routes/, resources/ oder public/. Also keine HTTP-Route, keine
+  Oberflaeche, kein Serverprozess.
+  BELEGTER SATZ FUER DAS BLATT: "Testdaten, Benutzerrolle, Route und Browserpfad: n.z. —
+  der Auftrag baut ein lesendes Skript ohne Oberflaeche und ohne Serverprozess; der Scope
+  liegt vollstaendig unter scripts/ und docs/."
+formalie_2_api_server_schema_migration_bestandsdaten_bundle: |
+  Je einzeln gemessen statt pauschal:
+    API/Server   Scope beruehrt weder routes/ noch app/    -> nicht beruehrt
+    Schema       keine Datei unter database/                -> nicht beruehrt
+    Migration    0 Migrationen im Scope                     -> nicht beruehrt
+    Bestandsdaten kein Datenpfad, das Skript LIEST nur      -> nicht beruehrt
+    BUNDLE       hier war meine erste Messung schlecht gestellt und ich habe sie verworfen:
+                 'grep -c scripts/.*\.sh package.json' lieferte 7 und beantwortet die Frage
+                 NICHT — es zaehlt Erwaehnungen. Richtig gemessen: 'build' ist 'vite build'
+                 und nennt kein Shell-Skript; die sieben Treffer sind Laufzeit-Huellen
+                 (node-runtime.sh) und Schema-/Test-Laeufe. KEIN Bauschritt liest
+                 scripts/*.sh als QUELLE. Ein neues Skript dort kann das Buendel nicht
+                 veraendern.
+  BELEGTER SATZ: "API, Server, Schema, Migration, Bestandsdaten und Bundle: nicht beruehrt.
+  Der Scope liegt unter scripts/ und docs/; kein Bauschritt liest scripts/*.sh als Quelle
+  (build = vite build), es gibt keine Migration und keinen Datenpfad."
+formalie_3_abhaengigkeitskette: |
+  A-36 ist additiv: ein neues Skript plus ein Aufruf. Es haengt an genau zwei Dingen, beide
+  vorhanden gemessen:
+    scripts/commit-pruefen.sh  existiert und ruft die drei Vorgaenger-Barrieren auf
+                               (a26 :618-619, a27 :627-628, a30 :642-643)
+    docs/STATUS.md             muss Abschnittsueberschriften tragen — 249 yaml-Zaeune und
+                               die Ueberschriftenstruktur sind da, sonst waere meine
+                               Hunk-Zuordnung von 09:02 nicht gelaufen.
+  Nichts anderes haengt an A-36, und A-36 haengt an nichts Ungebautem.
+formalie_4_erstnutzer_bleibt_offen: |
+  Den kann ich NICHT messen, und er ist der einzige materielle der vier. §5 verlangt fuer ein
+  NEU zu bauendes Werkzeug einen BENANNTEN Erstnutzer: welche Rolle es ab wann in welchem
+  Ablauf benutzt. Der Aufrufort ist klar (commit-pruefen.sh, Muster der drei Vorgaenger), aber
+  WER ab WANN ist eine Festlegung, keine Messung. Die gehoert dem Planner.
+was_das_fuer_die_DoR_heisst: |
+  Sobald diese drei Saetze im Blatt stehen und der Erstnutzer benannt ist, erteile ich ohne
+  weitere Runde. Die Sache selbst ist seit b6640235 durchgemessen, A-36-3s Wortlaut-Frage
+  seit 902c83f3 benannt. Es fehlt Schreibarbeit, keine Pruefarbeit.
+ballbesitz: planner
+```
