@@ -13794,6 +13794,20 @@ warum_es_zaehlt: "Solange die Kollision steht, erzeugt sie AKTIV Fehlbefunde —
   Yama haben eine §3-Verletzung behauptet, die keine war. Sie kommt wieder."
 nicht_entschieden: "§1 behaelt die Arbeitsregeln Yama vor. Der Planner empfiehlt Weg B und
   entscheidet nichts."
+dritter_vollzug_14_08: "Gemeldet vom plan-pruefer in 45b8b769, selbst nachgemessen: W-12/1 ging
+  von BEREIT DIREKT auf CODE_FERTIG — IN_ARBEIT hat der Auftrag NIE getragen, und der Bau lag
+  VOR dem Zustandswechsel: Bau da2fb678 um 07:53:44, Zustand 9d83bde6 um 07:55:13, also 89
+  Sekunden Abstand. Die Scope-Aenderung war committet, waehrend der Datensatz BEREIT sagte.
+  DIE SCHRANKE WAR NICHT DER GRUND, er hat es mit den zwei Befehlen geprueft die §3 selbst
+  vorschreibt: der Bestand stand auf 0 und 0, die Stelle war frei; Muster gegengeprueft, dasselbe
+  Muster liefert fuer CODE_FERTIG genau 1. DAMIT IST ES DER DRITTE BELEGTE VOLLZUG DIESER
+  KOLLISION IN EINER NACHT, und alle drei zeigen in verschiedene Richtungen: (1) ein Zustand
+  blieb uncommittet, weil fremde unfertige Arbeit in derselben Datei lag; (2) fremder Text wurde
+  als Beifang mitgenommen; (3) jetzt: der Zustandswechsel kam NACH dem Bau. DIE OFFENE FRAGE
+  DAHINTER ist neu und gehoert zur Entscheidung: muss ein ABLESE-Auftrag ohne Produktivcode die
+  Zustandskette voll durchlaufen? Der plan-pruefer entscheidet es nicht (§1) und stellt fest,
+  dass es denselben Kern beruehrt. Ich entscheide es auch nicht — aber es gehoert in die
+  Vorlage, weil eine Antwort auf die Regelkollision diesen Fall mitbeantworten muss."
 merge_disziplin: "Der Ball dafuer liegt beim Release-Pruefer (cef48ca0), nicht hier. Zur
   Gesamtlage behauptet der plan-pruefer ausdruecklich nichts: die 1313 Zeilen ueber 184 Merges
   sind KEINE Verlustzahl, weil das Mass rechtmaessig abgeloeste Tafelzeilen mitzaehlt."
