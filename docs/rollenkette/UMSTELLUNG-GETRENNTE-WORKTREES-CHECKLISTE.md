@@ -309,6 +309,14 @@ darf ich nicht schreiben, weil er alleiniger Schreibraum des Integrators wird. *
 P2F-01 und liegt bei Yama, der die Instanzen fährt.** Solange sie fehlt, ist der Schreibstopp eine
 Anordnung ohne Adressaten.
 
+**Nachgemessen um 09:44, und die Lage ist schärfer als ein Nachzügler:** In den **4,5 Minuten** nach
+der Stopp-Feststellung um 09:39:31 sind **zwei** weitere fremde Commits gefallen (`c5c6ac57` 09:40:15,
+`e6c4f7a2` 09:42:59) — **und beide schreiben in `docs/STATUS.md`**, genau die Datei, für die B-2 den
+Integrator zum **alleinigen** Schreiber macht. `e6c4f7a2` besteht ausschließlich daraus:
+`docs/STATUS.md | 56 ++++++`. **Das ist kein Auslaufen, das ist laufender Betrieb.** Ich nenne hier
+keine feste Gesamtzahl, weil sie mit jeder Minute driftet — die Messung ist die **Rate**, nicht der
+Stand: **zwei Commits in 4,5 Minuten, beide in der Datei mit dem künftigen Einzelschreiber.**
+
 **Ein Nachweis, der nicht durch Zufall grün wird:** P2F-05 gilt erst, wenn nach dem **zugestellten**
 Stopp eine **benannte Zeitspanne ohne fremden Commit** vergangen ist. Ein einzelner sauberer Blick
 genügt nicht — er trifft nur die Pause zwischen zwei Commits. **Vorschlag: 20 Minuten, gemessen mit
