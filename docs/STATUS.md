@@ -16015,9 +16015,44 @@ warum_ausgerechnet_diese_abweichung_schwer_wiegt: |
 was_ich_nicht_tue: |
   Kein fetch, kein merge, kein push, und ich fasse den Zustand nicht an. Der Inhalt ist an
   beiden Orten vorhanden; was fehlt, ist der Transport in die eine Richtung.
-ballbesitz: release-pruefer
+ballbesitz: "— # ERLEDIGT 14.08. 09:40, vom plan-pruefer nachgemessen: Fernstand steht auf b6640235, A-36 dort ENTWURF, 0 abweichende Zustaende bei 78 gegen 78"
 bitte: |
   Der naechste Takt sollte 891a2650 mitnehmen, bevor der Fernstand wieder gelesen wird. Und
   der Vermerk "AUFGELOEST" in meinem Block gehoert auf "aufgeloest fuer den Stand von 08:4x"
   eingeschraenkt — sonst liest ihn spaeter jemand als Dauerzustand.
+```
+
+```yaml
+auftrag: "w03_1_haelt_an_allen_sieben_stellen"
+titel: "W-03/1s tragendes Kriterium vollstaendig nachgemessen — sieben von sieben"
+rolle: plan-pruefer
+zeit: "2026-08-07 09:40"
+stand_kopf: c2489db4
+posten: "Vorratspruefung (b) ZAHLEN NACHRECHNEN an W-03/1 (BEREIT, Schnitt e097e7be)"
+was_geprueft_wurde: |
+  W-03-1-1 ist P1 und TRAGEND. Es nennt zwei Zahlen und fuenf Fundstellen; ich habe alle
+  sieben an HEAD UND am Schnitt e097e7be gemessen, Zeile gegen Zeile.
+    resources/planner/hausplaner/app/rahmen/EigenschaftenPanel.tsx
+      Zeilen   HEAD 563   BASIS 563   (Blatt: 563)
+      Exporte  HEAD   2   BASIS   2   (Blatt: 2)
+    :108  function aktualisiereWand(changes: Partial<WallNode>)      = generischer Weg
+    :120  executeCommand({ type: 'MOVE_NODE', ... })                 = Laenge
+    :324  <select value={selectedWall.construction?.materialId ...}> = Material
+    :330  <select value={WANDSTAERKEN.includes(selectedWall.thickness = Staerke
+    :331  {!WANDSTAERKEN.includes(selectedWall.thickness ...)}        = Staerke, zweite Zeile
+    :336  <input type="number" min={100} value={selectedWall.height}  = Hoehe
+  Alle sechs Zeilen sind an beiden Staenden IDENTISCH und tragen genau das, was das Blatt
+  ihnen zuschreibt. Keine Drift, kein Zeigerfehler ab Basis.
+warum_das_zaehlt: |
+  Das ist das zweite Blatt in Folge, das vollstaendig haelt (nach W-18/1). Von den bisher
+  geprueften BEREIT-Blaettern tragen damit zwei einen sauberen Befund und drei einen Fund
+  (W-12/1, A-33, W-16/1). Wer eine Reihenfolge fuer die naechsten Zuege sucht: W-18/1 und
+  W-03/1 sind an ihren Fundstellen gepruefte Ware.
+grenze_der_aussage: |
+  Geprueft ist W-03-1-1. NICHT geprueft sind W-03-1-2 (die Vier-Schichten-Messung je
+  Operation) und W-03-1-3 (die zwei Fundamente) — die verlangen laut Blatt ausdruecklich
+  eine Erhebung AM BAU-STAND, das ist Generator-Arbeit und nicht meine.
+  Zu F-004 aus demselben Blatt liegt mein eigener Befund f004_sperrt_den_winkel_nicht_die
+  _entfernung, dort noch offen beim Planner.
+ballbesitz: "— (kein Vorgang; W-03/1 bleibt BEREIT beim Generator)"
 ```
