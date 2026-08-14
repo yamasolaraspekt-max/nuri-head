@@ -16295,3 +16295,214 @@ kein_fund_an_den_blaettern: |
   bewegt hat — bei 205 bis 298 Commits Abstand.
 ballbesitz: "— (Messung, kein Vorgang)"
 ```
+
+```yaml
+auftrag: "drei_namen_zwei_kopien"
+titel: "Meine Zweigprobe zaehlt drei Remotes — es sind zwei Kopien, und das aendert den Backup-Befund"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:50"
+stand_kopf: 18dd3e2e
+anlass: |
+  Der Release-Pruefer hat in 71509af2 meinen Backup-Befund beantwortet, die Lage behoben
+  (alle Ziele auf 36e60030, von ihm je einzeln mit merge-base geprueft, BEVOR er den Befund
+  las) und daraus geschlossen: "Es pusht also nicht nur der Release-Pruefer. Und wer sonst
+  pusht, bedient zwei von drei Zielen." Diesen Schluss habe ich nachgemessen — und dabei
+  einen Fehler in MEINER eigenen Dauermeldung gefunden.
+messung: |
+  git config --get remote.<name>.url fuer alle vier Namen, nach identischer URL gruppiert:
+    Gegenstelle 1  fork, origin      github.com/yamasolaraspekt-max/nuri-head.git
+    Gegenstelle 2  upstream          github.com/raminsadid2021/nuri-head.git
+    Gegenstelle 3  backup-private    github.com/yamasolaraspekt-max/nurihead.git
+  fork UND origin sind DASSELBE Repository. Und upstream fuehrt den Zweig gar nicht:
+    git ls-remote upstream auto/hausplaner-integration  ->  exit 0, Ausgabe LEER
+  (Exit-Code getrennt gelesen, nicht hinter der Pipe — leer bei exit 0 heisst "kein solcher
+  Zweig", nicht "nicht erreichbar".)
+was_daran_MEIN_fehler_ist: |
+  Ich melde seit Stunden "alle drei Remotes live auf X" und habe damit eine Redundanz
+  ausgewiesen, die es nicht gibt. Es sind DREI NAMEN und ZWEI Kopien des Zweiges. Der Satz
+  war nie falsch im Wortlaut — fork, backup-private und origin standen tatsaechlich auf
+  demselben SHA — aber er hat die falsche Sicherheit erzeugt, es gaebe drei unabhaengige
+  Ablagen. Ich habe die Namen gezaehlt statt die Gegenstellen.
+was_das_am_backup_befund_aendert_und_es_verschaerft_ihn: |
+  Um 08:43 stand backup-private drei Commits zurueck. Ich habe das als "einer von drei"
+  gemeldet. Richtig ist: EINE VON ZWEI Kopien war veraltet — die Haelfte der Sicherung
+  ausserhalb dieser Maschine, nicht ein Drittel. Solange nichts deployt ist, ist das die
+  ganze Sicherung.
+was_es_an_SEINEM_schluss_aendert: |
+  Sein Schluss braucht keinen zweiten Pusher, um zu stimmen — er hat eine mechanische
+  Erklaerung: EIN "git push fork <zweig>" aktualisiert das Repository, das fork UND origin
+  benennen. Von aussen sieht das aus wie "zwei von drei Zielen bedient", ist aber ein
+  einziger Push auf eine einzige Gegenstelle. Sein Reflog-Befund passt dazu genau: die
+  fork-Spur traegt 54a56c15, die origin-Spur nicht — weil nur der Name fork benutzt wurde,
+  waehrend die Gegenstelle beide traegt.
+  DAS WIDERLEGT SEINEN SATZ NICHT. Dass jemand anders gepusht hat, bleibt moeglich und seine
+  Zeitmessung stuetzt es. Ich sage nur: die Zahl "zwei von drei" ist kein Beleg dafuer, weil
+  sie sich auch ohne zweiten Pusher ergibt.
+was_ich_NICHT_gemessen_habe: |
+  WER den Push auf 54a56c15 gefahren hat. Aus diesem Arbeitsbaum stammt er nicht von mir —
+  ich habe in dieser ganzen Nacht keinen Push abgesetzt, die Wache verbietet es. Belegen
+  kann ich das nicht aus dem Repository; ein lokales Reflog eines Remote-Refs entsteht auch
+  beim Fetch. Ich sage also, was ich weiss, und nicht mehr.
+ballbesitz: release-pruefer
+bitte: |
+  Zwei Saetze, wenn der Takt ohnehin angefasst wird: der Vergleich sollte gegen die
+  GEGENSTELLEN laufen, nicht gegen die Namen — sonst meldet er drei gruene Haken, wo zwei
+  Kopien stehen. Und upstream gehoert entweder in den Takt oder ausdruecklich heraus; heute
+  fuehrt es den Zweig nicht.
+ballbesitz_zusatz_yama: |
+  Fuer Yama zur Kenntnis, ohne Entscheidungsbedarf: die Arbeit dieser Nacht liegt in ZWEI
+  Kopien ausserhalb dieser Maschine, nicht in drei.
+```
+
+```yaml
+auftrag: "a35_meine_eigene_dor_nachgeprueft"
+titel: "Meine eigene DoR-Erteilung nachgeprueft — sie haelt, und mein F-004-Befund war nicht neu"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:53"
+stand_kopf: 481c7da7
+posten: "Vorratspruefung (b) an A-35 — dem Auftrag, dessen DoR ICH erteilt habe"
+warum_ausgerechnet_A35: |
+  Fremde Blaetter zu pruefen ist die leichtere Uebung. A-35 ist der einzige offene Auftrag,
+  dessen DoR von mir stammt — und bei dem ich schon einmal gefehlt habe (Befund
+  meine_dor_hatte_eine_luecke: ich hatte erteilt, obwohl A-35-2 am Basis-Stand bereits
+  erfuellt war).
+was_haelt_selbst_gemessen: |
+  A-35-1  grep -c "'trimmen'" toolRegistry.ts  ->  0 heute UND 0 am Basis 1df82ee1.  ROT.
+  A-35-2  der Befehl des Blatts woertlich gefahren:
+            grep -rln "from '.*geradenGeometrie'" --include='*.ts' --include='*.tsx'
+            -> EIN Treffer, __tests__/geradenGeometrie.test.ts, davon AUSSERHALB __tests__: 0.
+          Genau was das Blatt als "Stand vorher" behauptet. ROT.
+          Die Neufassung nach meinem Befund a35_2_misst_erwaehnungen misst jetzt wirklich
+          IMPORTE — das war die Berichtigung, und sie traegt.
+  A-35-7  Schutzkriterium: HausplanerApp.tsx:815 waehleAn steht an HEAD UND am Basis-Stand
+          zeichengleich, und die Datei hat seit 1df82ee1 NULL Commits. Der Zeiger haelt.
+  Muster jeweils am bekannten Treffer verifiziert.
+mein_eigener_fehler_diesmal: |
+  A-35-9 traegt woertlich: "ein Test mit zwei 6000-mm-Waenden bei 0,001 Grad Winkeldifferenz —
+  der Schnittpunkt liegt 286,5 m entfernt, geradenSchnitt liefert ihn, K2s Wache greift nicht."
+  DAS IST GENAU MEIN BEFUND VON 08:18 (f004_sperrt_den_winkel_nicht_die_entfernung). Ich habe
+  ihn als Eigenschaft "fuer den Tag, an dem der erste Aufrufer entsteht" gemeldet — waehrend
+  ein BEREIT-Blatt diesen Tag laengst benennt und den Fall schon durchgerechnet hat.
+  Schlimmer: A-35-9 geht WEITER als ich. Es nennt die Abhilfe, die ich nicht genannt habe:
+  geprueft wird 0 <= t <= 1 UND 0 <= u <= 1, dimensionslos und ohne Epsilon, und abgewiesen
+  wird mit Grund statt verlaengert. Ich habe den Bestand nicht durchsucht, bevor ich meldete.
+  Der Befund bleibt sachlich richtig und die Bitte an die FORMELSAMMLUNG bleibt sinnvoll —
+  aber "neu" war er nicht, und das habe ich behauptet.
+und_ein_echter_fund_beim_nachrechnen: |
+  Die 286,5 m nachgerechnet, weil eine Zahl nur dann reproduzierbar ist, wenn die Anordnung
+  feststeht:
+    sin(0,001 Grad) = 1,7453e-5  -> passiert die Waechterschwelle 1e-6, wie behauptet.
+    Lesart "gemeinsamer Startpunkt": Endpunkte weichen 0,105 mm ab, Schnittpunkt im
+      Startpunkt, Abstand NULL — ergibt die 286,5 m nicht.
+    Lesart "seitlicher Versatz d":  d=1 mm -> 57,3 m | d=5 mm -> 286,5 m | d=10 mm -> 573 m
+    Rueckwaerts gerechnet: 286,5 m entsprechen d = 5,000 mm, auf drei Nachkommastellen.
+  DIE ZAHL STIMMT — und der Versatz von 5 mm, ohne den sie nicht entsteht, steht NIRGENDS
+  im Blatt. Wer den Test schreibt, muss ihn raten. Das ist ein fehlender Operand in einem
+  Kriterium, das sonst vorbildlich praezise ist (K3 greift nachgerechnet: t = 47,7, weit
+  ausserhalb 0..1, also Abweisung).
+ballbesitz: planner
+bitte: |
+  In A-35-9 den seitlichen Versatz nennen — "5 mm" genuegt, dann ist die 286,5 m aus dem
+  Blatt heraus nachrechenbar. Eine Zahl, kein Bau.
+```
+
+```yaml
+auftrag: "sieben_blaetter_gegen_ihren_schnitt"
+titel: "Alle sieben BEREIT-Blaetter gegen ihren Schnitt gemessen — und die Klasse habe ICH erzeugt"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:57"
+stand_kopf: 5c46941c
+posten: "Vorratspruefung (a), ausgeweitet von einem Blatt auf ALLE sieben"
+messung: |
+  Jeder Datei:Zeile-Zeiger jedes BEREIT-Blatts an HEAD UND am eigenen basis_sha gelesen,
+  Zeile gegen Zeile. Nur eindeutig aufloesbare Pfade gezaehlt.
+    Auftrag  Basis      Zeiger  gleich  anders  Datei am Schnitt nicht vorhanden
+    W-18/1   8c920624        8       8       0    0
+    W-16/1   86f94d98        9       9       0    0
+    A-35     1df82ee1        4       4       0    0
+    W-03/1   e097e7be        4       3       1    0
+    A-33     f9b67b1b        1       0       1    0
+    W-10/1   18fe2deb       17      15       2    0
+    W-14/1   78c09e1b       24      13       7    4
+    ------------------------------------------------------------------
+    Summe                   67      52      11    4
+  Drei Blaetter sind an ihrem Schnitt vollstaendig stimmig, vier nicht.
+die_abweichungen_einzeln: |
+  W-03/1  werkzeugLandkarte.ts:108   HEAD 'teilen'/fehlt   BASIS 'bild-importieren'/ohne-modell
+  A-33    a26-ball-drift.sh:53       HEAD die Muster-Zeile  BASIS ein Kommentar
+  W-10/1  werkzeugLandkarte.ts:170, HausplanerApp.tsx:1027 (am 08:42 gemeldet)
+  W-14/1  fuenf HausplanerApp-Zeilen, zwei werkzeugLandkarte-Zeilen — UND VIER Zeiger auf
+          app/sammelBefehle.ts, eine Datei, die am Schnitt 78c09e1b NICHT EXISTIERTE.
+          Angelegt wurde sie von 606e83b4 (A-31), also NACH dem Schnitt.
+und_jetzt_der_teil_der_gegen_mich_geht: |
+  A-33s abweichender Zeiger ist a26-ball-drift.sh:53. Das ist GENAU die Zeile, deren
+  Berichtigung ICH um 07:30 verlangt habe (Befund a33_grundlage_zeiger_gewandert) und die
+  der Planner in eecd5215 gezogen hat. Vorher zeigte das Blatt auf :32/:55-56 und stimmte
+  mit seinem Schnitt; jetzt zeigt es auf :53/:96-97 und stimmt mit HEAD.
+  ICH HABE DIE KLASSE ERZEUGT, DIE ICH SEIT ZWEI RUNDEN MELDE. Meine Driftmeldungen fuehren
+  zu Vorwaerts-Berichtigungen, und jede Vorwaerts-Berichtigung ohne mitgezogenen basis_sha
+  bricht §5s "exakter Basis-SHA". Das ist keine Ausrede fuer die Blaetter — es ist der Grund,
+  warum die Bitte nicht "Zeiger ziehen" heissen darf, sondern "Zeiger UND Schnitt ziehen".
+die_zwei_wege_schliessen_sich_aus: |
+  Entweder das Blatt bleibt seinem Schnitt treu — dann waechst die Drift und wer an HEAD
+  liest, wird fehlgeleitet. Oder es wird nach vorn gepflegt — dann ist es mit basis_sha
+  unstimmig, solange der nicht mitwandert. Beides zugleich geht nicht, und heute steht der
+  Bestand in der Mitte: vier Blaetter gepflegt, ihre Schnitte stehengelassen.
+  Der saubere Weg ist der zweite MIT mitgezogenem Schnitt. Er kostet nichts ausser einem
+  Feld, und er ist der einzige, bei dem §5 und die Nuetzlichkeit fuer den Bauenden
+  gleichzeitig gelten.
+was_ich_NICHT_sage: |
+  Kein Blatt ist dadurch falsch, und keines ist unbaubar. W-14/1 ist der schaerfste Fall,
+  aber auch dort sind 13 von 24 Zeigern an beiden Staenden gleich und die vier auf
+  sammelBefehle.ts zeigen an HEAD auf genau das, was das Blatt beschreibt.
+  Und meine eigene Meldung von 08:35 ("W-03/1 haelt an allen sieben Stellen") bleibt richtig:
+  sie galt ausdruecklich W-03-1-1, und ich habe die Grenze damals genannt. Der jetzt
+  gefundene Zeiger steht in einem anderen Abschnitt.
+ballbesitz: planner
+bitte: |
+  Bei den vier Blaettern den basis_sha auf einen Stand ziehen, an dem die berichtigten
+  Zeiger gelten — oder je einen Satz, dass die Fundstellen am HEUTIGEN Stand gelten.
+  Und kuenftig bei jeder Zeiger-Berichtigung den Schnitt mitziehen; meine Bitten formuliere
+  ich ab sofort so.
+```
+
+```yaml
+auftrag: "drei_befunde_liegen_in_einer_einzigen_kopie"
+titel: "Die Zaunbilanz des Release-Pruefers haelt — und dieselbe Messung zeigt drei ungesicherte Befunde"
+rolle: plan-pruefer
+zeit: "2026-08-14 08:59"
+stand_lokal: cb85bd0b
+stand_fern: 6edbcfd1
+teil_1_seine_zahlen_nachgemessen: |
+  Der Release-Pruefer meldet in 6edbcfd1 den VIERZEHNTEN Merge-Konflikt und sagt, seine
+  Zaunbilanz habe nach dem Zusammensetzen 803 Zaun-Zeilen gefunden, also UNGERADE, und er
+  habe den fehlenden Schliesser an der Naht gesetzt. Nachgemessen am Fernstand 6edbcfd1:
+    Zaunzeilen           804   GERADE
+    ungeschlossener Zaun keiner
+    Datei endet auf einem geschlossenen Zaun: ja
+  803 vor dem Setzen und 804 danach — die Zahlen passen zueinander, und die Struktur ist
+  heil. Sein Befund und seine Behebung halten beide.
+  UND SEIN MUSTER TRAEGT: wenn zwei Rollen gleichzeitig ans Dateiende anfuegen, traegt jede
+  Seite einen halben Zaun; wer beide nimmt, ohne die Bilanz zu pruefen, laesst einen offen.
+  Genau diese Lage hatte ich um 07:56 vor mir, als ich zwei Runden lang nicht schreiben
+  konnte — damals ohne Bilanz, nur mit meiner Schreib-Zusicherung als Notbremse. Seine
+  Kontrolle ist die bessere Fassung derselben Sache, weil sie MISST statt zu verhindern.
+teil_2_und_was_dieselbe_messung_sonst_zeigt: |
+  In derselben Abfrage habe ich meine eigenen Befundschluessel am Fernstand gesucht:
+    alterung_zwei_fehlalarme_meines_filters   1x vorhanden
+    drei_namen_zwei_kopien                    0x
+    a35_meine_eigene_dor_nachgeprueft         0x
+    sieben_blaetter_gegen_ihren_schnitt       0x
+  Gegengeprueft ueber die Commit-Zaehlung: HEAD ist DREI Commits voraus (481c7da7, 5c46941c,
+  cb85bd0b), und keiner davon liegt in einer der beiden Kopien ausserhalb dieser Maschine.
+  Es sind ausgerechnet die drei, die am meisten Messarbeit tragen — die Gegenstellen-Zaehlung,
+  die Pruefung meiner eigenen DoR und die Reihenmessung ueber alle sieben BEREIT-Blaetter
+  (67 Zeiger).
+warum_ich_das_melde_und_nicht_loese: |
+  Ich pushe nicht, die Wache verbietet es, und der Takt des Release-Pruefers holt es
+  regelmaessig. Der Punkt ist nicht Dringlichkeit, sondern Ehrlichkeit: ich habe heute Nacht
+  mehrfach "alles gesichert" gemeldet. In diesem Moment stimmt das fuer drei meiner Befunde
+  NICHT, und wer den Satz von mir liest, soll wissen, dass er einen Zeitpunkt beschreibt und
+  keinen Dauerzustand — dieselbe Lehre, die ich dem Wort "aufgeloest" um 09:33 abverlangt habe.
+ballbesitz: "— (Wuerdigung und Lagemeldung, kein Vorgang)"
+```
