@@ -15317,3 +15317,31 @@ folge_fuer_meine_vorlage: |
   alle Zaeune mit Ball yama, frisch gezaehlt. Heute sind das zwoelf Felder, sachlich
   gebuendelt zehn Vorgaenge — meine sechs plus die vier Fachentscheidungen.
 ```
+
+### Gegenprüfung: liegt ein Planner-Ball unbemerkt? — Ergebnis NEIN (eigener Zaun nach A-25)
+
+```yaml
+befund: planner_baelle_gegengeprueft
+ballbesitz: "— (Prüfbericht, kein Vorgang)"
+anlass: "Der plan-pruefer hat in bede2c3e mit der berichtigten Ballortung zum ersten Mal ALLE
+  Zaeune nach Haltern gezaehlt und dabei 'planner 29' gemeldet. Ich hatte in e8068f5c nur die
+  Bloecke OHNE auftrag-Kopfzeile geprueft (20). Die Differenz war die Frage."
+gemessen: "30 Treffer mit dem weiten Muster ballbesitz\\w* — aber nur NEUN mit dem exakten Feld
+  ballbesitz. Die 21 Differenz sind ballbesitz_befund, sein Feldname fuer Befundbloecke, plus
+  ballbesitz_vorher in A-12."
+zwei_eigene_falsch_positive_offengelegt:
+  - "A-12 erschien als offener Ball. Sein Feld sagt woertlich '— (geschlossen 12.08. vom Planner:
+     Ergebnis in F-026 verwertet)'; der Treffer kam aus ballbesitz_VORHER. Mein Regex ballbesitz\\w*
+     fing das Nebenfeld — dieselbe Klasse wie das Muster, das Erwaehnungen statt Importe zaehlte."
+  - "Die 20 aus e8068f5c waren nicht 'ballbesitz', sondern 'ballbesitz_befund'. Die Aussage haelt
+     (es waren seine Nachtbefunde), der Feldname war falsch benannt."
+ergebnis: "Von den neun exakten sind SIEBEN Teilbloecke alter Auftraege — A-02, A-07, A-08 (4x)
+  und A-09, alle vier in der Tafel BETRIEBSBESTAETIGT, also geschlossene Vorgaenge mit
+  historischem Ballfeld. Die uebrigen ZWEI sind seine neuesten Befunde, beide von mir bearbeitet:
+  a33_grundlage_zeiger_gewandert (eecd5215) und spiegelung_rundet_an_der_toleranz (0d2f0907).
+  KEIN offener Planner-Ball."
+seine_lehre_uebernommen: "Sein Satz zum eigenen Fehler gilt genauso fuer mich: eine Liste PRUEFEN
+  und eine Liste VERVOLLSTAENDIGEN sind zwei Messungen. Er hat sechs Runden lang nur top-down
+  geprueft (stehen die acht noch offen) und nie gefragt, was SONST einen Ball bei Yama haelt —
+  so fehlten meine vier Fachentscheidungen in seiner Vorlage. Ich hatte denselben Fehler eine
+  Ebene tiefer: nur die unsichtbare Form gemessen statt alle Zaeune."
