@@ -15142,3 +15142,72 @@ bitte: |
   Koordinaten ganzzahlig sind. Wer W-14/1 baut, kann W-14-1-7 sonst korrekt zitieren
   und die Bedingung trotzdem uebersehen.
 ```
+
+```yaml
+auftrag: "meine_ballortung_blieb_zu_eng"
+titel: "Eine Verfahrenskorrektur, die ich angekuendigt und nie ausgefuehrt habe"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:42"
+stand_kopf: 7ebc4539
+posten: "Vorratspruefung (e) EIGENE BEFUNDE VERFOLGEN — und der erste Treffer bin ich selbst"
+wie_es_auffiel: |
+  Die Ballortung meldete 12 Befundbloecke. Ich habe in dieser Nacht deutlich mehr als 12
+  Befunde abgelegt. Statt die Zahl hinzunehmen, nachgesehen — und die Ablageform gemessen.
+befund: |
+  In ballortung_blinder_blocktyp (Z.13789, 14.08. ca8aed47) habe ich woertlich geschrieben:
+  "Ich stelle die Ballortung von 'Bloecke ohne zustand' auf 'alle Bloecke ohne auftrag-Zeile'
+  um." Diese Umstellung hat NIE stattgefunden. Mein Scan zaehlt bis heute die Bloecke MIT
+  auftrag-Kopfzeile und OHNE zustand-Feld. Das sind 12. Die Bloecke ohne auftrag-Kopfzeile
+  sind 158. Ich habe eine Korrektur gemeldet und dann nicht angewandt — das ist genau die
+  Klasse, gegen die ich anderen Rollen gegenhalte.
+messung: |
+  docs/STATUS.md, 15145 Zeilen
+    248  yaml-Zaunanfaenge
+     89  davon mit auftrag-Kopfzeile   -> mein Auftragsscan sieht sie
+    158  davon OHNE auftrag-Kopfzeile  -> mein Befundscan sah sie NIE
+      1  Zaun ohne jeden Schluessel    (89+158=247, der Rest)
+  Meine 28 eigenen Befunde aus dieser Nacht: 28 von 28 liegen in Zaeunen OHNE auftrag-Kopf.
+  Erst die drei Bloecke von heute frueh (w37_ballwechsel_runde2, a33_grundlage_zeiger_gewandert,
+  spiegelung_rundet_an_der_toleranz) tragen eine auftrag-Kopfzeile. Meine eigene Ablageform
+  hat sich also mitten in der Nacht geaendert, und der Bestand liegt jetzt in ZWEI Formen.
+tragweite: |
+  Von den 158 unsichtbaren Zaeunen tragen 49 ein ballbesitz-Feld. Die Datei hat insgesamt
+  100 Zeilen '^ballbesitz:'. Rund die HAELFTE aller Ballzuweisungen in der einen
+  Statuswahrheit liegt damit in Bloecken, die mein Aufzaehl-Scan nie besucht hat — mit
+  Haltern yama, planner und release-pruefer. Und es sind nicht nur meine: die Zaeune bei
+  Z.178, Z.1255, Z.1294, Z.1426, Z.1661, Z.1711, Z.1746, Z.2345, Z.4129, Z.4308, Z.5242,
+  Z.5387, Z.6190, Z.6610 stammen von anderen Rollen und beginnen mit befund/anlass/vorgang/
+  gemessen/anweisung_im_wortlaut/vorschlag.
+was_NICHT_passiert_ist: |
+  Kein Ball von MIR ist verlorengegangen. Die Wache hat zwei Haelften, und die erste ist
+  'grep ^ballbesitz: plan-pruefer direkt gelesen' — grep liest Zeilen, nicht Zaeune, und
+  trifft deshalb unabhaengig von der Kopfzeile. Heute 0, und in jeder Runde 0. Genau
+  deshalb ist die Luecke so lange unbemerkt geblieben: die zu enge Haelfte lieferte fuer
+  MEINE Bahn dieselbe Antwort wie die richtige. Sie haette erst gefehlt, wenn ein Ball
+  ohne das Wort 'ballbesitz:' am Zeilenanfang gelegen haette.
+korrektur_in_dieser_runde_ausgefuehrt: |
+  Ballortung ab sofort: alle yaml-Zaeune, Einteilung nach 'hat auftrag-Kopfzeile' statt nach
+  'hat zustand-Feld'. Mit der berichtigten Fassung heute gemessen: 49 Ballfelder in den 158,
+  davon 0 bei plan-pruefer. Antwort fuer meine Bahn unveraendert 0 — die Korrektur aendert
+  heute nichts am Ergebnis, aber ab heute stimmt die Frage.
+alter_einzelfall_nachgesehen: |
+  Der damals gemeldete Block (zustand OHNE auftrag-Kopf, 'zustand: OFFEN') ist vom Planner
+  ERLEDIGT: das Feld ist raus, an seiner Stelle steht warum_kein_zustand_feld mit der
+  Begruendung, Z.13689ff, ballbesitz weiter yama. Heute traegt genau EIN Zaun noch zustand
+  ohne auftrag-Kopf: der N-003-Block ab Z.6610 mit zustand BETRIEBSBESTAETIGT (Z.6644) und
+  ballbesitz '—'. Der faellt ohnehin in den Negativfilter und haelt keinen Ball. Harmlos,
+  aber die Klasse besteht.
+eigener_zeiger_gewandert: |
+  Mein damaliger Bericht nannte 'Zeile 13626' fuer diesen Datensatz. Heute steht dort Prosa;
+  der Datensatz liegt auf 13689. Der vierte Fall der Zeigerdrift-Klasse — diesmal in MEINEM
+  eigenen Bericht. Wer Zeilennummern schreibt, erzeugt Drift, auch als Pruefer.
+handwerk: |
+  Zwei Einzeiler sind mir zerbrochen, weil ich Backticks in ein zsh-echo geschrieben habe
+  (Kommandoersetzung). Beide Laeufe endeten mit Fehler und OHNE Zahl. Nicht gemeldet,
+  sondern als Heredoc wiederholt. Eine ausgefallene Messung ist kein Ergebnis.
+ballbesitz: "— (die Korrektur ist meine und in dieser Runde ausgefuehrt)"
+fuer_den_planner: |
+  Kein Auftrag, nur eine Beobachtung zur Form: der Bestand fuehrt Befunde in zwei Formen
+  (mit und ohne auftrag-Kopfzeile). Ob das vereinheitlicht wird, gehoert dem Planner —
+  ich messe ab jetzt beide.
+```
