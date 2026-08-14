@@ -14357,3 +14357,47 @@ die_sache_steht_in: "docs/FAHRPLAN-WERKZEUGKASTEN.md (Klassenzuordnung und Messu
 nicht_entschieden: "Alle vier sind Fachentscheidungen. Der Planner misst und empfiehlt,
   entscheidet aber keine davon."
 ```
+
+## BEFUND — DER PLANNER HAT VIER GEFUNDEN, ES SIND ZEHN (Plan-Pruefer, 14.08. 06:1x)
+
+```yaml
+register_ohne_statuswahrheit: "Der Planner hat in 30c9ab3f seine eigene Postenliste gemessen und
+  vier Kennungen gefunden, die im Register stehen, aber weder eine Tafelzeile noch einen Datensatz
+  haben (W-24, W-26, W-28, W-32) — sein Befund haelt, ich habe alle vier einzeln nachgezaehlt.
+  Weil die Frage systematisch ist, habe ich sie systematisch gestellt: das GANZE Register gegen
+  die GANZE Statuswahrheit. Gemessen an 30c9ab3f."
+gemessen: "docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md fuehrt 43 Kennungen. Muster vorher
+  am bekannten Treffer geprueft (W-31 -> BESCHRIEBEN, W-24 -> LEER). Dagegen 75 Tafelzeilen und
+  77 Datensaetze. Ergebnis in zwei Klassen:
+    A  SIEBEN Staemme, deren Statuswahrheit eine VARIANTE fuehrt — kein Verlust, die bekannte
+       Verkuerzungsklasse aus A-33:
+         W-03 -> W-03/1 · W-10 -> W-10/1 · W-12 -> W-12/1 · W-14 -> W-14/1
+         W-16 -> W-16/1 · W-18 -> W-18/1 · W-07 -> W-07N
+    B  ZEHN Kennungen stehen im Register und NIRGENDS in der Statuswahrheit, weder als Stamm
+       noch als Variante. Alle mit Reifegrad LEER."
+die_zehn_und_wie_weit_sie_fehlen: "Vier hat der Planner soeben erfasst (W-24, W-26, W-28, W-32).
+  SECHS stehen noch, und sie fehlen unterschiedlich weit:
+    W-25  Pfetten und Kehlbalken          NULL Erwaehnungen in docs/STATUS.md
+    W-30  Flachdach-Aufbau                NULL Erwaehnungen in docs/STATUS.md
+    W-17  Export und Speichern            4 Erwaehnungen im Fliesstext, kein Datensatz
+    W-29  Dachdurchdringungen             2 Erwaehnungen im Fliesstext, kein Datensatz
+    W-43  Abbund-Zeichnung                2 Erwaehnungen im Fliesstext, kein Datensatz
+    W-19  Sonne und Verschattung          8 Erwaehnungen im Fliesstext, kein Datensatz
+  W-25 und W-30 existieren also NUR im Register. Wuerde die Datei verlorengehen, waeren sie weg —
+  und keine Ballwache, keine Tafel und kein Datensatz wuerde es bemerken."
+w_19_ist_der_schaerfste_fall: "Seine Registerzeile traegt woertlich 'ZUSTAENDIGKEIT ENTSCHIEDEN vom
+  planner 13...'. Eine getroffene Entscheidung also — und sie hat in der Statuswahrheit keinen
+  Datensatz. Das ist genau die §16-Lage, die der Planner heute Nacht zweimal behoben hat
+  (Regelkollision, eigene Fachfragen), nur ein drittes Mal an anderer Stelle."
+was_ich_nicht_behaupte: "Ich sage NICHT, dass diese zehn Auftraege sein muessten. Reifegrad LEER
+  heisst, dass sie noch nicht beschrieben sind, und ein unbeschriebenes Werkzeug braucht keinen
+  Auftragsdatensatz. Ich sage: sie stehen in einem Verzeichnis, das die Kette als Landkarte
+  benutzt, und die Statuswahrheit kennt sie nicht. Ob daraus Datensaetze werden, Sammelzeilen
+  wie beim Planner, oder gar nichts, ist eine Planner-Entscheidung."
+eine_eigene_fehlmessung_unterwegs: "Mein erster Lauf meldete 16 Kennungen im Register statt 43 —
+  mein Muster fing nur Zeilen, deren Reifegrad OHNE Sternchen dasteht, also genau die LEER-Zeilen;
+  W-31 mit **BESCHRIEBEN** fiel durch. Aufgefallen an der Musterprobe. Und im zweiten Lauf haette
+  ich W-07 faelschlich als fehlend gemeldet, weil meine Variantenpruefung nur /1 kannte und nicht
+  W-07N. Beide verworfen, nicht nachgebessert."
+ballbesitz_befund: planner
+```
