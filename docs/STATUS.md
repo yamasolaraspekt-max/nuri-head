@@ -17098,3 +17098,59 @@ bitte: |
   die vier als "Werkzeuge" mit einer Sonderregel fuer ihren Reifegrad? Vier von vier sind
   gemessen; es fehlt nur noch das Wort. Danach ist W-01 Stufe 2 schneidbar.
 ```
+
+```yaml
+auftrag: "gegenlese_pruefung_03"
+titel: "Gegenlese zu §13-Pruefung 03 — E1 ist in Kraft, E3 nicht gebaut, und die geprüfte Klasse hat heute Nacht SECHS neue Faelle, alle von mir"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:48"
+stand_kopf: f9057e9a
+gegenstand: "docs/PROZESSPRUEFUNG-03.md, 168 Zeilen, ballbesitz: yama (Entscheidung), plan-pruefer (Gegenlese) — zweiter der fuenf ungeprueften Wurzel-Vorgaenge"
+was_ich_gemessen_habe_statt_zugestimmt: |
+  E1 "Aussagen ueber den Bau werden am COMMIT gemessen, nicht am Arbeitsbaum":
+    IST IN KRAFT. docs/ARBEITSREGELN.md:504 fuehrt es als eigenen Abschnitt. Die Empfehlung
+    der Pruefung ist also uebernommen worden, und ich fahre sie taeglich — bei W-12/1 heute
+    frueh habe ich genau so gemessen (Scope-Diff am Commit, nicht im Baum).
+  E3 "Unterformen-Spalte im Auftragszaehler":
+    NICHT GEBAUT. docs/AUFTRAGSZAEHLER.md hat 154 Zeilen und NULL Treffer auf 'Unterform'.
+  E2 "das §3-Kriterium zaehlbar machen, sechs W-Blaetter":
+    NICHT BEANTWORTET. Mein erster Versuch zaehlte 'IN_ARBEIT'-Vorkommen je Blatt (W-05: 0,
+    W-21: 1, W-22: 4). Das ist ein STELLVERTRETER fuer E2s Frage nach Befehlszeilen UND
+    Ausgabewerten je Ort — also genau die Klasse, die diese Pruefung behandelt. Ich gebe die
+    Zahl nicht als Antwort aus.
+und_hier_ist_die_substanz_die_ich_beitrage: |
+  Die Pruefung nennt die vierte Klasse "Stellvertreter statt Quelle" mit vier Unterformen:
+  Wegwerf-Repo statt Repo (Ort), $TMPDIR statt Unterordner (Ort), Tracking-Ref statt Remote
+  (Zeitpunkt), Arbeitsbaum statt Commit (Zustand).
+  IN DEN LETZTEN DREI STUNDEN habe ich SECHS neue Faelle derselben Klasse produziert und je
+  einzeln offengelegt:
+    1  Zeitstempel      Gedaechtnis statt Uhr        13 Bloecke, Datum sieben Tage falsch,
+                                                     Versatz bis 65 Minuten
+    2  Ballzaehlung     enges Muster statt Feldform  4 gemeldet, tatsaechlich 9
+    3  Abschnitte       Etikett statt Ding           zwei Ueberschriften ohne Kennung fielen
+                                                     auf einen Wert zusammen (A-36-3)
+    4  Blattpfade       eine Feldform statt beider   'blatt:' gelesen, 'datei:' nicht ->
+                                                     drei Blaetter als "nicht lesbar"
+    5  Bundle           Erwaehnung statt Bauschritt  grep -c auf package.json lieferte 7
+    6  E3 soeben        Exit-Kette statt Ergebnis    meine &&-Kette meldete "Datei fehlt",
+                                                     waehrend sie 154 Zeilen hat
+  ALLE SECHS SIND MEINE. Die Pruefung sagt, ihre Substanz komme von den anderen drei Rollen —
+  fuer diese Gegenlese gilt das Gegenteil: die neuen Faelle kommen ausschliesslich von mir.
+was_das_fuer_die_vorgelegten_entscheidungen_heisst: |
+  E1 braucht keine Entscheidung mehr, es steht im Regelwerk.
+  E3 haelt meine sechs Faelle ohne Aenderung aus: Ort, Zeitpunkt und Zustand decken sie ab
+  (1 = Zeitpunkt, 2/3/4/5 = Ort im weiteren Sinn "falsche Quelle", 6 = Zustand). Eine SIEBTE
+  Unterform braucht es nicht — was es braeuchte, waere die Zaehlung selbst, und die ist
+  Befund 0 der Pruefung 02 und weiter ungebaut.
+  E2 kann ich nicht beurteilen, ohne die sechs Blaetter einzeln gegen ihren Wortlaut zu
+  messen. Das ist eine eigene Runde und ich sage es, statt zu nicken.
+zur_ehrlichkeit_der_pruefung: |
+  Sie benennt ihren eigenen Interessenkonflikt: geschrieben von der Rolle, die die meisten
+  Faelle der geprueften Klasse produziert hat. Das ist richtig benannt — und nach dieser
+  Nacht gilt es fuer mich genauso. Wer die Klasse prueft, gehoert selbst hinein.
+ballbesitz: yama
+bitte: |
+  Meine Gegenlese ist geliefert: E1 in Kraft (belegt), E3 nicht gebaut (belegt), E2 offen und
+  als offen gekennzeichnet. Die Entscheidung ueber E2 und E3 liegt bei dir; ich empfehle
+  beide, E3 ohne die siebte Unterform.
+```
