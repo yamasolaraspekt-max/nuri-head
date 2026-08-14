@@ -14975,3 +14975,47 @@ was_ich_daraus_fuer_meine_pruefung_mache: "Bei jeder kuenftigen DoR ordne ich je
   wie ich den vorhandenen Punkt anwende."
 ballbesitz_befund: —   # Pruefbericht: A-33s DoR haelt, nichts ist offen
 ```
+
+```yaml
+auftrag: "w37_ballwechsel_runde2"
+titel: "Der Ballwechsel der zweiten Runde — nachgeholt und bestaetigt"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:26"
+stand_kopf: 2a5f7510
+befund: |
+  Ein Posten aus MEINER eigenen Bahn. W-37 lief nach NACHBESSERN durch eine zweite
+  Runde; die Wache verlangt bei CODE_FERTIG drei Dinge: SHA existent, SHA in einem
+  FELD, Scope-Diff selbst gemessen — und dann den Ballwechsel bestaetigen. Fuer
+  Runde 2 habe ich das nie abgeschlossen. Heute nachgeholt, alles selbst gemessen.
+messung_sha_in_feldern: |
+  bau_sha: 225a7f1a            -> existiert, 13.08. 23:22
+  nachbesserung_sha: 1df82ee1  -> existiert, 13.08. 23:32
+  basis_sha: a94d91ac          -> existiert, 12.08. 22:26
+  Alle drei stehen in FELDERN, nicht in Prosa. Meldepflicht 1+2 erfuellt.
+messung_scope_diff: |
+  git show --numstat 225a7f1a  (Bau):
+    7 Dateien, 508+/0- , ausschliesslich W-37-rechenpanels/1-ZWECK .. 7-GRENZEN
+  git show --numstat 1df82ee1  (Nachbesserung):
+    REGISTER.md                       1+/1-   (Reifegrad LEER -> BESCHRIEBEN)
+    W-37-rechenpanels/7-GRENZEN.md    9+/5-
+  Kein Griff ausserhalb des Werkzeugordners, kein resources/, kein app/.
+  Der Scope ist eng und deckt sich mit dem, was das Blatt verlangt.
+gegenprobe: |
+  Die Zahl 508+/0- allein sagt nicht, dass die Blaetter GEFUELLT sind — 48 Ordner
+  der Werkbank tragen byte-gleiche Schablonen (mein Befund werkbank_acht_schablonen).
+  Also unabhaengig geprueft: md5 ab Zeile 2 ueber alle 1-ZWECK.md.
+    groesste gleiche Gruppe: 9 Ordner
+    W-37 darin: NEIN
+    W-37 1-ZWECK: 5a4394e185501582...   _VORLAGE: e921aa0846c2bd3b...
+  W-37s Blaetter sind echter Inhalt, keine kopierte Vorlage.
+urteil: |
+  Ballwechsel Runde 2 BESTAETIGT. Der Uebergang evaluator -> release-pruefer am
+  13.08. 23:38 nach ABGENOMMEN traegt: SHAs existent und in Feldern, Scope eng und
+  selbst nachgemessen, Inhalt unabhaengig belegt. W-37 liegt zu Recht beim
+  release-pruefer und wartet dort auf §10.
+ballbesitz_befund: "-- kein neuer Ball; Bestaetigung einer eigenen offenen Pflicht"
+anmerkung: |
+  Damit ist W-37 aus meiner Bahn heraus: blatt-Feld nachgetragen (Befund
+  w37_ohne_blattfeld), Ballwechsel Runde 2 bestaetigt. Offen bleibt allein die
+  §10-Freigabe beim release-pruefer, der seit 8h schweigt.
+```
