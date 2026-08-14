@@ -14279,3 +14279,48 @@ was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Bau. Die drei Posten bleiben 
   stehen; ich habe sie nur bestaetigt statt sie weiterzureichen."
 ballbesitz_befund: yama
 ```
+
+## BEFUND — ZWEI VON YAMAS ACHT POSTEN SIND ERLEDIGT UND STEHEN TROTZDEM AUF DER LISTE (Plan-Pruefer, 14.08. 06:1x)
+
+```yaml
+acht_posten_vollstaendig: "Fortsetzung von 5636dc65: dort hatte ich drei der acht Posten gemessen,
+  hier die restlichen fuenf. Damit ist die Liste, die meine Wache in JEDER Runde an Yama
+  weiterreicht, zum ersten Mal vollstaendig gegen den Bestand gehalten. Gemessen an 5636dc65.
+  Ergebnis: ZWEI der acht sind erledigt, SECHS sind offen."
+erledigt_1_fach_gate_N_003: "Der Bestand sagt es zweimal und woertlich:
+    Z.6726  'N-003 kommt nicht wieder auf deinen Tisch. DAUERGELB heisst: die Frage ist
+            beantwortet und bleibt beantwortet.'
+    Z.6797  'N-003 bleibt wie entschieden: DAUERGELB, Geltungsbereich woertlich, erledigt.
+            Es ist der Beleg fuer Fall B — und der einzige bisher.'
+  Das ist kein Vorschlag und keine Empfehlung, sondern eine getroffene Entscheidung mit
+  Kontrollsatz daneben ('heute nachgemessen: EIN Ausgabeweg, er traegt den Satz')."
+erledigt_2_A_13_veroeffentlichungsbedingung: "Die Auflage lautete: SELECT COUNT(*) FROM p_v_roofs
+  WHERE roof_azimuth IS NOT NULL AND (roof_azimuth < 0 OR roof_azimuth >= 360), Ergebnis 0 -> die
+  Bedingung ist leer. GEFAHREN am 12.08. gegen die lokale Arbeits-DB ticket, nur lesend:
+    p_v_roofs gesamt 0 · roof_azimuth ausserhalb 0 · roof_azimuth NULL 0
+  Repo-intern gegengeprueft: A-13 traegt heute zustand BETRIEBSBESTAETIGT, ballbesitz '—' mit dem
+  Vermerk 'Kette vollstaendig, P2 vom Evaluator gegengeprueft und geschlossen', Tafelzeile 8/8.
+  Die Veroeffentlichung hat also stattgefunden, die Bedingung war leer."
+offen_die_sechs: "Jeder einzeln am Bestand geprueft, keiner aus einer Notiz uebernommen:
+    Tragwerk an die Zeichenflaeche   OFFEN — 'offen_bei_yama: nur die Fachfrage aus Punkt 4 —
+                                     gehoert Tragwerk an die Zeichenflaeche?' Reine Fachfrage.
+    W-21L                            OFFEN — DECISION_BLOCKED (Feld ballbesitz '—', Halter im
+                                     Kommentar: 'bis Yama die Fachdaten liefert oder W-23 sie erzeugt')
+    versatz-Quittung                 OFFEN — der Vertretungsentscheid des Release-Pruefers steht
+                                     (erzeugend, Z.1776-1826) und sagt selbst: 'Diese Entscheidung
+                                     ist eine Vertretung, kein Fachurteil. Yama kann sie mit einem
+                                     Satz umdrehen.' Eine Quittung liegt nicht vor.
+    Seed-Weg der Pruefbuehne         OFFEN — 'ICH ENTSCHEIDE DAS NICHT. Ein Seed schreibt in eine
+                                     Datenbank ... ballbesitz: yama'
+    Zeiger raumAuswahl.ts            OFFEN — in 5636dc65 selbst nachgemessen: Buehne.tsx:147 traegt
+                                     {massElemente}, die Stelle steht auf :162
+    Regelkollision §3/E1/Beifang     OFFEN — Datensatz seit 2717ec3d wieder im Bestand, ballbesitz yama"
+was_daraus_folgt: "Die Liste in der Wache kann von acht auf sechs. Zwei Posten haben Yamas
+  Aufmerksamkeit seit Tagen ohne Gegenstand gebunden — N-003 seit der DAUERGELB-Entscheidung,
+  A-13 seit dem 12.08. Ich habe sie in jeder Runde weitergereicht, ohne sie ein einziges Mal zu
+  messen. Das ist derselbe Fehler, den ich heute Nacht an fremden Blaettern gemeldet habe:
+  eine Zahl oder ein Posten wird kopiert statt geprueft."
+was_ich_NICHT_tue: "Ich streiche nichts. Die Liste steht in der Wache, und die gehoert Yama —
+  ich lege die Messung daneben. Kein Blatt, kein Zustand, kein Bau."
+ballbesitz_befund: yama
+```
