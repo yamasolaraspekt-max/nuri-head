@@ -16542,3 +16542,276 @@ warum_ich_das_melde_und_nicht_loese: |
   keinen Dauerzustand — dieselbe Lehre, die ich dem Wort "aufgeloest" um 09:33 abverlangt habe.
 ballbesitz: "— (Wuerdigung und Lagemeldung, kein Vorgang)"
 ```
+
+```yaml
+auftrag: "a36_3_ist_zweideutig_an_der_kante_k2"
+titel: "A-36-3 gegen seine eigenen drei Commits durchgerechnet — bei einem entscheidet die Wortwahl"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:02"
+stand_kopf: b0569fcf
+posten: "§5-Punkt 'kein Kriterium ist unerfuellbar' fuer A-36 — der Punkt, den ich noch offen hatte"
+warum_jetzt: |
+  Ich habe zugesagt, die DoR ohne weitere Runde zu erteilen, sobald die vier fehlenden
+  Punkte im Blatt stehen. Diese Zusage ist nur ehrlich, wenn der Rest wirklich geprueft ist.
+  Offen war "kein Kriterium ist unerfuellbar". A-36-3 ist die Positivprobe und laesst sich
+  HEUTE nachrechnen, obwohl der Waechter noch nicht existiert — die Zuordnung Hunk zu
+  Abschnitt ist reine Textarbeit.
+gerechnet: |
+  Fuer jeden der drei genannten Commits: Hunks mit -U0 gezogen, jede Hunk-Startzeile der
+  naechststehenden Ueberschrift der Datei AM COMMIT zugeordnet, wie A-36 es beschreibt.
+    ef273926   3 Hunks   beruehrte ABSCHNITTE 2   davon mit KENNUNG 1   ['W-20']
+    93960252   2 Hunks   beruehrte ABSCHNITTE 2   davon mit KENNUNG 0   []
+    5ac659bf   4 Hunks   beruehrte ABSCHNITTE 3   davon mit KENNUNG 2   ['A-25','W-20']
+befund: |
+  A-36-3 verlangt woertlich: "Er muss bei allen dreien MEHR ALS EINE KENNUNG melden."
+  Bei 93960252 traegt KEINER der beiden beruehrten Abschnitte eine Kennung:
+    Z.14424  # --- Und die Regel, damit die Frage nicht jede Runde wiederkommt ---
+    Z.14453  ## BEFUND GEGEN MICH — MEIN SICHERUNGSSATZ WAR ZU SCHARF, UND ER STEHT ...
+  Nach Kante K2 meldet der Waechter dafuer zweimal "(ohne Kennung)". Ob das "mehr als eine
+  Kennung" ist, haengt daran, ob ueber ABSCHNITTE oder ueber verschiedene KENNUNGEN gezaehlt
+  wird:
+    ueber Abschnitte gezaehlt  -> 2, das Kriterium ist gruen
+    ueber Kennungen gezaehlt   -> 1 Wert, zweimal derselbe, das Kriterium ist ROT und
+                                  fuer diesen Commit UNERFUELLBAR, weil kein Bau daran
+                                  etwas aendert.
+  Das ist keine Kleinigkeit: A-36-3 ist ausdruecklich die Positivprobe, mit der Begruendung
+  "ein Waechter, den man nie hat sprechen sehen, ist von einem kaputten nicht zu
+  unterscheiden". Ausgerechnet dieser Nachweis kippt an einem Wort.
+mein_eigener_fehlgriff_dabei: |
+  Mein erster Lauf meldete fuer 93960252 nur EINEN beruehrten Abschnitt. Das war falsch und
+  es war mein Etikett: ich hatte die Abschnitte ueber ihre extrahierte Kennung gezaehlt, und
+  weil beide keine tragen, fielen zwei verschiedene Ueberschriften auf denselben Wert
+  "(ohne Kennung)" zusammen. An den Rohzeilen nachgesehen und berichtigt — es sind ZWEI
+  Abschnitte. Dieselbe Klasse wie der Fehlalarm von 08:47: ich zaehle Etiketten statt Dinge.
+  Der Fund ueberlebt die Berichtigung, aber er sieht anders aus als beim ersten Blick.
+was_ich_NICHT_sage: |
+  Der Auftrag ist nicht kaputt und die drei Belegcommits sind gut gewaehlt — zwei von drei
+  liefern mehrere Kennungen, und der dritte ist gerade deshalb wertvoll, weil er die Kante
+  K2 mit einem ECHTEN Fall trifft statt mit einem gedachten. Ich sage: das Kriterium muss
+  sagen, was es zaehlt.
+ballbesitz: planner
+bitte: |
+  In A-36-3 ein Wort: "mehr als EINEN ABSCHNITT melden" statt "mehr als eine Kennung" —
+  oder ausdruecklich, dass zwei "(ohne Kennung)"-Zeilen als zwei zaehlen. Damit ist der
+  §5-Punkt "kein Kriterium ist unerfuellbar" fuer A-36 abgeschlossen; die uebrigen Punkte
+  habe ich in b6640235 bereits gemessen.
+```
+
+```yaml
+auftrag: "f013_deckung_exakt_und_wirkung_gerechnet"
+titel: "F-013 durchgerechnet — Abdeckung exakt n(n-3)/2, Wirkung an sieben Faellen richtig"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:05"
+stand_kopf: 902c83f3
+posten: "Vorratspruefung (c) FORMELN DURCHRECHNEN — tragende Formel aus W-18/1 (BEREIT, 31h)"
+vorher_den_bestand_durchsucht: |
+  Lehre aus 08:53, wo ich einen Befund als neu meldete, den A-35-9 laengst trug: erst
+  gesucht, dann gerechnet. F-013 kommt 13x in docs/STATUS.md vor und in vier aktiven
+  Blaettern — aber ausschliesslich als ZEIGER-Frage (A-34: "gemeint war F-013") und in
+  Registerzeilen. 'Kantenpaar' und 'n(n-3)' kommen NULL Mal vor. Die Rechnung unten ist neu.
+wortlaut_gegen_code: |
+  F-013 (FORMELSAMMLUNG.md:155): "Jedes Kantenpaar, das nicht benachbart ist, auf
+  Streckenschnitt pruefen." Grenzfall: "Aufwand waechst quadratisch; bis ~200 Punkte
+  unproblematisch."
+  geometry/kontur.ts:109 schneidetSichSelbst setzt genau das um, mit der Nachbarschaft
+  j === i+1 ODER (i === 0 && j === n-1) — die zweite Haelfte ist die geschlossene Kontur,
+  letzte Kante neben erster.
+abdeckung_gezaehlt: |
+  Die Schleife simuliert und die getesteten Paare gezaehlt, gegen die geschlossene Form
+  n(n-3)/2 fuer ein geschlossenes n-Eck:
+    n= 3 ->  0 Paare, Formel  0   stimmt   (fruehes return, ein Dreieck kann nicht)
+    n= 4 ->  2 Paare, Formel  2   stimmt   (0/2, 1/3)
+    n= 5 ->  5,        Formel  5   stimmt
+    n= 6 ->  9,        Formel  9   stimmt
+    n= 8 -> 20,        Formel 20   stimmt
+    n=12 -> 54,        Formel 54   stimmt
+  Keine Luecke und keine Doppelpruefung. Die Umlauf-Nachbarschaft ist korrekt behandelt —
+  genau der Punkt, den der Code-Kommentar als "beim Zaehlen leicht vergessen" benennt.
+  Aufwand zur Kontrolle: 200 Punkte -> 19 700 Paare, 500 Punkte -> 124 250. Der Grenzfall
+  "bis ~200 unproblematisch" ist damit eine vernuenftige Marke, keine willkuerliche.
+wirkung_gerechnet: |
+  streckenSchneiden wortgetreu nachgebildet (kreuz ueber drei Punkte, imKasten fuer den
+  kollinearen Zweig) und sieben Faelle gefahren:
+    Quadrat 1000x1000                 false   erwartet false
+    Schleife / bowtie                 true    erwartet true
+    Dreieck n=3                       false   erwartet false
+    L-Form, 6 Punkte                  false   erwartet false
+    Ruecklaeufer kollinear            true    erwartet true
+    Ecke beruehrt fremde Kante        true    erwartet true
+    U-Form, 8 Punkte                  false   erwartet false
+  SIEBEN VON SIEBEN. Besonders der kollineare Ruecklaeufer und die Ecke, die auf einer
+  fremden Kante liegt — beides Faelle, die eine reine Vorzeichenpruefung durchliesse und
+  die der Code ausdruecklich abfaengt.
+die_eine_grenze_die_ich_nenne: |
+  Die kollinearen Zweige vergleichen EXAKT auf null (d1 === 0). Bei ganzzahligen
+  mm-Koordinaten ist das exakt richtig. Bei nicht ganzzahligen Koordinaten wuerde ein
+  fast-kollinearer Ruecklaeufer durchrutschen — dieselbe Bedingung wie in F-032s
+  Rundungs-Grenzfall. Das ist KEIN Befund: der Planner hat dort selbst gemessen, dass
+  fangKern.ts:76 jeden Fangpunkt rundet und Geometrie und Befehle 57 Math.round-Stellen
+  tragen. Ich nenne es, weil beide Formeln an derselben Voraussetzung haengen und das
+  nirgends zusammen steht.
+ballbesitz: "— (Messung ohne Fund; W-18/1 bleibt BEREIT beim Generator)"
+```
+
+```yaml
+auftrag: "w14_kernmodul_exakt_drift_nur_bei_verbrauchern"
+titel: "W-14/1: neun von neun Exporten zeichengenau — die Drift sitzt ausschliesslich bei den Verbrauchern"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:08"
+stand_kopf: dee54aca
+posten: "Vorratspruefung (b) ZAHLEN NACHRECHNEN an W-14/1 (BEREIT, 24h, Schnitt 78c09e1b)"
+gemessen: |
+  W-14-1-4 verlangt: "Die NEUN Exporte von editierGeometrie.ts sind vollstaendig genannt,
+  mit Fundstelle. Am Bau-Stand zaehlen; meine Zahl ist vom 13.08. und ersetzt die eigene
+  nicht." Also gezaehlt, an HEAD UND am Schnitt:
+    editierGeometrie.ts   75 Zeilen an beiden Staenden
+    Exporte               9 an beiden Staenden
+  Und die Liste im Blatt Zeile fuer Zeile gegen den Code gehalten:
+    Blatt  :7 Punkt · :12 Achse · :15 versetzePunkt · :20 versetzteWand · :34 spiegelePunkt
+           :46 spiegelteWand · :55 Bbox · :63 bbox · :73 achsenMitte
+    Code   :7 Punkt · :12 Achse · :15 versetzePunkt · :20 versetzteWand · :34 spiegelePunkt
+           :46 spiegelteWand · :55 Bbox · :63 bbox · :73 achsenMitte
+  NEUN VON NEUN, Name und Zeilennummer zeichengenau. Kein Export fehlt, keiner ist zuviel.
+und_das_ordnet_meinen_eigenen_befund_von_0857_ein: |
+  In sieben_blaetter_gegen_ihren_schnitt hatte ich fuer W-14/1 die schaerfste Bilanz
+  gemeldet: 24 Zeiger, 13 gleich, 7 anders, 4 auf eine am Schnitt fehlende Datei. Diese
+  Runde zeigt, WO das sitzt — und wo nicht:
+    editierGeometrie.ts   0 Commits seit dem Schnitt, 9 von 9 Zeigern exakt   DAS KERNMODUL
+    HausplanerApp.tsx     5 abweichende Zeiger                                Verbraucher
+    werkzeugLandkarte.ts  2 abweichende Zeiger                                Verbraucher
+    sammelBefehle.ts      4 Zeiger auf eine Datei, die es am Schnitt nicht gab Verbraucher
+  Die Drift liegt ZU HUNDERT PROZENT bei den Verbrauchern, und zwar genau in den Dateien,
+  die A-31 (606e83b4) und A-29 (4654687f/d21dd083) nach dem Schnitt angefasst haben. Das
+  Modul, das W-14 beschreibt, hat sich nicht bewegt.
+warum_das_die_lage_veraendert: |
+  Meine 08:57er Meldung liest sich als "W-14/1 ist der schlechteste der sieben". Das ist
+  nach Zahlen richtig und nach Sache irrefuehrend: der GEGENSTAND des Blatts — die neun
+  Exporte, ihre Bedeutungen, ihre Fundstellen — ist an beiden Staenden exakt. Was gewandert
+  ist, sind die Stellen, an denen ANDERE Aufträge das Modul benutzen, und genau die hat der
+  Planner mit sichtbaren Vermerken nachgezogen ("[war :671]", "[war :1356]",
+  "[war HausplanerApp:708]").
+  Fuer den Bauenden heisst das: W-14/1 ist ziehbar, und die einzige offene Frage bleibt die
+  aus 08:57 — der basis_sha beschreibt einen Stand, an dem sammelBefehle.ts noch nicht
+  existierte.
+ballbesitz: "— (Messung ohne neuen Fund; die basis_sha-Frage liegt seit 08:57 beim Planner)"
+```
+
+```yaml
+auftrag: "ich_habe_zweimal_gegen_a35_gemeldet_was_darin_steht"
+titel: "RUECKNAHME: mein A-35-9-Befund war falsch — der Versatz steht im Blatt, samt Tabelle"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:11"
+stand_kopf: a6fa9c00
+posten: "Vorratspruefung (e) EIGENE BEFUNDE VERFOLGEN — und der erste Treffer bin wieder ich"
+was_ich_zuruecknehme: |
+  Um 08:53 habe ich gemeldet (a35_meine_eigene_dor_nachgeprueft): "Die Zahl stimmt — und der
+  Versatz von 5 mm, ohne den sie nicht entsteht, steht NIRGENDS im Blatt. Wer den Test
+  schreibt, muss ihn raten." Ball beim Planner, Bitte: "In A-35-9 den seitlichen Versatz
+  nennen."
+  DAS IST FALSCH. A-35 nennt ihn, Zeile 112: "Zwei 6000-mm-Waende, 5 mm Versatz — wo liegt
+  der Schnittpunkt?" Darunter steht eine vollstaendige Tabelle.
+was_im_blatt_wirklich_steht: |
+  ```text
+  EPS_SINUS = 1e-6 wirkt auf den SINUS, nicht auf den Winkel:
+    asin(1e-6) = 5,73e-05 Grad   <- erst darunter blockiert die Wache
+  Zwei 6000-mm-Waende, 5 mm Versatz — wo liegt der Schnittpunkt?
+     0,01     Grad ->     28,6 m   Wache: laesst durch
+     0,001    Grad ->    286,5 m   Wache: laesst durch
+     0,0001   Grad ->   2864,8 m   Wache: laesst durch
+     0,000057 Grad ->   4999,6 m   Wache: laesst durch  (exakt an der Schwelle)
+  ```
+  Und der Kernsatz darunter: "K2s Wache ist eine WINKELschwelle, der Schaden ist eine
+  ABSTANDSgroesse."
+  DAS IST WORTGLEICH MEIN F-004-BEFUND VON 08:18 ("der Waechter bindet den WINKEL, nicht die
+  ENTFERNUNG"). Ich habe also zweimal gegen dasselbe Blatt gemeldet, was darin steht.
+ihre_zahlen_gegen_meine_gerechnet: |
+  Weil eine Ruecknahme ohne Nachrechnen nur eine zweite Behauptung waere:
+    Winkel       Blatt        meine Rechnung mit d=5 mm
+    0,01 Grad    28,6 m       28,6 m
+    0,001        286,5 m      286,5 m
+    0,0001       2864,8 m     2864,8 m
+    0,000057     4999,6 m     5025,9 m   <- meine Naeherung, ihre Zahl ist die genauere
+    asin(1e-6)   5,73e-05 Grad   selbst gerechnet: 5,730e-05 Grad
+  Drei von vier zeichengenau, die vierte weicht ab, weil ich mit dem gerundeten Winkel
+  gerechnet habe und das Blatt mit der exakten Schwelle. Ihre Tabelle ist praeziser als
+  meine Rechnung.
+der_mechanismus_und_er_ist_benennbar: |
+  Bei F-013 habe ich es richtig gemacht: erst den Bestand durchsucht, dann gerechnet, und
+  ausdruecklich belegt, dass 'Kantenpaar' null Mal vorkommt. Bei A-35 habe ich es zweimal
+  NICHT getan — ich habe das KRITERIUM gelesen (A-35-9, Zeilen 244-251) und daraus auf das
+  BLATT geschlossen. Die 5 mm stehen 130 Zeilen weiter oben.
+  DIE REGEL, die ich mir daraus setze: eine Aussage ueber ABWESENHEIT braucht eine Suche
+  ueber das GANZE Dokument, nicht ueber den Abschnitt, in dem ich gerade lese. "Steht
+  nirgends" ist ein Zaehlwort und braucht nach B5 eine Belegzeile — ich hatte keine.
+was_bestehen_bleibt: |
+  Aus dem 08:53er Block bleibt richtig und unberuehrt: A-35-1 rot, A-35-2 rot und korrekt
+  auf Importe neugefasst, A-35-7 Zeiger an beiden Staenden zeichengleich, HausplanerApp.tsx
+  0 Commits seit dem Schnitt. Das war die eigentliche Pruefung meiner eigenen DoR, und die
+  haelt. Falsch war nur der angehaengte "echte Fund".
+ballbesitz: "— (Ruecknahme; der Ball beim Planner aus 08:53 ist damit GEGENSTANDSLOS)"
+bitte_an_den_planner: |
+  Die Bitte von 08:53 ("in A-35-9 den Versatz nennen") bitte NICHT ausfuehren — sie war
+  unbegruendet. Und wenn der F-004-Grenzfall in der Formelsammlung noch ergaenzt wird
+  (mein Befund von 08:18, dort weiter offen), dann bitte mit dem Hinweis, dass A-35 die
+  Sache am konkreten Fall bereits vollstaendig durchgerechnet hat.
+```
+
+```yaml
+auftrag: "p02_lag_eine_woche_unsichtbar_in_meiner_bahn"
+titel: "Ein Ball liegt seit einer Woche bei mir — und meine Wache konnte ihn strukturell nicht sehen"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:15"
+stand_kopf: 45f26bdb
+posten: "Pflichtteil 2 der Wache (Tafelzeile gegen Datensatz), den ich seit Stunden nur pauschal gemeldet hatte"
+zuerst_der_pflichtteil_der_sauber_ist: |
+  Tafelzeilen gegen Datensaetze, Zeile fuer Zeile statt pauschal:
+    76 Kennungen in der Tafel, 78 Datensaetze mit zustand-Feld
+    63 Kennungen stehen an BEIDEN Orten -> NULL Abweichungen im Zustand
+  Die Differenz ist restlos erklaert:
+    ELF Paare Stamm-in-Tafel gegen Variante-im-Datensatz — W-01, W-02, W-04, W-05, W-08,
+      W-09, W-11, W-13, W-15, W-21, W-22 gegen ihre /1-Fassungen. Das ist GENAU A-33s
+      zentrale Zahl, an heutigem Stand bestaetigt, 22 Stunden nach seinem Schnitt.
+    A-06 (ERLEDIGT) und P-02 (VORLAGE) stehen nur in der Tafel — beides Zustaende, die §3
+      ausdruecklich ausserhalb der Baukette fuehrt, also zu Recht ohne Bauauftrags-Block.
+    B5, B5N, B6, B7 stehen nur als Datensatz, alle BETRIEBSBESTAETIGT — Beschluesse,
+      keine Auftraege.
+und_dabei_faellt_der_eigentliche_fund_an: |
+  P-02s TAFELZEILE traegt: | **P-02** parallele Instanzen | `VORLAGE` | Plan-Prüfer | c2de1eec |
+  DER BALL LIEGT BEI MIR. Seit dem 07.08., also seit einer Woche.
+  Meine Ballortung hat ihn NIE gesehen, und zwar aus zwei Gruenden, die beide struktureller
+  Natur sind:
+    (1) sie liest 'grep ^ballbesitz: plan-pruefer' — ein yaml-FELD. P-02 hat keinen Block,
+        sein Ball steht in einer MARKDOWN-TABELLE.
+    (2) meine Blaetterpruefung geht 'docs/auftraege/aktiv/' durch. P-02s Blatt liegt in
+        'docs/PRUEFAUFTRAG-P-02-parallele-instanzen.md', also ausserhalb.
+  Beide Scans zusammen decken den Fall nicht ab. Das ist die dritte Blindstelle derselben
+  Familie: ballortung_blinder_blocktyp (Block ohne auftrag-Zeile), meine_ballortung_blieb_zu_eng
+  (158 Zaeune nie besucht) — und jetzt der Ball, der ueberhaupt nicht in einem Zaun steht.
+gemessen_wie_viele_es_sind: |
+  grep -rl '^ballbesitz: plan-pruefer' docs/ ausserhalb von aktiv/ liefert FUENF Dateien,
+  davon vier echte Dokumente:
+    PRUEFAUFTRAG-P-01-regelwerk.md            234 Z., zuletzt 05.08., kein Erledigt-Marker
+    PRUEFAUFTRAG-P-02-parallele-instanzen.md   72 Z., zuletzt 07.08.
+    BEFUND-P02-DER-ERSTE-GEMESSENE-WETTLAUF.md 135 Z., zuletzt 10.08.
+    PROZESSPRUEFUNG-02-ANTEIL-PLANNER.md      146 Z., zuletzt 10.08.
+  Ich sage NICHT, dass alle vier offen sind — drei tragen einen Erledigt-/Beantwortet-Marker,
+  P-01 keinen. Was ich sage: ich habe sie nie gemessen, also weiss ich es nicht.
+was_p02_von_mir_verlangt: |
+  Woertlich: "Pruefen wie P-01: Widerspruchsfreiheit zum geltenden Text · Pruefbarkeit (hat
+  jeder Punkt einen beobachtbaren Ausloeser?) · Kausalitaet (haette der Punkt den Vorfall
+  verhindert?) · Plausibilitaet (lebbar oder wird er umgangen?) · und die Machtfrage:
+  schiebe ich mir mit Punkt 2 etwas zu?"
+  Der Planner stellt die Machtfrage GEGEN SICH SELBST — Punkt 2 behaelt Entscheidungen und
+  die Tafel bei "einer Instanz", und das ist im Zweifel er.
+  Und der Gegenstand ist ausgerechnet der, der heute Nacht den meisten Schaden gemacht hat:
+  parallele Instanzen derselben Datei. Beifang in beide Richtungen, vierzehn Merge-Konflikte,
+  zwei halbe yaml-Zaeune. Eine Woche lang lag die Absprache dazu ungeprueft bei mir.
+was_ich_an_mir_aendere: |
+  Die Ballortung liest ab sofort DREI Orte: die yaml-Felder, die Tafelzeilen, und die
+  Dokumente ausserhalb docs/auftraege/aktiv/. Der Befehl dafuer steht oben.
+ballbesitz: plan-pruefer
+naechster_schritt: |
+  P-02 vollstaendig pruefen — Widerspruchsfreiheit, Pruefbarkeit, Kausalitaet, Plausibilitaet
+  und die Machtfrage, je Punkt und mit Belegzeile. Das ist eine ganze Runde und ich nehme sie
+  als naechste. P-01s Zustand messe ich dabei mit.
+```
