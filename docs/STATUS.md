@@ -14802,3 +14802,45 @@ warum_ich_das_trenne: "Weil ich heute Nacht mehrfach gemeldet habe, dass eine Za
   dafuer einen Fehlerfall."
 ballbesitz_befund: —   # Pruefbericht, kein Vorgang
 ```
+
+## BEFUND — A-35-2 IST HEUTE SCHON GRUEN, WEIL SEINE MESSVORSCHRIFT ERWAEHNUNGEN ZAEHLT (Plan-Pruefer, 14.08. 06:5x)
+
+```yaml
+a35_2_misst_erwaehnungen: "VORRATSPRUEFUNG Posten b an A-35, dem Auftrag, der als naechstes
+  gebaut wuerde und dessen DoR ich erteilt habe. Gemessen an 125558b8. Das Kriterium A-35-2
+  verlangt der UEBERSCHRIFT nach einen Produktivaufrufer — seine MESSVORSCHRIFT zaehlt aber
+  Erwaehnungen, und die ist ohne jeden Bau bereits erfuellt."
+was_das_kriterium_sagt: "'A-35-2 · geradenGeometrie.ts hat mindestens einen Produktivaufrufer.
+  Messbar: grep -rln \"geradenGeometrie\" --include=*.ts --include=*.tsx ohne __tests__ liefert
+  ausser werkzeugLandkarte.ts mindestens eine weitere Datei. Vorher war es nur die Landkarte —
+  die Zahl vorher/nachher gehoert in den Bericht.'"
+was_die_messung_heute_ergibt: "Genau dieser Befehl, heute gefahren:
+    Treffer ohne __tests__:  app/tools/werkzeugLandkarte.ts  UND  geometry/geradenGeometrie.ts
+    ausser der Landkarte:    EINE weitere Datei -> Kriterium formal ERFUELLT
+  Die 'weitere Datei' ist die geprueфte Datei SELBST. Der Selbsttreffer steht auf Zeile 82 und
+  ist nicht einmal ihr eigener Name im Kopf, sondern eine Erwaehnung von geradenGeometrie.test.ts
+  in einem Kommentar. A-35-2 ist damit gruen, bevor irgendjemand etwas gebaut hat."
+und_die_vorher_zahl_stimmt_auch_nicht: "Das Kriterium sagt 'Vorher war es NUR die Landkarte'.
+  Ohne __tests__ sind es heute ZWEI — Landkarte und die Datei selbst. Die Vorher/Nachher-Zahl,
+  die laut Kriterium in den Bericht gehoert, geht also von einer falschen Ausgangszahl aus."
+was_das_kriterium_MEINT_und_wie_es_messbar_waere: "Selbst gemessen, was ein Aufrufer ist:
+    echte Importe von geradenGeometrie im ganzen Hausplaner:  EINER
+      __tests__/geradenGeometrie.test.ts:14  import { geradenSchnitt, parallelVersatz ... }
+    Produktivimporte:  NULL
+    werkzeugLandkarte.ts ERWAEHNT die Datei in einer Begruendung, IMPORTIERT sie aber nicht
+      (grep auf \"from '...geradenGeometrie'\" in der Landkarte: 0).
+  Gegenprobe, dass das Muster taugt: dieselbe Suche auf editierGeometrie liefert SECHS Dateien,
+  davon fuenf Produktivcode (HausplanerApp, Kopfrahmen, einpassen, Buehne, sammelBefehle).
+  Die Sachlage stimmt also mit der A-35-Tafelzeile ueberein, die woertlich 'NULL Produktivaufrufer'
+  sagt — nur die Messvorschrift des Kriteriums bildet sie nicht ab."
+warum_das_zaehlt: "A-35 ist der erste Bau nach A7 und ausdruecklich das Muster fuer vier weitere
+  Werkzeuge. Ein Kriterium, das gruen ist, bevor gebaut wird, prueft nichts — und es wird
+  abgehakt, weil der Befehl im Blatt steht und liefert, was er liefern soll. Das ist dieselbe
+  Klasse wie die gekreuzten Zeiger von 04:44, nur an einer Abnahmestelle statt an einem Verweis.
+  Die Abhilfe ist billig: auf IMPORTE messen statt auf Erwaehnungen, dann ist die Vorher-Zahl
+  NULL Produktivimporte und der Bau muss sie auf mindestens EINS bringen."
+was_ich_NICHT_tue: "Kein Blatt, kein Zustand, kein Kriterium, kein Bau. A-35 bleibt BEREIT beim
+  Generator, und meine DoR ziehe ich nicht zurueck — das Kriterium ist nicht falsch, seine
+  Messvorschrift ist zu weit. Ob und wie sie verengt wird, entscheidet der Planner."
+ballbesitz_befund: planner
+```
