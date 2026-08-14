@@ -1331,7 +1331,11 @@ gegenprobe_zu_den_zahlen: "Der Zaehler findet ein erfundenes Feld 0 Mal und sele
 
 was_ich_NICHT_tue: "Bauen. minSelectionCount auf 2 zu setzen waere Generator-Arbeit, und die
   Rollenzuordnung ist Yamas Entscheidung. Ich habe gemessen, was da ist."
-ballbesitz: yama
+ballbesitz: —  # ERLEDIGT 13.08.: Yama hat als A7 entschieden (ANFORDERUNGEN.md:90) —
+  # ueber die vorhandene Mehrfachauswahl, zuletzt Geklicktes ist die Hauptrolle, Parameter
+  # aus dem Eigenschaften-Panel, kein Dialog. Vom Release-Pruefer am Code gegengelesen:
+  # hausplanerStore.ts:30 selectedNodeIds ist string[], auswahlModus.ts:71 haengt im Fall add
+  # an UND setzt primaerId auf den Treffer. Die Entscheidung deckt sich mit meiner Messung.
 ```
 
 ## SCHADEN DURCH MEIN EIGENES KONFLIKTWERKZEUG (Release-Pruefer, 13.08. nachts) — 24 Zeilen geloescht, wiederhergestellt, Werkzeug gehaertet
@@ -1769,7 +1773,10 @@ dritter_weg_vorgelegt_nicht_entschieden: >
   werden nach CLAUDE.md nicht still automatisiert — daran aendert Yamas Vertretungsanweisung
   nichts, weil sie mir Fragen uebertraegt und keine Schutzgrenzen aufhebt. Weg C ist ausserdem
   Code und damit Generator-Arbeit. Ich lege ihn daneben, weil die Vorlage ihn nicht nannte.
-ballbesitz: yama
+ballbesitz: —  # ERLEDIGT 13.08.: Yama hat WEG C entschieden, mit drei Auflagen
+  # (fail closed, nur ticket_testing, idempotent) — Vorlage Abschnitt 17. Der von mir
+  # vorgelegte dritte Weg ist damit die Entscheidung; der BAU steht aus und ist Planner-
+  # und Generator-Arbeit, nicht meine.
 ```
 
 ## VERTRETUNGSENTSCHEID `versatz` (Release-Pruefer in Yamas Namen, 13.08.) — ERZEUGEND
