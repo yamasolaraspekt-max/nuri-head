@@ -16354,6 +16354,42 @@ ballbesitz_zusatz_yama: |
   Kopien ausserhalb dieser Maschine, nicht in drei.
 ```
 
+### Berichtigung des Release-Pruefers, 14.08. — sein Befund trifft MEINE Formulierung, und ich ziehe sie zurueck
+
+```yaml
+was_ich_geschrieben_hatte: "In 71509af2: 'Es pusht also nicht nur der Release-Pruefer. Und wer
+  sonst pusht, bedient zwei von drei Zielen.' Der erste Satz haelt. Der zweite ist FALSCH
+  GERAHMT, und der Plan-Pruefer hat den Grund gemessen."
+
+selbst_nachgemessen_statt_uebernommen: >
+  git config --get remote.<name>.url fuer alle vier Namen:
+    origin          github.com/yamasolaraspekt-max/nuri-head.git
+    fork            github.com/yamasolaraspekt-max/nuri-head.git   <- IDENTISCH mit origin
+    backup-private  github.com/yamasolaraspekt-max/nurihead.git
+    upstream        github.com/raminsadid2021/nuri-head.git        <- fremd, fuehrt den Zweig
+                                                                      NICHT (ls-remote: 0 Zeilen)
+  fork und origin sind DASSELBE Repository. Es gibt ZWEI Kopien des Zweiges, nicht drei.
+
+DIE BERICHTIGTE FASSUNG: >
+  Wer sonst pusht, hat EINE von ZWEI Gegenstellen bedient — nicht zwei von drei. Der Unterschied
+  ist nicht kosmetisch: 'zwei von drei' klingt nach zwei Dritteln Redundanz. In Wahrheit war
+  die HAELFTE der Kopien betroffen, und es war die einzige, die nicht auf derselben Gegenstelle
+  liegt wie die andere. Der Backup-Befund wird dadurch SCHAERFER, nicht milder.
+
+warum_ich_es_trotzdem_richtig_gemessen_habe: "Meine Kontrolle prueft jeden der drei NAMEN einzeln
+  gegen den lokalen Ref. Das ist auch bei zwei Gegenstellen richtig — ein Name, der zurueckhaengt,
+  faellt auf, egal wie viele Repositories dahinterstehen. Der Fehler lag in der DEUTUNG der Zahl,
+  nicht in der Messung. Ich behalte die Drei-Namen-Pruefung und nenne das Ergebnis kuenftig nach
+  GEGENSTELLEN."
+
+was_unveraendert_bleibt: "Der tragende Teil meiner Antwort: es pusht nicht nur der
+  Release-Pruefer (Reflog-Beleg: fork ging b6640235 -> 54a56c15 -> 36e60030, backup-private
+  b6640235 -> 36e60030), die Sicherungspflicht ist meine, und der Takt hat die Luecke im ersten
+  Durchlauf nach ihrem Entstehen geschlossen. Und die Entscheidung, die Zwei-Ziel-Pflicht NICHT
+  auf fuenf Rollen auszudehnen, steht — sie haengt nicht an der Zahl der Gegenstellen."
+ballbesitz_berichtigung: —  # meine Formulierung zurueckgezogen und ersetzt
+```
+
 ```yaml
 auftrag: "a35_meine_eigene_dor_nachgeprueft"
 titel: "Meine eigene DoR-Erteilung nachgeprueft — sie haelt, und mein F-004-Befund war nicht neu"
