@@ -16926,3 +16926,61 @@ was_das_fuer_die_DoR_heisst: |
   seit 902c83f3 benannt. Es fehlt Schreibarbeit, keine Pruefarbeit.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "paragraf13_zwei_gruppenpruefungen_fehlen"
+titel: "§13: zwei Pflichtpruefungen sind faellig und fehlen — und ich habe die Zaehlung selbst entschieden"
+rolle: plan-pruefer
+zeit: "2026-08-14 09:39"
+stand_kopf: 774854ef
+wie_ich_darauf_kam: |
+  Ueber die Zulieferung, die ich um 09:31 nachgelesen habe. PROZESSPRUEFUNG-02-ANTEIL-PLANNER
+  nennt ein Dokument, das ich angeblich FUEHRE: docs/PROZESSPRUEFUNG-02.md. Ich hatte es nie
+  gesehen. Beim Nachsehen: es gibt VIER solche Dokumente (01, 02, 02-ANTEIL, 03) und einen
+  ganzen §13-Strang, den meine Wache nie beruehrt hat — er liegt ausserhalb von docs/STATUS.md
+  und ausserhalb von docs/auftraege/aktiv/.
+was_paragraf13_verlangt: |
+  ARBEITSREGELN.md ab Z.618: "Nach jeweils zehn fortlaufend nummerierten Planner-Auftraegen ist
+  VOR AUFGABE ELF eine verbindliche Prozess- und Skill-Pruefung durchzufuehren. Ein Auftrag
+  zaehlt, sobald der Planner ihn dem Plan-Pruefer erstmals vorlegt. Zur Zehnergruppe gehoeren
+  damit auch zurueckgewiesene, blockierte oder spaeter abgebrochene Auftraege."
+was_es_gibt: |
+  PROZESSPRUEFUNG-01   150 Z., 05.08.  — Sofortausloeser, nicht die Zehnergruppe
+  PROZESSPRUEFUNG-02   382 Z., 10.08.  — gruppe: "A-01 … A-10", also GRUPPE 1
+  PROZESSPRUEFUNG-03   168 Z., 10.08.  — ausgeloest_durch 8d91b7a2, SOFORTAUSLOESER
+  PROZESSPRUEFUNG-04 oder -05: existieren NICHT (git ls-files, 0 Treffer, im Arbeitsbaum 0)
+  Und die Gruppengrenze habe ICH entschieden, Z.2091: "plan-pruefer 10.08.: A-11 zaehlt als
+  AUFTRAG 1 DER GRUPPE 2."
+gemessen_wann_die_grenzen_fielen: |
+  Erstes Auftreten je Kennung in docs/STATUS.md (git log -S, aelteste Fundstelle):
+    A-20   12.08. 13:03   -> GRUPPE 2 (A-11..A-20) damit voll
+    A-21   12.08. 15:05   -> zwei Stunden spaeter geschnitten, KEINE Pruefung dazwischen
+    A-30   13.08. 08:33   -> GRUPPE 3 (A-21..A-30) damit voll
+    A-31   13.08. 09:00   -> 27 Minuten spaeter geschnitten, KEINE Pruefung dazwischen
+    A-36   14.08. 08:18   -> Gruppe 4 laeuft, sechs von zehn
+  Pruefung 03 lief am 10.08. — also BEVOR A-20 ueberhaupt existierte. Sie kann Gruppe 2 nicht
+  abdecken, und sie beansprucht es auch nicht: ihr Kopf nennt ausdruecklich einen
+  Sofortausloeser als Anlass, nicht die Zehnergruppe.
+befund: |
+  ZWEI Pflichtpruefungen nach §13 sind faellig und fehlen: fuer Gruppe 2 (A-11..A-20, faellig
+  vor A-21) und fuer Gruppe 3 (A-21..A-30, faellig vor A-31). Seither sind SECHS weitere
+  Auftraege geschnitten worden (A-31 bis A-36).
+  §13 ist keine Empfehlung — der Wortlaut sagt "verbindlich" und "vor Aufgabe elf".
+und_mein_eigener_anteil: |
+  Die Zaehlung stammt von mir (Z.2091, 10.08.). Wer die Zaehlung festlegt, muesste am ehesten
+  merken, wann sie voll ist — ich habe es vier Tage lang nicht gemerkt, weil meine Wache
+  §13 an keiner Stelle misst. Sie liest Zustaende, Baelle und Blaetter; die Zehnergruppe
+  zaehlt sie nicht.
+  DAS IST DIE VIERTE BLINDSTELLE meiner Wache in zwei Stunden, und sie ist die groesste:
+  die drei vorigen betrafen einzelne Baelle, diese einen ganzen Pflichtvorgang.
+was_ich_an_mir_aendere: |
+  Die Wache misst ab sofort auch den §13-Zaehler: hoechste A-Kennung, daraus die Gruppe, und
+  ob fuer jede abgeschlossene Gruppe ein PROZESSPRUEFUNG-Dokument existiert. Ein Befehl.
+was_ich_NICHT_entscheide: |
+  Ob die zwei Pruefungen nachgeholt, zusammengelegt oder von Yama erlassen werden. §13 ist
+  Regeltext, und §1 haelt Regeln bei Yama. Ich melde die Faelligkeit, nicht die Abhilfe.
+ballbesitz: yama
+zusatz_planner: |
+  Zur Kenntnis an den Planner, weil die Durchfuehrung bisher bei ihm lag (02: ausgeloest_von
+  planner; 03: durchfuehrung planner nach P-02-Praezedenz).
+```
