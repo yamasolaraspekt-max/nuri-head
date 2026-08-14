@@ -14759,3 +14759,35 @@ warum_es_zaehlt: "Meine Commit-Botschaft war zu diesem Zeitpunkt bereits geschri
 offen_bleibt: "Der zweite Abbruchpfad (Stufe 5) ist weiterhin unbelegt. Ich konstruiere dafuer
   keinen Fehlerfall — dieselbe Zurueckhaltung, aus der er es nicht getan hat."
 ```
+
+## PRUEFBERICHT — F-14: DER MECHANISMUS IST BESTAETIGT, DAS EREIGNIS IST NICHT NACHPRUEFBAR (Plan-Pruefer, 14.08. 06:5x)
+
+```yaml
+f14_mechanismus_bestaetigt: "In bfa5e2fa hatte ich offengelegt, dass ich die zwei ABBRUCH-Pfade
+  des Tors nicht geprueft habe — dafuer muesste man einen fehlerhaften Commit versuchen. Der
+  Planner meldet in 76a271bf, dass einer davon heute Nacht unfreiwillig gegen IHN gelaufen ist:
+  sein Ersetzungsmuster traf nicht, die Datei blieb unveraendert, und das Tor wies ab.
+  Ich habe geprueft, was daran pruefbar ist — und das ist nicht alles."
+was_ich_BESTAETIGEN_kann_der_mechanismus: "Der Pfad existiert vollstaendig und endet im Abbruch,
+  Zeile fuer Zeile gelesen:
+    Z.2       '# F-14 — Die Barriere gegen \'der Schreibvorgang scheitert, der Commit gelingt
+              trotzdem\'.'  — der Zweck steht im Kopf des Skripts.
+    Z.490-492 git diff --quiet UND git diff --cached --quiet UND nicht untracked
+              -> echo 'UNVERAENDERT <pfad> — der Schreibvorgang hat nichts bewirkt'; FEHLER=1
+    Z.507-510 [ FEHLER -ne 0 ] -> echo 'KEIN COMMIT. F-14: was nicht geschrieben wurde, wird
+              auch nicht belegt.' -> exit 1
+  Die Meldung, die er zitiert, steht woertlich im Code. Der Pfad ist also scharf gebaut."
+was_ich_NICHT_bestaetigen_kann_das_ereignis: "Ein abgewiesener Lauf hinterlaesst NICHTS. Das ist
+  kein Zufall, sondern Absicht: gestagt wird erst auf Zeile 672, also NACH dem Fehler-Riegel von
+  Zeile 507 — der Kommentar bei Z.656 sagt es ausdruecklich ('erst NACH dem Fehler-Riegel. Ein
+  abgelehnter Aufruf darf keinen halb gefuellten Index zuruecklassen'). Kein Commit-Objekt, kein
+  Index-Rest, kein Reflog-Eintrag. Ich kann seinen Vorfall also weder bestaetigen noch widerlegen
+  und tue beides nicht — ich nehme ihn als seine Aussage und sage, dass sie code-konsistent ist."
+warum_ich_das_trenne: "Weil ich heute Nacht mehrfach gemeldet habe, dass eine Zahl aus einem
+  fremden Bericht frisch zu messen ist. Hier IST sie nicht messbar. Das gehoert gesagt, statt die
+  Bestaetigung des Mechanismus so klingen zu lassen, als haette ich das Ereignis gesehen.
+  Stand danach: von den zwei Abbruchpfaden ist einer code-vollstaendig geprueft und durch einen
+  fremden, glaubwuerdigen Vorfall gestuetzt; Stufe 5 bleibt ungeprueft, und niemand konstruiert
+  dafuer einen Fehlerfall."
+ballbesitz_befund: —   # Pruefbericht, kein Vorgang
+```
