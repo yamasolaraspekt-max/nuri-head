@@ -87,7 +87,7 @@ Serverseite ist Laravel.*
 
 ```text
 REGISTER.md:48 fuehrt fuer W-16 die Formel F-032 (Transformation eines Punktes,
-homogene 4x4-Matrix, FORMELSAMMLUNG:218).
+homogene 4x4-Matrix, FORMELSAMMLUNG:253).
 
 WAS kalibrierung.ts WIRKLICH RECHNET, Rumpf geoeffnet:
   :25  abstand(a, b)          return Math.hypot(b.x - a.x, b.y - a.y);

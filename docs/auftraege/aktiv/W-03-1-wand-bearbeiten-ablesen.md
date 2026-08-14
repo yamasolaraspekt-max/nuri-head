@@ -24,7 +24,7 @@ anlass: "Die letzte der zehn B-Zeilen ohne Blatt. Und der Zeitpunkt ist nicht be
 grundlage: "app/rahmen/EigenschaftenPanel.tsx (563 Z., 2 Exporte) :108/:120/:324/:330-331/:336 ·
             app/tools/toolRegistry.ts (0 Eintraege fuer die fuenf) · app/tools/werkzeugVertrag.ts
             (je 1) · app/tools/werkzeugPaket.ts (je 1) · app/tools/werkzeugLandkarte.ts:76-80
-            (je 'fehlt') · geometry/geradenGeometrie.ts:84 geradenSchnitt, :157 parallelVersatz
+            (je 'fehlt') · geometry/geradenGeometrie.ts:84 geradenSchnitt, :174 parallelVersatz   [war :157 — A-34 fuegte 17 Kommentarzeilen davor ein]
             (A-32) · store/hausplanerStore.ts:65/:145/:147 executeCommands (A-31) · REGISTER.md:44"
 ```
 
@@ -75,7 +75,7 @@ DIE LANDKARTE BEGRUENDET DIE FUENF fehlt-MARKEN, vollstaendig gelesen:
 
 SEIT HEUTE STEHT DER UNTERBAU FUER BEIDE GRUPPEN:
   geometry/geradenGeometrie.ts:84   geradenSchnitt(a,b,c,d): Punkt | null
-                              :157  parallelVersatz(...)
+                              :174  parallelVersatz(...)   [war :157]
                                     -> A-32, GEBAUT (Abnahme steht aus)
   store/hausplanerStore.ts:65/:147  executeCommands(commands[])
                                     -> A-31, ABGENOMMEN. Und sauber gebaut:

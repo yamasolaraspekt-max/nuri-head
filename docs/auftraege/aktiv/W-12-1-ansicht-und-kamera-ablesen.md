@@ -22,7 +22,7 @@ anlass: "Yamas Regel fuer Klasse B, 13.08.: erst die Messung, dann die Einordnun
          Zeile, das ist die zweite — und damit sind beide, die er genannt hat, gemessen."
 grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.ts:100/:101/:170/:212-215/
             :621/:627 · app/rahmen/Buehne.tsx:146 (gezeichnet) mit app/HausplanerApp.tsx:1261-1269/:1337/:1409/:349
-            und app/dashboard/Kopfrahmen.tsx:304 · app/state/uiState.ts:5/:10/:11 · FORMELSAMMLUNG:218"
+            und app/dashboard/Kopfrahmen.tsx:304 · app/state/uiState.ts:5/:10/:11 · FORMELSAMMLUNG:253 (F-032, war :218)"
 ```
 
 ## 1 — Die Einordnung ist gemessen: ABLESUNG. Alle vier Gegenstände sind gebaut
@@ -65,7 +65,7 @@ grundlage: "store/hausplanerStore.ts:20/:28/:45/:72 · renderers/three-d/szene.t
     Meine Formulierung 'Raster in BEIDEN Renderern' war deshalb doppelt falsch —
     der Beleg war eine Typzeile, und die Schicht hiess anders.
 
-(4) F-032 Transformation eines Punktes (FORMELSAMMLUNG:218, homogene 4x4-Matrix)
+(4) F-032 Transformation eines Punktes (FORMELSAMMLUNG:253, homogene 4x4-Matrix)
     szene.ts:621  new THREE.Matrix4().makeBasis(…)
            :627  geometrie.applyMatrix4(m)
     Also EIGENE Matrix-Anwendung, nicht nur three.js-Internes — die
