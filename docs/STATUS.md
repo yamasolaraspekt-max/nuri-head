@@ -15246,3 +15246,74 @@ keine_zahlen_die_altern: "Nach der A-33-Lehre stehen hier KEINE Zaehlstaende, di
   aendern (Tafelzeilen, Datensaetze, Commits seit X). Was zaehlt, steht in den Datensaetzen; hier
   steht nur, WER woran ist."
 ```
+
+```yaml
+auftrag: "vier_fachfragen_fehlen_in_meiner_liste"
+titel: "Ich habe Yamas Liste geprueft, aber nie gefragt, ob sie vollstaendig ist"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:49"
+stand_kopf: 3cfa11cf
+posten: "Vorratspruefung (e), zweite Runde — Nachlauf zur berichtigten Ballortung"
+wie_es_auffiel: |
+  Mit der in 3cfa11cf berichtigten Einteilung zum ersten Mal ALLE Zaeune nach Ballhaltern
+  gezaehlt statt nur die Auftragsbloecke. Dabei stand eine Zeile, die ich nicht kannte:
+  Z.14354 'Vier offene Fachentscheidungen bei Yama'.
+ballverteilung_exakt_gemessen: |
+  249 Zaeune, 137 Ballfelder (ballbesitz + ballbesitz_befund), Wert exakt verglichen:
+    (kein Halter)     81
+    planner           29
+    yama              12
+    generator         10
+    release-pruefer    3
+    (Prosa)            2
+    plan-pruefer       0
+    evaluator          0
+befund: |
+  Die zwoelf Ballfelder bei Yama namentlich (Ueberschrift des jeweiligen Zauns):
+    Z.1294   Bedienmodell nachgemessen (release-pruefer 13.08.)
+    Z.1426   Repo-weite Suche nach Yama-Posten (release-pruefer)
+    Z.1661   Vorratsmessung — was der Stillstand kostet (release-pruefer)
+    Z.1711   Nachmessung Identitaetsfrage — zwei Faelle (release-pruefer)
+    Z.1746   Buehnenmessung 13.08. (release-pruefer)
+    Z.13688  Regelkollision §3/E1/Beifang (planner)
+    Z.14144  Stillstand dreier Rollen (planner)
+    Z.14269  Drei von Yamas acht Posten nachgemessen (plan-pruefer)
+    Z.14309  Zwei von acht sind erledigt (plan-pruefer)
+    Z.14354  VIER OFFENE FACHENTSCHEIDUNGEN (planner)  <-- fehlt in meiner Meldung
+    Z.14672  Acht BEREIT sind ziehbar (plan-pruefer)
+    Z.14862  Achtundvierzig Werkbank-Schablonen (plan-pruefer)
+  Gegenprobe: in meinen beiden Sammelbloecken Z.14269 und Z.14309, in denen ich Yamas
+  Postenliste gemessen habe, kommen W-24, W-26, W-28 und W-32 zusammen NULL Mal vor.
+  Sie stehen sonst sehr wohl im Bestand (Planner-Zaun Z.166, Vorratsmessung des
+  Release-Pruefers Z.1641/1652) — nur nicht in dem, was ich Yama jede Runde vorlege.
+die_vier: |
+  W-24  Fundament und Bodenplatte — Erdkontakt, der Code markiert ihn dreimal selbst als
+        Operanden-Gate. Fachentscheidung mit Rechenwirkung.
+  W-26  Dachschichten — das Feld schichten fehlt am RoofNode, waehrend WallNode und
+        CeilingNode es feldgleich fuehren. Schema-Entscheidung.
+  W-28  Dachentwaesserung — Rinnenbemessung nach DIN 1986-100. Planner empfiehlt VERTAGEN.
+  W-32  Giebelwand-Bindung — als Ableitung entschieden, offen ist nur noch, ob der Bau
+        gewollt ist.
+  (Wortlaut aus dem Planner-Zaun uebernommen und als Uebernahme gekennzeichnet — ich habe
+  diese vier Fachfragen NICHT selbst am Code nachgemessen. Das waere eine eigene Runde.)
+der_mechanismus: |
+  Ich habe die Liste TOP-DOWN geprueft: stehen Yamas acht Posten noch offen? Zwei waren
+  erledigt, das habe ich gemeldet. Die Gegenrichtung habe ich nie gestellt: was haelt sonst
+  noch einen Ball bei Yama? Eine Liste pruefen und eine Liste vervollstaendigen sind zwei
+  verschiedene Messungen, und ich habe nur die erste gemacht — sechs Runden lang.
+  Es ist dieselbe Bewegung, die der Planner am 14.08. an sich selbst gefunden hat
+  (Z.14354: 'sie lebten nur in meinen Antworten'), nur eine Ebene hoeher: seine vier
+  Fachfragen haben jetzt einen Datensatz, aber meine Vorlage an Yama kannte sie nicht.
+ein_fast_fehlbefund: |
+  Mein erster Abgleich verglich die UEBERSCHRIFTEN der zwoelf mit meinen sechs Posten und
+  fand nur EINE Uebereinstimmung. Das haette geheissen: fuenf meiner sechs Posten sind
+  unbelegt. Falsch — ich hatte Titel gegen Titel gehalten statt Inhalt gegen Inhalt.
+  Nachgesucht: raumAuswahl liegt in Z.1711 mit Ball yama, der Seed-Weg der Pruefbuehne in
+  Z.1746 mit Ball yama, Tragwerk in Z.14309, versatz ueber acht Zaeune. Meine sechs Posten
+  sind belegt. Nicht gemeldet, weil vor dem Melden gegengeprueft.
+ballbesitz: "— (die Korrektur ist meine; die vier tragen ihren Ball bereits im Planner-Zaun Z.14354)"
+folge_fuer_meine_vorlage: |
+  Ab dieser Runde nenne ich Yama nicht mehr die gepflegte Liste, sondern das Messergebnis:
+  alle Zaeune mit Ball yama, frisch gezaehlt. Heute sind das zwoelf Felder, sachlich
+  gebuendelt zehn Vorgaenge — meine sechs plus die vier Fachentscheidungen.
+```
