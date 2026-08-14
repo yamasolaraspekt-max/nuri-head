@@ -8417,6 +8417,36 @@ tafelzeile_berichtigt: "Die Tafelzeile trug im beschreibenden Teil weiterhin -0 
   Berichtigung des Planners (b0ff1f0f, fuenf Reststellen) hat das Blatt erreicht, die Tafelzeile an dieser
   Stelle nicht. Ich habe sie im Freigabe-Handgriff auf die Zugriffsart-Fassung gestellt; der Rest der Zeile
   bleibt unangetastet, meine Runde-1-Ruege bleibt als Historie stehen."
+ballwechsel_bestaetigt: "plan-pruefer 14.08. 08:16: W-12/1-CODE_FERTIG-Meldepflichten geprueft,
+  Ball beim EVALUATOR bestaetigt. SHA existent UND in einem FELD: bau_sha da2fb678, vorhanden.
+  SCOPE-DIFF SELBST GEMESSEN, nicht uebernommen: da2fb678 fasst genau die sieben Blaetter
+  W-12-ansicht-und-kamera/1-ZWECK .. 7-GRENZEN an, 393+/158-, und NULL Dateien unter
+  resources|app|public|routes|database — kein Produktivcode, wie das Blatt es verlangt.
+  GEGENPROBE ZUM INHALT, weil Zeilenzahlen nichts ueber Fuellung sagen: md5 ab Zeile 2 ueber alle
+  1-ZWECK.md der Werkbank — die Schablonengruppe ist von NEUN auf ACHT Ordner gefallen und W-12
+  ist nicht mehr darin. Echter Inhalt, keine kopierte Vorlage.
+  A-20 ERFUELLT: Tafelzeile und Datensatz wechseln in EINEM Commit (9d83bde6) gemeinsam von
+  BEREIT/Generator auf CODE_FERTIG/Evaluator; bau_sha in derselben Aenderung gesetzt.
+  ZWEI COMMITS SAUBER GETRENNT: da2fb678 traegt den Bau ohne STATUS.md, 9d83bde6 traegt den
+  Zustand ohne Blaetter (43+/3-). Kein Beifang in beide Richtungen.
+  EIGENMELDUNG DES GENERATORS GEWUERDIGT: er meldet selbst eine gewanderte Zeilenangabe
+  (Auftrag nennt HausplanerStudio.tsx:85, gemessen :87) und schliesst Buehne.tsx:62 ausdruecklich
+  als Beleg AUS, weil dort nur die Props-Typzeile steht. Beides ist die Bauform, die ich seit
+  Stunden an anderen Blaettern anmahne — hier hat sie der Bauende selbst angewandt."
+zustandskette_uebersprungen: "SEPARAT VOM BALLWECHSEL, und er wird dadurch nicht aufgehalten:
+  W-12/1 ist von BEREIT direkt auf CODE_FERTIG gegangen. IN_ARBEIT hat der Auftrag NIE getragen
+  — der Zustands-Commit 9d83bde6 zeigt -zustand: BEREIT gegen +zustand: CODE_FERTIG, und der
+  Bau da2fb678 lag DAVOR, also wurde die Scope-Aenderung committet, waehrend der Datensatz
+  BEREIT sagte. §3 fuehrt die Kette ENTWURF -> BEREIT -> IN_ARBEIT -> CODE_FERTIG; die einzigen
+  zwei Zustaende, die keine IN_ARBEIT-Stelle belegen, sind ERLEDIGT und VORLAGE (Regelwerk
+  Z.87-92), und keiner davon trifft hier zu.
+  DIE SCHRANKE WAR NICHT DER GRUND: mit den ZWEI Befehlen gemessen, die §3 selbst vorschreibt
+  (Regelwerk Z.125-126), steht der Bestand auf Tafelzeile 0 und Zustandsfeld 0 IN_ARBEIT — die
+  einzige Stelle war frei. Muster an einem bekannten Treffer gegengeprueft: dasselbe Muster
+  liefert fuer CODE_FERTIG genau 1, naemlich diesen Auftrag.
+  ICH ENTSCHEIDE DAS NICHT. Ob ein Ablese-Auftrag ohne Produktivcode die Kette voll durchlaufen
+  muss, ist eine Regelfrage, und §1 behaelt Regeln Yama vor. Ich melde die Messung; sie beruehrt
+  denselben Kern wie die offene Regelkollision §3/E1."
 ```
 
 ```yaml
