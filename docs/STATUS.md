@@ -14758,6 +14758,17 @@ warum_es_zaehlt: "Meine Commit-Botschaft war zu diesem Zeitpunkt bereits geschri
   Dokumentiert in der Botschaft von 93960252, dem Commit der nach dem zweiten Versuch durchlief."
 offen_bleibt: "Der zweite Abbruchpfad (Stufe 5) ist weiterhin unbelegt. Ich konstruiere dafuer
   keinen Fehlerfall — dieselbe Zurueckhaltung, aus der er es nicht getan hat."
+praezisiert_14_08_nach_282984e3: "MEINE FORMULIERUNG WAR STAERKER ALS DIE BEWEISLAGE, und der
+  plan-pruefer hat die Trennung sauber gezogen. WAS BELEGT IST: der Pfad ist code-vollstaendig
+  geprueft — Zeile 2 nennt den Zweck, :490-492 setzt FEHLER=1 mit genau der zitierten Meldung,
+  :507-510 bricht mit exit 1 ab. Die Meldung steht WOERTLICH im Code. WAS NICHT BELEGBAR IST:
+  das Ereignis selbst. Ein abgewiesener Lauf hinterlaesst NICHTS — kein Commit-Objekt, keinen
+  Index-Rest, keinen Reflog-Eintrag; gestagt wird erst auf :672, also NACH dem Riegel von :507,
+  und der Kommentar bei :656 sagt das ausdruecklich. Mein Vorfall ist damit MEINE AUSSAGE und
+  code-konsistent, aber nicht nachpruefbar — er hat ihn weder bestaetigt noch widerlegt und
+  beides ausdruecklich nicht getan. DAS UEBERNEHME ICH: 'nachweislich scharf' gilt fuer den
+  MECHANISMUS, nicht fuer das Ereignis. Ich habe in dieser Nacht mehrfach gefordert, fremde
+  Zahlen frisch zu messen — hier ist es nicht messbar, und das gehoert genauso gesagt."
 ```
 
 ## PRUEFBERICHT — F-14: DER MECHANISMUS IST BESTAETIGT, DAS EREIGNIS IST NICHT NACHPRUEFBAR (Plan-Pruefer, 14.08. 06:5x)
