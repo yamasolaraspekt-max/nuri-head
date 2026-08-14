@@ -15884,7 +15884,7 @@ zustand: ENTWURF   # BERICHTIGT 14.08. — stand faelschlich auf BEREIT, waehren
   #   ausstehender DoR geht nicht. Sein Befund haelt, die Berichtigung gehoert mir.
   #   Wechselt auf BEREIT, sobald die DoR erteilt ist — wie bei A-35 (Datensatz:
   #   "DoR erteilt 13.08. 23:38").
-ballbesitz: plan-pruefer
+ballbesitz: planner  # BERICHTIGT 14.08. 10:10 vom plan-pruefer: bei NICHT erteilter DoR gehoert der Ball zurueck an den Schneidenden. Er lag seit 08:26 bei mir, waehrend die vier fehlenden §5-Punkte SCHREIBARBEIT am Blatt sind — beide Seiten haben aufeinander gewartet.
 blatt: "docs/auftraege/aktiv/A-36-wer-schreibt-und-paragraf-14.md"
 basis_sha: 80ab2d8d
 art: "BAU — ein lesendes Skript plus die von Yama entschiedene §14-Aenderung."
@@ -16503,7 +16503,7 @@ und_ein_echter_fund_beim_nachrechnen: |
   im Blatt. Wer den Test schreibt, muss ihn raten. Das ist ein fehlender Operand in einem
   Kriterium, das sonst vorbildlich praezise ist (K3 greift nachgerechnet: t = 47,7, weit
   ausserhalb 0..1, also Abweisung).
-ballbesitz: planner
+ballbesitz: "— # GEGENSTANDSLOS seit 09:11, die Bitte ist zurueckgenommen (ich_habe_zweimal_gegen_a35_gemeldet_was_darin_steht)"
 bitte: |
   In A-35-9 den seitlichen Versatz nennen — "5 mm" genuegt, dann ist die 286,5 m aus dem
   Blatt heraus nachrechenbar. Eine Zahl, kein Bau.
@@ -17185,7 +17185,7 @@ was_die_wache_ab_jetzt_misst: |
   Vier Orte statt drei: yaml-Felder in STATUS.md, Tafelzeilen, Blaetter in aktiv/ (nur zur
   Zuordnung, nicht als Ball), und die Dokumente in der WURZEL von docs/ mit dem WEITEN
   Muster '^ball[a-z_]*:.*plan-pruefer'.
-ballbesitz: plan-pruefer
+ballbesitz: "— # ERLEDIGT 09:59: alle NEUN Wurzel-Vorgaenge geprueft"
 naechste_schritte: |
   Die fuenf ungeprueften der Reihe nach durchgehen, je eine Runde, beginnend mit dem, das
   die Statuswahrheit gar nicht kennt. Kein neuer Ball fuer andere — das ist meine Bahn.
@@ -17438,7 +17438,7 @@ bilanz_der_neun: |
   ACHT von NEUN sind durch. Der neunte ist der einzige, dessen Ball ausdruecklich eine
   Vorbedingung nennt: Yamas Kenntnisnahme. Ich pruefe ihn als naechstes und melde, ob die
   Vorbedingung erfuellt ist — messen kann ich sie, entscheiden nicht.
-ballbesitz: plan-pruefer
+ballbesitz: "— # ERLEDIGT 09:59: der neunte (WERKBANK-ANSCHLUSS) ist geprueft"
 ```
 
 ```yaml
@@ -17487,4 +17487,54 @@ bilanz: |
   STATUS.md bei mir lagen, bleibt einer: A-36, und der wartet nicht auf mich, sondern auf
   vier Saetze im Blatt.
 ballbesitz: "— (geprueft; die Matrix ist verbraucht, die zehn Auftraege existieren)"
+```
+
+```yaml
+auftrag: "ballfelder_geraeumt_damit_der_planner_sieht"
+titel: "Der Planner traegt 13 Baelle und schuldet FUENF Saetze — die Differenz ist meine Unordnung"
+rolle: plan-pruefer
+zeit: "2026-08-14 10:10"
+stand_kopf: 8346b5fe
+anlass: "Yamas Auftrag: schau, was der Planner macht, verschaffe dir einen Ueberblick, und schau wo du ihm helfen kannst."
+was_ich_gemessen_habe: |
+  82 Planner-Commits in 24 Stunden, der letzte um 08:26 — seither still, jetzt 104 Minuten.
+  Ballfelder mit exaktem Wert am Fernstand 62911b2c: DREIZEHN beim Planner.
+  Aufgeschluesselt:
+    SIEBEN sind Teilbloecke alter Auftraege — A-02, A-07, A-08 (viermal) und A-09.
+      Alle vier Auftraege stehen auf BETRIEBSBESTAETIGT, je einzeln nachgemessen.
+      Das sind historische Felder, keine Last. Er hat sie um 07:46 selbst so gemessen.
+    SECHS sind meine Befunde von heute — und einer davon ist gegenstandslos.
+  ES BLEIBEN FUENF, und jeder ist ein Satz oder ein Feld:
+    1  F-004 Grenzfall: ein Satz, dass die Schwelle den WINKEL bindet und nicht die
+       ENTFERNUNG. (Mein Befund 08:18. A-35 hat den Fall bereits vollstaendig
+       durchgerechnet — der Satz kann darauf verweisen statt ihn zu wiederholen.)
+    2  W-10/1: basis_sha nachziehen ODER ein Satz, dass die Fundstellen am heutigen Stand
+       gelten. (Mein Befund 08:42.)
+    3  Vier Blaetter derselben Sache: W-10/1, W-14/1, W-03/1, A-33 — Zeiger sind nach vorn
+       gepflegt, Schnitt steht still. (Mein Befund 08:57, 67 Zeiger gemessen.)
+    4  A-36-3: EIN Wort — "mehr als einen ABSCHNITT" statt "mehr als eine Kennung".
+       (Mein Befund 09:02, an allen drei Belegcommits durchgerechnet.)
+    5  A-36: drei Saetze fuer die §5-Formalien plus den benannten Erstnutzer.
+       (Ich habe die drei am 09:34 GEMESSEN — er muss nur schreiben, nicht erheben.)
+  Fuenf Punkte, kein einziger braucht eine neue Messung. Alle Zahlen liegen vor.
+und_die_ursache_des_stillstands_ist_meine: |
+  A-36 traegt im Datensatz UND im Blattkopf "ballbesitz: plan-pruefer". Er hat mir den Ball
+  um 08:20 gegeben und wartet seither. Ich habe um 09:12 die DoR NICHT erteilt und vier
+  fehlende Punkte benannt — und den Ball trotzdem bei mir gelassen.
+  DAS IST EIN DEADLOCK, den ich gebaut habe: er wartet auf meine DoR, ich warte auf seine
+  vier Saetze, und keiner von beiden sieht, dass der andere wartet. 104 Minuten.
+  Bei NICHT erteilter DoR gehoert der Ball zurueck an den Schneidenden — das ist der Sinn
+  von §5s "bleibt ENTWURF". Ich habe das Feld soeben berichtigt.
+was_ich_geraeumt_habe: |
+  A-36                              ballbesitz plan-pruefer -> planner, mit Begruendung
+  a35_meine_eigene_dor_nachgeprueft ballbesitz planner -> gegenstandslos (Bitte am 09:11
+                                    zurueckgenommen, das Feld stand noch)
+  neun_dokumente_ohne_datensatz     mein eigener Ball, erledigt 09:59
+  wurzelvorgaenge_bilanz            mein eigener Ball, erledigt 09:59
+  NICHT angefasst: die sieben historischen Felder in A-02/A-07/A-08/A-09 — fremde Bloecke.
+  Ich melde nur, dass sie leerlaufen; das Raeumen gehoert dem, dem sie gehoeren.
+angebot: |
+  Zu jedem der fuenf Punkte liegt meine Messung im Bestand, mit Befehl und Zahl. Wenn
+  einer davon nicht in einem Satz erledigt ist, sage mir welcher — dann messe ich nach.
+ballbesitz: planner
 ```
