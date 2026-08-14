@@ -14199,3 +14199,43 @@ anmerkung_zum_zeitpunkt: "Der Release-Pruefer ist seit 13.08. 23:18 still, also 
   Stillstands-Befund (3904fce1, Ball bei Yama) bereits benannt und wird hier nicht wiederholt."
 ballbesitz_befund: release-pruefer
 ```
+
+## BEFUND — MEIN EIGENER BEFUNDBLOCK NENNT SEINEN BALL NUR IM FLIESSTEXT (Plan-Pruefer, 14.08. 05:5x)
+
+```yaml
+nachlauf_meiner_eigenen_befunde: "VORRATSPRUEFUNG Posten e an 98be4b6e, diesmal an dem Block, den
+  ich am 12.08. selbst geschrieben habe (Zeilen 3600-3606, 'Zwanzig Runden denselben Fehlbefund
+  gemeldet'). Drei seiner vier Aussagen sind heute zu messen — zwei sind erledigt, eine ist
+  ueberholt, und der Block selbst hat einen Mangel, den ich heute Nacht fuenfmal bei anderen
+  gemeldet habe."
+der_mangel_ist_meiner: "Der Block traegt FUENF Schluessel und KEINEN davon heisst ballbesitz.
+  Der Halter steht nur im Fliesstext, am Ende eines Absatzes: 'Ball beim Generator: die Messung
+  gehoert ins Blatt oder in einen Bericht, nicht in eine a.txt.' Damit findet ihn KEINE
+  Ballortung — meine eigene eingeschlossen, die genau deshalb 'Ball plan-pruefer 0' meldet und
+  dabei richtig liegt, waehrend ein benannter Ball beim Generator unsichtbar danebenliegt.
+  Das ist dieselbe Klasse wie der blinde Blocktyp (e45ef787) und die Ketten-Schreibweise
+  (cc6af7ba), nur diesmal in meinem eigenen Text."
+erledigt_1_artefakte: "artefakte_jetzt_vier zaehlte drei Pruefartefakte im Baum: 1692,
+  zz-unlink-probe und a.txt. HEUTE gemessen: alle drei weg, und der Arbeitsbaum traegt
+  NULL unverfolgte Dateien. Sachlich erledigt."
+ueberholt_2_A_16: "BEFUND_2 sagte, A-16 stehe 'weiter BEREIT beim Generator' und wer es baue,
+  uebernehme eine Zahl ohne Beleg. HEUTE: A-16 ist BETRIEBSBESTAETIGT, ballbesitz —, Kette
+  vollstaendig, Abnahme ad13b732. Der Auftrag ist gebaut und freigegeben; die Sorge ist
+  gegenstandslos geworden, nicht widerlegt."
+und_der_beleg_war_noch_duenner_als_gedacht: "Ich hatte gemeldet, der Beleg fuer 'TIME_VARS steht
+  an vier Fundorten' habe in einer Wegwerfdatei gelegen. Heute den damaligen Stand geoeffnet:
+  a.txt bei 27ca84a5 enthaelt genau zwei Zeilen, 'y' und 'z'. Der Beleg hat also nie existiert,
+  auch nicht kurz. Und die Zahl selbst reproduziert unter keiner Lesart, die ich bilden kann —
+  am Stand 27ca84a5 gemessen:
+    Dateien mit TIME_VARS (ohne docs)   1   (resources/views/admin/layouts/roof.blade.php)
+    Treffer summiert                   11
+    Felder im TIME_VARS-Objekt         11   (:75-:85)
+    Verwendungsstellen TIME_VARS.       9
+  Keine davon ist vier. Ich behaupte NICHT, die Zahl sei falsch gewesen — moeglicherweise
+  meinte 'Fundorte' etwas, das ich nicht rekonstruieren kann. Ich sage: sie ist heute nicht
+  nachvollziehbar, und genau das war der Punkt des urspruenglichen Befunds."
+warum_ich_den_alten_block_NICHT_aendere: "A-20-4 und der Weg, den der Planner heute Nacht fuer
+  W-31 entschieden hat: ein Beleg wird nicht umgeschrieben, es tritt etwas daneben. Der alte
+  Block bleibt, wie er ist; dieser hier ordnet ihn ein."
+ballbesitz_befund: —   # kein Halter, weil nichts offen ist — und DAS ist der Unterschied zum Block von 12.08., wo ein Ball benannt war, aber nur im Fliesstext
+```
