@@ -15077,3 +15077,68 @@ bitte: |
   nur die Datei nennen. Das Blatt liegt seit 20h41 BEREIT beim Generator; wer es aufnimmt,
   schlaegt sonst als Erstes an der falschen Stelle nach.
 ```
+
+```yaml
+auftrag: "spiegelung_rundet_an_der_toleranz"
+titel: "F-032 deckt die Achsenspiegelung — aber nicht das Runden, und das Runden endet genau auf epsilon"
+rolle: plan-pruefer
+zeit: "2026-08-07 07:36"
+stand_kopf: 0b80ca53
+posten: "Vorratspruefung (c) FORMELN DURCHRECHNEN — tragende Formel aus W-14/1 (BEREIT, 22h39)"
+anlass: |
+  W-14-1-7 verlangt woertlich: "Die FORMELN sind am Code erhoben und F-032 aus der
+  Registerzeile ist GEPRUEFT statt uebernommen. Wenn Translation und Achsenspiegelung
+  ohne F-Nummer sind, ist das zu sagen." Also nicht zitiert, sondern gerechnet.
+code_am_stand: |
+  resources/planner/hausplaner/geometry/editierGeometrie.ts (75 Zeilen)
+    :34  spiegelePunkt  vertikal:   { x: Math.round(2*pos - p.x), y: Math.round(p.y) }
+                        horizontal: { x: Math.round(p.x), y: Math.round(2*pos - p.y) }
+    :73  achsenMitte    vertikal ? (b.minX+b.maxX)/2 : (b.minY+b.maxY)/2
+f032_wortlaut: |
+  FORMELSAMMLUNG.md:253 — "Transformation eines Punktes", homogene 4x4-Matrix,
+  P' = M·P, Verkettung M = T·R·S, Grenzfall: nicht kommutativ.
+befund_1_deckung: |
+  Die Achsenspiegelung IST durch F-032 darstellbar: S mit sx = -1 spiegelt, T(2*pos,0,0)
+  schiebt zurueck, in der von F-032 vorgeschriebenen Reihenfolge T·R·S mit R = Einheit
+  ergibt das x' = 2*pos - x. Deckungsgleich mit dem Code. Insoweit ist die Registerzeile
+  nicht falsch — was der Auftrag als moegliche Antwort offenlaesst, ist damit beantwortet.
+befund_2_luecke: |
+  F-032 kennt KEIN Runden. Der Code rundet in JEDER Achse und bei JEDEM Aufruf. Das ist
+  kein Detail: gerechnet an vier Faellen (Nachbildung der beiden Funktionen wortgetreu,
+  ausgefuehrt mit node).
+    Fall 1  Bbox 0..5000, pos=2500     x=0/1000/2500/5000  -> hin und zurueck IDENTISCH
+    Fall 2  Bbox 0..5001, pos=2500.5   x=0/1000/5001       -> hin und zurueck IDENTISCH
+            (ueberraschend und wichtig: die UNGERADE Bbox-Breite bricht nichts, weil
+             2*pos = minX+maxX eine ganzzahlige Summe ist)
+    Fall 3  pos=2500.5, nicht ganzzahliges x
+            1000.4 -> 4001 -> 1000     Abweichung -0.4
+            1000.5 -> 4001 -> 1000     Abweichung -0.5
+             999.5 -> 4002 ->  999     Abweichung -0.5
+    Fall 4  pos=0, Koordinate auf der Halben
+            -1000.5 -> 1001 -> -1001   Abweichung -0.5
+             1000.5 -> -1000 -> 1000   Abweichung -0.5
+                -2.5 ->    3 ->    -3  Abweichung -0.5
+                 2.5 ->   -2 ->     2  Abweichung -0.5
+            Math.round(2.5)=3, Math.round(-2.5)=-2 — die Halbe geht IMMER Richtung +inf,
+            deshalb driften beide Vorzeichen in DIESELBE Richtung. Die Spiegelung ist an
+            der Halben also nicht achsensymmetrisch.
+die_kante: |
+  F-001 (frisch gelesen, FORMELSAMMLUNG.md:13, Grenzfall :18): "d < eps (0,5 mm) -> beide Punkte
+  gelten als DERSELBE". Die gemessene Abweichung eines Hin-und-Zurueck betraegt exakt
+  0,5 mm. 0,5 ist NICHT kleiner als 0,5 — ein zweimal gespiegelter Punkt liegt also
+  genau auf der Kante und gilt nach F-001 als ein ANDERER Punkt. Zweimal spiegeln ist
+  im Code nicht die Identitaet, sondern der kleinste Abstand, den F-001 noch als
+  Unterschied zaehlt.
+tragweite_ehrlich: |
+  Ich habe NICHT gemessen, ob im Hausplaner ueberhaupt nicht ganzzahlige Koordinaten
+  entstehen. Sind alle Punkte ganzzahlige mm, tritt Fall 3/4 nie ein und Fall 1/2 gilt.
+  Der Fund ist damit: die FORMEL traegt eine Bedingung, die F-032 nicht nennt
+  ("Koordinaten ganzzahlig"), und ohne sie ist die Spiegelung keine Involution.
+  Das ist Material fuer W-14-1-7, kein Baufehler-Vorwurf.
+ballbesitz: planner
+bitte: |
+  Zwei Saetze ins Blatt oder in die Formelsammlung: F-032 deckt die Achsenspiegelung
+  ueber sx=-1, aber der Code rundet, und das Runden ist nur folgenlos, solange die
+  Koordinaten ganzzahlig sind. Wer W-14/1 baut, kann W-14-1-7 sonst korrekt zitieren
+  und die Bedingung trotzdem uebersehen.
+```
