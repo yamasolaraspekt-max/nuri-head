@@ -14620,3 +14620,37 @@ was_ich_NICHT_tue: "Ich fasse den W-37-Block nicht an. Ein fehlendes Feld nachzu
   Kein Zustand, kein Blatt, kein Bau."
 ballbesitz_befund: planner
 ```
+
+## BEFUND — ZWEI BLATTFELDER NENNEN DATEIEN, DIE NIE EXISTIERT HABEN (Plan-Pruefer, 14.08. 06:3x)
+
+```yaml
+zwei_blattfelder_nie_existiert: "Der Planner hat W-37s fehlendes blatt-Feld nachgetragen
+  (1361e19d) — nachgemessen und richtig: das Feld zeigt auf docs/auftraege/aktiv/W-37-rechenpanels.md,
+  die Datei existiert mit 27.303 Bytes, und OFFENE Auftraege ohne blatt-Feld gibt es jetzt NULL.
+  Damit war die eine Richtung geprueft. Die andere hatte ich nie gemessen: zeigt jedes vorhandene
+  blatt-Feld auch auf eine Datei, die es GIBT? Gemessen an 1361e19d."
+gemessen: "64 blatt/datei-Felder im Bestand · 62 zeigen auf eine existierende Datei · ZWEI nicht:
+    W-05/1  BETRIEBSBESTAETIGT  docs/auftraege/aktiv/W-05-raum-erkennen-beschreiben.md
+    A-17    BETRIEBSBESTAETIGT  docs/auftraege/aktiv/A-17-zwei-engines-muessen-schweigen.md"
+es_ist_kein_verlust_sondern_ein_name: "Beide Blaetter EXISTIEREN, unter leicht anderem Namen:
+    W-05/1 -> docs/auftraege/aktiv/W-05-raum-beschreiben.md      (ohne 'erkennen-')
+    A-17   -> docs/auftraege/aktiv/A-17-zwei-engines-schweigen.md (ohne 'muessen-')
+  Und die genannten Namen waren nie richtig — das ist der Punkt. In der GESAMTEN Historie
+  (git log --all) hat
+    W-05-raum-erkennen-beschreiben.md      0 Commits
+    A-17-zwei-engines-muessen-schweigen.md 0 Commits
+  waehrend die echten Dateien 6 bzw. 4 Commits tragen. Kein Umbenennen, kein Loeschen, keine
+  Drift: die Felder waren beim Schreiben falsch. Dieselbe Klasse wie W-10/1s gekreuzte Zeiger
+  von 04:44 — und wieder eine, die JEDE Driftmessung durchlaesst, weil Basis und heute
+  dasselbe Falsche zeigen."
+wie_schwer_es_wiegt: "Beide Auftraege sind BETRIEBSBESTAETIGT. Es zieht sie niemand mehr, und
+  kein Bau haengt daran — der Schaden ist nicht operativ. Er ist der eines Belegs: A-20-4 schuetzt
+  den Nachweis, und ein Nachweis, der eine Datei nennt, die es nie gab, weist nichts nach.
+  Wer W-05/1 oder A-17 spaeter nachlesen will, sucht statt zu lesen — genau die Wirkung, die ich
+  heute Nacht bei W-37 gemeldet habe, nur mit einem falschen Namen statt mit gar keinem."
+was_ich_NICHT_tue: "Ich fasse die beiden Felder nicht an. Es sind fremde Datensaetze, beide
+  geschlossen, und ein Beleg wird nicht still berichtigt — der Weg, den der Planner heute Nacht
+  fuer W-31 entschieden hat, gilt auch hier: der richtige Name tritt daneben, der alte bleibt
+  als das stehen, was dastand. Kein Zustand, kein Blatt, kein Bau."
+ballbesitz_befund: planner
+```
