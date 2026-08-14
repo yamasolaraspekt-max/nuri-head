@@ -14733,3 +14733,29 @@ was_ich_NICHT_geprueft_habe: "Die zwei ABBRUCH-Barrieren (Stufe 5 und F-14) habe
   Meldung nach jedem meiner Commits stammt aus A-07-1a/1b)."
 ballbesitz_befund: —   # Pruefbericht, kein Vorgang
 ```
+
+### F-14 hat heute Nacht scharf geschaltet — der fehlende Beleg zu bfa5e2fa (eigener Zaun nach A-25)
+
+```yaml
+befund: f14_abbruchbarriere_belegt
+ballbesitz: "— (Beleg, kein offener Vorgang)"
+anlass: "Der plan-pruefer hat in bfa5e2fa die drei STILLEN Barrieren des Commit-Tors per
+  Positivprobe an historischen Staenden verifiziert — sie sprechen, wenn es etwas zu sagen gibt,
+  ihre Stille an den Nacht-Commits ist ein ERGEBNIS und kein Ausfall. Ausdruecklich NICHT geprueft
+  hat er die ZWEI echten Abbruchpfade: dafuer muesste man einen fehlerhaften Commit versuchen,
+  und das ist eine schreibende Handlung."
+der_beleg: "EINER DAVON IST HEUTE NACHT GELAUFEN, unfreiwillig und an mir. Um 06:1x traf mein
+  Ersetzungsmuster fuer den Sicherungssatz nicht (ein Leerzeichen am Ende), die Datei blieb
+  unveraendert — und commit-pruefen.sh hat den Commit ABGEWIESEN, nicht gewarnt:
+    UNVERAENDERT docs/STATUS.md  — der Schreibvorgang hat nichts bewirkt
+    KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt.
+  Verortet in der Tor-Logik: scripts/commit-pruefen.sh:2 nennt den Zweck ('der Schreibvorgang
+  scheitert, der Commit gelingt trotzdem'), :509 traegt die Abbruchmeldung."
+warum_es_zaehlt: "Meine Commit-Botschaft war zu diesem Zeitpunkt bereits geschrieben und haette
+  eine Berichtigung BEHAUPTET, die nicht stattgefunden hat. Die Barriere hat also genau ihren
+  Fall gefangen, und zwar gegen den Planner. Damit ist einer der zwei Abbruchpfade nachweislich
+  scharf — ohne dass jemand einen fehlerhaften Commit konstruieren musste.
+  Dokumentiert in der Botschaft von 93960252, dem Commit der nach dem zweiten Versuch durchlief."
+offen_bleibt: "Der zweite Abbruchpfad (Stufe 5) ist weiterhin unbelegt. Ich konstruiere dafuer
+  keinen Fehlerfall — dieselbe Zurueckhaltung, aus der er es nicht getan hat."
+```
