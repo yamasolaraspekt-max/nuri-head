@@ -86,7 +86,7 @@
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 | **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | `BEREIT` | **Generator** | Schnitt `1df82ee1` · Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` | **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
-### AUFGABENVERTEILUNG — Planner 12.08., gemessen aus dieser Tabelle
+### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
 > **Anlass: Yamas Auftrag „gib dir und den anderen Aufgaben".** *Grundlage ist ausschließlich die
 > Tabelle oben — nicht meine Notizen. **Und der Befund, der die Verteilung überhaupt nötig machte:
@@ -15210,4 +15210,39 @@ fuer_den_planner: |
   Kein Auftrag, nur eine Beobachtung zur Form: der Bestand fuehrt Befunde in zwei Formen
   (mit und ohne auftrag-Kopfzeile). Ob das vereinheitlicht wird, gehoert dem Planner —
   ich messe ab jetzt beide.
+```
+
+### AUFGABENVERTEILUNG 14.08. — löst den überholten Block von Zeile 89 ab (eigener Zaun nach A-25)
+
+```yaml
+befund: aufgabenverteilung_14_08
+ballbesitz: "— (Übersicht, kein eigener Vorgang)"
+anlass: "Der plan-pruefer hat den Verteilungsblock vom 12.08. am 13.08. 21:14 als veraltet
+  gemeldet und den Ball ausdruecklich beim Planner gelassen — 'er gehoert dem Planner, und
+  Rollengrenze heisst hier: melden, nicht ersetzen'. Der Ball lag danach ueber ZEHN STUNDEN bei
+  mir. Gefunden habe ich ihn erst, als er in 3cfa11cf meldete, dass seine eigene Ballortung
+  158 Zaeune ohne auftrag-Kopfzeile nie gesehen hat — 20 davon tragen ballbesitz planner.
+  Achtzehn waren seine Befunde dieser Nacht, alle bearbeitet; DIESER war der Rest.
+  Bitter daran: ich habe in dieser Nacht mehrfach gemeldet, dass veraltete Postenlisten
+  Aufmerksamkeit ohne Gegenstand binden — und meine eigene Verteilung war seit zwei Tagen falsch."
+der_alte_block_bleibt: "Zeile 89 wird NICHT umgeschrieben, A-20-4 schuetzt den Beleg. Die
+  Ueberschrift traegt jetzt den Hinweis auf diesen Block — in der VORHANDENEN Zeile, ohne
+  Zeilenverschiebung."
+verteilung_heute: >
+    GENERATOR         ACHT ziehbare Auftraege, alle mit Ball bei ihm, alle DoR erteilt:
+                      A-35 (erster Bau nach A7) · A-33 (klein, kein Code, raeumt die
+                      STATUS-Kollision) · sechs B-Ablesungen W-03/1 W-10/1 W-12/1 W-14/1
+                      W-16/1 W-18/1. 61 Kriterien, keine Luecke, 0 IN_ARBEIT im Weg.
+    EVALUATOR         Nichts unterwegs. 0 CODE_FERTIG im ganzen Bestand.
+    RELEASE-PRUEFER   DREI Vorgaenge: W-37 ABGENOMMEN seit 13.08. 23:38 · der doppelte
+                      release_vermerk in A-09 (98be4b6e) · 39 ungesicherte Commits auf
+                      auto/hausplaner-integration, live gemessen gegen b15c1cb7.
+    PLAN-PRUEFER      Kein offener Ball; er faehrt Vorratspruefungen.
+    PLANNER (ich)     Kein offener Ball nach dieser Runde.
+    YAMA              Die Regelkollision §3/E1/Beifang (Empfehlung B) · vier Fachentscheidungen
+                      W-24 W-26 W-28 W-32 · fuenf Solar-Operanden · die K3-Erweiterung
+                      (verlaengern ja/nein) · und die Frage, ob eine Bau-Instanz gestartet wird.
+keine_zahlen_die_altern: "Nach der A-33-Lehre stehen hier KEINE Zaehlstaende, die sich stuendlich
+  aendern (Tafelzeilen, Datensaetze, Commits seit X). Was zaehlt, steht in den Datensaetzen; hier
+  steht nur, WER woran ist."
 ```
