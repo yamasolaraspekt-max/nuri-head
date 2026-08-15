@@ -1463,6 +1463,71 @@ eine_dritte_form_die_der_block_noch_nicht_nennt: "Beide Seiten koennen zugleich 
 ballbesitz: planner  # oder Yama, wenn er die Prozessfrage an sich zieht
 ```
 
+## EIN POSTEN VON YAMAS LISTE IST HALB ERLEDIGT — durch seine EIGENE spaetere Entscheidung (Release-Pruefer, 15.08.)
+
+```yaml
+anlass: "Yamas Anweisung, seine Posten zu uebernehmen, und die Dauerregel, sie FRISCH zu messen
+  statt aus Notizen. Die Liste docs/BEFUND-WAS-BEI-YAMA-WIRKLICH-OFFEN-IST.md ist vom 13.08.
+  und nennt neun Posten. Ich habe die messbaren gegen den heutigen Bestand gehalten."
+
+zwei_stehen_unveraendert_und_bleiben_bei_yama: >
+  W-15   ZoneNode ohne Materialfeld — scene.types.ts:203-215 GEOEFFNET: zoneType, polygon,
+         KEIN materialId. Der Posten steht Zeichen fuer Zeichen wie am 13.08.
+  A-16/A-18  die tote View — resources/views/admin/layouts/roof.blade.php liegt weiter,
+         113.776 B, 12 TIME_VARS. Aufrufer im Code: 0 (die fuenf grep-Treffer sind samt und
+         sonders Doku ueber den Befund, einzeln geoeffnet, kein einziger ein Aufruf).
+         Loeschung bleibt Yamas — Dauerregel, kein Loeschen ohne Freigabe.
+
+DER FUND — A-22-6 ist zur HAELFTE beantwortet, und zwar von Yama selbst: >
+  A-22-6 fragte am 12.08.: welche Abhilfe gegen die Nebenlaeufigkeit an docs/STATUS.md? Der
+  Bericht nennt drei denkbare Formen — Datensaetze je Auftrag, eine Schreibsperre, eine andere
+  Zerlegung — und sagt ausdruecklich: wer das nebenbei loest, aendert die Arbeitsweise von fuenf
+  Rollen ohne Yama.
+  ZWEI TAGE SPAETER HAT YAMA ENTSCHIEDEN, nur unter anderem Namen: die
+  UMSTELLUNG-GETRENNTE-WORKTREES-CHECKLISTE traegt im Kopf "Verbindliche Master-Checkliste fuer
+  Yamas §1-Entscheidung vom 14.08.2026". Getrennte Worktrees sind eine VIERTE Form, die A-22-6
+  nicht aufzaehlt, und sie loest denselben Fall: nicht durch Zerlegen der Datei, sondern durch
+  Trennen der Baeume. Der Beifang entsteht beim Committen aus einem Baum, in dem eine fremde
+  Rolle uncommittierte Arbeit liegen hat — ohne gemeinsamen Baum kein Beifang.
+  DAMIT IST DER BEIFANG-TEIL VON A-22-6 ERLEDIGT. Nicht erledigt ist der zweite Teil, und den
+  trenne ich ausdruecklich ab: die REGELKOLLISION im Regelwerk selbst — "zweiter Commit
+  unmittelbar" gegen "nie fremde unverfolgte Arbeit einsammeln" — steht unveraendert, weil sie
+  eine Regelaenderung braucht und keine Arbeitsweise.
+
+ABER DIE LOESUNG GREIFT NUR FUER ZWEI VON FUENF, gemessen statt vermutet: >
+  Eigene Commits je Rollenzweig seit der gemeinsamen Basis bc2125d9:
+    planner           84
+    release-pruefer   70
+    evaluator          0
+    generator          0
+    plan-pruefer       0
+  Und die drei mit 0 sind nicht etwa untaetig — seit Umstellungsbeginn (14.08. 22:20) sind
+  18 generator- und 10 evaluator-Commits gelaufen. Sie arbeiten also, nur nicht ueber ihren
+  Rollenzweig: der Beifang-Mechanismus besteht fuer sie unveraendert fort. Das ist genau P2H-04
+  ("es fehlt die Zustellung an die vier Rollen"), hier mit Zahlen statt als Zustandswort.
+  40 von 62 Commits seit 22:20 fassen docs/STATUS.md an — die Datei, um die es geht.
+
+UND DIE DRITTE NULL IST EINE ANDERE ALS DIE ERSTEN ZWEI: >
+  plan-pruefer hat seit Umstellungsbeginn 0 Commits, aber auch sonst keine: der letzte ist vom
+  14.08. 10:11. Das sind ueber 27 Stunden. Er arbeitet nicht im falschen Baum — er arbeitet
+  nicht. Der Planner hat das im selben Takt als P2H-13 aufgemacht, unabhaengig und mit
+  demselben Ergebnis; meine Zahl bestaetigt seine.
+  DIE FOLGE IST KONKRET UND TRIFFT DAS TOR: A-37 (Rollen-Tor) und A-38 (Merges laufen am Tor
+  vorbei) stehen beide auf ENTWURF mit ballbesitz plan-pruefer. Beide warten auf seine DoR,
+  und A-38 ist der Auftrag, der die Luecke schliessen soll, durch die 41 von 309 Commits am
+  Tor vorbeilaufen. Der Engpass sitzt also vor der Behebung des Engpasses.
+
+was_ich_NICHT_tue: "Die DoR fuer A-37 und A-38 fahren. Das ist die Plan-Pruefung, und ich
+  pruefe Releases — eine Rollengrenze, die auch dann gilt, wenn die andere Rolle still ist.
+  Ich melde den Stillstand, ich fuelle ihn nicht."
+
+fuer_yama_die_frage_in_einem_satz: "Was geschieht mit einem Auftrag, dessen zustaendige Rolle
+  nicht antwortet — wartet er, oder darf eine andere Rolle die Station uebernehmen? Das ist
+  dieselbe Klasse wie R1/R2/R3 eine Ebene tiefer, und es ist deine Festlegung, nicht meine."
+
+ballbesitz: yama
+```
+
 ## ANTWORT AUF P2H-12 — der Rueckstau ist weg, die Regel dahinter fehlt weiter (Release-Pruefer, 15.08.)
 
 ```yaml
