@@ -1463,6 +1463,62 @@ eine_dritte_form_die_der_block_noch_nicht_nennt: "Beide Seiten koennen zugleich 
 ballbesitz: planner  # oder Yama, wenn er die Prozessfrage an sich zieht
 ```
 
+## AN YAMA — der Umzug und deine node_modules-Bedingung sind heute unvereinbar, und ich habe den Preis beziffert (Release-Pruefer, 15.08.)
+
+```yaml
+warum_dieser_block: "In der DoR zu A-37/A-38 habe ich gemeldet, dass kein Rollenbaum die eigenen
+  Kriterien pruefen kann. Ich hatte dabei EINEN Ausweg gemessen und die uebrigen offen gelassen.
+  Das habe ich nachgeholt, und das Ergebnis praezisiert mein eigenes Votum an zwei Stellen —
+  eine davon ENTLASTET das A-37-Blatt."
+
+die_ursache_ist_schaerfer_als_ich_sie_gemeldet_hatte: >
+  Ich hatte geschrieben: NODE_PATH rettet die YAML-Pruefung, aber nicht die Suite, weil das
+  npm-Skript einen relativen Dateipfad benutzt. Das stimmt, ist aber nicht der Kern. Gegenprobe
+  im Generator-Baum, beide Male mit gesetztem NODE_PATH:
+    CJS   require("js-yaml")   ->  aufgeloest
+    ESM   import("js-yaml")    ->  ERR_MODULE_NOT_FOUND
+  NODE_PATH wirkt ausschliesslich auf CommonJS-require. Es wirkt NICHT auf ESM-Importe und NICHT
+  auf die Typaufloesung von TypeScript, die node_modules im Projektverzeichnis erwartet.
+  Nachgewiesen an beiden Gates: schema:hausplaner:check ist eine .mts-Datei (ESM) und scheitert
+  trotz NODE_PATH; tsc laeuft zwar, meldet aber "Cannot find module 'react'" fuer jede Datei.
+
+WAS DAS FUER A-37 HEISST — eine Entlastung, die ich nachtrage: >
+  A-37-8 verlangt die Meldung "MODUL ... Abhilfe: NODE_PATH=<integrations-checkout>/node_modules".
+  Diese Abhilfe ist RICHTIG fuer ihren Fall: die YAML-Pruefung in commit-pruefen.sh nutzt
+  require("js-yaml"), also CJS, und wird von NODE_PATH tatsaechlich gerettet — selbst gefahren.
+  Das Blatt verspricht also nichts Falsches. Was nicht gilt, ist die Verallgemeinerung, die ICH
+  daraus gezogen hatte: als Loesung fuer den UMZUG reicht NODE_PATH nicht.
+
+DIE UNVEREINBARKEIT, in einem Satz: "Solange die Gates ESM und TypeScript benutzen, kann ein
+  Worktree ohne eigenes node_modules nicht pruefen — und dein Nicht-Ziel im A-37-Blatt schliesst
+  genau das aus: kein node_modules je Worktree, kein Symlink, keine Modulkopie ins Repo."
+
+DER PREIS, gemessen statt geschaetzt: >
+    gemeinsames node_modules      337 MB
+    fuenf Rollenbaeume            rund 1,7 GB
+    frei auf der Platte           74 GB von 460 GB   -> rund 2,3 Prozent des freien Platzes
+    /node_modules in .gitignore   ja, Zeile 2 — es wandert NICHT ins Repo
+
+was_ich_vermute_und_ausdruecklich_nicht_entscheide: "Deine Bedingung richtete sich dem Wortlaut
+  nach gegen DREI Dinge: node_modules je Worktree, Symlinks, Modulkopien ins Repo. Zwei davon
+  sind echte Gefahren — ein Symlink zwischen Baeumen bricht bei jedem npm-Lauf, und eine Kopie im
+  Repo waere ein Bestandsschaden. Eine echte Installation je Baum ist keines von beiden, und
+  .gitignore faengt sie. OB deine Bedingung auch sie treffen soll, weisst nur du; ich lege es
+  vor und deute sie nicht um."
+
+die_wege_wie_ich_sie_sehe: >
+  W1  node_modules je Rollenbaum zulassen. Preis 1,7 GB, Standardweg, sofort wirksam.
+      Erfordert, dass du das Nicht-Ziel praezisierst oder aufhebst.
+  W2  Gebaut wird im Rollenbaum, GEPRUEFT im Integrations-Checkout. Kein Plattenplatz, aber die
+      Trennung ist nur halb — wer prueft, arbeitet wieder im gemeinsamen Baum.
+  W3  Die Gates so umbauen, dass sie ohne lokales node_modules laufen. Das ist ein eigener
+      Auftrag am Werkzeugbau und die teuerste der drei.
+  KEINE EMPFEHLUNG von mir: W1 setzt eine Bedingung von dir ausser Kraft, und W2 verschiebt
+  Arbeit in meinen eigenen Zustaendigkeitsbereich zurueck. Bei beidem bin ich befangen.
+
+ballbesitz: yama
+```
+
 ## EIN POSTEN VON YAMAS LISTE IST HALB ERLEDIGT — durch seine EIGENE spaetere Entscheidung (Release-Pruefer, 15.08.)
 
 ```yaml
