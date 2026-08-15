@@ -19864,3 +19864,51 @@ bitte_an_yama: |
   Beides ist deine Entscheidung, nicht meine — (1) beruehrt die Push-Regel, (2) den Umzug.
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "formelsammlung_33_zeiger_geprueft_einer_gewandert"
+titel: "Alle 33 Datei:Zeile-Zeiger der FORMELSAMMLUNG nachgefahren — 32 treffen, einer ist um 28 Zeilen gewandert"
+rolle: plan-pruefer
+zeit: "2026-08-15 16:07"
+stand_kopf: 50857d3b
+posten: "Vorratspruefung (a) gewanderte Verweise — diesmal vollstaendig statt stichprobenweise"
+messung: |
+  Muster: ([A-Za-z0-9_./-]+\.(ts|tsx|php|mjs|sh|blade\.php)):(\d+) ueber die ganze Datei.
+    Zeiger gesamt                                   33
+    Zeile existiert und trifft                      26
+    zeigt auf ausgewiesenen Fremdcode ausserhalb      6
+    gewandert                                         1
+    zeigt ins Leere                                   0
+DER EINE FUND: |
+  F-051 (Zeitwerte je Gewerk, 🔴 GESPERRT) nennt als Herkunft
+    resources/views/admin/layouts/roof.blade.php:73  "time assumptions (minutes)"
+  Heute steht auf :73 eine Kommentar-Trennlinie. Der Satz steht auf :101 — 28 Zeilen weiter.
+  Nicht ins Leere, sondern auf etwas anderes: genau die Klasse, die dieser Posten sucht.
+  Warum es trotz seiner Kleinheit zaehlt: F-051 ist GESPERRT, und die Sperre steht und
+  faellt mit ihrer Herkunftsanalyse. Wer :73 aufschlaegt und eine Trennlinie findet, kann
+  ebenso schliessen, die Werte seien laengst weg — und die Sperre fuer erledigt halten.
+zwei_eigene_fehlalarme_unterwegs_gefangen: |
+  (1) Ich mass fuer 'admin.layouts.roof' EINEN View-Treffer, wo das Blatt 0/0/0 behauptet.
+      Nachgesehen: der Treffer ist ein Kommentar IN DERSELBEN DATEI (:91), der die
+      Nullmessung dokumentiert. Das Blatt hat recht, mein Treffer war sein eigener Beleg.
+  (2) Mein erster Durchlauf meldete 7 Zeiger als "Datei weg". Falsch, beide Male an mir:
+      create_p_v_roofs_table.php traegt ein Zeitstempel-Praefix (2024_06_04_103808_...),
+      mein Basename-Abgleich hat sie verfehlt — ich hatte dieselbe Datei zehn Minuten
+      zuvor selbst gelesen. Und dachdecker_pro_3d.tsx (6 Zeiger) ist kein Repo-Code,
+      sondern ausdruecklich ausgewiesene Fremdquelle.
+die_fremdquelle_habe_ich_nachgeprueft: |
+  ~/Desktop/Gemini-Code-Ideen-2026-05-25/03-energie-pv-dach-3d/dachdecker_pro_3d.tsx
+    vorhanden JA · 132374 Bytes — das Blatt nennt 132374, exakt gleich
+    Zeilen: das Blatt nennt 2173, ich zaehlte 2174. KEIN Unterschied: die Datei endet ohne
+    abschliessenden Zeilenumbruch (letztes Byte ';'), deshalb gibt wc -l 2173 und
+    grep -c '' 2174. Das Blatt hat wc -l benutzt. Bei identischen Bytes ist die Datei
+    unveraendert — die Belegstellen sind nachpruefbar geblieben.
+was_das_ueber_die_sammlung_sagt: |
+  32 von 33 Zeigern treffen nach Wochen und hunderten Commits. Das ist ein besserer Zustand
+  als bei den Auftragsblaettern, wo ich heute drei gewanderte Grundlagen gefunden habe.
+  Der Unterschied ist erklaerbar: die Sammlung zeigt ueberwiegend auf Formel-Definitionen,
+  die Blaetter auf Bau-Stellen, und Bau-Stellen bewegen sich.
+bitte: |
+  Eine Zahl aendern: F-051s Belegstelle von :73 auf :101. Sonst nichts.
+ballbesitz: planner
+```
