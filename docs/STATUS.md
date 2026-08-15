@@ -1664,6 +1664,28 @@ folge_wenn_entschieden: "Zwei Datensaetze auf ERLEDIGT, zwei Tafelzeilen nachgez
   A-06/P-02 bekommen bei der Gelegenheit die fehlenden Datensaetze aus dem Befund darueber.
   Das ist ein Arbeitsgang beim Planner, keine Release-Pruefung."
 
+NACHTRAG_15_08_nachmittags_die_frage_ist_groesser_als_sie_aussah: >
+  Wenige Stunden nach diesem Block ist derselbe Fall ein ZWEITES Mal aufgetreten, an einem
+  anderen Auftrag und mit einem anderen Wort — gefunden, weil mein Konfliktwerkzeug abbrach:
+    A-36   zustand: ZURUECKGEZOGEN   (Yamas Entscheidung V-02 vom 14.08.)
+  GEMESSEN, nicht vermutet: ZURUECKGEZOGEN kommt in docs/ARBEITSREGELN.md 0 mal vor. Zum
+  Vergleich in derselben Datei: ERLEDIGT 2, VORLAGE 2, DECISION_BLOCKED 10. Es ist damit
+  dieselbe Klasse wie ZURUECKGESTELLT, das A-21 am 12.08. als Phantasiewort abgeschafft hat —
+  nur diesmal ein neues Wort statt des alten.
+  DIE ENTSCHEIDUNG IST NICHT DAS PROBLEM: Yama darf einen Auftrag zurueckziehen, und er hat es
+  getan. Das Problem ist, dass §3 dafuer kein Wort hat, also erfindet jeder eins.
+  DAMIT LAUTET DIE FRAGE OBEN ALLGEMEINER, und ich stelle sie neu: §3 beschreibt EINE Kette
+  vom ENTWURF bis BETRIEBSBESTAETIGT plus vier Blockzustaende, die alle eine RUECKKEHR
+  vorsehen. Fuer einen Auftrag, der die Kette SEITWAERTS verlaesst und nicht zurueckkommt, gibt
+  es genau zwei Woerter (ERLEDIGT, VORLAGE), und beide sind fuer Auftraege gedacht, die nie in
+  die Kette eingetreten sind. Es fehlt der Ausgang fuer die, die drin waren:
+    A-05, A-12   abgenommen, aber nichts zu veroeffentlichen   -> steht auf ABGENOMMEN
+    A-36         zurueckgezogen, waehrend er lief              -> steht auf ZURUECKGEZOGEN
+  Zwei Belege an einem Tag, aus zwei verschiedenen Richtungen. Das ist keine Wortklauberei:
+  mein eigenes Messwerkzeug hat A-36 STILL UEBERSPRUNGEN, weil es das Wort nicht kannte, und
+  meldete dabei Drift 0 fuer einen Auftrag, den es nie angesehen hatte.
+  ICH ENTSCHEIDE AUCH DAS NICHT — es bleibt eine Aenderung an §3.
+
 ballbesitz: yama
 ```
 
