@@ -43,6 +43,20 @@ function kreuz(ux: number, uy: number, vx: number, vy: number): number {
 }
 
 /**
+ * Der Schnittpunkt **und wo er auf den beiden Achsen liegt** — `S = a + t·(b−a) = c + u·(d−c)`.
+ *
+ * *`t` und `u` sind dimensionslos:* **`0 ≤ t ≤ 1` heißt „auf der Strecke a→b", sonst „auf ihrer
+ * Verlängerung".** Dasselbe gilt für `u` auf `c→d`.
+ */
+export interface SchnittLage {
+  /** Lage auf der ersten Achse `a → b`. */
+  t: number;
+  /** Lage auf der zweiten Achse `c → d`. */
+  u: number;
+  punkt: Punkt;
+}
+
+/**
  * **F-004 · Schnittpunkt zweier Geraden.** Gerade 1 durch `a`,`b`, Gerade 2 durch `c`,`d`.
  *
  * Liefert den Schnittpunkt der **unbegrenzten Geraden** — nicht den der Strecken. *Genau das
@@ -82,6 +96,37 @@ function kreuz(ux: number, uy: number, vx: number, vy: number): number {
  * Zusage darunter (`geradenGeometrie.test.ts`) genau diesen Rückfall rot werden lässt.
  */
 export function geradenSchnitt(a: Punkt, b: Punkt, c: Punkt, d: Punkt): Punkt | null {
+  const s = geradenSchnittParameter(a, b, c, d);
+  return s === null ? null : s.punkt;
+}
+
+/**
+ * Der Schnittpunkt **mit seinen beiden Lageparametern** — dieselbe Rechnung, eine zweite Sicht.
+ *
+ * ```text
+ * S = a + t·(b−a)        t beschreibt die Lage auf der ERSTEN Geraden
+ * S = c + u·(d−c)        u beschreibt die Lage auf der ZWEITEN
+ * ```
+ *
+ * **Wofür:** `geradenSchnitt` beantwortet „wo kreuzen sich die **Geraden**". Ein Werkzeug wie
+ * `trimmen` muss aber wissen, ob der Punkt auch auf den **Strecken** liegt — und das ist genau die
+ * Frage `0 ≤ t ≤ 1` und `0 ≤ u ≤ 1`.
+ *
+ * > ***Warum über die Parameter und nicht über die Koordinate:*** *`t` und `u` sind
+ * > **dimensionslos**. Die Frage „liegt der Punkt auf der Strecke" wird damit zu „liegt die Zahl
+ * > zwischen 0 und 1", und die ist **exakt** beantwortbar — ohne Abstands-Epsilon.* **Der Weg über
+ * > die Koordinate bräuchte eines, und niemand hat es benannt** *(A-35, K3-Präzisierung).*
+ *
+ * ***Und `geradenSchnitt` rechnet nicht mehr selbst*** — *es ruft diese Funktion und gibt den Punkt
+ * heraus.* **Eine Rechnung, zwei Sichten: kein zweiter Rechenweg, der auseinanderlaufen kann.**
+ * *Die Signatur von `geradenSchnitt` ist unverändert; alle seine Zusagen gelten weiter.*
+ */
+export function geradenSchnittParameter(
+  a: Punkt,
+  b: Punkt,
+  c: Punkt,
+  d: Punkt,
+): SchnittLage | null {
   const rx = b.x - a.x;
   const ry = b.y - a.y;
   const sx = d.x - c.x;
@@ -104,7 +149,11 @@ export function geradenSchnitt(a: Punkt, b: Punkt, c: Punkt, d: Punkt): Punkt | 
   const n = kreuz(c.x - a.x, c.y - a.y, sx, sy);
   const t = n / m;
 
-  return { x: a.x + t * rx, y: a.y + t * ry };
+  // u aus DERSELBEN Determinante m: aus a + t·r = c + u·s folgt durch Kreuzen mit r
+  //   u = ((c−a) × r) / m .  Kein zweiter Nenner, keine zweite Wache.
+  const u = kreuz(c.x - a.x, c.y - a.y, rx, ry) / m;
+
+  return { t, u, punkt: { x: a.x + t * rx, y: a.y + t * ry } };
 }
 
 /**

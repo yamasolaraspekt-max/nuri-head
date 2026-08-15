@@ -112,6 +112,7 @@ import type { ObjectType, ViewType } from './tools/toolTypes';
 import { type Achse } from '../geometry/editierGeometrie';
 import { dupliziereGeschoss } from '../geometry/geschossVorlage';
 import { befehleLoeschen, befehleDuplizieren, befehleSpiegeln, befehleGeschossDuplizieren } from './sammelBefehle';
+import { befehleTrimmen, TRIMM_MELDUNG } from './tools/trimmen';
 import { treppeZuParametern, parametereZuTreppe, type TreppeParams } from '../geometry/treppeObjekt';
 
 // Basis-URL der Icon-Assets — aus dem Bundle-Standort abgeleitet (traegt Subpfad/Domain).
@@ -336,6 +337,9 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
   const [dachNaeherung, setDachNaeherung] = useState<boolean | null>(null);
   // A-01: der Grund, warum ein Dach NICHT entstanden ist. `null` = es gab keine Absage.
   const [dachAbsage, setDachAbsage] = useState<string | null>(null);
+  // A-35: derselbe Kanal fuer das Trimmen. Ein Werkzeug, das bei unmoeglicher Lage einfach nichts
+  // tut, sieht aus wie ein defektes Werkzeug — deshalb traegt jede Absage einen Grund.
+  const [trimmAbsage, setTrimmAbsage] = useState<string | null>(null);
   /** Z-01: steht der Zeiger auf der Zeichenflaeche? Verlassen pausiert, es beendet nicht. */
   const [zeigerDrinnen, setZeigerDrinnen] = useState(true);
   const [cursor, setCursor] = useState<Punkt>({ x: 0, y: 0 });
@@ -456,6 +460,8 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
    */
   const fussHinweis: string | null = werkzeug === 'kontur'
     ? konturStatusText(konturPunkte.length, konturFehler, letzteKontur?.length ?? null)
+    : trimmAbsage !== null
+    ? trimmAbsage
     : dachAbsage !== null
       ? dachAbsage
       : dachNaeherung === true
@@ -627,6 +633,34 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     store.getState().executeCommands(befehleLoeschen(selectedNodeIds, nodes));
     store.getState().selectNodes([]);
   }
+  /**
+   * A-35 — **die Vertragsgrenze, und zwar die EINZIGE.**
+   *
+   * `selectionIds` (Werkzeugvertrag) und `selectedNodeIds` (Store) sind dieselbe Größe; A7
+   * Konsequenz 2 sagt: *„Wer ein Werkzeug anschließt, übersetzt an der Vertragsgrenze und nirgends
+   * sonst."* **Hier ist sie** — die Reihenfolge bleibt erhalten, `primaerId` bleibt die Hauptrolle,
+   * und `befehleTrimmen` selbst kennt den Store nicht.
+   *
+   * *Der frische Store-Stand statt der gerenderten Werte:* dieselbe Klasse wie im Tastaturweg des
+   * Löschens — zwischen Render und Klick kann sich die Auswahl bewegt haben.
+   *
+   * **Die Absage landet in der Fußzeile** (`trimmAbsage` → `fussHinweis`) *und nicht in
+   * `letzteAblehnung`: die gehört abgelehnten KOMMANDOS, und ein abgewiesener Trimmvorgang führt
+   * keines aus.* Derselbe Weg wie bei der Konturprüfung (Z-05) und der Dach-Absage.
+   */
+  function trimme(): void {
+    const s = store.getState();
+    const { befehle, grund } = befehleTrimmen(
+      { ids: s.selectedNodeIds, primaerId: s.primaerId },
+      s.scene?.nodes ?? [],
+    );
+    if (grund !== null) {
+      setTrimmAbsage(TRIMM_MELDUNG[grund]);
+      return;
+    }
+    setTrimmAbsage(null);
+    s.executeCommands(befehle);
+  }
   function exportPng(): void {
     const stage = stageRef.current;
     if (!stage) return;
@@ -669,6 +703,7 @@ export function HausplanerApp({ imStudio = false }: { imStudio?: boolean } = {})
     }
     if (tool.id === 'loeschen') loescheAuswahl();
     else if (tool.id === 'duplizieren') dupliziere();
+    else if (tool.id === 'trimmen') trimme();
   }
   // AUF-48 Scheibe 4a: `opSep` und `OpGruppe` sind mit der Bedien-Werkzeugleiste umgezogen.
   // A-31: die ganze Auswahl in EINEM Schritt. Die neuen IDs werden nur dann ausgewählt, wenn die

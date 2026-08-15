@@ -291,6 +291,33 @@ export const TOOL_DEFINITIONS: readonly ToolDefinition[] = [
     group: 'Bearbeiten',
     tooltip: { title: 'Duplizieren', body: 'Sofortige Kopie am aktuellen Ort erzeugen.', usage: 'Einsatzbereich: Fenster, Möbel, technische Objekte.' },
   },
+  {
+    // A-35 — das ERSTE Werkzeug nach dem Bedienmodell A7 (Yama, 13.08.). Bis hierher galten acht
+    // Werkzeuge als nicht baubar, weil ein Bedienmuster fehlte; es fehlte nicht, es war nur nie
+    // benutzt worden. `minSelectionCount: 2`, weil ohne zweite Wand keine Schnittkante existiert.
+    id: 'trimmen',
+    label: 'Trimmen',
+    icon: 'trimmen',
+    art: 'aktion',
+    groupId: 'global',
+    supportedWorkspaces: [WORKSPACE_ARCHITEKTUR],
+    supportedViews: [],
+    minSelectionCount: 2,
+    requiredPermissions: ['Hausplaner,update'],
+    supportedSelectionTypes: ['wall'],
+    helpText: 'Wand an einer anderen abschneiden: Schnittkanten zuerst auswählen, die zu kürzende Wand zuletzt.',
+    activationRules: [
+      { type: 'object-state', operator: 'not-equals', value: 'locked', grund: 'Eine gesperrte Wand kann nicht gekürzt werden.' },
+      { type: 'project-state', operator: 'not-equals', value: 'readonly', grund: 'Der Plan ist schreibgeschützt.' },
+    ],
+    // Bedeutung, Einsatz, Kategorie und Icon kommen WOERTLICH aus dem Paket (werkzeugPaket.ts:123) —
+    // `gehobeneWerkzeuge.test.ts` vergleicht sie Feld fuer Feld, damit Handeintrag und Paket nicht
+    // auseinanderlaufen. Der helpText darueber ist die BEDIENANWEISUNG und wird nicht verglichen.
+    meaning: 'Überstehende Linien an Begrenzungen abschneiden.',
+    usageArea: 'Grundriss- und Detailkorrektur.',
+    group: 'CAD',
+    tooltip: { title: 'Trimmen', body: 'Überstehende Linien an Begrenzungen abschneiden.', usage: 'Einsatzbereich: Grundriss- und Detailkorrektur.' },
+  },
 ];
 
 const BY_ID = new Map(TOOL_DEFINITIONS.map((t) => [t.id, t]));
@@ -329,7 +356,7 @@ export const PAKET_WERKZEUGE = 110;
  * `ROH_GEHOBEN` in `__tests__/elevationTokens.test.ts`). *Zwei Bedeutungen fuer einen Namen sind
  * eine zweite Wahrheit — gemessen, bevor der Name gewaehlt wurde.*
  */
-export const AUS_PAKET_GEHOBEN = ['bemassen', 'flaeche-messen'] as const;
+export const AUS_PAKET_GEHOBEN = ['bemassen', 'flaeche-messen', 'trimmen'] as const;
 
 /** Werkzeuge, die NACH dem 110er-Fachpaket dazugekommen sind. */
 export const EIGENE_WERKZEUGE = ['kontur'] as const;

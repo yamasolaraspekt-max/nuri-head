@@ -110,7 +110,8 @@ export const TOOL_PRESENTATION_RULES: readonly ToolPresentationRule[] = [
   { toolId: 'polygon', zone: 'weitere', ordnung: 20, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'kreis', zone: 'weitere', ordnung: 21, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'bogen', zone: 'weitere', ordnung: 22, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
-  { toolId: 'trimmen', zone: 'weitere', ordnung: 23, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
+  // A-35: aus dem Katalog GEHOBEN — trimmen ist gebaut, die Herkunft ist jetzt die Registry.
+  { toolId: 'trimmen', zone: 'weitere', ordnung: 23, herkunft: 'registry', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'verlaengern', zone: 'weitere', ordnung: 24, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'versatz', zone: 'weitere', ordnung: 25, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },
   { toolId: 'teilen', zone: 'weitere', ordnung: 26, herkunft: 'katalog', begruendung: GRUND_PAKET , prioritaet: 'secondary', anheftbar: true },

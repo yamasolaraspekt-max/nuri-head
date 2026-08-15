@@ -46,11 +46,32 @@ test('W-05: jede gehobene id steht wirklich im Paket — sonst hebt die Liste in
   assert.ok(AUS_PAKET_GEHOBEN.length > 0, 'die Hebeliste ist leer — die Zusagen messen Leere');
 });
 
+/**
+ * **⚠ ERWEITERT mit A-35 (15.08.) — und zwar die Zusage, nicht ihre Grundgesamtheit.**
+ *
+ * *Hier stand `assert.equal(eintrag.art, 'werkzeug')`.* **Gemessen war das eine Aussage über die
+ * damaligen zwei und nicht über das Heben:** `bemassen` und `flaeche-messen` tragen `art:
+ * 'werkzeug'`, stehen aber **nicht** in der `Werkzeug`-Union (`werkzeugArten.ts:21`) — ihr Modus
+ * tut nichts. *„Gehoben" hieß bis heute: erscheint in der Leiste.*
+ *
+ * **`trimmen` ist das erste gehobene Werkzeug, das wirklich etwas tut** — und es tut es **sofort
+ * auf der Auswahl**, wie `loeschen` und `duplizieren`. Das ist `art: 'aktion'`. *Wäre es
+ * `'werkzeug'`, schaltete der Klick in einen Modus, den kein Renderer bedient, und die Aktion liefe
+ * nie.*
+ *
+ * ***Der Zweck der Zusage bleibt vollständig erhalten:*** *sie fängt weiterhin jede id, deren
+ * Registry-Eintrag gar kein Bedien-Eintrag ist* (`bauteil`, `bereich`, `schritt`) — **nur die
+ * Gleichsetzung „gehoben = Modus" fällt, und die war nie gemessen.**
+ */
 test('W-05: jede gehobene id hat einen Registry-Eintrag — die Liste allein hebt nichts', () => {
+  const BEDIENBAR = ['werkzeug', 'aktion'];
   for (const id of AUS_PAKET_GEHOBEN) {
     const eintrag = TOOL_DEFINITIONS.find((t) => t.id === id);
     assert.ok(eintrag, `'${id}' steht in der Hebeliste, aber nicht in TOOL_DEFINITIONS`);
-    assert.equal(eintrag.art, 'werkzeug', `'${id}' ist kein Werkzeug und erscheint nicht in der Leiste`);
+    assert.ok(
+      BEDIENBAR.includes(eintrag.art),
+      `'${id}' hat art '${eintrag.art}' — das erscheint nicht als bedienbarer Eintrag in der Leiste`,
+    );
   }
 });
 

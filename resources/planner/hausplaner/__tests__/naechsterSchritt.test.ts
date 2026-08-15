@@ -36,6 +36,8 @@ const kontext = (caps: string[], sel: ObjectType[] = []) => baueAktivierungsKont
 const LEER = kontext([FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_ANSICHT_BEREIT]);
 const MIT_GESCHOSS = kontext([FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_ANSICHT_BEREIT, FAEHIGKEIT_GESCHOSS_DA]);
 const MIT_AUSWAHL = kontext([FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_ANSICHT_BEREIT, FAEHIGKEIT_GESCHOSS_DA], ['wall']);
+/** A-35: zwei ausgewaehlte Waende — die Lage, in der `trimmen` ueberhaupt erst bedienbar wird. */
+const MIT_ZWEI_AUSWAHL = kontext([FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_ANSICHT_BEREIT, FAEHIGKEIT_GESCHOSS_DA], ['wall', 'wall']);
 const zustaende = (ctx: ReturnType<typeof kontext>) => ALLE.map((t) => resolveToolState(t, ctx));
 /** Ein Kandidat, wie ihn die App baut: Grund + dieselben Werkzeuge im hypothetischen Kontext. */
 const kandidat = (grund: string, ctx: ReturnType<typeof kontext>): Kandidat => ({ grund, danach: zustaende(ctx) });
@@ -48,7 +50,14 @@ test('K4: dieser Posten lockert KEINE Sperre — die gesperrten Mengen sind exak
   // stünde hier eine andere Zahl.
   assert.equal(gesperrt(LEER).length, 73, 'leerer Plan');
   assert.equal(gesperrt(MIT_GESCHOSS).length, 53, 'mit Geschoss');
-  assert.equal(gesperrt(MIT_AUSWAHL).length, 28, 'mit Geschoss und Auswahl');
+  // **A-35 (15.08.): 28 -> 29, und der Grund ist EIN neues Werkzeug, keine gelockerte Sperre.**
+  // `trimmen` braucht ZWEI ausgewaehlte Objekte; `MIT_AUSWAHL` haelt genau EINES. Vorher war
+  // `trimmen` ein Katalog-Eintrag und wurde mit einer Auswahl frei — jetzt sagt es die Wahrheit.
+  // Die zwei Zeilen darunter halten diese Begruendung selbst fest, damit die Zahl nicht nur
+  // hochgezaehlt, sondern BELEGT ist.
+  assert.equal(gesperrt(MIT_AUSWAHL).length, 29, 'mit Geschoss und Auswahl');
+  assert.ok(gesperrt(MIT_AUSWAHL).includes('trimmen'), 'trimmen muss bei EINER Auswahl gesperrt sein');
+  assert.ok(!gesperrt(MIT_ZWEI_AUSWAHL).includes('trimmen'), 'trimmen muss bei ZWEI Auswahlen frei sein');
   // und jede gesperrte nennt ihren Grund — sonst wäre der Wegweiser nicht zählbar
   for (const ctx of [LEER, MIT_GESCHOSS, MIT_AUSWAHL]) {
     for (const z of zustaende(ctx)) {
@@ -86,14 +95,18 @@ test('K5: die genannte Zahl ist die GEMESSENE Differenz, nicht die Zahl der Wart
 });
 
 test('K5: ohne Kandidaten gewinnt die blosse Häufigkeit — und die zeigt auf den falschen Schritt', () => {
-  // GEMESSEN und der Grund, warum es Kandidaten gibt: im leeren Plan sperrt „etwas auswählen" 23
-  // Werkzeuge und damit MEHR als das fehlende Geschoss (22). Als erster Schritt wäre das
+  // GEMESSEN und der Grund, warum es Kandidaten gibt: im leeren Plan sperrt „etwas auswählen" 22
+  // Werkzeuge und damit MEHR als das fehlende Geschoss (20). Als erster Schritt wäre das
   // unbrauchbar — in einem leeren Plan gibt es nichts auszuwählen.
+  // **A-35: 23 -> 22.** `trimmen` wird nicht mehr von „etwas auswählen" gesperrt, sondern von
+  // seinem eigenen, schaerferen Grund: „braucht mindestens 2 ausgewaehlte Objekte". Selbst
+  // gemessen; die Aussage der Zusage — dieser Schritt gewinnt nach blosser Haeufigkeit und ist
+  // trotzdem der falsche — bleibt unveraendert.
   const nurHaeufigkeit = naechsterSchritt(zustaende(LEER))!;
   assert.equal(nurHaeufigkeit.grund, 'Dafür muss zuerst etwas ausgewählt sein.');
-  assert.equal(nurHaeufigkeit.wartend, 23);
+  assert.equal(nurHaeufigkeit.wartend, 22);
   assert.equal(nurHaeufigkeit.entsperrt, null, 'ohne Messung wird nichts versprochen');
-  assert.match(wegweiserSatz(nurHaeufigkeit, 'Wähle ein Bauteil aus'), /darauf warten 23 Werkzeuge/);
+  assert.match(wegweiserSatz(nurHaeufigkeit, 'Wähle ein Bauteil aus'), /darauf warten 22 Werkzeuge/);
 
   // Mit gemessenem Kandidaten gewinnt der Schritt, der wirklich etwas löst.
   const gemessen = naechsterSchritt(zustaende(LEER), [GESCHOSS_KANDIDAT()])!;
@@ -209,14 +222,16 @@ test('AUF-57: die Auswahl ist ein messbarer Anlass — dieselbe Engine, ein ande
   const h = handlungZuGrund('Dafür muss zuerst etwas ausgewählt sein.');
   assert.equal(h?.brauchtAuswahl, true, 'ohne diese Kennzeichnung baut niemand den Vergleich');
   assert.equal(h?.faehigkeit, undefined, 'die Auswahl ist keine Fähigkeit');
-  // Gemessen: mit einer Auswahl werden 25 Werkzeuge bedienbar.
+  // Gemessen: mit einer Auswahl werden 24 Werkzeuge bedienbar.
+  // **A-35: 25 -> 24.** `trimmen` kommt mit EINER Auswahl nicht mehr frei — es braucht zwei.
+  // Die Aussage der Zusage (die Zahl im Satz ist die GEMESSENE Differenz) ist unberuehrt.
   const mitAuswahl = ALLE.map((t) => resolveToolState(t, kontext(
     [FAEHIGKEIT_PROJEKT_OFFEN, FAEHIGKEIT_ANSICHT_BEREIT, FAEHIGKEIT_GESCHOSS_DA], ['wall'],
   )));
   const w = naechsterSchritt(zustaende(MIT_GESCHOSS), [{ grund: 'Dafür muss zuerst etwas ausgewählt sein.', danach: mitAuswahl }])!;
   assert.equal(w.grund, 'Dafür muss zuerst etwas ausgewählt sein.');
-  assert.equal(w.entsperrt, 25, 'die Zahl ist gemessen, nicht gesetzt');
-  assert.match(wegweiserSatz(w, 'Wähle ein Bauteil aus'), /das schaltet 25 Werkzeuge frei/);
+  assert.equal(w.entsperrt, 24, 'die Zahl ist gemessen, nicht gesetzt');
+  assert.match(wegweiserSatz(w, 'Wähle ein Bauteil aus'), /das schaltet 24 Werkzeuge frei/);
 });
 
 test('AUF-57: der Arbeitsbereich ist KEIN Anlass — gemessen sperrt jeder Wechsel MEHR', () => {
@@ -244,5 +259,7 @@ test('AUF-57: Schweigen bleibt möglich — löst kein Kandidat etwas, erscheint
 test('AUF-57: die Aktivierung ist unverändert — dieselben Mengen wie zu AUF-45', () => {
   assert.equal(gesperrt(LEER).length, 73);
   assert.equal(gesperrt(MIT_GESCHOSS).length, 53);
-  assert.equal(gesperrt(MIT_AUSWAHL).length, 28);
+  // A-35: 28 -> 29, dieselbe Begruendung wie oben in K4 — EIN neues Werkzeug, das ZWEI Objekte
+  // braucht. Die beiden Zahlen darueber sind unberuehrt, und genau das ist die Aussage.
+  assert.equal(gesperrt(MIT_AUSWAHL).length, 29);
 });
