@@ -1478,6 +1478,41 @@ was_ich_NICHT_tue: "Ich lege die zwei Datensaetze nicht selbst an. Der Zustand e
 ballbesitz: planner
 ```
 
+## BEFUND — ZWEI geschnittene Auftraege ohne Platz in der Statuswahrheit (Release-Pruefer, 15.08.)
+
+```yaml
+was_gemessen_ist: >
+  Auftragsblatt vorhanden, Platz in docs/STATUS.md gesucht:
+    A-36   A-36-wer-schreibt-und-paragraf-14.md        Tafel 1 · Datensatz 1   vollstaendig
+    A-37   A-37-rollen-tor-und-drei-fehlerursachen.md  Tafel 0 · Datensatz 0   FEHLT GANZ
+    A-38   A-38-merges-laufen-am-tor-vorbei.md         Tafel 0 · Datensatz 0   FEHLT GANZ
+  A-37 geschnitten in 7ef8f046, A-38 in 927e7b1f, beide vom Planner, beide NACH A-20.
+
+die_regel: "A-20 vom 12.08. steht als eigene Ueberschrift in §5: 'Wer den Auftrag schneidet,
+  legt seinen Platz in der Statuswahrheit an.' Sie wurde eingefuehrt, weil Zustaende an vier
+  Orten standen und zwei davon Kopien waren. A-36 haelt sie, A-37 und A-38 nicht."
+
+warum_das_nicht_kosmetik_ist: "docs/STATUS.md ist nach §16 die EINZIGE Statuswahrheit — wer
+  wissen will, was anliegt, liest sie und nicht den Blattkopf. Zwei Auftraege, die dort nicht
+  vorkommen, sind fuer jede Rolle unsichtbar, die sich an die Regel haelt. Der Planner schreibt
+  selbst in den A-38-Commit, A-37 und A-38 stauten sich beide ungeprueft beim Plan-Pruefer —
+  aber der Plan-Pruefer arbeitet die Statuswahrheit ab, und dort steht keiner von beiden. Ein
+  Auftrag, den man nur findet, wenn man das Verzeichnis der Blaetter durchsieht, hat genau den
+  Zustand, den A-20 abgeschafft hat. Zweite Folge: der §13-Zaehler zaehlt Bauauftraege — zwei,
+  die nicht in der Statuswahrheit stehen, zaehlt er nicht mit."
+
+was_ich_NICHT_tue: "Ich lege die zwei Plaetze nicht an. Gleiche Begruendung wie bei A-06 und
+  P-02 im Block darueber: ein Datensatz traegt Zustand, Ballbesitz und dor_beleg, und die kann
+  ich nicht nachliefern, ohne sie zu erfinden. Das Blatt lesen und daraus einen Zustand
+  ableiten waere genau die stille Entscheidung, gegen die die Rollentrennung gebaut ist."
+
+transportiert_trotzdem: "Das A-38-Blatt lag nur auf rolle/planner und auf keiner Gegenstelle.
+  Ich habe es transportiert, damit es gesichert ist — Transport ist keine Wertung und keine
+  Planpruefung."
+
+ballbesitz: planner
+```
+
 ## OFFENE REGELFRAGE AN YAMA — hat ein Messauftrag eine Endstation? (Release-Pruefer, 15.08.)
 
 ```yaml
