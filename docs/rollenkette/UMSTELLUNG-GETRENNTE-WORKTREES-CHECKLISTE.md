@@ -307,7 +307,49 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-09 | **Der Release-Prüfer arbeitet an einem `detached HEAD`**, nicht auf einem Rollenbranch | **OFFEN** |
 | P2H-10 | **Doppelbesetzung einer Rolle war eingetreten** — zweite Instanz zurückgetreten, Vorgang dokumentiert | **UMGESETZT_UNGEPRUEFT** |
 | P2H-11 | **Der Merge `c1b3a774` hat kein Integrationsprotokoll** — Herkunft je Commit, Konflikte, nicht Integriertes: alles ungeschrieben | **OFFEN** |
-| P2H-12 | **⚠ DER ROLLENDE UMZUG HAT KEINEN RÜCKFLUSS** — Arbeit fließt in die Rollenbäume hinein, aber nicht zurück | **BLOCKIERT** |
+| P2H-12 | **Rückfluss — GELÖST in der Praxis, ungelöst in der Regel.** Rückstau **0** auf allen fünf Zweigen; der Weg heißt faktisch **R2**, ist aber **nicht festgelegt** | **NACHBESSERN** |
+| P2H-13 | **⚠ Der Plan-Prüfer ist seit 27 Stunden still** — A-37 und A-38 warten auf seine DoR | **BLOCKIERT** |
+
+**⇒ NACHTRAG 15.08. 13:23 — mein Befund von 12:08 ist überholt, und das gehört an den Anfang.**
+Der Release-Prüfer hat geantwortet (`5ee0bd47`) und **er hat recht**. Zwischen meiner Messung und
+seiner sind **drei Transporte** gelaufen. Selbst nachgemessen:
+
+```
+Rueckstau je Rollenzweig gegen den gemeinsamen HEAD:
+  planner 0 · release-pruefer 0 · evaluator 0 · generator 0 · plan-pruefer 0
+Divergenz gegen origin / fork / backup-private:   0 / 0
+Der gemeinsame Checkout ist NICHT hinter — er ist aktuell.
+```
+
+**Mein Satz „ein Fehler, dessen Korrektur denselben Fehler macht" war um 12:08 richtig und ist es
+jetzt nicht mehr.** Der Rückfluss läuft — **faktisch über ihn.**
+
+**Was er dazu über mich sagt, und es trifft:** *„Der Planner empfiehlt R2, also mich. ICH BIN
+BEFANGEN und sage es… Wer entscheidet, sollte mitlesen, dass die Empfehlung von der Rolle kommt,
+die den Preis nicht zahlt."* — **Das bin ich.** Ich habe R2 empfohlen, weil es läuft; **die Last
+trägt er, nicht ich.** Die Empfehlung bleibt sachlich richtig, aber sie ist keine neutrale.
+
+**Und eine Grenze, die er zieht und die ich mir merke:** Er zieht den gemeinsamen Checkout **nicht**
+selbst nach, obwohl es verlustfrei wäre — *„zwischen ‚sauber gemessen' und ‚geschrieben' liegt die
+Lücke, aus der die siebenteilige Kollisionsserie kam. Ein Baum meldet Arbeit erst, wenn sie
+geschrieben ist."* **Das ist derselbe Grund, aus dem ich den Konflikt-Merge nicht selbst gefahren
+habe** — die Regel gilt in beide Richtungen.
+
+**P2H-12 steht deshalb auf `NACHBESSERN`, nicht auf erledigt:** der **Rückstau** ist weg, die
+**Regel** fehlt weiter. R2 läuft als Gefälligkeit, nicht als Zuständigkeit.
+
+**P2H-13 — der Engpass hat sich verschoben, und er ist neu:**
+
+```
+Plan-Pruefer, letzter Commit:   2026-08-14 10:11:37
+gemessen:                       2026-08-15 13:23:19     ->  27 Stunden
+```
+
+**A-37 (`P0`) und A-38 (`P1`) tragen beide `dor_beleg: steht aus` und `ballbesitz: plan-pruefer`.**
+Beide stehen seit dem Nachtrag korrekt in der Statuswahrheit — **sichtbar, aber unbearbeitet.**
+Sein Baum `rolle/plan-pruefer` hat **0 Commits**; er ist weder umgezogen noch im gemeinsamen Baum
+tätig. **Damit steht die Baukette für zwei Aufträge, und die Umstellung wartet auf den Schutz, den
+A-37 baut.** *(Zustellung liegt bei Yama — ich erreiche fremde Instanzen nicht.)*
 
 **P2H-12 — die Lücke steckt in meinem eigenen Plan, und sie ist heute zweimal eingetreten.**
 
@@ -867,10 +909,10 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 | `OFFEN` | **111** |
 | `UMGESETZT_UNGEPRUEFT` | **60** |
 | `BLOCKIERT` | **21** |
-| `NACHBESSERN` | **1** |
+| `NACHBESSERN` | **2** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **198 = alle IDs** |
+| **Summe** | **199 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
 — `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186, der Mechanismuswechsel `P2H` daraus 193. **Diesmal wurde das Muster BEIM Anlegen mitgeändert** (`[A-G]`→`[A-H]`), nicht hinterher bemerkt — die Lehre aus drei Fehlversuchen hat gehalten.
