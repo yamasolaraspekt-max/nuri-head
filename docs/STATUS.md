@@ -1384,6 +1384,57 @@ was_ich_daraus_ziehe: "Zwoelf Konflikte lang war der Einzeiler richtig, weil zwo
   ich messe, was ich zu messen gewohnt bin."
 ```
 
+## ZULIEFERUNG ZUR OFFENEN DOKU-§10-FRAGE — die Praxis hat sie beantwortet, gemessen statt gemeint (Release-Pruefer, 15.08.)
+
+```yaml
+die_frage: "Der Block 'ENTSCHEIDUNG FAELLIG — braucht eine DOKU-Stufe eine §10-Release-Pruefung?'
+  steht seit dem 12.08. offen. Der Plan-Pruefer hat sie sauber gestellt und ausdruecklich dem
+  Planner oder Yama zugewiesen. Sie ist NICHT entschieden worden — aber die Praxis lief weiter."
+
+warum_ICH_sie_nicht_entscheide: "Sie bestimmt, ob es meine Station gibt. Eine Entscheidung fuer
+  §10 vergroessert meine eigene Zustaendigkeit, eine dagegen verkleinert sie und erklaert
+  vierundzwanzig eigene Durchgaenge rueckwirkend fuer entbehrlich. Beides ist eine
+  Regelaenderung ueber die eigene Vollmacht, und die vertrete ich nicht — auch nicht in Yamas
+  Namen. Was ich liefern kann, ist die Zahl, die der Block am 12.08. noch nicht haben konnte."
+
+was_seither_gemessen_ist: >
+  Doku-Stufen, die seit dem 12.08. durch §10 gelaufen sind und heute BETRIEBSBESTAETIGT tragen:
+    24 von 72   A-04 A-13 A-15 W-01/1 W-02/1 W-03/1 W-04/1 W-05/1 W-06 W-07N W-08/1 W-09/1
+                W-10/1 W-11/1 W-12/1 W-13/1 W-14/1 W-15/1 W-16/1 W-18/1 W-21/1 W-22/1 W-31 W-37
+  Die Frage des Blocks war: faengt diese Station etwas, das die Abnahme durchgelassen hat?
+
+die_antwort_mit_belegen_und_mit_der_gegenseite: "JA, aber selten — und ich nenne beide Zahlen.
+  Von 24 Durchgaengen trugen 5 ueberhaupt ein Befundwort im Release-Feld. Diese 5 habe ich
+  GEOEFFNET statt sie zu zaehlen, denn ein Wort ist keine Sache:
+    W-12/1  ECHTER FUND gegen die Abnahme — 'drei Zahlen tragen im Votum den falschen Traeger'.
+            Ein Befund AM VOTUM, nicht am Bau. Genau der Fall, den der Block vorhersah.
+    W-04/1  ECHTER FUND, der Praezedenzfall des Blocks selbst — drei Kriterien ohne Beleg,
+            gefunden von der Sammel-Kontrolle, nicht von der Abnahme.
+    W-16/1  ECHTER FUND, F-Zuordnung: die falsche Nummer stand da, wo sie gelesen wird.
+    W-15/1  KEIN Fund gegen die Abnahme — das war MEIN eigener Fehler, ich las die falsche
+            Datei und haette dem Evaluator beinahe zu Unrecht widersprochen.
+    W-07N   KEIN Fund — eine Lueckenmeldung, kein Befund am Bau.
+  DREI echte Funde auf 24 Durchgaenge. Neunzehn Durchgaenge fanden nichts."
+
+was_das_fuer_beide_seiten_heisst: "Fuer §10 spricht: drei Funde, die sonst niemand gemacht
+  haette, alle drei AM VOTUM — also genau dort, wo eine zweite Lesung wirkt und die Abnahme
+  selbst blind ist. Dagegen spricht unveraendert und unwiderlegt, was der Plan-Pruefer
+  schrieb: es gibt nichts zu VEROEFFENTLICHEN. Kein Bundle, keine Migration, kein Rueckweg
+  ausser git revert. Von den §10-Punkten greift bei Doku nur eine Teilmenge."
+
+eine_dritte_form_die_der_block_noch_nicht_nennt: "Beide Seiten koennen zugleich recht haben,
+  wenn man Kontrolle und Veroeffentlichung trennt. Was die drei Funde erbracht hat, war nie die
+  Release-Frage ('darf das raus'), sondern die zweite Lesung des Votums ('traegt der Beleg').
+  Eine Doku-Stufe koennte also nach ABGENOMMEN eine VOTUMS-GEGENLESUNG durchlaufen und danach
+  direkt an den Planner gehen, ohne die Zustaende RELEASE_FREI und VEROEFFENTLICHT zu
+  durchlaufen, die bei ihr ohnehin leer sind. Das nimmt die Auflage des Plan-Pruefers auf
+  (Beleg je Kriterium) und spart die Station, die nichts zu pruefen hat.
+  ICH SCHLAGE DAS VOR, ich beschliesse es nicht — und ich bin befangen, weil es meine eigene
+  Station betrifft. Wer entscheidet, sollte das mitlesen."
+
+ballbesitz: planner  # oder Yama, wenn er die Prozessfrage an sich zieht
+```
+
 ## P2H-09 ZUR HAELFTE GESCHLOSSEN — mein Rollenzweig ist nachgezogen, der Baumwechsel bleibt offen (Release-Pruefer, 15.08.)
 
 ```yaml
