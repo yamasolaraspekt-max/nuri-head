@@ -63,15 +63,15 @@
 | **A-28** Zwei Typen, eine Wahrheit | **`BETRIEBSBESTAETIGT`** | – | Release `2a06907d` · §19 13.08. | **BAU, P2** · **Die neun Aufbauarten stehen ZWEIMAL, zeichengleich:** `aufbauPlatzierung.ts:21 AufbauArt` und `dachformVorlagen.ts:173 VorlagenAufbauArt` — `md5` der Werteliste **identisch** (`35ed563c…`), selbst verglichen. **Eine zweite Wahrheit, und CLAUDE.md verbietet sie** — schlimmer verborgen als bei einem Wert: wer eine zehnte Art hinzufügt, muss beide ändern, **und `tsc` merkt es nicht**, weil die Typen unabhängig sind. **Die Behebung ist klein:** jeder Typ wird nur in seiner eigenen Datei benutzt, kein Import-Geflecht. **Der Ort ist nicht erfunden** — `domain/roofShape.ts:12` ist der Präzedenzfall (Domänen-Typ in `domain/`, von vier Dateien genutzt); die *Art* eines Aufbaus ist Domäne, Platzierung und Vorlagen sind **Verbraucher**. **Zweiter Befund im selben Griff:** der Dateikopf nennt **sechs** Arten, der Typ hat **neun** — sechs Gattungen, neun Arten (Gaube zerfällt in vier). Beide Zahlen stimmen über verschiedene Mengen; A-28-5 verlangt die Unterscheidung im Bericht statt eine Zahl zu „berichtigen". **Gefunden beim Messen für W-22s Bedien-Schnitt**, kein fremder Befund. |
 | **A-29** Die Landkarte nennt die falsche Funktion | `BETRIEBSBESTAETIGT` | — | Bau `4654687f` · **EVALUATOR 13.08.: NACHBESSERN, EIN Punkt (§12.2).** **Fünf der sechs Kriterien sind erfüllt**, das sechste in seinen *geforderten* Zusagen ebenfalls — der Befund trifft eine **Zusatzzahl, die der Bau freiwillig aufgenommen und nicht am eigenen Stand gemessen hat.** **Der Nachtrag sagt `ROH grep -c "werkzeugId: '"` → 112; ich messe am Elter `1de986de` 112 und am Bau `4654687f` 116** — *der Nachtrag hat die Zahl selbst verschoben*, weil er das Muster viermal in seinen eigenen Text schreibt (Z.39/40/43/48 neben der genannten Z.27). Damit sind **beide** Aussagen der Zeile falsch. **Warum das trägt:** `A-29-3` sagt wörtlich *„Die Zahl wird AM BAU-STAND erhoben und nicht aus diesem Blatt übernommen (E1)"* — die 112 steht im Blatt; der Nachtrag **liefert den grep-Befehl mit** und lädt zum Nachfahren ein; und A-29 ist ein Auftrag *gegen* eine falsche Selbstauskunft im Code. **Ausdrücklich nicht beanstandet:** die vier tragenden Zahlen stimmen, alle vier von mir nachgezählt → je **111**; beide Ursachen-Commits selbst geprüft (`e903ce36` trägt 110, `1fba9a1d` hebt auf 111 mit `kontur`). **`A-29-1` geht über seinen eigenen Wortlaut hinaus, und das werte ich als richtig** — die Rechnung fehlt seit A-32 nicht mehr (`geradenGeometrie.ts:157` selbst geöffnet); wörtlich befolgt hätte der Bau eine *neue* falsche Aussage in genau die Datei geschrieben, die er berichtigt. **Fangprobe 2×, Anker je 1×, md5 zurück auf `cd8139a2`:** Marke `fehlt→deckt` macht den harten Verteilungs-Wächter `:119` rot, Begründung auf 8 Zeichen macht `:90` rot. Suite **1750/1750**, tsc exit=0, Bündel byte-gleich. **Eigener Messfehler offengelegt:** mein erster Gedanke war *„der Bau zählt falsch"* — erst die Messung am Elter zeigte, dass die Zahl dort richtig war und der Bau sie selbst verschoben hat. · **Der Generator schrieb: 6/6 belegt · Suite 1750 unverändert · Fangprobe 2× mit Anker zurück.** **Ein Kriterium war überholt, bevor der Bau anfing:** `A-29-1` verlangt zu schreiben, die Rechnung *fehle* — **sie fehlt nicht mehr**, `geradenGeometrie.parallelVersatz` liegt seit **A-32** (`BETRIEBSBESTAETIGT`) vor. Wörtlich befolgt hätte das eine **neue falsche Aussage** in genau die Datei geschrieben, die A-29 von einer falschen Aussage befreit. Gebaut wurde nach dem **Zweck**: Wortfalle benannt, alter Wortlaut an derselben Stelle überholt lesbar, heutiger Stand genannt — *es fehlt nur noch der Modellbefehl.* **Beide Lesarten im Bericht, Entscheidung beim Evaluator.** Die Zahl mit **vier** Trägern erhoben (**111**; roh **112**, weil eine Nennung im Kopf selbst steht) · Marken unverändert 41/21/43/6 · genau **zwei** Diff-Bereiche · Bündel unverändert. · Schnitt 13.08. · Basis `84c57085` | **Zwei Berichtigungen in `app/tools/werkzeugLandkarte.ts`.** `:80` sagt, die Parallelversatz-Geometrie liege „bereits" in `editierGeometrie.versetzteWand` — die verschiebt **beide Endpunkte um denselben Vektor**, ist also eine Translation; ein Offset braucht die Normale. **Diese eine Zuschreibung hat mich in die Falle geführt:** ich habe daraus „Cluster 3 = Anschluss, sofort machbar" gemacht und es Yama zugesagt, zurückgezogen in `485004c4`. Reichweite gemessen: **1 von 18** Begründungen mit Codestelle — kein systematischer Mangel, bei `trimmen` hatte die Landkarte recht. Zweiter Punkt: der Kopf begründet ausführlich „es sind 110 Verträge", gemessen sind **111** (Träger: `werkzeugVertrag.ts`, drei Muster). Er war an seinem Tag korrekt (`e903ce36` → 110), `1fba9a1d` fügte den Kontur-Vertrag ein. Daten und Test wurden mitgezogen, nur die Prosa nicht. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `86f94d98`):** Befund und Reichweite selbst nachgemessen — `:80` sagt wörtlich *„bereits"*, `versetzteWand` versetzt beide Endpunkte um denselben Vektor (Translation); 21 `fehlt`-Marken, 18 mit Codestelle, Stichprobe der übrigen trägt. Alle vier Zahlen bestätigt (je **111**, roh **112** wegen der Nennung in Zeile 27) — **mein erstes Muster war gröber als seins und lieferte 114/113**, genau die Streuung, deretwegen `A-29-3` Datei und Muster verlangt. Ursache belegt: `e903ce36` trägt 110, `1fba9a1d` fügt `kontur` ein. **Alle drei P1 heute rot**, kein Konflikt, 40-Zeichen-Wächter benannt. **Nachgetragen:** der Datensatz-Block fehlte — `86f94d98` legte nur diese Tafelzeile an (A-20), und dadurch war der Ball bei mir für die Ballortung **unsichtbar**. | · **RUNDE 2 — EVALUATOR 13.08.: ABGENOMMEN.** Nach §12.4 **alle sechs Kriterien erneut gefahren**, nicht nur der Befund. **Der Befund ist an der Wurzel behoben, und die Lösung ist besser als eine berichtigte Zahl:** der Bau hat die Muster in seiner Tabelle **beschrieben statt ausgeschrieben** — damit kann der Kommentar sich nicht mehr selbst mitzählen, heute nicht und bei der nächsten Erweiterung nicht. *Eine korrigierte Zahl wäre beim nächsten Satz wieder falsch geworden.* **Selbst nachgemessen am Stand `d21dd083`:** `grep -c` → **112**, und **genau eine** Nennung außerhalb der Einträge (Z.27, aus dem alten P-04-Absatz, den A-29-3 ausdrücklich nicht umschreiben lässt). 111 + 1 = 112 — die Zahl stimmt jetzt. **Die vier tragenden Zahlen erneut gezählt: je 111.** **Fangprobe erneut**, Anker je 1×, md5 zurück auf `7db42e60`: Marke `fehlt→deckt` → `:119` rot, Begründung gekürzt → `:90` rot. **A-29-6 über beide Commits:** Bau 2 Hunks + Nachbesserung 1, gegen die Basis `84c57085` genau **zwei Bereiche**. Suite **1750/1750**, tsc exit=0.
 | **A-30** Die halbe Statuswahrheit | `BETRIEBSBESTAETIGT` | — | Bau `0aceee01` · Basis `d8fd395d` | **EVALUATOR 13.08.: ABGENOMMEN, 8/8 selbst nachgemessen.** **Die sechs echten Stände selbst gefahren**, Rückgabewerte einzeln: `86f94d98` exit=1 *„A-29: neue TAFELZEILE ohne Datensatz-Block"*, `ca99466b` exit=1 *„W-16/1: …"* — die roten melden nicht irgendetwas, sondern **genau die fehlende Kennung**; `875d1da5`/`c5e52994`/`c82c7f55`/`b778152b` alle exit=0. **A-30-8 als Unterschied zweier Läufe, beide von mir gefahren:** eng **12** ohne `P-02`, breit **13** mit — und beide im Kommentar genannten Fundstellen selbst geöffnet (`:31` P-02 VORLAGE, `:5586` M-02 Befundtabelle, beide stimmen, auch die Korrektur `:5302 → :5586`). **A-30-3 nicht am Text geprüft, sondern gefahren:** mit Anker eine `W-01`-Tafelzeile angefasst → *„A-26-HINWEIS NICHT GEPRÜFT … kein Datensatz-Block"* bei **exit=0** — gemeldet **und** der Rückgabewert nicht gehoben. **Fangprobe dreimal**, Anker je 1×, md5 zurück auf `1f05e12f`: Verengung raus → **genau die zwölf** Fehlalarme, die das Blatt vorhergesagt hat; zweite Richtung raus → die Probe rutscht durch; Muster auf `[A]-` → `ca99466b` wird grün. **Eigene Zusatzprobe zu Scope (1) „und umgekehrt"**, das kein Kriterium misst: ein neuer Block `A-99` → exit=1, *„neuer DATENSATZ ohne Tafelzeile"*. **Regressionsprobe an A-26**, weil der Bau ihren Rumpf anfasst (§12.1 stuft REGRESSION P0): `55cd13d8^` und `38bc5e12` melden die Drift weiter, der Tor-Aufruf `a26-ball-drift.sh docs/STATUS.md` unverändert still. **Die Scope-Frage zur `--stand`-Nachrüstung hat der Generator selbst gemeldet — sie geht an den PLANNER, nicht an mich:** additiv, für den von A-30-1 verlangten Nachweis nötig, keine Regression; über Scope entscheidet aber der Planner. **Zwei eigene Messfehler offengelegt**, darunter der schwerere: ich maß „0 Deckungslücken" — ohne `--stand` liest A-26 den Diff gegen HEAD, und der ist im sauberen Prüfstand leer. Mein Aufbau war falsch, nicht der Bau. · **Der Generator schrieb: 8/8 belegt.** Die **sechste** Tor-Barriere steht, und das stille `continue` in meiner eigenen A-26 ist zu — **in beide Richtungen**, weil eine fehlende Tafelzeile genauso still war und die Zahlen des Auftrags selbst beide nennen (12 und 11). **An sechs echten Ständen geprobt:** `86f94d98` und `ca99466b` rot (Rückgabe 1), die vier anderen still. **A-30-8 als Unterschied zweier Läufe** — festgelegtes Muster **12**, breites **13** (die dreizehnte ist `P-02`, VORLAGE); und weil das die `M-`Gefahr *nicht* zeigt, einzeln belegt: `[A-Z]+-[0-9]+[A-Za-z-]*` liest `M-02-Kopienzahl` ein, eine Zeile aus einer **Befundtabelle**. **Zwei Funde an mir selbst:** (1) mein erstes Kennungsmuster war **zu eng** — es traf `W-01N`, `W-07N`, `W-21L` nicht; die 12/11 halten, die Gesamtzahl ist **73/72** statt 70/69. (2) **A-26 war gar nicht an historischen Ständen fahrbar**, obwohl ihr Kopf genau das behauptet — nur über eine Dateikopie, und die läuft gegen den falschen Diff. `--stand` nachgerüstet; **erst damit** ist das geschlossene Loch überhaupt zu zeigen. *Das geht über den Wortlaut von Scope (2) hinaus — gemeldet, nicht entschieden.* **Zu `8c24b79f`:** der Stand schweigt zu **Recht** — dieser Commit hat die Drift *behoben*; wer ihn probt, probt den falschen. `docs/STATUS.md` 0 · `resources/` 0 · `app/` 0. · **Die SECHSTE Tor-Barriere — und ein stiller Deckungsverlust, der größer ist als der Anlass.** A-20-2 verlangt Blatt, Tafelzeile und Datensatz in EINEM Commit; dafür gibt es **keine Barriere**. Belegt an mir: `86f94d98` (A-29) und `ca99466b` (W-16/1) legten je **1 Tafelzeile, 0 Blöcke** an — zwei Aufträge lagen **unsichtbar** in der Bahn des Plan-Prüfers, dessen Ballortung `ballbesitz` im **Datensatz** liest. Vier frühere Schnitte (`875d1da5`, `c5e52994`, `c82c7f55`, `b778152b`) tragen je 1+1 — der Handgriff war richtig und ist abgebrochen. **Der eigentliche Fund:** `a26-ball-drift.sh:56` überspringt fehlende Gegenstücke **still** (`continue`) — dadurch prüft die Ball-Drift bei **11 von 62** Tafelzeilen gar nichts (Tafel `W-01` ↔ Datensatz `W-01/1`, ein Vorgang, zwei Schreibweisen). **Reichweite hat die Barriere verengt:** „jede Tafelzeile braucht einen Datensatz" hätte **12 Fehlalarme** erzeugt — geprüft wird nur, was im Commit **neu** ist. **DoR 13.08. NICHT erteilt (plan-pruefer, gemessen an `18fe2deb`):** fast alles belegt — die **sechs Probestände stimmen exakt** (2× 1 Tafelzeile/0 Blöcke, 4× 1/1), das stille `continue` steht auf `a26-ball-drift.sh:56`, beide Teile sind heute rot (Wort *Tafelzeile* im Tor **0×**, Klasse *nicht geprüft* **0×**), und **12/11 treffe ich mit identischen Listen**. **Es fehlt eine Zeile im tragenden Teil:** das Blatt legt nicht fest, was die Barriere als Auftragskennung liest. Die Tafel führt **vier** Präfixe (30 `A-`, 36 `W-`, je 1 `M-`/`P-`); mit breiterem Muster sind es **13** statt 12 — die dreizehnte ist **`P-02`**, eine `VORLAGE` ohne Datensatz, also genau der Fehlalarm auf einer legitimen Zeile, den `A-30-2` ausschließen will. Ball beim Planner. |
-| **W-10/1** Decke und Boden (Ablesung) | `BEREIT` | **`Generator`** | Schnitt 13.08. · Basis `18fe2deb` | **STUFE B, Einordnung GEMESSEN: Ablesung — und der Gegenstand ist wieder größer als das Modul.** Gebaut sind: Registry-Werkzeug `id: 'decke'` (`toolRegistry.ts:132`, Shortcut K, `bauteilKind: 'ceiling'`), `CeilingNode` + `CeilingOeffnung` im Schema, **drei Befehle** (`applyCommand.ts:288/:305/:320`), `deckenMesh.ts` (35 Z., **drei** Exporte), Aufrufer `HausplanerApp.tsx:1042`, Fixtures, Test **242 Z.** **Die Tooltip-Zusage „Treppen werden ausgespart" HÄLT** — `treppenDurchbrueche()` (`applyCommand.ts:119`), aufgerufen in `:298`. **Und ich hätte das Gegenteil gemeldet:** vier Muster auf „Aussparung" ergaben **0 Treffer**, die Sache heißt „Durchbruch" — vierte H-9-Wortfalle des Tages, dritter erspartes Phantom. **Befund zur Abgrenzung:** `boden` hat Vertrag (`FloorCommand`) und Paket-Eintrag, kommt in `toolRegistry.ts` aber **0 Mal** vor; die Landkarte führt `boden` **und** `decke` beide als `deckt`/`ADD_CEILING`. Ob W-24 ein eigenes Werkzeug braucht, ist damit eine offene **Einordnungsfrage** — nicht entschieden. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `1045c5a7`):** alle Schichten selbst nachgeschlagen — Registry `:132`, Schema `:338`, die drei Befehle `:288`/`:305`/`:320`, `treppenDurchbrueche` `:119`, die drei Aufrufer-Stellen `:296`/`:298`/`:300`, `deckenMesh.ts` 35 Z./3 Exporte, Test 242 Z. **Die Tooltip-Zusage hält wirklich:** vier Muster (`ausspar`, `Ausspar`, `stair-cut`, `stairCut`) ergeben **0 Trefferzeilen** — die Sache heißt `treppenDurchbrueche` und ist voll gebaut. Vierte Wortfalle des Tages, dritter verhinderter Phantom-Befund. `boden` trägt Vertrag `:649` und Paket `:167`, in der Registry **0×**; `PAKET_WERKZEUGE` ist eine **Konstante**. **Rot-Lage belegt:** die W-10-Blätter sind Schablonen (hash-gleich mit W-12). Test ohne Datenbank, kein Konflikt mit W-21/2. |
-| **W-14/1** Kopieren/Spiegeln/Drehen (Ablesung) | `BEREIT` | **`Generator`** | Schnitt 13.08. · Basis `78c09e1b` | **STUFE B, Einordnung GEMESSEN: Ablesung plus ein benannter Rest — und der tragende Punkt ist ein Befund.** Die Registerzeile liest sich wie eine Gruppe; gemessen sind es **drei verschiedene Bezugsrahmen**: `duplizieren` (`toolRegistry.ts:273`) und `loeschen` (`:249`) arbeiten auf der **Auswahl**, **`spiegeln` auf dem GANZEN Grundriss** — kein Registry-Eintrag, zwei Kopfrahmen-Knöpfe (`Kopfrahmen.tsx:315/:316`, `disabled={waende.length === 0}`), Handler `HausplanerApp.tsx:703` — und `verschieben` über **drei Wege** ohne eigenes Werkzeug (`Buehne.tsx:207`, `EigenschaftenPanel.tsx:120`, `HausplanerApp.tsx:601`). **H-8 wie beim Raster in W-12/1.** `drehen` **fehlt aus einem Schema-Grund**, am Schema bestätigt: `transform.rotation` gibt es nur am `ObjectNode` (`scene.types.ts:193-196`), Wände tragen `start`/`end`. `editierGeometrie.ts`: 75 Z., **neun** Exporte, Test 52 Z. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `5dfb6f17`):** die drei Bezugsrahmen stimmen alle — `duplizieren` (`:273`) und `loeschen` (`:249`) auf der Auswahl, **`spiegeln` 0× in der Registry** und über `Kopfrahmen.tsx:315/:316` mit `disabled={waende.length === 0}`, Handler `:703` über **alle** Wände; `verschieben` ohne Werkzeug über drei Wege. **Der Schema-Grund für Drehen trägt:** `transform` nur am ObjectNode (`:193-196`), `WallNode` **0×** `rotation`, `applyCommand.ts:203` lehnt ab. **Neun Exporte namentlich nachgezählt**, die W-13-Berichtigung belegt (kein Auswahl-Modul importiert `editierGeometrie`). **Rot-Lage belegt** (Schablonen), Test ohne Datenbank, kein Konflikt. |
+| **W-10/1** Decke und Boden (Ablesung) | **`ABGENOMMEN`** | **Release-Prüfer** | Nachbesserung R1 `d145ea0e` · Bau `25db5490` | **NACHBESSERUNG R1 FERTIG 15.08. — der Befund trägt, selbst nachgemessen statt geglaubt.** `deckenMesh` hat im **ganzen Repo genau EINEN** Importeur (`decke.test.ts:9`), `naechsteEtageElevationMm` **0** Produktivaufrufer, `deckenOberkanteMm` **null Verweise überhaupt** — nicht einmal im Test. Gestapelt wird **von Hand** in `Kopfrahmen.tsx:172`, gezeichnet in `szene.ts:482-483` **ohne `deckenMesh`**. **Das ist H-8 und meine eigene Fehlerklasse:** *die Schicht richtig **benannt**, ihre **Wirkung** falsch **behauptet*** — dieselbe Klasse wie die Spiegel-Öffnungen in W-14, nur diesmal nicht selbst gefangen, weil ich die Datei gelesen und die **Verbraucher nicht gesucht** habe. **Umfang größer als die genannte Zeile, ausdrücklich gemeldet:** dieselbe falsche Wirkung stand an **fünf** Stellen (`4-BEDIENUNG:40`, `1-ZWECK:37`, `1-ZWECK:12`, `2-FUNKTION:27` und — die schärfste — die Überschrift `2-FUNKTION:79` „eine Ableitung, kein zweiter Rechenweg", wo ich den **Dateikopf zitiert statt gemessen** hatte). **Zwei-Richtungs-Probe je Befund:** `Kopfrahmen.tsx:172` **0→5**, „kein Produktivverbraucher" **0→1**, `szene.ts:482` **0→3**, die falsche Wirkung **1→0**. **Alle acht Kriterien erneut gefahren (§12.4)**; `W-10-1-7` neu gemessen, weil die Reparatur **vier** Hashes verändert hat. Wächter **13/13**, Suite **1750/1750**, tsc **0**, **0** Produktivcode. **— ABNAHME-STAND R0:** **GEBAUT 14.08.: sieben Blätter UND die Registerzeile in EINEM Commit — zum vierten Mal in Folge.** **Die Formel-Bilanz fällt in DREI Richtungen gegen die Registerzeile aus** (sie sagte `F-011, F-030`): **F-011 trägt wörtlich** (`polygonFlaeche.ts:44`/`:46`), **F-030 trägt zur HÄLFTE** — die 2D-Schritte deckungsgleich (Richtung, Normale `n = (−r_y, r_x)` auf `:128`, vier Grundpunkte `A ± (d/2)·n`), **die Extrusion in z gar nicht**: ein flaches Loch-Polygon, kein Quader. *Nicht falsch — **zu groß**.* **Und F-001 fehlte ganz** (`Math.hypot`, `:127`), nachgetragen. **Lücke statt erfundener Nummer:** die Subtraktion „Fläche minus Lochpolygone" hat in der Sammlung **keine** Nummer. **Die Wortfalle hat DREI Stufen, nicht zwei:** `grep 'ausspar'` findet **die Zusage selbst nicht**, weil in „aus-**ge**-spart" ein `ge` dazwischensteht — *wer so misst, hält Nicht-Finden für Abwesenheit.* **Die Zusage hält**, alle vier Stufen einzeln geöffnet. **Und ein Befund:** die **Reihenfolge** `:298`→`:300` (erst Durchbrüche, dann Ganzzahligkeit) ist die eigentliche Zusage des Werkzeugs und durch **keinen** Test gesichert. Wächter selbst gefahren **13/13**, Suite **1750/1750**, **0** Produktivcode. **— EINORDNUNG BEIM SCHNITT:** **STUFE B, Einordnung GEMESSEN: Ablesung — und der Gegenstand ist wieder größer als das Modul.** Gebaut sind: Registry-Werkzeug `id: 'decke'` (`toolRegistry.ts:132`, Shortcut K, `bauteilKind: 'ceiling'`), `CeilingNode` + `CeilingOeffnung` im Schema, **drei Befehle** (`applyCommand.ts:288/:305/:320`), `deckenMesh.ts` (35 Z., **drei** Exporte), Aufrufer `HausplanerApp.tsx:1042`, Fixtures, Test **242 Z.** **Die Tooltip-Zusage „Treppen werden ausgespart" HÄLT** — `treppenDurchbrueche()` (`applyCommand.ts:119`), aufgerufen in `:298`. **Und ich hätte das Gegenteil gemeldet:** vier Muster auf „Aussparung" ergaben **0 Treffer**, die Sache heißt „Durchbruch" — vierte H-9-Wortfalle des Tages, dritter erspartes Phantom. **Befund zur Abgrenzung:** `boden` hat Vertrag (`FloorCommand`) und Paket-Eintrag, kommt in `toolRegistry.ts` aber **0 Mal** vor; die Landkarte führt `boden` **und** `decke` beide als `deckt`/`ADD_CEILING`. Ob W-24 ein eigenes Werkzeug braucht, ist damit eine offene **Einordnungsfrage** — nicht entschieden. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `1045c5a7`):** alle Schichten selbst nachgeschlagen — Registry `:132`, Schema `:338`, die drei Befehle `:288`/`:305`/`:320`, `treppenDurchbrueche` `:119`, die drei Aufrufer-Stellen `:296`/`:298`/`:300`, `deckenMesh.ts` 35 Z./3 Exporte, Test 242 Z. **Die Tooltip-Zusage hält wirklich:** vier Muster (`ausspar`, `Ausspar`, `stair-cut`, `stairCut`) ergeben **0 Trefferzeilen** — die Sache heißt `treppenDurchbrueche` und ist voll gebaut. Vierte Wortfalle des Tages, dritter verhinderter Phantom-Befund. `boden` trägt Vertrag `:649` und Paket `:167`, in der Registry **0×**; `PAKET_WERKZEUGE` ist eine **Konstante**. **Rot-Lage belegt:** die W-10-Blätter sind Schablonen (hash-gleich mit W-12). Test ohne Datenbank, kein Konflikt mit W-21/2. |
+| **W-14/1** Kopieren/Spiegeln/Drehen (Ablesung) | **`ABGENOMMEN`** | **Release-Prüfer** | Bau `5a2e70b1` · Basis `78c09e1b` | **GEBAUT 14.08.: sieben Blätter UND die Registerzeile in EINEM Commit — zum dritten Mal in Folge, ohne Erinnerung.** **F-032 ist am Code widerlegt:** `editierGeometrie.ts` rechnet **6× `Math.round`, 2× `Math.max`, 2× `Math.min`**, kennt „Matrix" **0×**, keine Trigonometrie — *F-032 hat den **Gegenstand** getroffen und die **Bauform** verfehlt.* Registerzeile **LEER → BESCHRIEBEN**, ~~F-032~~ mit `ⓝ`. **Die drei Bezugsrahmen belegt:** `duplizieren` (`:273`)/`loeschen` (`:249`) auf der **Auswahl**, `spiegeln` auf dem **ganzen Grundriss** (`'spiegeln'` **0×** in der Registry, `Kopfrahmen.tsx:315/:316` mit `disabled={waende.length === 0}`), `verschieben` **ohne Werkzeug**. **Zeilennummer gemeldet statt still ersetzt:** Auftrag und DoR nennen `:703`, am Bau-Stand steht der Handler auf **`:695`** — Inhalt identisch, die Datei ist seit dem Schnitt bewegt worden. **EIGENE BEHAUPTUNG BERICHTIGT, bevor sie committet war:** ich hatte die Richtungsumkehr beim Spiegeln als Problem für angedockte Öffnungen geschrieben — **nachgerechnet gilt das Gegenteil** (Wand 0–1000, Öffnung 200, Achse 500 → **800**, das wahre Spiegelbild); die Umkehr ist der **Grund**, warum es stimmt. **Und ein Befund:** der Bezugsrahmen ist durch **keine** Zusage gesichert — `befehleSpiegeln(waende)` → `(auswahl)` bricht **keinen** Test. Wächter selbst gefahren **8/8**, Suite **1750/1750**, **0** Dateien außerhalb `docs/`. **— EINORDNUNG BEIM SCHNITT:** **STUFE B, Einordnung GEMESSEN: Ablesung plus ein benannter Rest — und der tragende Punkt ist ein Befund.** Die Registerzeile liest sich wie eine Gruppe; gemessen sind es **drei verschiedene Bezugsrahmen**: `duplizieren` (`toolRegistry.ts:273`) und `loeschen` (`:249`) arbeiten auf der **Auswahl**, **`spiegeln` auf dem GANZEN Grundriss** — kein Registry-Eintrag, zwei Kopfrahmen-Knöpfe (`Kopfrahmen.tsx:315/:316`, `disabled={waende.length === 0}`), Handler `HausplanerApp.tsx:703` — und `verschieben` über **drei Wege** ohne eigenes Werkzeug (`Buehne.tsx:207`, `EigenschaftenPanel.tsx:120`, `HausplanerApp.tsx:601`). **H-8 wie beim Raster in W-12/1.** `drehen` **fehlt aus einem Schema-Grund**, am Schema bestätigt: `transform.rotation` gibt es nur am `ObjectNode` (`scene.types.ts:193-196`), Wände tragen `start`/`end`. `editierGeometrie.ts`: 75 Z., **neun** Exporte, Test 52 Z. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `5dfb6f17`):** die drei Bezugsrahmen stimmen alle — `duplizieren` (`:273`) und `loeschen` (`:249`) auf der Auswahl, **`spiegeln` 0× in der Registry** und über `Kopfrahmen.tsx:315/:316` mit `disabled={waende.length === 0}`, Handler `:703` über **alle** Wände; `verschieben` ohne Werkzeug über drei Wege. **Der Schema-Grund für Drehen trägt:** `transform` nur am ObjectNode (`:193-196`), `WallNode` **0×** `rotation`, `applyCommand.ts:203` lehnt ab. **Neun Exporte namentlich nachgezählt**, die W-13-Berichtigung belegt (kein Auswahl-Modul importiert `editierGeometrie`). **Rot-Lage belegt** (Schablonen), Test ohne Datenbank, kein Konflikt. |
 | **A-31** Eine Operation, viele Undo-Schritte | `BETRIEBSBESTAETIGT` | — | Bau `606e83b4` · Nachtrag `8275ddea` · Basis `c3d2b527` | **8/8 belegt · Suite 1731 → 1741 · tsc grün · Bündel neu (`executeCommands` darin: 0 → 2).** `executeCommands` klammert die Liste in **ein** `produceWithPatches` und **einen** `historie.push`; `executeCommand` ist jetzt der **Sonderfall einer Liste mit einem Eintrag** — zwei Ausführungswege wären zwei Wahrheiten. **Der wichtigste Fund kam aus dem Messen, nicht aus dem Testen:** `REMOVE_NODE` auf eine Wand nimmt ihre Öffnungen mit (`applyCommand.ts:168`). Sind **Wand und ihr Fenster gemeinsam ausgewählt** — und `wendeAuswahlAn` filtert nicht nach Typ, das ist erreichbar —, dann hätte *alles oder nichts* die **ganze Löschung verworfen**: der Benutzer drückt Entf und nichts passiert. Vorher fing jeder Aufruf seine Ablehnung selbst. `befehleLoeschen` lässt die Öffnung deshalb **vor** der Liste heraus; eine **unbekannte** id wird dagegen NICHT geschluckt. **Fangprobe zweimal, Anker beide zurück:** Mutation 1 macht genau die fünf store-abhängigen Zusagen rot, Mutation 2 genau die eine Kanten-Zusage — **und die erste Fangprobe hat einen Mangel in MEINEN Tests gezeigt** (geteilter Historien-Singleton; ein Test, der aus dem falschen Grund rot wird, wird auch aus dem falschen Grund grün). **A-31-5 mit echtem Klammer-Durchlauf statt Zeilen-Heuristik**, selbstgeprüft: am Vorstand genau `623 680 686 709 726 1153`, am Bau **null**. *Zur Zahl:* fünf **Operationen**, gemessen **sechs Aufrufe** — `dupliziere` hat zwei in derselben Schleife; beide Zahlen stehen, keine ersetzt die andere. **Und das Werkzeug hat sich selbst blamiert, bevor es trug:** erste Fassung meldete sechs Treffer in `Buehne`/`EigenschaftenPanel` — **alle sechs sind Handler**, die pro Geste einen Befehl auslösen. Drei Schärfungen, Fangprobe mit sieben Fällen im Repo. **ABWEICHUNG, gemeldet statt genommen:** `A-31-8` nennt drei Dateien, ich habe eine **vierte** angelegt (`app/sammelBefehle.ts`), weil `A-31-1` Zusagen verlangt, die rot werden können, und Tests `HausplanerApp.tsx` nur als **Text** lesen können. `app/tools/**` unberührt (**0**). **Entscheidung beim Evaluator.** · `executeCommand` macht **ein** `historie.push` pro Aufruf (`hausplanerStore.ts:122`), und **fünf** Stellen rufen es in einer Schleife: `loescheAuswahl` (`:621-623`), `dupliziere` (`:671-686`), `spiegeleGrundriss` (`:703-709`), `dupliziereGeschossJetzt` (`:714-727`, **N+2 Schritte für ein Geschoss**), `:1152-1153`. **Das Haus hat die Regel schon** — `applyCommand.test.ts:111` prüft „**EIN Undo** stellt beides wieder her" als Abnahmekriterium, nur eine Ebene tiefer. **Und es ist derselbe Hebel wie Cluster 1:** die Landkarte führt `teilen`/`verbinden`/`ausrichten`/`verteilen`/`erkennung-bestaetigen` als `fehlt` mit der Begründung „zwei Befehle wären zwei Undo-Schritte" — gemessen fehlt **kein Befehl**, sondern eine Ausführungs-Klammer im Store. Entscheidung im Auftrag: **alles oder nichts** (kostet nichts, `produceWithPatches` verwirft den Draft ohnehin). **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `5f6517b5`):** die Kopplung ist belegt — `:120` ein `produceWithPatches`, `:122` **ein** `historie.push`. **Die fünf Schleifenstellen einzeln geöffnet** (nicht gegrept, weil das Blatt selbst vor dem Rückwärts-Scan warnt): `:622`, `:674`, `:707`, `:725` (wirklich **N+2**), `:1152`. Die Zusage des Hauses steht wörtlich in `applyCommand.test.ts:111`. **Rot-Lage belegt:** der Store kennt weder `executeCommands` noch `batch` (**0/0**). Kriterien ungewöhnlich sorgfältig — `A-31-1` verlangt **≥2 Knoten je Test**, weil die alte Fassung bei einem Knoten zufällig auch richtig ist. **Ein Fund ohne Auflage:** von den fünf Landkarte-Marken tragen nur **drei** das Undo-Argument; `:62` und `:74` brauchen zusätzlich eine **Rechnung**, die die Klammer nicht liefert — für den Fahrplan, nicht für den Bau. |
 | **A-32** Geradenschnitt und Parallelversatz | `BETRIEBSBESTAETIGT` | — | Bau `1b73ccb0` · Nachtrag `1d07811d` · Basis `8233cf6e` | **EVALUATOR 13.08.: ABGENOMMEN, 8/8 selbst nachgemessen.** Suite am Elter `136ebca1` **1741**, am Bau `1d07811d` **1750** — beide Zahlen selbst gefahren, `tsc` exit=0. **Fangprobe VIERMAL statt dreimal**, Anker je 1×, md5 jedes Mal zurück auf `4fb463b9`: absolute Schwelle → **genau** der tragende Test rot (`'schnitt'` statt `'parallel'`), alte Zählerzeile → 2 rot, Seite vertauscht → 3 rot, und **meine eigene vierte** (EPS 1e-6 → 1e-2) → tragender Test rot, die Schwelle ist also wirksam und nicht nur vorhanden. **Eigene Gegenprobe, 24 Zusagen, unabhängig vom Bau:** vier Lagen gegen eine **Cramer-Lösung** (übereinstimmend auf 9 Stellen), der Punkt liegt auf **beiden** Geraden, drei Winkel bis 0,00001° längenunabhängig, `a²+b²=1` auf 12 Stellen. **Bündel-Gegenbeleg:** md5 am Elter = md5 am Bau (`448d8653`), die vier Bezeichner kommen **0×** darin vor — kein Anschluss, von der anderen Seite belegt. **EIN BEFUND, und er trifft die SPEZIFIKATION, nicht den Bau:** `A-32-3` verlangt die Fundstelle `FORMELSAMMLUNG.md:141-143`, der Bau schreibt genau das — am Bau-Stand steht dort aber **F-011 Polygonfläche**; die Normalform ist auf `:176-178` gewandert, weil `136ebca1` den F-004-Block um 35 Zeilen verlängert hat. *Von sieben Fundstellen im Bau habe ich alle sieben selbst geöffnet; sechs stimmen.* Den Bau dafür zurückzuweisen hieße, ihn gegen meine Erwartung statt gegen den Auftrag zu prüfen → **Befund an den Planner**, keine Reparatur durch mich. **Vier eigene Messfehler offengelegt** (Reihenfolge verletzt, falsche Baum-Unruhe gemeldet, Fangprobe zuerst mit `vitest` statt `node --test` = drei Läufe ohne Messwert, Prüfstand-Abbruch). Und mein `claim_abnahme` ist **zum fünften Mal heute** als Beifang in einem fremden Commit gelandet (`e097e7be`, Generator). · **Der Generator schrieb: 8/8 belegt · Suite 1741 → 1750 · tsc grün · Fangprobe DREIMAL, Anker jedes Mal zurück.** `geradenSchnitt` (F-004) und `parallelVersatz` (F-020 Normalform) in `geometry/geradenGeometrie.ts`. **Der Befund an der Prämisse kam VOR dem Bau** (`5bf61e54`) und ist inzwischen erledigt (`136ebca1`) — die Zusage dazu bleibt trotzdem: *der Befund ist behoben, der Rückfall nicht ausgeschlossen*, und ein Test rechnet die **alte** Fassung nach und zeigt den an A gespiegelten Punkt. **A-32-4 zwang zu einer Messung, die ich sonst geraten hätte:** `Buehne.tsx:135-136` sagt wörtlich, die Stage dreht auf **CAD-Konvention Y-hoch** — im Modell zeigt `y` nach **oben**, der Bildschirm dreht und das Modell nicht. Mit y-nach-unten wäre der Versatz spiegelverkehrt und erst an der gezeichneten Wand aufgefallen. **Der Widerspruchsweg aus A-32-3 ist ausdrücklich beantwortet statt übergangen:** F-020s Normalform ist beim Rechnen dieselbe Formel geblieben (`a²+b²=1` **ist** die Einheitsnormale), ein Test prüft `a·x+b·y+c = t` an beiden Endpunkten. **Die tragende Zusage hat zwei Fallen in Gegenrichtung** — `k=1e-9` muss bei 100 mm *und* 10 000 mm „parallel" heißen (m: 1e-5 gegen 0,1), `k=1e-3` beide Male „Schnitt" (m: 10 gegen 100 000); *eine einzelne Falle wäre durch die Wahl der Schwelle zu umgehen.* **Kein Anschluss, von der anderen Seite belegt:** das Bündel änderte sich beim Neubau **nicht** — es gibt keinen Verbraucher. `app/tools/` 0 · `commands/` 0 · `domain/` 0 · `wallGeometry.ts` 0 · `applyCommand.ts` 0. **Und mein eigener Kommentar war eine Stunde nach dem Schreiben überholt** — an drei Stellen nachgezogen. · **Der zweite und letzte Baustein für Cluster 3 — unabhängig von A-31, weil `trimmen` nur EINEN Knoten ändert.** **F-004s Zählerzeile war FALSCH und ist am 13.08. berichtigt** — gefunden vom Generator beim Ziehen (`5bf61e54`), von mir an vier Fällen nachgerechnet: die alte Fassung liefert `−t`, der Punkt liegt auf der falschen Seite von A und ist **kein Schnittpunkt** (Probe: er liegt nicht auf der zweiten Geraden). **F-004 ist bis zum Grenzfall spezifiziert** (`FORMELSAMMLUNG:75-87`, samt „häufigster Absturzgrund in Wandverschneidungen") **und nicht gebaut**: `gehrungsEcken` (`wallGeometry.ts:110`, nicht exportiert) löst den Fall mit **gemeinsamem Scheitel**, beim Trimmen berühren sich die Wände gerade nicht. **Und der Parallelversatz braucht KEINE neue Nummer** — die Normalform steht in **F-020** (`:141-143`), und `FORMELSAMMLUNG:4` sagt „eine Formel steht genau einmal". **Der eigentliche Wert des Blattes ist die ε-Falle:** F-004 nennt keinen Wert, `m` ist ein Kreuzprodukt in **mm²**, und keines der zwei Haus-Epsilons passt (1e-6 dimensionslos, 0,5 mm eine Länge). Eine absolute Schwelle wäre **längenabhängig** — 10 m bei 1° ergibt m ≈ 1,7 Mio., 100 mm bei 1° ≈ 175. Entscheidung: **normalisieren** (m/Längenprodukt = Sinus), und A-32-1 macht die Längenunabhängigkeit zum Test. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `5b1a0cdb`):** F-004 steht auf `:75-87` und ist **nicht gebaut** (einziger Schnitt-Export ist `berechneAusschnitt`, `skeleton` **0×**, `geradenGeometrie.ts` fehlt). Die Abgrenzung zu `gehrungsEcken` trägt: `wallGeometry.ts:110`, **nicht exportiert**, nimmt den **gemeinsamen** Scheitel `V` — beim Trimmen berühren sich die Wände gerade nicht. F-020s Normalform steht auf `:141-142`, und `:4` sagt wörtlich *„Eine Formel steht genau einmal"* — keine neue Nummer ist richtig. **Die ε-Entscheidung selbst nachgerechnet:** 10 000 mm → **1.745.241 mm²**, 100 mm → **175 mm²** bei gleichem Winkel; normalisiert beide **0,017452**. Die Längenunabhängigkeit als Test (`A-32-1`) ist Pflichtprüfung 4 in wirksamer Form. Kein Konflikt mit dem laufenden A-31. **Fund:** `applyCommand.ts:129` ist **zum zweiten Mal** die falsche Zeile — die Normale steht auf `:128`. |
 | **A-33** Elf Tafelzeilen tragen eine alte Kennung | **`BEREIT`** | `generator` | Schnitt 13.08. · Basis `f9b67b1b` | **Der in A-30 angekündigte getrennte Vorgang.** **Elf** Tafelzeilen schreiben die Kennung verkürzt (`W-01`), ihr Datensatz vollständig (`W-01/1`) — deshalb springt `a26-ball-drift.sh:56` bei ihnen **still** weiter und prüft die Ball-Drift nicht. **Eine Paarungs-Heuristik ist widerlegt, gemessen:** bei `W-27`/`W-27/1` und `W-40`/`W-40/1` sind **beide Formen eigene Aufträge** mit eigenem Titel — `W-27` ist die Ablesung, `W-27/1` der Bau in die Insel. Ein Zusammenziehen würde einen Auftrag **löschen**. Bei `W-05`/`W-21` hätte die Heuristik zwei Kandidaten und müsste raten. **Und es ist keine Lesbarkeitsfrage:** die neueren Zeilen schreiben Kennung *und* Klartext (`W-12/1 Ansicht und Kamera (Ablesung)`). Ausgeschlossen: A-06 (kein Datensatz, ERLEDIGT), W-27/W-40 und ihre Suffix-Partner. **DoR 13.08. NICHT erteilt (plan-pruefer, gemessen an `f9b67b1b`):** Befund und Heuristik-Ablehnung sind exzellent belegt und nachgemessen — W-27/W-40 tragen die Form ohne Suffix wirklich als **eigenen** Auftrag. **Aber die Menge widerspricht sich:** die Blatt-Tabelle listet A-06 + **elf** Verkürzungen (W-21 ausdrücklich mit), Titel, Block und `A-33-3` nennen **zehn** und lassen W-21 weg — obwohl **W-05 und W-21 strukturgleich** sind (je `/1` und `/2`, je Tafelzeile für Stamm und `/2`). **Rechnung:** 12 − 10 = **2** übrig, aber `A-33-1` (P1) verlangt **genau eins**. Damit ist ein P1-Kriterium unerfüllbar. Dazu wie bei A-30: mit breiterem Muster sind es **13** (dreizehnte ist `P-02`, VORLAGE ohne Datensatz). Ball beim Planner. |
-| **W-03/1** Wand bearbeiten (Ablesung) | `BEREIT` | **`Generator`** | Schnitt 13.08. · Basis `e097e7be` | **Die letzte der zehn B-Zeilen ohne Blatt — und mein eigener Eintrag war zum VIERTEN Mal zu klein.** Er sagte „0 Treffer für ein Werkzeug"; gemessen ist **Wand-Bearbeitung gebaut**, nur nicht als Werkzeug: `EigenschaftenPanel.tsx` ändert Material (`:324`), Stärke (`:330`), Höhe (`:336`) und Länge (`:120`). **Die fünf geometrischen Operationen fehlen alle gleich weit** — je Registry 0, Vertrag 1, Paket 1, Landkarte `fehlt`. **Und seit heute steht ihr Fundament:** `trimmen`/`verlaengern`/`versatz` an `geradenGeometrie.ts` (A-32, CODE_FERTIG), `teilen`/`verbinden` an `executeCommands` (A-31, ABGENOMMEN). **Zwei verschiedene Fundamente** — deshalb Ablesung und kein Bau. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `2b082921`):** Panel 563 Z. mit allen fünf Fundstellen; die **Vier-Schichten-Messung für alle fünf Operationen selbst gefahren** — je Registry **0**, Vertrag **1**, Paket **1**, Landkarte `fehlt`, alle gleich weit. Beide Fundamente stehen (`geradenGeometrie.ts:84`/`:157`, `hausplanerStore.ts:147`). **Erstmals nach meiner neuen Regel die Formel durchgerechnet:** `geradenSchnitt` rechnet `(C−A)×s` — die **richtige** Fassung; drei Fälle geprüft, alle korrekt, Parallelprüfung längenunabhängig wie in `A-32-1` verlangt. `geradenSchnitt` wird von W-03-Code **0×** aufgerufen — die Falle ist richtig benannt. **Rot-Lage belegt** (Schablonen), kein Konflikt. |
+| **W-03/1** Wand bearbeiten (Ablesung) | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 13.08. · Basis `e097e7be` | **Die letzte der zehn B-Zeilen ohne Blatt — und mein eigener Eintrag war zum VIERTEN Mal zu klein.** Er sagte „0 Treffer für ein Werkzeug"; gemessen ist **Wand-Bearbeitung gebaut**, nur nicht als Werkzeug: `EigenschaftenPanel.tsx` ändert Material (`:324`), Stärke (`:330`), Höhe (`:336`) und Länge (`:120`). **Die fünf geometrischen Operationen fehlen alle gleich weit** — je Registry 0, Vertrag 1, Paket 1, Landkarte `fehlt`. **Und seit heute steht ihr Fundament:** `trimmen`/`verlaengern`/`versatz` an `geradenGeometrie.ts` (A-32, CODE_FERTIG), `teilen`/`verbinden` an `executeCommands` (A-31, ABGENOMMEN). **Zwei verschiedene Fundamente** — deshalb Ablesung und kein Bau. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `2b082921`):** Panel 563 Z. mit allen fünf Fundstellen; die **Vier-Schichten-Messung für alle fünf Operationen selbst gefahren** — je Registry **0**, Vertrag **1**, Paket **1**, Landkarte `fehlt`, alle gleich weit. Beide Fundamente stehen (`geradenGeometrie.ts:84`/`:157`, `hausplanerStore.ts:147`). **Erstmals nach meiner neuen Regel die Formel durchgerechnet:** `geradenSchnitt` rechnet `(C−A)×s` — die **richtige** Fassung; drei Fälle geprüft, alle korrekt, Parallelprüfung längenunabhängig wie in `A-32-1` verlangt. `geradenSchnitt` wird von W-03-Code **0×** aufgerufen — die Falle ist richtig benannt. **Rot-Lage belegt** (Schablonen), kein Konflikt. |
 | **A-34** Zeilennummern zeigen auf die falsche Formel | `BETRIEBSBESTAETIGT` | — | Bau `2f8cf32d` · Basis `876403f4` | **EVALUATOR 13.08.: ABGENOMMEN, 5/5 selbst nachgemessen.** **Befangenheit offengelegt: dieser Auftrag ist aus meinem eigenen Befund entstanden** (A-32-Abnahme, `7994539d`) — deshalb habe ich jede Zahl und jeden Anker **neu** gemessen statt sie aus meinem Befund zu übernehmen. **A-34-1 beide Zahlen selbst:** am Elter `5c0a7e12` **2** Treffer (`geradenGeometrie.ts:133` und `:146`), am Bau **0**. **A-34-2 alle drei Anker selbst gezählt**, je 1× (Z.167 · Z.174 · Z.4) — *und sie führen zum Richtigen:* direkt unter dem Kantenversatz-Anker steht die Normalform `a·x + b·y + c = 0` mit `a²+b²=1`. **Fangprobe 2×**, Anker je 1×, md5 zurück auf `06221d20`: Zeilennummer wieder eingebaut → Gegenprobe meldet **1 statt 0**; Anker-Text verfälscht → **0 statt 1**. *Beide Gegenproben können also rot werden.* **A-34-4 die Menge selbst eingesammelt** statt die Liste zu prüfen: neun aktive Blätter tragen Zeilenverweise, drei sind `BETRIEBSBESTAETIGT` und ausgeschlossen, und von den sechs übrigen trägt **genau eines** einen Verweis im Kriterien-Zaun — `W-06:184`. Die drei Behauptungen des W-06-Nachtrags einzeln nachgemessen: F-032-Anker 1× auf Z.253, Zeile 218 trägt heute wörtlich *„Zweck: PV-Ertrag, Verschattung"*, F-032 liegt auf 253. **Zwei Stellen, an denen der Bau mehr getan hat als abzuhaken, beide zu Recht:** seine eigene Gegenprobe hat ihn erwischt (der Erklärsatz zitierte die alte Nummer in *Verweisform*) — er hat umformuliert statt die Abweichung zu begründen, und der Beleg ist trotzdem erhalten; und der zweite Verweis auf `:4` war **richtig** und wurde trotzdem umgestellt, wie der Scope es verlangt. **Eigener Messfehler — und es ist derselbe, den der Generator vor mir gemacht hat:** mein erstes Muster maß *„liegt der Treffer nach der Kriterien-Überschrift"* und meldete auch `W-31:240`; geöffnet ist das ein **yaml-Belegfeld** nach dem Kriterienblock. Erst die Abgrenzung am **Zaun** statt an der Überschrift trennt sauber. *Dass er dieselbe Falle selbst gefunden hat, las ich erst danach — die Reihenfolge war eingehalten.* · **Der Generator schrieb: 5/5 belegt · Suite 1750 unverändert.** `FORMELSAMMLUNG:<Zahl>` in `resources/planner/**`: **2 → 0**. Anker je **einmal** in der Sammlung belegt. **Der Schaden war meiner** — meine F-004-Meldung führte zur Berichtigung, die ~35 Zeilen einfügte; zwei der verschobenen Verweise standen in **meiner eigenen** A-32-Datei. **A-34-4 am Bau-Stand:** neun aktive Blätter, 19 Verweise, drei Blätter `BETRIEBSBESTAETIGT` und ausgeschlossen — **genau EINER ist ein Kriterium** (`W-06-7`, zeigte auf `:218`, dort steht heute „PV-Ertrag, Verschattung"; F-032 liegt auf 253). **Zweimal fast selbst gestolpert:** die Gegenprobe meldete einen Resttreffer — *mein eigener Belegsatz in Verweisform*, umformuliert statt wegerklärt; und mein Abschnitts-Muster hielt `W-31:240` für ein Kriterium — geöffnet ist es ein **yaml-Belegfeld**, das A-34 ausdrücklich schützt. · **Den Schaden habe ich verursacht.** Meine F-004-Berichtigung (`136ebca1`) fügte ~35 Zeilen in die FORMELSAMMLUNG ein — nötig, aber seither zeigt **jeder Verweis nach dieser Stelle auf eine andere Formel**. Gemessen: **52** Verweise mit Zeilennummer, davon **2 im Produktivcode**. Belegt an drei Beispielen: `:120` (gemeint F-013) → **F-004**, `:139`/`:141` (gemeint F-020) → **F-011**; `:75` und `:80` stimmen weiter. **Das Gefährliche ist die Lautlosigkeit** — der Verweis sieht unverändert aus. Gefunden vom Evaluator bei der A-32-Abnahme (`7994539d`), weil er **alle sieben** Fundstellen öffnete. **Berichtigt wird, wo der Verweis WIRKT** (Code, Kriterien aktiver Blätter) und auf **Anker statt Nummer** — nicht alle 52: in Befunden belegt eine Nummer legitim einen Stand, und abgenommene Blätter werden nicht umgeschrieben. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `876403f4`):** die Verschiebung an fünf Stellen gegen den Stand **vor** der Berichtigung gehalten — `136ebca1` fügte **36** Zeilen ein; `:120` lag in **F-013**, liegt heute in **F-004**; `:139`/`:141` lagen in **F-020**, liegen heute in **F-011**; `:75`/`:80` unverändert. **52 / 2 / 50 exakt am Basis-Stand** — mein erster Lauf an HEAD ergab 54, weil das A-34-Blatt selbst zwei Verweise mitbringt; mein Fehler, und dieselbe Klasse, die der Auftrag behandelt. **Der Produktivcode-Befund trägt, genau einer von zweien:** `geradenGeometrie.ts:146` → `FORMELSAMMLUNG:141` zeigt heute auf **F-011 Fläche eines Polygons**. **Rot-Lage belegt:** 0 Anker, 0 Anker-Verweise. Kein Konflikt (0 IN_ARBEIT). |
 | **W-16/1** Grundriss unterlegen (Ablesung) | `BETRIEBSBESTAETIGT` | — | Schnitt 13.08. · Basis `86f94d98` | **STUFE B, und die Einordnung ist GEMESSEN: Ablesung — aber eines fertigen, quer liegenden Features.** **Der Gegenstand ist doppelt so groß wie mein eigener Fahrplan-Eintrag** („drei Dateien in `app/unterlage/`"): gebaut ist die ganze Kette: zwei Migrationen, `PlanUpload.php` (88 Z.), **sechs Routen** (`routes/web.php:5679-5692`), `Energie\PlanUploadController` (178 Z.), drei Insel-Module (349 Z., **sechs Exporte**), **angeschlossen** in `Buehne.tsx:36/:37` und `GruppenzeileUndSchiene.tsx:36`, zwei Tests (selbst gefahren, fail 0). **Berichtigt noch vor der DoR:** ich hatte „`REGISTER.md:48` sagt LEER" als Registerfehler gemeldet — `REGISTER.md:87` sagt wörtlich, **LEER heiße „kein Blatt gefüllt", nicht „kein Code vorhanden"**, die Spalte heißt *Reifegrad*. Das Register hat recht; falsch war meine Lesart. **Der Fehler war meiner:** ich habe nur in der Insel gesucht (`energie.plan-upload.*` liegt außerhalb) und daraus einen zu kleinen Fahrplan-Eintrag gemacht. Zweiter Befund: **F-032 trägt nicht** — `abstand` ist `Math.hypot` (F-001), `berechneMassstab` eine Verhältnisrechnung, keine Matrix. **DoR ERTEILT 13.08. (plan-pruefer, gemessen an `d5296fe7`):** Umfang am Blob nachgezählt — 66+239+44=**349**, Controller **178**, Modell **88**, **sechs** Routen, **sechs** Exporte, zwei Migrationen, alle drei Import-Zeilen wörtlich. **F-032 trägt wirklich nicht:** `Math.hypot` (F-001) und eine Verhältnisrechnung, das Wort *Matrix* **0×** — und die FORMELSAMMLUNG kennt Maßstab/Verhältnis/Kalibrierung **0×**, die Lücke besteht. `null`-Zusage an `:40`/`:41`, keine hartgeschriebene URL (**0**). Die Register-Selbstberichtigung ist richtig gedreht (`:6`/`:87`), **19** Tabellenzeilen tragen LEER. **Rot-Lage belegt:** die sieben Blätter sind **Schablonen**, hash-gleich mit W-12. Tests laufen über `node:test` **ohne Datenbank**, kein Konflikt. |
-| **W-18/1** Topologie prüfen (Ablesung) | `BEREIT` | **Generator** | Schnitt 13.08. · Basis `8c920624` | **STUFE B, und die EINORDNUNG IST GEMESSEN — Ablesung, kein Bau.** Nach Yamas Regel vom 13.08. (*„bei B gilt zuerst die Messung"*) zu Ende gefahren: **F-013 ist gebaut UND hat eine Nutzermeldung** — `kontur.ts:109 schneidetSichSelbst`, acht Exporte, und `:63` wörtlich *„Die Kontur überschneidet sich selbst — zieh den letzten Punkt so, dass sich keine zwei Kanten kreuzen."* **Angeschlossen:** `HausplanerApp.tsx:31` führt vier Symbole ein, `:30` nennt den Grund. **F-004 ist auch gebaut, aber als GEHRUNGSDETAIL** — `wallGeometry.ts:62`/`:106`; Gegenprobe: kein `achsenSchnitt`/`geradenSchnitt` im Repo. **Die H-9-Falle ist scharf:** `'kontur'` in `toolRegistry.ts:230` ist das **Zeichnen-Werkzeug**, `geometry/kontur.ts` die **Prüfung** — Import trifft **einen** Test, das Wort **zwölf**. Keine nackte Zahl im Kriterium. **Dritter Topologie-Fall aus W-09:207-208:** *„Treppe ohne Zielgeschoss → gehört zu W-18"* — nicht gebaut, als Grenze benannt; dieselbe Zeile belegt *„Yama hat W-18 ausdrücklich behalten"*. |
+| **W-18/1** Topologie prüfen (Ablesung) | **`ABGENOMMEN`** | **Release-Prüfer** | Nachbesserung R1 `ee2a76d6` · Bau `25c98cd6` | **NACHBESSERUNG R1 FERTIG 14.08. — beide Befunde behoben, Umfang ist der Befund (§12.2).** **Befund 1:** die Meldung aus `kontur.ts:63` steht jetzt an allen **drei** Stellen ungekürzt und **zeichenweise** gegen den Code gehalten — *vorher `zwei Kanten kreuzen` **0/0/0**, nachher drei Treffer.* **Dabei hat meine eigene Probe einen eigenen Fehler gefangen:** ich hatte das Zitat in `3-FORMELN` nach der Hausbreite umgebrochen, **mitten durch** „zwei Kanten / kreuzen" — inhaltlich richtig und für jede Suche unsichtbar. *Ein Zitat, das man nur findet, wenn man es schon kennt, ist kein Beleg.* **Befund 2:** die **Einordnung** steht als Leitblock oben in `1-ZWECK`, mit dem Schluss **und** der Messung, aus der er folgt (F-013 `kontur.ts:109`, F-004 als Gehrungsdetail `wallGeometry.ts:62`/`:106`, Anschluss `HausplanerApp.tsx:30-31`/`:831`) — **alle drei Belege selbst geöffnet**, nicht aus dem Votum übernommen. **Alle übrigen Kriterien erneut gefahren (§12.4)**, nicht nur die roten; `W-18-1-7` neu gemessen, weil die Reparatur **vier** Hashes verändert hat. Suite **1750/1750**, tsc **0**, **0** Produktivcode. **— ABNAHME-STAND R0:** **STUFE B, und die EINORDNUNG IST GEMESSEN — Ablesung, kein Bau.** Nach Yamas Regel vom 13.08. (*„bei B gilt zuerst die Messung"*) zu Ende gefahren: **F-013 ist gebaut UND hat eine Nutzermeldung** — `kontur.ts:109 schneidetSichSelbst`, acht Exporte, und `:63` wörtlich *„Die Kontur überschneidet sich selbst — zieh den letzten Punkt so, dass sich keine zwei Kanten kreuzen."* **Angeschlossen:** `HausplanerApp.tsx:31` führt vier Symbole ein, `:30` nennt den Grund. **F-004 ist auch gebaut, aber als GEHRUNGSDETAIL** — `wallGeometry.ts:62`/`:106`; Gegenprobe: kein `achsenSchnitt`/`geradenSchnitt` im Repo. **Die H-9-Falle ist scharf:** `'kontur'` in `toolRegistry.ts:230` ist das **Zeichnen-Werkzeug**, `geometry/kontur.ts` die **Prüfung** — Import trifft **einen** Test, das Wort **zwölf**. Keine nackte Zahl im Kriterium. **Dritter Topologie-Fall aus W-09:207-208:** *„Treppe ohne Zielgeschoss → gehört zu W-18"* — nicht gebaut, als Grenze benannt; dieselbe Zeile belegt *„Yama hat W-18 ausdrücklich behalten"*. |
 | **W-12/1** Ansicht und Kamera (Ablesung) | `BETRIEBSBESTAETIGT` | — | Schnitt 13.08. · Basis `b778152b` · Bau `da2fb678` · Votum R1 Evaluator 14.08.: 6/7, W-12-1-6 offen | **STUFE B, EINORDNUNG GEMESSEN — Ablesung.** Alle vier Gegenstände gebaut: Ansichtszustand (`hausplanerStore.ts:20 HausplanerModus = 2d\|split\|3d`, `:72` Standard `2d`), Kamera + OrbitControls (`szene.ts:100/:101/:170`), **Raster in 3D-Szene UND 2D-Konva-Bühne** — `szene.ts:212-215` GridHelper; 2D die ganze Kette: `HausplanerApp.tsx:1274-1281` erzeugt, `:1423` reicht durch, `:346` schaltet, `Kopfrahmen.tsx:304` Knopf, `Buehne.tsx:146` **zeichnet**. **Berichtigt nach `800a6075`:** mein erster Beleg war `Buehne.tsx:62` — eine **Props-Typzeile**, H-8; und einen „2D-Renderer" gibt es nicht, der einzige Ordner ist `renderers/three-d/` und F-032 mit eigener Matrix-Anwendung (`szene.ts:621/:627`). **Tragend ist die H-9-Falle: `modus` heißt ZWEIMAL etwas anderes** — `HausplanerModus` (Ansicht) gegen `StudioModus = start\|guided\|expert` (`studioDaten.ts:97`, W-39). Beide mit `setModus`. **Kein Werkzeug, und das ist richtig:** kein Registry-Eintrag führt `ansicht`/`2d`/`3d`/`split` als **ID**, während Werkzeuge sie als `supportedViews`-**Werte** führen (Zahlen am Bau-Stand, je mit Träger) — die Ansicht ist Infrastruktur wie der Fang (W-01). **Zwei Fragen mitbeantwortet:** W-01:94 verwies die Raster-Frage hierher (Antwort: es wird gezeichnet), und der Einwand *„W-12 zurückgehalten"* aus `W-02:206`/`W-13:239` ist durch Yamas „bleiben"-Entscheidung erledigt. **DoR 13.08. NICHT erteilt (plan-pruefer, gemessen an `230fa551`):** zwei Belegmaengel — (1) *Raster in BEIDEN Renderern* mit `Buehne.tsx:62` belegt, aber das ist eine **Typzeile**; gezeichnet wird in `Buehne.tsx:146`, erzeugt in `HausplanerApp.tsx:1274-1281`, geschaltet in `:346` — und einen 2D-**Renderer** gibt es nicht (nur `renderers/three-d`), der 2D-Weg ist die Konva-Bühne. (2) `W-12-1-3` fixiert **12** ohne Träger, obwohl `W-12-1-6` im selben Blatt die nackte Zahl verbietet: 12 gilt für `toolRegistry.ts`, im Hausplaner sind es **75** Zeilen, davon **54** im stillgelegten Katalog. Alles Übrige nachgemessen und richtig. Ball beim Planner. **DoR RUNDE 2 ERTEILT 13.08. (plan-pruefer, gemessen an `c23a3b8b`):** beide Mängel geschlossen und nachgeprüft — die 2D-Kette stimmt Zeile für Zeile, `Buehne.tsx:62` liegt zwischen `setPan` und `rasterLinien` (Props-Interface), `renderers/` enthält nur `three-d/`; alle fünf Zahlen selbst nachgemessen (12/75/54/9/0). **Rot-Lage belegt:** der Werkbank-Ordner existiert mit sieben Blättern, aber als **Schablonen** — der `1-ZWECK`-Hash `e921aa08` wird von **neun** Werkzeugen geteilt, `7-GRENZEN.md` ist hash-gleich mit W-18. `W-12-1-7` ist heute rot. `md5` liegt auf der Maschine, kein Code-Scope, kein Konflikt. **Nachgezogen:** die nackte **12** stand noch im beschreibenden Teil dieser Zeile — auf die Zugriffsart-Fassung gestellt. |
 | **W-39** Studio-Rahmen | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `d53806f6` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6) · `HausplanerStudio.tsx` 159 Z., **13 Importe, ein Export** · additiver Rahmen: die `HausplanerApp` bleibt unverändert |
 | **W-40** Gueltigkeitsstatus `confirmed`/`outdated`/`blocked` | **`BETRIEBSBESTAETIGT`** | – | Schnitt 12.08. · Basis `c9ac316d` | **Ziel `ENTWORFEN`** (Vorgabe, kein Code) · Yamas Freigabe 12.08. · **zwei Achsen**: Fortschritt (W-38) und Gueltigkeit · traegt L-9 |
@@ -8565,8 +8565,161 @@ release_pruefung: "release-pruefer 14.08.: RELEASE_FREI und bis BETRIEBSBESTAETI
 
 ```yaml
 auftrag: "W-18/1"
-zustand: BEREIT
-ballbesitz: generator
+zustand: ABGENOMMEN
+nachbesserung_r1_sha: ee2a76d6   # auf der Linie des Baus, drei Dateien, kein Produktivcode
+nachbesserung_r1_bericht: "generator 14.08. BEIDE BEFUNDE BEHOBEN, Umfang ist der Befund und
+  nichts sonst (12.2). Ich habe sie nicht geglaubt, sondern zuerst nachgemessen — beide tragen.
+  BEFUND 1 (P1, W-18-1-1) — WAS GEAENDERT WURDE: der Satz aus kontur.ts:63 steht jetzt an allen
+  drei Stellen ungekuerzt (1-ZWECK im Codeblock, 3-FORMELN als Zitat, 4-BEDIENUNG in der Tabelle
+  unter der Ueberschrift 'Die drei Fehlermeldungen, woertlich'). Nicht abgetippt, sondern
+  ZEICHENWEISE gegengehalten: Markdown-Marker entfernt, Zeilenumbrueche geglaettet, dann mit der
+  Codezeile verglichen — alle drei Fassungen sind mit dem Code identisch.
+  ZWEI-RICHTUNGS-PROBE: 'zwei Kanten kreuzen' am Commit-Stand 25c98cd6 in 1-ZWECK 0, 3-FORMELN 0,
+  4-BEDIENUNG 0 Treffer (git show HEAD:<blatt> | grep -c). Nachher drei Treffer und zeichengleich.
+  UND EIN EIGENER FEHLER, DEN MEINE EIGENE PROBE GEFANGEN HAT: in 3-FORMELN hatte ich das Zitat
+  zuerst nach der Hausbreite umgebrochen, mitten durch 'zwei Kanten / kreuzen'. Die Gruen-Probe fand
+  die Stelle daraufhin NICHT — das Blatt waere inhaltlich richtig und fuer jede Suche nach dem
+  Wortlaut unsichtbar gewesen. Ein Zitat, das man nur findet wenn man es schon kennt, ist kein
+  Beleg. Auf eine Zeile gezogen, Probe wieder gruen. Genau deshalb verlangt 12.3 die Probe und
+  nicht die Behauptung.
+  BEFUND 2 (W-18-1-6) — WAS GEAENDERT WURDE: die Einordnung steht jetzt als Leitblock oben in
+  1-ZWECK, in der Hausform der anderen Ablesungsblaetter (W-34, W-39, W-15). Sie nennt den SCHLUSS
+  (W-18 war eine Ablesung und kein Bau) UND die Messung, aus der er folgt — F-013 gebaut in
+  kontur.ts:109 mit acht Exporten und Nutzermeldung :63; F-004 gebaut, aber ANDERSWO und als
+  Gehrungsdetail (wallGeometry.ts:62 'die beiden Bandkanten werden bis zum Schnittpunkt
+  verlaengert', :106); der Anschluss HausplanerApp.tsx:30-31 mit dem Verbraucher :831. Dazu die
+  zwei Grenzen, die davon uebrig bleiben: der dritte Topologie-Fall (Treppe ohne Zielgeschoss) ist
+  nicht gebaut, und 'kontur' in der Registry (:230) ist das ZEICHNEN-Werkzeug, nicht die Pruefung.
+  Alle drei Belege SELBST geoeffnet statt aus dem Votum uebernommen. Und der Block sagt
+  ausdruecklich, dass die Einordnung AUS der Messung entstand und nicht umgekehrt.
+  ZWEI-RICHTUNGS-PROBE: am Commit-Stand trug 1-ZWECK 'EINORDNUNG' 0, 'Ablesung und kein Bau' 0,
+  'war eine ABLESUNG' 0. Nachher der Leitblock, ein Treffer.
+  ALLE UEBRIGEN KRITERIEN ERNEUT GEFAHREN (12.4), nicht nur die roten: W-18-1-2 acht Exporte auf
+  41/47/49/55/61/109/135/156, Datei 175 Z.; W-18-1-4 IM MUSTER DES KRITERIUMS, also in __tests__/ —
+  IMPORT auf geometry/kontur genau EINE Datei (kontur.test.ts), WORT 'kontur' ZWOELF, beide Zahlen
+  wie im Blatt; W-18-1-5 kontur.test.ts 173 Z.; W-18-1-7 sieben Blaetter, sieben VERSCHIEDENE md5,
+  Kollisionsprobe gegen alle W-*-Ordner je genau EIN Treffer, naemlich der eigene (die Reparatur hat
+  vier Hashes veraendert, deshalb neu gefahren statt zitiert). Suite 1750/1750, tsc exit 0.
+  E1 an allen drei Pfaden GLEICH gegen ee2a76d6. Drei Richtungen: geaendert ausserhalb W-18 0,
+  hinzugefuegt 0, entfernt 0, Produktivcode 0.
+  EINE ABWEICHUNG MELDE ICH STATT SIE ZU VERSCHWEIGEN: als ich W-18-1-4 zuerst ueber den GANZEN
+  Inselbaum statt ueber __tests__/ gemessen habe, kamen 2 und 35 heraus. Das ist kein Widerspruch
+  zum Blatt, sondern ein anderer Umfang — aber es ist genau die Sorte Zahl, die ohne den Zusatz
+  'wo gemessen' in ein Blatt wandert und dort falsch wird. Das Blatt sagt __tests__/ und stimmt.
+  Keine Browserabnahme: die Reparatur beruehrt kein sichtbares Verhalten, nur docs/."
+bau_sha: 25c98cd6   # EIN Commit: sieben Blaetter UND die Registerzeile zusammen
+bau_bericht: "generator 14.08. Sieben Kriterien belegt, sieben Blaetter — UND die Registerzeile im
+  SELBEN Commit. Kein Produktivcode; Suite 1750 gruen und unveraendert.
+  DAS ZUERST, weil es meine Lehre des Tages ist: heute ist mir DREIMAL dasselbe passiert (W-37-6,
+  die Reifegrade von W-12/W-16, die Formelspalte F-032) — richtig gemessen, aufgeschrieben, die
+  verlangte HANDLUNG nicht ausgefuehrt. 'Eine Ablesung endet an der Registerzeile, nicht am siebten
+  Blatt' steht seither in meinem Weckauftrag, und sie hat beim ERSTEN Anwenden getragen: die
+  W-18-Zeile stand auf LEER und nannte F-004. Beides ist mit berichtigt — ohne dass ein Evaluator
+  es mir sagen musste.
+  W-18-1-1 DER TRAGENDE PUNKT, am Code erhoben: F-013 ist in kontur.ts:109 gebaut
+  (schneidetSichSelbst), die Meldung dazu steht woertlich auf :63. F-004 dagegen ist KEINE
+  Topologie-Formel, sondern ein GEHRUNGSDETAIL — wallGeometry.ts:62 und :106 rechnen den
+  Schnittpunkt zweier WANDBAENDER fuer die Ecke auf Gehrung. kontur.ts importiert daraus NICHTS
+  (einziger Import :39, signierteFlaeche).
+  UND DIE GEGENPROBE DES AUFTRAGS IST UEBERHOLT — DURCH MEINE EIGENE ARBEIT. Sie verlangt: kein
+  achsenSchnitt, geradenSchnitt oder schnittZweierGeraden im Repo. Gemessen: die ersten beiden
+  NULL, aber geradenSchnitt gibt es SEIT A-32 (geradenGeometrie.ts:84) — und A-32 habe ich selbst
+  gebaut. Gemeldet statt uebergangen. DIE AUSSAGE WIRD DADURCH NICHT SCHWAECHER, SONDERN SCHAERFER:
+  geradenGeometrie hat NULL Produktivverbraucher (nur sein eigener Test; werkzeugLandkarte nennt es
+  in einem Kommentar), und die Konturpruefung rechnet ihren Streckenschnitt weiterhin selbst. F-004
+  ist fuer W-18 also kein Bestandteil — weder als Gehrungsdetail noch als reine Formel.
+  Im Blatt steht auch, warum eine Umstellung NICHT trivial waere: ein Streckenschnitt braucht
+  zusaetzlich die Pruefung, ob der Punkt INNERHALB beider Strecken liegt, und den kollinearen
+  Ueberlappungsfall, den kontur.test.ts ausdruecklich verriegelt.
+  W-18-1-2 ACHT Ausfuhren mit Fundstelle, selbst gezaehlt (41/47/49/55/61/109/135/156), 175 Zeilen.
+  W-18-1-3 Der Anschluss: HausplanerApp.tsx:31 fuehrt vier Symbole ein, :30 BEGRUENDET die
+  Schichtung, statt sie nur zu vollziehen — 'die Konturpruefung ist reine Geometrie und wohnt dort'.
+  W-18-1-4 DIE H-9-GRENZE MIT BEIDEN ZAHLEN UND IHREM TRAEGER: ein IMPORT auf geometry/kontur
+  liefert EINE Testdatei, das WORT 'kontur' liefert ZWOELF — elf treffen die WERKZEUG-ID
+  (toolRegistry.ts:230). 'Zwoelf Waechter' waere eine Zahl und kein Befund.
+  W-18-1-5 Alle DREI Grenzen, einschliesslich des offenen Postens aus W-09:207-208: Treppe ohne
+  Zielgeschoss gehoert hierher und ist NICHT gebaut. Der Grund ist STRUKTURELL: KonturPunkt hat
+  zwei Felder, die Pruefung sieht eine Punktfolge und kein Geschoss. Wer ihn hier baute, muesste
+  dem Pruefmodul das Dokument geben — und damit genau die Schichtung aufheben, die
+  HausplanerApp.tsx:30 begruendet.
+  W-18-1-6 Die Einordnung als ABLESUNG ist begruendet: beide Formeln gebaut, Pruefung angeschlossen.
+  W-18-1-7 md5 ueber ALLE Werkzeuge und ALLE sieben Blaetter: eindeutig.
+  Spaltenprobe der Registerzeile: fuenf; nur Z.35 (W-01) und Z.77 (W-19) weichen ab, beide FREMD
+  und nur gemeldet. E1 auf allen ACHT Dateien GLEICH. must_preserve in DREI Richtungen: alle leer."
+ballbesitz: release-pruefer  # ABGENOMMEN 14.08. 23:36 Evaluator Runde 2
+votum_evaluator_r2: "ABGENOMMEN, 14.08. 23:36 — Wiederabnahme, ALLE SIEBEN Kriterien erneut gefahren
+  (§12.3). Beide Befunde behoben und BEIDSEITIG gegengeprueft. BEFUND 1: ich habe nicht nach dem
+  Auge verglichen, sondern den Satz aus kontur.ts:63 gezogen und zeichengenau in den Blaettern
+  gesucht — am alten Stand 25c98cd6 traegt ihn KEINE der drei Stellen vollstaendig, am neuen
+  ee2a76d6 alle drei, und die gekuerzte Fassung 'dass sich keine …' hat im ganzen Ordner 0 Treffer.
+  Der Nachweis kann also rot werden (Pflichtpruefung 4), und er ist es am alten Stand. BEFUND 2:
+  dieselben acht Muster wie in Runde 1 erneut — ablesung 1 (in falscher Bedeutung) auf 2,
+  einordnung 0 auf 1, 'kein Bau' 0 auf 1, 'nichts zu bauen' 0 auf 1. Der neue Abschnitt in 1-ZWECK
+  nennt den SCHLUSS und die MESSUNG, aus der er folgt, und er sagt den Satz um den es dem Kriterium
+  ging: 'damit die naechste Rolle sie nicht wiederholt'. Ein Satz darin ist mehr als verlangt und
+  er ist der beste: 'Die Einordnung entstand aus dieser Messung und nicht umgekehrt — vor dem
+  Oeffnen des Codes stand offen, ob F-004 fehlt.' DIE EINE NEUE ZAHL der Nachbesserung selbst
+  geoeffnet: HausplanerApp.tsx:831 traegt den Aufruf pruefeKontur(punkte); zwei Treffer im File,
+  :31 Import und :831 Aufruf. Sie schliesst eine Luecke, die ich in Runde 1 NICHT beanstandet
+  hatte — das Blatt nannte den Import, aber nicht die Stelle, an der die Pruefung laeuft. ALLES
+  UEBRIGE erneut selbst gemessen: acht Exporte bei 175 Z, Anschluss :30/:31, IMPORT 1 gegen WORT 12,
+  kontur.test.ts 173 Z mit 11 Zusagen und Lauf 11 pass 0 fail, drei Grenzen als Ueberschriften,
+  sieben Blaetter 87/87/76/54/49/72/76 Z mit sieben VERSCHIEDENEN md5 und keiner Kollision im
+  ganzen Werkbank-Bestand, Registerzeile unveraendert mit 5 Spalten. Suite 1750/1750, tsc Exit 0,
+  Scope der Nachbesserung drei Dateien +29-3, 0 ausserhalb docs/. Browser nicht gefahren, §15 nicht
+  beruehrt. EIGENER MESSFEHLER, offengelegt: mein erster zeichengenauer Vergleich meldete
+  4-BEDIENUNG als unvollstaendig — falsch, die Stelle traegt den vollen Satz, aber mit
+  Markdown-Fettschrift mitten drin, und mein Vergleich zaehlte die Sternchen als Textunterschied.
+  Ein Pruefwerkzeug, das Auszeichnung fuer Inhalt haelt, erzeugt genau die Sorte Befund, die ich
+  beim Generator beanstande. Vor der Meldung nachgemessen mit entfernter Auszeichnung: alle drei
+  vollstaendig. Ball an den Release-Pruefer. Votum und Messtisch im Blatt."
+claim_abnahme_r2: "evaluator, 14.08. 23:30 — Claim VOR dem Pruefstand, Wiederabnahme. §18 war ruhig,
+  Blockvergleich 0 fremde Bloecke. Die Nachbesserung selbst gesucht statt aus einem Feld genommen:
+  genau EIN Commit beruehrt den W-18-Ordner seit meinem Votum, ee2a76d6. §12.3: ALLE SIEBEN
+  Kriterien erneut, nicht nur die zwei roten."
+votum_evaluator_r1: "NACHBESSERN, 14.08. 23:18 — fuenf von sieben Kriterien tragen, und eines
+  traegt BESSER als der Auftrag selbst. Zwei sind offen. BEFUND 1 (P1, W-18-1-1): das Kriterium
+  verlangt die Meldung aus kontur.ts:63 WOERTLICH; sie steht an allen DREI Stellen gekuerzt
+  (1-ZWECK:12, 3-FORMELN:23, 4-BEDIENUNG:34) — es fehlen genau die Worte 'zwei Kanten kreuzen',
+  also der Teil, der dem Anwender sagt WAS er ziehen soll. Kein Stilprinzip: die anderen beiden
+  Meldungen stehen in derselben Tabelle ungekuerzt, und die Ueberschrift darueber lautet 'Die drei
+  Fehlermeldungen, woertlich'. Eine Zusage traegt den Namen des Kriteriums und misst etwas anderes.
+  BEFUND 2 (W-18-1-6): die Einordnung fehlt ganz. Acht Muster ueber alle sieben Blaetter: ablesung
+  1 Treffer, und der steht in 7-GRENZEN:14 in ANDERER Bedeutung ('eine Produktfrage und keine
+  Ablesung'); einordnung 0, eingeordnet 0, Stufe B 0, kein Bau 0, nichts zu bauen 0, vollstaendig
+  gebaut 0; 'gebaut und angeschlossen' 1, aber das ist eine Tabellenzelle fuer F-013. Die
+  BESTANDTEILE der Messung stehen alle da, der SCHLUSS fehlt — und genau er ist das Kriterium,
+  damit die naechste Rolle die Messung nicht wiederholt. WAS DER BAU BESSER GEMACHT HAT ALS DER
+  AUFTRAG, und das gehoert ins Votum: W-18-1-1 verlangt als Gegenprobe 'kein geradenSchnitt im
+  Repo'. Das ist am Bau-Stand FALSCH, von mir gemessen bevor ich das Blatt aufschlug —
+  geometry/geradenGeometrie.ts:84 traegt geradenSchnitt, gebaut 13.08. in 1b73ccb0 (A-32), und
+  jener Commit nennt sie ausdruecklich F-004. Der Bau hat die Praemisse NICHT abgeschrieben,
+  sondern nachgemessen und die Abweichung an drei Stellen offengelegt. Und seine Schlussfolgerung
+  traegt, von mir eigens nachgeprueft: drei Dateien nennen geradenGeometrie — der eigene Test, sie
+  selbst, und ein KOMMENTAR in werkzeugLandkarte.ts:130; kein Produktivverbraucher. kontur.ts hat
+  genau EINEN Import (:39 signierteFlaeche) und rechnet den Streckenschnitt selbst. GRUEN und
+  selbst gefahren: acht Exporte mit den Zeilen 41/47/49/55/61/109/135/156 jede nachgeschlagen,
+  175 Z selbst gezaehlt; der Anschluss HausplanerApp.tsx:30-31 geoeffnet (vier Symbole, Grund im
+  Kommentar); die Zwei-Muster-Messung IMPORT 1 gegen WORT 12 selbst gefahren, das Blatt nennt
+  keine nackte Zwoelf; kontur.test.ts 173 Z und 11 Zusagen selbst nachgezaehlt, Lauf 11 pass 0
+  fail; die drei Grenzen als eigene Ueberschriften; das Zitat W-09:207-208 selbst gegengelesen,
+  Wortlaut deckt sich; sieben Blaetter 61/87/76/54/49/72/76 Z mit sieben VERSCHIEDENEN md5,
+  Kollisionsprobe gegen alle 253 Werkbank-Blaetter — sieben Dubletten im Bestand, keine betrifft
+  W-18. Suite 1750/1750, tsc still, 0 Dateien ausserhalb docs/ im Bau-Commit. Browser nicht
+  gefahren (nur docs/), §15 nicht beruehrt. EIGENER MESSFEHLER: ich habe einen Pfad geraten und
+  das Zitat zuerst in W-09-treppe/7-GRENZEN.md gesucht — 83 Zeilen, kein 'Zielgeschoss'; einen
+  Moment sah es nach einem falschen Zitat aus. Der Auftrag sagt auf Zeile 92 selbst, dass das
+  AUFTRAGSBLATT gemeint ist. Derselbe Fehler steht in meinem eigenen Takt unter Punkt 4; er hat
+  nichts gekostet, weil ich die Abweichung gegen den eigenen Aufbau geprueft habe BEVOR ich sie
+  gemeldet habe. Umfang des Befundes ist der Befund (§12.2): drei fehlende Worte an drei Stellen
+  und ein Abschnitt zur Einordnung, kein Umbau der Blaetter. Wiederabnahme faehrt ALLE SIEBEN
+  Kriterien (§12.3). Ball an den Generator."
+claim_abnahme: "evaluator, 14.08. 23:01 — Claim VOR dem Pruefstand. §18 war NICHT ruhig: im Baum
+  liegt fremde uncommittete Arbeit des Generators, W-03/1 von BEREIT auf IN_ARBEIT. Gemessen, nicht
+  vermutet — der Blockvergleich HEAD gegen Arbeitsbaum zeigt genau EINEN fremden Block. Ich fasse
+  ihn nicht an. Diese Zeile bleibt bis zu meinem Votum ungebunden; nach der Lehre von 22:15 ist das
+  ein offenes Fenster, in dem ein fremdes git add sie einsammeln kann — ich melde es dann, statt es
+  zurueckzudrehen."
 titel: "Topologie pruefen — beide Formeln sind gebaut, und eine steckt in der Gehrung"
 basis_sha: 8c920624
 spur: A
@@ -9014,8 +9167,84 @@ release_pruefung: "release-pruefer 13.08.: RELEASE_FREI und bis BETRIEBSBESTAETI
 
 ```yaml
 auftrag: "W-03/1"
-zustand: BEREIT
-ballbesitz: generator  # DoR 13.08. erteilt
+zustand: ABGENOMMEN
+bau_sha: c9b32ad3   # EIN Commit: sieben Blaetter UND die Registerzeile
+bau_bericht: "generator 14.08. Sechs Kriterien belegt, sieben Blaetter UND die Registerzeile im
+  SELBEN Commit — zum zweiten Mal, und diesmal ohne dass mich jemand erinnern musste.
+  DIE REGISTERZEILE STAND AUF LEER UND NANNTE DREI FORMELN. Alle drei am Code widerlegt, jede
+  einzeln geprueft statt die Spalte zu uebernehmen:
+    F-003 (lotAufWand)        0 Treffer im Panel
+    F-004 (geradenGeometrie)  0 Treffer im Panel
+    F-030 (wandBaender)       0 Treffer im Panel
+  Gebaut ist stattdessen F-001, zweimal: EigenschaftenPanel.tsx:117 und :339.
+  UND DER UNTERSCHIED, den W-03-1-4 ausdruecklich verlangt: F-004 IST gebaut (A-32), aber von W-03
+  NICHT aufgerufen. Wer 'F-004 ✓' in der Registerzeile liest, liest es als 'W-03 benutzt sie' und
+  sucht im Panel eine Schnittpunktrechnung, die dort nicht steht. Sie gehoert erst hierher, wenn
+  trimmen/verlaengern/versatz gebaut sind.
+  W-03-1-1 BEIDE HAELFTEN, jede Fundstelle einzeln geoeffnet. GEBAUT: Mauerwerk :324, Wandstaerke
+  :330, Hoehe :336, Laenge :120, generischer Weg :108. UND DIE LAENGE FAELLT AUS DER REIHE: sie
+  geht ueber MOVE_NODE statt UPDATE_NODE, weil sie GEOMETRIE ist und keine Eigenschaft — sie
+  verschiebt den Endpunkt entlang der Achsrichtung, Anfang und Richtung bleiben.
+  W-03-1-2 'NICHT GEBAUT' HEISST HIER NICHT 'NIRGENDS VORHANDEN'. Ueber vier Schichten gemessen
+  fuehren DREI die fuenf Operationen bereits — Vertrag 1, Paket 1, Landkarte 1 (Marke 'fehlt', mit
+  Begruendung) — und NUR die Registry hat 0. Zum Vergleich dieselben Dateien insgesamt:
+  werkzeugVertrag 111, werkzeugPaket 101, toolRegistry 12. DIE REGISTRY IST DAS NADELOEHR DES
+  GANZEN HAUSES und kein Sonderfall dieser fuenf.
+  W-03-1-3 ZWEI Fundamente, getrennt gefuehrt: trimmen/verlaengern/versatz an A-32
+  (geradenGeometrie), teilen/verbinden an A-31 (executeCommands). A-32 loest eine RECHENfrage,
+  A-31 eine AUSFUEHRUNGSfrage; sie ueberschneiden sich nicht. Wer W-03 als EINEN Bau schneidet,
+  baut drei Operationen ohne Klammer oder zwei ohne Rechnung.
+  W-03-1-6 AM BAU-STAND GEMESSEN statt uebernommen: BEIDE Fundamente sind inzwischen
+  BETRIEBSBESTAETIGT — der Auftrag sagte noch 'A-32 gebaut und noch nicht abgenommen'.
+  UND EIN BEFUND, DEN KEIN KRITERIUM VERLANGT und der die GEBAUTE Haelfte trifft: SIE IST NICHT
+  VERRIEGELT. Fuenf Muster gemessen — setzeWandLaenge, WANDSTAERKEN, aktualisiereWand, 'Mauerwerk',
+  'Wandstaerke' — vier davon NULL Testdateien; der eine Treffer gehoert bemassung.test.ts und meint
+  die WANDDICKE in der Bemassungskette (W-11), nicht dieses Feld. Die elf Zusagen des
+  Panel-Waechters betreffen Schalter, Anbau-Felder und Reiter — keine einzige eine Wand.
+  AM TEUERSTEN IST DABEI DER STAERKEN-SONDERFALL: eine Wand mit 200 mm bekommt einen eigenen
+  Eintrag '200 mm (aktuell)' (:331), statt still auf 240 gesetzt zu werden. Ohne diesen Zweig saehe
+  das Panel richtig aus und die Wand aenderte sich, ohne dass jemand sie geaendert hat — und keine
+  Zusage haelt das fest.
+  W-03-1-5 KEIN Produktivcode: resources/planner/ kommt im Commit 0 Mal vor.
+  E1 auf allen ACHT Dateien GLEICH. must_preserve in DREI Richtungen: alle leer. Suite 1750 gruen
+  und unveraendert. Spaltenprobe: meine Registerzeile fuenfspaltig; nur Z.35 (W-01) und Z.77 (W-19)
+  weichen ab, beide FREMD und nur gemeldet."
+ballbesitz: release-pruefer  # ABGENOMMEN 14.08. 23:26 Evaluator Runde 1
+votum_evaluator_r1: "ABGENOMMEN, 14.08. 23:26 — sechs von sechs Kriterien tragen, jede Zahl selbst
+  erhoben. W-03-1-1: alle FUENF Panel-Zeilen selbst geoeffnet in EigenschaftenPanel.tsx (563 Z
+  selbst gezaehlt) — :108 aktualisiereWand, :120 MOVE_NODE, :324 materialId, :330 WANDSTAERKEN,
+  :336 input min=100; jede traegt was das Blatt ihr zuschreibt. W-03-1-2: die Vier-Schichten-
+  Messung selbst gefahren, je Operation vier Muster — Registry 0, Vertrag 1, Paket 1, Landkarte 1,
+  und zwar fuer ALLE FUENF identisch; die Tabelle stimmt Zelle fuer Zelle. W-03-1-3: die zwei
+  Fundamente selbst geoeffnet — geradenGeometrie.ts 196 Z mit vier Exporten (geradenSchnitt :84,
+  Versatzseite :124, VersetzteAchse :127, parallelVersatz :174), executeCommands im Store :65/:145/
+  :147; der verlangte Satz dass es ZWEI verschiedene sind steht woertlich (A-32 Rechenfrage, A-31
+  Ausfuehrungsfrage). W-03-1-4: Gegenprobe selbst gefahren, geradenGeometrie in app/rahmen/ 0
+  Treffer, die 17 Math.-Aufrufe des Panels sind Math.round 14, hypot 2, min 1 — kein Geradenschnitt;
+  F-004 gebaut aber nicht aufgerufen, im Blatt an zwei Stellen benannt. W-03-1-5: resources/planner
+  im Bau-Commit 0 Treffer, 0 Dateien ausserhalb docs/. W-03-1-6: A-31 und A-32 am Bau-Stand selbst
+  gelesen, BEIDE BETRIEBSBESTAETIGT. WAS STAERKER IST ALS VERLANGT, zweierlei. (1) Die Zusage 'drei
+  von vier Schichten fuehren sie bereits' traegt eine Zahl weit ueber W-03 hinaus, und sie stimmt:
+  selbst gezaehlt toolRegistry 12, werkzeugVertrag 111, werkzeugPaket 101 — zwoelf von 111
+  vertraglich beschriebenen Werkzeugen sind registriert. Das ist der eigentliche Wert dieser
+  Ablesung: W-03 ist kein Einzelfall, sondern ein Fall. (2) Der Bau hat den AUFTRAG berichtigt statt
+  ihn abzuschreiben: W-03-1-6 sagt noch 'A-32 GEBAUT und noch nicht abgenommen', gemessen stehen
+  beide auf BETRIEBSBESTAETIGT — das Blatt schreibt den gemessenen Stand und haelt fest, dass der
+  Auftrag etwas anderes sagte. Derselbe Handgriff, der bei W-18/1 die ueberholte geradenSchnitt-
+  Praemisse aufgedeckt hat. Waechter selbst gefahren: Suite 1750/1750 fail 0, tsc still. Sieben
+  Blaetter 74/75/53/64/60/72/68 Z mit sieben VERSCHIEDENEN md5, Kollisionsprobe gegen alle
+  Werkbank-Blaetter — sieben Dubletten im Bestand, keine betrifft W-03. Registerzeile LEER auf
+  BESCHRIEBEN, F-Zuordnung berichtigt (F-001 gruen an :117 und :339, beide von mir geoeffnet;
+  F-003/F-004/F-030 durchgestrichen). Browser nicht gefahren, der Commit fasst nur docs/ an. §15
+  nicht beruehrt. Ball an den Release-Pruefer. Votum und Messtisch im Blatt."
+claim_abnahme: "evaluator, 14.08. 23:22 — Claim VOR dem Pruefstand. §18 ist NICHT ruhig, und zwar
+  doppelt: (1) meine eigene fertige W-18/1-Arbeit liegt uncommittet hier, weil (2) im selben File
+  fremde uncommittete Arbeit des Generators steht — W-14/1 von BEREIT auf IN_ARBEIT, Datensatz und
+  Tafelzeile. Gemessen, nicht vermutet: Blockvergleich HEAD gegen Arbeitsbaum nennt genau zwei
+  Bloecke, W-14/1 (fremd) und W-18/1 (meiner). Ich fasse den fremden nicht an und committe nicht,
+  solange er im File liegt — mit docs/STATUS.md kaeme sein Zustand mit, und fremde Zustaende
+  nachtragen ist mir untersagt. Diese Zeile und mein W-18/1-Votum warten zusammen auf den ersten
+  ruhigen Baum."
 titel: "Wand bearbeiten ablesen — ueber Eigenschaften geht es, als Geometrie-Operation nicht"
 basis_sha: e097e7be
 spur: A
@@ -9679,8 +9908,107 @@ release_pruefung: "release-pruefer 13.08.: RELEASE_FREI und bis BETRIEBSBESTAETI
 
 ```yaml
 auftrag: "W-14/1"
-zustand: BEREIT
-ballbesitz: generator  # DoR 13.08. erteilt
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer  # ABGENOMMEN 14.08. 23:48 Evaluator Runde 1
+votum_evaluator_r1: "ABGENOMMEN, 14.08. 23:48 — neun von neun Kriterien, jede Fundstelle selbst
+  geoeffnet. DER PUNKT AN DEM ICH EINEN BEFUND ERWARTET HABE UND KEINEN FAND: W-14-1-6 nennt als
+  Verbraucher von bbox und achsenMitte auch Kopfrahmen.tsx:30. Geoeffnet steht dort 'import type
+  { Achse }' und achsenMitte kommt im Kopfrahmen 0 Mal vor — wer die Auftragsangabe abgeschrieben
+  haette, haette einen Verbraucher behauptet den es nicht gibt. Das Blatt schreibt stattdessen
+  'Kopfrahmen.tsx:30 type Achse (nur der Typ)' und nennt den echten Anschluss sammelBefehle.ts:23,
+  den ich selbst gesucht habe (achsenMitte laeuft dort auf :108). Vierte Stelle heute, an der eine
+  Auftragsangabe gemessen statt geglaubt wurde. W-14-1-1: Registry selbst gezaehlt, duplizieren 1
+  (:273), loeschen 1 (:249), spiegeln 0, verschieben 0, beide Zeilen geoeffnet. W-14-1-2: der
+  Spiegel-Befund am Code — Kopfrahmen.tsx:315/:316 tragen disabled={waende.length === 0} und die
+  Titel nennen Grundriss, der Handler HausplanerApp.tsx:695 ruft befehleSpiegeln(waende, achse),
+  also ueber waende und NICHT selectedNodeIds, und waende ist waendeAus(nodes) auf :365; 'spiegeln'
+  in toolRegistry 0. W-14-1-3: scene.types.ts:193-196 traegt transform mit rotation am ObjectNode,
+  WallNode :98-104 traegt start/end/thickness ohne Rotation, commands/applyCommand.ts:203 wirft
+  CommandAbgelehnt fuer undefinierte Typen; die zwei offenen Fragen stehen als FRAGEN. W-14-1-4:
+  neun Exporte, Datei 75 Z, die Tabelle nennt genau diese neun mit ihren Zeilen. W-14-1-5: der
+  Rumpf von versetzteWand geoeffnet — beide Endpunkte um denselben Vektor, also Translation; A-29
+  an vier Stellen benannt. W-14-1-7: F-032 geprueft statt uebernommen, von mir mit VORKOMMEN statt
+  Zeilen nachgezaehlt: Math.round 6, max 2, min 2, cos/sin/atan2 0, matrix/transform/rotation 0 —
+  das Blatt nennt exakt diese Zahlen und sagt zusaetzlich WARUM F-032 plausibel aussah. W-14-1-8:
+  0 Dateien ausserhalb docs/. W-14-1-9: Test selbst gefahren, 8 pass 0 fail, 8 Zusagen selbst
+  gezaehlt bei 52 Z. Waechter: Suite 1750/1750, tsc Exit 0. Sieben Blaetter 64/101/57/54/69/58/87
+  mit sieben verschiedenen md5, Registerzeile in der Hausform mit 5 Spalten. Browser nicht
+  gefahren, §15 nicht beruehrt. EIGENER MESSFEHLER: ich habe Zeilen gezaehlt wo Vorkommen zu
+  zaehlen waren — grep -c 'Math\\.' ergab 4, das Blatt sagt 6+2+2=10, und einen Moment sah es nach
+  einer zu hohen Zahl im Blatt aus. Nachgemessen mit grep -o: das Blatt stimmt. grep -c beantwortet
+  eine andere Frage als die die ich gestellt habe, in wie vielen ZEILEN statt wie OFT — dieselbe
+  Klasse gegen die ich pruefe, und sie haette diesmal den Bau getroffen statt mich. Ball an den
+  Release-Pruefer. Votum und Messtisch im Blatt."
+claim_abnahme: "evaluator, 14.08. 23:40 — Claim VOR dem Pruefstand. §18 ruhig fuer STATUS.md;
+  im Baum liegen fremde W-10-Blaetter des Generators, die ich nicht anfasse und die nicht in meinen
+  Pfaden stehen. Bau selbst gesucht statt aus bau_sha genommen: genau EIN Commit beruehrt den
+  W-14-Ordner, 5a2e70b1."
+bau_sha: 5a2e70b1
+bau_bericht: "SIEBEN BLAETTER UND DIE REGISTERZEILE IN EINEM COMMIT — zum dritten Mal in Folge
+  (W-18/1, W-03/1, W-14/1) und diesmal ohne dass mich jemand erinnern musste. Das ist die Fehlerklasse,
+  die mich vier Runden gekostet hat: richtig messen, aufschreiben, und die VERLANGTE HANDLUNG nicht tun.
+  W-14-1-7 IST DER TRAGENDE BEFUND DIESES BAUS, und er faellt gegen die Registerzeile aus: sie nannte
+  F-032 (Transformation, homogene 4x4-Matrix). AM CODE ERHOBEN statt uebernommen — editierGeometrie.ts
+  rechnet 6x Math.round, 2x Math.max, 2x Math.min, kennt das Wort Matrix 0-mal und keine Trigonometrie.
+  spiegelePunkt:36 ist 2*pos - p.x, eine Achsenspiegelung in EINER Zeile; versetztePunkt ist eine
+  Addition. F-032 hat den GEGENSTAND getroffen (Transformationen) und die BAUFORM verfehlt (Matrix) —
+  die Sorte Zuordnung, die niemandem auffaellt, bis jemand die Formel sucht und zwei Additionen findet.
+  Eine Drehung waere die erste Operation dieses Werkzeugs, fuer die F-032 in Frage kaeme; die gibt es nicht.
+  Registerzeile W-14 berichtigt: LEER -> BESCHRIEBEN, F-032 durchgestrichen mit Marker (n), Begruendung
+  in der Zeile.
+  W-14-1-1/2 DREI BEZUGSRAHMEN BEI VIER OPERATIONEN, jede Fundstelle selbst geoeffnet: duplizieren
+  (toolRegistry.ts:273) und loeschen (:249) auf der AUSWAHL; spiegeln auf dem GANZEN GRUNDRISS, kein
+  Registry-Eintrag (gemessen 'spiegeln' 0 Treffer, 'verschieben' 0 Treffer), zwei Kopfrahmen-Knoepfe
+  :315/:316 mit disabled={waende.length === 0} und Titel woertlich 'Grundriss links/rechts spiegeln';
+  Handler HausplanerApp.tsx:695 -> befehleSpiegeln(WAENDE, achse). Verschieben hat gar kein Werkzeug.
+  ZUR ZEILENNUMMER, damit der Evaluator nicht sucht: der Auftrag und der DoR-Beleg nennen :703, am
+  Bau-Stand steht der Handler auf :695 — die Datei ist seit dem Schnitt 78c09e1b von anderen Auftraegen
+  bewegt worden. Ich melde BEIDE Zahlen und ersetze das Kriterium nicht still; der Inhalt ist identisch.
+  EINE EIGENE BEHAUPTUNG WAR FALSCH, UND ICH HABE SIE GERECHNET STATT SIE STEHEN ZU LASSEN. In
+  2-FUNKTION stand zuerst, die Richtungsumkehr beim Spiegeln sei fuer angedockte Oeffnungen ein Problem,
+  weil offsetFromWallStart ab dem Anfang misst. Nachgerechnet gilt das GEGENTEIL: Wand (0,0)-(1000,0),
+  Oeffnung bei 200, Spiegelachse 500 -> die Oeffnung landet bei 800, und das IST das wahre Spiegelbild.
+  Weil start und end an ihrem Platz gespiegelt und NICHT vertauscht werden, misst der Offset weiter vom
+  richtigen Ende. Die Richtungsumkehr ist der GRUND, warum es stimmt, nicht ein Mangel. Berichtigt bevor
+  es committet war — eine behauptete Folge ist kein Beleg (H-6), auch wenn sie plausibel klingt.
+  W-14-1-3 DREHEN FEHLT AUS EINEM SCHEMA-GRUND, am Schema und nicht an der Landkarte nachgemessen:
+  transform{position,rotation,scale} steht am ObjectNode (scene.types.ts:193-196), WallNode traegt
+  start/end und 0-mal rotation, applyCommand.ts:203 lehnt MOVE_NODE fuer undefinierte Typen ab. Ein
+  Objekt dreht sich durch EINE Zahl, eine Wand muesste ZWEI Punkte neu rechnen — keine fehlende Formel,
+  eine andere Art von Operation. Die zwei offenen Punkte stehen als FRAGEN und nicht als Vorschlag:
+  Bezugspunkt (Schwerpunkt? Bbox-Mitte? gesetzter Punkt?) und was mit angedockten Oeffnungen bei einem
+  freien Winkel geschieht, wenn die Wand danach nicht mehr achsparallel ist.
+  W-14-1-4 NEUN EXPORTE mit Zeile, selbst nachgeschlagen: Punkt :7, Achse :12, versetzePunkt :15,
+  versetzteWand :20, spiegelePunkt :34, spiegelteWand :46, Bbox :55, bbox :63, achsenMitte :73. 75 Zeilen.
+  W-14-1-5 VERSETZTEWAND IST EINE TRANSLATION, mit dem Rumpf zitiert statt paraphrasiert: beide
+  Endpunkte um denselben Vektor, Richtung und Laenge bleiben. Ein Parallelversatz legt eine neue Achse im
+  senkrechten Abstand daneben und braucht die Normale. Genau diese Verwechslung hat am 13.08. eine
+  falsche Fahrplan-Einordnung und eine zurueckgezogene Zusage an Yama erzeugt (A-29); das Wort traegt sie,
+  'versetzen' und 'Versatz' sind dasselbe Wort und zwei Vorgaenge. Der echte Parallelversatz liegt seit
+  A-32 in geradenGeometrie.parallelVersatz.
+  W-14-1-6 BBOX UND ACHSENMITTE ALS NACHBARN benannt, nicht beschrieben — und die Berichtigung vom 13.08.
+  SELBST nachgemessen statt zitiert: alle VIER W-13-Auswahlmodule (auswahlModus, auswahlDarstellung,
+  auswahlUebersicht, trefferSuche) importieren editierGeometrie NULL Mal. Die Nachbarschaft ist W-12
+  (einpassen.ts:21), nicht W-13.
+  W-14-1-9 DEN WAECHTER SELBST GEFAHREN: editierGeometrie.test.ts, 52 Z., ACHT Zusagen, 8 pass 0 fail,
+  Rohausgabe im Blatt. Die zwei tragenden hervorgehoben, weil sie Eigenschaften und keine Beispiele sind:
+  'beide Endpunkte um DENSELBEN Versatz' trennt Translation von Parallelversatz und wird rot, wenn jemand
+  versetzteWand eines Tages umbaut; 'doppelte Spiegelung ergibt den Ausgangspunkt' ist eine INVOLUTION und
+  faengt jede Umstellung, die Vorzeichen oder Bezug verdreht. Dazu ihre Grenze aus F-032s neuem Grenzfall 2
+  (Involution exakt bei ganzzahligen Koordinaten, bis 0,5 mm Drift sonst — das Modul rundet jeden Punkt,
+  also ist der gepruefte Fall der gebaute). Und bbox: leere Menge -> null ist die Kanten-Zusage, ohne sie
+  kaeme achsenMitte an Infinity statt an null.
+  UND EIN BEFUND ZUM WAECHTER: der Bezugsrahmen — der tragende Punkt des Werkzeugs — ist durch KEINE
+  Zusage gesichert. Wer befehleSpiegeln(waende, achse) zu befehleSpiegeln(auswahl, achse) aendert, bricht
+  keinen Test, und der Anwender bekaeme einen Knopf, der 'Grundriss' verspricht und die Auswahl spiegelt.
+  Als Befund im Blatt, nicht als Bau — die Umstellungsfrage gehoert laut Auftrag Yama.
+  W-14-1-8 NULL PRODUKTIVCODE: 0 Dateien ausserhalb docs/ im Commit, in drei Richtungen geprueft
+  (geaendert HEAD~1..HEAD ausserhalb meiner Pfade leer, hinzugefuegt untracked unter resources/app/scripts
+  leer, entfernt leer). E1 an allen acht Pfaden GLEICH gegen 5a2e70b1.
+  MESSSTAND: sieben Blaetter mit sieben verschiedenen md5, Kollisionsprobe gegen alle W-*-Ordner je 1
+  Treffer (der eigene). REGISTER.md 5 Spalten in der W-14-Zeile; die zwei bekannten Fremdzeilen Z.35 (W-01)
+  und Z.77 (W-19) tragen 7 Spalten, unberuehrt und weiterhin gemeldet. Suite 1750/1750 gruen und
+  unveraendert. Keine Browserabnahme verlangt (nur docs/), §15 nicht beruehrt."
 titel: "Kopieren, Spiegeln, Drehen ablesen — drei Operationen, drei Bezugsrahmen, und Drehen fehlt aus einem Schema-Grund"
 basis_sha: 78c09e1b
 spur: A
@@ -9764,8 +10092,211 @@ fund_ohne_auflage: "Zu W-14-1-7 vorab gemessen, damit der Bauende weiss wo er st
 
 ```yaml
 auftrag: "W-10/1"
-zustand: BEREIT
-ballbesitz: generator  # DoR 13.08. erteilt
+zustand: ABGENOMMEN
+ballbesitz: release-pruefer  # ABGENOMMEN 15.08. 00:02 Evaluator Runde 2
+votum_evaluator_r2: "ABGENOMMEN, 15.08. 00:02 — Wiederabnahme, ALLE ACHT Kriterien erneut gefahren
+  (§12.3). Der Befund ist behoben, und zwar an FUENF Stellen statt an der einen die ich beanstandet
+  hatte; der Umfang blieb trotzdem der Befund (fuenf Dateien, +59-10, kein Umbau). BEIDSEITIG:
+  4-BEDIENUNG:40 sagte am alten Stand 25db5490 'das Werkzeug: naechsteEtageElevationMm', am neuen
+  d145ea0e 'NICHT dieses Werkzeug — Kopfrahmen.tsx:172 rechnet es beim Anlegen des Geschosses
+  selbst'. Die fehlende Verbraucher-Aussage steht jetzt zusaetzlich in 1-ZWECK:13, 2-FUNKTION:28 und
+  im neuen Abschnitt 5-CODE:35-60 — und die Schichtbezeichnung wurde von DARSTELLUNG auf 'Kennwerte,
+  unbenutzt' geaendert. Das war NICHT verlangt, ich hatte nur den einen Satz beanstandet; aber genau
+  dort sass die Irrefuehrung, eine Tabellenzeile 'Darstellung' fuer eine Datei die nichts darstellt.
+  DIE NEUEN ZAHLEN JEDE SELBST NACHGEMESSEN: Importe von deckenMesh im ganzen Repo GENAU EINER
+  (decke.test.ts:9); naechsteEtageElevationMm 3 Verweise, alle 3 im Test, produktiv 0;
+  deckenNettoFlaecheM2 5 Verweise, alle 5 im Test, produktiv 0; deckenOberkanteMm 0 Verweise
+  ueberhaupt; Kopfrahmen.tsx:172 geoeffnet und traegt die Rechnung; und die NEUE Angabe szene.ts:483
+  von mir geoeffnet — bodenPunkteThree(decke.polygon, oberkante), dort wird gezeichnet. Das Blatt
+  sagt jetzt mehr als der Befund verlangte, und jede Zusatzangabe haelt: die Zeile :483 beantwortet
+  die Frage die mein Befund offen liess, WO die Decke stattdessen gezeichnet wird. ALLES UEBRIGE
+  erneut selbst gemessen: Registry decke 1, deckenMesh 35 Z mit 3 Exporten, Test 242 Z mit 13
+  Zusagen und Lauf 13 pass 0 fail, drei Befehle in commands.types.ts:29-31 geoeffnet,
+  treppenDurchbrueche :119 mit Aufruf :298, Tooltip :141 traegt 'ausgespart', Wortfalle Aussparung 0
+  gegen Durchbruch 5, pruefeDeckeProLevel an :112/:296/:315 einzeln geprueft, boden Vertrag 1 Paket
+  1 Registry 0, die drei Zahlen mit Traeger (12/35/242), 0 Dateien ausserhalb docs/, sieben Blaetter
+  62/99/117/72/127/101/94 mit sieben verschiedenen md5, Registerzeile 5 Spalten. Suite 1750/1750,
+  tsc Exit 0. Browser nicht gefahren, §15 nicht beruehrt. EIGENER MESSFEHLER: DREI meiner Messungen
+  sind an der eigenen Shell-Quotierung zerbrochen, nicht am Bau — ich hatte grep-Muster mit
+  Anfuehrungszeichen in printf-Argumente verschachtelt, und das Ergebnis meldete 'drei Befehle 0',
+  'Aussparung 1 / Durchbruch 0' und 'boden 0/0/0'. Alle drei falsch, und zwei davon haetten wie
+  schwere Befunde ausgesehen. Die Warnung stand in der Ausgabe (ugrep: warning: boden: No such file
+  or directory), das Muster war zerlegt worden. Nachgemessen ohne Verschachtelung: 3 Befehle,
+  Aussparung 0 gegen Durchbruch 5, boden 1/1/0 — alles wie in Runde 1. Ein Pruefergebnis aus einem
+  kaputten Befehl ist kein Pruefergebnis und sieht genauso aus wie eines; der einzige Schutz ist,
+  die Ausgabe selbst zu lesen statt nur die Zahl. Ball an den Release-Pruefer."
+claim_abnahme_r2: "evaluator, 14.08. 23:52 — Claim VOR dem Pruefstand, Wiederabnahme. §18 ruhig,
+  Blockvergleich 0 fremde Bloecke. Nachbesserung selbst gesucht: genau EIN Commit beruehrt den
+  W-10-Ordner seit meinem Votum, d145ea0e. §12.3: ALLE ACHT Kriterien erneut, nicht nur das rote.
+  Anker fuer diese Zeile blockgenau."
+nachbesserung_r1_sha: d145ea0e   # auf der Linie des Baus, fuenf Blaetter, kein Produktivcode
+nachbesserung_r1_bericht: "generator 15.08. DER BEFUND TRAEGT, und ich habe ihn zuerst selbst
+  nachgemessen statt ihn zu glauben — ueber die FUNKTIONSNAMEN, nicht ueber den Modulnamen:
+  deckenMesh hat im GANZEN Repo genau EINEN Importeur (decke.test.ts:9), und der zieht nur zwei der
+  drei Ausfuhren. naechsteEtageElevationMm 0 Produktivaufrufer, deckenNettoFlaecheM2 0
+  Produktivaufrufer, deckenOberkanteMm NULL VERWEISE UEBERHAUPT — nicht einmal im Test. Gerechnet
+  wird von Hand: Kopfrahmen.tsx:172 (oben.elevation + oben.defaultWallHeight + oben.floorThickness,
+  beim Anlegen eines Geschosses), szene.ts:455 und :482 (elevation + defaultWallHeight), und :483
+  zeichnet die Decke ueber bodenPunkteThree — ohne deckenMesh anzufassen.
+  DAS IST MEINE FEHLERKLASSE, UND ZWAR H-8: Ort ist nicht Wirkung. Ich habe die Schicht richtig
+  BENANNT und ihre WIRKUNG falsch BEHAUPTET. Dieselbe Klasse wie die Spiegel-Oeffnungen in W-14, die
+  ich zwei Tage vorher an mir selbst gefangen habe — nur diesmal nicht gefangen, weil ich die Datei
+  gelesen und die VERBRAUCHER nicht gesucht habe. Ein Modul, das plausibel aussieht, ist kein Beleg
+  dafuer, dass es laeuft.
+  WAS GEAENDERT WURDE — UND DER UMFANG IST GROESSER ALS DIE GENANNTE ZEILE, ausdruecklich gemeldet:
+  der Befund nennt 4-BEDIENUNG:40, dieselbe falsche Wirkung stand aber an FUENF Stellen. Einzeln:
+  (1) 4-BEDIENUNG:40 'das Werkzeug: naechsteEtageElevationMm' — die genannte Zeile;
+  (2) 1-ZWECK:37 dieselbe Behauptung in der Drei-Zusagen-Tabelle ('Etagen-Basis');
+  (3) 1-ZWECK:12 die Schicht DARSTELLUNG im Einordnungs-Block;
+  (4) 2-FUNKTION:27 dieselbe Schichtangabe im Weg-Diagramm;
+  (5) 2-FUNKTION:79 die Ueberschrift 'Etagen-Stapel: eine Ableitung, kein zweiter Rechenweg' — die
+      schaerfste von allen, denn gemessen ist der zweite Rechenweg der EINZIGE der laeuft. Ich hatte
+      dort den DATEIKOPF zitiert statt zu messen.
+  Dazu in 6-PRUEFUNG:86 eine Verschaerfung derselben Tatsache: dort stand, deckenOberkanteMm sei
+  'die einzige der drei Ausfuhren ohne eigene Zusage' — gemessen hat sie ueberhaupt keinen Verweis.
+  Eine halbe Berichtigung waere schlimmer als keine; die Zahl fuenf melde ich trotzdem, damit der
+  Evaluator den Umfang selbst beurteilt und nicht ich (12.2).
+  DIE TATSACHE SELBST STEHT EINMAL, in 5-CODE unter eigener Ueberschrift, mit den Zahlen und den
+  drei Handrechnungs-Fundstellen — und mit dem Satz, was das fuer den Leser heisst: wer
+  naechsteEtageElevationMm aendert, aendert NICHTS am Verhalten, und wer den Stapelfehler sucht,
+  sucht in der falschen Datei; er sitzt in Kopfrahmen.tsx:172. Der Satz des Evaluators 'ob es ein
+  Mangel im CODE ist entscheidet eine Ablesung nicht' steht woertlich im Blatt. Die Schichten-Tabelle
+  fuehrt deckenMesh jetzt als 'Kennwerte, unbenutzt' und szene.ts:482-483 als DARSTELLUNG.
+  ZWEI-RICHTUNGS-PROBE JE BEFUND, beide Richtungen selbst gefahren, gemessen ueber alle sieben
+  Blaetter am Bau-Stand 25db5490 gegen den Arbeitsbaum: 'Kopfrahmen.tsx:172' vorher 0 / nachher 5;
+  'kein Produktivverbraucher' vorher 0 / nachher 1; 'szene.ts:482' vorher 0 / nachher 3; und die
+  falsche Wirkung 'das Werkzeug: naechsteEtageElevationMm' vorher 1 / nachher 0.
+  ALLE UEBRIGEN KRITERIEN ERNEUT GEFAHREN (12.4), nicht nur das rote: W-10-1-2 'ausgespart' 1 Treffer
+  in toolRegistry.ts, treppenDurchbrueche :119 mit Aufruf :298; W-10-1-3 pruefeDeckeProLevel :296 UND
+  :315, pruefeDeckeGanzzahlig :300 UND :316; W-10-1-4 Math.hypot :127 und die Normale :128;
+  W-10-1-5 'boden' 0 in toolRegistry.ts, PAKET_WERKZEUGE 110 auf :316, ZWOELF Registry-Eintraege;
+  W-10-1-6 deckenMesh 35 Z., decke.test.ts 242 Z.; W-10-1-7 sieben Blaetter, sieben VERSCHIEDENE md5,
+  Kollisionsprobe gegen alle W-*-Ordner je genau EIN Treffer — VIER Hashes hat die Reparatur
+  veraendert, deshalb neu gemessen statt zitiert; W-10-1-8 Waechter selbst gefahren, 13 pass 0 fail.
+  Suite 1750/1750, tsc exit 0. E1 an allen fuenf Pfaden GLEICH gegen d145ea0e. Drei Richtungen:
+  geaendert ausserhalb W-10 0, hinzugefuegt 0, entfernt 0, Produktivcode 0. Keine Browserabnahme:
+  die Reparatur beruehrt kein sichtbares Verhalten, nur docs/.
+  ZUM ZWEITEN BEFUND OHNE BEFUNDSTATUS, den der Evaluator gemeldet hat (PAKET_WERKZEUGE 110 gegen
+  101 id-Eintraege in werkzeugPaket.ts): NICHT angefasst. Er ist kein Teil dieses Befundes, und der
+  Umfang einer Nachbesserung ist der Befund (12.2). Er gehoert dem Planner."
+votum_evaluator_r1: "NACHBESSERN, 14.08. 23:58 — sieben von acht Kriterien tragen; W-10-1-1 (P1,
+  TRAGEND) hat eine Stelle, an der das Blatt eine WIRKUNG behauptet, die es nicht gibt.
+  DER BEFUND: 4-BEDIENUNG:40 sagt 'naechste Etage hoehenrichtig stapeln — das Werkzeug:
+  naechsteEtageElevationMm'. Gemessen ueber die FUNKTIONSNAMEN statt ueber den Modulnamen hat
+  naechsteEtageElevationMm KEINEN Produktivaufrufer (nur decke.test.ts), deckenOberkanteMm hat NULL
+  Aufrufer ueberhaupt, und der einzige Import von deckenMesh im ganzen Repo ist der Test. Gestapelt
+  wird tatsaechlich in Kopfrahmen.tsx:172 von Hand (oben.elevation + oben.defaultWallHeight +
+  oben.floorThickness), und szene.ts:455/:482 rechnet elevation + defaultWallHeight ebenfalls selbst
+  — das ist deckenOberkanteMm. Die Schichten-Tabelle fuehrt deckenMesh.ts als Schicht DARSTELLUNG,
+  aber szene.ts zeichnet die Decke ohne deckenMesh. Warum P1 und keine Feinheit: das Kriterium
+  begruendet sich damit, dass ein zu kleines Blatt 'die Darstellung beschreibt und nicht das
+  Werkzeug' — hier ist es umgekehrt eingetreten. Wer naechsteEtageElevationMm aendert, aendert
+  nichts; wer den Stapelfehler sucht, sucht in der falschen Datei. UMFANG DES BEFUNDES (§12.2): die
+  Zeile in 4-BEDIENUNG berichtigen und festhalten, dass deckenMesh keinen Produktivverbraucher hat,
+  mit der Angabe wo stattdessen gerechnet wird. Kein Umbau; ob es ein Mangel im CODE ist,
+  entscheidet eine Ablesung nicht. GRUEN und selbst gefahren: Registry 'decke' 1 auf :132-148,
+  Schema CeilingNode/CeilingOeffnung, drei Befehle in commands.types.ts:29-31 und applyCommand
+  :288/:305/:320, treppenDurchbrueche :119 mit Aufruf :298, deckenMesh 35 Z mit drei Exporten,
+  Aufruf HausplanerApp.tsx:1026 geoeffnet, Fixtures studioFixtures.ts:58-61 geoeffnet, Test 242 Z
+  mit 13 Zusagen und Lauf 13 pass 0 fail; die TOOLTIP-Zusage am Code (toolRegistry.ts:141 verspricht
+  'Treppen werden ausgespart', treppenDurchbrueche leistet es); die zwei Aufrufer-Regeln
+  (pruefeDeckeProLevel :112 gerufen :296/:315, Test :50; oeffnungen-Unterdrueckung auf :298 selbst
+  gelesen); die Formeln am Code (Math.hypot und die Normale nx=-dy/len, ny=dx/len selbst
+  geoeffnet); der boden-Befund (Vertrag :649, Paket :167, Registry 0); die drei Zahlen mit Traeger
+  (12 Registry, 35 Z deckenMesh, 242 Z Test); 0 Dateien ausserhalb docs/. Suite 1750/1750, tsc
+  Exit 0, sieben Blaetter mit sieben verschiedenen md5, Registerzeile 5 Spalten.
+  DIE BESTE STELLE DES BLATTES haette mir fast einen Phantom-Befund gekostet: es loest die Wortfalle
+  Aussparung gegen Durchbruch auf, und ich bin genau dort hineingelaufen — mein erster Griff war
+  grep 'Aussparung' mit NULL Treffern, was nach A-24 ein P1-Befund gewesen waere. Selbst
+  nachgemessen: Aussparung 0, ausgespart 5, Durchbruch 5, treppenDurchbrueche gebaut UND gerufen.
+  ZWEI BEOBACHTUNGEN OHNE BEFUNDSTATUS: (1) dieselbe Hoehenrechnung steht dreimal von Hand im
+  Produktivcode, waehrend die gekapselte Fassung nur im Test lebt — ein Fahrplan-Punkt, kein
+  Ablese-Punkt. (2) Das Blatt schreibt 'die 110 sind GEZAEHLT'; gemessen ist PAKET_WERKZEUGE eine
+  hartgeschriebene Konstante auf toolRegistry.ts:316, und werkzeugPaket.ts traegt 101 id-Eintraege,
+  mit zwei Mustern geprueft. Der Zweck des Kriteriums ist trotzdem erfuellt, und WELCHE Menge die
+  110 meint habe ich NICHT abschliessend geklaert — gemeldet ohne Bewertung, es gehoert nicht zu
+  diesem Auftrag. Wiederabnahme faehrt ALLE ACHT Kriterien (§12.3). Ball an den Generator."
+claim_abnahme: "evaluator, 14.08. 23:52 — Claim VOR dem Pruefstand. §18 ruhig, Blockvergleich 0
+  fremde Bloecke. Bau selbst gesucht statt aus bau_sha genommen: genau EIN Commit beruehrt den
+  W-10-Ordner, 25db5490. Der Anker fuer diese Zeile ist BLOCKGENAU gebunden — die Lehre aus 23:18
+  und 23:48, wo zweimal die Dateireihenfolge entschieden hat statt des Ankers."
+bau_sha: 25db5490
+bau_bericht: "SIEBEN BLAETTER UND DIE REGISTERZEILE IN EINEM COMMIT — zum vierten Mal in Folge
+  (W-18/1, W-03/1, W-14/1, W-10/1). Kein Produktivcode, Suite 1750 gruen und unveraendert.
+  W-10-1-4 IST DER TRAGENDE BEFUND, und die Bilanz faellt in DREI Richtungen gegen die
+  Registerzeile aus, die 'F-011, F-030' sagte.
+  F-011 TRAEGT WOERTLICH: polygonFlaeche.ts:44 rechnet a.x*b.y - b.x*a.y, :46 Math.abs(summe)/2 —
+  die Gaussche Flaechenformel Zeichen fuer Zeichen, der Dateikopf :10 nennt sie beim Namen.
+  F-030 TRAEGT ZUR HAELFTE, UND DIE HAELFTE IST EXAKT: treppenDurchbrueche rechnet :126 die
+  Richtung, :127 len=Math.hypot, :128 die Normale nx=-dy/len ny=dx/len — das IST F-030s
+  n=(-r_y, r_x) — und :131-136 die vier Grundpunkte start±n·h mit h=laufbreite/2, also F-030s
+  A±(d/2)·n. Der VIERTE Schritt, die Extrusion in z, kommt NICHT vor: es entsteht ein flaches
+  Loch-Polygon und kein Quader. F-030 ist damit nicht falsch sondern ZU GROSS — die Zeile
+  verspricht einen Koerper, gebaut ist die Grundflaeche. Der Grund ist sachlich: ein Treppenauge
+  ist ein Loch in einer Ebene, keine Wand.
+  F-001 FEHLTE GANZ und ist nachgetragen: Math.hypot (:127) ist die Lauflaenge, durch die :128
+  teilt. Keine Nebenrechnung, sondern die Voraussetzung der zweiten. Ihr Grenzfall ist hier ANDERS
+  geloest als in der Sammlung — die Sammlung sagt 'd < eps -> Absage', der Code setzt '|| 1' ein.
+  Als Unterschied festgehalten und NICHT als Fehler gemeldet: eine Treppe ohne Laenge ist etwas
+  anderes als eine Wand ohne Laenge, und eine Absage mitten im Reducer waere eine
+  Produktentscheidung.
+  UND EINE LUECKE STATT EINER ERFUNDENEN NUMMER: die Subtraktion 'Flaeche minus Lochpolygone' in
+  deckenNettoFlaecheM2 hat in der Sammlung KEINE Nummer. Gemeldet, nicht getauft — Lehre aus W-21.
+  W-10-1-2 DIE WORTFALLE HAT DREI STUFEN UND NICHT ZWEI. Der Auftrag sagt, grep auf 'ausspar'
+  liefere null und die Sache heisse 'Durchbruch'. Selbst nachgemessen ist es schaerfer: 'ausspar'
+  findet auch die ZUSAGE SELBST nicht, weil in 'aus-ge-spart' ein ge dazwischensteht. Wer so misst,
+  bekommt null und haelt es fuer Abwesenheit — dabei hat er nicht einmal den Text gefunden, den er
+  pruefen wollte. Gemessen: 'ausspar' 0, 'Aussparung' 0, 'ausgespar' FUENF Dateien darunter
+  toolRegistry.ts:141, 'treppenDurchbrueche' 3, 'Durchbr' 18. Das ist H-9 in Reinform und die
+  vierte Wortfalle derselben Art nach modus, Aufbau und versetzen/Versatz.
+  DIE ZUSAGE HAELT, alle vier Stufen einzeln geoeffnet: Versprechen toolRegistry.ts:141, Leistung
+  applyCommand.ts:119 mit vollstaendigem Rumpf, Aufruf :298, Waechter decke.test.ts:62. Jede der
+  drei ersten allein haette gereicht, um sich zu taeuschen.
+  W-10-1-1 ALLE SIEBEN SCHICHTEN mit Fundstelle, jede selbst geoeffnet: Oberflaeche
+  toolRegistry.ts:132-148, Schema scene.types.ts:338/:348 und :54, Befehlstyp commands.types.ts:29,
+  drei Befehle applyCommand.ts:288/:305/:320, Rechnung :119 mit Aufruf :298, Darstellung
+  deckenMesh.ts (35 Z., drei Ausfuhren :10/:18/:32), Aufruf HausplanerApp.tsx:1026-1035,
+  Probedaten studioFixtures.ts:63, Waechter decke.test.ts.
+  W-10-1-3 DIE ZWEI AUFRUFER-REGELN stehen in 7-GRENZEN — und ich habe eine DRITTE Fundstelle
+  dazugemessen, die der Auftrag nicht nennt: pruefeDeckeProLevel steht NICHT nur auf :296 sondern
+  auch auf :315 im UPDATE-Weg, mit dem Kommentar 'falls levelId geaendert wurde'. Kein Doppel,
+  sondern derselbe Zustand ueber einen anderen Weg: eine zweite Decke kann auch durch Umhaengen
+  entstehen.
+  UND EIN BEFUND ZUM WAECHTER, der der wichtigste dieses Blattes ist: die REIHENFOLGE auf :298 bis
+  :300 — erst die Durchbrueche einsetzen, DANN Ganzzahligkeit pruefen, also auf dem Ergebnis der
+  Automatik und nicht auf der Eingabe — ist die eigentliche Zusage dieses Werkzeugs und durch
+  KEINEN Test gesichert. Wer die zwei Zeilen tauscht, bleibt gruen, weil die Testdicke schon vor
+  der Automatik krumm ist. Ebenso ungesichert: pruefeDeckeProLevel im UPDATE-Weg. Als Befund im
+  Blatt, nicht gebaut — eine Ablesung baut keine Tests.
+  W-10-1-5 DER BODEN-BEFUND ohne Entscheidung: 'boden' in toolRegistry.ts NULL Mal, aber
+  werkzeugPaket.ts:167 und werkzeugVertrag.ts:649 beschreiben es, und werkzeugLandkarte.ts:170 und
+  :173 fuehren boden UND decke auf denselben Befehl ADD_CEILING. Dazu der Satz zu PAKET_WERKZEUGE:
+  :316 ist eine KONSTANTE (110), :335 EIGENE_WERKZEUGE eine Liste, und die verdrahteten Eintraege
+  habe ich selbst gezaehlt — ZWOELF, mit allen zwoelf Zeilennummern im Blatt. Die Frage, ob W-24
+  ein eigenes Werkzeug braucht, steht als Frage: decke traegt den Tooltip 'Decke / Bodenplatte'.
+  W-10-1-6 ALLE ZAHLEN MIT TRAEGER: ZWOELF gilt fuer app/tools/toolRegistry.ts, 35 fuer
+  deckenMesh.ts, 242 und 13 fuer __tests__/decke.test.ts, DREI fuer die Ausfuhren von deckenMesh.
+  Keine Zahl aus dem Auftragsblatt uebernommen — auch nicht die zwanzig Zeiger, die der Planner am
+  14.08. berichtigt hat. Ich habe sie am Bau-Stand nachgemessen, alle treffen.
+  W-10-1-8 DEN WAECHTER SELBST GEFAHREN: decke.test.ts, 242 Z., DREIZEHN Zusagen, 13 pass 0 fail,
+  Rohausgabe im Blatt. Die drei tragenden hervorgehoben — die L-Form mit 68 statt 80 m2 (der
+  Kommentar :110-114 begruendet, warum die Zusage die FLAECHE prueft und nicht die Punktliste:
+  'falsch, aber sieht richtig aus'), der Umlaufsinn als EIGENSCHAFT (haengt an Math.abs), und die
+  einzige Zusage, die eine ABLEHNUNG festhaelt (:50, max. 1 pro Level).
+  ZWEI MESSUNGEN, DIE KEINER VERLANGT HAT: erstens heisst polygonFlaecheM2 nach m2 und rechnet
+  KEINE Einheit um — die Shoelace-Formel liefert die Einheit, die man hineingibt. BEIDE Verbraucher
+  haben es gemerkt und dazugeschrieben (deckenMesh.ts:14 und decke.test.ts:128 teilen je durch
+  1e6), grundriss.ts:111 reicht durch. Der Name ist die Falle, nicht die Rechnung; gemeldet, nicht
+  behoben. Zweitens zeigt F-011s eigener Grenzfall auf W-18: 'selbstschneidendes Polygon liefert
+  eine falsche aber plausible Zahl, deshalb vorher F-013' — auf dem KONTUR-Weg ist das erfuellt
+  (HausplanerApp.tsx:831 pruefeKontur), auf dem UMRISS-Weg (gebaeudeUmriss) habe ich es NICHT
+  gemessen und behaupte es deshalb nicht. Als offene Stelle benannt statt geraten.
+  W-10-1-7 NULL PRODUKTIVCODE, in drei Richtungen geprueft: geaendert ausserhalb 0, hinzugefuegt 0,
+  entfernt 0, Dateien ausserhalb docs/ im Commit 0. E1 an allen ACHT Pfaden GLEICH gegen 25db5490.
+  MESSSTAND: sieben Blaetter, sieben VERSCHIEDENE md5, Kollisionsprobe gegen alle W-*-Ordner je
+  genau EIN Treffer (der eigene). Registerzeile W-10 fuenf Spalten; die zwei bekannten Fremdzeilen
+  Z.35 (W-01) und Z.77 (W-19) tragen sieben, unberuehrt und weiterhin gemeldet. Keine
+  Browserabnahme verlangt (nur docs/), §15 nicht beruehrt."
 titel: "Decke und Boden ablesen — das Werkzeug ist gebaut, es haelt seine Tooltip-Zusage, und boden ist ein Vertrag ohne Oberflaeche"
 basis_sha: 18fe2deb
 spur: A

@@ -1,33 +1,49 @@
-# W-xx · CODE
+# W-18 · Topologie prüfen — CODE
 
-## Wo der Code wirklich lebt
+**EIN Modul, 175 Zeilen, ACHT Ausfuhren** — am Bau-Stand gezählt.
 
-| Schicht | Datei im Repo | Zweck |
+| Modul | Z | Ausfuhren |
 |---|---|---|
-| 1 Domäne | `resources/planner/hausplaner/domain/…` | |
-| 2 Geometrie | `resources/planner/hausplaner/geometry/…` | |
-| 3 Werkzeug | `resources/planner/hausplaner/app/tools/…` | |
-| 4 Darstellung | `resources/planner/hausplaner/renderers/…` | |
-| 5 Oberfläche | `resources/planner/hausplaner/ui/…` | |
+| `resources/planner/hausplaner/geometry/kontur.ts` | 175 | `KonturPunkt` (41) · `KonturGrund` (47) · `KonturUrteil` (49) · `KONTUR_MIN_PUNKTE` (55) · `KONTUR_MELDUNG` (61) · `schneidetSichSelbst()` (109) · `pruefeKontur()` (135) · `konturStatusText()` (156) |
 
-> **Der Code steht im Repo, nicht in diesem Ordner.** Hier liegen nur
-> Schnittstellenbeschreibung, Ablaufskizze und — wo nötig — ein kurzer
-> Auszug der Kernstelle mit Zeilennummer, damit man beim Lesen nicht springen muss.
+**Ein einziger Import** (`:39`): `signierteFlaeche` aus `roomDetection`. *Das Modul steht sonst für
+sich — es kennt weder Wände noch Befehle noch die Bühne.*
 
-## Schnittstelle
+## Der Anschluss
 
-```ts
-// Signatur der öffentlichen Funktion(en) dieses Werkzeugs
+```text
+app/HausplanerApp.tsx:30   // Z-05: die Konturpruefung ist reine Geometrie und wohnt dort,
+                           //       nicht hier.
+                     :31   import { pruefeKontur, konturStatusText, KONTUR_MIN_PUNKTE,
+                                     type KonturGrund } from '../geometry/kontur'
 ```
 
-## Kernstelle
+**Vier Symbole in einer Zeile, mit einer Begründung darüber.** *Der Kommentar beantwortet die Frage,
+die ein Leser sonst stellt: warum liegt die Prüfung nicht bei der Zeichenlogik.*
 
-```ts
-// Der eine Ausschnitt, auf den es ankommt — mit Datei:Zeile
+## Die Namensgleichheit, die man kennen muss
+
+```text
+app/tools/toolRegistry.ts:230   id: 'kontur'          das WERKZEUG zum ZEICHNEN
+geometry/kontur.ts              das MODUL zum PRUEFEN
 ```
 
-## Abhängigkeiten
+> ***Zwei Dinge, ein Wort.*** *Gemessen: ein `import` auf `geometry/kontur` liefert **eine**
+> Testdatei, das **Wort** „kontur" liefert **zwölf** — elf treffen die Werkzeug-ID.* **Wer die
+> Verriegelung über das Wort zählt, schreibt „zwölf Wächter" und hat einen.**
 
-| Braucht | Warum | Richtung geprüft? |
-|---|---|---|
-| | | ja/nein — kein Kreis |
+## F-004 liegt woanders — und seit A-32 an zwei Stellen
+
+```text
+wallGeometry.ts:62 · :106       F-004 als GEHRUNGSDETAIL (Bandkanten-Schnittpunkt)
+geradenGeometrie.ts:84          F-004 in REINER Form (geradenSchnitt, seit A-32)
+```
+
+**Beide sind für W-18 ohne Belang:** *`kontur.ts` importiert keines von beiden und rechnet seinen
+Streckenschnitt selbst.* **`geradenGeometrie` hat überhaupt keinen Produktivverbraucher** — nur
+seinen eigenen Test. Siehe `3-FORMELN`.
+
+## Kein eigener Befehl
+
+**Die Prüfung ist einem Befehl VORGELAGERT** — sie entscheidet, ob überhaupt einer entsteht, und
+hinterlässt selbst keinen Zustand und keinen Historien-Eintrag.

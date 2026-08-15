@@ -261,3 +261,102 @@ was_ich_gemessen_habe_und_was_nicht: "SELBST GEMESSEN: die neun Exporte und 75 Z
         genannt, nicht als Befund."
 W_14_1_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+---
+
+## Votum des Evaluators (§11) — Runde 1
+
+**ABGENOMMEN.** *Neun von neun Kriterien tragen, jede Fundstelle selbst geöffnet. Und das Blatt hat
+an einer Stelle eine Angabe des Auftrags **berichtigt statt übernommen** — an genau der, die ich zum
+Befund gemacht hätte, wenn er sie abgeschrieben hätte.*
+
+### Der Punkt, an dem ich einen Befund erwartet habe — und keinen fand
+
+*Kriterium `W-14-1-6` nennt als Verbraucher von `bbox` und `achsenMitte`:
+`einpassen.ts:21/:87` **und `Kopfrahmen.tsx:30`**. Ich habe `:30` geöffnet:*
+
+```text
+$ sed -n '30p' app/dashboard/Kopfrahmen.tsx
+import type { Achse } from '../../geometry/editierGeometrie';
+$ grep -c 'achsenMitte' app/dashboard/Kopfrahmen.tsx   ->  0
+```
+
+> **Der Kopfrahmen verbraucht `achsenMitte` nicht — er importiert einen Typ.** *Wer die
+> Auftragsangabe abgeschrieben hätte, hätte einen Verbraucher behauptet, den es nicht gibt.*
+
+**Das Blatt schreibt stattdessen** (`5-CODE:16`): *„`app/dashboard/Kopfrahmen.tsx:30` `type Achse`
+**(nur der Typ)**"* — **und nennt den echten Verbraucher**, den ich selbst gesucht habe:
+
+```text
+$ grep -rn 'achsenMitte' resources/planner/hausplaner/
+  app/sammelBefehle.ts:23    import … achsenMitte …
+  app/sammelBefehle.ts:108   const pos = achsenMitte(b, achse);
+  geometry/editierGeometrie.ts:73   (die Definition)
+  __tests__/editierGeometrie.test.ts   (der Wächter)
+```
+
+*Das Blatt führt `app/sammelBefehle.ts:23` als Anschluss (`5-CODE:12`).* **Vierte Stelle heute, an
+der eine Auftragsangabe gemessen statt geglaubt wurde** — *nach `geradenSchnitt` (W-18/1), dem
+A-32-Zustand (W-03/1) und der Registerzeile F-032 hier.*
+
+### Messtisch — alle neun Kriterien, jede Fundstelle selbst geöffnet
+
+| Kriterium | Ergebnis | Beleg |
+|---|---|---|
+| **W-14-1-1** (P1, TRAGEND) vier Operationen mit Bezug und Weg | **grün** | Registry selbst gezählt: `duplizieren` **1** (`:273`), `loeschen` **1** (`:249`), `spiegeln` **0**, `verschieben` **0`. Beide Zeilen geöffnet und bestätigt. Die Bezüge stehen in `1-ZWECK:16` (Grundriss gegen Auswahl) |
+| **W-14-1-2** (P1) Spiegel-Befund belegt | **grün** | `Kopfrahmen.tsx:315/:316` geöffnet: `disabled={waende.length === 0}`, Titel *„Grundriss links/rechts spiegeln"*. `HausplanerApp.tsx:695` `function spiegeleGrundriss(achse)` → `executeCommands(befehleSpiegeln(waende, achse))` — **über `waende`, nicht `selectedNodeIds`**; `waende` ist `waendeAus(nodes)` (`:365`), also der ganze Grundriss. `'spiegeln'` in `toolRegistry.ts`: **0** |
+| **W-14-1-3** (P1) Drehen mit Schema-Grund + zwei offene Fragen | **grün** | `scene.types.ts:193-196` `transform: {position, rotation, scale}` geöffnet; `WallNode` (`:98-104`) trägt `start`/`end`/`thickness`, **keine Rotation**. `commands/applyCommand.ts:203` `throw new CommandAbgelehnt('MOVE_NODE für Typ … nicht definiert (P0)')`. Die zwei Fragen stehen als **Fragen** (`7-GRENZEN:26`, `:30`) |
+| **W-14-1-4** (P1) neun Exporte mit Fundstelle | **grün** | `grep -c '^export '` → **9**, Datei **75** Z; die Tabelle nennt genau diese neun mit 7/12/15/20/34/46/55/63/73 |
+| **W-14-1-5** `versetzteWand` als Translation, A-29 | **grün** | Rumpf geöffnet: `{start: versetzePunkt(start,dx,dy), end: versetzePunkt(end,dx,dy)}` — **beide Endpunkte um denselben Vektor**. A-29 an vier Stellen benannt, dazu der Verweis, dass der echte Parallelversatz seit A-32 in `geradenGeometrie` liegt |
+| **W-14-1-6** `bbox`/`achsenMitte` als Nachbarn | **grün** | s. o. — **besser als das Kriterium**. `einpassen.ts:21/:87` selbst geöffnet; W-13s Auswahl-Module importieren `editierGeometrie` **0×**, selbst gemessen |
+| **W-14-1-7** F-032 geprüft statt übernommen | **grün** | selbst gezählt, **Vorkommen statt Zeilen**: `Math.round` **6**, `Math.max` **2**, `Math.min` **2**, `Math.cos`/`sin`/`atan2` **0**, `matrix`/`transform`/`rotation` **0**. Das Blatt nennt exakt diese Zahlen und sagt zusätzlich, **warum** F-032 plausibel aussah |
+| **W-14-1-8** kein Produktivcode | **grün** | `5a2e70b1`: 8 Dateien, **0** außerhalb `docs/` |
+| **W-14-1-9** Test selbst gefahren | **grün** | `tests 8 · pass 8 · fail 0`; Datei 52 Z, **8** Zusagen selbst gezählt |
+| **Wächter** Insel-Suite | **grün** | `tests 1750 · pass 1750 · fail 0` |
+| **Wächter** `tsc:hausplaner` | **grün** | Exit 0 |
+| **sieben Blätter** | **grün** | `64/101/57/54/69/58/87` Z, **sieben verschiedene** md5 |
+| **Registerzeile** | **grün** | `**keine** ⓝ (~~F-032~~)` in der Hausform, 5 Spalten wie die Nachbarn |
+| **Browser** | **nicht gefahren** | *der Bau-Commit fasst ausschließlich `docs/` an* |
+| **§15 Datenbank** | **nicht berührt** | *kein schreibender Lauf* |
+
+### Mein eigener Messfehler in dieser Runde
+
+**Ich habe Zeilen gezählt, wo Vorkommen zu zählen waren.** *Mein `grep -c 'Math\.'` auf
+`editierGeometrie.ts` ergab **4** — das Blatt sagt `6+2+2 = 10`. Einen Moment sah es nach einer zu
+hohen Zahl im Blatt aus.* **Nachgemessen mit `grep -o … | wc -l`: 6/2/2, das Blatt stimmt.**
+
+> ***`grep -c` beantwortet eine andere Frage als die, die ich gestellt habe*** — *„in wie vielen
+> Zeilen" statt „wie oft".* **Dieselbe Klasse, gegen die ich prüfe: ein Zählwort, das den Namen der
+> Sache trägt und etwas anderes misst.** *Und es hätte diesmal den Bau getroffen, nicht mich.*
+
+### Weitergabe
+
+**Ball an den Release-Prüfer** (§11, ABGENOMMEN).
+
+### Nachtrag: derselbe Beinahe-Fehler wie um 23:18 — halb behoben ist nicht behoben
+
+**Ich hatte die Lehre gezogen und nur zur Hälfte angewandt.** *Den `zustand`-Anker habe ich
+blockgenau gebunden (`auftrag`-Zeile + `zustand` in einem Muster). Den `ballbesitz`-Anker nicht — und
+er hatte **zwei** Treffer:*
+
+```text
+ballbesitz: evaluator  # CODE_FERTIG 14.08. generator
+  W-14/1   (meiner)
+  W-10/1   (FREMD — derselbe Wortlaut, ein anderer Auftrag)
+```
+
+**Nachgewiesen, dass der richtige getroffen wurde** *(ballbesitz-Vergleich aller Blöcke, HEAD gegen
+Baum)*:
+
+```text
+W-14/1  evaluator # CODE_FERTIG …  ->  release-pruefer # ABGENOMMEN …
+W-10/1  unveraendert
+```
+
+> ***Und wieder hat allein die Dateireihenfolge entschieden*** — *W-14/1 steht vor W-10/1.* **Zum
+> zweiten Mal in dreißig Minuten war die Sicherung nicht der Anker, sondern der Zufall.**
+>
+> **Was daran neu ist und weshalb es hier steht:** *ich habe die Lehre aus 23:18 gezogen und sie auf
+> **ein** Feld angewandt statt auf alle. Eine Regel, die man auf die Stelle anwendet, an der man
+> gestolpert ist, fängt die nächste Stelle nicht.* **Ab sofort blockgenau für jedes Feld, das ich in
+> `STATUS.md` ersetze — `zustand`, `ballbesitz`, jedes weitere.**
