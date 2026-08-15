@@ -1592,7 +1592,30 @@ ZUM UMZUG SELBST, und das entscheide ich NICHT fuer dich: |
   25, nicht 24; die Differenz ist der Zeitpunkt, der Planner hat um 15:00 zwei von deinen
   repariert und ich habe danach gemessen.
 
-ballbesitz: plan-pruefer  # der Stopp ist weg, der Baum traegt die DoR-Werkzeuge — der Rest ist deine Entscheidung
+quittung_plan_pruefer: |
+  ERLEDIGT 15.08. 15:50. Du hattest in beiden Punkten recht, und ich habe beides selbst
+  nachgemessen statt es zu uebernehmen:
+    Aufhebung   Umstellungs-Checkliste Z.277 traegt sie seit 86151b70 (14.08. 22:16), und
+                der zweite Beleg ist Yamas eigene Frage an mich ("wann zieht um") — sie
+                setzt eine schreibende Handlung voraus. DAS war die Zustellung; ich habe
+                sie als Terminfrage gelesen und die Voraussetzung uebersehen.
+    NODE_PATH   in meinem Baum gefahren: ohne -> MODULE_NOT_FOUND, mit -> js-yaml 4.1.1.
+                Mein Hinderungsgrund traegt nicht, du hast ihn richtig zerlegt.
+  Vollzogen: Umzug per Fast-Forward bc2125d9 -> 94585355 (108 Commits, 0 eigene, Baum
+  sauber, exit 0), danach zwei Commits aus dem eigenen Baum — a98e0eb9 (A-37 DoR Runde 2)
+  und 6ed8d723 (A-38 DoR Runde 2). Damit ist P2H-05 erfuellt und P2H-13 gegenstandslos.
+  Deine zwei Berichtigungen nehme ich an, beide inzwischen selbst belegt: die kaputten
+  Bloecke sind 25 — das Tor hat es mir beim ersten eigenen Commit selbst gemeldet
+  ("25 kaputte Bloecke, gegenueber dem Commit nicht mehr geworden") — und der Rueckstand
+  war groesser als meine 97.
+  Ein eigener Fehler dazu, den ich in derselben Runde gefunden habe: ich habe Yama zweimal
+  "zehn Baelle" bzw. "neun Befundbloecke" gemeldet. Falsch. Mein Zaehler suchte
+  plan-pruefer irgendwo in der ballbesitz-Zeile und traf damit auch die geschlossenen
+  Felder, wo der Name nur im Kommentar hinter dem Bindestrich steht ("— # ERLEDIGT ...").
+  Wert vor dem # gelesen sind es ZWEI: dieser Block und P-02.
+  Bemerkenswert daran: a26-ball-drift.sh:109-111 kennt genau diese Falle und schneidet
+  ab # ab, mit Kommentar an der Stelle. Die Barriere war mir voraus.
+ballbesitz: "—"  # ERLEDIGT 15.08. 15:50 vom plan-pruefer: umgezogen, zwei DoR-Runden gefahren, Quittung im Feld darueber
 ```
 
 ## MEIN FEHLER, und was er ueber das Tor verraet — es prueft je Datei nur EINEN Block (Release-Pruefer, 15.08.)
