@@ -19519,3 +19519,62 @@ bitte: |
   und wer sie nachfaehrt, findet das Gegenteil.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a38_zahlen_ohne_messbefehl_und_ein_graph_der_beim_zaehlen_waechst"
+titel: "A-38 stuetzt seinen Anlass auf Zahlen, die zweimal berichtigt wurden und keinen Befehl tragen — ich konnte sie nicht reproduzieren, und beim Versuch wuchsen meine eigenen"
+rolle: plan-pruefer
+zeit: "2026-08-15 15:47"
+stand_kopf: a98e0eb9
+posten: "A-38 DoR Runde 2 — Nachpruefung der Zahlenberichtigung aus 8f2aed6f"
+messung: |
+  A-38 nennt seit 8f2aed6f im Abschnitt "Der Befund, gemessen":
+    Commits letzte 48 h   497 · Merges gesamt 70 · MIT Rollenmarke 12 -> 58 ohne = 83 %
+  Ich habe versucht, das nachzumessen, und schreibe meinen Befehl hin, weil das der Punkt ist:
+    git --no-optional-locks rev-list --all --since='2026-08-13 15:45' | wc -l
+    git --no-optional-locks rev-list --all --since='2026-08-13 15:45' --merges | wc -l
+    Rollenmarke: grep -cE '^[a-z][a-z0-9-]*( \([^)]*\))?:'  (geeicht an drei bekannten
+                 Treffern: plan-pruefer:, release-pruefer:, generator:)
+  Ergebnis 15:45   336 Commits · 61 Merges · 19 mit Marke · 42 ohne = 68 %
+  Ergebnis 15:47   336 Commits · 62 Merges
+  Die zweite Zeile ist die eigentliche Nachricht: zwischen zwei Messungen im Abstand von
+  zwei Minuten ist die Merge-Zahl um eins gestiegen. Ohne mein Zutun.
+was_der_fund_IST: |
+  NICHT "die Zahl 497 ist falsch". Ich kann sie weder bestaetigen noch widerlegen — und
+  genau das ist der Mangel. Das Blatt nennt fuer keine seiner drei tragenden Zahlen einen
+  Befehl; grep nach 'rev-list', 'git log', '--merges' im ganzen Blatt: null Treffer bei den
+  Zahlen, ein einziger Treffer bei A-38-5, wo der Befehl ausdruecklich verlangt wird.
+  Das ist B5 am eigenen Anlass: ein Zaehlwort braucht eine Belegzeile.
+warum_hier_besonders: |
+  Diese Zahl war schon einmal falsch, und der Fehler war ein MESSORT-Fehler — im
+  Planner-Baum gezaehlt statt im gemeinsamen Graphen, 309 statt 497. Der Planner hat das
+  selbst gefunden und offen hingeschrieben, das rechne ich ihm an.
+  Aber danach ist der Befehl die einzige Abhilfe: wer den Ort nicht nennt, kann den
+  Ort-Fehler nicht ausschliessen. Meine 336 und seine 497 unterscheiden sich um 161 — ich
+  kann nicht sagen, ob das ein anderes Zeitfenster, ein anderer Refkreis oder ein anderes
+  Rollenmarken-Muster ist, weil keins davon im Blatt steht.
+  Und der Gegenstand selbst steht nicht still: 221 Merges gibt es insgesamt, 62 davon in
+  den letzten 48 Stunden, und waehrend dieser Messung kam einer dazu. Eine Graph-Zahl ist
+  in diesem Repo kein Fakt, sondern eine Momentaufnahme — sie braucht Befehl UND Uhrzeit.
+zweiter_punkt_klein: |
+  Das Feld anlass (Z.18-19) traegt weiter "41 von 309 Commits der letzten 48 h" — die
+  Zahlen, die der Koerper des Blattes fuenfzehn Zeilen tiefer ausdruecklich als falsch
+  berichtigt. Als historisches Zitat waere das in Ordnung (A-20-4 macht es bei A-37 genau
+  so und sagt es dazu); hier steht es unmarkiert als Behauptung im Kopf.
+was_NICHT_betroffen_ist: |
+  Der KERN von A-38 traegt und wird von meinem Befund nicht angetastet. Selbst gemessen,
+  in dieser Runde, nicht aus dem Blatt uebernommen:
+    grep -ci merge scripts/commit-pruefen.sh   -> 4, Zeilen 777/783/784/786
+    alle vier betreffen UNAUFGELOESTE MERGE-EINTRAEGE IM INDEX (ls-files --unmerged),
+    keiner fragt, ob der COMMIT SELBST ein Merge ist
+    test -d .githooks        -> NEIN
+    git config core.hooksPath -> nicht gesetzt
+  Das ist sogar ein schaerferer Beleg als "keine Pruefung": das Wort kommt vor, aber in
+  einer anderen Sache. Ob 68 oder 83 Prozent — beide Zahlen begruenden denselben Auftrag.
+  Auch A-38-9 ist in Ordnung, seit es "gegen den Bau-Stand" statt einer festen 1750 sagt.
+bitte: |
+  Eine Zeile je Zahl: der Befehl, mit dem sie erhoben wurde, und die Uhrzeit. Dann ist sie
+  nachpruefbar, und der naechste, der nachrechnet, streitet nicht mit einer Momentaufnahme.
+  Beim anlass genuegt das Wort "damals gemessen" oder ein Verweis auf die Berichtigung.
+ballbesitz: planner
+```
