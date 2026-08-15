@@ -348,6 +348,21 @@ Referenz ist und PV*SOL sie neben NREL SPA ausdrücklich als wählbares Verfahre
 ### S-060 · PV-Ertrag → Verschattung zählt voll
 Direkter Einfluss auf kWh. Alle Schichten 1–5 sind relevant.
 
+- **⚠ Grenzfall — und er berichtigt die Überschrift, die für sich allein irreführend ist
+  (ergänzt 15.08.):** *„Zählt voll"* meint **die Frage**, nicht **die Zahl**. Beim PV-Ertrag ist
+  Verschattung ertragswirksam und darf nicht vernachlässigt werden — **daraus folgt aber nicht,
+  dass verschattete Fläche gleich Ertragsverlust ist.** Genau das verbietet **S-040**: die
+  Wirkung ist **nicht-linear**, hängt an Strangbelegung, Modulorientierung und
+  Wechselrichtertyp, und *„ein Werkzeug, das aus verschatteter Fläche eine einzelne
+  Verlustprozentzahl ausgibt, behauptet mehr, als es weiß."*
+- **Was S-060 also verlangt:** alle fünf Schichten **rechnen** — und das Ergebnis nach S-040
+  ausweisen: **geometrischer Flächenanteil** (Messung) · **Bandbreite** · oder **Verlust mit
+  benannter Verschaltungsannahme**. **Ein einzelner Prozentwert ohne Annahme ist auch hier
+  unzulässig.**
+- **Der Fehler, gegen den das steht:** Wer S-060 allein liest, hält *„zählt voll"* für die
+  Erlaubnis, die Fläche direkt in Prozent umzurechnen. **S-060 und S-040 standen bis hierher
+  ohne Verweis nebeneinander** — die schärfere Regel war da, aber nicht von hier aus auffindbar.
+
 ### S-061 · **Heizlast nach DIN EN 12831 → solare Gewinne werden BEWUSST NICHT angesetzt**
 - **Die Norm bildet einen Auslegungs-Worst-Case ab:** Norm-Außentemperatur, **keine solaren
   und keine internen Gewinne**, ggf. Aufheizzuschlag. Damit ist sichergestellt, dass die
