@@ -19670,3 +19670,69 @@ bitte: |
   Schneiden festzuschreiben, ist eine Regelfrage — ich melde nur, dass sie sich stellt.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "node_modules_bedingung_traegt_keinen_wortlaut"
+titel: "Yama soll ueber 'seine' node_modules-Bedingung entscheiden — im ganzen Bestand steht kein Satz von ihm dazu"
+rolle: plan-pruefer
+zeit: "2026-08-15 15:57"
+stand_kopf: fd5e7f54
+posten: "A-37 DoR Runde 3 — Nachpruefung von d2ca3611, dem Umschnitt auf meinen Befund hin"
+zuerst_das_gute: |
+  Der Planner hat meinen Runde-2-Befund in ZWEI MINUTEN aufgenommen und umgesetzt: a98e0eb9
+  (mein Commit 15:43:45) liegt auf rolle/planner, 46a5ded2 (15:45:23) zieht ihn nach,
+  d2ca3611 (15:45:45) setzt gebaut_in auf den Generator-Baum zurueck. Der Rueckfluss laeuft
+  also in BEIDE Richtungen, schneller als ich ihn messen konnte.
+  Seine drei Zahlen habe ich nachgemessen, alle drei halten:
+    ticket-rolle-generator/node_modules  echtes Verzeichnis  323 MB
+    ticket-rolle-release/node_modules    echtes Verzeichnis  323 MB
+    sechs Baeume x 323 MB = 1938 MB ~ 1,9 GB
+  Und er hat etwas gefunden, das ich uebersehen hatte: die Kopien verletzen ein Nicht-Ziel.
+  Dass er sie NICHT entfernt ("fremde Arbeitsumgebung, nicht mein Bestand"), ist richtig.
+der_befund: |
+  A-37 Z.127 fuehrt als Nicht-Ziel:
+    "Kein `node_modules` je Worktree, kein Symlink, keine Modulkopie ins Repo (Yamas Bedingung)"
+  Darauf bauen inzwischen zwei Instanzen auf:
+    - der Planner legt Yama die Wahl (a) aufheben / (b) halten vor
+    - der Release-Pruefer hat die Bedingung "IN YAMAS NAMEN praezisiert, nicht aufgehoben"
+      (docs/STATUS.md:1466) und schreibt an Yama von "deiner node_modules-Bedingung"
+  Ich habe den Wortlaut gesucht, mit dem Yama sie gesetzt haben soll:
+    grep ueber docs/ nach yama+node_modules/modulkopie/kopie   -> nur Verweise, kein Zitat
+    grep ueber ALLE Commit-Botschaften seit 10.08.             -> nur Verweise, kein Zitat
+  Die Bedingung kam mit 7ef8f046 (14.08. 22:35, planner: "A-37 geschnitten") ins Blatt,
+  bereits mit dem Klammerzusatz, ohne Zitat.
+warum_das_belastbar_ist: |
+  Mein Suchmuster ist geeicht, und zwar am Gegenteil: dasselbe Muster findet im Bestand
+  reihenweise echte Yama-Wortlaute, z.B. dreimal
+    'YAMAS ANWEISUNG IM WORTLAUT, 13.08.: "suche ueber alle ob offene fragen ..."'
+  und der Release-Pruefer zitiert seine Vollmacht woertlich
+    'Yamas Anweisung vom 15.08. im Wortlaut: "dass sollst du auch in meinem namen beantworten"'.
+  Dieses Haus zitiert Yama, wenn es ihn hat. Bei genau dieser Bedingung tut es das nicht.
+was_ich_ausdruecklich_NICHT_behaupte: |
+  NICHT, dass die Bedingung erfunden ist. Yama spricht mit den Instanzen im Chat, und was
+  dort gesagt und nicht mitgeschrieben wurde, kann ich nicht messen. Sie kann muendlich
+  ergangen sein — dann ist sie echt und nur unbelegt.
+  NICHT, dass der Planner falsch gehandelt hat. Er legt die Sache Yama vor, statt sie selbst
+  zu entscheiden, und benennt den Preis. Das ist genau richtig.
+  NICHT, dass die Vorlage unvollstaendig waere: ich habe nach einem dritten Weg gesucht und
+  keinen gefunden, der den Wortlaut haelt — auch eine Hardlink-Kopie (cp -al, fast ohne
+  Platzkosten) ist dem Wortlaut nach eine "Modulkopie".
+warum_es_trotzdem_zaehlt: |
+  Yama wird gefragt, ob er SEINE Bedingung aufhebt. Das Wort "seine" traegt die halbe
+  Entscheidung: eine eigene Bedingung hebt man anders auf als eine, die einem zugeschrieben
+  wurde. Und zwei Instanzen haben bereits "in seinem Namen" darauf aufgebaut.
+  Es ist dieselbe Klasse, die ich heute Nachmittag an mir selbst hatte, als ich einen
+  Schreibstopp 17 Stunden zu lang hielt: eine Anordnung wirkt weiter, weil niemand mehr
+  nachfragt, woher sie kam.
+bitte_an_yama: |
+  Ein Satz genuegt, und nur du kannst ihn geben: Stammt "kein node_modules je Worktree,
+  kein Symlink, keine Modulkopie" von dir — und wenn ja, gilt er noch, jetzt wo zwei
+  Baeume je 323 MB tragen und der Umzug ohne sie nicht prueffaehig ist?
+  Sagst du ja, sind die zwei Kopien zu entfernen und die Gates brauchen einen anderen Weg.
+  Sagst du nein oder "so habe ich das nicht gesagt", entfaellt das Nicht-Ziel und A-37
+  verliert seinen letzten Hinderungsgrund.
+bitte_an_den_planner: |
+  Unabhaengig von Yamas Antwort: den Klammerzusatz (Yamas Bedingung) durch die Fundstelle
+  ersetzen, aus der sie stammt — oder durch "Herkunft nicht im Bestand belegt".
+ballbesitz: yama
+```
