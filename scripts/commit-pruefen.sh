@@ -480,6 +480,58 @@ if [ "$INDEX_VOM_TOR" = "ja" ]; then
   fi
 fi
 
+# ── A-37/3 + der zweite Befund: der YAML-Pruefer als EIGENES Programm ────────────────────────
+#
+# **Zwei Maengel meines eigenen Baus, beide von anderen Rollen gemessen und von mir nachgemessen:**
+#
+#   1. Der Node-Fehler ging nach /dev/null. Damit meldete das Tor in JEDEM Fehlerfall
+#      "der Kopf parst nicht" — auch dann, wenn nur `js-yaml` fehlte. **Eine Barriere, die beim
+#      Sperren luegt** (P2A-12). Sobald eine Rolle in einen Worktree ohne node_modules zieht,
+#      bekommt sie bei JEDEM Commit einen Kopf-Fehler, den es nicht gibt — und nach A-03 wird eine
+#      Barriere, die aus dem falschen Grund sperrt, weggeklickt.
+#   2. `t.match` ohne g-Flag las GENAU EINEN Block je Datei. Fuer ein Auftragsblatt ist das
+#      richtig; fuer docs/STATUS.md mit 302 Bloecken sind es **0,3 Prozent der Datei**. Der
+#      kaputte Block des Release-Pruefers war der 250-und-etwas-te und kam ungehindert durch.
+#
+# **Warum der Pruefer eine eigene Variable ist und keine Zeile im Rumpf:** er wird ZWEIMAL
+# gefahren — einmal auf den Arbeitsstand, einmal auf den committeten Stand derselben Datei. Erst
+# der Vergleich trennt "jemand hat gerade etwas kaputtgemacht" von "das liegt hier seit Wochen".
+#
+# **Rueckgabe:** 0 alles heil · 2 YAML-Syntax · 3 Modulaufloesung · 4 sonstiger Laufzeitfehler.
+YAML_PRUEFER='
+  const {readFileSync}=require("fs");
+  let yaml;
+  try { yaml = require("js-yaml"); }
+  catch (e) {
+    const c = e && e.code;
+    if (c === "MODULE_NOT_FOUND" || c === "ERR_MODULE_NOT_FOUND") { process.stdout.write("MODUL\n"); process.exit(3); }
+    process.stdout.write("LAUFZEIT " + ((e && e.message) || String(e)) + "\n"); process.exit(4);
+  }
+  try {
+    const t = readFileSync(process.argv[1], "utf8");
+    const bloecke = [...t.matchAll(/```yaml\n([\s\S]*?)```/g)];
+    const zeilen = [];
+    for (let i = 0; i < bloecke.length; i++) {
+      try { yaml.load(bloecke[i][1]); }
+      catch (e) {
+        const ab = t.slice(0, bloecke[i].index).split("\n").length;
+        zeilen.push("  Block " + (i + 1) + "/" + bloecke.length + " ab Zeile " + ab + ": " + String((e && e.reason) || (e && e.message) || e).split("\n")[0]);
+      }
+    }
+    process.stdout.write("BLOECKE " + bloecke.length + " KAPUTT " + zeilen.length + "\n");
+    if (zeilen.length) process.stdout.write(zeilen.slice(0, 8).join("\n") + "\n");
+    process.exit(zeilen.length ? 2 : 0);
+  } catch (e) {
+    process.stdout.write("LAUFZEIT " + ((e && e.message) || String(e)) + "\n"); process.exit(4);
+  }
+'
+
+# Zaehlt die kaputten Bloecke einer Datei. Gibt den Bericht auf stdout, die Klasse als Rueckgabe.
+yaml_bericht() { node -e "$YAML_PRUEFER" "$1" 2>&1; }
+
+# Die Zahl aus dem Bericht — EIN Ort, damit die beiden Laeufe nicht verschieden gelesen werden.
+yaml_kaputt_zahl() { printf '%s\n' "$1" | awk '/^BLOECKE/ {print $4; exit}'; }
+
 for p in "$@"; do
   if [ ! -e "$p" ]; then
     echo "FEHLT      $p" >&2; FEHLER=1; continue
@@ -495,12 +547,41 @@ for p in "$@"; do
     *.mjs|*.js)
       node --check "$p" 2>/dev/null || { echo "SYNTAX     $p" >&2; FEHLER=1; } ;;
     *.md)
-      node -e '
-        const {readFileSync}=require("fs"); const yaml=require("js-yaml");
-        const t=readFileSync(process.argv[1],"utf8");
-        const m=t.match(/```yaml\n([\s\S]*?)```/);
-        if (m) yaml.load(m[1]);
-      ' "$p" 2>/dev/null || { echo "YAML-KOPF  $p  — der Kopf parst nicht" >&2; FEHLER=1; } ;;
+      BERICHT="$(yaml_bericht "$p")"; RC=$?
+      case "$RC" in
+        0) ;;
+        3)
+          # Fall 2 der Anordnung vom 14.08.: der WAHRE Grund, nicht als Kopf-Fehler getarnt.
+          echo "MODUL      $p  — js-yaml nicht aufloesbar. Dieser Worktree hat kein node_modules." >&2
+          echo "           Abhilfe: NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules vor den Aufruf setzen." >&2
+          FEHLER=1 ;;
+        2)
+          # Fall 1: echter Syntaxfehler. ABER: die Zahl allein sagt nicht, WER ihn gemacht hat.
+          # Verglichen wird gegen den committeten Stand DERSELBEN Datei — kein fester Schwellwert,
+          # der driftet, sondern eine Messung, die sich selbst nachfuehrt. Kaputte Bloecke duerfen
+          # schrumpfen, nie wachsen.
+          JETZT="$(yaml_kaputt_zahl "$BERICHT")"
+          VORHER=0
+          if git --no-optional-locks cat-file -e "HEAD:$p" 2>/dev/null; then
+            VOR_DATEI="$(mktemp)"
+            git --no-optional-locks show "HEAD:$p" > "$VOR_DATEI" 2>/dev/null
+            VORHER="$(yaml_kaputt_zahl "$(yaml_bericht "$VOR_DATEI")")"
+            rm -f "$VOR_DATEI"
+          fi
+          [ -z "$VORHER" ] && VORHER=0
+          if [ "${JETZT:-0}" -gt "$VORHER" ]; then
+            echo "YAML-KOPF  $p  — der Kopf parst nicht ($JETZT kaputte Bloecke, am Commit waren es $VORHER)" >&2
+            printf '%s\n' "$BERICHT" | grep '^  Block' >&2
+            FEHLER=1
+          else
+            echo "YAML-ALTLAST  $p  — $JETZT kaputte Bloecke, gegenueber dem Commit nicht mehr geworden ($VORHER)." >&2
+            echo "              Warnung, kein Abbruch: dieser Schreibvorgang hat sie nicht verursacht." >&2
+            printf '%s\n' "$BERICHT" | grep '^  Block' >&2
+          fi ;;
+        *)
+          # Fall 3: alles Uebrige, als solches benannt statt als Kopf-Fehler.
+          echo "LAUFZEIT   $p  — ${BERICHT#LAUFZEIT }" >&2; FEHLER=1 ;;
+      esac ;;
   esac
 done
 
