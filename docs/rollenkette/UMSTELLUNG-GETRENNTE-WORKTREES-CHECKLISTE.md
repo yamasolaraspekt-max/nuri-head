@@ -307,6 +307,46 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-09 | **Der Release-Prüfer arbeitet an einem `detached HEAD`**, nicht auf einem Rollenbranch | **OFFEN** |
 | P2H-10 | **Doppelbesetzung einer Rolle war eingetreten** — zweite Instanz zurückgetreten, Vorgang dokumentiert | **UMGESETZT_UNGEPRUEFT** |
 | P2H-11 | **Der Merge `c1b3a774` hat kein Integrationsprotokoll** — Herkunft je Commit, Konflikte, nicht Integriertes: alles ungeschrieben | **OFFEN** |
+| P2H-12 | **⚠ DER ROLLENDE UMZUG HAT KEINEN RÜCKFLUSS** — Arbeit fließt in die Rollenbäume hinein, aber nicht zurück | **BLOCKIERT** |
+
+**P2H-12 — die Lücke steckt in meinem eigenen Plan, und sie ist heute zweimal eingetreten.**
+
+```
+Stand 15.08. 12:08, gemessen:
+  rolle/planner          5 Commits NICHT im gemeinsamen Baum, darunter 53a0947e
+  rolle/release-pruefer 10 Commits NICHT im gemeinsamen Baum
+  letzter Planner-Merge in den gemeinsamen Baum:  14.08. 22:51
+```
+
+**Das ist zeichengleich der Befund, den der zurückgetretene Release-Prüfer gestern über die
+Release-Linie erhoben hat** — *„merget den gemeinsamen Checkout in sich hinein, 15 Mal, aber NIE
+zurück"*. **Ich habe denselben Mechanismus gebaut, eine Ebene höher, und ihn nicht bemerkt, bis
+meine eigene Korrektur davon betroffen war.**
+
+**Die Folge ist bitter genau:** Der Nachtrag `53a0947e` behebt, dass A-37 und A-38 in der
+Statuswahrheit fehlten und deshalb für den Plan-Prüfer unsichtbar waren. **Diese Behebung ist
+selbst unsichtbar**, weil sie nur in meinem Baum liegt. *Ein Fehler, dessen Korrektur denselben
+Fehler macht.*
+
+**Warum ich den Rückfluss-Merge NICHT selbst fahre:** Er ist konfliktbehaftet. Meine Seite trägt
+`A-35` auf `CODE_FERTIG`, der gemeinsame Baum auf **`ABGENOMMEN`** (`5dd5eaee`, 12:00, Evaluator).
+**Nähme ich meine Seite, setzte ich den Zustand eines fremden Auftrags zurück** — Verlust an fremder
+Arbeit, verboten nach der Eigentumsregel. Die richtige Auflösung **kombiniert** beide Seiten:
+A-36/A-37/A-38 von mir, A-35 von ihnen. **Genau diese Handarbeit hat gestern 24 Zeilen gekostet**,
+und die Rolle mit dem gehärteten Werkzeug dafür ist der Release-Prüfer, nicht ich.
+
+**Was der Rückfluss braucht — drei Wege, einer muss gewählt werden:**
+
+| Weg | wer merget zurück | Preis |
+|---|---|---|
+| **R1** | **jede Rolle selbst**, mit Protokoll | fünf Schreiber im gemeinsamen Baum — **der Zustand von vorher** |
+| **R2** | **eine benannte Rolle** übernimmt es bis zum Integrator *(faktisch tut es heute der Release-Prüfer)* | eine Rolle trägt fremde Konflikte, ohne dafür zuständig zu sein |
+| **R3** | **der Integrator**, wie im Zielbild | setzt voraus, dass er startet — bis dahin fließt nichts zurück |
+
+**Meine Empfehlung: R2 als Übergang, benannt statt faktisch.** Der Release-Prüfer tut es ohnehin,
+hat das Werkzeug und die Übung; **was fehlt, ist die Festlegung, dass es seine Aufgabe ist und nicht
+seine Gefälligkeit.** R1 hebt den Umzug auf, R3 wartet auf einen Start, der offen ist.
+**Die Entscheidung gehört Yama.**
 
 **P2H-08 — der schwerste Befund des Tages, gemeldet vom zurückgetretenen Release-Prüfer
 (`8a417fe0`), von mir nachgemessen und an einer Stelle berichtigt.**
@@ -826,11 +866,11 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 |---|---|
 | `OFFEN` | **111** |
 | `UMGESETZT_UNGEPRUEFT` | **60** |
-| `BLOCKIERT` | **20** |
+| `BLOCKIERT` | **21** |
 | `NACHBESSERN` | **1** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **197 = alle IDs** |
+| **Summe** | **198 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
 — `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186, der Mechanismuswechsel `P2H` daraus 193. **Diesmal wurde das Muster BEIM Anlegen mitgeändert** (`[A-G]`→`[A-H]`), nicht hinterher bemerkt — die Lehre aus drei Fehlversuchen hat gehalten.

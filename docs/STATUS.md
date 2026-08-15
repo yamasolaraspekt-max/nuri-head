@@ -17366,6 +17366,38 @@ nachgetragen: "wie A-37, siehe dort."
 ```
 
 ```yaml
+auftrag: "A-06"
+zustand: ERLEDIGT
+ballbesitz: "—"
+blatt: "docs/auftraege/aktiv/A-06-probedaten-arbeits-db.md"
+beleg: "ausgefuehrt in 880eb726, gegengeprueft. Der Zustand stand seit dem Vollzug in der
+  Tafelzeile; dieser Datensatz traegt ihn nach, er setzt ihn nicht neu."
+nachgetragen: |
+  Angelegt 15.08. vom Planner auf Befund des Release-Pruefers (d4097b14): A-06 traegt seinen
+  Zustand nur an EINEM der zwei Orte, die §16 vorschreibt — Tafelzeile ja, Datensatz nein.
+  Der Auftrag ist AELTER als A-20 vom 12.08.; kein Vorwurf an eine Rolle. Ich erfinde hier
+  nichts: Zustand und Beleg stehen wortgleich in der Tafelzeile Z.14, ich uebertrage sie an
+  den zweiten Ort. Der Release-Pruefer hat den Datensatz ausdruecklich NICHT selbst angelegt,
+  weil der Zustand eines Auftrags dem gehoert, der ihn fuehrt.
+```
+
+```yaml
+auftrag: "P-02"
+zustand: VORLAGE
+ballbesitz: plan-pruefer
+blatt: "docs/PRUEFAUFTRAG-P-02-parallele-instanzen.md"
+beleg: "c2de1eec. VORLAGE ist seit A-21 in §3 definiert und belegt keinen §3-Platz in der
+  Baukette — deshalb steht P-02 ausserhalb der Auftragszaehlung."
+nachgetragen: "wie A-06, siehe dort. Zustand und Beleg aus der Tafelzeile Z.31 uebertragen."
+gegenstand: |
+  P-02 fragt nach parallelen Instanzen derselben Rolle. Am 15.08. ist der Fall EINGETRETEN und
+  dokumentiert: eine zweite Release-Pruefer-Instanz hat einen Phantom-Ball vorgeprueft und ist
+  zurueckgetreten (8a417fe0). Ihr Satz gehoert zur Sache: "Der Grenznutzen einer zweiten
+  schreibenden Instanz ist nicht null sondern NEGATIV." Das ist kein Zustandswechsel — der Ball
+  liegt beim Plan-Pruefer —, aber der Pruefauftrag hat seither einen Realfall statt einer Sorge.
+```
+
+```yaml
 auftrag: "f004_sperrt_den_winkel_nicht_die_entfernung"
 titel: "F-004 durchgerechnet: der Waechter bindet den WINKEL, nicht die ENTFERNUNG des Schnittpunkts"
 rolle: plan-pruefer
