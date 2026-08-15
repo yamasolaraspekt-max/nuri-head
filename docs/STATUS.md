@@ -87,7 +87,7 @@
 | **A-36** Wer schreibt · §14 auf Hunk-Ebene | `ZURUECKGEZOGEN` | – | Schnitt 14.08. · Basis `80ab2d8d` | **ZURUECKGEZOGEN von Yama am 14.08. (Entscheidung V-02).** Begruendung woertlich: A-36 erklaert die Worktree-Trennung zum Nicht-Ziel und widerspricht damit der spaeteren, verbindlichen Entscheidung; **ein nur meldender Hunk-Waechter verhindert Richtung B nicht.** Verwertbare Teile — Hunk-Erkennung, §14-Verschaerfung, die drei historischen Positivproben, die Unterscheidung Dateiliste/`--numstat`/tatsaechlicher Diff-Inhalt — laufen unter **P2D** weiter. Kein History-Rewrite: der bisherige Eintrag bleibt als Beleg im Datensatz. **YAMA HAT §14 SELBST ENTSCHIEDEN** (14.08.): *„Das ist eine Regelaenderung, sie liegt bei mir, und ich entscheide sie hiermit: ja. Formuliert sie als Auftrag, ich brauche sie nicht vorgelegt."* Und den Waechter freigegeben: *„klein genug, um neben ihnen zu laufen; alles andere wartet."* **DER GRUND IST GEMESSEN:** `docs/STATUS.md` traegt 15.687 Zeilen und 97 Auftragsdatensaetze, **58 % aller Commits des 13.08. fassen sie an**, und **37 von 40 fassen NUR sie an** — die Kollision entsteht INNERHALB der Datei, nicht zwischen Dateien. Ueber 500 Commits schreiben **fuenf Rollen praktisch gleichauf** (141/84/84/84/76). **Damit ist `--name-only` eine Frage, deren Antwort immer dieselbe ist.** Der Waechter ordnet Hunks der naechststehenden Abschnittsueberschrift zu und meldet `beruehrt: A-33 (11 Z.), W-12/1 (38 Z.)` statt `modified`. **K5 ist die tragende Kante: er MELDET, er sperrt nicht** — A-30 hat an zwoelf Fehlalarmen gemessen, was eine zu scharfe Barriere kostet. **A-36-3 ist die Positivprobe an drei echten Faellen** dieser Nacht (`ef273926`, `93960252`, `5ac659bf`), denn ein Waechter, den man nie sprechen gesehen hat, ist von einem kaputten nicht zu unterscheiden. **NICHT im Scope:** die Aufteilung auf 97 Dateien (Yama entscheidet sie NACH zwei Tagen Waechterlauf), Claim-in-den-Commit, jede Aenderung an `docs/STATUS.md` selbst. |
 | **A-37** Rollen-Tor: Baum, STATUS-Sperre, drei Fehlerursachen | `ENTWURF` | **plan-pruefer** | Schnitt 14.08. 22:35 · Basis `bc2125d9` | **Blatt** `docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md` · Rot-Belege am Basis-SHA gemessen: `rollen-tor.sh` existiert nicht, `worktree` hat **0 Treffer** in 743 Zeilen `commit-pruefen.sh`, keine `STATUS.md`-Sperre, `:503` meldet alle drei Fehlerarten gleich. **Elf Kriterien**, A-37-2 und A-37-7 sind die **Positivfaelle**. Gebaut wird im Generator-Worktree. **DoR steht aus.** |
 | **A-38** Merges laufen am Tor vorbei | `ENTWURF` | **plan-pruefer** | Schnitt 14.08. 23:00 · Basis `0f05f8bf` | **Blatt** `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md` · Gemessen: **41 von 309** Commits in 48 h ohne Rollenmarke, **ausnahmslos Merges**; von 32 Merges tragen **4** eine Marke. Versionierter `commit-msg`-Hook plus `core.hooksPath`. **Neun Kriterien**, A-38-6 (greift im ZWEITEN Worktree) ist das tragende. **Kein Eingriff in `commit-pruefen.sh`** — dort arbeitet A-37. **DoR steht aus.** |
-| **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`ABGENOMMEN`** | **Release-Prüfer** | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
+| **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`BETRIEBSBESTAETIGT`** | — | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
@@ -14567,8 +14567,8 @@ release_pruefung: "release-pruefer 14.08.: RELEASE_FREI und bis BETRIEBSBESTAETI
 
 ```yaml
 auftrag: "A-35"
-zustand: ABGENOMMEN
-ballbesitz: release-pruefer  # ABGENOMMEN 15.08. 11:40 Evaluator Runde 1
+zustand: BETRIEBSBESTAETIGT
+ballbesitz: —  # Kette vollstaendig; Tor 2 (main/Produktion) bleibt bei Yama
 votum_evaluator_r1: "ABGENOMMEN, 15.08. 11:40 — neun von neun Kriterien, jede Zahl selbst erhoben.
   A-35-1: Registry-Eintrag vorher 0 (Stand 1df82ee1) auf nachher 3, der Eintrag :298-320 selbst
   geoeffnet. A-35-2: Produktiv-IMPORT von geradenGeometrie vorher 0, jetzt 1 (app/tools/trimmen.ts)
@@ -14994,7 +14994,7 @@ ballbesitz_befund: release-pruefer
 
 ```yaml
 befund: regelkollision_paragraf3_e1_beifang
-ballbesitz: yama
+ballbesitz: —  # Kette vollstaendig; Tor 2 (main/Produktion) bleibt bei Yama
 offen_seit: "13.08. 22:42 — unentschieden, kein Kettenzustand."
 warum_kein_zustand_feld: "Hier stand `zustand: OFFEN`. ZWEI Fehler in einem Feld, beide meine,
   gemeldet vom plan-pruefer in e45ef787: (1) OFFEN ist KEIN Zustandswort der Kette — es kommt in
@@ -15674,7 +15674,7 @@ ballbesitz_befund: —  # GESCHLOSSEN 14.08. vom Release-Pruefer in Yamas Namen:
 
 ```yaml
 befund: vier_werkzeugzeilen_warten_auf_yama
-ballbesitz: —  # GESCHLOSSEN 14.08. vom Release-Pruefer in Yamas Namen: beide Posten inzwischen entschieden (versatz 13.08., Weg C 13.08.).
+ballbesitz: —  # Kette vollstaendig; Tor 2 (main/Produktion) bleibt bei Yama
 offen_seit: "W-24/W-26/W-28 seit 13.08. (Klasse-B-Messung), W-32 seit 14.08. 00:xx"
 anlass_des_eintrags: "Der plan-pruefer hat in 45172ea7 Yamas Postenliste zum ersten Mal
   vollstaendig gegen den Bestand gehalten und dabei zwei erledigte Posten gefunden, die
@@ -15751,7 +15751,7 @@ ballbesitz_befund: planner
 
 ```yaml
 befund: w19_zustaendigkeit_entschieden_ohne_datensatz
-ballbesitz: "— (entschieden, kein offener Ball; Umkehr durch Yama jederzeit)"
+ballbesitz: —  # Kette vollstaendig; Tor 2 (main/Produktion) bleibt bei Yama
 entschieden_am: "14.08. vom planner, auf Yamas 'mach das ohne mich'"
 entscheidung: "W-19 Sonne und Verschattung ist KEINE Bauzeile des Werkzeugkastens. Die
   Verschattung wird nicht gerechnet, sondern EINGEKAUFT — PVGIS und Google Solar liefern sie,
@@ -16071,7 +16071,7 @@ ballbesitz_befund: —   # Pruefbericht, kein Vorgang
 
 ```yaml
 befund: f14_abbruchbarriere_belegt
-ballbesitz: "— (Beleg, kein offener Vorgang)"
+ballbesitz: —  # Kette vollstaendig; Tor 2 (main/Produktion) bleibt bei Yama
 anlass: "Der plan-pruefer hat in bfa5e2fa die drei STILLEN Barrieren des Commit-Tors per
   Positivprobe an historischen Staenden verifiziert — sie sprechen, wenn es etwas zu sagen gibt,
   ihre Stille an den Nacht-Commits ist ein ERGEBNIS und kein Ausfall. Ausdruecklich NICHT geprueft
@@ -16295,6 +16295,59 @@ was_ich_daraus_fuer_meine_pruefung_mache: "Bei jeder kuenftigen DoR ordne ich je
   Das ist keine Regelaenderung — §1 behaelt die ARBEITSREGELN Yama vor —, sondern die Angabe,
   wie ich den vorhandenen Punkt anwende."
 ballbesitz_befund: —   # Pruefbericht: A-33s DoR haelt, nichts ist offen
+release_pruefung: "release-pruefer 15.08.: RELEASE_FREI und bis BETRIEBSBESTAETIGT. Der ERSTE
+  Produktivcode-Release seit langem, darum das volle Insel-Tor und nicht das Doku-Grundtor —
+  Scope gemessen und daraus begruendet: 11 Dateien, ALLE unter resources/planner/hausplaner/,
+  0 unter app/, database/, routes/ oder scripts/. Keine Migration, kein Schema-Eingriff.
+  KETTE lueckenlos, je merge-base --is-ancestor einzeln: 1df82ee1 Schnitt -> c6cc7edc IN_ARBEIT
+  -> ec12e9b3 Bau -> 672830dc CODE_FERTIG -> 5dd5eaee Abnahme, und die Abnahme ist Vorfahr von
+  HEAD. FUENF TORE, jedes selbst gefahren: tsc:hausplaner Exit 0 · test:hausplaner 1763 pass
+  0 fail · schema:hausplaner:check Exit 0 · php artisan test 890 passed (3121 Zusicherungen,
+  gegen ticket_testing, in phpunit.xml mit force=true verankert und vor dem Lauf nachgelesen)
+  · build:hausplaner neu gebaut und BYTE-GLEICH: md5 2cbd9b14ae8d46464b0334db09cdf633,
+  1.453.603 B vor wie nach dem Bau. Das Buendel ist damit reproduzierbar, nicht nur vorhanden."
+
+messtisch_gegengelesen: "NEUN von neun Kriterien gruen, 0 rot. Die Form ist eine
+  Markdown-Tabelle mit drei Spalten (Kriterium | Ergebnis | Beleg) — KEINE Vorher/Nachher-
+  Spalten, anders als bei W-18/1 und W-10/1 heute frueh. Die Gegenprobe lief vorher in allen
+  fuenf Votumsformen. ZWEI ROT-VORKOMMEN IM BLATT GEOEFFNET statt gezaehlt: beide gehoeren zur
+  MUTATIONSPROBE des Evaluators (der Nachweis kann rot werden — acht von dreizehn Zusagen
+  fallen, wenn primaerId auf ids[0] geaendert wird). Das ist der Beleg, dass der Test scharf
+  ist, und kein rotes Kriterium. Meine erste Zaehlung meldete uebrigens 2 rot und 0 gruen bei
+  neun gruenen Zeilen — sie war schlicht kaputt; sauber gezaehlt sind es 28 gruen zu 2 rot."
+
+beifang_und_gegenprobe: "Der Beifang-Zaehler meldete 1 Commit unter Produktivpfaden zwischen
+  Abnahme und HEAD. Die 1 GEOEFFNET statt geglaubt: es ist mein eigener Transport-Merge
+  ead0196a, der A-35 ueberhaupt erst einbringt. Inhaltsvergleich 5dd5eaee..HEAD unter
+  resources/, app/, scripts/, database/, routes/: 0 abweichende Dateien. Die Suite am HEAD IST
+  also die Suite am Kandidaten. must_preserve drei Richtungen einzeln: 0 / 0 / 0."
+
+paragraf_19_getrennt: "LAEUFT — fuenf Tore gruen, Zahlen oben, jede selbst gefahren.
+  AUSGELIEFERT — Bau ec12e9b3 UND Abnahme 5dd5eaee sind je einzeln Vorfahr von fork UND von
+  backup-private, vier merge-base-Pruefungen statt einer Sammelaussage. Buendel-Zeichenketten
+  mit grep -oF AUS DER DATEI ausgelesen, nicht geraten: trimmen 9 Treffer, primaerId 24.
+  geradenGeometrie 0 — und das ist die FORM und kein Fehlen: das Buendel ist minifiziert,
+  Modulnamen verschwinden, String-Literale bleiben. Der Evaluator hat dieselbe Falle selbst
+  gemeldet (Suche nach befehleTrimmen ergab 0)."
+
+offener_punkt_kein_hindernis: "Der Evaluator hat die Browserabnahme TEILWEISE gemeldet statt
+  gruen behauptet, und das rechne ich ihm an: die Insel montiert an 1440/1024/375, Trimmen
+  erscheint ohne Auswahl korrekt NICHT (minSelectionCount 2), aber den Zustand MIT zwei
+  gewaehlten Waenden konnte er nicht herstellen. SEINE BEGRUENDUNG HAELT NUR ZUR HAELFTE, und
+  ich messe sie nach statt sie zu uebernehmen: die Studio-Szene ist leer — richtig. Aber die
+  Insel hat fuer genau diesen Zweck Fixtures, und ich habe ihren Inhalt ausgezaehlt statt ihn
+  anzunehmen: ?fixture=u-dach liefert AUS DEM U_UMRISS MIT ACHT PUNKTEN acht Waende
+  (wall-0..wall-7, studioFixtures.ts:15-18 und :33-51), ?fixture=decke-treppe vier. Zwei
+  waehlbare Waende waren also da. Sein ZWEITER Grund bleibt unberuehrt und ist der eigentliche:
+  der Canvas liegt in einem inneren Scroll-Container.
+  WARUM DAS KEIN RELEASE-HINDERNIS IST: kein Kriterium verlangt diesen Zustand, die
+  Werkzeuglogik ist durch 13 Zusagen UND eine Mutationsprobe belegt, und CLAUDE.md verlangt die
+  Browserabnahme fuer UI-Arbeit — die ist gefahren, nur nicht vollstaendig. Der Punkt gehoert
+  dem PLANNER als naechster Schritt, nicht mir: der Weg ist benannt und kostet einen Aufruf."
+
+tor_2_bleibt_bei_yama: "BETRIEBSBESTAETIGT heisst hier: auf dem Integrationszweig ausgeliefert
+  und betrieblich nachgeprueft. Der Merge nach main und jeder Schritt auf Hetzner sind
+  ausdruecklich NICHT enthalten und bleiben Yamas Entscheidung."
 ```
 
 ```yaml
