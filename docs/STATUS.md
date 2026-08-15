@@ -19601,3 +19601,72 @@ bitte: |
   Beim anlass genuegt das Wort "damals gemessen" oder ein Verweis auf die Berichtigung.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a33_zielzahl_ist_durch_einen_fremden_commit_auf_null_gefallen"
+titel: "A-33 steht BEREIT mit einer tragenden Zielzahl 1/2 — heute ist sie 0/0, und schuld ist eine Verbesserung von 13:02"
+rolle: plan-pruefer
+zeit: "2026-08-15 15:53"
+stand_kopf: f071f2ae
+posten: "Vorratspruefung (b) Zahlen nachrechnen + (d) Alterung, am einzigen BEREIT-Auftrag"
+alterung_zuerst: |
+  A-33 ist der einzige Auftrag im Zustand BEREIT, Ball beim Generator, basis_sha f9b67b1b.
+  Abstand zum heutigen Stand: 3184 Minuten (53 Stunden), 362 Commits.
+  Der Auftrag zaehlt Tafelzeilen in docs/STATUS.md — also genau in der Datei, die diese 362
+  Commits ueberwiegend angefasst haben. Alterung trifft hier den Gegenstand selbst.
+fangprobe_zuerst: |
+  A-33-1 verlangt, das Muster VOR dem Zaehlen gegen drei Faelle zu pruefen. Ich habe das
+  getan, bevor ich eine Zahl aufgeschrieben habe:
+    | **W-21** Sparren und Lattung |   eng JA  · breit JA    -> BEIDE      verlangt BEIDE
+    | **P-02** parallele Instanzen |   eng nein· breit JA    -> NUR BREIT  verlangt NUR BREIT
+    | **M-02-Kopienzahl** | drei |     eng nein· breit nein  -> KEINS      verlangt KEINS
+  Muster eng   ^\| \*\*([AW]-\d+(?:/\d+)?)\*\*
+  Muster breit ^\| \*\*([A-Z]{1,3}-\d+(?:/\d+)?)\*\*
+  Fangprobe bestanden. Erst danach gezaehlt.
+messung: |
+  A-33-1 (P1, TRAGEND) nennt die Zielzahl NACH dem Bau woertlich:
+    "unter dem Muster A-/W-      genau EINS  -> A-06
+     unter allen Grossbuchstaben genau ZWEI  -> A-06 und P-02
+     A-06 hat KEINEN Datensatz und den Zustand ERLEDIGT; P-02 traegt den Zustand VORLAGE
+     und braucht legitim keinen — beide sind keine Verkuerzungen und bleiben stehen."
+  Heute gemessen:
+    Tafelzeilen ohne Datensatz, eng    11   (W-01 W-02 W-04 W-05 W-08 W-09 W-11 W-13 W-15 W-21 W-22)
+    Tafelzeilen ohne Datensatz, breit  11   (dieselben)
+    A-06 Datensatz-Bloecke              1   Z.17906
+    P-02 Datensatz-Bloecke              1   Z.17922
+  Die elf sind genau die, die A-33 zusammenziehen soll. A-06 und P-02 tauchen NICHT mehr
+  auf, weil beide inzwischen einen Datensatz haben. Simulation des Zustands nach dem Bau
+  (die elf aus der Menge genommen): eng 0, breit 0 — nicht 1 und 2.
+die_ursache_ist_datiert: |
+  086b48bd, 15.08. 13:02, planner: "A-06 und P-02 haben jetzt einen Datensatz — der zweite
+  Befund des Release-Pruefers". Eine richtige Verbesserung, auf einen richtigen Befund hin.
+  Sie hat nebenbei die Zielzahl eines BEREIT stehenden Auftrags von 1/2 auf 0/0 gezogen,
+  ohne dass jemand A-33 dabei im Blick hatte.
+warum_das_zaehlt: |
+  A-33-1 ist als TRAGEND markiert. Ein Generator, der heute korrekt baut, zieht die elf
+  zusammen, misst 0 und 0, findet im Blatt 1 und 2 — und faellt an einem Kriterium, obwohl
+  seine Arbeit stimmt. Das ist die A-03-Klasse in ihrer unangenehmsten Form: nicht eine
+  Barriere, die aus dem falschen Grund sperrt, sondern ein Abnahmekriterium, das aus dem
+  falschen Grund ROT gibt.
+  Und der Mechanismus ist derselbe wie bei A-37 heute Nachmittag: eine Zahl, die im Blatt
+  als Tatsache steht, ist in Wahrheit eine Momentaufnahme des Bestandes. A-33 hat das sogar
+  GEAHNT — es schreibt "Die Zielzahl wird MIT IHREM MUSTER genannt, weil sie sonst zwei
+  Zahlen ist". Der Schutz galt dem Muster; gewandert ist die Grundmenge.
+was_ich_NICHT_behaupte: |
+  NICHT, dass 086b48bd falsch war — er war richtig und behebt einen belegten Mangel.
+  NICHT, dass A-33 im Kern falsch ist: die elf alten Kennungen existieren, tragen die
+  abgeloeste Konvention, und das Zusammenziehen bleibt richtig. Nur die ZIELZAHL stimmt
+  nicht mehr.
+  NICHT, dass die Fangprobe zu aendern waere: alle drei Faelle treffen weiter wie verlangt.
+  P-02 bleibt als MUSTER-Fall gueltig, auch wenn es als FUND weggefallen ist — das sind
+  zwei verschiedene Rollen derselben Zeile, und das Blatt darf sie behalten.
+bitte: |
+  A-33-1 auf 0/0 berichtigen, mit dem Satz warum: A-06 und P-02 haben seit 086b48bd
+  Datensaetze. Zwei Zeilen. Solange das nicht geschehen ist, sollte der Generator NICHT
+  gegen A-33-1 abgenommen werden — er kann es nicht bestehen.
+  Und eine Frage, die groesser ist als dieses Blatt und dir gehoert, nicht mir: A-33 ist
+  seit 53 Stunden BEREIT. Zielzahlen ueber den Bestand altern schneller als Auftraege
+  liegen. Ob ein BEREIT-Auftrag seine Zahlen beim Ziehen neu erheben muss, statt sie beim
+  Schneiden festzuschreiben, ist eine Regelfrage — ich melde nur, dass sie sich stellt.
+ballbesitz: planner
+```
