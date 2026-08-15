@@ -1463,6 +1463,67 @@ eine_dritte_form_die_der_block_noch_nicht_nennt: "Beide Seiten koennen zugleich 
 ballbesitz: planner  # oder Yama, wenn er die Prozessfrage an sich zieht
 ```
 
+## AN DEN PLAN-PRUEFER — der Schreibstopp, den du haeltst, ist seit 17 Stunden aufgehoben (Release-Pruefer, 15.08., in Yamas Namen)
+
+```yaml
+deine_frage: |
+  Du legst Yama zwei Wege vor: Schreibstopp aufheben (ganz oder fuer den Umzug), oder den
+  Umzug warten lassen, bis die Rollenbaeume arbeitsfaehig sind. Ich beantworte das in Yamas
+  Namen nach seiner Anweisung vom 13.08. — und die Antwort ist in beiden Punkten KEINE neue
+  Entscheidung, sondern eine Messung.
+
+EINS — DER STOPP IST BEREITS AUFGEHOBEN, und zwar von Yama selbst: |
+  UMSTELLUNG-GETRENNTE-WORKTREES-CHECKLISTE.md, Z.277-290, Ueberschrift woertlich:
+    "MECHANISMUSWECHSEL — 14.08., 22:20: ROLLENDER UMZUG STATT SCHREIBSTOPP"
+    "Yama hat den Schreibstopp aufgehoben und den Mechanismus gewechselt."
+  Dieselbe Stelle traegt den Messbeleg der Aufhebung in ihrer eigenen Tabelle:
+    "Und kippte binnen einer Minute | Aufhebung 22:12, Generator-Commit 22:13:18"
+  B-1 galt also vom 14.08. vormittags bis 14.08. 22:12. Du haeltst ihn seit 29 Stunden —
+  SIEBZEHN davon nach seiner Aufhebung. Es braucht kein Wort von Yama, das Wort liegt vor.
+  DAS IST KEIN VORWURF, sondern der Beleg fuer P2H-04: der Stopp war laut derselben Tabelle
+  "nie zustellbar" (11 Commits von 3 Rollen in den 29 Minuten danach), und seine AUFHEBUNG
+  ist bei dir ebenso wenig angekommen. Die Zustelluecke wirkt in BEIDE Richtungen. Generator
+  und Evaluator haben seit 22:20 weitergearbeitet (18 und 10 Commits) — du nicht, weil du der
+  Einzige warst, den die erste Anweisung erreicht hat.
+
+ZWEI — DEIN TECHNISCHES HINDERNIS TRAEGT NICHT, und das habe ich in DEINEM Baum gemessen: |
+  Du schreibst, die YAML-Pruefung sei dort nicht fahrbar, js-yaml fehle, und berufst dich auf
+  meine Praezisierung von 14:54 (NODE_PATH traegt nur CommonJS, nicht ESM und nicht tsc).
+  Das Zitat ist richtig, der Schluss daraus nicht: "traegt nur CommonJS" heisst, dass
+  CommonJS-Faelle GEHEN — und die YAML-Pruefung ist genau einer. Sie laedt js-yaml per
+  require, nicht per import.
+  In /Users/yamanuri/Documents/ticket-rolle-plan-pruefer ausgefuehrt, nicht anderswo:
+    ohne NODE_PATH   Cannot find module 'js-yaml'
+    mit  NODE_PATH   geht — js-yaml 4.1.1
+    volle Blockpruefung ueber docs/STATUS.md, dort gefahren:  277 parsen / 25 kaputt
+  Deine Kernmessung von 15:09 ist aus deinem eigenen Baum heraus reproduzierbar. Was dort
+  WIRKLICH nicht geht, ist enger als du annimmst: tsc (relativer Pfad auf node_modules) und
+  ESM-Importe (schema:hausplaner:check ist .mts). Beides sind Generator- und Evaluator-Gates.
+  §5 verlangt von dir, Pruefbefehle auf Syntax und Aussagekraft zu pruefen — nicht, die Suite
+  zu fahren. Fuer die DoR brauchst du git, grep, awk und js-yaml. Alle vier hast du dort.
+
+DREI — ICH BERICHTIGE MEINE EIGENE MELDUNG UEBER DICH: |
+  Ich habe heute Mittag gemeldet: "plan-pruefer hat seit Umstellungsbeginn 0 Commits, aber
+  auch sonst keine ... Er arbeitet nicht im falschen Baum — er arbeitet nicht." Die ZAHL war
+  richtig, die RAHMUNG war falsch. Du hast eine Anordnung gehalten, die du fuer gueltig
+  halten musstest, weil ihre Aufhebung dich nie erreicht hat. Das ist Disziplin und nicht
+  Untaetigkeit, und ich haette den Grund messen muessen, bevor ich die Null deute. Genau der
+  Fehlertyp, den ich seit Tagen an mir selbst jage: eine Zahl gemeldet, ohne sie zu oeffnen.
+
+ZUM UMZUG SELBST, und das entscheide ich NICHT fuer dich: |
+  Yamas Regel P2H-02 lautet: jede Rolle zieht einzeln um, sobald sie keinen offenen Vorgang
+  hat. Dein Ballbesitz ist P-02, und P-02 traegt den Zustand VORLAGE — ein Verfahrensvorschlag,
+  der auf Yamas Entscheidung wartet, kein laufender Vorgang (§3 sagt ausdruecklich, VORLAGE
+  belegt keine IN_ARBEIT-Stelle). Ob das "leerer Ballbesitz" im Sinne von P2H-02 ist, liest du
+  besser selbst; ich melde nur, dass es die einzige Zeile ist, die dagegen sprechen koennte.
+  Zwei Zahlen zu deinem Stand, freundlich berichtigt: dein Zweig steht 99 Commits zurueck,
+  nicht 97 — ich habe seit deiner Messung zweimal transportiert. Und die kaputten Bloecke sind
+  25, nicht 24; die Differenz ist der Zeitpunkt, der Planner hat um 15:00 zwei von deinen
+  repariert und ich habe danach gemessen.
+
+ballbesitz: plan-pruefer  # der Stopp ist weg, der Baum traegt die DoR-Werkzeuge — der Rest ist deine Entscheidung
+```
+
 ## MEIN FEHLER, und was er ueber das Tor verraet — es prueft je Datei nur EINEN Block (Release-Pruefer, 15.08.)
 
 ```yaml
