@@ -1463,6 +1463,73 @@ eine_dritte_form_die_der_block_noch_nicht_nennt: "Beide Seiten koennen zugleich 
 ballbesitz: planner  # oder Yama, wenn er die Prozessfrage an sich zieht
 ```
 
+## MEIN FEHLER, und was er ueber das Tor verraet — es prueft je Datei nur EINEN Block (Release-Pruefer, 15.08.)
+
+```yaml
+mein_anteil_zuerst: "Ich habe die Statuswahrheit mit ungueltigem YAML committet. Meine zwei
+  DoR-Votumsfelder standen als dor_votum: \"...\" in Anfuehrungszeichen, und danach habe ich
+  weitere eingerueckte Zeilen angehaengt (den gemeinsamen Bau-Ort-Befund). Nach dem
+  schliessenden Quote ist das kein gueltiges YAML. Der Planner hat es gefunden und repariert
+  (e17745c4), indem er auf einen Block-Skalar umgestellt hat — und er hat dafuer im gemeinsamen
+  Checkout geschrieben, also gegen die Richtung, die er selbst vorantreibt."
+
+seine_reparatur_geprueft_statt_geglaubt: >
+  Bloecke, die parsen:   vorher 274 von 301   nachher 276 von 301
+  Genau ZWEI geheilt, und es sind meine.
+  Behauptung "kein Wort geaendert": Text ohne Anfuehrungszeichen, Striche und Leerraum
+  verglichen — IDENTISCH. Sie traegt.
+
+DER EIGENTLICHE FUND, und er ist groesser als mein Fehler: >
+  Warum ist das durchgekommen? commit-pruefen.sh:501 liest den YAML-Kopf mit
+  t.match(<zaun>yaml ... <zaun>) — die Zaunzeichen hier bewusst UMSCHRIEBEN, siehe unten.
+  t.match OHNE das g-Flag liefert genau EINEN Treffer. Das Tor prueft je Datei also den ERSTEN
+  yaml-Block und keinen weiteren. Mein kaputter Block war der 250-und-etwas-te von 301.
+  Fuer ein Auftragsblatt mit einem Kopf ist das richtig. Fuer docs/STATUS.md, die 301 Bloecke
+  traegt und nach §16 die einzige Statuswahrheit ist, prueft es 0,3 Prozent der Datei.
+
+die_folge_gemessen_und_ausdruecklich_NICHT_ueberhoeht: >
+  25 von 301 Bloecken parsen heute nicht. Fehlerklassen:
+    15x  bad indentation of a mapping entry
+     4x  unknown escape sequence
+     2x  can not read a block mapping entry (multiline key)
+     2x  unexpected end of the stream within a double quoted scalar
+     1x  expected a single document in the stream
+     1x  duplicated mapping key
+  KEIN AKUTER SCHADEN, und das gehoert dazu: die Zahl ist stabil, nicht wachsend —
+    bc2125d9  14.08. 22:15   262 von 285 parsen   (23 kaputt)
+    a041590f  15.08. 10:43   264 von 289 parsen   (25 kaputt)
+    HEAD      15.08. 15:04   276 von 301 parsen   (25 kaputt)
+  Es ist ein Dauerzustand seit mindestens gestern und kein neuer Bruch. Niemand liest diese
+  Bloecke heute maschinell — mein eigenes Driftwerkzeug liest sie per Regex, weshalb es nichts
+  gemerkt hat. Aber A-22 hat die Statuswahrheit ausdruecklich MASCHINELL LESBAR gemacht, und
+  dieser Anspruch ist zu 92 Prozent erfuellt, nicht zu 100.
+
+ZULIEFERUNG AN A-37, keine Nachforderung: "A-37 fasst commit-pruefen.sh an und schaerft dort die
+  Fehlerunterscheidung — es ist der eine Auftrag, bei dem das g-Flag ohne Umweg mitgenommen
+  werden koennte. IM SCOPE VON A-37 STEHT ES NICHT, und ich fordere es nicht nach: eine
+  Zulieferung, die kein Kriterium hat, kommt zur Haelfte an, das hat der Plan-Pruefer bei W-08
+  zweimal erlebt. Wer es will, schneidet es als Kriterium oder als eigenen Auftrag. Ich melde
+  nur, dass der guenstigste Zeitpunkt dafuer gerade offen ist."
+
+UND DERSELBE FEHLER EIN ZWEITES MAL, IN DIESEM BLOCK, binnen Minuten: >
+  Ich hatte den Regex des Tores hier woertlich zitiert — samt seiner drei Zaunzeichen. Damit
+  war MEIN Block an dieser Stelle vorzeitig geschlossen: die Extraktion lieferte 16 Zeilen
+  statt der vollen Laenge, und die 16 parsten zufaellig. Meine Zaunbilanz merkte nichts, weil
+  sie nur Zeilen zaehlt, die MIT einem Zaun BEGINNEN — die Zeichen standen mitten in der Zeile.
+  Gefunden, weil ich nach dem Schreiben nachgesehen habe, ob mein eigener Block parst, und die
+  Zeilenzahl nicht zur Blocklaenge passte. Behoben durch Umschreiben statt Zitieren.
+  DAS IST DIE LEHRE DES GANZEN BLOCKS, an mir selbst: ein Befund ueber kaputte Bloecke, der
+  beim Schreiben einen kaputten Block erzeugt. Zaunzeichen gehoeren nicht in einen yaml-Wert.
+
+was_ich_ab_sofort_selbst_tue: "Mehrzeilige Werte in docs/STATUS.md schreibe ich als
+  Block-Skalar und nicht als Anfuehrungszeichen-Wert mit Fortsetzung. Zaunzeichen umschreibe
+  ich, statt sie zu zitieren. Und ich pruefe nach dem Schreiben ALLE Bloecke UND die
+  Zeilenzahl des eigenen — eine Zaunbilanz, die nur Zeilenanfaenge zaehlt, sieht den Fall
+  nicht."
+
+ballbesitz: —  # Befund gemeldet; A-37 gehoert dem Planner, die Tor-Frage entscheidet er oder Yama
+```
+
 ## AN YAMA — der Umzug und deine node_modules-Bedingung sind heute unvereinbar, und ich habe den Preis beziffert (Release-Pruefer, 15.08.)
 
 ```yaml
