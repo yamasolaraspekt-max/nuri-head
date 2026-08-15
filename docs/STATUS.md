@@ -19912,3 +19912,53 @@ bitte: |
   Eine Zahl aendern: F-051s Belegstelle von :73 auf :101. Sonst nichts.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "alle_84_blaetter_gegen_ihre_bloecke_und_ein_fehler_in_meinem_zaehler"
+titel: "84 Blaetter vollstaendig gegen die Bloecke gefahren — kein neuer Fund, dafuer eine dreifache Bestaetigung fuer A-33 und ein Zaehlfehler bei mir"
+rolle: plan-pruefer
+zeit: "2026-08-15 16:10"
+stand_kopf: b160f6d8
+posten: "Pflichtteil 2 der Wache, diesmal ueber ALLE Blaetter statt ueber drei"
+messung: |
+  docs/auftraege/aktiv/ enthaelt 84 Blaetter. Jedes gegen die Datensaetze in docs/STATUS.md,
+  mit BEIDEN Schreibweisen (W-05-1-... sucht W-05/1 UND W-05):
+    Blaetter gesamt                                84
+    Datensatz gefunden                             70
+    ausdruecklich STILLGELEGT (braucht keinen)      1   A-33-zehn-tafelzeilen...
+    ohne Datensatz                                 13
+  Von den 13 sind ELF die alten W-Kennungen: W-01 W-02 W-04 W-05 W-08 W-09 W-11 W-13
+  W-15 W-21 W-22. Die restlichen zwei sind A-08-Blaetter und ein Fehlalarm von mir (unten).
+DREIFACHE BESTAETIGUNG FUER A-33: |
+  Dieselben elf Kennungen sind mir heute auf drei unabhaengigen Wegen begegnet:
+    (1) A-33-Zielzahl-Pruefung: 11 TAFELZEILEN ohne Datensatz, ueber das [AW]-Muster
+    (2) das Tor beim Commit: A-30 meldet dieselben elf als Deckungsluecke,
+        "zwei Schreibweisen fuer EINEN Vorgang (Tafel W-01, Datensatz W-01/1)"
+    (3) jetzt: 11 BLAETTER ohne Datensatz, ueber die Dateinamen
+  Drei Verfahren, drei Gegenstaende (Tafelzeilen, Barriere, Blattnamen), dieselbe Elf.
+  A-33 zaehlt richtig — nur seine ZIELZAHL nach dem Bau ist ueberholt, wie um 15:53 gemeldet.
+MEIN ZAEHLFEHLER, und er betrifft heutige Meldungen: |
+  Ich habe A-08 als "Blatt ohne Datensatz" gemessen. FALSCH: Z.2622 traegt
+  zustand: BETRIEBSBESTAETIGT, passend zur Tafelzeile. Gefangen, bevor ich es gemeldet habe.
+  Die Ursache liegt in MEINEM Werkzeug, nicht im Bestand. Mein Python-Zaehler erkennt Bloecke
+  ueber die Zaunlogik: ```yaml oeffnet, ``` schliesst. Bei den 25 kaputten yaml-Bloecken
+  laeuft diese Logik aus dem Takt — oeffnet ein neuer Zaun, bevor der alte geschlossen ist,
+  faellt der vorherige Block ersatzlos weg.
+  Auswirkung, gegengemessen mit grep statt Parser:
+    zustand-Zeilen        82   ich hatte 81 gemeldet
+    BETRIEBSBESTAETIGT    73   ich hatte 72 gemeldet
+    auftrag-Zeilen       136
+  Genau ein Block zu wenig, und zwar dieser. Alle uebrigen Zustandszahlen von heute halten.
+  NICHT betroffen: die A-33-Zielzahl und die Formelsammlungs-Zeiger — beide habe ich ueber
+  Regex auf den Gesamttext gemessen, nicht ueber die Zaunlogik.
+die_lehre: |
+  Fuer docs/STATUS.md ist grep auf die Feldzeile zuverlaessiger als ein Zaun-Parser,
+  solange kaputte Bloecke darin liegen. Bemerkenswert: a26-ball-drift.sh macht es genau so
+  (grep -m1 auf ^ballbesitz:) — das ist heute das ZWEITE Mal, dass die Barriere robuster
+  gebaut ist als mein Einzeiler. Beim ersten Mal war es das Abschneiden ab #.
+was_daraus_NICHT_folgt: |
+  Kein Fund gegen den Bestand. Die 84 Blaetter sind in Ordnung; die elf offenen sind
+  bekannt und haben mit A-33 einen laufenden Auftrag. Ich melde diese Runde ausdruecklich
+  als OHNE FUND — und den Fehler, den ich dabei an mir selbst gefunden habe.
+ballbesitz: "—"  # kein Ball: Bestandspruefung ohne Fund, der Zaehlfehler ist meiner und behoben
+```
