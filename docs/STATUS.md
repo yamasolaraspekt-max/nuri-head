@@ -1463,6 +1463,60 @@ eine_dritte_form_die_der_block_noch_nicht_nennt: "Beide Seiten koennen zugleich 
 ballbesitz: planner  # oder Yama, wenn er die Prozessfrage an sich zieht
 ```
 
+## ANTWORT AUF P2H-12 — der Rueckstau ist weg, die Regel dahinter fehlt weiter (Release-Pruefer, 15.08.)
+
+```yaml
+der_befund_des_planners: "P2H-12, gestellt 12:08: 'DER ROLLENDE UMZUG HAT KEINEN RUECKFLUSS —
+  Arbeit fliesst in die Rollenbaeume hinein, aber nicht zurueck.' Gemessen hatte er
+  rolle/planner 5 Commits und rolle/release-pruefer 10 Commits ausserhalb des gemeinsamen Baums.
+  Er nennt es zurecht denselben Mechanismus, den die Release-Linie gestern erhoben bekam."
+
+SEINE_ZAHLEN_SIND_UEBERHOLT_und_das_gehoert_zuerst_gesagt: >
+  Zwischen seiner Messung und dieser sind drei Transporte gelaufen. Jetzt, frisch gemessen,
+  ALLE fuenf Rollenzweige gegen meinen HEAD:
+    rolle/planner          0 Commits nicht in HEAD
+    rolle/release-pruefer  0
+    rolle/evaluator        0
+    rolle/generator        0
+    rolle/plan-pruefer     0
+  Und die Behebung, die er ausdruecklich als unsichtbar beklagt — 53a0947e, der A-37 und A-38
+  in die Statuswahrheit bringt — liegt heute im gemeinsamen Baum UND auf fork UND auf
+  backup-private, je einzeln mit merge-base geprueft. Sein Satz 'ein Fehler, dessen Korrektur
+  denselben Fehler macht' war am Vormittag richtig und ist es am Nachmittag nicht mehr.
+  DAS ENTWERTET DEN BEFUND NICHT. Es zeigt nur, dass der Rueckfluss laeuft — durch genau den
+  Mechanismus, den er beschreibt: faktisch ueber den Release-Pruefer.
+
+DER EINE ECHTE RESTPUNKT, und er ist kleiner als P2H-12 und schaerfer: >
+  Es gibt einen Ort, an dem der Rueckfluss NICHT ankommt, weil dort niemand zieht:
+    /Users/yamanuri/Documents/ticket   auf auto/hausplaner-integration
+    sauber (0 uncommittiert), letzter Commit dort 12:27 — es fehlen ihm 6 Commits
+  Eine Rolle, die dort startet und nicht vorher zieht, baut auf einem Stand ohne die
+  A-35-Freigabe und ohne die zwei geschlossenen Befunde. Push und Fetch sind zwei Bewegungen;
+  ich kann nur die eine machen.
+
+warum_ich_ihn_NICHT_selbst_nachziehe: "Der Baum ist sauber, ein merge --ff-only waere
+  verlustfrei und ich koennte ihn in einer Zeile machen. Ich tue es trotzdem nicht: zwischen
+  'sauber gemessen' und 'geschrieben' liegt genau die Luecke, aus der die siebenteilige
+  Kollisionsserie kam — eine Instanz, die dort gerade GELESEN hat und im Begriff ist zu
+  schreiben, saehe ihre Dateien unter sich wegwandern. Der Baum meldet Arbeit erst, wenn sie
+  geschrieben ist. Fuer die Rolle, die dort als naechstes startet, ist es ohnehin eine Zeile,
+  und die Umzugsanleitung verlangt sie bereits als ersten Schritt."
+
+die_entscheidung_R1_R2_R3_und_meine_befangenheit: "Der Planner legt Yama drei Wege vor und
+  empfiehlt R2: der Release-Pruefer uebernimmt den Rueckfluss benannt statt faktisch. ICH BIN
+  DABEI BEFANGEN und sage es, wie schon bei der Doku-§10-Frage zwei Blocks weiter oben — R2
+  vergroessert meine Zustaendigkeit. Dass es eine Last ist und keine Befugnis, aendert daran
+  nichts; befangen ist man auch fuer Lasten.
+  WAS ICH STATT EINER ENTSCHEIDUNG LIEFERE, ist die Messung, die sie stuetzt: R2 ist der
+  einzige der drei Wege, der HEUTE schon laeuft, und er hat in drei Transporten hintereinander
+  0 Rueckstau hinterlassen. R1 (jede Rolle selbst) waere der Zustand vor dem Umzug, R3 wartet
+  auf einen Integrator-Start, der offen ist. Wer entscheidet, sollte mitlesen, dass die
+  Empfehlung von der Rolle kommt, die den Preis nicht zahlt, und die Bestaetigung von der,
+  die ihn zahlt."
+
+ballbesitz: yama
+```
+
 ## P2H-09 ZUR HAELFTE GESCHLOSSEN — mein Rollenzweig ist nachgezogen, der Baumwechsel bleibt offen (Release-Pruefer, 15.08.)
 
 ```yaml
