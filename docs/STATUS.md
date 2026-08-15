@@ -85,8 +85,8 @@
 | **W-37** Rechenpanels | `BETRIEBSBESTAETIGT` | — | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben | · **EVALUATOR 13.08.: NACHBESSERN, EIN Punkt (§12.2) — `W-37-6`.** **Acht der neun Kriterien sind erfüllt**, jedes einzeln nachgemessen. **Der Befund trifft eine verlangte HANDLUNG, die nicht ausgeführt wurde:** das Kriterium sagt wörtlich *„Die REGISTERZEILE wird nachgezogen"* — am Commit gemessen enthält `225a7f1a` **0** Treffer für `REGISTER.md`, und `:124` nennt weiterhin **196 Z**, während `EngineFlaeche.tsx` an **drei** Ständen (Basis, Bau, HEAD) je **199** hat. *Der Bericht sagt es selbst:* „die Berichtigung gehört ins Register" — der Bau hat den Befund gesehen, richtig gemessen und bewusst nicht ausgeführt. **Warum ich das nicht durchgehen lasse:** der Scope nennt das Register **weder** als Ziel **noch** als Nicht-Ziel (beide Listen gelesen; nach §5 gilt dann das Kriterium), die Handlung ist an **vier** echten Ständen üblich und möglich (`fa7547c7` W-33, `3dae69b4` W-35, `3abd8e79` W-39, `7c782f76` W-34 — alle enthalten `REGISTER.md`), und W-37 ist nach eigener Aussage die **letzte freie Ablesung**. **Ausdrücklich nicht beanstandet:** die Messung 196↔199 stimmt. **Was erfüllt ist:** die **acht** Adapter nach **Signatur** gezählt (das Namensmuster `als*Eingabe` findet nur sechs — das Klassenmerkmal trägt), `SCHWERE_ANZEIGE` mit drei Graden je Zeichen **und** Wort (`EngineFlaeche.tsx:31-35`), sechs Import-Wächter namentlich plus drei **Nur-Quelle**-Fälle getrennt, `:522/:527/:538` selbst geöffnet, und 0 Doppel über **253** Blattdateien. Suite **1750/1750**, tsc exit=0. **Die Gegenprobe des Kriteriums nachgefahren:** am Bau-Stand sind es **vier** von sechs richtigen Registerzahlen, nicht fünf — *kein Befund gegen das Blatt*, denn `StartView.tsx` hatte am Basis-Stand `a94d91ac` wirklich 267 und wuchs erst danach. **Drei eigene Messfehler offengelegt**, darunter ein vertippter Basis-SHA, dessen stiller Fehlschlag dreimal „0 Zeilen" ergab. · **Der Generator schrieb: acht Kriterien belegt, sieben Blätter, Stufe 6 vollständig.** · **RUNDE 2 — EVALUATOR 13.08.: ABGENOMMEN.** Nach §12.4 **alle neun Kriterien erneut gefahren**. **Der Befund ist behoben und A-20-4 dabei eingehalten:** `REGISTER.md:124` nennt jetzt **199 Z** mit der alten Zahl **durchgestrichen daneben** samt Datum und Anlass — nicht gelöscht; `EngineFlaeche.tsx` habe ich mit **199** selbst nachgezählt. Und der Befund steht nicht nur im Register: `7-GRENZEN` trägt einen eigenen Abschnitt mit den drei Ständen und dem Satz *„Die Zahl war nicht veraltet, sie war falsch."* Suite **1750/1750**, tsc exit=0. **Mein eigener Messfehler in dieser Runde, und es ist der dritte derselben Klasse an einem Tag:** bei `W-37-5` maß ich erst **fünf**, dann **vier** Importe — richtig sind **sechs**. Zwei Ursachen, beide in meinem Muster: `enginePanelTreppe` importiert **mehrzeilig** (`^import` greift nicht), und `sparrenVorbehalt:3` sowie `zweiEnginesSchweigen:3` importieren **mit Dateiendung** `.ts`. Erst `from [^]*dashboard/enginePanels(\.ts)?` fängt alle sechs. *Bemerkenswert daran:* genau dieses Kriterium ist entstanden, weil der Bauende dieselbe Zahl zu klein gemessen hat, und sein Blatt schreibt als Lehre die **Zwei-Muster-Regel** auf — ich bin heute zum dritten Mal in dieselbe Klasse gelaufen. Die Lehre steht bei mir noch als Kenntnis, nicht als Handgriff.
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 | **A-36** Wer schreibt · §14 auf Hunk-Ebene | `ZURUECKGEZOGEN` | – | Schnitt 14.08. · Basis `80ab2d8d` | **ZURUECKGEZOGEN von Yama am 14.08. (Entscheidung V-02).** Begruendung woertlich: A-36 erklaert die Worktree-Trennung zum Nicht-Ziel und widerspricht damit der spaeteren, verbindlichen Entscheidung; **ein nur meldender Hunk-Waechter verhindert Richtung B nicht.** Verwertbare Teile — Hunk-Erkennung, §14-Verschaerfung, die drei historischen Positivproben, die Unterscheidung Dateiliste/`--numstat`/tatsaechlicher Diff-Inhalt — laufen unter **P2D** weiter. Kein History-Rewrite: der bisherige Eintrag bleibt als Beleg im Datensatz. **YAMA HAT §14 SELBST ENTSCHIEDEN** (14.08.): *„Das ist eine Regelaenderung, sie liegt bei mir, und ich entscheide sie hiermit: ja. Formuliert sie als Auftrag, ich brauche sie nicht vorgelegt."* Und den Waechter freigegeben: *„klein genug, um neben ihnen zu laufen; alles andere wartet."* **DER GRUND IST GEMESSEN:** `docs/STATUS.md` traegt 15.687 Zeilen und 97 Auftragsdatensaetze, **58 % aller Commits des 13.08. fassen sie an**, und **37 von 40 fassen NUR sie an** — die Kollision entsteht INNERHALB der Datei, nicht zwischen Dateien. Ueber 500 Commits schreiben **fuenf Rollen praktisch gleichauf** (141/84/84/84/76). **Damit ist `--name-only` eine Frage, deren Antwort immer dieselbe ist.** Der Waechter ordnet Hunks der naechststehenden Abschnittsueberschrift zu und meldet `beruehrt: A-33 (11 Z.), W-12/1 (38 Z.)` statt `modified`. **K5 ist die tragende Kante: er MELDET, er sperrt nicht** — A-30 hat an zwoelf Fehlalarmen gemessen, was eine zu scharfe Barriere kostet. **A-36-3 ist die Positivprobe an drei echten Faellen** dieser Nacht (`ef273926`, `93960252`, `5ac659bf`), denn ein Waechter, den man nie sprechen gesehen hat, ist von einem kaputten nicht zu unterscheiden. **NICHT im Scope:** die Aufteilung auf 97 Dateien (Yama entscheidet sie NACH zwei Tagen Waechterlauf), Claim-in-den-Commit, jede Aenderung an `docs/STATUS.md` selbst. |
-| **A-37** Rollen-Tor: Baum, STATUS-Sperre, drei Fehlerursachen | `ENTWURF` | **plan-pruefer** | Schnitt 14.08. 22:35 · Basis `bc2125d9` | **Blatt** `docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md` · Rot-Belege am Basis-SHA gemessen: `rollen-tor.sh` existiert nicht, `worktree` hat **0 Treffer** in 743 Zeilen `commit-pruefen.sh`, keine `STATUS.md`-Sperre, `:503` meldet alle drei Fehlerarten gleich. **Elf Kriterien**, A-37-2 und A-37-7 sind die **Positivfaelle**. Gebaut wird im Generator-Worktree. **DoR steht aus.** |
-| **A-38** Merges laufen am Tor vorbei | `ENTWURF` | **plan-pruefer** | Schnitt 14.08. 23:00 · Basis `0f05f8bf` | **Blatt** `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md` · Gemessen: **41 von 309** Commits in 48 h ohne Rollenmarke, **ausnahmslos Merges**; von 32 Merges tragen **4** eine Marke. Versionierter `commit-msg`-Hook plus `core.hooksPath`. **Neun Kriterien**, A-38-6 (greift im ZWEITEN Worktree) ist das tragende. **Kein Eingriff in `commit-pruefen.sh`** — dort arbeitet A-37. **DoR steht aus.** |
+| **A-37** Rollen-Tor: Baum, STATUS-Sperre, drei Fehlerursachen | `ENTWURF` | **planner** | Schnitt 14.08. 22:35 · Basis `bc2125d9` | **Blatt** `docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md` · Rot-Belege am Basis-SHA gemessen: `rollen-tor.sh` existiert nicht, `worktree` hat **0 Treffer** in 743 Zeilen `commit-pruefen.sh`, keine `STATUS.md`-Sperre, `:503` meldet alle drei Fehlerarten gleich. **Elf Kriterien**, A-37-2 und A-37-7 sind die **Positivfaelle**. Gebaut wird im Generator-Worktree. **DoR steht aus.** |
+| **A-38** Merges laufen am Tor vorbei | `ENTWURF` | **planner** | Schnitt 14.08. 23:00 · Basis `0f05f8bf` | **Blatt** `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md` · Gemessen: **41 von 309** Commits in 48 h ohne Rollenmarke, **ausnahmslos Merges**; von 32 Merges tragen **4** eine Marke. Versionierter `commit-msg`-Hook plus `core.hooksPath`. **Neun Kriterien**, A-38-6 (greift im ZWEITEN Worktree) ist das tragende. **Kein Eingriff in `commit-pruefen.sh`** — dort arbeitet A-37. **DoR steht aus.** |
 | **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`BETRIEBSBESTAETIGT`** | — | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
@@ -17447,7 +17447,7 @@ dor_urteil_plan_pruefer: "plan-pruefer 14.08. 09:26 — §5-DURCHGANG VOLLSTAEND
 ```yaml
 auftrag: "A-37"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner  # DoR 1. Runde NICHT BEREIT — die Restpunkte sind Blattarbeit
 blatt: "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md"
 basis_sha: bc2125d9
 art: "BAU — scripts/rollen-tor.sh, STATUS-Sperre, drei unterscheidbare Fehlerursachen."
@@ -17462,7 +17462,68 @@ claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG (der Plan-
   Merges, und ich fahre die meisten davon. Die DoR prueft Baubarkeit und Messbarkeit, nicht
   Wuenschbarkeit; wo ein Punkt mich belastet, entscheide ich im Zweifel FUER den Auftrag und sage
   es an der Stelle."
-dor_beleg: "steht aus"
+dor_beleg: "NICHT BEREIT — 1. Runde, siehe dor_votum"
+dor_votum: "plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 1. DoR-Runde: NICHT BEREIT
+  — DREI Restpunkte, alle klein und benannt. Das Blatt ist im Uebrigen das sorgfaeltigste dieser
+  Runde; die Restpunkte sind Nachtraege, keine Neuschnitte.
+  WAS TRAEGT, selbst nachgemessen und nicht uebernommen: Basis bc2125d9 existiert und ist Vorfahr
+  von HEAD. ALLE DREI Ist-Belege exakt, am Basis-SHA UND heute: commit-pruefen.sh 743 Zeilen
+  (Blatt 743), grep worktree 0 (Blatt 0), Dateien scripts/ mit rolle|worktree 0 (Blatt keine).
+  Beide zitierten Stellen geoeffnet und sie tragen: :503 leitet den Node-Fehler nach /dev/null
+  und meldet in JEDEM Fall YAML-KOPF, :59-61 ist die bestehende TICKET_ROLLE-Pruefung.
+  Kriterien wirksam rot: A-37-1 rot (Datei fehlt), A-37-8 rot (0 Treffer MODUL/LAUFZEIT), und
+  A-37-6 rot — die 7 STATUS.md-Treffer in commit-pruefen.sh habe ich GEOEFFNET statt gezaehlt:
+  ein Kommentar und drei Aufrufe (a26/a27/a30), jeder mit || true, also Melder und keine Sperre.
+  K2 am Bestand belegt: ticket-rolle-release traegt rolle/release-pruefer — der einzige Fall, in
+  dem Verzeichnis und Rolle auseinandergehen, eine Namensregel scheitert daran wirklich.
+  Konfliktfrei gegen A-38: 0 Commits auf commit-pruefen.sh seit der Basis, und A-38 fuehrt
+  Kein Eingriff in commit-pruefen.sh woertlich als Nicht-Ziel. Positiv- UND Negativfaelle sind
+  da (A-37-2/7 gegen 3/4/5/6) — das Blatt sagt selbst, der Positivfall werde am leichtesten
+  vergessen, und stellt ihn deshalb voran. A-37-8 ist machbar: ohne NODE_PATH liefert der
+  Generator-Baum exakt MODULE_NOT_FOUND, die Kennung, die das Kriterium verlangt.
+  RESTPUNKT 1 (tragend) — der Bau-Ort kann A-37-11 nicht erfuellen. Siehe den gemeinsamen
+  Befund unten.
+  RESTPUNKT 2 — A-37-11 nennt die Suitezahl 1750 (Stand bc2125d9). Sie ist ueberholt: heute
+  1763, weil A-35 dreizehn Zusagen gebracht hat. Wer das Kriterium woertlich misst, meldet eine
+  Abweichung, die keine ist. Die Zahl gehoert an den Bau-Stand gebunden, nicht an bc2125d9.
+  RESTPUNKT 3 — A-37-5 verlangt exit 1 bei leerem TICKET_ROLLE und verweist zugleich auf die
+  bestehende Pruefung in :59-61, die NICHT verdoppelt werden soll. Die macht aber exit 2
+  (selbst geoeffnet). Offen bleibt, ob rollen-tor.sh eigenstaendig pruefen soll und mit welchem
+  Code — bei eigenstaendigem Aufruf braucht es die Pruefung, dann ist sie aber verdoppelt.
+  HINWEIS, kein Restpunkt: der Rot-Beleg ls scripts/ | grep -c rollen-tor gibt bei 0 Treffern
+  grep-exit 1. Unter set -e bricht das ab. Die Ausgabe 0 ist richtig, der Exit-Code taeuscht.
+  NICHT GEPRUEFT und nicht behauptet: ob das Tor fachlich richtig sperrt. Die DoR prueft
+  Baubarkeit und Messbarkeit."
+  GEMEINSAMER BEFUND ZUM BAU-ORT:
+  DER TRAGENDE BEFUND, und er gilt fuer BEIDE Auftraege gleich: KEIN EINZIGER Rollenbaum kann
+  die eigenen Abnahmekriterien pruefen. Gemessen, alle fuenf plus den gemeinsamen:
+    ticket-rolle-planner       node_modules NEIN   typescript NEIN
+    ticket-rolle-generator     node_modules NEIN   typescript NEIN
+    ticket-rolle-evaluator     node_modules NEIN   typescript NEIN
+    ticket-rolle-plan-pruefer  node_modules NEIN   typescript NEIN
+    ticket-rolle-release       node_modules NEIN   typescript NEIN
+    ticket (gemeinsam)         node_modules JA     typescript JA
+  Beide Blaetter tragen gebaut_in: ticket-rolle-generator und verlangen zugleich Suite gruen
+  und tsc exit=0. Das ist dort unerfuellbar, und §5 nennt genau das: kein Kriterium darf
+  unerfuellbar sein, und jeder Befehl ist auf der Zielmaschine zu pruefen.
+  DEN NAHELIEGENDEN AUSWEG HABE ICH GEMESSEN STATT VERMUTET: NODE_PATH auf das node_modules des
+  gemeinsamen Checkouts rettet die YAML-Pruefung wirklich (js-yaml 4.1.1 aufloesbar, im
+  Generator-Baum gefahren) — aber NICHT die Suite. Das npm-Skript ruft
+  ./node_modules/typescript/bin/tsc ueber einen RELATIVEN DATEIPFAD, und NODE_PATH wirkt nur auf
+  require. Rohausgabe: Cannot find module .../ticket-rolle-generator/node_modules/typescript/bin/tsc.
+  Yamas Nicht-Ziel im A-37-Blatt schliesst die andere Abhilfe ausdruecklich aus: kein
+  node_modules je Worktree, kein Symlink, keine Modulkopie.
+  DIE BEHEBUNG IST EINE ZEILE JE BLATT und ich formuliere sie vor, damit sie nicht neu erfunden
+  werden muss: gebaut_in auf den Integrations-Checkout setzen, solange P2H-06 offen ist — der
+  Bau eines Tores, das den Umzug erst ermoeglicht, kann nicht voraussetzen, dass der Umzug
+  schon gelungen ist. Alternativ das Suite-Kriterium ausdruecklich an den Integrations-Checkout
+  binden. Beides ist Planner-Arbeit; ich fasse fremde Blaetter nicht an.
+  UND DAS ERKLAERT MEHR ALS DIESE ZWEI AUFTRAEGE: es ist derselbe Grund, aus dem ich heute frueh
+  meinen eigenen Baumwechsel nicht vollzogen habe (P2H-09), und vermutlich der Grund, warum
+  generator, evaluator und plan-pruefer 0 Commits auf ihren Rollenzweigen haben. Wer umzieht,
+  verliert seine Pruefwerkzeuge. Der Umzug ist nicht an Disziplin gescheitert, sondern an
+  node_modules.
+
 claim: "planner 14.08. 22:35 — Claim VOR dem Schnitt; A-37 hatte null Treffer und null Blaetter."
 nachgetragen: |
   Tafelzeile und Datensatz sind am 15.08. NACHGETRAGEN, nicht mit dem Schnitt angelegt.
@@ -17478,7 +17539,7 @@ nachgetragen: |
 ```yaml
 auftrag: "A-38"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: planner  # DoR 1. Runde NICHT BEREIT — die Restpunkte sind Blattarbeit
 blatt: "docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md"
 basis_sha: 0f05f8bf
 art: "BAU — versionierter commit-msg-Hook plus core.hooksPath."
@@ -17493,7 +17554,66 @@ claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG (der Plan-
   Merges, und ich fahre die meisten davon. Die DoR prueft Baubarkeit und Messbarkeit, nicht
   Wuenschbarkeit; wo ein Punkt mich belastet, entscheide ich im Zweifel FUER den Auftrag und sage
   es an der Stelle."
-dor_beleg: "steht aus"
+dor_beleg: "NICHT BEREIT — 1. Runde, siehe dor_votum"
+dor_votum: "plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 1. DoR-Runde: NICHT BEREIT
+  — ZWEI Restpunkte, einer davon derselbe wie bei A-37.
+  WAS TRAEGT: Basis 0f05f8bf existiert und ist Vorfahr von HEAD. .githooks am Basis-SHA nicht
+  vorhanden (0), core.hooksPath leer — beide Rot-Belege stimmen. Nicht-Ziele scharf, darunter
+  die Abgrenzung zu A-37 an derselben Datei. Positiv- UND Negativfall vorhanden (A-38-3 gegen
+  A-38-2). K6 nennt --no-verify ausdruecklich als NICHT verhinderbar — eine Grenze, die
+  verschwiegen falsches Vertrauen erzeugt, und sie steht da. Rueckweg ist eine Zeile ohne
+  Commit. Das Vorhandene ist vor dem Schnitt geprueft, drei Nachbarn einzeln mit Begruendung.
+  ZWEI EIGENE MESSFEHLER, beide vor dem Votum gefunden und offengelegt, weil sie sonst als
+  Blattfehler durchgegangen waeren:
+    (1) Ich mass grep -c merge = 1 gegen die 4 des Blattes und war im Begriff, eine Abweichung
+        zu melden. Case-insensitive sind es GENAU 4 — die Treffer heissen Merge-Eintraege und
+        UNMERGED. Das Blatt hat recht, mein grep war zu eng.
+    (2) Ich fand einen markenlosen NICHT-Merge und wollte damit das Wort ALLE widerlegen. Der
+        Commit 8a417fe0 traegt release-pruefer (zweite Instanz): — die Marke steht da, nur
+        hinter einem Instanzzusatz, und mein Filter sah nur die ersten 24 Zeichen. Die
+        Behauptung des Blattes traegt.
+  ZUR ZAHLENABWEICHUNG, die ich MELDE ohne sie dem Blatt anzulasten: das Blatt nennt 309
+  Commits, 32 Merges, 41 ohne Marke. Am selben Basis-SHA messe ich im gemeinsamen Graphen 497
+  Commits, 70 Merges, 59 ohne Marke. Der Unterschied ist der MESSORT — der Planner hat in
+  seinem Baum gemessen, dessen Graph kleiner war, und die Zahl waechst rueckwirkend, sobald
+  Zweige zusammengefuehrt werden. Der KERN traegt unveraendert und ist sogar schaerfer als das
+  Blatt sagt: 58 von 70 Merges ohne Rollenmarke, 83 Prozent.
+  RESTPUNKT 1 (tragend) — derselbe Bau-Ort-Befund wie bei A-37, siehe unten. A-38 traegt
+  ebenfalls gebaut_in: ticket-rolle-generator und verlangt in A-38-9 Suite und tsc.
+  RESTPUNKT 2 — A-38-9 nennt 1750 (Stand 0f05f8bf), heute 1763. Wortgleich zu A-37-11.
+  ANMERKUNG zur Reihenfolge: das Blatt sagt staut_hinter A-37 und ueberlaesst die Reihenfolge
+  mir. Sie ist richtig so — A-37 fasst commit-pruefen.sh an, A-38 nicht, und ein Hook, der vor
+  dem Tor scharf wird, sperrt Merges, bevor das Tor sie einordnen kann."
+  GEMEINSAMER BEFUND ZUM BAU-ORT:
+  DER TRAGENDE BEFUND, und er gilt fuer BEIDE Auftraege gleich: KEIN EINZIGER Rollenbaum kann
+  die eigenen Abnahmekriterien pruefen. Gemessen, alle fuenf plus den gemeinsamen:
+    ticket-rolle-planner       node_modules NEIN   typescript NEIN
+    ticket-rolle-generator     node_modules NEIN   typescript NEIN
+    ticket-rolle-evaluator     node_modules NEIN   typescript NEIN
+    ticket-rolle-plan-pruefer  node_modules NEIN   typescript NEIN
+    ticket-rolle-release       node_modules NEIN   typescript NEIN
+    ticket (gemeinsam)         node_modules JA     typescript JA
+  Beide Blaetter tragen gebaut_in: ticket-rolle-generator und verlangen zugleich Suite gruen
+  und tsc exit=0. Das ist dort unerfuellbar, und §5 nennt genau das: kein Kriterium darf
+  unerfuellbar sein, und jeder Befehl ist auf der Zielmaschine zu pruefen.
+  DEN NAHELIEGENDEN AUSWEG HABE ICH GEMESSEN STATT VERMUTET: NODE_PATH auf das node_modules des
+  gemeinsamen Checkouts rettet die YAML-Pruefung wirklich (js-yaml 4.1.1 aufloesbar, im
+  Generator-Baum gefahren) — aber NICHT die Suite. Das npm-Skript ruft
+  ./node_modules/typescript/bin/tsc ueber einen RELATIVEN DATEIPFAD, und NODE_PATH wirkt nur auf
+  require. Rohausgabe: Cannot find module .../ticket-rolle-generator/node_modules/typescript/bin/tsc.
+  Yamas Nicht-Ziel im A-37-Blatt schliesst die andere Abhilfe ausdruecklich aus: kein
+  node_modules je Worktree, kein Symlink, keine Modulkopie.
+  DIE BEHEBUNG IST EINE ZEILE JE BLATT und ich formuliere sie vor, damit sie nicht neu erfunden
+  werden muss: gebaut_in auf den Integrations-Checkout setzen, solange P2H-06 offen ist — der
+  Bau eines Tores, das den Umzug erst ermoeglicht, kann nicht voraussetzen, dass der Umzug
+  schon gelungen ist. Alternativ das Suite-Kriterium ausdruecklich an den Integrations-Checkout
+  binden. Beides ist Planner-Arbeit; ich fasse fremde Blaetter nicht an.
+  UND DAS ERKLAERT MEHR ALS DIESE ZWEI AUFTRAEGE: es ist derselbe Grund, aus dem ich heute frueh
+  meinen eigenen Baumwechsel nicht vollzogen habe (P2H-09), und vermutlich der Grund, warum
+  generator, evaluator und plan-pruefer 0 Commits auf ihren Rollenzweigen haben. Wer umzieht,
+  verliert seine Pruefwerkzeuge. Der Umzug ist nicht an Disziplin gescheitert, sondern an
+  node_modules.
+
 claim: "planner 14.08. 23:00 — Claim VOR dem Schnitt; A-38 hatte null Treffer und null Blaetter."
 staut_hinter: "A-37 — beide ungeprueft. Die Reihenfolge entscheidet der Plan-Pruefer."
 hinweis_basis: "rolle/generator stand beim Schnitt auf bc2125d9, die Basis 0f05f8bf ist drei
