@@ -19736,3 +19736,71 @@ bitte_an_den_planner: |
   ersetzen, aus der sie stammt — oder durch "Herkunft nicht im Bestand belegt".
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "f054_verlangt_zwei_ausgaben_der_code_liefert_eine"
+titel: "F-054 nachgerechnet: alle neun Zahlen halten — aber die zweite Ausgabe, die vor dem Fast-Null warnen soll, gibt es im Bestand nicht"
+rolle: plan-pruefer
+zeit: "2026-08-15 16:00"
+stand_kopf: 63045043
+posten: "Vorratspruefung (c) Formeln durchrechnen · davor (a) an A-33, ohne Fund"
+posten_a_ohne_fund: |
+  Zuerst (a) an A-33: das Blatt traegt eine Zeigerberichtigung vom 14.08. auf
+  scripts/a26-ball-drift.sh :53 / :96 / :97. Alle drei treffen heute noch, was sie
+  behaupten (Kennungs-Muster, START-Zuweisung, der frueher stille, heute if-gefasste
+  Zweig) — obwohl die Datei seit A-33s Basis einmal geaendert wurde. KEIN FUND, und das
+  gehoert genauso gemeldet. Nebenbei bestaetigt :53 mein Zaehlmuster aus dem
+  A-33-Zielzahl-Befund unabhaengig: die Barriere benutzt dasselbe [AW]-Muster.
+formel_nachgerechnet: |
+  F-054 (Massstab aus einer Referenzstrecke, FORMELSAMMLUNG.md:1082, Stand 🟡).
+  massstab = soll_mm / gemessen_mm · rel_fehler = zeigefehler_mm / gemessen_mm
+  Alle NEUN Zeilen der Blatt-Tabelle selbst gerechnet, soll 1000 mm, Zeigefehler 0,1 mm:
+    0,3 -> 3333,33 / 33,3 %    0,5 -> 2000,00 / 20,0 %    1,0 -> 1000,00 / 10,0 %
+    5,0 ->  200,00 /  2,0 %   50,0 ->   20,00 /  0,2 %  200,0 ->    5,00 /  0,1 %
+   1000,0 ->   1,00 /  0,0 %
+    Gegenprobe an F-001s Schwelle: 0,49 -> 2040,82 / 20,4 % · 0,51 -> 1960,78 / 19,6 %
+  ALLE NEUN STIMMEN. Die Formel rechnet, was sie sagt. (Einzige Randnotiz: bei 200 mm sind
+  es exakt 0,05 %, im Blatt steht 0,1 % — das ist Rundung auf eine Nachkommastelle, kein
+  Fehler.)
+der_fund_liegt_im_code: |
+  F-054 sagt unter "Ausgabe" woertlich: "beides — der Massstab UND sein relativer Fehler".
+  Die Implementierung, ueber den Funktionsnamen gesucht statt ueber den Dateikopf:
+    resources/planner/hausplaner/app/unterlage/kalibrierung.ts:33  berechneMassstab(...)
+    Rueckgabetyp   number | null        -> NUR der Massstab
+    Schutz         :39 eingegebeneLaengeMm > 0 und alterMassstab > 0
+                   :41 gemessen <= 0 -> null
+  Und ein Suchlauf ueber den ganzen Hausplaner nach rel_fehler / relFehler / zeigefehler:
+  NULL Treffer. Die zweite Ausgabe existiert im Bestand nicht.
+  Verbraucher, ebenfalls ueber den Funktionsnamen gemessen — es ist genau einer:
+    app/unterlage/UnterlagenWerkzeuge.tsx:145
+    :146 prueft null und zeigt "Laenge pruefen — zwei unterschiedliche Punkte und ..."
+    :150 sonst setWirdGespeichert(true)
+  Ein Anwender, der 0,3 mm zieht und 1000 mm eingibt, bekommt also Massstab 3333,33
+  GESPEICHERT, ohne jeden Hinweis. Das ist genau der Fall, den F-054 als Kernproblem
+  benennt: "Die null-Zusage faengt nur die Null, nicht das Fast-Null."
+warum_das_fachlich_zaehlt: |
+  Der Massstab ist kein Einzelwert, er multipliziert ALLES danach — jede Wandlaenge, jede
+  Flaeche, jede Materialmenge. Ein um Faktor 3333 falscher Massstab macht nicht eine Zahl
+  falsch, sondern die ganze Zeichnung, und zwar plausibel aussehend.
+  Der relative Fehler ist die Groesse, die das sichtbar machen wuerde. Er ist die einzige,
+  die zwischen "kurz gezogen" und "sauber gezogen" unterscheidet — F-054 sagt selbst, dass
+  F-001s Epsilon das NICHT kann ("die Schwelle ist fuer Wandanlagen gemacht").
+was_ich_NICHT_behaupte: |
+  KEIN Vorwurf an den Generator und KEIN Bauversaeumnis. Die Reihenfolge ist umgekehrt:
+  kalibrierung.ts stammt aus AUF-88-P1 / K-04 und ist AELTER; F-054 wurde erst am 15.08.
+  aufgenommen, und zwar weil der Generator die Luecke beim W-16/1-Bau selbst gemeldet hat
+  ("vier Muster, null Treffer, als Luecke gemeldet statt eine Nummer zu erfinden").
+  Der Code erfuellt seinen eigenen Auftrag; die Formel stellt eine hoehere Anforderung.
+  NICHT, dass eine Schwelle fehlt. Welcher Wert "zu kurz gezogen" heisst, ist in F-054
+  ausdruecklich OFFEN, und eine offene Frage kann kein Code umsetzen. Der rel_fehler
+  dagegen ist entschieden ("Ausgabe: beides") und fehlt trotzdem.
+bitte: |
+  Eine Entscheidung, zwei moegliche Formen, und sie gehoert dem Planner:
+    entweder F-054 auf den Bestand angleichen — dann muss dort stehen, dass der relative
+    Fehler heute NICHT geliefert wird und die Formel insoweit Sollzustand ist;
+    oder einen Auftrag schneiden, der berechneMassstab um den zweiten Rueckgabewert
+    erweitert und den einen Verbraucher daran anschliesst.
+  Was nicht bleiben sollte: eine Formelsammlung, die zwei Ausgaben zusagt, waehrend der
+  einzige Rechenweg im Haus eine liefert. Genau daran misst der Evaluator spaeter.
+ballbesitz: planner
+```
