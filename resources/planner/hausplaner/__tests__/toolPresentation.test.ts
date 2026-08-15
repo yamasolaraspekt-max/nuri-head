@@ -163,7 +163,8 @@ test('Regressionsanker: faehigkeitenNach(werkzeuge) bleibt nach der Fachzuordnun
   // gemessen und nicht geraten. *Der Anker bleibt ein Anker:* er haelt fest, dass sich die
   // BESTEHENDEN vier nicht gegeneinander verschieben; dass zwei dazukommen, ist der Zweck der
   // Scheibe und kein Bruch.
-  const vorher = ['auswahl', 'bemassen', 'flaeche-messen', 'kontur', 'loeschen', 'duplizieren'];
+  // A-35: `trimmen` reiht sich als drittes gehobenes ein — Registry-Reihenfolge, ans Ende gestellt.
+  const vorher = ['auswahl', 'bemassen', 'flaeche-messen', 'kontur', 'loeschen', 'duplizieren', 'trimmen'];
   const ist = faehigkeitenNach('werkzeuge').map((f) => f.id);
   assert.deepEqual(ist, vorher);
 

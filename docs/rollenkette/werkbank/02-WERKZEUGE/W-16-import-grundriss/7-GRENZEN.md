@@ -1,47 +1,74 @@
-# W · import grundriss — GRENZEN
+# W-16 · Grundriss unterlegen — GRENZEN
 
-> **Dieses Blatt ist Pflicht.**
-> Der teuerste Fehler des Projekts bisher: ein Dach, das bei nicht-rechteckiger
-> Kontur unsichtbar verschwand statt eine Absage zu geben. Die Domäne verweigerte
-> korrekt — der Renderer schluckte die Absage mit `catch { continue; }`.
-> **Ein Werkzeug ohne benannte Grenze baut genau diesen Fehler wieder ein.**
+## Der Vertrag: `berechneMassstab` liefert `null` statt NaN
 
-## Was dieses Werkzeug NICHT kann
+**Wörtlich aus `kalibrierung.ts:30-31`:**
 
-| Fall | Warum nicht | Was der Anwender stattdessen sieht |
-|---|---|---|
-| | | |
+> *„Der korrigierte Maßstab. `null`, wenn die Eingabe nicht auswertbar ist (Punkte identisch, Länge
+> ≤ 0) — **kein NaN, keine Division durch 0**, ein Aufrufer muss nicht selbst darauf prüfen."*
 
-## Die Absagekette
+**Die drei Bedingungen, am Code:**
 
-Für jeden Fall oben muss die Kette vollständig sein:
-
-```
-Schicht 1/2 wirft benannten Fehler
-        ↓
-Schicht 3 fängt und übersetzt
-        ↓
-Schicht 4 reicht DURCH — kein catch/continue
-        ↓
-Schicht 5 zeigt dem Anwender einen verständlichen Satz
+```text
+:39   eingegebeneLaengeMm <= 0      ->  null
+:39   alterMassstab       <= 0      ->  null
+:41   gemessen            <= 0      ->  null   (identische Punkte)
 ```
 
-| Fall | Fehlername | Wer fängt | Anwendertext steht in |
-|---|---|---|---|
-| | | | 4-BEDIENUNG.md |
+> ***Das ist ein Vertrag und keine Vorsichtsmaßnahme.*** *Der Kommentar sagt ausdrücklich, dass ein
+> **Aufrufer sich darauf verlassen** darf — wer die Bedingungen aufweicht, bricht eine Zusage, auf
+> die anderswo verzichtet wurde zu prüfen.* **Alle drei sind einzeln verriegelt**
+> (`kalibrierung.test.ts`, drei Kanten-Zusagen).
 
-## Fänger-Prüfung
+## Die Grenze, die dabei OFFEN bleibt
 
-- [ ] Jeder Fehlerpfad ist durch einen Test belegt, der prüft:
-      **die Meldung erreicht die Oberfläche**
-- [ ] Kein `catch { }` ohne Weiterreichen im Pfad dieses Werkzeugs
-- [ ] Kein stilles `return` bei ungültiger Eingabe
+**`gemessen <= 0` fängt nur die Null, nicht das Fast-Null.** *Nachgerechnet bei `alterMassstab = 1`
+und 1000 mm Eingabe:*
 
-## Bekannte Ungenauigkeiten
+```text
+Abstand 0,3 mm   ->  3333,33
+Abstand 0,5 mm   ->  2000,00
+Abstand 0   mm   ->  null
+```
 
-| Größe | Abweichung | Ab wann stört es |
-|---|---|---|
+> **F-001 sagt, zwei Punkte mit `d < 0,5 mm` seien **derselbe** Punkt.** *Hier liefern sie trotzdem
+> ein Ergebnis — ein sehr großes.* **Der Aufrufer bekommt keine `null`, sondern eine unbrauchbare
+> Zahl, die aussieht wie ein Maßstab.**
+>
+> *Das ist keine Beanstandung: F-001s ε gilt für **Wandanlagen**. Es ist die Stelle, an der die
+> fachliche und die rechnerische Schwelle auseinandergehen — und keine Zusage hält sie fest.*
 
-## Was später kommen könnte
+## Was das Werkzeug nicht tut
 
-<Absichtlich weggelassene Funktionen, damit sie nicht als Fehler gemeldet werden.>
+| Grenze | Beleg |
+|---|---|
+| **keine Wanderkennung** aus dem Bild | die Unterlage ist eine Vorlage zum Nachzeichnen |
+| **keine Entzerrung** — ein schief fotografierter Plan bleibt schief | eine Strecke gibt ein Verhältnis, keine Transformation |
+| **kein Eingriff ins Modell** | `listening={false}`, kein Klick-Handler, keine Befehle (K-03) |
+| **kein Undo** für Upload oder Maßstab | die Unterlage liegt in `plan_uploads`, nicht im Szenendokument |
+| **keine Bildverarbeitung in der Insel** | PDF-Klassifizierung und Rasterung laufen auf dem Server (`…/status`) |
+
+## Die Grenze, die man beim Lesen übersieht: ein einziger Maßstab
+
+**`massstab_mm_pro_einheit` ist EIN Wert je Unterlage.** *Es gibt keine Verzerrung in x und y
+getrennt.* **Ein Plan, der beim Scannen in einer Richtung gestaucht wurde, lässt sich nicht
+korrigieren** — *die Kalibrierung macht ihn in einer Richtung richtig und in der anderen falsch,
+ohne dass etwas warnt.*
+
+## Und `LEER` im Register heißt nicht, was es zu heißen scheint
+
+**`REGISTER.md:87`:** *„`LEER` heißt hier **„kein Blatt gefüllt"**, nicht „kein Code vorhanden"."*
+
+> **Der Code ist vollständig gebaut, angeschlossen und in beiden Hälften geprüft.** *Was fehlte,
+> waren die Blätter — und die Registerzeile hat genau das gesagt.* **Nach dieser Ablesung wandert
+> der Reifegrad auf die Stufe, die den gefüllten Blättern entspricht** (`:6`: `n/7 BLÄTTER` bzw.
+> `BESCHRIEBEN`).
+
+## Die doppelte Einordnung — benannt, nicht entschieden
+
+**Der Gegenstand liegt unter `Energie`** *(sechs Routen `energie.plan-upload.*`, Controller in
+`app/Http/Controllers/Energie/`)*, **und das Register führt ihn als Hausplaner-Werkzeug.**
+
+> ***Beides trifft zu.*** *Ob die Serverhälfte dort bleiben soll, ist eine eigene Frage mit eigener
+> Größe — dieses Blatt hält fest, wo sie liegt, damit niemand sie in
+> `app/Http/Controllers/Hausplaner/` sucht.*

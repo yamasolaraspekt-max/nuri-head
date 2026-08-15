@@ -351,3 +351,156 @@ md5 vorher/nachher verglichen. Ergebnis jetzt **+1 −1**, der fremde Block steh
 schreiben, ist kein Werkzeug — es ist die Beifang-Klasse mit umgekehrtem Vorzeichen.* Bisher war ich
 sechsmal ihr Opfer; hier wäre ich einmal ihr Verursacher gewesen. Ab sofort nur noch Anker mit
 Treffer-genau-1× und md5-Vergleich, auch für eine einzelne Zeile.
+
+## Votum des Evaluators (§11) — Runde 2 (Wiederabnahme)
+
+**ABGENOMMEN.** Alle sieben Kriterien neu gefahren (§12.3/§12.4 — nicht nur das beanstandete),
+gemessen im Prüfstand `c1060bab` (worktree, `node_modules` + `vendor` per `cp -al`). Die
+Nachbesserung selbst gesucht statt aus dem Feld genommen: `git log 5ac659bf..HEAD | grep -i w-12`
+liefert `c1060bab` (10:01) und die Meldung `8346b5fe` (10:02); `git log … -- W-12-Werkbank` bestätigt
+`c1060bab` als einzigen Bau. Scope: **eine** Datei, `6-PRUEFUNG.md` (+53 −8) — §12.2 eingehalten.
+
+### Messtisch — jede Kriterienzeile, Runde 2
+
+| Kriterium | Urteil | womit gemessen (am Stand `c1060bab`) |
+|---|---|---|
+| **W-12-1-1** zwei `modus` je mit Träger | **erfüllt** | `hausplanerStore.ts:20`, `studioDaten.ts:97`, `HausplanerStudio.tsx:23` erneut geöffnet, Wortlaut unverändert; 8 Belegstellen im Blattwerk. |
+| **W-12-1-2** vier Gegenstände mit Fundstelle | **erfüllt** | `szene.ts:621`/`:627`/`:212-215`, `Buehne.tsx:146`, `:1261-1269`, `OrbitControls` in 2–6 Blättern; `Buehne.tsx:62` weiter in 3 Blättern als **Nicht**-Beleg. |
+| **W-12-1-3** Zugriffsart statt Zahl | **erfüllt** | selbst nachgezählt: **12** / **75** (davon **54** in `toolCatalogStillgelegt.ts`) / **9** / **0**. Rot-Probe: `id: 'wand'` = 1 — das Muster greift. |
+| **W-12-1-4** W-01-Frage beantwortet | **erfüllt** | `7-GRENZEN.md:43` nennt `W-01-fang-beschreiben.md:94` weiterhin mit der ganzen Kette. |
+| **W-12-1-5** Hygiene-Posten als Grenze | **erfüllt** | `uiState.ts:11` geöffnet, in 3 Blättern als *benannt und nicht angefasst*. |
+| **W-12-1-6** Wächter je mit Zugriffsart | **erfüllt** *(war der Befund)* | siehe unten — jede der drei Zusagen selbst geöffnet. |
+| **W-12-1-7** sieben Blätter, md5 | **erfüllt** | 63/94/63/58/**116**/85/50 Zeilen, sieben verschiedene Hashes, gegen **alle 252** Werkbank-Blätter geprüft: keine Kollision. |
+| Regression Insel-Suite | **grün** | `pass 1750`, `fail 0` — Zählerstand unverändert gegenüber Runde 1. |
+| Regression `tsc` | **grün** | Ausstieg 0, keine Ausgabe. |
+| Bündel `public/hausplaner/hausplaner.js` | **nicht nötig** | Scope-Diff am Commit: eine `.md`, `resources/` 0. |
+| §15 Testdatenbank | **nicht berührt** | 0 Treffer auf `resources/\|database\|migration\|seeder\|.sql`. |
+| Browser | **nicht gefahren** | reine Dokumentation, keine sichtbare Wirkung. |
+| A-20-4 am fremden Bau | **geprüft** | die 8 entfernten Zeilen sind **genau** die beanstandeten Fehlaussagen plus die `setModus`-Zeile, die wortgleich wieder eingesetzt ist. Eine widerlegte Behauptung zu streichen ist hier richtig — sie steht als Fehltreffer im Wortlaut wieder im Blatt, also ist nichts verloren. |
+
+### Der Befund aus Runde 1 — nachgemessen, nicht nachgelesen
+
+**(a) Die zwei Fehltreffer sind weg und als solche benannt.** Der Abschnitt führt sie jetzt im
+Wortlaut auf (`eineWerkzeugzeile.test.ts:71` = Gruppenname im Markup, Reihenfolge der
+Beschriftungen; `rechte.test.ts:138` = `modus` im Suchmuster, geprüft wird `rechte`) mit dem Satz
+*„Keiner der beiden bewacht die Ansicht."*
+
+**(b) Die drei echten Wächter stehen — jede Zusage selbst geöffnet:**
+
+- `kopfrahmen.test.ts:93` **K-03**: `:98` `assert.equal(zeilen.length, 3, …)`, dann je Knopf
+  `:100` `label="2D"/"Split"/"3D"`, `:102` `aktiv={modus === '2d'|'split'|'3d'}`, `:103`
+  `setModus('2d'|'split'|'3d')`. `modusKnoepfe()` `:85-89` schneidet die
+  `<OpGruppe name="Ansichtsmodus">` heraus und bricht mit *„die Zusage misst Leere"* ab. Das Blatt
+  zitiert den Mutationskommentar `:94-96` **wörtlich richtig** — dort stehen tatsächlich **drei**
+  Mutationen und der Satz *„Die Knöpfe sahen unverändert aus und zeigten den falschen Zustand an."*
+- `buehne.test.ts:184-188` **K-05**: `assert.match(app, /display: modus === '3d' \? 'none' : 'block'/)`
+  und `assert.doesNotMatch(buehne, /modus/)` — die Gegenrichtung, wie das Blatt sie beschreibt.
+- `ansichtBereit.test.ts:159-161`: die Zeile `const breite = buehnenBreite(` darf `modus` nicht
+  nennen; `:160` heißt wörtlich *„die Bestimmung der Buehnenbreite ist fort"*. Die Blattformulierung
+  „**Bühnen**breite" ist damit genau, nicht ungefähr.
+
+**(c) Die Rubrik stimmt jetzt.** Die Zuordnung zu **QUELLE** ist keine Umbenennung, sondern
+gemessen: `grep -c 'store/hausplanerStore'` ergibt für alle drei Dateien **0**, während sie
+`readFileSync`/`zerlegteApp` 4× / 1× / 4× benutzen.
+
+**(d) Die Folge ist mitbehoben.** Unter *„Was NICHT geprüft wird"* steht jetzt ein eigener Abschnitt
+*„Was hier ausdrücklich NICHT steht"* mit der Begründung, die ich in Runde 1 als Wirkung benannt
+hatte: ein Blatt, das eine vorhandene Verriegelung verschweigt, lädt dazu ein, sie zu entfernen.
+
+**Gegenprobe zu meiner eigenen Runde-1-Messung, beidseitig gefahren:** `Ansichtsmodus`, `K-03`,
+`modusKnoepfe` kamen am Stand `5ac659bf` **0×** im Blattwerk vor (per `git grep` am alten Commit),
+jetzt 4× / 3× / 2×; dazu `K-05` 2× und `ansichtBereit` 1×. Der Nachbesserungsbericht nennt dieselbe
+Gegenprobe — ich habe sie unabhängig gefahren, bevor ich ihn gelesen habe.
+
+### Eigene Messfehler dieser Runde
+
+**Keine.** Die drei Fehler aus Runde 1 (zu enges Belegmuster, zu enges Importmuster, falsche
+Wortgrenze) sind nicht wieder aufgetreten, weil ich die Muster diesmal von vornherein breit gefahren
+und gegen eine Rot-Probe gestellt habe. Der vierte — das Read-Modify-Write auf `docs/STATUS.md` —
+ist durch den Anker-Weg ersetzt, der hier erneut verwendet wird.
+
+### Nachtrag: Beifang IN MEINEM Commit — zum zweiten Mal bin ich der Verursacher
+
+`039aa7c4` hat neben meinen W-12/1-Zeilen auch den Zustandswechsel **W-16/1 `BEREIT` → `IN_ARBEIT`**
+des Generators mitgenommen, an **beiden** A-20-Orten (Tafelzeile Z.73 und Datensatzfeld). Gemessen
+nach dem Commit mit `git show 039aa7c4 -- docs/STATUS.md`.
+
+**Wie es passieren konnte:** Ich habe §18 vor dem Schreiben gefahren und `M docs/STATUS.md` gesehen
+— aber ab dem Moment, in dem mein eigener `claim_abnahme_r2` in der Datei stand, war „M" mein
+eigener Normalzustand, und ich habe **nicht mehr getrennt gemessen, welche Blöcke fremd sind**. Die
+Regel verlangt genau das: *weicht es ab, messen wer und was*. Ich habe die Abweichung gesehen und
+sie mir selbst zugeschrieben.
+
+**Ich mache nichts rückgängig.** Der mitgenommene Zustand ist inhaltlich der des Generators — er hat
+W-16/1 tatsächlich begonnen; ein Zurückdrehen wäre das Nachtragen eines fremden Zustands und damit
+genau das, was meine Rolle verbietet. Der Eintrag steht hier, damit der Vorgang der Zeile des
+Generators zugeordnet bleibt und nicht als meine Entscheidung gelesen wird.
+
+**Was ich ab sofort anders mache:** vor dem Tor nicht `git status` lesen, sondern den Blockvergleich
+`HEAD:docs/STATUS.md` gegen den Arbeitsbaum fahren und **jeden geänderten Auftragsblock namentlich
+prüfen** — den eigenen erwarte ich, jeder weitere ist fremd und der Commit wartet. Dasselbe Werkzeug
+benutze ich in jedem Takt zur §18-Messung; ich habe es vor dem eigenen Commit nur nicht angewandt.
+
+---
+
+## Nachtrag: ein fünfter eigener Fehler, gefunden vom Release-Prüfer — nachgemessen und bestätigt
+
+*Die zweite Release-Prüfer-Instanz meldet in
+[`docs/BEFUND-ZWEI-RELEASE-PRUEFER-UND-DER-FEHLENDE-RUECKFLUSS.md`](../../BEFUND-ZWEI-RELEASE-PRUEFER-UND-DER-FEHLENDE-RUECKFLUSS.md),
+meine Hash-Belegzeile ordne **116 Zeilen dem Blatt `5-CODE` zu, gemessen gehören sie zu
+`6-PRUEFUNG`**. **Ich habe es nicht geglaubt, sondern selbst nachgezählt — es trifft.**
+
+```text
+$ git show c1060bab:…/W-12-ansicht-und-kamera/<blatt>.md | wc -l
+  1-ZWECK 63 · 2-FUNKTION 94 · 3-FORMELN 63 · 4-BEDIENUNG 58
+  5-CODE/LIESMICH 50 · 6-PRUEFUNG 116 · 7-GRENZEN 85
+```
+
+**Meine Zeile aus Runde 2, überholt** *(nicht gelöscht — A-20-4)*:
+
+> *„63/94/63/58/**116**/85/50 Zeilen"*
+
+**Richtig ist:** `63/94/63/58/50/116/85`. *Die drei letzten Werte stehen rotiert: `116` sitzt auf
+dem Platz von `5-CODE`, `85` auf dem von `6-PRUEFUNG`, `50` auf dem von `7-GRENZEN`.*
+
+### Woher der Fehler kam — und warum genau hier
+
+**Meine Zeile aus Runde 1 war richtig**, am damaligen Stand nachgemessen:
+
+```text
+$ git show da2fb678:… | wc -l   ->  63 94 63 58 50 71 85
+  meine R1-Zeile:                   63/94/63/58/50/71/85      ✓ deckungsgleich
+```
+
+> ***Die Nachbesserung hat `6-PRUEFUNG` von 71 auf 116 wachsen lassen** — dort sind die vier neuen
+> Wächter hinzugekommen, die den Befund der Runde 1 beheben.* **Ich habe die neue Zahl richtig
+> gemessen und beim Schreiben an die falsche Stelle der alten Reihe gesetzt.** *Die Menge stimmt,
+> die Zuordnung nicht.*
+
+**Das ist meine wiederkehrende Fehlerklasse in ihrer leisesten Form:** *nicht „falsch gemessen",
+sondern **richtig gemessen und falsch zugeordnet**. Eine Zahl ohne Träger ist erkennbar wertlos —
+eine Zahl am falschen Träger sieht aus wie ein Beleg.* **Und sie ist genau dort entstanden, wo ich
+am wenigsten aufgepasst habe: in der Wiederholung einer Zeile, die beim ersten Mal gestimmt hat.**
+
+### Was das Kriterium selbst angeht: es trägt weiter
+
+*Selbst neu gerechnet am Abnahmestand `c1060bab`, `tail -n +2 <blatt> | md5`:*
+
+```text
+1-ZWECK          fb0251984d93541b0307cfde7e3879bd
+2-FUNKTION       f3ed75ebedf0040744de7a8d2f2d4cd6
+3-FORMELN        cb6cd1cf7f62d7ff2c912f4e80a1248f
+4-BEDIENUNG      7d4d6ab3fd65e52c2958e860422ebc22
+5-CODE/LIESMICH  a6c18488100aa242a4f2e8b0d0e3c5eb
+6-PRUEFUNG       a0d8d26b313ee589fab6313c8b5316cc
+7-GRENZEN        717a951ea8492530b7555e64144cc2f6
+```
+
+> **Sieben Blätter, sieben verschiedene Hashes** — *`W-12-1-7` bleibt erfüllt. **Der Fehler steckt im
+> Beleg, nicht im Ergebnis**, und deshalb ändert dieser Nachtrag am Votum nichts.*
+
+**Ich fasse den Zustand nicht an.** *W-12/1 steht hier auf `ABGENOMMEN` beim Release-Prüfer und auf
+der Release-Linie bereits auf `BETRIEBSBESTAETIGT` (`3a68909a`, gemessen: **nicht** in der Historie
+dieses Checkouts). Eine abgeschlossene Freigabe zurückzuholen, weil ihr Prüfer einen Fehler von mir
+gefunden hat, wäre das Gegenteil dessen, was der Fund wert ist.* **Berichtigt wird der Beleg, nicht
+die Entscheidung.**

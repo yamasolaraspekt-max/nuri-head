@@ -203,13 +203,16 @@ test('K7: das Import-Recht öffnet acht Werkzeuge — jetzt aus dem Nutzer, nich
   assert.equal(ohne - mit, 8, 'das Import-Recht oeffnet nicht mehr acht Werkzeuge');
 });
 
-test('K7: 45 Werkzeuge hängen am Bearbeiten-Recht — vorher konnte das niemand verlieren', () => {
+test('K7: 44 Werkzeuge hängen am Bearbeiten-Recht — vorher konnte das niemand verlieren', () => {
   // Arbeitsbereich Architektur, Wand ausgewählt: die Lage, in der am meisten bedienbar ist.
   const ohne = gesperrt([], 'architektur', ['wall']);
   const mit = gesperrt([RECHT_BEARBEITEN], 'architektur', ['wall']);
   assert.equal(ohne, 73);
-  assert.equal(mit, 28);
-  assert.equal(ohne - mit, 45, 'das ist die Anzeige-Lüge, die dieser Posten beendet');
+  // A-35: 28 -> 29. `trimmen` braucht ZWEI ausgewaehlte Objekte, hier ist genau EINES gewaehlt —
+  // es bleibt also gesperrt, obwohl das Bearbeiten-Recht da ist. Die Differenz sinkt entsprechend
+  // von 45 auf 44; die AUSSAGE (so viele Werkzeuge haengen am Bearbeiten-Recht) ist unberuehrt.
+  assert.equal(mit, 29);
+  assert.equal(ohne - mit, 44, 'das ist die Anzeige-Lüge, die dieser Posten beendet');
 });
 
 test('K7 gemessen, nicht behauptet: im Import-Bereich ändert das Bearbeiten-Recht NICHTS', () => {

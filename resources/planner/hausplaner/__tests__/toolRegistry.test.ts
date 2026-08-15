@@ -54,9 +54,15 @@ test('werkzeugTools = genau die modus-schaltenden Werkzeuge der Leiste (UI-3)', 
     'bemassen', 'flaeche-messen',   // <- W-05
     'kontur',
   ]);
-  // Und die Verbindung zur Hebeliste, damit beide nicht auseinanderlaufen koennen:
+  // Und die Verbindung zur Hebeliste, damit beide nicht auseinanderlaufen koennen.
+  // **A-35 (15.08.):** ein gehobenes Werkzeug muss in der Leiste ANKOMMEN — als modus-schaltendes
+  // Werkzeug ODER als Aktion. *`trimmen` ist das erste gehobene, das sofort auf der Auswahl wirkt;
+  // als `art: 'werkzeug'` schaltete der Klick in einen Modus, den kein Renderer bedient.* Die
+  // Zusage prueft weiterhin, dass die Hebeliste nicht ins Leere zeigt — nur nicht mehr, dass jedes
+  // gehobene Werkzeug ein MODUS ist.
   for (const id of AUS_PAKET_GEHOBEN) {
-    assert.ok(ids.includes(id), `${id} ist gehoben, steht aber nicht in der Leiste`);
+    const alsAktion = TOOL_DEFINITIONS.find((t) => t.id === id && t.art === 'aktion');
+    assert.ok(ids.includes(id) || alsAktion, `${id} ist gehoben, kommt aber in der Leiste nicht an`);
   }
   // Aktionen (Löschen/Duplizieren) gehören NICHT in die Werkzeugleiste
   assert.ok(!ids.includes('loeschen') && !ids.includes('duplizieren'));

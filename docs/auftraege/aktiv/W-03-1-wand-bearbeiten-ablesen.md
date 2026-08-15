@@ -172,3 +172,56 @@ was_ich_nicht_gemessen_habe: "Was die 563 Zeilen des Eigenschaften-Panels sonst 
 W_03_1_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT. §3 ist beim Schnitt 0/0 — A-32 ist
         inzwischen CODE_FERTIG und beim Evaluator."
 ```
+
+---
+
+## Votum des Evaluators (§11) — Runde 1
+
+**ABGENOMMEN.** *Sechs von sechs Kriterien tragen, jedes selbst nachgemessen. Zwei Zusagen sind
+stärker als das Kriterium verlangt — und eine davon berichtigt den Auftrag.*
+
+### Messtisch — alle sechs Kriterien, jede Zahl selbst erhoben
+
+| Kriterium | Ergebnis | Wie ich es gemessen habe |
+|---|---|---|
+| **W-03-1-1** (P1, TRAGEND) beide Hälften mit Fundstelle je Feld | **grün** | **Alle fünf Zeilen selbst geöffnet** in `app/rahmen/EigenschaftenPanel.tsx` (563 Z, selbst gezählt): `:108` `aktualisiereWand(changes)`, `:120` `executeCommand({type:'MOVE_NODE'…})`, `:324` `select … construction.materialId`, `:330` `select … WANDSTAERKEN`, `:336` `input type="number" min={100}`. **Jede trägt, was das Blatt ihr zuschreibt.** Die fünf fehlenden Operationen stehen daneben (`1-ZWECK:15-21` gegen `:36-46`) |
+| **W-03-1-2** (P1) Vier-Schichten-Messung statt pauschalem „fehlt" | **grün** | **Selbst gefahren, je Operation vier Muster:** `id:'<op>'` in `toolRegistry.ts` → **0**, `werkzeugId:'<op>'` in `werkzeugVertrag.ts` → **1**, `id:'<op>'` in `werkzeugPaket.ts` → **1**, `werkzeugId:'<op>'` in `werkzeugLandkarte.ts` → **1**. **Für alle fünf Operationen identisch** — die Tabelle in `1-ZWECK:36` stimmt Zelle für Zelle |
+| **W-03-1-3** (P1) je Operation das Fundament, und es sind ZWEI | **grün** | `geradenGeometrie.ts` selbst geöffnet: **196 Z, 4 Exporte** (`geradenSchnitt` :84, `Versatzseite` :124, `VersetzteAchse` :127, `parallelVersatz` :174). `executeCommands` im Store an `:65`/`:145`/`:147`. Die Zuordnung `trimmen·verlaengern·versatz → A-32` und `teilen·verbinden → A-31` steht in `7-GRENZEN:27-28`, mit dem verlangten Satz: *„A-32 löst eine RECHENfrage, A-31 eine AUSFÜHRUNGSfrage"* |
+| **W-03-1-4** Formeln am Code, F-004 gebaut aber nicht aufgerufen | **grün** | **Gegenprobe selbst gefahren:** `geradenGeometrie` in `app/rahmen/` → **0 Treffer**. Die 17 `Math.`-Aufrufe des Panels sind `Math.round` (14), `Math.hypot` (2), `Math.min` (1) — **kein Geradenschnitt**. Das Blatt sagt es an zwei Stellen (`3-FORMELN:23`, `7-GRENZEN:44`) |
+| **W-03-1-5** kein Produktivcode | **grün** | `resources/planner` im Bau-Commit `c9b32ad3`: **0 Treffer**; 0 Dateien außerhalb `docs/` |
+| **W-03-1-6** Zeitpunkt begründet, A-31/A-32 am Bau-Stand geprüft | **grün** | **selbst am Bau-Stand gelesen:** beide stehen auf `BETRIEBSBESTAETIGT`, `ballbesitz: —`. Das Blatt nennt genau das und **schreibt dazu, dass der Auftrag noch etwas anderes sagte** (`7-GRENZEN:35-36`, `5-CODE:53`) |
+| **Wächter** Insel-Suite | **grün** | selbst gefahren: `tests 1750 · pass 1750 · fail 0 · skipped 0` |
+| **Wächter** `tsc:hausplaner` | **grün** | keine Ausgabe |
+| **sieben Blätter** *(nicht eigenes Kriterium, aber Hausform)* | **grün** | `74/75/53/64/60/72/68` Z selbst gezählt, **sieben verschiedene md5**; Kollisionsprobe gegen alle Werkbank-Blätter: sieben Dubletten im Bestand, **keine betrifft W-03** |
+| **Registerzeile** | **grün** | `LEER → BESCHRIEBEN`, F-Zuordnung berichtigt: `**F-001** ✓ (:117/:339)`, `~~F-003~~ ~~F-004~~ ~~F-030~~ ⓝ`. **Beide F-001-Stellen geöffnet** — `:117` `Math.hypot(dx,dy)`, `:339` `Math.round(Math.hypot(...))` |
+| **Browser** | **nicht gefahren** | *der Bau-Commit fasst ausschließlich `docs/` an* |
+| **§15 Datenbank** | **nicht berührt** | *kein schreibender Lauf, keine Verbindung* |
+
+### Was stärker ist als verlangt
+
+**1. Die Zusage „drei von vier Schichten führen sie bereits" ist keine Behauptung, sondern trägt
+eine Zahl, die weit über W-03 hinausweist — und sie stimmt:**
+
+```text
+selbst gezaehlt, je zwei Muster:
+  toolRegistry.ts      id: '        12
+  werkzeugVertrag.ts   { werkzeugId: '   111
+  werkzeugPaket.ts     id: '       101
+```
+
+> ***Zwölf von 111 vertraglich beschriebenen Werkzeugen sind registriert.*** *Das Blatt nennt die
+> Registry deshalb „das Nadelöhr des ganzen Hauses" — **und diese Aussage ist der eigentliche Wert
+> der Ablesung**: sie sagt der nächsten Rolle, dass W-03 kein Einzelfall ist, sondern ein Fall.*
+
+**2. Der Bau hat den Auftrag berichtigt, nicht abgeschrieben.** *Der Auftrag sagt in `W-03-1-6`
+noch: „A-31 ist ABGENOMMEN, A-32 GEBAUT und noch nicht abgenommen." **Am Bau-Stand stehen beide auf
+`BETRIEBSBESTAETIGT`** — selbst nachgelesen. Das Blatt schreibt den gemessenen Stand hin und hält
+ausdrücklich fest, dass der Auftrag etwas anderes sagte.*
+
+> **Das Kriterium hatte den Fall vorgesehen** *(„am Bau-Stand prüfen, nicht aus diesem Blatt
+> übernehmen")* — **und der Bau hat ihn genutzt, statt die bequeme Fassung zu übernehmen.** *Das ist
+> derselbe Handgriff, der bei W-18/1 die überholte `geradenSchnitt`-Prämisse aufgedeckt hat.*
+
+### Weitergabe
+
+**Ball an den Release-Prüfer** (§11, ABGENOMMEN).
