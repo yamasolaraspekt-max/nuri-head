@@ -18,12 +18,16 @@ kennung_geprueft: "A-37 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
 anlass: "Der rollende Umzug laeuft seit 14.08. 22:20. Fuenf Rollen haben eigene Worktrees.
          Nichts hindert eine Rolle daran, im falschen Baum zu schreiben — das Tor kennt den
          Baum nicht (0 Treffer fuer 'worktree' in 743 Zeilen)."
-gebaut_in: "DER INTEGRATIONS-CHECKOUT /Users/yamanuri/Documents/ticket, solange P2H-06 offen ist.
-            BERICHTIGT 15.08. nach DoR-Restpunkt 1 — vorher stand hier ticket-rolle-generator.
-            Grund, vom Pruefer gemessen: KEIN Rollenbaum hat node_modules oder typescript, alle
-            fuenf NEIN, nur der gemeinsame JA. A-37-11 waere dort unerfuellbar, und Paragraf 5
-            verbietet unerfuellbare Kriterien. Der Bau eines Tores, das den Umzug erst
-            ermoeglicht, kann nicht voraussetzen, dass der Umzug schon gelungen ist."
+gebaut_in: "ticket-rolle-generator (rolle/generator) — BERICHTIGT ZURUECK am 15.08. 15:50.
+            Der Grund fuer die Verlegung in den Integrations-Checkout ist ENTFALLEN: der
+            Generator-Baum hat seit 15:36:54 node_modules samt typescript, gemessen. Der
+            Plan-Pruefer hat A-37-11 dort gefahren: tsc exit 0, Suite 1763/1763.
+            KEIN Blattfehler und kein Messfehler auf einer der beiden Seiten — die Zeitstempel
+            liegen so: Blatt 15:30:37, release/node_modules 15:30:51, generator 15:36:54.
+            Mein Befund hielt VIERZEHN SEKUNDEN. Die Umgebung ist unter dem Satz weggewandert.
+            OFFEN UND YAMA VORGELEGT, siehe Nicht-Ziele: die zwei node_modules sind ECHTE
+            Verzeichnisse mit je 323 MB, keine Symlinks — und Yamas Nicht-Ziel schliesst
+            genau das aus."
 ```
 
 ## Warum jetzt, und warum P0
@@ -121,6 +125,29 @@ nicht der Bau dieses Auftrags.
 - **KEINE Änderung an `docs/STATUS.md`** — weder Inhalt noch Struktur.
 - **KEIN Hausplaner-Code.** Weder `resources/` noch `app/`.
 - **Kein `node_modules` je Worktree**, kein Symlink, keine Modulkopie ins Repo *(Yamas Bedingung)*.
+
+  > **⚠ DIESES NICHT-ZIEL IST SEIT 15:30 FAKTISCH VERLETZT — Yama vorgelegt, von mir nicht
+  > entschieden.** Gemessen am 15.08. um 15:50:
+  >
+  > ```text
+  >   ticket-rolle-release     node_modules JA   seit 15:30:51   echtes Verzeichnis  323 MB
+  >   ticket-rolle-generator   node_modules JA   seit 15:36:54   echtes Verzeichnis  323 MB
+  >   ticket-rolle-planner     NEIN     ticket-rolle-evaluator   NEIN
+  >   ticket-rolle-plan-pruefer NEIN
+  > ```
+  >
+  > **Keine Symlinks — zwei echte Modulkopien.** Sie sind git-ignoriert, stehen also nicht *im
+  > Repo*; **der Wortlaut „kein `node_modules` je Worktree" ist trotzdem verletzt.**
+  >
+  > **Zwei Wege, und die Wahl gehört Yama:**
+  > **(a)** Das Nicht-Ziel **aufheben** — dann ist der Umzug technisch gelöst, Preis: 323 MB je
+  > Baum, bei sechs Bäumen rund 1,9 GB, und jede Rolle muss ihre Kopie aktuell halten.
+  > **(b)** Das Nicht-Ziel **halten** — dann müssen die zwei Kopien wieder weg, und die Gates
+  > brauchen einen anderen Weg *(`NODE_PATH` reicht nicht: es wirkt nur auf CommonJS-`require`,
+  > nicht auf ESM-Importe und nicht auf die Typauflösung von `tsc`)*.
+  >
+  > **Was ich nicht tue: die Kopien entfernen.** Sie sind fremde Arbeitsumgebung, nicht mein
+  > Bestand — und ohne sie kann heute niemand außer dem Integrations-Checkout prüfen.
 - **Keine Abschwächung** der vorhandenen Barrieren A-25/A-26/A-27/A-30 und der YAML-Prüfung.
 - **Kein Hook.** Der versionierte `pre-commit`-Hook ist ein eigener Auftrag — dieses Tor läuft
   weiter über den ausdrücklichen Aufruf.
