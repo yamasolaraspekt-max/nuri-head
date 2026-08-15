@@ -1426,6 +1426,100 @@ was_A_30_wirklich_ist: "CODE_FERTIG beim Evaluator, Bau 0aceee01. Der Evaluator 
   Release-Pruefer."
 ```
 
+## ZWEITER BEFUND GEGEN MEIN EIGENES MESSWERKZEUG (Release-Pruefer, 15.08.) — es hat 82 Tafelzeilen nie gefragt, ob sie einen Datensatz haben
+
+```yaml
+wie_es_auffiel: "Nach der Freigabe von W-18/1, W-03/1, W-14/1 und W-10/1 standen noch zwei
+  Auftraege auf ABGENOMMEN: A-05 und A-12. Beide tragen im Datensatz den Vermerk, ein
+  Messauftrag habe keinen Release-Kandidaten — der Planner hatte mir den Ball ausdruecklich
+  abgenommen. Ich wollte pruefen, ob das eine gueltige Endstation ist, und bin dabei ueber
+  etwas anderes gestolpert."
+
+der_werkzeugfehler: "Meine Driftmessung laeuft ueber die DATENSAETZE und sucht zu jedem die
+  passende Tafelzeile. Eine Tafelzeile OHNE Datensatz wird darin nie angefasst. Sie kann keine
+  Drift erzeugen, weil nichts sie mit etwas vergleicht — und faellt still durch. Das Werkzeug
+  meldete 'Drift 0' und meinte damit nur: von den Zeilen, die ich ansehe, weicht keine ab.
+  Es ist derselbe Fehlertyp wie beim Konfliktwerkzeug am 13.08.: ein Nulltreffer las sich als
+  Sauberkeit."
+
+zwei_formfehler_im_selben_werkzeug: >
+  Beim Nachbessern fielen zwei weitere auf, beide von derselben Art:
+    1  Die Zustandsliste kannte ERLEDIGT und VORLAGE nicht, obwohl §3 sie seit A-21 (12.08.)
+       fuehrt. Auch ABNAHME und RELEASE_PRUEFUNG aus der Kette fehlten. Ein Zustand, den das
+       Muster nicht kennt, liest sich als 'keine Zustandsangabe' — also als ueberspringbar.
+    2  Das Tafelmuster verlangte Backticks um den Zustand. A-06 schreibt **ERLEDIGT** nur fett.
+       A-06 galt dem Werkzeug damit als Zeile ohne Zustand, obwohl sein Zustand dasteht.
+  Beide zusammen haetten den Befund unten auch nach der ersten Nachbesserung noch verdeckt.
+
+gegenprobe_vor_dem_glauben: "Die gelockerte Form haette neue Falschtreffer erzeugen koennen.
+  Gemessen alt gegen neu ueber alle 82 Tafelzeilen: GENAU 2 lesen sich anders, A-06 (None ->
+  ERLEDIGT) und P-02 (None -> VORLAGE). Beide einzeln ausgewiesen, keine Sammelzahl. Zustands-
+  und Ball-Drift bleiben 0 — die Lockerung hat keine bestehende Lesung verschoben."
+
+und_die_erste_zahl_war_wieder_falsch: "Das gehaertete Werkzeug meldete zuerst 15 Tafelzeilen
+  ohne Datensatz. Ich habe die 15 nicht gemeldet, sondern geoeffnet: 11 davon sind
+  Sammelzeilen fuer Unterauftraege — die Tafelzeile W-01 gehoert zum Datensatz W-01/1, und wer
+  das nicht aufloest, zaehlt jeden Werkzeugauftrag als Loch. Zwei weitere ('Generator',
+  'M-02-Kopienzahl') sind ueberhaupt keine Auftragszeilen, sondern Tabellenzeilen anderer Art,
+  die mein Kennungsmuster faelschlich greift. 15 -> 4 -> 2."
+
+der_eigentliche_befund: "ZWEI Tafelzeilen tragen ihren Zustand nur an EINEM der zwei Orte,
+  die §16 vorschreibt: A-06 (ERLEDIGT) und P-02 (VORLAGE). Beide haben keinen Datensatz.
+  Ausgerechnet diese beiden sind die Realfaelle, die §3 selbst anfuehrt, um die Zustaende
+  ERLEDIGT und VORLAGE zu belegen. A-20 verlangt seit dem 12.08. ausdruecklich, dass wer einen
+  Auftrag schneidet, ihm seinen Platz in der Statuswahrheit anlegt. Fuer diese zwei ist das
+  nicht nachgeholt worden — und weil sie keinen Datensatz haben, hat auch niemand ihren
+  Zustand begruendet. Kein Vorwurf an eine Rolle: sie sind aelter als A-20."
+
+was_ich_NICHT_tue: "Ich lege die zwei Datensaetze nicht selbst an. Der Zustand eines Auftrags
+  ist Planner-Sache, und ein Datensatz traegt eine BEGRUENDUNG samt dor_beleg — die kann ich
+  nicht nachliefern, ohne sie zu erfinden. Ich melde und uebergebe."
+
+ballbesitz: planner
+```
+
+## OFFENE REGELFRAGE AN YAMA — hat ein Messauftrag eine Endstation? (Release-Pruefer, 15.08.)
+
+```yaml
+der_stand: "A-05 (Messauftrag L-Kontur) und A-12 (Messauftrag F-026 ausfuehren) stehen beide
+  auf ABGENOMMEN, ohne Ball, seit dem 12.08. ABGENOMMEN ist in §3 ein DURCHGANGSZUSTAND — die
+  Kette geht weiter ueber RELEASE_PRUEFUNG, RELEASE_FREI, VEROEFFENTLICHT bis
+  BETRIEBSBESTAETIGT. Beide Datensaetze sagen selbst, warum sie da nicht weitergehen: ein
+  Messauftrag hat keinen Release-Kandidaten. Sie haengen also nicht aus Nachlaessigkeit,
+  sondern weil die Kette fuer sie keinen Ausgang vorsieht."
+
+gemessen_statt_angenommen: >
+  Erzeugen die beiden wirklich keinen Code? Die genannten Commits geoeffnet:
+    92310844   docs/BERICHT-A-12-f026.md   424 +      1 Datei
+    752174d1   docs/BERICHT-A-12-f026.md   53 + / 2 - 1 Datei
+  A-05 fuehrt docs/BERICHT-A-05-l-kontur.md, 22.974 B, Votum b29bb79d. Sein Titel sagt es
+  ausdruecklich: 'MESSAUFTRAG (kein Produktivbau)'. Beide erzeugen NULL Produktivcode.
+
+warum_ich_es_nicht_selbst_entscheide: "§3 hat seit A-21 den Zustand ERLEDIGT: 'ausgefuehrt und
+  gegengeprueft, ohne jemals Code erzeugt zu haben ... endet hier'. Der Kern passt wortgenau.
+  Aber derselbe Absatz sagt auch 'Er durchlaeuft die Baukette nicht' — und A-05 und A-12 SIND
+  durchgelaufen, mit BEREIT, IN_ARBEIT, CODE_FERTIG und einem Evaluator-Votum. Ob dieser Satz
+  eine Beschreibung des Regelfalls ist oder eine Bedingung, ist Auslegung einer Regel, nicht
+  eine Messung. Das entscheide ich nicht, auch nicht in Yamas Namen: es aendert die
+  Zustandsdefinition fuer alle kuenftigen Messauftraege."
+
+mein_begruendeter_vorschlag: "ERLEDIGT als Endstation auch fuer Messauftraege zulassen, die
+  die Kette durchlaufen haben. Begruendung: der tragende Teil der Definition ist 'ohne jemals
+  Code erzeugt zu haben' und 'endet hier' — beides trifft zu. Der Satz 'durchlaeuft die
+  Baukette nicht' beschreibt A-06, den Realfall, der nie in die Kette eingetreten ist; als
+  Sperre gelesen liesse er A-05 und A-12 dauerhaft in einem Durchgangszustand stehen, und ein
+  Zustand, aus dem es keinen Ausgang gibt, ist schlechter als ein leicht geweiteter Begriff.
+  Die Abnahme geht dabei nicht verloren: das Evaluator-Votum bleibt im Datensatz stehen.
+  ALTERNATIVE, die ich NICHT empfehle: ein eigener Endzustand fuer abgenommene Nicht-Bauten.
+  Das waere ein neuntes Wort fuer einen Fall, den ein vorhandenes schon deckt."
+
+folge_wenn_entschieden: "Zwei Datensaetze auf ERLEDIGT, zwei Tafelzeilen nachgezogen, und
+  A-06/P-02 bekommen bei der Gelegenheit die fehlenden Datensaetze aus dem Befund darueber.
+  Das ist ein Arbeitsgang beim Planner, keine Release-Pruefung."
+
+ballbesitz: yama
+```
+
 ## REPO-WEITE SUCHE NACH YAMA-POSTEN (Release-Pruefer, 13.08. nachts) — 47 Fundstellen, 6 erledigt, 2 verkleinert
 
 ```yaml
