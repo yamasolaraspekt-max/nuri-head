@@ -85,7 +85,7 @@
 | **W-37** Rechenpanels | `BETRIEBSBESTAETIGT` | — | Schnitt 12.08. · Basis `a94d91ac` | **Ziel `BESCHRIEBEN`** (Ablesung, Stufe 6, die LETZTE) · `enginePanels.ts` 540 Z. + `EngineFlaeche.tsx` 199 Z. · traegt die **A-14-Ausgabeauflage** · **DoR erteilt** (dritte Fassung) — beide Blocker und der Vollstaendigkeitspunkt behoben | · **EVALUATOR 13.08.: NACHBESSERN, EIN Punkt (§12.2) — `W-37-6`.** **Acht der neun Kriterien sind erfüllt**, jedes einzeln nachgemessen. **Der Befund trifft eine verlangte HANDLUNG, die nicht ausgeführt wurde:** das Kriterium sagt wörtlich *„Die REGISTERZEILE wird nachgezogen"* — am Commit gemessen enthält `225a7f1a` **0** Treffer für `REGISTER.md`, und `:124` nennt weiterhin **196 Z**, während `EngineFlaeche.tsx` an **drei** Ständen (Basis, Bau, HEAD) je **199** hat. *Der Bericht sagt es selbst:* „die Berichtigung gehört ins Register" — der Bau hat den Befund gesehen, richtig gemessen und bewusst nicht ausgeführt. **Warum ich das nicht durchgehen lasse:** der Scope nennt das Register **weder** als Ziel **noch** als Nicht-Ziel (beide Listen gelesen; nach §5 gilt dann das Kriterium), die Handlung ist an **vier** echten Ständen üblich und möglich (`fa7547c7` W-33, `3dae69b4` W-35, `3abd8e79` W-39, `7c782f76` W-34 — alle enthalten `REGISTER.md`), und W-37 ist nach eigener Aussage die **letzte freie Ablesung**. **Ausdrücklich nicht beanstandet:** die Messung 196↔199 stimmt. **Was erfüllt ist:** die **acht** Adapter nach **Signatur** gezählt (das Namensmuster `als*Eingabe` findet nur sechs — das Klassenmerkmal trägt), `SCHWERE_ANZEIGE` mit drei Graden je Zeichen **und** Wort (`EngineFlaeche.tsx:31-35`), sechs Import-Wächter namentlich plus drei **Nur-Quelle**-Fälle getrennt, `:522/:527/:538` selbst geöffnet, und 0 Doppel über **253** Blattdateien. Suite **1750/1750**, tsc exit=0. **Die Gegenprobe des Kriteriums nachgefahren:** am Bau-Stand sind es **vier** von sechs richtigen Registerzahlen, nicht fünf — *kein Befund gegen das Blatt*, denn `StartView.tsx` hatte am Basis-Stand `a94d91ac` wirklich 267 und wuchs erst danach. **Drei eigene Messfehler offengelegt**, darunter ein vertippter Basis-SHA, dessen stiller Fehlschlag dreimal „0 Zeilen" ergab. · **Der Generator schrieb: acht Kriterien belegt, sieben Blätter, Stufe 6 vollständig.** · **RUNDE 2 — EVALUATOR 13.08.: ABGENOMMEN.** Nach §12.4 **alle neun Kriterien erneut gefahren**. **Der Befund ist behoben und A-20-4 dabei eingehalten:** `REGISTER.md:124` nennt jetzt **199 Z** mit der alten Zahl **durchgestrichen daneben** samt Datum und Anlass — nicht gelöscht; `EngineFlaeche.tsx` habe ich mit **199** selbst nachgezählt. Und der Befund steht nicht nur im Register: `7-GRENZEN` trägt einen eigenen Abschnitt mit den drei Ständen und dem Satz *„Die Zahl war nicht veraltet, sie war falsch."* Suite **1750/1750**, tsc exit=0. **Mein eigener Messfehler in dieser Runde, und es ist der dritte derselben Klasse an einem Tag:** bei `W-37-5` maß ich erst **fünf**, dann **vier** Importe — richtig sind **sechs**. Zwei Ursachen, beide in meinem Muster: `enginePanelTreppe` importiert **mehrzeilig** (`^import` greift nicht), und `sparrenVorbehalt:3` sowie `zweiEnginesSchweigen:3` importieren **mit Dateiendung** `.ts`. Erst `from [^]*dashboard/enginePanels(\.ts)?` fängt alle sechs. *Bemerkenswert daran:* genau dieses Kriterium ist entstanden, weil der Bauende dieselbe Zahl zu klein gemessen hat, und sein Blatt schreibt als Lehre die **Zwei-Muster-Regel** auf — ich bin heute zum dritten Mal in dieselbe Klasse gelaufen. Die Lehre steht bei mir noch als Kenntnis, nicht als Handgriff.
 | **W-21L** Lattung, fehlender Schritt | `DECISION_BLOCKED` | – | Schnitt `717eb11c` | **OPERANDEN-GATE STEHT — meine fruehere Aussage war zu stark**: W-23 traegt die Lattmass-Spannen im BLATT, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean** (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL. Weg b (W-23 erzeugt die Daten) ist **nicht** eingetreten · offen bleiben die **zwei Fachfragen bei Yama**: Restausgleich und die Wahl des `n` |
 | **A-36** Wer schreibt · §14 auf Hunk-Ebene | `ENTWURF` | **planner** | Schnitt 14.08. · Basis `80ab2d8d` | **YAMA HAT §14 SELBST ENTSCHIEDEN** (14.08.): *„Das ist eine Regelaenderung, sie liegt bei mir, und ich entscheide sie hiermit: ja. Formuliert sie als Auftrag, ich brauche sie nicht vorgelegt."* Und den Waechter freigegeben: *„klein genug, um neben ihnen zu laufen; alles andere wartet."* **DER GRUND IST GEMESSEN:** `docs/STATUS.md` traegt 15.687 Zeilen und 97 Auftragsdatensaetze, **58 % aller Commits des 13.08. fassen sie an**, und **37 von 40 fassen NUR sie an** — die Kollision entsteht INNERHALB der Datei, nicht zwischen Dateien. Ueber 500 Commits schreiben **fuenf Rollen praktisch gleichauf** (141/84/84/84/76). **Damit ist `--name-only` eine Frage, deren Antwort immer dieselbe ist.** Der Waechter ordnet Hunks der naechststehenden Abschnittsueberschrift zu und meldet `beruehrt: A-33 (11 Z.), W-12/1 (38 Z.)` statt `modified`. **K5 ist die tragende Kante: er MELDET, er sperrt nicht** — A-30 hat an zwoelf Fehlalarmen gemessen, was eine zu scharfe Barriere kostet. **A-36-3 ist die Positivprobe an drei echten Faellen** dieser Nacht (`ef273926`, `93960252`, `5ac659bf`), denn ein Waechter, den man nie sprechen gesehen hat, ist von einem kaputten nicht zu unterscheiden. **NICHT im Scope:** die Aufteilung auf 97 Dateien (Yama entscheidet sie NACH zwei Tagen Waechterlauf), Claim-in-den-Commit, jede Aenderung an `docs/STATUS.md` selbst. |
-| **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | `BEREIT` | **Generator** | Schnitt `1df82ee1` · Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` | **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
+| **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`CODE_FERTIG`** | **Evaluator** | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
 
@@ -14420,8 +14420,88 @@ release_pruefung: "release-pruefer 14.08.: RELEASE_FREI und bis BETRIEBSBESTAETI
 
 ```yaml
 auftrag: "A-35"
-zustand: BEREIT
-ballbesitz: generator  # DoR erteilt 13.08. 23:38 — jede Vorbedingung selbst nachgemessen
+zustand: CODE_FERTIG
+ballbesitz: evaluator  # CODE_FERTIG 15.08. generator
+bau_sha: ec12e9b3
+bau_bericht: "TRIMMEN IST DAS ERSTE WERKZEUG NACH A7, DAS WIRKLICH ETWAS TUT — und genau daran
+  hat sich gezeigt, dass 'ein Registry-Eintrag' im Haus kein additiver Vorgang ist. Zwoelf
+  bestehende Zusagen wurden rot; alle zwoelf sind einzeln nachgemessen und keine ist weggeraeumt
+  worden. Details unten unter UMFANG.
+  A-35-1 'trimmen' in toolRegistry.ts vorher 0, nachher 3.
+  A-35-2 Produktiv-Importe von geradenGeometrie: vorher NULL (der einzige Import war der eigene
+  Test), nachher EINER — app/tools/trimmen.ts. Muster wie im Kriterium: from '.*geradenGeometrie'.
+  A-35-3 Rollen nach A7, T-01 mit DREI Objekten in bekannter Reihenfolge A->B->C: gekuerzt wird C
+  (primaerId), nicht ids[0]. Absichtlich UNSYMMETRISCH gelegt, sonst greift die Mehrdeutigkeits-
+  Wache und die Zusage waere am falschen Grund rot.
+  A-35-4 T-12 faehrt gegen den echten Store: ein Trimmvorgang, EIN undo, Ausgangszustand wieder da,
+  und danach kannUndo() false — es lag also genau ein Historien-Eintrag vor.
+  A-35-5 die Uebersetzung steht an GENAU EINER Stelle: ausserhalb von werkzeugVertrag.ts kommt
+  selectionIds im ganzen Inselbaum einmal vor, im Kopf von trimme() (A7 Konsequenz 2).
+  A-35-6 alle sechs Kanten je mit Zusage: K1 T-03, K2 T-04, K3 T-07 und T-08, K4 T-05, K5 T-06,
+  K6 T-02 und T-10. Dazu T-09 fuer u und T-13 fuer die Rundung.
+  A-35-7 kein Nicht-Ziel beruehrt, einzeln geprueft statt behauptet: 0 Dateien unter
+  docs/rollenkette, scene.types.ts inhaltlich unveraendert, auswahlModus.ts inhaltlich
+  unveraendert, und der Rumpf von waehleAn ist zeichengleich mit HEAD.
+  A-35-8 Suite 1763 gruen — 1750 plus GENAU meine 13 neuen. tsc exit 0.
+  A-35-9 T-07 faehrt den Fall, den K2 durchlaesst: 0,001 Grad zwischen zwei 6000-mm-Waenden,
+  Schnittpunkt rund 286 m entfernt, Parallel-Wache greift nicht — abgewiesen statt verlaengert.
+  T-08 dazu t = 1 + 1e-9: ueber die Koordinate gerechnet liefe der Fall durch.
+  DREI ENTSCHEIDUNGEN, DIE DER AUFTRAG MIR GELASSEN HAT, alle benannt statt still getroffen:
+  (1) K6 schlaegt 'die naechstgelegene zum Klickpunkt' vor — den Klickpunkt gibt es im Modell
+      NICHT, waehleAn bekommt (id, MouseEvent). Stattdessen EINE Regel fuer zwei Fragen: es wird
+      so wenig gekuerzt wie moeglich. Das bestimmt, welches Ende wandert UND welche Schnittkante
+      gewinnt. Ein zu kurzer Schnitt kostet ein Undo, ein zu langer die halbe Wand — und die Regel
+      ist reihenfolgeunabhaengig, was K6 ausdruecklich verlangt (T-02 faehrt beide Reihenfolgen).
+  (2) Gleichstand bei t = 0,5: dann sagt 'kleinste Kuerzung' nichts mehr, und es entscheidet die
+      Zeichenrichtung — 'end' wandert, weil start->end die Richtung ist, in die zuletzt gezogen
+      wurde. Dasselbe Prinzip, auf dem A7 selbst steht.
+  (3) K5: eine gesperrte Wand wird nicht gekuerzt, darf aber als Schnittkante DIENEN — sie wird
+      dabei nur gelesen. Beide Richtungen in T-06.
+  DER FEHLER, DEN MEINE EIGENE ZUSAGE GEFANGEN HAT, und er ist der lehrreichste des Baus: die
+  erste Fassung verglich den ANTEIL min(t, 1-t). T-10 wurde rot, Ursache Gleitkomma —
+  min(0.2, 1-0.2) ist 0.2, min(0.8, 1-0.8) aber 0.19999999999999996. Der Gleichstand waere NIE
+  erkannt worden: das Werkzeug haette die rechte Kante genommen, weil 1-0.8 einen Hauch kleiner
+  ist, nicht weil die Geometrie es sagt — genau das Raten, das K6 verbietet, nur unsichtbar.
+  Behoben ueber den QUADRIERTEN Abstand zum GERUNDETEN Schnittpunkt: alles ganze Millimeter, also
+  ist dx*dx+dy*dy eine ganze Zahl und exakt vergleichbar — und verglichen wird die Lage, die
+  wirklich gebaut wuerde. Danach fiel T-01, und auch das war meine Schuld: die Testdaten waren
+  selbst symmetrisch und liefen in die eben gebaute Wache.
+  DIE MATHEMATIK IST NICHT NACHGEBAUT: geradenSchnittParameter ist eine ZWEITE SICHT auf DIESELBE
+  Rechnung. geradenSchnitt ruft sie und gibt weiterhin nur den Punkt heraus, Signatur unveraendert.
+  u gab es vorher nicht; u = ((c-a) x r)/m selbst hergeleitet und an zwei Lagen von Hand
+  nachgerechnet, bevor es geschrieben wurde. T-09 rechtfertigt u: Schnittpunkt mitten auf dem Ziel,
+  aber hinter dem Ende der Schnittkante — wer nur t prueft, trimmt dort.
+  UMFANG GROESSER ALS DER SCHNITT, ausdruecklich gemeldet: trimmen steht im 110er-Paket, und Paket
+  und Registry duerfen dasselbe Werkzeug nicht doppelt fuehren. Der Hausweg ist AUS_PAKET_GEHOBEN;
+  dazu gehoert, dass Bedeutung, Einsatz, Kategorie und Icon WOERTLICH aus werkzeugPaket.ts:123
+  kommen — meine eigenen Formulierungen habe ich zurueckgenommen. toolPresentation:113 wandert von
+  herkunft 'katalog' auf 'registry'.
+  EINE BESTEHENDE ZUSAGE HABE ICH ERWEITERT — HIER SOLL DER EVALUATOR AM GENAUESTEN HINSEHEN:
+  gehobeneWerkzeuge.test.ts verlangte art === 'werkzeug'. Gemessen war das eine Aussage ueber die
+  damaligen ZWEI und nicht ueber das Heben: bemassen und flaeche-messen tragen art 'werkzeug',
+  stehen aber NICHT in der Werkzeug-Union (werkzeugArten.ts:21) — ihr Modus tut nichts. 'Gehoben'
+  hiess bis heute: erscheint in der Leiste. trimmen wirkt SOFORT auf der Auswahl wie loeschen und
+  duplizieren, also art 'aktion'; als 'werkzeug' schaltete der Klick in einen Modus, den kein
+  Renderer bedient, und die Aktion liefe nie. Erweitert auf 'werkzeug ODER aktion', Grund in der
+  Datei. Ob das noch Auslegung oder schon eine Aenderung fremder Zusagen ist, entscheide ich nicht.
+  SECHS ZAEHL-ANKER nachgezogen, jeder als Folge EINER Tatsache belegt: trimmen braucht ZWEI
+  ausgewaehlte Objekte, die Anker messen mit EINEM. GEGENPROBE gefahren — nimmt man trimmen aus der
+  Grundgesamtheit, stehen alle alten Zahlen wieder da. gesperrt(MIT_AUSWAHL) 28->29, wartend 23->22,
+  entsperrt 25->24, Bearbeiten-Recht 45->44 samt Testtitel. In K4 ist nicht nur die Zahl gehoben,
+  sondern es sind ZWEI Zusagen ergaenzt, die die Begruendung festhalten: trimmen bei EINER Auswahl
+  gesperrt, bei ZWEIEN frei. Der Anker faengt damit weiterhin jede ANDERE Drift.
+  BUENDEL frisch gebaut (npm run build:hausplaner); der Store-Schluessel 'trimmen' und alle drei
+  neuen Meldungstexte sind im Buendel nachgewiesen.
+  OFFEN UND NICHT BEHAUPTET — DIE BROWSERABNAHME. Der Auftrag nennt sie in keinem seiner neun
+  Kriterien; das Haus verlangt sie fuer sichtbare Aenderungen, und meine IST eine: ein neuer Knopf
+  in der Leiste und eine neue Zeile in der Fussleiste. Buehne auf Port 8100 gegen ticket_testing
+  gestartet und am Kindprozess geprueft — sie ist LEER: 0 Benutzer, 0 hausplaner_documents,
+  0 new_leads. Die Planer-Seite haengt an einem Objekt, das Objekt an new_leads, und dort stehen
+  mehrere NOT-NULL-Spalten ohne Vorgabe; die Index-Route ist eine Objektliste ohne Leinwand. Ich
+  habe einen Testbenutzer angelegt, gemessen und wieder entfernt (0 Benutzer, 0 Leads danach), und
+  die Buehne beendet. Was ich stattdessen habe, ist AUSDRUECKLICH KEIN ERSATZ, sondern nur der ORT:
+  der Eintrag steht im frischen Buendel, in Zone 'weitere' mit herkunft 'registry'. Ort ist nicht
+  Wirkung — das war gestern mein Befund gegen mich selbst (W-10/1), und er gilt auch fuer mich."
 blatt: "docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md"
 basis_sha: 1df82ee1
 art: "BAU — erstes Werkzeug nach ANFORDERUNGEN.md A7. Kein neues Schema, keine neue
