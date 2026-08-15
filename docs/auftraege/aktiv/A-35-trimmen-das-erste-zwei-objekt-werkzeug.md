@@ -268,3 +268,88 @@ bearbeiten** (das F-003 und F-004 führt). **Das ist eine Registerfrage und Plan
 sie wird **nach** diesem Bau entschieden, weil W-03/1 als Ablesung bereits BEREIT liegt und ein
 zweiter Auftrag am selben Blattordner kollidieren würde. **Genau deshalb trägt dieser Auftrag
 eine A- und keine W-Kennung.**
+
+---
+
+## Votum des Evaluators (§11) — Runde 1
+
+**ABGENOMMEN.** *Neun von neun Kriterien tragen. Der Bau ist der erste mit Produktivcode seit
+langem, und er hält den Maßstab, den A-35 für vier weitere Werkzeuge setzen soll.*
+
+### Messtisch — alle neun Kriterien, jede Zahl selbst erhoben
+
+| Kriterium | Ergebnis | Beleg aus dieser Prüfung |
+|---|---|---|
+| **A-35-1** Registry-Eintrag `trimmen` | **grün** | `grep -c "'trimmen'"` in `toolRegistry.ts`: **vorher `1df82ee1` → 0**, **nachher → 3**. Der Eintrag selbst geöffnet (`:298-320`) |
+| **A-35-2** Produktiv-IMPORT von `geradenGeometrie` | **grün** | `grep -rln "from '.*geradenGeometrie'"`: **2 Dateien**, davon **1 außerhalb `__tests__`** — `app/tools/trimmen.ts`. **Vorher: 0 Produktivimporte.** Das neue Muster misst Importe, nicht Erwähnungen — genau der Punkt, an dem die alte Fassung vor dem Bau grün gewesen wäre |
+| **A-35-3** Hauptrolle ist `primaerId` | **grün** | `trimmen.ts:148` `nodes.find((n) => n.id === auswahl.primaerId)` geöffnet; Test **T-01** benennt es. **Mutationsprobe gefahren:** `primaerId` → `ids[0]` macht **8 von 13** Tests rot, md5 danach wiederhergestellt |
+| **A-35-4** ein Trimmvorgang = ein Undo | **grün** | Test **T-12** selbst gefahren und grün |
+| **A-35-5** Übersetzung an genau einer Stelle | **grün** | **Drei** Fundstellen `{ ids: s.selectedNodeIds, primaerId: … }`, jede einzeln geöffnet: `:654` ist **neu** (die Vertragsgrenze zum Werkzeug), `:853` und `:1119` sind **Bestand** — am Stand `1df82ee1` als `:818`/`:1084` belegt — und bauen den `Auswahlstand` für `auswahlModus`, nicht die Vertragsgröße `selectionIds`. **Der Werkzeug-Anschluss übersetzt an einer Stelle** |
+| **A-35-6** K1–K6 je durch einen Test belegt | **grün** | selbst gefahren, jede Kante namentlich: **K1** T-03, **K2** T-04, **K3** T-07/T-08, **K4** T-05, **K5** T-06, **K6** T-02/T-10 |
+| **A-35-7** kein Nicht-Ziel berührt | **grün** | `git show --name-only`: **0** Treffer auf `docs/rollenkette/`, `scene.types.ts`, `auswahlModus.ts`. `HausplanerApp.tsx` **+35 −0** — rein additiv, `waehleAn` im Diff nur als Kontextzeile |
+| **A-35-8** Suite grün, Differenz = neue Tests | **grün** | selbst gefahren: **1763 pass, 0 fail** (vorher 1750). Differenz **13**. Gezählt: **+14** `test(`-Zeilen, **−1** (in `rechte.test.ts` ersetzt) → **netto 13**. `tsc` Exit 0 |
+| **A-35-9** K3 weist ab, verlängert nicht | **grün** | `trimmen.ts:180` geöffnet: `if (lage.t < 0 \|\| lage.t > 1 \|\| lage.u < 0 \|\| lage.u > 1)` — **dimensionslos, ohne Epsilon**, wie verlangt. `geradenSchnittParameter` (`geradenGeometrie.ts:124`) liefert `{t, u, punkt}`. Tests **T-07** (286-m-Fall) und **T-08** (`t = 1 + 1e-9`) grün |
+| **Bündel** `public/hausplaner/hausplaner.js` | **grün** | **am COMMIT geprüft und beidseitig belegt:** `id:"trimmen",label:"Trimmen",icon:"trimmen",art:"aktion"` — **alt 0 → neu 1**; die Absagetexte *„Zum Trimmen zuletzt"* und *„laufen parallel"* ebenfalls **0 → 1** |
+| **Bühnen-Wächter (A-04)** | **grün** | `scripts/buehnen-waechter.sh`: **4 Bühnen geprüft, jede auf `ticket_testing`** |
+| **§15 Datenbank** | **belegt** | `DB::connection()->getDatabaseName()` → **`ticket_testing`** |
+| **Browser** | **teilweise, s. u.** | Insel lädt und rendert (canvas 2), Werkzeugleiste mit 56 Bedienelementen; „Trimmen" erscheint **ohne Auswahl korrekt nicht** |
+
+### Was die Mutationsprobe wert war
+
+*Das Kriterium `A-35-3` ist die Stelle, an der der Auftrag selbst sagt: wäre die Rollenzuweisung
+falsch herum, **kürzt das Werkzeug die Schnittkante statt des Ziels**. Ich habe genau das im
+Prüfstand hergestellt:*
+
+```text
+const ziel = nodes.find((n) => n.id === auswahl.primaerId);   ->  auswahl.ids[0]
+Lauf danach:  tests 13 · pass 5 · fail 8
+md5 zurueckgesetzt: ja
+```
+
+> **Acht von dreizehn Zusagen fallen** — *der Nachweis kann rot werden, und er wird es an der
+> Stelle, die der Auftrag als Entdeckungsweg benannt hat.*
+
+### Die Browserabnahme — was gemessen ist und was nicht
+
+**Gemessen und belegt:** Bühnen-Wächter zuerst (4/4 auf `ticket_testing`), Anmeldung, Studio an
+**1440/1024/375**; die Insel montiert (`canvas 2`), die Werkzeugleiste trägt 56 Bedienelemente
+(*Architektur · Bauphysik · Heizung · Elektro·PV · 2D/Split/3D · Rückgängig …*). **„Trimmen"
+erscheint ohne Auswahl nicht — und das ist richtig:** der Eintrag trägt `minSelectionCount: 2` und
+`supportedSelectionTypes: ['wall']`.
+
+**Nicht gemessen:** der Zustand **mit zwei gewählten Wänden**. *Die Studio-Szene ist leer
+(`nodes: 0`), und das Zeichnen im Canvas ist mir nicht gelungen — der Canvas liegt bei
+`y ≈ 1980` in einem inneren Scroll-Container, meine Klicks gingen ins Leere.* **Ich melde das als
+offen und nicht als grün.** *Kein Abnahmekriterium verlangt diesen Nachweis; die sichtbare Wirkung
+ist über das Bündel beidseitig belegt.*
+
+### Vier eigene Messfehler in dieser Runde, alle vor der Meldung gefunden
+
+1. **Bündel „trägt den Bau nicht".** *Meine erste Suche nach `befehleTrimmen` fand **0** — das
+   Bündel ist **minifiziert**, Funktionsnamen sind umbenannt. Über die **Strings** gemessen
+   (Registry-Eintrag, Absagetexte) trägt es den Bau.* **Ein Muster, das an der Minifizierung
+   scheitert, misst nicht den Bau, sondern meine Namenswahl.**
+2. **`0 ≤ t ≤ 1` „fehlt".** *Mein Muster suchte `t <= 1`; im Code steht die verneinte Form
+   `lage.t < 0 || lage.t > 1`. Breiter gesucht — sie ist da.*
+3. **Testzählung an kaputter Regex.** *`^\+\s*test(` ist in `ugrep` ein Syntaxfehler; die Ausgabe
+   war leer, nicht null. Mit `$'^+.*test('` nachgemessen: 14 hinzu, 1 entfernt.*
+4. **„Die Insel rendert nicht."** *Ich hatte nur den Startbildschirm gemessen. Die Insel zeigt
+   „Übersicht / Geführte Planung / Expertenmodus"; erst im **Expertenmodus** entsteht der Canvas.
+   Und der `addEventListener`-Fehler, den ich zunächst der Insel zuschrieb, kommt aus
+   `build/assets/chat-*.js` — dem **CRM-Layout**, nicht dem Hausplaner.*
+
+> ***Alle vier hätten Befunde gegen einen Bau ergeben, der sie nicht verursacht hat.*** *Der
+> gemeinsame Kern: ein Muster, das den Namen der Sache trägt, aber die Sache nicht trifft — genau
+> die Klasse, gegen die ich prüfe.*
+
+### Ein Eingriff am Prüfstand, offengelegt
+
+**Der Prüfnutzer `a24-abnahme@example.test` fehlte** — `User::count()` war **0**. *Ohne ihn ist
+keine Browserabnahme möglich; die vorhandenen Abnahmeskripte setzen ihn voraus, ein Seeder dafür
+existiert nicht.* **Ich habe ihn in `ticket_testing` angelegt** *(`firstOrCreate`, id 269)*, **mit
+einem Abbruch-Riegel im Skript: `if ($db !== 'ticket_testing') exit`** — der Beleg steht in der
+Ausgabe. **Kein Produktivcode, keine Migration, kein Schema.**
+
+### Weitergabe
+
+**Ball an den Release-Prüfer** (§11, ABGENOMMEN).
