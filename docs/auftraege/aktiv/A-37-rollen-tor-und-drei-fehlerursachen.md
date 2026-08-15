@@ -18,7 +18,12 @@ kennung_geprueft: "A-37 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
 anlass: "Der rollende Umzug laeuft seit 14.08. 22:20. Fuenf Rollen haben eigene Worktrees.
          Nichts hindert eine Rolle daran, im falschen Baum zu schreiben — das Tor kennt den
          Baum nicht (0 Treffer fuer 'worktree' in 743 Zeilen)."
-gebaut_in: "ticket-rolle-generator (rolle/generator) — NICHT im gemeinsamen Checkout"
+gebaut_in: "DER INTEGRATIONS-CHECKOUT /Users/yamanuri/Documents/ticket, solange P2H-06 offen ist.
+            BERICHTIGT 15.08. nach DoR-Restpunkt 1 — vorher stand hier ticket-rolle-generator.
+            Grund, vom Pruefer gemessen: KEIN Rollenbaum hat node_modules oder typescript, alle
+            fuenf NEIN, nur der gemeinsame JA. A-37-11 waere dort unerfuellbar, und Paragraf 5
+            verbietet unerfuellbare Kriterien. Der Bau eines Tores, das den Umzug erst
+            ermoeglicht, kann nicht voraussetzen, dass der Umzug schon gelungen ist."
 ```
 
 ## Warum jetzt, und warum P0
@@ -68,7 +73,38 @@ Sobald `docs/STATUS.md` in der Pfadliste steht **und** der Baum nicht der Integr
 schreiben können, sonst steht die Kette. **Der Umschaltpunkt ist `P2H-06`** (alle vier umgezogen),
 nicht der Bau dieses Auftrags.
 
-### 3 · Drei Fehlerursachen, drei Meldungen
+### 3 · Drei Fehlerursachen, drei Meldungen — **✅ VORAB GEBAUT am 15.08., ohne DoR**
+
+> **⚠ TEIL 3 IST BEREITS GEBAUT** — `374bb851`, Generator, **auf Yamas ausdrückliche Anweisung und
+> ohne DoR**. Er hat es als Erstes gemeldet statt es einzureihen: *„Das melde ich zuerst, weil es
+> eine Ausnahme ist: A-37 steht auf ENTWURF beim Planner und ist NICHT BEREIT; ich habe es nicht
+> gezogen."* **Teil 1 und Teil 2 hat er ausdrücklich nicht angefasst** — die gehören in den Auftrag,
+> wenn er `BEREIT` ist.
+>
+> **Selbst nachgemessen:** `grep -cE 'MODUL|LAUFZEIT'` → **5** *(war 0)*. Die drei Fälle sind
+> einzeln gefahren, mit Rückgabecodes **2 / 3 / 4** und Rohausgabe im Bau-Bericht. **Die Barriere
+> ist nicht abgeschwächt:** dieselbe Datei im selben Baum **mit** `NODE_PATH` gibt `BLOECKE 0
+> KAPUTT 0`, Rückgabe 0.
+>
+> **Ein zweiter Mangel kam dazu, der in keinem Auftrag stand** und den der Release-Prüfer an
+> **seinem eigenen** kaputten YAML fand: `t.match` auf `:501` lief **ohne `g`-Flag** und las genau
+> **einen** Block je Datei. Bei einem Auftragsblatt ist das richtig — bei `docs/STATUS.md` mit
+> **302** Blöcken sind es **0,3 %** der Datei.
+>
+> **Und die Lösung wiegt schwerer als der Fund.** Hätte der Generator einfach das `g` gesetzt, wäre
+> **ab sofort jeder Commit an `docs/STATUS.md` gesperrt** — wegen **25** Blöcken, die seit Wochen
+> liegen und die der Schreibende nicht verursacht hat. **Dieselbe Falle wie Mangel 1, nur
+> andersherum: eine Barriere, die zu oft und am Falschen sperrt.** Stattdessen vergleicht der
+> Prüfer den Arbeitsstand gegen den **committeten** Stand derselben Datei und sperrt **nur, wenn die
+> Zahl wächst**. *Kaputte Blöcke dürfen schrumpfen, nie wachsen.* **Kein fester Schwellwert, der
+> driftet — genau das hat er selbst an A-07-5 kritisiert.**
+>
+> **Was das für diesen Auftrag heißt:** **A-37-8 und A-37-9 sind erfüllt, bevor der Auftrag `BEREIT`
+> ist.** Nach §5 darf ein Kriterium nicht schon erfüllt sein — **hier ist es das, und zwar durch
+> eine benannte Ausnahme, nicht durch einen Schnittfehler.** Der Evaluator prüft sie am Bau-Commit
+> `374bb851`; **neu zu bauen ist Teil 3 nicht.**
+
+*(Der ursprüngliche Scope-Text bleibt als Beleg stehen — A-20-4.)*
 
 `commit-pruefen.sh:501-503` meldet heute alles als Kopf-Fehler. **Neu:**
 
@@ -103,7 +139,12 @@ nicht der Bau dieses Auftrags.
 ## Abnahmekriterien
 
 - **A-37-1** · `scripts/rollen-tor.sh` existiert und ist ausführbar.
-  **Messbar:** `test -x scripts/rollen-tor.sh` → exit 0. **Rot am Basis-SHA:** `ls scripts/ | grep -c rollen-tor` → **0**.
+  **Messbar:** `test -x scripts/rollen-tor.sh` → exit 0.
+  **Rot am Basis-SHA:** `ls scripts/ | grep -c rollen-tor` → **0**.
+  **⚠ Zum Messbefehl, vom Prüfer bemerkt und selbst nachgefahren:** `grep -c` gibt bei null
+  Treffern die **0 aus und beendet mit 1**. **Unter `set -e` bricht das Skript an dieser Stelle
+  ab, obwohl die Ausgabe richtig ist.** Wer den Rot-Beleg in einem Skript fährt, schreibt
+  `ls scripts/ | grep -c rollen-tor || true` — **die Zahl stimmt, der Exit-Code täuscht.**
 - **A-37-2** · **Positivfall: die richtige Rolle im richtigen Baum kommt durch.**
   **Messbar:** `TICKET_ROLLE=generator` im Verzeichnis `ticket-rolle-generator` auf `rolle/generator`
   → `rollen-tor.sh` exit **0**, keine Ausgabe. **Rohausgabe in den Bericht.**
@@ -112,8 +153,21 @@ nicht der Bau dieses Auftrags.
 - **A-37-3** · **Negativfall Baum:** `TICKET_ROLLE=generator` im **Planner**-Worktree → exit **1**,
   Meldung nennt **erwarteten und gefundenen** Baum.
 - **A-37-4** · **Negativfall Branch:** richtiger Baum, aber falscher Branch ausgecheckt → exit **1**.
-- **A-37-5** · **Negativfall fehlende Kennung:** `TICKET_ROLLE` leer → exit **1** *(die bestehende
-  Prüfung in `commit-pruefen.sh:59-61` bleibt unberührt und wird nicht verdoppelt)*.
+- **A-37-5** · **Negativfall fehlende Kennung:** `TICKET_ROLLE` leer → **exit 3**.
+  **Entschieden am 15.08. nach DoR-Restpunkt 3, benannt statt geraten:** `rollen-tor.sh` prüft
+  **eigenständig**, denn bei direktem Aufruf ist keine andere Prüfung davor. **Drei
+  unterscheidbare Codes**, damit die Quelle am Code ablesbar ist:
+
+  | Code | Bedeutung | wer |
+  |---|---|---|
+  | **1** | Rolle und Baum passen nicht zusammen | `rollen-tor.sh` |
+  | **2** | Rollenkennung fehlt oder hat falsche Form | `commit-pruefen.sh:59-65` *(unberührt)* |
+  | **3** | Rollenkennung fehlt **beim direkten Aufruf des Tors** | `rollen-tor.sh` |
+
+  **Das ist keine Verdopplung, sondern eine zweite Eintrittstür:** wer `commit-pruefen.sh` ruft,
+  wird von `:59-65` mit **2** abgewiesen und erreicht das Tor gar nicht. Wer das Tor direkt ruft,
+  braucht die Prüfung — sonst vergleicht es einen leeren Rollennamen mit einem Verzeichnis.
+  *(Selbst nachgemessen: `:59-63` beendet mit **2**.)*
 - **A-37-6** · **`docs/STATUS.md` aus einem Rollen-Worktree wird abgewiesen.**
   **Messbar:** Aufruf mit `docs/STATUS.md` in der Pfadliste aus `ticket-rolle-generator` → `KEIN COMMIT`.
   **Rot am Basis-SHA:** dieselbe Lage heute → der Commit **läuft durch** (0 Treffer für eine Sperre).
@@ -128,7 +182,13 @@ nicht der Bau dieses Auftrags.
   abgewiesen — **Gegenprobe mit gesetztem `NODE_PATH`**, exit ≠ 0.
 - **A-37-10** · **Kein Nicht-Ziel berührt.** `git show --stat` nennt keine Datei unter `resources/`,
   `app/`, kein `node_modules`, **nicht `docs/STATUS.md`**.
-- **A-37-11** · **Suite grün und Zahl unverändert** (Stand `bc2125d9`: 1750), `tsc exit=0`.
+- **A-37-11** · **Suite grün und Zahl unverändert GEGEN DEN BAU-STAND**, `tsc exit=0`.
+  **Messbar:** Zahl **unmittelbar vor dem Bau** im Integrations-Checkout erheben und im Bericht
+  nennen; nach dem Bau muss sie **gleich** sein. **Nicht** gegen eine feste Zahl prüfen.
+  *(Berichtigt 15.08. nach DoR-Restpunkt 2: das Kriterium nannte 1750 vom Stand `bc2125d9`;
+  seit A-35 sind es 1763, weil dieser Bau dreizehn Zusagen gebracht hat. **Wer die feste Zahl
+  wörtlich misst, meldet eine Abweichung, die keine ist** — und in vier Wochen erst recht.
+  Eine Zahl, die an einem alten Stand klebt, misst die Zeit, nicht den Bau.)*
 
 ## Rückweg und Entdeckung
 

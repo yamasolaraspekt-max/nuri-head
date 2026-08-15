@@ -17,7 +17,9 @@ kennung_geprueft: "A-38 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
                    docs/auftraege/aktiv/. A-01 bis A-37 sind vergeben. Frei."
 anlass: "Beim Pruefen, ob ein pre-commit-Hook noetig ist, gemessen statt angenommen:
          41 von 309 Commits der letzten 48 h tragen keine Rollenmarke — ausnahmslos Merges."
-gebaut_in: "ticket-rolle-generator (rolle/generator)"
+gebaut_in: "DER INTEGRATIONS-CHECKOUT /Users/yamanuri/Documents/ticket, solange P2H-06 offen
+            ist. BERICHTIGT 15.08. nach DoR-Restpunkt 1, gleicher Grund wie bei A-37: kein
+            Rollenbaum hat node_modules oder typescript, A-38-9 waere dort unerfuellbar."
 hinweis_basis: "rolle/generator steht auf bc2125d9, der Basis-SHA 0f05f8bf ist DREI Commits neuer.
                 Das Objekt ist im gemeinsamen Lager erreichbar, der BRANCH aber nicht dort.
                 Der Generator zieht vor dem Bau nach — sonst baut er am falschen Stand.
@@ -28,14 +30,22 @@ staut_hinter: "A-37 — beide sind ungeprueft. Der Plan-Pruefer entscheidet die 
 ## Der Befund, gemessen
 
 ```
-Commits letzte 48 h                                309
-davon ohne Rollenmarke                              41    = 13 %
-davon Merges                                        41    = ALLE
-Merges gesamt                                       32
-davon MIT Rollenmarke                                4    -> 28 ohne
-'merge' in scripts/commit-pruefen.sh                 4 Treffer, keine Pruefung
+GEMESSEN IM GEMEINSAMEN GRAPHEN (berichtigt 15.08., siehe unten):
+Commits letzte 48 h                                497
+davon ohne Rollenmarke                              59
+davon Merges                                        59    = ALLE
+Merges gesamt                                       70
+davon MIT Rollenmarke                               12    -> 58 ohne  = 83 %
+'merge' in scripts/commit-pruefen.sh  (-i)           4 Treffer, keine Pruefung
 .githooks / core.hooksPath                          nicht vorhanden / nicht gesetzt
 ```
+
+**⚠ Meine erste Zählung war am falschen Ort gemessen — 309/32/41 statt 497/70/59.** Der Prüfer
+hat die Ursache benannt: **ich habe im Planner-Baum gezählt, dessen Graph kleiner war**, und die
+Zahl **wächst rückwirkend**, sobald Zweige zusammengeführt werden. **Der Kern trägt unverändert
+und ist sogar schärfer: 58 von 70 Merges ohne Rollenmarke, 83 Prozent** statt der von mir
+genannten 28 von 32. *(Derselbe Fehlertyp wie am 14.08., als ich 701 statt 39 ungesicherte
+Commits meldete: am falschen Gegenstand gemessen. Diesmal am falschen **Ort**.)*
 
 **Ein Merge ist die Handlung, die künftig dem Integrator allein gehört — und sie ist heute die
 einzige, die das Tor gar nicht sieht.** `git merge` erzeugt einen Commit, ohne dass
@@ -125,7 +135,9 @@ Einzeiler, der `core.hooksPath` setzt, und A-38-6 belegt, dass er in einem zweit
   verhinderbar benannt** — ein Schutz, dessen Grenze verschwiegen wird, erzeugt falsches Vertrauen.
 - **A-38-8** · **Kein Nicht-Ziel berührt.** `git show --stat` nennt weder `resources/`, `app/`,
   `docs/STATUS.md` noch `scripts/commit-pruefen.sh`.
-- **A-38-9** · **Suite grün und Zahl unverändert** (Stand `0f05f8bf`: 1750), `tsc exit=0`.
+- **A-38-9** · **Suite grün und Zahl unverändert GEGEN DEN BAU-STAND**, `tsc exit=0`.
+  **Messbar:** Zahl unmittelbar vor dem Bau erheben, nach dem Bau muss sie gleich sein.
+  **Keine feste Zahl.** *(Berichtigt 15.08., wortgleich zu A-37-11.)*
 
 ## Rückweg und Entdeckung
 
