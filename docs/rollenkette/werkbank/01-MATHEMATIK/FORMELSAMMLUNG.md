@@ -1076,3 +1076,76 @@ und der Aggregationsregel *Anteile werden ertragsgewichtet, nie ungewichtet gemi
 *Dieser Abschnitt steht am Dateiende und nicht bei den Gruppen — auf diese Datei zeigen
 **48 Zeilenverweise** `FORMELSAMMLUNG.md:<zeile>`, und ein Einschub weiter oben hätte jeden
 davon verschoben. Dieselbe Regel wie im `REGISTER.md`, und aus demselben Anlass (A-34).*
+
+---
+
+### F-054 · Maßstab aus einer Referenzstrecke (Grundriss unterlegen) · 🟡
+
+- **Zweck:** Ein eingescannter oder fotografierter Grundriss wird unterlegt. Der Anwender zieht eine
+  **Referenzstrecke** über eine bekannte Länge (Türbreite, Wandlänge) und gibt die **reale** Länge
+  ein. Daraus folgt der Maßstab für alles Weitere.
+- **Eingabe:** `soll_mm` (eingegeben) · `gemessen_mm` (die gezogene Strecke nach F-001)
+- **Formel:**
+  ```
+  massstab      = soll_mm / gemessen_mm
+  rel_fehler    = zeigefehler_mm / gemessen_mm
+  ```
+- **Ausgabe:** **beides** — der Maßstab **und** sein relativer Fehler.
+- **Grenzfall:** `gemessen_mm = 0` → **kein Maßstab**, nicht 0 und nicht ∞.
+
+> **⚠ Aufgenommen am 15.08.2026 — als Lücke gemeldet, nicht erfunden.**
+>
+> **Der Generator hat sie beim Bau von W-16/1 benannt** *(`bc2125d9`)*: *„Die Maßstabsrechnung steht
+> in der FORMELSAMMLUNG nicht: vier Muster, null Treffer, als Lücke gemeldet statt eine Nummer zu
+> erfinden."* — **Nachgemessen: `grep -ci 'massstab' FORMELSAMMLUNG.md` → 0.**
+>
+> **Sein Befund, den ich nachgerechnet und dabei geschärft habe:** *„Die null-Zusage fängt nur die
+> Null, nicht das Fast-Null. Ein Abstand von 0,3 mm bei 1000 mm Eingabe liefert 3333,33 statt null.
+> Der Aufrufer bekommt eine unbrauchbare Zahl, die aussieht wie ein Maßstab."*
+>
+> **Selbst gerechnet, Soll 1000 mm, Zeigefehler ±0,1 mm:**
+>
+> ```text
+>   gemessen [mm]     Maßstab     rel. Fehler
+>            0,3      3333,33         33,3 %
+>            0,5      2000,00         20,0 %
+>            1,0      1000,00         10,0 %
+>            5,0       200,00          2,0 %
+>           50,0        20,00          0,2 %
+>          200,0         5,00          0,1 %
+>         1000,0         1,00          0,0 %
+> ```
+>
+> **Und die Gegenprobe, die den eigentlichen Punkt zeigt — an F-001s Schwelle:**
+>
+> ```text
+>   gemessen 0,49 mm  ->  Maßstab 2040,82   rel. Fehler 20,4 %   (F-001 SPERRT)
+>   gemessen 0,51 mm  ->  Maßstab 1960,78   rel. Fehler 19,6 %   (F-001 laesst durch)
+> ```
+>
+> **F-001s ε trennt hier nichts Fachliches.** Beide Werte sind gleich unbrauchbar; der Unterschied
+> beträgt 4 % im Maßstab und 0,8 Prozentpunkte im Fehler. **Die Schwelle ist für Wandanlagen
+> gemacht — dort heißt „unter ε" *derselbe Punkt*. Beim Referenzmaß heißt es *zu kurz gezogen*, und
+> das ist eine andere Frage.**
+>
+> **Die Regel, und sie braucht keinen freien Operanden:**
+>
+> **Der relative Fehler des Maßstabs IST der relative Fehler der Referenzstrecke.** `rel_fehler`
+> gehört zur Ausgabe, nicht in einen Kommentar. **Kein Aufrufer darf `massstab` ohne `rel_fehler`
+> verwenden.** Bei 0,3 mm Strecke hat die Zahl `3333,33` eine Genauigkeit von **einer** Stelle und
+> sieht aus wie **sechs**.
+>
+> **Wer die fachliche Grenze setzt:** nicht die Formel. Sie hängt am Anwendungsfall und ist dort ein
+> **benannter Operand**:
+>
+> | Anwendungsfall | Anforderung an die Referenzstrecke |
+> |---|---|
+> | **Grundriss maßhaltig unterlegen** | so lang wie möglich — eine Außenwand, keine Türbreite. **Der Operand ist der höchste zulässige `rel_fehler`, und er gehört ins Auftragsblatt, nicht in die Formel.** |
+> | **grobe Lageorientierung** | jede Strecke, aber der Maßstab wird als *ungefähr* geführt und nicht für Mengen verwendet |
+>
+> ***Was daran lehrreich ist — es ist derselbe Fehler wie bei F-004, eine Woche später und an einer
+> anderen Formel:*** *Die Formel ist richtig, der Grenzfall prüft die Größe, die leicht zu prüfen ist
+> (ist es null?), und nicht die, an der die Antwort scheitert (wie genau ist sie?). **Bei F-004 war es
+> der Winkel statt der Entfernung, hier die Null statt der Genauigkeit.** Und F-001 sagt den Schaden
+> sogar voraus — „sie erzeugt später eine Division durch null" —, **aber der Schaden kam nicht als
+> Absturz, sondern als plausibel aussehende Zahl.** Ein Absturz wäre billiger gewesen.*
