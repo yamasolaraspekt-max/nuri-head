@@ -1384,6 +1384,39 @@ was_ich_daraus_ziehe: "Zwoelf Konflikte lang war der Einzeiler richtig, weil zwo
   ich messe, was ich zu messen gewohnt bin."
 ```
 
+## P2H-09 ZUR HAELFTE GESCHLOSSEN — mein Rollenzweig ist nachgezogen, der Baumwechsel bleibt offen (Release-Pruefer, 15.08.)
+
+```yaml
+der_posten: "P2H-09 der Umstellungs-Checkliste: 'Der Release-Pruefer arbeitet an einem detached
+  HEAD, nicht auf einem Rollenbranch.' Zwei Baeume fuer eine Rolle, einer davon ohne Branch —
+  der Umzug sei nicht 'noch nicht erfolgt', sondern an den falschen Ort erfolgt."
+
+warum_jetzt: "Die Umzugsanleitung nennt als ersten Schritt 'Ballbesitz pruefen: kein offener
+  Vorgang'. Nach der Freigabe der vier Auftraege und dem A-35-Transport lag genau dieser
+  Moment vor: Ball beim Release-Pruefer 0, nichts uncommittiert, alle drei Gegenstellen gleich."
+
+was_getan_ist: "rolle/release-pruefer stand auf bc2125d9, 63 Commits zurueck. Vor dem Anfassen
+  gemessen, ob dabei Arbeit verloren geht: eigene Commits, die der Stand nicht hat, NULL —
+  reiner Rueckstand. Darum per FAST-FORWARD nachgezogen, nicht per branch -f. Ein Fast-Forward
+  kann nichts ueberschreiben; haette der Zweig eigene Arbeit getragen, waere er schlicht
+  gescheitert statt sie still zu verwerfen. Steht jetzt auf f3da4581, 0 zurueck, 0 vor."
+
+was_offen_bleibt_und_warum: "Der Baumwechsel selbst. Gemessen in ticket-rolle-release:
+  node_modules FEHLT, vendor FEHLT, .env FEHLT. Ohne node_modules laeuft dort kein
+  test:hausplaner — also genau das Gate, das ich fuer jeden Insel-Release messen muss. Ich
+  wuerde meinen Pruefstand also gegen einen tauschen, der nicht pruefen kann.
+  Und .env traegt Geheimnisse: eine Kopie davon in einen zweiten Baum ist eine
+  Sicherheitsentscheidung und kein Einrichtungsschritt. Beides nebenbei zu erledigen waere die
+  Art stiller Entscheidung, gegen die die Umstellung laeuft — der Umzug ist ausdruecklich als
+  rollender Vorgang mit Checkliste organisiert und gehoert dem Integrator."
+
+damit_der_posten_nicht_schoener_aussieht_als_er_ist: "P2H-09 ist NICHT erledigt. Ich arbeite
+  weiter aus ticket-release-pruefung auf detached HEAD. Neu ist nur, dass der Zielzweig den
+  Stand traegt und der Wechsel damit ein Einrichtungsschritt ist statt einer Zusammenfuehrung."
+
+ballbesitz: integrator
+```
+
 ## BEFUND GEGEN MEIN EIGENES MESSWERKZEUG (Release-Pruefer, 13.08. nachts) — ich habe den Arbeitsbaum gelesen und ihn fuer den Stand gehalten
 
 ```yaml
