@@ -73,7 +73,38 @@ Sobald `docs/STATUS.md` in der Pfadliste steht **und** der Baum nicht der Integr
 schreiben können, sonst steht die Kette. **Der Umschaltpunkt ist `P2H-06`** (alle vier umgezogen),
 nicht der Bau dieses Auftrags.
 
-### 3 · Drei Fehlerursachen, drei Meldungen
+### 3 · Drei Fehlerursachen, drei Meldungen — **✅ VORAB GEBAUT am 15.08., ohne DoR**
+
+> **⚠ TEIL 3 IST BEREITS GEBAUT** — `374bb851`, Generator, **auf Yamas ausdrückliche Anweisung und
+> ohne DoR**. Er hat es als Erstes gemeldet statt es einzureihen: *„Das melde ich zuerst, weil es
+> eine Ausnahme ist: A-37 steht auf ENTWURF beim Planner und ist NICHT BEREIT; ich habe es nicht
+> gezogen."* **Teil 1 und Teil 2 hat er ausdrücklich nicht angefasst** — die gehören in den Auftrag,
+> wenn er `BEREIT` ist.
+>
+> **Selbst nachgemessen:** `grep -cE 'MODUL|LAUFZEIT'` → **5** *(war 0)*. Die drei Fälle sind
+> einzeln gefahren, mit Rückgabecodes **2 / 3 / 4** und Rohausgabe im Bau-Bericht. **Die Barriere
+> ist nicht abgeschwächt:** dieselbe Datei im selben Baum **mit** `NODE_PATH` gibt `BLOECKE 0
+> KAPUTT 0`, Rückgabe 0.
+>
+> **Ein zweiter Mangel kam dazu, der in keinem Auftrag stand** und den der Release-Prüfer an
+> **seinem eigenen** kaputten YAML fand: `t.match` auf `:501` lief **ohne `g`-Flag** und las genau
+> **einen** Block je Datei. Bei einem Auftragsblatt ist das richtig — bei `docs/STATUS.md` mit
+> **302** Blöcken sind es **0,3 %** der Datei.
+>
+> **Und die Lösung wiegt schwerer als der Fund.** Hätte der Generator einfach das `g` gesetzt, wäre
+> **ab sofort jeder Commit an `docs/STATUS.md` gesperrt** — wegen **25** Blöcken, die seit Wochen
+> liegen und die der Schreibende nicht verursacht hat. **Dieselbe Falle wie Mangel 1, nur
+> andersherum: eine Barriere, die zu oft und am Falschen sperrt.** Stattdessen vergleicht der
+> Prüfer den Arbeitsstand gegen den **committeten** Stand derselben Datei und sperrt **nur, wenn die
+> Zahl wächst**. *Kaputte Blöcke dürfen schrumpfen, nie wachsen.* **Kein fester Schwellwert, der
+> driftet — genau das hat er selbst an A-07-5 kritisiert.**
+>
+> **Was das für diesen Auftrag heißt:** **A-37-8 und A-37-9 sind erfüllt, bevor der Auftrag `BEREIT`
+> ist.** Nach §5 darf ein Kriterium nicht schon erfüllt sein — **hier ist es das, und zwar durch
+> eine benannte Ausnahme, nicht durch einen Schnittfehler.** Der Evaluator prüft sie am Bau-Commit
+> `374bb851`; **neu zu bauen ist Teil 3 nicht.**
+
+*(Der ursprüngliche Scope-Text bleibt als Beleg stehen — A-20-4.)*
 
 `commit-pruefen.sh:501-503` meldet heute alles als Kopf-Fehler. **Neu:**
 
