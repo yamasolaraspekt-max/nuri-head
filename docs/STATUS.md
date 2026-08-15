@@ -17519,7 +17519,8 @@ claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG (der Plan-
   Wuenschbarkeit; wo ein Punkt mich belastet, entscheide ich im Zweifel FUER den Auftrag und sage
   es an der Stelle."
 dor_beleg: "NICHT BEREIT — 1. Runde, siehe dor_votum"
-dor_votum: "plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 1. DoR-Runde: NICHT BEREIT
+dor_votum: |
+  plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 1. DoR-Runde: NICHT BEREIT
   — DREI Restpunkte, alle klein und benannt. Das Blatt ist im Uebrigen das sorgfaeltigste dieser
   Runde; die Restpunkte sind Nachtraege, keine Neuschnitte.
   WAS TRAEGT, selbst nachgemessen und nicht uebernommen: Basis bc2125d9 existiert und ist Vorfahr
@@ -17549,7 +17550,7 @@ dor_votum: "plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 1. DoR-Runde
   HINWEIS, kein Restpunkt: der Rot-Beleg ls scripts/ | grep -c rollen-tor gibt bei 0 Treffern
   grep-exit 1. Unter set -e bricht das ab. Die Ausgabe 0 ist richtig, der Exit-Code taeuscht.
   NICHT GEPRUEFT und nicht behauptet: ob das Tor fachlich richtig sperrt. Die DoR prueft
-  Baubarkeit und Messbarkeit."
+  Baubarkeit und Messbarkeit.
   GEMEINSAMER BEFUND ZUM BAU-ORT:
   DER TRAGENDE BEFUND, und er gilt fuer BEIDE Auftraege gleich: KEIN EINZIGER Rollenbaum kann
   die eigenen Abnahmekriterien pruefen. Gemessen, alle fuenf plus den gemeinsamen:
@@ -17611,7 +17612,8 @@ claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG (der Plan-
   Wuenschbarkeit; wo ein Punkt mich belastet, entscheide ich im Zweifel FUER den Auftrag und sage
   es an der Stelle."
 dor_beleg: "NICHT BEREIT — 1. Runde, siehe dor_votum"
-dor_votum: "plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 1. DoR-Runde: NICHT BEREIT
+dor_votum: |
+  plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 1. DoR-Runde: NICHT BEREIT
   — ZWEI Restpunkte, einer davon derselbe wie bei A-37.
   WAS TRAEGT: Basis 0f05f8bf existiert und ist Vorfahr von HEAD. .githooks am Basis-SHA nicht
   vorhanden (0), core.hooksPath leer — beide Rot-Belege stimmen. Nicht-Ziele scharf, darunter
@@ -17639,7 +17641,7 @@ dor_votum: "plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 1. DoR-Runde
   RESTPUNKT 2 — A-38-9 nennt 1750 (Stand 0f05f8bf), heute 1763. Wortgleich zu A-37-11.
   ANMERKUNG zur Reihenfolge: das Blatt sagt staut_hinter A-37 und ueberlaesst die Reihenfolge
   mir. Sie ist richtig so — A-37 fasst commit-pruefen.sh an, A-38 nicht, und ein Hook, der vor
-  dem Tor scharf wird, sperrt Merges, bevor das Tor sie einordnen kann."
+  dem Tor scharf wird, sperrt Merges, bevor das Tor sie einordnen kann.
   GEMEINSAMER BEFUND ZUM BAU-ORT:
   DER TRAGENDE BEFUND, und er gilt fuer BEIDE Auftraege gleich: KEIN EINZIGER Rollenbaum kann
   die eigenen Abnahmekriterien pruefen. Gemessen, alle fuenf plus den gemeinsamen:
