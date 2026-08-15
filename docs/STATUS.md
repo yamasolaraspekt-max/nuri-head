@@ -19804,3 +19804,63 @@ bitte: |
   einzige Rechenweg im Haus eine liefert. Genau daran misst der Evaluator spaeter.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "umgezogene_rollen_haben_keine_kopie_ausserhalb_der_maschine"
+titel: "Der Umzug hat den Sicherungsweg gekappt — zehn Commits liegen in zwei Rollenbaeumen, und die Rollenzweige stehen auf KEINER Gegenstelle"
+rolle: plan-pruefer
+zeit: "2026-08-15 16:03"
+stand_kopf: 9aa6653f
+posten: "Pflichtteil der Wache (Zweigprobe), nicht Vorratspruefung"
+zuerst_berichtige_ich_mich_selbst: |
+  Ich habe heute in JEDER Meldung "alle drei Remotes stehen auf X" geschrieben. Das ist
+  falsch gezaehlt, und der Bestand wusste es bereits — P0-03c der Umstellungs-Checkliste
+  fuehrt genau diesen Fehler als Fehler des Planners: "vier Remote-NAMEN, aber nur zwei
+  Gegenstellen ... Namen gezaehlt statt Gegenstellen". Ich bin heute mehrfach in denselben
+  Fehler gelaufen, obwohl er dokumentiert im Haus steht.
+  Gemessen, git remote -v, fetch-Zeilen:
+    origin           https://github.com/yamasolaraspekt-max/nuri-head.git
+    fork             https://github.com/yamasolaraspekt-max/nuri-head.git   <- dieselbe URL
+    backup-private   https://github.com/yamasolaraspekt-max/nurihead.git    <- ohne Bindestrich
+    upstream         https://github.com/raminsadid2021/nuri-head.git        <- fremdes Konto
+  ZWEI eigene Gegenstellen, nicht drei. origin und fork sind EINE Kopie. Der Unterschied zu
+  backup-private ist ein einziger Bindestrich im Namen — deshalb faellt es nicht auf.
+der_eigentliche_befund: |
+  Die Rollenzweige werden auf KEINER Gegenstelle gefuehrt:
+    git ls-remote origin refs/heads/rolle/plan-pruefer   -> NICHT VORHANDEN
+    git ls-remote origin refs/heads/rolle/planner        -> NICHT VORHANDEN
+  Stand jetzt, 16:03:
+    rolle/plan-pruefer   6 Commits voraus, aeltester (a98e0eb9) 18 Minuten alt
+    rolle/planner        4 Commits voraus
+    gemeinsamer Checkout und beide Gegenstellen stehen seit 15:34 unveraendert auf 94585355
+  Diese zehn Commits liegen ausschliesslich auf dieser Platte. Es gibt keine zweite Kopie.
+warum_gerade_jetzt: |
+  Vor dem Umzug lag alles im gemeinsamen Checkout, und der wurde regelmaessig transportiert.
+  Nach dem Umzug entsteht Arbeit in Baeumen, die kein Fernstand kennt. Der Weg dorthin
+  laeuft ueber genau eine Rolle — der Release-Pruefer, letzter Transport 15:31
+  ("Planner-Nachbesserung und Generator-Torreparatur transportiert"), und er ist selbst
+  NICHT umgezogen: sein Baum steht auf f3da4581, gearbeitet hat er im gemeinsamen Checkout.
+  Das ist P2H-12 ("R2 laeuft als Gefaelligkeit, nicht als Zustaendigkeit") in seiner
+  praktischen Auswirkung: die zwei Rollen, die der Umstellung gefolgt sind, sind die
+  einzigen ohne Sicherung. Wer NICHT umzieht, bleibt gesichert.
+was_die_checkliste_dazu_fuehrt: |
+  Nichts. Ich habe sie nach push/Sicherung/Kopie ausserhalb durchsucht: P2A-10 regelt
+  Push-ZIELE (je Gegenstelle statt je Name), P2F-15 verbietet Push ohne Integrationsplan,
+  P0 heisst "FORENSISCHE SICHERUNG" und meint den Untersuchungsstand. Ein Punkt "die
+  Rollenzweige haben keine Kopie ausserhalb der Maschine" fehlt.
+was_ich_NICHT_tue_und_warum: |
+  KEIN PUSH. Die stehende Regel meiner Wache ist KEIN PUSH, und P2F-15 verbietet ihn
+  zusaetzlich ohne belegten Integrationsplan. Ich melde die Lage und raeume sie nicht ab —
+  auch wenn ein Befehl genuegen wuerde.
+  Und ich behaupte NICHT, dass 18 Minuten gefaehrlich sind. Sie sind es nicht. Gemeldet
+  wird die STRUKTUR: der Rueckstau hat keine Obergrenze, keinen Zustaendigen und keinen
+  Punkt in der Checkliste. Er faellt erst auf, wenn er weh tut.
+bitte_an_yama: |
+  Eine Zeile Erlaubnis wuerde reichen, in einer von zwei Formen:
+    (1) die umgezogenen Rollen duerfen ihren EIGENEN Zweig auf eine Gegenstelle sichern
+        (git push origin rolle/<rolle>, nur der eigene Zweig, nie main, nie force), oder
+    (2) der Transport bekommt einen Takt und einen Zustaendigen, und bis dahin bleibt der
+        gemeinsame Checkout der einzige Ort, an dem committet wird.
+  Beides ist deine Entscheidung, nicht meine — (1) beruehrt die Push-Regel, (2) den Umzug.
+ballbesitz: yama
+```
