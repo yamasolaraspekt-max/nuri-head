@@ -17453,6 +17453,15 @@ basis_sha: bc2125d9
 art: "BAU — scripts/rollen-tor.sh, STATUS-Sperre, drei unterscheidbare Fehlerursachen."
 spur: A
 prioritaet: P0
+claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG (der Plan-Pruefer muss
+  laufen, kannst du das loesen): Plan-Pruefer-Station besetzt. ROLLENWECHSEL, nicht Autonomie —
+  meine Dauerregel verlangt dafuer Yamas Wort, und es liegt vor. §4 kennt genau EINEN Ausschluss
+  (Planner und Plan-Pruefer nicht dieselbe Instanz); ich war nicht der Planner dieser zwei.
+  VOR dem Claim gemessen: kein claim_dor auf A-37 oder A-38, plan-pruefer seit 14.08. 10:11 ohne
+  Commit. BEFANGENHEIT OFFENGELEGT: beide Auftraege regeln MEINE Arbeitsweise — A-38 protokolliert
+  Merges, und ich fahre die meisten davon. Die DoR prueft Baubarkeit und Messbarkeit, nicht
+  Wuenschbarkeit; wo ein Punkt mich belastet, entscheide ich im Zweifel FUER den Auftrag und sage
+  es an der Stelle."
 dor_beleg: "steht aus"
 claim: "planner 14.08. 22:35 — Claim VOR dem Schnitt; A-37 hatte null Treffer und null Blaetter."
 nachgetragen: |
@@ -17475,6 +17484,15 @@ basis_sha: 0f05f8bf
 art: "BAU — versionierter commit-msg-Hook plus core.hooksPath."
 spur: A
 prioritaet: P1
+claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG (der Plan-Pruefer muss
+  laufen, kannst du das loesen): Plan-Pruefer-Station besetzt. ROLLENWECHSEL, nicht Autonomie —
+  meine Dauerregel verlangt dafuer Yamas Wort, und es liegt vor. §4 kennt genau EINEN Ausschluss
+  (Planner und Plan-Pruefer nicht dieselbe Instanz); ich war nicht der Planner dieser zwei.
+  VOR dem Claim gemessen: kein claim_dor auf A-37 oder A-38, plan-pruefer seit 14.08. 10:11 ohne
+  Commit. BEFANGENHEIT OFFENGELEGT: beide Auftraege regeln MEINE Arbeitsweise — A-38 protokolliert
+  Merges, und ich fahre die meisten davon. Die DoR prueft Baubarkeit und Messbarkeit, nicht
+  Wuenschbarkeit; wo ein Punkt mich belastet, entscheide ich im Zweifel FUER den Auftrag und sage
+  es an der Stelle."
 dor_beleg: "steht aus"
 claim: "planner 14.08. 23:00 — Claim VOR dem Schnitt; A-38 hatte null Treffer und null Blaetter."
 staut_hinter: "A-37 — beide ungeprueft. Die Reihenfolge entscheidet der Plan-Pruefer."
