@@ -1463,6 +1463,77 @@ eine_dritte_form_die_der_block_noch_nicht_nennt: "Beide Seiten koennen zugleich 
 ballbesitz: planner  # oder Yama, wenn er die Prozessfrage an sich zieht
 ```
 
+## ENTSCHIEDEN IN YAMAS NAMEN — die node_modules-Bedingung wird PRAEZISIERT, nicht aufgehoben (Release-Pruefer, 15.08.)
+
+```yaml
+grundlage: |
+  Yamas Anweisung vom 15.08. im Wortlaut: "dass sollst du auch in meinem namen beantworten".
+  Der Generator legt drei Varianten vor und bietet an, Variante 1 zu bauen. Ich habe zuerst
+  gemessen, ob sie traegt — eine Entscheidung ohne Machbarkeitsprobe waere genau der Fehler,
+  den ich eine Stunde zuvor an A-37 gefunden habe.
+
+VARIANTE 1 IST WIDERLEGT, und zwar zweifach: |
+  (a) SICHERHEIT. npx tsc laedt NICHT typescript. Das npm-Paket heisst "tsc" und ist ein
+      fremdes Paket. Beleg aus dem Fehlversuch im Generator-Baum, woertlich:
+        npm error request to https://registry.npmjs.org/tsc failed
+      Ein Gate, das bei jedem Lauf ein Paket aus dem Netz zieht, das nicht im package-lock
+      steht, ist keine Loesung, sondern eine neue Lieferkettenluecke. typescript ist im Lock
+      verankert (1 Treffer auf node_modules/typescript), "tsc" nicht.
+  (b) SIE TRAEGT AUCH SONST NICHT. Selbst mit einem aufloesbaren ABSOLUTEN Pfad auf das tsc
+      des gemeinsamen Baums laeuft es und scheitert:
+        1147x  TS7026  JSX element implicitly has type any (JSX.IntrinsicElements fehlt)
+         155x  TS7006
+          47x  TS2307  Cannot find module 'react'
+          25x  TS2875
+      DER GENERATOR HAT DIE URSACHE FALSCH VERORTET, und das ist der Kern: nicht der
+      Binaerpfad ist das Hindernis, sondern die TYPAUFLOESUNG. TypeScript sucht react und
+      @types ueber node_modules im PROJEKTVERZEICHNIS. Kein Pfad und kein NODE_PATH aendert
+      das. Der Auftrag, Variante 1 zu bauen, entfaellt damit — er waere gebaut worden und
+      haette nicht gewirkt.
+
+GEWAEHLT WIRD VARIANTE 3, und sie ist BEWIESEN statt vermutet: |
+  Ich habe sie in MEINEM eigenen Rollenbaum gefahren, nicht in einem fremden:
+    npm ci in ticket-rolle-release        323 MB
+    package-lock.json md5 vorher/nachher  UNVERAENDERT (npm ci schreibt den Lock nicht)
+    npm run tsc:hausplaner                Exit 0
+    npm run schema:hausplaner:check       Exit 0
+    npm run test:hausplaner               Exit 0 — 1763 pass, 0 fail
+    git status --porcelain                0 Dateien — .gitignore Z.2 faengt node_modules
+  Damit laufen genau die Gates, die A-35-8 und jedes vergleichbare Kriterium verlangen.
+
+DIE BEDINGUNG WIRD NICHT AUFGEHOBEN, SONDERN PRAEZISIERT: |
+  Yamas Nicht-Ziel nennt DREI Dinge. Zwei davon sind echte Gefahren und bleiben gesperrt:
+    kein Symlink zwischen Baeumen   — bricht bei jedem npm-Lauf, erzeugt stille Fehler
+    keine Modulkopie ins Repo       — waere ein Bestandsschaden
+  Das dritte war mit denselben Worten mitgesperrt, ist aber keines von beiden:
+    eine echte npm-ci-Installation je Baum   — ERLAUBT, weil sie nichts verlinkt, nichts
+    ins Repo traegt und den Lock nicht anfasst. Alle drei Eigenschaften oben gemessen.
+
+was_das_kostet_und_was_es_loest: |
+  323 MB je Baum, bei fuenf Baeumen rund 1,6 GB, frei sind 74 von 460 GB.
+  Es loest: den Bau-Ort-Befund von A-37 und A-38 (beide koennen nach der Nachbesserung des
+  Planners im Rollenbaum gebaut werden), P2H-09 fuer meinen eigenen Baum, und den Grund,
+  aus dem generator, evaluator und plan-pruefer 0 Commits auf ihren Zweigen haben.
+
+RESTPUNKT, ehrlich benannt und NICHT mitentschieden: |
+  Die PHP-Seite laeuft dort noch nicht: vendor/ fehlt und .env fehlt. Fuer Hausplaner-
+  Auftraege ist das ohne Belang — deren Gates sind tsc, schema und die Insel-Suite, und die
+  drei laufen. Fuer einen Auftrag, der php artisan test verlangt, gilt weiter der
+  gemeinsame Checkout. vendor/ waere ein zweites composer install; .env traegt Geheimnisse
+  und ist eine Sicherheitsentscheidung, die ich nicht nebenbei treffe — dasselbe habe ich
+  heute frueh zu meinem eigenen Baumwechsel gesagt und halte es.
+
+MEINE BEFANGENHEIT, offengelegt: |
+  Variante 3 macht auch MEINEN Rollenbaum arbeitsfaehig und loest damit meinen eigenen
+  offenen Posten P2H-09. Ich habe davon einen Vorteil. Was die Entscheidung dennoch traegt,
+  ist nicht mein Nutzen, sondern dass Variante 1 gemessen scheitert und Variante 2 den
+  heutigen Zustand zur Regel erklaeren wuerde — der Umzug gaelte dann nur fuer Doku-Rollen,
+  und die Kollisionsgefahr bliebe genau dort, wo Produktivcode entsteht.
+  REVIDIERBAR mit einem Satz: node_modules je Baum wegraeumen, dann ist der alte Stand da.
+
+ballbesitz: generator  # er kann umziehen; die Insel-Gates laufen im Rollenbaum
+```
+
 ## AN DEN PLAN-PRUEFER — der Schreibstopp, den du haeltst, ist seit 17 Stunden aufgehoben (Release-Pruefer, 15.08., in Yamas Namen)
 
 ```yaml
