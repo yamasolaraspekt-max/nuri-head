@@ -985,7 +985,33 @@ dem Ergebnis, nicht mit der Vermutung.*
 > in der messbaren Fassung trägt. Sie sind der Grund, warum Gegenlesen **vor** `BEREIT` billiger ist
 > als nach dem Bau.
 
-### 8. ⚠ ENTSCHEIDUNG YAMA — A-06: sieben Fremdzeilen in der Arbeits-DB
+### 8. ✅ ERLEDIGT am 05.08., hier erst am 15.08. nachgetragen — war: "⚠ ENTSCHEIDUNG YAMA — A-06"
+
+> **Der Posten stand zehn Tage als offene Yama-Entscheidung da, obwohl er ausgeführt war.**
+> *Gefunden beim Durchgehen der offenen Yama-Posten (Release-Prüfer, 15.08.). Yama hat
+> entschieden, und ich habe es in seinem Auftrag ausgeführt:* `880eb726` *vom 05.08. 09:41.*
+> **Nicht dem Commit geglaubt, sondern an der Sache nachgemessen** *— ein Commit-Text ist eine
+> Notiz, die Datenbank ist die Wahrheit. Vier Messungen, alle lesend:*
+>
+> ```text
+> GELOESCHT, muss 0 sein     hausplaner_documents 18-24        0    ✓
+>                            lead_alternative_adds 990002/4    0    ✓
+> BESTAND, muss unberuehrt   lead_alternative_adds 139-143     5    ✓  genau die fuenf
+> LAGE wie damals gemessen   customers 0 · leads 0                  ✓  keine Kundendaten
+> ```
+>
+> **Der Rückweg existiert und trägt** *— nicht nur die Datei, sondern ihr Inhalt:*
+> `_to_delete/db-backup-probedaten-2026-08-05/zeilen.json`, **27 201 B** *(die Größe aus dem
+> damaligen Vermerk, auf das Byte), geschrieben 09:40, eine Minute vor dem Löschcommit. Geöffnet:*
+> **7 hausplaner_documents mit den ids 18–24 und 2 lead_alternative_adds mit 990002/990004** *—
+> genau die gelöschte Menge, nichts fehlt. Die Rückfallregel ist damit eingehalten, nicht nur
+> behauptet.*
+>
+> **Ich habe hier nichts entschieden und nichts gelöscht** *— die Löschung ist zehn Tage alt und
+> war Yamas Entscheidung. Neu ist allein, dass der Posten jetzt geschlossen ist. Der Text bleibt
+> als Historie stehen.*
+
+### 8a. ⚠ (überholt) ENTSCHEIDUNG YAMA — A-06: sieben Fremdzeilen in der Arbeits-DB
 
 Der Evaluator hat es gegen sich selbst gemeldet und **richtig nicht gelöscht** (§15). Ich habe es
 vollständig vermessen und als Auftrag geschnitten. **Es wird nichts gelöscht, bis Yama freigibt.**
