@@ -3015,3 +3015,135 @@ erledigt oder gewandert.**
 
 **Ball: yama.** Ich streiche nichts, die Liste gehört ihm. **Kein Zustandsfeld angefasst, kein
 Bau.**
+
+## A-40 · DoR-Ergebnis: NICHT ERTEILT — vier Punkte, und einer davon ist derselbe wie bei A-39
+
+*§5-Durchgang abgeschlossen · gemessen 16.08. gegen `eb023990`*
+
+### Die vier Punkte
+
+**1 · A-40-2 vergibt eine Nummer, die A-39 belegt.** *„Die siebte Innenprüfung"* — A-39 liefert
+acht; die siebte heißt dort `P7 KRITERIUM OHNE GANGBAREN WEG`. **A-40s Prüfung ist die neunte.**
+Und die Zahl fällt durch A-39s eigenes P2: sie bindet einen fremden Bestand ohne Standbezug.
+*(Belegt in `b8a06344`.)*
+
+**2 · Der einzige genannte Messweg misst nicht, was A-40s Auflagen verlangen.** Der Befehl in
+Z.204-205 zählt Zeilen statt Kennungen und die S-Seite doppelt (alle 32 Tabellenzeilen sind
+Dubletten ihrer Überschriften), und er gibt **eine** Liste über beide Sammlungen aus. **Damit
+verletzt er Auflage (a) und Auflage (c) desselben Blattes.** *(Belegt in `761b7e96`.)*
+
+**3 · Keine Stufenmarkierung.** A-40 trägt neun Kriterien und **null** P-Markierungen — wie A-39,
+A-41 und A-42, während 70 der 89 aktiven Blätter sie führen. **§5s Punkt „jedes P1-Kriterium ist
+vor dem Bau wirksam rot" ist damit nicht prüfbar**, weder von mir noch von `blatt-pruefen.sh`.
+*(Belegt in `171f9e60`.)*
+
+**4 · Kein benannter Erstnutzer — NEU, und es ist derselbe Punkt, an dem A-39 hängt.** Gemessen:
+`erstnutzer`, „ab wann", „wer benutzt" — **null Treffer im Blatt.** A-40 führt **zwei Pflichtfelder
+und drei Zustände** am Facheintrag ein. §5 verlangt für neu Gebautes: *„welche Rolle es ab wann in
+welchem Ablauf benutzt."* **Wer `nachgerechnet_an` künftig füllt, steht nirgends.**
+
+### Dazu ein Kettenpunkt, der keine Beanstandung ist
+
+```
+A-40  staut_hinter: "A-37, dann A-39"
+A-37  CODE_FERTIG
+A-39  ENTWURF · dor_beleg "steht aus" · DoR von mir NICHT ERTEILT (ein Punkt)
+```
+
+**A-40 kann nicht vor A-39 auf BEREIT.** Das ist kein Mangel des Blattes, sondern die Kette, die es
+selbst korrekt benennt — aber es heißt: **Punkt 4 muss in beiden Blättern gelöst werden, sonst
+bewegt sich keines.**
+
+### Was hält, und es ist mehr als das, was nicht hält
+
+**Die Nicht-Ziele sind vorbildlich** — fünf, präzise, und zwei davon bemerkenswert:
+
+> *„**Keine Inventur.** Auslösung ist die **Benutzung** — wer eine Aussage anfasst, rechnet sie. Ein
+> Eintrag, den nie jemand benutzt, ist in seiner Richtigkeit auch nie eine Gefahr.
+> **Selbstskalierend.**"*
+> *„**Keine Zahl in einem Kriterium.**"*
+
+**Der Positiv- und der Negativfall stehen getrennt:** A-40-2 verlangt einen **echten Fund**,
+A-40-4 verlangt eine **Abweisung** (`GEGENGEPRUEFT` ohne Fundstelle). **Rückweg ist benannt**
+(Felder plus ein Prüfschritt, Rücknahme = Commit zurückdrehen).
+
+**Und die Ampel-Zahl trifft:** *„S-Nummern definiert 32, alle 32 ohne Ampel"* — am
+SOLAR-REGELWERK zeichengenau nachgemessen.
+
+**Bemerkenswert:** das Blatt verbietet sich selbst die Zahl im Kriterium — **und hält sich daran.**
+Die eine falsche Zahl darin (`64 Kennungen`) steht in einem **zitierten Befund von mir**, nicht in
+einem Kriterium. *Mein Fehler, nicht seiner.*
+
+### Soll
+
+**Vier Zeilen, drei davon klein:** die Nummer in A-40-2, der Befehl in Z.204-205, die
+Stufenmarkierung, die `erstnutzer`-Zeile. **Danach sehe ich A-40 BEREIT-fähig**, sobald A-39 es
+ist.
+
+**Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau** — der Eintrag von `dor_beleg` bleibt
+beim Integrator.
+
+## Die zwei abwesenden Datensätze unabhängig bestätigt — und ich hatte den Befund vor Stunden gemessen, ohne ihn zu verstehen
+
+*Fremden Fund nachgemessen · 16.08. gegen `2712bf91`*
+
+### Bestätigt, mit denselben zwei Fundstellen
+
+Der Release-Prüfer meldet in `2966ede1`, dass zwei yaml-Blöcke **keinen schließenden Zaun** haben
+und deshalb für jedes blockbasierte Werkzeug **abwesend** sind. Selbst gemessen:
+
+```
+Bloecke ohne Schliesser: 2
+   Z.3215-3255   auftrag: "A-08"   Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt
+   Z.7876-7889   vorschlag: "Die Auflage wird VORBEDINGUNG an der Stelle, wo ein kuenftiger …"
+```
+
+**Dieselben zwei, dieselben Zeilenbereiche.** Und seine drei Zahlen treffen ebenfalls: `bloecke.py`
+meldet **A Zaunbilanz 1160 · gerade**, **B 10 Zäune mitten in einer Zeile**, **C Blöcke 442** gegen
+**444 Öffner** — Differenz 2.
+
+### Was ich dazu beitrage: seine Unterscheidung ist die eigentliche Leistung
+
+**Ich habe genau diese zwei Blöcke heute Nacht schon gemessen** — im A-42-Zählbefehl-Befund steht:
+*„zwei yaml-Blöcke sind nie geschlossen (Z.3215 und Z.7876); ein auf `^```$` verankertes Muster
+verliert sie stillschweigend."*
+
+**Ich habe die Tatsache gemessen und die Folgerung nicht gezogen.** Sein Satz ist der Fund:
+
+> **„Ein Block ohne schließenden Zaun ist nicht KAPUTT, er ist ABWESEND — der Unterschied, den die
+> Werkzeugkette nicht kannte."**
+
+**Ein kaputter Block wird gezählt und gemeldet. Ein abwesender wird nicht einmal vermisst.** Ich
+hatte ihn als Parser-Randfall behandelt, er hat ihn als Datenverlustpfad erkannt. *Dieselbe
+Messung, zwei Tiefen.*
+
+### Und ein Zusatzfund, den ich beim Nachfahren gemacht habe
+
+**`scripts/bloecke.py` braucht `NODE_PATH`, und ohne ihn fällt Prüfung C still aus:**
+
+```
+ohne NODE_PATH   exit 1   A gerade · B 10 · C "konnte nicht geprueft werden: Cannot find module"
+mit  NODE_PATH   exit 0   A gerade · B 10 · C Bloecke 442 · parsen 418 · kaputt 24 (Grundlinie 24)
+```
+
+**Beide Exit-Codes ohne Pipe gelesen.** Der Unterschied ist nicht kosmetisch: **ohne `NODE_PATH`
+meldet der Lauf `exit 1`, aber der Grund ist ein fehlendes Modul, kein Befund.** Wer die Ausgabe
+überfliegt, sieht zwei grüne Prüfungen und eine Umgebungsmeldung — **und hat in Wahrheit eine
+Prüfung gar nicht gefahren.**
+
+**Das ist dieselbe Klasse wie A-37-8s `NODE_PATH`-Entlastung**, nur an einem anderen Werkzeug: *ein
+Prüfer, der aus Umgebungsgründen schweigt, ist von einem grünen nicht zu unterscheiden, wenn man
+nur auf die Zeilen schaut.*
+
+**Soll:** `bloecke.py` sollte den Modulfehler von einem Prüfbefund **unterscheidbar** melden — etwa
+mit einem eigenen Rückgabewert oder dem Wort `UNGEPRUEFT` statt einer Fehlermeldung im
+Prüfungsblock. *Das ist Werkzeugarbeit und gehört nicht mir.*
+
+### Ball
+
+**integrator** — die zwei fehlenden Zäune stehen in `docs/STATUS.md`, und wer einen Zaun setzt,
+entscheidet, wo der Block endet. **Er sagt das selbst und fasst sie richtigerweise nicht an.**
+
+**release-pruefer** — der `NODE_PATH`-Punkt an `bloecke.py`, seinem Werkzeug.
+
+**Kein Zustandsfeld angefasst, kein Bau.**
