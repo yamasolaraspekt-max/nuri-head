@@ -2738,3 +2738,142 @@ die im Bestand vorkommen.** *Eine Fangprobe ist nur so gut wie die Formenliste, 
 gemacht ist — und die gehört aus der Datei genommen, nicht aus dem Kopf.*
 
 **Ball: planner** — die vereinte Form für A-42-12. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Yama-Posten W-21L: die zweite Bedingung ist eingetreten — der erste Schritt liegt nicht mehr bei Yama
+
+*Offener Posten bei Yama · gemessen 16.08. gegen `74c997c7`*
+
+### Der Posten trägt seine eigene Ausstiegsbedingung, und sie ist erfüllt
+
+```
+Datensatz  ballbesitz: —  # bis Yama die Fachdaten liefert ODER W-23 sie erzeugt
+Blatt      ballbesitz: "YAMA — der Auftrag kann ohne Fachdaten nicht in DoR gehen"
+           blockiert_durch: "OPERANDEN-GATE — keine Deckungsart/Lattweiten-Daten
+                             im Repo, gemessen"
+Zustand    DECISION_BLOCKED
+```
+
+**W-23 steht heute auf `BETRIEBSBESTAETIGT`, abgenommen 8/8** (`53060551`). Als W-21L geschnitten
+wurde, stand W-23 laut dessen eigenem Blatt noch **auf LEER** — *„Ich schlage vor: dieser Auftrag
+wartet auf W-23."*
+
+### Die Daten existieren, gemessen und nicht vermutet
+
+W-23s Blatt führt die geforderten Größen für **sieben Braas-Modelle**, im Wortlaut aus der Quelle:
+
+```
+Modell               Lattmass     Verschiebespiel   Regeldachneigung   Datenstatus
+Achat 12V            330-360 mm         30               16 Grad       verifiziert
+Granat 11V           338-380 mm         42               25 Grad       verifiziert
+Harzer Pfanne 7      372-405 mm          —               22 Grad       verifiziert
+Rubin 13V            330-360 mm         30                —            teilweise verifiziert
+Rubin 9V             370-400 mm         30               16 Grad       verifiziert
+Topas 11V            320-380 mm         60               25 Grad       verifiziert
+Topas 13V            320-360 mm         40               25 Grad       verifiziert
+```
+
+**Das ist genau die Tabelle, die W-21L verlangt** — Deckungsart, Lattweite von…bis, Mindestneigung,
+Quelle —, nur für sieben Modelle eines Herstellers statt für „die Lattung".
+
+### Was W-23 dazu selbst sagt, und es ist die entscheidende Stelle
+
+> ```
+> W-21L wartet laut Fahrplan auf "W-23s Ziegeltabelle" — OPERANDEN-GATE.
+> NACH diesem Auftrag ist die Lage:
+>   ENTSPERRT fuer SIEBEN Braas-Modelle mit verifiziertem Lattmass-Bereich
+>   WEITER GESPERRT fuer alles andere — und das ist RICHTIG, nicht bedauerlich
+> ```
+> **„Damit ist W-21L nicht ‚entsperrt', sondern ZUSCHNEIDBAR … Der Unterschied gehört in W-21Ls
+> Nachschnitt und ist eine PLANNER-ENTSCHEIDUNG, die nach diesem Auftrag fällt."**
+
+### Was ich daraus melde — und was ausdrücklich nicht
+
+**Gemeldet:** W-21Ls `blockiert_durch` ist sachlich überholt. *„Keine Deckungsart/Lattweiten-Daten
+im Repo, gemessen"* stimmt heute nicht mehr: es gibt sie, für sieben Modelle, in einem
+abgenommenen Auftrag. **Und die Ausstiegsbedingung, die der Datensatz selbst nennt — „oder W-23 sie
+erzeugt" —, ist eingetreten.**
+
+**Der nächste Schritt liegt damit beim Planner, nicht bei Yama**: der Nachschnitt auf die sieben
+belegten Modelle. W-23 benennt ihn wörtlich als Planner-Entscheidung.
+
+**NICHT gemeldet, weil es nicht stimmt:** dass die Sperre gefallen sei. **Sie steht weiter für alles
+außerhalb der sieben** — und W-23 nennt das ausdrücklich *richtig, nicht bedauerlich*. **Eine
+Lattung ohne belegten Bereich wäre die erfundene Zahl, gegen die das Gate steht.**
+
+**Für Yamas Vorlage:** *einer seiner acht Posten ist kleiner geworden. Er braucht Yama nicht mehr
+für den ersten Schritt — nur noch für alles jenseits der sieben Modelle.*
+
+**Ball: planner** (der Nachschnitt). **Kein Zustandsfeld angefasst, kein Bau, keine
+DoR-Entscheidung.**
+
+## A-42-12 ist ausgemessen: DREI unabhängige Wege, sechs Zahlen, keine Abweichung
+
+*Vierte Runde, Abschluss · gemessen 16.08. gegen `520d47b0`*
+
+### Die vereinte Form hält an allen zehn Fällen
+
+Der Release-Prüfer hat die Vereinigung an zehn Fällen gefahren und **zwei ergänzt, die ich nicht
+geprüft hatte**. Ich habe alle zehn selbst nachgefahren:
+
+```
+                                              SOLL   getroffen
+ballbesitz: plan-pruefer                       ja       ja
+ballbesitz: "plan-pruefer (DoR)"               ja       ja
+ballbesitz: plan-pruefer  # Kommentar          ja       ja
+ballbesitz: plan-pruefer<TAB># Tabulator       ja       ja
+ballbesitz: plan-pruefer(direkt geklammert)    ja       ja
+ballbesitz: plan-pruefer-2                    nein     nein
+ballbesitz: planner                           nein     nein
+ballbesitz_vorher: plan-pruefer               nein     nein     <- seine Ergaenzung
+  ballbesitz: plan-pruefer  (eingerueckt)     nein     nein     <- seine Ergaenzung
+x ballbesitz: plan-pruefer                    nein     nein     <- meine Ergaenzung
+                                              ----     ----
+                                                 5        5
+```
+
+**Fünf Treffer, fünf korrekte Abweisungen. Kein Fehltreffer in beide Richtungen.**
+
+### Und die dritte, von der Zeilenform unabhängige Probe
+
+`scripts/yama-posten.py` liest **YAML-Zäune** statt Zeilenmuster. Seine eigene Summenzeile gegen
+meinen grep:
+
+```
+                  Werkzeug   grep
+plan-pruefer          39      39
+planner               81      81
+generator             10      10
+release-pruefer        5       5
+integrator             2       2
+evaluator              0       0
+```
+
+**Sechs von sechs, über zwei grundverschiedene Lesarten.** Damit ist die Zahl nicht mehr von der
+Musterwahl abhängig — und genau das war die Krankheit der vier Runden.
+
+### Mein achter gefangener Fehlbefund, und er ist der lehrreichste
+
+**Mein erster Durchlauf des Werkzeugs ergab 39 · 78 · 6 · 5 · 1 · 0** — drei Abweichungen, und
+damit ein scheinbarer Widerspruch zur Aussage des Release-Prüfers, das Werkzeug liefere „genau die
+rechte Spalte".
+
+**Ich habe die falsche Zahl gezählt.** Statt der Summe, die das Werkzeug selbst nennt, habe ich
+**seine Listenzeilen** gezählt — und die zeigen nur Blöcke **mit** Kennung. Das Werkzeug sagt es in
+seiner eigenen Kopfzeile:
+
+```
+Posten mit ballbesitz: planner   —   81   (Stand HEAD)
+  davon mit Kennung 78 · ohne Kennung 3   <- die ohne uebersieht jede Zaehlung ueber auftrag:
+```
+
+**Die Auflösung stand in Zeile drei der Ausgabe, die ich schon vor mir hatte.** *Zum achten Mal
+heute Nacht — und diesmal hätte ich einen Kollegen widerlegt, der recht hatte.*
+
+**Die Lehre schließt an die der vier Runden an:** *ein Werkzeug fahren genügt nicht, man muss auch
+die richtige Zahl aus seiner Ausgabe nehmen.* **Es hat mir seine Summe hingeschrieben, und ich habe
+seine Zeilen gezählt.**
+
+### Stand
+
+**A-42-12 braucht keine fünfte Runde.** Die Form ist dreifach belegt, die Zahlen sind es auch.
+**Ball: planner** — es fehlt nur noch das Einsetzen. **Kein Zustandsfeld angefasst, kein Bau.**
