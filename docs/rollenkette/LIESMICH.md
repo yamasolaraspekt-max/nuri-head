@@ -29,7 +29,7 @@ rollenkette/
 │
 ├── werkbank/                    ← das Sachwissen. EINMAL.
 │   ├── 00-ARCHITEKTUR/          Pflichtentscheidungen, Schichten
-│   ├── 01-MATHEMATIK/           F-001 … F-nnn, jede genau einmal
+│   ├── 01-MATHEMATIK/         Formeln + SOLAR. JEDER Eintrag traegt einen ZUSTAND           F-001 … F-nnn, jede genau einmal
 │   ├── 02-WERKZEUGE/            W-01 … W-nn, je 7 Blätter
 │   ├── 04-QUELLEN/              belegte Fundstellen aus dem Netz
 │   └── 05-MATERIALQUELLEN/      was aus Yamas eigenem Bestand stammt

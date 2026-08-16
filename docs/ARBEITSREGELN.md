@@ -252,7 +252,7 @@ Ein Auftrag darf nur `BEREIT` werden, wenn der Plan-Prüfer alle folgenden Punkt
 - vollständige Abhängigkeitskette,
 - positive und negative Akzeptanzfälle,
 - jedes P1-Kriterium ist vor dem Bau wirksam rot,
-- kein Kriterium ist bereits erfüllt,
+- kein Kriterium ist bereits erfüllt, **und jede Fachaussage, die das Blatt nennt, trägt `nachgerechnet_an` — oder das Nachrechnen ist ein Kriterium DIESES Blattes (Nachtrag am Dateiende: „Eine Formel, die niemand rechnet, ist nicht geprüft“, verbindlich seit 16.08.2026),**
 - kein Kriterium ist unerfüllbar,
 - jeder Prüfbefehl wurde auf Syntax und Aussagekraft geprüft,
 - erforderliche Testdaten, Benutzerrolle, Route und Browserpfad sind benannt,

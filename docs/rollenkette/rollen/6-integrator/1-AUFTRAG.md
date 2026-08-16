@@ -84,3 +84,18 @@ tragende — und die einzige, die sich an keinem Git-Zustand ablesen lässt.**
 **Yama hat ausdrücklich gegen den Release-Prüfer als Integrator entschieden.** Der Grund ist
 derselbe wie bei der Rollentrennung überhaupt: wer freigibt und dann integriert, prüft sein
 eigenes Ergebnis.
+
+## Fachaussagen — was der Integrator tut *(verbindlich seit 16.08.2026)*
+
+**Nichts inhaltlich — und das ist Absicht.** Er führt zusammen; **Fachaussagen prüft er nicht, und
+er darf sie auch nicht ändern.**
+
+**Was er prüft, weil es Herkunft ist und nicht Fachwissen:**
+- Trägt ein integrierter Commit eine **neue oder geänderte** Fachaussage (`F-`/`N-`/`S-`)?
+  → **Dann muss der zugehörige Zustand mitkommen.** Eine Aussage ohne Zustand ist keine
+  vollständige Übergabe und wird **abgelehnt, nicht ergänzt.**
+- **Er setzt keinen Zustand.** Weder `NACHGERECHNET` noch `GEGENGEPRUEFT`, auch nicht „offensichtlich".
+
+> **Ein Integrator, der einen Fachzustand ergänzt, hat eine fachliche Entscheidung getroffen, für
+> die ihm jede Grundlage fehlt.** Dieselbe Regel wie bei Konflikten: **er stellt fest, er
+> entscheidet nicht.**

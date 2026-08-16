@@ -1,5 +1,5 @@
 # SOLAR-REGELWERK — Sonnenstand, Einstrahlung, Verschattung
-
+> **⚠ SEIT 16.08.2026: Jede S-Regel traegt einen Zustand — `ABGESCHRIEBEN` · `NACHGERECHNET` · `GEGENGEPRUEFT` — und `nachgerechnet_an` mit dem FALL. Siehe `docs/ARBEITSREGELN.md`, Nachtrag am Dateiende.**
 > **Reihe `S-`.** Eigene Nummern, weil das ein eigenes Fachgebiet ist und die `F-`-Reihe
 > Planungsgeometrie führt. Aufbau je Eintrag wie in der `FORMELSAMMLUNG.md`:
 > **Zweck · Eingabe · Formel · Ausgabe · Grenzfall.** Der Grenzfall ist Pflicht.
