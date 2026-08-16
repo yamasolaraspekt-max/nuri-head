@@ -3905,3 +3905,78 @@ der Suchraum.*
 
 **Ball: planner**, unverändert — eine Zeile `js-yaml` in `devDependencies`. **Kein Zustandsfeld
 angefasst, kein Bau, keine gemeinsame Datei geändert.**
+
+## W-20: vier von fünf Zahlen treffen exakt — und die fünfte zählt Zeichenketten, nicht Begriffe
+
+*Vorratsprüfung (b) am fünften unberührten Blatt · gemessen 16.08. gegen `2e4d10a9`, Basis `8300aa59`*
+
+### Vier Zahlen, vier Treffer
+
+W-20 nennt seine Zahlen **mit den Suchmustern dazu** — vorbildlich, und deshalb prüfbar:
+
+```
+holzMengen.ts        64 Zeilen / 3 Exporte    Basis 64/3    heute 64/3
+'stueck.*m2'          0 Treffer                heute  0
+'bedarf'              1 Treffer                heute  1
+'ziegel'             16 Treffer                heute 16
+```
+
+**Vier von vier, zeichengenau.** *Ein Blatt, das seine Muster mitliefert, ist in Minuten prüfbar —
+das ist der Unterschied zu den vier Runden, die der Ballortungsbefehl gekostet hat.*
+
+### Die fünfte weicht ab, und die Erklärung ist gemessen
+
+```
+'deckung'    Blatt: 79        heute: 81
+```
+
+**Am Basis-Stand `8300aa59` (12.08. 12:14) sind es exakt 79** — die Zahl war richtig.
+
+**Die Differenz ist eine einzige Datei, und sie war am Basis-Stand nicht da:**
+
+```
+geradenGeometrie.ts   angelegt 1b73ccb0, 13.08. 14:34 (A-32 gebaut)   traegt 2 Treffer
+79 + 2 = 81
+```
+
+*Ein Tag nach dem Schnitt, durch einen fremden Auftrag.*
+
+### Und jetzt das, was die Sache entscheidet: die zwei Treffer meinen etwas anderes
+
+```
+geradenGeometrie.ts:65    "…bei parallel, deckungsgleich oder einer Achse der Laenge 0…"
+geradenGeometrie.ts:145   "return null; // parallel oder deckungsgleich"
+
+dachformVorlagen.ts:113   "// Korrektur (deckungsneutral): KEINE feste Dacheindeckung…"
+dachformVorlagen.ts:115   "deckungsHinweis: string;"
+```
+
+**`deckungsgleich` ist ein Geometriebegriff für zusammenfallende Geraden. Mit Dacheindeckung hat er
+nichts zu tun.** Der Zähler misst die **Zeichenkette** `deckung`, nicht den **Begriff**.
+
+**Die Zahl ist also nicht nur gealtert — sie ist um etwas gewachsen, das sie gar nicht meint.**
+
+### Was das Blatt selbst schon wusste, und das gehört dazu
+
+Es schreibt: *„`'deckung'` 79 Treffer, **davon der erste eine LASTannahme**"* und ordnet `'ziegel'`
+ausdrücklich als **Typ statt Menge** ein. **Der Blattschreiber wusste, dass die Treffer gemischt
+sind, und hat es hingeschrieben.** *Das ist kein blinder Zähler, sondern einer mit Vorbehalt.*
+
+**Der Mangel ist damit kleiner, als die Abweichung aussieht** — aber er bleibt: eine Zahl, die
+Zeichenketten zählt, wandert mit jeder neuen Datei, die das Wortfragment aus einem **anderen**
+Grund benutzt. **Und sie wird das weiter tun.**
+
+### Dieselbe Falle, die ich heute zwölfmal an mir selbst gefunden habe
+
+**Zwölfmal in dieser Nacht hat mein eigenes Muster etwas anderes gezählt als gemeint** — Adverbien
+statt Zahlen, Prosa statt Felder, ein Beschreibungstext statt eines Aufrufs, `021` statt `2.021`.
+**Hier ist es dieselbe Klasse in einem fremden Blatt**, nur milder: *`deckungsgleich` ist nicht
+`Dacheindeckung`, und `grep` sieht den Unterschied nicht.*
+
+### Soll
+
+**Kein Umbau, eine Ergänzung:** die Zahl braucht ihren Stand (`79 am Stand 8300aa59`) **und** den
+Vorbehalt, den das Blatt an anderer Stelle schon führt — *„gezählt wird die Zeichenkette, nicht der
+Begriff."* **Dann altert sie sichtbar statt still.**
+
+**Ball: planner.** W-20 steht auf `BETRIEBSBESTAETIGT`. **Kein Zustandsfeld angefasst, kein Bau.**
