@@ -26144,3 +26144,56 @@ lehre_fuer_meine_wache: |
 urteil: "Der Bauvorrat steht: 10 von 55 Modulen, jede Bedingung einzeln nachgemessen. Kein Befund gegen den Generator."
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-3 ist vollstaendig belegt — W-28 dreimal JA, F-004 dreimal NEIN, beide Proben selbst gefahren; meine 19:02-Meldung ist damit in beiden Teilen zurueckgenommen"
+rolle: plan-pruefer
+zeit: "16.08. 19:24"
+mess_stand: e388f7c71c2908058e28f7664209c1f4d94e35b4
+geprueft_gegen: "692cde54 (Blatt) · origin/rolle/generator (W-28) · auto/hausplaner-integration (ARBEITSREGELN)"
+baum: "sauber (0 Eintraege)"
+der_verweis_haelt: |
+  Das Blatt sagt, die drei Fragen seien ENTSCHIEDEN und stuenden in ARBEITSREGELN.md,
+  Nachtrag vom 16.08. — 'dieses Blatt BAUT sie, es erfindet sie nicht'. Nachgeprueft:
+  sie stehen dort, ab Zeile 1405, mit Namen und Erlaeuterung:
+    1 NORMBEZUG  Normkennung (DIN, EN, VDI) oder als normkonform bezeichnet?
+    2 DRITTER    Verlaesst das Ergebnis das Haus — Angebot, Nachweis, Plan, Bericht?
+    3 BEMESSUNG  Legt es eine GEBAUTE Groesse fest — Querschnitt, Tragfaehigkeit,
+                 Entwaesserung, Abstand, Lastannahme?
+    Dreimal NEIN -> NACHGERECHNET reicht. Einmal JA -> nur mit Primaerquelle.
+  EINSCHRAENKUNG: unter den Namen 'Drei-Fragen-Test' oder '5c' ist in ARBEITSREGELN.md
+  NICHTS zu finden — 0 Treffer in allen vier Zweigen. Der Test steht dort, sein Name
+  nicht. Wer ihn unter dem Namen sucht, den A-40 benutzt, findet ihn nicht.
+positivprobe_W_28: |
+  Dreimal JA, an W-28s sieben Blaettern im generator-Zweig gemessen:
+    1 NORMBEZUG   4 Treffer  (DIN 1986-100, EN 12056-3)          JA
+    2 DRITTER     5 Treffer  (Nachweis, Kunde, Amt)              JA
+    3 BEMESSUNG  34 Treffer  (Querschnitt, Nennweite, Gefaelle)  JA
+  Frage 3 nennt 'Entwaesserung' woertlich — W-28 IST die Dachentwaesserung.
+  Der Beleg sitzt also nicht knapp, sondern in allen drei Richtungen.
+negativprobe_F_004: |
+  Dreimal NEIN. F-004 'Schnittpunkt zweier Geraden', FORMELSAMMLUNG.md Zeile 75 bis 180.
+    1 NORMBEZUG   0 Treffer   NEIN
+    2 DRITTER     0 Treffer   NEIN
+    3 BEMESSUNG   0 Treffer   NEIN
+  Beide Proben treffen also genau so, wie das Kriterium es verlangt.
+eigener_mustertreffer_gefangen: |
+  Der erste Lauf gab fuer F-004 bei Frage 2 ZWEI Treffer und damit 'einmal JA'. Geoeffnet:
+    Z.92   '⚠ BERICHTIGT am 13.08.2026 — die Zaehlerzeile trug ein vertauschtes Vorzeichen'
+    Z.121  'Beide sind berichtigt.'
+  Mein Muster 'Bericht' traf das Wort BERICHTIGT. Ohne das Oeffnen haette ich gemeldet,
+  die Negativprobe falle durch. Dieselbe Wortgrenzen-Klasse wie bei K2 im Werkzeug.
+zuruecknahme: |
+  Meine Meldung von 19:02 sagte, A-40-3s historischer Beleg sei unerfuellbar, weil es
+  W-28 nicht gebe. Beide Haelften sind erledigt: W-28 existiert seit 16:47 mit sieben
+  Blaettern (bereits um 19:17 berichtigt), und der Drei-Fragen-Test schlaegt dort in
+  allen drei Richtungen an, waehrend er bei F-004 in allen drei schweigt.
+  A-40-3 ist gruen.
+stand_A_40: |
+  Offene Punkte am Blatt jetzt: A-40-2 (Negativprobe ohne Kandidaten), A-40-6 (Rot-Lage
+  seit 14:49 weg), A-40-9 (kann nicht scheitern), A-40-5s Merkmal im Solar-Regelwerk,
+  die Menge 22 statt 25, sowie K5/K6 ohne benannten Fall.
+  Belegt und gruen: A-40-1, A-40-3, A-40-4, A-40-8, K1, K2, K3, K4.
+ballbesitz: planner
+```
