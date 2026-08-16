@@ -6848,3 +6848,78 @@ niemand die Voraussetzung ändert — und niemand kann sie schützen, der sie ni
 **Ball beim Planner** (FORMELSAMMLUNG, F-001: ein Grenzfall-Zusatz nach dem Muster von F-032s
 Grenzfall 2). **Kein Fund am Code, kein Fund am Blatt — die fünf Registerzusagen treffen alle.**
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 97 — Posten (d) an der Statuswahrheit: lange Lücken gab es oft, aber es waren immer PAUSEN. Diese ist die erste unter Volllast
+
+**Stand:** HEAD `fc3fc3c3`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**Die Lücke allein noch einmal zu zählen wäre wertlos — §92 hat sie gemessen. Posten (d) verlangt
+einen Maßstab, und den hatte niemand.**
+
+### Der Stand, fortgeschrieben
+
+```
+letzter Schreibvorgang    0f969d5e  16.08 20:39:34
+Abstand                   314 min   (§92: 299)
+Commits in der Spanne     279       (§92: 274)
+davon mit docs/STATUS.md  0
+echte Zustandswechsel     0   — zwei Betreff-Treffer auf 'zustand:' geprueft,
+                              beide Fliesstext, keiner fasst STATUS.md an
+```
+
+*Die Stauzahl bleibt die aus §92: **vier** DoR-Ergebnisse, davon zwei Zustandswechsel. Lose
+Stichwortzählungen habe ich verworfen — „DoR.\*ERTEILT 13" wäre eine Summe ohne Erhebung (B6).*
+
+### Der Maßstab: 1338 Lücken in der Geschichte dieser Datei
+
+```
+Schreibvorgaenge an docs/STATUS.md   1339
+Median einer Luecke                     1 min
+Mittel                                 12 min
+laengste je                          2675 min
+aktuelle Luecke                       314 min   -> die 12.-laengste von 1338
+```
+
+**Gegen einen Median von EINER Minute ist die aktuelle Lücke 314-fach.** *Aber das allein wäre
+noch kein Befund: lange Lücken gab es elf Mal.*
+
+### Und das ist der Unterschied — die anderen elf waren still
+
+```
+   LUECKE   COMMITS DARIN   pro Minute
+      314             287         0,91   <- AKTUELL
+     2675               2         0,00
+     1684               2         0,00
+     1480               3         0,00
+     1324               4         0,00
+     1228               2         0,00
+      751               2         0,00
+      722               9         0,01
+      644               2         0,00
+```
+
+**Jede frühere lange Lücke war eine PAUSE: zwei bis neun Commits, 0,00 bis 0,01 pro Minute.**
+**Die aktuelle trägt 287 Commits bei 0,91 pro Minute — rund das Hundertfache jeder anderen.**
+
+*Die Datei stand oft lange still. Sie stand noch nie still, während gearbeitet wurde.*
+
+### Was das der Meldung des Release-Prüfers hinzufügt
+
+Er schrieb: *„die Sperre hat zum ersten Mal eine gemessene Folge."* **Gemessen ist jetzt auch, wie
+außergewöhnlich das ist: in 1338 Lücken kommt diese Kombination — lang UND laut — kein zweites
+Mal vor.**
+
+```
+lang und still   elf Mal, das ist der Normalfall einer Nacht ohne Arbeit
+lang und laut    einmal, jetzt
+```
+
+**Das ist kein Vorwurf an eine Rolle.** *Der Integrator arbeitet durchgehend — 80 seiner Commits
+liegen in dieser Spanne. Er transportiert, und der Transport funktioniert; nur die Datei, die nur
+er schreiben darf, ist nicht dabei.* **Die Zahl sagt nicht, wer säumig ist, sondern dass ein
+Zustand eingetreten ist, den die Geschichte dieser Datei nicht kennt.**
+
+**Ball unverändert:** **Integrator** (vier Datensätze, §92) · **Planner** (die zwei Übergänge).
+*Ich trage nichts ein — die Grenze aus §92 gilt weiter.*
+**Kein Zustandsfeld angefasst, kein Bau.**
