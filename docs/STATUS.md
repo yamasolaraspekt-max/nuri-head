@@ -22306,3 +22306,60 @@ was_A_30_an_meinem_commit_gemeldet_hat: |
   Meldeverfahren und die Erwartung anderer Rollen — gehoert dem Planner, nicht mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "A-37-5 ist am gebauten Stand NICHT ERFUELLBAR — die Berichtigung von heute hat den Widerspruch verschoben, nicht behoben"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:17 CEST"
+mess_stand: "Blatt aus rolle/planner (Blattaenderung 02504a25, 16.08. 13:53) · Code aus rolle/generator 1e342d53 (16.08. 15:15, 247 Z.) · lokal und fern identisch"
+befund: |
+  Kriterium A-37-5 verlangt einen Rueckgabewert, den das gebaute Tor an keiner Stelle
+  erzeugt. Drei Seiten, jede einzeln gemessen:
+    1. BLATT Z.292 (das Kriterium selbst):
+       "- **A-37-5** · **Negativfall fehlende Kennung:** TICKET_ROLLE leer -> **exit 3**."
+    2. BLATT Z.389 (die Berichtigung von HEUTE):
+       "... != 0, und zwar dem fuer den Fall festgelegten: A-37-3/4/6 -> 1, A-37-5 -> **5**."
+    3. CODE, REAL GEFAHREN (nicht gelesen, ausgefuehrt):
+         TICKET_ROLLE="" bash rollen-tor.sh  -> Rueckgabe 5
+         Ausgabe: "ROLLEN-TOR  TICKET_ROLLE ist nicht gesetzt — ohne Rolle ist keine
+                   Zuordnung pruefbar."
+       Und der Wert 3 kommt im ganzen Skript nicht vor:
+         grep -c 'exit 3' -> 0     (Muster geeicht: grep -c 'exit 5' -> 1)
+  Der Code tut 5. Die Berichtigung sagt 5. Nur das Kriterium sagt 3.
+warum_das_ein_dor_blocker_ist: |
+  Paragraf 5 verbietet unerfuellbare Abnahmekriterien. A-37-5 ist am heutigen Bau nicht
+  erfuellbar: der Evaluator fuehrt den Negativfall aus, misst 5, liest 3, und muss ROT
+  melden — obwohl der Bau richtig ist und genau das tut, was der Rest des Blattes will.
+  Das ist die teuerste Sorte Rot: eine Abnahme, die einen korrekten Bau zurueckweist. Und
+  es ist die A-03-Klasse in ihrer Wurzel — wer einmal erlebt, dass die Abnahmebedingung
+  falsch ist, glaubt der naechsten auch nicht mehr.
+was_ich_dem_planner_anrechne_und_was_nicht: |
+  ANRECHNEN: Er hat heute 13:53 an genau dieser Stelle gearbeitet und die Berichtigung
+  offengelegt statt sie stillschweigend einzupflegen (Z.390: "hier stand pauschal 'exit 1'
+  und widersprach damit A-37-5"). Er hat den Widerspruch GESEHEN.
+  NICHT ANRECHNEN: Er hat ihn an der falschen Seite aufgeloest. Die Stelle, die er anglich
+  (Z.389), war die allgemeine; die Stelle, die den Wert festlegt (Z.292), blieb stehen.
+  Damit ist der Widerspruch nicht weg, sondern gewandert: vorher "1 gegen 3", jetzt
+  "5 gegen 3". Eine Berichtigung, die ihre eigene Gegenstelle nicht mitmisst, verschiebt
+  den Fehler an einen Ort, an dem ihn niemand mehr sucht — die Zeile traegt jetzt sogar
+  einen Berichtigungsvermerk und sieht damit geprueft aus.
+was_zu_tun_ist: |
+  EINE ZAHL in Z.292: "exit 3" -> "exit 5". Nichts weiter. Der Bau ist richtig, die
+  Berichtigung ist richtig, das Kriterium ist die einzige falsche Stelle.
+  Ausdruecklich NICHT der andere Weg: den Code auf 3 umzubauen hiesse, einen fertigen und
+  wirksamen Bau wegen einer Blattzeile anzufassen.
+zweite_richtung_geprueft: |
+  Paragraf 12.3 verlangt die Probe in beide Richtungen. Gegenprobe gefahren:
+  Gaebe es im Skript ein 'exit 3' an anderer Stelle, waere mein Befund falsch — grep
+  ueber das ganze Skript: 0 Treffer, und das Muster ist an 'exit 5' (1 Treffer) geeicht.
+  Der reale Lauf ist zusaetzlich gefahren, nicht nur der Code gelesen: eine Zeile im Code
+  belegt nicht, welcher Zweig sie erreicht.
+noch_nicht_geprueft: |
+  A-37-13 (Modulstand, Blatt Z.335) sagt heute nur "-> Abbruch" ohne Zahl, waehrend Z.389
+  fuer A-37-6 den Wert 1 festlegt. Ob das eine zweite Luecke derselben Art ist, habe ich
+  NICHT gemessen — der Negativfall setzt eine Marke auf einen fremden Hash, und das fasse
+  ich ohne Not nicht an. Naechste Runde, mit einer Kopie.
+  Die uebrigen 15 Kriterien der A-37-DoR sind ebenfalls noch offen.
+ballbesitz: planner
+```
