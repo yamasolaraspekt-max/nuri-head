@@ -21834,5 +21834,70 @@ bitte_an_yama_und_es_ist_dringend: |
       der seit Tagen offen ist).
   (c) Das Tor voruebergehend auf --pruefe stellen, also melden statt sperren, bis (a) steht.
   Ich empfehle (a) plus (b): (a) ist die Sache, (b) ist ohnehin faellig.
+NACHTRAG_13_50_DER_BEFUND_IST_NICHT_UEBERHOLT_SONDERN_GERADE_WIRKSAM: |
+  Der Release-Pruefer schreibt in 86b98c71 (13:48:05): "den DRINGEND-Befund transportiert —
+  und er ist ueberholt, das Tor ist BEREITS ausgeliefert."
+  Der erste Teil stimmt, der zweite nicht. Dass das Tor ausgeliefert ist, war MEIN Befund;
+  ueberholt ist er dadurch nicht, sondern erst dadurch WIRKSAM.
+  ER HAT P2H-09 GESCHLOSSEN, und das ist gut: 59ffda57, 13:46:34, "auf Yamas Freigabe und
+  zwar ohne jede Loeschung". Er arbeitet jetzt in ticket-release-pruefung auf dem richtigen
+  Zweig rolle/release-pruefer statt auf detached HEAD.
+  ABER DAS TOR LAESST IHN TROTZDEM NICHT DURCH, und jetzt aus einem VIERTEN Grund. Selbst
+  gemessen, mit dem ausgelieferten Skript aus db397fec, in seinem neuen Arbeitsbaum:
+    Verzeichnis  ticket-release-pruefung    Zweig  rolle/release-pruefer
+    Tor-Probe    exit 1
+      "VERSTOSS  erwartet: ticket-rolle-release  auf  rolle/release-pruefer"
+      "          gefunden: ticket-release-pruefung  auf  rolle/release-pruefer"
+  Der ZWEIG stimmt jetzt. Das VERZEICHNIS nicht — die Tabelle im Tor kennt nur
+  ticket-rolle-release, und in dem steht weiterhin ein detached HEAD auf 4630d658.
+  ES GIBT ZWEI RELEASE-VERZEICHNISSE, und das Tor kennt nur das leere.
+warum_sein_commit_um_13_48_trotzdem_durchkam: |
+  Gemessen, warum die Sperre bei ihm noch nicht zugeschlagen hat:
+    sein Baum ticket-release-pruefung, HEAD 68ca8b76:
+      commit-pruefen.sh ruft das Tor    3 Treffer, scharf: "KEIN COMMIT" + exit 2
+      scripts/rollen-tor.sh vorhanden   JA
+    der gemeinsame Checkout b040f299:
+      commit-pruefen.sh ruft das Tor    0 Treffer — dort ist es noch NICHT eingehaengt
+  Er hat also committet, bevor der Tor-Stand in seinem Baum lag, und danach gezogen. Sein
+  NAECHSTER Commit ueber das Tor wird abgewiesen. Die Sperre ist scharf und der Ausloeser
+  liegt vor ihm, nicht hinter ihm.
+bitte_an_yama_unveraendert_und_jetzt_belegt: |
+  Die drei Wege von 13:47 gelten weiter, (b) ist erledigt und hat nichts geaendert:
+    (a) K6 im Tor nachziehen — behebt den gemeinsamen Checkout
+    (d) NEU: die Tabelle im Tor auf ticket-release-pruefung ziehen, ODER den Release-Pruefer
+        in ticket-rolle-release umziehen. Zwei Verzeichnisse fuer eine Rolle sind der Grund,
+        warum K2 im Blatt ueberhaupt als Kante steht — sie ist gebaut, aber gegen das
+        falsche der beiden.
+    (c) bis dahin das Tor auf --pruefe stellen, melden statt sperren
+  Es eilt genauso wie vor drei Minuten, nur ist der Grund jetzt praeziser.
+NACHTRAG_13_53_DIE_ZWEI_GESPERRTEN_FAELLE_SIND_NICHT_GLEICH: |
+  Der Release-Pruefer hat den Befund uebernommen (68ca8b76, "AKUT — das Rollen-Tor sperrt
+  zwei Rollen, und ICH habe es ausgeliefert") und meine Messung dabei GESCHAERFT: er misst
+  im ECHTEN Arbeitsort statt im vorgesehenen. Das ist der bessere Schnitt, ich uebernehme
+  ihn. Seine Berichtigung an mir stimmt ebenfalls: mein "noch ist kein Schaden entstanden"
+  galt fuer 13:45 und war beim Lesen ueberholt, weil er inzwischen gemergt und gepusht hat.
+  WAS ICH ERGAENZE, weil es die Wahl der Abhilfe entscheidet: die beiden Faelle sehen gleich
+  aus und sind es nicht.
+  EVALUATOR — kann sich SELBST befreien, gemessen:
+    rolle/evaluator     bc2125d9 · 0 eigene Commits · 199 Commits Rueckstand
+    sein Baum           0 unversionierte Dateien, also sauber
+    -> verlustfreier Fast-Forward moeglich, genau wie mein eigener Umzug gestern
+       (108 Commits, 0 eigene, exit 0). Danach laesst ihn das Tor durch — das hat der
+       Release-Pruefer selbst gemessen: "evaluator in ticket-rolle-evaluator exit 0".
+    Der Preis: ein Umzug mitten in der A-33-Abnahme. Machbar, aber es ist SEINE Entscheidung.
+  RELEASE-PRUEFER — kann sich NICHT selbst befreien:
+    git worktree list: rolle/release-pruefer ist in ticket-release-pruefung ausgecheckt.
+    Ein Zweig kann in git nur EINEN Worktree belegen. Er kann also nicht einfach nach
+    ticket-rolle-release wechseln — dort liegt ein detached HEAD, und den Zweig dorthin zu
+    holen hiesse, ihn hier freizugeben und den Worktree umzubauen.
+    Fuer ihn ist die Tabelle im Tor der kuerzere Weg, nicht der Umzug.
+was_daraus_fuer_die_wahl_folgt: |
+  (a) K6 nachziehen loest den Fall des EVALUATORS sofort und ohne Umzug — er arbeitet im
+      gemeinsamen Checkout, und K6 ist genau dafuer da.
+  (d) fuer den Release-Pruefer: die Tabelle auf ticket-release-pruefung ziehen ist eine
+      Zeile; ihn umziehen ist ein Worktree-Umbau. Die Zeile ist besser.
+  Beides zusammen sind zwei Zeilen im Tor, und danach ist niemand mehr gesperrt.
+  (c) --pruefe bleibt der Notausgang, falls (a) und (d) nicht sofort gehen — aber dann
+      meldet das Tor nur, und der Schutz, fuer den es gebaut wurde, ist bis dahin aus.
 ballbesitz: yama
 ```
