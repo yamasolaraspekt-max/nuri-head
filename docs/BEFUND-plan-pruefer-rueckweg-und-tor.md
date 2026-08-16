@@ -5570,3 +5570,99 @@ wegzulassen, denn der Name steht schon da.*
 **Ball beim Planner** (FORMELSAMMLUNG, N-003-Belegstelle · gehört zum §77/§79-Ball).
 *Für Yama ändert sich am Fach-Gate nichts: die Rechnung ist geprüft und hält, der Vorbehalt wird
 unbedingt ausgegeben.* **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 82 — Posten (d) auf den Yama-Stapel: es sind ZWÖLF Bälle, nicht acht — und acht davon tragen keine Kennung
+
+**Stand:** HEAD `113faf6e`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**Die Wache trägt mir acht Yama-Posten aus dem Gedächtnis auf. Ich habe stattdessen den Bestand
+gelesen.**
+
+### Drei der acht frisch gemessen
+
+```
+N-003 Fach-Gate    FORMELSAMMLUNG:784 'von Yama festgelegt 12.08., DAUERGELB'
+                   -> ENTSCHIEDEN, nicht mehr bei Yama.  (Rechnung in §81 auf 11 Werte geprueft)
+A-13               zustand BETRIEBSBESTAETIGT · ballbesitz '—  # Kette vollstaendig,
+                   P2 vom Evaluator gegengeprueft und geschlossen'
+                   -> nicht mehr bei Yama.
+W-21L              DECISION_BLOCKED · 7241 min · 2061 Commits seit Schnitt
+                   -> BLEIBT bei Yama, mit ZWEI benannten Fachfragen.
+```
+
+### W-21Ls Sperre — ich hätte sie fast für aufgelöst erklärt
+
+W-21Ls Ballfeld sagt: *„— # bis Yama die Fachdaten liefert **oder W-23 sie erzeugt**"*. **Und §75
+hat W-23 durchgerechnet: sieben Modelle mit verifiziertem Lattmaß-Bereich, alle sieben nachgezählt.**
+*Ich war eine Messung davon entfernt, „Weg b ist eingetreten" zu melden.*
+
+**Die Tafelzeile trägt die Korrektur bereits — und sie ist vorsichtiger, als ich gewesen wäre:**
+
+> *„OPERANDEN-GATE STEHT — meine frühere Aussage war zu stark: W-23 trägt die Lattmaß-Spannen im
+> **BLATT**, aber im Code steht nur `lattmassAbhaengigVonProdukt` als **boolean**
+> (`dachformVorlagen.ts:118`) — das Flag sagt DASS, nicht WIE VIEL."*
+
+**Selbst nachgeprüft statt geglaubt:**
+
+```
+dachformVorlagen.ts:118   'lattmassAbhaengigVonProdukt: boolean; // Deckmass/Lattung ist
+                           produktabhaengig'                         TRIFFT zeichengenau
+Vorkommen im Code         :1380 true · :1406 true   — zwei Flags, KEINE Zahl
+```
+
+**Weg b ist wirklich nicht eingetreten.** *Die Daten liegen im Blatt, nicht im Code — und ein
+`boolean` beantwortet die Frage „wie viel" nicht.* **W-21L bleibt bei Yama, offen sind
+Restausgleich und die Wahl des `n`.**
+
+*Nebenbei: dieser Zeiger `:118` trifft — als einer von wenigen heute Nacht. Er zeigt in eine
+Typdeklaration nahe am Dateianfang einer 2402-Zeilen-Datei, also oberhalb praktisch allen
+Wachstums. **§79s Platzierungsregel, hier zufällig eingehalten.***
+
+### Der eigentliche Fund: zwölf Bälle, acht ohne Kennung
+
+```
+Bloecke mit ballbesitz: yama   12
+davon MIT auftrag-Feld          4   die_sicherung_steht_aber… · REGISTER · P-07 · P-09
+davon OHNE auftrag-Feld         8   Z.1544 · 1758 · 1814 · 1879 · 2602 · 2685 · 2974 · 17883
+```
+
+**Acht Yama-Bälle sind durch keine Auftragssuche auffindbar.** Ihre Gegenstände, aus dem Blockinhalt
+gelesen:
+
+```
+Z.1544   'auftrag_von_yama'  -> Ball: 'nur noch die eine Zahl bzw. der Mindestwinkel'
+Z.1758   kein Rollenbaum sichert die eigenen Commits (aus der A-37/A-38-DoR)
+Z.1814   Yamas Anweisung, seine Posten zu uebernehmen, mit der Dauerregel FRISCH zu messen
+Z.1879   P2H-12 des Planners: 'der rollende Umzug hat keinen Rueckfluss'
+Z.2602   A-05 und A-12 stehen beide (Messauftraege L-Kontur und F-026)
+Z.2685   Yama 13.08.: alle Fragen und Aufgaben an ihn zusammenstellen
+Z.2974   Vorlage Abschnitt 14: ZoneNode / materialId, zwei Faelle zusammen vorgelegt
+Z.17883  Yama 14.08.: 'wie soll ich das loesen, ich moechte dass du mich vertrittst'
+         -> Ball: 'FUENF Sachposten bleiben; elf sind mit diesem Eintrag geschlossen'
+```
+
+**Meine Wache-Liste nennt acht Posten aus dem Gedächtnis; der Bestand trägt zwölf Bälle, und die
+Mehrzahl davon steht an keiner Kennung.** *Das ist derselbe Träger-Fehler wie §78 — dort zeigte ein
+Feld auf einen Befund, der woanders lag; hier liegt der Befund an einer Stelle, die kein Feld
+benennt.*
+
+### Zwei eigene Fehler, beide vor dem Melden gefangen
+
+```
+1  meine erste Zaehlung ordnete SIEBEN Baelle 'A-04' zu — mein Muster nahm den zuletzt
+   gesehenen auftrag-Schluessel statt den des BLOCKS. Am Objekt geoeffnet: die Bloecke
+   gehoeren nicht zu A-04. Sieben identische Zuordnungen waren die Signatur.
+2  Tafelzeile sagt 'Schnitt 717eb11c', Datensatz sagt 'basis_sha 4f0d4584' — SECHS Commits
+   auseinander, KEIN Elter-Verhaeltnis. 717eb11c hat das Blatt ANGELEGT (diff-filter=A),
+   4f0d4584 ist der gemessene Stand davor. Zwei verschiedene Dinge, aehnliche Namen.
+```
+
+**Punkt 2 trifft mich selbst: ich beschrifte `basis_sha` seit §71 mit „SCHNITT".** *Bei 83 von 84
+Aufträgen kostet das nichts, weil keine Tafelzeile widerspricht. Bei W-21L widerspricht sie — und
+sie hat recht.* **Gemessene Größe: genau eine Tafelzeile von zweien mit dieser Form. Ich melde es
+in dieser Größe und nicht größer.**
+
+**Ball bei Yama unverändert** (12 Bälle, gemessen). **Die acht kennungslosen Blöcke gehören dem
+Integrator** — sie sind der Grund, warum eine Postenliste aus dem Gedächtnis entstehen musste.
+**Kein Zustandsfeld angefasst, kein Bau.**
