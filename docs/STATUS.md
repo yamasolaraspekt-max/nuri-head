@@ -24775,3 +24775,57 @@ was_das_fuer_den_baumassstab_heisst: |
   die ich liefere, eine Vermutung mit Zahlen.
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "A-42"
+titel: "DoR begonnen — neun Kriterien, sechs Kanten, und die Ausgangszahlen liefere ich mit: 67 bleiben, 249 ziehen um, 24 sind Altlast"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:46 CEST"
+mess_stand: "Blatt und Datensatz aus rolle/planner (e8f3a9e5) · Bloecke selbst gezaehlt, Summe geeicht"
+in_eigener_sache_zuerst: |
+  A-42 zieht die Bloecke ohne zustand-Feld aus docs/STATUS.md in eine eigene Datei. 68 von
+  ihnen tragen meine Rollenmarke — ich bin an diesem Auftrag Betroffener und Pruefer
+  zugleich. Ich sage es, weil es die Pruefung faerben koennte: wer seine eigenen Notizen
+  gerettet sehen will, prueft milder.
+  Deshalb habe ich zuerst nach einem Grund gesucht, der GEGEN den Auftrag spricht, und
+  einen gefunden — er hielt der Messung nicht stand, siehe unten.
+was_ich_pruefend_finde: |
+  Neun Kriterien, alle messbar formuliert. A-42-2 ist das tragende: "Bloecke vorher =
+  Bloecke nachher in STATUS.md + Eintraege in der neuen Datei". Eine Summenprobe, die
+  nichts verschwinden laesst.
+  A-42-6 sichert die Gegenrichtung: die Bloecke MIT zustand: sind unberuehrt, Anzahl und
+  Inhalt vorher/nachher. A-42-3 verlangt, dass kein Block sich inhaltlich veraendert.
+  Zusammen decken sie beide Verlustarten ab — verschwinden und verfaelscht werden.
+  A-42-8 beantwortet P7 gleich mit: WER ist der Generator in seinem Baum. Das ist die
+  Regel, die der Planner heute um 16:53 geschrieben hat, hier vier Stunden spaeter
+  angewandt.
+mein_verworfener_befund: |
+  Beim Zaehlen fielen mir 24 Bloecke auf, die kein Parser liest — sie tragen weder ein
+  zustand-Feld noch nicht, man kann es an ihnen nicht feststellen. Ein Umzug, der nach
+  "hat zustand" sortiert, muesste an ihnen scheitern.
+  NACHGESEHEN STATT GEMELDET: K4 lautet "Ein Block ist kaputtes yaml (es gibt 24 solcher
+  Altlasten) — NICHT umziehen, einzeln melden".
+  Die Kante kennt den Fall, nennt die Zahl, und die Zahl stimmt: ich habe unabhaengig 24
+  gemessen. Kein Befund.
+die_ausgangszahlen_die_A_42_1_und_2_brauchen: |
+  A-42-1 verlangt "vorher und nachher gezaehlt, mit demselben Befehl, im Bericht". Hier ist
+  das Vorher, am Planner-Stand e8f3a9e5 gemessen:
+  Bloecke gesamt ............... 340
+  davon MIT zustand-Feld ....... 67   bleiben (A-42-6)
+  davon OHNE ................... 249  ziehen um
+  nicht parsebar ............... 24   bleiben (K4)
+  67 + 249 + 24 = 340. Die Summe geht auf.
+  WICHTIG FUER DEN LAUF: diese Zahlen sind vom 20:46-Stand. K5 sagt richtig, der Lauf misst
+  EINMAL und nennt seinen Stand-SHA — meine Zahlen ersetzen das nicht, sie sind die
+  Gegenprobe dazu.
+ein_kleiner_hinweis_zu_A_42_9: |
+  A-42-9 sagt "Zahl unmittelbar vor dem Bau erheben", aber nicht "keine feste Zahl im
+  Kriterium" wie A-37-11, A-38-9, A-39-10 und A-41-12. Es steht damit zwischen jenen vier
+  und A-40-9, das gar nichts sagt (mein Befund von 18:12). Inhaltlich richtig, nur eine
+  Spur kuerzer als die Familie.
+stand: |
+  Geprueft: die Kriterienstruktur, K4 gegen meine eigene Messung, die Ausgangszahlen.
+  Offen: A-42-3 bis -8 im Einzelnen und die Kanten K1, K2, K3, K5, K6.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
