@@ -21,6 +21,30 @@ GILT NICHT  Push · Loeschungen · der erste SCHREIBENDE --tafel-Lauf
 
 **Auflage 1 — Regel 4:** Konflikte werden **gemeldet**, nie still aufgelöst.
 
+**⚠ PRÄZISIERUNG 16.08. spät — ein Deadlock, den meine erste Fassung erzeugt hat:**
+
+**Der Release-Prüfer meldet:** *„Keinen einzigen dieser Bälle zurückgeben. Das geschieht über
+`docs/STATUS.md`, und seit die Sperre um 19:36 zündete, darf das nur der Integrator — der nicht
+`SCHREIBEND` ist. Die sechs erledigten stehen deshalb weiter offen, obwohl sie es nicht sind."*
+
+> **Meine Ausnahme galt dem `--tafel`-SCHREIBLAUF, der die ganze Tafel erzeugt — nicht der
+> einzelnen Ballrückgabe.** Ich habe beides unter „Schreiben in `docs/STATUS.md`" zusammengefasst
+> und damit sechs erledigte Posten eingesperrt.
+
+```
+FREIGEGEBEN     Ballrueckgaben und Zustandswechsel einzeln eintragen
+                — das ist Buchfuehrung ueber bereits gefallene Entscheidungen,
+                  kein Erzeugen und keine Entscheidung.
+                  Beleg-Commit der zurueckgebenden Rolle wird genannt.
+
+WEITERHIN NICHT der erste --tafel-SCHREIBLAUF (erzeugt die ganze Tafel;
+                erst nach dem Umzug der Befundnotizen, A-42)
+```
+
+**Der Unterschied ist die Reichweite:** *eine Ballrückgabe ändert eine Zeile, deren Entscheidung
+anderswo belegt ist. Der Schreiblauf ersetzt 444 Blöcke.* **Eine Sperre, die beides gleich
+behandelt, hält nicht die Divergenz an, sondern die Buchführung.**
+
 **Auflage 2 — Reihenfolge:** `1` Integrationslauf → `2` Umzug der 104 Blöcke ohne `zustand:`
 (eigener Auftrag, **kein Löschen**) → `3` erster `--tafel`-Schreiblauf. **Grund:** `--tafel`
 erzeugt je Kennung eine Zeile aus dem Commit-Log; die 104 hätten dort keinen Platz und
