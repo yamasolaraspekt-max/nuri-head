@@ -21909,5 +21909,56 @@ was_daraus_fuer_die_wahl_folgt: |
   Beides zusammen sind zwei Zeilen im Tor, und danach ist niemand mehr gesperrt.
   (c) --pruefe bleibt der Notausgang, falls (a) und (d) nicht sofort gehen — aber dann
       meldet das Tor nur, und der Schutz, fuer den es gebaut wurde, ist bis dahin aus.
-ballbesitz: yama
+NACHTRAG_13_56_WARUM_NOCH_NICHTS_STEHT_UND_WANN_ES_STEHT: |
+  Ich hatte um 13:50 geschrieben: "Sein NAECHSTER Commit ueber das Tor wird abgewiesen."
+  Er hat seither zweimal committet (2a6b9d07 um 13:54:54). Meine eigene Vorhersage gehoert
+  also geprueft, und sie stimmt — nur am falschen ORT.
+  GEMESSEN, warum es noch geht:
+    der gemeinsame Checkout ticket steht auf b040f299
+    Rueckstand gegen den Fernstand f4a1b170:   34 Commits
+    scripts/rollen-tor.sh dort vorhanden:      NEIN
+    commit-pruefen.sh ruft das Tor dort:       0 Treffer
+  Dort ist die Einhaengung schlicht noch nicht angekommen. Die Sperre existiert im
+  Fernstand und in den umgezogenen Baeumen, aber nicht an dem Ort, an dem die zwei
+  Betroffenen arbeiten. Deshalb laeuft alles weiter.
+  DER AUSLOESER IST DAMIT BENANNT: sobald der gemeinsame Checkout die 34 Commits nachzieht,
+  greift die Sperre fuer Evaluator und Release-Pruefer gleichzeitig. Nicht der naechste
+  Commit ist der Zeitpunkt, sondern der naechste Stand-Nachzug im gemeinsamen Checkout.
+  UND ES GIBT EIN ZEITFENSTER: der Planner hat K6 um 13:53:25 im BLATT geschaerft und das
+  fehlende Kriterium nachgetragen (02504a25) — beide Punkte meines Befunds von 13:45. Im
+  BAU fehlt K6 weiterhin, gemessen: rolle/generator, 0 Treffer.
+  Wird K6 gebaut und transportiert, BEVOR der gemeinsame Checkout nachzieht, tritt der
+  Schaden nie ein. Das ist kein Zufall, auf den man sich verlassen sollte, aber es ist die
+  Lage: die Reihenfolge entscheidet, nicht die Zeit.
+was_ich_dazu_beitrage: |
+  Nur die Praezisierung des Zeitpunkts. Die Sache selbst liegt bei drei Rollen, die alle
+  daran arbeiten: der Planner hat das Blatt nachgezogen, der Generator muss bauen, der
+  Release-Pruefer hat den Befund uebernommen und transportiert.
+  Ich habe eine eigene Vorhersage geprueft und sie im Zeitpunkt berichtigt — das ist der
+  Grund, warum dieser Nachtrag existiert.
+NACHTRAG_14_02_A_37_17_IST_BESSER_ALS_MEIN_VORSCHLAG: |
+  Ich hatte gefordert, K6 brauche ein eigenes Kriterium. Der Planner hat stattdessen
+  A-37-17 geschnitten: "ALLE SECHS KANTEN sind behandelt und JE EINZELN belegt."
+  Das ist die bessere Loesung. Ein Kriterium fuer K6 haette K6 geschuetzt; dieses schuetzt
+  jede kuenftige Kante mit. Genau die Verallgemeinerung, die er heute schon zweimal
+  gefunden hat — Invariante statt Zahl bei A-33, Aussage statt Zahl bei A-38.
+  BEINAHE-FEHLALARM MEINERSEITS: mein erster grep suchte Kriterien, die "K6" im TEXT nennen,
+  und fand null. Daraus haette ich melden koennen, das Kriterium fehle weiter. Erst die
+  vollstaendige Liste zeigte A-37-17 — es steht zwischen -15 und -16 und nennt K6 nicht
+  namentlich, weil es ALLE Kanten meint. Zaehlung: 16 Kriterien vorher, 17 jetzt.
+  Das ist dieselbe Falle wie heute frueh beim Tafelmuster: das Muster war zu eng, und die
+  Nicht-Existenz waere ein Messfehler gewesen, kein Befund.
+WAS SEIT 36 MINUTEN UNVERAENDERT OFFEN IST: |
+  Meine zwei Zahlen aus dem Runde-4-Votum (13:26), im neuesten Planner-Stand 02504a25:
+    A-37-5   "TICKET_ROLLE leer -> exit 3"     Tabelle sagt 5
+    A-37-13  "Rueckgabe != 0"                  Tabelle sagt 6
+  In derselben Zeit sind vier andere Punkte behoben worden — K6 geschaerft, A-37-17
+  geschnitten, P2H-09 geschlossen, das Markenformat festgelegt. Die zwei Zahlen sind die
+  kleinsten offenen Posten und werden von den groesseren verdraengt.
+  A-37-5 WIEGT INZWISCHEN SCHWERER ALS BEI DER MELDUNG: Teil 1 IST gebaut, und zwar mit
+  exit 1 — also weder mit der 3 des Kriteriums noch mit der 5 der Tabelle. Wer A-37-5 jetzt
+  abnimmt, misst gegen eine Zahl, die an keiner der drei Stellen steht.
+  Das ist kein neuer Befund. Es ist derselbe, 36 Minuten aelter, an einem Auftrag, dessen
+  erster Teil inzwischen im Fernstand liegt.
+ballbesitz: planner
 ```
