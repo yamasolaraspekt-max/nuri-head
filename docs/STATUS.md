@@ -25705,3 +25705,49 @@ vorschlag: |
   Zufallstreffer zum Belegfall. Blattaenderung, nicht meine Entscheidung.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-2 ist zur Haelfte nicht abnehmbar — die Positivprobe hat 39 Kandidaten, die Negativprobe keinen einzigen ausser dem Auftragsblatt selbst"
+rolle: plan-pruefer
+zeit: "16.08. 18:57"
+mess_stand: 510a36a5e87e3379c58a5fecb962e2dc0df5372e
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+kriterium: "A-40-2 — die siebte Innenpruefung laeuft und findet einen echten Fall. Positivprobe: ein Blatt, das eine F-Kennung nennt, deren Eintrag kein nachgerechnet_an traegt -> Meldung. Negativprobe: ein Blatt, dessen KRITERIUM das Nachrechnen selbst verlangt -> keine Meldung"
+positivprobe: |
+  ERFUELLBAR, und zwar reichlich. Am Basis-Stand 99add90f nennen 39 Blaetter unter
+  docs/auftraege/aktiv/ mindestens eine F-Kennung, und die FORMELSAMMLUNG trug dort
+  NULL nachgerechnet_an. Jeder dieser Eintraege ist ein Positivfall.
+negativprobe: |
+  KEIN KANDIDAT. Gesucht wurde nach Kriterienzeilen (Form '- **X-nn-n**') mit
+  nachrechn / nachgerechnet / durchgerechnet.
+    am Basis-Stand 99add90f : 0 Blaetter
+    heute (rolle/planner)   : 1 Blatt — und das ist A-40 SELBST (sein A-40-6)
+  Zwoelf Blaetter erwaehnen das Nachrechnen ueberhaupt, aber ausnahmslos in
+  PRUEFVERMERKEN (gegenprobe, selbst_nachgerechnet, 'Anlass'), nie in einem Kriterium.
+  Geoeffnet und einzeln geprueft: A-12 Z.244/250/266, W-23 Z.331/338/345,
+  A-35 Z.105/107 — alles Belege einer bereits erfolgten Rechnung, keine Forderung.
+fangproben: |
+  Zwei Muster wurden gegen einen bekannten Treffer geprueft, beide Male mit Folgen:
+  1. '^- \*\*[A-Z]' lieferte fuer A-40 am Basis-Stand 0 Kriterienzeilen. Grund: das
+     A-40-Blatt EXISTIERT am Basis-Stand nicht — geschnitten wurde es um 14:23, der
+     Basis-Stand ist 13:45. Das Muster war richtig, das Objekt fehlte.
+  2. '^ *- \*\*[A-Z]-[0-9]+' liefert fuer A-40 heute 9 Kriterienzeilen. Damit ist
+     belegt, dass die Negativproben-Suche ueberhaupt greifen konnte.
+befund: |
+  A-40-2 verlangt zwei Proben und benennt — anders als A-40-3, das W-28 und F-004
+  ausdruecklich nennt — kein einziges Blatt. Fuer die Positivprobe ist das folgenlos,
+  weil es 39 gibt. Fuer die Negativprobe ist es entscheidend: es gibt keine.
+  Wer A-40-2 abnimmt, kann zeigen dass die Pruefung anschlaegt, aber nicht dass sie
+  DORT SCHWEIGT wo sie schweigen soll. Das ist der Teil, der eine Pruefung von einem
+  Alarm unterscheidet.
+klasse: "P7 — Kriterium ohne gangbaren Weg. Nicht die Pruefung fehlt, sondern der Fall, an dem ihr Schweigen belegt wuerde."
+vorschlag: |
+  Entweder A-40-2 benennt seine zwei Proben so konkret wie A-40-3 — dann muss die
+  Negativprobe erst geschaffen werden, etwa indem ein bestehendes Blatt ein
+  Nachrechen-Kriterium bekommt. Oder die Negativprobe wird gestrichen und A-40-2
+  sagt ausdruecklich, dass nur die Positivrichtung belegt wird. Beides ist
+  Blattaenderung und nicht meine Entscheidung.
+ballbesitz: planner
+```
