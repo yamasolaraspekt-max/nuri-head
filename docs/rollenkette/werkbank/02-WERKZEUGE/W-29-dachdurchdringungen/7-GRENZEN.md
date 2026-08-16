@@ -52,6 +52,30 @@ toolRegistry: 0 Treffer fuer alle fuenf Durchdringungsarten
 > Bedienung zu einer Engine; hier steht zusätzlich schon das **Modell**.* **Was fehlt, ist genau
 > ein Registry-Eintrag, ein Handler und der Weg vom Klick zur Flächenkoordinate.**
 
+## ⚠ NACHGETRAGEN — zwei Werkzeuge gelten als GEDECKT durch genau diesen Befehl
+
+**Bei der Fehlerinventur am 16.08. abends nachgemessen:** `ADD_ROOF_AUFBAU` kommt außerhalb von
+Schema und Reducer dreimal vor — einmal als Typdeklaration, **und zweimal in der
+Werkzeug-Landkarte als Begründung einer Deckungszusage:**
+
+```text
+app/tools/werkzeugLandkarte.ts:172
+  { werkzeugId: 'dachfenster', marke: 'deckt', begruendung: 'ADD_ROOF_AUFBAU' }
+app/tools/werkzeugLandkarte.ts:176
+  { werkzeugId: 'gaube',       marke: 'deckt', begruendung: 'ADD_ROOF_AUFBAU' }
+```
+
+> ***Damit ist der Befund dieses Blattes schärfer, als er oben steht:*** *es geht nicht nur um
+> Code, den niemand ruft.* **Zwei Werkzeuge sind in der Landkarte als „gedeckt" verbucht — und die
+> Deckung beruht auf einem Befehl, den kein Produktivcode auslöst.**
+>
+> *Für den Leser der Landkarte sind `dachfenster` und `gaube` erledigt.* **Gemessen ist der Weg vom
+> Klick zum Befehl nicht vorhanden** (`4-BEDIENUNG`). *Eine Deckungszusage, die auf einem toten
+> Befehl steht, ist die teuerste Sorte Eintrag: sie beendet die Suche.*
+>
+> **Mein Blatt sagte bisher nur „PRODUKTIVE AUFRUFER: keiner".** *Das war richtig und zu leise —
+> wer die Landkarte liest, erfährt das Gegenteil, und keiner der beiden Texte weiß vom anderen.*
+
 ## Drei der fünf Arten kennt nur die Rechnung
 
 ```text
