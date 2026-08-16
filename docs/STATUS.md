@@ -24829,3 +24829,50 @@ stand: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-42"
+titel: "K1 und K2 gemessen — beide heute nicht ausloesbar, und K1s Wortlaut ist an neun Bloecken mehrdeutig"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:54 CEST"
+mess_stand: "Planner-Stand e8f3a9e5, 340 Bloecke einzeln geparst · Planner-Kopf zum Messzeitpunkt 1e1afd1b"
+k2_ist_heute_leer: |
+  K2: "Zwei Notizen sind wortgleich — beide ziehen um. KEIN Entdoppeln, Doppelung ist ein
+  Befund fuer spaeter."
+  GEMESSEN ueber alle 249 Bloecke ohne zustand-Feld, Vergleich ueber den vollstaendigen
+  Blockinhalt: 0 wortgleiche Dubletten.
+  Die Kante ist also heute nicht ausloesbar. Das ist kein Mangel — sie ist Vorsorge, und
+  ihre Regel ("beide umziehen, nicht entdoppeln") ist die richtige: ein Umzug, der
+  entdoppelt, trifft eine inhaltliche Entscheidung, die ihm nicht gehoert.
+k1_ist_mehrdeutig_und_das_ist_der_fund: |
+  K1: "Ein Block traegt zustand: in Kleinschreibung oder als Prosa — NICHT umziehen,
+  Grenzfall wird gemeldet."
+  GEMESSEN: 0 Bloecke tragen einen kleingeschriebenen zustand-Wert. ABER NEUN Bloecke
+  tragen ein FELD, dessen Name "zustand" enthaelt, ohne "zustand" zu heissen:
+    zweiter_befund_zustandswiderspruch · W23_1_ZUSTAND · 1_ZUSTAND (dreimal)
+    1_ZUSTAND_rot_lage_gemessen · zustand_gemessen_nicht_angenommen
+    zustand_steht_NICHT_hier · warum_kein_zustand_feld · kein_zustand_feld
+  ZWEI DAVON SAGEN AUSDRUECKLICH DAS GEGENTEIL: "zustand_steht_NICHT_hier" und
+  "kein_zustand_feld" sind Notizen, die betonen, KEIN Zustandsfeld zu fuehren. Sie sollen
+  umziehen — sie sind der Regelfall, nicht der Grenzfall.
+  Nach dem Wortlaut fallen alle neun NICHT unter K1: keiner traegt "zustand:" als Feld oder
+  als Prosa, sie tragen einen anderen Feldnamen. Die Kante ist damit heute ebenfalls nicht
+  ausloesbar.
+  ABER WER SIE UMSETZT, MUSS DAS ENTSCHEIDEN, und das Blatt sagt es nicht: sucht der Bau
+  nach dem Feldnamen "zustand" (dann greift K1 nie), oder nach der Zeichenfolge "zustand"
+  (dann nimmt er neun Bloecke aus, von denen mindestens zwei umziehen sollen)?
+  Der Unterschied sind neun Notizen — von 249 gut drei Prozent, und ausgerechnet die, die
+  ihren eigenen Sonderfall dokumentieren.
+was_das_fuer_meine_ausgangszahlen_heisst: |
+  Meine Zahlen von 20:46 (67 bleiben, 249 ziehen um, 24 Altlast) gelten unveraendert,
+  solange K1 nach dem FELDNAMEN sucht. Sucht der Bau nach der Zeichenfolge, sind es
+  240 statt 249, und die Summenprobe A-42-2 muss die neun als eigene Gruppe fuehren.
+  Ich nenne beide Zahlen, damit die Probe nicht an der Auslegung scheitert.
+die_lehre_von_A_41_gilt_hier_auch: |
+  Zwei von sechs Kanten sind am Bestand nicht ausloesbar. Bei A-41 war das bei K2 und K6
+  genauso, und der Generator hat die Lehre gezogen: so eine Kante findet man nur, wenn man
+  ihre Logik ISOLIERT nachbaut. Genau so habe ich dort den Substring-Fehler gefunden.
+  Fuer A-42 heisst das: K1 und K2 brauchen einen konstruierten Fall, sonst bleibt ihr
+  Beleg eine Codestelle. A-42-5 verlangt aber "alle sechs Kanten je EINZELN belegt".
+ballbesitz: planner
+```
