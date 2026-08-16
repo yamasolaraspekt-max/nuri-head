@@ -3834,3 +3834,74 @@ Einordnung und lege nur die Kette daneben.
 
 **Ball: planner**, unverändert. **Kein Zustandsfeld angefasst, kein Bau, keine Datei außerhalb
 meines Befundblatts.**
+
+## Die js-yaml-Kette bis zur Wirkung durchgemessen: das Tor SPERRT — und der Rückweg hängt an derselben Kette
+
+*Folgemessung am eigenen Werkzeug · gemessen 16.08. gegen `9861b52a`*
+
+### Am Lauf bewiesen, nicht gelesen
+
+```
+FALL A   js-yaml auffindbar        exit 0   Trockenlauf durchgelaufen
+FALL B   NODE_PATH auf leeres Verz. exit 1   MODUL … Abhilfe: NODE_PATH=…
+```
+
+*Beide mit `--trocken`, kein Commit; die Probedatei ist entfernt, Baum wieder 0.*
+
+**`FEHLER=1` steht im Code (Z.732), und der Lauf bestätigt es: fehlt `js-yaml`, wird JEDER
+`.md`-Commit abgewiesen** — für jede Rolle, denn alle schreiben Blätter und Befunde.
+
+**Damit ist die Wirkung der Kette gemessen:**
+
+```
+puppeteer ^24.39.1   (dependencies, DIREKT)
+  -> cosmiconfig      (transitiv)
+     -> js-yaml       (transitiv; in package.json NULL Mal)
+        -> YAML-Pruefung in commit-pruefen.sh
+           fehlt sie: exit 1, jeder .md-Commit gesperrt
+```
+
+### Der Prüfer selbst ist vorbildlich gebaut
+
+**Er unterscheidet vier Lagen** — `0 heil · 2 YAML-Syntax · 3 Modulauflösung · 4 Laufzeit` — und
+meldet den Modulfehler **als solchen**, nicht als Kopf-Fehler:
+
+> *„Eine Barriere, die beim Fehlen eines Moduls ‚der Kopf parst nicht' sagt …"* — genau das tut er
+> **nicht**.
+
+**Das ist dieselbe Trennung, die der Release-Prüfer heute Nacht in `bloecke.py` nachgerüstet hat.
+Das Tor hatte sie schon.** *Der Unterschied: dort fehlte sie und fiel mir auf; hier war sie da und
+ich habe es erst jetzt nachgesehen.*
+
+### Und die schärfste Stelle: der Rückweg ist nicht unabhängig vom Ausfall
+
+Der benannte Rückweg ist `scripts/module-nachziehen.sh` (151 Zeilen), genannt in
+`rollen-tor.sh:460` und `:467` — **er fährt `npm ci`.**
+
+**`npm ci` installiert nach dem Lockfile. Und im Lockfile steht `js-yaml` nur, weil `puppeteer`
+`cosmiconfig` zieht.** *Ändert puppeteer seinen Baum, bringt auch der Rückweg das Paket nicht
+zurück — der Rückweg hängt an derselben Kette wie der Ausfall.*
+
+**Das ist keine Kritik am Rückweg**, sondern die Feststellung, dass er hier keine zweite Sicherung
+ist. **Eine Zeile in `devDependencies` wäre die erste unabhängige** — genau die, die der Generator
+vorschlägt.
+
+### Zwei Nebenbefunde, beide klein
+
+**Die Abhilfe nennt genau einen fest verdrahteten absoluten Pfad** (Z.731,
+`/Users/yamanuri/Documents/ticket/node_modules`). Er existiert heute und trägt `js-yaml`
+— **gemessen, nicht angenommen.** Wird jener Baum je bereinigt, verweist die Abhilfe ins Leere.
+
+**Mein eigener Arbeitsbaum hat gar kein `node_modules`** — das Tor sagt es selbst bei jedem Lauf
+(*„MODULSTAND UNBEKANNT"*). Deshalb setze ich `NODE_PATH` in jeder Runde; das ist kein Mangel,
+sondern die gemessene Lage.
+
+### Mein zwölfter gefangener Fehlbefund
+
+Ich suchte den Rückweg in `commit-pruefen.sh` — **null Treffer** — und stand kurz davor zu melden,
+es gebe keinen. **Er steht in `rollen-tor.sh`.** *Falsche Datei durchsucht; dieselbe Klasse wie das
+Muster, der Anker und der Großbuchstabe, nur eine Ebene höher: nicht das Muster war zu eng, sondern
+der Suchraum.*
+
+**Ball: planner**, unverändert — eine Zeile `js-yaml` in `devDependencies`. **Kein Zustandsfeld
+angefasst, kein Bau, keine gemeinsame Datei geändert.**
