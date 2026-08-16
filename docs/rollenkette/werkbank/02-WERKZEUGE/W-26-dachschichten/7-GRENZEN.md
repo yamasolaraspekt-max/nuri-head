@@ -2,14 +2,14 @@
 
 ## Der Befund in zwei Sätzen
 
-**Der Dachaufbau ist bewusst nicht gebaut, und die Entscheidung ist sieben Mal dokumentiert und
-einmal bewacht.** *Was bleibt, ist ein Vertrag von dreizehn Feldern, den jede Vorlage mitträgt und
+**Der Dachaufbau ist bewusst nicht gebaut, und die Entscheidung ist acht Mal dokumentiert und
+einmal bewacht.** *Was bleibt, ist ein Vertrag von siebzehn Feldern, den jede Vorlage mitträgt und
 den außerhalb der Vorlagendatei niemand liest.*
 
 ```text
-Entscheidung   sieben Modulkoepfe: „KEINE Dacheindeckung"
+Entscheidung   acht Modulkoepfe: „KEINE Dacheindeckung"
 Waechter       dachformVorlagen.test.ts:561 ueber ALLE Vorlagen
-Vertrag        13 Felder · ausserhalb gelesen: 0 · davon wirksam: 2 (in derselben Datei)
+Vertrag        17 Felder · ausserhalb gelesen: 0 · davon wirksam: 2 (in derselben Datei)
 Rest           eindeckungPasstZuKategorie — gebaut, 4 Zusagen, 0 produktive Aufrufer
 ```
 

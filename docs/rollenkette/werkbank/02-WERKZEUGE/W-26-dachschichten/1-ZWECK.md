@@ -2,13 +2,13 @@
 
 > ***EINORDNUNG: W-26 ist eine ABLESUNG mit einem BEFUND, der größer ist als der Registereintrag.***
 > **Das Register nennt `konterlattungMm` einen „toten Vertrag". Gemessen ist es der GANZE Block:
-> `VorlagenDachdecker` führt DREIZEHN Felder, und KEIN EINZIGES wird außerhalb der Vorlagendatei
+> `VorlagenDachdecker` führt SIEBZEHN Felder, und KEIN EINZIGES wird außerhalb der Vorlagendatei
 > gelesen.**
 
 ```text
-ENTSCHEIDUNG   GEBAUT   „deckungsneutral" — in SIEBEN Modulkoepfen ausdruecklich
+ENTSCHEIDUNG   GEBAUT   „deckungsneutral" — in ACHT Modulkoepfen ausdruecklich
 WAECHTER       GEBAUT   dachformVorlagen.test.ts:561 haelt die ABWESENHEIT fest
-VERTRAG        TOT      VorlagenDachdecker, 13 Felder, ausserhalb gelesen: 0
+VERTRAG        TOT      VorlagenDachdecker, 17 Felder, ausserhalb gelesen: 0
 RECHNUNG       ZWEI ZAHLEN  rdnGrad + mindestneigungGrad, nur INNERHALB der Datei
 MODUL          FEHLT    kein dachschicht/schichtaufbau/unterspannbahn — je 0
 ```
@@ -18,7 +18,7 @@ MODUL          FEHLT    kein dachschicht/schichtaufbau/unterspannbahn — je 0
 **Keines — und das ist hier eine ENTSCHEIDUNG und kein Versäumnis.** *Der Dachaufbau (Deckung,
 Lattung, Unterdeckung) ist bewusst aus der Geometrie herausgehalten worden.*
 
-**Sieben Module sagen das in ihrem Kopf, wörtlich und je einzeln:**
+**Acht Module sagen das in ihrem Kopf, wörtlich und je einzeln:**
 
 ```text
 geometry/dachAusschnitt.ts:23      „KEINE Dacheindeckung, KEINE Statik"
@@ -27,10 +27,11 @@ geometry/gaubeGeometrie.ts:28      „KEINE Dacheindeckung"
 geometry/aufbauPlatzierung.ts:18   „KEINE Dacheindeckung/Material"
 geometry/dachOeffnung.ts:14        „KEINE Dacheindeckung/Material/Statik"
 geometry/linienBauteile.ts:10      „Material/Produkt, KEINE Dacheindeckung"
+geometry/dachformVorlagen.ts:113   KEINE feste Dacheindeckung/kein Material
 geometry/grundriss.ts:16           „KEINE Dacheindeckung/Material"
 ```
 
-> ***Eine Entscheidung, die siebenmal an der Stelle steht, an der man sie brechen würde, ist keine
+> ***Eine Entscheidung, die achtmal an der Stelle steht, an der man sie brechen würde, ist keine
 > Notiz — sie ist eine Bauregel.*** **Und der Grund steht daneben** (`dachformVorlagen.ts:113-114`):
 > *„Die Dacheindeckung wird ausschließlich über die separate Produktauswahl gewählt."*
 
@@ -60,9 +61,11 @@ geometry/grundriss.ts:16           „KEINE Dacheindeckung/Material"
 | `battenDistCm` · `konterlattungMm` | **0** | 0 |
 | `unterdeckungKlasse` · `firstausbildung` | **0** | 0 |
 | `gratausbildung` · `kehlausbildung` | **0** | 0 |
+| `ortgangausbildung` · `traufausbildung` | **0** | 0 |
+| `entwaesserungHinweis` · `schneefangHinweis` · `lueftungHinweis` | **0** | 0 |
 
-> **Dreizehn Felder, dreizehn Nullen.** *Zwei davon werden INNERHALB der Datei ausgewertet
-> (`rdnGrad`, `mindestneigungGrad` → `3-FORMELN`); die übrigen elf werden gefüllt, gepflegt und nie
+> **Siebzehn Felder, siebzehn Nullen.** *Zwei davon werden INNERHALB der Datei ausgewertet
+> (`rdnGrad`, `mindestneigungGrad` → `3-FORMELN`); die übrigen fünfzehn werden gefüllt, gepflegt und nie
 > gefragt.*
 
 ## Die Berichtigung einer eigenen Zahl, bevor sie jemand übernimmt
