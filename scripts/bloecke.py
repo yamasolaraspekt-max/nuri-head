@@ -207,6 +207,52 @@ def main(pfad=P):
           f'(Grundlinie {GRUNDLINIE_D}, {"+" if ueber_d > 0 else ""}{ueber_d})')
     for a_d, b_d in offen_d:
         print(f'       Z.{a_d} bis Z.{b_d} — von A, B und C nicht gesehen')
+
+    # D2 — WELCHER DATENSATZ GEHT DABEI VERLOREN. Nachgetragen 17.08. 01:4x auf den
+    # A-42-DoR-Befund des Plan-Pruefers, und seine Praezisierung ist der eigentliche Punkt:
+    #
+    #   "ein kaputter Block macht nicht SICH SELBST unsichtbar, sondern den FOLGENDEN"
+    #
+    # D oben meldet, WO der Zaun fehlt. Das ist die Ursache. Verloren geht aber der Block
+    # DANACH: die Vorschrift /```yaml\n([\s\S]*?)```/ paart den ungeschlossenen Oeffner mit
+    # dem naechsten Schliesser und frisst alles dazwischen — darunter einen vollstaendigen,
+    # voellig intakten Datensatz.
+    #
+    # Sein Befund ist aelter als mein D (16.08. 19:29 gegen 17.08. 23:1x). Ich hatte die
+    # Ursache benannt (abwesend statt kaputt), er die FOLGE (A-18 verschluckt). Beides
+    # zusammen ist der ganze Fall, und diese Zeilen sind seine Haelfte.
+    #
+    # Gegenprobe, die er vorschlaegt und die hier laeuft: auftrag-Zeilen im VOLLTEXT gegen
+    # die in erfassten Bloecken. Gemessen 17.08.: 258 gegen 257, Differenz 1, es ist A-18
+    # in Z.7891 — der Block direkt hinter dem ungeschlossenen Zaun von Z.7876.
+    #
+    # WARUM A-42-2s SUMMENPROBE DAS NICHT FAENGT (auch seine Messung): A-18 bliebe beim
+    # Umzug in STATUS.md liegen und wuerde auf der Nachher-Seite mitgezaehlt. Die Gleichung
+    # geht auf, der Verlust ist unsichtbar. Deshalb muss die Differenzprobe eine ANDERE
+    # Groesse messen als die Summenprobe.
+    _txt = '\n'.join(_zeilen)
+    _bl = re.findall(r'```yaml\n([\s\S]*?)```', _txt)
+    _drin = set()
+    for _b in _bl:
+        for _m in re.finditer(r'^auftrag: (.+)$', _b, re.M):
+            _drin.add(_m.group(1).strip())
+    _alle = [(i + 1, l.split(':', 1)[1].strip())
+             for i, l in enumerate(_zeilen) if l.startswith('auftrag:')]
+    _weg = [(ln, k) for ln, k in _alle if k not in _drin]
+    print(f'  D2 auftrag-Zeilen im Volltext {len(_alle)} · in Bloecken erfasst '
+          f'{len(_alle) - len(_weg)} · verschluckt {len(_weg)}')
+    for ln, k in _weg:
+        print(f'       Z.{ln} {k} — intakter Datensatz, von der Vorschrift nicht gesehen')
+    if len(_weg) > 1:
+        print(f'     ⚠ mehr als der bekannte eine Fall — das ist neu.')
+    # WARUM D2 EINE EIGENE PRUEFUNG IST UND NICHT EINE ZEILE IN D: die Gegenprobe zu diesem
+    # Nachtrag hat einen zweiten yaml-Schliesser entfernt und D auf 3 getrieben — D2 blieb bei
+    # 1. Das ist kein Werkzeugfehler, sondern das Ergebnis: NICHT JEDER FEHLENDE SCHLIESSER
+    # VERSCHLUCKT EINEN DATENSATZ. Die Regex sucht ab jedem ```yaml den naechsten ```; wo der
+    # landet, haengt davon ab, wie die folgenden Zaeune stehen. Manchmal verschmilzt sie zwei
+    # Bloecke (beide Inhalte bleiben lesbar), manchmal springt sie ueber einen hinweg (der
+    # faellt heraus). D zaehlt die URSACHEN, D2 misst die FOLGE — und die Folge ist die Zahl,
+    # die zaehlt.
     if ueber_d > 0:
         print(f'     ⚠ {ueber_d} MEHR als der Altbestand — ein Datensatz koennte '
               f'unsichtbar geworden sein.')
