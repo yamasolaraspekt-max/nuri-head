@@ -107,6 +107,42 @@
 # > dritten Variante ist der Fehler, den dieser Bau gerade behebt.* **Gemeldet: 2 ist in
 # > `commit-pruefen.sh` mit „YAML-Syntaxfehler" belegt.** *Am Einhaengepunkt kann der Fall nicht
 # > eintreten — dort laeuft immer ein Repository —, die Kollision ist also heute theoretisch.*
+# ## A-37-17 — ALLE SECHS KANTEN, je einzeln gefahren, Rohausgabe (16.08. abends)
+#
+# ```text
+# K1  Instanznummer wird abgeschnitten
+#     TICKET_ROLLE=generator-2   ->  keine Ausgabe            exit 0   (wie 'generator')
+#
+# K2  unbekannte Rolle steht NICHT in der Tabelle
+#     ROLLEN-TOR  unbekannte Rolle 'hausmeister' (Stamm 'hausmeister') — die Tabelle
+#                 kennt sie nicht.
+#                 Bekannt: integrator planner plan-pruefer generator evaluator
+#                          release-pruefer                            exit 1
+#
+# K3  Rolle ohne eigenen Baum — DURCHGELASSEN
+#     ROLLEN-TOR  HINWEIS  'generator' hat noch keinen eigenen Baum
+#                 (ticket-rolle-generator) — durchgelassen (K3).       exit 0
+#
+# K4  kein Repository — KEIN Rollenfehler
+#     ROLLEN-TOR  kein Git-Repository — hier ist keine Zuordnung pruefbar (K4).
+#                 Ursache: git rev-parse --show-toplevel schlug fehl.  exit 2
+#
+# K5  Integrator IM Integrations-Checkout
+#     (nur der Modulstand-Hinweis, keine Rollenmeldung)                exit 0
+#
+# K6  fremde Rolle im gemeinsamen Checkout — DURCHGELASSEN
+#     (nur der Modulstand-Hinweis, keine Rollenmeldung)                exit 0
+# ```
+#
+# **Vier der sechs Kanten LASSEN DURCH und melden; zwei weisen ab.** *Das ist kein Zufall der
+# Umsetzung, sondern die Bauabsicht:* **abgewiesen wird, was Schaden anrichtet — der Commit im
+# fremden Baum und die Rolle, die es nicht gibt.** *Alles andere ist ein Uebergangszustand, und
+# ein Tor, das Uebergaenge sperrt, haelt die Kette an.*
+#
+# ***Bei K5 und K6 erscheint heute NUR der Modulstand-Hinweis*** — *der gemeinsame Checkout hat
+# Module, aber keine Marke.* **Das ist eine Auskunft an den Integrator und kein Mangel dieser
+# Probe:** *sie zeigt, dass an dieser Stelle keine ROLLEN-Meldung entsteht, und genau das war zu
+# belegen.*
 set -uo pipefail
 
 NUR_MELDEN=0
