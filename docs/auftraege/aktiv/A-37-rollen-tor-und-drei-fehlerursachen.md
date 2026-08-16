@@ -274,7 +274,7 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
 
 ## Abnahmekriterien
 
-- **A-37-1** · `scripts/rollen-tor.sh` existiert und ist ausführbar.
+- **A-37-1** · `scripts/rollen-tor.sh` existiert und ist ausführbar. **Erzeuger: DIESER Auftrag, Teil 1** — `scripts/rollen-tor.sh` wird vom **Generator** in `rolle/generator` gebaut; der Scope nennt ihn als Liefergegenstand. *(Im Kriterium genannt, damit P3 den Erzeuger nicht suchen muss.)*
   **Messbar:** `test -x scripts/rollen-tor.sh` → exit 0.
   **Rot am Basis-SHA:** `ls scripts/ | grep -c rollen-tor` → **0**.
   **⚠ Zum Messbefehl, vom Prüfer bemerkt und selbst nachgefahren:** `grep -c` gibt bei null
@@ -437,8 +437,8 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   „vermutlich in Ordnung" liest, meldet den halb installierten Baum grün.** Deshalb ist es ein
   **eigenes** Kriterium und kein Nebensatz im Vergleich — *„der Unterschied zwischen einer Prüfung
   und einer Prüfung, die man beim Nachbessern versehentlich entfernt."*
-- **A-37-10** · **Kein Nicht-Ziel berührt.** `git show --stat` nennt keine Datei unter `resources/`,
-  `app/`, kein `node_modules`, **nicht `docs/STATUS.md`**.
+- **A-37-10** · **Kein Nicht-Ziel berührt.** Die Prüfung läuft über die Ausgabe von `git show --stat`; **verboten sind Dateien unter** `resources/`,
+  `app/`, kein `node_modules`, **nicht `docs/STATUS.md`**. **`docs/` im Übrigen ist ERLAUBT** — dieser Auftrag schreibt Blätter. *(Ausdrücklich getrennt, weil eine Prüfung sonst „keine Datei unter docs/" liest und den eigenen Liefergegenstand meldet.)*
 - **A-37-11** · **Suite grün und Zahl unverändert GEGEN DEN BAU-STAND**, `tsc exit=0`.
   **Messbar:** Zahl **unmittelbar vor dem Bau** im Integrations-Checkout erheben und im Bericht
   nennen; nach dem Bau muss sie **gleich** sein. **Nicht** gegen eine feste Zahl prüfen.
