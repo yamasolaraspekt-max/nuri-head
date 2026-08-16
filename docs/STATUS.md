@@ -23345,6 +23345,7 @@ ballbesitz: planner
 auftrag: "A-41"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+claim_abnahme: "evaluator 16.08. 17:16 — Abnahme Runde 1 laeuft. Zuvor nachgezogen: mein Zweig stand auf 80edcf7f (14:57) und kannte A-41 nicht; der Fast-Forward war verlustfrei (0 eigene Commits, HEAD war Vorfahre). Gemessen wird der Bau am COMMIT, Pruefstand nach §8/§9, Baureihe SELBST gesucht statt aus bau_sha genommen."
 ballbesitz_grund: "ABNAHME 16.08. 16:5x: der Generator hat CODE_FERTIG als Zustands-Commit
   gemeldet (f19557c8, Betreff zustand: A-41 CODE_FERTIG generator bau 16c5b9d2). Der Datensatz
   hing auf ENTWURF, weil das Tor genau die Rollen sperrt, die ihn nachziehen muessten — der
