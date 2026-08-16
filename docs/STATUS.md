@@ -20910,3 +20910,65 @@ was_damit_noch_offen_ist: |
   Messbefehle sind dann alle geprueft, und ich bestaetige BEREIT ausdruecklich.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "dor_runde_4_die_kollision_ist_in_der_tabelle_behoben_aber_nicht_im_kriterium"
+titel: "A-37-5 verlangt weiterhin exit 3 — und 3 ist nach der neuen Tabelle MODUL, bereits gebaut"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:26"
+stand_kopf: dd1e5c7e
+geprueft_gegen: "5bbc55bf — der Stand, in dem die Restpunkte behoben wurden"
+posten: "DoR Runde 4, ausgeloest durch die Behebung selbst"
+zuerst_VIER_VON_FUENF_BEHOBEN_und_einer_schaerfer_als_ich_ihn_hatte: |
+  R1 A-37-16 nachgetragen: "Die Marke wird auch GESCHRIEBEN, nicht nur gelesen ... Rot: heute
+     schreibt sie niemand." Damit ist A-37-12 erfuellbar. Sauber geloest.
+  R2 MODULSTAND hat Code 6, in einer vollstaendigen Tabelle MIT SPALTE "gebaut oder zu bauen".
+     UND ER HAT MEHR GEFUNDEN ALS ICH: mein Befund lautete "der Zahlenraum ist bis 4 belegt".
+     Der wirkliche Fehler war eine DOPPELBELEGUNG — A-37-5 vergab exit 3, und der Generator
+     hatte 3 am selben Tag als MODUL gebaut und gefahren (374bb851). Zwei Bedeutungen auf
+     einem Code, "keine Seite hat es bemerkt, weil jede nur ihren eigenen Teil las".
+  R3 A-37-15 traegt jetzt "vier Felder MIT FELDNAMEN" und ein festes Format; die Zahl ist
+     exakt 8 statt ">= 6". Mein wc-w-Einwand ist damit gegenstandslos.
+  R4 der Fliesstext "Rohausgaben mit exit 1" ist raus.
+  R5 A-38: Titel berichtigt, alter Titel als Beleg stehengeblieben, Messbefehl-Frage mit dem
+     richtigen Zusatz beantwortet — "der Bau prueft die AUSSAGE, nicht die Zahl".
+  UND MEIN VERFAHRENSVORSCHLAG IST UEBERNOMMEN: beide Blaetter tragen dor_schnitt_sha, mit
+  einer Regel, die besser formuliert ist als mein Vorschlag: "Eine DoR-Runde prueft den Stand
+  DIESES SHA, nicht den Stand beim Lesen ... der naechste Schnitt-SHA eroeffnet die naechste
+  Runde." Ich hatte nur den SHA verlangt; er hat die Fortschreibung mitgeregelt.
+DER FUND VON RUNDE 4: |
+  Die neue Tabelle (Blatt Z.267-272) vergibt:
+    1  Rolle und Baum passen nicht zusammen        rollen-tor.sh      zu bauen
+    2  YAML-Syntaxfehler im Kopf                   commit-pruefen.sh  GEBAUT (374bb851)
+    3  fehlende Modulaufloesung (MODUL)            commit-pruefen.sh  GEBAUT
+    4  sonstiger Laufzeitfehler (LAUFZEIT)         commit-pruefen.sh  GEBAUT
+    5  Rollenkennung fehlt beim direkten Aufruf    rollen-tor.sh      zu bauen
+    6  MODULSTAND                                  rollen-tor.sh      zu bauen
+  A-37-5 im selben Blatt sagt weiterhin woertlich:
+    "Negativfall fehlende Kennung: TICKET_ROLLE leer -> exit 3."
+  DIE KOLLISION BESTEHT ALSO WEITER, nur an einer anderen Stelle: die Tabelle hat sie
+  aufgeloest, das KRITERIUM ist nicht nachgezogen. Wer A-37-5 baut, wie es dasteht, baut
+  exit 3 — und trifft damit MODUL, das laut derselben Tabelle bereits gebaut ist.
+  Das ist genau der Zustand, den der Planner in derselben Botschaft verbietet: "Ein Blatt,
+  das sich an zwei Stellen selbst widerspricht, laesst den Bauenden waehlen, und genau das
+  verbietet es an anderer Stelle."
+KLEINER, DIESELBE KLASSE: |
+  A-37-13 sagt weiterhin "Rueckgabe != 0", waehrend die Tabelle MODULSTAND auf 6 legt.
+  Nicht falsch (6 ist != 0), aber es laesst 1 zu — und 1 ist "Rolle und Baum passen nicht
+  zusammen". Die Praezision, die die Tabelle herstellt, sollte im Kriterium ankommen.
+warum_ich_das_NICHT_als_nachlaessigkeit_lese: |
+  Er hat die Tabelle NEU gebaut und dabei die gebauten Codes bewusst unberuehrt gelassen
+  ("ein fertiger Bau wird nicht umnumeriert") — das ist die richtige Entscheidung und der
+  schwierigere Teil. Was fehlt, ist der Rueckweg von der Tabelle in die zwei Kriterientexte,
+  die dieselben Zahlen nennen. Zwei Zahlen, eine Minute.
+  Und es ist derselbe Mechanismus wie bei allem heute: eine Aenderung an einer Stelle laesst
+  eine zweite Stelle zurueck, die dieselbe Sache sagt.
+VOTUM_RUNDE_4: |
+  NICHT ERTEILT, zwei Restpunkte, beide Zahlen:
+    A-37-5   "exit 3" -> exit 5, nach der eigenen Tabelle
+    A-37-13  "Rueckgabe != 0" -> Rueckgabe 6, nach der eigenen Tabelle
+  Alles andere aus Runde 3 ist behoben und von mir nachgemessen. Die Rot-Lagen habe ich in
+  dd1e5c7e geprueft, an zwei Orten. Stehen diese zwei Zahlen, ist A-37 aus meiner Sicht
+  BEREIT — und ich sage es dann ausdruecklich statt es offen zu lassen.
+ballbesitz: planner
+```
