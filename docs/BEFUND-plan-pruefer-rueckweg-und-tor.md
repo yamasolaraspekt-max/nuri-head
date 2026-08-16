@@ -1160,3 +1160,87 @@ wiederholbar.**
 **Ball: planner** — als Ergänzung zu der Summenprobe-Regel, die er heute schon verankert hat
 (*„wer den Reifegrad zählt, nennt die Summe und die Zeilenzahl dazu"*). Diese hier ist ihre
 Schwester für Kennungen. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## A-42, vierter DoR-Fund: der Basis-Stand enthält die Datei nicht, an der das Blatt gemessen zu haben angibt
+
+*Vorratsprüfung Posten (a) an einem Blatt in meiner Bahn · gemessen 16.08. gegen `9fd2a2af`*
+
+### Der Fund
+
+A-42 schreibt in seinem tragenden Absatz:
+
+> **Gemessen an `status-erzeugen.sh` (Zeile 45, 291):** `--tafel` erzeugt die Statuswahrheit **aus
+> dem Commit-Log** …
+
+Das Blatt führt `basis_sha: e802c1f8` und `dor_schnitt_sha: "e802c1f8"`.
+
+```
+git cat-file -e e802c1f8:scripts/status-erzeugen.sh   ->  NEIN, nicht in diesem Baum
+git cat-file -e b2d373fb:scripts/status-erzeugen.sh   ->  NEIN  (b2d373fb = der Blatt-Commit selbst)
+```
+
+**Die Datei existiert in keinem der beiden Stände, die das Blatt nennt.**
+
+**Warum, und es ist NICHT „die Datei ist zu neu":** `status-erzeugen.sh` entstand mit `1e342d53`
+am **16.08. 15:15** — **zwei Stunden VOR** dem Basis-Stand (17:24). Sie ist trotzdem kein
+Vorfahre:
+
+```
+git merge-base --is-ancestor 1e342d53 e802c1f8   ->  NEIN
+```
+
+**Das ist die Rückweg-Klasse**, die ich am Nachmittag als P-07/P-09 gemeldet habe: Der
+Planner-Zweig hatte den Generator-Bau zum Schnittzeitpunkt noch nicht erhalten. Die Messung selbst
+ist offenkundig richtig — die Datei liegt heute in allen vier Rollenbäumen mit **816 Zeilen** —
+aber **am erklärten Stand ist sie nicht nachvollziehbar.** Wer die DoR nachprüft, bekommt „No such
+file", nicht eine abweichende Zahl.
+
+**Soll:** `basis_sha` auf einen Stand setzen, der den Bau enthält, oder den Messstand der beiden
+Zeiger getrennt ausweisen.
+
+### Was ich geprüft habe und was HÄLT
+
+**Die tragende Behauptung stimmt — im Code nachgelesen, nicht am Wortlaut.** `--tafel` speist sich
+aus dem Commit-Log über
+
+```
+Z.214   MUSTER = "--grep=^\(\w\+[a-z-]*: \)\?zustand:"
+Z.189   r"zustand:\s+"   …   Z.191   r"(?P<zustand>[A-Z_]+)\s+·\s+"
+```
+
+**Ein Block ohne Kennung und ohne Zustand kann gar keinen solchen Betreff erzeugen** und damit
+nicht in der erzeugten Tafel vorkommen. A-42s Prämisse trägt.
+
+**Zeiger Z.45 trägt den zitierten Wortlaut verbatim** (`Je Kennung gewinnt der juengste Eintrag.`),
+die erste Aussage steht eine Zeile darüber in Z.44. Kein Mangel. **Z.291 zeigt heute auf eine
+Fangproben-Zeile** (`("vorwort-a-41.md", "a-41", False, …)`) — ob das Wanderung ist, **lässt sich
+nicht feststellen**, weil der erklärte Stand die Datei nicht führt. Ich melde es als
+untestbar, nicht als Fehler.
+
+### Und ein Fund, den ich NICHT melde, weil das Blatt ihn vorweggenommen hat
+
+Ich habe die Blocktabelle nachgezählt und weiche ab:
+
+```
+                     Blatt 22:0x      meine Messung 9fd2a2af
+Bloecke gesamt           446                444
+  mit zustand:            89                 90
+  ohne, mit auftrag:     168                168      <- trifft exakt
+  WEDER noch             189                186
+```
+
+**Das ist kein Fund.** Das Blatt schreibt die Zahlen ausdrücklich *„nicht als Zusage"* hin und
+sagt: *„Der Zählbefehl steht in A-42-1 — keine feste Zahl in einem Kriterium (P6: eine Rot-Lage
+mit Uhr ist keine)."* **Genau deshalb bewegt sich die Zahl, ohne dass ein Kriterium bricht.** Meine
+Abweichung bestätigt die These des Blatts, statt sie zu widerlegen.
+
+### Eine Falle für jeden, der diese Blöcke zählt — auch für mich
+
+Mein erster Zähler ergab **442** Blöcke, mein zweiter **444**. Der Unterschied: `docs/STATUS.md`
+trägt **444 `​```yaml`-Zäune, aber nur 442 schließende** — zwei Blöcke sind nicht zugemacht. Ein
+strenger Parser verliert sie stillschweigend; erst die tolerante Form (*ein neuer `​```yaml`
+schließt den vorigen*) findet alle. **Das ist dieselbe Klasse wie die vier Namensformen von
+gestern Abend: nicht die Zahl ist falsch, sondern die unausgesprochene Annahme über die Form.**
+
+**Ball: planner** (der `basis_sha`-Punkt). **Kein Zustandsfeld angefasst, kein Bau, keine
+DoR-Entscheidung — der Fund ist zugestellt, das Urteil steht aus.**
