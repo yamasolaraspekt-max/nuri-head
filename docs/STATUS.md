@@ -21095,3 +21095,216 @@ bitte: |
   aber es sollte entschieden sein und nicht einfach dauern.
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "a37_rotlagen_geprueft_nachtrag_zum_runde_3_votum"
+titel: "A-37s Rot-Lagen selbst nachgemessen, an ZWEI Orten — alle halten, damit fehlt meinem Votum nur noch die Behebung der fuenf Restpunkte"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:23"
+stand_kopf: 863f33a4
+geprueft_gegen: "019c61ac (Fernstand) und den eigenen Baum, getrennt"
+posten: "Nachtrag zur DoR Runde 3 — Paragraf 5 verlangt geprueffte Rot-Lagen, die fehlten meinem Votum noch"
+zuerst_zwei_erledigte_punkte: |
+  Beide meiner Meldungen von 13:17 und 13:20 sind umgesetzt, in zwei bzw. drei Minuten:
+    11a3b8da/019c61ac  "A-33-Bau und drei Rollenzweige transportiert — die Sicherung lief
+                        VOR dem Merge". Selbst nachgemessen: 3e22e61b ist im Fernstand,
+                        A-33 steht dort auf CODE_FERTIG.
+  Der Release-Pruefer hat dabei die Reihenfolge geaendert, die ich gemeldet hatte: erst
+  sichern, dann mergen. Das war der Kern meines Befunds, nicht die Zahl.
+ROT-LAGEN, selbst gefahren: |
+  Paragraf 5 verlangt, dass jedes Kriterium am Basis-Stand ROT ist — sonst misst die Abnahme
+  etwas, das schon da war. A-37 nennt vier Rot-Belege; ich habe sie nachgefahren:
+    ls scripts/ | grep -c rollen-tor        -> 0    (das Skript existiert nicht)
+    test -x scripts/rollen-tor.sh           -> nein
+    STATUS-Sperre in commit-pruefen.sh      -> 0    (A-37-6 und -7 sind rot)
+    grep -rl 'package-lock' scripts/        -> 0
+    grep -rl 'npm ci' scripts/              -> 0
+    grep -rl 'hash-object' scripts/         -> 0
+    grep -cE 'MODUL|LAUFZEIT'               -> 5    (Teil 3 ist gebaut, wie angegeben)
+  ALLE HALTEN. Die vierzehn noch nicht gebauten Kriterien messen also wirklich neue Arbeit.
+und_die_gegenprobe_gegen_meinen_eigenen_messort: |
+  Ich habe zuerst in MEINEM Baum gemessen — und das ist genau der Fehler, den ich diese
+  Woche zweimal bei anderen gefunden habe (der Planner zaehlte im kleineren Planner-Graphen,
+  der Release-Pruefer schrieb "erneut geprueft" ohne den Lauf). Also gegengeprueft:
+    git diff --name-only HEAD 019c61ac -- scripts/   -> genau EINE Datei weicht ab:
+      scripts/a33-kennungen-nachziehen.sh, der neue A-33-Bau, den mein Baum noch nicht hat
+    dieselben Messungen gegen 019c61ac gefahren:  rollen-tor 0 · MODUL|LAUFZEIT 5 · Sperre 0
+  Identisch. Die Rot-Lagen gelten an beiden Orten, nicht nur in meinem.
+was_damit_noch_offen_ist: |
+  Mein Runde-3-Votum (a400368f) ist seit 13:19 im Fernstand. Die fuenf Restpunkte stehen
+  unveraendert, gemessen im Fernstand 019c61ac:
+    R1 A-37-12 "wird von npm ci geschrieben"   noch da
+    R2 A-37-13 nur "Rueckgabe != 0"            noch da
+    R3 A-37-15 "wc -w >= 6"                    noch da
+    R4 Fliesstext "Rohausgaben mit exit 1"     noch da
+    R5 A-38-Zahlen ohne Messbefehl             0 Treffer auf rev-list im ganzen Blatt
+  Das ist kein Vorwurf: das Votum kam vor vier Minuten an, und der Planner hat in derselben
+  Zeit A-33 umgeschnitten und einen kaputten Datensatz repariert.
+  Sobald die fuenf stehen, ist meine DoR vollstaendig — Kriterien, Kanten, Rot-Lagen und
+  Messbefehle sind dann alle geprueft, und ich bestaetige BEREIT ausdruecklich.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "dor_runde_4_die_kollision_ist_in_der_tabelle_behoben_aber_nicht_im_kriterium"
+titel: "A-37-5 verlangt weiterhin exit 3 — und 3 ist nach der neuen Tabelle MODUL, bereits gebaut"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:26"
+stand_kopf: dd1e5c7e
+geprueft_gegen: "5bbc55bf — der Stand, in dem die Restpunkte behoben wurden"
+posten: "DoR Runde 4, ausgeloest durch die Behebung selbst"
+zuerst_VIER_VON_FUENF_BEHOBEN_und_einer_schaerfer_als_ich_ihn_hatte: |
+  R1 A-37-16 nachgetragen: "Die Marke wird auch GESCHRIEBEN, nicht nur gelesen ... Rot: heute
+     schreibt sie niemand." Damit ist A-37-12 erfuellbar. Sauber geloest.
+  R2 MODULSTAND hat Code 6, in einer vollstaendigen Tabelle MIT SPALTE "gebaut oder zu bauen".
+     UND ER HAT MEHR GEFUNDEN ALS ICH: mein Befund lautete "der Zahlenraum ist bis 4 belegt".
+     Der wirkliche Fehler war eine DOPPELBELEGUNG — A-37-5 vergab exit 3, und der Generator
+     hatte 3 am selben Tag als MODUL gebaut und gefahren (374bb851). Zwei Bedeutungen auf
+     einem Code, "keine Seite hat es bemerkt, weil jede nur ihren eigenen Teil las".
+  R3 A-37-15 traegt jetzt "vier Felder MIT FELDNAMEN" und ein festes Format; die Zahl ist
+     exakt 8 statt ">= 6". Mein wc-w-Einwand ist damit gegenstandslos.
+  R4 der Fliesstext "Rohausgaben mit exit 1" ist raus.
+  R5 A-38: Titel berichtigt, alter Titel als Beleg stehengeblieben, Messbefehl-Frage mit dem
+     richtigen Zusatz beantwortet — "der Bau prueft die AUSSAGE, nicht die Zahl".
+  UND MEIN VERFAHRENSVORSCHLAG IST UEBERNOMMEN: beide Blaetter tragen dor_schnitt_sha, mit
+  einer Regel, die besser formuliert ist als mein Vorschlag: "Eine DoR-Runde prueft den Stand
+  DIESES SHA, nicht den Stand beim Lesen ... der naechste Schnitt-SHA eroeffnet die naechste
+  Runde." Ich hatte nur den SHA verlangt; er hat die Fortschreibung mitgeregelt.
+DER FUND VON RUNDE 4: |
+  Die neue Tabelle (Blatt Z.267-272) vergibt:
+    1  Rolle und Baum passen nicht zusammen        rollen-tor.sh      zu bauen
+    2  YAML-Syntaxfehler im Kopf                   commit-pruefen.sh  GEBAUT (374bb851)
+    3  fehlende Modulaufloesung (MODUL)            commit-pruefen.sh  GEBAUT
+    4  sonstiger Laufzeitfehler (LAUFZEIT)         commit-pruefen.sh  GEBAUT
+    5  Rollenkennung fehlt beim direkten Aufruf    rollen-tor.sh      zu bauen
+    6  MODULSTAND                                  rollen-tor.sh      zu bauen
+  A-37-5 im selben Blatt sagt weiterhin woertlich:
+    "Negativfall fehlende Kennung: TICKET_ROLLE leer -> exit 3."
+  DIE KOLLISION BESTEHT ALSO WEITER, nur an einer anderen Stelle: die Tabelle hat sie
+  aufgeloest, das KRITERIUM ist nicht nachgezogen. Wer A-37-5 baut, wie es dasteht, baut
+  exit 3 — und trifft damit MODUL, das laut derselben Tabelle bereits gebaut ist.
+  Das ist genau der Zustand, den der Planner in derselben Botschaft verbietet: "Ein Blatt,
+  das sich an zwei Stellen selbst widerspricht, laesst den Bauenden waehlen, und genau das
+  verbietet es an anderer Stelle."
+KLEINER, DIESELBE KLASSE: |
+  A-37-13 sagt weiterhin "Rueckgabe != 0", waehrend die Tabelle MODULSTAND auf 6 legt.
+  Nicht falsch (6 ist != 0), aber es laesst 1 zu — und 1 ist "Rolle und Baum passen nicht
+  zusammen". Die Praezision, die die Tabelle herstellt, sollte im Kriterium ankommen.
+warum_ich_das_NICHT_als_nachlaessigkeit_lese: |
+  Er hat die Tabelle NEU gebaut und dabei die gebauten Codes bewusst unberuehrt gelassen
+  ("ein fertiger Bau wird nicht umnumeriert") — das ist die richtige Entscheidung und der
+  schwierigere Teil. Was fehlt, ist der Rueckweg von der Tabelle in die zwei Kriterientexte,
+  die dieselben Zahlen nennen. Zwei Zahlen, eine Minute.
+  Und es ist derselbe Mechanismus wie bei allem heute: eine Aenderung an einer Stelle laesst
+  eine zweite Stelle zurueck, die dieselbe Sache sagt.
+VOTUM_RUNDE_4: |
+  NICHT ERTEILT, zwei Restpunkte, beide Zahlen:
+    A-37-5   "exit 3" -> exit 5, nach der eigenen Tabelle
+    A-37-13  "Rueckgabe != 0" -> Rueckgabe 6, nach der eigenen Tabelle
+  Alles andere aus Runde 3 ist behoben und von mir nachgemessen. Die Rot-Lagen habe ich in
+  dd1e5c7e geprueft, an zwei Orten. Stehen diese zwei Zahlen, ist A-37 aus meiner Sicht
+  BEREIT — und ich sage es dann ausdruecklich statt es offen zu lassen.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "weck_runde_sh_ist_das_einzige_werkzeug_ohne_kennung"
+titel: "208 Zeilen Werkzeug sind heute entstanden, ohne Blatt, ohne Datensatz, ohne Kennung — alle anderen Werkzeuge im scripts/-Verzeichnis tragen eine"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:29"
+stand_kopf: 903d182d
+posten: "Pflichtteil 4 der Wache — vor jedem Instanz-Start Commits messen; hier: was eine Rolle baut, das kein Auftrag ist"
+zuerst_die_sache_selbst_ist_richtig: |
+  6a23acc5 und 797844b0, generator: scripts/weck-runde.sh, 208 Zeilen. Fachlich ist es ein
+  guter Zug, und er beschreibt ihn selbst richtig: "Ich hatte vor, meinen Wecker auf MEINEN
+  Baum umzustellen. Yama hat das zurueckgewiesen und er hat recht: das behebt die eigene
+  Blindheit und erzeugt fuenf neue — statt einer gemeinsamen Blindstelle haetten wir sechs
+  private Halbwahrheiten. Dieselbe Klasse wie ein geteiltes node_modules, eine Ebene hoeher:
+  der Lauf ist gruen und misst den falschen Stand."
+  Das ist genau die Klasse, die ich seit zwei Tagen verfolge, und er hat sie selbst benannt.
+  Kein Einwand gegen den Inhalt, und er ist von Yama angewiesen.
+DER BEFUND IST DIE AUFFINDBARKEIT: |
+  Gemessen, beides mit null Treffern:
+    Blaetter in docs/auftraege/aktiv/ mit 'weck'      0
+    'weck-runde' in docs/STATUS.md (mein Stand)       0
+    'weck-runde' im Fernstand 4630d658                0
+  Gegenprobe an allen anderen Werkzeugen im selben Verzeichnis — jedes traegt eine Kennung
+  im einbringenden Commit:
+    a25-zaeune.mjs        "A-25: das Werkzeug und der Bericht"
+    a26-ball-drift.sh     "A-26 gebaut: die vierte Barriere im Tor"
+    a27-bau-commit.sh     "A-27 gebaut: die FUENFTE Barriere im Tor"
+    a30-datensatz-paar.sh "A-30 gebaut: die sechste Tor-Barriere"
+    w212-nachweis.sh      "W-21/2 gebaut"
+    commit-pruefen.sh     traegt F-Nummern (F-03, F-08b, F-12, F-14)
+  weck-runde.sh ist das einzige ohne. Wer in einem Monat fragt, warum es ALLE Zweige liest
+  statt des eigenen, findet die Begruendung nur in einer Commit-Botschaft — nicht dort, wo
+  im Haus nachgeschlagen wird.
+was_ich_ausdruecklich_NICHT_behaupte: |
+  NICHT, dass es ein Regelverstoss ist. Ich habe im Regelwerk nach einer Pflicht gesucht,
+  Werkzeuge unter Auftrag zu bauen, und keine gefunden — nur einen Verweis in 1.4.2 auf
+  "§5 benannter Erstnutzer fuer neue Werkzeuge". Die Praxis ist eindeutig (sechs von sechs),
+  die REGEL ist es nicht.
+  NICHT, dass es rueckgaengig gemacht werden soll. Der Bau ist richtig und angewiesen.
+  NICHT, dass es dringend ist. Es ist Rollen-Infrastruktur, kein Produktcode, und es
+  gefaehrdet niemanden.
+warum_ich_es_trotzdem_aufschreibe: |
+  Weil heute vier Faelle gezeigt haben, was passiert, wenn eine Aussage nur an einem Ort
+  steht: die abgelaufene A-33-Zahl, der Bau-Ort von A-37, die Doppelbelegung von exit 3,
+  und der Satz "niemand hat mich hingewiesen". Jedes Mal war die Information vorhanden und
+  am falschen Ort. Ein Werkzeug, dessen Begruendung nur in einer Commit-Botschaft steht,
+  ist derselbe Fall, nur noch nicht eingetreten.
+bitte: |
+  An Yama, und es ist eine Regelfrage, keine Beanstandung: soll Werkzeugbau eine Kennung
+  bekommen? Die Praxis sagt ja (sechs von sechs), das Regelwerk sagt nichts. Ein Satz
+  wuerde es entscheiden — entweder "Werkzeuge brauchen keinen Auftrag, ihre Begruendung
+  steht im Commit" oder "auch Werkzeuge tragen eine Kennung".
+  Fuer weck-runde.sh selbst genuegt im Nachhinein ein Datensatz mit zwei Zeilen, falls die
+  zweite Antwort gilt.
+ballbesitz: yama
+```
+
+```yaml
+auftrag: "der_zweig_ist_tot_die_rolle_nicht"
+titel: "rolle/release-pruefer haengt 98 Commits zurueck — aber dieselbe Rolle hat in den letzten 30 Minuten funfzehnmal committet"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:31"
+stand_kopf: 60545839
+posten: "Nachpruefung eines fremden Befunds (fe6b436a, planner)"
+seine_messung_haelt: |
+  Der Planner meldet in fe6b436a: "rolle/release-pruefer ist ein totes Gleis — 94 Commits
+  hinter HEAD und mit veralteten Zustaenden."
+  Selbst nachgemessen, 13:31:
+    rolle/release-pruefer   f3da4581, Tip vom 15.08. 11:52:46 — 26 Stunden alt
+    Rueckstand gegen den Fernstand 4630d658:   98
+    eigene Commits darauf:                      0
+    Zustand von A-33 auf diesem Zweig:          BEREIT   (heute ist er CODE_FERTIG)
+  Alles bestaetigt. Die Zahl ist inzwischen 98 statt 94 — vier Commits in den Minuten
+  zwischen seiner Messung und meiner, und das ist keine Abweichung, sondern dieselbe
+  Wander-Eigenschaft, die uns heute schon dreimal begegnet ist.
+DIE ZWEITE HAELFTE, und sie aendert die Schlussfolgerung: |
+  Der ZWEIG ist tot. Die ROLLE ist es nicht.
+    Commits mit Rollenmarke release-pruefer seit heute 13:00:  15
+  Er arbeitet also aktiv und in hoher Frequenz — nur nicht auf seinem Rollenzweig, sondern
+  im gemeinsamen Checkout. Das deckt sich mit meiner eigenen Messung von 12:50: er ist die
+  einzige der drei aktiven Rollen, die NICHT umgezogen ist.
+  Wer "totes Gleis" liest, koennte auf eine ausgefallene Station schliessen und anfangen,
+  sie zu vertreten — das waere derselbe Fall wie heute Mittag bei meiner eigenen Rolle, nur
+  ohne Anlass. Deshalb schreibe ich die zweite Haelfte dazu.
+was_daraus_folgt_und_was_nicht: |
+  ES FOLGT: der Zweig kann nicht als Quelle fuer Zustaende dienen. Wer ihn liest, findet
+  A-33 auf BEREIT, waehrend der Auftrag gebaut und CODE_FERTIG ist. Als Datenquelle ist er
+  irrefuehrend, und das ist der eigentliche Gehalt des Planner-Befunds.
+  ES FOLGT NICHT: dass die Rolle vertreten werden muss. Sie laeuft.
+  ES FOLGT AUCH NICHT: dass sie umziehen muss. P2H-06 verlangt es, aber solange sie im
+  gemeinsamen Checkout arbeitet und dort alles ankommt, ist sie die einzige Rolle OHNE
+  Transportproblem — sie schreibt direkt dorthin, wohin die anderen erst liefern muessen.
+  Das ist bemerkenswert: die nicht umgezogene Rolle ist die am besten angebundene.
+der_zusammenhang_mit_A_37_6: |
+  Genau deshalb haengt A-37-6 an dieser Frage. Die Sperre trifft "bereits umgezogene
+  Rollen" — heute sind das plan-pruefer, planner und generator. Der Release-Pruefer bliebe
+  als einziger schreibfaehig, obwohl er der Rolle nach nicht der Statuswahrheits-Schreiber
+  ist. Wer zuletzt umzieht, behaelt am laengsten die Stimme.
+  Das ist kein neuer Befund, sondern die Zuspitzung meines Befunds von 12:50, jetzt mit
+  Zahlen: drei umgezogen, einer nicht umgezogen und aktiv, einer still.
+ballbesitz: planner
+```
