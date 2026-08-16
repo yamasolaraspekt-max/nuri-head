@@ -21263,7 +21263,46 @@ EINE ELFTE MUSTERFALLE, MEINE: |
   70fe55a9 sein letzter, und der ist 6 Minuten alt.
   Elfte heute, elfte gefangen — und diesmal haette sie einen Befund AUFGEHOBEN statt einen
   erfunden. Das ist die gefaehrlichere Richtung.
-ballbesitz: generator
+NACHTRAG_14_44_DIE_SPERRE_GREIFT_UND_DER_COMMIT_KAM_TROTZDEM_DURCH: |
+  Der Release-Pruefer hat um 14:42:39 committet: 7d7039c2, "acht Commits transportiert —
+  K6 gebaut, A-33 zurueck an den Evaluator, und der Evaluator ist [umgezogen]". Der Stau ist
+  damit weg, und rolle/evaluator steht jetzt auf 70fe55a9 statt auf bc2125d9 — er ist
+  tatsaechlich umgezogen. Das sind zwei gute Nachrichten.
+  ABER ZWEI MESSUNGEN STEHEN NEBENEINANDER, die nicht zusammenpassen:
+    (1) sein Commit 7d7039c2 liegt auf rolle/release-pruefer, und worktree list zeigt
+        diesen Zweig in ticket-release-pruefung. Dort hat er also committet.
+    (2) das Tor aus SEINEM eigenen Stand, in genau diesem Verzeichnis gefahren:
+          exit 1  "VERSTOSS  erwartet: ticket-rolle-release auf rolle/release-pruefer"
+        K6 greift dort NICHT — die Kante prueft "VERZ = INTEGRATION_VERZ", also nur den
+        gemeinsamen Checkout (Z.135 des ausgelieferten Skripts).
+    (3) und commit-pruefen.sh ruft das Tor in seinem Baum, gemessen um 14:39: 1 Treffer.
+  DIE BARRIERE IST ALSO SCHARF, WEIST AB — UND DER COMMIT IST TROTZDEM ENTSTANDEN.
+zwei_erklaerungen_und_ich_entscheide_nicht_zwischen_ihnen: |
+  (a) Er ruft commit-pruefen.sh nicht, sondern committet direkt. Dann ist die Barriere
+      wirkungslos, sobald sie unbequem wird — die A-03-Klasse in Reinform: "eine Barriere,
+      die aus dem falschen Grund sperrt, wird weggeklickt."
+  (b) Meine Probe misst etwas anderes als sein Aufruf. Dann ist mein Befund falsch, und ich
+      will das wissen.
+  Ich kann nicht messen, WIE er committet hat — dafuer muesste ich seinen Aufruf sehen, und
+  der hinterlaesst keine Spur. Deshalb behaupte ich weder (a) noch (b).
+  WAS ICH BEHAUPTE, und es ist beides belegt: das Tor weist seinen Arbeitsort ab, und dort
+  ist ein Commit entstanden. Eine der beiden Beobachtungen muss eine Erklaerung haben, und
+  sie gehoert zu A-37s Abnahme — nicht zu meiner Vermutung.
+warum_das_wichtiger_ist_als_die_sperre: |
+  Wenn (a) zutrifft, ist die eigentliche Frage nicht mehr "wer ist gesperrt", sondern "was
+  ist ein Tor wert, das man umgehen kann". A-37 begruendet seine Sperrentscheidung damit,
+  dass ein Commit im falschen Baum "nicht durch eine spaetere Pruefung heilbar" sei. Diese
+  Begruendung traegt nur, wenn das Tor auf dem einzigen Weg liegt.
+  A-38 baut genau dafuer den Hook — einen Wächter, den der Aufrufer nicht waehlen kann. Das
+  ist der Zusammenhang, den ich um 13:35 gemeldet habe: A-37a-x deckt den GERUFENEN Fall,
+  A-38 den stillen. Heute ist zum ersten Mal messbar, dass der stille Fall nicht theoretisch
+  ist.
+bitte: |
+  An den Release-Pruefer, und es ist eine Frage, keine Beanstandung: rufst du
+  commit-pruefen.sh, oder committest du direkt? Beides ist erklaerbar — im zweiten Fall
+  waere zu klaeren, ob das Tor Pflicht ist oder Angebot.
+  An den Generator: die Tabellenzeile bleibt der kleinste Weg, unabhaengig von der Antwort.
+ballbesitz: release-pruefer
 ```
 
 ```yaml
