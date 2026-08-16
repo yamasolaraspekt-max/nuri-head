@@ -147,7 +147,7 @@ leer bliebe.** Die anderen Rollen ziehen mit der DoR nach.
 | K2 | **Ein Zustand wird gemeldet für eine Kennung, die kein Blatt hat** | Zeile wird erzeugt **und** als Fund gemeldet — ein Zustand ohne Auftrag ist ein Befund, kein Filterfall |
 | K3 | **Erstbefüllung: eine Kennung steht in sechs Ständen verschieden** *(A-33)* | **jüngster Commit gewinnt, über alle sechs Zweige nach Commit-Zeit.** Die fünf verdrängten Stände werden **einzeln protokolliert** — sie sind die erste vollständige Divergenzmessung |
 | K4 | **Prosa in `STATUS.md`, die kein Zustand ist** *(ein Teil der 3.442 Zeilen)* | **nicht übernehmen, aber je Zweig protokollieren, wo sie steht.** Sie gehört in die Blätter, aus denen sie stammt — **verloren geht sie nicht** |
-| K5 | **Ein Zustands-Commit wird zurückgedreht** (`revert`) | der Revert ist **kein** Zustands-Commit; der zurückgedrehte bleibt gültig. **Wer zurücknehmen will, meldet den alten Zustand neu** — ausdrücklich benannt, nicht stillschweigend |
+| K5 | **Ein Zustands-Commit wird zurückgedreht** (`revert`) | der Revert ist **kein** Zustands-Commit; der zurückgedrehte bleibt gültig. **Wer zurücknehmen will, meldet den alten Zustand neu** — ausdrücklich benannt, nicht stillschweigend. **⚠ DER BELEG FÜR K5 IST EINE MUSTERPROBE, KEINE CODESTELLE:** das Muster verlangt den Zeilenanfang, ein Revert stellt `Revert "` davor — die Kante ist durch die **Form** des Musters erledigt. **Wer nach `revert` im Skript sucht, findet 0 und meldet eine erfüllte Kante als rot** *(Nachweis: Plan-Prüfer `60aefc78`, beide Richtungen real getestet)* |
 | K6 | **Eine Rolle meldet einen Zustand im fremden Zweig** | Zeile wird erzeugt **und** gemeldet: Zweigname und Rollenmarke passen nicht zusammen |
 | K7 | **Der Zustands-Betreff steht in einem Merge-Commit** | **nicht zählen.** `--no-merges`. Ein Merge trägt fremde Betreffs — sonst wandert ein Zustand beim Transport ein zweites Mal ein |
 
@@ -188,6 +188,13 @@ leer bliebe.** Die anderen Rollen ziehen mit der DoR nach.
   Log kommt, erzeugt **keine** zweite Zeile. *(K7 — sonst wandert jeder Zustand beim Transport
   erneut ein.)*
 - **A-41-9** · **Alle sieben Kanten K1–K7 sind behandelt und je einzeln belegt.**
+  **„Behandelt" heißt nicht „im Code adressiert".** Eine Kante, die durch die **Form** einer
+  Lösung erledigt ist, gilt als behandelt, **wenn der Beleg die Probe ist** — bei **K5** die
+  Musterprobe in beiden Richtungen, **nicht** eine Fundstelle für `revert`.
+  **⚠ Diese Zeile verhindert ein falsches Rot.** *(Plan-Prüfer `60aefc78`: wer `revert` sucht,
+  findet 0 und meldet eine erfüllte Kante als Mangel.)* **Ein Fehlalarm ist teurer als eine
+  fehlende Prüfung — er bringt bei, die Meldung wegzuklicken.** *(A-03.)*
+  **Eine Kante ohne Zweig, der falsch laufen kann, ist die bessere Bauart, nicht die schlechtere.**
 - **A-41-10** · **Die Rückgabewerte sind eindeutig und einfach vergeben:**
   `0` erzeugt, keine Meldung · `1` erzeugt, mit Meldungen *(K2/K4/K6)* · `2` **nicht** erzeugt,
   Widerspruch *(K1)* · `3` Eingang leer, nichts erzeugt.
