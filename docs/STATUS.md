@@ -25274,3 +25274,49 @@ stand: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: A-40
+titel: "K2 belegt — aber in einer anderen Datei als der Zaehlbefehl; und der Zaehlbefehl zaehlt Zeilen statt Kennungen"
+rolle: plan-pruefer
+zeit: "16.08. 18:24"
+mess_stand: 2de9fac9c56673ffc6a25b55a8a9e64f6965f7b8
+baum: "sauber (0 Eintraege)"
+zustand: BEFUND
+k2_wortlaut: "Die Aussage ist eine Grenze, keine Formel (S-078 'Was die Simulation nicht darf')"
+k2_urteil: "BELEGT — der Wortlaut stimmt zeichengenau"
+k2_fundort: "docs/rollenkette/werkbank/01-MATHEMATIK/SOLAR-REGELWERK.md:543  '### S-078 · Was die Simulation nicht darf'"
+k2_inhalt: "vier nummerierte Verbote (nicht vom Tag aufs Jahr, nicht Monatsmittel verschatten, keine Zahl ohne Doppellauf, Matrix nicht ohne Vermerk) — eine Grenze, keine Formel. Die Kante trifft."
+eigener_fehlgriff: |
+  Mein Zwischenbefund lautete, S-078 komme in der FORMELSAMMLUNG nur als Spannen-Endpunkt
+  (Z.1073 'S-070…S-078') vor und die Kante sei unbelegt. Das war ein Ortsfehler: die S-Reihe
+  wohnt im SOLAR-REGELWERK, was ich heute Nachmittag selbst gemessen hatte. Dieselbe Klasse
+  wie meine 18-vermeintliche-Luecken-Fehlmessung. Der Befund wird zurueckgezogen.
+befund_1_reichweite: |
+  A-40-5s Zaehlbefehl nennt genau eine Datei: FORMELSAMMLUNG.md. Das SOLAR-REGELWERK steht
+  nicht darin — obwohl es 32 eigene S-Kennungen traegt und Ampeln dort NULLmal vorkommen.
+  Das Kriterium 'jede Definitionsstelle traegt eine Ampel' misst also einen Teil des Bestands.
+befund_2_zeilen_statt_kennungen: |
+  Der Zaehlbefehl zaehlt ZEILEN. Im SOLAR-REGELWERK traegt jede Kennung eine Ueberschrift UND
+  eine Uebersichtstabellenzeile: 64 Trefferzeilen fuer 32 Kennungen. Wer ihn dort anwendet,
+  liest die doppelte Zahl. In der FORMELSAMMLUNG faellt es nicht auf (32 Zeilen, keine Tabelle),
+  dort erzeugen 30 Kennungen 32 Zeilen, weil N-003 dreimal ueberschrieben ist (754/784/814).
+befund_3_erster_echter_eintrag: |
+  Im SOLAR-REGELWERK:163 steht der ERSTE echte Zustandseintrag des Bestands — S-008
+  (Auf-/Untergangs-Azimut) mit 'zustand: NACHGERECHNET' und einem gefuellten nachgerechnet_an
+  (eingabe/erwartet/gerechnet, zwei unabhaengige Rechenwege). Der zweite Treffer im selben
+  Zaehler ist die Regelankuendigung in Zeile 2 — geoeffnet, nicht gezaehlt.
+s008_selbst_nachgerechnet: |
+  Eigener Lauf, python3, acos(sin(dek)/cos(phi)) bei phi=51 Grad N:
+    21.06. dek +23,45 ->  50,777   Blatt sagt  50,8   Abweichung 0,023
+    21.12. dek -23,42 -> 129,167   Blatt sagt 129,2   Abweichung 0,033
+    21.03. dek   0,00 ->  90,000   Blatt sagt  90,0   Abweichung 0,000
+  Die Abweichungen sind reine Rundung auf eine Nachkommastelle. Der Eintrag haelt —
+  er ist nachgerechnet, nicht nur etikettiert.
+messbefehle: |
+  git show rolle/planner:docs/rollenkette/werkbank/01-MATHEMATIK/SOLAR-REGELWERK.md
+  grep -nE '^#+ *\**`?[FNS]-[0-9]{3}' <datei>            # Ueberschriften
+  grep -cE '^\| *\**`?[FNS]-[0-9]{3}' <datei>            # Tabellenzeilen
+vorschlag: "A-40-5 benennt entweder beide Dateien, oder das Kriterium sagt ausdruecklich, dass es nur die Formelsammlung meint. Und der Zaehlbefehl sollte auf eindeutige Kennungen entfalten, sonst zaehlt er im Solar-Regelwerk doppelt. Beides ist Blattarbeit."
+ballbesitz: planner
+```
