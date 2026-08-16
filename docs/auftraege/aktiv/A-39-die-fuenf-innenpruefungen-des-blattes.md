@@ -1,9 +1,9 @@
-# A-39 — Sechs Prüfungen, die ein Blatt gegen sich selbst hält
+# A-39 — Sieben Prüfungen, die ein Blatt gegen sich selbst hält
 
 ```yaml
 auftrag: "A-39"
 werkzeug: "— (Werkzeug der Rollenkette, kein Hausplaner-Werkzeug)"
-art: "BAU — ein Pruefskript fuer Auftragsblaetter (sechs Innenpruefungen). Es laeuft im DoR-SCHRITT, nicht im Tor:
+art: "BAU — ein Pruefskript fuer Auftragsblaetter (sieben Innenpruefungen). Es laeuft im DoR-SCHRITT, nicht im Tor:
       es misst ein BLATT, keinen Commit. KEINE Aenderung an docs/STATUS.md, KEIN Hausplaner-Code."
 spur: A
 heimat_app: ticket
@@ -16,13 +16,13 @@ ballbesitz: "plan-pruefer (DoR)"
 claim: "planner 16.08. — Claim VOR dem Schnitt."
 kennung_geprueft: "A-39 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
                    docs/auftraege/aktiv/. A-01 bis A-38 sind vergeben. Frei."
-anlass: "Sechs Blattfehler: fuenf an EINEM Tag, der sechste am 16.08., jeder erst beim Bauen oder Abnehmen gefunden,
+anlass: "Sieben Blattfehler: fuenf an EINEM Tag, zwei weitere am 16.08., jeder erst beim Bauen oder Abnehmen gefunden,
          jeder vor dem ersten Zeichen Code vorhanden und maschinell erkennbar."
 gebaut_in: "ticket-rolle-generator (rolle/generator)"
 staut_hinter: "A-37 — das Tor schuetzt A-39, nicht umgekehrt."
 ```
 
-## Der Anlass: sechs Fehler, alle zu spät gefunden
+## Der Anlass: sieben Fehler, alle zu spät gefunden
 
 | # | Fehler | gefunden | Kosten |
 |---|---|---|---|
@@ -31,20 +31,20 @@ staut_hinter: "A-37 — das Tor schuetzt A-39, nicht umgekehrt."
 | 3 | **Geforderte Datei ohne Erzeuger** — A-37-12 verlangte `.aus-lockfile`, **niemand schrieb sie** | in DoR Runde 3 | ein Kriterium, das nie erfüllbar gewesen wäre |
 | 4 | **Kriterium gegen den eigenen Blattkopf** — A-33-7 verlangte „`scripts/` null Mal", `art:` verlangte genau dieses Skript | vom Evaluator, in der Abnahme | `SPEC_BLOCKED`, eine Runde verloren |
 | 5 | **Rückgabewert doppelt vergeben** — `exit 3` war „Kennung fehlt" **und** `MODUL` | in DoR Runde 3 | zwei Bedeutungen auf einem Code, beide Seiten ahnungslos |
-
 | 6 | **Rot-Lage mit Uhr** — A-38-2 belegte „28 von 32" aus einem wandernden 48-Stunden-Fenster | vom Plan-Prüfer, **6 h 37 min vor Ablauf** | wäre um 22:53 von selbst grün geworden, **ohne dass jemand etwas behob** |
+| 7 | **Kriterium ohne gangbaren Weg** — A-41-4, A-41-5, A-37-18, **alle drei am selben Tag vom selben Schreiber** | **jedes Mal vom BAUENDEN**, keiner Prüfung | drei Runden; das Kriterium war gegen eine Vorstellung geschrieben, nicht gegen den Weg |
 
-**Alle sechs waren vor dem ersten Zeichen Code vorhanden und maschinell erkennbar.** Jeder kostete
+**Alle sieben waren vor dem ersten Zeichen Code vorhanden und maschinell erkennbar.** Jeder kostete
 eine Runde. **Keiner wurde von einer Prüfstation gefunden — alle erst, als jemand das Blatt
 benutzen wollte.**
 
 ## Warum das in den DoR-Schritt gehört und nicht ins Tor
 
-**Das Tor prüft Commits. Diese sechs prüfen ein Blatt.** Ein Blatt wird geschnitten, bevor es einen
+**Das Tor prüft Commits. Diese sieben prüfen ein Blatt.** Ein Blatt wird geschnitten, bevor es einen
 Commit gibt, und die Fehler wirken, sobald jemand es liest. **Im Tor käme die Prüfung zu spät und
 träfe den Falschen** — der Bauende hätte den Blattfehler nicht verursacht.
 
-## Scope — sechs Prüfungen über eine Datei
+## Scope — sieben Prüfungen über eine Datei
 
 ```
 scripts/blatt-pruefen.sh <pfad-zum-blatt>
@@ -82,6 +82,24 @@ P6  ROT-LAGE MIT UHR
     Belegfall: A-38-2 lief am 16.08. um 22:53 ab — der juengste
     markenlose Merge fiel aus dem 48-Stunden-Fenster, danach haette
     jede Pruefung 0 von 102 gemessen und keinen Beleg mehr gefunden.
+
+P7  KRITERIUM OHNE GANGBAREN WEG
+    Zu JEDEM Kriterium muessen drei Fragen beantwortbar sein:
+      WER fuehrt die Handlung aus?
+      DARF diese Rolle sie ausfuehren?
+      EXISTIERT die verlangte Eigenschaft auf dem Messweg?
+    Ist eine Antwort nein oder unbekannt, ist es ein Fund.
+    DREI BELEGFAELLE VOM 16.08., alle aus DEMSELBEN Blattschreiber:
+      A-41-4  verlangte SCHREIBEN von docs/STATUS.md — das darf nur
+              der Integrator, den es zu dem Zeitpunkt nicht gab.
+      A-41-5  verlangte eine COMMIT-Zeit von einer DATEI-Messung —
+              eine aus git show gelesene Zeile hat keine.
+      A-37-18 verlangte vom Generator einen Zustand, dessen einziger
+              Weg TRANSPORT ist, und Transport ist ihm untersagt.
+    Alle drei fielen erst dem BAUENDEN auf, keiner einer Pruefung,
+    und alle drei kosteten eine Runde. Das ist kein Zufall, sondern
+    eine Fehlerform: das Kriterium wird gegen eine VORSTELLUNG
+    geschrieben statt gegen den WEG, auf dem es erfuellt wird.
 ```
 
 **Ausgabe: je Fund eine Zeile mit Kennung und Fundstelle. Rückgabe 1, wenn ein Fund vorliegt.**
@@ -133,6 +151,13 @@ P6  ROT-LAGE MIT UHR
   **Und die Probe, die den Sinn trägt:** ein Kriterium, das eine Zahl **mit** Zeitstempel oder
   `Bau-Stand` nennt, ist **kein** Fund — P6 sucht das **wandernde Fenster**, nicht jede Zeitangabe.
   *(Sonst meldet es jede Messvorschrift und wird weggeklickt — A-03.)*
+- **A-39-12** · **P7 findet alle drei Wegfehler vom 16.08.**
+  **Positivproben:** `A-41-4` am Stand `a613100e` (verlangt Schreiben ohne Berechtigten) ·
+  `A-41-5` am Stand `74cc04d5` (Commit-Eigenschaft von Datei-Messung) · `A-37-18` am Stand
+  `78841603` (Weg dem Adressaten untersagt) — **alle drei gemeldet.**
+  **Negativproben:** die heutigen Fassungen derselben drei Kriterien **nicht.**
+  **Grenze, ausdrücklich:** P7 prüft, ob die drei Fragen **beantwortbar** sind — es beurteilt
+  **nicht**, ob die Antwort klug ist. *Ein Prüfer, der Urteile fällt, wird weggeklickt.*
 - **A-39-7** · **Positivfall gesamt:** ein Blatt ohne Befund erzeugt **keine Ausgabe** und
   Rückgabe **0**. *(Ohne diesen Beleg ist das Skript von einem kaputten nicht zu unterscheiden.)*
 - **A-39-8** · **Alle sechs Kanten K1–K6 sind behandelt und je einzeln belegt.**
