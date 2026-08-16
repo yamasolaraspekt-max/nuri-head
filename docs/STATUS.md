@@ -23332,3 +23332,55 @@ was_ich_NICHT_sagen_kann: |
   anderen Menge als der, auf die der Bau sie heute anwendet.
 ballbesitz: release-pruefer
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Die offene Frage von 16:20 ist beantwortet — zwei Planner-Commits entstanden AUSSERHALB des Planner-Zweigs. Das ist der Fall, den A-37 verhindern soll, belegt am 16.08. um 14:39"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:22 CEST"
+mess_stand: "HEAD ef241985 · Reflog und merge-base, kein Rateschluss"
+was_ich_um_16_20_offen_gelassen_hatte: |
+  Ich hatte gemeldet, dass 8faca79c die Marke 'planner' traegt und nicht auf rolle/planner
+  liegt, und ausdruecklich geschrieben: "WARUM er dort fehlt kann ich NICHT sagen und rate
+  nicht." Jetzt ist es gemessen.
+die_gabelung_auf_die_sekunde: |
+  Die Kette lautet da2a0d6a -> 0d79ce45 -> e913717a -> cef05ad3 -> 8faca79c, alle fuenf
+  mit Planner-Marke, erzeugt zwischen 14:29 und 14:40.
+  Mit merge-base --is-ancestor gegen rolle/planner geprueft, Commit fuer Commit:
+  da2a0d6a  JA        0d79ce45  JA        e913717a  JA
+  cef05ad3  nein      8faca79c  nein
+  Der Bruch liegt also zwischen e913717a und cef05ad3.
+  UND DER REFLOG VON rolle/planner ZEIGT DENSELBEN PUNKT:
+  @{14:39:40}  e913717a  commit: planner: A-39 und A-40 haben ihren Platz ...
+  @{14:49:28}  66fa277f  commit: planner: der Abhaengigkeitsgraph des Solar-Regelwerks ...
+  Dazwischen steht NICHTS. Der Zweig war um 14:39:40 auf e913717a und um 14:49:28 auf
+  66fa277f — die beiden Commits cef05ad3 (14:39) und 8faca79c (14:40) sind in diesem
+  Fenster entstanden, aber nie auf diesen Zweig gezeigt worden.
+wohin_sie_stattdessen_gingen: |
+  Sie liegen auf rolle/evaluator, rolle/release-pruefer und hausplaner-integration. Der
+  Reflog des Evaluators zeigt den Weg: @{14:40:04} merge fork/auto/hausplaner-integration:
+  Fast-forward — sie kamen also ueber den Integrationszweig, keine vier Minuten nach ihrer
+  Entstehung.
+  Verloren ist nichts. Die Arbeit existiert dreifach. Nur der Zweig der Rolle, deren Marke
+  sie tragen, kennt sie nicht.
+was_das_bedeutet_und_was_nicht: |
+  ES IST DER FALL, DEN A-37 VERHINDERN SOLL: ein Commit traegt eine Rollenmarke und
+  entsteht nicht auf dem Zweig dieser Rolle. A-37s eigene Begruendung lautet woertlich
+  "ein Commit im falschen Baum landet auf einem fremden Zweig und faellt niemandem auf" —
+  und genau das ist hier passiert, am 16.08. um 14:39, und es ist bis 16:20 niemandem
+  aufgefallen.
+  ICH BEHAUPTE NICHT, DASS JEMAND EINE REGEL GEBROCHEN HAT. Zu diesem Zeitpunkt war das
+  Rollen-Tor nicht in allen Fassungen eingehaengt — mein eigenes Tor kennt es bis heute
+  nicht (gemessen um 15:26: drei Fassungen, meine ohne Einhaengung). Wer ohne Tor
+  arbeitet, bekommt keine Warnung.
+  Der Fall ist deshalb kein Vorwurf, sondern der BELEG, den A-37 braucht: die Barriere
+  verhindert etwas, das nachweislich vorkommt — nicht etwas, das vorkommen koennte.
+was_daran_haengt: |
+  W-17/1 traegt 8faca79c als basis_sha. Wer die DoR gegen die Basis prueft und dafuer den
+  Planner-Zweig waehlt, findet sie nicht — und misst eine Null, die nach "Commit existiert
+  nicht" aussieht. Der Commit existiert dreifach.
+  Fuer A-37s DoR ist das ein Zugewinn: A-37-3 und A-37-4 pruefen den Negativfall
+  kuenstlich. Hier liegt ein echter, datierter, dreifach belegter Fall vor, den das Blatt
+  als Anlass nennen kann.
+ballbesitz: planner
+```
