@@ -110,6 +110,49 @@ geschieht, ist ein eigener Vorgang** — und die Frage danach gehört Yama, nich
 > Rolle das?" — aber nicht „darf sie es noch, wenn der Bau fertig ist?".* **Eine Erlaubnis mit
 > Ablaufdatum ist keine Erlaubnis.** Das gehört als Schärfung in **A-39 P7**, nicht nur hierher.
 
+## ⚠ DER UMZUG NIMMT 120 VON 137 BÄLLEN MIT — Befund des Plan-Prüfers, zutreffend
+
+**Gemessen von ihm, nach Rollen getrennt:**
+
+```
+Rolle             bleiben   ziehen um   gesamt
+plan-pruefer          8         31        39
+planner               3         78        81
+generator             4          6        10
+release-pruefer       0          5         5
+integrator            2          0         2
+evaluator             0          0         0
+                     --        ---       ---
+                     17        120       137
+```
+
+> **Jede Rolle ortet ihre Bälle über `docs/STATUS.md`.** Seine eigene Wacheanweisung nennt den
+> Befehl wörtlich — `grep -n 'ballbesitz: plan-pruefer' docs/STATUS.md`. **Heute liefert er 39,
+> nach dem Umzug 8. Der Befehl bleibt RICHTIG und liefert trotzdem eine FALSCHE Lage.**
+
+**Dasselbe gilt für `scripts/yama-posten.py` des Release-Prüfers — und für mich am härtesten:
+78 meiner 81 Bälle ziehen um.**
+
+**Nichts geht verloren** — die Nicht-Ziele stimmen an dieser Stelle. **Die Bälle sind nicht weg,
+sie sind unauffindbar.** *Derselbe Unterschied, den A-30 für Zustände gemacht hat: die
+Statuswahrheit sagt nicht das Falsche, sie sagt gar nichts.*
+
+### Behebung — zwei Kriterien, keine Abschwächung des Umzugs
+
+- **A-42-11** · **DIE BALLBESITZ-ORTUNG ÜBERLEBT DEN UMZUG.**
+  Vor dem Lauf wird je Rolle `grep -c 'ballbesitz: <rolle>' docs/STATUS.md` erhoben *(die Datei ist hier der Gegenstand selbst, kein geratener Suchraum)*, **nach dem
+  Lauf über BEIDE Dateien zusammen** — und die Summen müssen übereinstimmen. **Weicht eine
+  Rolle ab, ist der Lauf nicht abgeschlossen.** *Die Gleichung ist dieselbe wie A-42-2, nur je
+  Rolle statt über alle Blöcke.*
+- **A-42-12** · **JEDE ROLLE BEKOMMT IHREN NEUEN ORTUNGSBEFEHL, im Bericht, namentlich.**
+  Er läuft über **beide** Dateien:
+  ```bash
+  grep -c 'ballbesitz: <rolle>' docs/STATUS.md docs/BEFUNDNOTIZEN.md
+  ```
+  *(beide Dateien sind hier der Gegenstand selbst, kein geratener Suchraum.)* **Und die alten Befehle werden benannt, die dadurch falsch werden** — die Wacheanweisung des
+  Plan-Prüfers und `scripts/yama-posten.py`. *Ein Werkzeug, das nach dem Umzug still das Falsche
+  liefert, ist schlimmer als eines, das abstürzt.*
+
 ## Nicht-Ziele
 
 - **KEIN Löschen.** Kein Block verschwindet; jeder steht danach vollständig in der Zieldatei.
