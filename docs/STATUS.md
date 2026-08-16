@@ -21306,6 +21306,57 @@ ballbesitz: release-pruefer
 ```
 
 ```yaml
+auftrag: "a37_exit_codes_behoben_ein_fall_bleibt_ausserhalb_der_tabelle"
+titel: "Beide Exit-Code-Punkte sind sauber behoben — K4 gibt aber weiterhin exit 2, und 2 gehoert laut Tabelle dem YAML-Syntaxfehler"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:47"
+stand_kopf: 0e70726d
+gemessen_an: "b60cfa4f, generator 14:43:43"
+posten: "Nachpruefung meines Befunds von 13:41"
+BEIDE PUNKTE BEHOBEN, selbst gemessen: |
+  (1) A-37-5 vergibt jetzt exit 5, passend zur Tabelle. Im Tor gemessen: Z.93 exit 5 fuer
+      die fehlende Kennung, Z.128 und 174 exit 1 fuer Rolle-gegen-Baum. Die dritte Variante
+      (exit 1 fuer fehlende Kennung) ist weg.
+  (2) DER RUECKGABEWERT WIRD DURCHGEREICHT. Am Einhaengepunkt:
+        TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh
+        TOR_RC=$?
+        if [ "$TOR_RC" -ne 0 ]; then ... "Rueckgabe $TOR_RC" ...
+      Und der Kommentar daneben nennt den alten Zustand beim Namen: "Vorher stand hier
+      exit 2 — und damit war an der Einhaengestelle genau die [Unterscheidbarkeit
+      eingeebnet]". Mein Befund von 13:41 ist damit vollstaendig erledigt, und die Meldung
+      nennt jetzt sogar den Code mit.
+DER VERBLIEBENE FALL: |
+  Das Tor gibt bei K4 — "kein Git-Repository" — weiterhin exit 2 (Z.105).
+  Die Codetabelle des Blattes vergibt die 2 an "YAML-Syntaxfehler im Kopf", gebaut in
+  commit-pruefen.sh. Und da der Rueckgabewert jetzt DURCHGEREICHT wird, sieht der Aufrufer
+  in beiden Faellen dieselbe 2:
+    kein Git-Repository (Tor, K4)          -> 2
+    YAML-Syntaxfehler (commit-pruefen.sh)  -> 2
+  DAS IST DIESELBE KLASSE, DIE GERADE BEHOBEN WURDE, nur eine Nummer tiefer. Und sie ist
+  erst durch die Behebung sichtbar geworden: solange der Einhaengepunkt alles auf 2 warf,
+  fiel es nicht auf.
+  K4 STEHT AUCH NICHT IN DER TABELLE. Sie hat sechs Zeilen (1 Rolle/Baum, 2 YAML,
+  3 MODUL, 4 LAUFZEIT, 5 Kennung am Tor, 6 MODULSTAND) — "kein Repository" fehlt.
+  Ein Fall, der einen Code vergibt, aber keine Zeile hat, ist genau das, was A-37s Teil 3
+  verhindern soll.
+was_ich_NICHT_sage: |
+  NICHT, dass es dringend ist. K4 tritt auf, wenn jemand ausserhalb eines Repos committet —
+  das kommt in diesem Haus nicht vor, und die MELDUNG ist eindeutig ("kein Git-Repository,
+  das ist KEIN Rollenfehler").
+  NICHT, dass der Generator es haette sehen muessen. Er hat behoben, was gemeldet war, und
+  dabei sauber gearbeitet — der neue Fall entsteht erst dadurch, dass der Code jetzt
+  ueberhaupt sichtbar ankommt.
+bitte: |
+  Eine Zeile in der Tabelle: "7 · kein Git-Repository · rollen-tor.sh · gebaut" — und im Tor
+  die 2 auf 7 ziehen. Oder, falls 7 zu viel ist: K4 gibt 0 zurueck und meldet nur, denn es
+  ist nach eigener Aussage KEIN Rollenfehler. Die zweite Fassung ist sogar naeher an dem,
+  was der Kommentar im Code selbst sagt.
+  Und unveraendert offen: die Tabellenzeile fuer ticket-release-pruefung. Der Transporteur
+  bekommt im neuesten Stand b60cfa4f weiterhin exit 1, selbst gemessen.
+ballbesitz: generator
+```
+
+```yaml
 auftrag: "a37_rotlagen_geprueft_nachtrag_zum_runde_3_votum"
 titel: "A-37s Rot-Lagen selbst nachgemessen, an ZWEI Orten — alle halten, damit fehlt meinem Votum nur noch die Behebung der fuenf Restpunkte"
 rolle: plan-pruefer
