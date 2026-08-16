@@ -1688,3 +1688,46 @@ Belegs *„ich habe an dieser Stelle gemessen"*.
 Commit-Botschaften mit Zeitstempel und waren zu ihrem Zeitpunkt richtig *(A-20-4)*. **Diese
 Warnung hier ersetzt die Korrektur an hundert Stellen.**
 
+## STOPP-REGEL — ein entdeckter Fehler wird behoben, bevor irgendetwas anderes geschieht
+
+**Yamas Anordnung vom 16.08.** Sie steht über den Arbeitsplänen aller Rollen.
+
+```
+WIRD EIN FEHLER ENTDECKT, DARF NICHT WEITERGEMACHT WERDEN,
+SOLANGE ER NICHT BEHOBEN IST.
+
+  Kein weiteres Messen.
+  Kein naechster Auftrag.
+  Kein "ich sammle das und behebe es spaeter zusammen".
+```
+
+**Was als „entdeckt" gilt:** jeder Befund, der beim Messen, Bauen, Prüfen oder Lesen auffällt —
+gleich ob er die eigene Arbeit betrifft oder eine fremde, und gleich ob er klein aussieht.
+
+**Was „behoben" heißt, je nach Art des Fehlers:**
+
+```
+in eigener Zustaendigkeit   -> selbst beheben, sofort, mit Beleg
+in fremder Zustaendigkeit   -> ZUGESTELLT mit Ballbesitz und Soll
+                               (nicht: in einer Botschaft erwaehnt)
+nicht behebbar              -> als Auftrag geschnitten oder Yama vorgelegt,
+                               mit dem Grund warum er offen bleibt
+```
+
+> **Erst wenn der Fehler eine dieser drei Formen hat, ist er behoben im Sinn dieser Regel.**
+> *Ein Fund, der nur gemeldet wurde, ist nicht behoben — er ist verschoben.*
+
+### Warum die Regel nötig wurde
+
+**Am 16.08. abends habe ich sieben Reichweitenmessungen hintereinander gefahren und dabei
+Funde angesammelt statt sie zu schließen** — sechs Blattfunde, vier falsche Anker in der
+Prozessquelle, vier in der Formelsammlung, 38 Zeilenverweise in lebenden Dokumenten. **Jeder
+einzelne war beim Auffinden behebbar. Am Ende stand eine Liste statt einer Behebung.**
+
+**Und der Beleg, dass Sammeln nicht trägt:** `A-34` hat am 13.08. **52** verschobene Verweise
+behoben und ist `BETRIEBSBESTAETIGT`. **Drei Tage später sind es wieder 38.** *Eine
+Sammelbehebung repariert einen Stand; sie verhindert nichts.*
+
+**Die Regel kehrt die Reihenfolge um: nicht messen bis die Liste voll ist, sondern beim ersten
+Fund anhalten.**
+
