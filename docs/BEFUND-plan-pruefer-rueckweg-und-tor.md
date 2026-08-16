@@ -5404,3 +5404,77 @@ die tragenden Summen sind identisch.**
 **Ball beim Release-Prüfer geschlossen** — der Erhebungsbefehl steht, beide Uhren sind benannt, und
 er entscheidet ausdrücklich nicht, welche gilt. *Offen bleibt bei ihm nur noch der
 `.gitignore`-Eintrag aus §74.*
+
+---
+
+## 80 — Posten (b) an W-39: neun Zusagen, neun Treffer — und die zweite Quelle von W-27/1s Regel ist der SPIEGELFALL zu W-34
+
+**Stand:** HEAD `4323dbf3`, getrackt 0, `?? scripts/__pycache__/` liegt weiter. **Messstand in
+Variable, Gegenprobe: unbewegt.**
+
+**W-27/1 nennt zwei Quellen für seine Fangproben-Regel: W-34-1 und W-39-5.** §73 hat W-34
+gemessen. **Hier die zweite — und sie versagt in die GEGENRICHTUNG.**
+
+### Neun Zusagen, am heutigen Stand nachgezählt
+
+```
+grep -rl 'HausplanerStudio' __tests__/            8 Dateien   Blatt sagt ACHT      TRIFFT
+fussleistenEhrlich.test.ts:9                      'Der Massstab ist derselbe: sagen, was
+                                                   da ist, statt zu versprechen, was kommt' TRIFFT
+fussleistenEhrlich.test.ts:14-15                  'Eine gezaehlte Zahl kann nicht veralten;
+                                                   eine abgetippte schon.'                  TRIFFT
+stilschicht.test.ts:809                           test('T2/K-05: der Weg in die gefuehrte
+                                                   Planung ist direkt erreichbar', …)       TRIFFT
+stilschicht.test.ts:814                           assert.match(studio, /modeBtn\('guided',
+                                                   'Geführte Planung'/, 'der direkte Weg …') TRIFFT
+HausplanerStudio.tsx:111                          {modeBtn('guided', 'Geführte Planung', …)} TRIFFT
+W-39-6  import-Zeilen 14 minus React 1 = 13 Module                                          TRIFFT
+```
+
+**Die 13 zusätzlich über die NAMEN gegengeprüft**, nicht nur gezählt: `hausplanerStore` ·
+`ConfigWizard` · `FachFlaeche` · `GuidedView` · `HausplanerApp` · `StartView` · `dialogFokus` ·
+`fachFlaechen` · `fahrschritte` · `speicherAnzeige` · `uiState` · `studioDaten` · `studioUi`.
+**Genau dreizehn, einzeln benannt.**
+
+**Und alle drei berührten Dateien sind byte-identisch zur Basis `d53806f6`.**
+
+### Der Spiegelfall — und der Evaluator hat ihn selbst benannt
+
+```
+W-34-1   das Blatt behauptete einen WAECHTER   ->  die Probe fing NICHTS   1698 pass · 0 fail
+W-39-5   das Blatt behauptete eine LUECKE      ->  der Waechter EXISTIERT  1698 tests · 1 FAIL
+```
+
+W-39s Blatt schrieb an **zwei** Stellen *„KEIN TEST — K-05 ist nur im Kommentar belegt"*. Der
+Evaluator hat es gefahren, den Schalter aus `:111` entfernt — **1 FAIL**, und der fallende Test
+heißt wörtlich `T2/K-05`. **Der Wächter trägt die Kennung sogar im Namen und sitzt in einer Datei,
+die derselbe Bau unter seinen acht aufführt.** `urteil: NICHT ERFUELLT`.
+
+**Die Verallgemeinerung steht in seinem eigenen Wortlaut, und ich beanspruche sie nicht:**
+
+> *„Eine behauptete Lücke, die es nicht gibt, ist derselbe Schaden wie ein behaupteter Wächter,
+> den es nicht gibt; **W-34 war der andere Fall derselben Klasse**."*
+
+### Warum W-27/1s Regel dann BEIDE fängt
+
+**Weil sie nicht nach dem Wächter fragt, sondern nach der Bewegung des Zählers:**
+
+```
+behaupteter Waechter, den es nicht gibt   ->  Probe bleibt GRUEN, obwohl sie fallen muesste
+behauptete Luecke, die es gibt            ->  Probe FAELLT, obwohl nichts fallen duerfte
+```
+
+**Beide Male weicht der Zählerstand von dem ab, was das Blatt ansagt — und genau das misst
+W-27/1s *„sie wird gefahren und muss FALLEN"*.** *Die Regel ist deshalb schärfer als ihre beiden
+Anlässe: sie prüft nicht die Behauptung, sondern ihre Vorhersage.*
+
+### Und eine Methode, die ich mir merke
+
+W-39-6 trägt sie ausgeschrieben: *„Ich habe die beiden Registerzahlen SELBST gezählt, **bevor** ich
+das Blatt geöffnet habe."* **Nicht nachrechnen, sondern vorrechnen** — dann kann die Zahl des
+Blattes das eigene Ergebnis nicht mehr färben. *Das ist die stärkere Form dessen, was ich jede
+Runde tue, und sie kostet nichts.*
+
+**Kein Ball, kein Fund.** **Sechstes Blatt ohne Abweichung: W-08/1 · W-11/1 · W-27/1 · W-34 ·
+W-23 · W-39** — *wobei W-39 seine eigene Nicht-Erfüllung trägt und gerade deshalb hält.*
+**Kein Zustandsfeld angefasst, kein Bau.**
