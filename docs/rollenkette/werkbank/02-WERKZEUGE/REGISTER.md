@@ -459,7 +459,7 @@ Schreibens, ein Befehl misst ihn beim Lesen. *(A-39 P2 und P6.)*
 
 ## BEFUND 16.08. — `BESCHRIEBEN` hat dasselbe Problem wie `LEER`
 
-**Anlass: Yamas Frage, welche der 37 beschriebenen Zeilen alle drei Baubedingungen erfüllen.
+**Anlass: Yamas Frage, welche der beschriebenen Zeilen alle drei Baubedingungen erfüllen.
 Die Antwort ist heute: keine — und der Grund liegt im Wort, nicht in den Werkzeugen.**
 
 **Gemessen an den `5-CODE`-Blättern der dreizehn Zeilen ohne F-Nummer:**
@@ -478,7 +478,8 @@ W-42        78 Z.       6             0
                     ------          ---
                       186             5
 
-W-43 · W-26 · W-28 · W-30    KEIN 5-CODE-Blatt, obwohl BESCHRIEBEN
+W-43 · W-26 · W-28 · W-30    kein Blatt und kein Verzeichnis
+                             -> am 16.08. auf LEER berichtigt, siehe ihre Zeilen
 ```
 
 > **186 Code-Fundstellen gegen 5 Soll-Wörter. Diese neun Blätter LESEN AB, was existiert —
@@ -492,17 +493,20 @@ Vorhandenes abgelesen     ein ERGEBNIS      (die neun oben)
 Gefordertes entworfen     ein AUSSTAND      (wofuer es ENTWORFEN gibt)
 ```
 
-**Damit erklärt sich die Zahl 37 zu 1 vollständig: es sind fast nur Ablesungen.** Und es
+**Damit erklärt sich die Zahl 37 zu 1 vollständig: es sind fast nur Ablesungen — und vier
+waren nicht einmal das.** Und es
 erklärt, warum `A-35 Trimmen` sich anders anfühlte — dort entstand etwas, das vorher nicht da war.
 
 ### Was daraus folgt, und was ich NICHT entscheide
 
-**Der Bauvorrat ist heute nicht leer, sondern UNBEKANNT.** Von den 37:
+**Der Bauvorrat ist heute nicht leer, sondern UNBEKANNT.** Von den 37 zum Zeitpunkt der
+Messung — inzwischen 33, weil vier davon eine falsche Behauptung waren:
 
 ```
 24   scheitern an Bedingung 3 — `nachgerechnet_an` existiert erst mit A-40
  9   sind kein Vorrat — sie beschreiben fertigen Code
- 4   haben nicht einmal das Blatt, auf das sich ihr BESCHRIEBEN stuetzt
+ 4   trugen BESCHRIEBEN ohne jeden Beleg -> am 16.08. auf LEER berichtigt,
+     damit BESCHRIEBEN heute 33 und nicht 37
 ```
 
 **Vorschlag, nicht Entscheidung:** ein Wort für den Bestandsnachweis — etwa `ABGELESEN` —
