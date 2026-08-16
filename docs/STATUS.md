@@ -27263,3 +27263,212 @@ lehre_fuer_meine_wache: |
 urteil: "Der Bauvorrat steht: 10 von 55 Modulen, jede Bedingung einzeln nachgemessen. Kein Befund gegen den Generator."
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-3 ist vollstaendig belegt — W-28 dreimal JA, F-004 dreimal NEIN, beide Proben selbst gefahren; meine 19:02-Meldung ist damit in beiden Teilen zurueckgenommen"
+rolle: plan-pruefer
+zeit: "16.08. 19:24"
+mess_stand: e388f7c71c2908058e28f7664209c1f4d94e35b4
+geprueft_gegen: "692cde54 (Blatt) · origin/rolle/generator (W-28) · auto/hausplaner-integration (ARBEITSREGELN)"
+baum: "sauber (0 Eintraege)"
+der_verweis_haelt: |
+  Das Blatt sagt, die drei Fragen seien ENTSCHIEDEN und stuenden in ARBEITSREGELN.md,
+  Nachtrag vom 16.08. — 'dieses Blatt BAUT sie, es erfindet sie nicht'. Nachgeprueft:
+  sie stehen dort, ab Zeile 1405, mit Namen und Erlaeuterung:
+    1 NORMBEZUG  Normkennung (DIN, EN, VDI) oder als normkonform bezeichnet?
+    2 DRITTER    Verlaesst das Ergebnis das Haus — Angebot, Nachweis, Plan, Bericht?
+    3 BEMESSUNG  Legt es eine GEBAUTE Groesse fest — Querschnitt, Tragfaehigkeit,
+                 Entwaesserung, Abstand, Lastannahme?
+    Dreimal NEIN -> NACHGERECHNET reicht. Einmal JA -> nur mit Primaerquelle.
+  EINSCHRAENKUNG: unter den Namen 'Drei-Fragen-Test' oder '5c' ist in ARBEITSREGELN.md
+  NICHTS zu finden — 0 Treffer in allen vier Zweigen. Der Test steht dort, sein Name
+  nicht. Wer ihn unter dem Namen sucht, den A-40 benutzt, findet ihn nicht.
+positivprobe_W_28: |
+  Dreimal JA, an W-28s sieben Blaettern im generator-Zweig gemessen:
+    1 NORMBEZUG   4 Treffer  (DIN 1986-100, EN 12056-3)          JA
+    2 DRITTER     5 Treffer  (Nachweis, Kunde, Amt)              JA
+    3 BEMESSUNG  34 Treffer  (Querschnitt, Nennweite, Gefaelle)  JA
+  Frage 3 nennt 'Entwaesserung' woertlich — W-28 IST die Dachentwaesserung.
+  Der Beleg sitzt also nicht knapp, sondern in allen drei Richtungen.
+negativprobe_F_004: |
+  Dreimal NEIN. F-004 'Schnittpunkt zweier Geraden', FORMELSAMMLUNG.md Zeile 75 bis 180.
+    1 NORMBEZUG   0 Treffer   NEIN
+    2 DRITTER     0 Treffer   NEIN
+    3 BEMESSUNG   0 Treffer   NEIN
+  Beide Proben treffen also genau so, wie das Kriterium es verlangt.
+eigener_mustertreffer_gefangen: |
+  Der erste Lauf gab fuer F-004 bei Frage 2 ZWEI Treffer und damit 'einmal JA'. Geoeffnet:
+    Z.92   '⚠ BERICHTIGT am 13.08.2026 — die Zaehlerzeile trug ein vertauschtes Vorzeichen'
+    Z.121  'Beide sind berichtigt.'
+  Mein Muster 'Bericht' traf das Wort BERICHTIGT. Ohne das Oeffnen haette ich gemeldet,
+  die Negativprobe falle durch. Dieselbe Wortgrenzen-Klasse wie bei K2 im Werkzeug.
+zuruecknahme: |
+  Meine Meldung von 19:02 sagte, A-40-3s historischer Beleg sei unerfuellbar, weil es
+  W-28 nicht gebe. Beide Haelften sind erledigt: W-28 existiert seit 16:47 mit sieben
+  Blaettern (bereits um 19:17 berichtigt), und der Drei-Fragen-Test schlaegt dort in
+  allen drei Richtungen an, waehrend er bei F-004 in allen drei schweigt.
+  A-40-3 ist gruen.
+stand_A_40: |
+  Offene Punkte am Blatt jetzt: A-40-2 (Negativprobe ohne Kandidaten), A-40-6 (Rot-Lage
+  seit 14:49 weg), A-40-9 (kann nicht scheitern), A-40-5s Merkmal im Solar-Regelwerk,
+  die Menge 22 statt 25, sowie K5/K6 ohne benannten Fall.
+  Belegt und gruen: A-40-1, A-40-3, A-40-4, A-40-8, K1, K2, K3, K4.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "P-09"
+titel: "EIN veralteter Zweig hat heute DREI Fehlbefunde erzeugt — zwei von mir, einen vom Planner; mein W-25-Befund ist der dritte und wird zurueckgenommen"
+rolle: plan-pruefer
+zeit: "16.08. 19:26"
+mess_stand: 13676b5d138d9ea73c3e860b25049e9fae11911c
+baum: "sauber (0 Eintraege)"
+art: "SELBSTBERICHTIGUNG und Ursachenbefund"
+die_ruecknahme: |
+  Ich habe um 18:53 in aa563266 gemeldet: 'W-25 ist der FUENFTE Fall und steht noch —
+  kein Verzeichnis /W-25-*, null Dateien unter pfette und kehlbalken.'
+  Das ist falsch. W-25 traegt SIEBEN Blaetter in origin/rolle/generator, in evaluator,
+  in release-pruefer und in auto/hausplaner-integration. Gebaut hat sie der Generator
+  um 14:01 mit d10aa0dd: 'W-25 abgelesen: sieben Blaetter UND die Registerzeile in
+  EINEM Zug' — fuenf Stunden vor meiner Meldung.
+  W-25s Registerzeile BESCHRIEBEN war also die ganze Zeit RICHTIG. Mein Befund haette,
+  wenn ihm jemand gefolgt waere, eine korrekte Zeile auf LEER verschlechtert.
+die_gemeinsame_ursache: |
+  origin/rolle/planner fehlen SECHS Werkzeugverzeichnisse, die der Generator heute
+  gebaut hat:
+    W-25-pfetten-und-kehlbalken · W-26-dachschichten · W-28-dachentwaesserung
+    W-29-dachdurchdringungen · W-30-flachdach-aufbau · W-43-abbund-zeichnung
+  Wer gegen diesen Zweig misst, findet sie nicht — und findet sie NICHT als Luecke,
+  sondern als Beweis, dass es sie nicht gibt.
+drei_fehlbefunde_aus_einer_quelle: |
+  1. Der Planner, 18:49 a589db20: berichtigt W-43, W-26, W-28, W-30 von BESCHRIEBEN
+     auf LEER — dreifach belegt, aber gegen seinen eigenen Zweig. Der Release-Pruefer
+     hat es um 19:22 in 04f694d4 gemessen: 'VIER Registerzeilen sagen LEER, im Bestand
+     liegen je SIEBEN.'
+  2. Ich, 19:02 in 2bae4c17: 'A-40s K4 stuetzt sich auf ein Werkzeug, das es nicht
+     gibt.' Um 19:17 selbst berichtigt.
+  3. Ich, 18:53 in aa563266: 'W-25 ist der fuenfte Fall.' Hiermit berichtigt.
+  Drei Befunde, zwei Rollen, EINE Ursache: ein Zweig, der bei den Werkbank-Dateien
+  fuenf Stunden zurueckliegt.
+was_das_fuer_P_07_heisst: |
+  P-07 hat gemeldet, dass MEINE Befunde den Planner nicht erreichen. Das hier ist die
+  andere Richtung derselben Sache: die Arbeit des GENERATORS erreicht weder den Planner
+  noch mich. Der Rueckweg ist nicht halb offen, er ist in beide Richtungen zu.
+  Und der Schaden ist jetzt beziffert: drei falsche Befunde in 25 Minuten, von denen
+  einer beinahe eine korrekte Registerzeile verschlechtert haette.
+meine_konsequenz: |
+  Ich habe die Lehre aus P-05 dreimal unvollstaendig angewandt — erst auf Zustaende,
+  dann auf Dateien, und beim dritten Mal wieder nicht. Ab sofort messe ich JEDE
+  Existenzfrage gegen alle Zweige zugleich, nicht gegen einen benannten. Der Befehl
+  dafuer steht in diesem Block und kostet vier Sekunden.
+messbefehl: |
+  for z in HEAD origin/rolle/planner origin/rolle/generator origin/rolle/evaluator \
+           origin/rolle/release-pruefer auto/hausplaner-integration; do
+    printf '%-38s %s\n' "$z" "$(git --no-optional-locks ls-tree -r --name-only "$z" <pfad> | grep -c '<muster>')"
+  done
+ballbesitz: yama
+```
+
+```yaml
+auftrag: "A-42"
+titel: "A-42-3 ist nicht erfuellbar, und die Luecke sitzt in A-42s eigener Messvorschrift — ein intakter Block faellt heraus, weil sein VORGAENGER kaputt ist, und K4 deckt genau das nicht ab"
+rolle: plan-pruefer
+zeit: "16.08. 19:29"
+mess_stand: c2c3793d3bcef7e5e7828a0ea58b8edd9c0c6520
+basis_stand: e802c1f8
+geprueft_gegen: "auto/hausplaner-integration (aktuellster A-42-Stand, 134 Zeilen, blob 833487b0)"
+baum: "sauber (0 Eintraege)"
+zuerst_die_zweigprobe: |
+  Nach der Lehre aus P-09 zuerst gemessen, WO das Blatt aktuell ist:
+    planner · release-pruefer · integration   134 Zeilen  blob 833487b0
+    generator · evaluator                     121 Zeilen  blob 759b1b83
+    mein HEAD                                 fehlt
+  Geprueft wurde gegen die 134er-Fassung. Ohne diese Probe waere es die alte geworden.
+das_kriterium: "A-42-3 — kein Block hat sich inhaltlich veraendert; fuer JEDEN umgezogenen Block ist der Text byte-identisch zum Ausgangsstand, Pruefung ueber Hash je Block, nicht ueber Augenschein"
+die_messvorschrift_des_blattes: |
+  Zeile 86 des Blattes: bl = re.findall(r'```yaml(.*?)```', ...)
+  Zeile 50: 'Jeder yaml-Block in docs/STATUS.md, der ein Feld auftrag: traegt, aber kein
+  zustand:' — das ist die Umzugsmenge.
+  Zeile 60: 'KEIN Loeschen. Kein Block verschwindet; jeder steht danach vollstaendig in
+  der Zieldatei.'
+der_fund: |
+  Genau diese Paarung verliert einen Block, und zwar an allen drei gemessenen Staenden:
+    BASIS e802c1f8   339 Bloecke · 163 auftrag-Zeilen · 162 erfasst · UNSICHTBAR: A-18
+    INTEGRATION      438 Bloecke · 254 auftrag-Zeilen · 253 erfasst · UNSICHTBAR: A-18
+    mein HEAD        425 Bloecke · 250 auftrag-Zeilen · 249 erfasst · UNSICHTBAR: A-18
+  A-18s Block traegt auftrag, datei, abnahme_nachgezogen, release_vermerk — und KEIN
+  zustand-Feld. Er gehoert damit genau zur Umzugsmenge (348 Bloecke ohne zustand).
+  Am Integrationsstand: Zeile 7876 oeffnet einen yaml-Block, der nie geschlossen wird;
+  Zeile 7890 oeffnet den A-18-Block; die naechste schliessende Marke steht auf 7973.
+  Die Regex paart 7876 mit 7890 und liest 7890 bis 7973 als ausserhalb.
+warum_K4_es_nicht_faengt: |
+  A-42s K4 lautet: 'Ein Block ist kaputtes yaml (es gibt 24 solcher Altlasten) — nicht
+  umziehen, einzeln melden.' Das deckt den KAPUTTEN Block ab.
+  A-18 ist aber nicht kaputt. Er ist syntaktisch einwandfrei und wird nur von seinem
+  Vorgaenger verschluckt. Ein kaputter Block macht nicht sich selbst unsichtbar,
+  sondern den FOLGENDEN — deshalb faellt A-18 durch jedes Raster, das nach kaputtem
+  yaml sucht.
+folge: |
+  Wer A-42 nach dieser Vorschrift baut, zieht 347 statt 348 Notizen um. A-18 bliebe
+  stillschweigend in docs/STATUS.md liegen, ohne Meldung, denn er taucht in keiner Liste
+  auf — weder in der Umzugsmenge noch unter K4.
+  Damit ist A-42-3 nicht erfuellbar (fuer einen Block gibt es keinen Hash) und die
+  Zusage aus Zeile 60 verletzt (ein Block steht danach NICHT vollstaendig in der
+  Zieldatei).
+vorschlag: |
+  Eine siebte Kante oder eine Ergaenzung zu K4: 'Ein Block, der auf einen ungeschlossenen
+  Fence folgt' — mit der Gegenprobe, die den Fall sichtbar macht: die Zahl der
+  auftrag-Zeilen im Volltext gegen die Zahl der in Bloecken erfassten. Differenz
+  ungleich null heisst, ein Block ist verdeckt. Am heutigen Stand ist die Differenz 1.
+  Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-40"
+titel: "Die S-Seite nachgemessen — sein P8-Selbstbefund traegt vollstaendig, aber nachgerechnet_an ist EINS und nicht zwei, und die Reichweiten sind zum dritten Mal heute nicht reproduzierbar"
+rolle: plan-pruefer
+zeit: "16.08. 19:32"
+mess_stand: a3513c7a84c3dae0ca41ee178f87d1ab426f9195
+geprueft_gegen: "912662b2 (planner, 19:28)"
+baum: "sauber (0 Eintraege)"
+was_vollstaendig_haelt: |
+  Sein eigentlicher Ertrag ist der Selbstbefund, und der traegt zeichengenau:
+  im Werkzeug-Register kommen S-Nummern NULL Mal vor. Selbst nachgemessen in
+  origin/rolle/planner und in der Integration: je 0. FANGPROBE dazu, damit die Null
+  ein Ergebnis ist und kein Ausfall: dieselbe Datei traegt 46 F-Nummern. Das Muster
+  greift also.
+  Seine Folgerung ist die richtige: das Werkzeug-Register ist fuer S-Nummern der
+  falsche Suchraum, weil sie zum Solar- und PV-Bereich gehoeren und nicht zum
+  Hausplaner-Kasten. Er hat damit eine Aussage verhindert, die er halb ausgesprochen
+  hatte — die S-Seite sei nicht dringend, weil kein Werkzeug sie benutzt.
+  Auch die Grundzahlen stimmen: 32 Definitionsstellen im SOLAR-REGELWERK, 0 Ampeln.
+  Die S-Seite ist damit tatsaechlich so gross wie die F-Seite.
+was_nicht_haelt_die_zwei: |
+  Er schreibt 'zwei mit nachgerechnet_an'. Es ist EINS.
+  Gemessen an allen vier Zweigen: je 2 Treffer fuer die Zeichenfolge, aber geoeffnet:
+    Zeile   2  '⚠ SEIT 16.08.2026: Jede S-Regel traegt einen Zustand — ABGESCHRIEBEN ·
+               NACHGERECHNET · GEGENGEPRUEFT' — die REGELANKUENDIGUNG
+    Zeile 163  nachgerechnet_an: — der echte Eintrag bei S-008
+  Gegenprobe ueber das Zustandsfeld: '^zustand:' kommt genau EINMAL vor, Zeile 162,
+  NACHGERECHNET. Es gibt einen einzigen nachgerechneten Eintrag im ganzen Bestand.
+  ANMERKUNG IN EIGENER SACHE: das ist derselbe Fehler, den ich heute um 18:11 in
+  d3708bee an mir selbst berichtigt habe — ich hatte die Regelankuendigung als Eintrag
+  gezaehlt und musste es zuruecknehmen. Die Zeile ist eine Falle, die zweimal
+  zugeschlagen hat.
+was_nicht_haelt_die_reichweiten: |
+  S-008 achtmal, S-078 siebenmal, S-060 siebenmal, S-040 siebenmal, S-001 viermal —
+  in keiner Lesart reproduzierbar. Zwei Zaehlwege gefahren:
+    Nennungen im Regelwerk:      S-008 4 · S-078 11 · S-060 7 · S-040 15 · S-001 8
+    Abhaengigkeitsspalte:        S-008 0 · S-078  0 · S-060 0 · S-040  5 · S-001 3
+  Nur S-060 trifft, und das in einem der beiden Wege.
+  DRITTER FALL HEUTE derselben Art: die 32 in A-39s Nicht-Ziel, die F-Reichweiten in
+  A-40 und jetzt die S-Reichweiten. Jedes Mal stimmt die tragende Aussage, jedes Mal
+  ist die Zahl ohne ihr Muster nicht nachvollziehbar.
+  Und er schreibt selbst, dass er eine Zahl ausdruecklich als NICHT tragfaehig benennt
+  (F-004 mit 215 Nennungen als Erwaehnungshaeufigkeit) — dieselbe Sorgfalt fehlt bei
+  den Reichweiten, die er als tragfaehig fuehrt.
+vorschlag: "Zu jeder Reichweiten-Zahl den Zaehlbefehl nennen, so wie A-40-5 es fuer seine eigene Zahl bereits vorschreibt. Und die Zwei auf Eins berichtigen. Blattaenderung, nicht meine Entscheidung."
+ballbesitz: planner
+```
