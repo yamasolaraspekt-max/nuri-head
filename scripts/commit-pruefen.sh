@@ -43,8 +43,32 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
+# ── --trocken: ALLE PRUEFUNGEN, KEIN COMMIT ─────────────────────────────────────────────────
+#
+# **Gebaut, weil ich selbst hineingelaufen bin.** Am 16.08. wollte ich pruefen, ob im eigenen Baum
+# die neue Abwesenheitsmeldung ausbleibt, und rief dafuer das Tor mit dem Betreff „Gegenprobe" auf.
+# **Es hat committet** — der Commit `3f5e64c7` traegt seither 23 Zeilen echte Aenderung unter einem
+# Betreff, der eine Messung war.
+#
+# ***Wer mit einem Tor misst, das schreibt, schreibt beim Messen.*** *Und das trifft nicht nur
+# mich: es gab bis heute keine Moeglichkeit, die Annahme einer Botschaft zu pruefen, ohne sie zu
+# vollziehen.* **Ein Werkzeug, dessen Probe nur der Ernstfall ist, wird im Ernstfall geprobt.**
+#
+# ```sh
+#   TICKET_ROLLE=generator bash scripts/commit-pruefen.sh --trocken "Botschaft" pfad ...
+# ```
+#
+# **Der Ausstieg liegt VOR dem `git add` der neuen Dateien** — der einzigen schreibenden Stelle
+# vor dem Commit. *Damit hat der Trockenlauf keine Nebenwirkung, und deshalb kann er auch nicht
+# beweisen, dass das Stagen gelingt.* **Das ist der Preis, und er steht hier statt im Kleingedruckten.**
+TROCKEN=0
+if [ "${1:-}" = "--trocken" ]; then
+  TROCKEN=1
+  shift
+fi
+
 if [ "$#" -lt 2 ]; then
-  echo 'Aufruf: bash scripts/commit-pruefen.sh "Botschaft" pfad [weitere ...]' >&2
+  echo 'Aufruf: bash scripts/commit-pruefen.sh [--trocken] "Botschaft" pfad [weitere ...]' >&2
   exit 2
 fi
 
@@ -72,6 +96,29 @@ fi
 # Dieses Tor SPERRT, waehrend A-26/A-27/A-30 melden. Die Begruendung steht in rollen-tor.sh:
 # jene melden ueber den INHALT, wo ein Fehlalarm teuer und ein Durchlassen billig ist. Hier ist
 # es umgekehrt.
+# ── A-37-18: DIE ABWESENHEIT DER BARRIERE MELDET SICH SELBST ────────────────────────────────
+#
+# **Diese Bedingung war bis 16.08. ein stilles `if`:** fehlte `scripts/rollen-tor.sh`, uebersprang
+# das Tor die gesamte Barriere **ohne ein Wort**. Der Gedanke dahinter war richtig — ein Baum ohne
+# die Datei soll nicht am Commit gehindert werden —, **die Ausfuehrung war es nicht.**
+#
+# ***Der Planner hat den Fall benannt, und der Satz ist der Bau:*** *„eine Barriere, die eine Rolle
+# nicht kennt, weist sie ab und ist laut; eine Barriere, die in ihrem Baum fehlt, laesst alles
+# durch und meldet nichts. Der erste Fall kostet eine Runde, der zweite bleibt unbemerkt."*
+#
+# **Am 16.08. ueber alle sechs Baeume erhoben:** das Tor liegt in DREI — generator, evaluator,
+# release-pruefung. Es fehlt in Integration, planner und plan-pruefer. *Drei Baeume haben also
+# stundenlang committet, ohne dass irgendwo stand, dass die Pruefung gar nicht lief.*
+#
+# **Es wird weiterhin DURCHGELASSEN und ab jetzt GESAGT.** *Sperren waere hier falsch: die vier
+# Baeume koennen die Datei nicht selbst herbeischaffen, sie kommt ueber den Transport.* **Eine
+# Sperre vor ihrem Ersatzweg haelt die Kette an** — derselbe Satz wie bei K3, K6 und Teil 2.
+if [ ! -f scripts/rollen-tor.sh ]; then
+  echo "ROLLEN-TOR  FEHLT IN DIESEM BAUM — die Zuordnung Rolle/Zweig wird NICHT geprueft." >&2
+  echo "            $(pwd)" >&2
+  echo "            Durchgelassen, aber ungeprueft. Die Datei kommt ueber den Transport;" >&2
+  echo "            ohne sie ist ein Commit im fremden Baum hier nicht zu bemerken." >&2
+fi
 if [ -f scripts/rollen-tor.sh ]; then
   # A-37 Teil 2: das Tor muss wissen, OB die Statuswahrheit in der Pfadliste steht. Es bekommt
   # die Auskunft als Umgebungsvariable, damit es selbst keine Pfadliste kennen muss — es prueft
@@ -776,6 +823,23 @@ fi
 #
 # *Der Index sagt „geloescht und unbekannt", HEAD sagt die Wahrheit.* Wer hier `^??` liest, stagt
 # den ganzen Baum und nennt Bestand „NEU".
+# Hier endet der Trockenlauf: alles darunter SCHREIBT. Er nennt die Botschaft in der Form, die
+# das Tor daraus gemacht hat (mit Rollenmarke), damit genau das pruefbar ist, woran ich mich
+# geirrt habe — nicht die eingegebene, sondern die entstehende.
+if [ "$TROCKEN" = "1" ]; then
+  echo ""
+  echo "TROCKENLAUF — alle Pruefungen gelaufen, KEIN Commit."
+  echo "  Botschaft: $BOTSCHAFT"
+  for p in "$@"; do
+    if [ -n "$(git --no-optional-locks ls-tree --name-only HEAD -- "$p" 2>/dev/null)" ]; then
+      echo "  bekannt:   $p"
+    else
+      echo "  NEU:       $p  — wuerde einzeln gestagt"
+    fi
+  done
+  exit 0
+fi
+
 for p in "$@"; do
   if [ -n "$(git --no-optional-locks ls-tree --name-only HEAD -- "$p" 2>/dev/null)" ]; then
     continue

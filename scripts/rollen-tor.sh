@@ -190,6 +190,100 @@ esac
 #
 # **Und es ist eine Abweichung vom Wortlaut des Kriteriums. Sie steht hier und im Bau-Bericht,
 # nicht still im Code.**
+#
+# ## ⚠ DIE SPERRE HAT AM 16.08. UM 16:17 GEZUENDET — ohne dass jemand eine Zeile anfasste
+#
+# ```text
+#   Commits mit Rollenmarke 'integrator'   0  ->  1   (83296554, Yama, 16:17)
+#
+#   TOR_STATUS_PFAD=1, generator, eigener Baum
+#     vor  16:17   HINWEIS  ... noch KEIN Integrator gestartet   exit 0
+#     nach 16:17   VERSTOSS ... EINEN Schreiber: den Integrator  exit 1
+# ```
+#
+# ***Das ist der Ertrag der Bedingung.*** *Waere sie ein Datum oder ein Haekchen gewesen, haette
+# jemand sie umlegen muessen — und es waere entweder zu frueh oder vergessen worden.* **Sie war
+# eine Messung, also hat sie sich selbst umgelegt.**
+#
+# ## Der Einwand des Integrators, und wo er zutrifft
+#
+# **Yama misst im Integrations-Checkout** (`83296554`): *„die Barriere ist hier nicht vorhanden …
+# sie koennte die Divergenz ohnehin nicht fangen: sie prueft Baum gegen Zweig gegen Rolle, und
+# jede Rolle committet in ihrem eigenen Baum regelkonform — die Divergenz entsteht genau dann,
+# wenn alle regelkonform arbeiten."*
+#
+# **Fuer TEIL 1 stimmt das vollstaendig, und es ist der schaerfste Satz, der ueber diesen Bau
+# gesagt wurde.** *Teil 1 schuetzt gegen den Commit im FALSCHEN Baum. Die Divergenz kommt aber aus
+# dem richtigen.*
+#
+# **Fuer TEIL 2 stimmt es nicht — und der Grund, warum er ihn nicht sieht, ist die zweite Haelfte
+# seines eigenen Satzes:**
+#
+# ```text
+#   Zweig                        Tor  Teil-2-Zeilen  Haken in commit-pruefen.sh
+#   auto/hausplaner-integration   0        0            0     <- wo er misst
+#   rolle/generator               1        1            3
+#   rolle/release-pruefer         1        1            3
+# ```
+#
+# ***Teil 2 prueft nicht Baum gegen Rolle, sondern den PFAD:*** `docs/STATUS.md` *ausserhalb des
+# Integrations-Checkouts.* **Er trifft genau den Fall, den er beschreibt** — sechs Rollen, alle
+# regelkonform, die dieselbe Datei fortschreiben. *Er liegt seit 15:31 gebaut auf meinem Zweig und
+# ist an dem einen Ort nicht angekommen, an dem gemessen wird.*
+#
+# **Der Einwand ist damit kein Einwand gegen den Bau, sondern die genaueste Beschreibung des
+# Transportproblems, die heute vorliegt.**
+#
+# ## A-37-18 — wo das Tor am 16.08. um 16:30 WIRKLICH liegt, alle sechs Baeume einzeln
+#
+# ```text
+#   Baum                        Zweig                        Tor   Haken
+#   ticket                      auto/hausplaner-integration  NEIN    0
+#   ticket-rolle-planner        rolle/planner                NEIN    0
+#   ticket-rolle-plan-pruefer   rolle/plan-pruefer           NEIN    0
+#   ticket-rolle-generator      rolle/generator              JA      3
+#   ticket-rolle-evaluator      rolle/evaluator              JA      3
+#   ticket-release-pruefung     rolle/release-pruefer        JA      3
+# ```
+#
+# **DREI von sechs, nicht zwei.** *Der Auftrag nennt zwei und fuehrt `release` mit 0.* **Die
+# Ursache steht schon weiter oben in dieser Datei:** das Verzeichnis `ticket-rolle-release`
+# existiert noch, ist aber laengst nicht mehr der Baum des Release-Pruefers — der arbeitet in
+# `ticket-release-pruefung`. *Wer nach dem alten Namen misst, findet eine Null, die es nicht gibt.*
+#
+# ***Genau daran ist meine eigene Tabelle am 16.08. gescheitert, und genau deshalb entscheidet
+# hier seither der ZWEIG und nicht das Verzeichnis.*** **Dieselbe Falle, zweite Runde, anderer
+# Messender** — was fuer die Zahl im Kriterium heisst: besser den Zweig erheben als den Ordner.
+#
+# **Gemeldet, nicht geaendert.** *Das Blatt gehoert dem Planner.*
+#
+# ### Woran die Verteilung haengt — es ist EIN Commit, und der Weg dorthin ist nicht meiner
+#
+# ```text
+#   eingefuehrt durch   0ee521f7   16.08. 13:38
+#
+#   Zweig                        enthaelt ihn   ls-tree
+#   auto/hausplaner-integration      NEIN          0
+#   rolle/planner                    NEIN          0
+#   rolle/plan-pruefer               NEIN          0
+#   rolle/generator                  JA            1
+#   rolle/evaluator                  JA            1
+#   rolle/release-pruefer            JA            1
+# ```
+#
+# **Das SOLL von A-37-18 lautet: `git ls-files scripts/rollen-tor.sh` ergibt in JEDEM der sechs
+# Baeume 1.** *Der Index eines Worktrees ist der seines Zweiges* — die Datei erscheint dort genau
+# dann, wenn `0ee521f7` auf dem Zweig liegt. **Das ist Transport, und Transport ist mir
+# ausdruecklich untersagt.**
+#
+# ***Auch der naheliegende Ausweg traegt nicht:*** *das Tor in `commit-pruefen.sh` hineinzuziehen,
+# damit es keine eigene Datei mehr braucht.* **Die drei Baeume ohne Tor tragen auch den HAKEN
+# nicht** (`Haken 0`, oben gemessen) — beide Dateien reisen mit demselben Transport. *Kein Bau von
+# mir aendert das Ergebnis.*
+#
+# **Was ich statt dessen gebaut habe, steht in `commit-pruefen.sh`:** die Abwesenheit meldet sich
+# jetzt selbst. *Das behebt A-37-18 nicht — es macht nur den Zustand, den A-37-18 beschreibt, in
+# jedem betroffenen Baum sichtbar, statt ihn schweigen zu lassen.*
 if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
   INTEGRATOR_DA="$(git log --all --format=%s --grep='^integrator:' 2>/dev/null | head -1)"
   if [ -n "$INTEGRATOR_DA" ]; then
