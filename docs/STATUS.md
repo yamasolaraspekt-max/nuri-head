@@ -20268,5 +20268,33 @@ bitte_an_yama_und_es_eilt: |
   Eine Zeile genuegt: entweder die umgezogenen Rollen duerfen ihren EIGENEN Zweig sichern
   (git push origin rolle/<rolle>), oder du sagst dem Release-Pruefer, dass er
   rolle/planner und rolle/plan-pruefer einsammelt, bevor der Generator zieht.
+NACHTRAG_12_50_DIESER_BEFUND_IST_ERLEDIGT: |
+  Waehrend ich ihn schrieb, hat der Release-Pruefer beides selbst getan. Gemessen am
+  Fernstand ab9eb41f, nicht aus seiner Meldung uebernommen:
+    76800d27  12:40:58  "vier Commits transportiert — darunter der ERSTE Commit des
+              Plan-Pruefers aus seinem eigenen Baum". Damit sind d2ca3611 (die
+              gebaut_in-Korrektur des Planners) und mein a98e0eb9 im Fernstand.
+    ab9eb41f  12:42:35  "ein Beleg meines eigenen Runde-2-Votums ist FALSCH — und ich gebe
+              die Plan-Pruefer-Station zurueck"
+  A-37 gebaut_in im Fernstand steht jetzt wieder auf "ticket-rolle-generator", mit meiner
+  Messung als Beleg (tsc exit 0, Suite 1763/1763). DER BAU-ORT IST KORRIGIERT.
+  Sein Selbstbefund ist schaerfer als mein Fremdbefund, und das gehoert hierher: er hat
+  nicht nur den falschen Satz gefunden, sondern die eigene Ursache — "Ich habe installiert,
+  danach die Bedingung in Yamas Namen praezisiert, und dann behauptet, es gebe keine
+  Installation." Und er trennt sauber: "Falsch war der BELEG, nicht das Urteil." BEREIT
+  traegt weiter, zu Recht.
+  Die Dringlichkeit dieses Blocks ist damit weg. Was bleibt, ist die Ursache: der Transport
+  hing 21 Stunden, und in dieser Zeit haben zwei Instanzen dieselbe DoR auf zwei
+  Datenstaenden gefahren. Dass es gut ausging, lag an seiner Selbstpruefung — nicht am
+  Verfahren.
+was_noch_offen_ist: |
+  Von meinen elf Commits ist EINER angekommen (a98e0eb9), zehn liegen weiter nur hier.
+  Darunter mein A-38-Runde-2-Befund (6ed8d723): die Zahlen 497/70/58 tragen keinen
+  Messbefehl, und der anlass fuehrt weiter die als falsch berichtigten 41/309. A-38 ist
+  seit heute BEREIT, ohne dass dieser Punkt jemandem vorlag. Er ist KEIN Sperrgrund — der
+  Kern des Auftrags traegt, das habe ich selbst gemessen — aber er gehoert vor den Bau.
+  Ebenso ungesichert: A-33s Zielzahl 0/0 (fd5e7f54), F-054s fehlende zweite Ausgabe
+  (9aa6653f), die node_modules-Herkunftsfrage an Yama (63045043) und mein P-02-Votum
+  (8f5190ae).
 ballbesitz: yama
 ```
