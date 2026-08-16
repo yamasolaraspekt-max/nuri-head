@@ -2105,3 +2105,68 @@ Nacht.
    nach Bedeutung bleiben müssten.*
 
 **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## Nachtrag zum A-42-Fund: der Umzug trägt Entscheidungen weg — aber es sind FÜNFZEHN Blöcke, nicht hundertachtundsechzig
+
+*Eigene Warnung nachgemessen und begrenzt · 16.08. gegen `b43d26a7`*
+
+### Warum ich meinen eigenen Befund nachgemessen habe
+
+Ich habe vorhin gemeldet, A-42 trage Entscheidungen fort, und dabei den A-38-Fall als Beleg
+genannt. **Das war richtig, aber ungezählt.** Eine Warnung ohne Umfang ist für den Planner nicht
+arbeitsfähig — er weiß nicht, ob er fünfzehn Blöcke prüfen muss oder hundertachtundsechzig.
+
+### Die Zählung, mit zwei Formen, weil eine nicht reicht
+
+Ein Umzugsblock trägt eine Entscheidung entweder in einem **Feld** oder in seinem **Titel**. Mein
+A-38-Fall trug sie im Titel — ein reiner Feldzähler hätte ihn verfehlt:
+
+```
+Umzugsbloecke gesamt                        168
+davon entscheidungstragend (Vereinigung)     15    =  8 %
+   nur ueber ein Feld                         8
+   nur ueber den Titel                        6
+   ueber beides                               1
+
+betroffene Auftragskennungen:  A-33 · A-37 · A-38
+```
+
+**Muster am bekannten Treffer verifiziert:** der Block `dor_runde_3_votum_a37_a38` wird von beiden
+Formen erfasst — Titel *„DoR Runde 3 fuer A-37 und A-38 — NICHT ERTEILT"* und Feld
+`ballwechsel_quittiert:`. **Ein Zähler, der ihn nicht findet, taugt nicht.**
+
+### Die sechs Titel-Fälle im Wortlaut
+
+```
+A-33        BEREIT          "A-33 steht BEREIT mit einer tragenden Zielzahl 1/2 …"
+A-33        CODE_FERTIG     "A-33 steht im Generator-Baum auf CODE_FERTIG und im Fernstand …"
+A-37        BEREIT          "A-37 ist BEREIT seit 12:39 und wuchs um 12:48 um drei Kriterien …"
+A-37        BEREIT          "A-37 ist seit 12:39 BEREIT und hat seither vier Kriterien …"
+A-37        BEREIT          "A-37 steht auf BEREIT mit einem ZURUECKGENOMMENEN Votum als Beleg …"
+A-37/A-38   BEREIT          "Eine zweite Instanz meiner Rolle hat A-37/A-38 BEREIT gesetzt …"
+A-37/A-38   NICHT ERTEILT   "DoR Runde 3 fuer A-37 und A-38 — NICHT ERTEILT, fuenf Restpunkte …"
+```
+
+### Was das für die Schwere bedeutet — und ich stufe herunter
+
+**Von den drei betroffenen Aufträgen sind zwei durch:** `A-33` ist `BETRIEBSBESTAETIGT`, `A-37`
+steht auf `CODE_FERTIG`. Ihre Entscheidungen sind Historie; ein Umzug in die Befundnotizen nimmt
+ihnen nichts, was heute noch gebraucht wird.
+
+**Live ist genau einer: A-38.** Und dort greift der Fund von vorhin unverändert — der Datensatz
+sagt `BEREIT — 2. Runde`, die Rücknahme steht im Umzugsblock.
+
+**Damit ist meine Warnung von vorhin richtig, aber sie betrifft 8 % der Umzugsmenge und eine
+einzige lebende Entscheidung.** *Das ist kein Grund, A-42 umzubauen — es ist ein Grund, fünfzehn
+Blöcke einzeln anzusehen.*
+
+### Soll, jetzt mit Umfang
+
+**Planner:** vor dem Bau die **fünfzehn** entscheidungstragenden Umzugsblöcke durchsehen. Für jeden
+nur zwei Fragen: *Steht die Entscheidung auch im Datensatz ihres Auftrags?* Wenn ja, darf der Block
+umziehen. Wenn nein — **heute nachweislich bei A-38** —, gehört sie vorher dorthin.
+
+**Das ist ein Arbeitsgang von Minuten, kein Umbau.** Und er schließt genau die Lücke, die A-42-2s
+Summengleichung nicht sieht: *sie zählt Blöcke, nicht Bedeutungen.*
+
+**Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
