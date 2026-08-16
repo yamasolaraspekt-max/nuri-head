@@ -10100,6 +10100,29 @@ bau_bericht: "A-33 IST UMGESCHNITTEN WORDEN, und ich baue gegen den Umschnitt: L
   wird docs/STATUS.md von dem, der sie schreiben darf. Erster Auftrag, den ich vollstaendig aus dem
   Rollenbaum ticket-rolle-generator geliefert habe."
 ballbesitz: planner  # SPEC_BLOCKED 16.08. Evaluator Runde 1
+nachtrag_evaluator_r1: "YAMAS DREI PRAEZISIERUNGEN NACHGEMESSEN, 16.08. — eine davon korrigiert
+  meinen eigenen Messtisch. (1) Idempotenz war schon nachgemessen statt behauptet: erster Lauf 11,
+  zweiter 'keine — die Invariante haelt bereits', md5-Ruecksetzung belegt. (2) Die fehlende Zielzahl
+  habe ich NICHT beanstandet; A-33-1 ist an der INVARIANTE gruen gemessen, und dass die Zahl driftet
+  ist heute selbst belegt — 121 Datensaetze am Bau-Stand gegen 141 am heutigen Bestand, die
+  Invariante liefert beide Male 11 Zeilen und null unklare Faelle. (3) DIE WIRKUNG: ich hatte A-33-5
+  als STILLE gemessen (a26 meldet 0, exit 0) statt als WIRKUNG. Jetzt am Bestand je Kennung einzeln
+  gemessen, vorher am Bau-Stand und nachher am Lauf-Stand: paarbar VORHER 0 von 11, NACHHER 11 von
+  11 — bei allen elf greift der Ausstieg 'kein Datensatz-Block — Ball und Zustand nicht
+  vergleichbar' danach nicht mehr. Beleg dafuer, dass a26 danach wirklich VERGLEICHT, ist die
+  Meldung die es dabei erstmals erzeugt: 'W-01/1 BALL: Tafel *-* <-> Datensatz *--*', U+2013 gegen
+  U+2014 je Zeichen gemessen. MEIN MESSFEHLER IN EINEM SATZ: dieselbe Rohausgabe hatte ich im
+  Zwischenzustand als SCHADEN gelesen und daraus einen Beinahe-P1 gegen A-33-5 gebaut, waehrend sie
+  zur Haelfte der WIRKUNGSNACHWEIS ist.
+  DER ZEIGER a26-ball-drift.sh:56 TRIFFT NICHT MEHR: :55 ist der KENNUNGEN-Ausstieg, :56 eine
+  LEERZEILE, der gemeinte Ausstieg liegt auf :96-98. Das Blatt selbst hat diesen Zeiger am 14.08.
+  berichtigt, nach dem A-30-Bau der die Datei von 102 auf 158 Zeilen umgebaut hat — fuenfter
+  belegter Fall dieser Klasse. Am Inhalt der Anweisung aendert das nichts.
+  OFFEN OHNE BEWERTUNG: a26 im STAND-Modus meldet am Lauf-Commit NICHTS, obwohl der Diff 22
+  Kennungen enthaelt (selbst gezaehlt); im Arbeitsbaum-Modus meldet dieselbe Datenlage 31 Zeilen.
+  Warum die zwei Modi auseinanderlaufen habe ich NICHT geklaert — es gehoert nicht zu A-33.
+  DAS VOTUM BLEIBT SPEC_BLOCKED: es haengt an A-33-7, und keine der drei Praezisierungen beruehrt
+  A-33-7. Ball beim Planner."
 votum_evaluator_r1: "SPEC_BLOCKED, 16.08. 13:34 — SECHS von sieben Kriterien gruen und selbst
   gefahren; A-33-7 ist mit dem eigenen Blatt unvereinbar. A-33-7 verlangt woertlich 'der Bau-Commit
   fasst NUR docs/STATUS.md an — scripts/ null Mal', der Kopf art: desselben Blattes verlangt seit
