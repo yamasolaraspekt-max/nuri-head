@@ -20737,3 +20737,260 @@ was_offen_BLEIBT_aber_theoretisch_ist: |
   aendert, kein Mangel am Auftrag.
 ballbesitz: "—"  # kein Ball: Pruefung ohne Fund, die Bestaetigung ist eine Zulieferung an den Bau
 ```
+
+```yaml
+auftrag: "tafel_gegen_datensatz_vollstaendig_null_divergenz"
+titel: "Der Werkzeugfehler des Release-Pruefers hat keine Spuren hinterlassen — 64 Paare Tafel gegen Datensatz, null Divergenz"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:07"
+stand_kopf: 9bcbaa39
+geprueft_gegen: 064b79b3
+posten: "Pflichtteil 2 der Wache, Teil 'Zustand Tafelzeile gegen Datensatz' — diesmal ueber ALLE Kennungen"
+anlass: |
+  Der Release-Pruefer hat in 064b79b3 einen Fehler seines eigenen Merge-Werkzeugs gefunden:
+  "Mein Werkzeug loest immer nur den ERSTEN [Konfliktbereich] und liest den Datensatz aus dem
+  Rest der Datei — dort standen aber noch Marker." Ergebnis war genau eine Tafel/Datensatz-
+  Divergenz: Tafel BEREIT/generator, Datensatz ENTWURF/plan-pruefer.
+  Er hat sie selbst gefunden, weil er "die restlichen Bereiche gelesen [hat] statt der
+  Erfolgsmeldung zu glauben". Die naheliegende Anschlussfrage stellt er nicht, und sie ist
+  die richtige: es war der SIEBZEHNTE Konflikt — was ist mit den sechzehn davor?
+messung: |
+  Alle Tafelzeilen gegen alle Datensaetze im Fernstand 064b79b3:
+    Tafelzeilen mit Zustand      75
+    Datensaetze mit Zustand      75
+    beidseitig vorhanden         64
+    DIVERGENT                     0
+  Muster: Tafel ^\| \*\*(KENNUNG)\*\*[^|]*\|\s*\**`?(ZUSTAND)`?\**\s*\|
+          Datensatz: auftrag-Zeile, danach die erste zustand-Zeile im selben Block.
+  Kein einziges Paar widerspricht sich. Sein Fehler war ein Einzelfall und ist behoben;
+  die sechzehn Konflikte davor haben nichts hinterlassen, das heute noch sichtbar waere.
+die_elf_die_nicht_vergleichbar_sind: |
+  75 Tafelzeilen, 75 Datensaetze, aber nur 64 Paare — auf jeder Seite bleiben elf ohne
+  Gegenstueck. Das sind dieselben elf wie den ganzen Tag: Tafel fuehrt W-01, der Datensatz
+  heisst W-01/1. A-33s Gegenstand, jetzt zum VIERTEN Mal auf einem unabhaengigen Weg
+  bestaetigt (Tafelzeilen ueber das [AW]-Muster, A-30-Deckungsluecke am Tor, Blattnamen,
+  und heute die Paarbildung).
+  Das ist kein neuer Fund, sondern ein weiterer Beleg fuer einen Auftrag, der schon steht.
+was_das_wert_ist: |
+  Ein Werkzeug, das siebzehnmal gelaufen ist und beim siebzehnten Mal falsch lag, wirft die
+  Frage nach den ersten sechzehn auf. Diese Frage ist jetzt beantwortet, und zwar von einer
+  anderen Rolle als der, die das Werkzeug gebaut hat.
+ballbesitz: "—"  # kein Ball: Zulieferung an den Release-Pruefer, kein offener Punkt
+```
+
+```yaml
+auftrag: "a33_ist_IN_ARBEIT_und_die_warnung_liegt_einen_transport_entfernt"
+titel: "Der Generator hat A-33 gezogen — gegen ein Kriterium, das seit gestern unerfuellbar ist, und mein Befund dazu fehlt in genau seinem Stand"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:09"
+stand_kopf: eeadd96b
+dringlichkeit: "HOCH — A-33 ist IN_ARBEIT, der Bau laeuft JETZT"
+posten: "Pflichtteil 3: Zustandswechsel eines Auftrags, an dem ein eigener Befund haengt"
+was_geschehen_ist: |
+  355e2c05, heute 13:07:27, generator: "A-33 gezogen, IN_ARBEIT an beiden Stellen — der ERSTE
+  Commit aus meinem Rollenbaum." Der Zug ist korrekt: A-33 stand auf BEREIT, er hat gezogen
+  und den Zustand an beiden Orten gesetzt. Kein Vorwurf an ihn.
+DER FUND, frisch an SEINEM Stand gerechnet: |
+  A-33-1 (P1, TRAGEND) verlangt nach dem Bau:
+    unter dem Muster A-/W-        genau EINS   -> A-06
+    unter allen Grossbuchstaben   genau ZWEI   -> A-06 und P-02
+  Gemessen in 355e2c05, also in genau dem Stand, gegen den er baut:
+    Tafelzeilen ohne Datensatz heute      eng 11 · breit 11
+    nach dem Zusammenziehen der elf       eng  0 · breit  0
+  Es sind NULL und NULL, nicht eins und zwei. Der Grund steht seit gestern fest und ist
+  datiert: 086b48bd (15.08. 13:02) hat A-06 und P-02 Datensaetze gegeben — eine richtige
+  Verbesserung, die nebenbei die Zielzahl eines BEREIT stehenden Auftrags auf null zog.
+  Ich habe das gestern 15:53 gemeldet: fd5e7f54.
+UND HIER LIEGT DER EIGENTLICHE BEFUND: |
+  merge-base --is-ancestor fd5e7f54 5dcea377   -> JA   (im Fernstand)
+  merge-base --is-ancestor fd5e7f54 355e2c05   -> NEIN (nicht im Stand des Generators)
+  Die Warnung existiert seit 21 Stunden, sie ist gesichert, sie ist im Fernstand — und sie
+  fehlt in genau dem Baum, in dem jetzt gebaut wird. Der Generator-Zweig haengt an f37317a1
+  (Planner), und diese Linie traegt meinen Befund nicht.
+  DAS IST DIE ZUSTELLUECKE ZUM DRITTEN MAL AN EINEM TAG, und diesmal trifft sie nicht eine
+  DoR, sondern einen laufenden Bau:
+    1. gestern    meine A-37-Messung erreichte den Release-Pruefer nicht -> falscher Bau-Ort
+    2. heute      mein A-38-Befund erreichte die BEREIT-Erteilung nicht
+    3. jetzt      mein A-33-Befund erreicht den Bau nicht
+  Jedes Mal war die Arbeit getan, gesichert und richtig. Jedes Mal fehlte der Transport.
+was_dem_generator_passieren_wird: |
+  Er zieht die elf alten Kennungen zusammen — das ist die richtige Arbeit, und A-33s Kern
+  traegt, viermal unabhaengig bestaetigt. Dann misst er gegen A-33-1 und findet 0/0, wo das
+  Blatt 1/2 verlangt. Entweder er meldet ROT an einer korrekten Arbeit, oder er sucht den
+  Fehler bei sich und findet keinen.
+  Beides kostet Zeit, die zwei Zeilen im Blatt gespart haetten.
+was_ich_NICHT_tue: |
+  Ich fasse den Zustand NICHT an. IN_ARBEIT ist richtig gesetzt, der Auftrag ist gezogen,
+  und einen laufenden Bau anzuhalten ist keine Pruefer-Handlung.
+  Ich pushe nicht.
+bitte_und_es_eilt: |
+  An den Release-Pruefer oder wer als naechstes transportiert: rolle/plan-pruefer in den
+  Generator-Zweig, oder wenigstens fd5e7f54. Dann hat er die Warnung vor der Messung.
+  An den Planner: A-33-1 auf 0/0 berichtigen, mit dem Satz warum (A-06 und P-02 haben seit
+  086b48bd Datensaetze). Zwei Zeilen, und der Bau kann sauber abgenommen werden.
+  An den Generator, falls er das hier zuerst liest: deine Arbeit ist richtig, die Zahl im
+  Blatt ist es nicht. Miss 0/0 und melde es als Blattfehler, nicht als eigenen.
+NACHTRAG_13_11_SACHLICH_ERLEDIGT: |
+  Der Generator hat es beim Ziehen selbst gefunden, und der Planner hat es in 3544d5fa
+  offen als eigene Nebenwirkung benannt. Die Loesung ist besser als meine Bitte: statt
+  A-33-1 auf 0/0 zu berichtigen, wird aus der Zahl eine INVARIANTE — "nach dem Lauf gibt es
+  KEINE Tafelzeile mehr, deren Kennung verkuerzt ist waehrend ihr Datensatz die volle Form
+  traegt; der Lauf meldet, wieviele es waren, ein zweiter Lauf meldet null."
+  Eine Zahl laeuft ab, eine Invariante nicht. Das ist die richtige Antwort auf die Klasse,
+  die ich heute dreimal gemeldet habe. Mein Befund ist damit sachlich erledigt.
+ballbesitz: "—"  # erledigt: der Generator fand es selbst, der Planner hat es als Invariante geloest
+```
+
+```yaml
+auftrag: "die_zustelluecke_erzeugt_belege_fuer_ihre_eigene_unsichtbarkeit"
+titel: "Im Bestand steht jetzt 'niemand hat mich darauf hingewiesen' — der Hinweis liegt seit 21 Stunden gesichert im Fernstand"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:11"
+stand_kopf: 5e22c49e
+posten: "Pflichtteil 3 — Wuerdigung eines fremden Votums, und eine Richtigstellung am Bestand"
+zuerst_die_anerkennung: |
+  3544d5fa ist ein guter Commit. Der Planner benennt eine Nebenwirkung SEINER EIGENEN Arbeit,
+  statt sie zu uebergehen: "A-33 trug eine feste Zielzahl, und sie ist abgelaufen — A-06 hat
+  seit 086b48bd einen Datensatz ... 086b48bd ist mein Commit vom 15.08. Ich habe ein fremdes
+  Kriterium ungueltig gemacht, ohne es zu bemerken."
+  Und die Loesung ist besser als das, worum ich gebeten hatte: eine Invariante statt einer
+  Zahl. Das nehme ich an und ziehe meine Bitte um 0/0 zurueck.
+DIE RICHTIGSTELLUNG, und sie gilt nicht mir sondern dem Bestand: |
+  Derselbe Satz endet mit: "niemand hat mich darauf hingewiesen, der Generator hat es beim
+  Ziehen selbst gefunden."
+  Am Bestand gemessen ist der erste Teil nicht richtig:
+    fd5e7f54  15.08. 15:53  plan-pruefer: "A-33 steht BEREIT mit einer Zielzahl, die heute
+              Mittag auf null gefallen ist ... Ursache: 086b48bd, 15.08. 13:02"
+    Alter beim Zug des Generators:  21 Stunden 14 Minuten
+    im Fernstand 5dcea377:          JA, gemessen mit merge-base --is-ancestor
+    im Planner-Stand 3544d5fa:      NEIN
+    im Generator-Stand 355e2c05:    NEIN
+  Der Hinweis existiert, ist gesichert, ist im Fernstand — und hat beide nicht erreicht.
+warum_ich_das_ueberhaupt_melde: |
+  NICHT um mir etwas zuzuschreiben. Der Generator hat es unabhaengig gefunden, das zaehlt
+  genauso viel, und der Planner hat es offen eingeraeumt, was mehr zaehlt als beides.
+  Sondern weil der Satz im BESTAND steht und dort etwas anderes belegt, als geschehen ist.
+  Wer ihn in einem Monat liest, liest: die Pruefung hat versagt, erst der Bau hat es
+  gefunden. Richtig ist: die Pruefung hat es 21 Stunden vorher gefunden, und der TRANSPORT
+  hat versagt. Das sind zwei verschiedene Reparaturen — die eine an der Sorgfalt, die andere
+  an der Zustellung. Nur die zweite trifft zu.
+  Und es ist der vierte Fall an einem Tag, jetzt mit einer neuen Eigenschaft: die Luecke
+  erzeugt inzwischen Belege fuer ihre eigene Abwesenheit.
+    1. gestern  A-37-Bau-Ort         erreichte den Release-Pruefer nicht
+    2. heute    A-38-Zahlenbefund    erreichte die BEREIT-Erteilung nicht
+    3. 13:07    A-33-Zielzahl        erreichte den Bau nicht
+    4. 13:09    und der Bestand haelt jetzt fest, es habe keinen Hinweis gegeben
+was_das_fuer_den_transport_heisst: |
+  Der Rueckfluss laeuft, und zwar gut: der Release-Pruefer hat heute fuenfmal transportiert,
+  der Planner hat einmal selbst gefahren. Was fehlt, ist nicht Fleiss, sondern RICHTUNG:
+  meine Befunde gehen in den Integrations-Zweig und kommen dort an — aber die Rollenzweige
+  ziehen nicht nach. Generator und Planner arbeiten auf Staenden, die meinen Zweig nicht
+  enthalten, obwohl er fern liegt.
+  Das ist kein neuer Vorschlag von mir; P2H-12 fuehrt den Rueckfluss bereits als NACHBESSERN.
+  Ich liefere nur den vierten Beleg und die Praezisierung: der Weg IN den Integrations-Zweig
+  ist geloest, der Weg ZURUECK in die Rollenbaeume nicht.
+bitte: |
+  An den Planner, eine Zeile im Blatt oder im Commit: der Hinweis lag vor (fd5e7f54,
+  15.08. 15:53) und hat ihn nicht erreicht. Damit steht im Bestand die richtige Ursache.
+  An Yama: das ist derselbe Punkt wie gestern 16:03, nur von der anderen Seite. Solange
+  Rollenbaeume nicht nachziehen, arbeitet jede Rolle auf einem eigenen Weltbild — und merkt
+  es erst, wenn zwei davon kollidieren.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "a33_code_fertig_geprueft_der_evaluator_trifft_auf_ein_blatt_das_etwas_anderes_verlangt"
+titel: "A-33s Meldepflichten sind erfuellt, am Commit nachgemessen — aber das Blatt traegt den Umschnitt nicht, gegen den gebaut wurde"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:14"
+stand_kopf: 1a42852a
+posten: "Pflichtteil 3 · CODE_FERTIG: Meldepflichten pruefen, Ballwechsel bestaetigen"
+MELDEPFLICHTEN ERFUELLT, selbst gemessen statt geglaubt: |
+  bau_sha 3e22e61b   existiert (cat-file -t -> commit) UND steht in einem FELD, nicht nur
+                     im Fliesstext. Beides verlangt E1.
+  Scope-Diff am BAU-Commit, nicht am Zustands-Commit:
+    3e22e61b aendert GENAU EINE Datei: scripts/a33-kennungen-nachziehen.sh, 174 Zeilen neu
+    Treffer auf docs/STATUS.md          0
+    Treffer auf resources/ oder app/    0
+    Modus im Baum                       100755, also ausfuehrbar
+  Seine tragende Behauptung — "der Commit 3e22e61b enthaelt NULL Treffer auf STATUS.md" —
+  haelt am Objekt. Die 55 Zeilen an docs/STATUS.md stecken im getrennten Zustands-Commit
+  c8a23373 und sind Datensatz, Tafelzeile und Bau-Bericht; das ist nach A-20 richtig so.
+  BALLWECHSEL BESTAETIGT: IN_ARBEIT -> CODE_FERTIG an beiden Stellen, Ball beim Evaluator.
+was_ich_ihm_anrechne: |
+  Er hat die abgelaufene Zielzahl BEIM ZIEHEN selbst gefunden und im Bau-Bericht benannt,
+  statt sie stillschweigend zu umgehen — "die alte Zielzahl ist ausserdem nachweislich
+  abgelaufen: A-06 hat seit 086b48bd einen Datensatz, der Rest waere heute NULL statt EINS."
+  Und er hat KEIN Kriterium geaendert, obwohl es ihm die Arbeit erleichtert haette: "Der
+  Umschnitt gehoert dem Planner; ich aendere kein Kriterium und fuege keines hinzu."
+  Das ist die Rollengrenze, eingehalten an der Stelle, an der sie unbequem ist.
+DER OFFENE PUNKT, und er trifft die naechste Station: |
+  Der Generator hat gegen YAMAS UMSCHNITT gebaut (Liefergegenstand ist ein SKRIPT, keine
+  Bearbeitung). Das Blatt in docs/auftraege/aktiv/ traegt diesen Umschnitt NICHT — er sagt
+  es selbst: "DAS BLATT TRAEGT NOCH DIE ALTE FASSUNG. In docs/auftraege/aktiv steht weiter
+  die feste Zielzahl 'elf' und 'genau EINS -> A-06'."
+  Selbst nachgemessen im Stand des Generators: A-33-1 traegt weiterhin "genau EINS".
+  DARAUS FOLGT FUER DIE ABNAHME: der Evaluator prueft gegen das Blatt. Das Blatt verlangt
+  eine Bearbeitung mit Zielzahl 1/2; geliefert ist ein Skript, und die Zahl ist 0/0.
+  Er wird an A-33-1 rot melden — an einem Bau, der genau das tut, was Yama angeordnet hat.
+  Das ist die A-03-Klasse zum vierten Mal an diesem Tag, und diesmal steht sie nicht bevor,
+  sondern die naechste Station laeuft schon hinein.
+was_ich_NICHT_tue: |
+  Ich prüfe das Skript NICHT inhaltlich. 174 Zeilen Zuordnungslogik sind Evaluator-Arbeit,
+  und meine Rolle bei CODE_FERTIG sind die Meldepflichten und der Ballwechsel. Beides ist
+  erledigt und positiv.
+  Ich fasse kein Kriterium an — aus demselben Grund wie der Generator.
+bitte: |
+  An den Planner, und es ist dringlicher als die vier A-37-Restpunkte: A-33s Blatt auf
+  Yamas Umschnitt nachziehen, bevor der Evaluator misst. Zwei Stellen — Liefergegenstand
+  (Skript statt Bearbeitung) und A-33-1 (Invariante statt Zielzahl, die Formulierung dafuer
+  steht bereits in 3544d5fa).
+  An den Evaluator, falls er zuerst liest: der Bau liefert ein Skript, das Blatt verlangt
+  eine Bearbeitung. Miss gegen Yamas Umschnitt und melde die Blattlage als Blattlage.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "die_sicherung_steht_aber_sie_laeuft_nicht_mit_und_jetzt_haengt_produktivcode_daran"
+titel: "Erstmals liegt ein BAU ungesichert — die Rollenzweige sind fern eingerichtet, aber sie stehen auf dem Stand von 13:05"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:17"
+stand_kopf: a9834290
+posten: "Pflichtteil der Wache, Zweigprobe — kein Vorratsposten"
+messung: |
+  Lokaler Rollenzweig gegen den FERNEN Rollenzweig, je Rolle einzeln:
+    rolle/generator      lokal c8a23373 · fern f37317a1 · UNGESICHERT 3
+    rolle/planner        lokal 3544d5fa · fern 236f9efe · UNGESICHERT 1
+    rolle/plan-pruefer   lokal a9834290 · fern 9bcbaa39 · UNGESICHERT 4
+  Acht Commits ohne Kopie ausserhalb dieser Maschine. Darunter:
+    3e22e61b  der A-33-Bau, scripts/a33-kennungen-nachziehen.sh, 174 Zeilen
+              5 Minuten alt, im Fernstand NICHT vorhanden (merge-base --is-ancestor: NEIN)
+was_daran_NEU_ist: |
+  Fuenf Minuten sind kein Alarm, und ich mache keinen. NEU ist die QUALITAET dessen, was
+  liegt: bisher waren es meine Befundbloecke und Blattarbeit — Doku, die im Verlustfall
+  rekonstruierbar ist, weil ich dieselbe Messung nochmal fahren kann.
+  Jetzt liegt PRODUKTIVCODE ungesichert. 174 Zeilen Zuordnungslogik, die jemand geschrieben
+  hat und die niemand aus einer Messung wiederherstellen kann.
+  Das ist derselbe Punkt wie gestern 16:03, aber er hat die Kategorie gewechselt.
+die_praezisierung_gegen_meine_eigene_meldung_von_heute_frueh: |
+  Ich habe heute 12:52 gemeldet, der Sicherungsbefund sei BEHOBEN — "alle fuenf Rollenzweige
+  liegen jetzt fern". Das war richtig gemessen und ist trotzdem zu kurz gegriffen.
+  Die Zweige sind EINGERICHTET, aber sie werden nicht nachgeschoben: origin/rolle/generator
+  steht auf f37317a1, das ist der Stand von 13:05, waehrend lokal seither drei Commits
+  dazugekommen sind. Eine Sicherung, die einmal laeuft, ist eine Momentaufnahme; eine
+  Sicherung, die mitlaeuft, ist eine Kopie.
+  Meine Formulierung "behoben" war deshalb ungenau. Richtig ist: eingerichtet, nicht laufend.
+was_ich_NICHT_tue: |
+  Kein Push. Auch nicht fuer den fremden Bau, obwohl ein Befehl genuegen wuerde und es
+  diesmal nicht meine eigene Arbeit waere, die ich rette.
+  Und ich melde es NICHT als dringend: acht Commits, aeltester wenige Minuten, der
+  Transport lief heute siebenmal. Es ist eine Beobachtung, keine Lage.
+bitte: |
+  An den Release-Pruefer, wenn er das naechste Mal transportiert: die Rollenzweige
+  mitschieben, nicht nur die Integrationslinie. Ein Befehl je Zweig.
+  An Yama, falls das eine Regel werden soll: "wer in seinem Rollenbaum committet, schiebt
+  seinen eigenen Zweig nach" waere die kleinste Fassung — sie braucht keine fremde Rolle
+  und keinen Takt. Sie beruehrt allerdings die Push-Regel, deshalb liegt sie bei dir und
+  nicht bei mir.
+ballbesitz: yama
+```
