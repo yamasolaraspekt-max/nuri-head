@@ -113,16 +113,23 @@ P6  ROT-LAGE MIT UHR
   K6 gemeldet werden** — dort nannte kein Kriterium die Kanten.
   **Positivprobe daneben:** A-35, A-36 und A-38 tragen ein Kanten-Kriterium und werden **nicht**
   gemeldet. *(Gemessen 16.08.: 3 von 4 Blättern mit Kantenliste hatten eines.)*
-- **A-39-3** · **P2 findet A-33-1 („genau EINS") und A-37-11 („Suite 1750") am jeweils alten
+- **A-39-3** · **P2 findet A-33-1 („genau EINS", Stand **`8559b555`**) und A-37-11 („Suite 1750",
+  Stand **`7ef8f046`**, 14.08. 22:35) am jeweils alten
   Stand** — und meldet **nicht** die heutigen Fassungen, die an Invariante bzw. Bau-Stand gebunden
   sind. **Das ist die schärfste Probe: dieselbe Datei, zwei Stände, zwei Antworten.**
-- **A-39-4** · **P3 findet A-37-12 am Stand vor A-37-16** — die Marke ohne Erzeuger.
+- **A-39-4** · **P3 findet A-37-12 am Stand `7ef8f046`** (vor A-37-16) — die Marke ohne Erzeuger.
+  *(A-39-3, -4 und -11 nannten bis 16.08. keinen festen Stand, während A-39-2, -5 und -6 es taten
+  — **dieselbe Art Angabe, zwei Handhabungen, in dem Blatt, das genau diesen Fehler prüft.** Der
+  Plan-Prüfer hat die drei fehlenden Stände nicht nur bemängelt, sondern **gesucht und geliefert**;
+  sie stehen jetzt hier.)*
 - **A-39-5** · **P4 findet A-33-7 am Stand vor `5db5f8a9`** — „`scripts/` null Mal" gegen `art:`.
 - **A-39-6** · **P5 findet den doppelten `exit 3`** am Stand vor `5bbc55bf`.
-- **A-39-11** · **P6 findet die Rot-Lage mit Uhr.** Gegen den Stand von A-38 **vor** der
-  Umstellung auf feste SHAs gefahren, **muss A-38-2 gemeldet werden** — dort belegte
-  *„28 von 32 Merges"* aus einem `--since='48 hours ago'`-Fenster.
-  **Negativprobe:** die heutige Fassung, die fünf feste SHAs nennt, wird **nicht** gemeldet.
+- **A-39-11** · **P6 findet die Rot-Lage mit Uhr.** Gegen **`5bbc55bf`** gefahren — den Stand von
+  A-38 **vor** der Umstellung —, **muss A-38-2 gemeldet werden**: dort belegte *„28 von 32
+  Merges"* aus einem `--since='48 hours ago'`-Fenster.
+  **Negativprobe am selben Paar:** die heutige Fassung mit fünf festen SHAs wird **nicht**
+  gemeldet. *(Gegenprobe des Plan-Prüfers: in `5bbc55bf` steht „28 von 32" zweimal und feste
+  SHAs null Mal, heute umgekehrt — der Stand trägt genau das, was P6 finden soll.)*
   **Und die Probe, die den Sinn trägt:** ein Kriterium, das eine Zahl **mit** Zeitstempel oder
   `Bau-Stand` nennt, ist **kein** Fund — P6 sucht das **wandernde Fenster**, nicht jede Zeitangabe.
   *(Sonst meldet es jede Messvorschrift und wird weggeklickt — A-03.)*
