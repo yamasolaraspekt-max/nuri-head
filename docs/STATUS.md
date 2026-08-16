@@ -1923,6 +1923,67 @@ die_entscheidung_R1_R2_R3_und_meine_befangenheit: "Der Planner legt Yama drei We
 ballbesitz: yama
 ```
 
+## DIE ZWEI NEUEN EVALUATOR-BERICHTE GELESEN — der herrenlose Punkt ist aufgeklaert, KEIN Befund (Release-Pruefer, 16.08.)
+
+```yaml
+yamas_frage_und_die_ehrliche_antwort: |
+  "hast du den letzten bericht von evaluator gelesen" — NEIN, nicht vollstaendig, und das sage
+  ich lieber als es zu behaupten. Auf seine Bitte hatte ich 5dd5eaee gelesen (A-35, 15.08.).
+  Seither sind ZWEI dazugekommen, 75c471cf und b040f299 vom 16.08. Ich habe beide
+  TRANSPORTIERT und ihre Betreffzeilen gelesen — ihren Inhalt nicht. Transport ist keine
+  Lektuere, und ein Bericht, den ich weiterreiche ohne ihn zu lesen, ist genau die Klasse
+  Zahl-ohne-Oeffnen, die ich an anderen messe. Jetzt nachgeholt.
+
+WAS DRINSTEHT, in einem Satz je Bericht: |
+  75c471cf  A-33 SPEC_BLOCKED. Sechs von sieben Kriterien gruen und selbst gefahren, aber
+            A-33-7 ist mit dem EIGENEN Blatt unvereinbar: es verlangt woertlich "der Bau-Commit
+            fasst NUR docs/STATUS.md an, scripts/ null Mal", waehrend der Kopf art: seit Yamas
+            Umschnitt genau dieses Skript unter scripts/ verlangt. Gemessen an 3e22e61b:
+            docs/STATUS.md 0, scripts/ 1. Der Generator kann A-33-7 nur erfuellen, indem er
+            Yamas Anweisung bricht. Ball beim Planner — der Umschnitt hat A-33-1 neugefasst und
+            A-33-7 stehen lassen, dazu messen -3/-5/-6 noch "vor und nach dem Bau", obwohl der
+            Bau die Datei nicht mehr anfasst.
+  b040f299  Er korrigiert seinen EIGENEN Messtisch: A-33-5 hatte er als STILLE gemessen statt
+            als WIRKUNG. Neu je Kennung einzeln: paarbar vorher 0 von 11, nachher 11 von 11.
+            Und er nimmt einen fertigen P1 zurueck — die U+2013-gegen-U+2014-Meldung hatte er
+            als Schaden gelesen, sie ist zur Haelfte der Wirkungsnachweis.
+
+DER PUNKT OHNE EIGENTUEMER, und darum habe ich ihn genommen: |
+  Er schreibt woertlich: "Offen ohne Bewertung: a26 meldet im STAND-Modus nichts, wo der
+  Arbeitsbaum-Modus 31 Zeilen meldet; nicht geklaert, gehoert nicht zu A-33."
+  Das ist ein Waechter-Befund ohne Ball, und es ist MEINE Klasse — der Unterschied zwischen
+  Arbeitsbaum und Commit ist der Fehler, den ich am 13.08. an mir selbst gefunden habe.
+
+AUFGEKLAERT, und es ist KEIN Befund: |
+  Die zwei Modi messen verschiedene Zeitpunkte, nicht verschieden gut:
+    Standard      git diff HEAD -- DATEI          sieht UNCOMMITTIERTE Aenderungen
+    --stand SHA   git diff SHA^ SHA -- DATEI      sieht genau EINEN Commit
+  Erste Messung: keiner der letzten 40 STATUS.md-Commits meldet im STAND-Modus etwas. Das ist
+  KEIN Beweis fuer Blindheit — es kann auch heissen, dass keiner Drift trug. Also die
+  Gegenprobe gebaut statt geschlossen:
+    Wegwerf-Zweig zz-probe-a26, ein ECHTER Commit mit ECHTER Drift (A-35 Tafel auf ENTWURF,
+    Datensatz bleibt BETRIEBSBESTAETIGT).
+    STAND-Modus auf genau diesen Commit:  A-26-WARNUNG, Zeile fuer Zeile richtig, Exit 1.
+  DER STAND-MODUS IST NICHT BLIND. Er meldete nichts, weil nichts da war.
+  Damit ist auch die 31-gegen-0-Beobachtung erklaert, und der Evaluator hat die Erklaerung im
+  anderen Bericht selbst schon: die 31 Zeilen lagen im ARBEITSBAUM, nicht im Commit — ein
+  Zwischenzustand, den E1 nicht misst. Beide Modi sind richtig, sie beantworten zwei Fragen.
+
+aufgeraeumt: |
+  Der Wegwerf-Zweig ist entfernt. Er trug eine ABSICHTLICHE Faelschung, lag auf keiner
+  Gegenstelle (0 Treffer gemessen) und war eine Minute alt — ihn stehen zu lassen waere
+  gefaehrlicher gewesen als ihn zu loeschen, weil ein Merge daraus A-35 zurueckgeholt haette.
+  Danach geprueft: 0 zz-Zweige, 0 uncommittierte Dateien, A-35 in der echten Datei
+  BETRIEBSBESTAETIGT.
+
+was_offen_bleibt_und_wem_es_gehoert: |
+  A-33-7 und die drei mitgezogenen Kriterien — Planner, er hat den Ball.
+  An Yama geht aus diesen zwei Berichten NICHTS. Der Widerspruch geht zwar auf seinen Umschnitt
+  zurueck, aber die Behebung ist Blattarbeit und braucht keine neue Entscheidung von ihm.
+
+ballbesitz: —  # der herrenlose Punkt ist geschlossen, der Rest liegt beim Planner
+```
+
 ## ⚠ AKUT — das Rollen-Tor SPERRT zwei Rollen, und ich habe es ausgeliefert (Release-Pruefer, 16.08.)
 
 ```yaml
