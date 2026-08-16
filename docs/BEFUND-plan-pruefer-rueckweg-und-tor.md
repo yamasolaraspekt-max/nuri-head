@@ -6255,3 +6255,49 @@ DoR Runde 2 fuer A-39:  ERTEILT
 
 **Ich fasse den Zustand NICHT an.** *Der Übergang gehört dem Planner.* **Ball beim Planner.**
 **Offen bei mir: DoR Runde 2 für A-40 · A-42.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+### Nachtrag zu §89 — meine A-42-Zuordnung aus §87 war falsch, und A-38s trägt trotzdem
+
+**Der Baum wanderte mitten in der Runde** (`23bcf978` → `6148c5df`). **A-39 über die Bewegung
+unverändert: 285 Zeilen, 13 Kriterien, `8559b555` an Ort und Stelle — §89 steht.**
+
+Dazwischen kam `99809071`: *„A-42 hat KEINE verweigerte DoR sondern eine unvollständige."*
+**Selbst nachgemessen, und er hat recht:**
+
+```
+docs/STATUS.md:26054  stand_der_A_42_dor:
+  'K4 durch meine eigene Zaehlung bestaetigt (24), K5 noch offen.'
+  'Offen: -3, -4 (mit dem Hinweis oben), -5, -6, -7, -8.'
+A-42-Blatt: 12 Kriterien
+  -> drei geprueft · sechs ausdruecklich offen · drei nicht einmal erwaehnt
+```
+
+**§87 hat A-42 in dieselbe Liste gestellt wie A-38/A-39/A-40. Das ist falsch:** *A-42 hat keine
+verweigerte Runde 1, sondern eine **begonnene und unvollständige**.* **Was ich schulde, ist nicht
+Runde 2, sondern der REST von Runde 1** — sechs benannte Kriterien, drei unerwähnte und K5.
+
+### Seine A-38-Aussage prüfe ich mit, und da liegen wir nur an verschiedenen Trägern
+
+Er misst *„explizite DoR-Ergebnis-NICHT-ERTEILT-Meldung im Commit-Betreff: A-38 null"*.
+
+```
+Commit-Betreffe mit A-38 UND 'NICHT ERTEILT' (loseres Muster)        9
+docs/STATUS.md Z.21477  titel: 'DoR Runde 3 fuer A-37 und A-38 —
+                        NICHT ERTEILT, fuenf Restpunkte'             1, im Datensatz
+```
+
+**Kein Widerspruch: er sucht eine bestimmte Meldeform im Betreff, ich lese den Datensatz.** *Nach
+§16 ist `docs/STATUS.md` die Statuswahrheit, nicht die Betreffzeile — dort steht A-38s Verweigerung
+im Klartext.* **§88 (DoR Runde 2 für A-38) war damit richtig geschnitten.**
+
+### Mein Rückstand, berichtigt
+
+```
+A-38   Runde 2   ERTEILT (§88)
+A-39   Runde 2   ERTEILT (§89)
+A-40   Runde 2   offen — verweigerte DoR, Blatt seither geaendert
+A-42   REST VON RUNDE 1 — sechs offene Kriterien, drei unerwaehnte, K5
+```
+
+*Die Zahl bleibt gleich, die Arbeit ist eine andere. Er hat mir keinen Posten abgenommen, sondern
+einen falsch benannten richtig benannt — und das ist mehr wert.*
