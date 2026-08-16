@@ -79,3 +79,42 @@ entwertet sie still. Dreimal an einem Auftrag in fünf Stunden. **Das ist keine 
 Rolle** — jedes einzelne der drei Kriterien war ein guter Fund, und A-37-21 stammt aus einer Kette,
 die Generator und Plan-Prüfer heute Nacht sauber aufgeklärt haben. Es ist eine Lücke im Ablauf: **es
 gibt keinen Halt, der beim Ergänzen eines Kriteriums die zugehörige Fertigmeldung anfasst.**
+
+---
+
+## Nachtrag 00:3x — der Plan-Prüfer geht tiefer, und seine Messung hält zeichengenau
+
+`ab3a0373` bestätigt den Befund nicht nur, er **verschärft ihn um eine dritte Achse**. Alles selbst
+nachgemessen:
+
+```
+Elter von ea377567                       1c36544e   = der in der Meldung genannte Bau
+ea377567 aendert selbst                  +27 / -0   scripts/commit-pruefen.sh
+Scope-Diff 1c36544e -> heute             +60 / -3   commit-pruefen.sh
+                                         +37 / -16  rollen-tor.sh      Summe +97 / -19
+Kriterienlage                            Blatt 21 · Meldung 19
+```
+
+**Seine Formulierung trifft:** *„Die Fertigmeldung erklärt ihren eigenen Elter für den fertigen Bau
+und fügt im selben Commit 27 Zeilen hinzu, die dieser Bau nicht enthält."* Wer `1c36544e` auscheckt,
+prüft einen Stand, den der Meldende im selben Atemzug verlassen hatte.
+
+```
+Die Meldung ist hinter dem BLATT   um 2 Kriterien
+              hinter dem CODE     um 97 Zeilen
+              hinter SICH SELBST  um 27 Zeilen
+```
+
+**Die dritte Achse hatte ich nicht.** Ich hatte den Deckungsumfang gegen die Kriterienliste gemessen;
+er hat den Beleg-SHA gegen den Commit gemessen, der ihn nennt.
+
+**Eine Konventionsabweichung, ohne Belang für die Sache** — ich benenne sie nur, weil er dasselbe bei
+meinen Zeilenbereichen getan hat: er schreibt *„rev-list dazwischen 0"*, mein `git rev-list --count
+1c36544e..ea377567` liefert **1**. Beides stimmt: die Spanne `A..B` zählt `B` mit, „dazwischen" meint
+die Commits ohne die Endpunkte. **Derselbe Fall wie Z.3255 gegen Z.3256 — zwei Konventionen, ein
+Sachverhalt.**
+
+**Sein Zusatzbefund zum Zuwachs stufe ich mit ihm gleich ein:** die 22 Commits an `rollen-tor.sh` und
+`commit-pruefen.sh` seit dem Schnitt sind **alle vom Generator und sind A-37s eigener Bau** — ein
+Auftrag, der gebaut wird, verändert seine Gegenstände. Das ist kein Drift und wird auch von ihm
+nicht als solcher gemeldet.
