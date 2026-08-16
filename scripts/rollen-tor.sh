@@ -43,6 +43,10 @@
 #                                                  Rollenfehler. Sonst sucht jemand eine
 #                                                  Rollenverwechslung, die es nicht gibt.
 # K5  integrator im gemeinsamen Checkout        -> erlaubt, das ist sein Baum
+# --  Zweig stimmt, VERZEICHNIS weicht ab       -> erlaubt MIT HINWEIS. Der Zweig ist der
+#                                                  verlaessliche Schluessel, git laesst ihn nur
+#                                                  EINMAL auschecken; ein Verzeichnisname nicht.
+#                                                  GEHT UEBER DIE SECHS KANTEN HINAUS — gemeldet.
 # K6  ANDERE Rolle im gemeinsamen Checkout,     -> erlaubt MIT HINWEIS auf den wartenden Baum.
 #     deren eigener Baum SCHON STEHT               EIGENER Fall, KEINE Variante von K3:
 #                                                  K3 greift nur wenn das Verzeichnis FEHLT.
@@ -137,7 +141,29 @@ if [ ! -d "$SOLL_PFAD" ]; then
   exit 0
 fi
 
-if [ "$VERZ" = "$SOLL_VERZ" ] && [ "$ZWEIG" = "$SOLL_ZWEIG" ]; then
+# DER ZWEIG ENTSCHEIDET, das Verzeichnis wird nur GEMELDET.
+#
+# **Gemessen am 16.08., nachdem der Plan-Pruefer den Transporteur gesperrt fand:** der
+# Release-Pruefer arbeitet in `ticket-release-pruefung`, meine Tabelle nannte
+# `ticket-rolle-release` — dort liegt nur noch ein detached HEAD. Mein Tor gab ihm exit 1, und er
+# ist der, der den Transport faehrt.
+#
+# **Warum der Zweig und nicht das Verzeichnis:** *git erzwingt, dass ein Zweig in HOECHSTENS EINEM
+# Worktree ausgecheckt ist* — die Gegenprobe gefahren, `git worktree add` auf einen belegten Zweig
+# scheitert mit „already used by worktree at …". **Damit IST der Zweig die Zuordnung**; der
+# Verzeichnisname ist eine Setup-Entscheidung, die sich umbenennen laesst, ohne dass jemand es
+# merkt. Ein Tor, das am Namen haengt, sperrt beim naechsten Umbenennen wieder.
+#
+# **Die vorgeschlagene Abhilfe war eine Zeile** — die Tabelle auf `ticket-release-pruefung` ziehen.
+# *Sie behebt den Fall und nicht die Klasse.* **Diese hier behebt die Klasse und meldet die
+# Abweichung trotzdem**, damit niemand sie fuer beabsichtigt haelt.
+if [ "$ZWEIG" = "$SOLL_ZWEIG" ]; then
+  if [ "$VERZ" != "$SOLL_VERZ" ]; then
+    echo "ROLLEN-TOR  HINWEIS  '$ROLLE' ist auf ihrem Zweig, aber in einem anderen Verzeichnis." >&2
+    echo "            erwartet laut Tabelle: $SOLL_VERZ" >&2
+    echo "            gefunden:              $VERZ  auf  $ZWEIG" >&2
+    echo "            Durchgelassen: der Zweig ist eindeutig (git laesst ihn nur EINMAL auschecken)." >&2
+  fi
   exit 0
 fi
 
