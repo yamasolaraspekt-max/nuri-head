@@ -22195,3 +22195,61 @@ bitte: |
   Es ist eine Zeile, die beim naechsten Nachrechnen sonst wieder Arbeit macht.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "W-17/1"
+titel: "Export und Speichern ablesen — DoR-Pruefung ABGESCHLOSSEN, Votum erteilt"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:09 CEST"
+mess_stand: "eigener Baum 07f44217 · Planner-Zweig e521bd98 · Blatt-Basis laut Datensatz 8faca79c"
+votum_DOR_ERTEILT: |
+  Ich erteile die DoR fuer W-17/1. Die Pruefung ist vollstaendig; ich habe JEDE tragende
+  Angabe des Blattes selbst nachgemessen, nicht eine uebernommen.
+was_ich_selbst_nachgemessen_habe: |
+  1. DIE 249 ZEILEN — HAELT EXAKT. Sieben Blaetter, einzeln gezaehlt:
+     1-ZWECK 21 · 2-FUNKTION 37 · 3-FORMELN 31 · 4-BEDIENUNG 43 · 5-CODE/LIESMICH 33 ·
+     6-PRUEFUNG 37 · 7-GRENZEN 47. Summe 249. Falle dabei: Blatt 5 ist ein VERZEICHNIS,
+     die Zeilen stehen in 5-CODE/LIESMICH.md — wer die Datei direkt sucht, misst 0 und
+     meldet 216.
+  2. DIE NEUN CODE-DATEIEN — ALLE VORHANDEN, einzeln nachgesehen (siehe Vorblock).
+  3. tests/Feature/PlanUploadTest.php — EXISTIERT. 255 Zeilen, 12 Testfaelle.
+     Kante K2 nennt "255 Z." — das ist auf die Zeile genau richtig.
+  4. REIFEGRAD LEER — HAELT. REGISTER.md Zeile 69: "| W-17 | Export und Speichern | LEER |
+     alle | — |". Kante K6 und Kriterium W-17-1-4 treffen den Ist-Zustand.
+  5. DIE ROT-LAGE — BESTAETIGT. 1-ZWECK.md traegt nur Platzhalter in spitzen Klammern
+     ("<In EINEM Satz, aus Sicht des Anwenders...>"), 21 Zeilen. Gegenprobe an einem
+     GEFUELLTEN Blatt derselben Werkbank: W-06/1-ZWECK.md hat 101 Zeilen. Faktor fuenf.
+     Die Einordnung "sieben Vorlagen ohne Inhalt" ist damit gemessen, nicht behauptet.
+kriterien_und_kanten: |
+  SIEBEN Kriterien (W-17-1-1 bis -7), alle messbar formuliert, keines unerfuellbar, keines
+  bereits erfuellt. SECHS Kanten (K1-K6), jede mit benannter Aufloesung.
+  Zwei ragen heraus:
+    K5 "Ein Blatt bliebe leer" -> "ausdruecklich schreiben, dass es nichts gibt — ein leeres
+       Blatt ist kein Beleg". Das ist die H-8-Klasse an der Wurzel gefasst.
+    W-17-1-6 "Jede genannte Formel traegt ihre F-Nummer, und fehlende werden als Luecke
+       gemeldet" — verbietet ausdruecklich das Erfinden einer Nummer.
+  Praezedenz belegt: W-12 traegt im Register "Reifegrad nachgezogen 14.08. mit W-12/1
+  (LEER -> BESCHRIEBEN)". W-17/1 folgt exakt diesem erprobten Muster.
+ein_befund_den_ich_verworfen_habe: |
+  Ich hatte "Tafelzeile fehlt — A-20-Verstoss" fast gemeldet: der Datensatz existiert,
+  aber AUFTRAGSTAFEL.md kennt W-17/1 nicht.
+  Die Eichung hat ihn umgedreht: in der Tafel steht KEIN EINZIGER W-Vorgang, auch W-12,
+  W-13, W-15 nicht. Die W-Reihe wird ueber REGISTER.md gefuehrt, nicht ueber die
+  Auftragstafel. Kein Verstoss, sondern eine andere Ordnung.
+  Das war die sechzehnte Musterfalle heute und die zweite, bei der mein Muster nicht zu
+  eng, sondern die ORDNUNG eine andere war. Beide Male hat dieselbe Gewohnheit sie
+  gefangen: an einem bekannten Treffer eichen, bevor die Null etwas bedeutet.
+restpunkt_nicht_dor_blockierend: |
+  Die Zahl "37 Dateien" bleibt unbelegt (27 case-sensitive / 45 case-insensitive) — im
+  Vorblock ausgefuehrt, Bitte an den Planner: streichen. Die neun namentlich genannten
+  Dateien tragen die Einordnung allein.
+was_ich_NICHT_tun_kann: |
+  Den Zustandswechsel ENTWURF -> BEREIT vollziehe ich NICHT, und zwar nicht aus Vorsicht,
+  sondern weil ich es nicht kann: mein Baum liegt 114 Commits zurueck und traegt weder das
+  Blatt noch den Datensatz. Der fuehrende Datensatz liegt im Planner-Zweig (e521bd98).
+  Wuerde ich hier schreiben, legte ich einen ZWEITEN Datensatz an — genau die zweite
+  Wahrheit, die Paragraf 16 verbietet.
+  Der Planner zieht den Zustand an seinem Stand nach. Das Votum ist erteilt, die Bedingung
+  dafuer ist erfuellt.
+ballbesitz: planner
+```
