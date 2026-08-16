@@ -439,12 +439,31 @@ def blatt_gefunden(kennung):
 # einem Transport liegt ein Commit auf mehreren Zweigen, und der Ursprung ist daraus nicht mehr
 # rekonstruierbar. Gemeldet wird deshalb der belegbare Fall — die Rollenmarke nennt eine Rolle,
 # und auf DEREN Zweig liegt der Commit nicht.
+# ── WELCHER ZWEIG GEHOERT ZU WELCHER ROLLE ──────────────────────────────────────────────────
+#
+# **Nicht `rolle/<name>` fuer alle — der INTEGRATOR hat keinen solchen Zweig.** Er arbeitet im
+# Integrations-Checkout, und `rolle/integrator` existiert nicht.
+#
+# **Gemessen am 16.08.:** die erzeugte Tafel meldete `A-37` als „Zustand im fremden Zweig", weil
+# die Rollenmarke `integrator` lautet und meine Zuordnung nach `rolle/integrator` suchte. *Ein
+# Fehlalarm, der bei JEDEM Zustands-Commit des Integrators wieder kaeme* — **und ausgerechnet bei
+# der Rolle, die als einzige die Statuswahrheit schreibt.**
+#
+# ***Dieselbe Klasse wie die Verzeichnistabelle im Rollen-Tor:*** *eine Zuordnung, die aus dem
+# Namen gerechnet statt nachgeschlagen wird, bricht beim ersten Sonderfall.*
+#
+# Die Instanznummer faellt weg (`plan-pruefer-2` ist `plan-pruefer`), wie im Tor bei K1.
+def zweig_der_rolle(rolle):
+    stamm = re.sub(r"-[0-9]+$", "", rolle)
+    return "auto/hausplaner-integration" if stamm == "integrator" else f"rolle/{stamm}"
+
 _ZWEIG_VON = None
 def zweige_mit(sha, muster):
     global _ZWEIG_VON
     if _ZWEIG_VON is None:
         _ZWEIG_VON = {}
-        for z in lauf("git", "for-each-ref", "--format=%(refname:short)", "refs/heads/rolle/*").split("\n"):
+        for z in lauf("git", "for-each-ref", "--format=%(refname:short)",
+                      "refs/heads/rolle/*", "refs/heads/auto/hausplaner-integration").split("\n"):
             if not z.strip():
                 continue
             for s in lauf("git", "log", z, "--no-merges", muster, "--format=%H").split("\n"):
@@ -503,7 +522,7 @@ if MODUS == "tafel":
     for k in sorted(tafel):
         e = tafel[k]
         liegt = zweige_mit(e["voll"], MUSTER)
-        if liegt and f"rolle/{e['rolle']}" not in liegt:
+        if liegt and zweig_der_rolle(e["rolle"]) not in liegt:
             fremd.append((k, e, liegt))
     if fremd:
         print(f"\n  K6 · ZUSTAND IM FREMDEN ZWEIG — Zeile erzeugt UND gemeldet: {len(fremd)}")
