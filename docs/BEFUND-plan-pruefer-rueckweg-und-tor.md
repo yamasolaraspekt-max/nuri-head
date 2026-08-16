@@ -1408,3 +1408,76 @@ Barriere bleibt zu Recht stehen** — sie schützt vor Erzeugen, nicht vor Buchf
 
 **Ball: integrator.** Die 137 Bälle sind jetzt buchhalterisch rückgebbar; meine neun Punkte 1, 2, 5
 und 6 sind darunter. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## A-40: meine eigene Korrektur wiederholt den Fehler, den sie korrigiert — 64 ist wieder ein Zeilenzähler
+
+*Vorratsprüfung Posten (a) an A-40 · gemessen 16.08. gegen `d2c14029`, Basis `99add90f`*
+
+### Der Fund, und er ist meiner
+
+A-40 führt meine drei DoR-Befunde als *„alle nachgemessen und alle zutreffend"* und behebt sie mit
+drei Auflagen. Der erste Befund lautet dort wörtlich:
+
+```
+Der Befehl zaehlt ZEILEN, nicht Kennungen:   87 Zeilen  ->  64 Kennungen
+```
+
+Und **Auflage (a)** zieht daraus die richtige Folgerung:
+
+> *gezählt wird **je Kennung**, nicht je Zeile — eine Kennung mit drei Definitionsstellen ist EIN
+> Eintrag ohne Ampel, nicht drei*
+
+**Die Auflage ist richtig. Die Zahl daneben ist es nicht.** Gemessen im Verzeichnis
+`docs/rollenkette/werkbank/01-MATHEMATIK/` über beide Sammlungen:
+
+```
+                                        Basis 99add90f    heute d2c14029
+Ueberschriftenzeilen  ^### [FNS]-ddd          64                64
+verschiedene Kennungen darin                  62                62
+```
+
+**64 ist die Zahl der Definitionszeilen. Die Zahl der Kennungen ist 62.** Die Differenz ist
+vollständig erklärt und sie ist ausgerechnet das Beispiel, das die Auflage selbst anführt:
+
+```
+N-003 hat DREI Definitionsstellen:
+   Z.754  N-003 · Sparren-Vorbemessung (Biegung + Durchbiegung) · FACH-GATE
+   Z.784  N-003 · Geltungsbereich — von Yama festgelegt 12.08., DAUERGELB
+   Z.814  N-003 · AUFLAGE an die Ausgabe — keine stille Zahl
+
+64 − 3 + 1 = 62
+```
+
+**Ich habe einen Zeilenzähler (87) durch einen anderen Zeilenzähler (64) ersetzt und ihn
+„Kennungen" genannt** — genau der Fehler, den derselbe Befund anprangert, im selben Codeblock, drei
+Zeilen über der Auflage, die ihn verbietet. **Das ist Fehler 23**, und er wiegt schwerer als die
+vier Musterfehler dieser Nacht: die waren Fehlbefunde vor dem Melden, dieser steht seit dem
+Nachmittag in einem fremden Blatt und stützt dort eine Auflage.
+
+### Was daran NICHT zu beanstanden ist
+
+**Die Zahl ist stabil, nicht gewandert** — 64/62 an beiden Ständen. Kein Alterungsproblem.
+
+**Die 87 kann ich nicht widerlegen**, weil das Blatt das Muster nicht mitliefert, mit dem sie
+erhoben wurde. Der weite Zählweg (jede Zeile, die irgendwo eine Kennung nennt) ergibt am
+Basis-Stand **165**, nicht 87. **Ich melde das als nicht nachprüfbar, nicht als falsch** — und es
+ist ein Beleg mehr für die Musterregel, die ich vorhin zugestellt habe: *wer eine Kennungszahl
+nennt, nennt die Form dazu.*
+
+**Auflage (c) ist bereits erfüllbar und sinnvoll**, getrennt gemessen:
+
+```
+FORMELSAMMLUNG.md    32 Definitionszeilen   30 Kennungen
+SOLAR-REGELWERK.md   32 Definitionszeilen   32 Kennungen
+```
+
+**Nur die F-/N-Seite trägt überhaupt Mehrfachstellen.** Eine Summe über beide hätte das verdeckt —
+Auflage (c) greift genau richtig.
+
+### Soll
+
+**In A-40 die Zeile berichtigen:** `87 Zeilen -> 64 Kennungen` wird zu **`87 Zeilen -> 64
+Definitionsstellen -> 62 Kennungen`**. Die Auflage (a) bleibt unverändert richtig; sie bekommt nur
+die Zahl, die zu ihr passt.
+
+**Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
