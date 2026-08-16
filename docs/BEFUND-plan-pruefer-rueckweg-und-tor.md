@@ -1569,3 +1569,85 @@ und der dritte Beleg für die zugestellte Musterregel.
 
 **Ball: planner** — Fehler 23 auch in A-39s Schlussabschnitt, dazu die Ausnahme-Größe für A-40s
 Auflage (b). **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## A-39 · DoR-Ergebnis: NICHT ERTEILT — genau EIN §5-Punkt fehlt, und er ist eine Zeile
+
+*§5-Durchgang vollständig gefahren · gemessen 16.08. gegen `6b844aed`, Basis `99add90f`*
+
+### Der fehlende Punkt
+
+§5 verlangt für ein **neu zu bauendes** Werkzeug ausdrücklich einen **benannten Erstnutzer**:
+
+> *„Schreibt der Auftrag ein **neu zu bauendes** Werkzeug vor, tritt an die Stelle ein **benannter
+> Erstnutzer**: welche Rolle es ab wann in welchem Ablauf benutzt."* — belegt an A-04-6.
+
+A-39 baut `scripts/blatt-pruefen.sh`. Gemessen, was das Blatt dazu sagt:
+
+| §5 verlangt | A-39 sagt | |
+|---|---|---|
+| **in welchem Ablauf** | *„Es läuft im DoR-SCHRITT, nicht im Tor"* (Z.6), eigener Abschnitt Z.43 | **genannt** |
+| **welche Rolle** | nirgends als Nutzer; `plan-pruefer` steht nur in `dor_beleg`, `ballbesitz` und als Verweis | **herleitbar, nicht genannt** |
+| **ab wann** | — | **fehlt** |
+
+**Das ist der einzige Punkt, an dem ich A-39 hängen sehe** — und §5 ist dort eindeutig: *„Fehlt ein
+Punkt, bleibt der Auftrag `ENTWURF`."* Es ist eine Zeile im Kopf, kein Umbau.
+
+### Was ich geprüft habe und was trägt
+
+**Alle acht eigenen Prüfungen, gegen A-39 selbst gehalten — es besteht sie:**
+
+```
+P1  besteht   A-39-8 nennt "alle sechs Kanten K1-K6" — die von P1 erlaubte Sammelform
+P2  besteht   kein Kriterium bindet eine Zahl an einen Bestand ohne Standbezug;
+              A-39-10 verbietet es sogar ausdruecklich ("nicht gegen eine feste Zahl pruefen")
+P3  besteht   A-39-1 verlangt das Skript, art: nennt es als Liefergegenstand
+P4  besteht   A-39-9 schliesst resources/, app/, docs/STATUS.md und commit-pruefen.sh aus —
+              NICHT scripts/blatt-pruefen.sh, das der Kopf liefert. Praezise vermieden.
+P5  besteht   A-39 vergibt selbst nur EINEN Code (Rueckgabe 0 in A-39-7); alle vier
+              exit-Nennungen sind Belegfaelle ueber A-37s doppelten exit 3
+P6  besteht   alle sieben Belegstaende sind feste SHAs, kein wanderndes Fenster
+P7  besteht   siehe Staende unten
+P8  besteht   K4 behandelt den Nicht-Ziel-Pfad ausdruecklich
+```
+
+**Alle sieben zitierten Belegstände existieren und sind vom heutigen Stand erreichbar:**
+
+```
+0ee521f7  8559b555  5db5f8a9  5bbc55bf  7ef8f046  a613100e  e802c1f8
+```
+
+**Zwei davon inhaltlich geöffnet** (im vorigen Befund belegt): der Fall liegt jeweils wortgenau dort.
+
+**A-39-10 ist am Bauort ausführbar** — `gebaut_in: ticket-rolle-generator`, und dieser Baum trägt
+`node_modules` **und** `tsc`. *In meinem Baum fehlt beides; das ist ohne Belang, weil dort nicht
+gebaut wird.* **Gemessen, nicht angenommen.**
+
+**Der Positivfall A-39-7 ist konstruierbar** — von 40 geprüften Blättern nennen 4 ihre Kanten
+sammelweise.
+
+### A-39s eigene P8-Selbstmessung nachgeprüft: die Aussage hält, die Zahl ist gewachsen
+
+Das Blatt begründet seinen Suchraum nicht mit dem Pfad, sondern misst gegen P8:
+
+> *„**32 Dateien außerhalb** tragen ebenfalls `auftrag: "X-NN"` … **Keine einzige trägt
+> `## Abnahmekriterien`.**"*
+
+```
+Dateien ausserhalb docs/auftraege/ mit auftrag:-Feld   heute  35   (Blatt: 32, gemessen 18:3x)
+davon mit '## Abnahmekriterien'                        heute   0   (Blatt: keine einzige)
+```
+
+**Die tragende Aussage hält exakt: null.** Die Zahl ist in gut vier Stunden von 32 auf 35
+gewachsen — **und drei davon gehen auf mich**, `docs/BEFUND-plan-pruefer-rueckweg-und-tor.md` ist
+selbst eine der 35. **Kein Mangel:** solange keine Außendatei Abnahmekriterien trägt, fallen beide
+Mengen zusammen und das Suchraum-Argument steht. *Aber es steht auf einer Zahl, die sich bewegt —
+und die Bewegung kommt vom laufenden Betrieb, nicht von einem Fehler.*
+
+### Soll
+
+**Eine Zeile im Kopf**, etwa: `erstnutzer: "plan-pruefer, ab dem ersten DoR-Durchgang nach dem Bau
+— vor der Erteilung, an jedem Blatt in docs/auftraege/aktiv/."` Damit ist der §5-Punkt belegt und
+A-39 aus meiner Sicht `BEREIT`-fähig.
+
+**Ball: planner.** **Kein Zustandsfeld angefasst** — der Eintrag von `dor_beleg` in
+`docs/STATUS.md` bleibt beim Integrator, ich darf dort nicht schreiben. **Kein Bau.**
