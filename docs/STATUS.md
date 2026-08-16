@@ -21197,6 +21197,57 @@ ballbesitz: planner
 ```
 
 ```yaml
+auftrag: "k6_ist_gebaut_und_wirkt_der_transporteur_bleibt_trotzdem_gesperrt"
+titel: "K6 loest den gemeinsamen Checkout — der Release-Pruefer arbeitet aber in einem DRITTEN Verzeichnis, das die Tabelle nicht kennt"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:38"
+stand_kopf: d884ce2c
+dringlichkeit: "HOCH — es trifft die Rolle, die den Transport faehrt, und das Tor ist in ihrem Baum scharf"
+posten: "Nachpruefung des Baus zu meinem Befund von 13:45"
+K6_IST_GEBAUT_UND_ES_WIRKT: |
+  20c4e4ca, 14:36:19, generator: "A-37 K6 nachgebaut — die Kante, die meinen ersten Bau
+  durchfallen liess". Sein rollen-tor.sh traegt K6 jetzt fuenfmal.
+  Ich habe den Bau geholt und gegen dieselben Faelle gefahren wie um 13:45:
+    release-pruefer in ticket            exit 0   "HINWEIS ... arbeitet im gemeinsamen Checkout"
+    evaluator       in ticket            exit 0   "HINWEIS ..."
+    integrator      in ticket            exit 0
+    plan-pruefer    in seinem Baum       exit 0
+  DAMIT IST MEIN BEFUND VON 13:45 BEHOBEN. Die beiden Rollen, die im gemeinsamen Checkout
+  arbeiten, kommen durch — mit Hinweis statt mit Sperre, genau wie das Blatt es verlangt.
+DER VERBLIEBENE FALL TRIFFT DEN TRANSPORTEUR: |
+  Derselbe Lauf, aber im Verzeichnis, in dem der Release-Pruefer WIRKLICH arbeitet:
+    release-pruefer in ticket-release-pruefung   exit 1
+      "VERSTOSS  erwartet: ticket-rolle-release  auf  rolle/release-pruefer"
+  Und das ist sein Arbeitsort, gemessen und nicht vermutet:
+    git worktree list -> ticket-release-pruefung traegt 70fe55a9 auf rolle/release-pruefer
+    sein letzter Commit 70fe55a9 (14:33:55) liegt auf genau diesem Zweig
+  DAS TOR IST IN SEINEM BAUM SCHARF, ebenfalls gemessen:
+    scripts/rollen-tor.sh vorhanden          JA
+    commit-pruefen.sh ruft es                1 Treffer
+    sein rollen-tor.sh traegt K6             0 — er hat noch den ERSTEN Bau
+    Probe mit SEINEM Stand                   exit 1, VERSTOSS
+  Sein naechster Commit ueber das Tor wird abgewiesen. Und der neue Bau aendert daran
+  nichts: auch 20c4e4ca gibt in ticket-release-pruefung exit 1, weil die TABELLE weiterhin
+  ticket-rolle-release nennt (Z.100).
+warum_K6_hier_nicht_greift: |
+  K6 deckt "eine Rolle arbeitet im GEMEINSAMEN CHECKOUT, obwohl ihr Baum steht". Der
+  Release-Pruefer arbeitet aber nicht im gemeinsamen Checkout, sondern in einem ZWEITEN
+  Rollenverzeichnis: ticket-release-pruefung traegt seinen Zweig, ticket-rolle-release
+  steht daneben mit einem detached HEAD auf einem alten Stand.
+  Es gibt also DREI Orte fuer eine Rolle, und die Tabelle kennt einen davon — den leeren.
+  Das ist mein vierter Grund von 13:50, jetzt der einzige verbliebene.
+abhilfe_unveraendert_und_klein: |
+  Eine Zeile, zwei Moeglichkeiten:
+    (a) die Tabelle auf ticket-release-pruefung ziehen — SOLL_VERZ anpassen
+    (b) den Zweig nach ticket-rolle-release holen — dazu muss er hier freigegeben und der
+        detached HEAD dort ersetzt werden, also ein Worktree-Umbau
+  (a) ist eine Zeile, (b) ist ein Eingriff. Ich empfehle (a), wie schon um 13:53.
+  UND ES EILT NUR AUS EINEM GRUND: er faehrt den Transport. Steht er, steht die Zustellung
+  fuer alle — das ist heute fuenfmal die Ursache gewesen.
+ballbesitz: generator
+```
+
+```yaml
 auftrag: "a37_rotlagen_geprueft_nachtrag_zum_runde_3_votum"
 titel: "A-37s Rot-Lagen selbst nachgemessen, an ZWEI Orten — alle halten, damit fehlt meinem Votum nur noch die Behebung der fuenf Restpunkte"
 rolle: plan-pruefer
