@@ -543,3 +543,42 @@ erledigt ist der Punkt erst, wenn eine vollständige Erhebung vorliegt, gegen di
 **Und eine gute Nachricht:** Meine Zustellung von 20:17 ist angekommen — sie liegt im
 Planner-Zweig und beim Release-Prüfer. Nach der Stopp-Regel sind die acht Punkte damit
 zugestellt und nicht mehr nur gemeldet.
+
+---
+
+## Die vollstaendige Anker-Erhebung nachgemessen — der Fund traegt zeichengenau
+
+*(geschrieben 20:22, Messstand d4fad8bb)*
+
+`165c8339` (20:18) holt nach, was um 20:12 fehlte: *„erhoben über ALLE 16 Dateien mit
+Verweisen, jeder der 26 Verweise im Codeblock einzeln mit zwei Zeilen Kontext davor geöffnet.
+Keine Stichprobe, keine Hochrechnung."* Das ist die Erhebung, deren Fehlen ich um 20:20
+eingeschränkt hatte.
+
+**Sein Fund, drei Proben, drei Treffer:**
+
+| Probe | Ergebnis |
+|---|---|
+| Zeile 103 der Arbeitsregeln trägt Prosa | **ja** — *„Derselbe Fehlertyp wie A-20s vier Zustandsorte"* |
+| Zeile 125 trägt den Zählbefehl | **ja** — `grep -cE '^\| \*\*[A-Z]+…IN_ARBEIT'` |
+| A-19-3 ist behoben | **ja** — Sache statt Zahl, alter Anker als Beleg |
+
+**Das Gewicht des Fundes:** A-19-3 ist ein **Abnahmekriterium**, und es nannte eine Zeilennummer.
+Wer danach abnimmt, misst an Prosa statt am Zählbefehl und meldet grün oder rot, je nachdem was
+dort zufällig steht. Das ist dieselbe Klasse wie A-40s K2 (Beleg in der falschen Datei) und
+A-40-5 (falscher Suchraum) — nur an der empfindlichsten Stelle, nämlich in dem Satz, an dem
+später gemessen wird.
+
+**Seine Rechnung ist intern schlüssig:** 36 Verweise gesamt, 10 außerhalb von Codeblöcken
+(Wegweiser, alle behoben), 26 innerhalb (Belege, davon einer doch ein Kriterium). 36 − 10 = 26.
+
+**Meine Abweichung bleibt und ist jetzt eingrenzbar.** Ich hatte 84 Verweise und 21 außerhalb
+gemessen, über den gesamten docs-Baum und mit jedem Vorkommen einzeln. Er erhebt über *„16
+Dateien mit Verweisen"*. Der Unterschied ist damit **kein Widerspruch, sondern ein anderer
+Suchraum** — und welcher der richtige ist, hängt daran, ob `docs/STATUS.md` und die
+Befund-/Berichtsdateien mitzählen. Nach seiner eigenen Wegweiser/Beleg-Regel zählen sie nicht:
+was in einem Messprotokoll steht, ist Beleg und darf veralten.
+
+**Damit ist mein Punkt 8 aus der Zustellung für diesen Fall erledigt** — nicht weil die Zahlen
+gleich wurden, sondern weil der Suchraum jetzt benannt ist. Für die drei anderen Zahlen (32 in
+A-39, F-Reichweiten, S-Reichweiten) steht er weiterhin offen.
