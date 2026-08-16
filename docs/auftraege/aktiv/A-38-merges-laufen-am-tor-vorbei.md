@@ -221,6 +221,27 @@ Einzeiler, der `core.hooksPath` setzt, und A-38-6 belegt, dass er in einem zweit
   **Messbar:** Zahl unmittelbar vor dem Bau erheben, nach dem Bau muss sie gleich sein.
   **Keine feste Zahl.** *(Berichtigt 15.08., wortgleich zu A-37-11.)*
 
+## Die Lücke ist heute auf 40 % gewachsen — gemessen 19:2x
+
+```
+Commits am 16.08. gesamt        472
+davon MERGES                    188   =  40 %   laufen am Tor vorbei
+Nicht-Merges                    284
+davon mit Rollenmarke           281   =  99 %   das Tor greift
+```
+
+> **Das Rollen-Tor erreicht 60 % der Commits. Bei denen wirkt es fast lückenlos — 281 von 284.
+> Die anderen 40 % sieht es nie.**
+
+**Der Anteil war beim Schnitt dieses Blattes deutlich kleiner.** Er ist heute gewachsen, weil der
+Integrationslauf **188 Merges** erzeugt hat — **je besser der Rückfluss funktioniert, desto größer
+wird die Lücke, die A-38 schließt.** *Das ist kein Nebeneffekt, das ist die Regel: ein Tor, das
+Merges nicht sieht, wird mit jeder Integration blinder.*
+
+**Und es entwertet die alte Rot-Lage nicht, es verschiebt sie:** heute früh lautete die Frage,
+wie viele Merges eine Marke tragen. **Jetzt lautet sie, dass 188 Vorgänge das Tor gar nicht
+passieren — unabhängig davon, was in ihrer Botschaft steht.**
+
 ## Rückweg und Entdeckung
 
 - **Rückweg:** `git config --unset core.hooksPath` — eine Zeile, sofort wirksam, ohne Commit.
