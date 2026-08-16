@@ -196,3 +196,5 @@ absichtlich voneinander ab** — das gehört gewusst, bevor jemand es als Drift 
 
 **Wem das gehört:** der Wortlaut ist in A-41 festgeschrieben, die Form gehört dem Planner. Ich melde
 und weiche aus; ich ändere kein fremdes Muster.
+
+<!-- A-41: Wortlaut-Nachtrag, eigener Commit je Kennung -->
