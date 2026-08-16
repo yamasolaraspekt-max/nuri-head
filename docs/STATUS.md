@@ -20506,3 +20506,47 @@ zur_reihenfolge: |
   die bei korrekter Umsetzung durchfaellt.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a38_kanten_und_hookpath_geprueft_ohne_fund"
+titel: "A-38 auf zwei Vorratsposten geprueft — kein Fund, dafuer eine Voraussetzung fuer A-38-6 unabhaengig belegt"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:05"
+stand_kopf: a400368f
+posten: "Vorratspruefung (a) und (d) an A-38, dem zweiten BEREIT-Auftrag"
+was_ich_geprueft_habe_und_NICHT_gefunden_habe: |
+  (a) GEWANDERTE VERWEISE: A-38 nennt keine Datei:Zeile-Verweise. Der Posten greift dort
+      nicht — das ist kein Fund, sondern eine nicht anwendbare Pruefung, und ich schreibe
+      es hin, damit niemand die Luecke fuer ein Ergebnis haelt.
+  (d) ALTERUNG: Basis 0f05f8bf, 78 Commits seither. Eine im Blatt genannte Datei wurde
+      seither geaendert — scripts/commit-pruefen.sh, einmal, durch die Tor-Reparatur
+      374bb851. Die Zahl, die A-38 daran haengt, habe ich heute frueh nachgemessen und sie
+      haelt: 4 merge-Treffer, Zeilen 777/783/784/786, alle am Index, keiner am Commit-Typ.
+  DIE KANTEN: ich hatte sechs Faelle im Kopf, in denen ein commit-msg-Hook NICHT laeuft.
+  Alle sechs stehen bereits im Blatt, K1 bis K6 — merge --no-commit, Fast-Forward, amend an
+  einem Merge, Rebase/Cherry-Pick, kaputter Hook, und --no-verify. Der letzte ist
+  ausdruecklich als "nicht verhinderbar" benannt statt verschwiegen. Da ist nichts zu holen.
+DIE BESTAETIGUNG, und sie gehoert dem Generator: |
+  A-38-6 verlangt: "Der Hook greift in einem ZWEITEN Worktree, ohne dort eingerichtet zu
+  werden." Ob das ueberhaupt gehen kann, haengt an einer Tatsache ueber diesen Bestand, die
+  im Blatt nicht steht. Selbst gemessen:
+    git rev-parse --git-common-dir  in ticket-rolle-plan-pruefer -> /Users/yamanuri/Documents/ticket/.git
+    dasselbe in ticket-rolle-generator                           -> /Users/yamanuri/Documents/ticket/.git
+    config.worktree in beiden                                    -> nicht vorhanden
+    git config --get extensions.worktreeConfig                   -> nicht gesetzt
+    git config --get core.hooksPath in vier Baeumen              -> ueberall leer (A-38s Rot-Beleg haelt)
+  Alle Worktrees teilen EINE config. Wird core.hooksPath einmal gesetzt, gilt es in allen
+  sechs Baeumen — A-38-6 ist damit erfuellbar, und zwar mit einem einzigen Befehl.
+  Die Bedingung dafuer ist extensions.worktreeConfig: waere sie aktiv, koennte jeder Baum
+  eine eigene config haben und der Schalter waere pro Baum zu setzen. Sie ist es nicht.
+  Wer A-38 baut, sollte diese Bedingung im Bericht mitnennen — sie ist heute erfuellt, aber
+  sie ist eine Umgebungstatsache, und die sind hier zweimal an einem Tag weggewandert.
+was_offen_BLEIBT_aber_theoretisch_ist: |
+  core.hooksPath ist lokale Konfiguration und wird nicht mitversioniert. Ein FRISCHER KLON
+  dieses Repos haette den Hook, aber nicht den Schalter — und wuerde still ohne Schutz
+  laufen. A-38 deckt den zweiten Worktree (A-38-6), nicht den frischen Klon.
+  Ich fuehre das NICHT als Restpunkt: in diesem Haus wird nicht geklont, es gibt eine
+  Maschine und sechs Worktrees darauf. Es ist eine Notiz fuer den Tag, an dem sich das
+  aendert, kein Mangel am Auftrag.
+ballbesitz: "—"  # kein Ball: Pruefung ohne Fund, die Bestaetigung ist eine Zulieferung an den Bau
+```
