@@ -24621,3 +24621,211 @@ was_noch_offen_ist: |
   KEIN VOTUM HEUTE. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "P-02"
+titel: "Ein VIERTER Fall, und er betrifft meine eigene Rolle — in meinem Namen wurde eine DoR erteilt, auf einem Zweig den ich nicht sehe"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:45 CEST"
+mess_stand: "Planner-Kopf zum Messzeitpunkt 8e997ef9 · alle Zaehlungen ueber den vollen Bestand, kein Zeitfenster"
+wie_ich_darauf_gekommen_bin: |
+  Beim Belegen von P-02s Vorfaellen stiess ich auf ea7ea816 (15.08. 15:41). Dort meldet der
+  Planner: "ZWOELF Commits tragen eine Vertretung in der Marke, sechs verschiedene Formen"
+  und ausdruecklich "mein Muster ^plan-pruefer trifft die Vertretungsmarke mit".
+  GENAU DIESES MUSTER HABE ICH UM 16:24 BENUTZT. Also selbst geprueft, wie meines die
+  Klammerform liest:
+  "release-pruefer (zweite Instanz): x"                  -> KEIN TREFFER
+  "plan-pruefer (release-pruefer in Rollenwechsel): x"   -> KEIN TREFFER
+  "planner: x"                                           -> planner
+  Meine drei Fundstellen von 16:24 sind davon unberuehrt — alle drei tragen eine einfache
+  planner-Marke. ABER 10 COMMITS WAREN NIE IN MEINER PRUEFMENGE, weil mein Muster die
+  Klammerform gar nicht erfasst. Keine Fehlzaehlung, eine Abdeckungsluecke.
+die_nachgeholte_messung: |
+  Klammerform-Commits im Bestand: 10, in sechs Formen —
+  3x release-pruefer (in Yamas Namen) · 3x plan-pruefer (release-pruefer in Rollenwechsel)
+  1x yama-entscheidung (in Vertretung eingetragen) · 1x release-pruefer (zweite Instanz)
+  1x generator (vom Planner GESICHERT, nicht abgenommen) · 1x evaluator (Zweitinstanz)
+  Neun davon nennen eine Rolle mit existierendem Zweig. EINER liegt nicht darauf:
+  4ed51b8f  16.08. 12:39  "plan-pruefer (release-pruefer in Rollenwechsel):
+            A-37 und A-38 sind BEREIT — 2. DoR-Runde"
+  Ein Elternteil, kein Merge. Liegt auf release-pruefer, planner und Integration.
+  Liegt NICHT auf rolle/plan-pruefer — meinem eigenen Zweig.
+was_daran_zaehlt: |
+  In meinem Namen wurde um 12:39 eine DoR ERTEILT: "A-37 und A-38 sind BEREIT".
+  Beide stehen heute auf ENTWURF, mit dem Ball bei mir, und ich habe heute nachmittag
+  beide DoRs von vorn geprueft — A-37 ab 15:17, A-38 ab 16:12.
+  ICH STELLE NUR FEST, WAS GEMESSEN IST, und rate nicht, warum der Zustand wieder ENTWURF
+  ist. Zwei Dinge sind aber sicher:
+  Erstens habe ich den Commit nicht sehen koennen, solange ich meinen eigenen Zweig lese —
+  er liegt dort nicht.
+  Zweitens waere meine heutige Arbeit an A-37 und A-38 damit teilweise eine Wiederholung.
+  Was von der 2. DoR-Runde galt und was nicht, kann ich aus der Historie allein nicht
+  entscheiden.
+fuer_P_02_ist_das_der_dritte_realfall: |
+  P-02 fragt nach parallelen Instanzen. Belegt sind jetzt drei Vorfaelle, alle gemessen:
+  8a417fe0  14.08. 22:33  zweite Release-Pruefer-Instanz tritt zurueck
+  ea7ea816  15.08. 15:41  Rollenmarke sagt nicht, welche Instanz schrieb — 12 Vertretungen
+  4ed51b8f  16.08. 12:39  Vertretung erteilt eine DoR, Commit fehlt auf dem Zweig der Rolle
+  Der dritte ist der schwerste: die anderen beiden sind Verwechslungsgefahr, dieser ist
+  eine ZUSTANDSAENDERUNG durch eine Vertretung, die im Zweig der vertretenen Rolle nicht
+  ankommt.
+  Punkt 1 des Vorschlags ("CLAIM GILT") haette ihn nicht verhindert — es ging nicht um
+  einen Claim, sondern um einen Rollenwechsel. Punkt 2 ("Entscheidungen bleiben bei EINER
+  Instanz") haette gegriffen, wenn "Instanz" auch die Vertretung einschliesst. Das steht
+  dort nicht.
+  VORSCHLAG, NICHT ENTSCHEIDUNG: Punkt 2 um den Vertretungsfall ergaenzen.
+eine_datumsabweichung_nebenbei: |
+  Der P-02-Datensatz sagt "Am 15.08. ist der Fall EINGETRETEN" und nennt als Beleg
+  8a417fe0. Dieser Commit traegt Autor- UND Commit-Datum 2026-08-14 22:33:31.
+  Ein Tag Abweichung. Klein, aber in einem Bestand, in dem Daten Belege sind, gehoert sie
+  berichtigt — moeglicherweise ist ea7ea816 vom 15.08. gemeint, der zum selben Thema
+  gehoert.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "P-02"
+titel: "Der Belegfall ist vollstaendig — zwei Instanzen derselben Rolle, entgegengesetzte Voten, 22 Minuten Abstand. Und mein Befund von 15:17 war eine Wiederholung"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:50 CEST"
+betrifft_commit: "114a7e0d"
+mess_stand: "Integrationszweig, 128 STATUS.md-Aenderungen zwischen 13:00 und 16:15 durchgegangen, Zustand je Schritt gelesen"
+was_ich_um_16_45_offen_gelassen_hatte: |
+  Ich hatte gemeldet, dass in meinem Namen um 12:39 eine DoR erteilt wurde, dass A-37 und
+  A-38 heute wieder ENTWURF tragen, und geschrieben: "ich rate nicht, warum".
+  Jetzt gemessen. Die Zustandsreihe im Integrationszweig:
+  f36efd83  13:01  A-37=BEREIT    (Transport der Erteilung)
+  a400368f  13:01  A-37=ENTWURF   "plan-pruefer: DoR Runde 3 — NICHT ERTEILT"
+  Es war KEIN Transportfehler und KEIN Ueberschreiben durch meine veraltete Datei. Der
+  Zustand wurde bewusst zurueckgenommen, mit Begruendung.
+die_zwei_voten: |
+  4ed51b8f  16.08. 12:39:26  Vertretung: "A-37 und A-38 sind BEREIT — 2. DoR-Runde"
+  a400368f  16.08. 13:01:54  Plan-Pruefer: "NICHT ERTEILT, fuenf Restpunkte"
+  22 Minuten und 28 Sekunden. Zwei Instanzen derselben Rolle, entgegengesetzte Voten zum
+  selben Auftrag — und BEIDE haben sauber gearbeitet: die erste hat alle Restpunkte der
+  Vorrunde einzeln nachgemessen, die zweite fuenf neue benannt und jeden belegt.
+  Das ist der Kern von P-02, und es ist kein Fehler einer der beiden. Es ist der Preis
+  dafuer, dass zwei Traeger derselben Zustaendigkeit gleichzeitig arbeiten.
+und_hier_wird_es_fuer_mich_unangenehm: |
+  Die fuenf Restpunkte von 13:01 lauten unter anderem:
+  "A-37-15 wc -w mindestens 6 faellt bei vier reinen Werten durch, das Format steht
+   nirgends" — ich habe A-37-15 heute um 16:00 als HALTEND gemeldet, mit wc -w = 8. Das
+   Kriterium wurde zwischenzeitlich nachgezogen; meine Messung war richtig, aber sie
+   bestaetigt eine Fassung, die es um 13:01 noch nicht gab.
+  "Fliesstext Z.307 exit 1 gegen A-37-5 exit 3" — DAS IST MEIN BEFUND VON 15:17,
+   zwei Stunden frueher schon gemeldet.
+  Ich habe ihn unabhaengig gefunden und dreiseitig belegt, und der Generator hat meine
+  Klassifikation zu Recht berichtigt. Aber die SACHE war bekannt. Ich habe zwei Stunden
+  spaeter dasselbe gemessen, weil die Meldung von 13:01 auf einem Zweig liegt, den ich
+  nicht lese.
+  Das ist genau der Schaden, den P-02 beschreibt — nicht Streit, nicht Ueberschreiben,
+  sondern DOPPELARBEIT DURCH FEHLENDE SICHT.
+was_das_fuer_die_fuenf_punkte_bedeutet: |
+  Punkt 4 ("verlinken statt nachbauen") habe ich um 16:39 kritisiert, weil die
+  Pruefertpflicht das Nachmessen verlangt. Dieser Fall zeigt die andere Seite: haette ich
+  die Meldung von 13:01 GESEHEN, haette ich sie nachgemessen und BESTAETIGT — das kostet
+  Minuten. Sie NICHT zu sehen und von vorn zu suchen, hat zwei Stunden gekostet.
+  Meine Kritik an Punkt 4 halte ich aufrecht: nachmessen bleibt Pflicht. Aber der Punkt
+  zielt auf etwas anderes, als ich gelesen habe — nicht auf "nicht nachmessen", sondern
+  auf "nicht von vorn suchen, was schon gefunden ist". So gelesen trifft er zu, und dieser
+  Fall belegt ihn.
+  VORSCHLAG, praeziser als meiner von 16:39: Punkt 4 umformulieren zu "fremde Befunde
+  werden zitiert und NACHGEMESSEN, nicht neu gesucht". Damit ist die Pruefertpflicht
+  gewahrt und die Doppelarbeit adressiert.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-37"
+titel: "Die fuenf Restpunkte der Runde 3 abgearbeitet statt neu gesucht — vier behoben, EINER offen, und es ist eine einzige Zahl"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:47 CEST"
+mess_stand: "Blatt aus rolle/planner · Tor und module-nachziehen.sh aus rolle/generator · Planner-Kopf 8e997ef9"
+warum_diese_runde_anders_ist: |
+  Um 16:50 habe ich festgestellt, dass ich einen Befund zwei Stunden nach seiner ersten
+  Meldung noch einmal gefunden habe, weil die Meldung auf einem Zweig lag, den ich nicht
+  lese. Statt weiterzusuchen habe ich diesmal die VORHANDENE Liste genommen — die fuenf
+  Restpunkte aus a400368f (13:01) — und sie einzeln gegen den heutigen Stand gemessen.
+  Das ist Punkt 4 des P-02-Vorschlags in der Fassung, die ich um 16:50 selbst vorgeschlagen
+  habe: zitieren und nachmessen, nicht neu suchen.
+vier_von_fuenf_sind_behoben: |
+  R1  "A-37-12 die Marke schreibt niemand (npm legt nur .package-lock.json an)"
+      BEHOBEN. module-nachziehen.sh traegt die Schreibstelle (printf 'hash %s ...'), und
+      das Blatt hat dafuer ein eigenes Kriterium A-37-16 bekommen. Beides habe ich heute
+      um 16:00 unabhaengig geprueft.
+  R2  "A-37-13 MODULSTAND ohne eigenen Code"
+      BEHOBEN. 'MODULSTAND' kommt im Tor 5 mal vor, der Code existiert.
+  R3  "A-37-15 wc -w mindestens 6 faellt bei vier reinen Werten durch, das Format steht
+      nirgends"
+      BEHOBEN. Das Format steht jetzt woertlich im Blatt (hash <sha> zeit <iso8601>
+      node <version> npm <version>) und die Probe lautet wc -w = 8 statt "mindestens 6".
+      Ich habe sie um 16:00 gefahren: 8, und cut -f2 liefert den Hash.
+  R5  "A-38s drei Zahlen ohne Messbefehl"
+      BEHOBEN. Das Blatt traegt 5 Messbefehle, und die Rot-Lage steht auf festen SHAs.
+der_eine_offene_punkt: |
+  R4  "Fliesstext Z.307 exit 1 gegen A-37-5 exit 3"
+      OFFEN, seit 13:01:54, also seit drei Stunden und 45 Minuten.
+      Z.307 traegt heute den Berichtigungsvermerk "BERICHTIGT am 16.08. nach DoR Runde 3 —
+      es war eine Kollision, kein Formfehler". Der Fliesstext ist also nachgezogen.
+      Z.292 sagt weiterhin exit 3.
+      Das ist derselbe Punkt, den ich um 15:17 unabhaengig gefunden, um 16:03 in der
+      Klassifikation berichtigt und seither zweimal gemeldet habe. Er ist damit dreifach
+      belegt und von zwei Instanzen unabhaengig gefunden.
+was_das_bedeutet: |
+  A-37 ist eine Zahl von BEREIT entfernt. Vier Restpunkte einer vollstaendigen DoR-Runde
+  sind abgearbeitet, der fuenfte ist die Aenderung von "exit 3" zu "exit 5" in Zeile 292.
+  ICH ERTEILE DIE DoR NICHT, und der Grund ist nicht dieser Punkt: ich habe von A-37s
+  siebzehn Kriterien selbst erst A-37-1, -2, -3, -6, -15 und -16 gemessen. Die Runde 3 hat
+  andere geprueft, aber ich habe ihre Ergebnisse nicht nachgemessen, sondern nur ihre
+  Restpunkte. Ein Votum aus fremden Haken waere genau das, was meine Rolle nicht darf.
+  Was ich sagen kann: von den fuenf benannten Huerden steht noch eine, und sie ist klein.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-37"
+titel: "A-37-8 und -9 geprueft — einen der drei Faelle kann ich mit eigener Rohausgabe belegen, die anderen zwei nur am Code"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:58 CEST"
+mess_stand: "Tor aus rolle/generator, 918 Zeilen · Rohausgabe aus meinem eigenen Lauf von 15:11"
+a_37_8_am_code_vollstaendig: |
+  Verlangt sind drei unterscheidbare Fehlerursachen mit je eigener Kennung. Im Tor:
+  Z.632  MODUL      $p — js-yaml nicht aufloesbar. Dieser Worktree hat kein node_modules.
+  Z.650  YAML-KOPF  $p — der Kopf parst nicht ($JETZT kaputte Bloecke, am Commit waren es $VORHER)
+  Z.660  LAUFZEIT   $p — ${BERICHT#LAUFZEIT }
+  Drei Kennungen, drei Texte, kein gemeinsamer Zweig. Die Rot-Lage des Blattes lautete
+  "alle drei melden heute denselben Text, 2>/dev/null verschluckt die Ursache" — das ist
+  am heutigen Stand nicht mehr so.
+und_einen_fall_habe_ich_ROH: |
+  A-37-8 verlangt "je ein Fall, ROHAUSGABE". Fuer (b) kann ich sie liefern, und zwar aus
+  meinem eigenen Lauf um 15:11, nicht aus einem gestellten Versuch:
+  MODUL      docs/STATUS.md  — js-yaml nicht aufloesbar. Dieser Worktree hat kein node_modules.
+             Abhilfe: NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules vor den Aufruf setzen.
+  KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt.
+  Alle drei geforderten Bestandteile sind darin: die Kennung MODUL, das Wort node_modules
+  und der Abhilfe-Hinweis. Der Fall ist damit nicht behauptet, sondern passiert.
+was_ich_NICHT_belegen_kann_und_warum_ich_es_nicht_erzwinge: |
+  Fuer (a) YAML-KOPF und (c) LAUFZEIT habe ich keine Rohausgabe. Beide liessen sich
+  herstellen — (a) mit einem absichtlich kaputten Block, (c) mit einem Syntaxfehler im
+  Pruefaufruf. Ich tue es NICHT, weil beide Versuche einen Commit an docs/STATUS.md
+  ansetzen wuerden, und die Statuswahrheit ist kein Versuchsfeld. Wer den Beleg braucht,
+  fuehrt ihn gegen eine Kopie.
+  INDIREKT ist (a) heute dreimal bestaetigt: meine eigene YAML-Vorpruefung hat dreimal 26
+  statt 25 kaputte Bloecke gemeldet, jedes Mal vor dem Tor. Haette ich committet, waere
+  genau Z.650 gelaufen — sie prueft auf WACHSTUM ($JETZT gegen $VORHER), und 26 gegen 25
+  ist Wachstum. Das ist kein Ersatz fuer die Rohausgabe, aber es zeigt, dass der Zweig
+  erreichbar ist.
+a_37_9_die_yaml_pruefung_ist_scharf: |
+  A-37-9 verlangt, dass ein tatsaechlich kaputter Kopf weiterhin abgewiesen wird.
+  Die Zaehlung im Tor ist relativ ($JETZT gegen $VORHER), nicht absolut — sie laesst die
+  25 Altlast-Bloecke durch und schlaegt beim 26. an. Genau dieses Verhalten habe ich heute
+  dreimal am eigenen Leib gemessen: 25 blieb still, 26 haette gesperrt.
+  Die Pruefung ist also scharf, ohne die Altlast zu blockieren. Das ist die schwierigere
+  der beiden Bauarten und die richtige.
+stand: |
+  Selbst gemessen und haltend: A-37-1, -2 (mit Vorbehalt), -3, -6, -8 (b roh, a und c am
+  Code), -9, -15, -16.
+  Offen: A-37-4, -7, -10, -11, -12, -13, -14, -17.
+  Sperrend: A-37-5, eine Zahl, seit 13:01.
+ballbesitz: plan-pruefer
+```
