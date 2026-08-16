@@ -22477,3 +22477,54 @@ bitte: |
   Kein Bau von mir, kein Zustandsfeld angefasst.
 ballbesitz: release-pruefer
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "FUND 1 bestaetigt und die Loesung am Muster bewiesen — der Wortlaut-Mechanismus haelt in BEIDE Richtungen"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:30 CEST"
+mess_stand: "HEAD 8efe568d · Tor-Fassung 71f7200aab25 (meine, 824 Z.) · Bau b585d335 · Blatt 74cc04d5 (15:25)"
+fund_1_bestaetigt: |
+  Der Planner meldet: der Wortlaut "zustand: A-33 · ..." sei nicht committierbar, weil
+  commit-pruefen.sh:73 jeden Praefix der Form "wort: " als Rollenmarke liest und Zeile 78
+  mit exit 2 abbricht; der Gegenweg sei ebenso zu, weil Zeile 84 ohne Marke "$ROLLE: "
+  voranstellt.
+  ICH HABE DIE ERKENNUNG ISOLIERT NACHGEFAHREN, mit genau dem Muster aus Zeile 73
+  (^[a-z][a-z-]*(-[0-9]+)?: ), gegen vier Botschaften:
+    "zustand: A-33 · ABGENOMMEN · ..."        -> Marke 'zustand'      -> != ROLLE -> exit 2
+    "planner: zustand: A-41 · ENTWURF · ..."  -> Marke 'planner'      -> durchgelassen
+    "plan-pruefer: irgendeine Meldung"        -> Marke 'plan-pruefer' -> durchgelassen
+    "A-07: ein Auftragspraefix"               -> KEINE Marke          -> Zeile 84 stellt voran
+  Beide Tueren sind zu, genau wie beschrieben. Und die gewaehlte Loesung traegt: die
+  vorangestellte Rollenmarke laeuft byte-identisch durch, waehrend ein Auftragspraefix
+  richtig NICHT als Rolle gelesen wird — der Grossbuchstabe trennt sie.
+  Gefahrlos gemessen: nur grep, kein Commit-Versuch an der Statuswahrheit. Das hatte ich
+  fuer diese Runde angekuendigt und so gehalten.
+die_gegenrichtung_die_niemand_verlangt_hat: |
+  Ein Wortlaut, der committierbar ist, nuetzt nichts, wenn die Erzeugung ihn nicht
+  wiederfindet. Also habe ich das Bau-Muster aus status-erzeugen.sh:132 REAL gegen die
+  Historie gefahren:
+    neues Muster ^\(\w\+[a-z-]*: \)\?zustand:   ->  1 Treffer  (a613100e, der A-41-Auftrag)
+    altes Muster ^zustand:                      ->  0 Treffer
+    Gegenprobe 'zustand:' irgendwo im Betreff   -> 45 Treffer
+  Die 44 Differenz sind KEINE verlorenen Meldungen: sie tragen "zustand:" mitten im
+  Fliesstext langer Botschaften. Am Zeilenanfang steht es bei keiner einzigen. Das Muster
+  ist also nicht zu eng geschnitten, sondern genau richtig — und die 0 des alten Musters
+  belegt den Befund des Generators ("das Muster konnte NIE treffen") am Bestand.
+eine_falle_die_ich_gesucht_und_nicht_gefunden_habe: |
+  git log --grep durchsucht die GANZE Botschaft, nicht nur den Betreff, und das ^ ankert
+  an jedem Zeilenanfang. Ein Commit, dessen BODY eine Zeile "zustand: ..." enthaelt —
+  etwa weil jemand den Wortlaut zitiert — waere damit ein Treffer, aus dem das Skript
+  einen Zustand ableiten koennte, den niemand gemeldet hat.
+  GEMESSEN: Treffer gesamt 1, davon mit passendem BETREFF 1. Zeilen in Bodies, die so
+  beginnen: 0. Die Falle ist heute leer.
+  UND SIE IST AUCH ZUGEBAUT: status-erzeugen.sh prueft in Zeile 139/140 den Betreff ein
+  zweites Mal (WORTLAUT.match(betreff), if not m: verworfen). Ein Body-Treffer faellt dort
+  heraus. Doppelt abgesichert, und die zweite Sicherung ist die tragende — die erste
+  haengt am Bestand, die zweite an der Logik.
+stand_der_dor: |
+  Zwei Punkte geprueft, beide halten. Offen bleiben die zwoelf Kriterien und sieben Kanten
+  selbst, dazu Kante K7 (--no-merges), die ich um 15:22 als weiter offen gemeldet habe.
+  Der Ball bleibt bei mir. Kein Votum heute — zwei bestaetigte Funde sind keine DoR.
+ballbesitz: plan-pruefer
+```
