@@ -121,13 +121,28 @@ MODUS = os.environ["MODUS"]
 #
 # *Das Muster nimmt deshalb BEIDE Formen.* **Gemeldet statt still umgeschrieben:** ob die
 # Rollenmarke entfallen soll oder Teil des Wortlauts wird, entscheidet nicht dieses Skript.
-WORTLAUT = re.compile(
-    r"^(?:[a-z-]+(?:-[0-9]+)?:\s+)?zustand:\s+"
+KERN = (
+    r"zustand:\s+"
     r"(?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:/[0-9A-Za-z]+)?)\s+·\s+"
     r"(?P<zustand>[A-Z_]+)\s+·\s+"
     r"(?P<rolle>[a-z-]+(?:-[0-9]+)?)"
-    r"(?:\s+·\s+(?P<beleg>.*))?$"
+    r"(?:\s+·\s+(?P<beleg>.*))?"
 )
+WORTLAUT = re.compile(r"^(?:[a-z-]+(?:-[0-9]+)?:\s+)?" + KERN + r"$")
+
+# ── DASSELBE MUSTER, ANDERS VERANKERT — und die Verankerung IST der Unterschied ──────────────
+#
+# **Ein Commit-BETREFF muss der Wortlaut SEIN; eine Regel ZITIERT ihn.** In `ARBEITSREGELN.md`
+# steht er als *„Beispiel:  generator: zustand: A-33 · …"* — mit einem Wort davor.
+#
+# **Meine erste Regelprobe hat genau daran vorbeigemessen und ROT gemeldet, obwohl der Planner
+# geliefert hatte.** *Ein Falsch-Negativ an einem Pruefer — dieselbe Richtung, die ich eine
+# Stunde vorher bei K2 als die gefaehrlichere uebernommen habe, diesmal an mir selbst.*
+#
+# ***Zwei Verwendungen, zwei Verankerungen, EIN Kern:*** *der Betreff verankert an Anfang und
+# Ende, das Zitat nicht.* **Waeren es zwei Muster, wuerde das zweite still veralten** — deshalb
+# steht `KERN` einmal da und beide setzen darauf auf.
+IM_TEXT = re.compile(KERN)
 
 # Das Vorfilter fuer `git log`. Es steht EINMAL hier, weil zwei Stellen es brauchen (die Tafel
 # und die Zweigzuordnung fuer K6) — und zwei Fassungen desselben Musters waeren zwei Wahrheiten,
@@ -219,8 +234,26 @@ if MODUS == "fangprobe":
         print(f"  {'✔' if ok else '✖'} {'trifft' if erwartet else 'trifft nicht'}  {warum}")
         print(f"      '{form}' gegen '{stueck}'")
     print(f"\n  Fangprobe Blattgrenze: {len(grenz_faelle)-grot}/{len(grenz_faelle)} wie erwartet")
-    rot += grot
-    faelle = faelle + grenz_faelle
+
+    # ── DRITTE PROBE: die zwei Verankerungen desselben Kerns ────────────────────────────────
+    # Genau diese Zeile steht seit 16:10 in den Arbeitsregeln, und genau an ihr hat meine erste
+    # Regelprobe ROT gemeldet, obwohl geliefert war. Sie steht hier, damit die Unterscheidung
+    # nicht wieder verlorengeht: als BETREFF ist sie ungueltig, als ZITAT gueltig.
+    zitat = "Beispiel:  generator: zustand: A-33 · CODE_FERTIG · generator · bau 3e22e61b"
+    anker_faelle = [
+        (bool(WORTLAUT.match(zitat)), False, "als Commit-BETREFF ungueltig (ein Wort davor)"),
+        (bool(IM_TEXT.search(zitat)), True,  "als ZITAT in der Regel gueltig"),
+    ]
+    arot = 0
+    for ist, erwartet, warum in anker_faelle:
+        ok = ist == erwartet
+        arot += 0 if ok else 1
+        print(f"  {'✔' if ok else '✖'} {warum}")
+    print(f"      {zitat}")
+    print(f"\n  Fangprobe Verankerung: {len(anker_faelle)-arot}/{len(anker_faelle)} wie erwartet")
+
+    rot += grot + arot
+    faelle = faelle + grenz_faelle + anker_faelle
     # 70 und nicht 1: eine rote Selbstprobe heisst nicht „erzeugt, mit Meldungen", sondern
     # „diesem Werkzeug ist nicht zu trauen". Wer beides auf 1 legt, laesst ein defektes Werkzeug
     # wie ein meldendes aussehen.
@@ -488,8 +521,7 @@ if MODUS == "regelprobe":
         # Der Wortlaut steht in einer Regel als BEISPIEL: eingerueckt, in einem Block, evtl. mit
         # Aufzaehlungszeichen davor. Deshalb wird die Zeile abgeraeumt, bevor sie geprueft wird —
         # aber NICHT der Betreff selbst veraendert.
-        treffer = [l.strip().lstrip("#*->` ").strip()
-                   for l in text.split("\n") if WORTLAUT.match(l.strip().lstrip("#*->` ").strip())]
+        treffer = [l.strip() for l in text.split("\n") if IM_TEXT.search(l)]
         treffer_je_zweig[z] = treffer
         print(f"  {z.split('/')[-1]:<24} {len(treffer):>2} Zeile(n) im Wortlaut")
         for t in treffer[:2]:
