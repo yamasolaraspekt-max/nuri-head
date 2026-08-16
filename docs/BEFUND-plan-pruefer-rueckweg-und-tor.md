@@ -1816,3 +1816,74 @@ je Sammlung getrennt · nur Definitionsstellen (Ueberschriften), keine Verzeichn
 
 **Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau. A-40s DoR bleibt offen** — dies ist der
 zweite Fund, nach der Nummernvergabe in A-40-2.
+
+## §5s Punkt „jedes P1-Kriterium ist vor dem Bau wirksam rot" ist an den vier jüngsten Aufträgen NICHT PRÜFBAR — sie markieren keine Stufen
+
+*§5-Durchgang an A-40, dritter Teil · gemessen 16.08. gegen `b8a06344`*
+
+### Der Fund
+
+```
+              Kriterien   Stufenmarkierungen
+   A-38            9              1
+   A-39           13              0     <-- keine
+   A-40            9              0     <-- keine
+   A-41           24              0     <-- keine
+   A-42           11              0     <-- keine
+                  --             --
+                  57              0     (ohne A-38)
+
+   zum Vergleich:  A-33  14 Kriterien / 12 Markierungen · A-30 8 · A-32 9 · A-34 6
+   von 89 aktiven Blaettern tragen 70 eine Stufenmarkierung.
+```
+
+**§5 verlangt: *„jedes P1-Kriterium ist vor dem Bau wirksam rot"*.** Bei einem Blatt ohne
+P-Stufen ist dieser Punkt **nicht prüfbar** — weder von mir noch später von
+`scripts/blatt-pruefen.sh`, das A-39 baut. **Es fehlt nicht der Nachweis, es fehlt die Frage.**
+
+**A-41 ist der Beleg dafür, dass es durchgeht:** 24 Kriterien, null Markierungen, heute
+`BETRIEBSBESTAETIGT`.
+
+**Und A-39 trifft es doppelt:** es baut das Werkzeug, das Blätter gegen sich selbst hält — und
+trägt selbst die Markierung nicht, die §5 für seine eigene Abnahme braucht.
+
+### Der Fall, an dem es sichtbar wurde: A-40-6
+
+A-40-6 lautet *„`nachgerechnet_an` trägt die Abweichung, nicht nur das Ergebnis"*. **Der Planner
+hat selbst gemerkt, dass er die Rot-Lage beseitigt hatte** — durch seinen eigenen Eintrag an
+`S-008` um 14:49 — und eine neue gesetzt. Ich habe beide nachgemessen:
+
+```
+Eintraege mit Feld nachgerechnet_an        1
+davon mit einer abweichungs-Zeile          1
+Kennungen insgesamt                       62
+Kennungen OHNE nachgerechnet_an           61
+
+-> Faelle, auf die A-40-6s Aussage anwendbar ist :  1
+-> davon rot                                     :  0
+```
+
+**Die ersetzte Rot-Lage misst etwas anderes als das Kriterium behauptet:** sie zählt Kennungen
+**ohne** das Feld (61 von 62), während das Kriterium prüft, ob ein **vorhandenes** Feld die
+Abweichung trägt. Für diese Aussage ist der Bestand heute vollständig grün.
+
+**Das ist kein Mangel des Kriteriums** — es nennt seine Nachweisform selbst: *„(Mutationsprobe.)"*,
+und A-39s eigenes **P6 lässt „ein KONSTRUIERTER Fall" ausdrücklich zu.** **Der Mangel ist, dass
+niemand prüfen kann, ob A-40-6 überhaupt P1 ist** und die Rot-Pflicht damit greift.
+
+### Und eine ausgefallene Messung, die ich fast gemeldet hätte
+
+Mein erster Lauf ergab **null** Stufenmarkierungen für A-33 — womit ich beinahe geschrieben hätte,
+*kein* Blatt markiere Stufen. **A-33 trägt heute zwölf.** Gefangen, weil ich das Muster gegen einen
+bekannten Treffer gehalten habe: `A-33-1 (P1, TRAGEND)` am Stand `8559b555`, wo dasselbe Muster
+sechs Treffer liefert. **Eine ausgefallene Messung ist kein Ergebnis** — hier hätte sie den Befund
+um den Faktor 70 verzerrt, und zwar in die bequeme Richtung.
+
+### Soll
+
+**Die vier Blätter markieren ihre tragenden Kriterien**, wie 70 andere es tun. Das ist keine
+Formsache: **ohne die Markierung ist ein §5-Punkt unprüfbar, und ein unprüfbarer Punkt gilt nach
+§5 als fehlend** — *„Fehlt ein Punkt, bleibt der Auftrag `ENTWURF`."*
+
+**Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau. A-40s DoR bleibt offen** — dritter Fund
+nach der Nummernvergabe in A-40-2 und dem Prüfbefehl in Z.204.
