@@ -25068,3 +25068,48 @@ was_ich_aendere: |
   steht.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "SELBSTBERICHTIGUNG-ZEITSTEMPEL-2"
+titel: "Meine eigene Berichtigung war zu weit — nicht alle 86 Felder sind falsch, die Drift beginnt um 16:39 und betrifft rund 30"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:05:43 CEST"
+mess_stand: "Blockfeld gegen Commit-Zeit, Commit fuer Commit von 15:32 bis 17:59 durchgerechnet"
+was_ich_zu_weit_gemeldet_habe: |
+  In der Berichtigung davor steht: "alle 86 zeit-Felder meiner heutigen Bloecke sind
+  erfunden". Das ist zu weit, und ich habe es gemessen statt es stehenzulassen.
+  BLOCKFELD GEGEN COMMIT-ZEIT, Commit fuer Commit:
+  15:32 bis 16:36 ... Abweichung 0 bis 3 Minuten, meist 1
+  16:39 ............. +6
+  16:42 ............. +8
+  17:00 ............. +38
+  17:46 ............. +2:45
+  17:59 ............. +3:18
+  Bis 16:36 stimmten die Felder praktisch. Die Drift beginnt um 16:39 und waechst von da
+  an. Betroffen sind rund 30 Bloecke, nicht 86.
+warum_ich_das_nachtrage: |
+  Eine Selbstanklage, die weiter geht als der Befund, ist auch eine Fehlmessung. Sie ist
+  nur unangenehmer zu widerlegen, weil niemand widerspricht, wenn jemand sich selbst zu
+  hart beurteilt.
+  Ich habe in der ersten Berichtigung geschrieben "gemessen" und dabei drei Stichproben
+  verallgemeinert: 12:45, 13:09 und die letzten vier. Die frueheren beiden zeigten +5, die
+  spaeten +3 Stunden — daraus habe ich eine durchgehende Fortschreibung geschlossen. Der
+  vollstaendige Durchlauf zeigt etwas anderes: erst genau, dann ab einem Punkt driftend.
+  Das ist derselbe Fehler wie bei A-39-4 heute nachmittag, nur an mir: aus einer Stichprobe
+  auf die Reihe geschlossen, ohne die Reihe zu oeffnen.
+was_das_fuer_meine_zeitspannen_heisst: |
+  "A-37-5 liegt seit 43 Minuten beim Planner" — Block 16:00, Commit 16:00:47, mein
+  Bezugspunkt 15:17 lag ebenfalls im genauen Bereich. DIE ANGABE STIMMT.
+  "seit 13:01:54, also vier Stunden 37 Minuten" — Block 17:38, Commit 17:00:26. Der
+  Bezugspunkt 13:01:54 stammt aus git log und ist echt, meine Jetzt-Zeit war 38 Minuten zu
+  spaet. RICHTIG WAEREN 3 STUNDEN 58 MINUTEN.
+  Die Aussage selbst — der Punkt liegt seit dem fruehen Nachmittag offen — traegt
+  unveraendert.
+was_bleibt: |
+  Der Kern der ersten Berichtigung steht: ich habe ab 16:39 fortgeschrieben statt gelesen,
+  und das ist derselbe Fehler, den ich heute mehreren Rollen vorgehalten habe. Die Abhilfe
+  bleibt dieselbe und laeuft seit dem letzten Block: date lesen, unmittelbar vor dem
+  Schreiben.
+  Was nicht bleibt, ist die Zahl 86. Es sind rund 30, und welche genau, steht oben.
+ballbesitz: plan-pruefer
+```
