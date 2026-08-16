@@ -24132,3 +24132,44 @@ stand_der_A_38_dor: |
   Kein Kriterium ist bisher unerfuellbar oder bereits erfuellt. Kein Votum.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-38"
+titel: "Vier der sechs Kanten eingeordnet — und bei zweien sage ich ausdruecklich, dass ich sie NICHT belegen konnte"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:04 CEST"
+mess_stand: "Blatt aus rolle/planner · Tor-Fassung aus rolle/generator · Historien-Stichprobe 200 Commits · Planner-Kopf 6d9c6a3c"
+k5_ist_erfuellbar_und_hat_ein_vorbild: |
+  K5 verlangt: "Der Hook selbst ist kaputt — muss mit EIGENER Ursache melden, nicht als
+  Formfehler."
+  Das ist keine neue Forderung, sie ist im Bestand schon umgesetzt. commit-pruefen.sh:
+  Z.585 und Z.602  process.stdout.write("LAUFZEIT " + e.message); process.exit(4)
+  Z.660            echo "LAUFZEIT $p — ${BERICHT#LAUFZEIT }"
+  Der Hook kann die Bauart uebernehmen, statt sie zu erfinden. Das Kriterium ist damit
+  nicht nur erfuellbar, es hat ein Muster im selben Werkzeugkasten.
+k4_ist_ein_randfall_und_richtig_eingeordnet: |
+  K4 sagt: "Rebase / Cherry-Pick — NICHT betroffen, ein Cherry-Pick hat einen Elter."
+  Gemessen: im ganzen Bestand tragen 2 Commits 'cherry' im Text. In einer Stichprobe von
+  200 Commits haben 138 einen Elternteil und 62 zwei.
+  Der Fall kommt also praktisch nicht vor, und wo er vorkommt, unterscheidet ihn die
+  Elternzahl zuverlaessig von einem Merge — genau das Merkmal, das der Hook ohnehin liest.
+was_ich_NICHT_belegen_konnte_und_warum: |
+  K1 "git merge --no-commit greift nicht, der Hook laeuft erst beim Commit" und
+  K3 "git commit --amend an einem Merge — die Eltern bleiben zwei"
+  sind beides Aussagen ueber das VERHALTEN von git, nicht ueber den Bestand. Belegen liesse
+  sie nur ein Lauf: ein Wegwerf-Repo anlegen, einen Merge bauen, amenden, die Eltern
+  zaehlen.
+  ICH HABE DAS VERSUCHT UND ES WURDE NICHT ERLAUBT — der Aufruf ist an der
+  Berechtigung gescheitert. Damit habe ich keine Messung, und eine ausgefallene Messung
+  ist kein Ergebnis. Ich trage die beiden Kanten deshalb als UNGEPRUEFT ein, nicht als
+  plausibel: dass ein Amend die Elternzahl erhaelt, ist mir gelaeufig, aber gelaeufig ist
+  kein Beleg, und genau diese Ersetzung habe ich heute mehrfach an anderen gerueegt.
+  Wer sie braucht, faehrt sie in einem Baum, in dem er schreiben darf.
+stand_der_A_38_dor: |
+  Geprueft und haltend: A-38-1, -2, -5, -6 sowie die Kanten K2, K4, K5, K6.
+  Ungeprueft mangels erlaubtem Lauf: K1, K3.
+  Offen: A-38-3, -4, -8, -9.
+  Kein Kriterium ist unerfuellbar oder bereits erfuellt. Kein Votum, der Ball bleibt bei
+  mir.
+ballbesitz: plan-pruefer
+```
