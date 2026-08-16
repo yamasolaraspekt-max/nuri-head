@@ -2584,3 +2584,79 @@ Falle, vor der meine eigene Wacheanweisung im selben Absatz warnt, in dem sie da
 **Die 0 stand nicht länger als eine Ausgabe im Terminal, aber sie stand da.**
 
 **Ball: yama** — unverändert, als Regelfrage. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Die Anker-Behebung nachgemessen: jetzt ist das Muster zu STRENG — der Generator verliert die Hälfte seiner Bälle
+
+*Dritte Runde am selben Befehl · gemessen 16.08. gegen `c2596c40`*
+
+Der Planner hat meinen Fund mit `6da4e914` behoben und **beide** Enden verankert:
+`^ballbesitz: <rolle>$`. **Der Schluss-Anker ist neu, und er kostet.**
+
+### Gemessen am heutigen Bestand
+
+```
+ROLLE                nur ^     sein ^$      lose
+plan-pruefer            39          38        49
+planner                 81          80        90
+generator               10           5        15
+release-pruefer          5           5         7
+integrator               2           2         2
+evaluator                0           0         1
+```
+
+**Drei Rollen verlieren Bälle, der Generator die Hälfte.** Die verlorenen Zeilen sind
+Ballzeilen **mit angehängtem Kommentar**, zum Beispiel Z.18694:
+
+```
+ballbesitz: plan-pruefer  # 16.08. vom Planner zurueckgegeben: die Restpunkte
+                          #   der 1. DoR-Runde sind behoben (8f2aed6f, d2ca3611, …)
+```
+
+**Das ist eine gültige Ballzeile mit einer Begründung dahinter** — genau die Form, die ich heute
+Abend schon einmal gemessen habe, als sie die Differenz zwischen 38 und 39 erklärte.
+
+### Der reine Vorn-Anker wäre auch falsch
+
+**Ich schlage nicht vor, den Schluss-Anker einfach zu streichen.** Fangprobe an vier Zeilen:
+
+```
+Eingabe                                  ^…$   ^…   ^…([[:space:]]|$)
+ballbesitz: plan-pruefer                  ja    ja        ja
+ballbesitz: plan-pruefer-2                nein  JA        nein
+ballbesitz: plan-pruefer  # Kommentar     NEIN  ja        ja
+ballbesitz: planner                       nein  nein      nein
+                                          ---   ---       ---
+Treffer                                    1     3         2      <- 2 ist richtig
+```
+
+**Der reine Vorn-Anker fängt `plan-pruefer-2` mit** — eine Instanz-Rolle. Heute trägt kein
+`ballbesitz`-Feld eine solche Form (gemessen: nur `generator`, `integrator`, `offen`,
+`plan-pruefer`, `planner`, `release-pruefer`, `yama`), **aber die Fangproben des Tores führen
+`plan-pruefer-2` ausdrücklich als Fall.**
+
+### Soll — die Form, die beide Fallen umgeht, an beiden Proben getestet
+
+```
+grep -cE '^ballbesitz: <rolle>([[:space:]]|$)' docs/STATUS.md docs/BEFUNDNOTIZEN.md
+```
+
+**Über den echten Bestand liefert sie für alle sechs Rollen genau die Soll-Zahl**
+(39 · 81 · 10 · 5 · 2 · 0), **und an der Fangprobe trifft sie 2 statt 1 oder 3.**
+
+### Die Lehre, und sie ist inzwischen belegt
+
+**Das ist die dritte Runde an demselben einen Befehl**, und jede hat etwas gefunden:
+
+```
+Runde 1   ohne Anker        49 statt 39   zaehlt Prosa mit, die den Befehl zitiert
+Runde 2   ^…$               38 statt 39   verliert Ballzeilen mit Kommentar
+Runde 3   ^…([[:space:]]|$)     39        trifft, an Bestand UND Fangprobe geprueft
+```
+
+**Kein Schritt war unsorgfältig — jeder war eine plausible Verschärfung des vorigen.** Was jedes
+Mal fehlte, war dasselbe: **der Befehl wurde überlegt statt gefahren.** *Ein Zählbefehl ist wie
+eine Formel: ein richtig gedachtes Muster kann falsch zählen, und man sieht es erst am Fall.*
+
+**Deshalb liegt hier eine Fangprobe bei und nicht nur eine Begründung.**
+
+**Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau.**
