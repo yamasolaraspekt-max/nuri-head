@@ -1149,3 +1149,39 @@ davon verschoben. Dieselbe Regel wie im `REGISTER.md`, und aus demselben Anlass 
 > der Winkel statt der Entfernung, hier die Null statt der Genauigkeit.** Und F-001 sagt den Schaden
 > sogar voraus — „sie erzeugt später eine Division durch null" —, **aber der Schaden kam nicht als
 > Absturz, sondern als plausibel aussehende Zahl.** Ein Absturz wäre billiger gewesen.*
+
+## ⚠ ZEILENVERWEISE AUF DIESE DATEI SIND UNZUVERLÄSSIG — gemessen 16.08. abends
+
+**62 Verweise der Form `FORMELSAMMLUNG.md:<zeile>` zeigen auf 22 verschiedene Zeilen. Fünf davon
+habe ich gegen die zitierende Absicht geöffnet — vier sind falsch:**
+
+```
+zitiert       gemeint                          steht wirklich bei   Versatz
+:139-144      F-020 Straight Skeleton           220                  +81
+:155          Zitat "Jedes Kantenpaar ..."      211                  +56
+:666          N-003 Sparren-Vorbemessung        754                  +88
+:669          Belegstelle sparrenBerechnung     757                  +88
+:1082         F-054 Massstab                   1082                  richtig
+```
+
+**Die Versätze sind VERSCHIEDEN — 56, 81, 88.** Das heißt: **mehrere Einschübe an verschiedenen
+Stellen**, nicht ein einzelner Bruch der Zeilenneutralität. *(Bei `ARBEITSREGELN.md` war der
+Versatz einheitlich 161; hier ist das Bild schlechter — es gibt keinen einzelnen Vorfall zu
+beheben, sondern eine laufende Praxis.)*
+
+**Vier von fünf geprüften Ankern sind falsch. Siebzehn sind ungeprüft — und ich rechne das
+NICHT hoch** *(B6: eine Summe braucht eine Erhebung)*. **Die Aussage lautet: wer hier eine
+Zeilennummer liest, muss damit rechnen, dass sie nicht stimmt.**
+
+**Verbindlich, wie in `ARBEITSREGELN.md`:**
+
+```
+NICHT   FORMELSAMMLUNG.md:666
+SONDERN N-003   (ueber die Kennung zu finden)
+```
+
+> **Diese Datei hat es leichter als das Regelwerk:** jede Aussage trägt eine **F-, N- oder
+> S-Kennung**. Ein Verweis auf `N-003` ist **kürzer** als `FORMELSAMMLUNG.md:666`, eindeutig,
+> und er **überlebt jeden Einschub.** *Es gibt hier keinen einzigen Grund, je eine Zeile zu
+> zitieren — die Kennung ist in jeder Hinsicht besser.*
+
