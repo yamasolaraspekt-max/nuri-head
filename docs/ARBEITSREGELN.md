@@ -1637,6 +1637,53 @@ sondern die Folge davon, dass dort fast immer die S-Kennung zitiert wird statt e
 **Dort steht deshalb KEINE Warnung.** *Eine Warnung ohne Befund ist Lärm, und Lärm bringt bei,
 Warnungen zu überlesen (A-03).*
 
+### Wer behebt was — die Unterscheidung, die ich zuerst nicht gemacht habe
+
+**Ein falscher Zeilenverweis ist nicht überall dasselbe. Gemessen, wo die vier stehen:**
+
+```
+WEGWEISER in einem lebenden Blatt      -> MUSS behoben werden, sofort
+  A-19: "H-9 kommt hinter H-8 (:812)"     eine BAUANWEISUNG.
+                                          Wer der Zahl folgt, haengt H-9 an den
+                                          Statustraeger-Absatz. Behoben 16.08.
+
+BELEG in Bericht oder Commit-Botschaft -> bleibt unveraendert (A-20-4)
+  A-19:88 grep-Befehl im Messprotokoll    dokumentiert, WIE gemessen wurde
+  BERICHT-B5:130                          Bericht mit Zeitstempel
+  docs/STATUS.md (mehrfach)               Befundnotizen
+```
+
+> **Ein Beleg sagt, was jemand zu einem Zeitpunkt gesehen hat — er darf veralten und muss es
+> sogar. Ein Wegweiser sagt, wohin jemand gehen soll — er darf nie veralten.**
+
+**Deshalb wird nicht „alles behoben", sondern genau die Wegweiser.** *Wer Belege korrigiert,
+zerstört die Beweiskette; wer Wegweiser stehen lässt, schickt den Nächsten in die Irre.*
+
+### Wie es künftig verhindert wird — die Form statt der Richtigkeit prüfen
+
+**Heute ist belegt: die Richtigkeit eines Zeilenverweises ist NICHT maschinell prüfbar** — drei
+von vier Fehlern zeigten auf gültigen Text, nur auf den falschen. **Die Absicht steht nicht in
+der Zahl.**
+
+**Die Form ist es sehr wohl:**
+
+```
+NICHT PRUEFBAR   "Zeigt :812 auf das Gemeinte?"     -> nur mit Kenntnis der Absicht
+PRUEFBAR         "Steht hier ueberhaupt eine Zeilennummer?"  -> ein Suchmuster
+
+  grep -rnE '(ARBEITSREGELN|FORMELSAMMLUNG|SOLAR-REGELWERK)\.md[:#][0-9]+' \
+       docs/auftraege/ docs/rollenkette/
+```
+
+**Verbindlich: in einem LEBENDEN Dokument — Auftragsblatt, Rollenblatt, Regelwerk — wird auf die
+SACHE verwiesen.** Abschnittsüberschrift, Paragraf, Hausregel-Kennung, F-/N-/S-Nummer. **In
+Berichten und Commit-Botschaften bleibt die Zeilennummer erlaubt**, denn dort ist sie Teil des
+Belegs *„ich habe an dieser Stelle gemessen"*.
+
+> **Das ist die einzige Prüfung, die trägt: nicht ob der Verweis stimmt, sondern ob er die Form
+> hat, die veralten kann.** *Eine Form, die nicht veralten kann, braucht keine Prüfung ihrer
+> Richtigkeit.*
+
 **Die vorhandenen Verweise werden NICHT rückwirkend umgeschrieben** — sie stehen in Befunden und
 Commit-Botschaften mit Zeitstempel und waren zu ihrem Zeitpunkt richtig *(A-20-4)*. **Diese
 Warnung hier ersetzt die Korrektur an hundert Stellen.**
