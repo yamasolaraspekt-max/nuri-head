@@ -162,6 +162,11 @@ geschieht, ist ein eigener Vorgang** — und die Frage danach gehört Yama, nich
 - **A-42-8** · **Der Weg ist gangbar** *(P7)*: **WER** — der Generator, in seinem Baum ·
   **DARF er** — ja, es ist `docs/`, kein Produktivcode, kein Löschen · **EXISTIERT die
   Eigenschaft** — ja, die Blockstruktur ist maschinell erfassbar, der Zählbefehl steht in A-42-1.
+- **A-42-9** · **Suite grün und Zahl unverändert gegen den Bau-Stand**, `tsc exit=0`.
+  Zahl **unmittelbar vor dem Bau** erheben.
+
+## Rückweg und Entdeckung
+
 - **A-42-10** · **Der Suchraum ist die Sache, nicht der Ort** *(P8)* — **gemessen, nicht
   angenommen.** Die Sache ist *„yaml-Block mit `auftrag:` und ohne `zustand:`"*; dass er nur in
   `docs/STATUS.md` vorkommt, ist eine **Messung**:
@@ -175,10 +180,6 @@ geschieht, ist ein eigener Vorgang** — und die Frage danach gehört Yama, nich
   im Bestand waren es zur selben Zeit 129 — **deshalb nennt A-42-1 den Befehl und keine Zahl.**)*
   **Ohne dieses Kriterium wäre der Pfad ein geratener Suchraum** — genau der Fehler, den P8
   heute an vier Fällen gefangen hat, drei davon meine.
-- **A-42-9** · **Suite grün und Zahl unverändert gegen den Bau-Stand**, `tsc exit=0`.
-  Zahl **unmittelbar vor dem Bau** erheben.
-
-## Rückweg und Entdeckung
 
 - **Rückweg:** ein Verschiebevorgang in `docs/`. **Rücknahme = Commit zurückdrehen.** Da nichts
   gelöscht wird, ist der Ausgangsstand vollständig im selben Commit enthalten.
