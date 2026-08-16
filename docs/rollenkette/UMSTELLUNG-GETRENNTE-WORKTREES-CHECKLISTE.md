@@ -315,6 +315,70 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-16 | **Lockfile-Prüfung im Rollen-Tor** — Yamas **Bedingung** für die Entscheidung; ohne sie ist der eigene Modulbaum Disziplin statt Mechanik | **OFFEN** — `A-37-12..14` |
 | P2H-17 | **Zwei Haltbarkeiten einer Messung** — flüchtig trägt Zeitstempel, unveränderlich trägt SHA *(Nachtrag in `ARBEITSREGELN.md`)* | **UMGESETZT_UNGEPRUEFT** |
 | P2H-18 | **⚠ `rolle/release-pruefer` ist ein TOTES GLEIS** — 94 Commits hinter HEAD, trägt veraltete Zustände, und die Rolle arbeitet woanders | **BLOCKIERT** |
+| P2H-19 | **⚠⚠ §16 IST GEBROCHEN — die Statuswahrheit existiert SECHSMAL** | **BLOCKIERT** |
+| P2H-20 | **Rückfluss ist niemandes Zuständigkeit** — 64 Transporte vom Release-Prüfer, 12 vom Planner, keiner beauftragt | **BLOCKIERT** |
+
+**P2H-19 — der schwerste Befund der ganzen Umstellung, bewiesen am 16.08. 15:05.**
+
+**§16 sagt: `docs/STATUS.md` ist die EINZIGE Statuswahrheit. Gemessen gibt es sechs:**
+
+```
+HEAD                   80f73be1   21.705 Zeilen
+rolle/planner          8eaea5df   21.704
+rolle/plan-pruefer     8e758cb5   22.165
+rolle/generator        b9525585   19.568      <- Spannweite 3.400 Zeilen
+rolle/evaluator        66bc3ccd   22.796
+rolle/release-pruefer  ac5b9351   22.968
+
+Rueckstau, gleichzeitig gemessen:
+  release-pruefer 85 · evaluator 73 · plan-pruefer 23 · generator 11   = 192 Commits
+```
+
+**Und der Beweis, dass es kein Zeitversatz ist, sondern ein Widerspruch:**
+
+```
+A-33 in HEAD                    CODE_FERTIG
+A-33 in rolle/evaluator         ABGENOMMEN
+A-33 in rolle/release-pruefer   ABGENOMMEN
+```
+
+**Derselbe Auftrag hat zwei Zustände, je nachdem wer nachsieht.** Wer `HEAD` liest, hält A-33 für
+unabgenommen und könnte es ein zweites Mal ziehen — **genau der Fehler, den das Werkzeug des
+Generators heute früh an ihm selbst verhindert hat.**
+
+**Die Umstellung hat die Kollision nicht gelöst, sondern verwandelt:**
+
+| | vorher | heute |
+|---|---|---|
+| **Wo** | ein Baum, fünf Schreiber | sechs Bäume, je ein Schreiber |
+| **Der Fehler** | Beifang, gleichzeitiges Schreiben | **divergente Statuswahrheit** |
+| **Sichtbarkeit** | sofort, beim Commit | **unsichtbar, bis jemand vergleicht** |
+
+**Das ist nicht schlimmer als vorher, aber es ist leiser** — und leise Fehler sind in diesem Haus
+die teuren.
+
+**P2H-20 — die Ursache ist keine Nachlässigkeit, sondern eine fehlende Zuständigkeit.** Gemessen:
+**64** Transporte hat der Release-Prüfer gefahren, **12** der Planner. **Keiner davon war
+beauftragt.** Ein Rückfluss, der von der Aufmerksamkeit dessen abhängt, der gerade Zeit hat, ist
+kein Verfahren.
+
+**DIE LÖSUNG IST BEREITS GESCHNITTEN UND NICHT GEBAUT.** Das ist der ehrliche Kern:
+
+| Teil | Auftrag | Zustand |
+|---|---|---|
+| `docs/STATUS.md` **außerhalb des Integrations-Checkouts sperren** | **A-37 Teil 2** | **ENTWURF, ungebaut** |
+| Alleiniger Schreiber | **Integrator** (B-2, entschieden am 14.08.) | **nie gestartet** |
+| Rückfluss als Zuständigkeit | **P2H-12** | `NACHBESSERN` seit dem 15.08. |
+
+**Solange die Rollen `docs/STATUS.md` in ihren eigenen Bäumen ändern dürfen, entsteht die
+Divergenz bei jedem Zustandswechsel neu.** Kein Transport-Takt behebt das — **er verkürzt nur die
+Zeit, in der die Wahrheit zweigeteilt ist.**
+
+**Was sofort hilft und was nicht:**
+- **Hilft nicht:** häufiger transportieren. Das ist der Zustand von heute, 76-mal gefahren.
+- **Hilft:** A-37 Teil 2 bauen. Dann kann eine Rolle die Statuswahrheit gar nicht mehr lokal ändern.
+- **Hilft:** den Integrator starten. Dann hat der Rückfluss einen Zuständigen.
+- **Beides ist entschieden. Beides ist nicht geschehen.**
 
 **P2H-18 — gefunden über einen Befund des Generators, gegengemessen 16.08. 13:30** *(flüchtige
 Messung, Zeitstempel nach der Regel)*:
@@ -1076,7 +1140,7 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 |---|---|
 | `OFFEN` | **110** |
 | `UMGESETZT_UNGEPRUEFT` | **66** |
-| `BLOCKIERT` | **22** |
+| `BLOCKIERT` | **24** |
 | `NACHBESSERN` | **2** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
