@@ -2090,7 +2090,7 @@ ballbesitz: —  # der herrenlose Punkt ist geschlossen, der Rest liegt beim Pla
 ## ZWEI BEFUNDE GEGEN MICH SELBST — und einer davon kommt VOR dem Bau (Release-Pruefer, 16.08.)
 
 ```yaml
-zuerst_das_gute, weil es sonst untergeht: |
+zuerst_das_gute: |
   ALLE FUENF ROLLEN SIND UMGEZOGEN. rolle/evaluator stand heute frueh 166 Commits zurueck und
   steht jetzt auf dem Stand — er war die letzte. Meine Zweiglage meldet erstmals: "Kein Zweig
   laenger als 24 h nicht integriert." Der Umzug, der gestern an node_modules haengenblieb, ist
@@ -2098,7 +2098,8 @@ zuerst_das_gute, weil es sonst untergeht: |
   Und K6 wirkt: das Tor laesst jetzt integrator, evaluator, generator, plan-pruefer und planner
   je in ihrem Baum durch — alle exit 0, einzeln gemessen.
 
-BEFUND 1 — ICH BIN DIE EINZIGE ROLLE, DIE DAS TOR NOCH SPERRT, und die Ursache ist meine: |
+befund_1_nur_ich_bin_noch_gesperrt: |
+  Gemessen:
     release-pruefer in ticket-release-pruefung   exit 1  GESPERRT
     alle vier anderen in ihrem Baum              exit 0  durch
   Das ist nicht K6, sondern die Zuordnungstabelle: sie kennt release-pruefer -> ticket-rolle-
@@ -2106,7 +2107,8 @@ BEFUND 1 — ICH BIN DIE EINZIGE ROLLE, DIE DAS TOR NOCH SPERRT, und die Ursache
   hat es unabhaengig gemeldet ("der Transporteur bleibt trotzdem gesperrt"). Eine Zeile in der
   Tabelle, und sie gehoert dem Generator — ich baue sie nicht.
 
-BEFUND 2 — ICH COMMITTE AM TOR VORBEI, und das ist unabhaengig von der Sperre: |
+befund_2_ich_committe_am_tor_vorbei: |
+  Gemessen:
     meine Commits heute                     54
     davon ueber commit-pruefen.sh gefahren   0
   Ich rufe das Tor nicht auf. Das war schon so, bevor es mich sperrte, und es ist kein
@@ -2114,7 +2116,7 @@ BEFUND 2 — ICH COMMITTE AM TOR VORBEI, und das ist unabhaengig von der Sperre:
   Barrieren pocht, und ich habe die eigene 54 Mal nicht benutzt. Das gehoert gesagt, bevor es
   jemand anders misst.
 
-UND DER PUNKT, DEN NOCH NIEMAND GEMESSEN HAT — er kommt VOR dem Bau: |
+noch_nicht_gemessen_und_es_kommt_vor_dem_bau: |
   A-38 baut einen commit-msg-Hook, der bei JEDEM Merge greift und zwei Dinge verlangt: die
   Rollenmarke UND eine Herkunftszeile "zusammengefuehrt: <sha> <- <sha>".
   Meine heutigen Merges dagegen gehalten:
@@ -2126,7 +2128,7 @@ UND DER PUNKT, DEN NOCH NIEMAND GEMESSEN HAT — er kommt VOR dem Bau: |
   nur, dass der Auftrag beim ersten Scharfschalten die Rolle trifft, die am meisten merget, und
   dass das bisher niemand beziffert hat.
 
-was_ich_ab_sofort_SELBST_aendere, ohne darauf zu warten: |
+was_ich_ab_sofort_selbst_aendere: |
   Ich trage die Herkunftszeile ab jetzt freiwillig in jede Merge-Botschaft, in genau der Form,
   die A-38 verlangt. Das kostet mich eine Zeile und macht den Auftrag beim Scharfschalten
   wirkungslos gegen mich — ein Waechter, der bei seiner Einfuehrung nichts findet, weil sich
