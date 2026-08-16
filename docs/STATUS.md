@@ -23898,3 +23898,54 @@ die_ursache_in_einem_satz: |
   Statuswahrheit.
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "Die CODE_FERTIG-Meldung geprueft — zwei von drei Meldepflichten erfuellt, die dritte ist keine Nachlaessigkeit sondern die Verfahrensfrage selbst"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:09 CEST"
+mess_stand: "Meldung f19557c8 (16:23:00) · Bau 16c5b9d2 (16:15) · Baureihe ueber alle Zweige gesucht, nach DATEI nicht nach Betreff"
+warum_ich_das_pruefe: |
+  Paragraf 4 der Wache: bei CODE_FERTIG sind die Meldepflichten zu pruefen und der
+  Ballwechsel zu bestaetigen. A-41 ist seit 16:23 als CODE_FERTIG gemeldet — im
+  Commit-Betreff, nach dem Verfahren, das A-41 selbst baut. Das ist mein Ball, unabhaengig
+  davon, dass der Datensatz noch ENTWURF sagt.
+meldepflicht_1_der_bau_sha_existiert: |
+  ERFUELLT. 16c5b9d2 ist auffindbar, vom 16:15, Betreff "Die Regelprobe hat ROT gemeldet,
+  obwohl der Planner geliefert hatte — mein Pr...". Kein toter Verweis.
+meldepflicht_2_der_sha_steht_in_einem_FELD: |
+  NICHT ERFUELLT. Im A-41-Datensatz gibt es kein Feld bau, gebaut_in oder bau_sha —
+  gemessen, 0 Treffer. Der SHA steht ausschliesslich im Commit-Betreff.
+  UND DAS IST KEINE NACHLAESSIGKEIT. Der Generator meldet nach dem Verfahren, das A-41
+  einfuehrt: der Zustand steht im Betreff und wird daraus erzeugt. Die alte Meldepflicht
+  verlangt ein Feld im Datensatz — und genau dieses Schreiben ist ihm seit der Zuendung
+  um 16:17 durch das Rollen-Tor gesperrt.
+  Er kann die Pflicht also nicht erfuellen, ohne die Barriere zu verletzen, gegen die er
+  sich richtig verhaelt. Die Pflicht und die Sperre widersprechen sich, nicht der Bau.
+meldepflicht_3_scope_diff_selbst_gemessen: |
+  ERFUELLT UND SAUBER. Ich habe die Baureihe nach der DATEI gesucht, nicht nach dem Betreff
+  — die Lehre aus meinem eigenen Fehlgriff von 15:46:
+  1e342d53 · b585d335 · 2e9cf127 · ccdfd7b6 · 1013e254 · 253a51d7 · 16c5b9d2 · f19557c8
+  Acht Commits, alle vom Generator, alle ausschliesslich an scripts/status-erzeugen.sh.
+  Der gemeldete Bau selbst: 46 geaenderte Zeilen, eine Datei.
+  Gegenprobe auf Nicht-Ziele ueber ALLE acht: kein Treffer unter resources/, app/,
+  database/, und weder commit-pruefen.sh noch rollen-tor.sh. A-41-11 haelt ueber die
+  gesamte Reihe, nicht nur am Endstand.
+was_ich_bezeugen_kann_und_was_nicht: |
+  ICH BEZEUGE: der Bau existiert, sein Umfang ist sauber, und von A-41s zwoelf Kriterien
+  habe ich elf selbst gemessen — A-41-1 als korrekte Rot-Lage, -2, -3, -5, -8, -10, -11
+  sowie die Kanten K1 bis K7, davon K2 und K5 isoliert nachgebaut. Keines ist rot.
+  ICH BEZEUGE NICHT: A-41-4, -6, -7, -9 und -12. Sie verlangen gefahrene Laeufe mit
+  Protokoll (Erstbefuellung, Gegenprobe gegen den Integrationsstand) und die Suite. Das
+  ist Abnahmearbeit, nicht meine.
+  ICH ERKLAERE DEN BALLWECHSEL NICHT FUER VOLLZOGEN, weil die zweite Meldepflicht offen
+  ist. Aber ich stelle fest, dass sie aus einem Verfahrenskonflikt offen ist und nicht aus
+  einem Mangel des Baus — wer sie gegen den Generator verwendet, misst die Sperre und
+  nicht seine Arbeit.
+was_zu_entscheiden_ist: |
+  Ob eine Fertigmeldung im Commit-Betreff die Meldepflicht "SHA in einem Feld" erfuellt,
+  ist eine Verfahrensentscheidung. Sie gehoert nicht mir und nicht dem Generator.
+  Solange sie aussteht, kann der Evaluator nicht abnehmen: er nimmt CODE_FERTIG ab, und
+  der Datensatz sagt ENTWURF.
+ballbesitz: yama
+```
