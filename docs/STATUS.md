@@ -21635,3 +21635,85 @@ bitte: |
   Dann bleibt die Quelle am Code ablesbar, so wie A-37 es begruendet.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "das_gebaute_tor_sperrt_release_pruefer_und_evaluator_aus"
+titel: "K6 fehlt im Bau — und K6 ist heute der haeufigste Fall: das Tor gibt VERSTOSS fuer genau die zwei Rollen, die noch im gemeinsamen Checkout arbeiten"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:45"
+stand_kopf: 5c3d6e9d
+dringlichkeit: "HOCH — das Tor ist bereits in commit-pruefen.sh eingehaengt; es wirkt, sobald 0ee521f7 die anderen Rollen erreicht"
+posten: "Vorratspruefung am frischen Bau: alle sechs Kanten gegen den Code"
+messung_der_kanten: |
+  A-37 nennt sechs Kanten fuer das Tor. Im gebauten rollen-tor.sh sind FUENF namentlich
+  behandelt und im Code kommentiert: K1 Instanzsuffix · K2 Verzeichnisname weicht ab ·
+  K3 Baum existiert nicht -> durchlassen · K4 kein Repo -> eigene Ursache · K5 integrator
+  im gemeinsamen Checkout -> erlaubt.
+  K6 KOMMT IM GANZEN SKRIPT NICHT VOR. Der Blatt-Wortlaut:
+    "K6  Eine andere Rolle im gemeinsamen Checkout, die noch nicht umgezogen ist
+         -> erlaubt, aber MIT HINWEIS"
+  Im Code faellt dieser Fall in den Schlusszweig: K3 greift nicht, weil der Baum EXISTIERT;
+  Verzeichnis und Zweig passen nicht -> VERSTOSS, exit 1.
+DER BEWEIS, gefahren statt behauptet: |
+  Das gebaute Skript aus 0ee521f7 geholt und im gemeinsamen Checkout laufen lassen:
+    release-pruefer   exit 1   "VERSTOSS  Rolle 'release-pruefer' arbeitet im falschen Baum"
+    evaluator         exit 1   "VERSTOSS  Rolle 'evaluator' arbeitet im falschen Baum"
+    integrator        exit 0   K5 greift, richtig
+    generator         exit 1   er ist umgezogen und arbeitet dort nicht mehr, folgenlos
+  Gegenprobe im eigenen Rollenbaum:
+    plan-pruefer      exit 0   richtig
+  Und weil das Tor in commit-pruefen.sh eingehaengt ist, wird aus exit 1 dort ein
+  "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle."
+WAS DAS PRAKTISCH HEISST: |
+  Sobald 0ee521f7 die anderen Rollen erreicht, koennen RELEASE-PRUEFER und EVALUATOR nicht
+  mehr committen. Beide arbeiten heute im gemeinsamen Checkout, und beider Baum existiert.
+  Es trifft ausgerechnet die zwei Rollen, die gerade tragen: der Release-Pruefer faehrt den
+  Transport, heute achtmal; der Evaluator hat A-33 in der Abnahme. Steht der Transport,
+  steht die Zustellung — der Engpass, den ich heute fuenfmal gemeldet habe.
+  A-37 hat das vorausgesehen. K3s Begruendung steht im Code: "Der Umzug ist freiwillig
+  getaktet — ein Tor, das ihn erzwingt, haelt die Kette an, statt sie zu schuetzen."
+  K6 ist derselbe Gedanke fuer den Fall, dass der Baum schon dasteht. Nur ist er nicht gebaut.
+was_ich_NICHT_sage: |
+  NICHT, dass der Bau schlecht ist. Fuenf von sechs Kanten sind sauber behandelt, die
+  Meldung nennt beide Werte, es gibt einen Pruefmodus, die Sperrentscheidung ist begruendet.
+  Es fehlt EINE Kante.
+  NICHT, dass schon Schaden entstanden ist: 0ee521f7 liegt bisher nur auf rolle/generator,
+  und der Generator ist selbst umgezogen. Heute committet noch niemand dagegen.
+  NICHT, dass zurueckgebaut werden muss. Es sind wenige Zeilen: vor dem Schlusszweig
+  pruefen, ob der Baum der gemeinsame Checkout ist, und dann durchlassen mit Hinweis.
+bitte_und_es_eilt_vor_dem_transport: |
+  An den Generator: K6 nachziehen, bevor 0ee521f7 die anderen Rollen erreicht. Sonst ist der
+  erste Effekt des Tores, dass zwei arbeitende Rollen stehen.
+  An den Planner: K6 steht als Kante im Blatt, aber als KRITERIUM fehlt sie — A-37-1 bis -7
+  decken sie nicht ab. Eine Kante ohne Kriterium wird beim Bauen uebersehen, genau wie hier.
+NACHTRAG_13_47_DAS_TOR_IST_TRANSPORTIERT_UND_WIRKT: |
+  0ee521f7 ist seit 13:43:56 im Fernstand (db397fec) — merge-base --is-ancestor: JA. Mein
+  Befund kam eine Minute zu spaet. K6 fehlt weiterhin, der Rueckgabewert wird weiterhin
+  nicht durchgereicht; beides im Fernstand nachgemessen, je 0 Treffer.
+  UND ES IST SCHAERFER ALS GEMELDET. Der Release-Pruefer ist an ALLEN Orten gesperrt:
+    gemeinsamer Checkout ticket          -> VERSTOSS (K6 fehlt)
+    sein Baum ticket-rolle-release       -> VERSTOSS, und zwar aus einem ZWEITEN Grund:
+                                            er steht auf DETACHED HEAD, der Zweig heisst
+                                            "HEAD" statt "rolle/release-pruefer"
+    ticket-release-pruefung              -> traegt zwar rolle/release-pruefer, aber das
+                                            Verzeichnis heisst anders als die Tabelle sagt
+  Alle drei Proben selbst gefahren, mit dem gebauten Skript aus dem Fernstand.
+  DAS IST P2H-09, seit Tagen als OFFEN gefuehrt: "Der Release-Pruefer arbeitet an einem
+  detached HEAD, nicht auf einem Rollenbranch." Das Tor macht aus diesem bekannten offenen
+  Punkt eine harte Sperre — fuer die Rolle, die den Transport faehrt.
+  DIE FOLGE IST EIN KREIS: mein Befund darueber kann ihn nur ueber den Transport erreichen,
+  und der Transport laeuft ueber ihn. Ein Fehler, der die Zustellung seiner eigenen Meldung
+  verhindert.
+was_ich_dazu_NICHT_tue: |
+  Kein Push, kein Eingriff in fremde Baeume, kein Zurueckdrehen des Tores. Ich habe zwei
+  Rollenbaeume nur GELESEN und das Tor im Pruefmodus gefahren — nichts geschrieben.
+bitte_an_yama_und_es_ist_dringend: |
+  Nur du kannst den Kreis aufbrechen, weil die Zustellung selbst betroffen ist. Drei Wege,
+  jeder fuer sich ausreichend:
+  (a) K6 im Tor nachziehen (Generator, wenige Zeilen) — behebt die Ursache.
+  (b) Den Release-Pruefer auf seinen Zweig setzen statt detached (behebt zugleich P2H-09,
+      der seit Tagen offen ist).
+  (c) Das Tor voruebergehend auf --pruefe stellen, also melden statt sperren, bis (a) steht.
+  Ich empfehle (a) plus (b): (a) ist die Sache, (b) ist ohnehin faellig.
+ballbesitz: yama
+```
