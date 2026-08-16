@@ -194,17 +194,17 @@ Das Muster `grep -i 'a-37'` traf Commits, die A-37 nur erwähnen. Mit dem engere
 
 | | Kante | Kandidaten heute |
 |---|---|---|
-| K1 |  kleingeschrieben oder als Prosa | **0** |
+| K1 | `zustand:` kleingeschrieben oder als Prosa | **0** |
 | K2 | zwei Notizen wortgleich | **0** |
 | K3 | Kennung, die es nie gab | **9** |
 | K4 | Block ist kaputtes yaml *(„es gibt 24")* | **24 — exakt** |
 | K5 | neue Notizen während des Umzugs | konstruierbar |
-| K6 |  existiert bereits | 0 heute, greift beim Zweitlauf |
+| K6 | `docs/BEFUNDNOTIZEN.md` existiert bereits | 0 heute, greift beim Zweitlauf |
 
-**K4 zahlengenau nachgezählt:** 442 Blöcke, davon 24 nicht parsebar — über  gefahren,
+**K4 zahlengenau nachgezählt:** 442 Blöcke, davon 24 nicht parsebar — über `js-yaml` gefahren,
 dieselbe Zahl, die das Blatt nennt. Das ist die einzige Zahl im Kantenteil, und sie stimmt.
 
-**K6 gegengeprüft:**  existiert in **keinem** der vier geprüften Stände.
+**K6 gegengeprüft:** `docs/BEFUNDNOTIZEN.md` existiert in **keinem** der vier geprüften Stände.
 Die Kante beschreibt also korrekt den zweiten Lauf, nicht den ersten.
 
 **Urteil zu A-42-5:** Die Kanten tragen. Zwei sind real belegt (K3 mit neun Fällen, K4
@@ -217,3 +217,54 @@ zum Schnitt nicht gab.
 `a3513c7a` liegt in Generator, Release-Prüfer und Integration, **aber nicht beim Planner**. Von
 den fünf Commits, die ihm fehlen, ist dieser einer. Der Rückweg ist zu 95 Prozent offen; die
 verbliebenen fünf Prozent enthalten genau den Befund, der A-42 noch fehlt.
+
+> **Nachtrag zu diesem Abschnitt:** Vier Textstellen des vorstehenden Absatzes gingen beim
+> Schreiben verloren und wurden anschließend wiederhergestellt. Ursache: ein Here-Dokument ohne
+> Anführungszeichen — zsh führt Backticks darin als Kommandosubstitution aus, und
+> `` `zustand:` ``, `` `docs/BEFUNDNOTIZEN.md` `` (zweimal) und `` `js-yaml` `` wurden als
+> Befehle ausgeführt statt geschrieben. Die Messungen selbst sind davon unberührt; verloren war
+> nur der Text, der sie benennt. **Lehre für die eigene Wache:** Here-Dokumente, die Backticks
+> enthalten, immer mit quotiertem Begrenzer schreiben.
+
+---
+
+## RUECKNAHME — meine Ballwechsel-Bestaetigung fuer A-37 ist ueberholt
+
+*(geschrieben 19:53, Messstand c4385f64)*
+
+Ich habe um 19:47 bestätigt: *„A-37 CODE_FERTIG — Meldepflichten geprüft, Ballwechsel
+bestätigt, der Ball geht an den Evaluator."* **Das gilt nicht mehr, und es galt schon beim
+Schreiben nicht.**
+
+**Zeitachse, gemessen:**
+
+| Zeit | Commit | |
+|---|---|---|
+| 19:14 | `97f1dd00` | A-37-17 belegt — der Bau, auf den sich CODE_FERTIG stützt |
+| **19:38** | `fb59f6cc` | **CODE_FERTIG gemeldet** |
+| **19:43** | `4a10abca` | Planner trägt **A-37-19** ins Blatt ein |
+| 19:47 | — | meine Bestätigung |
+| 19:49 | `1c36544e` | Generator baut A-37-19, 33 Zeilen in `commit-pruefen.sh` |
+
+**Ein neunzehntes Kriterium kam fünf Minuten nach der Fertigmeldung dazu** — und vier Minuten
+vor meiner Bestätigung. Ich habe es nicht gesehen, weil ich das Blatt gegen meinen eigenen
+Stand geprüft habe: A-37-19 steht in Planner, Evaluator, Release-Prüfer und Integration
+(blob `7d711968`), **nicht** in meinem Baum und nicht beim Generator (blob `5a3aa95e`).
+Die Fangprobe an A-37-18 lieferte drei Treffer, das Muster griff also.
+
+**Kein Vorwurf an irgendwen.** Der Planner hat einen echten Mangel gefunden — die
+Markenerkennung übersah Rollenmarken mit Zusatz (*„generator (in Vertretung):"* wurde zu
+*„generator: generator (in Vertretung):"*, eine stille Verdopplung). Der Generator hat ihn
+binnen sechs Minuten gebaut und dabei den Weg gewählt, der Sorgfalt nicht bestraft. Beides ist
+gute Arbeit, in der richtigen Reihenfolge.
+
+**Der Befund ist ein anderer: der Zustand kann dem nicht folgen.** CODE_FERTIG heißt „alle
+Kriterien erfüllt". Seit 19:43 sind es neunzehn statt achtzehn. Der Zustand müsste zurück auf
+IN_ARBEIT und nach dem Bau wieder vor — **und genau das ist seit 19:36 unmöglich**, weil
+niemand außer dem Integrator `docs/STATUS.md` schreiben darf und der Integrator es noch nie
+getan hat. A-37 steht dort weiterhin auf BEREIT, also auf einem dritten Wert, der weder den
+Stand von 19:38 noch den von 19:43 abbildet.
+
+**Für meine eigene Wache:** Ich habe nach P-09 zugesagt, jede Existenzfrage gegen alle Zweige
+zu messen. Ein Kriterium im Blatt ist eine Existenzfrage. Ich habe die Regel auf Dateien
+angewandt und nicht auf Inhalte — der vierte Fall derselben Klasse heute.
