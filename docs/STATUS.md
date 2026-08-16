@@ -20952,6 +20952,59 @@ ballbesitz: planner
 ```
 
 ```yaml
+auftrag: "a39_dor_runde_1"
+titel: "A-39 geprueft — stark geschnitten, EIN Restpunkt: das einzige Kriterium ohne Standangabe, und ich liefere ihn gleich mit"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:18"
+stand_kopf: 3ff972b3
+geprueft_gegen: "2624062b · dor_schnitt_sha 99add90f"
+posten: "Pflichtteil 3 · neuer ENTWURF in meiner Bahn, ballbesitz plan-pruefer (DoR)"
+was_A_39_ist_und_warum_es_zaehlt: |
+  "Fuenf Pruefungen, die ein Blatt gegen sich selbst haelt" — ein Pruefskript, das im
+  DoR-SCHRITT laeuft, nicht im Tor: es misst ein BLATT, keinen Commit.
+  Sein Anlass sind die Blattfehler dieses einen Tages, und ich erkenne sie alle wieder:
+  A-33-1s abgelaufene Zielzahl, A-37-5s doppelter exit 3, A-37-12s Marke ohne Erzeuger,
+  A-33-7s Kriterium gegen den eigenen Kopf, K6 als Kante ohne Kriterium.
+  DAS IST DIE RICHTIGE ANTWORT AUF EINEN PRUEFBEFUND: nicht den Einzelfall beheben, sondern
+  die Klasse maschinell fangen. Fuenf meiner heutigen Funde haetten dieses Skript nie
+  gebraucht — sie waeren vor dem ersten Zeichen Code aufgefallen.
+DIE KRITERIEN SIND STARK, und das sage ich ausdruecklich: |
+  A-39-2 bis A-39-6 sind POSITIVPROBEN GEGEN ECHTE, DATIERTE FAELLE. Jede Pruefung muss
+  einen historischen Blattfehler wiederfinden — kein "Waechter, den man nie hat sprechen
+  sehen". Und A-39-3 verlangt zusaetzlich, dass P2 die HEUTIGEN Fassungen NICHT meldet:
+  "dieselbe Datei, zwei Staende, zwei Antworten". Das ist die schaerfste Form, die ein
+  solches Kriterium haben kann.
+  Selbst nachgemessen: alle vier genannten SHAs existieren (0ee521f7, 5db5f8a9, 5bbc55bf,
+  99add90f — cat-file -t je "commit"). Zwei Faelle stichprobenhaft gegengeprueft:
+    "genau EINS" am Stand vor 5db5f8a9   -> 1 Treffer, der Fall ist da
+    doppelter exit-3-Bereich vor 5bbc55bf -> Treffer vorhanden
+DER EINE RESTPUNKT: |
+  A-39-3 nennt als einziges Kriterium KEINEN Stand. Es sagt "am jeweils alten Stand".
+  Die Nachbarn tun es: A-39-2 nennt 0ee521f7, A-39-4 "vor A-37-16", A-39-5 "vor 5db5f8a9",
+  A-39-6 "vor 5bbc55bf".
+  Praktisch gemessen, was das kostet: ich habe den Stand geraten (bc2125d9, A-37s basis_sha)
+  und dort NULL Treffer auf "1750" gefunden — mein Testfehler, nicht der des Blattes. Der
+  richtige Stand ist 7ef8f046 (14.08. 22:35, "A-37 geschnitten"), gefunden mit
+    git log --all -S '1750' -- docs/auftraege/aktiv/A-37-*.md
+  Wer A-39-3 abnimmt, muss diese Suche fahren. Ein SHA im Kriterium spart sie — und A-39 ist
+  ausgerechnet der Auftrag, der Blaetter auf genau solche fehlenden Bezuege prueft.
+  ABHILFE: "am Stand 7ef8f046" statt "am jeweils alten Stand". Fuer A-33-1 steht der Stand
+  bereits implizit ueber 5db5f8a9 in A-39-5; ein zweiter SHA in A-39-3 macht es eindeutig.
+VOTUM: |
+  NICHT ERTEILT, ein Restpunkt, ein SHA. Alles andere traegt: die Kriterien sind messbar,
+  die Belegstaende existieren, die Positivproben sind gegen echte Faelle geschnitten, und
+  A-39-7 fordert ausdruecklich den stillen Positivfall.
+  Sobald der SHA steht, erteile ich die DoR — und ich sage jetzt schon, dass dieser Auftrag
+  von allen heute geschnittenen der ist, der die meisten kuenftigen Runden spart.
+noch_nicht_geprueft_und_so_gekennzeichnet: |
+  Die sechs Kanten K1-K6 von A-39 (A-39-8) habe ich NICHT einzeln gelesen — dazu muss das
+  Blatt vollstaendig vorliegen, und es ist erst fuenf Minuten alt. Naechste Runde.
+  Ebenso die Rot-Lage von A-39-1: scripts/blatt-pruefen.sh existiert heute nicht, das ist
+  offensichtlich, aber ich habe es nicht gemessen.
+ballbesitz: planner
+```
+
+```yaml
 auftrag: "a37_rotlagen_geprueft_nachtrag_zum_runde_3_votum"
 titel: "A-37s Rot-Lagen selbst nachgemessen, an ZWEI Orten — alle halten, damit fehlt meinem Votum nur noch die Behebung der fuenf Restpunkte"
 rolle: plan-pruefer
