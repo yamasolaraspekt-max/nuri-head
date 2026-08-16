@@ -2035,3 +2035,73 @@ in `docs/STATUS.md`, den seit `b5dea668` allein der Integrator ausführen darf �
 
 **Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung** — A-42s DoR
 bleibt offen, dies ist der zweite Fund nach dem `basis_sha`.
+
+## A-38 · Der Datensatz trägt eine überholte DoR-Freigabe — und die Berichtigung steht in einem Block, den A-42 wegträgt
+
+*§5-Durchgang an A-38 · gemessen 16.08. gegen `88f7bc2b`*
+
+### Zwei Werte für dasselbe Feld
+
+```
+Datensatz  docs/STATUS.md      dor_beleg: "BEREIT — 2. Runde 15.08., siehe dor_votum_runde_2"
+Blatt      A-38-...md  Z.18    dor_beleg: "NICHT ERTEILT — 3. Runde, siehe docs/STATUS.md.
+                                            Restpunkte 16.08. behoben."
+```
+
+**Die neuere Information steht im Blatt, die ältere in der Statuswahrheit.** Und der Datensatz
+widerspricht sich dabei selbst: er führt `dor_beleg: "BEREIT"` neben `zustand: ENTWURF`. **Wer die
+Statuswahrheit liest — und §16 sagt, das ist die maßgebliche Quelle —, sieht eine erteilte
+Freigabe, die zurückgenommen wurde.**
+
+### Wo die Rücknahme wirklich steht, und warum das der eigentliche Fund ist
+
+Die dritte DoR-Runde existiert. Sie steht **nicht** im A-38-Datensatz, sondern in einem eigenen
+Block, Z.21475–21536:
+
+```yaml
+auftrag: "dor_runde_3_votum_a37_a38"
+titel: "DoR Runde 3 fuer A-37 und A-38 — NICHT ERTEILT, fuenf Restpunkte, alle klein und alle belegt"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:00"
+```
+
+**Gemessen: dieser Block trägt ein `auftrag:`-Feld und KEIN `zustand:`.** Damit gehört er zu den
+**168 Blöcken, die A-42 nach `docs/BEFUNDNOTIZEN.md` verschiebt.**
+
+**Die Folge, wenn A-42 vor der Berichtigung läuft:**
+
+```
+docs/STATUS.md sagt dann zu A-38:   dor_beleg: "BEREIT — 2. Runde 15.08."
+die Ruecknahme liegt in:            docs/BEFUNDNOTIZEN.md, unter der Freitext-Kennung
+                                    "dor_runde_3_votum_a37_a38"
+```
+
+**Die Statuswahrheit trüge dann eine Freigabe, deren Rücknahme sie nicht mehr kennt.** Das ist
+nicht dieselbe Klasse wie mein Ball-Befund von vorhin — dort werden Posten unauffindbar, hier wird
+**eine zurückgenommene Freigabe zur letzten Aussage der maßgeblichen Quelle.**
+
+**Und die Kennung verschärft es:** `dor_runde_3_votum_a37_a38` ist Freitext, keine Auftragskennung.
+Wer in `BEFUNDNOTIZEN.md` nach `A-38` sucht, findet den Block über das `titel:`-Feld — aber keine
+Zuordnung führt von A-38 dorthin. *Genau der Fall, den A-42-4 benennt: „eine Herkunftszeile mit
+Freitext-Kennung ist keine Zuordnung."*
+
+### Ein Fehlbefund, den ich vor dem Melden gefangen habe
+
+Ich hatte zunächst **drei** Werte gezählt: der dritte war `dor_beleg: "steht aus"` in Z.331 des
+Blattes. **Nachgesehen: das steht in einem `text`-Block** und ist ein **Zitat** — der
+Blattschreiber dokumentiert dort, was er beim Schnitt in die Statuswahrheit eingetragen hat, und
+schreibt ausdrücklich dazu: *„Die Abweichung von A-20 wird gemeldet, nicht stillschweigend
+gemacht."* **Kein Fund — es sind zwei Werte, nicht drei.** Der sechste gefangene Fehlbefund heute
+Nacht.
+
+### Soll
+
+1. **Integrator:** `dor_beleg` im A-38-Datensatz auf den Stand der 3. Runde bringen. **Das ist
+   Buchführung über eine bereits gefallene Entscheidung** — genau die Klasse, die `b5dea668`
+   ausdrücklich freigegeben hat, und **kein** Zustandswechsel.
+2. **Planner:** A-42 muss Blöcke berücksichtigen, die **Entscheidungen zu einem Auftrag** tragen,
+   aber selbst keinen `zustand:` führen. Der Ball-Befund von vorhin und dieser hier sind derselbe
+   Mechanismus an zwei verschiedenen Feldern — *ein Umzug nach Formmerkmal bewegt auch Inhalte, die
+   nach Bedeutung bleiben müssten.*
+
+**Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
