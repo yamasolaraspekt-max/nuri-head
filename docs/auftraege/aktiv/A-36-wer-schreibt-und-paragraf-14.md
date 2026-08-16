@@ -99,7 +99,7 @@ Aufruf wie die vorhandenen Barrieren (A-26, A-27, A-30): **melden, Rückgabe ver
 
 ## Abnahmekriterien
 
-- **A-36-1** · `scripts/wer-schreibt.sh` existiert und ist ausführbar.
+- **A-36-1** · `scripts/wer-schreibt.sh` existiert und ist ausführbar. **Erzeuger: DIESER Auftrag** — der Blattkopf nennt das Skript als Liefergegenstand, gebaut vom **Generator**. *(Im Kriterium genannt, damit P3 den Erzeuger nicht suchen muss.)*
   **Messbar:** `test -x scripts/wer-schreibt.sh` → exit 0. Vorher: Datei existiert nicht (0 Treffer).
 - **A-36-2** · **Der Wächter ordnet Hunks Kennungen zu — an einem echten Fall belegt.**
   **Messbar:** eine Teständerung an zwei verschiedenen Auftragsabschnitten von `docs/STATUS.md`
@@ -111,8 +111,8 @@ Aufruf wie die vorhandenen Barrieren (A-26, A-27, A-30): **melden, Rückgabe ver
   einem kaputten nicht zu unterscheiden** — die Formulierung stammt aus `bfa5e2fa`.
 - **A-36-4** · **Alle sechs Kanten K1–K6 sind behandelt und je belegt.** K5 verlangt eine
   **benannte** Entscheidung im Bau-Bericht.
-- **A-36-5** · §14 in `docs/ARBEITSREGELN.md` ist geändert und nennt die Hunk-Ebene.
-  **Messbar:** `grep -c 'name-only' docs/ARBEITSREGELN.md` — Stand vorher **2** (`:529` in einer
+- **A-36-5** · **§14 der Arbeitsregeln** ist geändert und nennt die Hunk-Ebene — **über die Abschnittsüberschrift zu finden, nicht über eine Zeilennummer.** *(P8: die Sache ist §14, nicht die Datei.)*
+  **Messbar:** `grep -c 'name-only' docs/ARBEITSREGELN.md` *(die Datei ist hier der Gegenstand selbst, nicht ein geratener Suchraum — P8 greift nicht)*` — Stand vorher **2** (`:529` in einer
   Falldarstellung, `:693` die Regel). **Die Falldarstellung auf `:529` bleibt unberührt**, sie ist
   ein Beleg (A-20-4); geändert wird nur `:693`.
 - **A-36-6** · `commit-pruefen.sh` ruft den Wächter auf, nach dem Muster der drei vorhandenen.
