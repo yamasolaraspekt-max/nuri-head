@@ -202,6 +202,33 @@ P8  DER ORT IST DAS KRITERIUM, NICHT DIE SACHE
 - **A-39-10** · **Suite grün und Zahl unverändert gegen den Bau-Stand**, `tsc exit=0`.
   Zahl **unmittelbar vor dem Bau** erheben, nicht gegen eine feste Zahl prüfen.
 
+## Die Reichweite dieses Prüfers — gemessen 19:0x, damit sie niemand überschätzt
+
+**Gemessen über alle Blätter unter `docs/auftraege/`:**
+
+```
+                 Blaetter   mit Kantentabelle   mit Abnahmekriterien
+A-Blaetter          44             8                    8
+W-Blaetter          41             1                    1
+                    --            --                   --
+                    85             9                    9
+```
+
+> **A-39 prüft die Struktur „Kanten + Abnahmekriterien". Diese Struktur haben 9 von 85
+> Blättern.** Die übrigen 76 laufen durch — **korrekt** (K1 deckt „Blatt ohne Kantenliste" ab),
+> aber **stumm**.
+
+**Das ist kein Mangel des Prüfers, sondern seine Reichweite** — und sie gehört genannt, weil ein
+Lauf über alle Blätter mit „0 Funde in 85 Blättern" endet und **wie eine Unbedenklichkeits-
+bescheinigung für 85 aussieht, während er 76 nie angesehen hat.**
+
+**Und die Proben spiegeln das:** von 17 Nennungen in den Kriterien stammen 15 aus A-Blättern
+(A-37 7×, A-38 3×, A-41 2×, A-33 2×). **Das ist kein Zufall — bei den W-Blättern gibt es nur
+ein einziges mit dieser Struktur (`W-17/1`), und es kommt in den Proben vor.**
+
+**Auflage daraus:** der Lauf nennt **beide** Zahlen — geprüfte Blätter und übersprungene.
+*Ein Prüfer, der nicht sagt, was er nicht angesehen hat, wird für gründlicher gehalten als er ist.*
+
 ## Rückweg und Entdeckung
 
 - **Rückweg:** ein neues Skript, sonst nichts. **Rücknahme = Commit zurückdrehen.** Es ist nirgends
