@@ -24408,3 +24408,49 @@ was_offen_bleibt: |
   Was ich beitrage: die drei Belege oben, damit der Beweis nicht bei null anfaengt.
 ballbesitz: generator
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "Die Kreuzprobe nachgeholt — A-39s Struktur ist geschlossen, zwei Kanten haengen bewusst ausserhalb, und A-38 hat eine andere Bauart"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:10 CEST"
+mess_stand: "A-38 und A-39 aus rolle/planner · Planner-Kopf d91f1dca"
+warum_diese_runde: |
+  Um 19:02 habe ich eingeraeumt, dass mir eine Kreuzprobe fehlt: ich arbeite Kanten und
+  Kriterien je einzeln ab und halte sie nie gegeneinander. Genau deshalb ist A-41-7
+  durchgefallen, obwohl sein Inhalt zwei Stunden vorher gemessen war.
+  Ich habe die Probe jetzt fuer beide Auftraege nachgeholt, die noch bei mir liegen.
+a_39_die_kette_ist_geschlossen: |
+  Jede Kante nennt eine Pruefung, jede Pruefung hat ein Kriterium:
+  K1 -> P1 -> A-39-2      K3 -> P2 -> A-39-3      K4 -> P3 -> A-39-4
+  K5 -> P5 -> A-39-6
+  Und umgekehrt vollstaendig: P1 A-39-2 · P2 A-39-3 · P3 A-39-4 · P4 A-39-5 ·
+  P5 A-39-6 · P6 A-39-11. Keine Pruefung ohne Kriterium.
+  ZWEI KANTEN NENNEN KEINE PRUEFUNG: K2 und K6. Das ist kein Loch, sondern eine andere
+  Art von Kante — beide beschreiben eine Grenze des GANZEN Werkzeugs, nicht das Verhalten
+  einer einzelnen Pruefung. K2 ist die Formgrenze, deren Groesse ich um 18:26 gemessen
+  habe (P1 erreicht 8 von 34 Blaettern), K6 ist der Stilllegungs-Wegweiser, der uebersprungen
+  wird.
+  P4 hat als einzige Pruefung keine Kante. Auch das ist kein Mangel: nicht jede Pruefung
+  hat einen Grenzfall, und A-39-5 nennt fuer P4 einen eigenen Stand.
+a_38_hat_eine_andere_bauart_und_das_ist_der_ertrag: |
+  Dieselbe Probe an A-38 ergibt auf den ersten Blick ein alarmierendes Bild: K1 bis K5
+  werden in KEINEM Kriterium genannt, nur K6 in A-38-6 und A-38-7.
+  NACHGESEHEN STATT GEMELDET: A-38-7 ist ein SAMMELKRITERIUM — "alle sechs Kanten
+  behandelt, K6 ausdruecklich als nicht verhinderbar benannt". Die Kanten sind also
+  vollstaendig abgedeckt, nur eben durch ein Kriterium statt durch sechs.
+  Zwei Auftraege, zwei Bauarten: A-39 verzahnt Kante und Pruefung einzeln, A-38 sammelt
+  sie in einem Kriterium. Beides ist tragfaehig. Haette ich nur gezaehlt, haette ich A-38
+  fuenf fehlende Zuordnungen gemeldet — es sind keine.
+was_die_probe_kostet_und_was_sie_bringt: |
+  Sie kostet keine neue Messung, nur den Abgleich zweier Listen, die beide schon
+  dastehen. Sie haette A-41-7 gefunden, bevor der Planner es tat, und sie hat hier
+  verhindert, dass ich A-38 fuenf Fehler andichte, die seine Bauart gar nicht kennt.
+  Ich fahre sie ab jetzt bei jeder DoR mit, bevor ich ein Votum erwaege.
+stand: |
+  A-39: Kette geschlossen, A-39-1 rot wie angegeben, K2s Groesse gemessen (8 von 34).
+  Offen: A-39-7, -8, -9, -10 und die Belege zu K1, K3, K4, K5, K6.
+  A-38: acht Punkte geprueft, K1 und K3 mangels erlaubtem Lauf ungeprueft.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
