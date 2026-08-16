@@ -121,3 +121,78 @@ und selbst gefahren.
 Evaluator hat sie mit dreizehn verdrängten Ständen belegt; ich habe die Zahl **nicht** nachgezählt,
 weil sie seine Abnahme ist und nicht meine Release-Prüfung. Ebenso ungeprüft: der `vendor`-Mangel in
 seinem Rollenbaum, den er selbst als Ausstattungsmangel offen meldet.
+
+---
+
+## Nachtrag 19:4x — mein eigener Release war im Log nur halb sichtbar
+
+Beim Messen des **dritten Zustandsorts** (Commit-Log, neben Tafelzeile und Datensatz) gefunden:
+
+```
+ECHTE Wortlaut-Commits im Log   4    A-37 · A-41 · A-42 · W-17/1
+Log weicht vom Datensatz ab     2
+   A-37     Log=CODE_FERTIG   Datensatz=BEREIT              (Datensatz hinkt)
+   W-17/1   Log=ABGENOMMEN    Datensatz=BETRIEBSBESTAETIGT  (mein Release fehlt)
+```
+
+**Der Grund ist mein Commit `5d53c011`.** Er hat A-41 **und** W-17/1 freigegeben, trägt im Betreff
+aber nur `zustand: A-41 · BETRIEBSBESTAETIGT`. W-17/1 stand nur im Fließtext — und Fließtext liest
+das Erzeugungswerkzeug nicht.
+
+**Das ist derselbe Mangel, den ich um 17:3x beim Evaluator zum Freigabehindernis gemacht habe**, und
+er trifft mich zwei Stunden später in der Umkehrung: er hatte den Zustand richtig im Datensatz und
+nicht im Log; ich hatte ihn richtig im Datensatz und **halb** im Log. **Ein Zustands-Commit trägt
+genau eine Kennung** — wer zwei Aufträge in einem Commit freigibt, macht den zweiten unsichtbar.
+
+Dieser Commit liefert den fehlenden Wortlaut nach.
+
+### Was dabei noch auffiel — zwei Messfehler, beide vor der Meldung gefangen
+
+**A-33 war ein Fehltreffer.** Meine erste Log-Messung meldete drei Abweichungen, darunter
+`A-33 Log=CODE_FERTIG`. Geöffnet: der Treffer stammt aus `16c5b9d2`, wo die Regel **sich selbst
+zitiert** — *„die Regel zitiert den Wortlaut als 'Beispiel: generator: zustand: A-33 · CODE_FERTIG
+· generator · bau 3e22e61b'"*. Mein Muster suchte irgendwo im Betreff; das Werkzeug
+`status-erzeugen.sh` bindet an den **Zeilenanfang** und fällt genau darauf nicht herein. Nach
+derselben Bindung: 2 Abweichungen statt 3.
+
+**76 freigegebene Aufträge haben keinen Wortlaut-Commit im Log.** Das ist kein Mangel, sondern der
+Altbestand: das Verfahren ist von heute. Es heißt aber, dass die erzeugte Tafel den Altbestand nicht
+kennt — wer sie für vollständig hält, sieht 4 Kennungen statt 87.
+
+### Nachtrag 19:5x — der Wortlaut hat keine Form für „kein Ballbesitzer mehr"
+
+Der Nachtrag von 19:4x hat **auch nicht getroffen**, und das Werkzeug sagt es selbst:
+
+```
+NICHT IM WORTLAUT, deshalb nicht gezaehlt: 2
+  b55305e6  release-pruefer: zustand: W-17/1 · BETRIEBSBESTAETIGT · — · release 5d53c011
+  5d53c011  release-pruefer: zustand: A-41 · BETRIEBSBESTAETIGT · — · release 27924b03
+```
+
+**Ursache am Muster gelesen** (`status-erzeugen.sh:150-157`): das Ballfeld ist
+`(?P<rolle>[a-z-]+(?:-[0-9]+)?)` — **eine Rolle, kein Gedankenstrich.** Am Muster gegengeprobt:
+
+```
+mein Commit (Ball —)                        trifft NICHT
+dieselbe Zeile mit  · release-pruefer ·     TRIFFT
+Generator A-37 (Vergleich)                  TRIFFT
+```
+
+**Das Werkzeug hat recht, mein Wortlaut war falsch** — zum zweiten Mal in Folge an derselben Zeile.
+Erst fehlte die Kennung, dann traf das Ballfeld nicht.
+
+**Dahinter steckt aber eine echte Lücke, und sie ist nicht meine:** bei `BETRIEBSBESTAETIGT` gibt es
+keinen Ballbesitzer mehr — der Auftrag ist abgeschlossen. Der Datensatz drückt das mit `—` aus, der
+Wortlaut **kann es nicht**. Er verlangt eine Rolle, wo keine mehr zuständig ist.
+
+Das ist derselbe Mangel wie im Register eine Ebene höher: *dort* konnte `LEER` „geklärt, nichts zu
+bauen" nicht ausdrücken, *hier* kann der Wortlaut „niemand mehr zuständig" nicht ausdrücken. **Eine
+Form, die den Normalfall trifft und den Endfall nicht.**
+
+Bis das entschieden ist, schreibe ich die **setzende Rolle** ins Ballfeld statt `—`: bei einem
+Release ist das der Release-Prüfer. Das ist nicht falsch (er hat den Zustand gesetzt), aber es sagt
+nicht dasselbe wie `—`. **Der Datensatz bleibt die genauere Auskunft, und beide Orte weichen damit
+absichtlich voneinander ab** — das gehört gewusst, bevor jemand es als Drift meldet.
+
+**Wem das gehört:** der Wortlaut ist in A-41 festgeschrieben, die Form gehört dem Planner. Ich melde
+und weiche aus; ich ändere kein fremdes Muster.
