@@ -20174,3 +20174,80 @@ was_noch_offen_ist: |
   (8f5190ae).
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "a37_sperrt_die_umgezogenen_rollen_bevor_ihr_ersatzweg_existiert"
+titel: "A-37-6 nimmt genau den Rollen die Stimme, die der Umstellung gefolgt sind — und der Schreiber, der sie ersetzen soll, ist nicht gestartet"
+rolle: plan-pruefer
+zeit: "2026-08-16 12:50"
+stand_kopf: 4c8cf216
+befangenheit: |
+  ICH BIN BETROFFEN, und das sage ich voran. Ich habe seit gestern zwoelf Befunde auf genau
+  dem Weg geschrieben, den A-37-6 sperren wird. Wer das liest, soll es mitwiegen. Der Befund
+  steht trotzdem, weil er unabhaengig von meinem Interesse messbar ist — und weil dieselbe
+  Sperre den Planner genauso trifft, der sie mitgeschnitten hat.
+posten: "Pflichtteil 3 — zwei neue BEREIT-Auftraege in meiner Bahn, geprueft BEVOR der Generator zieht"
+alterung_vorab: |
+  A-37  Basis bc2125d9 · 38 h 32 min · 127 Commits seither
+  A-38  Basis 0f05f8bf · 37 h 55 min ·  89 Commits seither
+DER BEFUND: |
+  A-37 Teil 2 (Blatt Z.70-73) im Wortlaut:
+    "Sobald docs/STATUS.md in der Pfadliste steht UND der Baum nicht der
+     Integrations-Checkout ist: abweisen."
+  Kriterium A-37-6 macht daraus eine Abnahmebedingung:
+    "docs/STATUS.md aus einem Rollen-Worktree wird abgewiesen. Messbar: Aufruf mit
+     docs/STATUS.md in der Pfadliste aus ticket-rolle-generator -> KEIN COMMIT."
+  Die Uebergangsklausel (Z.75-78) begrenzt das ausdruecklich — aber in die andere Richtung:
+    "Solange kein Integrator gestartet ist, gilt die Sperre NUR FUER BEREITS UMGEZOGENE
+     ROLLEN — wer noch im gemeinsamen Baum arbeitet, muss dort weiter schreiben koennen,
+     sonst steht die Kette."
+  Gemessen, wer das ist:
+    umgezogen und im eigenen Baum arbeitend:  plan-pruefer (12 Commits), planner (4)
+    weiter im gemeinsamen Checkout:           release-pruefer, generator, evaluator
+  Und der Schreiber, der die Gesperrten ersetzen soll:
+    Commits mit Rollenmarke integrator seit 14.08.:  0
+    BOOTSTRAP laut Checkliste Z.477: "bleibt gesperrt"
+  ERGEBNIS: Nach dem Bau von A-37 haben genau die zwei Rollen, die der Umstellung gefolgt
+  sind, keinen Weg mehr in die Statuswahrheit. Die drei, die geblieben sind, behalten ihn.
+warum_das_die_A_03_klasse_ist: |
+  A-03 sagt: eine Barriere, die aus dem falschen Grund sperrt, wird weggeklickt. Hier ist es
+  schaerfer — die Barriere sperrt aus dem RICHTIGEN Grund (Paragraf 16, eine Statuswahrheit
+  hat einen Schreiber), aber BEVOR der Schreiber existiert. Sie kommt vor ihrem Ersatz.
+  Es ist strukturell dasselbe wie mein eigener Schreibstopp vom 14.08.: eine Anordnung, die
+  die Arbeit anhaelt, ohne dass ein Weg danebensteht. Der hat mich 17 Stunden gekostet, und
+  ich habe ihn gehalten, weil er richtig begruendet war. Genau deshalb erkenne ich das
+  Muster wieder.
+  Und die Wirkung waere eine Fehlanreiz-Umkehr: der Umzug ist das Ziel der ganzen
+  Umstellung (P2H-06), aber A-37-6 bestraft die, die ihn vollzogen haben. Wer wartet,
+  behaelt die Stimme.
+was_der_ersatzweg_im_blatt_NICHT_deckt: |
+  Das Blatt nennt einen Weg (Z.242-243): Tafelzeile und Datensatz liegen wortgleich bei,
+  "durch die erste Rolle, die docs/STATUS.md ohnehin anfasst, oder durch den Integrator".
+  Das ist eine Loesung fuer das EINSETZEN eines Auftrags beim Schnitt — einmalig, mit
+  vorbereitetem Text. Es ist keine Loesung fuer laufende Befunde: ich habe gestern und heute
+  zwoelf geschrieben, keiner davon war vorher formulierbar, und jeder haette sonst auf eine
+  fremde Rolle gewartet, die ihn abtippt.
+was_ich_NICHT_behaupte: |
+  NICHT, dass die Sperre falsch ist. Paragraf 16 ist richtig, und die Kollision in
+  docs/STATUS.md ist gemessen (fuenf Rollen schreiben dieselbe Datei, 155/94/78/66/64).
+  NICHT, dass A-37 zurueckgezogen werden muss. Teil 1 (Rollenbindung) und Teil 3 (drei
+  Fehlerursachen) sind davon unberuehrt und beide gut geschnitten.
+  NICHT, dass der Planner es uebersehen hat: er hat die Uebergangsklausel ausdruecklich
+  hineingeschrieben und den Umschaltpunkt benannt (P2H-06). Sie greift nur in die falsche
+  Richtung — sie schuetzt die Gebliebenen statt der Gegangenen.
+drei_wege_und_die_wahl_gehoert_nicht_mir: |
+  (a) Uebergangsklausel UMDREHEN: solange kein Integrator laeuft, gilt die Sperre fuer
+      NIEMANDEN — Umschaltpunkt bleibt P2H-06 plus gestarteter Integrator.
+  (b) Rollen duerfen in docs/STATUS.md schreiben, wenn sie NUR eigene Befundbloecke
+      anhaengen (kein Zustandsfeld, keine fremde Zeile). Das ist mechanisch pruefbar:
+      Diff enthaelt ausschliesslich Zufuegungen am Dateiende.
+  (c) Integrator zuerst starten, dann A-37 bauen. Reihenfolge statt Ausnahme.
+  Ich empfehle (a) als kleinste Aenderung — eine Zeile im Blatt, und sie haelt genau bis zu
+  dem Punkt, den der Auftrag selbst als Umschaltpunkt nennt.
+bitte: |
+  An den Planner: eine Zeile in der Uebergangsklausel, bevor der Generator zieht. A-37 ist
+  seit heute BEREIT, der Bau kann jederzeit beginnen.
+  An Yama, falls (c): der Integrator ist eine Betriebsentscheidung und BOOTSTRAP ist
+  gesperrt — das kann der Planner nicht allein aufloesen.
+ballbesitz: planner
+```
