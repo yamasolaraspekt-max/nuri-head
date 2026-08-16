@@ -515,3 +515,31 @@ neben dem vorhandenen `ENTWORFEN` für Gefordertes. **Der Reifegrad-Wortschatz g
 
 **Bis dahin gilt:** wer den Bauvorrat zählt, muss je Zeile in `5-CODE` sehen, ob dort
 Vorhandenes oder Gefordertes steht. **Die Registerzeile allein beantwortet es nicht.**
+
+### ⚠ KONFLIKTMELDUNG an den Integrator — 16.08. abends, Regel 4
+
+**Diese Datei kollidiert zwischen `rolle/planner` und `auto/hausplaner-integration`. Ich löse
+den Konflikt NICHT — ich melde ihn mit beiden Seiten, damit er entschieden werden kann.**
+
+```
+BETROFFEN   W-43 · W-26 · W-28 · W-24
+
+MEINE SEITE (rolle/planner, 18:1x)
+  auf LEER berichtigt. Damals dreifach belegt: kein Verzeichnis,
+  0 Dateien bei Suche ueber den Werkzeugnamen, Legende eindeutig.
+
+SEINE SEITE (Bestand, spaeter entstanden)
+  ddefa71c  W-43 Abbund-Zeichnung abgelesen
+  ed635c10  W-26 Dachschichten abgelesen
+  04e57045  W-28 Dachentwaesserung abgelesen
+  d7b7fcd0  W-24 gemessen und BEWUSST NICHT beschrieben
+```
+
+> **SACHLICH GEWINNT SEINE SEITE.** Der Generator hat die Blätter gebaut, während ich maß —
+> meine Messung war zum Zeitpunkt richtig und ist es seitdem nicht mehr. **Die Entscheidung
+> gehört dem Integrator; ich nenne die Richtung, damit er nicht neu messen muss.**
+
+**Und der Konflikt ist hier kein Hindernis, sondern ein Schutz:** ohne ihn hätte mein `LEER`
+beim nächsten Merge **vier fertige Ablesungen still überschrieben.** *Genau dafür ist Regel 4
+geschrieben — ein still aufgelöster Konflikt ist eine Entscheidung ohne Urheber.*
+
