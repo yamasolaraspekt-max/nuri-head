@@ -1731,3 +1731,55 @@ Sammelbehebung repariert einen Stand; sie verhindert nichts.*
 **Die Regel kehrt die Reihenfolge um: nicht messen bis die Liste voll ist, sondern beim ersten
 Fund anhalten.**
 
+## ROTE KARTEN — Fehler werden gezählt, nicht nur behoben
+
+**Yamas Anordnung vom 16.08., unmittelbar nach der Stopp-Regel.**
+
+```
+JEDER FEHLER  =  EINE ROTE KARTE.
+
+  Bei DREI roten Karten muss die betreffende Rolle ihre EINSTELLUNG aendern,
+  damit derselbe Fehler nicht wieder passiert.
+  Nicht die Handlung nachbessern — die Arbeitsweise.
+```
+
+**Was eine rote Karte auslöst — und was nicht:**
+
+```
+ROTE KARTE          eine Aussage, auf die sich jemand verlassen sollte,
+                    und die nicht traegt:
+                      - eine Zahl ohne den Umfang, ueber den sie erhoben ist
+                      - ein Teil gemessen, das Ganze gemeldet
+                      - ein Fund gemeldet statt behoben oder zugestellt
+                      - eine Handlung als erledigt gemeldet, die es nicht ist
+
+KEINE ROTE KARTE    ein Irrtum, den der Verursacher SELBST findet und
+                    berichtigt, BEVOR jemand darauf gebaut hat.
+                    Sonst lohnt sich Verschweigen.
+```
+
+> **Die Unterscheidung ist der Kern: bestraft wird nicht der Irrtum, sondern die
+> unbelegte Behauptung.** *Wer misst, irrt sich gelegentlich. Wer behauptet, ohne gemessen zu
+> haben, hat nicht geirrt — er hat nicht gearbeitet.*
+
+**Drei Karten heißt Einstellungswechsel, nicht Entschuldigung.** Die Rolle legt dar, **welche
+Arbeitsweise sie ändert und woran man die Änderung messen kann.** *Eine Zusage ohne Messpunkt
+ist selbst wieder eine unbelegte Behauptung.*
+
+### Erster Eintrag — Planner, 16.08.
+
+**Fünf rote Karten an einem Tag, alle derselben Form: ein Teil gemessen, das Ganze gemeldet.**
+
+```
+1  vier abgeschlossene Auftraege als "offen" gemeldet   Muster gezaehlt, nicht Sache
+2  "ls-files 0" ueber einen Baum mit 7460 Dateien       EINE Datei gemessen
+3  281 statt 284 Rollenmarken                           Schreibweise gezaehlt
+4  "ein BEFUND liegt bei mir"                           Nachbarblock erwischt
+5  "3 Wegweiser von 38"                                 4 von 16 Dateien geprueft
+```
+
+**Geänderte Arbeitsweise, mit Messpunkt:** **jede Zahl trägt ihren Erhebungsumfang im selben
+Satz.** *„10 von 36, erhoben über alle 16 Dateien"* oder *„4 von 16 geprüft, Rest ungeprüft"*.
+**Fehlt der Umfang, ist die Zahl ungültig — unabhängig davon, ob sie stimmt.** Das ist von außen
+prüfbar, ohne die Sache zu kennen.
+
