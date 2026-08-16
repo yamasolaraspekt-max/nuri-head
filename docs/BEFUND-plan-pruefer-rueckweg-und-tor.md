@@ -1160,3 +1160,251 @@ wiederholbar.**
 **Ball: planner** — als Ergänzung zu der Summenprobe-Regel, die er heute schon verankert hat
 (*„wer den Reifegrad zählt, nennt die Summe und die Zeilenzahl dazu"*). Diese hier ist ihre
 Schwester für Kennungen. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## A-42, vierter DoR-Fund: der Basis-Stand enthält die Datei nicht, an der das Blatt gemessen zu haben angibt
+
+*Vorratsprüfung Posten (a) an einem Blatt in meiner Bahn · gemessen 16.08. gegen `9fd2a2af`*
+
+### Der Fund
+
+A-42 schreibt in seinem tragenden Absatz:
+
+> **Gemessen an `status-erzeugen.sh` (Zeile 45, 291):** `--tafel` erzeugt die Statuswahrheit **aus
+> dem Commit-Log** …
+
+Das Blatt führt `basis_sha: e802c1f8` und `dor_schnitt_sha: "e802c1f8"`.
+
+```
+git cat-file -e e802c1f8:scripts/status-erzeugen.sh   ->  NEIN, nicht in diesem Baum
+git cat-file -e b2d373fb:scripts/status-erzeugen.sh   ->  NEIN  (b2d373fb = der Blatt-Commit selbst)
+```
+
+**Die Datei existiert in keinem der beiden Stände, die das Blatt nennt.**
+
+**Warum, und es ist NICHT „die Datei ist zu neu":** `status-erzeugen.sh` entstand mit `1e342d53`
+am **16.08. 15:15** — **zwei Stunden VOR** dem Basis-Stand (17:24). Sie ist trotzdem kein
+Vorfahre:
+
+```
+git merge-base --is-ancestor 1e342d53 e802c1f8   ->  NEIN
+```
+
+**Das ist die Rückweg-Klasse**, die ich am Nachmittag als P-07/P-09 gemeldet habe: Der
+Planner-Zweig hatte den Generator-Bau zum Schnittzeitpunkt noch nicht erhalten. Die Messung selbst
+ist offenkundig richtig — die Datei liegt heute in allen vier Rollenbäumen mit **816 Zeilen** —
+aber **am erklärten Stand ist sie nicht nachvollziehbar.** Wer die DoR nachprüft, bekommt „No such
+file", nicht eine abweichende Zahl.
+
+**Soll:** `basis_sha` auf einen Stand setzen, der den Bau enthält, oder den Messstand der beiden
+Zeiger getrennt ausweisen.
+
+### Was ich geprüft habe und was HÄLT
+
+**Die tragende Behauptung stimmt — im Code nachgelesen, nicht am Wortlaut.** `--tafel` speist sich
+aus dem Commit-Log über
+
+```
+Z.214   MUSTER = "--grep=^\(\w\+[a-z-]*: \)\?zustand:"
+Z.189   r"zustand:\s+"   …   Z.191   r"(?P<zustand>[A-Z_]+)\s+·\s+"
+```
+
+**Ein Block ohne Kennung und ohne Zustand kann gar keinen solchen Betreff erzeugen** und damit
+nicht in der erzeugten Tafel vorkommen. A-42s Prämisse trägt.
+
+**Zeiger Z.45 trägt den zitierten Wortlaut verbatim** (`Je Kennung gewinnt der juengste Eintrag.`),
+die erste Aussage steht eine Zeile darüber in Z.44. Kein Mangel. **Z.291 zeigt heute auf eine
+Fangproben-Zeile** (`("vorwort-a-41.md", "a-41", False, …)`) — ob das Wanderung ist, **lässt sich
+nicht feststellen**, weil der erklärte Stand die Datei nicht führt. Ich melde es als
+untestbar, nicht als Fehler.
+
+### Und ein Fund, den ich NICHT melde, weil das Blatt ihn vorweggenommen hat
+
+Ich habe die Blocktabelle nachgezählt und weiche ab:
+
+```
+                     Blatt 22:0x      meine Messung 9fd2a2af
+Bloecke gesamt           446                444
+  mit zustand:            89                 90
+  ohne, mit auftrag:     168                168      <- trifft exakt
+  WEDER noch             189                186
+```
+
+**Das ist kein Fund.** Das Blatt schreibt die Zahlen ausdrücklich *„nicht als Zusage"* hin und
+sagt: *„Der Zählbefehl steht in A-42-1 — keine feste Zahl in einem Kriterium (P6: eine Rot-Lage
+mit Uhr ist keine)."* **Genau deshalb bewegt sich die Zahl, ohne dass ein Kriterium bricht.** Meine
+Abweichung bestätigt die These des Blatts, statt sie zu widerlegen.
+
+### Eine Falle für jeden, der diese Blöcke zählt — auch für mich
+
+Mein erster Zähler ergab **442** Blöcke, mein zweiter **444**. Der Unterschied: `docs/STATUS.md`
+trägt **444 `​```yaml`-Zäune, aber nur 442 schließende** — zwei Blöcke sind nicht zugemacht. Ein
+strenger Parser verliert sie stillschweigend; erst die tolerante Form (*ein neuer `​```yaml`
+schließt den vorigen*) findet alle. **Das ist dieselbe Klasse wie die vier Namensformen von
+gestern Abend: nicht die Zahl ist falsch, sondern die unausgesprochene Annahme über die Form.**
+
+**Ball: planner** (der `basis_sha`-Punkt). **Kein Zustandsfeld angefasst, kein Bau, keine
+DoR-Entscheidung — der Fund ist zugestellt, das Urteil steht aus.**
+
+## Alterung der vier ENTWURF-Aufträge: A-38 hält an jedem Punkt — und seine Lage hat sich verhältnismäßig verbessert, absolut verdreifacht
+
+*Vorratsprüfung Posten (d) · gemessen 16.08. gegen `3f93a5cc`*
+
+**Null Aufträge stehen auf BEREIT**, deshalb an den vier ENTWURF-Aufträgen gefahren, deren DoR bei
+mir liegt.
+
+### Alterung, gemessen
+
+| Auftrag | Basis | Alter | Commits seither | genannte Dateien, seither geändert |
+|---|---|---|---|---|
+| A-38 | `0f05f8bf` | **2824 min** (47 h) | **785** | `STATUS.md` 307 · `commit-pruefen.sh` **10** · eigenes Blatt 11 |
+| A-39 | `99add90f` | 491 min | 683 | `STATUS.md` 235 · `commit-pruefen.sh` 9 |
+| A-40 | `99add90f` | 491 min | 683 | `STATUS.md` 235 |
+| A-42 | `e802c1f8` | 272 min | 611 | `STATUS.md` 202 · `status-erzeugen.sh` 12 |
+
+**A-38 ist der Prüffall:** ältestes Blatt, und es misst an einer Datei, die sich seither zehnmal
+geändert hat.
+
+### Ergebnis: alle drei prüfbaren Aussagen halten
+
+**Der Zeiger hat zehn Änderungen überstanden.** Das Blatt sagt *„`merge` in
+`scripts/commit-pruefen.sh` (-i) → 4 Treffer, keine Prüfung"*:
+
+```
+0f05f8bf (Basis)  ->  4       heute  ->  4
+```
+
+Und die vier Treffer betreffen heute wie damals **unaufgelöste Merge-Einträge im Index**
+(Z.969, 975, 976, 978) — **keine Prüfung von Merge-Commits.** Die Aussage steht wörtlich.
+
+**Die tragende Strukturaussage hält exakt.** Z.67 des Blatts sagt, die markenlosen Commits seien
+*„= ALLE"* Merges:
+
+```
+Commits gesamt          705
+ohne Rollenmarke        180
+  davon Merges          180
+  davon NICHT-Merges      0        Summenprobe 180 + 0 = 180   GEHT AUF
+```
+
+**Kein Kriterium trägt eine feste Zahl.** A-38-1 bis A-38-9 sind sämtlich verhaltensbeschreibend
+(Hook existiert, Negativfall, Positivfall, `core.hooksPath`, zweiter Worktree, sechs Kanten,
+Nicht-Ziele, Suite). **Die gewachsenen Zahlen brechen daher kein Kriterium** — dieselbe
+P6-Disziplin, die A-42 anwendet.
+
+### Die neue Zahl, und sie macht den Auftrag dringlicher
+
+```
+                         Blatt (15.08.)      heute (16.08.)
+Merges gesamt                    70                313
+davon ohne Rollenmarke           58                180
+Anteil                          83 %               57 %
+```
+
+**Die Quote ist gefallen, die absolute Zahl hat sich verdreifacht.** Der Grund für die bessere
+Quote ist sichtbar: der Integrator markiert seine Rückwege inzwischen
+(`integrator: Rueckweg — rolle/… `). **Der Grund für die schlechtere absolute Zahl ist derselbe
+Betrieb, der die Quote verbessert:** es wird schlicht viel mehr gemergt.
+
+**Für A-38 heißt das:** das Blatt beschreibt die Lage weiterhin richtig, und der Bau wird
+dringlicher, nicht entbehrlicher. *Eine Quote, die sich bessert, während die Menge wächst, ist
+kein Entwarnungssignal.*
+
+### Und mein vierter Musterfehler in zwei Runden
+
+Meine erste Zählung fand **drei markenlose Nicht-Merge-Commits** und damit einen Widerspruch zu
+Z.67. Alle drei waren Fehlbefunde meines Musters:
+
+```
+release-pruefer (in Yamas Namen): …
+plan-pruefer (release-pruefer in Rollenwechsel): …
+```
+
+**Die Rollenmarke kommt auch in der Form `rolle (Zusatz):` vor.** Mein Muster verlangte `rolle:`
+direkt. Mit `^<rolle>( \([^)]*\))?:` sind es **null** Ausnahmen, und A-38s Aussage steht.
+
+**Das ist derselbe Kern wie die vier Namensformen und die zwei offenen `​```yaml`-Zäune: nicht die
+Zahl ist falsch, sondern meine unausgesprochene Annahme über die Form.** Viermal in zwei Runden,
+jedes Mal vor dem Melden gefangen — aber jedes Mal auch nur deshalb, weil ich die Abweichung
+geöffnet statt gezählt habe.
+
+**Ball: planner** — die frische Merge-Zahl (180 von 313) als Fortschreibung für A-38.
+**Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## Eigene Befunde verfolgt: neun zugestellt, neun angekommen, keiner bewegt — und der Grund ist eine Hand, die seit 77 Minuten ruht
+
+*Vorratsprüfung Posten (e) · gemessen 16.08. 22:0x gegen `d2c14029`*
+
+### Meine neun Befunde, am Halter nachgemessen
+
+| # | Befund | Halter | zugestellt | Alter | Stand heute |
+|---|---|---|---|---|---|
+| 1 | 39 Bälle abgeben | integrator | `651e61e4` | 27 min | **39**, unverändert |
+| 2 | `zustand: BEFUND` ×3 | integrator | `8f293730` | 19 min | **3**, unverändert |
+| 3 | `ZURUECKGEZOGEN` undefiniert | planner | `8f293730` | 19 min | **0** Treffer in ARBEITSREGELN |
+| 4 | 72 DoR-Bälle in Blättern | planner | `94c98ad0` | 13 min | **72** (45 + 27), unverändert |
+| 5 | `dor_beleg` A-41 · W-17/1 | integrator | `94c98ad0` | 13 min | beide `"steht aus"` |
+| 6 | `dor_beleg` A-30 · A-33 | integrator | `94c98ad0` | 13 min | beide `"NICHT erteilt"` |
+| 7 | Zeiger `F-001:53` in A-32 | planner | `94c98ad0` | 13 min | unverändert (Z.127) |
+| 8 | Kennungs-Musterregel | planner | `4a9b449c` | 9 min | nicht verankert |
+| 9 | A-42 `basis_sha` | planner | `49900324` | 5 min | `e802c1f8`, Datei fehlt weiter |
+
+**Alle neun sind im Integrationszweig angekommen** — `merge-base --is-ancestor` für jeden der sechs
+Zustellcommits: enthalten. **Der Zustellweg trägt.** Und **keiner ist älter als 27 Minuten** —
+dass nichts bewegt ist, ist bei diesem Alter kein Vorwurf, sondern normal.
+
+### Was ich stattdessen gemessen habe, und das ist der eigentliche Befund
+
+```
+Baelle in docs/STATUS.md
+  planner  81 · plan-pruefer 39 · generator 10 · release-pruefer 5 · integrator 2 · evaluator 0
+  SUMME                                                                              137
+
+Schreibberechtigt seit 19:36                          1 Rolle  (rollen-tor.sh:344)
+Letzter Schreibvorgang an docs/STATUS.md          vor 81 min  (0f969d5e, 20:39)
+Letzter Sachcommit des Integrators                vor 77 min  (d10a2f7c, 20:43)
+
+Letzter Sachcommit der uebrigen fuenf Rollen:
+  plan-pruefer 2 min · planner 7 min · release-pruefer 7 min · evaluator 13 min · generator 21 min
+```
+
+**Fünf Rollen haben in den letzten 21 Minuten gearbeitet. Die eine Hand, die 137 Bälle bewegen
+darf, seit 77 Minuten nicht.** In derselben Stunde habe ich allein 17 Sachcommits geschrieben,
+zehn davon Zustellungen mit Ballwechsel — **jede einzelne landet auf diesem Stapel.**
+
+### Die Sperre habe ich an mir selbst gemessen, nicht angenommen
+
+Der Torcode trägt einen datierten Beleg, der das Gegenteil nahelegt: *„Die Sperre wirkte VERKEHRT
+HERUM … `planner` und `plan-pruefer` haben `docs/STATUS.md` weiter geschrieben — sie umgehen
+nichts, das Tor liegt in ihren Bäumen gar nicht."* **Ich habe seit 19:36 behauptet, die Datei sei
+für mich gesperrt, ohne es je zu prüfen.** Nachgeholt, in meinem eigenen Arbeitsbaum:
+
+```
+scripts/commit-pruefen.sh   vorhanden, 1016 Z.   ruft das Tor in Z.126-134
+scripts/rollen-tor.sh       vorhanden,  540 Z.   Sperre in Z.344
+STAMM = "plan-pruefer"  !=  "integrator"          -> die Sperre greift fuer mich
+```
+
+**Meine Behauptung war richtig — aber sie war es aus Glück, nicht aus Messung.** Der zitierte
+Beleg beschreibt einen Stand von 16:17; das Tor ist seither in meinen Baum gewandert. *Ein Beleg
+darf veralten. Eine Behauptung über den heutigen Zustand darf es nicht.*
+
+### Und eine Vermutung, die ich beim Messen fallen lassen musste
+
+Ich hielt die Meldung des Planners *„DEADLOCK AUFGELÖST"* (`b5dea668`, vor 7 min) zunächst für
+folgenlos, weil sie **keine einzige Torfdatei** anfasst — `rollen-tor.sh:344` steht über alle vier
+Stände hinweg zeichengleich.
+
+**Das war falsch gedacht, und der Blick in die Änderung zeigt warum.** Die 24 neuen Zeilen stehen
+in `.../rollen/6-integrator/2-WANN-BIN-ICH-DRAN.md` und geben ausdrücklich frei:
+
+> `FREIGEGEBEN  Ballrueckgaben und Zustandswechsel einzeln eintragen — das ist Buchfuehrung ueber
+> bereits gefallene Entscheidungen, kein Erzeugen und keine Entscheidung.`
+
+**Der Deadlock war eine Freigabe-Frage, keine Torfrage.** Der Planner hatte den `--tafel`-Schreiblauf
+ausgenommen und dabei die einzelne Ballrückgabe mit eingesperrt; er hat genau das gelöst. **Die
+Barriere bleibt zu Recht stehen** — sie schützt vor Erzeugen, nicht vor Buchführung.
+
+**Damit ist der Weg frei, und es fehlt nur die Ausführung.**
+
+**Ball: integrator.** Die 137 Bälle sind jetzt buchhalterisch rückgebbar; meine neun Punkte 1, 2, 5
+und 6 sind darunter. **Kein Zustandsfeld angefasst, kein Bau.**
