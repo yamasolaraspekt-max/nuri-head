@@ -2378,3 +2378,60 @@ gegenmisst, ist von einer Behauptung nicht zu unterscheiden — auch der eigene.
 **Ball: planner** — der Schutz der Zieldatei gehört als Kriterium oder als ausdrückliches
 Nicht-Ziel ins Blatt, dritter Zustand ausgeschlossen (§5). **Kein Zustandsfeld angefasst, kein
 Bau.**
+
+## Yama-Posten „driftender Zeiger raumAuswahl.ts" frisch gemessen — unverändert, stabil, und mein Fehler 21 ist damit geschlossen
+
+*Offener Posten bei Yama · gemessen 16.08. gegen `fcd007a1`*
+
+### Der Posten selbst: unverändert und nicht gewachsen
+
+`app/raumAuswahl.ts` schreibt in Z.7-8:
+
+> *„Ihre heutige Identität ist der **Index in der Liste** (`Buehne.tsx:147`, `key={\`raum${i}\`}`)"*
+
+```
+Buehne.tsx:147   heute:  {massElemente}
+Buehne.tsx:162   heute:  <Group key={`raum${i}`} listening={werkzeug === 'auswahl'}>
+```
+
+**Die Drift beträgt fünfzehn Zeilen und sie ist STABIL.** Der Befund im Datensatz notierte
+seinerzeit ebenfalls *„Heute steht es auf :162"* — heute steht es immer noch dort. **Der Posten ist
+nicht schlimmer geworden**, und der Grund ist messbar: `Buehne.tsx` wurde insgesamt nur **viermal**
+geändert, zuletzt am 13.08. um 00:56.
+
+*Für Yamas Vorlage ist das die brauchbare Auskunft: ein offener Posten, der nicht driftet, während
+er offen ist.*
+
+### Und jetzt der Teil, der mir gehört: Fehler 21 ist geschlossen
+
+In meiner Fehlerliste steht als Nummer 21: **„Nachtrag 12 unvollständig erhoben — nur 1 von 3
+Verweisen geprüft."** Genau dieselbe Datei. **Nachgeholt, alle drei:**
+
+```
+ableitungen.ts:61              -> export function raeumeAus(waende, level)          TRIFFT
+geometry/roomDetection.ts:35-40 -> export interface ErkannterRaum {
+                                     polygon; kanten; flaecheMm2; volumenMm3 }      TRIFFT
+Buehne.tsx:147                 -> {massElemente}   statt key={`raum${i}`}           DRIFTET
+```
+
+**Zwei von drei halten zeichengenau** — und der zweite trifft nicht nur die Zeilenspanne, sondern
+**alle vier Feldnamen**, die der Kommentar aufzählt.
+
+**Das Ergebnis ist unbequem für meine ursprüngliche Meldung:** ich hatte einen driftenden Zeiger
+gemeldet und dabei den Eindruck erweckt, die Datei sei unzuverlässig. **Gemessen ist das Gegenteil:
+zwei Drittel ihrer Zeiger sind heute noch exakt.** *Ein einzelner Fund ohne die Grundgesamtheit
+sagt nichts über die Qualität des Ganzen — dieselbe Lehre wie bei den 15 von 168 Umzugsblöcken vor
+zwei Runden.*
+
+### Warum die drei sich unterschiedlich verhalten
+
+**Die beiden haltenden Zeiger zeigen in Dateien, die an diesen Stellen nicht gewachsen sind. Der
+driftende zeigt in die einzige der drei, die sich seither bewegt hat.** Das ist kein Zufall und
+keine Nachlässigkeit des Schreibers — **es ist die Bauform**: eine Zeilennummer ist so haltbar wie
+die Datei, in die sie zeigt.
+
+**Bleibt bei Yama**, unverändert. Die Behebung wäre eine Änderung an einem Kommentar in fremdem
+Produktivcode — *„ich melde sie und fasse sie nicht an"*, wie es im Datensatz steht, und dabei
+bleibe ich.
+
+**Kein Zustandsfeld angefasst, kein Bau.**
