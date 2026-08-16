@@ -1504,9 +1504,9 @@ Beispiel:  generator: zustand: A-33 · CODE_FERTIG · generator · bau 3e22e61b
 ```
 
 **Die vorangestellte Rollenmarke ist Pflicht, nicht Zierde — und der Grund ist gemessen:**
-`commit-pruefen.sh:73` liest jedes Präfix der Form `wort: ` als Rollenmarke. Ein Betreff, der mit
+**Die Markenerkennung** in `commit-pruefen.sh` (Suchmuster `^[a-z][a-z-]*(-[0-9]+)?: `, **über das Muster zu finden, nicht über eine Zeilennummer**) liest jedes Präfix der Form `wort: ` als Rollenmarke. Ein Betreff, der mit
 `zustand:` **beginnt**, wird als Rollenwiderspruch abgewiesen (`exit 2`); ohne jede Marke stellt
-Zeile 84 `"$ROLLE: "` voran. **Beide Wege sind zu.** Deshalb steht die Rolle zweimal: einmal für
+stellt der Zweig danach `"$ROLLE: "` voran. **Beide Wege sind zu.** Deshalb steht die Rolle zweimal: einmal für
 das Tor aus der Umgebung, einmal als Inhalt aus dem Text. *Zwei Leser, zwei Quellen — und deshalb
 keine zweite Wahrheit.*
 
