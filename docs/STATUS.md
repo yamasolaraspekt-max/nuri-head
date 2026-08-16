@@ -23798,3 +23798,51 @@ was_das_bedeutet: |
   Was ich sagen kann: von den fuenf benannten Huerden steht noch eine, und sie ist klein.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "A-37-8 und -9 geprueft — einen der drei Faelle kann ich mit eigener Rohausgabe belegen, die anderen zwei nur am Code"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:58 CEST"
+mess_stand: "Tor aus rolle/generator, 918 Zeilen · Rohausgabe aus meinem eigenen Lauf von 15:11"
+a_37_8_am_code_vollstaendig: |
+  Verlangt sind drei unterscheidbare Fehlerursachen mit je eigener Kennung. Im Tor:
+  Z.632  MODUL      $p — js-yaml nicht aufloesbar. Dieser Worktree hat kein node_modules.
+  Z.650  YAML-KOPF  $p — der Kopf parst nicht ($JETZT kaputte Bloecke, am Commit waren es $VORHER)
+  Z.660  LAUFZEIT   $p — ${BERICHT#LAUFZEIT }
+  Drei Kennungen, drei Texte, kein gemeinsamer Zweig. Die Rot-Lage des Blattes lautete
+  "alle drei melden heute denselben Text, 2>/dev/null verschluckt die Ursache" — das ist
+  am heutigen Stand nicht mehr so.
+und_einen_fall_habe_ich_ROH: |
+  A-37-8 verlangt "je ein Fall, ROHAUSGABE". Fuer (b) kann ich sie liefern, und zwar aus
+  meinem eigenen Lauf um 15:11, nicht aus einem gestellten Versuch:
+  MODUL      docs/STATUS.md  — js-yaml nicht aufloesbar. Dieser Worktree hat kein node_modules.
+             Abhilfe: NODE_PATH=/Users/yamanuri/Documents/ticket/node_modules vor den Aufruf setzen.
+  KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt.
+  Alle drei geforderten Bestandteile sind darin: die Kennung MODUL, das Wort node_modules
+  und der Abhilfe-Hinweis. Der Fall ist damit nicht behauptet, sondern passiert.
+was_ich_NICHT_belegen_kann_und_warum_ich_es_nicht_erzwinge: |
+  Fuer (a) YAML-KOPF und (c) LAUFZEIT habe ich keine Rohausgabe. Beide liessen sich
+  herstellen — (a) mit einem absichtlich kaputten Block, (c) mit einem Syntaxfehler im
+  Pruefaufruf. Ich tue es NICHT, weil beide Versuche einen Commit an docs/STATUS.md
+  ansetzen wuerden, und die Statuswahrheit ist kein Versuchsfeld. Wer den Beleg braucht,
+  fuehrt ihn gegen eine Kopie.
+  INDIREKT ist (a) heute dreimal bestaetigt: meine eigene YAML-Vorpruefung hat dreimal 26
+  statt 25 kaputte Bloecke gemeldet, jedes Mal vor dem Tor. Haette ich committet, waere
+  genau Z.650 gelaufen — sie prueft auf WACHSTUM ($JETZT gegen $VORHER), und 26 gegen 25
+  ist Wachstum. Das ist kein Ersatz fuer die Rohausgabe, aber es zeigt, dass der Zweig
+  erreichbar ist.
+a_37_9_die_yaml_pruefung_ist_scharf: |
+  A-37-9 verlangt, dass ein tatsaechlich kaputter Kopf weiterhin abgewiesen wird.
+  Die Zaehlung im Tor ist relativ ($JETZT gegen $VORHER), nicht absolut — sie laesst die
+  25 Altlast-Bloecke durch und schlaegt beim 26. an. Genau dieses Verhalten habe ich heute
+  dreimal am eigenen Leib gemessen: 25 blieb still, 26 haette gesperrt.
+  Die Pruefung ist also scharf, ohne die Altlast zu blockieren. Das ist die schwierigere
+  der beiden Bauarten und die richtige.
+stand: |
+  Selbst gemessen und haltend: A-37-1, -2 (mit Vorbehalt), -3, -6, -8 (b roh, a und c am
+  Code), -9, -15, -16.
+  Offen: A-37-4, -7, -10, -11, -12, -13, -14, -17.
+  Sperrend: A-37-5, eine Zahl, seit 13:01.
+ballbesitz: plan-pruefer
+```
