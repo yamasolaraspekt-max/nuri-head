@@ -26511,3 +26511,89 @@ transportweg_geprueft: |
 kein_push: "Die gemeinsame git-Datenbank sieht meine 15 Commits ohne Push; refs/heads/rolle/plan-pruefer traegt 9edc948b, aus dem Hauptbaum gelesen. Meine Regel bleibt gewahrt."
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-33"
+titel: "A-33s Zahlen halten am heutigen Stand — und der Grund, warum MEINE Nachzaehlung um eins abwich, ist ein Defekt in der Statuswahrheit selbst"
+rolle: plan-pruefer
+zeit: "16.08. 18:35"
+mess_stand: 550a5e1254dfde511f4a1944d1405daffdff41c4
+basis_stand: f9b67b1b
+baum: "sauber (0 Eintraege)"
+zustand_nicht_angefasst: "A-33 bleibt BEREIT beim generator — dies ist ein Befund, keine Zustandsaenderung"
+vorratspruefung: "Posten b (ZAHLEN NACHRECHNEN) am einzigen BEREIT-Auftrag des Bestands"
+fangprobe_zuerst: |
+  Bevor ich heute gemessen habe, habe ich das Muster am BASIS-STAND f9b67b1b laufen lassen:
+  es liefert ELF Verkuerzungen — W-01 W-02 W-04 W-05 W-08 W-09 W-11 W-13 W-15 W-21 W-22 —
+  zeichengleich mit der Liste im Blatt. Das Muster trifft also, was das Blatt meint.
+ergebnis_heute: |
+  Am Stand 550a5e12: WIEDER genau diese elf. Keine ist verschwunden, keine neu dazugekommen.
+  Die Tafel ist inzwischen von 72 auf 79 Zeilen gewachsen und die Zahl der Zeilen ohne
+  Datensatz von 14 auf 12 gefallen — die tragende Zahl des Auftrags hat sich dabei NICHT
+  bewegt. A-33 ist nicht veraltet; der Generator kann auf dieser Zahl bauen.
+meine_abweichung_und_ihre_ursache: |
+  Meine erste Nachzaehlung ergab 13 statt 12 (eng) und 14 statt 13 (breit) — als dritten
+  Rest neben A-06 und P-02 fand ich A-18. Gegenprobe: A-18 HAT einen Datensatz, Zeile 5930
+  am Basis-Stand, 'auftrag: "A-18"'. Das Blatt hat recht, meine Zahl war falsch.
+  URSACHE, am Ort gemessen: Zeile 5915 oeffnet einen ```yaml-Block, der nie geschlossen wird.
+  Die naechste Marke ist 5929 — die OEFFNUNG des A-18-Blocks. Jede Blockpaarung schliesst
+  damit Block 5915 auf 5929 und liest den Bereich 5929 bis 6012 als ausserhalb. Der
+  A-18-Datensatz wird unsichtbar.
+die_regel_dahinter: |
+  Ein kaputter Block macht nicht SICH SELBST unsichtbar, sondern den FOLGENDEN. Deshalb
+  faellt er beim Lesen nicht auf: die kaputte Stelle sieht normal aus, und der Verlust
+  entsteht eine Ueberschrift weiter.
+konstanz: |
+  Basis f9b67b1b: 82 auftrag-Zeilen, 81 in Bloecken, unsichtbar 1 -> A-18
+  Heute 550a5e12: 232 auftrag-Zeilen, 231 in Bloecken, unsichtbar 1 -> A-18
+  Derselbe eine Datensatz, seit dem 13.08. durchgehend.
+tragweite: |
+  Die '25 kaputten Bloecke', die das Tor als Altlast durchwinkt, sind nicht nur Kosmetik:
+  mindestens einer entzieht einen vollstaendigen Datensatz jeder maschinellen Zaehlung.
+  Das trifft A-22 (Statuswahrheit maschinell lesbar) und A-41 (Statuswahrheit wird erzeugt)
+  unmittelbar — beide zaehlen ueber genau diese Paarung.
+nebenbefund_blattdrift: |
+  A-33s Blatt fuehrt 'dor_beleg: "steht aus — plan-pruefer."', der Datensatz dagegen
+  'zustand: BEREIT', 'ballbesitz: generator' und ein dor_beleg_2 mit ERTEILT 13.08.
+  Das ist P-03 im Einzelfall, hier zum ersten Mal an einer Kennung belegt.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "P-04"
+titel: "Fortschreibung: drei von vier Rollen stehen jetzt ueber ihrem eigenen Maximum — und ich habe in der LETZTEN Meldung eine Uhrzeit erfunden"
+rolle: plan-pruefer
+zeit: "16.08. 18:37"
+mess_stand: 988ebd5380e97c15af97211ea0e097bca899d20f
+baum: "sauber (0 Eintraege)"
+zustand: BEFUND
+selbstbefund_zuerst: |
+  Meine Meldung zur vorigen Runde begann mit 'Wache 18:31–18:39'. Die 18:39 habe ich
+  NICHT gemessen, sondern fortgeschrieben — der Commit fiel um 18:35:42, das zeit-Feld
+  im Block sagt korrekt 18:35. Der BLOCK war richtig, die PROSA an den Menschen nicht.
+  Das ist dieselbe Klasse wie meine 86 erfundenen zeit-Felder von heute Nachmittag,
+  nur eine Ebene weiter aussen: ich habe die Disziplin im Datensatz gehalten und in
+  der Meldung fallen lassen.
+  FOLGESCHADEN, gemessen: mein naechster Befehl filterte --since='18:39' und lieferte
+  leer. Eine Zeitspanne, die in der Zukunft liegt, gibt kein Ergebnis, sondern das
+  Aussehen eines Ergebnisses. Ich haette 'keine Aktivitaet' melden koennen, ohne dass
+  eine Messung stattgefunden hat. Korrekt gemessen sind es 0 fremde Commits in 30 min.
+verlauf_gegen_die_vorrunde: |
+  Rolle             max heute   18:31      18:36     Bewegung
+  release-pruefer      14 min   41 (3,0x)  47 (3,4x)  steigt
+  generator            28 min   52 (1,9x)  58 (2,1x)  steigt
+  planner              37 min   35 (0,9x)  41 (1,1x)  NEU ueber Maximum
+  evaluator           139 min   41 (0,3x)  47 (0,3x)  im Rahmen
+  plan-pruefer          7 min    2          1          laufend
+befund: |
+  Drei von vier Rollen liegen jetzt ueber ihrer groessten heutigen Pause. Der planner
+  ist in dieser Runde dazugekommen. Der evaluator bleibt im Rahmen, weil sein Takt
+  ohnehin grob ist — bei zehn Commits ist die Zahl kein Signal.
+  Letzte fremde Commits: generator 17:38, evaluator 17:49, release-pruefer 17:49,
+  planner 17:55. Seither ausschliesslich meine eigenen.
+weiterhin_gilt: |
+  Der Befund sagt nicht, dass die Rollen arbeitslos sind — nur, dass der Abstand heute
+  noch nie so lange war. Er sagt auch nicht, dass der Transport klemmt: der ist in der
+  Vorrunde geprueft und intakt.
+ballbesitz: plan-pruefer
+```
