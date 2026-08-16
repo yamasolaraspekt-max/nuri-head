@@ -2521,3 +2521,66 @@ geht auf stderr, die Zahl bleibt richtig. *Das ist keine Kleinigkeit, denn A-42-
 Vorher-Messung genau in diesem Zustand.*
 
 **Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Yama-Posten „Regelkollision §3/E1/Beifang" gemessen: beide Regeln stehen, das Tor erzwingt die eine — offen ist nur noch die Regelfrage selbst
+
+*Offener Posten bei Yama · gemessen 16.08. gegen `9a67f208`*
+
+### Die Kollision, wie sie protokolliert ist
+
+Der Datensatz hält sie in Z.1839 fest:
+
+> *„die REGELKOLLISION im Regelwerk selbst — **„zweiter Commit unmittelbar" gegen „nie fremde
+> unverfolgte Arbeit einsammeln"** — steht unverändert, weil sie eine **Regeländerung** braucht und
+> keine Arbeitsweise."*
+
+### Beide Seiten stehen heute, mit Fundstelle
+
+```
+Seite A   ARBEITSREGELN Z.409
+          "unmittelbar nach dem Merge wird dessen SHA in einem Statusuebergang auf dem
+           Zielbranch festgehalten; erst dieser Uebergang darf VEROEFFENTLICHT setzen"
+
+Seite B   ARBEITSREGELN Z.692
+          "Nur ausdruecklich geprüfte Pfade werden gestaged; niemals git add -A."
+```
+
+### Und die eine Seite ist maschinell erzwungen
+
+Am Tor gemessen, nicht gefolgert:
+
+```
+ohne Pfadangabe            exit 2, Aufruf-Hinweis          (Exit OHNE Pipe gelesen)
+Stagen                     git add -- "$p", je Pfad einzeln, Z.945
+git add -A / git add .     0 Treffer im ganzen Tor
+```
+
+**Regel B ist damit nicht nur geschrieben, sondern gebaut.** Ein Commit ohne benannte Pfade kommt
+gar nicht zustande, und ein pauschales Einsammeln ist im Tor nirgends möglich.
+
+**Folge für die Kollision:** der „zweite Commit unmittelbar" nach Seite A schreibt **einen** Pfad —
+`docs/STATUS.md`. Pfadgenau ist das immer möglich, auch wenn im selben Baum fremde unverfolgte
+Arbeit liegt. **Die Kollision kann heute von keiner Arbeitsweise mehr ausgelöst werden.**
+
+**Was offen bleibt, ist genau das, was der Datensatz selbst sagt: die Regelfrage.** Ob die zwei
+Sätze im Wortlaut nebeneinander stehen bleiben oder einer präzisiert wird, ist eine
+Regeländerung — **§1 behält sie Yama vor, und ich entscheide sie nicht.**
+
+**Für die Vorlage ist die brauchbare Auskunft:** *der Posten ist ungefährlich geworden, ohne
+entschieden zu sein.* Er kostet heute nichts und blockiert nichts; er ist eine offene Textstelle,
+keine offene Gefahr.
+
+### Zwei eigene Fehler auf dem Weg dorthin
+
+**Erstens, fast gemeldet:** mein erster Durchgang fand `Beifang` nur **einmal** in den
+Arbeitsregeln — in einem Nebensatz über die Baumtrennung. Ich stand kurz davor zu schreiben, die
+Regel sei aus der Prozessquelle verschwunden. **Sie steht in Z.692, nur unter anderen Worten**
+(*„niemals `git add -A`"* statt *„Beifang"*). **Der siebte gefangene Fehlbefund heute Nacht — und
+wieder war es mein Muster, nicht der Bestand.**
+
+**Zweitens, tatsächlich passiert:** ich habe den Exit-Code des Tores **hinter einer Pipe** gelesen
+und `exit=0` notiert. **Das ist der Exit von `head`.** Ohne Pipe gemessen: **exit 2.** *Genau die
+Falle, vor der meine eigene Wacheanweisung im selben Absatz warnt, in dem sie das Messen verlangt.*
+**Die 0 stand nicht länger als eine Ausgabe im Terminal, aber sie stand da.**
+
+**Ball: yama** — unverändert, als Regelfrage. **Kein Zustandsfeld angefasst, kein Bau.**
