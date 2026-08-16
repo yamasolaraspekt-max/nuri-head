@@ -309,6 +309,41 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-11 | **Der Merge `c1b3a774` hat kein Integrationsprotokoll** — Herkunft je Commit, Konflikte, nicht Integriertes: alles ungeschrieben | **OFFEN** |
 | P2H-12 | **Rückfluss — GELÖST in der Praxis, ungelöst in der Regel.** Rückstau **0** auf allen fünf Zweigen; der Weg heißt faktisch **R2**, ist aber **nicht festgelegt** | **NACHBESSERN** |
 | P2H-13 | **⚠ Der Plan-Prüfer ist seit 27 Stunden still** — A-37 und A-38 warten auf seine DoR | **BLOCKIERT** |
+| P2H-14 | **Eine Rollenmarke sagt nicht, WELCHE INSTANZ geschrieben hat** — Vertretungen tragen die fremde Marke | **UMGESETZT_UNGEPRUEFT** |
+
+**P2H-14 — gefunden an vier Fehlalarmen meines eigenen Weckers, alle am selben Tag.**
+
+**Zwölf Commits im Bestand tragen eine Vertretung in der Marke, transparent geschrieben:**
+
+```
+evaluator         (Zweitinstanz)
+generator         (vom Planner GESICHERT, nicht abgenommen)
+plan-pruefer      (release-pruefer in Rollenwechsel)
+release-pruefer   (in Yamas Namen)
+release-pruefer   (zweite Instanz)
+yama-entscheidung (in Vertretung eingetragen)
+```
+
+**Jede Messung, die nur den Namen liest, hält die Vertretung für die Rolle selbst.** Konkret: mein
+Wecker meldete `rolle/plan-pruefer` als **umgezogen**, weil dort zwei Commits mit `plan-pruefer`
+beginnen — beide sind *„plan-pruefer (release-pruefer in Rollenwechsel)"*, beide stehen auch im
+gemeinsamen Baum, und **der Plan-Prüfer selbst hat seit 28 Stunden nichts geschrieben.**
+
+**Die Regel, die daraus folgt und die für jedes Werkzeug gilt, das Rollen zählt:**
+
+> **Eine Rollenmarke ist nur dann eine Instanzaussage, wenn der Doppelpunkt unmittelbar folgt.**
+> `<rolle>:` oder `<rolle>-<ziffer>:` ist die Rolle selbst. **`<rolle> (…)` ist eine Vertretung**
+> und zählt nicht als Arbeit dieser Rolle. Gemessen: das Muster mit Doppelpunkt trennt sauber —
+> plan-pruefer 290 → 288, release-pruefer 179 → 176, planner 391 → 384.
+
+**Und die zweite Falle desselben Weckers, weil sie dieselbe Familie ist:** „Commits über der Basis"
+zählt auch einen **reinen Nachzieh-Merge**. `rolle/generator` trug 108 Commits und **null** eigene.
+**Richtig misst nur `--first-parent`** — ein Commit, den die Rolle *dort* gesetzt hat, statt ihn von
+woanders zu holen.
+
+**Vier Wecker an einem Tag, vier Muster, die etwas anderes maßen als die Sache:** Textmuster statt
+Ballbesitz · Tafelzeile statt yaml-Feld · Merge statt Umzug · Vertretung statt Rolle. **Dieselbe
+Familie wie H-9, nur an meinem eigenen Werkzeug statt an einem fremden Blatt.**
 
 **⇒ NACHTRAG 15.08. 13:23 — mein Befund von 12:08 ist überholt, und das gehört an den Anfang.**
 Der Release-Prüfer hat geantwortet (`5ee0bd47`) und **er hat recht**. Zwischen meiner Messung und
@@ -907,12 +942,12 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 | Status | Anzahl |
 |---|---|
 | `OFFEN` | **111** |
-| `UMGESETZT_UNGEPRUEFT` | **60** |
+| `UMGESETZT_UNGEPRUEFT` | **61** |
 | `BLOCKIERT` | **21** |
 | `NACHBESSERN` | **2** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **199 = alle IDs** |
+| **Summe** | **200 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
 — `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186, der Mechanismuswechsel `P2H` daraus 193. **Diesmal wurde das Muster BEIM Anlegen mitgeändert** (`[A-G]`→`[A-H]`), nicht hinterher bemerkt — die Lehre aus drei Fehlversuchen hat gehalten.

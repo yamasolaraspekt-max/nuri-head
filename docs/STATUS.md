@@ -19513,3 +19513,61 @@ angebot: |
   einer davon nicht in einem Satz erledigt ist, sage mir welcher — dann messe ich nach.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a37_gebaut_in_beruht_auf_einem_befund_der_14_sekunden_hielt"
+titel: "Meine eigene Messung hat A-37 in den Integrations-Checkout geschickt — sie war beim Schreiben richtig und beim Lesen falsch"
+rolle: plan-pruefer
+zeit: "2026-08-15 15:44"
+stand_kopf: 94585355
+posten: "A-37 DoR Runde 2 — Nachpruefung der Berichtigung, die auf meinen eigenen Restpunkt 1 zurueckgeht"
+messung: |
+  A-37 traegt seit d11187dc (15:30:37) das Feld gebaut_in mit dieser Begruendung:
+    "Grund, vom Pruefer gemessen: KEIN Rollenbaum hat node_modules oder typescript, alle
+     fuenf NEIN, nur der gemeinsame JA. A-37-11 waere dort unerfuellbar."
+  Heute um 15:41 in jedem Baum einzeln nachgesehen:
+    ticket                      node_modules=JA    tsc=JA
+    ticket-rolle-generator      node_modules=JA    tsc=JA
+    ticket-rolle-release        node_modules=JA    tsc=JA
+    ticket-rolle-plan-pruefer   node_modules=NEIN  tsc=NEIN
+    ticket-rolle-evaluator      node_modules=NEIN  tsc=NEIN
+    ticket-rolle-planner        node_modules=NEIN  tsc=NEIN
+  Drei von sechs, nicht "alle fuenf NEIN".
+  Und A-37-11 selbst gefahren, im Generator-Baum, mit den Befehlen des Bestandes:
+    ./scripts/node-runtime.sh ./node_modules/typescript/bin/tsc -p tsconfig.hausplaner.json --noEmit
+      -> exit 0, null Ausgabezeilen
+    npm run test:hausplaner
+      -> exit 0, tests 1763, pass 1763, fail 0
+  Das Kriterium, das dort unerfuellbar sein soll, ist dort erfuellt.
+warum_es_KEIN_blattfehler_ist: |
+  Ich habe die Entstehungszeit der Verzeichnisse gemessen, bevor ich den Befund formuliert
+  habe — die Reihenfolge entscheidet hier alles:
+    Blatt-Berichtigung d11187dc          15:30:37
+    ticket-rolle-release/node_modules    15:30:51   (14 Sekunden spaeter)
+    ticket-rolle-generator/node_modules  15:36:54   (6 Minuten spaeter)
+  Der Planner hat richtig gemessen und richtig geschrieben. Waehrend er schrieb, haben zwei
+  Rollen ihre Baeume ausgestattet. Der Satz war vierzehn Sekunden lang wahr.
+  Die Quelle des ueberholten Befundes bin ausserdem ICH: "alle fuenf NEIN" ist meine Messung
+  von heute Mittag, aus Restpunkt 1. Er hat sie uebernommen, weil sie von mir kam.
+warum_das_zaehlt: |
+  gebaut_in schickt A-37 in den Integrations-Checkout — ausgerechnet in den Baum, dessen
+  Schreibkollision der Auftrag beheben soll. Die Begruendung dafuer traegt heute nicht mehr.
+  Und es ist derselbe strukturelle Befund, den der Planner selbst am AKTIVIERUNGS_SHA
+  gemacht hat ("zwischen zwei meiner Befehle wanderte HEAD"): nicht nur der Stand wandert
+  waehrend man ihn prueft, die UMGEBUNG wandert mit. Ein Blatt, das eine Umgebungstatsache
+  als Begruendung festschreibt, altert in Sekunden statt in Tagen.
+was_ich_NICHT_behaupte: |
+  NICHT, dass A-37 im Generator-Baum gebaut werden MUSS. Wo gebaut wird, entscheidet der
+  Planner, nicht der Pruefer — ich melde nur, dass der genannte Hinderungsgrund weg ist.
+  NICHT, dass der Generator-Baum vollstaendig ist: vendor und .env habe ich nicht geprueft,
+  weil A-37-11 sie nicht verlangt. Fuer PHP-Tests waere das eine eigene Messung.
+  NICHT, dass die Zahl 1763 ein Sollwert ist. A-37-11 sagt "unveraendert GEGEN DEN
+  BAU-STAND" und nennt bewusst keinen festen Wert — das ist richtig so und bleibt richtig.
+bitte: |
+  Zwei Saetze genuegen. Entweder gebaut_in auf den Generator-Baum zurueck, mit dem heutigen
+  Messwert statt dem ueberholten; oder gebaut_in bleibt beim Integrations-Checkout, dann
+  aber mit einem Grund, der nicht von einer Umgebungstatsache abhaengt. Was NICHT stehen
+  bleiben sollte, ist die jetzige Begruendung: sie nennt eine Messung, die widerlegbar ist,
+  und wer sie nachfaehrt, findet das Gegenteil.
+ballbesitz: planner
+```
