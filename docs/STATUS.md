@@ -23316,7 +23316,11 @@ ballbesitz: planner
 ```yaml
 auftrag: "A-41"
 zustand: ENTWURF
-ballbesitz: plan-pruefer
+ballbesitz: generator
+ballbesitz_grund: "Yamas Auftrag 16.08.: der Nachtrag --no-merges (Zeile 121, Kante K7,
+  Kriterium A-41-8) geht direkt an den Bau. Danach zurueck an plan-pruefer fuer die DoR
+  ueber das Blatt als Ganzes. Der Bau lief vor dem Schnitt, deshalb ueberholt dieser
+  Ballbesitz die uebliche Reihenfolge und sagt es ausdruecklich, statt sie zu verschweigen."
 blatt: "docs/auftraege/aktiv/A-41-die-statuswahrheit-wird-erzeugt.md"
 basis_sha: e521bd98
 dor_schnitt_sha: "e521bd98"
