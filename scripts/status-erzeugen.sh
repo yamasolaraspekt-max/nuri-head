@@ -51,6 +51,9 @@
 #
 #   --vergleich   haelt das Erzeugnis gegen den heutigen Bestand und meldet die Abweichung.
 #                 Weicht es ab, ist die ABWEICHUNG der Befund, nicht die Erzeugung.
+#
+#   --fangprobe   haelt das MUSTER gegen zwoelf echte Faelle, bevor es zaehlt.
+#   --regelprobe  fragt, ob docs/ARBEITSREGELN.md den Wortlaut traegt (A-41-1, halb fremd).
 # ```
 #
 # **Ohne Argument laeuft `--vergleich`** — der Modus, der nichts schreibt. *Ein Werkzeug, das die
@@ -94,6 +97,7 @@ case "${1:-}" in
   --bootstrap) MODUS="bootstrap" ;;
   --vergleich|"") MODUS="vergleich" ;;
   --fangprobe) MODUS="fangprobe" ;;
+  --regelprobe) MODUS="regelprobe" ;;
   # 64 und nicht 2: die 2 gehoert seit A-41-10 dem Widerspruch. Ein Tippfehler im Aufruf und ein
   # ungeloester Widerspruch sind nicht dasselbe Ereignis und duerfen nicht dieselbe Zahl tragen.
   *) echo "Unbekanntes Argument: $1" >&2; exit 64 ;;
@@ -396,6 +400,58 @@ if MODUS == "tafel":
     if meldungen:
         raus(1, f"nicht im Wortlaut {len(verworfen)} · ohne Auftrag {len(ohne_blatt)} · fremder Zweig {len(fremd)}")
     raus(0, f"{len(tafel)} Kennungen, keine Meldung.")
+
+# ── A-41-1 · STEHT DER WORTLAUT IN DEN ARBEITSREGELN? ───────────────────────────────────────
+#
+# **Das Kriterium hat zwei Haelften, und nur eine gehoert mir.** *„Der Wortlaut steht in
+# `docs/ARBEITSREGELN.md`"* — **das schreibt der Planner**, denn die Arbeitsregeln sind die
+# Prozessquelle und keine Werkzeugdatei. *„… und ist maschinell pruefbar"* — **das ist der
+# Pruefer, und der ist meiner.**
+#
+# ## ⚠ ICH HABE DIESES KRITERIUM SELBST FALSCH GRUEN GEMELDET
+#
+# ```text
+#   grep -c 'zustand:' docs/ARBEITSREGELN.md              8   <- so habe ich gemessen
+#   davon im neuen Wortlaut (mit Mitteltrenner)           0   <- so haette ich messen muessen
+# ```
+#
+# **Die acht Treffer sind das ALTE Feld in `STATUS.md`, nicht der Commit-Betreff.** *Ich habe die
+# Schreibweise gezaehlt und nicht die Sache* — **H-9, an mir selbst.** Ein `grep` auf ein
+# Teilwort trifft die Vorgeschichte des Wortes mit.
+#
+# **Deshalb prueft dieser Modus nicht auf das Wort, sondern gegen `WORTLAUT`** — dasselbe Muster,
+# das auch die Commits liest. *Ein Beispiel in der Regel, das die Erzeugung nicht laese, waere
+# eine Regel, die ihr Werkzeug nicht kennt.*
+if MODUS == "regelprobe":
+    zweige = [z for z in lauf("git", "for-each-ref", "--format=%(refname:short)",
+                              "refs/heads/rolle/*", "refs/heads/auto/hausplaner-integration").split("\n") if z]
+    INTEGRATION = "auto/hausplaner-integration"
+    print("# REGELPROBE — traegt docs/ARBEITSREGELN.md den Wortlaut, und liest ihn mein Muster?\n")
+    treffer_je_zweig = {}
+    for z in zweige:
+        text = lauf("git", "show", f"{z}:docs/ARBEITSREGELN.md")
+        # Der Wortlaut steht in einer Regel als BEISPIEL: eingerueckt, in einem Block, evtl. mit
+        # Aufzaehlungszeichen davor. Deshalb wird die Zeile abgeraeumt, bevor sie geprueft wird —
+        # aber NICHT der Betreff selbst veraendert.
+        treffer = [l.strip().lstrip("#*->` ").strip()
+                   for l in text.split("\n") if WORTLAUT.match(l.strip().lstrip("#*->` ").strip())]
+        treffer_je_zweig[z] = treffer
+        print(f"  {z.split('/')[-1]:<24} {len(treffer):>2} Zeile(n) im Wortlaut")
+        for t in treffer[:2]:
+            print(f"      {t[:96]}")
+    im_integrationszweig = len(treffer_je_zweig.get(INTEGRATION, []))
+    anderswo = sum(len(v) for k, v in treffer_je_zweig.items() if k != INTEGRATION)
+    # Auch hier traegt die 0 nicht die Bedeutung „erzeugt": die Regelprobe erzeugt nichts, sie
+    # prueft. Dieselbe Stelle wie bei der Fangprobe, und derselbe Ausweg.
+    if im_integrationszweig:
+        raus(0, "Der Wortlaut steht in den Arbeitsregeln und mein Muster liest ihn.",
+             "Regelprobe gruen")
+    if anderswo:
+        raus(1, "Der Wortlaut steht in einem Rollenzweig, aber noch nicht im Integrationszweig.",
+             "Regelprobe: steht, aber nicht transportiert")
+    raus(3, "Kein Zweig traegt den Wortlaut in docs/ARBEITSREGELN.md — A-41-1 ist offen "
+            "und gehoert dem Planner, nicht diesem Skript.",
+         "Regelprobe rot — die Regel nennt den Wortlaut nicht")
 
 if MODUS == "bootstrap":
     zweige, je_kennung, prosa = aus_den_zweigen()
