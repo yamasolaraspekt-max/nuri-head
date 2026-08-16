@@ -1,9 +1,9 @@
-# A-39 — Fünf Prüfungen, die ein Blatt gegen sich selbst hält
+# A-39 — Sechs Prüfungen, die ein Blatt gegen sich selbst hält
 
 ```yaml
 auftrag: "A-39"
 werkzeug: "— (Werkzeug der Rollenkette, kein Hausplaner-Werkzeug)"
-art: "BAU — ein Pruefskript fuer Auftragsblaetter. Es laeuft im DoR-SCHRITT, nicht im Tor:
+art: "BAU — ein Pruefskript fuer Auftragsblaetter (sechs Innenpruefungen). Es laeuft im DoR-SCHRITT, nicht im Tor:
       es misst ein BLATT, keinen Commit. KEINE Aenderung an docs/STATUS.md, KEIN Hausplaner-Code."
 spur: A
 heimat_app: ticket
@@ -16,13 +16,13 @@ ballbesitz: "plan-pruefer (DoR)"
 claim: "planner 16.08. — Claim VOR dem Schnitt."
 kennung_geprueft: "A-39 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
                    docs/auftraege/aktiv/. A-01 bis A-38 sind vergeben. Frei."
-anlass: "Fuenf Blattfehler an EINEM Tag, jeder erst beim Bauen oder Abnehmen gefunden,
+anlass: "Sechs Blattfehler: fuenf an EINEM Tag, der sechste am 16.08., jeder erst beim Bauen oder Abnehmen gefunden,
          jeder vor dem ersten Zeichen Code vorhanden und maschinell erkennbar."
 gebaut_in: "ticket-rolle-generator (rolle/generator)"
 staut_hinter: "A-37 — das Tor schuetzt A-39, nicht umgekehrt."
 ```
 
-## Der Anlass: fünf Fehler an einem Tag, alle zu spät gefunden
+## Der Anlass: sechs Fehler, alle zu spät gefunden
 
 | # | Fehler | gefunden | Kosten |
 |---|---|---|---|
@@ -32,17 +32,19 @@ staut_hinter: "A-37 — das Tor schuetzt A-39, nicht umgekehrt."
 | 4 | **Kriterium gegen den eigenen Blattkopf** — A-33-7 verlangte „`scripts/` null Mal", `art:` verlangte genau dieses Skript | vom Evaluator, in der Abnahme | `SPEC_BLOCKED`, eine Runde verloren |
 | 5 | **Rückgabewert doppelt vergeben** — `exit 3` war „Kennung fehlt" **und** `MODUL` | in DoR Runde 3 | zwei Bedeutungen auf einem Code, beide Seiten ahnungslos |
 
-**Alle fünf waren vor dem ersten Zeichen Code vorhanden und maschinell erkennbar.** Jeder kostete
+| 6 | **Rot-Lage mit Uhr** — A-38-2 belegte „28 von 32" aus einem wandernden 48-Stunden-Fenster | vom Plan-Prüfer, **6 h 37 min vor Ablauf** | wäre um 22:53 von selbst grün geworden, **ohne dass jemand etwas behob** |
+
+**Alle sechs waren vor dem ersten Zeichen Code vorhanden und maschinell erkennbar.** Jeder kostete
 eine Runde. **Keiner wurde von einer Prüfstation gefunden — alle erst, als jemand das Blatt
 benutzen wollte.**
 
 ## Warum das in den DoR-Schritt gehört und nicht ins Tor
 
-**Das Tor prüft Commits. Diese fünf prüfen ein Blatt.** Ein Blatt wird geschnitten, bevor es einen
+**Das Tor prüft Commits. Diese sechs prüfen ein Blatt.** Ein Blatt wird geschnitten, bevor es einen
 Commit gibt, und die Fehler wirken, sobald jemand es liest. **Im Tor käme die Prüfung zu spät und
 träfe den Falschen** — der Bauende hätte den Blattfehler nicht verursacht.
 
-## Scope — fünf Prüfungen über eine Datei
+## Scope — sechs Prüfungen über eine Datei
 
 ```
 scripts/blatt-pruefen.sh <pfad-zum-blatt>
@@ -71,6 +73,15 @@ P5  RUECKGABEWERT DOPPELT
     Wird in einem Blatt mehr als eine Bedeutung auf denselben exit-Code
     gelegt, ist das ein Fund — unabhaengig davon, ob beide Stellen
     denselben Bauteil betreffen.
+
+P6  ROT-LAGE MIT UHR
+    Eine Rot-Lage, die aus einem WANDERNDEN Zeitfenster stammt
+    (--since='N hours ago', "heute", "seit gestern"), ist ein Fund.
+    Sie wird von selbst gruen, ohne dass jemand etwas behoben hat.
+    Verlangt: feste SHAs, ein Zeitstempel, oder ein KONSTRUIERTER Fall.
+    Belegfall: A-38-2 lief am 16.08. um 22:53 ab — der juengste
+    markenlose Merge fiel aus dem 48-Stunden-Fenster, danach haette
+    jede Pruefung 0 von 102 gemessen und keinen Beleg mehr gefunden.
 ```
 
 **Ausgabe: je Fund eine Zeile mit Kennung und Fundstelle. Rückgabe 1, wenn ein Fund vorliegt.**
@@ -108,6 +119,13 @@ P5  RUECKGABEWERT DOPPELT
 - **A-39-4** · **P3 findet A-37-12 am Stand vor A-37-16** — die Marke ohne Erzeuger.
 - **A-39-5** · **P4 findet A-33-7 am Stand vor `5db5f8a9`** — „`scripts/` null Mal" gegen `art:`.
 - **A-39-6** · **P5 findet den doppelten `exit 3`** am Stand vor `5bbc55bf`.
+- **A-39-11** · **P6 findet die Rot-Lage mit Uhr.** Gegen den Stand von A-38 **vor** der
+  Umstellung auf feste SHAs gefahren, **muss A-38-2 gemeldet werden** — dort belegte
+  *„28 von 32 Merges"* aus einem `--since='48 hours ago'`-Fenster.
+  **Negativprobe:** die heutige Fassung, die fünf feste SHAs nennt, wird **nicht** gemeldet.
+  **Und die Probe, die den Sinn trägt:** ein Kriterium, das eine Zahl **mit** Zeitstempel oder
+  `Bau-Stand` nennt, ist **kein** Fund — P6 sucht das **wandernde Fenster**, nicht jede Zeitangabe.
+  *(Sonst meldet es jede Messvorschrift und wird weggeklickt — A-03.)*
 - **A-39-7** · **Positivfall gesamt:** ein Blatt ohne Befund erzeugt **keine Ausgabe** und
   Rückgabe **0**. *(Ohne diesen Beleg ist das Skript von einem kaputten nicht zu unterscheiden.)*
 - **A-39-8** · **Alle sechs Kanten K1–K6 sind behandelt und je einzeln belegt.**
@@ -121,7 +139,7 @@ P5  RUECKGABEWERT DOPPELT
 
 - **Rückweg:** ein neues Skript, sonst nichts. **Rücknahme = Commit zurückdrehen.** Es ist nirgends
   eingehängt und kann keinen Commit verhindern.
-- **Entdeckung:** A-39-2 bis A-39-6 sind **fünf historische Positivproben** — jede an einem Stand,
+- **Entdeckung:** A-39-2 bis A-39-6 und A-39-11 sind **sechs historische Positivproben** — jede an einem Stand,
   an dem der Fehler nachweislich vorlag. **Ein Prüfer, den man nie hat sprechen sehen, ist von
   einem kaputten nicht zu unterscheiden.**
 - **Der Fall, der beim Bauen am ehesten übersehen wird:** K5. **P5 sucht zwei *Bedeutungen* auf

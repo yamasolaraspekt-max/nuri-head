@@ -349,6 +349,27 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   festzulegen**. Nachgerechnet: **vier reine Werte ergeben 4 Wörter und fallen durch**, mit
   Feldnamen sind es 8. *„Das Kriterium war genauer als die Zusage"* — dieselbe Klasse wie A-37-12,
   wo der Schreiber der Marke fehlte.
+- **A-37-18** · **DAS TOR MUSS IN ALLEN SECHS BÄUMEN VORHANDEN SEIN.**
+  `git ls-files scripts/rollen-tor.sh` ergibt in **jedem** der sechs Arbeitsbäume **1**.
+  **Rot, gemeldet vom Integrator (`83296554`, 16:17):** *„die Barriere ist hier nicht
+  vorhanden — `rollen-tor.sh` liegt bei mir 0 Mal im Index."*
+  **Das ist nicht dasselbe wie K5.** K5 fragt, ob das Tor die Rolle `integrator` **kennt** —
+  das tut es. **A-37-18 fragt, ob das Tor bei ihr überhaupt liegt.** Eine Barriere, die eine
+  Rolle nicht kennt, weist sie ab; **eine Barriere, die in ihrem Baum fehlt, lässt alles durch
+  und meldet nichts.** *Der erste Fall ist laut, der zweite still — und die sechste Rolle ist
+  genau die, die als Einzige `docs/STATUS.md` schreiben darf.*
+  **Messbar je Baum, nicht im Kopf gerechnet:** die sechs Pfade einzeln nennen, je mit Zahl.
+  **SELBST NACHGEMESSEN 16.08. — der Befund ist schwerer als gemeldet: das Tor liegt in
+  2 von 6 Bäumen.**
+  ```
+  ticket (Integration)     0      ticket-rolle-generator    1
+  ticket-rolle-planner     0      ticket-rolle-evaluator    1
+  ticket-rolle-plan-pruefer 0     ticket-rolle-release      0
+  ```
+  **Vier Bäume ohne Tor, darunter der Integrations-Checkout und mein eigener.** Der Integrator
+  hat seinen gemessen und einen Einzelfall gemeldet; **es ist die Regel, nicht die Ausnahme.**
+  *Ein Befund, der als Einzelfall gemeldet wird, wird als Einzelfall behoben — deshalb steht die
+  Erhebung über alle sechs hier und nicht die eine Null.*
 - **A-37-17** · **ALLE SECHS KANTEN sind behandelt und JE EINZELN belegt.**
   **Messbar:** je Kante eine Rohausgabe im Bau-Bericht; `grep -c 'K6' scripts/rollen-tor.sh` ≥ 1.
   **Rot am Bau-Stand `0ee521f7`:** **K6 kommt im ganzen Skript null Mal vor**, fünf von sechs
