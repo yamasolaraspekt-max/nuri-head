@@ -6163,3 +6163,95 @@ DoR Runde 2 fuer A-38:  ERTEILT
 **Ich fasse den Zustand NICHT an.** *Das Blatt steht auf `ENTWURF`; der Übergang nach `BEREIT`
 gehört dem Planner, und meine Rolle endet mit dem Votum.* **Ball beim Planner.**
 **Kein Zustandsfeld angefasst, kein Bau.** **Offen bei mir: DoR Runde 2 für A-39 · A-40 · A-42.**
+
+---
+
+## 89 — DoR Runde 2 für A-39: ERTEILT. Der eine Restpunkt ist behoben, und drei Kriterien mehr sind dazugekommen als ich je geprüft hatte
+
+**Stand:** HEAD `23bcf978`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**A-39 `ENTWURF`, `basis_sha 99add90f`. Blattstand `315f33ee` (16.08. 21:22), 7 h 04 nach meiner
+Verweigerung.** Zweiter Posten des Rückstands aus §87.
+
+### Mein Restpunkt aus Runde 1 — behoben, und mehr als das
+
+Runde 1 lautete: *„NICHT ERTEILT, ein Restpunkt, ein SHA"* — A-39-3 nannte keinen Stand.
+
+```
+heute A-39-3:  P2 findet A-33-1 ('genau EINS', Stand 8559b555)
+               und A-37-11 ('Suite 1750', Stand 7ef8f046, 14.08. 22:35)
+```
+
+**Beide Stände am Objekt geprüft, nicht am Betreff:**
+
+```
+8559b555  A-33-1 steht dort (Z.175) und traegt 'genau EINS'          1 Treffer
+heute     dieselbe Datei, dasselbe Muster                            0 Treffer
+          -> die tragende Zusage 'dieselbe Datei, zwei Staende, zwei Antworten' HAELT
+7ef8f046  A-37-11 (Z.131): 'Suite gruen und Zahl unveraendert
+          (Stand bc2125d9: 1750), tsc exit=0'                        zeichengenau
+```
+
+**Und `7ef8f046` ist derselbe SHA, den ich in Runde 1 für A-39-4 als FALSCH gemeldet hatte.**
+*Er ist für A-39-4 falsch und für A-39-3 richtig — zwei Fälle, ein Stand, zwei Antworten. Das
+Blatt trennt sie korrekt.*
+
+**A-39-4 trägt heute BEWUSST keinen SHA**, mit dem Grund im Kriterium: *„Kein SHA im Kriterium,
+bevor er am Fall geprüft ist. **Ein falscher Stand ist schlimmer als keiner: er sieht geprüft
+aus.**"* **Das ist die richtige Auflösung eines falschen Belegs — nicht ersetzen, sondern die
+Ermittlung an den Bau binden.**
+
+### Drei Kriterien mehr, als ich je gesehen habe
+
+```
+Runde-1-Pruefstand 2624062b   10 Kriterien · 146 Zeilen
+heute                         13 Kriterien · 285 Zeilen   lueckenlos A-39-1 bis -13
+```
+
+**A-39-11 (P6), A-39-12 (P7) und A-39-13 (P8) sind nach meiner Runde 1 entstanden — ich hatte sie
+nie geprüft. Jetzt geprüft:**
+
+```
+A-39-12 (P7)  Positivproben  A-41-4 @ a613100e · A-41-5 @ 74cc04d5 · A-37-18 @ 78841603
+              Negativprobe   die heutigen Fassungen derselben drei NICHT
+              Grenze         'P7 prueft, ob die Fragen beantwortbar sind — nicht,
+                              ob die Antwort klug ist'
+A-39-13 (P8)  Positivproben  Regel-Ergaenzung @ e802c1f8 · W-17-1-3 vor d7f0c93d
+                             · Baum-Erhebung in A-37-18 @ 78841603
+              Negativprobe   ein Pfad ALS BEISPIEL ist kein Fund
+              Grenze         'P8 prueft die Suchvorschrift, nicht das Ergebnis'
+```
+
+**Alle acht genannten Stände existieren** (`a613100e` · `74cc04d5` · `78841603` · `e802c1f8` ·
+`d7f0c93d` · `0ee521f7` · `5db5f8a9` · `5bbc55bf`), **und die zwei, deren Zuordnung an der
+Oberfläche gekreuzt aussah, habe ich einzeln geöffnet:**
+
+```
+A-41-5 @ 74cc04d5   steht dort auf Z.176   (Commit-Betreff nennt A-41-4 — beides im selben Commit)
+A-41-4 @ a613100e   steht dort auf Z.164
+```
+
+*Ich hätte hier fast einen Zuordnungsfehler gemeldet. Der Betreff nannte die andere Nummer; die
+Datei nennt beide.*
+
+### Rot-Lage und Eigenprüfung
+
+```
+A-39-1 Rot-Lage    scripts/blatt-pruefen.sh existiert NICHT       haelt
+P2 an A-39 selbst  jedes fallbezogene Kriterium nennt einen Stand ODER bindet ihn
+                   an den Bau (A-39-4) · A-39-10 'gegen den Bau-Stand'
+                   -> das Blatt, das P2 definiert, besteht P2
+```
+
+## VOTUM
+
+```
+DoR Runde 2 fuer A-39:  ERTEILT
+  Restpunkt aus Runde 1 behoben, beide Staende am OBJEKT geprueft
+  drei neue Kriterien geprueft, alle mit Positiv-, Negativprobe und Grenze
+  acht Staende existieren, zwei einzeln geoeffnet
+  Rot-Lage haelt · A-39 besteht seine eigene Pruefung P2
+  kein neuer Restpunkt
+```
+
+**Ich fasse den Zustand NICHT an.** *Der Übergang gehört dem Planner.* **Ball beim Planner.**
+**Offen bei mir: DoR Runde 2 für A-40 · A-42.** **Kein Zustandsfeld angefasst, kein Bau.**
