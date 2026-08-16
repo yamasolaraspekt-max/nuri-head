@@ -337,3 +337,54 @@ WEITERGABE: "SPEC_BLOCKED geht an den PLANNER. Der Bau bleibt liegen wie er ist;
 | *Browser* | **nicht gefahren** — keine sichtbare Wirkung, der Bau ist ein Skript ohne UI | **entfällt** |
 | *§15 / `getDatabaseName()`* | **nicht beruehrt** — kein Datenbankzugriff im Scope | **entfällt** |
 | *Insel-Suite / tsc* | **nicht gefahren** — der Bau fasst weder `resources/` noch `app/` an (je 0 Treffer im Commit) | **entfällt** |
+
+### Nachtrag zum Votum — Yamas drei Präzisierungen, jede nachgemessen (16.08., nach `75c471cf`)
+
+```yaml
+anlass: "Yama hat waehrend meiner Abnahme drei Punkte praezisiert. Zwei davon hatte ich gemessen,
+  einer korrigiert meinen Messtisch an einer Stelle — er steht hier statt still eingearbeitet."
+
+1_IDEMPOTENZ_NACHGEMESSEN_NICHT_BEHAUPTET: "War schon so gefahren. Erster Lauf 'NACHZUZIEHEN: 11
+  Zeile(n), 11 Kennung(en)', zweiter Lauf 'keine — die Invariante haelt bereits', beide Rohausgaben
+  im Messtisch, md5-Ruecksetzung auf 7811e4d8c3e889c350008165eb5644b3 belegt."
+
+2_DIE_ZIELZAHL_FEHLT_ABSICHTLICH: "Ich habe sie NICHT beanstandet und A-33-1 gruen gemessen — an
+  der INVARIANTE, nicht an einer Zahl: nach dem Lauf keine verkuerzte Tafelzeile mehr, deren
+  Datensatz die volle Form traegt, und der zweite Lauf meldet null. Dass die Zahl driftet, ist bei
+  dieser Datei heute selbst belegt: am Bau-Stand 121 Datensaetze, am heutigen Bestand 141 — und die
+  Invariante liefert in beiden Faellen unveraendert 11 Zeilen und NULL unklare Faelle."
+
+3_DIE_WIRKUNG_IST_DAS_EIGENTLICHE_KRITERIUM — DAS KORRIGIERT MEINEN MESSTISCH: |
+  Ich hatte A-33-5 als 'a26 laeuft ohne neue Meldung' gemessen und mit 0 Zeilen/exit 0 gruen
+  gegeben. Das misst die STILLE, nicht die WIRKUNG. Yamas Kriterium ist das andere: a26 muss NACH
+  dem Lauf an den Zeilen ANSCHLAGEN koennen, an denen es vorher still weitersprang.
+  JETZT AM BESTAND GEMESSEN, je Kennung einzeln, vorher am Bau-Stand 3e22e61b und nachher am
+  Lauf-Stand — nicht aus dem Skript behauptet:
+    W-01  vorher Tafel 1 + Datensatz 0 -> Ausstieg   nachher Tafel 1 + Datensatz 1 -> PAART
+    W-02  W-04  W-05  W-08  W-09  W-11  W-13  W-15  W-21  W-22 — alle zehn identisch
+    SUMME: paarbar vorher 0 von 11, nachher 11 von 11.
+  DIE WIRKUNG IST DAMIT BELEGT, und sie ist staerker als meine Stille-Messung: der Ausstieg
+  schreibt woertlich 'kein Datensatz-Block — Ball und Zustand nicht vergleichbar'; nach dem Lauf
+  greift er bei keiner der elf mehr. Als Beleg, dass a26 danach wirklich VERGLEICHT, dient die
+  Meldung, die es dabei erstmals erzeugt: 'W-01/1 BALL: Tafel *–* <-> Datensatz *—*' — U+2013 gegen
+  U+2014, je Zeichen gemessen. Diese Differenz bestand vorher schon und war nur unsichtbar.
+  MEIN MESSFEHLER IN EINEM SATZ: ich habe im Zwischenzustand dieselbe Rohausgabe gesehen und sie
+  als SCHADEN gelesen (Beinahe-P1 gegen A-33-5), waehrend sie zur Haelfte der WIRKUNGSNACHWEIS ist.
+
+DER_ZEIGER_a26_56_TRIFFT_NICHT_MEHR, und das Blatt weiss es selbst: |
+  Yama nennt a26-ball-drift.sh:56. GEOEFFNET: :55 ist '[ -z "$KENNUNGEN" ] && exit 0', :56 ist eine
+  LEERZEILE, :57 ein Kommentar. Der Ausstieg, um den es geht, liegt auf :96-98
+  (START-Zuweisung, if [ -z "$START" ], UNGEPRUEFT-Zeile). Das Auftragsblatt hat genau diesen
+  Zeiger am 14.08. berichtigt — 'auf :56 eine Leerzeile statt des stillen continue (heute :97)' —
+  nach dem A-30-Bau, der die Datei von 102 auf 158 Zeilen umgebaut hat. Fuenfter belegter Fall
+  dieser Klasse. Am Inhalt der Anweisung aendert es nichts.
+
+OFFEN_UND_NICHT_ABSCHLIESSEND_GEKLAERT, ohne Bewertung: |
+  a26 im STAND-Modus (bash scripts/a26-ball-drift.sh <sha>) meldet am Lauf-Commit NICHTS, obwohl
+  der Diff 22 Kennungen enthaelt (W-01 bis W-22 in alter UND neuer Form, selbst gezaehlt). Im
+  Arbeitsbaum-Modus meldet dieselbe Datenlage 31 Zeilen. Warum die zwei Modi auseinanderlaufen,
+  habe ich NICHT geklaert — es gehoert nicht zu A-33 und ich melde es ohne Deutung.
+
+DAS_VOTUM_BLEIBT: "SPEC_BLOCKED. Es haengt an A-33-7, und keine dieser drei Praezisierungen
+  beruehrt A-33-7. Der Bau traegt; das Blatt traegt den Umschnitt nicht zu Ende. Ball beim Planner."
+```
