@@ -80,7 +80,7 @@ Beispiel:  zustand: A-33 · CODE_FERTIG · generator · bau 3e22e61b
 **Der Betreff ist die erste Zeile. Alles Weitere steht im Rumpf und wird nicht gelesen.**
 
 > **⚠ SO WIE OBEN GESCHRIEBEN IST DER WORTLAUT HEUTE NICHT COMMITTIERBAR — gemessen, nicht
-> vermutet.** `commit-pruefen.sh:73` erkennt jedes Präfix der Form `wort: ` als **Rollenmarke**.
+> vermutet.** Die **Markenerkennung** in `commit-pruefen.sh` erkennt jedes Präfix der Form `wort: ` als **Rollenmarke** *(über das Suchmuster `^[a-z][a-z-]*(-[0-9]+)?: ` zu finden — **die Zeilennummer wandert**, sie stand am 16.08. mittags bei 73 und abends bei 150)*.
 > `zustand: ` erfüllt das. Zeile 78 vergleicht es mit `TICKET_ROLLE` und wirft
 > `WIDERSPRUCH: die Botschaft gibt sich als 'zustand: ' aus … kein Commit`, **`exit 2`**.
 > Und ohne Marke stellt Zeile 84 `"$ROLLE: "` voran — dann matcht `^zustand:` nicht mehr.

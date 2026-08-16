@@ -142,3 +142,78 @@ Dateien aus, ohne dass es jemand angeordnet hat. Das funktioniert für Befunde u
 **Der Ball bei Yama bleibt derselbe und wird dadurch nicht dringender, aber klarer:** es geht
 nicht um den Betrieb der Kette, der läuft. Es geht um genau eine Sache — wer nach A-37 Teil 2
 die Zustandsfelder schreibt.
+
+---
+
+## 19:47 — A-37 CODE_FERTIG: Meldepflichten geprüft, Ballwechsel bestätigt
+
+**Der Ball geht an den Evaluator.** Ich bestätige ihn hier, weil ich ihn im Datensatz nicht
+bestätigen kann — A-37 steht dort weiterhin auf `BEREIT`, siehe oben.
+
+**Meldepflicht 1 — SHA existent:** `97f1dd00`, 16.08. 19:14, *„A-37-17 belegt — alle sechs
+Kanten je einzeln gefahren, Rohausgabe"*. ✓
+
+**Meldepflicht 2 — SHA in einem Feld:** ✗ **nicht erfüllbar.** Der Zustandswechsel steht nur
+im Commit-Betreff von `fb59f6cc`. Das ist kein Versäumnis des Generators, sondern die Folge
+der Sperre; sein Commit ändert ausschließlich `scripts/rollen-tor.sh`.
+
+**Meldepflicht 3 — Scope-Diff selbst gemessen.** Basis `bc2125d9`, fünfzehn Bau-Commits,
+Dateien einzeln ausgezählt:
+
+| Datei | Commits |
+|---|---|
+| `scripts/rollen-tor.sh` | 12 |
+| `scripts/commit-pruefen.sh` | 4 |
+| `scripts/module-nachziehen.sh` | 1 |
+
+**Nicht-Ziele: alle null.** `docs/STATUS.md` 0, `resources/` 0, `app/` 0, `database/` 0,
+`routes/` 0. Das Nicht-Ziel *„KEINE Änderung an docs/STATUS.md"* ist über den gesamten Bau
+eingehalten — bemerkenswert, weil genau dieser Bau die Sperre erzeugt hat, die es erzwingt.
+
+**Ein Befund, klein:** Das `art`-Feld kündigt *„Erweiterung von `scripts/commit-pruefen.sh`
+plus ein neues Prüfskript"* an — also zwei Dateien. Gebaut wurden **drei**. Die dritte,
+`scripts/module-nachziehen.sh`, stammt aus `4577fd1d` *(„A-37-12 bis A-37-16 gebaut — der
+Modulstand")* und ist damit durch Kriterien gedeckt, nur nicht im `art`-Feld angekündigt.
+Alle drei liegen unter `scripts/`, keine berührt ein Nicht-Ziel.
+
+**Urteil: der Bau hält seinen Rahmen.** Was der Abnahme fehlt, ist nicht der Beleg, sondern
+der Ort, an dem er stehen müsste.
+
+**Eigene Fangprobe:** Mein erster Lauf zählte vier Dateien, darunter `scripts/status-erzeugen.sh`.
+Das Muster `grep -i 'a-37'` traf Commits, die A-37 nur erwähnen. Mit dem engeren Muster
+`^generator: (zustand: )?A-37|A-37-[0-9]|A-37 Teil` bleiben drei. Die vierte war meine.
+
+---
+
+## 19:50 — A-42-5 geprüft: die Kanten tragen, und K4 trifft zahlengenau
+
+**Zweigprobe zuerst:** Das Blatt steht in allen fünf Ständen einheitlich auf 157 Zeilen
+(blob `76634ecb`) — gewachsen von 134, weil der Planner die dritte Blockklasse eingetragen hat.
+
+**Die sechs Kanten, je einzeln gemessen:**
+
+| | Kante | Kandidaten heute |
+|---|---|---|
+| K1 |  kleingeschrieben oder als Prosa | **0** |
+| K2 | zwei Notizen wortgleich | **0** |
+| K3 | Kennung, die es nie gab | **9** |
+| K4 | Block ist kaputtes yaml *(„es gibt 24")* | **24 — exakt** |
+| K5 | neue Notizen während des Umzugs | konstruierbar |
+| K6 |  existiert bereits | 0 heute, greift beim Zweitlauf |
+
+**K4 zahlengenau nachgezählt:** 442 Blöcke, davon 24 nicht parsebar — über  gefahren,
+dieselbe Zahl, die das Blatt nennt. Das ist die einzige Zahl im Kantenteil, und sie stimmt.
+
+**K6 gegengeprüft:**  existiert in **keinem** der vier geprüften Stände.
+Die Kante beschreibt also korrekt den zweiten Lauf, nicht den ersten.
+
+**Urteil zu A-42-5:** Die Kanten tragen. Zwei sind real belegt (K3 mit neun Fällen, K4
+zahlengenau), die übrigen vier sind Verhaltensregeln für konstruierbare oder künftige Lagen —
+dieselbe Bauart wie A-39s Kanten, und anders als A-40s K4, das auf ein Werkzeug zeigte, das es
+zum Schnitt nicht gab.
+
+**Eine Beobachtung zum Rückweg, die mich selbst betrifft:** Meine vorgeschlagene siebte Kante
+(*„Block nach ungeschlossenem Fence"*, 19:36) ist nicht eingezogen — und der Grund ist messbar:
+`a3513c7a` liegt in Generator, Release-Prüfer und Integration, **aber nicht beim Planner**. Von
+den fünf Commits, die ihm fehlen, ist dieser einer. Der Rückweg ist zu 95 Prozent offen; die
+verbliebenen fünf Prozent enthalten genau den Befund, der A-42 noch fehlt.
