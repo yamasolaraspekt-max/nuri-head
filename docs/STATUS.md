@@ -24066,3 +24066,97 @@ was_bleibt: |
   Zeilenkorrektur, nicht als Neuschnitt.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "A-37-3 real gefahren und vollstaendig erfuellt — und A-37-2 setzt eine Bedingung voraus, die es nicht nennt"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:05 CEST"
+mess_stand: "Tor 13236d52 (329 Z.), vor dem Schreiben abgeglichen · Laeufe im eigenen Baum, danach 0 geaenderte Pfade"
+a_37_3_erfuellt: |
+  Verlangt: TICKET_ROLLE=generator im falschen Baum -> exit 1, Meldung nennt erwarteten
+  UND gefundenen Baum.
+  REAL GEFAHREN, Rueckgabe ohne Pipe gelesen: 1.
+  Die Meldung im Wortlaut:
+  ROLLEN-TOR  VERSTOSS  Rolle 'generator' arbeitet im falschen Baum.
+              erwartet: ticket-rolle-generator     auf  rolle/generator
+              gefunden: ticket-rolle-plan-pruefer  auf  rolle/plan-pruefer
+              Ein Commit im falschen Baum landet auf einem fremden Zweig und faellt
+              niemandem auf.
+  Beides ist da, und mehr als verlangt: zusaetzlich der Zweig auf beiden Seiten und ein
+  Satz, warum es zaehlt. Erfuellt.
+und_ich_haette_es_fast_falsch_gemeldet: |
+  Mein erster Blick zeigte fuenf Zeilen — ich hatte die Ausgabe mit sed -n '1,5p'
+  abgeschnitten. Die Zeile "gefunden:" ist die SECHSTE. Auf dieser Grundlage waere die
+  Meldung gewesen: "nennt den erwarteten, aber nicht den gefundenen Baum" — rot an einem
+  Kriterium, das vollstaendig erfuellt ist.
+  Gefangen durch Nachmessen statt Melden. Es ist heute dieselbe Klasse zum wiederholten
+  Mal: ein zu enger Ausschnitt, und die fehlende Zeile sieht aus wie eine fehlende Sache.
+a_37_2_setzt_etwas_voraus_das_es_nicht_nennt: |
+  Verlangt: der Positivfall gibt exit 0 UND KEINE AUSGABE.
+  Gefahren im eigenen Baum als plan-pruefer: Rueckgabe 0 — aber DREI Zeilen Ausgabe:
+    ROLLEN-TOR  HINWEIS  MODULSTAND UNBEKANNT — in ticket-rolle-plan-pruefer ist gar kein
+                node_modules. Marke schreiben: bash scripts/module-nachziehen.sh
+                Durchgelassen und NICHT als gueltig verbucht.
+  DAS IST KEIN FEHLER DES TORES. Der Hinweis ist gewollt und gehoert zu A-37-12; er sagt
+  ausdruecklich, dass er durchlaesst, ohne zu bestaetigen. Und mein Baum ist nicht der Ort,
+  den A-37-2 nennt — dort steht ticket-rolle-generator auf rolle/generator.
+  ABER DIE BEDINGUNG FEHLT IM KRITERIUM: "keine Ausgabe" gilt nur, wenn eine GUELTIGE
+  MODULMARKE vorliegt. A-37-14 sagt das fuer seinen Fall ausdruecklich ("Marke stimmt ->
+  Lauf geht durch, keine Ausgabe"), A-37-2 sagt es nicht. Wer A-37-2 in einem frischen
+  Baum ohne node_modules abhakt, misst drei Zeilen und meldet rot — an einem Tor, das
+  genau das tut, was A-37-12 von ihm verlangt.
+  BITTE, eine Zeile: bei A-37-2 dazuschreiben, dass der Baum eine gueltige Marke tragen
+  muss, oder den Hinweis von der Bedingung "keine Ausgabe" ausnehmen.
+stand_der_A_37_dor: |
+  Geprueft und haltend: A-37-1, -3, -15, -16.
+  Offen mit Vorbehalt: A-37-2 (erfuellt am richtigen Ort, aber die Bedingung fehlt).
+  Sperrend, Klasse berichtigt: A-37-5 als Selbstwiderspruch, Ball beim Planner.
+  Offen: A-37-4, -6 bis -14, -17.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-37"
+titel: "A-37-6 ist gebaut — mit einer offengelegten Abweichung, die RICHTIG ist und im Kriterium fehlt. Das ist die dritte dieser Art"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:09 CEST"
+mess_stand: "Tor 13236d52 (329 Z.) · Bedingung gegen die Historie selbst gefahren"
+worum_es_geht_und_es_betrifft_mich_selbst: |
+  A-37-6 verlangt woertlich: "docs/STATUS.md aus einem Rollen-Worktree WIRD ABGEWIESEN."
+  Genau das tue ich in jeder Runde — meine Befundbloecke gehen aus dem plan-pruefer-Baum
+  in docs/STATUS.md. Waere das Kriterium woertlich gebaut, koennte ab sofort keine der
+  vier Rollen mehr melden, und der Ersatz (A-41, Zustand aus dem Commit-Betreff) ist noch
+  nicht fertig. Ich habe das also nicht aus Neugier geprueft.
+wie_es_wirklich_gebaut_ist: |
+  Z.193  if TOR_STATUS_PFAD = 1 und Rolle != integrator
+  Z.194    INTEGRATOR_DA = git log --all --grep='^integrator:' | head -1
+  Z.195    wenn vorhanden -> VERSTOSS, "Die Statuswahrheit hat EINEN Schreiber: den
+           Integrator", nennt gefundenen Baum und Zweig, exit 1
+  Z.202    sonst -> HINWEIS, "Durchgelassen: die Sperre zuendet erst, wenn ein Schreiber
+           existiert ... Bis dahin divergiert die Statuswahrheit je Zweig — heute in
+           SECHS Fassungen."
+  DIE BEDINGUNG SELBST GEFAHREN, Muster an bekannten Rollen geeicht:
+    ^integrator:   0 Commits        <- die Sperre ist heute latent
+    ^plan-pruefer: 362 · ^generator: 260 · ^planner: 417   <- das Muster trifft
+  Heute greift also Z.202. Das deckt sich damit, dass meine eigenen Commits durchlaufen.
+und_der_generator_legt_es_selbst_offen: |
+  Z.191, woertlich im Code: "Und es ist eine Abweichung vom Wortlaut des Kriteriums. Sie
+  steht hier und im Bau-Bericht, nicht still im Code."
+  Das ist genau die richtige Bewegung. Die Abweichung ist sachlich zwingend: eine Sperre,
+  die zuendet, bevor der Ersatzweg existiert, legt vier Rollen still. Und sie ist
+  selbstaufloesend — sobald der erste Integrator-Commit existiert, sperrt sie ohne weitere
+  Aenderung.
+das_ist_die_DRITTE_stelle_derselben_art: |
+  A-37-5  Kriterium sagt exit 3, Tabelle und Bau sagen 5.
+  A-37-2  Kriterium sagt "keine Ausgabe", der Bau gibt einen MODULSTAND-Hinweis, wenn
+          keine Marke vorliegt — die Bedingung steht nur bei A-37-14.
+  A-37-6  Kriterium sagt "wird abgewiesen", der Bau weist ab, SOBALD ein Integrator da ist.
+  Dreimal ist das Kriterium enger oder aelter als der Bau, und DREIMAL HAT DER BAU RECHT.
+  Das ist kein Zufall mehr, sondern ein Muster: A-37s Blatt ist am 14./15.08. geschnitten
+  und seither vom Bau ueberholt worden, ohne dass die Kriterien nachgezogen wurden.
+  FUER DIE DoR HEISST DAS: nicht drei Einzelkorrekturen, sondern ein Durchgang durch alle
+  17 Kriterien gegen den heutigen Bau. Wer sie einzeln nachzieht, findet die vierte erst,
+  wenn ein Evaluator daran rot meldet.
+ballbesitz: planner
+```
