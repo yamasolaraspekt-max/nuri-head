@@ -78,6 +78,34 @@ sind.** *Ohne diesen Absatz hielte man den Umzug für vollständig.*
 **Auflage:** der Lauf **zählt und meldet** die dritte Klasse, ohne sie anzufassen. **Was mit ihr
 geschieht, ist ein eigener Vorgang** — und die Frage danach gehört Yama, nicht diesem Blatt.
 
+## Befunde des Plan-Prüfers — 16.08. abends, alle drei zutreffend
+
+```
+1  K1 und K2 sind heute NICHT AUSLOESBAR, und K1s Wortlaut ist an
+   NEUN Bloecken mehrdeutig.
+   -> eine Kante, die kein Fall ausloest, ist eine Absichtserklaerung.
+      K1 wird am Wortlaut geschaerft, K2 bekommt einen konstruierten Fall
+      ODER wird gestrichen — nicht stehen gelassen.
+
+2  K3 und K6 ebenfalls nicht ausloesbar. ABER: 68 von 77 Notizen tragen
+   FREITEXT im auftrag-Feld statt einer Kennung.
+   -> das trifft A-42-4 (Herkunft): eine Herkunftszeile mit Freitext-Kennung
+      ist keine Zuordnung. A-42-4 muss den Fall benennen: Freitext bleibt
+      Freitext, wird uebernommen und als NICHT ZUORDENBAR markiert.
+
+3  A-42-8 wendet P7 an und FAELLT SELBST DURCH P7.
+   Das "DARF er" hat ein Ablaufdatum, und A-37 setzt es: sobald die
+   STATUS-Sperre greift, darf der Generator docs/STATUS.md nicht mehr
+   anfassen — und A-42 verlangt genau das.
+   -> A-42-8 muss die Bedingung nennen: der Umzug laeuft, BEVOR die Sperre
+      zuendet, oder er gehoert dem Integrator. Ein P7-Kriterium ohne
+      Zeitbezug prueft nur den Moment seines Schnitts.
+```
+
+> **Der dritte ist der schwerste und er trifft mein eigenes Werkzeug:** *P7 fragt „darf diese
+> Rolle das?" — aber nicht „darf sie es noch, wenn der Bau fertig ist?".* **Eine Erlaubnis mit
+> Ablaufdatum ist keine Erlaubnis.** Das gehört als Schärfung in **A-39 P7**, nicht nur hierher.
+
 ## Nicht-Ziele
 
 - **KEIN Löschen.** Kein Block verschwindet; jeder steht danach vollständig in der Zieldatei.

@@ -91,6 +91,13 @@ P7  KRITERIUM OHNE GANGBAREN WEG
       DARF diese Rolle sie ausfuehren?
       EXISTIERT die verlangte Eigenschaft auf dem Messweg?
     Ist eine Antwort nein oder unbekannt, ist es ein Fund.
+    UND DIE VIERTE FRAGE, ergaenzt 16.08. nach einem Befund am
+    eigenen Werkzeug: DARF SIE ES NOCH, WENN DER BAU FERTIG IST?
+    Eine Erlaubnis mit Ablaufdatum ist keine Erlaubnis.
+    Belegfall: A-42-8 bescheinigt dem Generator, er duerfe
+    docs/STATUS.md anfassen — A-37s Sperre nimmt ihm das Recht,
+    sobald sie zuendet. Das Kriterium prueft nur den Moment
+    seines Schnitts.
     DREI BELEGFAELLE VOM 16.08., alle aus DEMSELBEN Blattschreiber:
       A-41-4  verlangte SCHREIBEN von docs/STATUS.md — das darf nur
               der Integrator, den es zu dem Zeitpunkt nicht gab.

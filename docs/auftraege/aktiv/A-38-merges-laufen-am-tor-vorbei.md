@@ -250,6 +250,23 @@ Merges nicht sieht, wird mit jeder Integration blinder.*
 wie viele Merges eine Marke tragen. **Jetzt lautet sie, dass 188 Vorgänge das Tor gar nicht
 passieren — unabhängig davon, was in ihrer Botschaft steht.**
 
+## Befund des Plan-Prüfers zu Yamas Anweisung — 16.08.
+
+**Yama hat angeordnet: A-38 gehört als Kriterium IN A-37, nicht dahinter.** Der Plan-Prüfer hat
+das nachgemessen und dabei einen zweiten Punkt gefunden:
+
+```
+DIE TRAGENDE ZAHL IST EINE ANDERE als die genannte.
+Das Loch ist nicht die Quote der markenlosen Merges,
+sondern der Anteil der Merges an ALLEN Commits.
+```
+
+> **Beides gilt und beides ist heute belegt:** die Merges sind zu 100 % markiert *(Disziplin,
+> kein Mechanismus)* — **und sie sind 40 % aller Commits, die das Tor nie sieht.** *Die erste
+> Zahl beschreibt die Vergangenheit, die zweite den Schaden.*
+
+**Für den Umschnitt in A-37 gilt: die 40 % sind die Begründung, nicht die Quote.**
+
 ## Rückweg und Entdeckung
 
 - **Rückweg:** `git config --unset core.hooksPath` — eine Zeile, sofort wirksam, ohne Commit.
