@@ -84,3 +84,44 @@ allein um das Feld `ballbesitz`, das ich neununddreißigmal falsch gesetzt habe.
 **Und für meine eigene Wache:** Ab sofort trägt ein Befundblock von mir den Ball des
 **Empfängers**, nicht meinen. Meine Urheberschaft steht im Feld `rolle:` — dafür brauche ich
 den Ballbesitz nicht.
+
+---
+
+## Nachweis — jede Zahl oben gegengeprüft (16.08. 21:5x · Stand 95980a2b)
+
+**Die 39.** Zwei Muster, weil eines davon eine Zeile verfehlt:
+
+```
+grep -c '^ballbesitz: plan-pruefer$'  ->  38     (strikt)
+grep -c '^ballbesitz: plan-pruefer'   ->  39     (mit Nachtext)
+```
+
+Die Differenz ist **Z.18694**, eine Ballzeile mit angehängter Begründung
+(`# 16.08. vom Planner zurueckgegeben … VORHER: ballbesitz: planner`). Sie zählt mit —
+**39 ist richtig.** Zur Warnung für den nächsten, der das nachzählt: `ballbesitz.*plan-pruefer`
+liefert **80** und ist falsch, weil es Blöcke mitfängt, in deren *Kommentar* die Rolle erwähnt
+wird, ohne dass der Ball bei ihr liegt.
+
+**Die Aufteilung.** Über das Feld `auftrag:` — nicht `kennung:`, das es in dieser Datei nicht gibt:
+
+```
+8 A-41 · 6 A-40 · 4 P-02 · 4 A-39 · 4 A-38 · 3 A-42 · 2 P-04 · 2 A-37
+1 je: P-03 · P-05 · P-08 · BERICHTIGUNG-W-17-1-TAFELZEILE
+     · SELBSTBERICHTIGUNG-ZEITSTEMPEL · SELBSTBERICHTIGUNG-ZEITSTEMPEL-2
+SUMME 39      davon 8 mit zustand-Feld, 31 ohne
+```
+
+**Die sieben Auftragszustände**, auf die sich die Ball-Zuordnung stützt — alle frisch gelesen:
+
+| Auftrag | Zustand | Beleg |
+|---|---|---|
+| A-37 | CODE_FERTIG | Z.18514 |
+| A-38 · A-39 · A-40 · A-42 | ENTWURF | je eigener Block |
+| A-41 | BETRIEBSBESTAETIGT | Z.23389 (Release-Prüfer, §10+19) |
+| P-02 | VORLAGE | eigener Block |
+
+**Ein Messfehler im Prüfen selbst, gefangen und hier offengelegt:** Meine erste Gegenprobe für
+A-37 war `grep -A1 '^auftrag: "A-37"'` und kam **leer** zurück. Das ist keine Bestätigung und
+kein Widerspruch, sondern eine ausgefallene Messung — die Zustandszeile steht 21 Zeilen nach der
+Auftragszeile, nicht direkt darunter. Nachgeholt über einen Blockscanner. **Keine Zahl der
+Zustellung hat sich dadurch geändert.**
