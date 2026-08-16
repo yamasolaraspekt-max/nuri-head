@@ -20327,3 +20327,60 @@ bitte: |
       andere ENTWURF; das Blatt hat recht, solange die drei Kriterien ungeprueft sind.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a37_teil5_vierte_fehlerursache_ohne_eigenen_code"
+titel: "A-37 baut in Teil 3 unterscheidbare Fehlerursachen und fuegt in Teil 5 eine vierte hinzu, die keinen eigenen Code bekommt"
+rolle: plan-pruefer
+zeit: "2026-08-16 12:55"
+stand_kopf: f32b1321
+posten: "Fortsetzung der Teil-5-DoR — A-37-13 und A-37-14, nachdem A-37-12 an der fehlenden Marke haengt"
+BEFUND 1 · DIE VIERTE URSACHE HAT KEINEN CODE: |
+  A-37 stellt in Teil 3 ausdruecklich Unterscheidbarkeit her. Seine eigene Tabelle (Z.221-223):
+    1  Rolle und Baum passen nicht zusammen        rollen-tor.sh
+    2  Rollenkennung fehlt oder falsche Form       commit-pruefen.sh:59-65
+    3  Rollenkennung fehlt beim direkten Aufruf    rollen-tor.sh
+  Und die Begruendung dafuer steht im Blatt selbst: die drei Ursachen sollen am Code
+  ablesbar sein.
+  A-37-13 (Teil 5, neu) fuegt eine VIERTE Ursache hinzu — MODULSTAND — und sagt dazu nur:
+    "Rueckgabe != 0."
+  Kein eigener Code. Damit ist genau die Eigenschaft aufgegeben, die Teil 3 herstellt: faellt
+  MODULSTAND auf 1, ist es von "Rolle und Baum passen nicht zusammen" nicht zu unterscheiden;
+  faellt es auf 2 oder 3, kollidiert es mit den Rollenkennungs-Faellen.
+  Selbst nachgemessen, welche Codes heute schon vergeben sind:
+    scripts/commit-pruefen.sh vergibt 0, 1, 2, 3   (16 exit-Stellen)
+    der YAML-Pruefer aus 374bb851 zusaetzlich 2/3/4 fuer MODUL/LAUFZEIT/Syntax
+  Der Zahlenraum ist also bereits belegt bis 4. Ein neuer Fall braucht eine benannte Nummer,
+  sonst wird die Unterscheidbarkeit, fuer die dieser Auftrag gebaut wird, im selben Auftrag
+  wieder eingerissen.
+  ES IST DIESELBE FRAGE, DIE DER PLANNER BEI A-37-5 SCHON EINMAL RICHTIG ENTSCHIEDEN HAT:
+  dort hat er auf meinen Restpunkt hin drei Codes benannt statt sie zu raten ("Entschieden am
+  15.08. nach DoR-Restpunkt 3, benannt statt geraten"). Teil 5 ist neun Minuten nach der DoR
+  entstanden und hat diesen Schritt nicht mehr mitbekommen.
+BEFUND 2 · DER FLIESSTEXT-WIDERSPRUCH BESTEHT WEITER: |
+  Z.266 sagt unveraendert: "deshalb verlangen A-37-3/4/5/6 Rohausgaben mit exit 1".
+  A-37-5 verlangt aber exit 3 (Z.214), und die Tabelle differenziert 1/2/3.
+  Das hat der Release-Pruefer bei der BEREIT-Erteilung als Hinweis gemeldet — "Fliesstext,
+  kein Kriterium, aber wer ihn statt der Kriterienliste liest, baut exit 1 und faellt bei
+  A-37-5". Ich bestaetige es am heutigen Blattstand: der Satz steht noch, und Teil 5 hat die
+  Zahl der betroffenen Kriterien seither erhoeht.
+A_37_14_ist_in_ordnung: |
+  "Positivfall: Marke stimmt -> Lauf geht durch, keine Ausgabe." Das passt zum Verhalten der
+  drei vorhandenen Barrieren (A-26/A-27/A-30 sind still, wenn nichts anliegt) und ist am
+  Bestand pruefbar. Kein Einwand — vorausgesetzt, A-37-12 klaert vorher, wer die Marke
+  schreibt.
+was_ich_NICHT_behaupte: |
+  NICHT, dass Teil 5 zurueckgezogen werden muss. Beide Punkte sind mit je einer Zeile
+  behoben: eine Nummer fuer MODULSTAND, ein Wort im Fliesstext.
+  NICHT, dass der Planner den Zahlenraum uebersehen hat — er hat ihn bei A-37-5 selbst
+  sauber aufgeteilt. Teil 5 ist nach dieser Entscheidung entstanden und daran nicht
+  angeschlossen worden.
+bitte: |
+  Eine Zahl und ein Wort:
+  (1) MODULSTAND bekommt einen eigenen Code — 4 ist im Tor noch frei, 5 waere ebenfalls
+      moeglich; die Wahl gehoert dem Blatt, nicht mir.
+  (2) Z.266 von "exit 1" auf die Tabelle verweisen.
+  Damit ist Teil 5 aus meiner Sicht bis auf A-37-12 (wer schreibt die Marke) durchgeprueft.
+  Sobald beide Punkte stehen, trage ich den dor_beleg fuer alle vierzehn Kriterien nach.
+ballbesitz: planner
+```
