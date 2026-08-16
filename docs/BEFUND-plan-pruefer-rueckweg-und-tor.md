@@ -6484,3 +6484,82 @@ weil der nächste ungeschlossene Zaun denselben Schaden macht.*
 **Ich fasse den Zustand NICHT an. Ball beim Planner.** **Kein Zustandsfeld angefasst, kein Bau.**
 **Damit ist der Rückstand aus §87 abgearbeitet: A-38 erteilt · A-39 erteilt · A-40 zwei Restpunkte ·
 A-42 ein Restpunkt.**
+
+---
+
+## 92 — Seine Meldung gegengemessen, und der Teil, der mir gehört: meine vier DoR-Ergebnisse stehen in NULL Fällen in der Statuswahrheit
+
+**Stand:** HEAD `48d0a1b6`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+`c8e3ba6e` meldet, meine zwei erteilten DoRs kämen in der Statuswahrheit nicht an.
+
+### Seine Zahlen, selbst nachgemessen
+
+```
+BEREIT in der ganzen Datei              0        TRIFFT
+IN_ARBEIT                               0        TRIFFT
+letzter Schreibvorgang an STATUS.md     0f969d5e  16.08 20:39:34   TRIFFT
+Abstand                                 299 min  (er: 298, eine Minute frueher)
+Commits in der Spanne 0f969d5e..HEAD    274      (er: 273, dito)
+davon mit docs/STATUS.md                0        TRIFFT — die tragende Zahl
+davon Integrator                        80       TRIFFT
+```
+
+**Die eine Zahl, auf die es ankommt, ist zeichengenau: in 274 Commits über 299 Minuten hat kein
+einziger `docs/STATUS.md` berührt.** *Bei den Rückweg-Merges liegen wir auseinander (er 78, ich 93)
+— mein Muster zählt jede Botschaft mit „Rueckweg", seines offenbar nur die des Integrators. Kein
+Widerspruch, zwei Zuschnitte, und die tragende Zahl hängt an keinem von beiden.*
+
+### Und die Sperre kennt die Ausnahme wirklich nicht
+
+```
+scripts/rollen-tor.sh:344
+  if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
+
+Wortsuche im ganzen Tor:
+  Ballrueckgabe 0 · Zustandswechsel 0 · Reichweite 0 · ballbesitz 0 · zustand 2
+```
+
+**Die Freigabe des Planners für einzelne Zustandswechsel ist im Tor an keiner Stelle abgebildet.**
+*Ich habe die Live-Probe NICHT gefahren: sie würde im Erfolgsfall schreiben, und `docs/STATUS.md`
+gehört nicht mir. Der Wortlaut genügt für die Aussage.*
+
+### Der Teil, den er nicht messen konnte, weil er mir gehört
+
+```
+meine vier DoR-Ergebnisse dieser Nacht (§88 A-38 · §89 A-39 · §90 A-40 · §91 A-42)
+  in docs/BEFUND-plan-pruefer-rueckweg-und-tor.md   4
+  als Commit-Betreff                                6
+  in docs/STATUS.md                                 0
+```
+
+*Der eine scheinbare Treffer in `STATUS.md` ist `Z.21477` — „DoR Runde 3 … **NICHT** ERTEILT" von
+gestern; mein loses Muster hatte „A-38.\*ERTEILT" darin gefunden. **Null von vier.***
+
+**Nach §16 ist `docs/STATUS.md` die eine Statuswahrheit. Ein Prüfergebnis, das dort nicht steht, ist
+im Prozesssinn nicht abgeliefert — es ist nur aufgeschrieben.** Und ich kann es dort nicht
+hinschreiben; die Sperre lässt genau eine Rolle durch, und das bin ich nicht.
+
+**Damit ist es der dritte Träger-Fehler dieser Nacht, und der erste mit gemessenen Kosten:**
+
+```
+§82  ein Befund liegt, wo kein Feld ihn benennt
+§83  ein Feld traegt einen Namen, der zweierlei bedeutet
+§92  ein Ergebnis liegt in der falschen DATEI — richtig gehandelt, trotzdem unsichtbar
+```
+
+### Was einzutragen wäre, damit niemand es suchen muss
+
+```
+A-38   DoR Runde 2 ERTEILT (§88)   -> ENTWURF nach BEREIT · dor_beleg auf das Ergebnis
+A-39   DoR Runde 2 ERTEILT (§89)   -> ENTWURF nach BEREIT · dor_beleg auf das Ergebnis
+A-40   NICHT ERTEILT, R2 + R3 (§90) -> bleibt ENTWURF · dor_beleg 'NICHT ERTEILT 17.08.'
+A-42   NICHT ERTEILT, R1 (§91)      -> bleibt ENTWURF · dor_beleg 'NICHT ERTEILT 17.08.'
+```
+
+**Zwei davon sind Zustandswechsel, zwei nur Feldpflege** — und alle vier lösen den §78-Befund gleich
+mit: *„steht aus" ist die falsche Kategorie für eine gefahrene Prüfung.*
+
+**Ich trage nichts ein.** *Nicht weil ich zögere, sondern weil `docs/STATUS.md` dem Integrator gehört
+und ein Zustandswechsel kein Transport ist — dieselbe Grenze, die der Release-Prüfer für sich zieht.*
+**Ball beim Integrator** (Schreiblauf für vier Datensätze) **und beim Planner** (die zwei Übergänge
+sind seine Entscheidung). **Kein Zustandsfeld angefasst, kein Bau.**
