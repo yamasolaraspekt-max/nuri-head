@@ -3682,3 +3682,93 @@ nicht auf Aufmerksamkeit.
 
 **Ball: planner** — als siebte Positivprobe für A-39s P2, und weil W-22/1-8 einen Standbezug
 nachtragen könnte. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Systematische P2-Sichtung: zwei Zählungen, beide unbrauchbar — und ein Fund, der trägt
+
+*Vorratsprüfung (b), verallgemeinert · gemessen 16.08. gegen `bf8ea5f7`*
+
+### Was ich NICHT melde, und warum
+
+Nach dem W-22-Fund wollte ich wissen, wie viele P1-Kriterien eine feste Bestandszahl **ohne
+Standbezug** tragen. Zwei Läufe:
+
+```
+Lauf 1   43 Treffer   -> unbrauchbar
+Lauf 2   26 Treffer   -> ebenfalls unbrauchbar
+```
+
+**Lauf 1 fing deutsche Adverbien:** `genau wie`, `genau deshalb`, `genau der`, `genau diese` —
+mein Muster `genau <Wort>` las jedes davon als Zählung. **Lauf 2 verschärfte auf echte Ziffern und
+blieb trotzdem unbrauchbar**, weil er vier verschiedene Dinge in einen Topf wirft:
+
+```
+1  Kriteriumstext mit Bestandszahl        <- das Gesuchte
+2  Abnahme-TABELLENZEILEN mit Messwerten  <- Ergebnis, nicht Kriterium
+3  Nullaussagen "0 Treffer"               <- meist MIT genanntem Messweg
+4  Beispieleingaben in Negativfaellen     <- B6-3: "Suite 1692" ist die EINGABE
+```
+
+**Ich melde keine der beiden Zahlen.** *Eine Sichtung, die vier Klassen nicht trennt, liefert keine
+Menge, sondern eine Vermutung mit Ziffern.* **Für A-39 ist genau das die Warnung:** wer P2 baut,
+muss diese vier trennen — sonst meldet die Prüfung bei fast jedem Blatt und wird weggeklickt.
+
+### Mein zwölfter Musterfehler, und er ist neu: das Trennzeichen
+
+```
+Blatt:  "M-02 (2.021 Zeilen)"
+mein Muster \d{1,5}:  faengt "021"
+```
+
+**Der Tausenderpunkt zerlegt die Zahl.** Bisher waren meine Musterfehler Namensformen,
+Groß-/Kleinschreibung, fehlende Anker — **dies ist der erste an der Zahlschreibweise selbst.**
+
+### Und der Fund, der trägt: W-21/1-9 nennt eine Zahl, die eine Datei von fünf ist
+
+```
+W-21/1-9 (P1):  "die Register-Quelle M-02 (2.021 Zeilen) nicht ausgewertet"
+W-21/1:          BETRIEBSBESTAETIGT, Tafel "12/12"
+```
+
+**Gemessen, was M-02 wirklich ist** — aus dem Messbericht, der es aufgelöst hat:
+
+```
+dachdecker_pro.tsx             2.993
+profi_holzbau_solar_cad.tsx    2.021   <- DAS ist die Zahl im Kriterium
+solarmaster_konstruktion.tsx   3.045
+solarconstructapp.tsx          3.321
+solar_master_pro.tsx           2.472
+                              ------
+SUMME                         13.852
+```
+
+**Die 2.021 ist eine Datei von fünf — das Kriterium nennt sie als Umfang von M-02.** Der Faktor
+ist knapp sieben.
+
+**Und der Bericht benennt die Fehlerklasse selbst, wörtlich:**
+
+> *„Meine ‚2021 Zeilen' waren **B6 in Reinform**: eine Zahl aus einer **Registerzeile** übernommen,
+> die nur **eine** Datei nennt, und als **Summe** für M-02 ausgegeben."*
+
+### Die Zeitfolge — und sie entlastet den Blattschreiber teilweise
+
+```
+W-21 Basis  c9325929   11.08. 22:39   "nicht ausgewertet" war da RICHTIG
+M-02-Bericht 0df4b0e5  12.08. 01:30   drei Stunden spaeter ausgewertet
+```
+
+**Der Halbsatz „nicht ausgewertet" war zum Schnitt wahr und ist seit drei Stunden später überholt** —
+das ist Alterung, wie bei W-22. **Die Zahl 2.021 war dagegen schon beim Schnitt falsch**, denn sie
+stand so in der Registerzeile, aus der sie übernommen wurde. *Das ist nicht Alterung, das ist die
+B6-Klasse: eine Zahl abgeschrieben statt erhoben.*
+
+**Und sie ist mit `12/12` grün abgenommen worden.**
+
+### Soll
+
+**W-21/1-9 zwei Berichtigungen:** die Zahl auf `M-02, fünf Dateien, 13.852 Zeilen` und der Vermerk,
+dass der Messbericht seit dem 12.08. vorliegt (`docs/BERICHT-M02-AUSGEWERTET.md`, `0df4b0e5`) und
+**11.831 Zeilen weiterhin nicht inhaltlich ausgewertet** sind — *die Aussage des Kriteriums bleibt
+damit richtig, nur ihre Grundlage stimmt.*
+
+**Ball: planner.** Zweite P2-Positivprobe neben W-22/1-8, und diesmal einer B6-Fall.
+**Kein Zustandsfeld angefasst, kein Bau.**
