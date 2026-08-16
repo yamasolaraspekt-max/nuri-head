@@ -1923,6 +1923,81 @@ die_entscheidung_R1_R2_R3_und_meine_befangenheit: "Der Planner legt Yama drei We
 ballbesitz: yama
 ```
 
+## ZUR OFFENEN STELLE — die Aussenwirkungs-Grenze, aufgearbeitet und NICHT entschieden (Release-Pruefer, 16.08.)
+
+```yaml
+worum_es_geht: |
+  Der Planner legt vor und sagt selbst, es gelte noch nicht: "Eine Fachaussage, die nach aussen
+  wirkt — Bemessung nach Norm, Nachweis, alles mit Haftung — wird durch Nachrechnen allein nicht
+  gruen. Sie braucht eine Primaerquelle oder bleibt gelb." A-40 bleibt bis dahin ungeschnitten.
+  ICH ENTSCHEIDE DAS NICHT. Der Absatz sagt in seinem letzten Satz, wem es gehoert: "nur das
+  Zweite ist Yamas Entscheidung." Es ist eine Haftungsfrage, und die vertrete ich nicht.
+  Was ich liefere, ist die Groesse — damit die Entscheidung an Zahlen faellt und nicht am Gefuehl.
+
+WIE GROSS DER GELTUNGSBEREICH IST, gemessen: |
+  Fachaussagen im Bestand:
+    F-Kennungen FORMELSAMMLUNG      28
+    N-Kennungen                      3
+    S-Kennungen                     17
+    im SOLAR-REGELWERK zusaetzlich  33
+                                    --
+                                   ~81
+  Davon mit NORMBEZUG, und das ist das Merkmal "wirkt nach aussen":
+    Zeilen mit DIN/EN/VDI/ISO       20   (6 FORMELSAMMLUNG, 14 SOLAR-REGELWERK)
+    verschiedene Normen              8   EN 12831 (7x), EN 17037 (6x), VDI 6007-3 (5x),
+                                         DIN 5034-2 (5x), EN 1991-1-3 (3x), VDI 3789-2 (2x),
+                                         EN 1995-1-1, DIN 5034
+  Und der heutige Stand der Pruefung:
+    Eintraege mit nachgerechnet_an   1   von ~81
+  MEINE ERSTE ZAEHLUNG WAR FALSCH und ich berichtige sie hier: ich mass 0 F-Kennungen, weil mein
+  Muster den Zeilenanfang verlangte — die Kennungen stehen in Tabellenzellen. 0 ist keine
+  Sauberkeit, 0 war mein Muster.
+
+DER ZUSATZ VERLANGT NICHTS NEUES, und das ist der wichtigste Fund: |
+  Der Planner hat im selben Commit DREI Zustaende je Fachaussage eingefuehrt, und der dritte ist
+  woertlich fuer diesen Fall gebaut:
+    ABGESCHRIEBEN   Wortlaut geprueft, nie gerechnet   -> Doku, NICHT fuer einen Bau
+    NACHGERECHNET   ein Fall gerechnet, Fall und Sollwert IM Eintrag  -> Bau
+    GEGENGEPRUEFT   gegen eine AEUSSERE Quelle gehalten -> "Aussagen, die nach aussen wirken"
+  Die Struktur steht also schon. Die offene Frage ist nicht, OB es einen solchen Zustand gibt,
+  sondern ob er bei Aussenwirkung PFLICHT ist oder Kuer.
+
+WAS FUER DEN ZUSATZ SPRICHT, gemessen statt gemeint: |
+  1  Er schreibt auf, was Yama ohnehin tut. W-28 steht auf seiner D-Liste seit dem 13.08.,
+     Position 15, Begruendung woertlich "Normgroesse DIN 1986-100". Die Regel wuerde diese
+     Praxis ableitbar machen statt sie je Einzelfall neu zu begruenden.
+  2  Er kostet den Plan-Pruefer keine Fachkompetenz, sondern einen grep — das steht im Abschnitt
+     und trifft zu: er prueft, OB jemand geprueft hat, nicht ob es stimmt.
+  3  Er skaliert sich selbst, weil die Ausloesung die Benutzung ist und nicht die Inventur.
+     Bei 20 normbezogenen Zeilen und 1 geprueften Eintrag waere eine Inventur ein Vorhaben,
+     das niemand macht.
+
+WAS DAGEGEN SPRICHT, und ich verschweige es nicht: |
+  DER ABSCHNITT HAT KEINEN BELEGTEN SCHADENSFALL FUER GENAU DIESE AUSSAGE. Er beruft sich auf
+  F-004 ("die Ampel stand auf gruen, waehrend das Vorzeichen falsch war"). Das belegt, dass die
+  AMPEL nicht genuegt — nicht, dass NACHRECHNEN nicht genuegt. Ein Vorzeichenfehler faellt beim
+  Nachrechnen auf; genau dafuer ist NACHGERECHNET gebaut.
+  Was den Zusatz belegen wuerde, waere ein Fall, in dem eine rechnerisch korrekte Aussage falsch
+  ANGEWANDT wurde. Danach habe ich gesucht und im Bestand keinen gefunden. Es gibt
+  Zuordnungsfehler (F-Nummern auf die falsche Formel gezeigt, W-16/1 und W-04 berichtigt), aber
+  keinen Schaden aus einer richtig gerechneten, falsch angewandten Norm.
+  DER ZUSATZ IST ALSO PRAEVENTIV. Bei Haftung ist das kein Einwand, sondern der Zweck — aber wer
+  ihn in Kraft setzt, sollte wissen, dass er einen Schaden verhindert, den es hier noch nicht
+  gegeben hat, und nicht einen wiederholt.
+
+meine_empfehlung, ausdruecklich als Empfehlung: |
+  IN KRAFT SETZEN. Der Grund ist nicht die Gefahr, sondern die Ableitbarkeit: heute ist "W-28
+  bleibt bei Yama" eine Einzelfallbegruendung, die jede Rolle neu treffen muss. Mit dem Zusatz
+  ist es eine Ablesung — Normbezug ja, also GEGENGEPRUEFT noetig, also nicht gruen. Das ist
+  dieselbe Bauart, mit der A-20 die vier Zustandsorte auf zwei gebracht hat: nicht mehr
+  Disziplin verlangen, sondern die Frage so stellen, dass sie nur eine Antwort hat.
+  Wenn du ihn NICHT willst, ist die saubere Gegenform, GEGENGEPRUEFT ausdruecklich als KUER zu
+  benennen — sonst steht ein Zustand im Regelwerk, den niemand je erreichen muss, und das ist
+  die dritte Ampel, die nichts misst.
+
+ballbesitz: yama  # A-40 haengt daran; ohne das Wort bleibt er ungeschnitten
+```
+
 ## DIE ZWEI NEUEN EVALUATOR-BERICHTE GELESEN — der herrenlose Punkt ist aufgeklaert, KEIN Befund (Release-Pruefer, 16.08.)
 
 ```yaml
