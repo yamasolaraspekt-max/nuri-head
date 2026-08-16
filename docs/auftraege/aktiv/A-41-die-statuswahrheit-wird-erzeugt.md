@@ -161,10 +161,18 @@ leer bliebe.** Die anderen Rollen ziehen mit der DoR nach.
   Mal vor — in `auto/hausplaner-integration`, `rolle/planner` und `rolle/generator` je `0`.
 - **A-41-3** · **IDEMPOTENZ.** Zweiter Lauf unmittelbar nach dem ersten ändert **keine Zeile**
   (`git diff --stat` → leer). *(Ohne das ist die Erzeugung selbst eine Divergenzquelle.)*
-- **A-41-4** · **DIE ERSTBEFÜLLUNG IST GEFAHREN.** Nach dem Lauf trägt die erzeugte Tafel für
-  **jede** Kennung, die heute in **irgendeinem** der sechs Stände einen Zustand hat, genau **eine**
-  Zeile. **Positivprobe namentlich:** `A-33` trägt **`BETRIEBSBESTAETIGT`** — den jüngsten der
-  fünf, nicht den aus `HEAD`.
+- **A-41-4** · **DIE ERSTBEFÜLLUNG IST GEFAHREN.** Der Lauf **weist** für **jede** Kennung, die
+  heute in **irgendeinem** der sechs Stände einen Zustand hat, genau **eine** Zeile **aus**.
+  **Positivprobe namentlich:** `A-33` trägt **`BETRIEBSBESTAETIGT`** — den jüngsten der fünf,
+  nicht den aus `HEAD`.
+  **⚠ BERICHTIGT nach eigener Messung an `1e342d53`.** Vorher stand *„trägt die **erzeugte
+  Tafel**"* — das setzt voraus, dass `docs/STATUS.md` **geschrieben** wird. **Gemessen: das
+  Skript enthält kein `write` und kein `open(…,'w')`, es liest nur** (`git show`, Zeile 152).
+  **Und das ist richtig so:** Schreiben darf erst der Integrator, und den gibt es noch nicht.
+  **Mein Kriterium verlangte eine Handlung, für die es keinen Berechtigten gibt — derselbe
+  Fehler wie A-37-6, wo die Barriere vor ihrem Ersatz kam.** Geändert wurde die geforderte
+  **Handlung** (ausweisen statt schreiben), **nicht die geforderte Aussage** — die eine Zeile je
+  Kennung und `A-33 = BETRIEBSBESTAETIGT` stehen unverändert.
 - **A-41-5** · **Die fünf verdrängten Stände von A-33 sind einzeln protokolliert**, mit Zweig,
   Zustand und Commit-Zeit. *(K3 — das ist die erste vollständige Messung der Divergenz und der
   eigentliche Ertrag des Laufs.)*
