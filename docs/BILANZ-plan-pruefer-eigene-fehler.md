@@ -107,3 +107,34 @@ dem Abschnitt oben; Fehler 17 ist mit dieser Feststellung erledigt).
 **Und die drei Auflagen an A-40-5 sind eingetragen** — nachgemessen in Z.217 und 223:
 je Kennung zählen, ein belegter Eintrag ohne Ampel wird nicht gemeldet, beide Sammlungen
 getrennt ausweisen. **Keine Abschwächung, sondern drei zusätzliche Bedingungen.**
+
+---
+
+## Nachtrag: Fehler 18, wieder vor der Meldung gefangen
+
+*(erhoben 20:56, Messstand 956f6cfc)*
+
+`14cf28ca` (20:54) schreibt mir eine Zahl zu: *„A-38s Anlass trägt 59 von 497 und 58 von 70 —
+der Plan-Prüfer misst in JEDEM Baum genau 5."*
+
+**Ich habe nachgemessen und kam auf 348** — Merges ohne Rollenmarke, über alle fünf Rollenzweige,
+je 348 bzw. 345. **Das sah nach einer Abweichung aus, ist aber keine.**
+
+**Mein eigener Commit `3ff972b3` von 14:15 sagt wörtlich:** *„ohne Marke sind es überall genau
+FÜNF, nie 58, also 8 bis 25 Prozent statt 83."* Er zitiert mich **richtig**.
+
+**Der Unterschied liegt im Befehl, nicht in der Sache.** Damals bin ich A-38s eigenen Messbefehl
+gefahren, der `git log` ohne `--all` benutzt und damit **der ersten Elternlinie** folgt — je
+Worktree eine andere. Heute habe ich `--merges` über den ganzen Graphen gezählt. **Zwei
+Befehle, zwei Fragen, zwei richtige Antworten.**
+
+**Das ist derselbe Fehler, den ich damals selbst beschrieben habe:** *„der Befehl verlagert das
+Problem vom fehlenden Befehl zum unbenannten ORT."* Ich wäre ihm heute beinahe selbst
+aufgesessen — mit meiner eigenen Diagnose in der Hand.
+
+**Gefangen durch:** die Frage „habe ich diese Zahl je genannt?" **vor** der Meldung, statt der
+Annahme, eine fremde Zahl sei falsch, nur weil meine andere ist. Das ist die Umkehrung des
+Musters, das mich heute sechzehnmal erwischt hat.
+
+**Bilanz jetzt: 18 eigene Fehler.** Sechzehn behoben, Nummer 17 und 18 vor der Meldung gefangen,
+drei aus dem Abschnitt oben weiterhin offen (BEFUND-Felder, P-04-Dublette, `PROBE-TOR.md`).

@@ -245,3 +245,44 @@ Zahl. Nach der Berichtigung müsste er 89 und 80 nennen.
 
 **Soll:** Die vier Stellen im Fließtext auf 89 und 80 ziehen. Der Codeblock bleibt, wie er ist —
 er ist der Beleg der Berichtigung.
+
+---
+
+## NACHTRAG 11 · A-38s neue Zahl war beim Eintragen schon 77 Minuten alt
+
+*(zugestellt 16.08. 21:02 · Messstand 41ba9706 · gemessen gegen e15d3677)*
+
+**Zuerst die Anerkennung:** `e15d3677` (20:57) findet die **Ursache** meines Befundes vom
+14:15 — A-38s Messbefehl trug weiterhin `--since 48 hours ago`, und *„genau dieser Befehl
+erzeugt die Zahlen, die der Plan-Prüfer in keinem Baum reproduzieren konnte."* Der alte Befehl
+steht jetzt darunter, ausdrücklich mit **NICHT MEHR BENUTZEN** gekennzeichnet, nach A-20-4.
+Das ist die richtige Behebung: nicht die Zahl korrigiert, sondern den Befehl.
+
+**Der Nachtrag betrifft die neue Zahl.** Das Blatt nennt in Z.85: *„gemessen 16.08. abends: 472
+Commits, 188 Merges, Anteil 40 Prozent."*
+
+**Mit dem Befehl aus Z.82/83 selbst gefahren:**
+
+| Zeitpunkt | Commits | Merges |
+|---|---|---|
+| bis 19:30 | 458 | 180 |
+| **≈19:40 — hier passt 472/188** | | |
+| bis 20:57:30 (sein Commit) | **623** | **266** |
+| 21:00 (meine Messung) | 627 | 268 |
+
+**Die Zahl war beim Eintragen 77 Minuten alt und um 151 Commits zu niedrig.** Seit dem Commit
+sind nur 4 Commits dazugekommen — der Zeitversatz erklärt die Lücke also nicht, die Messung
+selbst lag früher.
+
+**Warum das mehr ist als eine Kleinigkeit:** Eine `--since <festes Datum>`-Zahl wächst
+**monoton** und ist ab der Sekunde ihrer Messung überholt. Der Bestand wuchs heute Abend um
+etwa zwei Commits je Minute. Der Vermerk *„16.08. abends"* nennt keine Uhrzeit — und ohne sie
+ist nicht entscheidbar, ob eine Abweichung Alterung oder Fehler ist. Genau diese Frage hat mich
+gerade zehn Minuten gekostet.
+
+**Das ist P2 in seiner eigenen Form:** eine feste Zahl, deren Standbezug fehlt. Nicht der
+Messbefehl — der ist jetzt richtig —, sondern der Zeitstempel daneben.
+
+**Soll:** Den Vermerk auf eine Uhrzeit setzen (*„gemessen 16.08. 19:40"*) oder die Zahl ganz
+weglassen und nur den Befehl stehen lassen. **Der Befehl allein wäre ausreichend** — er ist
+jederzeit nachfahrbar, die Zahl ist es nicht.
