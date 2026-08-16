@@ -729,3 +729,35 @@ Die `zustand`-Zeilen sind von 91 auf 90 gefallen — das ist die Entfernung des 
 **Meine drei offenen eigenen Punkte:** unverändert. Die Zustellung an den Integrator ist
 angekommen (Integration und Planner-Zweig), die drei `BEFUND`-Blöcke unter P-03/P-04 stehen
 noch, `docs/PROBE-TOR.md` ebenfalls.
+
+---
+
+## Bilanz meiner Zustellung — sieben von acht behoben, jede Behebung nachgemessen
+
+*(geschrieben 20:53, Messstand 0582bf58 — Posten e, vollständige Verfolgung)*
+
+| # | Punkt | Stand | Beleg im Blatt |
+|---|---|---|---|
+| 1 | A-40-5 misst das alte Merkmal | **behoben** | Z.173 *„S-051 trägt `nachgerechnet_an` → darf nicht gemeldet werden"*; Z.223 beide Sammlungen getrennt |
+| 2 | Menge 22 statt 25 | **behoben** | Z.92/93 beide Zahlen nebeneinander |
+| 3 | A-40-2s Negativprobe ohne Kandidaten | **behoben** | Z.180–182 *„Verlangt ist ein FREMDES Blatt"* |
+| 4 | A-40-6s Rot-Lage seit 14:49 weg | **behoben** | Z.228–233, neue Rot-Lage am Bestand erhoben |
+| 5 | A-40-9 kann nicht scheitern | **behoben** | Invarianten-Klausel, *„damit ist es scheiterfähig"* |
+| 5b | K5/K6 ohne benannten Fall | **behoben** | Auflage: *„Eine Kante ohne Fall ist eine Absichtserklärung"* |
+| 6 | A-42: Kante für den verdeckten Block | **offen** | keine K7; zugestellt und angekommen |
+| 7 | A-39s Nenner 89 statt 85 | **behoben** | Z.227–229; Fließtext offen → Nachtrag 10 |
+| 8 | vier Zahlen ohne Zählbefehl | **behoben** | Ursache gefunden: durchgestrichene Zuordnungen; *„je Kennung"* |
+
+**Sieben von acht behoben, alle sieben von mir einzeln am Blatt nachgemessen** — nicht aus der
+Meldung übernommen. Zwei Behebungen hätte ich beinahe falsch beurteilt: die Kanten (Auflage
+statt Tabellenänderung) und A-39s Nenner (Berichtigung im Codeblock, nicht im Fließtext).
+**Beide Male hat erst das Öffnen der Stelle die richtige Antwort gegeben.**
+
+**Bemerkenswert an der Art der Behebungen:** Keine ist eine Abschwächung. A-40-2 verlangt jetzt
+mehr (ein benanntes und ein fremdes Blatt statt einer Gesamtzahl), A-40-6 hat eine **neu
+erhobene** Rot-Lage statt einer gestrichenen, A-40-9 wurde scheiterfähig gemacht statt entfernt,
+und A-40-5 bekam drei zusätzliche Bedingungen. Der Planner hat außerdem zwei eigene Fehler
+mitgemeldet, die niemand gefordert hatte — A-39-4s falschen Stand und A-39-6s falsche Richtung.
+
+**Offen aus meiner Zustellung:** Punkt 6 (A-42), Nachtrag 9 (A-37s Ballbesitz an zwei Orten),
+Nachtrag 10 (A-39s Fließtext). Alle drei zugestellt, angekommen, kein Drängen.
