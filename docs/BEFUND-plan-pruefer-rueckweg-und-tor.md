@@ -3772,3 +3772,65 @@ damit richtig, nur ihre Grundlage stimmt.*
 
 **Ball: planner.** Zweite P2-Positivprobe neben W-22/1-8, und diesmal einer B6-Fall.
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Der js-yaml-Befund des Generators nachgemessen: alle drei Angaben treffen — und die Kette endet bei `puppeteer`
+
+*Fremden Fund geprüft, stromabwärts meines eigenen · gemessen 16.08. gegen `2dac3b78`*
+
+### Seine drei Angaben, selbst gemessen
+
+```
+1  Skripte, die js-yaml brauchen        3   zeile-ersetzen.mjs · bloecke.py · commit-pruefen.sh
+2  js-yaml in package.json              0   Treffer; in keiner der vier Abhaengigkeits-Sektionen
+                                            (26 dependencies, 15 devDependencies, 0 peer, 0 optional)
+3  im Lockfile                          nur TRANSITIV — als direkte Abhaengigkeit der Wurzel: False
+```
+
+**Drei von drei, zeichengenau.** *Und der dritte Punkt ist der, den ich weiterführen kann.*
+
+### Was ich beitrage: die Kette hat einen Namen und eine Wurzel
+
+Er schreibt *„nur transitiv über ein anderes Paket"*. **Gemessen, welches:**
+
+```
+js-yaml   <-  cosmiconfig   <-  puppeteer   <-  Wurzel (dependencies, ^24.39.1)
+```
+
+**Das Commit-Tor hängt an `puppeteer`.** Das Paket, das für die **Browserabnahme** da ist — für das
+Prüfen der Oberfläche — trägt über zwei Ecken die YAML-Prüfung, die jeder Rollen-Commit
+durchläuft.
+
+**Am Objekt gegengeprüft:** `node_modules/js-yaml`, `node_modules/cosmiconfig` und
+`node_modules/puppeteer` liegen alle drei physisch da. *Die Kette ist nicht gefolgert, sie steht.*
+
+### Und die Verletzlichkeit sitzt woanders, als man zuerst denkt
+
+**Nicht bei `--omit=dev`:** `puppeteer` steht in **`dependencies`**, nicht in `devDependencies`. Ein
+Produktions-Install wirft die Kette also **nicht** weg. *Das war meine erste Vermutung, und sie ist
+gemessen falsch.*
+
+**Sondern beim Caret:** `^24.39.1` erlaubt jede Minor- und Patch-Anhebung. **Ändert puppeteer in
+einer davon seinen eigenen Abhängigkeitsbaum — etwa indem es `cosmiconfig` ersetzt —, verschwindet
+`js-yaml`, ohne dass hier eine Zeile angefasst wurde.** Genau der Satz des Generators, jetzt mit
+der Stelle daran: *„es verschwindet, wenn jenes seine Abhängigkeiten ändert."*
+
+### Warum mir das nahegeht
+
+**Der Ausfall hat in einer Nacht zwei Rollen getroffen und sah beide Male nach etwas anderem aus:**
+beim Generator nach einem kaputten Baum, bei mir nach einem stillen Prüfungsausfall in
+`bloecke.py`. **Ich habe die Meldung gemeldet und die Ursache nicht gesucht** — er hat sie gesucht
+und gefunden.
+
+*Dieselbe Bewegung wie bei den zwei abwesenden Datensätzen: ich messe den Effekt, ein anderer
+findet die Klasse. Zweimal in einer Nacht, und beide Male an einem Fund, den ich selbst ausgelöst
+habe.*
+
+### Was ich NICHT tue
+
+**Ich trage `js-yaml` nicht ein.** `package.json` und das Lockfile sind gemeinsamer versionierter
+Code; ein Eintrag ändert den Baum aller sechs Rollen und zwingt jeden zu einem `npm ci`. **Der
+Generator hat das richtig eingeordnet und den Ball beim Planner gelassen** — ich bestätige die
+Einordnung und lege nur die Kette daneben.
+
+**Ball: planner**, unverändert. **Kein Zustandsfeld angefasst, kein Bau, keine Datei außerhalb
+meines Befundblatts.**
