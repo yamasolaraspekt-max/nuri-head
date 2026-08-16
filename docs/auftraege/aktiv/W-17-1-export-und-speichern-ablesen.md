@@ -12,6 +12,14 @@ dor_beleg: "steht aus — plan-pruefer."
 dor_schnitt_sha: "8faca79c"
 status_steht_in: docs/STATUS.md
 basis_sha: 8faca79c
+basis_sha_lage: "⚠ GEMESSEN 16.08.: 8faca79c liegt NICHT auf rolle/planner. Der Plan-Pruefer
+  (488186fc) hat den Bruch belegt — zwei Planner-Commits von 14:39/14:40 sind entstanden, ohne
+  je auf den Planner-Zweig zu zeigen; der Reflog springt von 14:39:40 auf e913717a direkt zu
+  14:49:28 auf 66fa277f. Der Inhalt ist NICHT verloren: cef05ad3 war ein Rueckfluss-Transport
+  und seine 166+579 Zeilen stehen im gemeinsamen Baum. Verloren ist die ERREICHBARKEIT vom
+  Rollenzweig aus. Wer die Rot-Lagen dieses Blattes nachmisst, muss ueber --all oder den
+  Integrations-Checkout gehen; ein Auscheck aus rolle/planner allein findet den Stand nicht.
+  Das ist genau der Fall, den A-37 verhindern soll, und er ist an MEINEM Blatt eingetreten."
 prioritaet: P2
 ballbesitz: "plan-pruefer (DoR)"
 claim: "planner 16.08. — Claim VOR dem Schnitt."

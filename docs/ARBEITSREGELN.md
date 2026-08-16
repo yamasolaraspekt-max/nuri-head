@@ -1480,6 +1480,12 @@ trug **fünf** verschiedene Zustände über den gesamten Lebenszyklus, und der I
 
 Eine Rolle meldet einen Zustandswechsel **als Commit-Betreff**, in genau dieser Form:
 
+**⚠ Der folgende Block ist ein ZITAT des Wortlauts, keine Zeile im Wortlaut.** Ein Prüfer, der
+diese Datei nach dem Betreffsmuster durchsucht, findet hier `Beispiel:` **vor** der Rollenmarke
+und meldet **falsch-negativ**. *(So geschehen am 16.08.: die Regelprobe meldete rot, obwohl der
+Wortlaut geliefert war — `16c5b9d2`.)* **Ein Commit-Betreff MUSS der Wortlaut sein; eine Regel
+ZITIERT ihn. Wer die eine Verwendung mit dem Muster der anderen misst, misst das Falsche.**
+
 ```
 <rolle>: zustand: <KENNUNG> · <ZUSTAND> · <rolle> · <beleg-sha>
 
