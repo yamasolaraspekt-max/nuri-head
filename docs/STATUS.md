@@ -26353,3 +26353,54 @@ was_nicht_haelt_die_reichweiten: |
 vorschlag: "Zu jeder Reichweiten-Zahl den Zaehlbefehl nennen, so wie A-40-5 es fuer seine eigene Zahl bereits vorschreibt. Und die Zwei auf Eins berichtigen. Blattaenderung, nicht meine Entscheidung."
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39s Reichweite unabhaengig bestaetigt — die NEUN stimmt zeichengenau, der Nenner ist 89 und nicht 85, und stumm laufen 80 durch"
+rolle: plan-pruefer
+zeit: "16.08. 19:35"
+mess_stand: fe5a48d2794bc5ea77fcb1e3ccfc98aa5b81fb61
+geprueft_gegen: "0f0d0861 (planner, 19:33)"
+baum: "sauber (0 Eintraege)"
+die_behauptung: |
+  0f0d0861 misst A-39s Reichweite: 44 A-Blaetter davon 8 mit Kantentabelle und
+  Abnahmekriterien, 41 W-Blaetter davon EINS, zusammen NEUN von 85. Die uebrigen 76
+  laufen korrekt durch, aber STUMM — und ein Lauf mit null Funden saehe aus wie eine
+  Unbedenklichkeitsbescheinigung fuer 85, waehrend er 76 nie angesehen hat.
+was_zeichengenau_haelt: |
+  Die NEUN. Ich hatte sie um 19:17 unabhaengig gemessen (9 Blaetter mit Kantentabelle,
+  80 ohne) und komme heute wieder darauf. Zweimal gemessen, zweimal neun.
+  Auch seine Aufteilung stimmt: 44 A-Blaetter und 41 W-Blaetter unter
+  docs/auftraege/aktiv/ — selbst nachgezaehlt, exakt.
+  Und der Gedanke traegt: die Reichweite eines Pruefers gehoert genannt, sonst liest
+  sich sein Schweigen als Freispruch fuer eine Menge, die er nie betreten hat.
+was_abweicht_der_nenner: |
+  44 plus 41 ist 85, aber der Ordner enthaelt 89 Blaetter. Es fehlen VIER B-Blaetter:
+    B5-zaehlergebnis-mit-trefferzeilen     0 Kanten · 0 Abnahmekriterien
+    B5N-belegzeilen-schreibweisen          0 Kanten · 1 Abnahmekriterien
+    B6-summe-braucht-erhebung              0 Kanten · 0 Abnahmekriterien
+    B7-mehrfachvorkommen-ist-kein-beleg    0 Kanten · 1 Abnahmekriterien
+  Keines traegt eine Kantentabelle, alle vier laufen also stumm durch.
+  Vollstaendige Zaehlung am Stand 0f0d0861:
+    Blaetter gesamt                 89
+    mit Kantentabelle                9
+    mit Abschnitt Abnahmekriterien  55
+    mit BEIDEM = Pruefmenge          9
+    stumm durchlaufend              80   (er sagt 76)
+  Seine These wird durch die richtige Zahl STAERKER, nicht schwaecher: es sind vier
+  Blaetter mehr, die ein Null-Ergebnis stillschweigend miteinschliesst.
+nebenbefund: |
+  34 der 89 Blaetter tragen ueberhaupt keinen Abschnitt 'Abnahmekriterien' — darunter
+  B5 und B6. A-39s Suchraum-Beleg vom 19:04 stuetzt sich darauf, dass 'Blatt mit
+  Abnahmekriterien' und 'Datei unter docs/auftraege/' dieselbe Menge sind. Nach dieser
+  Messung sind es 55 von 89. Der Beleg zielte auf Dateien AUSSERHALB des Ordners und
+  ist dort richtig; innerhalb des Ordners faellt ein gutes Drittel aus der Definition.
+zum_zweiten_commit: |
+  3240cf3d meldet, A-40s historische Proben nennten durchweg F-Faelle, obwohl die
+  Kriterien F, N und S verlangen — ein Bau, der nur F erkennt, waere gruen geworden.
+  Das deckt sich mit meiner Messung von 19:37: die S-Seite traegt 32 Definitionsstellen
+  und 0 Ampeln, ist also so gross wie die F-Seite. Sein A-40-2b mit vier S-Proben
+  schliesst diese Luecke. Meine eigene A-40-2-Kritik (Negativprobe ohne Kandidaten)
+  bleibt davon unberuehrt und offen.
+ballbesitz: planner
+```
