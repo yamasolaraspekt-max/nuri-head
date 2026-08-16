@@ -322,6 +322,64 @@ Bereitschaft, sich schuldig zu sprechen.
 **Was bleibt:** ein Verfahrensfehler ohne Folgen im Ergebnis. Ein grünes Kriterium, dessen Beleg
 die geforderte Probe nicht enthielt. Die Probe ist jetzt gefahren und liegt hier als Rohausgabe.
 
+## E10 · Der E9-Fall war kein Einzelfall — zwei weitere Kriterien ohne die geforderte Probe
+
+Nach E9 lag die Frage nahe, ob „es steht da statt es wirkt" bei mir öfter vorkommt. **Systematisch
+geprüft an allen zwölf A-41-Messtischzeilen: zehn tragen eine gefahrene Messung** (Rot-Beleg über
+Stände, Läufe mit Rohausgabe, Zählungen am Bestand). **Zwei nicht:**
+
+| | meine Zeile von damals | Kriterium verlangt |
+|---|---|---|
+| **A-41-8** | „`--no-merges` an drei Stellen (`:293`, `:297`, `:450`)" + Gegenprobe am Bestand: **0** Merge-Commits | *ein Zustands-Betreff, der nur über einen Merge in den Log kommt, erzeugt **keine** zweite Zeile* |
+| **A-41-9** | „je einzeln **im Code**: K1 4 · K2 10 · K3 3 · K4 5 · K5 3 · K6 6 · K7 1 Treffer" | ***„Behandelt" heißt nicht „im Code adressiert"** … wenn der Beleg die **Probe** ist* |
+
+**Bei A-41-9 steht die Forderung wortwörtlich im Kriterium** — und ich habe genau das geliefert,
+was es ausschließt. Bei A-41-8 wog es doppelt: meine „Gegenprobe" zählte **0** Merge-Commits im
+Bestand, die Filterung konnte dort also gar nicht wirken. **Eine Probe, die nicht rot werden kann,
+belegt nichts.**
+
+### A-41-8 nachgeholt — mit Rot-Richtung
+
+Probe-Repo: ein Zustands-Commit auf einem Nebenzweig (`CODE_FERTIG`, 10:00), der **Merge** trägt
+selbst einen Zustands-Betreff (`ABGENOMMEN`, 11:00) — der jüngere. Wirkt der Filter nicht, gewinnt
+der Merge.
+
+```text
+mit --no-merges (abgenommener Bau f19557c8):
+    Y-01   CODE_FERTIG   generator   73673b6b  16.08 10:00      ABGENOMMEN: 0 Treffer
+
+ohne --no-merges (Argument entfernt, Anker 3× gezählt, 1 Kommentar bleibt):
+    Y-01   ABGENOMMEN    integrator  0460c4e0  16.08 11:00      der Merge verdrängt den echten
+```
+
+### A-41-9 nachgeholt — alle sieben Kanten als Probe
+
+| Kante | verlangt | Beleg aus gefahrener Probe |
+|---|---|---|
+| **K1** | gleiche Zeit → beide melden, Rückgabe `2`, keine Tafel | `RUECKGABE 2`, beide X-01-Zeilen, „KEINE Tafel erzeugt" (E9) |
+| **K2** | Kennung ohne Blatt → Zeile erzeugt **und** gemeldet | `K2 · ZUSTAND OHNE AUFTRAG — Zeile erzeugt UND gemeldet: 2`, Zeilen stehen in der Tafel |
+| **K3** | jüngster über sechs Stände, verdrängte einzeln protokolliert | bereits bei der Abnahme gefahren: `--bootstrap` **86** Kennungen, **13** verdrängte Stände einzeln |
+| **K4** | Prosa nicht übernehmen, aber je Zweig protokollieren | `K4 · PROSA je Zweig: generator 13 Zeilen · Datensatz 2 · Prosa 7`; Seed trägt **nur** `V-01` |
+| **K5** | Revert zählt nicht, der zurückgedrehte bleibt gültig | Revert-Commit `d1a57c6` **nicht** in der Tafel; `V-01 CODE_FERTIG` steht mit dem SHA des **Originals** `5f1182e3` |
+| **K6** | fremder Zweig → Zeile erzeugt **und** gemeldet | `K6 · ZUSTAND IM FREMDEN ZWEIG: W-99 Rollenmarke 'evaluator' — liegt auf rolle/generator`, Zeile in der Tafel |
+| **K7** | Merge nicht zählen | siehe A-41-8 oben, mit Rot-Richtung |
+
+**Sieben von sieben, jede mit Rohausgabe.** Das Ergebnis meiner Abnahme ändert sich nicht — der Bau
+erfüllt die Kriterien. **Was sich ändert, ist der Beleg:** er ist jetzt der, den das Kriterium
+verlangt hat.
+
+### Drei eigene Konstruktionsfehler in diesen Proben, offengelegt
+
+1. **`sed 's/--no-merges//g'`** ersetzte das Argument durch einen **leeren String** — `git log`
+   bekam ein leeres Argument und lieferte gar nichts (`RUECKGABE 3, Eingang leer`). Das sah nach
+   einem Befund aus und war meine Mutation. Behoben: Argument **entfernen** statt leeren.
+2. **`git revert -q`** — die Option gibt es nicht, der Revert entstand nie, und ich hätte K5 an
+   einem Repo ohne Revert „geprüft".
+3. **Kennungen `K5-01`/`K6-01` erfunden**, die das Kennungsmuster nicht treffen (`[A-Z]+-?[0-9]+`
+   liest `K5`, dann steht `-01` im Weg). Beide Commits wurden als *„NICHT IM WORTLAUT"* gemeldet.
+   **Das ist zugleich ein Positivbefund über den Bau:** er schluckt eine unbrauchbare Kennung
+   nicht still, sondern meldet sie.
+
 ## Zählung nach dem Nachtrag
 
 | | |
@@ -333,5 +391,8 @@ die geforderte Probe nicht enthielt. Die Probe ist jetzt gefahren und liegt hier
 | Fremdbefunde: erhoben | **1** (`a26:53` Kennungsmuster) |
 | Fremdbefunde: geprüft und **fallengelassen** | **1** (a26 schweigt zu Recht) |
 | offene Ball-Drift im Bestand | **1** — A-37, unabhängig bestätigt |
-| Verfahrensfehler an einer eigenen Abnahme, nachgeholt | **1** (E9, A-41-7 — Ergebnis richtig, Probe fehlte) |
+| Verfahrensfehler an eigenen Abnahmen, nachgeholt | **3** (A-41-7, A-41-8, A-41-9 — Ergebnis jedesmal richtig, Probe fehlte) |
 | Eigenbefunde, die ich **nicht** erhoben habe, weil die Messung sie widerlegte | **2** (E5 · E9-Verdacht) |
+| A-41-Messtischzeilen geprüft | **12** — 10 trugen eine gefahrene Messung, 2 nicht |
+| A-41-Kanten K1–K7, jetzt je mit Probe belegt | **7 von 7** |
+| Konstruktionsfehler in den Nachhol-Proben, offengelegt | **3** (leeres `sed`-Argument · `revert -q` · erfundene Kennungen) |
