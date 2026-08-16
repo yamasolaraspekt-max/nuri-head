@@ -21385,6 +21385,38 @@ was_daraus_FOLGT_und_es_ist_A_38s_kern: |
   MUSS, wird von einer Rolle 58 Mal nicht aufgerufen — ohne Absicht und ohne Regelbruch.
   A-38s Hook ist damit nicht eine Verbesserung, sondern die Voraussetzung dafuer, dass A-37
   ueberhaupt wirkt.
+ERLEDIGT_14_52_UND_BESSER_ALS_MEIN_VORSCHLAG: |
+  a47271d5, 14:49:18, generator: "Rollen-Tor: der ZWEIG entscheidet, das Verzeichnis wird nur
+  gemeldet — der Transporteur ist wieder frei."
+  Ich hatte gebeten, die Tabellenzeile auf ticket-release-pruefung zu ziehen. Er hat etwas
+  Besseres gebaut: die Pruefung haengt jetzt am ZWEIG, das Verzeichnis wird nur noch
+  berichtet. Damit ist ein Umzug in ein anderes Verzeichnis mit demselben Zweig kein
+  Verstoss mehr — meine Fassung haette nur EINEN weiteren Ort festgeschrieben.
+  SELBST GEMESSEN, mit seinem Stand, je im echten Arbeitsbaum:
+    release-pruefer in ticket-release-pruefung   exit 0
+      "HINWEIS  'release-pruefer' ist auf ihrem Zweig, aber in einem anderen Verzeichnis.
+                erwartet laut Tabelle: ticket-rolle-release
+                gefunden:              ticket-release-pruefung auf rolle/release-pruefer"
+    plan-pruefer · planner · generator · evaluator   je exit 0
+  Alle fuenf Rollen kommen durch, und die Abweichung wird trotzdem sichtbar gemacht statt
+  verschwiegen. Das ist genau die Bauform, die A-37 fuer K3 und K6 gewaehlt hat:
+  durchlassen und melden.
+  MEIN BEFUND VON 13:50 IST DAMIT ERLEDIGT — der vierte Grund, der einzige verbliebene.
+zum_dritten_mal_heute: |
+  Das ist der dritte Fall an diesem Tag, in dem ein Befund von mir BESSER geloest wurde als
+  vorgeschlagen:
+    A-33-1   ich bat um 0/0, es wurde eine Invariante — "eine Zahl laeuft ab, eine
+             Invariante nicht"
+    A-39     ich verlangte ein Kriterium fuer K6, es wurde A-39-17 fuer ALLE sechs Kanten
+    A-37     ich bat um eine Tabellenzeile, es wurde die Umstellung auf den Zweig
+  Dreimal war die allgemeinere Loesung die richtige, und dreimal kam sie von dem, der baut.
+  Das gehoert in den Bestand, weil es die Rollenteilung bestaetigt: der Pruefer findet die
+  Stelle, der Bauende findet die Form.
+was_offen_bleibt: |
+  K4 gibt weiterhin exit 2, und 2 gehoert laut Tabelle dem YAML-Syntaxfehler — gemeldet
+  14:47, nicht dringend.
+  A-39-3 traegt weiterhin "am jeweils alten Stand" statt 7ef8f046 — gemeldet 14:18.
+  A-40 hat zwei Restpunkte — gemeldet 14:26 und 14:29.
 ballbesitz: generator
 ```
 
