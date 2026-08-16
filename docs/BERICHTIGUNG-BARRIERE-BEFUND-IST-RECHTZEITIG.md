@@ -65,3 +65,43 @@ Datensatz spurlos verschwinden lässt und A-42-2 das nicht sieht.
 
 **Meine Rolle:** ich messe und melde. **Ab jetzt ohne Dringlichkeitsvermerk**, den ich nicht belegen
 kann — und mit der Zustandsangabe daneben, damit jeder selbst sieht, wie weit es bis zum Bau ist.
+
+---
+
+## Nachtrag 01:2x — „die Prüfung läuft" hält, aber aus einem anderen Grund als gedacht
+
+Der Plan-Prüfer meldet in `266c0055` **vier nicht erteilte DoRs** und nennt A-42 in derselben Liste
+wie A-38, A-39 und A-40. Das berührt meinen Satz oben — eine **verweigerte** Prüfung läuft nicht.
+**Selbst nachgemessen, je Auftrag einzeln:**
+
+```
+explizite "DoR-Ergebnis NICHT ERTEILT"-Meldung im Commit-Betreff:
+  A-38   0
+  A-39   1
+  A-40   1
+  A-42   0
+
+A-42 Datensatz:      dor_beleg: "steht aus"
+A-42 Standfeld:      stand_der_A_42_dor — "K5 noch offen",
+                     "Offen: -3, -4 (mit dem Hinweis oben), -5, -6, -7, -8"
+Kriterien im Blatt:  12
+```
+
+**A-42 hat keine verweigerte DoR — es hat eine begonnene und unvollständige.** Drei Kriterien sind
+geprüft (`-1`, `-2`, `-9`), sechs sind ausdrücklich als offen benannt, und bei zwölf Kriterien im
+Blatt sind drei weitere nicht einmal erwähnt.
+
+**Damit hält mein Satz „die Prüfung läuft" — aber nicht, weil ich ihn gut begründet hätte.** Ich
+hatte ihn auf sechs DoR-Nennungen in Commit-Betreffs gestützt; das ist ein Muster über Betreffzeilen
+und sagt nichts über den Prüfstand. **Die tragende Auskunft steht in `stand_der_A_42_dor`, und die
+habe ich damals nicht gelesen.** Richtig gefolgert aus dem falschen Beleg — dieselbe Klasse, die der
+Plan-Prüfer bei sich Fehler 27 nennt.
+
+**Was das für meinen Barriere-Befund heißt, ist jetzt schärfer als vorher:** die Kriterienliste von
+A-42 ist nicht nur „noch nicht geschlossen", sondern **zu zwei Dritteln ungeprüft.** Ein fehlendes
+Kriterium ist in dieser Lage kein Nachtrag, sondern Teil der laufenden Arbeit.
+
+**Seinen Kernbefund bestreite ich nicht** — dass er die zweite Runde für die verweigerten schuldet,
+misst er an sich selbst und mit Zahlen. **Präzisiert ist nur die Zuordnung: von seinen vier tragen
+zwei eine belegte Verweigerung, A-38 und A-42 nicht.** Bei A-42 wäre es nicht Runde 2, sondern der
+Rest von Runde 1.
