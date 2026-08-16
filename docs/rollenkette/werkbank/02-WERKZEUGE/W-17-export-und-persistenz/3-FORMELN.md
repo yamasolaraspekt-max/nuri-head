@@ -1,31 +1,66 @@
-# W · export und persistenz — FORMELN
+# W-17 · Export und Speichern — FORMELN
 
-> **Regel: hier werden nur F-Nummern aus `01-MATHEMATIK/FORMELSAMMLUNG.md` genannt.
-> Keine abgeschriebenen Formeln.** Eine Formel, die an zwei Orten steht, wird an
-> einem Ort korrigiert und am anderen vergessen.
+> **Am Code erhoben, nicht aus der Registerzeile übernommen.** *Die Zeile führt in der Formelspalte
+> einen Gedankenstrich* (`REGISTER.md`: `| W-17 | Export und Speichern | LEER | alle | — |`).
+> **Gemessen ist das richtig** — *aber nicht, weil hier nichts gerechnet würde.*
 
-## Benutzte Formeln
+## Es gibt keine Geometrie — und das ist der Befund, nicht die Lücke
 
-| F-Nr | Wofür in diesem Werkzeug | Grenzfall betrifft uns? |
-|---|---|---|
-| F-0xx | | ja / nein — weil … |
-
-## Reihenfolge der Anwendung
-
-```
-1. F-0xx  →  <Zwischenergebnis>
-2. F-0xx  →  <Zwischenergebnis>
-3. F-0xx  →  Endergebnis
+```text
+SpeichereHausplanerDokument.php    Math./Trigonometrie   0
+StelleSnapshotWieder.php           Math./Trigonometrie   0
+speicherAnzeige.ts                 Math./Trigonometrie   0
 ```
 
-## Fehlt eine Formel?
+> ***W-17 rechnet nichts über den Grundriss.*** *Es transportiert ihn.* **Eine F-Nummer aus der
+> Sammlung wäre hier falsch** — *die Sammlung führt Geometrie, und Persistenz ist keine.*
 
-<Wenn dieses Werkzeug Mathematik braucht, die noch nicht in der Sammlung steht:
-hier benennen, DANN in die Sammlung eintragen, DANN hier auf die Nummer verweisen.
-Nicht umgekehrt.>
+**Der Gedankenstrich in der Registerzeile trägt also** — *und er trägt aus einem anderen Grund, als
+er auf den ersten Blick aussieht: nicht „noch nicht gemessen", sondern „hier gehört keine hin".*
 
-## Genauigkeit
+## Zwei Rechnungen gibt es trotzdem, und beide sind tragend
 
-- Eingangsgrößen in <Einheit>, Rechnung in <Einheit>, Rückgabe gerundet auf <…>
-- Toleranz ε = <…>
-- Bekannte Ungenauigkeit: <wo sich Fehler aufaddieren können>
+### 1 · Die Revision: `+ 1`, und mehr darf es nicht sein
+
+```text
+SpeichereHausplanerDokument.php:32   $neueRevision = (int) $aktuell->revision + 1;
+StelleSnapshotWieder.php             derselbe Schritt, +1 auch beim Rueckweg
+```
+
+> ***Der ganze 409-Schutz hängt an dieser einen Addition.*** *Sie muss **monoton** sein — eine
+> Revision, die springen oder zurücklaufen könnte, wäre als Vergleich wertlos.* **Deshalb erhöht
+> auch der Rückweg** (`StelleSnapshotWieder`), *statt die alte Revision wiederherzustellen: sonst
+> hätten zwei verschiedene Stände dieselbe Nummer, und `base_revision` vergliche Gleiches mit
+> Ungleichem.*
+
+### 2 · Die Prüfsumme: SHA-256 über eine KANONISCHE Fassung
+
+```text
+SpeichereHausplanerDokument.php:50  checksum(array $scene): string
+                              :52   $kanonisch = self::sortiereRekursiv($scene);
+                              :54   hash('sha256', json_encode($kanonisch,
+                                      JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
+```
+
+> ***Die Sortierung vor dem Hashen ist der ganze Trick.*** *Zwei Szenen mit denselben Inhalten in
+> anderer Schlüsselreihenfolge sind **dasselbe Dokument** — ohne `sortiereRekursiv` hätten sie
+> verschiedene Prüfsummen, und die Prüfsumme beantwortete die Frage „hat sich etwas geändert"
+> falsch.*
+>
+> **Und die zwei JSON-Schalter gehören dazu:** `JSON_UNESCAPED_UNICODE` *und*
+> `JSON_UNESCAPED_SLASHES` *legen die Schreibweise fest.* **Ohne sie hinge die Prüfsumme an der
+> PHP-Voreinstellung** — *eine Umgebung, die anders escapet, erzeugte eine andere Summe für
+> dasselbe Dokument.*
+
+## Was NICHT gerechnet wird, obwohl man es erwarten könnte
+
+| erwartet | gemessen |
+|---|---|
+| **eine Größenformel** für die Szene | `SpeichereHausplanerDokumentRequest.php:61` prüft die Größe, aber als **Schwelle**, nicht als Rechnung |
+| **eine Differenz** zwischen zwei Ständen | es gibt keine — gespeichert wird die **ganze** Szene, nicht ihr Unterschied |
+| **eine Auflösungsrechnung** beim Export | `toDataURL({ pixelRatio: 2 })` ist ein **fester Faktor**, keine Formel |
+
+> ***Die mittlere Zeile ist die folgenreichste.*** *W-17 schreibt jedes Mal das ganze Dokument.*
+> **Das ist der Grund, warum die Prüfsumme über die ganze Szene läuft und warum die Revision
+> genügt** — *bei einer Differenzspeicherung bräuchte es eine Kette, und ein verlorenes Glied wäre
+> nicht bemerkbar.*
