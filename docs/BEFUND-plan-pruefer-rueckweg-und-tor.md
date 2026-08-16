@@ -463,3 +463,40 @@ Messung als „38 Verweise stehen wieder da", und sie ist die, die A-34s Behebun
 was ich heute an den Blättern gesehen habe: A-40s K2 zeigte auf eine Definitionsstelle in einer
 anderen Datei — ein Wegweiser. A-37-19s Zeile 150 war eine Momentaufnahme — ein Beleg, und das
 Blatt hat sie ausdrücklich so gekennzeichnet.
+
+---
+
+## Die Anker-Behebung nachgemessen — vier Proben, vier Treffer
+
+*(geschrieben 20:14, Messstand 9e456dfe)*
+
+`7df28e43` (20:12) meldet die Behebung: 38 Verweise einzeln geprüft, **drei Wegweiser behoben,
+35 Belege unverändert**. Der Zählweg, der mir um 20:16 gefehlt hat, steht jetzt darin —
+klassifiziert wird danach, ob ein Verweis **innerhalb eines Codeblocks** steht (dann Beleg) oder
+im Fließtext (dann Wegweiser).
+
+**Vier Proben, vier Treffer:**
+
+| Probe | Ergebnis |
+|---|---|
+| F-020 steht bei Zeile 220 | **ja** — deckt sich mit meiner eigenen Messung von 19:20 |
+| N-003 steht bei Zeile 754 | **ja** — deckt sich mit meiner Nachmittagsmessung |
+| Zeile 141 (alter Verweis) zeigt heute worauf? | auf eine Messausgabe `auf A-B: 0.000e+00` |
+| Zeile 669 (alter Verweis) | **leer** |
+| Wegweiser behoben? | ja — `1-AUFTRAG.md:469` nennt jetzt die **Kennung** |
+
+**Die Behebung folgt seiner eigenen Regel.** Statt der Zahl steht die Kennung, und der alte
+Verweis bleibt als Beleg der Berichtigung stehen: *„F-020 (Straight Skeleton, über die Kennung
+zu finden) für die Normalform (hier stand …)"*. Zeile 486 formuliert die Lehre:
+*„FORMELSAMMLUNG.md, F-020, Abschnitt Kantenversatz" statt „:141-143"*.
+
+**Mein Befund von 20:16 ist damit erledigt** — nicht, weil die Zahl anders wurde, sondern weil
+der Zählweg nachgeliefert und die Sache behoben ist. Der zweite Fall der Berichtigung ist
+bemerkenswert: `ARBEITSREGELN.md:255` für §5 war **inhaltlich richtig** und wurde trotzdem
+umgestellt, weil die Form falsch war. *„Ein richtiger Zeilenverweis ist morgen ein falscher."*
+
+**Meine eigene Zustellung ist noch nicht angekommen.**
+`docs/ZUSTELLUNG-plan-pruefer-an-planner.md` liegt in meinem Baum, aber weder im
+Planner-Zweig noch in der Integration. Nach der Stopp-Regel ist ein Fund erst behoben, wenn er
+**zugestellt** ist — geschrieben ist er, angekommen noch nicht. Ich verfolge das weiter, statt
+es als erledigt zu verbuchen.
