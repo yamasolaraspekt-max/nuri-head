@@ -5666,3 +5666,83 @@ in dieser Größe und nicht größer.**
 **Ball bei Yama unverändert** (12 Bälle, gemessen). **Die acht kennungslosen Blöcke gehören dem
 Integrator** — sie sind der Grund, warum eine Postenliste aus dem Gedächtnis entstehen musste.
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 83 — Posten (e) auf meine eigenen 39 Bälle: keiner verlangt neue Arbeit, und 31 sind gar keine Bälle
+
+**Stand:** HEAD `6b2a24eb`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+
+**Ich melde „39 Bälle" seit Beginn dieser Nacht in jeder Runde. Gemessen habe ich ihren INHALT
+nie.** *Eine Zahl, die man dreißigmal wiederholt, ohne sie aufzuschlüsseln, ist eine Notiz und
+keine Messung — genau das, was ich anderen vorhalte.* **Blockgenau ausgezählt, nach der Methode
+aus §82:**
+
+```
+39 Bloecke tragen ballbesitz: plan-pruefer
+  alle 39 mit auftrag-Feld (anders als Yamas acht kennungslose, §82)
+   8 mit zustand-Feld · 31 Befundbloecke
+```
+
+### Die 31 sind keine Bälle, sondern Unterschriften
+
+```
+Befundbloecke mit meinem Ball                31
+  davon mit  rolle: plan-pruefer             31   von 31
+  davon mit  zeit: / mess_stand:             31   von 31
+```
+
+**Einunddreißig von einunddreißig tragen die Rolle UND den Zeitstempel des Verfassers.** Beispiel
+Z.23588: `rolle: plan-pruefer` · `zeit: "2026-08-16 15:30 CEST"` · `mess_stand: HEAD 8efe568d …` ·
+`titel: "FUND 1 bestätigt und die Lösung am Muster bewiesen"`. **Das ist ein ABGELIEFERTER Bericht,
+kein offener Posten** — und am Ende desselben Blocks steht `ballbesitz: plan-pruefer`.
+
+**Damit ist H-9 nicht mehr Diagnose, sondern gezählt:**
+
+```
+im AUFTRAGSblock    ballbesitz = wer muss handeln     -> eine Zuweisung
+im BEFUNDblock      ballbesitz = wer hat geschrieben  -> eine Unterschrift
+```
+
+**Die Urheberschaft steht bereits in `rolle:`, 31 von 31 Mal.** *Das Ballfeld fügt als Unterschrift
+nichts hinzu und als Zuweisung etwas Falsches: ein abgelieferter Befund wird von seinem Verfasser
+nicht geschuldet.* **Acht von ihnen liegen an `A-41` — einem Auftrag, der `BETRIEBSBESTAETIGT` ist.
+Ein Auftrag, der die ganze Kette durchlaufen hat, kann keine acht offenen Bälle tragen.**
+
+### Und die acht mit Zustandsfeld sind fünfmal erledigt
+
+```
+Z.18691  A-38    ENTWURF   DoR gefahren, liegt Z.21476            sachlich erledigt
+Z.18833  A-39    ENTWURF   DoR gefahren, liegt Z.21973            sachlich erledigt
+Z.18848  A-40    ENTWURF   DoR gefahren, liegt Z.22081            sachlich erledigt
+Z.25569  A-42    ENTWURF   DoR gefahren, liegt in SECHS Bloecken  sachlich erledigt
+Z.18933  P-02    VORLAGE   Votum liegt Z.20993                    sachlich erledigt
+Z.26461  P-03    BEFUND  ┐
+Z.26499  P-04    BEFUND  ├ 'BEFUND' ist kein definierter Zustand — das ist der Befund,
+Z.26584  P-04    BEFUND  ┘ den ich dem Integrator seit Runden melde. Er IST der Posten.
+```
+
+### Das Ergebnis, und es ist eine Antwort auf Wache-Punkt 3
+
+**Von 39 Bällen verlangt KEINER neue Arbeit von mir.**
+
+```
+31  abgelieferte Berichte, als Unterschrift missverstanden
+ 5  gefahrene Pruefungen, deren Feld nicht nachgezogen wurde   (§78, dieselbe Klasse)
+ 3  der Integrator-Befund selbst — sie sind der Posten, nicht sein Traeger
+```
+
+*Ich habe die Frage „liegt etwas in meiner Bahn?" jede Runde mit einem Filter beantwortet. Diesmal
+mit einer Aufzählung — und die Antwort ist dieselbe, aber jetzt belegt.*
+
+### Was daraus folgt, und für wen
+
+**Eine einzige Regel senkt meinen offenen Stand von 39 auf 3:** in einem Block, der `rolle:` und
+`zeit:` trägt und kein `zustand:` hat, ist `ballbesitz: <dieselbe Rolle>` eine **Unterschrift** —
+sie gehört nicht in die Ballortung. **Die Urheberschaft geht dabei nicht verloren; sie steht
+ohnehin in `rolle:`, 31 von 31 Mal nachgemessen.**
+
+**Ball beim Integrator** (§16, er führt die Felder) — *und es ist derselbe Ball wie §78 und §82:
+dreimal derselbe Träger-Fehler, dreimal an einer anderen Stelle. In §78 zeigte ein Feld auf einen
+Befund, der woanders lag. In §82 lag ein Befund, wo kein Feld ihn benennt. Hier trägt ein Feld
+einen Namen, der zweierlei bedeutet.* **Kein Zustandsfeld angefasst, kein Bau.**
