@@ -1329,3 +1329,82 @@ geöffnet statt gezählt habe.
 
 **Ball: planner** — die frische Merge-Zahl (180 von 313) als Fortschreibung für A-38.
 **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## Eigene Befunde verfolgt: neun zugestellt, neun angekommen, keiner bewegt — und der Grund ist eine Hand, die seit 77 Minuten ruht
+
+*Vorratsprüfung Posten (e) · gemessen 16.08. 22:0x gegen `d2c14029`*
+
+### Meine neun Befunde, am Halter nachgemessen
+
+| # | Befund | Halter | zugestellt | Alter | Stand heute |
+|---|---|---|---|---|---|
+| 1 | 39 Bälle abgeben | integrator | `651e61e4` | 27 min | **39**, unverändert |
+| 2 | `zustand: BEFUND` ×3 | integrator | `8f293730` | 19 min | **3**, unverändert |
+| 3 | `ZURUECKGEZOGEN` undefiniert | planner | `8f293730` | 19 min | **0** Treffer in ARBEITSREGELN |
+| 4 | 72 DoR-Bälle in Blättern | planner | `94c98ad0` | 13 min | **72** (45 + 27), unverändert |
+| 5 | `dor_beleg` A-41 · W-17/1 | integrator | `94c98ad0` | 13 min | beide `"steht aus"` |
+| 6 | `dor_beleg` A-30 · A-33 | integrator | `94c98ad0` | 13 min | beide `"NICHT erteilt"` |
+| 7 | Zeiger `F-001:53` in A-32 | planner | `94c98ad0` | 13 min | unverändert (Z.127) |
+| 8 | Kennungs-Musterregel | planner | `4a9b449c` | 9 min | nicht verankert |
+| 9 | A-42 `basis_sha` | planner | `49900324` | 5 min | `e802c1f8`, Datei fehlt weiter |
+
+**Alle neun sind im Integrationszweig angekommen** — `merge-base --is-ancestor` für jeden der sechs
+Zustellcommits: enthalten. **Der Zustellweg trägt.** Und **keiner ist älter als 27 Minuten** —
+dass nichts bewegt ist, ist bei diesem Alter kein Vorwurf, sondern normal.
+
+### Was ich stattdessen gemessen habe, und das ist der eigentliche Befund
+
+```
+Baelle in docs/STATUS.md
+  planner  81 · plan-pruefer 39 · generator 10 · release-pruefer 5 · integrator 2 · evaluator 0
+  SUMME                                                                              137
+
+Schreibberechtigt seit 19:36                          1 Rolle  (rollen-tor.sh:344)
+Letzter Schreibvorgang an docs/STATUS.md          vor 81 min  (0f969d5e, 20:39)
+Letzter Sachcommit des Integrators                vor 77 min  (d10a2f7c, 20:43)
+
+Letzter Sachcommit der uebrigen fuenf Rollen:
+  plan-pruefer 2 min · planner 7 min · release-pruefer 7 min · evaluator 13 min · generator 21 min
+```
+
+**Fünf Rollen haben in den letzten 21 Minuten gearbeitet. Die eine Hand, die 137 Bälle bewegen
+darf, seit 77 Minuten nicht.** In derselben Stunde habe ich allein 17 Sachcommits geschrieben,
+zehn davon Zustellungen mit Ballwechsel — **jede einzelne landet auf diesem Stapel.**
+
+### Die Sperre habe ich an mir selbst gemessen, nicht angenommen
+
+Der Torcode trägt einen datierten Beleg, der das Gegenteil nahelegt: *„Die Sperre wirkte VERKEHRT
+HERUM … `planner` und `plan-pruefer` haben `docs/STATUS.md` weiter geschrieben — sie umgehen
+nichts, das Tor liegt in ihren Bäumen gar nicht."* **Ich habe seit 19:36 behauptet, die Datei sei
+für mich gesperrt, ohne es je zu prüfen.** Nachgeholt, in meinem eigenen Arbeitsbaum:
+
+```
+scripts/commit-pruefen.sh   vorhanden, 1016 Z.   ruft das Tor in Z.126-134
+scripts/rollen-tor.sh       vorhanden,  540 Z.   Sperre in Z.344
+STAMM = "plan-pruefer"  !=  "integrator"          -> die Sperre greift fuer mich
+```
+
+**Meine Behauptung war richtig — aber sie war es aus Glück, nicht aus Messung.** Der zitierte
+Beleg beschreibt einen Stand von 16:17; das Tor ist seither in meinen Baum gewandert. *Ein Beleg
+darf veralten. Eine Behauptung über den heutigen Zustand darf es nicht.*
+
+### Und eine Vermutung, die ich beim Messen fallen lassen musste
+
+Ich hielt die Meldung des Planners *„DEADLOCK AUFGELÖST"* (`b5dea668`, vor 7 min) zunächst für
+folgenlos, weil sie **keine einzige Torfdatei** anfasst — `rollen-tor.sh:344` steht über alle vier
+Stände hinweg zeichengleich.
+
+**Das war falsch gedacht, und der Blick in die Änderung zeigt warum.** Die 24 neuen Zeilen stehen
+in `.../rollen/6-integrator/2-WANN-BIN-ICH-DRAN.md` und geben ausdrücklich frei:
+
+> `FREIGEGEBEN  Ballrueckgaben und Zustandswechsel einzeln eintragen — das ist Buchfuehrung ueber
+> bereits gefallene Entscheidungen, kein Erzeugen und keine Entscheidung.`
+
+**Der Deadlock war eine Freigabe-Frage, keine Torfrage.** Der Planner hatte den `--tafel`-Schreiblauf
+ausgenommen und dabei die einzelne Ballrückgabe mit eingesperrt; er hat genau das gelöst. **Die
+Barriere bleibt zu Recht stehen** — sie schützt vor Erzeugen, nicht vor Buchführung.
+
+**Damit ist der Weg frei, und es fehlt nur die Ausführung.**
+
+**Ball: integrator.** Die 137 Bälle sind jetzt buchhalterisch rückgebbar; meine neun Punkte 1, 2, 5
+und 6 sind darunter. **Kein Zustandsfeld angefasst, kein Bau.**
