@@ -74,6 +74,19 @@ davon MIT Rollenmarke                               12    -> 58 ohne  = 83 %
 **Der Messbefehl, damit die drei Zahlen nachrechenbar sind statt geglaubt** *(DoR Runde 3: „A-38s
 drei Zahlen ohne Messbefehl")* — **im Integrations-Checkout zu fahren, nicht im Rollenbaum:**
 
+**⚠ DIESER BEFEHL TRAEGT EIN WANDERNDES FENSTER — P6, gefunden in der Endpruefung 16.08.** Er erzeugt genau die Zahlen, die der Plan-Pruefer in keinem Baum reproduzieren konnte. **Ersetzt durch eine feste Erhebung; der alte Befehl bleibt als Beleg stehen.**
+
+```bash
+# FESTE ERHEBUNG — ein benannter Tag statt eines wandernden Fensters
+cd /Users/yamanuri/Documents/ticket
+G=$(git --no-optional-locks log --all --since='2026-08-16 00:00' --oneline | wc -l)
+M=$(git --no-optional-locks log --all --since='2026-08-16 00:00' --merges --oneline | wc -l)
+echo "Commits $G . Merges $M"
+# gemessen 16.08. abends: 472 Commits, 188 Merges, Anteil 40 Prozent
+```
+
+**Der alte Befehl, nur noch als Beleg (A-20-4) — NICHT mehr benutzen:**
+
 ```bash
 cd /Users/yamanuri/Documents/ticket
 G=$(git --no-optional-locks log --since='48 hours ago' --oneline | wc -l)
