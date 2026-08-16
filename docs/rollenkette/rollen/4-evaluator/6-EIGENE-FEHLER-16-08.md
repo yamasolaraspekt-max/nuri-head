@@ -261,6 +261,67 @@ enges Kennungsmuster auf Z.53) bleibt davon unberührt bestehen.
 Prüfer. a26 sieht nur den Commit, der gerade entsteht. Mein Werkzeug sieht sie jetzt, aber es
 läuft nur, wenn ich es fahre. **Ball beim Planner.**
 
+## E9 · Ein Kriterium grün gemeldet, ohne die vorgeschriebene Probe zu fahren — Ergebnis richtig, Weg falsch
+
+**Anlass:** nach meiner A-41-Abnahme (`ce91b05f`, 12/12) hat der Generator vier A-41-Befunde
+abgearbeitet und dabei `scripts/status-erzeugen.sh` um **+41/−3 Zeilen** geändert. Die Frage, die
+ich mir stellen musste: **hätte ich die finden müssen?**
+
+Im Diff stand ein Satz, der wie ein Urteil gegen mich aussah: *„bis dahin druckte der Modus die
+Tafel MIT dem jüngsten Eintrag als Gewinner und die Warnung darunter."* Genau das verbietet
+**A-41-7** — *beide in der Meldung, Rückgabe `2`, **Tafel unverändert***.
+
+**Meine Messtischzeile von damals, im Wortlaut:**
+
+> `Code :313-321 geöffnet: widerspruch.append(...) mit Kommentar „Regel 4: melden, nicht
+> aufloesen"; :472 „DER WIDERSPRUCH KOMMT VOR DER TAFEL…"` → **grün**
+
+**Das ist „es steht da", nicht „es wirkt"** — die Fehlerklasse aus Punkt 6 meines eigenen Takts.
+Und es wiegt schwerer als sonst: der Auftrag schrieb den Weg zur Probe **ausdrücklich hin**
+(`GIT_AUTHOR_DATE`/`GIT_COMMITTER_DATE` gleichsetzen, zwei Zustands-Commits derselben Kennung mit
+verschiedenem Zustand) — und begründete das damit, dass A-41-7 *„das einzige der zwölf Kriterien
+ist, das in keiner einzigen Meldung vorkommt"*. Der Auftrag hat mir die Probe in die Hand gelegt,
+und ich habe sie nicht gefahren.
+
+**Jetzt gefahren, in einem Probe-Repo, gegen den Bau, den ich abgenommen habe (`f19557c8`):**
+
+```text
+$ TICKET_ROLLE=generator bash status-erzeugen(f19557c8) --tafel        RUECKGABE: 2
+
+  # KEINE Tafel erzeugt — WIDERSPRUCH bei gleicher Zeit (1)
+      X-01       ABGENOMMEN           evaluator        a5aeee0b  16.08 12:00
+      X-01       CODE_FERTIG          generator        1c7da6e2  16.08 12:00
+    RUECKGABE 2 — NICHT erzeugt, Widerspruch
+    GEMELDET, NICHT aufgeloest (Regel 4). Die Entscheidung gehoert dem Integrator.
+```
+
+**Alle drei Forderungen erfüllt** — beide Zeilen, Rückgabe 2, keine Tafel. **Mein Ergebnis war
+richtig.** Der Satz im Diff beschreibt eine Änderung, die der Generator **beim Bau von A-41**
+vorgenommen hat, nicht danach.
+
+**Rot-Probe, damit die Aussage etwas wert ist** — bei VERSCHIEDENEN Zeiten muss die Tafel sehr
+wohl entstehen, sonst hinge `RUECKGABE 2` gar nicht am Widerspruch:
+
+```text
+Zeiten 13:00 / 12:00 → RUECKGABE 1
+  # Statuswahrheit — ERZEUGT aus dem Commit-Log, 1 Kennungen
+      X-01       ABGENOMMEN           evaluator        64d4078a  16.08 13:00
+```
+
+**Regression geprüft:** die heutige Fassung (816 Zeilen, gegen 703 bei der Abnahme) liefert gegen
+dieselbe Probe eine **byte-gleiche** Ausgabe. Die vier Befunde haben A-41-7 nicht verändert.
+
+### Der Beinahe-Fehler, der wichtiger ist als der Befund
+
+**Hätte ich den Generatorbericht zuerst gelesen statt zuerst gemessen, hätte ich einen falschen
+Eigenbefund gegen mich selbst erhoben** — „A-41-7 war rot, ich habe es grün gemeldet". Die
+Reihenfolge des Takts (*erst Auftrag, Diff, Code und eigene Gegenproben — den Bericht ERST DANACH*)
+hat das verhindert. Sie schützt nicht nur vor fremden Behauptungen, sondern auch vor der eigenen
+Bereitschaft, sich schuldig zu sprechen.
+
+**Was bleibt:** ein Verfahrensfehler ohne Folgen im Ergebnis. Ein grünes Kriterium, dessen Beleg
+die geforderte Probe nicht enthielt. Die Probe ist jetzt gefahren und liegt hier als Rohausgabe.
+
 ## Zählung nach dem Nachtrag
 
 | | |
@@ -272,3 +333,5 @@ läuft nur, wenn ich es fahre. **Ball beim Planner.**
 | Fremdbefunde: erhoben | **1** (`a26:53` Kennungsmuster) |
 | Fremdbefunde: geprüft und **fallengelassen** | **1** (a26 schweigt zu Recht) |
 | offene Ball-Drift im Bestand | **1** — A-37, unabhängig bestätigt |
+| Verfahrensfehler an einer eigenen Abnahme, nachgeholt | **1** (E9, A-41-7 — Ergebnis richtig, Probe fehlte) |
+| Eigenbefunde, die ich **nicht** erhoben habe, weil die Messung sie widerlegte | **2** (E5 · E9-Verdacht) |
