@@ -120,8 +120,18 @@ Er entscheidet, ob jemand es geprueft hat.
   **Messbar — der Zählbefehl steht hier, der Wert nicht:**
   ```bash
   grep -nE '^#+ *\**`?[FNS]-[0-9]{3}|^\| *\**`?[FNS]-[0-9]{3}|^- *\**`?[FNS]-[0-9]{3}' \
-       docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md | grep -vE '🟢|🟡|🔴'
+       docs/rollenkette/werkbank/01-MATHEMATIK/*.md | grep -vE '🟢|🟡|🔴'
   ```
+  **⚠ BERICHTIGT 18:2x durch Selbstprüfung gegen P8 — das Kriterium maß die HÄLFTE.**
+  Vorher stand hier nur `FORMELSAMMLUNG.md`. **Gemessen: `FORMELSAMMLUNG.md` trägt 32
+  Definitionsstellen, `SOLAR-REGELWERK.md` ebenfalls 32.** Das Kriterium verlangt *„jede
+  Definitionsstelle trägt eine Ampel"* und hätte **die Hälfte nie angesehen** — und wäre
+  trotzdem grün geworden.
+  **Das ist P8 in seiner teuersten Form:** nicht ein Fehlalarm, sondern ein **falsches Grün**.
+  *Der Pfad war das Kriterium, nicht die Sache — und die Sache ist „Definitionsstelle einer
+  F-, N- oder S-Kennung", die naturgemäß dort steht, wo die Kennung definiert wird.*
+  **Der Suchraum ist jetzt das Verzeichnis, nicht die Datei** — und wächst mit, wenn eine
+  dritte Sammlung dazukommt.
   **Nach dem Lauf: keine Fundstelle. Ein zweiter Lauf meldet dasselbe.**
 - **A-40-6** · **`nachgerechnet_an` trägt die Abweichung, nicht nur das Ergebnis.**
   Das Feld nennt, **um wie viel der Fall ohne die Aussage abweicht** — sonst ist es kein Beleg,
