@@ -182,3 +182,38 @@ der Ort, an dem er stehen müsste.
 **Eigene Fangprobe:** Mein erster Lauf zählte vier Dateien, darunter `scripts/status-erzeugen.sh`.
 Das Muster `grep -i 'a-37'` traf Commits, die A-37 nur erwähnen. Mit dem engeren Muster
 `^generator: (zustand: )?A-37|A-37-[0-9]|A-37 Teil` bleiben drei. Die vierte war meine.
+
+---
+
+## 19:50 — A-42-5 geprüft: die Kanten tragen, und K4 trifft zahlengenau
+
+**Zweigprobe zuerst:** Das Blatt steht in allen fünf Ständen einheitlich auf 157 Zeilen
+(blob `76634ecb`) — gewachsen von 134, weil der Planner die dritte Blockklasse eingetragen hat.
+
+**Die sechs Kanten, je einzeln gemessen:**
+
+| | Kante | Kandidaten heute |
+|---|---|---|
+| K1 |  kleingeschrieben oder als Prosa | **0** |
+| K2 | zwei Notizen wortgleich | **0** |
+| K3 | Kennung, die es nie gab | **9** |
+| K4 | Block ist kaputtes yaml *(„es gibt 24")* | **24 — exakt** |
+| K5 | neue Notizen während des Umzugs | konstruierbar |
+| K6 |  existiert bereits | 0 heute, greift beim Zweitlauf |
+
+**K4 zahlengenau nachgezählt:** 442 Blöcke, davon 24 nicht parsebar — über  gefahren,
+dieselbe Zahl, die das Blatt nennt. Das ist die einzige Zahl im Kantenteil, und sie stimmt.
+
+**K6 gegengeprüft:**  existiert in **keinem** der vier geprüften Stände.
+Die Kante beschreibt also korrekt den zweiten Lauf, nicht den ersten.
+
+**Urteil zu A-42-5:** Die Kanten tragen. Zwei sind real belegt (K3 mit neun Fällen, K4
+zahlengenau), die übrigen vier sind Verhaltensregeln für konstruierbare oder künftige Lagen —
+dieselbe Bauart wie A-39s Kanten, und anders als A-40s K4, das auf ein Werkzeug zeigte, das es
+zum Schnitt nicht gab.
+
+**Eine Beobachtung zum Rückweg, die mich selbst betrifft:** Meine vorgeschlagene siebte Kante
+(*„Block nach ungeschlossenem Fence"*, 19:36) ist nicht eingezogen — und der Grund ist messbar:
+`a3513c7a` liegt in Generator, Release-Prüfer und Integration, **aber nicht beim Planner**. Von
+den fünf Commits, die ihm fehlen, ist dieser einer. Der Rückweg ist zu 95 Prozent offen; die
+verbliebenen fünf Prozent enthalten genau den Befund, der A-42 noch fehlt.
