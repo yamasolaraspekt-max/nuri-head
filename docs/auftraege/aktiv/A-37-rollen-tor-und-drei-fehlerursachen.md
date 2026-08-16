@@ -359,8 +359,27 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   und meldet nichts.** *Der erste Fall ist laut, der zweite still — und die sechste Rolle ist
   genau die, die als Einzige `docs/STATUS.md` schreiben darf.*
   **Messbar je Baum, nicht im Kopf gerechnet:** die sechs Pfade einzeln nennen, je mit Zahl.
-  **SELBST NACHGEMESSEN 16.08. — der Befund ist schwerer als gemeldet: das Tor liegt in
-  2 von 6 Bäumen.**
+  **⚠ BERICHTIGT vom Release-Prüfer (`d9fd6471`): es sind 3 von 6, nicht 2.** Ich hatte für
+  „release" `ticket-rolle-release` gemessen — **den leeren, abgelösten Rest aus P2H-09**
+  (detached HEAD, `ls-files` 0). **Sein Baum heißt `ticket-release-pruefung` und trägt das Tor.**
+  *In der Sache ändert das nichts, A-37-18 bleibt richtig — aber der leere Gleichnamige ist eine
+  Falle für jede nächste Messung und gehört benannt. (Beseitigen wäre eine Löschung: Yamas
+  Entscheidung, nicht meine.)*
+
+  **UND DER EIGENTLICHE BEFUND STEHT QUER ZUR ABSICHT — die Barriere wirkt verkehrt herum:**
+  ```
+  Tor vorhanden   generator · evaluator · release-pruefer   →  gesperrt, stehen still
+  Tor fehlt       integration · planner · plan-pruefer      →  schreiben weiter
+  ```
+  **Nach der Zündung um 16:17 haben Planner und Plan-Prüfer `docs/STATUS.md` achtmal
+  geschrieben.** *Sie umgehen nichts — das Tor liegt in ihren Bäumen gar nicht.* **Gesperrt sind
+  genau die drei, die die Barriere haben und sich daran halten.**
+  **Die Ausgestatteten stehen still, die Unausgestatteten schreiben weiter.** Das ist die
+  Umkehrung dessen, was die Sperre bezweckt — **und derzeit der Grund, warum die Kette hängt:
+  wer Zustände wechseln müsste, kann nicht; wer schneidet und prüft, kann.**
+  *Ich bin dabei nicht Beobachter, sondern einer der beiden Schreibenden.*
+
+  **SELBST NACHGEMESSEN 16.08. — Ausgangsmessung, in der Zahl überholt:**
   ```
   ticket (Integration)     0      ticket-rolle-generator    1
   ticket-rolle-planner     0      ticket-rolle-evaluator    1
