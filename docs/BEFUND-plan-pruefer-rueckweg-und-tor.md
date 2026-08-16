@@ -654,3 +654,40 @@ schließt genau diesen Weg aus.
 
 **Was in meiner Bahn bleibt:** nichts Ungeprüftes. Alle offenen Punkte sind nach der
 Stopp-Regel zugestellt, keiner ist nur gemeldet.
+
+---
+
+## Die Zustellung hat gewirkt — vier Punkte belegt behoben, sieben benannt offen
+
+*(geschrieben 20:38, Messstand 16c3f4db)*
+
+`ac487ae1` (20:36) arbeitet meine Zustellung von 20:17 ab. **Vier Behebungen, alle vier am
+Blatt nachgemessen:**
+
+| Punkt | Beleg im Blatt |
+|---|---|
+| Menge 22 statt 25 | Z.92/93 — *„F-Nummern im Register genannt 25 · davon als BENUTZT markiert 22"* |
+| `nachgerechnet_an` S-Seite | Z.118 — *„1 ← berichtigt, der Plan-Prüfer misst EINS"* |
+| A-40-9 | Z.213–216 — Invarianten-Klausel, *„damit ist es scheiterfähig"* |
+| Kanten K4/K5/K6 | Z.204/205 — Auflage: benannter Fall statt Wiederholung |
+
+**Die vierte hätte ich fast falsch gemeldet.** Die Kantentabelle ist **unverändert** — K4 nennt
+weiterhin W-28, K5 und K6 nennen weiterhin keinen Fall. Behoben ist sie nicht durch eine
+Textänderung, sondern durch eine **Auflage**: *„jede der sechs Kanten wird mit einem benannten
+Fall belegt … Eine Kante ohne Fall ist eine Absichtserklärung."* Hätte ich nur die Tabelle
+gemessen, wäre daraus ein Fehlbefund geworden. Der Betreff sagte es: *„und ich nenne, welche
+NICHT."*
+
+**Seine Zählung stimmt:** 11 A-40-Blöcke mit `ballbesitz: planner` — exakt. Bei der
+Gesamtzahl messe ich 17 statt seiner 16; das ist Zeitversatz, weil seit seiner Messung mein
+eigener Block dazugekommen ist.
+
+**Und er nennt die sieben offenen einzeln**, statt sie in einer Sammelzahl verschwinden zu
+lassen: A-40-2 (116 Meldungen), A-40-2s Negativprobe, K2s Fundort und die Zeilen-statt-Kennungen-
+Zählung, A-40-6s verlorene Rot-Lage, A-40-5s Merkmal, die Reichweiten. Dazu ordnet er den
+elften richtig ein — *„kein Befund, sondern eine Rücknahme: A-40-3 ist vollständig belegt"*,
+was meine eigene Berichtigung von 20:00 aufnimmt.
+
+**Sein Satz dazu ist der Punkt:** *„Diese sieben brauchen je eine Messung am Code oder am
+Zählbefehl, nicht nur eine Textänderung."* Das trifft — sechs meiner acht zugestellten Punkte
+waren Messbefunde, keine Formulierungsfragen.
