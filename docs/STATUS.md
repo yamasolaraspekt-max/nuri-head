@@ -23336,3 +23336,59 @@ befund_am_parallelbau: "Der Generator hat A-41 parallel gebaut (1e342d53), ohne 
   commit-pruefen.sh:73 den Praefix zustand als Rollenmarke liest und Zeile 78 exit 2
   wirft; (2) in status-erzeugen.sh:121 fehlt --no-merges, das ist Kante K7."
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "FUND 2 des Planners bestaetigt — und die Nachbesserung von 15:20 hat GENAU DIESE ZEILE angefasst, ohne die Luecke mitzunehmen"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:22 CEST"
+mess_stand: "Blatt a613100e (15:19:22) · Bau 1e342d53 (15:15:49) · Nachbesserung b585d335 (15:20:43) · alle drei Zeitpunkte aus dem Reflog, nicht aus Prosa"
+lage: |
+  A-41 ist seit 15:19 mein siebter Ball (ENTWURF, basis_sha e521bd98). Die vollstaendige
+  DoR ueber zwoelf Kriterien und sieben Kanten steht noch aus. Diese Runde hat EINEN
+  Punkt geprueft: die zwei Funde, die der Planner am parallelen Bau des Generators meldet.
+fund_2_bestaetigt_auf_die_zeile: |
+  Der Planner meldet: "in status-erzeugen.sh:121 fehlt --no-merges".
+  ICH HABE DEN ALTEN STAND SELBST GEHOLT UND NACHGESEHEN. 1e342d53, Zeile 121, wortgleich:
+    roh = lauf("git", "log", "--all", "--grep=^zustand:", "--format=%H%x09%at%x09%an%x09%s")
+  Kein --no-merges. Der Fund stimmt punktgenau, einschliesslich der Zeilennummer.
+und_hier_wird_es_ernst: |
+  Der Generator hat um 15:20:43 nachgebessert (b585d335, "das Muster konnte NIE treffen").
+  Diese Nachbesserung hat GENAU DIESE ZEILE angefasst — aus einem Aufruf wurden drei
+  Zeilen, das grep-Muster nimmt jetzt beide Formen mit und ohne Rollenmarke.
+  Der fehlende Schalter ist dabei NICHT mitgekommen:
+    'no-merges' im ganzen neuen Skript (227 Z.): 0 Treffer
+    Muster geeicht: '--all' im selben Skript:    1 Treffer
+  Wer eine Zeile umbaut, sieht ihre andere Luecke nicht — er sieht das, was er sucht. Das
+  ist dieselbe Klasse wie A-37 heute: dort hat eine Berichtigung die Gegenstelle nicht
+  mitgemessen, hier hat ein Umbau die Nachbarluecke derselben Zeile nicht mitgenommen.
+  Zweimal am selben Tag, zwei verschiedene Rollen, dieselbe Bewegung.
+warum_das_nicht_kosmetisch_ist: |
+  Der Planner benennt die Folge richtig, und sie ist die schwerste denkbare fuer genau
+  diesen Bau: ein Merge traegt fremde Betreffs mit. Ohne den Schalter erscheint jeder
+  Zustand nach jedem Transport erneut — die Erzeugung, die die Divergenz beenden soll,
+  wuerde sie selbst herstellen. Ein Werkzeug, das sein eigenes Problem erzeugt, ist
+  schlimmer als keines, weil sein Ergebnis vertrauenswuerdig aussieht.
+was_ich_dem_generator_anrechne: |
+  Er hat den Musterfehler SELBST gefunden und binnen fuenf Minuten nachgebessert, ohne
+  dass ihn jemand darauf gestossen hat — der Betreff sagt es offen: "das Muster konnte NIE
+  treffen". Das ist die richtige Bewegung. Sie war nur zu schmal: die Zeile war schon
+  offen, der zweite Mangel stand daneben.
+zeitachse_als_eigener_punkt: |
+  Aus dem Reflog, nicht aus Prosa: Bau 15:15:49, Blatt 15:19:22, Nachbesserung 15:20:43.
+  Der Bau lag VIER MINUTEN VOR dem Auftragsblatt, und das Blatt traegt ENTWURF — die DoR
+  ist nicht erteilt, der Code ist fertig. Nach Paragraf 3 laeuft die Kette
+  ENTWURF -> BEREIT -> IN_ARBEIT -> CODE_FERTIG.
+  ICH MELDE DAS ALS BEOBACHTUNG, NICHT ALS VERSTOSS, und sage warum: der Planner hat den
+  parallelen Bau offen benannt und ihn geprueft statt ihn zu uebersehen — die Rollen haben
+  getrennt gearbeitet, nur nicht nacheinander. Ob Yama diesen Parallellauf so gewollt hat,
+  weiss ich nicht; im Blatt steht "YAMAS ENTSCHEIDUNG IST UMGESETZT". Das zu entscheiden
+  ist nicht meine Rolle. Zu messen und hinzulegen schon.
+noch_offen: |
+  Die DoR selbst: zwoelf Kriterien, sieben Kanten, dazu FUND 1 des Planners (der Wortlaut
+  "zustand: ..." sei wegen commit-pruefen.sh:73/78 nicht committierbar, exit 2). FUND 1
+  habe ich NICHT nachgemessen — er verlangt einen echten Commit-Versuch mit dem alten
+  Wortlaut, und den setze ich nicht ungeprueft an die Statuswahrheit. Naechste Runde, gegen
+  eine Kopie.
+ballbesitz: generator
+```
