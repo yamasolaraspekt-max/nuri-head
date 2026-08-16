@@ -148,3 +148,46 @@ beschreibt die Hälfte.
 - **Entdeckung:** W-17-1-5 ist die Schutzgrenze — schlägt sie an, hat jemand gebaut statt gelesen.
 - **Der Fall, der am ehesten übersehen wird:** **W-17-1-4.** Die Registerzeile steht am Ende, das
   Blatt sieht vorher fertig aus, **und genau daran ist W-37 gescheitert.**
+
+## Votum des Evaluators, Runde 1 (16.08.)
+
+```yaml
+votum: ABGENOMMEN
+runde: 1
+gemessen_am: d7f0c93d
+bau_commits: "ZWEI, selbst gesucht nach der DATEI: 1980519b (13:46, sieben Blaetter + Registerzeile)
+  und d7f0c93d (17:29, Nachzug an 6-PRUEFUNG). Zusammen 0 Treffer unter resources/ app/ database/
+  routes/ tests/."
+pruefstand: "eigener Worktree an d7f0c93d, node_modules per cp -al aus dem Rollenbaum."
+
+DIE ABLESUNG TRAEGT, und ihre Staerke liegt an der Stelle, wo Ablesungen sonst duenn werden: |
+  W-17 hat KEINE Formeln, und das Blatt schreibt genau das hin statt eine zu erfinden —
+  'Es gibt keine Geometrie, und das ist der Befund, nicht die Luecke', mit der Zaehlung
+  Math./Trigonometrie 0 je Datei. Das ist K5 und K3 in einem, und es ist die Bauart, die
+  A-33 und A-41 heute an anderer Stelle gelehrt haben: eine Kante, die durch die FORM einer
+  Loesung erledigt ist, gilt als behandelt, wenn der Beleg die Probe ist.
+
+EIGENE MESSFEHLER, beide vor der Meldung gefunden: |
+  (1) W-17-1-1 zaehlte ich mit '*.md' und fand SECHS Blaetter. Das siebte liegt in 5-CODE/;
+      rekursiv gezaehlt sind es sieben. Mein Glob, nicht der Bau.
+  (2) W-17-1-8 stand auf ROT: K1 bis K6 haben in den sieben Blaettern je 0 Treffer. Die Kanten
+      werden aber INHALTLICH belegt, nicht durch ihren Buchstaben — dieselbe Lesart, die A-41-9
+      ausdruecklich festschreibt. Einzeln nachgemessen tragen alle sechs.
+```
+
+### Messtisch — alle acht, jede Zahl und Fundstelle selbst geöffnet
+
+| Kriterium | Messung | Ergebnis |
+|---|---|---|
+| **W-17-1-1** Sieben Blätter gefüllt | rekursiv gezählt: **7**, Zeilen 69 · 87 · 66 · 70 · 88 · 117 · 85 | **grün** |
+| **W-17-1-2** Beide Hälften in `5-CODE` | Insel **und** Server mit Pfad und Zeile. Drei Angaben **selbst geöffnet**: `speicherAnzeige.ts` **68 Z** (Blatt: 68) · `SpeichereHausplanerDokument.php` **73 Z** (73) · `SpeichereHausplanerDokumentRequest.php` **96 Z** (96) | **grün** |
+| **W-17-1-3** `PlanUploadTest.php` mit Zahl | Blatt: „255 Z., 12 Zusagen". Selbst gezählt: **255 Zeilen**, **12** `public function test` | **grün** |
+| **W-17-1-4** Registerzeile nachgezogen | vor dem Bau `LEER`, danach **`BESCHRIEBEN`** — beide Stände einzeln aus git geholt | **grün** |
+| **W-17-1-5** Kein Produktivcode | beide Bau-Commits: `resources/` 0 · `app/` 0 · `database/` 0 · `routes/` 0 · `tests/` 0 | **grün** |
+| **W-17-1-6** F-Nummern oder Lücke | keine Formel vorhanden; `3-FORMELN` sagt es ausdrücklich und belegt es mit `Math./Trigonometrie 0` je Datei. `toDataURL(pixelRatio: 2)` als **fester Faktor, keine Formel** benannt | **grün** |
+| **W-17-1-7** Suite und tsc | **1763 pass, 0 fail**, exit 0 · `tsc` exit **0**, am Bau-Stand gefahren | **grün** |
+| **W-17-1-8** K1–K6 einzeln belegt | **K1** beide Orte mit Pfad+Zeile · **K2** `PlanUploadTest` in `6-PRUEFUNG:23`, Zahl nachgezählt · **K3** Lücke gemeldet statt erfunden · **K4** eigener Abschnitt `2-FUNKTION:54` „Der Rückweg ist APPEND-ONLY" mit `StelleSnapshotWieder.php:12-15` · **K5** leeres Blatt ausdrücklich als Aussage · **K6** Registerzeile `LEER → BESCHRIEBEN` | **grün** |
+| *Browser* | **nicht gefahren** — Ablesung ohne sichtbare Wirkung | entfällt |
+| *§15* | **nicht berührt** — kein Datenbankzugriff im Scope | entfällt |
+
+**Ball an den Release-Prüfer.**
