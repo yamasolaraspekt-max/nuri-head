@@ -68,7 +68,12 @@
 #   1   Rolle und Baum passen NICHT zusammen        <- der Verstoss
 #   5   Rollenkennung fehlt beim DIREKTEN Aufruf    <- NICHT 1, sonst nicht unterscheidbar
 #   2   kein Repository (K4)                        <- s. OFFEN unten
+#   6   MODULSTAND: die Marke widerspricht dem Lockfile (A-37-13)
 # ```
+#
+# **Die 6 ist gewaehlt, weil 0/1/2/5 hier und 0/2/3/4 in `commit-pruefen.sh` schon belegt sind** —
+# nachgesehen, nicht angenommen. Fuer die FEHLENDE Marke steht hier bewusst kein Code; die
+# Begruendung steht beim Bau selbst und nicht nur hier.
 #
 # **Die Zahlen kommen aus der Codetabelle des Auftrags** (berichtigt am 16.08. nach DoR Runde 3).
 # *Meine erste Fassung vergab fuer die fehlende Kennung ebenfalls 1 — der Plan-Pruefer hat es
@@ -177,6 +182,62 @@ if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
   echo "            Durchgelassen: die Sperre zuendet erst, wenn ein Schreiber existiert" >&2
   echo "            (gemessen: 0 Commits mit Rollenmarke 'integrator'). Bis dahin divergiert" >&2
   echo "            die Statuswahrheit je Zweig — heute in SECHS Fassungen." >&2
+fi
+
+# ── A-37-12 bis A-37-16 — der MODULSTAND ────────────────────────────────────────────────────
+#
+# **Warum die Pruefung HIER steht und nicht weiter unten:** ab dieser Zeile gibt es nur noch
+# Ausgaenge, die DURCHLASSEN (K3 :188, Zweig stimmt :214, K6 :235). Wer die Pruefung hinter einen
+# davon setzt, hat sie fuer die anderen zwei nicht gebaut. **Genau diesen Fehler habe ich bei
+# Teil 2 schon einmal gemacht** — der Block stand hinter dem `exit 0`, den der Fall zuerst traf,
+# und war damit unerreichbar. Einmal reicht.
+#
+# **Was verglichen wird:** der Hash von `package-lock.json` gegen Feld 2 der Marke. NICHT
+# `node_modules/.package-lock.json` — das ist npms eigene Buchfuehrung und fuehrt planmaessig
+# weniger Pakete (am 16.08. gemessen: 465 gegen 404). Wer die vergleicht, misst eine Differenz,
+# die immer da ist, und schaltet die Pruefung nach dem dritten Fehlalarm ab (A-03).
+#
+# ## ⚠ DER DRITTE FALL MELDET, ER SPERRT NICHT — und das ist eine Entscheidung, keine Nachlaessigkeit
+#
+# **A-37-13 verlangt woertlich „Rueckgabe ≠ 0" — aber nur fuer den FALSCHEN Stand.** Fuer die
+# FEHLENDE Marke verlangt A-37-14 eine eigene Meldung und dass sie *„nicht stillschweigend als
+# gueltig behandelt"* wird. **Einen Rueckgabewert nennt die Tabelle fuer diesen Fall nicht.**
+#
+# Ich erfinde keinen. *Das ist dieselbe Zurueckhaltung wie bei K4 oben* — und sie hat hier eine
+# zweite, gemessene Begruendung: **heute hat KEIN Baum eine Marke** (16.08. nachgesehen). Eine
+# Sperre haette in dem Augenblick, in dem sie eingehaengt wird, alle fuenf Rollen vom Commit
+# ausgeschlossen, bevor auch nur einer den Schreiber gefahren hat. **Eine Sperre, die vor ihrem
+# Ersatzweg kommt, haelt die Kette an, statt sie zu schuetzen** — derselbe Satz wie bei K3, K6 und
+# Teil 2, und zum vierten Mal derselbe Fehler waere keiner mehr, sondern Absicht.
+#
+# **Gemeldet und nicht still entschieden:** wer will, dass der halb installierte Baum SPERRT,
+# gibt A-37-14 einen Rueckgabewert. Dann ist es eine Zeile hier.
+MARKE="$BAUM/node_modules/.aus-lockfile"
+LOCKDATEI="$BAUM/package-lock.json"
+if [ -f "$LOCKDATEI" ]; then
+  LOCK_HASH="$(git -C "$BAUM" hash-object "$LOCKDATEI" 2>/dev/null)"
+  if [ ! -f "$MARKE" ]; then
+    if [ ! -d "$BAUM/node_modules" ]; then
+      echo "ROLLEN-TOR  HINWEIS  MODULSTAND UNBEKANNT — in $VERZ ist gar kein node_modules." >&2
+    else
+      # Der gefaehrliche der beiden: es LIEGT etwas da. Es sieht vollstaendig aus, es hat Tausende
+      # Dateien, und niemand weiss, ob `npm ci` durchgelaufen ist oder auf halbem Weg abbrach.
+      echo "ROLLEN-TOR  HINWEIS  MODULSTAND UNBEKANNT — $VERZ hat Module, aber keine Marke." >&2
+      echo "            Ein abgebrochenes 'npm ci' hinterlaesst genau dieses Bild." >&2
+    fi
+    echo "            Marke schreiben: bash scripts/module-nachziehen.sh  (faehrt npm ci)" >&2
+    echo "            Durchgelassen und NICHT als gueltig verbucht — s. Kopf dieser Datei." >&2
+  elif [ "$(cut -d' ' -f2 < "$MARKE" 2>/dev/null)" != "$LOCK_HASH" ]; then
+    echo "ROLLEN-TOR  MODULSTAND  die Module in $VERZ gehoeren nicht zu diesem package-lock.json." >&2
+    echo "            Lockfile jetzt: $LOCK_HASH" >&2
+    echo "            Marke sagt:     $(cut -d' ' -f2 < "$MARKE" 2>/dev/null)" >&2
+    echo "            geschrieben:    $(cut -d' ' -f4 < "$MARKE" 2>/dev/null)" >&2
+    echo "            Abhilfe: npm ci in diesem Baum — bash scripts/module-nachziehen.sh" >&2
+    echo "            Ein Lauf auf fremden Modulen ist gruen oder rot aus Gruenden, die nicht" >&2
+    echo "            im Code stehen. Das ist die Sorte Fehler, die beim naechsten Mal weg ist." >&2
+    [ "$NUR_MELDEN" = "1" ] && exit 0
+    exit 6
+  fi
 fi
 
 # K3: wer noch nicht umgezogen ist, wird DURCHGELASSEN und gemeldet. Der Umzug ist freiwillig
