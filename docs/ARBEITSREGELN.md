@@ -1299,3 +1299,53 @@ die überholte Quelle bin ich."*
   sondern eine Beobachtung über die Zeit.** Zwei Blätter sechs Minuten später in die andere
   Richtung zu ziehen, sieht nach Schwanken aus und ist das Gegenteil: **viermal dieselbe Regel
   angewandt — gegen den Bestand messen, nicht gegen die Erinnerung.**
+
+---
+
+## NACHTRAG · Eine Formel, die niemand rechnet, ist nicht geprüft *(16.08.2026)*
+
+> **Was für einen Test gilt, gilt für eine Formel: was auch ohne sie stimmt, hat sie nicht belegt.**
+
+**Das ist keine neue Regel, sondern die Mutationsprobe — angewandt auf Fakten statt auf Code.**
+Dieses Haus erkennt seit Wochen keinen Test an, der auch dann grün ist, wenn man den Code entfernt.
+**Derselbe Maßstab hat an der Tür der Formelsammlung haltgemacht, und niemand hat es bemerkt.**
+
+**Die Regel:**
+
+> **Eine Fachaussage gilt erst als geprüft, wenn jemand sie an einem Fall nachgerechnet hat, der
+> ohne sie ein anderes Ergebnis hätte.**
+> **Wer eine Fachaussage in ein Blatt oder in Code übernimmt, rechnet sie — oder trägt ein, dass er
+> es nicht getan hat.**
+
+**Warum keine Prüfstation das leisten kann, und warum eine sechste Rolle die schlechteste Lösung
+wäre:** Plan-Prüfer, Evaluator, Release-Prüfer, Generator und Integrator beziehen ihr Fachwissen
+aus **derselben Quelle** — der Formelsammlung und dem Regelwerk. **Ein zweiter Leser desselben
+Dokuments ist keine zweite Meinung, er ist dieselbe Meinung zweimal.** Ein „Fach-Prüfer" würde
+F-004 aufschlagen und dasselbe falsche Vorzeichen lesen wie alle vor ihm.
+
+**Richtigkeit kann nur aus einer Quelle kommen, die außerhalb unserer eigenen Dokumente liegt:**
+
+| | Quelle | Stärke |
+|---|---|---|
+| **1** | **Rechnen** — eine unabhängige Rechnung aus Grundgrößen, die übereinstimmen **muss**. **Die Arithmetik liest unsere Blätter nicht.** | stärkste Form, **kostet nichts** |
+| **2** | **Referenzfall** — ein durchgerechnetes Beispiel aus Norm, Fachbuch, Datenblatt, zertifiziertem Werkzeug | unabhängig, beschaffungsaufwendig |
+| **3** | **Primärquelle** — der Normtext selbst, nicht unsere Paraphrase | nötig, wo Haftung dranhängt |
+
+**Alle drei Fachfehler dieser Woche wären mit Nummer 1 gefallen, und Nummer 1 ist gratis:**
+
+```
+F-004          Vorzeichen vertauscht        gefunden vom GENERATOR beim Bauen
+F-054          prueft Winkel statt Weite    gefunden beim RECHNEN
+S-060 / S-040  standen in Spannung          gefunden beim LESEN fuer ein anderes Werkzeug
+```
+
+**Keiner von einer Prüfstation — alle drei vom Benutzer.** Und das ist kein Zufall, sondern
+Mechanik: **wer eine Aussage aufschreibt, hat sie gerade geglaubt. Wer sie benutzt, braucht ein
+Ergebnis** — und ein Ergebnis, das nicht passt, ist der einzige Alarm, der hier nie überhört wurde.
+
+**Deshalb rechnet, wer BENUTZT — nicht, wer aufgeschrieben hat.**
+
+**Und die Auslösung ist die Benutzung, nicht die Inventur.** Wer alle Einträge auf einmal
+nachrechnen lässt, schafft ein Vorhaben, das niemand macht — und trifft auch die, die nie jemand
+benutzt. **Ein Eintrag, den nie jemand benutzt, ist in seiner Richtigkeit auch nie eine Gefahr.**
+Die Regel skaliert sich selbst.
