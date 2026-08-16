@@ -383,3 +383,42 @@ Gemessen steht sie jetzt auf **Zeile 173** bei 985 Zeilen Gesamtlänge; der Bau 
 **Das ist kein Vorwurf, sondern die Bestätigung der Warnung im selben Satz.** Das Blatt
 kennzeichnet die Zahl ausdrücklich als Momentaufnahme und verlangt, sie mitzumessen. Genau das
 war nötig — nach 17 Minuten stimmte sie nicht mehr.
+
+---
+
+## A-37 CODE_FERTIG, zweite Meldung — Ballwechsel bestaetigt, diesmal mit Stabilitaetsprobe
+
+*(geschrieben 20:05, Messstand 339bc8d3)*
+
+`ea377567` um **20:01:55** meldet A-37 erneut als CODE_FERTIG, mit `1c36544e` als Bau-SHA und
+neunzehn Kriterien. Damit ist die Lücke geschlossen, die der Release-Prüfer um 19:56 gemeldet
+und ich um 20:00 unabhängig nachgemessen hatte.
+
+**Fünf Proben, fünf Treffer:**
+
+| Probe | Ergebnis |
+|---|---|
+| Betreff gegen das Pflichtmuster aus `ARBEITSREGELN.md` Z.1503 | **trifft** |
+| Meldung nennt NEUNZEHN Kriterien | **ja**, zweimal im Wortlaut |
+| Bau-SHA `1c36544e` existiert | **ja**, 19:49 |
+| **Blatt seit 20:01:55 unverändert** | **ja** — kein neues Kriterium nachgeschoben |
+| Scope des Baus | nur `scripts/commit-pruefen.sh`, 33 Zeilen |
+
+**Die vierte Probe ist die, die mir um 19:47 gefehlt hat.** Damals habe ich bestätigt, ohne zu
+prüfen, ob sich das Blatt zwischen Meldung und Bestätigung bewegt hat — es hatte sich bewegt.
+Diesmal ist es seit der Meldung unverändert, über alle Zweige gemessen.
+
+**Ballwechsel bestätigt. Der Ball geht an den Evaluator**, und Schritt I hat damit einen
+Gegenstand, dessen Umfang mit der Meldung übereinstimmt.
+
+**Zwei Beobachtungen am Rand, beide ohne Folge für die Abnahme:**
+
+Der **Generator-Zweig selbst führt nur achtzehn** Kriterien (blob-Stand älter); neunzehn stehen
+in Planner, Release-Prüfer und Integration. Er hat also gegen eine Fassung gemeldet, die sein
+eigener Baum nicht trägt — inhaltlich richtig, weil er A-37-19 aus dem Planner-Befund gebaut
+hat, aber es ist dieselbe Zweig-Alterung, die heute schon dreimal Fehlbefunde erzeugt hat.
+
+Und der Generator **berichtigt sich in der Meldung selbst**: *„MEIN FEHLER, ausdrücklich: um
+20:0x habe ich geschrieben ‚einen zweiten Zustands-Commit für denselben Zustand setze ich
+nicht'. Das war falsch. Der Zustand war unverändert, aber der BELEG-SHA nicht — und genau der
+sagt dem Evaluator, welchen Bau er misst."* Das ist die Unterscheidung, um die es geht.
