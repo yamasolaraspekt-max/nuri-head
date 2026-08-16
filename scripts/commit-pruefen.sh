@@ -147,9 +147,40 @@ A11_ERSTE="${BOTSCHAFT%%$'\n'*}"
 A11_RUMPF=""
 case "$BOTSCHAFT" in *$'\n'*) A11_RUMPF=$'\n'"${BOTSCHAFT#*$'\n'}" ;; esac
 A11_BEWERTET="${A11_ERSTE#"${A11_ERSTE%%[![:space:]]*}"}"
-A11_VORHANDEN="$(printf '%s\n' "$A11_BEWERTET" | grep -oE '^[a-z][a-z-]*(-[0-9]+)?: ' | head -n 1)"
+# ── A-37-19: DIE MARKE DARF EINEN ZUSATZ TRAGEN ─────────────────────────────────────────────
+#
+# **Gemessen am Trockenlauf, bevor gebaut wurde:**
+#
+# ```text
+#   'generator: schlicht'                     ->  generator: schlicht
+#   'generator (in Vertretung): mit Zusatz'   ->  generator: generator (in Vertretung): …
+#                                                 ^^^^^^^^^^ STILLE VERDOPPLUNG
+# ```
+#
+# **Das alte Muster verlangte den Doppelpunkt DIREKT hinter dem Rollennamen.** *Ein Betreff wie
+# `release-pruefer (in Yamas Namen): …` galt damit als markenlos — und die Zeile darunter stellt
+# einer markenlosen Botschaft die Rolle voran.*
+#
+# ***Der Planner hat den entscheidenden Satz dazu geschrieben, und deshalb wird ERKANNT und nicht
+# abgewiesen:*** *„in Yamas Namen" und „in Vertretung" sind genau die Faelle, in denen jemand fuer
+# einen anderen handelt UND es kenntlich macht. Das ist die erwuenschte Sorgfalt.* **Ein Tor, das
+# sie bestraft, erzieht zum Weglassen des Zusatzes — und dann steht `release-pruefer` da, wo in
+# Wahrheit jemand in Vertretung gehandelt hat.**
+#
+# **Verglichen wird weiterhin nur der ROLLENNAME**; der Zusatz wird abgetrennt, GEMELDET und
+# unveraendert im Betreff gelassen. *Ein Zusatz, den das Tor still schluckt, waere derselbe Fehler
+# eine Ebene tiefer.*
+A11_VORHANDEN="$(printf '%s\n' "$A11_BEWERTET" | grep -oE '^[a-z][a-z-]*(-[0-9]+)?( \([^)]*\))?: ' | head -n 1)"
 if [ -n "$A11_VORHANDEN" ]; then
   A11_VORHANDEN="${A11_VORHANDEN%: }"
+  A11_ZUSATZ=""
+  case "$A11_VORHANDEN" in
+    *\ \(*\))
+      A11_ZUSATZ="${A11_VORHANDEN#* }"
+      A11_VORHANDEN="${A11_VORHANDEN%% *}"
+      echo "ROLLENMARKE mit Zusatz erkannt: '$A11_VORHANDEN' $A11_ZUSATZ — Betreff bleibt unveraendert." >&2
+      ;;
+  esac
   if [ "$A11_VORHANDEN" != "$ROLLE" ]; then
     # Der Fall b29bb79d: eine Botschaft, die sich als andere Rolle ausgibt, ist ein WIDERSPRUCH.
     echo "WIDERSPRUCH: die Botschaft gibt sich als '$A11_VORHANDEN' aus, die Umgebung sagt TICKET_ROLLE='$ROLLE' — kein Commit." >&2
