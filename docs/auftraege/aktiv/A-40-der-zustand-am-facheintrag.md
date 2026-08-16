@@ -82,6 +82,33 @@ Er entscheidet, ob jemand es geprueft hat.
 **Nicht als Wertung, sondern damit „unbekannt" sichtbar wird.** Ein Eintrag ohne Ampel ist **nicht
 „vermutlich in Ordnung"** — dieselbe Bauform wie *„fehlt die Marke, ist der Modulstand unbekannt."*
 
+## Die Menge, die „Auslösung ist die Benutzung" wirklich meint — gemessen 16.08.
+
+**Das Nicht-Ziel sagt: keine Inventur, wer eine Aussage anfasst, rechnet sie. Damit ist die
+Menge nicht „alle Einträge", sondern „alle benutzten".** Gemessen über die Formelspalte der
+Registerzeilen mit Reifegrad `BESCHRIEBEN`:
+
+```
+F-Nummern, die BENUTZT werden          25
+davon mit `nachgerechnet_an`            0
+
+meistgenutzt   F-001  12x    F-032   6x
+               F-030   8x    F-011   5x
+               F-004   7x    F-003   4x
+```
+
+**Damit hat A-40 eine Reihenfolge, die sich nicht aus der Nummer ergibt, sondern aus der
+Reichweite:** **`F-001` zuerst — zwölf Werkzeuge hängen daran.** Ein Fehler dort trifft ein
+Drittel des Kastens, einer in einer einmal genutzten Formel trifft eines.
+
+> **⚠ Und `F-004` ist der Fall, der das Blatt ausgelöst hat.** Sie trug ein vertauschtes
+> Vorzeichen, gefunden vom Generator **beim Bauen** — und sie wird von **sieben** Werkzeugen
+> benutzt und trägt bis heute **keinen** Nachweis. *Der Anlass dieses Auftrags ist zugleich
+> sein drittdringendster Eintrag.*
+
+**Die Zahlen stehen hier als Messung mit Datum, NICHT in einem Kriterium** — A-40 trägt
+bewusst keine Zahl, und die Menge wächst mit jeder Registerzeile.
+
 ## Nicht-Ziele
 
 - **Keine Inventur.** Es werden **nicht** alle Einträge nachgerechnet. **Auslösung ist die
