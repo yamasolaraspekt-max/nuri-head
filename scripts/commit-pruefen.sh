@@ -72,6 +72,29 @@ fi
 # Dieses Tor SPERRT, waehrend A-26/A-27/A-30 melden. Die Begruendung steht in rollen-tor.sh:
 # jene melden ueber den INHALT, wo ein Fehlalarm teuer und ein Durchlassen billig ist. Hier ist
 # es umgekehrt.
+# ── A-37-18: DIE ABWESENHEIT DER BARRIERE MELDET SICH SELBST ────────────────────────────────
+#
+# **Diese Bedingung war bis 16.08. ein stilles `if`:** fehlte `scripts/rollen-tor.sh`, uebersprang
+# das Tor die gesamte Barriere **ohne ein Wort**. Der Gedanke dahinter war richtig — ein Baum ohne
+# die Datei soll nicht am Commit gehindert werden —, **die Ausfuehrung war es nicht.**
+#
+# ***Der Planner hat den Fall benannt, und der Satz ist der Bau:*** *„eine Barriere, die eine Rolle
+# nicht kennt, weist sie ab und ist laut; eine Barriere, die in ihrem Baum fehlt, laesst alles
+# durch und meldet nichts. Der erste Fall kostet eine Runde, der zweite bleibt unbemerkt."*
+#
+# **Am 16.08. ueber alle sechs Baeume erhoben:** das Tor liegt in DREI — generator, evaluator,
+# release-pruefung. Es fehlt in Integration, planner und plan-pruefer. *Drei Baeume haben also
+# stundenlang committet, ohne dass irgendwo stand, dass die Pruefung gar nicht lief.*
+#
+# **Es wird weiterhin DURCHGELASSEN und ab jetzt GESAGT.** *Sperren waere hier falsch: die vier
+# Baeume koennen die Datei nicht selbst herbeischaffen, sie kommt ueber den Transport.* **Eine
+# Sperre vor ihrem Ersatzweg haelt die Kette an** — derselbe Satz wie bei K3, K6 und Teil 2.
+if [ ! -f scripts/rollen-tor.sh ]; then
+  echo "ROLLEN-TOR  FEHLT IN DIESEM BAUM — die Zuordnung Rolle/Zweig wird NICHT geprueft." >&2
+  echo "            $(pwd)" >&2
+  echo "            Durchgelassen, aber ungeprueft. Die Datei kommt ueber den Transport;" >&2
+  echo "            ohne sie ist ein Commit im fremden Baum hier nicht zu bemerken." >&2
+fi
 if [ -f scripts/rollen-tor.sh ]; then
   # A-37 Teil 2: das Tor muss wissen, OB die Statuswahrheit in der Pfadliste steht. Es bekommt
   # die Auskunft als Umgebungsvariable, damit es selbst keine Pfadliste kennen muss — es prueft
