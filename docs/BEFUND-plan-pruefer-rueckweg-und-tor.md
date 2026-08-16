@@ -2660,3 +2660,81 @@ eine Formel: ein richtig gedachtes Muster kann falsch zählen, und man sieht es 
 **Deshalb liegt hier eine Fangprobe bei und nicht nur eine Begründung.**
 
 **Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Konvergenz mit dem Release-Prüfer — und sein Muster ist besser als meins
+
+*Zwei Rollen, derselbe Fund, unabhängig · gemessen 16.08. gegen `74c997c7`*
+
+### Die Konvergenz: sechs Zahlenpaare, sechsmal deckungsgleich
+
+Der Release-Prüfer hat mit `65c30073` denselben Anker-Fund gemeldet wie ich mit `7137054c`,
+**unabhängig und im selben Zeitfenster**. Seine Zahlen gegen meine:
+
+```
+              er        ich
+planner       80/81     80/81
+plan-pruefer  38/39     38/39
+generator      5/10      5/10
+evaluator      0/0       0/0
+release-pruefer 5/5      5/5
+integrator     2/2       2/2
+```
+
+**Sechs von sechs identisch.** Und er ist weiter gegangen als ich: **er hat alle sieben verfehlten
+Zeilen einzeln geöffnet** — fünf mit YAML-Kommentar, zwei mit Klammerzusatz — und festgestellt,
+dass kein Grenzfall darunter ist.
+
+**Seine Einordnung übernehme ich, weil sie schärfer ist als meine:** *„Eine zu große Zahl lässt
+einen suchen und nichts finden. Eine ZU KLEINE sagt ihm, er sei fertig."* **Der Generator sähe 5
+statt 10 offener Bälle und hätte keinen Anlass nachzusehen.** Das ist die gefährlichere Richtung,
+und ich hatte sie nur als „verliert Bälle" benannt, nicht als *Schweigen, das als Erledigung
+gelesen wird.*
+
+### Und jetzt gegen mich selbst: sein Muster fängt mehr als meins
+
+```
+mein Vorschlag    ^ballbesitz: <rolle>([[:space:]]|$)
+sein Vorschlag    ^ballbesitz: "?<rolle>"?([ #(]|$)
+```
+
+**Am echten Bestand liefern beide für alle sechs Rollen dieselben Zahlen.** An der Fangprobe nicht:
+
+```
+Eingabe                                  meins   seines
+ballbesitz: plan-pruefer                   ja      ja
+ballbesitz: "plan-pruefer (DoR)"          NEIN     ja
+ballbesitz: plan-pruefer  # Kommentar      ja      ja
+ballbesitz: plan-pruefer(x)               NEIN     ja
+ballbesitz: plan-pruefer-2                nein    nein
+                                          ---     ---
+                                            2       4
+```
+
+**Mein Muster verliert die gequotete Form** — und das ist genau die Form, die **jedes Blatt**
+benutzt (`ballbesitz: "plan-pruefer (DoR)"`). Heute trägt `docs/STATUS.md` 38 gequotete
+`ballbesitz`-Werte; keiner davon ist ein Rollenname, deshalb fällt es an dieser Datei nicht auf.
+**Es ist eine Lücke, die heute nichts kostet und morgen alles.**
+
+**Eine einzige Kante spricht für meins**, und sie ist theoretisch: bei einem **Tabulator** hinter
+dem Rollennamen trifft meins, seins nicht. **Gemessen: null solche Zeilen im Bestand.**
+
+### Die Form, die beide Stärken vereint — an vier Proben getestet
+
+```
+grep -cE '^ballbesitz: "?<rolle>"?([[:space:]#(]|$)' docs/STATUS.md docs/BEFUNDNOTIZEN.md
+```
+
+```
+nackt · gequotet · mit Kommentar · mit Tabulator   ->  4 Treffer, alle richtig
+plan-pruefer-2 · planner                           ->  0 Treffer, beide richtig abgewiesen
+am echten Bestand: plan-pruefer 39 · generator 10  ->  Soll getroffen
+```
+
+### Was ich daraus mitnehme
+
+**Ich hatte eine Fangprobe beigelegt und trotzdem eine Form übersehen** — die gequotete. Meine
+Probe prüfte die Fälle, an die ich beim Bauen des Musters gedacht hatte. **Seine prüfte die Fälle,
+die im Bestand vorkommen.** *Eine Fangprobe ist nur so gut wie die Formenliste, aus der sie
+gemacht ist — und die gehört aus der Datei genommen, nicht aus dem Kopf.*
+
+**Ball: planner** — die vereinte Form für A-42-12. **Kein Zustandsfeld angefasst, kein Bau.**
