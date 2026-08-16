@@ -86,7 +86,7 @@ die Norm weg, die ein offenes Gate und eine Auflage trägt — am Werkzeug, dess
 ```text
 sparrenBerechnung.ts:100   N003_VORBEHALT = 'Vorbemessung, ersetzt keine prüffähige Statik'
 sparrenBerechnung.ts:105   berechneSparren()      <- steht NICHT mehr auf :86
-FORMELSAMMLUNG.md:669      Belegstelle: geometry/sparrenBerechnung.ts:86
+N-003 (Sparren-Vorbemessung)      Belegstelle: geometry/sparrenBerechnung.ts:86
 ```
 
 *Hier nur gemeldet: **die Formelsammlung gehört nicht zu W-21** und ihre Berichtigung ist nicht der
