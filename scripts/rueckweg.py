@@ -39,21 +39,39 @@ import sys
 # is-ancestor 0), und die Abhilfe liegt bei ihm (Messstand in eine Variable, Gegenprobe am
 # Ende). Was ihm fehlte, war die GROESSE — die liefere ich hier nach.
 #
-#   Baum                       Fast-forwards   eigene Commits
-#   plan-pruefer                    18              238
-#   planner                         43              117
-#   generator                       44               52
-#   evaluator                       49               12   <- 4x haeufiger fremd als eigen
+# ERHEBUNGSBEFEHL — nachgetragen 17.08. 00:5x auf einen Ball des Plan-Pruefers, und er trifft:
+# hier standen die ERGEBNISSE und nicht die MESSUNG, und die Zahl "4 von 74" trug eine
+# Entscheidung, die niemand nachrechnen konnte. Das ist B5, an der Rolle, die diese Regel heute
+# Nacht am schaerfsten vertreten hat.
 #
-#   Abstand Fast-forward zum vorigen EIGENEN Commit:
-#   plan-pruefer   10 Paare · Median  100 s · unter 30 s: 3
-#   generator      30 Paare · Median 1719 s · unter 30 s: 1
-#   evaluator      34 Paare · Median 1587 s · unter 30 s: 0
+#     git -C <baum> reflog --date=unix --format='%gs|%cd|%gd'     # OHNE -N !
+#     Paar = jeder 'merge …: Fast-forward'-Eintrag + der naechstaeltere 'commit:'-Eintrag
+#     Abstand = Zeit(merge) - Zeit(commit), ungefiltert
 #
-# KEIN RUHEFENSTER EINGEBAUT, und das ist eine Entscheidung mit Grund: es fienge 4 von 74
-# Paaren und verzoegerte dafuer jeden Befundtransport um seine Fensterlaenge. Der Rueckweg ist
-# heute mehrfach nachweislich der Weg gewesen, auf dem ein Befund die andere Rolle erreicht
-# hat. Wer das Fenster doch will, hat hier die Zahlen dafuer — und muss den Preis mitnennen.
+# WELCHE UHR — es sind ZWEI, und sie antworten verschieden (auch das sein Fund):
+#     %cd mit --date=unix   COMMIT-Datum des Ziels        -> die Spalte "commit" unten
+#     HEAD@{…} aus %gd      Zeitstempel des Reflog-Eintrags -> die Spalte "reflog" unten
+#
+# MEINE ERSTE ERHEBUNG WAR FALSCH, und der fehlende Befehl hat es verdeckt: ich hatte die
+# Fast-forwards ohne Limit gezaehlt, die Paare aber mit `-60` — 18 FF aus dem vollen Reflog,
+# 10 Paare aus den letzten 60 Eintraegen. ZWEI GRUNDMENGEN IN EINEM SATZ. Ohne Limit sind es
+# 17 Paare, genau die Zahl, die der Plan-Pruefer gegengemessen hat. Dieselbe Klasse wie F7.
+#
+#   Baum            FF   eigene   Paare   Med(commit)  <30 s   Med(reflog)  <30 s
+#   plan-pruefer    18      241      17            43      7            90       0
+#   planner         51      117      51           736      0           867       0
+#   generator       45       52      43          2178      1          2379       0
+#   evaluator       50       12      48          1877      0          2031       0
+#                                          SUMME:        8/159                 0/159
+#
+# KEIN RUHEFENSTER EINGEBAUT, und das ist eine Entscheidung mit Grund: es fienge **8 von 159**
+# Paaren nach der Commit-Uhr und **0 von 159** nach der Reflog-Uhr — und verzoegerte dafuer
+# jeden Befundtransport um seine Fensterlaenge. Der Rueckweg ist heute mehrfach nachweislich
+# der Weg gewesen, auf dem ein Befund die andere Rolle erreicht hat. Welche Uhr gilt, ist nicht
+# entschieden; die Entscheidung gegen das Fenster traegt in beiden.
+#
+# Unveraendert gilt die Kernzahl: beim Evaluator 50 Fremd-Fast-forwards gegen 12 eigene
+# Commits — der Rueckweg bewegt seinen HEAD 4,2-mal so oft, wie er selbst committet.
 BAEUME = [
     'ticket',
     'ticket-rolle-planner',
