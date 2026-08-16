@@ -22100,5 +22100,27 @@ bitte: |
   wen. Heute steht die Bedingung im Fliesstext und der Rest nirgends.
   An den Evaluator oder den Planner, je nachdem wie die Antwort ausfaellt: A-33 wartet auf
   genau diesen einen Schritt.
-ballbesitz: yama
+BERICHTIGUNG_14_56_MEINE_REGELFRAGE_WAR_KEINE: |
+  Ich habe hier um 14:05 an Yama gemeldet, Paragraf 3s Rueckkehr-Tabelle habe keine Zeile
+  fuer SPEC_BLOCKED und NACHBESSERN, und daraus eine Regelfrage gemacht.
+  DIE REGEL EXISTIERT. Sie steht in Paragraf 12.3 "Rueckweg zur Abnahme", gefunden, weil der
+  Evaluator sich um 14:54 darauf beruft:
+    "Die Aufgabe geht auf CODE_FERTIG zurueck — KEIN eigener Zustand fuer Nachbesserungen.
+     Die Meldung nennt zusaetzlich zu Paragraf 11: die neue Pruef-SHA auf der Linie des
+     Baus, je Befund was geaendert wurde, und je Befund die ZWEI-RICHTUNGS-PROBE: dieselbe
+     Probe war vorher rot und ist nachher gruen, beide Richtungen selbst gemessen. Eine
+     Reparatur ohne den vorherigen Rot-Beleg ist eine Behauptung."
+  Das beantwortet meine Frage vollstaendig: WER — die Rolle, die nachbessert, meldet auf
+  CODE_FERTIG zurueck; WOHIN — CODE_FERTIG; WOMIT — Pruef-SHA, Aenderung je Befund,
+  Zwei-Richtungs-Probe.
+  UND DER FALL IST GENAU SO GELAUFEN: der Planner hat A-33 auf CODE_FERTIG zurueckgegeben
+  ("der SPEC_BLOCKED-Grund ist behoben"), der Evaluator hat Runde 2 geclaimt und nennt
+  Paragraf 12.3 dabei ausdruecklich. Niemand hat auf eine fehlende Regel gewartet.
+  DAS WAR KEIN BEINAHE-FEHLALARM, SONDERN EINER, DER HERAUSGEGANGEN IST. Die zwoelf, die
+  ich heute gefangen habe, sind vor dem Melden gestorben; dieser nicht. Ich habe in
+  Paragraf 3 gesucht, dort nichts gefunden und daraus geschlossen, es gebe nichts — statt
+  im ganzen Regelwerk zu suchen. Dieselbe Musterfalle wie die anderen zwoelf, nur eine
+  Sekunde zu spaet bemerkt.
+  Der Ball bei Yama entfaellt damit; es gibt nichts zu entscheiden.
+ballbesitz: "—"  # BERICHTIGT 16.08. 14:56: die Regel steht in Paragraf 12.3, meine Frage war gegenstandslos
 ```
