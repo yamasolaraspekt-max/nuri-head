@@ -61,6 +61,18 @@ Solange das so bleibt, kann Schritt I nicht stattfinden, egal wie lange man wart
 
 ### Grund 2 — es gibt nichts abzunehmen
 
+> **⚠ BERICHTIGT 16.08. 17:0x — dieser Grund ist überholt, und zwar 5 Minuten nach seiner
+> Niederschrift.** Gemessen habe ich um **16:46:39**; um **16:52:01** hat der Planner A-41 auf
+> `CODE_FERTIG` gesetzt (`e1cc61ef`), danach W-17/1 auf `BEREIT` (16:55:56) und A-37 auf `BEREIT`
+> (16:56:59). **Es gibt jetzt ein Übergabestück: A-41, Ball beim Evaluator.**
+>
+> Die Zahl war am Messstand richtig — im Stand `d9fd6471` sind es nachweislich **0** `CODE_FERTIG`.
+> **Falsch war die Form, nicht der Wert:** der Satz unten steht im Präsens ohne Stand und liest sich
+> darum wie ein Dauerzustand. Wer ihn zitiert, zitiert ihn ohne Verfallsdatum — und genau das ist
+> passiert, als daraus geschlossen wurde, eine Regel sei „mangels Übergabestück" nicht anwendbar.
+> **Lehre für mich: eine Zahl in einem Befund trägt den Messzeitpunkt, oder sie trägt eine
+> Entscheidung, für die sie nicht mehr gilt.**
+
 **Kein einziger Auftrag steht auf `CODE_FERTIG`.** Die zwei Treffer, die eine grobe Suche auf
 `zustand: CODE_FERTIG` liefert, habe ich geöffnet: beide sind **Zitate in Fließtext** (Z.9780 und
 Z.12490, Befundtexte über frühere Zustandswechsel), kein Datensatz. Alle acht aktiven Aufträge
