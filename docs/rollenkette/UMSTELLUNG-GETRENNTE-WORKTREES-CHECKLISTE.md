@@ -314,6 +314,45 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-15 | **`node_modules`-Nicht-Ziel ERSETZT** *(Yama §1, 16.08.)* — je Baum ein eigenes, aus **diesem** Lockfile erzeugt; kein Prüfergebnis darf vom Baum abhängen | **UMGESETZT_UNGEPRUEFT** |
 | P2H-16 | **Lockfile-Prüfung im Rollen-Tor** — Yamas **Bedingung** für die Entscheidung; ohne sie ist der eigene Modulbaum Disziplin statt Mechanik | **OFFEN** — `A-37-12..14` |
 | P2H-17 | **Zwei Haltbarkeiten einer Messung** — flüchtig trägt Zeitstempel, unveränderlich trägt SHA *(Nachtrag in `ARBEITSREGELN.md`)* | **UMGESETZT_UNGEPRUEFT** |
+| P2H-18 | **⚠ `rolle/release-pruefer` ist ein TOTES GLEIS** — 94 Commits hinter HEAD, trägt veraltete Zustände, und die Rolle arbeitet woanders | **BLOCKIERT** |
+
+**P2H-18 — gefunden über einen Befund des Generators, gegengemessen 16.08. 13:30** *(flüchtige
+Messung, Zeitstempel nach der Regel)*:
+
+```
+rolle/release-pruefer   letzter Commit 15.08. 11:52   94 Commits hinter HEAD
+
+Zustaende auf diesem Zweig gegen den gemeinsamen Stand:
+  A-36   HEAD ZURUECKGEZOGEN      Zweig ENTWURF
+  A-33   HEAD CODE_FERTIG         Zweig BEREIT
+  A-35   HEAD BETRIEBSBESTAETIGT  Zweig CODE_FERTIG
+  A-37   HEAD ENTWURF             Zweig kennt ihn nicht
+  A-38   HEAD ENTWURF             Zweig kennt ihn nicht
+```
+
+**Die Rolle arbeitet nicht dort.** Sie schreibt aus `ticket-release-pruefung` mit **detached HEAD**
+— das ist `P2H-09`, seit dem 15.08. offen. **Der Zweig `rolle/release-pruefer` ist eingerichtet,
+unbenutzt und veraltet.**
+
+**Warum das gefährlich ist und nicht nur unordentlich:** Der Generator hat heute genau daran
+gemessen, wie sein Werkzeug ihn falsch informierte — *„`git log -G` trifft JEDE Schreibung, die die
+Kennung berührt, auch einen **Transport**, der einen älteren Zustand mitbringt."* **Ein toter Zweig
+mit alten Zuständen ist eine Quelle für genau solche Transporte.** Wer von dort zusammenführt, holt
+`A-35` von `BETRIEBSBESTAETIGT` zurück auf `CODE_FERTIG`.
+
+**Zwei Wege, und die Wahl gehört Yama:**
+**(1)** Der Release-Prüfer zieht um — `ticket-release-pruefung` aufgeben, in `ticket-rolle-release`
+arbeiten, Zweig nachziehen. **Dann ist `P2H-09` zu und der tote Zweig lebt.**
+**(2)** Der Zweig `rolle/release-pruefer` wird **entfernt**, und `ticket-release-pruefung` bekommt
+einen richtigen Branch. **Dann gibt es wieder einen Baum je Rolle.**
+
+**Was ich nicht tue: einen fremden Zweig entfernen oder nachziehen.** Er gehört einer anderen
+Rolle, und ein Zweig, den man ohne Absprache bewegt, ist genau der Fall aus der Eigentumsregel.
+
+**Und die Zahl ist nicht meine:** Der Generator meldet **neun** Widersprüche, ich messe **einen**.
+Der Unterschied ist der Gegenstand — **ich vergleiche `zustand:` in Datensätzen, er offenbar auch
+Tafelzeilen**, und auf dem alten Zweig parsen mehrere Blöcke nicht. **Beide Zahlen sind richtig für
+ihre Frage; keine ist die Zahl der Sache.** *(H-9, und diesmal an zwei Werkzeugen gleichzeitig.)*
 
 **P2H-15 — die Entscheidung hing an zwei Wörtern, und das ist der eigentliche Fund.** Yamas
 Bedingung stand im A-37-Blatt als *„Kein `node_modules` je Worktree, kein Symlink, keine Modulkopie
@@ -1012,11 +1051,11 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 |---|---|
 | `OFFEN` | **111** |
 | `UMGESETZT_UNGEPRUEFT` | **65** |
-| `BLOCKIERT` | **21** |
+| `BLOCKIERT` | **22** |
 | `NACHBESSERN` | **2** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **204 = alle IDs** |
+| **Summe** | **205 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
 — `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186, der Mechanismuswechsel `P2H` daraus 193. **Diesmal wurde das Muster BEIM Anlegen mitgeändert** (`[A-G]`→`[A-H]`), nicht hinterher bemerkt — die Lehre aus drei Fehlversuchen hat gehalten.

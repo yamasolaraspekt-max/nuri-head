@@ -1,5 +1,5 @@
 # FORMELSAMMLUNG
-
+> **⚠ SEIT 16.08.2026: Jeder Eintrag trägt einen Zustand — `ABGESCHRIEBEN` · `NACHGERECHNET` · `GEGENGEPRUEFT` — und das Feld `nachgerechnet_an` mit dem FALL, nicht mit der Behauptung. Regel und Drei-Fragen-Test: `docs/ARBEITSREGELN.md`, Nachtrag am Dateiende. `ABGESCHRIEBEN` ist NICHT baufähig.**
 > Jede Formel hat eine feste Nummer. Werkzeuge verweisen auf diese Nummern,
 > nie auf abgeschriebene Formeln. **Eine Formel steht genau einmal.**
 >

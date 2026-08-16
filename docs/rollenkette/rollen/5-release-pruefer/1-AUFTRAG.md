@@ -28,3 +28,23 @@ grün überall.**
   und jedes Löschen bleiben bei Yama.
 - **Nicht abnehmen.** Das war der Evaluator.
 - **Nicht bauen, nicht reparieren.** Wenn ein Tor rot ist: RELEASE_BLOCKED zurück.
+
+## Fachaussagen — was der Release-Prüfer tut *(verbindlich seit 16.08.2026)*
+
+**Vor `RELEASE_FREI` prüft er, ob eine Fachaussage nach außen wirkt — und ob sie dafür gedeckt
+ist.** Das ist die Stelle, an der der Unterschied zwischen *„stimmt rechnerisch"* und *„darf man
+behaupten"* zum ersten Mal Folgen hat.
+
+```
+Traegt der Release eine Aussage mit
+  NORMBEZUG  oder  DRITTER  oder  BEMESSUNG ?
+
+  ja  -> `gegengeprueft_an` mit Fundstelle vorhanden?
+           nein -> KEIN RELEASE_FREI, solange die Aussage
+                   ohne `geltungsbereich` ausgeliefert wuerde.
+                   GELB ist zulaessig — still ist es nicht.
+```
+
+**Er entscheidet nicht über den Fachinhalt.** Er stellt fest, ob eine Aussage, die das Haus
+verlässt, ihren Geltungsbereich mitträgt. **Eine gelbe Aussage darf hinaus — eine gelbe Aussage
+ohne Geltungsbereich nicht.**

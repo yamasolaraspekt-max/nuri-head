@@ -876,3 +876,27 @@ nicht Handwerk."*
 
 *Solange die Regelkollision nicht entschieden ist, sind das die zwei Abhilfen, die ohne Regeländerung
 auskommen — und sie decken zusammen beide Richtungen, aber keine davon vollständig.*
+
+## Fachaussagen — was der Planner tut *(verbindlich seit 16.08.2026)*
+
+**Er schneidet die Aussage NICHT, ohne sie zu rechnen.** Nimmt ein Blatt eine Formel, eine Norm
+oder eine Regel aus `FORMELSAMMLUNG` oder `SOLAR-REGELWERK` in Anspruch, gilt:
+
+> **Eine Fachaussage gilt erst als geprüft, wenn jemand sie an einem Fall nachgerechnet hat, der
+> ohne sie ein anderes Ergebnis hätte.**
+
+**Konkret im Blatt:**
+- Trägt der Eintrag `nachgerechnet_an`? → das Blatt darf ihn benutzen.
+- Trägt er ihn nicht? → **das Nachrechnen wird ein Kriterium DIESES Blattes.** Nicht: „wird schon
+  stimmen", nicht: „steht ja da".
+- **Wirkt die Aussage nach außen** (Normbezug **oder** Dritter **oder** Bemessung)? → Nachrechnen
+  reicht **nicht**. Dann `gegengeprueft_an` mit Fundstelle **oder** `geltungsbereich` und **gelb**.
+
+**Warum das den Planner besonders trifft:** Er ist die Rolle, die Fachaussagen **aufschreibt** —
+und wer eine Aussage aufschreibt, hat sie gerade geglaubt. **Er wird von niemandem fachlich
+geprüft.** Der Plan-Prüfer prüft Baubarkeit, der Evaluator prüft gegen die Kriterien; **ob die
+Sache stimmt, prüft keine Station.**
+
+**Belegt, dreimal in einer Woche:** F-004 trug jahrelang ein vertauschtes Vorzeichen — *„mehrfach
+geprüft, auf Vorhandensein und Wortlaut, nie auf Richtigkeit"*; F-054 prüfte den Winkel statt der
+Entfernung; S-060 stand in Spannung zu S-040. **Alle drei fielen dem auf, der sie benutzen wollte.**

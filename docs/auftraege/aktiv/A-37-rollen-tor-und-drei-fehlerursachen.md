@@ -7,7 +7,20 @@ art: "BAU — Erweiterung von scripts/commit-pruefen.sh plus ein neues Pruefskri
       KEINE Aenderung an docs/STATUS.md, KEIN Hausplaner-Code, KEINE Migration."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "NICHT ERTEILT — 3. Runde, siehe docs/STATUS.md. Restpunkte 16.08. behoben."
+dor_schnitt_sha: "b6af3207"
+dor_schnitt_regel: |
+  NEU am 16.08., auf Vorschlag des Plan-Pruefers und weil es dreimal an einem Tag passiert ist:
+  Eine DoR-Runde prueft den Stand DIESES SHA, nicht den Stand beim Lesen.
+  Waechst das Blatt waehrend der Pruefung, gilt der Befund trotzdem — er bezieht sich auf
+  einen benannten Stand, und der naechste Schnitt-SHA eroeffnet die naechste Runde.
+  ANLASS, gemessen von ihm: A-37 wuchs zwischen BEREIT-Erteilung und Nachpruefung von
+  11 Kriterien und 234 Zeilen auf 15 und 342 — vier Kriterien und 108 Zeilen in dreizehn
+  Minuten. Kein Vorwurf an die Nachtraege, zwei gehen auf Yamas Gegenprobe zurueck.
+  Der Befund gilt dem ZUSTAND: BEREIT heisst, der Generator darf ziehen, und er wuerde
+  gegen gepruefte UND ungepruefte Kriterien bauen.
+  Das ist dieselbe Klasse wie die abgelaufene Zahl in A-33 — eine Aussage ohne Standbezug
+  laeuft ab, ohne dass der Schreibende es erfaehrt.
 status_steht_in: docs/STATUS.md
 basis_sha: bc2125d9
 prioritaet: P0
@@ -225,7 +238,39 @@ beantworten die Frage, die **nach** dem ersten Widerspruch kommt.
 | K3 | **Ein Worktree, den es nicht gibt** (Rolle noch nicht umgezogen) | **durchlassen und melden** — Umzug ist freiwillig getaktet, kein Zwang |
 | K4 | **`git rev-parse` schlägt fehl** (kein Repo) | abweisen mit eigener Ursache, **nicht** als Rollenfehler |
 | K5 | **`integrator` im gemeinsamen Checkout, aber es gibt schon umgezogene Rollen** | erlaubt — das ist sein Baum |
-| K6 | **Eine andere Rolle im gemeinsamen Checkout, die noch nicht umgezogen ist** | erlaubt, aber **mit Hinweis** auf ihren wartenden Baum |
+| K6 | **Eine andere Rolle im gemeinsamen Checkout, deren Baum SCHON STEHT** | **erlaubt**, aber **mit Hinweis** auf ihren wartenden Baum. **⚠ EIGENER FALL, NICHT eine Variante von K3** — siehe unten |
+
+**⚠ K6 IST DIE KANTE, DIE DEN LAUFENDEN BETRIEB SCHÜTZT — und sie ist im ersten Bau ausgefallen.**
+
+**Belegt statt vermutet** *(Plan-Prüfer, 16.08., das gebaute Skript aus `0ee521f7` geholt und
+gefahren)*:
+
+```
+release-pruefer   exit 1  VERSTOSS      <- faehrt heute achtmal den Transport
+evaluator         exit 1  VERSTOSS      <- hat A-33 in der Abnahme
+integrator        exit 0  richtig
+plan-pruefer      exit 0  (eigener Baum)
+```
+
+**Das Tor ist eingehängt — daraus wird `KEIN COMMIT`.** Es trifft genau die zwei Rollen, die gerade
+tragen.
+
+**Warum K6 durchgefallen ist, und es ist eine Blattschwäche, keine Bauschwäche:**
+
+| | K3 | K6 |
+|---|---|---|
+| **Bedingung** | der Baum **existiert nicht** | der Baum **steht schon** |
+| **Rolle** | noch nicht umgezogen | noch nicht umgezogen |
+| **Verhalten** | durchlassen + melden | **durchlassen + melden** |
+
+**Dieselbe Antwort, zwei verschiedene Bedingungen.** Wer K3 baut, hat das Gefühl, den Fall erledigt
+zu haben — **im Code greift K3 aber nur, wenn das Verzeichnis fehlt.** Steht es, fällt der Fall in
+den Schlusszweig und wird zum Verstoß. **Der Kopf des gebauten Skripts listet folgerichtig nur
+K1–K5; K6 kommt dort nicht vor.**
+
+**Die Begründung, die im gebauten Code selbst steht, gilt für K6 unverändert:** *„Ein Tor, das den
+Umzug erzwingt, hält die Kette an statt sie zu schützen."* **K6 ist derselbe Gedanke für den Fall,
+dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K3 verhindern soll.
 
 ## Abnahmekriterien
 
@@ -249,11 +294,23 @@ beantworten die Frage, die **nach** dem ersten Widerspruch kommt.
   **eigenständig**, denn bei direktem Aufruf ist keine andere Prüfung davor. **Drei
   unterscheidbare Codes**, damit die Quelle am Code ablesbar ist:
 
-  | Code | Bedeutung | wer |
-  |---|---|---|
-  | **1** | Rolle und Baum passen nicht zusammen | `rollen-tor.sh` |
-  | **2** | Rollenkennung fehlt oder hat falsche Form | `commit-pruefen.sh:59-65` *(unberührt)* |
-  | **3** | Rollenkennung fehlt **beim direkten Aufruf des Tors** | `rollen-tor.sh` |
+  | Code | Bedeutung | wer | Stand |
+  |---|---|---|---|
+  | **1** | Rolle und Baum passen nicht zusammen | `rollen-tor.sh` | zu bauen |
+  | **2** | **YAML-Syntaxfehler** im Kopf | `commit-pruefen.sh` | **gebaut** (`374bb851`) |
+  | **3** | **fehlende Modulauflösung** (`MODUL`) | `commit-pruefen.sh` | **gebaut** |
+  | **4** | **sonstiger Laufzeitfehler** (`LAUFZEIT`) | `commit-pruefen.sh` | **gebaut** |
+  | **5** | Rollenkennung fehlt **beim direkten Aufruf des Tors** | `rollen-tor.sh` | zu bauen |
+  | **6** | **`MODULSTAND`** — Baum aus fremdem Lockfile installiert | `rollen-tor.sh` | zu bauen |
+  | *(2)* | *Rollenkennung fehlt/falsche Form* | *`commit-pruefen.sh:59-65`, unberührt* | *vorhanden* |
+
+  **⚠ BERICHTIGT am 16.08. nach DoR Runde 3 — es war eine Kollision, kein Formfehler.**
+  Meine Fassung vom 15.08. vergab **3** für „Kennung fehlt beim direkten Aufruf". **Der Generator
+  hatte am selben Tag in Teil 3 bereits `MODUL` auf 3 gelegt** (`374bb851`, gefahren und belegt).
+  **Zwei Bedeutungen auf einem Code — und keine der beiden Seiten hat es bemerkt**, weil jede nur
+  ihren eigenen Teil las. **Der Plan-Prüfer hat es gefunden** *(„MODULSTAND ohne eigenen Code bei
+  einem bis 4 belegten Zahlenraum")*. Die Kennung liegt jetzt auf **5**, `MODULSTAND` auf **6**.
+  *Die gebauten Codes 2/3/4 bleiben unberührt — ein fertiger Bau wird nicht umnumeriert.*
 
   **Das ist keine Verdopplung, sondern eine zweite Eintrittstür:** wer `commit-pruefen.sh` ruft,
   wird von `:59-65` mit **2** abgewiesen und erreicht das Tor gar nicht. Wer das Tor direkt ruft,
@@ -280,8 +337,32 @@ beantworten die Frage, die **nach** dem ersten Widerspruch kommt.
 - **A-37-14** · **Positivfall:** Marke stimmt → Lauf geht durch, **keine Ausgabe**.
   *(Und der dritte Fall getrennt: Marke **fehlt** → eigene Meldung „Modulstand unbekannt", nicht
   stillschweigend als gültig behandelt.)*
-- **A-37-15** · **Die Marke trägt vier Felder** — Hash · Zeitstempel · `node -v` · `npm -v`.
-  **Messbar:** `wc -w < node_modules/.aus-lockfile` ≥ 6. **Rot:** die Datei existiert nicht.
+- **A-37-15** · **Die Marke trägt vier Felder MIT FELDNAMEN**, in dieser Reihenfolge:
+
+  ```
+  hash <sha>  zeit <iso8601>  node <version>  npm <version>
+  ```
+
+  **Messbar:** `wc -w < node_modules/.aus-lockfile` = **8**; `cut -d' ' -f2` liefert den Hash.
+  **Rot:** die Datei existiert nicht.
+  **⚠ BERICHTIGT am 16.08. nach DoR Runde 3:** die erste Fassung verlangte `≥ 6` **ohne das Format
+  festzulegen**. Nachgerechnet: **vier reine Werte ergeben 4 Wörter und fallen durch**, mit
+  Feldnamen sind es 8. *„Das Kriterium war genauer als die Zusage"* — dieselbe Klasse wie A-37-12,
+  wo der Schreiber der Marke fehlte.
+- **A-37-17** · **ALLE SECHS KANTEN sind behandelt und JE EINZELN belegt.**
+  **Messbar:** je Kante eine Rohausgabe im Bau-Bericht; `grep -c 'K6' scripts/rollen-tor.sh` ≥ 1.
+  **Rot am Bau-Stand `0ee521f7`:** **K6 kommt im ganzen Skript null Mal vor**, fünf von sechs
+  Kanten sind namentlich behandelt.
+  **⚠ DIESES KRITERIUM HAT GEFEHLT, und das ist der Grund, warum der Bau ohne K6 grün sein
+  konnte.** Sechzehn Kriterien, und **keines** nannte die Kanten. **Eine Kantenliste ohne
+  Kriterium ist eine Empfehlung** — A-36 hatte dafür ein eigenes (`A-36-4`), A-37 nicht.
+  *Gefunden vom Plan-Prüfer, nachdem der Bau schon lief.*
+- **A-37-16** · **Die Marke wird auch GESCHRIEBEN, nicht nur gelesen.**
+  **Messbar:** ein Skript oder eine dokumentierte Zeile erzeugt sie nach `npm ci`; nach einem
+  Lauf existiert sie und trägt den Hash des Lockfiles **dieses** Baumes.
+  **Rot:** heute schreibt sie **niemand** — npm legt nur `.package-lock.json` an, und das ist eine
+  andere Datei *(404 gegen 466 Pakete)*. **Ohne diesen Punkt fordert A-37-12 eine Datei, die nie
+  entsteht** — gefunden in DoR Runde 3.
   **Warum der dritte Fall der wichtigste ist, mit Yamas Begründung, die ich nicht hatte:**
   **`npm ci` löscht `node_modules` als erstes und legt es neu an.** Wird der Lauf unterbrochen,
   steht dort ein **halbes** Verzeichnis **ohne** Marke. **Ein Tor, das „keine Marke" als
@@ -304,7 +385,11 @@ beantworten die Frage, die **nach** dem ersten Widerspruch kommt.
   eingebunden ist, ändert sich nichts; danach ist der schlimmste Fall, dass es zu viel sperrt —
   und das fällt sofort auf, weil dann niemand mehr committen kann.
 - **Entdeckung:** A-37-2 und A-37-7 sind die Positivproben. Meldet das Tor gar nichts, sind sie
-  grün und trotzdem wertlos — deshalb verlangen A-37-3/4/5/6 **Rohausgaben mit exit 1**.
+  grün und trotzdem wertlos — deshalb verlangen A-37-3/4/5/6 **Rohausgaben mit einem Rückgabewert
+  ≠ 0**, und zwar dem **für den Fall festgelegten**: A-37-3/4/6 → **1**, A-37-5 → **5**.
+  *(Berichtigt 16.08.: hier stand pauschal „exit 1" und widersprach damit A-37-5. Ein Blatt, das
+  sich an zwei Stellen selbst widerspricht, lässt den Bauenden wählen — und genau das verbietet es
+  an anderer Stelle.)*
 - **Der Fall, der beim Bauen am ehesten übersehen wird:** K2. Der Release-Worktree heißt
   `ticket-rolle-release`, die Rolle aber `release-pruefer`. **Eine Namensregel scheitert daran;
   eine Zuordnungstabelle nicht.**

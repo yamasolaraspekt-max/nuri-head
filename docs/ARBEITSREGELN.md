@@ -252,7 +252,7 @@ Ein Auftrag darf nur `BEREIT` werden, wenn der Plan-Prüfer alle folgenden Punkt
 - vollständige Abhängigkeitskette,
 - positive und negative Akzeptanzfälle,
 - jedes P1-Kriterium ist vor dem Bau wirksam rot,
-- kein Kriterium ist bereits erfüllt,
+- kein Kriterium ist bereits erfüllt, **und jede Fachaussage, die das Blatt nennt, trägt `nachgerechnet_an` — oder das Nachrechnen ist ein Kriterium DIESES Blattes (Nachtrag am Dateiende: „Eine Formel, die niemand rechnet, ist nicht geprüft“, verbindlich seit 16.08.2026),**
 - kein Kriterium ist unerfüllbar,
 - jeder Prüfbefehl wurde auf Syntax und Aussagekraft geprüft,
 - erforderliche Testdaten, Benutzerrolle, Route und Browserpfad sind benannt,
@@ -1299,3 +1299,167 @@ die überholte Quelle bin ich."*
   sondern eine Beobachtung über die Zeit.** Zwei Blätter sechs Minuten später in die andere
   Richtung zu ziehen, sieht nach Schwanken aus und ist das Gegenteil: **viermal dieselbe Regel
   angewandt — gegen den Bestand messen, nicht gegen die Erinnerung.**
+
+---
+
+## NACHTRAG · Eine Formel, die niemand rechnet, ist nicht geprüft *(16.08.2026)*
+
+> **Was für einen Test gilt, gilt für eine Formel: was auch ohne sie stimmt, hat sie nicht belegt.**
+
+**Das ist keine neue Regel, sondern die Mutationsprobe — angewandt auf Fakten statt auf Code.**
+Dieses Haus erkennt seit Wochen keinen Test an, der auch dann grün ist, wenn man den Code entfernt.
+**Derselbe Maßstab hat an der Tür der Formelsammlung haltgemacht, und niemand hat es bemerkt.**
+
+**Die Regel:**
+
+> **Eine Fachaussage gilt erst als geprüft, wenn jemand sie an einem Fall nachgerechnet hat, der
+> ohne sie ein anderes Ergebnis hätte.**
+> **Wer eine Fachaussage in ein Blatt oder in Code übernimmt, rechnet sie — oder trägt ein, dass er
+> es nicht getan hat.**
+
+**Warum keine Prüfstation das leisten kann, und warum eine sechste Rolle die schlechteste Lösung
+wäre:** Plan-Prüfer, Evaluator, Release-Prüfer, Generator und Integrator beziehen ihr Fachwissen
+aus **derselben Quelle** — der Formelsammlung und dem Regelwerk. **Ein zweiter Leser desselben
+Dokuments ist keine zweite Meinung, er ist dieselbe Meinung zweimal.** Ein „Fach-Prüfer" würde
+F-004 aufschlagen und dasselbe falsche Vorzeichen lesen wie alle vor ihm.
+
+**Richtigkeit kann nur aus einer Quelle kommen, die außerhalb unserer eigenen Dokumente liegt:**
+
+| | Quelle | Stärke |
+|---|---|---|
+| **1** | **Rechnen** — eine unabhängige Rechnung aus Grundgrößen, die übereinstimmen **muss**. **Die Arithmetik liest unsere Blätter nicht.** | stärkste Form, **kostet nichts** |
+| **2** | **Referenzfall** — ein durchgerechnetes Beispiel aus Norm, Fachbuch, Datenblatt, zertifiziertem Werkzeug | unabhängig, beschaffungsaufwendig |
+| **3** | **Primärquelle** — der Normtext selbst, nicht unsere Paraphrase | nötig, wo Haftung dranhängt |
+
+**Alle drei Fachfehler dieser Woche wären mit Nummer 1 gefallen, und Nummer 1 ist gratis:**
+
+```
+F-004          Vorzeichen vertauscht        gefunden vom GENERATOR beim Bauen
+F-054          prueft Winkel statt Weite    gefunden beim RECHNEN
+S-060 / S-040  standen in Spannung          gefunden beim LESEN fuer ein anderes Werkzeug
+```
+
+**Keiner von einer Prüfstation — alle drei vom Benutzer.** Und das ist kein Zufall, sondern
+Mechanik: **wer eine Aussage aufschreibt, hat sie gerade geglaubt. Wer sie benutzt, braucht ein
+Ergebnis** — und ein Ergebnis, das nicht passt, ist der einzige Alarm, der hier nie überhört wurde.
+
+**Deshalb rechnet, wer BENUTZT — nicht, wer aufgeschrieben hat.**
+
+### Die drei Zustände je Fachaussage — und der Zustand trägt den FALL, nicht die Behauptung
+
+**Sachverstand bekommt keine Rolle, sondern ein Feld am Eintrag** — weil der Eintrag der einzige
+Ort ist, den jeder Benutzer garantiert öffnet.
+
+| Zustand | Bedeutung | tragfähig für |
+|---|---|---|
+| **`ABGESCHRIEBEN`** | aus einer Quelle übernommen, **Wortlaut** geprüft, **nie gerechnet** | Doku. **NICHT für einen Bau.** |
+| **`NACHGERECHNET`** | jemand hat einen Fall gerechnet, der **ohne die Aussage ein anderes Ergebnis hätte**. **Fall und Sollwert stehen IM EINTRAG** | Bau |
+| **`GEGENGEPRUEFT`** | zusätzlich gegen eine **äußere** Quelle gehalten (Normbeispiel, Referenzwerkzeug) | Aussagen, die **nach außen** wirken |
+
+**Das Feld enthält nicht den Satz „wurde nachgerechnet", sondern den Fall:**
+
+```yaml
+nachgerechnet_an:
+  eingabe:   Wand 10 m waagrecht, Achse um δ=3° verkippt, Versatz 1000 mm
+  erwartet:  <Zahl mit Einheit>
+  gerechnet: 14.08. · Planner · weicht ohne die Formel um <Zahl> ab
+```
+
+**Damit ist die Nachrechnung kein einmaliger Akt, sondern ein wiederholbarer Fall** — der nächste
+Benutzer rechnet nicht neu, er **lässt laufen**. **Aus Einträgen mit Fällen wird eine Prüfsuite für
+Fachwissen, genau wie die Testsuite eine für Code ist.** Erst damit ist Sachverstand eine **Zahl**
+statt eines Gefühls; heute ist er beides nicht.
+
+**Die Ampel misst etwas anderes als Richtigkeit.** Sie sagt *ausgeführt / nicht ausgeführt* — **bei
+F-004 stand sie auf grün, während das Vorzeichen falsch war.** Ein Eintrag **ohne** Ampel ist nicht
+„vermutlich in Ordnung", sondern **unbekannt**; dieselbe Bauform wie *„fehlt die Marke, ist der
+Modulstand unbekannt — nicht etwa gültig."*
+
+### Der Plan-Prüfer verweigert — er weiß es nicht besser, er lässt es nicht durch
+
+**Das ist die entscheidende Trennung, und sie liegt vollständig in seiner heutigen Kompetenz.**
+Er prüft Belege; **„nachgerechnet" ist ein Beleg wie jeder andere.**
+
+```
+IM DoR-SCHRITT, mechanisch pruefbar:
+
+  Nennt das Blatt eine Fachaussage (F-/N-/S-Kennung)?
+    -> ja: traegt der Eintrag `nachgerechnet_an`?
+         -> ja:   DoR frei
+         -> nein: DoR NUR DANN frei, wenn das NACHRECHNEN
+                  ein KRITERIUM DESSELBEN BLATTES ist.
+
+  Er entscheidet NICHT, ob die Aussage stimmt.
+  Er entscheidet, ob jemand es geprueft hat.
+```
+
+**Damit kostet die Regel keine Fachkompetenz, sondern einen `grep`** — und sie kann nicht vergessen
+werden, weil sie an derselben Stelle sitzt wie die Innenprüfungen aus A-39.
+
+### Die Grenze nach außen — ENTSCHIEDEN von Yama am 16.08. als TEST, nicht als Eigenschaftswort
+
+**Ein Adjektiv hätte zwei Lesarten und verlöre seinen Geltungsbereich beim ersten Weitertragen** —
+wie „keine Modulkopie ins Repo". **Deshalb drei Fragen, jede in Sekunden am Blatt beantwortbar und
+keine verlangt Fachwissen:**
+
+```
+EINE FACHAUSSAGE WIRKT NACH AUSSEN, wenn EINE der drei Fragen JA ist:
+
+  1  NORMBEZUG   Wird das Ergebnis mit einer Normkennung verbunden
+                 (DIN, EN, VDI, DIN EN …) oder als normkonform bezeichnet?
+
+  2  DRITTER     Verlaesst das Ergebnis das Haus — Angebot, Nachweis, Plan,
+                 Bericht, Ausdruck, alles was ein Kunde oder Amt bekommt?
+
+  3  BEMESSUNG   Legt das Ergebnis eine GEBAUTE Groesse fest — Querschnitt,
+                 Tragfaehigkeit, Entwaesserung, Abstand, Lastannahme?
+
+  Dreimal NEIN -> NACHGERECHNET reicht fuer gruen.
+  Einmal JA    -> gruen NUR mit Primaerquelle (GEGENGEPRUEFT).
+                  Ohne sie bleibt der Eintrag GELB — nicht rot, nicht
+                  gesperrt: GELB.
+```
+
+**Der Plan-Prüfer prüft damit nicht, ob die Aussage stimmt — er prüft, ob sie eine Primärquelle
+braucht.** Derselbe Zuschnitt wie oben: **eine Frage und ein `grep`, keine Fachfrage.**
+
+**Gelb ist ein Zustand, keine Sperre — und trägt ein Pflichtfeld:**
+
+```yaml
+geltungsbereich: "Nachgerechnet, nicht gegen die Norm gehalten.
+                  Verwendbar fuer <…>. NICHT verwendbar als Nachweis,
+                  nicht in Unterlagen fuer Dritte, nicht als
+                  Bemessungsgrundlage."
+```
+
+**Das ist N-003 wörtlich, an einer zweiten Stelle angewandt.** Der Eintrag trägt seit dem 12.08.
+`🟡 FACH-GATE`, einen von Yama festgelegten **Geltungsbereich** und die **DAUERGELB**-Kennzeichnung.
+**Die Bauform existiert und hat sich bewährt — sie bekommt ein zweites Bauteil, keine neue
+Erfindung.**
+
+**`GEGENGEPRUEFT` darf niemand aus eigener Beurteilung setzen.** Der Zustand entsteht nur mit einer
+Fundstelle:
+
+```yaml
+gegengeprueft_an: "Norm/Quelle mit Ausgabe und Jahr · Abschnitt oder
+                   Beispielnummer · das dort genannte Ergebnis"
+```
+
+**Damit ist auch das kein Urteil, sondern eine Belegprüfung — von jeder Rolle verweigerbar, von
+keiner erfindbar.** Wer eine Norm nicht in der Hand hat, kann den Zustand nicht setzen, und das
+ist der Punkt.
+
+**Die drei offenen Fälle, damit die Regel sofort trägt:**
+
+| | drei Fragen | Folge |
+|---|---|---|
+| **W-28** Rinnenbemessung DIN 1986-100 | **1 ja · 2 ja · 3 ja** | bleibt **gelb**, bis die Norm vorliegt. **„Vertagen" ist damit eine Ableitung, keine Meinung.** |
+| **F-004** Schnittpunkt zweier Geraden | nein · nein · nein | **nachgerechnet reicht für grün** — sobald der Fall im Eintrag steht |
+| **S-007…S-009** Sonnenbahn, Azimut | nein · nein · nein | nachgerechnet reicht. **Die Rechnung ist längst gemacht** (51°N, 21.06./21.12., selbst gerechnet) — **es fehlt nur der Ort, an dem sie stehen bleibt.** |
+
+Rinnenbemessung nach DIN 1986-100: dann ist „vertagen" eine Ableitung statt eines Bauchgefühls.)*
+
+**Und die Auslösung ist die Benutzung, nicht die Inventur.** Wer alle Einträge auf einmal
+nachrechnen lässt, schafft ein Vorhaben, das niemand macht — und trifft auch die, die nie jemand
+benutzt. **Ein Eintrag, den nie jemand benutzt, ist in seiner Richtigkeit auch nie eine Gefahr.**
+Die Regel skaliert sich selbst.

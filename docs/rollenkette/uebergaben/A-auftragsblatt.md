@@ -58,3 +58,25 @@
 **Votum:** ENTWURF bleibt · **BEREIT** · SPEC_BLOCKED
 **Prüf-SHA:** `<sha>`
 **Begründung:** <bei ENTWURF/SPEC_BLOCKED: was genau fehlt>
+
+---
+
+## Pflichtangabe seit 16.08.2026 — Fachaussagen
+
+**Nennt das Blatt eine Kennung aus `FORMELSAMMLUNG` oder `SOLAR-REGELWERK` (`F-`, `N-`, `S-`),
+gehört in den Kopf:**
+
+```yaml
+fachaussagen:
+  - kennung: "F-0nn"
+    zustand: "NACHGERECHNET"        # ABGESCHRIEBEN | NACHGERECHNET | GEGENGEPRUEFT
+    gedeckt_durch: "nachgerechnet_an im Eintrag"   # oder: "Kriterium A-nn-n dieses Blattes"
+```
+
+**Ohne Deckung keine DoR.** Der Plan-Prüfer prüft es mechanisch: trägt der Eintrag
+`nachgerechnet_an`, oder ist das Nachrechnen ein **Kriterium dieses Blattes**?
+
+**Wirkt die Aussage nach außen** — **Normbezug** oder **Dritter** oder **Bemessung** —, reicht
+Nachrechnen nicht: dann `gegengeprueft_an` mit Fundstelle **oder** `geltungsbereich` und **gelb**.
+
+> **Was für einen Test gilt, gilt für eine Formel: was auch ohne sie stimmt, hat sie nicht belegt.**

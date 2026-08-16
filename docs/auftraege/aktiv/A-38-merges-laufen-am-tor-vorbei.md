@@ -1,4 +1,12 @@
-# A-38 — 41 von 309 Commits laufen am Tor vorbei, und alle sind Merges
+# A-38 — Merges laufen am Tor vorbei, und keiner trägt eine Rollenmarke
+
+> **⚠ TITEL BERICHTIGT am 16.08. nach DoR Runde 3.** Er lautete *„41 von 309 Commits laufen am Tor
+> vorbei"* — **beide Zahlen sind falsch gemessen** (am Planner-Baum statt am gemeinsamen Graphen)
+> und stehen seit dem 15.08. berichtigt im Blatt: **59 von 497, 58 von 70 Merges ohne Marke.**
+> **Der Titel trug die widerlegte Zahl weiter.** *Präzedenzfall A-33: dort hieß ein Blatt „zehn
+> Tafelzeilen", gemessen waren es elf — es wurde stillgelegt und durch ein Blatt mit richtigem
+> Namen ersetzt.* **Hier genügt die Berichtigung, weil der Dateiname keine Zahl trägt.** Der alte
+> Titel steht in dieser Zeile als Beleg (A-20-4).
 
 ```yaml
 auftrag: "A-38"
@@ -7,7 +15,20 @@ art: "BAU — ein versionierter commit-msg-Hook plus core.hooksPath.
       KEINE Aenderung an docs/STATUS.md, KEIN Hausplaner-Code, KEINE Migration."
 spur: A
 heimat_app: ticket
-dor_beleg: "steht aus — plan-pruefer."
+dor_beleg: "NICHT ERTEILT — 3. Runde, siehe docs/STATUS.md. Restpunkte 16.08. behoben."
+dor_schnitt_sha: "b6af3207"
+dor_schnitt_regel: |
+  NEU am 16.08., auf Vorschlag des Plan-Pruefers und weil es dreimal an einem Tag passiert ist:
+  Eine DoR-Runde prueft den Stand DIESES SHA, nicht den Stand beim Lesen.
+  Waechst das Blatt waehrend der Pruefung, gilt der Befund trotzdem — er bezieht sich auf
+  einen benannten Stand, und der naechste Schnitt-SHA eroeffnet die naechste Runde.
+  ANLASS, gemessen von ihm: A-37 wuchs zwischen BEREIT-Erteilung und Nachpruefung von
+  11 Kriterien und 234 Zeilen auf 15 und 342 — vier Kriterien und 108 Zeilen in dreizehn
+  Minuten. Kein Vorwurf an die Nachtraege, zwei gehen auf Yamas Gegenprobe zurueck.
+  Der Befund gilt dem ZUSTAND: BEREIT heisst, der Generator darf ziehen, und er wuerde
+  gegen gepruefte UND ungepruefte Kriterien bauen.
+  Das ist dieselbe Klasse wie die abgelaufene Zahl in A-33 — eine Aussage ohne Standbezug
+  laeuft ab, ohne dass der Schreibende es erfaehrt.
 status_steht_in: docs/STATUS.md
 basis_sha: 0f05f8bf
 prioritaet: P1
@@ -16,7 +37,10 @@ claim: "planner 14.08. 23:00 — Claim VOR dem Schnitt."
 kennung_geprueft: "A-38 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
                    docs/auftraege/aktiv/. A-01 bis A-37 sind vergeben. Frei."
 anlass: "Beim Pruefen, ob ein pre-commit-Hook noetig ist, gemessen statt angenommen:
-         41 von 309 Commits der letzten 48 h tragen keine Rollenmarke — ausnahmslos Merges."
+         Commits ohne Rollenmarke sind AUSNAHMSLOS Merges. BERICHTIGT 16.08.: die
+         urspruenglichen Zahlen 41 von 309 waren am Planner-Baum gemessen, dessen Graph
+         kleiner war; im gemeinsamen Graphen sind es 59 von 497, und 58 von 70 Merges
+         tragen keine Marke. Der Kern ist damit schaerfer, nicht schwaecher."
 gebaut_in: "ticket-rolle-generator (rolle/generator) — BERICHTIGT ZURUECK am 15.08. 15:50.
             Der Grund fuer die Verlegung in den Integrations-Checkout ist ENTFALLEN: der
             Generator-Baum hat seit 15:36:54 node_modules samt typescript, gemessen. Der
@@ -46,6 +70,24 @@ davon MIT Rollenmarke                               12    -> 58 ohne  = 83 %
 'merge' in scripts/commit-pruefen.sh  (-i)           4 Treffer, keine Pruefung
 .githooks / core.hooksPath                          nicht vorhanden / nicht gesetzt
 ```
+
+**Der Messbefehl, damit die drei Zahlen nachrechenbar sind statt geglaubt** *(DoR Runde 3: „A-38s
+drei Zahlen ohne Messbefehl")* — **im Integrations-Checkout zu fahren, nicht im Rollenbaum:**
+
+```bash
+cd /Users/yamanuri/Documents/ticket
+G=$(git --no-optional-locks log --since='48 hours ago' --oneline | wc -l)
+M=$(git --no-optional-locks log --since='48 hours ago' --merges --oneline | wc -l)
+O=$(git --no-optional-locks log --since='48 hours ago' --format='%s' \
+      | grep -cvE '^(planner|plan-pruefer|generator|evaluator|release-pruefer|integrator)(-[0-9]+)?:')
+MM=$(git --no-optional-locks log --since='48 hours ago' --merges --format='%s' \
+      | grep -cE '^(planner|plan-pruefer|generator|evaluator|release-pruefer|integrator)(-[0-9]+)?:')
+echo "Commits $G · Merges $M · ohne Marke $O · Merges MIT Marke $MM"
+```
+
+**Die Zahlen sind flüchtig** *(Regel vom 16.08.)*: `--since='48 hours ago'` misst ein wanderndes
+Fenster, und der Graph wächst rückwirkend beim Zusammenführen. **Der Bau prüft die Aussage, nicht
+die Zahl:** *Merges ohne Rollenmarke existieren und werden vom Tor nicht gesehen.*
 
 **⚠ Meine erste Zählung war am falschen Ort gemessen — 309/32/41 statt 497/70/59.** Der Prüfer
 hat die Ursache benannt: **ich habe im Planner-Baum gezählt, dessen Graph kleiner war**, und die
