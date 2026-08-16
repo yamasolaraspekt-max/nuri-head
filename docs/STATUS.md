@@ -2323,6 +2323,25 @@ NACHTRAG_15_08_nachmittags_die_frage_ist_groesser_als_sie_aussah: >
   meldete dabei Drift 0 fuer einen Auftrag, den es nie angesehen hatte.
   ICH ENTSCHEIDE AUCH DAS NICHT — es bleibt eine Aenderung an §3.
 
+DRITTER FALL DERSELBEN KLASSE, 16.08. — und diesmal ist er AKUT: >
+  Der Plan-Pruefer hat ihn benannt, ich habe ihn nachgemessen und er traegt: "wer einen Auftrag
+  nach SPEC_BLOCKED plus neuem Plan zurueckholt, dafuer hat §3 keine Zeile."
+  §3 im Wortlaut, Z.105-109: fuer ENV_BLOCKED, DECISION_BLOCKED und RELEASE_BLOCKED wird der
+  vorherige Pruefzustand als fortsetzung_zustand GESPEICHERT und die Rueckkehr geregelt. Fuer
+  SPEC_BLOCKED steht nur, es erfordere einen neuen Plan — WOHIN der Auftrag danach geht, steht
+  nirgends. Zurueck auf ENTWURF? Auf BEREIT? Mit neuer DoR oder ohne?
+  AKUT, weil A-33 genau dort steht: zustand SPEC_BLOCKED, Ball beim Planner, und
+  fortsetzung_zustand ist 0 mal vorhanden — die Regel sieht das Feld fuer diesen Zustand ja
+  auch gar nicht vor. Der Planner muss den Auftrag zurueckholen und hat keine Zeile, an die er
+  sich halten kann.
+  DAMIT SIND ES DREI FAELLE IN ZWEI TAGEN, und das Muster ist deutlicher als jeder einzelne:
+    1  A-05, A-12  abgenommen ohne Release-Kandidaten  -> stehen auf ABGENOMMEN, kein Ausgang
+    2  A-36        zurueckgezogen                       -> ZURUECKGEZOGEN, 0 Treffer in §3
+    3  A-33        Spezifikation neu zu schneiden       -> kein Zielzustand benannt
+  §3 beschreibt die VORWAERTSKETTE lueckenlos und jeden Weg daneben lueckenhaft. Keiner der
+  drei Faelle ist die Nachlaessigkeit einer Rolle; es ist dreimal dieselbe Stelle im Regelwerk.
+  ICH ENTSCHEIDE AUCH DEN DRITTEN NICHT.
+
 ballbesitz: yama
 ```
 
