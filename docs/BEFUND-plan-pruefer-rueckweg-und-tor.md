@@ -3598,3 +3598,87 @@ heute so im Bestand.**
 
 **Kein Ball.** Beide Berichtigungen sind gefahren und halten. **Kein Zustandsfeld angefasst, kein
 Bau.**
+
+## W-22/1: zwei Zahlen treffen exakt, die dritte ist gewandert — und sie steht in einem P1-Kriterium ohne Standbezug
+
+*Vorratsprüfung (b) am vierten unberührten Blatt · gemessen 16.08. gegen `b17b764d`, Basis `95fe1b88`*
+
+### Zwei Zahlen treffen an beiden Ständen
+
+```
+gaubeGeometrie.ts    Basis 498 Zeilen / 26 Exporte     heute 498 / 26
+auswechslung.ts      Basis 174 Zeilen                  heute 174
+```
+
+**Die Exportsumme geht auf:** 2 `const` + 11 `function` + 10 `interface` + 3 `type` = **26**.
+*Diesmal habe ich das vollständige Muster von Anfang an benutzt — nach Fehler 11.*
+
+### Die dritte ist gewandert, und die Erklärung ist gemessen
+
+```
+                        Basis 95fe1b88    heute
+gaubeGeometrie.ts             498          498
+aufbauPlatzierung.ts          190          219      <- gewachsen
+auswechslung.ts               174          174
+aufbauOrientierung.ts          61           61
+aufbautenStatus.ts             52           52
+                              ---         ----
+                              975         1004
+```
+
+**Am Basis-Stand stimmt die 975 auf die Zeile.** Das Blatt sagt *„selbst nachgezählt, exakt die
+Zahl des Auftrags"* — **und das war richtig.**
+
+**Die Erklärung habe ich gemessen, nicht angenommen** *(die Lehre aus Fehler 25)*:
+
+```
+git log 95fe1b88..HEAD -- aufbauPlatzierung.ts   ->  genau EIN Commit: 2a06907d, 13.08. 08:00
+git merge-base --is-ancestor 95fe1b88 HEAD       ->  JA
+```
+
+**Ein Commit, +29 Zeilen, nach dem Schnitt.** Die Zahl ist gealtert, nicht falsch gewesen.
+
+### Der eigentliche Fund: die Zahl steht in einem P1-Kriterium
+
+```
+W-22/1-8 (P1, der Dachaufbauten-Befund steht im Blatt): Das Blatt nennt, dass fuenf Module
+(975 Zeilen) das Thema Dachaufbauten bilden …
+```
+
+**Kein SHA, kein Zeitstempel, kein „Bau-Stand" im Kriterium.** Und das ist wörtlich der Fall, den
+**A-39s P2** melden soll:
+
+> *„Ein Kriterium, das eine Zahl mit einer Bestandsaussage verbindet („genau N", „Suite N",
+> „N Treffer"), muss im selben Kriterium einen SHA, einen Zeitstempel oder das Wort ‚Bau-Stand'
+> tragen."*
+
+**Und die Folge ist bereits eingetreten:** das Kriterium wurde mit `GRUEN` abgenommen und trägt
+975; heute misst dieselbe Zählung **1004**. **Wer es heute nachprüft, findet eine andere Zahl und
+kann ohne eine Messung am Basis-Stand nicht entscheiden, ob die Abnahme falsch war oder der Bestand
+gewachsen ist.** *Ich konnte es nur, weil ich beide Stände gemessen habe.*
+
+### Warum das für A-39 wertvoll ist
+
+**A-39 sucht historische Positivproben für seine acht Prüfungen** — Fälle, an denen die Prüfung
+nachweislich anschlägt. **Hier ist eine für P2, die es noch nicht führt:**
+
+```
+Blatt      W-22/1, Kriterium W-22/1-8 (P1)
+Stand      95fe1b88 — dort ist die Zahl 975 und richtig
+heute      1004
+Befund     feste Bestandszahl in einem P1-Kriterium ohne Standbezug
+```
+
+**Der Unterschied zu A-39s bisherigen Proben:** A-33-1 und A-37-11 waren Fälle **vor** der Abnahme.
+**Dieser hier ist durch die Abnahme gegangen** und steht seit dem 13.08. mit einer Zahl im Bestand,
+die nicht mehr stimmt. *Das ist die teurere Sorte.*
+
+### Was ich NICHT melde
+
+**Kein Fehler des Blattes zum Zeitpunkt des Schnitts.** Die Zahl war richtig, die Zählung war
+selbst gefahren, und der Wortlaut sagt es. **Der Mangel liegt in der Form des Kriteriums, nicht in
+der Sorgfalt seines Verfassers** — genau deshalb baut A-39 dafür ein Werkzeug und verlässt sich
+nicht auf Aufmerksamkeit.
+
+**Ball: planner** — als siebte Positivprobe für A-39s P2, und weil W-22/1-8 einen Standbezug
+nachtragen könnte. **Kein Zustandsfeld angefasst, kein Bau.**
