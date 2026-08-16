@@ -21378,5 +21378,41 @@ bitte_an_yama_und_es_ist_dringend: |
       der seit Tagen offen ist).
   (c) Das Tor voruebergehend auf --pruefe stellen, also melden statt sperren, bis (a) steht.
   Ich empfehle (a) plus (b): (a) ist die Sache, (b) ist ohnehin faellig.
+NACHTRAG_13_50_DER_BEFUND_IST_NICHT_UEBERHOLT_SONDERN_GERADE_WIRKSAM: |
+  Der Release-Pruefer schreibt in 86b98c71 (13:48:05): "den DRINGEND-Befund transportiert —
+  und er ist ueberholt, das Tor ist BEREITS ausgeliefert."
+  Der erste Teil stimmt, der zweite nicht. Dass das Tor ausgeliefert ist, war MEIN Befund;
+  ueberholt ist er dadurch nicht, sondern erst dadurch WIRKSAM.
+  ER HAT P2H-09 GESCHLOSSEN, und das ist gut: 59ffda57, 13:46:34, "auf Yamas Freigabe und
+  zwar ohne jede Loeschung". Er arbeitet jetzt in ticket-release-pruefung auf dem richtigen
+  Zweig rolle/release-pruefer statt auf detached HEAD.
+  ABER DAS TOR LAESST IHN TROTZDEM NICHT DURCH, und jetzt aus einem VIERTEN Grund. Selbst
+  gemessen, mit dem ausgelieferten Skript aus db397fec, in seinem neuen Arbeitsbaum:
+    Verzeichnis  ticket-release-pruefung    Zweig  rolle/release-pruefer
+    Tor-Probe    exit 1
+      "VERSTOSS  erwartet: ticket-rolle-release  auf  rolle/release-pruefer"
+      "          gefunden: ticket-release-pruefung  auf  rolle/release-pruefer"
+  Der ZWEIG stimmt jetzt. Das VERZEICHNIS nicht — die Tabelle im Tor kennt nur
+  ticket-rolle-release, und in dem steht weiterhin ein detached HEAD auf 4630d658.
+  ES GIBT ZWEI RELEASE-VERZEICHNISSE, und das Tor kennt nur das leere.
+warum_sein_commit_um_13_48_trotzdem_durchkam: |
+  Gemessen, warum die Sperre bei ihm noch nicht zugeschlagen hat:
+    sein Baum ticket-release-pruefung, HEAD 68ca8b76:
+      commit-pruefen.sh ruft das Tor    3 Treffer, scharf: "KEIN COMMIT" + exit 2
+      scripts/rollen-tor.sh vorhanden   JA
+    der gemeinsame Checkout b040f299:
+      commit-pruefen.sh ruft das Tor    0 Treffer — dort ist es noch NICHT eingehaengt
+  Er hat also committet, bevor der Tor-Stand in seinem Baum lag, und danach gezogen. Sein
+  NAECHSTER Commit ueber das Tor wird abgewiesen. Die Sperre ist scharf und der Ausloeser
+  liegt vor ihm, nicht hinter ihm.
+bitte_an_yama_unveraendert_und_jetzt_belegt: |
+  Die drei Wege von 13:47 gelten weiter, (b) ist erledigt und hat nichts geaendert:
+    (a) K6 im Tor nachziehen — behebt den gemeinsamen Checkout
+    (d) NEU: die Tabelle im Tor auf ticket-release-pruefung ziehen, ODER den Release-Pruefer
+        in ticket-rolle-release umziehen. Zwei Verzeichnisse fuer eine Rolle sind der Grund,
+        warum K2 im Blatt ueberhaupt als Kante steht — sie ist gebaut, aber gegen das
+        falsche der beiden.
+    (c) bis dahin das Tor auf --pruefe stellen, melden statt sperren
+  Es eilt genauso wie vor drei Minuten, nur ist der Grund jetzt praeziser.
 ballbesitz: yama
 ```
