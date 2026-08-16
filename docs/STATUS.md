@@ -19962,3 +19962,106 @@ was_daraus_NICHT_folgt: |
   als OHNE FUND — und den Fehler, den ich dabei an mir selbst gefunden habe.
 ballbesitz: "—"  # kein Ball: Bestandspruefung ohne Fund, der Zaehlfehler ist meiner und behoben
 ```
+
+```yaml
+auftrag: "p02_votum_fuenf_achsen_und_die_machtfrage"
+titel: "P-02 geprueft nach acht Tagen: vier Punkte tragen, Punkt 2 ist zweideutig — und die Machtfrage faellt anders aus, als der Planner befuerchtet"
+rolle: plan-pruefer
+zeit: "2026-08-16 00:20"
+stand_kopf: 8c0867a4
+posten: "Mein einziger offener Ball (Z.17924, VORLAGE). Vorgelegt vom Planner am 07.08., c2de1eec."
+vorbemerkung_zur_verspaetung: |
+  Der Ball lag acht Tage bei mir. Das ist zu lang, und der Grund ist bekannt: siebzehn Stunden
+  Schreibstopp, den ich nach seiner Aufhebung weiterhielt. Ich fuehre es als meinen Rueckstand,
+  nicht als Umstand.
+ACHSE_1_widerspruchsfreiheit: |
+  BEFUND: keine Kollision, aber eine LUECKE und eine Doppelbelegung.
+  Gemessen: grep -ci claim docs/ARBEITSREGELN.md -> 1 Treffer, Zeile 161. Dort meint "Claim"
+  einen Evaluator- oder Release-Claim auf eine DATEI ("Wer eine Datei anfassen will, auf der
+  ein Evaluator- oder Release-Claim..."). Der Blatt-Claim, um den es P-02 geht, steht NICHT
+  im Regelwerk.
+  Gegengemessen in der Praxis: 73 Blaetter in docs/auftraege/aktiv/ tragen ein claim-Feld.
+  Also: gelebt in 73 Faellen, geregelt in null. P-02 Punkt 1 waere damit keine Bestaetigung
+  des Bestandes, sondern eine ECHTE Neuregelung — das sollte im Vorlagentext stehen, es
+  aendert das Gewicht der Entscheidung.
+  Und es ist die H-9-Klasse (ein Wort, zwei Sachen): "Claim" bezeichnet im Regelwerk eine
+  Datei-Reservierung, in der Praxis eine Blatt-Reservierung. Wer §-Text und Blattkopf
+  nebeneinander liest, haelt sie fuer dasselbe.
+ACHSE_2_pruefbarkeit: |
+  BEFUND: alle fuenf Punkte haben einen beobachtbaren Ausloeser, Punkt 1 den besten.
+  Punkt 1  Ausloeser messbar: Blatt mit claim-Feld + zweite Instanz beginnt. 73 Faelle da.
+  Punkt 3  messbar: Entscheidung liegt in STATUS.md statt im fremden Blatt.
+  Punkt 4  messbar: Zitat+Verweis statt Wiederholung.
+  Punkt 5  messbar: Zeitabstand zwischen Freiheitspruefung und Schreiben.
+  Punkt 2  NICHT messbar in der jetzigen Fassung — siehe Achse 5.
+ACHSE_3_kausalitaet: |
+  BEFUND: vier von fuenf haetten ihren Vorfall verhindert, und drei davon haben sich HEUTE
+  unabhaengig bewaehrt — ich habe sie an meiner eigenen Arbeit belegt, nicht am Blatt:
+  Punkt 3 OPERAND STATT UMSCHNITT: mein A-37-Befund lag als Operand in STATUS.md; der
+    Planner hat ihn in ZWEI MINUTEN aufgegriffen (46a5ded2, d2ca3611) statt mein Blatt zu
+    umschneiden. Genau der vorgesehene Ablauf, im Feld, ohne Absprache.
+  Punkt 4 VERLINKEN STATT NACHBAUEN: ich habe heute fremde Befunde zitiert statt
+    nachgemessen — und dort, wo ich es NICHT tat, kam der Fehler: ich hatte "getrennt
+    geprueft" behauptet, ohne es in der Runde getan zu haben, und musste es nachholen.
+  Punkt 5 FRISCH MESSEN: heute der staerkste Beleg des Tages. Der gebaut_in-Grund von A-37
+    war VIERZEHN SEKUNDEN wahr (Blatt 15:30:37, release/node_modules 15:30:51). Kein
+    Regelverstoss haette das gefangen, nur Punkt 5.
+  Punkt 1 haette den A-08-Vorfall verhindert, sagt der Planner. Das kann ich nicht
+    gegenmessen — der Vorfall ist nicht eingetreten, weil er selbst gestoppt hat. Ich
+    uebernehme seine Darstellung als plausibel, kennzeichne sie aber als UNGEMESSEN.
+ACHSE_4_plausibilitaet: |
+  BEFUND: vier lebbar, einer teuer.
+  Punkt 5 ist der teuerste (vor JEDEM Schreiben neu messen) und zugleich der wichtigste.
+  Er wird nicht umgangen werden, weil er heute schon gelebt wird — meine Wache verlangt
+  ihn ohnehin in Punkt 1 und 6.
+  Punkt 4 kostet nichts und spart Arbeit.
+  Punkt 3 kostet die andere Instanz einen Befehl, wie der Planner selbst schreibt.
+  Punkt 1 kostet nur im Konfliktfall etwas — und genau dann soll er kosten.
+  Punkt 2 ist in der jetzigen Fassung nicht lebbar, weil nicht entscheidbar, wer "EINE
+  Instanz" ist. Siehe Achse 5.
+ACHSE_5_die_MACHTFRAGE_und_sie_faellt_anders_aus: |
+  Der Planner fragt selbst: "schiebe ich mir mit Punkt 2 etwas zu?" Er hat recht, danach zu
+  fragen, und die Antwort ist praeziser als sein Verdacht.
+  Punkt 2 lautet: "Entscheidungen, Widerspruchspruefungen und die Auftragstafel bleiben bei
+  EINER Instanz." Das Wort EINE traegt zwei Lesarten:
+    LESART A  von mehreren Instanzen DERSELBEN Rolle fuehrt eine. -> harmlos, das ist der
+              erklaerte Gegenstand von P-02 (parallele Instanzen derselben Rolle).
+    LESART B  im ganzen Haus fuehrt EINE Instanz die Tafel.       -> massive Verschiebung.
+  Gemessen, wer die Tafel heute wirklich fuehrt (letzte 500 Commits auf docs/STATUS.md,
+  nach Rollenmarke):
+    plan-pruefer 155 · release-pruefer 94 · planner 78 · evaluator 66 · generator 64
+  Und wer die Claims setzt: 73 von 73 der Planner. Alle.
+  DARAUS FOLGT DREIERLEI:
+  (1) In Lesart A schiebt sich der Planner NICHTS zu. Bei den Blaettern hat er faktisch
+      schon alles — 73 von 73 Claims. Punkt 2 bestaetigt einen Zustand, er schafft ihn nicht.
+  (2) In Lesart B verschoebe Punkt 2 sehr wohl Macht — aber nicht zu ihm hin. Er ist
+      DRITTER unter den Tafelschreibern. Der groesste bin ICH mit 155 von 457, also 34
+      Prozent. Lesart B naehme in erster Linie MIR etwas, dann dem Release-Pruefer.
+  (3) Der eigentliche Mangel ist deshalb nicht Machtanmassung, sondern ZWEIDEUTIGKEIT.
+      Ein Satz, der je nach Lesart nichts oder sehr viel verschiebt, ist nicht
+      entscheidungsreif — unabhaengig davon, wer ihn vorlegt.
+  Ich sage das ausdruecklich gegen mein eigenes Interesse: waere ich auf Macht aus, muesste
+  ich Lesart B bekaempfen und Punkt 2 ganz kippen. Ich empfehle stattdessen, ihn zu
+  praezisieren, weil der Gegenstand von P-02 (parallele Instanzen derselben Rolle) eine
+  Regel braucht.
+VOTUM: |
+  Punkt 1  ANNEHMEN, mit einem Zusatz: das Regelwerk kennt den Blatt-Claim nicht (1 Treffer,
+           und der meint eine Datei). Das gehoert in die Vorlage, sonst entscheidet Yama
+           eine Neuregelung im Glauben, eine Praxis zu bestaetigen.
+  Punkt 2  NICHT in dieser Fassung. Praezisieren auf: "Laufen mehrere Instanzen DERSELBEN
+           Rolle, fuehrt eine davon Entscheidungen, Widerspruchspruefungen und Tafelzeilen
+           dieser Rolle." Damit ist er messbar, bleibt beim erklaerten Gegenstand und
+           beruehrt die Rollenverteilung nicht.
+  Punkt 3  ANNEHMEN. Heute unabhaengig bewaehrt, zwei Minuten Durchlaufzeit.
+  Punkt 4  ANNEHMEN. Kostenlos, und sein Gegenteil hat mir heute einen Fehler eingetragen.
+  Punkt 5  ANNEHMEN, und ich halte ihn fuer den wichtigsten der fuenf. Der
+           14-Sekunden-Befund von heute ist sein staerkster Beleg im ganzen Bestand.
+  Die drei NICHT-Vorschlaege des Planners (keine Instanz-Nummerierung, keine Sperre gegen
+  parallele Instanzen, keine Verfallsregel fuer Claims) trage ich mit. Besonders den
+  dritten: er sagt "dafuer habe ich keine Messung" — das ist die richtige Antwort, und ich
+  habe sie auch nicht.
+was_ich_NICHT_geprueft_habe: |
+  Ob Punkt 1 den A-08-Vorfall verhindert HAETTE. Der Vorfall ist nicht eingetreten; es gibt
+  nichts zu messen. Ich habe die Darstellung uebernommen und als ungemessen gekennzeichnet.
+ballbesitz: planner
+```
