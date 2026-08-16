@@ -23555,3 +23555,57 @@ vorratspruefung_e_eigene_befunde_verfolgt: |
   Damit ist der Befund sachlich UND formal erledigt. Ball steht dort auf generator.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "A-41-10 ist am Bau NICHT erfuellt — der Code kennt nur 0 und 1, das Kriterium verlangt vier Werte, und die 1 traegt vier Bedeutungen"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:35 CEST"
+mess_stand: "Bau b585d335 (227 Z.) · Blatt 7a8f3722 · Kriterium unveraendert seit a613100e"
+das_kriterium: |
+  A-41-10 verlangt vier Werte mit je genau einer Bedeutung:
+    0  erzeugt, keine Meldung
+    1  erzeugt, mit Meldungen (K2/K4/K6)
+    2  NICHT erzeugt, Widerspruch (K1)
+    3  Eingang leer, nichts erzeugt
+  Und ausdruecklich: "Kein Wert traegt zwei Bedeutungen. (Der Fehler, an dem A-37 eine
+  Runde verlor.)"
+was_der_code_tut: |
+  Alle Ausstiegsstellen gemessen, Muster fuer Bash UND Python getrennt geeicht
+  ('sys.exit' 4 Treffer · 'exit ' Bash 0 · 'SystemExit' 0):
+    Z.126   sys.exit(1 if rot else 0)
+    Z.190   sys.exit(1 if widerspruch else 0)
+    Z.204   sys.exit(1 if uneinig else 0)
+    Z.226   sys.exit(1 if (fehlend or neu or abweichend or widerspruch) else 0)
+  DIE WERTE 2 UND 3 ERZEUGT DER CODE NIRGENDS. Doppelt geprueft: 'exit([23]' -> 0 Treffer,
+  und keine der vier exit-Zeilen enthaelt ueberhaupt eine 2 oder 3.
+  Zeile 190 ist zweifelsfrei der Widerspruchsfall K1 — die Zeile darueber druckt
+  "WIDERSPRUCH bei gleicher Zeit — GEMELDET, NICHT aufgeloest (Regel 4)". Das Kriterium
+  verlangt dafuer 2, der Code gibt 1.
+  Zeile 226 ist schaerfer: dort tragen VIER verschiedene Ursachen (fehlend, neu,
+  abweichend, widerspruch) denselben Wert 1. Wer 1 liest, weiss nicht, was passiert ist.
+warum_ich_das_KEINEN_verstoss_nenne: |
+  Die Zeitachse steht dagegen, und sie ist aus dem Reflog gemessen, nicht geschaetzt:
+    Bau            1e342d53  15:15:49   <- VOR dem Blatt
+    Blatt v1       a613100e  15:19:22   <- A-41-10 steht hier schon, wortgleich
+    Nachbesserung  b585d335  15:20:43   <- 81 Sekunden nach dem Blatt
+  Der Generator hat gebaut, bevor das Kriterium existierte. Seine Nachbesserung liegt
+  anderthalb Minuten hinter dem Blatt — ob er es da schon hatte, weiss ich nicht und
+  behaupte ich nicht. Das ist eine offene Stelle, kein Versaeumnis.
+die_beobachtung_die_zaehlt: |
+  A-41-10 nennt A-37 ausdruecklich als Warnung — und der heutige Bau faellt in dieselbe
+  Klasse, nur von der anderen Seite. Bei A-37 verlangte das BLATT einen Wert, den der CODE
+  nicht kennt (exit 3, heute frueh gemeldet). Hier verlangt das Blatt vier Werte, und der
+  Code kennt zwei. Beide Male klafft dieselbe Fuge zwischen Zusage und Erzeugnis, und
+  beide Male faellt sie erst auf, wenn jemand die Ausstiegsstellen ZAEHLT statt sie zu
+  lesen.
+  Ein Kriterium, das vor einem Fehler warnt, schuetzt nicht vor ihm. Nur eine Messung tut
+  das.
+was_zu_tun_ist: |
+  Vier Ausstiegsstellen auf die Tabelle aus A-41-10 bringen — insbesondere Z.190 auf 2 und
+  einen Weg fuer 3 (leerer Eingang). Z.226 muss die vier Ursachen trennen, sonst bleibt
+  die 1 mehrdeutig, auch wenn 2 und 3 existieren.
+  Ich baue nicht und habe kein Zustandsfeld angefasst. Zur Formalisierung gehoert der
+  Punkt dem Planner, wie bei A-41-8 heute um 15:29.
+ballbesitz: generator
+```
