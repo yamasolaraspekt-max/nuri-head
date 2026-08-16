@@ -914,3 +914,81 @@ gesetzt wären, sondern weil sie bisher nie auf die Probe gestellt wurden.
 **Das ist der Unterschied zwischen *„hält"* und *„hält, weil nichts passiert ist"*** — und er
 gehört in die Wegweiser/Beleg-Unterscheidung: Ein Wegweiser in einem ruhenden Bereich sieht
 genauso aus wie ein guter, bis der Bereich erwacht.
+
+## Zwei Zustandswörter sind im Gebrauch, ohne je definiert worden zu sein — und für diesen Fall gibt es einen Präzedenzfall in den Regeln selbst
+
+*Vorratsprüfung Posten (e), eigene Befunde verfolgt · gemessen 16.08. gegen `72b15e0e`*
+
+**Anlass:** Ich wollte nachsehen, ob mein Befund „das erfundene Zustandswort `BEFUND`" erledigt
+ist. Er ist es zu einem Viertel — und beim Nachzählen fiel ein zweites Wort derselben Klasse auf,
+das nicht meines ist.
+
+### Die Messung: welche Zustandswörter laufen um, und welche kennt §3?
+
+Alle `zustand:`-Werte in `docs/STATUS.md` gegen die **beiden** Listen der Regeln — die Baukette
+(Z.59–72) und die Zusatz-Blockzustände (Z.72–99):
+
+```
+76 BETRIEBSBESTAETIGT   definiert      1 VORLAGE             definiert (A-21, 12.08.)
+ 4 ENTWURF              definiert      1 ERLEDIGT            definiert (A-21, 12.08.)
+ 2 ABGENOMMEN           definiert      1 DECISION_BLOCKED    definiert
+ 1 CODE_FERTIG          definiert
+--
+ 3 BEFUND               NICHT DEFINIERT
+ 1 ZURUECKGEZOGEN       NICHT DEFINIERT
+```
+
+### Fund 1 — `ZURUECKGEZOGEN` · Ball: **planner**
+
+`docs/ARBEITSREGELN.md` enthält das Wort **null Mal**. In der Statuswahrheit trägt es
+`A-36` als echtes Zustandsfeld (Z.18375), und die Tafelzeile Z.87 führt es in der Zustandsspalte.
+
+**Das Wort stammt nicht von einer Rolle, sondern von Yama** — Entscheidung **V-02 vom 14.08.**,
+wörtlich im Datensatz: *„A-36 wird als eigenständiger Auftrag ZURUECKGEZOGEN."* Eine Rolle hat
+hier nichts erfunden; ein Wort ist durch eine Entscheidung entstanden und nie in §3 nachgetragen
+worden.
+
+**Der Präzedenzfall steht in derselben Datei**, Z.83: `ERLEDIGT` und `VORLAGE` wurden am **12.08.
+mit A-21 verankert**, mit genau dieser Begründung — *„weil sie im Gebrauch waren und nirgends
+definiert"*. `ZURUECKGEZOGEN` ist heute derselbe Fall.
+
+**Was konkret fehlt**, und die Regeln benennen es selbst (Z.99): jeder eingeführte Zustand muss
+angeben, **ob er einen `IN_ARBEIT`-Platz nach §3 belegt** — *„wer einen Zustand einführt, ohne zu
+sagen, ob er auf diese Schranke zählt, hat kein Wort erklärt, sondern eine Lücke geschaffen."*
+Für `ZURUECKGEZOGEN` fehlt diese Angabe. Sachlich dürfte die Antwort **nein** lauten, aber das ist
+eine Regelentscheidung und gehört dem Planner, nicht mir.
+
+**Was ich ausdrücklich NICHT behaupte, weil ich es getrennt gemessen habe:** Das Wort erscheint
+insgesamt 19-mal in der Statuswahrheit und 7-mal in fünf aktiven Blättern (A-20, W-23, W-34,
+W-38, W-39) — **davon ist alles außer dem einen Feld Prosa**, im Sinne von *„die falsche Aussage
+steht als ZURUECKGEZOGEN da, mit Ursache und Wirkung"*. Ein Fund über 26 Stellen wäre falsch.
+Bemerkenswert ist die Prosa trotzdem: das Wort ist quer über fünf Blätter zur **eingeführten
+Praxis** geworden, ohne je definiert zu sein.
+
+### Fund 2 — `BEFUND`, drei Reste · Ball: **integrator**
+
+Mein eigener Befund, zu einem Viertel erledigt: **4 → 3.** Der Integrator hat mit `0f969d5e`
+(20:39) den A-40-Block bereinigt.
+
+**Kein Fund gegen ihn — im Gegenteil.** Er hat die Grenze im Voraus benannt und exakt eingehalten:
+*„die drei übrigen Felder bei P-03 und zweimal P-04 sind unberührt … Wer sie mitnimmt, erweitert
+einen fremden Auftrag."* Das ist richtig, und es ist genau die Disziplin, die ich heute mehrfach
+angemahnt habe. Der Rest blieb liegen, weil **meine Zustellung zu eng geschnitten war**, nicht
+weil er sie unvollständig ausgeführt hätte.
+
+**Damit hebe ich die Enge auf.** Die drei verbleibenden Felder sind hiermit **eigener
+Zustellungsgegenstand**, nicht Erweiterung des alten:
+
+| Zeile | Auftrag | Ball des Blocks | Titel (gekürzt) |
+|---|---|---|---|
+| 26467 | P-03 | planner | „Meine Ballortung sah nur die Statuswahrheit — 36 Blätter …" |
+| 26506 | P-04 | plan-pruefer | „Zwei Rollen stehen über ihrem heutigen Maximum still …" |
+| 26591 | P-04 | planner | „Fortschreibung: drei von vier Rollen …" |
+
+**Soll:** dieselbe Behandlung wie bei A-40 — Feld entfernen, Vermerk mit Anlass und Grenze
+setzen, **kein** Zustandswechsel, **keine** Inhaltszeile anfassen. Alle drei sind von mir
+verfasst (`rolle: plan-pruefer`), es wird also keine fremde Arbeit angefasst.
+
+**Warum es überhaupt meine Hand nicht sein kann:** `docs/STATUS.md` ist für mich seit der
+A-37-Sperre (19:36) nicht schreibbar. Das ist keine Ausrede, sondern der Grund, warum dieser
+Punkt seit 20:41 als Zustellung und nicht als Behebung geführt wird.
