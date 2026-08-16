@@ -256,6 +256,34 @@ esac
 # Messender** — was fuer die Zahl im Kriterium heisst: besser den Zweig erheben als den Ordner.
 #
 # **Gemeldet, nicht geaendert.** *Das Blatt gehoert dem Planner.*
+#
+# ### Woran die Verteilung haengt — es ist EIN Commit, und der Weg dorthin ist nicht meiner
+#
+# ```text
+#   eingefuehrt durch   0ee521f7   16.08. 13:38
+#
+#   Zweig                        enthaelt ihn   ls-tree
+#   auto/hausplaner-integration      NEIN          0
+#   rolle/planner                    NEIN          0
+#   rolle/plan-pruefer               NEIN          0
+#   rolle/generator                  JA            1
+#   rolle/evaluator                  JA            1
+#   rolle/release-pruefer            JA            1
+# ```
+#
+# **Das SOLL von A-37-18 lautet: `git ls-files scripts/rollen-tor.sh` ergibt in JEDEM der sechs
+# Baeume 1.** *Der Index eines Worktrees ist der seines Zweiges* — die Datei erscheint dort genau
+# dann, wenn `0ee521f7` auf dem Zweig liegt. **Das ist Transport, und Transport ist mir
+# ausdruecklich untersagt.**
+#
+# ***Auch der naheliegende Ausweg traegt nicht:*** *das Tor in `commit-pruefen.sh` hineinzuziehen,
+# damit es keine eigene Datei mehr braucht.* **Die drei Baeume ohne Tor tragen auch den HAKEN
+# nicht** (`Haken 0`, oben gemessen) — beide Dateien reisen mit demselben Transport. *Kein Bau von
+# mir aendert das Ergebnis.*
+#
+# **Was ich statt dessen gebaut habe, steht in `commit-pruefen.sh`:** die Abwesenheit meldet sich
+# jetzt selbst. *Das behebt A-37-18 nicht — es macht nur den Zustand, den A-37-18 beschreibt, in
+# jedem betroffenen Baum sichtbar, statt ihn schweigen zu lassen.*
 if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
   INTEGRATOR_DA="$(git log --all --format=%s --grep='^integrator:' 2>/dev/null | head -1)"
   if [ -n "$INTEGRATOR_DA" ]; then
