@@ -286,17 +286,61 @@ esac
 # jedem betroffenen Baum sichtbar, statt ihn schweigen zu lassen.*
 if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
   INTEGRATOR_DA="$(git log --all --format=%s --grep='^integrator:' 2>/dev/null | head -1)"
-  if [ -n "$INTEGRATOR_DA" ]; then
+
+  # ── DIE ZWEITE HAELFTE DER ZUENDBEDINGUNG (16.08., nach dem Befund d9fd6471) ──────────────
+  #
+  # **Die Sperre wirkte VERKEHRT HERUM, und das ist gemessen und nicht gefolgert.** Nach der
+  # Zuendung um 16:17 haben `planner` und `plan-pruefer` `docs/STATUS.md` weiter geschrieben —
+  # **sie umgehen nichts, das Tor liegt in ihren Baeumen gar nicht.** Gesperrt waren Generator,
+  # Evaluator und Release-Pruefer: **genau die drei, die die Barriere HABEN und sich daran halten.**
+  #
+  # ```text
+  #   nach 16:17 schrieben docs/STATUS.md:  plan-pruefer, planner   (Tor im Baum: 0)
+  #   gesperrt:                             generator, evaluator,
+  #                                         release-pruefer         (Tor im Baum: 1)
+  # ```
+  #
+  # ***Eine Barriere, die nur die Ausgestatteten bindet, schuetzt die Datei nicht — sie waehlt
+  # aus, wer sie schreibt.*** *Und sie waehlt genau falsch: die Diszipliniertesten stehen still,
+  # die Uebrigen schreiben weiter.* **Der Bestand wird dadurch nicht einheitlicher, sondern
+  # einseitiger.**
+  #
+  # **Meine Zuendbedingung war notwendig und nicht hinreichend.** Sie fragte „gibt es einen
+  # Schreiber?" und haette auch fragen muessen „gilt die Regel fuer alle?". *Eine Regel, die nur
+  # dort gilt, wo sie zufaellig installiert ist, ist keine Regel, sondern eine Benachteiligung.*
+  #
+  # **Deshalb zuendet sie erst, wenn das Tor in ALLEN Zweigen liegt** — was genau das SOLL von
+  # A-37-18 ist. *Damit schaltet der Transport die Sperre scharf, und wieder ist es eine Messung
+  # und kein Datum.*
+  TOR_ZWEIGE=0
+  TOR_MIT=0
+  for _z in $(git for-each-ref --format='%(refname:short)' 'refs/heads/rolle/*' 'refs/heads/auto/hausplaner-integration' 2>/dev/null); do
+    TOR_ZWEIGE=$((TOR_ZWEIGE + 1))
+    if [ -n "$(git ls-tree -r --name-only "$_z" scripts/rollen-tor.sh 2>/dev/null)" ]; then
+      TOR_MIT=$((TOR_MIT + 1))
+    fi
+  done
+
+  if [ -n "$INTEGRATOR_DA" ] && [ "$TOR_ZWEIGE" -gt 0 ] && [ "$TOR_MIT" -lt "$TOR_ZWEIGE" ]; then
+    echo "ROLLEN-TOR  HINWEIS  '$ROLLE' aendert docs/STATUS.md — die Sperre ist NOCH NICHT scharf." >&2
+    echo "            Das Tor liegt in $TOR_MIT von $TOR_ZWEIGE Zweigen. Solange es fehlt, wuerde die" >&2
+    echo "            Sperre NUR die Baeume binden, die sie haben — und die uebrigen schrieben weiter." >&2
+    echo "            Sie zuendet, sobald der Transport das Tor ueberall hingebracht hat (A-37-18)." >&2
+  elif [ -n "$INTEGRATOR_DA" ]; then
     echo "ROLLEN-TOR  VERSTOSS  '$ROLLE' aendert docs/STATUS.md ausserhalb des Integrations-Checkouts." >&2
     echo "            Die Statuswahrheit hat EINEN Schreiber: den Integrator." >&2
     echo "            gefunden: $VERZ auf $ZWEIG" >&2
     [ "$NUR_MELDEN" = "1" ] && exit 0
     exit 1
   fi
-  echo "ROLLEN-TOR  HINWEIS  '$ROLLE' aendert docs/STATUS.md — noch KEIN Integrator gestartet." >&2
-  echo "            Durchgelassen: die Sperre zuendet erst, wenn ein Schreiber existiert" >&2
-  echo "            (gemessen: 0 Commits mit Rollenmarke 'integrator'). Bis dahin divergiert" >&2
-  echo "            die Statuswahrheit je Zweig — heute in SECHS Fassungen." >&2
+  # Diese Meldung gilt NUR fuer den Fall ohne Integrator. Beim Umbau auf die zweiteilige
+  # Zuendbedingung fiel sie zunaechst mit durch und behauptete „noch KEIN Integrator gestartet",
+  # waehrend es seit 16:17 einen gibt — vom ersten Lauf gefangen, nicht vom Nachdenken.
+  if [ -z "$INTEGRATOR_DA" ]; then
+    echo "ROLLEN-TOR  HINWEIS  '$ROLLE' aendert docs/STATUS.md — noch KEIN Integrator gestartet." >&2
+    echo "            Durchgelassen: die Sperre zuendet erst, wenn ein Schreiber existiert." >&2
+    echo "            Bis dahin divergiert die Statuswahrheit je Zweig." >&2
+  fi
 fi
 
 # ── A-37-12 bis A-37-16 — der MODULSTAND ────────────────────────────────────────────────────
