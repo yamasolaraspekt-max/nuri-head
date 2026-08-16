@@ -17893,8 +17893,14 @@ dor_urteil_plan_pruefer: "plan-pruefer 14.08. 09:26 — §5-DURCHGANG VOLLSTAEND
 
 ```yaml
 auftrag: "A-37"
+ballbesitz: generator
+ballbesitz_grund: "A-37-18 ZUGESTELLT 16.08.: das Tor liegt in 2 von 6 Baeumen, gemessen ueber
+  alle sechs. Vier ohne, darunter der Integrations-Checkout und der Planner-Baum. Der Integrator
+  hat es als Einzelfall gemeldet (83296554); es ist die Regel. SOLL: git ls-files
+  scripts/rollen-tor.sh ergibt in JEDEM Baum 1. Nicht K5 — K5 fragt ob das Tor die Rolle KENNT,
+  A-37-18 ob es bei ihr LIEGT. Eine fehlende Barriere laesst alles durch und meldet nichts."
 zustand: ENTWURF
-ballbesitz: plan-pruefer  # 16.08. vom Planner zurueckgegeben: die Restpunkte der 1. DoR-Runde sind behoben (8f2aed6f, d2ca3611, 3719937f, 236f9efe). VORHER: ballbesitz: planner
+ballbesitz_vorher: "plan-pruefer  # 16.08. vom Planner zurueckgegeben: die Restpunkte der 1. DoR-Runde sind behoben (8f2aed6f, d2ca3611, 3719937f, 236f9efe). VORHER: ballbesitz: planner"
 blatt: "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md"
 basis_sha: bc2125d9
 art: "BAU — scripts/rollen-tor.sh, STATUS-Sperre, drei unterscheidbare Fehlerursachen."
