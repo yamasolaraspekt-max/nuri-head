@@ -20200,7 +20200,17 @@ bitte_an_yama: |
 bitte_an_den_planner: |
   Unabhaengig von Yamas Antwort: den Klammerzusatz (Yamas Bedingung) durch die Fundstelle
   ersetzen, aus der sie stammt — oder durch "Herkunft nicht im Bestand belegt".
-ballbesitz: yama
+ERLEDIGT_16_08_14_12: |
+  Yama hat die Zeile an der Quelle geholt und dabei mehr gefunden als meine Frage hatte: im
+  Wortlaut stehen zwei Woerter, die im Bericht fehlten — "keine Modulkopie INS REPO". Er
+  entscheidet die engere Lesart, das Nicht-Ziel ist ERSETZT statt gestrichen, der alte
+  Wortlaut steht durchgestrichen daneben.
+  Selbst nachgemessen im Planner-Zweig: A-37 traegt "ins Repo" dreimal. Die Herkunftsfrage
+  ist damit beantwortet und der Klammerzusatz durch den entschiedenen Text ersetzt.
+  Mein Befund lautete "die Herkunft ist nicht belegt". Er war richtig und hat zu mehr
+  gefuehrt als zu einer Bestaetigung — das ist der beste Ausgang, den ein solcher Befund
+  haben kann.
+ballbesitz: "—"  # ERLEDIGT 16.08. 14:12: Yama hat entschieden, der Wortlaut ist ersetzt, selbst nachgemessen
 ```
 
 ```yaml
@@ -21325,7 +21335,20 @@ bitte: |
   nicht gibt — dann ist zu entscheiden, ob jemand vertritt (wie heute Mittag bei meiner
   eigenen Rolle) oder ob A-33 bis zu seinem Start liegen bleibt. Beides ist vertretbar,
   aber es sollte entschieden sein und nicht einfach dauern.
-ballbesitz: yama
+ERLEDIGT_16_08_14_12: |
+  Beide Teile haben sich innerhalb von Minuten erledigt, und meine Frage war beim Stellen
+  schon beantwortet:
+    der Release-Pruefer hat rolle/generator transportiert — der Bau 3e22e61b liegt im
+    Fernstand, A-33 stand dort auf CODE_FERTIG
+    der Evaluator LAEUFT: 5f37d8e4 um 13:24 "A-33 geclaimt, Abnahme Runde 1 beginnt" und
+    75c471cf um 13:35 "A-33 SPEC_BLOCKED, sechs von sieben Kriterien gruen"
+  Selbst nachgemessen: zwei Evaluator-Commits seit 13:20. Die Abnahme hat stattgefunden, sie
+  ist nicht ausgeblieben — mein Befund war zum Zeitpunkt richtig gemessen und vier Minuten
+  spaeter gegenstandslos.
+  Was aus dem Vorgang BLEIBT, steht an anderer Stelle und nicht hier: die Frage, wer einen
+  Auftrag nach SPEC_BLOCKED plus neuem Plan zurueckholt — Paragraf 3s Rueckkehr-Tabelle hat
+  dafuer keine Zeile. Das ist ein eigener Block von 14:05, nicht dieser.
+ballbesitz: "—"  # ERLEDIGT 16.08. 14:12: Bau transportiert, Evaluator laeuft und hat abgenommen, selbst nachgemessen
 ```
 
 ```yaml
@@ -21961,4 +21984,52 @@ WAS SEIT 36 MINUTEN UNVERAENDERT OFFEN IST: |
   Das ist kein neuer Befund. Es ist derselbe, 36 Minuten aelter, an einem Auftrag, dessen
   erster Teil inzwischen im Fernstand liegt.
 ballbesitz: planner
+```
+
+```yaml
+auftrag: "spec_blocked_braucht_kein_fortsetzung_zustand_und_wer_a33_zurueckholt"
+titel: "Ein Fehlalarm, den ich vor dem Melden gestoppt habe — und die Frage, die dahinter uebrigbleibt"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:05"
+stand_kopf: 645a9d72
+posten: "Pflichtteil 3 · SPEC_BLOCKED nachmessen"
+der_fehlalarm_den_ich_gestoppt_habe: |
+  A-33 steht im Fernstand auf SPEC_BLOCKED. Seine Felder, gemessen:
+    auftrag · zustand · claim_abnahme · bau_sha · bau_bericht
+    KEIN fortsetzung_zustand, KEIN ballbesitz in den ersten 14 Zeilen
+  Ich war im Begriff, das fehlende fortsetzung_zustand als Verstoss zu melden — Paragraf 3
+  nennt das Feld an zwei Stellen, und eine Blockade ohne Rueckweg ist genau die Klasse, die
+  ich heute mehrfach hatte.
+  DANN HABE ICH DEN WORTLAUT GELESEN, Paragraf 3 Z.105-109:
+    "Beim Eintritt in ENV_BLOCKED, DECISION_BLOCKED oder RELEASE_BLOCKED wird der vorherige
+     Pruefzustand als fortsetzung_zustand gespeichert ... SPEC_BLOCKED und NACHBESSERN
+     erfordern dagegen einen NEUEN PLAN beziehungsweise Inhalts-Commit."
+  SPEC_BLOCKED braucht also ausdruecklich KEIN fortsetzung_zustand. Kein Fund. Das Verfahren
+  ist korrekt gefahren: der Evaluator hat blockiert (75c471cf), der Planner hat den neuen
+  Plan geliefert (5db5f8a9, A-33 umgeschnitten). Genau was der Wortlaut verlangt.
+  Ich schreibe das auf, weil es die dritte Beinahe-Fehlmeldung heute ist, die am Nachlesen
+  gescheitert ist — nach dem Tafelmuster und dem K6-Kriterium. Alle drei haetten "das fehlt"
+  gemeldet, wo etwas an einer anderen Stelle stand oder anders geregelt ist.
+WAS ALS ECHTE FRAGE UEBRIGBLEIBT: |
+  Der neue Plan liegt seit 13:36 vor, der Zustand steht seit 13:35 auf SPEC_BLOCKED. Nach
+  Paragraf 3 endet SPEC_BLOCKED mit einem neuen Plan — den gibt es. Wer setzt den Zustand
+  zurueck, und auf welchen?
+  Die Rueckkehr-Tabelle in Paragraf 3 fuehrt Zeilen fuer ENV_BLOCKED, DECISION_BLOCKED und
+  RELEASE_BLOCKED — mit gespeichertem fortsetzung_zustand und benannter Rolle. Fuer
+  SPEC_BLOCKED und NACHBESSERN steht dort KEINE Zeile.
+  Das ist keine Luecke im Verfahren, sondern eine im REGELTEXT: der Wortlaut sagt, was
+  noetig ist (ein neuer Plan), aber nicht, wer danach welchen Zustand setzt. Bei den drei
+  anderen Blockzustaenden sagt die Tabelle beides.
+  PRAKTISCH: A-33 hat einen fertigen Bau (3e22e61b), einen neuen Plan und eine laufende
+  Abnahme-Runde (claim_abnahme des Evaluators von 13:24). Es fehlt nur der Zustandsschritt.
+  Ich fasse ihn nicht an — SPEC_BLOCKED zu verlassen ist nicht meine Rolle, und welcher
+  Zustand richtig ist (zurueck auf ABNAHME? auf CODE_FERTIG?), ist genau das, was der
+  Regeltext offenlaesst.
+bitte: |
+  An Yama, kleine Regelfrage: Paragraf 3s Rueckkehr-Tabelle sollte eine Zeile fuer
+  SPEC_BLOCKED und NACHBESSERN bekommen — nach welchem Ereignis, in welchen Zustand, durch
+  wen. Heute steht die Bedingung im Fliesstext und der Rest nirgends.
+  An den Evaluator oder den Planner, je nachdem wie die Antwort ausfaellt: A-33 wartet auf
+  genau diesen einen Schritt.
+ballbesitz: yama
 ```
