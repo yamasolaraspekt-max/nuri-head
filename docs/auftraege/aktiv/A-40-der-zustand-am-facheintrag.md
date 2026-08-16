@@ -94,9 +94,13 @@ davon als BENUTZT markiert             22   <- drei sind ausdruecklich als NICHT
                                             benutzt gekennzeichnet (Plan-Pruefer)
 davon mit `nachgerechnet_an`            0
 
-meistgenutzt   F-001  12x    F-032   6x
-               F-030   8x    F-011   5x
-               F-004   7x    F-003   4x
+meistgenutzt   F-001  10x    (12x mit widerlegten Zuordnungen)
+               F-030 · F-004 · F-032 · F-011 · F-003  -> je neu zu erheben
+
+URSACHE der drei nicht reproduzierbaren Messungen, gefunden 16.08.:
+  das Register kennzeichnet WIDERLEGTE Zuordnungen als ~~F-001~~.
+  Ein grep ueber die Formelspalte zaehlt sie MIT.
+  F-001: 12 Nennungen, davon 2 durchgestrichen -> 10 echte.
 ```
 
 **Damit hat A-40 eine Reihenfolge, die sich nicht aus der Nummer ergibt, sondern aus der
@@ -169,6 +173,15 @@ Mal heute an einer eigenen Messung.)*
   **S-Negativprobe:** `S-051` trägt `nachgerechnet_an` → **darf nicht gemeldet werden.**
   *Zwei Seiten, vier Proben — und keine davon lässt sich mit dem Wissen über die andere bestehen.*
 - **A-40-2** · **Die siebte Innenprüfung läuft und findet einen echten Fall.**
+  **⚠ ZWEI BEFUNDE DES PLAN-PRÜFERS, beide zutreffend und beide am Kriterium behoben:**
+  **(a) Die Positivprobe hätte heute 116 Meldungen erzeugt** — sie ist damit kein Beleg,
+  sondern eine Lawine. **Verlangt ist jetzt EIN namentlich benanntes Blatt**, an dem der
+  Fund einzeln gezeigt wird; die Gesamtzahl gehört in den Bericht, nicht in die Probe.
+  **(b) Die Negativprobe hatte keinen einzigen Kandidaten** außer dem Auftragsblatt selbst
+  — *eine Negativprobe, die nur am eigenen Blatt läuft, prüft die Prüfung nicht.*
+  **Verlangt ist ein FREMDES Blatt**, das eine F-/N-/S-Kennung nennt, deren Eintrag belegt
+  ist — und das deshalb **nicht** gemeldet werden darf. **Findet sich keines, ist DAS der
+  Befund** und wird gemeldet, statt die Probe wegzulassen.
   **Positivprobe historisch:** gegen ein Blatt, das eine F-Kennung nennt, deren Eintrag kein
   `nachgerechnet_an` trägt → **Meldung**. **Negativprobe:** ein Blatt, dessen Kriterium das
   Nachrechnen selbst verlangt → **keine Meldung.**
@@ -194,7 +207,32 @@ Mal heute an einer eigenen Messung.)*
   **Der Suchraum ist jetzt das Verzeichnis, nicht die Datei** — und wächst mit, wenn eine
   dritte Sammlung dazukommt.
   **Nach dem Lauf: keine Fundstelle. Ein zweiter Lauf meldet dasselbe.**
+  **⚠ DREI BEFUNDE DES PLAN-PRÜFERS, alle nachgemessen und alle zutreffend:**
+  ```
+  Der Befehl zaehlt ZEILEN, nicht Kennungen:   87 Zeilen  ->  64 Kennungen
+  Er meldet auch den EINZIGEN nachgerechneten Eintrag als ampellos
+  Der erweiterte Suchraum (*.md statt einer Datei) traegt ein ANDERES Merkmal
+  ```
+  **Behoben durch drei Auflagen am Kriterium, nicht durch Abschwächung:**
+  **(a)** gezählt wird **je Kennung**, nicht je Zeile — *eine Kennung mit drei
+  Definitionsstellen ist EIN Eintrag ohne Ampel, nicht drei* **(K1 sagt das bereits,
+  der Zählbefehl widersprach ihm).**
+  **(b)** ein Eintrag mit `nachgerechnet_an` **oder** `gegengeprueft_an` wird **nicht**
+  gemeldet, auch wenn die Ampel fehlt — *er ist belegt, nur nicht gekennzeichnet;
+  das ist ein anderer Mangel und gehört getrennt gezählt.*
+  **(c)** die beiden Sammlungen werden **getrennt ausgewiesen** — F-/N-Seite und S-Seite
+  tragen verschiedene Merkmale, und eine Summe über beide verdeckt, welche Seite fehlt.
+
+
 - **A-40-6** · **`nachgerechnet_an` trägt die Abweichung, nicht nur das Ergebnis.**
+  **⚠ BEFUND: die Rot-Lage ist seit 14:49 weg — und zwar durch mich selbst.** Ich habe an
+  `S-008` ein `nachgerechnet_an` eingetragen, das die Abweichung bereits nennt. **Damit war
+  das Kriterium erfüllt, bevor der Auftrag gebaut ist — §5 verbietet genau das.**
+  **Neue Rot-Lage, am Bestand erhoben statt behauptet:** von den Einträgen mit
+  `nachgerechnet_an` trägt **genau einer** die Abweichungszeile; alle übrigen Kennungen
+  tragen **gar keins**. **Der Lauf misst beide Zahlen und nennt sie getrennt** — *ein
+  Kriterium, dessen Rot-Lage der Schreibende selbst wegräumt, misst danach nur noch sich
+  selbst.*
   Das Feld nennt, **um wie viel der Fall ohne die Aussage abweicht** — sonst ist es kein Beleg,
   sondern eine Wiederholung. *(Mutationsprobe.)*
 - **A-40-7** · **Alle sechs Kanten K1–K6 sind behandelt und je einzeln belegt.**

@@ -161,13 +161,24 @@ P8  DER ORT IST DAS KRITERIUM, NICHT DIE SACHE
   Stand **`7ef8f046`**, 14.08. 22:35) am jeweils alten
   Stand** — und meldet **nicht** die heutigen Fassungen, die an Invariante bzw. Bau-Stand gebunden
   sind. **Das ist die schärfste Probe: dieselbe Datei, zwei Stände, zwei Antworten.**
-- **A-39-4** · **P3 findet A-37-12 am Stand `7ef8f046`** (vor A-37-16) — die Marke ohne Erzeuger.
+- **A-39-4** · **P3 findet A-37-12 an einem Stand, an dem die Marke ohne Erzeuger vorlag.**
+  **⚠ BEFUND DES PLAN-PRÜFERS, zutreffend: der SHA `7ef8f046` stammt von mir und an ihm
+  existiert der zu findende Fall NICHT.** *Ich habe heute Nachmittag einen Stand nachgetragen,
+  ohne zu prüfen, ob der Fall dort steht — genau der Fehler, den P2 verhindern soll, begangen
+  beim Beheben von P2.*
+  **Verlangt: der Stand wird BEIM BAU ermittelt** — der letzte Commit, an dem `A-37-12` die
+  Marke verlangt und kein Kriterium sie erzeugt. **Kein SHA im Kriterium, bevor er am Fall
+  geprüft ist.** *(Ein falscher Stand ist schlimmer als keiner: er sieht geprüft aus.)* — die Marke ohne Erzeuger.
   *(A-39-3, -4 und -11 nannten bis 16.08. keinen festen Stand, während A-39-2, -5 und -6 es taten
   — **dieselbe Art Angabe, zwei Handhabungen, in dem Blatt, das genau diesen Fehler prüft.** Der
   Plan-Prüfer hat die drei fehlenden Stände nicht nur bemängelt, sondern **gesucht und geliefert**;
   sie stehen jetzt hier.)*
 - **A-39-5** · **P4 findet A-33-7 am Stand vor `5db5f8a9`** — „`scripts/` null Mal" gegen `art:`.
-- **A-39-6** · **P5 findet den doppelten `exit 3`** am Stand vor `5bbc55bf`.
+- **A-39-6** · **P5 findet den doppelten `exit 3`.**
+  **⚠ BEFUND: der Stand stand in der FALSCHEN RICHTUNG.** Hier hieß es *„am Stand **vor**
+  `5bbc55bf`"* — **der doppelte `exit 3` entstand MIT `5bbc55bf`, nicht davor.** *Wer die
+  Positivprobe am Elter fährt, findet nichts und hält die Prüfung für kaputt.*
+  **Verlangt: `5bbc55bf` selbst, und die Negativprobe am NACHFOLGER**, der ihn behoben hat.
 - **A-39-11** · **P6 findet die Rot-Lage mit Uhr.** Gegen **`5bbc55bf`** gefahren — den Stand von
   A-38 **vor** der Umstellung —, **muss A-38-2 gemeldet werden**: dort belegte *„28 von 32
   Merges"* aus einem `--since='48 hours ago'`-Fenster.
@@ -211,7 +222,13 @@ P8  DER ORT IST DAS KRITERIUM, NICHT DIE SACHE
 A-Blaetter          44             8                    8
 W-Blaetter          41             1                    1
                     --            --                   --
-                    85             9                    9
+                    89             9                    9
+
+BERICHTIGT 16.08. nach Gegenmessung des Plan-Pruefers:
+  Nenner ist 89 und nicht 85 — meine Zaehlung liess vier Blaetter aus.
+  Die NEUN stimmt zeichengenau. Stumm durchlaufen 80.
+  Und P1 im engeren Sinn erfasst 8 von 34 Blaettern MIT Kantenliste —
+  die Struktur "Kanten UND Kriterien" ist enger als "Kanten".
 ```
 
 > **A-39 prüft die Struktur „Kanten + Abnahmekriterien". Diese Struktur haben 9 von 85
@@ -249,7 +266,9 @@ wäre genau der Fehler, den A-37 heute kostet: ein Blatt, das während der DoR w
 ## Zwei Zahlen, die ich nenne ohne sie zu behaupten
 
 Yama hat gemessen: **48 Kennungen, 4 Treffer auf „nachgerechnet", 13 ohne Ampel.**
-Ich messe im selben Dokument: **32 Kennungen** (`^### [FNS]-`), **4 Treffer**, **23 ohne Ampel**.
+**⚠ BERICHTIGT 16.08.: die 32 ist in KEINER Lesart reproduzierbar** — der Plan-Pruefer misst 36, 37 oder 40, je nach Zaehlweise, und ich selbst heute 64 ueber beide Sammlungen. **Die Groessenordnungs-Aussage traegt, die Zahl nicht.** *Sie steht hier nur noch als Beleg dessen, was ich damals gemessen zu haben glaubte.*
+
+Ich mass im selben Dokument: **32 Kennungen** (`^### [FNS]-`), **4 Treffer**, **23 ohne Ampel**.
 
 **Die vier stimmen überein, die anderen zwei nicht** — wir zählen verschieden (Überschriften gegen
 Nennungen, und die Ampel steht nicht immer in der Überschriftszeile). **Ich übernehme seine Zahl

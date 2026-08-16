@@ -349,6 +349,16 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   festzulegen**. Nachgerechnet: **vier reine Werte ergeben 4 Wörter und fallen durch**, mit
   Feldnamen sind es 8. *„Das Kriterium war genauer als die Zusage"* — dieselbe Klasse wie A-37-12,
   wo der Schreiber der Marke fehlte.
+- **A-37-20** · **DIE RÜCKGABEWERTE MÜSSEN IM BAU AUCH VERGEBEN WERDEN.**
+  **⚠ ZWEI BEFUNDE DES PLAN-PRÜFERS, beide zutreffend und zusammengehörig:**
+  *(a)* **`exit 2` trägt im Blatt zwei Bedeutungen und im Bau mindestens vier** — das ist P5,
+  auf dieses Blatt selbst angewandt.
+  *(b)* **Die Codes 2, 3 und 4 werden im Bau GAR NICHT vergeben: alle drei Ursachen enden bei
+  `exit 1`.** *Ein Kriterium, das drei unterscheidbare Ursachen verlangt, ist damit nicht
+  erfüllt — auch wenn die Codetabelle im Blatt steht.*
+  **Verlangt:** je Ursache ein eigener, im Bau **wirklich erreichbarer** Rückgabewert, belegt
+  durch **je einen Lauf mit Rohausgabe und `echo $?`** — nicht durch die Tabelle.
+  **Zählen der `raus()`-Aufrufe genügt nicht, wenn kein Pfad sie erreicht.**
 - **A-37-19** · **DIE MARKENERKENNUNG MUSS ROLLENMARKEN MIT ZUSATZ ERKENNEN.**
   **Gemessen 19:4x:** die Erkennung sucht `^[a-z][a-z-]*(-[0-9]+)?: ` *(heute Zeile **150**,
   nicht mehr 73 — die Datei ist gewachsen; **diese Nummer gehört mitgemessen, nicht zitiert**)*.
@@ -436,6 +446,42 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   seit A-35 sind es 1763, weil dieser Bau dreizehn Zusagen gebracht hat. **Wer die feste Zahl
   wörtlich misst, meldet eine Abweichung, die keine ist** — und in vier Wochen erst recht.
   Eine Zahl, die an einem alten Stand klebt, misst die Zeit, nicht den Bau.)*
+
+## Offene Befunde des Plan-Prüfers — Stand 16.08. abends, einzeln benannt
+
+**Vier seiner zehn Befunde sind mit `A-37-18`, `A-37-19` und `A-37-20` in Kriterien überführt.
+Die übrigen sechs stehen hier, weil sie den Zuschnitt betreffen und nicht ein einzelnes
+Kriterium — sie gehören in die nächste DoR-Runde, nicht in eine stille Textänderung:**
+
+```
+1  A-37-5 ist am gebauten Stand NICHT ERFUELLBAR — meine Berichtigung hat den
+   Widerspruch VERSCHOBEN, nicht behoben. Er hat es danach selbst berichtigt:
+   der Generator hat recht, und der Unterschied ist nicht akademisch.
+   -> DoR-Runde, nicht Textaenderung: es geht um den Zuschnitt von Teil 1.
+
+2  A-37-2 setzt eine Bedingung voraus, die es nicht NENNT.
+   -> Kriterium muss die Bedingung tragen oder auf sie verzichten.
+
+3  A-37-6 ist gebaut mit einer offengelegten Abweichung, die RICHTIG ist und
+   im Kriterium FEHLT. "Das ist die dritte dieser Art."
+   -> das Kriterium muss der richtigen Abweichung folgen, nicht umgekehrt.
+
+4  A-37 steht auf BEREIT mit einem ZURUECKGENOMMENEN Votum als Beleg.
+   -> Zustandsfrage, gehoert dem Plan-Pruefer und Yama, nicht mir.
+
+5  Zwei Planner-Commits entstanden AUSSERHALB des Planner-Zweigs — der Fall,
+   den A-37 verhindern soll. Praezisiert: es sind DREI, sein eigener Filter
+   hatte zwei versteckt.
+   -> als basis_sha_lage in W-17/1 bereits vermerkt; hier als Beleg gefuehrt.
+
+6  Von den fuenf Restpunkten der Runde 3 ist EINER offen, "und es ist eine
+   einzige Zahl".
+   -> die Zahl gehoert benannt, bevor die naechste Runde laeuft.
+```
+
+> **Ich trage sie hier ein und behebe sie NICHT im Text.** Vier davon ändern den Zuschnitt oder
+> den Zustand des Auftrags — **das ist die DoR, und die gehört dem Plan-Prüfer.** *Ein Planner,
+> der Zuschnittbefunde still in sein eigenes Blatt einarbeitet, entzieht sie der Prüfung.*
 
 ## Rückweg und Entdeckung
 
