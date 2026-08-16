@@ -65,6 +65,20 @@ if ! printf '%s\n' "$ROLLE" | grep -qE "$ROLLEN_FORM"; then
   echo "TICKET_ROLLE='$ROLLE' entspricht nicht der Form $ROLLEN_FORM (klein geschrieben, Bindestriche, optionale Instanznummer wie evaluator-2) — kein Commit." >&2
   exit 2
 fi
+# A-37/1 — DAS ROLLEN-TOR. Erst wenn die Rolle FORMAL gueltig ist, hat die Frage einen Sinn, ob
+# sie im richtigen Baum steht. Es steht bewusst VOR jeder Messung: ein Commit im falschen Baum
+# ist nicht durch eine spaetere Pruefung heilbar — er liegt dann schon auf dem fremden Zweig.
+#
+# Dieses Tor SPERRT, waehrend A-26/A-27/A-30 melden. Die Begruendung steht in rollen-tor.sh:
+# jene melden ueber den INHALT, wo ein Fehlalarm teuer und ein Durchlassen billig ist. Hier ist
+# es umgekehrt.
+if [ -f scripts/rollen-tor.sh ]; then
+  if ! TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh; then
+    echo "" >&2
+    echo "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle." >&2
+    exit 2
+  fi
+fi
 # Erste Zeile der Botschaft; BEWERTET wird nach vorn getrimmt, VERAENDERT wird nichts daran.
 A11_ERSTE="${BOTSCHAFT%%$'\n'*}"
 A11_RUMPF=""
