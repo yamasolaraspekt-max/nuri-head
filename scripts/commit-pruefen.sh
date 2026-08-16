@@ -73,7 +73,14 @@ fi
 # jene melden ueber den INHALT, wo ein Fehlalarm teuer und ein Durchlassen billig ist. Hier ist
 # es umgekehrt.
 if [ -f scripts/rollen-tor.sh ]; then
-  TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh
+  # A-37 Teil 2: das Tor muss wissen, OB die Statuswahrheit in der Pfadliste steht. Es bekommt
+  # die Auskunft als Umgebungsvariable, damit es selbst keine Pfadliste kennen muss — es prueft
+  # Rolle gegen Baum und nicht Dateien.
+  TOR_STATUS_PFAD=0
+  for _p in "$@"; do
+    case "$_p" in docs/STATUS.md) TOR_STATUS_PFAD=1 ;; esac
+  done
+  TICKET_ROLLE="$ROLLE" TOR_STATUS_PFAD="$TOR_STATUS_PFAD" bash scripts/rollen-tor.sh
   TOR_RC=$?
   if [ "$TOR_RC" -ne 0 ]; then
     echo "" >&2

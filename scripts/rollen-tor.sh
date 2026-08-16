@@ -132,6 +132,53 @@ case "$STAMM" in
     exit 1 ;;
 esac
 
+# ── A-37 TEIL 2 — die Statuswahrheit hat EINEN Schreiber ─────────────────────────────────────
+#
+# **Der Befund, der es noetig macht** (16.08., ueber alle Zweige gemessen): `docs/STATUS.md` liegt
+# in SECHS Fassungen vor — 21.705 / 21.704 / 22.165 / 19.568 / 22.796 / 22.968 Zeilen. **A-33 stand
+# gleichzeitig auf CODE_FERTIG und ABGENOMMEN.** Wer HEAD liest, haelt einen abgenommenen Auftrag
+# fuer offen und zieht ihn ein zweites Mal.
+#
+# *Die Umstellung hat die Kollision nicht geloest, sondern verwandelt:* **vorher Beifang beim
+# gleichzeitigen Schreiben, sofort sichtbar — heute divergente Wahrheit, unsichtbar bis jemand
+# vergleicht.** Nicht schlimmer, aber leiser, und leise Fehler sind die teuren.
+#
+# ## ⚠ DIE SPERRE ZUENDET ERST, WENN ES EINEN INTEGRATOR GIBT — und das ist eine Abweichung
+#
+# **A-37-6 verlangt woertlich: sobald `docs/STATUS.md` in der Pfadliste steht und der Baum nicht
+# der Integrations-Checkout ist, ABWEISEN.** Die Uebergangsklausel nennt als Umschaltpunkt
+# `P2H-06` (alle Rollen umgezogen).
+#
+# **Gemessen am 16.08.: `P2H-06` ist ERFUELLT und es gibt NULL Commits mit der Rollenmarke
+# `integrator`.** Woertlich gebaut haette die Sperre damit heute ALLE FUENF Rollen aus der
+# Statuswahrheit ausgesperrt, ohne dass ein Schreiber danebensteht. **Eine andere Rolle hat den
+# Deadlock bereits im Datensatz dokumentiert:** *„die Barriere sperrt aus dem RICHTIGEN Grund, aber
+# BEVOR der Schreiber existiert. Sie kommt vor ihrem Ersatz."*
+#
+# **Deshalb ist die Bedingung nicht `P2H-06`, sondern die Existenz des Ersatzes** — am Repository
+# gemessen und nicht geraten: gibt es mindestens einen Commit mit der Rollenmarke `integrator`,
+# ist der Schreiber da und die Sperre greift. Vorher wird gemeldet statt gesperrt.
+#
+# ***Das ist derselbe Gedanke wie K3 und K6, eine Ebene hoeher:*** *ein Tor, das eine Handlung
+# erzwingt, fuer die es noch keinen Weg gibt, haelt die Kette an, statt sie zu schuetzen.*
+#
+# **Und es ist eine Abweichung vom Wortlaut des Kriteriums. Sie steht hier und im Bau-Bericht,
+# nicht still im Code.**
+if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
+  INTEGRATOR_DA="$(git log --all --format=%s --grep='^integrator:' 2>/dev/null | head -1)"
+  if [ -n "$INTEGRATOR_DA" ]; then
+    echo "ROLLEN-TOR  VERSTOSS  '$ROLLE' aendert docs/STATUS.md ausserhalb des Integrations-Checkouts." >&2
+    echo "            Die Statuswahrheit hat EINEN Schreiber: den Integrator." >&2
+    echo "            gefunden: $VERZ auf $ZWEIG" >&2
+    [ "$NUR_MELDEN" = "1" ] && exit 0
+    exit 1
+  fi
+  echo "ROLLEN-TOR  HINWEIS  '$ROLLE' aendert docs/STATUS.md — noch KEIN Integrator gestartet." >&2
+  echo "            Durchgelassen: die Sperre zuendet erst, wenn ein Schreiber existiert" >&2
+  echo "            (gemessen: 0 Commits mit Rollenmarke 'integrator'). Bis dahin divergiert" >&2
+  echo "            die Statuswahrheit je Zweig — heute in SECHS Fassungen." >&2
+fi
+
 # K3: wer noch nicht umgezogen ist, wird DURCHGELASSEN und gemeldet. Der Umzug ist freiwillig
 # getaktet — ein Tor, das ihn erzwingt, haelt die Kette an, statt sie zu schuetzen.
 SOLL_PFAD="$(dirname "$BAUM")/$SOLL_VERZ"
