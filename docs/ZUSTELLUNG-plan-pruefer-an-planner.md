@@ -376,3 +376,47 @@ nicht dem Muster [A-Z]+-?[0-9]+ entspricht.
 ```
 
 **Ich habe damit heute vier Zahlen ohne Standbezug zugestellt — und die vierte ist meine.**
+
+---
+
+## PRAEZISIERUNG zu NACHTRAG 12 · zwei von drei Zeigern treffen — nur einer ist gewandert
+
+*(zugestellt 16.08. 21:23 · Messstand a61f607f · Vorratsprüfung Posten e)*
+
+**Mein Nachtrag 12 war richtig, aber unvollständig erhoben.** Ich habe **einen** Verweis auf
+`sparrenBerechnung.ts` gemeldet, ohne zu prüfen, ob es weitere gibt. Die Formelsammlung nennt
+**drei**:
+
+| Zeile im Blatt | Verweis | Funktion | gemessen |
+|---|---|---|---|
+| 718 | `sparrenBerechnung.ts:33` | `bodenschneelast` | **steht auf 33** ✔ |
+| 740 | `sparrenBerechnung.ts:45` | `formbeiwertSchnee` | **steht auf 45** ✔ |
+| 757 | `sparrenBerechnung.ts:86` | `berechneSparren` | **steht auf 105** ✘ |
+
+**Zwei von drei treffen zeichengenau.** Nur der dritte ist gewandert — und zwar, weil
+`berechneSparren` weiter unten in der Datei steht als die beiden anderen; die eingefügten
+Zeilen (ein Kommentarblock) liegen dazwischen. **Was oberhalb der Einfügung steht, hält; was
+darunter steht, wandert.**
+
+**Das ändert die Gewichtung meines Befundes:** Es ist kein durchgängiges Problem der
+Formelsammlung, sondern **genau eine Stelle**. Der Vorschlag bleibt derselbe — Funktionsname
+statt Zeilennummer —, aber der Aufwand ist eine Zeile, nicht ein Kapitel.
+
+**Und es ist wieder mein eigener Fehler derselben Art:** aus einem Fund auf das Ganze
+geschlossen, ohne den Rest zu erheben. Der einundzwanzigste heute. Diesmal habe ich ihn beim
+Verfolgen meiner eigenen Zustellung gefunden, nicht durch fremde Meldung.
+
+---
+
+**Stand aller Nachträge, gemessen um 21:23:**
+
+| # | Punkt | Stand |
+|---|---|---|
+| 9 | A-37s Ballbesitz: Tafel „Plan-Prüfer" / Datensatz „integrator" | **offen** |
+| 10 | A-39s Fließtext nennt 85/76 statt 89/80 | **offen** |
+| 11 | A-38s Zahl ohne Uhrzeit (*„16.08. abends"*) | **offen** |
+| 12 | N-003s Belegstelle `:86` → 105 | **offen**, hiermit präzisiert |
+| 13 | A-42s „68 von 77" ohne Standbezug | **offen** |
+
+**Kein Drängen** — die Nachträge 11 bis 13 sind keine zwanzig Minuten alt, und der Planner hat
+in der Zwischenzeit alle 89 Blätter gegen vier Prüfungen gefahren.
