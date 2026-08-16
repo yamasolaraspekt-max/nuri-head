@@ -21041,3 +21041,57 @@ bitte: |
   nicht bei mir.
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "a33_ist_gebaut_aber_der_bau_erreicht_die_abnehmende_rolle_nicht"
+titel: "A-33 steht im Generator-Baum auf CODE_FERTIG und im Fernstand auf BEREIT — und der Evaluator, der abnehmen soll, ist seit 25 Stunden still und haengt 147 Commits zurueck"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:20"
+stand_kopf: 33227f5c
+posten: "Pflichtteil 3 — Stillstand aufloesen"
+zuerst_das_erledigte: |
+  Mein dringlichster Punkt von 13:14 ist behoben, vom Planner in b6af3207 (13:16:53):
+  "A-33 umgeschnitten — der Ball, den der Generator ausdruecklich bei mir gelassen hat."
+  Selbst nachgemessen im Blatt:
+    'genau EINS'            0 Treffer  (war die abgelaufene Zielzahl)
+    'Invariante' / 'Skript' 5 Treffer
+  Das Blatt traegt jetzt Yamas Umschnitt, BEVOR der Evaluator misst. Genau die Reihenfolge,
+  um die ich gebeten hatte — und der Generator hatte den Ball bewusst dort gelassen, statt
+  selbst am Kriterium zu drehen.
+DIE LAGE, in zwei Zahlen: |
+  A-33 zustand im Generator-Baum c8a23373:  CODE_FERTIG · Ball Evaluator · bau_sha 3e22e61b
+  A-33 zustand im Fernstand      a4694b21:  BEREIT      · Ball generator
+  Beides ist richtig gesetzt worden; sie kennen einander nur nicht. Der Generator-Zweig ist
+  nicht transportiert — drei Commits, darunter der Bau, habe ich um 13:17 als ungesichert
+  gemeldet. Der Fernstand weiss deshalb nicht, dass gebaut wurde.
+  UND DIE ROLLE, DIE ABNEHMEN SOLL, IST DIE EINZIGE, DIE NICHT UMGEZOGEN IST:
+    letzter Evaluator-Commit   5dd5eaee, 15.08. 12:00 (die A-35-Abnahme)
+    still seit                 25 h 18 min
+    eigene Commits auf rolle/evaluator   0
+    Rueckstand seines Baums              147 Commits
+  Er arbeitet, wenn er wieder anfaengt, auf einem Stand von gestern Mittag — dort gibt es
+  weder A-33s Bau noch das umgeschnittene Blatt noch die vier Auftraege dazwischen.
+warum_das_die_fuenfte_stelle_derselben_klasse_ist: |
+  1. gestern  A-37-Bau-Ort      erreichte den Release-Pruefer nicht
+  2. heute    A-38-Zahlenbefund erreichte die BEREIT-Erteilung nicht
+  3. 13:07    A-33-Zielzahl     erreichte den Bau nicht
+  4. 13:09    der Bestand hielt fest, es habe keinen Hinweis gegeben
+  5. jetzt    der fertige BAU erreicht die Abnahme nicht
+  Die ersten vier trafen Prueftexte. Dieser trifft die Kette selbst: eine Station meldet
+  fertig, die naechste kann es nicht sehen. Das ist kein Transportrueckstand mehr, sondern
+  eine unterbrochene Uebergabe.
+was_ich_NICHT_sage: |
+  NICHT, dass der Evaluator saeumig ist. Ich weiss nicht, ob er laeuft; 25 Stunden Stille
+  koennen heissen, dass er nicht gestartet ist. Das ist eine Betriebsfrage, keine
+  Rollenfrage, und sie gehoert Yama.
+  NICHT, dass jemand einen Fehler gemacht hat. Generator und Planner haben beide sauber
+  gearbeitet und ihre Baelle korrekt gesetzt. Es fehlt der Weg dazwischen.
+bitte: |
+  An den Release-Pruefer: rolle/generator transportieren, damit der Bau und CODE_FERTIG im
+  Fernstand ankommen. Ohne das kann keine Abnahme beginnen, egal wer sie faehrt.
+  An Yama: laeuft der Evaluator? Wenn nicht, wartet A-33 auf eine Station, die es gerade
+  nicht gibt — dann ist zu entscheiden, ob jemand vertritt (wie heute Mittag bei meiner
+  eigenen Rolle) oder ob A-33 bis zu seinem Start liegen bleibt. Beides ist vertretbar,
+  aber es sollte entschieden sein und nicht einfach dauern.
+ballbesitz: yama
+```
