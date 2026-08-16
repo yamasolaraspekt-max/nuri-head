@@ -6563,3 +6563,69 @@ mit: *„steht aus" ist die falsche Kategorie für eine gefahrene Prüfung.*
 und ein Zustandswechsel kein Transport ist — dieselbe Grenze, die der Release-Prüfer für sich zieht.*
 **Ball beim Integrator** (Schreiblauf für vier Datensätze) **und beim Planner** (die zwei Übergänge
 sind seine Entscheidung). **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 93 — Posten (a) an A-18: sieben von sieben halten — und dieselbe Datei trägt einen gewanderten und einen haltenden Zeiger, aus rein zeitlichem Grund
+
+**Stand:** HEAD `414c3260`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**A-18 gewählt, weil zwei Fäden dort zusammenlaufen:** sein Block ist der, den A-42s Messvorschrift
+verliert (§91), und §77 führte ihn mit zwei geänderten Code-Dateien.
+
+### Sieben Zeiger, alle am Objekt
+
+```
+wandaufbau.ts:2      'Konfigurator „Wandaufbau" §11, autark; SPEIST HEIZLAST & DACH'   TRIFFT
+wandaufbau.ts:4      'Reine Bauphysik: Waermedurchgangskoeffizient U aus geschichtetem
+                      Aufbau' — der Dateikopf nennt seine Norm selbst                  TRIFFT
+wandaufbau.ts:9-15   export interface Schicht { name?, dicke, lambda }
+                     'GENAU DREI Felder'                                               TRIFFT
+faehigkeiten.ts:81   { id: 'engine-uwert', label: 'U-Wert (Wandaufbau)', … }            TRIFFT
+fachFlaechen.ts:149  { label: 'Feuchtelast', einheit: 'g/h' },                          TRIFFT
+dachformVorlagen.ts:105  holzfeuchteProzent: string;                                   TRIFFT
+sparrenBerechnung.ts:100 export const N003_VORBEHALT = 'Vorbemessung, ersetzt keine
+                         prueffaehige Statik'                                          TRIFFT
+```
+
+**Und A-18-1s Forderung ist dadurch belegt:** der Vorbehalt soll *„als Konstante wie
+`sparrenBerechnung.ts:100`, nicht als Zeichenkette im Rückgabeblock"* geführt werden — **er ist
+dort genau das.**
+
+### Der eigentliche Fund: zwei Zeiger, eine Datei, gegenteiliges Schicksal
+
+`sparrenBerechnung.ts` trägt beide — den aus §81, der ins Leere zeigt, und diesen, der hält:
+
+```
+FORMELSAMMLUNG, N-003 Belegstelle  :86   geschrieben 12.08 00:30   heute Kommentarzeile  GEWANDERT
+A-18, N003_VORBEHALT               :100  geschrieben 12.08 08:57   heute die Konstante   HAELT
+dazwischen                         e0722979, 12.08 02:46, +20 Zeilen (A-14s Bau)
+```
+
+**Am Objekt nachgemessen, und die Erklärung ist rein chronologisch:**
+
+```
+N003_VORBEHALT bei e0722979~1   existiert NICHT      Datei 131 Z.
+N003_VORBEHALT bei e0722979     Zeile 100            Datei 151 Z.
+N003_VORBEHALT heute            Zeile 100            Datei 151 Z.
+seit e0722979 byte-identisch · 0 Commits an der Datei in fuenf Tagen
+```
+
+**Der eine Zeiger wurde zwei Stunden VOR dem Einschub geschrieben, der andere sechs Stunden
+DANACH.** *Beide Autoren haben sorgfältig gearbeitet. Der Unterschied ist keine Sorgfalt, sondern
+ein Zeitpunkt.*
+
+### Was das zu §79 hinzufügt
+
+```
+§79   WO gewachsen wird entscheidet   — REGISTER.md waechst unter allen Zeigern, +122 ohne Bruch
+§93   WANN gezeigt wird entscheidet   — dieselbe Datei, zwei Zeiger, zwei Ergebnisse
+```
+
+**Ein Zeilenverweis ist nur so lange gültig, wie oberhalb nichts wächst — und ob das passiert,
+weiß der Schreibende im Moment des Schreibens nicht.** *Deshalb ist „Kennung statt Zeile" keine
+Stilfrage: `berechneSparren` und `N003_VORBEHALT` hätten beide überlebt, unabhängig vom Zeitpunkt.*
+**Und die Gegenprobe steht daneben: seit die Datei nicht mehr wächst, hält der Zeiger seit fünf
+Tagen. Nicht die Zahl ist das Problem, sondern die Bewegung darüber.**
+
+**Kein Ball, kein Fund an A-18 — sieben von sieben.** *Der Beleg gehört zum §77/§79/§81-Ball beim
+Planner, als dritte Achse: Ort, Zeitpunkt, Form.* **Kein Zustandsfeld angefasst, kein Bau.**
