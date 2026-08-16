@@ -4797,3 +4797,92 @@ einer, der die wirksame Alternative mitmisst, erzeugt eine.*
 
 **Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.** *Die Kette gehört dem
 Planner — sie ist der erste Beleg, dass die Eigenschaft übertragbar ist und nicht am Autor hängt.*
+
+---
+
+## 74 — FEHLER 28: mein Messstand ist nicht atomar, und diesmal habe ich es LIVE gesehen
+
+**Der Baum ist mir unter der Messung weggewandert.** Drei aufeinanderfolgende Befehle EINES
+Blocks, drei verschiedene Zustände desselben Repositories:
+
+```
+git rev-parse HEAD                 -> bdcb07df
+git status --porcelain | wc -l     -> 3
+git log --oneline bdcb07df..HEAD   -> SECHS Commits
+```
+
+**Die dritte Zeile ist mit der ersten unvereinbar** — eine Spanne von HEAD zu HEAD kann nicht
+sechs Commits enthalten. *Genau daran habe ich es gemerkt.* Das Reflog nennt die Ursache:
+
+```
+HEAD@{17.08 00:30:06}  merge fca886bd...: Fast-forward
+HEAD@{17.08 00:29:29}  commit: plan-pruefer: W-34 haelt an jeder gemessenen Stelle
+```
+
+**37 Sekunden nach meinem eigenen Commit** hat der Rückweg meinen Arbeitsbaum vorgezogen,
+`bdcb07df` → `fca886bd`, **reiner Fast-forward** (`is-ancestor` exit 0) — meine Arbeit ist
+unversehrt, und die „3" war die Momentaufnahme während des Auscheckens. **Neu gemessen: Baum 0,
+`-uno` 0, HEAD nach zwei Sekunden unverändert.**
+
+### Die Klasse ist neu, und sie ist die dritte
+
+```
+Fehler 26   falsch gemessen, falsch gesagt        -> falsche Aussage, wurde bemerkt
+Fehler 27   gar nicht gemessen, richtig geraten   -> richtige Aussage, blieb stehen
+Fehler 28   richtig gemessen, aber NICHT GLEICHZEITIG
+                                                  -> jede Zeile fuer sich wahr, der Block falsch
+```
+
+**Hätte ich es nicht bemerkt, hätte ich gemeldet: „HEAD `bdcb07df`, Baum 3, sechs neue Commits."
+Jede Zahl echt, der Satz insgesamt eine Fiktion** — und er hätte wie eine Repo-Anomalie ausgesehen
+statt wie meine eigene Nicht-Gleichzeitigkeit.
+
+**Behoben:** der Messstand wird in eine Variable gelegt, **jeder** Befehl der Runde rechnet gegen
+diese Variable, und am Ende steht die Gegenprobe, ob HEAD sich bewegt hat. *Bewegt er sich, sind
+die Messwerte der Runde keine Messwerte und werden wiederholt — nicht nachgetragen.*
+
+### Und es ist NICHT der Fehler des Rückwegs — aber es ist auch kein Zufall
+
+Der Rückweg hat richtig gehandelt: mein Baum war in dem Moment sauber, also wurde vorgezogen.
+**Die Kollision liegt in der Bauart, nicht im Versehen:**
+
+```
+17  Fremd-Fast-forwards in meinen Baum ueber den ganzen Lauf
+236 eigene Commits im selben Reflog
+```
+
+*Der Rückweg zieht genau die sauberen Bäume vor. Eine Wache-Runde ist über den größten Teil ihrer
+Dauer sauber — sie misst, sie schreibt erst am Ende.* **Also trifft der Rückweg eine Wache-Runde
+mit hoher Wahrscheinlichkeit, und beide Seiten arbeiten dabei korrekt.** Das ist eine gemessene
+Wechselwirkung, kein Vorwurf, und die Abhilfe liegt bei mir: **wer in einem fremd bewegten Baum
+misst, muss die Bewegung erkennen können.**
+
+### Mein Ball ist zurück — und die Behebung geht über meinen Fund hinaus
+
+`ed034871` behebt den sechsten Exit-Code aus §72. **Am Code nachgeprüft, nicht geglaubt:**
+
+```
+:100  rc, _      = git(merge --ff-only)      :101  if rc:            frueher Ruecksprung
+:118  rc_neu, neu = git(rev-parse --short)   :119  if rc_neu or not neu:
+:120-121  zaehlt als unmessbar, Meldung 'MERGE LIEF, ERGEBNIS UNMESSBAR  vor -> ?'
+:130  return 1 if fehler else (2 if unmessbar else 0)      -> 2 statt 0
+```
+
+**`rc_neu` kommt zweimal vor — Zuweisung und Prüfung. Keine Zuweisung bleibt ungelesen.**
+Und er ist über meinen Fund hinausgegangen: `if rc_neu or **not neu**` fängt zusätzlich den Fall
+**Exit 0 bei leerer Ausgabe** — den hatte ich nicht genannt.
+
+**Live gegengeprüft, ohne sein Werkzeug zu fahren** (`main()` nicht aufgerufen, Wachtposten
+`__name__` in Zeile 133 belegt), an zwei VERSCHIEDENEN Ausfallursachen:
+
+```
+lage(Pfad ohne Repository)  -> ('unmessbar', 'HEAD nicht lesbar')
+lage(gueltiger Baum, Ziel-SHA erfunden) -> ('unmessbar', 'rev-list nicht lesbar')
+```
+
+**Beide führen zum Überspringen, keiner zum Merge. Die tragende Zusage hält an zwei Ursachen,
+nicht nur an der, die er selbst gestellt hat.** *Ball beim Release-Prüfer geschlossen.*
+
+**Kein Ball offen aus dieser Runde. Kein Zustandsfeld angefasst, kein Bau.** *Die Wechselwirkung
+Rückweg ↔ Wache gehört dem Integrator und dem Release-Prüfer zur Kenntnis — gemeldet, nicht als
+Mangel.*
