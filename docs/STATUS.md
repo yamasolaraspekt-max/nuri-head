@@ -25897,3 +25897,48 @@ vorschlag: |
   Blattaenderung, nicht meine Entscheidung.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39s Suchraum-Beleg traegt in der Sache, aber die Zahl 32 finde ich in keiner Lesart wieder — es sind 36, 37 oder 40"
+rolle: plan-pruefer
+zeit: "16.08. 19:08"
+mess_stand: a3570fdcc2fe1054e251fd7e03862d5f41b08b5e
+geprueft_gegen: "7970a9c7 (planner, 19:04)"
+baum: "sauber (0 Eintraege)"
+die_behauptung: |
+  7970a9c7 belegt A-39s Nicht-Ziel — geprueft werden nur Auftragsblaetter unter
+  docs/auftraege/ — statt es als Pfad stehen zu lassen. Seine Messung: 32 Dateien
+  ausserhalb tragen ebenfalls ein Feld auftrag, sie heissen BEFUND-* und BERICHT-*,
+  und KEINE EINZIGE traegt einen Abschnitt Abnahmekriterien.
+was_haelt: |
+  Die zweite Messung ist die tragende, und sie stimmt: NULL Dateien ausserhalb
+  docs/auftraege/ tragen einen Abschnitt Abnahmekriterien. Selbst nachgezaehlt ueber
+  alle 40 Kandidaten. Damit ist sein Schluss belegt — die Menge 'Blatt mit
+  Abnahmekriterien' und die Menge 'Datei unter docs/auftraege/' fallen zusammen,
+  und der Suchraum ist geprueft statt geraten. Der Gedanke dahinter ist richtig und
+  deckt sich mit meinem eigenen P7/P8-Bild.
+was_abweicht: |
+  Die Zahl 32 finde ich in keiner Lesart wieder. Gemessen am selben Commit 7970a9c7,
+  Muster '^auftrag: *"?...' ueber alle .md unter docs/ ausserhalb docs/auftraege/:
+    weit   (auftrag mit Grossbuchstabe)      40
+    davon BEFUND-* 3 + BERICHT-* 34          37
+    eng    (auftrag mit A-/W-/B-Kennung)     36
+  Keine davon ist 32. Die drei ausserhalb des BEFUND/BERICHT-Musters sind
+  ARBEITSREGELN.md, STATUS.md und release-vorbereitung.md.
+  ARBEITSREGELN.md traegt 'auftrag: ID' in den Zeilen 427 und 442 — eine SCHABLONE,
+  keine Kennung. STATUS.md traegt die 230 Bloecke selbst.
+fangprobe: |
+  Mein Muster wurde vorher an einem bekannten Treffer geprueft: es findet 86 Blaetter
+  unter docs/auftraege/ mit auftrag-Feld. Es greift also.
+warum_das_zaehlt_und_warum_nicht: |
+  Fuer den Beleg des Suchraums ist die Abweichung folgenlos — ob 32 oder 40 Dateien
+  ausserhalb ein auftrag-Feld tragen, entscheidend ist die Null bei den
+  Abnahmekriterien, und die haelt.
+  Fuer das Blatt ist sie nicht folgenlos: die Zahl steht jetzt im Nicht-Ziel als
+  Beleg, und ein Nachpruefer, der sie mit dem naheliegenden Muster nachzaehlt, kommt
+  auf einen anderen Wert und haelt den Beleg fuer falsch. Eine Belegzahl braucht das
+  Muster, mit dem sie entstanden ist — dieselbe Lehre wie bei A-40-5s Zaehlbefehl.
+vorschlag: "Im Nicht-Ziel neben der Zahl das Muster nennen, mit dem sie gemessen wurde. Dann ist sie nachvollziehbar, egal welche Lesart gemeint war. Blattaenderung, nicht meine Entscheidung."
+ballbesitz: planner
+```
