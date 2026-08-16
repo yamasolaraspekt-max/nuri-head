@@ -1,0 +1,215 @@
+# A-41 — Der Zustandswechsel IST der Commit: `docs/STATUS.md` wird erzeugt, nicht geschrieben
+
+```yaml
+auftrag: "A-41"
+werkzeug: "— (Werkzeug der Rollenkette, kein Hausplaner-Werkzeug)"
+art: "BAU — ein Wortlaut, ein Erzeugungsskript, eine Erstbefuellung. KEIN Hausplaner-Code,
+      KEINE Migration. docs/STATUS.md wird von diesem Auftrag ERZEUGT — das ist der
+      Liefergegenstand, nicht ein Verstoss gegen das uebliche Nicht-Ziel."
+spur: A
+heimat_app: ticket
+dor_beleg: "steht aus — plan-pruefer."
+dor_schnitt_sha: "e521bd98"
+status_steht_in: docs/STATUS.md
+basis_sha: e521bd98
+prioritaet: P0
+ballbesitz: "plan-pruefer (DoR)"
+claim: "planner 16.08. — Claim VOR dem Schnitt."
+kennung_geprueft: "GEMESSEN UEBER ALLE SECHS ZWEIGE, nicht gegen HEAD: A-41 hat in jedem der
+                   sechs docs/STATUS.md NULL Treffer und in jedem Zweig NULL Blaetter unter
+                   docs/auftraege/. Frei. — Der Sechs-Zweige-Blick ist ab heute Pflicht, weil
+                   HEAD nachweislich der zweitaelteste der sechs Staende ist."
+gebaut_in: "ticket-rolle-generator (rolle/generator)"
+geht_vor: "A-39 und A-40. Beide stauen hinter A-37; A-41 staut hinter NICHTS."
+regelgrundlage: "Yamas Entscheidung vom 16.08. zu e521bd98 — der Zustandswechsel ist der
+                 Commit, docs/STATUS.md wird erzeugt. Dieses Blatt BAUT sie, es erfindet
+                 sie nicht."
+anlass: "EIN Auftrag, FUENF Zustaende: A-33 steht gleichzeitig auf CODE_FERTIG, SPEC_BLOCKED,
+         BEREIT, ABGENOMMEN und BETRIEBSBESTAETIGT. Der ganze Lebenszyklus gleichzeitig."
+```
+
+## Der Befund, an dem dieses Blatt hängt
+
+```
+Zweig                          STATUS.md   A-33                voraus  zurueck
+
+auto/hausplaner-integration      21.705 Z.  CODE_FERTIG              0       0
+rolle/planner                    21.704 Z.  SPEC_BLOCKED             1       3
+rolle/plan-pruefer               22.197 Z.  BEREIT                  24      52
+rolle/generator                  19.568 Z.  CODE_FERTIG             11      73
+rolle/evaluator                  22.796 Z.  ABGENOMMEN              73       4
+rolle/release-pruefer            23.010 Z.  BETRIEBSBESTAETIGT      86       1
+```
+
+**Spreizung 3.442 Zeilen. Der Integrationszweig ist 86 Commits hinter dem jüngsten Stand** — wer
+`HEAD` liest, und §16 sagt, er soll genau das, liest den zweitschlechtesten der sechs Stände.
+
+> **Der Generator hat vor einer Stunde zwei Zustände gemessen, Yama misst fünf. Das ist keine
+> Ungenauigkeit, das ist der Befund: die Divergenz ist kein Zustand, sie ist ein Vorgang.**
+
+## Warum eine Sperre nicht zuerst kommt
+
+```
+Eine Rolle wechselt heute einen Zustand, indem sie STATUS.md aendert.
+Sperrst du die Datei OHNE Ersatzweg, kann sie den Wechsel gar nicht
+mehr melden.
+
+  Sperre ohne Ersatzweg = kein Halt der Divergenz,
+                          sondern Halt der KETTE.
+```
+
+**Eine Sperre ist kein Weg, sie ist die Abwesenheit eines Weges.** Deshalb kommt der Ersatzweg
+zuerst — und er ist die endgültige Lösung, nicht ein Zwischenstück. **A-37 Teil 2 wird danach
+gebaut und sperrt dann nichts weg, sondern sichert eine offene Tür.**
+
+## Scope — vier Bestandteile
+
+### 1 · Der Wortlaut
+
+```
+zustand: <KENNUNG> · <ZUSTAND> · <rolle> · <beleg-sha>
+
+Beispiel:  zustand: A-33 · CODE_FERTIG · generator · bau 3e22e61b
+
+  WER    = git-Autor        — nicht aus Prosa
+  WANN   = git-Zeitstempel  — nicht aus Prosa
+  WAS    = Kennung + Zustand + Beleg-SHA
+  WO     = im eigenen Rollenzweig, sonst nirgends
+```
+
+**Der Betreff ist die erste Zeile. Alles Weitere steht im Rumpf und wird nicht gelesen.**
+
+> **⚠ SO WIE OBEN GESCHRIEBEN IST DER WORTLAUT HEUTE NICHT COMMITTIERBAR — gemessen, nicht
+> vermutet.** `commit-pruefen.sh:73` erkennt jedes Präfix der Form `wort: ` als **Rollenmarke**.
+> `zustand: ` erfüllt das. Zeile 78 vergleicht es mit `TICKET_ROLLE` und wirft
+> `WIDERSPRUCH: die Botschaft gibt sich als 'zustand: ' aus … kein Commit`, **`exit 2`**.
+> Und ohne Marke stellt Zeile 84 `"$ROLLE: "` voran — dann matcht `^zustand:` nicht mehr.
+>
+> **Beide Wege sind zu. Deshalb trägt der Wortlaut die Rollenmarke vorn:**
+>
+> ```
+> planner: zustand: A-41 · ENTWURF · planner · blatt e521bd98
+>          ^^^^^^^^ Muster: ^[a-z][a-z-]*(-[0-9]+)?: zustand:
+> ```
+>
+> **Das Tor bleibt unverändert, `%s` liest den ganzen Betreff, und die Rolle steht doppelt —
+> einmal fürs Tor, einmal als Inhalt.** *(Die Doppelung ist beabsichtigt: das Tor prüft die
+> Umgebung, die Erzeugung liest den Text. Zwei Leser, zwei Quellen.)*
+
+### 2 · `scripts/status-erzeugen.sh`
+
+```
+git log --all --grep='^zustand:' --format='%H %at %an %s'
+  -> je Kennung gewinnt der JUENGSTE Eintrag
+  -> daraus wird docs/STATUS.md GESCHRIEBEN
+  -> Widerspruch bei gleicher Zeit -> GEMELDET, nicht aufgeloest
+```
+
+### 3 · Die Erstbefüllung — **der Punkt, der in der Anweisung fehlt**
+
+**Gemessen am Basis-SHA: es gibt heute `0` Commits mit `^zustand:`.** Läuft die Erzeugung gegen
+diesen Log, erzeugt sie eine **leere Tafel**. Das sieht aus wie ein Skriptfehler und ist keiner —
+es ist fehlende Datenlage.
+
+> **Die Gegenprobe aus der Anweisung — *„weicht sie ab, ist die Abweichung der Befund"* — trägt
+> nur, wenn Daten da sind. Bei null Einträgen weicht sie um hundert Prozent ab, und das ist kein
+> Befund, sondern ein leerer Eingang.**
+
+**Deshalb ist die Erstbefüllung ein eigener Bestandteil:** Die heute in den **sechs** `STATUS.md`
+stehenden Zustände werden einmal maschinell in Zustands-Commits überführt — je Kennung der
+**jüngste** Stand über alle sechs Zweige, nach Commit-Zeit des Zweiges, nicht nach Zweigname.
+
+**Das ist genau der Sechs-Zweige-Blick, den die Übergangszeit verlangt — einmal maschinell, statt
+bei jedem Auftrag von Hand.** Und A-33 löst sich dabei von selbst: der jüngste Stand liegt beim
+Release-Prüfer und sagt `BETRIEBSBESTAETIGT`.
+
+### 4 · Der Übergang beginnt sofort, vor dem Bau
+
+**Ab dem Commit, der dieses Blatt trägt, schreibt der Planner den Zustands-Betreff mit** — auch
+solange das Skript nicht existiert. **Ein Wortlaut kostet nichts und füllt den Eingang, der sonst
+leer bliebe.** Die anderen Rollen ziehen mit der DoR nach.
+
+## Nicht-Ziele
+
+- **Kein Hausplaner-Code**, keine Migration, nichts unter `resources/`, `app/`, `database/`.
+- **Kein Eingriff in `commit-pruefen.sh` und `rollen-tor.sh`** — dort arbeitet A-37. *(A-41 baut
+  den Weg, A-37 Teil 2 baut den Riegel daneben.)*
+- **Keine inhaltliche Änderung an Prosa**, die heute in `docs/STATUS.md` steht. Was kein Zustand
+  ist, wird **gemeldet**, nicht gelöscht *(K4)*.
+- **Keine Auflösung von Widersprüchen.** Gleiche Zeit, zwei Zustände → Meldung. Regel 4.
+- **Keine Sperre.** Wer nach dem Bau noch von Hand schreibt, wird nicht gehindert — das ist A-37.
+
+## Kanten
+
+| # | Fall | Verlangtes Verhalten |
+|---|---|---|
+| K1 | **Zwei Zustands-Commits derselben Kennung mit identischem Zeitstempel** | **beide melden, keiner gewinnt.** Rückgabe `2`. Nicht: Autor oder Zweig entscheidet |
+| K2 | **Ein Zustand wird gemeldet für eine Kennung, die kein Blatt hat** | Zeile wird erzeugt **und** als Fund gemeldet — ein Zustand ohne Auftrag ist ein Befund, kein Filterfall |
+| K3 | **Erstbefüllung: eine Kennung steht in sechs Ständen verschieden** *(A-33)* | **jüngster Commit gewinnt, über alle sechs Zweige nach Commit-Zeit.** Die fünf verdrängten Stände werden **einzeln protokolliert** — sie sind die erste vollständige Divergenzmessung |
+| K4 | **Prosa in `STATUS.md`, die kein Zustand ist** *(ein Teil der 3.442 Zeilen)* | **nicht übernehmen, aber je Zweig protokollieren, wo sie steht.** Sie gehört in die Blätter, aus denen sie stammt — **verloren geht sie nicht** |
+| K5 | **Ein Zustands-Commit wird zurückgedreht** (`revert`) | der Revert ist **kein** Zustands-Commit; der zurückgedrehte bleibt gültig. **Wer zurücknehmen will, meldet den alten Zustand neu** — ausdrücklich benannt, nicht stillschweigend |
+| K6 | **Eine Rolle meldet einen Zustand im fremden Zweig** | Zeile wird erzeugt **und** gemeldet: Zweigname und Rollenmarke passen nicht zusammen |
+| K7 | **Der Zustands-Betreff steht in einem Merge-Commit** | **nicht zählen.** `--no-merges`. Ein Merge trägt fremde Betreffs — sonst wandert ein Zustand beim Transport ein zweites Mal ein |
+
+## Abnahmekriterien
+
+- **A-41-1** · **Der Wortlaut steht in `docs/ARBEITSREGELN.md`** und ist maschinell prüfbar
+  (ein Muster, das der Betreff erfüllen muss). **Rot am Basis-SHA:** `grep -c '^zustand:'` über
+  die Regeln → **0**.
+- **A-41-2** · **`scripts/status-erzeugen.sh` existiert und ist ausführbar.**
+  **Rot am Basis-SHA, über drei Zweige gemessen:** `status-erzeug` kommt in `scripts/` **null**
+  Mal vor — in `auto/hausplaner-integration`, `rolle/planner` und `rolle/generator` je `0`.
+- **A-41-3** · **IDEMPOTENZ.** Zweiter Lauf unmittelbar nach dem ersten ändert **keine Zeile**
+  (`git diff --stat` → leer). *(Ohne das ist die Erzeugung selbst eine Divergenzquelle.)*
+- **A-41-4** · **DIE ERSTBEFÜLLUNG IST GEFAHREN.** Nach dem Lauf trägt die erzeugte Tafel für
+  **jede** Kennung, die heute in **irgendeinem** der sechs Stände einen Zustand hat, genau **eine**
+  Zeile. **Positivprobe namentlich:** `A-33` trägt **`BETRIEBSBESTAETIGT`** — den jüngsten der
+  fünf, nicht den aus `HEAD`.
+- **A-41-5** · **Die fünf verdrängten Stände von A-33 sind einzeln protokolliert**, mit Zweig,
+  Zustand und Commit-Zeit. *(K3 — das ist die erste vollständige Messung der Divergenz und der
+  eigentliche Ertrag des Laufs.)*
+- **A-41-6** · **DIE GEGENPROBE GEGEN DEN HEUTIGEN STAND IST GEFAHREN UND PROTOKOLLIERT.**
+  Erzeugnis gegen den bestehenden Stand des Integrationszweiges gestellt. **Jede Abweichung ist
+  aufgeführt und je Zeile einer Ursache zugeordnet:** verdrängter Stand *(K3)*, Prosa *(K4)*,
+  Zustand ohne Auftrag *(K2)*, oder **ungeklärt**. **Ungeklärte Abweichungen sind ein Fund und
+  keine Nebensache.**
+- **A-41-7** · **Widerspruch wird gemeldet, nicht aufgelöst.** Zwei Zustands-Commits derselben
+  Kennung mit identischer Zeit → beide in der Meldung, Rückgabe `2`, **Tafel unverändert**.
+  *(Probe künstlich herstellbar, Beleg als Rohausgabe.)*
+- **A-41-8** · **Merges zählen nicht.** Ein Zustands-Betreff, der nur über einen Merge in den
+  Log kommt, erzeugt **keine** zweite Zeile. *(K7 — sonst wandert jeder Zustand beim Transport
+  erneut ein.)*
+- **A-41-9** · **Alle sieben Kanten K1–K7 sind behandelt und je einzeln belegt.**
+- **A-41-10** · **Die Rückgabewerte sind eindeutig und einfach vergeben:**
+  `0` erzeugt, keine Meldung · `1` erzeugt, mit Meldungen *(K2/K4/K6)* · `2` **nicht** erzeugt,
+  Widerspruch *(K1)* · `3` Eingang leer, nichts erzeugt.
+  **Kein Wert trägt zwei Bedeutungen.** *(Der Fehler, an dem A-37 eine Runde verlor.)*
+- **A-41-11** · **Kein Nicht-Ziel berührt.** `git show --stat` nennt keine Datei unter
+  `resources/`, `app/`, `database/`, und **nicht** `scripts/commit-pruefen.sh` oder
+  `scripts/rollen-tor.sh`.
+- **A-41-12** · **Suite grün und Zahl unverändert gegen den Bau-Stand**, `tsc exit=0`.
+  Zahl **unmittelbar vor dem Bau** erheben — **keine feste Zahl im Kriterium.**
+
+## Rückweg und Entdeckung
+
+- **Rückweg:** ein neues Skript, ein Regel-Nachtrag, ein erzeugter Dateistand. **Rücknahme =
+  Commit zurückdrehen.** Die alten sechs Stände bleiben in ihren Zweigen unberührt erhalten —
+  **nichts wird gelöscht, es wird nur ein siebter, erzeugter Stand danebengestellt.**
+- **Entdeckung:** A-41-3 (Idempotenz) fängt eine Erzeugung, die selbst driftet. A-41-6 (Gegenprobe)
+  fängt eine, die still etwas anderes erzeugt als bisher galt.
+- **Der Fall, der beim Bauen am ehesten übersehen wird:** **K7.** Ein Merge trägt fremde Betreffs
+  mit; ohne `--no-merges` erscheint jeder Zustand nach jedem Transport erneut — und die
+  Erzeugung, die die Divergenz beenden soll, würde sie selbst herstellen.
+
+## Was dieser Auftrag nicht löst
+
+**Nicht, dass ein Zustand falsch gemeldet wird.** Wer `ABGENOMMEN` meldet, ohne abgenommen zu
+haben, kommt durch — der Log sichert Urheber und Reihenfolge, nicht Wahrheit. Dagegen stehen die
+Kriterien und der Evaluator, wie bisher.
+
+**Nicht den Rückfluss.** Er wird nur billig genug, dass er beauftragt werden kann: an einzelnen
+Tagen fassen **76 %, 58 % und 80 %** aller Commits `docs/STATUS.md` an — dieser Anteil fällt beim
+Integrator weg, übrig bleiben echte Code-Konflikte.
+
+**Und nicht die 3.442 Zeilen rückwirkend.** Was davon Prosa ist, zeigt K4; wohin sie gehört,
+entscheidet danach ein eigener Vorgang.
