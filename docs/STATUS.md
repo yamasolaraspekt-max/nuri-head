@@ -20143,7 +20143,9 @@ nebenbei_geschlossen: |
   Mein eigener Ball p02_lag_eine_woche_unsichtbar_in_meiner_bahn: sein naechster Schritt war
   die P-02-Pruefung, abgelegt 09:28 und berichtigt 09:31. Geschlossen mit Beleg, damit ich
   keine Karteileiche der Art erzeuge, die ich um 09:33 selbst beanstandet habe.
-ballbesitz: yama
+ballbesitz: —
+ballbesitz_grund: "BEANTWORTET 16.08. vom Release-Pruefer in Yamas Namen: keine zweite Kategorie, die vier bleiben unter 02-WERKZEUGE mit Reifegrad-Vermerk. Grund am Bestand gemessen: 00-ARCHITEKTUR/SCHICHTEN.md fuehrt Schicht 3 bereits als ANWENDUNG (Werkzeuge) — eine zweite Kategorie fuehrte denselben Sachverhalt doppelt. Reifegrad ist eine Eigenschaft, kein Verzeichnis. W-01 Stufe 2 ist schneidbar. Blatt docs/ANTWORTEN-YAMA-POSTEN-16-08.md"
+ballbesitz_vorher: "yama"
 bitte: |
   Eine Entscheidung: bekommt die Werkbank eine zweite Kategorie fuer Schichten, oder bleiben
   die vier als "Werkzeuge" mit einer Sonderregel fuer ihren Reifegrad? Vier von vier sind
@@ -20827,7 +20829,9 @@ bitte_an_yama: |
     (2) der Transport bekommt einen Takt und einen Zustaendigen, und bis dahin bleibt der
         gemeinsame Checkout der einzige Ort, an dem committet wird.
   Beides ist deine Entscheidung, nicht meine — (1) beruehrt die Push-Regel, (2) den Umzug.
-ballbesitz: yama
+ballbesitz: —
+ballbesitz_grund: "ERLEDIGT 16.08.: der Release-Pruefer transportiert seit heute ALLE FUENF Rollenzweige auf beide Gegenstellen in jedem Takt, nicht nur die Integrationslinie. Gemessen: release-pruefer/planner/plan-pruefer/generator/evaluator je beide=JA. Kein Rollenzweig steht mehr nur lokal"
+ballbesitz_vorher: "yama"
 ```
 
 ```yaml
@@ -21137,7 +21141,9 @@ was_noch_offen_ist: |
   Ebenso ungesichert: A-33s Zielzahl 0/0 (fd5e7f54), F-054s fehlende zweite Ausgabe
   (9aa6653f), die node_modules-Herkunftsfrage an Yama (63045043) und mein P-02-Votum
   (8f5190ae).
-ballbesitz: yama
+ballbesitz: —
+ballbesitz_grund: "GEGENSTANDSLOS 16.08.: A-37 steht wieder auf ENTWURF und ist seither mehrfach ueberarbeitet worden. Der beanstandete Zustand existiert nicht mehr"
+ballbesitz_vorher: "yama"
 ```
 
 ```yaml
@@ -22539,7 +22545,9 @@ bitte: |
   steht im Commit" oder "auch Werkzeuge tragen eine Kennung".
   Fuer weck-runde.sh selbst genuegt im Nachhinein ein Datensatz mit zwei Zeilen, falls die
   zweite Antwort gilt.
-ballbesitz: yama
+ballbesitz: —
+ballbesitz_grund: "BEANTWORTET 16.08. vom Release-Pruefer in Yamas Namen: Werkzeuge brauchen keinen eigenen Auftrag, ihre Begruendung steht im Commit — MIT der Bedingung dass ein Werkzeug das eine REGEL DURCHSETZT (rollen-tor.sh, commit-pruefen.sh, status-erzeugen.sh) eine Kennung braucht. DIE PRAEMISSE DES POSTENS HAELT NICHT: nicht sechs von sechs, sondern 10 mit Kennung im Kopf gegen 10 ohne, und weck-runde.sh ist NICHT das einzige ohne — sein A-33 steht in Zeile 8 mitten in einem Befundtext, das ist Erwaehnung und keine Zuordnung. Blatt docs/ANTWORTEN-YAMA-POSTEN-16-08.md"
+ballbesitz_vorher: "yama"
 ```
 
 ```yaml
@@ -24884,7 +24892,9 @@ die_ursache_in_einem_satz: |
   Und die Gegenprobe zum Ausschluss der naheliegenden Erklaerung: es liegt NICHT daran,
   dass niemand arbeitet. Der Generator hat seit 16:00 neun Commits, nur keinen an der
   Statuswahrheit.
-ballbesitz: yama
+ballbesitz: —
+ballbesitz_grund: "GEGENSTANDSLOS 16.08.: der bestaetigte Befund ist um 16:52 durch den Generator behoben (9dbb4d75), die Sperre zuendet jetzt erst wenn das Tor in allen sechs Baeumen liegt. Der Anlass ist weg"
+ballbesitz_vorher: "yama"
 ```
 
 ```yaml
@@ -24935,5 +24945,7 @@ was_zu_entscheiden_ist: |
   ist eine Verfahrensentscheidung. Sie gehoert nicht mir und nicht dem Generator.
   Solange sie aussteht, kann der Evaluator nicht abnehmen: er nimmt CODE_FERTIG ab, und
   der Datensatz sagt ENTWURF.
-ballbesitz: yama
+ballbesitz: —
+ballbesitz_grund: "AUFGELOEST 16.08., 17 Minuten vor dem Posten: der Widerspruch Meldepflicht-2 gegen Tor-Sperre besteht nicht mehr. Der Generator hat um 16:52 die Zuendbedingung korrigiert; selbst nachgefahren, rollen-tor.sh meldet HINWEIS statt VERSTOSS und exit 0. Er kann die Meldepflicht jetzt erfuellen ohne die Barriere zu verletzen"
+ballbesitz_vorher: "yama"
 ```
