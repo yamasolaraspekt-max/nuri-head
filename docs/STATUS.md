@@ -25274,3 +25274,56 @@ was_das_fuer_die_DoR_heisst: |
   Reichweite.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "P5 auf A-37 selbst angewandt — Code 2 traegt im Blatt zwei Bedeutungen und im Bau mindestens vier"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:42 CEST"
+mess_stand: "A-37-Blatt aus rolle/planner · commit-pruefen.sh aus rolle/generator, 918 Z. · Planner-Kopf a774e549"
+warum_diese_pruefung: |
+  A-39s Pruefung P5 lautet: "Wird in einem Blatt mehr als eine Bedeutung auf denselben
+  exit-Code gelegt, ist das ein Fund — unabhaengig davon, ob beide Stellen denselben
+  Bauteil betreffen." K5 grenzt ab: zwei Nennungen fuer DASSELBE sind kein Fund.
+  Ich habe P5 auf A-37 angewandt, weil dort eine Codetabelle steht und A-37 heute BEREIT
+  traegt.
+im_blatt: |
+  Die Codetabelle vergibt 1 bis 6, jeden Wert einmal — mit einer Ausnahme:
+  Z.300  | **2** | YAML-Syntaxfehler im Kopf         | commit-pruefen.sh | gebaut
+  Z.305  | *(2)* | Rollenkennung fehlt/falsche Form  | commit-pruefen.sh:59-65 | vorhanden
+  Zwei Bedeutungen auf Code 2. Alle anderen Codes je eine. Das ist P5s Fall, nicht K5s:
+  die beiden Zeilen meinen NICHT dasselbe.
+  ZUR FAIRNESS: die zweite Zeile ist kursiv und als "unberuehrt, vorhanden" markiert. Sie
+  dokumentiert einen bestehenden Zustand, sie vergibt nichts neu. Verschwiegen wird also
+  nichts — aber die Doppelbelegung besteht.
+im_bau_ist_es_groesser: |
+  Am Code nachgemessen, statt es beim Blatt zu belassen: 'exit 2' kommt in
+  commit-pruefen.sh FUENFMAL vor, und die Meldungen davor sind verschieden:
+  Z.72   "Aufruf: bash scripts/commit-pruefen.sh [--trocken] ..."   Aufruffehler
+  Z.86   "TICKET_ROLLE fehlt oder ist leer"                          Kennung fehlt
+  Z.90   "TICKET_ROLLE entspricht nicht der Form"                    Kennung falsch
+  Z.156  "WIDERSPRUCH: die Botschaft gibt sich als ... aus"          Rollenwiderspruch
+  (Z.137 ist ein Kommentar ueber ein frueheres exit 2, keine Vergabe.)
+  Vier Bedeutungen auf einem Wert. Das Blatt nennt fuer Code 2 den YAML-Syntaxfehler —
+  der unter diesen vier gar nicht vorkommt.
+  EINSCHRAENKUNG, die ich selbst nenne: ich habe die vier Stellen ueber ihre unmittelbar
+  vorangehende Meldung zugeordnet, nicht ueber den vollstaendigen Kontrollfluss. Dass es
+  vier VERSCHIEDENE Faelle sind, ist damit belegt; ob einer davon zugleich der YAML-Fall
+  ist, habe ich NICHT ausgeschlossen.
+warum_das_zaehlt: |
+  A-37 selbst nennt die Codekollision "der Fehler, an dem A-37 eine Runde verlor" — bei
+  der Verschiebung von 3 auf 5 am 16.08. Und A-41-10 verlangt woertlich "kein Wert traegt
+  zwei Bedeutungen" und hat es geloest: EIN zentraler Ausstieg mit einer BEDEUTUNG-Tabelle,
+  von mir um 15:43 nachgemessen.
+  A-37s eigenes Werkzeug hat also genau die Mehrdeutigkeit, die sein Nachbarauftrag gerade
+  behoben hat — und A-37 traegt seit 16:56 BEREIT.
+  Wer exit 2 liest, weiss heute nicht, ob der Aufruf falsch war, die Rolle fehlt, ihre
+  Form nicht stimmt oder die Botschaft widerspricht. Vier Ursachen, ein Wert, keine
+  Unterscheidung — und A-37-8 verlangt ausdruecklich, dass Ursachen unterscheidbar sind.
+was_ich_vorschlage_ohne_zu_entscheiden: |
+  Fuer das Blatt: die Doppelzeile (2) aufloesen oder den bestehenden Fall auf einen eigenen
+  Wert legen. Fuer den Bau: dieselbe Bauart wie A-41-10 — ein Ausstieg, eine Tabelle,
+  jeder Wert eine Bedeutung. Das Muster liegt fertig im Nachbarskript.
+  Kein Bau von mir, kein Zustandsfeld angefasst.
+ballbesitz: planner
+```
