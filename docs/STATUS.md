@@ -22684,3 +22684,56 @@ stand: |
   Offen: A-41-1, -4 bis -7, -9, -11, -12 und die Kanten K1 bis K4 sowie K6.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "Beide meiner roten Punkte sind behoben — am laufenden Werkzeug nachgemessen, nicht am Commit-Text geglaubt"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:45 CEST"
+mess_stand: "Bau 2e9cf127 (15:40, 316 Z., vorher 227) · HEAD 52c4e13d · Laeufe im eigenen Baum, Arbeitsbaum danach 0 geaenderte Pfade"
+a_41_8_behoben: |
+  'no-merges' im Skript: 2 Treffer (vorher 0). Z.191 traegt den Schalter im Aufruf,
+  Z.187 die Begruendung im Kommentar. Der Punkt, den ich um 15:22 gemeldet und den der
+  Planner um 15:29 zum Auftrag gemacht hat, ist zu.
+a_41_10_behoben_und_besser_als_verlangt: |
+  Aus vier verstreuten 'sys.exit(1 if X else 0)' ist EIN zentraler Ausstieg geworden:
+  def raus(code, grund, bedeutung=None) mit einer BEDEUTUNG-Tabelle.
+  ALLE VIER WERTE WERDEN JETZT WIRKLICH ERZEUGT — die Aufrufe gezaehlt, nicht die Tabelle
+  gelesen (das war der Fehler, an dem A-37 haengt):
+    raus(0, ...) 3 mal · raus(1, ...) 2 mal · raus(2, ...) 3 mal · raus(3, ...) 3 mal
+    dazu raus(70, ...) 1 mal fuer die rote Selbstprobe (sysexits EX_SOFTWARE)
+  sys.exit gesamt: 1. Bash-exit: 0. Es gibt keinen zweiten Weg hinaus.
+  Und die Zuordnung stimmt inhaltlich, Stichprobe an drei Stellen:
+    Z.238 raus(3, "Kein einziger Commit im Wortlaut ... nichts zu erzeugen")
+    Z.251 raus(2, "GEMELDET, NICHT aufgeloest (Regel 4)")
+    Z.262 raus(0, "... Kennungen, keine Meldung")
+  BESSER ALS VERLANGT ist der Sonderfall, den A-41-10 gar nicht nennt: die Fangprobe
+  erzeugt nichts, also waere ihre 0 als "erzeugt, keine Meldung" unehrlich. Der Code
+  ueberschreibt die Bedeutung an dieser einen Stelle und begruendet es im Kommentar —
+  "an genau der Stelle unehrlich, an der sie die Ehrlichkeit des Werkzeugs bezeugen soll".
+am_laufenden_werkzeug_bestaetigt: |
+  Nicht am Code stehengeblieben, sondern gefahren — diesmal am richtigen Ort:
+    --fangprobe  -> Rueckgabe 0, "Fangprobe 10/10 wie erwartet", "RUECKGABE 0 — Selbstprobe gruen"
+    (ohne Arg)   -> Rueckgabe 1, "RUECKGABE 1 — erzeugt, MIT Meldungen",
+                    "fehlend 85 · neu 0 · abweichend 0"
+  Genau die Mehrdeutigkeit, die ich um 15:35 gemeldet hatte, ist weg: die 1 steht nicht
+  mehr allein, ihre Aufschluesselung steht daneben. Wer sie liest, weiss jetzt, was
+  passiert ist.
+  Die 86 Kennungen im Bestand sind zum dritten Mal unveraendert — Skript, mein
+  Python-Nachbau, und dieser Lauf.
+a_41_1_ist_heute_korrekt_rot: |
+  Das Blatt gibt als Rot-Lage an: grep -c '^zustand:' ueber die Regeln -> 0.
+  Am Basis-SHA e521bd98 nachgemessen: 0. Die Angabe stimmt, das Kriterium ist weder
+  unerfuellbar noch bereits erfuellt.
+  EIN HINWEIS FUER DEN, DER ES SPAETER ABHAKT: ohne den Anker misst man 8 Treffer in
+  docs/ARBEITSREGELN.md (Z.126, 720, 722, 733, 752 u.a.). Die sind Altbestand und meinen
+  das ZUSTANDSFELD in STATUS.md, nicht den Commit-Wortlaut. Wer 'zustand:' ohne ^ zaehlt,
+  haelt A-41-1 faelschlich fuer erfuellt. Der Anker im Blatt ist richtig gesetzt — er muss
+  nur benutzt werden.
+stand: |
+  Haltend: A-41-1 (als Rot-Lage sauber), -2, -3, -8, -10, K5, FUND 1, Bau-Muster,
+  Vergleichsmodus, Fangprobe 10/10.
+  Offen: A-41-4 bis -7, -9, -11, -12 und die Kanten K1 bis K4 sowie K6.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
