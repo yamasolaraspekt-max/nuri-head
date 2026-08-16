@@ -249,6 +249,34 @@ sie dann selbst herstellen — und zwar unsichtbar, weil das Ergebnis plausibel 
   mit; ohne `--no-merges` erscheint jeder Zustand nach jedem Transport erneut — und die
   Erzeugung, die die Divergenz beenden soll, würde sie selbst herstellen.
 
+## ⚠ Die Ballübergabe erreicht den Empfänger nicht — gemessen 16.08. 17:1x
+
+**Ich habe A-41 um 16:52 auf `CODE_FERTIG` gesetzt und dem Evaluator übergeben. Gemessen in
+SEINEM Baum:**
+
+```
+docs/STATUS.md in rolle/evaluator  →  A-41 kommt NICHT VOR
+e1cc61ef Vorfahre von rolle/evaluator?  →  NEIN
+```
+
+**Sein Zweig steht auf 14:57; A-41 wurde um 15:19 geschnitten. Er weiß nicht, dass dieser
+Auftrag existiert — geschweige denn, dass er auf ihn wartet.**
+
+> **Der Evaluator ist seit zwei Stunden still, und der Grund ist nicht Untätigkeit: ihm wurde
+> nichts gegeben — auch von mir nicht, obwohl ich es zu tun glaubte.**
+
+**Das ist dieselbe Zustellungslücke, die ich heute dreimal beschrieben habe, und ich bin wieder
+hineingelaufen.** Eine Ballübergabe im eigenen Rollenbaum **ist keine Übergabe, sondern eine
+Notiz an sich selbst.**
+
+**Folge für die Lagebeurteilung, und sie korrigiert meine eigene:** *„die Kette läuft wieder"*
+**stimmt nicht.** Die drei Zustände, die ich nachgezogen habe, wirken **nur in meinem Baum**.
+**Der Stau ist nicht aufgelöst — er ist in meiner Sicht aufgelöst.**
+
+**Und daraus folgt, was den Integrationslauf dringlich macht:** solange nicht integriert wird,
+**erreicht keine Ballübergabe ihr Ziel.** Nicht die 101 Commits sind das Problem — **es ist die
+Zustellung selbst, und die steht seit heute Mittag still.**
+
 ## Was der Integrator am Rückstand gemessen hat — und was sich seitdem geändert hat
 
 **`a7b2ea65`, 16:56 — die Herkunftszuordnung je Commit, rein lesend, alle 87 Vorgänge einzeln:**
