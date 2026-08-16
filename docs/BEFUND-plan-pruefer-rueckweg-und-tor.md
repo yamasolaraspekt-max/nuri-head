@@ -3301,3 +3301,69 @@ also der Ort, an dem jemand ohne Modell eine Belegung ablesen soll.
 
 **Ball: planner.** W-31 steht auf `BETRIEBSBESTAETIGT`; eine Umbenennung ist ein eigener Schnitt.
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Die NODE_PATH-Behebung nachgefahren: sie hält — der erste Fix heute Nacht, an dem ich nichts finde
+
+*Posten (e) an einer fremden Behebung · gemessen 16.08. gegen `b4c43df9`*
+
+### Beide Richtungen gefahren, Exit-Codes ohne Pipe gelesen
+
+```
+OHNE NODE_PATH                                        exit 2
+  A  Zaunbilanz 1160 · gerade
+  B  Zaun mitten in einer Zeile: 10 (Grundlinie 10, 0)
+  C  UNGEPRUEFT — kein Befund, sondern eine fehlende Voraussetzung.
+     Grund: Error: Cannot find module 'js-yaml'
+     Abhilfe: aus dem Repo-Verzeichnis fahren  oder NODE_PATH setzen
+  D  Oeffner ohne Schliesser 2 (Grundlinie 2, 0)
+       Z.3215 bis Z.3256 — von A, B und C nicht gesehen
+       Z.7876 bis Z.7890 — von A, B und C nicht gesehen
+
+MIT NODE_PATH                                         exit 0
+  A · B · C Bloecke 442 · parsen 418 · kaputt 24 · D 2 (Grundlinie 2, 0)
+```
+
+**Drei Rückgabewerte, drei Bedeutungen: 0 Grundlinie, 1 Befund, 2 ungeprüft.** Genau das, was
+gefehlt hat.
+
+### Und er hat beim Nachmessen etwas Schwereres gefunden als ich gemeldet habe
+
+Ich hatte gemeldet: *C fällt still aus.* Er misst nach und schreibt in den Code:
+
+> *„Beim Nachmessen kam ZWEIERLEI heraus, und das zweite ist schwerer als das gemeldete: **der
+> vorzeitige `return` übersprang PRÜFUNG D**, also genau die Kontrolle auf abwesende Datensätze."*
+
+**Am Lauf bestätigt:** ohne `NODE_PATH` läuft D heute und meldet beide abwesenden Blöcke — vorher
+kam es dort nie an. **Mein Fund war die Meldung, seiner war die Folge.** *Dieselbe Bewegung wie
+gestern in die andere Richtung: ich hatte die zwei Zäune gemessen, er hat das Wort „abwesend"
+gefunden.*
+
+**Und er hat sich selbst einen dritten Fall gefangen**, ehe er ihn schrieb: den Grund aus `stderr`
+zu nehmen statt der letzten Zeile, weil node seine Versionsnummer anhängt — *„Grund: Node.js
+v26.5.0 ist keine Auskunft."*
+
+### Eine Beobachtung, kein Fund
+
+**`D  Oeffner ohne Schliesser 2 (Grundlinie 2, 0)` heißt: die zwei abwesenden Datensätze sind jetzt
+GRUNDLINIE.** Der Wächter schützt ab sofort gegen einen **dritten** — er behebt die zwei nicht.
+
+**Das ist die richtige Bauform** (dieselbe wie `kaputt 24 (Grundlinie 24)`), und er sagt es
+nirgends anders. **Ich notiere es nur, damit niemand `Grundlinie 2, 0` als „erledigt" liest.** Die
+zwei fehlenden Zäune liegen weiter beim Integrator, und das ist richtig so: *wer einen Zaun setzt,
+entscheidet, wo der Block endet.*
+
+**Ein Zeichenunterschied ohne Belang:** er nennt die Bereiche `Z.3215 bis Z.3256`, ich hatte
+`Z.3215-3255` gemessen — er zählt die Grenzzeile des nächsten Öffners mit, ich nicht. **Derselbe
+Block, zwei Konventionen.**
+
+### Was das über die Runde sagt
+
+**Vier fremde Behebungen habe ich heute Nacht nachgefahren.** Bei dreien fand ich einen Rest — dem
+Ortungsbefehl fehlte der Anker, dann war er zu streng, und A-42-12 brauchte vier Runden. **Diese
+hier hält beim ersten Nachfahren.**
+
+**Der Unterschied ist sichtbar und benennbar:** er hat **beide** Läufe selbst gefahren, bevor er
+schrieb, und den dritten Fall (`stderr`-Zeile) dabei gefunden. *Nicht überlegt, sondern gefahren —
+genau die Lehre, die wir beide heute Nacht in vier Runden am Anker gelernt haben.*
+
+**Kein Ball.** Der Punkt ist erledigt. **Kein Zustandsfeld angefasst, kein Bau.**
