@@ -4190,3 +4190,125 @@ W-11/1   nennt die SUMME neben den Einzelzahlen
 andere, indem er die Gegenrechnung mitliefert. *Kein Zufall, dass genau diese zwei halten.*
 
 **Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 68 — W-06 gegen seinen Schnitt: der Code hält, und die FORMELSAMMLUNG-Versätze sind ZWEI Vorfälle, nicht eine Praxis
+
+**Stand:** HEAD `acb8e3e5`, Baum 0 Einträge, kein Push. **Vorratsprüfung Posten (a) — gewanderte
+Verweise**, am siebten noch nie angefassten Blatt: **W-06 Geschoss verwalten**, `BETRIEBSBESTAETIGT`,
+Basis `acb3d494` (12.08. 23:33).
+
+### Erstens: W-06 selbst hält vollständig
+
+Vier Code-Dateien gegen die Basis, byte-genau:
+
+```
+geometry/geschossVorlage.ts            78 Z.  IDENTISCH
+app/dashboard/geschossStapel.ts       104 Z.  IDENTISCH
+__tests__/geschossFlaeche.test.ts     165 Z.  IDENTISCH
+app/dashboard/palette.ts              191 Z.  IDENTISCH
+```
+
+Und **alle vierzehn Werkbank-Zeiger treffen exakt**: `1-ZWECK` :15 :21 :25 :39 :59-62 :80 :83-85 ·
+`2-FUNKTION` :5 :15 :27 :36 :39 · `7-GRENZEN` :3 :15-16 :60 :63 · `REGISTER.md:54`.
+**Kein einziger gewandert.** *Ausdrücklich positiv:* `1-ZWECK:83-85` führt die Zahl „34 der 110"
+**mit ihrer eigenen Alterung** („heute sind es 111 … der Zähler 34 ist hier nicht nachgemessen und
+wird deshalb nicht als heutige Zahl geführt"). **Ein Blatt, das seine eigene Zahl altern lässt und
+das dazuschreibt.**
+
+### Zweitens: der Fund liegt woanders — an der FORMELSAMMLUNG
+
+W-06-7 wurde von **A-34** am 13.08. von `FORMELSAMMLUNG.md:218` auf den **Anker** umgestellt.
+**Das Kriterium hält** (`7-GRENZEN:15-16` trägt den Anker, F-032 existiert). Aber die Zahl, mit der
+A-34 die Umstellung begründete, ist **selbst weitergewandert** — und dieselbe Zahl steckt in vier
+weiteren aktiven Blättern:
+
+```
+BLATT      ZEILE  VERWEIS                gemeint          heute dort
+W-12/1     :25    FORMELSAMMLUNG:253     F-032            F-022 Dachneigung umrechnen
+W-12/1     :68    FORMELSAMMLUNG:253     F-032            F-022
+W-16/1     :90    FORMELSAMMLUNG:253     F-032            F-022
+W-16/1     :243   FORMELSAMMLUNG:253     F-032            F-022
+W-18/1     :30    FORMELSAMMLUNG:155     F-013 Selbstschnitt   F-004 Schnittpunkt
+W-31       :279   FORMELSAMMLUNG.md:557  F-028 Azimut     F-026 Dach
+```
+
+**Nicht „zeigt ins Leere", sondern „zeigt auf eine andere Formel"** — genau die Klasse, für die A-34
+angelegt wurde. **Gegenprobe, und sie ist der Beleg:** jeder der drei Zeiger trifft bei **+53** exakt
+seine Abschnittsüberschrift — `155+53=208` F-013, `253+53=306` F-032, `557+53=610` F-028.
+*Die Blätter hatten alle recht, als sie geschrieben wurden.*
+
+### Drittens: acht Commits, EINER hat die Zahlen bewegt
+
+```
+COMMIT     ZEIT          LAENGE  F-013  F-022  F-032
+136ebca1   13.08 14:33      996    155    200    253
+6c08c478   13.08 23:20     1021    155    200    253
+5e94b27b   13.08 23:25     1025    155    200    253
+0d2f0907   14.08 07:36     1025    155    200    253
+6e786005   14.08 10:17     1078    208    253    306   <-- +53
+bb97fd5c   15.08 11:52     1151    208    253    306
+da2a0d6a   16.08 14:29     1151    208    253    306
+15c49f96   16.08 20:01     1187    208    253    306
+HEAD       17.08 00:02     1187    208    253    306
+```
+
+**Die Datei wuchs um 191 Zeilen, und 138 davon haben nichts verschoben.** `6c08c478`, `5e94b27b`,
+`bb97fd5c` hängten ans Dateiende an, `0d2f0907` tauschte „zwei rein zwei raus", `da2a0d6a` setzte
+zeilenneutral ein — **fünf Commits nennen die Gegenprobe in ihrer Botschaft und hatten recht.**
+
+**`6e786005` ist der einzige, dessen Botschaft keine Zeilenneutralitäts-Gegenprobe trägt** — und
+er ist der einzige, der verschoben hat. Sein unmittelbarer Vorgänger `0d2f0907`, zwei Stunden
+einundvierzig Minuten davor am selben Tag, hatte genau dafür extra Zeilen getauscht statt eingefügt.
+
+### Viertens — und das ist der eigentliche Befund: die Schlussfolgerung in `15c49f96` trägt nicht
+
+Der Planner hat die Sache am 16.08. 20:01 selbst gemessen (62 Verweise auf 22 Zeilen, fünf geprüft,
+vier falsch) und geschlossen:
+
+> *„DIE VERSAETZE SIND VERSCHIEDEN: 56, 81, 88 … es gibt keinen einzelnen Vorfall zu beheben,
+> sondern eine laufende Praxis."*
+
+**Nachgerechnet zerlegen sich genau diese drei Zahlen in ZWEI Vorfälle:**
+
+```
+N-003:  666 -> 701 (136ebca1 +35) -> 754 (6e786005 +53)  = +88   sein Wert: 88
+F-020:  132 -> 167 (136ebca1 +35) -> 220 (6e786005 +53)  = +88   sein Wert: 81 *
+F-013:  155 ------------------->    208 (6e786005 +53)   = +53   sein Wert: 56 *
+```
+
+`*` Die Restdifferenz ist **keine Abweichung, sondern Körnung**: er hat den Zeiger gegen die
+**Zitatzeile** gehalten (`:139` liegt 7 Zeilen in F-020, `:211` 3 Zeilen in F-013), ich gegen die
+**Abschnittsüberschrift**. Beide Messungen sind richtig.
+
+**Die Versätze sehen nur verschieden aus, weil die Zeiger zu verschiedenen Zeiten geschrieben
+wurden — nicht, weil es viele Einschübe gab.** Es sind zwei: `136ebca1` (+35) und `6e786005` (+53).
+Wer vor dem 13.08. 14:33 schrieb, trägt +88; wer dazwischen schrieb, +53; wer nach dem 14.08. 10:17
+schrieb, trägt 0.
+
+**Das ändert die Behebung.** „Laufende Praxis" heißt: 22 Stellen einzeln aufmachen. Gemessen heißt
+es: **das Schreibdatum des Zeigers bestimmt den Summanden**, und die Prüfung ist eine Addition.
+*Für die neun bisher gemessenen Zeiger — seine fünf und meine sechs, ein Überschneider — geht die
+Rechnung ohne Rest auf. Die übrigen habe ich NICHT hochgerechnet* (B6).
+
+**Und die Praxis selbst funktioniert:** fünf von sechs Einfügungen in diesem Fenster waren
+zeilenneutral, von ihren Urhebern gemessen und richtig gemeldet. Der Befund ist nicht „niemand
+achtet darauf", sondern **„einer hat einmal nicht gemessen, und dieser eine trägt den ganzen
+Versatz"**.
+
+### Was NICHT betroffen ist — die Grenze der Meldung
+
+**Alle vier Blätter sind `BETRIEBSBESTAETIGT`.** A-34 hat ausdrücklich entschieden: berichtigt wird,
+**wo der Verweis wirkt** (Produktivcode, Kriterien aktiver Blätter) — *„in Befunden belegt eine
+Nummer legitim einen Stand, und abgenommene Blätter werden nicht umgeschrieben."*
+
+**A-34s eigene Gegenprobe hält am heutigen Stand: `FORMELSAMMLUNG:<Zahl>` im Produktivcode = 0.**
+**Kein aktives Kriterium ist betroffen.** Der Schaden ist deshalb heute keiner am Bau, sondern einer
+am Lesen — und die Meldung ist der **Mechanismus**, nicht die Liste.
+
+**Die Empfehlung des Planners aus `15c49f96` bleibt davon unberührt richtig:** die F-/N-Kennung ist
+kürzer, eindeutig und überlebt jeden Einschub. *Nur der Grund, den er darunter geschrieben hat,
+stimmt nicht.*
+
+**Ball beim Planner.** **Kein Zustandsfeld angefasst, kein Bau.**
