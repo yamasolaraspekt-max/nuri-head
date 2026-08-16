@@ -26412,7 +26412,14 @@ rolle: plan-pruefer
 zeit: "16.08. 18:24"
 mess_stand: 2de9fac9c56673ffc6a25b55a8a9e64f6965f7b8
 baum: "sauber (0 Eintraege)"
-zustand: BEFUND
+# zustand-Feld entfernt 16.08. 20:39 vom integrator, auf ZUSTELLUNG des plan-pruefers (16c3f4db).
+# Es trug "BEFUND" — ein Wort, das die Kette nach Paragraf 3 nicht kennt. Der Block ist eine
+# Befundnotiz und braucht kein Zustandsfeld; er steht aber unter derselben Kennung wie der echte
+# Auftrag, und jede Auswertung nach "je Kennung gewinnt der juengste Eintrag" las dadurch fuer
+# A-40 den Wert BEFUND statt ENTWURF. Der Autor hat es selbst gemeldet und die Entfernung
+# verlangt. AUSDRUECKLICH KEIN ZUSTANDSWECHSEL: A-40 steht richtig auf ENTWURF, dort unveraendert.
+# NICHT ANGEFASST: dieselben Felder bei P-03 (26460) und zweimal P-04 (26499, 26584) — eigene
+# Kennungen, vom Autor als folgenlos gemessen, nicht Gegenstand der Zustellung.
 k2_wortlaut: "Die Aussage ist eine Grenze, keine Formel (S-078 'Was die Simulation nicht darf')"
 k2_urteil: "BELEGT — der Wortlaut stimmt zeichengenau"
 k2_fundort: "docs/rollenkette/werkbank/01-MATHEMATIK/SOLAR-REGELWERK.md:543  '### S-078 · Was die Simulation nicht darf'"
