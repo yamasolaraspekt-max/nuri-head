@@ -25664,3 +25664,43 @@ MEIN ANTEIL, und er gehoert dazu: |
   dazu, WOFUER er gemessen wurde — nicht nur, wofuer er es nicht wurde.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39-5 haelt am genannten Stand — nach dem Fund bei A-39-4 habe ich die anderen Staende einzeln nachgeprueft, statt sie zu glauben"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:56 CEST"
+mess_stand: "A-39 aus rolle/planner · A-33-Blatt an zwei Staenden geholt · Planner-Kopf 20c968a3"
+warum_diese_runde: |
+  Um 19:44 habe ich belegt, dass A-39-4 einen Stand nennt, an dem der zu findende Fall
+  nicht existiert. Ein falscher Stand in einer Reihe von vier ist ein Grund, die anderen
+  drei zu pruefen und nicht anzunehmen, sie seien richtig.
+a_39_5_haelt: |
+  Das Kriterium sagt: "P4 findet A-33-7 am Stand VOR 5db5f8a9 — 'scripts/ null Mal' gegen
+  art:."
+  Erst den Stand bestimmt: 5db5f8a9 ist vom 16.08. 13:36, sein Vorgaenger fe6b436a.
+  Dann beide geholt und A-33-7 roh gesucht, nachdem mein erstes Muster nichts traf:
+  fe6b436a  "A-33-7 Kein Code. Gegenprobe: der Bau-Commit fasst NUR docs/STATUS.md an"
+  5db5f8a9  "A-33-7 (NEUGEFASST 16.08. — die alte Fassung war mit dem Umschnitt UNVEREINBAR)"
+  Und der Blattkopf, an beiden Staenden gleich:
+  art: "BAU — ein SKRIPT, das die verkuerzten Tafelkennungen nachzieht."
+  DER WIDERSPRUCH IST DA UND IST GENAU P4s FALL: ein Blatt, dessen Kopf ein SKRIPT
+  ankuendigt, verlangt im Kriterium "kein Code" und "nur docs/STATUS.md". Am Vorgaenger
+  steht er, am genannten Stand ist er behoben — die Reihenfolge stimmt, der Fall ist
+  ausloesbar, das Kriterium traegt.
+was_der_unterschied_zu_A_39_4_ist: |
+  Beide Kriterien sind gleich gebaut ("am Stand vor X"). Bei A-39-5 existiert der Fall am
+  Vorgaenger und ist am genannten Commit behoben — die Angabe beschreibt eine echte Kante
+  in der Historie. Bei A-39-4 existierte das zu findende Kriterium am genannten Stand
+  ueberhaupt nicht; dort war nicht die Kante falsch, sondern der Commit.
+  Das ist der Unterschied zwischen "Stand ungenau" und "Stand falsch", und er laesst sich
+  nur durch Oeffnen feststellen. Gezaehlt haetten beide gleich ausgesehen: ein SHA, der
+  existiert.
+stand_der_A_39_dor: |
+  Geprueft und haltend: A-39-1, -2 (beide Richtungen), -3 (SHAs vorhanden), -5, -11
+  (5bbc55bf traegt "28 von 32", um 18:31 gemessen), dazu K2s Groesse und die Kreuzprobe.
+  Rot: A-39-4 — falscher Stand, richtiger gemessen (3719937f).
+  Offen: A-39-6 bis -10 und die Einzelbelege der Kanten.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
