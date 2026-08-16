@@ -249,6 +249,45 @@ sie dann selbst herstellen — und zwar unsichtbar, weil das Ergebnis plausibel 
   mit; ohne `--no-merges` erscheint jeder Zustand nach jedem Transport erneut — und die
   Erzeugung, die die Divergenz beenden soll, würde sie selbst herstellen.
 
+## Was der Integrator am Rückstand gemessen hat — und was sich seitdem geändert hat
+
+**`a7b2ea65`, 16:56 — die Herkunftszuordnung je Commit, rein lesend, alle 87 Vorgänge einzeln:**
+
+```
+Produktivcode im Rueckstand:  NULL
+  resources 0 · app 0 · database 0 · routes 0 · config 0 · tests 0 · public 0 · bootstrap 0
+beruehrt werden nur:          docs 104 · scripts 20
+
+was die 87 anfassen:  60 nur docs/STATUS.md · 4 STATUS.md + weitere · 23 ohne
+```
+
+> **Der Rückstand ist kein Stapel von Lieferungen, der auf Abnahme wartet — er ist das
+> Arbeitsprotokoll von fünf Rollen.** **Der Lauf kann die Anwendung nicht beschädigen; das
+> Risiko liegt vollständig in der Statuswahrheit selbst.**
+
+**Sieben von zehn Vorgängen sind dieselbe Datei**, nacheinander von fünf Rollen geschrieben —
+**das ist die Divergenzquelle, gemessen statt behauptet, und genau das, was dieser Auftrag
+abstellt.**
+
+**Die sechzehn ohne Auftragskennung hat er geöffnet statt gezählt:** alle sechzehn sind Befund-,
+Antwort- oder Berichtigungs-Commits mit erkennbarem Sachbezug. **Wer den Lauf nach Aufträgen
+sortiert, verliert diese sechzehn lautlos.** *(Dieselbe Klasse wie die 104 Blöcke ohne
+`zustand:` — Inhalt gut, Zuordnung fehlt.)*
+
+**⚠ SEINE ZUSTANDSZAHLEN SIND SEIT 16:52 ÜBERHOLT — durch meine drei Commits, nicht durch
+seinen Fehler:**
+
+```
+er maß 16:56          CODE_FERTIG 0 · ENTWURF 7 · Evaluator 0 Bälle
+Stand nach 17:0x      CODE_FERTIG 1 (A-41) · BEREIT 2 (W-17/1, A-37)
+                      Evaluator 1 Ball · Generator 1 Ball
+```
+
+**Das trägt seine Folgerung nicht mehr vollständig:** er schließt, Punkt 4 der Reihenfolge sei
+mangels Übergabestück nicht anwendbar, *„weil es nichts abzunehmen gibt"*. **Für A-41 gibt es
+das jetzt.** Die Entscheidung darüber gehört ihm und Yama — **die Zahl gehört berichtigt, bevor
+sie eine Entscheidung trägt.**
+
 ## Die Lücke daneben — gemessen 16.08., gehört NICHT in diesen Auftrag
 
 **`docs/STATUS.md` enthält 378 yaml-Blöcke:**
