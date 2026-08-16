@@ -25748,3 +25748,57 @@ die_ironie_gehoert_dazu: |
   hat ihn achtzehn Minuten frueher schon als Restpunkt notiert.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-38"
+titel: "Yamas Anweisung angenommen — A-38 gehoert in A-37, und die tragende Zahl ist eine ANDERE als die genannte: das Loch ist nicht alt, es entsteht gerade"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:16 CEST"
+mess_stand: "ganzer Bestand ohne Zeitfenster · Messzeitpunkt 16.08. 20:16, weil die Zahl sich stuendlich aendert"
+die_anweisung: |
+  Yama, 16.08. abends: "A-38 gehoert NICHT hinter A-37, sondern ALS KRITERIUM HINEIN."
+  Reihenfolge fuer mich: A-38 in A-37, dann A-39, dann A-40.
+  ANGENOMMEN. Und die Begruendung traegt — aber nicht mit der genannten Zahl.
+die_genannte_zahl_ist_ueberholt: |
+  Yama nennt: "41 von 309 Commits ohne Rollenmarke, ausnahmslos Merges, von 32 Merges
+  tragen 4 eine ... ein 13-Prozent-Loch ab dem ersten Tag."
+  HEUTE GEMESSEN, ganzer Bestand: 3870 Commits, 349 Merges, davon 232 ohne Rollenmarke.
+  Die Grundgesamtheit ist von 309 auf 3870 gewachsen. Eine Quote aus 309 Commits beschreibt
+  den Bestand von damals, nicht den von heute.
+und_meine_eigene_zahl_ist_es_auch: |
+  Um 16:16 habe ich gemeldet: "seit 15.08. 00:00 gibt es 97 Merges und davon 0 ohne
+  Rollenmarke. Nicht wenige — keinen einzigen." Daraus habe ich geschlossen, A-38s Rot-Lage
+  laufe um 22:53 ab.
+  HEUTE UM 20:16: seit 15.08. gibt es 144 Merges, davon 43 OHNE Marke.
+  Meine Messung war zum Zeitpunkt richtig. Die Lage hat sich geaendert, und zwar in den
+  Stunden dazwischen.
+das_ist_der_eigentliche_befund: |
+  Die markenlosen Merges sind nicht Altbestand. Sie entstehen JETZT:
+  seit 15.08. bis heute 17:30 ..... 28
+  ab heute 17:30 .................. 18
+  Verteilung ueber den Nachmittag: 16:54, 17:05, 17:15, 17:26, 17:27, 17:38, 17:40, 17:42 —
+  vier bis fuenf je Viertelstunde, im Wortlaut "Merge branch 'rolle/planner' into
+  auto/hausplaner-integration".
+  Es ist der INTEGRATIONSLAUF, der sie erzeugt. Der Lauf, den Yama heute freigegeben hat
+  und der funktioniert hat, produziert genau die Commit-Art, gegen die A-38 gebaut werden
+  soll — nicht aus Nachlaessigkeit, sondern weil ein Merge ohne Hook keine Marke bekommt.
+  DAMIT IST YAMAS ANWEISUNG NICHT NUR RICHTIG, SONDERN DRINGLICHER ALS IHRE BEGRUENDUNG.
+  Das Loch ist kein 13-Prozent-Rest vom ersten Tag. Es ist offen, es fuellt sich stuendlich,
+  und je laenger der Integrationslauf ohne Hook laeuft, desto mehr unmarkierte Merges
+  stehen im Bestand, den A-41s Erzeugung spaeter lesen soll.
+  Und es bestaetigt K7 von A-41 an einem Fall, den ich heute selbst getreten habe: ein
+  Merge traegt fremde Betreffs mit, und ohne --no-merges zaehlt jeder Zustand nach jedem
+  Transport erneut.
+was_ich_daraus_fuer_meine_arbeit_ziehe: |
+  Meine Meldung von 16:16 ("die Rot-Lage laeuft um 22:53 ab") war eine Prognose aus einem
+  Zeitfenster — genau die Klasse, die P6 verbietet. Sie ist nicht falsch gemessen, aber sie
+  hat eine Entwicklung fortgeschrieben, die vier Stunden spaeter nicht mehr galt.
+  P6 sagt: eine Rot-Lage aus einem wandernden Fenster wird von selbst gruen. Mein Fall
+  zeigt die Rueckseite: sie kann auch von selbst wieder ROT werden. Beides ist derselbe
+  Fehler — aus einem Fenster auf die Zukunft zu schliessen.
+reihenfolge_bestaetigt: |
+  A-38 als Kriterium in A-37, dann A-39, dann A-40. Ich habe A-38 heute mit acht Punkten
+  geprueft (-1, -2, -5, -6, K2, K4, K5, K6); K1 und K3 blieben mangels erlaubtem Lauf
+  offen. Diese Vorarbeit gilt weiter, sie wandert mit dem Kriterium.
+ballbesitz: planner
+```
