@@ -20251,3 +20251,79 @@ bitte: |
   gesperrt — das kann der Planner nicht allein aufloesen.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a37_teil5_kam_neun_minuten_nach_der_dor_und_seine_marke_schreibt_niemand"
+titel: "A-37 ist BEREIT seit 12:39 und wuchs um 12:48 um drei Kriterien — die DoR gilt fuer einen Stand, den es nicht mehr gibt"
+rolle: plan-pruefer
+zeit: "2026-08-16 12:52"
+stand_kopf: 55539d8d
+posten: "Pflichtteil 3 — der Ball steht im Blatt weiterhin auf mir: dor_beleg 'steht aus — plan-pruefer'"
+zuerst_das_erledigte: |
+  Zwei meiner Befunde sind behoben, beide selbst nachgemessen statt aus der Meldung geglaubt:
+  SICHERUNG (50857d3b): alle fuenf Rollenzweige liegen jetzt fern. ls-remote origin:
+    rolle/plan-pruefer 4c8cf216 · rolle/planner d2ca3611 · rolle/generator 94585355
+    rolle/evaluator bc2125d9 · rolle/release-pruefer f3da4581
+  Vorher: NICHT VORHANDEN, alle. Der Befund ist zu.
+  HERKUNFT DER NODE_MODULES-BEDINGUNG (63045043): Yama hat die Zeile an der Quelle geholt
+  und dabei einen Sachfund gemacht, den meine Frage nicht hatte — im Wortlaut stehen zwei
+  Woerter, die im Bericht fehlten: "keine Modulkopie INS REPO". An ihnen haengt die ganze
+  Reichweite. Er entscheidet die engere Lesart mit der Begruendung, eine Bedingung mit zwei
+  Lesarten habe im Zweifel die engere. Das Nicht-Ziel ist ERSETZT, nicht gestrichen.
+  Mein Befund lautete "die Herkunft ist nicht belegt" — er war richtig und hat zu mehr
+  gefuehrt als zu einer Bestaetigung.
+BEFUND 1 · DIE DOR DECKT DEN SCOPE NICHT MEHR: |
+  Gemessen, beide Zeitstempel aus git:
+    BEREIT gesetzt         4ed51b8f   16.08. 12:39:26
+    Teil 5 geschnitten     3719937f   16.08. 12:48:18   — neun Minuten spaeter
+    Blatt-Zeilen           234 -> 301  (+67)
+    neue Kriterien         A-37-12, A-37-13, A-37-14
+  Die DoR-Runde 2 hat elf Kriterien geprueft. Es sind jetzt vierzehn. Drei davon hat nie
+  jemand gegen Paragraf 5 gehalten, und der Auftrag steht im Datensatz auf BEREIT — der
+  Generator kann ihn ziehen.
+  Das Blatt selbst sagt es richtiger als der Datensatz: dort steht weiter zustand: ENTWURF
+  und dor_beleg: "steht aus — plan-pruefer". Beide Felder zeigen auf mich, und sie haben
+  recht — der Datensatz ist der ueberholte Ort.
+BEFUND 2 · A-37-12 BESCHREIBT EINEN MECHANISMUS DEN ES NICHT GIBT: |
+  Das Kriterium im Wortlaut:
+    "A-37-12 Lockfile-Pruefung im Tor. Messbar: Marke node_modules/.aus-lockfile WIRD VON
+     npm ci GESCHRIEBEN und vom Tor gelesen."
+  npm ci schreibt diese Marke nicht. Am Bestand nachgesehen, ticket-rolle-generator:
+    node_modules/  enthaelt  .bin  und  .package-lock.json      — von npm angelegt
+    .aus-lockfile:  NICHT VORHANDEN
+  Der Planner WEISS das — seine Commit-Botschaft sagt woertlich "Die Marke muss beim
+  Installieren geschrieben werden, npm liefert sie nicht — npm ci und danach git
+  hash-object". Nur das KRITERIUM sagt das Gegenteil, und das Kriterium ist der Text, gegen
+  den gebaut und abgenommen wird.
+  Wer A-37-12 baut, baut ein Tor, das eine Datei liest, die kein Schritt anlegt. Ergebnis:
+  entweder jeder Lauf bricht mit MODULSTAND ab, obwohl der Baum in Ordnung ist — die
+  A-03-Klasse zum dritten Mal an diesem Auftrag — oder das Tor legt sie selbst an, dann
+  bezeugt sie nur sich selbst.
+  ES FEHLT DER ZUSTAENDIGE: das Blatt nennt den Vergleich (git hash-object package-lock.json
+  gegen die Marke) und die Fehlermeldung ("Abhilfe: npm ci in diesem Baum"), aber keine
+  Stelle, die die Marke SCHREIBT. Ein Kriterium ohne Schreiber ist nicht erfuellbar.
+rot_belege_halten: |
+  Seine drei Rot-Belege habe ich selbst nachgefahren, alle bestaetigt:
+    grep -rl 'package-lock' scripts/  -> 0
+    grep -rl 'npm ci' scripts/        -> 0
+    grep -rl 'hash-object' scripts/   -> 0
+    zusaetzlich 'aus-lockfile'        -> 0
+  Und die zwei verworfenen Bauwege sind richtig verworfen: der mtime-Vergleich (git checkout
+  setzt mtime auch bei gleichem Inhalt neu) und der Hash von .package-lock.json (andere
+  Datei, er misst 404 gegen 466 Pakete). Beide Begruendungen habe ich als plausibel gelesen,
+  die 404/466 NICHT nachgemessen — das kennzeichne ich.
+was_ich_NICHT_sage: |
+  NICHT, dass Teil 5 falsch ist. Der tragende Grund ueberzeugt mich: ein geteiltes
+  node_modules waere eine zweite Wahrheit, weil jeder Rollen-Branch sein eigenes
+  package-lock.json traegt — "der Lauf schlaegt nicht fehl, er ist gruen und misst den
+  falschen Stand". Das ist genau die Klasse, die ich seit zwei Tagen jage.
+  NICHT, dass BEREIT zurueckgenommen werden muss. Elf Kriterien sind geprueft und tragen.
+  Es fehlt die DoR fuer die drei neuen, nicht fuer den ganzen Auftrag.
+bitte: |
+  Zwei Zeilen, dann pruefe ich Teil 5 zu Ende und trage den dor_beleg nach:
+  (1) A-37-12 umformulieren: WER schreibt die Marke, und wann. Solange das offen ist, kann
+      ich das Kriterium nicht gegen Paragraf 5 abnehmen — es ist nicht erfuellbar.
+  (2) Den Datensatz und das Blatt zur Deckung bringen. Heute sagt der eine BEREIT und das
+      andere ENTWURF; das Blatt hat recht, solange die drei Kriterien ungeprueft sind.
+ballbesitz: planner
+```
