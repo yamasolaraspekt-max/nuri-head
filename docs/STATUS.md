@@ -22528,3 +22528,53 @@ stand_der_dor: |
   Der Ball bleibt bei mir. Kein Votum heute — zwei bestaetigte Funde sind keine DoR.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "DoR Teil 3 — A-41-2 haelt, K5 ist erfuellt OHNE Code, und genau daraus entsteht ein falsches Rot"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:33 CEST"
+mess_stand: "Blatt 7a8f3722 (15:29, 248 Z., 12 Kriterien, 7 Kanten) · Bau b585d335 · HEAD a0a0cf3a"
+a_41_2_haelt: |
+  "existiert und ist ausfuehrbar" — am Dateimodus IM BAUM gemessen, nicht im Dateisystem
+  (im Dateisystem haette mein Baum die Datei gar nicht):
+    100755 blob 405171f0...  scripts/status-erzeugen.sh
+  Eichung an einem bekannt ausfuehrbaren Skript: commit-pruefen.sh ebenfalls 100755.
+  Das Kriterium ist erfuellbar und heute erfuellt.
+k5_ist_erfuellt_aber_der_beleg_ist_ein_NICHT_treffer: |
+  K5 verlangt: "der Revert ist KEIN Zustands-Commit; der zurueckgedrehte bleibt gueltig.
+  Wer zuruecknehmen will, meldet den alten Zustand neu."
+  REAL GETESTET, beide Richtungen:
+    Revert "planner: zustand: A-41 · ENTWURF · ..."   -> kein Treffer
+    planner: zustand: A-41 · ENTWURF · ...            -> TREFFER
+  Die Kante ist erfuellt, und zwar ohne eine einzige Zeile Code: das Muster verlangt den
+  ZEILENANFANG, und bei einem Revert steht 'Revert "' davor. Im ganzen Skript kommt
+  'revert' 0 mal vor — es braucht den Sonderfall nicht.
+  Das ist gute Bauart. Eine Kante, die durch die FORM des Musters erledigt ist, hat keinen
+  Zweig, der falsch laufen kann.
+und_hier_ist_die_falle: |
+  A-41-9 verlangt: "Alle sieben Kanten K1-K7 sind behandelt und JE EINZELN BELEGT."
+  Wer "behandelt" als "im Code adressiert" liest, sucht nach 'revert' im Skript, findet 0,
+  und meldet K5 als unbehandelt — ROT an einer erfuellten Kante.
+  Der Beleg fuer K5 ist ein NICHT-Treffer, und ein Nicht-Treffer sieht aus wie eine
+  fehlende Pruefung. Das ist dieselbe Klasse, die mich heute zweimal erwischt hat: die
+  Null in AUFTRAGSTAFEL.md (15:15) und der exit 127 beim Rollen-Tor (15:16). Eine Null
+  bedeutet erst dann etwas, wenn feststeht, wonach sie gemessen wurde.
+  BITTE, und es ist eine Zeile: bei K5 dazuschreiben, dass der Beleg die Musterprobe ist
+  und nicht eine Codestelle. Sonst faellt der Erste, der A-41-9 abhakt, genau hier hinein.
+was_noch_offen_ist: |
+  Geprueft und haltend: A-41-2, K5, dazu FUND 1 und das Bau-Muster aus der Vorrunde.
+  Heute ROT und im Auftrag erfasst: A-41-8 / K7 (--no-merges fehlt, grep 0 im Stand
+  b585d335) — der Planner hat das um 15:29 zum Auftrag an den Generator gemacht.
+  Noch ungeprueft: A-41-1, -3 bis -7, -10 bis -12 und die Kanten K1-K4, K6.
+  Kein Votum. Der Ball bleibt bei mir.
+vorratspruefung_e_eigene_befunde_verfolgt: |
+  Mein K7-Befund von 15:22 liegt nicht mehr bei mir: der Planner hat ihn um 15:29
+  aufgenommen, mit derselben Messung (grep -c -- --no-merges = 0 in b585d335) und einer
+  SCHAERFEREN Begruendung als meiner. Ich hatte geschrieben, jeder Zustand erscheine nach
+  jedem Transport erneut. Er ergaenzt: mit NEUER Commit-Zeit — und da der juengste
+  gewinnt, kann ein ALTER Zustand einen NEUEREN verdraengen. Das ist nicht mehr
+  Doppelzaehlung, das ist Zustandsumkehr.
+  Damit ist der Befund sachlich UND formal erledigt. Ball steht dort auf generator.
+ballbesitz: plan-pruefer
+```
