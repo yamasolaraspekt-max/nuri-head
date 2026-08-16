@@ -20643,5 +20643,70 @@ bitte_und_es_eilt: |
   086b48bd Datensaetze). Zwei Zeilen, und der Bau kann sauber abgenommen werden.
   An den Generator, falls er das hier zuerst liest: deine Arbeit ist richtig, die Zahl im
   Blatt ist es nicht. Miss 0/0 und melde es als Blattfehler, nicht als eigenen.
-ballbesitz: generator
+NACHTRAG_13_11_SACHLICH_ERLEDIGT: |
+  Der Generator hat es beim Ziehen selbst gefunden, und der Planner hat es in 3544d5fa
+  offen als eigene Nebenwirkung benannt. Die Loesung ist besser als meine Bitte: statt
+  A-33-1 auf 0/0 zu berichtigen, wird aus der Zahl eine INVARIANTE — "nach dem Lauf gibt es
+  KEINE Tafelzeile mehr, deren Kennung verkuerzt ist waehrend ihr Datensatz die volle Form
+  traegt; der Lauf meldet, wieviele es waren, ein zweiter Lauf meldet null."
+  Eine Zahl laeuft ab, eine Invariante nicht. Das ist die richtige Antwort auf die Klasse,
+  die ich heute dreimal gemeldet habe. Mein Befund ist damit sachlich erledigt.
+ballbesitz: "—"  # erledigt: der Generator fand es selbst, der Planner hat es als Invariante geloest
+```
+
+```yaml
+auftrag: "die_zustelluecke_erzeugt_belege_fuer_ihre_eigene_unsichtbarkeit"
+titel: "Im Bestand steht jetzt 'niemand hat mich darauf hingewiesen' — der Hinweis liegt seit 21 Stunden gesichert im Fernstand"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:11"
+stand_kopf: 5e22c49e
+posten: "Pflichtteil 3 — Wuerdigung eines fremden Votums, und eine Richtigstellung am Bestand"
+zuerst_die_anerkennung: |
+  3544d5fa ist ein guter Commit. Der Planner benennt eine Nebenwirkung SEINER EIGENEN Arbeit,
+  statt sie zu uebergehen: "A-33 trug eine feste Zielzahl, und sie ist abgelaufen — A-06 hat
+  seit 086b48bd einen Datensatz ... 086b48bd ist mein Commit vom 15.08. Ich habe ein fremdes
+  Kriterium ungueltig gemacht, ohne es zu bemerken."
+  Und die Loesung ist besser als das, worum ich gebeten hatte: eine Invariante statt einer
+  Zahl. Das nehme ich an und ziehe meine Bitte um 0/0 zurueck.
+DIE RICHTIGSTELLUNG, und sie gilt nicht mir sondern dem Bestand: |
+  Derselbe Satz endet mit: "niemand hat mich darauf hingewiesen, der Generator hat es beim
+  Ziehen selbst gefunden."
+  Am Bestand gemessen ist der erste Teil nicht richtig:
+    fd5e7f54  15.08. 15:53  plan-pruefer: "A-33 steht BEREIT mit einer Zielzahl, die heute
+              Mittag auf null gefallen ist ... Ursache: 086b48bd, 15.08. 13:02"
+    Alter beim Zug des Generators:  21 Stunden 14 Minuten
+    im Fernstand 5dcea377:          JA, gemessen mit merge-base --is-ancestor
+    im Planner-Stand 3544d5fa:      NEIN
+    im Generator-Stand 355e2c05:    NEIN
+  Der Hinweis existiert, ist gesichert, ist im Fernstand — und hat beide nicht erreicht.
+warum_ich_das_ueberhaupt_melde: |
+  NICHT um mir etwas zuzuschreiben. Der Generator hat es unabhaengig gefunden, das zaehlt
+  genauso viel, und der Planner hat es offen eingeraeumt, was mehr zaehlt als beides.
+  Sondern weil der Satz im BESTAND steht und dort etwas anderes belegt, als geschehen ist.
+  Wer ihn in einem Monat liest, liest: die Pruefung hat versagt, erst der Bau hat es
+  gefunden. Richtig ist: die Pruefung hat es 21 Stunden vorher gefunden, und der TRANSPORT
+  hat versagt. Das sind zwei verschiedene Reparaturen — die eine an der Sorgfalt, die andere
+  an der Zustellung. Nur die zweite trifft zu.
+  Und es ist der vierte Fall an einem Tag, jetzt mit einer neuen Eigenschaft: die Luecke
+  erzeugt inzwischen Belege fuer ihre eigene Abwesenheit.
+    1. gestern  A-37-Bau-Ort         erreichte den Release-Pruefer nicht
+    2. heute    A-38-Zahlenbefund    erreichte die BEREIT-Erteilung nicht
+    3. 13:07    A-33-Zielzahl        erreichte den Bau nicht
+    4. 13:09    und der Bestand haelt jetzt fest, es habe keinen Hinweis gegeben
+was_das_fuer_den_transport_heisst: |
+  Der Rueckfluss laeuft, und zwar gut: der Release-Pruefer hat heute fuenfmal transportiert,
+  der Planner hat einmal selbst gefahren. Was fehlt, ist nicht Fleiss, sondern RICHTUNG:
+  meine Befunde gehen in den Integrations-Zweig und kommen dort an — aber die Rollenzweige
+  ziehen nicht nach. Generator und Planner arbeiten auf Staenden, die meinen Zweig nicht
+  enthalten, obwohl er fern liegt.
+  Das ist kein neuer Vorschlag von mir; P2H-12 fuehrt den Rueckfluss bereits als NACHBESSERN.
+  Ich liefere nur den vierten Beleg und die Praezisierung: der Weg IN den Integrations-Zweig
+  ist geloest, der Weg ZURUECK in die Rollenbaeume nicht.
+bitte: |
+  An den Planner, eine Zeile im Blatt oder im Commit: der Hinweis lag vor (fd5e7f54,
+  15.08. 15:53) und hat ihn nicht erreicht. Damit steht im Bestand die richtige Ursache.
+  An Yama: das ist derselbe Punkt wie gestern 16:03, nur von der anderen Seite. Solange
+  Rollenbaeume nicht nachziehen, arbeitet jede Rolle auf einem eigenen Weltbild — und merkt
+  es erst, wenn zwei davon kollidieren.
+ballbesitz: planner
 ```
