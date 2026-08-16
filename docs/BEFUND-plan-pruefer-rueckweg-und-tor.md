@@ -6301,3 +6301,91 @@ A-42   REST VON RUNDE 1 — sechs offene Kriterien, drei unerwaehnte, K5
 
 *Die Zahl bleibt gleich, die Arbeit ist eine andere. Er hat mir keinen Posten abgenommen, sondern
 einen falsch benannten richtig benannt — und das ist mehr wert.*
+
+---
+
+## 90 — DoR Runde 2 für A-40: NICHT ERTEILT, zwei Restpunkte. R1 ist behoben, R2 nicht, und A-40-5s eigener Zählbefehl fällt in P8
+
+**Stand:** HEAD `ee5ac878`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**A-40 `ENTWURF`, `basis_sha 99add90f`, Blattstand `65b83ee9` (16.08. 22:11).** Dritter Posten
+des Rückstands aus §87.
+
+### R1 — behoben
+
+Runde 1: *„der Anlass nennt F-054 als ‚von keiner Prüfstation gefunden' — belegt falsch."*
+
+```
+heute Z.35-38:  '⚠ BERICHTIGT nach Befund des Plan-Pruefers: „von keiner Pruefstation
+                 gefunden" trifft auf F-054 NICHT zu. Sie ist beim RECHNEN aufgefallen —
+                 das ist eine Pruefstation, nur keine formale. Zwei der drei stimmen,
+                 der dritte nicht.'
+                 Dazu eine Tabelle mit allen drei Faellen und ihrem Fundort.  BEHOBEN
+```
+
+### R2 — nicht behoben, mit zehn Mustern gesucht
+
+Runde 1: *„A-40-5 verlangt 21 neue Ampeln, ohne zu sagen, wer den Erstzustand vergibt."*
+
+```
+gesucht: erstzustand · wer vergibt · erstbelegung · vergabe · wer setzt · wer traegt ein
+         zustaendig · Fach-Pruefer · setzt die Ampel · erste Ampel · initial
+Treffer im Blatt: 0
+```
+
+**Die Frage ist offen. Wer eine Ampel zum ersten Mal setzt, ist eine Fachentscheidung —
+CLAUDE.md verlangt dafür Rückfrage statt stiller Automatisierung.** *Ein Bauender müsste sie
+selbst treffen, und genau das darf er nicht.*
+
+### R3 (neu) — die Reduktion 87 → 64 stimmt nicht, und der Befehl fällt in P8
+
+A-40-5 trägt einen Zählbefehl und daneben: *„Der Befehl zählt ZEILEN, nicht Kennungen:
+**87 Zeilen → 64 Kennungen**."* **Selbst gefahren:**
+
+```
+Zeilen ohne Ampel                          87   TRIFFT (an beiden Staenden)
+davon VERSCHIEDENE Kennungen               54
+Kennungen MIT Ampel                        10
+54 + 10                                  = 64   <- die Zahl des Blattes
+Vereinigung beider Mengen                  62   -> zwei doppelt gezaehlt
+```
+
+**Die 64 ist keine Reduktion der 87, sondern eine Summe zweier Mengen mit Überschneidung.**
+*Die richtige Reduktion lautet 54.*
+
+**Und die Überschneidung ist der eigentliche Fund. Zwei Kennungen tragen beide Formen — eine
+davon ist MEIN Musterfehler, die andere echt:**
+
+```
+F-020   'F-026 · Dach ueber vorgegebene Grundform (Alternative zu F-020) · 🟢'
+        -> mein grep zog F-020 aus F-026s UEBERSCHRIFT.  MEIN FEHLER, kein Fund.
+N-003   :754  '### N-003 · Sparren-Vorbemessung … · 🟡 FACH-GATE'
+        :784  '### N-003 · Geltungsbereich — von Yama festgelegt 12.08., DAUERGELB'
+        :814  '### N-003 · AUFLAGE an die Ausgabe — keine stille Zahl'
+        -> DREI Definitionszeilen, eine mit Ampel, zwei ohne.  ECHT.
+```
+
+**A-40-5 verlangt „jede Definitionsstelle trägt eine Ampel". Der Befehl zählt damit die zwei
+UNTERABSCHNITTE von N-003 als eigene Definitionsstellen und würde zwei Ampeln fordern, wo eine
+Kennung eine trägt.** *Geltungsbereich und Auflage sind keine zweite und dritte Formel — sie sind
+Teile derselben.*
+
+**Das ist P8 in genau der Form, die A-40 selbst definiert: der ORT ist das Kriterium.** *Der Befehl
+misst Überschriftenzeilen und nennt sie Definitionsstellen. A-40-5 hat diesen Fehler schon einmal
+an sich selbst gefunden (der Suchraum war eine Datei statt des Verzeichnisses) — dies ist dieselbe
+Klasse, eine Ebene tiefer.*
+
+## VOTUM
+
+```
+DoR Runde 2 fuer A-40:  NICHT ERTEILT, zwei Restpunkte
+  R1  F-054 im Anlass                                        BEHOBEN
+  R2  wer vergibt den Erstzustand der 21 Ampeln              OFFEN, zehn Muster gesucht
+  R3  '87 Zeilen -> 64 Kennungen' ist 54; der Befehl zaehlt
+      Unterabschnitte einer Kennung als Definitionsstellen   NEU
+```
+
+**Nicht geprüft und so gekennzeichnet:** die sechs Kanten A-40-7 und A-40-2s *„echter Fall"* —
+welcher, steht weiterhin nicht im Kriterium. **Beides bleibt für Runde 3.**
+
+**Ich fasse den Zustand NICHT an. Ball beim Planner.** **Offen bei mir: A-42, Rest von Runde 1.**
+**Kein Zustandsfeld angefasst, kein Bau.**
