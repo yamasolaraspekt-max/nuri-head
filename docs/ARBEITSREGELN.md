@@ -1299,3 +1299,118 @@ die überholte Quelle bin ich."*
   sondern eine Beobachtung über die Zeit.** Zwei Blätter sechs Minuten später in die andere
   Richtung zu ziehen, sieht nach Schwanken aus und ist das Gegenteil: **viermal dieselbe Regel
   angewandt — gegen den Bestand messen, nicht gegen die Erinnerung.**
+
+---
+
+## NACHTRAG · Eine Formel, die niemand rechnet, ist nicht geprüft *(16.08.2026)*
+
+> **Was für einen Test gilt, gilt für eine Formel: was auch ohne sie stimmt, hat sie nicht belegt.**
+
+**Das ist keine neue Regel, sondern die Mutationsprobe — angewandt auf Fakten statt auf Code.**
+Dieses Haus erkennt seit Wochen keinen Test an, der auch dann grün ist, wenn man den Code entfernt.
+**Derselbe Maßstab hat an der Tür der Formelsammlung haltgemacht, und niemand hat es bemerkt.**
+
+**Die Regel:**
+
+> **Eine Fachaussage gilt erst als geprüft, wenn jemand sie an einem Fall nachgerechnet hat, der
+> ohne sie ein anderes Ergebnis hätte.**
+> **Wer eine Fachaussage in ein Blatt oder in Code übernimmt, rechnet sie — oder trägt ein, dass er
+> es nicht getan hat.**
+
+**Warum keine Prüfstation das leisten kann, und warum eine sechste Rolle die schlechteste Lösung
+wäre:** Plan-Prüfer, Evaluator, Release-Prüfer, Generator und Integrator beziehen ihr Fachwissen
+aus **derselben Quelle** — der Formelsammlung und dem Regelwerk. **Ein zweiter Leser desselben
+Dokuments ist keine zweite Meinung, er ist dieselbe Meinung zweimal.** Ein „Fach-Prüfer" würde
+F-004 aufschlagen und dasselbe falsche Vorzeichen lesen wie alle vor ihm.
+
+**Richtigkeit kann nur aus einer Quelle kommen, die außerhalb unserer eigenen Dokumente liegt:**
+
+| | Quelle | Stärke |
+|---|---|---|
+| **1** | **Rechnen** — eine unabhängige Rechnung aus Grundgrößen, die übereinstimmen **muss**. **Die Arithmetik liest unsere Blätter nicht.** | stärkste Form, **kostet nichts** |
+| **2** | **Referenzfall** — ein durchgerechnetes Beispiel aus Norm, Fachbuch, Datenblatt, zertifiziertem Werkzeug | unabhängig, beschaffungsaufwendig |
+| **3** | **Primärquelle** — der Normtext selbst, nicht unsere Paraphrase | nötig, wo Haftung dranhängt |
+
+**Alle drei Fachfehler dieser Woche wären mit Nummer 1 gefallen, und Nummer 1 ist gratis:**
+
+```
+F-004          Vorzeichen vertauscht        gefunden vom GENERATOR beim Bauen
+F-054          prueft Winkel statt Weite    gefunden beim RECHNEN
+S-060 / S-040  standen in Spannung          gefunden beim LESEN fuer ein anderes Werkzeug
+```
+
+**Keiner von einer Prüfstation — alle drei vom Benutzer.** Und das ist kein Zufall, sondern
+Mechanik: **wer eine Aussage aufschreibt, hat sie gerade geglaubt. Wer sie benutzt, braucht ein
+Ergebnis** — und ein Ergebnis, das nicht passt, ist der einzige Alarm, der hier nie überhört wurde.
+
+**Deshalb rechnet, wer BENUTZT — nicht, wer aufgeschrieben hat.**
+
+### Die drei Zustände je Fachaussage — und der Zustand trägt den FALL, nicht die Behauptung
+
+**Sachverstand bekommt keine Rolle, sondern ein Feld am Eintrag** — weil der Eintrag der einzige
+Ort ist, den jeder Benutzer garantiert öffnet.
+
+| Zustand | Bedeutung | tragfähig für |
+|---|---|---|
+| **`ABGESCHRIEBEN`** | aus einer Quelle übernommen, **Wortlaut** geprüft, **nie gerechnet** | Doku. **NICHT für einen Bau.** |
+| **`NACHGERECHNET`** | jemand hat einen Fall gerechnet, der **ohne die Aussage ein anderes Ergebnis hätte**. **Fall und Sollwert stehen IM EINTRAG** | Bau |
+| **`GEGENGEPRUEFT`** | zusätzlich gegen eine **äußere** Quelle gehalten (Normbeispiel, Referenzwerkzeug) | Aussagen, die **nach außen** wirken |
+
+**Das Feld enthält nicht den Satz „wurde nachgerechnet", sondern den Fall:**
+
+```yaml
+nachgerechnet_an:
+  eingabe:   Wand 10 m waagrecht, Achse um δ=3° verkippt, Versatz 1000 mm
+  erwartet:  <Zahl mit Einheit>
+  gerechnet: 14.08. · Planner · weicht ohne die Formel um <Zahl> ab
+```
+
+**Damit ist die Nachrechnung kein einmaliger Akt, sondern ein wiederholbarer Fall** — der nächste
+Benutzer rechnet nicht neu, er **lässt laufen**. **Aus Einträgen mit Fällen wird eine Prüfsuite für
+Fachwissen, genau wie die Testsuite eine für Code ist.** Erst damit ist Sachverstand eine **Zahl**
+statt eines Gefühls; heute ist er beides nicht.
+
+**Die Ampel misst etwas anderes als Richtigkeit.** Sie sagt *ausgeführt / nicht ausgeführt* — **bei
+F-004 stand sie auf grün, während das Vorzeichen falsch war.** Ein Eintrag **ohne** Ampel ist nicht
+„vermutlich in Ordnung", sondern **unbekannt**; dieselbe Bauform wie *„fehlt die Marke, ist der
+Modulstand unbekannt — nicht etwa gültig."*
+
+### Der Plan-Prüfer verweigert — er weiß es nicht besser, er lässt es nicht durch
+
+**Das ist die entscheidende Trennung, und sie liegt vollständig in seiner heutigen Kompetenz.**
+Er prüft Belege; **„nachgerechnet" ist ein Beleg wie jeder andere.**
+
+```
+IM DoR-SCHRITT, mechanisch pruefbar:
+
+  Nennt das Blatt eine Fachaussage (F-/N-/S-Kennung)?
+    -> ja: traegt der Eintrag `nachgerechnet_an`?
+         -> ja:   DoR frei
+         -> nein: DoR NUR DANN frei, wenn das NACHRECHNEN
+                  ein KRITERIUM DESSELBEN BLATTES ist.
+
+  Er entscheidet NICHT, ob die Aussage stimmt.
+  Er entscheidet, ob jemand es geprueft hat.
+```
+
+**Damit kostet die Regel keine Fachkompetenz, sondern einen `grep`** — und sie kann nicht vergessen
+werden, weil sie an derselben Stelle sitzt wie die Innenprüfungen aus A-39.
+
+### ⚠ OFFEN — die Grenze nach außen liegt bei Yama
+
+**Der Bruch in der bestehenden Schutzgrenze ist benannt: eine falsche Formel ist keine
+Entscheidung — sie sieht aus wie ein Fakt.** Der vorgeschlagene Zusatz, **noch nicht entschieden**:
+
+> **Eine Fachaussage, die nach außen wirkt** — Bemessung nach Norm, Nachweis, alles mit Haftung —
+> **wird durch Nachrechnen allein nicht grün.** Sie braucht eine **Primärquelle** oder bleibt gelb.
+> **Nachrechnen trennt „stimmt rechnerisch" von „darf man behaupten" — und nur das Zweite ist Yamas
+> Entscheidung.**
+
+**Solange dieser Absatz nicht entschieden ist, gilt er nicht.** Er steht hier als Vorlage, nicht als
+Regel — und `A-40` bleibt ungeschnitten, bis das Wort da ist. *(Erster Anwendungsfall wäre W-28,
+Rinnenbemessung nach DIN 1986-100: dann ist „vertagen" eine Ableitung statt eines Bauchgefühls.)*
+
+**Und die Auslösung ist die Benutzung, nicht die Inventur.** Wer alle Einträge auf einmal
+nachrechnen lässt, schafft ein Vorhaben, das niemand macht — und trifft auch die, die nie jemand
+benutzt. **Ein Eintrag, den nie jemand benutzt, ist in seiner Richtigkeit auch nie eine Gefahr.**
+Die Regel skaliert sich selbst.
