@@ -125,6 +125,11 @@ WORTLAUT = re.compile(
     r"(?:\s+·\s+(?P<beleg>.*))?$"
 )
 
+# Das Vorfilter fuer `git log`. Es steht EINMAL hier, weil zwei Stellen es brauchen (die Tafel
+# und die Zweigzuordnung fuer K6) — und zwei Fassungen desselben Musters waeren zwei Wahrheiten,
+# von denen die zweite still veraltet.
+MUSTER = "--grep=^\\(\\w\\+[a-z-]*: \\)\\?zustand:"
+
 def lauf(*a):
     return subprocess.run(a, capture_output=True, text=True).stdout
 
@@ -165,6 +170,14 @@ if MODUS == "fangprobe":
         ("zustand: A-33 · code_fertig · generator",                False, "Zustand klein — MUSS scheitern"),
         ("planner: zustand: A-41 · ENTWURF · planner · blatt x",   True,  "MIT Rollenmarke — das Tor stellt sie voran"),
         ("release-pruefer: zustand: B5 · ABGENOMMEN · evaluator",  True,  "Rollenmarke mit Bindestrich"),
+        # K5 — der Beleg fuer diese Kante IST diese Probe und keine Codestelle. Ein Revert stellt
+        # `Revert "` voran; das Muster verlangt den Zeilenanfang und trifft deshalb nicht mehr.
+        # Beide Richtungen stehen hier, weil eine allein nichts zeigt: dass etwas nicht trifft,
+        # ist erst dann eine Aussage, wenn die Gegenprobe trifft.
+        ('Revert "generator: zustand: A-33 · CODE_FERTIG · generator"', False,
+         "K5 Revert — MUSS scheitern, sonst zaehlt die Ruecknahme als Zustand"),
+        ("generator: zustand: A-33 · CODE_FERTIG · generator",     True,
+         "K5 Gegenrichtung — genau dieser Betreff OHNE das Revert-Praefix trifft"),
     ]
     rot = 0
     for text, erwartet, warum in faelle:
@@ -188,8 +201,7 @@ def aus_dem_log():
     # zweiter Eintrag fuer denselben Zustand — und zwar mit der Zeit des TRANSPORTS statt der der
     # Entscheidung. Der Zustand wanderte bei jedem Transport erneut ein und ueberholte sich selbst.
     # Der urspruengliche Commit bleibt sichtbar; --all findet ihn ueber seinen Zweig.
-    roh = lauf("git", "log", "--all", "--no-merges",
-               "--grep=^\\(\\w\\+[a-z-]*: \\)\\?zustand:",
+    roh = lauf("git", "log", "--all", "--no-merges", MUSTER,
                "--format=%H%x09%at%x09%an%x09%s")
     treffer, verworfen = {}, []
     for zeile in roh.split("\n"):
@@ -201,7 +213,7 @@ def aus_dem_log():
             verworfen.append((sha[:8], betreff))
             continue
         k = m.group("kennung")
-        eintrag = {"ts": int(ts), "sha": sha[:8], "autor": autor,
+        eintrag = {"ts": int(ts), "sha": sha[:8], "voll": sha, "autor": autor,
                    "zustand": m.group("zustand"), "rolle": m.group("rolle"),
                    "beleg": m.group("beleg") or ""}
         treffer.setdefault(k, []).append(eintrag)
@@ -219,18 +231,120 @@ def aus_dem_log():
 def aus_den_zweigen():
     zweige = [z for z in lauf("git", "for-each-ref", "--format=%(refname:short)",
                               "refs/heads/rolle/*", "refs/heads/auto/hausplaner-integration").split("\n") if z]
-    je_kennung = {}
+    je_kennung, prosa = {}, {}
     for z in zweige:
         text = lauf("git", "show", f"{z}:docs/STATUS.md")
+        # K4: was NICHT uebernommen wird, wird gezaehlt statt verschwiegen. Der Parser nimmt
+        # `auftrag:` und `zustand:` — jede andere nichtleere Zeile ist Prosa und bleibt liegen.
+        # Sie geht nicht verloren: sie steht weiter in der Datei, aus der sie stammt, und diese
+        # Zahl sagt, wie viel davon ein spaeterer Vorgang zurueckzuraeumen hat.
+        zeilen = text.split("\n")
+        genommen = sum(1 for l in zeilen if l.startswith("auftrag:") or l.startswith("zustand:"))
+        leer = sum(1 for l in zeilen if not l.strip())
+        prosa[z] = {"gesamt": len(zeilen), "genommen": genommen,
+                    "prosa": len(zeilen) - genommen - leer}
         cur = None
-        for l in text.split("\n"):
+        for l in zeilen:
             if l.startswith("auftrag:"):
                 m = re.match(r'^auftrag: "([^"]+)"', l)
                 cur = m.group(1) if m else None
             elif cur and l.startswith("zustand:"):
                 je_kennung.setdefault(cur, {}).setdefault(l[8:].split("#")[0].strip(), []).append(z)
                 cur = None
-    return zweige, je_kennung
+    return zweige, je_kennung, prosa
+
+# ── WANN WURDE DIESER ZUSTAND AUF DIESEM ZWEIG GESETZT ───────────────────────────────────────
+# A-41-5 verlangt die verdraengten Staende MIT Commit-Zeit, A-41-4 verlangt den JUENGSTEN. Beides
+# braucht eine Zeit je (Zweig, Kennung) — und die ist nicht die letzte Aenderung an STATUS.md.
+#
+# **Die naheliegende Messung waere falsch:** `git log -1 -- docs/STATUS.md` gibt die letzte
+# Aenderung an der DATEI. Wer A-33 vor dreissig Commits gesetzt und seither zwanzig andere
+# Auftraege gepflegt hat, bekaeme die Zeit des letzten fremden Eintrags. **Das ist H-8 — Ort ist
+# nicht Wirkung —, und hier heisst es: Datei ist nicht Eintrag.**
+#
+# Deshalb wird der Zweig rueckwaerts gegangen, bis der Wert sich AENDERT. Der aelteste Commit,
+# der ihn noch traegt, ist der, in dem er gesetzt wurde. Der Gang bricht beim ersten Andersstand
+# ab und laeuft deshalb kurz — nicht ueber die ganze Historie.
+_STAND = {}
+def _wert(sha, kennung):
+    if sha not in _STAND:
+        d, cur = {}, None
+        for l in lauf("git", "show", f"{sha}:docs/STATUS.md").split("\n"):
+            if l.startswith("auftrag:"):
+                m = re.match(r'^auftrag: "([^"]+)"', l)
+                cur = m.group(1) if m else None
+            elif cur and l.startswith("zustand:"):
+                d[cur] = l[8:].split("#")[0].strip()
+                cur = None
+        _STAND[sha] = d
+    return _STAND[sha].get(kennung)
+
+# ── K2: HAT DIESE KENNUNG UEBERHAUPT EIN BLATT? ─────────────────────────────────────────────
+# *„Ein Zustand ohne Auftrag ist ein Befund, kein Filterfall"* — die Zeile wird also erzeugt UND
+# gemeldet, nicht weggelassen.
+#
+# **Die Schreibweisen gehen auseinander, und das ist hier die eigentliche Schwierigkeit:** die
+# Werkbank fuehrt `W-05/2`, die Datei heisst `w05-werkzeug-anschluss.md`. **Ein Muster, das eine
+# Schreibweise voraussetzt, misst die Schreibweise und nicht die Sache** (H-9) — deshalb werden
+# beide Formen gesucht, mit und ohne Bindestrich.
+#
+# ***Und das bleibt eine Heuristik ueber Dateinamen.*** *Sie kann eine Kennung uebersehen, deren
+# Blatt anders heisst.* **Deshalb heisst die Meldung „kein Blatt GEFUNDEN" und nicht „kein Blatt
+# vorhanden"** — der Unterschied ist der zwischen einer Messung und einer Behauptung.
+#
+# ## ⚠ UND NICHT `git ls-files` — der erste Bau hier war falsch, der Lauf hat es gezeigt
+#
+# `git ls-files` liest den EIGENEN Auscheck. **Der erste Lauf meldete `A-41` als „Zustand ohne
+# Auftrag" — das Blatt liegt im Planner-Zweig, mein Baum haengt 73 Commits zurueck.** Ein
+# Fehlalarm, und zwar der teuerste: er behauptet einen Befund ueber eine andere Rolle.
+#
+# **Dieselbe Klasse wie K6 und wie die ganze Erzeugung:** wer ueber alle Zweige urteilt, muss
+# ueber alle Zweige lesen. *Der eigene Auscheck ist ein Zweig von sechs und nie die Auskunft.*
+_BLAETTER = None
+def blatt_gefunden(kennung):
+    global _BLAETTER
+    if _BLAETTER is None:
+        teile = []
+        for z in lauf("git", "for-each-ref", "--format=%(refname:short)",
+                      "refs/heads/rolle/*", "refs/heads/auto/hausplaner-integration").split("\n"):
+            if z.strip():
+                teile.append(lauf("git", "ls-tree", "-r", "--name-only", z, "docs/"))
+        _BLAETTER = "\n".join(teile).lower()
+    stamm = kennung.split("/")[0].lower()
+    return stamm in _BLAETTER or stamm.replace("-", "") in _BLAETTER
+
+# ── K6: AUF WELCHEN ROLLENZWEIGEN LIEGT DIESER COMMIT? ──────────────────────────────────────
+# Sechs `git log` statt eines `git branch --contains` je Commit: dieselbe Auskunft, aber die
+# Kosten haengen an der Zahl der ZWEIGE und nicht an der der Commits.
+#
+# **Was diese Messung NICHT kann, und das steht hier, damit niemand mehr hineinliest:** nach
+# einem Transport liegt ein Commit auf mehreren Zweigen, und der Ursprung ist daraus nicht mehr
+# rekonstruierbar. Gemeldet wird deshalb der belegbare Fall — die Rollenmarke nennt eine Rolle,
+# und auf DEREN Zweig liegt der Commit nicht.
+_ZWEIG_VON = None
+def zweige_mit(sha, muster):
+    global _ZWEIG_VON
+    if _ZWEIG_VON is None:
+        _ZWEIG_VON = {}
+        for z in lauf("git", "for-each-ref", "--format=%(refname:short)", "refs/heads/rolle/*").split("\n"):
+            if not z.strip():
+                continue
+            for s in lauf("git", "log", z, "--no-merges", muster, "--format=%H").split("\n"):
+                if s.strip():
+                    _ZWEIG_VON.setdefault(s, []).append(z)
+    return _ZWEIG_VON.get(sha, [])
+
+def wann_gesetzt(zweig, kennung, zustand):
+    gesetzt = None
+    for zeile in lauf("git", "log", "--format=%H%x09%at", zweig, "--", "docs/STATUS.md").split("\n"):
+        if not zeile.strip():
+            continue
+        sha, ts = zeile.split("\t")
+        if _wert(sha, kennung) == zustand:
+            gesetzt = int(ts)          # noch derselbe Wert -> weiter zurueck
+        else:
+            break                      # hier hat er gewechselt: der vorige ist der Setzzeitpunkt
+    return gesetzt
 
 if MODUS == "tafel":
     tafel, widerspruch, verworfen = aus_dem_log()
@@ -258,32 +372,106 @@ if MODUS == "tafel":
         print(f"\n  NICHT IM WORTLAUT, deshalb nicht gezaehlt: {len(verworfen)}")
         for sha, b in verworfen[:5]:
             print(f"    {sha}  {b[:90]}")
-        raus(1, f"{len(verworfen)} Commits nennen 'zustand:', treffen den Wortlaut aber nicht.")
+
+    # K2 — die Zeile steht schon oben in der Tafel. Hier wird sie GEMELDET, nicht entfernt.
+    ohne_blatt = [k for k in sorted(tafel) if not blatt_gefunden(k)]
+    if ohne_blatt:
+        print(f"\n  K2 · ZUSTAND OHNE AUFTRAG — Zeile erzeugt UND gemeldet: {len(ohne_blatt)}")
+        for k in ohne_blatt:
+            print(f"    {k:<10} {tafel[k]['zustand']:<20} kein Blatt gefunden unter docs/")
+
+    # K6 — Rollenmarke und Zweig passen nicht zusammen. Auch hier: erzeugt UND gemeldet.
+    fremd = []
+    for k in sorted(tafel):
+        e = tafel[k]
+        liegt = zweige_mit(e["voll"], MUSTER)
+        if liegt and f"rolle/{e['rolle']}" not in liegt:
+            fremd.append((k, e, liegt))
+    if fremd:
+        print(f"\n  K6 · ZUSTAND IM FREMDEN ZWEIG — Zeile erzeugt UND gemeldet: {len(fremd)}")
+        for k, e, liegt in fremd:
+            print(f"    {k:<10} Rollenmarke '{e['rolle']}' — liegt auf {', '.join(sorted(liegt))}")
+
+    meldungen = len(verworfen) + len(ohne_blatt) + len(fremd)
+    if meldungen:
+        raus(1, f"nicht im Wortlaut {len(verworfen)} · ohne Auftrag {len(ohne_blatt)} · fremder Zweig {len(fremd)}")
     raus(0, f"{len(tafel)} Kennungen, keine Meldung.")
 
 if MODUS == "bootstrap":
-    zweige, je_kennung = aus_den_zweigen()
+    zweige, je_kennung, prosa = aus_den_zweigen()
     einig = {k: list(v)[0] for k, v in je_kennung.items() if len(v) == 1}
     uneinig = {k: v for k, v in je_kennung.items() if len(v) > 1}
     print(f"# BOOTSTRAP — {len(zweige)} Zweige gelesen, keiner ausgecheckt\n")
+    # K4 — was NICHT uebernommen wird, je Zweig. Ohne diese Zahl saehe der Bootstrap aus, als
+    # haette er die Datei vollstaendig gelesen; tatsaechlich nimmt er zwei Zeilenarten und laesst
+    # den groesseren Teil liegen. Die Prosa geht nicht verloren — sie bleibt, wo sie steht.
+    print("  K4 · PROSA je Zweig — nicht uebernommen, aber protokolliert:")
+    for z in sorted(prosa):
+        p = prosa[z]
+        print(f"    {z.split('/')[-1]:<24} {p['gesamt']:>6} Zeilen · Datensatz {p['genommen']:>4} · Prosa {p['prosa']:>6}")
+    print()
     print(f"  EINIG, seed-faehig ohne Entscheidung: {len(einig)} von {len(je_kennung)}")
     print(f"  UNEINIG, brauchen eine Entscheidung:  {len(uneinig)}\n")
     for k in sorted(uneinig):
         print(f"    {k}")
         for zustand, zs in sorted(uneinig[k].items()):
             print(f"      {zustand:<20} laut {', '.join(sorted(z.split('/')[-1] for z in zs))}")
-    print(f"\n  Regel 4: hier wird NICHTS aufgeloest. Die {len(uneinig)} Faelle gehoeren dem Integrator.")
+    # ── A-41-4 UND A-41-5: JE KENNUNG EINE ZEILE, UND DIE VERDRAENGTEN EINZELN ──────────────
+    #
+    # **Hier korrigiere ich meine eigene Zeile von vorhin.** Sie lautete *„Regel 4: hier wird
+    # NICHTS aufgeloest"* und gab bei JEDER Uneinigkeit die 2. **A-41-4 verlangt aber woertlich
+    # eine Zeile je Kennung und namentlich `A-33 = BETRIEBSBESTAETIGT, den juengsten der fuenf`.**
+    # Beides zusammen ging nicht.
+    #
+    # **Aufgeloest hat es das Lesen der Kanten, nicht das Nachgeben:** K1 ist *„gleiche Zeit,
+    # verschiedener Zustand"*. **Verschiedene Zeiten sind kein Widerspruch, sondern eine
+    # Reihenfolge** — und der juengste gewinnt, exakt wie im Log-Pfad. Ein echter Widerspruch
+    # bleibt nur der Gleichstand.
+    #
+    # ***Das ist keine stille Aufloesung:*** *jeder verdraengte Stand wird mit Zweig, Zustand und
+    # Zeit einzeln ausgewiesen* (A-41-5). **Regel 4 verbietet das stille Aufloesen, nicht das
+    # Anwenden einer angesagten Ordnung.**
+    verdraengt, gleichstand, seed = [], [], dict(einig)
+    for k in sorted(uneinig):
+        kandidaten = []
+        for zustand, zs in uneinig[k].items():
+            for z in zs:
+                kandidaten.append((wann_gesetzt(z, k, zustand) or 0, z, zustand))
+        kandidaten.sort(key=lambda t: -t[0])
+        juengste = [c for c in kandidaten if c[0] == kandidaten[0][0]]
+        if len({c[2] for c in juengste}) > 1:
+            gleichstand.append((k, juengste))       # K1 — und NUR das ist einer
+            continue
+        seed[k] = kandidaten[0][2]
+        for ts, z, zustand in kandidaten[1:]:
+            verdraengt.append((k, z, zustand, ts))
+
+    if verdraengt:
+        print(f"\n  VERDRAENGTE STAENDE, einzeln mit Zweig, Zustand und Commit-Zeit: {len(verdraengt)}")
+        for k, z, zustand, ts in verdraengt:
+            print(f"    {k:<8} {z.split('/')[-1]:<16} {zustand:<20} {zeit(ts)}")
+        print(f"\n  Es gewinnt je Kennung der juengste Stand — die obigen sind ihm gewichen.")
+    if gleichstand:
+        print(f"\n  GLEICHSTAND (K1) — GEMELDET, NICHT aufgeloest: {len(gleichstand)}")
+        for k, js in gleichstand:
+            for ts, z, zustand in js:
+                print(f"    {k:<8} {z.split('/')[-1]:<16} {zustand:<20} {zeit(ts)}")
+
+    print(f"\n  SEED — eine Zeile je Kennung: {len(seed)}")
+    for k in sorted(seed):
+        print(f"    {k:<10} {seed[k]}")
+
     if not je_kennung:
         raus(3, "Kein Zweig traegt einen Datensatz — der Bootstrap hat keine Eingabe.")
-    if uneinig:
-        # Auch hier 2 und nicht 1: solange die Zweige uneinig sind, ist kein Seed erzeugbar.
-        # Ein Seed aus den EINIGEN allein waere unvollstaendig und saehe vollstaendig aus.
-        raus(2, f"{len(uneinig)} Kennungen brauchen eine Entscheidung, bevor geseedet wird.")
+    if gleichstand:
+        raus(2, f"{len(gleichstand)} Kennung(en) im Gleichstand — kein Seed ohne Entscheidung.")
+    if verdraengt:
+        raus(1, f"{len(seed)} Kennungen seed-faehig, {len(verdraengt)} Staende verdraengt.")
     raus(0, f"Alle {len(einig)} Kennungen einig — seed-faehig ohne Entscheidung.")
 
 # ── VERGLEICH: Erzeugnis gegen den heutigen Bestand ─────────────────────────────────────────
 tafel, widerspruch, verworfen = aus_dem_log()
-_, je_kennung = aus_den_zweigen()
+_, je_kennung, _ = aus_den_zweigen()
 print(f"# VERGLEICH — Erzeugnis gegen den heutigen Bestand\n")
 print(f"  aus dem Commit-Log erzeugt:      {len(tafel)} Kennungen")
 print(f"  im heutigen Bestand vorhanden:   {len(je_kennung)} Kennungen")
@@ -310,7 +498,37 @@ if widerspruch:
     raus(2, f"{len(widerspruch)} Kennung(en) im Widerspruch — der Vergleich hat keine Grundlage.")
 if not tafel and not je_kennung:
     raus(3, "Weder Log noch Bestand tragen einen Zustand — nichts zu vergleichen.")
+# ── A-41-6: JEDE ABWEICHUNG BEKOMMT IHRE URSACHE ────────────────────────────────────────────
+#
+# Der Auftrag nennt vier: verdraengter Stand (K3), Prosa (K4), Zustand ohne Auftrag (K2), oder
+# ungeklaert. **Gemessen deckt keine davon den heutigen Hauptfall ab** — und das wird gemeldet
+# statt in „ungeklaert" verschoben, wo es als Raetsel erschiene, obwohl die Ursache bekannt ist.
+#
+# ***Der Wortlaut ist erst heute entstanden.*** *Fast jede Kennung steht im Bestand und hat noch
+# keinen Zustands-Commit; das ist keine Divergenz, sondern das Fehlen einer Historie.* **Eine
+# Ursache, die 85 von 86 Faellen traegt, gehoert benannt und nicht unter „ungeklaert" gebucht.**
+def ursache(k, art):
+    staende = je_kennung.get(k, {})
+    if art == "fehlend":
+        if len(staende) > 1:
+            return "K3 verdraengter Stand"
+        return "Wortlaut neu — kein Zustands-Commit"
+    if art == "neu":
+        return "K2 kein Blatt gefunden" if not blatt_gefunden(k) else "Zustand ohne Datensatz im Bestand"
+    return "K3 verdraengter Stand" if len(staende) > 1 else "UNGEKLAERT"
+
 if fehlend or neu or abweichend:
-    raus(1, f"fehlend {len(fehlend)} · neu {len(neu)} · abweichend {len(abweichend)}")
+    zaehler = {}
+    for art, liste in (("fehlend", fehlend), ("neu", neu), ("abweichend", abweichend)):
+        for k in liste:
+            zaehler.setdefault(ursache(k, art), []).append(k)
+    print("\n  URSACHE je Abweichung (A-41-6):")
+    for u in sorted(zaehler):
+        ks = zaehler[u]
+        print(f"    {u:<34} {len(ks):>3}   {', '.join(ks[:6])}{' …' if len(ks) > 6 else ''}")
+    offen = len(zaehler.get("UNGEKLAERT", []))
+    if offen:
+        print(f"\n  ⚠ {offen} UNGEKLAERT — das ist ein Fund und keine Nebensache.")
+    raus(1, f"fehlend {len(fehlend)} · neu {len(neu)} · abweichend {len(abweichend)} · ungeklaert {offen}")
 raus(0, "Erzeugnis und Bestand stimmen ueberein.")
 PY
