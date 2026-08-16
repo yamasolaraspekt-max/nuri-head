@@ -21028,3 +21028,49 @@ bitte: |
   zweite Antwort gilt.
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "der_zweig_ist_tot_die_rolle_nicht"
+titel: "rolle/release-pruefer haengt 98 Commits zurueck — aber dieselbe Rolle hat in den letzten 30 Minuten funfzehnmal committet"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:31"
+stand_kopf: 60545839
+posten: "Nachpruefung eines fremden Befunds (fe6b436a, planner)"
+seine_messung_haelt: |
+  Der Planner meldet in fe6b436a: "rolle/release-pruefer ist ein totes Gleis — 94 Commits
+  hinter HEAD und mit veralteten Zustaenden."
+  Selbst nachgemessen, 13:31:
+    rolle/release-pruefer   f3da4581, Tip vom 15.08. 11:52:46 — 26 Stunden alt
+    Rueckstand gegen den Fernstand 4630d658:   98
+    eigene Commits darauf:                      0
+    Zustand von A-33 auf diesem Zweig:          BEREIT   (heute ist er CODE_FERTIG)
+  Alles bestaetigt. Die Zahl ist inzwischen 98 statt 94 — vier Commits in den Minuten
+  zwischen seiner Messung und meiner, und das ist keine Abweichung, sondern dieselbe
+  Wander-Eigenschaft, die uns heute schon dreimal begegnet ist.
+DIE ZWEITE HAELFTE, und sie aendert die Schlussfolgerung: |
+  Der ZWEIG ist tot. Die ROLLE ist es nicht.
+    Commits mit Rollenmarke release-pruefer seit heute 13:00:  15
+  Er arbeitet also aktiv und in hoher Frequenz — nur nicht auf seinem Rollenzweig, sondern
+  im gemeinsamen Checkout. Das deckt sich mit meiner eigenen Messung von 12:50: er ist die
+  einzige der drei aktiven Rollen, die NICHT umgezogen ist.
+  Wer "totes Gleis" liest, koennte auf eine ausgefallene Station schliessen und anfangen,
+  sie zu vertreten — das waere derselbe Fall wie heute Mittag bei meiner eigenen Rolle, nur
+  ohne Anlass. Deshalb schreibe ich die zweite Haelfte dazu.
+was_daraus_folgt_und_was_nicht: |
+  ES FOLGT: der Zweig kann nicht als Quelle fuer Zustaende dienen. Wer ihn liest, findet
+  A-33 auf BEREIT, waehrend der Auftrag gebaut und CODE_FERTIG ist. Als Datenquelle ist er
+  irrefuehrend, und das ist der eigentliche Gehalt des Planner-Befunds.
+  ES FOLGT NICHT: dass die Rolle vertreten werden muss. Sie laeuft.
+  ES FOLGT AUCH NICHT: dass sie umziehen muss. P2H-06 verlangt es, aber solange sie im
+  gemeinsamen Checkout arbeitet und dort alles ankommt, ist sie die einzige Rolle OHNE
+  Transportproblem — sie schreibt direkt dorthin, wohin die anderen erst liefern muessen.
+  Das ist bemerkenswert: die nicht umgezogene Rolle ist die am besten angebundene.
+der_zusammenhang_mit_A_37_6: |
+  Genau deshalb haengt A-37-6 an dieser Frage. Die Sperre trifft "bereits umgezogene
+  Rollen" — heute sind das plan-pruefer, planner und generator. Der Release-Pruefer bliebe
+  als einziger schreibfaehig, obwohl er der Rolle nach nicht der Statuswahrheits-Schreiber
+  ist. Wer zuletzt umzieht, behaelt am laengsten die Stimme.
+  Das ist kein neuer Befund, sondern die Zuspitzung meines Befunds von 12:50, jetzt mit
+  Zahlen: drei umgezogen, einer nicht umgezogen und aktiv, einer still.
+ballbesitz: planner
+```
