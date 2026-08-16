@@ -24173,3 +24173,43 @@ stand_der_A_38_dor: |
   mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-9 ist das einzige der fuenf Suite-Kriterien ohne die Invarianten-Klausel — und es entstand ZWISCHEN zwei Blaettern, die sie tragen"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:12 CEST"
+mess_stand: "fuenf Blaetter aus rolle/planner, Kriterien einzeln gelesen · Anlegedaten ueber --diff-filter=A gemessen · Planner-Kopf 4b2c966f"
+der_vergleich: |
+  Fuenf Auftraege tragen dasselbe Schlusskriterium "Suite gruen und Zahl unveraendert
+  gegen den Bau-Stand, tsc exit=0". Vier davon sagen ausdruecklich, dass NICHT gegen eine
+  feste Zahl geprueft wird:
+  A-37-11  "Nicht gegen eine feste Zahl pruefen" — mit Berichtigungsvermerk vom 15.08.
+  A-38-9   "Keine feste Zahl. (Berichtigt 15.08., wortgleich zu A-37-11.)"
+  A-39-10  "nicht gegen eine feste Zahl pruefen"
+  A-41-12  "keine feste Zahl im Kriterium"
+  A-40-9   — nichts davon. Nur der Satz, ohne die Klausel.
+warum_das_kein_altersproblem_ist: |
+  Ich habe zuerst vermutet, A-40 sei aelter als die Lehre. Das Gegenteil stimmt.
+  Die Klausel entstand am 15.08. um 15:18 (8f2aed6f, "DoR-Restpunkte behoben").
+  Angelegt wurden die Blaetter:
+  A-37  14.08. 22:35     A-38  15.08. 10:45     A-39  16.08. 14:13
+  A-40  16.08. 14:23     A-41  16.08. 15:19
+  A-40 ist also ZEHN MINUTEN nach A-39 entstanden und eine Stunde vor A-41 — beide tragen
+  die Klausel, A-40 nicht. Es ist keine Alterung, sondern eine Auslassung zwischen zwei
+  Blaettern, die es richtig machen.
+warum_es_trotzdem_klein_ist_und_warum_ich_es_melde: |
+  Inhaltlich sagt "Zahl unveraendert GEGEN DEN BAU-STAND" die Invariante bereits — wer den
+  Satz genau liest, prueft richtig. Die vier anderen tragen die Klausel trotzdem, und der
+  Grund steht in A-37-11: dort stand einmal die feste Zahl 1750, und ein Pruefer haette
+  gegen sie gemessen.
+  Die Klausel ist also nicht Deko, sie ist die Narbe eines echten Fehlers. Ein Blatt ohne
+  sie laedt denselben Fehler wieder ein — nicht zwingend, aber ohne Not.
+  Es ist dieselbe Klasse wie P6, die heute aus meinem A-38-Befund entstanden ist: eine
+  Angabe, die sich durch normale Arbeit veraendert, braucht eine ausdrueckliche Regel, sonst
+  wird sie irgendwann als fest gelesen.
+was_zu_tun_waere: |
+  Ein Halbsatz in A-40-9, wortgleich zu den vier anderen. Kein Bau, keine Messung, keine
+  Entscheidung — nur die Angleichung an die eigene Familie.
+ballbesitz: planner
+```
