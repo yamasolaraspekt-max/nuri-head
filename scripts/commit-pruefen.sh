@@ -43,8 +43,32 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
+# ── --trocken: ALLE PRUEFUNGEN, KEIN COMMIT ─────────────────────────────────────────────────
+#
+# **Gebaut, weil ich selbst hineingelaufen bin.** Am 16.08. wollte ich pruefen, ob im eigenen Baum
+# die neue Abwesenheitsmeldung ausbleibt, und rief dafuer das Tor mit dem Betreff „Gegenprobe" auf.
+# **Es hat committet** — der Commit `3f5e64c7` traegt seither 23 Zeilen echte Aenderung unter einem
+# Betreff, der eine Messung war.
+#
+# ***Wer mit einem Tor misst, das schreibt, schreibt beim Messen.*** *Und das trifft nicht nur
+# mich: es gab bis heute keine Moeglichkeit, die Annahme einer Botschaft zu pruefen, ohne sie zu
+# vollziehen.* **Ein Werkzeug, dessen Probe nur der Ernstfall ist, wird im Ernstfall geprobt.**
+#
+# ```sh
+#   TICKET_ROLLE=generator bash scripts/commit-pruefen.sh --trocken "Botschaft" pfad ...
+# ```
+#
+# **Der Ausstieg liegt VOR dem `git add` der neuen Dateien** — der einzigen schreibenden Stelle
+# vor dem Commit. *Damit hat der Trockenlauf keine Nebenwirkung, und deshalb kann er auch nicht
+# beweisen, dass das Stagen gelingt.* **Das ist der Preis, und er steht hier statt im Kleingedruckten.**
+TROCKEN=0
+if [ "${1:-}" = "--trocken" ]; then
+  TROCKEN=1
+  shift
+fi
+
 if [ "$#" -lt 2 ]; then
-  echo 'Aufruf: bash scripts/commit-pruefen.sh "Botschaft" pfad [weitere ...]' >&2
+  echo 'Aufruf: bash scripts/commit-pruefen.sh [--trocken] "Botschaft" pfad [weitere ...]' >&2
   exit 2
 fi
 
@@ -799,6 +823,23 @@ fi
 #
 # *Der Index sagt „geloescht und unbekannt", HEAD sagt die Wahrheit.* Wer hier `^??` liest, stagt
 # den ganzen Baum und nennt Bestand „NEU".
+# Hier endet der Trockenlauf: alles darunter SCHREIBT. Er nennt die Botschaft in der Form, die
+# das Tor daraus gemacht hat (mit Rollenmarke), damit genau das pruefbar ist, woran ich mich
+# geirrt habe — nicht die eingegebene, sondern die entstehende.
+if [ "$TROCKEN" = "1" ]; then
+  echo ""
+  echo "TROCKENLAUF — alle Pruefungen gelaufen, KEIN Commit."
+  echo "  Botschaft: $BOTSCHAFT"
+  for p in "$@"; do
+    if [ -n "$(git --no-optional-locks ls-tree --name-only HEAD -- "$p" 2>/dev/null)" ]; then
+      echo "  bekannt:   $p"
+    else
+      echo "  NEU:       $p  — wuerde einzeln gestagt"
+    fi
+  done
+  exit 0
+fi
+
 for p in "$@"; do
   if [ -n "$(git --no-optional-locks ls-tree --name-only HEAD -- "$p" 2>/dev/null)" ]; then
     continue
