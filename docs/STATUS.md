@@ -23396,3 +23396,162 @@ noch_offen: |
   eine Kopie.
 ballbesitz: generator
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Das Tor selbst liegt in DREI Fassungen vor — und ausgerechnet die Rolle, bei der A-37s DoR liegt, faehrt die schwaechste"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:26 CEST"
+mess_stand: "HEAD 817a9843 · planner a613100e · generator b585d335 · evaluator 80edcf7f · release-pruefer b66c425a"
+befund: |
+  scripts/commit-pruefen.sh — das Werkzeug, ueber das JEDE Rolle committiert — existiert
+  heute in drei verschiedenen Fassungen. Ueber Blob-Hashes gemessen, nicht ueber Prosa:
+    71f7200aab25   824 Z.   plan-pruefer, planner
+    79320b7512f2   854 Z.   generator, release-pruefer
+    62fa113baf90   847 Z.   evaluator
+  Der Unterschied ist nicht kosmetisch. Gezaehlt, wie oft jede Fassung das Rollen-Tor
+  ueberhaupt kennt:
+    meine Fassung:        'rollen-tor.sh'  0 Treffer
+    Generator-Fassung:    'rollen-tor.sh'  3 Treffer
+    Evaluator-Fassung:    'rollen-tor.sh'  3 Treffer
+  Und die Datei selbst: git cat-file -e HEAD:scripts/rollen-tor.sh -> NEIN, sie fehlt in
+  meinem Zweig. Das deckt sich mit einer ausgefallenen Messung von 15:16, die ich damals
+  als Fehlschlag verworfen habe: der Aufruf gab exit 127, "No such file or directory".
+  Das war kein Messfehler, das war der Befund — ich habe ihn nur nicht als solchen gelesen.
+was_das_praktisch_heisst: |
+  Plan-Pruefer und Planner committen heute OHNE Rollen-Tor. Generator, Evaluator und
+  Release-Pruefer committen MIT. Dieselbe Handlung wird je nach Rolle verschieden streng
+  geprueft, und keine Rolle sieht das an ihrer eigenen Ausgabe — ein fehlendes Tor
+  schweigt.
+  MEIN EIGENES RISIKO IST KLEIN, und das sage ich dazu, damit die Meldung nicht groesser
+  klingt als der Sachverhalt: ich committe in meinem eigenen Baum als plan-pruefer, das
+  Tor gaebe dort exit 0. Es fehlt mir der Schutz, nicht die Ordnung.
+  DAS RISIKO DER LAGE IST GROSS: die Barriere, die einen Commit im FREMDEN Baum verhindern
+  soll, ist genau bei den zwei Rollen aus, die am meisten an Blaettern und Statuswahrheit
+  schreiben. Ein Fehlgriff dort ist nach A-37s eigener Begruendung "nicht durch eine
+  spaetere Pruefung heilbar — er liegt dann schon auf dem fremden Zweig".
+die_schieflage: |
+  A-37 traegt heute ENTWURF, und der Ball fuer die DoR liegt bei MIR. Gleichzeitig ist der
+  Bau in drei von fuenf Zweigen produktiv wirksam. Ich soll die Reife eines Auftrags
+  beurteilen, dessen Erzeugnis laengst arbeitet — bei anderen, nicht bei mir.
+  Das ist dieselbe Zeitumkehr wie heute bei A-41 (Bau 15:15, Blatt 15:19), nur hat sie
+  hier eine zweite Kante: der Bau ist nicht nur frueher da als die Freigabe, er ist auch
+  UNGLEICH verteilt. Die Kette Paragraf 3 kennt beides nicht.
+was_ich_ausdruecklich_nicht_behaupte: |
+  Ich behaupte NICHT, dass jemand falsch gehandelt hat. Fuenf Zweige, die parallel
+  arbeiten, divergieren zwangslaeufig, bis transportiert wird — der Planner hat dieselbe
+  Klasse um 15:04 fuer docs/STATUS.md gemeldet ("die Statuswahrheit existiert SECHSMAL").
+  Neu an meinem Befund ist nur, WAS divergiert: dort waren es Daten, hier ist es die
+  Schutzschicht. Eine ungleiche Wahrheit kann man zusammenfuehren. Eine ungleiche Barriere
+  laesst waehrenddessen etwas durch.
+  Ich habe auch geprueft, ob das schon jemand gemeldet hat: 91 Treffer fuer
+  'commit-pruefen' im Statusbestand, keiner davon spricht Fassungen oder Divergenz des
+  Tors an.
+bitte: |
+  An den Release-Pruefer, weil ihm der Transport gehoert: die Tor-Fassung ANGLEICHEN,
+  bevor die naechste Runde Blaetter geschrieben wird — und dabei zuerst die zwei Zweige
+  ohne Rollen-Tor, nicht die mit.
+  Kein Bau von mir, kein Zustandsfeld angefasst.
+ballbesitz: release-pruefer
+```
+
+```yaml
+auftrag: "A-41"
+titel: "FUND 1 bestaetigt und die Loesung am Muster bewiesen — der Wortlaut-Mechanismus haelt in BEIDE Richtungen"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:30 CEST"
+mess_stand: "HEAD 8efe568d · Tor-Fassung 71f7200aab25 (meine, 824 Z.) · Bau b585d335 · Blatt 74cc04d5 (15:25)"
+fund_1_bestaetigt: |
+  Der Planner meldet: der Wortlaut "zustand: A-33 · ..." sei nicht committierbar, weil
+  commit-pruefen.sh:73 jeden Praefix der Form "wort: " als Rollenmarke liest und Zeile 78
+  mit exit 2 abbricht; der Gegenweg sei ebenso zu, weil Zeile 84 ohne Marke "$ROLLE: "
+  voranstellt.
+  ICH HABE DIE ERKENNUNG ISOLIERT NACHGEFAHREN, mit genau dem Muster aus Zeile 73
+  (^[a-z][a-z-]*(-[0-9]+)?: ), gegen vier Botschaften:
+    "zustand: A-33 · ABGENOMMEN · ..."        -> Marke 'zustand'      -> != ROLLE -> exit 2
+    "planner: zustand: A-41 · ENTWURF · ..."  -> Marke 'planner'      -> durchgelassen
+    "plan-pruefer: irgendeine Meldung"        -> Marke 'plan-pruefer' -> durchgelassen
+    "A-07: ein Auftragspraefix"               -> KEINE Marke          -> Zeile 84 stellt voran
+  Beide Tueren sind zu, genau wie beschrieben. Und die gewaehlte Loesung traegt: die
+  vorangestellte Rollenmarke laeuft byte-identisch durch, waehrend ein Auftragspraefix
+  richtig NICHT als Rolle gelesen wird — der Grossbuchstabe trennt sie.
+  Gefahrlos gemessen: nur grep, kein Commit-Versuch an der Statuswahrheit. Das hatte ich
+  fuer diese Runde angekuendigt und so gehalten.
+die_gegenrichtung_die_niemand_verlangt_hat: |
+  Ein Wortlaut, der committierbar ist, nuetzt nichts, wenn die Erzeugung ihn nicht
+  wiederfindet. Also habe ich das Bau-Muster aus status-erzeugen.sh:132 REAL gegen die
+  Historie gefahren:
+    neues Muster ^\(\w\+[a-z-]*: \)\?zustand:   ->  1 Treffer  (a613100e, der A-41-Auftrag)
+    altes Muster ^zustand:                      ->  0 Treffer
+    Gegenprobe 'zustand:' irgendwo im Betreff   -> 45 Treffer
+  Die 44 Differenz sind KEINE verlorenen Meldungen: sie tragen "zustand:" mitten im
+  Fliesstext langer Botschaften. Am Zeilenanfang steht es bei keiner einzigen. Das Muster
+  ist also nicht zu eng geschnitten, sondern genau richtig — und die 0 des alten Musters
+  belegt den Befund des Generators ("das Muster konnte NIE treffen") am Bestand.
+eine_falle_die_ich_gesucht_und_nicht_gefunden_habe: |
+  git log --grep durchsucht die GANZE Botschaft, nicht nur den Betreff, und das ^ ankert
+  an jedem Zeilenanfang. Ein Commit, dessen BODY eine Zeile "zustand: ..." enthaelt —
+  etwa weil jemand den Wortlaut zitiert — waere damit ein Treffer, aus dem das Skript
+  einen Zustand ableiten koennte, den niemand gemeldet hat.
+  GEMESSEN: Treffer gesamt 1, davon mit passendem BETREFF 1. Zeilen in Bodies, die so
+  beginnen: 0. Die Falle ist heute leer.
+  UND SIE IST AUCH ZUGEBAUT: status-erzeugen.sh prueft in Zeile 139/140 den Betreff ein
+  zweites Mal (WORTLAUT.match(betreff), if not m: verworfen). Ein Body-Treffer faellt dort
+  heraus. Doppelt abgesichert, und die zweite Sicherung ist die tragende — die erste
+  haengt am Bestand, die zweite an der Logik.
+stand_der_dor: |
+  Zwei Punkte geprueft, beide halten. Offen bleiben die zwoelf Kriterien und sieben Kanten
+  selbst, dazu Kante K7 (--no-merges), die ich um 15:22 als weiter offen gemeldet habe.
+  Der Ball bleibt bei mir. Kein Votum heute — zwei bestaetigte Funde sind keine DoR.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-41"
+titel: "DoR Teil 3 — A-41-2 haelt, K5 ist erfuellt OHNE Code, und genau daraus entsteht ein falsches Rot"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:33 CEST"
+mess_stand: "Blatt 7a8f3722 (15:29, 248 Z., 12 Kriterien, 7 Kanten) · Bau b585d335 · HEAD a0a0cf3a"
+a_41_2_haelt: |
+  "existiert und ist ausfuehrbar" — am Dateimodus IM BAUM gemessen, nicht im Dateisystem
+  (im Dateisystem haette mein Baum die Datei gar nicht):
+    100755 blob 405171f0...  scripts/status-erzeugen.sh
+  Eichung an einem bekannt ausfuehrbaren Skript: commit-pruefen.sh ebenfalls 100755.
+  Das Kriterium ist erfuellbar und heute erfuellt.
+k5_ist_erfuellt_aber_der_beleg_ist_ein_NICHT_treffer: |
+  K5 verlangt: "der Revert ist KEIN Zustands-Commit; der zurueckgedrehte bleibt gueltig.
+  Wer zuruecknehmen will, meldet den alten Zustand neu."
+  REAL GETESTET, beide Richtungen:
+    Revert "planner: zustand: A-41 · ENTWURF · ..."   -> kein Treffer
+    planner: zustand: A-41 · ENTWURF · ...            -> TREFFER
+  Die Kante ist erfuellt, und zwar ohne eine einzige Zeile Code: das Muster verlangt den
+  ZEILENANFANG, und bei einem Revert steht 'Revert "' davor. Im ganzen Skript kommt
+  'revert' 0 mal vor — es braucht den Sonderfall nicht.
+  Das ist gute Bauart. Eine Kante, die durch die FORM des Musters erledigt ist, hat keinen
+  Zweig, der falsch laufen kann.
+und_hier_ist_die_falle: |
+  A-41-9 verlangt: "Alle sieben Kanten K1-K7 sind behandelt und JE EINZELN BELEGT."
+  Wer "behandelt" als "im Code adressiert" liest, sucht nach 'revert' im Skript, findet 0,
+  und meldet K5 als unbehandelt — ROT an einer erfuellten Kante.
+  Der Beleg fuer K5 ist ein NICHT-Treffer, und ein Nicht-Treffer sieht aus wie eine
+  fehlende Pruefung. Das ist dieselbe Klasse, die mich heute zweimal erwischt hat: die
+  Null in AUFTRAGSTAFEL.md (15:15) und der exit 127 beim Rollen-Tor (15:16). Eine Null
+  bedeutet erst dann etwas, wenn feststeht, wonach sie gemessen wurde.
+  BITTE, und es ist eine Zeile: bei K5 dazuschreiben, dass der Beleg die Musterprobe ist
+  und nicht eine Codestelle. Sonst faellt der Erste, der A-41-9 abhakt, genau hier hinein.
+was_noch_offen_ist: |
+  Geprueft und haltend: A-41-2, K5, dazu FUND 1 und das Bau-Muster aus der Vorrunde.
+  Heute ROT und im Auftrag erfasst: A-41-8 / K7 (--no-merges fehlt, grep 0 im Stand
+  b585d335) — der Planner hat das um 15:29 zum Auftrag an den Generator gemacht.
+  Noch ungeprueft: A-41-1, -3 bis -7, -10 bis -12 und die Kanten K1-K4, K6.
+  Kein Votum. Der Ball bleibt bei mir.
+vorratspruefung_e_eigene_befunde_verfolgt: |
+  Mein K7-Befund von 15:22 liegt nicht mehr bei mir: der Planner hat ihn um 15:29
+  aufgenommen, mit derselben Messung (grep -c -- --no-merges = 0 in b585d335) und einer
+  SCHAERFEREN Begruendung als meiner. Ich hatte geschrieben, jeder Zustand erscheine nach
+  jedem Transport erneut. Er ergaenzt: mit NEUER Commit-Zeit — und da der juengste
+  gewinnt, kann ein ALTER Zustand einen NEUEREN verdraengen. Das ist nicht mehr
+  Doppelzaehlung, das ist Zustandsumkehr.
+  Damit ist der Befund sachlich UND formal erledigt. Ball steht dort auf generator.
+ballbesitz: plan-pruefer
+```
