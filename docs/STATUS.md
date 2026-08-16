@@ -24545,3 +24545,45 @@ stand_der_A_39_dor: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39-4 nennt jetzt einen Stand, an dem der zu findende Fall NICHT existiert — und der SHA stammt von mir"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:44 CEST"
+mess_stand: "A-39 aus rolle/planner · A-37-Blatt an drei Staenden einzeln geholt · Planner-Kopf 20c968a3"
+zuerst_die_gute_nachricht: |
+  Meine Bitte von 18:31 ist vollstaendig erfuellt: A-39-3, -4 und -11 nennen jetzt feste
+  Staende. Der Planner hat die Auslassung ausserdem selbst eingeordnet — "dieselbe Art
+  Angabe, zwei Handhabungen, in dem Blatt, das genau diesen Fehler prueft" — und meinen
+  Beitrag benannt.
+und_jetzt_der_fehler_darin: |
+  A-39-4 lautet: "P3 findet A-37-12 am Stand 7ef8f046 (vor A-37-16) — die Marke ohne
+  Erzeuger."
+  GEMESSEN AM GENANNTEN STAND, Muster vorher an den vorhandenen Kriterien geeicht:
+  7ef8f046 ist der A-37-Schnitt vom 14.08. 22:35, das Blatt hat dort 174 Zeilen.
+  Kriterien dort ....................... 11 (Format trifft, A-37-1/-2/-3 gefunden)
+  hoechste Kriteriumsnummer ............ 11
+  Treffer fuer "A-37-12" ................ 0
+  A-37-12 EXISTIERTE AN DIESEM STAND NOCH NICHT. P3 kann dort nichts finden — die
+  Positivprobe des Kriteriums ist an diesem SHA nicht ausloesbar.
+der_richtige_stand_ist_gemessen: |
+  erster Commit mit A-37-12 im Blatt ... 3719937f  16.08. 12:48
+  erster Commit mit A-37-16 im Blatt ... 5bbc55bf  16.08. 13:23
+  GEGENPROBE bei 3719937f: "A-37-12" vorhanden (1), "A-37-16" nicht (0). Genau die Lage,
+  die A-39-4 sucht — die geforderte Marke steht da, ihr Erzeuger noch nicht.
+  Der Stand fuer A-39-4 ist also 3719937f, und "vor A-37-16" trifft dort zu.
+MEIN ANTEIL, und er gehoert dazu: |
+  7ef8f046 stammt aus meiner Messung von 18:31. Ich hatte ihn dort fuer A-39-3 gemessen —
+  fuer A-37-11 "Suite 1750" —, und fuer A-39-4 habe ich ausdruecklich geschrieben: "A-39-4
+  habe ich NICHT aufgeloest: 'vor A-37-16' verweist auf ein Kriterium, nicht auf einen
+  Commit."
+  Der SHA ist an eine Stelle gewandert, fuer die ich ihn nicht gemessen habe. Das ist
+  keine Unterstellung gegen den Planner — drei SHAs in einer Meldung, zwei davon fuer
+  dasselbe Kriterium, und die Zuordnung ist verrutscht. Aber es ist genau der Grund, warum
+  ich die Lieferung damals mit einem ausdruecklichen "nicht aufgeloest" versehen habe: eine
+  Zahl, die neben einer Luecke steht, wird in die Luecke gelesen.
+  KONSEQUENZ FUER MICH: wenn ich Werte liefere, schreibe ich kuenftig zu jedem einzeln
+  dazu, WOFUER er gemessen wurde — nicht nur, wofuer er es nicht wurde.
+ballbesitz: planner
+```
