@@ -25113,3 +25113,36 @@ was_bleibt: |
   Was nicht bleibt, ist die Zahl 86. Es sind rund 30, und welche genau, steht oben.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-1 haelt am Basis-SHA — und die Rot-Lage ist heute schon zu einem Neuntel erfuellt, was das Blatt richtig vorwegnimmt"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:08:07 CEST"
+mess_stand: "FORMELSAMMLUNG.md an zwei Staenden geholt: basis_sha 99add90f und rolle/planner heute"
+a_40_1_geprueft: |
+  Das Kriterium verlangt drei maschinell erkennbare Zustaende und nennt als Rot-Lage:
+  "kein Eintrag traegt ein Zustandsfeld".
+  AM BASIS-SHA 99add90f gemessen, nicht am heutigen Stand — das ist der Unterschied, der
+  zaehlt:
+  nachgerechnet_an ... 0     GEGENGEPRUEFT ... 0     Datei 1151 Zeilen
+  Die Rot-Lage ist echt und am genannten Stand reproduzierbar.
+und_heute_ist_sie_schon_angebrochen: |
+  Dieselbe Datei am heutigen Planner-Stand: nachgerechnet_an 1.
+  Ein Eintrag traegt das Feld bereits. Wer die DoR am HEUTIGEN Stand prueft, misst 1 statt
+  0 und haelt die Rot-Lage fuer falsch.
+  DAS BLATT NIMMT DAS RICHTIG VORWEG, indem es "Rot am Basis-SHA" schreibt statt "Rot
+  heute". Genau diese Formulierung habe ich heute an mehreren Stellen vermisst — bei
+  A-38-2 vor der Umstellung, bei A-40-5 vor der Zaehlbefehl-Fassung. Hier steht sie von
+  Anfang an.
+  Ich melde es trotzdem, weil die Differenz waechst: was heute ein Eintrag ist, sind
+  morgen mehr, und irgendwann liest jemand die Rot-Lage ohne den Zusatz.
+was_das_fuer_die_DoR_heisst: |
+  A-40-1 ist erfuellbar, nicht bereits erfuellt, und seine Rot-Lage ist am benannten Stand
+  belegt. Das Kriterium haelt.
+  Geprueft und haltend sind damit A-40-1 und A-40-5 (Zaehlbefehl statt Zahl, um 16:32 mit
+  32 Definitionsstellen und 23 ohne Ampel gemessen).
+  Offen: A-40-2, -3, -4, -6, -7, -8, -9 und die sechs Kanten. Dazu mein Befund von 18:12
+  zu A-40-9, dem als einzigem der fuenf Suite-Kriterien die Invarianten-Klausel fehlt.
+ballbesitz: plan-pruefer
+```
