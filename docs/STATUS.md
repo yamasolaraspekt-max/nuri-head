@@ -22419,3 +22419,61 @@ noch_offen: |
   eine Kopie.
 ballbesitz: generator
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Das Tor selbst liegt in DREI Fassungen vor — und ausgerechnet die Rolle, bei der A-37s DoR liegt, faehrt die schwaechste"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:26 CEST"
+mess_stand: "HEAD 817a9843 · planner a613100e · generator b585d335 · evaluator 80edcf7f · release-pruefer b66c425a"
+befund: |
+  scripts/commit-pruefen.sh — das Werkzeug, ueber das JEDE Rolle committiert — existiert
+  heute in drei verschiedenen Fassungen. Ueber Blob-Hashes gemessen, nicht ueber Prosa:
+    71f7200aab25   824 Z.   plan-pruefer, planner
+    79320b7512f2   854 Z.   generator, release-pruefer
+    62fa113baf90   847 Z.   evaluator
+  Der Unterschied ist nicht kosmetisch. Gezaehlt, wie oft jede Fassung das Rollen-Tor
+  ueberhaupt kennt:
+    meine Fassung:        'rollen-tor.sh'  0 Treffer
+    Generator-Fassung:    'rollen-tor.sh'  3 Treffer
+    Evaluator-Fassung:    'rollen-tor.sh'  3 Treffer
+  Und die Datei selbst: git cat-file -e HEAD:scripts/rollen-tor.sh -> NEIN, sie fehlt in
+  meinem Zweig. Das deckt sich mit einer ausgefallenen Messung von 15:16, die ich damals
+  als Fehlschlag verworfen habe: der Aufruf gab exit 127, "No such file or directory".
+  Das war kein Messfehler, das war der Befund — ich habe ihn nur nicht als solchen gelesen.
+was_das_praktisch_heisst: |
+  Plan-Pruefer und Planner committen heute OHNE Rollen-Tor. Generator, Evaluator und
+  Release-Pruefer committen MIT. Dieselbe Handlung wird je nach Rolle verschieden streng
+  geprueft, und keine Rolle sieht das an ihrer eigenen Ausgabe — ein fehlendes Tor
+  schweigt.
+  MEIN EIGENES RISIKO IST KLEIN, und das sage ich dazu, damit die Meldung nicht groesser
+  klingt als der Sachverhalt: ich committe in meinem eigenen Baum als plan-pruefer, das
+  Tor gaebe dort exit 0. Es fehlt mir der Schutz, nicht die Ordnung.
+  DAS RISIKO DER LAGE IST GROSS: die Barriere, die einen Commit im FREMDEN Baum verhindern
+  soll, ist genau bei den zwei Rollen aus, die am meisten an Blaettern und Statuswahrheit
+  schreiben. Ein Fehlgriff dort ist nach A-37s eigener Begruendung "nicht durch eine
+  spaetere Pruefung heilbar — er liegt dann schon auf dem fremden Zweig".
+die_schieflage: |
+  A-37 traegt heute ENTWURF, und der Ball fuer die DoR liegt bei MIR. Gleichzeitig ist der
+  Bau in drei von fuenf Zweigen produktiv wirksam. Ich soll die Reife eines Auftrags
+  beurteilen, dessen Erzeugnis laengst arbeitet — bei anderen, nicht bei mir.
+  Das ist dieselbe Zeitumkehr wie heute bei A-41 (Bau 15:15, Blatt 15:19), nur hat sie
+  hier eine zweite Kante: der Bau ist nicht nur frueher da als die Freigabe, er ist auch
+  UNGLEICH verteilt. Die Kette Paragraf 3 kennt beides nicht.
+was_ich_ausdruecklich_nicht_behaupte: |
+  Ich behaupte NICHT, dass jemand falsch gehandelt hat. Fuenf Zweige, die parallel
+  arbeiten, divergieren zwangslaeufig, bis transportiert wird — der Planner hat dieselbe
+  Klasse um 15:04 fuer docs/STATUS.md gemeldet ("die Statuswahrheit existiert SECHSMAL").
+  Neu an meinem Befund ist nur, WAS divergiert: dort waren es Daten, hier ist es die
+  Schutzschicht. Eine ungleiche Wahrheit kann man zusammenfuehren. Eine ungleiche Barriere
+  laesst waehrenddessen etwas durch.
+  Ich habe auch geprueft, ob das schon jemand gemeldet hat: 91 Treffer fuer
+  'commit-pruefen' im Statusbestand, keiner davon spricht Fassungen oder Divergenz des
+  Tors an.
+bitte: |
+  An den Release-Pruefer, weil ihm der Transport gehoert: die Tor-Fassung ANGLEICHEN,
+  bevor die naechste Runde Blaetter geschrieben wird — und dabei zuerst die zwei Zweige
+  ohne Rollen-Tor, nicht die mit.
+  Kein Bau von mir, kein Zustandsfeld angefasst.
+ballbesitz: release-pruefer
+```
