@@ -238,7 +238,39 @@ beantworten die Frage, die **nach** dem ersten Widerspruch kommt.
 | K3 | **Ein Worktree, den es nicht gibt** (Rolle noch nicht umgezogen) | **durchlassen und melden** — Umzug ist freiwillig getaktet, kein Zwang |
 | K4 | **`git rev-parse` schlägt fehl** (kein Repo) | abweisen mit eigener Ursache, **nicht** als Rollenfehler |
 | K5 | **`integrator` im gemeinsamen Checkout, aber es gibt schon umgezogene Rollen** | erlaubt — das ist sein Baum |
-| K6 | **Eine andere Rolle im gemeinsamen Checkout, die noch nicht umgezogen ist** | erlaubt, aber **mit Hinweis** auf ihren wartenden Baum |
+| K6 | **Eine andere Rolle im gemeinsamen Checkout, deren Baum SCHON STEHT** | **erlaubt**, aber **mit Hinweis** auf ihren wartenden Baum. **⚠ EIGENER FALL, NICHT eine Variante von K3** — siehe unten |
+
+**⚠ K6 IST DIE KANTE, DIE DEN LAUFENDEN BETRIEB SCHÜTZT — und sie ist im ersten Bau ausgefallen.**
+
+**Belegt statt vermutet** *(Plan-Prüfer, 16.08., das gebaute Skript aus `0ee521f7` geholt und
+gefahren)*:
+
+```
+release-pruefer   exit 1  VERSTOSS      <- faehrt heute achtmal den Transport
+evaluator         exit 1  VERSTOSS      <- hat A-33 in der Abnahme
+integrator        exit 0  richtig
+plan-pruefer      exit 0  (eigener Baum)
+```
+
+**Das Tor ist eingehängt — daraus wird `KEIN COMMIT`.** Es trifft genau die zwei Rollen, die gerade
+tragen.
+
+**Warum K6 durchgefallen ist, und es ist eine Blattschwäche, keine Bauschwäche:**
+
+| | K3 | K6 |
+|---|---|---|
+| **Bedingung** | der Baum **existiert nicht** | der Baum **steht schon** |
+| **Rolle** | noch nicht umgezogen | noch nicht umgezogen |
+| **Verhalten** | durchlassen + melden | **durchlassen + melden** |
+
+**Dieselbe Antwort, zwei verschiedene Bedingungen.** Wer K3 baut, hat das Gefühl, den Fall erledigt
+zu haben — **im Code greift K3 aber nur, wenn das Verzeichnis fehlt.** Steht es, fällt der Fall in
+den Schlusszweig und wird zum Verstoß. **Der Kopf des gebauten Skripts listet folgerichtig nur
+K1–K5; K6 kommt dort nicht vor.**
+
+**Die Begründung, die im gebauten Code selbst steht, gilt für K6 unverändert:** *„Ein Tor, das den
+Umzug erzwingt, hält die Kette an statt sie zu schützen."* **K6 ist derselbe Gedanke für den Fall,
+dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K3 verhindern soll.
 
 ## Abnahmekriterien
 
@@ -317,6 +349,14 @@ beantworten die Frage, die **nach** dem ersten Widerspruch kommt.
   festzulegen**. Nachgerechnet: **vier reine Werte ergeben 4 Wörter und fallen durch**, mit
   Feldnamen sind es 8. *„Das Kriterium war genauer als die Zusage"* — dieselbe Klasse wie A-37-12,
   wo der Schreiber der Marke fehlte.
+- **A-37-17** · **ALLE SECHS KANTEN sind behandelt und JE EINZELN belegt.**
+  **Messbar:** je Kante eine Rohausgabe im Bau-Bericht; `grep -c 'K6' scripts/rollen-tor.sh` ≥ 1.
+  **Rot am Bau-Stand `0ee521f7`:** **K6 kommt im ganzen Skript null Mal vor**, fünf von sechs
+  Kanten sind namentlich behandelt.
+  **⚠ DIESES KRITERIUM HAT GEFEHLT, und das ist der Grund, warum der Bau ohne K6 grün sein
+  konnte.** Sechzehn Kriterien, und **keines** nannte die Kanten. **Eine Kantenliste ohne
+  Kriterium ist eine Empfehlung** — A-36 hatte dafür ein eigenes (`A-36-4`), A-37 nicht.
+  *Gefunden vom Plan-Prüfer, nachdem der Bau schon lief.*
 - **A-37-16** · **Die Marke wird auch GESCHRIEBEN, nicht nur gelesen.**
   **Messbar:** ein Skript oder eine dokumentierte Zeile erzeugt sie nach `npm ci`; nach einem
   Lauf existiert sie und trägt den Hash des Lockfiles **dieses** Baumes.
