@@ -1726,3 +1726,93 @@ messe nur, dass der Unterschied hier greift.
 **Ball: planner** für 1 und 2, **integrator** für die zwei Stellen in `docs/STATUS.md`.
 **Kein Zustandsfeld angefasst, kein Bau. A-40s DoR ist damit nicht abgeschlossen** — dieser Fund
 steht vor den übrigen §5-Punkten.
+
+## A-40 · §5-Punkt „jeder Prüfbefehl ist auf Syntax und Aussagekraft geprüft": gefahren — die Syntax hält, die Aussagekraft nicht. Und ich berichtige mich
+
+*§5-Durchgang an A-40, zweiter Teil · gemessen 16.08. gegen `b8a06344`*
+
+### Zuerst Fehler 24, an mir selbst
+
+Ich habe vor zwei Runden gemeldet, A-40s Zahl **87** sei *„nicht nachprüfbar, weil das Blatt das
+Muster nicht mitliefert"*. **Das war falsch.** Das Blatt liefert den Befehl mit — in Z.204-205,
+sechsunddreißig Zeilen unter der Stelle, die ich zitiert habe. Gefahren:
+
+```
+grep -nE '^#+ *\**`?[FNS]-[0-9]{3}|^\| *\**`?[FNS]-[0-9]{3}|^- *\**`?[FNS]-[0-9]{3}' \
+     docs/rollenkette/werkbank/01-MATHEMATIK/*.md | grep -vE '🟢|🟡|🔴'
+
+  -> 87 Trefferzeilen
+```
+
+**Die 87 ist exakt reproduzierbar.** Ich habe „nicht nachprüfbar" gesagt, ohne den Befehl zu
+suchen, der im selben Blatt steht — **derselbe Fehlgriff, den ich heute Abend viermal an fremden
+Zahlen gefunden habe, nur andersherum: nicht ein zu enges Muster, sondern gar keines gesucht.**
+
+### Und damit wird Fehler 23 schärfer, nicht hinfällig
+
+```
+A-40 sagt:        87 Zeilen  ->  64 Kennungen
+
+gemessen:
+  Befehl Z.204 (breit)          87 Zeilen  ->  54 Kennungen
+  Muster ^### [FNS]- (eng)      64 Zeilen  ->  62 Kennungen
+```
+
+**Das Blatt paart die Zeilenzahl des BREITEN Befehls mit der Zeilenzahl des ENGEN Musters und nennt
+Letztere „Kennungen".** Zwei verschiedene Zählwege in einer Zeile, und die zweite Zahl trägt das
+falsche Wort. **64 ist weder die Kennungszahl des einen noch des anderen.**
+
+### Der Aussagekraft-Befund: der Befehl zählt die S-Seite doppelt
+
+```
+Kennungen aus Ueberschriften   54
+Kennungen aus Tabellenzeilen   32
+in BEIDEN                      32       <- jede Tabellenzeile ist eine Dublette
+NUR in der Tabelle              0
+```
+
+**Alle 32 Tabellenzeilen sind Wiederholungen ihrer eigenen Überschrift.** Es ist die
+Übersichtstabelle des Solar-Regelwerks (`| **S-001** Tagesnummer und Jahreswinkel | — | S-002 · …`),
+also ein **Verzeichnis**, keine Definitionsstelle.
+
+**Damit verletzt der Befehl beide Auflagen, die A-40 sich selbst gegeben hat:**
+
+- **Auflage (a)** — *„gezählt wird je Kennung, nicht je Zeile"*: der Befehl zählt Zeilen, und die
+  S-Seite doppelt.
+- **Auflage (c)** — *„die beiden Sammlungen werden getrennt ausgewiesen"*: der Befehl gibt **eine**
+  Liste über `*.md` aus.
+
+Getrennt gemessen sieht es so aus — **beide Summenproben gehen auf**:
+
+```
+FORMELSAMMLUNG     32 Treffer -> 23 nach Ampelfilter -> 22 Kennungen
+SOLAR-REGELWERK    64 Treffer -> 64 nach Ampelfilter -> 32 Kennungen
+                                 --                    --
+                                 87                    54
+```
+
+**Der Ampelfilter greift auf der S-Seite null Mal** — dort trägt keine Definitionsstelle eine
+Ampel. Das ist kein Fehler des Filters, sondern genau der Befund, den A-40 belegen will.
+
+### Ein Fehlbefund, den ich vor dem Melden gefangen habe
+
+Ich hatte gemessen, dass der Bestand **❌** enthält, das der Filter `🟢|🟡|🔴` nicht kennt — ein
+Eintrag mit ❌ würde fälschlich als „ohne Ampel" gezählt. **Nachgeprüft: ❌ steht genau einmal, in
+Prosa** (*„… mit ❌. Ich hatte das am 13.08. als Lücke …"*), **und trifft null Befundzeilen.**
+Kein Fund. **Der fünfte gefangene Fehlbefund heute Nacht, und wieder war die Auflösung im Text.**
+
+### Soll
+
+**Der Befehl in Z.204-205 muss vor dem Bau umgeschrieben werden** — er ist heute der einzige
+Messweg, den A-40 nennt, und er misst nicht, was A-40s Auflagen verlangen:
+
+```
+je Sammlung getrennt · nur Definitionsstellen (Ueberschriften), keine Verzeichniszeilen
+· je Kennung zaehlen, nicht je Zeile · Eintraege mit nachgerechnet_an ausnehmen (heute: 1)
+```
+
+**Zum Vergleich die Zahl, die eine solche Zählung heute liefern würde:**
+`FORMELSAMMLUNG 22 · SOLAR-REGELWERK 32` ohne Ampel, bei 30 bzw. 32 Kennungen insgesamt.
+
+**Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau. A-40s DoR bleibt offen** — dies ist der
+zweite Fund, nach der Nummernvergabe in A-40-2.
