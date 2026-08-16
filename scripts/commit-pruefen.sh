@@ -170,6 +170,33 @@ A11_BEWERTET="${A11_ERSTE#"${A11_ERSTE%%[![:space:]]*}"}"
 # **Verglichen wird weiterhin nur der ROLLENNAME**; der Zusatz wird abgetrennt, GEMELDET und
 # unveraendert im Betreff gelassen. *Ein Zusatz, den das Tor still schluckt, waere derselbe Fehler
 # eine Ebene tiefer.*
+#
+# ### Fuenf Faelle, am Trockenlauf gefahren — Rohausgabe
+#
+# ```text
+#   'generator: schlicht'
+#       Botschaft: generator: schlicht
+#
+#   'generator (in Vertretung): mit Zusatz'
+#       ROLLENMARKE mit Zusatz erkannt: 'generator' (in Vertretung) — Betreff bleibt unveraendert.
+#       Botschaft: generator (in Vertretung): mit Zusatz
+#
+#   'generator (in Yamas Namen): zweiter Zusatz'
+#       ROLLENMARKE mit Zusatz erkannt: 'generator' (in Yamas Namen) — …
+#       Botschaft: generator (in Yamas Namen): zweiter Zusatz
+#
+#   'planner (in Vertretung): fremde Rolle'      <- die GEGENPROBE
+#       ROLLENMARKE mit Zusatz erkannt: 'planner' (in Vertretung) — …
+#       WIDERSPRUCH: die Botschaft gibt sich als 'planner' aus, die Umgebung sagt
+#                    TICKET_ROLLE='generator' — kein Commit.
+#
+#   'ohne jede Marke'
+#       Botschaft: generator: ohne jede Marke
+# ```
+#
+# ***Der vierte Fall ist der, auf den es ankommt:*** *der Zusatz wird erkannt UND die fremde Rolle
+# trotzdem gesperrt.* **Eine Erweiterung, die nebenbei die Rollenpruefung aufweicht, waere
+# schlimmer als die Verdopplung, die sie behebt.**
 A11_VORHANDEN="$(printf '%s\n' "$A11_BEWERTET" | grep -oE '^[a-z][a-z-]*(-[0-9]+)?( \([^)]*\))?: ' | head -n 1)"
 if [ -n "$A11_VORHANDEN" ]; then
   A11_VORHANDEN="${A11_VORHANDEN%: }"
