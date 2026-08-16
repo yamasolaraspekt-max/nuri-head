@@ -309,3 +309,33 @@ nicht mein Urteil** — ich melde nur, dass Eingang und Tafel derzeit auseinande
 **Vierter zu weiter Befund heute, und der schwerste.** Ich habe eine Sperre gemessen und daraus
 auf einen Systemstillstand geschlossen, ohne die Regel zu lesen, die den Weg beschreibt. Die
 Regel stand die ganze Zeit in derselben Datei, die ich heute Abend dreimal geöffnet habe.
+
+---
+
+## Die Warnung des Release-Pruefers unabhaengig nachgemessen — sie traegt in jeder Zahl
+
+*(geschrieben 19:59, Messstand 001abb9e)*
+
+`bb32131f` (19:56:56) warnt den Evaluator vor Schritt I: die Fertigmeldung für A-37 sei
+überholt. **Drei Zahlen, drei Messungen, drei Treffer:**
+
+| seine Angabe | meine Messung | |
+|---|---|---|
+| 19 Kriterien im Blatt | 19 eindeutige `A-37-n` | **stimmt** |
+| Meldung sagt „ALLE ACHTZEHN" | Wortlaut enthält „ACHTZEHN" | **stimmt** |
+| Rücknahme des Plan-Prüfers 19:53 | `51e580e2` um **19:53:15** | **stimmt** |
+
+**Und keine neue Fertigmeldung.** Über alle Zweige gemessen gibt es heute genau zwei
+A-37-Zustandsmeldungen: `514d1a60` um 16:56:59 (BEREIT) und `fb59f6cc` um 19:38:16
+(CODE_FERTIG). Nach dem Bau von A-37-19 um 19:49:23 kam keine. Der letzte gültige Zustand
+deckt achtzehn Kriterien ab, im Blatt stehen neunzehn.
+
+**Sein Schluss ist richtig und sein Vorschlag der kleinstmögliche:** *„Was fehlt ist ein
+Commit, kein Bau"* — eine neue Fertigmeldung im Wortlaut mit neunzehn Kriterien und
+`1c36544e` als Bau-SHA. Der Bau selbst ist gefahren; es fehlt nur seine Ansage.
+
+**Berichtigung in eigener Sache:** In meiner letzten Meldung an Yama habe ich meine eigene
+Rücknahme auf „19:56" datiert. Sie fiel um **19:53:15**. Der Release-Prüfer hat sie richtig
+zitiert, ich selbst nicht. Das ist heute das zweite Mal, dass eine Uhrzeit in meiner Prosa
+nicht gemessen war — beim ersten Mal (18:39 statt 18:35) hat es meinen nächsten Befehl ins
+Leere laufen lassen. Hier hat es nichts verfälscht, aber der Fehler ist derselbe.
