@@ -26094,3 +26094,53 @@ vorschlag: |
   bekommt. Blattaenderung, nicht meine Entscheidung.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "P-08"
+titel: "Der Bauvorrat des Generators haelt in jedem Punkt — und meine erste Gegenmessung war wertlos, weil zsh eine Variable nicht aufteilt"
+rolle: plan-pruefer
+zeit: "16.08. 19:21"
+mess_stand: ba0096b0029337bf748d2fdfc48a7d363414f4d7
+geprueft_gegen: "bb1da29f (generator, 19:17)"
+baum: "sauber (0 Eintraege)"
+die_messvorschrift: |
+  Modul unter geometry mit mindestens einer Ausfuhr · eigener Waechter unter __tests__ ·
+  NULL produktive Verbraucher in app/renderers/commands/store/domain.
+  Er hat sie aus dem CODE gefahren statt aus den Blaettern, mit ausdruecklicher
+  Begruendung: nur fuenf bis sechs der 41 Werkzeugverzeichnisse tragen einen
+  einheitlichen Bestandsblock, eine Auswertung ueber alle 41 waere ein Muster ueber
+  Fliesstext und damit H-9.
+nachgemessen_alles_haelt: |
+  55 .ts-Module unter geometry — exakt seine Zahl.
+  Alle zehn genannten Module existieren, jedes mit genau einem Waechter unter __tests__:
+  dachformVorlagen, aufbautenStatus, dachVorlage, masskette, auswechslung,
+  integrationAbgleich, sparrenTrennung, dachTopologie, treppenTypen, wandFlaeche.
+  Produktive Verbraucher, Nicht-Typ-Nennungen in app/renderers/store/domain: alle NULL.
+  Das Verzeichnis 'commands' aus seiner Vorschrift existiert nicht; der Suchraum sind
+  85 app + 9 renderers + 5 domain + 2 store = 101 Dateien.
+sein_eigener_zweifel_war_berechtigt: |
+  Er schreibt, eine Zahl habe er nicht geglaubt: dachformVorlagen mit 51 Ausfuhren und
+  null Verbrauchern, obwohl drei Dateien es nennen. Nachgemessen, er hat recht:
+    renderers/three-d/dachMesh.ts:13   'import type { EngineRoofShape } from ...'
+    domain/roofShape.ts:3              eine KOMMENTARZEILE, keine Benutzung
+  Beides sind keine produktiven Verbraucher. Die Zahl haelt.
+mein_eigener_fehler: |
+  Meine erste Gegenmessung ergab fuer ALLE zehn Module null Nennungen — auch fuer
+  geradenGeometrie, das nachweislich einen Produktivaufrufer hat. Die Fangprobe hat es
+  gefangen, bevor etwas gemeldet wurde.
+  URSACHE: ich hatte den Suchraum in eine Variable gelegt und 'for f in $PROD'
+  geschrieben. zsh teilt eine unquotierte VARIABLE nicht an Whitespace auf — anders als
+  bash und anders als eine Kommandosubstitution '$(...)', die IFS-Splitting macht.
+  Die Schleife lief also einmal ueber einen einzigen langen String, jedes git show
+  schlug fehl, und das Ergebnis war ueberall 0. Ein Nullwert, der wie eine Messung
+  aussieht.
+  Mit der Schleife direkt ueber $(git ls-tree ...) liefert die Fangprobe 3 Nennungen
+  fuer geradenGeometrie in trimmen.ts und werkzeugLandkarte.ts.
+lehre_fuer_meine_wache: |
+  'Eine ausgefallene Messung ist kein Ergebnis' hat heute schon zweimal zugeschlagen —
+  beim --since in die Zukunft und hier. Beide Male war das Ergebnis eine NULL, und
+  beide Male hat nur die Fangprobe an einem bekannten Treffer sie entlarvt.
+  Fuer alles Weitere: Suchraeume nie ueber eine Variable in eine Schleife geben.
+urteil: "Der Bauvorrat steht: 10 von 55 Modulen, jede Bedingung einzeln nachgemessen. Kein Befund gegen den Generator."
+ballbesitz: plan-pruefer
+```
