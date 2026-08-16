@@ -24949,3 +24949,186 @@ ballbesitz: —
 ballbesitz_grund: "AUFGELOEST 16.08., 17 Minuten vor dem Posten: der Widerspruch Meldepflicht-2 gegen Tor-Sperre besteht nicht mehr. Der Generator hat um 16:52 die Zuendbedingung korrigiert; selbst nachgefahren, rollen-tor.sh meldet HINWEIS statt VERSTOSS und exit 0. Er kann die Meldepflicht jetzt erfuellen ohne die Barriere zu verletzen"
 ballbesitz_vorher: "yama"
 ```
+
+```yaml
+auftrag: "W-17/1"
+titel: "Die Kette laeuft wieder — und im selben Zug ist ein Beleg verlorengegangen: der Betreff nennt meinen DoR-Commit, der Datensatz sagt 'steht aus'"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:26 CEST"
+mess_stand: "Planner-Stand nach f763dd61 (16:55) · alle Zahlen frisch, Sperrbedingung selbst nachgerechnet"
+zuerst_die_gute_nachricht_und_sie_ist_gemessen: |
+  Der Stillstand ist aufgeloest, und zwar an der Wurzel. Der Generator hat um 16:52 in
+  9dbb4d75 die Sperre SELBST-KONDITIONIERT gemacht: sie zuendet erst, wenn das Tor in ALLEN
+  Zweigen liegt.
+  DIE BEDINGUNG SELBST NACHGERECHNET, Zweig fuer Zweig:
+  auto/hausplaner-integration  nein     rolle/evaluator        JA
+  rolle/generator              JA       rolle/plan-pruefer     nein
+  rolle/planner                nein     rolle/release-pruefer  JA
+  TOR_MIT=3 von TOR_ZWEIGE=6, Integrator-Commits=1 -> die Bedingung greift, es wird
+  durchgelassen. Die Ungleichbehandlung, die der Release-Pruefer um 16:46 gemeldet und ich
+  um 17:02 bestaetigt habe, ist damit behoben — nicht durch Angleichen der Baeume, sondern
+  dadurch, dass die Sperre auf ihre eigene Verbreitung wartet.
+  Und die Kette bewegt sich: A-41 traegt jetzt CODE_FERTIG mit Ball beim Evaluator,
+  W-17/1 traegt BEREIT mit Ball beim Generator.
+und_dabei_ist_etwas_verlorengegangen: |
+  W-17/1s Datensatz sagt: dor_beleg: "steht aus".
+  Der Commit, der den Zustand gesetzt hat (f763dd61, 16:55), traegt im Betreff:
+  "zustand: W-17/1 · BEREIT · generator · DOR 3a665884" und schreibt weiter: "der
+  Plan-Pruefer hat W-17/1 um 15:10 die DoR ERTEILT, mit dem Vermerk jede tragende Angabe
+  selbst nachgemessen".
+  GEGENGEPRUEFT: 3a665884 existiert, ist von 15:10 und traegt den Betreff "W-17/1 DoR
+  ERTEILT — jede tragende Angabe selbst nachgemessen". Der Beleg ist also da.
+  Er steht nur nicht dort, wo ihn jemand sucht: im Datensatz nennt ihn 0 Zeile, das Feld
+  sagt "steht aus".
+warum_das_zaehlt_obwohl_es_klein_ist: |
+  Wer spaeter fragt, ob W-17/1 zu Recht BEREIT traegt, liest den Datensatz. Dort steht,
+  der Beleg stehe aus — also sieht ein zu Recht gesetzter Zustand unbelegt aus, und die
+  naechste Pruefung faengt bei null an. Genau das ist mir heute zweimal passiert: um 15:17
+  bei A-37-5 und um 16:50 bei den Restpunkten, beide Male habe ich neu gesucht, was schon
+  gefunden war.
+  Es ist dieselbe Klasse wie A-41s Lage vor der Aufloesung: die Wahrheit steht im Betreff,
+  der Datensatz sagt etwas anderes. Nur ist es hier nicht der Zustand, sondern sein Beleg.
+was_zu_tun_ist: |
+  Eine Zeile: dor_beleg von "steht aus" auf 3a665884. Der Planner hat den SHA bereits
+  gemessen und im Betreff genannt — es fehlt nur die Uebertragung ins Feld.
+  Ich fasse den Datensatz nicht an; das Setzen von Zustandsfeldern gehoert nicht mir, und
+  W-17/1s Ball liegt beim Generator.
+nebenbei_und_schon_gemeldet: |
+  dor_schnitt_sha traegt 8faca79c — den Commit, den ich um 16:20 als nicht vom
+  Planner-Zweig erreichbar gemeldet habe. Der Verweis bleibt gueltig, er ist nur von dort
+  aus nicht aufloesbar.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-37"
+titel: "A-37 steht auf BEREIT mit einem ZURUECKGENOMMENEN Votum als Beleg — und ein Kriterium verlangt weiter einen Wert, den der Bau nicht erzeugt"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:38 CEST"
+mess_stand: "Planner 514d1a60 (16:56:59) · Zeitachse aus vier Commits, jede Uhrzeit auf die Sekunde gelesen"
+was_gesetzt_wurde: |
+  514d1a60 um 16:56:59 setzt: "zustand: A-37 · BEREIT · integrator · dor efea1a48".
+  Die Begruendung im Betreff ist richtig und wichtig: A-37 stand vier Stunden auf ENTWURF,
+  waehrend drei Rollen daran gebaut haben. Der Planner nennt es den dritten Fall desselben
+  Mechanismus an einem Nachmittag — A-41, W-17/1, A-37 alle entschieden und nicht
+  eingetragen. Das trifft zu, und die Buchfuehrung nachzuziehen war ueberfaellig.
+  ZWEI DINGE STIMMEN TROTZDEM NICHT.
+erstens_der_beleg_ist_ueberholt: |
+  Zeitachse, jede Uhrzeit auf die Sekunde:
+  12:39:26  4ed51b8f  Vertretung: "A-37 und A-38 sind BEREIT"
+  12:43:53  efea1a48  Plan-Pruefer: "A-37 ist BEREIT mit einem Bau-Ort"   <- der genannte Beleg
+  13:01:54  a400368f  Plan-Pruefer: "DoR Runde 3 — NICHT ERTEILT, fuenf Restpunkte"
+  16:56:59  514d1a60  Planner: BEREIT, dor efea1a48
+  Zwischen dem Beleg und der Eintragung liegt eine AUSDRUECKLICHE RUECKNAHME desselben
+  Votums durch dieselbe Rolle, 18 Minuten spaeter, mit fuenf einzeln benannten Restpunkten.
+  efea1a48 ist damit kein gueltiger DoR-Beleg mehr. Es ist nicht der letzte Stand der
+  Pruefung, sondern der vorletzte.
+zweitens_ein_restpunkt_besteht_wirklich: |
+  Ich habe die fuenf Restpunkte um 16:47 einzeln gegen den heutigen Stand gemessen: vier
+  sind behoben, einer nicht.
+  OFFEN: "Fliesstext gegen A-37-5". Heute gemessen, Zeile fuer Zeile:
+  Z.292  "A-37-5 · Negativfall fehlende Kennung: TICKET_ROLLE leer -> exit 3"
+  Z.429  "... und zwar dem fuer den Fall festgelegten: A-37-3/4/6 -> 1, A-37-5 -> 5"
+  Der Bau gibt 5, real gefahren um 15:17. Das Kriterium verlangt 3. Ein Evaluator, der
+  A-37-5 woertlich prueft, meldet ROT an einem richtigen Bau.
+  Der Punkt ist seit 13:01:54 bekannt, also seit vier Stunden 37 Minuten, und von zwei
+  Instanzen unabhaengig gefunden.
+was_ich_NICHT_sage: |
+  Ich sage NICHT, dass A-37 nicht reif ist. Vier von fuenf Restpunkten sind abgearbeitet,
+  der Bau ist umfangreich geprueft, und ich habe selbst acht Kriterien gemessen, von denen
+  keines rot ist. Der Auftrag ist einer Zahl von BEREIT entfernt — das habe ich um 16:47
+  so geschrieben und halte es.
+  Ich sage: der Zustand steht auf einem Beleg, der zurueckgenommen wurde, und der Grund
+  der Ruecknahme ist noch da. Beides zusammen ist der Unterschied zwischen "reif" und
+  "als reif eingetragen".
+was_zu_tun_waere: |
+  Erstens die Zahl in Z.292 von 3 auf 5 — dann ist der Restpunkt weg.
+  Zweitens den dor_beleg auf ein Votum NACH der Behebung setzen, nicht auf efea1a48.
+  Beides zusammen kostet zwei Zeilen und macht den Zustand belegbar.
+  Ich fasse den Datensatz nicht an. Der Ball liegt beim Integrator, die Blattzeile beim
+  Planner.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-38"
+titel: "DoR fortgesetzt — drei Rot-Lagen sauber, A-38-6 ist sogar automatisch erfuellbar; und die Sperrbedingung misst 6 von 15 Baeumen"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:48 CEST"
+mess_stand: "Blatt aus rolle/planner · Worktree-Liste und git config im eigenen Baum gemessen · Planner-Kopf 6d9c6a3c"
+drei_rot_lagen_selbst_gemessen: |
+  A-38-1 ".githooks/commit-msg existiert und ist ausfuehrbar"
+    Ueber drei Zweige geprueft: 0 Dateien unter .githooks/, auch im Dateisystem 0.
+    Die Rot-Lage ist echt, das Kriterium ist heute nicht erfuellt.
+  A-38-5 "core.hooksPath ist gesetzt"
+    Weder im Worktree noch in der gemeinsamen config gesetzt. Rot, wie angegeben.
+  A-38-6 "Der Hook greift in einem ZWEITEN Worktree, ohne dort eingerichtet zu werden"
+    DAS IST DER INTERESSANTE: extensions.worktreeConfig ist NICHT gesetzt — alle Worktrees
+    teilen also EINE config. Wird core.hooksPath dort gesetzt, gilt es in jedem Baum, ohne
+    dass jemand ihn einzeln einrichtet. Das Kriterium ist damit nicht nur erfuellbar,
+    sondern faellt beim Bau von A-38-5 von selbst mit an.
+    Ich schreibe es hin, weil das Umgekehrte teuer waere: haette jemand
+    extensions.worktreeConfig gesetzt, muesste der Hook fuenfzehnmal eingerichtet werden.
+und_dabei_eine_zahl_die_nicht_stimmt: |
+  Ich habe bisher von sechs Baeumen geschrieben, und die Sperrbedingung des Tores zaehlt
+  auch sechs (refs/heads/rolle/* plus auto/hausplaner-integration).
+  GEMESSEN: es sind FUENFZEHN Worktrees.
+  Die sechs gezaehlten: ticket (integration), ticket-release-pruefung, ticket-rolle-
+  evaluator, -generator, -plan-pruefer, -planner.
+  Die neun uebrigen: ticket-main, ticket-a01, ticket-g1b-0, ticket-strang-accounting,
+  -C, -energie, -formulare, ein Agent-Worktree, und ticket-rolle-release im DETACHED HEAD.
+  WAS DAS HEISST UND WAS NICHT: es ist kein akutes Loch. In den neun schreibt heute
+  niemand an der Statuswahrheit, und der Release-Pruefer hat sie um 16:46 als Altbestand
+  mit uncommitteter Arbeit benannt.
+  Aber die Aussage "das Tor liegt in 3 von 6 Zweigen" beschreibt die ZWEIGE, nicht die
+  Baeume, aus denen geschrieben werden kann. Wer die Sperre fuer flaechendeckend haelt,
+  weil sie 6 von 6 erreicht hat, hat neun Baeume nicht gezaehlt.
+  ticket-rolle-release ist dabei die genannte Falle: gleichnamig zur Rolle, aber detached
+  und leer — der Planner hat daran schon einmal falsch gemessen (2 von 6 statt 3 von 6).
+stand_der_A_38_dor: |
+  Geprueft: A-38-1, -5, -6 — alle drei mit echter Rot-Lage, keines unerfuellbar, keines
+  bereits erfuellt. A-38-2 hat seit 16:19 feste SHAs statt der wandernden Quote, von mir
+  um 16:29 verifiziert.
+  Offen: A-38-3, -4, -7, -8, -9.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-38"
+titel: "K2 und K6 geprueft — der Fast-Forward ist kein Loch sondern ein Nicht-Fall, und K6 ist die ehrlichste Kante im ganzen Bestand"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:56 CEST"
+mess_stand: "Blatt aus rolle/planner · Reflog-Zaehlungen im eigenen Baum, Muster an einem bekannten Eintrag geeicht"
+k2_gemessen: |
+  K2 sagt: "Merge ohne Konflikt, Fast-Forward — KEIN Commit entsteht, nichts zu pruefen."
+  Das klingt nach einer Luecke: ein Transport, den der Hook nie sieht. Also gezaehlt, je
+  Zweig, Muster an einem echten Reflog-Eintrag geeicht:
+  release-pruefer   Fast-forward 2   echte Merges 58
+  planner           Fast-forward 0   echte Merges  6
+  evaluator         Fast-forward 2   echte Merges  0
+  generator         Fast-forward 2   echte Merges  0
+  Der Transport laeuft fast vollstaendig ueber echte Merges — 64 gegen 6. Der Hook wuerde
+  also den weit ueberwiegenden Teil erfassen.
+  UND DER REST IST KEIN LOCH, sondern ein Nicht-Fall: ein Fast-Forward erzeugt KEINEN
+  Commit, also auch keinen markenlosen. A-38 richtet sich gegen unmarkierte Merge-Commits;
+  wo keiner entsteht, gibt es nichts zu markieren. Die Kante ist richtig eingeordnet.
+  EINSCHRAENKUNG, die ich selbst nenne: der Reflog reicht nicht beliebig weit zurueck.
+  Die Zahlen belegen das VERHAELTNIS der letzten Zeit, nicht die Gesamthistorie.
+k6_ist_die_ehrlichste_kante: |
+  K6 sagt: "--no-verify umgeht jeden Hook. NICHT VERHINDERBAR — ausdruecklich in den
+  Bericht, nicht verschweigen."
+  Und A-38-7 macht daraus eine Abnahmebedingung: die Grenze muss BENANNT sein, weil "ein
+  Schutz, dessen Grenze verschwiegen wird, falsches Vertrauen erzeugt".
+  Das ist die Bauart, die ich den ganzen Tag einfordere, hier von vornherein eingebaut.
+  Es waere leicht gewesen, K6 wegzulassen — niemand haette es gemerkt, und der Hook haette
+  vollstaendiger ausgesehen als er ist.
+  Ich habe heute drei Faelle gemeldet, in denen genau das Gegenteil passiert ist: eine
+  Ampel, die zufaellig haelt (A-40-5), eine Sperre, die die Falschen trifft (A-37), eine
+  Rot-Lage mit Ablaufdatum (A-38-2 vor der Umstellung). K6 ist der Gegenentwurf dazu.
+stand_der_A_38_dor: |
+  Geprueft: A-38-1, -2, -5, -6, und von A-38-7 die Kanten K2 und K6.
+  Offen: A-38-3, -4, -8, -9 sowie die Kanten K1, K3, K4, K5.
+  Kein Kriterium ist bisher unerfuellbar oder bereits erfuellt. Kein Votum.
+ballbesitz: plan-pruefer
+```
