@@ -107,6 +107,19 @@ verstreut und die Herkunftskette ginge verloren.
 - **A-42-8** · **Der Weg ist gangbar** *(P7)*: **WER** — der Generator, in seinem Baum ·
   **DARF er** — ja, es ist `docs/`, kein Produktivcode, kein Löschen · **EXISTIERT die
   Eigenschaft** — ja, die Blockstruktur ist maschinell erfassbar, der Zählbefehl steht in A-42-1.
+- **A-42-10** · **Der Suchraum ist die Sache, nicht der Ort** *(P8)* — **gemessen, nicht
+  angenommen.** Die Sache ist *„yaml-Block mit `auftrag:` und ohne `zustand:`"*; dass er nur in
+  `docs/STATUS.md` vorkommt, ist eine **Messung**:
+  ```
+  docs/STATUS.md          77
+  docs/handoff-status.md   0
+  docs/STAND.md            0
+  ```
+  **Der Lauf misst diese drei erneut** und meldet jeden Treffer außerhalb von `docs/STATUS.md`
+  als Fund, statt ihn stillschweigend auszulassen. *(Die 77 sind der Stand des Planner-Baums;
+  im Bestand waren es zur selben Zeit 129 — **deshalb nennt A-42-1 den Befehl und keine Zahl.**)*
+  **Ohne dieses Kriterium wäre der Pfad ein geratener Suchraum** — genau der Fehler, den P8
+  heute an vier Fällen gefangen hat, drei davon meine.
 - **A-42-9** · **Suite grün und Zahl unverändert gegen den Bau-Stand**, `tsc exit=0`.
   Zahl **unmittelbar vor dem Bau** erheben.
 
