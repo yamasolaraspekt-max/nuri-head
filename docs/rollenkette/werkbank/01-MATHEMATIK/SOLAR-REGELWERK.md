@@ -157,6 +157,25 @@ Referenz ist und PV*SOL sie neben NREL SPA ausdrücklich als wählbares Verfahre
   (47,5°) verschiebt sich alles spürbar — Tageslänge am 21.06. rund **17,3 h** im Norden gegen
   **15,8 h** im Süden. **Die Breite ist ein Operand, kein Näherungswert.**
 
+
+```yaml
+zustand: NACHGERECHNET
+nachgerechnet_an:
+  eingabe:   "51 Grad N · 21.06. (dek +23,45) · 21.12. (dek -23,42) · 21.03. (dek 0)"
+  erwartet:  "21.06. Aufgang 50,8 Grad NORDOST · 21.12. 129,2 Grad SUEDOST · 21.03. 90,0 Grad"
+  gerechnet: "16.08. Planner, python3, ZWEI unabhaengige Wege — acos(sin(dek)/cos(phi))
+              und der Azimut aus S-006 beim Aufgangs-Stundenwinkel. Beide Wege, beide Daten:
+              50,8 und 129,2. Uebereinstimmung zeichengenau."
+  abweichung_ohne_die_regel: "Mit vertauschtem Vorzeichen liefert dieselbe Formel 129,2 im Juni
+    und 50,8 im Dezember — die Sonne ginge im Juni im SUEDOSTEN auf. Der Fehler betraegt
+    78,4 Grad und ist an EINEM Datum nicht sichtbar: am Aequinoktium geben BEIDE Vorzeichen
+    exakt 90,0 Grad. Wer nur dort prueft, bestaetigt das falsche Vorzeichen."
+  fund: "GENAU DAS ist beim Nachrechnen passiert. Mein Probecode vom 16.08. trug -sin(dek)
+    und widersprach dem Regelwerk. Aufgeloest ueber den zweiten Weg: das REGELWERK stimmt,
+    der Probecode war falsch. Ohne den zweiten Weg haette ich das Regelwerk berichtigt —
+    und damit einen richtigen Eintrag kaputtgemacht."
+```
+
 ### S-009 · Der Jahresgang der Bahn — und die Asymmetrie, die niemand erwartet
 - **Zweck:** Zusammenhang der Tagesbögen über das Jahr — die Grundlage jeder Darstellung
 - **Die Bahnschar:** Alle Tagesbögen sind zueinander **parallel verschobene Kreise**; ihre Höhe
@@ -610,3 +629,56 @@ fachFlaechen.ts:358                  →  Anzeige „Verschattungsverlust %"
 > stammen aus Fachquellen, die sich auf sie berufen. **Vor einer normativ belastbaren
 > Auslegung ist am Normtext gegenzulesen** — für Planung, Darstellung und Größenordnung
 > tragen sie.
+
+---
+
+## ABHÄNGIGKEITEN — der Graph, gemessen am 16.08.2026
+
+**Er stand bisher nirgends.** Die Verweise lagen verstreut im Fließtext; **eine Regel, die eine
+andere braucht, sagte es — aber niemand konnte sehen, wer SIE braucht.** Genau daran ist S-060
+gegen S-040 vorbeigelaufen: zwei Regeln in Spannung, ohne Verweis aufeinander.
+
+**Gemessen: 32 Regeln · 43 Kanten · 2 ohne jede Verbindung.**
+
+| Regel | braucht | wird gebraucht von |
+|---|---|---|
+| **S-001** Tagesnummer und Jahreswinkel | — | `S-002` · `S-070` · `S-076` |
+| **S-002** Deklination δ | `S-001` | `S-005` · `S-007` · `S-009` |
+| **S-003** Zeitgleichung ZGL und Wahre Ortszeit WOZ | — | `S-004` · `S-009` |
+| **S-004** Stundenwinkel ω | `S-003` · `S-020` | `S-005` |
+| **S-005** Sonnenhöhe γs (Elevation) | `S-002` · `S-004` | `S-006` |
+| **S-006** Sonnenazimut αs | `S-005` | `S-008` · `S-020` · `S-070` |
+| **S-007** Sonnenauf- und -untergang, Tageslänge | `S-002` | — |
+| **S-008** Auf- und Untergangs-Azimut — „im Osten" stim | `S-006` · `S-051` | — |
+| **S-009** Der Jahresgang der Bahn — und die Asymmetrie | `S-002` · `S-003` · `S-051` · `S-073` | — |
+| **S-010** Die drei Komponenten | — | `S-070` |
+| **S-011** Kennzahlen Deutschland (Stand der Recherche  | — | `S-077` |
+| **S-020** Einfallswinkel AOI (die Kernformel) | `S-006` | `S-004` · `S-070` |
+| **S-021** POA-Zerlegung (Plane of Array) | — | `S-070` · `S-078` |
+| **S-022** Modellwahl | — | `S-078` |
+| **S-030** Horizontverschattung (Fernverschattung) | — | `S-070` · `S-078` |
+| **S-031** Nahverschattung (Eigenverschattung am Gebäud | `S-040` | `S-078` |
+| **S-032** Selbstverschattung bei Aufständerung (Reihen | — | `S-070` · `S-078` |
+| **S-040** Verschattung wirkt NICHT-LINEAR | — | `S-031` · `S-060` · `S-070` · `S-075` · `S-078` |
+| **S-050** Zeitliche Auflösung | — | `S-078` |
+| **S-051** Die vier Stichtage (für Darstellung und Prüf | — | `S-008` · `S-009` |
+| **S-060** PV-Ertrag → Verschattung zählt voll | `S-040` | — |
+| **S-061** Heizlast nach DIN EN 12831 → solare Gewinne  | — | — |
+| **S-062** Energiebedarf nach DIN V 18599 / GEG → Versc | `S-073` · `S-074` · `S-077` | — |
+| **S-070** Der Simulationskern — ein Zeitschritt | `S-001` · `S-006` · `S-010` · `S-020` · `S-021` · `S-030` · `S-032` · `S-040` | — |
+| **S-071** Zeitraumtypen — vier, und sie haben verschie | — | — |
+| **S-072** Zeitschrittweite je Zweck | `S-073` | — |
+| **S-073** Die Verschattungsmatrix — der Trick, der Jah | — | `S-009` · `S-062` · `S-072` · `S-074` · `S-075` · `S-078` |
+| **S-074** Aggregation — hier entsteht die häufigste Fa | `S-073` | `S-062` · `S-078` |
+| **S-075** Was ein Lauf zurückgeben muss | `S-040` · `S-073` | `S-077` |
+| **S-076** Zeitrechnung im Jahreslauf — drei Stolperste | `S-001` | — |
+| **S-077** Welches Wetterjahr — TMY, nicht ein reales | `S-011` · `S-075` | `S-062` |
+| **S-078** Was die Simulation nicht darf | `S-021` · `S-022` · `S-030` · `S-031` · `S-032` · `S-040` · `S-050` · `S-073` · `S-074` | — |
+
+**Die Leseregel:** Wer eine Regel **baut**, braucht zuerst alles aus Spalte 2.
+Wer eine Regel **ändert**, muss alles aus Spalte 3 gegenlesen — **dort schlägt die Änderung durch.**
+
+**⚠ Ohne jede Verbindung: `S-061` · `S-071`**
+Das ist **kein Mangel an sich** — eine Grenze oder eine Kennzahl steht zu Recht für sich.
+**Aber es ist die Klasse, in der eine Spannung unbemerkt bleibt:** was mit nichts verknüpft
+ist, wird auch von nichts widerlegt.
