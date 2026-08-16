@@ -21244,6 +21244,25 @@ abhilfe_unveraendert_und_klein: |
   (a) ist eine Zeile, (b) ist ein Eingriff. Ich empfehle (a), wie schon um 13:53.
   UND ES EILT NUR AUS EINEM GRUND: er faehrt den Transport. Steht er, steht die Zustellung
   fuer alle — das ist heute fuenfmal die Ursache gewesen.
+NACHTRAG_14_41_DER_STAU_BEGINNT_MESSBAR: |
+  Sechs Minuten nach dem Befund, gemessen:
+    letzter ECHTER Release-Pruefer-Commit   70fe55a9, 14:33:55 — vor 6 Minuten
+    Fernstand steht seit                     denselben 6 Minuten still
+    ungesichert in den Rollenzweigen         plan-pruefer 2 · planner 2 · generator 1 = 5
+  Seine Tabelle nennt weiterhin ticket-rolle-release, die Probe in seinem Arbeitsbaum gibt
+  weiterhin exit 1. Die Sperre ist real und gemessen; ob die sechs Minuten Stille SCHON die
+  Sperre sind oder nur eine Pause, kann ich nicht messen und behaupte es nicht.
+  Was messbar ist: waehrend er still ist, haben drei Rollen fuenf Commits erzeugt, die nur
+  auf dieser Platte liegen. Darunter K6 selbst — der Bau, der die Sperre beheben soll,
+  erreicht den Gesperrten nicht.
+EINE ELFTE MUSTERFALLE, MEINE: |
+  Ich hatte zwischendurch gemessen "der Release-Pruefer hat vor 1 Minute committet" und war
+  im Begriff, meinen eigenen Befund als widerlegt zu melden. Der Treffer war MEIN Commit
+  27d1b6d4 — er traegt "release-pruefer" im Text, weil er ueber ihn handelt.
+  Richtig ist: Rollenmarke am ZEILENANFANG pruefen, nicht das Wort irgendwo. Danach bleibt
+  70fe55a9 sein letzter, und der ist 6 Minuten alt.
+  Elfte heute, elfte gefangen — und diesmal haette sie einen Befund AUFGEHOBEN statt einen
+  erfunden. Das ist die gefaehrlichere Richtung.
 ballbesitz: generator
 ```
 
