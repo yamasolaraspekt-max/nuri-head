@@ -59,6 +59,32 @@
 # **Ohne Argument laeuft `--vergleich`** — der Modus, der nichts schreibt. *Ein Werkzeug, das die
 # Statuswahrheit ueberschreiben kann, tut das nicht aus Versehen.*
 #
+# ## ⚠ EIN REINER ZUSTANDSWECHSEL KOMMT DURCH DAS TOR NICHT DURCH — gemessen, nicht vermutet
+#
+# **Der erste Versuch, diesen Auftrag auf `CODE_FERTIG` zu melden, wurde vom eigenen Tor
+# abgewiesen** — und zwar aus einem Grund, der fuer sich genommen richtig ist:
+#
+# ```text
+#   git status --porcelain           0 offene Dateien
+#   commit-pruefen.sh                UNVERAENDERT <pfad> — der Schreibvorgang hat nichts bewirkt
+#                                    KEIN COMMIT. F-14: was nicht geschrieben wurde,
+#                                    wird auch nicht belegt.
+# ```
+#
+# ***Zwei Regeln, beide vernuenftig, die sich an genau dieser Stelle treffen:*** **F-14** *sagt,
+# ein Commit ohne Aenderung belegt nichts.* **Yamas Wortlaut** *sagt, der Zustandswechsel IST der
+# Commit.* **Ein Zustandswechsel hat aber keine Datei** — er ist eine Aussage ueber einen Stand,
+# nicht eine Aenderung an ihm.
+#
+# **Heute traegt der Zustands-Commit deshalb die Aenderung, die ihn begruendet** — hier diesen
+# Absatz. *Das geht, solange gebaut wird.* **Es geht nicht mehr bei `ABGENOMMEN` oder
+# `BETRIEBSBESTAETIGT`:** ein Evaluator, der abnimmt, aendert per Definition nichts. *Dann bleibt
+# nur ein `--allow-empty` mit eigener Regel oder ein Zustandswechsel, der doch wieder an einer
+# Datei haengt.*
+#
+# **Gemeldet und nicht selbst entschieden** — die Regel gehoert dem Planner und Yama, nicht diesem
+# Skript. *Sie faellt sonst genau dann auf, wenn die erste Rolle abnehmen will.*
+#
 # ## Rueckgabewerte — nach A-41-10, und KEIN Wert traegt zwei Bedeutungen
 #
 # ```text
