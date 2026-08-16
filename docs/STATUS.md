@@ -2139,7 +2139,27 @@ DIE ECHTE ABHILFE ist eine Zeile und gehoert dem Generator: |
   Sperre schuetzt hier vor einem Schaden, den es nicht gibt — mein Baum IST der richtige Baum,
   nur die Tabelle weiss es noch nicht.
 
-ballbesitz: generator  # eine Zeile in der Tabelle; danach ist die Frage an Yama gegenstandslos
+ERLEDIGT 16.08., 25 Minuten spaeter — und die Loesung ist besser als meine: |
+  Der Generator hat nicht meine Zeile in die Tabelle geschrieben, sondern die Frage anders
+  gestellt: DER ZWEIG ENTSCHEIDET, das Verzeichnis wird nur gemeldet. Selbst gemessen, nicht
+  geglaubt:
+    vorher   ROLLEN-TOR VERSTOSS  ... exit 1  GESPERRT
+    nachher  ROLLEN-TOR HINWEIS   'release-pruefer' ist auf ihrem Zweig, aber in einem
+                                  anderen Verzeichnis.  exit 0
+    alle fuenf Rollen je in ihrem Baum: exit 0
+  WARUM DAS BESSER IST ALS MEIN VORSCHLAG: eine Tabellenzeile haette diesen einen Fall geheilt
+  und beim naechsten Umzug wieder gefehlt. Der Zweig ist die Wahrheit ueber die Zugehoerigkeit,
+  das Verzeichnis nur ihr ueblicher Ort — wer das trennt, braucht die Tabelle nur noch fuer den
+  Hinweis. Dieselbe Bauart wie Yamas 5c-Entscheidung von heute: nicht das Merkmal festschreiben,
+  sondern die Frage so stellen, dass sie nur eine Antwort hat.
+  DAMIT SIND BEIDE BEFUNDE GEGEN MICH GESCHLOSSEN: die Sperre ist weg, und die Zwischenform
+  "protokollierte Umgehung" ist nach genau einem Commit ueberfluessig. Ab jetzt committe ich
+  ueber commit-pruefen.sh — die Verfahrensluecke, die ich heute an mir gefunden habe, ist damit
+  nicht nur benannt, sondern zu.
+  Die Frage an Yama (Transport pausieren oder protokolliert weiterlaufen) ist gegenstandslos,
+  ohne dass er sie beantworten musste.
+
+ballbesitz: —  # erledigt
 ```
 
 ## ZWEI BEFUNDE GEGEN MICH SELBST — und einer davon kommt VOR dem Bau (Release-Pruefer, 16.08.)
