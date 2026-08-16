@@ -349,6 +349,24 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   festzulegen**. Nachgerechnet: **vier reine Werte ergeben 4 Wörter und fallen durch**, mit
   Feldnamen sind es 8. *„Das Kriterium war genauer als die Zusage"* — dieselbe Klasse wie A-37-12,
   wo der Schreiber der Marke fehlte.
+- **A-37-19** · **DIE MARKENERKENNUNG MUSS ROLLENMARKEN MIT ZUSATZ ERKENNEN.**
+  **Gemessen 19:4x:** die Erkennung sucht `^[a-z][a-z-]*(-[0-9]+)?: ` *(heute Zeile **150**,
+  nicht mehr 73 — die Datei ist gewachsen; **diese Nummer gehört mitgemessen, nicht zitiert**)*.
+  **Sie greift NICHT auf:**
+  ```
+  release-pruefer (in Yamas Namen): …     -> kein Treffer
+  plan-pruefer (release-pruefer in Rollenwechsel): …  -> kein Treffer
+  planner: …                              -> Treffer
+  ```
+  **Folge nach Zeile 151 ff.: das Tor hält den Betreff für markenlos und stellt die Rolle
+  voran** — aus `release-pruefer (in Yamas Namen): …` würde `release-pruefer: release-pruefer
+  (in Yamas Namen): …`. **Im Bestand stehen diese drei Betreffs sauber**, also sind sie **am Tor
+  vorbei** entstanden oder mit einer älteren Fassung.
+  **Verlangt:** entweder erkennt die Marke einen Klammerzusatz, **oder** der Zusatz ist
+  ausdrücklich verboten und das Tor weist ihn ab. **Beides ist besser als stille Verdopplung** —
+  und die Form ist real: `in Yamas Namen` und `in Rollenwechsel` sind genau die Fälle, in denen
+  jemand für einen anderen handelt und es kenntlich macht. *Die Kenntlichmachung darf nicht
+  bestraft werden.*
 - **A-37-18** · **DAS TOR MUSS IN ALLEN SECHS BÄUMEN VORHANDEN SEIN.**
   `git ls-files scripts/rollen-tor.sh` ergibt in **jedem** der sechs Arbeitsbäume **1**.
   **Rot, gemeldet vom Integrator (`83296554`, 16:17):** *„die Barriere ist hier nicht
