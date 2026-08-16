@@ -1637,7 +1637,97 @@ sondern die Folge davon, dass dort fast immer die S-Kennung zitiert wird statt e
 **Dort steht deshalb KEINE Warnung.** *Eine Warnung ohne Befund ist Lärm, und Lärm bringt bei,
 Warnungen zu überlesen (A-03).*
 
+### Wer behebt was — die Unterscheidung, die ich zuerst nicht gemacht habe
+
+**Ein falscher Zeilenverweis ist nicht überall dasselbe. Gemessen, wo die vier stehen:**
+
+```
+WEGWEISER in einem lebenden Blatt      -> MUSS behoben werden, sofort
+  A-19: "H-9 kommt hinter H-8 (:812)"     eine BAUANWEISUNG.
+                                          Wer der Zahl folgt, haengt H-9 an den
+                                          Statustraeger-Absatz. Behoben 16.08.
+
+BELEG in Bericht oder Commit-Botschaft -> bleibt unveraendert (A-20-4)
+  A-19:88 grep-Befehl im Messprotokoll    dokumentiert, WIE gemessen wurde
+  BERICHT-B5:130                          Bericht mit Zeitstempel
+  docs/STATUS.md (mehrfach)               Befundnotizen
+```
+
+> **Ein Beleg sagt, was jemand zu einem Zeitpunkt gesehen hat — er darf veralten und muss es
+> sogar. Ein Wegweiser sagt, wohin jemand gehen soll — er darf nie veralten.**
+
+**Deshalb wird nicht „alles behoben", sondern genau die Wegweiser.** *Wer Belege korrigiert,
+zerstört die Beweiskette; wer Wegweiser stehen lässt, schickt den Nächsten in die Irre.*
+
+### Wie es künftig verhindert wird — die Form statt der Richtigkeit prüfen
+
+**Heute ist belegt: die Richtigkeit eines Zeilenverweises ist NICHT maschinell prüfbar** — drei
+von vier Fehlern zeigten auf gültigen Text, nur auf den falschen. **Die Absicht steht nicht in
+der Zahl.**
+
+**Die Form ist es sehr wohl:**
+
+```
+NICHT PRUEFBAR   "Zeigt :812 auf das Gemeinte?"     -> nur mit Kenntnis der Absicht
+PRUEFBAR         "Steht hier ueberhaupt eine Zeilennummer?"  -> ein Suchmuster
+
+  grep -rnE '(ARBEITSREGELN|FORMELSAMMLUNG|SOLAR-REGELWERK)\.md[:#][0-9]+' \
+       docs/auftraege/ docs/rollenkette/
+```
+
+**Verbindlich: in einem LEBENDEN Dokument — Auftragsblatt, Rollenblatt, Regelwerk — wird auf die
+SACHE verwiesen.** Abschnittsüberschrift, Paragraf, Hausregel-Kennung, F-/N-/S-Nummer. **In
+Berichten und Commit-Botschaften bleibt die Zeilennummer erlaubt**, denn dort ist sie Teil des
+Belegs *„ich habe an dieser Stelle gemessen"*.
+
+> **Das ist die einzige Prüfung, die trägt: nicht ob der Verweis stimmt, sondern ob er die Form
+> hat, die veralten kann.** *Eine Form, die nicht veralten kann, braucht keine Prüfung ihrer
+> Richtigkeit.*
+
 **Die vorhandenen Verweise werden NICHT rückwirkend umgeschrieben** — sie stehen in Befunden und
 Commit-Botschaften mit Zeitstempel und waren zu ihrem Zeitpunkt richtig *(A-20-4)*. **Diese
 Warnung hier ersetzt die Korrektur an hundert Stellen.**
+
+## STOPP-REGEL — ein entdeckter Fehler wird behoben, bevor irgendetwas anderes geschieht
+
+**Yamas Anordnung vom 16.08.** Sie steht über den Arbeitsplänen aller Rollen.
+
+```
+WIRD EIN FEHLER ENTDECKT, DARF NICHT WEITERGEMACHT WERDEN,
+SOLANGE ER NICHT BEHOBEN IST.
+
+  Kein weiteres Messen.
+  Kein naechster Auftrag.
+  Kein "ich sammle das und behebe es spaeter zusammen".
+```
+
+**Was als „entdeckt" gilt:** jeder Befund, der beim Messen, Bauen, Prüfen oder Lesen auffällt —
+gleich ob er die eigene Arbeit betrifft oder eine fremde, und gleich ob er klein aussieht.
+
+**Was „behoben" heißt, je nach Art des Fehlers:**
+
+```
+in eigener Zustaendigkeit   -> selbst beheben, sofort, mit Beleg
+in fremder Zustaendigkeit   -> ZUGESTELLT mit Ballbesitz und Soll
+                               (nicht: in einer Botschaft erwaehnt)
+nicht behebbar              -> als Auftrag geschnitten oder Yama vorgelegt,
+                               mit dem Grund warum er offen bleibt
+```
+
+> **Erst wenn der Fehler eine dieser drei Formen hat, ist er behoben im Sinn dieser Regel.**
+> *Ein Fund, der nur gemeldet wurde, ist nicht behoben — er ist verschoben.*
+
+### Warum die Regel nötig wurde
+
+**Am 16.08. abends habe ich sieben Reichweitenmessungen hintereinander gefahren und dabei
+Funde angesammelt statt sie zu schließen** — sechs Blattfunde, vier falsche Anker in der
+Prozessquelle, vier in der Formelsammlung, 38 Zeilenverweise in lebenden Dokumenten. **Jeder
+einzelne war beim Auffinden behebbar. Am Ende stand eine Liste statt einer Behebung.**
+
+**Und der Beleg, dass Sammeln nicht trägt:** `A-34` hat am 13.08. **52** verschobene Verweise
+behoben und ist `BETRIEBSBESTAETIGT`. **Drei Tage später sind es wieder 38.** *Eine
+Sammelbehebung repariert einen Stand; sie verhindert nichts.*
+
+**Die Regel kehrt die Reihenfolge um: nicht messen bis die Liste voll ist, sondern beim ersten
+Fund anhalten.**
 

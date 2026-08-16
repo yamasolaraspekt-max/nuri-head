@@ -59,7 +59,11 @@ genau das.*
 ## 3 · DECISION — die Regel, ihr Wortlaut und ihre Prüfform
 
 ```text
-H-9 KOMMT als neunte Hausregel in §18a, ANGEHAENGT hinter H-8 (ARBEITSREGELN.md:812).
+H-9 KOMMT als neunte Hausregel in Abschnitt 18a, ANGEHAENGT hinter H-8.
+  ANKER BERICHTIGT 16.08.: hier stand ARBEITSREGELN.md:812 — dort steht heute der
+  Statustraeger-Absatz, H-8 steht bei 973. Wer die Zeilennummer befolgt haette, haette
+  H-9 an die falsche Stelle gehaengt. Die SACHE ist eindeutig: hinter H-8, ueber die
+  Kennung zu finden.
     Wortlaut vom Generator, der ihn am 12.08. zweimal selbst formuliert hat:
 
       "Ein Muster, das eine Schreibweise voraussetzt, misst die Schreibweise
