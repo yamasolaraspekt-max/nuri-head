@@ -58,10 +58,14 @@ verstreut und die Herkunftskette ginge verloren.
 ## Die dritte Klasse, die dieser Auftrag NICHT anfasst — gemessen 19:1x im Bestand
 
 ```
-Bloecke gesamt              444
-  mit `zustand:`             90    echte Auftraege      -> bleiben
-  mit `auftrag:` ohne         165   Befundnotizen        -> ziehen um
-  WEDER noch                 189    dritte Klasse       -> bleiben, unbenannt
+Stand 19:1x                 Stand 22:0x
+Bloecke gesamt   444          446
+  mit `zustand:`  90           89    echte Auftraege   -> bleiben
+  ohne, mit auftrag 165        168   Befundnotizen     -> ziehen um
+  WEDER noch      189          189   dritte Klasse     -> bleiben, unbenannt
+
+DIE MENGE WAECHST WEITER — in drei Stunden +2 Bloecke, +3 Notizen, -1 Auftrag.
+Genau deshalb nennt A-42-1 den Zaehlbefehl und keine Zahl.
 ```
 
 **Die 189 beginnen mit:** `befund` 12 · `anlass` 11 · `meldepflichten_erfuellt` 10 ·
