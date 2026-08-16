@@ -1481,3 +1481,91 @@ Definitionsstellen -> 62 Kennungen`**. Die Auflage (a) bleibt unverändert richt
 die Zahl, die zu ihr passt.
 
 **Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## A-39 gegen seine eigenen acht Prüfungen gehalten — es besteht sie. Und mein Fehler 23 steht in ZWEI Blättern, nicht in einem
+
+*Vorratsprüfung Posten (c), auf die Selbstanwendung gewendet · gemessen 16.08. gegen `eddf8ddf`, Basis `99add90f`*
+
+### A-39 an sich selbst geprüft — der Test, an dem A-42-8 gescheitert ist
+
+A-39 definiert acht Innenprüfungen P1–P8. Ich habe sie gegen A-39 selbst gehalten:
+
+| | Prüfung | Ergebnis an A-39 |
+|---|---|---|
+| **P1** | Kante ohne Kriterium | **besteht** — A-39-8 nennt *„alle sechs Kanten K1–K6"*, die von P1 ausdrücklich erlaubte Sammelform |
+| **P3** | geforderte Datei ohne Erzeuger | **besteht** — A-39-1 verlangt `scripts/blatt-pruefen.sh`, der Kopf `art:` nennt es als Liefergegenstand |
+| **P6** | Rot-Lage mit Uhr | **besteht** — alle sechs Positivproben hängen an festen SHAs, kein wanderndes Fenster |
+| **P7** | Kriterium ohne gangbaren Weg | **besteht** — dritte Frage geprüft, siehe unten |
+
+**P7s dritte Frage — „existiert die verlangte Eigenschaft auf dem Messweg?" — ist die harte.** A-39
+stützt sechs Kriterien auf vier historische Stände. Alle vier geprüft:
+
+```
+0ee521f7  16.08. 13:38  Vorfahre der Integration
+8559b555  16.08. 14:18  Vorfahre der Integration
+5db5f8a9  16.08. 13:36  Vorfahre der Integration
+5bbc55bf  16.08. 13:23  Vorfahre der Integration
+```
+
+**Und zwei davon habe ich inhaltlich geöffnet**, statt die Existenz für den Beleg zu halten:
+
+- **A-39-3** verlangt, dass P2 in A-33-1 *„genau EINS"* findet. Am Stand `8559b555`, Z.179:
+  `unter dem Muster A-/W-  genau EINS -> A-06`. **Der Fall liegt dort.**
+- **A-39-5** verlangt, dass P4 in A-33-7 *„`scripts/` null Mal"* gegen `art:` findet. Am Elternstand
+  `fe6b436a`, Z.232: *„Kein Code. Gegenprobe: der Bau-Commit fasst NUR `docs/STATUS.md` an"* — und
+  der Kopf Z.14: *„Liefergegenstand ist `scripts/a33-kennungen-nachziehen.sh`"*. **Der Widerspruch
+  liegt dort, wortgenau.**
+
+**A-39s Positivproben sind echt.** Das ist der Punkt, den das Blatt selbst macht: *„Ein Prüfer, den
+man nie hat sprechen sehen, ist von einem kaputten nicht zu unterscheiden."*
+
+### Fehler 23 ist größer, als ich ihn gemeldet habe
+
+Ich habe vorhin berichtet, A-40 gebe **64** als Kennungszahl aus, während es Definitionszeilen sind.
+**Dieselbe 64 steht auch in A-39**, im Schlussabschnitt:
+
+> *„der Plan-Pruefer misst 36, 37 oder 40, je nach Zaehlweise, und **ich selbst heute 64 ueber beide
+> Sammlungen**."*
+
+**Meine Berichtigung muss also zwei Blätter erreichen, nicht eines.** In A-39 ist der Schaden
+kleiner — der Absatz heißt *„Zwei Zahlen, die ich nenne ohne sie zu behaupten"* und trägt bereits
+den Vermerk *„die Größenordnungs-Aussage trägt, die Zahl nicht"*. **Das ist die richtige Form.** In
+A-40 stützt dieselbe Zahl dagegen eine Auflage.
+
+### Die Ampel-Zahlen beider Blätter verifizieren exakt
+
+Mit dem Muster, das A-39 selbst nennt (`^### [FNS]-`), je Sammlung getrennt:
+
+```
+FORMELSAMMLUNG.md    32 Definitionszeilen   9 mit Ampel   23 OHNE      30 Kennungen
+SOLAR-REGELWERK.md   32 Definitionszeilen   0 mit Ampel   32 OHNE      32 Kennungen
+```
+
+**A-39 sagt „32 Kennungen, 23 ohne Ampel"** — beides trifft die FORMELSAMMLUNG auf den Punkt (die
+32 als Zeilenzahl, siehe oben). **A-40 sagt „S-Nummern definiert 32, alle 32 ohne Ampel"** — trifft
+das SOLAR-REGELWERK exakt. **Zwei unabhängig geschriebene Zahlen, beide reproduzierbar.**
+
+### Eine Zahl für den Bauenden, die noch nirgends steht
+
+A-40s **Auflage (b)** nimmt Einträge mit `nachgerechnet_an` **oder** `gegengeprueft_an` von der
+Meldung aus. Wie groß ist diese Ausnahme heute?
+
+```
+Feld nachgerechnet_an   1
+Feld gegengeprueft_an   0
+```
+
+**Die Ausnahme schützt genau einen Eintrag.** Das bestätigt meinen früheren Befund, den A-40 als
+*„Er meldet auch den EINZIGEN nachgerechneten Eintrag als ampellos"* aufgenommen hat — **„der
+einzige" war und ist wörtlich richtig.** Für den Bauenden ist das relevant: die Ausnahme ist heute
+fast leer, sie wird aber mit jedem nachgerechneten Eintrag wachsen.
+
+### Und eine Zahl, die ich nicht widerlegen kann
+
+A-39 nennt *„4 Treffer"* auf `nachgerechnet`. Ich messe je nach Muster **5** (Wortvorkommen je
+Datei) oder **1** (das Feld `nachgerechnet_an`). **Keines ergibt 4.** Da das Blatt das Muster nicht
+mitliefert, melde ich es **als nicht nachprüfbar, nicht als falsch** — der dritte Fall heute Nacht,
+und der dritte Beleg für die zugestellte Musterregel.
+
+**Ball: planner** — Fehler 23 auch in A-39s Schlussabschnitt, dazu die Ausnahme-Größe für A-40s
+Auflage (b). **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
