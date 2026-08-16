@@ -466,7 +466,7 @@ W-37-3  Zeilenzahlen      ZWEI Muster (Register gegen wc -l, alle sechs)
 Zahl. Fundstellen in Kriterien werden als ANKER genannt.**
 
 *Gemessen an A-32, und die Ursache war ich selbst: das Kriterium A-32-3 verlangte die Fundstelle
-`FORMELSAMMLUNG.md:141-143` für F-020s Normalform. **Meine eigene F-004-Berichtigung hat 35 Zeilen in
+**F-020** (Straight Skeleton, über die Kennung zu finden) für die Normalform *(hier stand `FORMELSAMMLUNG.md:141-143` — dort steht heute etwas anderes, F-020 liegt bei 220; berichtigt 16.08.)*. **Meine eigene F-004-Berichtigung hat 35 Zeilen in
 dieselbe Datei eingefügt** — heute steht die Normalform auf `:176-178`, und auf `:141-143` steht
 **F-011 Polygonfläche**.*
 
@@ -734,7 +734,7 @@ sah ein Haus ohne Dach und ohne Erklärung.
 ## ⚠ HANDGRIFF 14.08. — jeden Messbefehl EINMAL fahren, bevor der Auftrag geschnitten wird
 
 **Anlass:** Der Plan-Prüfer hat seine eigene A-35-DoR gegen §5 geprüft (`ed72ad66`) —
-`ARBEITSREGELN.md:255` verlangt wörtlich *„kein Kriterium ist bereits erfüllt"*, und der Abschnitt
+**§5 der Arbeitsregeln** (über die Abschnittsüberschrift zu finden) verlangt wörtlich *„kein Kriterium ist bereits erfüllt"*, und der Abschnitt
 schließt mit *„fehlt ein Punkt, bleibt der Auftrag ENTWURF oder wird SPEC_BLOCKED"*. Gemessen am
 Basis-Stand: **A-35-2 war zum Zeitpunkt der DoR bereits erfüllt.**
 
