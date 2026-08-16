@@ -5925,3 +5925,77 @@ an einer Einordnung.*
 **Ball beim Planner ZURÜCKGEZOGEN**, soweit er aus §84 kam. *Was ich ihm geschickt hätte, wäre die
 Aufforderung gewesen, Belege zu zerstören, die A-34 ausdrücklich schützt.* **Kein Zustandsfeld
 angefasst, kein Bau.**
+
+---
+
+## 86 — Seine W-21L-Berichtigung bestätigt, und der Lattenabstand steht doch im Code — unter englischem Namen
+
+**Stand:** HEAD `23cd7fdc`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+`4244f70f` zieht einen Satz zurück, **der ursprünglich von mir stammt** („W-21L liegt jetzt beim
+Planner"). Er hat recht, und §82 hatte es bereits gemessen.
+
+### Seine Zahlen — alle selbst nachgefahren, alle treffen
+
+```
+lattweite unter resources/                       0 Dateien                       TRIFFT
+Granat  Code 0 · W-23-Blatt  4                                                   TRIFFT
+Rubin   Code 0 · W-23-Blatt 13                                                   TRIFFT
+Topas   Code 0 · W-23-Blatt  9                                                   TRIFFT
+Harzer  Code 0 · W-23-Blatt 39                                                   TRIFFT
+Achat   sein -i-Fehlalarm: resources/js/chat-mensions.js  (saChat…, nicht Achat) TRIFFT
+die fuenf Nachbarfelder :1378-1382, zeichengenau                                 TRIFFT
+```
+
+**Seine Schlussfolgerung bestätige ich unabhängig: der PRODUKTABHÄNGIGE Lattmaß-Wert steht nicht im
+Code. W-21L bleibt `DECISION_BLOCKED` und bleibt bei Yama.**
+
+### Und zwei Zeilen unter seinem Beleg steht eine Zahl
+
+```
+:1380  lattmassAbhaengigVonProdukt: true      <- sein Beleg
+:1381  rdnGrad: 22
+:1382  mindestneigungGrad: 16
+:1383  battenDistCm: 34                        <- Lattenabstand, MIT Zahl
+```
+
+**`battenDist` = Lattenabstand, englisch geschrieben.** Deshalb liefert eine Suche auf `lattweite`
+oder `lattmass` null Treffer, und deshalb sieht das Feld aus wie ein reines Ja/Nein.
+
+**Vier verschiedene Werte, gemessen:**
+
+```
+battenDistCm: 0 · 30 · 34 (2x) · 40 (2x)
+gebunden an die EINDECKUNGSART: :1758 'schiefer' · :1796 und :1842 'trapezblech'
+```
+
+**Und er WIRKT — Verbraucher über den Funktionsnamen belegt, nicht über die Ordnerlage (P7):**
+
+```
+roof.blade.php:1093   const numBattens = Math.max(1, Math.floor(slopeLength / dim.battenDist));
+                      -> die Lattenzahl entsteht durch Division DURCH diesen Wert
+dachWerte.ts:92       pruefe(b.battenDist, DACH_FLOOR_CM.battenDist, "Lattenabstand")
+dachWerte.ts:20       battenDist: 0.05  // Lattenabstand  min 5 cm
+                      -> Untergrenze 5 cm, mit Nutzertext 'wurde auf den gueltigen
+                         Mindestwert (5 cm) gesetzt'
+```
+
+### Was das ändert — und was ausdrücklich NICHT
+
+**NICHT geändert:** seine Aussage trägt. `battenDistCm` hängt an der **Eindeckungsart**, nicht am
+**Ziegelmodell**; kein einziger Braas-Modellname steht im Code (0 von 5, oben gemessen).
+**W-21Ls Operand — der Lattmaß-Bereich JE PRODUKT — fehlt weiterhin.**
+
+**Geändert ist der Schritt von der Messung zur Aussage:** *„`lattweite` 0 Treffer"* → *„keine Zahl
+im Code"* ist ein Schluss über die **Schreibweise**, nicht über die **Sache**. **Genau die Klasse,
+die der Planner in `acb3d494` an sich selbst benannt hat:** *„die ursprüngliche Messung suchte zwei
+feste Zeichenfolgen und maß damit die SCHREIBWEISE statt der Sache."*
+
+**Und es zählt für den nächsten Schritt, um den es ihm ging:** wer W-21L nachschneidet, baut nicht
+in leeren Raum. **Es gibt bereits einen Lattenabstand, der gerechnet, geprüft und nach unten
+begrenzt wird.** *Ein produktabhängiger Wert müsste sich zu ihm verhalten — ersetzen, überschreiben
+oder danebenstehen —, und diese Frage gehört in den Nachschnitt, nicht in den Bau.*
+
+**Ball beim Release-Prüfer** (seine Postenlage, ein Satz zu ergänzen: *nicht* „keine Zahl im Code",
+sondern „keine **produktabhängige** Zahl — ein Lattenabstand je Eindeckungsart existiert").
+*Sein Urteil zu W-21L bleibt unangetastet; ich habe es bestätigt, nicht bestritten.*
+**Kein Zustandsfeld angefasst, kein Bau.**
