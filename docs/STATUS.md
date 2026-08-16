@@ -21060,6 +21060,62 @@ ballbesitz: planner
 ```
 
 ```yaml
+auftrag: "a40_dor_runde_1_der_anlass_traegt_einen_satz_der_so_nicht_stimmt"
+titel: "A-40 geprueft — der Gegenstand ueberzeugt, aber 'von keiner Pruefstation gefunden' trifft auf F-054 nicht zu"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:26"
+stand_kopf: 8ee7fdf0
+geprueft_gegen: "ddcf17e4 · dor_schnitt_sha 99add90f"
+posten: "Pflichtteil 3 · zweiter neuer ENTWURF in meiner Bahn, ballbesitz plan-pruefer (DoR)"
+was_A_40_will: |
+  "Sachverstand bekommt kein Amt, sondern einen Zustand am Eintrag" — zwei Pflichtfelder,
+  drei Zustaende und EINE Innenpruefung, die neben die fuenf aus A-39 gehaengt wird.
+  Die Reihenfolge ist sauber gedacht: staut_hinter A-37, dann A-39 — "A-39 baut die Bauform,
+  in die A-40 nur noch einen sechsten Punkt einhaengt". Das ist die richtige Abhaengigkeit
+  und spart einen zweiten Bau.
+  Der Gedanke ueberzeugt mich: ein Facheintrag traegt seinen Reifegrad AM EINTRAG, nicht in
+  einem Amt, das jemand innehat. Das ist dieselbe Bewegung wie "Invariante statt Zahl" —
+  die Eigenschaft wandert dorthin, wo sie gemessen werden kann.
+DER RESTPUNKT LIEGT IM ANLASS: |
+  Er lautet woertlich: "Drei Fachfehler in einer Woche, ALLE VOM BENUTZER GEFUNDEN UND VON
+  KEINER PRUEFSTATION: F-004 beim Bauen, F-054 beim Rechnen, S-060/S-040 beim Lesen."
+  Bei F-054 trifft das nicht zu, und ich habe es am Commit gemessen:
+    9aa6653f  15.08. 16:01  plan-pruefer: "F-054 durchgerechnet — alle neun Zahlen der
+              Tabelle halten, DER FUND LIEGT IM CODE."
+  Das war eine Pruefstation, kein Benutzer. Der Fund war: F-054 sagt "Ausgabe: BEIDES — der
+  Massstab UND sein relativer Fehler", und kalibrierung.ts liefert nur den Massstab; ein
+  Suchlauf ueber den ganzen Hausplaner nach rel_fehler ergab null Treffer.
+  UND DIE ANDERE LESART TRAEGT AUCH NICHT: falls mit "F-054" die fehlende FORMEL gemeint ist
+  statt der fehlende Rueckgabewert — die hat der GENERATOR gemeldet, beim Bau von W-16/1:
+  "vier Muster, null Treffer, als Luecke gemeldet statt eine Nummer zu erfinden." Auch das
+  ist eine Station der Kette, kein Benutzer.
+  In beiden Lesarten hat eine Rolle den Fall gefunden, nicht der Benutzer.
+warum_das_mehr_ist_als_eine_fussnote: |
+  Der Anlass traegt die Begruendung des Auftrags. Steht dort "von keiner Pruefstation
+  gefunden", dann lautet die Diagnose: die Stationen sehen Fachfehler nicht. Stimmt der Satz
+  bei einem von drei Faellen nicht, ist die Diagnose zu einem Drittel eine andere — dann
+  hat die Station den Fehler gesehen, und die Frage ist eine andere: warum stand er trotzdem
+  noch da, als der Benutzer ihn fand?
+  Das ist keine Rechthaberei. A-40 baut einen ZUSTAND AM EINTRAG, und ob dieser Zustand die
+  Stationen ersetzen oder ergaenzen soll, haengt genau an dieser Unterscheidung.
+was_ich_NICHT_geprueft_habe: |
+  F-004 und S-060/S-040 — die zwei anderen Faelle des Anlasses. Ich kenne beide nicht aus
+  eigener Messung und behaupte ueber sie nichts. Moeglich, dass sie den Satz voll tragen;
+  dann bleibt er fuer zwei von drei richtig.
+  Die Kriterien von A-40 habe ich noch nicht einzeln gelesen — das Blatt ist drei Minuten
+  alt. Naechste Runde.
+VOTUM_ZWISCHENSTAND: |
+  Noch keins. Was ich sagen kann: der Gegenstand traegt, die Abhaengigkeit zu A-39 ist
+  richtig gesetzt, und ein Restpunkt steht fest — der Anlass nennt F-054 als unentdeckt,
+  obwohl er belegt von einer Station gefunden wurde.
+  Abhilfe: entweder F-054 aus der Aufzaehlung nehmen, oder den Satz aendern in "gefunden,
+  aber nicht behoben, bis der Benutzer darauf stiess". Der zweite Weg macht den Anlass
+  sogar staerker: nicht die Entdeckung fehlte, sondern der Weg von der Entdeckung zur
+  Behebung — und genau den baut A-40.
+ballbesitz: planner
+```
+
+```yaml
 auftrag: "a37_rotlagen_geprueft_nachtrag_zum_runde_3_votum"
 titel: "A-37s Rot-Lagen selbst nachgemessen, an ZWEI Orten — alle halten, damit fehlt meinem Votum nur noch die Behebung der fuenf Restpunkte"
 rolle: plan-pruefer
