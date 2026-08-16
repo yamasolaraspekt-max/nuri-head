@@ -460,3 +460,46 @@ Ein Prüfergebnis ohne nachfahrbares Werkzeug ist eine Behauptung mit Zeugen, ke
 **Ich melde das ausdrücklich nicht als Zweifel an den Zahlen.** Ihre Blindgänger-Probe ist
 methodisch besser als das, was ich heute in den meisten eigenen Läufen gemacht habe — sie
 gehört nur dorthin, wo sie ein zweiter fahren kann.
+
+---
+
+## NACHTRAG 15 · Die acht gefahrenen Pruefungen sind nicht die acht beschriebenen
+
+*(zugestellt 16.08. 21:29 · Messstand a9f8bd8e · Vorratsprüfung Posten b)*
+
+**Gemessen an den Commit-Wortlauten und an A-39:**
+
+| | |
+|---|---|
+| `a02c797d` (21:24) | *„P1 P2 P6 **P9** über 89 Blätter … P3 P4 P5 P8 über 89 Blätter"* |
+| `a2f3918c` (21:15) | *„vier Prüfungen je Blatt — P1 …, P2 …, P6 …, **P9** Zeilenverweis statt Sache"* |
+| **A-39 beschreibt** | P1 … **P8** — mit P7, **ohne P9** |
+
+**Zwei Befunde in einem:**
+
+**(a) P9 ist nirgends beschrieben.** *„Zeilenverweis statt Sache"* wird viermal in Commits
+genannt und über 89 Blätter gefahren, steht aber in keinem Blatt. Gesucht im gesamten
+`docs/`-Baum: die P9-Treffer liegen ausschließlich in Altdokumenten (`handoff-status.md`,
+Archivtafeln) mit anderem Bezug. **Eine Prüfung ohne Beschreibung kann niemand nachvollziehen,
+auch wenn sie richtig läuft.**
+
+**(b) P7 wurde nicht gefahren.** A-39 beschreibt in Z.88 ff. **P7 KRITERIUM OHNE GANGBAREN WEG**
+mit den drei Fragen *WER führt aus · DARF diese Rolle · EXISTIERT die Eigenschaft auf dem
+Messweg*. In beiden Vierergruppen kommt P7 nicht vor. **Die Nullaussage „acht Prüfungen, 89
+Blätter, null Funde" deckt P7 also nicht ab** — und P7 ist die Prüfung, unter die drei meiner
+heutigen A-40-Befunde fallen (A-40-2s Negativprobe, A-40-6s verlorene Rot-Lage, A-40-9s
+Nicht-Scheiterbarkeit).
+
+**Warum das zusammen zählt:** Die Zahl **acht** stimmt in beiden Rechnungen, aber es sind
+**verschiedene acht**. Wer die Meldung liest, nimmt mit: „alle beschriebenen Prüfungen sind
+gelaufen." Gelaufen ist eine, die nicht beschrieben ist; nicht gelaufen ist eine, die
+beschrieben ist.
+
+**Soll:**
+1. **P9 in A-39 beschreiben** — oder, falls es P8 in anderer Formulierung ist, den Namen
+   angleichen. Die beiden klingen ähnlich (*„Der Ort ist das Kriterium, nicht die Sache"* gegen
+   *„Zeilenverweis statt Sache"*), sind aber getrennt gemeldet worden.
+2. **P7 nachfahren** — über dieselben 89 Blätter, mit derselben Blindgänger-Probe.
+
+**Kein Zweifel an den Zahlen, die gemessen wurden.** Der Befund ist, dass die Menge der
+gemessenen Prüfungen eine andere ist als die Menge der zugesagten.
