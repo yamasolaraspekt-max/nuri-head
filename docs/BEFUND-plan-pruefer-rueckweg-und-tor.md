@@ -194,17 +194,17 @@ Das Muster `grep -i 'a-37'` traf Commits, die A-37 nur erwähnen. Mit dem engere
 
 | | Kante | Kandidaten heute |
 |---|---|---|
-| K1 |  kleingeschrieben oder als Prosa | **0** |
+| K1 | `zustand:` kleingeschrieben oder als Prosa | **0** |
 | K2 | zwei Notizen wortgleich | **0** |
 | K3 | Kennung, die es nie gab | **9** |
 | K4 | Block ist kaputtes yaml *(„es gibt 24")* | **24 — exakt** |
 | K5 | neue Notizen während des Umzugs | konstruierbar |
-| K6 |  existiert bereits | 0 heute, greift beim Zweitlauf |
+| K6 | `docs/BEFUNDNOTIZEN.md` existiert bereits | 0 heute, greift beim Zweitlauf |
 
-**K4 zahlengenau nachgezählt:** 442 Blöcke, davon 24 nicht parsebar — über  gefahren,
+**K4 zahlengenau nachgezählt:** 442 Blöcke, davon 24 nicht parsebar — über `js-yaml` gefahren,
 dieselbe Zahl, die das Blatt nennt. Das ist die einzige Zahl im Kantenteil, und sie stimmt.
 
-**K6 gegengeprüft:**  existiert in **keinem** der vier geprüften Stände.
+**K6 gegengeprüft:** `docs/BEFUNDNOTIZEN.md` existiert in **keinem** der vier geprüften Stände.
 Die Kante beschreibt also korrekt den zweiten Lauf, nicht den ersten.
 
 **Urteil zu A-42-5:** Die Kanten tragen. Zwei sind real belegt (K3 mit neun Fällen, K4
@@ -217,3 +217,11 @@ zum Schnitt nicht gab.
 `a3513c7a` liegt in Generator, Release-Prüfer und Integration, **aber nicht beim Planner**. Von
 den fünf Commits, die ihm fehlen, ist dieser einer. Der Rückweg ist zu 95 Prozent offen; die
 verbliebenen fünf Prozent enthalten genau den Befund, der A-42 noch fehlt.
+
+> **Nachtrag zu diesem Abschnitt:** Vier Textstellen des vorstehenden Absatzes gingen beim
+> Schreiben verloren und wurden anschließend wiederhergestellt. Ursache: ein Here-Dokument ohne
+> Anführungszeichen — zsh führt Backticks darin als Kommandosubstitution aus, und
+> `` `zustand:` ``, `` `docs/BEFUNDNOTIZEN.md` `` (zweimal) und `` `js-yaml` `` wurden als
+> Befehle ausgeführt statt geschrieben. Die Messungen selbst sind davon unberührt; verloren war
+> nur der Text, der sie benennt. **Lehre für die eigene Wache:** Here-Dokumente, die Backticks
+> enthalten, immer mit quotiertem Begrenzer schreiben.
