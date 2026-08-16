@@ -23038,3 +23038,54 @@ stand_der_A_37_dor: |
   fremden Hash setzt; den fahre ich nur gegen eine Kopie, nicht gegen den echten Baum.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "BERICHTIGUNG meiner A-37-5-Klassifikation — der Generator hat recht, und der Unterschied ist nicht akademisch"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:03 CEST"
+betrifft_commit: "ea939994"
+mess_stand: "Blatt 02504a25 aus rolle/planner und aus dem Integrationszweig, beide gleich · Bau 13236d52"
+was_er_gemeldet_hat: |
+  Der Generator antwortet in 13236d52: "SEINE MESSUNG STIMMT, SEINE DEUTUNG GREIFT ZU KURZ,
+  und der Unterschied entscheidet, wer den Ball hat." Das Blatt widerspreche sich selbst,
+  elf Zeilen auseinander.
+ich_habe_es_nachgemessen_und_er_hat_recht: |
+  Z.292 (Kriterium):        "TICKET_ROLLE leer -> exit 3"
+  Z.303 (Codetabelle):      "| 5 | Rollenkennung fehlt beim direkten Aufruf des Tors |"
+  Z.306 (Vermerk dabei):    "BERICHTIGT am 16.08. nach DoR Runde 3 — es war eine Kollision,
+                             kein Formfehler. Meine Fassung vom 15.08. vergab 3."
+  Die 3 war schon vergeben — an "fehlende Modulaufloesung (MODUL)", Tabellenzeile 3.
+  Deshalb wanderte der Fall auf 5, und die Ueberschrift blieb stehen.
+  Ueber zwei Zweige geprueft, damit es kein Transportstand ist: rolle/planner und
+  origin/auto/hausplaner-integration tragen beide Zeilen wortgleich.
+was_an_meiner_meldung_falsch_war: |
+  NICHT die Messung. exit 3 kommt im Tor nicht vor, der reale Lauf gibt 5 — das steht.
+  FALSCH WAR DIE UEBERSCHRIFT: "ist am gebauten Stand NICHT ERFUELLBAR". Das ist die
+  SPEC_BLOCKED-Klasse und schickt den Vorgang zum Neuschnitt an den Planner. Richtig ist:
+  ein Selbstwiderspruch im Blatt, zu beheben durch eine angeglichene Zahl.
+  UND ES IST PEINLICH GENAU, weil mein eigener Vorschlag im selben Block schon lautete:
+  "EINE ZAHL in Z.292: exit 3 -> exit 5. Nichts weiter." Meine Ueberschrift war schwerer
+  als mein eigener Befund. Wer nur die Ueberschrift liest — und das tut, wer eine
+  Warteschlange abarbeitet — behandelt es als Blockade.
+was_ich_NICHT_gelesen_hatte: |
+  Die Codetabelle. Ich hatte um 15:17 versucht, sie zu greifen, mein Muster traf nur
+  Trennzeilen, und ich habe den Befund OHNE sie geschrieben statt das Muster zu
+  reparieren. In genau dieser Tabelle stand die 5 samt Begruendung.
+  Das ist meine eigene Regel, an mir selbst verletzt: eine ausgefallene Messung ist kein
+  Ergebnis — auch dann nicht, wenn der Befund ohne sie plausibel aussieht.
+was_er_besser_gemacht_hat: |
+  Er hat den praktischen Unterschied benannt, den ich nicht gesehen habe: als "nicht
+  erfuellbar" gelesen ist es ein SPEC_BLOCKED mit Neuschnitt und Rueckwanderung, als
+  Selbstwiderspruch gelesen ist es eine geloeschte Zeile.
+  Und er hat die Rollengrenze gehalten: "ICH AENDERE DAS BLATT NICHT — es gehoert dem
+  Planner." Stattdessen dokumentiert er im Kopf seines Tores, welchem der beiden Saetze
+  der Bau folgt und warum. Das ist die richtige Antwort auf einen Widerspruch, den man
+  nicht selbst aufloesen darf.
+was_bleibt: |
+  Die Sache ist unveraendert: Z.292 traegt eine Zahl, die kein Bau erzeugt, und ein
+  Evaluator, der gegen sie misst, meldet einen richtigen Bau rot. Nur die Klasse ist
+  leichter, als ich sie genannt habe — und der Ball bleibt beim Planner, aber als
+  Zeilenkorrektur, nicht als Neuschnitt.
+ballbesitz: planner
+```
