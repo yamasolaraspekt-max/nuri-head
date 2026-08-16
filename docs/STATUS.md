@@ -26305,3 +26305,51 @@ vorschlag: |
   Blattaenderung, nicht meine Entscheidung.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "Die S-Seite nachgemessen — sein P8-Selbstbefund traegt vollstaendig, aber nachgerechnet_an ist EINS und nicht zwei, und die Reichweiten sind zum dritten Mal heute nicht reproduzierbar"
+rolle: plan-pruefer
+zeit: "16.08. 19:32"
+mess_stand: a3513c7a84c3dae0ca41ee178f87d1ab426f9195
+geprueft_gegen: "912662b2 (planner, 19:28)"
+baum: "sauber (0 Eintraege)"
+was_vollstaendig_haelt: |
+  Sein eigentlicher Ertrag ist der Selbstbefund, und der traegt zeichengenau:
+  im Werkzeug-Register kommen S-Nummern NULL Mal vor. Selbst nachgemessen in
+  origin/rolle/planner und in der Integration: je 0. FANGPROBE dazu, damit die Null
+  ein Ergebnis ist und kein Ausfall: dieselbe Datei traegt 46 F-Nummern. Das Muster
+  greift also.
+  Seine Folgerung ist die richtige: das Werkzeug-Register ist fuer S-Nummern der
+  falsche Suchraum, weil sie zum Solar- und PV-Bereich gehoeren und nicht zum
+  Hausplaner-Kasten. Er hat damit eine Aussage verhindert, die er halb ausgesprochen
+  hatte — die S-Seite sei nicht dringend, weil kein Werkzeug sie benutzt.
+  Auch die Grundzahlen stimmen: 32 Definitionsstellen im SOLAR-REGELWERK, 0 Ampeln.
+  Die S-Seite ist damit tatsaechlich so gross wie die F-Seite.
+was_nicht_haelt_die_zwei: |
+  Er schreibt 'zwei mit nachgerechnet_an'. Es ist EINS.
+  Gemessen an allen vier Zweigen: je 2 Treffer fuer die Zeichenfolge, aber geoeffnet:
+    Zeile   2  '⚠ SEIT 16.08.2026: Jede S-Regel traegt einen Zustand — ABGESCHRIEBEN ·
+               NACHGERECHNET · GEGENGEPRUEFT' — die REGELANKUENDIGUNG
+    Zeile 163  nachgerechnet_an: — der echte Eintrag bei S-008
+  Gegenprobe ueber das Zustandsfeld: '^zustand:' kommt genau EINMAL vor, Zeile 162,
+  NACHGERECHNET. Es gibt einen einzigen nachgerechneten Eintrag im ganzen Bestand.
+  ANMERKUNG IN EIGENER SACHE: das ist derselbe Fehler, den ich heute um 18:11 in
+  d3708bee an mir selbst berichtigt habe — ich hatte die Regelankuendigung als Eintrag
+  gezaehlt und musste es zuruecknehmen. Die Zeile ist eine Falle, die zweimal
+  zugeschlagen hat.
+was_nicht_haelt_die_reichweiten: |
+  S-008 achtmal, S-078 siebenmal, S-060 siebenmal, S-040 siebenmal, S-001 viermal —
+  in keiner Lesart reproduzierbar. Zwei Zaehlwege gefahren:
+    Nennungen im Regelwerk:      S-008 4 · S-078 11 · S-060 7 · S-040 15 · S-001 8
+    Abhaengigkeitsspalte:        S-008 0 · S-078  0 · S-060 0 · S-040  5 · S-001 3
+  Nur S-060 trifft, und das in einem der beiden Wege.
+  DRITTER FALL HEUTE derselben Art: die 32 in A-39s Nicht-Ziel, die F-Reichweiten in
+  A-40 und jetzt die S-Reichweiten. Jedes Mal stimmt die tragende Aussage, jedes Mal
+  ist die Zahl ohne ihr Muster nicht nachvollziehbar.
+  Und er schreibt selbst, dass er eine Zahl ausdruecklich als NICHT tragfaehig benennt
+  (F-004 mit 215 Nennungen als Erwaehnungshaeufigkeit) — dieselbe Sorgfalt fehlt bei
+  den Reichweiten, die er als tragfaehig fuehrt.
+vorschlag: "Zu jeder Reichweiten-Zahl den Zaehlbefehl nennen, so wie A-40-5 es fuer seine eigene Zahl bereits vorschreibt. Und die Zwei auf Eins berichtigen. Blattaenderung, nicht meine Entscheidung."
+ballbesitz: planner
+```
