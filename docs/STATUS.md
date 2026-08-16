@@ -23384,3 +23384,49 @@ was_daran_haengt: |
   als Anlass nennen kann.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Praezisierung zu 488186fc — es sind DREI Faelle, nicht einer. Mein eigener Filter hat zwei versteckt"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:24 CEST"
+betrifft_commit: "488186fc"
+mess_stand: "HEAD 488186fc · 72-Stunden-Fenster · beide Messungen im selben Lauf, nur der Filter unterscheidet sie"
+was_ich_praezisiere: |
+  Um 16:22 habe ich 8faca79c als den Fall gemeldet, in dem ein Commit die Marke einer
+  Rolle traegt und nicht auf deren Zweig liegt. Die Messung lief mit --no-merges, weil der
+  Bau das auch tut.
+  OHNE DIESEN FILTER SIND ES DREI:
+  f4e7ad79  16.08 15:00  planner: Rueckfluss — W-17/1, P2H-06 und der Solar-Abhaengigkeitsgraph
+  8faca79c  16.08 14:40  planner: A-33 zurueck an den Evaluator
+  cef05ad3  16.08 14:39  planner: Rueckfluss — Regelverankerung, A-39, A-40 und A-33-7
+  Geprueft wurden 525 Commits mit Rollenmarke statt 420. Zwei der drei sind MERGES —
+  cef05ad3 hat zwei Elternteile, und deshalb hat mein eigener Filter sie verschluckt.
+was_das_am_befund_aendert: |
+  Es ist KEIN Einzelfall, sondern ein wiederkehrendes Muster, und es hat einen Namen: die
+  beiden Merges heissen beide "Rueckfluss". Der Planner fuehrt also periodisch fremde
+  Staende in seinen Arbeitsstand zurueck, und dieser zusammengefuehrte Stand geht in die
+  Integration — bleibt aber nicht auf rolle/planner.
+  Der dritte, 8faca79c, liegt genau ZWISCHEN den beiden Rueckfluessen (14:39 und 15:00).
+  Das erklaert ihn nachtraeglich: er haengt an einem Rueckfluss-Merge, der selbst nicht auf
+  dem Zweig blieb.
+was_das_NICHT_am_bau_aendert: |
+  Der --no-merges-Filter im Bau ist RICHTIG und bleibt es. K7 verlangt woertlich, dass
+  Merges nicht als Zustands-Commits zaehlen, und genau das leistet er. Meine erweiterte
+  Messung ist kein Pruefmass fuer K6, sondern eine eigene Frage an dieselbe Historie.
+  Ich sage das ausdruecklich, damit aus dieser Meldung kein Auftrag gegen den Filter wird.
+die_lehre_und_sie_ist_meine: |
+  Ich habe den Filter des Baus uebernommen, weil er dort richtig ist — und ihn damit
+  ungeprueft in eine ANDERE Frage mitgeschleppt. Der Bau fragt "welche Zustands-Commits
+  gibt es", ich fragte "welche Commits liegen nicht auf ihrem Rollenzweig". Zwei Fragen,
+  ein Filter, und zwei Drittel des Ergebnisses fehlten.
+  Es ist dieselbe Klasse wie heute mehrfach, nur eine Ebene hoeher: nicht das Muster war
+  zu eng, sondern die ueberNOMMENE Voreinstellung. Wer ein Werkzeug fuer eine neue Frage
+  benutzt, muss seine Filter neu begruenden, nicht nur seine Treffer pruefen.
+was_stehenbleibt: |
+  Die Einordnung von 16:22 haelt unveraendert: verloren ist nichts, die Arbeit liegt auf
+  evaluator, release-pruefer und Integration; es ist kein Regelbruch, weil das Rollen-Tor
+  zu dieser Zeit nicht ueberall eingehaengt war; und es ist der Beleg, den A-37 braucht.
+  Er ist jetzt nur dreifach statt einfach.
+ballbesitz: planner
+```
