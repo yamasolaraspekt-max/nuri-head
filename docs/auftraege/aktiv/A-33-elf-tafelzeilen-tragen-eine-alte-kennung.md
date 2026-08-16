@@ -416,3 +416,58 @@ OFFEN_UND_NICHT_ABSCHLIESSEND_GEKLAERT, ohne Bewertung: |
 DAS_VOTUM_BLEIBT: "SPEC_BLOCKED. Es haengt an A-33-7, und keine dieser drei Praezisierungen
   beruehrt A-33-7. Der Bau traegt; das Blatt traegt den Umschnitt nicht zu Ende. Ball beim Planner."
 ```
+
+## 7 — Votum des Evaluators, Runde 2 (Wiederabnahme, 16.08.)
+
+```yaml
+votum: ABGENOMMEN
+runde: 2
+gemessen_am: 3e22e61b
+pruefstand: "eigener Worktree an 3e22e61b, node_modules per cp -al aus dem ROLLENBAUM (299 Pakete,
+  Marke d17b19a2 gueltig). ERSTE Abnahme aus ticket-rolle-evaluator."
+
+§12_3_ALLE_SIEBEN_ERNEUT_GEFAHREN: "Nicht nur A-33-7. Jede Zahl neu erhoben, keine aus Runde 1
+  uebernommen — und alle sieben reproduzieren sich zeichengleich."
+
+DER_BEFUND_IST_BEHOBEN, und zwar an der richtigen Stelle: |
+  A-33-7 ist NEUGEFASST (5db5f8a9, Planner). Die neue Fassung verlangt, was der Umschnitt
+  tatsaechlich meint: kein Produktivcode der Insel (resources/, app/, database/ je null Mal),
+  GENAU EINE Datei unter scripts/, und docs/STATUS.md wird vom BAU nicht angefasst.
+  AM COMMIT GEMESSEN, jede Zeile einzeln statt als Summe:
+    resources/  0 · app/  0 · database/  0
+    scripts/    1  -> scripts/a33-kennungen-nachziehen.sh
+    docs/STATUS.md 0
+  Der Bau ist unveraendert 3e22e61b — ich habe die Bau-Commits GESUCHT statt aus bau_sha genommen:
+  genau ein Commit fasst scripts/a33* an, es gab keine Nachbesserung. Der Befund lag nie am Bau.
+
+DER_PLANNER_HAT_MEHR_GETAN_ALS_DEN_BEFUND: "Er haette die Zeile berichtigen koennen. Stattdessen
+  steht im Blatt, WARUM sie fiel, wer den Fehler gemacht hat und was daraus folgt: 'EIN UMSCHNITT
+  IST NICHT FERTIG, WENN EIN KRITERIUM NEU IST — er ist fertig, wenn ALLE Kriterien gegen den neuen
+  Liefergegenstand gelesen wurden.' Das ist der Satz, der den naechsten Umschnitt billiger macht."
+
+WAS_ICH_IN_RUNDE_2_ANDERS_GEMESSEN_HABE_ALS_IN_RUNDE_1: |
+  A-33-5 habe ich in Runde 1 als STILLE gemessen und erst auf Yamas Praezisierung hin als WIRKUNG
+  nachgetragen. Diesmal war die Wirkung von Anfang an das Kriterium, und sie ist wieder je Kennung
+  am Bestand erhoben: paarbar VORHER 0 von 11, NACHHER 11 von 11. Die Stille am Commit gilt
+  zusaetzlich (a26 0 Zeilen, exit 0) — beides, nicht eines statt des anderen.
+```
+
+### Messtisch Runde 2 — alle sieben, jede Zahl neu erhoben
+
+| Kriterium | Messung Runde 2 | Ergebnis |
+|---|---|---|
+| **A-33-1** (P1, TRAGEND) | Fangprobe `--fangprobe` **5/5**, exit 0. Erster Lauf `NACHZUZIEHEN: 11 Zeile(n), 11 Kennung(en)` · `GESCHRIEBEN.` · 0 unklar. **Zweiter Lauf: `keine — die Invariante haelt bereits`** | **grün** |
+| **A-33-2** (P1) | `W-27\|W-40` in den geänderten Zeilen: **0 Treffer**. Alle vier Tafelzeilen vorher 1 / nachher 1 | **grün** |
+| **A-33-3** (P1) | Ballbesitz-Spalte aller elf vorher/nachher gleich; `BETRIEBSBESTAETIGT` in allen elf unverändert | **grün** |
+| **A-33-4** | Rest der Zeile nach der Kennung zeichengenau, **alle elf gleich** | **grün** |
+| **A-33-5** | **Wirkung:** paarbar vorher **0/11**, nachher **11/11**. **Stille:** a26 am Commit **0 Zeilen, exit 0** | **grün** |
+| **A-33-6** | `wc -l` **19521 → 19521**, gelöschte Zeilen **0** (11 geändert) | **grün** |
+| **A-33-7** (neugefasst) | `resources/` 0 · `app/` 0 · `database/` 0 · `scripts/` **genau 1** · `docs/STATUS.md` 0 | **grün** |
+| *Idempotenz + Rücksetzung* | md5 vor dem Lauf `7811e4d8…`, nach der Rücksetzung wieder `7811e4d8…` | **belegt** |
+| *Browser* | **nicht gefahren** — keine sichtbare Wirkung | **entfällt** |
+| *§15 / `getDatabaseName()`* | **nicht berührt** — kein Datenbankzugriff im Scope | **entfällt** |
+| *Insel-Suite / tsc* | **nicht gefahren** — `resources/` und `app/` je 0 Treffer im Bau-Commit | **entfällt** |
+
+**Offen und nicht dem Bau anzulasten** (beides schon in Runde 1 gemeldet, beides unverändert): das Skript meldet `Z.18` für eine Zeile, die auf 19 steht (0-basierter Index als „Z."), und die Dash-Differenz U+2013 ↔ U+2014 zwischen Tafel und Datensatz besteht fort — sie ist älter als A-33 und wird von ihm nur sichtbar gemacht.
+
+**Ball an den Release-Prüfer.**
