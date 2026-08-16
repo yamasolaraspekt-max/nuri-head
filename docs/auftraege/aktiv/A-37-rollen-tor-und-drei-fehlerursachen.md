@@ -141,7 +141,7 @@ gemessen und beide tragen **nicht**:
 | Weg | warum er scheitert |
 |---|---|
 | **`mtime`-Vergleich** `package-lock.json` gegen `node_modules/.package-lock.json` | **`git checkout` setzt die mtime neu, auch bei gleichem Inhalt** → Fehlalarm bei jedem Branchwechsel. *(Gemessen: im Generator-Baum steht der Lockfile auf 08-14 22:15, `.package-lock.json` auf 08-15 15:36 — der Abstand sagt nichts über den Inhalt.)* |
-| **Hash von `node_modules/.package-lock.json`** | **Es ist eine andere Datei:** 404 Pakete gegen **466** im Lockfile. Kein Vergleich möglich. |
+| **Hash von `node_modules/.package-lock.json`** | **Es ist eine andere Datei:** 404 Pakete gegen **466** im Lockfile. Kein Vergleich möglich — **und der Grund dahinter wiegt schwerer als die Zahl**, siehe unten. |
 
 **Deshalb, entschieden statt geraten:** nach jedem `npm ci` schreibt der Baum die Marke selbst —
 
@@ -151,6 +151,39 @@ npm ci && git hash-object package-lock.json > node_modules/.aus-lockfile
 
 **Das Tor liest sie und vergleicht.** Fehlt sie, ist der Modulstand **unbekannt** und nicht
 etwa gültig — eigene Meldung, eigener Rückgabewert.
+
+**⚠ Der zweite Grund für die Dateiwahl, und er ist der stärkere** *(Yamas Gegenprobe, 16.08., von
+mir nachgemessen)*: **Die 62 fehlenden Einträge sind kein Rauschen — 61 davon tragen eine
+`os`/`cpu`-Einschränkung, 0 sind dev-only.** npm legt nur ab, was zu dieser Maschine passt; diese
+ist `darwin arm64`, also fehlt `@esbuild/darwin-x64` **zu Recht**.
+
+| Datei | beantwortet |
+|---|---|
+| `package-lock.json` | **aus welcher Abhängigkeitswahrheit** installiert wurde — **maschinenunabhängig** |
+| `node_modules/.package-lock.json` | **was auf DIESER Maschine gelandet ist** — **maschinenabhängig** |
+
+**Liefe je ein Rollenbaum auf einer anderen Architektur, wäre `.package-lock.json` dort zu Recht
+verschieden** — ein Tor darauf würde eine **richtige** Umgebung als falsch melden. Die gewählte
+Datei ist die einzige, die *„welche Wahrheit"* von *„welche Maschine"* trennt.
+
+**⚠ Und die Marke ist selbst eine flüchtige Messung — Yamas Nachtrag, und er wendet meine eigene
+Regel von vor einer Stunde auf mein eigenes Werkzeug an.** Der Hash ist ein SHA über eine
+unveränderliche Datei; **die Aussage der Marke ist es nicht:** *„dieses Modulverzeichnis stammt aus
+diesem Lockfile"* gilt **ab** der Installation und kann ablaufen. **Praktisch zählt das, weil aus
+demselben `lockfileVersion 3` verschiedene npm-Hauptversionen unterschiedlich auslegen** — steht in
+einem Baum grün und im anderen rot bei gleichem Hash, ist die nächste Frage *„mit welchem npm?"*,
+und die Antwort wäre nicht da. **Die Marke trägt deshalb vier Felder:**
+
+```
+npm ci && printf '%s  %s  node %s  npm %s\n' \
+  "$(git hash-object package-lock.json)" "$(date -Iseconds)" \
+  "$(node -v)" "$(npm -v)" > node_modules/.aus-lockfile
+
+Heute waere das:  d17b19a2…  2026-08-16T…  node v26.5.0  npm 11.17.0
+```
+
+**Das Tor liest und vergleicht ausschließlich das ERSTE Feld.** Die übrigen drei kosten nichts und
+beantworten die Frage, die **nach** dem ersten Widerspruch kommt.
 
 ## Nicht-Ziele
 
@@ -247,6 +280,14 @@ etwa gültig — eigene Meldung, eigener Rückgabewert.
 - **A-37-14** · **Positivfall:** Marke stimmt → Lauf geht durch, **keine Ausgabe**.
   *(Und der dritte Fall getrennt: Marke **fehlt** → eigene Meldung „Modulstand unbekannt", nicht
   stillschweigend als gültig behandelt.)*
+- **A-37-15** · **Die Marke trägt vier Felder** — Hash · Zeitstempel · `node -v` · `npm -v`.
+  **Messbar:** `wc -w < node_modules/.aus-lockfile` ≥ 6. **Rot:** die Datei existiert nicht.
+  **Warum der dritte Fall der wichtigste ist, mit Yamas Begründung, die ich nicht hatte:**
+  **`npm ci` löscht `node_modules` als erstes und legt es neu an.** Wird der Lauf unterbrochen,
+  steht dort ein **halbes** Verzeichnis **ohne** Marke. **Ein Tor, das „keine Marke" als
+  „vermutlich in Ordnung" liest, meldet den halb installierten Baum grün.** Deshalb ist es ein
+  **eigenes** Kriterium und kein Nebensatz im Vergleich — *„der Unterschied zwischen einer Prüfung
+  und einer Prüfung, die man beim Nachbessern versehentlich entfernt."*
 - **A-37-10** · **Kein Nicht-Ziel berührt.** `git show --stat` nennt keine Datei unter `resources/`,
   `app/`, kein `node_modules`, **nicht `docs/STATUS.md`**.
 - **A-37-11** · **Suite grün und Zahl unverändert GEGEN DEN BAU-STAND**, `tsc exit=0`.
