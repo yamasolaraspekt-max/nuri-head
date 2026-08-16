@@ -383,3 +383,83 @@ Gemessen steht sie jetzt auf **Zeile 173** bei 985 Zeilen Gesamtlänge; der Bau 
 **Das ist kein Vorwurf, sondern die Bestätigung der Warnung im selben Satz.** Das Blatt
 kennzeichnet die Zahl ausdrücklich als Momentaufnahme und verlangt, sie mitzumessen. Genau das
 war nötig — nach 17 Minuten stimmte sie nicht mehr.
+
+---
+
+## A-37 CODE_FERTIG, zweite Meldung — Ballwechsel bestaetigt, diesmal mit Stabilitaetsprobe
+
+*(geschrieben 20:05, Messstand 339bc8d3)*
+
+`ea377567` um **20:01:55** meldet A-37 erneut als CODE_FERTIG, mit `1c36544e` als Bau-SHA und
+neunzehn Kriterien. Damit ist die Lücke geschlossen, die der Release-Prüfer um 19:56 gemeldet
+und ich um 20:00 unabhängig nachgemessen hatte.
+
+**Fünf Proben, fünf Treffer:**
+
+| Probe | Ergebnis |
+|---|---|
+| Betreff gegen das Pflichtmuster aus `ARBEITSREGELN.md` Z.1503 | **trifft** |
+| Meldung nennt NEUNZEHN Kriterien | **ja**, zweimal im Wortlaut |
+| Bau-SHA `1c36544e` existiert | **ja**, 19:49 |
+| **Blatt seit 20:01:55 unverändert** | **ja** — kein neues Kriterium nachgeschoben |
+| Scope des Baus | nur `scripts/commit-pruefen.sh`, 33 Zeilen |
+
+**Die vierte Probe ist die, die mir um 19:47 gefehlt hat.** Damals habe ich bestätigt, ohne zu
+prüfen, ob sich das Blatt zwischen Meldung und Bestätigung bewegt hat — es hatte sich bewegt.
+Diesmal ist es seit der Meldung unverändert, über alle Zweige gemessen.
+
+**Ballwechsel bestätigt. Der Ball geht an den Evaluator**, und Schritt I hat damit einen
+Gegenstand, dessen Umfang mit der Meldung übereinstimmt.
+
+**Zwei Beobachtungen am Rand, beide ohne Folge für die Abnahme:**
+
+Der **Generator-Zweig selbst führt nur achtzehn** Kriterien (blob-Stand älter); neunzehn stehen
+in Planner, Release-Prüfer und Integration. Er hat also gegen eine Fassung gemeldet, die sein
+eigener Baum nicht trägt — inhaltlich richtig, weil er A-37-19 aus dem Planner-Befund gebaut
+hat, aber es ist dieselbe Zweig-Alterung, die heute schon dreimal Fehlbefunde erzeugt hat.
+
+Und der Generator **berichtigt sich in der Meldung selbst**: *„MEIN FEHLER, ausdrücklich: um
+20:0x habe ich geschrieben ‚einen zweiten Zustands-Commit für denselben Zustand setze ich
+nicht'. Das war falsch. Der Zustand war unverändert, aber der BELEG-SHA nicht — und genau der
+sagt dem Evaluator, welchen Bau er misst."* Das ist die Unterscheidung, um die es geht.
+
+---
+
+## Der Anker-Rueckfall nachgemessen — A-34 bestaetigt, die 38 nicht reproduzierbar
+
+*(geschrieben 20:09, Messstand 059198ab)*
+
+`df61e5bb` (20:05) beantwortet Yamas zwei Fragen und nennt als schwersten Fund: *„A-34 hat
+genau das schon einmal behoben, BETRIEBSBESTAETIGT, und heute stehen 38 Verweise wieder da."*
+
+**Was zeichengenau hält:** A-34 existiert als Blatt
+(`A-34-zeilennummern-zeigen-auf-die-falsche-formel.md`) und trägt im Datensatz genau einen
+Zustandsblock: **BETRIEBSBESTAETIGT**. Die Grundlage seines Fundes stimmt.
+
+**Was ich nicht reproduzieren kann:** die 38. Über den Integrationsstand gemessen, vier
+Lesarten:
+
+| Suchraum | Treffer |
+|---|---|
+| `ARBEITSREGELN.md:NNN` im ganzen docs-Baum | 26 |
+| `ARBEITSREGELN.md` + beliebiges Trennzeichen + Zahl | 31 |
+| `FORMELSAMMLUNG.md:NNN` | 64 |
+| `SOLAR-REGELWERK.md:NNN` | 2 |
+| alle `DATEI:ZEILE`-Verweise im docs-Baum | 2798 |
+
+Keine ergibt 38. **Vierter Fall heute derselben Art** — nach der 32 in A-39s Nicht-Ziel, den
+F-Reichweiten und den S-Reichweiten. Jedes Mal trägt die Sache, jedes Mal fehlt der Zählbefehl,
+mit dem die Zahl entstanden ist.
+
+**Und eine Anmerkung zur Sache, nicht zur Zahl:** Sein eigener Satz beantwortet die
+Rückfall-Frage teilweise selbst — *„ein Beleg sagt, was jemand zu einem Zeitpunkt gesehen hat;
+er darf veralten und muss es sogar. Ein Wegweiser sagt, wohin jemand gehen soll; er darf nie
+veralten."* Nach dieser Unterscheidung ist ein wachsender Bestand veralteter **Belege** kein
+Rückfall hinter A-34, sondern der Normalzustand einer Beweiskette. Ein Rückfall wäre erst
+belegt, wenn die von A-34 behobenen **Wegweiser** erneut falsch zeigen. Das ist eine andere
+Messung als „38 Verweise stehen wieder da", und sie ist die, die A-34s Behebung prüfen würde.
+
+**Die Unterscheidung selbst ist der wertvollste Teil seines Commits** und deckt sich mit dem,
+was ich heute an den Blättern gesehen habe: A-40s K2 zeigte auf eine Definitionsstelle in einer
+anderen Datei — ein Wegweiser. A-37-19s Zeile 150 war eine Momentaufnahme — ein Beleg, und das
+Blatt hat sie ausdrücklich so gekennzeichnet.
