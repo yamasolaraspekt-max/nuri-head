@@ -79,8 +79,16 @@ MODUS = os.environ["MODUS"]
 # Der Mitteltrenner ist U+00B7 mit je einem Leerzeichen. Die Kennung folgt dem Hausmuster
 # (A-33, W-05/2, B5, W-21L). Der Beleg ist frei und wird NICHT geprueft — er ist Auskunft,
 # keine Bedingung.
+# **⚠ DIE ROLLENMARKE STEHT DAVOR, und das ist keine Auslegung, sondern eine Messung.**
+# Yamas Vorgabe lautet `zustand: A-33 · …` als BETREFF. Das Tor stellt jedoch die Rollenmarke
+# ZWINGEND voran (`commit-pruefen.sh:113-114`, „Keine Rollenmarke … voranstellen"). **Ein Betreff,
+# der mit `zustand:` beginnt, ist ueber das Tor nicht erzeugbar** — und der Planner hat es bereits
+# umgangen: `planner: zustand: A-41 · ENTWURF · planner · blatt e521bd98`.
+#
+# *Das Muster nimmt deshalb BEIDE Formen.* **Gemeldet statt still umgeschrieben:** ob die
+# Rollenmarke entfallen soll oder Teil des Wortlauts wird, entscheidet nicht dieses Skript.
 WORTLAUT = re.compile(
-    r"^zustand:\s+"
+    r"^(?:[a-z-]+(?:-[0-9]+)?:\s+)?zustand:\s+"
     r"(?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:/[0-9A-Za-z]+)?)\s+·\s+"
     r"(?P<zustand>[A-Z_]+)\s+·\s+"
     r"(?P<rolle>[a-z-]+(?:-[0-9]+)?)"
@@ -104,6 +112,8 @@ if MODUS == "fangprobe":
         ("Zustand: A-33 · CODE_FERTIG · generator",                False, "grosses Z — MUSS scheitern"),
         ("generator: A-33 auf CODE_FERTIG gesetzt",                False, "Prosa — MUSS scheitern"),
         ("zustand: A-33 · code_fertig · generator",                False, "Zustand klein — MUSS scheitern"),
+        ("planner: zustand: A-41 · ENTWURF · planner · blatt x",   True,  "MIT Rollenmarke — das Tor stellt sie voran"),
+        ("release-pruefer: zustand: B5 · ABGENOMMEN · evaluator",  True,  "Rollenmarke mit Bindestrich"),
     ]
     rot = 0
     for text, erwartet, warum in faelle:
@@ -118,7 +128,9 @@ if MODUS == "fangprobe":
 # ── DIE ERZEUGUNG AUS DEM COMMIT-LOG ────────────────────────────────────────────────────────
 def aus_dem_log():
     """Je Kennung der juengste Eintrag. Gleiche Zeit + anderer Zustand -> Widerspruch."""
-    roh = lauf("git", "log", "--all", "--grep=^zustand:", "--format=%H%x09%at%x09%an%x09%s")
+    # Das grep-Muster nimmt beide Formen: mit und ohne vorangestellte Rollenmarke.
+    roh = lauf("git", "log", "--all", "--grep=^\\(\\w\\+[a-z-]*: \\)\\?zustand:",
+               "--format=%H%x09%at%x09%an%x09%s")
     treffer, verworfen = {}, []
     for zeile in roh.split("\n"):
         if not zeile.strip():
