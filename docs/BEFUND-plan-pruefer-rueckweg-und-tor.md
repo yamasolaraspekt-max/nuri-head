@@ -992,3 +992,98 @@ verfasst (`rolle: plan-pruefer`), es wird also keine fremde Arbeit angefasst.
 **Warum es überhaupt meine Hand nicht sein kann:** `docs/STATUS.md` ist für mich seit der
 A-37-Sperre (19:36) nicht schreibbar. Das ist keine Ausrede, sondern der Grund, warum dieser
 Punkt seit 20:41 als Zustellung und nicht als Behebung geführt wird.
+
+## A-32s DoR gefahren — beide Formeln rechnen richtig, aber das Blatt hält seit dem 13.08. einen Ball, der längst gegenstandslos ist. Und meine eigene Zahl dazu war halb so groß wie die Wirklichkeit
+
+*Vorratsprüfung Posten (c), Formeln durchgerechnet · gemessen 16.08. gegen `81f4eab4`, Basis `8233cf6e`*
+
+### Zuerst die Berichtigung an mir selbst — Fehler 22
+
+In P-03 habe ich gemeldet: *„36 Blätter tragen einen DoR-Ball bei mir."* **Falsch. Es sind 72.**
+
+```
+ballbesitz: "plan-pruefer (DoR)"           exakt : 45
+ballbesitz: "plan-pruefer (DoR), danach …"       : 27
+                                          zusammen 72
+```
+
+**Die Ursache ist dieselbe Klasse wie schon dreimal heute:** mein Muster traf nur die erste
+Schreibweise. Die zweite trägt denselben Ball mit einem Nachsatz — und war unsichtbar. Ich habe
+die halbe Menge gemeldet und die Zahl für vollständig gehalten.
+
+### Der Fund: 67 der 72 Bälle sind gegenstandslos
+
+Jedes aktive Blatt gegen den Zustand seines Auftrags im Datensatz:
+
+```
+Auftrag durch (BETRIEBSBESTAETIGT / ABGENOMMEN / ZURUECKGEZOGEN) :  67
+echt offen  (A-37 CODE_FERTIG · A-38 A-39 A-40 A-42 ENTWURF)     :   5
+```
+
+**Der Beweisfall ist A-32**, weil dort beide Seiten zu lesen sind:
+
+| | Blatt `docs/auftraege/aktiv/A-32-…md` | Datensatz `docs/STATUS.md` |
+|---|---|---|
+| Zustand | *(kein Feld)* | `BETRIEBSBESTAETIGT` |
+| `dor_beleg` | `"steht aus — plan-pruefer."` | `"ERTEILT 13.08. plan-pruefer, gemessen an 5b1a0cdb"` |
+| `ballbesitz` | `"plan-pruefer (DoR)"` | `—  # Kette vollstaendig` |
+
+**Die DoR wurde also erteilt, der Auftrag gebaut (`1b73ccb0`, 13.08. 14:34), abgenommen (8/8) und
+betriebsbestätigt — und das Blatt behauptet bis heute, sie stehe aus.** Kein Regelverstoß, kein
+übersprungener Schritt: **die Blätter wurden nie nachgezogen.**
+
+### Vier Kennungen, bei denen der DATENSATZ selbst nicht trägt
+
+Bei 34 der 36 stichprobenweise geprüften Kennungen belegt der Datensatz die DoR (`ERTEILT` oder
+`plan-pruefer <Datum>`). Vier fallen heraus:
+
+- **A-30 und A-33** tragen `dor_beleg: "NICHT erteilt 13.08. plan-pruefer"` — **das sind meine
+  eigenen Ablehnungen**, ausführlich begründet. Beide Aufträge stehen heute auf
+  `BETRIEBSBESTAETIGT`. Die Ablehnung wurde offenkundig aufgelöst; **der Beleg wurde nie
+  fortgeschrieben** und liest sich deshalb heute wie ein offener Einspruch gegen einen fertigen
+  Auftrag.
+- **A-41 und W-17/1** tragen blank `dor_beleg: "steht aus"` — ohne Text — und stehen ebenfalls auf
+  `BETRIEBSBESTAETIGT`. Bei A-41 **habe ich die DoR nachweislich gefahren**: acht Befundblöcke von
+  mir (DoR Teil 3, Teil 4, K1, K2, A-41-5, A-41-11, zwei rote Punkte). **Die Prüfung fand statt,
+  das Feld hat sie nie aufgenommen.**
+
+### Was ich beim Rechnen gefunden habe — und was hält
+
+**F-004 (Schnittpunkt zweier Geraden) hält.** Vier Fälle gerechnet, gegen die Lehrbuchform
+`t = ((C−A) × s) / (r × s)` geprüft, Abweichung 0:
+
+```
+achsparallel  t=+0,500000   schraeg  t=+0,666667
+neg. Richtung t=+0,500000   Gehrung  t=+0,700000     Grenzfall parallel: m = 0 -> kein Schnittpunkt
+```
+
+**Die vom Planner am 13.08. berichtigte Vorzeichenfassung ist belastbar:** die ALTE Fassung
+liefert in **allen vier** Fällen einen Punkt, der **nicht auf der Geraden CD liegt** — das Blatt
+behauptet genau das („Der alte Punkt ist also KEIN Schnittpunkt"), und es stimmt gerechnet.
+
+**F-020 (Parallelversatz) hält ebenfalls.** Zwölf Kombinationen aus vier Geradenlagen und drei
+Versätzen: `a·x+b·y+c−t = 0` verschiebt exakt um `t`, bei `a²+b² = 1` in jedem Fall. Die
+gewichtete Form `w·(a·x+b·y+c)−t = 0` verschiebt um `t/w`, an vier Gewichten geprüft, Restglied 0.
+
+### Ein Zeiger, der nicht gewandert ist, sondern nie stimmte
+
+Das Blatt führt in seiner ε-Vergleichstabelle `FORMELSAMMLUNG F-001:53 → ε = 0,5 mm`.
+
+**Am Basis-Stand `8233cf6e` stand ε = 0,5 mm in Z.18, nicht in Z.53** — und heute steht es
+ebenfalls in Z.18. F-001 beginnt an beiden Ständen in Z.13. Z.53 trägt an beiden Ständen denselben
+fremden Satz.
+
+**Das ist eine andere Klasse als die drei Drift-Fälle** (W-12/1, A-30 M-02, raumAuswahl.ts): dort
+zeigte ein Zeiger einmal richtig und wanderte. **Hier war er von Anfang an falsch.** Der *Wert*
+(0,5 mm) stimmt — nur der Weg dorthin führt woanders hin. Folgenlos für die Rechnung, aber ein
+Wegweiser darf nie falsch sein, auch nicht folgenlos.
+
+### Ball
+
+- **planner** — die 67 gegenstandslosen DoR-Bälle in den aktiven Blättern; dazu der Zeiger
+  `F-001:53` in A-32 (richtig wäre `F-001:18`).
+- **integrator** — `dor_beleg` bei **A-41** und **W-17/1** steht blank auf `"steht aus"`, obwohl
+  beide betriebsbestätigt sind; bei **A-30** und **A-33** steht meine Ablehnung vom 13.08.
+  unfortgeschrieben.
+
+**Kein Zustandsfeld angefasst, kein Bau.**
