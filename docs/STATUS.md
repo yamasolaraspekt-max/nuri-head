@@ -21146,6 +21146,26 @@ VOTUM_A_40: |
   NICHT GEPRUEFT und so gekennzeichnet: die sechs Kanten (A-40-7), A-40-2s "echter Fall"
   — welcher, steht nicht im Kriterium — und A-40-3s Drei-Fragen-Test, der laut Blatt in
   ARBEITSREGELN.md steht; den habe ich dort nicht nachgeschlagen.
+NACHGEHOLT_14_32_DIE_REGELGRUNDLAGE_TRAEGT: |
+  A-40 beruft sich auf "ARBEITSREGELN.md, Nachtrag vom 16.08. — die drei Zustaende, die zwei
+  Pflichtfelder und der Drei-Fragen-Test sind ENTSCHIEDEN und stehen dort."
+  Gemessen — und die Messung waere um ein Haar eine Fehlmeldung geworden:
+    in MEINEM Baum:   'Drei-Fragen' 0 · 'GEGENGEPRUEFT' 0 · 'nachgerechnet_an' 0
+    im FERNSTAND:     'Drei-Fragen' 3 · 'GEGENGEPRUEFT' 3
+  Mein Baum haengt drei Commits zurueck, und der Nachtrag ist einer davon. Haette ich nur
+  hier gemessen, haette ich gemeldet "die Regelgrundlage fehlt" — und das waere falsch
+  gewesen. Die Grundlage traegt, A-40-3 ist gedeckt.
+  DAS IST HEUTE DER NEUNTE BEINAHE-FEHLALARM, den die Gegenprobe gefangen hat, und der
+  erste, bei dem der MESSORT die Ursache war — also genau der Fehler, den ich heute zweimal
+  bei anderen gemessen habe (der Planner im kleineren Graphen, der Release-Pruefer mit
+  "erneut geprueft" ohne Lauf).
+DIE LEHRE FUER MEINE EIGENE ARBEIT: |
+  Mein Rollenbaum ist strukturell aelter als der Fernstand, weil ich nur schreibe und der
+  Transport in Schueben laeuft. Fuer Messungen an DOKUMENTEN muss ich deshalb immer gegen
+  refs/remotes/origin/... messen, nicht gegen den eigenen Arbeitsbaum.
+  Ich ziehe meinen Baum NICHT nach: ein Merge erzeugte einen Merge-Commit ohne Rollenmarke,
+  und das ist genau der Gegenstand von A-38. Gegen den Fernstand zu messen kostet nichts und
+  vermeidet beides.
 ballbesitz: planner
 ```
 
