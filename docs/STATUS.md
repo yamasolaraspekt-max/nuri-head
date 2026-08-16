@@ -20710,3 +20710,55 @@ bitte: |
   es erst, wenn zwei davon kollidieren.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a33_code_fertig_geprueft_der_evaluator_trifft_auf_ein_blatt_das_etwas_anderes_verlangt"
+titel: "A-33s Meldepflichten sind erfuellt, am Commit nachgemessen — aber das Blatt traegt den Umschnitt nicht, gegen den gebaut wurde"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:14"
+stand_kopf: 1a42852a
+posten: "Pflichtteil 3 · CODE_FERTIG: Meldepflichten pruefen, Ballwechsel bestaetigen"
+MELDEPFLICHTEN ERFUELLT, selbst gemessen statt geglaubt: |
+  bau_sha 3e22e61b   existiert (cat-file -t -> commit) UND steht in einem FELD, nicht nur
+                     im Fliesstext. Beides verlangt E1.
+  Scope-Diff am BAU-Commit, nicht am Zustands-Commit:
+    3e22e61b aendert GENAU EINE Datei: scripts/a33-kennungen-nachziehen.sh, 174 Zeilen neu
+    Treffer auf docs/STATUS.md          0
+    Treffer auf resources/ oder app/    0
+    Modus im Baum                       100755, also ausfuehrbar
+  Seine tragende Behauptung — "der Commit 3e22e61b enthaelt NULL Treffer auf STATUS.md" —
+  haelt am Objekt. Die 55 Zeilen an docs/STATUS.md stecken im getrennten Zustands-Commit
+  c8a23373 und sind Datensatz, Tafelzeile und Bau-Bericht; das ist nach A-20 richtig so.
+  BALLWECHSEL BESTAETIGT: IN_ARBEIT -> CODE_FERTIG an beiden Stellen, Ball beim Evaluator.
+was_ich_ihm_anrechne: |
+  Er hat die abgelaufene Zielzahl BEIM ZIEHEN selbst gefunden und im Bau-Bericht benannt,
+  statt sie stillschweigend zu umgehen — "die alte Zielzahl ist ausserdem nachweislich
+  abgelaufen: A-06 hat seit 086b48bd einen Datensatz, der Rest waere heute NULL statt EINS."
+  Und er hat KEIN Kriterium geaendert, obwohl es ihm die Arbeit erleichtert haette: "Der
+  Umschnitt gehoert dem Planner; ich aendere kein Kriterium und fuege keines hinzu."
+  Das ist die Rollengrenze, eingehalten an der Stelle, an der sie unbequem ist.
+DER OFFENE PUNKT, und er trifft die naechste Station: |
+  Der Generator hat gegen YAMAS UMSCHNITT gebaut (Liefergegenstand ist ein SKRIPT, keine
+  Bearbeitung). Das Blatt in docs/auftraege/aktiv/ traegt diesen Umschnitt NICHT — er sagt
+  es selbst: "DAS BLATT TRAEGT NOCH DIE ALTE FASSUNG. In docs/auftraege/aktiv steht weiter
+  die feste Zielzahl 'elf' und 'genau EINS -> A-06'."
+  Selbst nachgemessen im Stand des Generators: A-33-1 traegt weiterhin "genau EINS".
+  DARAUS FOLGT FUER DIE ABNAHME: der Evaluator prueft gegen das Blatt. Das Blatt verlangt
+  eine Bearbeitung mit Zielzahl 1/2; geliefert ist ein Skript, und die Zahl ist 0/0.
+  Er wird an A-33-1 rot melden — an einem Bau, der genau das tut, was Yama angeordnet hat.
+  Das ist die A-03-Klasse zum vierten Mal an diesem Tag, und diesmal steht sie nicht bevor,
+  sondern die naechste Station laeuft schon hinein.
+was_ich_NICHT_tue: |
+  Ich prüfe das Skript NICHT inhaltlich. 174 Zeilen Zuordnungslogik sind Evaluator-Arbeit,
+  und meine Rolle bei CODE_FERTIG sind die Meldepflichten und der Ballwechsel. Beides ist
+  erledigt und positiv.
+  Ich fasse kein Kriterium an — aus demselben Grund wie der Generator.
+bitte: |
+  An den Planner, und es ist dringlicher als die vier A-37-Restpunkte: A-33s Blatt auf
+  Yamas Umschnitt nachziehen, bevor der Evaluator misst. Zwei Stellen — Liefergegenstand
+  (Skript statt Bearbeitung) und A-33-1 (Invariante statt Zielzahl, die Formulierung dafuer
+  steht bereits in 3544d5fa).
+  An den Evaluator, falls er zuerst liest: der Bau liefert ein Skript, das Blatt verlangt
+  eine Bearbeitung. Miss gegen Yamas Umschnitt und melde die Blattlage als Blattlage.
+ballbesitz: planner
+```
