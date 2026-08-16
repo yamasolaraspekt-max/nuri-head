@@ -172,18 +172,36 @@ def main(pfad=P):
     # Bloecke. EINE Zeile Unterschied — und dahinter lag der Datensatz A-08 (Z.3215-3256),
     # fuer jedes blockbasierte Werkzeug unsichtbar. Heute ohne Schaden (BETRIEBSBESTAETIGT,
     # ballbesitz —), aber derselbe Mechanismus haette einen offenen Ball verschluckt.
+    # GRUNDLINIE_D ist eine MESSLATTE, keine Erledigung. Der Plan-Pruefer notiert es
+    # ausdruecklich, und er hat recht: "Grundlinie 2, 0" heisst, der Waechter schuetzt ab
+    # sofort gegen einen DRITTEN — die zwei bestehenden behebt er nicht. Sie liegen beim
+    # Integrator, denn wer einen Zaun setzt, entscheidet wo der Block endet.
     GRUNDLINIE_D = 2        # Stand 16.08. 23:1x: A-08 (Z.3215) und ein Vorschlagsblock (Z.7876)
     offen_d, start_d = [], None
-    for i, l in enumerate(text.split('\n')):
+    _zeilen = text.split('\n')
+    for i, l in enumerate(_zeilen):
         s = l.strip()
         if s.startswith('```yaml'):
             if start_d is not None:
-                offen_d.append((start_d + 1, i + 1))
+                # BEREICHSENDE: i ist der 0-basierte Index des NAECHSTEN Oeffners, seine
+                # 1-basierte Zeilennummer waere i+1 — und die gehoert schon zum naechsten
+                # Block. Der offene Block endet eine Zeile davor, also bei i.
+                # Berichtigt 16.08. 23:2x: ich hatte i+1 ausgegeben und damit fuer A-08
+                # "bis Z.3256" gemeldet, wo in Z.3256 der ```yaml von A-09 steht. Der
+                # Plan-Pruefer mass 3255 und nannte es einen Zeichenunterschied ohne Belang
+                # — es ist aber MEINE Zeilenangabe, und sie fuehrt auf den falschen Block.
+                offen_d.append((start_d + 1, i))
             start_d = i
         elif s == '```' and start_d is not None:
             start_d = None
     if start_d is not None:
-        offen_d.append((start_d + 1, len(text.split('\n'))))
+        # Dateiende: split('\n') liefert bei abschliessendem Zeilenumbruch ein leeres
+        # letztes Element, das keine Zeile ist. Ohne diesen Abzug meldet D bei einer
+        # Datei mit vier Zeilen "bis Z.5". Gefunden von der Gegenprobe zum Bereichsende
+        # oben — derselbe Off-by-one am anderen Ende, und ich haette ihn ohne die Probe
+        # nicht gesehen, weil der Fall im echten Bestand nicht vorkommt.
+        _letzte = len(_zeilen) - (1 if _zeilen and _zeilen[-1] == '' else 0)
+        offen_d.append((start_d + 1, _letzte))
     ueber_d = len(offen_d) - GRUNDLINIE_D
     print(f'  D  Oeffner ohne Schliesser {len(offen_d)} '
           f'(Grundlinie {GRUNDLINIE_D}, {"+" if ueber_d > 0 else ""}{ueber_d})')
