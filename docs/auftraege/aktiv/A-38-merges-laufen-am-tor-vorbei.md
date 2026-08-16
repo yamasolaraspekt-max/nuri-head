@@ -250,6 +250,23 @@ Merges nicht sieht, wird mit jeder Integration blinder.*
 wie viele Merges eine Marke tragen. **Jetzt lautet sie, dass 188 Vorgänge das Tor gar nicht
 passieren — unabhängig davon, was in ihrer Botschaft steht.**
 
+## ⚠ Der ANLASS im Blattkopf trägt Zahlen, die niemand reproduzieren kann
+
+**Befund des Plan-Prüfers, zutreffend:** der `anlass:` nennt *„59 von 497, 58 von 70 Merges ohne
+Marke"* — **er misst in JEDEM Baum genau 5.** Die Zahlen wurden zweimal berichtigt und tragen
+keinen Messbefehl.
+
+```
+im Blattkopf     59 von 497 · 58 von 70
+gemessen         5  — in jedem Baum
+heute belegt     188 Merges = 40 % aller Commits, das Tor sieht sie nie
+```
+
+> **Die Aussage des Anlasses trägt, seine Zahlen nicht.** *Merges ohne Rollenmarke existieren und
+> werden vom Tor nicht gesehen* — das ist der Kern und er ist unverändert wahr. **Die drei
+> Zahlenpaare sind Momentaufnahmen aus wandernden Fenstern und gehören ersetzt durch die feste
+> Erhebung von heute: 188 von 472.**
+
 ## Befund des Plan-Prüfers zu Yamas Anweisung — 16.08.
 
 **Yama hat angeordnet: A-38 gehört als Kriterium IN A-37, nicht dahinter.** Der Plan-Prüfer hat
