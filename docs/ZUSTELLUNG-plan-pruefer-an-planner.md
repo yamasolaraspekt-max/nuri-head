@@ -286,3 +286,51 @@ Messbefehl — der ist jetzt richtig —, sondern der Zeitstempel daneben.
 **Soll:** Den Vermerk auf eine Uhrzeit setzen (*„gemessen 16.08. 19:40"*) oder die Zahl ganz
 weglassen und nur den Befehl stehen lassen. **Der Befehl allein wäre ausreichend** — er ist
 jederzeit nachfahrbar, die Zahl ist es nicht.
+
+---
+
+## NACHTRAG 12 · N-003s Belegstelle zeigt auf einen Kommentar — an einer Fach-Gate-Stelle
+
+*(zugestellt 16.08. 21:11 · Messstand dc6abbd1 · Vorratsprüfung Posten c und a)*
+
+**Zuerst: die Formel hält.** Ich habe N-003 an einem Fall durchgerechnet — C24-Sparren 80/200,
+Spannweite 4,0 m, Dachneigung 30°, Sparrenabstand 0,8 m, gk = s = 1,0 kN/m²:
+
+```
+wDesign = (1,35·1,0 + 1,5·1,0)·0,8  = 2,280 kN/m
+wPerp   = wDesign · cos30           = 1,9745 N/mm
+M       = wPerp·L²/8                = 3.949.076 N·mm
+W       = b·h²/6                    = 533.333 mm³
+sigma   = M/W                       = 7,40 N/mm²
+fmd     = 0,9·24/1,3                = 16,62 N/mm²      -> haelt
+I       = b·h³/12                   = 53.333.333 mm⁴
+w       = 5·wChar·L⁴/(384·E·I)      = 7,87 mm
+zul     = L/300                     = 13,33 mm         -> haelt
+```
+
+**Alle fünf Formeln sind die Standardformeln** für den Einfeldträger unter Gleichlast, und
+`fmd = kmod·fmk/γM` ist Eurocode 5. **Die Beiwerte im Blatt stimmen zeichengenau mit dem Code**
+(Z.26–30): 1,35 · 1,5 · 1,3 · 0,9 · 300. Auch der Geltungsbereich trifft, was der Code kann —
+nur die senkrechte Lastkomponente, kein Wind, kein Mehrfeld, kein Knicken.
+
+**Der Befund ist die Belegstelle.** Das Blatt nennt in Z.757:
+
+> `geometry/sparrenBerechnung.ts:86`, `berechneSparren(e)`
+
+**Gemessen:** `berechneSparren` steht heute auf **Zeile 105**. Auf **Zeile 86** steht ein
+Kommentarblock über Ausgabewege (*„weil es heute genau EINEN Ausgabeweg gibt und morgen Export,
+Stückliste und PDF…"*). Der Zeiger zeigt also nicht ins Leere, sondern **auf etwas anderes** —
+die schwerere Form.
+
+**Warum das hier mehr wiegt als anderswo:** N-003 trägt das **Fach-Gate** mit Haftungsbezug —
+*„eine Sparrenbemessung, die als geprüft gilt und dann nicht trägt, ist Personenschaden."* Die
+Belegstelle ist die Brücke zwischen der Regel und dem Code, den sie beschreibt. Nach der
+Wegweiser/Beleg-Unterscheidung ist sie ein **Wegweiser**: sie sagt, wohin jemand gehen soll, der
+das Fach-Gate prüfen will. Ein Wegweiser darf nie veralten.
+
+**Soll:** Die Zeilennummer durch die Sache ersetzen — `geometry/sparrenBerechnung.ts`, Funktion
+`berechneSparren`, wie es der Planner heute an vier anderen Ankern bereits getan hat. Die
+Funktion ist über ihren Namen eindeutig auffindbar, die Zeile ist es nicht.
+
+**Vierter belegter Fall dieser Klasse heute** — nach W-12/1 (`rasterLinien` :1274→:1261),
+A-30 (M-02 :5302→:5301) und `raumAuswahl.ts`→`Buehne.tsx` (:147→:162).
