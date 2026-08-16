@@ -138,3 +138,36 @@ Musters, das mich heute sechzehnmal erwischt hat.
 
 **Bilanz jetzt: 18 eigene Fehler.** Sechzehn behoben, Nummer 17 und 18 vor der Meldung gefangen,
 drei aus dem Abschnitt oben weiterhin offen (BEFUND-Felder, P-04-Dublette, `PROBE-TOR.md`).
+
+---
+
+## Nachtrag: Fehler 19 — ich habe den Fehlalarm des Generators exakt reproduziert
+
+*(erhoben 21:05, Messstand be7c3134)*
+
+**Die Inventur des Generators nachgemessen** — neun Fehler in drei Klassen. Zwei seiner Zahlen
+sind am Code prüfbar, beide geprüft:
+
+| Zahl | seine Angabe | meine Messung |
+|---|---|---|
+| `analysiereAuswechslung` Aufrufer außerhalb Tests | **0** bei 11 Zusagen | **0** — die einzige Nennung ist die Definition selbst |
+| `ZimmererFlags` Felder | **13** | **13** |
+
+**Bei der zweiten habe ich zuerst 4 gemessen — genau seinen Fehlalarm.** Mein Regex
+`^\s+([a-zA-Z]\w*)\??:` findet **eine** Flagge je Zeile. Sein Commit sagt den Grund:
+*„mein Zähler meldete ZimmererFlags mit 4 statt 13 Flaggen — er zählte ZEILEN, und dort stehen
+mehrere Flaggen je Zeile."* Mit allen Vorkommen gezählt sind es 13:
+`sparren firstpfette mittelpfette fusspfette kehlbalken stuhlsaeule strebeKopfband zange
+aufschiebling gratsparren kehlsparren schifter wechsel`.
+
+**Gefangen durch: seinen Grund lesen, bevor ich meine Zahl für richtig halte.** Hätte ich die 4
+gemeldet, wäre es ein Fehlbefund gegen ein korrektes Blatt gewesen — mit derselben Ursache, die
+er zwei Zeilen darüber selbst benennt.
+
+**Das ist heute das vierte Mal, dass ich denselben Griff mache wie der Gemessene:**
+bei den A-40-Kanten, bei A-39s Nenner, bei `ballrueckgabe.py` und hier. **Jedes Mal stand die
+Auflösung im Text, den ich schon vor mir hatte.** Seine eigene Lehre trifft es genau:
+*„eine Zahl, die dem widerspricht, was man weiß, ist zuerst ein Verdacht gegen die Messung."*
+
+**Bilanz jetzt: 19 eigene Fehler.** Sechzehn behoben, drei (17, 18, 19) vor der Meldung
+gefangen, drei aus dem Abschnitt oben weiterhin offen.
