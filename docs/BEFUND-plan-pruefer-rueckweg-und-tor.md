@@ -832,3 +832,42 @@ A-42s Nicht-Ziel-Wahl) und findet nichts Drittes.
 **Das ist selbst ein Ergebnis** und wird so gemeldet — nach Yamas Anweisung vom 13.08. läuft die
 Vorratsprüfung, damit ich nicht stehenbleibe; sie garantiert keinen Fund. Ein Posten, der sauber
 durchläuft und nichts findet, ist die Antwort auf die Frage, nicht ihr Ausbleiben.
+
+---
+
+## Die Nullaussage ueber 89 Blaetter geprueft — sie haelt, mit Fangprobe
+
+*(geschrieben 21:17, Messstand 78ac33b9)*
+
+`a2f3918c` (21:15) meldet: alle **89** Blätter geprüft — nicht nur die eigenen sieben —, vier
+Prüfungen je Blatt, **null Funde in den 82 fremden**, ein Fund im eigenen Blatt, behoben,
+Gegenprobe 0/0.
+
+**Die 89 ist meine berichtigte Zahl** aus Zustellung Punkt 7; er hat sie übernommen und den
+Suchraum entsprechend erweitert. Sein Anlass ist bemerkenswert offen: *„Yamas Vorhalt war
+richtig: ich hatte gemeldet, die 82 fremden Blätter nicht angesehen zu haben, und es dabei
+belassen. **Melden ist keine Pflichterfüllung.**"*
+
+**Eine Nullaussage braucht eine Fangprobe** — sonst ist sie von einem ausgefallenen Lauf nicht
+zu unterscheiden. Meinen Gegenfall hatte ich zur Hand: **A-42 trägt seit 20:47 meine Zahl
+„68 von 77" ohne jeden Zeitstempel** (Z.90). Wenn P2 „feste Zahl ohne Standbezug" prüft und über
+alle 89 Blätter läuft, müsste sie anschlagen.
+
+**Sie schlägt korrekt nicht an.** P2s Wortlaut in A-39:
+
+> *„Ein **Kriterium**, das eine Zahl mit einer Bestandsaussage verbindet (‚genau N', ‚Suite N',
+> ‚N Treffer'), muss **im selben Kriterium** einen SHA, einen Zeitstempel oder das Wort
+> ‚Bau-Stand' tragen."*
+
+**P2 prüft Kriterien.** Meine Zahl steht in einem **Befundabschnitt** — sie ist eine Messung, die
+das Blatt zitiert, kein Kriterium, an dem später abgenommen wird. Die Prüfung ist damit **enger
+als mein Nachtrag 13**, und zwar zu Recht: ein Kriterium mit alter Zahl macht die Abnahme
+falsch, ein Befundzitat mit alter Zahl macht sie nur schwerer lesbar.
+
+**Mein Nachtrag 13 bleibt gültig** — aber als eigener Punkt, nicht als P2-Verstoß. Und seine
+Nullaussage hält.
+
+**Fünfter gefangener Fehlbefund heute in derselben Klasse:** Ich hätte gemeldet, P2 habe meine
+Zahl übersehen. Gefangen durch **den Wortlaut der Prüfung lesen, bevor ich ihr Ergebnis
+anzweifle** — dieselbe Bewegung wie bei den A-40-Kanten, A-39s Nenner, `ballrueckgabe.py` und
+den ZimmererFlags.
