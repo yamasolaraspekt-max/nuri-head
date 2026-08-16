@@ -1534,6 +1534,69 @@ MEINE BEFANGENHEIT, offengelegt: |
 ballbesitz: generator  # er kann umziehen; die Insel-Gates laufen im Rollenbaum
 ```
 
+## DER EVALUATOR-BERICHT ZU A-35 — die zwei Posten an Yama, beide bearbeitet (Release-Pruefer, 16.08., in Yamas Namen)
+
+```yaml
+auftrag_von_yama: |
+  "kannst du den bericht von evaluator lesen und erledigen auch die aufgaben was an mich
+  gerichtet ist". Gemessen statt gesucht: der letzte Evaluator-Commit ist 5dd5eaee vom 15.08.
+  12:00, die A-35-Abnahme. Ein neuerer liegt nicht vor, rolle/evaluator traegt 0 eigene
+  Commits. Der Bericht richtet ZWEI Dinge an Yama, und beide stehen unten.
+
+POSTEN 1 — die Verlaengern-Frage, zur HAELFTE vom Bestand beantwortet: |
+  Der Bericht fragt woertlich: "Soll das Werkzeug spaeter auch verlaengern koennen, und bis zu
+  welchem Abstand?" — ausdruecklich als Erweiterung, nicht als Blockade.
+  DIE ERSTE HAELFTE ENTSCHEIDET NIEMAND NEU, sie ist abgelesen: verlaengern steht bereits als
+  EIGENES Werkzeug im Katalog, nicht als Erweiterung von trimmen.
+    toolPresentation.ts:115   toolId verlaengern · zone weitere · ordnung 24 · herkunft katalog
+    toolPresentation.ts:114   toolId trimmen     · ordnung 23 · herkunft REGISTRY (A-35 gebaut)
+    werkzeugLandkarte.ts:111  marke fehlt, Begruendung "Wie trimmen, andere Richtung —
+                              Schnittpunkt rechnen und den Endpunkt dorthin ziehen"
+  Zwei Eintraege mit eigener Ordnungszahl nebeneinander sind zwei Werkzeuge. Die Antwort lautet
+  also: NICHT dieses Werkzeug — ein Nachbarauftrag, der im Katalog schon steht. Registry-Treffer
+  fuer verlaengern heute: 0, also gebaut ist er nicht.
+  DIE ZWEITE HAELFTE BLEIBT BEI YAMA, und sie ist ein Operand — die Zahl, die niemand benannt
+  hat. Ich setze sie nicht. Was ich liefern kann, ist ihre Groessenordnung, gerechnet statt
+  behauptet: zwei 6000-mm-Waende, 3000 mm versetzt, wie weit liegt der Schnittpunkt hinter dem
+  Endpunkt?
+      30 Grad    Schnittpunkt liegt VOR dem Endpunkt (-804 mm) — das ist Trimmen, nicht Verlaengern
+       5 Grad    28 Meter
+       1 Grad    166 Meter
+     0,1 Grad    1,7 Kilometer
+    0,01 Grad    17 Kilometer
+  Bei fast parallelen Waenden waechst der Schnittpunkt ins Unbegrenzte. DARUM ist die Frage
+  real und keine Formalie: ohne Grenze wuerde das Werkzeug eine Wand stillschweigend um
+  Kilometer verlaengern, und das Ergebnis saehe aus wie eine Zahl.
+  MEIN VORSCHLAG, ausdruecklich nur ein Vorschlag: die Grenze nicht als Millimeterzahl setzen,
+  sondern als WINKEL — unterhalb eines Mindestwinkels gibt es keinen sinnvollen Schnittpunkt.
+  Das ist dieselbe Bauart wie A-35s eigene Loesung (dimensionslos statt Epsilon) und braucht
+  keine Bezugsgroesse. Welcher Winkel, bleibt deine Zahl.
+
+POSTEN 2 — die offene Browserabnahme, URSACHE GEFUNDEN und sie liegt bei MIR: |
+  Der Bericht meldet ehrlich: "OFFEN und nicht behauptet: die Browserabnahme — die Buehne
+  ticket_testing ist leer (0 Benutzer, 0 Objekte)." Er hatte sich einen Pruefnutzer angelegt
+  und das offengelegt.
+  HEUTE NACHGEMESSEN in ticket_testing: users 0, hausplaner_documents 0. Sein Nutzer ist weg.
+  WARUM, gemessen: 70 Testdateien nutzen RefreshDatabase. Wer php artisan test faehrt,
+  migriert ticket_testing frisch — jeder Buehnen-Datensatz faellt. UND ICH HABE SIE GEFAHREN,
+  am 15.08. 12:59 im Rahmen der A-35-Freigabe, also nach ihm. Ich habe seine Buehne abgeraeumt,
+  waehrend ich seinen Bau freigab.
+  DAS IST KEIN FEHLER DER SUITE, sondern eine fehlende Absprache: ein Pruefnutzer, der einen
+  Suite-Lauf ueberstehen soll, braucht einen Seeder — der existiert laut Bericht nicht.
+  UND DER SZENEN-TEIL BRAUCHT DIE DATENBANK GAR NICHT: ich hatte schon gemessen, dass
+  ?fixture=u-dach acht Waende aus dem Umriss erzeugt (studioFixtures.ts:15-18 und :33-51),
+  ?fixture=decke-treppe vier. Der Zustand "zwei gewaehlte Waende" ist also ohne jeden
+  Datensatz herstellbar. Was bleibt, ist allein der Login.
+  ERLEDIGT ist damit die URSACHENFRAGE. NICHT erledigt und ausdruecklich nicht von mir getan:
+  einen Seeder bauen — das ist Generator-Arbeit und braucht einen Auftrag.
+
+was_ich_NICHT_entschieden_habe: |
+  Den Verlaengern-Abstand (Operand, CLAUDE.md verlangt Rueckfrage statt stiller Annahme) und
+  ob ein Pruefnutzer-Seeder gebaut wird (Auftrag, gehoert dem Planner).
+
+ballbesitz: yama  # nur noch die eine Zahl bzw. der Mindestwinkel
+```
+
 ## AN DEN PLAN-PRUEFER — der Schreibstopp, den du haeltst, ist seit 17 Stunden aufgehoben (Release-Pruefer, 15.08., in Yamas Namen)
 
 ```yaml
