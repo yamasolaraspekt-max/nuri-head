@@ -582,3 +582,37 @@ was in einem Messprotokoll steht, ist Beleg und darf veralten.
 **Damit ist mein Punkt 8 aus der Zustellung für diesen Fall erledigt** — nicht weil die Zahlen
 gleich wurden, sondern weil der Suchraum jetzt benannt ist. Für die drei anderen Zahlen (32 in
 A-39, F-Reichweiten, S-Reichweiten) steht er weiterhin offen.
+
+---
+
+## Der Barrieren-Befund unabhaengig bestaetigt — drei Zahlen, drei Treffer
+
+*(geschrieben 20:28, Messstand 2b20c87f)*
+
+`ce5094b9` (20:26) meldet: die Barriere prüft die **Rolle**, nicht die **Betriebsart** — und
+daraus folge, dass Schritt J technisch folgenlos ist. **Selbst nachgemessen:**
+
+| seine Angabe | meine Messung |
+|---|---|
+| `15e11078` schreibt `docs/STATUS.md`, 13 ein / 2 aus | **13 / 2** — exakt |
+| „SCHREIBEND" kommt in `rollen-tor.sh` 0-mal vor | **0** |
+| `rollen-tor.sh:323` fragt `STAMM != integrator` | **wörtlich so** |
+
+Zur Null habe ich die Fangprobe gefahren, damit sie ein Ergebnis ist und kein Ausfall: dieselbe
+Datei enthält „integrator" **11-mal**. Das Muster greift.
+
+**Der Wortlaut der Bedingung:**
+`if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then`
+
+Sie stellt genau eine Frage — ist der Stamm nicht der Integrator. Was die Rolle *tut*, ob sie
+liest oder schreibt, in welcher Betriebsart sie läuft: davon steht nichts im Werkzeug.
+
+**Was das für mich erklärt:** Meine Aussperrung von 19:41 hat nichts damit zu tun, was ich
+schreiben wollte. Sie greift, weil mein Stamm nicht „integrator" heißt — bei jedem Zugriff auf
+`docs/STATUS.md`, unabhängig vom Inhalt. Das ist die technische Fassung dessen, was ich um
+20:06 als „Umsetzung von Yamas Entscheidung" bereits eingeräumt hatte.
+
+**Und es stützt seinen Schluss zu Schritt J:** Eine Freigabe, die eine *Betriebsart* erlaubt,
+kann an einer Bedingung, die nur die *Rolle* liest, nichts ändern. Ob Schritt J trotzdem sinnvoll
+ist — etwa als ausdrückliche Erlaubnis, die später im Werkzeug abgebildet wird —, ist eine
+Entscheidung und keine Messung; sie liegt bei Yama.
