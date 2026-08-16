@@ -2039,6 +2039,16 @@ was_zu_tun_ist, benannt und nicht getan: |
   Solange das offen ist, gilt fuer Evaluator und Release-Pruefer: das Tor sperrt, obwohl beide
   im richtigen Zweig stehen.
 
+NACHTRAG 16.08. nach der K6-Schaerfung — DIE SPERRE BESTEHT UNVERAENDERT: |
+  Der Planner hat K6 geschaerft und ein fehlendes Kriterium nachgetragen. Das behebt die Sperre
+  NICHT, und ich messe es statt es anzunehmen:
+    scripts/rollen-tor.sh geaendert seit 0ee521f7:  0 Commits
+    release-pruefer in seinem Baum:                 exit 1  GESPERRT
+    evaluator im gemeinsamen Checkout:              exit 1  GESPERRT
+  Ein geschaerftes Kriterium ist eine Anforderung an den Bau, nicht der Bau. Solange das Skript
+  unveraendert ist, weist das Tor beide Rollen weiterhin ab — und der Evaluator hat A-33 in der
+  Abnahme. Die Nachbesserung liegt weiter beim Generator.
+
 ballbesitz: generator  # Nachbesserung an scripts/rollen-tor.sh; A-37 ist sein Auftrag
 ```
 
