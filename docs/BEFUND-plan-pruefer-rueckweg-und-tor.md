@@ -795,3 +795,40 @@ auftragsspezifisch, es gehört nicht zu den Taktwerkzeugen."*
 das dritte Mal in einer Stunde, dass ein Fehlbefund an derselben Stelle gestorben ist — bei den
 A-40-Kanten, bei A-39s Nenner und hier. **Alle drei Male stand die Antwort im Text, den ich
 schon hatte.**
+
+---
+
+## Vorratspruefung Posten (d) — Alterung, vollstaendig gefahren, kein neuer Befund
+
+*(geschrieben 21:08, Messstand 32b8bcee)*
+
+**Alle sechs offenen Aufträge, Alter und Bewegung seit ihrem Schnitt:**
+
+| Auftrag | Zustand | basis_sha | Alter | Commits seither |
+|---|---|---|---|---|
+| A-37 | CODE_FERTIG | `bc2125d9` | 2812 min (47 h) | 777 |
+| A-38 | ENTWURF | `0f05f8bf` | 2775 min (46 h) | 739 |
+| A-39 | ENTWURF | `99add90f` | 441 min (7 h) | 637 |
+| A-40 | ENTWURF | `99add90f` | 441 min (7 h) | 637 |
+| A-42 | ENTWURF | `e802c1f8` | 222 min (4 h) | 565 |
+| W-21L | DECISION_BLOCKED | `4f0d4584` | 7006 min (117 h) | 1873 |
+
+**Zweiter Teil: nennt ein Blatt eine Datei, die seither geändert wurde?** Ja — alle sechs. Aber
+das ist bei näherem Hinsehen **kein Befund**, und der Grund gehört genannt:
+
+- **Der Löwenanteil ist `docs/STATUS.md`** (202 bis 1120 Commits je Auftrag). Die
+  Statuswahrheit ändert sich naturgemäß im Minutentakt; sie steht in den Blättern als
+  `status_steht_in` oder als **Nicht-Ziel**, nicht als Messgegenstand.
+- **A-37 nennt `scripts/commit-pruefen.sh` mit 10 Commits seither** — das ist genau das
+  Werkzeug, das A-37 baut. Bewegung dort ist der Auftrag selbst.
+- **A-42 nennt `scripts/status-erzeugen.sh` mit 11 Commits** — das ist A-42s **Nicht-Ziel**.
+  Das Nicht-Ziel sagt „A-42 fasst sie nicht an", nicht „sie bewegt sich nicht". Kein Widerspruch.
+- **A-40 nennt genau eine Datei**, `docs/STATUS.md`, und die ist ebenfalls sein Nicht-Ziel. Das
+  bestätigt meinen Befund von 19:00: A-40 hat **null Code-Pfade**.
+
+**Ergebnis: kein neuer Befund.** Die Messung bestätigt zwei frühere (A-40s fehlende Code-Pfade,
+A-42s Nicht-Ziel-Wahl) und findet nichts Drittes.
+
+**Das ist selbst ein Ergebnis** und wird so gemeldet — nach Yamas Anweisung vom 13.08. läuft die
+Vorratsprüfung, damit ich nicht stehenbleibe; sie garantiert keinen Fund. Ein Posten, der sauber
+durchläuft und nichts findet, ist die Antwort auf die Frage, nicht ihr Ausbleiben.
