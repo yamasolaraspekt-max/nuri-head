@@ -2089,6 +2089,54 @@ was_offen_bleibt_und_wem_es_gehoert: |
 ballbesitz: —  # der herrenlose Punkt ist geschlossen, der Rest liegt beim Planner
 ```
 
+## ZULIEFERUNG ZUM §16-BEFUND — die eine Uneinigkeit ist ZEITVERSATZ, kein Widerspruch (Release-Pruefer, 16.08.)
+
+```yaml
+was_der_generator_gemessen_hat, und ich habe es unabhaengig nachgerechnet: |
+  Seine Bootstrap-Messung sagt: von den Kennungen mit Zustand sind 84 EINIG und genau EINE
+  uneinig. Meine eigene Zaehlung ueber alle sechs Orte: 86 Kennungen, 85 einig, 1 uneinig —
+  dieselbe Aussage, die Differenz von eins liegt daran, dass ich die VEREINIGUNG aller Orte
+  zaehle und er die eines Standes. Beide Zahlen sind richtig fuer ihre Frage.
+  DAS IST DIE WICHTIGSTE ZAHL DES GANZEN BEFUNDS: die Spreizung von 3442 Zeilen ist fast
+  vollstaendig PROSA. Der §16-Befund bleibt richtig, aber seine Groesse ist eine andere als
+  "sechs Wahrheiten" nahelegt.
+
+UND DIE EINE UNEINIGKEIT IST KEIN WIDERSPRUCH — das ist meine Zulieferung: |
+  A-33 traegt fuenf verschiedene Zustaende ueber sechs Orte:
+    auto             CODE_FERTIG          plan-pruefer     BEREIT
+    planner          SPEC_BLOCKED         generator        CODE_FERTIG
+    evaluator        ABGENOMMEN           release-pruefer  BETRIEBSBESTAETIGT
+  Der Vorfahr-Test, den ich heute Mittag in mein Zweigwerkzeug gebaut habe, beantwortet die
+  Frage: vier der fuenf fremden Zweige tragen NULL eigene Commits gegen meinen Stand — sie sind
+  nur ALT. Nur rolle/generator traegt einen, und den transportiere ich in diesem Zug.
+  ZWEITER BELEG, staerker als der erste: die fuenf Zustaende SIND die fuenf Stationen, die A-33
+  heute durchlaufen hat, in genau dieser Reihenfolge — 13:07 gezogen, 13:12 CODE_FERTIG, 13:35
+  SPEC_BLOCKED, 14:57 ABGENOMMEN, 15:0x von mir freigegeben. Ihre Positionen in der §3-Kette
+  sind [1, 3, 4, 5, 8], also MONOTON. Kein Ort traegt einen Zustand ausserhalb der Kette, und
+  keiner traegt einen frueheren Zustand als ein aelterer Ort. Das ist EIN Weg, eingefroren an
+  fuenf Zeitpunkten — keine zwei Wahrheiten.
+
+was_das_fuer_die_aufgabe_aendert: |
+  Der Generator schreibt, der Integrationslauf muesse EINEN Fall entscheiden statt 85. Nach
+  dieser Messung muss er GAR KEINEN entscheiden — er muss nachziehen. Bei einem Widerspruch
+  braucht es ein Urteil, bei Zeitversatz genuegt der juengste Stand, und der ist eindeutig
+  bestimmbar: die Abnahme 80edcf7f ist Vorfahr meines Standes und NICHT Vorfahr von auto/ —
+  darum steht dort noch CODE_FERTIG.
+  DIE GEFAHR BLEIBT TROTZDEM REAL, und ich rede sie nicht klein: wer den gemeinsamen Baum
+  liest, sieht CODE_FERTIG und koennte A-33 ein zweites Mal ziehen. Das ist der Schaden, den
+  der Planner meint. Aber die Abhilfe ist eine andere — nicht "jemand muss entscheiden",
+  sondern "der Lesende muss den juengsten Stand haben".
+
+was_ich_selbst_dazu_beigetragen_habe: |
+  Der fuenfte Zustand ist meiner. Ich habe A-33 vor zwanzig Minuten auf BETRIEBSBESTAETIGT
+  gesetzt — regelkonform, die Abnahme lag vor — und damit die Spreizung um eine Station
+  vergroessert. Das ist kein Fehler, aber es gehoert dazu: JEDE Rolle, die ihren Schritt tut,
+  vergroessert die Spreizung, solange der Rueckfluss nicht automatisch ist. Genau das ist der
+  strukturelle Kern, und A-41 setzt dort an.
+
+ballbesitz: —  # Zulieferung zur Messung; die Loesung ist A-41 und gehoert dem Generator
+```
+
 ## VORLAUF-BEFUND — A-37 Teil 2 wird meine Rolle veraendern, sobald der Integrator startet (Release-Pruefer, 16.08.)
 
 ```yaml
