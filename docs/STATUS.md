@@ -23524,3 +23524,47 @@ die_ironie_und_sie_ist_der_kern: |
   diesem Blatt tatsaechlich stehen.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-5 haelt — mein Befund ist behoben, und die Umstellung war nachweislich noetig: die Zahl hat sich bewegt"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:35 CEST"
+mess_stand: "Blatt 1ca66c0d (161 Z., 9 Kriterien) · FORMELSAMMLUNG aus rolle/planner, 1151 Zeilen · Planner-Kopf ccf856f9"
+vorratspruefung_e_mein_befund_ist_behoben: |
+  Ich hatte gemeldet, A-40-5 verlange "21 Ampeln" als feste Zahl, ohne Regel fuer den
+  Erstzustand. Heute lautet das Kriterium: "Jede Definitionsstelle traegt eine Ampel.
+  Messbar — DER ZAEHLBEFEHL STEHT HIER, DER WERT NICHT", gefolgt vom grep-Ausdruck.
+  Das ist die richtige Loesung, und sie ist mehr als eine Formsache.
+und_die_umstellung_war_nachweislich_noetig: |
+  Ich habe den Zaehlbefehl gefahren, statt ihn zu lesen:
+  Definitionsstellen gesamt ..... 32
+  davon OHNE Ampel .............. 23
+  Mein urspruenglicher Befund nannte 21. Heute sind es 23. Die Zahl hat sich also
+  tatsaechlich bewegt, waehrend niemand an den Ampeln gearbeitet hat — sie waechst mit
+  jeder neuen Formel. Eine feste 21 im Kriterium waere heute falsch, und der Pruefer haette
+  ROT gemeldet, ohne zu wissen warum.
+  Das ist P6 in einer dritten Ausprägung: nicht ein wanderndes Zeitfenster, nicht eine
+  Ereignis-Referenz, sondern ein Zaehlwert, der durch normale Arbeit waechst.
+was_ich_geprueft_und_VERWORFEN_habe: |
+  Beim Nachzaehlen fiel mir auf: die Datei nennt 48 verschiedene F-/N-/S-Nummern, aber nur
+  32 haben eine Definitionsstelle. Das sah nach einer Luecke aus — 16 Nummern, die der
+  Zaehlbefehl gar nicht sieht.
+  NACHGESEHEN STATT GEMELDET, und es sind 18, nicht 16: F-052 kommt nur in einem
+  Erklaerungssatz vor ("Warum ein eigenes Praefix und nicht F-052"), die S-Nummern stehen
+  als SPANNEN in einer Uebersichtszeile ("S-001…S-006 Sonnenstand (rechnen)"). Keine davon
+  ist eine Definitionsstelle in dieser Datei; die S-Reihe gehoert zum Solar-Regelwerk.
+  Kein Befund. Haette ich die Differenz gemeldet, waere es die vierte Fehlmeldung heute
+  gewesen, die auf einer Zahl beruht, deren Bedeutung ich nicht geprueft habe.
+eine_beobachtung_ohne_befundcharakter: |
+  Der Zaehlbefehl hat drei Alternativen — Ueberschrift, Tabellenzeile, Listenzeile.
+  Einzeln gemessen: Ueberschrift 32, Tabellenzeile 0, Listenzeile 0.
+  Zwei Drittel des Musters treffen heute nichts. Das ist KEIN Fehler, sondern Vorsorge
+  fuer Definitionsstellen in anderer Form. Ich nenne es nur, damit niemand die 32 fuer
+  eine Bestaetigung aller drei Formen haelt — geprueft ist heute genau eine.
+stand_der_A_40_dor: |
+  Geprueft und haltend: A-40-5.
+  Offen: A-40-1 bis -4, -6 bis -9 und die sechs Kanten.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
