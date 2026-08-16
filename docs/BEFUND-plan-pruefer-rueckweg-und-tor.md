@@ -4312,3 +4312,88 @@ kürzer, eindeutig und überlebt jeden Einschub. *Nur der Grund, den er darunter
 stimmt nicht.*
 
 **Ball beim Planner.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 69 — W-27/1 durchgerechnet: die tragende Zusage hält, und das Wort „ALLE" ist wörtlich wahr
+
+**Stand:** HEAD `365b6434`, Baum 0 Einträge, kein Push. **Vorratsprüfung Posten (c) — Formeln
+durchrechnen**, am achten unberührten Blatt: **W-27/1 Bau Dachkantentypen**, `BETRIEBSBESTAETIGT`.
+
+**Nicht abgeschrieben, sondern gefahren:** `dachTopologie.ts` mit esbuild übersetzt und aufgerufen.
+Zweite Fassung mit `isCCW = istGegenUhrzeigersinn(points)` → `isCCW = true` (Ersetzung belegt: 1
+Treffer, 0 Rest), um die Fangprobe M1 selbst nachzustellen.
+
+### Die tragende Zusage — L-Grundriss, sechs Ecken, eine einspringend
+
+```
+ECHT (Schritt 0 vorhanden)
+  CCW   0,0:a/g@90  10,0:a/g@90  10,6:a/g@90  6,6:i/k@270  6,10:a/g@90  0,10:a/g@90
+  CW    0,10:a/g@90  6,10:a/g@90  6,6:i/k@270  10,6:a/g@90  10,0:a/g@90  0,0:a/g@90
+                                                  -> je PUNKT verglichen: 6/6 GLEICH
+
+OHNE Schritt 0 (isCCW fest true)
+  CCW   identisch zu echt
+  CW    0,10:i/k  6,10:i/k  6,6:a/g  10,6:i/k  10,0:i/k  0,0:i/k
+                                                  -> 0/6 gleich, ALLE SECHS gekippt
+```
+
+**Das Blatt schreibt: *„klassifiziert … ALLE Ecken falsch herum, und zwar LEISE"*. Beide Wörter
+sind wörtlich wahr — nicht rhetorisch.** *ALLE:* 6 von 6, und am konvexen Rechteck 4 von 4 — die
+Kippung hängt nicht an der Form. *LEISE:* aus fünf Graten und einer Kehle werden fünf Kehlen und
+ein Grat. **Kein Fehler, kein NaN, kein ungültiger Wert — ein vollkommen plausibles Dach, nur das
+falsche.**
+
+### Die drei übrigen Aussagen, je selbst erzeugt
+
+```
+prevIsTraufe im weiteren Sinn   TRAUFE -> grat · WALM -> grat · TEILWALM -> grat
+                                GIEBEL -> neutral · PULT_WAND -> neutral        TRIFFT
+vier Ausgaenge erreichbar       grat · kehle · ortgang · neutral  (4 von 4)
+                                undefined dabei? false                          TRIFFT
+Grenzfall exakt 180 Grad        CCW und CW je 180.0/aussen, beide Richtungen     STABIL
+```
+
+### Die fünf Zeiger des Evaluator-Belegs, zeilengenau nachgeschlagen
+
+```
+:100  '**Schritt 0 — der Umlaufsinn.**'                              TRIFFT
+:106  function istGegenUhrzeigersinn(...)                            TRIFFT
+:133  '// Schritt 1 — Eckenwinkel.'                                  TRIFFT
+:151  '// Schritt 2 — Eckenart.'                                     TRIFFT
+:154  '// Schritt 3 — Verbindungsart.'                               TRIFFT
+```
+
+**Fünf von fünf, ohne Versatz** — und das an einem Blatt, dessen Nachbarn heute Nacht bei genau
+dieser Prüfung gewandert sind (§68).
+
+### Eine Beobachtung, die AUSDRÜCKLICH kein Fund ist
+
+Der Kopfkommentar von `analyzeTopology` zählt `:118` **„1. Umlaufsinn"**, während die Marke im
+Rumpf `:133` **„Schritt 1 — Eckenwinkel"** heißt. **Fünfzehn Zeilen auseinander meint „1" zweimal
+etwas anderes** — die H-9-Klasse.
+
+**Warum ich es trotzdem nicht als Fund melde, gemessen und nicht gefühlt:** die vier maßgeblichen
+Marken sind widerspruchsfrei von **0 bis 3** durchnummeriert (`:100`, `:133`, `:151`, `:154`), die
+`1.` bei `:118` steht innerhalb einer eigenen Aufzählung („Vier Schritte, in dieser Reihenfolge")
+und ist keine Verweisform, und **die Wirkung ist null**. *Ich schreibe es auf, weil ich es gemessen
+habe — nicht, weil es trägt.* **Eine Beobachtung als Fund zu verkaufen wäre derselbe Fehler wie
+einen Fund wegzuerklären, nur in die andere Richtung.**
+
+### Das dritte fehlerfreie Blatt — und jetzt ist das Muster benennbar
+
+```
+W-08/1   nennt seinen gefaehrlichsten Grenzfall im TITEL
+W-11/1   nennt die SUMME neben den Einzelzahlen
+W-27/1   nennt seine eigene Widerlegung — und verlangt, dass sie FAELLT
+```
+
+W-27/1 schreibt es aus: *„Jede Fangprobe muss WIRKSAM sein: sie wird gefahren und muss FALLEN.
+Eine Probe, die grün bleibt, prüft nichts."* **Alle drei fehlerfreien Blätter bauen ihre eigene
+Widerlegung ein** — der eine als Grenzfall, der zweite als Gegenrechnung, der dritte als
+Fangprobe mit Fallpflicht. **Die Blätter, die heute Nacht Fehler hatten, taten das nicht.**
+
+*Das ist kein Fund und keine Regel, die ich setzen könnte — es ist eine Beobachtung an drei von
+acht geprüften Blättern, und sie gehört dem Planner.*
+
+**Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
