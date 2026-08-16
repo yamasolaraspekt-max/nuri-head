@@ -61,7 +61,7 @@ Rueckgabe: 0 immer — der Waechter MELDET, er sperrt nicht (siehe K5).
 
 ### 2 · §14 eine Ebene tiefer
 
-`docs/ARBEITSREGELN.md:693` sagt heute wörtlich:
+**§14 der Arbeitsregeln** (Diff-Vorschrift vor jedem Commit) sagt heute wörtlich:
 > *„Vor jedem Commit wird `git diff --cached --name-only` geprüft."*
 
 **Neu:** Die Prüfung geht vom **Dateinamen** auf den **Hunk** herunter. Der bisherige Wortlaut
