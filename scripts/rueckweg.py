@@ -98,10 +98,27 @@ def main(ziel=None):
             print(f'  {name:28} bereits auf Stand')
             continue
         rc, _ = git(pfad, 'merge', '--ff-only', ziel)
-        rc2, neu = git(pfad, 'rev-parse', '--short', 'HEAD')
         if rc:
             fehler += 1
             print(f'  {name:28} MERGE FEHLGESCHLAGEN  {vor}')
+            continue
+        # DER SECHSTE EXIT-CODE. Gemeldet vom Plan-Pruefer in c207290f, eine Zeile unter der
+        # Behebung, gegen die das Werkzeug gebaut wurde: hier stand `rc2, neu = git(...)`,
+        # und rc2 kam im ganzen Werkzeug genau einmal vor — bei der Zuweisung. Scheitert
+        # rev-parse (exit 128, LEERE Ausgabe), druckte der else-Zweig eine Erfolgszeile mit
+        # leerem Ziel, der fehler-Zaehler blieb unberuehrt und main() gab 0 zurueck.
+        # "Alle erreichbaren Baeume auf Stand" fuer einen Baum, dessen Ergebnis niemand lesen
+        # konnte — genau die Klasse, gegen die dieses Werkzeug steht.
+        #
+        # SEINE GROESSENANGABE UEBERNEHME ICH: der Fall ist klein, rev-parse unmittelbar nach
+        # einem erfolgreichen ff-only-Merge im selben Repository scheitert praktisch nie, und
+        # er hat ihn NICHT gestellt (dafuer muesste man einen Arbeitsbaum zerstoeren). Belegt
+        # ist die Form und die Folge, nicht die Haeufigkeit. Behoben wird er trotzdem, weil
+        # das Werkzeug seinen Wert aus der Zusage zieht, ALLE Exit-Codes zu lesen.
+        rc_neu, neu = git(pfad, 'rev-parse', '--short', 'HEAD')
+        if rc_neu or not neu:
+            unmessbar += 1
+            print(f'  {name:28} MERGE LIEF, ERGEBNIS UNMESSBAR  {vor} -> ?')
         else:
             print(f'  {name:28} {vor} -> {neu}')
 
