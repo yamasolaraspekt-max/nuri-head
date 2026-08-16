@@ -49,8 +49,13 @@
 # ```text
 #   package.json:47   "puppeteer": "^24.39.1"
 #   .npmrc            existiert NICHT
-#   PUPPETEER_SKIP_DOWNLOAD im ganzen Repo:   0 Treffer   (16.08. gemessen)
+#   PUPPETEER_SKIP_DOWNLOAD im ganzen Repo:   0 Treffer   (16.08. VOR diesem Absatz gemessen)
 # ```
+#
+# ***⚠ Diese Null hat sich durch ihr eigenes Aufschreiben widerlegt:*** *seit dieser Absatz hier
+# steht, findet dieselbe Suche EINEN Treffer — diese Datei.* **Eine Messung, die in denselben
+# Bestand geschrieben wird, den sie misst, gilt nur bis zum Schreiben.** *Deshalb steht jetzt
+# „VOR diesem Absatz" daneben; die Zahl ohne diesen Zusatz war falsch, sobald sie gespeichert war.*
 #
 # **`npm ci` zieht ueber puppeteer einen Chrome nach und ist genau daran schon einmal
 # ausgestiegen.** Die Umgehung war `PUPPETEER_SKIP_DOWNLOAD=1` — *und dieses Wissen lag danach in
