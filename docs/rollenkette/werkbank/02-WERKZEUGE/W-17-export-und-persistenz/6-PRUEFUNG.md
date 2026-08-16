@@ -20,7 +20,43 @@ snapshotFlaecheEhrlich.test.ts 10 Zusagen   die Snapshot-Naht (AUF-55), 110 Z.
 ```text
 tests/Feature/Hausplaner/HausplanerSpeichernNutzlastTest.php   268 Z., 15 Zusagen
 tests/Feature/Hausplaner/SnapshotRueckwegVersionTest.php       169 Z.,  4 Zusagen
+tests/Feature/PlanUploadTest.php                               255 Z., 12 Zusagen
 ```
+
+### ⚠ Den dritten hatte ich beim ersten Lesen NICHT gefunden — und er ist der breiteste
+
+**Er liegt nicht unter `tests/Feature/Hausplaner/`, sondern eine Ebene höher.** *Meine erste
+Suche ging über das Verzeichnis der Insel-Server-Tests und fand deshalb zwei statt drei* — **H-8
+in der Suchvorschrift: der Ort war das Kriterium, nicht die Sache.**
+
+**Seine zwölf Zusagen decken vier Gruppen, und keine davon ist Geometrie:**
+
+| Gruppe | Zusagen | was sie hält |
+|---|---|---|
+| **Dateisignatur** | 4 | umbenannte Datei abgelehnt **und liegt nicht auf der Platte** · echte PDF-Signatur angenommen · Bild mit PDF-Endung abgelehnt · `dwg`/`dxf` **haben keine verlässliche Signatur** und werden über die Endung angenommen |
+| **Rechte am Projekt** | 4 | mit `hausplaner update` darf zuweisen · ohne nicht · Upload **ohne** Projektbezug bleibt möglich · unbekanntes Projekt abgelehnt |
+| **Maßstab** | 2 | wird gespeichert **und nur vom Besitzer** · `0` oder kleiner wird abgelehnt |
+| **Robustheit** | 2 | ohne konfigurierten Import-Dienst bleibt die Klassifikation *graceful* · unbekannter Dateityp wird als Fehler klassifiziert **ohne Absturz** |
+
+> ***Die erste Zeile ist die wertvollste und die, die eine Insel-Zusage niemals leisten kann:***
+> *„abgelehnt UND liegt nicht auf der Platte".* **Eine Ablehnung, die die Datei trotzdem
+> hinterlässt, ist keine Ablehnung** — *und das ist auf dem Server prüfbar und im Browser nicht.*
+>
+> ***Und die vierte Zeile der ersten Gruppe ist eine ehrliche Grenze im Wächter selbst:*** *`dwg`
+> und `dxf` werden über die ENDUNG angenommen, weil sie keine verlässliche Signatur haben.* **Der
+> Test hält damit fest, wo die Prüfung schwächer ist, statt sie stärker aussehen zu lassen.**
+
+> **Der Maßstab zeigt die Grenze dieses Werkzeugs besonders scharf — und ich habe sie beim
+> Schreiben zuerst falsch gezogen.** *Mein erster Satz hier lautete, die Maßstabsrechnung stehe in
+> `3-FORMELN` als `F-054`.* **Nachgesehen, bevor es committet wurde: `3-FORMELN` nennt gar keine
+> F-Nummer, und `F-054` heißt in der Formelsammlung (`:1082`) „Maßstab aus einer Referenzstrecke
+> (**Grundriss unterlegen**)" — das ist W-16.**
+>
+> ***Und genau darin liegt die richtige Aussage:*** *die zwei Zusagen hier halten nicht die
+> RECHNUNG fest, sondern ihre SPEICHERUNG* — **„wird gespeichert und nur vom Besitzer" und „`0`
+> oder kleiner wird abgelehnt".** *W-17 transportiert einen Wert, dessen Berechnung einem anderen
+> Werkzeug gehört; der Server prüft dabei Plausibilität und Zugriffsrecht.* **Das ist die saubere
+> Trennung und nicht die Lücke, für die ich sie zuerst gehalten habe.**
 
 **Gemessen, warum:**
 
