@@ -190,3 +190,85 @@ Zweiter Beleg, dass der Balldetektor trägt — er findet fremde Bälle, die wir
 | Fehlversuche innerhalb der Behebung, vor dem Commit verworfen | **1** (E4, erste Fassung) |
 | Fremdbefunde gemeldet, nicht angefasst | **1** (`a26-ball-drift.sh:53`) |
 | Fehler in den Voten selbst | **0** von 71 |
+
+---
+
+# NACHTRAG 21:5x — E7 und E8, gefunden beim nächsten Takt
+
+## E7 · Ich habe „0 Drift" gemeldet und nur den Zustand gemessen — BEHOBEN
+
+**Das ist die Fehlerklasse aus Punkt 6 des Takts, an mir selbst:** meine Ausgabe hieß `Drift`,
+verglich aber ausschließlich das Feld `zustand`. Der **Ballbesitz** — genau das, wonach ich in
+jedem Takt suche — wurde nie verglichen.
+
+**Wirkung, gemessen:** `A-37` trägt in der Tafelzeile 88 **`Plan-Prüfer`** und im Datensatz
+**`integrator`**. Meine letzten Taktmeldungen sagten trotzdem „0 Drift". Der Plan-Prüfer hatte
+die Abweichung um 20:20 selbst gemeldet (`d4fad8bb`, *„A-37s Ballbesitz steht an zwei Orten
+verschieden"*); ich bestätige sie hier unabhängig — und mein Werkzeug hätte sie finden müssen.
+
+**Behebung:** Zustand-Drift und Ball-Drift werden getrennt gezählt und getrennt benannt. Die
+Normalisierung ist **wortgleich** aus `a26-ball-drift.sh:121` übernommen (Kleinschreibung,
+Umlaute, `–`/`—` = kein Ball) — zwei Prüfungen desselben Feldes mit zwei Schreibweisenregeln
+wären eine zweite Wahrheit.
+
+**Beleg in beide Richtungen:**
+
+```
+ROT Ball-Drift   A-38  Tafel-Ball künstlich auf generator (Datensatz 'plan-pruefer')  → gemeldet
+GEG Schreibweise A-37  Backticks statt Sternchen, dieselbe Rolle                      → schweigt
+```
+
+Die Gegenprobe steht dort, weil eine Barriere, die bei jeder Schreibweise warnt, nach A-03 in
+drei Tagen weggeklickt ist.
+
+**Eigener Konstruktionsfehler in dieser Behebung, offengelegt:** die Rot-Probe zielte zuerst auf
+`A-16`. Dessen Datensatz trägt `ballbesitz: —`, und die Regel verlangt zu Recht auf **beiden**
+Seiten einen Ball — die Probe meldete deshalb nur die echte A-37-Drift und **sah aus, als
+schlüge sie an**. Ziel auf eine Kennung mit Ball an beiden Orten umgestellt (A-38).
+
+## E8 · Elf W-Aufträge waren dauerhaft driftungeprüft — BEHOBEN
+
+Der Altbestand führt denselben Vorgang unter zwei Schreibweisen: Tafel `W-01`, Datensatz
+`W-01/1`. Ohne Paarung fallen **elf** Kennungen aus jedem Vergleich — und es sind dieselben
+W-Aufträge, die mein Kennungsmuster schon zweimal übersehen hat.
+
+**Behebung, bewusst eng:** gepaart wird nur, wenn die Tafelkennung selbst keinen Datensatz hat
+**und genau ein** Kandidat `<kennung>/…` existiert. **Vergleichbar: 76 → 85.**
+
+**Was NICHT gepaart wird, und warum das richtig ist:** `W-05` und `W-21` haben je zwei Kandidaten
+(`/1` und `/2`). Die Regel rät nicht. **Mein erstes Prüfkriterium war hier falsch** — ich erwartete
+„alle 87 vergleichbar" und meldete die korrekte Zurückhaltung des Werkzeugs als rot. Kriterium
+berichtigt: die Paarung muss *wirken* und jede ungepaarte Kennung einen *nachweisbaren* Grund
+haben. Die vier Datensätze hinter W-05 und W-21 habe ich stattdessen **von Hand** geprüft — alle
+`BETRIEBSBESTAETIGT`, Ball `—`, Tafel identisch, **keine Drift**.
+
+Gegenprobe zur Paarung: einer Kennung künstlich einen zweiten Kandidaten geben → sie bleibt
+ungepaart statt geraten.
+
+## Was KEIN Befund war — `a26-ball-drift.sh` ist entlastet
+
+Zwischenzeitlich sah es so aus, als übersähe das Tor-Werkzeug die A-37-Ball-Drift: es lief mit
+`exit=0` und schwieg. **Ursache gemessen, nicht vermutet:** `a26-ball-drift.sh:51-54` bildet die
+zu prüfenden Kennungen aus dem **Diff**. Bei sauberem Arbeitsbaum ist der leer, `KENNUNGEN` ist
+leer, und Zeile 55 steigt mit `exit 0` aus. Es ist eine **Barriere für den anstehenden Commit**,
+kein Bestandsprüfer — genau so gebaut und genau so richtig. A-37s Drift ist committet, liegt also
+nicht im Diff.
+
+**Der Befund gegen a26 wäre falsch gewesen und wird nicht erhoben.** Der andere von 20:5x (zu
+enges Kennungsmuster auf Z.53) bleibt davon unberührt bestehen.
+
+**Was daraus systemisch folgt und nicht mir gehört:** die Ball-Drift im **Bestand** hat keinen
+Prüfer. a26 sieht nur den Commit, der gerade entsteht. Mein Werkzeug sieht sie jetzt, aber es
+läuft nur, wenn ich es fahre. **Ball beim Planner.**
+
+## Zählung nach dem Nachtrag
+
+| | |
+|---|---|
+| eigene Fehler insgesamt behoben | **6** (E1–E4, E7, E8) |
+| durch Messung widerlegt | **1** (E5) |
+| gemeldet, nicht in meiner Rolle behebbar | **2** (E6 §6-Test-DB · Ball-Drift im Bestand ohne Prüfer) |
+| Fehlversuche in den Behebungen, vor dem Commit berichtigt | **3** (E4-Regel, E7-Rot-Probe, E8-Kriterium) |
+| Fremdbefunde: erhoben | **1** (`a26:53` Kennungsmuster) |
+| Fremdbefunde: geprüft und **fallengelassen** | **1** (a26 schweigt zu Recht) |
+| offene Ball-Drift im Bestand | **1** — A-37, unabhängig bestätigt |
