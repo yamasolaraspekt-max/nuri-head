@@ -21464,3 +21464,126 @@ NACHTRAG_A_37a_x: |
       Sonst steht spaeter ein erledigt gemeldeter Merge-Schutz da, der die Haelfte deckt.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "die_lehre_aus_a33_7_gilt_fuer_den_a37_schnitt_der_noch_bevorsteht"
+titel: "A-33-7 war nach dem Umschnitt unerfuellbar — und A-37 steht vor genau demselben Schnitt, mit 16 Kriterien statt sieben"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:39"
+stand_kopf: 5644ab75
+posten: "Pflichtteil 3 · SPEC_BLOCKED nachmessen und klassifizieren"
+ZUERST EINE RICHTIGSTELLUNG AN MIR: |
+  Ich habe um 13:20 gemeldet, der Evaluator sei seit 25 Stunden still und A-33 warte auf
+  eine Station, die es womoeglich nicht gibt. Das war zum Zeitpunkt richtig gemessen und
+  war VIER MINUTEN spaeter ueberholt:
+    5f37d8e4  13:24:45  evaluator: "A-33 geclaimt — Abnahme Runde 1 beginnt, gemessen wird
+                        der Bau 3e22e61b am COMMIT"
+    75c471cf  13:35:12  evaluator: "A-33 SPEC_BLOCKED — sechs von sieben Kriterien gruen"
+  Meine Frage an Yama ("laeuft der Evaluator?") ist damit beantwortet: ja. Sie soll nicht
+  als offener Posten stehenbleiben.
+DER SPEC_BLOCKED, nachgemessen und klassifiziert: |
+  Der Evaluator meldet A-33-7 als unerfuellbar: das Kriterium verlangt woertlich "der
+  Bau-Commit fasst NUR docs/STATUS.md an, scripts/ null Mal", waehrend der Kopf art:
+  desselben Blattes seit Yamas Umschnitt genau ein Skript unter scripts/ verlangt.
+  Seine Messung an 3e22e61b: docs/STATUS.md 0 · scripts/ 1 · resources/ 0 · app/ 0.
+  Ich habe dieselbe Messung heute 13:14 unabhaengig gefahren und bin auf dieselben vier
+  Zahlen gekommen (Block a9834290). Sie halten.
+  KLASSIFIZIERUNG: SPEC_BLOCKED ist richtig gewaehlt. Es ist kein Baufehler — der Generator
+  konnte das Kriterium nur erfuellen, indem er Yamas Anweisung bricht. Und es ist kein
+  ENV_BLOCKED: nichts an der Umgebung fehlt, der Widerspruch steht im Blatt selbst.
+  Der Planner hat es in 5db5f8a9 behoben und den eigenen Anteil benannt: "ICH HABE BEIM
+  UMSCHNITT A-33-1 NEUGEFASST UND A-33-7 STEHEN LASSEN."
+DIE LEHRE, DIE ER DARAUS ZIEHT, IST DIE WICHTIGE: |
+  "Ein Umschnitt ist nicht fertig, wenn EIN Kriterium neu ist — er ist fertig, wenn ALLE
+  Kriterien gegen den neuen Liefergegenstand gelesen wurden."
+  UND GENAU DAS STEHT BEI A-37 BEVOR. Yamas Schnitt in A-37a/b/c ist noch nicht in Blaetter
+  umgesetzt (gemessen: 0 Blaetter mit A-37a/b/c im Planner-Zweig 5db5f8a9). Es sind 16
+  Kriterien statt sieben, und der Liefergegenstand aendert sich fuer jedes der drei Stuecke.
+  DIE KANDIDATEN, an denen es bei A-37 genauso zuschlagen wuerde:
+    A-37-10  "kein Nicht-Ziel beruehrt: git show --stat nennt keine Datei unter resources/,
+             app/ und NICHT docs/STATUS.md" — das ist WORTGLEICH die Klasse von A-33-7.
+             Nach dem Schnitt gibt es DREI Bau-Commits; das Kriterium muss fuer jeden
+             einzeln gelten und in jedem Blatt stehen, sonst misst es einen fremden Bau.
+    A-37-11  "Suite gruen und Zahl unveraendert GEGEN DEN BAU-STAND" — dasselbe: drei
+             Bau-Staende, drei Messungen.
+    A-37-5   traegt exit 3, waehrend die Tabelle 5 vergibt (mein offener Restpunkt) — nach
+             dem Schnitt liegt das Kriterium in A-37a und die Tabelle womoeglich anderswo.
+  Das sind keine neuen Befunde. Es ist die Liste, die man beim Schneiden abarbeiten muss,
+  damit A-37 nicht dasselbe passiert wie A-33 — und sie kostet weniger Zeit als ein
+  zweiter SPEC_BLOCKED.
+was_ich_dem_evaluator_anrechne: |
+  Er hat einen eigenen Beinahe-Fehler offengelegt, statt ihn zu verschweigen: A-33-5 lag
+  als P1 fertig-rot vor, weil a26 nach dem Lauf 31 Zeilen und exit 1 meldete. Dann hat er
+  die Aussage des Generators GEPRUEFT statt sie zu glauben oder zu verwerfen — im
+  Pruefstand committet meldet a26 0 und exit 0, weil es git diff HEAD liest und auf
+  uncommitteten Aenderungen arbeitet. Sein Befund haette einen Zwischenzustand gemeldet,
+  den E1 nicht misst. Das ist dieselbe Sorgfalt, die ich mir selbst abverlange, und sie
+  hat hier eine falsche Rot-Meldung verhindert.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "a37_teil1_gebaut_die_codes_stimmen_an_drei_stellen_nicht_ueberein"
+titel: "rollen-tor.sh ist gebaut — es vergibt 1 und 2, das Kriterium verlangt 3, die Tabelle 5, und die Einhaengung wirft alles auf 2"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:41"
+stand_kopf: d2f724e5
+gemessen_an: "0ee521f7 — generator: A-37 Teil 1 gebaut, auf Yamas Anweisung"
+posten: "Pflichtteil 3 · ein Bau an einem Auftrag im Zustand ENTWURF, gemessen am COMMIT (E1)"
+was_gebaut_wurde: |
+  0ee521f7, 13:38:23, zwei Dateien:
+    scripts/rollen-tor.sh       119 Zeilen, neu
+    scripts/commit-pruefen.sh   +14 Zeilen, der Einhaengepunkt
+  Der Bau ist sorgfaeltig: die Kanten K1 (Instanznummer wird abgeschnitten), K2 (die
+  Zuordnung steht als Tabelle da und wird NICHT aus dem Rollennamen gerechnet) und K4 (kein
+  Repo ist KEIN Rollenfehler) sind einzeln behandelt und im Code kommentiert. Es gibt einen
+  --pruefe-Modus, der meldet statt zu sperren. Und die Entscheidung zu sperren ist begruendet:
+  "jene melden ueber den INHALT, wo ein Fehlalarm teuer und ein Durchlassen billig ist. Hier
+  ist es umgekehrt." Daran habe ich nichts auszusetzen.
+DER FUND · DREI STELLEN, DREI ZUORDNUNGEN: |
+  (1) IM GEBAUTEN TOR, am Commit gemessen:
+        TICKET_ROLLE nicht gesetzt   -> exit 1   (Z.65)
+        kein Git-Repository (K4)     -> exit 2   (Z.77)
+        unbekannte Rolle             -> exit 1   (Z.94)
+        Rolle/Baum passen nicht      -> exit 1   (Z.119)
+  (2) IM KRITERIUM A-37-5, unveraendert seit gestern:
+        "TICKET_ROLLE leer -> exit 3"
+  (3) IN DER TABELLE desselben Blattes:
+        5 = Rollenkennung fehlt beim direkten Aufruf des Tors
+  Drei Stellen, drei verschiedene Zahlen fuer denselben Fall. Der Generator musste waehlen
+  und hat eine dritte Variante genommen — genau das, was der Planner heute selbst benannt
+  hat: "Ein Blatt, das sich an zwei Stellen selbst widerspricht, laesst den Bauenden waehlen."
+  MEIN RESTPUNKT VON 13:26 IST DAMIT EINGETRETEN, nicht mehr nur vorhergesagt.
+UND EIN ZWEITER, DER ERST DURCH DIE EINHAENGUNG ENTSTEHT: |
+  commit-pruefen.sh ruft das Tor so:
+      if ! TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh; then
+        echo "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle." >&2
+        exit 2
+      fi
+  Der Rueckgabewert des Tors wird NICHT durchgereicht. Jeder Torfehler — ob 1 oder 2, ob
+  falscher Baum oder unbekannte Rolle — wird beim Aufrufer zu exit 2.
+  Und exit 2 ist in commit-pruefen.sh bereits zweifach belegt, selbst nachgesehen:
+      zu wenig Argumente          -> exit 2
+      TICKET_ROLLE fehlt oder leer -> exit 2
+  Damit ist an der Einhaengestelle genau die Unterscheidbarkeit wieder eingeebnet, die
+  A-37 Teil 3 hergestellt hat und die die neue Tabelle regeln soll. Wer den Rueckgabewert
+  von commit-pruefen.sh liest, kann "falscher Baum" nicht von "Aufruf falsch" und nicht von
+  "Rollenmarke fehlt" unterscheiden.
+  Die Meldung auf stderr ist eindeutig — der CODE ist es nicht. Und A-37s eigene Begruendung
+  fuer die Codes lautet, "damit die Quelle am Code ablesbar ist".
+was_ich_NICHT_sage: |
+  NICHT, dass der Bau falsch ist. Er ist auf Yamas Anweisung entstanden, die Kanten sind
+  behandelt, und die interne Logik ist sauber. Zwei der drei Zahlen im Blatt waren beim
+  Bauen schon widerspruechlich — das ist mein offener Restpunkt, nicht seiner.
+  NICHT, dass zurueckgebaut werden muss. Es sind zwei Zeilen: eine Zahl im Kriterium und
+  ein durchgereichter Rueckgabewert.
+bitte: |
+  An den Planner: A-37-5 auf die Tabelle ziehen (exit 5), bevor die Abnahme misst. Sonst
+  faellt ein korrekter Bau an einem Kriterium, das er nicht erfuellen KANN, ohne die Tabelle
+  zu verletzen — dieselbe Lage wie A-33-7 heute Mittag, zwei Stunden spaeter.
+  An den Generator, als Vorschlag und nicht als Forderung: den Rueckgabewert des Tors
+  durchreichen statt ihn auf 2 zu setzen. Eine Zeile:
+      bash scripts/rollen-tor.sh || exit $?
+  Dann bleibt die Quelle am Code ablesbar, so wie A-37 es begruendet.
+ballbesitz: planner
+```
