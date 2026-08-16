@@ -1522,9 +1522,20 @@ keine zweite Wahrheit.*
 
 ### Zwei Verzeichnisse, von denen eines tot ist
 
-**`ticket-rolle-release` ist NICHT der Baum des Release-Prüfers.** Es ist der leere, abgelöste
-Rest aus P2H-09 — **detached HEAD, `ls-files` 0**. **Der lebende Baum heißt
-`ticket-release-pruefung`.**
+**`ticket-rolle-release` ist NICHT der Baum des Release-Prüfers.** Es ist ein **abgelöster
+Checkout auf detached HEAD** aus P2H-09. **Der lebende Baum heißt `ticket-release-pruefung`.**
+
+**⚠ BERICHTIGUNG einer Zahl, die hier falsch stand.** Bis 17:3x hieß es *„der LEERE Rest,
+`ls-files` 0"*. **Gemessen vom Plan-Prüfer (`74e13595`), dreifach: `ls-files` 7460,
+`ls-tree HEAD` 7460, Dateisystem 35 Einträge. Der Baum ist nicht leer, sondern ein
+vollständiger Checkout.** Meine Null stammte aus `ls-files scripts/rollen-tor.sh` — **ich habe
+die Messung EINER Datei zur Aussage über den ganzen Baum verallgemeinert.**
+
+**Und seine Begründung ist die bessere:** *Die Frage vor einer Löschung ist nicht, ob er leer
+ist, sondern ob etwas verloren geht.* Gemessen: **0 uncommittete Pfade**, und sein SHA
+`4630d658` ist **Vorfahr von `rolle/release-pruefer` UND von `auto/hausplaner-integration`.
+**Gefahrlos entfernbar — nicht weil leer, sondern weil nichts verloren geht.** *(Die Löschung
+selbst bleibt Yamas Entscheidung.)*
 
 > **Wer die sechs Bäume misst und nach dem Namensmuster `ticket-rolle-*` sucht, greift den toten
 > und hält seine Nullen für einen Befund.** Genau das ist am 16.08. passiert: die Erhebung zu
