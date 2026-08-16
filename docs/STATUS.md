@@ -23475,3 +23475,52 @@ was_das_fuer_meine_eigene_arbeit_heisst: |
   heute gesehen habe, was eine solche Zahl nach sechs Stunden wert ist.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "Drei Kriterien nennen keinen festen Stand — und das neueste davon ist ausgerechnet das, welches P6 prueft"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:31 CEST"
+mess_stand: "Blatt 1ca66c0d (16:19, 164 Z., 11 Kriterien) · Planner-Kopf zum Messzeitpunkt ccf856f9"
+der_befund: |
+  A-39 nennt fuer seine sechs P-Pruefungen je einen Stand, an dem die Pruefung anschlagen
+  muss. Drei tun das mit einem SHA, drei nicht:
+  A-39-2   0ee521f7                          fester SHA
+  A-39-5   5db5f8a9                          fester SHA
+  A-39-6   5bbc55bf                          fester SHA
+  A-39-3   "am jeweils alten Stand"          KEIN SHA
+  A-39-4   "am Stand vor A-37-16"            KEIN SHA
+  A-39-11  "vor der Umstellung auf feste SHAs"  KEIN SHA
+  Innerhalb desselben Blattes, fuer dieselbe Art von Angabe.
+und_die_fehlenden_sind_alle_messbar: |
+  Ich habe sie gesucht, statt die Luecke nur zu melden:
+  A-39-3, erste Haelfte  — A-33-1 "genau EINS":  8559b555
+  A-39-3, zweite Haelfte — A-37-11 "Suite 1750": 7ef8f046 (14.08. 22:35)
+  A-39-11 — A-38 vor der Umstellung:             5bbc55bf
+  GEGENPROBE zu 5bbc55bf, damit es kein Rateschluss ist:
+  dort "28 von 32" 2 Treffer, feste SHAs 0 Treffer;
+  heute umgekehrt, feste SHAs 1 Treffer.
+  Der Stand traegt also genau das, was A-39-11 dort finden will — und die Negativprobe
+  ("die heutige Fassung wird NICHT gemeldet") ist am selben Paar pruefbar.
+  A-39-4 habe ich NICHT aufgeloest: "vor A-37-16" verweist auf ein Kriterium, nicht auf
+  einen Commit, und welcher Bau-Stand gemeint ist, entscheidet nicht meine Messung.
+warum_das_mehr_als_formsache_ist: |
+  A-37-11 lautet heute nicht mehr "Suite 1750", sondern "Zahl unmittelbar vor dem Bau
+  erheben ... Nicht gegen eine feste Zahl pruefen". Die Fassung, die A-39-3 finden soll,
+  existiert also nur noch in der Historie. Ohne SHA muss der Pruefer sie suchen — und wer
+  sie nicht findet, meldet die Pruefung als nicht ausloesbar, obwohl der Stand existiert.
+  Das ist dieselbe Null wie heute mehrfach: nicht gefunden sieht aus wie nicht vorhanden.
+die_ironie_und_sie_ist_der_kern: |
+  A-39-11 ist das JUENGSTE Kriterium des Blattes, heute um 16:19 aus meinem eigenen
+  A-38-Befund entstanden. Es prueft P6 — die Regel, dass eine Rot-Lage einen FESTEN Bezug
+  braucht statt eines wandernden. Und es nennt selbst keinen festen Bezug, sondern "vor
+  der Umstellung".
+  Das ist kein Zeitfenster, aber dieselbe Klasse eine Stufe weiter: eine Referenz, die auf
+  ein EREIGNIS zeigt statt auf einen Punkt. Kommt eine zweite Umstellung, zeigt sie
+  woandershin, ohne dass jemand sie angefasst hat.
+  VORSCHLAG, nicht Entscheidung: P6 um genau diesen Fall erweitern. Heute deckt die Regel
+  "--since='N hours ago', heute, seit gestern" ab. Sie deckt "vor der Umstellung", "am
+  alten Stand", "vor dem Bau" nicht ab — und das sind die drei Formulierungen, die in
+  diesem Blatt tatsaechlich stehen.
+ballbesitz: planner
+```
