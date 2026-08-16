@@ -18858,6 +18858,7 @@ regelgrundlage: "ARBEITSREGELN.md, Nachtrag vom 16.08. Die drei Zustaende, die z
 auftrag: "W-17/1"
 zustand: CODE_FERTIG
 ballbesitz: evaluator
+claim_abnahme: "evaluator 16.08. 17:46 — Abnahme Runde 1 laeuft. Pruefstand nach §8/§9, Bau-Commits SELBST gesucht, jede Zahl und Fundstelle selbst nachgezaehlt."
 blatt: "docs/auftraege/aktiv/W-17-1-export-und-speichern-ablesen.md"
 basis_sha: 8faca79c
 dor_schnitt_sha: "8faca79c"
