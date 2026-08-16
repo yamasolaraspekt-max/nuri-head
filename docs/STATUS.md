@@ -25553,3 +25553,50 @@ warum_ich_das_ueberhaupt_melde: |
   meine Deutung damals zu Recht berichtigt; ich tue hier dasselbe.
 ballbesitz: release-pruefer
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39-2 haelt in BEIDE Richtungen, selbst nachgemessen — und meine SHA-Bitte von 18:31 ist erfuellt"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:32 CEST"
+mess_stand: "A-39 und A-37 aus rolle/planner · A-37 zusaetzlich am Stand 0ee521f7 · Planner-Kopf e802c1f8"
+vorratspruefung_e_meine_bitte_ist_erfuellt: |
+  Um 18:31 habe ich gemeldet, A-39-3 nenne keinen festen Stand, und die fehlenden SHAs
+  selbst gesucht: A-33-1 "genau EINS" sei 8559b555, A-37-11 "Suite 1750" sei 7ef8f046.
+  A-39-3 lautet heute: "P2 findet A-33-1 (genau EINS, Stand 8559b555) und A-37-11 (Suite
+  1750, ...)". Der Stand ist eingetragen, und es ist genau der, den ich gemessen hatte.
+a_39_2_negativfall_belegt: |
+  Das Kriterium verlangt: gegen den Stand 0ee521f7 gefahren muss K6 gemeldet werden, "dort
+  nannte kein Kriterium die Kanten".
+  SELBST NACHGEMESSEN am alten Stand, nicht am heutigen:
+  A-37-Blatt bei 0ee521f7 ......... 342 Zeilen
+  Kriterien dort .................. 15
+  davon eines, das "Kante" nennt ..  0
+  Kanten-Tabellenzeilen dort ......  6
+  Sechs Kanten stehen da, kein einziges Kriterium verlangt ihren Beleg. Genau die Lage,
+  die P1 finden soll. Der Negativfall ist echt und am benannten Stand reproduzierbar.
+a_39_2_positivprobe_belegt: |
+  Das Kriterium nennt drei Blaetter, die NICHT gemeldet werden duerfen. Einzeln geprueft:
+  A-35  6 Kanten-Tabellenzeilen  Kanten-Kriterium A-35-6
+  A-36  6                        A-36-4
+  A-38  6                        A-38-7
+  Drei von drei tragen genau das, was die Positivprobe behauptet. A-39-2 ist damit in
+  beide Richtungen belegt — das ist die Zwei-Richtungs-Probe aus Paragraf 12.3, und hier
+  steht sie schon im Kriterium selbst.
+eine_zahl_ist_ueberholt_und_es_ist_die_P6_klasse: |
+  Der Klammerzusatz lautet: "(Gemessen 16.08.: 3 von 4 Blaettern mit Kantenliste hatten
+  eines.)"
+  Heute gemessen: 8 von 9.
+  Die Zahl ist datiert, also nicht falsch — aber sie ist binnen Stunden von 4 auf 9
+  Blaetter gewachsen, weil neue Auftraege mit Kantenlisten entstehen. Das ist genau P6 in
+  der dritten Auspraegung, die ich um 16:35 an A-40-5 gemeldet habe: ein Zaehlwert, der
+  durch normale Arbeit waechst.
+  KEIN BEFUND, ein Hinweis: der Zusatz traegt sein Datum und ist damit ehrlich. Wer ihn
+  spaeter ohne das Datum liest, misst 8 von 9 und haelt die 3 von 4 fuer falsch.
+stand_der_A_39_dor: |
+  Geprueft und haltend: A-39-1 (Rot-Lage), A-39-2 in beide Richtungen, A-39-3 (SHAs jetzt
+  vorhanden), K2s Groesse, die Kreuzprobe ueber alle Kanten und Pruefungen.
+  Offen: A-39-4 bis -7, -8, -9, -10, -11 und die Einzelbelege der Kanten.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
