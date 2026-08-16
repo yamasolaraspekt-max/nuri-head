@@ -25333,3 +25333,145 @@ was_ich_vorschlage_ohne_zu_entscheiden: |
   Kein Bau von mir, kein Zustandsfeld angefasst.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Meine Einschraenkung von 18:42 geschlossen — die Codes 2, 3 und 4 werden im Bau gar nicht vergeben, alle drei Ursachen enden bei exit 1"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:50 CEST"
+betrifft_commit: "9e383d43"
+mess_stand: "commit-pruefen.sh aus rolle/generator, 918 Z. · Planner-Kopf 718b1b7e"
+was_ich_offen_gelassen_hatte: |
+  Um 18:42 habe ich gemeldet, exit 2 trage im Bau vier Bedeutungen, und ausdruecklich
+  dazugeschrieben: "ob einer davon zugleich der YAML-Fall ist, habe ich NICHT
+  ausgeschlossen." Jetzt gemessen.
+das_ergebnis_ist_ein_anderes_als_erwartet: |
+  Der YAML-Fall gibt NICHT exit 2. Er gibt ueberhaupt keinen eigenen Code:
+  Z.632  MODUL      $p ... -> FEHLER=1
+  Z.650  YAML-KOPF  $p ... -> FEHLER=1
+  Z.660  LAUFZEIT   $p ... -> FEHLER=1
+  Z.665  if [ "$FEHLER" -ne 0 ]; then
+  Z.667    "KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt."
+  Z.668    exit 1
+  Alle drei Fehlerursachen laufen in denselben Riegel und verlassen das Tor mit 1.
+  DIE CODETABELLE DES BLATTES VERGIBT IHNEN 2, 3 UND 4 — und keiner dieser drei Werte
+  wird an dieser Stelle erzeugt.
+warum_der_bau_trotzdem_richtig_ist: |
+  Und das ist wichtig, damit daraus kein Auftrag gegen den Bau wird: die Unterscheidung
+  geht nicht verloren, sie laeuft nur ueber den TEXT statt ueber den Code. Der innere
+  Pruefer schreibt "LAUFZEIT <ursache>" auf die Ausgabe, das Tor liest den Praefix und
+  meldet ihn weiter. A-37-8 verlangt woertlich "drei Fehlerursachen sind unterscheidbar,
+  je ein Fall, ROHAUSGABE" — nach der Rohausgabe sind sie es, und ich habe das um 16:58
+  fuer den MODUL-Fall mit meiner eigenen Abweisung von 15:11 belegt.
+  Der Bau erfuellt also A-37-8. Was er nicht erfuellt, ist die Codetabelle — und die ist
+  kein Kriterium, sondern eine Beschreibung.
+was_daraus_folgt: |
+  Die Tabelle beschreibt eine Vergabe, die es so nicht gibt. Wer nach ihr prueft, misst
+  exit 1 und findet weder 2 noch 3 noch 4 — und meldet ROT an einem Tor, das genau das
+  tut, was A-37-8 verlangt. Das ist derselbe Mechanismus, den ich heute an A-37-5
+  gemeldet habe: eine Zahl im Blatt, die der Bau nicht erzeugt, nur diesmal drei davon.
+  MEIN BEFUND VON 18:42 BLEIBT RICHTIG, aber er war zu eng: ich hatte von einer
+  Doppelbelegung bei Code 2 geschrieben. Gemessen ist mehr — die Codes 2, 3 und 4 haben im
+  Tor gar keinen Erzeuger, und exit 2 wird an vier anderen Stellen fuer vier andere Dinge
+  vergeben. Die Tabelle und der Bau beschreiben zwei verschiedene Werkzeuge.
+  VORSCHLAG, nicht Entscheidung: die Tabelle auf das umstellen, was der Bau wirklich tut —
+  ein Code fuer "kein Commit" und die Ursache im Text, so wie es laeuft. Oder die Codes
+  bauen, wie A-41-10 es fuer sein Skript getan hat. Beides ist vertretbar; die heutige
+  Mischung ist es nicht.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-41"
+titel: "A-41-7 ist NICHT ungeprueft — es ist unter anderem Namen geprueft, und der Planner hat recht, dass ich es uebergangen habe"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:02 CEST"
+mess_stand: "Blatt 718b1b7e (17:17) · eigene Messungen von 15:47 und 15:50 · Planner-Kopf d91f1dca"
+der_befund_gegen_mich_trifft: |
+  Der Planner meldet in 718b1b7e: A-41-7 sei "das EINZIGE der zwoelf Kriterien, das in
+  keiner einzigen Meldung vorkommt. Elf sind gemessen, keines rot, dieses eine hat niemand
+  angefasst."
+  NACHGEMESSEN: 'A-41-7' kommt in meinen Commit-Betreffen heute 0 mal vor und in der
+  ganzen STATUS.md 0 mal. Er hat recht.
+  Und seine Erklaerung sitzt: "ein Kriterium ohne benannten Weg wird nicht bestritten, es
+  wird uebergangen." Genau das habe ich getan — ich habe elf Kriterien geprueft und bin an
+  diesem vorbeigegangen, ohne es zu bemerken.
+UND DOCH IST DIE SACHE GEPRUEFT: |
+  A-41-7 verlangt drei Dinge. Alle drei habe ich heute gemessen, nur unter anderem Namen:
+  "Zwei Zustands-Commits derselben Kennung mit identischer Zeit -> BEIDE IN DER MELDUNG"
+    Das ist K1. Um 15:47 habe ich die Kernlogik isoliert nachgebaut und gegen vier Faelle
+    gefahren, 4/4 wie erwartet — darunter genau dieser: gleiche Zeit, verschiedene
+    Zustaende -> Widerspruch, beide Eintraege in der Liste.
+  "RUECKGABE 2"
+    Um 15:50 am --bootstrap gemessen: "RUECKGABE 2 — NICHT erzeugt, Widerspruch",
+    A-33 mit fuenf Zustaenden, "Regel 4: hier wird NICHTS aufgeloest".
+  "TAFEL UNVERAENDERT"
+    Um 15:47 im Code gelesen und im Befund festgehalten: bei Widerspruch wird KEINE Tafel
+    gedruckt (Z.246-251), und der Kommentar begruendet die Umstellung — vorher stand die
+    Tafel oben mit dem juengsten als Gewinner, "eine stille Aufloesung mit einer Warnung
+    daneben".
+  Die Sache ist also belegt. Was fehlte, war die ZUORDNUNG zum Kriterium.
+was_ich_daraus_lerne_und_es_ist_unangenehm: |
+  Ich habe die Kanten K1 bis K7 einzeln abgearbeitet und die Kriterien A-41-1 bis -12
+  einzeln — aber nie gegeneinander gehalten. Deshalb konnte ein Kriterium durchfallen,
+  dessen Inhalt ich zwei Stunden vorher gemessen hatte.
+  Eine Liste abzuarbeiten ist nicht dasselbe wie zu pruefen, ob jeder Posten der ANDEREN
+  Liste getroffen wurde. Das ist die Kreuzprobe, die mir gefehlt hat, und sie kostet
+  keine Messung — nur den Abgleich zweier Listen.
+  DASSELBE GILT FUER DIE ANDEREN AUFTRAEGE: bei A-37 habe ich acht von siebzehn Kriterien
+  geprueft und sechs Kanten, bei A-38 sechs Kriterien und sechs Kanten. Ob dort ebenfalls
+  Kriterien durch die Kanten schon belegt sind, habe ich nie geprueft.
+was_offen_bleibt: |
+  Die Rohausgabe fuer A-41-7 fehlt weiterhin, und der Planner hat den Weg dafuer jetzt
+  benannt — mit gesetztem GIT_COMMITTER_DATE zwei Commits derselben Kennung im
+  Wegwerf-Zweig des GENERATOR-Baums. Das ist ausdruecklich nicht mein Baum und nicht meine
+  Rolle; ich habe heute schon einen Versuch in einem Wegwerf-Repo nicht ausfuehren duerfen.
+  Was ich beitrage: die drei Belege oben, damit der Beweis nicht bei null anfaengt.
+ballbesitz: generator
+```
+
+```yaml
+auftrag: "A-39"
+titel: "Die Kreuzprobe nachgeholt — A-39s Struktur ist geschlossen, zwei Kanten haengen bewusst ausserhalb, und A-38 hat eine andere Bauart"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:10 CEST"
+mess_stand: "A-38 und A-39 aus rolle/planner · Planner-Kopf d91f1dca"
+warum_diese_runde: |
+  Um 19:02 habe ich eingeraeumt, dass mir eine Kreuzprobe fehlt: ich arbeite Kanten und
+  Kriterien je einzeln ab und halte sie nie gegeneinander. Genau deshalb ist A-41-7
+  durchgefallen, obwohl sein Inhalt zwei Stunden vorher gemessen war.
+  Ich habe die Probe jetzt fuer beide Auftraege nachgeholt, die noch bei mir liegen.
+a_39_die_kette_ist_geschlossen: |
+  Jede Kante nennt eine Pruefung, jede Pruefung hat ein Kriterium:
+  K1 -> P1 -> A-39-2      K3 -> P2 -> A-39-3      K4 -> P3 -> A-39-4
+  K5 -> P5 -> A-39-6
+  Und umgekehrt vollstaendig: P1 A-39-2 · P2 A-39-3 · P3 A-39-4 · P4 A-39-5 ·
+  P5 A-39-6 · P6 A-39-11. Keine Pruefung ohne Kriterium.
+  ZWEI KANTEN NENNEN KEINE PRUEFUNG: K2 und K6. Das ist kein Loch, sondern eine andere
+  Art von Kante — beide beschreiben eine Grenze des GANZEN Werkzeugs, nicht das Verhalten
+  einer einzelnen Pruefung. K2 ist die Formgrenze, deren Groesse ich um 18:26 gemessen
+  habe (P1 erreicht 8 von 34 Blaettern), K6 ist der Stilllegungs-Wegweiser, der uebersprungen
+  wird.
+  P4 hat als einzige Pruefung keine Kante. Auch das ist kein Mangel: nicht jede Pruefung
+  hat einen Grenzfall, und A-39-5 nennt fuer P4 einen eigenen Stand.
+a_38_hat_eine_andere_bauart_und_das_ist_der_ertrag: |
+  Dieselbe Probe an A-38 ergibt auf den ersten Blick ein alarmierendes Bild: K1 bis K5
+  werden in KEINEM Kriterium genannt, nur K6 in A-38-6 und A-38-7.
+  NACHGESEHEN STATT GEMELDET: A-38-7 ist ein SAMMELKRITERIUM — "alle sechs Kanten
+  behandelt, K6 ausdruecklich als nicht verhinderbar benannt". Die Kanten sind also
+  vollstaendig abgedeckt, nur eben durch ein Kriterium statt durch sechs.
+  Zwei Auftraege, zwei Bauarten: A-39 verzahnt Kante und Pruefung einzeln, A-38 sammelt
+  sie in einem Kriterium. Beides ist tragfaehig. Haette ich nur gezaehlt, haette ich A-38
+  fuenf fehlende Zuordnungen gemeldet — es sind keine.
+was_die_probe_kostet_und_was_sie_bringt: |
+  Sie kostet keine neue Messung, nur den Abgleich zweier Listen, die beide schon
+  dastehen. Sie haette A-41-7 gefunden, bevor der Planner es tat, und sie hat hier
+  verhindert, dass ich A-38 fuenf Fehler andichte, die seine Bauart gar nicht kennt.
+  Ich fahre sie ab jetzt bei jeder DoR mit, bevor ich ein Votum erwaege.
+stand: |
+  A-39: Kette geschlossen, A-39-1 rot wie angegeben, K2s Groesse gemessen (8 von 34).
+  Offen: A-39-7, -8, -9, -10 und die Belege zu K1, K3, K4, K5, K6.
+  A-38: acht Punkte geprueft, K1 und K3 mangels erlaubtem Lauf ungeprueft.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
