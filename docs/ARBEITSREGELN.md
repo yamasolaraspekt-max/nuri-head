@@ -1269,3 +1269,33 @@ Infrastrukturhandlung legt die Rollen-Worktrees an.** Der Integrator führt **vo
 unabhängig geprüften Barriere **keine Git-Verwaltungsänderung** aus; `BOOTSTRAP` bleibt nur als
 dokumentierter Notfallweg bestehen und ist **nicht freigegeben**. **Die bloße Dokumentation einer
 Betriebsart ist keine Erlaubnis, sie zu benutzen.**
+
+---
+
+## NACHTRAG · Zwei Haltbarkeiten einer Messung *(Yamas Entscheidung vom 16.08.2026)*
+
+**Jede Messung gehört einer von zwei Klassen an, und sie werden verschieden behandelt.**
+
+| Klasse | Gegenstand | Beleg | Haltbarkeit |
+|---|---|---|---|
+| **UNVERÄNDERLICH** | Repo-Historie · Commits · Blattinhalte **an einem SHA** | **der SHA** | **für immer** — der Stand kann nicht wandern |
+| **FLÜCHTIG** | Arbeitsbäume · installierte Module · laufende Prozesse · alles außerhalb der Versionierung | **der Zeitstempel** | **ab dem Zeitstempel, und sie läuft ab** |
+
+> **Eine flüchtige Messung wird NUR MIT Zeitstempel notiert.** Ohne ihn ist sie eine Behauptung
+> über die Gegenwart, **die morgen als Behauptung über heute gelesen wird.**
+
+**Der Anlass, wörtlich belegt:** Am 15.08. hat der Planner in ein Auftragsblatt geschrieben, **kein
+Rollenbaum** habe `node_modules` — richtig gemessen um **15:30:37**. Um **15:30:51** installierte
+der Release-Prüfer seines, um **15:36:54** der Generator. **Der Befund hielt vierzehn Sekunden.**
+
+**Kein Messfehler auf einer der beiden Seiten.** Der Plan-Prüfer, der es fand, hat es selbst so
+eingeordnet: *„Der Planner hat richtig gemessen, die Umgebung ist unter dem Satz weggewandert — und
+die überholte Quelle bin ich."*
+
+**Was daraus folgt und was nicht:**
+
+- **Nicht:** langsamer messen, oder flüchtige Messungen meiden. Beides ginge nicht.
+- **Sondern:** den Zeitstempel mitschreiben — **dann ist die spätere Abweichung kein Widerspruch,
+  sondern eine Beobachtung über die Zeit.** Zwei Blätter sechs Minuten später in die andere
+  Richtung zu ziehen, sieht nach Schwanken aus und ist das Gegenteil: **viermal dieselbe Regel
+  angewandt — gegen den Bestand messen, nicht gegen die Erinnerung.**

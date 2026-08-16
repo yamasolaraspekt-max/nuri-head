@@ -309,6 +309,74 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-11 | **Der Merge `c1b3a774` hat kein Integrationsprotokoll** — Herkunft je Commit, Konflikte, nicht Integriertes: alles ungeschrieben | **OFFEN** |
 | P2H-12 | **Rückfluss — GELÖST in der Praxis, ungelöst in der Regel.** Rückstau **0** auf allen fünf Zweigen; der Weg heißt faktisch **R2**, ist aber **nicht festgelegt** | **NACHBESSERN** |
 | P2H-13 | **⚠ Der Plan-Prüfer ist seit 27 Stunden still** — A-37 und A-38 warten auf seine DoR | **BLOCKIERT** |
+| P2H-14 | **Eine Rollenmarke sagt nicht, WELCHE INSTANZ geschrieben hat** — Vertretungen tragen die fremde Marke | **UMGESETZT_UNGEPRUEFT** |
+| P2H-15 | **`node_modules`-Nicht-Ziel ERSETZT** *(Yama §1, 16.08.)* — je Baum ein eigenes, aus **diesem** Lockfile erzeugt; kein Prüfergebnis darf vom Baum abhängen | **UMGESETZT_UNGEPRUEFT** |
+| P2H-16 | **Lockfile-Prüfung im Rollen-Tor** — Yamas **Bedingung** für die Entscheidung; ohne sie ist der eigene Modulbaum Disziplin statt Mechanik | **OFFEN** — `A-37-12..14` |
+| P2H-17 | **Zwei Haltbarkeiten einer Messung** — flüchtig trägt Zeitstempel, unveränderlich trägt SHA *(Nachtrag in `ARBEITSREGELN.md`)* | **UMGESETZT_UNGEPRUEFT** |
+
+**P2H-15 — die Entscheidung hing an zwei Wörtern, und das ist der eigentliche Fund.** Yamas
+Bedingung stand im A-37-Blatt als *„Kein `node_modules` je Worktree, kein Symlink, keine Modulkopie
+**ins Repo**"*. **In meinem Bericht fehlte `ins Repo`** — und genau daran hängt die Reichweite:
+bezieht sich die Präpositionalphrase auf alle drei Glieder, verletzen git-ignorierte Kopien nichts;
+bezieht sie sich nur auf das letzte, steht *„kein `node_modules` je Worktree"* unbedingt da.
+
+**Yama hat die engere Lesart entschieden** — *„weil eine Bedingung, die zwei Lesarten trägt, im
+Zweifel die engere hat: die weite hätte ich mir sonst nachträglich zurechtgelegt."*
+
+**Er ordnet es als H-9 auf der Regelebene ein, vierter Fall dieser Woche:** `selectionIds` ↔
+`selectedNodeIds` · „Giebel" an Dach und Wand · „Orientierung" als Modullage und Himmelsrichtung ·
+**und jetzt eine Bedingung, deren Geltungsbereich beim Weitertragen abfiel.** *„Nicht der Inhalt
+driftet, der Geltungsbereich driftet."*
+
+**Der tragende Grund für die Entscheidung ist nicht der Preis** — 2,0 GB sind **2,6 %** des freien
+Platzes, *„zu klein, um überhaupt in der Abwägung vorzukommen"*. Sondern: **ein geteiltes
+`node_modules` wäre eine zweite Wahrheit.** Jeder Rollen-Branch trägt sein eigenes
+`package-lock.json`; ändert einer eine Abhängigkeit, ist ein geteiltes Modulverzeichnis für
+höchstens einen Baum richtig — **und der Lauf schlägt nicht fehl, er ist grün und misst den
+falschen Stand.**
+
+**P2H-16 ist die Bedingung, nicht die Kür.** Yamas Satz: *„Ohne diese Prüfung bin ich gegen (a).
+Mit ihr bin ich dafür."* **Rot-Beleg selbst gemessen:** `package-lock` **0**, `npm ci` **0**,
+`hash-object` **0** Treffer unter `scripts/`. **Die Drift ist heute unbewacht.**
+
+**Und beim Bauen der Prüfung sind zwei naheliegende Wege gemessen und verworfen worden:** der
+`mtime`-Vergleich *(`git checkout` setzt sie neu — Fehlalarm bei jedem Branchwechsel)* und der Hash
+von `node_modules/.package-lock.json` *(404 gegen 466 Pakete — eine andere Datei)*. **Die Marke muss
+beim Installieren geschrieben werden; npm liefert sie nicht.**
+
+**P2H-14 — gefunden an vier Fehlalarmen meines eigenen Weckers, alle am selben Tag.**
+
+**Zwölf Commits im Bestand tragen eine Vertretung in der Marke, transparent geschrieben:**
+
+```
+evaluator         (Zweitinstanz)
+generator         (vom Planner GESICHERT, nicht abgenommen)
+plan-pruefer      (release-pruefer in Rollenwechsel)
+release-pruefer   (in Yamas Namen)
+release-pruefer   (zweite Instanz)
+yama-entscheidung (in Vertretung eingetragen)
+```
+
+**Jede Messung, die nur den Namen liest, hält die Vertretung für die Rolle selbst.** Konkret: mein
+Wecker meldete `rolle/plan-pruefer` als **umgezogen**, weil dort zwei Commits mit `plan-pruefer`
+beginnen — beide sind *„plan-pruefer (release-pruefer in Rollenwechsel)"*, beide stehen auch im
+gemeinsamen Baum, und **der Plan-Prüfer selbst hat seit 28 Stunden nichts geschrieben.**
+
+**Die Regel, die daraus folgt und die für jedes Werkzeug gilt, das Rollen zählt:**
+
+> **Eine Rollenmarke ist nur dann eine Instanzaussage, wenn der Doppelpunkt unmittelbar folgt.**
+> `<rolle>:` oder `<rolle>-<ziffer>:` ist die Rolle selbst. **`<rolle> (…)` ist eine Vertretung**
+> und zählt nicht als Arbeit dieser Rolle. Gemessen: das Muster mit Doppelpunkt trennt sauber —
+> plan-pruefer 290 → 288, release-pruefer 179 → 176, planner 391 → 384.
+
+**Und die zweite Falle desselben Weckers, weil sie dieselbe Familie ist:** „Commits über der Basis"
+zählt auch einen **reinen Nachzieh-Merge**. `rolle/generator` trug 108 Commits und **null** eigene.
+**Richtig misst nur `--first-parent`** — ein Commit, den die Rolle *dort* gesetzt hat, statt ihn von
+woanders zu holen.
+
+**Vier Wecker an einem Tag, vier Muster, die etwas anderes maßen als die Sache:** Textmuster statt
+Ballbesitz · Tafelzeile statt yaml-Feld · Merge statt Umzug · Vertretung statt Rolle. **Dieselbe
+Familie wie H-9, nur an meinem eigenen Werkzeug statt an einem fremden Blatt.**
 
 **⇒ NACHTRAG 15.08. 13:23 — mein Befund von 12:08 ist überholt, und das gehört an den Anfang.**
 Der Release-Prüfer hat geantwortet (`5ee0bd47`) und **er hat recht**. Zwischen meiner Messung und
@@ -906,13 +974,13 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 
 | Status | Anzahl |
 |---|---|
-| `OFFEN` | **111** |
-| `UMGESETZT_UNGEPRUEFT` | **60** |
+| `OFFEN` | **112** |
+| `UMGESETZT_UNGEPRUEFT` | **63** |
 | `BLOCKIERT` | **21** |
 | `NACHBESSERN` | **2** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **199 = alle IDs** |
+| **Summe** | **203 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
 — `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186, der Mechanismuswechsel `P2H` daraus 193. **Diesmal wurde das Muster BEIM Anlegen mitgeändert** (`[A-G]`→`[A-H]`), nicht hinterher bemerkt — die Lehre aus drei Fehlversuchen hat gehalten.

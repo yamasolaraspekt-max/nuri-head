@@ -18,12 +18,16 @@ kennung_geprueft: "A-37 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
 anlass: "Der rollende Umzug laeuft seit 14.08. 22:20. Fuenf Rollen haben eigene Worktrees.
          Nichts hindert eine Rolle daran, im falschen Baum zu schreiben — das Tor kennt den
          Baum nicht (0 Treffer fuer 'worktree' in 743 Zeilen)."
-gebaut_in: "DER INTEGRATIONS-CHECKOUT /Users/yamanuri/Documents/ticket, solange P2H-06 offen ist.
-            BERICHTIGT 15.08. nach DoR-Restpunkt 1 — vorher stand hier ticket-rolle-generator.
-            Grund, vom Pruefer gemessen: KEIN Rollenbaum hat node_modules oder typescript, alle
-            fuenf NEIN, nur der gemeinsame JA. A-37-11 waere dort unerfuellbar, und Paragraf 5
-            verbietet unerfuellbare Kriterien. Der Bau eines Tores, das den Umzug erst
-            ermoeglicht, kann nicht voraussetzen, dass der Umzug schon gelungen ist."
+gebaut_in: "ticket-rolle-generator (rolle/generator) — BERICHTIGT ZURUECK am 15.08. 15:50.
+            Der Grund fuer die Verlegung in den Integrations-Checkout ist ENTFALLEN: der
+            Generator-Baum hat seit 15:36:54 node_modules samt typescript, gemessen. Der
+            Plan-Pruefer hat A-37-11 dort gefahren: tsc exit 0, Suite 1763/1763.
+            KEIN Blattfehler und kein Messfehler auf einer der beiden Seiten — die Zeitstempel
+            liegen so: Blatt 15:30:37, release/node_modules 15:30:51, generator 15:36:54.
+            Mein Befund hielt VIERZEHN SEKUNDEN. Die Umgebung ist unter dem Satz weggewandert.
+            OFFEN UND YAMA VORGELEGT, siehe Nicht-Ziele: die zwei node_modules sind ECHTE
+            Verzeichnisse mit je 323 MB, keine Symlinks — und Yamas Nicht-Ziel schliesst
+            genau das aus."
 ```
 
 ## Warum jetzt, und warum P0
@@ -116,11 +120,98 @@ nicht der Bau dieses Auftrags.
 
 **Der Node-Fehler darf nicht mehr nach `/dev/null`.** Er wird gelesen und ausgewertet.
 
+### 5 · Lockfile-Prüfung — **Yamas Bedingung für (a), 16.08.**
+
+**Ohne sie ist ein eigenes `node_modules` je Baum Disziplin. Mit ihr ist es Mechanik.**
+
+```
+Vor jedem Lauf vergleicht das Tor:
+   git hash-object package-lock.json        (heute in allen vier Baeumen: d17b19a2…)
+   gegen die Marke, aus der dieses node_modules erzeugt wurde
+
+Abweichung -> ABBRUCH:
+   "MODULSTAND — dieser Baum wurde aus einem anderen package-lock.json
+    installiert. Abhilfe: npm ci in diesem Baum."
+   Rueckgabe != 0. Kein Lauf, kein gruenes Ergebnis.
+```
+
+**⚠ Die Marke muss GESCHRIEBEN werden — npm liefert sie nicht.** Zwei naheliegende Wege sind
+gemessen und beide tragen **nicht**:
+
+| Weg | warum er scheitert |
+|---|---|
+| **`mtime`-Vergleich** `package-lock.json` gegen `node_modules/.package-lock.json` | **`git checkout` setzt die mtime neu, auch bei gleichem Inhalt** → Fehlalarm bei jedem Branchwechsel. *(Gemessen: im Generator-Baum steht der Lockfile auf 08-14 22:15, `.package-lock.json` auf 08-15 15:36 — der Abstand sagt nichts über den Inhalt.)* |
+| **Hash von `node_modules/.package-lock.json`** | **Es ist eine andere Datei:** 404 Pakete gegen **466** im Lockfile. Kein Vergleich möglich — **und der Grund dahinter wiegt schwerer als die Zahl**, siehe unten. |
+
+**Deshalb, entschieden statt geraten:** nach jedem `npm ci` schreibt der Baum die Marke selbst —
+
+```
+npm ci && git hash-object package-lock.json > node_modules/.aus-lockfile
+```
+
+**Das Tor liest sie und vergleicht.** Fehlt sie, ist der Modulstand **unbekannt** und nicht
+etwa gültig — eigene Meldung, eigener Rückgabewert.
+
+**⚠ Der zweite Grund für die Dateiwahl, und er ist der stärkere** *(Yamas Gegenprobe, 16.08., von
+mir nachgemessen)*: **Die 62 fehlenden Einträge sind kein Rauschen — 61 davon tragen eine
+`os`/`cpu`-Einschränkung, 0 sind dev-only.** npm legt nur ab, was zu dieser Maschine passt; diese
+ist `darwin arm64`, also fehlt `@esbuild/darwin-x64` **zu Recht**.
+
+| Datei | beantwortet |
+|---|---|
+| `package-lock.json` | **aus welcher Abhängigkeitswahrheit** installiert wurde — **maschinenunabhängig** |
+| `node_modules/.package-lock.json` | **was auf DIESER Maschine gelandet ist** — **maschinenabhängig** |
+
+**Liefe je ein Rollenbaum auf einer anderen Architektur, wäre `.package-lock.json` dort zu Recht
+verschieden** — ein Tor darauf würde eine **richtige** Umgebung als falsch melden. Die gewählte
+Datei ist die einzige, die *„welche Wahrheit"* von *„welche Maschine"* trennt.
+
+**⚠ Und die Marke ist selbst eine flüchtige Messung — Yamas Nachtrag, und er wendet meine eigene
+Regel von vor einer Stunde auf mein eigenes Werkzeug an.** Der Hash ist ein SHA über eine
+unveränderliche Datei; **die Aussage der Marke ist es nicht:** *„dieses Modulverzeichnis stammt aus
+diesem Lockfile"* gilt **ab** der Installation und kann ablaufen. **Praktisch zählt das, weil aus
+demselben `lockfileVersion 3` verschiedene npm-Hauptversionen unterschiedlich auslegen** — steht in
+einem Baum grün und im anderen rot bei gleichem Hash, ist die nächste Frage *„mit welchem npm?"*,
+und die Antwort wäre nicht da. **Die Marke trägt deshalb vier Felder:**
+
+```
+npm ci && printf '%s  %s  node %s  npm %s\n' \
+  "$(git hash-object package-lock.json)" "$(date -Iseconds)" \
+  "$(node -v)" "$(npm -v)" > node_modules/.aus-lockfile
+
+Heute waere das:  d17b19a2…  2026-08-16T…  node v26.5.0  npm 11.17.0
+```
+
+**Das Tor liest und vergleicht ausschließlich das ERSTE Feld.** Die übrigen drei kosten nichts und
+beantworten die Frage, die **nach** dem ersten Widerspruch kommt.
+
 ## Nicht-Ziele
 
 - **KEINE Änderung an `docs/STATUS.md`** — weder Inhalt noch Struktur.
 - **KEIN Hausplaner-Code.** Weder `resources/` noch `app/`.
-- **Kein `node_modules` je Worktree**, kein Symlink, keine Modulkopie ins Repo *(Yamas Bedingung)*.
+- **⚠ ERSETZT am 16.08. durch Yamas §1-Entscheidung — neuer Wortlaut, wörtlich:**
+
+  > **„Kein Modulverzeichnis wird versioniert oder ins Repo eingebracht. Je Baum ein eigenes
+  > `node_modules`, ausschließlich aus dem `package-lock.json` DIESES Baumes erzeugt.
+  > KEIN Prüfergebnis darf davon abhängen, in welchem Baum es lief."**
+
+  **Der Grund ist nicht der Preis, sondern die zweite Wahrheit** *(Yama, 16.08.)*:
+  `package-lock.json` liegt **im Repo**, jeder Rollen-Branch trägt seine eigene Fassung. Ändert
+  **ein** Branch eine Abhängigkeit, ist ein geteiltes `node_modules` für **höchstens einen** Baum
+  richtig und für die anderen fünf **still falsch** — *„Der Lauf schlägt nicht fehl. Er ist grün
+  und er misst den falschen Stand."* **Das ist Richtung B, eine Ebene tiefer.**
+
+  **Harte Links sind ausdrücklich NICHT der Weg:** sie lösen die Regelfrage nicht und **brechen
+  still**, sobald ein Werkzeug eine Paketdatei an Ort und Stelle überschreibt.
+
+  *(Der bisherige Wortlaut bleibt als Beleg stehen — A-20-4:)*
+
+  > ~~- **Kein `node_modules` je Worktree**, kein Symlink, keine Modulkopie ins Repo
+  > *(Yamas Bedingung)*.~~ **Die Zeile trug zwei Lesarten**, weil `ins Repo` sich auf alle drei
+  > oder nur auf das letzte Glied beziehen konnte. **Yama hat die engere entschieden (L2)** — mit
+  > der Begründung, dass eine Bedingung mit zwei Lesarten im Zweifel die engere hat, *„die weite
+  > hätte ich mir sonst nachträglich zurechtgelegt."*
+
 - **Keine Abschwächung** der vorhandenen Barrieren A-25/A-26/A-27/A-30 und der YAML-Prüfung.
 - **Kein Hook.** Der versionierte `pre-commit`-Hook ist ein eigener Auftrag — dieses Tor läuft
   weiter über den ausdrücklichen Aufruf.
@@ -180,6 +271,23 @@ nicht der Bau dieses Auftrags.
   `2>/dev/null` verschluckt die Ursache.
 - **A-37-9** · **Die YAML-Prüfung bleibt scharf.** Ein tatsächlich kaputter Kopf wird weiterhin
   abgewiesen — **Gegenprobe mit gesetztem `NODE_PATH`**, exit ≠ 0.
+- **A-37-12** · **Lockfile-Prüfung im Tor.** **Messbar:** Marke `node_modules/.aus-lockfile`
+  wird von `npm ci` geschrieben und vom Tor gelesen.
+  **Rot am Basis-SHA und heute:** `grep -rl 'package-lock' scripts/` → **0**, `npm ci` → **0**,
+  `hash-object` → **0**. *(Selbst nachgemessen 16.08.)*
+- **A-37-13** · **Negativfall Modulstand:** Marke auf einen fremden Hash setzen → **Abbruch**
+  mit dem Wort `MODULSTAND` und dem Hinweis `npm ci in diesem Baum`, Rückgabe ≠ 0.
+- **A-37-14** · **Positivfall:** Marke stimmt → Lauf geht durch, **keine Ausgabe**.
+  *(Und der dritte Fall getrennt: Marke **fehlt** → eigene Meldung „Modulstand unbekannt", nicht
+  stillschweigend als gültig behandelt.)*
+- **A-37-15** · **Die Marke trägt vier Felder** — Hash · Zeitstempel · `node -v` · `npm -v`.
+  **Messbar:** `wc -w < node_modules/.aus-lockfile` ≥ 6. **Rot:** die Datei existiert nicht.
+  **Warum der dritte Fall der wichtigste ist, mit Yamas Begründung, die ich nicht hatte:**
+  **`npm ci` löscht `node_modules` als erstes und legt es neu an.** Wird der Lauf unterbrochen,
+  steht dort ein **halbes** Verzeichnis **ohne** Marke. **Ein Tor, das „keine Marke" als
+  „vermutlich in Ordnung" liest, meldet den halb installierten Baum grün.** Deshalb ist es ein
+  **eigenes** Kriterium und kein Nebensatz im Vergleich — *„der Unterschied zwischen einer Prüfung
+  und einer Prüfung, die man beim Nachbessern versehentlich entfernt."*
 - **A-37-10** · **Kein Nicht-Ziel berührt.** `git show --stat` nennt keine Datei unter `resources/`,
   `app/`, kein `node_modules`, **nicht `docs/STATUS.md`**.
 - **A-37-11** · **Suite grün und Zahl unverändert GEGEN DEN BAU-STAND**, `tsc exit=0`.

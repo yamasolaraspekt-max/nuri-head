@@ -17,9 +17,16 @@ kennung_geprueft: "A-38 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
                    docs/auftraege/aktiv/. A-01 bis A-37 sind vergeben. Frei."
 anlass: "Beim Pruefen, ob ein pre-commit-Hook noetig ist, gemessen statt angenommen:
          41 von 309 Commits der letzten 48 h tragen keine Rollenmarke — ausnahmslos Merges."
-gebaut_in: "DER INTEGRATIONS-CHECKOUT /Users/yamanuri/Documents/ticket, solange P2H-06 offen
-            ist. BERICHTIGT 15.08. nach DoR-Restpunkt 1, gleicher Grund wie bei A-37: kein
-            Rollenbaum hat node_modules oder typescript, A-38-9 waere dort unerfuellbar."
+gebaut_in: "ticket-rolle-generator (rolle/generator) — BERICHTIGT ZURUECK am 15.08. 15:50.
+            Der Grund fuer die Verlegung in den Integrations-Checkout ist ENTFALLEN: der
+            Generator-Baum hat seit 15:36:54 node_modules samt typescript, gemessen. Der
+            Plan-Pruefer hat A-38-9 dort gefahren: tsc exit 0, Suite 1763/1763.
+            KEIN Blattfehler und kein Messfehler auf einer der beiden Seiten — die Zeitstempel
+            liegen so: Blatt 15:30:37, release/node_modules 15:30:51, generator 15:36:54.
+            Mein Befund hielt VIERZEHN SEKUNDEN. Die Umgebung ist unter dem Satz weggewandert.
+            OFFEN UND YAMA VORGELEGT, siehe Nicht-Ziele: die zwei node_modules sind ECHTE
+            Verzeichnisse mit je 323 MB, keine Symlinks — und Yamas Nicht-Ziel schliesst
+            genau das aus."
 hinweis_basis: "rolle/generator steht auf bc2125d9, der Basis-SHA 0f05f8bf ist DREI Commits neuer.
                 Das Objekt ist im gemeinsamen Lager erreichbar, der BRANCH aber nicht dort.
                 Der Generator zieht vor dem Bau nach — sonst baut er am falschen Stand.
