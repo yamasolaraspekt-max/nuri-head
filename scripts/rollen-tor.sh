@@ -57,7 +57,26 @@
 #   TICKET_ROLLE=generator bash scripts/rollen-tor.sh --pruefe   nur melden, nie sperren
 # ```
 #
-# **Rueckgabe:** 0 wenn Baum und Rolle zusammenpassen (oder K3/K5) · 1 bei Verstoss · 2 bei K4.
+# ## Rueckgabewerte — sie stehen im Auftrag und nicht in meiner Wahl
+#
+# ```text
+#   0   Baum und Rolle passen zusammen, oder K3 / K5 / K6
+#   1   Rolle und Baum passen NICHT zusammen        <- der Verstoss
+#   5   Rollenkennung fehlt beim DIREKTEN Aufruf    <- NICHT 1, sonst nicht unterscheidbar
+#   2   kein Repository (K4)                        <- s. OFFEN unten
+# ```
+#
+# **Die Zahlen kommen aus der Codetabelle des Auftrags** (berichtigt am 16.08. nach DoR Runde 3).
+# *Meine erste Fassung vergab fuer die fehlende Kennung ebenfalls 1 — der Plan-Pruefer hat es
+# gemessen und drei Stellen mit drei Zahlen fuer denselben Fall gefunden.* **Die Tabelle liegt seit
+# der Berichtigung auf 5, weil ich selbst am 15.08. die 3 fuer `MODUL` belegt hatte** (`374bb851`)
+# *und zwei Bedeutungen auf einem Code niemandem aufgefallen waren.*
+#
+# > ***OFFEN und hier nicht selbst entschieden:*** *fuer K4 (kein Repository) vergibt die Tabelle
+# > KEINEN Code.* **Ich lasse 2 stehen und erfinde keinen siebten** — *genau das Waehlen einer
+# > dritten Variante ist der Fehler, den dieser Bau gerade behebt.* **Gemeldet: 2 ist in
+# > `commit-pruefen.sh` mit „YAML-Syntaxfehler" belegt.** *Am Einhaengepunkt kann der Fall nicht
+# > eintreten — dort laeuft immer ein Repository —, die Kollision ist also heute theoretisch.*
 set -uo pipefail
 
 NUR_MELDEN=0
@@ -65,9 +84,13 @@ NUR_MELDEN=0
 
 ROLLE="${TICKET_ROLLE:-}"
 if [ -z "$ROLLE" ]; then
+  # Rueckgabe 5, NICHT 1. Die Zahl kommt aus der Codetabelle des Auftrags (berichtigt 16.08. nach
+  # DoR Runde 3) und nicht aus meiner Wahl: 1 ist "Rolle und Baum passen nicht zusammen", und die
+  # beiden Faelle muessen am Code unterscheidbar bleiben. Dass hier vorher 1 stand, hat der
+  # Plan-Pruefer gemessen.
   echo "ROLLEN-TOR  TICKET_ROLLE ist nicht gesetzt — ohne Rolle ist keine Zuordnung pruefbar." >&2
   [ "$NUR_MELDEN" = "1" ] && exit 0
-  exit 1
+  exit 5
 fi
 
 # K1: eine Instanz haengt ihre Nummer an. `plan-pruefer-2` ist die Rolle `plan-pruefer`.

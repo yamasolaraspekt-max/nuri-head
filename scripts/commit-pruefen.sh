@@ -73,10 +73,19 @@ fi
 # jene melden ueber den INHALT, wo ein Fehlalarm teuer und ein Durchlassen billig ist. Hier ist
 # es umgekehrt.
 if [ -f scripts/rollen-tor.sh ]; then
-  if ! TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh; then
+  TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh
+  TOR_RC=$?
+  if [ "$TOR_RC" -ne 0 ]; then
     echo "" >&2
-    echo "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle." >&2
-    exit 2
+    echo "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle (Rollen-Tor, Rueckgabe $TOR_RC)." >&2
+    # DER RUECKGABEWERT WIRD DURCHGEREICHT und nicht durch einen eigenen ersetzt.
+    #
+    # **Vorher stand hier `exit 2`** — und damit war an der Einhaengestelle genau die
+    # Unterscheidbarkeit wieder eingeebnet, die Teil 3 dieses Auftrags hergestellt hat: die
+    # Meldung auf stderr war eindeutig, der Code nicht. *Zusaetzlich ist 2 hier bereits ZWEIFACH
+    # belegt — zu wenig Argumente und fehlende Rollenmarke.* **Gemessen und gemeldet vom
+    # Plan-Pruefer; zwei Zeilen loesen es.**
+    exit "$TOR_RC"
   fi
 fi
 # Erste Zeile der Botschaft; BEWERTET wird nach vorn getrimmt, VERAENDERT wird nichts daran.
