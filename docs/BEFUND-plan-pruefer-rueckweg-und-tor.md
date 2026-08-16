@@ -616,3 +616,41 @@ schreiben wollte. Sie greift, weil mein Stamm nicht „integrator" heißt — be
 kann an einer Bedingung, die nur die *Rolle* liest, nichts ändern. Ob Schritt J trotzdem sinnvoll
 ist — etwa als ausdrückliche Erlaubnis, die später im Werkzeug abgebildet wird —, ist eine
 Entscheidung und keine Messung; sie liegt bei Yama.
+
+---
+
+## A-42-7 geprueft — scharf und erfuellbar; damit sind alle vier Auftraege meiner Bahn durch
+
+*(geschrieben 20:31, Messstand 6722ac01)*
+
+**A-42-7 im Wortlaut:** *„Kein Nicht-Ziel berührt. `git show --stat` nennt keine Datei unter
+`resources/`, `app/`, `database/`, `routes/`, und **nicht** `scripts/status-erzeugen.sh`."*
+
+**Messweg genannt, Nicht-Ziele einzeln aufgezählt** — das Kriterium ist prüfbar wie A-39-9 und
+anders als A-40-9, das eine Suite verlangt, die nichts sehen kann.
+
+**Die ungewöhnliche fünfte Nennung habe ich nachgeprüft:** Warum steht ausgerechnet
+`scripts/status-erzeugen.sh` neben den Produktivpfaden? Verdacht war eine Kollision — A-42
+ändert `docs/STATUS.md`, und dieses Skript hat mit derselben Datei zu tun.
+
+**Gemessen:** `status-erzeugen.sh` nennt `docs/STATUS.md` achtmal, und **jede Nennung ist ein
+Lesevorgang** (`git show <ref>:docs/STATUS.md`, `git log -- docs/STATUS.md`). Es schreibt die
+Datei nicht. Sein Modus `--tafel` *„erzeugt die Statuswahrheit AUS DEM COMMIT-LOG"* und gibt
+sie aus; eingetragen wird sie vom Integrator — so hat er es um 20:16 auch getan.
+
+**Also keine technische Kollision, und die Nennung ist trotzdem richtig:** A-42 baut ein
+Umzugsskript, das Blöcke aus derselben Datei liest, die das Erzeugungsskript liest. Wer beim
+Bauen dort etwas anpasst, verändert die Regel-Erzeugung als Nebenwirkung. Das Nicht-Ziel
+schließt genau diesen Weg aus.
+
+**Damit ist A-42 vollständig durchgeprüft** — und mit ihm alle vier Aufträge meiner Bahn:
+
+| Auftrag | Stand nach Prüfung |
+|---|---|
+| **A-37** | CODE_FERTIG bestätigt, Ballwechsel mit Stabilitätsprobe belegt |
+| **A-39** | alle Kriterien tragen; Nenner 89 statt 85 zugestellt |
+| **A-40** | -1, -3, -4, -8 und K1–K4 belegt; sechs Punkte zugestellt |
+| **A-42** | -3 bis -7 geprüft; die siebte Kante (A-42-6) zugestellt |
+
+**Was in meiner Bahn bleibt:** nichts Ungeprüftes. Alle offenen Punkte sind nach der
+Stopp-Regel zugestellt, keiner ist nur gemeldet.
