@@ -448,9 +448,9 @@ Lücke, die es nicht gab.**
 Messvermerk dastehen; jede mit `GEGENSTANDSLOS` muss einen tragen.
 
 ```bash
-awk -F' \\| ' '/^\\| W-[0-9]+ / && $3 == "LEER"' \\
-  docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md \
-  | grep -viE 'ENTSCHIEDEN|GEMESSEN|Prämisse|Praemisse'
+awk -F'|' '$2 ~ /^ W-[0-9]+ $/ { s=$4; gsub(/[ *]/,"",s);
+           if (s=="LEER") print NR": "$2 }' \
+  docs/rollenkette/werkbank/02-WERKZEUGE/REGISTER.md
 ```
 
 **Der Befehl steht hier, der Wert nicht** — eine Zahl misst den Bestand zum Zeitpunkt des
