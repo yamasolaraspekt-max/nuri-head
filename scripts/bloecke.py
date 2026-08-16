@@ -245,14 +245,31 @@ def main(pfad=P):
         print(f'       Z.{ln} {k} — intakter Datensatz, von der Vorschrift nicht gesehen')
     if len(_weg) > 1:
         print(f'     ⚠ mehr als der bekannte eine Fall — das ist neu.')
-    # WARUM D2 EINE EIGENE PRUEFUNG IST UND NICHT EINE ZEILE IN D: die Gegenprobe zu diesem
-    # Nachtrag hat einen zweiten yaml-Schliesser entfernt und D auf 3 getrieben — D2 blieb bei
-    # 1. Das ist kein Werkzeugfehler, sondern das Ergebnis: NICHT JEDER FEHLENDE SCHLIESSER
-    # VERSCHLUCKT EINEN DATENSATZ. Die Regex sucht ab jedem ```yaml den naechsten ```; wo der
-    # landet, haengt davon ab, wie die folgenden Zaeune stehen. Manchmal verschmilzt sie zwei
-    # Bloecke (beide Inhalte bleiben lesbar), manchmal springt sie ueber einen hinweg (der
-    # faellt heraus). D zaehlt die URSACHEN, D2 misst die FOLGE — und die Folge ist die Zahl,
-    # die zaehlt.
+    # WARUM D2 EINE EIGENE PRUEFUNG IST UND NICHT EINE ZEILE IN D — und die Regel dazu ist
+    # BELEGT, nicht vermutet, weil zwei Gegenproben VERSCHIEDEN ausfielen:
+    #
+    #   meine  (Schliesser bei Z.1163 entfernt):  D 2 -> 3,  D2 bleibt 1
+    #   seine  (Schliesser bei Z.9137 entfernt):  D 2 -> 3,  D2 steigt auf 2
+    #                                             unsichtbar dann A-18 UND W-38
+    #
+    # Beide nachgestellt, seine an einer Kopie im Kratzverzeichnis nachgefahren und
+    # zeichengenau bestaetigt. Kein Widerspruch — die Folge haengt an der STELLE:
+    #
+    #   Ein fehlender Schliesser verschluckt den NAECHSTEN Datensatz, wenn zwischen ihm und
+    #   dem naechsten nackten ``` ueberhaupt einer steht. Steht dort keiner, verschmelzen
+    #   zwei Zaeune und nichts geht verloren.   (Formulierung des Plan-Pruefers, 17.08. 01:50)
+    #
+    # Bei Z.7876 folgt A-18s Block, bei Z.9137 folgt W-38s Block — beide werden verschluckt.
+    # Bei Z.1163 folgt keiner, deshalb blieb D2 dort stehen.
+    #
+    # DARAUS: D zaehlt die URSACHEN (fehlende Schliesser), D2 misst die FOLGE (verschluckte
+    # Datensaetze). Haette nur ich gemessen, haette ich geschlossen "D2 folgt D nicht";
+    # haette nur er gemessen, "D2 folgt D". Erst beide Versuche zusammen zeigen, dass eine
+    # Zahl die andere nicht ersetzen kann.
+    #
+    # ZEILENKONVENTION, damit niemand zwei Angaben fuer einen Widerspruch haelt: D2 nennt die
+    # `auftrag:`-Zeile (A-18 -> Z.7891), der Plan-Pruefer nennt den Blockoeffner (Z.7890).
+    # Beide richtig, geoeffnet und geprueft.
     if ueber_d > 0:
         print(f'     ⚠ {ueber_d} MEHR als der Altbestand — ein Datensatz koennte '
               f'unsichtbar geworden sein.')
