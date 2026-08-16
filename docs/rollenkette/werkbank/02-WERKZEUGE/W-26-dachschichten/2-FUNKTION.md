@@ -15,7 +15,7 @@ applyVorlage(v, prevBuild)              :1264   produktiver Aufrufer
 ```
 
 > ***Das ist der einzige Weg, auf dem ein Feld des Dachdecker-Blocks je eine Wirkung entfaltet.***
-> *Zwei Zahlen von dreizehn Feldern, und beide nur, um zu warnen.*
+> *Zwei Zahlen von siebzehn Feldern, und beide nur, um zu warnen.*
 
 ## Was NICHT läuft, obwohl es dasteht
 
@@ -36,14 +36,15 @@ eindeckungPasstZuKategorie(cover, category)      :422
 
 ## Der Vertrag, den jede Vorlage mitträgt
 
-`VorlagenDachdecker` (`:112-125`) — **dreizehn Felder in vier Gruppen:**
+`VorlagenDachdecker` (`:112-129`) — **siebzehn Felder in fuenf Gruppen:**
 
 | Gruppe | Felder | Art |
 |---|---|---|
 | **die Entscheidung selbst** | `deckungsHinweis`, `dachdeckungSeparatAuswaehlen` | Text und ein Flag, das immer `true` ist |
 | **die Abhängigkeitsaussagen** | `regeldachneigungAbhaengigVonMaterial`, `lattmassAbhaengigVonProdukt` | zwei Wahrheitswerte über das Fach |
 | **die Richtwerte** | `rdnGrad`, `mindestneigungGrad` | die zwei, die wirken |
-| **der Aufbau** | `battenDistCm`, `konterlattungMm`, `unterdeckungKlasse`, `firstausbildung`, `gratausbildung`, `kehlausbildung`, `empfohleneEindeckung` | **das eigentliche W-26 — und komplett ungelesen** |
+| **der Aufbau** | `battenDistCm`, `konterlattungMm`, `unterdeckungKlasse`, `firstausbildung`, `gratausbildung`, `kehlausbildung`, `ortgangausbildung`, `traufausbildung`, `empfohleneEindeckung` | **das eigentliche W-26 — und komplett ungelesen** |
+| **die drei Hinweise** | `entwaesserungHinweis`, `schneefangHinweis`, `lueftungHinweis` | Text je Vorlage, ebenfalls ungelesen — **`entwaesserungHinweis` gehört fachlich zu W-28** |
 
 > ***Die vierte Gruppe IST das Werkzeug, um das es hier geht.*** *Sie ist nicht ungebaut, sie ist
 > ungefragt:* **Lattenabstand, Konterlattung, Unterdeckungsklasse, First-, Grat- und

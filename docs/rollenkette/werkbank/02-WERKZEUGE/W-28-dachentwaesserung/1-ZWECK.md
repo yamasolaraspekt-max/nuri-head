@@ -67,6 +67,33 @@ pruefeAbwasser(eingabe)        Pruefliste mit Schweregraden
 > Bemessung, einmal gebaut und einmal nicht** — *und das ist die nützlichste Auskunft dieses
 > Blattes, denn sie sagt, wo ein Bau anfangen würde und dass er nicht bei null anfinge.*
 
+## ⚠ BERICHTIGT — es gibt doch ein Feld, und mein geschärftes Muster ist daran vorbeigegangen
+
+**Nachgemessen bei der Fehlerinventur am selben Abend:** `VorlagenDachdecker` führt ein Feld
+`entwaesserungHinweis: string` (`dachformVorlagen.ts:129`), **je Dachform gefüllt und mit echtem
+Inhalt:**
+
+```text
+:1391   'Vorgehaengte Rinne + Fallrohr, Bemessung …'
+:1415   'Gefaelledaemmung >= 2 % (Richtwert), Notueb…'
+:1670   entwaesserungHinweis: s.kehleHinweis
+        Leser ausserhalb dachformVorlagen.ts:   0
+```
+
+***Der Satz „die Bemessung fehlt nicht halb, sie fehlt ganz" bleibt richtig*** — *ein Hinweistext
+ist keine Bemessung.* **Falsch war das Bild, es gebe zum Thema nur ein Wort in einer Aufzählung.**
+*Es gibt zusätzlich einen gepflegten Text je Dachform, der Rinne und Fallrohr ausdrücklich nennt —
+und wie der ganze Dachdecker-Block niemanden erreicht* (`W-26`).
+
+> ***Und der Grund, warum ich es übersehen habe, ist die Kehrseite eines guten Griffs:*** *mein
+> erstes Muster `dachrinne|fallrohr|rinne` gab 55 Fehltreffer, ich habe es auf `dachrinne|fallrohr`
+> geschärft — und `entwaesserungHinweis` enthält keines von beidem.* **Nach `entwaesser` habe ich
+> nur in `toolRegistry` und `werkzeugPaket` gesucht, nicht in `geometry/`.**
+>
+> **Die Schärfung, die mich vor der Fehlmessung bewahrt hat, hat mich an der Sache vorbeigeführt.**
+> *Beides ist H-9: einmal misst das Muster die Zeichenfolge statt der Sache, einmal misst es eine
+> Schreibweise der Sache und übersieht die andere.*
+
 ## Wie ich mich beim Messen selbst getäuscht habe
 
 **Der erste Ausdruck lautete `dachrinne|fallrohr|rinne` und meldete 55 Treffer in 14 Dateien.**
