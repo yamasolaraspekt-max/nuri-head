@@ -5106,3 +5106,98 @@ Weg, auf dem ein Befund die andere Rolle überhaupt erreicht hat — auch meiner
 **Ball beim Release-Prüfer: der Erhebungsbefehl zu `rueckweg.py:48-51` und zu `4 von 74`.**
 *Nicht die Zahlen ändern — den Befehl danebenschreiben, mit der Angabe, welche der beiden Uhren
 gilt.* **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 77 — Posten (d) als Sweep über 84 Aufträge: die Hausregel „nicht löschen, danebenstellen" ist die URSACHE der wandernden Zeiger
+
+**Stand:** HEAD `88e5f0b8`, getrackt 0, `?? scripts/__pycache__/` liegt weiter. **Messstand in
+Variable, Gegenprobe: unbewegt.**
+
+**Nicht §71 wiederholt.** Dort waren es die acht nicht-terminalen Aufträge; hier alle **84 mit
+`basis_sha`**, gegen die Frage: *unter welchem Blatt hat sich genannter Code seit dem Schnitt
+bewegt?* **Muster an zwei bekannten Treffern verifiziert (A-37 → 2, W-06 → 0).**
+
+```
+ohne Drift  45     mit Drift  30     kein Blatt  9
+```
+
+**Die meisten 30 sind KEIN Befund**: ein Auftrag, der gebaut wird, verändert seine Gegenstände.
+Ich habe deshalb getrennt, was **fremd** ist — und dabei sind zwei Dateien übriggeblieben, die von
+einem ANDEREN Auftrag berührt wurden: `studioDaten.ts` und `StartView.tsx`, beide durch
+**`3ad920b1` — A-23s Bau**.
+
+### A-23 hat vorbildlich gearbeitet, und genau deshalb ist es passiert
+
+A-23s Auftrag war, überholte Begleittexte zu berichtigen. Der Diff zeigt die Hausregel in
+Reinform:
+
+```
+- * Gefuellt wird sie in **Teil B** (Route + Controller, bei Yama).
++ * **UEBERHOLT (A-23, 13.08.), und nicht geloescht.** *Hier stand: „…"*
++ * Der Weg, jede Stelle geoeffnet: HausplanerController.php:101 -> :55 -> ...
+```
+
+**Kein Wort gelöscht, der alte Stand belegt, der neue Weg nachgewiesen.** *Das ist genau, was die
+Hausregel verlangt.* **Und es wächst dabei: `studioDaten.ts` +10 Zeilen (257 → 267),
+`StartView.tsx` +14 (267 → 281) — beide Einschübe nahe am Dateianfang.**
+
+### Vier abgenommene Blätter zeigen seitdem auf etwas anderes
+
+**`studioDaten.ts`, Einschub bei `:154`, Versatz gleichmäßig +10:**
+
+```
+ZEIGER   an der Blatt-BASIS                                  HEUTE
+:163     export type SchrittStatus = 'ok'|'prog'|'warn'|'open';   Kommentar ueber web.php:5016
+:206     ... cfg: true  (W-38: "die einzige mit cfg: true")        empfehlung: { titel: 'Zu den 4 …
+:255     export const STATUS_LABEL: Record<SchrittStatus,string>   /**   (Kommentarbeginn)
+```
+
+**GEGENKONTROLLE — und sie ist der Beleg, dass der Versatz sauber lokalisiert ist:** `:97` liegt
+**oberhalb** des Einschubs und trägt an der Basis wie heute **zeichengleich**
+`export type StudioModus = 'start' | 'guided' | 'expert';`. *Die Zeiger unter dem Einschub sind
+gewandert, die darüber nicht.*
+
+**`StartView.tsx`, Einschübe bei `:18` und `:205`, +14:**
+
+```
+:18   Basis  '* Gefuellt wird sie in **Teil B** (Route + …'   heute  ' *'  (Leerzeile)
+:205  Basis  '**Die echte Liste braucht eine Route…'          heute  <div className="hp-start-wrap">
+:206  Basis  '{projekte.length === 0 ? ('                     heute  <div className="hp-start-kicker">
+```
+
+**Betroffen, alle vier `BETRIEBSBESTAETIGT`:**
+
+```
+W-38   funf Zeiger  :163 · :164-174 · :206 · :255 · :255-257
+W-33   funf Stellen :18 (3x) · :205 · :206
+W-36   :163
+W-40   :163
+```
+
+**Anker, die heute stimmen: `SchrittStatus` :173 · `cfg: true` :216 · `STATUS_LABEL` :265** —
+jeder exakt +10.
+
+### Warum das mehr ist als der vierte Fall derselben Klasse
+
+§68 fand zwei Einschübe in der FORMELSAMMLUNG und nannte einen davon „ohne Gegenprobe". **Hier ist
+das Gegenteil der Fall: A-23 hat alles richtig gemacht.** Die Regel *„nicht löschen, sondern
+danebenstellen"* schützt die Wahrheit **an der Stelle** — und **erzwingt dabei Wachstum**. Jedes
+Wachstum oberhalb eines Zeigers macht ihn falsch.
+
+```
+Regel A  Berichtigungen NICHT loeschen, den alten Stand danebenstellen   -> Datei waechst
+Regel B  Fundstellen als datei.ts:zeile belegen                          -> Zeiger bricht
+```
+
+**Die beiden Regeln sind einzeln richtig und zusammen unverträglich.** *Das ist keine Nachlässigkeit
+irgendeiner Rolle — es ist eine Regelkollision, und sie erklärt, warum dieselbe Klasse heute Nacht
+zum fünften Mal auftaucht, jedes Mal bei jemand anderem.*
+
+**Der Planner hat die Abhilfe in `15c49f96` selbst benannt — Kennung statt Zeile.** Meine Messung
+liefert das Argument dafür nach, das dort noch fehlte: **nicht „Zeilen veralten", sondern „die
+Hausregel LÄSST sie veralten, jedes Mal, wenn sie befolgt wird".**
+
+**Ball beim Planner.** *A-23 trifft keine Schuld und der Befund ist ausdrücklich keiner gegen ihn —
+er ist der Beleg, dass die Ursache in der Regel liegt und nicht im Ausführenden.*
+**Kein Zustandsfeld angefasst, kein Bau.**
