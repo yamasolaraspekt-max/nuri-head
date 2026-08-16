@@ -22737,3 +22737,47 @@ stand: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "A-41-11 haelt — und beim Messen hat mir ein Merge genau die Falle gestellt, die K7 beschreibt"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:46 CEST"
+mess_stand: "Bau 2e9cf127 · HEAD a4f31a4e · Suche ueber alle Zweige, nicht gegen HEAD"
+a_41_11_haelt: |
+  Das Kriterium verlangt: keine Datei unter resources/, app/, database/, und nicht
+  scripts/commit-pruefen.sh oder scripts/rollen-tor.sh.
+  Erst den Scope bestimmt, statt ihn zu raten: alle Commits gesucht, die
+  scripts/status-erzeugen.sh ueberhaupt beruehren, ueber ALLE Zweige. Es sind genau drei,
+  alle vom Generator:
+    1e342d53   1 Datei · 0 Nicht-Ziele
+    b585d335   1 Datei · 0 Nicht-Ziele
+    2e9cf127   1 Datei · 0 Nicht-Ziele
+  Jeder Bau-Commit beruehrt genau eine Datei, und es ist die richtige. A-41-11 ist heute
+  erfuellt.
+und_hier_hat_K7_mich_selbst_erwischt: |
+  Meine erste Gegenprobe lief ueber alle Commits, deren BETREFF 'A-41' nennt — 26 Stueck.
+  Einer davon schlug an: 4d89df6f beruehre ein Nicht-Ziel.
+  NACHGESEHEN STATT GEMELDET: 4d89df6f hat ZWEI ELTERN. Es ist ein Merge, ein
+  Transport-Commit des Release-Pruefers, und die beiden Dateien darin
+  (scripts/module-nachziehen.sh, scripts/rollen-tor.sh) gehoeren zu A-37, nicht zu A-41.
+  Der Betreff nennt A-41 nur, weil der Transport mehrere Vorgaenge zugleich befoerdert.
+  DAS IST WOERTLICH K7: "ein Merge traegt fremde Betreffs mit". Ich habe die Kante heute
+  um 15:22 gemeldet und um 15:45 ihre Behebung bestaetigt — und bin beim naechsten
+  Messschritt selbst hineingelaufen, mit demselben Mechanismus, nur an anderer Stelle:
+  dort verfaelscht der Merge die ZUSTANDSZAEHLUNG, hier hat er meinen SCOPE-FILTER
+  verfaelscht.
+  Eine Kante, die man kennt, schuetzt nicht davor, sie zu treten. Nur die Gegenprobe tut
+  das — hier war es die Elternzahl, zwei statt einer.
+was_daraus_folgt_fuer_die_abnahme: |
+  Wer A-41-11 spaeter abhakt, darf NICHT nach dem Betreff filtern. Der richtige Schnitt
+  ist die DATEI: git log --all -- scripts/status-erzeugen.sh liefert genau die drei
+  Bau-Commits und keinen Transport. Ich schreibe das dazu, weil der naechste Pruefer sonst
+  denselben Umweg geht — und moeglicherweise nicht nachsieht, sondern meldet.
+stand: |
+  Haltend: A-41-1 (als Rot-Lage), -2, -3, -8, -10, -11, K5, K7, FUND 1, Bau-Muster,
+  Vergleichsmodus, Fangprobe 10/10. Kein Punkt mehr rot.
+  Offen: A-41-4 bis -7, -9, -12 und die Kanten K1 bis K4 sowie K6.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
