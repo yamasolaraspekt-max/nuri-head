@@ -3219,3 +3219,85 @@ habe, statt den eigenen Stapel weiter zu vermessen. *Ein Befund, der zum vierten
 nachgezählt wird, wird davon nicht wahrer.*
 
 **Ball: unverändert — integrator (6), planner (10).** **Kein Zustandsfeld angefasst, kein Bau.**
+
+## W-31 PV-Schnellbelegung durchgerechnet: die Formel ist richtig, die Beschriftung ist vertauscht
+
+*Vorratsprüfung (b) und (c) an einem Blatt, das ich noch nie angefasst hatte · gemessen 16.08. gegen `3e797d50`, Basis `6ace6f3e`*
+
+### Die Zahl trifft, an beiden Ständen
+
+Das Blatt behauptet: *„Der Code EXISTIERT: `geometry/pvBelegung.ts`, **75 Z.**, und er ist
+ANGESCHLOSSEN."*
+
+```
+Basis 6ace6f3e   75 Zeilen
+heute            75 Zeilen
+angeschlossen    enginePanels.ts · faehigkeiten.ts · zwei Testdateien
+```
+
+### Die Packformel ist mathematisch richtig — physisch nachgerechnet, nicht nur gelesen
+
+```
+spalten = max(0, floor((nutzL + gap) / (mW + gap)))
+reihen  = max(0, floor((nutzB + gap) / (mH + gap)))
+```
+
+Fall: Dachhälfte, Modul 1134 × 1762 mm, Rand 300, Spalt 20, `nutzL = 9400`.
+
+```
+floor((9400+20)/(1134+20)) = floor(8,1629) = 8
+Probe:  8 Module a 1134 + 7 Spalte a 20 = 9212 mm  <= 9400   passt
+        9 Module a 1134 + 8 Spalte a 20 = 10366 mm > 9400    passt NICHT
+```
+
+**Die 8 ist maximal — die Formel zählt richtig, und sie zählt die Spalte zwischen den Modulen
+korrekt als n−1.** *Das ist die Stelle, an der solche Formeln üblicherweise brechen, und hier
+bricht sie nicht.*
+
+### Der Fund: `spalten` und `reihen` sind gegeneinander vertauscht
+
+Die Felddoku sagt: `dachBreite` = **horizontal**, `dachLaenge` = **in Falllinie**. Die Zuweisung
+lautet:
+
+```
+spalten <- nutzL (FALLLINIE)     / Modul-BREITE
+reihen  <- nutzB (HORIZONTALE)   / Modul-HOEHE
+```
+
+**Gemessen an einem realistischen Dach — 10 m horizontal, 6 m Falllinie:**
+
+```
+Ausgabe des Codes:      4 Spalten · 5 Reihen · 20 Module
+uebliche Sprechweise:   5 Spalten · 4 Reihen · 20 Module
+```
+
+**Spalten stehen nebeneinander — also entlang der horizontalen Breite. Reihen liegen übereinander
+— also entlang der Falllinie.** Der Code zählt genau umgekehrt.
+
+**Und die Beschriftung erreicht den Benutzer:** `enginePanels.ts` Z.395-396 zeigt beide Felder
+unter genau diesen Wörtern:
+
+```
+{ schluessel: 'spalten', label: 'Spalten' },
+{ schluessel: 'reihen',  label: 'Reihen'  },
+```
+
+### Was ausdrücklich NICHT falsch ist
+
+**`moduleGesamt` und `kWp` stimmen** — das Produkt ist in beiden Lesarten dasselbe (4·5 = 5·4 = 20).
+**Es ist kein Rechenfehler, es ist eine Falschauskunft über die Anordnung.** Dieselbe Klasse wie
+A-24s Panel-Zusage und der Auswahl-Drift in W-05/2: *die Zahl ist richtig, das Wort daneben führt
+in die Irre.*
+
+**Und ich behaupte NICHT, dass die Orientierungsangabe (`hochkant`/`quer`) falsch ist.** Dafür
+müsste ich die Konvention kennen, nach der das Modul seine Breite und Höhe führt — die habe ich
+nicht gemessen, und ohne sie wäre es geraten.
+
+### Warum das jemanden trifft
+
+Wer „5 Reihen" liest und daraus die Strings plant, legt sie über die falsche Achse. **Die Modulzahl
+stimmt, der Belegungsplan nicht** — und das Panel ist ausdrücklich die *„autarke Schnell-Stufe"*,
+also der Ort, an dem jemand ohne Modell eine Belegung ablesen soll.
+
+**Ball: planner.** W-31 steht auf `BETRIEBSBESTAETIGT`; eine Umbenennung ist ein eigener Schnitt.
+**Kein Zustandsfeld angefasst, kein Bau.**
