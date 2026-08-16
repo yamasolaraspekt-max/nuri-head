@@ -21074,3 +21074,104 @@ der_zusammenhang_mit_A_37_6: |
   Zahlen: drei umgezogen, einer nicht umgezogen und aktiv, einer still.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "yamas_schnitt_a37abc_zugeordnet_und_drei_folgen"
+titel: "Yamas Dreiteilung auf die 16 Kriterien abgebildet — sie geht restlos auf, loest den Paragraf-5-Streit von selbst und macht EINEN meiner Befunde dringend"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:35"
+stand_kopf: 3686538d
+anlass: "Yama, 16.08.: Schnitt entlang der Frage 'was blockiert HEUTE den Betrieb' — A-37a das Tor selbst, A-37b die drei Fehlerursachen, A-37c die MODULSTAND-Pruefung."
+ZUORDNUNG_der_16_kriterien: |
+  A-37a  DAS TOR SELBST — Baum-Erkennung und STATUS-Sperre.  SIEBEN Kriterien:
+    A-37-1  rollen-tor.sh existiert und ist ausfuehrbar
+    A-37-2  Positivfall: richtige Rolle im richtigen Baum kommt durch
+    A-37-3  Negativfall Baum   -> exit 1
+    A-37-4  Negativfall Branch -> exit 1
+    A-37-5  fehlende Kennung   -> HIER LIEGT EINE MEINER ZWEI ZAHLEN
+    A-37-6  docs/STATUS.md aus einem Rollen-Worktree wird abgewiesen
+    A-37-7  docs/STATUS.md aus dem Integrations-Checkout mit integrator kommt durch
+  A-37b  DIE DREI FEHLERURSACHEN.  ZWEI Kriterien:
+    A-37-8  drei Fehlerursachen unterscheidbar
+    A-37-9  die YAML-Pruefung bleibt scharf
+  A-37c  MODULSTAND.  FUENF Kriterien:
+    A-37-12 Lockfile-Pruefung im Tor
+    A-37-13 Negativfall Modulstand   -> HIER LIEGT DIE ZWEITE MEINER ZAHLEN
+    A-37-14 Positivfall
+    A-37-15 Marke traegt vier Felder mit Feldnamen
+    A-37-16 die Marke wird auch geschrieben
+  QUERSCHNITT, gehoert in JEDEN der drei:  ZWEI Kriterien:
+    A-37-10 kein Nicht-Ziel beruehrt
+    A-37-11 Suite gruen und tsc exit 0 gegen den Bau-Stand
+  7 + 2 + 5 + 2 = 16. Die Zuordnung geht restlos auf, kein Kriterium bleibt uebrig und
+  keines passt in zwei Teile.
+FOLGE 1 · DER PARAGRAF-5-STREIT LOEST SICH AUF: |
+  A-37-8 und A-37-9 waren der Streitpunkt: sie sind ERFUELLT, bevor der Auftrag BEREIT ist,
+  weil Teil 3 auf Yamas Anweisung vorab gebaut wurde (374bb851, selbst nachgemessen: 5
+  Treffer auf MODUL|LAUFZEIT). Der Release-Pruefer hat das als Auslegung offengelegt und
+  ausdruecklich gesagt, der Wortlaut von Paragraf 5 sei strenger als sein Votum.
+  Nach dem Schnitt ist das kein Auslegungsfall mehr: A-37b ist ein Auftrag, dessen Bau
+  bereits erbracht ist. Er geht nicht durch BEREIT, sondern direkt zur ABNAHME — der
+  Evaluator misst ihn an 374bb851. Damit entfaellt die Konstruktion "BEREIT trotz erfuellter
+  Kriterien" ersatzlos.
+FOLGE 2 · EIN BEFUND WIRD DRINGEND, EINER ENTSPANNT SICH: |
+  A-37-6 liegt in A-37a — dem Teil, der laut Yama ZUERST UND ALLEIN geht. Mein Befund vom
+  16.08. 12:50 (die Uebergangsklausel sperrt genau die umgezogenen Rollen, waehrend der
+  Integrator nicht existiert) muss damit VOR dem ersten Bau entschieden sein, nicht
+  irgendwann. Er liegt bei Yama und ist der einzige echte Blocker fuer A-37a.
+  Umgekehrt: A-37-13 (MODULSTAND braucht Code 6 statt "!= 0") liegt in A-37c und kann
+  nachgezogen werden, wie Yama es vorsieht. Von meinen zwei offenen Zahlen ist also nur
+  EINE dringend: A-37-5, exit 3 -> 5, weil sie in A-37a liegt.
+FOLGE 3 · EIN NEUER PUNKT, DER ERST DURCH DEN SCHNITT ENTSTEHT: |
+  Die Exit-Code-Tabelle vergibt heute 1 bis 6 ueber ALLE Teile hinweg — 1/5 gehoeren dem
+  Tor (A-37a), 2/3/4 sind in commit-pruefen.sh gebaut (A-37b), 6 gehoert MODULSTAND (A-37c).
+  Nach dem Schnitt liegt sie in EINEM der drei Blaetter, und die anderen zwei brauchen sie
+  genauso. Wird sie kopiert, gibt es drei Fassungen, die auseinanderlaufen koennen — genau
+  die Klasse, die heute schon zweimal zugeschlagen hat (die abgelaufene A-33-Zahl, der
+  Fliesstext gegen die Kriterienliste).
+  VORSCHLAG: die Tabelle bleibt an EINER Stelle und die anderen zwei verweisen darauf.
+  Wo sie steht, ist mir gleich; dass sie einmal steht, ist der Punkt.
+was_ich_zum_schnitt_selbst_sage: |
+  Er traegt. Die Trennlinie "was blockiert HEUTE den Betrieb" schneidet an der Stelle, an
+  der die Abhaengigkeiten ohnehin verlaufen: A-37a braucht nichts von den anderen beiden,
+  A-37c braucht die node_modules-Entscheidung (getroffen) und das Tor (A-37a), A-37b ist
+  fertig und haengt an nichts.
+  Und er loest das Problem, das ich um 12:58 gemeldet hatte — A-37 wuchs in dreizehn Minuten
+  von 11 auf 15 Kriterien, weil alles in einem Blatt lag. Drei kleine Blaetter altern
+  langsamer als ein grosses.
+NACHTRAG_A_37a_x: |
+  Yama hat A-37a um ein Kriterium ergaenzt: "Das Tor greift auch bei Merge-Commits, oder es
+  bricht bei einem Merge ohne Rollenmarke ausdruecklich ab. Gemessen wird an den 32 Merges
+  der letzten 48 Stunden: nach dem Bau traegt jeder von ihnen entweder eine Marke oder wird
+  gemeldet. Kein stiller Durchlauf."
+  Der Punkt ist richtig und er gehoert nach A-37a — das Tor kennt heute keinen Merge-Fall.
+  ZWEI SACHEN DAZU, beide gemessen:
+  (1) DIE ZAHL 32 IST DIE UEBERHOLTE. Sie stammt aus A-38s erster Zaehlung, die das Blatt
+      selbst als falsch berichtigt: "Meine erste Zaehlung war am falschen Ort gemessen —
+      309/32/41 statt 497/70/59" (A-38 Z.92). Berichtigt sind es 70 Merges.
+      Heute frisch gezaehlt, Fenster 14.08. 13:35 bis 16.08. 13:35, Befehle ausgeschrieben:
+        git rev-list --all --merges --since        45
+        git rev-list --first-parent --merges HEAD  17
+        nur die Integrationslinie (4630d658)       41
+      Drei Refkreise, drei Zahlen, keine davon 32. Die Zahl im Kriterium sollte entweder den
+      Refkreis mitnennen oder ganz entfallen — die AUSSAGE traegt ohne sie, und genau so hat
+      der Planner es heute bei A-38 und A-33 geloest ("der Bau prueft die AUSSAGE, nicht die
+      Zahl" · "eine Zahl laeuft ab, eine Invariante nicht").
+  (2) DIE ABHAENGIGKEIT ZU A-38, und sie beruehrt "A-37a geht zuerst und ALLEIN":
+      Gemessen, welche Hooks es gibt:
+        .git/hooks enthaelt genau EINEN: post-commit -> scripts/hooks/post-commit (AUF-75)
+        dieser Hook blockiert ausdruecklich NICHT — er startet einen Waechter im Hintergrund
+        commit-msg / pre-commit: keiner · core.hooksPath: nicht gesetzt · .githooks: fehlt
+      Ein 'git merge' ruft commit-pruefen.sh also NICHT. Das Tor sieht einen Merge nur, wenn
+      es ausdruecklich gerufen wird.
+      DARAUS FOLGT NICHT, dass A-37a-x unerfuellbar ist — Yamas zweiter Halbsatz deckt genau
+      diesen Fall ab: wird das Tor gerufen und liegt ein Merge vor, bricht es ab. Das geht
+      ohne Hook. Und die Rueckwaerts-Messung ist als SIMULATION formuliert ("nach dem Bau
+      traegt jeder von ihnen entweder eine Marke oder wird gemeldet") — die alten Merges
+      durchschicken und pruefen, dass das Tor spricht. Auch das geht ohne Hook.
+      WAS ES BEDEUTET: A-37a-x schliesst die Luecke fuer den GERUFENEN Fall. Der STILLE Fall
+      — jemand merged, ohne das Tor zu rufen — bleibt offen und ist genau A-38s Gegenstand.
+      Wer A-37a-x baut, sollte im Bericht sagen, dass A-38 dadurch nicht entbehrlich wird.
+      Sonst steht spaeter ein erledigt gemeldeter Merge-Schutz da, der die Haelfte deckt.
+ballbesitz: planner
+```
