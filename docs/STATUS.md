@@ -25944,3 +25944,102 @@ stand: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-42"
+titel: "K1 und K2 gemessen — beide heute nicht ausloesbar, und K1s Wortlaut ist an neun Bloecken mehrdeutig"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:54 CEST"
+mess_stand: "Planner-Stand e8f3a9e5, 340 Bloecke einzeln geparst · Planner-Kopf zum Messzeitpunkt 1e1afd1b"
+k2_ist_heute_leer: |
+  K2: "Zwei Notizen sind wortgleich — beide ziehen um. KEIN Entdoppeln, Doppelung ist ein
+  Befund fuer spaeter."
+  GEMESSEN ueber alle 249 Bloecke ohne zustand-Feld, Vergleich ueber den vollstaendigen
+  Blockinhalt: 0 wortgleiche Dubletten.
+  Die Kante ist also heute nicht ausloesbar. Das ist kein Mangel — sie ist Vorsorge, und
+  ihre Regel ("beide umziehen, nicht entdoppeln") ist die richtige: ein Umzug, der
+  entdoppelt, trifft eine inhaltliche Entscheidung, die ihm nicht gehoert.
+k1_ist_mehrdeutig_und_das_ist_der_fund: |
+  K1: "Ein Block traegt zustand: in Kleinschreibung oder als Prosa — NICHT umziehen,
+  Grenzfall wird gemeldet."
+  GEMESSEN: 0 Bloecke tragen einen kleingeschriebenen zustand-Wert. ABER NEUN Bloecke
+  tragen ein FELD, dessen Name "zustand" enthaelt, ohne "zustand" zu heissen:
+    zweiter_befund_zustandswiderspruch · W23_1_ZUSTAND · 1_ZUSTAND (dreimal)
+    1_ZUSTAND_rot_lage_gemessen · zustand_gemessen_nicht_angenommen
+    zustand_steht_NICHT_hier · warum_kein_zustand_feld · kein_zustand_feld
+  ZWEI DAVON SAGEN AUSDRUECKLICH DAS GEGENTEIL: "zustand_steht_NICHT_hier" und
+  "kein_zustand_feld" sind Notizen, die betonen, KEIN Zustandsfeld zu fuehren. Sie sollen
+  umziehen — sie sind der Regelfall, nicht der Grenzfall.
+  Nach dem Wortlaut fallen alle neun NICHT unter K1: keiner traegt "zustand:" als Feld oder
+  als Prosa, sie tragen einen anderen Feldnamen. Die Kante ist damit heute ebenfalls nicht
+  ausloesbar.
+  ABER WER SIE UMSETZT, MUSS DAS ENTSCHEIDEN, und das Blatt sagt es nicht: sucht der Bau
+  nach dem Feldnamen "zustand" (dann greift K1 nie), oder nach der Zeichenfolge "zustand"
+  (dann nimmt er neun Bloecke aus, von denen mindestens zwei umziehen sollen)?
+  Der Unterschied sind neun Notizen — von 249 gut drei Prozent, und ausgerechnet die, die
+  ihren eigenen Sonderfall dokumentieren.
+was_das_fuer_meine_ausgangszahlen_heisst: |
+  Meine Zahlen von 20:46 (67 bleiben, 249 ziehen um, 24 Altlast) gelten unveraendert,
+  solange K1 nach dem FELDNAMEN sucht. Sucht der Bau nach der Zeichenfolge, sind es
+  240 statt 249, und die Summenprobe A-42-2 muss die neun als eigene Gruppe fuehren.
+  Ich nenne beide Zahlen, damit die Probe nicht an der Auslegung scheitert.
+die_lehre_von_A_41_gilt_hier_auch: |
+  Zwei von sechs Kanten sind am Bestand nicht ausloesbar. Bei A-41 war das bei K2 und K6
+  genauso, und der Generator hat die Lehre gezogen: so eine Kante findet man nur, wenn man
+  ihre Logik ISOLIERT nachbaut. Genau so habe ich dort den Substring-Fehler gefunden.
+  Fuer A-42 heisst das: K1 und K2 brauchen einen konstruierten Fall, sonst bleibt ihr
+  Beleg eine Codestelle. A-42-5 verlangt aber "alle sechs Kanten je EINZELN belegt".
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-42"
+titel: "K3 und K6 auch nicht ausloesbar — aber 68 von 77 Notizen tragen FREITEXT im auftrag-Feld, und das trifft A-42-4"
+rolle: plan-pruefer
+zeit: "2026-08-16 21:02 CEST"
+mess_stand: "Planner-Stand e8f3a9e5, 340 Bloecke geparst · Planner-Kopf zum Messzeitpunkt 1e1afd1b"
+k6_ist_nicht_ausloesbar: |
+  K6: "docs/BEFUNDNOTIZEN.md existiert bereits — anhaengen, nicht ueberschreiben."
+  Gemessen ueber rolle/planner, rolle/generator und den Integrationszweig: die Datei
+  existiert in KEINEM. Der erste Lauf legt sie an, die Kante greift beim zweiten.
+  Richtig gebaut, heute nur nicht pruefbar.
+k3_ebenfalls_nicht_und_der_weg_dahin_war_lehrreich: |
+  K3: "Eine Notiz nennt eine Kennung, die es nie gab — zieht trotzdem um, mit Vermerk."
+  MEIN ERSTES ERGEBNIS WAR 70 VON 77 und sah nach einem Massenfall aus. Nachgesehen statt
+  gemeldet: die meisten dieser "Kennungen" sind gar keine.
+  77 Notizen tragen ein auftrag-Feld. Gegen die Kennungsform geprueft:
+    Form einer Kennung ....  9
+    Freitext oder Titel ... 68
+  Von den neun echten fehlen zwei im Datensatzbestand: A-08 und A-09. Aber BEIDE HABEN EIN
+  BLATT — A-08 zwei Dateien, A-09 eine. Es sind also keine Kennungen, die es nie gab,
+  sondern Auftraege ohne Zustandsdatensatz. K3 trifft nicht.
+  Ohne das Trennen haette ich 70 statt 0 gemeldet.
+der_eigentliche_fund: |
+  68 von 77 Notizen tragen FREITEXT im auftrag-Feld, nicht eine Kennung. Beispiele:
+    w37_ballwechsel_runde2 · a33_grundlage_zeiger_gewandert
+    spiegelung_rundet_an_der_toleranz · meine_ballortung_blieb_zu_eng
+    vier_fachfragen_fehlen_in_meiner_liste · statuswahrheit_in_zwei_fassungen
+  Das Feld heisst "auftrag", traegt aber in 88 Prozent der Faelle eine Ueberschrift.
+  UND ICH BIN DARAN BETEILIGT: viele dieser Notizen sind meine.
+  FUER A-42-4 IST DAS DER PUNKT. Das Kriterium verlangt "jeder Eintrag traegt seine
+  Herkunft (herkunft: mit Blocknummer und ...)". Solange die Herkunft die BLOCKNUMMER ist,
+  geht das auf. Wer die Eintraege aber nach KENNUNG gruppieren will — und das ist die
+  naheliegende naechste Frage an eine Notizsammlung —, kann es fuer 68 von 77 nicht.
+  Kein Einwand gegen A-42: der Umzug soll nichts umschreiben, und das ist richtig. Aber
+  wer danach die Sammlung benutzt, findet ein Feld vor, dessen Name nicht haelt, was er
+  sagt — H-9 in der Zielablage.
+  VORSCHLAG, nicht Entscheidung: im Eintrag zusaetzlich zur Blocknummer festhalten, OB das
+  auftrag-Feld eine Kennung trug. Ein Wahrheitswert, keine Umschreibung. Dann ist die
+  Gruppierbarkeit spaeter messbar, statt sie neu erheben zu muessen.
+nebenbefund_A_08_und_A_09: |
+  Beide haben ein Blatt, aber keinen Datensatz mit zustand-Feld im Planner-Stand. Das ist
+  die A-20-Klasse (Blatt, Tafelzeile, Datensatz gehoeren zusammen), gemessen an zwei
+  Kennungen. Ich melde es hier nur nebenbei, weil es beim K3-Pruefen anfiel — es gehoert
+  nicht zu A-42.
+stand_der_A_42_dor: |
+  Kanten: K1 mehrdeutig (Feldname oder Zeichenfolge), K2, K3, K6 heute nicht ausloesbar,
+  K4 durch meine eigene Zaehlung bestaetigt (24), K5 noch offen.
+  Kriterien: die Ausgangszahlen fuer -1 und -2 stehen, -9 einen Halbsatz kuerzer als die
+  Familie. Offen: -3, -4 (mit dem Hinweis oben), -5, -6, -7, -8.
+ballbesitz: planner
+```
