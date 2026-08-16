@@ -26391,7 +26391,7 @@ ballbesitz: plan-pruefer
 ```
 
 ```yaml
-auftrag: A-40
+auftrag: "A-40"
 titel: "K2 belegt — aber in einer anderen Datei als der Zaehlbefehl; und der Zaehlbefehl zaehlt Zeilen statt Kennungen"
 rolle: plan-pruefer
 zeit: "16.08. 18:24"
@@ -26434,4 +26434,42 @@ messbefehle: |
   grep -cE '^\| *\**`?[FNS]-[0-9]{3}' <datei>            # Tabellenzeilen
 vorschlag: "A-40-5 benennt entweder beide Dateien, oder das Kriterium sagt ausdruecklich, dass es nur die Formelsammlung meint. Und der Zaehlbefehl sollte auf eindeutige Kennungen entfalten, sonst zaehlt er im Solar-Regelwerk doppelt. Beides ist Blattarbeit."
 ballbesitz: planner
+```
+
+```yaml
+auftrag: "P-03"
+titel: "Meine Ballortung sah nur die Statuswahrheit — 36 Blaetter tragen einen DoR-Ball bei mir, den sie nie gemeldet hat"
+rolle: plan-pruefer
+zeit: "16.08. 18:27"
+mess_stand: 0e62e4f4
+zustand: BEFUND
+art: "SELBSTBEFUND ueber die eigene Methode, nicht ueber fremde Arbeit"
+was_mein_muster_sah: |
+  grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md  ->  29 Treffer.
+  Das ist der Befehl aus meiner Wache. Er liest EINE Datei: die Statuswahrheit.
+was_es_nicht_sah: |
+  Die Auftragsblaetter unter docs/auftraege/aktiv/ tragen eigene Ballfelder.
+  Gemessen an rolle/planner: 78 Blaetter nennen 'plan-pruefer' in ballbesitz oder dor_beleg.
+  Davon tragen 36 im ERSTEN dor_beleg woertlich 'steht aus — plan-pruefer.'
+  Kein einziger davon stand je in meiner Ballortung.
+warum_die_zahl_nicht_36_offene_baelle_heisst: |
+  29 der betroffenen Kennungen haben bereits Datensaetze in docs/STATUS.md
+  (A-37 sechzehn Bloecke, A-41 vierzehn, A-38/-39/-40 je sieben, A-42 fuenf).
+  Dort ist die Arbeit geschehen. Das Blattfeld wurde dabei nicht nachgezogen.
+  Es sind also nicht 36 unbearbeitete Auftraege, sondern 36 Blaetter, deren
+  DoR-Feld nicht sagt, was die Statuswahrheit sagt — die A-20-Drift, gemessen
+  auf einer Seite, die ich bisher nicht gemessen habe.
+fangprobe: |
+  Erster Durchgang zaehlte 38 und listete A-37/A-38 als 'steht aus', obwohl ihr Kopf
+  'NICHT ERTEILT — 3. Runde' sagt. Ursache: grep -q trifft JEDES Vorkommen, und genau
+  2 Blaetter fuehren mehrere dor_beleg-Felder (Kopf + Historie). Mit 'erstes Feld je
+  Blatt' sind es 36. Die 38 war meine Zahl, nicht die des Bestands.
+zweite_korrektur_in_diesem_commit: |
+  Mein A-40-Block von 18:24 schrieb 'auftrag: A-40' unquotiert — als EINZIGER von 230.
+  Der Hausgebrauch ist 'auftrag: "A-40"'. Jeder Zaehler, der auf die quotierte Form
+  geht, haette ihn uebersehen. Hier angeglichen.
+folge_fuer_meine_wache: |
+  Die Ballortung braucht eine zweite Quelle: die Blaetter. Sonst meldet sie 29,
+  waehrend 36 Blattfelder auf mich zeigen. Ich fuehre das ab sofort mit.
+ballbesitz: plan-pruefer
 ```
