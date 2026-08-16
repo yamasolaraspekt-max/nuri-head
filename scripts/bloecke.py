@@ -106,9 +106,35 @@ def main(pfad=P):
              'console.log(ok+" "+bad);', pfad],
             capture_output=True, text=True)
         if r.returncode != 0:
-            print('  C  konnte nicht geprueft werden:', r.stderr.strip()[:80])
-            return 1
-        ok, bad = (int(x) for x in r.stdout.split())
+            # UNGEPRUEFT ist kein BEFUND. Nachgezogen 16.08. 23:2x auf einen Fund des
+            # Plan-Pruefers (er mass es an bloecke.py, Ball ausdruecklich bei mir):
+            # "ein Pruefer, der aus Umgebungsgruenden schweigt, ist von einem gruenen nicht
+            # zu unterscheiden, wenn man nur auf die Zeilen schaut."
+            #
+            # Die alte Fassung gab hier `return 1` — denselben Wert wie eine echte
+            # Verschlechterung. Beim Nachmessen kam ZWEIERLEI heraus, und das zweite ist
+            # schwerer als das gemeldete: der vorzeitige return uebersprang PRUEFUNG D,
+            # also genau die Kontrolle auf abwesende Datensaetze.
+            #
+            #   Lauf ohne erreichbares js-yaml, VORHER:  A · B · "C konnte nicht" · exit 1
+            #                                            D lief NICHT
+            #   Lauf mit js-yaml:                        A · B · C · D · exit 0
+            #
+            # Jetzt: C meldet UNGEPRUEFT, D laeuft weiter, und der Rueckgabewert ist 2 —
+            # unterscheidbar von 0 (alles auf Grundlinie) und 1 (Befund).
+            # Den GRUND aus stderr holen, nicht die letzte Zeile: node haengt seine
+            # Versionsnummer ans Ende, und "Grund: Node.js v26.5.0" ist keine Auskunft.
+            # Selbst bemerkt beim Gegenpruefen, bevor der Text in den Bestand ging.
+            _z = [l.strip() for l in r.stderr.splitlines() if l.strip()]
+            _grund = next((l for l in _z if 'Error' in l or 'Cannot find' in l),
+                          _z[0] if _z else 'node lieferte keinen Grund')
+            print(f'  C  UNGEPRUEFT — kein Befund, sondern eine fehlende Voraussetzung.')
+            print(f'     Grund: {_grund[:72]}')
+            print(f'     Abhilfe: aus dem Repo-Verzeichnis fahren (js-yaml liegt in node_modules)')
+            print(f'              oder NODE_PATH auf ein Verzeichnis mit js-yaml setzen.')
+            ok = bad = None
+        else:
+            ok, bad = (int(x) for x in r.stdout.split())
     else:
         ok = bad = 0
         for blk in bloecke(text):
@@ -118,11 +144,16 @@ def main(pfad=P):
             except Exception:
                 bad += 1
 
-    ueber = bad - GRUNDLINIE
-    print(f'  C  Bloecke {ok + bad} · parsen {ok} · kaputt {bad} '
-          f'(Grundlinie {GRUNDLINIE}, {"+" if ueber > 0 else ""}{ueber})')
-    if ueber > 0:
-        print(f'     ⚠ {ueber} MEHR als der Altbestand — das ist neu und gehoert geoeffnet.')
+    if bad is None:
+        ueber = 0                      # ungeprueft zaehlt NICHT als Befund
+        c_ungeprueft = True
+    else:
+        c_ungeprueft = False
+        ueber = bad - GRUNDLINIE
+        print(f'  C  Bloecke {ok + bad} · parsen {ok} · kaputt {bad} '
+              f'(Grundlinie {GRUNDLINIE}, {"+" if ueber > 0 else ""}{ueber})')
+        if ueber > 0:
+            print(f'     ⚠ {ueber} MEHR als der Altbestand — das ist neu und gehoert geoeffnet.')
 
     # D — OEFFNER OHNE SCHLIESSER. Nachgeruestet 16.08. 23:1x, weil A, B und C denselben
     # Fall alle drei nicht sehen und dabei "still" melden:
@@ -162,7 +193,14 @@ def main(pfad=P):
         print(f'     ⚠ {ueber_d} MEHR als der Altbestand — ein Datensatz koennte '
               f'unsichtbar geworden sein.')
 
-    return 1 if (a % 2 or ueber_b > 0 or ueber > 0 or ueber_d > 0) else 0
+    # Rueckgabewerte, seit 16.08. 23:2x DREI statt zwei:
+    #   0  alle vier gefahren, alle auf Grundlinie
+    #   1  BEFUND — eine Pruefung meldet eine Verschlechterung
+    #   2  UNGEPRUEFT — eine Pruefung konnte nicht gefahren werden (Umgebung, nicht Bestand)
+    # Ein Befund schlaegt "ungeprueft", denn er ist die staerkere Aussage.
+    if a % 2 or ueber_b > 0 or ueber > 0 or ueber_d > 0:
+        return 1
+    return 2 if c_ungeprueft else 0
 
 
 if __name__ == '__main__':
