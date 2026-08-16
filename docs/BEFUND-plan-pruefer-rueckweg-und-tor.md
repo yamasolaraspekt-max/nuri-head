@@ -339,3 +339,47 @@ Rücknahme auf „19:56" datiert. Sie fiel um **19:53:15**. Der Release-Prüfer 
 zitiert, ich selbst nicht. Das ist heute das zweite Mal, dass eine Uhrzeit in meiner Prosa
 nicht gemessen war — beim ersten Mal (18:39 statt 18:35) hat es meinen nächsten Befehl ins
 Leere laufen lassen. Hier hat es nichts verfälscht, aber der Fehler ist derselbe.
+
+---
+
+## A-37-19 geprueft — der Befund traegt, der Bau loest ihn, und die Zeilennummer ist schon wieder gewandert
+
+*(geschrieben 20:02, Messstand 83635ca7)*
+
+**Der Befund ist belegt.** Das alte Muster `^[a-z][a-z-]*(-[0-9]+)?: ` an den drei Proben
+gefahren, die das Blatt nennt:
+
+| Betreff | gemessen | Blatt sagt |
+|---|---|---|
+| `release-pruefer (in Yamas Namen): …` | kein Treffer | kein Treffer |
+| `plan-pruefer (release-pruefer in Rollenwechsel): …` | kein Treffer | kein Treffer |
+| `planner: …` | Treffer | Treffer |
+
+Drei von drei. Die Markenerkennung übersah Rollenmarken mit Klammerzusatz, und die Folge wäre
+die stille Verdopplung gewesen, die der Generator beschreibt.
+
+**Der Bau löst ihn.** Das neue Muster steht heute in `scripts/commit-pruefen.sh` und trägt den
+optionalen Zusatz: `^[a-z][a-z-]*(-[0-9]+)?( \([^)]*\))?: `. An denselben Proben plus einer
+vierten:
+
+| Betreff | neues Muster |
+|---|---|
+| `release-pruefer (in Yamas Namen): …` | **Treffer** |
+| `plan-pruefer (release-pruefer in Rollenwechsel): …` | **Treffer** |
+| `planner: …` | **Treffer** |
+| `Beispiel: zustand: A-33 · CODE_FERTIG` | **kein Treffer** |
+
+Die vierte Probe ist meine eigene Zugabe und die wichtigere: Sie prüft, ob der erweiterte
+Zusatz die Zitat-Falle aus `ARBEITSREGELN.md` Zeile 1483 aufreißt — ein Regelzitat, das mit
+`Beispiel:` beginnt, darf **nicht** als Rollenmarke gelten. Es tut es nicht. Der Bau ist an
+dieser Stelle enger geblieben, als er hätte werden können.
+
+**Und der Zeiger wandert schon wieder.** Das Blatt nennt die Fundstelle *„heute Zeile 150,
+nicht mehr 73 — die Datei ist gewachsen; diese Nummer gehört mitgemessen, nicht zitiert"*.
+Gemessen steht sie jetzt auf **Zeile 173** bei 985 Zeilen Gesamtlänge; der Bau von 19:49 hat
+33 Zeilen eingefügt. Zwischen Blatt-Eintrag (19:43) und dieser Messung liegen 17 Minuten und
+23 Zeilen.
+
+**Das ist kein Vorwurf, sondern die Bestätigung der Warnung im selben Satz.** Das Blatt
+kennzeichnet die Zahl ausdrücklich als Momentaufnahme und verlangt, sie mitzumessen. Genau das
+war nötig — nach 17 Minuten stimmte sie nicht mehr.
