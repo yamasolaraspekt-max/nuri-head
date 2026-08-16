@@ -124,8 +124,21 @@ def datensaetze(text):
     return raus
 
 
+def normalisiere_rolle(s):
+    """Rollennamen vergleichbar machen — WORTGLEICH zu `a26-ball-drift.sh:121`.
+
+    Bewusst dieselbe Normalisierung wie das Tor-Werkzeug: zwei Prüfungen desselben Feldes mit
+    zwei Schreibweisenregeln wären eine zweite Wahrheit. `–`, `—` und `-` heissen "kein Ball".
+    """
+    s = (s or "").lower()
+    for a, b in (("ä", "ae"), ("ö", "oe"), ("ü", "ue"), ("ß", "ss")):
+        s = s.replace(a, b)
+    s = re.sub(r"[`*]", "", s).strip()
+    return "" if s in ("-", "–", "—") else s
+
+
 def tafelzeilen(text):
-    """Je Kennung (zeile, zustand) aus SPALTE 2 der Tafel — nicht aus dem ersten Backtick (E3).
+    """Je Kennung (zeile, zustand, ball) aus SPALTE 2 und 3 — nicht aus dem ersten Backtick (E3).
 
     Die Statustafel steht VOR dem ersten Zaun der Datei. Danach kommen Tabellen im Fliesstext,
     die dieselbe Form haben und sonst mitzaehlen — gemessen fuenf Stueck, darunter
@@ -146,8 +159,33 @@ def tafelzeilen(text):
             continue
         kennung = k.group(1).strip()
         roh = spalten[2].strip().strip("*").strip("`").strip("*").strip()
-        raus.setdefault(kennung, (i + 1, roh))
+        ball = spalten[3] if len(spalten) > 3 else ""
+        raus.setdefault(kennung, (i + 1, roh, ball.strip()))
     return raus
+
+
+def paare(ds, taf):
+    """Tafelkennung auf Datensatzkennung abbilden, wo der Altbestand zwei Schreibweisen fuehrt.
+
+    Gemessen: elf Tafelzeilen (W-01, W-02, W-04, W-05, W-08, W-09, W-11, W-13, W-15, W-21,
+    W-22) haben keinen gleichnamigen Datensatz — der heisst dort `W-01/1`. Ohne Paarung
+    bleiben genau diese elf dauerhaft driftungeprueft, und es sind dieselben W-Auftraege, die
+    mein Kennungsmuster schon zweimal uebersehen hat.
+
+    ENG gehalten, damit keine Fehlpaarung entsteht: nur wenn die Tafelkennung selbst KEINEN
+    Datensatz hat UND es GENAU EINEN Kandidaten `<kennung>/…` gibt. Zwei Kandidaten heissen
+    "nicht entscheidbar" und bleiben ungepaart — eine geratene Paarung waere schlimmer als
+    eine offen ausgewiesene Luecke.
+    """
+    abb = {}
+    for k in taf:
+        if k in ds:
+            abb[k] = k
+            continue
+        kand = [x for x in ds if x.startswith(k + "/")]
+        if len(kand) == 1:
+            abb[k] = kand[0]
+    return abb
 
 
 def messen(refs, rolle):
@@ -168,14 +206,35 @@ def messen(refs, rolle):
             k for k, (_, f) in ds.items()
             if f.get("claim_abnahme") and f.get("zustand") not in ABGESCHLOSSEN
         )
-        drift = sorted(
-            k for k in set(ds) & set(taf)
-            if ds[k][1].get("zustand") and taf[k][1] != ds[k][1]["zustand"]
+        # E7: bis 21:4x verglich diese Zeile NUR den Zustand und die Ausgabe hiess trotzdem
+        # "Drift". Der Ball — das, was der Takt eigentlich sucht — wurde nie verglichen; A-37
+        # trug 'Plan-Prüfer' in der Tafel und 'integrator' im Datensatz, und die Meldung sagte
+        # weiter "Drift keine". Beide Felder werden jetzt getrennt gezaehlt und getrennt benannt.
+        abb = paare(ds, taf)
+        drift_z = sorted(
+            k for k, d in abb.items()
+            if ds[d][1].get("zustand") and taf[k][1] != ds[d][1]["zustand"]
         )
+        drift_b = sorted(
+            k for k, d in abb.items()
+            if normalisiere_rolle(ds[d][1].get("ballbesitz"))
+            and normalisiere_rolle(taf[k][2])
+            and normalisiere_rolle(ds[d][1].get("ballbesitz")) != normalisiere_rolle(taf[k][2])
+        )
+        # Deckungsluecke ausdruecklich benennen, nicht als Null verschweigen (A-30-3): eine
+        # Kennung, die nach der Paarung immer noch an nur EINEM Ort steht, ist nicht
+        # vergleichbar, und Schweigen darueber liest sich wie "geprueft und still".
+        nur_einer = len(set(taf) - set(abb)) + len(set(ds) - set(abb.values()))
         print(f"  {ref:34s} Datensaetze {len(ds):3d} · Tafel {len(taf):3d} · "
-              f"Ball[{rolle}] {ball if ball else 'keiner'} · Drift {drift if drift else 'keine'}")
+              f"Ball[{rolle}] {ball if ball else 'keiner'} · "
+              f"Zustand-Drift {drift_z if drift_z else 'keine'} · "
+              f"Ball-Drift {drift_b if drift_b else 'keine'} · "
+              f"nicht vergleichbar {nur_einer}")
         if claim:
             print(f"  {'':34s}   offene claim_abnahme: {claim}")
+        for k in drift_b:
+            print(f"  {'':34s}   BALL-DRIFT {k}: Tafel '{taf[k][2]}' <-> Datensatz "
+                  f"'{ds[abb[k]][1].get('ballbesitz')}'")
     return fehler
 
 
@@ -278,6 +337,85 @@ def fangprobe():
     ball2 = sorted(k for k, (_, f) in d2.items() if "evaluator" in f.get("ballbesitz", ""))
     print(f"  ROT Ball            {ziel}    ballbesitz kuenstlich auf evaluator · gemeldet={ball2}")
     if ball2 != [ziel]:
+        rot += 1
+
+    # E7 — die Ball-Drift, die bis 21:4x gar nicht gemessen wurde. Der ECHTE Fall steht im
+    # Bestand (A-37: Tafel 'Plan-Prüfer', Datensatz 'integrator'), also braucht diese Probe
+    # keine Mutation — sie prueft, dass er GEFUNDEN wird. Die Rot-Richtung kommt danach.
+    def balldrift(dd, tt):
+        a = paare(dd, tt)
+        return sorted(k for k, d in a.items()
+                      if normalisiere_rolle(dd[d][1].get("ballbesitz"))
+                      and normalisiere_rolle(tt[k][2])
+                      and normalisiere_rolle(dd[d][1].get("ballbesitz")) != normalisiere_rolle(tt[k][2]))
+    echt = balldrift(ds, taf)
+    print(f"  E7 Ball-Drift im Bestand: {echt if echt else 'keine'}"
+          + (f"  (Tafel '{taf[echt[0]][2]}' <-> Datensatz '{ds[echt[0]][1].get('ballbesitz')}')"
+             if echt else ""))
+
+    # E8 — die elf Altbestandspaare: ohne sie blieben genau die W-Auftraege ungeprueft, die
+    # mein Muster schon zweimal verfehlt hat. Die Probe prueft die WIRKUNG (Zahl der
+    # vergleichbaren Kennungen), nicht die Existenz der Funktion.
+    abb_fp = paare(ds, taf)
+    ungepaart = sorted(set(taf) - set(abb_fp))
+    ohne = len(set(ds) & set(taf))
+    # Das Kriterium ist NICHT "alle 87 vergleichbar" — das war meine erste Erwartung und sie
+    # war falsch. W-05 und W-21 haben ZWEI Kandidaten (/1 und /2); die enge Regel paart dort
+    # zu Recht nicht. Geprueft wird deshalb: die Paarung wirkt (mehr als ohne sie), und jede
+    # ungepaarte Kennung hat einen NACHWEISBAREN Grund — nicht einen, den ich ihr zuschreibe.
+    grundlos = [k for k in ungepaart if len([x for x in ds if x.startswith(k + "/")]) == 1]
+    print(f"  E8 Altbestandspaare: {ohne} vergleichbar ohne Paarung · {len(abb_fp)} mit · "
+          f"ungepaart={ungepaart} (Kandidaten: "
+          f"{ {k: [x for x in sorted(ds) if x.startswith(k + '/')] for k in ungepaart} })")
+    if len(abb_fp) <= ohne or grundlos:
+        rot += 1
+    # GEGENPROBE zur Paarung: eine Tafelkennung mit ZWEI Kandidaten darf NICHT geraten werden.
+    ds_test = dict(ds)
+    ds_test["W-01/9"] = ds["W-01/1"]
+    if "W-01" in paare(ds_test, taf):
+        print("  GEG Paarung        W-01 mit ZWEI Kandidaten wurde trotzdem gepaart — geraten")
+        rot += 1
+    else:
+        print("  GEG Paarung        W-01 mit ZWEI Kandidaten bleibt ungepaart — nicht geraten")
+
+    # ROT-Richtung: eine Kennung ohne Drift kuenstlich verstellen — wird sie gemeldet?
+    # NICHT A-16 nehmen: dessen Datensatz traegt `ballbesitz: —`, und die Regel verlangt zu
+    # Recht auf BEIDEN Seiten einen Ball. Mit A-16 meldete die Probe nur die echte A-37-Drift
+    # und haette so ausgesehen, als schlage sie an — das war mein Konstruktionsfehler, nicht
+    # der des Werkzeugs. Also ein Ziel, das wirklich einen Ball an beiden Orten hat.
+    ziel_b = next((k for k in sorted(set(ds) & set(taf))
+                   if k not in echt
+                   and normalisiere_rolle(ds[k][1].get("ballbesitz"))
+                   and normalisiere_rolle(taf[k][2])), None)
+    if ziel_b is None:
+        print("  ROT Ball-Drift      KEIN ZIEL — keine Kennung mit Ball an beiden Orten")
+        rot += 1
+    else:
+        mut3 = list(L)
+        for i, z in enumerate(mut3):
+            if z.startswith(f"| **{ziel_b}**"):
+                sp = z.split("|")
+                sp[3] = " **generator** "
+                mut3[i] = "|".join(sp)
+                break
+        b3 = balldrift(datensaetze("\n".join(mut3)), tafelzeilen("\n".join(mut3)))
+        print(f"  ROT Ball-Drift      {ziel_b:7s} Tafel-Ball kuenstlich auf generator "
+              f"(Datensatz '{ds[ziel_b][1].get('ballbesitz')}') · gemeldet={b3}")
+        if ziel_b not in b3:
+            rot += 1
+
+    mut4 = list(L)
+    for i, z in enumerate(mut4):
+        if z.startswith("| **A-37**"):
+            sp = z.split("|")
+            sp[3] = " `Plan-Prüfer` "        # nur Schreibweise, dieselbe Rolle
+            mut4[i] = "|".join(sp)
+            break
+    b4 = balldrift(datensaetze("\n".join(mut4)), tafelzeilen("\n".join(mut4)))
+    nur_schreibweise = [k for k in b4 if k != "A-37"]
+    print(f"  GEG Schreibweise    A-37    Backticks statt Sternchen · zusaetzliche Meldungen="
+          f"{nur_schreibweise if nur_schreibweise else 'keine'}")
+    if nur_schreibweise:
         rot += 1
 
     print(f"  ---- Fangproben rot: {rot}")
