@@ -268,3 +268,44 @@ Stand von 19:38 noch den von 19:43 abbildet.
 **Für meine eigene Wache:** Ich habe nach P-09 zugesagt, jede Existenzfrage gegen alle Zweige
 zu messen. Ein Kriterium im Blatt ist eine Existenzfrage. Ich habe die Regel auf Dateien
 angewandt und nicht auf Inhalte — der vierte Fall derselben Klasse heute.
+
+---
+
+## RUECKNAHME — "die Statuswahrheit ist eingefroren" war falsch
+
+*(geschrieben 19:56, Messstand 51e580e2)*
+
+Ich habe um 19:42 gemeldet, die Zustandskette nach §3 könne nicht mehr fortgeschrieben werden,
+und das als **dringenden Ball an Yama** gestellt. **Das war falsch, und die Regel sagt es
+wörtlich.**
+
+**`ARBEITSREGELN.md`, Zeile 1481 und 1490–1497:**
+
+> Eine Rolle meldet einen Zustandswechsel **als Commit-Betreff**, in genau dieser Form:
+> `<rolle>: zustand: <KENNUNG> · <ZUSTAND> · <rolle> · <beleg-sha>`
+> WER = git-Autor · WANN = git-Zeitstempel · WAS = Kennung + Zustand + Beleg-SHA ·
+> **WO = im eigenen Rollenzweig, sonst nirgends**
+
+**`scripts/status-erzeugen.sh`, Zeile 4–6:**
+
+> **Yamas Entscheidung vom 16.08.:** *„Der Zustandswechsel IST der Commit."* Keine Rolle
+> bearbeitet `docs/STATUS.md` mehr; sie meldet einen Zustandswechsel als Commit-Betreff in
+> festem Wortlaut, **und der Integrator lässt daraus die Tafel erzeugen.**
+
+**Die Kette läuft also, und zwar genau wie entschieden.** Gemessen: 20 Commits mit
+Zustands-Betreff, alle von heute, **vier davon nach dem Scharfwerden der Sperre um 19:36**.
+Meine „Aussperrung" ist kein Defekt, sondern die Umsetzung dieser Entscheidung.
+
+**Damit fällt auch der Kern meiner A-37-Rücknahme von 19:56.** Ich schrieb, der Zustand könne
+dem neunzehnten Kriterium „nicht folgen". Er kann — über den Betreff, im eigenen Rollenzweig.
+Was von jener Meldung bleibt, ist nur die Zeitachse: A-37-19 kam um 19:43, fünf Minuten nach
+der CODE_FERTIG-Meldung. Das ist eine Beobachtung zum Ablauf, kein Systemmangel.
+
+**Was tatsächlich offen ist, und nur das:** Die Tafel `docs/STATUS.md` ist seit 19:35 nicht
+erzeugt worden; der Erzeugerlauf taucht in keinem Commit-Betreff auf. Der Eingang füllt sich
+(20 Meldungen), die Ableitung hinkt. **Ob und wann der Integrator erzeugt, ist sein Takt und
+nicht mein Urteil** — ich melde nur, dass Eingang und Tafel derzeit auseinanderlaufen.
+
+**Vierter zu weiter Befund heute, und der schwerste.** Ich habe eine Sperre gemessen und daraus
+auf einen Systemstillstand geschlossen, ohne die Regel zu lesen, die den Weg beschreibt. Die
+Regel stand die ganze Zeit in derselben Datei, die ich heute Abend dreimal geöffnet habe.
