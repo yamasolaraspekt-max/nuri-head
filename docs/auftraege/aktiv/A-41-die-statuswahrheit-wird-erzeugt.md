@@ -444,7 +444,7 @@ DER_ERTRAG_DES_LAUFS, und er ist groesser als das Kriterium verlangt: |
 
 | Kriterium | Messung | Ergebnis |
 |---|---|---|
-| **A-41-1** Wortlaut in den Regeln | `docs/ARBEITSREGELN.md:1469` „Der Zustandswechsel IST der Commit", Muster auf `:1490`, Beispiel `:1492`. **Rot-Beleg:** am Basis `e521bd98` **0** Treffer, am Bau **0**, heute **1** — der Nachweis kann rot werden | **grün** |
+| **A-41-1** Wortlaut in den Regeln | **Nachtrag vom 16.08.** „Der Zustandswechsel IST der Commit", Muster auf `:1490`, Beispiel `:1492`. **Rot-Beleg:** am Basis `e521bd98` **0** Treffer, am Bau **0**, heute **1** — der Nachweis kann rot werden | **grün** |
 | **A-41-2** Skript existiert, ausführbar | `scripts/status-erzeugen.sh`, **703 Zeilen**, Modus **755**, `bash -n` sauber. **Rot-Beleg über drei Stände:** `status-erzeug` in `scripts/` am Basis `e521bd98` **0**, `rolle/planner` **0** | **grün** |
 | **A-41-3** Idempotenz | zweiter Lauf: `git diff --stat` **leer**, `git status` **0 Dateien** — keine Zeile geändert | **grün** |
 | **A-41-4** Erstbefüllung gefahren | `--bootstrap`: **86** Kennungen, **86** Datenzeilen, **0** Doppelte. **Positivprobe namentlich: `A-33 BETRIEBSBESTAETIGT`** — der jüngste der fünf, nicht der aus HEAD | **grün** |
