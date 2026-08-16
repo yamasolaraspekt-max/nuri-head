@@ -23609,3 +23609,108 @@ was_zu_tun_ist: |
   Punkt dem Planner, wie bei A-41-8 heute um 15:29.
 ballbesitz: generator
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "DoR Teil 4 — A-41-3 haelt am echten Lauf, und ich haette um ein Haar einen schweren Fehlbefund gemeldet"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:43 CEST"
+mess_stand: "Bau b585d335 · HEAD 55028175 · Lauf im eigenen Baum, Arbeitsbaum danach wieder 0 geaenderte Pfade"
+a_41_3_idempotenz_haelt: |
+  Zweimal unmittelbar hintereinander gefahren, Ausgaben verglichen: IDENTISCH.
+  Rueckgabe beide Male 1. Der Arbeitsbaum ist unveraendert geblieben (0 geaenderte Pfade,
+  nach dem Lauf gemessen).
+  Vorher abgesichert, dass der Lauf gefahrlos ist: 0 Python-Schreibzugriffe, 0 'git add'
+  und 0 'git commit'. Drei vermeintliche Shell-Umlenkungen waren Fehlalarm meines Musters
+  — Z.95 ist ein Regex, Z.130 ein Docstring mit Pfeil, Z.215 ein print mit Pfeil. Kein
+  Schreibzugriff im ganzen Skript.
+was_der_vergleichsmodus_wirklich_liefert: |
+  aus dem Commit-Log erzeugt:      1 Kennung   (A-41, der einzige Zustands-Commit)
+  im heutigen Bestand vorhanden:  86 Kennungen
+  NUR IM BESTAND, nicht im Log:   85
+  Und das Werkzeug sagt den Grund selbst dazu: "der Wortlaut ist neu; ohne Bootstrap hat
+  die Erzeugung keine Eingabe." Das ist genau die Luecke, die Planner und Generator vor
+  dem Bau unabhaengig voneinander gefunden haben. Es meldet sie, statt 85 Abweichungen
+  als Divergenz auszugeben.
+  GEGENGEMESSEN: die 86 habe ich unabhaengig nachgebaut — den Bestandsleser in einem
+  eigenen Python-Lauf ueber dieselben sechs Zweige nachprogrammiert. Ergebnis 86,
+  identisch. Zwei Wege, eine Zahl.
+und_A_41_10_zeigt_sich_hier_praktisch: |
+  Der Lauf gibt Rueckgabe 1 — wegen 'fehlend', also der 85. Derselbe Wert 1 steht laut
+  A-41-10 aber fuer "erzeugt, mit Meldungen". Mein Befund von 15:35 ist damit nicht mehr
+  nur am Code belegt, sondern am laufenden Werkzeug: wer diese 1 liest, weiss nicht, ob
+  85 Kennungen fehlen oder ob drei Meldungen angefallen sind.
+DIE_FALLE_DIE_ICH_MIR_SELBST_GESTELLT_HABE: |
+  Mein erster Lauf meldete "0 Kennungen aus dem Log" UND "0 im Bestand". Das sah nach
+  einem schweren Bau-Fehler aus: das Werkzeug, das die Statuswahrheit erzeugen soll,
+  findet nichts. Ich habe es NICHT gemeldet, sondern weitergemessen — und beide
+  Bestandteile funktionierten isoliert: das WORTLAUT-Regex trifft den Betreff
+  (kennung=A-41, zustand=ENTWURF, rolle=planner), der git-log-Aufruf liefert 1 Zeile, der
+  nachgebaute Bestandsleser findet 86.
+  DER GRUND WAR MEINER: Zeile 61 des Skripts lautet cd "$(dirname "$0")/.." — ich hatte
+  das Skript nach /tmp kopiert und von dort gefahren. Es wechselte also nach /, fand kein
+  Repo und meldete folgerichtig ueberall Null. Am richtigen Ort gefahren: 1 und 86.
+  Das ist heute die dritte Null, die etwas anderes bedeutet hat, als sie aussah — nach
+  AUFTRAGSTAFEL.md um 15:15 und exit 127 um 15:16. Diese war die gefaehrlichste, weil ein
+  spektakulaeres Ergebnis am wenigsten Nachfragen provoziert. Ein Werkzeug, das man nicht
+  an seinem gedachten Ort fahren laesst, misst den Ort und nicht das Werkzeug.
+stand: |
+  Geprueft und haltend: A-41-2, A-41-3, K5, FUND 1, das Bau-Muster, der Vergleichsmodus.
+  Rot: A-41-8 mit K7 (--no-merges, seit 15:29 Auftrag beim Generator) und A-41-10 (der
+  Code kennt nur 0 und 1).
+  Offen: A-41-1, -4 bis -7, -9, -11, -12 und die Kanten K1 bis K4 sowie K6.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-41"
+titel: "Beide meiner roten Punkte sind behoben — am laufenden Werkzeug nachgemessen, nicht am Commit-Text geglaubt"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:45 CEST"
+mess_stand: "Bau 2e9cf127 (15:40, 316 Z., vorher 227) · HEAD 52c4e13d · Laeufe im eigenen Baum, Arbeitsbaum danach 0 geaenderte Pfade"
+a_41_8_behoben: |
+  'no-merges' im Skript: 2 Treffer (vorher 0). Z.191 traegt den Schalter im Aufruf,
+  Z.187 die Begruendung im Kommentar. Der Punkt, den ich um 15:22 gemeldet und den der
+  Planner um 15:29 zum Auftrag gemacht hat, ist zu.
+a_41_10_behoben_und_besser_als_verlangt: |
+  Aus vier verstreuten 'sys.exit(1 if X else 0)' ist EIN zentraler Ausstieg geworden:
+  def raus(code, grund, bedeutung=None) mit einer BEDEUTUNG-Tabelle.
+  ALLE VIER WERTE WERDEN JETZT WIRKLICH ERZEUGT — die Aufrufe gezaehlt, nicht die Tabelle
+  gelesen (das war der Fehler, an dem A-37 haengt):
+    raus(0, ...) 3 mal · raus(1, ...) 2 mal · raus(2, ...) 3 mal · raus(3, ...) 3 mal
+    dazu raus(70, ...) 1 mal fuer die rote Selbstprobe (sysexits EX_SOFTWARE)
+  sys.exit gesamt: 1. Bash-exit: 0. Es gibt keinen zweiten Weg hinaus.
+  Und die Zuordnung stimmt inhaltlich, Stichprobe an drei Stellen:
+    Z.238 raus(3, "Kein einziger Commit im Wortlaut ... nichts zu erzeugen")
+    Z.251 raus(2, "GEMELDET, NICHT aufgeloest (Regel 4)")
+    Z.262 raus(0, "... Kennungen, keine Meldung")
+  BESSER ALS VERLANGT ist der Sonderfall, den A-41-10 gar nicht nennt: die Fangprobe
+  erzeugt nichts, also waere ihre 0 als "erzeugt, keine Meldung" unehrlich. Der Code
+  ueberschreibt die Bedeutung an dieser einen Stelle und begruendet es im Kommentar —
+  "an genau der Stelle unehrlich, an der sie die Ehrlichkeit des Werkzeugs bezeugen soll".
+am_laufenden_werkzeug_bestaetigt: |
+  Nicht am Code stehengeblieben, sondern gefahren — diesmal am richtigen Ort:
+    --fangprobe  -> Rueckgabe 0, "Fangprobe 10/10 wie erwartet", "RUECKGABE 0 — Selbstprobe gruen"
+    (ohne Arg)   -> Rueckgabe 1, "RUECKGABE 1 — erzeugt, MIT Meldungen",
+                    "fehlend 85 · neu 0 · abweichend 0"
+  Genau die Mehrdeutigkeit, die ich um 15:35 gemeldet hatte, ist weg: die 1 steht nicht
+  mehr allein, ihre Aufschluesselung steht daneben. Wer sie liest, weiss jetzt, was
+  passiert ist.
+  Die 86 Kennungen im Bestand sind zum dritten Mal unveraendert — Skript, mein
+  Python-Nachbau, und dieser Lauf.
+a_41_1_ist_heute_korrekt_rot: |
+  Das Blatt gibt als Rot-Lage an: grep -c '^zustand:' ueber die Regeln -> 0.
+  Am Basis-SHA e521bd98 nachgemessen: 0. Die Angabe stimmt, das Kriterium ist weder
+  unerfuellbar noch bereits erfuellt.
+  EIN HINWEIS FUER DEN, DER ES SPAETER ABHAKT: ohne den Anker misst man 8 Treffer in
+  docs/ARBEITSREGELN.md (Z.126, 720, 722, 733, 752 u.a.). Die sind Altbestand und meinen
+  das ZUSTANDSFELD in STATUS.md, nicht den Commit-Wortlaut. Wer 'zustand:' ohne ^ zaehlt,
+  haelt A-41-1 faelschlich fuer erfuellt. Der Anker im Blatt ist richtig gesetzt — er muss
+  nur benutzt werden.
+stand: |
+  Haltend: A-41-1 (als Rot-Lage sauber), -2, -3, -8, -10, K5, FUND 1, Bau-Muster,
+  Vergleichsmodus, Fangprobe 10/10.
+  Offen: A-41-4 bis -7, -9, -11, -12 und die Kanten K1 bis K4 sowie K6.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
