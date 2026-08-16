@@ -21232,3 +21232,69 @@ was_ich_dem_evaluator_anrechne: |
   hat hier eine falsche Rot-Meldung verhindert.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a37_teil1_gebaut_die_codes_stimmen_an_drei_stellen_nicht_ueberein"
+titel: "rollen-tor.sh ist gebaut — es vergibt 1 und 2, das Kriterium verlangt 3, die Tabelle 5, und die Einhaengung wirft alles auf 2"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:41"
+stand_kopf: d2f724e5
+gemessen_an: "0ee521f7 — generator: A-37 Teil 1 gebaut, auf Yamas Anweisung"
+posten: "Pflichtteil 3 · ein Bau an einem Auftrag im Zustand ENTWURF, gemessen am COMMIT (E1)"
+was_gebaut_wurde: |
+  0ee521f7, 13:38:23, zwei Dateien:
+    scripts/rollen-tor.sh       119 Zeilen, neu
+    scripts/commit-pruefen.sh   +14 Zeilen, der Einhaengepunkt
+  Der Bau ist sorgfaeltig: die Kanten K1 (Instanznummer wird abgeschnitten), K2 (die
+  Zuordnung steht als Tabelle da und wird NICHT aus dem Rollennamen gerechnet) und K4 (kein
+  Repo ist KEIN Rollenfehler) sind einzeln behandelt und im Code kommentiert. Es gibt einen
+  --pruefe-Modus, der meldet statt zu sperren. Und die Entscheidung zu sperren ist begruendet:
+  "jene melden ueber den INHALT, wo ein Fehlalarm teuer und ein Durchlassen billig ist. Hier
+  ist es umgekehrt." Daran habe ich nichts auszusetzen.
+DER FUND · DREI STELLEN, DREI ZUORDNUNGEN: |
+  (1) IM GEBAUTEN TOR, am Commit gemessen:
+        TICKET_ROLLE nicht gesetzt   -> exit 1   (Z.65)
+        kein Git-Repository (K4)     -> exit 2   (Z.77)
+        unbekannte Rolle             -> exit 1   (Z.94)
+        Rolle/Baum passen nicht      -> exit 1   (Z.119)
+  (2) IM KRITERIUM A-37-5, unveraendert seit gestern:
+        "TICKET_ROLLE leer -> exit 3"
+  (3) IN DER TABELLE desselben Blattes:
+        5 = Rollenkennung fehlt beim direkten Aufruf des Tors
+  Drei Stellen, drei verschiedene Zahlen fuer denselben Fall. Der Generator musste waehlen
+  und hat eine dritte Variante genommen — genau das, was der Planner heute selbst benannt
+  hat: "Ein Blatt, das sich an zwei Stellen selbst widerspricht, laesst den Bauenden waehlen."
+  MEIN RESTPUNKT VON 13:26 IST DAMIT EINGETRETEN, nicht mehr nur vorhergesagt.
+UND EIN ZWEITER, DER ERST DURCH DIE EINHAENGUNG ENTSTEHT: |
+  commit-pruefen.sh ruft das Tor so:
+      if ! TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh; then
+        echo "KEIN COMMIT. Der Baum gehoert nicht zu dieser Rolle." >&2
+        exit 2
+      fi
+  Der Rueckgabewert des Tors wird NICHT durchgereicht. Jeder Torfehler — ob 1 oder 2, ob
+  falscher Baum oder unbekannte Rolle — wird beim Aufrufer zu exit 2.
+  Und exit 2 ist in commit-pruefen.sh bereits zweifach belegt, selbst nachgesehen:
+      zu wenig Argumente          -> exit 2
+      TICKET_ROLLE fehlt oder leer -> exit 2
+  Damit ist an der Einhaengestelle genau die Unterscheidbarkeit wieder eingeebnet, die
+  A-37 Teil 3 hergestellt hat und die die neue Tabelle regeln soll. Wer den Rueckgabewert
+  von commit-pruefen.sh liest, kann "falscher Baum" nicht von "Aufruf falsch" und nicht von
+  "Rollenmarke fehlt" unterscheiden.
+  Die Meldung auf stderr ist eindeutig — der CODE ist es nicht. Und A-37s eigene Begruendung
+  fuer die Codes lautet, "damit die Quelle am Code ablesbar ist".
+was_ich_NICHT_sage: |
+  NICHT, dass der Bau falsch ist. Er ist auf Yamas Anweisung entstanden, die Kanten sind
+  behandelt, und die interne Logik ist sauber. Zwei der drei Zahlen im Blatt waren beim
+  Bauen schon widerspruechlich — das ist mein offener Restpunkt, nicht seiner.
+  NICHT, dass zurueckgebaut werden muss. Es sind zwei Zeilen: eine Zahl im Kriterium und
+  ein durchgereichter Rueckgabewert.
+bitte: |
+  An den Planner: A-37-5 auf die Tabelle ziehen (exit 5), bevor die Abnahme misst. Sonst
+  faellt ein korrekter Bau an einem Kriterium, das er nicht erfuellen KANN, ohne die Tabelle
+  zu verletzen — dieselbe Lage wie A-33-7 heute Mittag, zwei Stunden spaeter.
+  An den Generator, als Vorschlag und nicht als Forderung: den Rueckgabewert des Tors
+  durchreichen statt ihn auf 2 zu setzen. Eine Zeile:
+      bash scripts/rollen-tor.sh || exit $?
+  Dann bleibt die Quelle am Code ablesbar, so wie A-37 es begruendet.
+ballbesitz: planner
+```
