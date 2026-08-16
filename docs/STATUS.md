@@ -23233,3 +23233,54 @@ was_zu_entscheiden_ist_und_nicht_von_mir: |
   Der zweite Weg prueft auch morgen noch. Aber die Entscheidung gehoert dem Planner.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "K2-Befund behoben und nachgemessen, 6 von 6 — und mein eigener Loesungsvorschlag war falsch"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:17 CEST"
+mess_stand: "Bau 253a51d7 (16:13, 645 Z., vorher 590) · HEAD 4eac6684 · Funktion isoliert nachgebaut"
+behoben_und_selbst_nachgemessen: |
+  Die Substring-Suche ist durch eine Wortgrenze ersetzt:
+  def _trifft(stueck, form): return stueck.startswith(form) and
+      (len(stueck) == len(form) or not stueck[len(form)].isalnum())
+  Ein Pfadstueck traegt die Kennung also nur, wenn es mit ihr anfaengt und danach etwas
+  kommt, das weder Ziffer noch Buchstabe ist.
+  ISOLIERT NACHGEBAUT und gegen dieselben sechs Faelle gefahren wie um 15:58, 963
+  Pfadstuecke im Set:
+  A-41  vorher True  -> jetzt True   richtig, echtes Blatt
+  W-17  vorher True  -> jetzt True   richtig
+  B5    vorher True  -> jetzt True   richtig
+  Z-99  vorher False -> jetzt False  richtig, frei erfunden
+  A-4   vorher True  -> jetzt FALSE  der Fehltreffer ist weg
+  A-1   vorher True  -> jetzt FALSE  der Fehltreffer ist weg
+  6 von 6. Und die Gegenrichtung ist mitgeprueft, denn darauf kam es an: eine zu strenge
+  Grenze haette die echten Treffer mitgenommen. Hat sie nicht.
+MEIN_VORSCHLAG_WAR_FALSCH: |
+  Ich hatte um 15:58 vorgeschlagen: "der Basisname beginnt mit dem Stamm, gefolgt von
+  Bindestrich oder Punkt".
+  Der Generator weist es zurueck, und er hat recht: das haette die halbe Werkbank
+  verloren. Dort steht die Kennung im VERZEICHNIS, nicht im Dateinamen —
+  W-25-pfetten-und-kehlbalken/1-ZWECK.md hat den Basisnamen '1-zweck.md'. Er prueft
+  deshalb JEDES Pfadstueck und setzt die Grenze innerhalb des Stuecks.
+  DAS IST MIR PEINLICH GENAU, denn ich habe genau diese Struktur heute selbst gemessen:
+  bei W-17/1 war Blatt 5 ein VERZEICHNIS (5-CODE/LIESMICH.md), und ich habe eigens
+  vermerkt, dass wer die Datei sucht 216 statt 249 Zeilen misst. Dieselbe Falle, dieselbe
+  Werkbank, zwei Stunden spaeter nicht mitgedacht.
+  Ein richtiger Befund macht keinen richtigen Vorschlag. Ich habe die Luecke gefunden und
+  daneben eine zweite eingebaut — dass sie nicht gebaut wurde, liegt daran, dass der
+  Generator meinen Vorschlag geprueft und nicht ausgefuehrt hat.
+was_er_uebernommen_hat: |
+  Er nennt zwei Dinge woertlich: die Gewichtung ("der Falsch-Negativ kostet eine
+  ueberfluessige Meldung, der Falsch-Positiv laesst K2 SCHWEIGEN") und den Schutzbefund
+  "ungeglaettet" — dass der Fall heute nicht auftritt, weil 0 von 79 Kennungen einstellig
+  sind, aber das Zufall ist und keine Konstruktion.
+  Und er benennt, wie der Befund ueberhaupt gefunden wurde: durch isoliertes Nachbauen,
+  weil die Kante am Bestand gar nicht ausloest. Am Bestand allein waere sie unsichtbar
+  geblieben. Das ist die Lehre fuer K6, die noch offen ist.
+stand: |
+  Belegt: K1, K2 (jetzt mit Wortgrenze), K3, K4, K5, K7. Offen: K6.
+  Kriterien haltend: A-41-1 als Rot-Lage, -2, -3, -5, -8, -10, -11.
+  Offen: A-41-4, -6, -7, -9, -12.
+ballbesitz: plan-pruefer
+```
