@@ -174,3 +174,42 @@ reiner Feldzähler verfehlt hätte. Sein A-38-Fall ist damit belegt und beziffer
 Entscheidung mittragen, ist eine Frage der Sorgfalt beim Umzug. Ob die Zieldatei danach von Tor und
 Nachprüfungen gedeckt ist, entscheidet, ob die Ballwahrheit überhaupt noch geschützt ist. **Die
 beiden Befunde konkurrieren nicht — sie treffen verschiedene Stellen desselben Auftrags.**
+
+---
+
+## FEHLER 10 — ich habe den Commit-Prüfer zweimal falsch aufgerufen und es erst beim dritten Mal gemerkt
+
+Seine Signatur lautet `commit-pruefen.sh [--trocken] "Botschaft" pfad [weitere …]` — **die Botschaft
+ist das erste Argument, und er committet selbst.** Ich habe ihm zweimal nur Pfade übergeben.
+
+```
+Lauf 1   ... scripts/yama-posten.py docs/A-42-...md
+         -> "scripts/yama-posten.py" als BOTSCHAFT gelesen, ein Pfad blieb uebrig
+         -> er committete 770662c1 mit dem Betreff "release-pruefer: scripts/yama-posten.py",
+            Inhalt: die 144 Zeilen dieses Blattes
+Lauf 2   ... docs/A-42-...md          -> Botschaft fehlte ganz, exit 2, Aufrufhilfe
+```
+
+**Folge: Betreff und Inhalt stehen bei zwei Commits über Kreuz.**
+
+```
+770662c1  "release-pruefer: scripts/yama-posten.py"      traegt  das BLATT (144 Z.)
+5a67c953  "release-pruefer: A-42 gegengemessen — …"      traegt  das SKRIPT (54 Z.)
+```
+
+**Zwei Fehler in einem, und der zweite ist der schwerere:**
+
+1. Ich habe die Signatur eines Werkzeugs geraten, das ich täglich benutze.
+2. **Ich habe im selben Befehlsblock geprüft und committet** — deshalb lief `git commit` durch,
+   obwohl der Prüfer `exit 2` gemeldet hatte. Das ist wortwörtlich der Griff, gegen den mein
+   eigener Takt eine Regel führt: *Ergebnis lesen, dann erst pushen, nie im selben Befehlsblock.*
+   Ich hatte sie als Push-Regel gelesen. **Sie gilt für jeden Vollzug nach einer Prüfung**, und
+   ein Commit ist einer.
+
+Gemessen, ob das ein Muster ist: über meine letzten 80 Commits und über 400 Commits aller Rollen
+findet sich **genau ein** Betreff, der wie ein reiner Pfad aussieht — dieser. Einzelfall, kein Muster.
+
+**Nicht umgeschrieben.** Ein `reset --soft` mit Neuaufbau wäre technisch möglich (nichts ist
+gepusht, kein Force nötig) — ich lasse es. Eine begradigte Historie wäre genau das stille Bereinigen,
+das ich anderen gegenüber beanstande; der Kreuzstand steht jetzt hier, benannt und auffindbar.
+**Wer `770662c1` liest, findet über diesen Absatz, was wirklich darin liegt.**
