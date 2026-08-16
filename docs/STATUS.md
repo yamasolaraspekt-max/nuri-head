@@ -23846,3 +23846,55 @@ stand: |
   Sperrend: A-37-5, eine Zahl, seit 13:01.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Der Release-Pruefer-Befund ist bestaetigt und ich bin sein groesster Einzelfall — 11 von 13 Schreibvorgaengen seit der Zuendung kommen von mir, ohne Tor"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:02 CEST"
+mess_stand: "Zuendung 83296554 um 16:17:16 · alle Zahlen ohne Merges, nach Rollenmarke gezaehlt, Summe gegen Gesamtzahl geeicht"
+was_der_release_pruefer_meldet: |
+  In d9fd6471 (16:46) meldet er auf Yamas Frage: die Barriere wirke VERKEHRT HERUM. Das Tor
+  liege in 3 von 6 Baeumen; gesperrt seien genau die drei, die es HABEN, waehrend die zwei
+  ohne Tor weiterschreiben.
+  ICH HABE ES NACHGEMESSEN, weil es meinen eigenen Befund von 15:26 fortsetzt — ich hatte
+  die drei Tor-Fassungen gefunden, aber nicht ihre WIRKUNG gemessen.
+die_messung: |
+  Eigene Schreibvorgaenge an docs/STATUS.md seit 16:17:16, ohne Merges, nach Rollenmarke:
+  planner ............ 2   Tor FEHLT
+  plan-pruefer ....... 11  Tor FEHLT
+  generator ..........  0  Tor JA (5 Fundstellen)
+  evaluator ..........  0  Tor JA (3)
+  release-pruefer ....  0  Tor JA (5)
+  Summe 13, und die Gesamtzahl der Commits im selben Fenster ist 13. Die Zaehlung ist also
+  vollstaendig, nicht gestichprobt.
+  DIE KORRELATION IST LUECKENLOS: wer das Tor hat, hat null geschrieben. Wer es nicht hat,
+  hat geschrieben. Sein Befund haelt.
+und_ich_bin_der_groesste_einzelfall: |
+  11 von 13 Schreibvorgaengen sind meine. In der Stunde, in der drei Rollen stillstehen,
+  weil die Sperre bei ihnen greift, habe ich elfmal an dieselbe Datei geschrieben — nicht
+  weil ich die Regel umgehe, sondern weil sie in meinem Baum nicht existiert.
+  Das ist keine Entlastung. Es heisst nur, dass mein Anteil an der Schieflage nicht in
+  einer Entscheidung liegt, sondern in einem Transportstand.
+was_ich_ergaenze_und_es_ist_der_schaerfere_teil: |
+  Die Sperre ist NICHT immer scharf gewesen. Um 16:09 habe ich die Bedingung selbst
+  gemessen: 0 Commits mit Rollenmarke 'integrator', also lief der HINWEIS-Zweig und liess
+  durch. Der erste Integrator-Commit ist 83296554 um 16:17:16 — seither zuendet Zeile 195
+  und der VERSTOSS-Zweig sperrt.
+  Der Generator hat um 16:23, also SECHS MINUTEN nach der Zuendung, seine Fertigmeldung
+  abgesetzt — nicht im Datensatz, sondern im Betreff: f19557c8 "generator: zustand: A-41 ·
+  CODE_FERTIG · generator · bau 16c5b9d2". Nachgemessen: dieser Commit fasst docs/STATUS.md
+  NULL mal an, nur scripts/status-erzeugen.sh. Der Datensatz sagt bis jetzt ENTWURF.
+  ER UMGEHT NICHTS. Er meldet nach dem Verfahren, das A-41 baut, und das ist richtig.
+  Aber A-41s Erzeuger laeuft noch nicht produktiv — die Meldung liegt also in einem Kanal,
+  den heute niemand liest.
+die_ursache_in_einem_satz: |
+  Die Kette haengt zwischen zwei Systemen: der alte Weg (Zustand im Datensatz) ist seit
+  16:17 fuer die drei Rollen mit Tor gesperrt, und der neue Weg (Zustand im Betreff, daraus
+  erzeugt) ist gebaut, aber nicht in Betrieb. Wer wechseln muesste, kann nicht; wer kann,
+  muss nicht.
+  Und die Gegenprobe zum Ausschluss der naheliegenden Erklaerung: es liegt NICHT daran,
+  dass niemand arbeitet. Der Generator hat seit 16:00 neun Commits, nur keinen an der
+  Statuswahrheit.
+ballbesitz: yama
+```
