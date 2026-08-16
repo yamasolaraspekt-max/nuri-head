@@ -2877,3 +2877,63 @@ seine Zeilen gezählt.**
 
 **A-42-12 braucht keine fünfte Runde.** Die Form ist dreifach belegt, die Zahlen sind es auch.
 **Ball: planner** — es fehlt nur noch das Einsetzen. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Meine eigene Wache-Liste gemessen: von acht Yama-Posten liegen mindestens VIER nicht mehr bei Yama
+
+*Alle acht Posten der Wacheanweisung geprüft · gemessen 16.08. gegen `8781795b`*
+
+### Der Anstoß kam aus der Statuswahrheit selbst
+
+Beim Messen des Seed-Wegs bin ich auf einen Block gestoßen, der genau das schon festgestellt hat:
+
+> *„Die Liste in der Wache kann von acht auf sechs. Zwei Posten haben Yamas Aufmerksamkeit seit
+> Tagen ohne Gegenstand gebunden … **Ich habe sie in jeder Runde weitergereicht, ohne sie ein
+> einziges Mal zu messen.** Das ist derselbe Fehler, den ich heute Nacht an fremden Blättern
+> gemeldet habe: ein Posten wird kopiert statt geprüft."*
+
+**Das trifft mich unverändert.** Ich rezitiere dieselben acht Posten seit vielen Runden. **Also
+gemessen, jeden einzeln.**
+
+### Das Ergebnis
+
+| # | Posten | gemessen | Lage |
+|---|---|---|---|
+| 1 | **Fach-Gate N-003** | FORMELSAMMLUNG Z.784 | **entschieden** — *„von Yama festgelegt 12.08., DAUERGELB"*, mit ERLAUBT/NICHT-ERLAUBT-Liste. Das Gelb ist der beschlossene Dauerzustand, keine offene Frage. |
+| 2 | **A-13-Veröffentlichungsbedingung** | STATUS Z.7038-7047 | **entschieden** — die Bedingung wurde gemessen und war **leer** (`p_v_roofs` 0 Zeilen). A-13 ist veröffentlicht und `BETRIEBSBESTAETIGT`, `ballbesitz: —`. |
+| 3 | Tragwerk an die Zeichenfläche | — | **nicht gemessen**, bleibt für die nächste Runde |
+| 4 | **W-21L** | heute gemessen | **verkleinert** — erster Schritt beim Planner, Yama nur noch jenseits der sieben Modelle |
+| 5 | **versatz-Quittung** | STATUS Z.3042 / Z.16843 | **OFFEN, und der Abschlussvermerk ist zu stark** — siehe unten |
+| 6 | **Seed-Weg der Prüfbühne** | STATUS Z.3037 | **entschieden** — *„ERLEDIGT 13.08.: Yama hat WEG C entschieden, mit drei Auflagen (fail closed, nur `ticket_testing`, idempotent)."* **Aus steht der BAU**, und der gehört Planner und Generator. |
+| 7 | **Zeiger raumAuswahl.ts** | heute gemessen | **offen, stabil** — 147 → 162, unverändert seit der Aufnahme |
+| 8 | **Regelkollision §3/E1/Beifang** | heute gemessen | **praktisch geschlossen, formal offen** — beide Regeln stehen, das Tor erzwingt eine |
+
+### Der eine Punkt, an dem ich einer Schließung widerspreche
+
+Ein Abschlussvermerk (Z.16856) sagt: *„GESCHLOSSEN 14.08. … **beide Posten inzwischen entschieden**
+(versatz 13.08., Weg C 13.08.)."*
+
+**Für Weg C stimmt das — für versatz nicht.** Der Posten heißt **`versatz-Quittung`**, und
+gemessen:
+
+```
+Z.3042   VERTRETUNGSENTSCHEID versatz (Release-Pruefer in Yamas Namen, 13.08.) — ERZEUGEND
+Z.16843  "...sagt selbst: 'Diese Entscheidung ist eine Vertretung, kein Fachurteil.
+          Yama kann sie mit einem Satz umdrehen.'  Eine Quittung liegt nicht vor."
+```
+
+**Die Entscheidung liegt vor. Die Quittung nicht.** Der Vermerk setzt beides gleich —
+*„entschieden"* ist nicht *„quittiert"*, und der Posten trägt das zweite Wort im Namen. **Ich lasse
+ihn offen.**
+
+### Was das für die Vorlage heißt
+
+**Mindestens vier der acht liegen nicht mehr bei Yama** (1, 2, 6, und bei 4 der erste Schritt).
+**Einer ist stabil offen** (7), **einer nur noch formal** (8), **einer wirklich offen** (5) — und
+einer ist noch ungemessen (3).
+
+**Und die D-Liste in der Statuswahrheit führt Posten 6 weiter unter „BLEIBT BEI YAMA"** (Z.2898),
+obwohl vier Zeilen später der Erledigungsvermerk steht. **Das ist dieselbe Klasse wie die
+28 nicht nachgezogenen Blätter: die Entscheidung fiel, der Eintrag blieb.**
+
+**Ball: yama** — die Liste gehört ihm, ich lege die Messung daneben und streiche nichts.
+**Kein Zustandsfeld angefasst, kein Bau.**
