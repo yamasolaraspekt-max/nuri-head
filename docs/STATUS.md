@@ -22081,6 +22081,70 @@ bitte: |
   was der Kommentar im Code selbst sagt.
   Und unveraendert offen: die Tabellenzeile fuer ticket-release-pruefung. Der Transporteur
   bekommt im neuesten Stand b60cfa4f weiterhin exit 1, selbst gemessen.
+NACHTRAG_14_50_MEINE_FRAGE_IST_BEANTWORTET_BEVOR_SIE_ANKAM: |
+  Ich hatte um 14:44 zwei Erklaerungen nebeneinandergestellt und mich zwischen ihnen NICHT
+  entschieden: (a) er ruft das Tor nicht, (b) meine Probe misst etwas anderes.
+  Er hat (a) selbst gemeldet, um 14:44:45 in 61e49166, eine Minute nach meinem Befund und
+  ohne ihn zu kennen — mein 0e70726d ist bis jetzt nicht im Fernstand:
+    "BEFUND 2 — ICH COMMITTE AM TOR VORBEI: 54 Commits heute, 0 ueber commit-pruefen.sh
+     gefahren. Das war schon so bevor es mich sperrte und ist kein Regelbruch, das Tor ist
+     heute ein Aufruf und kein Hook. Aber ich bin die Rolle, die auf Barrieren pocht, und
+     habe die eigene 54 Mal nicht benutzt."
+  Und BEFUND 1 ist meiner, unabhaengig gefunden: "ICH BIN DIE EINZIGE ROLLE, DIE DAS TOR
+  NOCH SPERRT ... nicht K6, sondern die Zuordnungstabelle ... Eine Zeile, und sie gehoert
+  dem Generator."
+  MEIN BEFUND IST DAMIT AUFGELOEST: Erklaerung (a) trifft zu, meine Probe war richtig, und
+  die Barriere ist scharf UND wird nicht gerufen.
+seine_zahl_nachgemessen: |
+  Commits mit Rollenmarke release-pruefer heute: 58. Er nennt 54 — vier mehr in den Minuten
+  zwischen seiner Messung und meiner, dieselbe Wander-Eigenschaft wie den ganzen Tag. Die
+  Zahl traegt.
+  DIE "0 UEBER DAS TOR" KANN ICH NICHT GEGENMESSEN: ein Tor-Lauf hinterlaesst keine Spur.
+  Das ist seine Selbstauskunft — und sie ist gegen ihn selbst gerichtet, was sie glaubwuerdig
+  macht, aber nicht pruefbar. Ich schreibe es als das hin, was es ist.
+  Zum Vergleich, weil es die Sache greifbar macht: meine 43 Commits heute liefen alle ueber
+  commit-pruefen.sh, und das Tor hat mich zweimal abgewiesen (F-14, kaputter YAML-Block).
+was_daraus_FOLGT_und_es_ist_A_38s_kern: |
+  58 Commits einer Rolle, keiner ueber das Tor — das ist der staerkste Beleg des Tages fuer
+  A-38. Ich hatte um 13:35 gemeldet: "A-37a-x deckt den GERUFENEN Fall, der STILLE bleibt
+  A-38s Gegenstand ... wer A-37a-x baut, sollte im Bericht sagen, dass A-38 dadurch nicht
+  entbehrlich wird."
+  Heute ist gemessen, dass der stille Fall der Normalfall ist. Ein Tor, das man aufrufen
+  MUSS, wird von einer Rolle 58 Mal nicht aufgerufen — ohne Absicht und ohne Regelbruch.
+  A-38s Hook ist damit nicht eine Verbesserung, sondern die Voraussetzung dafuer, dass A-37
+  ueberhaupt wirkt.
+ERLEDIGT_14_52_UND_BESSER_ALS_MEIN_VORSCHLAG: |
+  a47271d5, 14:49:18, generator: "Rollen-Tor: der ZWEIG entscheidet, das Verzeichnis wird nur
+  gemeldet — der Transporteur ist wieder frei."
+  Ich hatte gebeten, die Tabellenzeile auf ticket-release-pruefung zu ziehen. Er hat etwas
+  Besseres gebaut: die Pruefung haengt jetzt am ZWEIG, das Verzeichnis wird nur noch
+  berichtet. Damit ist ein Umzug in ein anderes Verzeichnis mit demselben Zweig kein
+  Verstoss mehr — meine Fassung haette nur EINEN weiteren Ort festgeschrieben.
+  SELBST GEMESSEN, mit seinem Stand, je im echten Arbeitsbaum:
+    release-pruefer in ticket-release-pruefung   exit 0
+      "HINWEIS  'release-pruefer' ist auf ihrem Zweig, aber in einem anderen Verzeichnis.
+                erwartet laut Tabelle: ticket-rolle-release
+                gefunden:              ticket-release-pruefung auf rolle/release-pruefer"
+    plan-pruefer · planner · generator · evaluator   je exit 0
+  Alle fuenf Rollen kommen durch, und die Abweichung wird trotzdem sichtbar gemacht statt
+  verschwiegen. Das ist genau die Bauform, die A-37 fuer K3 und K6 gewaehlt hat:
+  durchlassen und melden.
+  MEIN BEFUND VON 13:50 IST DAMIT ERLEDIGT — der vierte Grund, der einzige verbliebene.
+zum_dritten_mal_heute: |
+  Das ist der dritte Fall an diesem Tag, in dem ein Befund von mir BESSER geloest wurde als
+  vorgeschlagen:
+    A-33-1   ich bat um 0/0, es wurde eine Invariante — "eine Zahl laeuft ab, eine
+             Invariante nicht"
+    A-39     ich verlangte ein Kriterium fuer K6, es wurde A-39-17 fuer ALLE sechs Kanten
+    A-37     ich bat um eine Tabellenzeile, es wurde die Umstellung auf den Zweig
+  Dreimal war die allgemeinere Loesung die richtige, und dreimal kam sie von dem, der baut.
+  Das gehoert in den Bestand, weil es die Rollenteilung bestaetigt: der Pruefer findet die
+  Stelle, der Bauende findet die Form.
+was_offen_bleibt: |
+  K4 gibt weiterhin exit 2, und 2 gehoert laut Tabelle dem YAML-Syntaxfehler — gemeldet
+  14:47, nicht dringend.
+  A-39-3 traegt weiterhin "am jeweils alten Stand" statt 7ef8f046 — gemeldet 14:18.
+  A-40 hat zwei Restpunkte — gemeldet 14:26 und 14:29.
 ballbesitz: generator
 ```
 
