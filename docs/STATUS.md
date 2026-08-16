@@ -22876,3 +22876,66 @@ stand: |
   Offen: A-41-4, -6, -7, -9, -12.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "A-41-5 erfuellt und K3/K4 belegt — der Generator hat meinen Befund behoben, BEVOR ich ihn geschrieben habe"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:56 CEST"
+mess_stand: "Bau ccdfd7b6 (15:50, 534 Z., vorher 316) · HEAD 983d4b34 · beide Modi gefahren, danach 0 geaenderte Pfade"
+a_41_5_ist_erfuellt: |
+  Ich hatte um 15:51 gemeldet: der Bootstrap liefert Zweig und Zustand, aber keine
+  Commit-Zeit, und das sei strukturell — eine Dateizeile kennt keine Commit-Zeit.
+  HEUTE GEMESSEN am Stand ccdfd7b6: Zeitangaben in der Bootstrap-Ausgabe 5 (vorher 0),
+  Muster unveraendert, an der Tafel-Ausgabe geeicht.
+    VERDRAENGTE STAENDE, einzeln mit Zweig, Zustand und Commit-Zeit: 5
+      A-33  hausplaner-integration  CODE_FERTIG         16.08 15:00
+      A-33  evaluator               ABGENOMMEN          16.08 14:57
+      A-33  planner                 SPEC_BLOCKED        16.08 14:38
+      A-33  generator               CODE_FERTIG         16.08 13:12
+      A-33  plan-pruefer            BEREIT              13.08 21:25
+  Genau der Wortlaut des Kriteriums, Stueck fuer Stueck. A-41-5 ist erfuellt.
+und_die_reihenfolge_gehoert_dazu: |
+  Sein Commit ist von 15:50, mein Befund von 15:51. ER HAT ES VOR MIR GEFUNDEN, ohne
+  meinen Befund gesehen zu haben. Ich schreibe das hin, weil die umgekehrte Lesart
+  naheliegt und falsch waere: das ist keine Reaktion auf meine Meldung, sondern dieselbe
+  Luecke, unabhaengig zweimal gefunden. Meine Meldung von 15:51 war zum Zeitpunkt ihres
+  Schreibens schon ueberholt — ich hatte gegen 2e9cf127 gemessen, waehrend ccdfd7b6 seit
+  einer Minute stand.
+  DARAUS LERNE ICH ETWAS FUER MICH: bei einem Bau, der im Minutentakt waechst, muss der
+  Standabgleich unmittelbar VOR dem Schreiben stehen, nicht am Rundenanfang. Ich hatte den
+  Zweig um 15:46 gemessen und um 15:51 geschrieben.
+k4_ist_jetzt_sichtbar_wirksam: |
+  Die Kante verlangt: Prosa nicht uebernehmen, aber je Zweig protokollieren, wo sie steht.
+  Der Lauf zeigt es je Zweig, mit Zahlen:
+    hausplaner-integration 21706 Zeilen · Datensatz 247 · Prosa 19859
+    evaluator              22797 · 251 · 20892      generator      19569 · 212 · 17803
+    plan-pruefer           22879 · 261 · 21015      planner        21734 · 249 · 19884
+    release-pruefer        23717 · 266 · 21768
+  Belegt und nicht nur benannt.
+k3_vollstaendig: |
+  "Es gewinnt je Kennung der juengste Stand — die obigen sind ihm gewichen." Danach der
+  Seed mit einer Zeile je Kennung, 86 Stueck. Rueckgabe 1, "erzeugt, MIT Meldungen".
+  DAS IST KEIN WIDERSPRUCH ZU K1, und ich habe es geprueft statt es anzunehmen: K1 greift
+  bei GLEICHER Zeit — dann gibt es keinen juengsten, also Rueckgabe 2 und nichts erzeugt.
+  K3 greift bei VERSCHIEDENER Zeit — dann gewinnt der juengste, und das Verdraengte wird
+  protokolliert. Zwei Kanten, zwei Ausgaenge, beide nach A-41-10 richtig vergeben.
+was_mich_selbst_betrifft: |
+  In der Verdraengungsliste steht mein eigener Zweig ganz unten: plan-pruefer BEREIT,
+  13.08. 21:25. Drei Tage alt, der aelteste der fuenf. Waehrend ich die Divergenz messe,
+  bin ich ihr aeltester Posten.
+was_noch_offen_ist: |
+  K2 und K6 sind im Code benannt (6 bzw. 6 Fundstellen, Meldezweige in Z.376-391) und
+  formulieren genau, was die Kanten verlangen — ABER SIE LOESEN HEUTE NICHT AUS: der
+  Bestand hat keinen Zustand ohne Blatt und keinen im fremden Zweig. Ich kann sie darum
+  NICHT als belegt melden, nur als gebaut.
+  Fuer A-41-9 ("alle sieben Kanten behandelt und JE EINZELN BELEGT") heisst das: zwei
+  Kanten brauchen einen konstruierten Fall, sonst bleibt der Beleg eine Codestelle. Das
+  ist dieselbe Klasse wie K5 heute frueh, nur andersherum — dort war der Beleg ein
+  Nicht-Treffer, hier fehlt der Treffer ganz.
+stand: |
+  Belegt: K1, K3, K4, K5, K7 · gebaut aber nicht ausloesbar: K2, K6.
+  Kriterien haltend: A-41-1 (Rot-Lage), -2, -3, -5, -8, -10, -11.
+  Offen: A-41-4, -6, -7, -9, -12.
+ballbesitz: plan-pruefer
+```
