@@ -1581,6 +1581,28 @@ SONDERN Abschnitt 18a  (ueber die Ueberschrift zu finden)
 **Wer eine Zeilennummer nennt, nennt sie zusätzlich zur Sache und nie statt ihrer.** *Die Sache
 ist stabil, solange sie existiert; die Nummer wandert bei jedem Einschub darüber.*
 
+### Und meine eigene Prüfung fällt auf denselben Fehler herein
+
+**Systematisch gemessen: 26 Verweise auf 11 verschiedene Zeilen. Genau EINE davon ist eine
+Leerzeile** — der Rest trägt Text und sieht damit gültig aus.
+
+> **„Trägt Text" ist kein Beleg für „trägt den gemeinten Text".** `:812` zeigt auf eine Zeile
+> über Ballbesitz und Votum — **gemeint war H-8, und die steht bei 973.** Der Anker ist falsch
+> und wäre durch jede maschinelle Prüfung gekommen.
+
+```
+26 Verweise auf 11 Zeilen
+  1  nachweislich TOT      (:739, Leerzeile)
+  1  nachweislich FALSCH   (:812 -> H-8 steht bei 973)
+  9  UNGEPRUEFT            tragen Text, aber ob es der gemeinte ist,
+                           weiss nur wer den Verweis geschrieben hat
+```
+
+**Das ist die Grenze jeder Ankerprüfung und der eigentliche Grund für die Regel oben:** ein
+Zeilenverweis lässt sich **nicht** maschinell verifizieren, weil die Absicht nicht in der Zahl
+steht. **Ein Verweis auf die Sache lässt sich verifizieren — die Überschrift ist entweder da
+oder nicht.**
+
 **Die vorhandenen Verweise werden NICHT rückwirkend umgeschrieben** — sie stehen in Befunden und
 Commit-Botschaften mit Zeitstempel und waren zu ihrem Zeitpunkt richtig *(A-20-4)*. **Diese
 Warnung hier ersetzt die Korrektur an hundert Stellen.**
