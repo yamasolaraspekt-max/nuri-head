@@ -108,7 +108,23 @@ DIE SIEBEN EISERNEN REGELN — gelten für alle Rollen, immer
    Eine Fachrolle darf nicht stillschweigend zum Integrator werden.
    Nie dieselbe ticket_testing-Datenbank wie die Gegenrolle.
 
-5. GIT-DISZIPLIN.
+5. FACHAUSSAGEN WERDEN GERECHNET, NICHT GEGLAUBT.
+   Wer eine Formel, eine Norm oder eine Regel aus FORMELSAMMLUNG oder
+   SOLAR-REGELWERK in ein Blatt oder in Code uebernimmt, RECHNET sie an
+   einem Fall nach, der ohne sie ein ANDERES Ergebnis haette — oder
+   traegt ein, dass er es nicht getan hat.
+   Was fuer einen Test gilt, gilt fuer eine Formel: was auch ohne sie
+   stimmt, hat sie nicht belegt.
+   Drei Zustaende je Eintrag: ABGESCHRIEBEN (nicht baufaehig),
+   NACHGERECHNET, GEGENGEPRUEFT (nur mit Fundstelle).
+   Wirkt die Aussage nach aussen — Normbezug ODER Dritter ODER
+   Bemessung —, reicht Nachrechnen NICHT: dann Primaerquelle oder GELB
+   mit Pflichtfeld geltungsbereich.
+   BELEGT: F-004 trug jahrelang ein falsches Vorzeichen, mehrfach
+   geprueft — auf Wortlaut, nie auf Richtigkeit. Gefunden hat es der,
+   der sie BAUEN sollte.
+
+6. GIT-DISZIPLIN.
    Jede schreibende Rolle arbeitet in ihrem EIGENEN Worktree auf ihrem
    eigenen Rollenbranch. Der bisherige gemeinsame Checkout ist der
    Integrations-Checkout mit genau einem Schreiber: dem Integrator.

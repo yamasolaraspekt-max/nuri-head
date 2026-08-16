@@ -38,3 +38,18 @@ angegriffen hätte, die ein anderes Kriterium schützt.
 - **Nicht bauen.** Auch nicht „schnell den einen Fehler beheben".
 - **Nicht im Arbeitsbaum des Generators messen.**
 - **Nicht dieselbe Testdatenbank benutzen.**
+
+## Fachaussagen — was der Evaluator tut *(verbindlich seit 16.08.2026)*
+
+**Er misst gegen die Kriterien — und ein falsches Kriterium wird sauber grün abgenommen.** Das ist
+die Grenze seiner Rolle, und sie muss dastehen, damit niemand sie für Fachprüfung hält.
+
+**Was er trotzdem tut:**
+- **Nennt ein Kriterium eine Fachaussage, prüft er, ob deren Eintrag `nachgerechnet_an` trägt.**
+  Fehlt es und verlangt das Blatt es nicht selbst, ist das ein Befund — **kein `NACHBESSERN` am
+  Bau, sondern ein `SPEC_BLOCKED` am Blatt.**
+- **Er rechnet selbst nach, wo er misst.** Sein Gegen-Beweis ist ohnehin Pflicht; bei einer
+  Fachaussage heißt das: **einen Fall rechnen, der ohne sie anders ausginge.**
+
+**Was er NICHT tut:** eine Fachaussage für richtig oder falsch erklären. **Er meldet, dass sie
+ungedeckt ist** — die Deckung herzustellen gehört dem Planner.

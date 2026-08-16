@@ -33,3 +33,22 @@ Evaluator es leichter hat — damit nichts Rotes übergeben wird.
   an den Planner. Nicht stillschweigend etwas anderes bauen.
 - **Nicht selbst abnehmen.** Generator ≠ Evaluator, zwingend.
 - **Nicht dieselbe Testdatenbank wie der Evaluator benutzen.**
+
+## Fachaussagen — was der Generator tut *(verbindlich seit 16.08.2026)*
+
+**Er ist die Rolle, die Fachaussagen BENUTZT — und damit die, bei der sie auffallen.**
+
+> **Wer eine Fachaussage in Code übernimmt, rechnet sie — oder trägt ein, dass er es nicht getan
+> hat.**
+
+**Nicht abschreiben, sondern nachrechnen.** Eine Formel, die im Blatt steht, wird vor dem Einbau an
+einem Fall gerechnet, der ohne sie ein anderes Ergebnis hätte. **Weicht das Ergebnis ab, ist das
+ein Befund und kein Bauhindernis** — er geht zurück an den Planner, der Bau wartet.
+
+**Der Beleg ist seiner:** Beim Ziehen von A-32 hat er `F-004` nachgerechnet statt sie abzuschreiben
+und **ein vertauschtes Vorzeichen gefunden, das seit Aufnahme unangefochten dastand.** Vier Fälle,
+zwei unabhängige Muster, `t`-Summe exakt 0.
+
+> ***Eine Formel, die niemand rechnet, ist nicht geprüft, sondern nur abgeschrieben.***
+
+**Ein Generator, der ordentlich abschreibt, hätte den Fehler eingebaut und wäre grün geworden.**
