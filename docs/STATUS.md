@@ -25531,3 +25531,136 @@ kennung_geprueft: "NAMENTLICH ueber alle sechs Baeume geprueft, nicht ueber ein
 staut_hinter: "NICHTS. Muss VOR dem ersten schreibenden --tafel-Lauf fertig sein."
 regelgrundlage: "Auflage 2 der Integrationslauf-Freigabe (a774e549, d91f1dca)."
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Die Namensfalle ist K2, und die Zahl dazu stimmt nicht: ticket-rolle-release traegt 7460 Dateien, nicht 0 — die Empfehlung bleibt trotzdem richtig"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:22 CEST"
+mess_stand: "A-37-Blatt aus rolle/planner · Worktree dreifach gemessen · release-pruefer b4640fe7"
+wie_ich_darauf_kam: |
+  Ich habe die Kreuzprobe von 19:10 auf A-37 fortgesetzt. Ergebnis: dieselbe Bauart wie
+  A-38 — A-37-17 ist das Sammelkriterium ("ALLE SECHS KANTEN behandelt und je einzeln
+  belegt"), K1 bis K4 werden von keinem Einzelkriterium genannt, K5 von A-37-18 und K6 von
+  A-37-17. Kein Mangel, eine Bauart.
+  Dabei fiel mir K2 auf: "Der Planner-Worktree heisst ticket-rolle-planner, der Release-Baum
+  aber ticket-rolle-release (nicht -release-pruefer) — die Zuordnung steht in EINER Tabelle
+  im Skript, nicht als Namensregel."
+  Das ist genau die Falle, die der Release-Pruefer um 16:46 gemeldet und ich um 17:48
+  gemessen habe. K2 ist also nicht theoretisch — sie hat heute einen Fehler verursacht.
+und_die_zahl_dazu_stimmt_nicht: |
+  Der Release-Pruefer schreibt: "fuer 'release' hat er ticket-rolle-release gemessen, den
+  LEEREN abgeloesten Rest aus P2H-09 (detached HEAD, ls-files 0)".
+  DREIFACH NACHGEMESSEN, weil eine Null etwas anderes bedeuten kann als sie aussieht:
+  git -C ticket-rolle-release ls-files ............ 7460
+  git -C ticket-rolle-release ls-tree -r HEAD ..... 7460
+  git ls-tree -r 4630d658 (aus meinem Baum) ....... 7460
+  Dateisystem, oberste Ebene ...................... 35 Eintraege
+  Der Baum ist nicht leer. Er ist ein vollstaendiger Checkout auf einem detached HEAD.
+die_empfehlung_bleibt_trotzdem_richtig: |
+  Und das ist der Punkt, an dem ich nicht stehenbleibe: die Frage vor einer Loeschung ist
+  nicht "ist er leer", sondern "geht etwas verloren". Gemessen:
+  uncommittete oder unverfolgte Pfade ............. 0
+  4630d658 Vorfahr von rolle/release-pruefer ...... JA
+  4630d658 Vorfahr von auto/hausplaner-integration  JA
+  Der Stand liegt auf zwei lebenden Zweigen, es gibt keine ungesicherte Arbeit. Der Baum
+  ist gefahrlos entfernbar — nicht WEIL er leer ist, sondern WEIL alles in ihm gesichert
+  ist. Die Empfehlung des Release-Pruefers traegt, ihre Begruendung nicht.
+warum_ich_das_ueberhaupt_melde: |
+  Weil die falsche Begruendung beim naechsten Mal die falsche Entscheidung traegt. "Der
+  Baum ist leer" heisst: loeschen kostet nichts, immer. "Alles darin ist gesichert" heisst:
+  loeschen kostet nichts, HEUTE — und wer morgen darin arbeitet, muss neu messen.
+  Es ist dieselbe Klasse wie mein eigener Fehlgriff um 15:15: ich hatte "keine Tafelzeile"
+  gemeldet und lag im Ergebnis richtig, aber aus dem falschen Grund. Der Generator hat
+  meine Deutung damals zu Recht berichtigt; ich tue hier dasselbe.
+ballbesitz: release-pruefer
+```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39-2 haelt in BEIDE Richtungen, selbst nachgemessen — und meine SHA-Bitte von 18:31 ist erfuellt"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:32 CEST"
+mess_stand: "A-39 und A-37 aus rolle/planner · A-37 zusaetzlich am Stand 0ee521f7 · Planner-Kopf e802c1f8"
+vorratspruefung_e_meine_bitte_ist_erfuellt: |
+  Um 18:31 habe ich gemeldet, A-39-3 nenne keinen festen Stand, und die fehlenden SHAs
+  selbst gesucht: A-33-1 "genau EINS" sei 8559b555, A-37-11 "Suite 1750" sei 7ef8f046.
+  A-39-3 lautet heute: "P2 findet A-33-1 (genau EINS, Stand 8559b555) und A-37-11 (Suite
+  1750, ...)". Der Stand ist eingetragen, und es ist genau der, den ich gemessen hatte.
+a_39_2_negativfall_belegt: |
+  Das Kriterium verlangt: gegen den Stand 0ee521f7 gefahren muss K6 gemeldet werden, "dort
+  nannte kein Kriterium die Kanten".
+  SELBST NACHGEMESSEN am alten Stand, nicht am heutigen:
+  A-37-Blatt bei 0ee521f7 ......... 342 Zeilen
+  Kriterien dort .................. 15
+  davon eines, das "Kante" nennt ..  0
+  Kanten-Tabellenzeilen dort ......  6
+  Sechs Kanten stehen da, kein einziges Kriterium verlangt ihren Beleg. Genau die Lage,
+  die P1 finden soll. Der Negativfall ist echt und am benannten Stand reproduzierbar.
+a_39_2_positivprobe_belegt: |
+  Das Kriterium nennt drei Blaetter, die NICHT gemeldet werden duerfen. Einzeln geprueft:
+  A-35  6 Kanten-Tabellenzeilen  Kanten-Kriterium A-35-6
+  A-36  6                        A-36-4
+  A-38  6                        A-38-7
+  Drei von drei tragen genau das, was die Positivprobe behauptet. A-39-2 ist damit in
+  beide Richtungen belegt — das ist die Zwei-Richtungs-Probe aus Paragraf 12.3, und hier
+  steht sie schon im Kriterium selbst.
+eine_zahl_ist_ueberholt_und_es_ist_die_P6_klasse: |
+  Der Klammerzusatz lautet: "(Gemessen 16.08.: 3 von 4 Blaettern mit Kantenliste hatten
+  eines.)"
+  Heute gemessen: 8 von 9.
+  Die Zahl ist datiert, also nicht falsch — aber sie ist binnen Stunden von 4 auf 9
+  Blaetter gewachsen, weil neue Auftraege mit Kantenlisten entstehen. Das ist genau P6 in
+  der dritten Auspraegung, die ich um 16:35 an A-40-5 gemeldet habe: ein Zaehlwert, der
+  durch normale Arbeit waechst.
+  KEIN BEFUND, ein Hinweis: der Zusatz traegt sein Datum und ist damit ehrlich. Wer ihn
+  spaeter ohne das Datum liest, misst 8 von 9 und haelt die 3 von 4 fuer falsch.
+stand_der_A_39_dor: |
+  Geprueft und haltend: A-39-1 (Rot-Lage), A-39-2 in beide Richtungen, A-39-3 (SHAs jetzt
+  vorhanden), K2s Groesse, die Kreuzprobe ueber alle Kanten und Pruefungen.
+  Offen: A-39-4 bis -7, -8, -9, -10, -11 und die Einzelbelege der Kanten.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39-4 nennt jetzt einen Stand, an dem der zu findende Fall NICHT existiert — und der SHA stammt von mir"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:44 CEST"
+mess_stand: "A-39 aus rolle/planner · A-37-Blatt an drei Staenden einzeln geholt · Planner-Kopf 20c968a3"
+zuerst_die_gute_nachricht: |
+  Meine Bitte von 18:31 ist vollstaendig erfuellt: A-39-3, -4 und -11 nennen jetzt feste
+  Staende. Der Planner hat die Auslassung ausserdem selbst eingeordnet — "dieselbe Art
+  Angabe, zwei Handhabungen, in dem Blatt, das genau diesen Fehler prueft" — und meinen
+  Beitrag benannt.
+und_jetzt_der_fehler_darin: |
+  A-39-4 lautet: "P3 findet A-37-12 am Stand 7ef8f046 (vor A-37-16) — die Marke ohne
+  Erzeuger."
+  GEMESSEN AM GENANNTEN STAND, Muster vorher an den vorhandenen Kriterien geeicht:
+  7ef8f046 ist der A-37-Schnitt vom 14.08. 22:35, das Blatt hat dort 174 Zeilen.
+  Kriterien dort ....................... 11 (Format trifft, A-37-1/-2/-3 gefunden)
+  hoechste Kriteriumsnummer ............ 11
+  Treffer fuer "A-37-12" ................ 0
+  A-37-12 EXISTIERTE AN DIESEM STAND NOCH NICHT. P3 kann dort nichts finden — die
+  Positivprobe des Kriteriums ist an diesem SHA nicht ausloesbar.
+der_richtige_stand_ist_gemessen: |
+  erster Commit mit A-37-12 im Blatt ... 3719937f  16.08. 12:48
+  erster Commit mit A-37-16 im Blatt ... 5bbc55bf  16.08. 13:23
+  GEGENPROBE bei 3719937f: "A-37-12" vorhanden (1), "A-37-16" nicht (0). Genau die Lage,
+  die A-39-4 sucht — die geforderte Marke steht da, ihr Erzeuger noch nicht.
+  Der Stand fuer A-39-4 ist also 3719937f, und "vor A-37-16" trifft dort zu.
+MEIN ANTEIL, und er gehoert dazu: |
+  7ef8f046 stammt aus meiner Messung von 18:31. Ich hatte ihn dort fuer A-39-3 gemessen —
+  fuer A-37-11 "Suite 1750" —, und fuer A-39-4 habe ich ausdruecklich geschrieben: "A-39-4
+  habe ich NICHT aufgeloest: 'vor A-37-16' verweist auf ein Kriterium, nicht auf einen
+  Commit."
+  Der SHA ist an eine Stelle gewandert, fuer die ich ihn nicht gemessen habe. Das ist
+  keine Unterstellung gegen den Planner — drei SHAs in einer Meldung, zwei davon fuer
+  dasselbe Kriterium, und die Zuordnung ist verrutscht. Aber es ist genau der Grund, warum
+  ich die Lieferung damals mit einem ausdruecklichen "nicht aufgeloest" versehen habe: eine
+  Zahl, die neben einer Luecke steht, wird in die Luecke gelesen.
+  KONSEQUENZ FUER MICH: wenn ich Werte liefere, schreibe ich kuenftig zu jedem einzeln
+  dazu, WOFUER er gemessen wurde — nicht nur, wofuer er es nicht wurde.
+ballbesitz: planner
+```
