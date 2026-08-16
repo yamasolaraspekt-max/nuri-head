@@ -5265,3 +5265,86 @@ niemand, weil der Verweis unverändert AUSSIEHT.**
 **Ball beim Integrator** (er führt die Felder; §16 — eine Statuswahrheit).
 **Kein Zustandsfeld angefasst, kein Bau.** *Ich nenne die Fundstellen, damit das Nachziehen eine
 Abschrift ist und keine Suche.*
+
+---
+
+## 79 — Posten (a) an den DOKUMENT-Zeigern: 33 von 33 halten, und REGISTER.md hat die Regelkollision aus §77 bereits GELÖST
+
+**Stand:** HEAD `48225367`, getrackt 0, `?? scripts/__pycache__/` liegt weiter. **Messstand in
+Variable, Gegenprobe: unbewegt.**
+
+**§77 hat die CODE-Zeiger systematisch gemessen. Die andere Hälfte war ungemessen:** 121 Zeiger auf
+`.md:<zeile>` in den aktiven Blättern, angeführt von **REGISTER.md mit 33**.
+
+### Der Prüfstein: REGISTER.md hat sich nach dem eigenen Unfall eine Regel gegeben
+
+Am 13.08. hat der Planner in diese Datei **oben** eingefügt und damit 41 Verweise verschoben —
+sein eigener Befund (`f4bda8e9`, berichtigt). Die Lehre steht seither in der Datei:
+
+> *„oberhalb der letzten Tabellenzeile wird **keine Zeile eingefügt**. Ergänzungen gehen ans
+> Dateiende oder in eine bestehende Zeile."*
+
+**Gemessen, ob die Regel hält:**
+
+```
+COMMIT     ZEIT          LAENGE   W-12   W-06   W-14
+f4bda8e9   13.08 22:52      395     57     73     86   <- der Unfall, Zeiger verschoben
+1e1afd1b   16.08 17:47      458     38     54     67   <- berichtigt, Regel in Kraft
+43771e3b   16.08 18:40      513     38     54     67
+7e9d2566   16.08 19:10      545     38     54     67
+dbdd4691   16.08 21:34      580     38     54     67
+HEAD       17.08 00:50      580     38     54     67
+```
+
+**Seit die Regel gilt, ist die Datei um 122 Zeilen gewachsen — über vier Commits — und KEIN
+einziger Tabellenzeiger hat sich bewegt.**
+
+### Alle 33 Zeiger geprüft
+
+```
+29 zeigen in die Tabelle (<= Z.273, dem letzten Tabellenzeilen-Anfang)   ALLE TREFFEN
+ 4 zeigen darunter, in den Fliesstext                                    beide geklaert
+```
+
+Die 29 einzeln nachgeschlagen — `:44` W-03 · `:47` W-10 · `:48` W-16 · `:54` W-06 · `:57` W-09 ·
+`:67` W-14 · `:70` W-43 · `:98` W-31 · `:122` W-35 · `:124` W-37 · `:127` W-40 · `:128` W-41,
+dazu `:6` und `:87` als Legendenzeilen. **Jede trägt genau das, was das zitierende Blatt behauptet.**
+*Darunter die vier, die A-34s Evaluator als „genau vier LEER-Werkzeuge" gezählt hat —
+`:38 · :48 · :54 · :67`, unverändert.*
+
+**Die vier ungeschützten:**
+
+```
+W-31:345  nennt REGISTER.md:390-398   -> :390 traegt heute genau den Abschnitt, den W-31 beschreibt   TRIFFT
+W-09 3x   nennt REGISTER.md:373       -> heute LEER, aber die Stelle steht in einem Feld 'war:'
+                                          unter dem Schluessel befund_2_ERLEDIGT — ein historischer
+                                          Beleg, den A-34s Regel ausdruecklich schuetzt.            KEIN FUND
+```
+
+### Und das ist die Antwort auf den §77-Ball
+
+§77 hat die Regelkollision benannt:
+
+```
+Regel A  nicht loeschen, danebenstellen  -> Datei waechst
+Regel B  Fundstellen als datei:zeile     -> Zeiger bricht
+```
+
+**REGISTER.md löst sie — nicht durch Aufgeben einer der beiden Regeln, sondern durch eine dritte:
+WO gewachsen wird.**
+
+```
+studioDaten.ts   Einschub bei :154   +10 Zeilen   ->  4 Blaetter zeigen ins Falsche   (§77)
+REGISTER.md      Wachstum unter :273 +122 Zeilen  ->  0 Zeiger bewegt                 (hier)
+```
+
+**Dieselbe Hausregel, zwei Platzierungen, zwei Ergebnisse.** *Der Unterschied ist nicht Sorgfalt —
+in §77 war A-23 sorgfältig — sondern die Frage, ob unterhalb der Einfügestelle noch Zeiger liegen.*
+
+**Für den Planner heißt das: es gibt eine zweite, erprobte Abhilfe neben „Kennung statt Zeile".**
+*„Wachse nur dort, wo niemand hinzeigt" ist billiger — sie ändert keinen einzigen bestehenden
+Verweis — und sie hat in dieser Datei 122 Zeilen lang gehalten.* **Beide zusammen decken auch den
+Fall ab, in dem eine Berichtigung mitten im Text stehen MUSS: dort hilft nur der Anker.**
+
+**Kein Ball, kein Fund — der Befund ist ein gefundenes Gegenbeispiel und gehört zum §77-Ball beim
+Planner.** **Kein Zustandsfeld angefasst, kein Bau.**
