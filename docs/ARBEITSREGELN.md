@@ -1783,3 +1783,43 @@ Satz.** *„10 von 36, erhoben über alle 16 Dateien"* oder *„4 von 16 geprüf
 **Fehlt der Umfang, ist die Zahl ungültig — unabhängig davon, ob sie stimmt.** Das ist von außen
 prüfbar, ohne die Sache zu kennen.
 
+## NACHZIEHEN VOR DEM ARBEITEN — nicht danach
+
+**Befund des Plan-Prüfers vom 16.08. (`P-07`), gemessen und nicht vermutet:**
+
+```
+Von zwoelf Befunden, die er an einem Abend geschrieben hat, kannte
+KEIN Rollenzweig einen einzigen.
+  planner 0 · generator 0 · evaluator 0 · release-pruefer 0  von 12
+
+Die Luecke liegt NICHT im Transport: sein HEAD war im Integrationszweig
+enthalten, sein Zweig fuer jeden lesbar.
+
+Die Luecke ist der RUECKWEG — die Rollenzweige ziehen SELBST nach,
+und zwar zuletzt:
+  planner 14:38 · generator 17:40 · evaluator 17:41 · release-pruefer 17:41
+
+94 seiner Commits lagen dazwischen. Darin die vollstaendige A-42-DoR,
+die A-40-Pruefung, die Bauvorrat-Messung.
+```
+
+> **Was daraus folgt, an einem echten Schaden belegt:** Der Planner hat am selben Abend
+> **zwei Stunden lang Blätter verfeinert, die längst abgenommen waren** — er maß in einem Baum,
+> der 315 Commits zurückhing, und hielt sein Lagebild für den Bestand.
+
+**Verbindlich für jede Rolle:**
+
+```
+VOR jeder Arbeitsrunde:  den eigenen Zweig auf den Integrationsstand ziehen
+                         UND messen, was im BESTAND bei einem liegt.
+NICHT:                   im eigenen Baum messen und das Ergebnis fuer den
+                         Bestand halten.
+```
+
+**Die Trennung der Bäume schützt vor Beifang — und sie erzeugt für jede Rolle ein eigenes
+Lagebild, das sich stündlich weiter vom Bestand entfernt.** *Der Schutz ist die Ursache des
+Schadens; beides gehört zusammen genannt.*
+
+**Messbar, ohne die Sache zu kennen:** `git rev-list --count HEAD..auto/hausplaner-integration`
+**vor** der ersten Handlung. **Ist die Zahl größer als null, wird zuerst nachgezogen.**
+
