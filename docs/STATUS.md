@@ -22253,3 +22253,56 @@ was_ich_NICHT_tun_kann: |
   dafuer ist erfuellt.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "BERICHTIGUNG-W-17-1-TAFELZEILE"
+titel: "Ich habe am falschen Objekt gemessen — H-9 an mir selbst"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:15 CEST"
+betrifft_commit: "3a665884"
+was_falsch_war: |
+  In 3a665884 steht als Begruendung: "die Eichung zeigte KEINEN W-Vorgang auf der Tafel —
+  die W-Reihe laeuft ueber REGISTER.md".
+  DAS IST FALSCH GEMESSEN. Ich habe die DATEI docs/auftraege/AUFTRAGSTAFEL.md geprueft.
+  A-30 meint mit "Tafelzeile" aber die TABELLENZEILE INNERHALB von docs/STATUS.md — das
+  Skript sagt es in seinem eigenen Kommentar (Z.31): "docs/STATUS.md:31 | **P-02**
+  parallele Instanzen | VORLAGE | ...". DATEI="docs/STATUS.md" in Zeile 55.
+was_richtig_ist: |
+  Geeicht an A-30s eigenem Beispiel P-02 und dann gemessen:
+    W-Tafelzeilen in STATUS.md gesamt:  37 (W-01 bis W-42)
+    W-17/1 Tafelzeile in STATUS.md:      1
+    W-17/1 Datensatz in STATUS.md:       1
+  W-17/1 ERFUELLT A-20 VOLLSTAENDIG. Es fehlt nichts. Die Gegenprobe W-12/1 steht direkt
+  daneben: "| **W-12/1** Ansicht und Kamera (Ablesung) | BETRIEBSBESTAETIGT | ...".
+  Auch mein Satz "die W-Reihe laeuft ueber REGISTER.md STATT ueber die Tafel" ist falsch:
+  sie laeuft ueber BEIDE — REGISTER.md fuehrt den Reifegrad, STATUS.md die Tafelzeile.
+die_klasse: |
+  H-9, ein Wort zwei Sachen: "Tafel" heisst bei A-30 die Tabelle IN STATUS.md, bei mir die
+  Datei AUFTRAGSTAFEL.md. Beide Lesarten sind im Haus belegt, und ich habe die falsche
+  genommen, ohne sie am Werkzeug zu pruefen.
+  Und es ist DIESELBE Klasse, die ich um 14:15 an A-38 gemeldet habe: ein Messbefehl ohne
+  Ortsangabe. Ich habe den Ort selbst nicht bestimmt, bevor ich die Null gedeutet habe.
+  Die Null war echt — in AUFTRAGSTAFEL.md steht wirklich kein W-Vorgang. Sie bedeutete nur
+  nicht, was ich sie bedeuten liess. Eine Null ist erst dann ein Befund, wenn feststeht,
+  dass das Gesuchte an diesem Ort ueberhaupt stehen wuerde.
+was_das_votum_betrifft: |
+  DAS VOTUM HAELT UNVERAENDERT. Kein einziger Beleg der DoR haengt an dieser Messung:
+  249 Zeilen, PlanUploadTest.php 255 Z./12 Faelle, REGISTER.md Z.69 LEER, W-06 mit 101 Z.
+  gegen W-17s 21 Z., sieben Kriterien, sechs Kanten — alle einzeln und am richtigen Ort
+  gemessen. Falsch war nur der Abschnitt "ein_befund_den_ich_verworfen_habe", und zwar in
+  der BEGRUENDUNG, nicht im Ergebnis: dass kein Verstoss vorliegt, stimmt.
+  Zufaellig richtig zu liegen ist kein Messen. Deshalb steht die Berichtigung hier.
+was_A_30_an_meinem_commit_gemeldet_hat: |
+  A-30 warnte: "W-17/1: neuer DATENSATZ ohne Tafelzeile". Das war korrekt — bezogen auf
+  MEINE STATUS.md im Rollenbaum, wo mein Meldeblock den Schluessel auftrag: "W-17/1"
+  traegt, ohne Tafelzeile daneben.
+  Damit sieht A-30 jeden meiner Befundbloecke wie einen Statusdatensatz. Bei jeder NEUEN
+  Kennung, die ich melde, wird die Warnung feuern, ohne dass etwas fehlt — A-03-Klasse:
+  eine Meldung, die aus dem falschen Grund kommt, wird weggeklickt, und dann auch dort,
+  wo sie recht hat. Das ist ein Befund am Werkzeug, kein Vorwurf: A-30 kann Meldung und
+  Datensatz nicht unterscheiden, weil beide denselben Schluessel tragen.
+  Vorschlag, NICHT von mir zu entscheiden: Meldebloecke einen anderen Kopfschluessel
+  tragen lassen (z.B. befund: statt auftrag:), dann trennt A-30 sauber. Das aendert mein
+  Meldeverfahren und die Erwartung anderer Rollen — gehoert dem Planner, nicht mir.
+ballbesitz: plan-pruefer
+```
