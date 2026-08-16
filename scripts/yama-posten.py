@@ -23,7 +23,27 @@ import re
 import subprocess
 import sys
 
-P = 'docs/STATUS.md'
+# UMZUGSFEST seit 16.08. 22:3x — der Plan-Pruefer hat es in b43d26a7 vorhergesagt:
+# "Dasselbe gilt fuer scripts/yama-posten.py des Release-Pruefers, das ueber dieselbe Datei
+# laeuft." A-42 verschiebt jeden Block MIT auftrag und OHNE zustand nach docs/BEFUNDNOTIZEN.md.
+# Gemessen an A-42s eigenem Kriterium: von 12 Yama-Posten ziehen 4 um, von meinen fuenf ALLE.
+# Ein Werkzeug, das nur STATUS.md liest, meldete danach 8 statt 12 und bei mir 0 statt 5 —
+# es waere nicht kaputt, es waere LEISE FALSCH. Deshalb liest es beide Dateien und sagt, aus
+# welcher jeder Treffer stammt.
+#
+# DIESE ZWEI ZAHLEN STANDEN ERST VERTAUSCHT HIER (8 um / 4 bleiben). Gefunden hat es die Probe
+# unten, nicht ich: sammle() ueber beide Haelften ergab S 8 + B 4, also bleiben 8. Ich hatte die
+# Spalten meiner eigenen Messtabelle verwechselt — dieselbe Klasse wie F4 und F7. Der Kommentar
+# eines Werkzeugs wird von niemandem nachgerechnet; deshalb steht der Fehler hier statt still
+# berichtigt zu sein.
+#
+# Probe, jederzeit wiederholbar (schreibt nichts, legt keine Git-Objekte an):
+#   STATUS.md nach A-42s Kriterium in zwei Zeilenlisten teilen, sammle() auf beide anwenden,
+#   Summe muss der Messung an der ungeteilten Datei gleichen.
+#   Ergebnis 16.08. 22:4x:  yama 12 = 8+4 · release-pruefer 5 = 0+5
+# Der Ueberspring-Zweig (Quelle fehlt) ist heute im Echtbetrieb belegt: BEFUNDNOTIZEN.md gibt es
+# noch nicht, das Werkzeug meldet "gelesen: docs/STATUS.md" und laeuft durch.
+QUELLEN = ('docs/STATUS.md', 'docs/BEFUNDNOTIZEN.md')
 
 
 def bloecke(zeilen):
@@ -40,11 +60,23 @@ def bloecke(zeilen):
 
 
 def main(wer='yama', rev='HEAD'):
-    s = subprocess.run(['git', 'show', f'{rev}:{P}'], capture_output=True, text=True).stdout
-    if not s:
-        print(f'  {rev}:{P} nicht lesbar')
+    treffer = []
+    gelesen = []
+    for quelle in QUELLEN:
+        s = subprocess.run(['git', 'show', f'{rev}:{quelle}'],
+                           capture_output=True, text=True).stdout
+        if not s:
+            continue          # BEFUNDNOTIZEN.md gibt es vor dem Umzug noch nicht
+        gelesen.append(quelle)
+        z = s.split('\n')
+        treffer += sammle(z, wer, quelle)
+    if not gelesen:
+        print(f'  keine der Quellen {QUELLEN} in {rev} lesbar')
         return 2
-    z = s.split('\n')
+    return melde(treffer, wer, rev, gelesen)
+
+
+def sammle(z, wer, quelle):
     treffer = []
     for a, b in bloecke(z):
         blk = z[a + 1:b]
@@ -63,16 +95,22 @@ def main(wer='yama', rev='HEAD'):
                       for l in blk if l.startswith('titel:')), '')
         zeit = next((l.split(':', 1)[1].strip().strip('"')
                      for l in blk if l.startswith('zeit:')), '')
-        treffer.append((a + 2, kenn, zeit, titel, ohne_kennung))
+        treffer.append((a + 2, kenn, zeit, titel, ohne_kennung, quelle))
 
+    return treffer
+
+
+def melde(treffer, wer, rev, gelesen):
     print(f'  Posten mit ballbesitz: {wer}   —   {len(treffer)}   (Stand {rev})')
+    print(f'    gelesen: {" · ".join(gelesen)}')
     mit = sum(1 for t in treffer if not t[4])
     print(f'    davon mit Kennung {mit} · ohne Kennung {len(treffer) - mit}'
           f'   <- die ohne uebersieht jede Zaehlung ueber auftrag:')
     print()
-    for ln, kenn, zeit, titel, ok in treffer:
+    for ln, kenn, zeit, titel, ok, quelle in treffer:
         marke = ' ' if not ok else '*'
-        print(f'  {marke} Z.{ln:<7} {kenn[:34]:36} {zeit[:16]:17} {titel[:52]}')
+        q = 'S' if quelle.endswith('STATUS.md') else 'B'
+        print(f'  {marke}{q} Z.{ln:<7} {kenn[:34]:36} {zeit[:16]:17} {titel[:50]}')
     if len(treffer) - mit:
         print('\n  * = Block ohne auftrag:-Kennung (Befundnotiz)')
     return 0
