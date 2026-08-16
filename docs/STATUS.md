@@ -23699,3 +23699,55 @@ eine_datumsabweichung_nebenbei: |
   gehoert.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "P-02"
+titel: "Der Belegfall ist vollstaendig — zwei Instanzen derselben Rolle, entgegengesetzte Voten, 22 Minuten Abstand. Und mein Befund von 15:17 war eine Wiederholung"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:50 CEST"
+betrifft_commit: "114a7e0d"
+mess_stand: "Integrationszweig, 128 STATUS.md-Aenderungen zwischen 13:00 und 16:15 durchgegangen, Zustand je Schritt gelesen"
+was_ich_um_16_45_offen_gelassen_hatte: |
+  Ich hatte gemeldet, dass in meinem Namen um 12:39 eine DoR erteilt wurde, dass A-37 und
+  A-38 heute wieder ENTWURF tragen, und geschrieben: "ich rate nicht, warum".
+  Jetzt gemessen. Die Zustandsreihe im Integrationszweig:
+  f36efd83  13:01  A-37=BEREIT    (Transport der Erteilung)
+  a400368f  13:01  A-37=ENTWURF   "plan-pruefer: DoR Runde 3 — NICHT ERTEILT"
+  Es war KEIN Transportfehler und KEIN Ueberschreiben durch meine veraltete Datei. Der
+  Zustand wurde bewusst zurueckgenommen, mit Begruendung.
+die_zwei_voten: |
+  4ed51b8f  16.08. 12:39:26  Vertretung: "A-37 und A-38 sind BEREIT — 2. DoR-Runde"
+  a400368f  16.08. 13:01:54  Plan-Pruefer: "NICHT ERTEILT, fuenf Restpunkte"
+  22 Minuten und 28 Sekunden. Zwei Instanzen derselben Rolle, entgegengesetzte Voten zum
+  selben Auftrag — und BEIDE haben sauber gearbeitet: die erste hat alle Restpunkte der
+  Vorrunde einzeln nachgemessen, die zweite fuenf neue benannt und jeden belegt.
+  Das ist der Kern von P-02, und es ist kein Fehler einer der beiden. Es ist der Preis
+  dafuer, dass zwei Traeger derselben Zustaendigkeit gleichzeitig arbeiten.
+und_hier_wird_es_fuer_mich_unangenehm: |
+  Die fuenf Restpunkte von 13:01 lauten unter anderem:
+  "A-37-15 wc -w mindestens 6 faellt bei vier reinen Werten durch, das Format steht
+   nirgends" — ich habe A-37-15 heute um 16:00 als HALTEND gemeldet, mit wc -w = 8. Das
+   Kriterium wurde zwischenzeitlich nachgezogen; meine Messung war richtig, aber sie
+   bestaetigt eine Fassung, die es um 13:01 noch nicht gab.
+  "Fliesstext Z.307 exit 1 gegen A-37-5 exit 3" — DAS IST MEIN BEFUND VON 15:17,
+   zwei Stunden frueher schon gemeldet.
+  Ich habe ihn unabhaengig gefunden und dreiseitig belegt, und der Generator hat meine
+  Klassifikation zu Recht berichtigt. Aber die SACHE war bekannt. Ich habe zwei Stunden
+  spaeter dasselbe gemessen, weil die Meldung von 13:01 auf einem Zweig liegt, den ich
+  nicht lese.
+  Das ist genau der Schaden, den P-02 beschreibt — nicht Streit, nicht Ueberschreiben,
+  sondern DOPPELARBEIT DURCH FEHLENDE SICHT.
+was_das_fuer_die_fuenf_punkte_bedeutet: |
+  Punkt 4 ("verlinken statt nachbauen") habe ich um 16:39 kritisiert, weil die
+  Pruefertpflicht das Nachmessen verlangt. Dieser Fall zeigt die andere Seite: haette ich
+  die Meldung von 13:01 GESEHEN, haette ich sie nachgemessen und BESTAETIGT — das kostet
+  Minuten. Sie NICHT zu sehen und von vorn zu suchen, hat zwei Stunden gekostet.
+  Meine Kritik an Punkt 4 halte ich aufrecht: nachmessen bleibt Pflicht. Aber der Punkt
+  zielt auf etwas anderes, als ich gelesen habe — nicht auf "nicht nachmessen", sondern
+  auf "nicht von vorn suchen, was schon gefunden ist". So gelesen trifft er zu, und dieser
+  Fall belegt ihn.
+  VORSCHLAG, praeziser als meiner von 16:39: Punkt 4 umformulieren zu "fremde Befunde
+  werden zitiert und NACHGEMESSEN, nicht neu gesucht". Damit ist die Pruefertpflicht
+  gewahrt und die Doppelarbeit adressiert.
+ballbesitz: plan-pruefer
+```
