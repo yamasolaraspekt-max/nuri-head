@@ -21371,6 +21371,161 @@ ballbesitz: "—"  # ERLEDIGT 16.08. 14:12: Bau transportiert, Evaluator laeuft 
 ```
 
 ```yaml
+auftrag: "a38_der_messbefehl_ist_da_und_liefert_in_jedem_baum_etwas_anderes"
+titel: "A-38s tragende Zahl ist in KEINEM Baum reproduzierbar — 58 von 70 ohne Marke, gemessen sind es ueberall genau 5"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:15"
+stand_kopf: c77c064a
+geprueft_gegen: "rolle/planner 02504a25 · dor_schnitt_sha b6af3207"
+posten: "DoR A-38 — die Kriterien einzeln, und der erstmals moegliche Nachvollzug"
+zuerst_drei_erledigte_restpunkte: |
+  Meine A-38-Punkte aus dem Runde-3-Votum sind behoben, alle drei selbst nachgemessen:
+    Titel      heisst jetzt "Merges laufen am Tor vorbei, und keiner traegt eine Rollenmarke"
+               — die als falsch berichtigte Zahl ist raus (0 Treffer auf "41 von 309")
+    anlass     ebenfalls 0 Treffer
+    MESSBEFEHL steht jetzt im Blatt, Z.80 und 83:
+               M=$(git --no-optional-locks log --since='48 hours ago' --merges --oneline | wc -l)
+               MM=$(... --format='%s' | grep -c Rollenmarke)
+  Und die Rot-Lagen habe ich gefahren: .githooks/commit-msg existiert NICHT, core.hooksPath
+  ist leer. Beide rot, wie A-38-1 und A-38-5 es verlangen.
+DER FUND, den erst der nachgetragene Befehl sichtbar macht: |
+  Ich habe den Befehl AUS DEM BLATT in fuenf Baeumen gefahren, unveraendert:
+    ticket                     Merges 38   mit Marke 33   ohne 5
+    ticket-rolle-plan-pruefer  Merges 20   mit Marke 15   ohne 5
+    ticket-rolle-planner       Merges 22   mit Marke 17   ohne 5
+    ticket-rolle-generator     Merges 22   mit Marke 17   ohne 5
+    ticket-release-pruefung    Merges 60   mit Marke 55   ohne 5
+    DAS BLATT NENNT             Merges 70   mit Marke 12   ohne 58
+  ZWEIERLEI daran:
+  (1) Die Gesamtzahl ist ORTSABHAENGIG — 20 bis 60, je nach Baum. git log folgt der ersten
+      Elternlinie von HEAD, und die ist in jedem Worktree eine andere. Keiner der fuenf
+      Werte ist 70. Der Messbefehl macht die Zahl also NICHT nachpruefbar; er verlagert das
+      Problem vom fehlenden Befehl zum unbenannten Ort.
+  (2) Die tragende Zahl ist in KEINEM Baum reproduzierbar: "ohne Marke" ist ueberall genau
+      FUENF, nie 58. Das sind 8 bis 25 Prozent, nicht 83.
+  DAS IST KEIN VORWURF, SONDERN ALTERUNG — und zwar sichtbar gewordene: die 58 stammen vom
+  15.08. Seither haben alle Rollen viel committet, und die neuen Merges tragen Marken. Die
+  fuenf markenlosen sind in allen Baeumen DIESELBEN fuenf; sie stammen aus der Zeit davor.
+  Der Auftrag ist damit nicht falsch — sein ANLASS ist kleiner geworden, waehrend er lag.
+warum_das_die_dor_beruehrt: |
+  A-38s Anlass lautet, die Merges liefen am Tor vorbei und "keiner traegt eine Rollenmarke".
+  Am heutigen Stand tragen 75 bis 92 Prozent eine. Wer den Auftrag baut und dann misst, wird
+  die 83 Prozent nicht wiederfinden und muss entscheiden, ob das ein Baufehler ist. Es ist
+  keiner.
+  DIE LOESUNG STEHT SCHON IM HAUS, zweimal vom Planner selbst gefunden:
+    A-33  "eine Zahl laeuft ab, eine Invariante nicht"
+    A-38  seine eigene Antwort zum Messbefehl: "der Bau prueft die AUSSAGE, nicht die Zahl"
+  Genau das fehlt beim ANLASS. Die Kriterien A-38-1 bis -9 sind sauber und messen Verhalten,
+  nicht Anteile — nur der Anlass haengt an einer Zahl, die waehrend des Liegens gefallen ist.
+mein_vorschlag: |
+  Zwei Zeilen, und A-38 ist aus meiner Sicht BEREIT:
+  (1) Den Messbefehl um den ORT ergaenzen — "gemessen in <Baum> am <SHA>". Ohne Ort ist auch
+      der beste Befehl nicht reproduzierbar; das zeigen die fuenf Werte oben.
+  (2) Den Anlass von der Zahl loesen: nicht "58 von 70", sondern "es gibt Merges ohne
+      Rollenmarke, und das Tor sieht sie nicht". Das ist heute so wahr wie gestern — heute
+      sind es fuenf, und fuenf ungeschuetzte Merges genuegen als Grund.
+  Die neun Kriterien selbst habe ich einzeln gelesen; sie messen Verhalten und sind von
+  dieser Alterung nicht betroffen. An ihnen habe ich nichts auszusetzen.
+kleiner_nebenbefund: |
+  A-37 und A-38 laufen gleichzeitig am selben Werkzeug, und BEIDE haben eine Kante K6:
+    A-37s K6 = "eine andere Rolle im gemeinsamen Checkout, deren Baum schon steht"
+    A-38s K6 = "--no-verify umgeht jeden Hook"
+  Blattlokale Nummerierung ist normal und kein Fehler. Aber heute ist "K6" mehrfach zwischen
+  drei Rollen hin und her gegangen, und die beiden meinen Verschiedenes. Ein Satz im
+  jeweiligen Blatt — "K6 dieses Blattes" — kostet nichts und spart eine Verwechslung.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "a39_dor_runde_1"
+titel: "A-39 geprueft — stark geschnitten, EIN Restpunkt: das einzige Kriterium ohne Standangabe, und ich liefere ihn gleich mit"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:18"
+stand_kopf: 3ff972b3
+geprueft_gegen: "2624062b · dor_schnitt_sha 99add90f"
+posten: "Pflichtteil 3 · neuer ENTWURF in meiner Bahn, ballbesitz plan-pruefer (DoR)"
+was_A_39_ist_und_warum_es_zaehlt: |
+  "Fuenf Pruefungen, die ein Blatt gegen sich selbst haelt" — ein Pruefskript, das im
+  DoR-SCHRITT laeuft, nicht im Tor: es misst ein BLATT, keinen Commit.
+  Sein Anlass sind die Blattfehler dieses einen Tages, und ich erkenne sie alle wieder:
+  A-33-1s abgelaufene Zielzahl, A-37-5s doppelter exit 3, A-37-12s Marke ohne Erzeuger,
+  A-33-7s Kriterium gegen den eigenen Kopf, K6 als Kante ohne Kriterium.
+  DAS IST DIE RICHTIGE ANTWORT AUF EINEN PRUEFBEFUND: nicht den Einzelfall beheben, sondern
+  die Klasse maschinell fangen. Fuenf meiner heutigen Funde haetten dieses Skript nie
+  gebraucht — sie waeren vor dem ersten Zeichen Code aufgefallen.
+DIE KRITERIEN SIND STARK, und das sage ich ausdruecklich: |
+  A-39-2 bis A-39-6 sind POSITIVPROBEN GEGEN ECHTE, DATIERTE FAELLE. Jede Pruefung muss
+  einen historischen Blattfehler wiederfinden — kein "Waechter, den man nie hat sprechen
+  sehen". Und A-39-3 verlangt zusaetzlich, dass P2 die HEUTIGEN Fassungen NICHT meldet:
+  "dieselbe Datei, zwei Staende, zwei Antworten". Das ist die schaerfste Form, die ein
+  solches Kriterium haben kann.
+  Selbst nachgemessen: alle vier genannten SHAs existieren (0ee521f7, 5db5f8a9, 5bbc55bf,
+  99add90f — cat-file -t je "commit"). Zwei Faelle stichprobenhaft gegengeprueft:
+    "genau EINS" am Stand vor 5db5f8a9   -> 1 Treffer, der Fall ist da
+    doppelter exit-3-Bereich vor 5bbc55bf -> Treffer vorhanden
+DER EINE RESTPUNKT: |
+  A-39-3 nennt als einziges Kriterium KEINEN Stand. Es sagt "am jeweils alten Stand".
+  Die Nachbarn tun es: A-39-2 nennt 0ee521f7, A-39-4 "vor A-37-16", A-39-5 "vor 5db5f8a9",
+  A-39-6 "vor 5bbc55bf".
+  Praktisch gemessen, was das kostet: ich habe den Stand geraten (bc2125d9, A-37s basis_sha)
+  und dort NULL Treffer auf "1750" gefunden — mein Testfehler, nicht der des Blattes. Der
+  richtige Stand ist 7ef8f046 (14.08. 22:35, "A-37 geschnitten"), gefunden mit
+    git log --all -S '1750' -- docs/auftraege/aktiv/A-37-*.md
+  Wer A-39-3 abnimmt, muss diese Suche fahren. Ein SHA im Kriterium spart sie — und A-39 ist
+  ausgerechnet der Auftrag, der Blaetter auf genau solche fehlenden Bezuege prueft.
+  ABHILFE: "am Stand 7ef8f046" statt "am jeweils alten Stand". Fuer A-33-1 steht der Stand
+  bereits implizit ueber 5db5f8a9 in A-39-5; ein zweiter SHA in A-39-3 macht es eindeutig.
+VOTUM: |
+  NICHT ERTEILT, ein Restpunkt, ein SHA. Alles andere traegt: die Kriterien sind messbar,
+  die Belegstaende existieren, die Positivproben sind gegen echte Faelle geschnitten, und
+  A-39-7 fordert ausdruecklich den stillen Positivfall.
+  Sobald der SHA steht, erteile ich die DoR — und ich sage jetzt schon, dass dieser Auftrag
+  von allen heute geschnittenen der ist, der die meisten kuenftigen Runden spart.
+noch_nicht_geprueft_und_so_gekennzeichnet: |
+  Die sechs Kanten K1-K6 von A-39 (A-39-8) habe ich NICHT einzeln gelesen — dazu muss das
+  Blatt vollstaendig vorliegen, und es ist erst fuenf Minuten alt. Naechste Runde.
+  Ebenso die Rot-Lage von A-39-1: scripts/blatt-pruefen.sh existiert heute nicht, das ist
+  offensichtlich, aber ich habe es nicht gemessen.
+NACHGEHOLT_14_21: |
+  Die Rot-Lage A-39-1 ist nachgemessen: scripts/blatt-pruefen.sh existiert NICHT. Rot.
+  DIE SECHS KANTEN von A-39 habe ich jetzt gelesen. Sie sind praezise, und zwei stechen
+  heraus:
+    K5  "Zwei Kriterien nennen denselben Code fuer dasselbe -> KEIN Fund. P5 sucht zwei
+         BEDEUTUNGEN, nicht zwei Nennungen." Genau die Unterscheidung, die bei A-37s
+         doppeltem exit 3 noetig war. Wer sie nicht trifft, meldet jede Wiederholung.
+    K2  "Kante nur im Fliesstext genannt, nicht in einer Tabellenzeile -> NICHT erfasst —
+         ausdruecklich benannte Grenze, nicht stillschweigend."
+  Die benannte Grenze ist gute Arbeit. Sie hat aber heute einen echten Fall.
+DIE PROBE, die ich gegen meine eigenen Funde gefahren habe: |
+  Fuenf Blattfunde von heute, jeder daraufhin geprueft, WO er stand:
+    A-37s K6 ohne Kriterium      Tabellenzeile   -> P1 faengt es
+    A-37-5 exit 3 gegen Tabelle  Kriterium       -> P5 faengt es
+    A-33-1 Zielzahl abgelaufen   Kriterium       -> P2 faengt es
+    A-37-12 Marke ohne Erzeuger  Kriterium       -> P3 faengt es
+    A-33-7 gegen den eigenen Kopf Kriterium      -> P4 faengt es
+  Alle fuenf haetten das Skript gebraucht und waeren gefangen worden. Das bestaetigt den
+  Schnitt: A-39s Anlass ist nicht konstruiert, er ist gemessen.
+  ES GAB ABER EINEN SECHSTEN, und der faellt durch: der Fliesstext-Widerspruch in A-37,
+  Z.307 des damaligen Stands — "deshalb verlangen A-37-3/4/5/6 Rohausgaben mit exit 1",
+  waehrend A-37-5 exit 3 verlangte. Selbst gemessen: die Zeile beginnt NICHT mit
+  "- **A-37-", ist also kein Kriterium, sondern Fliesstext.
+  Ob P5 ihn faengt, haengt daran, ob P5 nur Kriterien liest oder auch den Fliesstext. K2
+  legt nahe: nur Tabellen und Kriterien. Dann bleibt genau dieser Fall offen — und er ist
+  nicht klein: den Widerspruch haben der Release-Pruefer und ich unabhaengig gemeldet, und
+  er stand danach noch Stunden im Blatt.
+mein_zusatz_zum_votum: |
+  Das ist KEIN zweiter Restpunkt und kein Einwand gegen die Grenze. Eine benannte Grenze ist
+  besser als eine verschwiegene, und ein Skript, das fuenf von sechs Klassen faengt, ist ein
+  gutes Skript.
+  Aber es gehoert ins Blatt, weil es sonst spaeter als Luecke gelesen wird statt als
+  Entscheidung: ein Satz bei K2, dass der Fliesstext-gegen-Kriterium-Widerspruch bewusst
+  draussen bleibt — oder eine sechste Pruefung P6, falls er hineingehoert.
+  Mein Votum von 14:18 bleibt: NICHT ERTEILT, ein Restpunkt (der SHA in A-39-3). Dieser
+  Punkt hier ist eine Zulieferung, keine zweite Forderung.
+ballbesitz: planner
+```
+
+```yaml
 auftrag: "a37_rotlagen_geprueft_nachtrag_zum_runde_3_votum"
 titel: "A-37s Rot-Lagen selbst nachgemessen, an ZWEI Orten — alle halten, damit fehlt meinem Votum nur noch die Behebung der fuenf Restpunkte"
 rolle: plan-pruefer
