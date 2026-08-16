@@ -106,9 +106,13 @@ fi
 # nicht kennt, weist sie ab und ist laut; eine Barriere, die in ihrem Baum fehlt, laesst alles
 # durch und meldet nichts. Der erste Fall kostet eine Runde, der zweite bleibt unbemerkt."*
 #
-# **Am 16.08. ueber alle sechs Baeume erhoben:** das Tor liegt in DREI — generator, evaluator,
-# release-pruefung. Es fehlt in Integration, planner und plan-pruefer. *Drei Baeume haben also
-# stundenlang committet, ohne dass irgendwo stand, dass die Pruefung gar nicht lief.*
+# **Am 16.08. um 16:30 ueber alle sechs Baeume erhoben:** das Tor lag in DREI — generator,
+# evaluator, release-pruefung. Es fehlte in Integration, planner und plan-pruefer. *Drei Baeume
+# haben also stundenlang committet, ohne dass irgendwo stand, dass die Pruefung gar nicht lief.*
+#
+# ***Stand am selben Abend: SECHS von sechs*** — *der Transport hat es nachgezogen, und damit ist
+# auch A-37-6 von selbst scharf geworden.* **Die Drei oben bleibt stehen, weil sie den Anlass
+# dieses Bauteils belegt** — *sie ist eine Messung mit Uhrzeit und keine Aussage ueber heute.*
 #
 # **Es wird weiterhin DURCHGELASSEN und ab jetzt GESAGT.** *Sperren waere hier falsch: die vier
 # Baeume koennen die Datei nicht selbst herbeischaffen, sie kommt ueber den Transport.* **Eine

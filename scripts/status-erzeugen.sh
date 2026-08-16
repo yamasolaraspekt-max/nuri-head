@@ -38,7 +38,7 @@
 # sondern nur die Auskunft, dass niemand den neuen Wortlaut je benutzt hat.* **Deshalb hat dieses
 # Skript einen dritten Modus: `--bootstrap`.**
 #
-# ## Die drei Betriebsarten
+# ## Die Betriebsarten — ohne Zahl, weil sie gewachsen sind (drei am Anfang, heute fuenf)
 #
 # ```text
 #   --tafel       erzeugt die Statuswahrheit AUS DEM COMMIT-LOG.
@@ -52,7 +52,8 @@
 #   --vergleich   haelt das Erzeugnis gegen den heutigen Bestand und meldet die Abweichung.
 #                 Weicht es ab, ist die ABWEICHUNG der Befund, nicht die Erzeugung.
 #
-#   --fangprobe   haelt das MUSTER gegen zwoelf echte Faelle, bevor es zaehlt.
+#   --fangprobe   haelt das MUSTER gegen echte Faelle, bevor es zaehlt — dreiteilig:
+#                 Wortlaut, Blattgrenze, Verankerung. Die Zahl nennt der Lauf selbst.
 #   --regelprobe  fragt, ob docs/ARBEITSREGELN.md den Wortlaut traegt (A-41-1, halb fremd).
 # ```
 #
@@ -141,7 +142,8 @@ MODUS = os.environ["MODUS"]
 # keine Bedingung.
 # **⚠ DIE ROLLENMARKE STEHT DAVOR, und das ist keine Auslegung, sondern eine Messung.**
 # Yamas Vorgabe lautet `zustand: A-33 · …` als BETREFF. Das Tor stellt jedoch die Rollenmarke
-# ZWINGEND voran (`commit-pruefen.sh:113-114`, „Keine Rollenmarke … voranstellen"). **Ein Betreff,
+# ZWINGEND voran (`commit-pruefen.sh`, die Zeile „Keine Rollenmarke … voranstellen" — **absichtlich
+# ohne Nummer**, sie stand bei 113 und liegt heute bei 218). **Ein Betreff,
 # der mit `zustand:` beginnt, ist ueber das Tor nicht erzeugbar** — und der Planner hat es bereits
 # umgangen: `planner: zustand: A-41 · ENTWURF · planner · blatt e521bd98`.
 #
