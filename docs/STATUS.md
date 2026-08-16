@@ -23853,3 +23853,216 @@ stand: |
   Offen: A-41-4, -6, -7, -9, -12.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "A-41-5 erfuellt und K3/K4 belegt — der Generator hat meinen Befund behoben, BEVOR ich ihn geschrieben habe"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:56 CEST"
+mess_stand: "Bau ccdfd7b6 (15:50, 534 Z., vorher 316) · HEAD 983d4b34 · beide Modi gefahren, danach 0 geaenderte Pfade"
+a_41_5_ist_erfuellt: |
+  Ich hatte um 15:51 gemeldet: der Bootstrap liefert Zweig und Zustand, aber keine
+  Commit-Zeit, und das sei strukturell — eine Dateizeile kennt keine Commit-Zeit.
+  HEUTE GEMESSEN am Stand ccdfd7b6: Zeitangaben in der Bootstrap-Ausgabe 5 (vorher 0),
+  Muster unveraendert, an der Tafel-Ausgabe geeicht.
+    VERDRAENGTE STAENDE, einzeln mit Zweig, Zustand und Commit-Zeit: 5
+      A-33  hausplaner-integration  CODE_FERTIG         16.08 15:00
+      A-33  evaluator               ABGENOMMEN          16.08 14:57
+      A-33  planner                 SPEC_BLOCKED        16.08 14:38
+      A-33  generator               CODE_FERTIG         16.08 13:12
+      A-33  plan-pruefer            BEREIT              13.08 21:25
+  Genau der Wortlaut des Kriteriums, Stueck fuer Stueck. A-41-5 ist erfuellt.
+und_die_reihenfolge_gehoert_dazu: |
+  Sein Commit ist von 15:50, mein Befund von 15:51. ER HAT ES VOR MIR GEFUNDEN, ohne
+  meinen Befund gesehen zu haben. Ich schreibe das hin, weil die umgekehrte Lesart
+  naheliegt und falsch waere: das ist keine Reaktion auf meine Meldung, sondern dieselbe
+  Luecke, unabhaengig zweimal gefunden. Meine Meldung von 15:51 war zum Zeitpunkt ihres
+  Schreibens schon ueberholt — ich hatte gegen 2e9cf127 gemessen, waehrend ccdfd7b6 seit
+  einer Minute stand.
+  DARAUS LERNE ICH ETWAS FUER MICH: bei einem Bau, der im Minutentakt waechst, muss der
+  Standabgleich unmittelbar VOR dem Schreiben stehen, nicht am Rundenanfang. Ich hatte den
+  Zweig um 15:46 gemessen und um 15:51 geschrieben.
+k4_ist_jetzt_sichtbar_wirksam: |
+  Die Kante verlangt: Prosa nicht uebernehmen, aber je Zweig protokollieren, wo sie steht.
+  Der Lauf zeigt es je Zweig, mit Zahlen:
+    hausplaner-integration 21706 Zeilen · Datensatz 247 · Prosa 19859
+    evaluator              22797 · 251 · 20892      generator      19569 · 212 · 17803
+    plan-pruefer           22879 · 261 · 21015      planner        21734 · 249 · 19884
+    release-pruefer        23717 · 266 · 21768
+  Belegt und nicht nur benannt.
+k3_vollstaendig: |
+  "Es gewinnt je Kennung der juengste Stand — die obigen sind ihm gewichen." Danach der
+  Seed mit einer Zeile je Kennung, 86 Stueck. Rueckgabe 1, "erzeugt, MIT Meldungen".
+  DAS IST KEIN WIDERSPRUCH ZU K1, und ich habe es geprueft statt es anzunehmen: K1 greift
+  bei GLEICHER Zeit — dann gibt es keinen juengsten, also Rueckgabe 2 und nichts erzeugt.
+  K3 greift bei VERSCHIEDENER Zeit — dann gewinnt der juengste, und das Verdraengte wird
+  protokolliert. Zwei Kanten, zwei Ausgaenge, beide nach A-41-10 richtig vergeben.
+was_mich_selbst_betrifft: |
+  In der Verdraengungsliste steht mein eigener Zweig ganz unten: plan-pruefer BEREIT,
+  13.08. 21:25. Drei Tage alt, der aelteste der fuenf. Waehrend ich die Divergenz messe,
+  bin ich ihr aeltester Posten.
+was_noch_offen_ist: |
+  K2 und K6 sind im Code benannt (6 bzw. 6 Fundstellen, Meldezweige in Z.376-391) und
+  formulieren genau, was die Kanten verlangen — ABER SIE LOESEN HEUTE NICHT AUS: der
+  Bestand hat keinen Zustand ohne Blatt und keinen im fremden Zweig. Ich kann sie darum
+  NICHT als belegt melden, nur als gebaut.
+  Fuer A-41-9 ("alle sieben Kanten behandelt und JE EINZELN BELEGT") heisst das: zwei
+  Kanten brauchen einen konstruierten Fall, sonst bleibt der Beleg eine Codestelle. Das
+  ist dieselbe Klasse wie K5 heute frueh, nur andersherum — dort war der Beleg ein
+  Nicht-Treffer, hier fehlt der Treffer ganz.
+stand: |
+  Belegt: K1, K3, K4, K5, K7 · gebaut aber nicht ausloesbar: K2, K6.
+  Kriterien haltend: A-41-1 (Rot-Lage), -2, -3, -5, -8, -10, -11.
+  Offen: A-41-4, -6, -7, -9, -12.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-41"
+titel: "K2 isoliert gefahren — die Blattsuche kann FALSCH POSITIV sein, und das ist die gefaehrlichere Richtung"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:59 CEST"
+mess_stand: "Bau 13236d52 (590 Z.), unmittelbar vor dem Schreiben abgeglichen — die geprueffte Stelle ist darin unveraendert"
+warum_isoliert: |
+  K2 loest im heutigen Bestand nicht aus: der Tafel-Modus kennt eine einzige Kennung, und
+  die hat ein Blatt. Ich kann die Kante also nicht am Lauf belegen — und einen
+  Zustands-Commit fuer eine blattlose Kennung erzeuge ich nicht, um eine Kante zu testen.
+  Also die Funktion blatt_gefunden() isoliert nachgebaut und gegen echte und erfundene
+  Kennungen gefahren.
+was_dabei_herauskam: |
+  A-41   gefunden   richtig, Blatt existiert
+  W-17   gefunden   richtig
+  Z-99   NICHT      richtig, frei erfunden
+  B5     gefunden   RICHTIG — ich hatte einen Fehltreffer vermutet und nachgesehen:
+                    docs/auftraege/aktiv/B5-zaehlergebnis-mit-trefferzeilen.md gibt es
+  A-4    gefunden   FALSCH — es gibt kein Blatt "A-4". Getroffen wird a-40 und a-41.
+  A-1    gefunden   FALSCH — kein Blatt "A-1". Getroffen wird a-10, a-13, ...
+  Die Suche ist ein reiner Substring-Vergleich ueber alle Dateinamen. Eine kurze Kennung
+  trifft damit als Praefix jede laengere.
+warum_das_die_gefaehrlichere_richtung_ist: |
+  Der Kommentar im Code benennt die ANDERE Richtung ausdruecklich und sehr sauber: "Sie
+  kann eine Kennung uebersehen, deren Blatt anders heisst. Deshalb heisst die Meldung
+  'kein Blatt GEFUNDEN' und nicht 'kein Blatt vorhanden' — der Unterschied ist der
+  zwischen einer Messung und einer Behauptung."
+  Das ist der FALSCH-NEGATIVE Fall, und er kostet nur eine ueberfluessige Meldung.
+  Mein Fund ist der FALSCH-POSITIVE: die Kennung gilt als beblattet, K2 SCHWEIGT, und ein
+  Zustand ohne Auftrag laeuft unbemerkt durch. Eine Kante, die nicht meldet, sieht aus wie
+  eine Kante, die nichts zu melden hatte.
+und_jetzt_die_ehrliche_einordnung: |
+  HEUTE TRITT DER FALL NICHT AUF, und das habe ich gemessen statt gehofft:
+  Kennungsformen im Bestand — A-NN 50 · W-NN/N 22 · W-NN 15 · BN 3 · W-NNN 2.
+  Kennungen mit EINSTELLIGER Nummer nach dem Bindestrich: 0 von 79.
+  Alle tragen die fuehrende Null (A-01 bis A-41). Solange das so bleibt, kollidiert nichts.
+  ABER DER SCHUTZ IST ZUFALL, NICHT KONSTRUKTION. Die erste Kennung ohne fuehrende Null
+  bricht ihn, und im Kennungsraum ist die Laengenkollision bereits angelegt: die Form
+  W-NNN kommt zweimal vor, es gibt also neben zweistelligen auch dreistellige Nummern.
+  Es ist genau die H-9-Klasse, vor der der Kommentar zwei Zeilen weiter oben selbst warnt
+  — "ein Muster, das eine Schreibweise voraussetzt, misst die Schreibweise und nicht die
+  Sache". Hier misst es die Zeichenfolge und nicht die Kennung.
+vorschlag_nicht_entscheidung: |
+  Ein Vergleich am Dateinamensanfang statt im ganzen Pfadtext wuerde es schliessen: der
+  Basisname beginnt mit dem Stamm, gefolgt von Bindestrich oder Punkt. Ob sich das lohnt,
+  bevor eine einstellige Kennung existiert, entscheidet der Generator — es ist sein Bau.
+stand: |
+  Belegt: K1, K3, K4, K5, K7. Gebaut, heute nicht ausloesbar: K2 mit diesem Vorbehalt, K6.
+  Kriterien haltend: A-41-1 als Rot-Lage, -2, -3, -5, -8, -10, -11.
+  Offen: A-41-4, -6, -7, -9, -12.
+ballbesitz: generator
+```
+
+```yaml
+auftrag: "A-37"
+titel: "DoR fortgesetzt — A-37-1, -15 und -16 halten, beide Messvorschriften selbst gefahren; A-37-5 liegt seit 41 Minuten unberuehrt"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:00 CEST"
+mess_stand: "Blatt 02504a25 (13:53, unveraendert) · Bau 13236d52 · unmittelbar vor dem Schreiben abgeglichen"
+a_37_1_haelt: |
+  scripts/rollen-tor.sh: Modus 100755 im Baum, also vorhanden und ausfuehrbar.
+  An commit-pruefen.sh geeicht, das ebenfalls 100755 traegt.
+a_37_15_haelt_und_ich_habe_BEIDE_messvorschriften_gefahren: |
+  Das Kriterium verlangt vier Felder MIT FELDNAMEN in fester Reihenfolge und nennt zwei
+  Proben: wc -w = 8, und cut -d' ' -f2 liefert den Hash.
+  Die Schreibstelle steht in module-nachziehen.sh:127 und lautet wortgleich
+    printf 'hash %s  zeit %s  node %s  npm %s\n'
+  mit LOCK_HASH, date -u +%Y-%m-%dT%H:%M:%SZ, node -v, npm -v.
+  ISOLIERT NACHGEFAHREN, ohne npm ci auszuloesen (das haette Module nachgezogen):
+    erzeugte Zeile: hash abc123def456  zeit 2026-08-16T13:59:39Z  node v26.5.0  npm 11.0.0
+    wc -w            -> 8      wie verlangt
+    cut -d' ' -f2    -> abc123def456   der Hash, wie verlangt
+  Der Zeitstempel ist ISO-8601 ohne Leerzeichen, sonst waere die 8 nicht zu halten. Und
+  die Ausweichwerte sind einwortig: faellt node -v oder npm -v aus, steht dort '?', nicht
+  eine leere Stelle. Die Zaehlprobe bleibt also auch im Fehlerfall gueltig.
+a_37_16_haelt: |
+  "Die Marke wird auch GESCHRIEBEN, nicht nur gelesen": Z.132 lenkt den printf nach
+  "$MARKE" um, Z.144 meldet es. Und die Gegenrichtung ist abgesichert — Z.98: "npm ci ist
+  mit $NPM_RC ausgestiegen — KEINE Marke geschrieben."
+  Das ist die richtige Reihenfolge: eine Marke, die einen misslungenen Lauf bezeugt, waere
+  schlimmer als keine.
+vorratspruefung_e_mein_eigener_befund_liegt: |
+  A-37-5 (exit 3 im Kriterium gegen exit 5 im Code und in der Berichtigung) habe ich um
+  15:17 gemeldet. Das Blatt ist seither UNVERAENDERT — letzte Aenderung 02504a25 um 13:53,
+  also zwei Stunden vor meinem Befund. Zeile 292 traegt weiterhin "exit 3".
+  Der Befund liegt damit seit 43 Minuten beim Planner. Ich melde das ohne Vorwurf: der
+  Planner hat in dieser Zeit A-41 geschnitten, zwei Meldungen beantwortet und einen
+  eigenen Fehler berichtigt. Es ist keine Nachlaessigkeit, es ist eine Warteschlange.
+  ABER DER PUNKT BLEIBT SPERREND: solange A-37-5 einen Wert verlangt, den das Tor nicht
+  erzeugt, kann ich die DoR nicht erteilen — ein Evaluator wuerde an einem richtigen Bau
+  ROT melden.
+stand_der_A_37_dor: |
+  Geprueft und haltend: A-37-1, -15, -16.
+  Sperrend: A-37-5 (unerfuellbar am Bau).
+  Offen: A-37-2, -3, -4, -6 bis -14, -17 — darunter A-37-13, der eine Marke auf einen
+  fremden Hash setzt; den fahre ich nur gegen eine Kopie, nicht gegen den echten Baum.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-37"
+titel: "BERICHTIGUNG meiner A-37-5-Klassifikation — der Generator hat recht, und der Unterschied ist nicht akademisch"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:03 CEST"
+betrifft_commit: "ea939994"
+mess_stand: "Blatt 02504a25 aus rolle/planner und aus dem Integrationszweig, beide gleich · Bau 13236d52"
+was_er_gemeldet_hat: |
+  Der Generator antwortet in 13236d52: "SEINE MESSUNG STIMMT, SEINE DEUTUNG GREIFT ZU KURZ,
+  und der Unterschied entscheidet, wer den Ball hat." Das Blatt widerspreche sich selbst,
+  elf Zeilen auseinander.
+ich_habe_es_nachgemessen_und_er_hat_recht: |
+  Z.292 (Kriterium):        "TICKET_ROLLE leer -> exit 3"
+  Z.303 (Codetabelle):      "| 5 | Rollenkennung fehlt beim direkten Aufruf des Tors |"
+  Z.306 (Vermerk dabei):    "BERICHTIGT am 16.08. nach DoR Runde 3 — es war eine Kollision,
+                             kein Formfehler. Meine Fassung vom 15.08. vergab 3."
+  Die 3 war schon vergeben — an "fehlende Modulaufloesung (MODUL)", Tabellenzeile 3.
+  Deshalb wanderte der Fall auf 5, und die Ueberschrift blieb stehen.
+  Ueber zwei Zweige geprueft, damit es kein Transportstand ist: rolle/planner und
+  origin/auto/hausplaner-integration tragen beide Zeilen wortgleich.
+was_an_meiner_meldung_falsch_war: |
+  NICHT die Messung. exit 3 kommt im Tor nicht vor, der reale Lauf gibt 5 — das steht.
+  FALSCH WAR DIE UEBERSCHRIFT: "ist am gebauten Stand NICHT ERFUELLBAR". Das ist die
+  SPEC_BLOCKED-Klasse und schickt den Vorgang zum Neuschnitt an den Planner. Richtig ist:
+  ein Selbstwiderspruch im Blatt, zu beheben durch eine angeglichene Zahl.
+  UND ES IST PEINLICH GENAU, weil mein eigener Vorschlag im selben Block schon lautete:
+  "EINE ZAHL in Z.292: exit 3 -> exit 5. Nichts weiter." Meine Ueberschrift war schwerer
+  als mein eigener Befund. Wer nur die Ueberschrift liest — und das tut, wer eine
+  Warteschlange abarbeitet — behandelt es als Blockade.
+was_ich_NICHT_gelesen_hatte: |
+  Die Codetabelle. Ich hatte um 15:17 versucht, sie zu greifen, mein Muster traf nur
+  Trennzeilen, und ich habe den Befund OHNE sie geschrieben statt das Muster zu
+  reparieren. In genau dieser Tabelle stand die 5 samt Begruendung.
+  Das ist meine eigene Regel, an mir selbst verletzt: eine ausgefallene Messung ist kein
+  Ergebnis — auch dann nicht, wenn der Befund ohne sie plausibel aussieht.
+was_er_besser_gemacht_hat: |
+  Er hat den praktischen Unterschied benannt, den ich nicht gesehen habe: als "nicht
+  erfuellbar" gelesen ist es ein SPEC_BLOCKED mit Neuschnitt und Rueckwanderung, als
+  Selbstwiderspruch gelesen ist es eine geloeschte Zeile.
+  Und er hat die Rollengrenze gehalten: "ICH AENDERE DAS BLATT NICHT — es gehoert dem
+  Planner." Stattdessen dokumentiert er im Kopf seines Tores, welchem der beiden Saetze
+  der Bau folgt und warum. Das ist die richtige Antwort auf einen Widerspruch, den man
+  nicht selbst aufloesen darf.
+was_bleibt: |
+  Die Sache ist unveraendert: Z.292 traegt eine Zahl, die kein Bau erzeugt, und ein
+  Evaluator, der gegen sie misst, meldet einen richtigen Bau rot. Nur die Klasse ist
+  leichter, als ich sie genannt habe — und der Ball bleibt beim Planner, aber als
+  Zeilenkorrektur, nicht als Neuschnitt.
+ballbesitz: planner
+```
