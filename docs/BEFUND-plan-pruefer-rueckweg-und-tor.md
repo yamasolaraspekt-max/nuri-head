@@ -4397,3 +4397,83 @@ Fangprobe mit Fallpflicht. **Die Blätter, die heute Nacht Fehler hatten, taten 
 acht geprüften Blättern, und sie gehört dem Planner.*
 
 **Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 70 — FEHLER 27 an mir selbst: zweimal eine ausgefallene Messung als Ergebnis gemeldet — und sie hatte recht
+
+**Stand:** HEAD `d0acd89c`, Baum 0 Einträge. **Die Wache warnt in zwei Sätzen genau davor, und ich
+bin in beide gelaufen:** *„eine ausgefallene Messung ist KEIN Ergebnis"* und *„Exit-Code nie hinter
+einer Pipe lesen."*
+
+### Was ich gefahren habe, in §68 und §69, wörtlich dieselbe Zeile
+
+```
+git --no-optional-locks log --oneline @{u}..HEAD 2>/dev/null | wc -l
+   ->  0        und ich habe geschrieben: "ungepusht: 0"
+```
+
+**Ohne Pipe und ohne Unterdrückung:**
+
+```
+exit=128
+fatal: no upstream configured for branch 'rolle/plan-pruefer'
+```
+
+**Für diesen Zweig ist gar kein Upstream gesetzt.** Meine „0" war nicht die Zahl der Commits — sie
+war **die Zeilenzahl eines nach `/dev/null` geleiteten Fehlerstroms**. `wc -l` zählt gehorsam das
+Nichts.
+
+### Der wahre Stand, live gemessen statt aus der lokalen Fernkopie
+
+```
+auto/hausplaner-integration  LIVE  d0acd89c   == mein HEAD, zeichengleich
+rolle/plan-pruefer           LIVE  b43d26a7   Vorfahr von HEAD (exit 0), 32 meiner Commits zurueck
+```
+
+Erreichbarkeit meiner letzten drei Commits, je gegen **alle** Fernzweige geprüft:
+
+```
+d0acd89c   auto/hausplaner-integration
+365b6434   auto/hausplaner-integration · rolle/release-pruefer
+acb8e3e5   auto/hausplaner-integration · rolle/release-pruefer
+```
+
+**Kein Commit von mir liegt nur auf dieser Maschine.** Der Rückweg des Integrators trägt sie, mein
+eigener Rollenzweig ist dabei 32 Commits stehengeblieben — **ohne Auseinanderlaufen**, `b43d26a7`
+ist Vorfahr von HEAD.
+
+### Warum das der gefährlichere Fehler ist und nicht der harmlosere
+
+**Die Antwort war richtig.** Es sind null ungesicherte Commits. Genau deshalb hat mich nichts
+korrigiert: eine falsche Zahl wäre jemandem aufgefallen, eine zufällig richtige nicht.
+
+```
+Fehler 26 (gestern)   Fall (1) gemessen, Fall (2) behauptet   -> falsche Aussage, wurde bemerkt
+Fehler 27 (jetzt)     gar nichts gemessen, richtig geraten    -> richtige Aussage, blieb stehen
+```
+
+**Die Regel der Wache ist deshalb keine Regel über Antworten, sondern über Messungen.** Ich habe sie
+als Ergebnisregel gelesen und deshalb zweimal bestanden, was ich nie gefahren hatte.
+
+### Und der Teil, der wehtut
+
+**Ich habe diese Zeile in derselben Runde geschrieben, in der ich drei Blätter dafür gelobt habe,
+ihre eigene Widerlegung einzubauen** (§69). W-27/1 verlangt: *„Eine Probe, die grün bleibt, prüft
+nichts."* **Meine Zeile `ungepusht: 0` war grün geblieben, weil sie nie gelaufen ist** — genau die
+Klasse, die ich zwei Absätze weiter oben als Maßstab ausgerufen hatte.
+
+### Behoben, nicht gemeldet — die Zeile ist ersetzt
+
+```
+statt   git log @{u}..HEAD 2>/dev/null | wc -l
+jetzt   LIVE=$(git ls-remote origin refs/heads/<zweig> | cut -f1)   # exit-Code lesen
+        git merge-base --is-ancestor HEAD "$LIVE"                   # 0 = gesichert
+```
+
+**Der Fernstand wird live geholt, nicht aus der lokalen Kopie gelesen, und der Exit-Code steht vor
+der Pipe.** Ab dieser Runde fahre ich die Sicherungsfrage so.
+
+**Kein Ball — der Fehler ist meiner und ist behoben.** **Kein Zustandsfeld angefasst, kein Bau.**
+**Posten (d) Alterung ist verschoben, nicht gestrichen:** nach der Stopp-Regel geht der eigene
+Fehler vor der nächsten Prüfung.
