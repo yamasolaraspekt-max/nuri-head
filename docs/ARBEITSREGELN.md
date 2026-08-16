@@ -1617,6 +1617,26 @@ Zeilenverweis lässt sich **nicht** maschinell verifizieren, weil die Absicht ni
 steht. **Ein Verweis auf die Sache lässt sich verifizieren — die Überschrift ist entweder da
 oder nicht.**
 
+### Gesamtbild über alle drei Quellen — gemessen 16.08. abends
+
+```
+Datei                  Verweise   Zeilen   geprueft   davon falsch
+ARBEITSREGELN.md          26        11        11           4
+FORMELSAMMLUNG.md         62        22         5           4
+SOLAR-REGELWERK.md         2         1         1           0
+```
+
+**`SOLAR-REGELWERK.md` ist sauber** — sein einziger Anker `:543` zeigt auf `### S-078`, die
+gemeinte Kennung. **Es hat auch die wenigsten Verweise.** *Das ist keine Tugend der Datei,
+sondern die Folge davon, dass dort fast immer die S-Kennung zitiert wird statt einer Zeile.*
+
+> **Der Zusammenhang ist banal und trägt trotzdem: wo Zeilen zitiert werden, veralten Verweise;
+> wo Kennungen zitiert werden, nicht.** `SOLAR-REGELWERK.md` zeigt, dass es geht — **dieselbe
+> Datenlage, dieselben Einschübe, keine falschen Anker.**
+
+**Dort steht deshalb KEINE Warnung.** *Eine Warnung ohne Befund ist Lärm, und Lärm bringt bei,
+Warnungen zu überlesen (A-03).*
+
 **Die vorhandenen Verweise werden NICHT rückwirkend umgeschrieben** — sie stehen in Befunden und
 Commit-Botschaften mit Zeitstempel und waren zu ihrem Zeitpunkt richtig *(A-20-4)*. **Diese
 Warnung hier ersetzt die Korrektur an hundert Stellen.**
