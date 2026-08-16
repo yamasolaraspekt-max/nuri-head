@@ -157,6 +157,15 @@ Mal heute an einer eigenen Messung.)*
 
 - **A-40-1** · **Die drei Zustände sind maschinell erkennbar.** Ein Prüfbefehl liest je Kennung
   den Zustand und meldet ihn. **Rot am Basis-SHA:** kein Eintrag trägt ein Zustandsfeld.
+- **A-40-2b** · **DIE PROBEN DECKEN BEIDE SEITEN AB — nicht nur die F-Seite.**
+  **⚠ NACHGETRAGEN 18:5x.** Die Kriterien sprechen von `[FNS]`, **aber jede historische
+  Positivprobe nannte einen F-Fall.** Ein Bau, der nur F-Kennungen erkennt, wäre **grün
+  geworden** — dieselbe Klasse wie A-40-5 heute Abend, nur eine Ebene tiefer: **dort war der
+  Suchraum zu eng, hier der Beleg.**
+  **S-Positivprobe:** `S-060` · `S-040` · `S-078` — je gemessen **ohne** `nachgerechnet_an`,
+  jede mit Reichweite 7 → **müssen gemeldet werden.**
+  **S-Negativprobe:** `S-051` trägt `nachgerechnet_an` → **darf nicht gemeldet werden.**
+  *Zwei Seiten, vier Proben — und keine davon lässt sich mit dem Wissen über die andere bestehen.*
 - **A-40-2** · **Die siebte Innenprüfung läuft und findet einen echten Fall.**
   **Positivprobe historisch:** gegen ein Blatt, das eine F-Kennung nennt, deren Eintrag kein
   `nachgerechnet_an` trägt → **Meldung**. **Negativprobe:** ein Blatt, dessen Kriterium das
