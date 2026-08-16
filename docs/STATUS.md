@@ -20550,3 +20550,43 @@ was_offen_BLEIBT_aber_theoretisch_ist: |
   aendert, kein Mangel am Auftrag.
 ballbesitz: "—"  # kein Ball: Pruefung ohne Fund, die Bestaetigung ist eine Zulieferung an den Bau
 ```
+
+```yaml
+auftrag: "tafel_gegen_datensatz_vollstaendig_null_divergenz"
+titel: "Der Werkzeugfehler des Release-Pruefers hat keine Spuren hinterlassen — 64 Paare Tafel gegen Datensatz, null Divergenz"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:07"
+stand_kopf: 9bcbaa39
+geprueft_gegen: 064b79b3
+posten: "Pflichtteil 2 der Wache, Teil 'Zustand Tafelzeile gegen Datensatz' — diesmal ueber ALLE Kennungen"
+anlass: |
+  Der Release-Pruefer hat in 064b79b3 einen Fehler seines eigenen Merge-Werkzeugs gefunden:
+  "Mein Werkzeug loest immer nur den ERSTEN [Konfliktbereich] und liest den Datensatz aus dem
+  Rest der Datei — dort standen aber noch Marker." Ergebnis war genau eine Tafel/Datensatz-
+  Divergenz: Tafel BEREIT/generator, Datensatz ENTWURF/plan-pruefer.
+  Er hat sie selbst gefunden, weil er "die restlichen Bereiche gelesen [hat] statt der
+  Erfolgsmeldung zu glauben". Die naheliegende Anschlussfrage stellt er nicht, und sie ist
+  die richtige: es war der SIEBZEHNTE Konflikt — was ist mit den sechzehn davor?
+messung: |
+  Alle Tafelzeilen gegen alle Datensaetze im Fernstand 064b79b3:
+    Tafelzeilen mit Zustand      75
+    Datensaetze mit Zustand      75
+    beidseitig vorhanden         64
+    DIVERGENT                     0
+  Muster: Tafel ^\| \*\*(KENNUNG)\*\*[^|]*\|\s*\**`?(ZUSTAND)`?\**\s*\|
+          Datensatz: auftrag-Zeile, danach die erste zustand-Zeile im selben Block.
+  Kein einziges Paar widerspricht sich. Sein Fehler war ein Einzelfall und ist behoben;
+  die sechzehn Konflikte davor haben nichts hinterlassen, das heute noch sichtbar waere.
+die_elf_die_nicht_vergleichbar_sind: |
+  75 Tafelzeilen, 75 Datensaetze, aber nur 64 Paare — auf jeder Seite bleiben elf ohne
+  Gegenstueck. Das sind dieselben elf wie den ganzen Tag: Tafel fuehrt W-01, der Datensatz
+  heisst W-01/1. A-33s Gegenstand, jetzt zum VIERTEN Mal auf einem unabhaengigen Weg
+  bestaetigt (Tafelzeilen ueber das [AW]-Muster, A-30-Deckungsluecke am Tor, Blattnamen,
+  und heute die Paarbildung).
+  Das ist kein neuer Fund, sondern ein weiterer Beleg fuer einen Auftrag, der schon steht.
+was_das_wert_ist: |
+  Ein Werkzeug, das siebzehnmal gelaufen ist und beim siebzehnten Mal falsch lag, wirft die
+  Frage nach den ersten sechzehn auf. Diese Frage ist jetzt beantwortet, und zwar von einer
+  anderen Rolle als der, die das Werkzeug gebaut hat.
+ballbesitz: "—"  # kein Ball: Zulieferung an den Release-Pruefer, kein offener Punkt
+```
