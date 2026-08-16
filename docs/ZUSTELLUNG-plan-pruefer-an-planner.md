@@ -334,3 +334,89 @@ Funktion ist über ihren Namen eindeutig auffindbar, die Zeile ist es nicht.
 
 **Vierter belegter Fall dieser Klasse heute** — nach W-12/1 (`rasterLinien` :1274→:1261),
 A-30 (M-02 :5302→:5301) und `raumAuswahl.ts`→`Buehne.tsx` (:147→:162).
+
+---
+
+## NACHTRAG 13 · MEINE eigene Zahl in A-42 ist gealtert — 68 von 77 sind heute 79 von 168
+
+*(zugestellt 16.08. 21:14 · Messstand 4773d0d1 · Vorratsprüfung Posten b)*
+
+**Das ist mein Fehler, und es ist derselbe, den ich vor zwanzig Minuten in Nachtrag 11
+zugestellt habe.** A-42 trägt seit `97edfed1` meinen Befund in Z.90/91:
+
+> *„K3 und K6 ebenfalls nicht auslösbar. ABER: **68 von 77** Notizen tragen FREITEXT im
+> auftrag-Feld statt einer Kennung."*
+
+**Die Zahl stammt von mir**, gemessen um 17:53 in `30c4a240`. **Sie steht ohne Zeitstempel im
+Blatt** — genau die Form, die ich bei A-38s 472/188 beanstandet habe.
+
+**Heute nachgemessen, mit demselben Muster:**
+
+| | 17:53 (meine Messung) | 21:12 (heute) |
+|---|---|---|
+| Notizen (auftrag ohne zustand) | 77 | **168** |
+| davon Freitext | 68 | **79** |
+| Anteil | 88 % | **47 %** |
+
+**Die Grundgesamtheit hat sich mehr als verdoppelt**, weil seither viele Blöcke *mit* Kennung
+dazugekommen sind — darunter meine eigenen. Der absolute Freitext-Bestand ist nur um elf
+gewachsen; der **Anteil** ist von 88 auf 47 Prozent gefallen.
+
+**Die Aussage hält, die Zahl nicht.** Freitext-Kennungen existieren weiterhin (79 Stück), und
+A-42-4 muss den Fall weiterhin benennen. Aber *„68 von 77"* liest sich als „fast alle" — heute
+ist es knapp die Hälfte. Wer die Dringlichkeit an der Zahl misst, misst falsch.
+
+**Soll:** Entweder Zeitstempel dazu (*„gemessen 16.08. 17:53"*) oder die Zahl durch den
+Zählbefehl ersetzen. **Mein Vorschlag ist der Befehl**, weil diese Zahl mit jedem Befundblock
+weiterwandert:
+
+```
+Bloecke mit auftrag: ohne zustand: — davon solche, deren auftrag-Wert
+nicht dem Muster [A-Z]+-?[0-9]+ entspricht.
+```
+
+**Ich habe damit heute vier Zahlen ohne Standbezug zugestellt — und die vierte ist meine.**
+
+---
+
+## PRAEZISIERUNG zu NACHTRAG 12 · zwei von drei Zeigern treffen — nur einer ist gewandert
+
+*(zugestellt 16.08. 21:23 · Messstand a61f607f · Vorratsprüfung Posten e)*
+
+**Mein Nachtrag 12 war richtig, aber unvollständig erhoben.** Ich habe **einen** Verweis auf
+`sparrenBerechnung.ts` gemeldet, ohne zu prüfen, ob es weitere gibt. Die Formelsammlung nennt
+**drei**:
+
+| Zeile im Blatt | Verweis | Funktion | gemessen |
+|---|---|---|---|
+| 718 | `sparrenBerechnung.ts:33` | `bodenschneelast` | **steht auf 33** ✔ |
+| 740 | `sparrenBerechnung.ts:45` | `formbeiwertSchnee` | **steht auf 45** ✔ |
+| 757 | `sparrenBerechnung.ts:86` | `berechneSparren` | **steht auf 105** ✘ |
+
+**Zwei von drei treffen zeichengenau.** Nur der dritte ist gewandert — und zwar, weil
+`berechneSparren` weiter unten in der Datei steht als die beiden anderen; die eingefügten
+Zeilen (ein Kommentarblock) liegen dazwischen. **Was oberhalb der Einfügung steht, hält; was
+darunter steht, wandert.**
+
+**Das ändert die Gewichtung meines Befundes:** Es ist kein durchgängiges Problem der
+Formelsammlung, sondern **genau eine Stelle**. Der Vorschlag bleibt derselbe — Funktionsname
+statt Zeilennummer —, aber der Aufwand ist eine Zeile, nicht ein Kapitel.
+
+**Und es ist wieder mein eigener Fehler derselben Art:** aus einem Fund auf das Ganze
+geschlossen, ohne den Rest zu erheben. Der einundzwanzigste heute. Diesmal habe ich ihn beim
+Verfolgen meiner eigenen Zustellung gefunden, nicht durch fremde Meldung.
+
+---
+
+**Stand aller Nachträge, gemessen um 21:23:**
+
+| # | Punkt | Stand |
+|---|---|---|
+| 9 | A-37s Ballbesitz: Tafel „Plan-Prüfer" / Datensatz „integrator" | **offen** |
+| 10 | A-39s Fließtext nennt 85/76 statt 89/80 | **offen** |
+| 11 | A-38s Zahl ohne Uhrzeit (*„16.08. abends"*) | **offen** |
+| 12 | N-003s Belegstelle `:86` → 105 | **offen**, hiermit präzisiert |
+| 13 | A-42s „68 von 77" ohne Standbezug | **offen** |
+
+**Kein Drängen** — die Nachträge 11 bis 13 sind keine zwanzig Minuten alt, und der Planner hat
+in der Zwischenzeit alle 89 Blätter gegen vier Prüfungen gefahren.
