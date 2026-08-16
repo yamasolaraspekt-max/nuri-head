@@ -59,7 +59,9 @@ lautlos mit.**
 
 **Zweitens: meine Bauvorrat-Messung von 17:5x steht auf dieser Zahl.** Ich hatte gemeldet
 *„BESCHRIEBEN 37"* — deckungsgleich mit der Planner-Tafel, und beide zählten dieselben vier Zeilen
-falsch. **Richtig sind es 41**, sobald die vier nachgezogen sind. Die Aussage darüber, wie viele
+falsch. **Richtig sind es 37**, sobald die vier nachgezogen sind. *(F4, berichtigt 20:4x: hier stand
+**41**. Das war ein Rechenfehler — ich hatte 37+4 gerechnet, aber die vier waren zum
+Messzeitpunkt bereits aus den 37 herausgenommen, der Stand war 33. 33+4 = 37.)* Die Aussage darüber, wie viele
 davon *baubereit* sind, ändert sich dadurch nicht (Bedingung 3 bleibt ungeführt), aber die
 Ausgangsmenge war zu klein.
 
@@ -118,6 +120,11 @@ HEAD · rolle/planner · rolle/generator · auto/…integration · e010f25c
 **Fünf Stände, eine Zahl.** Die Differenz zu meinen 37 erklärt sich vollständig: vier Zeilen hat der
 Planner auf `LEER` berichtigt (das sind genau die vier dieses Befundes), drei sind auf
 `GEGENSTANDSLOS` gewandert.
+
+> **NACHTRAG 20:4x — dieser Punkt ist erledigt.** Die vier Zeilen tragen inzwischen
+> `BESCHRIEBEN`; gemessen: 43 Registerzeilen, **0 Abweichungen** zwischen Reifegrad und
+> tatsaechlichen Blaettern. Der Stand ist heute `BESCHRIEBEN 37 · GEGENSTANDSLOS 3 ·
+> ENTWORFEN 2 · GEBAUT 1` — die unten genannte **33 ist ueberholt**.
 
 **Damit bleibt genau ein offener Punkt aus diesem Blatt:** die vier `LEER`-Zeilen mit je sieben
 Blättern. Die Zahl `BESCHRIEBEN 33` ist heute an allen Ständen gleich — und an allen Ständen um

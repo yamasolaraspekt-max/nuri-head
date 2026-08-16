@@ -74,7 +74,13 @@ hat sich die Lage genau in die Richtung bewegt, die ich als Weg A empfohlen hatt
 
 **Weg 1 — Schritt I jetzt, dann J.** Der Evaluator prüft die positiven und negativen Sperrfälle; er
 hat das Tor im Baum, A-37 steht auf `CODE_FERTIG` und liegt bei ihm. Danach ist V6 vollständig und
-Schritt J trägt. *Kosten: eine Prüfrunde. Die Statuswahrheit bleibt so lange eingefroren.*
+Schritt J trägt. *Kosten: eine Prüfrunde.*
+
+> **NACHTRAG 20:4x (F6) — „eingefroren" gilt so nicht mehr.** Hier stand, die Statuswahrheit
+> bleibe bis Schritt J eingefroren. Gemessen: der **Integrator hat um 20:16 geschrieben**
+> (`15e11078`, A-37 von `BEREIT` auf `CODE_FERTIG` nachgezogen) — die Sperre laesst ihn durch,
+> weil sie die Rolle prueft und nicht die Betriebsart. Eingefroren sind die **fuenf anderen**
+> Rollen, nicht die Datei. Siehe `BEFUND-BARRIERE-KENNT-DIE-BETRIEBSART-NICHT.md`.
 
 **Weg 2 — Schritt J sofort, Schritt I nachziehen.** Löst die Blockade in einer Minute, kehrt aber
 die Reihenfolge um, die deine Neufassung vom 14.08. ausdrücklich begründet: *„er schreibt erst,
