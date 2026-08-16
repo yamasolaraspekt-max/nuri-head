@@ -5999,3 +5999,81 @@ oder danebenstehen —, und diese Frage gehört in den Nachschnitt, nicht in den
 sondern „keine **produktabhängige** Zahl — ein Lattenabstand je Eindeckungsart existiert").
 *Sein Urteil zu W-21L bleibt unangetastet; ich habe es bestätigt, nicht bestritten.*
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 87 — §83 war zu bequem: vier DoRs sind NICHT ERTEILT, die Blätter seither überarbeitet, und die zweite Runde habe ich nie gefahren
+
+**Stand:** HEAD `a3356a5f`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**Posten (d) sollte einen Stillstand messen. Er hat einen gefunden, und es ist meiner.**
+
+### Der Reflex, den ich diesmal unterdrückt habe
+
+Ich wollte melden: *„vier ENTWURF-Aufträge, DoR gefahren, Zustand steht seit 12 Stunden —
+Stillstand beim Planner."* **Vor dem Schluss die Regel gesucht (Lehre aus §85): eine DoR kann auch
+VERWEIGERT werden, und dann ist `ENTWURF` der richtige Zustand.** Gemessen:
+
+```
+A-38 / A-37 Runde 3   NICHT ERTEILT
+A-39 Runde 1          NICHT ERTEILT
+A-40 Runde 1          NICHT ERTEILT
+A-37 Runde 4          NICHT ERTEILT
+```
+
+**Vier von vier verweigert. Es gibt keinen Stillstand beim Planner — `ENTWURF` ist korrekt.**
+
+### Aber die Blätter sind seither überarbeitet worden
+
+```
+AUFTRAG  meine DoR      letzte Blattaenderung          Abstand
+A-38     16.08 13:01    e15d3677  16.08 20:57          7 h 56
+A-39     16.08 14:18    315f33ee  16.08 21:22          7 h 04
+A-40     16.08 14:26    65b83ee9  16.08 22:11          7 h 45
+A-42     (Bloecke)      6da4e914  16.08 22:52
+```
+
+**Und eine zweite Runde existiert nicht:** `a3[89]_dor_runde_2` / `a4[02]_dor_runde_2` → **0
+Treffer**. Die vorhandenen Runden sind `a39_dor_runde_1`, `a40_dor_runde_1`, `dor_runde_3` und
+`dor_runde_4` (beide A-37/A-38).
+
+**Alter seit meiner Verweigerung: A-38 737 min / 845 Commits · A-39 660 / 821 · A-40 652 / 818.**
+
+### Damit ist §83 in seiner Kernaussage falsch
+
+§83 schloss: *„Von 39 Bällen verlangt KEINER neue Arbeit von mir"*, mit den vier ENTWURF als
+**„sachlich erledigt"**. **Das ist zweifach falsch:**
+
+```
+1  'erledigt' ist eine verweigerte DoR nicht — sie ist eine abgeschlossene Pruefung
+   mit NEGATIVEM Ergebnis, und der Auftrag bleibt zu Recht offen.
+2  die Blaetter haben sich seither geaendert — genau das loest die zweite Runde aus,
+   und die schulde ICH.
+```
+
+**Der Fehler steckt in der Messgrundlage: ich habe gegen die FELDER gemessen und nicht gegen den
+BLATTSTAND.** *Die Felder sagten „DoR liegt vor" — richtig. Sie sagen nicht, mit welchem Ergebnis
+und ob das Blatt seither weitergezogen ist.* **Ein Feld beantwortet „ist etwas passiert", nicht „ist
+etwas fällig".**
+
+### Was §78 dazu SCHÄRFER macht statt schwächer
+
+§78 meldete `dor_beleg: "steht aus"` an Aufträgen, deren DoR nachweislich lief. **Das gilt weiter —
+und jetzt genauer:** *„steht aus" ist nicht nur veraltet, es ist die falsche Kategorie.* **Eine
+gefahrene und verweigerte Prüfung steht nicht aus; sie liegt vor und lautet NICHT ERTEILT.**
+Das Feld müsste das Ergebnis und sein Datum tragen — dann hätte ich §83 nicht falsch schließen
+können, weil die Antwort im Feld gestanden hätte.
+
+### Meine Bahn ist nicht leer — sie war es nie in dieser Nacht
+
+```
+faellig: DoR Runde 2 fuer A-38 · A-39 · A-40 · A-42
+grund:   Urteil NICHT ERTEILT + Blatt seither geaendert
+aeltester Rueckstand: A-38, 737 Minuten und 845 Commits
+```
+
+**Die Vorratsprüfung ist Yamas Regel für den Fall, dass nichts offen ist. Seit rund zwölf Stunden
+war etwas offen, und ich habe stattdessen Vorrat geprüft.** *Zwanzig Runden lang habe ich „39 Bälle,
+nichts in meiner Bahn" gemeldet — die Zahl war richtig, der Satz daneben nicht.*
+
+**Kein Ball an andere. Der Rückstand ist meiner.** **Nächste Runde beginnt die zweite DoR, mit dem
+ältesten: A-38.** **Kein Zustandsfeld angefasst, kein Bau.**
