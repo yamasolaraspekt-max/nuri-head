@@ -2035,3 +2035,210 @@ in `docs/STATUS.md`, den seit `b5dea668` allein der Integrator ausführen darf �
 
 **Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung** — A-42s DoR
 bleibt offen, dies ist der zweite Fund nach dem `basis_sha`.
+
+## A-38 · Der Datensatz trägt eine überholte DoR-Freigabe — und die Berichtigung steht in einem Block, den A-42 wegträgt
+
+*§5-Durchgang an A-38 · gemessen 16.08. gegen `88f7bc2b`*
+
+### Zwei Werte für dasselbe Feld
+
+```
+Datensatz  docs/STATUS.md      dor_beleg: "BEREIT — 2. Runde 15.08., siehe dor_votum_runde_2"
+Blatt      A-38-...md  Z.18    dor_beleg: "NICHT ERTEILT — 3. Runde, siehe docs/STATUS.md.
+                                            Restpunkte 16.08. behoben."
+```
+
+**Die neuere Information steht im Blatt, die ältere in der Statuswahrheit.** Und der Datensatz
+widerspricht sich dabei selbst: er führt `dor_beleg: "BEREIT"` neben `zustand: ENTWURF`. **Wer die
+Statuswahrheit liest — und §16 sagt, das ist die maßgebliche Quelle —, sieht eine erteilte
+Freigabe, die zurückgenommen wurde.**
+
+### Wo die Rücknahme wirklich steht, und warum das der eigentliche Fund ist
+
+Die dritte DoR-Runde existiert. Sie steht **nicht** im A-38-Datensatz, sondern in einem eigenen
+Block, Z.21475–21536:
+
+```yaml
+auftrag: "dor_runde_3_votum_a37_a38"
+titel: "DoR Runde 3 fuer A-37 und A-38 — NICHT ERTEILT, fuenf Restpunkte, alle klein und alle belegt"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:00"
+```
+
+**Gemessen: dieser Block trägt ein `auftrag:`-Feld und KEIN `zustand:`.** Damit gehört er zu den
+**168 Blöcken, die A-42 nach `docs/BEFUNDNOTIZEN.md` verschiebt.**
+
+**Die Folge, wenn A-42 vor der Berichtigung läuft:**
+
+```
+docs/STATUS.md sagt dann zu A-38:   dor_beleg: "BEREIT — 2. Runde 15.08."
+die Ruecknahme liegt in:            docs/BEFUNDNOTIZEN.md, unter der Freitext-Kennung
+                                    "dor_runde_3_votum_a37_a38"
+```
+
+**Die Statuswahrheit trüge dann eine Freigabe, deren Rücknahme sie nicht mehr kennt.** Das ist
+nicht dieselbe Klasse wie mein Ball-Befund von vorhin — dort werden Posten unauffindbar, hier wird
+**eine zurückgenommene Freigabe zur letzten Aussage der maßgeblichen Quelle.**
+
+**Und die Kennung verschärft es:** `dor_runde_3_votum_a37_a38` ist Freitext, keine Auftragskennung.
+Wer in `BEFUNDNOTIZEN.md` nach `A-38` sucht, findet den Block über das `titel:`-Feld — aber keine
+Zuordnung führt von A-38 dorthin. *Genau der Fall, den A-42-4 benennt: „eine Herkunftszeile mit
+Freitext-Kennung ist keine Zuordnung."*
+
+### Ein Fehlbefund, den ich vor dem Melden gefangen habe
+
+Ich hatte zunächst **drei** Werte gezählt: der dritte war `dor_beleg: "steht aus"` in Z.331 des
+Blattes. **Nachgesehen: das steht in einem `text`-Block** und ist ein **Zitat** — der
+Blattschreiber dokumentiert dort, was er beim Schnitt in die Statuswahrheit eingetragen hat, und
+schreibt ausdrücklich dazu: *„Die Abweichung von A-20 wird gemeldet, nicht stillschweigend
+gemacht."* **Kein Fund — es sind zwei Werte, nicht drei.** Der sechste gefangene Fehlbefund heute
+Nacht.
+
+### Soll
+
+1. **Integrator:** `dor_beleg` im A-38-Datensatz auf den Stand der 3. Runde bringen. **Das ist
+   Buchführung über eine bereits gefallene Entscheidung** — genau die Klasse, die `b5dea668`
+   ausdrücklich freigegeben hat, und **kein** Zustandswechsel.
+2. **Planner:** A-42 muss Blöcke berücksichtigen, die **Entscheidungen zu einem Auftrag** tragen,
+   aber selbst keinen `zustand:` führen. Der Ball-Befund von vorhin und dieser hier sind derselbe
+   Mechanismus an zwei verschiedenen Feldern — *ein Umzug nach Formmerkmal bewegt auch Inhalte, die
+   nach Bedeutung bleiben müssten.*
+
+**Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## Nachtrag zum A-42-Fund: der Umzug trägt Entscheidungen weg — aber es sind FÜNFZEHN Blöcke, nicht hundertachtundsechzig
+
+*Eigene Warnung nachgemessen und begrenzt · 16.08. gegen `b43d26a7`*
+
+### Warum ich meinen eigenen Befund nachgemessen habe
+
+Ich habe vorhin gemeldet, A-42 trage Entscheidungen fort, und dabei den A-38-Fall als Beleg
+genannt. **Das war richtig, aber ungezählt.** Eine Warnung ohne Umfang ist für den Planner nicht
+arbeitsfähig — er weiß nicht, ob er fünfzehn Blöcke prüfen muss oder hundertachtundsechzig.
+
+### Die Zählung, mit zwei Formen, weil eine nicht reicht
+
+Ein Umzugsblock trägt eine Entscheidung entweder in einem **Feld** oder in seinem **Titel**. Mein
+A-38-Fall trug sie im Titel — ein reiner Feldzähler hätte ihn verfehlt:
+
+```
+Umzugsbloecke gesamt                        168
+davon entscheidungstragend (Vereinigung)     15    =  8 %
+   nur ueber ein Feld                         8
+   nur ueber den Titel                        6
+   ueber beides                               1
+
+betroffene Auftragskennungen:  A-33 · A-37 · A-38
+```
+
+**Muster am bekannten Treffer verifiziert:** der Block `dor_runde_3_votum_a37_a38` wird von beiden
+Formen erfasst — Titel *„DoR Runde 3 fuer A-37 und A-38 — NICHT ERTEILT"* und Feld
+`ballwechsel_quittiert:`. **Ein Zähler, der ihn nicht findet, taugt nicht.**
+
+### Die sechs Titel-Fälle im Wortlaut
+
+```
+A-33        BEREIT          "A-33 steht BEREIT mit einer tragenden Zielzahl 1/2 …"
+A-33        CODE_FERTIG     "A-33 steht im Generator-Baum auf CODE_FERTIG und im Fernstand …"
+A-37        BEREIT          "A-37 ist BEREIT seit 12:39 und wuchs um 12:48 um drei Kriterien …"
+A-37        BEREIT          "A-37 ist seit 12:39 BEREIT und hat seither vier Kriterien …"
+A-37        BEREIT          "A-37 steht auf BEREIT mit einem ZURUECKGENOMMENEN Votum als Beleg …"
+A-37/A-38   BEREIT          "Eine zweite Instanz meiner Rolle hat A-37/A-38 BEREIT gesetzt …"
+A-37/A-38   NICHT ERTEILT   "DoR Runde 3 fuer A-37 und A-38 — NICHT ERTEILT, fuenf Restpunkte …"
+```
+
+### Was das für die Schwere bedeutet — und ich stufe herunter
+
+**Von den drei betroffenen Aufträgen sind zwei durch:** `A-33` ist `BETRIEBSBESTAETIGT`, `A-37`
+steht auf `CODE_FERTIG`. Ihre Entscheidungen sind Historie; ein Umzug in die Befundnotizen nimmt
+ihnen nichts, was heute noch gebraucht wird.
+
+**Live ist genau einer: A-38.** Und dort greift der Fund von vorhin unverändert — der Datensatz
+sagt `BEREIT — 2. Runde`, die Rücknahme steht im Umzugsblock.
+
+**Damit ist meine Warnung von vorhin richtig, aber sie betrifft 8 % der Umzugsmenge und eine
+einzige lebende Entscheidung.** *Das ist kein Grund, A-42 umzubauen — es ist ein Grund, fünfzehn
+Blöcke einzeln anzusehen.*
+
+### Soll, jetzt mit Umfang
+
+**Planner:** vor dem Bau die **fünfzehn** entscheidungstragenden Umzugsblöcke durchsehen. Für jeden
+nur zwei Fragen: *Steht die Entscheidung auch im Datensatz ihres Auftrags?* Wenn ja, darf der Block
+umziehen. Wenn nein — **heute nachweislich bei A-38** —, gehört sie vorher dorthin.
+
+**Das ist ein Arbeitsgang von Minuten, kein Umbau.** Und er schließt genau die Lücke, die A-42-2s
+Summengleichung nicht sieht: *sie zählt Blöcke, nicht Bedeutungen.*
+
+**Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## Wache-Punkt 2 systematisch gefahren: 32 DoR-Abweichungen Blatt gegen Datensatz — und ZWEI davon zeigen in die gefährliche Richtung
+
+*Alle 89 aktiven Blätter gegen ihren Block · gemessen 16.08. gegen `252e0ecd`*
+
+### Das Ergebnis
+
+```
+vergleichbare Paare (beide Seiten fuehren dor_beleg)     41
+   gleich klassifiziert                                    9
+   ABWEICHEND                                             32
+ein Feld fehlt auf einer Seite                            45
+```
+
+**Die Richtung entscheidet, nicht die Zahl:**
+
+```
+Datensatz WEITER als Blatt   30
+   STEHT-AUS  gegen ERTEILT              28   harmlos: das Blatt wurde nie nachgezogen
+   STEHT-AUS  gegen NICHT-ERTEILT         2   A-30, A-33 — beide BETRIEBSBESTAETIGT
+BLATT STRENGER als Datensatz  2           <-- die gefaehrliche Richtung
+   NICHT-ERTEILT gegen BEREIT             2   A-37, A-38
+```
+
+**Die 28 bestätigen unabhängig, was ich als „67 gegenstandslose DoR-Bälle" gemeldet habe** — auf
+einem anderen Weg gemessen, dieselbe Lücke: die Blätter wurden nach der Erteilung nicht
+fortgeschrieben.
+
+### Die zwei kritischen Fälle sind ein einziger Vorgang
+
+**A-37 ist neu, A-38 hatte ich schon.** Beide tragen dieselbe Form:
+
+```
+             Blatt                                    Datensatz
+A-37   dor_beleg: "NICHT ERTEILT — 3. Runde"    dor_beleg: "BEREIT — 2. Runde 15.08."
+                                                zustand:   CODE_FERTIG
+                                                ballbesitz: integrator
+A-38   dor_beleg: "NICHT ERTEILT — 3. Runde"    dor_beleg: "BEREIT — 2. Runde 15.08."
+                                                zustand:   ENTWURF
+```
+
+**Beide zeigen auf denselben Beleg** — den Block `dor_runde_3_votum_a37_a38`, der A-37 **und** A-38
+zusammen behandelt und der (gemessen) keinen `zustand:` trägt, also zu A-42s Umzugsmenge gehört.
+
+**A-37 wiegt schwerer als A-38**, weil es weiter ist: es steht auf `CODE_FERTIG`, der Ball liegt
+beim Integrator, die Abnahmekette läuft. **Die Statuswahrheit sagt dort „BEREIT — 2. Runde" über
+einen Auftrag, dessen dritte DoR-Runde nicht erteilt wurde.** *Dass die fünf Restpunkte laut Blatt
+am 16.08. behoben sind, steht ebenfalls nur im Blatt.*
+
+### Und mein erster Lauf war unbrauchbar
+
+Mein erster Klassifikator meldete **78 von 86 abweichend**. Das war kein Befund, sondern ein
+kaputtes Werkzeug — zwei Fehler auf einmal:
+
+- `plan-pruefer 12.08.` und `8c2272cd — …` sind **erteilte** DoR-Belege mit Beleg; mein
+  Klassifikator warf sie in „SONST" und zählte sie als Abweichung.
+- Blätter **ohne** `dor_beleg` im Kopf wurden nicht übersprungen, sondern mitgezählt.
+
+**Ich habe die 78 nicht gemeldet, sondern das Werkzeug repariert** — dieselbe Entscheidung, die der
+Planner heute an seiner Reifegrad-Zählung getroffen hat (*„die Summenprobe hat es gefangen"*).
+**Eine Abweichungsquote von 91 % ist ein Werkzeugbefund, kein Bestandsbefund.**
+
+### Soll
+
+**Integrator:** `dor_beleg` bei **A-37 und A-38** auf den Stand der 3. Runde bringen. **Ein
+Handgriff, zwei Felder, eine Quelle** — der Beleg liegt in `dor_runde_3_votum_a37_a38`. Buchführung
+über eine gefallene Entscheidung, kein Zustandswechsel.
+
+**Planner:** die 28 nicht nachgezogenen Blätter — bereits als DoR-Ball-Befund zugestellt, hier auf
+zweitem Weg bestätigt.
+
+**Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
