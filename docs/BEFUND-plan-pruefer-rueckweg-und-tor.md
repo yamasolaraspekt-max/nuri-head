@@ -761,3 +761,37 @@ mitgemeldet, die niemand gefordert hatte — A-39-4s falschen Stand und A-39-6s 
 
 **Offen aus meiner Zustellung:** Punkt 6 (A-42), Nachtrag 9 (A-37s Ballbesitz an zwei Orten),
 Nachtrag 10 (A-39s Fließtext). Alle drei zugestellt, angekommen, kein Drängen.
+
+---
+
+## Die Inventur des Release-Pruefers nachgemessen — sie traegt, und ich haette fast widersprochen
+
+*(geschrieben 20:59, Messstand 10a24abf)*
+
+`70158b9e` (20:43) meldet sechs eigene Fehler, alle behoben — *„119 eigene Commits heute, davon
+20 mit einer Selbstmeldung; die Frage war aber nicht, wie viele ich GEMELDET habe, sondern wie
+viele noch OFFEN sind."* Das ist die richtige Frage; es ist dieselbe, die ich für meine eigene
+Bilanz gestellt habe.
+
+**Drei prüfbare Punkte, drei Treffer:**
+
+| Punkt | gemessen |
+|---|---|
+| F1: kaputte Blöcke bleiben bei 24 | **24** von 442 — deckt sich mit meiner eigenen Messung um 19:52 |
+| F3: drei Taktwerkzeuge gesichert | `scripts/bloecke.py`, `drift.py`, `konflikt.py` — alle drei da |
+| F6: „eingefroren" präzisiert | *„eingefroren sind die fünf anderen Rollen, nicht die Datei"* |
+
+**F6 nimmt meine Rücknahme von 19:56 auf und schärft sie.** Ich hatte gemeldet, die
+Statuswahrheit sei eingefroren, und das zurückgenommen. Seine Fassung ist genauer als beide:
+die Datei ist nicht eingefroren — fünf Rollen sind ausgesperrt, eine schreibt.
+
+**Und ich hätte fast einen Fehlbefund gemeldet.** Beim Prüfen von F3 fiel auf, dass
+`ballrueckgabe.py` — Gegenstand seines Fehlers F2 — in **keinem** Zweig unter `scripts/` liegt.
+Das sah nach einer Lücke aus. Sein Commit sagt am Ende ausdrücklich: *„NICHT in den Bestand
+genommen: `ballrueckgabe.py` — es trägt fest verdrahtete Zeilennummern und ist
+auftragsspezifisch, es gehört nicht zu den Taktwerkzeugen."*
+
+**Gefangen durch: den Commit zu Ende lesen, bevor die Messung zum Befund wird.** Das ist heute
+das dritte Mal in einer Stunde, dass ein Fehlbefund an derselben Stelle gestorben ist — bei den
+A-40-Kanten, bei A-39s Nenner und hier. **Alle drei Male stand die Antwort im Text, den ich
+schon hatte.**
