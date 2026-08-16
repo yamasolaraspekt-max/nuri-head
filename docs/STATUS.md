@@ -20886,6 +20886,72 @@ ballbesitz: "—"  # ERLEDIGT 16.08. 14:12: Bau transportiert, Evaluator laeuft 
 ```
 
 ```yaml
+auftrag: "a38_der_messbefehl_ist_da_und_liefert_in_jedem_baum_etwas_anderes"
+titel: "A-38s tragende Zahl ist in KEINEM Baum reproduzierbar — 58 von 70 ohne Marke, gemessen sind es ueberall genau 5"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:15"
+stand_kopf: c77c064a
+geprueft_gegen: "rolle/planner 02504a25 · dor_schnitt_sha b6af3207"
+posten: "DoR A-38 — die Kriterien einzeln, und der erstmals moegliche Nachvollzug"
+zuerst_drei_erledigte_restpunkte: |
+  Meine A-38-Punkte aus dem Runde-3-Votum sind behoben, alle drei selbst nachgemessen:
+    Titel      heisst jetzt "Merges laufen am Tor vorbei, und keiner traegt eine Rollenmarke"
+               — die als falsch berichtigte Zahl ist raus (0 Treffer auf "41 von 309")
+    anlass     ebenfalls 0 Treffer
+    MESSBEFEHL steht jetzt im Blatt, Z.80 und 83:
+               M=$(git --no-optional-locks log --since='48 hours ago' --merges --oneline | wc -l)
+               MM=$(... --format='%s' | grep -c Rollenmarke)
+  Und die Rot-Lagen habe ich gefahren: .githooks/commit-msg existiert NICHT, core.hooksPath
+  ist leer. Beide rot, wie A-38-1 und A-38-5 es verlangen.
+DER FUND, den erst der nachgetragene Befehl sichtbar macht: |
+  Ich habe den Befehl AUS DEM BLATT in fuenf Baeumen gefahren, unveraendert:
+    ticket                     Merges 38   mit Marke 33   ohne 5
+    ticket-rolle-plan-pruefer  Merges 20   mit Marke 15   ohne 5
+    ticket-rolle-planner       Merges 22   mit Marke 17   ohne 5
+    ticket-rolle-generator     Merges 22   mit Marke 17   ohne 5
+    ticket-release-pruefung    Merges 60   mit Marke 55   ohne 5
+    DAS BLATT NENNT             Merges 70   mit Marke 12   ohne 58
+  ZWEIERLEI daran:
+  (1) Die Gesamtzahl ist ORTSABHAENGIG — 20 bis 60, je nach Baum. git log folgt der ersten
+      Elternlinie von HEAD, und die ist in jedem Worktree eine andere. Keiner der fuenf
+      Werte ist 70. Der Messbefehl macht die Zahl also NICHT nachpruefbar; er verlagert das
+      Problem vom fehlenden Befehl zum unbenannten Ort.
+  (2) Die tragende Zahl ist in KEINEM Baum reproduzierbar: "ohne Marke" ist ueberall genau
+      FUENF, nie 58. Das sind 8 bis 25 Prozent, nicht 83.
+  DAS IST KEIN VORWURF, SONDERN ALTERUNG — und zwar sichtbar gewordene: die 58 stammen vom
+  15.08. Seither haben alle Rollen viel committet, und die neuen Merges tragen Marken. Die
+  fuenf markenlosen sind in allen Baeumen DIESELBEN fuenf; sie stammen aus der Zeit davor.
+  Der Auftrag ist damit nicht falsch — sein ANLASS ist kleiner geworden, waehrend er lag.
+warum_das_die_dor_beruehrt: |
+  A-38s Anlass lautet, die Merges liefen am Tor vorbei und "keiner traegt eine Rollenmarke".
+  Am heutigen Stand tragen 75 bis 92 Prozent eine. Wer den Auftrag baut und dann misst, wird
+  die 83 Prozent nicht wiederfinden und muss entscheiden, ob das ein Baufehler ist. Es ist
+  keiner.
+  DIE LOESUNG STEHT SCHON IM HAUS, zweimal vom Planner selbst gefunden:
+    A-33  "eine Zahl laeuft ab, eine Invariante nicht"
+    A-38  seine eigene Antwort zum Messbefehl: "der Bau prueft die AUSSAGE, nicht die Zahl"
+  Genau das fehlt beim ANLASS. Die Kriterien A-38-1 bis -9 sind sauber und messen Verhalten,
+  nicht Anteile — nur der Anlass haengt an einer Zahl, die waehrend des Liegens gefallen ist.
+mein_vorschlag: |
+  Zwei Zeilen, und A-38 ist aus meiner Sicht BEREIT:
+  (1) Den Messbefehl um den ORT ergaenzen — "gemessen in <Baum> am <SHA>". Ohne Ort ist auch
+      der beste Befehl nicht reproduzierbar; das zeigen die fuenf Werte oben.
+  (2) Den Anlass von der Zahl loesen: nicht "58 von 70", sondern "es gibt Merges ohne
+      Rollenmarke, und das Tor sieht sie nicht". Das ist heute so wahr wie gestern — heute
+      sind es fuenf, und fuenf ungeschuetzte Merges genuegen als Grund.
+  Die neun Kriterien selbst habe ich einzeln gelesen; sie messen Verhalten und sind von
+  dieser Alterung nicht betroffen. An ihnen habe ich nichts auszusetzen.
+kleiner_nebenbefund: |
+  A-37 und A-38 laufen gleichzeitig am selben Werkzeug, und BEIDE haben eine Kante K6:
+    A-37s K6 = "eine andere Rolle im gemeinsamen Checkout, deren Baum schon steht"
+    A-38s K6 = "--no-verify umgeht jeden Hook"
+  Blattlokale Nummerierung ist normal und kein Fehler. Aber heute ist "K6" mehrfach zwischen
+  drei Rollen hin und her gegangen, und die beiden meinen Verschiedenes. Ein Satz im
+  jeweiligen Blatt — "K6 dieses Blattes" — kostet nichts und spart eine Verwechslung.
+ballbesitz: planner
+```
+
+```yaml
 auftrag: "a37_rotlagen_geprueft_nachtrag_zum_runde_3_votum"
 titel: "A-37s Rot-Lagen selbst nachgemessen, an ZWEI Orten — alle halten, damit fehlt meinem Votum nur noch die Behebung der fuenf Restpunkte"
 rolle: plan-pruefer
