@@ -456,3 +456,58 @@ awk -F'|' '$2 ~ /^ W-[0-9]+ $/ { s=$4; gsub(/[ *]/,"",s);
 **Der Befehl steht hier, der Wert nicht** — eine Zahl misst den Bestand zum Zeitpunkt des
 Schreibens, ein Befehl misst ihn beim Lesen. *(A-39 P2 und P6.)*
 
+
+## BEFUND 16.08. — `BESCHRIEBEN` hat dasselbe Problem wie `LEER`
+
+**Anlass: Yamas Frage, welche der 37 beschriebenen Zeilen alle drei Baubedingungen erfüllen.
+Die Antwort ist heute: keine — und der Grund liegt im Wort, nicht in den Werkzeugen.**
+
+**Gemessen an den `5-CODE`-Blättern der dreizehn Zeilen ohne F-Nummer:**
+
+```
+Werkzeug   Blatt   Fundstellen   Soll-Woerter
+W-33       105 Z.      22             0
+W-34        90 Z.      17             1
+W-35        84 Z.      26             1
+W-36       117 Z.      31             0
+W-37        60 Z.      15             0
+W-38       147 Z.      39             0
+W-39       108 Z.      19             0
+W-40       120 Z.      11             2
+W-42        78 Z.       6             0
+                    ------          ---
+                      186             5
+
+W-43 · W-26 · W-28 · W-30    KEIN 5-CODE-Blatt, obwohl BESCHRIEBEN
+```
+
+> **186 Code-Fundstellen gegen 5 Soll-Wörter. Diese neun Blätter LESEN AB, was existiert —
+> sie fordern nichts.** `BESCHRIEBEN` heißt hier: *der vorhandene Code ist dokumentiert.*
+> **Das ist ein Bestandsnachweis, kein Bauauftrag.**
+
+**`BESCHRIEBEN` trägt damit zwei Bedeutungen — genau wie `LEER` bis heute Morgen:**
+
+```
+Vorhandenes abgelesen     ein ERGEBNIS      (die neun oben)
+Gefordertes entworfen     ein AUSSTAND      (wofuer es ENTWORFEN gibt)
+```
+
+**Damit erklärt sich die Zahl 37 zu 1 vollständig: es sind fast nur Ablesungen.** Und es
+erklärt, warum `A-35 Trimmen` sich anders anfühlte — dort entstand etwas, das vorher nicht da war.
+
+### Was daraus folgt, und was ich NICHT entscheide
+
+**Der Bauvorrat ist heute nicht leer, sondern UNBEKANNT.** Von den 37:
+
+```
+24   scheitern an Bedingung 3 — `nachgerechnet_an` existiert erst mit A-40
+ 9   sind kein Vorrat — sie beschreiben fertigen Code
+ 4   haben nicht einmal das Blatt, auf das sich ihr BESCHRIEBEN stuetzt
+```
+
+**Vorschlag, nicht Entscheidung:** ein Wort für den Bestandsnachweis — etwa `ABGELESEN` —
+neben dem vorhandenen `ENTWORFEN` für Gefordertes. **Der Reifegrad-Wortschatz gehört Yama
+(§1); `GEGENSTANDSLOS` kam heute auf seinen ausdrücklichen Auftrag, dieses Wort nicht.**
+
+**Bis dahin gilt:** wer den Bauvorrat zählt, muss je Zeile in `5-CODE` sehen, ob dort
+Vorhandenes oder Gefordertes steht. **Die Registerzeile allein beantwortet es nicht.**
