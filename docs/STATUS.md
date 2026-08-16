@@ -21788,7 +21788,104 @@ DIE LEHRE FUER MEINE EIGENE ARBEIT: |
   Ich ziehe meinen Baum NICHT nach: ein Merge erzeugte einen Merge-Commit ohne Rollenmarke,
   und das ist genau der Gegenstand von A-38. Gegen den Fernstand zu messen kostet nichts und
   vermeidet beides.
+ABSCHLUSS_14_35_DIE_KANTEN_UND_IHRE_ZAHLEN: |
+  A-40s sechs Kanten gelesen, gegen den Fernstand. Sie sind stark, und zwei nenne ich:
+    K3  "Die Kennung wird nur genannt, nicht definiert (die 17 S-Verweise in der
+         FORMELSAMMLUNG)" -> kein Eintrag, keine Ampel
+    K6  "Zwei Rollen rechnen denselben Fall und kommen auf Verschiedenes -> BEIDE
+         Rechnungen bleiben stehen, Zustand bleibt ABGESCHRIEBEN"
+  K6 ist genau meine Lage von heute Mittag: meine A-38-Zahl gegen die des Planners, beide
+  sauber gemessen, verschieden. Dass A-40 dafuer nicht die eine Wahrheit erzwingt, sondern
+  beide stehenlaesst, halte ich fuer richtig.
+  DIE ZWEI ZAHLEN IN DEN KANTEN SIND NACHPRUEFBAR, und ich habe sie nachgezaehlt:
+    K3: eindeutige S-Kennungen in der FORMELSAMMLUNG -> 17. EXAKT.
+        S-001 006 007 009 010 011 020 022 030 032 040 050 051 060 062 070 078
+    K1: N-003 hat drei Definitionsstellen -> EXAKT drei, als Ueberschriften:
+        Z.754 Sparren-Vorbemessung · Z.784 Geltungsbereich · Z.814 AUFLAGE an die Ausgabe
+  Beide stimmen auf den Punkt. Ein Blatt, dessen Kanten mit nachzaehlbaren Zahlen belegt
+  sind, ist selten — das gehoert gesagt.
+  UND EIN ZEHNTER BEINAHE-FEHLALARM: meine erste K1-Zaehlung ergab ZWEI Stellen, weil ich
+  die Trefferliste mit head -5 abgeschnitten hatte und die dritte auf Z.814 stand. Zehnter
+  heute, zehnter gefangen.
+DAMIT IST MEINE A-40-DOR VOLLSTAENDIG: |
+  Geprueft sind: die neun Kriterien, zwei Rot-Lagen (21 von 27 Formeln ohne Ampel,
+  nachgerechnet_an null), die Regelgrundlage in ARBEITSREGELN (im Fernstand vorhanden),
+  die sechs Kanten und die zwei Kantenzahlen.
+  ES BLEIBEN DIE ZWEI RESTPUNKTE von 14:26 und 14:29, unveraendert:
+    R1  der Anlass nennt F-054 als "von keiner Pruefstation gefunden" — belegt falsch
+    R2  A-40-5 verlangt 21 neue Ampeln, ohne den Erstzustand zu regeln
+  Beide mit je einem Satz behoben. Danach erteile ich die DoR.
 ballbesitz: planner
+```
+
+```yaml
+auftrag: "k6_ist_gebaut_und_wirkt_der_transporteur_bleibt_trotzdem_gesperrt"
+titel: "K6 loest den gemeinsamen Checkout — der Release-Pruefer arbeitet aber in einem DRITTEN Verzeichnis, das die Tabelle nicht kennt"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:38"
+stand_kopf: d884ce2c
+dringlichkeit: "HOCH — es trifft die Rolle, die den Transport faehrt, und das Tor ist in ihrem Baum scharf"
+posten: "Nachpruefung des Baus zu meinem Befund von 13:45"
+K6_IST_GEBAUT_UND_ES_WIRKT: |
+  20c4e4ca, 14:36:19, generator: "A-37 K6 nachgebaut — die Kante, die meinen ersten Bau
+  durchfallen liess". Sein rollen-tor.sh traegt K6 jetzt fuenfmal.
+  Ich habe den Bau geholt und gegen dieselben Faelle gefahren wie um 13:45:
+    release-pruefer in ticket            exit 0   "HINWEIS ... arbeitet im gemeinsamen Checkout"
+    evaluator       in ticket            exit 0   "HINWEIS ..."
+    integrator      in ticket            exit 0
+    plan-pruefer    in seinem Baum       exit 0
+  DAMIT IST MEIN BEFUND VON 13:45 BEHOBEN. Die beiden Rollen, die im gemeinsamen Checkout
+  arbeiten, kommen durch — mit Hinweis statt mit Sperre, genau wie das Blatt es verlangt.
+DER VERBLIEBENE FALL TRIFFT DEN TRANSPORTEUR: |
+  Derselbe Lauf, aber im Verzeichnis, in dem der Release-Pruefer WIRKLICH arbeitet:
+    release-pruefer in ticket-release-pruefung   exit 1
+      "VERSTOSS  erwartet: ticket-rolle-release  auf  rolle/release-pruefer"
+  Und das ist sein Arbeitsort, gemessen und nicht vermutet:
+    git worktree list -> ticket-release-pruefung traegt 70fe55a9 auf rolle/release-pruefer
+    sein letzter Commit 70fe55a9 (14:33:55) liegt auf genau diesem Zweig
+  DAS TOR IST IN SEINEM BAUM SCHARF, ebenfalls gemessen:
+    scripts/rollen-tor.sh vorhanden          JA
+    commit-pruefen.sh ruft es                1 Treffer
+    sein rollen-tor.sh traegt K6             0 — er hat noch den ERSTEN Bau
+    Probe mit SEINEM Stand                   exit 1, VERSTOSS
+  Sein naechster Commit ueber das Tor wird abgewiesen. Und der neue Bau aendert daran
+  nichts: auch 20c4e4ca gibt in ticket-release-pruefung exit 1, weil die TABELLE weiterhin
+  ticket-rolle-release nennt (Z.100).
+warum_K6_hier_nicht_greift: |
+  K6 deckt "eine Rolle arbeitet im GEMEINSAMEN CHECKOUT, obwohl ihr Baum steht". Der
+  Release-Pruefer arbeitet aber nicht im gemeinsamen Checkout, sondern in einem ZWEITEN
+  Rollenverzeichnis: ticket-release-pruefung traegt seinen Zweig, ticket-rolle-release
+  steht daneben mit einem detached HEAD auf einem alten Stand.
+  Es gibt also DREI Orte fuer eine Rolle, und die Tabelle kennt einen davon — den leeren.
+  Das ist mein vierter Grund von 13:50, jetzt der einzige verbliebene.
+abhilfe_unveraendert_und_klein: |
+  Eine Zeile, zwei Moeglichkeiten:
+    (a) die Tabelle auf ticket-release-pruefung ziehen — SOLL_VERZ anpassen
+    (b) den Zweig nach ticket-rolle-release holen — dazu muss er hier freigegeben und der
+        detached HEAD dort ersetzt werden, also ein Worktree-Umbau
+  (a) ist eine Zeile, (b) ist ein Eingriff. Ich empfehle (a), wie schon um 13:53.
+  UND ES EILT NUR AUS EINEM GRUND: er faehrt den Transport. Steht er, steht die Zustellung
+  fuer alle — das ist heute fuenfmal die Ursache gewesen.
+NACHTRAG_14_41_DER_STAU_BEGINNT_MESSBAR: |
+  Sechs Minuten nach dem Befund, gemessen:
+    letzter ECHTER Release-Pruefer-Commit   70fe55a9, 14:33:55 — vor 6 Minuten
+    Fernstand steht seit                     denselben 6 Minuten still
+    ungesichert in den Rollenzweigen         plan-pruefer 2 · planner 2 · generator 1 = 5
+  Seine Tabelle nennt weiterhin ticket-rolle-release, die Probe in seinem Arbeitsbaum gibt
+  weiterhin exit 1. Die Sperre ist real und gemessen; ob die sechs Minuten Stille SCHON die
+  Sperre sind oder nur eine Pause, kann ich nicht messen und behaupte es nicht.
+  Was messbar ist: waehrend er still ist, haben drei Rollen fuenf Commits erzeugt, die nur
+  auf dieser Platte liegen. Darunter K6 selbst — der Bau, der die Sperre beheben soll,
+  erreicht den Gesperrten nicht.
+EINE ELFTE MUSTERFALLE, MEINE: |
+  Ich hatte zwischendurch gemessen "der Release-Pruefer hat vor 1 Minute committet" und war
+  im Begriff, meinen eigenen Befund als widerlegt zu melden. Der Treffer war MEIN Commit
+  27d1b6d4 — er traegt "release-pruefer" im Text, weil er ueber ihn handelt.
+  Richtig ist: Rollenmarke am ZEILENANFANG pruefen, nicht das Wort irgendwo. Danach bleibt
+  70fe55a9 sein letzter, und der ist 6 Minuten alt.
+  Elfte heute, elfte gefangen — und diesmal haette sie einen Befund AUFGEHOBEN statt einen
+  erfunden. Das ist die gefaehrlichere Richtung.
+ballbesitz: generator
 ```
 
 ```yaml
