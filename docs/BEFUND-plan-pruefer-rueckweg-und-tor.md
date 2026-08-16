@@ -3527,3 +3527,74 @@ davor, die Angabe „ZWEI Exporte" als falsch zu melden. **`export interface` f�
 nicht ihr Text.*
 
 **Kein Ball** — ich lege die Größenordnung nur dazu. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Mein „Zeichenunterschied ohne Belang" war einer mit Belang — Fehler 25, und er ist eine neue Klasse
+
+*Fremde Berichtigung nachgefahren, eigene Abtuung geprüft · gemessen 16.08. gegen `2a0d6611`*
+
+### Was ich geschrieben habe
+
+> *„Ein Zeichenunterschied ohne Belang: er nennt die Bereiche `Z.3215 bis Z.3256`, ich hatte
+> `Z.3215-3255` gemessen — er zählt die Grenzzeile des nächsten Öffners mit, ich nicht. **Derselbe
+> Block, zwei Konventionen.**"*
+
+### Was tatsächlich dort steht
+
+```
+Z.3254   ## A-09 — RELEASE_FREI an af8f2054 (Ball bei Yama: main-Ve…)
+Z.3255   (leer)                                <- hier endet A-08 wirklich
+Z.3256   ```yaml                                <- Oeffner des NAECHSTEN Blocks
+Z.3260   auftrag: "A-09"
+```
+
+**Seine Angabe reichte über die Überschrift von A-09 hinweg bis in dessen Öffner.** Sein Satz ist
+wörtlich belegt: *„Meine Zeilenangabe führt also auf den falschen Block."*
+
+**Es waren nicht zwei Konventionen. Es war ein Off-by-one, und ich hatte die richtige Zahl.**
+
+### Die Berichtigung, beide Kanten selbst gefahren
+
+```
+EINGABE       ALT              NEU
+ende1.md      Z.2 bis Z.5      Z.2 bis Z.4     <- Datei hat nur 4 Zeilen
+ende2.md      Z.2 bis Z.4      Z.2 bis Z.4
+
+echter Bestand
+A-08-Block    Z.3215-3256      Z.3215-3255
+```
+
+**Die alte Fassung meldete bei abschließendem Zeilenumbruch eine Zeile, die es nicht gibt** — genau
+der zweite Off-by-one, den seine Gegenprobe fand und den er ohne sie nie gesehen hätte, *„weil er
+im echten Bestand nicht vorkommt"*. **Beide Berichtigungen greifen, beide Varianten geprüft.**
+
+*Meine Kopie trägt die Berichtigung noch nicht — ich habe seine Fassung aus dem Integrationsstand
+gefahren und gegen meine alte gehalten. Der Unterschied ist damit gemessen, nicht behauptet.*
+
+### Fehler 25, und er ist eine neue Klasse
+
+**Die bisherigen elf gefangenen Fehlbefunde hatten alle dieselbe Form:** mein Muster fand zu viel
+oder zu wenig, ich öffnete die Abweichung, und sie löste sich auf. **Dieser hier ist das
+Gegenteil:**
+
+```
+gemessen        richtig  (3255)
+Abweichung      gesehen
+eingeordnet     als belanglos abgetan
+```
+
+**Ich habe einen echten Befund selbst weggeredet** — mit einer plausiblen Erklärung, die ich nicht
+geprüft habe. *„Zwei Konventionen" klang vernünftig, und es hätte gestimmt, wenn beide Zahlen auf
+denselben Block gezeigt hätten. Ich habe nicht nachgesehen, worauf Z.3256 zeigt.*
+
+**Die Lehre ist nicht dieselbe wie bisher.** Bisher hieß sie: *ein Muster kann falsch zählen, also
+öffne die Abweichung.* **Diese hier heißt: eine Abweichung, die man geöffnet hat, ist damit noch
+nicht erklärt** — eine Erklärung, die man nicht misst, ist eine Vermutung mit besserem Ruf.
+
+**Und sie wiegt schwerer als die elf**, denn ein weggeredeter Befund kommt nicht wieder: er ist
+gemeldet worden und ausdrücklich für unerheblich erklärt. **Ohne seine Gegenmessung stünde er
+heute so im Bestand.**
+
+### Stand
+
+**Kein Ball.** Beide Berichtigungen sind gefahren und halten. **Kein Zustandsfeld angefasst, kein
+Bau.**
