@@ -1887,3 +1887,70 @@ Formsache: **ohne die Markierung ist ein §5-Punkt unprüfbar, und ein unprüfba
 
 **Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau. A-40s DoR bleibt offen** — dritter Fund
 nach der Nummernvergabe in A-40-2 und dem Prüfbefehl in Z.204.
+
+## A-42 · §5-Punkt „Prüfbefehl auf Syntax und Aussagekraft": gefahren — er hält, wo es zählt, und die Abweichung hebt sich nachweislich auf
+
+*§5-Durchgang an A-42 · gemessen 16.08. gegen `171f9e60`*
+
+### Der Befehl, wörtlich gefahren
+
+A-42-1 liefert seinen Zählbefehl vollständig mit. Gefahren, und gegen zwei Alternativen gehalten:
+
+```
+A-42-1 wie geschrieben                446 Bloecke   168 ohne zustand
+am Zeilenanfang verankert             442 Bloecke   168 ohne zustand
+Zaunzahl als Schiedsrichter           444
+```
+
+**Keine der beiden Fassungen trifft 444 — und zwar aus zwei verschiedenen Gründen:**
+
+- **+2 unverankert:** `​```yaml` kommt **452-mal** vor, aber nur **444-mal am Zeilenanfang**. Acht
+  Vorkommen stehen **in Prosa** — und mehrere davon in Notizen, die *genau dieses Parser-Problem
+  beschreiben* (`„dort steht ein ​```yaml IM TEXT des Feldes dor_beleg, als ZITAT der Fundstelle"`).
+  **Der Befehl stolpert über die Dokumentation seines eigenen Fehlers.**
+- **−2 verankert:** zwei yaml-Blöcke sind **nie geschlossen** (Z.3215 und Z.7876); ein auf
+  `^```$` verankertes Muster verliert sie stillschweigend.
+
+### Und jetzt der Teil, der entscheidet: es hebt sich auf
+
+**Die tragende Zahl ist in allen drei Fassungen identisch: 168.** Das ist die Menge, die A-42
+bewegt — *„Blöcke ohne `zustand:`, mit `auftrag:`"*.
+
+**Und keine der sechs Störstellen liegt in einem Block, der umzieht:**
+
+```
+Z.58      keine Blockzugehoerigkeit (Tafelzeile)          -> zieht nicht um
+Z.13196   Block 13189-13378, hat zustand                  -> bleibt
+Z.13234   Block 13189-13378, hat zustand                  -> bleibt
+Z.13307   Block 13189-13378, hat zustand                  -> bleibt
+Z.3215    unverschlossen, A-08, hat zustand               -> bleibt
+Z.7876    unverschlossen, kein auftrag (dritte Klasse)    -> bleibt
+```
+
+**Damit trägt A-42-2, die Summengleichung.** Der Zählfehler von +2 erscheint **auf beiden Seiten
+der Gleichung** — vorher wie nachher —, weil die störenden Blöcke in `docs/STATUS.md` verbleiben.
+**Und A-42-1 verlangt ausdrücklich denselben Befehl für beide Messungen** (*„Vorher und nachher
+gezählt, mit demselben Befehl"*). **Das ist keine glückliche Fügung, sondern genau das, wogegen
+diese Auflage schützt.**
+
+**Kein Blocker an diesem Punkt.**
+
+### Eine Klarstellung, die ich trotzdem empfehle
+
+Die Zahl **446** wird im Bericht als „Blöcke" erscheinen, und es sind **444**. Wer sie später gegen
+eine Zaunzählung hält — so wie ich gerade —, findet eine Abweichung und muss sie erst auflösen.
+
+**Soll:** im Bericht die Zaunzahl danebenstellen, etwa
+`446 Regex-Treffer / 444 Zaeune / 168 Umzugsbloecke`. **Das ist dieselbe Disziplin wie die
+Summenprobe-Regel des Planners** (*„wer den Reifegrad zählt, nennt die Summe und die Zeilenzahl
+dazu"*) — hier für Blöcke.
+
+### Und ein eigener Fehler auf dem Weg dorthin
+
+Mein erster Lauf brach ab: **`(eval):21: parse error`**. Ursache war meine eigene `echo`-Zeile —
+ich hatte `​```yaml` in **doppelten** Anführungszeichen stehen, und zsh las die Backticks als
+Kommandosubstitution. **Dieselbe Klasse wie mein Here-Dokument-Fehler von heute Nachmittag.**
+Sauber wiederholt mit einfachen Anführungszeichen; **kein Messwert stammt aus dem abgebrochenen
+Lauf.**
+
+**Ball: planner** (die Klarstellung). **Kein Zustandsfeld angefasst, kein Bau.**
