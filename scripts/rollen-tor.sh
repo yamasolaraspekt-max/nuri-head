@@ -348,6 +348,22 @@ if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
   # **Deshalb zuendet sie erst, wenn das Tor in ALLEN Zweigen liegt** — was genau das SOLL von
   # A-37-18 ist. *Damit schaltet der Transport die Sperre scharf, und wieder ist es eine Messung
   # und kein Datum.*
+  #
+  # ## ⚠ SIE HAT GEZUENDET — 16.08. abends, ohne dass jemand eine Zeile angefasst hat
+  #
+  # ```text
+  #   16:17   Integrator startet          Haelfte 1 erfuellt
+  #   danach  Tor in 3 von 6 Zweigen      HINWEIS „NOCH NICHT scharf"      exit 0
+  #           Tor in 4, dann 5 von 6      unveraendert HINWEIS             exit 0
+  #   20:0x   plan-pruefer holt den
+  #           Integrationszweig -> 6/6    VERSTOSS „EINEN Schreiber"       exit 1
+  # ```
+  #
+  # ***Zweimal an einem Tag hat sich eine Bedingung selbst umgelegt*** — *bei Haelfte 1 der erste
+  # Integrator-Commit, bei Haelfte 2 der letzte fehlende Zweig.* **Waere eine der beiden ein Datum
+  # oder ein Haekchen gewesen, haette jemand daran denken muessen: zu frueh, oder vergessen.**
+  #
+  # *Und es war nie Arbeit, die fehlte* — **es war eine Transport-Etappe.**
   TOR_ZWEIGE=0
   TOR_MIT=0
   for _z in $(git for-each-ref --format='%(refname:short)' 'refs/heads/rolle/*' 'refs/heads/auto/hausplaner-integration' 2>/dev/null); do
