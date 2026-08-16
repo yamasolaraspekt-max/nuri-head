@@ -1,9 +1,9 @@
-# A-39 — Sieben Prüfungen, die ein Blatt gegen sich selbst hält
+# A-39 — Acht Prüfungen, die ein Blatt gegen sich selbst hält
 
 ```yaml
 auftrag: "A-39"
 werkzeug: "— (Werkzeug der Rollenkette, kein Hausplaner-Werkzeug)"
-art: "BAU — ein Pruefskript fuer Auftragsblaetter (sieben Innenpruefungen). Es laeuft im DoR-SCHRITT, nicht im Tor:
+art: "BAU — ein Pruefskript fuer Auftragsblaetter (acht Innenpruefungen). Es laeuft im DoR-SCHRITT, nicht im Tor:
       es misst ein BLATT, keinen Commit. KEINE Aenderung an docs/STATUS.md, KEIN Hausplaner-Code."
 spur: A
 heimat_app: ticket
@@ -16,13 +16,13 @@ ballbesitz: "plan-pruefer (DoR)"
 claim: "planner 16.08. — Claim VOR dem Schnitt."
 kennung_geprueft: "A-39 hat NULL Treffer in docs/STATUS.md und NULL Blaetter in
                    docs/auftraege/aktiv/. A-01 bis A-38 sind vergeben. Frei."
-anlass: "Sieben Blattfehler: fuenf an EINEM Tag, zwei weitere am 16.08., jeder erst beim Bauen oder Abnehmen gefunden,
+anlass: "Acht Blattfehler: fuenf an EINEM Tag, drei weitere am 16.08., jeder erst beim Bauen oder Abnehmen gefunden,
          jeder vor dem ersten Zeichen Code vorhanden und maschinell erkennbar."
 gebaut_in: "ticket-rolle-generator (rolle/generator)"
 staut_hinter: "A-37 — das Tor schuetzt A-39, nicht umgekehrt."
 ```
 
-## Der Anlass: sieben Fehler, alle zu spät gefunden
+## Der Anlass: acht Fehler, alle zu spät gefunden
 
 | # | Fehler | gefunden | Kosten |
 |---|---|---|---|
@@ -34,17 +34,19 @@ staut_hinter: "A-37 — das Tor schuetzt A-39, nicht umgekehrt."
 | 6 | **Rot-Lage mit Uhr** — A-38-2 belegte „28 von 32" aus einem wandernden 48-Stunden-Fenster | vom Plan-Prüfer, **6 h 37 min vor Ablauf** | wäre um 22:53 von selbst grün geworden, **ohne dass jemand etwas behob** |
 | 7 | **Kriterium ohne gangbaren Weg** — A-41-4, A-41-5, A-37-18, **alle drei am selben Tag vom selben Schreiber** | **jedes Mal vom BAUENDEN**, keiner Prüfung | drei Runden; das Kriterium war gegen eine Vorstellung geschrieben, nicht gegen den Weg |
 
-**Alle sieben waren vor dem ersten Zeichen Code vorhanden und maschinell erkennbar.** Jeder kostete
+| 8 | **Der Ort ist das Kriterium, nicht die Sache** — `ls-files` auf **eine** Datei als Aussage über einen Baum mit 7460 · Wächtersuche im falschen Verzeichnis · „release" am toten Gleichnamigen | **drei Rollen unabhängig an einem Tag**, jede von einer anderen | einer der drei stand in der **Prozessquelle** |
+
+**Alle acht waren vor dem ersten Zeichen Code vorhanden und maschinell erkennbar.** Jeder kostete
 eine Runde. **Keiner wurde von einer Prüfstation gefunden — alle erst, als jemand das Blatt
 benutzen wollte.**
 
 ## Warum das in den DoR-Schritt gehört und nicht ins Tor
 
-**Das Tor prüft Commits. Diese sieben prüfen ein Blatt.** Ein Blatt wird geschnitten, bevor es einen
+**Das Tor prüft Commits. Diese acht prüfen ein Blatt.** Ein Blatt wird geschnitten, bevor es einen
 Commit gibt, und die Fehler wirken, sobald jemand es liest. **Im Tor käme die Prüfung zu spät und
 träfe den Falschen** — der Bauende hätte den Blattfehler nicht verursacht.
 
-## Scope — sieben Prüfungen über eine Datei
+## Scope — acht Prüfungen über eine Datei
 
 ```
 scripts/blatt-pruefen.sh <pfad-zum-blatt>
@@ -100,6 +102,25 @@ P7  KRITERIUM OHNE GANGBAREN WEG
     und alle drei kosteten eine Runde. Das ist kein Zufall, sondern
     eine Fehlerform: das Kriterium wird gegen eine VORSTELLUNG
     geschrieben statt gegen den WEG, auf dem es erfuellt wird.
+
+P8  DER ORT IST DAS KRITERIUM, NICHT DIE SACHE
+    Eine Messvorschrift, die einen VERZEICHNISPFAD oder einen
+    DATEINAMEN als Suchraum festlegt, ist ein Fund, wenn die
+    gesuchte Sache auch anderswo liegen kann.
+    Verlangt: die SACHE benennen (Funktionsname, Testzweck,
+    Wirkung) und den Pfad hoechstens als Beispiel.
+    DREI BELEGFAELLE VOM 16.08., aus DREI VERSCHIEDENEN ROLLEN:
+      Planner       mass `ls-files <EINE Datei>` und schrieb
+                    "ls-files 0" ueber den ganzen Baum — der
+                    Baum traegt 7460 Dateien. Stand in der
+                    PROZESSQUELLE.
+      Generator     suchte den Waechter in tests/Feature/Hausplaner/
+                    und fand ihn nicht; er liegt eine Ebene hoeher.
+      Planner       mass "release" am Verzeichnis ticket-rolle-release
+                    statt am lebenden ticket-release-pruefung.
+    Es ist H-8 in der SUCHVORSCHRIFT: nicht der gemessene Ort ist
+    falsch, sondern dass ueberhaupt ein Ort gemessen wurde.
+    Drei Rollen unabhaengig an einem Tag — belegt, nicht vermutet.
 ```
 
 **Ausgabe: je Fund eine Zeile mit Kennung und Fundstelle. Rückgabe 1, wenn ein Fund vorliegt.**
@@ -158,6 +179,15 @@ P7  KRITERIUM OHNE GANGBAREN WEG
   **Negativproben:** die heutigen Fassungen derselben drei Kriterien **nicht.**
   **Grenze, ausdrücklich:** P7 prüft, ob die drei Fragen **beantwortbar** sind — es beurteilt
   **nicht**, ob die Antwort klug ist. *Ein Prüfer, der Urteile fällt, wird weggeklickt.*
+- **A-39-13** · **P8 findet die drei Ortsfehler vom 16.08.**
+  **Positivproben:** die Regel-Ergänzung am Stand `e802c1f8` („`ls-files` 0" über einen Baum
+  mit 7460 Dateien) · W-17-1-3 vor `d7f0c93d` (Suchraum `tests/Feature/Hausplaner/`) ·
+  die Baum-Erhebung in A-37-18 am Stand `78841603`.
+  **Negativprobe:** eine Messvorschrift, die einen Pfad **als Beispiel** nennt und die Sache
+  benennt, ist **kein** Fund — sonst meldet P8 jede Fundstellenangabe.
+  **Grenze:** P8 prüft die **Suchvorschrift**, nicht das Ergebnis. *Ein an der richtigen Stelle
+  gefundenes Ergebnis kann trotzdem aus einer zu engen Vorschrift stammen — dann ist es Glück,
+  und Glück ist kein Prüfverfahren.*
 - **A-39-7** · **Positivfall gesamt:** ein Blatt ohne Befund erzeugt **keine Ausgabe** und
   Rückgabe **0**. *(Ohne diesen Beleg ist das Skript von einem kaputten nicht zu unterscheiden.)*
 - **A-39-8** · **Alle sechs Kanten K1–K6 sind behandelt und je einzeln belegt.**

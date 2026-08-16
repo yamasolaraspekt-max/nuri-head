@@ -132,6 +132,16 @@ beschreibt die Hälfte.
 - **W-17-1-7** · **Suite grün und Zahl unverändert gegen den Bau-Stand**, `tsc exit=0`.
   Zahl **unmittelbar vor dem Bau** erheben — **keine feste Zahl im Kriterium.**
 
+- **W-17-1-8** · **ALLE SECHS KANTEN K1–K6 sind behandelt und je einzeln belegt.**
+  **⚠ NACHGETRAGEN 17:4x — das Blatt trug sechs Kanten und KEIN Kriterium nannte sie.**
+  Gefunden durch die Selbstprüfung des Planners gegen die sieben Innenprüfungen aus A-39,
+  **P1: Kante ohne Kriterium.** *Es ist derselbe Fehler, an dem A-37 eine Runde verloren hat —
+  dort fiel K6 durch, weil kein Kriterium sie verlangte.*
+  **Der Bau ist bereits gelaufen** (`d7f0c93d`), das Kriterium kommt also nach dem Bau. **Es
+  wird deshalb NICHT abgeschwächt, sondern gegen den vorhandenen Bau gemessen:** trägt eine
+  Kante keinen Beleg, ist das ein Befund und keine Formalie. **K2 hat sich bereits als tragend
+  erwiesen** — der Wächter `PlanUploadTest.php` lag außerhalb der Insel und wurde übersehen.
+
 ## Rückweg und Entdeckung
 
 - **Rückweg:** nur Dokumentation. **Rücknahme = Commit zurückdrehen**, kein Code betroffen.
