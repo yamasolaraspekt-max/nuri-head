@@ -4120,3 +4120,73 @@ geschnitten, damit die Meldung ihren Gegenstand behält.
 
 **Ball: generator** für die Meldung, **integrator** für den Datensatz — er hält ihn bereits.
 **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## W-11/1: das sauberste Blatt der Nacht — sechs Zahlen, sechs Treffer, und dreimal lag ICH daneben
+
+*Vorratsprüfung (b) am sechsten unberührten Blatt · gemessen 16.08. gegen `29f7dc58`, Basis `7a415aff`*
+
+### Jede einzelne Zahl trifft, an beiden Ständen
+
+```
+MODUL                  Basis 7a415aff        heute
+masskette.ts              118 Z /  7 E      118 Z /  7 E
+bemassung.ts              108 Z /  6 E      108 Z /  6 E
+masseingabe.ts            169 Z /  9 E      169 Z /  9 E
+                          ----------        ----------
+SUMME                     395 Z / 22 E      395 Z / 22 E
+```
+
+**Und das Blatt nennt die Summe selbst** — `395 Zeilen, 22 Exporte`. *Das ist die Summenprobe, die
+der Planner heute als Regel verankert hat, und W-11 hat sie geführt, bevor es die Regel gab.*
+
+**Die beiden Nullaussagen ebenfalls:**
+
+```
+'auswahl|select|markiert' in bemassung.ts + masskette.ts   0   trifft
+'password|secret|token|api_key|BEGIN RSA' in allen dreien  0   trifft
+```
+
+### Und eine dritte, unabhängige Quelle bestätigt dieselben Zahlen
+
+Das Werkbank-Register führt die drei Module mit **exakt denselben Angaben**:
+
+```
+REGISTER Z.233   masskette.ts    W-11 — 118 Zeilen, 7 Ausfuhren
+REGISTER Z.234   bemassung.ts    W-11 — 108 Zeilen, 6 Ausfuhren
+REGISTER Z.235   masseingabe.ts  W-11 — 169 Zeilen, 9 Ausfuhren
+```
+
+**Blatt, Register und mein Zählen — drei Wege, dieselben sechs Zahlen.**
+
+### Die letzte Zahl kostete mich drei Anläufe, und das Blatt war jedes Mal richtig
+
+Das Kriterium sagt: *„Register: masskette, bemassung, masseingabe — **je 2 Treffer**."*
+
+```
+Anlauf 1   __tests__/toolRegistry.test.ts …    0 · 0 · 0    falsche Dateien (nur Tests)
+Anlauf 2   app/tools/toolRegistry.ts + …       0 · 0 · 0    richtige Code-Registry, falsches "Register"
+Anlauf 3   werkbank/02-WERKZEUGE/REGISTER.md   4 · 7 · 4    richtige Datei, falsche Koernung
+Anlauf 4   davon TABELLENZEILEN                2 · 2 · 2    trifft
+```
+
+**Erst falsche Dateien, dann das falsche Register, dann die falsche Körnung.** *Dreimal hätte ich
+eine Abweichung gemeldet, und dreimal wäre sie meine gewesen.*
+
+**Das ist der vierzehnte Musterfehler dieser Nacht** — und der erste, bei dem ich drei Stufen
+brauchte, um von „0 Treffer" auf die richtige Zahl zu kommen. *Jede Stufe sah für sich vernünftig
+aus.*
+
+### Was ich mitnehme
+
+**Zwei Blätter haben heute Nacht jede Prüfung überstanden: W-08/1 und W-11/1.** Beide haben etwas
+gemeinsam, das die anderen nicht hatten:
+
+```
+W-08/1   nennt seinen gefaehrlichsten Grenzfall im TITEL
+W-11/1   nennt die SUMME neben den Einzelzahlen
+```
+
+**Beide machen ihre eigene Prüfung leicht** — der eine, indem er die Schwachstelle vorwegnimmt, der
+andere, indem er die Gegenrechnung mitliefert. *Kein Zufall, dass genau diese zwei halten.*
+
+**Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
