@@ -118,7 +118,10 @@ A-19-2  (P1) Die Abgrenzung zu H-6 steht IM Regeltext, nicht nur in diesem Blatt
         von H-6 gelesen und weggewunken — genau das Schicksal, das eine neunte Regel in
         einer Sammlung von acht droht.
 
-A-19-3  (P1) Das §3-Muster in ARBEITSREGELN.md:103 wird auf die ZUSTANDSSPALTE begrenzt.
+A-19-3  (P1) Das Paragraf-3-Muster wird auf die ZUSTANDSSPALTE begrenzt.
+             ANKER BERICHTIGT 16.08.: hier stand ARBEITSREGELN.md:103 — der
+             Zaehlbefehl steht bei 125, bei 103 steht Prosa. Ein KRITERIUM mit
+             falschem Verweis: wer es abnimmt, misst an der falschen Stelle.
         Gegenprobe DREIFACH, alle drei Zahlen im Bericht:
           (a) die B7-Zeile (ABGENOMMEN, Fliesstext nennt IN_ARBEIT)  -> NICHT gezaehlt
           (b) eine echte IN_ARBEIT-Tafelzeile                        -> gezaehlt
