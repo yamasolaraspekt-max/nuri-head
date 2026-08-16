@@ -20762,3 +20762,48 @@ bitte: |
   eine Bearbeitung. Miss gegen Yamas Umschnitt und melde die Blattlage als Blattlage.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "die_sicherung_steht_aber_sie_laeuft_nicht_mit_und_jetzt_haengt_produktivcode_daran"
+titel: "Erstmals liegt ein BAU ungesichert — die Rollenzweige sind fern eingerichtet, aber sie stehen auf dem Stand von 13:05"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:17"
+stand_kopf: a9834290
+posten: "Pflichtteil der Wache, Zweigprobe — kein Vorratsposten"
+messung: |
+  Lokaler Rollenzweig gegen den FERNEN Rollenzweig, je Rolle einzeln:
+    rolle/generator      lokal c8a23373 · fern f37317a1 · UNGESICHERT 3
+    rolle/planner        lokal 3544d5fa · fern 236f9efe · UNGESICHERT 1
+    rolle/plan-pruefer   lokal a9834290 · fern 9bcbaa39 · UNGESICHERT 4
+  Acht Commits ohne Kopie ausserhalb dieser Maschine. Darunter:
+    3e22e61b  der A-33-Bau, scripts/a33-kennungen-nachziehen.sh, 174 Zeilen
+              5 Minuten alt, im Fernstand NICHT vorhanden (merge-base --is-ancestor: NEIN)
+was_daran_NEU_ist: |
+  Fuenf Minuten sind kein Alarm, und ich mache keinen. NEU ist die QUALITAET dessen, was
+  liegt: bisher waren es meine Befundbloecke und Blattarbeit — Doku, die im Verlustfall
+  rekonstruierbar ist, weil ich dieselbe Messung nochmal fahren kann.
+  Jetzt liegt PRODUKTIVCODE ungesichert. 174 Zeilen Zuordnungslogik, die jemand geschrieben
+  hat und die niemand aus einer Messung wiederherstellen kann.
+  Das ist derselbe Punkt wie gestern 16:03, aber er hat die Kategorie gewechselt.
+die_praezisierung_gegen_meine_eigene_meldung_von_heute_frueh: |
+  Ich habe heute 12:52 gemeldet, der Sicherungsbefund sei BEHOBEN — "alle fuenf Rollenzweige
+  liegen jetzt fern". Das war richtig gemessen und ist trotzdem zu kurz gegriffen.
+  Die Zweige sind EINGERICHTET, aber sie werden nicht nachgeschoben: origin/rolle/generator
+  steht auf f37317a1, das ist der Stand von 13:05, waehrend lokal seither drei Commits
+  dazugekommen sind. Eine Sicherung, die einmal laeuft, ist eine Momentaufnahme; eine
+  Sicherung, die mitlaeuft, ist eine Kopie.
+  Meine Formulierung "behoben" war deshalb ungenau. Richtig ist: eingerichtet, nicht laufend.
+was_ich_NICHT_tue: |
+  Kein Push. Auch nicht fuer den fremden Bau, obwohl ein Befehl genuegen wuerde und es
+  diesmal nicht meine eigene Arbeit waere, die ich rette.
+  Und ich melde es NICHT als dringend: acht Commits, aeltester wenige Minuten, der
+  Transport lief heute siebenmal. Es ist eine Beobachtung, keine Lage.
+bitte: |
+  An den Release-Pruefer, wenn er das naechste Mal transportiert: die Rollenzweige
+  mitschieben, nicht nur die Integrationslinie. Ein Befehl je Zweig.
+  An Yama, falls das eine Regel werden soll: "wer in seinem Rollenbaum committet, schiebt
+  seinen eigenen Zweig nach" waere die kleinste Fassung — sie braucht keine fremde Rolle
+  und keinen Takt. Sie beruehrt allerdings die Push-Regel, deshalb liegt sie bei dir und
+  nicht bei mir.
+ballbesitz: yama
+```
