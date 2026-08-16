@@ -6700,3 +6700,77 @@ dasselbe: „die dünnste Vorgabe".*
 **Siebtes Blatt ohne Abweichung: W-08/1 · W-11/1 · W-27/1 · W-34 · W-23 · W-39 · W-41.**
 
 **Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 95 — D2 nachgemessen: seine Gegenprobe und meine fallen VERSCHIEDEN aus, und genau das belegt seine Bauentscheidung
+
+**Stand:** HEAD `167cf13d`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+`203f308c` rüstet **D2** in `scripts/bloecke.py` nach — die Differenzprobe, die ich am 16.08. 19:29
+vorgeschlagen und in §91 erneut belegt habe.
+
+### Seine Zahlen, selbst nachgefahren
+
+```
+258 auftrag-Zeilen im Volltext · 257 in Bloecken erfasst · Differenz 1 · A-18   TRIFFT
+```
+
+**Die eine Abweichung ist keine:** er nennt A-18 in `Z.7891`, ich in §91 in `Z.7890`.
+
+```
+Z.7876   ```yaml     der ungeschlossene Oeffner
+Z.7890   ```yaml     A-18s Blockoeffner        <- meine Zahl
+Z.7891   auftrag: "A-18"                       <- seine Zahl
+```
+
+**Beide richtig — Öffner gegen erste Inhaltszeile.** *Vierte Konventionsabweichung dieser Nacht,
+die keine Abweichung ist (nach dem Dach in §73, der Paarbildung in §80, dem Träger in §89).*
+
+### Seine überraschende Gegenprobe — und meine fällt anders aus
+
+Er schreibt: *„ein zweiter künstlich entfernter Schließer trieb D auf 3, **D2 blieb bei 1**… NICHT
+JEDER FEHLENDE SCHLIESSER VERSCHLUCKT EINEN DATENSATZ."*
+
+**Ich habe es unabhängig nachgestellt, an einer KOPIE im Kratzverzeichnis — `docs/STATUS.md` bleibt
+unberührt:**
+
+```
+ORIGINAL             D=2 · D2=1   unsichtbar: A-18
+Schliesser Z.9137 entfernt
+                     D=3 · D2=2   unsichtbar: A-18 UND W-38
+```
+
+**Bei seinem Schließer blieb D2 stehen. Bei meinem stieg es.** *Kein Widerspruch — die Gegenprobe
+fällt je nach Stelle anders aus, und genau das ist die Aussage.*
+
+### Und damit ist die Regel messbar statt vermutet
+
+```
+Z.9137   ```          der entfernte Schliesser
+Z.9138   ---
+Z.9140   ## W-38 · Schrittstatus und Pruefpunkte …
+         darunter W-38s yaml-Block            -> W-38 wird verschluckt
+```
+
+**Ein fehlender Schließer verschluckt den NÄCHSTEN Datensatz — wenn vor dem nächsten nackten
+Schließer überhaupt einer steht.** *Steht dort keiner, verschmelzen zwei Zäune und nichts geht
+verloren; steht dort einer, ist er weg. Dasselbe Muster erklärt A-18: hinter `Z.7876` folgt sein
+Block.*
+
+**Zwei unabhängige Versuche, entgegengesetzte Ergebnisse, eine Schlussfolgerung — und sie ist
+seine:**
+
+```
+D  zaehlt die URSACHEN   (fehlende Schliesser)      heute 2
+D2 misst die FOLGE       (verschluckte Datensaetze) heute 1
+```
+
+**Seine Entscheidung, zwei Prüfungen statt einer zu bauen, ist damit nicht begründet, sondern
+belegt — von einem Versuch, der bei ihm anders ausging als bei mir.** *Hätte er nur seine
+Gegenprobe gehabt, hätte er „D2 folgt D nicht" sagen können. Hätte ich nur meine, hätte ich „D2
+folgt D" gesagt. Beide zusammen sagen: die Folge hängt an der Stelle, und eine Zahl kann die
+andere nicht ersetzen.*
+
+**Kein Ball. Der Restpunkt aus §91 bleibt beim Planner** (siebte Kante oder K4-Ergänzung in A-42),
+**der ungeschlossene Zaun beim Integrator** — *und D2 misst jetzt, was er kostet.*
+**Kein Zustandsfeld angefasst, kein Bau, `docs/STATUS.md` nicht berührt.**
