@@ -24970,3 +24970,50 @@ was_daraus_fuer_A_42_folgt: |
   ihre Summe aufgeht. Die absoluten Werte sind Tagesform.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-42"
+titel: "A-42-8 wendet P7 an und faellt selbst durch P7 — das DARF er hat ein Ablaufdatum, und A-37 setzt es"
+rolle: plan-pruefer
+zeit: "2026-08-16 21:18 CEST"
+mess_stand: "Tor aus rolle/generator · Sperrbedingung Zweig fuer Zweig nachgerechnet · Planner-Kopf fa1ac559"
+was_A_42_8_sagt: |
+  "Der Weg ist gangbar (P7): WER — der Generator, in seinem Baum · DARF er — ja, es ist
+  docs/, kein Produktivcode, kein Loeschen · EXISTIERT die Eigenschaft — ja, die
+  Blockstruktur ist maschinell erfassbar."
+  Alle drei P7-Fragen sind beantwortet, und die Antworten sind sorgfaeltig. Das Kriterium
+  wendet die Regel an, die heute um 16:53 entstanden ist.
+und_die_zweite_antwort_traegt_nur_noch_heute: |
+  Das Rollen-Tor sagt in seinem eigenen Kopf, Zeile 199-201:
+    TOR_STATUS_PFAD=1, generator, eigener Baum
+      nach 16:17   VERSTOSS ... EINEN Schreiber: den Integrator   exit 1
+  A-42 verlangt vom Generator, Bloecke AUS docs/STATUS.md zu entfernen. Das ist genau der
+  Pfad, den das Tor ihm verwehrt, sobald es scharf ist.
+  SCHARF IST ES NOCH NICHT, und das habe ich nachgerechnet statt es anzunehmen:
+    TOR_MIT = 4 von TOR_ZWEIGE = 6 · Integrator-Commits = 3
+    -> die Selbstkonditionierung von 16:52 greift: HINWEIS, durchgelassen.
+  ABER DIE ZAHL WANDERT: um 17:26 habe ich TOR_MIT=3 gemessen, jetzt 4. Das Tor verbreitet
+  sich, und Yamas Liste von heute abend setzt es an die erste Stelle: "P0 GENERATOR — A-37
+  fertigbauen." Danach liegt es in allen sechs Zweigen, TOR_MIT = TOR_ZWEIGE, und die
+  Sperre zuendet.
+  DANN IST A-42-8s "DARF er — ja" FALSCH, ohne dass jemand das Blatt angefasst hat.
+warum_das_ein_P7_fund_ist_und_kein_A_37_fund: |
+  P7 fragt "DARF diese Rolle die Handlung ausfuehren?" — und die Antwort ist heute ja,
+  morgen nein. Ein Kriterium, dessen Gangbarkeit von der Reihenfolge zweier Auftraege
+  abhaengt, hat den Weg nicht vollstaendig benannt.
+  Es ist zugleich P6 in einer fuenften Auspraegung: nicht eine Zahl, die durch normale
+  Arbeit waechst, sondern eine ERLAUBNIS, die durch normale Arbeit erlischt.
+was_daraus_folgt_und_es_ist_eine_reihenfolge: |
+  A-42s Datensatz sagt: "staut_hinter: NICHTS. Muss VOR dem ersten schreibenden
+  --tafel-Lauf fertig sein."
+  Das ist richtig und unvollstaendig. Es muss auch VOR der vollstaendigen Tor-Verteilung
+  fertig sein — also vor dem Abschluss von A-37, den Yama als P0 gesetzt hat.
+  Beide Auftraege stehen in Yamas Liste, A-37 bei P0 und A-42 gar nicht (es ist juenger als
+  die Liste). Wer sie in der genannten Reihenfolge abarbeitet, macht A-42 unausfuehrbar.
+  ZWEI WEGE, beide gangbar, keiner meiner:
+    A-42 vor dem letzten A-37-Transport fahren — dann greift die Uebergangsklausel noch.
+    Oder A-42-8 auf den Integrator umschreiben, der ohnehin der eine Schreiber ist.
+  Der zweite Weg ist der stabilere, aber er aendert das WER — und das ist eine
+  Zuschnittsfrage, keine Messung.
+ballbesitz: planner
+```
