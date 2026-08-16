@@ -6774,3 +6774,77 @@ andere nicht ersetzen.*
 **Kein Ball. Der Restpunkt aus §91 bleibt beim Planner** (siebte Kante oder K4-Ergänzung in A-42),
 **der ungeschlossene Zaun beim Integrator** — *und D2 misst jetzt, was er kostet.*
 **Kein Zustandsfeld angefasst, kein Bau, `docs/STATUS.md` nicht berührt.**
+
+---
+
+## 96 — Posten (c) an W-03/1: F-001 rechnet richtig, aber aus einem Grund, den niemand aufgeschrieben hat
+
+**Stand:** HEAD `7d9b27c2`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**Nach der §80-Methode: Gegenstände aus dem REGISTER, gemessen vor dem Öffnen des Blattes.**
+
+### Vier Registerzusagen, alle getroffen
+
+```
+F-001 an EigenschaftenPanel.tsx:117   const len = Math.hypot(dx, dy);              TRIFFT
+F-001 an :339                          Math.round(Math.hypot(selectedWall.end.x …)) TRIFFT
+lotAufWand im Panel                    0                                            TRIFFT
+geradenGeometrie im Panel              0                                            TRIFFT
+wandBaender im Panel                   0                                            TRIFFT
+```
+
+### Die Formel durchgerechnet — und der Grenzfall geht auseinander
+
+```
+FORMELSAMMLUNG F-001, Grenzfall:
+  'd < ε (0,5 mm) → beide Punkte gelten als DERSELBE. Eine Wand mit d < ε darf nicht
+   angelegt werden — sie erzeugt spaeter eine Division durch null.'
+
+Code, EigenschaftenPanel.tsx:118:
+  if (len === 0) return;
+```
+
+**Der Code prüft auf EXAKT null, die Formel auf kleiner 0,5.** *Das sah nach einem Fund aus, und
+ich habe ihn nicht gemeldet — sondern zu Ende gerechnet.*
+
+```
+fangKern.ts:76   const runde = (p) => ({ x: Math.round(p.x), y: Math.round(p.y) })
+Panel :119       const end = { x: Math.round(…), y: Math.round(…) }
+Math.round in geometry/ und commands/                       56 Stellen
+kleinste ganzzahlige Differenz ungleich 0: dx=1 → len = 1,0
+-> zwischen 0 und 0,5 liegt bei GANZZAHLIGEN Koordinaten kein Wert
+```
+
+**Bei ganzzahligen Koordinaten ist das Intervall `(0; 0,5)` unerreichbar. `len === 0` und `d < ε`
+decken exakt dieselbe Menge ab.** *Der Code ist richtig — enger im Wortlaut, gleich in der
+Reichweite.* **Kein Fund am Code.**
+
+### Der Fund ist, dass die Voraussetzung nirgends steht
+
+```
+nennt F-001 die Ganzzahligkeit?          0 Treffer
+nennt das Panel sie?                     0 Treffer
+```
+
+**Die Gleichwertigkeit hängt allein daran, dass alle Koordinaten ganzzahlig sind — und das steht
+weder in der Formel noch am Code.** *Wer morgen einen Weg baut, auf dem gebrochene Koordinaten
+entstehen (ein Maßstab, ein Import, eine Skalierung), verliert die Gleichwertigkeit lautlos: das
+`ε` würde dann greifen müssen, und `len === 0` greift nicht.*
+
+**Und der Bestand kennt die Behebung bereits — an der Nachbarformel:**
+
+```
+F-032, Grenzfall 2 — RUNDUNG, ergaenzt 14.08.:
+  'F-032 kennt KEIN Runden; wer das Ergebnis auf ganze …'
+```
+
+**Genau diese Bedingung wurde für F-032 nachgetragen, auf meinen eigenen Befund vom 14.08.**
+*Dieselbe Klasse, dieselbe Sammlung, dieselbe Lösung — und für F-001 ist sie offen.*
+
+**Das ist die Posten-(c)-Aussage in ihrer schärfsten Form:** *„Ein richtig zitierter Wortlaut kann
+falsch rechnen"* — hier rechnet er **richtig**, und trotzdem fehlt etwas: **der Grund.**
+*Ein Ergebnis, das nur unter einer ungenannten Voraussetzung stimmt, ist so lange gültig, wie
+niemand die Voraussetzung ändert — und niemand kann sie schützen, der sie nicht kennt.*
+
+**Ball beim Planner** (FORMELSAMMLUNG, F-001: ein Grenzfall-Zusatz nach dem Muster von F-032s
+Grenzfall 2). **Kein Fund am Code, kein Fund am Blatt — die fünf Registerzusagen treffen alle.**
+**Kein Zustandsfeld angefasst, kein Bau.**
