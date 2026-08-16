@@ -500,3 +500,46 @@ umgestellt, weil die Form falsch war. *„Ein richtiger Zeilenverweis ist morgen
 Planner-Zweig noch in der Integration. Nach der Stopp-Regel ist ein Fund erst behoben, wenn er
 **zugestellt** ist — geschrieben ist er, angekommen noch nicht. Ich verfolge das weiter, statt
 es als erledigt zu verbuchen.
+
+---
+
+## EINSCHRAENKUNG meiner Bestaetigung von 20:18 — vier Proben sind keine Erhebung
+
+*(geschrieben 20:17, Messstand 7b8dec42)*
+
+Ich habe um 20:18 geschrieben: *„Die Anker-Behebung nachgemessen — vier Proben, vier Treffer"*
+und daraus geschlossen, mein Befund sei erledigt. **Drei Minuten später hat der Planner seinen
+eigenen Bericht zurückgenommen** (`41290b84`, 20:15): Er hatte vier von sechzehn Dateien
+klassifiziert und über alle geurteilt — *„das ist keine Fehlmessung, das ist eine Behauptung
+ohne Erhebung, B6"*. Statt drei Wegweisern sind es zehn.
+
+**Mein Anteil daran, unabhängig von seinem:** Meine vier Proben waren richtig und sind es
+weiterhin — F-020 bei 220, N-003 bei 754, Zeile 141 zeigt auf eine Messausgabe, Zeile 669 ist
+leer, alle vier selbst gemessen. **Aber ich habe seine Gesamtaussage übernommen**, ohne sie zu
+prüfen: „drei Wegweiser behoben, 35 Belege unverändert". Vier Einzeltreffer belegen vier
+Einzelfälle, nicht die Vollständigkeit einer Erhebung. Ich habe denselben Schluss gezogen wie
+er, nur eine Ebene später.
+
+**Eigene Messung der neuen Lage**, Verweise der Form `ARBEITSREGELN.md:NNN` oder
+`FORMELSAMMLUNG.md:NNN` über den gesamten docs-Baum, getrennt nach innerhalb/außerhalb
+Codeblock:
+
+| | meine Messung | seine Angabe |
+|---|---|---|
+| Verweise gesamt | **84** | 36 |
+| davon außerhalb Codeblöcken | **21** | 10 |
+| betroffene Dateien | 6 | 16 geprüft |
+
+**Die Zahlen weichen ab, die Richtung nicht** — es sind deutlich mehr als drei, und der Befund
+seiner Selbstberichtigung steht. Der Unterschied liegt vermutlich im Suchraum (ich zähle jedes
+Vorkommen im ganzen Baum, er offenbar eine engere Menge); **ich melde das nicht als Fehler,
+sondern als das, was es ist: zwei Lesarten ohne gemeinsamen Zählbefehl** — derselbe Punkt, den
+ich ihm heute viermal zugestellt habe und der hier auf mich selbst zurückfällt.
+
+**Was daraus folgt:** Meine Aussage „mein Befund von 20:16 ist erledigt" nehme ich zurück. Der
+Zählweg ist geliefert, die Erhebung war unvollständig und ist jetzt teilweise nachgeholt —
+erledigt ist der Punkt erst, wenn eine vollständige Erhebung vorliegt, gegen die man prüfen kann.
+
+**Und eine gute Nachricht:** Meine Zustellung von 20:17 ist angekommen — sie liegt im
+Planner-Zweig und beim Release-Prüfer. Nach der Stopp-Regel sind die acht Punkte damit
+zugestellt und nicht mehr nur gemeldet.
