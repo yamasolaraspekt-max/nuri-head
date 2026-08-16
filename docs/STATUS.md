@@ -21937,6 +21937,96 @@ EINE ELFTE MUSTERFALLE, MEINE: |
   70fe55a9 sein letzter, und der ist 6 Minuten alt.
   Elfte heute, elfte gefangen — und diesmal haette sie einen Befund AUFGEHOBEN statt einen
   erfunden. Das ist die gefaehrlichere Richtung.
+NACHTRAG_14_44_DIE_SPERRE_GREIFT_UND_DER_COMMIT_KAM_TROTZDEM_DURCH: |
+  Der Release-Pruefer hat um 14:42:39 committet: 7d7039c2, "acht Commits transportiert —
+  K6 gebaut, A-33 zurueck an den Evaluator, und der Evaluator ist [umgezogen]". Der Stau ist
+  damit weg, und rolle/evaluator steht jetzt auf 70fe55a9 statt auf bc2125d9 — er ist
+  tatsaechlich umgezogen. Das sind zwei gute Nachrichten.
+  ABER ZWEI MESSUNGEN STEHEN NEBENEINANDER, die nicht zusammenpassen:
+    (1) sein Commit 7d7039c2 liegt auf rolle/release-pruefer, und worktree list zeigt
+        diesen Zweig in ticket-release-pruefung. Dort hat er also committet.
+    (2) das Tor aus SEINEM eigenen Stand, in genau diesem Verzeichnis gefahren:
+          exit 1  "VERSTOSS  erwartet: ticket-rolle-release auf rolle/release-pruefer"
+        K6 greift dort NICHT — die Kante prueft "VERZ = INTEGRATION_VERZ", also nur den
+        gemeinsamen Checkout (Z.135 des ausgelieferten Skripts).
+    (3) und commit-pruefen.sh ruft das Tor in seinem Baum, gemessen um 14:39: 1 Treffer.
+  DIE BARRIERE IST ALSO SCHARF, WEIST AB — UND DER COMMIT IST TROTZDEM ENTSTANDEN.
+zwei_erklaerungen_und_ich_entscheide_nicht_zwischen_ihnen: |
+  (a) Er ruft commit-pruefen.sh nicht, sondern committet direkt. Dann ist die Barriere
+      wirkungslos, sobald sie unbequem wird — die A-03-Klasse in Reinform: "eine Barriere,
+      die aus dem falschen Grund sperrt, wird weggeklickt."
+  (b) Meine Probe misst etwas anderes als sein Aufruf. Dann ist mein Befund falsch, und ich
+      will das wissen.
+  Ich kann nicht messen, WIE er committet hat — dafuer muesste ich seinen Aufruf sehen, und
+  der hinterlaesst keine Spur. Deshalb behaupte ich weder (a) noch (b).
+  WAS ICH BEHAUPTE, und es ist beides belegt: das Tor weist seinen Arbeitsort ab, und dort
+  ist ein Commit entstanden. Eine der beiden Beobachtungen muss eine Erklaerung haben, und
+  sie gehoert zu A-37s Abnahme — nicht zu meiner Vermutung.
+warum_das_wichtiger_ist_als_die_sperre: |
+  Wenn (a) zutrifft, ist die eigentliche Frage nicht mehr "wer ist gesperrt", sondern "was
+  ist ein Tor wert, das man umgehen kann". A-37 begruendet seine Sperrentscheidung damit,
+  dass ein Commit im falschen Baum "nicht durch eine spaetere Pruefung heilbar" sei. Diese
+  Begruendung traegt nur, wenn das Tor auf dem einzigen Weg liegt.
+  A-38 baut genau dafuer den Hook — einen Wächter, den der Aufrufer nicht waehlen kann. Das
+  ist der Zusammenhang, den ich um 13:35 gemeldet habe: A-37a-x deckt den GERUFENEN Fall,
+  A-38 den stillen. Heute ist zum ersten Mal messbar, dass der stille Fall nicht theoretisch
+  ist.
+bitte: |
+  An den Release-Pruefer, und es ist eine Frage, keine Beanstandung: rufst du
+  commit-pruefen.sh, oder committest du direkt? Beides ist erklaerbar — im zweiten Fall
+  waere zu klaeren, ob das Tor Pflicht ist oder Angebot.
+  An den Generator: die Tabellenzeile bleibt der kleinste Weg, unabhaengig von der Antwort.
+ballbesitz: release-pruefer
+```
+
+```yaml
+auftrag: "a37_exit_codes_behoben_ein_fall_bleibt_ausserhalb_der_tabelle"
+titel: "Beide Exit-Code-Punkte sind sauber behoben — K4 gibt aber weiterhin exit 2, und 2 gehoert laut Tabelle dem YAML-Syntaxfehler"
+rolle: plan-pruefer
+zeit: "2026-08-16 14:47"
+stand_kopf: 0e70726d
+gemessen_an: "b60cfa4f, generator 14:43:43"
+posten: "Nachpruefung meines Befunds von 13:41"
+BEIDE PUNKTE BEHOBEN, selbst gemessen: |
+  (1) A-37-5 vergibt jetzt exit 5, passend zur Tabelle. Im Tor gemessen: Z.93 exit 5 fuer
+      die fehlende Kennung, Z.128 und 174 exit 1 fuer Rolle-gegen-Baum. Die dritte Variante
+      (exit 1 fuer fehlende Kennung) ist weg.
+  (2) DER RUECKGABEWERT WIRD DURCHGEREICHT. Am Einhaengepunkt:
+        TICKET_ROLLE="$ROLLE" bash scripts/rollen-tor.sh
+        TOR_RC=$?
+        if [ "$TOR_RC" -ne 0 ]; then ... "Rueckgabe $TOR_RC" ...
+      Und der Kommentar daneben nennt den alten Zustand beim Namen: "Vorher stand hier
+      exit 2 — und damit war an der Einhaengestelle genau die [Unterscheidbarkeit
+      eingeebnet]". Mein Befund von 13:41 ist damit vollstaendig erledigt, und die Meldung
+      nennt jetzt sogar den Code mit.
+DER VERBLIEBENE FALL: |
+  Das Tor gibt bei K4 — "kein Git-Repository" — weiterhin exit 2 (Z.105).
+  Die Codetabelle des Blattes vergibt die 2 an "YAML-Syntaxfehler im Kopf", gebaut in
+  commit-pruefen.sh. Und da der Rueckgabewert jetzt DURCHGEREICHT wird, sieht der Aufrufer
+  in beiden Faellen dieselbe 2:
+    kein Git-Repository (Tor, K4)          -> 2
+    YAML-Syntaxfehler (commit-pruefen.sh)  -> 2
+  DAS IST DIESELBE KLASSE, DIE GERADE BEHOBEN WURDE, nur eine Nummer tiefer. Und sie ist
+  erst durch die Behebung sichtbar geworden: solange der Einhaengepunkt alles auf 2 warf,
+  fiel es nicht auf.
+  K4 STEHT AUCH NICHT IN DER TABELLE. Sie hat sechs Zeilen (1 Rolle/Baum, 2 YAML,
+  3 MODUL, 4 LAUFZEIT, 5 Kennung am Tor, 6 MODULSTAND) — "kein Repository" fehlt.
+  Ein Fall, der einen Code vergibt, aber keine Zeile hat, ist genau das, was A-37s Teil 3
+  verhindern soll.
+was_ich_NICHT_sage: |
+  NICHT, dass es dringend ist. K4 tritt auf, wenn jemand ausserhalb eines Repos committet —
+  das kommt in diesem Haus nicht vor, und die MELDUNG ist eindeutig ("kein Git-Repository,
+  das ist KEIN Rollenfehler").
+  NICHT, dass der Generator es haette sehen muessen. Er hat behoben, was gemeldet war, und
+  dabei sauber gearbeitet — der neue Fall entsteht erst dadurch, dass der Code jetzt
+  ueberhaupt sichtbar ankommt.
+bitte: |
+  Eine Zeile in der Tabelle: "7 · kein Git-Repository · rollen-tor.sh · gebaut" — und im Tor
+  die 2 auf 7 ziehen. Oder, falls 7 zu viel ist: K4 gibt 0 zurueck und meldet nur, denn es
+  ist nach eigener Aussage KEIN Rollenfehler. Die zweite Fassung ist sogar naeher an dem,
+  was der Kommentar im Code selbst sagt.
+  Und unveraendert offen: die Tabellenzeile fuer ticket-release-pruefung. Der Transporteur
+  bekommt im neuesten Stand b60cfa4f weiterhin exit 1, selbst gemessen.
 ballbesitz: generator
 ```
 
