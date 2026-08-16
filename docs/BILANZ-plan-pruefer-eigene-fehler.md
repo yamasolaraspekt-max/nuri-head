@@ -72,3 +72,38 @@ zwei Uhrzeiten, ein Zustandswort, eine Zahl aus dem Gedächtnis.
 **Keiner der sechzehn ist durch eine fremde Meldung aufgefallen, dreizehn habe ich selbst
 gefunden.** Drei fand der Bestand: W-28 über den Planner-Konflikt, W-25 über den
 Release-Prüfer, die Ballwechsel-Bestätigung über seine Warnung an den Evaluator.
+
+---
+
+## Nachtrag: Fehler 17, gefangen vor der Meldung
+
+*(erhoben 20:44, Messstand 4ad2d638)*
+
+**Der Planner hat um 20:39 alle sieben offenen A-40-Befunde behoben** (`70994393`) und für den
+siebten — die nicht reproduzierbaren Reichweiten — die **Ursache** gefunden: das Register
+kennzeichnet widerlegte Formelzuordnungen als durchgestrichenes `F-001`, sein grep zählte sie
+mit. *„Es waren drei verschiedene Fragen."*
+
+**Beim Nachmessen habe ich zunächst widersprochen** — 1 Durchstreichung statt 2, 11 echte statt
+10. **Das war mein Fehler.** Mein Muster `~~\s*F-001\s*~~` verlangte ein schließendes `~~`
+unmittelbar nach der Kennung. In `W-04` steht aber:
+
+```
+~~F-001 ✓, F-002 ✓~~
+```
+
+— **eine Durchstreichung über zwei Formeln.** Mit korrekter Auswertung (F-001 *innerhalb* eines
+`~~…~~`-Bereichs) ergibt sich **12 gesamt · 2 durchgestrichen · 10 echte** — zeichengenau seine
+Zahlen.
+
+**Das ist derselbe Fehlertyp wie die zwölf anderen:** ein Muster ohne Fangprobe, das die
+naheliegende Form trifft und die zweite übersieht. Er ist gefangen worden, bevor er in eine
+Meldung ging — durch das Öffnen aller zwölf Vorkommen im Kontext statt des Vertrauens auf die
+Zahl.
+
+**Damit steht die Bilanz bei 17 eigenen Fehlern**, sechzehn behoben, drei offen (die drei aus
+dem Abschnitt oben; Fehler 17 ist mit dieser Feststellung erledigt).
+
+**Und die drei Auflagen an A-40-5 sind eingetragen** — nachgemessen in Z.217 und 223:
+je Kennung zählen, ein belegter Eintrag ohne Ampel wird nicht gemeldet, beide Sammlungen
+getrennt ausweisen. **Keine Abschwächung, sondern drei zusätzliche Bedingungen.**
