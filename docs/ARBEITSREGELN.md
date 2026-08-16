@@ -1549,3 +1549,95 @@ Bäume werden namentlich aufgezählt, nicht über ein Muster gesucht.**
 **Bis der erste Integrationslauf gefahren ist, gilt der Sechs-Zweige-Blick:** wer eine Kennung
 prüft oder einen Auftrag zieht, misst über **alle sechs Zweige** und nicht gegen `HEAD` — `HEAD`
 ist nachweislich nicht der jüngste Stand.
+
+## ⚠ ZEILENVERWEISE AUF DIESE DATEI SIND UNZUVERLÄSSIG — gemessen 16.08. abends
+
+**Diese Datei trägt Verweise der Form `ARBEITSREGELN.md:<zeile>`. Zwei davon zeigen heute ins
+Leere, und zwar um denselben Betrag:**
+
+```
+zitiert          gemeint             steht wirklich bei    Versatz
+:739             Paragraf 18a         900                  +161
+:812             Hausregel H-8        973                  +161
+```
+
+**Derselbe Versatz an beiden Stellen heißt: ein Einschub weiter oben hat alles dahinter um 161
+Zeilen verschoben.** *Die Regel „zeilenneutral einfügen oder am Dateiende anhängen" ist also
+mindestens einmal gebrochen worden — und niemand hat es bemerkt, weil ein falscher Zeilenverweis
+nicht auffällt: er zeigt auf eine Zeile, die es gibt.*
+
+> **Ein toter Zeilenverweis ist schlimmer als ein fehlender.** Ein fehlender zwingt zum Suchen;
+> ein toter führt an eine falsche Stelle, die plausibel aussieht. Bei `:739` ist es eine
+> **Leerzeile** — wer dort nachsieht, findet nichts und hält den Verweis für einen Tippfehler.
+
+**Verbindlich ab sofort — dieselbe Lehre wie bei `commit-pruefen.sh`:**
+
+```
+NICHT   ARBEITSREGELN.md:739
+SONDERN Abschnitt 18a  (ueber die Ueberschrift zu finden)
+        Hausregel H-8  (ueber die Kennung zu finden)
+```
+
+**Wer eine Zeilennummer nennt, nennt sie zusätzlich zur Sache und nie statt ihrer.** *Die Sache
+ist stabil, solange sie existiert; die Nummer wandert bei jedem Einschub darüber.*
+
+### Und meine eigene Prüfung fällt auf denselben Fehler herein
+
+**Systematisch gemessen: 26 Verweise auf 11 verschiedene Zeilen. Genau EINE davon ist eine
+Leerzeile** — der Rest trägt Text und sieht damit gültig aus.
+
+> **„Trägt Text" ist kein Beleg für „trägt den gemeinten Text".** `:812` zeigt auf eine Zeile
+> über Ballbesitz und Votum — **gemeint war H-8, und die steht bei 973.** Der Anker ist falsch
+> und wäre durch jede maschinelle Prüfung gekommen.
+
+**Alle elf danach einzeln geöffnet — mit dem Kontext der ZITIERENDEN Stelle, nicht der
+zitierten. Die Bilanz ist schlechter als die Skript-Zahl:**
+
+```
+26 Verweise auf 11 Zeilen
+
+FALSCH  4
+  :739  soll Abschnitt 18a sein          steht bei  900   (Anker = LEERZEILE)
+  :812  soll Hausregel H-8 sein          steht bei  973
+  :767  soll Hausregel H-6 sein          steht bei  956
+  :103  soll den IN_ARBEIT-Zaehlbefehl   steht bei  125
+
+RICHTIG 7
+  :145  erklaert [A-Z]+-?[0-9]+   ·  :255 Paragraf 5  ·  :504 E1
+  :509  CODE_FERTIG-Meldung       ·  :693 Diff-Vorschrift
+  :834  RELEASE_FREI-Uebergang    ·  :1469 Nachtrag 16.08.
+```
+
+> **Vier von elf sind falsch — 36 Prozent. Mein Skript meldete einen.** Es prüfte, ob dort
+> *etwas* steht; falsch sind sie, weil dort **etwas anderes** steht. **Drei der vier hätte kein
+> maschinischer Test je gefunden.**
+
+**Das ist die Grenze jeder Ankerprüfung und der eigentliche Grund für die Regel oben:** ein
+Zeilenverweis lässt sich **nicht** maschinell verifizieren, weil die Absicht nicht in der Zahl
+steht. **Ein Verweis auf die Sache lässt sich verifizieren — die Überschrift ist entweder da
+oder nicht.**
+
+### Gesamtbild über alle drei Quellen — gemessen 16.08. abends
+
+```
+Datei                  Verweise   Zeilen   geprueft   davon falsch
+ARBEITSREGELN.md          26        11        11           4
+FORMELSAMMLUNG.md         62        22         5           4
+SOLAR-REGELWERK.md         2         1         1           0
+```
+
+**`SOLAR-REGELWERK.md` ist sauber** — sein einziger Anker `:543` zeigt auf `### S-078`, die
+gemeinte Kennung. **Es hat auch die wenigsten Verweise.** *Das ist keine Tugend der Datei,
+sondern die Folge davon, dass dort fast immer die S-Kennung zitiert wird statt einer Zeile.*
+
+> **Der Zusammenhang ist banal und trägt trotzdem: wo Zeilen zitiert werden, veralten Verweise;
+> wo Kennungen zitiert werden, nicht.** `SOLAR-REGELWERK.md` zeigt, dass es geht — **dieselbe
+> Datenlage, dieselben Einschübe, keine falschen Anker.**
+
+**Dort steht deshalb KEINE Warnung.** *Eine Warnung ohne Befund ist Lärm, und Lärm bringt bei,
+Warnungen zu überlesen (A-03).*
+
+**Die vorhandenen Verweise werden NICHT rückwirkend umgeschrieben** — sie stehen in Befunden und
+Commit-Botschaften mit Zeitstempel und waren zu ihrem Zeitpunkt richtig *(A-20-4)*. **Diese
+Warnung hier ersetzt die Korrektur an hundert Stellen.**
+
