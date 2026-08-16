@@ -132,6 +132,11 @@ P8  DER ORT IST DAS KRITERIUM, NICHT DIE SACHE
 - **Kein Eingriff in `commit-pruefen.sh`** — dort arbeitet A-37. *(Dieselbe Abgrenzung wie A-38.)*
 - **Kein Blatt wird automatisch geändert.** Das Skript **meldet**; das Beheben gehört dem Planner.
 - **Keine Prüfung fremder Dokumente** — nur Auftragsblätter unter `docs/auftraege/`.
+  **⚠ GEMESSEN 18:3x gegen P8, nicht angenommen.** Der Pfad ist hier ein Suchraum, also der
+  Fall, den P8 meint. **32 Dateien außerhalb tragen ebenfalls `auftrag: "X-NN"`** — sie heißen
+  `BEFUND-*` und `BERICHT-*`. **Keine einzige trägt `## Abnahmekriterien`**, also ist keine ein
+  Auftragsblatt. *Die Sache ist „Blatt mit Abnahmekriterien", nicht „Datei in einem Ordner" —
+  und beide Mengen fallen hier zusammen. Der Pfad ist damit belegt, nicht geraten.*
 
 ## Kanten
 
