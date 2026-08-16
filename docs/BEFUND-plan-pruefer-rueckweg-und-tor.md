@@ -3082,3 +3082,68 @@ ist.
 
 **Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau** — der Eintrag von `dor_beleg` bleibt
 beim Integrator.
+
+## Die zwei abwesenden Datensätze unabhängig bestätigt — und ich hatte den Befund vor Stunden gemessen, ohne ihn zu verstehen
+
+*Fremden Fund nachgemessen · 16.08. gegen `2712bf91`*
+
+### Bestätigt, mit denselben zwei Fundstellen
+
+Der Release-Prüfer meldet in `2966ede1`, dass zwei yaml-Blöcke **keinen schließenden Zaun** haben
+und deshalb für jedes blockbasierte Werkzeug **abwesend** sind. Selbst gemessen:
+
+```
+Bloecke ohne Schliesser: 2
+   Z.3215-3255   auftrag: "A-08"   Commit-Tor: unterscheiden, ob ein GIT-Prozess einen Lock haelt
+   Z.7876-7889   vorschlag: "Die Auflage wird VORBEDINGUNG an der Stelle, wo ein kuenftiger …"
+```
+
+**Dieselben zwei, dieselben Zeilenbereiche.** Und seine drei Zahlen treffen ebenfalls: `bloecke.py`
+meldet **A Zaunbilanz 1160 · gerade**, **B 10 Zäune mitten in einer Zeile**, **C Blöcke 442** gegen
+**444 Öffner** — Differenz 2.
+
+### Was ich dazu beitrage: seine Unterscheidung ist die eigentliche Leistung
+
+**Ich habe genau diese zwei Blöcke heute Nacht schon gemessen** — im A-42-Zählbefehl-Befund steht:
+*„zwei yaml-Blöcke sind nie geschlossen (Z.3215 und Z.7876); ein auf `^```$` verankertes Muster
+verliert sie stillschweigend."*
+
+**Ich habe die Tatsache gemessen und die Folgerung nicht gezogen.** Sein Satz ist der Fund:
+
+> **„Ein Block ohne schließenden Zaun ist nicht KAPUTT, er ist ABWESEND — der Unterschied, den die
+> Werkzeugkette nicht kannte."**
+
+**Ein kaputter Block wird gezählt und gemeldet. Ein abwesender wird nicht einmal vermisst.** Ich
+hatte ihn als Parser-Randfall behandelt, er hat ihn als Datenverlustpfad erkannt. *Dieselbe
+Messung, zwei Tiefen.*
+
+### Und ein Zusatzfund, den ich beim Nachfahren gemacht habe
+
+**`scripts/bloecke.py` braucht `NODE_PATH`, und ohne ihn fällt Prüfung C still aus:**
+
+```
+ohne NODE_PATH   exit 1   A gerade · B 10 · C "konnte nicht geprueft werden: Cannot find module"
+mit  NODE_PATH   exit 0   A gerade · B 10 · C Bloecke 442 · parsen 418 · kaputt 24 (Grundlinie 24)
+```
+
+**Beide Exit-Codes ohne Pipe gelesen.** Der Unterschied ist nicht kosmetisch: **ohne `NODE_PATH`
+meldet der Lauf `exit 1`, aber der Grund ist ein fehlendes Modul, kein Befund.** Wer die Ausgabe
+überfliegt, sieht zwei grüne Prüfungen und eine Umgebungsmeldung — **und hat in Wahrheit eine
+Prüfung gar nicht gefahren.**
+
+**Das ist dieselbe Klasse wie A-37-8s `NODE_PATH`-Entlastung**, nur an einem anderen Werkzeug: *ein
+Prüfer, der aus Umgebungsgründen schweigt, ist von einem grünen nicht zu unterscheiden, wenn man
+nur auf die Zeilen schaut.*
+
+**Soll:** `bloecke.py` sollte den Modulfehler von einem Prüfbefund **unterscheidbar** melden — etwa
+mit einem eigenen Rückgabewert oder dem Wort `UNGEPRUEFT` statt einer Fehlermeldung im
+Prüfungsblock. *Das ist Werkzeugarbeit und gehört nicht mir.*
+
+### Ball
+
+**integrator** — die zwei fehlenden Zäune stehen in `docs/STATUS.md`, und wer einen Zaun setzt,
+entscheidet, wo der Block endet. **Er sagt das selbst und fasst sie richtigerweise nicht an.**
+
+**release-pruefer** — der `NODE_PATH`-Punkt an `bloecke.py`, seinem Werkzeug.
+
+**Kein Zustandsfeld angefasst, kein Bau.**
