@@ -1,0 +1,117 @@
+"""RUECKWEG — Integration in die Rollenbaeume nachziehen, Vorbedingungen je Baum einzeln.
+
+GEBAUT 17.08. 00:2x nach einem eigenen Fehler, den der Fehler 27 des Plan-Pruefers sichtbar
+gemacht hat. Er hatte `git log ... 2>/dev/null | wc -l` gefahren und die 0 als "null ungepushte
+Commits" gelesen — tatsaechlich war es die Zeilenzahl eines nach /dev/null geleiteten
+Fehlerstroms. Seine Lehre: **eine ausgefallene Messung ist KEIN Ergebnis.**
+
+DERSELBE GRIFF STAND IN MEINER RUECKWEG-VORBEDINGUNG:
+
+    G=$(git -C "$P" status --porcelain --untracked-files=no | wc -l)
+    if [ "$G" != "0" ] ... -> UEBERSPRUNGEN
+
+Am Objekt geprueft, mit einem Pfad, der kein Repository ist:
+
+    gueltiger Baum         G=0
+    KEIN git-Verzeichnis   G=0     <- wc -l zaehlt die leere Ausgabe als 0
+
+**Ein Baum, in dem `git status` fehlschlaegt, galt damit als sauber, und der Merge waere
+gelaufen.** Genau das, wogegen die Vorbedingung steht. Die zweite Groesse war zufaellig
+fail-safe: `rev-list --count` liefert bei Fehler einen LEEREN String, und `[ "" != "0" ]` ist
+wahr, also wurde uebersprungen. Eine von zwei Groessen richtig — aus Versehen, nicht aus Bau.
+
+DIESES WERKZEUG PRUEFT EXIT-CODES, NICHT AUSGABEN. Jede der drei Vorbedingungen kann drei
+Ergebnisse haben: erfuellt, nicht erfuellt, ODER nicht messbar — und "nicht messbar" fuehrt
+immer zum Ueberspringen, nie zum Merge.
+
+    0  alle erreichbaren Baeume sind auf Stand
+    1  mindestens ein Merge ist fehlgeschlagen
+    2  mindestens ein Baum war nicht messbar (Umgebung, nicht Bestand)
+"""
+import subprocess
+import sys
+
+BAEUME = [
+    'ticket',
+    'ticket-rolle-planner',
+    'ticket-rolle-plan-pruefer',
+    'ticket-rolle-generator',
+    'ticket-rolle-evaluator',
+]
+WURZEL = '/Users/yamanuri/Documents'
+
+
+def git(pfad, *args):
+    """Gibt (exit, stdout) zurueck. Der Exit-Code ist der ECHTE, nie der einer Pipe."""
+    r = subprocess.run(['git', '-C', pfad, *args], capture_output=True, text=True)
+    return r.returncode, r.stdout.strip()
+
+
+def lage(pfad, ziel):
+    """(zustand, text) — zustand ist 'bereit', 'halt' oder 'unmessbar'."""
+    rc, kopf = git(pfad, 'rev-parse', '--short', 'HEAD')
+    if rc:
+        return 'unmessbar', 'HEAD nicht lesbar'
+
+    rc, offen = git(pfad, 'status', '--porcelain', '--untracked-files=no')
+    if rc:
+        return 'unmessbar', 'status nicht lesbar'
+    n_offen = len([z for z in offen.split('\n') if z.strip()])
+
+    rc, voraus = git(pfad, 'rev-list', '--count', f'{ziel}..HEAD')
+    if rc or not voraus.isdigit():
+        return 'unmessbar', 'rev-list nicht lesbar'
+    n_voraus = int(voraus)
+
+    if n_offen:
+        return 'halt', f'{kopf} · {n_offen} getrackt offen'
+    if n_voraus:
+        return 'halt', f'{kopf} · {n_voraus} voraus'
+    if kopf == ziel[:len(kopf)]:
+        return 'bereit', f'{kopf} · bereits auf Stand'
+    return 'bereit', kopf
+
+
+def main(ziel=None):
+    if ziel is None:
+        rc, ziel = git(WURZEL + '/ticket-release-pruefung',
+                       'rev-parse', 'fork/auto/hausplaner-integration')
+        if rc:
+            print('  Ziel nicht lesbar — fork/auto/hausplaner-integration')
+            return 2
+    kurz = ziel[:8]
+    print(f'  Ziel: {kurz}\n')
+
+    fehler = unmessbar = 0
+    for name in BAEUME:
+        pfad = f'{WURZEL}/{name}'
+        zustand, text = lage(pfad, ziel)
+        if zustand == 'unmessbar':
+            unmessbar += 1
+            print(f'  {name:28} UNMESSBAR      {text} — nicht angefasst')
+            continue
+        if zustand == 'halt':
+            print(f'  {name:28} UEBERSPRUNGEN  {text}')
+            continue
+        vor = text.split(' ')[0]
+        if vor == kurz:
+            print(f'  {name:28} bereits auf Stand')
+            continue
+        rc, _ = git(pfad, 'merge', '--ff-only', ziel)
+        rc2, neu = git(pfad, 'rev-parse', '--short', 'HEAD')
+        if rc:
+            fehler += 1
+            print(f'  {name:28} MERGE FEHLGESCHLAGEN  {vor}')
+        else:
+            print(f'  {name:28} {vor} -> {neu}')
+
+    print()
+    if fehler:
+        print(f'  {fehler} Merge(s) fehlgeschlagen')
+    if unmessbar:
+        print(f'  {unmessbar} Baum/Baeume nicht messbar — UNGEPRUEFT, nicht gruen')
+    return 1 if fehler else (2 if unmessbar else 0)
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else None))
