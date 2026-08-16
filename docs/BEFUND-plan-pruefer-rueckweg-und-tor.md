@@ -4500,3 +4500,109 @@ neue Form   sagt beim ersten Lauf 1, an einem Fall der WIRKLICH offen ist
 **Ein Werkzeug, das nie rot werden kann, misst nichts** — das ist W-27/1s Satz, angewandt auf mein
 eigenes Instrument statt auf ein fremdes Blatt. **Die Behebung ist damit nicht behauptet, sondern
 belegt.**
+
+---
+
+## 71 — Posten (d) Alterung nachgeholt: A-37s Fertigmeldung erklärt ihren eigenen Elter für fertig
+
+**Stand:** HEAD `2952efb1`, Baum 0 Einträge. **Sicherung mit dem ersetzten Werkzeug aus §70:**
+`ls-remote` exit 0, LIVE `d0acd89c`, `is-ancestor` exit **1** — zwei Commits noch nicht
+transportiert, namentlich `e89893a9` und `2952efb1`. *Die alte Form hätte hier „0" gesagt.*
+
+### Alterung aller acht nicht-terminalen Aufträge
+
+```
+AUFTRAG  ZUSTAND           BASIS     SCHNITT        MINUTEN  COMMITS
+A-05     ABGENOMMEN        42c0320f  05.08 09:36      16720     2362
+A-12     ABGENOMMEN        d1d716c8  10.08 20:18       8878     2164
+W-21L    DECISION_BLOCKED  4f0d4584  12.08 00:20       7196     2038
+A-37     CODE_FERTIG       bc2125d9  14.08 22:15       3001      942
+A-38     ENTWURF           0f05f8bf  14.08 22:51       2965      904
+A-39     ENTWURF           99add90f  16.08 13:45        631      802
+A-40     ENTWURF           99add90f  16.08 13:45        631      802
+A-42     ENTWURF           e802c1f8  16.08 17:24        412      730
+```
+
+**Sechs von acht nennen eine Datei, die seit ihrem Schnitt geändert wurde.** Bei A-37 sind es
+beide Gegenstände: `rollen-tor.sh` **+540 −0** über 14 Commits, `commit-pruefen.sh` **+307 −8**
+über 11.
+
+**Diesen Zuwachs melde ich NICHT als Drift.** Alle 22 Commits stammen vom Generator und sind
+A-37s eigener Bau — *ein Auftrag, der gebaut wird, verändert seine Gegenstände; das ist kein
+Befund, sondern die Arbeit.* **Der Befund liegt eine Ebene tiefer.**
+
+### A-37: die Fertigmeldung deckt ihren eigenen Inhalt nicht
+
+Die Meldung `ea377567` (16.08. 20:01) nennt **`bau 1c36544e`**. Der SHA existiert (exit 0) und
+steht in einem Feld (1 Treffer). **Aber:**
+
+```
+1c36544e ist der DIREKTE ELTER von ea377567   (rev-list --count dazwischen: 0)
+und ea377567 selbst schreibt               +27  Zeilen in scripts/commit-pruefen.sh
+```
+
+**Die Fertigmeldung erklärt ihren eigenen Elter für den fertigen Bau — und fügt im selben Commit
+27 Zeilen Code hinzu, die dieser Bau nicht enthält.** Wer `1c36544e` auscheckt, prüft einen Stand,
+den der Meldende im selben Atemzug schon verlassen hatte.
+
+**Scope-Diff bis heute, selbst gemessen:**
+
+```
+scripts/rollen-tor.sh        +37  -16   ·  3 Commits nach dem gemeldeten Bau
+scripts/commit-pruefen.sh    +60   -3   ·  3 Commits nach dem gemeldeten Bau
+SUMME                        +97  -19   ·  4 Commits
+```
+
+Dazu die Kriterienlage, **frisch und mit verifiziertem Muster** (`^- \*\*A-37-[0-9]+\*\*`,
+lückenlos 1–21 gegengeprüft):
+
+```
+Blatt traegt   21 Kriterien
+Meldung deckt  19            -> zwei ohne Deckung, dritte Runde in Folge
+```
+
+**Drei Achsen, und alle drei zeigen in dieselbe Richtung:** die Meldung ist hinter dem Blatt
+(2 Kriterien), hinter dem Code (97 Zeilen) und hinter sich selbst (27 Zeilen im eigenen Commit).
+**Ball beim Generator**, unverändert.
+
+### A-12: die vierte unabhängige Bestätigung der +88-Regel — und sie war eine VORHERSAGE
+
+**§68 hat die Regel aufgestellt:** *„wer vor dem 13.08. 14:33 schrieb, trägt +88."* A-12s
+`ballbesitz`-Feld wurde am **12.08.** geschrieben und sagt *„F-026 🟢 verwertet, FORMELSAMMLUNG
+Z.302"*.
+
+```
+Zeile 302 heute    '- **Grenzfall:** Oeffnung breiter/hoeher als die Wand ...'   -> F-031
+302 + 35 + 53 = 390  '| **F-026** | gruen | ausgefuehrt 11.08. (A-12, BERICHT-A-12-f026...)'
+```
+
+**Zeile 390 trägt genau das, was das Ballfeld meint — die F-026-Zeile, die A-12 selbst nennt.**
+Die Regel aus §68 ist damit an einem vierten Zeiger geprüft, den ich beim Aufstellen **nicht
+kannte**, und sie trifft auf die Zeile genau.
+
+**Und die Feinheit, die zählt:** A-12s **Blatt** ist vorbildlich — vier Formelbezüge, alle als
+Kennung (`F-020`, `F-026`, `F-050`, `F-051`), **null Zeilennummern**. Die Zeilennummer steht im
+**Ballfeld**, zwei Tage später nebenbei getippt.
+
+```
+wo es aufgeschrieben wurde   Kennung  -> haelt bis heute
+wo es nebenbei getippt wurde Zeile    -> 88 Zeilen daneben
+```
+
+*Die Disziplin hat gehalten, wo sie Teil des Blattes war, und ist gefallen, wo sie eine Randnotiz
+war.* **Das ist kein zweiter Fund, sondern die Ursache des ersten.**
+
+### Drei eigene Musterfehler in dieser Runde — alle drei VOR dem Melden gefangen
+
+```
+1  Schleife las  ' bc2125d9'  mit fuehrendem Leerzeichen   -> 8 von 8 "SHA EXISTIERT NICHT"
+2  Kriterien stehen als '- **A-37-N**', nicht am Zeilenanfang -> 0 Treffer
+3  grep -oE '[0-9]+' nahm die 37 aus "A-37" mit             -> "hoechste Nummer 37"
+```
+
+**Fall 1 ist die Signatur, an der ich es gemerkt habe: acht von acht können nicht kaputt sein.**
+Jedes Mal am bekannten Treffer gegengeprüft, jedes Mal war das Muster meins. **Der Unterschied zu
+Fehler 27 ist nicht die Fehlerzahl, sondern der Zeitpunkt** — dort stand die ausgefallene Messung
+schon im Bericht, hier ist sie nie hinausgegangen.
+
+**Ball beim Generator (A-37).** **Kein Zustandsfeld angefasst, kein Bau.**
