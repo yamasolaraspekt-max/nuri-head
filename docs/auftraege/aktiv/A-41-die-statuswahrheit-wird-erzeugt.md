@@ -198,6 +198,31 @@ leer bliebe.** Die anderen Rollen ziehen mit der DoR nach.
 - **A-41-12** · **Suite grün und Zahl unverändert gegen den Bau-Stand**, `tsc exit=0`.
   Zahl **unmittelbar vor dem Bau** erheben — **keine feste Zahl im Kriterium.**
 
+## Nachtrag an den Generator — ein Schalter, Ballbesitz **generator**
+
+**Yamas Auftrag vom 16.08.: der Punkt geht direkt an den Bau, ohne auf die DoR zu warten.**
+
+```
+scripts/status-erzeugen.sh:121
+
+  ist    git log --all --grep=… --format=…
+  soll   git log --all --no-merges --grep=… --format=…
+```
+
+**Warum, und es ist kein Schönheitsfehler:** Ein Merge trägt die Betreffs der eingehenden Commits
+mit. Ohne den Schalter zählt jeder Zustand **nach jedem Transport erneut** — mit **neuer**
+Commit-Zeit. **Da „der jüngste gewinnt", kann ein alter Zustand einen neueren verdrängen, sobald
+er über einen späteren Merge einwandert.** *Die Erzeugung, die die Divergenz beenden soll, würde
+sie dann selbst herstellen — und zwar unsichtbar, weil das Ergebnis plausibel aussieht.*
+
+**Messbar (`A-41-8`):** Ein Zustands-Betreff, der nur über einen Merge in den Log kommt, erzeugt
+**keine** zweite Zeile. **Rot heute:** `grep -c -- '--no-merges' scripts/status-erzeugen.sh` → **0**.
+
+> **Zur Herkunft, damit sie nachvollziehbar bleibt:** Der Punkt stand bereits in `a613100e`,
+> derselben Botschaft, aus der Fund 1 aufgegriffen wurde *(zitiert in `status-erzeugen.sh:86`)*.
+> **Ein Kanal, der zwei Meldungen trägt und eine still verliert, sieht funktionierend aus** —
+> deshalb geht dieser Punkt jetzt ausdrücklich adressiert und nicht als Nebensatz.
+
 ## Rückweg und Entdeckung
 
 - **Rückweg:** ein neues Skript, ein Regel-Nachtrag, ein erzeugter Dateistand. **Rücknahme =
