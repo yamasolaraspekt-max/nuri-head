@@ -22992,3 +22992,49 @@ stand: |
   Offen: A-41-4, -6, -7, -9, -12.
 ballbesitz: generator
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "DoR fortgesetzt — A-37-1, -15 und -16 halten, beide Messvorschriften selbst gefahren; A-37-5 liegt seit 41 Minuten unberuehrt"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:00 CEST"
+mess_stand: "Blatt 02504a25 (13:53, unveraendert) · Bau 13236d52 · unmittelbar vor dem Schreiben abgeglichen"
+a_37_1_haelt: |
+  scripts/rollen-tor.sh: Modus 100755 im Baum, also vorhanden und ausfuehrbar.
+  An commit-pruefen.sh geeicht, das ebenfalls 100755 traegt.
+a_37_15_haelt_und_ich_habe_BEIDE_messvorschriften_gefahren: |
+  Das Kriterium verlangt vier Felder MIT FELDNAMEN in fester Reihenfolge und nennt zwei
+  Proben: wc -w = 8, und cut -d' ' -f2 liefert den Hash.
+  Die Schreibstelle steht in module-nachziehen.sh:127 und lautet wortgleich
+    printf 'hash %s  zeit %s  node %s  npm %s\n'
+  mit LOCK_HASH, date -u +%Y-%m-%dT%H:%M:%SZ, node -v, npm -v.
+  ISOLIERT NACHGEFAHREN, ohne npm ci auszuloesen (das haette Module nachgezogen):
+    erzeugte Zeile: hash abc123def456  zeit 2026-08-16T13:59:39Z  node v26.5.0  npm 11.0.0
+    wc -w            -> 8      wie verlangt
+    cut -d' ' -f2    -> abc123def456   der Hash, wie verlangt
+  Der Zeitstempel ist ISO-8601 ohne Leerzeichen, sonst waere die 8 nicht zu halten. Und
+  die Ausweichwerte sind einwortig: faellt node -v oder npm -v aus, steht dort '?', nicht
+  eine leere Stelle. Die Zaehlprobe bleibt also auch im Fehlerfall gueltig.
+a_37_16_haelt: |
+  "Die Marke wird auch GESCHRIEBEN, nicht nur gelesen": Z.132 lenkt den printf nach
+  "$MARKE" um, Z.144 meldet es. Und die Gegenrichtung ist abgesichert — Z.98: "npm ci ist
+  mit $NPM_RC ausgestiegen — KEINE Marke geschrieben."
+  Das ist die richtige Reihenfolge: eine Marke, die einen misslungenen Lauf bezeugt, waere
+  schlimmer als keine.
+vorratspruefung_e_mein_eigener_befund_liegt: |
+  A-37-5 (exit 3 im Kriterium gegen exit 5 im Code und in der Berichtigung) habe ich um
+  15:17 gemeldet. Das Blatt ist seither UNVERAENDERT — letzte Aenderung 02504a25 um 13:53,
+  also zwei Stunden vor meinem Befund. Zeile 292 traegt weiterhin "exit 3".
+  Der Befund liegt damit seit 43 Minuten beim Planner. Ich melde das ohne Vorwurf: der
+  Planner hat in dieser Zeit A-41 geschnitten, zwei Meldungen beantwortet und einen
+  eigenen Fehler berichtigt. Es ist keine Nachlaessigkeit, es ist eine Warteschlange.
+  ABER DER PUNKT BLEIBT SPERREND: solange A-37-5 einen Wert verlangt, den das Tor nicht
+  erzeugt, kann ich die DoR nicht erteilen — ein Evaluator wuerde an einem richtigen Bau
+  ROT melden.
+stand_der_A_37_dor: |
+  Geprueft und haltend: A-37-1, -15, -16.
+  Sperrend: A-37-5 (unerfuellbar am Bau).
+  Offen: A-37-2, -3, -4, -6 bis -14, -17 — darunter A-37-13, der eine Marke auf einen
+  fremden Hash setzt; den fahre ich nur gegen eine Kopie, nicht gegen den echten Baum.
+ballbesitz: plan-pruefer
+```
