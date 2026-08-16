@@ -89,6 +89,7 @@
 | **A-38** Merges laufen am Tor vorbei | `ENTWURF` | **Plan-Prüfer** | Schnitt 14.08. 23:00 · Basis `0f05f8bf` | **Blatt** `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md` · Gemessen: **41 von 309** Commits in 48 h ohne Rollenmarke, **ausnahmslos Merges**; von 32 Merges tragen **4** eine Marke. Versionierter `commit-msg`-Hook plus `core.hooksPath`. **Neun Kriterien**, A-38-6 (greift im ZWEITEN Worktree) ist das tragende. **Kein Eingriff in `commit-pruefen.sh`** — dort arbeitet A-37. **DoR steht aus.** |
 | **A-39** Fünf Innenprüfungen des Blattes | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `99add90f` | **Blatt** `docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md` · Fünf Prüfungen, **je ein Belegfall von heute**: Kante ohne Kriterium (K6) · feste Zahl ohne Standbezug (A-33-1, Suite 1750) · geforderte Datei ohne Erzeuger (A-37-12) · Kriterium gegen den eigenen Blattkopf (A-33-7) · Rückgabewert doppelt (`exit 3`). **Alle fünf waren VOR dem ersten Zeichen Code vorhanden und maschinell erkennbar; jeder kostete eine Runde.** Läuft im **DoR-Schritt**, nicht im Tor — sie misst ein Blatt, keinen Commit. `A-39-2..6` sind **historische Positivproben** an Ständen, an denen der Fehler nachweislich vorlag. **DoR steht aus.** |
 | **A-40** Der Zustand am Facheintrag | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `99add90f` | **Blatt** `docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md` · Drei Zustände (`ABGESCHRIEBEN` · `NACHGERECHNET` · `GEGENGEPRUEFT`), zwei Pflichtfelder, die **den Fall tragen statt der Behauptung**, die sechste Innenprüfung und der **Drei-Fragen-Test** (Normbezug · Dritter · Bemessung) aus Yamas §1-Entscheidung vom 16.08. **KEINE Zahl in einem Kriterium** — A-40-5 nennt den Zählbefehl, weil dieselbe Formelsammlung drei Zählungen und drei Ergebnisse ergab. **DoR steht aus.** |
+| **W-17/1** Export und Speichern ablesen | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `8faca79c` | **Blatt** `docs/auftraege/aktiv/W-17-1-export-und-speichern-ablesen.md` · **Stufe B, Ziel `BESCHRIEBEN`.** Einordnung **gemessen**: Reifegrad `LEER`, die sieben Werkbank-Blätter sind reine Vorlagen (**249 Z.**), Produktivcode reichlich. **Der Code liegt an ZWEI Orten** — Insel (`arbeitsbereichSpeicher.ts`, `paketSpeichern.ts`, 37 Dateien) **und Server** (`SpeichereHausplanerDokument.php`, `StelleSnapshotWieder.php`). **Die Insel speichert nicht selbst.** `W-17-1-4` zieht die **Registerzeile** nach — das Kriterium existiert wegen der W-37-Lücke. `W-17-1-5` schließt Produktivcode aus. **DoR steht aus.** |
 | **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`BETRIEBSBESTAETIGT`** | — | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
 ### ⚠ ÜBERHOLT — AUFGABENVERTEILUNG Planner 12.08. · Der aktuelle Stand steht am DATEIENDE unter „AUFGABENVERTEILUNG 14.08."; dieser Block bleibt als Beleg stehen und wird nicht umgeschrieben (A-20-4). Er zeigt drei Rollen auf Arbeit, die es nicht mehr gibt — gemeldet vom plan-pruefer am 13.08. 21:14, Ball lag seitdem beim Planner.
@@ -18226,6 +18227,32 @@ regelgrundlage: "ARBEITSREGELN.md, Nachtrag vom 16.08. Die drei Zustaende, die z
   und der Drei-Fragen-Test sind ENTSCHIEDEN und stehen dort. Dieses Blatt BAUT sie, es erfindet
   sie nicht."
 
+
+```
+
+```yaml
+auftrag: "W-17/1"
+zustand: ENTWURF
+ballbesitz: plan-pruefer
+blatt: "docs/auftraege/aktiv/W-17-1-export-und-speichern-ablesen.md"
+basis_sha: 8faca79c
+dor_schnitt_sha: "8faca79c"
+art: "STUFE B — Ablesung, Ziel BESCHRIEBEN. KEIN Produktivcode."
+spur: A
+prioritaet: P2
+dor_beleg: "steht aus"
+claim: "planner 16.08. — Claim VOR dem Schnitt; W-17/1 hatte null Treffer und null Blaetter."
+abweichung_gemeldet: |
+  Yamas Auftrag lautete auf VIER Blaetter (W-06, W-07, W-20, W-23 nach meinem eigenen
+  Vorschlag). Die Messung widerlegt den Vorschlag: alle vier stehen bereits auf
+  BESCHRIEBEN mit gefuellten Werkbank-Blaettern — das Ziel waere schon erreicht, und
+  Paragraf 5 verbietet ein erfuelltes Kriterium. Mein Vorschlag war ein Widerspruch in
+  sich: die BESCHRIEBENEN, die noch nie abgelesen wurden. BESCHRIEBEN heisst abgelesen.
+  Von den LEER-Werkzeugen bleibt genau EINES: W-17. W-19 faellt aus, weil dort kein Code
+  zu lesen ist (Zeitgleichung 0 Treffer, Schattenwurf 1, die 37 Treffer sind je EINER pro
+  Datei) — W-19 ist ein BAU, keine Ablesung. W-24 bis W-32 haben kein Werkbank-Verzeichnis.
+  EIN Blatt statt vier, und die Abweichung steht hier statt in einer Fussnote.
+```
 
 ```yaml
 auftrag: "A-06"
