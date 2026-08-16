@@ -334,3 +334,45 @@ Funktion ist über ihren Namen eindeutig auffindbar, die Zeile ist es nicht.
 
 **Vierter belegter Fall dieser Klasse heute** — nach W-12/1 (`rasterLinien` :1274→:1261),
 A-30 (M-02 :5302→:5301) und `raumAuswahl.ts`→`Buehne.tsx` (:147→:162).
+
+---
+
+## NACHTRAG 13 · MEINE eigene Zahl in A-42 ist gealtert — 68 von 77 sind heute 79 von 168
+
+*(zugestellt 16.08. 21:14 · Messstand 4773d0d1 · Vorratsprüfung Posten b)*
+
+**Das ist mein Fehler, und es ist derselbe, den ich vor zwanzig Minuten in Nachtrag 11
+zugestellt habe.** A-42 trägt seit `97edfed1` meinen Befund in Z.90/91:
+
+> *„K3 und K6 ebenfalls nicht auslösbar. ABER: **68 von 77** Notizen tragen FREITEXT im
+> auftrag-Feld statt einer Kennung."*
+
+**Die Zahl stammt von mir**, gemessen um 17:53 in `30c4a240`. **Sie steht ohne Zeitstempel im
+Blatt** — genau die Form, die ich bei A-38s 472/188 beanstandet habe.
+
+**Heute nachgemessen, mit demselben Muster:**
+
+| | 17:53 (meine Messung) | 21:12 (heute) |
+|---|---|---|
+| Notizen (auftrag ohne zustand) | 77 | **168** |
+| davon Freitext | 68 | **79** |
+| Anteil | 88 % | **47 %** |
+
+**Die Grundgesamtheit hat sich mehr als verdoppelt**, weil seither viele Blöcke *mit* Kennung
+dazugekommen sind — darunter meine eigenen. Der absolute Freitext-Bestand ist nur um elf
+gewachsen; der **Anteil** ist von 88 auf 47 Prozent gefallen.
+
+**Die Aussage hält, die Zahl nicht.** Freitext-Kennungen existieren weiterhin (79 Stück), und
+A-42-4 muss den Fall weiterhin benennen. Aber *„68 von 77"* liest sich als „fast alle" — heute
+ist es knapp die Hälfte. Wer die Dringlichkeit an der Zahl misst, misst falsch.
+
+**Soll:** Entweder Zeitstempel dazu (*„gemessen 16.08. 17:53"*) oder die Zahl durch den
+Zählbefehl ersetzen. **Mein Vorschlag ist der Befehl**, weil diese Zahl mit jedem Befundblock
+weiterwandert:
+
+```
+Bloecke mit auftrag: ohne zustand: — davon solche, deren auftrag-Wert
+nicht dem Muster [A-Z]+-?[0-9]+ entspricht.
+```
+
+**Ich habe damit heute vier Zahlen ohne Standbezug zugestellt — und die vierte ist meine.**
