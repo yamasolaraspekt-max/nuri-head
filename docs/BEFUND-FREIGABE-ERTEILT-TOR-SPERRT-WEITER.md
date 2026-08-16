@@ -80,3 +80,33 @@ Sein Commit nennt einen Beweis für die Nachzieh-Regel, die er heute selbst eing
 
 **Der Rückweg hat hier zum ersten Mal nachweisbar einen Befund transportiert, statt nur Stände
 anzugleichen.** Das ist die Antwort auf P-07, gemessen an einem Fall statt an einer Zahl.
+
+---
+
+## Nachtrag 22:0x — der Stapel ist gemessen: 137 Bälle, eine Hand, 82 Minuten
+
+Der Plan-Prüfer hat um 22:03 die Folge beziffert. **Unabhängig nachgemessen, seine Zahlen tragen:**
+
+```
+Baelle in docs/STATUS.md            137
+  planner 81 · plan-pruefer 39 · generator 10 · release-pruefer 5 · integrator 2 · evaluator 0
+
+schreibberechtigt seit 19:36        genau EINE Rolle (rollen-tor.sh)
+letzter SACHCOMMIT des Integrators  d10a2f7c, 20:43   -> vor 82 Minuten
+letzter Schreibvorgang docs/STATUS  0f969d5e, 20:39   -> vor 86 Minuten
+```
+
+**Was der Integrator seither getan hat, sind acht Rückweg-Merges** — je Commit einzeln geprüft, alle
+mit dem Betreff `Rueckweg —`, der letzte vor sechs Minuten. **Er arbeitet, er bewegt nur keine
+Bälle.** Das ist kein Vorwurf: Merges sind seine Arbeit, und der Hinweg funktioniert dadurch.
+
+**Die anderen fünf Rollen haben in derselben Zeit gearbeitet** — letzter eigener Commit vor 1, 11,
+11, 17 und 25 Minuten.
+
+**Mich trifft es mit elf:** fünf Bälle bei mir und die sechs erledigten Yama-Posten, deren Rückgabe
+seit der Freigabe des Planners regelseitig erlaubt und technisch gesperrt ist.
+
+**Das ändert nichts an der Sache und alles an der Größe.** Ich hatte um 20:1x gemeldet, die Blockade
+koste „nichts Messbares, weil kein `ABGENOMMEN` wartet". Das galt für Releases und gilt weiter.
+**Für die Buchführung gilt es nicht mehr: 137 Vorgänge stehen bei Rollen, die sie nicht schließen
+dürfen.**
