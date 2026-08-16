@@ -188,7 +188,7 @@ P8  DER ORT IST DAS KRITERIUM, NICHT DIE SACHE
   **Verlangt: `5bbc55bf` selbst, und die Negativprobe am NACHFOLGER**, der ihn behoben hat.
 - **A-39-11** · **P6 findet die Rot-Lage mit Uhr.** Gegen **`5bbc55bf`** gefahren — den Stand von
   A-38 **vor** der Umstellung —, **muss A-38-2 gemeldet werden**: dort belegte *„28 von 32
-  Merges"* aus einem `--since='48 hours ago'`-Fenster.
+  Merges"* aus einem wandernden 48-Stunden-Fenster. *(In Worten statt als Befehl — sonst meldet P6 sein eigenes Beispiel und erzeugt einen Fehlalarm an sich selbst.)*
   **Negativprobe am selben Paar:** die heutige Fassung mit fünf festen SHAs wird **nicht**
   gemeldet. *(Gegenprobe des Plan-Prüfers: in `5bbc55bf` steht „28 von 32" zweimal und feste
   SHAs null Mal, heute umgekehrt — der Stand trägt genau das, was P6 finden soll.)*
