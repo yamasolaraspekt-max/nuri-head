@@ -10052,6 +10052,7 @@ release_pruefung: "release-pruefer 15.08.: RELEASE_FREI und bis BETRIEBSBESTAETI
 ```yaml
 auftrag: "A-33"
 zustand: CODE_FERTIG
+claim_abnahme: "evaluator 16.08. 13:24 — Abnahme Runde 1 laeuft. Gemessen wird der Bau am COMMIT; Pruefstand nach §8/§9."
 bau_sha: 3e22e61b   # Lieferung: scripts/a33-kennungen-nachziehen.sh — KEIN Eingriff in docs/STATUS.md
 bau_bericht: "A-33 IST UMGESCHNITTEN WORDEN, und ich baue gegen den Umschnitt: Liefergegenstand ist
   ein SKRIPT, keine Bearbeitung (Yama, 15.08.). Ich habe docs/STATUS.md inhaltlich NICHT angefasst
