@@ -191,7 +191,20 @@ leer bliebe.** Die anderen Rollen ziehen mit der DoR nach.
   keine Nebensache.**
 - **A-41-7** · **Widerspruch wird gemeldet, nicht aufgelöst.** Zwei Zustands-Commits derselben
   Kennung mit identischer Zeit → beide in der Meldung, Rückgabe `2`, **Tafel unverändert**.
-  *(Probe künstlich herstellbar, Beleg als Rohausgabe.)*
+  **DER WEG IST BENANNT — P7 auf das eigene Blatt angewandt.** Bis 17:2x stand hier nur *„Probe
+  künstlich herstellbar"*, ohne zu sagen **wer** sie herstellt und **wie**. **Es ist das einzige
+  der zwölf Kriterien, das in keiner einzigen Meldung vorkommt** — und der Grund dafür ist
+  wahrscheinlich genau dieser fehlende Weg.
+  ```
+  GIT_COMMITTER_DATE / GIT_AUTHOR_DATE auf denselben Wert setzen,
+  zwei Zustands-Commits derselben Kennung mit VERSCHIEDENEM Zustand
+  in einem Wegwerf-Zweig des GENERATOR-Baums erzeugen,
+  status-erzeugen.sh --tafel dagegen fahren, Rohausgabe und exit-Wert.
+  ```
+  **Die drei P7-Fragen beantwortet:** **WER** — der Generator, in seinem eigenen Baum ·
+  **DARF er** — ja: neue Commits mit gesetztem Datum sind **kein** Umschreiben veröffentlichter
+  Historie, Punkt 17 bleibt unberührt · **EXISTIERT die Eigenschaft** — ja, `%at` ist frei
+  setzbar. **Der Wegwerf-Zweig wird nicht transportiert.**
 - **A-41-8** · **Merges zählen nicht.** Ein Zustands-Betreff, der nur über einen Merge in den
   Log kommt, erzeugt **keine** zweite Zeile. *(K7 — sonst wandert jeder Zustand beim Transport
   erneut ein.)*

@@ -1520,6 +1520,19 @@ keine zweite Wahrheit.*
 - **Solange kein Integrator läuft, wird nur gemeldet, nicht geschrieben.** Ein Weg kommt vor
   seiner Sperre; A-37 Teil 2 sichert danach eine offene Tür, statt eine zu ersetzen.
 
+### Zwei Verzeichnisse, von denen eines tot ist
+
+**`ticket-rolle-release` ist NICHT der Baum des Release-Prüfers.** Es ist der leere, abgelöste
+Rest aus P2H-09 — **detached HEAD, `ls-files` 0**. **Der lebende Baum heißt
+`ticket-release-pruefung`.**
+
+> **Wer die sechs Bäume misst und nach dem Namensmuster `ticket-rolle-*` sucht, greift den toten
+> und hält seine Nullen für einen Befund.** Genau das ist am 16.08. passiert: die Erhebung zu
+> A-37-18 meldete „2 von 6", richtig sind **3 von 6**.
+
+**Bis der tote Rest beseitigt ist — eine Löschung, also Yamas Entscheidung — gilt: die sechs
+Bäume werden namentlich aufgezählt, nicht über ein Muster gesucht.**
+
 ### Übergangszeit
 
 **Bis der erste Integrationslauf gefahren ist, gilt der Sechs-Zweige-Blick:** wer eine Kennung
