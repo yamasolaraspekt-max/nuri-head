@@ -74,6 +74,19 @@ davon MIT Rollenmarke                               12    -> 58 ohne  = 83 %
 **Der Messbefehl, damit die drei Zahlen nachrechenbar sind statt geglaubt** *(DoR Runde 3: „A-38s
 drei Zahlen ohne Messbefehl")* — **im Integrations-Checkout zu fahren, nicht im Rollenbaum:**
 
+**⚠ DIESER BEFEHL TRAEGT EIN WANDERNDES FENSTER — P6, gefunden in der Endpruefung 16.08.** Er erzeugt genau die Zahlen, die der Plan-Pruefer in keinem Baum reproduzieren konnte. **Ersetzt durch eine feste Erhebung; der alte Befehl bleibt als Beleg stehen.**
+
+```bash
+# FESTE ERHEBUNG — ein benannter Tag statt eines wandernden Fensters
+cd /Users/yamanuri/Documents/ticket
+G=$(git --no-optional-locks log --all --since='2026-08-16 00:00' --oneline | wc -l)
+M=$(git --no-optional-locks log --all --since='2026-08-16 00:00' --merges --oneline | wc -l)
+echo "Commits $G . Merges $M"
+# gemessen 16.08. abends: 472 Commits, 188 Merges, Anteil 40 Prozent
+```
+
+**Der alte Befehl, nur noch als Beleg (A-20-4) — NICHT mehr benutzen:**
+
 ```bash
 cd /Users/yamanuri/Documents/ticket
 G=$(git --no-optional-locks log --since='48 hours ago' --oneline | wc -l)
@@ -249,6 +262,23 @@ Merges nicht sieht, wird mit jeder Integration blinder.*
 **Und es entwertet die alte Rot-Lage nicht, es verschiebt sie:** heute früh lautete die Frage,
 wie viele Merges eine Marke tragen. **Jetzt lautet sie, dass 188 Vorgänge das Tor gar nicht
 passieren — unabhängig davon, was in ihrer Botschaft steht.**
+
+## ⚠ Der ANLASS im Blattkopf trägt Zahlen, die niemand reproduzieren kann
+
+**Befund des Plan-Prüfers, zutreffend:** der `anlass:` nennt *„59 von 497, 58 von 70 Merges ohne
+Marke"* — **er misst in JEDEM Baum genau 5.** Die Zahlen wurden zweimal berichtigt und tragen
+keinen Messbefehl.
+
+```
+im Blattkopf     59 von 497 · 58 von 70
+gemessen         5  — in jedem Baum
+heute belegt     188 Merges = 40 % aller Commits, das Tor sieht sie nie
+```
+
+> **Die Aussage des Anlasses trägt, seine Zahlen nicht.** *Merges ohne Rollenmarke existieren und
+> werden vom Tor nicht gesehen* — das ist der Kern und er ist unverändert wahr. **Die drei
+> Zahlenpaare sind Momentaufnahmen aus wandernden Fenstern und gehören ersetzt durch die feste
+> Erhebung von heute: 188 von 472.**
 
 ## Befund des Plan-Prüfers zu Yamas Anweisung — 16.08.
 

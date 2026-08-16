@@ -32,7 +32,13 @@ regelgrundlage: "ARBEITSREGELN.md, Nachtrag vom 16.08. — die drei Zustaende, d
 Dokuments ist keine zweite Meinung — **er ist dieselbe Meinung zweimal.** Ein „Fach-Prüfer" hätte
 F-004 aufgeschlagen und dasselbe falsche Vorzeichen gelesen wie alle vor ihm.
 
-**Belegt: alle drei Fachfehler dieser Woche wurden vom Benutzer gefunden.**
+**⚠ BERICHTIGT nach Befund des Plan-Prüfers:** *„von keiner Prüfstation gefunden"* **trifft auf
+`F-054` NICHT zu.** Sie ist beim Rechnen aufgefallen — das ist eine Prüfstation, nur keine
+formale. **Zwei der drei stimmen, der dritte nicht.** *Ein Anlass, der die Lage schlimmer
+zeichnet als sie ist, macht den Auftrag nicht dringlicher, sondern angreifbar.*
+
+**Belegt: zwei der drei Fachfehler dieser Woche wurden vom Benutzer gefunden, der dritte beim
+Rechnen.**
 
 ```
 F-004          Vorzeichen vertauscht      vom GENERATOR beim Bauen

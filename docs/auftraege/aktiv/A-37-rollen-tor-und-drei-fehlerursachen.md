@@ -447,6 +447,20 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   wörtlich misst, meldet eine Abweichung, die keine ist** — und in vier Wochen erst recht.
   Eine Zahl, die an einem alten Stand klebt, misst die Zeit, nicht den Bau.)*
 
+## ⚠ Teil 5 fügt eine VIERTE Fehlerursache hinzu, die keinen eigenen Code bekommt
+
+**Befund des Plan-Prüfers, zutreffend und zum Titel des Blattes im Widerspruch:** der Titel sagt
+**drei** unterscheidbare Fehlerursachen. **Teil 5 fügt eine vierte hinzu — und sie bekommt keinen
+eigenen Rückgabewert.**
+
+> **Zusammen mit `A-37-20` ist das der ganze Befund:** *drei Ursachen sind benannt, eine vierte
+> kam dazu, und im Bau enden alle vier bei `exit 1`.* **Die Codetabelle beschreibt einen Zustand,
+> den es im Code nicht gibt.**
+
+**Verlangt: entweder bekommt die vierte Ursache einen eigenen Code — dann trägt der Titel „vier"
+— oder sie wird einer der drei zugeordnet.** *Ein Blatt, dessen Titel eine Zahl nennt und dessen
+Scope eine andere baut, ist an genau dieser Stelle nicht abnehmbar.*
+
 ## Offene Befunde des Plan-Prüfers — Stand 16.08. abends, einzeln benannt
 
 **Vier seiner zehn Befunde sind mit `A-37-18`, `A-37-19` und `A-37-20` in Kriterien überführt.
