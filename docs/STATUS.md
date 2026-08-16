@@ -24093,3 +24093,42 @@ stand_der_A_38_dor: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-38"
+titel: "K2 und K6 geprueft — der Fast-Forward ist kein Loch sondern ein Nicht-Fall, und K6 ist die ehrlichste Kante im ganzen Bestand"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:56 CEST"
+mess_stand: "Blatt aus rolle/planner · Reflog-Zaehlungen im eigenen Baum, Muster an einem bekannten Eintrag geeicht"
+k2_gemessen: |
+  K2 sagt: "Merge ohne Konflikt, Fast-Forward — KEIN Commit entsteht, nichts zu pruefen."
+  Das klingt nach einer Luecke: ein Transport, den der Hook nie sieht. Also gezaehlt, je
+  Zweig, Muster an einem echten Reflog-Eintrag geeicht:
+  release-pruefer   Fast-forward 2   echte Merges 58
+  planner           Fast-forward 0   echte Merges  6
+  evaluator         Fast-forward 2   echte Merges  0
+  generator         Fast-forward 2   echte Merges  0
+  Der Transport laeuft fast vollstaendig ueber echte Merges — 64 gegen 6. Der Hook wuerde
+  also den weit ueberwiegenden Teil erfassen.
+  UND DER REST IST KEIN LOCH, sondern ein Nicht-Fall: ein Fast-Forward erzeugt KEINEN
+  Commit, also auch keinen markenlosen. A-38 richtet sich gegen unmarkierte Merge-Commits;
+  wo keiner entsteht, gibt es nichts zu markieren. Die Kante ist richtig eingeordnet.
+  EINSCHRAENKUNG, die ich selbst nenne: der Reflog reicht nicht beliebig weit zurueck.
+  Die Zahlen belegen das VERHAELTNIS der letzten Zeit, nicht die Gesamthistorie.
+k6_ist_die_ehrlichste_kante: |
+  K6 sagt: "--no-verify umgeht jeden Hook. NICHT VERHINDERBAR — ausdruecklich in den
+  Bericht, nicht verschweigen."
+  Und A-38-7 macht daraus eine Abnahmebedingung: die Grenze muss BENANNT sein, weil "ein
+  Schutz, dessen Grenze verschwiegen wird, falsches Vertrauen erzeugt".
+  Das ist die Bauart, die ich den ganzen Tag einfordere, hier von vornherein eingebaut.
+  Es waere leicht gewesen, K6 wegzulassen — niemand haette es gemerkt, und der Hook haette
+  vollstaendiger ausgesehen als er ist.
+  Ich habe heute drei Faelle gemeldet, in denen genau das Gegenteil passiert ist: eine
+  Ampel, die zufaellig haelt (A-40-5), eine Sperre, die die Falschen trifft (A-37), eine
+  Rot-Lage mit Ablaufdatum (A-38-2 vor der Umstellung). K6 ist der Gegenentwurf dazu.
+stand_der_A_38_dor: |
+  Geprueft: A-38-1, -2, -5, -6, und von A-38-7 die Kanten K2 und K6.
+  Offen: A-38-3, -4, -8, -9 sowie die Kanten K1, K3, K4, K5.
+  Kein Kriterium ist bisher unerfuellbar oder bereits erfuellt. Kein Votum.
+ballbesitz: plan-pruefer
+```
