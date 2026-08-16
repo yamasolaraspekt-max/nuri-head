@@ -161,6 +161,12 @@ def raus(code, grund, bedeutung=None):
 def zeit(ts):
     return datetime.datetime.fromtimestamp(int(ts)).strftime("%d.%m %H:%M")
 
+# ── DIE GRENZE EINER KENNUNG (K2) ───────────────────────────────────────────────────────────
+# Ein Pfadstueck traegt eine Kennung nur, wenn es mit ihr ANFAENGT und danach etwas kommt, das
+# keine Ziffer und kein Buchstabe ist. Ohne die zweite Haelfte trifft `a-4` das Blatt `a-41`.
+def _trifft(stueck, form):
+    return stueck.startswith(form) and (len(stueck) == len(form) or not stueck[len(form)].isalnum())
+
 # ── FANGPROBE: das Muster wird gegen echte Faelle gehalten, BEVOR es zaehlt ──────────────────
 if MODUS == "fangprobe":
     faelle = [
@@ -190,7 +196,31 @@ if MODUS == "fangprobe":
         rot += 0 if ok else 1
         print(f"  {'✔' if ok else '✖'} {'trifft' if erwartet else 'trifft nicht'}  {warum}")
         print(f"      {text}")
-    print(f"\n  Fangprobe: {len(faelle)-rot}/{len(faelle)} wie erwartet")
+    print(f"\n  Fangprobe Wortlaut: {len(faelle)-rot}/{len(faelle)} wie erwartet")
+
+    # ── ZWEITE PROBE: die Blattgrenze (K2) ──────────────────────────────────────────────────
+    # Sie prueft eine EIGENSCHAFT an erfundenen Pfadstuecken und NICHT den heutigen Bestand.
+    # Eine Probe, die „A-41 hat ein Blatt" festhaelt, wird rot, sobald jemand das Blatt umbenennt
+    # — sie fror einen Zustand ein, statt eine Regel zu pruefen (F-06).
+    grenz_faelle = [
+        ("a-41-die-statuswahrheit.md", "a-41", True,  "das eigene Blatt trifft"),
+        ("a-40-etwas-anderes.md",      "a-4",  False, "kurze Kennung NICHT als Praefix — der Befund"),
+        ("a-10-und-mehr.md",           "a-1",  False, "dasselbe eine Stelle weiter"),
+        ("w-25-pfetten-und-kehlbalken", "w-25", True, "Kennung im VERZEICHNIS, nicht im Dateinamen"),
+        ("w05-werkzeug-anschluss.md",  "w05",  True,  "Schreibweise ohne Bindestrich"),
+        ("b5-zaehlergebnis.md",        "b5",   True,  "Kennung ohne Bindestrich"),
+        ("vorwort-a-41.md",            "a-41", False, "Treffer MITTEN im Namen zaehlt nicht"),
+        ("a-41",                       "a-41", True,  "Stueck IST die Kennung"),
+    ]
+    grot = 0
+    for stueck, form, erwartet, warum in grenz_faelle:
+        ok = _trifft(stueck, form) == erwartet
+        grot += 0 if ok else 1
+        print(f"  {'✔' if ok else '✖'} {'trifft' if erwartet else 'trifft nicht'}  {warum}")
+        print(f"      '{form}' gegen '{stueck}'")
+    print(f"\n  Fangprobe Blattgrenze: {len(grenz_faelle)-grot}/{len(grenz_faelle)} wie erwartet")
+    rot += grot
+    faelle = faelle + grenz_faelle
     # 70 und nicht 1: eine rote Selbstprobe heisst nicht „erzeugt, mit Meldungen", sondern
     # „diesem Werkzeug ist nicht zu trauen". Wer beides auf 1 legt, laesst ein defektes Werkzeug
     # wie ein meldendes aussehen.
@@ -304,18 +334,43 @@ def _wert(sha, kennung):
 #
 # **Dieselbe Klasse wie K6 und wie die ganze Erzeugung:** wer ueber alle Zweige urteilt, muss
 # ueber alle Zweige lesen. *Der eigene Auscheck ist ein Zweig von sechs und nie die Auskunft.*
+# ── DIE GRENZE, an der die erste Fassung gescheitert ist ────────────────────────────────────
+#
+# **Der Plan-Pruefer hat `blatt_gefunden()` isoliert nachgebaut und den Fehler gefunden, den mein
+# Bestand heute zufaellig verdeckt** (`02b5d81c`): der Vergleich war ein reiner Substring-Test,
+# **also trifft `A-4` das Blatt `a-41` und `A-1` das Blatt `a-10`.**
+#
+# ***Und er hat die Richtung richtig gewichtet:*** *der Falsch-Negativ kostet eine ueberfluessige
+# Meldung; der Falsch-Positiv laesst K2 **SCHWEIGEN** — und eine Kante, die nicht meldet, sieht aus
+# wie eine Kante, die nichts zu melden hatte.*
+#
+# **Sein Schutzbefund dazu, den ich uebernehme statt ihn zu glaetten:** heute tritt der Fall nicht
+# auf, 0 von 79 Kennungen haben eine einstellige Nummer. **Aber das ist Zufall und nicht
+# Konstruktion** — die erste Kennung ohne fuehrende Null bricht es.
+#
+# *Es ist genau die H-9-Klasse, vor der der Kommentar zwei Absaetze weiter oben warnt:* **das
+# Muster mass die Zeichenfolge und nicht die Kennung.** Die Grenze macht daraus eine Kennung.
+# *Die Funktion `_trifft` steht weiter oben, vor der Fangprobe* — sie wird dort gegen acht
+# erfundene Faelle gehalten, und Python liest von oben nach unten.
 _BLAETTER = None
 def blatt_gefunden(kennung):
     global _BLAETTER
     if _BLAETTER is None:
-        teile = []
+        _BLAETTER = set()
         for z in lauf("git", "for-each-ref", "--format=%(refname:short)",
                       "refs/heads/rolle/*", "refs/heads/auto/hausplaner-integration").split("\n"):
-            if z.strip():
-                teile.append(lauf("git", "ls-tree", "-r", "--name-only", z, "docs/"))
-        _BLAETTER = "\n".join(teile).lower()
+            if not z.strip():
+                continue
+            for pfad in lauf("git", "ls-tree", "-r", "--name-only", z, "docs/").split("\n"):
+                # JEDES Pfadstueck, nicht nur der Dateiname: die Werkbank fuehrt die Kennung im
+                # VERZEICHNIS (`W-25-pfetten-und-kehlbalken/1-ZWECK.md`), die Auftraege im
+                # Dateinamen. Wer nur Basisnamen prueft, verliert die halbe Werkbank.
+                for stueck in pfad.lower().split("/"):
+                    if stueck:
+                        _BLAETTER.add(stueck)
     stamm = kennung.split("/")[0].lower()
-    return stamm in _BLAETTER or stamm.replace("-", "") in _BLAETTER
+    formen = {stamm, stamm.replace("-", "")}
+    return any(_trifft(stueck, f) for stueck in _BLAETTER for f in formen)
 
 # ── K6: AUF WELCHEN ROLLENZWEIGEN LIEGT DIESER COMMIT? ──────────────────────────────────────
 # Sechs `git log` statt eines `git branch --contains` je Commit: dieselbe Auskunft, aber die
