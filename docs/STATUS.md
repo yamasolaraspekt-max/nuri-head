@@ -24834,3 +24834,106 @@ stand: |
   Sperrend: A-37-5, eine Zahl, seit 13:01.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Der Release-Pruefer-Befund ist bestaetigt und ich bin sein groesster Einzelfall — 11 von 13 Schreibvorgaengen seit der Zuendung kommen von mir, ohne Tor"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:02 CEST"
+mess_stand: "Zuendung 83296554 um 16:17:16 · alle Zahlen ohne Merges, nach Rollenmarke gezaehlt, Summe gegen Gesamtzahl geeicht"
+was_der_release_pruefer_meldet: |
+  In d9fd6471 (16:46) meldet er auf Yamas Frage: die Barriere wirke VERKEHRT HERUM. Das Tor
+  liege in 3 von 6 Baeumen; gesperrt seien genau die drei, die es HABEN, waehrend die zwei
+  ohne Tor weiterschreiben.
+  ICH HABE ES NACHGEMESSEN, weil es meinen eigenen Befund von 15:26 fortsetzt — ich hatte
+  die drei Tor-Fassungen gefunden, aber nicht ihre WIRKUNG gemessen.
+die_messung: |
+  Eigene Schreibvorgaenge an docs/STATUS.md seit 16:17:16, ohne Merges, nach Rollenmarke:
+  planner ............ 2   Tor FEHLT
+  plan-pruefer ....... 11  Tor FEHLT
+  generator ..........  0  Tor JA (5 Fundstellen)
+  evaluator ..........  0  Tor JA (3)
+  release-pruefer ....  0  Tor JA (5)
+  Summe 13, und die Gesamtzahl der Commits im selben Fenster ist 13. Die Zaehlung ist also
+  vollstaendig, nicht gestichprobt.
+  DIE KORRELATION IST LUECKENLOS: wer das Tor hat, hat null geschrieben. Wer es nicht hat,
+  hat geschrieben. Sein Befund haelt.
+und_ich_bin_der_groesste_einzelfall: |
+  11 von 13 Schreibvorgaengen sind meine. In der Stunde, in der drei Rollen stillstehen,
+  weil die Sperre bei ihnen greift, habe ich elfmal an dieselbe Datei geschrieben — nicht
+  weil ich die Regel umgehe, sondern weil sie in meinem Baum nicht existiert.
+  Das ist keine Entlastung. Es heisst nur, dass mein Anteil an der Schieflage nicht in
+  einer Entscheidung liegt, sondern in einem Transportstand.
+was_ich_ergaenze_und_es_ist_der_schaerfere_teil: |
+  Die Sperre ist NICHT immer scharf gewesen. Um 16:09 habe ich die Bedingung selbst
+  gemessen: 0 Commits mit Rollenmarke 'integrator', also lief der HINWEIS-Zweig und liess
+  durch. Der erste Integrator-Commit ist 83296554 um 16:17:16 — seither zuendet Zeile 195
+  und der VERSTOSS-Zweig sperrt.
+  Der Generator hat um 16:23, also SECHS MINUTEN nach der Zuendung, seine Fertigmeldung
+  abgesetzt — nicht im Datensatz, sondern im Betreff: f19557c8 "generator: zustand: A-41 ·
+  CODE_FERTIG · generator · bau 16c5b9d2". Nachgemessen: dieser Commit fasst docs/STATUS.md
+  NULL mal an, nur scripts/status-erzeugen.sh. Der Datensatz sagt bis jetzt ENTWURF.
+  ER UMGEHT NICHTS. Er meldet nach dem Verfahren, das A-41 baut, und das ist richtig.
+  Aber A-41s Erzeuger laeuft noch nicht produktiv — die Meldung liegt also in einem Kanal,
+  den heute niemand liest.
+die_ursache_in_einem_satz: |
+  Die Kette haengt zwischen zwei Systemen: der alte Weg (Zustand im Datensatz) ist seit
+  16:17 fuer die drei Rollen mit Tor gesperrt, und der neue Weg (Zustand im Betreff, daraus
+  erzeugt) ist gebaut, aber nicht in Betrieb. Wer wechseln muesste, kann nicht; wer kann,
+  muss nicht.
+  Und die Gegenprobe zum Ausschluss der naheliegenden Erklaerung: es liegt NICHT daran,
+  dass niemand arbeitet. Der Generator hat seit 16:00 neun Commits, nur keinen an der
+  Statuswahrheit.
+ballbesitz: yama
+```
+
+```yaml
+auftrag: "A-41"
+titel: "Die CODE_FERTIG-Meldung geprueft — zwei von drei Meldepflichten erfuellt, die dritte ist keine Nachlaessigkeit sondern die Verfahrensfrage selbst"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:09 CEST"
+mess_stand: "Meldung f19557c8 (16:23:00) · Bau 16c5b9d2 (16:15) · Baureihe ueber alle Zweige gesucht, nach DATEI nicht nach Betreff"
+warum_ich_das_pruefe: |
+  Paragraf 4 der Wache: bei CODE_FERTIG sind die Meldepflichten zu pruefen und der
+  Ballwechsel zu bestaetigen. A-41 ist seit 16:23 als CODE_FERTIG gemeldet — im
+  Commit-Betreff, nach dem Verfahren, das A-41 selbst baut. Das ist mein Ball, unabhaengig
+  davon, dass der Datensatz noch ENTWURF sagt.
+meldepflicht_1_der_bau_sha_existiert: |
+  ERFUELLT. 16c5b9d2 ist auffindbar, vom 16:15, Betreff "Die Regelprobe hat ROT gemeldet,
+  obwohl der Planner geliefert hatte — mein Pr...". Kein toter Verweis.
+meldepflicht_2_der_sha_steht_in_einem_FELD: |
+  NICHT ERFUELLT. Im A-41-Datensatz gibt es kein Feld bau, gebaut_in oder bau_sha —
+  gemessen, 0 Treffer. Der SHA steht ausschliesslich im Commit-Betreff.
+  UND DAS IST KEINE NACHLAESSIGKEIT. Der Generator meldet nach dem Verfahren, das A-41
+  einfuehrt: der Zustand steht im Betreff und wird daraus erzeugt. Die alte Meldepflicht
+  verlangt ein Feld im Datensatz — und genau dieses Schreiben ist ihm seit der Zuendung
+  um 16:17 durch das Rollen-Tor gesperrt.
+  Er kann die Pflicht also nicht erfuellen, ohne die Barriere zu verletzen, gegen die er
+  sich richtig verhaelt. Die Pflicht und die Sperre widersprechen sich, nicht der Bau.
+meldepflicht_3_scope_diff_selbst_gemessen: |
+  ERFUELLT UND SAUBER. Ich habe die Baureihe nach der DATEI gesucht, nicht nach dem Betreff
+  — die Lehre aus meinem eigenen Fehlgriff von 15:46:
+  1e342d53 · b585d335 · 2e9cf127 · ccdfd7b6 · 1013e254 · 253a51d7 · 16c5b9d2 · f19557c8
+  Acht Commits, alle vom Generator, alle ausschliesslich an scripts/status-erzeugen.sh.
+  Der gemeldete Bau selbst: 46 geaenderte Zeilen, eine Datei.
+  Gegenprobe auf Nicht-Ziele ueber ALLE acht: kein Treffer unter resources/, app/,
+  database/, und weder commit-pruefen.sh noch rollen-tor.sh. A-41-11 haelt ueber die
+  gesamte Reihe, nicht nur am Endstand.
+was_ich_bezeugen_kann_und_was_nicht: |
+  ICH BEZEUGE: der Bau existiert, sein Umfang ist sauber, und von A-41s zwoelf Kriterien
+  habe ich elf selbst gemessen — A-41-1 als korrekte Rot-Lage, -2, -3, -5, -8, -10, -11
+  sowie die Kanten K1 bis K7, davon K2 und K5 isoliert nachgebaut. Keines ist rot.
+  ICH BEZEUGE NICHT: A-41-4, -6, -7, -9 und -12. Sie verlangen gefahrene Laeufe mit
+  Protokoll (Erstbefuellung, Gegenprobe gegen den Integrationsstand) und die Suite. Das
+  ist Abnahmearbeit, nicht meine.
+  ICH ERKLAERE DEN BALLWECHSEL NICHT FUER VOLLZOGEN, weil die zweite Meldepflicht offen
+  ist. Aber ich stelle fest, dass sie aus einem Verfahrenskonflikt offen ist und nicht aus
+  einem Mangel des Baus — wer sie gegen den Generator verwendet, misst die Sperre und
+  nicht seine Arbeit.
+was_zu_entscheiden_ist: |
+  Ob eine Fertigmeldung im Commit-Betreff die Meldepflicht "SHA in einem Feld" erfuellt,
+  ist eine Verfahrensentscheidung. Sie gehoert nicht mir und nicht dem Generator.
+  Solange sie aussteht, kann der Evaluator nicht abnehmen: er nimmt CODE_FERTIG ab, und
+  der Datensatz sagt ENTWURF.
+ballbesitz: yama
+```
