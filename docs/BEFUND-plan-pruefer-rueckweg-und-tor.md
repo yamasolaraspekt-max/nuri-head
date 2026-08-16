@@ -3367,3 +3367,92 @@ schrieb, und den dritten Fall (`stderr`-Zeile) dabei gefunden. *Nicht überlegt,
 genau die Lehre, die wir beide heute Nacht in vier Runden am Anker gelernt haben.*
 
 **Kein Ball.** Der Punkt ist erledigt. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## W-09/1 Treppe: drei Zahlen treffen exakt — und eine der drei DIN-Prüfungen kann im Standardweg nicht anschlagen
+
+*Vorratsprüfung (b) und (c) an einem unberührten Blatt · gemessen 16.08. gegen `8f4ccb97`, Basis `65f3ece4`*
+
+### Die Zahlen treffen, und zwar an beiden Ständen
+
+Das Blatt heißt *„Sieben Module, 698 Zeilen, ZWÖLF Zusagen"*. Nachgezählt:
+
+```
+geometry/treppe2D.ts            93      geometry/treppenBauarten.ts     38
+geometry/treppe3D.ts            74      geometry/treppenBerechnung.ts  114
+geometry/treppeObjekt.ts        84      geometry/treppenTypen.ts       153
+geometry/treppeSvg.ts          142
+                                        SUMME  698   sieben Module
+
+Basis 65f3ece4:  698      heute:  698
+```
+
+**Sieben von sieben, 698 auf 698, an beiden Ständen.** *Das ist die erste Blattzahl heute Nacht,
+die ohne jede Auflösung stimmt.*
+
+### Die drei DIN-Regeln sind richtig übersetzt
+
+```
+Schrittmass       2s + a   Soll 590..650, ideal 630     DIN 18065: 59..65 cm    trifft
+Bequemlichkeit    a - s    Ziel ~120, Toleranz 25       DIN: a - s = 12 cm      trifft
+Sicherheit        a + s    Ziel ~460, Toleranz 30       DIN: a + s = 46 cm      trifft
+```
+
+### Der Fund: im Standardweg ist das Schrittmaß identisch 630
+
+`treppenBerechnung.ts:73` setzt den Auftritt, **wenn keine Lauflänge vorgegeben ist**:
+
+```
+auftrittExakt = 630 - 2 * steigungExakt      // Schrittmaßregel
+```
+
+**Damit ist `2s + a` algebraisch immer 630 — unabhängig davon, wie steil die Treppe ist.**
+Durchgerechnet an derselben Geschosshöhe von 2600 mm:
+
+```
+Steigungen   s (mm)   a (mm)   Schrittmass   Bequemlichkeit   Sicherheit
+    15        173,3    283,3      630,0           110,0          456,7
+    11        236,4    157,3      630,0           -79,1          393,6
+    22        118,2    393,6      630,0           275,5          511,8
+```
+
+**Eine Treppe mit 236 mm Steigung und 157 mm Auftritt ist unbegehbar — und die Schrittmaßprüfung
+meldet `bestanden`.** Sie prüft nicht die Treppe, sie prüft die Formel, mit der sie den Auftritt
+gerade selbst gebildet hat.
+
+### Was ausdrücklich NICHT kaputt ist — und das ist die Hälfte des Befunds
+
+**Die anderen Prüfungen fangen die Fälle:**
+
+```
+11 Steigungen:  Bequemlichkeit -79,1 (Ziel 120 ± 25)   schlaegt an
+                Sicherheit    393,6 (Ziel 460 ± 30)    schlaegt an
+                steigung-max  236,4 mm                 schlaegt als FEHLER an
+22 Steigungen:  Bequemlichkeit 275,5 · Sicherheit 511,8  beide schlagen an
+```
+
+**Die Rechnung führt niemanden in eine unbegehbare Treppe.** Der Mangel ist nicht, dass etwas
+durchrutscht — **der Mangel ist, dass eine der fünf Prüfungen im Standardweg keine Aussage macht
+und trotzdem wie eine aussieht.**
+
+**Und mit vorgegebener Lauflänge greift sie sehr wohl:** bei 3800 mm und 15 Steigungen ergibt sich
+`Schrittmaß 618,1` — eine echte, nicht vorherbestimmte Zahl.
+
+### Warum das dieselbe Klasse ist wie W-31 und A-24
+
+**Die Zahl ist richtig. Was sie behauptet, ist es nicht.** Wer `Schrittmaß 630,0 mm (Soll 590–650)`
+liest, glaubt, die Treppe sei gegen die Regel **geprüft** — sie wurde **aus** der Regel gebildet.
+*Dasselbe Muster wie die vertauschten PV-Beschriftungen von vorhin und die Panel-Zusage aus A-24:
+nicht falsch gerechnet, sondern falsch ausgesagt.*
+
+**Und das Blatt hat in seiner DoR genau danach gefragt:** *„Was tut sie bei einer Steigung außerhalb
+der Grenzmaße?"* **Antwort, gemessen: die Schrittmaßprüfung sagt `bestanden`.** Die Frage war
+richtig gestellt und ist an dieser Stelle nicht zu Ende beantwortet worden.
+
+### Soll
+
+**Kein Umbau.** Die Prüfung sollte im Standardweg **sagen, dass sie nichts sagt** — etwa
+`Schrittmaß 630,0 mm (aus der Regel gebildet, nicht geprüft)`, oder sie entfällt dort und tritt nur
+bei vorgegebener Lauflänge an. *Das ist die A-10-Klasse: sag, was du nicht kannst.*
+
+**Ball: planner.** W-09/1 steht auf `BETRIEBSBESTAETIGT`; die Änderung ist ein eigener Schnitt.
+**Kein Zustandsfeld angefasst, kein Bau.**
