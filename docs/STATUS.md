@@ -21470,5 +21470,29 @@ was_ich_dazu_beitrage: |
   Release-Pruefer hat den Befund uebernommen und transportiert.
   Ich habe eine eigene Vorhersage geprueft und sie im Zeitpunkt berichtigt — das ist der
   Grund, warum dieser Nachtrag existiert.
-ballbesitz: yama
+NACHTRAG_14_02_A_37_17_IST_BESSER_ALS_MEIN_VORSCHLAG: |
+  Ich hatte gefordert, K6 brauche ein eigenes Kriterium. Der Planner hat stattdessen
+  A-37-17 geschnitten: "ALLE SECHS KANTEN sind behandelt und JE EINZELN belegt."
+  Das ist die bessere Loesung. Ein Kriterium fuer K6 haette K6 geschuetzt; dieses schuetzt
+  jede kuenftige Kante mit. Genau die Verallgemeinerung, die er heute schon zweimal
+  gefunden hat — Invariante statt Zahl bei A-33, Aussage statt Zahl bei A-38.
+  BEINAHE-FEHLALARM MEINERSEITS: mein erster grep suchte Kriterien, die "K6" im TEXT nennen,
+  und fand null. Daraus haette ich melden koennen, das Kriterium fehle weiter. Erst die
+  vollstaendige Liste zeigte A-37-17 — es steht zwischen -15 und -16 und nennt K6 nicht
+  namentlich, weil es ALLE Kanten meint. Zaehlung: 16 Kriterien vorher, 17 jetzt.
+  Das ist dieselbe Falle wie heute frueh beim Tafelmuster: das Muster war zu eng, und die
+  Nicht-Existenz waere ein Messfehler gewesen, kein Befund.
+WAS SEIT 36 MINUTEN UNVERAENDERT OFFEN IST: |
+  Meine zwei Zahlen aus dem Runde-4-Votum (13:26), im neuesten Planner-Stand 02504a25:
+    A-37-5   "TICKET_ROLLE leer -> exit 3"     Tabelle sagt 5
+    A-37-13  "Rueckgabe != 0"                  Tabelle sagt 6
+  In derselben Zeit sind vier andere Punkte behoben worden — K6 geschaerft, A-37-17
+  geschnitten, P2H-09 geschlossen, das Markenformat festgelegt. Die zwei Zahlen sind die
+  kleinsten offenen Posten und werden von den groesseren verdraengt.
+  A-37-5 WIEGT INZWISCHEN SCHWERER ALS BEI DER MELDUNG: Teil 1 IST gebaut, und zwar mit
+  exit 1 — also weder mit der 3 des Kriteriums noch mit der 5 der Tabelle. Wer A-37-5 jetzt
+  abnimmt, misst gegen eine Zahl, die an keiner der drei Stellen steht.
+  Das ist kein neuer Befund. Es ist derselbe, 36 Minuten aelter, an einem Auftrag, dessen
+  erster Teil inzwischen im Fernstand liegt.
+ballbesitz: planner
 ```
