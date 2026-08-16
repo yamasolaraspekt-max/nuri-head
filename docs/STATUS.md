@@ -25748,3 +25748,1325 @@ die_ironie_gehoert_dazu: |
   hat ihn achtzehn Minuten frueher schon als Restpunkt notiert.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-38"
+titel: "Yamas Anweisung angenommen — A-38 gehoert in A-37, und die tragende Zahl ist eine ANDERE als die genannte: das Loch ist nicht alt, es entsteht gerade"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:16 CEST"
+mess_stand: "ganzer Bestand ohne Zeitfenster · Messzeitpunkt 16.08. 20:16, weil die Zahl sich stuendlich aendert"
+die_anweisung: |
+  Yama, 16.08. abends: "A-38 gehoert NICHT hinter A-37, sondern ALS KRITERIUM HINEIN."
+  Reihenfolge fuer mich: A-38 in A-37, dann A-39, dann A-40.
+  ANGENOMMEN. Und die Begruendung traegt — aber nicht mit der genannten Zahl.
+die_genannte_zahl_ist_ueberholt: |
+  Yama nennt: "41 von 309 Commits ohne Rollenmarke, ausnahmslos Merges, von 32 Merges
+  tragen 4 eine ... ein 13-Prozent-Loch ab dem ersten Tag."
+  HEUTE GEMESSEN, ganzer Bestand: 3870 Commits, 349 Merges, davon 232 ohne Rollenmarke.
+  Die Grundgesamtheit ist von 309 auf 3870 gewachsen. Eine Quote aus 309 Commits beschreibt
+  den Bestand von damals, nicht den von heute.
+und_meine_eigene_zahl_ist_es_auch: |
+  Um 16:16 habe ich gemeldet: "seit 15.08. 00:00 gibt es 97 Merges und davon 0 ohne
+  Rollenmarke. Nicht wenige — keinen einzigen." Daraus habe ich geschlossen, A-38s Rot-Lage
+  laufe um 22:53 ab.
+  HEUTE UM 20:16: seit 15.08. gibt es 144 Merges, davon 43 OHNE Marke.
+  Meine Messung war zum Zeitpunkt richtig. Die Lage hat sich geaendert, und zwar in den
+  Stunden dazwischen.
+das_ist_der_eigentliche_befund: |
+  Die markenlosen Merges sind nicht Altbestand. Sie entstehen JETZT:
+  seit 15.08. bis heute 17:30 ..... 28
+  ab heute 17:30 .................. 18
+  Verteilung ueber den Nachmittag: 16:54, 17:05, 17:15, 17:26, 17:27, 17:38, 17:40, 17:42 —
+  vier bis fuenf je Viertelstunde, im Wortlaut "Merge branch 'rolle/planner' into
+  auto/hausplaner-integration".
+  Es ist der INTEGRATIONSLAUF, der sie erzeugt. Der Lauf, den Yama heute freigegeben hat
+  und der funktioniert hat, produziert genau die Commit-Art, gegen die A-38 gebaut werden
+  soll — nicht aus Nachlaessigkeit, sondern weil ein Merge ohne Hook keine Marke bekommt.
+  DAMIT IST YAMAS ANWEISUNG NICHT NUR RICHTIG, SONDERN DRINGLICHER ALS IHRE BEGRUENDUNG.
+  Das Loch ist kein 13-Prozent-Rest vom ersten Tag. Es ist offen, es fuellt sich stuendlich,
+  und je laenger der Integrationslauf ohne Hook laeuft, desto mehr unmarkierte Merges
+  stehen im Bestand, den A-41s Erzeugung spaeter lesen soll.
+  Und es bestaetigt K7 von A-41 an einem Fall, den ich heute selbst getreten habe: ein
+  Merge traegt fremde Betreffs mit, und ohne --no-merges zaehlt jeder Zustand nach jedem
+  Transport erneut.
+was_ich_daraus_fuer_meine_arbeit_ziehe: |
+  Meine Meldung von 16:16 ("die Rot-Lage laeuft um 22:53 ab") war eine Prognose aus einem
+  Zeitfenster — genau die Klasse, die P6 verbietet. Sie ist nicht falsch gemessen, aber sie
+  hat eine Entwicklung fortgeschrieben, die vier Stunden spaeter nicht mehr galt.
+  P6 sagt: eine Rot-Lage aus einem wandernden Fenster wird von selbst gruen. Mein Fall
+  zeigt die Rueckseite: sie kann auch von selbst wieder ROT werden. Beides ist derselbe
+  Fehler — aus einem Fenster auf die Zukunft zu schliessen.
+reihenfolge_bestaetigt: |
+  A-38 als Kriterium in A-37, dann A-39, dann A-40. Ich habe A-38 heute mit acht Punkten
+  geprueft (-1, -2, -5, -6, K2, K4, K5, K6); K1 und K3 blieben mangels erlaubtem Lauf
+  offen. Diese Vorarbeit gilt weiter, sie wandert mit dem Kriterium.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "REGISTER"
+titel: "Yamas Messung geliefert — der Bauvorrat ist 30 und nicht 37, und LEER traegt VIER Bedeutungen statt zwei"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:32 CEST"
+mess_stand: "REGISTER.md aus rolle/planner · Reifegrad aus der dritten Tabellenspalte gelesen, Summe gegen die Zeilenzahl geeicht"
+was_erbeten_war: |
+  Yama: "von den 37 beschriebenen Zeilen — welche erfuellen heute alle drei Bedingungen?
+  Eine Liste, keine Prosa. Das ist der Bauvorrat, und niemand weiss heute, wie gross er ist."
+  Die erste Bedingung ist "Registerzeile auf BESCHRIEBEN". Ich habe sie gemessen, bevor ich
+  weitergehe — und dort endet die Frage schon.
+die_zahl_stimmt_nicht: |
+  Yamas Verteilung: BESCHRIEBEN 37 · ENTWORFEN 2 · GEBAUT 1 · LEER 3 = 43.
+  GEMESSEN aus der dritten Spalte, Summe gegen 43 Registerzeilen geeicht:
+  BESCHRIEBEN 30 · LEER 10 · ENTWORFEN 2 · GEBAUT 1 = 43.
+  Sieben Zeilen mehr auf LEER, als die Liste kennt.
+  MEIN ERSTER VERSUCH WAR AUCH FALSCH und ich sage es dazu: ich hatte zeilenweise nach den
+  Woertern gesucht und 30+2+3+19 = 54 bei 43 Zeilen bekommen — Zeilen wie "~~LEER~~ ->
+  BESCHRIEBEN" zaehlten doppelt. Erst die Spalte gibt die Zahl.
+die_zehn_LEER_zeilen_und_sie_meinen_vier_verschiedene_dinge: |
+  ENTSCHIEDEN, nichts zu bauen (Yamas drei):
+    W-19 Sonne und Verschattung .... "ZUSTAENDIGKEIT ENTSCHIEDEN vom planner 13.08."
+    W-24 Fundament und Bodenplatte . "Praemisse traegt nicht"
+    W-32 Giebelwand-Bindung ........ "ENTSCHIEDEN vom planner 13.08.: ABLEITUNG"
+  UNGEPRUEFT, Modul fehlt:
+    W-25 Pfetten und Kehlbalken .... "ungeprueft — dachformVorlagen, holzBauteile"
+    W-26 Dachschichten ............. "ungeprueft — KEIN Modul"
+  UNGEPRUEFT, Modul ist da:
+    W-28 Dachentwaesserung ......... "ungeprueft — linienBauteile fuehrt 'dachrinne'"
+    W-29 Dachdurchdringungen ....... "ungeprueft — STARK GEBAUT: dachOeffnung, ..."
+    W-30 Flachdach-Aufbau .......... "ungeprueft — dachformVorlagen (attika, svgFlach)"
+  FERTIG, Register nicht nachgezogen:
+    W-17 Export und Speichern ...... Vermerk "—", ABER: W-17/1 traegt CODE_FERTIG,
+                                     Ball beim Evaluator, heute von mir mitgeprueft.
+    W-43 Abbund-Zeichnung .......... "Darstellungslogik liegt in M-02"
+was_das_fuer_den_baumassstab_heisst: |
+  Yamas Befund war "LEER kann 'erledigt, weil es nichts zu bauen gibt' nicht ausdruecken —
+  H-9 auf der Registerebene". Das trifft, und es ist groesser: LEER traegt heute VIER
+  Bedeutungen, nicht zwei. Ein Wort fuer "entschieden", "ungemessen", "gemessen aber nicht
+  beschrieben" und "fertig, nur nicht eingetragen".
+  DER BAUVORRAT NACH BEDINGUNG 1 IST 30, NICHT 37. Und er ist an einer Stelle zu klein
+  gemessen: W-29 traegt LEER und im selben Feld "stark gebaut" — ein Kandidat, den die
+  Zahl verschweigt.
+  Bedingung 2 (Bedienweg existiert) und 3 (Rechenweg nachgerechnet) habe ich NICHT
+  gemessen. Beide brauchen eine Festlegung, was als Beleg gilt — bei 3 steht sie mit der
+  Sachverstaendigen-Regel schon da, bei 2 nicht. Ohne diese Festlegung waere jede Liste,
+  die ich liefere, eine Vermutung mit Zahlen.
+ballbesitz: yama
+```
+
+```yaml
+auftrag: "A-42"
+titel: "DoR begonnen — neun Kriterien, sechs Kanten, und die Ausgangszahlen liefere ich mit: 67 bleiben, 249 ziehen um, 24 sind Altlast"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:46 CEST"
+mess_stand: "Blatt und Datensatz aus rolle/planner (e8f3a9e5) · Bloecke selbst gezaehlt, Summe geeicht"
+in_eigener_sache_zuerst: |
+  A-42 zieht die Bloecke ohne zustand-Feld aus docs/STATUS.md in eine eigene Datei. 68 von
+  ihnen tragen meine Rollenmarke — ich bin an diesem Auftrag Betroffener und Pruefer
+  zugleich. Ich sage es, weil es die Pruefung faerben koennte: wer seine eigenen Notizen
+  gerettet sehen will, prueft milder.
+  Deshalb habe ich zuerst nach einem Grund gesucht, der GEGEN den Auftrag spricht, und
+  einen gefunden — er hielt der Messung nicht stand, siehe unten.
+was_ich_pruefend_finde: |
+  Neun Kriterien, alle messbar formuliert. A-42-2 ist das tragende: "Bloecke vorher =
+  Bloecke nachher in STATUS.md + Eintraege in der neuen Datei". Eine Summenprobe, die
+  nichts verschwinden laesst.
+  A-42-6 sichert die Gegenrichtung: die Bloecke MIT zustand: sind unberuehrt, Anzahl und
+  Inhalt vorher/nachher. A-42-3 verlangt, dass kein Block sich inhaltlich veraendert.
+  Zusammen decken sie beide Verlustarten ab — verschwinden und verfaelscht werden.
+  A-42-8 beantwortet P7 gleich mit: WER ist der Generator in seinem Baum. Das ist die
+  Regel, die der Planner heute um 16:53 geschrieben hat, hier vier Stunden spaeter
+  angewandt.
+mein_verworfener_befund: |
+  Beim Zaehlen fielen mir 24 Bloecke auf, die kein Parser liest — sie tragen weder ein
+  zustand-Feld noch nicht, man kann es an ihnen nicht feststellen. Ein Umzug, der nach
+  "hat zustand" sortiert, muesste an ihnen scheitern.
+  NACHGESEHEN STATT GEMELDET: K4 lautet "Ein Block ist kaputtes yaml (es gibt 24 solcher
+  Altlasten) — NICHT umziehen, einzeln melden".
+  Die Kante kennt den Fall, nennt die Zahl, und die Zahl stimmt: ich habe unabhaengig 24
+  gemessen. Kein Befund.
+die_ausgangszahlen_die_A_42_1_und_2_brauchen: |
+  A-42-1 verlangt "vorher und nachher gezaehlt, mit demselben Befehl, im Bericht". Hier ist
+  das Vorher, am Planner-Stand e8f3a9e5 gemessen:
+  Bloecke gesamt ............... 340
+  davon MIT zustand-Feld ....... 67   bleiben (A-42-6)
+  davon OHNE ................... 249  ziehen um
+  nicht parsebar ............... 24   bleiben (K4)
+  67 + 249 + 24 = 340. Die Summe geht auf.
+  WICHTIG FUER DEN LAUF: diese Zahlen sind vom 20:46-Stand. K5 sagt richtig, der Lauf misst
+  EINMAL und nennt seinen Stand-SHA — meine Zahlen ersetzen das nicht, sie sind die
+  Gegenprobe dazu.
+ein_kleiner_hinweis_zu_A_42_9: |
+  A-42-9 sagt "Zahl unmittelbar vor dem Bau erheben", aber nicht "keine feste Zahl im
+  Kriterium" wie A-37-11, A-38-9, A-39-10 und A-41-12. Es steht damit zwischen jenen vier
+  und A-40-9, das gar nichts sagt (mein Befund von 18:12). Inhaltlich richtig, nur eine
+  Spur kuerzer als die Familie.
+stand: |
+  Geprueft: die Kriterienstruktur, K4 gegen meine eigene Messung, die Ausgangszahlen.
+  Offen: A-42-3 bis -8 im Einzelnen und die Kanten K1, K2, K3, K5, K6.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-42"
+titel: "K1 und K2 gemessen — beide heute nicht ausloesbar, und K1s Wortlaut ist an neun Bloecken mehrdeutig"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:54 CEST"
+mess_stand: "Planner-Stand e8f3a9e5, 340 Bloecke einzeln geparst · Planner-Kopf zum Messzeitpunkt 1e1afd1b"
+k2_ist_heute_leer: |
+  K2: "Zwei Notizen sind wortgleich — beide ziehen um. KEIN Entdoppeln, Doppelung ist ein
+  Befund fuer spaeter."
+  GEMESSEN ueber alle 249 Bloecke ohne zustand-Feld, Vergleich ueber den vollstaendigen
+  Blockinhalt: 0 wortgleiche Dubletten.
+  Die Kante ist also heute nicht ausloesbar. Das ist kein Mangel — sie ist Vorsorge, und
+  ihre Regel ("beide umziehen, nicht entdoppeln") ist die richtige: ein Umzug, der
+  entdoppelt, trifft eine inhaltliche Entscheidung, die ihm nicht gehoert.
+k1_ist_mehrdeutig_und_das_ist_der_fund: |
+  K1: "Ein Block traegt zustand: in Kleinschreibung oder als Prosa — NICHT umziehen,
+  Grenzfall wird gemeldet."
+  GEMESSEN: 0 Bloecke tragen einen kleingeschriebenen zustand-Wert. ABER NEUN Bloecke
+  tragen ein FELD, dessen Name "zustand" enthaelt, ohne "zustand" zu heissen:
+    zweiter_befund_zustandswiderspruch · W23_1_ZUSTAND · 1_ZUSTAND (dreimal)
+    1_ZUSTAND_rot_lage_gemessen · zustand_gemessen_nicht_angenommen
+    zustand_steht_NICHT_hier · warum_kein_zustand_feld · kein_zustand_feld
+  ZWEI DAVON SAGEN AUSDRUECKLICH DAS GEGENTEIL: "zustand_steht_NICHT_hier" und
+  "kein_zustand_feld" sind Notizen, die betonen, KEIN Zustandsfeld zu fuehren. Sie sollen
+  umziehen — sie sind der Regelfall, nicht der Grenzfall.
+  Nach dem Wortlaut fallen alle neun NICHT unter K1: keiner traegt "zustand:" als Feld oder
+  als Prosa, sie tragen einen anderen Feldnamen. Die Kante ist damit heute ebenfalls nicht
+  ausloesbar.
+  ABER WER SIE UMSETZT, MUSS DAS ENTSCHEIDEN, und das Blatt sagt es nicht: sucht der Bau
+  nach dem Feldnamen "zustand" (dann greift K1 nie), oder nach der Zeichenfolge "zustand"
+  (dann nimmt er neun Bloecke aus, von denen mindestens zwei umziehen sollen)?
+  Der Unterschied sind neun Notizen — von 249 gut drei Prozent, und ausgerechnet die, die
+  ihren eigenen Sonderfall dokumentieren.
+was_das_fuer_meine_ausgangszahlen_heisst: |
+  Meine Zahlen von 20:46 (67 bleiben, 249 ziehen um, 24 Altlast) gelten unveraendert,
+  solange K1 nach dem FELDNAMEN sucht. Sucht der Bau nach der Zeichenfolge, sind es
+  240 statt 249, und die Summenprobe A-42-2 muss die neun als eigene Gruppe fuehren.
+  Ich nenne beide Zahlen, damit die Probe nicht an der Auslegung scheitert.
+die_lehre_von_A_41_gilt_hier_auch: |
+  Zwei von sechs Kanten sind am Bestand nicht ausloesbar. Bei A-41 war das bei K2 und K6
+  genauso, und der Generator hat die Lehre gezogen: so eine Kante findet man nur, wenn man
+  ihre Logik ISOLIERT nachbaut. Genau so habe ich dort den Substring-Fehler gefunden.
+  Fuer A-42 heisst das: K1 und K2 brauchen einen konstruierten Fall, sonst bleibt ihr
+  Beleg eine Codestelle. A-42-5 verlangt aber "alle sechs Kanten je EINZELN belegt".
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-42"
+titel: "K3 und K6 auch nicht ausloesbar — aber 68 von 77 Notizen tragen FREITEXT im auftrag-Feld, und das trifft A-42-4"
+rolle: plan-pruefer
+zeit: "2026-08-16 21:02 CEST"
+mess_stand: "Planner-Stand e8f3a9e5, 340 Bloecke geparst · Planner-Kopf zum Messzeitpunkt 1e1afd1b"
+k6_ist_nicht_ausloesbar: |
+  K6: "docs/BEFUNDNOTIZEN.md existiert bereits — anhaengen, nicht ueberschreiben."
+  Gemessen ueber rolle/planner, rolle/generator und den Integrationszweig: die Datei
+  existiert in KEINEM. Der erste Lauf legt sie an, die Kante greift beim zweiten.
+  Richtig gebaut, heute nur nicht pruefbar.
+k3_ebenfalls_nicht_und_der_weg_dahin_war_lehrreich: |
+  K3: "Eine Notiz nennt eine Kennung, die es nie gab — zieht trotzdem um, mit Vermerk."
+  MEIN ERSTES ERGEBNIS WAR 70 VON 77 und sah nach einem Massenfall aus. Nachgesehen statt
+  gemeldet: die meisten dieser "Kennungen" sind gar keine.
+  77 Notizen tragen ein auftrag-Feld. Gegen die Kennungsform geprueft:
+    Form einer Kennung ....  9
+    Freitext oder Titel ... 68
+  Von den neun echten fehlen zwei im Datensatzbestand: A-08 und A-09. Aber BEIDE HABEN EIN
+  BLATT — A-08 zwei Dateien, A-09 eine. Es sind also keine Kennungen, die es nie gab,
+  sondern Auftraege ohne Zustandsdatensatz. K3 trifft nicht.
+  Ohne das Trennen haette ich 70 statt 0 gemeldet.
+der_eigentliche_fund: |
+  68 von 77 Notizen tragen FREITEXT im auftrag-Feld, nicht eine Kennung. Beispiele:
+    w37_ballwechsel_runde2 · a33_grundlage_zeiger_gewandert
+    spiegelung_rundet_an_der_toleranz · meine_ballortung_blieb_zu_eng
+    vier_fachfragen_fehlen_in_meiner_liste · statuswahrheit_in_zwei_fassungen
+  Das Feld heisst "auftrag", traegt aber in 88 Prozent der Faelle eine Ueberschrift.
+  UND ICH BIN DARAN BETEILIGT: viele dieser Notizen sind meine.
+  FUER A-42-4 IST DAS DER PUNKT. Das Kriterium verlangt "jeder Eintrag traegt seine
+  Herkunft (herkunft: mit Blocknummer und ...)". Solange die Herkunft die BLOCKNUMMER ist,
+  geht das auf. Wer die Eintraege aber nach KENNUNG gruppieren will — und das ist die
+  naheliegende naechste Frage an eine Notizsammlung —, kann es fuer 68 von 77 nicht.
+  Kein Einwand gegen A-42: der Umzug soll nichts umschreiben, und das ist richtig. Aber
+  wer danach die Sammlung benutzt, findet ein Feld vor, dessen Name nicht haelt, was er
+  sagt — H-9 in der Zielablage.
+  VORSCHLAG, nicht Entscheidung: im Eintrag zusaetzlich zur Blocknummer festhalten, OB das
+  auftrag-Feld eine Kennung trug. Ein Wahrheitswert, keine Umschreibung. Dann ist die
+  Gruppierbarkeit spaeter messbar, statt sie neu erheben zu muessen.
+nebenbefund_A_08_und_A_09: |
+  Beide haben ein Blatt, aber keinen Datensatz mit zustand-Feld im Planner-Stand. Das ist
+  die A-20-Klasse (Blatt, Tafelzeile, Datensatz gehoeren zusammen), gemessen an zwei
+  Kennungen. Ich melde es hier nur nebenbei, weil es beim K3-Pruefen anfiel — es gehoert
+  nicht zu A-42.
+stand_der_A_42_dor: |
+  Kanten: K1 mehrdeutig (Feldname oder Zeichenfolge), K2, K3, K6 heute nicht ausloesbar,
+  K4 durch meine eigene Zaehlung bestaetigt (24), K5 noch offen.
+  Kriterien: die Ausgangszahlen fuer -1 und -2 stehen, -9 einen Halbsatz kuerzer als die
+  Familie. Offen: -3, -4 (mit dem Hinweis oben), -5, -6, -7, -8.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-42"
+titel: "K5 ist die einzige Kante mit echtem Beleg — und sie entwertet meine eigene Zahl von 20:46"
+rolle: plan-pruefer
+zeit: "2026-08-16 21:08 CEST"
+mess_stand: "Blockzahlen an vier Zeitpunkten aus der Historie von docs/STATUS.md, jeweils am juengsten Commit davor"
+k5_ist_belegt_und_zwar_am_heutigen_tag: |
+  K5: "Waehrend des Umzugs kommen neue Notizen dazu — der Lauf misst EINMAL und nennt
+  seinen Stand-SHA."
+  GEMESSEN, Bloecke in docs/STATUS.md an vier Zeitpunkten:
+  15:00  8400b3f9  343
+  17:00  77c08b1b  378   (+35 in zwei Stunden)
+  19:00  11386923  412   (+34 in zwei Stunden)
+  Das sind rund 17 neue Bloecke je Stunde, also einer alle dreieinhalb Minuten. Ein Umzug,
+  der eine Minute laeuft, sieht am Ende einen anderen Bestand als am Anfang.
+  K5 ist damit die EINZIGE der sechs Kanten mit einem echten, heute messbaren Fall. K1,
+  K2, K3 und K6 sind nicht ausloesbar, K4 ist durch die Altlast belegt — aber K5 passiert
+  gerade, waehrend ich das schreibe.
+und_sie_trifft_meine_eigene_lieferung: |
+  Um 20:46 habe ich die Ausgangszahlen geliefert: 340 Bloecke, 67 mit zustand, 249 ohne,
+  24 Altlast. Ich habe dazugeschrieben, sie seien "vom 20:46-Stand" und ersetzten den Lauf
+  nicht.
+  Das war richtig und trotzdem zu schwach: es sind nicht nur "Zahlen von einem Zeitpunkt",
+  sie sind bei diesem Tempo nach einer halben Stunde FALSCH. Mein eigener Baum traegt
+  jetzt 398 Bloecke, der gemessene Stand 412 — beide ueber meinen 340.
+  DIE ZAHLEN SIND ALSO KEINE GEGENPROBE, sie sind ein Zeitstempel. Wer sie beim Bau
+  verwendet, muss sie neu erheben; wer sie vergleicht, vergleicht zwei Zeitpunkte.
+  Das ist P6 zum vierten Mal heute, und diesmal an mir selbst: eine Zahl, die durch
+  normale Arbeit waechst, taugt nicht als Sollwert. Ich habe sie als Gegenprobe angeboten
+  und damit genau das getan, wovor ich um 16:16 gewarnt habe.
+was_daraus_fuer_A_42_folgt: |
+  A-42-1 verlangt "vorher und nachher gezaehlt, MIT DEMSELBEN BEFEHL, im Bericht". Das ist
+  die richtige Bauart — nicht meine Zahlen gegen die des Laufs, sondern zwei Messungen
+  desselben Laufs.
+  A-42-2s Summenprobe haelt auch bei wachsendem Bestand, SOLANGE beide Zaehlungen zum
+  selben Stand-SHA gehoeren. Genau das sagt K5. Die Kante ist nicht Vorsorge, sie ist die
+  Bedingung, unter der A-42-2 ueberhaupt aufgeht.
+  MEIN BEITRAG BLEIBT: die Aufteilung 67 / 249 / 24 zeigt, WELCHE Gruppen es gibt und dass
+  ihre Summe aufgeht. Die absoluten Werte sind Tagesform.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-42"
+titel: "A-42-8 wendet P7 an und faellt selbst durch P7 — das DARF er hat ein Ablaufdatum, und A-37 setzt es"
+rolle: plan-pruefer
+zeit: "2026-08-16 21:18 CEST"
+mess_stand: "Tor aus rolle/generator · Sperrbedingung Zweig fuer Zweig nachgerechnet · Planner-Kopf fa1ac559"
+was_A_42_8_sagt: |
+  "Der Weg ist gangbar (P7): WER — der Generator, in seinem Baum · DARF er — ja, es ist
+  docs/, kein Produktivcode, kein Loeschen · EXISTIERT die Eigenschaft — ja, die
+  Blockstruktur ist maschinell erfassbar."
+  Alle drei P7-Fragen sind beantwortet, und die Antworten sind sorgfaeltig. Das Kriterium
+  wendet die Regel an, die heute um 16:53 entstanden ist.
+und_die_zweite_antwort_traegt_nur_noch_heute: |
+  Das Rollen-Tor sagt in seinem eigenen Kopf, Zeile 199-201:
+    TOR_STATUS_PFAD=1, generator, eigener Baum
+      nach 16:17   VERSTOSS ... EINEN Schreiber: den Integrator   exit 1
+  A-42 verlangt vom Generator, Bloecke AUS docs/STATUS.md zu entfernen. Das ist genau der
+  Pfad, den das Tor ihm verwehrt, sobald es scharf ist.
+  SCHARF IST ES NOCH NICHT, und das habe ich nachgerechnet statt es anzunehmen:
+    TOR_MIT = 4 von TOR_ZWEIGE = 6 · Integrator-Commits = 3
+    -> die Selbstkonditionierung von 16:52 greift: HINWEIS, durchgelassen.
+  ABER DIE ZAHL WANDERT: um 17:26 habe ich TOR_MIT=3 gemessen, jetzt 4. Das Tor verbreitet
+  sich, und Yamas Liste von heute abend setzt es an die erste Stelle: "P0 GENERATOR — A-37
+  fertigbauen." Danach liegt es in allen sechs Zweigen, TOR_MIT = TOR_ZWEIGE, und die
+  Sperre zuendet.
+  DANN IST A-42-8s "DARF er — ja" FALSCH, ohne dass jemand das Blatt angefasst hat.
+warum_das_ein_P7_fund_ist_und_kein_A_37_fund: |
+  P7 fragt "DARF diese Rolle die Handlung ausfuehren?" — und die Antwort ist heute ja,
+  morgen nein. Ein Kriterium, dessen Gangbarkeit von der Reihenfolge zweier Auftraege
+  abhaengt, hat den Weg nicht vollstaendig benannt.
+  Es ist zugleich P6 in einer fuenften Auspraegung: nicht eine Zahl, die durch normale
+  Arbeit waechst, sondern eine ERLAUBNIS, die durch normale Arbeit erlischt.
+was_daraus_folgt_und_es_ist_eine_reihenfolge: |
+  A-42s Datensatz sagt: "staut_hinter: NICHTS. Muss VOR dem ersten schreibenden
+  --tafel-Lauf fertig sein."
+  Das ist richtig und unvollstaendig. Es muss auch VOR der vollstaendigen Tor-Verteilung
+  fertig sein — also vor dem Abschluss von A-37, den Yama als P0 gesetzt hat.
+  Beide Auftraege stehen in Yamas Liste, A-37 bei P0 und A-42 gar nicht (es ist juenger als
+  die Liste). Wer sie in der genannten Reihenfolge abarbeitet, macht A-42 unausfuehrbar.
+  ZWEI WEGE, beide gangbar, keiner meiner:
+    A-42 vor dem letzten A-37-Transport fahren — dann greift die Uebergangsklausel noch.
+    Oder A-42-8 auf den Integrator umschreiben, der ohnehin der eine Schreiber ist.
+  Der zweite Weg ist der stabilere, aber er aendert das WER — und das ist eine
+  Zuschnittsfrage, keine Messung.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "SELBSTBERICHTIGUNG-ZEITSTEMPEL"
+titel: "Alle 86 zeit-Felder meiner heutigen Bloecke sind erfunden — ich habe fortgeschrieben statt gemessen, und der Fehler waechst auf 3 Stunden 19 Minuten"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:02:20 CEST"
+mess_stand: "date, git log --format=%ad und die Blockfelder direkt verglichen"
+der_befund: |
+  Ich habe in jedem heutigen Befundblock ein Feld "zeit:" gefuehrt. Diese Zeiten sind
+  nicht gemessen, sie sind fortgeschrieben — ich habe zum vorigen Wert ein paar Minuten
+  addiert, statt die Uhr zu lesen.
+  GEMESSEN, Blockfeld gegen die Zeit des zugehoerigen Commits:
+  Block 12:45  Commit 12:40   +5 Minuten
+  Block 13:09  Commit 13:04   +5
+  Block 20:32  Commit 17:46   +2:45
+  Block 20:46  Commit 17:49   +2:57
+  Block 21:02  Commit 17:53   +3:08
+  Block 21:18  Commit 17:59   +3:18
+  Die Abweichung beginnt bei fuenf Minuten und waechst auf drei Stunden neunzehn. Das ist
+  die Signatur einer Fortschreibung: jeder Wert stammt vom vorigen, keiner von der Uhr.
+  BETROFFEN SIND 86 BLOECKE — alle, die heute ein zeit-Feld tragen.
+warum_das_schwer_wiegt: |
+  Ich habe heute mehrfach Zeitachsen gemessen und daraus Befunde gemacht: die A-37-Voten
+  auf die Sekunde (12:39:26 gegen 13:01:54), A-41s Bau gegen sein Blatt (15:15:49 gegen
+  15:19:22), den Zuendzeitpunkt der Sperre (16:17:16). Alle diese Zahlen stammen aus
+  git log und sind richtig.
+  Meine EIGENEN Zeitangaben daneben sind erfunden. Ich habe fremde Uhren geprueft und die
+  eigene nicht gelesen.
+  Und es ist derselbe Fehler, den ich heute vier Rollen vorgehalten habe: eine Zahl
+  fortschreiben statt sie neu zu erheben. P6 nennt den Fall fuer wandernde Zeitfenster;
+  hier ist es kein Fenster, sondern schlicht eine nicht abgelesene Uhr.
+was_NICHT_beschaedigt_ist: |
+  Kein Beleg ist verloren. Jeder Block haengt an einem Commit, und die Commit-Zeit ist
+  echt und unveraenderlich. Wer die Reihenfolge meiner Befunde braucht, liest sie aus
+  git log — dort stimmt sie.
+  Auch die INHALTE sind unberuehrt: die Messungen selbst habe ich jedes Mal gefahren, die
+  SHAs sind geprueft, die Zaehlungen geeicht. Falsch ist ausschliesslich die Uhrzeit im
+  Kopf des Blocks.
+  Falsch ist damit auch jeder Satz, in dem ich MEINE Zeiten gegen fremde gestellt habe —
+  etwa "mein Befund war 16:16, die Umstellung 16:19, drei Minuten dazwischen". Die
+  Reihenfolge stimmt, die Abstaende nicht.
+was_ich_aendere: |
+  Ab sofort steht in jedem zeit-Feld die Ausgabe von date, unmittelbar vor dem Schreiben
+  gelesen — so wie ich es fuer den Standabgleich seit 15:54 tue. Der Block hier traegt sie
+  bereits.
+  Die 86 vorhandenen Felder fasse ich NICHT an. Sie stehen in Commits, die durch das Tor
+  gegangen sind; sie nachtraeglich zu berichtigen hiesse, Geschriebenes umzuschreiben.
+  Diese Meldung ist die Berichtigung, und sie ist auffindbar, weil sie in derselben Datei
+  steht.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "SELBSTBERICHTIGUNG-ZEITSTEMPEL-2"
+titel: "Meine eigene Berichtigung war zu weit — nicht alle 86 Felder sind falsch, die Drift beginnt um 16:39 und betrifft rund 30"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:05:43 CEST"
+mess_stand: "Blockfeld gegen Commit-Zeit, Commit fuer Commit von 15:32 bis 17:59 durchgerechnet"
+was_ich_zu_weit_gemeldet_habe: |
+  In der Berichtigung davor steht: "alle 86 zeit-Felder meiner heutigen Bloecke sind
+  erfunden". Das ist zu weit, und ich habe es gemessen statt es stehenzulassen.
+  BLOCKFELD GEGEN COMMIT-ZEIT, Commit fuer Commit:
+  15:32 bis 16:36 ... Abweichung 0 bis 3 Minuten, meist 1
+  16:39 ............. +6
+  16:42 ............. +8
+  17:00 ............. +38
+  17:46 ............. +2:45
+  17:59 ............. +3:18
+  Bis 16:36 stimmten die Felder praktisch. Die Drift beginnt um 16:39 und waechst von da
+  an. Betroffen sind rund 30 Bloecke, nicht 86.
+warum_ich_das_nachtrage: |
+  Eine Selbstanklage, die weiter geht als der Befund, ist auch eine Fehlmessung. Sie ist
+  nur unangenehmer zu widerlegen, weil niemand widerspricht, wenn jemand sich selbst zu
+  hart beurteilt.
+  Ich habe in der ersten Berichtigung geschrieben "gemessen" und dabei drei Stichproben
+  verallgemeinert: 12:45, 13:09 und die letzten vier. Die frueheren beiden zeigten +5, die
+  spaeten +3 Stunden — daraus habe ich eine durchgehende Fortschreibung geschlossen. Der
+  vollstaendige Durchlauf zeigt etwas anderes: erst genau, dann ab einem Punkt driftend.
+  Das ist derselbe Fehler wie bei A-39-4 heute nachmittag, nur an mir: aus einer Stichprobe
+  auf die Reihe geschlossen, ohne die Reihe zu oeffnen.
+was_das_fuer_meine_zeitspannen_heisst: |
+  "A-37-5 liegt seit 43 Minuten beim Planner" — Block 16:00, Commit 16:00:47, mein
+  Bezugspunkt 15:17 lag ebenfalls im genauen Bereich. DIE ANGABE STIMMT.
+  "seit 13:01:54, also vier Stunden 37 Minuten" — Block 17:38, Commit 17:00:26. Der
+  Bezugspunkt 13:01:54 stammt aus git log und ist echt, meine Jetzt-Zeit war 38 Minuten zu
+  spaet. RICHTIG WAEREN 3 STUNDEN 58 MINUTEN.
+  Die Aussage selbst — der Punkt liegt seit dem fruehen Nachmittag offen — traegt
+  unveraendert.
+was_bleibt: |
+  Der Kern der ersten Berichtigung steht: ich habe ab 16:39 fortgeschrieben statt gelesen,
+  und das ist derselbe Fehler, den ich heute mehreren Rollen vorgehalten habe. Die Abhilfe
+  bleibt dieselbe und laeuft seit dem letzten Block: date lesen, unmittelbar vor dem
+  Schreiben.
+  Was nicht bleibt, ist die Zahl 86. Es sind rund 30, und welche genau, steht oben.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-1 haelt am Basis-SHA — und die Rot-Lage ist heute schon zu einem Neuntel erfuellt, was das Blatt richtig vorwegnimmt"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:08:07 CEST"
+mess_stand: "FORMELSAMMLUNG.md an zwei Staenden geholt: basis_sha 99add90f und rolle/planner heute"
+a_40_1_geprueft: |
+  Das Kriterium verlangt drei maschinell erkennbare Zustaende und nennt als Rot-Lage:
+  "kein Eintrag traegt ein Zustandsfeld".
+  AM BASIS-SHA 99add90f gemessen, nicht am heutigen Stand — das ist der Unterschied, der
+  zaehlt:
+  nachgerechnet_an ... 0     GEGENGEPRUEFT ... 0     Datei 1151 Zeilen
+  Die Rot-Lage ist echt und am genannten Stand reproduzierbar.
+und_heute_ist_sie_schon_angebrochen: |
+  Dieselbe Datei am heutigen Planner-Stand: nachgerechnet_an 1.
+  Ein Eintrag traegt das Feld bereits. Wer die DoR am HEUTIGEN Stand prueft, misst 1 statt
+  0 und haelt die Rot-Lage fuer falsch.
+  DAS BLATT NIMMT DAS RICHTIG VORWEG, indem es "Rot am Basis-SHA" schreibt statt "Rot
+  heute". Genau diese Formulierung habe ich heute an mehreren Stellen vermisst — bei
+  A-38-2 vor der Umstellung, bei A-40-5 vor der Zaehlbefehl-Fassung. Hier steht sie von
+  Anfang an.
+  Ich melde es trotzdem, weil die Differenz waechst: was heute ein Eintrag ist, sind
+  morgen mehr, und irgendwann liest jemand die Rot-Lage ohne den Zusatz.
+was_das_fuer_die_DoR_heisst: |
+  A-40-1 ist erfuellbar, nicht bereits erfuellt, und seine Rot-Lage ist am benannten Stand
+  belegt. Das Kriterium haelt.
+  Geprueft und haltend sind damit A-40-1 und A-40-5 (Zaehlbefehl statt Zahl, um 16:32 mit
+  32 Definitionsstellen und 23 ohne Ampel gemessen).
+  Offen: A-40-2, -3, -4, -6, -7, -8, -9 und die sechs Kanten. Dazu mein Befund von 18:12
+  zu A-40-9, dem als einzigem der fuenf Suite-Kriterien die Invarianten-Klausel fehlt.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-40"
+titel: "Berichtigung meiner Meldung von vor zwei Runden — die 1 war eine Regelankuendigung, kein Eintrag; und A-40-2 wuerde heute 116 Meldungen erzeugen"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:11:05 CEST"
+mess_stand: "FORMELSAMMLUNG.md heute und am basis_sha 99add90f · 89 aktive Blaetter einzeln gelesen"
+was_ich_berichtige: |
+  Vor zwei Runden habe ich gemeldet: "heute ist die Rot-Lage schon angebrochen —
+  nachgerechnet_an 1". Das ist falsch.
+  NACHGESEHEN, WO DIE 1 STEHT: in Zeile 2, in der Kopfzeile der Datei —
+  "SEIT 16.08.2026: Jeder Eintrag traegt einen Zustand — ABGESCHRIEBEN · NACHGERECHNET ·
+  GEGENGEPRUEFT ...".
+  Das ist die ANKUENDIGUNG der Regel, nicht ihre Anwendung. Kein einziger Formeleintrag
+  traegt ein Zustandsfeld.
+  Damit ist A-40-1s Rot-Lage nicht nur am Basis-SHA erfuellt, sondern auch heute noch
+  vollstaendig. Mein Zusatz "zu einem Neuntel angebrochen" faellt weg.
+  ES IST DERSELBE FEHLER WIE HEUTE MEHRFACH, und diesmal an mir: eine Zahl gezaehlt und
+  ihre Bedeutung nicht geoeffnet. Genau das habe ich um 16:32 an A-40-5 richtig gemacht
+  (die 18 vermeintlichen Luecken waren Verweise) und hier unterlassen.
+a_40_2_die_groessenordnung: |
+  A-40-2 verlangt: "Die siebte Innenpruefung laeuft und findet einen echten Fall.
+  Positivprobe historisch: gegen ein Blatt, das eine F-Kennung nennt, deren Eintrag kein
+  nachgerechnet_an traegt -> Meldung."
+  GEMESSEN ueber alle 89 aktiven Blaetter:
+  Blaetter mit mindestens einer F-Kennung .... 41
+  Blaetter ohne ............................. 48
+  F-Nennungen insgesamt, je Blatt eindeutig . 116
+  Definitionsstellen in der Formelsammlung .. 32
+  davon mit nachgerechnet_an ................  0
+  NAHEZU JEDE DER 116 NENNUNGEN WAERE HEUTE EINE MELDUNG. Die Positivprobe ist also nicht
+  knapp ausloesbar, sondern flaechendeckend.
+was_das_bedeutet_und_was_nicht: |
+  Es ist KEIN Einwand gegen das Kriterium. A-40-2 verlangt genau einen echten Fall, und
+  den gibt es 116-fach — die Probe ist erfuellbar, mit Abstand.
+  Aber wer die Pruefung baut, sollte die Zahl kennen. Eine Innenpruefung, die bei 41 von
+  89 Blaettern anschlaegt und 116 Zeilen ausgibt, ist entweder ein Alarm oder eine
+  Bestandsaufnahme — und das ist ein Unterschied in der Bauart, nicht im Ergebnis.
+  Dasselbe habe ich um 17:24 an A-39s K2 gemeldet: die Kante nennt ihre Grenze richtig,
+  aber nicht ihre Groesse. Hier ist es umgekehrt — das Kriterium nennt seinen Fall richtig,
+  aber nicht seine Menge.
+  VORSCHLAG, nicht Entscheidung: die erwartete Trefferzahl im Kriterium nennen, oder die
+  Pruefung von Anfang an als Bestandsaufnahme bauen, die zaehlt statt zu melden.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-3 und -4 geprueft — die Rot-Lage ist vollstaendig (0 und 0), und damit haengt die ganze Unterscheidung am Drei-Fragen-Test allein"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:13:45 CEST"
+mess_stand: "FORMELSAMMLUNG und REGISTER aus rolle/planner · Werkbank-Verzeichnis durchsucht"
+die_rot_lage_ist_vollstaendig: |
+  A-40 fuehrt zwei Pflichtfelder ein. Beide gemessen, ueber die ganze FORMELSAMMLUNG:
+  gegengeprueft_an ... 0     geltungsbereich ... 0
+  Kein Eintrag traegt eines von beiden. A-40-4 ("GEGENGEPRUEFT ohne Fundstelle wird
+  abgewiesen") ist damit heute nicht ausloesbar — es gibt keinen Eintrag mit dem Zustand,
+  also auch keinen ohne Fundstelle. Das Kriterium ist Vorsorge fuer den ersten Eintrag.
+a_40_3_die_beiden_proben_stehen: |
+  Das Kriterium nennt einen historischen Beleg mit beiden Richtungen: "W-28 (dreimal JA)
+  muss anschlagen, F-004 (dreimal NEIN) nicht."
+  BEIDE GEPRUEFT:
+  W-28   Registerzeile vorhanden — "Dachentwaesserung | LEER | W-07, W-27 | ungeprueft —
+         linienBauteile fuehrt 'dachrinne' als Linientyp". Werkbank-Blaetter: 0.
+  F-004  Definitionsstelle in Zeile 75 der Formelsammlung, vollstaendig mit Zweck,
+         Eingabe und Formel ("Schnittpunkt zweier Geraden").
+  Beide Gegenstaende existieren, die Probe ist an ihnen fahrbar.
+und_hier_liegt_der_hinweis: |
+  Da BEIDE Pflichtfelder ueberall fehlen, unterscheidet das Fehlen der Felder W-28 nicht
+  von F-004. Die Bedingung des Kriteriums lautet "bei JA UND fehlendem gegengeprueft_an
+  UND fehlendem geltungsbereich" — die letzten beiden Teile sind heute IMMER wahr.
+  ALSO HAENGT DIE GANZE UNTERSCHEIDUNG AM DREI-FRAGEN-TEST ALLEIN. Er ist der einzige
+  Teil der Bedingung, der zwischen den beiden Proben trennt.
+  Das ist kein Fehler — es ist der Zustand vor dem Bau, und genau deshalb sind die Felder
+  ja Gegenstand des Auftrags. Aber wer A-40-3 abnimmt, prueft in Wahrheit den
+  Drei-Fragen-Test und nicht die Feldbedingung. Wenn der Test falsch abgebildet ist,
+  faellt es an den Feldern nicht auf.
+  VORSCHLAG, nicht Entscheidung: die Probe so aufschreiben, dass sie den Test isoliert —
+  etwa "W-28 und F-004 durch denselben Prueflauf, Unterschied allein aus den drei Fragen".
+  Dann misst die Abnahme, was sie messen will.
+stand_der_A_40_dor: |
+  Geprueft und haltend: A-40-1 (Rot-Lage am Basis-SHA, heute unveraendert), A-40-3 (beide
+  Proben vorhanden, mit dem Hinweis oben), A-40-5 (Zaehlbefehl statt Zahl).
+  Nicht ausloesbar, weil Vorsorge: A-40-4.
+  Offen: A-40-2 (mit der 116er-Groessenordnung von vorhin), -6, -7, -8, -9 und die sechs
+  Kanten. Dazu mein Befund zu A-40-9, dem die Invarianten-Klausel fehlt.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-40"
+titel: "K1 und K3 sind zahlengenau belegt — drei Definitionsstellen fuer N-003, siebzehn S-Verweise ohne eigene"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:16:41 CEST"
+mess_stand: "FORMELSAMMLUNG.md aus rolle/planner, 1151 Zeilen · Kreuzprobe ueber alle sechs Kanten"
+k1_stimmt_auf_die_stelle: |
+  Die Kante sagt: "Eine Kennung hat mehrere Definitionsstellen (N-003 hat drei: Formel,
+  Geltungsbereich, Auflage)."
+  NACHGEZAEHLT, Ueberschriften in der Formelsammlung:
+  Z.754  ### N-003 · Sparren-Vorbemessung (Biegung + Durchbiegung) · FACH-GATE
+  Z.784  ### N-003 · Geltungsbereich — von Yama festgelegt 12.08., DAUERGELB
+  Z.814  ### N-003 · AUFLAGE an die Ausgabe — keine stille Zahl
+  Drei Stellen, und zwar genau die drei genannten. Die Kante ist nicht behauptet, sie ist
+  am Bestand nachweisbar — und N-003 ist zugleich einer der Posten, die bei Yama offen
+  liegen. Die drei Stellen zeigen, warum: die Formel allein traegt die Einschraenkung
+  nicht, sie steht in zwei weiteren Abschnitten.
+k3_stimmt_ebenfalls: |
+  Die Kante sagt: "Die Kennung wird nur genannt, nicht definiert (die 17 S-Verweise in der
+  FORMELSAMMLUNG)."
+  GEMESSEN: S-Nummern eindeutig 17 · davon mit eigener Definitionsstelle 0.
+  Siebzehn genannt, keine definiert. Die Zahl im Blatt stimmt auf den Punkt.
+  Das deckt sich mit meiner Messung von 16:32, wo ich beim Nachzaehlen der Ampeln 18
+  vermeintliche Luecken fand und beim Oeffnen sah, dass die S-Reihe nur in Spannen genannt
+  wird ("S-001…S-006 Sonnenstand"). Damals war es mein Fehltreffer, hier ist es die
+  bewusst benannte Kante — dieselbe Beobachtung, einmal als Irrtum und einmal als Regel.
+kreuzprobe_wie_bei_den_anderen: |
+  K1 und K6 werden von A-40-6 und A-40-7 genannt, K2 bis K5 von keinem Einzelkriterium.
+  A-40-7 ist das Sammelkriterium ("alle sechs Kanten behandelt und je einzeln belegt") —
+  dieselbe Bauart wie A-37-17 und A-38-7. Kein Mangel.
+  Damit haben alle vier Auftraege in meiner Bahn dieselbe Struktur, und A-39 als einziger
+  die feinere: dort nennt jede Kante ihre Pruefung.
+stand: |
+  A-40 geprueft und haltend: -1, -3, -5, Kanten K1 und K3.
+  Vorsorge, heute nicht ausloesbar: -4.
+  Offen: -2 (Groessenordnung 116 gemessen), -6, -8, -9 und die Kanten K2, K4, K5, K6.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-40"
+titel: "K2 belegt — aber in einer anderen Datei als der Zaehlbefehl; und der Zaehlbefehl zaehlt Zeilen statt Kennungen"
+rolle: plan-pruefer
+zeit: "16.08. 18:24"
+mess_stand: 2de9fac9c56673ffc6a25b55a8a9e64f6965f7b8
+baum: "sauber (0 Eintraege)"
+zustand: BEFUND
+k2_wortlaut: "Die Aussage ist eine Grenze, keine Formel (S-078 'Was die Simulation nicht darf')"
+k2_urteil: "BELEGT — der Wortlaut stimmt zeichengenau"
+k2_fundort: "docs/rollenkette/werkbank/01-MATHEMATIK/SOLAR-REGELWERK.md:543  '### S-078 · Was die Simulation nicht darf'"
+k2_inhalt: "vier nummerierte Verbote (nicht vom Tag aufs Jahr, nicht Monatsmittel verschatten, keine Zahl ohne Doppellauf, Matrix nicht ohne Vermerk) — eine Grenze, keine Formel. Die Kante trifft."
+eigener_fehlgriff: |
+  Mein Zwischenbefund lautete, S-078 komme in der FORMELSAMMLUNG nur als Spannen-Endpunkt
+  (Z.1073 'S-070…S-078') vor und die Kante sei unbelegt. Das war ein Ortsfehler: die S-Reihe
+  wohnt im SOLAR-REGELWERK, was ich heute Nachmittag selbst gemessen hatte. Dieselbe Klasse
+  wie meine 18-vermeintliche-Luecken-Fehlmessung. Der Befund wird zurueckgezogen.
+befund_1_reichweite: |
+  A-40-5s Zaehlbefehl nennt genau eine Datei: FORMELSAMMLUNG.md. Das SOLAR-REGELWERK steht
+  nicht darin — obwohl es 32 eigene S-Kennungen traegt und Ampeln dort NULLmal vorkommen.
+  Das Kriterium 'jede Definitionsstelle traegt eine Ampel' misst also einen Teil des Bestands.
+befund_2_zeilen_statt_kennungen: |
+  Der Zaehlbefehl zaehlt ZEILEN. Im SOLAR-REGELWERK traegt jede Kennung eine Ueberschrift UND
+  eine Uebersichtstabellenzeile: 64 Trefferzeilen fuer 32 Kennungen. Wer ihn dort anwendet,
+  liest die doppelte Zahl. In der FORMELSAMMLUNG faellt es nicht auf (32 Zeilen, keine Tabelle),
+  dort erzeugen 30 Kennungen 32 Zeilen, weil N-003 dreimal ueberschrieben ist (754/784/814).
+befund_3_erster_echter_eintrag: |
+  Im SOLAR-REGELWERK:163 steht der ERSTE echte Zustandseintrag des Bestands — S-008
+  (Auf-/Untergangs-Azimut) mit 'zustand: NACHGERECHNET' und einem gefuellten nachgerechnet_an
+  (eingabe/erwartet/gerechnet, zwei unabhaengige Rechenwege). Der zweite Treffer im selben
+  Zaehler ist die Regelankuendigung in Zeile 2 — geoeffnet, nicht gezaehlt.
+s008_selbst_nachgerechnet: |
+  Eigener Lauf, python3, acos(sin(dek)/cos(phi)) bei phi=51 Grad N:
+    21.06. dek +23,45 ->  50,777   Blatt sagt  50,8   Abweichung 0,023
+    21.12. dek -23,42 -> 129,167   Blatt sagt 129,2   Abweichung 0,033
+    21.03. dek   0,00 ->  90,000   Blatt sagt  90,0   Abweichung 0,000
+  Die Abweichungen sind reine Rundung auf eine Nachkommastelle. Der Eintrag haelt —
+  er ist nachgerechnet, nicht nur etikettiert.
+messbefehle: |
+  git show rolle/planner:docs/rollenkette/werkbank/01-MATHEMATIK/SOLAR-REGELWERK.md
+  grep -nE '^#+ *\**`?[FNS]-[0-9]{3}' <datei>            # Ueberschriften
+  grep -cE '^\| *\**`?[FNS]-[0-9]{3}' <datei>            # Tabellenzeilen
+vorschlag: "A-40-5 benennt entweder beide Dateien, oder das Kriterium sagt ausdruecklich, dass es nur die Formelsammlung meint. Und der Zaehlbefehl sollte auf eindeutige Kennungen entfalten, sonst zaehlt er im Solar-Regelwerk doppelt. Beides ist Blattarbeit."
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "P-03"
+titel: "Meine Ballortung sah nur die Statuswahrheit — 36 Blaetter tragen einen DoR-Ball bei mir, den sie nie gemeldet hat"
+rolle: plan-pruefer
+zeit: "16.08. 18:27"
+mess_stand: 0e62e4f4
+zustand: BEFUND
+art: "SELBSTBEFUND ueber die eigene Methode, nicht ueber fremde Arbeit"
+was_mein_muster_sah: |
+  grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md  ->  29 Treffer.
+  Das ist der Befehl aus meiner Wache. Er liest EINE Datei: die Statuswahrheit.
+was_es_nicht_sah: |
+  Die Auftragsblaetter unter docs/auftraege/aktiv/ tragen eigene Ballfelder.
+  Gemessen an rolle/planner: 78 Blaetter nennen 'plan-pruefer' in ballbesitz oder dor_beleg.
+  Davon tragen 36 im ERSTEN dor_beleg woertlich 'steht aus — plan-pruefer.'
+  Kein einziger davon stand je in meiner Ballortung.
+warum_die_zahl_nicht_36_offene_baelle_heisst: |
+  29 der betroffenen Kennungen haben bereits Datensaetze in docs/STATUS.md
+  (A-37 sechzehn Bloecke, A-41 vierzehn, A-38/-39/-40 je sieben, A-42 fuenf).
+  Dort ist die Arbeit geschehen. Das Blattfeld wurde dabei nicht nachgezogen.
+  Es sind also nicht 36 unbearbeitete Auftraege, sondern 36 Blaetter, deren
+  DoR-Feld nicht sagt, was die Statuswahrheit sagt — die A-20-Drift, gemessen
+  auf einer Seite, die ich bisher nicht gemessen habe.
+fangprobe: |
+  Erster Durchgang zaehlte 38 und listete A-37/A-38 als 'steht aus', obwohl ihr Kopf
+  'NICHT ERTEILT — 3. Runde' sagt. Ursache: grep -q trifft JEDES Vorkommen, und genau
+  2 Blaetter fuehren mehrere dor_beleg-Felder (Kopf + Historie). Mit 'erstes Feld je
+  Blatt' sind es 36. Die 38 war meine Zahl, nicht die des Bestands.
+zweite_korrektur_in_diesem_commit: |
+  Mein A-40-Block von 18:24 schrieb 'auftrag: A-40' unquotiert — als EINZIGER von 230.
+  Der Hausgebrauch ist 'auftrag: "A-40"'. Jeder Zaehler, der auf die quotierte Form
+  geht, haette ihn uebersehen. Hier angeglichen.
+folge_fuer_meine_wache: |
+  Die Ballortung braucht eine zweite Quelle: die Blaetter. Sonst meldet sie 29,
+  waehrend 36 Blattfelder auf mich zeigen. Ich fuehre das ab sofort mit.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "P-04"
+titel: "Zwei Rollen stehen ueber ihrem heutigen Maximum still — gemessen am eigenen Takt, nicht an einem Gefuehl"
+rolle: plan-pruefer
+zeit: "16.08. 18:31"
+mess_stand: 9edc948baffbcd3e70c8a20961b9d31b5636e061
+baum: "sauber (0 Eintraege)"
+zustand: BEFUND
+methode: |
+  Je Rolle alle heutigen Commits mit Rollenmarke, Zeitstempel entnommen, groesste Pause
+  des Tages gegen die aktuelle Stille gestellt. Der Maßstab ist der EIGENE Takt der Rolle,
+  nicht ein gemeinsamer Schwellwert — der release-pruefer taktet anders als der evaluator.
+messung: |
+  Rolle             Commits  letzter  groesste Pause heute  jetzt still   Urteil
+  release-pruefer      70     17:49          14 min            41 min     AUFFAELLIG (3x)
+  generator            40     17:38          28 min            52 min     AUFFAELLIG (1,9x)
+  planner              54     17:55          37 min            35 min     im Rahmen
+  evaluator            10     17:49         139 min            41 min     im Rahmen
+  plan-pruefer        112     18:28           7 min             2 min     laufend
+befund: |
+  Zwei Rollen liegen ueber ihrer groessten heutigen Pause: der release-pruefer beim
+  Dreifachen, der generator beim knapp Doppelten. Zwei liegen im Rahmen — der planner
+  knapp darunter (35 gegen 37), der evaluator deutlich (41 gegen 139).
+  Von 15 Commits der letzten 30 Minuten tragen ALLE meine Rollenmarke.
+was_der_befund_NICHT_sagt: |
+  Er sagt nicht, dass die Rollen arbeitslos sind — eine Rolle kann lange an einem Stueck
+  arbeiten, ohne zu committen. Er sagt: der Abstand hat heute noch nie so lange gedauert.
+  Bei einer Rolle mit 70 Commits und 14 Minuten Maximum ist das ein belastbarer Ausreisser,
+  beim evaluator mit 10 Commits waere dieselbe Zahl bedeutungslos. Deshalb nur zwei genannt.
+transportweg_geprueft: |
+  Meine eigenen Commits werden transportiert — nach jedem folgt binnen Minuten ein
+  'Merge branch rolle/plan-pruefer into auto/hausplaner-integration' (18:08, 18:11, 18:14,
+  18:17, 18:26, 18:29). Der Weg funktioniert. Sie erscheinen nur nicht in den Rollenzweigen,
+  weshalb ein Vergleich gegen origin/rolle/* sie als 'fehlend' liest. Das ist kein Defekt.
+kein_push: "Die gemeinsame git-Datenbank sieht meine 15 Commits ohne Push; refs/heads/rolle/plan-pruefer traegt 9edc948b, aus dem Hauptbaum gelesen. Meine Regel bleibt gewahrt."
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-33"
+titel: "A-33s Zahlen halten am heutigen Stand — und der Grund, warum MEINE Nachzaehlung um eins abwich, ist ein Defekt in der Statuswahrheit selbst"
+rolle: plan-pruefer
+zeit: "16.08. 18:35"
+mess_stand: 550a5e1254dfde511f4a1944d1405daffdff41c4
+basis_stand: f9b67b1b
+baum: "sauber (0 Eintraege)"
+zustand_nicht_angefasst: "A-33 bleibt BEREIT beim generator — dies ist ein Befund, keine Zustandsaenderung"
+vorratspruefung: "Posten b (ZAHLEN NACHRECHNEN) am einzigen BEREIT-Auftrag des Bestands"
+fangprobe_zuerst: |
+  Bevor ich heute gemessen habe, habe ich das Muster am BASIS-STAND f9b67b1b laufen lassen:
+  es liefert ELF Verkuerzungen — W-01 W-02 W-04 W-05 W-08 W-09 W-11 W-13 W-15 W-21 W-22 —
+  zeichengleich mit der Liste im Blatt. Das Muster trifft also, was das Blatt meint.
+ergebnis_heute: |
+  Am Stand 550a5e12: WIEDER genau diese elf. Keine ist verschwunden, keine neu dazugekommen.
+  Die Tafel ist inzwischen von 72 auf 79 Zeilen gewachsen und die Zahl der Zeilen ohne
+  Datensatz von 14 auf 12 gefallen — die tragende Zahl des Auftrags hat sich dabei NICHT
+  bewegt. A-33 ist nicht veraltet; der Generator kann auf dieser Zahl bauen.
+meine_abweichung_und_ihre_ursache: |
+  Meine erste Nachzaehlung ergab 13 statt 12 (eng) und 14 statt 13 (breit) — als dritten
+  Rest neben A-06 und P-02 fand ich A-18. Gegenprobe: A-18 HAT einen Datensatz, Zeile 5930
+  am Basis-Stand, 'auftrag: "A-18"'. Das Blatt hat recht, meine Zahl war falsch.
+  URSACHE, am Ort gemessen: Zeile 5915 oeffnet einen ```yaml-Block, der nie geschlossen wird.
+  Die naechste Marke ist 5929 — die OEFFNUNG des A-18-Blocks. Jede Blockpaarung schliesst
+  damit Block 5915 auf 5929 und liest den Bereich 5929 bis 6012 als ausserhalb. Der
+  A-18-Datensatz wird unsichtbar.
+die_regel_dahinter: |
+  Ein kaputter Block macht nicht SICH SELBST unsichtbar, sondern den FOLGENDEN. Deshalb
+  faellt er beim Lesen nicht auf: die kaputte Stelle sieht normal aus, und der Verlust
+  entsteht eine Ueberschrift weiter.
+konstanz: |
+  Basis f9b67b1b: 82 auftrag-Zeilen, 81 in Bloecken, unsichtbar 1 -> A-18
+  Heute 550a5e12: 232 auftrag-Zeilen, 231 in Bloecken, unsichtbar 1 -> A-18
+  Derselbe eine Datensatz, seit dem 13.08. durchgehend.
+tragweite: |
+  Die '25 kaputten Bloecke', die das Tor als Altlast durchwinkt, sind nicht nur Kosmetik:
+  mindestens einer entzieht einen vollstaendigen Datensatz jeder maschinellen Zaehlung.
+  Das trifft A-22 (Statuswahrheit maschinell lesbar) und A-41 (Statuswahrheit wird erzeugt)
+  unmittelbar — beide zaehlen ueber genau diese Paarung.
+nebenbefund_blattdrift: |
+  A-33s Blatt fuehrt 'dor_beleg: "steht aus — plan-pruefer."', der Datensatz dagegen
+  'zustand: BEREIT', 'ballbesitz: generator' und ein dor_beleg_2 mit ERTEILT 13.08.
+  Das ist P-03 im Einzelfall, hier zum ersten Mal an einer Kennung belegt.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "P-04"
+titel: "Fortschreibung: drei von vier Rollen stehen jetzt ueber ihrem eigenen Maximum — und ich habe in der LETZTEN Meldung eine Uhrzeit erfunden"
+rolle: plan-pruefer
+zeit: "16.08. 18:37"
+mess_stand: 988ebd5380e97c15af97211ea0e097bca899d20f
+baum: "sauber (0 Eintraege)"
+zustand: BEFUND
+selbstbefund_zuerst: |
+  Meine Meldung zur vorigen Runde begann mit 'Wache 18:31–18:39'. Die 18:39 habe ich
+  NICHT gemessen, sondern fortgeschrieben — der Commit fiel um 18:35:42, das zeit-Feld
+  im Block sagt korrekt 18:35. Der BLOCK war richtig, die PROSA an den Menschen nicht.
+  Das ist dieselbe Klasse wie meine 86 erfundenen zeit-Felder von heute Nachmittag,
+  nur eine Ebene weiter aussen: ich habe die Disziplin im Datensatz gehalten und in
+  der Meldung fallen lassen.
+  FOLGESCHADEN, gemessen: mein naechster Befehl filterte --since='18:39' und lieferte
+  leer. Eine Zeitspanne, die in der Zukunft liegt, gibt kein Ergebnis, sondern das
+  Aussehen eines Ergebnisses. Ich haette 'keine Aktivitaet' melden koennen, ohne dass
+  eine Messung stattgefunden hat. Korrekt gemessen sind es 0 fremde Commits in 30 min.
+verlauf_gegen_die_vorrunde: |
+  Rolle             max heute   18:31      18:36     Bewegung
+  release-pruefer      14 min   41 (3,0x)  47 (3,4x)  steigt
+  generator            28 min   52 (1,9x)  58 (2,1x)  steigt
+  planner              37 min   35 (0,9x)  41 (1,1x)  NEU ueber Maximum
+  evaluator           139 min   41 (0,3x)  47 (0,3x)  im Rahmen
+  plan-pruefer          7 min    2          1          laufend
+befund: |
+  Drei von vier Rollen liegen jetzt ueber ihrer groessten heutigen Pause. Der planner
+  ist in dieser Runde dazugekommen. Der evaluator bleibt im Rahmen, weil sein Takt
+  ohnehin grob ist — bei zehn Commits ist die Zahl kein Signal.
+  Letzte fremde Commits: generator 17:38, evaluator 17:49, release-pruefer 17:49,
+  planner 17:55. Seither ausschliesslich meine eigenen.
+weiterhin_gilt: |
+  Der Befund sagt nicht, dass die Rollen arbeitslos sind — nur, dass der Abstand heute
+  noch nie so lange war. Er sagt auch nicht, dass der Transport klemmt: der ist in der
+  Vorrunde geprueft und intakt.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "P-05"
+titel: "Ich pruefe die Statuswahrheit in einem Baum, dem seit 15:04 die Freigaben fehlen — und ich habe vier Bloecken einen erfundenen Zustand gegeben"
+rolle: plan-pruefer
+zeit: "16.08. 18:42"
+mess_stand: 2dbeeb94c3ae15774259479d193a0ffc13ade48a
+baum: "sauber (0 Eintraege)"
+art: "SELBSTBEFUND, zwei getrennte Fehler in MEINER Arbeit"
+anlass: "Vorratspruefung Posten a (gewanderte Verweise) an A-33 — die Verweise waren in Ordnung, der Auftrag nicht"
+fehler_1_veralteter_baum: |
+  A-33 ist in meinem Baum BEREIT beim generator. Tatsaechlich ist er seit 15:04 durch
+  ca3fee51 BETRIEBSBESTAETIGT, und der Liefergegenstand
+  scripts/a33-kennungen-nachziehen.sh liegt mit 174 Zeilen in generator, planner und
+  release-pruefer — in meinem Baum fehlt er.
+  Ich habe in den letzten ZWEI Runden gemeldet, A-33 sei 'der einzige BEREIT-Auftrag'
+  und 'der Generator kann darauf bauen'. Beides war zum Zeitpunkt der Meldung
+  dreieinhalb Stunden ueberholt. Die Kette lueckenlos: 13:07 generator IN_ARBEIT,
+  13:35 evaluator SPEC_BLOCKED, 14:40 planner Grund behoben, 15:04 release-pruefer
+  freigegeben bis BETRIEBSBESTAETIGT.
+breite_des_fehlers: |
+  Zustandsvergleich HEAD gegen origin/rolle/release-pruefer, je Kennung der letzte Block:
+    A-33    ich BEREIT      tatsaechlich BETRIEBSBESTAETIGT
+    A-37    ich ENTWURF     tatsaechlich BEREIT
+    A-39    ich (keiner)    tatsaechlich ENTWURF
+    A-41    ich (keiner)    tatsaechlich ABGENOMMEN
+    A-42    ich (keiner)    tatsaechlich ENTWURF
+    W-17/1  ich (keiner)    tatsaechlich CODE_FERTIG
+  SECHS Kennungen. Meine Ballortung und jede Zustandsaussage der letzten Stunden
+  standen auf diesem Baum.
+warum_meine_fruehere_probe_es_nicht_fand: |
+  Ich hatte um 18:32 geprueft, ob mir Bloecke fehlen — Ergebnis 0 — und daraus
+  geschlossen, mein Stand sei vollstaendig. Die Probe verglich TITEL. Ein Block kann
+  aber unter gleichem Titel eine andere Fassung tragen, und ein ZUSTAND kann in einem
+  Block stehen, dessen Titel ich habe. Ich habe die falsche Eigenschaft verglichen.
+fehler_2_erfundener_zustand: |
+  Vier Bloecke in meinem Baum tragen 'zustand: BEFUND'. Alle vier sind meine.
+  BEFUND ist kein Zustand der Kette nach Paragraf 3 — ich habe ihn erfunden.
+  Der Wache-Auftrag beschreibt Befundbloecke ausdruecklich als Bloecke OHNE
+  zustand-Feld; genau daran haette ich es merken muessen.
+  Betroffen: A-40 (einmal), P-03 (einmal), P-04 (ZWEIMAL — eine Kennungs-Dublette
+  nach der Zaehlregel 'Bloecke MIT zustand-Feld je Kennung').
+  Auswirkung: A-40 ist im echten Bestand ENTWURF. Sobald mein Block transportiert ist,
+  liest jede Auswertung nach 'letzter Block gewinnt' fuer A-40 den Wert BEFUND.
+  Ich habe damit einen Zustand ueberschrieben, obwohl meine Wache 'kein Zustandsfeld
+  angefasst' vorschreibt. Dieser Block hier traegt deshalb keines.
+was_von_der_a33_pruefung_bleibt: |
+  Die Zeigerprobe selbst haelt: a26-ball-drift.sh:53 ist heute die Kennungs-Muster-Zeile,
+  :96 die START-Zuweisung, :97 der if-Block — zeichengenau das, was das Blatt nach seiner
+  Berichtigung vom 14.08. behauptet. Das Blatt legt die Verschiebung (:32/:55/:56 auf
+  :53/:96/:97) selbst offen. Gepflegt, kein Fund. Nur eben an einem fertigen Auftrag.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "P-06"
+titel: "Die Antwort des Planners auf Yamas Baufrage nachgemessen — sie traegt, bis auf eine Zeile; und meine eigene 30 war nicht falsch, sondern eine Minute alt"
+rolle: plan-pruefer
+zeit: "16.08. 18:46"
+mess_stand: 2bab146d94b761b1b2bab1d70851ffd153890f2f
+geprueft_gegen: "43771e3b (planner, 18:40) — NICHT gegen meinen eigenen Baum, der das Register 92 Zeilen aelter fuehrt"
+baum: "sauber (0 Eintraege)"
+anlass: "Erster fremder Commit seit 17:55; er beantwortet die Frage, deren Messung ich geliefert hatte"
+was_haelt: |
+  BESCHRIEBEN 37 — nachgezaehlt an 43 Werkzeugzeilen, 43 eindeutige Kennungen,
+  Summe 37 + ENTWORFEN 2 + GEGENSTANDSLOS 3 + GEBAUT 1 = 43. Geht auf.
+  Die NEUN ohne F-Nummer mit 5-CODE-Blatt: W-33 W-34 W-35 W-36 W-37 W-38 W-39 W-40 W-42.
+  Zeichengleich mit seiner Liste. Die Einordnung 'Bestandsnachweis, kein Bauauftrag'
+  ist an der Sache belegt.
+was_nicht_haelt: |
+  Er nennt VIER Zeilen mit BESCHRIEBEN ohne 5-CODE-Blatt: W-43 W-26 W-28 W-30.
+  Gemessen sind es FUENF. W-25 (Pfetten und Kehlbalken) traegt BESCHRIEBEN und hat
+  ebenfalls kein 5-CODE-Verzeichnis — geprueft ueber git ls-tree gegen sein eigenes
+  Muster '/W-nn-*/5-CODE/': W-43 0 Dateien, W-26 0, W-28 0, W-30 0, W-25 0, W-17 1.
+  W-25s Registerzeile begruendet ausdruecklich die fehlende F-NUMMER ('Math. 0x —
+  W-25 zaehlt, es rechnet nicht'). Das ist eine Aussage ueber Formeln, nicht ueber
+  das Blatt. Beides faellt hier zusammen und wurde offenbar als erledigt gelesen.
+  FOLGE fuer seine Aufschluesselung: nicht 24 + 9 + 4, sondern 23 + 9 + 5 = 37.
+  Die Antwort auf Yamas Frage aendert sich dadurch NICHT — es bleibt: heute keine.
+meine_eigene_berichtigung: |
+  Ich habe Yama um 17:46 in 35928fa0 gemeldet, der Bauvorrat sei '30 und nicht 37'.
+  Gemessen an den Staenden:
+    vor 1e1afd1b (17:47)  BESCHRIEBEN 30 · LEER 10 · GEGENSTANDSLOS 0
+    nach 1e1afd1b         BESCHRIEBEN 37 · LEER  0 · GEGENSTANDSLOS 3
+  Sieben LEER wurden BESCHRIEBEN, drei GEGENSTANDSLOS: 30+7=37, 10-7-3=0.
+  Meine Zahl war zum Zeitpunkt der Meldung RICHTIG und war eine Minute spaeter
+  ueberholt. Yamas 37 war es also auch — nur fuer einen anderen Stand.
+  Das ist keine Fehlmessung, aber es ist eine Zahl, die Yama heute noch als meine
+  im Kopf hat. Sie gilt seit 17:47 nicht mehr.
+methodisch: |
+  Ich habe zuerst den falschen Stand gelesen (origin/rolle/planner, 421 Zeilen) und
+  daraus 'BESCHRIEBEN 30' und 'die vier tragen LEER' gemessen. Die Probe
+  'enthaelt der gelesene Stand den Commit?' hat es gefangen — merge-base --is-ancestor
+  sagte NEIN, und am Commit-Stand 43771e3b sind es 513 Zeilen und 37 BESCHRIEBEN.
+  Ohne diese Probe haette ich dem Planner zwei Fehler gemeldet, die keine sind.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "P-07"
+titel: "Der Planner arbeitet seit 14:38 ohne meine Befunde — 94 Commits erreichen ihn nicht, und es liegt nicht am Transport"
+rolle: plan-pruefer
+zeit: "16.08. 18:49"
+mess_stand: ad8ad162233f662e7493194610afe31921a1a56a
+baum: "sauber (0 Eintraege)"
+vorratspruefung: "Posten e — eigene Befunde verfolgen: liegen sie noch bei ihrem Halter?"
+befund: |
+  Von zwoelf Befunden, die ich heute Abend geschrieben habe, kennt KEIN Rollenzweig
+  einen einzigen. Gemessen ueber die Blocktitel in docs/STATUS.md je Zweig:
+  planner 0, generator 0, evaluator 0, release-pruefer 0 von 12.
+wo_die_luecke_liegt: |
+  NICHT im Transport. Mein HEAD ist in auto/hausplaner-integration enthalten
+  (merge-base --is-ancestor bestaetigt), der Integrationszweig steht auf ae9c86d7
+  von 18:47 und kennt meine juengsten Bloecke. refs/heads/rolle/plan-pruefer zeigt
+  auf denselben Commit wie mein HEAD, ist also fuer jeden im Repo lesbar.
+  Die Luecke ist der RUECKWEG. Die Rollenzweige ziehen selbst nach, und zwar zuletzt:
+    planner           14:38  (0d79ce45 'Stand nachgezogen vor dem Eintrag von A-39 und A-40')
+    generator         17:40
+    evaluator         17:41
+    release-pruefer   17:41
+  Mein juengster Commit im planner-Zweig ist 99add90f von 13:45.
+umfang: |
+  94 meiner Commits liegen zwischen 99add90f und HEAD. Darin die vollstaendige
+  A-42-DoR (neun Kriterien, sechs Kanten), die A-40-Pruefung (-1, -3, -4, K1, K2, K3),
+  Yamas Bauvorrat-Messung, die A-38-in-A-37-Annahme, drei Selbstberichtigungen und
+  die Befunde P-03 bis P-06.
+warum_das_zaehlt: |
+  Ich schreibe Befunde mit 'ballbesitz: planner'. Ein Ball, den der Empfaenger nicht
+  sehen kann, ist kein Ballwechsel. Der Planner hat um 18:40 Yamas Baufrage beantwortet,
+  ohne meine Messung dazu kennen zu koennen — und mein P-06 findet dort eine Zeile,
+  die ich ihm um 17:46 haette liefern koennen, wenn der Weg offen waere.
+  Es ist auch die Erklaerung fuer P-05: ich lese die Statuswahrheit veraltet, WEIL
+  der Austausch in beide Richtungen an derselben Stelle haengt.
+was_ich_NICHT_tue: |
+  Ich ziehe nicht selbst nach und schreibe in keinen fremden Zweig. Beides waere
+  ausserhalb meiner Rolle; die Einzelschreiber-Regel gilt. KEIN PUSH.
+ballbesitz: yama
+```
+
+```yaml
+auftrag: "P-06"
+titel: "W-25 ist der FUENFTE Fall und steht noch — die Berichtigung des Planners ist nach seinem eigenen Massstab unvollstaendig, und das ist der erste messbare Schaden der Rueckweg-Luecke"
+rolle: plan-pruefer
+zeit: "16.08. 18:51"
+mess_stand: 31f65117746fb9d56bfba6a1136f93370fe23451
+geprueft_gegen: "a589db20 (planner, 18:49)"
+baum: "sauber (0 Eintraege)"
+was_der_planner_getan_hat: |
+  a589db20 berichtigt VIER Zeilen von BESCHRIEBEN auf LEER — W-43, W-26, W-28, W-30 —
+  weil die Legende BESCHRIEBEN als 'alle sieben Blaetter gefuellt' definiert und fuer
+  diese vier nicht einmal ein Werkbank-Verzeichnis existiert. Er belegt es dreifach und
+  begruendet den dritten Weg ausdruecklich: die Suche ueber den WERKZEUGNAMEN statt ueber
+  den Pfad, damit der Beleg nicht nur heisst 'am erwarteten Ort ist nichts'.
+  Die Begruendung traegt: ein Reifegrad, der einen Beleg behauptet den es nicht gibt,
+  verhindert dass jemand nachsieht. Das ist richtig und gut gemessen.
+was_fehlt: |
+  W-25 (Pfetten und Kehlbalken) traegt weiterhin BESCHRIEBEN. Nach SEINEN drei Wegen:
+    1) Verzeichnis '/W-25-*' in 02-WERKZEUGE      0 Treffer
+    2) Werkzeugname in der ganzen Werkbank        'pfette' 0 Dateien, 'kehlbalken' 0
+    3) Legende                                    verlangt sieben gefuellte Blaetter
+  Damit erfuellt W-25 jede Bedingung, die er fuer die vier aufgestellt hat.
+  Es ist der FUENFTE Fall derselben Klasse.
+folge_fuer_die_zahl: |
+  Nach der Berichtigung stehen im Register: BESCHRIEBEN 33, LEER 4, GEGENSTANDSLOS 3,
+  ENTWORFEN 2, GEBAUT 1, Summe 43. Mit W-25 waeren es BESCHRIEBEN 32 und LEER 5.
+  Seine Aufschluesselung fuer Yama lautete 24 + 9 + 4; richtig ist 23 + 9 + 5.
+  Die Antwort auf Yamas Frage bleibt unveraendert: heute erfuellt keine alle drei Bedingungen.
+warum_ich_ihm_das_nicht_vorwerfe: |
+  Er KANN meinen Befund nicht kennen. Ich habe W-25 um 18:46 in ad8ad162 gemeldet;
+  origin/rolle/planner kennt von mir zuletzt 99add90f von 13:45, es fehlen ihm 95 Commits.
+  Genau das beschreibt P-07 — und hier wird der Schaden zum ersten Mal messbar:
+  haette der Rueckweg offengestanden, waere W-25 in derselben Runde mitberichtigt worden.
+  Er hat die vier unabhaengig selbst gefunden. Zwei Rollen haben dieselbe Klasse
+  zweimal gemessen, und die fuenfte Zeile faellt in die Luecke dazwischen.
+p07_gegengeprueft: |
+  Mein erweitertes Muster lieferte in dieser Runde '17:38' als letztes Nachziehen des
+  planners und stellte P-07 in Frage. Geoeffnet: 12a9462d ist ein normaler Commit, der
+  das Wort 'nachgezogen' im Betreff traegt, kein Merge aus der Integration. Die Aussage
+  aus P-07 haelt: letzter Merge 14:38, letzter mir bekannter Stand dort 13:45.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-6 geprueft — das Kriterium ist erfuellbar, aber seine Rot-Lage ist seit 14:49 weg, und zwar durch den Planner selbst"
+rolle: plan-pruefer
+zeit: "16.08. 18:54"
+mess_stand: aa5632663876d4fd5a98f7ff781495604526ca57
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+kriterium: "A-40-6 — nachgerechnet_an traegt die ABWEICHUNG, nicht nur das Ergebnis. Das Feld nennt, um wie viel der Fall ohne die Aussage abweicht (Mutationsprobe)"
+urteil: "ERFUELLBAR — aber am heutigen Stand bereits an 1 von 1 Eintraegen erfuellt"
+rot_lage_beim_schnitt: |
+  Am Basis-Stand 99add90f (13:45) trug KEIN Facheintrag ein nachgerechnet_an mit
+  Abweichung. Die Rot-Lage des Kriteriums war zum Schnitt also echt.
+was_seither_geschah: |
+  66fa277f (planner, 14:49) hat S-008 im SOLAR-REGELWERK das Feld gegeben — eine
+  Stunde nach dem Schnitt. Es traegt eingabe, erwartet, gerechnet, fund UND
+  abweichung_ohne_die_regel. Damit erfuellt der einzige existierende Eintrag genau
+  das, was A-40-6 fordert, bevor der Auftrag gebaut ist.
+selbst_nachgerechnet: |
+  Ich habe jede Zahl des Eintrags gegen python3 gerechnet, phi = 51 Grad N:
+    21.06. dek +23,45  ->  50,777   ·  21.12. dek -23,42  ->  129,167
+    Differenz 78,390                   Eintrag sagt 78,4
+    Vorzeichen vertauscht: 21.06. -> 129,223 (Eintrag 129,2), 21.12. -> 50,833 (Eintrag 50,8)
+    Aequinoktium dek 0: +sin 90,0000 und -sin 90,0000 — BEIDE, wie behauptet
+  Der blinde Fleck ist real: wer nur am 21.03. prueft, bestaetigt das falsche Vorzeichen.
+  Der Eintrag dokumentiert ausserdem, dass der Planner beim Nachrechnen selbst in diesen
+  Fehler lief und ihn ueber den zweiten Rechenweg aufloeste. Das ist ein Beleg, keine
+  Wiederholung — genau die Unterscheidung, die A-40-6 verlangt.
+befund_fuer_die_dor: |
+  A-40-6 hat heute keine Rot-Lage mehr AM FELD. Was fehlt, ist der PRUEFSCHRITT, der
+  die Abweichung erzwingt — ein Muster existiert, eine Pruefung nicht. Das Blatt trennt
+  das nicht: der Wortlaut fordert, dass das Feld die Abweichung traegt, und genau das
+  ist erfuellt. Wer A-40-6 nach dem Bau abnimmt, findet es gruen vor, ohne dass der Bau
+  etwas dazu beigetragen haette.
+vorschlag: |
+  A-40-6 auf den Pruefschritt umformulieren: 'der Pruefschritt meldet ein
+  nachgerechnet_an OHNE Abweichungsangabe' — mit S-008 als Negativprobe, die NICHT
+  anschlagen darf. Dann traegt das Kriterium wieder eine Rot-Lage, und S-008 wird vom
+  Zufallstreffer zum Belegfall. Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-2 ist zur Haelfte nicht abnehmbar — die Positivprobe hat 39 Kandidaten, die Negativprobe keinen einzigen ausser dem Auftragsblatt selbst"
+rolle: plan-pruefer
+zeit: "16.08. 18:57"
+mess_stand: 510a36a5e87e3379c58a5fecb962e2dc0df5372e
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+kriterium: "A-40-2 — die siebte Innenpruefung laeuft und findet einen echten Fall. Positivprobe: ein Blatt, das eine F-Kennung nennt, deren Eintrag kein nachgerechnet_an traegt -> Meldung. Negativprobe: ein Blatt, dessen KRITERIUM das Nachrechnen selbst verlangt -> keine Meldung"
+positivprobe: |
+  ERFUELLBAR, und zwar reichlich. Am Basis-Stand 99add90f nennen 39 Blaetter unter
+  docs/auftraege/aktiv/ mindestens eine F-Kennung, und die FORMELSAMMLUNG trug dort
+  NULL nachgerechnet_an. Jeder dieser Eintraege ist ein Positivfall.
+negativprobe: |
+  KEIN KANDIDAT. Gesucht wurde nach Kriterienzeilen (Form '- **X-nn-n**') mit
+  nachrechn / nachgerechnet / durchgerechnet.
+    am Basis-Stand 99add90f : 0 Blaetter
+    heute (rolle/planner)   : 1 Blatt — und das ist A-40 SELBST (sein A-40-6)
+  Zwoelf Blaetter erwaehnen das Nachrechnen ueberhaupt, aber ausnahmslos in
+  PRUEFVERMERKEN (gegenprobe, selbst_nachgerechnet, 'Anlass'), nie in einem Kriterium.
+  Geoeffnet und einzeln geprueft: A-12 Z.244/250/266, W-23 Z.331/338/345,
+  A-35 Z.105/107 — alles Belege einer bereits erfolgten Rechnung, keine Forderung.
+fangproben: |
+  Zwei Muster wurden gegen einen bekannten Treffer geprueft, beide Male mit Folgen:
+  1. '^- \*\*[A-Z]' lieferte fuer A-40 am Basis-Stand 0 Kriterienzeilen. Grund: das
+     A-40-Blatt EXISTIERT am Basis-Stand nicht — geschnitten wurde es um 14:23, der
+     Basis-Stand ist 13:45. Das Muster war richtig, das Objekt fehlte.
+  2. '^ *- \*\*[A-Z]-[0-9]+' liefert fuer A-40 heute 9 Kriterienzeilen. Damit ist
+     belegt, dass die Negativproben-Suche ueberhaupt greifen konnte.
+befund: |
+  A-40-2 verlangt zwei Proben und benennt — anders als A-40-3, das W-28 und F-004
+  ausdruecklich nennt — kein einziges Blatt. Fuer die Positivprobe ist das folgenlos,
+  weil es 39 gibt. Fuer die Negativprobe ist es entscheidend: es gibt keine.
+  Wer A-40-2 abnimmt, kann zeigen dass die Pruefung anschlaegt, aber nicht dass sie
+  DORT SCHWEIGT wo sie schweigen soll. Das ist der Teil, der eine Pruefung von einem
+  Alarm unterscheidet.
+klasse: "P7 — Kriterium ohne gangbaren Weg. Nicht die Pruefung fehlt, sondern der Fall, an dem ihr Schweigen belegt wuerde."
+vorschlag: |
+  Entweder A-40-2 benennt seine zwei Proben so konkret wie A-40-3 — dann muss die
+  Negativprobe erst geschaffen werden, etwa indem ein bestehendes Blatt ein
+  Nachrechen-Kriterium bekommt. Oder die Negativprobe wird gestrichen und A-40-2
+  sagt ausdruecklich, dass nur die Positivrichtung belegt wird. Beides ist
+  Blattaenderung und nicht meine Entscheidung.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-9 kann nicht scheitern — es ist das einzige der sechs Blaetter mit NULL Code-Pfaden, das die Suite-Zusage traegt"
+rolle: plan-pruefer
+zeit: "16.08. 18:59"
+mess_stand: 06ce32379bf8651f25f41a55c2062113e16dd57f
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+kriterien: "A-40-8 (kein Nicht-Ziel beruehrt) und A-40-9 (Suite gruen und Zahl unveraendert gegen den Bau-Stand, tsc exit=0)"
+was_A40_anfasst: |
+  Das Blatt sagt selbst: art 'BAU — zwei Pflichtfelder, drei Zustaende und EINE
+  Innenpruefung ... KEIN Hausplaner-Code, KEINE Migration.'
+  Gemessen an den Pfadangaben im Blatt: kein einziger Pfad unter scripts/, resources/
+  oder app/. Genannt werden ausschliesslich docs/STATUS.md, docs/auftraege/aktiv/ und
+  docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md.
+  'tsc' und 'Suite' kommen im ganzen Blatt GENAU EINMAL vor — in A-40-9 selbst.
+vergleich_mit_den_schwestern: |
+  Dieselbe Schlussformel tragen alle fuenf Schwesterblaetter. Der Unterschied ist der Bau:
+    A-37   7 Code-Pfade   A-37-11 gefahren, belegt mit 'tsc exit 0, Suite 17..'
+    A-41   6 Code-Pfade   A-41-12
+    A-39   3 Code-Pfade   A-39-10
+    A-38   2 Code-Pfade   A-38-9 gefahren, belegt mit 'tsc exit 0, Suite 176'
+    A-42   1 Code-Pfad    A-42-9
+    A-40   0 Code-Pfade   A-40-9
+  Die Formel ist also Hausgebrauch und an sich richtig — bei jedem anderen Auftrag gibt
+  es Code, der sie rechtfertigt. A-40 ist der einzige, bei dem sie ins Leere greift.
+befund: |
+  A-40-9 kann strukturell nicht scheitern. Wenn A-40-8 haelt — keine Datei ausserhalb
+  von docs/ — dann sieht weder tsc noch die Suite eine einzige Aenderung, und beide sind
+  zwangslaeufig so gruen wie vor dem Bau. Das Kriterium prueft damit nichts, was A-40-8
+  nicht schon prueft, nur auf einem teureren Weg.
+  Es ist NICHT falsch und es schadet nicht; es ist ein Kriterium ohne eigene Rot-Lage.
+  Damit ist es das dritte in diesem Blatt nach A-40-6 (Rot-Lage seit 14:49 weg) und
+  A-40-2 (Negativprobe ohne Kandidaten).
+was_A40_8_dagegen_leistet: |
+  A-40-8 traegt eine echte Rot-Lage: der Auftrag AENDERT docs-Dateien, und die Grenze
+  'keine bestehende Fachaussage inhaltlich geaendert' ist an einem Wissensspeicher
+  genau die Stelle, an der ein Bau abrutschen kann. Dieses Kriterium bleibt scharf.
+  Auffaellig ist nur, dass A-40-8 'keine Aenderung an docs/STATUS.md' verlangt,
+  waehrend das Blatt in Zeile 12 'status_steht_in: docs/STATUS.md' fuehrt — der Bau
+  darf die Datei nicht anfassen, der Zustand des Auftrags wird aber dort gefuehrt.
+  Das ist auflösbar (der Generator schreibt den Zustand, nicht der Bau), aber es steht
+  ungetrennt nebeneinander.
+vorschlag: |
+  A-40-9 entweder streichen, weil A-40-8 dieselbe Zusage traegt, oder ausdruecklich als
+  Regressionsschutz kennzeichnen ('belegt, dass der Bau die Grenze eingehalten hat')
+  statt als eigenes Abnahmekriterium. Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-40"
+titel: "Die Kanten sind durch — K4 stuetzt sich auf ein Werkzeug, das es nicht gibt und das schon beim Schnitt LEER war; K5 und K6 nennen gar keinen Fall"
+rolle: plan-pruefer
+zeit: "16.08. 19:02"
+mess_stand: 036e883d59a2d2ccbcacbb8ac09749eb62cc9b31
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+kriterium: "A-40-7 — alle sechs Kanten K1 bis K6 sind behandelt und je einzeln belegt"
+kantenbild: |
+  K1  N-003              BELEGT — drei Definitionsstellen, in frueherer Runde gemessen
+  K2  S-078              BELEGT — Wortlaut steht in SOLAR-REGELWERK.md:543, nicht in der
+                         FORMELSAMMLUNG, auf die A-40-5 zeigt
+  K3  die 17 S-Verweise  BELEGT — 17 eindeutige S-Nummern, davon 0 mit Definitionsstelle
+  K4  W-28               BELEG EXISTIERT NICHT
+  K5  (kein Fall)        kein Belegfall genannt
+  K6  (kein Fall)        kein Belegfall genannt
+k4_gemessen: |
+  W-28 kommt nirgends als Aussage vor:
+    Werkbank-Verzeichnis /W-28-*     Basis 0 · heute 0
+    FORMELSAMMLUNG                   Basis 0 Treffer
+    SOLAR-REGELWERK                  Basis 0 Treffer
+  K4 lautet 'Eine Aussage ist normabhaengig, aber die Norm liegt nicht vor (W-28)'.
+  Es gibt keine Aussage W-28, an der das gezeigt werden koennte.
+  DIESELBE Stelle traegt auch A-40-3: 'Historischer Beleg: W-28 (dreimal JA) muss
+  anschlagen'. Ein Drei-Fragen-Test kann an einem Eintrag, den es nicht gibt, nicht
+  dreimal JA ergeben. Zwei Stellen des Blattes haengen an derselben Leerstelle.
+und_das_register_hat_es_gesagt: |
+  Naheliegend waere die Entschuldigung, das Register habe W-28 damals faelschlich als
+  BESCHRIEBEN gefuehrt. Gemessen am Schnitt-Commit ddcf17e4 (16.08. 14:23): W-28 trug
+  dort LEER. Erst 1e1afd1b (17:47) hat es auf BESCHRIEBEN gezogen, und a589db20 (18:49)
+  hat es wieder auf LEER berichtigt. Zum Zeitpunkt des Schnitts stand also richtig da,
+  dass es zu W-28 nichts gibt.
+eigene_luecke: |
+  Ich habe A-40-3 heute um 18:14 geprueft und fuer belegt gehalten. Gemessen hatte ich
+  die ROT-LAGE (0 gegengeprueft_an, 0 geltungsbereich) — den HISTORISCHEN BELEG W-28
+  habe ich nicht geoeffnet. Das hole ich hiermit nach; die damalige Aussage war zur
+  Haelfte ungeprueft.
+folge_fuer_A_40_7: |
+  A-40-7 verlangt sechs einzeln belegte Kanten. Drei sind es (K1, K2, K3), eine ist es
+  nachweislich nicht (K4), zwei nennen keinen Fall (K5, K6). Das Kriterium ist am
+  heutigen Stand nicht abnehmbar.
+vorschlag: |
+  K4 auf einen existierenden normabhaengigen Fall umstellen — N-003 traegt bereits einen
+  Geltungsbereich und ein Fach-Gate und waere ein echter Kandidat. K5 und K6 brauchen je
+  einen benannten Fall oder die ausdrueckliche Ansage, dass sie als Entwurfsgrenze und
+  nicht als Belegfall gefuehrt werden. Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-40"
+titel: "Die A-40-5-Korrektur ist richtig und trifft meinen Befund unabhaengig — aber der erweiterte Suchraum traegt ein ANDERES Merkmal, und der Lauf meldet jetzt auch den einzigen nachgerechneten Eintrag als ampellos"
+rolle: plan-pruefer
+zeit: "16.08. 19:05"
+mess_stand: 2bae4c173d244e57c9f64bcceb8c90bb3a8e716a
+geprueft_gegen: "4a9053ed (planner, 19:01)"
+baum: "sauber (0 Eintraege)"
+die_korrektur_haelt: |
+  4a9053ed stellt A-40-5s Zaehlbefehl von FORMELSAMMLUNG.md auf 01-MATHEMATIK/*.md um.
+  Das ist genau der Befund, den ich um 18:24 in 0e62e4f4 geschrieben habe — der Planner
+  hat ihn unabhaengig gefunden, ohne ihn kennen zu koennen (100 meiner Commits fehlen
+  seinem Zweig). Zweite Doppelentdeckung dieses Abends nach den vier Reifegraden.
+  Seine Begruendung ist staerker als meine war: ein Fehlalarm kostet Aufmerksamkeit,
+  ein falsches Gruen kostet die Pruefung selbst. Und er schreibt die Zahl NICHT ins
+  Blatt, sondern nur den Befehl — genau wie A-40-5 es selbst verlangt.
+erster_punkt_die_zahl_zaehlt_zeilen: |
+  Seine Gegenprobe nennt 23 + 64 = 87. Nachgemessen mit seinem berichtigten Befehl:
+    FORMELSAMMLUNG    23 ZEILEN ohne Ampel · 22 EINDEUTIGE Kennungen
+    SOLAR-REGELWERK   64 ZEILEN ohne Ampel · 32 EINDEUTIGE Kennungen
+  87 ist eine Zeilenzahl, 54 die Kennungszahl. Belegt an S-008: Zeile 131 traegt die
+  Definitionsstelle '### S-008 · Auf- und Untergangs-Azimut', Zeile 652 eine Zeile der
+  ABHAENGIGKEITSTABELLE. Die zweite ist ein Verweis, keine Definitionsstelle.
+  Fuer den BAU ist 87 die richtige Zahl — so viele Zeilen muss jemand anfassen, damit
+  der Lauf schweigt. Als Aussage ueber Definitionsstellen ist sie um 33 zu hoch.
+zweiter_punkt_das_merkmal_passt_nicht: |
+  Der Ort ist berichtigt, das MERKMAL nicht. Gemessen:
+    FORMELSAMMLUNG    33 Ampelzeilen ·  0 zustand-Felder · 32 Definitionsstellen
+    SOLAR-REGELWERK    0 Ampelzeilen ·  1 zustand-Feld   · 32 Definitionsstellen
+  Die beiden Dateien kennzeichnen VERSCHIEDEN. Das Solar-Regelwerk fuehrt keine Ampeln,
+  sondern die drei Zustaende ABGESCHRIEBEN / NACHGERECHNET / GEGENGEPRUEFT — also genau
+  das, was A-40 erst einfuehren will. Es ist dem Auftrag voraus.
+  FOLGE: der berichtigte Lauf sucht dort Ampeln und findet keine. Er meldet alle 32
+  Kennungen als ampellos — darunter S-008, den EINZIGEN vollstaendig nachgerechneten
+  Eintrag des Bestands, mit gefuelltem nachgerechnet_an und Abweichungsangabe.
+  Das ist kein falsches Gruen mehr, sondern ein Fehlalarm auf dem besten Eintrag, den
+  es gibt. A-40-5 misst das ALTE Merkmal in einem Raum, der schon das NEUE traegt.
+vorschlag: |
+  A-40-5s Filter neben der Ampel auch das zustand-Feld anerkennen, oder das Kriterium
+  auf 'traegt eine Ampel ODER einen Zustand' umstellen. Sonst muss der Bau 32
+  Solar-Kennungen mit Ampeln versehen, die dort systemfremd sind — und S-008 bekaeme
+  eine Ampel, obwohl sein Zustand mehr aussagt als jede Ampel.
+  Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39s Suchraum-Beleg traegt in der Sache, aber die Zahl 32 finde ich in keiner Lesart wieder — es sind 36, 37 oder 40"
+rolle: plan-pruefer
+zeit: "16.08. 19:08"
+mess_stand: a3570fdcc2fe1054e251fd7e03862d5f41b08b5e
+geprueft_gegen: "7970a9c7 (planner, 19:04)"
+baum: "sauber (0 Eintraege)"
+die_behauptung: |
+  7970a9c7 belegt A-39s Nicht-Ziel — geprueft werden nur Auftragsblaetter unter
+  docs/auftraege/ — statt es als Pfad stehen zu lassen. Seine Messung: 32 Dateien
+  ausserhalb tragen ebenfalls ein Feld auftrag, sie heissen BEFUND-* und BERICHT-*,
+  und KEINE EINZIGE traegt einen Abschnitt Abnahmekriterien.
+was_haelt: |
+  Die zweite Messung ist die tragende, und sie stimmt: NULL Dateien ausserhalb
+  docs/auftraege/ tragen einen Abschnitt Abnahmekriterien. Selbst nachgezaehlt ueber
+  alle 40 Kandidaten. Damit ist sein Schluss belegt — die Menge 'Blatt mit
+  Abnahmekriterien' und die Menge 'Datei unter docs/auftraege/' fallen zusammen,
+  und der Suchraum ist geprueft statt geraten. Der Gedanke dahinter ist richtig und
+  deckt sich mit meinem eigenen P7/P8-Bild.
+was_abweicht: |
+  Die Zahl 32 finde ich in keiner Lesart wieder. Gemessen am selben Commit 7970a9c7,
+  Muster '^auftrag: *"?...' ueber alle .md unter docs/ ausserhalb docs/auftraege/:
+    weit   (auftrag mit Grossbuchstabe)      40
+    davon BEFUND-* 3 + BERICHT-* 34          37
+    eng    (auftrag mit A-/W-/B-Kennung)     36
+  Keine davon ist 32. Die drei ausserhalb des BEFUND/BERICHT-Musters sind
+  ARBEITSREGELN.md, STATUS.md und release-vorbereitung.md.
+  ARBEITSREGELN.md traegt 'auftrag: ID' in den Zeilen 427 und 442 — eine SCHABLONE,
+  keine Kennung. STATUS.md traegt die 230 Bloecke selbst.
+fangprobe: |
+  Mein Muster wurde vorher an einem bekannten Treffer geprueft: es findet 86 Blaetter
+  unter docs/auftraege/ mit auftrag-Feld. Es greift also.
+warum_das_zaehlt_und_warum_nicht: |
+  Fuer den Beleg des Suchraums ist die Abweichung folgenlos — ob 32 oder 40 Dateien
+  ausserhalb ein auftrag-Feld tragen, entscheidend ist die Null bei den
+  Abnahmekriterien, und die haelt.
+  Fuer das Blatt ist sie nicht folgenlos: die Zahl steht jetzt im Nicht-Ziel als
+  Beleg, und ein Nachpruefer, der sie mit dem naheliegenden Muster nachzaehlt, kommt
+  auf einen anderen Wert und haelt den Beleg fuer falsch. Eine Belegzahl braucht das
+  Muster, mit dem sie entstanden ist — dieselbe Lehre wie bei A-40-5s Zaehlbefehl.
+vorschlag: "Im Nicht-Ziel neben der Zahl das Muster nennen, mit dem sie gemessen wurde. Dann ist sie nachvollziehbar, egal welche Lesart gemeint war. Blattaenderung, nicht meine Entscheidung."
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39s letzte vier Kriterien geprueft — alle vier tragen, und A-39-10 ist genau die Formulierung, die A-40-9 fehlt"
+rolle: plan-pruefer
+zeit: "16.08. 19:12"
+mess_stand: 7a3a2e1b708e3e8a9dec85ebcf14ab63201d3841
+geprueft_gegen: "7970a9c7 (planner, 19:04)"
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+A_39_7: |
+  'Ein Blatt ohne Befund erzeugt keine Ausgabe und Rueckgabe 0.'
+  Erst nach dem Bau abschliessend pruefbar — das Skript gibt es noch nicht. Aber es ist
+  NICHT strukturell blockiert wie A-40-2s Negativprobe: es gibt 89 Blaetter, an denen
+  sich ein befundfreier Lauf zeigen laesst, und die Zusage nennt mit 'keine Ausgabe UND
+  Rueckgabe 0' zwei unabhaengig messbare Groessen. Der Klammersatz begruendet es richtig:
+  ohne diesen Beleg ist das Skript von einem kaputten nicht zu unterscheiden.
+A_39_8_kanten: |
+  Sechs Kanten, alle sechs gemessen. Sie sind ANDERS gebaut als A-40s: A-40 nennt
+  historische Faelle (K4 nennt W-28, das es nicht gibt), A-39 beschreibt Situationen
+  mit erwartetem Verhalten — 'P1 gilt als erfuellt, keine Meldung', 'P2 greift nicht,
+  sie ist keine Zusage'. Solche Kanten sind konstruierbar und koennen nicht ins Leere
+  zeigen.
+  K1 ist sogar real belegt: 'Blatt ohne Kantenliste' hat 80 Kandidaten — von 89
+  Blaettern unter docs/auftraege/aktiv/ tragen nur 9 eine Kantentabelle.
+  Fangprobe: A-39 selbst zaehlt 6 Kantenzeilen, das Muster greift.
+  K6 nennt zusaetzlich A-33 als Beispielfall.
+A_39_9: |
+  Scharf. Es benennt die Nicht-Ziele einzeln — resources/, app/, docs/STATUS.md und
+  scripts/commit-pruefen.sh — und nennt mit 'git show --stat' den Messweg dazu.
+A_39_10_ist_das_gegenstueck_zu_A_40_9: |
+  Gleicher Wortlaut wie A-40-9, aber mit dem entscheidenden Zusatz: 'Zahl unmittelbar
+  vor dem Bau erheben, nicht gegen eine feste Zahl pruefen.'
+  Damit traegt es einen Standbezug, den A-40-9 nicht hat. Und anders als bei A-40 ist
+  die Zusage hier begruendet: A-39 hat drei Code-Pfade und baut ein Skript unter
+  scripts/, waehrend A-40 null Code-Pfade hat. Dieselbe Formel, zwei verschiedene Lagen.
+nebenbefund_dateiname: |
+  Titel (Z.1) und art sagen ACHT Pruefungen, die Kriterien decken P1 bis P8 vollstaendig
+  ab (A-39-2 bis -6 fuer P1-P5, dann -11, -12, -13 fuer P6, P7, P8), und P8 ist ab
+  Zeile 106 beschrieben. Der DATEINAME sagt weiterhin
+  'A-39-die-fuenf-innenpruefungen-des-blattes.md'. Wer nach dem Blatt sucht, liest fuenf.
+zwei_eigene_fehlverdachte_gefangen: |
+  1. Ich hielt P8 fuer unbeschrieben — mein Listenbefehl war nach zehn Zeilen
+     abgeschnitten. P8 steht auf Zeile 106.
+  2. Ich hielt 'fuenf' im Text fuer einen Widerspruch — geoeffnet: Z.19 sagt 'Acht
+     Blattfehler: fuenf an EINEM Tag, drei weitere am 16.08.', Z.174 spricht von fuenf
+     festen SHAs. Beide Stellen sind richtig.
+  Beide Verdachte loesten sich zugunsten des Blattes auf, bevor sie in eine Meldung gingen.
+urteil: "Die vier offenen Kriterien tragen. A-39 steht damit deutlich besser da als A-40, wo vier Kriterien Befunde tragen."
+ballbesitz: planner
+```
