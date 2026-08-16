@@ -284,3 +284,135 @@ und_ich_habe_meinen_eigenen_neuen_handgriff_angewandt: "Das Paarungs-Muster lief
         das ist seine erste Anwendung."
 A_33_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+## 6 — Votum des Evaluators, Runde 1 (16.08.)
+
+```yaml
+votum: SPEC_BLOCKED
+runde: 1
+gemessen_am: 3e22e61b
+pruefstand: "eigener Worktree an 3e22e61b, node_modules und vendor per cp -al"
+
+DER_BEFUND_IN_EINEM_SATZ: "A-33-7 verlangt woertlich das Gegenteil dessen, was der Kopf desselben
+  Blattes verlangt — und keine Bauarbeit kann beides erfuellen."
+
+A_33_7_IST_MIT_DEM_EIGENEN_BLATT_UNVEREINBAR: |
+  A-33-7 (Z.232-233): 'Kein Code. Gegenprobe: der Bau-Commit fasst NUR docs/STATUS.md an —
+  scripts/, resources/ und app/ kommen null Mal vor.'
+  Kopf art: (Z.13-18): 'UMGESCHNITTEN am 16.08. durch Yama: Liefergegenstand ist
+  scripts/a33-kennungen-nachziehen.sh, NICHT die Bearbeitung von docs/STATUS.md.'
+  GEMESSEN am Commit 3e22e61b, git show --name-only:
+    docs/STATUS.md   0 Mal    (A-33-7 verlangt: das einzige)
+    scripts/         1 Mal    (A-33-7 verlangt: null)
+    resources/       0 · app/ 0
+  Der Bau ist gegen den Kopf richtig und gegen A-33-7 falsch. Der Umschnitt vom 16.08. hat A-33-1
+  neugefasst und A-33-7 stehen lassen. Das ist keine Bau-Frage: der Generator kann A-33-7 nur
+  erfuellen, indem er Yamas Anweisung bricht. §12.2 — der Umfang des Befundes ist genau diese eine
+  Kriterienzeile.
+
+WAS_SONST_NOCH_AN_DER_ALTEN_LOGIK_HAENGT: |
+  A-33-3, A-33-5 und A-33-6 messen 'vor und nach dem Bau'. Der Bau aendert docs/STATUS.md nicht
+  mehr — in der Bau-Lesart sind alle drei trivial gruen, ohne etwas zu belegen. Aussagekraeftig
+  sind sie nur in der LAUF-Lesart, und die habe ich gefahren (siehe Messtisch). Ich schneide nicht
+  um; ich melde, dass die Lesart im Blatt nicht mehr festgelegt ist.
+
+DER_BAU_SELBST_TRAEGT, und das gehoert vor den Befund: |
+  Sechs von sieben Kriterien habe ich gruen gemessen, jedes selbst gefahren. Das Skript loest die
+  Aufgabe sauberer als eine Bearbeitung es koennte: die Zuordnung kommt aus den Daten, Regel 1
+  schuetzt W-27 und W-40 vor dem Loeschen, Regel 3 ist der Riegel gegen das Raten, und der
+  Trockenlauf am HEUTIGEN Bestand (141 Datensaetze statt 121 am Bau-Stand) liefert unveraendert
+  11 Zeilen und NULL unklare Faelle. Genau das war Yamas Grund fuer den Umschnitt.
+
+MEIN_BEINAHE_FEHLER, offengelegt: |
+  Ich hatte A-33-5 als P1-Befund fertig: a26-ball-drift meldet nach dem Lauf 31 Zeilen und exit 1,
+  wo vorher 0 und exit 0 stand — zweimal reproduziert, mit md5-Ruecksetzung auf 7811e4d8.
+  DANN habe ich die Behauptung des Generators geprueft statt sie zu glauben ODER zu verwerfen:
+  'ab dem naechsten Commit ist es weg'. Im Pruefstand committet — a26 meldet 0 Zeilen, exit 0.
+  a26 liest 'git diff HEAD', arbeitet also auf UNCOMMITTETEN Aenderungen; im Diff steht die
+  Umbenennung zweimal, einmal als entfernte alte Kennung ohne Tafelzeile. Mein Befund haette einen
+  Zwischenzustand gemeldet, den E1 gar nicht misst. A-33-5 ist am COMMIT gruen.
+
+ZWEI_BEOBACHTUNGEN_OHNE_BEFUNDSTATUS: |
+  (1) OFF-BY-ONE IN DER MELDUNG: das Skript meldet 'Z.18  W-01', die Zeile steht auf 19.
+      zeilen.forEach((l, i)) liefert 0-basierte Indizes, ausgegeben als 'Z.'. Die WIRKUNG ist
+      richtig (die Ersetzung laeuft ueber denselben Index), nur die Angabe zeigt eine Zeile zu
+      hoch. In diesem Haus ist das eine belegte Fehlerklasse — A-29, A-34 und A-33s eigener
+      Zeiger. Kein Kriterium verlangt Zeilennummern; deshalb Beobachtung und nicht Befund.
+  (2) DIE DASH-DIFFERENZ BLEIBT: a26 meldete im Zwischenzustand 'W-01/1 BALL: Tafel *–* <->
+      Datensatz *—*' — U+2013 gegen U+2014, je Zeichen gemessen. Sie bestand VORHER schon und war
+      nur unsichtbar, weil a26 die zwei Orte ohne gemeinsame Kennung nicht paaren konnte. Der Lauf
+      macht sie erstmals sichtbar und a26 verliert sie nach dem Commit wieder aus dem Blick, weil
+      es diff-basiert prueft. Gehoert nicht zu A-33 — gemeldet, weil A-33 sie aufgedeckt hat.
+
+WEITERGABE: "SPEC_BLOCKED geht an den PLANNER. Der Bau bleibt liegen wie er ist; er braucht keine
+  Aenderung, sondern ein Blatt, das den Umschnitt zu Ende traegt. Wiederabnahme faehrt ALLE SIEBEN
+  Kriterien erneut (§12.3)."
+```
+
+### Messtisch — jede Kriterienzeile, auch die trivialen
+
+| Kriterium | Messung | Ergebnis |
+|---|---|---|
+| **A-33-1** (P1, TRAGEND) | Lauf selbst gefahren: `NACHZUZIEHEN: 11 Zeile(n), 11 Kennung(en)`. Zweiter Lauf: `keine — die Invariante haelt bereits`. Fangprobe `--fangprobe` selbst gefahren: **5/5**, die drei verlangten Faelle (W-21 trifft, P-02 trifft, `M-02-Kopienzahl` trifft nicht) einzeln in der Rohausgabe | **grün** |
+| **A-33-2** (P1) | Diff nach dem Lauf gegen `W-27\|W-40` gefiltert: **0 Treffer**. Alle vier Tafelzeilen (`W-27`, `W-27/1`, `W-40`, `W-40/1`) vorher 1 / nachher 1 | **grün** |
+| **A-33-3** (P1) | Ballbesitz-Spalte je Zeile einzeln: elfmal `'–'` vorher, `'–'` nachher. Zustand `BETRIEBSBESTAETIGT` in allen elf unveraendert | **grün** (in der Bau-Lesart trivial, s. o.) |
+| **A-33-4** | Rest der Zeile NACH der Kennung zeichengenau verglichen, alle elf, mit Laengen: 313/313 · 274/274 · 1271/1271 · 668/668 · 315/315 · 455/455 · 648/648 · 308/308 · 440/440 · 329/329 · 304/304 — **alle zeichengleich** | **grün** |
+| **A-33-5** | `a26-ball-drift.sh` am COMMIT: **0 Zeilen, exit 0** — vorher wie nachher. Rohausgabe des Zwischenzustands (31 Zeilen, exit 1) samt Aufloesung siehe MEIN_BEINAHE_FEHLER | **grün** |
+| **A-33-6** | `wc -l` vorher **19521**, nachher **19521**; entfernte Zeilen im Diff **0** (11 geaenderte) | **grün** |
+| **A-33-7** | `git show --name-only 3e22e61b`: `scripts/a33-kennungen-nachziehen.sh`. docs/STATUS.md **0** · scripts/ **1** · resources/ 0 · app/ 0 | **ROT — unerfüllbar, s. Befund** |
+| *Zusatz: Trockenlauf am heutigen Bestand* | 82 Kennungen · **141** Datensaetze · 11 Zeilen · **0 unklar**, Datei unberuehrt (`git status` 0) | **trägt** |
+| *Zusatz: Idempotenz* | zweiter Lauf schreibt nicht, md5-Ruecksetzung auf `7811e4d8c3e889c350008165eb5644b3` belegt | **trägt** |
+| *Browser* | **nicht gefahren** — keine sichtbare Wirkung, der Bau ist ein Skript ohne UI | **entfällt** |
+| *§15 / `getDatabaseName()`* | **nicht beruehrt** — kein Datenbankzugriff im Scope | **entfällt** |
+| *Insel-Suite / tsc* | **nicht gefahren** — der Bau fasst weder `resources/` noch `app/` an (je 0 Treffer im Commit) | **entfällt** |
+
+### Nachtrag zum Votum — Yamas drei Präzisierungen, jede nachgemessen (16.08., nach `75c471cf`)
+
+```yaml
+anlass: "Yama hat waehrend meiner Abnahme drei Punkte praezisiert. Zwei davon hatte ich gemessen,
+  einer korrigiert meinen Messtisch an einer Stelle — er steht hier statt still eingearbeitet."
+
+1_IDEMPOTENZ_NACHGEMESSEN_NICHT_BEHAUPTET: "War schon so gefahren. Erster Lauf 'NACHZUZIEHEN: 11
+  Zeile(n), 11 Kennung(en)', zweiter Lauf 'keine — die Invariante haelt bereits', beide Rohausgaben
+  im Messtisch, md5-Ruecksetzung auf 7811e4d8c3e889c350008165eb5644b3 belegt."
+
+2_DIE_ZIELZAHL_FEHLT_ABSICHTLICH: "Ich habe sie NICHT beanstandet und A-33-1 gruen gemessen — an
+  der INVARIANTE, nicht an einer Zahl: nach dem Lauf keine verkuerzte Tafelzeile mehr, deren
+  Datensatz die volle Form traegt, und der zweite Lauf meldet null. Dass die Zahl driftet, ist bei
+  dieser Datei heute selbst belegt: am Bau-Stand 121 Datensaetze, am heutigen Bestand 141 — und die
+  Invariante liefert in beiden Faellen unveraendert 11 Zeilen und NULL unklare Faelle."
+
+3_DIE_WIRKUNG_IST_DAS_EIGENTLICHE_KRITERIUM — DAS KORRIGIERT MEINEN MESSTISCH: |
+  Ich hatte A-33-5 als 'a26 laeuft ohne neue Meldung' gemessen und mit 0 Zeilen/exit 0 gruen
+  gegeben. Das misst die STILLE, nicht die WIRKUNG. Yamas Kriterium ist das andere: a26 muss NACH
+  dem Lauf an den Zeilen ANSCHLAGEN koennen, an denen es vorher still weitersprang.
+  JETZT AM BESTAND GEMESSEN, je Kennung einzeln, vorher am Bau-Stand 3e22e61b und nachher am
+  Lauf-Stand — nicht aus dem Skript behauptet:
+    W-01  vorher Tafel 1 + Datensatz 0 -> Ausstieg   nachher Tafel 1 + Datensatz 1 -> PAART
+    W-02  W-04  W-05  W-08  W-09  W-11  W-13  W-15  W-21  W-22 — alle zehn identisch
+    SUMME: paarbar vorher 0 von 11, nachher 11 von 11.
+  DIE WIRKUNG IST DAMIT BELEGT, und sie ist staerker als meine Stille-Messung: der Ausstieg
+  schreibt woertlich 'kein Datensatz-Block — Ball und Zustand nicht vergleichbar'; nach dem Lauf
+  greift er bei keiner der elf mehr. Als Beleg, dass a26 danach wirklich VERGLEICHT, dient die
+  Meldung, die es dabei erstmals erzeugt: 'W-01/1 BALL: Tafel *–* <-> Datensatz *—*' — U+2013 gegen
+  U+2014, je Zeichen gemessen. Diese Differenz bestand vorher schon und war nur unsichtbar.
+  MEIN MESSFEHLER IN EINEM SATZ: ich habe im Zwischenzustand dieselbe Rohausgabe gesehen und sie
+  als SCHADEN gelesen (Beinahe-P1 gegen A-33-5), waehrend sie zur Haelfte der WIRKUNGSNACHWEIS ist.
+
+DER_ZEIGER_a26_56_TRIFFT_NICHT_MEHR, und das Blatt weiss es selbst: |
+  Yama nennt a26-ball-drift.sh:56. GEOEFFNET: :55 ist '[ -z "$KENNUNGEN" ] && exit 0', :56 ist eine
+  LEERZEILE, :57 ein Kommentar. Der Ausstieg, um den es geht, liegt auf :96-98
+  (START-Zuweisung, if [ -z "$START" ], UNGEPRUEFT-Zeile). Das Auftragsblatt hat genau diesen
+  Zeiger am 14.08. berichtigt — 'auf :56 eine Leerzeile statt des stillen continue (heute :97)' —
+  nach dem A-30-Bau, der die Datei von 102 auf 158 Zeilen umgebaut hat. Fuenfter belegter Fall
+  dieser Klasse. Am Inhalt der Anweisung aendert es nichts.
+
+OFFEN_UND_NICHT_ABSCHLIESSEND_GEKLAERT, ohne Bewertung: |
+  a26 im STAND-Modus (bash scripts/a26-ball-drift.sh <sha>) meldet am Lauf-Commit NICHTS, obwohl
+  der Diff 22 Kennungen enthaelt (W-01 bis W-22 in alter UND neuer Form, selbst gezaehlt). Im
+  Arbeitsbaum-Modus meldet dieselbe Datenlage 31 Zeilen. Warum die zwei Modi auseinanderlaufen,
+  habe ich NICHT geklaert — es gehoert nicht zu A-33 und ich melde es ohne Deutung.
+
+DAS_VOTUM_BLEIBT: "SPEC_BLOCKED. Es haengt an A-33-7, und keine dieser drei Praezisierungen
+  beruehrt A-33-7. Der Bau traegt; das Blatt traegt den Umschnitt nicht zu Ende. Ball beim Planner."
+```
