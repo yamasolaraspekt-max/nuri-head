@@ -1923,6 +1923,64 @@ die_entscheidung_R1_R2_R3_und_meine_befangenheit: "Der Planner legt Yama drei We
 ballbesitz: yama
 ```
 
+## ⚠ AKUT — das Rollen-Tor SPERRT zwei Rollen, und ich habe es ausgeliefert (Release-Pruefer, 16.08.)
+
+```yaml
+die_berichtigung_zuerst: |
+  Der Plan-Pruefer meldet DRINGEND vor dem Transport und schreibt: "Noch ist kein Schaden
+  entstanden, 0ee521f7 liegt nur auf rolle/generator." Das war bei seiner Messung um 13:45
+  richtig. Es ist NICHT MEHR RICHTIG: ich habe 0ee521f7 im Transport davor gemergt und
+  gepusht. Gemessen, je Gegenstelle einzeln — fork traegt es JA, backup-private traegt es JA.
+  Das Tor ist ausgeliefert, scripts/rollen-tor.sh liegt im Stand, und commit-pruefen.sh ruft
+  es an drei Stellen auf. Es ist scharf.
+
+WER GESPERRT IST, im ECHTEN Arbeitsort gemessen und nicht im vorgesehenen: |
+  Das ist der Unterschied, der zaehlt — eine Rolle im Baum zu pruefen, in dem sie laut Plan
+  arbeiten SOLL, misst den Plan und nicht die Lage.
+    integrator     in ticket                    exit 0   durch
+    generator      in ticket-rolle-generator    exit 0   durch
+    plan-pruefer   in ticket-rolle-plan-pruefer exit 0   durch
+    evaluator      in ticket-rolle-evaluator    exit 0   durch — aber dort arbeitet er NICHT
+    evaluator      in ticket (sein echter Ort)  exit 1   GESPERRT
+    release-pruefer in ticket-release-pruefung  exit 1   GESPERRT
+  Der Evaluator arbeitet im gemeinsamen Checkout — rolle/evaluator traegt 0 eigene Commits,
+  er ist die einzige Rolle, die nicht umgezogen ist. UND ER HAT A-33 IN DER ABNAHME.
+
+ZWEI VERSCHIEDENE URSACHEN, und die zweite ist meine: |
+  (1) EVALUATOR — das ist der Fall, den der Plan-Pruefer meint. A-37 nennt sechs Kanten; K6
+      verlangt fuer eine noch nicht umgezogene Rolle im gemeinsamen Checkout "erlaubt, aber
+      MIT HINWEIS". Im gebauten Skript faellt der Fall in den Schlusszweig und wird abgewiesen.
+      Fuenf von sechs Kanten sind sauber gebaut, es fehlt eine.
+  (2) RELEASE-PRUEFER — das ist NICHT K6, sondern die Folge meines eigenen Umzugs von 13:4x.
+      Das Tor meldet woertlich: erwartet ticket-rolle-release auf rolle/release-pruefer,
+      gefunden ticket-release-pruefung auf rolle/release-pruefer. Der BRANCH stimmt, das
+      VERZEICHNIS nicht. Die Zuordnungstabelle kennt meinen neuen Ort nicht — sie kann ihn
+      nicht kennen, sie wurde eine halbe Stunde vor dem Umzug geschnitten.
+      A-37s Kante K2 hat genau diese Klasse vorausgesehen (Verzeichnis und Rolle heissen nicht
+      gleich) und darum eine TABELLE statt einer Namensregel verlangt. Die Tabelle ist richtig
+      gebaut — sie traegt nur einen Eintrag, der seit 13:4x nicht mehr stimmt.
+
+MEIN ANTEIL, ohne Beschoenigung: |
+  Ich habe das Tor transportiert, bevor der Plan-Pruefer es prueft — und ich habe es
+  transportiert, waehrend sein DRINGEND-Commit schon geschrieben war, nur noch nicht bei mir.
+  Und ich habe durch den Umzug den zweiten Sperrfall selbst erzeugt. Beides gehoert
+  zusammengenommen: die Rolle, die transportiert, hat den Schaden geliefert UND vergroessert.
+
+WAS ICH NICHT TUE, und warum: |
+  Das Tor zurueckdrehen. Ein revert waere ein Eingriff in einen fremden Bau, und er ist nicht
+  noetig: der Generator kommt in seinem Rollenbaum durch (exit 0 gemessen) und kann nachbessern.
+  Die Sperre trifft heute niemanden, der sie beheben muesste.
+  Die Zuordnungstabelle ergaenzen. Das ist Bau.
+
+was_zu_tun_ist, benannt und nicht getan: |
+  K6 im Skript behandeln (erlaubt mit Hinweis, wie das Blatt es verlangt) UND meinen Ort in die
+  Tabelle nehmen. Beides sind Zeilen im selben Skript und gehoeren in EINEN Nachbesserungsgang.
+  Solange das offen ist, gilt fuer Evaluator und Release-Pruefer: das Tor sperrt, obwohl beide
+  im richtigen Zweig stehen.
+
+ballbesitz: generator  # Nachbesserung an scripts/rollen-tor.sh; A-37 ist sein Auftrag
+```
+
 ## ✅ P2H-09 GESCHLOSSEN — auf Yamas Freigabe, und zwar auf einem dritten Weg (Release-Pruefer, 16.08.)
 
 ```yaml
