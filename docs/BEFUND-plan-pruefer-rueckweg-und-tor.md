@@ -6077,3 +6077,89 @@ nichts in meiner Bahn" gemeldet — die Zahl war richtig, der Satz daneben nicht
 
 **Kein Ball an andere. Der Rückstand ist meiner.** **Nächste Runde beginnt die zweite DoR, mit dem
 ältesten: A-38.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 88 — DoR Runde 2 für A-38: ERTEILT. Beide Restpunkte behoben, Rot-Lagen halten, und die Grundlage reicht weiter als das Blatt sagt
+
+**Stand:** HEAD `266c0055`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**A-38 `ENTWURF`, `basis_sha 0f05f8bf`, `dor_runde_2` = 0 Treffer — der Rückstand aus §87.**
+**Blattstand `e15d3677` (16.08. 20:57), also 7 h 56 nach meiner Verweigerung.**
+
+### Meine zwei Restpunkte aus Runde 3 — beide nachgemessen
+
+```
+R6  'A-38 traegt die als falsch berichtigte Zahl in der UEBERSCHRIFT'
+    heute Z.1:  '# A-38 — Merges laufen am Tor vorbei, und keiner traegt eine Rollenmarke'
+                                                                          BEHOBEN, zahlfrei
+
+R5  'die drei tragenden Zahlen (497/70/59) nennen KEINEN Messbefehl'
+    heute Z.79-86: ein bash-Block 'FESTE ERHEBUNG — ein benannter Tag statt eines
+    wandernden Fensters' mit --since='2026-08-16 00:00', und der alte 48-h-Befehl
+    daneben als Beleg mit 'NICHT mehr benutzen' (A-20-4)                  BEHOBEN
+```
+
+**Den Befehl selbst gefahren, im Baum, den er nennt:**
+
+```
+Blatt (Kommentar, 16.08. abends)   472 Commits · 188 Merges · 40 %
+meine Messung jetzt                855 Commits · 369 Merges · 43 %
+alter 48-h-Befehl zum Vergleich    916 Commits   (ausdruecklich nicht mehr zu benutzen)
+```
+
+**Die Absolutzahlen sind gewachsen, der Anteil hält — und die Blattzahl trägt ihren eigenen
+Zeitstempel („gemessen 16.08. abends").** *Ich war nahe daran, das als veraltete Zahl zu melden;
+eine Zahl MIT Standangabe ist aber genau die Form, die P2 verlangt. Zweite Anwendung der §85-Lehre
+in derselben Nacht.*
+
+### Die neun Kriterien tragen keine Anlass-Zahl
+
+```
+A-38-1 .githooks/commit-msg existiert und ist ausfuehrbar
+A-38-2 Negativfall Merge ohne Marke · A-38-3 Positivfall mit Marke
+A-38-4 normaler Commit unberuehrt  · A-38-5 core.hooksPath gesetzt
+A-38-6 Hook greift im ZWEITEN Worktree ohne dortige Einrichtung
+A-38-7 sechs Kanten, K6 ausdruecklich als nicht abfangbar
+A-38-8 kein Nicht-Ziel beruehrt   · A-38-9 Suite gruen GEGEN DEN BAU-STAND
+```
+
+**Kein Kriterium nennt 59/497/70 oder 188/472. A-38-9 ist an den BAU-STAND gebunden statt an eine
+feste Zahl** — genau die Umstellung, die ich in Runde 1 verlangt hatte.
+
+### Rot-Lagen selbst gemessen — beide halten
+
+```
+.githooks/                        existiert NICHT          -> A-38-1 kann rot werden
+core.hooksPath, sechs Baeume      ueberall leer, exit=1     -> A-38-5s Rot-Beleg haelt
+  ticket · planner · plan-pruefer · generator · evaluator · release-pruefung
+```
+
+### Und eine Grundlage, die weiter reicht als das Blatt sagt
+
+A-38-6 spricht vom *„ZWEITEN Worktree"*. Gemessen:
+
+```
+git rev-parse --git-common-dir  ->  alle Baeume zeigen auf /Users/…/ticket/.git
+git worktree list               ->  15 registrierte Worktrees
+```
+
+**Eine einzige `core.hooksPath`-Einstellung erreicht damit fünfzehn Bäume, nicht zwei** — darunter
+`ticket-rolle-release` in *detached HEAD*. **Das ist kein Einwand, sondern ein Argument für den
+Auftrag: die Wirkung ist siebenmal größer als das Kriterium verspricht, und A-38-6 bleibt trotzdem
+mit einem Befehl erfüllbar.** *Ich melde es, damit der Bauende die Reichweite kennt, bevor er sie
+setzt.*
+
+## VOTUM
+
+```
+DoR Runde 2 fuer A-38:  ERTEILT
+  R5 behoben, Befehl selbst gefahren und reproduziert
+  R6 behoben, Ueberschrift zahlfrei
+  neun Kriterien, keines mit Anlass-Zahl, A-38-9 standgebunden
+  zwei Rot-Lagen selbst gemessen, beide halten
+  kein neuer Restpunkt
+```
+
+**Ich fasse den Zustand NICHT an.** *Das Blatt steht auf `ENTWURF`; der Übergang nach `BEREIT`
+gehört dem Planner, und meine Rolle endet mit dem Votum.* **Ball beim Planner.**
+**Kein Zustandsfeld angefasst, kein Bau.** **Offen bei mir: DoR Runde 2 für A-39 · A-40 · A-42.**
