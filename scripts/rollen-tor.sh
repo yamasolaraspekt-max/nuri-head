@@ -190,6 +190,49 @@ esac
 #
 # **Und es ist eine Abweichung vom Wortlaut des Kriteriums. Sie steht hier und im Bau-Bericht,
 # nicht still im Code.**
+#
+# ## ⚠ DIE SPERRE HAT AM 16.08. UM 16:17 GEZUENDET — ohne dass jemand eine Zeile anfasste
+#
+# ```text
+#   Commits mit Rollenmarke 'integrator'   0  ->  1   (83296554, Yama, 16:17)
+#
+#   TOR_STATUS_PFAD=1, generator, eigener Baum
+#     vor  16:17   HINWEIS  ... noch KEIN Integrator gestartet   exit 0
+#     nach 16:17   VERSTOSS ... EINEN Schreiber: den Integrator  exit 1
+# ```
+#
+# ***Das ist der Ertrag der Bedingung.*** *Waere sie ein Datum oder ein Haekchen gewesen, haette
+# jemand sie umlegen muessen — und es waere entweder zu frueh oder vergessen worden.* **Sie war
+# eine Messung, also hat sie sich selbst umgelegt.**
+#
+# ## Der Einwand des Integrators, und wo er zutrifft
+#
+# **Yama misst im Integrations-Checkout** (`83296554`): *„die Barriere ist hier nicht vorhanden …
+# sie koennte die Divergenz ohnehin nicht fangen: sie prueft Baum gegen Zweig gegen Rolle, und
+# jede Rolle committet in ihrem eigenen Baum regelkonform — die Divergenz entsteht genau dann,
+# wenn alle regelkonform arbeiten."*
+#
+# **Fuer TEIL 1 stimmt das vollstaendig, und es ist der schaerfste Satz, der ueber diesen Bau
+# gesagt wurde.** *Teil 1 schuetzt gegen den Commit im FALSCHEN Baum. Die Divergenz kommt aber aus
+# dem richtigen.*
+#
+# **Fuer TEIL 2 stimmt es nicht — und der Grund, warum er ihn nicht sieht, ist die zweite Haelfte
+# seines eigenen Satzes:**
+#
+# ```text
+#   Zweig                        Tor  Teil-2-Zeilen  Haken in commit-pruefen.sh
+#   auto/hausplaner-integration   0        0            0     <- wo er misst
+#   rolle/generator               1        1            3
+#   rolle/release-pruefer         1        1            3
+# ```
+#
+# ***Teil 2 prueft nicht Baum gegen Rolle, sondern den PFAD:*** `docs/STATUS.md` *ausserhalb des
+# Integrations-Checkouts.* **Er trifft genau den Fall, den er beschreibt** — sechs Rollen, alle
+# regelkonform, die dieselbe Datei fortschreiben. *Er liegt seit 15:31 gebaut auf meinem Zweig und
+# ist an dem einen Ort nicht angekommen, an dem gemessen wird.*
+#
+# **Der Einwand ist damit kein Einwand gegen den Bau, sondern die genaueste Beschreibung des
+# Transportproblems, die heute vorliegt.**
 if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
   INTEGRATOR_DA="$(git log --all --format=%s --grep='^integrator:' 2>/dev/null | head -1)"
   if [ -n "$INTEGRATOR_DA" ]; then
