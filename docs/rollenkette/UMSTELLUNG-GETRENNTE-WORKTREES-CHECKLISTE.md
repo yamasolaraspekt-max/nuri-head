@@ -302,7 +302,7 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-04 | **Zustellung an die vier Rollen** — sie müssen erfahren, dass ihr Baum existiert | **BLOCKIERT** — nur Yama erreicht die Instanzen |
 | P2H-05 | **Erste Rolle umgezogen** und dort committet | **UMGESETZT_UNGEPRUEFT** — vier von fünf |
 | P2H-05b | **Umzugsstand je Rolle**, gemessen an eigenen Commits in der **ersten Elternlinie** ohne Vertretungen | **UMGESETZT_UNGEPRUEFT** |
-| P2H-06 | **Alle vier umgezogen** — erst danach wird der gemeinsame Checkout zum Integrations-Checkout | **OFFEN** — **es fehlt nur noch der Evaluator** |
+| P2H-06 | **ALLE FÜNF UMGEZOGEN** — der gemeinsame Checkout kann Integrations-Checkout werden | **UMGESETZT_UNGEPRUEFT** |
 | P2H-07 | **`AKTIVIERUNGS_SHA` entfällt als Konstrukt** — jede Rolle trägt ihren eigenen Umzugs-SHA | **UMGESETZT_UNGEPRUEFT** |
 | P2H-08 | **Zweite Statuswahrheit — GESCHLOSSEN am 14.08. 22:51 durch `c1b3a774`** *(Merge der Release-Linie `210dcc5a` mit der Kettenlinie `09125aaf`, durch den Release-Prüfer selbst, nicht durch den Integrator)* | **UMGESETZT_UNGEPRUEFT** |
 | P2H-09 | **Der Release-Prüfer arbeitet an einem `detached HEAD`**, nicht auf einem Rollenbranch | **OFFEN** |
@@ -573,6 +573,31 @@ rolle/release-pruefer  14      umgezogen
 rolle/generator         1      umgezogen  (erster eigener Commit 16.08. 13:07)
 rolle/evaluator         0      NICHT umgezogen  — der letzte
 ```
+
+**⇒ VOLLZUG 16.08. 14:39 — der Evaluator war der letzte** *(flüchtige Messung, Zeitstempel nach
+der Regel; Kriterium: eigene Commits in der **ersten Elternlinie**, Marke **mit Doppelpunkt**)*:
+
+```
+rolle/release-pruefer  96      rolle/plan-pruefer  53
+rolle/planner          45      rolle/generator     14
+rolle/evaluator         1   <- 16.08., "A-33 Runde 2 geclaimt"
+```
+
+**Damit ist `P2H-06` erfüllt und der gemeinsame Checkout kann Integrations-Checkout werden.**
+
+**Und der Evaluator hat dabei etwas getan, das niemand von ihm verlangt hat:** Sein
+`node_modules` trägt die **Marke aus A-37-15**, obwohl das Kriterium **nicht gebaut** ist —
+
+```
+hash d17b19a2…  zeit 2026-08-16T14:39:39+02:00  node v26.5.0  npm 11.17.0
+```
+
+**Vier Felder, genau die Form aus der Regel.** Zum Vergleich: die drei älteren Modulbäume
+(`ticket`, `ticket-rolle-generator`, `ticket-rolle-release`) tragen **keine** Marke — sie sind
+**vor** der Regel entstanden. **Die Regel hat gewirkt, bevor das Werkzeug sie erzwingt.**
+
+*(Der Planner-Baum und der Plan-Prüfer-Baum haben bis heute kein `node_modules` — beide arbeiten
+nur an Dokumenten. Das ist kein Mangel, aber es heißt: **sie könnten die Suite nicht fahren.**)*
 
 **Der Generator-Umzug ist der Beleg dafür, dass die `node_modules`-Entscheidung getragen hat.**
 Er hat als ersten Vorgang **A-33 gezogen**, nicht A-37 — und Yama hat dabei zwei Dinge entschieden,
@@ -1049,8 +1074,8 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 
 | Status | Anzahl |
 |---|---|
-| `OFFEN` | **111** |
-| `UMGESETZT_UNGEPRUEFT` | **65** |
+| `OFFEN` | **110** |
+| `UMGESETZT_UNGEPRUEFT` | **66** |
 | `BLOCKIERT` | **22** |
 | `NACHBESSERN` | **2** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
