@@ -8,6 +8,35 @@
 den jemand „schnell noch" im Integrations-Checkout ablegen will · eine Bitte, „nur die Tafelzeile"
 nachzuziehen.
 
+## ▶ FREIGABE LIEGT VOR — 16.08., `SCHREIBEND` für den Integrationslauf
+
+**Erteilt vom Planner in Yamas Namen** (`a774e549`), auf dessen ausdrückliche Übertragung, alle
+in seinem Namen anfallenden Aufgaben zu erledigen. **Der Volltext steht im `A-37`-Datensatz von
+`docs/STATUS.md` unter `freigabe_integrationslauf`.**
+
+```
+GILT     Betriebsart SCHREIBEND · Integrationslauf ueber alle fuenf Rollenzweige
+GILT NICHT  Push · Loeschungen · der erste SCHREIBENDE --tafel-Lauf
+```
+
+**Auflage 1 — Regel 4:** Konflikte werden **gemeldet**, nie still aufgelöst.
+
+**Auflage 2 — Reihenfolge:** `1` Integrationslauf → `2` Umzug der 104 Blöcke ohne `zustand:`
+(eigener Auftrag, **kein Löschen**) → `3` erster `--tafel`-Schreiblauf. **Grund:** `--tafel`
+erzeugt je Kennung eine Zeile aus dem Commit-Log; die 104 hätten dort keinen Platz und
+verschwänden lautlos aus dem lebenden Dokument.
+
+**Grundlage — deine eigene Messung** (`a7b2ea65`): null Zeilen Produktivcode im Rückstand, acht
+Verzeichnisse einzeln geprüft, berührt nur `docs` und `scripts`. **Rückweg:** der Lauf ist ein
+Merge und durch Zurückdrehen rücknehmbar, **solange nicht gepusht wird** — genau daran ist die
+Grenze gezogen.
+
+> **⚠ Warum das hier steht und nicht nur in `docs/STATUS.md`:** gemessen am 16.08. liegt
+> `a774e549` in `rolle/planner`, `rolle/evaluator` und `rolle/release-pruefer` — **nicht** in
+> `auto/hausplaner-integration`, also nicht in deinem Baum. **Die Freigabe für den
+> Integrationslauf erreicht dich nur, wenn jemand integriert.** Deshalb zusätzlich hier und im
+> Commit-Betreff, den `git log --all --grep` findet.
+
 ## Die DREI Betriebsarten
 
 *(Die erste Fassung kannte nur zwei und war widersprüchlich: sie ließ den Integrator bei Schritt D
