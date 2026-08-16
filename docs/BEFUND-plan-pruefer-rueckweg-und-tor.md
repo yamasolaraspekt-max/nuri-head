@@ -6389,3 +6389,98 @@ welcher, steht weiterhin nicht im Kriterium. **Beides bleibt für Runde 3.**
 
 **Ich fasse den Zustand NICHT an. Ball beim Planner.** **Offen bei mir: A-42, Rest von Runde 1.**
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 91 — A-42, Rest von Runde 1: NICHT ERTEILT, ein Restpunkt — und er ist derselbe, den ich am 16.08. gemeldet habe, jetzt am vierten Stand
+
+**Stand:** HEAD `ad5a4b97`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**A-42 `ENTWURF`, `basis_sha e802c1f8`, Blattstand `6da4e914` (16.08. 22:52).**
+**Kein Runde 2 — nach der Berichtigung des Release-Prüfers (§89-Nachtrag) schulde ich den REST
+von Runde 1: sechs benannte Kriterien, drei unerwähnte, K5.**
+
+### Die sieben bisher ungeprüften Kriterien
+
+```
+A-42-4   herkunft: mit Blocknummer und Basis-SHA                        messbar
+A-42-6   Bloecke MIT zustand: unberuehrt, Anzahl und Inhalt ueber Hash  messbar (heute 90)
+A-42-7   kein Nicht-Ziel, git show --stat, scripts/status-erzeugen.sh
+         ausdruecklich ausgenommen                                      messbar
+A-42-8   P7: WER (Generator, sein Baum) · DARF er (docs/, kein Loeschen)
+         · EXISTIERT die Eigenschaft (Blockstruktur maschinell erfassbar) VOLLSTAENDIG
+A-42-10  P8: Suchraum ist die Sache, drei Orte gemessen                 VORBILDLICH
+A-42-11  Ballortung ueberlebt den Umzug                                 aus Runde 4 belegt
+A-42-12  jede Rolle bekommt ihren Ortungsbefehl                         aus Runde 4 belegt
+```
+
+**A-42-10 verdient eine eigene Zeile.** Es nennt die Zahl **77** und schreibt dazu: *„(Die 77 sind
+der Stand des Planner-Baums; im Bestand waren es zur selben Zeit **129** — deshalb nennt A-42-1 den
+Befehl und keine Zahl.)"*
+
+```
+am Basis-Stand e802c1f8   Umzugsmenge  77   TRIFFT zeichengenau
+heute                     Umzugsmenge 168
+```
+
+**Eine Zahl, ihr Stand, die abweichende Zahl des anderen Baums und die Begründung, warum das
+Kriterium trotzdem an den Befehl gebunden ist — alles in einem Satz.** *Das ist die Form, deren
+Fehlen ich heute Nacht sechsmal gemeldet habe.*
+
+**Und K5 ist damit kein theoretischer Grenzfall mehr:** die Umzugsmenge wuchs während der Nacht von
+**77 auf 168**. *K5 („während des Umzugs kommen neue Notizen dazu") ist die Kante, die mit Sicherheit
+feuert — und das Blatt fängt sie, indem der Lauf einmal misst und seinen Stand-SHA nennt.*
+
+### Der Restpunkt: A-42-3 ist weiterhin nicht erfüllbar
+
+**Mein Befund vom 16.08. 19:29** (`Z.27392`): die Messvorschrift des Blattes
+(`re.findall(r'```yaml(.*?)```')`) **verliert einen Block** — `A-18` folgt auf den ungeschlossenen
+Zaun bei `Z.7876`, die Regex paart 7876 mit dem nächsten Öffner und liest A-18 als außerhalb.
+
+**Heute erneut gemessen — vierter Stand, gleiches Ergebnis:**
+
+```
+Bloecke nach der Vorschrift      446
+auftrag-Zeilen im VOLLTEXT       258
+davon in Bloecken ERFASST        257
+DIFFERENZ                          1
+UNSICHTBAR                       "A-18"
+```
+
+**Das Blatt hat den Fall nicht aufgenommen:**
+
+```
+Kantenliste heute      K1 bis K6 — unveraendert sechs, keine siebte
+K4 heute               'Ein Block ist kaputtes yaml (24 Altlasten)'
+                       -> A-18 ist NICHT kaputt; er wird verschluckt.
+                          Ein kaputter Block macht nicht sich selbst unsichtbar,
+                          sondern den FOLGENDEN.
+meine Gegenprobe       'auftrag-Zeilen im Volltext gegen erfasste'   0 Treffer im Blatt
+```
+
+**Und A-42-2s Summenprobe fängt es nicht:** die Gleichung lautet *„Blöcke vorher = Blöcke nachher in
+STATUS.md + Einträge in BEFUNDNOTIZEN.md + gemeldete K1/K4-Fälle"*. **A-18 bliebe in `STATUS.md`
+liegen und würde auf der Nachher-Seite mitgezählt — die Gleichung geht auf, und der Verlust ist
+unsichtbar.** *Das ist der Grund, warum die Differenzprobe eine ANDERE Größe messen muss als die
+Summenprobe.*
+
+**Damit sind zwei Kriterien betroffen, aus einer Ursache:** `A-42-3` (für einen Block gibt es keinen
+Hash) und `A-42-5` (die sechs Kanten decken den Fall nicht).
+
+## VOTUM
+
+```
+A-42, Rest von Runde 1:  NICHT ERTEILT, EIN Restpunkt
+  sieben Kriterien geprueft, alle messbar; A-42-10 vorbildlich, A-42-8 vollstaendig
+  R1  A-42-3/-5: der Block nach einem ungeschlossenen Zaun ist unsichtbar.
+      Vierter Stand, gleiches Ergebnis. Vorschlag steht seit 16.08. 19:29:
+      siebte Kante ODER K4-Ergaenzung, plus die Differenzprobe
+      'auftrag-Zeilen im Volltext gegen in Bloecken erfasste = 0'
+```
+
+**Der ungeschlossene Zaun `Z.7876` ist zugleich einer der zwei Posten, die seit §78 beim Integrator
+liegen.** *Wird er geschlossen, verschwindet die Ursache — dann bleibt die Kante trotzdem nötig,
+weil der nächste ungeschlossene Zaun denselben Schaden macht.*
+
+**Ich fasse den Zustand NICHT an. Ball beim Planner.** **Kein Zustandsfeld angefasst, kein Bau.**
+**Damit ist der Rückstand aus §87 abgearbeitet: A-38 erteilt · A-39 erteilt · A-40 zwei Restpunkte ·
+A-42 ein Restpunkt.**
