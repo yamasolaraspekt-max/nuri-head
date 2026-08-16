@@ -4919,3 +4919,105 @@ Male musste ich erst nachsehen, bevor die Zahl etwas bedeutete.*
 **Vorschlag, kein Bau: ein Eintrag `__pycache__/` in `.gitignore`.** **Ball beim Release-Prüfer**
 (sein Werkzeug, seine Datei) — **ich fasse `.gitignore` nicht an**, und die eine `.pyc` bleibt
 liegen, bis jemand mit dem Recht dazu sie wegnimmt.
+
+---
+
+## 75 — W-23 durchgerechnet: sieben Zahlen über 5.607 Fälle, alle sieben treffen — und die verworfene Formel log GENAU dort, wo es keine Antwort gibt
+
+**Stand:** HEAD `c6ce2f47`, getrackt 0, ungetrackt weiterhin `?? scripts/__pycache__/` (§74, liegt
+gemeldet). **Messstand nach der neuen Form in eine Variable gelegt; Gegenprobe am Ende: HEAD
+unbewegt.**
+
+**Posten (c) am neunten unberührten Blatt: W-23 Deckung und Material**, `BETRIEBSBESTAETIGT`,
+Schnitt 12.08. 11:22.
+
+### Die entschiedene Rechnung (Vertretungsentscheid F-053)
+
+```
+SCHRANKE  Dachneigung >= Regeldachneigung, sonst KEINE Rechnung
+TEILUNG   n_min = aufrunden(L / Lattmass_max)
+          n_max = abrunden (L / Lattmass_min)
+          n_min <= n_max -> TEILBAR, Lattmass = L/n fuer JEDES n im Bereich
+          n_min >  n_max -> KEINE gleichmaessige Teilung
+VERWORFEN n = aufrunden(L/max), Lattmass = L/n
+```
+
+### Erst das genannte Beispiel, dann die ganze Tabelle
+
+```
+Harzer Pfanne 7, Bereich 372-405, L=1000
+  VERWORFEN  n=ceil(1000/405)=3 -> 333,3 mm   im Bereich? NEIN
+  NEU        n_min=3 · n_max=floor(1000/372)=2 -> n_min>n_max -> KEINE Teilung
+  die Luecke  n=2 -> 500 mm zu gross · n=3 -> 333 mm zu klein
+  7 x 801 = 5607                                              TRIFFT
+```
+
+**Und dann alle sieben Modelle unabhängig nachgerechnet** — Längen 1.000–9.000 mm in 10-mm-Schritten
+(801, selbst gezählt), **in exakter Bruchrechnung statt Fließkomma**:
+
+```
+MODELL             BEREICH      BLATT  MEINE   %BLATT  %MEINE
+Rubin 9V           370-400        146    146     18,2    18,2   TRIFFT
+Harzer Pfanne 7    372-405        136    136     17,0    17,0   TRIFFT
+Achat 12V          330-360        100    100     12,5    12,5   TRIFFT
+Rubin 13V          330-360        100    100     12,5    12,5   TRIFFT
+Granat 11V         338-380         63     63      7,9     7,9   TRIFFT
+Topas 13V          320-360         55     55      6,9     6,9   TRIFFT
+Topas 11V          320-380         21     21      2,6     2,6   TRIFFT
+```
+
+**Sieben von sieben, auf die Einheit genau, über 5.607 gerechnete Fälle.** *Achat 12V und
+Rubin 13V teilen denselben Bereich und liefern beide 100 — die Tabelle ist auch in sich stimmig.*
+
+### Die tragende Zusage der neuen Fassung, erschöpfend geprüft
+
+```
+MODELL             verweigert  naiv falsch  gleiche Menge?  je n im Bereich
+Rubin 9V                  146          146            JA              JA
+Harzer Pfanne 7           136          136            JA              JA
+Achat 12V                 100          100            JA              JA
+Rubin 13V                 100          100            JA              JA
+Granat 11V                 63           63            JA              JA
+Topas 13V                  55           55            JA              JA
+Topas 11V                  21           21            JA              JA
+```
+
+**Zwei Ergebnisse, und das zweite ist mehr als eine Bestätigung:**
+
+1. **Wo die Formel „teilbar" sagt, liegt JEDES n aus `[n_min, n_max]` im Bereich** — nicht am
+   Beispiel, sondern an allen 5.607 Fällen. *Die Zusage „für jedes n im Bereich" ist erschöpfend
+   eingelöst.*
+
+2. **Die Verweigerungsmenge der richtigen Formel ist IDENTISCH mit der Falschmenge der naiven** —
+   bei allen sieben Modellen, Fall für Fall.
+
+**Das schärft die Aussage des Blattes.** Es schreibt, die verworfene Fassung liefere *„in 2,6 % bis
+18,2 % einen Wert AUSSERHALB des Bereichs, und zwar leise"*. **Gemessen ist es enger als das: sie
+lieferte eine Zahl in genau den Fällen, in denen es KEINE gibt.** *Sie war nicht ungenau — sie
+beantwortete ausschließlich die unbeantwortbaren Fragen.* **Und genau dort sieht eine Zahl am
+harmlosesten aus, weil kein Vergleichswert existiert, an dem sie auffallen könnte.**
+
+### Fünftes fehlerfreies Blatt — und es trägt die Eigenschaft in ihrer schärfsten Form
+
+W-23 hat die verworfene Fassung **nicht weggelassen, sondern mit ihrer Fehlerquote stehengelassen**:
+
+> *„Die verworfene Formelfassung steht MIT ihrer Fehlerquote im Blatt, statt weggelassen zu werden
+> — 2,6 % bis 18,2 % über 5.607 gerechnete Fälle."*
+
+**Und es ist die eigene verworfene Fassung des Planners** — er hat seinen eigenen Vorschlag
+gemessen, verworfen und die Messung danebengestellt. *Ohne diese Zahlen hätte ich nichts
+nachzurechnen gehabt; die Prüfbarkeit dieses Blattes ist sein eigenes Werk.*
+
+```
+W-08/1  nennt seinen gefaehrlichsten Grenzfall im TITEL
+W-11/1  nennt die SUMME neben den Einzelzahlen
+W-27/1  nennt seine eigene Widerlegung — und verlangt, dass sie FAELLT
+W-34    schreibt auf, dass die eigene Fangprobe NICHTS faengt, und misst die wirksame dazu
+W-23    laesst die eigene VERWORFENE Formel stehen, mit ihrer Fehlerquote ueber 5.607 Faelle
+```
+
+**Alle fünf sind vom 12.–13.08. Alle fünf halten. Alle fünf liefern das Material, mit dem man sie
+widerlegen könnte.** *Das ist inzwischen kein Zufall mehr und in §73 ist die Weitergabe datiert —
+es gehört dem Planner als Beobachtung, nicht als Regel, die ich setzen könnte.*
+
+**Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
