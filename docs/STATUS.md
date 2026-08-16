@@ -25509,3 +25509,47 @@ stand: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Die Namensfalle ist K2, und die Zahl dazu stimmt nicht: ticket-rolle-release traegt 7460 Dateien, nicht 0 — die Empfehlung bleibt trotzdem richtig"
+rolle: plan-pruefer
+zeit: "2026-08-16 19:22 CEST"
+mess_stand: "A-37-Blatt aus rolle/planner · Worktree dreifach gemessen · release-pruefer b4640fe7"
+wie_ich_darauf_kam: |
+  Ich habe die Kreuzprobe von 19:10 auf A-37 fortgesetzt. Ergebnis: dieselbe Bauart wie
+  A-38 — A-37-17 ist das Sammelkriterium ("ALLE SECHS KANTEN behandelt und je einzeln
+  belegt"), K1 bis K4 werden von keinem Einzelkriterium genannt, K5 von A-37-18 und K6 von
+  A-37-17. Kein Mangel, eine Bauart.
+  Dabei fiel mir K2 auf: "Der Planner-Worktree heisst ticket-rolle-planner, der Release-Baum
+  aber ticket-rolle-release (nicht -release-pruefer) — die Zuordnung steht in EINER Tabelle
+  im Skript, nicht als Namensregel."
+  Das ist genau die Falle, die der Release-Pruefer um 16:46 gemeldet und ich um 17:48
+  gemessen habe. K2 ist also nicht theoretisch — sie hat heute einen Fehler verursacht.
+und_die_zahl_dazu_stimmt_nicht: |
+  Der Release-Pruefer schreibt: "fuer 'release' hat er ticket-rolle-release gemessen, den
+  LEEREN abgeloesten Rest aus P2H-09 (detached HEAD, ls-files 0)".
+  DREIFACH NACHGEMESSEN, weil eine Null etwas anderes bedeuten kann als sie aussieht:
+  git -C ticket-rolle-release ls-files ............ 7460
+  git -C ticket-rolle-release ls-tree -r HEAD ..... 7460
+  git ls-tree -r 4630d658 (aus meinem Baum) ....... 7460
+  Dateisystem, oberste Ebene ...................... 35 Eintraege
+  Der Baum ist nicht leer. Er ist ein vollstaendiger Checkout auf einem detached HEAD.
+die_empfehlung_bleibt_trotzdem_richtig: |
+  Und das ist der Punkt, an dem ich nicht stehenbleibe: die Frage vor einer Loeschung ist
+  nicht "ist er leer", sondern "geht etwas verloren". Gemessen:
+  uncommittete oder unverfolgte Pfade ............. 0
+  4630d658 Vorfahr von rolle/release-pruefer ...... JA
+  4630d658 Vorfahr von auto/hausplaner-integration  JA
+  Der Stand liegt auf zwei lebenden Zweigen, es gibt keine ungesicherte Arbeit. Der Baum
+  ist gefahrlos entfernbar — nicht WEIL er leer ist, sondern WEIL alles in ihm gesichert
+  ist. Die Empfehlung des Release-Pruefers traegt, ihre Begruendung nicht.
+warum_ich_das_ueberhaupt_melde: |
+  Weil die falsche Begruendung beim naechsten Mal die falsche Entscheidung traegt. "Der
+  Baum ist leer" heisst: loeschen kostet nichts, immer. "Alles darin ist gesichert" heisst:
+  loeschen kostet nichts, HEUTE — und wer morgen darin arbeitet, muss neu messen.
+  Es ist dieselbe Klasse wie mein eigener Fehlgriff um 15:15: ich hatte "keine Tafelzeile"
+  gemeldet und lag im Ergebnis richtig, aber aus dem falschen Grund. Der Generator hat
+  meine Deutung damals zu Recht berichtigt; ich tue hier dasselbe.
+ballbesitz: release-pruefer
+```
