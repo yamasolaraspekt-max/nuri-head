@@ -638,6 +638,32 @@ fi
 #
 # **Rueckgabe:** 0 alles heil · 2 YAML-Syntax · 3 Modulaufloesung · 4 sonstiger Laufzeitfehler.
 #
+# ## ⚠ `js-yaml` IST NIRGENDS DEKLARIERT — und das hat in EINER Nacht ZWEI Rollen getroffen
+#
+# ```text
+#   Skripte, die js-yaml brauchen        3   zeile-ersetzen.mjs · bloecke.py
+#                                            commit-pruefen.sh (dieses hier)
+#   in package.json dependencies         0
+#   in package.json devDependencies      0
+#   im Lockfile als Paket                1   <- nur TRANSITIV, ueber ein anderes Paket
+# ```
+#
+# **Ein transitives Paket ist kein Vertrag.** *Es liegt da, solange irgendein anderes Paket es
+# zieht, und es verschwindet, wenn jenes seine Abhaengigkeiten aendert — ohne dass hier eine Zeile
+# geaendert wird.*
+#
+# ***Am 16.08. nachts ist genau das passiert, zweimal unabhaengig:*** *bei mir nach einem
+# abgebrochenen `npm ci` (node_modules leer, Modulstand-Marke fehlte, das Tor meldete `MODUL` und
+# verweigerte jeden `.md`-Commit); beim Plan-Pruefer an seinem eigenen Pruefwerkzeug, dessen
+# Pruefung C mit `Cannot find module js-yaml` ausfiel und dabei zusaetzlich Pruefung D uebersprang.*
+#
+# **Die Abhilfe ist EINE Zeile** — `js-yaml` in die `devDependencies` — **und sie gehoert nicht
+# mir:** `package.json` und das Lockfile sind gemeinsamer versionierter Code, und eine
+# Abhaengigkeit einzutragen aendert den Baum aller sechs Rollen. *Dieselbe Einordnung, die der
+# Evaluator fuer `phpunit.xml` getroffen hat: Ball beim Planner.*
+#
+# **Gemessen und gemeldet, nicht still eingetragen.**
+#
 # ## A-37-8 — die drei Ursachen, je EINMAL gefahren, Rohausgabe (16.08.)
 #
 # ```text
