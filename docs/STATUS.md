@@ -22903,5 +22903,66 @@ bitte: |
   wen. Heute steht die Bedingung im Fliesstext und der Rest nirgends.
   An den Evaluator oder den Planner, je nachdem wie die Antwort ausfaellt: A-33 wartet auf
   genau diesen einen Schritt.
-ballbesitz: yama
+BERICHTIGUNG_14_56_MEINE_REGELFRAGE_WAR_KEINE: |
+  Ich habe hier um 14:05 an Yama gemeldet, Paragraf 3s Rueckkehr-Tabelle habe keine Zeile
+  fuer SPEC_BLOCKED und NACHBESSERN, und daraus eine Regelfrage gemacht.
+  DIE REGEL EXISTIERT. Sie steht in Paragraf 12.3 "Rueckweg zur Abnahme", gefunden, weil der
+  Evaluator sich um 14:54 darauf beruft:
+    "Die Aufgabe geht auf CODE_FERTIG zurueck — KEIN eigener Zustand fuer Nachbesserungen.
+     Die Meldung nennt zusaetzlich zu Paragraf 11: die neue Pruef-SHA auf der Linie des
+     Baus, je Befund was geaendert wurde, und je Befund die ZWEI-RICHTUNGS-PROBE: dieselbe
+     Probe war vorher rot und ist nachher gruen, beide Richtungen selbst gemessen. Eine
+     Reparatur ohne den vorherigen Rot-Beleg ist eine Behauptung."
+  Das beantwortet meine Frage vollstaendig: WER — die Rolle, die nachbessert, meldet auf
+  CODE_FERTIG zurueck; WOHIN — CODE_FERTIG; WOMIT — Pruef-SHA, Aenderung je Befund,
+  Zwei-Richtungs-Probe.
+  UND DER FALL IST GENAU SO GELAUFEN: der Planner hat A-33 auf CODE_FERTIG zurueckgegeben
+  ("der SPEC_BLOCKED-Grund ist behoben"), der Evaluator hat Runde 2 geclaimt und nennt
+  Paragraf 12.3 dabei ausdruecklich. Niemand hat auf eine fehlende Regel gewartet.
+  DAS WAR KEIN BEINAHE-FEHLALARM, SONDERN EINER, DER HERAUSGEGANGEN IST. Die zwoelf, die
+  ich heute gefangen habe, sind vor dem Melden gestorben; dieser nicht. Ich habe in
+  Paragraf 3 gesucht, dort nichts gefunden und daraus geschlossen, es gebe nichts — statt
+  im ganzen Regelwerk zu suchen. Dieselbe Musterfalle wie die anderen zwoelf, nur eine
+  Sekunde zu spaet bemerkt.
+  Der Ball bei Yama entfaellt damit; es gibt nichts zu entscheiden.
+ballbesitz: "—"  # BERICHTIGT 16.08. 14:56: die Regel steht in Paragraf 12.3, meine Frage war gegenstandslos
+```
+
+```yaml
+auftrag: "w17_1_dor_die_zahl_ist_exakt_und_haette_mich_beinahe_erwischt"
+titel: "W-17/1 geprueft — 249 Zeilen in sieben Blaettern, auf die Zeile genau; mein Gegenbefund war ein Messfehler"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:00"
+stand_kopf: 4eeca099
+geprueft_gegen: "rolle/planner 3be497f5 · dor_schnitt_sha 8faca79c"
+posten: "Pflichtteil 3 · neuer ENTWURF in meiner Bahn, ballbesitz plan-pruefer (DoR)"
+was_W_17_1_ist: |
+  Eine ABLESUNG, Stufe B: "Blatt schneiden, Ziel BESCHRIEBEN. KEIN Bau, KEIN Produktivcode."
+  Der Kopf begruendet die Einordnung ausdruecklich als gemessen: "Reifegrad LEER, sieben
+  Blaetter sind reine Vorlagen (249 Z. gesamt), und Produktivcode ist reichlich vorhanden."
+DIE ZAHL IST EXAKT, und der Weg dorthin gehoert dazu: |
+  Erste Messung: ich zaehlte SECHS Blaetter mit 216 Zeilen und sah die Nummerierung springen
+  (1, 2, 3, 4, 6, 7 — die 5 fehlt). Das sah nach einem Fund aus: "sieben behauptet, sechs
+  vorhanden, 33 Zeilen Differenz".
+  Gegenprobe an drei anderen Werkzeugen (W-06, W-07, W-20): dort heisst Blatt 5 nicht
+  5-IRGENDWAS.md, sondern ist ein VERZEICHNIS — 5-CODE. Mein ls-tree auf Verzeichnisebene
+  zeigte es nicht, weil es kein .md ist.
+  Rekursiv gemessen:
+    1-ZWECK 21 · 2-FUNKTION 37 · 3-FORMELN 31 · 4-BEDIENUNG 43
+    5-CODE/LIESMICH 33 · 6-PRUEFUNG 37 · 7-GRENZEN 47
+    Summe 249 — das Blatt nennt 249. AUF DIE ZEILE GENAU.
+  VIERZEHNTE MUSTERFALLE HEUTE, und sie haette einen Fund ERFUNDEN. Die fehlenden 33 Zeilen
+  waren exakt die Datei, die mein Muster nicht sah — der Fund haette sogar plausibel
+  ausgesehen, weil die Differenz zu einem Blatt passte.
+was_ich_daraus_fuer_die_DoR_ziehe: |
+  Der Kopf sagt "GEMESSEN, nicht behauptet". Das trifft zu, und ich habe es an der einzigen
+  Zahl geprueft, die im Kopf steht. Ein Blatt, dessen Einordnung man nachzaehlen kann und
+  das dann stimmt, ist ein gutes Zeichen fuer den Rest.
+  NOCH NICHT GEPRUEFT und so gekennzeichnet: "Reifegrad LEER" und "Produktivcode ist
+  reichlich vorhanden" — beides sind Behauptungen mit Messcharakter, beide stehen im Kopf,
+  beide habe ich noch nicht nachgefahren. Ebenso die Kriterien und Kanten. Naechste Runde.
+  KEIN VOTUM heute. Was ich sagen kann: die tragende Zahl haelt, und die Einordnung als
+  Stufe B (Ablesung statt Bau) passt zu dem, was ich sehe — sieben Vorlagen ohne Inhalt sind
+  kein Bau-Auftrag, sondern ein Beschreibungs-Auftrag.
+ballbesitz: plan-pruefer
 ```
