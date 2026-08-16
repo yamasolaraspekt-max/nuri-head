@@ -18490,8 +18490,8 @@ dor_urteil_plan_pruefer: "plan-pruefer 14.08. 09:26 — §5-DURCHGANG VOLLSTAEND
 
 ```yaml
 auftrag: "A-37"
-ballbesitz: generator
-ballbesitz_grund: "A-37-18 ZUGESTELLT 16.08.: das Tor liegt in 2 von 6 Baeumen, gemessen ueber
+ballbesitz: integrator
+ballbesitz_grund: "A-37-18 UMADRESSIERT 16.08. vom generator an den integrator, weil der einzige Weg TRANSPORT ist und der dem Generator untersagt: das Tor liegt in 2 von 6 Baeumen, gemessen ueber
   alle sechs. Vier ohne, darunter der Integrations-Checkout und der Planner-Baum. Der Integrator
   hat es als Einzelfall gemeldet (83296554); es ist die Regel. SOLL: git ls-files
   scripts/rollen-tor.sh ergibt in JEDEM Baum 1. Nicht K5 — K5 fragt ob das Tor die Rolle KENNT,
