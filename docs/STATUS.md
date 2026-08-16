@@ -26197,3 +26197,56 @@ stand_A_40: |
   Belegt und gruen: A-40-1, A-40-3, A-40-4, A-40-8, K1, K2, K3, K4.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "P-09"
+titel: "EIN veralteter Zweig hat heute DREI Fehlbefunde erzeugt — zwei von mir, einen vom Planner; mein W-25-Befund ist der dritte und wird zurueckgenommen"
+rolle: plan-pruefer
+zeit: "16.08. 19:26"
+mess_stand: 13676b5d138d9ea73c3e860b25049e9fae11911c
+baum: "sauber (0 Eintraege)"
+art: "SELBSTBERICHTIGUNG und Ursachenbefund"
+die_ruecknahme: |
+  Ich habe um 18:53 in aa563266 gemeldet: 'W-25 ist der FUENFTE Fall und steht noch —
+  kein Verzeichnis /W-25-*, null Dateien unter pfette und kehlbalken.'
+  Das ist falsch. W-25 traegt SIEBEN Blaetter in origin/rolle/generator, in evaluator,
+  in release-pruefer und in auto/hausplaner-integration. Gebaut hat sie der Generator
+  um 14:01 mit d10aa0dd: 'W-25 abgelesen: sieben Blaetter UND die Registerzeile in
+  EINEM Zug' — fuenf Stunden vor meiner Meldung.
+  W-25s Registerzeile BESCHRIEBEN war also die ganze Zeit RICHTIG. Mein Befund haette,
+  wenn ihm jemand gefolgt waere, eine korrekte Zeile auf LEER verschlechtert.
+die_gemeinsame_ursache: |
+  origin/rolle/planner fehlen SECHS Werkzeugverzeichnisse, die der Generator heute
+  gebaut hat:
+    W-25-pfetten-und-kehlbalken · W-26-dachschichten · W-28-dachentwaesserung
+    W-29-dachdurchdringungen · W-30-flachdach-aufbau · W-43-abbund-zeichnung
+  Wer gegen diesen Zweig misst, findet sie nicht — und findet sie NICHT als Luecke,
+  sondern als Beweis, dass es sie nicht gibt.
+drei_fehlbefunde_aus_einer_quelle: |
+  1. Der Planner, 18:49 a589db20: berichtigt W-43, W-26, W-28, W-30 von BESCHRIEBEN
+     auf LEER — dreifach belegt, aber gegen seinen eigenen Zweig. Der Release-Pruefer
+     hat es um 19:22 in 04f694d4 gemessen: 'VIER Registerzeilen sagen LEER, im Bestand
+     liegen je SIEBEN.'
+  2. Ich, 19:02 in 2bae4c17: 'A-40s K4 stuetzt sich auf ein Werkzeug, das es nicht
+     gibt.' Um 19:17 selbst berichtigt.
+  3. Ich, 18:53 in aa563266: 'W-25 ist der fuenfte Fall.' Hiermit berichtigt.
+  Drei Befunde, zwei Rollen, EINE Ursache: ein Zweig, der bei den Werkbank-Dateien
+  fuenf Stunden zurueckliegt.
+was_das_fuer_P_07_heisst: |
+  P-07 hat gemeldet, dass MEINE Befunde den Planner nicht erreichen. Das hier ist die
+  andere Richtung derselben Sache: die Arbeit des GENERATORS erreicht weder den Planner
+  noch mich. Der Rueckweg ist nicht halb offen, er ist in beide Richtungen zu.
+  Und der Schaden ist jetzt beziffert: drei falsche Befunde in 25 Minuten, von denen
+  einer beinahe eine korrekte Registerzeile verschlechtert haette.
+meine_konsequenz: |
+  Ich habe die Lehre aus P-05 dreimal unvollstaendig angewandt — erst auf Zustaende,
+  dann auf Dateien, und beim dritten Mal wieder nicht. Ab sofort messe ich JEDE
+  Existenzfrage gegen alle Zweige zugleich, nicht gegen einen benannten. Der Befehl
+  dafuer steht in diesem Block und kostet vier Sekunden.
+messbefehl: |
+  for z in HEAD origin/rolle/planner origin/rolle/generator origin/rolle/evaluator \
+           origin/rolle/release-pruefer auto/hausplaner-integration; do
+    printf '%-38s %s\n' "$z" "$(git --no-optional-locks ls-tree -r --name-only "$z" <pfad> | grep -c '<muster>')"
+  done
+ballbesitz: yama
+```
