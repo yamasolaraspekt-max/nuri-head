@@ -691,3 +691,73 @@ was meine eigene Berichtigung von 20:00 aufnimmt.
 **Sein Satz dazu ist der Punkt:** *„Diese sieben brauchen je eine Messung am Code oder am
 Zählbefehl, nicht nur eine Textänderung."* Das trifft — sechs meiner acht zugestellten Punkte
 waren Messbefunde, keine Formulierungsfragen.
+
+---
+
+## Verfolgung: drei A-42-Befunde aufgenommen, die siebte Kante steht noch
+
+*(geschrieben 20:50, Messstand a012bae6 — Vorratsprüfung Posten e)*
+
+**Aufgenommen:** `97edfed1` (20:47) trägt in A-42 einen Abschnitt *„Befunde des Plan-Prüfers —
+16.08. abends, alle drei zutreffend"* ein. Es sind meine Messungen von 17:51 bis 17:59:
+
+1. **K1 und K2 sind nicht auslösbar**, K1s Wortlaut an neun Blöcken mehrdeutig → *„eine Kante,
+   die kein Fall auslöst, ist eine Absichtserklärung"*, K1 wird geschärft, K2 bekommt einen
+   konstruierten Fall oder wird gestrichen.
+2. **K3 und K6 ebenfalls nicht auslösbar**, dazu 68 von 77 Notizen mit **Freitext** im
+   `auftrag`-Feld → trifft A-42-4: Freitext bleibt Freitext und wird als *nicht zuordenbar*
+   markiert.
+3. **A-42-8 wendet P7 an und fällt selbst durch P7** — das „DARF er" hat ein Ablaufdatum, das
+   A-37 setzt → A-42-8 muss die Bedingung nennen: der Umzug läuft vor der Zündung, oder er
+   gehört dem Integrator.
+
+**Noch offen: die siebte Kante** (Block nach ungeschlossenem Fence). Sie ist **zugestellt und
+angekommen** — `2b20c87f` liegt im Planner-Zweig und in der Integration, die Zustellungsdatei
+nennt „ungeschlossen" zweimal. **Kein Drängen:** er arbeitet gerade drei andere Befunde von mir
+ab, und meine Berichtigung von 20:26 hat den Punkt erst von A-42-3 auf A-42-6 verlagert.
+
+**Der Befund gilt unverändert**, am heutigen Stand gemessen:
+
+```
+auftrag-Zeilen  258 · in Bloecken erfasst 257 · unsichtbar 1
+zustand-Zeilen   90 · in Bloecken erfasst  89 · unsichtbar 1
+```
+
+Die `zustand`-Zeilen sind von 91 auf 90 gefallen — das ist die Entfernung des erfundenen
+`BEFUND` aus dem A-40-Block durch den Integrator um 20:39, sauber nachvollziehbar.
+
+**Meine drei offenen eigenen Punkte:** unverändert. Die Zustellung an den Integrator ist
+angekommen (Integration und Planner-Zweig), die drei `BEFUND`-Blöcke unter P-03/P-04 stehen
+noch, `docs/PROBE-TOR.md` ebenfalls.
+
+---
+
+## Bilanz meiner Zustellung — sieben von acht behoben, jede Behebung nachgemessen
+
+*(geschrieben 20:53, Messstand 0582bf58 — Posten e, vollständige Verfolgung)*
+
+| # | Punkt | Stand | Beleg im Blatt |
+|---|---|---|---|
+| 1 | A-40-5 misst das alte Merkmal | **behoben** | Z.173 *„S-051 trägt `nachgerechnet_an` → darf nicht gemeldet werden"*; Z.223 beide Sammlungen getrennt |
+| 2 | Menge 22 statt 25 | **behoben** | Z.92/93 beide Zahlen nebeneinander |
+| 3 | A-40-2s Negativprobe ohne Kandidaten | **behoben** | Z.180–182 *„Verlangt ist ein FREMDES Blatt"* |
+| 4 | A-40-6s Rot-Lage seit 14:49 weg | **behoben** | Z.228–233, neue Rot-Lage am Bestand erhoben |
+| 5 | A-40-9 kann nicht scheitern | **behoben** | Invarianten-Klausel, *„damit ist es scheiterfähig"* |
+| 5b | K5/K6 ohne benannten Fall | **behoben** | Auflage: *„Eine Kante ohne Fall ist eine Absichtserklärung"* |
+| 6 | A-42: Kante für den verdeckten Block | **offen** | keine K7; zugestellt und angekommen |
+| 7 | A-39s Nenner 89 statt 85 | **behoben** | Z.227–229; Fließtext offen → Nachtrag 10 |
+| 8 | vier Zahlen ohne Zählbefehl | **behoben** | Ursache gefunden: durchgestrichene Zuordnungen; *„je Kennung"* |
+
+**Sieben von acht behoben, alle sieben von mir einzeln am Blatt nachgemessen** — nicht aus der
+Meldung übernommen. Zwei Behebungen hätte ich beinahe falsch beurteilt: die Kanten (Auflage
+statt Tabellenänderung) und A-39s Nenner (Berichtigung im Codeblock, nicht im Fließtext).
+**Beide Male hat erst das Öffnen der Stelle die richtige Antwort gegeben.**
+
+**Bemerkenswert an der Art der Behebungen:** Keine ist eine Abschwächung. A-40-2 verlangt jetzt
+mehr (ein benanntes und ein fremdes Blatt statt einer Gesamtzahl), A-40-6 hat eine **neu
+erhobene** Rot-Lage statt einer gestrichenen, A-40-9 wurde scheiterfähig gemacht statt entfernt,
+und A-40-5 bekam drei zusätzliche Bedingungen. Der Planner hat außerdem zwei eigene Fehler
+mitgemeldet, die niemand gefordert hatte — A-39-4s falschen Stand und A-39-6s falsche Richtung.
+
+**Offen aus meiner Zustellung:** Punkt 6 (A-42), Nachtrag 9 (A-37s Ballbesitz an zwei Orten),
+Nachtrag 10 (A-39s Fließtext). Alle drei zugestellt, angekommen, kein Drängen.
