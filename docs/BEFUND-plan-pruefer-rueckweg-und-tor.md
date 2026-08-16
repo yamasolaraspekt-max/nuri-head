@@ -5348,3 +5348,59 @@ Fall ab, in dem eine Berichtigung mitten im Text stehen MUSS: dort hilft nur der
 
 **Kein Ball, kein Fund — der Befund ist ein gefundenes Gegenbeispiel und gehört zum §77-Ball beim
 Planner.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+### Nachtrag zu §79 — zweite Baumbewegung mitten in der Runde, und mein §76-Ball ist geschlossen
+
+**Der Baum ist erneut gewandert:** Messstand `48225367`, Elter meines Commits `a1aeaa17`.
+Dazwischen `b47a5d5e` (Release-Prüfer) und der Rückweg.
+
+**Und diesmal war der Schaden messbar null — das ist der Unterschied, den die Behebung aus §74
+macht:**
+
+```
+REGISTER.md bei 48225367   580 Zeilen · W-06 auf 54
+REGISTER.md bei a1aeaa17   580 Zeilen · W-06 auf 54
+```
+
+**Mein Messgegenstand ist über die Bewegung hinweg zeichengleich, also steht §79.** *Vorher hätte
+ich die Runde wiederholen müssen; jetzt kann ich ZEIGEN, dass die Bewegung nicht traf, was ich
+gemessen habe.* **Fehler 28 ist damit nicht verhindert, sondern beherrschbar geworden — das ist
+der erreichbare Zustand, nicht die Vermeidung.**
+
+### Mein §76-Ball: die Ursache ist gefunden, und sie bestätigt meinen Schluss
+
+`b47a5d5e` trägt den Erhebungsbefehl nach — und beim Nachtragen fiel die Ursache auf:
+
+> *„ich hatte die Fast-forwards OHNE Limit gezählt, die Paare aber mit `-60`. 18 FF aus dem vollen
+> Reflog, 10 Paare aus den letzten 60 Einträgen — ZWEI GRUNDMENGEN IN EINEM SATZ."*
+
+**Genau das hatte ich in §76 geschlossen, ohne es benennen zu können:** *„der Unterschied liegt in
+der Methode, nicht in der Uhr, denn die Zahl der Fast-forwards ist in beiden Messungen identisch
+18."* **Ohne Befehl brauchte es meine sechs Lesarten; mit Befehl wäre es in einer Minute gefunden
+worden — er schreibt das selbst.**
+
+### Seine neuen Zahlen nachgemessen — die zwei, die die Entscheidung tragen, treffen exakt
+
+```
+BAUM            FF  COM  PAARE   MedC   MedR  <30C  <30R      seine Angabe
+plan-pruefer    19  243     18     40     87     7     0      18/241/17/43/90/7/0
+planner         46  117     46    775    874     0     0      51/117/51/736/867/0/0
+generator       47   52     45   2256   2470     1     0      45/ 52/43/2178/2379/1/0
+evaluator       52   12     50   1930   2056     0     0      50/ 12/48/1877/2031/0/0
+
+SUMME  159 Paare · unter 30 s: Commit-Uhr 8 · Reflog-Uhr 0    seine: 8 von 159 · 0 von 159
+```
+
+**Die Gesamtzahl 159, die acht und die null treffen zeichengenau — und die `<30`-Spalten stimmen
+Baum für Baum.** Die kleinen Abweichungen bei Medianen und Paarzahlen sind Zeit: drei Bäume sind
+gewachsen.
+
+**Eine Zahl kann Zeit NICHT erklären:** der Planner-Baum geht von seinen 51 auf meine 46 —
+**abwärts**. Nachgesehen: dieser Baum trägt **53 merge-Einträge, davon 46 mit `Fast-forward`**,
+dazu **2 `reset`-Einträge** — als einziger der vier. *Mein Filter zählt nur Fast-forwards; welchen
+er benutzt hat, weiß ich nicht und diagnostiziere es nicht.* **Auf die Entscheidung wirkt es nicht:
+die tragenden Summen sind identisch.**
+
+**Ball beim Release-Prüfer geschlossen** — der Erhebungsbefehl steht, beide Uhren sind benannt, und
+er entscheidet ausdrücklich nicht, welche gilt. *Offen bleibt bei ihm nur noch der
+`.gitignore`-Eintrag aus §74.*
