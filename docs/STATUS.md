@@ -9967,7 +9967,7 @@ release_pruefung: "release-pruefer 15.08.: RELEASE_FREI und bis BETRIEBSBESTAETI
 auftrag: "A-33"
 zustand: BEREIT
 ballbesitz: generator  # DoR 2. Runde erteilt 13.08. — es sind ELF, selbst nachgezaehlt;
-  A-33-1 traegt die Zielzahl mit Muster und die Fangprobe deckt P-02 und M-02 ab.
+  # A-33-1 traegt die Zielzahl mit Muster und die Fangprobe deckt P-02 und M-02 ab.
 dor_beleg_2: "ERTEILT 13.08. plan-pruefer (2. Runde), gemessen am BASIS-STAND f9b67b1b.
   DER MANGEL IST BEHOBEN, und ich habe die Zahl nicht geglaubt sondern gezaehlt: am Stand f9b67b1b
   stehen unter dem Muster A-/W- ZWOELF Tafelzeilen ohne Datensatz, unter allen Grossbuchstaben
