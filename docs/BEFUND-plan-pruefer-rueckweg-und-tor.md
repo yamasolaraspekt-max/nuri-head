@@ -1087,3 +1087,76 @@ Wegweiser darf nie falsch sein, auch nicht folgenlos.
   unfortgeschrieben.
 
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## A-30s vier Zahlen nachgerechnet: alle richtig, der Mangel ist inzwischen behoben — und ich habe in EINER Runde DREI Fehlbefunde erzeugt, alle aus derselben Ursache
+
+*Vorratsprüfung Posten (b), Zahlen nachgerechnet · gemessen 16.08. gegen `3bc7acd6`, Basis `18fe2deb`*
+
+### Das Ergebnis zuerst: A-30 trägt, und sein Befund ist erledigt
+
+A-30s DoR nennt vier Zahlen **samt Muster**. Am eigenen Basis-Stand nachgezählt:
+
+| Zahl im Blatt | nachgerechnet | Urteil |
+|---|---|---|
+| 30-mal `A-` | 30 | **trifft** |
+| 36-mal `W-` | 36 (weites Muster) | **trifft** |
+| einmal `M-` | 1 — `M-02-Kopienzahl` | trifft, aber **Fehlalarm, bereits aktenkundig** (Z.2547) |
+| einmal `P-` | 1 | **trifft** |
+| 12 Tafelzeilen ohne Datensatz | 12 roh · **1** nach Auflösung | **trifft** — 12 = 1 echte + 11 Sammelzeilen |
+
+**Die 12 und meine 1 widersprechen sich nicht — meine Zahl erklärt seine.** Die Tafelzeile `W-01`
+gehört zum Datensatz `W-01/1`; wer das nicht auflöst, zählt jeden Werkzeugauftrag als Loch. Genau
+diese Auflösung protokolliert die Statuswahrheit selbst als **„15 → 4 → 2"**.
+
+**Und der eigentliche Befund von A-30 ist heute behoben.** Die zwei echten Lücken trugen ihren
+Zustand nur an einem der zwei nach §16 vorgeschriebenen Orte:
+
+```
+             Tafelzeile   Datensatz          Tafelzeile   Datensatz
+   A-06   Basis:  1           0      ->   heute:  1           1
+   P-02   Basis:  1           0      ->   heute:  1           4
+```
+
+**Heute bleibt genau eine Tafelzeile ohne Datensatz: `M-02-Kopienzahl`** — die aktenkundige
+Nicht-Auftragszeile aus einer fremden Tabelle. **Echte Lücken: null, in beide Richtungen.**
+
+### Und jetzt der Teil, der mir gehört: drei Fehlbefunde in einer Runde
+
+Ich habe in dieser einen Prüfung **dreimal** eine Abweichung gemessen, die keine war. **Jedes Mal
+lag es an meinem Muster, nie am geprüften Text** — und jedes Mal war der Fehlbefund vor dem Melden
+gefangen, weil ich die Abweichung geöffnet statt gezählt habe.
+
+1. **`W-` 33 statt 36.** Mein Muster verlangte `W-<Ziffern>` oder `W-<Ziffern>/<Ziffer>`. Es
+   verfehlte **`W-07N`, `W-01N`, `W-21L`** — Suffix-Buchstabe statt Ziffer. Ich hätte gemeldet,
+   A-30 habe sich um drei verzählt. **Die DoR hat weit gezählt und lag richtig.**
+2. **`M-` verschwunden (1 → 0).** Mein Muster verlangte `**M-02**`; die Zeile heißt
+   `**M-02-Kopienzahl**`. Ich hätte gemeldet, eine Tafelzeile sei verlorengegangen.
+3. **Vier Datensätze ohne Tafelzeile: `B5`, `B5N`, `B6`, `B7`.** Mein Muster verlangte einen
+   **Bindestrich** in der Kennung. Alle vier haben eine Tafelzeile — Z.36, 42, 37, 41. Ich hätte
+   vier §16-Verstöße gegen fertige Aufträge gemeldet.
+
+### Die Musterwarnung, die daraus folgt — für jeden, der Kennungen zählt
+
+Vier Formen brechen jeden naheliegenden Kennungs-Zähler. Sie stehen alle in derselben Datei:
+
+```
+Suffix-Buchstabe    W-01N  W-07N  W-21L        -> Muster mit \d+$ verfehlt sie
+Ohne Bindestrich    B5  B5N  B6  B7            -> Muster mit [A-Z]+- verfehlt sie
+Sammelzeile         Tafel W-01 -> Datensatz W-01/1  -> zaehlt als Loch, ist keins
+Fremde Tabelle      M-02-Kopienzahl  Generator     -> sieht aus wie eine Auftragszeile
+```
+
+**Das ist nicht nur mein Problem.** Der Release-Prüfer hat heute denselben Fehler an anderer
+Stelle gemeldet und behoben (`a296eb48`): sein Zählweg lief über `auftrag:` und übersah jeden
+Block ohne Kennung — *„der Fehler ist nicht die Zahl, sondern der Zählweg."* Und ich selbst habe
+in der Runde davor 36 statt 72 DoR-Bälle gemeldet, weil mein Muster die Schreibweise
+`plan-pruefer (DoR), danach …` nicht kannte.
+
+**Dreimal dieselbe Klasse an einem Tag, bei zwei verschiedenen Rollen.** Der gemeinsame Kern: ein
+Zähler unterstellt eine Namensform, die Datei kennt vier. **Wer eine Kennungszahl meldet, muss die
+Form nennen, nach der er gezählt hat — sonst ist die Zahl nicht nachprüfbar, sondern nur
+wiederholbar.**
+
+**Ball: planner** — als Ergänzung zu der Summenprobe-Regel, die er heute schon verankert hat
+(*„wer den Reifegrad zählt, nennt die Summe und die Zeilenzahl dazu"*). Diese hier ist ihre
+Schwester für Kennungen. **Kein Zustandsfeld angefasst, kein Bau.**
