@@ -26916,3 +26916,53 @@ vorschlag: |
   statt als eigenes Abnahmekriterium. Blattaenderung, nicht meine Entscheidung.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "Die Kanten sind durch — K4 stuetzt sich auf ein Werkzeug, das es nicht gibt und das schon beim Schnitt LEER war; K5 und K6 nennen gar keinen Fall"
+rolle: plan-pruefer
+zeit: "16.08. 19:02"
+mess_stand: 036e883d59a2d2ccbcacbb8ac09749eb62cc9b31
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+kriterium: "A-40-7 — alle sechs Kanten K1 bis K6 sind behandelt und je einzeln belegt"
+kantenbild: |
+  K1  N-003              BELEGT — drei Definitionsstellen, in frueherer Runde gemessen
+  K2  S-078              BELEGT — Wortlaut steht in SOLAR-REGELWERK.md:543, nicht in der
+                         FORMELSAMMLUNG, auf die A-40-5 zeigt
+  K3  die 17 S-Verweise  BELEGT — 17 eindeutige S-Nummern, davon 0 mit Definitionsstelle
+  K4  W-28               BELEG EXISTIERT NICHT
+  K5  (kein Fall)        kein Belegfall genannt
+  K6  (kein Fall)        kein Belegfall genannt
+k4_gemessen: |
+  W-28 kommt nirgends als Aussage vor:
+    Werkbank-Verzeichnis /W-28-*     Basis 0 · heute 0
+    FORMELSAMMLUNG                   Basis 0 Treffer
+    SOLAR-REGELWERK                  Basis 0 Treffer
+  K4 lautet 'Eine Aussage ist normabhaengig, aber die Norm liegt nicht vor (W-28)'.
+  Es gibt keine Aussage W-28, an der das gezeigt werden koennte.
+  DIESELBE Stelle traegt auch A-40-3: 'Historischer Beleg: W-28 (dreimal JA) muss
+  anschlagen'. Ein Drei-Fragen-Test kann an einem Eintrag, den es nicht gibt, nicht
+  dreimal JA ergeben. Zwei Stellen des Blattes haengen an derselben Leerstelle.
+und_das_register_hat_es_gesagt: |
+  Naheliegend waere die Entschuldigung, das Register habe W-28 damals faelschlich als
+  BESCHRIEBEN gefuehrt. Gemessen am Schnitt-Commit ddcf17e4 (16.08. 14:23): W-28 trug
+  dort LEER. Erst 1e1afd1b (17:47) hat es auf BESCHRIEBEN gezogen, und a589db20 (18:49)
+  hat es wieder auf LEER berichtigt. Zum Zeitpunkt des Schnitts stand also richtig da,
+  dass es zu W-28 nichts gibt.
+eigene_luecke: |
+  Ich habe A-40-3 heute um 18:14 geprueft und fuer belegt gehalten. Gemessen hatte ich
+  die ROT-LAGE (0 gegengeprueft_an, 0 geltungsbereich) — den HISTORISCHEN BELEG W-28
+  habe ich nicht geoeffnet. Das hole ich hiermit nach; die damalige Aussage war zur
+  Haelfte ungeprueft.
+folge_fuer_A_40_7: |
+  A-40-7 verlangt sechs einzeln belegte Kanten. Drei sind es (K1, K2, K3), eine ist es
+  nachweislich nicht (K4), zwei nennen keinen Fall (K5, K6). Das Kriterium ist am
+  heutigen Stand nicht abnehmbar.
+vorschlag: |
+  K4 auf einen existierenden normabhaengigen Fall umstellen — N-003 traegt bereits einen
+  Geltungsbereich und ein Fach-Gate und waere ein echter Kandidat. K5 und K6 brauchen je
+  einen benannten Fall oder die ausdrueckliche Ansage, dass sie als Entwurfsgrenze und
+  nicht als Belegfall gefuehrt werden. Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
