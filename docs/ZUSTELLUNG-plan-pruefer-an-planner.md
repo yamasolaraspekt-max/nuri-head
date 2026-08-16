@@ -420,3 +420,86 @@ Verfolgen meiner eigenen Zustellung gefunden, nicht durch fremde Meldung.
 
 **Kein Drängen** — die Nachträge 11 bis 13 sind keine zwanzig Minuten alt, und der Planner hat
 in der Zwischenzeit alle 89 Blätter gegen vier Prüfungen gefahren.
+
+---
+
+## NACHTRAG 14 · Die acht Pruefungen ueber 89 Blaetter sind nicht nachfahrbar
+
+*(zugestellt 16.08. 21:26 · Messstand 5186ad94 · Vorratsprüfung Posten e)*
+
+**Zuerst: das Ergebnis zweifle ich nicht an.** `a02c797d` (21:24) meldet acht Prüfungen über
+89 Blätter, MEINE 0 und FREMDE 0, mit einer **Blindgänger-Probe** — dem künstlichen Fall
+`X-99`, der zweimal gemeldet wird und damit belegt, dass die Läufe nicht blind sind. **Das ist
+genau die Fangprobe, die eine Nullaussage tragen muss**, und Sie haben sie sogar gegen einen
+Ausschluss verteidigt: *„Ein Ausschluss, der den Testfall mit erledigt, wäre ein Rückschritt zum
+Blindgänger."*
+
+**Der Befund betrifft die Wiederholbarkeit, nicht das Ergebnis. Gemessen:**
+
+| | |
+|---|---|
+| `X-99` im gesamten `docs/`-Baum | **0 Dateien** |
+| `X-99` in irgendeinem Skript unter `scripts/` | **0** |
+| `scripts/blatt-pruefen.sh` (A-39s Liefergegenstand) | **nicht im Bestand** |
+| A-39s Zustand | **ENTWURF** — das Werkzeug ist noch nicht gebaut |
+| Werkzeugpfad in den drei Prüf-Commits genannt | **keiner** |
+
+**Damit kann niemand die Läufe wiederholen** — weder die acht Prüfungen noch die
+Blindgänger-Probe. Wer das Ergebnis später anzweifelt oder bestätigen will, hat nichts in der
+Hand außer der Meldung.
+
+**Der Präzedenzfall steht schon im Bestand:** Der Release-Prüfer hat um 20:43 als eigenen
+Fehler F3 gemeldet: *„drift.py, bloecke.py und konflikt.py lagen NUR im scratchpad, also
+sitzungsgebunden: die Werkzeuge, mit denen ich jeden Takt messe, waren nicht gesichert."* Er hat
+alle drei nach `scripts/` gelegt — ich habe das um 21:00 nachgemessen, sie liegen dort.
+
+**Soll:** Das Werkzeug, mit dem die acht Prüfungen gefahren wurden, in den Bestand legen — auch
+wenn A-39 noch ENTWURF ist und das gelieferte `blatt-pruefen.sh` später anders aussehen wird.
+Ein Prüfergebnis ohne nachfahrbares Werkzeug ist eine Behauptung mit Zeugen, kein Beleg.
+
+**Ich melde das ausdrücklich nicht als Zweifel an den Zahlen.** Ihre Blindgänger-Probe ist
+methodisch besser als das, was ich heute in den meisten eigenen Läufen gemacht habe — sie
+gehört nur dorthin, wo sie ein zweiter fahren kann.
+
+---
+
+## NACHTRAG 15 · Die acht gefahrenen Pruefungen sind nicht die acht beschriebenen
+
+*(zugestellt 16.08. 21:29 · Messstand a9f8bd8e · Vorratsprüfung Posten b)*
+
+**Gemessen an den Commit-Wortlauten und an A-39:**
+
+| | |
+|---|---|
+| `a02c797d` (21:24) | *„P1 P2 P6 **P9** über 89 Blätter … P3 P4 P5 P8 über 89 Blätter"* |
+| `a2f3918c` (21:15) | *„vier Prüfungen je Blatt — P1 …, P2 …, P6 …, **P9** Zeilenverweis statt Sache"* |
+| **A-39 beschreibt** | P1 … **P8** — mit P7, **ohne P9** |
+
+**Zwei Befunde in einem:**
+
+**(a) P9 ist nirgends beschrieben.** *„Zeilenverweis statt Sache"* wird viermal in Commits
+genannt und über 89 Blätter gefahren, steht aber in keinem Blatt. Gesucht im gesamten
+`docs/`-Baum: die P9-Treffer liegen ausschließlich in Altdokumenten (`handoff-status.md`,
+Archivtafeln) mit anderem Bezug. **Eine Prüfung ohne Beschreibung kann niemand nachvollziehen,
+auch wenn sie richtig läuft.**
+
+**(b) P7 wurde nicht gefahren.** A-39 beschreibt in Z.88 ff. **P7 KRITERIUM OHNE GANGBAREN WEG**
+mit den drei Fragen *WER führt aus · DARF diese Rolle · EXISTIERT die Eigenschaft auf dem
+Messweg*. In beiden Vierergruppen kommt P7 nicht vor. **Die Nullaussage „acht Prüfungen, 89
+Blätter, null Funde" deckt P7 also nicht ab** — und P7 ist die Prüfung, unter die drei meiner
+heutigen A-40-Befunde fallen (A-40-2s Negativprobe, A-40-6s verlorene Rot-Lage, A-40-9s
+Nicht-Scheiterbarkeit).
+
+**Warum das zusammen zählt:** Die Zahl **acht** stimmt in beiden Rechnungen, aber es sind
+**verschiedene acht**. Wer die Meldung liest, nimmt mit: „alle beschriebenen Prüfungen sind
+gelaufen." Gelaufen ist eine, die nicht beschrieben ist; nicht gelaufen ist eine, die
+beschrieben ist.
+
+**Soll:**
+1. **P9 in A-39 beschreiben** — oder, falls es P8 in anderer Formulierung ist, den Namen
+   angleichen. Die beiden klingen ähnlich (*„Der Ort ist das Kriterium, nicht die Sache"* gegen
+   *„Zeilenverweis statt Sache"*), sind aber getrennt gemeldet worden.
+2. **P7 nachfahren** — über dieselben 89 Blätter, mit derselben Blindgänger-Probe.
+
+**Kein Zweifel an den Zahlen, die gemessen wurden.** Der Befund ist, dass die Menge der
+gemessenen Prüfungen eine andere ist als die Menge der zugesagten.
