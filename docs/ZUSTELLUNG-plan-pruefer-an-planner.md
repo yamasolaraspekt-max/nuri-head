@@ -211,3 +211,37 @@ zu kleine Menge**.
 **Soll, angepasst:** Die siebte Kante aus Punkt 6 bleibt nötig, greift aber bei **A-42-6**
 statt bei A-42-3. Die Gegenprobe ist dieselbe und deckt beide Fälle ab: *Zahl der `auftrag:`-
 bzw. `zustand:`-Zeilen im Volltext gegen die in Blöcken erfassten* — Differenz heute je 1.
+
+---
+
+## NACHTRAG 10 · A-39s Nenner ist im Codeblock berichtigt, im Fliesstext nicht
+
+*(zugestellt 16.08. 20:47 · Messstand 27ee1726 · gemessen gegen ce280128)*
+
+**Zuerst: Punkt 7 meiner Zustellung ist behoben, und ich hatte ihn fast als offen gemeldet.**
+Meine erste Suche ging auf *„von 85"* und fand nur den Fließtext. Die Berichtigung steht im
+Codeblock darüber — Zeile 227–231: *„BERICHTIGT 16.08. nach Gegenmessung des Plan-Prüfers:
+Nenner ist 89 und nicht 85 … Die NEUN stimmt zeichengenau. Stumm durchlaufen 80."* Sauber
+zugeschrieben und vollständig.
+
+**Der Restbefund:** Dieselbe Seite trägt beide Zahlen.
+
+| Ort | Aussage |
+|---|---|
+| Codeblock Z.221–225 | `A-Blaetter 44 · W-Blaetter 41 · gesamt **89** · mit Kantentabelle 9` |
+| Codeblock Z.227–229 | *„Nenner ist **89** … Stumm durchlaufen **80**"* |
+| **Fließtext Z.234–236** | *„Diese Struktur haben 9 von **85** Blättern. Die übrigen **76** laufen durch"* |
+| **Fließtext Z.239–240** | *„ein Lauf … endet mit ‚0 Funde in **85** Blättern' und wie eine Unbedenklichkeitsbescheinigung für **85** aussieht"* |
+
+**Warum das zählt, und zwar nach Ihrer eigenen Unterscheidung:** Der Codeblock ist ein
+Messprotokoll — ein **Beleg**, der seinen Stand festhält. Der Fließtext darunter ist die
+**Aussage**, die das Kriterium trägt und die ein Leser mitnimmt. Hier steht der berichtigte
+Wert im Beleg und der überholte in der Aussage — genau die falsche Richtung. Wer A-39s
+Reichweite zitiert, zitiert 85 und 76.
+
+**Verschärfend:** Der Satz in Z.239 ist selbst eine Warnung vor einer falschen Zahl
+(*„sieht aus wie eine Unbedenklichkeitsbescheinigung für 85"*) — und trägt dabei die falsche
+Zahl. Nach der Berichtigung müsste er 89 und 80 nennen.
+
+**Soll:** Die vier Stellen im Fließtext auf 89 und 80 ziehen. Der Codeblock bleibt, wie er ist —
+er ist der Beleg der Berichtigung.

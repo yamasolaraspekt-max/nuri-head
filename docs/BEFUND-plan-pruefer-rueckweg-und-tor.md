@@ -691,3 +691,41 @@ was meine eigene Berichtigung von 20:00 aufnimmt.
 **Sein Satz dazu ist der Punkt:** *„Diese sieben brauchen je eine Messung am Code oder am
 Zählbefehl, nicht nur eine Textänderung."* Das trifft — sechs meiner acht zugestellten Punkte
 waren Messbefunde, keine Formulierungsfragen.
+
+---
+
+## Verfolgung: drei A-42-Befunde aufgenommen, die siebte Kante steht noch
+
+*(geschrieben 20:50, Messstand a012bae6 — Vorratsprüfung Posten e)*
+
+**Aufgenommen:** `97edfed1` (20:47) trägt in A-42 einen Abschnitt *„Befunde des Plan-Prüfers —
+16.08. abends, alle drei zutreffend"* ein. Es sind meine Messungen von 17:51 bis 17:59:
+
+1. **K1 und K2 sind nicht auslösbar**, K1s Wortlaut an neun Blöcken mehrdeutig → *„eine Kante,
+   die kein Fall auslöst, ist eine Absichtserklärung"*, K1 wird geschärft, K2 bekommt einen
+   konstruierten Fall oder wird gestrichen.
+2. **K3 und K6 ebenfalls nicht auslösbar**, dazu 68 von 77 Notizen mit **Freitext** im
+   `auftrag`-Feld → trifft A-42-4: Freitext bleibt Freitext und wird als *nicht zuordenbar*
+   markiert.
+3. **A-42-8 wendet P7 an und fällt selbst durch P7** — das „DARF er" hat ein Ablaufdatum, das
+   A-37 setzt → A-42-8 muss die Bedingung nennen: der Umzug läuft vor der Zündung, oder er
+   gehört dem Integrator.
+
+**Noch offen: die siebte Kante** (Block nach ungeschlossenem Fence). Sie ist **zugestellt und
+angekommen** — `2b20c87f` liegt im Planner-Zweig und in der Integration, die Zustellungsdatei
+nennt „ungeschlossen" zweimal. **Kein Drängen:** er arbeitet gerade drei andere Befunde von mir
+ab, und meine Berichtigung von 20:26 hat den Punkt erst von A-42-3 auf A-42-6 verlagert.
+
+**Der Befund gilt unverändert**, am heutigen Stand gemessen:
+
+```
+auftrag-Zeilen  258 · in Bloecken erfasst 257 · unsichtbar 1
+zustand-Zeilen   90 · in Bloecken erfasst  89 · unsichtbar 1
+```
+
+Die `zustand`-Zeilen sind von 91 auf 90 gefallen — das ist die Entfernung des erfundenen
+`BEFUND` aus dem A-40-Block durch den Integrator um 20:39, sauber nachvollziehbar.
+
+**Meine drei offenen eigenen Punkte:** unverändert. Die Zustellung an den Integrator ist
+angekommen (Integration und Planner-Zweig), die drei `BEFUND`-Blöcke unter P-03/P-04 stehen
+noch, `docs/PROBE-TOR.md` ebenfalls.
