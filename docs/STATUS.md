@@ -27369,3 +27369,58 @@ messbefehl: |
   done
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "A-42"
+titel: "A-42-3 ist nicht erfuellbar, und die Luecke sitzt in A-42s eigener Messvorschrift — ein intakter Block faellt heraus, weil sein VORGAENGER kaputt ist, und K4 deckt genau das nicht ab"
+rolle: plan-pruefer
+zeit: "16.08. 19:29"
+mess_stand: c2c3793d3bcef7e5e7828a0ea58b8edd9c0c6520
+basis_stand: e802c1f8
+geprueft_gegen: "auto/hausplaner-integration (aktuellster A-42-Stand, 134 Zeilen, blob 833487b0)"
+baum: "sauber (0 Eintraege)"
+zuerst_die_zweigprobe: |
+  Nach der Lehre aus P-09 zuerst gemessen, WO das Blatt aktuell ist:
+    planner · release-pruefer · integration   134 Zeilen  blob 833487b0
+    generator · evaluator                     121 Zeilen  blob 759b1b83
+    mein HEAD                                 fehlt
+  Geprueft wurde gegen die 134er-Fassung. Ohne diese Probe waere es die alte geworden.
+das_kriterium: "A-42-3 — kein Block hat sich inhaltlich veraendert; fuer JEDEN umgezogenen Block ist der Text byte-identisch zum Ausgangsstand, Pruefung ueber Hash je Block, nicht ueber Augenschein"
+die_messvorschrift_des_blattes: |
+  Zeile 86 des Blattes: bl = re.findall(r'```yaml(.*?)```', ...)
+  Zeile 50: 'Jeder yaml-Block in docs/STATUS.md, der ein Feld auftrag: traegt, aber kein
+  zustand:' — das ist die Umzugsmenge.
+  Zeile 60: 'KEIN Loeschen. Kein Block verschwindet; jeder steht danach vollstaendig in
+  der Zieldatei.'
+der_fund: |
+  Genau diese Paarung verliert einen Block, und zwar an allen drei gemessenen Staenden:
+    BASIS e802c1f8   339 Bloecke · 163 auftrag-Zeilen · 162 erfasst · UNSICHTBAR: A-18
+    INTEGRATION      438 Bloecke · 254 auftrag-Zeilen · 253 erfasst · UNSICHTBAR: A-18
+    mein HEAD        425 Bloecke · 250 auftrag-Zeilen · 249 erfasst · UNSICHTBAR: A-18
+  A-18s Block traegt auftrag, datei, abnahme_nachgezogen, release_vermerk — und KEIN
+  zustand-Feld. Er gehoert damit genau zur Umzugsmenge (348 Bloecke ohne zustand).
+  Am Integrationsstand: Zeile 7876 oeffnet einen yaml-Block, der nie geschlossen wird;
+  Zeile 7890 oeffnet den A-18-Block; die naechste schliessende Marke steht auf 7973.
+  Die Regex paart 7876 mit 7890 und liest 7890 bis 7973 als ausserhalb.
+warum_K4_es_nicht_faengt: |
+  A-42s K4 lautet: 'Ein Block ist kaputtes yaml (es gibt 24 solcher Altlasten) — nicht
+  umziehen, einzeln melden.' Das deckt den KAPUTTEN Block ab.
+  A-18 ist aber nicht kaputt. Er ist syntaktisch einwandfrei und wird nur von seinem
+  Vorgaenger verschluckt. Ein kaputter Block macht nicht sich selbst unsichtbar,
+  sondern den FOLGENDEN — deshalb faellt A-18 durch jedes Raster, das nach kaputtem
+  yaml sucht.
+folge: |
+  Wer A-42 nach dieser Vorschrift baut, zieht 347 statt 348 Notizen um. A-18 bliebe
+  stillschweigend in docs/STATUS.md liegen, ohne Meldung, denn er taucht in keiner Liste
+  auf — weder in der Umzugsmenge noch unter K4.
+  Damit ist A-42-3 nicht erfuellbar (fuer einen Block gibt es keinen Hash) und die
+  Zusage aus Zeile 60 verletzt (ein Block steht danach NICHT vollstaendig in der
+  Zieldatei).
+vorschlag: |
+  Eine siebte Kante oder eine Ergaenzung zu K4: 'Ein Block, der auf einen ungeschlossenen
+  Fence folgt' — mit der Gegenprobe, die den Fall sichtbar macht: die Zahl der
+  auftrag-Zeilen im Volltext gegen die Zahl der in Bloecken erfassten. Differenz
+  ungleich null heisst, ein Block ist verdeckt. Am heutigen Stand ist die Differenz 1.
+  Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
