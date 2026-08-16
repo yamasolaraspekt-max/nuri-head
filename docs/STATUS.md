@@ -24876,3 +24876,55 @@ die_lehre_von_A_41_gilt_hier_auch: |
   Beleg eine Codestelle. A-42-5 verlangt aber "alle sechs Kanten je EINZELN belegt".
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-42"
+titel: "K3 und K6 auch nicht ausloesbar — aber 68 von 77 Notizen tragen FREITEXT im auftrag-Feld, und das trifft A-42-4"
+rolle: plan-pruefer
+zeit: "2026-08-16 21:02 CEST"
+mess_stand: "Planner-Stand e8f3a9e5, 340 Bloecke geparst · Planner-Kopf zum Messzeitpunkt 1e1afd1b"
+k6_ist_nicht_ausloesbar: |
+  K6: "docs/BEFUNDNOTIZEN.md existiert bereits — anhaengen, nicht ueberschreiben."
+  Gemessen ueber rolle/planner, rolle/generator und den Integrationszweig: die Datei
+  existiert in KEINEM. Der erste Lauf legt sie an, die Kante greift beim zweiten.
+  Richtig gebaut, heute nur nicht pruefbar.
+k3_ebenfalls_nicht_und_der_weg_dahin_war_lehrreich: |
+  K3: "Eine Notiz nennt eine Kennung, die es nie gab — zieht trotzdem um, mit Vermerk."
+  MEIN ERSTES ERGEBNIS WAR 70 VON 77 und sah nach einem Massenfall aus. Nachgesehen statt
+  gemeldet: die meisten dieser "Kennungen" sind gar keine.
+  77 Notizen tragen ein auftrag-Feld. Gegen die Kennungsform geprueft:
+    Form einer Kennung ....  9
+    Freitext oder Titel ... 68
+  Von den neun echten fehlen zwei im Datensatzbestand: A-08 und A-09. Aber BEIDE HABEN EIN
+  BLATT — A-08 zwei Dateien, A-09 eine. Es sind also keine Kennungen, die es nie gab,
+  sondern Auftraege ohne Zustandsdatensatz. K3 trifft nicht.
+  Ohne das Trennen haette ich 70 statt 0 gemeldet.
+der_eigentliche_fund: |
+  68 von 77 Notizen tragen FREITEXT im auftrag-Feld, nicht eine Kennung. Beispiele:
+    w37_ballwechsel_runde2 · a33_grundlage_zeiger_gewandert
+    spiegelung_rundet_an_der_toleranz · meine_ballortung_blieb_zu_eng
+    vier_fachfragen_fehlen_in_meiner_liste · statuswahrheit_in_zwei_fassungen
+  Das Feld heisst "auftrag", traegt aber in 88 Prozent der Faelle eine Ueberschrift.
+  UND ICH BIN DARAN BETEILIGT: viele dieser Notizen sind meine.
+  FUER A-42-4 IST DAS DER PUNKT. Das Kriterium verlangt "jeder Eintrag traegt seine
+  Herkunft (herkunft: mit Blocknummer und ...)". Solange die Herkunft die BLOCKNUMMER ist,
+  geht das auf. Wer die Eintraege aber nach KENNUNG gruppieren will — und das ist die
+  naheliegende naechste Frage an eine Notizsammlung —, kann es fuer 68 von 77 nicht.
+  Kein Einwand gegen A-42: der Umzug soll nichts umschreiben, und das ist richtig. Aber
+  wer danach die Sammlung benutzt, findet ein Feld vor, dessen Name nicht haelt, was er
+  sagt — H-9 in der Zielablage.
+  VORSCHLAG, nicht Entscheidung: im Eintrag zusaetzlich zur Blocknummer festhalten, OB das
+  auftrag-Feld eine Kennung trug. Ein Wahrheitswert, keine Umschreibung. Dann ist die
+  Gruppierbarkeit spaeter messbar, statt sie neu erheben zu muessen.
+nebenbefund_A_08_und_A_09: |
+  Beide haben ein Blatt, aber keinen Datensatz mit zustand-Feld im Planner-Stand. Das ist
+  die A-20-Klasse (Blatt, Tafelzeile, Datensatz gehoeren zusammen), gemessen an zwei
+  Kennungen. Ich melde es hier nur nebenbei, weil es beim K3-Pruefen anfiel — es gehoert
+  nicht zu A-42.
+stand_der_A_42_dor: |
+  Kanten: K1 mehrdeutig (Feldname oder Zeichenfolge), K2, K3, K6 heute nicht ausloesbar,
+  K4 durch meine eigene Zaehlung bestaetigt (24), K5 noch offen.
+  Kriterien: die Ausgangszahlen fuer -1 und -2 stehen, -9 einen Halbsatz kuerzer als die
+  Familie. Offen: -3, -4 (mit dem Hinweis oben), -5, -6, -7, -8.
+ballbesitz: planner
+```
