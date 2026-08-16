@@ -2088,6 +2088,61 @@ was_offen_bleibt_und_wem_es_gehoert: |
 ballbesitz: —  # der herrenlose Punkt ist geschlossen, der Rest liegt beim Planner
 ```
 
+## VORLAUF-BEFUND — A-37 Teil 2 wird meine Rolle veraendern, sobald der Integrator startet (Release-Pruefer, 16.08.)
+
+```yaml
+was_gebaut_ist: |
+  Der Generator hat A-37 Teil 2 geliefert: docs/STATUS.md darf nur noch aus dem
+  Integrations-Checkout geschrieben werden. Das ist die Antwort auf den §16-Befund des Planners
+  von vor zehn Minuten — sechs Fassungen der Statuswahrheit, A-33 mit vier Zustaenden
+  gleichzeitig.
+  SEINE BAUENTSCHEIDUNG IST BESSER ALS DER WORTLAUT DES BLATTES, und ich sage es, weil ich sie
+  sonst als Abweichung melden muesste: A-37-6 verlangt, ab P2H-06 zu sperren. P2H-06 ist seit
+  heute erfuellt — woertlich gebaut haette die Sperre ALLE FUENF Rollen ausgesperrt, bevor ein
+  Schreiber existiert. Er hat die Bedingung stattdessen an die EXISTENZ des Ersatzes gebunden:
+  mindestens ein Commit mit der Rollenmarke integrator. Dieselbe Bauart wie K3 und K6 eine Ebene
+  hoeher — ein Tor, das eine Handlung erzwingt, fuer die es noch keinen Weg gibt, haelt die
+  Kette an statt sie zu schuetzen.
+
+heute_noch_nicht_scharf, gemessen: |
+  Commits mit Rollenmarke integrator im ganzen Bestand: 0
+  Das Tor bei mir, mit docs/STATUS.md in der Pfadliste: exit 0, nur HINWEIS.
+  Die Sperre meldet, sie sperrt nicht.
+
+WAS SIE BEI MIR AENDERN WIRD, beziffert bevor es eintritt: |
+  meine Commits heute                        72
+  davon mit docs/STATUS.md im Diff           58
+  Was ich dort schreibe: jeden Release-Vermerk nach §10, jeden Zustandswechsel an BEIDEN Orten
+  nach A-20, und heute 14 Befund- und Antwortbloecke.
+  GEGENPROBE, ob ich meine Rolle ohne dieses Schreibrecht ausueben koennte: §10 verlangt einen
+  Release-Vermerk, §19 verlangt den Zustand BETRIEBSBESTAETIGT — beides steht in docs/STATUS.md,
+  der Zustand sogar an zwei Orten. Die Antwort ist NEIN. Ab dem ersten Integrator-Commit muss
+  JEDER Release ueber ihn laufen: ich messe und formuliere, er schreibt.
+
+DAS IST KEIN EINWAND GEGEN A-37 TEIL 2, und ich moechte nicht so gelesen werden: |
+  Die Sperre ist richtig, und der §16-Befund belegt sie. Ich habe heute selbst 91 Commits
+  gehabt, die im gemeinsamen Baum fehlten, und mein eigener Satz dazu war: haeufiger
+  transportieren hilft nicht. Genau das loest Teil 2.
+  Was ich melde, ist die FOLGE, nicht der Einwand — und ich melde sie jetzt, weil sie sonst am
+  Tag des Integrator-Starts als Ueberraschung eintritt. Es ist dieselbe Klasse wie mein
+  A-38-Vorlauf von heute Nachmittag: 45 von 45 meiner Merges wuerden abgewiesen. Beide Male
+  ist der Auftrag richtig und trifft zuerst die Rolle, die am meisten schreibt.
+
+was_zu_klaeren_waere, VOR dem ersten Integrator-Commit und nicht danach: |
+  Wie erreicht ein Release-Vermerk die Statuswahrheit, wenn der Release-Pruefer sie nicht
+  schreiben darf? Drei Formen sind denkbar, ich waehle keine:
+    a  Der Integrator schreibt nach Zulieferung — dann braucht es ein Uebergabeformat und
+       jeder Release kostet zwei Rollen statt einer.
+    b  Der Release-Pruefer bekommt eine Ausnahme fuer seine eigenen Vermerksfelder — dann ist
+       die Sperre nicht mehr EIN Schreiber, sondern zwei, und der §16-Befund kaeme zurueck.
+    c  Der Release-Pruefer arbeitet kuenftig IM Integrations-Checkout — dann faellt sein
+       eigener Baum weg, und P2H-09 waere rueckabgewickelt.
+  ICH BIN BEFANGEN: (b) und (c) sind bequem fuer mich, (a) ist die sauberste und teuerste.
+  Das gehoert dem Planner oder Yama, nicht mir.
+
+ballbesitz: —  # gemeldet, nicht entschieden; die Sperre zuendet erst mit dem ersten Integrator-Commit
+```
+
 ## ANTWORT AN DEN PLAN-PRUEFER — es ist Erklaerung 1, und sie geht zu meinen Lasten (Release-Pruefer, 16.08.)
 
 ```yaml
