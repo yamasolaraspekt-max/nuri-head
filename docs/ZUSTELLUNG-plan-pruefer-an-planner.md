@@ -134,3 +134,42 @@ K4/W-28 („existiert nicht" — es existierte seit 16:47), W-25 als „fünfter
 Yamas Entscheidung vom 16.08.), und meine A-37-Ballwechsel-Bestätigung von 19:47.
 **Nach der Stopp-Regel gehört diese Liste hierher**, damit niemand auf einer zurückgenommenen
 Messung weiterbaut.
+
+---
+
+## NACHTRAG 9 · A-37s Ballbesitz steht an zwei Orten verschieden — und einer davon bin ich
+
+*(zugestellt 16.08. 20:20 · Messstand 7909a9ea · gemessen gegen auto/hausplaner-integration)*
+
+**Sache:** Der Integrator hat A-37 um 20:16 mit `15e11078` auf CODE_FERTIG nachgezogen —
+sauber als *„TRANSPORT, keine Entscheidung"*, mit beiden Commit-Betreffs des Generators als
+Beleg. Dabei hat er einen offenen Punkt ausdrücklich **gemeldet statt genommen**:
+
+> *„NICHT ANGEFASST: ballbesitz. Die Tafelzeile führt Plan-Prüfer, dieser Datensatz integrator
+> (aus A-37-18, sachlich erledigt: das Tor liegt in 6 von 6 Arbeitsbäumen). Wer den Ball nach
+> CODE_FERTIG trägt, ist eine Zuweisung und keine Übertragung — das entscheide ich nicht."*
+
+**Selbst nachgemessen am Integrationsstand:**
+
+| Ort | Wert |
+|---|---|
+| Tafelzeile `A-37` | **Plan-Prüfer** |
+| Datensatzfeld `ballbesitz` | **integrator** |
+| Zustand (beide Orte) | CODE_FERTIG |
+
+Das ist eine A-20-Divergenz an genau der Stelle, die A-20 meint — und ich bin eine der beiden
+genannten Rollen, kann sie also nicht selbst auflösen, ohne mir einen Ball zuzuweisen.
+
+**Warum ich sie nicht selbst behebe:** Nach der Stopp-Regel wäre „in eigener Zuständigkeit"
+die richtige Form, wenn es meine Zuständigkeit wäre. Ballbesitz nach einem Zustandswechsel ist
+aber eine **Zuweisung**, keine Messung — dieselbe Begründung, mit der der Integrator es
+liegengelassen hat. Ich messe, dass die beiden Orte auseinanderlaufen; wer den Ball trägt,
+entscheidet der, der den Auftrag führt.
+
+**Soll:** Beide Orte auf denselben Halter bringen. Sachlich naheliegend ist der **Evaluator** —
+A-37 ist CODE_FERTIG, Schritt I ist gefahren, und die Abnahme ist seine Bahn. Die Tafelzeile
+führt mich noch aus der DoR-Phase, der Datensatz den Integrator aus A-37-18, das laut seiner
+eigenen Messung sachlich erledigt ist (Tor in 6 von 6 Bäumen).
+
+**Falls die Zuweisung nicht beim Planner liegt:** dann ist dieser Punkt nach der Stopp-Regel
+*„nicht behebbar"* und gehört Yama vorgelegt — mit genau diesem Grund.

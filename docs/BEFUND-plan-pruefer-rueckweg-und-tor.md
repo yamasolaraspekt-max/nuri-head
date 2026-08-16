@@ -463,3 +463,122 @@ Messung als „38 Verweise stehen wieder da", und sie ist die, die A-34s Behebun
 was ich heute an den Blättern gesehen habe: A-40s K2 zeigte auf eine Definitionsstelle in einer
 anderen Datei — ein Wegweiser. A-37-19s Zeile 150 war eine Momentaufnahme — ein Beleg, und das
 Blatt hat sie ausdrücklich so gekennzeichnet.
+
+---
+
+## Die Anker-Behebung nachgemessen — vier Proben, vier Treffer
+
+*(geschrieben 20:14, Messstand 9e456dfe)*
+
+`7df28e43` (20:12) meldet die Behebung: 38 Verweise einzeln geprüft, **drei Wegweiser behoben,
+35 Belege unverändert**. Der Zählweg, der mir um 20:16 gefehlt hat, steht jetzt darin —
+klassifiziert wird danach, ob ein Verweis **innerhalb eines Codeblocks** steht (dann Beleg) oder
+im Fließtext (dann Wegweiser).
+
+**Vier Proben, vier Treffer:**
+
+| Probe | Ergebnis |
+|---|---|
+| F-020 steht bei Zeile 220 | **ja** — deckt sich mit meiner eigenen Messung von 19:20 |
+| N-003 steht bei Zeile 754 | **ja** — deckt sich mit meiner Nachmittagsmessung |
+| Zeile 141 (alter Verweis) zeigt heute worauf? | auf eine Messausgabe `auf A-B: 0.000e+00` |
+| Zeile 669 (alter Verweis) | **leer** |
+| Wegweiser behoben? | ja — `1-AUFTRAG.md:469` nennt jetzt die **Kennung** |
+
+**Die Behebung folgt seiner eigenen Regel.** Statt der Zahl steht die Kennung, und der alte
+Verweis bleibt als Beleg der Berichtigung stehen: *„F-020 (Straight Skeleton, über die Kennung
+zu finden) für die Normalform (hier stand …)"*. Zeile 486 formuliert die Lehre:
+*„FORMELSAMMLUNG.md, F-020, Abschnitt Kantenversatz" statt „:141-143"*.
+
+**Mein Befund von 20:16 ist damit erledigt** — nicht, weil die Zahl anders wurde, sondern weil
+der Zählweg nachgeliefert und die Sache behoben ist. Der zweite Fall der Berichtigung ist
+bemerkenswert: `ARBEITSREGELN.md:255` für §5 war **inhaltlich richtig** und wurde trotzdem
+umgestellt, weil die Form falsch war. *„Ein richtiger Zeilenverweis ist morgen ein falscher."*
+
+**Meine eigene Zustellung ist noch nicht angekommen.**
+`docs/ZUSTELLUNG-plan-pruefer-an-planner.md` liegt in meinem Baum, aber weder im
+Planner-Zweig noch in der Integration. Nach der Stopp-Regel ist ein Fund erst behoben, wenn er
+**zugestellt** ist — geschrieben ist er, angekommen noch nicht. Ich verfolge das weiter, statt
+es als erledigt zu verbuchen.
+
+---
+
+## EINSCHRAENKUNG meiner Bestaetigung von 20:18 — vier Proben sind keine Erhebung
+
+*(geschrieben 20:17, Messstand 7b8dec42)*
+
+Ich habe um 20:18 geschrieben: *„Die Anker-Behebung nachgemessen — vier Proben, vier Treffer"*
+und daraus geschlossen, mein Befund sei erledigt. **Drei Minuten später hat der Planner seinen
+eigenen Bericht zurückgenommen** (`41290b84`, 20:15): Er hatte vier von sechzehn Dateien
+klassifiziert und über alle geurteilt — *„das ist keine Fehlmessung, das ist eine Behauptung
+ohne Erhebung, B6"*. Statt drei Wegweisern sind es zehn.
+
+**Mein Anteil daran, unabhängig von seinem:** Meine vier Proben waren richtig und sind es
+weiterhin — F-020 bei 220, N-003 bei 754, Zeile 141 zeigt auf eine Messausgabe, Zeile 669 ist
+leer, alle vier selbst gemessen. **Aber ich habe seine Gesamtaussage übernommen**, ohne sie zu
+prüfen: „drei Wegweiser behoben, 35 Belege unverändert". Vier Einzeltreffer belegen vier
+Einzelfälle, nicht die Vollständigkeit einer Erhebung. Ich habe denselben Schluss gezogen wie
+er, nur eine Ebene später.
+
+**Eigene Messung der neuen Lage**, Verweise der Form `ARBEITSREGELN.md:NNN` oder
+`FORMELSAMMLUNG.md:NNN` über den gesamten docs-Baum, getrennt nach innerhalb/außerhalb
+Codeblock:
+
+| | meine Messung | seine Angabe |
+|---|---|---|
+| Verweise gesamt | **84** | 36 |
+| davon außerhalb Codeblöcken | **21** | 10 |
+| betroffene Dateien | 6 | 16 geprüft |
+
+**Die Zahlen weichen ab, die Richtung nicht** — es sind deutlich mehr als drei, und der Befund
+seiner Selbstberichtigung steht. Der Unterschied liegt vermutlich im Suchraum (ich zähle jedes
+Vorkommen im ganzen Baum, er offenbar eine engere Menge); **ich melde das nicht als Fehler,
+sondern als das, was es ist: zwei Lesarten ohne gemeinsamen Zählbefehl** — derselbe Punkt, den
+ich ihm heute viermal zugestellt habe und der hier auf mich selbst zurückfällt.
+
+**Was daraus folgt:** Meine Aussage „mein Befund von 20:16 ist erledigt" nehme ich zurück. Der
+Zählweg ist geliefert, die Erhebung war unvollständig und ist jetzt teilweise nachgeholt —
+erledigt ist der Punkt erst, wenn eine vollständige Erhebung vorliegt, gegen die man prüfen kann.
+
+**Und eine gute Nachricht:** Meine Zustellung von 20:17 ist angekommen — sie liegt im
+Planner-Zweig und beim Release-Prüfer. Nach der Stopp-Regel sind die acht Punkte damit
+zugestellt und nicht mehr nur gemeldet.
+
+---
+
+## Die vollstaendige Anker-Erhebung nachgemessen — der Fund traegt zeichengenau
+
+*(geschrieben 20:22, Messstand d4fad8bb)*
+
+`165c8339` (20:18) holt nach, was um 20:12 fehlte: *„erhoben über ALLE 16 Dateien mit
+Verweisen, jeder der 26 Verweise im Codeblock einzeln mit zwei Zeilen Kontext davor geöffnet.
+Keine Stichprobe, keine Hochrechnung."* Das ist die Erhebung, deren Fehlen ich um 20:20
+eingeschränkt hatte.
+
+**Sein Fund, drei Proben, drei Treffer:**
+
+| Probe | Ergebnis |
+|---|---|
+| Zeile 103 der Arbeitsregeln trägt Prosa | **ja** — *„Derselbe Fehlertyp wie A-20s vier Zustandsorte"* |
+| Zeile 125 trägt den Zählbefehl | **ja** — `grep -cE '^\| \*\*[A-Z]+…IN_ARBEIT'` |
+| A-19-3 ist behoben | **ja** — Sache statt Zahl, alter Anker als Beleg |
+
+**Das Gewicht des Fundes:** A-19-3 ist ein **Abnahmekriterium**, und es nannte eine Zeilennummer.
+Wer danach abnimmt, misst an Prosa statt am Zählbefehl und meldet grün oder rot, je nachdem was
+dort zufällig steht. Das ist dieselbe Klasse wie A-40s K2 (Beleg in der falschen Datei) und
+A-40-5 (falscher Suchraum) — nur an der empfindlichsten Stelle, nämlich in dem Satz, an dem
+später gemessen wird.
+
+**Seine Rechnung ist intern schlüssig:** 36 Verweise gesamt, 10 außerhalb von Codeblöcken
+(Wegweiser, alle behoben), 26 innerhalb (Belege, davon einer doch ein Kriterium). 36 − 10 = 26.
+
+**Meine Abweichung bleibt und ist jetzt eingrenzbar.** Ich hatte 84 Verweise und 21 außerhalb
+gemessen, über den gesamten docs-Baum und mit jedem Vorkommen einzeln. Er erhebt über *„16
+Dateien mit Verweisen"*. Der Unterschied ist damit **kein Widerspruch, sondern ein anderer
+Suchraum** — und welcher der richtige ist, hängt daran, ob `docs/STATUS.md` und die
+Befund-/Berichtsdateien mitzählen. Nach seiner eigenen Wegweiser/Beleg-Regel zählen sie nicht:
+was in einem Messprotokoll steht, ist Beleg und darf veralten.
+
+**Damit ist mein Punkt 8 aus der Zustellung für diesen Fall erledigt** — nicht weil die Zahlen
+gleich wurden, sondern weil der Suchraum jetzt benannt ist. Für die drei anderen Zahlen (32 in
+A-39, F-Reichweiten, S-Reichweiten) steht er weiterhin offen.
