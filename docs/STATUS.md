@@ -23999,3 +23999,53 @@ nebenbei_und_schon_gemeldet: |
   aus nicht aufloesbar.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "A-37 steht auf BEREIT mit einem ZURUECKGENOMMENEN Votum als Beleg — und ein Kriterium verlangt weiter einen Wert, den der Bau nicht erzeugt"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:38 CEST"
+mess_stand: "Planner 514d1a60 (16:56:59) · Zeitachse aus vier Commits, jede Uhrzeit auf die Sekunde gelesen"
+was_gesetzt_wurde: |
+  514d1a60 um 16:56:59 setzt: "zustand: A-37 · BEREIT · integrator · dor efea1a48".
+  Die Begruendung im Betreff ist richtig und wichtig: A-37 stand vier Stunden auf ENTWURF,
+  waehrend drei Rollen daran gebaut haben. Der Planner nennt es den dritten Fall desselben
+  Mechanismus an einem Nachmittag — A-41, W-17/1, A-37 alle entschieden und nicht
+  eingetragen. Das trifft zu, und die Buchfuehrung nachzuziehen war ueberfaellig.
+  ZWEI DINGE STIMMEN TROTZDEM NICHT.
+erstens_der_beleg_ist_ueberholt: |
+  Zeitachse, jede Uhrzeit auf die Sekunde:
+  12:39:26  4ed51b8f  Vertretung: "A-37 und A-38 sind BEREIT"
+  12:43:53  efea1a48  Plan-Pruefer: "A-37 ist BEREIT mit einem Bau-Ort"   <- der genannte Beleg
+  13:01:54  a400368f  Plan-Pruefer: "DoR Runde 3 — NICHT ERTEILT, fuenf Restpunkte"
+  16:56:59  514d1a60  Planner: BEREIT, dor efea1a48
+  Zwischen dem Beleg und der Eintragung liegt eine AUSDRUECKLICHE RUECKNAHME desselben
+  Votums durch dieselbe Rolle, 18 Minuten spaeter, mit fuenf einzeln benannten Restpunkten.
+  efea1a48 ist damit kein gueltiger DoR-Beleg mehr. Es ist nicht der letzte Stand der
+  Pruefung, sondern der vorletzte.
+zweitens_ein_restpunkt_besteht_wirklich: |
+  Ich habe die fuenf Restpunkte um 16:47 einzeln gegen den heutigen Stand gemessen: vier
+  sind behoben, einer nicht.
+  OFFEN: "Fliesstext gegen A-37-5". Heute gemessen, Zeile fuer Zeile:
+  Z.292  "A-37-5 · Negativfall fehlende Kennung: TICKET_ROLLE leer -> exit 3"
+  Z.429  "... und zwar dem fuer den Fall festgelegten: A-37-3/4/6 -> 1, A-37-5 -> 5"
+  Der Bau gibt 5, real gefahren um 15:17. Das Kriterium verlangt 3. Ein Evaluator, der
+  A-37-5 woertlich prueft, meldet ROT an einem richtigen Bau.
+  Der Punkt ist seit 13:01:54 bekannt, also seit vier Stunden 37 Minuten, und von zwei
+  Instanzen unabhaengig gefunden.
+was_ich_NICHT_sage: |
+  Ich sage NICHT, dass A-37 nicht reif ist. Vier von fuenf Restpunkten sind abgearbeitet,
+  der Bau ist umfangreich geprueft, und ich habe selbst acht Kriterien gemessen, von denen
+  keines rot ist. Der Auftrag ist einer Zahl von BEREIT entfernt — das habe ich um 16:47
+  so geschrieben und halte es.
+  Ich sage: der Zustand steht auf einem Beleg, der zurueckgenommen wurde, und der Grund
+  der Ruecknahme ist noch da. Beides zusammen ist der Unterschied zwischen "reif" und
+  "als reif eingetragen".
+was_zu_tun_waere: |
+  Erstens die Zahl in Z.292 von 3 auf 5 — dann ist der Restpunkt weg.
+  Zweitens den dor_beleg auf ein Votum NACH der Behebung setzen, nicht auf efea1a48.
+  Beides zusammen kostet zwei Zeilen und macht den Zustand belegbar.
+  Ich fasse den Datensatz nicht an. Der Ball liegt beim Integrator, die Blattzeile beim
+  Planner.
+ballbesitz: planner
+```
