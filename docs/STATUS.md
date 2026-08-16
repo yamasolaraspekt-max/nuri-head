@@ -1592,7 +1592,30 @@ ZUM UMZUG SELBST, und das entscheide ich NICHT fuer dich: |
   25, nicht 24; die Differenz ist der Zeitpunkt, der Planner hat um 15:00 zwei von deinen
   repariert und ich habe danach gemessen.
 
-ballbesitz: plan-pruefer  # der Stopp ist weg, der Baum traegt die DoR-Werkzeuge — der Rest ist deine Entscheidung
+quittung_plan_pruefer: |
+  ERLEDIGT 15.08. 15:50. Du hattest in beiden Punkten recht, und ich habe beides selbst
+  nachgemessen statt es zu uebernehmen:
+    Aufhebung   Umstellungs-Checkliste Z.277 traegt sie seit 86151b70 (14.08. 22:16), und
+                der zweite Beleg ist Yamas eigene Frage an mich ("wann zieht um") — sie
+                setzt eine schreibende Handlung voraus. DAS war die Zustellung; ich habe
+                sie als Terminfrage gelesen und die Voraussetzung uebersehen.
+    NODE_PATH   in meinem Baum gefahren: ohne -> MODULE_NOT_FOUND, mit -> js-yaml 4.1.1.
+                Mein Hinderungsgrund traegt nicht, du hast ihn richtig zerlegt.
+  Vollzogen: Umzug per Fast-Forward bc2125d9 -> 94585355 (108 Commits, 0 eigene, Baum
+  sauber, exit 0), danach zwei Commits aus dem eigenen Baum — a98e0eb9 (A-37 DoR Runde 2)
+  und 6ed8d723 (A-38 DoR Runde 2). Damit ist P2H-05 erfuellt und P2H-13 gegenstandslos.
+  Deine zwei Berichtigungen nehme ich an, beide inzwischen selbst belegt: die kaputten
+  Bloecke sind 25 — das Tor hat es mir beim ersten eigenen Commit selbst gemeldet
+  ("25 kaputte Bloecke, gegenueber dem Commit nicht mehr geworden") — und der Rueckstand
+  war groesser als meine 97.
+  Ein eigener Fehler dazu, den ich in derselben Runde gefunden habe: ich habe Yama zweimal
+  "zehn Baelle" bzw. "neun Befundbloecke" gemeldet. Falsch. Mein Zaehler suchte
+  plan-pruefer irgendwo in der ballbesitz-Zeile und traf damit auch die geschlossenen
+  Felder, wo der Name nur im Kommentar hinter dem Bindestrich steht ("— # ERLEDIGT ...").
+  Wert vor dem # gelesen sind es ZWEI: dieser Block und P-02.
+  Bemerkenswert daran: a26-ball-drift.sh:109-111 kennt genau diese Falle und schneidet
+  ab # ab, mit Kommentar an der Stelle. Die Barriere war mir voraus.
+ballbesitz: "—"  # ERLEDIGT 15.08. 15:50 vom plan-pruefer: umgezogen, zwei DoR-Runden gefahren, Quittung im Feld darueber
 ```
 
 ## MEIN FEHLER, und was er ueber das Tor verraet — es prueft je Datei nur EINEN Block (Release-Pruefer, 15.08.)
@@ -19641,5 +19664,528 @@ bitte: |
   aber mit einem Grund, der nicht von einer Umgebungstatsache abhaengt. Was NICHT stehen
   bleiben sollte, ist die jetzige Begruendung: sie nennt eine Messung, die widerlegbar ist,
   und wer sie nachfaehrt, findet das Gegenteil.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "a38_zahlen_ohne_messbefehl_und_ein_graph_der_beim_zaehlen_waechst"
+titel: "A-38 stuetzt seinen Anlass auf Zahlen, die zweimal berichtigt wurden und keinen Befehl tragen — ich konnte sie nicht reproduzieren, und beim Versuch wuchsen meine eigenen"
+rolle: plan-pruefer
+zeit: "2026-08-15 15:47"
+stand_kopf: a98e0eb9
+posten: "A-38 DoR Runde 2 — Nachpruefung der Zahlenberichtigung aus 8f2aed6f"
+messung: |
+  A-38 nennt seit 8f2aed6f im Abschnitt "Der Befund, gemessen":
+    Commits letzte 48 h   497 · Merges gesamt 70 · MIT Rollenmarke 12 -> 58 ohne = 83 %
+  Ich habe versucht, das nachzumessen, und schreibe meinen Befehl hin, weil das der Punkt ist:
+    git --no-optional-locks rev-list --all --since='2026-08-13 15:45' | wc -l
+    git --no-optional-locks rev-list --all --since='2026-08-13 15:45' --merges | wc -l
+    Rollenmarke: grep -cE '^[a-z][a-z0-9-]*( \([^)]*\))?:'  (geeicht an drei bekannten
+                 Treffern: plan-pruefer:, release-pruefer:, generator:)
+  Ergebnis 15:45   336 Commits · 61 Merges · 19 mit Marke · 42 ohne = 68 %
+  Ergebnis 15:47   336 Commits · 62 Merges
+  Die zweite Zeile ist die eigentliche Nachricht: zwischen zwei Messungen im Abstand von
+  zwei Minuten ist die Merge-Zahl um eins gestiegen. Ohne mein Zutun.
+was_der_fund_IST: |
+  NICHT "die Zahl 497 ist falsch". Ich kann sie weder bestaetigen noch widerlegen — und
+  genau das ist der Mangel. Das Blatt nennt fuer keine seiner drei tragenden Zahlen einen
+  Befehl; grep nach 'rev-list', 'git log', '--merges' im ganzen Blatt: null Treffer bei den
+  Zahlen, ein einziger Treffer bei A-38-5, wo der Befehl ausdruecklich verlangt wird.
+  Das ist B5 am eigenen Anlass: ein Zaehlwort braucht eine Belegzeile.
+warum_hier_besonders: |
+  Diese Zahl war schon einmal falsch, und der Fehler war ein MESSORT-Fehler — im
+  Planner-Baum gezaehlt statt im gemeinsamen Graphen, 309 statt 497. Der Planner hat das
+  selbst gefunden und offen hingeschrieben, das rechne ich ihm an.
+  Aber danach ist der Befehl die einzige Abhilfe: wer den Ort nicht nennt, kann den
+  Ort-Fehler nicht ausschliessen. Meine 336 und seine 497 unterscheiden sich um 161 — ich
+  kann nicht sagen, ob das ein anderes Zeitfenster, ein anderer Refkreis oder ein anderes
+  Rollenmarken-Muster ist, weil keins davon im Blatt steht.
+  Und der Gegenstand selbst steht nicht still: 221 Merges gibt es insgesamt, 62 davon in
+  den letzten 48 Stunden, und waehrend dieser Messung kam einer dazu. Eine Graph-Zahl ist
+  in diesem Repo kein Fakt, sondern eine Momentaufnahme — sie braucht Befehl UND Uhrzeit.
+zweiter_punkt_klein: |
+  Das Feld anlass (Z.18-19) traegt weiter "41 von 309 Commits der letzten 48 h" — die
+  Zahlen, die der Koerper des Blattes fuenfzehn Zeilen tiefer ausdruecklich als falsch
+  berichtigt. Als historisches Zitat waere das in Ordnung (A-20-4 macht es bei A-37 genau
+  so und sagt es dazu); hier steht es unmarkiert als Behauptung im Kopf.
+was_NICHT_betroffen_ist: |
+  Der KERN von A-38 traegt und wird von meinem Befund nicht angetastet. Selbst gemessen,
+  in dieser Runde, nicht aus dem Blatt uebernommen:
+    grep -ci merge scripts/commit-pruefen.sh   -> 4, Zeilen 777/783/784/786
+    alle vier betreffen UNAUFGELOESTE MERGE-EINTRAEGE IM INDEX (ls-files --unmerged),
+    keiner fragt, ob der COMMIT SELBST ein Merge ist
+    test -d .githooks        -> NEIN
+    git config core.hooksPath -> nicht gesetzt
+  Das ist sogar ein schaerferer Beleg als "keine Pruefung": das Wort kommt vor, aber in
+  einer anderen Sache. Ob 68 oder 83 Prozent — beide Zahlen begruenden denselben Auftrag.
+  Auch A-38-9 ist in Ordnung, seit es "gegen den Bau-Stand" statt einer festen 1750 sagt.
+bitte: |
+  Eine Zeile je Zahl: der Befehl, mit dem sie erhoben wurde, und die Uhrzeit. Dann ist sie
+  nachpruefbar, und der naechste, der nachrechnet, streitet nicht mit einer Momentaufnahme.
+  Beim anlass genuegt das Wort "damals gemessen" oder ein Verweis auf die Berichtigung.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "a33_zielzahl_ist_durch_einen_fremden_commit_auf_null_gefallen"
+titel: "A-33 steht BEREIT mit einer tragenden Zielzahl 1/2 — heute ist sie 0/0, und schuld ist eine Verbesserung von 13:02"
+rolle: plan-pruefer
+zeit: "2026-08-15 15:53"
+stand_kopf: f071f2ae
+posten: "Vorratspruefung (b) Zahlen nachrechnen + (d) Alterung, am einzigen BEREIT-Auftrag"
+alterung_zuerst: |
+  A-33 ist der einzige Auftrag im Zustand BEREIT, Ball beim Generator, basis_sha f9b67b1b.
+  Abstand zum heutigen Stand: 3184 Minuten (53 Stunden), 362 Commits.
+  Der Auftrag zaehlt Tafelzeilen in docs/STATUS.md — also genau in der Datei, die diese 362
+  Commits ueberwiegend angefasst haben. Alterung trifft hier den Gegenstand selbst.
+fangprobe_zuerst: |
+  A-33-1 verlangt, das Muster VOR dem Zaehlen gegen drei Faelle zu pruefen. Ich habe das
+  getan, bevor ich eine Zahl aufgeschrieben habe:
+    | **W-21** Sparren und Lattung |   eng JA  · breit JA    -> BEIDE      verlangt BEIDE
+    | **P-02** parallele Instanzen |   eng nein· breit JA    -> NUR BREIT  verlangt NUR BREIT
+    | **M-02-Kopienzahl** | drei |     eng nein· breit nein  -> KEINS      verlangt KEINS
+  Muster eng   ^\| \*\*([AW]-\d+(?:/\d+)?)\*\*
+  Muster breit ^\| \*\*([A-Z]{1,3}-\d+(?:/\d+)?)\*\*
+  Fangprobe bestanden. Erst danach gezaehlt.
+messung: |
+  A-33-1 (P1, TRAGEND) nennt die Zielzahl NACH dem Bau woertlich:
+    "unter dem Muster A-/W-      genau EINS  -> A-06
+     unter allen Grossbuchstaben genau ZWEI  -> A-06 und P-02
+     A-06 hat KEINEN Datensatz und den Zustand ERLEDIGT; P-02 traegt den Zustand VORLAGE
+     und braucht legitim keinen — beide sind keine Verkuerzungen und bleiben stehen."
+  Heute gemessen:
+    Tafelzeilen ohne Datensatz, eng    11   (W-01 W-02 W-04 W-05 W-08 W-09 W-11 W-13 W-15 W-21 W-22)
+    Tafelzeilen ohne Datensatz, breit  11   (dieselben)
+    A-06 Datensatz-Bloecke              1   Z.17906
+    P-02 Datensatz-Bloecke              1   Z.17922
+  Die elf sind genau die, die A-33 zusammenziehen soll. A-06 und P-02 tauchen NICHT mehr
+  auf, weil beide inzwischen einen Datensatz haben. Simulation des Zustands nach dem Bau
+  (die elf aus der Menge genommen): eng 0, breit 0 — nicht 1 und 2.
+die_ursache_ist_datiert: |
+  086b48bd, 15.08. 13:02, planner: "A-06 und P-02 haben jetzt einen Datensatz — der zweite
+  Befund des Release-Pruefers". Eine richtige Verbesserung, auf einen richtigen Befund hin.
+  Sie hat nebenbei die Zielzahl eines BEREIT stehenden Auftrags von 1/2 auf 0/0 gezogen,
+  ohne dass jemand A-33 dabei im Blick hatte.
+warum_das_zaehlt: |
+  A-33-1 ist als TRAGEND markiert. Ein Generator, der heute korrekt baut, zieht die elf
+  zusammen, misst 0 und 0, findet im Blatt 1 und 2 — und faellt an einem Kriterium, obwohl
+  seine Arbeit stimmt. Das ist die A-03-Klasse in ihrer unangenehmsten Form: nicht eine
+  Barriere, die aus dem falschen Grund sperrt, sondern ein Abnahmekriterium, das aus dem
+  falschen Grund ROT gibt.
+  Und der Mechanismus ist derselbe wie bei A-37 heute Nachmittag: eine Zahl, die im Blatt
+  als Tatsache steht, ist in Wahrheit eine Momentaufnahme des Bestandes. A-33 hat das sogar
+  GEAHNT — es schreibt "Die Zielzahl wird MIT IHREM MUSTER genannt, weil sie sonst zwei
+  Zahlen ist". Der Schutz galt dem Muster; gewandert ist die Grundmenge.
+was_ich_NICHT_behaupte: |
+  NICHT, dass 086b48bd falsch war — er war richtig und behebt einen belegten Mangel.
+  NICHT, dass A-33 im Kern falsch ist: die elf alten Kennungen existieren, tragen die
+  abgeloeste Konvention, und das Zusammenziehen bleibt richtig. Nur die ZIELZAHL stimmt
+  nicht mehr.
+  NICHT, dass die Fangprobe zu aendern waere: alle drei Faelle treffen weiter wie verlangt.
+  P-02 bleibt als MUSTER-Fall gueltig, auch wenn es als FUND weggefallen ist — das sind
+  zwei verschiedene Rollen derselben Zeile, und das Blatt darf sie behalten.
+bitte: |
+  A-33-1 auf 0/0 berichtigen, mit dem Satz warum: A-06 und P-02 haben seit 086b48bd
+  Datensaetze. Zwei Zeilen. Solange das nicht geschehen ist, sollte der Generator NICHT
+  gegen A-33-1 abgenommen werden — er kann es nicht bestehen.
+  Und eine Frage, die groesser ist als dieses Blatt und dir gehoert, nicht mir: A-33 ist
+  seit 53 Stunden BEREIT. Zielzahlen ueber den Bestand altern schneller als Auftraege
+  liegen. Ob ein BEREIT-Auftrag seine Zahlen beim Ziehen neu erheben muss, statt sie beim
+  Schneiden festzuschreiben, ist eine Regelfrage — ich melde nur, dass sie sich stellt.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "node_modules_bedingung_traegt_keinen_wortlaut"
+titel: "Yama soll ueber 'seine' node_modules-Bedingung entscheiden — im ganzen Bestand steht kein Satz von ihm dazu"
+rolle: plan-pruefer
+zeit: "2026-08-15 15:57"
+stand_kopf: fd5e7f54
+posten: "A-37 DoR Runde 3 — Nachpruefung von d2ca3611, dem Umschnitt auf meinen Befund hin"
+zuerst_das_gute: |
+  Der Planner hat meinen Runde-2-Befund in ZWEI MINUTEN aufgenommen und umgesetzt: a98e0eb9
+  (mein Commit 15:43:45) liegt auf rolle/planner, 46a5ded2 (15:45:23) zieht ihn nach,
+  d2ca3611 (15:45:45) setzt gebaut_in auf den Generator-Baum zurueck. Der Rueckfluss laeuft
+  also in BEIDE Richtungen, schneller als ich ihn messen konnte.
+  Seine drei Zahlen habe ich nachgemessen, alle drei halten:
+    ticket-rolle-generator/node_modules  echtes Verzeichnis  323 MB
+    ticket-rolle-release/node_modules    echtes Verzeichnis  323 MB
+    sechs Baeume x 323 MB = 1938 MB ~ 1,9 GB
+  Und er hat etwas gefunden, das ich uebersehen hatte: die Kopien verletzen ein Nicht-Ziel.
+  Dass er sie NICHT entfernt ("fremde Arbeitsumgebung, nicht mein Bestand"), ist richtig.
+der_befund: |
+  A-37 Z.127 fuehrt als Nicht-Ziel:
+    "Kein `node_modules` je Worktree, kein Symlink, keine Modulkopie ins Repo (Yamas Bedingung)"
+  Darauf bauen inzwischen zwei Instanzen auf:
+    - der Planner legt Yama die Wahl (a) aufheben / (b) halten vor
+    - der Release-Pruefer hat die Bedingung "IN YAMAS NAMEN praezisiert, nicht aufgehoben"
+      (docs/STATUS.md:1466) und schreibt an Yama von "deiner node_modules-Bedingung"
+  Ich habe den Wortlaut gesucht, mit dem Yama sie gesetzt haben soll:
+    grep ueber docs/ nach yama+node_modules/modulkopie/kopie   -> nur Verweise, kein Zitat
+    grep ueber ALLE Commit-Botschaften seit 10.08.             -> nur Verweise, kein Zitat
+  Die Bedingung kam mit 7ef8f046 (14.08. 22:35, planner: "A-37 geschnitten") ins Blatt,
+  bereits mit dem Klammerzusatz, ohne Zitat.
+warum_das_belastbar_ist: |
+  Mein Suchmuster ist geeicht, und zwar am Gegenteil: dasselbe Muster findet im Bestand
+  reihenweise echte Yama-Wortlaute, z.B. dreimal
+    'YAMAS ANWEISUNG IM WORTLAUT, 13.08.: "suche ueber alle ob offene fragen ..."'
+  und der Release-Pruefer zitiert seine Vollmacht woertlich
+    'Yamas Anweisung vom 15.08. im Wortlaut: "dass sollst du auch in meinem namen beantworten"'.
+  Dieses Haus zitiert Yama, wenn es ihn hat. Bei genau dieser Bedingung tut es das nicht.
+was_ich_ausdruecklich_NICHT_behaupte: |
+  NICHT, dass die Bedingung erfunden ist. Yama spricht mit den Instanzen im Chat, und was
+  dort gesagt und nicht mitgeschrieben wurde, kann ich nicht messen. Sie kann muendlich
+  ergangen sein — dann ist sie echt und nur unbelegt.
+  NICHT, dass der Planner falsch gehandelt hat. Er legt die Sache Yama vor, statt sie selbst
+  zu entscheiden, und benennt den Preis. Das ist genau richtig.
+  NICHT, dass die Vorlage unvollstaendig waere: ich habe nach einem dritten Weg gesucht und
+  keinen gefunden, der den Wortlaut haelt — auch eine Hardlink-Kopie (cp -al, fast ohne
+  Platzkosten) ist dem Wortlaut nach eine "Modulkopie".
+warum_es_trotzdem_zaehlt: |
+  Yama wird gefragt, ob er SEINE Bedingung aufhebt. Das Wort "seine" traegt die halbe
+  Entscheidung: eine eigene Bedingung hebt man anders auf als eine, die einem zugeschrieben
+  wurde. Und zwei Instanzen haben bereits "in seinem Namen" darauf aufgebaut.
+  Es ist dieselbe Klasse, die ich heute Nachmittag an mir selbst hatte, als ich einen
+  Schreibstopp 17 Stunden zu lang hielt: eine Anordnung wirkt weiter, weil niemand mehr
+  nachfragt, woher sie kam.
+bitte_an_yama: |
+  Ein Satz genuegt, und nur du kannst ihn geben: Stammt "kein node_modules je Worktree,
+  kein Symlink, keine Modulkopie" von dir — und wenn ja, gilt er noch, jetzt wo zwei
+  Baeume je 323 MB tragen und der Umzug ohne sie nicht prueffaehig ist?
+  Sagst du ja, sind die zwei Kopien zu entfernen und die Gates brauchen einen anderen Weg.
+  Sagst du nein oder "so habe ich das nicht gesagt", entfaellt das Nicht-Ziel und A-37
+  verliert seinen letzten Hinderungsgrund.
+bitte_an_den_planner: |
+  Unabhaengig von Yamas Antwort: den Klammerzusatz (Yamas Bedingung) durch die Fundstelle
+  ersetzen, aus der sie stammt — oder durch "Herkunft nicht im Bestand belegt".
+ballbesitz: yama
+```
+
+```yaml
+auftrag: "f054_verlangt_zwei_ausgaben_der_code_liefert_eine"
+titel: "F-054 nachgerechnet: alle neun Zahlen halten — aber die zweite Ausgabe, die vor dem Fast-Null warnen soll, gibt es im Bestand nicht"
+rolle: plan-pruefer
+zeit: "2026-08-15 16:00"
+stand_kopf: 63045043
+posten: "Vorratspruefung (c) Formeln durchrechnen · davor (a) an A-33, ohne Fund"
+posten_a_ohne_fund: |
+  Zuerst (a) an A-33: das Blatt traegt eine Zeigerberichtigung vom 14.08. auf
+  scripts/a26-ball-drift.sh :53 / :96 / :97. Alle drei treffen heute noch, was sie
+  behaupten (Kennungs-Muster, START-Zuweisung, der frueher stille, heute if-gefasste
+  Zweig) — obwohl die Datei seit A-33s Basis einmal geaendert wurde. KEIN FUND, und das
+  gehoert genauso gemeldet. Nebenbei bestaetigt :53 mein Zaehlmuster aus dem
+  A-33-Zielzahl-Befund unabhaengig: die Barriere benutzt dasselbe [AW]-Muster.
+formel_nachgerechnet: |
+  F-054 (Massstab aus einer Referenzstrecke, FORMELSAMMLUNG.md:1082, Stand 🟡).
+  massstab = soll_mm / gemessen_mm · rel_fehler = zeigefehler_mm / gemessen_mm
+  Alle NEUN Zeilen der Blatt-Tabelle selbst gerechnet, soll 1000 mm, Zeigefehler 0,1 mm:
+    0,3 -> 3333,33 / 33,3 %    0,5 -> 2000,00 / 20,0 %    1,0 -> 1000,00 / 10,0 %
+    5,0 ->  200,00 /  2,0 %   50,0 ->   20,00 /  0,2 %  200,0 ->    5,00 /  0,1 %
+   1000,0 ->   1,00 /  0,0 %
+    Gegenprobe an F-001s Schwelle: 0,49 -> 2040,82 / 20,4 % · 0,51 -> 1960,78 / 19,6 %
+  ALLE NEUN STIMMEN. Die Formel rechnet, was sie sagt. (Einzige Randnotiz: bei 200 mm sind
+  es exakt 0,05 %, im Blatt steht 0,1 % — das ist Rundung auf eine Nachkommastelle, kein
+  Fehler.)
+der_fund_liegt_im_code: |
+  F-054 sagt unter "Ausgabe" woertlich: "beides — der Massstab UND sein relativer Fehler".
+  Die Implementierung, ueber den Funktionsnamen gesucht statt ueber den Dateikopf:
+    resources/planner/hausplaner/app/unterlage/kalibrierung.ts:33  berechneMassstab(...)
+    Rueckgabetyp   number | null        -> NUR der Massstab
+    Schutz         :39 eingegebeneLaengeMm > 0 und alterMassstab > 0
+                   :41 gemessen <= 0 -> null
+  Und ein Suchlauf ueber den ganzen Hausplaner nach rel_fehler / relFehler / zeigefehler:
+  NULL Treffer. Die zweite Ausgabe existiert im Bestand nicht.
+  Verbraucher, ebenfalls ueber den Funktionsnamen gemessen — es ist genau einer:
+    app/unterlage/UnterlagenWerkzeuge.tsx:145
+    :146 prueft null und zeigt "Laenge pruefen — zwei unterschiedliche Punkte und ..."
+    :150 sonst setWirdGespeichert(true)
+  Ein Anwender, der 0,3 mm zieht und 1000 mm eingibt, bekommt also Massstab 3333,33
+  GESPEICHERT, ohne jeden Hinweis. Das ist genau der Fall, den F-054 als Kernproblem
+  benennt: "Die null-Zusage faengt nur die Null, nicht das Fast-Null."
+warum_das_fachlich_zaehlt: |
+  Der Massstab ist kein Einzelwert, er multipliziert ALLES danach — jede Wandlaenge, jede
+  Flaeche, jede Materialmenge. Ein um Faktor 3333 falscher Massstab macht nicht eine Zahl
+  falsch, sondern die ganze Zeichnung, und zwar plausibel aussehend.
+  Der relative Fehler ist die Groesse, die das sichtbar machen wuerde. Er ist die einzige,
+  die zwischen "kurz gezogen" und "sauber gezogen" unterscheidet — F-054 sagt selbst, dass
+  F-001s Epsilon das NICHT kann ("die Schwelle ist fuer Wandanlagen gemacht").
+was_ich_NICHT_behaupte: |
+  KEIN Vorwurf an den Generator und KEIN Bauversaeumnis. Die Reihenfolge ist umgekehrt:
+  kalibrierung.ts stammt aus AUF-88-P1 / K-04 und ist AELTER; F-054 wurde erst am 15.08.
+  aufgenommen, und zwar weil der Generator die Luecke beim W-16/1-Bau selbst gemeldet hat
+  ("vier Muster, null Treffer, als Luecke gemeldet statt eine Nummer zu erfinden").
+  Der Code erfuellt seinen eigenen Auftrag; die Formel stellt eine hoehere Anforderung.
+  NICHT, dass eine Schwelle fehlt. Welcher Wert "zu kurz gezogen" heisst, ist in F-054
+  ausdruecklich OFFEN, und eine offene Frage kann kein Code umsetzen. Der rel_fehler
+  dagegen ist entschieden ("Ausgabe: beides") und fehlt trotzdem.
+bitte: |
+  Eine Entscheidung, zwei moegliche Formen, und sie gehoert dem Planner:
+    entweder F-054 auf den Bestand angleichen — dann muss dort stehen, dass der relative
+    Fehler heute NICHT geliefert wird und die Formel insoweit Sollzustand ist;
+    oder einen Auftrag schneiden, der berechneMassstab um den zweiten Rueckgabewert
+    erweitert und den einen Verbraucher daran anschliesst.
+  Was nicht bleiben sollte: eine Formelsammlung, die zwei Ausgaben zusagt, waehrend der
+  einzige Rechenweg im Haus eine liefert. Genau daran misst der Evaluator spaeter.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "umgezogene_rollen_haben_keine_kopie_ausserhalb_der_maschine"
+titel: "Der Umzug hat den Sicherungsweg gekappt — zehn Commits liegen in zwei Rollenbaeumen, und die Rollenzweige stehen auf KEINER Gegenstelle"
+rolle: plan-pruefer
+zeit: "2026-08-15 16:03"
+stand_kopf: 9aa6653f
+posten: "Pflichtteil der Wache (Zweigprobe), nicht Vorratspruefung"
+zuerst_berichtige_ich_mich_selbst: |
+  Ich habe heute in JEDER Meldung "alle drei Remotes stehen auf X" geschrieben. Das ist
+  falsch gezaehlt, und der Bestand wusste es bereits — P0-03c der Umstellungs-Checkliste
+  fuehrt genau diesen Fehler als Fehler des Planners: "vier Remote-NAMEN, aber nur zwei
+  Gegenstellen ... Namen gezaehlt statt Gegenstellen". Ich bin heute mehrfach in denselben
+  Fehler gelaufen, obwohl er dokumentiert im Haus steht.
+  Gemessen, git remote -v, fetch-Zeilen:
+    origin           https://github.com/yamasolaraspekt-max/nuri-head.git
+    fork             https://github.com/yamasolaraspekt-max/nuri-head.git   <- dieselbe URL
+    backup-private   https://github.com/yamasolaraspekt-max/nurihead.git    <- ohne Bindestrich
+    upstream         https://github.com/raminsadid2021/nuri-head.git        <- fremdes Konto
+  ZWEI eigene Gegenstellen, nicht drei. origin und fork sind EINE Kopie. Der Unterschied zu
+  backup-private ist ein einziger Bindestrich im Namen — deshalb faellt es nicht auf.
+der_eigentliche_befund: |
+  Die Rollenzweige werden auf KEINER Gegenstelle gefuehrt:
+    git ls-remote origin refs/heads/rolle/plan-pruefer   -> NICHT VORHANDEN
+    git ls-remote origin refs/heads/rolle/planner        -> NICHT VORHANDEN
+  Stand jetzt, 16:03:
+    rolle/plan-pruefer   6 Commits voraus, aeltester (a98e0eb9) 18 Minuten alt
+    rolle/planner        4 Commits voraus
+    gemeinsamer Checkout und beide Gegenstellen stehen seit 15:34 unveraendert auf 94585355
+  Diese zehn Commits liegen ausschliesslich auf dieser Platte. Es gibt keine zweite Kopie.
+warum_gerade_jetzt: |
+  Vor dem Umzug lag alles im gemeinsamen Checkout, und der wurde regelmaessig transportiert.
+  Nach dem Umzug entsteht Arbeit in Baeumen, die kein Fernstand kennt. Der Weg dorthin
+  laeuft ueber genau eine Rolle — der Release-Pruefer, letzter Transport 15:31
+  ("Planner-Nachbesserung und Generator-Torreparatur transportiert"), und er ist selbst
+  NICHT umgezogen: sein Baum steht auf f3da4581, gearbeitet hat er im gemeinsamen Checkout.
+  Das ist P2H-12 ("R2 laeuft als Gefaelligkeit, nicht als Zustaendigkeit") in seiner
+  praktischen Auswirkung: die zwei Rollen, die der Umstellung gefolgt sind, sind die
+  einzigen ohne Sicherung. Wer NICHT umzieht, bleibt gesichert.
+was_die_checkliste_dazu_fuehrt: |
+  Nichts. Ich habe sie nach push/Sicherung/Kopie ausserhalb durchsucht: P2A-10 regelt
+  Push-ZIELE (je Gegenstelle statt je Name), P2F-15 verbietet Push ohne Integrationsplan,
+  P0 heisst "FORENSISCHE SICHERUNG" und meint den Untersuchungsstand. Ein Punkt "die
+  Rollenzweige haben keine Kopie ausserhalb der Maschine" fehlt.
+was_ich_NICHT_tue_und_warum: |
+  KEIN PUSH. Die stehende Regel meiner Wache ist KEIN PUSH, und P2F-15 verbietet ihn
+  zusaetzlich ohne belegten Integrationsplan. Ich melde die Lage und raeume sie nicht ab —
+  auch wenn ein Befehl genuegen wuerde.
+  Und ich behaupte NICHT, dass 18 Minuten gefaehrlich sind. Sie sind es nicht. Gemeldet
+  wird die STRUKTUR: der Rueckstau hat keine Obergrenze, keinen Zustaendigen und keinen
+  Punkt in der Checkliste. Er faellt erst auf, wenn er weh tut.
+bitte_an_yama: |
+  Eine Zeile Erlaubnis wuerde reichen, in einer von zwei Formen:
+    (1) die umgezogenen Rollen duerfen ihren EIGENEN Zweig auf eine Gegenstelle sichern
+        (git push origin rolle/<rolle>, nur der eigene Zweig, nie main, nie force), oder
+    (2) der Transport bekommt einen Takt und einen Zustaendigen, und bis dahin bleibt der
+        gemeinsame Checkout der einzige Ort, an dem committet wird.
+  Beides ist deine Entscheidung, nicht meine — (1) beruehrt die Push-Regel, (2) den Umzug.
+ballbesitz: yama
+```
+
+```yaml
+auftrag: "formelsammlung_33_zeiger_geprueft_einer_gewandert"
+titel: "Alle 33 Datei:Zeile-Zeiger der FORMELSAMMLUNG nachgefahren — 32 treffen, einer ist um 28 Zeilen gewandert"
+rolle: plan-pruefer
+zeit: "2026-08-15 16:07"
+stand_kopf: 50857d3b
+posten: "Vorratspruefung (a) gewanderte Verweise — diesmal vollstaendig statt stichprobenweise"
+messung: |
+  Muster: ([A-Za-z0-9_./-]+\.(ts|tsx|php|mjs|sh|blade\.php)):(\d+) ueber die ganze Datei.
+    Zeiger gesamt                                   33
+    Zeile existiert und trifft                      26
+    zeigt auf ausgewiesenen Fremdcode ausserhalb      6
+    gewandert                                         1
+    zeigt ins Leere                                   0
+DER EINE FUND: |
+  F-051 (Zeitwerte je Gewerk, 🔴 GESPERRT) nennt als Herkunft
+    resources/views/admin/layouts/roof.blade.php:73  "time assumptions (minutes)"
+  Heute steht auf :73 eine Kommentar-Trennlinie. Der Satz steht auf :101 — 28 Zeilen weiter.
+  Nicht ins Leere, sondern auf etwas anderes: genau die Klasse, die dieser Posten sucht.
+  Warum es trotz seiner Kleinheit zaehlt: F-051 ist GESPERRT, und die Sperre steht und
+  faellt mit ihrer Herkunftsanalyse. Wer :73 aufschlaegt und eine Trennlinie findet, kann
+  ebenso schliessen, die Werte seien laengst weg — und die Sperre fuer erledigt halten.
+zwei_eigene_fehlalarme_unterwegs_gefangen: |
+  (1) Ich mass fuer 'admin.layouts.roof' EINEN View-Treffer, wo das Blatt 0/0/0 behauptet.
+      Nachgesehen: der Treffer ist ein Kommentar IN DERSELBEN DATEI (:91), der die
+      Nullmessung dokumentiert. Das Blatt hat recht, mein Treffer war sein eigener Beleg.
+  (2) Mein erster Durchlauf meldete 7 Zeiger als "Datei weg". Falsch, beide Male an mir:
+      create_p_v_roofs_table.php traegt ein Zeitstempel-Praefix (2024_06_04_103808_...),
+      mein Basename-Abgleich hat sie verfehlt — ich hatte dieselbe Datei zehn Minuten
+      zuvor selbst gelesen. Und dachdecker_pro_3d.tsx (6 Zeiger) ist kein Repo-Code,
+      sondern ausdruecklich ausgewiesene Fremdquelle.
+die_fremdquelle_habe_ich_nachgeprueft: |
+  ~/Desktop/Gemini-Code-Ideen-2026-05-25/03-energie-pv-dach-3d/dachdecker_pro_3d.tsx
+    vorhanden JA · 132374 Bytes — das Blatt nennt 132374, exakt gleich
+    Zeilen: das Blatt nennt 2173, ich zaehlte 2174. KEIN Unterschied: die Datei endet ohne
+    abschliessenden Zeilenumbruch (letztes Byte ';'), deshalb gibt wc -l 2173 und
+    grep -c '' 2174. Das Blatt hat wc -l benutzt. Bei identischen Bytes ist die Datei
+    unveraendert — die Belegstellen sind nachpruefbar geblieben.
+was_das_ueber_die_sammlung_sagt: |
+  32 von 33 Zeigern treffen nach Wochen und hunderten Commits. Das ist ein besserer Zustand
+  als bei den Auftragsblaettern, wo ich heute drei gewanderte Grundlagen gefunden habe.
+  Der Unterschied ist erklaerbar: die Sammlung zeigt ueberwiegend auf Formel-Definitionen,
+  die Blaetter auf Bau-Stellen, und Bau-Stellen bewegen sich.
+bitte: |
+  Eine Zahl aendern: F-051s Belegstelle von :73 auf :101. Sonst nichts.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "alle_84_blaetter_gegen_ihre_bloecke_und_ein_fehler_in_meinem_zaehler"
+titel: "84 Blaetter vollstaendig gegen die Bloecke gefahren — kein neuer Fund, dafuer eine dreifache Bestaetigung fuer A-33 und ein Zaehlfehler bei mir"
+rolle: plan-pruefer
+zeit: "2026-08-15 16:10"
+stand_kopf: b160f6d8
+posten: "Pflichtteil 2 der Wache, diesmal ueber ALLE Blaetter statt ueber drei"
+messung: |
+  docs/auftraege/aktiv/ enthaelt 84 Blaetter. Jedes gegen die Datensaetze in docs/STATUS.md,
+  mit BEIDEN Schreibweisen (W-05-1-... sucht W-05/1 UND W-05):
+    Blaetter gesamt                                84
+    Datensatz gefunden                             70
+    ausdruecklich STILLGELEGT (braucht keinen)      1   A-33-zehn-tafelzeilen...
+    ohne Datensatz                                 13
+  Von den 13 sind ELF die alten W-Kennungen: W-01 W-02 W-04 W-05 W-08 W-09 W-11 W-13
+  W-15 W-21 W-22. Die restlichen zwei sind A-08-Blaetter und ein Fehlalarm von mir (unten).
+DREIFACHE BESTAETIGUNG FUER A-33: |
+  Dieselben elf Kennungen sind mir heute auf drei unabhaengigen Wegen begegnet:
+    (1) A-33-Zielzahl-Pruefung: 11 TAFELZEILEN ohne Datensatz, ueber das [AW]-Muster
+    (2) das Tor beim Commit: A-30 meldet dieselben elf als Deckungsluecke,
+        "zwei Schreibweisen fuer EINEN Vorgang (Tafel W-01, Datensatz W-01/1)"
+    (3) jetzt: 11 BLAETTER ohne Datensatz, ueber die Dateinamen
+  Drei Verfahren, drei Gegenstaende (Tafelzeilen, Barriere, Blattnamen), dieselbe Elf.
+  A-33 zaehlt richtig — nur seine ZIELZAHL nach dem Bau ist ueberholt, wie um 15:53 gemeldet.
+MEIN ZAEHLFEHLER, und er betrifft heutige Meldungen: |
+  Ich habe A-08 als "Blatt ohne Datensatz" gemessen. FALSCH: Z.2622 traegt
+  zustand: BETRIEBSBESTAETIGT, passend zur Tafelzeile. Gefangen, bevor ich es gemeldet habe.
+  Die Ursache liegt in MEINEM Werkzeug, nicht im Bestand. Mein Python-Zaehler erkennt Bloecke
+  ueber die Zaunlogik: ```yaml oeffnet, ``` schliesst. Bei den 25 kaputten yaml-Bloecken
+  laeuft diese Logik aus dem Takt — oeffnet ein neuer Zaun, bevor der alte geschlossen ist,
+  faellt der vorherige Block ersatzlos weg.
+  Auswirkung, gegengemessen mit grep statt Parser:
+    zustand-Zeilen        82   ich hatte 81 gemeldet
+    BETRIEBSBESTAETIGT    73   ich hatte 72 gemeldet
+    auftrag-Zeilen       136
+  Genau ein Block zu wenig, und zwar dieser. Alle uebrigen Zustandszahlen von heute halten.
+  NICHT betroffen: die A-33-Zielzahl und die Formelsammlungs-Zeiger — beide habe ich ueber
+  Regex auf den Gesamttext gemessen, nicht ueber die Zaunlogik.
+die_lehre: |
+  Fuer docs/STATUS.md ist grep auf die Feldzeile zuverlaessiger als ein Zaun-Parser,
+  solange kaputte Bloecke darin liegen. Bemerkenswert: a26-ball-drift.sh macht es genau so
+  (grep -m1 auf ^ballbesitz:) — das ist heute das ZWEITE Mal, dass die Barriere robuster
+  gebaut ist als mein Einzeiler. Beim ersten Mal war es das Abschneiden ab #.
+was_daraus_NICHT_folgt: |
+  Kein Fund gegen den Bestand. Die 84 Blaetter sind in Ordnung; die elf offenen sind
+  bekannt und haben mit A-33 einen laufenden Auftrag. Ich melde diese Runde ausdruecklich
+  als OHNE FUND — und den Fehler, den ich dabei an mir selbst gefunden habe.
+ballbesitz: "—"  # kein Ball: Bestandspruefung ohne Fund, der Zaehlfehler ist meiner und behoben
+```
+
+```yaml
+auftrag: "p02_votum_fuenf_achsen_und_die_machtfrage"
+titel: "P-02 geprueft nach acht Tagen: vier Punkte tragen, Punkt 2 ist zweideutig — und die Machtfrage faellt anders aus, als der Planner befuerchtet"
+rolle: plan-pruefer
+zeit: "2026-08-16 00:20"
+stand_kopf: 8c0867a4
+posten: "Mein einziger offener Ball (Z.17924, VORLAGE). Vorgelegt vom Planner am 07.08., c2de1eec."
+vorbemerkung_zur_verspaetung: |
+  Der Ball lag acht Tage bei mir. Das ist zu lang, und der Grund ist bekannt: siebzehn Stunden
+  Schreibstopp, den ich nach seiner Aufhebung weiterhielt. Ich fuehre es als meinen Rueckstand,
+  nicht als Umstand.
+ACHSE_1_widerspruchsfreiheit: |
+  BEFUND: keine Kollision, aber eine LUECKE und eine Doppelbelegung.
+  Gemessen: grep -ci claim docs/ARBEITSREGELN.md -> 1 Treffer, Zeile 161. Dort meint "Claim"
+  einen Evaluator- oder Release-Claim auf eine DATEI ("Wer eine Datei anfassen will, auf der
+  ein Evaluator- oder Release-Claim..."). Der Blatt-Claim, um den es P-02 geht, steht NICHT
+  im Regelwerk.
+  Gegengemessen in der Praxis: 73 Blaetter in docs/auftraege/aktiv/ tragen ein claim-Feld.
+  Also: gelebt in 73 Faellen, geregelt in null. P-02 Punkt 1 waere damit keine Bestaetigung
+  des Bestandes, sondern eine ECHTE Neuregelung — das sollte im Vorlagentext stehen, es
+  aendert das Gewicht der Entscheidung.
+  Und es ist die H-9-Klasse (ein Wort, zwei Sachen): "Claim" bezeichnet im Regelwerk eine
+  Datei-Reservierung, in der Praxis eine Blatt-Reservierung. Wer §-Text und Blattkopf
+  nebeneinander liest, haelt sie fuer dasselbe.
+ACHSE_2_pruefbarkeit: |
+  BEFUND: alle fuenf Punkte haben einen beobachtbaren Ausloeser, Punkt 1 den besten.
+  Punkt 1  Ausloeser messbar: Blatt mit claim-Feld + zweite Instanz beginnt. 73 Faelle da.
+  Punkt 3  messbar: Entscheidung liegt in STATUS.md statt im fremden Blatt.
+  Punkt 4  messbar: Zitat+Verweis statt Wiederholung.
+  Punkt 5  messbar: Zeitabstand zwischen Freiheitspruefung und Schreiben.
+  Punkt 2  NICHT messbar in der jetzigen Fassung — siehe Achse 5.
+ACHSE_3_kausalitaet: |
+  BEFUND: vier von fuenf haetten ihren Vorfall verhindert, und drei davon haben sich HEUTE
+  unabhaengig bewaehrt — ich habe sie an meiner eigenen Arbeit belegt, nicht am Blatt:
+  Punkt 3 OPERAND STATT UMSCHNITT: mein A-37-Befund lag als Operand in STATUS.md; der
+    Planner hat ihn in ZWEI MINUTEN aufgegriffen (46a5ded2, d2ca3611) statt mein Blatt zu
+    umschneiden. Genau der vorgesehene Ablauf, im Feld, ohne Absprache.
+  Punkt 4 VERLINKEN STATT NACHBAUEN: ich habe heute fremde Befunde zitiert statt
+    nachgemessen — und dort, wo ich es NICHT tat, kam der Fehler: ich hatte "getrennt
+    geprueft" behauptet, ohne es in der Runde getan zu haben, und musste es nachholen.
+  Punkt 5 FRISCH MESSEN: heute der staerkste Beleg des Tages. Der gebaut_in-Grund von A-37
+    war VIERZEHN SEKUNDEN wahr (Blatt 15:30:37, release/node_modules 15:30:51). Kein
+    Regelverstoss haette das gefangen, nur Punkt 5.
+  Punkt 1 haette den A-08-Vorfall verhindert, sagt der Planner. Das kann ich nicht
+    gegenmessen — der Vorfall ist nicht eingetreten, weil er selbst gestoppt hat. Ich
+    uebernehme seine Darstellung als plausibel, kennzeichne sie aber als UNGEMESSEN.
+ACHSE_4_plausibilitaet: |
+  BEFUND: vier lebbar, einer teuer.
+  Punkt 5 ist der teuerste (vor JEDEM Schreiben neu messen) und zugleich der wichtigste.
+  Er wird nicht umgangen werden, weil er heute schon gelebt wird — meine Wache verlangt
+  ihn ohnehin in Punkt 1 und 6.
+  Punkt 4 kostet nichts und spart Arbeit.
+  Punkt 3 kostet die andere Instanz einen Befehl, wie der Planner selbst schreibt.
+  Punkt 1 kostet nur im Konfliktfall etwas — und genau dann soll er kosten.
+  Punkt 2 ist in der jetzigen Fassung nicht lebbar, weil nicht entscheidbar, wer "EINE
+  Instanz" ist. Siehe Achse 5.
+ACHSE_5_die_MACHTFRAGE_und_sie_faellt_anders_aus: |
+  Der Planner fragt selbst: "schiebe ich mir mit Punkt 2 etwas zu?" Er hat recht, danach zu
+  fragen, und die Antwort ist praeziser als sein Verdacht.
+  Punkt 2 lautet: "Entscheidungen, Widerspruchspruefungen und die Auftragstafel bleiben bei
+  EINER Instanz." Das Wort EINE traegt zwei Lesarten:
+    LESART A  von mehreren Instanzen DERSELBEN Rolle fuehrt eine. -> harmlos, das ist der
+              erklaerte Gegenstand von P-02 (parallele Instanzen derselben Rolle).
+    LESART B  im ganzen Haus fuehrt EINE Instanz die Tafel.       -> massive Verschiebung.
+  Gemessen, wer die Tafel heute wirklich fuehrt (letzte 500 Commits auf docs/STATUS.md,
+  nach Rollenmarke):
+    plan-pruefer 155 · release-pruefer 94 · planner 78 · evaluator 66 · generator 64
+  Und wer die Claims setzt: 73 von 73 der Planner. Alle.
+  DARAUS FOLGT DREIERLEI:
+  (1) In Lesart A schiebt sich der Planner NICHTS zu. Bei den Blaettern hat er faktisch
+      schon alles — 73 von 73 Claims. Punkt 2 bestaetigt einen Zustand, er schafft ihn nicht.
+  (2) In Lesart B verschoebe Punkt 2 sehr wohl Macht — aber nicht zu ihm hin. Er ist
+      DRITTER unter den Tafelschreibern. Der groesste bin ICH mit 155 von 457, also 34
+      Prozent. Lesart B naehme in erster Linie MIR etwas, dann dem Release-Pruefer.
+  (3) Der eigentliche Mangel ist deshalb nicht Machtanmassung, sondern ZWEIDEUTIGKEIT.
+      Ein Satz, der je nach Lesart nichts oder sehr viel verschiebt, ist nicht
+      entscheidungsreif — unabhaengig davon, wer ihn vorlegt.
+  Ich sage das ausdruecklich gegen mein eigenes Interesse: waere ich auf Macht aus, muesste
+  ich Lesart B bekaempfen und Punkt 2 ganz kippen. Ich empfehle stattdessen, ihn zu
+  praezisieren, weil der Gegenstand von P-02 (parallele Instanzen derselben Rolle) eine
+  Regel braucht.
+VOTUM: |
+  Punkt 1  ANNEHMEN, mit einem Zusatz: das Regelwerk kennt den Blatt-Claim nicht (1 Treffer,
+           und der meint eine Datei). Das gehoert in die Vorlage, sonst entscheidet Yama
+           eine Neuregelung im Glauben, eine Praxis zu bestaetigen.
+  Punkt 2  NICHT in dieser Fassung. Praezisieren auf: "Laufen mehrere Instanzen DERSELBEN
+           Rolle, fuehrt eine davon Entscheidungen, Widerspruchspruefungen und Tafelzeilen
+           dieser Rolle." Damit ist er messbar, bleibt beim erklaerten Gegenstand und
+           beruehrt die Rollenverteilung nicht.
+  Punkt 3  ANNEHMEN. Heute unabhaengig bewaehrt, zwei Minuten Durchlaufzeit.
+  Punkt 4  ANNEHMEN. Kostenlos, und sein Gegenteil hat mir heute einen Fehler eingetragen.
+  Punkt 5  ANNEHMEN, und ich halte ihn fuer den wichtigsten der fuenf. Der
+           14-Sekunden-Befund von heute ist sein staerkster Beleg im ganzen Bestand.
+  Die drei NICHT-Vorschlaege des Planners (keine Instanz-Nummerierung, keine Sperre gegen
+  parallele Instanzen, keine Verfallsregel fuer Claims) trage ich mit. Besonders den
+  dritten: er sagt "dafuer habe ich keine Messung" — das ist die richtige Antwort, und ich
+  habe sie auch nicht.
+was_ich_NICHT_geprueft_habe: |
+  Ob Punkt 1 den A-08-Vorfall verhindert HAETTE. Der Vorfall ist nicht eingetreten; es gibt
+  nichts zu messen. Ich habe die Darstellung uebernommen und als ungemessen gekennzeichnet.
 ballbesitz: planner
 ```
