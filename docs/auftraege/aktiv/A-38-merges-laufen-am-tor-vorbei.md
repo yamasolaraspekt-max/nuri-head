@@ -170,7 +170,30 @@ Einzeiler, der `core.hooksPath` setzt, und A-38-6 belegt, dass er in einem zweit
   **Rot am Basis-SHA:** `ls .githooks` → Verzeichnis existiert nicht.
 - **A-38-2** · **Negativfall:** Ein Merge-Commit mit Botschaft `Merge branch 'x' into HEAD`
   wird **abgewiesen**. Rohausgabe.
-  **Rot:** heute geht er durch — 28 von 32 Merges belegen es.
+  **Rot — auf FESTE SHAs umgestellt, die Quote ist als Beleg abgesetzt:**
+  ```
+  94d2b479 · 0f05f8bf · c1b3a774 · b1d343e6 · 9b42e777
+  ```
+  **Fünf Merges ohne Rollenmarke, 14.08. zwischen 22:14 und 22:53 — `0f05f8bf` ist der
+  `basis_sha` dieses Blattes selbst.** Prüfbar mit
+  `git --no-optional-locks log -1 --format='%s' <sha>` → keine Rollenmarke. **Unveränderlich,
+  also trägt der Beleg einen SHA und keine Zahl.**
+
+  **⚠ DIE ALTE ROT-LAGE HATTE EINE UHR — behoben, bevor sie abgelaufen ist.** Sie zitierte
+  *„28 von 32"* aus einem `--since='48 hours ago'`-Fenster. **Der Plan-Prüfer (`4eac6684`) hat
+  gemessen: der jüngste markenlose Merge fällt am 16.08. um 22:53 aus dem Fenster; ab dann misst
+  wer A-38 prüft `0 von 102` und findet keinen Beleg für das Problem, das der Auftrag löst.**
+  Gefallen war nicht nur die Quote (88 % → 83 % → 25 % → 4 %), sondern die **absolute Zahl von
+  58 auf 5**.
+  **Eine Rot-Lage, die von selbst grün wird, ohne dass jemand etwas behoben hat, ist keine
+  Rot-Lage.** *(Zwei Haltbarkeiten, 16.08.: unveränderlich trägt SHA, flüchtig trägt Zeitstempel
+  — eine flüchtige Messung taugt als Anlass, nie als Rot-Lage.)*
+
+  **Und was NICHT folgt, weil die Zahl zu dieser Lesart einlädt:** A-38 ist nicht überflüssig
+  geworden. **Seit 15.08. gibt es 97 Merges und davon 0 ohne Marke — das ist Disziplin, kein
+  Mechanismus.** Sie hängt daran, dass der Release-Prüfer markiert. **Abgelaufen ist der Beleg,
+  nicht der Zweck.** Genau deshalb prüft **A-38-2 den konstruierten Fall** und nicht die
+  Vorgeschichte: er misst die **Wirkung** des Hooks und ist morgen so gültig wie heute.
 - **A-38-3** · **Positivfall:** Ein Merge mit `integrator: …` **und** Herkunftszeile kommt durch,
   exit 0. **Ohne diesen Beleg ist der Hook von einem kaputten nicht zu unterscheiden.**
 - **A-38-4** · **Ein normaler Commit ist unberührt** — `commit-pruefen.sh` bleibt allein zuständig,

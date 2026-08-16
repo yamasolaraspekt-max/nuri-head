@@ -20,7 +20,7 @@ anlass: "Drei Fachfehler in einer Woche, alle vom BENUTZER gefunden und von kein
          Pruefstation: F-004 beim Bauen, F-054 beim Rechnen, S-060/S-040 beim Lesen."
 gebaut_in: "ticket-rolle-generator (rolle/generator)"
 staut_hinter: "A-37, dann A-39 — das Tor schuetzt beide, und A-39 baut die Bauform,
-               in die A-40 nur noch einen sechsten Punkt einhaengt."
+               in die A-40 nur noch einen siebten Punkt einhaengt."
 regelgrundlage: "ARBEITSREGELN.md, Nachtrag vom 16.08. — die drei Zustaende, die zwei
                  Pflichtfelder und der Drei-Fragen-Test sind ENTSCHIEDEN und stehen dort.
                  Dieses Blatt BAUT sie, es erfindet sie nicht."
@@ -63,7 +63,7 @@ Mutationsprobe.** Ein Fall, der auch ohne die Formel dasselbe ergibt, hat sie ni
 
 **Bei JA im Drei-Fragen-Test zusätzlich:** `geltungsbereich:` — Pflichtfeld, kein Freitext-Zusatz.
 
-### 3 · Die sechste Innenprüfung, neben die fünf aus A-39
+### 3 · Die SIEBTE Innenprüfung, neben die sechs aus A-39
 
 ```
 Nennt das Blatt eine F-/N-/S-Kennung?
@@ -107,7 +107,7 @@ Er entscheidet, ob jemand es geprueft hat.
 
 - **A-40-1** · **Die drei Zustände sind maschinell erkennbar.** Ein Prüfbefehl liest je Kennung
   den Zustand und meldet ihn. **Rot am Basis-SHA:** kein Eintrag trägt ein Zustandsfeld.
-- **A-40-2** · **Die sechste Innenprüfung läuft und findet einen echten Fall.**
+- **A-40-2** · **Die siebte Innenprüfung läuft und findet einen echten Fall.**
   **Positivprobe historisch:** gegen ein Blatt, das eine F-Kennung nennt, deren Eintrag kein
   `nachgerechnet_an` trägt → **Meldung**. **Negativprobe:** ein Blatt, dessen Kriterium das
   Nachrechnen selbst verlangt → **keine Meldung.**
