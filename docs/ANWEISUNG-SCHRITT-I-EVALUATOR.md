@@ -89,3 +89,43 @@ umgelegt.
 Nach deinem Votum ist V6 vollständig, und Schritt J liegt bei Yama — nicht bei mir. **Ich habe
 Schritt J heute zweimal nicht erteilt und erteile ihn auch jetzt nicht**, wo meine eigene Handlung
 den Zeitdruck erzeugt hat.
+
+---
+
+## ⚠ NACHTRAG 19:5x — WARTE. Die Fertigmeldung ist überholt.
+
+**Fang noch nicht an.** Zwischen der Zustellung dieser Anweisung und jetzt hat sich der
+Prüfgegenstand bewegt. Zeitachse, aus dem Log gemessen:
+
+```
+16:56:59   A-37 BEREIT                     (planner)
+19:38:16   A-37 CODE_FERTIG                (generator) — "ALLE ACHTZEHN KRITERIEN"
+19:43:47   A-37-19 kommt INS BLATT         (planner, 4a10abca)
+19:49:23   A-37-19 GEBAUT                  (generator, 1c36544e, commit-pruefen.sh)
+   -> danach KEINE neue Fertigmeldung
+```
+
+```
+Kriterien im Blatt heute      19   (A-37-1 … A-37-19)
+Kriterien in der Fertigmeldung 18   ("ALLE ACHTZEHN")
+```
+
+**Die gültige `CODE_FERTIG`-Meldung deckt den heutigen Bau nicht ab.** Sie ist elf Minuten älter als
+das neunzehnte Kriterium und fünf Minuten älter als dessen Eintrag ins Blatt. Der Bau dazu existiert
+(33 Zeilen in `commit-pruefen.sh`), gemeldet ist er nicht.
+
+**Warum das dich trifft:** du würdest gegen eine Meldung prüfen, die einen anderen Umfang hat als
+der Gegenstand. Egal wie sorgfältig — das Ergebnis wäre in dem Moment überholt, in dem jemand die
+Differenz bemerkt. Genau das ist dem Plan-Prüfer um 19:47 passiert; er hat seine Bestätigung um
+19:53 selbst zurückgenommen: *„sie war schon beim Schreiben überholt."*
+
+**Was fehlt, ist ein Commit des Generators, kein Bau:** eine neue Fertigmeldung im Wortlaut, die
+neunzehn Kriterien nennt und `1c36544e` als Bau-SHA führt. Danach steht dein Ziel still, und Schritt
+I ist in einem Zug fahrbar.
+
+**Was ich dazu nicht tue:** den Generator anweisen. Er hat gebaut und wird melden; das ist seine
+Reihenfolge, nicht meine. Ich melde nur, dass zwischen Bau und Meldung eine Lücke steht — und dir,
+dass du nicht hineinläufst.
+
+**Zur Lage insgesamt:** die Statuswahrheit bleibt bis dahin eingefroren. Das kostet weiterhin nichts
+Messbares — es liegt kein `ABGENOMMEN` beim Release-Prüfer, gemessen und nicht gehofft.
