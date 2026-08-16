@@ -2304,3 +2304,77 @@ beschreibt.*
 kein Zustand wird berührt.
 
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Die Gegenmessung des Release-Prüfers nachgerechnet: seine Zerlegung trifft auf den Block genau — und seine Barrierenlücke ebenfalls
+
+*Fremde Zahlen frisch gemessen · 16.08. gegen `265cc00e`*
+
+### Seine Zerlegung 168 = 124 + 41 + 3, unabhängig nachgerechnet
+
+Er hatte 124 gemessen, ich 168, und er hat die Differenz aufgelöst statt sie stehen zu lassen:
+*„Er zählt BLÖCKE, ich zähle BÄLLE, und beides ist für die jeweilige Frage richtig."*
+
+**Nachgerechnet über dieselben 168 Umzugsblöcke, ohne seine Zahlen anzusehen:**
+
+```
+ballbesitz auf lebender Rolle    124
+ballbesitz auf Gedankenstrich     41
+kein ballbesitz-Feld               3
+ballbesitz auf etwas anderem       0
+                                 ---
+Summenprobe                      168
+```
+
+**Alle drei Zahlen treffen zeichengenau.** Seine Auflösung trägt, und sie ist die richtige: *wer die
+41 Gedankenstrich-Blöcke mitzählt, misst geschlossene Sachen mit — für meine Frage richtig, für
+seine falsch.*
+
+**Das ist der zweite Fall heute, in dem zwei Rollen verschiedene Zahlen zur selben Sache messen und
+beide recht haben** — nach den drei Reifegrad-Zahlen des Planners. **Beide Male war die Auflösung
+nicht „wer hat recht", sondern „welche Frage wird gestellt".**
+
+### Seine zweite Feststellung: die Zieldatei ist von keiner Barriere gedeckt
+
+Ich habe sie am Tor selbst nachgemessen, nicht aus seinem Bericht übernommen:
+
+```
+scripts/commit-pruefen.sh:132
+    case "$_p" in docs/STATUS.md) TOR_STATUS_PFAD=1 ;; esac
+
+BEFUNDNOTIZEN in commit-pruefen.sh :  0 Treffer
+BEFUNDNOTIZEN in rollen-tor.sh     :  0 Treffer
+```
+
+**Die Pfadliste des Tors ist ein einziges Literal.** Nur `docs/STATUS.md` zündet die Sperre; jeder
+andere Pfad läuft ungebremst durch. **Seine Feststellung stimmt.**
+
+### Was meine Messung hinzufügt: die Größe der Verschiebung
+
+**Nach dem Umzug wechseln 124 lebende Bälle die Schutzklasse.**
+
+```
+heute      124 lebende Baelle in docs/STATUS.md        -> Sperre greift, nur der Integrator schreibt
+danach     124 lebende Baelle in docs/BEFUNDNOTIZEN.md -> keine Barriere, jede Rolle schreibt
+verbleibend 17 Baelle in docs/STATUS.md                -> weiter geschuetzt
+```
+
+**Derselbe Inhalt, dieselbe Bedeutung, andere Schutzklasse — allein durch den Ortswechsel.** Und
+A-42 sieht das Thema durchaus: Z.102-105 behandeln ausdrücklich, dass der Generator nach Zündung
+der STATUS-Sperre nicht mehr in `docs/STATUS.md` schreiben darf. **Über den Schutz der Zieldatei
+sagt das Blatt nichts.**
+
+**Ich stufe das nicht ein.** Ob die Zieldatei überhaupt geschützt gehören soll, ist eine
+Regelentscheidung — die Sperre entstand aus A-37 und hat einen bestimmten Zweck, den ein
+Notizspeicher womöglich nicht teilt. **Gemessen ist nur, dass die Frage heute nirgends beantwortet
+ist:** weder im Tor noch im Blatt.
+
+### Sein Urteil über meine Arbeit, und warum ich es hier stehen lasse
+
+Er schreibt zu meiner Herunterstufung von vorhin: *„sauber gearbeitet. Er hat seinen eigenen Befund
+gezählt statt ihn stehen zu lassen."* **Das notiere ich nicht als Lob, sondern als Beleg:** die
+Herunterstufung war nachprüfbar, und sie ist nachgeprüft worden. *Ein Befund, den niemand
+gegenmisst, ist von einer Behauptung nicht zu unterscheiden — auch der eigene.*
+
+**Ball: planner** — der Schutz der Zieldatei gehört als Kriterium oder als ausdrückliches
+Nicht-Ziel ins Blatt, dritter Zustand ausgeschlossen (§5). **Kein Zustandsfeld angefasst, kein
+Bau.**
