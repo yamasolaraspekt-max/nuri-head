@@ -6629,3 +6629,74 @@ Tagen. Nicht die Zahl ist das Problem, sondern die Bewegung darüber.**
 
 **Kein Ball, kein Fund an A-18 — sieben von sieben.** *Der Beleg gehört zum §77/§79/§81-Ball beim
 Planner, als dritte Achse: Ort, Zeitpunkt, Form.* **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 94 — Posten (b) an W-41: alle Zahlen treffen — und drei Beinahe-Fehlalarme in einer Runde, alle drei meine
+
+**Stand:** HEAD `7af77b69`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**Nach der Methode aus §80: die Gegenstände aus dem REGISTER geholt und gemessen, BEVOR ich das
+Blatt geöffnet habe.**
+
+### Vorgerechnet, Blatt ungeöffnet
+
+Das Register sagt: *„Von sechs Kandidat-Kanten ist **eine belegt** — Dachfläche → PV-Belegung
+(`geometry/pvBelegung.ts:10-14`)."*
+
+```
+pvBelegung.ts:10-14   export interface PvEingabe {
+                        /** Dachbreite horizontal, mm. */   dachLaenge: number;
+                        /** Dachlaenge in Falllinie …  */   dachBreite: number;
+                      -> genau die Kante Dachflaeche → PV-Belegung       TRIFFT
+```
+
+**Erst danach das Blatt geöffnet — `:188-191` sagt: „Sechs Kanten, davon EINE belegt und fünf
+ausdrücklich als Kandidat gekennzeichnet."** *Meine Messung stand vorher fest.*
+
+### Die Null-Aussagen und die Blattlängen
+
+```
+invalidier / propagier                0 Dateien                        TRIFFT
+markiereVeraltet                      configuratorPackage.ts:125
+  Aufrufer AUSSERHALB der Tests       0 — nur :57 und :61 im Test      TRIFFT, beide Zeilen
+Kanten / Graph (Abhaengigkeitssinn)   0                                TRIFFT
+sieben Werkbank-Blaetter              63 · 103 · 56 · 65 · 67 · 78 · 102   ALLE SIEBEN
+Summe                                 534                              TRIFFT
+```
+
+### Drei Beinahe-Fehlalarme, alle meine, alle vor dem Melden gefangen
+
+```
+1  'Kante' im Inselcode          94 Dateien  -> das ist die GEOMETRIE-Kante (Polygonkante),
+                                                nicht die Abhaengigkeitskante.
+2  Aufrufer von pvBelegung        1 (enginePanels.ts:32) -> die '0' des Blattes gilt fuer
+                                                markiereVeraltet, nicht fuer pvBelegung.
+                                                Ich hatte die falsche Groesse gemessen.
+3  'Graph' im Inselcode           1 (roomDetection.ts:5) -> 'Wandachsen → Kanten-Graph',
+                                                ein GEOMETRIE-Graph. Wieder das Wort, nicht
+                                                die Sache.
+4  sieben Blaetter, ich fand 6   -> das siebte liegt in 5-CODE/LIESMICH.md, 67 Zeilen.
+                                    Mein '*.md' griff nicht in den Unterordner —
+                                    und 534 minus 467 war genau diese 67.
+```
+
+**Drei der vier sind dieselbe Klasse: ich habe das WORT gemessen und nicht die SACHE.** *„Kante"
+und „Graph" gibt es in der Geometrie längst; die Frage war, ob es sie als Abhängigkeit gibt.*
+**Und der vierte ist P8 an mir selbst: der Suchraum war der Ort statt der Sache** — genau der
+Fehler, den ich in §90 an A-40-5 gemessen habe und den der Release-Prüfer in §86 mit `lattweite`
+gemacht hat.
+
+**Dreimal dieselbe Klasse an einem Abend, bei drei verschiedenen Rollen, in beide Richtungen:**
+*ein Wort finden, das die Sache nicht ist (94 Kanten) — und die Sache nicht finden, weil man am
+falschen Ort sucht (das siebte Blatt, `lattweite`, A-40-5s Suchraum).*
+
+### Was das Blatt richtig macht
+
+**W-41 hat KEINEN Code, und das Blatt sagt es zuerst.** Es führt fünf der sechs Kanten
+**ausdrücklich als Kandidat** und belegt nur die eine, die es belegen kann. *Ein Entwurf, der
+seine eigene Dünne benennt, statt sie mit Vermutungen zu füllen — und die Registerzeile sagt
+dasselbe: „die dünnste Vorgabe".*
+
+**Siebtes Blatt ohne Abweichung: W-08/1 · W-11/1 · W-27/1 · W-34 · W-23 · W-39 · W-41.**
+
+**Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
