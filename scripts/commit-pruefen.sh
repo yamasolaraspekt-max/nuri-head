@@ -575,6 +575,42 @@ fi
 # der Vergleich trennt "jemand hat gerade etwas kaputtgemacht" von "das liegt hier seit Wochen".
 #
 # **Rueckgabe:** 0 alles heil · 2 YAML-Syntax · 3 Modulaufloesung · 4 sonstiger Laufzeitfehler.
+#
+# ## A-37-8 — die drei Ursachen, je EINMAL gefahren, Rohausgabe (16.08.)
+#
+# ```text
+# (a) heiler Block committet, dann kaputt gemacht
+#     YAML-KOPF  docs/probe.md  — der Kopf parst nicht (1 kaputte Bloecke, am Commit waren es 0)
+#     KEIN COMMIT.                                                          Rueckgabe 1
+#
+# (b) Baum ohne node_modules, kein NODE_PATH
+#     MODUL      docs/probe.md  — js-yaml nicht aufloesbar. Dieser Worktree hat kein node_modules.
+#                Abhilfe: NODE_PATH=... vor den Aufruf setzen.              Rueckgabe 1
+#
+# (c) js-yaml vorhanden, wirft beim Laden (NODE_PATH auf ein absichtlich kaputtes Modul)
+#     LAUFZEIT   docs/probe.md  — absichtlich kaputtes js-yaml fuer die Probe
+#     KEIN COMMIT.                                                          Rueckgabe 1
+# ```
+#
+# **Drei Faelle, drei verschiedene Woerter, drei verschiedene Texte.** *Der Rot-Beleg des Auftrags
+# lautete „alle drei melden heute denselben Text".* **Das ist behoben und jetzt gefahren statt
+# behauptet.** *(b) traegt zusaetzlich das Wort `node_modules` und den Abhilfe-Hinweis, wie A-37-8
+# es ausdruecklich verlangt.*
+#
+# ## ⚠ UND MEINE ERSTEN ZWEI PROBEN WAREN FALSCH GEBAUT — nicht das Werkzeug
+#
+# **Ich habe (a) zuerst mit einem Front-Matter-Kopf geprueft** (`---` … `---`) **und bekam
+# Rueckgabe 0.** *Daraus waere „der Kopf-Waechter feuert nicht" geworden — ein Befund gegen den
+# eigenen Bau, der keiner ist.*
+#
+# **Der Pruefer liest ```yaml-BLOECKE, nicht Front Matter** (`t.matchAll(/```yaml\n…/g)`). *Meine
+# Probendatei hatte gar keinen Block, also gab es nichts zu bemaengeln.* **Die zweite Probe hatte
+# den Block, war aber schon KAPUTT committet** — *und dann greift die Altlast-Regel: kaputte
+# Bloecke duerfen schrumpfen, nie wachsen.* **Erst die dritte Probe (heil committet, dann kaputt)
+# trifft den Fall, den A-37-8 meint.**
+#
+# > ***Zweimal haette ein Zwischenstand einen Mangel gemeldet, den es nicht gibt.*** *Wer ein
+# > Werkzeug pruefen will, muss zuerst pruefen, ob seine Probe den Fall ueberhaupt herstellt.*
 YAML_PRUEFER='
   const {readFileSync}=require("fs");
   let yaml;
