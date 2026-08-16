@@ -25146,3 +25146,130 @@ stand_der_A_38_dor: |
   Kein Kriterium ist bisher unerfuellbar oder bereits erfuellt. Kein Votum.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-38"
+titel: "Vier der sechs Kanten eingeordnet — und bei zweien sage ich ausdruecklich, dass ich sie NICHT belegen konnte"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:04 CEST"
+mess_stand: "Blatt aus rolle/planner · Tor-Fassung aus rolle/generator · Historien-Stichprobe 200 Commits · Planner-Kopf 6d9c6a3c"
+k5_ist_erfuellbar_und_hat_ein_vorbild: |
+  K5 verlangt: "Der Hook selbst ist kaputt — muss mit EIGENER Ursache melden, nicht als
+  Formfehler."
+  Das ist keine neue Forderung, sie ist im Bestand schon umgesetzt. commit-pruefen.sh:
+  Z.585 und Z.602  process.stdout.write("LAUFZEIT " + e.message); process.exit(4)
+  Z.660            echo "LAUFZEIT $p — ${BERICHT#LAUFZEIT }"
+  Der Hook kann die Bauart uebernehmen, statt sie zu erfinden. Das Kriterium ist damit
+  nicht nur erfuellbar, es hat ein Muster im selben Werkzeugkasten.
+k4_ist_ein_randfall_und_richtig_eingeordnet: |
+  K4 sagt: "Rebase / Cherry-Pick — NICHT betroffen, ein Cherry-Pick hat einen Elter."
+  Gemessen: im ganzen Bestand tragen 2 Commits 'cherry' im Text. In einer Stichprobe von
+  200 Commits haben 138 einen Elternteil und 62 zwei.
+  Der Fall kommt also praktisch nicht vor, und wo er vorkommt, unterscheidet ihn die
+  Elternzahl zuverlaessig von einem Merge — genau das Merkmal, das der Hook ohnehin liest.
+was_ich_NICHT_belegen_konnte_und_warum: |
+  K1 "git merge --no-commit greift nicht, der Hook laeuft erst beim Commit" und
+  K3 "git commit --amend an einem Merge — die Eltern bleiben zwei"
+  sind beides Aussagen ueber das VERHALTEN von git, nicht ueber den Bestand. Belegen liesse
+  sie nur ein Lauf: ein Wegwerf-Repo anlegen, einen Merge bauen, amenden, die Eltern
+  zaehlen.
+  ICH HABE DAS VERSUCHT UND ES WURDE NICHT ERLAUBT — der Aufruf ist an der
+  Berechtigung gescheitert. Damit habe ich keine Messung, und eine ausgefallene Messung
+  ist kein Ergebnis. Ich trage die beiden Kanten deshalb als UNGEPRUEFT ein, nicht als
+  plausibel: dass ein Amend die Elternzahl erhaelt, ist mir gelaeufig, aber gelaeufig ist
+  kein Beleg, und genau diese Ersetzung habe ich heute mehrfach an anderen gerueegt.
+  Wer sie braucht, faehrt sie in einem Baum, in dem er schreiben darf.
+stand_der_A_38_dor: |
+  Geprueft und haltend: A-38-1, -2, -5, -6 sowie die Kanten K2, K4, K5, K6.
+  Ungeprueft mangels erlaubtem Lauf: K1, K3.
+  Offen: A-38-3, -4, -8, -9.
+  Kein Kriterium ist unerfuellbar oder bereits erfuellt. Kein Votum, der Ball bleibt bei
+  mir.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-9 ist das einzige der fuenf Suite-Kriterien ohne die Invarianten-Klausel — und es entstand ZWISCHEN zwei Blaettern, die sie tragen"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:12 CEST"
+mess_stand: "fuenf Blaetter aus rolle/planner, Kriterien einzeln gelesen · Anlegedaten ueber --diff-filter=A gemessen · Planner-Kopf 4b2c966f"
+der_vergleich: |
+  Fuenf Auftraege tragen dasselbe Schlusskriterium "Suite gruen und Zahl unveraendert
+  gegen den Bau-Stand, tsc exit=0". Vier davon sagen ausdruecklich, dass NICHT gegen eine
+  feste Zahl geprueft wird:
+  A-37-11  "Nicht gegen eine feste Zahl pruefen" — mit Berichtigungsvermerk vom 15.08.
+  A-38-9   "Keine feste Zahl. (Berichtigt 15.08., wortgleich zu A-37-11.)"
+  A-39-10  "nicht gegen eine feste Zahl pruefen"
+  A-41-12  "keine feste Zahl im Kriterium"
+  A-40-9   — nichts davon. Nur der Satz, ohne die Klausel.
+warum_das_kein_altersproblem_ist: |
+  Ich habe zuerst vermutet, A-40 sei aelter als die Lehre. Das Gegenteil stimmt.
+  Die Klausel entstand am 15.08. um 15:18 (8f2aed6f, "DoR-Restpunkte behoben").
+  Angelegt wurden die Blaetter:
+  A-37  14.08. 22:35     A-38  15.08. 10:45     A-39  16.08. 14:13
+  A-40  16.08. 14:23     A-41  16.08. 15:19
+  A-40 ist also ZEHN MINUTEN nach A-39 entstanden und eine Stunde vor A-41 — beide tragen
+  die Klausel, A-40 nicht. Es ist keine Alterung, sondern eine Auslassung zwischen zwei
+  Blaettern, die es richtig machen.
+warum_es_trotzdem_klein_ist_und_warum_ich_es_melde: |
+  Inhaltlich sagt "Zahl unveraendert GEGEN DEN BAU-STAND" die Invariante bereits — wer den
+  Satz genau liest, prueft richtig. Die vier anderen tragen die Klausel trotzdem, und der
+  Grund steht in A-37-11: dort stand einmal die feste Zahl 1750, und ein Pruefer haette
+  gegen sie gemessen.
+  Die Klausel ist also nicht Deko, sie ist die Narbe eines echten Fehlers. Ein Blatt ohne
+  sie laedt denselben Fehler wieder ein — nicht zwingend, aber ohne Not.
+  Es ist dieselbe Klasse wie P6, die heute aus meinem A-38-Befund entstanden ist: eine
+  Angabe, die sich durch normale Arbeit veraendert, braucht eine ausdrueckliche Regel, sonst
+  wird sie irgendwann als fest gelesen.
+was_zu_tun_waere: |
+  Ein Halbsatz in A-40-9, wortgleich zu den vier anderen. Kein Bau, keine Messung, keine
+  Entscheidung — nur die Angleichung an die eigene Familie.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "A-39"
+titel: "K2 benennt die Grenze richtig — aber nicht ihre GROESSE: P1 erfasst 8 von 34 Blaettern mit Kantenliste"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:26 CEST"
+mess_stand: "88 aktive Blaetter aus rolle/planner, jedes einzeln gelesen · Planner-Kopf 4b2c966f"
+a_39_1_rot_lage_haelt: |
+  scripts/blatt-pruefen.sh existiert in keinem der geprueften Zweige — 0 Treffer. Das
+  Kriterium ist heute nicht erfuellt, die Rot-Lage ist echt.
+was_K2_sagt: |
+  "Kante nur im Fliesstext genannt, nicht in einer Tabellenzeile — NICHT erfasst,
+  ausdruecklich benannte Grenze."
+  Das ist dieselbe Ehrlichkeit wie A-38s K6: eine Reichweite wird benannt statt
+  verschwiegen. Richtig so.
+und_hier_ist_ihre_groesse: |
+  Ich habe alle 88 aktiven Blaetter einzeln gelesen und nach der FORM ihrer Kantenliste
+  getrennt:
+  nur Tabelle (^| K1 |) ........... 8
+  nur Ueberschrift (^## Kantenliste) 26
+  beides .......................... 0
+  Blaetter MIT Kantenliste gesamt .. 34
+  P1 wuerde also 8 von 34 erfassen — nicht ein Viertel, sondern knapp darunter. Die
+  restlichen 26 fuehren ihre Kanten als Ueberschrift mit Listenpunkten, zum Beispiel
+  A-02 ("## Kantenliste", darunter "die Kantenliste verlangt fuer Kante 2 ...") und A-03.
+  DIE GRENZE IST ALSO NICHT DER RANDFALL, ALS DEN SIE KLINGT. Sie ist der Regelfall: die
+  Mehrheit der Blaetter mit Kanten schreibt sie in der Form, die P1 nicht sieht.
+was_ich_dabei_verworfen_habe: |
+  Meine erste Zaehlung ergab 38 Blaetter "ohne Tabelle, aber mit dem Wort Kante". Die habe
+  ich NICHT gemeldet, sondern stichprobenartig geoeffnet — und die erste war ein
+  Fehltreffer: A-01 nennt "Kante-1" als FACHBEGRIFF des Renderers (dachFlaechen, Kante-1-
+  Wurf), nicht als Pruefkante. Deshalb die zweite, engere Messung auf "## Kantenliste".
+  Ohne das Oeffnen haette ich 38 gemeldet statt 26 — und die Zahl waere um 46 Prozent zu
+  hoch gewesen.
+was_das_fuer_die_DoR_heisst: |
+  Es ist KEIN Mangel des Kriteriums: K2 sagt die Wahrheit, und A-39-8 verlangt, dass alle
+  sechs Kanten behandelt und je einzeln belegt sind. Wer K2 belegt, muss die Grenze zeigen
+  — er muss nicht ihre Groesse nennen.
+  ABER WER DEN BAU ABNIMMT, sollte sie kennen. Ein Werkzeug, das 8 von 34 Blaettern
+  erreicht, ist etwas anderes als eines, das eine Ausnahme hat. Beides kann richtig sein;
+  nur die Erwartung ist eine andere.
+  VORSCHLAG, nicht Entscheidung: entweder die Zahl bei K2 nennen, oder das Muster auf die
+  zweite Form erweitern. Das Zweite kostet eine Zeile im Skript und vervierfacht die
+  Reichweite.
+ballbesitz: planner
+```
