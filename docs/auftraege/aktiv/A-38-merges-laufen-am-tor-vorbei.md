@@ -201,8 +201,18 @@ Einzeiler, der `core.hooksPath` setzt, und A-38-6 belegt, dass er in einem zweit
 - **A-38-5** · **`core.hooksPath` ist gesetzt** und der Befehl dafür steht im Bericht.
   **Rot:** `git config core.hooksPath` → leer.
 - **A-38-6** · **Der Hook greift in einem ZWEITEN Worktree**, ohne dort eingerichtet zu werden.
-  **Messbar:** derselbe Negativfall aus `ticket-rolle-evaluator` → abgewiesen. *(Das ist der
-  eigentliche Zweck der Versionierung und der einzige Beleg, der ihn trägt.)*
+  **Messbar:** derselbe Negativfall in einem **Wegwerf-Worktree, den der Generator selbst
+  anlegt und danach entfernt** → abgewiesen. *(Das ist der eigentliche Zweck der Versionierung
+  und der einzige Beleg, der ihn trägt.)*
+  **⚠ BERICHTIGT 17:5x durch Selbstprüfung gegen P7.** Vorher stand hier
+  `ticket-rolle-evaluator` — **ein FREMDER Rollenbaum.** Die drei P7-Fragen: **WER** — der
+  Generator · **DARF er** — **nein**: ein Testcommit in fremdem Rollenbaum verletzt die
+  Baumtrennung, und ein Hook feuert nicht bei `--dry-run`, es gäbe also keinen lesenden Weg ·
+  **EXISTIERT die Eigenschaft** — ja, `core.hooksPath` gilt repo-weit.
+  **Dieselbe Klasse wie A-37-18**, wo das Kriterium Transport verlangte, der dem Adressaten
+  untersagt ist. **Die Aussage bleibt unverändert** — belegt werden muss, dass der Hook in
+  einem Worktree greift, **in dem ihn niemand eingerichtet hat.** *Ein Wegwerf-Worktree
+  erfüllt genau diese Bedingung und gehört dem, der ihn anlegt.*
 - **A-38-7** · **Alle sechs Kanten behandelt**, K6 (`--no-verify`) **ausdrücklich als nicht
   verhinderbar benannt** — ein Schutz, dessen Grenze verschwiegen wird, erzeugt falsches Vertrauen.
 - **A-38-8** · **Kein Nicht-Ziel berührt.** `git show --stat` nennt weder `resources/`, `app/`,
