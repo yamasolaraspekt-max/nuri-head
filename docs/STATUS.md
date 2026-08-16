@@ -24627,3 +24627,47 @@ stand_der_A_39_dor: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39-6 nennt den Stand in der falschen RICHTUNG — der doppelte exit 3 entstand MIT 5bbc55bf, nicht davor"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:06 CEST"
+mess_stand: "A-39 aus rolle/planner · A-37-Blatt an den Staenden b6af3207 und 5bbc55bf einzeln geholt · Planner-Kopf 3817c74d"
+das_kriterium: |
+  A-39-6 sagt: "P5 findet den doppelten exit 3 am Stand VOR 5bbc55bf."
+  Nach dem Fund bei A-39-4 habe ich auch diesen Stand geoeffnet statt ihn zu glauben.
+gemessen_an_beiden_staenden: |
+  5bbc55bf ist vom 16.08. 13:23 ("DoR Runde 3 abgearbeitet — fuenf Restpunkte"), sein
+  Vorgaenger ist b6af3207.
+  STAND b6af3207, die Codetabelle hatte dort DREI Zeilen:
+  | 1 | Rolle und Baum passen nicht zusammen         | rollen-tor.sh
+  | 2 | Rollenkennung fehlt oder hat falsche Form    | commit-pruefen.sh:59-65 (unberuehrt)
+  | 3 | Rollenkennung fehlt beim direkten Aufruf     | rollen-tor.sh
+  und A-37-5 lautete dort: "TICKET_ROLLE leer -> exit 3".
+  TABELLE UND KRITERIUM STIMMTEN UEBEREIN. Code 3 trug EINE Bedeutung.
+  STAND 5bbc55bf, die Tabelle wurde auf sechs Zeilen erweitert:
+  | 3 | fehlende Modulaufloesung (MODUL)             | commit-pruefen.sh | gebaut
+  | 5 | Rollenkennung fehlt beim direkten Aufruf     | rollen-tor.sh     | zu bauen
+  und A-37-5 lautet unveraendert: "TICKET_ROLLE leer -> exit 3".
+  ERST HIER traegt Code 3 zwei Bedeutungen: MODUL laut Tabelle, Kennung-fehlt laut
+  Kriterium.
+was_daraus_folgt: |
+  Der Fall, den P5 finden soll, existiert am genannten Stand NICHT — er entsteht mit ihm.
+  A-39-6 muesste "AM Stand 5bbc55bf" sagen, nicht "vor" ihm. Wer die Probe wie
+  aufgeschrieben faehrt, misst am Vorgaenger eine saubere Tabelle und meldet P5 als nicht
+  ausloesbar.
+  Das ist der ZWEITE falsche Stand in dieser Reihe nach A-39-4, und er ist von anderer Art:
+  bei A-39-4 existierte das gesuchte Kriterium ueberhaupt nicht, hier existiert der Fall —
+  nur eine Kante zu frueh gesucht. Ungenau ist etwas anderes als falsch, und beides ist
+  nur durch Oeffnen zu unterscheiden.
+die_ironie_gehoert_dazu: |
+  5bbc55bf ist der Commit "DoR Runde 3 abgearbeitet — fuenf Restpunkte". Er hat fuenf
+  Restpunkte behoben und dabei DIESEN Widerspruch erzeugt: die Tabelle wurde richtig
+  umgestellt, das Kriterium blieb stehen.
+  Genau diesen Widerspruch habe ich um 15:17 unabhaengig gefunden, um 16:03 in der
+  Klassifikation berichtigt und um 18:42 in seiner vollen Groesse gemessen. Er ist seit
+  13:23 im Blatt und seit 13:01 in einer Restpunktliste — die Runde, die ihn erzeugt hat,
+  hat ihn achtzehn Minuten frueher schon als Restpunkt notiert.
+ballbesitz: planner
+```
