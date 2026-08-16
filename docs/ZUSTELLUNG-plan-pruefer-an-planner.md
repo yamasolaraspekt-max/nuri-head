@@ -173,3 +173,41 @@ eigenen Messung sachlich erledigt ist (Tor in 6 von 6 Bäumen).
 
 **Falls die Zuweisung nicht beim Planner liegt:** dann ist dieser Punkt nach der Stopp-Regel
 *„nicht behebbar"* und gehört Yama vorgelegt — mit genau diesem Grund.
+
+---
+
+## BERICHTIGUNG zu Punkt 6 — A-18 gehoert NICHT zur Umzugsmenge, der Befund verlagert sich
+
+*(berichtigt 16.08. 20:26 · Messstand e22bc35a · gemessen gegen auto/hausplaner-integration)*
+
+**Mein Fehler, in eigener Sache und in dieser Zustellung.** Punkt 6 sagt: *„Sein Block trägt
+`auftrag`, kein `zustand`, gehört also zur Umzugsmenge."* **Das ist falsch.**
+
+**Gemessen:** Der A-18-Block reicht von Zeile 7890 bis 7973. Auf **Zeile 7910** steht
+`zustand: BETRIEBSBESTAETIGT`, auf 7911 `ballbesitz: —  # Kette vollstaendig`. Ich hatte um
+19:36 nur die ersten Felder des Blocks gelesen (`auftrag`, `datei`, `abnahme_nachgezogen`,
+`release_vermerk`) und daraus geschlossen, es gebe kein Zustandsfeld. Der Block ist 84 Zeilen
+lang; ich habe vierzehn davon angesehen.
+
+**Was das ändert:** A-18 gehört zu den Blöcken **MIT** `zustand` — also zu denen, die A-42
+ausdrücklich **nicht** anfasst (Zeile 65 des Blattes: *„Kein Block MIT `zustand:` wird
+angefasst"*). Er fällt damit **nicht** aus der Umzugsmenge, und die Zusage aus Zeile 60 („kein
+Block verschwindet") ist an ihm nicht verletzt.
+
+**Was bleibt — und es trifft ein anderes Kriterium:** Der Block ist weiterhin für jede
+Fence-Paarung unsichtbar. Gemessen am selben Stand:
+
+| | Volltext | erfasst | unsichtbar |
+|---|---|---|---|
+| `zustand:`-Zeilen | 91 | 90 | **1** |
+| `auftrag:`-Zeilen | 258 | 257 | 1 |
+
+**A-42-6** verlangt: *„Die Blöcke MIT `zustand:` sind unberührt — Anzahl und Inhalt
+vorher/nachher gleich, **über Hash belegt**."* Für einen dieser Blöcke lässt sich kein Hash
+bilden, weil er von der Paarung nicht erfasst wird. Die Anzahl-Probe zählt 90 statt 91, und
+zwar vorher wie nachher — sie fällt also nicht auf, sondern **stimmt stillschweigend über eine
+zu kleine Menge**.
+
+**Soll, angepasst:** Die siebte Kante aus Punkt 6 bleibt nötig, greift aber bei **A-42-6**
+statt bei A-42-3. Die Gegenprobe ist dieselbe und deckt beide Fälle ab: *Zahl der `auftrag:`-
+bzw. `zustand:`-Zeilen im Volltext gegen die in Blöcken erfassten* — Differenz heute je 1.
