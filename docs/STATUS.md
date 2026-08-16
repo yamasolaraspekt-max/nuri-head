@@ -1923,7 +1923,55 @@ die_entscheidung_R1_R2_R3_und_meine_befangenheit: "Der Planner legt Yama drei We
 ballbesitz: yama
 ```
 
-## P2H-09 ZUR HAELFTE GESCHLOSSEN — mein Rollenzweig ist nachgezogen, der Baumwechsel bleibt offen (Release-Pruefer, 15.08.)
+## ✅ P2H-09 GESCHLOSSEN — auf Yamas Freigabe, und zwar auf einem dritten Weg (Release-Pruefer, 16.08.)
+
+```yaml
+yamas_wort: |
+  Auf meine Frage "schlaegst du vor soll geloescht werden" hat Yama geantwortet: "ich folge
+  deine empfehlungen". Damit lag die Freigabe fuer den Weg vor, den ich vorgeschlagen und
+  ausdruecklich NICHT ohne sein Wort gegangen bin.
+
+warum_KEINE_loeschung_die_antwort_war: |
+  Planner und Plan-Pruefer hatten zwei Wege benannt: umziehen, oder den Zweig entfernen. Beide
+  haetten das Falsche weggenommen. Gemessen:
+    ticket-release-pruefung  DETACHED  node_modules ja · vendor ja · .env ja   1,2 GB
+    ticket-rolle-release     Branch    node_modules ja · vendor NEIN · .env NEIN  764 MB
+    Commits auf rolle/release-pruefer, die fork/auto nicht hat:  0
+  Der Zweig traegt NICHTS Eigenes — er ist ein Zeiger, kein Inhalt. Der Ballast war nicht der
+  Zweig, sondern der zweite Baum: ausgerechnet der mit dem Branch war der unvollstaendige.
+
+was_getan_ist, in zwei Schritten und je mit Messung: |
+  VORHER der Nachweis der Verlustfreiheit, weil ohne ihn der zweite Schritt ein Force waere:
+    Branch ist Vorfahr von HEAD    JA
+    Commits NUR auf dem Branch     0
+    beide Baeume uncommittiert     0 und 0
+  1. ticket-rolle-release auf detached gesetzt — der Branch wurde frei, der Baum blieb stehen.
+  2. In ticket-release-pruefung den Branch ausgecheckt. Danach gemessen: Baum auf
+     rolle/release-pruefer @ db397fec, 0 uncommittierte Dateien, node_modules UND vendor UND
+     .env unveraendert vorhanden, HEAD..db397fec = 0 Commits verloren.
+  Auf beide Gegenstellen per FAST-FORWARD gesichert, 4630d658..db397fec, kein Force.
+  Gates danach gegengeprueft, nicht vorausgesetzt: tsc Exit 0, Suite 1763/1763.
+
+der_eigentliche_gewinn_ist_nicht_der_platz: |
+  Der Rollenzweig wandert ab jetzt mit JEDEM meiner Commits mit. Das manuelle Nachziehen, das
+  ich heute vergessen hatte und das Planner und Plan-Pruefer als "totes Gleis" melden mussten,
+  entfaellt strukturell. Die Zweiglage sagt es unmittelbar: rolle/release-pruefer stand
+  111 Commits zurueck und steht jetzt bei 28 voraus / 0 zurueck — vom Schlusslicht zum
+  aktuellsten Zweig, ohne dass jemand daran denken muss.
+
+was_NICHT_getan_ist: |
+  Die 764 MB node_modules in ticket-rolle-release stehen unberuehrt. Der Baum selbst ist nicht
+  entfernt, nur vom Branch geloest. Beides waere eine Loeschung und braucht ein eigenes Wort —
+  Yamas Freigabe galt dem Weg, den ich beschrieben habe, und der kam ohne aus.
+
+meine_befangenheit, unveraendert offengelegt: |
+  Es ging um meinen eigenen Arbeitsplatz, und der gewaehlte Weg war der bequemste fuer mich.
+  Was ihn traegt, ist die Null: der Zweig enthielt nichts, was verloren gehen konnte.
+
+ballbesitz: —  # P2H-09 erledigt
+```
+
+## (überholt) P2H-09 ZUR HAELFTE GESCHLOSSEN — mein Rollenzweig ist nachgezogen, der Baumwechsel bleibt offen (Release-Pruefer, 15.08.)
 
 ```yaml
 der_posten: "P2H-09 der Umstellungs-Checkliste: 'Der Release-Pruefer arbeitet an einem detached
