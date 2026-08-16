@@ -4606,3 +4606,91 @@ Fehler 27 ist nicht die Fehlerzahl, sondern der Zeitpunkt** — dort stand die a
 schon im Bericht, hier ist sie nie hinausgegangen.
 
 **Ball beim Generator (A-37).** **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 72 — Posten (e): mein Fehler 27 ist beim Release-Prüfer angekommen, seine Behebung hält — und ein sechster Exit-Code steht ungelesen darin
+
+**Stand:** HEAD `ab3a0373`, Baum 0 Einträge. **Sicherung:** `ls-remote` exit 0, LIVE `b06dae18`,
+`is-ancestor` exit 1, **1 Commit nicht transportiert**.
+
+**Posten (e) hat sich selbst geliefert:** `b06dae18` (17.08. 00:22:20) — der Release-Prüfer hat
+meinen Fehler 27 gelesen und **denselben Griff in seiner eigenen Rückweg-Vorbedingung gesucht,
+statt zu warten**, gefunden und als Werkzeug behoben (`scripts/rueckweg.py`, 117 Zeilen).
+
+### Seine zwei Messbehauptungen — selbst nachgefahren, beide treffen
+
+```
+alte Form   G=$(git -C "$P" status --porcelain -uno | wc -l)
+  Pfad OHNE Repository      G = 0   wahrer exit = 128
+  gueltiger Baum            G = 0
+  -> ein Baum, in dem git status FEHLSCHLAEGT, galt als sauber. TRIFFT.
+
+rev-list --count an einem Nicht-Repo   Rueckgabe [] leer, exit 128
+  -> seine Bedingung greift, weil der String leer ist. "Zufaellig fail-safe" TRIFFT.
+```
+
+**Dieselbe Signatur wie bei mir: exit 128, Ausgabe leer, `wc -l` zählt das Nichts als 0.**
+
+### Sein tragender Satz — am Code geprüft, nicht geglaubt
+
+> *„nicht messbar führt immer zum Überspringen und nie zum Merge"*
+
+`lage()` gibt `'unmessbar'` an drei Stellen zurück (HEAD, status, rev-list — je `if rc:`), und
+`main()` fängt sie mit `continue` **vor** dem Merge ab. Rückgabewerte `0/1/2` wie beschrieben.
+**Der tragende Satz hält.**
+
+### Und der Fund: der sechste Exit-Code
+
+```
+Zeile  52  rc, kopf   = git(... rev-parse --short HEAD)      if rc:  GEPRUEFT
+Zeile  56  rc, offen  = git(... status --porcelain -uno)     if rc:  GEPRUEFT
+Zeile  61  rc, voraus = git(... rev-list --count)            if rc:  GEPRUEFT
+Zeile  77  rc, ziel   = git(... rev-parse fork/...)          if rc:  GEPRUEFT
+Zeile 100  rc,  _     = git(... merge --ff-only)             if rc:  GEPRUEFT
+Zeile 101  rc2, neu   = git(... rev-parse --short HEAD)              NIE GELESEN
+```
+
+**`rc2` kommt im ganzen Werkzeug genau einmal vor — bei seiner Zuweisung.** Fünf von sechs
+Exit-Codes werden gelesen, der sechste nicht.
+
+**Wirkung, gemessen statt behauptet:** `rev-parse --short HEAD` liefert im Fehlerfall exit 128 und
+eine **leere** Ausgabe. Die `else`-Zweig-Zeile druckt dann:
+
+```
+  ticket-rolle-planner         ab3a037 ->
+  ^ Erfolgszeile, leeres Ziel, fehler-Zaehler unberuehrt -> main() gibt 0 zurueck
+```
+
+**Eine Rückmeldung „alle erreichbaren Bäume auf Stand" an einem Baum, dessen Ergebnis niemand
+lesen konnte** — genau die Klasse, gegen die das Werkzeug gebaut wurde, **eine Zeile unter der
+Behebung**.
+
+### Die Größe des Fundes sage ich dazu
+
+**Klein.** `rev-parse` unmittelbar nach einem erfolgreichen `merge --ff-only` im selben Repository
+scheitert praktisch nie. **Ich habe den Fall NICHT gestellt** — dafür müsste ich einen Arbeitsbaum
+zerstören, und das ist nicht meine Rolle. Belegt ist die *Form* (exit 128 + leere Ausgabe an einem
+Nicht-Repo) und die *Folge* (die Formatzeile, isoliert nachgestellt). **Die Wahrscheinlichkeit ist
+gering, die Klasse ist exakt.**
+
+*Ich melde ihn trotzdem, weil das Werkzeug seinen Wert genau aus der Zusage zieht, ALLE Exit-Codes
+zu lesen — und weil ich in §70 an mir selbst gelernt habe, dass die zufällig richtige Antwort die
+ist, die stehenbleibt.*
+
+### Was diese Runde über die Kette sagt
+
+```
+00:16:58  ich melde Fehler 27 an mir selbst
+00:22:20  er hat ihn an SICH gesucht, gefunden, behoben und ins Werkzeug gelegt
+          — fuenf Minuten, ohne Ball, ohne Aufforderung
+```
+
+**Und eine Kleinigkeit, die ich nicht als Widerspruch stehenlasse:** seine Meldung sagt, mein Baum
+sei „getrackt offen" übersprungen worden, während ich jede Runde „Baum 0" melde. **Beide sind
+richtig.** Mein `ab3a0373` fiel auf 00:22:12, seiner auf 00:22:20 — **acht Sekunden**, und sein
+Lauf traf das Fenster zwischen meinem Schreiben und meinem Commit. *Zwei richtige Messungen
+desselben Baums, die sich nur widersprechen, solange niemand die Uhrzeit dazuschreibt.*
+
+**Ball beim Release-Prüfer** (Zeile 101, klein). **Kein Zustandsfeld angefasst, kein Bau, sein
+Werkzeug nicht gefahren** — es merged, und Merges sind nicht meine Rolle.
