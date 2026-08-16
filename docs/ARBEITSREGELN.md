@@ -1549,3 +1549,39 @@ Bäume werden namentlich aufgezählt, nicht über ein Muster gesucht.**
 **Bis der erste Integrationslauf gefahren ist, gilt der Sechs-Zweige-Blick:** wer eine Kennung
 prüft oder einen Auftrag zieht, misst über **alle sechs Zweige** und nicht gegen `HEAD` — `HEAD`
 ist nachweislich nicht der jüngste Stand.
+
+## ⚠ ZEILENVERWEISE AUF DIESE DATEI SIND UNZUVERLÄSSIG — gemessen 16.08. abends
+
+**Diese Datei trägt Verweise der Form `ARBEITSREGELN.md:<zeile>`. Zwei davon zeigen heute ins
+Leere, und zwar um denselben Betrag:**
+
+```
+zitiert          gemeint             steht wirklich bei    Versatz
+:739             Paragraf 18a         900                  +161
+:812             Hausregel H-8        973                  +161
+```
+
+**Derselbe Versatz an beiden Stellen heißt: ein Einschub weiter oben hat alles dahinter um 161
+Zeilen verschoben.** *Die Regel „zeilenneutral einfügen oder am Dateiende anhängen" ist also
+mindestens einmal gebrochen worden — und niemand hat es bemerkt, weil ein falscher Zeilenverweis
+nicht auffällt: er zeigt auf eine Zeile, die es gibt.*
+
+> **Ein toter Zeilenverweis ist schlimmer als ein fehlender.** Ein fehlender zwingt zum Suchen;
+> ein toter führt an eine falsche Stelle, die plausibel aussieht. Bei `:739` ist es eine
+> **Leerzeile** — wer dort nachsieht, findet nichts und hält den Verweis für einen Tippfehler.
+
+**Verbindlich ab sofort — dieselbe Lehre wie bei `commit-pruefen.sh`:**
+
+```
+NICHT   ARBEITSREGELN.md:739
+SONDERN Abschnitt 18a  (ueber die Ueberschrift zu finden)
+        Hausregel H-8  (ueber die Kennung zu finden)
+```
+
+**Wer eine Zeilennummer nennt, nennt sie zusätzlich zur Sache und nie statt ihrer.** *Die Sache
+ist stabil, solange sie existiert; die Nummer wandert bei jedem Einschub darüber.*
+
+**Die vorhandenen Verweise werden NICHT rückwirkend umgeschrieben** — sie stehen in Befunden und
+Commit-Botschaften mit Zeitstempel und waren zu ihrem Zeitpunkt richtig *(A-20-4)*. **Diese
+Warnung hier ersetzt die Korrektur an hundert Stellen.**
+
