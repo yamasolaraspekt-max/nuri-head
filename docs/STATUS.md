@@ -22124,3 +22124,42 @@ BERICHTIGUNG_14_56_MEINE_REGELFRAGE_WAR_KEINE: |
   Der Ball bei Yama entfaellt damit; es gibt nichts zu entscheiden.
 ballbesitz: "—"  # BERICHTIGT 16.08. 14:56: die Regel steht in Paragraf 12.3, meine Frage war gegenstandslos
 ```
+
+```yaml
+auftrag: "w17_1_dor_die_zahl_ist_exakt_und_haette_mich_beinahe_erwischt"
+titel: "W-17/1 geprueft — 249 Zeilen in sieben Blaettern, auf die Zeile genau; mein Gegenbefund war ein Messfehler"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:00"
+stand_kopf: 4eeca099
+geprueft_gegen: "rolle/planner 3be497f5 · dor_schnitt_sha 8faca79c"
+posten: "Pflichtteil 3 · neuer ENTWURF in meiner Bahn, ballbesitz plan-pruefer (DoR)"
+was_W_17_1_ist: |
+  Eine ABLESUNG, Stufe B: "Blatt schneiden, Ziel BESCHRIEBEN. KEIN Bau, KEIN Produktivcode."
+  Der Kopf begruendet die Einordnung ausdruecklich als gemessen: "Reifegrad LEER, sieben
+  Blaetter sind reine Vorlagen (249 Z. gesamt), und Produktivcode ist reichlich vorhanden."
+DIE ZAHL IST EXAKT, und der Weg dorthin gehoert dazu: |
+  Erste Messung: ich zaehlte SECHS Blaetter mit 216 Zeilen und sah die Nummerierung springen
+  (1, 2, 3, 4, 6, 7 — die 5 fehlt). Das sah nach einem Fund aus: "sieben behauptet, sechs
+  vorhanden, 33 Zeilen Differenz".
+  Gegenprobe an drei anderen Werkzeugen (W-06, W-07, W-20): dort heisst Blatt 5 nicht
+  5-IRGENDWAS.md, sondern ist ein VERZEICHNIS — 5-CODE. Mein ls-tree auf Verzeichnisebene
+  zeigte es nicht, weil es kein .md ist.
+  Rekursiv gemessen:
+    1-ZWECK 21 · 2-FUNKTION 37 · 3-FORMELN 31 · 4-BEDIENUNG 43
+    5-CODE/LIESMICH 33 · 6-PRUEFUNG 37 · 7-GRENZEN 47
+    Summe 249 — das Blatt nennt 249. AUF DIE ZEILE GENAU.
+  VIERZEHNTE MUSTERFALLE HEUTE, und sie haette einen Fund ERFUNDEN. Die fehlenden 33 Zeilen
+  waren exakt die Datei, die mein Muster nicht sah — der Fund haette sogar plausibel
+  ausgesehen, weil die Differenz zu einem Blatt passte.
+was_ich_daraus_fuer_die_DoR_ziehe: |
+  Der Kopf sagt "GEMESSEN, nicht behauptet". Das trifft zu, und ich habe es an der einzigen
+  Zahl geprueft, die im Kopf steht. Ein Blatt, dessen Einordnung man nachzaehlen kann und
+  das dann stimmt, ist ein gutes Zeichen fuer den Rest.
+  NOCH NICHT GEPRUEFT und so gekennzeichnet: "Reifegrad LEER" und "Produktivcode ist
+  reichlich vorhanden" — beides sind Behauptungen mit Messcharakter, beide stehen im Kopf,
+  beide habe ich noch nicht nachgefahren. Ebenso die Kriterien und Kanten. Naechste Runde.
+  KEIN VOTUM heute. Was ich sagen kann: die tragende Zahl haelt, und die Einordnung als
+  Stufe B (Ablesung statt Bau) passt zu dem, was ich sehe — sieben Vorlagen ohne Inhalt sind
+  kein Bau-Auftrag, sondern ein Beschreibungs-Auftrag.
+ballbesitz: plan-pruefer
+```
