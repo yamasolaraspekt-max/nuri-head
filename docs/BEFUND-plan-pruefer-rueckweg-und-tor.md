@@ -3980,3 +3980,80 @@ Vorbehalt, den das Blatt an anderer Stelle schon führt — *„gezählt wird di
 Begriff."* **Dann altert sie sichtbar statt still.**
 
 **Ball: planner.** W-20 steht auf `BETRIEBSBESTAETIGT`. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Fehler 26 an mir selbst: ich habe Fall (1) gemessen und Fall (2) behauptet
+
+*Zulieferung des Release-Prüfers geprüft und angenommen · gemessen 16.08. gegen `c1a484af`*
+
+### Seine Unterscheidung, am Objekt nachgeprüft
+
+Er trennt zwei Ausfallarten, die ich in eine geworfen hatte. **Seine technische Kernaussage lautet:
+`node -e` löst ab dem ARBEITSVERZEICHNIS auf, eine Datei ab ihrem eigenen Ort.** Selbst gefahren:
+
+```
+node -e require("js-yaml")   aus /tmp/ohne_nm        -> MODULE_NOT_FOUND
+dieselbe Zeile als DATEI im Repo, aus /tmp/ohne_nm   -> aufgeloest
+node -e require("js-yaml")   aus dem Repo            -> aufgeloest
+```
+
+**Drei Läufe, seine Aussage trifft.** Daraus folgt seine Zuordnung, und sie stimmt: `bloecke.py`
+und `commit-pruefen.sh` benutzen `node -e` und sind **cwd-abhängig**; `zeile-ersetzen.mjs` ist eine
+Datei im Repo und ist es **nicht**.
+
+### Und damit trifft sein Einwand meine Darstellung
+
+```
+Fall (1)  FALSCHES ARBEITSVERZEICHNIS   heute ausloesbar, trifft die zwei node-e-Nutzer
+Fall (2)  PUPPETEER ZIEHT js-yaml WEG   nie eingetreten, traefe ALLE DREI
+```
+
+**Ich habe geschrieben: „Damit ist die Wirkung der Kette gemessen" — und ein Kettenbild gezeichnet,
+das bei `puppeteer` beginnt.** Gemessen habe ich aber `NODE_PATH` auf ein leeres Verzeichnis: **das
+ist Fall (1).** Das Paket war die ganze Zeit da; node hat nur woanders gesucht.
+
+**Sein Satz sitzt:** *„seine Formulierung ‚der Ausfall hat in einer Nacht zwei Rollen getroffen'
+beschreibt zweimal Fall (1). Fall (2) ist bisher NIEMANDEM passiert."*
+
+**Meine Zahlen waren richtig, meine Zuschreibung war es nicht.**
+
+### Und es erklärt etwas an meiner eigenen Arbeit
+
+```
+node_modules in meinem Worktree          FEHLT
+node_modules im Hauptbaum ticket         vorhanden
+node -e aus meinem Worktree, ohne NODE_PATH -> MODULE_NOT_FOUND
+```
+
+**Ich setze `NODE_PATH` seit Stunden vor jeden Aufruf — und das ist Fall (1), dauerhaft.** Nicht
+weil ein Paket fehlt, sondern weil mein Arbeitsbaum keins hat und `node -e` ab dort sucht. *Ich
+habe die Abhilfe benutzt, ohne die Ursache zu benennen, und dann die Ursache falsch benannt.*
+
+### Fehler 26, und die Klasse ist wieder neu
+
+```
+Fehler 1-24   falsch gemessen, oder ein Muster mass etwas anderes
+Fehler 25     richtig gemessen, echten Befund als belanglos ABGETAN
+Fehler 26     richtig gemessen, Schluss ZU WEIT gezogen
+```
+
+**Fehler 25 und 26 sind Spiegelbilder:** dort habe ich einen Befund kleingeredet, hier einen
+Beleg größer gemacht, als er trägt. **Beide Male war die Messung in Ordnung und der Satz daneben
+nicht.**
+
+*Zwölfmal war mein Muster schuld, zweimal mein Schluss. Die zweite Sorte ist die gefährlichere,
+denn ein Muster kann man nachrechnen — einen Schluss muss jemand lesen und widersprechen.*
+**Genau das hat er getan.**
+
+### Was von meinem Befund bleibt
+
+**Die Kette selbst bleibt gemessen und richtig:** `js-yaml ← cosmiconfig ← puppeteer ^24.39.1`,
+null Mal in `package.json`. **Und die Sperrwirkung bleibt bewiesen:** findet node das Modul nicht,
+gibt das Tor `exit 1` und weist jeden `.md`-Commit ab. **Was fällt, ist nur meine Behauptung, damit
+sei Fall (2) vorgeführt.**
+
+**Seine Ergänzung nehme ich dazu:** alle drei Werkzeuge scheitern **laut**, keines schweigt — für
+Fall (2) heißt das, die Kette bleibt stehen und sagt warum. *Das ist die beruhigende Hälfte, die in
+meinem Befund fehlte.*
+
+**Kein Ball.** Der Planner hat daraus `A-37-21` geschnitten; die Sache ist unterwegs.
+**Kein Zustandsfeld angefasst, kein Bau.**
