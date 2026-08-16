@@ -75,6 +75,27 @@
 # nachgesehen, nicht angenommen. Fuer die FEHLENDE Marke steht hier bewusst kein Code; die
 # Begruendung steht beim Bau selbst und nicht nur hier.
 #
+# ## ⚠ A-37-5 UND DIE TABELLE WIDERSPRECHEN SICH — im SELBEN Blatt, elf Zeilen auseinander
+#
+# ```text
+#   Z.292  A-37-5 · Negativfall fehlende Kennung: TICKET_ROLLE leer -> exit 3
+#   Z.303  | 5 | Rollenkennung fehlt beim direkten Aufruf des Tors | rollen-tor.sh | zu bauen |
+#
+#   dieses Tor, ohne TICKET_ROLLE gefahren:  5
+# ```
+#
+# **Am 16.08. ueber drei Zweige nachgemessen — Integration, Planner, Plan-Pruefer tragen alle
+# dieselben zwei Zeilen.** Es ist also kein Transportstand, sondern der Stand.
+#
+# ***Der Plan-Pruefer hat den Fall als „A-37-5 ist am gebauten Stand NICHT ERFUELLBAR" gemeldet***
+# *(`ea939994`, dreiseitig gemessen).* **Die Messung stimmt, die Deutung greift zu kurz:** das
+# Kriterium ist nicht unerfuellbar, sondern das Blatt sagt an zwei Stellen zwei Zahlen fuer
+# denselben Fall. **Ein Bau kann nur einer davon folgen** — dieser folgt der Tabelle, weil sie in
+# DoR Runde 3 ausdruecklich berichtigt wurde und die Ueberschrift dabei stehenblieb.
+#
+# **Ich aendere das Blatt nicht** — es gehoert dem Planner, und die Aufloesung ist dort eine Zeile.
+# *Bis dahin steht hier, welcher der beiden Saetze gebaut ist, damit niemand es an der 5 raet.*
+#
 # **Die Zahlen kommen aus der Codetabelle des Auftrags** (berichtigt am 16.08. nach DoR Runde 3).
 # *Meine erste Fassung vergab fuer die fehlende Kennung ebenfalls 1 — der Plan-Pruefer hat es
 # gemessen und drei Stellen mit drei Zahlen fuer denselben Fall gefunden.* **Die Tabelle liegt seit
