@@ -1651,3 +1651,78 @@ A-39 aus meiner Sicht `BEREIT`-fähig.
 
 **Ball: planner.** **Kein Zustandsfeld angefasst** — der Eintrag von `dor_beleg` in
 `docs/STATUS.md` bleibt beim Integrator, ich darf dort nicht schreiben. **Kein Bau.**
+
+## A-40 · DoR-Fund: das Kriterium A-40-2 vergibt eine Nummer, die A-39 bereits belegt — und acht Stellen nennen vier verschiedene Zahlen
+
+*§5-Durchgang an A-40 · gemessen 16.08. gegen `b7dd6579`, Basis `99add90f`*
+
+### Der tragende Fund: A-40-2 ist nicht bloß veraltet, es zeigt auf eine andere Prüfung
+
+```
+- **A-40-2** · **Die siebte Innenprüfung läuft und findet einen echten Fall.**
+```
+
+**A-39 liefert acht Prüfungen, P1 bis P8.** Die „siebte" ist damit **vergeben** — sie heißt dort
+`P7 KRITERIUM OHNE GANGBAREN WEG`. **A-40s neue Prüfung ist die neunte, nicht die siebte.**
+
+**Das ist kein Schönheitsfehler:** wer A-40-2 baut und „die siebte Innenprüfung" sucht, findet eine
+bestehende Prüfung mit völlig anderem Inhalt. Das Kriterium ist nicht unklar — **es ist auf eine
+falsche, existierende Sache gerichtet.**
+
+**Und es fällt durch A-39s eigenes P2**, *„feste Zahl ohne Standbezug"*: `die siebte` bindet eine
+Zahl an den Bestand von A-39s Prüfungen und trägt **keinen SHA, keinen Zeitstempel und nicht das
+Wort Bau-Stand**. Genau der Fall, den P2 melden soll — gefunden mit dem Werkzeug, das A-39 baut.
+
+### Acht Stellen, vier Zahlen
+
+| Stelle | sagt |
+|---|---|
+| A-39 Blattinhalt (P-Definitionen gezählt) | **acht** |
+| A-39 Titelzeile | **acht** |
+| **A-39 DATEINAME** `A-39-die-fuenf-innenpruefungen-des-blattes.md` | **fünf** |
+| A-40 Kopf `art:` (Z.7) | **fünf** |
+| A-40 Abschnitt 3 (Z.72) „neben die sechs aus A-39" | **sechs** |
+| **A-40-2 Kriterium (Z.172)** „die siebte" | **sieben** |
+| `docs/STATUS.md` Tafelzeile Z.90 „Fünf Innenprüfungen" | **fünf** |
+| `docs/STATUS.md` Datensatz Z.22090 | **fünf** |
+
+**A-40 widerspricht sich sogar selbst:** der Kopf sagt fünf, Abschnitt 3 sagt sechs.
+
+### Der Mechanismus, gemessen statt vermutet
+
+```
+a613100e   16.08. 15:19    5 Pruefungen   "# A-39 — Fünf Prüfungen …"
+e802c1f8   16.08. 17:24    7 Pruefungen   "# A-39 — Sieben Prüfungen …"
+b7dd6579   16.08. 22:12    8 Pruefungen   "# A-39 — Acht Prüfungen …"
+
+Dateiname gesetzt 2624062b, 16.08. 14:13 — seither UNVERAENDERT.
+```
+
+**A-39 ist während seiner DoR-Runden gewachsen, und der Titel wurde jedes Mal sauber nachgezogen.**
+Was nicht mitwuchs: der Dateiname und jede Fremdreferenz. **Jede ist bei der Zahl eingefroren, die
+sie beim Schreiben sah.** Das ist kein Nachlässigkeitsfehler, sondern die Bauform: *eine Zahl im
+Namen altert, sobald die Sache wächst.*
+
+### Der Präzedenzfall steht in A-38, und er unterscheidet die beiden Fälle
+
+A-38 hat heute denselben Fall an sich selbst behandelt und die Regel dazu formuliert:
+
+> *„Präzedenzfall A-33: dort hieß ein Blatt „zehn Tafelzeilen", gemessen waren es elf — es wurde
+> **stillgelegt und durch ein Blatt mit richtigem Namen ersetzt**. **Hier genügt die Berichtigung,
+> weil der Dateiname keine Zahl trägt.**"*
+
+**A-39s Dateiname trägt eine Zahl.** Nach dieser Unterscheidung fällt A-39 in die A-33-Klasse, nicht
+in die A-38-Klasse. **Ob umbenannt oder anders geheilt wird, ist eine Planner-Entscheidung** — ich
+messe nur, dass der Unterschied hier greift.
+
+### Soll
+
+1. **A-40-2**: `die siebte` → **`die neunte`**, oder besser ohne Zahl: *„die in Abschnitt 3
+   beschriebene Innenprüfung"*. **Eine Zahl, die auf einen fremden Bestand zeigt, gehört nicht in
+   ein Kriterium** — das ist P2 wörtlich.
+2. **A-40 Kopf und Abschnitt 3** auf denselben Stand bringen (heute fünf gegen sechs).
+3. **A-39 Dateiname und die zwei Stellen in `docs/STATUS.md`** — A-33-Klasse, Planner entscheidet.
+
+**Ball: planner** für 1 und 2, **integrator** für die zwei Stellen in `docs/STATUS.md`.
+**Kein Zustandsfeld angefasst, kein Bau. A-40s DoR ist damit nicht abgeschlossen** — dieser Fund
+steht vor den übrigen §5-Punkten.
