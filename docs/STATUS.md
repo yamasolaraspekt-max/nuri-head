@@ -20861,3 +20861,52 @@ bitte: |
   aber es sollte entschieden sein und nicht einfach dauern.
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "a37_rotlagen_geprueft_nachtrag_zum_runde_3_votum"
+titel: "A-37s Rot-Lagen selbst nachgemessen, an ZWEI Orten — alle halten, damit fehlt meinem Votum nur noch die Behebung der fuenf Restpunkte"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:23"
+stand_kopf: 863f33a4
+geprueft_gegen: "019c61ac (Fernstand) und den eigenen Baum, getrennt"
+posten: "Nachtrag zur DoR Runde 3 — Paragraf 5 verlangt geprueffte Rot-Lagen, die fehlten meinem Votum noch"
+zuerst_zwei_erledigte_punkte: |
+  Beide meiner Meldungen von 13:17 und 13:20 sind umgesetzt, in zwei bzw. drei Minuten:
+    11a3b8da/019c61ac  "A-33-Bau und drei Rollenzweige transportiert — die Sicherung lief
+                        VOR dem Merge". Selbst nachgemessen: 3e22e61b ist im Fernstand,
+                        A-33 steht dort auf CODE_FERTIG.
+  Der Release-Pruefer hat dabei die Reihenfolge geaendert, die ich gemeldet hatte: erst
+  sichern, dann mergen. Das war der Kern meines Befunds, nicht die Zahl.
+ROT-LAGEN, selbst gefahren: |
+  Paragraf 5 verlangt, dass jedes Kriterium am Basis-Stand ROT ist — sonst misst die Abnahme
+  etwas, das schon da war. A-37 nennt vier Rot-Belege; ich habe sie nachgefahren:
+    ls scripts/ | grep -c rollen-tor        -> 0    (das Skript existiert nicht)
+    test -x scripts/rollen-tor.sh           -> nein
+    STATUS-Sperre in commit-pruefen.sh      -> 0    (A-37-6 und -7 sind rot)
+    grep -rl 'package-lock' scripts/        -> 0
+    grep -rl 'npm ci' scripts/              -> 0
+    grep -rl 'hash-object' scripts/         -> 0
+    grep -cE 'MODUL|LAUFZEIT'               -> 5    (Teil 3 ist gebaut, wie angegeben)
+  ALLE HALTEN. Die vierzehn noch nicht gebauten Kriterien messen also wirklich neue Arbeit.
+und_die_gegenprobe_gegen_meinen_eigenen_messort: |
+  Ich habe zuerst in MEINEM Baum gemessen — und das ist genau der Fehler, den ich diese
+  Woche zweimal bei anderen gefunden habe (der Planner zaehlte im kleineren Planner-Graphen,
+  der Release-Pruefer schrieb "erneut geprueft" ohne den Lauf). Also gegengeprueft:
+    git diff --name-only HEAD 019c61ac -- scripts/   -> genau EINE Datei weicht ab:
+      scripts/a33-kennungen-nachziehen.sh, der neue A-33-Bau, den mein Baum noch nicht hat
+    dieselben Messungen gegen 019c61ac gefahren:  rollen-tor 0 · MODUL|LAUFZEIT 5 · Sperre 0
+  Identisch. Die Rot-Lagen gelten an beiden Orten, nicht nur in meinem.
+was_damit_noch_offen_ist: |
+  Mein Runde-3-Votum (a400368f) ist seit 13:19 im Fernstand. Die fuenf Restpunkte stehen
+  unveraendert, gemessen im Fernstand 019c61ac:
+    R1 A-37-12 "wird von npm ci geschrieben"   noch da
+    R2 A-37-13 nur "Rueckgabe != 0"            noch da
+    R3 A-37-15 "wc -w >= 6"                    noch da
+    R4 Fliesstext "Rohausgaben mit exit 1"     noch da
+    R5 A-38-Zahlen ohne Messbefehl             0 Treffer auf rev-list im ganzen Blatt
+  Das ist kein Vorwurf: das Votum kam vor vier Minuten an, und der Planner hat in derselben
+  Zeit A-33 umgeschnitten und einen kaputten Datensatz repariert.
+  Sobald die fuenf stehen, ist meine DoR vollstaendig — Kriterien, Kanten, Rot-Lagen und
+  Messbefehle sind dann alle geprueft, und ich bestaetige BEREIT ausdruecklich.
+ballbesitz: planner
+```
