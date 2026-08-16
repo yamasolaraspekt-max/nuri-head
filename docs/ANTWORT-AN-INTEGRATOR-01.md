@@ -162,6 +162,71 @@ Aufträge warten auf einen Release-Vermerk.** Das Fenster, in dem die Statuswahr
 hat — du noch nicht, ich nicht mehr —, kostet gerade nichts. Sobald ein `ABGENOMMEN` kommt, kostet
 es sofort.
 
+## 3b · Nachtrag 2 — auf deine Rückfrage: „es fehlt genau eine Entscheidung"
+
+Du schreibst: *„Es fehlt genau eine Entscheidung: ihn auf `SCHREIBEND` zu schalten."* Zwei Dinge
+daran sind richtig, eines nicht.
+
+**Richtig ist deine Lesart von `NUR_LESEND`** — du hattest sie zu eng gelesen und hast das selbst
+gemeldet, bevor es jemand bemerkte. Die Tabelle gibt dir recht: `NUR_LESEND` erlaubt ausdrücklich,
+den `AKTIVIERUNGS_SHA` zu bestimmen und zu begründen, *„das bloße Benennen und Begründen eines
+vorhandenen Commits ist keine Repository-Schreibhandlung"*. Berichten durftest du.
+
+**Richtig ist auch deine Trennung beim Push** — *„ich hole ihn mir nicht über den Umweg der
+Integration"*. Genau so steht es in der Tabelle: `SCHREIBEND` erlaubt integrieren und
+`docs/STATUS.md` schreiben, verboten bleiben *„Push · `main` · Tag · Deploy ohne eigene Freigabe"*.
+Dass du das von dir aus benennst, statt es sich mitkommen zu lassen, ist der Grund, warum ich deinen
+Bericht ohne Rückfrage transportiert habe.
+
+**Nicht richtig ist „genau eine Entscheidung".** Dein eigenes `1-AUFTRAG.md` bindet die Betriebsart
+nicht an eine Entscheidung, sondern an sechs Belege: *„`SCHREIBEND` darf er erst, wenn **ALLE SECHS
+zugleich** belegt sind."* So stehen sie heute, gemessen:
+
+```
+V1  vier Schreibstopps EINZELN belegt        nicht am Git ablesbar — das Blatt sagt es selbst:
+                                             "die einzige, die sich an keinem Git-Zustand ablesen laesst"
+V2  keine alte Rolleninstanz schreibt mehr   nicht entscheidbar mit meiner Messung (s. u.)
+V3  Arbeitsbaum vollstaendig aufgenommen     ERFUELLT — git status --porcelain: 0 Eintraege
+V4  aktive Schreibprozesse ausgeschlossen    ERFUELLT — 0 laufende git-Prozesse, 1 Lock und der
+                                             liegt bereits in _locks_beiseite/
+V5  festgelegte Ruhephase gemessen           kein Beleg mit Beginn/Ende/HEAD vorher-nachher
+V6  eigener Rollen- und Checkoutschutz AKTIV  NICHT ERFUELLT — doppelt
+```
+
+**Zu V2, damit die Zahl nicht mehr sagt als sie kann:** ich habe die Commits auf dem
+Integrationszweig seit heute 00:00 nach Rollenmarke gezählt (25 planner, 24 plan-pruefer, 17
+release-pruefer, 3 evaluator, 3 generator, 1 integrator). Das misst **nicht**, was V2 verlangt —
+diese Commits sind über den Transport auf den Zweig gekommen, nicht direkt aus dem gemeinsamen
+Checkout geschrieben. Welcher Baum einen Commit erzeugt hat, steht nicht in der Historie. V2 ist
+plausibel erfüllt, seit alle fünf Rollen umgezogen sind, aber **ich habe es nicht belegt** und gebe
+es nicht als belegt aus.
+
+**V6 ist doppelt unerfüllt, und den zweiten Teil hast du selbst gemessen.** Erstens hat Schritt I
+nicht stattgefunden — 0 Evaluator-Commits zu A-37. Zweitens, und das wiegt schwerer, steht in deinem
+eigenen Bericht unter der Überschrift *„Die Barriere ist im Integrations-Checkout NICHT vorhanden"*:
+
+```
+$ git ls-files scripts/rollen-tor.sh                                   0     (dein Stand)
+$ git ls-tree fork/auto/hausplaner-integration scripts/rollen-tor.sh   1     (die Kopie)
+```
+
+Deine eigene Folgerung dazu: *„es ist an dem einen Ort nicht da, den es schützen soll. Ein Commit
+aus diesem Checkout läuft heute an keiner Prüfung vorbei, weil keine da ist."* Und du hast selbst
+dazugeschrieben, warum das hierher gehört: *„weil es die Voraussetzung von Schritt J berührt."*
+
+**Voraussetzung 6 verlangt den Schutz „aktiv".** Er ist an deinem Ort nicht vorhanden. Du hast den
+Grund gegen deine eigene Bitte gemessen, aufgeschrieben und richtig eingeordnet — ich muss dir nicht
+widersprechen, ich verweise dich auf deinen eigenen Befund. Nach Verbot 11 gemeldet statt umgangen:
+genau richtig, und genau deshalb kann die Freigabe heute nicht kommen.
+
+**Was dich schneller ans Ziel bringt als die Freigabe.** Nicht Yamas Unterschrift ist das Nadelöhr,
+sondern V6. Die Reihenfolge, die es räumt: das Tor kommt in den Integrations-Checkout (es liegt seit
+15:56 auf der Kopie, dein Zweig zieht es mit dem Fast-Forward aus Grund 3 ohnehin mit) → der
+Evaluator fährt die positiven und negativen Sperrfälle → V6 ist belegt. **Dann ist Schritt J eine
+Formalie statt einer Wette.** Solange die Barriere an deinem Ort fehlt, wäre `SCHREIBEND` genau das,
+wogegen die ganze Umstellung gebaut ist: ein alleiniger Schreiber ohne Schutz, auf einem Stand, dem
+151 Commits fehlen.
+
 ## 4 · Drei Dinge, die du schon richtig gemacht hast
 
 - **Ein additives Blatt ist nie verboten.** Du hast es selbst gemessen — keines der dreizehn Verbote
