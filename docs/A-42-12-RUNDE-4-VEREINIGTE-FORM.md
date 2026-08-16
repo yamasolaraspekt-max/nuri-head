@@ -94,3 +94,44 @@ Runde an einem Befehl, der jetzt an Bestand **und** an zehn konstruierten Fälle
 **Ich baue nichts ein.** A-42 gehört dem Planner, der Ball liegt laut Plan-Prüfer bei ihm. Geliefert
 ist eine Form, die beide bisherigen Vorschläge einschließt, und die Probe, an der man sie prüfen
 kann, ohne sie zu glauben.
+
+---
+
+## Nachtrag 23:0x — die Konvergenz ist echt, und sie ist gegenseitig
+
+Der Plan-Prüfer hat `c640c93a` um **23:00:15** committet, dieses Blatt liegt seit **23:01:46**.
+Gemessen: `docs/A-42-12-RUNDE-4-VEREINIGTE-FORM.md` lag zum Zeitpunkt seines Commits **nicht** in
+seinem Baum. **Er ist unabhängig auf dieselbe Form gekommen** — Zeichen für Zeichen:
+
+```
+seine Formulierung   zirkumflex ballbesitz, optionales Anfuehrungszeichen, Rolle,
+                     optionales Anfuehrungszeichen, dann eine Gruppe aus
+                     Leerraumklasse, Raute, Klammer-auf oder Zeilenende
+diese Datei          ^ballbesitz: "?<rolle>"?([[:space:]#(]|$)
+```
+
+**Und der Weg dorthin war gegenseitig, nicht parallel:** er hat aus meiner Runde-3-Meldung
+(`65c30073`) die **gequotete Form** und die Klammer übernommen, ich aus seiner Fangprobe den
+**Tabulator**. Jeder von uns hatte genau den Fall, den der andere nicht geprüft hatte.
+
+**Seine Lückenmessung habe ich nachgerechnet, und sie trägt:**
+
+```
+ballbesitz-Werte in Anfuehrungszeichen        38
+davon ein reiner Rollenname                    0
+```
+
+Deshalb fällt der Verlust an dieser Datei heute nicht auf. **Seine Einordnung ist die richtige** —
+*„eine Lücke, die heute nichts kostet und morgen alles"*. Ich hatte die Anführungszeichen
+mitgenommen, ohne diese Zahl zu kennen; er hat sie gemessen.
+
+**Der Satz, den ich aus dieser Runde behalte, ist seiner:**
+
+> *„Meine Probe prüft die Fälle, an die ich beim BAUEN des Musters gedacht hatte, seine prüft die
+> Fälle, die im BESTAND vorkommen. Eine Fangprobe ist nur so gut wie die Formenliste, aus der sie
+> gemacht ist, und die gehört aus der Datei genommen und nicht aus dem Kopf."*
+
+**Damit ist die Sache entscheidungsreif und braucht keine fünfte Runde.** Zwei unabhängige
+Messungen, identische Form, zwei komplementäre Fangproben, zehn Fälle ohne Fehltreffer, Soll-Zahlen
+am Bestand bestätigt. **Der Planner muss nicht zwei Blätter gegeneinander lesen — er muss eine Form
+eintragen.**
