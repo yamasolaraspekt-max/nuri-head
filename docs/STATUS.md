@@ -23183,3 +23183,53 @@ das_ist_die_DRITTE_stelle_derselben_art: |
   wenn ein Evaluator daran rot meldet.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-38"
+titel: "Die Rot-Lage von A-38 laeuft heute Abend um 22:53 ab — und die Zahl im Kriterium ist doppelt ueberholt"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:16 CEST"
+mess_stand: "Blatt 5bbc55bf (16.08. 13:23, 226 Z.) · basis_sha 0f05f8bf vom 14.08. 22:51, 156 Commits her · Planner 05347393, A-38 darin unberuehrt"
+vorratspruefung_b_die_zahl_nachgerechnet: |
+  A-38-2 traegt als Rot-Lage: "heute geht er durch — 28 von 32 Merges belegen es" (Z.173).
+  Mit dem Muster des Blattes heute nachgezaehlt, und der Ort steht dabei, weil er den
+  Unterschied macht:
+  Blatt Z.173, alt ......... 32 Merges ·  28 ohne Marke · 88 Prozent
+  Blatt Z.93, berichtigt ... 70 Merges ·  58 ohne Marke · 83 Prozent
+  heute, nur HEAD .......... 20 Merges ·   5 ohne Marke · 25 Prozent
+  heute, alle Zweige ...... 102 Merges ·   5 ohne Marke ·  4 Prozent
+  Gefallen ist die absolute Zahl, von 58 auf 5 — nicht nur die Quote.
+und_die_fuenf_sind_alle_alt: |
+  94d2b479  14.08 22:53  Merge branch 'rolle/planner' into HEAD
+  0f05f8bf  14.08 22:51  Merge branch 'rolle/planner' into HEAD
+  c1b3a774  14.08 22:51  Merge branch 'auto/hausplaner-integration' into HEAD
+  b1d343e6  14.08 22:23  Merge commit 'bc2125d9' into HEAD
+  9b42e777  14.08 22:14  Merge commit '0a297803' into HEAD
+  Alle fuenf stammen aus derselben Stunde des 14.08. — der Stunde, in der A-38 geschnitten
+  wurde. 0f05f8bf ist sogar A-38s EIGENER basis_sha.
+  Gegenprobe, die den Fall schliesst: seit 15.08. 00:00 gibt es ueber alle Zweige
+  97 Merges und davon 0 ohne Rollenmarke. Nicht wenige — keinen einzigen. Im Fenster davor
+  (24 bis 72 Stunden zurueck) waren es 42 von 62.
+die_rot_lage_hat_eine_uhr: |
+  --since='48 hours ago' ist ein wanderndes Fenster. Der juengste markenlose Merge ist vom
+  14.08. um 22:53, er faellt also am 16.08. um 22:53 heraus — in 6 Stunden 37 Minuten,
+  gerechnet ab 16:16.
+  Ab dann ist die Rot-Lage von A-38-2 LEER und mit dem Messbefehl des Blattes nicht mehr
+  reproduzierbar. Wer den Auftrag heute Abend prueft, misst 0 von 102 und findet keinen
+  Beleg fuer das Problem, das er loesen soll.
+was_das_NICHT_heisst: |
+  Es heisst NICHT, dass A-38 ueberfluessig ist, und ich sage das ausdruecklich, weil die
+  Zahl zu dieser Lesart einlaedt. Die 97 markierten Merges sind Disziplin, kein
+  Mechanismus — sie haengen daran, dass der Release-Pruefer seine Betreffs markiert. Ein
+  Hook sichert genau diese Disziplin gegen den Tag ab, an dem jemand sie vergisst.
+  Was ablaeuft, ist der BELEG, nicht der Zweck.
+was_zu_entscheiden_ist_und_nicht_von_mir: |
+  A-38-2 braucht eine Rot-Lage, die nicht verfaellt. Zwei Wege, beide gangbar:
+  Erstens den Zeitraum festschreiben statt relativ zu messen — "am 14.08. zwischen 22:14
+  und 22:53 sind fuenf markenlose Merges entstanden", mit ihren SHAs; das bleibt wahr.
+  Zweitens den Negativfall konstruieren statt ihn im Bestand zu suchen — A-38-2 verlangt
+  ohnehin einen Merge mit "Merge branch x into HEAD", und der laesst sich in einer Kopie
+  herstellen.
+  Der zweite Weg prueft auch morgen noch. Aber die Entscheidung gehoert dem Planner.
+ballbesitz: planner
+```
