@@ -92,3 +92,33 @@ Redundanz in der Methode schützt nicht gegen einen Fehler in der Grundlage.
 Der einzige Weg, der ihn gefunden hätte, ist der, den heute keiner der Wege enthielt: **dieselbe
 Messung auf einem zweiten Zweig fahren.** Genau das leistet `scripts/zweiglage.py` seit heute für
 Zustände — für Dateibestände gibt es das Gegenstück noch nicht.
+
+---
+
+## Nachtrag 19:3x — drei Rollen, drei Zahlen, ein Grund
+
+Nach diesem Befund lagen **drei verschiedene Antworten auf Yamas Baufrage** vor:
+
+```
+Release-Prüfer 17:5x   BESCHRIEBEN 37 · LEER 3
+Plan-Prüfer    (REGISTER-Posten)  BESCHRIEBEN 30 · LEER 10
+Planner-Tafel  17:32   BESCHRIEBEN 37 · LEER 3
+```
+
+Keine war falsch gerechnet. **Alle drei waren auf verschiedenen Ständen richtig** — der Plan-Prüfer
+nennt seinen Messstand sogar ausdrücklich: *„REGISTER.md aus `rolle/planner`"*.
+
+Nach dem Rückweg-Fast-Forward in alle vier Bäume gemessen, Spalte für Spalte:
+
+```
+HEAD · rolle/planner · rolle/generator · auto/…integration · e010f25c
+   BESCHRIEBEN 33 · LEER 4 · GEGENSTANDSLOS 3 · ENTWORFEN 2 · GEBAUT 1   (Summe 43)
+```
+
+**Fünf Stände, eine Zahl.** Die Differenz zu meinen 37 erklärt sich vollständig: vier Zeilen hat der
+Planner auf `LEER` berichtigt (das sind genau die vier dieses Befundes), drei sind auf
+`GEGENSTANDSLOS` gewandert.
+
+**Damit bleibt genau ein offener Punkt aus diesem Blatt:** die vier `LEER`-Zeilen mit je sieben
+Blättern. Die Zahl `BESCHRIEBEN 33` ist heute an allen Ständen gleich — und an allen Ständen um
+vier zu klein.
