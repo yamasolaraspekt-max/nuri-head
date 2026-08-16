@@ -5201,3 +5201,67 @@ Hausregel LÄSST sie veralten, jedes Mal, wenn sie befolgt wird".**
 **Ball beim Planner.** *A-23 trifft keine Schuld und der Befund ist ausdrücklich keiner gegen ihn —
 er ist der Beleg, dass die Ursache in der Regel liegt und nicht im Ausführenden.*
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 78 — Posten (e) am Integrator-Stapel: fünf Punkte unverändert offen, und der sechste ist SCHÄRFER geworden — sieben `dor_beleg`-Felder, sieben Mal überholt
+
+**Stand:** HEAD `f688299f`, getrackt 0, `?? scripts/__pycache__/` liegt weiter. **Messstand in
+Variable, Gegenprobe: unbewegt.** **Nicht aus meiner Liste wiederholt — jeder Punkt frisch
+gemessen.**
+
+### Die fünf, die unverändert stehen
+
+```
+(1) Baelle bei plan-pruefer                      39            unveraendert
+(2) zustand: BEFUND                              3    Z.26467 · 26506 · 26591
+(3) A-09 doppelter release_vermerk               2    Z.3267 · 3288
+(4) nicht geschlossene yaml-Bloecke              2    Z.3215 (A-08) · Z.7876 (Vorschlag)
+```
+
+**Bei (4) hätte ich mich fast selbst belogen:** meine erste Zählung war eine **Differenz**
+(Öffner minus Schließer) und ergab **1**. Sequenziell geparst sind es **2** — und es sind genau die
+beiden, die ich damals gemeldet hatte. *Die Differenz stimmt nur, wenn man alle Zaunformen kennt;
+ich hatte `text`-Zäune übersehen. Zwei Zählungen, eine falsch, und die falsche war die bequeme.*
+
+### Der sechste Punkt hat sich verändert — nicht erledigt, sondern präziser
+
+Ich hatte gemeldet: *„`dor_beleg` A-41/W-17/1 leer, A-37/A-38 überholt."* **Leere Felder gibt es
+heute keine mehr** (`grep` auf leeren Wert: 0 Treffer). **Stattdessen sieben Felder mit
+Platzhaltern — und jedes einzelne ist widerlegbar:**
+
+```
+AUFTRAG  ZUSTAND              dor_beleg sagt              im Bestand liegt
+A-37     CODE_FERTIG          "2. Runde 15.08."           Runde 3 Z.21476 · Runde 4 Z.22491
+A-38     ENTWURF              "2. Runde 15.08."           Runde 3 Z.21476
+A-39     ENTWURF              "steht aus"                 Z.21973  a39_dor_runde_1
+A-40     ENTWURF              "steht aus"                 Z.22081  a40_dor_runde_1
+A-42     ENTWURF              "steht aus"                 Z.25910 · 25964 · 26011 ·
+                                                          26063 · 26105 · 27392  (SECHS Bloecke)
+W-17/1   BETRIEBSBESTAETIGT   "steht aus"                 Z.23149  w17_1_dor
+A-41     BETRIEBSBESTAETIGT   "steht aus"                 (kein Block gefunden — ich behaupte keinen)
+```
+
+**Zwei davon sind ein Widerspruch im Datensatz selbst:** `A-41` und `W-17/1` stehen auf
+**`BETRIEBSBESTAETIGT`** — die ganze Kette durchlaufen — und tragen zugleich eine DoR, die
+*„steht aus"*. **Ein Auftrag kann nicht abgenommen und veröffentlicht sein, während seine
+Bereitschaftsprüfung aussteht.**
+
+**Fünf weitere sind nicht widersprüchlich, sondern schlicht alt:** die Arbeit ist getan und liegt
+im selben Dokument, ein paar tausend Zeilen weiter unten — **nur das Feld weiß es nicht.**
+
+### Und das ist dieselbe Krankheit wie §77, nur in einem anderen Träger
+
+```
+§77   die Wahrheit steht in der DATEI          der Zeiger datei.ts:zeile ist alt
+§78   die Wahrheit steht im BEFUNDBLOCK        das Feld dor_beleg ist alt
+```
+
+**Beide Male ist der Bestand richtig und der Verweis darauf veraltet.** *In §77 wächst die Datei
+und schiebt die Zeile weg; hier wächst der Datensatz und lässt das Feld stehen.* **Die Ursache ist
+dieselbe: ein Verweis, der nicht mitwandert, wenn das Ziel sich bewegt — und beide Male merkt es
+niemand, weil der Verweis unverändert AUSSIEHT.**
+
+**Ball beim Integrator** (er führt die Felder; §16 — eine Statuswahrheit).
+**Kein Zustandsfeld angefasst, kein Bau.** *Ich nenne die Fundstellen, damit das Nachziehen eine
+Abschrift ist und keine Suche.*
