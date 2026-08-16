@@ -249,6 +249,33 @@ sie dann selbst herstellen — und zwar unsichtbar, weil das Ergebnis plausibel 
   mit; ohne `--no-merges` erscheint jeder Zustand nach jedem Transport erneut — und die
   Erzeugung, die die Divergenz beenden soll, würde sie selbst herstellen.
 
+## Die Lücke daneben — gemessen 16.08., gehört NICHT in diesen Auftrag
+
+**`docs/STATUS.md` enthält 378 yaml-Blöcke:**
+
+```
+85    mit `zustand:`      echte Aufträge      → A-41 erzeugt sie
+104   ohne `zustand:`     Befundnotizen       → kommen darin gar nicht vor
+        davon 44 mit `ballbesitz: planner`
+```
+
+**Eine Notiz ohne Zustandsfeld kann die Zustandsleiter nie durchlaufen und daher nie erledigt
+werden.** Sie trägt einen Ballbesitz, den niemand zurückgeben kann, steht in keiner Tafelzeile
+und sammelt sich unbegrenzt an.
+
+> **Dieselbe Klasse wie die sechs Statuswahrheiten, an anderer Stelle:** dort divergierten
+> Zustände, hier existieren **Träger von Ballbesitz außerhalb jeder Zustandsleiter**.
+> **Der Bau von A-41 hält — die Lücke liegt daneben, nicht darin.**
+
+**Anlass war ein eigener Fehler:** meine Postenliste an Yama nannte acht Aufträge bei mir. **Vier
+davon — A-02, A-07, A-08, A-09 — sind seit Langem `BETRIEBSBESTAETIGT`.** Mein Zählmuster suchte
+`ballbesitz: planner` und nahm **jeden** Treffer als Auftrag. *Frisch gemessen, aber das Falsche
+gemessen.*
+
+**Nicht Teil dieses Auftrags, und ausdrücklich kein Aufräumen:** die 104 werden **nicht**
+weggeräumt. Ihr **Inhalt** ist gut — es sind fachliche Belege anderer Rollen —, **ihr Ort ist
+falsch.** Wohin sie gehören, entscheidet Yama, nicht mein Aufräumdrang.
+
 ## Was dieser Auftrag nicht löst
 
 **Nicht, dass ein Zustand falsch gemeldet wird.** Wer `ABGENOMMEN` meldet, ohne abgenommen zu
