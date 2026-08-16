@@ -20189,3 +20189,84 @@ was_ich_NICHT_geprueft_habe: |
   nichts zu messen. Ich habe die Darstellung uebernommen und als ungemessen gekennzeichnet.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a37_ist_BEREIT_mit_einem_bauort_der_seit_21_stunden_falsch_ist"
+titel: "Eine zweite Instanz meiner Rolle hat A-37/A-38 BEREIT gesetzt — sorgfaeltig, aber mit Daten von gestern, weil meine zehn Commits nie herauskamen"
+rolle: plan-pruefer
+zeit: "2026-08-16 12:45"
+stand_kopf: 8f5190ae
+dringlichkeit: "HOCH — A-37 ist P0 und BEREIT beim Generator, kann also jederzeit gezogen werden"
+posten: "Pflichtteil 3 der Wache: Ballwechsel pruefen, Stillstand aufloesen"
+zuerst_eine_berichtigung_an_mir: |
+  Ich habe in der Nacht gemeldet, das Haus stehe seit 21 Stunden still. FALSCH — ich hatte
+  den LOKALEN Stand gemessen und daraus auf das Haus geschlossen. Der Fernstand ist heute
+  12:39 auf 4ed51b8f gewandert. Still war nur meine Seite.
+  Das ist genau der Fehler, den ich gestern an anderen gemessen habe (P0-03c: am falschen
+  Ort gezaehlt), und er ist mir bei der Kernmessung meiner eigenen Wache passiert. Die
+  Zweigprobe war in der Nacht in den Timeout gelaufen; ich habe sie als ausgefallen gemeldet
+  und dann trotzdem eine Aussage ueber "das Haus" gemacht. Eine ausgefallene Messung ist
+  kein Ergebnis — auch nicht als Nebensatz.
+was_geschehen_ist: |
+  4ed51b8f, heute 12:39:26, Betreff:
+    "plan-pruefer (release-pruefer in Rollenwechsel): A-37 und A-38 sind BEREIT — 2. DoR-Runde"
+  Eine zweite Instanz hat in MEINER Rolle die DoR erteilt, die mein Ball war. Gemessen im
+  Fernstand:
+    A-37  zustand BEREIT · ballbesitz generator · Tafel BEREIT/Generator
+    A-38  zustand BEREIT · ballbesitz generator · Tafel BEREIT/Generator
+  Seine Arbeit ist SORGFAELTIG: er hat alle Restpunkte einzeln nachgemessen statt der
+  Meldung zu glauben, die §5-Abweichung bei A-37-8/-9 offengelegt und ausdruecklich gesagt,
+  dass es eine Auslegung ist und der Wortlaut strenger ist als sein Votum. Er hat sogar die
+  formstrenge Gegenfassung mitgeliefert. Das ist kein Vorwurf-Fall.
+DER FUND: |
+  Sein A-37-R1 lautet: "gebaut_in auf dem Integrations-Checkout — Grund erneut geprueft,
+  KEIN ROLLENBAUM HAT NODE_MODULES."
+  Heute 12:42 selbst gemessen, Verzeichnis fuer Verzeichnis:
+    ticket                     JA  337 MB   ticket-rolle-plan-pruefer  NEIN
+    ticket-rolle-generator     JA  323 MB   ticket-rolle-evaluator     NEIN
+    ticket-rolle-release       JA  323 MB   ticket-rolle-planner       NEIN
+    ticket-rolle-generator/node_modules/.bin/tsc  vorhanden
+  ZWEI Rollenbaeume haben es, seit gestern 15:30:51 und 15:36:54 — also seit 21 Stunden.
+  Damit geht A-37 als P0 in den Bau mit einer Ortsangabe, deren Begruendung nicht mehr
+  traegt: in den Integrations-Checkout, ausgerechnet in den Baum, dessen Schreibkollision
+  der Auftrag beheben soll.
+DIE URSACHE IST MEINE UNGESICHERTE ARBEIT: |
+  Der Planner hatte das bereits korrigiert. d2ca3611, gestern 15:50:
+    "gebaut_in: ticket-rolle-generator — BERICHTIGT ZURUECK ... der Generator-Baum hat seit
+     15:36:54 node_modules samt typescript, gemessen. Der Plan-Pruefer hat A-37-11 dort
+     gefahren: tsc exit 0, Suite 1763/1763."
+  Dieser Commit liegt seit 21 Stunden in rolle/planner und ist nie herausgekommen. Meine
+  zehn Befund-Commits ebenso in rolle/plan-pruefer.
+  Der Release-Pruefer konnte es nicht besser wissen: er hat den letzten Stand geprueft, den
+  es fuer ihn gab. ZWEI Instanzen haben dieselbe DoR gefahren, auf zwei Datenstaenden, und
+  die aeltere hat gewonnen — weil nur sie transportfaehig war.
+  Das ist der Schaden, den ich gestern 16:03 als Struktur gemeldet habe ("der Rueckstau hat
+  keine Obergrenze, keinen Zustaendigen und keinen Punkt"). Er ist jetzt eingetreten, und
+  er hat einen P0-Auftrag getroffen.
+UND ES IST P-02s GEGENSTAND, EINGETRETEN: |
+  P-02 fragt nach parallelen Instanzen derselben Rolle. Heute lief eine zweite Plan-Pruefer-
+  Instanz und hat meinen Ball entschieden. Nach P-02 Punkt 1 (CLAIM GILT) haette sie es
+  nicht gedurft — der Ball stand auf plan-pruefer, und das bin ich, seit dem Umzug in
+  rolle/plan-pruefer nachweisbar arbeitend.
+  Ich klage das NICHT an: P-02 ist unentschieden, mein Votum dazu liegt seit heute 00:20
+  ebenfalls ungesichert im selben Baum. Die Regel, die den Fall verhindert haette, konnte
+  ihn nicht verhindern, weil auch sie den Transport nicht hatte.
+zwei_kleinere_befunde_am_rande: |
+  (1) BLATT GEGEN DATENSATZ: im Fernstand steht der Auftrag auf BEREIT, das BLATT traegt
+      weiter zustand: ENTWURF und dor_beleg: "steht aus — plan-pruefer". Der DoR-Beleg
+      fehlt dort, wo der Generator ihn zuerst sucht.
+  (2) Sein eigener Hinweis ist richtig und bleibt offen: A-37 Z.199 nennt weiter "exit 1"
+      fuer A-37-5, waehrend das Kriterium exit 3 verlangt. Fliesstext gegen Kriterienliste.
+was_ich_NICHT_tue: |
+  Ich fasse KEINEN Zustand an. BEREIT wurde von einer Instanz meiner Rolle gesetzt, mit
+  offengelegter Begruendung; das zurueckzudrehen waere ein Zweikampf zwischen zwei
+  Instanzen derselben Rolle — genau das, was P-02 verhindern soll.
+  Ich pushe NICHT, obwohl ein Befehl den ganzen Vorgang aufloesen wuerde.
+bitte_an_yama_und_es_eilt: |
+  Der Bau-Ort ist in zwei Minuten korrigiert, wenn d2ca3611 und meine zehn Commits
+  ankommen. Ohne sie baut der Generator am falschen Ort.
+  Eine Zeile genuegt: entweder die umgezogenen Rollen duerfen ihren EIGENEN Zweig sichern
+  (git push origin rolle/<rolle>), oder du sagst dem Release-Pruefer, dass er
+  rolle/planner und rolle/plan-pruefer einsammelt, bevor der Generator zieht.
+ballbesitz: yama
+```
