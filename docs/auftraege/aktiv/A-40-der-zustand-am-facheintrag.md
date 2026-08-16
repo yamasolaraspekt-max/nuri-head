@@ -109,6 +109,29 @@ Drittel des Kastens, einer in einer einmal genutzten Formel trifft eines.
 **Die Zahlen stehen hier als Messung mit Datum, NICHT in einem Kriterium** — A-40 trägt
 bewusst keine Zahl, und die Menge wächst mit jeder Registerzeile.
 
+### Die S-Seite ist etwa gleich groß — und meine erste Messung hätte das Gegenteil behauptet
+
+```
+S-Nummern definiert        32        alle 32 ohne Ampel
+mit `nachgerechnet_an`      2
+im Werkzeug-Register        0   <-- meine erste Messung
+tatsaechlich benutzt       18   <-- P8-Gegenprobe ueber den ganzen Bestand
+
+Reichweite   S-008 8x · S-078 7x · S-060 7x · S-040 7x · S-001 4x
+```
+
+**Hätte ich die erste Zahl gemeldet, wäre die Folgerung gewesen: *„die S-Seite ist nicht
+dringend, kein Werkzeug benutzt sie."* Das ist falsch.** Die S-Nummern gehören zum Solar-/
+PV-Bereich, nicht zum Hausplaner-Kasten — **das Werkzeug-Register ist für sie der falsche
+Suchraum, und er sah plausibel aus, weil er für die F-Nummern der richtige war.** *(P8, fünftes
+Mal heute an einer eigenen Messung.)*
+
+> **⚠ EINE ZAHL, DIE NICHT TRÄGT, und ich nenne sie nur, um vor ihr zu warnen:** dieselbe
+> Zählung über die F-Seite ergibt `F-004` **215×**, `F-032` 155×, `F-001` 146×. **Das ist
+> Erwähnungshäufigkeit, keine Reichweite** — `F-004` war heute den ganzen Tag Gegenstand von
+> Befunden und Berichten. **Wer damit priorisiert, priorisiert nach Gesprächsstoff.**
+> **Belastbar bleibt die Registermessung: `F-001` 12 Werkzeuge, `F-004` 7.**
+
 ## Nicht-Ziele
 
 - **Keine Inventur.** Es werden **nicht** alle Einträge nachgerechnet. **Auslösung ist die
