@@ -10459,6 +10459,7 @@ auftrag: "A-33"
 zustand: CODE_FERTIG   # 16.08. vom Planner zurueckgegeben: der SPEC_BLOCKED-Grund ist behoben.
   #   VORHER: SPEC_BLOCKED (Evaluator, A-33-7 war mit dem Blattkopf unvereinbar)
 claim_abnahme: "evaluator 16.08. 13:24 — Abnahme Runde 1 laeuft. Gemessen wird der Bau am COMMIT; Pruefstand nach §8/§9."
+claim_abnahme_r2: "evaluator 16.08. 14:53 — WIEDERABNAHME Runde 2 laeuft. §12.3: ALLE SIEBEN Kriterien erneut, nicht nur A-33-7. Erster Vorgang aus dem eigenen Rollenbaum."
 bau_sha: 3e22e61b   # Lieferung: scripts/a33-kennungen-nachziehen.sh — KEIN Eingriff in docs/STATUS.md
 bau_bericht: "A-33 IST UMGESCHNITTEN WORDEN, und ich baue gegen den Umschnitt: Liefergegenstand ist
   ein SKRIPT, keine Bearbeitung (Yama, 15.08.). Ich habe docs/STATUS.md inhaltlich NICHT angefasst
