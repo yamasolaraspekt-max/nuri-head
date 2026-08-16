@@ -218,6 +218,15 @@ A-33-2 (P1) W-27, W-27/1, W-40 und W-40/1 sind UNBERUEHRT — alle vier
        Tafelzeilen und alle vier Datensaetze. Gegenprobe am Diff: die vier
        Kennungen kommen in den geaenderten Zeilen nicht vor. Ein Zusammenziehen
        waere das LOESCHEN eines Auftrags.
+HINWEIS ZU A-33-3, A-33-5 UND A-33-6 (16.08., nach dem Umschnitt):
+       Alle drei messen "vor und nach dem Bau". Der BAU aendert docs/STATUS.md
+       nicht mehr — er liefert ein Skript. Die drei Kriterien gelten deshalb
+       fuer den LAUF des Skripts, nicht fuer den Bau-Commit:
+         am Bau-Commit    sind sie trivial erfuellt (die Datei ist unberuehrt)
+         am LAUF          gelten sie wie geschrieben und sind dort zu pruefen
+       Wer sie am Bau-Commit misst, misst nichts. Der Evaluator hat genau das
+       gemeldet, und er hat recht.
+
 A-33-3 (P1) KEIN Zustand und KEIN Ballbesitz geaendert. Gegenprobe: fuer jede
        der ELF Zeilen ist das Statusfeld vor und nach dem Bau zeichengleich.
        Rohausgabe je Zeile.
@@ -229,8 +238,27 @@ A-33-5 a26-ball-drift.sh laeuft nach dem Bau ohne neue Meldung. Rohausgabe.
 A-33-6 Nichts geloescht. Der alte Wortlaut steht in der Historie; im Dokument
        wird keine Zeile entfernt, nur die Kennung darin ersetzt. Gegenprobe: die
        Zeilenzahl von docs/STATUS.md ist vorher und nachher gleich.
-A-33-7 Kein Code. Gegenprobe: der Bau-Commit fasst NUR docs/STATUS.md an —
-       scripts/, resources/ und app/ kommen null Mal vor.
+A-33-7 (NEUGEFASST 16.08. — die alte Fassung war mit dem Umschnitt UNVEREINBAR)
+
+       Kein Produktivcode der Insel. Gegenprobe am Bau-Commit:
+         resources/  null Mal
+         app/        null Mal
+         database/   null Mal
+       ERWARTET wird genau EINE Datei unter scripts/ — das Skript IST der
+       Liefergegenstand seit Yamas Umschnitt.
+       docs/STATUS.md wird vom BAU nicht angefasst; sie aendert sich erst,
+       wenn der INTEGRATOR das Skript ausfuehrt.
+
+       WARUM DIE ALTE FASSUNG FIEL, und der Fehler ist meiner:
+       Sie verlangte woertlich "der Bau-Commit fasst NUR docs/STATUS.md an —
+       scripts/ null Mal". Nach Yamas Umschnitt ist der Liefergegenstand ein
+       SKRIPT unter scripts/. Gemessen an 3e22e61b: docs/STATUS.md 0,
+       scripts/ 1, resources/ 0, app/ 0 — der Generator konnte A-33-7 nur
+       erfuellen, indem er Yamas Anweisung bricht.
+       Ich habe beim Umschnitt A-33-1 neugefasst und A-33-7 stehen lassen.
+       Gefunden hat es der Evaluator, nicht ich. EIN UMSCHNITT IST NICHT
+       FERTIG, WENN EIN KRITERIUM NEU IST — er ist fertig, wenn ALLE
+       Kriterien gegen den neuen Liefergegenstand gelesen wurden.
 ```
 
 **Nachweisform: Befehl und Trefferzeilen** (B5), **Messung am COMMIT** (E1),
