@@ -23153,3 +23153,113 @@ was_ich_NICHT_tun_kann: |
   dafuer ist erfuellt.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "BERICHTIGUNG-W-17-1-TAFELZEILE"
+titel: "Ich habe am falschen Objekt gemessen — H-9 an mir selbst"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:15 CEST"
+betrifft_commit: "3a665884"
+was_falsch_war: |
+  In 3a665884 steht als Begruendung: "die Eichung zeigte KEINEN W-Vorgang auf der Tafel —
+  die W-Reihe laeuft ueber REGISTER.md".
+  DAS IST FALSCH GEMESSEN. Ich habe die DATEI docs/auftraege/AUFTRAGSTAFEL.md geprueft.
+  A-30 meint mit "Tafelzeile" aber die TABELLENZEILE INNERHALB von docs/STATUS.md — das
+  Skript sagt es in seinem eigenen Kommentar (Z.31): "docs/STATUS.md:31 | **P-02**
+  parallele Instanzen | VORLAGE | ...". DATEI="docs/STATUS.md" in Zeile 55.
+was_richtig_ist: |
+  Geeicht an A-30s eigenem Beispiel P-02 und dann gemessen:
+    W-Tafelzeilen in STATUS.md gesamt:  37 (W-01 bis W-42)
+    W-17/1 Tafelzeile in STATUS.md:      1
+    W-17/1 Datensatz in STATUS.md:       1
+  W-17/1 ERFUELLT A-20 VOLLSTAENDIG. Es fehlt nichts. Die Gegenprobe W-12/1 steht direkt
+  daneben: "| **W-12/1** Ansicht und Kamera (Ablesung) | BETRIEBSBESTAETIGT | ...".
+  Auch mein Satz "die W-Reihe laeuft ueber REGISTER.md STATT ueber die Tafel" ist falsch:
+  sie laeuft ueber BEIDE — REGISTER.md fuehrt den Reifegrad, STATUS.md die Tafelzeile.
+die_klasse: |
+  H-9, ein Wort zwei Sachen: "Tafel" heisst bei A-30 die Tabelle IN STATUS.md, bei mir die
+  Datei AUFTRAGSTAFEL.md. Beide Lesarten sind im Haus belegt, und ich habe die falsche
+  genommen, ohne sie am Werkzeug zu pruefen.
+  Und es ist DIESELBE Klasse, die ich um 14:15 an A-38 gemeldet habe: ein Messbefehl ohne
+  Ortsangabe. Ich habe den Ort selbst nicht bestimmt, bevor ich die Null gedeutet habe.
+  Die Null war echt — in AUFTRAGSTAFEL.md steht wirklich kein W-Vorgang. Sie bedeutete nur
+  nicht, was ich sie bedeuten liess. Eine Null ist erst dann ein Befund, wenn feststeht,
+  dass das Gesuchte an diesem Ort ueberhaupt stehen wuerde.
+was_das_votum_betrifft: |
+  DAS VOTUM HAELT UNVERAENDERT. Kein einziger Beleg der DoR haengt an dieser Messung:
+  249 Zeilen, PlanUploadTest.php 255 Z./12 Faelle, REGISTER.md Z.69 LEER, W-06 mit 101 Z.
+  gegen W-17s 21 Z., sieben Kriterien, sechs Kanten — alle einzeln und am richtigen Ort
+  gemessen. Falsch war nur der Abschnitt "ein_befund_den_ich_verworfen_habe", und zwar in
+  der BEGRUENDUNG, nicht im Ergebnis: dass kein Verstoss vorliegt, stimmt.
+  Zufaellig richtig zu liegen ist kein Messen. Deshalb steht die Berichtigung hier.
+was_A_30_an_meinem_commit_gemeldet_hat: |
+  A-30 warnte: "W-17/1: neuer DATENSATZ ohne Tafelzeile". Das war korrekt — bezogen auf
+  MEINE STATUS.md im Rollenbaum, wo mein Meldeblock den Schluessel auftrag: "W-17/1"
+  traegt, ohne Tafelzeile daneben.
+  Damit sieht A-30 jeden meiner Befundbloecke wie einen Statusdatensatz. Bei jeder NEUEN
+  Kennung, die ich melde, wird die Warnung feuern, ohne dass etwas fehlt — A-03-Klasse:
+  eine Meldung, die aus dem falschen Grund kommt, wird weggeklickt, und dann auch dort,
+  wo sie recht hat. Das ist ein Befund am Werkzeug, kein Vorwurf: A-30 kann Meldung und
+  Datensatz nicht unterscheiden, weil beide denselben Schluessel tragen.
+  Vorschlag, NICHT von mir zu entscheiden: Meldebloecke einen anderen Kopfschluessel
+  tragen lassen (z.B. befund: statt auftrag:), dann trennt A-30 sauber. Das aendert mein
+  Meldeverfahren und die Erwartung anderer Rollen — gehoert dem Planner, nicht mir.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-37"
+titel: "A-37-5 ist am gebauten Stand NICHT ERFUELLBAR — die Berichtigung von heute hat den Widerspruch verschoben, nicht behoben"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:17 CEST"
+mess_stand: "Blatt aus rolle/planner (Blattaenderung 02504a25, 16.08. 13:53) · Code aus rolle/generator 1e342d53 (16.08. 15:15, 247 Z.) · lokal und fern identisch"
+befund: |
+  Kriterium A-37-5 verlangt einen Rueckgabewert, den das gebaute Tor an keiner Stelle
+  erzeugt. Drei Seiten, jede einzeln gemessen:
+    1. BLATT Z.292 (das Kriterium selbst):
+       "- **A-37-5** · **Negativfall fehlende Kennung:** TICKET_ROLLE leer -> **exit 3**."
+    2. BLATT Z.389 (die Berichtigung von HEUTE):
+       "... != 0, und zwar dem fuer den Fall festgelegten: A-37-3/4/6 -> 1, A-37-5 -> **5**."
+    3. CODE, REAL GEFAHREN (nicht gelesen, ausgefuehrt):
+         TICKET_ROLLE="" bash rollen-tor.sh  -> Rueckgabe 5
+         Ausgabe: "ROLLEN-TOR  TICKET_ROLLE ist nicht gesetzt — ohne Rolle ist keine
+                   Zuordnung pruefbar."
+       Und der Wert 3 kommt im ganzen Skript nicht vor:
+         grep -c 'exit 3' -> 0     (Muster geeicht: grep -c 'exit 5' -> 1)
+  Der Code tut 5. Die Berichtigung sagt 5. Nur das Kriterium sagt 3.
+warum_das_ein_dor_blocker_ist: |
+  Paragraf 5 verbietet unerfuellbare Abnahmekriterien. A-37-5 ist am heutigen Bau nicht
+  erfuellbar: der Evaluator fuehrt den Negativfall aus, misst 5, liest 3, und muss ROT
+  melden — obwohl der Bau richtig ist und genau das tut, was der Rest des Blattes will.
+  Das ist die teuerste Sorte Rot: eine Abnahme, die einen korrekten Bau zurueckweist. Und
+  es ist die A-03-Klasse in ihrer Wurzel — wer einmal erlebt, dass die Abnahmebedingung
+  falsch ist, glaubt der naechsten auch nicht mehr.
+was_ich_dem_planner_anrechne_und_was_nicht: |
+  ANRECHNEN: Er hat heute 13:53 an genau dieser Stelle gearbeitet und die Berichtigung
+  offengelegt statt sie stillschweigend einzupflegen (Z.390: "hier stand pauschal 'exit 1'
+  und widersprach damit A-37-5"). Er hat den Widerspruch GESEHEN.
+  NICHT ANRECHNEN: Er hat ihn an der falschen Seite aufgeloest. Die Stelle, die er anglich
+  (Z.389), war die allgemeine; die Stelle, die den Wert festlegt (Z.292), blieb stehen.
+  Damit ist der Widerspruch nicht weg, sondern gewandert: vorher "1 gegen 3", jetzt
+  "5 gegen 3". Eine Berichtigung, die ihre eigene Gegenstelle nicht mitmisst, verschiebt
+  den Fehler an einen Ort, an dem ihn niemand mehr sucht — die Zeile traegt jetzt sogar
+  einen Berichtigungsvermerk und sieht damit geprueft aus.
+was_zu_tun_ist: |
+  EINE ZAHL in Z.292: "exit 3" -> "exit 5". Nichts weiter. Der Bau ist richtig, die
+  Berichtigung ist richtig, das Kriterium ist die einzige falsche Stelle.
+  Ausdruecklich NICHT der andere Weg: den Code auf 3 umzubauen hiesse, einen fertigen und
+  wirksamen Bau wegen einer Blattzeile anzufassen.
+zweite_richtung_geprueft: |
+  Paragraf 12.3 verlangt die Probe in beide Richtungen. Gegenprobe gefahren:
+  Gaebe es im Skript ein 'exit 3' an anderer Stelle, waere mein Befund falsch — grep
+  ueber das ganze Skript: 0 Treffer, und das Muster ist an 'exit 5' (1 Treffer) geeicht.
+  Der reale Lauf ist zusaetzlich gefahren, nicht nur der Code gelesen: eine Zeile im Code
+  belegt nicht, welcher Zweig sie erreicht.
+noch_nicht_geprueft: |
+  A-37-13 (Modulstand, Blatt Z.335) sagt heute nur "-> Abbruch" ohne Zahl, waehrend Z.389
+  fuer A-37-6 den Wert 1 festlegt. Ob das eine zweite Luecke derselben Art ist, habe ich
+  NICHT gemessen — der Negativfall setzt eine Marke auf einen fremden Hash, und das fasse
+  ich ohne Not nicht an. Naechste Runde, mit einer Kopie.
+  Die uebrigen 15 Kriterien der A-37-DoR sind ebenfalls noch offen.
+ballbesitz: planner
+```
