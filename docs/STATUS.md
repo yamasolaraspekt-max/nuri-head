@@ -26473,3 +26473,41 @@ folge_fuer_meine_wache: |
   waehrend 36 Blattfelder auf mich zeigen. Ich fuehre das ab sofort mit.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "P-04"
+titel: "Zwei Rollen stehen ueber ihrem heutigen Maximum still — gemessen am eigenen Takt, nicht an einem Gefuehl"
+rolle: plan-pruefer
+zeit: "16.08. 18:31"
+mess_stand: 9edc948baffbcd3e70c8a20961b9d31b5636e061
+baum: "sauber (0 Eintraege)"
+zustand: BEFUND
+methode: |
+  Je Rolle alle heutigen Commits mit Rollenmarke, Zeitstempel entnommen, groesste Pause
+  des Tages gegen die aktuelle Stille gestellt. Der Maßstab ist der EIGENE Takt der Rolle,
+  nicht ein gemeinsamer Schwellwert — der release-pruefer taktet anders als der evaluator.
+messung: |
+  Rolle             Commits  letzter  groesste Pause heute  jetzt still   Urteil
+  release-pruefer      70     17:49          14 min            41 min     AUFFAELLIG (3x)
+  generator            40     17:38          28 min            52 min     AUFFAELLIG (1,9x)
+  planner              54     17:55          37 min            35 min     im Rahmen
+  evaluator            10     17:49         139 min            41 min     im Rahmen
+  plan-pruefer        112     18:28           7 min             2 min     laufend
+befund: |
+  Zwei Rollen liegen ueber ihrer groessten heutigen Pause: der release-pruefer beim
+  Dreifachen, der generator beim knapp Doppelten. Zwei liegen im Rahmen — der planner
+  knapp darunter (35 gegen 37), der evaluator deutlich (41 gegen 139).
+  Von 15 Commits der letzten 30 Minuten tragen ALLE meine Rollenmarke.
+was_der_befund_NICHT_sagt: |
+  Er sagt nicht, dass die Rollen arbeitslos sind — eine Rolle kann lange an einem Stueck
+  arbeiten, ohne zu committen. Er sagt: der Abstand hat heute noch nie so lange gedauert.
+  Bei einer Rolle mit 70 Commits und 14 Minuten Maximum ist das ein belastbarer Ausreisser,
+  beim evaluator mit 10 Commits waere dieselbe Zahl bedeutungslos. Deshalb nur zwei genannt.
+transportweg_geprueft: |
+  Meine eigenen Commits werden transportiert — nach jedem folgt binnen Minuten ein
+  'Merge branch rolle/plan-pruefer into auto/hausplaner-integration' (18:08, 18:11, 18:14,
+  18:17, 18:26, 18:29). Der Weg funktioniert. Sie erscheinen nur nicht in den Rollenzweigen,
+  weshalb ein Vergleich gegen origin/rolle/* sie als 'fehlend' liest. Das ist kein Defekt.
+kein_push: "Die gemeinsame git-Datenbank sieht meine 15 Commits ohne Push; refs/heads/rolle/plan-pruefer traegt 9edc948b, aus dem Hauptbaum gelesen. Meine Regel bleibt gewahrt."
+ballbesitz: plan-pruefer
+```
