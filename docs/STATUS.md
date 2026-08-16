@@ -25535,3 +25535,47 @@ was_von_der_a33_pruefung_bleibt: |
   :53/:96/:97) selbst offen. Gepflegt, kein Fund. Nur eben an einem fertigen Auftrag.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "P-06"
+titel: "Die Antwort des Planners auf Yamas Baufrage nachgemessen — sie traegt, bis auf eine Zeile; und meine eigene 30 war nicht falsch, sondern eine Minute alt"
+rolle: plan-pruefer
+zeit: "16.08. 18:46"
+mess_stand: 2bab146d94b761b1b2bab1d70851ffd153890f2f
+geprueft_gegen: "43771e3b (planner, 18:40) — NICHT gegen meinen eigenen Baum, der das Register 92 Zeilen aelter fuehrt"
+baum: "sauber (0 Eintraege)"
+anlass: "Erster fremder Commit seit 17:55; er beantwortet die Frage, deren Messung ich geliefert hatte"
+was_haelt: |
+  BESCHRIEBEN 37 — nachgezaehlt an 43 Werkzeugzeilen, 43 eindeutige Kennungen,
+  Summe 37 + ENTWORFEN 2 + GEGENSTANDSLOS 3 + GEBAUT 1 = 43. Geht auf.
+  Die NEUN ohne F-Nummer mit 5-CODE-Blatt: W-33 W-34 W-35 W-36 W-37 W-38 W-39 W-40 W-42.
+  Zeichengleich mit seiner Liste. Die Einordnung 'Bestandsnachweis, kein Bauauftrag'
+  ist an der Sache belegt.
+was_nicht_haelt: |
+  Er nennt VIER Zeilen mit BESCHRIEBEN ohne 5-CODE-Blatt: W-43 W-26 W-28 W-30.
+  Gemessen sind es FUENF. W-25 (Pfetten und Kehlbalken) traegt BESCHRIEBEN und hat
+  ebenfalls kein 5-CODE-Verzeichnis — geprueft ueber git ls-tree gegen sein eigenes
+  Muster '/W-nn-*/5-CODE/': W-43 0 Dateien, W-26 0, W-28 0, W-30 0, W-25 0, W-17 1.
+  W-25s Registerzeile begruendet ausdruecklich die fehlende F-NUMMER ('Math. 0x —
+  W-25 zaehlt, es rechnet nicht'). Das ist eine Aussage ueber Formeln, nicht ueber
+  das Blatt. Beides faellt hier zusammen und wurde offenbar als erledigt gelesen.
+  FOLGE fuer seine Aufschluesselung: nicht 24 + 9 + 4, sondern 23 + 9 + 5 = 37.
+  Die Antwort auf Yamas Frage aendert sich dadurch NICHT — es bleibt: heute keine.
+meine_eigene_berichtigung: |
+  Ich habe Yama um 17:46 in 35928fa0 gemeldet, der Bauvorrat sei '30 und nicht 37'.
+  Gemessen an den Staenden:
+    vor 1e1afd1b (17:47)  BESCHRIEBEN 30 · LEER 10 · GEGENSTANDSLOS 0
+    nach 1e1afd1b         BESCHRIEBEN 37 · LEER  0 · GEGENSTANDSLOS 3
+  Sieben LEER wurden BESCHRIEBEN, drei GEGENSTANDSLOS: 30+7=37, 10-7-3=0.
+  Meine Zahl war zum Zeitpunkt der Meldung RICHTIG und war eine Minute spaeter
+  ueberholt. Yamas 37 war es also auch — nur fuer einen anderen Stand.
+  Das ist keine Fehlmessung, aber es ist eine Zahl, die Yama heute noch als meine
+  im Kopf hat. Sie gilt seit 17:47 nicht mehr.
+methodisch: |
+  Ich habe zuerst den falschen Stand gelesen (origin/rolle/planner, 421 Zeilen) und
+  daraus 'BESCHRIEBEN 30' und 'die vier tragen LEER' gemessen. Die Probe
+  'enthaelt der gelesene Stand den Commit?' hat es gefangen — merge-base --is-ancestor
+  sagte NEIN, und am Commit-Stand 43771e3b sind es 513 Zeilen und 37 BESCHRIEBEN.
+  Ohne diese Probe haette ich dem Planner zwei Fehler gemeldet, die keine sind.
+ballbesitz: planner
+```
