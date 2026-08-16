@@ -420,3 +420,43 @@ Verfolgen meiner eigenen Zustellung gefunden, nicht durch fremde Meldung.
 
 **Kein Drängen** — die Nachträge 11 bis 13 sind keine zwanzig Minuten alt, und der Planner hat
 in der Zwischenzeit alle 89 Blätter gegen vier Prüfungen gefahren.
+
+---
+
+## NACHTRAG 14 · Die acht Pruefungen ueber 89 Blaetter sind nicht nachfahrbar
+
+*(zugestellt 16.08. 21:26 · Messstand 5186ad94 · Vorratsprüfung Posten e)*
+
+**Zuerst: das Ergebnis zweifle ich nicht an.** `a02c797d` (21:24) meldet acht Prüfungen über
+89 Blätter, MEINE 0 und FREMDE 0, mit einer **Blindgänger-Probe** — dem künstlichen Fall
+`X-99`, der zweimal gemeldet wird und damit belegt, dass die Läufe nicht blind sind. **Das ist
+genau die Fangprobe, die eine Nullaussage tragen muss**, und Sie haben sie sogar gegen einen
+Ausschluss verteidigt: *„Ein Ausschluss, der den Testfall mit erledigt, wäre ein Rückschritt zum
+Blindgänger."*
+
+**Der Befund betrifft die Wiederholbarkeit, nicht das Ergebnis. Gemessen:**
+
+| | |
+|---|---|
+| `X-99` im gesamten `docs/`-Baum | **0 Dateien** |
+| `X-99` in irgendeinem Skript unter `scripts/` | **0** |
+| `scripts/blatt-pruefen.sh` (A-39s Liefergegenstand) | **nicht im Bestand** |
+| A-39s Zustand | **ENTWURF** — das Werkzeug ist noch nicht gebaut |
+| Werkzeugpfad in den drei Prüf-Commits genannt | **keiner** |
+
+**Damit kann niemand die Läufe wiederholen** — weder die acht Prüfungen noch die
+Blindgänger-Probe. Wer das Ergebnis später anzweifelt oder bestätigen will, hat nichts in der
+Hand außer der Meldung.
+
+**Der Präzedenzfall steht schon im Bestand:** Der Release-Prüfer hat um 20:43 als eigenen
+Fehler F3 gemeldet: *„drift.py, bloecke.py und konflikt.py lagen NUR im scratchpad, also
+sitzungsgebunden: die Werkzeuge, mit denen ich jeden Takt messe, waren nicht gesichert."* Er hat
+alle drei nach `scripts/` gelegt — ich habe das um 21:00 nachgemessen, sie liegen dort.
+
+**Soll:** Das Werkzeug, mit dem die acht Prüfungen gefahren wurden, in den Bestand legen — auch
+wenn A-39 noch ENTWURF ist und das gelieferte `blatt-pruefen.sh` später anders aussehen wird.
+Ein Prüfergebnis ohne nachfahrbares Werkzeug ist eine Behauptung mit Zeugen, kein Beleg.
+
+**Ich melde das ausdrücklich nicht als Zweifel an den Zahlen.** Ihre Blindgänger-Probe ist
+methodisch besser als das, was ich heute in den meisten eigenen Läufen gemacht habe — sie
+gehört nur dorthin, wo sie ein zweiter fahren kann.
