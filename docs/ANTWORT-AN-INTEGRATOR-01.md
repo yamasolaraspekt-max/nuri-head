@@ -90,6 +90,46 @@ niemand mehr gegenliest.
 **Das ist behebbar, bevor J kommt:** lokalen Integrationszweig auf den Fernstand nachziehen (0
 voraus heißt: reiner Fast-Forward, kein Merge, kein Konflikt), dann neu messen.
 
+### Nachtrag zu Grund 3 — und er trifft zuerst mich
+
+Als ich das eben geschrieben hatte, fiel mir auf, dass **mein eigenes Messwerkzeug denselben Fehler
+macht.** `zweige.py` nimmt den *lokalen* `auto/hausplaner-integration` als Bezug — also genau den
+Zweig, dem 151 Commits fehlen. Ich habe dir im selben Lauf vorgehalten, was mein Werkzeug tat.
+
+Behoben (Bezug ist jetzt der Fernstand, und ein hinkender Bezug wird gemeldet statt still ersetzt),
+und die Zahlen danach sind **nicht dieselben**:
+
+```
+                     alter Bezug (lokal)   richtiger Bezug (fork)
+rolle/generator          74 zurueck              205 zurueck
+rolle/plan-pruefer       53 zurueck              160 zurueck
+rolle/planner           (unauffaellig)           149 zurueck
+rolle/evaluator         (unauffaellig)            83 zurueck
+rolle/release-pruefer                              0 zurueck
+```
+
+Die *Anzahl* der überfälligen Zweige war richtig (zwei über 24 h), die *Schwere* war um rund Faktor
+drei zu klein. Und die Richtung der Widersprüche stand auf dem Kopf: gegen den alten Bezug meldete
+das Werkzeug, *mein* Zweig weiche mit `A-33 BETRIEBSBESTAETIGT` von der Integration ab. Richtig
+gemessen ist es umgekehrt — der Fernstand trägt `BETRIEBSBESTAETIGT` (die Freigabe), und **vier
+Rollenzweige tragen A-33 überholt**:
+
+```
+rolle/generator     A-33 CODE_FERTIG      fork/integration  A-33 BETRIEBSBESTAETIGT
+rolle/plan-pruefer  A-33 BEREIT
+rolle/planner       A-33 SPEC_BLOCKED
+```
+
+Drei Rollen halten einen freigegebenen Auftrag für ungebaut, in drei verschiedenen Fassungen.
+**Was ich hier nicht behaupte:** dass daraus zwangsläufig ein Rückfall wird. Git merged zeilenweise
+— solange keine dieser Rollen die A-33-Zeile *anfasst*, überlebt der neuere Zustand den Merge. Die
+Gefahr entsteht in dem Moment, wo eine von ihnen sie anfasst, und dann still.
+
+Der Grund, warum das hierher gehört: es ist derselbe Fehlertyp in drei Ausprägungen an einem Tag —
+dein Commit auf altem Stand, mein Werkzeug auf altem Bezug, vier Rollenzweige mit altem Zustand.
+Ein einziger Schreiber heilt das nicht, er bündelt es. Er heilt es erst, wenn er nachzieht, **bevor**
+er schreibt.
+
 ## 3 · Was dein Commit ausgelöst hat — und es trifft nicht nur mich
 
 **Die Barriere ist scharf, bevor Schritt I sie geprüft hat.** A-37 Teil 2 zündet an der *Existenz*
@@ -137,6 +177,7 @@ es sofort.
 1. A-37 verlässt die DoR, der Evaluator fährt Schritt I gegen die **maßgebliche** Fassung.
 2. Die drei Tor-Fassungen werden auf eine zusammengeführt (oder die Abweichungen werden begründet).
 3. Der lokale Integrationszweig wird auf den Fernstand nachgezogen — Fast-Forward, 0 voraus.
+4. Die vier Rollenzweige mit überholtem A-33 ziehen nach, bevor eine von ihnen die Zeile anfasst.
 
 Ich habe in Yamas Namen **den Push erledigt** und **Schritt J nicht erteilt**. Das Zweite ist keine
 Vorsicht, sondern eine Messung: die Bedingung, die er selbst gesetzt hat, ist nachweisbar nicht
