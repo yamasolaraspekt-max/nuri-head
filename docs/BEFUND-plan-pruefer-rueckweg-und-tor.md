@@ -5746,3 +5746,94 @@ ohnehin in `rolle:`, 31 von 31 Mal nachgemessen.**
 dreimal derselbe Träger-Fehler, dreimal an einer anderen Stelle. In §78 zeigte ein Feld auf einen
 Befund, der woanders lag. In §82 lag ein Befund, wo kein Feld ihn benennt. Hier trägt ein Feld
 einen Namen, der zweierlei bedeutet.* **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 84 — Posten (a) an der Prozessquelle: drei Zeiger treffen, zwei nicht — und einer davon steht 30 Zeilen über seiner eigenen Berichtigung
+
+**Stand:** HEAD `e48b056b`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+
+**`docs/ARBEITSREGELN.md` ist nach CLAUDE.md die einzige verbindliche Prozessquelle.** Zehn Zeiger
+aus den aktiven Blättern zeigen hinein, auf sechs verschiedene Zeilen. **Erst gemessen, dann die
+Blätter gelesen.**
+
+```
+1587 Z. (16.08 19:54)  ->  1825 Z. (16.08 21:37)      +238 ueber acht Commits
+```
+
+*Und die Botschaften dieser acht handeln fast alle von Ankern:* „zwei tote Zeilenverweise in der
+Prozessquelle gefunden" · „meine eigene Ankerprüfung fällt auf genau den F…" · **„VIER von elf
+Ankern sind falsch — 36 Prozent"** · „Ankerlage in allen drei Quellen gemessen". **Der Planner hat
+an genau dieser Datei genau dieses Problem gearbeitet.**
+
+### Das Ergebnis, Zeiger für Zeiger
+
+```
+ZEIGER  BLATT        HEUTE                                                    URTEIL
+:145    A-19 (3x)    '**Warum der Ausdruck [A-Z]+-?[0-9]+ und nicht …**'      TRIFFT
+:509    A-27 (2x)    'Vor jeder CODE_FERTIG-Meldung wird JEDE beruehrte …'    TRIFFT
+:693    A-36         liegt unter '## 14. Git, Commits und Veroeffentlichung'
+                     (Ueberschrift Z.690) — A-36 nennt es '§14'              TRIFFT
+:812    A-19 (1x)    zitiert als 'hier stand :812' — historischer Beleg      KEIN FUND
+:103    A-19         siehe unten                                             FUND
+:834    B7           siehe unten                                             FUND
+```
+
+### Fund 1 — die Berichtigung sitzt 30 Zeilen unter dem unberichtigten Zwilling
+
+A-19s **Kriterium** wurde am 16.08. berichtigt, und die Berichtigung hält:
+
+> *„ANKER BERICHTIGT 16.08.: hier stand `ARBEITSREGELN.md:103` — der Zählbefehl steht bei **125**,
+> bei 103 steht Prosa. **Ein KRITERIUM mit falschem Verweis: wer es abnimmt, misst an der falschen
+> Stelle.**"*
+
+```
+:125 heute   "Tafelzeile      grep -cE '^\| \*\*[A-Z]+-?[0-9]+[^|]*\| *\*{0,2}`?IN_ARBEIT' …"   TRIFFT
+:103 heute   "> Regel nie.* **Derselbe Fehlertyp wie A-20s vier Zustandsorte …**"              Prosa
+```
+
+**Aber `A-19:92` — der Textblock in Abschnitt 4 desselben Blattes — trägt weiter `:103`**, mit dem
+Zählbefehl daneben. **Berichtigt wurde das Kriterium, nicht der Fließtext — und der unberichtigte
+Zwilling steht DREISSIG ZEILEN ÜBER seiner eigenen Berichtigungsnotiz.**
+
+*Das ist zeichengenau die Klasse aus §68: A-34 stellte W-06s Kriterium auf den Anker um und ließ
+die Zahl im Erklärtext stehen. Hier dasselbe, in derselben Datei, an einem Blatt, dessen
+Berichtigungsnotiz den Schaden selbst benennt: „wer es abnimmt, misst an der falschen Stelle."*
+
+### Fund 2 — B7s Zeiger trägt den Versatz, den der Planner selbst gemessen hat
+
+```
+B7:215 sagt   'ARBEITSREGELN.md:834 traegt die Reichweiten-Zeile: kein statischer Aufrufer ist …'
+:834 heute    '`RELEASE_FREI → VEROEFFENTLICHT` dokumentieren.'
+die Zeile     liegt heute auf :995
+              834 + 161 = 995
+```
+
+**Und 161 ist keine Zahl von mir.** Der Planner schreibt in `15c49f96` wörtlich — von mir aus dem
+Commit geholt, nicht erinnert:
+
+> *„Beim **Regelwerk** war er einheitlich **161**, also EIN Einschub weiter oben"*
+
+**Er hat den Versatz dieser Datei gemessen und benannt. B7s Zeiger trägt ihn exakt — und war nicht
+im behobenen Satz.** *Ein bekannter, benannter, gleichmäßiger Versatz, und trotzdem steht ein
+Zeiger unbehoben da: nicht weil ihn niemand berechnen konnte, sondern weil niemand die Liste der
+Betroffenen vollständig hatte.*
+
+### Was das zur Regelkollision beiträgt
+
+§77 nannte die Kollision, §79 zeigte die Platzierungslösung, §81 den A/B-Versuch in einer Zeile.
+**Hier kommt der vierte Baustein: die Behebung selbst ist unvollständig, und zwar systematisch.**
+
+```
+A-34 (§68)  Kriterium berichtigt   Erklaertext nicht     -> Zahl lebt weiter
+A-19 (hier) Kriterium berichtigt   Abschnitt 4 nicht     -> Zahl lebt weiter, 30 Zeilen entfernt
+```
+
+**Zweimal dieselbe halbe Behebung, bei zwei verschiedenen Rollen, an zwei verschiedenen Dateien.**
+*Wer einen Anker berichtigt, sucht die Kennung im KRITERIUM — und übersieht, dass dieselbe Zahl im
+erklärenden Text daneben steht. Eine Behebung, die nur das Kriterium trifft, ist so weit von
+fertig entfernt wie die Zahl von ihrem Ziel.*
+
+**Ball beim Planner** (beide Fundstellen benannt: `A-19:92` und `B7:215`; Ziele `:125` und `:995`).
+*Drei von sechs Zeigern treffen, und die eine geprüfte Berichtigung hält — das gehört dazu.*
+**Kein Zustandsfeld angefasst, kein Bau.**
