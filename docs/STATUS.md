@@ -21698,6 +21698,60 @@ VOTUM_ZWISCHENSTAND: |
   aber nicht behoben, bis der Benutzer darauf stiess". Der zweite Weg macht den Anlass
   sogar staerker: nicht die Entdeckung fehlte, sondern der Weg von der Entdeckung zur
   Behebung — und genau den baut A-40.
+NACHGEHOLT_14_29_DIE_KRITERIEN_UND_IHRE_ROT_LAGEN: |
+  A-40 hat neun Kriterien. Zwei Rot-Lagen selbst gemessen, beide bestaetigt:
+    A-40-5  "Jede Definitionsstelle traegt eine Ampel"
+            FORMELSAMMLUNG.md: 27 Formel-Ueberschriften, davon 6 mit Ampel (🔴/🟡/🟢)
+            -> 21 OHNE. Rot bestaetigt, und zwar deutlich.
+    A-40-6  "nachgerechnet_an traegt die Abweichung, nicht nur das Ergebnis"
+            grep 'nachgerechnet_an' in der Formelsammlung: 0 Treffer. Rot bestaetigt.
+  Die Kriterien messen also wirklich neue Arbeit — die Paragraf-5-Voraussetzung haelt.
+EIN ZWEITER RESTPUNKT, der aus dieser Messung folgt: |
+  A-40-5 verlangt eine Ampel an JEDER Definitionsstelle. Das sind heute 21 Formeln ohne.
+  Die ersten davon sind F-001 Abstand zweier Punkte, F-002 Richtungswinkel, F-003
+  Lotfusspunkt, F-004 Schnittpunkt — Grundformeln, bei denen die Ampel offensichtlich
+  scheint. Bei anderen ist sie ein FACHURTEIL.
+  UND GENAU DAS IST DIE FRAGE, DIE A-40 SELBST STELLT: sein Titel lautet "Sachverstand
+  bekommt kein Amt, sondern einen Zustand am Eintrag". Wenn niemand das Amt hat — wer setzt
+  dann die 21 Ampeln, und woraus?
+  Das Blatt nennt drei Zustaende und zwei Pflichtfelder, aber (soweit ich es gelesen habe)
+  nicht, wer den Erstzustand vergibt. Bei einem neuen Eintrag ist das klar: der, der ihn
+  schreibt. Bei 21 vorhandenen ist es offen.
+  ABHILFE, und sie ist klein: ein Satz, dass vorhandene Eintraege ohne Ampel als
+  UNGEPRUEFT gelten, bis jemand sie nachrechnet. Dann ist der Erstzustand mechanisch und
+  niemand muss 21 Fachurteile faellen, bevor der Bau abgenommen werden kann.
+  Sonst haengt A-40-5 an einer Fachentscheidung, die der Auftrag ausdruecklich niemandem
+  zuweist — und das waere dieselbe Klasse wie A-37-12s Marke, die niemand schreibt.
+VOTUM_A_40: |
+  NICHT ERTEILT, zwei Restpunkte:
+    R1  der Anlass nennt F-054 als "von keiner Pruefstation gefunden" — belegt falsch
+        (9aa6653f, plan-pruefer, 15.08. 16:01)
+    R2  A-40-5 verlangt 21 neue Ampeln, ohne zu sagen, wer den Erstzustand vergibt
+  Beides ist mit je einem Satz behoben. Der Gegenstand traegt, die Abhaengigkeit zu A-39 ist
+  richtig gesetzt, und die Rot-Lagen sind sauber.
+  NICHT GEPRUEFT und so gekennzeichnet: die sechs Kanten (A-40-7), A-40-2s "echter Fall"
+  — welcher, steht nicht im Kriterium — und A-40-3s Drei-Fragen-Test, der laut Blatt in
+  ARBEITSREGELN.md steht; den habe ich dort nicht nachgeschlagen.
+NACHGEHOLT_14_32_DIE_REGELGRUNDLAGE_TRAEGT: |
+  A-40 beruft sich auf "ARBEITSREGELN.md, Nachtrag vom 16.08. — die drei Zustaende, die zwei
+  Pflichtfelder und der Drei-Fragen-Test sind ENTSCHIEDEN und stehen dort."
+  Gemessen — und die Messung waere um ein Haar eine Fehlmeldung geworden:
+    in MEINEM Baum:   'Drei-Fragen' 0 · 'GEGENGEPRUEFT' 0 · 'nachgerechnet_an' 0
+    im FERNSTAND:     'Drei-Fragen' 3 · 'GEGENGEPRUEFT' 3
+  Mein Baum haengt drei Commits zurueck, und der Nachtrag ist einer davon. Haette ich nur
+  hier gemessen, haette ich gemeldet "die Regelgrundlage fehlt" — und das waere falsch
+  gewesen. Die Grundlage traegt, A-40-3 ist gedeckt.
+  DAS IST HEUTE DER NEUNTE BEINAHE-FEHLALARM, den die Gegenprobe gefangen hat, und der
+  erste, bei dem der MESSORT die Ursache war — also genau der Fehler, den ich heute zweimal
+  bei anderen gemessen habe (der Planner im kleineren Graphen, der Release-Pruefer mit
+  "erneut geprueft" ohne Lauf).
+DIE LEHRE FUER MEINE EIGENE ARBEIT: |
+  Mein Rollenbaum ist strukturell aelter als der Fernstand, weil ich nur schreibe und der
+  Transport in Schueben laeuft. Fuer Messungen an DOKUMENTEN muss ich deshalb immer gegen
+  refs/remotes/origin/... messen, nicht gegen den eigenen Arbeitsbaum.
+  Ich ziehe meinen Baum NICHT nach: ein Merge erzeugte einen Merge-Commit ohne Rollenmarke,
+  und das ist genau der Gegenstand von A-38. Gegen den Fernstand zu messen kostet nichts und
+  vermeidet beides.
 ballbesitz: planner
 ```
 
