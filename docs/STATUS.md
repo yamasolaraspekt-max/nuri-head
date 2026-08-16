@@ -24049,3 +24049,47 @@ was_zu_tun_waere: |
   Planner.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-38"
+titel: "DoR fortgesetzt — drei Rot-Lagen sauber, A-38-6 ist sogar automatisch erfuellbar; und die Sperrbedingung misst 6 von 15 Baeumen"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:48 CEST"
+mess_stand: "Blatt aus rolle/planner · Worktree-Liste und git config im eigenen Baum gemessen · Planner-Kopf 6d9c6a3c"
+drei_rot_lagen_selbst_gemessen: |
+  A-38-1 ".githooks/commit-msg existiert und ist ausfuehrbar"
+    Ueber drei Zweige geprueft: 0 Dateien unter .githooks/, auch im Dateisystem 0.
+    Die Rot-Lage ist echt, das Kriterium ist heute nicht erfuellt.
+  A-38-5 "core.hooksPath ist gesetzt"
+    Weder im Worktree noch in der gemeinsamen config gesetzt. Rot, wie angegeben.
+  A-38-6 "Der Hook greift in einem ZWEITEN Worktree, ohne dort eingerichtet zu werden"
+    DAS IST DER INTERESSANTE: extensions.worktreeConfig ist NICHT gesetzt — alle Worktrees
+    teilen also EINE config. Wird core.hooksPath dort gesetzt, gilt es in jedem Baum, ohne
+    dass jemand ihn einzeln einrichtet. Das Kriterium ist damit nicht nur erfuellbar,
+    sondern faellt beim Bau von A-38-5 von selbst mit an.
+    Ich schreibe es hin, weil das Umgekehrte teuer waere: haette jemand
+    extensions.worktreeConfig gesetzt, muesste der Hook fuenfzehnmal eingerichtet werden.
+und_dabei_eine_zahl_die_nicht_stimmt: |
+  Ich habe bisher von sechs Baeumen geschrieben, und die Sperrbedingung des Tores zaehlt
+  auch sechs (refs/heads/rolle/* plus auto/hausplaner-integration).
+  GEMESSEN: es sind FUENFZEHN Worktrees.
+  Die sechs gezaehlten: ticket (integration), ticket-release-pruefung, ticket-rolle-
+  evaluator, -generator, -plan-pruefer, -planner.
+  Die neun uebrigen: ticket-main, ticket-a01, ticket-g1b-0, ticket-strang-accounting,
+  -C, -energie, -formulare, ein Agent-Worktree, und ticket-rolle-release im DETACHED HEAD.
+  WAS DAS HEISST UND WAS NICHT: es ist kein akutes Loch. In den neun schreibt heute
+  niemand an der Statuswahrheit, und der Release-Pruefer hat sie um 16:46 als Altbestand
+  mit uncommitteter Arbeit benannt.
+  Aber die Aussage "das Tor liegt in 3 von 6 Zweigen" beschreibt die ZWEIGE, nicht die
+  Baeume, aus denen geschrieben werden kann. Wer die Sperre fuer flaechendeckend haelt,
+  weil sie 6 von 6 erreicht hat, hat neun Baeume nicht gezaehlt.
+  ticket-rolle-release ist dabei die genannte Falle: gleichnamig zur Rolle, aber detached
+  und leer — der Planner hat daran schon einmal falsch gemessen (2 von 6 statt 3 von 6).
+stand_der_A_38_dor: |
+  Geprueft: A-38-1, -5, -6 — alle drei mit echter Rot-Lage, keines unerfuellbar, keines
+  bereits erfuellt. A-38-2 hat seit 16:19 feste SHAs statt der wandernden Quote, von mir
+  um 16:29 verifiziert.
+  Offen: A-38-3, -4, -7, -8, -9.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
