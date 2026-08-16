@@ -140,7 +140,7 @@ Statuswahrheit sagt nicht das Falsche, sie sagt gar nichts.*
 ### Behebung — zwei Kriterien, keine Abschwächung des Umzugs
 
 - **A-42-11** · **DIE BALLBESITZ-ORTUNG ÜBERLEBT DEN UMZUG.**
-  Vor dem Lauf wird je Rolle `grep -c 'ballbesitz: <rolle>' docs/STATUS.md` erhoben, **nach dem
+  Vor dem Lauf wird je Rolle `grep -c 'ballbesitz: <rolle>' docs/STATUS.md` erhoben *(die Datei ist hier der Gegenstand selbst, kein geratener Suchraum)*, **nach dem
   Lauf über BEIDE Dateien zusammen** — und die Summen müssen übereinstimmen. **Weicht eine
   Rolle ab, ist der Lauf nicht abgeschlossen.** *Die Gleichung ist dieselbe wie A-42-2, nur je
   Rolle statt über alle Blöcke.*
@@ -149,7 +149,7 @@ Statuswahrheit sagt nicht das Falsche, sie sagt gar nichts.*
   ```bash
   grep -c 'ballbesitz: <rolle>' docs/STATUS.md docs/BEFUNDNOTIZEN.md
   ```
-  **Und die alten Befehle werden benannt, die dadurch falsch werden** — die Wacheanweisung des
+  *(beide Dateien sind hier der Gegenstand selbst, kein geratener Suchraum.)* **Und die alten Befehle werden benannt, die dadurch falsch werden** — die Wacheanweisung des
   Plan-Prüfers und `scripts/yama-posten.py`. *Ein Werkzeug, das nach dem Umzug still das Falsche
   liefert, ist schlimmer als eines, das abstürzt.*
 
