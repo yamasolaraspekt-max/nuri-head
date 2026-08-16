@@ -23638,3 +23638,64 @@ was_noch_offen_ist: |
   KEIN VOTUM HEUTE. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "P-02"
+titel: "Ein VIERTER Fall, und er betrifft meine eigene Rolle — in meinem Namen wurde eine DoR erteilt, auf einem Zweig den ich nicht sehe"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:45 CEST"
+mess_stand: "Planner-Kopf zum Messzeitpunkt 8e997ef9 · alle Zaehlungen ueber den vollen Bestand, kein Zeitfenster"
+wie_ich_darauf_gekommen_bin: |
+  Beim Belegen von P-02s Vorfaellen stiess ich auf ea7ea816 (15.08. 15:41). Dort meldet der
+  Planner: "ZWOELF Commits tragen eine Vertretung in der Marke, sechs verschiedene Formen"
+  und ausdruecklich "mein Muster ^plan-pruefer trifft die Vertretungsmarke mit".
+  GENAU DIESES MUSTER HABE ICH UM 16:24 BENUTZT. Also selbst geprueft, wie meines die
+  Klammerform liest:
+  "release-pruefer (zweite Instanz): x"                  -> KEIN TREFFER
+  "plan-pruefer (release-pruefer in Rollenwechsel): x"   -> KEIN TREFFER
+  "planner: x"                                           -> planner
+  Meine drei Fundstellen von 16:24 sind davon unberuehrt — alle drei tragen eine einfache
+  planner-Marke. ABER 10 COMMITS WAREN NIE IN MEINER PRUEFMENGE, weil mein Muster die
+  Klammerform gar nicht erfasst. Keine Fehlzaehlung, eine Abdeckungsluecke.
+die_nachgeholte_messung: |
+  Klammerform-Commits im Bestand: 10, in sechs Formen —
+  3x release-pruefer (in Yamas Namen) · 3x plan-pruefer (release-pruefer in Rollenwechsel)
+  1x yama-entscheidung (in Vertretung eingetragen) · 1x release-pruefer (zweite Instanz)
+  1x generator (vom Planner GESICHERT, nicht abgenommen) · 1x evaluator (Zweitinstanz)
+  Neun davon nennen eine Rolle mit existierendem Zweig. EINER liegt nicht darauf:
+  4ed51b8f  16.08. 12:39  "plan-pruefer (release-pruefer in Rollenwechsel):
+            A-37 und A-38 sind BEREIT — 2. DoR-Runde"
+  Ein Elternteil, kein Merge. Liegt auf release-pruefer, planner und Integration.
+  Liegt NICHT auf rolle/plan-pruefer — meinem eigenen Zweig.
+was_daran_zaehlt: |
+  In meinem Namen wurde um 12:39 eine DoR ERTEILT: "A-37 und A-38 sind BEREIT".
+  Beide stehen heute auf ENTWURF, mit dem Ball bei mir, und ich habe heute nachmittag
+  beide DoRs von vorn geprueft — A-37 ab 15:17, A-38 ab 16:12.
+  ICH STELLE NUR FEST, WAS GEMESSEN IST, und rate nicht, warum der Zustand wieder ENTWURF
+  ist. Zwei Dinge sind aber sicher:
+  Erstens habe ich den Commit nicht sehen koennen, solange ich meinen eigenen Zweig lese —
+  er liegt dort nicht.
+  Zweitens waere meine heutige Arbeit an A-37 und A-38 damit teilweise eine Wiederholung.
+  Was von der 2. DoR-Runde galt und was nicht, kann ich aus der Historie allein nicht
+  entscheiden.
+fuer_P_02_ist_das_der_dritte_realfall: |
+  P-02 fragt nach parallelen Instanzen. Belegt sind jetzt drei Vorfaelle, alle gemessen:
+  8a417fe0  14.08. 22:33  zweite Release-Pruefer-Instanz tritt zurueck
+  ea7ea816  15.08. 15:41  Rollenmarke sagt nicht, welche Instanz schrieb — 12 Vertretungen
+  4ed51b8f  16.08. 12:39  Vertretung erteilt eine DoR, Commit fehlt auf dem Zweig der Rolle
+  Der dritte ist der schwerste: die anderen beiden sind Verwechslungsgefahr, dieser ist
+  eine ZUSTANDSAENDERUNG durch eine Vertretung, die im Zweig der vertretenen Rolle nicht
+  ankommt.
+  Punkt 1 des Vorschlags ("CLAIM GILT") haette ihn nicht verhindert — es ging nicht um
+  einen Claim, sondern um einen Rollenwechsel. Punkt 2 ("Entscheidungen bleiben bei EINER
+  Instanz") haette gegriffen, wenn "Instanz" auch die Vertretung einschliesst. Das steht
+  dort nicht.
+  VORSCHLAG, NICHT ENTSCHEIDUNG: Punkt 2 um den Vertretungsfall ergaenzen.
+eine_datumsabweichung_nebenbei: |
+  Der P-02-Datensatz sagt "Am 15.08. ist der Fall EINGETRETEN" und nennt als Beleg
+  8a417fe0. Dieser Commit traegt Autor- UND Commit-Datum 2026-08-14 22:33:31.
+  Ein Tag Abweichung. Klein, aber in einem Bestand, in dem Daten Belege sind, gehoert sie
+  berichtigt — moeglicherweise ist ea7ea816 vom 15.08. gemeint, der zum selben Thema
+  gehoert.
+ballbesitz: plan-pruefer
+```
