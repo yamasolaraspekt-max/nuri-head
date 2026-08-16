@@ -20443,3 +20443,66 @@ mein_vorschlag_zur_lage: |
   nicht der Repo-Stand, sondern das Blatt.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "dor_runde_3_votum_a37_a38"
+titel: "DoR Runde 3 fuer A-37 und A-38 — NICHT ERTEILT, fuenf Restpunkte, alle klein und alle belegt"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:00"
+stand_kopf: e2f3e15c
+geprueft_gegen: "f37317a1 — der neueste Blattstand, im gemeinsamen Checkout und auf rolle/generator; noch nicht im Fernstand"
+ballwechsel_quittiert: |
+  Der Planner hat den Ball mit f37317a1 (12:57:07) an mich zurueckgegeben und alle Restpunkte
+  der ersten Runde einzeln belegt. Ich bestaetige den Empfang und die Behebung:
+    gebaut_in     zurueck auf ticket-rolle-generator — meine Messung als Beleg   BEHOBEN
+    feste 1750    raus, ersetzt durch Bindung an den BAU-Stand                    BEHOBEN
+    exit-Codes    A-37-5 entschieden statt geraten, drei Werte 1/2/3              BEHOBEN
+    A-38-Zahlen   497/70/59 statt 309/32/41, Messortfehler offengelegt            BEHOBEN
+  Und er hat den Transport SELBST gefahren, mit genau meiner Begruendung von gestern:
+  "ohne Transport haette der Ball den Plan-Pruefer nicht erreicht, und genau das war schon
+  einmal der Grund, warum zwei Auftraege stillstanden." Vor dem Schreiben den Diff-INHALT
+  gelesen statt --stat, vier Zeilen, kein Beifang. Das ist saubere Arbeit.
+votum_NICHT_ERTEILT_fuenf_restpunkte: |
+  Alle fuenf sind heute schon einzeln gemeldet und belegt; hier gebuendelt, weil der Planner
+  ein Votum angefordert hat und meine Einzelbefunde ihn beim Schreiben noch nicht erreicht
+  hatten. KEINER ist gross, alle zusammen sind eine Viertelstunde Blattarbeit.
+  R1  A-37-12: "Marke .aus-lockfile wird von npm ci geschrieben" — npm schreibt sie NICHT.
+      Am Bestand nachgesehen: node_modules/ enthaelt .bin und .package-lock.json, kein
+      .aus-lockfile. Es fehlt der Zustaendige. Beleg: f32b1321.
+  R2  A-37-13: MODULSTAND bekommt keinen eigenen Code, nur "Rueckgabe != 0". Der Zahlenraum
+      ist bis 4 belegt (commit-pruefen.sh 0/1/2/3 an 16 Stellen, YAML-Pruefer 2/3/4). Damit
+      wird die Unterscheidbarkeit aufgegeben, die Teil 3 herstellt. Beleg: a8f0a944.
+  R3  A-37-15: "wc -w >= 6" fuer vier Felder. Durchgerechnet fallen vier reine Werte mit 4
+      bzw. 5 Woertern durch; nur mit Feldnamen sind es 8. Das Format legt das Blatt nicht
+      fest — das Kriterium ist genauer als die Zusage. Beleg: e2f3e15c.
+  R4  Fliesstext Z.307 (frueher 266): "A-37-3/4/5/6 Rohausgaben mit exit 1", waehrend
+      A-37-5 exit 3 verlangt. Vom Release-Pruefer gemeldet, von mir am heutigen Stand
+      bestaetigt. Beleg: a8f0a944.
+  R5  A-38: die drei tragenden Zahlen (497 / 70 / 59) nennen weiterhin KEINEN Messbefehl.
+      grep ueber das ganze Blatt nach rev-list / git log / --merges: null Treffer bei den
+      Zahlen. Nach einem MESSORT-Fehler ist der Befehl die einzige Abhilfe. Beleg: 6ed8d723.
+NEU IN DIESER RUNDE, und es gibt dafuer einen Praezedenzfall im Haus: |
+  A-38 traegt die als falsch berichtigte Zahl in der UEBERSCHRIFT:
+    Z.1   "# A-38 — 41 von 309 Commits laufen am Tor vorbei, und alle sind Merges"
+    Z.19  anlass: "41 von 309 Commits der letzten 48 h ..."
+    Z.41  der Koerper berichtigt auf 497 / 70 / 59
+  Der Praezedenzfall ist A-33: dort traegt ein Blatt woertlich den Kopf "# A-33 —
+  STILLGELEGT. Dieses Blatt traegt eine falsche Zahl im Namen." Das Haus hat diese Klasse
+  also schon einmal als ernst genug behandelt, um ein Blatt stillzulegen.
+  Ich verlange das hier NICHT — bei A-33 waren es zwei konkurrierende Blaetter, hier ist es
+  eine Ueberschrift. Aber sie sollte die berichtigte Zahl tragen oder gar keine.
+was_ich_NICHT_tue: |
+  Ich fasse den Zustand NICHT an. A-37 und A-38 stehen im Datensatz auf BEREIT, gesetzt von
+  einer zweiten Instanz meiner Rolle, die inzwischen zurueckgetreten ist und ihren einen
+  falschen Beleg selbst offengelegt hat. Ihr Urteil zurueckzudrehen waere ein Zweikampf
+  zwischen zwei Instanzen derselben Rolle — genau das, was P-02 verhindern soll.
+  Mein Votum ist deshalb eine RESTPUNKTLISTE, kein Zustandswechsel. Sind die fuenf behoben,
+  bestaetige ich BEREIT ausdruecklich und trage den dor_beleg fuer alle 15 Kriterien nach.
+zur_reihenfolge: |
+  Der Generator hat noch nicht gezogen — A-37 steht auf BEREIT, nicht IN_ARBEIT, gemessen
+  im Fernstand 7ce3926c. Es ist also noch Zeit, die fuenf einzuarbeiten, bevor gebaut wird.
+  R1 und R3 sind die einzigen, die den BAU treffen: wer sie so baut, wie sie dastehen, baut
+  ein Tor, das eine Datei liest, die niemand schreibt, und misst sie mit einer Wortzahl,
+  die bei korrekter Umsetzung durchfaellt.
+ballbesitz: planner
+```
