@@ -23751,3 +23751,50 @@ was_das_fuer_die_fuenf_punkte_bedeutet: |
   gewahrt und die Doppelarbeit adressiert.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Die fuenf Restpunkte der Runde 3 abgearbeitet statt neu gesucht — vier behoben, EINER offen, und es ist eine einzige Zahl"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:47 CEST"
+mess_stand: "Blatt aus rolle/planner · Tor und module-nachziehen.sh aus rolle/generator · Planner-Kopf 8e997ef9"
+warum_diese_runde_anders_ist: |
+  Um 16:50 habe ich festgestellt, dass ich einen Befund zwei Stunden nach seiner ersten
+  Meldung noch einmal gefunden habe, weil die Meldung auf einem Zweig lag, den ich nicht
+  lese. Statt weiterzusuchen habe ich diesmal die VORHANDENE Liste genommen — die fuenf
+  Restpunkte aus a400368f (13:01) — und sie einzeln gegen den heutigen Stand gemessen.
+  Das ist Punkt 4 des P-02-Vorschlags in der Fassung, die ich um 16:50 selbst vorgeschlagen
+  habe: zitieren und nachmessen, nicht neu suchen.
+vier_von_fuenf_sind_behoben: |
+  R1  "A-37-12 die Marke schreibt niemand (npm legt nur .package-lock.json an)"
+      BEHOBEN. module-nachziehen.sh traegt die Schreibstelle (printf 'hash %s ...'), und
+      das Blatt hat dafuer ein eigenes Kriterium A-37-16 bekommen. Beides habe ich heute
+      um 16:00 unabhaengig geprueft.
+  R2  "A-37-13 MODULSTAND ohne eigenen Code"
+      BEHOBEN. 'MODULSTAND' kommt im Tor 5 mal vor, der Code existiert.
+  R3  "A-37-15 wc -w mindestens 6 faellt bei vier reinen Werten durch, das Format steht
+      nirgends"
+      BEHOBEN. Das Format steht jetzt woertlich im Blatt (hash <sha> zeit <iso8601>
+      node <version> npm <version>) und die Probe lautet wc -w = 8 statt "mindestens 6".
+      Ich habe sie um 16:00 gefahren: 8, und cut -f2 liefert den Hash.
+  R5  "A-38s drei Zahlen ohne Messbefehl"
+      BEHOBEN. Das Blatt traegt 5 Messbefehle, und die Rot-Lage steht auf festen SHAs.
+der_eine_offene_punkt: |
+  R4  "Fliesstext Z.307 exit 1 gegen A-37-5 exit 3"
+      OFFEN, seit 13:01:54, also seit drei Stunden und 45 Minuten.
+      Z.307 traegt heute den Berichtigungsvermerk "BERICHTIGT am 16.08. nach DoR Runde 3 —
+      es war eine Kollision, kein Formfehler". Der Fliesstext ist also nachgezogen.
+      Z.292 sagt weiterhin exit 3.
+      Das ist derselbe Punkt, den ich um 15:17 unabhaengig gefunden, um 16:03 in der
+      Klassifikation berichtigt und seither zweimal gemeldet habe. Er ist damit dreifach
+      belegt und von zwei Instanzen unabhaengig gefunden.
+was_das_bedeutet: |
+  A-37 ist eine Zahl von BEREIT entfernt. Vier Restpunkte einer vollstaendigen DoR-Runde
+  sind abgearbeitet, der fuenfte ist die Aenderung von "exit 3" zu "exit 5" in Zeile 292.
+  ICH ERTEILE DIE DoR NICHT, und der Grund ist nicht dieser Punkt: ich habe von A-37s
+  siebzehn Kriterien selbst erst A-37-1, -2, -3, -6, -15 und -16 gemessen. Die Runde 3 hat
+  andere geprueft, aber ich habe ihre Ergebnisse nicht nachgemessen, sondern nur ihre
+  Restpunkte. Ein Votum aus fremden Haken waere genau das, was meine Rolle nicht darf.
+  Was ich sagen kann: von den fuenf benannten Huerden steht noch eine, und sie ist klein.
+ballbesitz: planner
+```
