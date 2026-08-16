@@ -453,6 +453,53 @@ def blatt_gefunden(kennung):
 # Namen gerechnet statt nachgeschlagen wird, bricht beim ersten Sonderfall.*
 #
 # Die Instanznummer faellt weg (`plan-pruefer-2` ist `plan-pruefer`), wie im Tor bei K1.
+# ── BEINAHE-MELDUNGEN: gemeint, aber nicht im Wortlaut ──────────────────────────────────────
+#
+# **Der Anlass ist gemessen und kostete eine Runde:** der Abnahme-Commit `e0df30d7` lautet
+# *„evaluator: A-41 ABGENOMMEN — …"*. **Er enthaelt das Wort `zustand:` nicht und ist fuer die
+# Erzeugung damit UNSICHTBAR** — nicht einmal in der Liste „nicht im Wortlaut", denn die sieht nur
+# Commits, die `zustand:` sagen. *Die Tafel meldete A-41 weiter als `CODE_FERTIG`, und der
+# Release-Pruefer musste die Luecke von Hand finden.*
+#
+# ***Eine Meldung, die knapp danebenliegt, ist teurer als eine, die fehlt:*** *ihr Autor glaubt,
+# gemeldet zu haben.*
+#
+# ## Warum die Zeitgrenze und warum sie GEMESSEN wird
+#
+# ```text
+#   Beinahe-Treffer VOR dem Wortlaut:   202   <- die alte, gueltige Form. KEIN Befund.
+#   Beinahe-Treffer NACH dem Wortlaut:    2
+# ```
+#
+# **Ohne Grenze meldete diese Kante 202 Zeilen und waere nach dem ersten Blick abgeschaltet**
+# (A-03). **Die Grenze ist der aelteste Commit, der den Wortlaut trifft** — *aus dem Log erhoben,
+# nicht als Datum eingetragen.* **Ein fester Zeitpunkt im Code altert; eine Messung nicht.**
+#
+# ***Und die Kante meldet, sie sperrt nicht:*** *einer der zwei Treffer ist ein Bericht UEBER eine
+# Zustandsmeldung („A-41s CODE_FERTIG-Meldung geprueft") und keine.* **Bei zwei Zeilen entscheidet
+# der Leser in einer Sekunde; bei zweihundert entscheidet niemand mehr.**
+BEINAHE = re.compile(
+    r"^[a-z-]+(?:-[0-9]+)?:\s+"
+    r"(?P<kennung>[A-Z]+-?[0-9]+[A-Za-z]?(?:/[0-9A-Za-z]+)?)\s+"
+    r"(?P<zustand>ENTWURF|BEREIT|IN_ARBEIT|CODE_FERTIG|ABGENOMMEN|BETRIEBSBESTAETIGT"
+    r"|SPEC_BLOCKED|NACHBESSERN|RELEASE_FREI)\b"
+)
+
+def beinahe_meldungen(ab_ts):
+    if ab_ts is None:
+        return []
+    out = []
+    for zeile in lauf("git", "log", "--all", "--no-merges", "--format=%H%x09%at%x09%s").split("\n"):
+        if not zeile.strip():
+            continue
+        sha, ts, betreff = zeile.split("\t", 2)
+        if WORTLAUT.match(betreff) or int(ts) < ab_ts:
+            continue
+        m = BEINAHE.match(betreff)
+        if m:
+            out.append((sha[:8], int(ts), m.group("kennung"), m.group("zustand"), betreff))
+    return sorted(out, key=lambda e: -e[1])
+
 def zweig_der_rolle(rolle):
     stamm = re.sub(r"-[0-9]+$", "", rolle)
     return "auto/hausplaner-integration" if stamm == "integrator" else f"rolle/{stamm}"
@@ -529,9 +576,18 @@ if MODUS == "tafel":
         for k, e, liegt in fremd:
             print(f"    {k:<10} Rollenmarke '{e['rolle']}' — liegt auf {', '.join(sorted(liegt))}")
 
-    meldungen = len(verworfen) + len(ohne_blatt) + len(fremd)
+    # Die Grenze ist der aelteste Eintrag IM Wortlaut — gemessen, nicht eingetragen.
+    aeltester = min((e["ts"] for e in tafel.values()), default=None)
+    beinahe = beinahe_meldungen(aeltester)
+    if beinahe:
+        print(f"\n  BEINAHE — sieht aus wie eine Zustandsmeldung, trifft den Wortlaut aber nicht: {len(beinahe)}")
+        for sha, ts, k, zu, betreff in beinahe:
+            print(f"    {sha}  {zeit(ts)}  {k:<8} {zu:<20} {betreff[:60]}")
+        print("    (nur Commits ab dem ersten Wortlaut-Eintrag; davor ist es die alte Form)")
+
+    meldungen = len(verworfen) + len(ohne_blatt) + len(fremd) + len(beinahe)
     if meldungen:
-        raus(1, f"nicht im Wortlaut {len(verworfen)} · ohne Auftrag {len(ohne_blatt)} · fremder Zweig {len(fremd)}")
+        raus(1, f"nicht im Wortlaut {len(verworfen)} · ohne Auftrag {len(ohne_blatt)} · fremder Zweig {len(fremd)} · beinahe {len(beinahe)}")
     raus(0, f"{len(tafel)} Kennungen, keine Meldung.")
 
 # ── A-41-1 · STEHT DER WORTLAUT IN DEN ARBEITSREGELN? ───────────────────────────────────────
