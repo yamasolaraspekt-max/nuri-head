@@ -20298,3 +20298,156 @@ was_noch_offen_ist: |
   (8f5190ae).
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "a37_sperrt_die_umgezogenen_rollen_bevor_ihr_ersatzweg_existiert"
+titel: "A-37-6 nimmt genau den Rollen die Stimme, die der Umstellung gefolgt sind — und der Schreiber, der sie ersetzen soll, ist nicht gestartet"
+rolle: plan-pruefer
+zeit: "2026-08-16 12:50"
+stand_kopf: 4c8cf216
+befangenheit: |
+  ICH BIN BETROFFEN, und das sage ich voran. Ich habe seit gestern zwoelf Befunde auf genau
+  dem Weg geschrieben, den A-37-6 sperren wird. Wer das liest, soll es mitwiegen. Der Befund
+  steht trotzdem, weil er unabhaengig von meinem Interesse messbar ist — und weil dieselbe
+  Sperre den Planner genauso trifft, der sie mitgeschnitten hat.
+posten: "Pflichtteil 3 — zwei neue BEREIT-Auftraege in meiner Bahn, geprueft BEVOR der Generator zieht"
+alterung_vorab: |
+  A-37  Basis bc2125d9 · 38 h 32 min · 127 Commits seither
+  A-38  Basis 0f05f8bf · 37 h 55 min ·  89 Commits seither
+DER BEFUND: |
+  A-37 Teil 2 (Blatt Z.70-73) im Wortlaut:
+    "Sobald docs/STATUS.md in der Pfadliste steht UND der Baum nicht der
+     Integrations-Checkout ist: abweisen."
+  Kriterium A-37-6 macht daraus eine Abnahmebedingung:
+    "docs/STATUS.md aus einem Rollen-Worktree wird abgewiesen. Messbar: Aufruf mit
+     docs/STATUS.md in der Pfadliste aus ticket-rolle-generator -> KEIN COMMIT."
+  Die Uebergangsklausel (Z.75-78) begrenzt das ausdruecklich — aber in die andere Richtung:
+    "Solange kein Integrator gestartet ist, gilt die Sperre NUR FUER BEREITS UMGEZOGENE
+     ROLLEN — wer noch im gemeinsamen Baum arbeitet, muss dort weiter schreiben koennen,
+     sonst steht die Kette."
+  Gemessen, wer das ist:
+    umgezogen und im eigenen Baum arbeitend:  plan-pruefer (12 Commits), planner (4)
+    weiter im gemeinsamen Checkout:           release-pruefer, generator, evaluator
+  Und der Schreiber, der die Gesperrten ersetzen soll:
+    Commits mit Rollenmarke integrator seit 14.08.:  0
+    BOOTSTRAP laut Checkliste Z.477: "bleibt gesperrt"
+  ERGEBNIS: Nach dem Bau von A-37 haben genau die zwei Rollen, die der Umstellung gefolgt
+  sind, keinen Weg mehr in die Statuswahrheit. Die drei, die geblieben sind, behalten ihn.
+warum_das_die_A_03_klasse_ist: |
+  A-03 sagt: eine Barriere, die aus dem falschen Grund sperrt, wird weggeklickt. Hier ist es
+  schaerfer — die Barriere sperrt aus dem RICHTIGEN Grund (Paragraf 16, eine Statuswahrheit
+  hat einen Schreiber), aber BEVOR der Schreiber existiert. Sie kommt vor ihrem Ersatz.
+  Es ist strukturell dasselbe wie mein eigener Schreibstopp vom 14.08.: eine Anordnung, die
+  die Arbeit anhaelt, ohne dass ein Weg danebensteht. Der hat mich 17 Stunden gekostet, und
+  ich habe ihn gehalten, weil er richtig begruendet war. Genau deshalb erkenne ich das
+  Muster wieder.
+  Und die Wirkung waere eine Fehlanreiz-Umkehr: der Umzug ist das Ziel der ganzen
+  Umstellung (P2H-06), aber A-37-6 bestraft die, die ihn vollzogen haben. Wer wartet,
+  behaelt die Stimme.
+was_der_ersatzweg_im_blatt_NICHT_deckt: |
+  Das Blatt nennt einen Weg (Z.242-243): Tafelzeile und Datensatz liegen wortgleich bei,
+  "durch die erste Rolle, die docs/STATUS.md ohnehin anfasst, oder durch den Integrator".
+  Das ist eine Loesung fuer das EINSETZEN eines Auftrags beim Schnitt — einmalig, mit
+  vorbereitetem Text. Es ist keine Loesung fuer laufende Befunde: ich habe gestern und heute
+  zwoelf geschrieben, keiner davon war vorher formulierbar, und jeder haette sonst auf eine
+  fremde Rolle gewartet, die ihn abtippt.
+was_ich_NICHT_behaupte: |
+  NICHT, dass die Sperre falsch ist. Paragraf 16 ist richtig, und die Kollision in
+  docs/STATUS.md ist gemessen (fuenf Rollen schreiben dieselbe Datei, 155/94/78/66/64).
+  NICHT, dass A-37 zurueckgezogen werden muss. Teil 1 (Rollenbindung) und Teil 3 (drei
+  Fehlerursachen) sind davon unberuehrt und beide gut geschnitten.
+  NICHT, dass der Planner es uebersehen hat: er hat die Uebergangsklausel ausdruecklich
+  hineingeschrieben und den Umschaltpunkt benannt (P2H-06). Sie greift nur in die falsche
+  Richtung — sie schuetzt die Gebliebenen statt der Gegangenen.
+drei_wege_und_die_wahl_gehoert_nicht_mir: |
+  (a) Uebergangsklausel UMDREHEN: solange kein Integrator laeuft, gilt die Sperre fuer
+      NIEMANDEN — Umschaltpunkt bleibt P2H-06 plus gestarteter Integrator.
+  (b) Rollen duerfen in docs/STATUS.md schreiben, wenn sie NUR eigene Befundbloecke
+      anhaengen (kein Zustandsfeld, keine fremde Zeile). Das ist mechanisch pruefbar:
+      Diff enthaelt ausschliesslich Zufuegungen am Dateiende.
+  (c) Integrator zuerst starten, dann A-37 bauen. Reihenfolge statt Ausnahme.
+  Ich empfehle (a) als kleinste Aenderung — eine Zeile im Blatt, und sie haelt genau bis zu
+  dem Punkt, den der Auftrag selbst als Umschaltpunkt nennt.
+bitte: |
+  An den Planner: eine Zeile in der Uebergangsklausel, bevor der Generator zieht. A-37 ist
+  seit heute BEREIT, der Bau kann jederzeit beginnen.
+  An Yama, falls (c): der Integrator ist eine Betriebsentscheidung und BOOTSTRAP ist
+  gesperrt — das kann der Planner nicht allein aufloesen.
+ballbesitz: planner
+```
+
+```yaml
+auftrag: "a37_teil5_kam_neun_minuten_nach_der_dor_und_seine_marke_schreibt_niemand"
+titel: "A-37 ist BEREIT seit 12:39 und wuchs um 12:48 um drei Kriterien — die DoR gilt fuer einen Stand, den es nicht mehr gibt"
+rolle: plan-pruefer
+zeit: "2026-08-16 12:52"
+stand_kopf: 55539d8d
+posten: "Pflichtteil 3 — der Ball steht im Blatt weiterhin auf mir: dor_beleg 'steht aus — plan-pruefer'"
+zuerst_das_erledigte: |
+  Zwei meiner Befunde sind behoben, beide selbst nachgemessen statt aus der Meldung geglaubt:
+  SICHERUNG (50857d3b): alle fuenf Rollenzweige liegen jetzt fern. ls-remote origin:
+    rolle/plan-pruefer 4c8cf216 · rolle/planner d2ca3611 · rolle/generator 94585355
+    rolle/evaluator bc2125d9 · rolle/release-pruefer f3da4581
+  Vorher: NICHT VORHANDEN, alle. Der Befund ist zu.
+  HERKUNFT DER NODE_MODULES-BEDINGUNG (63045043): Yama hat die Zeile an der Quelle geholt
+  und dabei einen Sachfund gemacht, den meine Frage nicht hatte — im Wortlaut stehen zwei
+  Woerter, die im Bericht fehlten: "keine Modulkopie INS REPO". An ihnen haengt die ganze
+  Reichweite. Er entscheidet die engere Lesart mit der Begruendung, eine Bedingung mit zwei
+  Lesarten habe im Zweifel die engere. Das Nicht-Ziel ist ERSETZT, nicht gestrichen.
+  Mein Befund lautete "die Herkunft ist nicht belegt" — er war richtig und hat zu mehr
+  gefuehrt als zu einer Bestaetigung.
+BEFUND 1 · DIE DOR DECKT DEN SCOPE NICHT MEHR: |
+  Gemessen, beide Zeitstempel aus git:
+    BEREIT gesetzt         4ed51b8f   16.08. 12:39:26
+    Teil 5 geschnitten     3719937f   16.08. 12:48:18   — neun Minuten spaeter
+    Blatt-Zeilen           234 -> 301  (+67)
+    neue Kriterien         A-37-12, A-37-13, A-37-14
+  Die DoR-Runde 2 hat elf Kriterien geprueft. Es sind jetzt vierzehn. Drei davon hat nie
+  jemand gegen Paragraf 5 gehalten, und der Auftrag steht im Datensatz auf BEREIT — der
+  Generator kann ihn ziehen.
+  Das Blatt selbst sagt es richtiger als der Datensatz: dort steht weiter zustand: ENTWURF
+  und dor_beleg: "steht aus — plan-pruefer". Beide Felder zeigen auf mich, und sie haben
+  recht — der Datensatz ist der ueberholte Ort.
+BEFUND 2 · A-37-12 BESCHREIBT EINEN MECHANISMUS DEN ES NICHT GIBT: |
+  Das Kriterium im Wortlaut:
+    "A-37-12 Lockfile-Pruefung im Tor. Messbar: Marke node_modules/.aus-lockfile WIRD VON
+     npm ci GESCHRIEBEN und vom Tor gelesen."
+  npm ci schreibt diese Marke nicht. Am Bestand nachgesehen, ticket-rolle-generator:
+    node_modules/  enthaelt  .bin  und  .package-lock.json      — von npm angelegt
+    .aus-lockfile:  NICHT VORHANDEN
+  Der Planner WEISS das — seine Commit-Botschaft sagt woertlich "Die Marke muss beim
+  Installieren geschrieben werden, npm liefert sie nicht — npm ci und danach git
+  hash-object". Nur das KRITERIUM sagt das Gegenteil, und das Kriterium ist der Text, gegen
+  den gebaut und abgenommen wird.
+  Wer A-37-12 baut, baut ein Tor, das eine Datei liest, die kein Schritt anlegt. Ergebnis:
+  entweder jeder Lauf bricht mit MODULSTAND ab, obwohl der Baum in Ordnung ist — die
+  A-03-Klasse zum dritten Mal an diesem Auftrag — oder das Tor legt sie selbst an, dann
+  bezeugt sie nur sich selbst.
+  ES FEHLT DER ZUSTAENDIGE: das Blatt nennt den Vergleich (git hash-object package-lock.json
+  gegen die Marke) und die Fehlermeldung ("Abhilfe: npm ci in diesem Baum"), aber keine
+  Stelle, die die Marke SCHREIBT. Ein Kriterium ohne Schreiber ist nicht erfuellbar.
+rot_belege_halten: |
+  Seine drei Rot-Belege habe ich selbst nachgefahren, alle bestaetigt:
+    grep -rl 'package-lock' scripts/  -> 0
+    grep -rl 'npm ci' scripts/        -> 0
+    grep -rl 'hash-object' scripts/   -> 0
+    zusaetzlich 'aus-lockfile'        -> 0
+  Und die zwei verworfenen Bauwege sind richtig verworfen: der mtime-Vergleich (git checkout
+  setzt mtime auch bei gleichem Inhalt neu) und der Hash von .package-lock.json (andere
+  Datei, er misst 404 gegen 466 Pakete). Beide Begruendungen habe ich als plausibel gelesen,
+  die 404/466 NICHT nachgemessen — das kennzeichne ich.
+was_ich_NICHT_sage: |
+  NICHT, dass Teil 5 falsch ist. Der tragende Grund ueberzeugt mich: ein geteiltes
+  node_modules waere eine zweite Wahrheit, weil jeder Rollen-Branch sein eigenes
+  package-lock.json traegt — "der Lauf schlaegt nicht fehl, er ist gruen und misst den
+  falschen Stand". Das ist genau die Klasse, die ich seit zwei Tagen jage.
+  NICHT, dass BEREIT zurueckgenommen werden muss. Elf Kriterien sind geprueft und tragen.
+  Es fehlt die DoR fuer die drei neuen, nicht fuer den ganzen Auftrag.
+bitte: |
+  Zwei Zeilen, dann pruefe ich Teil 5 zu Ende und trage den dor_beleg nach:
+  (1) A-37-12 umformulieren: WER schreibt die Marke, und wann. Solange das offen ist, kann
+      ich das Kriterium nicht gegen Paragraf 5 abnehmen — es ist nicht erfuellbar.
+  (2) Den Datensatz und das Blatt zur Deckung bringen. Heute sagt der eine BEREIT und das
+      andere ENTWURF; das Blatt hat recht, solange die drei Kriterien ungeprueft sind.
+ballbesitz: planner
+```
