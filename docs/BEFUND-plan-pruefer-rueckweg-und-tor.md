@@ -2242,3 +2242,65 @@ Handgriff, zwei Felder, eine Quelle** — der Beleg liegt in `dor_runde_3_votum_
 zweitem Weg bestätigt.
 
 **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## Wache-Punkt 2 vollständig: eine Kennungs-Dublette, ein doppelter Schlüssel — und die Zustandskette hält über alle 87 Tafelzeilen
+
+*Alle drei offenen Teilprüfungen gefahren · gemessen 16.08. gegen `aa49949e`*
+
+### 1 · Kennungs-Dubletten: eine, und es ist meine
+
+```
+P-04   ->  2 Bloecke mit zustand-Feld
+```
+
+**Unverändert der einzige Fall.** Beide Blöcke tragen mein erfundenes `zustand: BEFUND` und stehen
+seit 20:41 beim Integrator. **Kein neuer Fund, aber die Bestätigung, dass es der einzige geblieben
+ist** — 443 andere Blöcke sind sauber.
+
+### 2 · Doppelter Schlüssel: einer, und er ist neu
+
+```
+Block A-09, Z.3259-3290
+   release_vermerk:  Z.3267   "release-pruefer (Stamm-Instanz) 10.08.: §10 an der Abnahme af8f2054 …"
+   release_vermerk:  Z.3288   "release-pruefer 10.08.: RELEASE_FREI an af8f2054 …"
+```
+
+**Beide auf Blockebene, beide im selben Block** — geprüft über die Zaungrenzen, nicht über Nähe.
+
+**Die Folge benenne ich aus der Sprachregel, nicht aus einer Vorführung:** YAML verbietet doppelte
+Schlüssel; gängige Leser nehmen den **letzten** und verwerfen den ersten ohne Meldung. **Ich konnte
+das nicht am Objekt zeigen — PyYAML ist in diesem Baum nicht vorhanden.** *Eine ausgefallene
+Vorführung ist kein Beleg, deshalb steht hier die Regel und nicht ein behaupteter Lauf.*
+
+**Der Bestand kennt die Lösung bereits.** Dieselbe Datei führt an vier anderen Stellen
+`release_vermerk_1`, `release_vermerk_2` und `release_vermerk_stamm` — die Konvention existiert,
+A-09 folgt ihr nur nicht.
+
+**Geringe Dringlichkeit, klare Sache:** A-09 steht auf `BETRIEBSBESTAETIGT`, der verdeckte Vermerk
+ist Historie. **Aber A-22 will die Statuswahrheit maschinell lesbar machen** — und ein Block, aus
+dem ein Leser stillschweigend eine Zeile verliert, ist genau das nicht.
+
+### 3 · Zustand Tafelzeile gegen Datensatz: null Abweichungen
+
+```
+Tafelzeilen mit lesbarem Zustand    87
+Datensaetze mit Zustand             89
+ABWEICHEND                           0
+```
+
+**Das ist das sauberste Ergebnis des Abends, und es gehört genannt.** A-30 hat im August gemeldet,
+dass Zustände an zwei Orten auseinanderlaufen; heute laufen sie an keiner einzigen Stelle
+auseinander. **Zusammen mit dem A-06/P-02-Befund von vorhin — beide Lücken geschlossen — ist die
+§16-Doppelführung des Zustands heute intakt.**
+
+*Die Differenz 87 zu 89 ist keine Lücke: zwei Datensätze führen einen Zustand ohne eigene
+Tafelzeile, weil sie über eine Sammelzeile laufen — dieselbe Auflösung, die A-30s „15 → 4 → 2"
+beschreibt.*
+
+### Soll
+
+**Integrator:** in A-09 den ersten `release_vermerk` (Z.3267) in `release_vermerk_stamm` umbenennen
+— **die Konvention steht vier Zeilen weiter unten im selben Dokument.** Kein Inhalt ändert sich,
+kein Zustand wird berührt.
+
+**Kein Zustandsfeld angefasst, kein Bau.**
