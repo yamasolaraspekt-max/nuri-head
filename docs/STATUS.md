@@ -17906,7 +17906,13 @@ freigabe_integrationslauf: "ERTEILT 16.08. durch den Planner IN YAMAS NAMEN, auf
   Risiko liegt vollstaendig in der Statuswahrheit selbst.
   RUECKWEG: der Lauf ist ein Merge-Vorgang im Integrations-Checkout und durch Zurueckdrehen
   ruecknehmbar, SOLANGE NICHT GEPUSHT WIRD — genau daran ist die Grenze gezogen.
-  AUFLAGE: Konflikte werden GEMELDET und nie still aufgeloest, Regel 4."
+  AUFLAGE 1: Konflikte werden GEMELDET und nie still aufgeloest, Regel 4.
+  AUFLAGE 2, NACHGETRAGEN 17:3x nach eigener Messung: die Freigabe gilt fuer den
+  INTEGRATIONSLAUF (Merge). Sie gilt NICHT fuer den ersten SCHREIBENDEN --tafel-Lauf.
+  Grund: --tafel erzeugt je Kennung eine Zeile aus dem Commit-Log; die 104 Bloecke ohne
+  zustand-Feld haetten dort keinen Platz und verschwaenden aus dem lebenden Dokument,
+  ohne dass es jemand bemerkt. Reihenfolge: 1 Integrationslauf, 2 Umzug der 104 als
+  eigener Auftrag ohne Loeschen, 3 erster Schreiblauf."
 zustand: BEREIT
 ballbesitz: integrator
 ballbesitz_grund: "A-37-18 UMADRESSIERT 16.08. vom generator an den integrator, weil der einzige Weg TRANSPORT ist und der dem Generator untersagt: das Tor liegt in 2 von 6 Baeumen, gemessen ueber

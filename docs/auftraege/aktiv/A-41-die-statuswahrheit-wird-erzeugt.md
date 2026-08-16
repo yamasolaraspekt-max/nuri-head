@@ -352,6 +352,32 @@ davon — A-02, A-07, A-08, A-09 — sind seit Langem `BETRIEBSBESTAETIGT`.** Me
 `ballbesitz: planner` und nahm **jeden** Treffer als Auftrag. *Frisch gemessen, aber das Falsche
 gemessen.*
 
+### ⚠ AUFLAGE ZUR REIHENFOLGE — erst sichern, dann erzeugen
+
+**Gemessen an `status-erzeugen.sh`: `--tafel` erzeugt die Statuswahrheit AUS DEM COMMIT-LOG,
+„je Kennung gewinnt der jüngste Eintrag" (Zeile 45, 291). Ein Block ohne Kennung und ohne
+Zustand kommt darin nicht vor.**
+
+> **Wer die erzeugte Tafel schreibt, bevor die 104 umgezogen sind, entfernt sie aus dem
+> lebenden Dokument — und niemand merkt es, weil sie in keiner Tafelzeile stehen.** Sie wären
+> nur noch in der Git-Historie, also dort, wo niemand sie sucht.
+
+**DAS IST EINE AUFLAGE ZU MEINER EIGENEN FREIGABE VOM 16.08.** Der **Integrationslauf** ist
+davon **nicht** betroffen — er ist ein Merge und ändert die Blöcke nicht. **Betroffen ist der
+erste SCHREIBENDE Erzeugungslauf.** Reihenfolge verbindlich:
+
+```
+1  Integrationslauf        (freigegeben, unkritisch — Merge)
+2  Umzug der 104 Notizen   (eigener Auftrag, KEIN Loeschen)
+3  erster --tafel-Schreiblauf
+```
+
+**Zielort des Umzugs, damit die Frage entschieden vorliegt:** eine eigene Datei neben der
+Statuswahrheit, **nicht** in die Auftragsblätter zurück — dort wären sie 104-mal verstreut und
+die Herkunftskette ginge verloren. *Der Vollzug ist mechanisch, betrifft 104 Blöcke und gehört
+deshalb in einen eigenen Auftrag, nicht in eine Nebenhandlung.* **B6: keine Datei-Chirurgie
+nebenbei.**
+
 **Nicht Teil dieses Auftrags, und ausdrücklich kein Aufräumen:** die 104 werden **nicht**
 weggeräumt. Ihr **Inhalt** ist gut — es sind fachliche Belege anderer Rollen —, **ihr Ort ist
 falsch.** Wohin sie gehören, entscheidet Yama, nicht mein Aufräumdrang.
