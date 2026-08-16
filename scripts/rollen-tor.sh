@@ -43,6 +43,11 @@
 #                                                  Rollenfehler. Sonst sucht jemand eine
 #                                                  Rollenverwechslung, die es nicht gibt.
 # K5  integrator im gemeinsamen Checkout        -> erlaubt, das ist sein Baum
+# K6  ANDERE Rolle im gemeinsamen Checkout,     -> erlaubt MIT HINWEIS auf den wartenden Baum.
+#     deren eigener Baum SCHON STEHT               EIGENER Fall, KEINE Variante von K3:
+#                                                  K3 greift nur wenn das Verzeichnis FEHLT.
+#                                                  Ohne K6 erzwingt das Tor genau das, was K3
+#                                                  verhindern soll.
 # ```
 #
 # ## Aufruf
@@ -79,9 +84,15 @@ fi
 VERZ="$(basename "$BAUM")"
 ZWEIG="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")"
 
+# Der Integrations-Checkout steht EINMAL hier: K5 (der integrator gehoert hinein) und K6 (jede
+# andere Rolle darf dort noch arbeiten) lesen dieselben zwei Werte. Zwei Schreibweisen waeren
+# zwei Wahrheiten, und die zweite altert still.
+INTEGRATION_VERZ="ticket"
+INTEGRATION_ZWEIG="auto/hausplaner-integration"
+
 # K2: die Zuordnung steht hier und wird NICHT aus dem Rollennamen gerechnet.
 case "$STAMM" in
-  integrator)      SOLL_VERZ="ticket";                    SOLL_ZWEIG="auto/hausplaner-integration" ;;
+  integrator)      SOLL_VERZ="$INTEGRATION_VERZ";         SOLL_ZWEIG="$INTEGRATION_ZWEIG" ;;
   planner)         SOLL_VERZ="ticket-rolle-planner";      SOLL_ZWEIG="rolle/planner" ;;
   plan-pruefer)    SOLL_VERZ="ticket-rolle-plan-pruefer"; SOLL_ZWEIG="rolle/plan-pruefer" ;;
   generator)       SOLL_VERZ="ticket-rolle-generator";    SOLL_ZWEIG="rolle/generator" ;;
@@ -104,6 +115,27 @@ if [ ! -d "$SOLL_PFAD" ]; then
 fi
 
 if [ "$VERZ" = "$SOLL_VERZ" ] && [ "$ZWEIG" = "$SOLL_ZWEIG" ]; then
+  exit 0
+fi
+
+# K6: die Rolle arbeitet im GEMEINSAMEN Checkout, und ihr eigener Baum STEHT bereits.
+#
+# **Der Fall, der meinen ersten Bau durchfallen liess, und er ist ein eigener — keine Variante
+# von K3.** K3 greift nur, wenn das Verzeichnis FEHLT; steht es, fiel der Fall bis hierher in den
+# Schlusszweig und wurde zum Verstoss. Der Plan-Pruefer hat es am gebauten Skript belegt:
+# release-pruefer und evaluator bekamen exit 1, und weil das Tor eingehaengt ist, hiess das
+# KEIN COMMIT — fuer genau die zwei Rollen, die den Transport und die Abnahme trugen.
+#
+# **Die Begruendung ist dieselbe wie bei K3, und sie steht schon oben:** ein Tor, das den Umzug
+# ERZWINGT, haelt die Kette an, statt sie zu schuetzen. Der Umzug ist freiwillig getaktet, und
+# dass ein Baum schon dasteht, ist kein Umzug.
+#
+# **Was danach noch SPERRT, bleibt scharf:** eine Rolle im Baum einer FREMDEN Rolle. Das ist der
+# Schaden, gegen den die Umstellung gebaut wird, und er faellt unten durch.
+if [ "$VERZ" = "$INTEGRATION_VERZ" ] && [ "$ZWEIG" = "$INTEGRATION_ZWEIG" ]; then
+  echo "ROLLEN-TOR  HINWEIS  '$ROLLE' arbeitet im gemeinsamen Checkout — durchgelassen (K6)." >&2
+  echo "            ihr eigener Baum steht bereits und wartet: $SOLL_VERZ auf $SOLL_ZWEIG" >&2
+  echo "            gefunden: $VERZ auf $ZWEIG" >&2
   exit 0
 fi
 
