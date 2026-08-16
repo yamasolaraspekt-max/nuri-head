@@ -2521,3 +2521,142 @@ geht auf stderr, die Zahl bleibt richtig. *Das ist keine Kleinigkeit, denn A-42-
 Vorher-Messung genau in diesem Zustand.*
 
 **Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Yama-Posten „Regelkollision §3/E1/Beifang" gemessen: beide Regeln stehen, das Tor erzwingt die eine — offen ist nur noch die Regelfrage selbst
+
+*Offener Posten bei Yama · gemessen 16.08. gegen `9a67f208`*
+
+### Die Kollision, wie sie protokolliert ist
+
+Der Datensatz hält sie in Z.1839 fest:
+
+> *„die REGELKOLLISION im Regelwerk selbst — **„zweiter Commit unmittelbar" gegen „nie fremde
+> unverfolgte Arbeit einsammeln"** — steht unverändert, weil sie eine **Regeländerung** braucht und
+> keine Arbeitsweise."*
+
+### Beide Seiten stehen heute, mit Fundstelle
+
+```
+Seite A   ARBEITSREGELN Z.409
+          "unmittelbar nach dem Merge wird dessen SHA in einem Statusuebergang auf dem
+           Zielbranch festgehalten; erst dieser Uebergang darf VEROEFFENTLICHT setzen"
+
+Seite B   ARBEITSREGELN Z.692
+          "Nur ausdruecklich geprüfte Pfade werden gestaged; niemals git add -A."
+```
+
+### Und die eine Seite ist maschinell erzwungen
+
+Am Tor gemessen, nicht gefolgert:
+
+```
+ohne Pfadangabe            exit 2, Aufruf-Hinweis          (Exit OHNE Pipe gelesen)
+Stagen                     git add -- "$p", je Pfad einzeln, Z.945
+git add -A / git add .     0 Treffer im ganzen Tor
+```
+
+**Regel B ist damit nicht nur geschrieben, sondern gebaut.** Ein Commit ohne benannte Pfade kommt
+gar nicht zustande, und ein pauschales Einsammeln ist im Tor nirgends möglich.
+
+**Folge für die Kollision:** der „zweite Commit unmittelbar" nach Seite A schreibt **einen** Pfad —
+`docs/STATUS.md`. Pfadgenau ist das immer möglich, auch wenn im selben Baum fremde unverfolgte
+Arbeit liegt. **Die Kollision kann heute von keiner Arbeitsweise mehr ausgelöst werden.**
+
+**Was offen bleibt, ist genau das, was der Datensatz selbst sagt: die Regelfrage.** Ob die zwei
+Sätze im Wortlaut nebeneinander stehen bleiben oder einer präzisiert wird, ist eine
+Regeländerung — **§1 behält sie Yama vor, und ich entscheide sie nicht.**
+
+**Für die Vorlage ist die brauchbare Auskunft:** *der Posten ist ungefährlich geworden, ohne
+entschieden zu sein.* Er kostet heute nichts und blockiert nichts; er ist eine offene Textstelle,
+keine offene Gefahr.
+
+### Zwei eigene Fehler auf dem Weg dorthin
+
+**Erstens, fast gemeldet:** mein erster Durchgang fand `Beifang` nur **einmal** in den
+Arbeitsregeln — in einem Nebensatz über die Baumtrennung. Ich stand kurz davor zu schreiben, die
+Regel sei aus der Prozessquelle verschwunden. **Sie steht in Z.692, nur unter anderen Worten**
+(*„niemals `git add -A`"* statt *„Beifang"*). **Der siebte gefangene Fehlbefund heute Nacht — und
+wieder war es mein Muster, nicht der Bestand.**
+
+**Zweitens, tatsächlich passiert:** ich habe den Exit-Code des Tores **hinter einer Pipe** gelesen
+und `exit=0` notiert. **Das ist der Exit von `head`.** Ohne Pipe gemessen: **exit 2.** *Genau die
+Falle, vor der meine eigene Wacheanweisung im selben Absatz warnt, in dem sie das Messen verlangt.*
+**Die 0 stand nicht länger als eine Ausgabe im Terminal, aber sie stand da.**
+
+**Ball: yama** — unverändert, als Regelfrage. **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Die Anker-Behebung nachgemessen: jetzt ist das Muster zu STRENG — der Generator verliert die Hälfte seiner Bälle
+
+*Dritte Runde am selben Befehl · gemessen 16.08. gegen `c2596c40`*
+
+Der Planner hat meinen Fund mit `6da4e914` behoben und **beide** Enden verankert:
+`^ballbesitz: <rolle>$`. **Der Schluss-Anker ist neu, und er kostet.**
+
+### Gemessen am heutigen Bestand
+
+```
+ROLLE                nur ^     sein ^$      lose
+plan-pruefer            39          38        49
+planner                 81          80        90
+generator               10           5        15
+release-pruefer          5           5         7
+integrator               2           2         2
+evaluator                0           0         1
+```
+
+**Drei Rollen verlieren Bälle, der Generator die Hälfte.** Die verlorenen Zeilen sind
+Ballzeilen **mit angehängtem Kommentar**, zum Beispiel Z.18694:
+
+```
+ballbesitz: plan-pruefer  # 16.08. vom Planner zurueckgegeben: die Restpunkte
+                          #   der 1. DoR-Runde sind behoben (8f2aed6f, d2ca3611, …)
+```
+
+**Das ist eine gültige Ballzeile mit einer Begründung dahinter** — genau die Form, die ich heute
+Abend schon einmal gemessen habe, als sie die Differenz zwischen 38 und 39 erklärte.
+
+### Der reine Vorn-Anker wäre auch falsch
+
+**Ich schlage nicht vor, den Schluss-Anker einfach zu streichen.** Fangprobe an vier Zeilen:
+
+```
+Eingabe                                  ^…$   ^…   ^…([[:space:]]|$)
+ballbesitz: plan-pruefer                  ja    ja        ja
+ballbesitz: plan-pruefer-2                nein  JA        nein
+ballbesitz: plan-pruefer  # Kommentar     NEIN  ja        ja
+ballbesitz: planner                       nein  nein      nein
+                                          ---   ---       ---
+Treffer                                    1     3         2      <- 2 ist richtig
+```
+
+**Der reine Vorn-Anker fängt `plan-pruefer-2` mit** — eine Instanz-Rolle. Heute trägt kein
+`ballbesitz`-Feld eine solche Form (gemessen: nur `generator`, `integrator`, `offen`,
+`plan-pruefer`, `planner`, `release-pruefer`, `yama`), **aber die Fangproben des Tores führen
+`plan-pruefer-2` ausdrücklich als Fall.**
+
+### Soll — die Form, die beide Fallen umgeht, an beiden Proben getestet
+
+```
+grep -cE '^ballbesitz: <rolle>([[:space:]]|$)' docs/STATUS.md docs/BEFUNDNOTIZEN.md
+```
+
+**Über den echten Bestand liefert sie für alle sechs Rollen genau die Soll-Zahl**
+(39 · 81 · 10 · 5 · 2 · 0), **und an der Fangprobe trifft sie 2 statt 1 oder 3.**
+
+### Die Lehre, und sie ist inzwischen belegt
+
+**Das ist die dritte Runde an demselben einen Befehl**, und jede hat etwas gefunden:
+
+```
+Runde 1   ohne Anker        49 statt 39   zaehlt Prosa mit, die den Befehl zitiert
+Runde 2   ^…$               38 statt 39   verliert Ballzeilen mit Kommentar
+Runde 3   ^…([[:space:]]|$)     39        trifft, an Bestand UND Fangprobe geprueft
+```
+
+**Kein Schritt war unsorgfältig — jeder war eine plausible Verschärfung des vorigen.** Was jedes
+Mal fehlte, war dasselbe: **der Befehl wurde überlegt statt gefahren.** *Ein Zählbefehl ist wie
+eine Formel: ein richtig gedachtes Muster kann falsch zählen, und man sieht es erst am Fall.*
+
+**Deshalb liegt hier eine Fangprobe bei und nicht nur eine Begründung.**
+
+**Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau.**
