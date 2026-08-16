@@ -25191,3 +25191,46 @@ was_das_bedeutet_und_was_nicht: |
   Pruefung von Anfang an als Bestandsaufnahme bauen, die zaehlt statt zu melden.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-3 und -4 geprueft — die Rot-Lage ist vollstaendig (0 und 0), und damit haengt die ganze Unterscheidung am Drei-Fragen-Test allein"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:13:45 CEST"
+mess_stand: "FORMELSAMMLUNG und REGISTER aus rolle/planner · Werkbank-Verzeichnis durchsucht"
+die_rot_lage_ist_vollstaendig: |
+  A-40 fuehrt zwei Pflichtfelder ein. Beide gemessen, ueber die ganze FORMELSAMMLUNG:
+  gegengeprueft_an ... 0     geltungsbereich ... 0
+  Kein Eintrag traegt eines von beiden. A-40-4 ("GEGENGEPRUEFT ohne Fundstelle wird
+  abgewiesen") ist damit heute nicht ausloesbar — es gibt keinen Eintrag mit dem Zustand,
+  also auch keinen ohne Fundstelle. Das Kriterium ist Vorsorge fuer den ersten Eintrag.
+a_40_3_die_beiden_proben_stehen: |
+  Das Kriterium nennt einen historischen Beleg mit beiden Richtungen: "W-28 (dreimal JA)
+  muss anschlagen, F-004 (dreimal NEIN) nicht."
+  BEIDE GEPRUEFT:
+  W-28   Registerzeile vorhanden — "Dachentwaesserung | LEER | W-07, W-27 | ungeprueft —
+         linienBauteile fuehrt 'dachrinne' als Linientyp". Werkbank-Blaetter: 0.
+  F-004  Definitionsstelle in Zeile 75 der Formelsammlung, vollstaendig mit Zweck,
+         Eingabe und Formel ("Schnittpunkt zweier Geraden").
+  Beide Gegenstaende existieren, die Probe ist an ihnen fahrbar.
+und_hier_liegt_der_hinweis: |
+  Da BEIDE Pflichtfelder ueberall fehlen, unterscheidet das Fehlen der Felder W-28 nicht
+  von F-004. Die Bedingung des Kriteriums lautet "bei JA UND fehlendem gegengeprueft_an
+  UND fehlendem geltungsbereich" — die letzten beiden Teile sind heute IMMER wahr.
+  ALSO HAENGT DIE GANZE UNTERSCHEIDUNG AM DREI-FRAGEN-TEST ALLEIN. Er ist der einzige
+  Teil der Bedingung, der zwischen den beiden Proben trennt.
+  Das ist kein Fehler — es ist der Zustand vor dem Bau, und genau deshalb sind die Felder
+  ja Gegenstand des Auftrags. Aber wer A-40-3 abnimmt, prueft in Wahrheit den
+  Drei-Fragen-Test und nicht die Feldbedingung. Wenn der Test falsch abgebildet ist,
+  faellt es an den Feldern nicht auf.
+  VORSCHLAG, nicht Entscheidung: die Probe so aufschreiben, dass sie den Test isoliert —
+  etwa "W-28 und F-004 durch denselben Prueflauf, Unterschied allein aus den drei Fragen".
+  Dann misst die Abnahme, was sie messen will.
+stand_der_A_40_dor: |
+  Geprueft und haltend: A-40-1 (Rot-Lage am Basis-SHA, heute unveraendert), A-40-3 (beide
+  Proben vorhanden, mit dem Hinweis oben), A-40-5 (Zaehlbefehl statt Zahl).
+  Nicht ausloesbar, weil Vorsorge: A-40-4.
+  Offen: A-40-2 (mit der 116er-Groessenordnung von vorhin), -6, -7, -8, -9 und die sechs
+  Kanten. Dazu mein Befund zu A-40-9, dem die Invarianten-Klausel fehlt.
+ballbesitz: plan-pruefer
+```
