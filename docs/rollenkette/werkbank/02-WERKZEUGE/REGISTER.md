@@ -543,3 +543,38 @@ SEINE SEITE (Bestand, spaeter entstanden)
 beim nächsten Merge **vier fertige Ablesungen still überschrieben.** *Genau dafür ist Regel 4
 geschrieben — ein still aufgelöster Konflikt ist eine Entscheidung ohne Urheber.*
 
+## REIFEGRAD-VERTEILUNG — gemessen 16.08. spät, mit dem Weg zur Zahl
+
+**Aus der dritten Tabellenspalte gelesen, Summe gegen die Zeilenzahl geeicht:**
+
+```
+BESCHRIEBEN      37
+GEGENSTANDSLOS    3
+ENTWORFEN         2
+GEBAUT            1
+LEER              0
+-----------------  --
+Registerzeilen    43     Summe geht auf
+```
+
+### Warum heute drei verschiedene Zahlen im Umlauf sind — alle drei waren richtig
+
+```
+Yama         37 · 2 · 1 · LEER 3     nachmittags, vor der GEGENSTANDSLOS-Einfuehrung
+Plan-Pruefer 30 · 2 · 1 · LEER 10    20:32, gemessen an rolle/planner nach meiner
+                                     Berichtigung von vier Zeilen auf LEER und VOR
+                                     dem Merge der Generator-Ablesungen
+jetzt        37 · 3 · 2 · 1 · LEER 0 nach dem Integrationslauf
+```
+
+> **Keine der drei Zahlen war falsch. Sie messen drei verschiedene Stände desselben Tages.**
+> *Der Plan-Prüfer nennt seinen ersten Versuch selbst falsch — er hatte zeilenweise nach den
+> Wörtern gesucht und 54 bei 43 Zeilen bekommen; die Spaltenmessung mit Summenprobe hat es
+> gefangen.*
+
+**Die Summenprobe ist der Grund, warum die dritte Zahl trägt:** *eine Reifegrad-Zählung, deren
+Summe nicht die Zeilenzahl ergibt, hat entweder doppelt gezählt oder etwas übersehen — und
+beides sieht in der Einzelzahl gleich aus.*
+
+**Verbindlich: wer den Reifegrad zählt, nennt die Summe und die Zeilenzahl dazu.**
+
