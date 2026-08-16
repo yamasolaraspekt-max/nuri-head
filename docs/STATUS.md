@@ -25942,3 +25942,54 @@ warum_das_zaehlt_und_warum_nicht: |
 vorschlag: "Im Nicht-Ziel neben der Zahl das Muster nennen, mit dem sie gemessen wurde. Dann ist sie nachvollziehbar, egal welche Lesart gemeint war. Blattaenderung, nicht meine Entscheidung."
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "A-39s letzte vier Kriterien geprueft — alle vier tragen, und A-39-10 ist genau die Formulierung, die A-40-9 fehlt"
+rolle: plan-pruefer
+zeit: "16.08. 19:12"
+mess_stand: 7a3a2e1b708e3e8a9dec85ebcf14ab63201d3841
+geprueft_gegen: "7970a9c7 (planner, 19:04)"
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+A_39_7: |
+  'Ein Blatt ohne Befund erzeugt keine Ausgabe und Rueckgabe 0.'
+  Erst nach dem Bau abschliessend pruefbar — das Skript gibt es noch nicht. Aber es ist
+  NICHT strukturell blockiert wie A-40-2s Negativprobe: es gibt 89 Blaetter, an denen
+  sich ein befundfreier Lauf zeigen laesst, und die Zusage nennt mit 'keine Ausgabe UND
+  Rueckgabe 0' zwei unabhaengig messbare Groessen. Der Klammersatz begruendet es richtig:
+  ohne diesen Beleg ist das Skript von einem kaputten nicht zu unterscheiden.
+A_39_8_kanten: |
+  Sechs Kanten, alle sechs gemessen. Sie sind ANDERS gebaut als A-40s: A-40 nennt
+  historische Faelle (K4 nennt W-28, das es nicht gibt), A-39 beschreibt Situationen
+  mit erwartetem Verhalten — 'P1 gilt als erfuellt, keine Meldung', 'P2 greift nicht,
+  sie ist keine Zusage'. Solche Kanten sind konstruierbar und koennen nicht ins Leere
+  zeigen.
+  K1 ist sogar real belegt: 'Blatt ohne Kantenliste' hat 80 Kandidaten — von 89
+  Blaettern unter docs/auftraege/aktiv/ tragen nur 9 eine Kantentabelle.
+  Fangprobe: A-39 selbst zaehlt 6 Kantenzeilen, das Muster greift.
+  K6 nennt zusaetzlich A-33 als Beispielfall.
+A_39_9: |
+  Scharf. Es benennt die Nicht-Ziele einzeln — resources/, app/, docs/STATUS.md und
+  scripts/commit-pruefen.sh — und nennt mit 'git show --stat' den Messweg dazu.
+A_39_10_ist_das_gegenstueck_zu_A_40_9: |
+  Gleicher Wortlaut wie A-40-9, aber mit dem entscheidenden Zusatz: 'Zahl unmittelbar
+  vor dem Bau erheben, nicht gegen eine feste Zahl pruefen.'
+  Damit traegt es einen Standbezug, den A-40-9 nicht hat. Und anders als bei A-40 ist
+  die Zusage hier begruendet: A-39 hat drei Code-Pfade und baut ein Skript unter
+  scripts/, waehrend A-40 null Code-Pfade hat. Dieselbe Formel, zwei verschiedene Lagen.
+nebenbefund_dateiname: |
+  Titel (Z.1) und art sagen ACHT Pruefungen, die Kriterien decken P1 bis P8 vollstaendig
+  ab (A-39-2 bis -6 fuer P1-P5, dann -11, -12, -13 fuer P6, P7, P8), und P8 ist ab
+  Zeile 106 beschrieben. Der DATEINAME sagt weiterhin
+  'A-39-die-fuenf-innenpruefungen-des-blattes.md'. Wer nach dem Blatt sucht, liest fuenf.
+zwei_eigene_fehlverdachte_gefangen: |
+  1. Ich hielt P8 fuer unbeschrieben — mein Listenbefehl war nach zehn Zeilen
+     abgeschnitten. P8 steht auf Zeile 106.
+  2. Ich hielt 'fuenf' im Text fuer einen Widerspruch — geoeffnet: Z.19 sagt 'Acht
+     Blattfehler: fuenf an EINEM Tag, drei weitere am 16.08.', Z.174 spricht von fuenf
+     festen SHAs. Beide Stellen sind richtig.
+  Beide Verdachte loesten sich zugunsten des Blattes auf, bevor sie in eine Meldung gingen.
+urteil: "Die vier offenen Kriterien tragen. A-39 steht damit deutlich besser da als A-40, wo vier Kriterien Befunde tragen."
+ballbesitz: planner
+```
