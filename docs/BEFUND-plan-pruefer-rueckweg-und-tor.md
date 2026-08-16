@@ -4694,3 +4694,106 @@ desselben Baums, die sich nur widersprechen, solange niemand die Uhrzeit dazusch
 
 **Ball beim Release-Prüfer** (Zeile 101, klein). **Kein Zustandsfeld angefasst, kein Bau, sein
 Werkzeug nicht gefahren** — es merged, und Merges sind nicht meine Rolle.
+
+---
+
+## 73 — W-34 hält an jeder gemessenen Stelle, und es ist die QUELLE von W-27/1s Regel
+
+**Stand:** HEAD `c207290f`, Baum 0 Einträge. **Sicherung:** `ls-remote` exit 0, LIVE `9f4bfe09`,
+`is-ancestor` exit 1, **1 Commit nicht transportiert**.
+
+### Zuerst die Gegenmessung des Release-Prüfers zu §71 — sie trifft, auch in der Abweichung
+
+`9f4bfe09` bestätigt alle vier Größen meines A-37-Fundes unabhängig. **Die eine Zahl, bei der wir
+auseinanderliegen, habe ich an meinem eigenen Befehl nachgemessen:**
+
+```
+ich:  rev-list --count 1c36544e..ea377567^   = 0     Dach schliesst den Endpunkt AUS
+er:   rev-list --count 1c36544e..ea377567    = 1     Spanne zaehlt B mit
+```
+
+**Beides richtig, zwei Konventionen, ein Sachverhalt** — und er hat es selbst so eingeordnet.
+*Er nennt es „ohne Belang" und benennt es trotzdem. Das ist die richtige Reihenfolge.*
+
+### Posten (a) an W-34, Basis `6682b83c` — neun Zeiger, alle geprüft
+
+```
+GuidedView.tsx           IDENTISCH zur Basis
+fahrschritte.ts          IDENTISCH zur Basis
+
+GuidedView.tsx:4      import { T, STATUS_LABEL, type SchrittStatus, type Fahrschritt }   TRIFFT
+GuidedView.tsx:18     badgeFarbe: Record<SchrittStatus, …>                               TRIFFT
+GuidedView.tsx:22     checkFarbe: Record<SchrittStatus, …>                               TRIFFT
+fahrschritte.ts:40-41 'Leere Liste => open — ein Schritt ohne pruefbare Aussage …'       TRIFFT
+fahrschritte.ts:43-49 statusAus, FUENF return-Zweige selbst gezaehlt                     TRIFFT
+fahrschritte.ts:84-88 levels per levelId aus nodes ODER roofs ODER ceilings              TRIFFT
+```
+
+**Dazu Posten (b) — die fünf Wächterzahlen, Muster am bekannten Treffer verifiziert** (`^test\(`
+liefert für `fahrschritte` 12, genau die Zahl des Blattes):
+
+```
+DATEI               BLATT  HEUTE  BASIS   Datei
+fahrschritte          12     12     12    IDENTISCH
+gefuehrteEhrlich       8      8      8    IDENTISCH
+breiten                5      5      5    IDENTISCH
+dialogFokus           11     11     11    IDENTISCH
+stilschicht           58     58     58    IDENTISCH
+```
+
+**Fünf von fünf, und alle fünf Dateien unverändert. Vierzehn Zusagen, vierzehn Treffer.**
+
+### Ein Fehlalarm, den ich vor dem Melden gefangen habe
+
+`fahrschritte.ts:84-88` zählt aus **drei** Quellen, und meine erste Blattzeile nannte nur zwei
+(`nodes ODER roofs`). **Der Satz lief über den Zeilenumbruch weiter und endet auf `ODER ceilings`;
+das Blatt nennt sie an drei Stellen (`:97`, `:166`, `:281`).** *Mein Zeilenschnitt, nicht sein
+Fehler — der fünfzehnte Musterfehler wäre es gewesen, und er ist nie hinausgegangen.*
+
+### Der eigentliche Fund dieser Runde ist kein Defekt, sondern eine Kette
+
+**W-27/1 hielt in §69 an jeder Stelle, weil es eine Regel trägt: *„Jede Fangprobe muss WIRKSAM
+sein: sie wird gefahren und muss FALLEN."* Diese Regel hat einen Ursprung, und er ist messbar:**
+
+```
+W-34   Schnitt 12.08. 15:18
+W-27/1 Schnitt 12.08. 20:11     -> 4 Stunden 53 Minuten spaeter
+W-27/1:114  "Eine Probe, die gruen bleibt, prueft nichts — das ist der Befund aus W-34-1"
+```
+
+**Und W-34 hat den Befund an sich selbst erhoben, unter eigenem yaml-Schlüssel
+`und_die_fangprobe_faengt_nicht`:**
+
+```
+die eigene erste Fangprobe gefahren   1698 tests · 1698 pass · 0 fail  -> faengt NICHTS
+die beiden anderen zum Vergleich      1 fail (K6) · 4 fail (K5,K4)     -> beide fangen
+"von fuenf Fangproben ist genau die eine wirkungslos,
+ die zum tragenden P1-Kriterium gehoert"
+```
+
+**Und dann der Zug, der es aus dem Verneinen heraushebt** — Schlüssel
+`damit_der_befund_nicht_nur_verneint`: er hat den `warn`-Zweig ersatzweise **entfernt** statt
+verschoben → **3 fail**. *Also ist der Zweig sehr wohl bewacht; die Probe zielte auf seine
+POSITION statt auf den ZWEIG.* **Er hat nicht nur gezeigt, dass die Probe nichts fängt, sondern
+dass an derselben Stelle eine wirksame existiert.**
+
+### Was das für §69 bedeutet
+
+In §69 hatte ich beobachtet, dass die fehlerfreien Blätter ihre eigene Widerlegung einbauen — und
+dazugeschrieben, es sei *„eine Beobachtung an drei von acht, keine Regel"*. **Jetzt ist es mehr als
+eine Beobachtung: die Eigenschaft ist WEITERGEGEBEN worden, und die Weitergabe ist datierbar.**
+
+```
+W-34 schreibt sein eigenes Versagen auf, ehrlich und mit Gegenmessung
+    -> 4h53 spaeter macht W-27/1 daraus ein KRITERIUM mit Fallpflicht
+        -> und W-27/1 haelt in 69 an jeder Stelle, die ich gerechnet habe
+```
+
+**Die fehlerfreien Blätter sind nicht zufällig gut. Das eine ist gut, WEIL das andere seinen
+Fehler brauchbar aufgeschrieben hat.** *Ein Befund, der nur „falsch" sagt, erzeugt keine Regel;
+einer, der die wirksame Alternative mitmisst, erzeugt eine.*
+
+**Viertes fehlerfreies Blatt: W-08/1 · W-11/1 · W-27/1 · W-34.**
+
+**Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.** *Die Kette gehört dem
+Planner — sie ist der erste Beleg, dass die Eigenschaft übertragbar ist und nicht am Autor hängt.*
