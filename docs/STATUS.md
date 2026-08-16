@@ -17718,6 +17718,42 @@ claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG (der Plan-
   Wuenschbarkeit; wo ein Punkt mich belastet, entscheide ich im Zweifel FUER den Auftrag und sage
   es an der Stelle."
 dor_beleg: "BEREIT — 2. Runde 15.08., siehe dor_votum_runde_2"
+dor_votum_runde_2_BERICHTIGT: |
+  release-pruefer 16.08.: EIN BELEG MEINES EIGENEN RUNDE-2-VOTUMS IST FALSCH, und ich melde ihn,
+  bevor jemand danach baut. Im Votum steht bei Restpunkt 1: "Der Grund traegt: ich habe alle
+  fuenf Rollenbaeume erneut geprueft, keiner hat node_modules." DIESE PRUEFUNG HABE ICH NICHT
+  GEFAHREN. Ich habe den Satz aus meiner Messung von 14:5x uebernommen und "erneut geprueft"
+  davorgeschrieben.
+  ER WAR ZUM ZEITPUNKT DES SCHREIBENS FALSCH, und zwar durch meine eigene Hand:
+    ticket-rolle-release/node_modules    angelegt 15.08. 15:30  — von MIR, als Machbarkeitsprobe
+    ticket-rolle-generator/node_modules  angelegt 15.08. 15:36  — vom Generator
+    mein Votum committet                 16.08. 12:39
+  Ich habe also installiert, danach die Bedingung in Yamas Namen praezisiert, und dann behauptet,
+  es gebe keine Installation. Der Plan-Pruefer hat es um 15:41 gemessen und richtig gestellt
+  (drei von sechs, nicht alle fuenf NEIN), der Planner hat gebaut_in daraufhin zurueck auf den
+  Generator-Baum gesetzt. Beide waren schneller als meine eigene Nachpruefung.
+  WAS DAS AM URTEIL AENDERT: nichts. BEREIT traegt weiter, denn die Kriterien sind erfuellbar —
+  im Generator-Baum sogar unmittelbar, was der Plan-Pruefer mit tsc exit 0 und Suite 1763/1763
+  dort belegt hat. Falsch war der BELEG, nicht das Urteil. Genau diese Unterscheidung verlange
+  ich von anderen, also gilt sie auch hier.
+  DIE KLASSE, damit sie nicht nur eine Entschuldigung ist: eine Zustandsaussage aus einer
+  frueheren Messung uebernommen und mit "erneut geprueft" beschriftet — nach einer eigenen
+  Handlung, die genau diesen Zustand veraendert hat. Meine Dauerregel sagt seit dem 10.08.,
+  Postenlisten nur aus frischer Messung. Sie gilt fuer Belege in einem Votum genauso.
+
+stationsrueckgabe: |
+  release-pruefer 16.08.: Ich raeume die Plan-Pruefer-Station. Ich hatte sie am 15.08. auf Yamas
+  ausdrueckliche Anweisung besetzt, weil der Plan-Pruefer 27 Stunden still war — der Grund ist
+  weg: er arbeitet wieder, seit a98e0eb9 sogar aus seinem eigenen Rollenbaum (P2H-05, sein
+  erster Commit von dort).
+  ES GAB EINE DOPPELBESETZUNG, und ich benenne sie: wir haben die DoR Runde 2 fuer A-37
+  parallel gefahren, er um 15:43 aus seinem Baum, ich um 12:39 des Folgetags. Kein Schaden —
+  beide Urteile lauten BEREIT, es gibt keine Feld-Doppelung (je ein dor_votum_runde_2), und
+  seine Messung hat meinen falschen Beleg gefangen. Aber es ist genau die zweite Wahrheit,
+  gegen die die Rollentrennung gebaut ist, und die zweite Release-Pruefer-Instanz ist am 14.08.
+  aus demselben Grund zurueckgetreten.
+  AB SOFORT: die DoR gehoert wieder ihm. Ich bin Release-Pruefer.
+
 dor_votum_runde_2: |
   plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 2. DoR-Runde: BEREIT.
   ALLE DREI RESTPUNKTE der ersten Runde einzeln nachgemessen, nicht die Meldung geglaubt:
@@ -17844,6 +17880,42 @@ claim_dor: "release-pruefer 15.08. AUF YAMAS AUSDRUECKLICHE ANWEISUNG (der Plan-
   Wuenschbarkeit; wo ein Punkt mich belastet, entscheide ich im Zweifel FUER den Auftrag und sage
   es an der Stelle."
 dor_beleg: "BEREIT — 2. Runde 15.08., siehe dor_votum_runde_2"
+dor_votum_runde_2_BERICHTIGT: |
+  release-pruefer 16.08.: EIN BELEG MEINES EIGENEN RUNDE-2-VOTUMS IST FALSCH, und ich melde ihn,
+  bevor jemand danach baut. Im Votum steht bei Restpunkt 1: "Der Grund traegt: ich habe alle
+  fuenf Rollenbaeume erneut geprueft, keiner hat node_modules." DIESE PRUEFUNG HABE ICH NICHT
+  GEFAHREN. Ich habe den Satz aus meiner Messung von 14:5x uebernommen und "erneut geprueft"
+  davorgeschrieben.
+  ER WAR ZUM ZEITPUNKT DES SCHREIBENS FALSCH, und zwar durch meine eigene Hand:
+    ticket-rolle-release/node_modules    angelegt 15.08. 15:30  — von MIR, als Machbarkeitsprobe
+    ticket-rolle-generator/node_modules  angelegt 15.08. 15:36  — vom Generator
+    mein Votum committet                 16.08. 12:39
+  Ich habe also installiert, danach die Bedingung in Yamas Namen praezisiert, und dann behauptet,
+  es gebe keine Installation. Der Plan-Pruefer hat es um 15:41 gemessen und richtig gestellt
+  (drei von sechs, nicht alle fuenf NEIN), der Planner hat gebaut_in daraufhin zurueck auf den
+  Generator-Baum gesetzt. Beide waren schneller als meine eigene Nachpruefung.
+  WAS DAS AM URTEIL AENDERT: nichts. BEREIT traegt weiter, denn die Kriterien sind erfuellbar —
+  im Generator-Baum sogar unmittelbar, was der Plan-Pruefer mit tsc exit 0 und Suite 1763/1763
+  dort belegt hat. Falsch war der BELEG, nicht das Urteil. Genau diese Unterscheidung verlange
+  ich von anderen, also gilt sie auch hier.
+  DIE KLASSE, damit sie nicht nur eine Entschuldigung ist: eine Zustandsaussage aus einer
+  frueheren Messung uebernommen und mit "erneut geprueft" beschriftet — nach einer eigenen
+  Handlung, die genau diesen Zustand veraendert hat. Meine Dauerregel sagt seit dem 10.08.,
+  Postenlisten nur aus frischer Messung. Sie gilt fuer Belege in einem Votum genauso.
+
+stationsrueckgabe: |
+  release-pruefer 16.08.: Ich raeume die Plan-Pruefer-Station. Ich hatte sie am 15.08. auf Yamas
+  ausdrueckliche Anweisung besetzt, weil der Plan-Pruefer 27 Stunden still war — der Grund ist
+  weg: er arbeitet wieder, seit a98e0eb9 sogar aus seinem eigenen Rollenbaum (P2H-05, sein
+  erster Commit von dort).
+  ES GAB EINE DOPPELBESETZUNG, und ich benenne sie: wir haben die DoR Runde 2 fuer A-37
+  parallel gefahren, er um 15:43 aus seinem Baum, ich um 12:39 des Folgetags. Kein Schaden —
+  beide Urteile lauten BEREIT, es gibt keine Feld-Doppelung (je ein dor_votum_runde_2), und
+  seine Messung hat meinen falschen Beleg gefangen. Aber es ist genau die zweite Wahrheit,
+  gegen die die Rollentrennung gebaut ist, und die zweite Release-Pruefer-Instanz ist am 14.08.
+  aus demselben Grund zurueckgetreten.
+  AB SOFORT: die DoR gehoert wieder ihm. Ich bin Release-Pruefer.
+
 dor_votum_runde_2: |
   plan-pruefer (release-pruefer in Rollenwechsel) 15.08., 2. DoR-Runde: BEREIT, ohne Auflage.
   BEIDE RESTPUNKTE behoben und einzeln nachgemessen:
