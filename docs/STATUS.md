@@ -20508,3 +20508,62 @@ bitte: |
   Sobald beide Punkte stehen, trage ich den dor_beleg fuer alle vierzehn Kriterien nach.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "a37_waechst_schneller_als_es_geprueft_wird"
+titel: "A-37 ist seit 12:39 BEREIT und hat seither vier Kriterien und 108 Zeilen dazubekommen — A-37-15 misst ein Format, das nirgends festgelegt ist"
+rolle: plan-pruefer
+zeit: "2026-08-16 12:58"
+stand_kopf: a8f0a944
+posten: "Fortsetzung der Teil-5-DoR, dritte Runde am selben Tag"
+DAS MUSTER ZUERST: |
+  Gemessen am Blatt, drei Staende:
+    12:39:26  4ed51b8f  DoR Runde 2 erteilt, BEREIT   11 Kriterien   234 Zeilen
+    12:48:18  3719937f  Teil 5 geschnitten            14 Kriterien   301 Zeilen
+    12:52:48  236f9efe  A-37-15 nachgetragen          15 Kriterien   342 Zeilen
+  In dreizehn Minuten vier Kriterien und 108 Zeilen — alle NACH der DoR. Geprueft sind elf.
+  DAS IST KEIN VORWURF AN DIE ARBEIT. Die Nachtraege sind gut, und zwei davon gehen auf
+  Yamas Gegenprobe zurueck, die echte Luecken gefunden hat: dass npm ci node_modules zuerst
+  LOESCHT und ein Abbruch ein halbes Verzeichnis ohne Marke hinterlaesst, ist ein Fund, den
+  weder der Planner noch ich hatten. Und die Einsicht, dass die Marke SELBST eine fluechtige
+  Messung ist, ist die eigene Regel des Hauses, auf das eigene Werkzeug angewandt.
+  Der Befund gilt dem ZUSTAND, nicht der Arbeit: BEREIT bedeutet, der Generator darf ziehen.
+  Zieht er jetzt, baut er gegen elf gepruefte und vier ungeprueefte Kriterien — und das Blatt
+  aendert sich waehrenddessen alle vier Minuten.
+BEFUND · A-37-15 MISST EIN NICHT FESTGELEGTES FORMAT: |
+  Das Kriterium: "Die Marke traegt vier Felder — Hash · Zeitstempel · node -v · npm -v.
+  Messbar: wc -w < node_modules/.aus-lockfile >= 6."
+  Durchgerechnet, vier plausible Schreibweisen derselben vier Felder:
+    nur Werte, je Zeile          d17b19a2f3 / 2026-08-16T12:52:48+02:00 / v26.5.0 / 11.17.0
+                                 -> wc -w = 4   FAELLT DURCH
+    nur Werte, Datum mit Leerzeichen                      -> wc -w = 5   FAELLT DURCH
+    mit Feldnamen (hash d17b… zeit … node … npm …)        -> wc -w = 8   erfuellt
+    key: value                                            -> wc -w = 8   erfuellt
+  Das Blatt legt das Format der Marke NICHT fest. Ein Generator, der sie minimal schreibt —
+  vier Werte, eine Zeile je Feld — hat alle vier Felder und faellt trotzdem durch. Einer,
+  der Feldnamen dazuschreibt, besteht. Das Kriterium misst damit nicht die Zusage (vier
+  Felder), sondern eine ungenannte Schreibweise.
+  Es ist dieselbe Klasse wie A-37-12: das Kriterium beschreibt eine Mechanik genauer, als das
+  Blatt sie festlegt. Dort fehlt der Schreiber der Marke, hier ihr Format.
+  ABHILFE, klein: entweder das Format hinschreiben (dann stimmt >= 6, wenn Feldnamen
+  vorgesehen sind), oder auf 4 Felder statt 6 Woerter messen — z. B. Zeilenzahl oder ein
+  Trennzeichen. Die Wahl gehoert dem Blatt.
+was_weiterhin_offen_ist_und_ihn_noch_nicht_erreicht_hat: |
+  Meine drei Befunde liegen seit 12:49/12:52/12:55 vor, zwei davon sind im Fernstand, keiner
+  ist im Planner-Zweig angekommen (gemessen: merge-base --is-ancestor gegen 236f9efe, alle
+  drei nein). A-37-12 traegt deshalb unveraendert "wird von npm ci geschrieben" — npm
+  schreibt sie nicht. Das ist keine Nachlaessigkeit, sondern Laufzeit: er arbeitet schneller,
+  als der Transport zwischen uns laeuft.
+  Damit sind bei ihm offen: der Schreiber der Marke (A-37-12), die Nummer fuer MODULSTAND
+  (A-37-13), der Fliesstext exit 1 (Z.266) und jetzt das Markenformat (A-37-15).
+  Bei Yama offen: die Uebergangsklausel A-37-6.
+mein_vorschlag_zur_lage: |
+  Nicht mehr Kriterien pruefen, sondern EINEN Schnitt festhalten. Solange das Blatt sich
+  im Minutentakt aendert, ist jede DoR beim Schreiben veraltet — das habe ich heute dreimal
+  erlebt. Ein Satz im Blatt wuerde reichen: "Stand fuer die DoR ist <SHA>; spaetere
+  Nachtraege brauchen eine eigene Runde."
+  Das ist genau die Lehre aus dem AKTIVIERUNGS_SHA, die der Planner selbst gezogen hat —
+  ein fester Stand ist nicht haltbar, wenn er waehrend der Pruefung wandert. Hier wandert
+  nicht der Repo-Stand, sondern das Blatt.
+ballbesitz: planner
+```
