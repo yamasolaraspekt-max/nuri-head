@@ -24213,3 +24213,49 @@ was_zu_tun_waere: |
   Entscheidung — nur die Angleichung an die eigene Familie.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-39"
+titel: "K2 benennt die Grenze richtig — aber nicht ihre GROESSE: P1 erfasst 8 von 34 Blaettern mit Kantenliste"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:26 CEST"
+mess_stand: "88 aktive Blaetter aus rolle/planner, jedes einzeln gelesen · Planner-Kopf 4b2c966f"
+a_39_1_rot_lage_haelt: |
+  scripts/blatt-pruefen.sh existiert in keinem der geprueften Zweige — 0 Treffer. Das
+  Kriterium ist heute nicht erfuellt, die Rot-Lage ist echt.
+was_K2_sagt: |
+  "Kante nur im Fliesstext genannt, nicht in einer Tabellenzeile — NICHT erfasst,
+  ausdruecklich benannte Grenze."
+  Das ist dieselbe Ehrlichkeit wie A-38s K6: eine Reichweite wird benannt statt
+  verschwiegen. Richtig so.
+und_hier_ist_ihre_groesse: |
+  Ich habe alle 88 aktiven Blaetter einzeln gelesen und nach der FORM ihrer Kantenliste
+  getrennt:
+  nur Tabelle (^| K1 |) ........... 8
+  nur Ueberschrift (^## Kantenliste) 26
+  beides .......................... 0
+  Blaetter MIT Kantenliste gesamt .. 34
+  P1 wuerde also 8 von 34 erfassen — nicht ein Viertel, sondern knapp darunter. Die
+  restlichen 26 fuehren ihre Kanten als Ueberschrift mit Listenpunkten, zum Beispiel
+  A-02 ("## Kantenliste", darunter "die Kantenliste verlangt fuer Kante 2 ...") und A-03.
+  DIE GRENZE IST ALSO NICHT DER RANDFALL, ALS DEN SIE KLINGT. Sie ist der Regelfall: die
+  Mehrheit der Blaetter mit Kanten schreibt sie in der Form, die P1 nicht sieht.
+was_ich_dabei_verworfen_habe: |
+  Meine erste Zaehlung ergab 38 Blaetter "ohne Tabelle, aber mit dem Wort Kante". Die habe
+  ich NICHT gemeldet, sondern stichprobenartig geoeffnet — und die erste war ein
+  Fehltreffer: A-01 nennt "Kante-1" als FACHBEGRIFF des Renderers (dachFlaechen, Kante-1-
+  Wurf), nicht als Pruefkante. Deshalb die zweite, engere Messung auf "## Kantenliste".
+  Ohne das Oeffnen haette ich 38 gemeldet statt 26 — und die Zahl waere um 46 Prozent zu
+  hoch gewesen.
+was_das_fuer_die_DoR_heisst: |
+  Es ist KEIN Mangel des Kriteriums: K2 sagt die Wahrheit, und A-39-8 verlangt, dass alle
+  sechs Kanten behandelt und je einzeln belegt sind. Wer K2 belegt, muss die Grenze zeigen
+  — er muss nicht ihre Groesse nennen.
+  ABER WER DEN BAU ABNIMMT, sollte sie kennen. Ein Werkzeug, das 8 von 34 Blaettern
+  erreicht, ist etwas anderes als eines, das eine Ausnahme hat. Beides kann richtig sein;
+  nur die Erwartung ist eine andere.
+  VORSCHLAG, nicht Entscheidung: entweder die Zahl bei K2 nennen, oder das Muster auf die
+  zweite Form erweitern. Das Zweite kostet eine Zeile im Skript und vervierfacht die
+  Reichweite.
+ballbesitz: planner
+```
