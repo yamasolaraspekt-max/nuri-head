@@ -10,8 +10,12 @@
 ```yaml
 auftrag: "A-33"
 werkzeug: "—  (Statuswahrheit in docs/STATUS.md)"
-art: "BAU — ELF Tafelzeilen auf die Kennung ihres Datensatzes ziehen. Reine Datenberichtigung,
-      kein Code."
+art: "BAU — ein SKRIPT, das die verkuerzten Tafelkennungen nachzieht.
+      UMGESCHNITTEN am 16.08. durch Yama: Liefergegenstand ist scripts/a33-kennungen-nachziehen.sh,
+      NICHT die Bearbeitung von docs/STATUS.md. Der Generator fasst die Statuswahrheit inhaltlich
+      gar nicht an — das Skript liegt unter scripts/, AUSGEFUEHRT wird es vom Integrator, und damit
+      bleibt der einzige Schreiber der einzige Schreiber. Die Einzelschreiber-Regel gilt hier,
+      bevor der Integrator ueberhaupt existiert."
 spur: A
 heimat_app: ticket
 dor_beleg: "steht aus — plan-pruefer."
@@ -172,15 +176,36 @@ A-33 IST NICHT
 ## 5 — Abnahmekriterien
 
 ```text
-A-33-1 (P1, TRAGEND) Nach dem Bau enthaelt die Menge „Tafelzeile ohne
-       Datensatz" KEINE Verkuerzung mehr. Die Zielzahl wird MIT IHREM MUSTER
-       genannt, weil sie sonst zwei Zahlen ist — dieselbe Klasse, die bei A-30
-       schon einmal die DoR gekostet hat:
-         unter dem Muster A-/W-        genau EINS   -> A-06
-         unter allen Grossbuchstaben   genau ZWEI   -> A-06 und P-02
-       A-06 hat KEINEN Datensatz und den Zustand ERLEDIGT; P-02 traegt den
-       Zustand VORLAGE und braucht legitim keinen — beide sind keine
-       Verkuerzungen und bleiben stehen.
+A-33-1 (P1, TRAGEND) — NEUGEFASST am 16.08.: EINE INVARIANTE STATT EINER ZAHL.
+
+       Nach dem Lauf gibt es KEINE Tafelzeile mehr, deren Kennung VERKUERZT ist,
+       waehrend ihr Datensatz die VOLLE Form traegt.
+       Der Lauf MELDET, wieviele es waren. Ein ZWEITER Lauf meldet NULL.
+
+       WARUM DIE ZAHL RAUS MUSSTE, und der Beleg gehoert dazu:
+       Die alte Fassung nannte feste Zielzahlen — unter dem Muster A-/W- genau
+       EINS (A-06), unter allen Grossbuchstaben genau ZWEI (A-06 und P-02).
+       BEIDE SIND ABGELAUFEN. A-06 und P-02 haben seit 086b48bd einen Datensatz;
+       der Rest waere heute NULL statt eins beziehungsweise zwei.
+
+       DER COMMIT 086b48bd IST MEINER. Ich habe A-06 und P-02 am 15.08. ihre
+       fehlenden Datensaetze gegeben — auf einen Befund des Release-Pruefers hin,
+       sachlich richtig — und dabei OHNE ES ZU BEMERKEN ein fremdes Kriterium
+       ungueltig gemacht. Gefunden hat es der Generator beim Ziehen, nicht ich.
+
+       DIE LEHRE, und sie gilt ueber diesen Auftrag hinaus:
+       Eine Zahl im Kriterium misst den Bestand ZUM ZEITPUNKT DES SCHNITTS.
+       Jede spaetere Arbeit an demselben Bestand laesst sie ablaufen — und der
+       Schneidende erfaehrt es nicht. Eine INVARIANTE laeuft nicht ab: sie sagt,
+       was NACH dem Lauf gelten muss, unabhaengig davon, wieviele es vorher waren.
+       (Dieselbe Bewegung wie bei A-37-11 und A-38-9, wo die feste Suitezahl 1750
+       durch die Bindung an den Bau-Stand ersetzt wurde. Zwei Rollen, ein Tag,
+       dieselbe Lehre unabhaengig gezogen.)
+
+       WAS UNVERAENDERT GILT: A-06 traegt den Zustand ERLEDIGT, P-02 den Zustand
+       VORLAGE. Beide sind KEINE Verkuerzungen und bleiben unberuehrt — heute
+       haben sie zusaetzlich einen Datensatz, was die Invariante ohnehin
+       unabhaengig davon macht.
        DAS MUSTER WIRD VORHER GEGEN EINE FANGPROBE GEPRUEFT (Pruefung 7,
        fuenfter Schritt), und sie muss DREI Faelle abdecken:
          `| **W-21** Sparren und Lattung |`   muss unter BEIDEN Mustern treffen

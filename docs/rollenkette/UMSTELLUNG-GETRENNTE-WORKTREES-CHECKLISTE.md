@@ -300,8 +300,9 @@ stillsteht, während man ihn prüft. **Das war an keinem Punkt dieses Tages der 
 | P2H-02 | **Umzugsregel je Rolle** — einzeln, bei leerem Ballbesitz | **UMGESETZT_UNGEPRUEFT** |
 | P2H-03 | **`NODE_PATH` in jeder Umzugsanleitung** — sonst weist das Tor jeden Commit mit falscher Ursache ab | **UMGESETZT_UNGEPRUEFT** |
 | P2H-04 | **Zustellung an die vier Rollen** — sie müssen erfahren, dass ihr Baum existiert | **BLOCKIERT** — nur Yama erreicht die Instanzen |
-| P2H-05 | **Erste Rolle umgezogen** und dort committet | **OFFEN** |
-| P2H-06 | **Alle vier umgezogen** — erst danach wird der gemeinsame Checkout zum Integrations-Checkout | **OFFEN** |
+| P2H-05 | **Erste Rolle umgezogen** und dort committet | **UMGESETZT_UNGEPRUEFT** — vier von fünf |
+| P2H-05b | **Umzugsstand je Rolle**, gemessen an eigenen Commits in der **ersten Elternlinie** ohne Vertretungen | **UMGESETZT_UNGEPRUEFT** |
+| P2H-06 | **Alle vier umgezogen** — erst danach wird der gemeinsame Checkout zum Integrations-Checkout | **OFFEN** — **es fehlt nur noch der Evaluator** |
 | P2H-07 | **`AKTIVIERUNGS_SHA` entfällt als Konstrukt** — jede Rolle trägt ihren eigenen Umzugs-SHA | **UMGESETZT_UNGEPRUEFT** |
 | P2H-08 | **Zweite Statuswahrheit — GESCHLOSSEN am 14.08. 22:51 durch `c1b3a774`** *(Merge der Release-Linie `210dcc5a` mit der Kettenlinie `09125aaf`, durch den Release-Prüfer selbst, nicht durch den Integrator)* | **UMGESETZT_UNGEPRUEFT** |
 | P2H-09 | **Der Release-Prüfer arbeitet an einem `detached HEAD`**, nicht auf einem Rollenbranch | **OFFEN** |
@@ -521,6 +522,41 @@ durchgezogen; sie selbst hatte null. **Ihr Satz gehört in dieses Blatt:** *„D
 zweiten schreibenden Instanz ist nicht null, sondern NEGATIV: zwei Release-Prüfer erzeugen die
 zweite Wahrheit, gegen die die Rolle gebaut ist."* — **Das ist die Begründung der ganzen Umstellung,
 unabhängig hergeleitet von einer Rolle, die dabei ihren eigenen Platz aufgibt.**
+
+**Umzugsstand am 16.08. 13:08, gemessen** *(flüchtige Messung — Zeitstempel nach der Regel vom
+16.08.; Kriterium: eigene Commits in der **ersten Elternlinie**, Marke **mit Doppelpunkt**, also
+ohne Vertretungen)*:
+
+```
+rolle/planner          30      umgezogen
+rolle/plan-pruefer     19      umgezogen  (erster eigener Commit 15.08. 15:43)
+rolle/release-pruefer  14      umgezogen
+rolle/generator         1      umgezogen  (erster eigener Commit 16.08. 13:07)
+rolle/evaluator         0      NICHT umgezogen  — der letzte
+```
+
+**Der Generator-Umzug ist der Beleg dafür, dass die `node_modules`-Entscheidung getragen hat.**
+Er hat als ersten Vorgang **A-33 gezogen**, nicht A-37 — und Yama hat dabei zwei Dinge entschieden,
+die hierher gehören:
+
+**(1) Weg (a): im Rollenbaum bauen, als eigener Commit liefern.** Die Alternative wäre
+**Personalunion beim Integrator** gewesen; der Generator selbst nennt den Grund dagegen — *„der
+Präzedenzfall hätte mehr gekostet als dieser eine Auftrag."*
+
+**(2) A-33 umgeschnitten: Liefergegenstand ist ein SKRIPT, keine Bearbeitung.** Damit fasst der
+Generator `docs/STATUS.md` **inhaltlich nicht an** — das Skript liegt unter `scripts/`,
+**ausgeführt wird es vom Integrator, der alleiniger Schreiber bleibt.** *Das ist die
+Einzelschreiber-Regel, angewandt bevor der Integrator existiert.*
+
+**Und eine Nebenwirkung meiner eigenen Arbeit, die ich benenne:** A-33 trug eine **feste Zielzahl**,
+und sie ist **abgelaufen** — *„A-06 hat seit `086b48bd` einen Datensatz, also wäre der Rest null
+statt eins."* **`086b48bd` ist mein Commit vom 15.08.**, mit dem ich A-06 und P-02 ihre Datensätze
+gegeben habe. **Ich habe ein fremdes Kriterium ungültig gemacht, ohne es zu bemerken.**
+
+**Der Generator hat daraus dasselbe gemacht wie ich bei der Suite-Zahl — eine Invariante statt einer
+Zahl:** *„nach dem Lauf gibt es KEINE Tafelzeile mehr, deren Kennung verkürzt ist, während ihr
+Datensatz die volle Form trägt; der Lauf meldet, wie viele es waren; ein zweiter Lauf meldet null."*
+**Eine Zahl läuft ab, eine Invariante nicht.**
 
 ### Die Umzugsanleitung — vier Zeilen je Rolle
 
@@ -974,13 +1010,13 @@ aktuellen Punkt benennen · Voraussetzungen prüfen.
 
 | Status | Anzahl |
 |---|---|
-| `OFFEN` | **112** |
-| `UMGESETZT_UNGEPRUEFT` | **63** |
+| `OFFEN` | **111** |
+| `UMGESETZT_UNGEPRUEFT` | **65** |
 | `BLOCKIERT` | **21** |
 | `NACHBESSERN` | **2** |
 | `ENTFÄLLT_MIT_BEGRUENDUNG` | **5** |
 | `UNABHAENGIG_BESTAETIGT` | **0** — **keiner, und das ist richtig: P8 hat nicht begonnen** |
-| **Summe** | **203 = alle IDs** |
+| **Summe** | **204 = alle IDs** |
 
 **Diese Zahlen sind ein Abzug, kein Zustand.** Sie sind **während der Erstellung zweimal gedriftet**
 — `P1-07b` machte aus 136 IDs 137, `P2A-11`/`P2A-12` daraus 139, der neue Block **P2F** daraus 155, **P2G** daraus 179, die Nachbesserung `P2G-25..31` daraus 186, der Mechanismuswechsel `P2H` daraus 193. **Diesmal wurde das Muster BEIM Anlegen mitgeändert** (`[A-G]`→`[A-H]`), nicht hinterher bemerkt — die Lehre aus drei Fehlversuchen hat gehalten.
