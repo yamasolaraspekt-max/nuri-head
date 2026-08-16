@@ -23714,3 +23714,142 @@ stand: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "A-41-11 haelt — und beim Messen hat mir ein Merge genau die Falle gestellt, die K7 beschreibt"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:46 CEST"
+mess_stand: "Bau 2e9cf127 · HEAD a4f31a4e · Suche ueber alle Zweige, nicht gegen HEAD"
+a_41_11_haelt: |
+  Das Kriterium verlangt: keine Datei unter resources/, app/, database/, und nicht
+  scripts/commit-pruefen.sh oder scripts/rollen-tor.sh.
+  Erst den Scope bestimmt, statt ihn zu raten: alle Commits gesucht, die
+  scripts/status-erzeugen.sh ueberhaupt beruehren, ueber ALLE Zweige. Es sind genau drei,
+  alle vom Generator:
+    1e342d53   1 Datei · 0 Nicht-Ziele
+    b585d335   1 Datei · 0 Nicht-Ziele
+    2e9cf127   1 Datei · 0 Nicht-Ziele
+  Jeder Bau-Commit beruehrt genau eine Datei, und es ist die richtige. A-41-11 ist heute
+  erfuellt.
+und_hier_hat_K7_mich_selbst_erwischt: |
+  Meine erste Gegenprobe lief ueber alle Commits, deren BETREFF 'A-41' nennt — 26 Stueck.
+  Einer davon schlug an: 4d89df6f beruehre ein Nicht-Ziel.
+  NACHGESEHEN STATT GEMELDET: 4d89df6f hat ZWEI ELTERN. Es ist ein Merge, ein
+  Transport-Commit des Release-Pruefers, und die beiden Dateien darin
+  (scripts/module-nachziehen.sh, scripts/rollen-tor.sh) gehoeren zu A-37, nicht zu A-41.
+  Der Betreff nennt A-41 nur, weil der Transport mehrere Vorgaenge zugleich befoerdert.
+  DAS IST WOERTLICH K7: "ein Merge traegt fremde Betreffs mit". Ich habe die Kante heute
+  um 15:22 gemeldet und um 15:45 ihre Behebung bestaetigt — und bin beim naechsten
+  Messschritt selbst hineingelaufen, mit demselben Mechanismus, nur an anderer Stelle:
+  dort verfaelscht der Merge die ZUSTANDSZAEHLUNG, hier hat er meinen SCOPE-FILTER
+  verfaelscht.
+  Eine Kante, die man kennt, schuetzt nicht davor, sie zu treten. Nur die Gegenprobe tut
+  das — hier war es die Elternzahl, zwei statt einer.
+was_daraus_folgt_fuer_die_abnahme: |
+  Wer A-41-11 spaeter abhakt, darf NICHT nach dem Betreff filtern. Der richtige Schnitt
+  ist die DATEI: git log --all -- scripts/status-erzeugen.sh liefert genau die drei
+  Bau-Commits und keinen Transport. Ich schreibe das dazu, weil der naechste Pruefer sonst
+  denselben Umweg geht — und moeglicherweise nicht nachsieht, sondern meldet.
+stand: |
+  Haltend: A-41-1 (als Rot-Lage), -2, -3, -8, -10, -11, K5, K7, FUND 1, Bau-Muster,
+  Vergleichsmodus, Fangprobe 10/10. Kein Punkt mehr rot.
+  Offen: A-41-4 bis -7, -9, -12 und die Kanten K1 bis K4 sowie K6.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-41"
+titel: "K1 belegt — die Kernlogik isoliert gegen vier Faelle gefahren, 4/4, und die Nachbesserung dahinter ist die eigentliche Leistung"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:48 CEST"
+mess_stand: "Bau 2e9cf127 (316 Z.) · HEAD 02bfe8c5"
+k1_belegt: |
+  K1 verlangt: zwei Zustands-Commits derselben Kennung mit identischem Zeitstempel —
+  beide melden, keiner gewinnt.
+  Die Kernlogik steht in Z.208-216. Ich habe sie NICHT nur gelesen, sondern isoliert
+  nachgebaut und gegen vier Faelle gefahren:
+    gleiche Zeit, VERSCHIEDENE Zustaende          -> Widerspruch erwartet   -> Widerspruch
+    gleiche Zeit, GLEICHER Zustand                -> kein Konflikt erwartet -> keiner
+    verschiedene Zeit, verschiedene Zustaende     -> juengster gewinnt      -> gewinnt
+    zwei ALTE Eintraege gleicher Zeit, nicht die juengsten -> darf NICHT anschlagen -> tut es nicht
+  4/4 wie erwartet.
+  Der vierte Fall ist der, an dem eine schlampige Fassung scheitern wuerde: wer irgendwo
+  im Bestand zwei gleiche Zeitstempel findet und daraus einen Widerspruch macht, blockiert
+  bei jedem zweiten Lauf. Der Code vergleicht ausdruecklich nur die JUENGSTEN
+  (e["ts"] == liste[0]["ts"]) und ist damit richtig eng.
+die_eigentliche_leistung_steht_im_kommentar: |
+  Z.240-245 dokumentiert, was vorher falsch war, und es ist ein feiner Unterschied:
+  "Vorher stand sie oben und der Widerspruch darunter — mit dem juengsten Eintrag als
+  Gewinner. Das war eine stille Aufloesung mit einer Warnung daneben. Bei gleicher Zeit
+  gibt es aber keinen juengsten; wer trotzdem einen waehlt, entscheidet per
+  Sortierreihenfolge."
+  Das ist genau die Klasse, die ich heute mehrfach gemeldet habe, nur von innen gesehen:
+  eine Ausgabe, die richtig AUSSIEHT (Tafel plus Warnung), aber eine Entscheidung
+  enthaelt, die niemand getroffen hat — hier die Sortierreihenfolge von Python.
+  Heute wird bei Widerspruch KEINE Tafel gedruckt und mit 2 ausgestiegen. Melden statt
+  aufloesen, ohne Hintertuer.
+  GEGENGEPRUEFT, dass die Strenge an BEIDEN Stellen gilt: der Tafel-Modus steigt mit
+  raus(2) aus (Z.251), der Vergleichsmodus ebenfalls (Z.310, "der Vergleich hat keine
+  Grundlage"). Es gibt keinen Weg, an dem ein Widerspruch stillschweigend in ein Ergebnis
+  einwandert.
+stand: |
+  Kanten belegt: K1, K5, K7. Offen: K2, K3, K4, K6.
+  Kriterien haltend: A-41-1 (als Rot-Lage), -2, -3, -8, -10, -11.
+  Offen: A-41-4 bis -7, -9, -12.
+  Kein Punkt rot. Kein Votum, der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
+
+```yaml
+auftrag: "A-41"
+titel: "K3 belegt — aber A-41-5 verlangt eine Commit-Eigenschaft von einer Datei-Messung, und die kann sie nicht liefern"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:51 CEST"
+mess_stand: "Bau 2e9cf127 · HEAD 6fffa356 · beide Modi im eigenen Baum gefahren, danach 0 geaenderte Pfade"
+k3_belegt: |
+  --bootstrap gefahren. Rueckgabe 2, und die Ausgabe trennt sauber:
+    EINIG, seed-faehig ohne Entscheidung: 85 von 86
+    UNEINIG, brauchen eine Entscheidung:   1
+    A-33  ABGENOMMEN laut evaluator · BEREIT laut plan-pruefer ·
+          BETRIEBSBESTAETIGT laut release-pruefer · CODE_FERTIG laut generator und
+          hausplaner-integration · SPEC_BLOCKED laut planner
+    "Regel 4: hier wird NICHTS aufgeloest. Die 1 Faelle gehoeren dem Integrator."
+  Die Kante ist behandelt: fuenf Zustaende, keiner gewinnt, Rueckgabe 2 nach A-41-10.
+  UND MEIN EIGENER ZWEIG IST TEIL DER DIVERGENZ: plan-pruefer traegt BEREIT, den
+  aeltesten der fuenf. Ich melde die Divergenz nicht von aussen, ich stehe darin.
+die_fremde_zahl_frisch_gemessen: |
+  Der Generator meldete um 15:15 "von 85 Kennungen sind 84 EINIG und genau EINE uneinig".
+  Ich messe um 15:48: 85 von 86 einig, 1 uneinig.
+  DIE ABWEICHUNG IST ECHT UND ERKLAERBAR: A-41 ist seit 15:19 selbst eine Kennung mit
+  Zustand und einig. 85+1 = 86, 84+1 = 85. Beide Messungen stimmen zu ihrem Zeitpunkt.
+  Ich schreibe es hin, weil eine uebernommene 84 morgen falsch waere und niemand wuesste,
+  woher die Differenz kommt.
+A_41_5_KANN_SO_NICHT_ERFUELLT_WERDEN: |
+  A-41-5 verlangt woertlich: die fuenf verdraengten Staende von A-33 "sind einzeln
+  protokolliert, MIT ZWEIG, ZUSTAND UND COMMIT-ZEIT".
+  GEMESSEN, beide Muster, an einem bekannten Treffer geeicht:
+    Zeitangaben in der Bootstrap-Ausgabe:  0
+    Zeitangaben in der Tafel-Ausgabe:      1   ("a613100e  16.08 15:19")
+  Das Muster funktioniert also — im Bootstrap gibt es schlicht keine Zeit.
+  DER GRUND IST STRUKTURELL, nicht nachlaessig: aus_den_zweigen() liest die zustand:-Zeilen
+  aus den STATUS.md-DATEIEN der sechs Zweige. Eine Dateizeile hat keine Commit-Zeit. Wer
+  sie haben will, muss ermitteln, welcher Commit genau diese Zeile zuletzt geaendert hat —
+  also blame oder log -L je Zeile, ueber sechs Zweige und 86 Kennungen.
+  ZWEI QUELLEN, ZWEI FAEHIGKEITEN: der Commit-Log kennt Zeiten und liefert sie (Tafel-Modus
+  zeigt es), der Dateibestand kennt sie nicht. A-41-5 verlangt eine COMMIT-Eigenschaft von
+  einer DATEI-Messung.
+was_ich_NICHT_entscheide: |
+  Ob die Commit-Zeit wirklich gebraucht wird oder ob Zweig und Zustand genuegen, ist eine
+  Frage an den Auftrag, nicht an mich. Beide Wege sind gangbar:
+    Kriterium anpassen — dann ist es heute erfuellt, denn Zweig und Zustand stehen da.
+    Bau erweitern — dann kostet es einen blame-Lauf je Kennung und Zweig.
+  Ich lege es hin und messe, was daraus wird. Kein Bau, kein Zustandsfeld angefasst.
+stand: |
+  Kanten belegt: K1, K3, K5, K7. Offen: K2, K4, K6.
+  Kriterien haltend: A-41-1 (Rot-Lage), -2, -3, -8, -10, -11.
+  NEU AUFGEFALLEN: A-41-5 ist am gebauten Bootstrap nicht erfuellbar.
+  Offen: A-41-4, -6, -7, -9, -12.
+ballbesitz: planner
+```
