@@ -2435,3 +2435,89 @@ Produktivcode — *„ich melde sie und fasse sie nicht an"*, wie es im Datensat
 bleibe ich.
 
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Die Behebung meines A-42-Ballfunds nachgemessen: die Gleichung hält, der mitgelieferte Ortungsbefehl nicht
+
+*Vorratsprüfung (e) an einer FREMDEN Behebung · gemessen 16.08. gegen `0df68243`*
+
+Der Planner hat meinen Fund mit `11232084` behoben und meine Empfehlung wörtlich übernommen: die
+Ball-Summengleichung als **A-42-11**, dazu **A-42-12** mit dem neuen Ortungsbefehl je Rolle.
+**Ich habe beide gefahren, statt die Behebung zu glauben.**
+
+### A-42-11 hält — und zwar aus demselben Grund wie A-42-2
+
+Die Gleichung lautet: *vorher je Rolle über `docs/STATUS.md`, nachher über **beide** Dateien, die
+Summen müssen übereinstimmen.*
+
+**Sie trägt, auch mit dem losen Muster, das das Kriterium mitliefert.** Der Grund ist ein
+Erhaltungssatz: jede Zeile liegt nach dem Umzug in genau einer der beiden Dateien, die Summe über
+beide bleibt unverändert. **Dieselbe Mechanik, mit der A-42-2s Zählfehler von +2 sich aufhebt.**
+
+### A-42-12 hält NICHT — dem Befehl fehlt der Zeilenanfang
+
+Das Kriterium gibt jeder Rolle diesen Befehl mit:
+
+```
+grep -c 'ballbesitz: <rolle>' docs/STATUS.md docs/BEFUNDNOTIZEN.md
+```
+
+**Ohne `^` zählt er jede Zeile mit, in der die Zeichenfolge irgendwo vorkommt.** Gemessen am
+heutigen Bestand:
+
+```
+                  ohne Anker    mit Anker
+plan-pruefer          49           39
+planner               90           81
+generator             15           10
+release-pruefer        7            5
+evaluator              1            0
+integrator             2            2
+```
+
+**Fünf von sechs Rollen bekämen eine zu große Zahl** — bei mir zehn Phantom-Bälle, beim Planner
+neun. **Und die Phantome sind ausgerechnet Fließtext, der die Ballortung zitiert**, zum Beispiel:
+
+```
+Z.17743   "'grep ^ballbesitz: plan-pruefer direkt gelesen' — grep liest Zeilen, nicht Zaeune"
+Z.19808   "(1) sie liest 'grep ^ballbesitz: plan-pruefer' — ein yaml-FELD."
+```
+
+**Der Befehl zählt die Dokumentation seiner selbst.** Dazu kommt eine zweite Unschärfe: drei
+Zeilen, die `planner` **und** `plan-pruefer` erwähnen, werden für **beide** Rollen gezählt.
+
+**Und ein zweiter, kleinerer Mangel:** `grep -c` über **zwei** Dateien gibt **zwei Zeilen** aus, keine
+Summe:
+
+```
+docs/BEFUNDNOTIZEN.md:31
+docs/STATUS.md:8
+```
+
+*Wer eine Zahl will, muss sie selbst bilden — und wer das übersieht, vergleicht eine Teilzahl mit
+einer Gesamtzahl.*
+
+### Die Ironie, die den Fund festmacht
+
+**Meine eigene Wacheanweisung führt den Anker seit jeher:**
+
+```
+Wache:     grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md      MIT Anker
+A-42-12:   grep -c  'ballbesitz: <rolle>'      zwei Dateien        OHNE Anker
+```
+
+**Das Kriterium, das die Ballortung retten soll, liefert eine schlechtere Ortung als die, die es
+ersetzt.**
+
+### Soll — ein Zeichen und ein Bindestrich, beide Formen getestet
+
+```
+cat docs/STATUS.md docs/BEFUNDNOTIZEN.md 2>/dev/null | grep -c '^ballbesitz: <rolle>'
+grep -h '^ballbesitz: <rolle>' docs/STATUS.md docs/BEFUNDNOTIZEN.md 2>/dev/null | grep -c ''
+```
+
+**Beide liefern heute 39 für mich und 81 für den Planner — die verankerten Zahlen.** Und beide
+überstehen es, dass `docs/BEFUNDNOTIZEN.md` **vor** dem Lauf noch gar nicht existiert: der Fehler
+geht auf stderr, die Zahl bleibt richtig. *Das ist keine Kleinigkeit, denn A-42-11 verlangt die
+Vorher-Messung genau in diesem Zustand.*
+
+**Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau.**
