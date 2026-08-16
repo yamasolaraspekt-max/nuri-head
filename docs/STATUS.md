@@ -26261,3 +26261,48 @@ was_das_fuer_die_DoR_heisst: |
   zu A-40-9, dem als einzigem der fuenf Suite-Kriterien die Invarianten-Klausel fehlt.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "Berichtigung meiner Meldung von vor zwei Runden — die 1 war eine Regelankuendigung, kein Eintrag; und A-40-2 wuerde heute 116 Meldungen erzeugen"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:11:05 CEST"
+mess_stand: "FORMELSAMMLUNG.md heute und am basis_sha 99add90f · 89 aktive Blaetter einzeln gelesen"
+was_ich_berichtige: |
+  Vor zwei Runden habe ich gemeldet: "heute ist die Rot-Lage schon angebrochen —
+  nachgerechnet_an 1". Das ist falsch.
+  NACHGESEHEN, WO DIE 1 STEHT: in Zeile 2, in der Kopfzeile der Datei —
+  "SEIT 16.08.2026: Jeder Eintrag traegt einen Zustand — ABGESCHRIEBEN · NACHGERECHNET ·
+  GEGENGEPRUEFT ...".
+  Das ist die ANKUENDIGUNG der Regel, nicht ihre Anwendung. Kein einziger Formeleintrag
+  traegt ein Zustandsfeld.
+  Damit ist A-40-1s Rot-Lage nicht nur am Basis-SHA erfuellt, sondern auch heute noch
+  vollstaendig. Mein Zusatz "zu einem Neuntel angebrochen" faellt weg.
+  ES IST DERSELBE FEHLER WIE HEUTE MEHRFACH, und diesmal an mir: eine Zahl gezaehlt und
+  ihre Bedeutung nicht geoeffnet. Genau das habe ich um 16:32 an A-40-5 richtig gemacht
+  (die 18 vermeintlichen Luecken waren Verweise) und hier unterlassen.
+a_40_2_die_groessenordnung: |
+  A-40-2 verlangt: "Die siebte Innenpruefung laeuft und findet einen echten Fall.
+  Positivprobe historisch: gegen ein Blatt, das eine F-Kennung nennt, deren Eintrag kein
+  nachgerechnet_an traegt -> Meldung."
+  GEMESSEN ueber alle 89 aktiven Blaetter:
+  Blaetter mit mindestens einer F-Kennung .... 41
+  Blaetter ohne ............................. 48
+  F-Nennungen insgesamt, je Blatt eindeutig . 116
+  Definitionsstellen in der Formelsammlung .. 32
+  davon mit nachgerechnet_an ................  0
+  NAHEZU JEDE DER 116 NENNUNGEN WAERE HEUTE EINE MELDUNG. Die Positivprobe ist also nicht
+  knapp ausloesbar, sondern flaechendeckend.
+was_das_bedeutet_und_was_nicht: |
+  Es ist KEIN Einwand gegen das Kriterium. A-40-2 verlangt genau einen echten Fall, und
+  den gibt es 116-fach — die Probe ist erfuellbar, mit Abstand.
+  Aber wer die Pruefung baut, sollte die Zahl kennen. Eine Innenpruefung, die bei 41 von
+  89 Blaettern anschlaegt und 116 Zeilen ausgibt, ist entweder ein Alarm oder eine
+  Bestandsaufnahme — und das ist ein Unterschied in der Bauart, nicht im Ergebnis.
+  Dasselbe habe ich um 17:24 an A-39s K2 gemeldet: die Kante nennt ihre Grenze richtig,
+  aber nicht ihre Groesse. Hier ist es umgekehrt — das Kriterium nennt seinen Fall richtig,
+  aber nicht seine Menge.
+  VORSCHLAG, nicht Entscheidung: die erwartete Trefferzahl im Kriterium nennen, oder die
+  Pruefung von Anfang an als Bestandsaufnahme bauen, die zaehlt statt zu melden.
+ballbesitz: planner
+```
