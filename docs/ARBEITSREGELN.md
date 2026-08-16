@@ -1463,3 +1463,59 @@ Rinnenbemessung nach DIN 1986-100: dann ist „vertagen" eine Ableitung statt ei
 nachrechnen lässt, schafft ein Vorhaben, das niemand macht — und trifft auch die, die nie jemand
 benutzt. **Ein Eintrag, den nie jemand benutzt, ist in seiner Richtigkeit auch nie eine Gefahr.**
 Die Regel skaliert sich selbst.
+
+---
+
+## Nachtrag vom 16.08. — Der Zustandswechsel IST der Commit
+
+**Yamas §1-Entscheidung zu `e521bd98`.** `docs/STATUS.md` wird ab sofort **erzeugt, nicht
+geschrieben**. Anlass: die Statuswahrheit lag in **sechs** Fassungen vor, ein Auftrag (`A-33`)
+trug **fünf** verschiedene Zustände über den gesamten Lebenszyklus, und der Integrationszweig war
+**86 Commits** hinter dem jüngsten Stand.
+
+> **Damit fällt die Frage „wer darf schreiben" weg, statt beantwortet zu werden** — derselbe
+> Griff wie bei den getrennten Worktrees: der Fall kann nicht mehr entstehen.
+
+### Der Wortlaut
+
+Eine Rolle meldet einen Zustandswechsel **als Commit-Betreff**, in genau dieser Form:
+
+```
+<rolle>: zustand: <KENNUNG> · <ZUSTAND> · <rolle> · <beleg-sha>
+
+Beispiel:  generator: zustand: A-33 · CODE_FERTIG · generator · bau 3e22e61b
+
+  WER   = git-Autor        — nicht aus Prosa
+  WANN  = git-Zeitstempel  — nicht aus Prosa
+  WAS   = Kennung + Zustand + Beleg-SHA
+  WO    = im eigenen Rollenzweig, sonst nirgends
+```
+
+**Maschinell prüfbar** — der Betreff muss diesem Muster genügen:
+
+```
+^(?:[a-z-]+(?:-[0-9]+)?:\s+)?zustand:\s+[A-Z0-9-]+\s+·\s+[A-Z_]+\s+·\s+[a-z-]+(?:-[0-9]+)?\s+·\s+
+```
+
+**Die vorangestellte Rollenmarke ist Pflicht, nicht Zierde — und der Grund ist gemessen:**
+`commit-pruefen.sh:73` liest jedes Präfix der Form `wort: ` als Rollenmarke. Ein Betreff, der mit
+`zustand:` **beginnt**, wird als Rollenwiderspruch abgewiesen (`exit 2`); ohne jede Marke stellt
+Zeile 84 `"$ROLLE: "` voran. **Beide Wege sind zu.** Deshalb steht die Rolle zweimal: einmal für
+das Tor aus der Umgebung, einmal als Inhalt aus dem Text. *Zwei Leser, zwei Quellen — und deshalb
+keine zweite Wahrheit.*
+
+### Was daraus folgt
+
+- **Niemand bearbeitet `docs/STATUS.md` von Hand.** Der **Integrator** lässt
+  `scripts/status-erzeugen.sh` laufen und schreibt die Tafel daraus.
+- **Je Kennung gewinnt der jüngste Zustands-Commit.** Merges zählen nicht (`--no-merges`) — sonst
+  gäbe ein Transport einem alten Zustand eine neue Zeit und könnte einen neueren verdrängen.
+- **Widerspruch bei gleicher Zeit wird gemeldet, nicht aufgelöst.**
+- **Solange kein Integrator läuft, wird nur gemeldet, nicht geschrieben.** Ein Weg kommt vor
+  seiner Sperre; A-37 Teil 2 sichert danach eine offene Tür, statt eine zu ersetzen.
+
+### Übergangszeit
+
+**Bis der erste Integrationslauf gefahren ist, gilt der Sechs-Zweige-Blick:** wer eine Kennung
+prüft oder einen Auftrag zieht, misst über **alle sechs Zweige** und nicht gegen `HEAD` — `HEAD`
+ist nachweislich nicht der jüngste Stand.

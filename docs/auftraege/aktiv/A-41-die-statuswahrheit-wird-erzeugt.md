@@ -173,9 +173,17 @@ leer bliebe.** Die anderen Rollen ziehen mit der DoR nach.
   Fehler wie A-37-6, wo die Barriere vor ihrem Ersatz kam.** Geändert wurde die geforderte
   **Handlung** (ausweisen statt schreiben), **nicht die geforderte Aussage** — die eine Zeile je
   Kennung und `A-33 = BETRIEBSBESTAETIGT` stehen unverändert.
-- **A-41-5** · **Die fünf verdrängten Stände von A-33 sind einzeln protokolliert**, mit Zweig,
-  Zustand und Commit-Zeit. *(K3 — das ist die erste vollständige Messung der Divergenz und der
-  eigentliche Ertrag des Laufs.)*
+- **A-41-5** · **Die fünf verdrängten Stände von A-33 sind einzeln protokolliert**, mit **Zweig,
+  Zustand und der Commit-Zeit des Standes, aus dem der Zustand gelesen wurde** — messbar als
+  `git log -1 --format=%at <zweig> -- docs/STATUS.md`. *(K3 — das ist die erste vollständige
+  Messung der Divergenz und der eigentliche Ertrag des Laufs.)*
+  **⚠ BERICHTIGT.** Vorher stand schlicht *„Commit-Zeit"*. **Der Befund des Plan-Prüfers
+  (`983d4b34`) trägt: die Erstbefüllung ist eine DATEI-Messung** (`git show <zweig>:docs/STATUS.md`)
+  — **eine aus einer Datei gelesene Zustandszeile hat keine eigene Commit-Zeit.** Ich habe eine
+  **Commit-Eigenschaft von einer Datei-Messung** verlangt; das war nicht erfüllbar.
+  **Dieselbe Klasse wie A-41-4** — ein Kriterium, das etwas fordert, was es an dieser Stelle nicht
+  geben kann. **Die Aussage bleibt unverändert:** welcher der Stände der jüngste ist, muss
+  entscheidbar bleiben, sonst trägt „der jüngste gewinnt" nicht.
 - **A-41-6** · **DIE GEGENPROBE GEGEN DEN HEUTIGEN STAND IST GEFAHREN UND PROTOKOLLIERT.**
   Erzeugnis gegen den bestehenden Stand des Integrationszweiges gestellt. **Jede Abweichung ist
   aufgeführt und je Zeile einer Ursache zugeordnet:** verdrängter Stand *(K3)*, Prosa *(K4)*,
