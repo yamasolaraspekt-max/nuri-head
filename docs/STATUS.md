@@ -25579,3 +25579,44 @@ methodisch: |
   Ohne diese Probe haette ich dem Planner zwei Fehler gemeldet, die keine sind.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "P-07"
+titel: "Der Planner arbeitet seit 14:38 ohne meine Befunde — 94 Commits erreichen ihn nicht, und es liegt nicht am Transport"
+rolle: plan-pruefer
+zeit: "16.08. 18:49"
+mess_stand: ad8ad162233f662e7493194610afe31921a1a56a
+baum: "sauber (0 Eintraege)"
+vorratspruefung: "Posten e — eigene Befunde verfolgen: liegen sie noch bei ihrem Halter?"
+befund: |
+  Von zwoelf Befunden, die ich heute Abend geschrieben habe, kennt KEIN Rollenzweig
+  einen einzigen. Gemessen ueber die Blocktitel in docs/STATUS.md je Zweig:
+  planner 0, generator 0, evaluator 0, release-pruefer 0 von 12.
+wo_die_luecke_liegt: |
+  NICHT im Transport. Mein HEAD ist in auto/hausplaner-integration enthalten
+  (merge-base --is-ancestor bestaetigt), der Integrationszweig steht auf ae9c86d7
+  von 18:47 und kennt meine juengsten Bloecke. refs/heads/rolle/plan-pruefer zeigt
+  auf denselben Commit wie mein HEAD, ist also fuer jeden im Repo lesbar.
+  Die Luecke ist der RUECKWEG. Die Rollenzweige ziehen selbst nach, und zwar zuletzt:
+    planner           14:38  (0d79ce45 'Stand nachgezogen vor dem Eintrag von A-39 und A-40')
+    generator         17:40
+    evaluator         17:41
+    release-pruefer   17:41
+  Mein juengster Commit im planner-Zweig ist 99add90f von 13:45.
+umfang: |
+  94 meiner Commits liegen zwischen 99add90f und HEAD. Darin die vollstaendige
+  A-42-DoR (neun Kriterien, sechs Kanten), die A-40-Pruefung (-1, -3, -4, K1, K2, K3),
+  Yamas Bauvorrat-Messung, die A-38-in-A-37-Annahme, drei Selbstberichtigungen und
+  die Befunde P-03 bis P-06.
+warum_das_zaehlt: |
+  Ich schreibe Befunde mit 'ballbesitz: planner'. Ein Ball, den der Empfaenger nicht
+  sehen kann, ist kein Ballwechsel. Der Planner hat um 18:40 Yamas Baufrage beantwortet,
+  ohne meine Messung dazu kennen zu koennen — und mein P-06 findet dort eine Zeile,
+  die ich ihm um 17:46 haette liefern koennen, wenn der Weg offen waere.
+  Es ist auch die Erklaerung fuer P-05: ich lese die Statuswahrheit veraltet, WEIL
+  der Austausch in beide Richtungen an derselben Stelle haengt.
+was_ich_NICHT_tue: |
+  Ich ziehe nicht selbst nach und schreibe in keinen fremden Zweig. Beides waere
+  ausserhalb meiner Rolle; die Einzelschreiber-Regel gilt. KEIN PUSH.
+ballbesitz: yama
+```
