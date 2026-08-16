@@ -227,11 +227,19 @@ Einzeiler, der `core.hooksPath` setzt, und A-38-6 belegt, dass er in einem zweit
 Commits am 16.08. gesamt        472
 davon MERGES                    188   =  40 %   laufen am Tor vorbei
 Nicht-Merges                    284
-davon mit Rollenmarke           281   =  99 %   das Tor greift
+davon mit Rollenmarke           284   = 100 %   das Tor greift lueckenlos
 ```
 
-> **Das Rollen-Tor erreicht 60 % der Commits. Bei denen wirkt es fast lückenlos — 281 von 284.
+> **Das Rollen-Tor erreicht 60 % der Commits. Bei denen wirkt es LÜCKENLOS — 284 von 284.
 > Die anderen 40 % sieht es nie.**
+
+**⚠ Die drei scheinbaren Ausreißer sind keine.** Eine erste Zählung ergab 281 und meldete drei
+markenlose Commits. **Geöffnet statt gezählt:** `c425638d` und `a4694b21` tragen
+`release-pruefer (in Yamas Namen): `, `4ed51b8f` trägt
+`plan-pruefer (release-pruefer in Rollenwechsel): `. **Alle drei haben eine Rollenmarke — mit
+einem Klammerzusatz dazwischen, den mein Zählmuster nicht erfasste.** *H-9 an der eigenen
+Messung: die Schreibweise gezählt, nicht die Sache.*
+**Das macht den Befund stärker:** die gesamte Lücke sind die Merges, und **nur** die.
 
 **Der Anteil war beim Schnitt dieses Blattes deutlich kleiner.** Er ist heute gewachsen, weil der
 Integrationslauf **188 Merges** erzeugt hat — **je besser der Rückfluss funktioniert, desto größer
