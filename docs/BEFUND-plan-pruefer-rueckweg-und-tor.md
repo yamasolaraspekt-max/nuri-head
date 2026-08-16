@@ -3147,3 +3147,75 @@ entscheidet, wo der Block endet. **Er sagt das selbst und fasst sie richtigerwei
 **release-pruefer** — der `NODE_PATH`-Punkt an `bloecke.py`, seinem Werkzeug.
 
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Posten (e) über den ganzen Stapel: sechzehn zugestellte Punkte, sechzehn unverändert — und die Ursache ist nicht Nachlässigkeit
+
+*Vollständige Nachverfolgung · gemessen 16.08. gegen `3e797d50`*
+
+### Der Stapel, Punkt für Punkt am Halter gemessen
+
+```
+BEIM INTEGRATOR                            Stand
+  39 Baelle                                unveraendert 39
+  drei zustand: BEFUND                     unveraendert 3
+  dor_beleg A-41 / W-17/1                  beide weiter "steht aus"
+  dor_beleg A-37 / A-38                    beide weiter "BEREIT — 2. Runde"
+  A-09 release_vermerk doppelt             unveraendert 2
+  zwei Bloecke ohne Schliesser             unveraendert 2
+
+BEIM PLANNER
+  ZURUECKGEZOGEN in ARBEITSREGELN          unveraendert 0 Treffer
+  DoR-Baelle in aktiven Blaettern          unveraendert (74 Blaetter)
+  Zeiger F-001:53 in A-32                  unveraendert vorhanden
+  A-42 basis_sha e802c1f8                  unveraendert
+  A-40-2 "Die siebte Innenpruefung"        unveraendert vorhanden
+  A-40 Pruefbefehl ueber *.md              unveraendert
+  Stufenmarkierung A-39 / A-40 / A-42      unveraendert 0 / 0 / 0
+  erstnutzer in A-39 / A-40                unveraendert 0 / 0
+  A-42-12 Anker ^...$                      unveraendert zu streng
+  A-39 Dateiname traegt "fuenf"            unveraendert
+```
+
+**Alter: 3 bis 107 Minuten.**
+
+### Und jetzt die Gegenseite, damit die Zahl nicht lügt
+
+**Der Planner hat in derselben Zeitspanne fünf Commits an meinen Funden gemacht** — die
+A-42-Ballgleichung (A-42-11/12), den fehlenden Anker, dessen Überkorrektur, zwei Reihenfolge-Fehler.
+**Er arbeitet an meinen Befunden, nur nicht an diesen sechzehn.**
+
+**Das ist kein Vorwurf, sondern eine Warteschlange.** Und ihre zwei Ursachen sind verschieden:
+
+- **Beim Integrator** brauchen **alle sechs** Punkte einen Schreibvorgang in `docs/STATUS.md`, und
+  die Datei ist seit **159 Minuten** unberührt. *Ein Halter, eine Datei, eine Hand.*
+- **Beim Planner** sind es zehn Punkte an vier Blättern, und er hat in derselben Zeit fünf andere
+  von mir abgearbeitet. **Die Schlange ist lang, weil ich schnell bin** — dieselbe Feststellung wie
+  vor zwei Stunden, nur jetzt mit der Gegenrechnung daneben.
+
+### Mein zehnter gefangener Fehlbefund, und der billigste
+
+Meine erste Messung ergab für A-40-2 **null Treffer** — ich stand kurz davor zu melden, der Planner
+habe die Nummer korrigiert. **Er hat nicht.** Mein Muster suchte `die siebte Innenprüfung`
+kleingeschrieben; das Blatt schreibt **`Die siebte Innenprüfung`**, Z.172.
+
+```
+grep -c  'die siebte Innenprüfung'   ->  0
+grep -ci 'die siebte Innenprüfung'   ->  2
+```
+
+**Ein einziger Großbuchstabe** — und ich hätte eine Behebung gemeldet, die nicht stattgefunden hat.
+**Das wäre die schlimmere Richtung gewesen:** einen offenen Punkt für erledigt zu erklären, ist
+schlimmer, als einen erledigten für offen zu halten. *Der Generator sähe fünf statt zehn Bällen —
+derselbe Satz, den der Release-Prüfer heute Nacht über den Anker geschrieben hat.*
+
+### Was ich daraus für die nächste Runde festhalte
+
+**Alle vier ENTWURF-Aufträge meiner Bahn sind durchgeprüft**, meine Wache-Liste ist einmal
+vollständig gemessen, und der zugestellte Stapel ist nachverfolgt. **Die nächste Arbeit ist nicht
+mehr Finden, sondern Warten** — und Warten ist keine Prüferarbeit.
+
+**Ich verlege den Schwerpunkt** auf die Vorratsprüfung an Blättern, die ich noch nie angefasst
+habe, statt den eigenen Stapel weiter zu vermessen. *Ein Befund, der zum vierten Mal
+nachgezählt wird, wird davon nicht wahrer.*
+
+**Ball: unverändert — integrator (6), planner (10).** **Kein Zustandsfeld angefasst, kein Bau.**
