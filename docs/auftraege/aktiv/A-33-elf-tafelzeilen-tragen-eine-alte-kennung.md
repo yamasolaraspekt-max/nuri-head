@@ -256,3 +256,84 @@ und_ich_habe_meinen_eigenen_neuen_handgriff_angewandt: "Das Paarungs-Muster lief
         das ist seine erste Anwendung."
 A_33_nimmt_keinen_paragraf3_platz: "ENTWURF, nicht IN_ARBEIT."
 ```
+
+## 6 — Votum des Evaluators, Runde 1 (16.08.)
+
+```yaml
+votum: SPEC_BLOCKED
+runde: 1
+gemessen_am: 3e22e61b
+pruefstand: "eigener Worktree an 3e22e61b, node_modules und vendor per cp -al"
+
+DER_BEFUND_IN_EINEM_SATZ: "A-33-7 verlangt woertlich das Gegenteil dessen, was der Kopf desselben
+  Blattes verlangt — und keine Bauarbeit kann beides erfuellen."
+
+A_33_7_IST_MIT_DEM_EIGENEN_BLATT_UNVEREINBAR: |
+  A-33-7 (Z.232-233): 'Kein Code. Gegenprobe: der Bau-Commit fasst NUR docs/STATUS.md an —
+  scripts/, resources/ und app/ kommen null Mal vor.'
+  Kopf art: (Z.13-18): 'UMGESCHNITTEN am 16.08. durch Yama: Liefergegenstand ist
+  scripts/a33-kennungen-nachziehen.sh, NICHT die Bearbeitung von docs/STATUS.md.'
+  GEMESSEN am Commit 3e22e61b, git show --name-only:
+    docs/STATUS.md   0 Mal    (A-33-7 verlangt: das einzige)
+    scripts/         1 Mal    (A-33-7 verlangt: null)
+    resources/       0 · app/ 0
+  Der Bau ist gegen den Kopf richtig und gegen A-33-7 falsch. Der Umschnitt vom 16.08. hat A-33-1
+  neugefasst und A-33-7 stehen lassen. Das ist keine Bau-Frage: der Generator kann A-33-7 nur
+  erfuellen, indem er Yamas Anweisung bricht. §12.2 — der Umfang des Befundes ist genau diese eine
+  Kriterienzeile.
+
+WAS_SONST_NOCH_AN_DER_ALTEN_LOGIK_HAENGT: |
+  A-33-3, A-33-5 und A-33-6 messen 'vor und nach dem Bau'. Der Bau aendert docs/STATUS.md nicht
+  mehr — in der Bau-Lesart sind alle drei trivial gruen, ohne etwas zu belegen. Aussagekraeftig
+  sind sie nur in der LAUF-Lesart, und die habe ich gefahren (siehe Messtisch). Ich schneide nicht
+  um; ich melde, dass die Lesart im Blatt nicht mehr festgelegt ist.
+
+DER_BAU_SELBST_TRAEGT, und das gehoert vor den Befund: |
+  Sechs von sieben Kriterien habe ich gruen gemessen, jedes selbst gefahren. Das Skript loest die
+  Aufgabe sauberer als eine Bearbeitung es koennte: die Zuordnung kommt aus den Daten, Regel 1
+  schuetzt W-27 und W-40 vor dem Loeschen, Regel 3 ist der Riegel gegen das Raten, und der
+  Trockenlauf am HEUTIGEN Bestand (141 Datensaetze statt 121 am Bau-Stand) liefert unveraendert
+  11 Zeilen und NULL unklare Faelle. Genau das war Yamas Grund fuer den Umschnitt.
+
+MEIN_BEINAHE_FEHLER, offengelegt: |
+  Ich hatte A-33-5 als P1-Befund fertig: a26-ball-drift meldet nach dem Lauf 31 Zeilen und exit 1,
+  wo vorher 0 und exit 0 stand — zweimal reproduziert, mit md5-Ruecksetzung auf 7811e4d8.
+  DANN habe ich die Behauptung des Generators geprueft statt sie zu glauben ODER zu verwerfen:
+  'ab dem naechsten Commit ist es weg'. Im Pruefstand committet — a26 meldet 0 Zeilen, exit 0.
+  a26 liest 'git diff HEAD', arbeitet also auf UNCOMMITTETEN Aenderungen; im Diff steht die
+  Umbenennung zweimal, einmal als entfernte alte Kennung ohne Tafelzeile. Mein Befund haette einen
+  Zwischenzustand gemeldet, den E1 gar nicht misst. A-33-5 ist am COMMIT gruen.
+
+ZWEI_BEOBACHTUNGEN_OHNE_BEFUNDSTATUS: |
+  (1) OFF-BY-ONE IN DER MELDUNG: das Skript meldet 'Z.18  W-01', die Zeile steht auf 19.
+      zeilen.forEach((l, i)) liefert 0-basierte Indizes, ausgegeben als 'Z.'. Die WIRKUNG ist
+      richtig (die Ersetzung laeuft ueber denselben Index), nur die Angabe zeigt eine Zeile zu
+      hoch. In diesem Haus ist das eine belegte Fehlerklasse — A-29, A-34 und A-33s eigener
+      Zeiger. Kein Kriterium verlangt Zeilennummern; deshalb Beobachtung und nicht Befund.
+  (2) DIE DASH-DIFFERENZ BLEIBT: a26 meldete im Zwischenzustand 'W-01/1 BALL: Tafel *–* <->
+      Datensatz *—*' — U+2013 gegen U+2014, je Zeichen gemessen. Sie bestand VORHER schon und war
+      nur unsichtbar, weil a26 die zwei Orte ohne gemeinsame Kennung nicht paaren konnte. Der Lauf
+      macht sie erstmals sichtbar und a26 verliert sie nach dem Commit wieder aus dem Blick, weil
+      es diff-basiert prueft. Gehoert nicht zu A-33 — gemeldet, weil A-33 sie aufgedeckt hat.
+
+WEITERGABE: "SPEC_BLOCKED geht an den PLANNER. Der Bau bleibt liegen wie er ist; er braucht keine
+  Aenderung, sondern ein Blatt, das den Umschnitt zu Ende traegt. Wiederabnahme faehrt ALLE SIEBEN
+  Kriterien erneut (§12.3)."
+```
+
+### Messtisch — jede Kriterienzeile, auch die trivialen
+
+| Kriterium | Messung | Ergebnis |
+|---|---|---|
+| **A-33-1** (P1, TRAGEND) | Lauf selbst gefahren: `NACHZUZIEHEN: 11 Zeile(n), 11 Kennung(en)`. Zweiter Lauf: `keine — die Invariante haelt bereits`. Fangprobe `--fangprobe` selbst gefahren: **5/5**, die drei verlangten Faelle (W-21 trifft, P-02 trifft, `M-02-Kopienzahl` trifft nicht) einzeln in der Rohausgabe | **grün** |
+| **A-33-2** (P1) | Diff nach dem Lauf gegen `W-27\|W-40` gefiltert: **0 Treffer**. Alle vier Tafelzeilen (`W-27`, `W-27/1`, `W-40`, `W-40/1`) vorher 1 / nachher 1 | **grün** |
+| **A-33-3** (P1) | Ballbesitz-Spalte je Zeile einzeln: elfmal `'–'` vorher, `'–'` nachher. Zustand `BETRIEBSBESTAETIGT` in allen elf unveraendert | **grün** (in der Bau-Lesart trivial, s. o.) |
+| **A-33-4** | Rest der Zeile NACH der Kennung zeichengenau verglichen, alle elf, mit Laengen: 313/313 · 274/274 · 1271/1271 · 668/668 · 315/315 · 455/455 · 648/648 · 308/308 · 440/440 · 329/329 · 304/304 — **alle zeichengleich** | **grün** |
+| **A-33-5** | `a26-ball-drift.sh` am COMMIT: **0 Zeilen, exit 0** — vorher wie nachher. Rohausgabe des Zwischenzustands (31 Zeilen, exit 1) samt Aufloesung siehe MEIN_BEINAHE_FEHLER | **grün** |
+| **A-33-6** | `wc -l` vorher **19521**, nachher **19521**; entfernte Zeilen im Diff **0** (11 geaenderte) | **grün** |
+| **A-33-7** | `git show --name-only 3e22e61b`: `scripts/a33-kennungen-nachziehen.sh`. docs/STATUS.md **0** · scripts/ **1** · resources/ 0 · app/ 0 | **ROT — unerfüllbar, s. Befund** |
+| *Zusatz: Trockenlauf am heutigen Bestand* | 82 Kennungen · **141** Datensaetze · 11 Zeilen · **0 unklar**, Datei unberuehrt (`git status` 0) | **trägt** |
+| *Zusatz: Idempotenz* | zweiter Lauf schreibt nicht, md5-Ruecksetzung auf `7811e4d8c3e889c350008165eb5644b3` belegt | **trägt** |
+| *Browser* | **nicht gefahren** — keine sichtbare Wirkung, der Bau ist ein Skript ohne UI | **entfällt** |
+| *§15 / `getDatabaseName()`* | **nicht beruehrt** — kein Datenbankzugriff im Scope | **entfällt** |
+| *Insel-Suite / tsc* | **nicht gefahren** — der Bau fasst weder `resources/` noch `app/` an (je 0 Treffer im Commit) | **entfällt** |
