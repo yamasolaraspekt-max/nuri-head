@@ -21166,6 +21166,33 @@ DIE LEHRE FUER MEINE EIGENE ARBEIT: |
   Ich ziehe meinen Baum NICHT nach: ein Merge erzeugte einen Merge-Commit ohne Rollenmarke,
   und das ist genau der Gegenstand von A-38. Gegen den Fernstand zu messen kostet nichts und
   vermeidet beides.
+ABSCHLUSS_14_35_DIE_KANTEN_UND_IHRE_ZAHLEN: |
+  A-40s sechs Kanten gelesen, gegen den Fernstand. Sie sind stark, und zwei nenne ich:
+    K3  "Die Kennung wird nur genannt, nicht definiert (die 17 S-Verweise in der
+         FORMELSAMMLUNG)" -> kein Eintrag, keine Ampel
+    K6  "Zwei Rollen rechnen denselben Fall und kommen auf Verschiedenes -> BEIDE
+         Rechnungen bleiben stehen, Zustand bleibt ABGESCHRIEBEN"
+  K6 ist genau meine Lage von heute Mittag: meine A-38-Zahl gegen die des Planners, beide
+  sauber gemessen, verschieden. Dass A-40 dafuer nicht die eine Wahrheit erzwingt, sondern
+  beide stehenlaesst, halte ich fuer richtig.
+  DIE ZWEI ZAHLEN IN DEN KANTEN SIND NACHPRUEFBAR, und ich habe sie nachgezaehlt:
+    K3: eindeutige S-Kennungen in der FORMELSAMMLUNG -> 17. EXAKT.
+        S-001 006 007 009 010 011 020 022 030 032 040 050 051 060 062 070 078
+    K1: N-003 hat drei Definitionsstellen -> EXAKT drei, als Ueberschriften:
+        Z.754 Sparren-Vorbemessung · Z.784 Geltungsbereich · Z.814 AUFLAGE an die Ausgabe
+  Beide stimmen auf den Punkt. Ein Blatt, dessen Kanten mit nachzaehlbaren Zahlen belegt
+  sind, ist selten — das gehoert gesagt.
+  UND EIN ZEHNTER BEINAHE-FEHLALARM: meine erste K1-Zaehlung ergab ZWEI Stellen, weil ich
+  die Trefferliste mit head -5 abgeschnitten hatte und die dritte auf Z.814 stand. Zehnter
+  heute, zehnter gefangen.
+DAMIT IST MEINE A-40-DOR VOLLSTAENDIG: |
+  Geprueft sind: die neun Kriterien, zwei Rot-Lagen (21 von 27 Formeln ohne Ampel,
+  nachgerechnet_an null), die Regelgrundlage in ARBEITSREGELN (im Fernstand vorhanden),
+  die sechs Kanten und die zwei Kantenzahlen.
+  ES BLEIBEN DIE ZWEI RESTPUNKTE von 14:26 und 14:29, unveraendert:
+    R1  der Anlass nennt F-054 als "von keiner Pruefstation gefunden" — belegt falsch
+    R2  A-40-5 verlangt 21 neue Ampeln, ohne den Erstzustand zu regeln
+  Beide mit je einem Satz behoben. Danach erteile ich die DoR.
 ballbesitz: planner
 ```
 
