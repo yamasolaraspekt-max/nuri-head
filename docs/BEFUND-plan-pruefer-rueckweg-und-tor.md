@@ -871,3 +871,46 @@ Nullaussage hält.
 Zahl übersehen. Gefangen durch **den Wortlaut der Prüfung lesen, bevor ich ihr Ergebnis
 anzweifle** — dieselbe Bewegung wie bei den A-40-Kanten, A-39s Nenner, `ballrueckgabe.py` und
 den ZimmererFlags.
+
+---
+
+## Posten (a) an W-21L — vier von vier Zeigern halten, und der Grund ist unbequem
+
+*(geschrieben 21:20, Messstand f22d3420)*
+
+**Gewählt: W-21L** — der älteste offene Vorgang (117 h, DECISION_BLOCKED, 1873 Commits seit
+Schnitt) und ein offener Posten bei Yama. Zugleich **Gegenprobe zur P9-Nullaussage** des
+Planners von 21:15.
+
+**Vier Datei:Zeile-Verweise, alle vier geprüft:**
+
+| Verweis | Blatt behauptet | heute dort |
+|---|---|---|
+| `sparrenBerechnung.ts:63` | „LATTUNG ALS LAST" | *„ständige Last (Dachdeckung + **Lattung** + Sparren-Eigengewicht)"* |
+| `holzMengen.ts:32` | „konterLaenge" | *„Summe der echten **Konterlatten**längen (lfm)"* |
+| `dachWerte.ts:20` | `battenDist: 0.05, // Lattenabstand min 5 cm` | **zeichengleich** |
+| `dachWerte.ts:19` | `rafterDist: 0.05, // Sparrenabstand min 5 cm` | **zeichengleich** |
+
+**Vier von vier treffen** — und bestätigen damit die P9-Nullaussage für dieses Blatt.
+
+**Der Grund ist aber nicht Sorgfalt, sondern Stillstand.** Seit dem Schnitt `4f0d4584` liegen
+**1861 Commits**; von den drei genannten Dateien wurde bewegt:
+
+```
+sparrenBerechnung.ts   1 Commit
+holzMengen.ts          0
+dachWerte.ts           0
+```
+
+**Ein Zeiger, der hält, weil die Zieldatei ruht, ist nicht sicherer als einer, der wandert — er
+ist nur noch nicht gewandert.** W-21L steht seit fünf Tagen auf DECISION_BLOCKED; genau in dieser
+Zeit hat niemand die Lattung angefasst. Sobald die Entscheidung fällt und gebaut wird, bewegen
+sich exakt diese drei Dateien, und dann wandern alle vier Zeiger auf einmal.
+
+**Kein Befund heute, aber eine Prognose mit Beleg:** Wenn W-21L aus DECISION_BLOCKED
+herauskommt, sind seine Verweise die ersten, die zu prüfen sind — nicht weil sie schlecht
+gesetzt wären, sondern weil sie bisher nie auf die Probe gestellt wurden.
+
+**Das ist der Unterschied zwischen *„hält"* und *„hält, weil nichts passiert ist"*** — und er
+gehört in die Wegweiser/Beleg-Unterscheidung: Ein Wegweiser in einem ruhenden Bereich sieht
+genauso aus wie ein guter, bis der Bereich erwacht.
