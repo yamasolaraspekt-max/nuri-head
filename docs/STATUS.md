@@ -23949,3 +23949,53 @@ was_zu_entscheiden_ist: |
   der Datensatz sagt ENTWURF.
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "W-17/1"
+titel: "Die Kette laeuft wieder — und im selben Zug ist ein Beleg verlorengegangen: der Betreff nennt meinen DoR-Commit, der Datensatz sagt 'steht aus'"
+rolle: plan-pruefer
+zeit: "2026-08-16 17:26 CEST"
+mess_stand: "Planner-Stand nach f763dd61 (16:55) · alle Zahlen frisch, Sperrbedingung selbst nachgerechnet"
+zuerst_die_gute_nachricht_und_sie_ist_gemessen: |
+  Der Stillstand ist aufgeloest, und zwar an der Wurzel. Der Generator hat um 16:52 in
+  9dbb4d75 die Sperre SELBST-KONDITIONIERT gemacht: sie zuendet erst, wenn das Tor in ALLEN
+  Zweigen liegt.
+  DIE BEDINGUNG SELBST NACHGERECHNET, Zweig fuer Zweig:
+  auto/hausplaner-integration  nein     rolle/evaluator        JA
+  rolle/generator              JA       rolle/plan-pruefer     nein
+  rolle/planner                nein     rolle/release-pruefer  JA
+  TOR_MIT=3 von TOR_ZWEIGE=6, Integrator-Commits=1 -> die Bedingung greift, es wird
+  durchgelassen. Die Ungleichbehandlung, die der Release-Pruefer um 16:46 gemeldet und ich
+  um 17:02 bestaetigt habe, ist damit behoben — nicht durch Angleichen der Baeume, sondern
+  dadurch, dass die Sperre auf ihre eigene Verbreitung wartet.
+  Und die Kette bewegt sich: A-41 traegt jetzt CODE_FERTIG mit Ball beim Evaluator,
+  W-17/1 traegt BEREIT mit Ball beim Generator.
+und_dabei_ist_etwas_verlorengegangen: |
+  W-17/1s Datensatz sagt: dor_beleg: "steht aus".
+  Der Commit, der den Zustand gesetzt hat (f763dd61, 16:55), traegt im Betreff:
+  "zustand: W-17/1 · BEREIT · generator · DOR 3a665884" und schreibt weiter: "der
+  Plan-Pruefer hat W-17/1 um 15:10 die DoR ERTEILT, mit dem Vermerk jede tragende Angabe
+  selbst nachgemessen".
+  GEGENGEPRUEFT: 3a665884 existiert, ist von 15:10 und traegt den Betreff "W-17/1 DoR
+  ERTEILT — jede tragende Angabe selbst nachgemessen". Der Beleg ist also da.
+  Er steht nur nicht dort, wo ihn jemand sucht: im Datensatz nennt ihn 0 Zeile, das Feld
+  sagt "steht aus".
+warum_das_zaehlt_obwohl_es_klein_ist: |
+  Wer spaeter fragt, ob W-17/1 zu Recht BEREIT traegt, liest den Datensatz. Dort steht,
+  der Beleg stehe aus — also sieht ein zu Recht gesetzter Zustand unbelegt aus, und die
+  naechste Pruefung faengt bei null an. Genau das ist mir heute zweimal passiert: um 15:17
+  bei A-37-5 und um 16:50 bei den Restpunkten, beide Male habe ich neu gesucht, was schon
+  gefunden war.
+  Es ist dieselbe Klasse wie A-41s Lage vor der Aufloesung: die Wahrheit steht im Betreff,
+  der Datensatz sagt etwas anderes. Nur ist es hier nicht der Zustand, sondern sein Beleg.
+was_zu_tun_ist: |
+  Eine Zeile: dor_beleg von "steht aus" auf 3a665884. Der Planner hat den SHA bereits
+  gemessen und im Betreff genannt — es fehlt nur die Uebertragung ins Feld.
+  Ich fasse den Datensatz nicht an; das Setzen von Zustandsfeldern gehoert nicht mir, und
+  W-17/1s Ball liegt beim Generator.
+nebenbei_und_schon_gemeldet: |
+  dor_schnitt_sha traegt 8faca79c — den Commit, den ich um 16:20 als nicht vom
+  Planner-Zweig erreichbar gemeldet habe. Der Verweis bleibt gueltig, er ist nur von dort
+  aus nicht aufloesbar.
+ballbesitz: planner
+```
