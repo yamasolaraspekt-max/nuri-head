@@ -19734,7 +19734,17 @@ bitte_an_yama: |
 bitte_an_den_planner: |
   Unabhaengig von Yamas Antwort: den Klammerzusatz (Yamas Bedingung) durch die Fundstelle
   ersetzen, aus der sie stammt — oder durch "Herkunft nicht im Bestand belegt".
-ballbesitz: yama
+ERLEDIGT_16_08_14_12: |
+  Yama hat die Zeile an der Quelle geholt und dabei mehr gefunden als meine Frage hatte: im
+  Wortlaut stehen zwei Woerter, die im Bericht fehlten — "keine Modulkopie INS REPO". Er
+  entscheidet die engere Lesart, das Nicht-Ziel ist ERSETZT statt gestrichen, der alte
+  Wortlaut steht durchgestrichen daneben.
+  Selbst nachgemessen im Planner-Zweig: A-37 traegt "ins Repo" dreimal. Die Herkunftsfrage
+  ist damit beantwortet und der Klammerzusatz durch den entschiedenen Text ersetzt.
+  Mein Befund lautete "die Herkunft ist nicht belegt". Er war richtig und hat zu mehr
+  gefuehrt als zu einer Bestaetigung — das ist der beste Ausgang, den ein solcher Befund
+  haben kann.
+ballbesitz: "—"  # ERLEDIGT 16.08. 14:12: Yama hat entschieden, der Wortlaut ist ersetzt, selbst nachgemessen
 ```
 
 ```yaml
@@ -20859,7 +20869,20 @@ bitte: |
   nicht gibt — dann ist zu entscheiden, ob jemand vertritt (wie heute Mittag bei meiner
   eigenen Rolle) oder ob A-33 bis zu seinem Start liegen bleibt. Beides ist vertretbar,
   aber es sollte entschieden sein und nicht einfach dauern.
-ballbesitz: yama
+ERLEDIGT_16_08_14_12: |
+  Beide Teile haben sich innerhalb von Minuten erledigt, und meine Frage war beim Stellen
+  schon beantwortet:
+    der Release-Pruefer hat rolle/generator transportiert — der Bau 3e22e61b liegt im
+    Fernstand, A-33 stand dort auf CODE_FERTIG
+    der Evaluator LAEUFT: 5f37d8e4 um 13:24 "A-33 geclaimt, Abnahme Runde 1 beginnt" und
+    75c471cf um 13:35 "A-33 SPEC_BLOCKED, sechs von sieben Kriterien gruen"
+  Selbst nachgemessen: zwei Evaluator-Commits seit 13:20. Die Abnahme hat stattgefunden, sie
+  ist nicht ausgeblieben — mein Befund war zum Zeitpunkt richtig gemessen und vier Minuten
+  spaeter gegenstandslos.
+  Was aus dem Vorgang BLEIBT, steht an anderer Stelle und nicht hier: die Frage, wer einen
+  Auftrag nach SPEC_BLOCKED plus neuem Plan zurueckholt — Paragraf 3s Rueckkehr-Tabelle hat
+  dafuer keine Zeile. Das ist ein eigener Block von 14:05, nicht dieser.
+ballbesitz: "—"  # ERLEDIGT 16.08. 14:12: Bau transportiert, Evaluator laeuft und hat abgenommen, selbst nachgemessen
 ```
 
 ```yaml
