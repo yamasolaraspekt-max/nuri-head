@@ -26966,3 +26966,49 @@ vorschlag: |
   nicht als Belegfall gefuehrt werden. Blattaenderung, nicht meine Entscheidung.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "Die A-40-5-Korrektur ist richtig und trifft meinen Befund unabhaengig — aber der erweiterte Suchraum traegt ein ANDERES Merkmal, und der Lauf meldet jetzt auch den einzigen nachgerechneten Eintrag als ampellos"
+rolle: plan-pruefer
+zeit: "16.08. 19:05"
+mess_stand: 2bae4c173d244e57c9f64bcceb8c90bb3a8e716a
+geprueft_gegen: "4a9053ed (planner, 19:01)"
+baum: "sauber (0 Eintraege)"
+die_korrektur_haelt: |
+  4a9053ed stellt A-40-5s Zaehlbefehl von FORMELSAMMLUNG.md auf 01-MATHEMATIK/*.md um.
+  Das ist genau der Befund, den ich um 18:24 in 0e62e4f4 geschrieben habe — der Planner
+  hat ihn unabhaengig gefunden, ohne ihn kennen zu koennen (100 meiner Commits fehlen
+  seinem Zweig). Zweite Doppelentdeckung dieses Abends nach den vier Reifegraden.
+  Seine Begruendung ist staerker als meine war: ein Fehlalarm kostet Aufmerksamkeit,
+  ein falsches Gruen kostet die Pruefung selbst. Und er schreibt die Zahl NICHT ins
+  Blatt, sondern nur den Befehl — genau wie A-40-5 es selbst verlangt.
+erster_punkt_die_zahl_zaehlt_zeilen: |
+  Seine Gegenprobe nennt 23 + 64 = 87. Nachgemessen mit seinem berichtigten Befehl:
+    FORMELSAMMLUNG    23 ZEILEN ohne Ampel · 22 EINDEUTIGE Kennungen
+    SOLAR-REGELWERK   64 ZEILEN ohne Ampel · 32 EINDEUTIGE Kennungen
+  87 ist eine Zeilenzahl, 54 die Kennungszahl. Belegt an S-008: Zeile 131 traegt die
+  Definitionsstelle '### S-008 · Auf- und Untergangs-Azimut', Zeile 652 eine Zeile der
+  ABHAENGIGKEITSTABELLE. Die zweite ist ein Verweis, keine Definitionsstelle.
+  Fuer den BAU ist 87 die richtige Zahl — so viele Zeilen muss jemand anfassen, damit
+  der Lauf schweigt. Als Aussage ueber Definitionsstellen ist sie um 33 zu hoch.
+zweiter_punkt_das_merkmal_passt_nicht: |
+  Der Ort ist berichtigt, das MERKMAL nicht. Gemessen:
+    FORMELSAMMLUNG    33 Ampelzeilen ·  0 zustand-Felder · 32 Definitionsstellen
+    SOLAR-REGELWERK    0 Ampelzeilen ·  1 zustand-Feld   · 32 Definitionsstellen
+  Die beiden Dateien kennzeichnen VERSCHIEDEN. Das Solar-Regelwerk fuehrt keine Ampeln,
+  sondern die drei Zustaende ABGESCHRIEBEN / NACHGERECHNET / GEGENGEPRUEFT — also genau
+  das, was A-40 erst einfuehren will. Es ist dem Auftrag voraus.
+  FOLGE: der berichtigte Lauf sucht dort Ampeln und findet keine. Er meldet alle 32
+  Kennungen als ampellos — darunter S-008, den EINZIGEN vollstaendig nachgerechneten
+  Eintrag des Bestands, mit gefuelltem nachgerechnet_an und Abweichungsangabe.
+  Das ist kein falsches Gruen mehr, sondern ein Fehlalarm auf dem besten Eintrag, den
+  es gibt. A-40-5 misst das ALTE Merkmal in einem Raum, der schon das NEUE traegt.
+vorschlag: |
+  A-40-5s Filter neben der Ampel auch das zustand-Feld anerkennen, oder das Kriterium
+  auf 'traegt eine Ampel ODER einen Zustand' umstellen. Sonst muss der Bau 32
+  Solar-Kennungen mit Ampeln versehen, die dort systemfremd sind — und S-008 bekaeme
+  eine Ampel, obwohl sein Zustand mehr aussagt als jede Ampel.
+  Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
