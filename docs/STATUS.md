@@ -1995,7 +1995,33 @@ meine_empfehlung, ausdruecklich als Empfehlung: |
   benennen — sonst steht ein Zustand im Regelwerk, den niemand je erreichen muss, und das ist
   die dritte Ampel, die nichts misst.
 
-ballbesitz: yama  # A-40 haengt daran; ohne das Wort bleibt er ungeschnitten
+NACHTRAG 16.08., WENIGE MINUTEN SPAETER — ENTSCHIEDEN, und die Fassung ist besser als mein Vorschlag: |
+  Yamas Wort ist gefallen, direkt beim Planner. Ich habe die Eintragung gegengeprueft statt sie
+  zu glauben: die Markierung "OFFEN — die Grenze nach aussen" kommt 0 mal vor, ARBEITSREGELN.md
+  Z.1399 fuehrt den Abschnitt jetzt als "ENTSCHIEDEN von Yama am 16.08. als TEST, nicht als
+  Eigenschaftswort".
+  ER HAT ES NICHT ALS ADJEKTIV ENTSCHIEDEN, sondern als DREI FRAGEN — und das ist der Punkt, den
+  weder der Vorschlag noch meine Empfehlung hatten:
+    1 NORMBEZUG  wird das Ergebnis mit einer Normkennung verbunden?
+    2 DRITTER    verlaesst es das Haus — Angebot, Nachweis, Plan, Ausdruck?
+    3 BEMESSUNG  legt es eine GEBAUTE Groesse fest?
+    dreimal NEIN -> NACHGERECHNET reicht · einmal JA -> gruen nur mit Primaerquelle, sonst GELB
+  Seine Begruendung traegt und ich merke sie mir: ein Adjektiv haette zwei Lesarten und verloere
+  seinen Geltungsbereich beim ersten Weitertragen — "wie kein node_modules ins Repo". Das ist
+  genau der Fall, an dem ich gestern selbst gestolpert bin, als ich seine Bedingung praezisieren
+  musste.
+  MEIN EIGENER BEFUND IST BESTAETIGT UND UEBERTROFFEN. Ich hatte gemessen, dass der Zusatz nichts
+  Neues verlangt, weil GEGENGEPRUEFT als Zustand schon existiert. Der Planner hat mehr gefunden:
+  N-003 traegt seit dem 12.08. FACH-GATE, einen von Yama festgelegten Geltungsbereich und
+  DAUERGELB — ein vollstaendiger Praezedenzfall, nicht nur eine Struktur. Nachgemessen: FACH-GATE
+  in der Prozessquelle Z.1436, DAUERGELB 5 Treffer im Bestand. Die Regel gibt einer bewaehrten
+  Bauform ein zweites Bauteil.
+  UND EIN PUNKT, DEN ICH ALS EINWAND HATTE, IST DAMIT GEGENSTANDSLOS: ich hatte gemeldet, der
+  Zusatz sei praeventiv und habe keinen belegten Fall. N-003 IST der Fall — er laeuft seit vier
+  Tagen genau so. Ich hatte nach einem SCHADEN gesucht und uebersehen, dass eine bewaehrte
+  Anwendung derselbe Beleg ist, nur ohne Schaden.
+
+ballbesitz: —  # entschieden; A-40 ist geschnitten und in DoR Runde 1
 ```
 
 ## DIE ZWEI NEUEN EVALUATOR-BERICHTE GELESEN — der herrenlose Punkt ist aufgeklaert, KEIN Befund (Release-Pruefer, 16.08.)
