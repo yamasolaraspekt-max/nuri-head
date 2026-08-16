@@ -26866,3 +26866,53 @@ vorschlag: |
   Blattaenderung und nicht meine Entscheidung.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-9 kann nicht scheitern — es ist das einzige der sechs Blaetter mit NULL Code-Pfaden, das die Suite-Zusage traegt"
+rolle: plan-pruefer
+zeit: "16.08. 18:59"
+mess_stand: 06ce32379bf8651f25f41a55c2062113e16dd57f
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+kriterien: "A-40-8 (kein Nicht-Ziel beruehrt) und A-40-9 (Suite gruen und Zahl unveraendert gegen den Bau-Stand, tsc exit=0)"
+was_A40_anfasst: |
+  Das Blatt sagt selbst: art 'BAU — zwei Pflichtfelder, drei Zustaende und EINE
+  Innenpruefung ... KEIN Hausplaner-Code, KEINE Migration.'
+  Gemessen an den Pfadangaben im Blatt: kein einziger Pfad unter scripts/, resources/
+  oder app/. Genannt werden ausschliesslich docs/STATUS.md, docs/auftraege/aktiv/ und
+  docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md.
+  'tsc' und 'Suite' kommen im ganzen Blatt GENAU EINMAL vor — in A-40-9 selbst.
+vergleich_mit_den_schwestern: |
+  Dieselbe Schlussformel tragen alle fuenf Schwesterblaetter. Der Unterschied ist der Bau:
+    A-37   7 Code-Pfade   A-37-11 gefahren, belegt mit 'tsc exit 0, Suite 17..'
+    A-41   6 Code-Pfade   A-41-12
+    A-39   3 Code-Pfade   A-39-10
+    A-38   2 Code-Pfade   A-38-9 gefahren, belegt mit 'tsc exit 0, Suite 176'
+    A-42   1 Code-Pfad    A-42-9
+    A-40   0 Code-Pfade   A-40-9
+  Die Formel ist also Hausgebrauch und an sich richtig — bei jedem anderen Auftrag gibt
+  es Code, der sie rechtfertigt. A-40 ist der einzige, bei dem sie ins Leere greift.
+befund: |
+  A-40-9 kann strukturell nicht scheitern. Wenn A-40-8 haelt — keine Datei ausserhalb
+  von docs/ — dann sieht weder tsc noch die Suite eine einzige Aenderung, und beide sind
+  zwangslaeufig so gruen wie vor dem Bau. Das Kriterium prueft damit nichts, was A-40-8
+  nicht schon prueft, nur auf einem teureren Weg.
+  Es ist NICHT falsch und es schadet nicht; es ist ein Kriterium ohne eigene Rot-Lage.
+  Damit ist es das dritte in diesem Blatt nach A-40-6 (Rot-Lage seit 14:49 weg) und
+  A-40-2 (Negativprobe ohne Kandidaten).
+was_A40_8_dagegen_leistet: |
+  A-40-8 traegt eine echte Rot-Lage: der Auftrag AENDERT docs-Dateien, und die Grenze
+  'keine bestehende Fachaussage inhaltlich geaendert' ist an einem Wissensspeicher
+  genau die Stelle, an der ein Bau abrutschen kann. Dieses Kriterium bleibt scharf.
+  Auffaellig ist nur, dass A-40-8 'keine Aenderung an docs/STATUS.md' verlangt,
+  waehrend das Blatt in Zeile 12 'status_steht_in: docs/STATUS.md' fuehrt — der Bau
+  darf die Datei nicht anfassen, der Zustand des Auftrags wird aber dort gefuehrt.
+  Das ist auflösbar (der Generator schreibt den Zustand, nicht der Bau), aber es steht
+  ungetrennt nebeneinander.
+vorschlag: |
+  A-40-9 entweder streichen, weil A-40-8 dieselbe Zusage traegt, oder ausdruecklich als
+  Regressionsschutz kennzeichnen ('belegt, dass der Bau die Grenze eingehalten hat')
+  statt als eigenes Abnahmekriterium. Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
