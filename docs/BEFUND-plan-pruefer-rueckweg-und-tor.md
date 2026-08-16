@@ -1954,3 +1954,84 @@ Sauber wiederholt mit einfachen Anführungszeichen; **kein Messwert stammt aus d
 Lauf.**
 
 **Ball: planner** (die Klarstellung). **Kein Zustandsfeld angefasst, kein Bau.**
+
+## A-42 · DoR-Fund, der schwerste: der Umzug nimmt 120 von 137 Bällen mit, und kein Kriterium erwähnt das
+
+*§5-Durchgang an A-42, dritter Teil · gemessen 16.08. gegen `88f7bc2b`*
+
+### Die Messung
+
+A-42 verschiebt jeden Block **mit** `auftrag:` und **ohne** `zustand:` nach `docs/BEFUNDNOTIZEN.md`.
+Genau diese Blöcke tragen aber den Großteil aller offenen Bälle:
+
+```
+ROLLE                bleibt   zieht um   gesamt
+plan-pruefer              8         31       39
+planner                   3         78       81
+generator                 4          6       10
+release-pruefer           0          5        5
+integrator                2          0        2
+evaluator                 0          0        0
+SUMME                    17        120      137
+```
+
+**120 von 137 Bällen wandern aus der Statuswahrheit heraus.**
+
+### Warum das keine Kleinigkeit ist
+
+**Jede Rolle ortet ihre Bälle über `docs/STATUS.md`.** Meine eigene Wacheanweisung nennt den Befehl
+wörtlich: `grep -n '^ballbesitz: plan-pruefer' docs/STATUS.md`. Gemessen:
+
+```
+heute            39
+nach dem Umzug    8
+```
+
+**Der Befehl bleibt richtig und liefert trotzdem eine falsche Lage.** Dasselbe gilt für
+`scripts/yama-posten.py` des Release-Prüfers, das über dieselbe Datei läuft — und für den Planner
+härter als für alle anderen: **78 seiner 81 Bälle ziehen um.**
+
+**Nichts geht verloren** — A-42s Nicht-Ziele sind an dieser Stelle einwandfrei (*„KEIN Löschen. Kein
+Block verschwindet; jeder steht danach vollständig in der Zieldatei."*). **Die Bälle sind nicht weg,
+sie sind unauffindbar.** Das ist genau der Unterschied, den A-30 für Zustände gemacht hat: *die
+Statuswahrheit sagt dort nicht das Falsche, sie sagt gar nichts.*
+
+### Der §5-Hebel: es gibt keinen dritten Zustand
+
+§5 verlangt wörtlich:
+
+> *„jede Anforderung ist entweder ein **Kriterium** oder ein ausdrückliches **Nicht-Ziel**; einen
+> dritten Zustand gibt es nicht"*
+
+Gemessen: **`ballbesitz` kommt in A-42 genau einmal vor — im eigenen Kopf** (Z.15, das Feld des
+Blattes selbst). **Kein Kriterium, kein Nicht-Ziel, keine Kante** nennt die Folge für die
+Ballortung. Sie steht damit im dritten Zustand, den §5 ausschließt.
+
+### Und die Reihenfolge verschärft es
+
+A-42 nennt seine Stellung in der Kette:
+
+```
+staut_hinter: "NICHTS. Muss VOR dem ersten schreibenden --tafel-Lauf fertig sein."
+Reihenfolge:  1 Integrationslauf, 2 DIESER Auftrag, 3 erster Schreiblauf.
+```
+
+**Die 137 Ballrückgaben kommen in dieser Reihenfolge nicht vor.** Sie brauchen einen Schreibvorgang
+in `docs/STATUS.md`, den seit `b5dea668` allein der Integrator ausführen darf — und der hat seit
+**106 Minuten** nicht gearbeitet, die Statuswahrheit ist seit **110 Minuten** unberührt.
+**Läuft A-42 vorher, zieht der Stapel mit um.**
+
+### Soll — drei gangbare Wege, ich empfehle den zweiten
+
+1. **Die Ballrückgaben laufen VOR A-42.** Dann bleibt nur, was wirklich offen ist. *Setzt voraus,
+   dass der Integrator vorher tätig wird — heute nicht absehbar.*
+2. **A-42 bekommt eine Ball-Summengleichung**, in seiner eigenen Bauform und neben A-42-2:
+   *„Bälle je Rolle vorher = Bälle je Rolle in `STATUS.md` nachher + Bälle in `BEFUNDNOTIZEN.md`"* —
+   **plus die Angabe im Bericht, wie die Ballortung nach dem Umzug lautet.** *Das ist dieselbe
+   Disziplin, mit der A-42-2 schon den Blockverlust ausschließt, nur für die zweite Größe, die in
+   denselben Blöcken steckt.*
+3. **Ein ausdrückliches Nicht-Ziel** („die Ballortung wird nicht angepasst") **plus Zustellung an
+   alle fünf betroffenen Rollen.** *Ehrlich, aber es verschiebt die Arbeit, statt sie zu benennen.*
+
+**Ball: planner.** **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung** — A-42s DoR
+bleibt offen, dies ist der zweite Fund nach dem `basis_sha`.
