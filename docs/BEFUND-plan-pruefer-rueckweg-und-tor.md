@@ -2170,3 +2170,75 @@ umziehen. Wenn nein — **heute nachweislich bei A-38** —, gehört sie vorher 
 Summengleichung nicht sieht: *sie zählt Blöcke, nicht Bedeutungen.*
 
 **Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
+
+## Wache-Punkt 2 systematisch gefahren: 32 DoR-Abweichungen Blatt gegen Datensatz — und ZWEI davon zeigen in die gefährliche Richtung
+
+*Alle 89 aktiven Blätter gegen ihren Block · gemessen 16.08. gegen `252e0ecd`*
+
+### Das Ergebnis
+
+```
+vergleichbare Paare (beide Seiten fuehren dor_beleg)     41
+   gleich klassifiziert                                    9
+   ABWEICHEND                                             32
+ein Feld fehlt auf einer Seite                            45
+```
+
+**Die Richtung entscheidet, nicht die Zahl:**
+
+```
+Datensatz WEITER als Blatt   30
+   STEHT-AUS  gegen ERTEILT              28   harmlos: das Blatt wurde nie nachgezogen
+   STEHT-AUS  gegen NICHT-ERTEILT         2   A-30, A-33 — beide BETRIEBSBESTAETIGT
+BLATT STRENGER als Datensatz  2           <-- die gefaehrliche Richtung
+   NICHT-ERTEILT gegen BEREIT             2   A-37, A-38
+```
+
+**Die 28 bestätigen unabhängig, was ich als „67 gegenstandslose DoR-Bälle" gemeldet habe** — auf
+einem anderen Weg gemessen, dieselbe Lücke: die Blätter wurden nach der Erteilung nicht
+fortgeschrieben.
+
+### Die zwei kritischen Fälle sind ein einziger Vorgang
+
+**A-37 ist neu, A-38 hatte ich schon.** Beide tragen dieselbe Form:
+
+```
+             Blatt                                    Datensatz
+A-37   dor_beleg: "NICHT ERTEILT — 3. Runde"    dor_beleg: "BEREIT — 2. Runde 15.08."
+                                                zustand:   CODE_FERTIG
+                                                ballbesitz: integrator
+A-38   dor_beleg: "NICHT ERTEILT — 3. Runde"    dor_beleg: "BEREIT — 2. Runde 15.08."
+                                                zustand:   ENTWURF
+```
+
+**Beide zeigen auf denselben Beleg** — den Block `dor_runde_3_votum_a37_a38`, der A-37 **und** A-38
+zusammen behandelt und der (gemessen) keinen `zustand:` trägt, also zu A-42s Umzugsmenge gehört.
+
+**A-37 wiegt schwerer als A-38**, weil es weiter ist: es steht auf `CODE_FERTIG`, der Ball liegt
+beim Integrator, die Abnahmekette läuft. **Die Statuswahrheit sagt dort „BEREIT — 2. Runde" über
+einen Auftrag, dessen dritte DoR-Runde nicht erteilt wurde.** *Dass die fünf Restpunkte laut Blatt
+am 16.08. behoben sind, steht ebenfalls nur im Blatt.*
+
+### Und mein erster Lauf war unbrauchbar
+
+Mein erster Klassifikator meldete **78 von 86 abweichend**. Das war kein Befund, sondern ein
+kaputtes Werkzeug — zwei Fehler auf einmal:
+
+- `plan-pruefer 12.08.` und `8c2272cd — …` sind **erteilte** DoR-Belege mit Beleg; mein
+  Klassifikator warf sie in „SONST" und zählte sie als Abweichung.
+- Blätter **ohne** `dor_beleg` im Kopf wurden nicht übersprungen, sondern mitgezählt.
+
+**Ich habe die 78 nicht gemeldet, sondern das Werkzeug repariert** — dieselbe Entscheidung, die der
+Planner heute an seiner Reifegrad-Zählung getroffen hat (*„die Summenprobe hat es gefangen"*).
+**Eine Abweichungsquote von 91 % ist ein Werkzeugbefund, kein Bestandsbefund.**
+
+### Soll
+
+**Integrator:** `dor_beleg` bei **A-37 und A-38** auf den Stand der 3. Runde bringen. **Ein
+Handgriff, zwei Felder, eine Quelle** — der Beleg liegt in `dor_runde_3_votum_a37_a38`. Buchführung
+über eine gefallene Entscheidung, kein Zustandswechsel.
+
+**Planner:** die 28 nicht nachgezogenen Blätter — bereits als DoR-Ball-Befund zugestellt, hier auf
+zweitem Weg bestätigt.
+
+**Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
