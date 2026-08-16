@@ -1244,3 +1244,88 @@ gestern Abend: nicht die Zahl ist falsch, sondern die unausgesprochene Annahme �
 
 **Ball: planner** (der `basis_sha`-Punkt). **Kein Zustandsfeld angefasst, kein Bau, keine
 DoR-Entscheidung — der Fund ist zugestellt, das Urteil steht aus.**
+
+## Alterung der vier ENTWURF-Aufträge: A-38 hält an jedem Punkt — und seine Lage hat sich verhältnismäßig verbessert, absolut verdreifacht
+
+*Vorratsprüfung Posten (d) · gemessen 16.08. gegen `3f93a5cc`*
+
+**Null Aufträge stehen auf BEREIT**, deshalb an den vier ENTWURF-Aufträgen gefahren, deren DoR bei
+mir liegt.
+
+### Alterung, gemessen
+
+| Auftrag | Basis | Alter | Commits seither | genannte Dateien, seither geändert |
+|---|---|---|---|---|
+| A-38 | `0f05f8bf` | **2824 min** (47 h) | **785** | `STATUS.md` 307 · `commit-pruefen.sh` **10** · eigenes Blatt 11 |
+| A-39 | `99add90f` | 491 min | 683 | `STATUS.md` 235 · `commit-pruefen.sh` 9 |
+| A-40 | `99add90f` | 491 min | 683 | `STATUS.md` 235 |
+| A-42 | `e802c1f8` | 272 min | 611 | `STATUS.md` 202 · `status-erzeugen.sh` 12 |
+
+**A-38 ist der Prüffall:** ältestes Blatt, und es misst an einer Datei, die sich seither zehnmal
+geändert hat.
+
+### Ergebnis: alle drei prüfbaren Aussagen halten
+
+**Der Zeiger hat zehn Änderungen überstanden.** Das Blatt sagt *„`merge` in
+`scripts/commit-pruefen.sh` (-i) → 4 Treffer, keine Prüfung"*:
+
+```
+0f05f8bf (Basis)  ->  4       heute  ->  4
+```
+
+Und die vier Treffer betreffen heute wie damals **unaufgelöste Merge-Einträge im Index**
+(Z.969, 975, 976, 978) — **keine Prüfung von Merge-Commits.** Die Aussage steht wörtlich.
+
+**Die tragende Strukturaussage hält exakt.** Z.67 des Blatts sagt, die markenlosen Commits seien
+*„= ALLE"* Merges:
+
+```
+Commits gesamt          705
+ohne Rollenmarke        180
+  davon Merges          180
+  davon NICHT-Merges      0        Summenprobe 180 + 0 = 180   GEHT AUF
+```
+
+**Kein Kriterium trägt eine feste Zahl.** A-38-1 bis A-38-9 sind sämtlich verhaltensbeschreibend
+(Hook existiert, Negativfall, Positivfall, `core.hooksPath`, zweiter Worktree, sechs Kanten,
+Nicht-Ziele, Suite). **Die gewachsenen Zahlen brechen daher kein Kriterium** — dieselbe
+P6-Disziplin, die A-42 anwendet.
+
+### Die neue Zahl, und sie macht den Auftrag dringlicher
+
+```
+                         Blatt (15.08.)      heute (16.08.)
+Merges gesamt                    70                313
+davon ohne Rollenmarke           58                180
+Anteil                          83 %               57 %
+```
+
+**Die Quote ist gefallen, die absolute Zahl hat sich verdreifacht.** Der Grund für die bessere
+Quote ist sichtbar: der Integrator markiert seine Rückwege inzwischen
+(`integrator: Rueckweg — rolle/… `). **Der Grund für die schlechtere absolute Zahl ist derselbe
+Betrieb, der die Quote verbessert:** es wird schlicht viel mehr gemergt.
+
+**Für A-38 heißt das:** das Blatt beschreibt die Lage weiterhin richtig, und der Bau wird
+dringlicher, nicht entbehrlicher. *Eine Quote, die sich bessert, während die Menge wächst, ist
+kein Entwarnungssignal.*
+
+### Und mein vierter Musterfehler in zwei Runden
+
+Meine erste Zählung fand **drei markenlose Nicht-Merge-Commits** und damit einen Widerspruch zu
+Z.67. Alle drei waren Fehlbefunde meines Musters:
+
+```
+release-pruefer (in Yamas Namen): …
+plan-pruefer (release-pruefer in Rollenwechsel): …
+```
+
+**Die Rollenmarke kommt auch in der Form `rolle (Zusatz):` vor.** Mein Muster verlangte `rolle:`
+direkt. Mit `^<rolle>( \([^)]*\))?:` sind es **null** Ausnahmen, und A-38s Aussage steht.
+
+**Das ist derselbe Kern wie die vier Namensformen und die zwei offenen `​```yaml`-Zäune: nicht die
+Zahl ist falsch, sondern meine unausgesprochene Annahme über die Form.** Viermal in zwei Runden,
+jedes Mal vor dem Melden gefangen — aber jedes Mal auch nur deshalb, weil ich die Abweichung
+geöffnet statt gezählt habe.
+
+**Ball: planner** — die frische Merge-Zahl (180 von 313) als Fortschreibung für A-38.
+**Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
