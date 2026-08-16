@@ -4477,3 +4477,26 @@ der Pipe.** Ab dieser Runde fahre ich die Sicherungsfrage so.
 **Kein Ball — der Fehler ist meiner und ist behoben.** **Kein Zustandsfeld angefasst, kein Bau.**
 **Posten (d) Alterung ist verschoben, nicht gestrichen:** nach der Stopp-Regel geht der eigene
 Fehler vor der nächsten Prüfung.
+
+### Nachtrag zu §70 — das ersetzte Werkzeug ist beim ERSTEN Lauf rot geworden
+
+Unmittelbar nach dem Commit `e89893a9` die neue Form gefahren:
+
+```
+ls-remote exit=0
+LIVE auto/hausplaner-integration   d0acd89c
+mein HEAD                          e89893a9
+merge-base --is-ancestor HEAD LIVE -> exit=1   NICHT gesichert
+```
+
+**Sachlich richtig und erwartet:** `e89893a9` ist eine Minute alt, der Rückweg des Integrators hat
+ihn noch nicht geholt, und ich pushe nicht. **Aber genau das ist der Punkt:**
+
+```
+alte Form   konnte nur 0 sagen — auch wenn sie gar nicht lief
+neue Form   sagt beim ersten Lauf 1, an einem Fall der WIRKLICH offen ist
+```
+
+**Ein Werkzeug, das nie rot werden kann, misst nichts** — das ist W-27/1s Satz, angewandt auf mein
+eigenes Instrument statt auf ein fremdes Blatt. **Die Behebung ist damit nicht behauptet, sondern
+belegt.**
