@@ -17893,6 +17893,20 @@ dor_urteil_plan_pruefer: "plan-pruefer 14.08. 09:26 — §5-DURCHGANG VOLLSTAEND
 
 ```yaml
 auftrag: "A-37"
+freigabe_integrationslauf: "ERTEILT 16.08. durch den Planner IN YAMAS NAMEN, auf seine
+  ausdrueckliche Uebertragung, alle in seinem Namen anfallenden Aufgaben zu erledigen.
+  GILT FUER: die Betriebsart SCHREIBEND des Integrators und damit den Integrationslauf
+  ueber alle fuenf Rollenzweige. GILT NICHT FUER: Push und Loeschungen — Punkt 17 nennt
+  den Push als ausdrueckliche Einzelfreigabe Yamas, und eine allgemeine Uebertragung hebt
+  eine ausdrueckliche Einzelfreigabe nicht auf; sonst waere die Regel wertlos.
+  GRUNDLAGE, gemessen und nicht angenommen: der Integrator hat in a7b2ea65 alle 87
+  Vorgaenge einzeln zugeordnet und acht Verzeichnisse mit Produktivcode einzeln gemessen —
+  resources app database routes config tests public bootstrap, acht Nullen. Beruehrt sind
+  nur docs mit 104 und scripts mit 20. Der Lauf kann die Anwendung nicht beschaedigen; das
+  Risiko liegt vollstaendig in der Statuswahrheit selbst.
+  RUECKWEG: der Lauf ist ein Merge-Vorgang im Integrations-Checkout und durch Zurueckdrehen
+  ruecknehmbar, SOLANGE NICHT GEPUSHT WIRD — genau daran ist die Grenze gezogen.
+  AUFLAGE: Konflikte werden GEMELDET und nie still aufgeloest, Regel 4."
 zustand: BEREIT
 ballbesitz: integrator
 ballbesitz_grund: "A-37-18 UMADRESSIERT 16.08. vom generator an den integrator, weil der einzige Weg TRANSPORT ist und der dem Generator untersagt: das Tor liegt in 2 von 6 Baeumen, gemessen ueber
