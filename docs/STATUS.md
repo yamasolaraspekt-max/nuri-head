@@ -22781,3 +22781,46 @@ stand: |
   Kein Votum. Der Ball bleibt bei mir.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "K1 belegt — die Kernlogik isoliert gegen vier Faelle gefahren, 4/4, und die Nachbesserung dahinter ist die eigentliche Leistung"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:48 CEST"
+mess_stand: "Bau 2e9cf127 (316 Z.) · HEAD 02bfe8c5"
+k1_belegt: |
+  K1 verlangt: zwei Zustands-Commits derselben Kennung mit identischem Zeitstempel —
+  beide melden, keiner gewinnt.
+  Die Kernlogik steht in Z.208-216. Ich habe sie NICHT nur gelesen, sondern isoliert
+  nachgebaut und gegen vier Faelle gefahren:
+    gleiche Zeit, VERSCHIEDENE Zustaende          -> Widerspruch erwartet   -> Widerspruch
+    gleiche Zeit, GLEICHER Zustand                -> kein Konflikt erwartet -> keiner
+    verschiedene Zeit, verschiedene Zustaende     -> juengster gewinnt      -> gewinnt
+    zwei ALTE Eintraege gleicher Zeit, nicht die juengsten -> darf NICHT anschlagen -> tut es nicht
+  4/4 wie erwartet.
+  Der vierte Fall ist der, an dem eine schlampige Fassung scheitern wuerde: wer irgendwo
+  im Bestand zwei gleiche Zeitstempel findet und daraus einen Widerspruch macht, blockiert
+  bei jedem zweiten Lauf. Der Code vergleicht ausdruecklich nur die JUENGSTEN
+  (e["ts"] == liste[0]["ts"]) und ist damit richtig eng.
+die_eigentliche_leistung_steht_im_kommentar: |
+  Z.240-245 dokumentiert, was vorher falsch war, und es ist ein feiner Unterschied:
+  "Vorher stand sie oben und der Widerspruch darunter — mit dem juengsten Eintrag als
+  Gewinner. Das war eine stille Aufloesung mit einer Warnung daneben. Bei gleicher Zeit
+  gibt es aber keinen juengsten; wer trotzdem einen waehlt, entscheidet per
+  Sortierreihenfolge."
+  Das ist genau die Klasse, die ich heute mehrfach gemeldet habe, nur von innen gesehen:
+  eine Ausgabe, die richtig AUSSIEHT (Tafel plus Warnung), aber eine Entscheidung
+  enthaelt, die niemand getroffen hat — hier die Sortierreihenfolge von Python.
+  Heute wird bei Widerspruch KEINE Tafel gedruckt und mit 2 ausgestiegen. Melden statt
+  aufloesen, ohne Hintertuer.
+  GEGENGEPRUEFT, dass die Strenge an BEIDEN Stellen gilt: der Tafel-Modus steigt mit
+  raus(2) aus (Z.251), der Vergleichsmodus ebenfalls (Z.310, "der Vergleich hat keine
+  Grundlage"). Es gibt keinen Weg, an dem ein Widerspruch stillschweigend in ein Ergebnis
+  einwandert.
+stand: |
+  Kanten belegt: K1, K5, K7. Offen: K2, K3, K4, K6.
+  Kriterien haltend: A-41-1 (als Rot-Lage), -2, -3, -8, -10, -11.
+  Offen: A-41-4 bis -7, -9, -12.
+  Kein Punkt rot. Kein Votum, der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
