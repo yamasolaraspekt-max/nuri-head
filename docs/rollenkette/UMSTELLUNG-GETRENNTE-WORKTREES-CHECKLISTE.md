@@ -7,13 +7,14 @@
 
 | Feld | Wert |
 |---|---|
-| **Forensischer Ausgangs-SHA** | `36e600308890ba600757162cfab7a9903f3393bb` |
+| **Forensischer Ausgangs-SHA** | → siehe Zeile **`FORENSISCHER_SHA`** weiter unten. **Doppeleintrag am 16.08.2026 aufgelöst** (Integrator): derselbe Wert stand hier und dort, nur unten mit Begründung. Ein Wert an zwei Orten ist zwei Werte, sobald einer nachgezogen wird. |
 | festgeschrieben | 14.08.2026, unmittelbar nach der Messung |
 | **Planner-Worktree** | `/Users/yamanuri/Documents/ticket-rolle-planner` |
 | **Planner-Branch** | `rolle/planner` |
 | Gemeinsamer Checkout | `/Users/yamanuri/Documents/ticket` · `auto/hausplaner-integration` |
 | **FORENSISCHER_SHA** | **`36e600308890ba600757162cfab7a9903f3393bb`** — unveränderlicher Bezug für Ursachen- und Rückprüfung. **Nicht** der Arbeits-SHA. |
 | **AKTIVIERUNGS_SHA** | **ENTFÄLLT als Konstrukt** *(14.08. 22:20)*. Er setzte einen Stand voraus, der stillsteht — den gab es an keinem Punkt dieses Tages. Ersetzt durch **den Umzugs-SHA je Rolle**; die vier Worktrees stehen auf `bc2125d9`. |
+| **UMZUGS-SHA je Rolle — Klartext, mit Datum** | **Es sind ZWEI, nicht einer.**<br>`rolle/planner` → **`36e600308890ba600757162cfab7a9903f3393bb`**, angelegt **14.08.2026 08:45**<br>`rolle/plan-pruefer` · `rolle/generator` · `rolle/evaluator` · `rolle/release-pruefer` → **`bc2125d986e34f5c3697159df0ed072925fbe6ce`**, alle vier angelegt **14.08.2026 22:15**<br>*Gemessen am 16.08.2026 17:29 CEST vom Integrator, Befehl: `git reflog show <zweig> \| tail -1` je Zweig — nicht aus einer Commit-Botschaft übernommen. Der Planner ist auf dem forensischen Stand selbst gestartet, die vier anderen dreizehneinhalb Stunden später auf `bc2125d9`.* |
 | **Status der Umstellung** | **`UMSTELLUNG_LAEUFT`** — **rollender Umzug seit 14.08. 22:20.** Fünf Worktrees stehen; es fehlt die Zustellung an die vier Rollen (`P2H-04`). |
 
 **Zulässige Statuswerte — und ausschließlich diese:** `OFFEN` · `BLOCKIERT` ·
