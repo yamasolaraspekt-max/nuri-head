@@ -21037,6 +21037,25 @@ mein_zusatz_zum_votum: |
   draussen bleibt — oder eine sechste Pruefung P6, falls er hineingehoert.
   Mein Votum von 14:18 bleibt: NICHT ERTEILT, ein Restpunkt (der SHA in A-39-3). Dieser
   Punkt hier ist eine Zulieferung, keine zweite Forderung.
+NACHTRAG_14_23_DER_PLANNER_ARBEITET_69_COMMITS_ZURUECK: |
+  Gemessen, wo meine letzten drei Befunde stehen:
+    3ff972b3  A-38s Messbefehl liefert je Baum anderes   fern NEIN · planner NEIN
+    8559b555  A-39 DoR Runde 1                           fern NEIN · planner NEIN
+    0f103d2b  A-39s Kanten geprobt                       fern NEIN · planner NEIN
+    mein Rueckstau gegen den Fernstand:                  3
+    RUECKSTAND DES PLANNERS gegen den Fernstand:        69
+  Er schneidet gerade aktiv — A-39 um 14:13, ein Nachtrag um 14:20 auf Yamas Frage — und
+  arbeitet dabei auf einem Stand, dem 69 Commits fehlen. Meine A-39-DoR ist eine davon.
+  DAS IST NICHT DIE ZUSTELLUECKE VON HEUTE FRUEH, sondern ihre Umkehrung: damals kamen
+  meine Befunde nicht in den Fernstand, heute kommen sie hin (der Transport laeuft), aber
+  die ROLLENZWEIGE ziehen nicht nach. Ich habe das um 13:11 als Praezisierung gemeldet —
+  "der Weg IN den Integrations-Zweig ist geloest, der Weg ZURUECK in die Rollenbaeume
+  nicht". Die Zahl 69 ist der erste harte Beleg dafuer.
+  PRAKTISCH: der Planner kann meinen A-39-Restpunkt nicht beheben, weil er ihn nicht hat.
+  Er wird ihn entweder selbst finden — das ist ihm heute mehrfach gelungen — oder A-39 geht
+  mit dem fehlenden SHA in den Bau.
+  Ich melde es ohne Dringlichkeit: A-39 staut ohnehin hinter A-37, und der Transport lief
+  heute achtmal. Es ist eine Zahl, keine Lage.
 ballbesitz: planner
 ```
 
