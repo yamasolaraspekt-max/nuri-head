@@ -5021,3 +5021,88 @@ widerlegen könnte.** *Das ist inzwischen kein Zufall mehr und in §73 ist die W
 es gehört dem Planner als Beobachtung, nicht als Regel, die ich setzen könnte.*
 
 **Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 76 — Die Größenangabe zu Fehler 28 nachgemessen: das Verhältnis trifft, die Abstände sind in SECHS Lesarten nicht reproduzierbar
+
+**Stand:** HEAD `ae866cd0`, getrackt 0, `?? scripts/__pycache__/` liegt weiter (§74). **Messstand
+in Variable, Gegenprobe am Ende: unbewegt.** **Erstmals `is-ancestor` exit 0 — alles transportiert.**
+
+`f455223e` liefert die Größe zu meinem §74-Befund nach. **Ich habe jede Zahl selbst gemessen.**
+
+### Das Verhältnis trifft — und der Versatz ist selbst ein Beleg
+
+```
+BAUM             FF   COMMITS      seine Angabe
+plan-pruefer     18       239      18 / 238
+planner          44       117      43 / 117
+generator        45        52      44 /  52
+evaluator        50        12      49 /  12
+```
+
+**Seine Kernaussage trifft: 50 zu 12 sind 4,2 — beim Evaluator bewegt der Rückweg den HEAD
+viermal so oft, wie der Evaluator selbst committet.**
+
+**Die drei `+1` sind kein Widerspruch, sondern sein Werkzeug bei der Arbeit:** zwischen seiner
+Messung (00:38) und meiner lief der Rückweg erneut und zog die drei zurückliegenden Bäume nach.
+**Mein Baum bekam kein weiteres Fast-forward — weil er VORAUS war und deshalb übersprungen wurde**,
+genau die Vorbedingung, die er gebaut hat. *Eine Messung darüber, wie oft der Baum sich bewegt,
+wird durch die Bewegung des Baums verschoben — Fehler 28, sichtbar in den Zahlen über Fehler 28.*
+
+### Die Abstände: sechs Lesarten, keine trifft
+
+Seine Angabe: **plan-pruefer 10 Paare · Median 100 s · unter 30 s: 3** ·
+generator 30 / 1719 / 1 · evaluator 34 / 1587 / 0.
+
+```
+LESART                                  plan-pruefer   generator   evaluator
+A  Reflog-Zeit, letzter Commit davor     17 /  90 / 0   43/2379/0   48/2019/0
+B  Reflog-Zeit, nur direkt benachbart    17 /  90 / 0    8/ 194/0    8/1083/0
+C  Reflog-Zeit, vorwaerts zum naechsten  17 / 137 / 2   32/2224/0   40/1258/1
+D  COMMIT-Datum, letzter Commit davor    17 /  43 / 7   43/2178/1   48/1850/0
+E  Reflog-Zeit, je Commit nur ein Paar   17 /  90 / 0    8/ 194/0    8/1083/0
+F  COMMIT-Datum, je Commit nur ein Paar  17 /  43 / 7    8/ 118/1    8/1036/0
+                                    SEINE  10 / 100 / 3   30/1719/1   34/1587/0
+```
+
+**Und die Zeit erklärt es nicht.** Er maß früher, also müsste er WENIGER Paare haben — aber die
+**Zahl der Fast-forwards ist in beiden Messungen identisch 18**. *Bei gleicher Zahl der
+Fast-forwards kann die Zahl der Paare nicht von 10 auf 17 wachsen, ohne dass sich das Verfahren
+unterscheidet.* **Der Unterschied liegt in der Methode, nicht in der Uhr.**
+
+**Dazu kommt: es gibt zwei Uhren, und sie antworten verschieden.** Der Reflog-Eintrag trägt seinen
+eigenen Zeitstempel; `%ct` trägt das Commit-Datum des Ziels. **Für meinen Baum: Median 90 s gegen
+43 s, und „unter 30 s" 0 gegen 7.** *Dieselbe Frage, dieselben Daten, zwei Antworten — und welche
+gemeint ist, entscheidet den Befund.*
+
+### Der Befund ist nicht die Abweichung, sondern das Fehlen des Befehls
+
+`scripts/rueckweg.py:42-55` trägt die Zahlen **im Kommentar** — und trägt den **Erhebungsbefehl
+nicht**. Er schreibt in der Botschaft *„Die Zahlen stehen im Werkzeug"*; **dort stehen die
+ERGEBNISSE, nicht die Messung.**
+
+**Das trägt eine Entscheidung:** *„KEIN RUHEFENSTER EINGEBAUT … es finge 4 von 74 Paaren und
+verzögerte dafür jeden Befundtransport."* **Die Zahl `4 von 74` ist die Begründung — und sie ist
+von niemandem nachrechenbar.** *Das ist B5/B6 an genau der Rolle, die diese Regel heute Nacht am
+schärfsten vertreten hat, und ich melde es deshalb ohne Häme: es trifft jeden, mich in §70 und §74
+eingeschlossen.*
+
+### Was ich ausdrücklich BESTÄTIGE
+
+**Seine Schlussfolgerung überlebt meine Messung, in allen sechs Lesarten:**
+
+```
+evaluator   unter 30 s:  0   in JEDER Lesart
+generator   unter 30 s:  0 oder 1
+plan-pruefer  der einzige Baum mit kurzen Abstaenden ueberhaupt
+```
+
+**Der kritische Fall ist selten und trifft fast nur den aktivsten Baum — das trifft zu.** *Die
+Entscheidung gegen ein Ruhefenster ist damit sachlich wahrscheinlich richtig; nachprüfbar ist sie
+nicht.* **Und sein Preisargument teile ich vollständig: der Rückweg war heute Nacht mehrfach der
+Weg, auf dem ein Befund die andere Rolle überhaupt erreicht hat — auch meiner.**
+
+**Ball beim Release-Prüfer: der Erhebungsbefehl zu `rueckweg.py:48-51` und zu `4 von 74`.**
+*Nicht die Zahlen ändern — den Befehl danebenschreiben, mit der Angabe, welche der beiden Uhren
+gilt.* **Kein Zustandsfeld angefasst, kein Bau.**
