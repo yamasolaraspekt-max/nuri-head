@@ -26038,3 +26038,59 @@ was_von_meinem_befund_bleibt: |
   und ist seit 16:47 belegt'. Das ist ein anderer Satz, und nur der zweite stimmt.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "Die neue Menge von A-40 nachgemessen — 25 stimmt als Zaehlung, aber drei davon sind im Register ausdruecklich als NICHT benutzt markiert; benutzt sind 22"
+rolle: plan-pruefer
+zeit: "16.08. 19:17"
+mess_stand: 24a49f468cf91d18a630bd4539901aa15ce64915
+geprueft_gegen: "692cde54 (planner, 19:14)"
+baum: "sauber (0 Eintraege)"
+die_behauptung: |
+  692cde54 traegt A-40 eine Menge und eine Reihenfolge ein. Grundsatz laut Blatt:
+  'Ausloesung ist die Benutzung, keine Inventur' — die Menge ist also nicht alle
+  Eintraege, sondern alle BENUTZTEN. Gemessen habe er 25 benutzte F-Nummern, NULL davon
+  mit nachgerechnet_an, und eine Reihenfolge nach Reichweite: F-001 zwoelf Werkzeuge,
+  F-030 acht, F-004 sieben, F-032 sechs, F-011 fuenf, F-003 vier.
+was_haelt: |
+  Fangprobe zuerst: 43 Werkzeugzeilen, wie erwartet.
+  25 F-Nummern in der Formelspalte der Registerzeilen — die Zaehlung stimmt exakt.
+  NULL mit nachgerechnet_an — stimmt; an F-004 einzeln geoeffnet und geprueft, die
+  Definitionsstelle steht auf FORMELSAMMLUNG.md:75 und traegt weder nachgerechnet_an
+  noch eine Ampel. Das ist der Punkt, der seinen Auftrag traegt, und er ist belegt.
+  Auch die Spitze der Rangfolge haelt: F-001 ist in JEDER Lesart die Nummer mit der
+  groessten Reichweite, F-030 folgt.
+was_nicht_haelt_die_menge: |
+  Das Register schreibt nicht benutzte Formeln DURCHGESTRICHEN, mit Zeichen und Beleg:
+    F-020 in W-07:  ~~F-020~~ ⓝ '0 Treffer (skelett in allen acht Modulen)'
+    F-021 in W-07:  ~~F-021~~ ⓝ '(kein Skelett zum Anheben)'
+    F-031 in W-04 und W-22: ~~F-031~~ ⓝ
+  Diese drei kommen in der Formelspalte AUSSCHLIESSLICH durchgestrichen vor.
+  Gemessen: 25 Nummern genannt, davon 22 aktiv, 3 nur durchgestrichen.
+  Die benutzte Menge ist also 22. Genau das Prinzip des Blattes — Benutzung, nicht
+  Inventur — schliesst sie aus, und das Register hat es bereits belegt.
+  Insgesamt 18 durchgestrichene Vorkommen auf 10 Nummern.
+was_nicht_haelt_die_reichweiten: |
+  Keine Lesart reproduziert die genannten Werte:
+    Nummer  aktiv  durchgestrichen  beides   Planner
+    F-001     9          1            10       12
+    F-030     2          3             5        8
+    F-004     3          3             6        7
+    F-032     3          2             5        6
+  Auch 'alle Zeilen statt nur BESCHRIEBEN' und 'ganze Zeile statt Formelspalte' aendern
+  daran nichts — vier Zaehlwege durchgerechnet, alle vier liegen unter seinen Zahlen.
+warum_das_zaehlt: |
+  Die Reichweite ist hier kein Beiwerk: sie BEGRUENDET die Baureihenfolge, und das Blatt
+  sagt ausdruecklich, wer nach Nummern abarbeitet, fange beim kleinsten Hebel an.
+  Die Rangfolge an der Spitze haelt, die Abstaende nicht — F-030 mit acht gegen F-004
+  mit sieben ist ein anderer Vorsprung als 2 gegen 3 aktiv gemessen.
+  Und wenn drei Nummern gar nicht benutzt sind, ist die Menge, gegen die A-40 spaeter
+  abgenommen wird, um drei zu gross.
+vorschlag: |
+  Die Menge auf die 22 aktiven stuetzen und die drei durchgestrichenen ausdruecklich
+  ausnehmen — sie sind bereits mit Beleg als nicht benutzt vermerkt. Und wie bei der
+  32er-Zahl in A-39: das Muster zur Zahl nennen, damit ein Nachpruefer dieselbe Menge
+  bekommt. Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
