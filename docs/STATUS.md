@@ -89,7 +89,7 @@
 | **A-38** Merges laufen am Tor vorbei | `ENTWURF` | **Plan-Prüfer** | Schnitt 14.08. 23:00 · Basis `0f05f8bf` | **Blatt** `docs/auftraege/aktiv/A-38-merges-laufen-am-tor-vorbei.md` · Gemessen: **41 von 309** Commits in 48 h ohne Rollenmarke, **ausnahmslos Merges**; von 32 Merges tragen **4** eine Marke. Versionierter `commit-msg`-Hook plus `core.hooksPath`. **Neun Kriterien**, A-38-6 (greift im ZWEITEN Worktree) ist das tragende. **Kein Eingriff in `commit-pruefen.sh`** — dort arbeitet A-37. **DoR steht aus.** |
 | **A-39** Fünf Innenprüfungen des Blattes | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `99add90f` | **Blatt** `docs/auftraege/aktiv/A-39-die-fuenf-innenpruefungen-des-blattes.md` · Fünf Prüfungen, **je ein Belegfall von heute**: Kante ohne Kriterium (K6) · feste Zahl ohne Standbezug (A-33-1, Suite 1750) · geforderte Datei ohne Erzeuger (A-37-12) · Kriterium gegen den eigenen Blattkopf (A-33-7) · Rückgabewert doppelt (`exit 3`). **Alle fünf waren VOR dem ersten Zeichen Code vorhanden und maschinell erkennbar; jeder kostete eine Runde.** Läuft im **DoR-Schritt**, nicht im Tor — sie misst ein Blatt, keinen Commit. `A-39-2..6` sind **historische Positivproben** an Ständen, an denen der Fehler nachweislich vorlag. **DoR steht aus.** |
 | **A-40** Der Zustand am Facheintrag | `ENTWURF` | **plan-pruefer** | Schnitt 16.08. · Basis `99add90f` | **Blatt** `docs/auftraege/aktiv/A-40-der-zustand-am-facheintrag.md` · Drei Zustände (`ABGESCHRIEBEN` · `NACHGERECHNET` · `GEGENGEPRUEFT`), zwei Pflichtfelder, die **den Fall tragen statt der Behauptung**, die sechste Innenprüfung und der **Drei-Fragen-Test** (Normbezug · Dritter · Bemessung) aus Yamas §1-Entscheidung vom 16.08. **KEINE Zahl in einem Kriterium** — A-40-5 nennt den Zählbefehl, weil dieselbe Formelsammlung drei Zählungen und drei Ergebnisse ergab. **DoR steht aus.** |
-| **A-41** Die Statuswahrheit wird erzeugt | `CODE_FERTIG` | **evaluator** | Schnitt 16.08. · Basis `e521bd98` | **Blatt** `docs/auftraege/aktiv/A-41-die-statuswahrheit-wird-erzeugt.md` · Yamas §1-Entscheidung vom 16.08.: **der Zustandswechsel IST der Commit**, `docs/STATUS.md` wird **erzeugt statt geschrieben** — damit fällt die Frage „wer darf schreiben“ weg, statt beantwortet zu werden. **P0, staut hinter nichts, geht vor A-39/A-40.** Vier Bestandteile: Wortlaut · `status-erzeugen.sh` · **Erstbefüllung** · sofortiger Übergang. **Kennung über ALLE SECHS ZWEIGE geprüft**, nicht gegen `HEAD` — `HEAD` ist der zweitälteste der sechs Stände (86 Commits hinter `rolle/release-pruefer`). **Zwei Funde am parallelen Bau `1e342d53` liegen im Blatt.** **DoR steht aus.** |
+| **A-41** Die Statuswahrheit wird erzeugt | **`ABGENOMMEN`** | **Release-Prüfer** | Schnitt 16.08. · Basis `e521bd98` | **Blatt** `docs/auftraege/aktiv/A-41-die-statuswahrheit-wird-erzeugt.md` · Yamas §1-Entscheidung vom 16.08.: **der Zustandswechsel IST der Commit**, `docs/STATUS.md` wird **erzeugt statt geschrieben** — damit fällt die Frage „wer darf schreiben“ weg, statt beantwortet zu werden. **P0, staut hinter nichts, geht vor A-39/A-40.** Vier Bestandteile: Wortlaut · `status-erzeugen.sh` · **Erstbefüllung** · sofortiger Übergang. **Kennung über ALLE SECHS ZWEIGE geprüft**, nicht gegen `HEAD` — `HEAD` ist der zweitälteste der sechs Stände (86 Commits hinter `rolle/release-pruefer`). **Zwei Funde am parallelen Bau `1e342d53` liegen im Blatt.** **DoR steht aus.** |
 | **W-17/1** Export und Speichern ablesen | `BEREIT` | **generator** | Schnitt 16.08. · Basis `8faca79c` | **Blatt** `docs/auftraege/aktiv/W-17-1-export-und-speichern-ablesen.md` · **Stufe B, Ziel `BESCHRIEBEN`.** Einordnung **gemessen**: Reifegrad `LEER`, die sieben Werkbank-Blätter sind reine Vorlagen (**249 Z.**), Produktivcode reichlich. **Der Code liegt an ZWEI Orten** — Insel (`arbeitsbereichSpeicher.ts`, `paketSpeichern.ts`, 37 Dateien) **und Server** (`SpeichereHausplanerDokument.php`, `StelleSnapshotWieder.php`). **Die Insel speichert nicht selbst.** `W-17-1-4` zieht die **Registerzeile** nach — das Kriterium existiert wegen der W-37-Lücke. `W-17-1-5` schließt Produktivcode aus. **DoR steht aus.** |
 | **A-35** Trimmen — erstes Zwei-Objekt-Werkzeug | **`BETRIEBSBESTAETIGT`** | — | Bau `ec12e9b3` · Schnitt `1df82ee1` | **GEBAUT 15.08.: das erste Werkzeug nach A7, das wirklich etwas tut.** `geradenGeometrie` hatte **null** Produktivimporte, jetzt einen. **`u` gab es vorher nicht** — `geradenSchnittParameter` ist eine **zweite Sicht auf dieselbe Rechnung**, `geradenSchnitt` ruft sie und bleibt in seiner Signatur. **Der lehrreichste Fehler kam von meiner eigenen Zusage:** die erste Fassung verglich `min(t, 1−t)` — in Gleitkomma ist `1−0.8` **nicht** `0.2`, der Gleichstand zweier symmetrischer Schnittkanten wäre **nie** erkannt worden. *Genau das Raten, das K6 verbietet, nur unsichtbar.* Behoben über den **quadrierten Abstand zum gerundeten** Schnittpunkt — ganze Millimeter, exakt vergleichbar. **Drei Entscheidungen benannt statt still getroffen** (K6 ohne Klickpunkt → *kleinste Kürzung*; Gleichstand bei `t = 0,5` → `end`; gesperrte Wand als Schnittkante erlaubt). **UMFANG GRÖSSER ALS DER SCHNITT, gemeldet:** ein Registry-Eintrag ist im Haus **nicht additiv** — **zwölf** bestehende Zusagen wurden rot, alle einzeln nachgemessen; **eine** Zusage habe ich **erweitert** (`art === 'werkzeug'` → auch `'aktion'`), **sechs Zähl-Anker** mit Gegenprobe nachgezogen. **OFFEN und nicht behauptet: die Browserabnahme** — die Bühne `ticket_testing` ist leer (0 Benutzer, 0 Objekte). Suite **1763/1763** (1750 + genau 13 neue), tsc **0**, Bündel frisch. **— SCHNITT:** Blatt `docs/auftraege/aktiv/A-35-trimmen-das-erste-zwei-objekt-werkzeug.md` · **ERSTER BAU NACH A7.** Yama hat das Bedienmodell am 13.08. bestaetigt (`ANFORDERUNGEN.md` A7) — damit faellt das Hindernis, das acht Werkzeuge als nicht baubar gefuehrt hat. **Alle Vorbedingungen gemessen erfuellt:** Mathematik liegt (`geradenGeometrie.ts:84 geradenSchnitt`, 9 Tests, **NULL Produktivaufrufer**), Auswahl mit Rollen gebaut (`selectedNodeIds` als geordnete Liste, `primaerId` = zuletzt geklickt), Undo-Klammer gebaut (A-31) — **nur das Werkzeug fehlt** (`toolRegistry.ts`: 0 Treffer auf `trimmen`). Zeichengleich die Lage von W-27/1: die Engine laeuft, die Bedienung fehlt. **Muster fuer vier weitere** (teilen, verbinden, verlaengern, versatz — dieselbe Vertragssignatur), deshalb wiegt jede Festlegung hier mehr als ein Werkzeug. **Sechs Kanten benannt**, darunter K3 (Geradenschnitt ist nicht Streckenschnitt) und K6 (welche von mehreren Schnittkanten gewinnt) — beide verlangen eine **benannte** Entscheidung im Bau-Bericht, eine stille Annahme ist ein Mangel. **A-Kennung statt W-03/2**, weil W-03/1 als Ablesung BEREIT liegt und ein zweiter Auftrag am selben Blattordner kollidieren wuerde. |
 
@@ -23343,8 +23343,42 @@ ballbesitz: planner
 
 ```yaml
 auftrag: "A-41"
-zustand: CODE_FERTIG
-ballbesitz: evaluator
+zustand: ABGENOMMEN   # 16.08. Evaluator Runde 1, zwoelf von zwoelf
+#   VORHER: CODE_FERTIG (generator, bau f19557c8)
+ballbesitz: release-pruefer  # ABGENOMMEN 16.08. Evaluator Runde 1
+votum_evaluator_r1: "ABGENOMMEN, 16.08. — ZWOELF von zwoelf Kriterien, jedes selbst gefahren.
+  DIE BAUREIHE SELBST GESUCHT statt aus bau_sha genommen, und zwar nach der DATEI: acht Commits
+  1e342d53 b585d335 2e9cf127 ccdfd7b6 1013e254 253a51d7 16c5b9d2 f19557c8, alle acht fassen
+  AUSSCHLIESSLICH scripts/status-erzeugen.sh an, je einzeln mit --name-only geprueft.
+  A-41-1 Wortlaut ARBEITSREGELN.md:1469-1516, Rot-Beleg am Basis e521bd98 0 gegen heute 1.
+  A-41-2 703 Zeilen, Modus 755, bash -n sauber, am Basis ueber drei Staende 0 Treffer.
+  A-41-3 zweiter Lauf git diff --stat LEER, git status 0. A-41-4 Bootstrap 86 Kennungen, 86
+  Datenzeilen, 0 Doppelte, Positivprobe A-33 traegt BETRIEBSBESTAETIGT. A-41-5 dreizehn
+  verdraengte Staende, alle dreizehn mit Zweig UND Zustand UND Zeit. A-41-6 fehlend 83, neu 0,
+  abweichend 2, UNGEKLAERT 0. A-41-7 Code :313-321 und :472 geoeffnet, Widerspruch vor der Tafel,
+  Tafel wird dann nicht gedruckt. A-41-8 --no-merges an drei Stellen, Gegenprobe am Bestand:
+  5 Zustands-Betreffe, davon 0 Merges, ohne Filter zaehlt dasselbe Muster 41. A-41-9 K1 bis K7
+  je einzeln belegt. A-41-10 fuenf Rueckgabewerte selbst gefahren, kein Wert doppelt. A-41-11
+  resources/ app/ database/ commit-pruefen.sh rollen-tor.sh je 0. A-41-12 Suite 1763 pass 0 fail,
+  tsc 0.
+  ZWEI EIGENE MESSFEHLER, beide vor der Meldung gefunden. (1) A-41-1 hatte ich ROT, weil
+  'grep -c ^zustand:' 0 ergab — der Wortlaut traegt die ROLLENMARKE VORN, weil commit-pruefen.sh:73
+  ein blankes 'zustand: ' als Rollenmarke liest und mit exit 2 abweist. Ich suchte genau die Form,
+  die das Blatt eine Seite vorher als nicht committierbar belegt. (2) A-41-3 hatte ich ROT, weil
+  die AUSGABE des zweiten Laufs abwich — das Kriterium misst die DATEI, und die ist unberuehrt. Der
+  Ausgabeunterschied ist sogar ein BELEG: zwischen den Laeufen wuchsen planner 21759 auf 21765 und
+  release-pruefer 25330 auf 25336 Zeilen, das Skript liest die sechs Zweige LIVE. Beide Male hatte
+  ich gemessen was der Name nahelegt, nicht was das Kriterium sagt — die Fehlerklasse gegen die ich
+  pruefe. Dritte Beinahe-Meldung: SEED sagt 86, ich zaehlte 82; die vier fehlenden sind B5 B5N B6 B7,
+  Kennungen ohne Bindestrich-Ziffer, die mein Muster nicht traf.
+  DER ERTRAG IST GROESSER ALS DAS KRITERIUM: die Erstbefuellung misst die Divergenz erstmals
+  vollstaendig — sechs Zweige gelesen, keiner ausgecheckt, 83 von 86 einig, drei uneinig und
+  gemeldet statt aufgeloest. Darunter mein eigener Fall: A-33 steht auf fuenf Zweigen in vier
+  Zustaenden, von BETRIEBSBESTAETIGT bis BEREIT.
+  ZUM AUFTRAG SELBST: mein Zweig kannte A-41 nicht, er stand auf 80edcf7f von 14:57 waehrend der
+  Auftrag um 16:52 geschnitten wurde. Nachgezogen per Fast-Forward, verlustfrei geprueft. Browser
+  nicht gefahren, §15 nicht beruehrt. vendor fehlt im Rollenbaum — hier ohne Wirkung, als
+  Ausstattungsmangel offen. Ball an den Release-Pruefer."
 claim_abnahme: "evaluator 16.08. 17:16 — Abnahme Runde 1 laeuft. Zuvor nachgezogen: mein Zweig stand auf 80edcf7f (14:57) und kannte A-41 nicht; der Fast-Forward war verlustfrei (0 eigene Commits, HEAD war Vorfahre). Gemessen wird der Bau am COMMIT, Pruefstand nach §8/§9, Baureihe SELBST gesucht statt aus bau_sha genommen."
 ballbesitz_grund: "ABNAHME 16.08. 16:5x: der Generator hat CODE_FERTIG als Zustands-Commit
   gemeldet (f19557c8, Betreff zustand: A-41 CODE_FERTIG generator bau 16c5b9d2). Der Datensatz

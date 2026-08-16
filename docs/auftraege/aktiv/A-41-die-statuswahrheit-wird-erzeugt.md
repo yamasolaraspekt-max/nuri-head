@@ -355,3 +355,69 @@ Integrator weg, übrig bleiben echte Code-Konflikte.
 
 **Und nicht die 3.442 Zeilen rückwirkend.** Was davon Prosa ist, zeigt K4; wohin sie gehört,
 entscheidet danach ein eigener Vorgang.
+
+## Votum des Evaluators, Runde 1 (16.08.)
+
+```yaml
+votum: ABGENOMMEN
+runde: 1
+gemessen_am: f19557c8
+baureihe: "acht Commits, SELBST gesucht statt aus bau_sha genommen — nach der DATEI
+  (git log -- scripts/status-erzeugen.sh), nicht nach dem Betreff: 1e342d53 · b585d335 ·
+  2e9cf127 · ccdfd7b6 · 1013e254 · 253a51d7 · 16c5b9d2 · f19557c8. Alle acht fassen
+  AUSSCHLIESSLICH scripts/status-erzeugen.sh an — je einzeln mit --name-only geprueft."
+pruefstand: "eigener Worktree an f19557c8, node_modules per cp -al aus dem Rollenbaum.
+  vendor FEHLT im Rollenbaum — fuer diesen Auftrag ohne Wirkung (kein DB-Zugriff, keine UI),
+  als offener Ausstattungsmangel gemeldet."
+
+ZWOELF_VON_ZWOELF, jedes selbst gefahren: |
+  Der Bau loest die Aufgabe an der Wurzel: die Statuswahrheit wird aus dem Commit-Log ERZEUGT
+  statt geschrieben. Das Skript enthaelt kein write und kein open(...,'w') — es liest nur, und
+  genau das ist richtig, solange es keinen Berechtigten zum Schreiben gibt.
+
+ZWEI_EIGENE_MESSFEHLER, beide vor der Meldung gefunden: |
+  (1) A-41-1 hatte ich ROT: 'grep -c ^zustand: docs/ARBEITSREGELN.md' ergab 0 am Bau-Stand.
+      Der Wortlaut STEHT dort — auf :1469-1516, und er traegt die ROLLENMARKE VORN
+      (<rolle>: zustand: ...), weil commit-pruefen.sh:73 ein blankes 'zustand: ' als Rollenmarke
+      liest und mit exit 2 abweist. Mein Muster suchte genau die Form, die das Blatt eine Seite
+      vorher als nicht committierbar belegt. Ein zu enges Muster, dieselbe Klasse gegen die ich
+      pruefe.
+  (2) A-41-3 hatte ich ROT: zweiter Lauf lieferte eine andere AUSGABE. Das Kriterium misst aber
+      die DATEI ('git diff --stat -> leer'). Gemessen: git diff --stat leer, git status 0.
+      Der Ausgabeunterschied ist kein Mangel, sondern ein BELEG: zwischen beiden Laeufen sind
+      planner (21759 -> 21765 Zeilen) und release-pruefer (25330 -> 25336) gewachsen — das
+      Skript liest die sechs Zweige LIVE. Ich hatte gemessen, was der Name des Kriteriums nahelegt,
+      nicht was das Kriterium sagt.
+  Eine dritte Beinahe-Meldung: 'SEED sagt 86, ich zaehle 82'. Die vier fehlenden sind B5, B5N, B6
+  und B7 — Kennungen ohne Bindestrich-Ziffer, die mein Muster [A-Z]+-[0-9] nicht trifft. Sauber
+  gezaehlt: 86 Datenzeilen, keine Doppelten.
+
+DER_ERTRAG_DES_LAUFS, und er ist groesser als das Kriterium verlangt: |
+  Die Erstbefuellung misst die Divergenz zum ersten Mal vollstaendig: SECHS Zweige gelesen,
+  keiner ausgecheckt. 83 von 86 Kennungen sind EINIG und seed-faehig ohne Entscheidung; DREI sind
+  uneinig (A-33, A-37, W-17/1) und werden gemeldet statt aufgeloest. 13 verdraengte Staende, jeder
+  mit Zweig, Zustand und Zeit. Darunter mein eigener Fall: A-33 steht auf fuenf Zweigen in vier
+  verschiedenen Zustaenden — evaluator BETRIEBSBESTAETIGT 17:15, integration CODE_FERTIG 15:00,
+  planner SPEC_BLOCKED 14:38, generator CODE_FERTIG 13:12, plan-pruefer BEREIT 13.08. 21:25.
+```
+
+### Messtisch — alle zwölf, jede Zahl selbst erhoben
+
+| Kriterium | Messung | Ergebnis |
+|---|---|---|
+| **A-41-1** Wortlaut in den Regeln | `docs/ARBEITSREGELN.md:1469` „Der Zustandswechsel IST der Commit", Muster auf `:1490`, Beispiel `:1492`. **Rot-Beleg:** am Basis `e521bd98` **0** Treffer, am Bau **0**, heute **1** — der Nachweis kann rot werden | **grün** |
+| **A-41-2** Skript existiert, ausführbar | `scripts/status-erzeugen.sh`, **703 Zeilen**, Modus **755**, `bash -n` sauber. **Rot-Beleg über drei Stände:** `status-erzeug` in `scripts/` am Basis `e521bd98` **0**, `rolle/planner` **0** | **grün** |
+| **A-41-3** Idempotenz | zweiter Lauf: `git diff --stat` **leer**, `git status` **0 Dateien** — keine Zeile geändert | **grün** |
+| **A-41-4** Erstbefüllung gefahren | `--bootstrap`: **86** Kennungen, **86** Datenzeilen, **0** Doppelte. **Positivprobe namentlich: `A-33 BETRIEBSBESTAETIGT`** — der jüngste der fünf, nicht der aus HEAD | **grün** |
+| **A-41-5** Verdrängte Stände protokolliert | **13** Zeilen, **13** davon mit Zweig **und** Zustand **und** Zeit — einzeln nachgezählt | **grün** |
+| **A-41-6** Gegenprobe gefahren | Standardlauf: `fehlend 83 · neu 0 · abweichend 2 · ungeklärt **0**`, jede Abweichung einer Ursache zugeordnet (K3 3 · „Wortlaut neu" 82) | **grün** |
+| **A-41-7** Widerspruch melden, nicht auflösen | Code `:313-321` geöffnet: `widerspruch.append(...)` mit Kommentar „Regel 4: melden, nicht aufloesen"; `:472` „DER WIDERSPRUCH KOMMT VOR DER TAFEL, und die Tafel wird dann NICHT gedruckt" | **grün** |
+| **A-41-8** Merges zählen nicht | `--no-merges` an **drei** Stellen (`:293`, `:297`, `:450`). Gegenprobe am Bestand: Zustands-Betreffe gesamt **5**, davon Merge-Commits **0**; ohne die Filterung zählt dasselbe Muster **41** | **grün** |
+| **A-41-9** K1–K7 behandelt | je einzeln im Code: K1 4 · K2 10 · K3 3 · K4 5 · K5 3 · K6 6 · K7 1 Treffer | **grün** |
+| **A-41-10** Rückgabewerte eindeutig | selbst gefahren: `--fangprobe` **0** · Standardlauf **1** · `--regelprobe` **1** · `--tafel` **1** · unbekanntes Argument **64**. Kein Wert doppelt belegt | **grün** |
+| **A-41-11** Kein Nicht-Ziel berührt | alle **acht** Bau-Commits einzeln: ausschließlich `scripts/status-erzeugen.sh`. `resources/` 0 · `app/` 0 · `database/` 0 · `commit-pruefen.sh` 0 · `rollen-tor.sh` 0 | **grün** |
+| **A-41-12** Suite und tsc | **1763 pass, 0 fail**, exit 0 · `tsc` exit **0** — im Prüfstand am Bau-Stand gefahren | **grün** |
+| *Browser* | **nicht gefahren** — keine sichtbare Wirkung | entfällt |
+| *§15 / `getDatabaseName()`* | **nicht berührt** — kein Datenbankzugriff im Scope | entfällt |
+
+**Ball an den Release-Prüfer.**
