@@ -21001,6 +21001,42 @@ noch_nicht_geprueft_und_so_gekennzeichnet: |
   Blatt vollstaendig vorliegen, und es ist erst fuenf Minuten alt. Naechste Runde.
   Ebenso die Rot-Lage von A-39-1: scripts/blatt-pruefen.sh existiert heute nicht, das ist
   offensichtlich, aber ich habe es nicht gemessen.
+NACHGEHOLT_14_21: |
+  Die Rot-Lage A-39-1 ist nachgemessen: scripts/blatt-pruefen.sh existiert NICHT. Rot.
+  DIE SECHS KANTEN von A-39 habe ich jetzt gelesen. Sie sind praezise, und zwei stechen
+  heraus:
+    K5  "Zwei Kriterien nennen denselben Code fuer dasselbe -> KEIN Fund. P5 sucht zwei
+         BEDEUTUNGEN, nicht zwei Nennungen." Genau die Unterscheidung, die bei A-37s
+         doppeltem exit 3 noetig war. Wer sie nicht trifft, meldet jede Wiederholung.
+    K2  "Kante nur im Fliesstext genannt, nicht in einer Tabellenzeile -> NICHT erfasst —
+         ausdruecklich benannte Grenze, nicht stillschweigend."
+  Die benannte Grenze ist gute Arbeit. Sie hat aber heute einen echten Fall.
+DIE PROBE, die ich gegen meine eigenen Funde gefahren habe: |
+  Fuenf Blattfunde von heute, jeder daraufhin geprueft, WO er stand:
+    A-37s K6 ohne Kriterium      Tabellenzeile   -> P1 faengt es
+    A-37-5 exit 3 gegen Tabelle  Kriterium       -> P5 faengt es
+    A-33-1 Zielzahl abgelaufen   Kriterium       -> P2 faengt es
+    A-37-12 Marke ohne Erzeuger  Kriterium       -> P3 faengt es
+    A-33-7 gegen den eigenen Kopf Kriterium      -> P4 faengt es
+  Alle fuenf haetten das Skript gebraucht und waeren gefangen worden. Das bestaetigt den
+  Schnitt: A-39s Anlass ist nicht konstruiert, er ist gemessen.
+  ES GAB ABER EINEN SECHSTEN, und der faellt durch: der Fliesstext-Widerspruch in A-37,
+  Z.307 des damaligen Stands — "deshalb verlangen A-37-3/4/5/6 Rohausgaben mit exit 1",
+  waehrend A-37-5 exit 3 verlangte. Selbst gemessen: die Zeile beginnt NICHT mit
+  "- **A-37-", ist also kein Kriterium, sondern Fliesstext.
+  Ob P5 ihn faengt, haengt daran, ob P5 nur Kriterien liest oder auch den Fliesstext. K2
+  legt nahe: nur Tabellen und Kriterien. Dann bleibt genau dieser Fall offen — und er ist
+  nicht klein: den Widerspruch haben der Release-Pruefer und ich unabhaengig gemeldet, und
+  er stand danach noch Stunden im Blatt.
+mein_zusatz_zum_votum: |
+  Das ist KEIN zweiter Restpunkt und kein Einwand gegen die Grenze. Eine benannte Grenze ist
+  besser als eine verschwiegene, und ein Skript, das fuenf von sechs Klassen faengt, ist ein
+  gutes Skript.
+  Aber es gehoert ins Blatt, weil es sonst spaeter als Luecke gelesen wird statt als
+  Entscheidung: ein Satz bei K2, dass der Fliesstext-gegen-Kriterium-Widerspruch bewusst
+  draussen bleibt — oder eine sechste Pruefung P6, falls er hineingehoert.
+  Mein Votum von 14:18 bleibt: NICHT ERTEILT, ein Restpunkt (der SHA in A-39-3). Dieser
+  Punkt hier ist eine Zulieferung, keine zweite Forderung.
 ballbesitz: planner
 ```
 
