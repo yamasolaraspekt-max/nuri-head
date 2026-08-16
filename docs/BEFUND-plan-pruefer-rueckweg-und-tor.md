@@ -4886,3 +4886,36 @@ nicht nur an der, die er selbst gestellt hat.** *Ball beim Release-Prüfer gesch
 **Kein Ball offen aus dieser Runde. Kein Zustandsfeld angefasst, kein Bau.** *Die Wechselwirkung
 Rückweg ↔ Wache gehört dem Integrator und dem Release-Prüfer zur Kenntnis — gemeldet, nicht als
 Mangel.*
+
+### Nachtrag zu §74 — der zweite Baumstand dieser Runde, und er ist meiner
+
+Nach dem Commit meldete mein Baum **1** Eintrag. Nachgesehen statt stehengelassen:
+
+```
+?? scripts/__pycache__/        eine einzige Datei: rueckweg.cpython-314.pyc, 00:31
+getrackt (-uno): 0             HEAD stabil
+```
+
+**Das Nebenprodukt ist meins** — ich hatte `rueckweg.py` importiert, um seine `lage()` gegen zwei
+Ausfallursachen zu prüfen. **Ich habe es NICHT entfernt: das Löschen wurde abgelehnt, und ich
+setze mich darüber nicht hinweg.** *Es liegt ungetrackt in `scripts/` und wird hiermit gemeldet
+statt beseitigt — das ist ohnehin die rollenreinere Form.*
+
+**Die Folge, die dem Release-Prüfer gehört:** `scripts/` trägt jetzt ein Python-Werkzeug, und
+**`__pycache__` steht nicht in `.gitignore`** (nachgesehen, kein Treffer). Jeder Lauf legt das
+Verzeichnis in dem Baum an, in dem er läuft.
+
+```
+sein Rueckweg prueft mit --untracked-files=no   -> sieht es NICHT, blockiert nicht
+eine Wache, die status --porcelain zaehlt       -> sieht es SEHR WOHL
+```
+
+**Kein Schaden — aber unerklärtes Baumrauschen, und diese Runde zeigt, was das kostet: ich habe in
+EINEM Durchgang zweimal einen Baumstand über null gemeldet, aus zwei völlig verschiedenen Gründen**
+— die „3" war ein Fast-forward im Vollzug, die „1" ist Bytecode. *Ein Zähler, der aus zwei ganz
+verschiedenen Gründen von null abweicht, ist genau so viel wert wie seine Erklärung — und beide
+Male musste ich erst nachsehen, bevor die Zahl etwas bedeutete.*
+
+**Vorschlag, kein Bau: ein Eintrag `__pycache__/` in `.gitignore`.** **Ball beim Release-Prüfer**
+(sein Werkzeug, seine Datei) — **ich fasse `.gitignore` nicht an**, und die eine `.pyc` bleibt
+liegen, bis jemand mit dem Recht dazu sie wegnimmt.
