@@ -22939,3 +22939,56 @@ stand: |
   Offen: A-41-4, -6, -7, -9, -12.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-41"
+titel: "K2 isoliert gefahren — die Blattsuche kann FALSCH POSITIV sein, und das ist die gefaehrlichere Richtung"
+rolle: plan-pruefer
+zeit: "2026-08-16 15:59 CEST"
+mess_stand: "Bau 13236d52 (590 Z.), unmittelbar vor dem Schreiben abgeglichen — die geprueffte Stelle ist darin unveraendert"
+warum_isoliert: |
+  K2 loest im heutigen Bestand nicht aus: der Tafel-Modus kennt eine einzige Kennung, und
+  die hat ein Blatt. Ich kann die Kante also nicht am Lauf belegen — und einen
+  Zustands-Commit fuer eine blattlose Kennung erzeuge ich nicht, um eine Kante zu testen.
+  Also die Funktion blatt_gefunden() isoliert nachgebaut und gegen echte und erfundene
+  Kennungen gefahren.
+was_dabei_herauskam: |
+  A-41   gefunden   richtig, Blatt existiert
+  W-17   gefunden   richtig
+  Z-99   NICHT      richtig, frei erfunden
+  B5     gefunden   RICHTIG — ich hatte einen Fehltreffer vermutet und nachgesehen:
+                    docs/auftraege/aktiv/B5-zaehlergebnis-mit-trefferzeilen.md gibt es
+  A-4    gefunden   FALSCH — es gibt kein Blatt "A-4". Getroffen wird a-40 und a-41.
+  A-1    gefunden   FALSCH — kein Blatt "A-1". Getroffen wird a-10, a-13, ...
+  Die Suche ist ein reiner Substring-Vergleich ueber alle Dateinamen. Eine kurze Kennung
+  trifft damit als Praefix jede laengere.
+warum_das_die_gefaehrlichere_richtung_ist: |
+  Der Kommentar im Code benennt die ANDERE Richtung ausdruecklich und sehr sauber: "Sie
+  kann eine Kennung uebersehen, deren Blatt anders heisst. Deshalb heisst die Meldung
+  'kein Blatt GEFUNDEN' und nicht 'kein Blatt vorhanden' — der Unterschied ist der
+  zwischen einer Messung und einer Behauptung."
+  Das ist der FALSCH-NEGATIVE Fall, und er kostet nur eine ueberfluessige Meldung.
+  Mein Fund ist der FALSCH-POSITIVE: die Kennung gilt als beblattet, K2 SCHWEIGT, und ein
+  Zustand ohne Auftrag laeuft unbemerkt durch. Eine Kante, die nicht meldet, sieht aus wie
+  eine Kante, die nichts zu melden hatte.
+und_jetzt_die_ehrliche_einordnung: |
+  HEUTE TRITT DER FALL NICHT AUF, und das habe ich gemessen statt gehofft:
+  Kennungsformen im Bestand — A-NN 50 · W-NN/N 22 · W-NN 15 · BN 3 · W-NNN 2.
+  Kennungen mit EINSTELLIGER Nummer nach dem Bindestrich: 0 von 79.
+  Alle tragen die fuehrende Null (A-01 bis A-41). Solange das so bleibt, kollidiert nichts.
+  ABER DER SCHUTZ IST ZUFALL, NICHT KONSTRUKTION. Die erste Kennung ohne fuehrende Null
+  bricht ihn, und im Kennungsraum ist die Laengenkollision bereits angelegt: die Form
+  W-NNN kommt zweimal vor, es gibt also neben zweistelligen auch dreistellige Nummern.
+  Es ist genau die H-9-Klasse, vor der der Kommentar zwei Zeilen weiter oben selbst warnt
+  — "ein Muster, das eine Schreibweise voraussetzt, misst die Schreibweise und nicht die
+  Sache". Hier misst es die Zeichenfolge und nicht die Kennung.
+vorschlag_nicht_entscheidung: |
+  Ein Vergleich am Dateinamensanfang statt im ganzen Pfadtext wuerde es schliessen: der
+  Basisname beginnt mit dem Stamm, gefolgt von Bindestrich oder Punkt. Ob sich das lohnt,
+  bevor eine einstellige Kennung existiert, entscheidet der Generator — es ist sein Bau.
+stand: |
+  Belegt: K1, K3, K4, K5, K7. Gebaut, heute nicht ausloesbar: K2 mit diesem Vorbehalt, K6.
+  Kriterien haltend: A-41-1 als Rot-Lage, -2, -3, -5, -8, -10, -11.
+  Offen: A-41-4, -6, -7, -9, -12.
+ballbesitz: generator
+```
