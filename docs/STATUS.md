@@ -24312,3 +24312,50 @@ was_ich_vorschlage_ohne_zu_entscheiden: |
   Kein Bau von mir, kein Zustandsfeld angefasst.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-37"
+titel: "Meine Einschraenkung von 18:42 geschlossen — die Codes 2, 3 und 4 werden im Bau gar nicht vergeben, alle drei Ursachen enden bei exit 1"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:50 CEST"
+betrifft_commit: "9e383d43"
+mess_stand: "commit-pruefen.sh aus rolle/generator, 918 Z. · Planner-Kopf 718b1b7e"
+was_ich_offen_gelassen_hatte: |
+  Um 18:42 habe ich gemeldet, exit 2 trage im Bau vier Bedeutungen, und ausdruecklich
+  dazugeschrieben: "ob einer davon zugleich der YAML-Fall ist, habe ich NICHT
+  ausgeschlossen." Jetzt gemessen.
+das_ergebnis_ist_ein_anderes_als_erwartet: |
+  Der YAML-Fall gibt NICHT exit 2. Er gibt ueberhaupt keinen eigenen Code:
+  Z.632  MODUL      $p ... -> FEHLER=1
+  Z.650  YAML-KOPF  $p ... -> FEHLER=1
+  Z.660  LAUFZEIT   $p ... -> FEHLER=1
+  Z.665  if [ "$FEHLER" -ne 0 ]; then
+  Z.667    "KEIN COMMIT. F-14: was nicht geschrieben wurde, wird auch nicht belegt."
+  Z.668    exit 1
+  Alle drei Fehlerursachen laufen in denselben Riegel und verlassen das Tor mit 1.
+  DIE CODETABELLE DES BLATTES VERGIBT IHNEN 2, 3 UND 4 — und keiner dieser drei Werte
+  wird an dieser Stelle erzeugt.
+warum_der_bau_trotzdem_richtig_ist: |
+  Und das ist wichtig, damit daraus kein Auftrag gegen den Bau wird: die Unterscheidung
+  geht nicht verloren, sie laeuft nur ueber den TEXT statt ueber den Code. Der innere
+  Pruefer schreibt "LAUFZEIT <ursache>" auf die Ausgabe, das Tor liest den Praefix und
+  meldet ihn weiter. A-37-8 verlangt woertlich "drei Fehlerursachen sind unterscheidbar,
+  je ein Fall, ROHAUSGABE" — nach der Rohausgabe sind sie es, und ich habe das um 16:58
+  fuer den MODUL-Fall mit meiner eigenen Abweisung von 15:11 belegt.
+  Der Bau erfuellt also A-37-8. Was er nicht erfuellt, ist die Codetabelle — und die ist
+  kein Kriterium, sondern eine Beschreibung.
+was_daraus_folgt: |
+  Die Tabelle beschreibt eine Vergabe, die es so nicht gibt. Wer nach ihr prueft, misst
+  exit 1 und findet weder 2 noch 3 noch 4 — und meldet ROT an einem Tor, das genau das
+  tut, was A-37-8 verlangt. Das ist derselbe Mechanismus, den ich heute an A-37-5
+  gemeldet habe: eine Zahl im Blatt, die der Bau nicht erzeugt, nur diesmal drei davon.
+  MEIN BEFUND VON 18:42 BLEIBT RICHTIG, aber er war zu eng: ich hatte von einer
+  Doppelbelegung bei Code 2 geschrieben. Gemessen ist mehr — die Codes 2, 3 und 4 haben im
+  Tor gar keinen Erzeuger, und exit 2 wird an vier anderen Stellen fuer vier andere Dinge
+  vergeben. Die Tabelle und der Bau beschreiben zwei verschiedene Werkzeuge.
+  VORSCHLAG, nicht Entscheidung: die Tabelle auf das umstellen, was der Bau wirklich tut —
+  ein Code fuer "kein Commit" und die Ursache im Text, so wie es laeuft. Oder die Codes
+  bauen, wie A-41-10 es fuer sein Skript getan hat. Beides ist vertretbar; die heutige
+  Mischung ist es nicht.
+ballbesitz: planner
+```
