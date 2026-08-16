@@ -1590,13 +1590,27 @@ Leerzeile** — der Rest trägt Text und sieht damit gültig aus.
 > über Ballbesitz und Votum — **gemeint war H-8, und die steht bei 973.** Der Anker ist falsch
 > und wäre durch jede maschinelle Prüfung gekommen.
 
+**Alle elf danach einzeln geöffnet — mit dem Kontext der ZITIERENDEN Stelle, nicht der
+zitierten. Die Bilanz ist schlechter als die Skript-Zahl:**
+
 ```
 26 Verweise auf 11 Zeilen
-  1  nachweislich TOT      (:739, Leerzeile)
-  1  nachweislich FALSCH   (:812 -> H-8 steht bei 973)
-  9  UNGEPRUEFT            tragen Text, aber ob es der gemeinte ist,
-                           weiss nur wer den Verweis geschrieben hat
+
+FALSCH  4
+  :739  soll Abschnitt 18a sein          steht bei  900   (Anker = LEERZEILE)
+  :812  soll Hausregel H-8 sein          steht bei  973
+  :767  soll Hausregel H-6 sein          steht bei  956
+  :103  soll den IN_ARBEIT-Zaehlbefehl   steht bei  125
+
+RICHTIG 7
+  :145  erklaert [A-Z]+-?[0-9]+   ·  :255 Paragraf 5  ·  :504 E1
+  :509  CODE_FERTIG-Meldung       ·  :693 Diff-Vorschrift
+  :834  RELEASE_FREI-Uebergang    ·  :1469 Nachtrag 16.08.
 ```
+
+> **Vier von elf sind falsch — 36 Prozent. Mein Skript meldete einen.** Es prüfte, ob dort
+> *etwas* steht; falsch sind sie, weil dort **etwas anderes** steht. **Drei der vier hätte kein
+> maschinischer Test je gefunden.**
 
 **Das ist die Grenze jeder Ankerprüfung und der eigentliche Grund für die Regel oben:** ein
 Zeilenverweis lässt sich **nicht** maschinell verifizieren, weil die Absicht nicht in der Zahl
