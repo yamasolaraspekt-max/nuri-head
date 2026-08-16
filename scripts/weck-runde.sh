@@ -154,7 +154,18 @@ for k in alle_kennungen:
         zust_gilt = next(iter(sicht))
         z_gilt = sicht[zust_gilt][0]
     if zust_gilt == "IN_ARBEIT": para3 += 1
-    if ROLLE and zust_gilt in ("BEREIT", "NACHBESSERN"):
+    # FREI ist ein Auftrag nur, wenn ALLE Zweige, die ihn kennen, dasselbe sagen.
+    #
+    # **Warum nicht "der juengste Zustand gilt".** Genau das war der erste Lauf dieses Werkzeugs:
+    # es meldete A-33 als frei, weil ein TRANSPORT die Kennung zuletzt beruehrt und dabei den
+    # AELTEREN Zustand mitgebracht hatte — der Auftrag war laengst CODE_FERTIG. Eine Frei-Liste,
+    # die sich auf die -G-Heuristik stuetzt, schickt die Rolle in fertige Arbeit zurueck.
+    #
+    # **Die sichere Richtung ist die strengere:** bei Uneinigkeit gilt der Auftrag als NICHT frei
+    # und erscheint stattdessen im Widerspruch. Ein uebersehener freier Auftrag kostet eine Runde
+    # Warten; ein doppelt gezogener kostet einen ganzen Bau — und im schlimmsten Fall ueberschreibt
+    # er die Arbeit, die schon abgenommen war.
+    if ROLLE and zust_gilt in ("BEREIT", "NACHBESSERN") and len(sicht) == 1:
         a = stand[z_gilt]["auftraege"][k]
         if (a["k"] or "").startswith(ROLLE): meins.append((k, zust_gilt, z_gilt))
 
