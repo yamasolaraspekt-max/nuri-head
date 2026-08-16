@@ -3456,3 +3456,74 @@ bei vorgegebener Lauflänge an. *Das ist die A-10-Klasse: sag, was du nicht kann
 
 **Ball: planner.** W-09/1 steht auf `BETRIEBSBESTAETIGT`; die Änderung ist ein eigener Schnitt.
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## W-08/1 Dachfläche: hält an jedem gemessenen Punkt — und ich trage die fehlende Größenordnung nach
+
+*Vorratsprüfung (b) und (c) am dritten unberührten Blatt · gemessen 16.08. gegen `8f4ccb97`, Basis `b202ad7c`*
+
+### Alles, was das Blatt behauptet, trifft
+
+```
+polygonFlaeche.ts     48 Zeilen     Basis b202ad7c: 48    heute: 48
+                      ZWEI Exporte  Z.19 interface Punkt2D · Z.31 function polygonFlaecheM2
+```
+
+**Und die Gaußsche Flächenformel rechnet richtig**, an sieben Fällen gefahren:
+
+```
+Quadrat 10x10           100,000    Dreieck 10x10            50,000
+dasselbe RUECKWAERTS    100,000    L-Form                   27,000
+Trapez (Walmflaeche)     28,000    entartet (2 Punkte)       0,000
+kollinear                 0,000
+```
+
+**Alle sieben treffen** — einschließlich der drei Zusagen aus dem Dateikopf: umgekehrte
+Punktreihenfolge liefert dasselbe positive Ergebnis, weniger als drei Punkte liefern 0, und
+kollineare Punkte liefern 0 statt NaN.
+
+### Der „gefährlichste Grenzfall" ist vom Blatt selbst gefunden — und besser benannt, als ich es getan hätte
+
+> **„Die Neigung steckt in der EINGABE, nicht in einer Korrektur. Wer flache Koordinaten übergibt,
+> bekommt die Grundfläche statt der Dachfläche — und das Modul kann das nicht erkennen. Zwei
+> Punktlisten sehen identisch aus; nur die Bedeutung unterscheidet sie."**
+
+**Ich hatte denselben Punkt aus dem Dateikopf abgeleitet, bevor ich den Abschnitt las.** Das Blatt
+war zuerst da und führt ihn im **Titel**. **Kein Fund.**
+
+### Was ich beitrage: das Blatt nennt die Gefahr, beziffert sie aber nicht
+
+Es führt `F-023  A_Dach = A_Grundriss / cos(alpha)` als *„NICHT implementiert — und nicht nötig"*
+und quantifiziert den Fehler nirgends. **Gerechnet:**
+
+```
+Neigung   1/cos(a)   Fehlmenge, wenn flache Koordinaten uebergeben werden
+ 15 Grad   1,0353      3,5 % zu wenig
+ 25 Grad   1,1034     10,3 % zu wenig
+ 38 Grad   1,2690     26,9 % zu wenig      <- haeufige deutsche Regeldachneigung
+ 45 Grad   1,4142     41,4 % zu wenig
+ 60 Grad   2,0000    100,0 % zu wenig
+
+Satteldachhaelfte, Grundflaeche 60 m2:
+  25 Grad -> echte Flaeche 66,20 m2   Fehlmenge  6,20 m2
+  38 Grad -> echte Flaeche 76,14 m2   Fehlmenge 16,14 m2
+  45 Grad -> echte Flaeche 84,85 m2   Fehlmenge 24,85 m2
+```
+
+**Bei der gängigsten Neigung fehlen gut ein Viertel der Fläche** — und weil der Fehler *zu wenig*
+liefert, fällt er im Angebot als **zu billig** auf, nicht als unmöglich. *Das ist die Richtung, in
+der ein Mengenfehler am längsten unentdeckt bleibt.*
+
+**Das ist kein Mangel des Blattes**, sondern eine Ergänzung: es hat den Fall richtig erkannt und
+richtig eingeordnet. **Eine Zahl daneben macht aus einer richtigen Warnung eine bemessene** — und
+sie steht jetzt hier, falls jemand F-023 doch noch baut.
+
+### Mein elfter gefangener Fehlbefund
+
+Mein erster Exportzähler suchte `^export (function|const)` und fand **einen** — ich stand kurz
+davor, die Angabe „ZWEI Exporte" als falsch zu melden. **`export interface` fällt nicht unter
+`function|const`.** Korrekt gezählt sind es zwei, wie das Blatt sagt.
+
+*Dieselbe Klasse wie die vier Namensformen, der fehlende Anker und der Großbuchstabe: mein Muster,
+nicht ihr Text.*
+
+**Kein Ball** — ich lege die Größenordnung nur dazu. **Kein Zustandsfeld angefasst, kein Bau.**
