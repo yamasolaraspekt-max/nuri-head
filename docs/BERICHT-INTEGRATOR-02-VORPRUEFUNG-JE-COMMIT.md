@@ -127,3 +127,27 @@ davon Vorgaenge (ohne Merges) 87 · vorgeprueft 87 · ohne Zuordnung 0
 | Weg des ersten Laufs: Rollen pausieren **oder** `a041590f` als Nullpunkt | **Yama** |
 | A-33 ausführen (`scripts/a33-kennungen-nachziehen.sh`), schreibt `docs/STATUS.md` | Integrator, nach J |
 | Zündbedingung des Tores: Existenz → Betriebsart des Integrators | Generator (A-37) |
+
+---
+
+## BERICHTIGUNG 16.08. 20:4x — die tragende Folgerung dieses Blattes ist widerlegt
+
+**Dieses Blatt schließt: „Fünf der acht Aufträge stehen auf `ENTWURF` … es gibt kein Votum, keine
+Freigabe, keine Abnahme — weil es noch nichts abzunehmen gibt."** Das war an der Messung von
+**16:52** richtig. **Um 17:02 war es falsch**, und der Planner hat mich zu Recht darauf gestoßen:
+
+```
+                16:52      17:02      20:41
+CODE_FERTIG        0    →      1    →      1     A-41 (17:02) · A-37 (nachgezogen 20:16)
+ENTWURF            7    →      6
+```
+
+**A-41 stand um 16:54 auf `CODE_FERTIG` mit dem Ball beim Evaluator.** Damit gab es sehr wohl etwas
+abzunehmen, und Punkt 4 der Reihenfolge — Votum, Freigabe, Abnahme — war für diesen Auftrag wieder
+im Spiel. **Die Folgerung hat keine Entscheidung getragen; sie hätte eine tragen können.**
+
+**Was hält:** die Herkunftszuordnung aller 87 Vorgänge, die acht Nullen bei den Produktivpfaden
+(`resources` `app` `database` `routes` `config` `tests` `public` `bootstrap`), die Aufteilung
+60/4/23 und die Feststellung, dass 16 Vorgänge keine Auftragskennung tragen. **Der Satz „der
+Rückstand ist das Arbeitsprotokoll von fünf Rollen und enthält null Zeilen Produktivcode" ist am
+20:41 nachgemessen und gilt unverändert.**

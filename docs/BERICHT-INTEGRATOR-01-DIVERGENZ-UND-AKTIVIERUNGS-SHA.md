@@ -221,3 +221,25 @@ nach Verbot 12 einen fremden Pruefer am exakten Commit; meine eigene Messung ist
 
 **Vier von neun fehlen, und alle vier aus demselben Grund.** Sie stehen hier, damit dieser Bericht
 nicht vollstaendiger aussieht, als er ist.
+
+---
+
+## BERICHTIGUNG 16.08. 20:4x — drei Zahlen dieses Blattes sind tot
+
+**Sie waren um 16:15 richtig gemessen. Sie sind es seit dem Integrationslauf nicht mehr, und ein
+Blatt, das eine tote Zahl trägt, wird als Messung gelesen.**
+
+| Stelle | stand hier | gemessen 20:41 | warum |
+|---|---|---|---|
+| Divergenz je Gegenstelle | **voraus 0 · zurück 150** | **voraus 0 · zurück 0** | der Lauf ab 17:26 hat den Rückstand geschlossen und hält ihn seither in jeder Weckerrunde auf 0 |
+| Zählstand | offen **150** | übernommen **150** · offen **0** | dieselbe Ursache |
+| `.env` in den Rollenbäumen | 4 von 6 ohne | unverändert — **aber** das Tor liegt inzwischen in **6 von 6** Arbeitsbäumen (A-37-18) | die `.env`-Frage ist offen, die Tor-Frage nicht mehr |
+
+**Was NICHT berichtigt wird, weil es hält:** der `AKTIVIERUNGS_SHA` `a041590f` samt Begründung, die
+Herkunftszuordnung (0 ohne Rollenmarke), die Feststellung „`fork` und `origin` sind dieselbe URL,
+also zwei eigene Kopien", und der Befund, dass die Barriere zum Messzeitpunkt im
+Integrations-Checkout fehlte. **Der letzte Punkt hat sich erledigt, ist aber nicht falsch gewesen.**
+
+**Warum als Anhang und nicht als Überschreibung:** Auflage 2 der Freigabe — Korrekturen nur durch
+einen neuen, zugeordneten Eintrag. Wer wissen will, was um 16:15 galt, muss es oben noch lesen
+können.
