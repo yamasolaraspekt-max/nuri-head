@@ -377,6 +377,26 @@ dass der Baum schon dasteht** — und ohne ihn erzwingt das Tor genau das, was K
   und die Form ist real: `in Yamas Namen` und `in Rollenwechsel` sind genau die Fälle, in denen
   jemand für einen anderen handelt und es kenntlich macht. *Die Kenntlichmachung darf nicht
   bestraft werden.*
+- **A-37-21** · **DIE ABHÄNGIGKEIT DES TORS MUSS DEKLARIERT SEIN.**
+  **Befund des Generators (`8a1ad00d`), vom Plan-Prüfer bis zur Wirkung durchgemessen
+  (`6c51931c`) — beide am Lauf, nicht am Text:**
+  ```
+  js-yaml ist NIRGENDS als dependency deklariert.
+  Die Kette:  puppeteer ^24.39.1 (direkte dependency)
+                -> cosmiconfig  -> js-yaml
+                -> YAML-Pruefung in commit-pruefen.sh
+  Fehlt js-yaml, greift FEHLER=1 und JEDER .md-Commit wird abgewiesen —
+  fuer JEDE Rolle, denn alle schreiben Blaetter und Befunde.
+  ```
+  **Am Lauf belegt:** mit auffindbarem `js-yaml` → Trockenlauf `exit 0`; mit `NODE_PATH` auf
+  ein leeres Verzeichnis → `exit 1` mit Meldung `MODUL` und Abhilfe. *(Beide `--trocken`, kein
+  Commit, Probedatei entfernt, Baum wieder auf 0.)*
+  **Verlangt: `js-yaml` wird als direkte `dependency` deklariert.** *Eine Barriere, die an einer
+  transitiven Abhängigkeit hängt, fällt aus, sobald jemand ein unbeteiligtes Paket entfernt —
+  und sperrt dann die gesamte Kette, ohne dass die Ursache am Fehlerbild ablesbar wäre.*
+  **Das Tor selbst ist an dieser Stelle vorbildlich:** es trennt vier Lagen — heil, YAML-Syntax,
+  Modulauflösung, Laufzeit — und meldet den Modulfehler **als solchen** statt als Kopf-Fehler.
+  *Der Mangel liegt nicht im Tor, sondern in der Deklaration, an der es hängt.*
 - **A-37-18** · **DAS TOR MUSS IN ALLEN SECHS BÄUMEN VORHANDEN SEIN.**
   `git ls-files scripts/rollen-tor.sh` ergibt in **jedem** der sechs Arbeitsbäume **1**.
   **Rot, gemeldet vom Integrator (`83296554`, 16:17):** *„die Barriere ist hier nicht
