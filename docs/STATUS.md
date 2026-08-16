@@ -21443,5 +21443,32 @@ was_daraus_fuer_die_wahl_folgt: |
   Beides zusammen sind zwei Zeilen im Tor, und danach ist niemand mehr gesperrt.
   (c) --pruefe bleibt der Notausgang, falls (a) und (d) nicht sofort gehen — aber dann
       meldet das Tor nur, und der Schutz, fuer den es gebaut wurde, ist bis dahin aus.
+NACHTRAG_13_56_WARUM_NOCH_NICHTS_STEHT_UND_WANN_ES_STEHT: |
+  Ich hatte um 13:50 geschrieben: "Sein NAECHSTER Commit ueber das Tor wird abgewiesen."
+  Er hat seither zweimal committet (2a6b9d07 um 13:54:54). Meine eigene Vorhersage gehoert
+  also geprueft, und sie stimmt — nur am falschen ORT.
+  GEMESSEN, warum es noch geht:
+    der gemeinsame Checkout ticket steht auf b040f299
+    Rueckstand gegen den Fernstand f4a1b170:   34 Commits
+    scripts/rollen-tor.sh dort vorhanden:      NEIN
+    commit-pruefen.sh ruft das Tor dort:       0 Treffer
+  Dort ist die Einhaengung schlicht noch nicht angekommen. Die Sperre existiert im
+  Fernstand und in den umgezogenen Baeumen, aber nicht an dem Ort, an dem die zwei
+  Betroffenen arbeiten. Deshalb laeuft alles weiter.
+  DER AUSLOESER IST DAMIT BENANNT: sobald der gemeinsame Checkout die 34 Commits nachzieht,
+  greift die Sperre fuer Evaluator und Release-Pruefer gleichzeitig. Nicht der naechste
+  Commit ist der Zeitpunkt, sondern der naechste Stand-Nachzug im gemeinsamen Checkout.
+  UND ES GIBT EIN ZEITFENSTER: der Planner hat K6 um 13:53:25 im BLATT geschaerft und das
+  fehlende Kriterium nachgetragen (02504a25) — beide Punkte meines Befunds von 13:45. Im
+  BAU fehlt K6 weiterhin, gemessen: rolle/generator, 0 Treffer.
+  Wird K6 gebaut und transportiert, BEVOR der gemeinsame Checkout nachzieht, tritt der
+  Schaden nie ein. Das ist kein Zufall, auf den man sich verlassen sollte, aber es ist die
+  Lage: die Reihenfolge entscheidet, nicht die Zeit.
+was_ich_dazu_beitrage: |
+  Nur die Praezisierung des Zeitpunkts. Die Sache selbst liegt bei drei Rollen, die alle
+  daran arbeiten: der Planner hat das Blatt nachgezogen, der Generator muss bauen, der
+  Release-Pruefer hat den Befund uebernommen und transportiert.
+  Ich habe eine eigene Vorhersage geprueft und sie im Zeitpunkt berichtigt — das ist der
+  Grund, warum dieser Nachtrag existiert.
 ballbesitz: yama
 ```
