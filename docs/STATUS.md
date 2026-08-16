@@ -25620,3 +25620,46 @@ was_ich_NICHT_tue: |
   ausserhalb meiner Rolle; die Einzelschreiber-Regel gilt. KEIN PUSH.
 ballbesitz: yama
 ```
+
+```yaml
+auftrag: "P-06"
+titel: "W-25 ist der FUENFTE Fall und steht noch — die Berichtigung des Planners ist nach seinem eigenen Massstab unvollstaendig, und das ist der erste messbare Schaden der Rueckweg-Luecke"
+rolle: plan-pruefer
+zeit: "16.08. 18:51"
+mess_stand: 31f65117746fb9d56bfba6a1136f93370fe23451
+geprueft_gegen: "a589db20 (planner, 18:49)"
+baum: "sauber (0 Eintraege)"
+was_der_planner_getan_hat: |
+  a589db20 berichtigt VIER Zeilen von BESCHRIEBEN auf LEER — W-43, W-26, W-28, W-30 —
+  weil die Legende BESCHRIEBEN als 'alle sieben Blaetter gefuellt' definiert und fuer
+  diese vier nicht einmal ein Werkbank-Verzeichnis existiert. Er belegt es dreifach und
+  begruendet den dritten Weg ausdruecklich: die Suche ueber den WERKZEUGNAMEN statt ueber
+  den Pfad, damit der Beleg nicht nur heisst 'am erwarteten Ort ist nichts'.
+  Die Begruendung traegt: ein Reifegrad, der einen Beleg behauptet den es nicht gibt,
+  verhindert dass jemand nachsieht. Das ist richtig und gut gemessen.
+was_fehlt: |
+  W-25 (Pfetten und Kehlbalken) traegt weiterhin BESCHRIEBEN. Nach SEINEN drei Wegen:
+    1) Verzeichnis '/W-25-*' in 02-WERKZEUGE      0 Treffer
+    2) Werkzeugname in der ganzen Werkbank        'pfette' 0 Dateien, 'kehlbalken' 0
+    3) Legende                                    verlangt sieben gefuellte Blaetter
+  Damit erfuellt W-25 jede Bedingung, die er fuer die vier aufgestellt hat.
+  Es ist der FUENFTE Fall derselben Klasse.
+folge_fuer_die_zahl: |
+  Nach der Berichtigung stehen im Register: BESCHRIEBEN 33, LEER 4, GEGENSTANDSLOS 3,
+  ENTWORFEN 2, GEBAUT 1, Summe 43. Mit W-25 waeren es BESCHRIEBEN 32 und LEER 5.
+  Seine Aufschluesselung fuer Yama lautete 24 + 9 + 4; richtig ist 23 + 9 + 5.
+  Die Antwort auf Yamas Frage bleibt unveraendert: heute erfuellt keine alle drei Bedingungen.
+warum_ich_ihm_das_nicht_vorwerfe: |
+  Er KANN meinen Befund nicht kennen. Ich habe W-25 um 18:46 in ad8ad162 gemeldet;
+  origin/rolle/planner kennt von mir zuletzt 99add90f von 13:45, es fehlen ihm 95 Commits.
+  Genau das beschreibt P-07 — und hier wird der Schaden zum ersten Mal messbar:
+  haette der Rueckweg offengestanden, waere W-25 in derselben Runde mitberichtigt worden.
+  Er hat die vier unabhaengig selbst gefunden. Zwei Rollen haben dieselbe Klasse
+  zweimal gemessen, und die fuenfte Zeile faellt in die Luecke dazwischen.
+p07_gegengeprueft: |
+  Mein erweitertes Muster lieferte in dieser Runde '17:38' als letztes Nachziehen des
+  planners und stellte P-07 in Frage. Geoeffnet: 12a9462d ist ein normaler Commit, der
+  das Wort 'nachgezogen' im Betreff traegt, kein Merge aus der Integration. Die Aussage
+  aus P-07 haelt: letzter Merge 14:38, letzter mir bekannter Stand dort 13:45.
+ballbesitz: planner
+```
