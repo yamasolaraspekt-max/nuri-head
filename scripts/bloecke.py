@@ -124,7 +124,45 @@ def main(pfad=P):
     if ueber > 0:
         print(f'     ⚠ {ueber} MEHR als der Altbestand — das ist neu und gehoert geoeffnet.')
 
-    return 1 if (a % 2 or ueber_b > 0 or ueber > 0) else 0
+    # D — OEFFNER OHNE SCHLIESSER. Nachgeruestet 16.08. 23:1x, weil A, B und C denselben
+    # Fall alle drei nicht sehen und dabei "still" melden:
+    #
+    #   ```yaml-Oeffner in der Datei   444
+    #   Bloecke, die C ueberhaupt sieht 442
+    #   Differenz                         2
+    #
+    # Ein Block ohne schliessenden Zaun ist nicht KAPUTT, er ist ABWESEND — das Muster
+    # /```yaml\n([\s\S]*?)```/ findet ihn nicht, also kann C ihn auch nicht als kaputt
+    # zaehlen. A bleibt still, weil sie nur die GESAMTZAHL aller Zaunzeilen auf Geradheit
+    # prueft (1160) und ein fehlender Schliesser von den Schliessern der ```bash-Bloecke
+    # rechnerisch ausgeglichen wird. B bleibt still, weil der Zaun am Zeilenanfang steht.
+    #
+    # Gefunden ueber einen Nebenweg: die Zustandszaehlung ergab 90 ueber grep gegen 89 ueber
+    # Bloecke. EINE Zeile Unterschied — und dahinter lag der Datensatz A-08 (Z.3215-3256),
+    # fuer jedes blockbasierte Werkzeug unsichtbar. Heute ohne Schaden (BETRIEBSBESTAETIGT,
+    # ballbesitz —), aber derselbe Mechanismus haette einen offenen Ball verschluckt.
+    GRUNDLINIE_D = 2        # Stand 16.08. 23:1x: A-08 (Z.3215) und ein Vorschlagsblock (Z.7876)
+    offen_d, start_d = [], None
+    for i, l in enumerate(text.split('\n')):
+        s = l.strip()
+        if s.startswith('```yaml'):
+            if start_d is not None:
+                offen_d.append((start_d + 1, i + 1))
+            start_d = i
+        elif s == '```' and start_d is not None:
+            start_d = None
+    if start_d is not None:
+        offen_d.append((start_d + 1, len(text.split('\n'))))
+    ueber_d = len(offen_d) - GRUNDLINIE_D
+    print(f'  D  Oeffner ohne Schliesser {len(offen_d)} '
+          f'(Grundlinie {GRUNDLINIE_D}, {"+" if ueber_d > 0 else ""}{ueber_d})')
+    for a_d, b_d in offen_d:
+        print(f'       Z.{a_d} bis Z.{b_d} — von A, B und C nicht gesehen')
+    if ueber_d > 0:
+        print(f'     ⚠ {ueber_d} MEHR als der Altbestand — ein Datensatz koennte '
+              f'unsichtbar geworden sein.')
+
+    return 1 if (a % 2 or ueber_b > 0 or ueber > 0 or ueber_d > 0) else 0
 
 
 if __name__ == '__main__':
