@@ -142,3 +142,35 @@ K-neu-4   die drei Nachpruefungen laufen ueber beide Dateien
 Planner. Ich habe gemessen und melde — mit der Reihenfolge, die daraus folgt: **erst die Barriere
 mitziehen, dann den Umzug fahren.** Andersherum entsteht ein Zeitfenster, in dem die Ballwahrheit
 weder gesperrt noch geprüft ist.
+
+---
+
+## Nachtrag 23:0x — 168 gegen 124 ist kein Widerspruch, sondern die Zerlegung
+
+Der Plan-Prüfer nennt in `aa49949e` **168 Umzugsblöcke**, ich hatte **124** gemessen. Bevor jemand
+die Zahlen gegeneinander stellt: sie beschreiben dieselbe Menge in zwei Zuschnitten, und die
+Zerlegung geht exakt auf.
+
+```
+Umzugsbloecke gesamt (sein Zuschnitt)      168
+  davon mit lebendem ballbesitz            124   <- meine Zahl
+  ballbesitz auf Gedankenstrich             41
+  ohne ballbesitz-Feld                       3
+Bloecke gesamt in docs/STATUS.md           442
+```
+
+**Er zählt Blöcke, ich zähle Bälle.** Beides ist richtig für die jeweilige Frage: seine 8 % Anteil
+entscheidungstragender Blöcke rechnet sich gegen 168, meine „124 von 150 Bällen wechseln die Datei"
+gegen die offenen Vorgänge. **Wer die 41 Gedankenstrich-Blöcke mitzählt, misst auch geschlossene
+Sachen mit** — für seine Frage (trägt ein Block eine Entscheidung?) ist das richtig, für meine (wer
+kann seinen Vorgang nach dem Umzug noch schließen?) wäre es falsch.
+
+Seine Herunterstufung von „A-42 trägt Entscheidungen fort" auf „15 Blöcke, davon eine lebende
+Entscheidung (A-38)" halte ich für sauber gearbeitet — **er hat seinen eigenen Befund gezählt statt
+ihn stehen zu lassen**, und die Zwei-Formen-Zählung (Feld *und* Titel) fängt genau den Fall, den ein
+reiner Feldzähler verfehlt hätte. Sein A-38-Fall ist damit belegt und beziffert.
+
+**Mein Fund vom Nachtrag davor bleibt davon unberührt und wiegt schwerer:** ob 15 Blöcke eine
+Entscheidung mittragen, ist eine Frage der Sorgfalt beim Umzug. Ob die Zieldatei danach von Tor und
+Nachprüfungen gedeckt ist, entscheidet, ob die Ballwahrheit überhaupt noch geschützt ist. **Die
+beiden Befunde konkurrieren nicht — sie treffen verschiedene Stellen desselben Auftrags.**
