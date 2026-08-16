@@ -268,3 +268,118 @@ Stand von 19:38 noch den von 19:43 abbildet.
 **Für meine eigene Wache:** Ich habe nach P-09 zugesagt, jede Existenzfrage gegen alle Zweige
 zu messen. Ein Kriterium im Blatt ist eine Existenzfrage. Ich habe die Regel auf Dateien
 angewandt und nicht auf Inhalte — der vierte Fall derselben Klasse heute.
+
+---
+
+## RUECKNAHME — "die Statuswahrheit ist eingefroren" war falsch
+
+*(geschrieben 19:56, Messstand 51e580e2)*
+
+Ich habe um 19:42 gemeldet, die Zustandskette nach §3 könne nicht mehr fortgeschrieben werden,
+und das als **dringenden Ball an Yama** gestellt. **Das war falsch, und die Regel sagt es
+wörtlich.**
+
+**`ARBEITSREGELN.md`, Zeile 1481 und 1490–1497:**
+
+> Eine Rolle meldet einen Zustandswechsel **als Commit-Betreff**, in genau dieser Form:
+> `<rolle>: zustand: <KENNUNG> · <ZUSTAND> · <rolle> · <beleg-sha>`
+> WER = git-Autor · WANN = git-Zeitstempel · WAS = Kennung + Zustand + Beleg-SHA ·
+> **WO = im eigenen Rollenzweig, sonst nirgends**
+
+**`scripts/status-erzeugen.sh`, Zeile 4–6:**
+
+> **Yamas Entscheidung vom 16.08.:** *„Der Zustandswechsel IST der Commit."* Keine Rolle
+> bearbeitet `docs/STATUS.md` mehr; sie meldet einen Zustandswechsel als Commit-Betreff in
+> festem Wortlaut, **und der Integrator lässt daraus die Tafel erzeugen.**
+
+**Die Kette läuft also, und zwar genau wie entschieden.** Gemessen: 20 Commits mit
+Zustands-Betreff, alle von heute, **vier davon nach dem Scharfwerden der Sperre um 19:36**.
+Meine „Aussperrung" ist kein Defekt, sondern die Umsetzung dieser Entscheidung.
+
+**Damit fällt auch der Kern meiner A-37-Rücknahme von 19:56.** Ich schrieb, der Zustand könne
+dem neunzehnten Kriterium „nicht folgen". Er kann — über den Betreff, im eigenen Rollenzweig.
+Was von jener Meldung bleibt, ist nur die Zeitachse: A-37-19 kam um 19:43, fünf Minuten nach
+der CODE_FERTIG-Meldung. Das ist eine Beobachtung zum Ablauf, kein Systemmangel.
+
+**Was tatsächlich offen ist, und nur das:** Die Tafel `docs/STATUS.md` ist seit 19:35 nicht
+erzeugt worden; der Erzeugerlauf taucht in keinem Commit-Betreff auf. Der Eingang füllt sich
+(20 Meldungen), die Ableitung hinkt. **Ob und wann der Integrator erzeugt, ist sein Takt und
+nicht mein Urteil** — ich melde nur, dass Eingang und Tafel derzeit auseinanderlaufen.
+
+**Vierter zu weiter Befund heute, und der schwerste.** Ich habe eine Sperre gemessen und daraus
+auf einen Systemstillstand geschlossen, ohne die Regel zu lesen, die den Weg beschreibt. Die
+Regel stand die ganze Zeit in derselben Datei, die ich heute Abend dreimal geöffnet habe.
+
+---
+
+## Die Warnung des Release-Pruefers unabhaengig nachgemessen — sie traegt in jeder Zahl
+
+*(geschrieben 19:59, Messstand 001abb9e)*
+
+`bb32131f` (19:56:56) warnt den Evaluator vor Schritt I: die Fertigmeldung für A-37 sei
+überholt. **Drei Zahlen, drei Messungen, drei Treffer:**
+
+| seine Angabe | meine Messung | |
+|---|---|---|
+| 19 Kriterien im Blatt | 19 eindeutige `A-37-n` | **stimmt** |
+| Meldung sagt „ALLE ACHTZEHN" | Wortlaut enthält „ACHTZEHN" | **stimmt** |
+| Rücknahme des Plan-Prüfers 19:53 | `51e580e2` um **19:53:15** | **stimmt** |
+
+**Und keine neue Fertigmeldung.** Über alle Zweige gemessen gibt es heute genau zwei
+A-37-Zustandsmeldungen: `514d1a60` um 16:56:59 (BEREIT) und `fb59f6cc` um 19:38:16
+(CODE_FERTIG). Nach dem Bau von A-37-19 um 19:49:23 kam keine. Der letzte gültige Zustand
+deckt achtzehn Kriterien ab, im Blatt stehen neunzehn.
+
+**Sein Schluss ist richtig und sein Vorschlag der kleinstmögliche:** *„Was fehlt ist ein
+Commit, kein Bau"* — eine neue Fertigmeldung im Wortlaut mit neunzehn Kriterien und
+`1c36544e` als Bau-SHA. Der Bau selbst ist gefahren; es fehlt nur seine Ansage.
+
+**Berichtigung in eigener Sache:** In meiner letzten Meldung an Yama habe ich meine eigene
+Rücknahme auf „19:56" datiert. Sie fiel um **19:53:15**. Der Release-Prüfer hat sie richtig
+zitiert, ich selbst nicht. Das ist heute das zweite Mal, dass eine Uhrzeit in meiner Prosa
+nicht gemessen war — beim ersten Mal (18:39 statt 18:35) hat es meinen nächsten Befehl ins
+Leere laufen lassen. Hier hat es nichts verfälscht, aber der Fehler ist derselbe.
+
+---
+
+## A-37-19 geprueft — der Befund traegt, der Bau loest ihn, und die Zeilennummer ist schon wieder gewandert
+
+*(geschrieben 20:02, Messstand 83635ca7)*
+
+**Der Befund ist belegt.** Das alte Muster `^[a-z][a-z-]*(-[0-9]+)?: ` an den drei Proben
+gefahren, die das Blatt nennt:
+
+| Betreff | gemessen | Blatt sagt |
+|---|---|---|
+| `release-pruefer (in Yamas Namen): …` | kein Treffer | kein Treffer |
+| `plan-pruefer (release-pruefer in Rollenwechsel): …` | kein Treffer | kein Treffer |
+| `planner: …` | Treffer | Treffer |
+
+Drei von drei. Die Markenerkennung übersah Rollenmarken mit Klammerzusatz, und die Folge wäre
+die stille Verdopplung gewesen, die der Generator beschreibt.
+
+**Der Bau löst ihn.** Das neue Muster steht heute in `scripts/commit-pruefen.sh` und trägt den
+optionalen Zusatz: `^[a-z][a-z-]*(-[0-9]+)?( \([^)]*\))?: `. An denselben Proben plus einer
+vierten:
+
+| Betreff | neues Muster |
+|---|---|
+| `release-pruefer (in Yamas Namen): …` | **Treffer** |
+| `plan-pruefer (release-pruefer in Rollenwechsel): …` | **Treffer** |
+| `planner: …` | **Treffer** |
+| `Beispiel: zustand: A-33 · CODE_FERTIG` | **kein Treffer** |
+
+Die vierte Probe ist meine eigene Zugabe und die wichtigere: Sie prüft, ob der erweiterte
+Zusatz die Zitat-Falle aus `ARBEITSREGELN.md` Zeile 1483 aufreißt — ein Regelzitat, das mit
+`Beispiel:` beginnt, darf **nicht** als Rollenmarke gelten. Es tut es nicht. Der Bau ist an
+dieser Stelle enger geblieben, als er hätte werden können.
+
+**Und der Zeiger wandert schon wieder.** Das Blatt nennt die Fundstelle *„heute Zeile 150,
+nicht mehr 73 — die Datei ist gewachsen; diese Nummer gehört mitgemessen, nicht zitiert"*.
+Gemessen steht sie jetzt auf **Zeile 173** bei 985 Zeilen Gesamtlänge; der Bau von 19:49 hat
+33 Zeilen eingefügt. Zwischen Blatt-Eintrag (19:43) und dieser Messung liegen 17 Minuten und
+23 Zeilen.
+
+**Das ist kein Vorwurf, sondern die Bestätigung der Warnung im selben Satz.** Das Blatt
+kennzeichnet die Zahl ausdrücklich als Momentaufnahme und verlangt, sie mitzumessen. Genau das
+war nötig — nach 17 Minuten stimmte sie nicht mehr.
