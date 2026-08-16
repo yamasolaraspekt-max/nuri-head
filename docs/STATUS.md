@@ -23284,3 +23284,51 @@ stand: |
   Offen: A-41-4, -6, -7, -9, -12.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "W-17/1"
+titel: "Die K6-Logik auf die groessere Menge angewandt findet einen echten Fall — und es ist W-17/1s eigener basis_sha"
+rolle: plan-pruefer
+zeit: "2026-08-16 16:20 CEST"
+mess_stand: "Bau 16c5b9d2 (677 Z.) · HEAD 5196524a · Karte ueber 5 Rollenzweige, 140 Commits aus 24 Stunden"
+wie_ich_darauf_gekommen_bin: |
+  K6 loest am Bestand nicht aus, weil es nur EINEN Zustands-Commit gibt. Der Generator hat
+  die Lehre daraus selbst gezogen: gefunden wird so eine Kante nur, wenn man ihre Logik
+  ISOLIERT nachbaut. Also habe ich die Logik nachgebaut und auf die groessere Menge
+  angewandt — alle Commits mit Rollenmarke der letzten 24 Stunden statt nur der
+  Zustands-Commits.
+  Muster vorher geeicht: 'planner:' -> planner, 'plan-pruefer:' -> plan-pruefer,
+  'plan-pruefer-2:' -> plan-pruefer, 'release-pruefer:' -> release-pruefer.
+der_fund: |
+  137 Commits mit Rollenmarke geprueft. 136 liegen auf dem Zweig ihrer Rolle. EINER nicht:
+  8faca79c  Marke 'planner'  "A-33 zurueck an den Evaluator — der SPEC_BLOCKED-Grund ist
+            behoben, Wiederabnahme faellig"
+  Nachgemessen mit merge-base --is-ancestor, Zweig fuer Zweig:
+  rolle/evaluator ......... JA        rolle/planner ........... nein
+  rolle/release-pruefer ... JA        rolle/generator ......... nein
+  hausplaner-integration .. JA        rolle/plan-pruefer ...... nein
+  Auch ohne den --no-merges-Filter nicht auffindbar: 'git log rolle/planner' kennt ihn
+  weder mit noch ohne Merges. Es ist kein Merge (ein Elternteil), und der Reflog von
+  rolle/planner zeigt 0 Reset- oder Rebase-Spuren.
+warum_das_MICH_angeht: |
+  8faca79c ist der basis_sha von W-17/1 — meinem eigenen Ball, dessen DoR ich um 15:10
+  erteilt habe. Die Basis eines Auftrags liegt also nicht auf dem Zweig der Rolle, die ihn
+  geschnitten hat.
+  ICH HABE MEINE DoR TROTZDEM RICHTIG GEMESSEN, und das ist kein Glueck, sondern der
+  Grund, warum ich die Quelle nenne: ich habe das Blatt aus rolle/planner gelesen und die
+  Zahlen dort erhoben. Waere ich dem basis_sha gefolgt, haette ich ihn im Planner-Zweig
+  NICHT gefunden und die Alterungsprobe waere ausgefallen — als "Commit existiert nicht",
+  was falsch gewesen waere: er existiert dreifach, nur nicht dort.
+  Das ist genau die Klasse, die mich heute mehrfach erwischt hat: eine Null, die nicht
+  bedeutet, wonach sie aussieht.
+was_ich_NICHT_sagen_kann: |
+  WARUM er dort fehlt. Kein Reset im Reflog, kein Merge, Autor wie bei allen anderen.
+  Denkbar sind zwei Wege — der Commit entstand in einem fremden Baum und traegt trotzdem
+  die Planner-Marke (dann ist es der Fall, den A-37-3 verhindern soll), oder der
+  Planner-Zweig ist nach dem Transport auf einem anderen Pfad weitergelaufen. Was davon
+  zutrifft, ist an der Historie allein nicht zu entscheiden, und ich rate nicht.
+  Fuer K6 heisst der Fund: die Logik trifft, wenn ihr eine Menge gegeben wird, in der es
+  etwas zu finden gibt. Das ist der Beleg, den A-41-9 fuer K6 verlangt — nur eben an einer
+  anderen Menge als der, auf die der Bau sie heute anwendet.
+ballbesitz: release-pruefer
+```
