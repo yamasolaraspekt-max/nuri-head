@@ -73,3 +73,42 @@ gehört entfernt — durch den, der es darf. Ich melde sie, statt sie an der Reg
 `docs/STATUS.md` geschrieben werden. Bis Yama etwas anderes anordnet, legt der Plan-Prüfer
 seine Befunde in Dateien dieser Form ab. Der Ball für beides — die Probedatei und der Ort
 künftiger Befunde — liegt bei **Yama**.
+
+---
+
+## 19:42 — die Statuswahrheit ist eingefroren, und der einzige Schreiber hat sie nie geschrieben
+
+**Anlass:** A-37 wurde um 19:38 mit `fb59f6cc` als CODE_FERTIG gemeldet. Das ist ein
+Ballwechsel in meiner Bahn, also die Meldepflichten geprüft.
+
+**Bau-SHA existiert:** `97f1dd00`, 16.08. 19:14, *„A-37-17 belegt — alle sechs Kanten je
+einzeln gefahren"*. ✓
+
+**Aber er steht in keinem Feld.** Gemessen über alle fünf Zweige plus Integration:
+
+| Zweig | A-37 letzter Zustand |
+|---|---|
+| HEAD · generator · release-pruefer · planner · integration | **BEREIT** |
+
+**Der Grund ist kein Versäumnis des Generators.** Sein Commit ändert ausschließlich
+`scripts/rollen-tor.sh` (16 Zeilen) — er konnte `docs/STATUS.md` nicht anfassen, weil
+dieselbe Sperre auch ihn trifft. Der Zustandswechsel steht deshalb nur im Commit-Betreff.
+
+**Der einzige berechtigte Schreiber schreibt nicht:**
+
+- Commits mit Rollenmarke `integrator:`: **3** — 16:17, 16:56, 17:29
+- davon mit `docs/STATUS.md` im Scope: **0**
+- letzter Integrator-Commit: **17:29**, also seit über zwei Stunden still
+
+**Letzte Änderung an `docs/STATUS.md`: mein eigener Commit `dab4086b` um 19:35** — eine
+Minute bevor die Sperre scharf wurde. Seither steht die Statuswahrheit still, während
+Generator (19:38) und Planner (19:39) weiterarbeiten.
+
+**Was das heißt:** Die Zustandskette nach §3 kann nicht mehr fortgeschrieben werden. Jede
+Rolle kann ihren Zustand nur noch im Commit-Betreff ansagen, und A-20 (Blatt + Tafelzeile +
+Datensatz) ist ab sofort für jede neue Zustandsänderung verletzt. Der Rückstau ist heute
+noch klein — **eine** Ansage —, aber er wächst mit jedem Ballwechsel.
+
+**Ball bei Yama.** Entweder der Integrator übernimmt das Schreiben der Statuswahrheit
+tatsächlich, oder die Sperre braucht eine Ausnahme für Zustandsfelder. Ich kann weder das
+eine noch das andere entscheiden, und die Sperre selbst ist als A-37-Bau gewollt.
