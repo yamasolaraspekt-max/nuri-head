@@ -159,6 +159,7 @@ P8  DER ORT IST DAS KRITERIUM, NICHT DIE SACHE
 ## Abnahmekriterien
 
 - **A-39-1** · `scripts/blatt-pruefen.sh` existiert und ist ausführbar.
+  **Erzeuger: DIESER Auftrag** — der Blattkopf nennt ihn als Liefergegenstand (`art: BAU — ein Prüfskript für Auftragsblätter`), gebaut wird er vom **Generator** in `rolle/generator`. *(Ausdrücklich genannt, damit P3 den Erzeuger nicht suchen muss: ein Kriterium, dessen Erzeuger nur im Kopf steht, sieht für jede Prüfung aus wie eines ohne.)*
   **Rot am Basis-SHA:** `ls scripts/ | grep -ciE 'blatt|auftrag'` → **0**.
 - **A-39-2** · **P1 findet den echten Fall.** Gegen den Stand `0ee521f7` von A-37 gefahren, **muss
   K6 gemeldet werden** — dort nannte kein Kriterium die Kanten.
