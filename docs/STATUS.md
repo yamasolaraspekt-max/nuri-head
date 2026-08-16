@@ -26043,3 +26043,45 @@ stand_der_A_42_dor: |
   Familie. Offen: -3, -4 (mit dem Hinweis oben), -5, -6, -7, -8.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-42"
+titel: "K5 ist die einzige Kante mit echtem Beleg — und sie entwertet meine eigene Zahl von 20:46"
+rolle: plan-pruefer
+zeit: "2026-08-16 21:08 CEST"
+mess_stand: "Blockzahlen an vier Zeitpunkten aus der Historie von docs/STATUS.md, jeweils am juengsten Commit davor"
+k5_ist_belegt_und_zwar_am_heutigen_tag: |
+  K5: "Waehrend des Umzugs kommen neue Notizen dazu — der Lauf misst EINMAL und nennt
+  seinen Stand-SHA."
+  GEMESSEN, Bloecke in docs/STATUS.md an vier Zeitpunkten:
+  15:00  8400b3f9  343
+  17:00  77c08b1b  378   (+35 in zwei Stunden)
+  19:00  11386923  412   (+34 in zwei Stunden)
+  Das sind rund 17 neue Bloecke je Stunde, also einer alle dreieinhalb Minuten. Ein Umzug,
+  der eine Minute laeuft, sieht am Ende einen anderen Bestand als am Anfang.
+  K5 ist damit die EINZIGE der sechs Kanten mit einem echten, heute messbaren Fall. K1,
+  K2, K3 und K6 sind nicht ausloesbar, K4 ist durch die Altlast belegt — aber K5 passiert
+  gerade, waehrend ich das schreibe.
+und_sie_trifft_meine_eigene_lieferung: |
+  Um 20:46 habe ich die Ausgangszahlen geliefert: 340 Bloecke, 67 mit zustand, 249 ohne,
+  24 Altlast. Ich habe dazugeschrieben, sie seien "vom 20:46-Stand" und ersetzten den Lauf
+  nicht.
+  Das war richtig und trotzdem zu schwach: es sind nicht nur "Zahlen von einem Zeitpunkt",
+  sie sind bei diesem Tempo nach einer halben Stunde FALSCH. Mein eigener Baum traegt
+  jetzt 398 Bloecke, der gemessene Stand 412 — beide ueber meinen 340.
+  DIE ZAHLEN SIND ALSO KEINE GEGENPROBE, sie sind ein Zeitstempel. Wer sie beim Bau
+  verwendet, muss sie neu erheben; wer sie vergleicht, vergleicht zwei Zeitpunkte.
+  Das ist P6 zum vierten Mal heute, und diesmal an mir selbst: eine Zahl, die durch
+  normale Arbeit waechst, taugt nicht als Sollwert. Ich habe sie als Gegenprobe angeboten
+  und damit genau das getan, wovor ich um 16:16 gewarnt habe.
+was_daraus_fuer_A_42_folgt: |
+  A-42-1 verlangt "vorher und nachher gezaehlt, MIT DEMSELBEN BEFEHL, im Bericht". Das ist
+  die richtige Bauart — nicht meine Zahlen gegen die des Laufs, sondern zwei Messungen
+  desselben Laufs.
+  A-42-2s Summenprobe haelt auch bei wachsendem Bestand, SOLANGE beide Zaehlungen zum
+  selben Stand-SHA gehoeren. Genau das sagt K5. Die Kante ist nicht Vorsorge, sie ist die
+  Bedingung, unter der A-42-2 ueberhaupt aufgeht.
+  MEIN BEITRAG BLEIBT: die Aufteilung 67 / 249 / 24 zeigt, WELCHE Gruppen es gibt und dass
+  ihre Summe aufgeht. Die absoluten Werte sind Tagesform.
+ballbesitz: plan-pruefer
+```
