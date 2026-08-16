@@ -233,6 +233,29 @@ esac
 #
 # **Der Einwand ist damit kein Einwand gegen den Bau, sondern die genaueste Beschreibung des
 # Transportproblems, die heute vorliegt.**
+#
+# ## A-37-18 — wo das Tor am 16.08. um 16:30 WIRKLICH liegt, alle sechs Baeume einzeln
+#
+# ```text
+#   Baum                        Zweig                        Tor   Haken
+#   ticket                      auto/hausplaner-integration  NEIN    0
+#   ticket-rolle-planner        rolle/planner                NEIN    0
+#   ticket-rolle-plan-pruefer   rolle/plan-pruefer           NEIN    0
+#   ticket-rolle-generator      rolle/generator              JA      3
+#   ticket-rolle-evaluator      rolle/evaluator              JA      3
+#   ticket-release-pruefung     rolle/release-pruefer        JA      3
+# ```
+#
+# **DREI von sechs, nicht zwei.** *Der Auftrag nennt zwei und fuehrt `release` mit 0.* **Die
+# Ursache steht schon weiter oben in dieser Datei:** das Verzeichnis `ticket-rolle-release`
+# existiert noch, ist aber laengst nicht mehr der Baum des Release-Pruefers — der arbeitet in
+# `ticket-release-pruefung`. *Wer nach dem alten Namen misst, findet eine Null, die es nicht gibt.*
+#
+# ***Genau daran ist meine eigene Tabelle am 16.08. gescheitert, und genau deshalb entscheidet
+# hier seither der ZWEIG und nicht das Verzeichnis.*** **Dieselbe Falle, zweite Runde, anderer
+# Messender** — was fuer die Zahl im Kriterium heisst: besser den Zweig erheben als den Ordner.
+#
+# **Gemeldet, nicht geaendert.** *Das Blatt gehoert dem Planner.*
 if [ "${TOR_STATUS_PFAD:-0}" = "1" ] && [ "$STAMM" != "integrator" ]; then
   INTEGRATOR_DA="$(git log --all --format=%s --grep='^integrator:' 2>/dev/null | head -1)"
   if [ -n "$INTEGRATOR_DA" ]; then
