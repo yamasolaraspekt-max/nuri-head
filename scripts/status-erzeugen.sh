@@ -86,6 +86,42 @@
 # **Gemeldet und nicht selbst entschieden** — die Regel gehoert dem Planner und Yama, nicht diesem
 # Skript. *Sie faellt sonst genau dann auf, wenn die erste Rolle abnehmen will.*
 #
+# ## A-41-7 — Widerspruch wird GEMELDET, nicht aufgeloest. Rohausgabe, kuenstlich hergestellt
+#
+# **Der Plan-Pruefer hat gemessen** (`df0132d2`): *„A-41-7 ist NICHT ungeprueft — es ist unter
+# anderem Namen geprueft."* **Alle drei Forderungen lagen belegt vor, aber unter `K1`, und deshalb
+# fand niemand sie unter `A-41-7`.** *Seine Lehre daraus, die ich uebernehme:* **„eine Liste
+# abzuarbeiten ist nicht dasselbe wie zu pruefen, ob jeder Posten der ANDEREN Liste getroffen
+# wurde."**
+#
+# **Die Zuordnung wird hier nachgeholt, mit der Rohausgabe aus einem Probe-Repo, in dem zwei
+# Zustands-Commits derselben Kennung dieselbe Autorzeit tragen:**
+#
+# ```text
+#   $ TICKET_ROLLE=generator bash scripts/status-erzeugen.sh --tafel
+#
+#   # KEINE Tafel erzeugt — WIDERSPRUCH bei gleicher Zeit (1)
+#
+#       X-01       ABGENOMMEN           evaluator        23ed2710  16.08 12:00
+#       X-01       CODE_FERTIG          generator        5b37f32a  16.08 12:00
+#
+#     RUECKGABE 2 — NICHT erzeugt, Widerspruch
+#     GEMELDET, NICHT aufgeloest (Regel 4). Die Entscheidung gehoert dem Integrator.
+# ```
+#
+# ```text
+#   A-41-7 verlangt          belegt durch
+#   beide in der Meldung  -> die zwei X-01-Zeilen, verschiedene Rollen, gleiche Zeit
+#   Rueckgabe 2           -> RUECKGABE 2, am Lauf abgelesen
+#   Tafel unveraendert    -> die Ueberschrift lautet KEINE Tafel erzeugt; es wird
+#                            keine Zeile gedruckt und nichts geschrieben
+# ```
+#
+# ***Die dritte Zeile ist die, die vorher fehlte und die ich beim Bau eigens geaendert habe:***
+# *bis dahin druckte der Modus die Tafel MIT dem juengsten Eintrag als Gewinner und die Warnung
+# darunter.* **Bei gleicher Zeit gibt es keinen juengsten — wer trotzdem einen waehlt, entscheidet
+# per Sortierreihenfolge.**
+#
 # ## Rueckgabewerte — nach A-41-10, und KEIN Wert traegt zwei Bedeutungen
 #
 # ```text

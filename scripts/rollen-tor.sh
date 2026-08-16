@@ -39,9 +39,10 @@
 # K3  Worktree existiert nicht (nicht umgezogen)-> DURCHLASSEN und melden. Der Umzug ist
 #                                                  freiwillig getaktet; ein Tor, das ihn
 #                                                  erzwingt, haelt die Kette an.
-# K4  git rev-parse schlaegt fehl (kein Repo)   -> abweisen mit EIGENER Ursache, NICHT als
-#                                                  Rollenfehler. Sonst sucht jemand eine
-#                                                  Rollenverwechslung, die es nicht gibt.
+# K4  git rev-parse schlaegt fehl (kein Repo)   -> DURCHLASSEN und melden, mit EIGENER
+#                                                  Ursache und NICHT als Rollenfehler.
+#                                                  Sonst sucht jemand eine Rollenver-
+#                                                  wechslung, die es nicht gibt.
 # K5  integrator im gemeinsamen Checkout        -> erlaubt, das ist sein Baum
 # --  Zweig stimmt, VERZEICHNIS weicht ab       -> erlaubt MIT HINWEIS. Der Zweig ist der
 #                                                  verlaessliche Schluessel, git laesst ihn nur
@@ -67,11 +68,13 @@
 #   0   Baum und Rolle passen zusammen, oder K3 / K5 / K6
 #   1   Rolle und Baum passen NICHT zusammen        <- der Verstoss
 #   5   Rollenkennung fehlt beim DIREKTEN Aufruf    <- NICHT 1, sonst nicht unterscheidbar
-#   2   kein Repository (K4)                        <- s. OFFEN unten
+#   0   kein Repository (K4) — durchgelassen und gemeldet, wie K3/K5/K6
+#       (bis 16.08. abends 2; das kollidierte mit dem YAML-Syntaxfehler,
+#        seit der Wert durchgereicht wird. Behoben, Begruendung am Code.)
 #   6   MODULSTAND: die Marke widerspricht dem Lockfile (A-37-13)
 # ```
 #
-# **Die 6 ist gewaehlt, weil 0/1/2/5 hier und 0/2/3/4 in `commit-pruefen.sh` schon belegt sind** —
+# **Die 6 ist gewaehlt, weil 0/1/5 hier und 0/2/3/4 in `commit-pruefen.sh` schon belegt sind** —
 # nachgesehen, nicht angenommen. Fuer die FEHLENDE Marke steht hier bewusst kein Code; die
 # Begruendung steht beim Bau selbst und nicht nur hier.
 #
@@ -102,11 +105,10 @@
 # der Berichtigung auf 5, weil ich selbst am 15.08. die 3 fuer `MODUL` belegt hatte** (`374bb851`)
 # *und zwei Bedeutungen auf einem Code niemandem aufgefallen waren.*
 #
-# > ***OFFEN und hier nicht selbst entschieden:*** *fuer K4 (kein Repository) vergibt die Tabelle
-# > KEINEN Code.* **Ich lasse 2 stehen und erfinde keinen siebten** — *genau das Waehlen einer
-# > dritten Variante ist der Fehler, den dieser Bau gerade behebt.* **Gemeldet: 2 ist in
-# > `commit-pruefen.sh` mit „YAML-Syntaxfehler" belegt.** *Am Einhaengepunkt kann der Fall nicht
-# > eintreten — dort laeuft immer ein Repository —, die Kollision ist also heute theoretisch.*
+# > ***ERLEDIGT am 16.08. abends:*** *fuer K4 vergab die Tabelle keinen Code, und ich liess
+# > die 2 stehen mit dem Hinweis, die Kollision mit dem YAML-Syntaxfehler sei theoretisch.*
+# > **Der Plan-Pruefer hat gemessen, dass sie es nicht mehr ist, seit der Wert durchgereicht
+# > wird** (`e000f087`). **K4 gibt jetzt 0 und meldet** — der Code ist frei statt neu vergeben.
 # ## A-37-17 — ALLE SECHS KANTEN, je einzeln gefahren, Rohausgabe (16.08. abends)
 #
 # ```text
@@ -123,9 +125,9 @@
 #     ROLLEN-TOR  HINWEIS  'generator' hat noch keinen eigenen Baum
 #                 (ticket-rolle-generator) — durchgelassen (K3).       exit 0
 #
-# K4  kein Repository — KEIN Rollenfehler
-#     ROLLEN-TOR  kein Git-Repository — hier ist keine Zuordnung pruefbar (K4).
-#                 Ursache: git rev-parse --show-toplevel schlug fehl.  exit 2
+# K4  kein Repository — KEIN Rollenfehler, DURCHGELASSEN (seit 16.08. abends)
+#     ROLLEN-TOR  HINWEIS  kein Git-Repository — keine Zuordnung pruefbar (K4).
+#                 Durchgelassen und gemeldet — wie K3, K5 und K6.        exit 0
 #
 # K5  Integrator IM Integrations-Checkout
 #     (nur der Modulstand-Hinweis, keine Rollenmeldung)                exit 0
@@ -165,10 +167,29 @@ STAMM="$(printf '%s' "$ROLLE" | sed -E 's/-[0-9]+$//')"
 # K4: kein Repo ist KEIN Rollenfehler und wird auch nicht als einer gemeldet.
 BAUM="$(git rev-parse --show-toplevel 2>/dev/null)" || BAUM=""
 if [ -z "$BAUM" ]; then
-  echo "ROLLEN-TOR  kein Git-Repository — hier ist keine Zuordnung pruefbar (K4)." >&2
+  echo "ROLLEN-TOR  HINWEIS  kein Git-Repository — hier ist keine Zuordnung pruefbar (K4)." >&2
   echo "            Das ist KEIN Rollenfehler. Ursache: git rev-parse --show-toplevel schlug fehl." >&2
-  [ "$NUR_MELDEN" = "1" ] && exit 0
-  exit 2
+  echo "            Durchgelassen und gemeldet — wie K3, K5 und K6." >&2
+  # ── K4 GIBT 0 STATT 2 (behoben 16.08. abends) ───────────────────────────────────────────
+  #
+  # **Der Befund des Plan-Pruefers** (`e000f087`): *„das Tor gibt bei K4 weiterhin exit 2 — und
+  # die Tabelle vergibt die 2 an den YAML-Syntaxfehler in `commit-pruefen.sh`. Da der Wert jetzt
+  # durchgereicht wird, sieht der Aufrufer in beiden Faellen dieselbe 2."*
+  #
+  # ***Und er nennt den Grund, warum es vorher unsichtbar war:*** *„solange der Einhaengepunkt
+  # alles auf 2 warf, fiel es nicht auf".* **Erst die Behebung eine Ebene hoeher hat den Fall
+  # sichtbar gemacht.**
+  #
+  # **Von seinen zwei Wegen — siebte Tabellenzeile oder 0 mit Meldung — nehme ich den zweiten,
+  # und zwar nicht aus Bequemlichkeit:** *eine siebte Zeile waere eine Codevergabe, und die
+  # Tabelle gehoert dem Auftrag und nicht mir.* **Die 0 dagegen folgt der eigenen Bauform dieses
+  # Tores:** *K3 (kein Baum), K5 (Integrator im Checkout) und K6 (fremde Rolle im gemeinsamen
+  # Checkout) lassen ALLE durch und melden.* **K4 sagt selbst „das ist KEIN Rollenfehler" — dann
+  # darf es auch nicht wie einer aussehen.**
+  #
+  # *Sicherheitsverlust: keiner.* **Ohne Repository scheitert der Commit ohnehin an git**, und
+  # zwar mit einer eigenen, deutlicheren Meldung als der Rueckgabe eines Rollentors.
+  exit 0
 fi
 VERZ="$(basename "$BAUM")"
 ZWEIG="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")"
