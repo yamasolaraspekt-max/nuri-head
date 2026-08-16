@@ -55,6 +55,29 @@ mit einer vorangestellten Zeile `herkunft: docs/STATUS.md · Block <n> · <basis
 Statuswahrheit. **Nicht** zurück in die Auftragsblätter — dort wären sie über hundertmal
 verstreut und die Herkunftskette ginge verloren.
 
+## Die dritte Klasse, die dieser Auftrag NICHT anfasst — gemessen 19:1x im Bestand
+
+```
+Bloecke gesamt              444
+  mit `zustand:`             90    echte Auftraege      -> bleiben
+  mit `auftrag:` ohne         165   Befundnotizen        -> ziehen um
+  WEDER noch                 189    dritte Klasse       -> bleiben, unbenannt
+```
+
+**Die 189 beginnen mit:** `befund` 12 · `anlass` 11 · `meldepflichten_erfuellt` 10 ·
+`was_passiert_ist` 5 · `vorgang` 5 · **17 mit gar keinem erkennbaren Feld.**
+
+> **Sie fallen durch jedes Raster: kein Auftrag, keine Kennung, kein Zustand.** A-42 lässt sie
+> stehen — **richtig, aber unbenannt.** Die Summengleichung `A-42-2` zählt sie korrekt als
+> „bleiben in `STATUS.md`", **ohne dass jemals gesagt wurde, was sie sind.**
+
+**Das ist kein Mangel dieses Auftrags, sondern seine Grenze — und sie gehört genannt, weil nach
+dem Umzug ein Leser sieht: 90 Aufträge und 189 Blöcke, die aussehen wie Aufträge und keine
+sind.** *Ohne diesen Absatz hielte man den Umzug für vollständig.*
+
+**Auflage:** der Lauf **zählt und meldet** die dritte Klasse, ohne sie anzufassen. **Was mit ihr
+geschieht, ist ein eigener Vorgang** — und die Frage danach gehört Yama, nicht diesem Blatt.
+
 ## Nicht-Ziele
 
 - **KEIN Löschen.** Kein Block verschwindet; jeder steht danach vollständig in der Zieldatei.
