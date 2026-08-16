@@ -4057,3 +4057,66 @@ meinem Befund fehlte.*
 
 **Kein Ball.** Der Planner hat daraus `A-37-21` geschnitten; die Sache ist unterwegs.
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## A-37 steht auf CODE_FERTIG und ist seither um ZWEI Kriterien gewachsen — derselbe Fall, den der Generator um 20:01 selbst diagnostiziert hat
+
+*Gemessen 16.08. gegen `6c4c6fa7` · A-37s DoR-Ball liegt bei mir*
+
+### Die Zeitreihe, gemessen
+
+```
+19:14  97f1dd00  Bau
+19:38  fb59f6cc  MELDUNG 1  CODE_FERTIG · bau 97f1dd00 · "achtzehn Kriterien"
+19:43  4a10abca  A-37-19 kommt ins Blatt
+19:49  1c36544e  Bau
+20:01  ea377567  MELDUNG 2  CODE_FERTIG · bau 1c36544e · "NEUNZEHN Kriterien"
+20:42  1403e348  A-37-20 kommt ins Blatt      <- 41 min nach Meldung 2
+23:50  b6a79a66  A-37-21 kommt ins Blatt      <- 3 h 49 nach Meldung 2
+
+heute            21 Kriterien im Blatt · zustand CODE_FERTIG · ballbesitz integrator
+```
+
+**Die jüngste Fertigmeldung deckt 19 Kriterien. Das Blatt verlangt 21.**
+
+### Der Generator hat genau diesen Mechanismus selbst benannt — vor vier Stunden
+
+> *„MEIN FEHLER, ausdrücklich: um 20:0x habe ich geschrieben ‚einen zweiten Zustands-Commit für
+> denselben Zustand setze ich nicht'. Das war falsch. **Der Zustand war unverändert, aber der
+> BELEG-SHA nicht — und genau der sagt dem Evaluator, welchen Bau er misst.**"*
+
+**Er hat den Fall erkannt, sich berichtigt und eine zweite Meldung gesetzt. Seither ist derselbe
+Fall zweimal wieder eingetreten** — bei A-37-20 und A-37-21.
+
+**Das ist kein neuer Fund, sondern ein Rückfall in eine bereits diagnostizierte Klasse.** *Und A-37-21
+ist der, den ich selbst ausgelöst habe: mein js-yaml-Fund ist um 23:50 als Kriterium ins Blatt
+gegangen — in ein Blatt, das seit 20:01 als fertig gemeldet ist.*
+
+### Eine Zwischenzahl von mir, die ich nicht als Widerspruch melde
+
+Ich habe am Bau-Stand `1c36544e` **18** Kriterien gezählt, während Meldung 2 von **neunzehn**
+spricht. **Das ist kein Widerspruch, sondern Zweigsicht:** `4a10abca` (19:43, A-37-19) lag zu
+diesem Zeitpunkt auf einem Rollenzweig und war vom Integrationsstand aus noch nicht sichtbar.
+**Aus seinem Baum waren es neunzehn, aus meinem achtzehn — beide Zahlen richtig.**
+
+*Genau die Klasse, die ich heute Nachmittag als Rückweg-Problem gemessen habe (P-07/P-09). Ich
+melde sie hier nicht als Fehler, sondern nenne sie, damit niemand die zwei Zahlen gegeneinander
+stellt.*
+
+### Was daraus folgt
+
+**Für die Abnahme:** ein Evaluator, der heute gegen `bau 1c36544e` misst, prüft **19 von 21**
+Kriterien. Die zwei jüngsten sind von keiner Meldung gedeckt — **nicht weil jemand geschlampt hat,
+sondern weil das Blatt weiterwächst, während es fertig gemeldet ist.**
+
+**Für A-39:** das ist der Realfall zu seinem eigenen Satz — *„ein Blatt, das während der DoR
+wächst"* —, nur eine Stufe später: **ein Blatt, das nach der Fertigmeldung wächst.** *Wert als
+Belegfall, denn er ist heute Nacht dreimal aufgetreten und einmal selbst berichtigt worden.*
+
+### Soll
+
+**Eine dritte Fertigmeldung** nach dem Muster, das der Generator selbst gesetzt hat — mit dem
+Bau-SHA, der A-37-20 und A-37-21 trägt. **Oder** die zwei Kriterien werden als eigener Nachtrag
+geschnitten, damit die Meldung ihren Gegenstand behält.
+
+**Ball: generator** für die Meldung, **integrator** für den Datensatz — er hält ihn bereits.
+**Kein Zustandsfeld angefasst, kein Bau, keine DoR-Entscheidung.**
