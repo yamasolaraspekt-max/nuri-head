@@ -26778,3 +26778,45 @@ p07_gegengeprueft: |
   aus P-07 haelt: letzter Merge 14:38, letzter mir bekannter Stand dort 13:45.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "A-40-6 geprueft — das Kriterium ist erfuellbar, aber seine Rot-Lage ist seit 14:49 weg, und zwar durch den Planner selbst"
+rolle: plan-pruefer
+zeit: "16.08. 18:54"
+mess_stand: aa5632663876d4fd5a98f7ff781495604526ca57
+basis_stand: 99add90f
+baum: "sauber (0 Eintraege)"
+kriterium: "A-40-6 — nachgerechnet_an traegt die ABWEICHUNG, nicht nur das Ergebnis. Das Feld nennt, um wie viel der Fall ohne die Aussage abweicht (Mutationsprobe)"
+urteil: "ERFUELLBAR — aber am heutigen Stand bereits an 1 von 1 Eintraegen erfuellt"
+rot_lage_beim_schnitt: |
+  Am Basis-Stand 99add90f (13:45) trug KEIN Facheintrag ein nachgerechnet_an mit
+  Abweichung. Die Rot-Lage des Kriteriums war zum Schnitt also echt.
+was_seither_geschah: |
+  66fa277f (planner, 14:49) hat S-008 im SOLAR-REGELWERK das Feld gegeben — eine
+  Stunde nach dem Schnitt. Es traegt eingabe, erwartet, gerechnet, fund UND
+  abweichung_ohne_die_regel. Damit erfuellt der einzige existierende Eintrag genau
+  das, was A-40-6 fordert, bevor der Auftrag gebaut ist.
+selbst_nachgerechnet: |
+  Ich habe jede Zahl des Eintrags gegen python3 gerechnet, phi = 51 Grad N:
+    21.06. dek +23,45  ->  50,777   ·  21.12. dek -23,42  ->  129,167
+    Differenz 78,390                   Eintrag sagt 78,4
+    Vorzeichen vertauscht: 21.06. -> 129,223 (Eintrag 129,2), 21.12. -> 50,833 (Eintrag 50,8)
+    Aequinoktium dek 0: +sin 90,0000 und -sin 90,0000 — BEIDE, wie behauptet
+  Der blinde Fleck ist real: wer nur am 21.03. prueft, bestaetigt das falsche Vorzeichen.
+  Der Eintrag dokumentiert ausserdem, dass der Planner beim Nachrechnen selbst in diesen
+  Fehler lief und ihn ueber den zweiten Rechenweg aufloeste. Das ist ein Beleg, keine
+  Wiederholung — genau die Unterscheidung, die A-40-6 verlangt.
+befund_fuer_die_dor: |
+  A-40-6 hat heute keine Rot-Lage mehr AM FELD. Was fehlt, ist der PRUEFSCHRITT, der
+  die Abweichung erzwingt — ein Muster existiert, eine Pruefung nicht. Das Blatt trennt
+  das nicht: der Wortlaut fordert, dass das Feld die Abweichung traegt, und genau das
+  ist erfuellt. Wer A-40-6 nach dem Bau abnimmt, findet es gruen vor, ohne dass der Bau
+  etwas dazu beigetragen haette.
+vorschlag: |
+  A-40-6 auf den Pruefschritt umformulieren: 'der Pruefschritt meldet ein
+  nachgerechnet_an OHNE Abweichungsangabe' — mit S-008 als Negativprobe, die NICHT
+  anschlagen darf. Dann traegt das Kriterium wieder eine Rot-Lage, und S-008 wird vom
+  Zufallstreffer zum Belegfall. Blattaenderung, nicht meine Entscheidung.
+ballbesitz: planner
+```
