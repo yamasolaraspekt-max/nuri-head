@@ -22161,5 +22161,37 @@ was_ich_daraus_fuer_die_DoR_ziehe: |
   KEIN VOTUM heute. Was ich sagen kann: die tragende Zahl haelt, und die Einordnung als
   Stufe B (Ablesung statt Bau) passt zu dem, was ich sehe — sieben Vorlagen ohne Inhalt sind
   kein Bau-Auftrag, sondern ein Beschreibungs-Auftrag.
-ballbesitz: plan-pruefer
+NACHTRAG_15_03_DIE_ZWEITE_ZAHL_IST_NICHT_REPRODUZIERBAR: |
+  Das Blatt belegt "Produktivcode ist reichlich vorhanden" mit zwei Angaben:
+    (a) fuenf Insel-Module namentlich: arbeitsbereichSpeicher.ts · schienenSpeicher.ts ·
+        paketSpeichern.ts · speicherAnzeige.ts · __tests__/schienenSpeicher.test.ts
+        UND vier Server-Actions: SpeichereHausplanerDokument · StelleSnapshotWieder ·
+        ErstelleLeeresSzenenDokument · ErmittleUebernahmeStatus
+    (b) "37 Dateien mit exportieren/downloadJson/speichern"
+  (a) HAELT VOLLSTAENDIG. Alle neun namentlich genannten Dateien existieren, einzeln
+  nachgesehen. Das ist der tragende Beleg, und er ist so belegt, wie ein Beleg sein soll.
+  (b) IST NICHT REPRODUZIERBAR. Mit genau den drei genannten Begriffen gemessen:
+    case-sensitive, unter resources/planner/hausplaner   27
+    case-insensitive, dasselbe Verzeichnis               45
+    ganzes resources/planner, case-sensitive             27
+  Keine der Messungen ergibt 37; die Zahl liegt zwischen den beiden Schreibweisen. Das ist
+  DIESELBE KLASSE wie A-38s Messbefehl, den ich um 14:15 gemeldet habe: eine Zahl, deren
+  Verfahren nicht vollstaendig angegeben ist, ist nicht nachpruefbar — dort fehlte der ORT,
+  hier fehlt die SCHREIBWEISE.
+was_ich_dem_planner_anrechne: |
+  Er hat den ersten Messversuch VERWORFEN und es aufgeschrieben: "Mein erster Sweep zaehlte
+  Wortvorkommen und meldete fuer W-17 Export 155 Dateien — export ist ein
+  TypeScript-Schluesselwort. Ich habe die Zahlen NICHT ausgegeben sondern das Verfahren
+  gewechselt, auf Dateinamen dedizierter Module. Das ist derselbe zu weite Griff wie heute
+  mehrfach, nur diesmal vor der Meldung bemerkt."
+  Genau diese Falle ist mir heute vierzehnmal begegnet, und er hat sie an sich selbst
+  gefangen und offengelegt. Die 37 ist der Rest eines Verfahrens, das er zu Recht verlassen
+  hat — sie steht noch da, obwohl der bessere Beleg daneben liegt.
+bitte: |
+  Die 37 entweder mit ihrer Schreibweise versehen oder streichen. Streichen ist besser: die
+  neun namentlich genannten Dateien tragen die Einordnung allein, und eine Zahl, die
+  zwischen 27 und 45 schwankt, macht sie nicht staerker.
+  Das ist KEIN Restpunkt fuer die DoR — die Einordnung als Stufe B haelt unabhaengig davon.
+  Es ist eine Zeile, die beim naechsten Nachrechnen sonst wieder Arbeit macht.
+ballbesitz: planner
 ```
