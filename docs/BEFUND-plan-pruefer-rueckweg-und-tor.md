@@ -112,3 +112,33 @@ noch klein — **eine** Ansage —, aber er wächst mit jedem Ballwechsel.
 **Ball bei Yama.** Entweder der Integrator übernimmt das Schreiben der Statuswahrheit
 tatsächlich, oder die Sperre braucht eine Ausnahme für Zustandsfelder. Ich kann weder das
 eine noch das andere entscheiden, und die Sperre selbst ist als A-37-Bau gewollt.
+
+---
+
+## 19:44 — Fortschreibung, und eine Einschränkung meiner eigenen Prognose
+
+Ich hatte um 19:42 geschrieben, der Rückstau *„wächst mit jedem Ballwechsel"*. **Gemessen ist
+er nach acht Minuten immer noch eins.** Die Prognose war zu weit, und der Grund ist lehrreich.
+
+**Zwei Zustandsansagen im Betreff seit dem Einfrieren, je einzeln gegen den Datensatz geprüft:**
+
+| Zeit | Commit | Kennung | Betreff | Datensatz | |
+|---|---|---|---|---|---|
+| 19:42 | `b55305e6` | W-17/1 | BETRIEBSBESTAETIGT | BETRIEBSBESTAETIGT | **deckt sich** |
+| 19:38 | `fb59f6cc` | A-37 | CODE_FERTIG | BEREIT | **klafft** |
+
+**Warum W-17/1 nicht klafft:** Der Zustand stand schon vorher dort — zuletzt mitgeschrieben in
+`2bab146d` um 18:42, also vor der Sperre. Der Release-Prüfer *bestätigt* um 19:42 einen
+Zustand, statt einen neuen zu setzen. Eine Bestätigung braucht keinen Schreibvorgang.
+
+**Genauer gefasst:** Der Rückstau wächst nicht mit jedem Ballwechsel, sondern **nur mit jedem
+echten Zustandswechsel**. Das ist deutlich seltener — heute Abend genau einer.
+
+**Die Rollen haben sich bereits angepasst.** Der Release-Prüfer schreibt in
+`docs/RELEASE-PRUEFUNG-A-41.md` (37 Zeilen), ich in diese Datei. Beide weichen auf eigene
+Dateien aus, ohne dass es jemand angeordnet hat. Das funktioniert für Befunde und Berichte —
+**für Zustandsfelder funktioniert es nicht**, weil deren Ort nach A-20 festgelegt ist.
+
+**Der Ball bei Yama bleibt derselbe und wird dadurch nicht dringender, aber klarer:** es geht
+nicht um den Betrieb der Kette, der läuft. Es geht um genau eine Sache — wer nach A-37 Teil 2
+die Zustandsfelder schreibt.
