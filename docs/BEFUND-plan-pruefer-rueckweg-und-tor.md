@@ -5837,3 +5837,91 @@ fertig entfernt wie die Zahl von ihrem Ziel.*
 **Ball beim Planner** (beide Fundstellen benannt: `A-19:92` und `B7:215`; Ziele `:125` und `:995`).
 *Drei von sechs Zeigern treffen, und die eine geprüfte Berichtigung hält — das gehört dazu.*
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 85 — FEHLER 29: §84s zwei Funde sind KEINE. Richtig gemessen, falsch eingeordnet — und die Regel dagegen hatte ich selbst zitiert
+
+**Stand:** HEAD `96137c83`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**Posten (b) sollte §84 nachzählen. Er hat §84 widerlegt.**
+
+### Was ich in §84 gemeldet habe
+
+```
+Fund 1  A-19:92 traegt weiter ARBEITSREGELN.md:103, dort steht heute Prosa
+Fund 2  B7:215  nennt :834, die Zeile liegt heute auf :995 (+161)
+Schluss "zweimal dieselbe halbe Behebung … wer einen Anker berichtigt, sucht die
+         Kennung im KRITERIUM und uebersieht dieselbe Zahl im Text daneben"
+```
+
+**Die Messungen stimmen alle. Der Schluss ist falsch.**
+
+### Der Berichtigungs-Commit trägt seine Reichweite, und ich habe sie nicht gelesen
+
+`165c8339` (16.08. 20:18), wörtlich aus dem Commit geholt:
+
+> *„alle **26** einzeln geöffnet — **25 sind Belege, EINER war ein Abnahmekriterium**"*
+
+**Es war keine halbe Behebung. Es war eine vollständige Behebung mit erklärter Reichweite:**
+26 Fundstellen geöffnet, 25 als Beleg klassifiziert und bewusst stehengelassen, die eine wirkende
+berichtigt. **Genau das ist A-34s Regel** — und die habe ich in §68 selbst zitiert:
+
+> *„berichtigt wird, wo der Verweis WIRKT (Produktivcode, Kriterien aktiver Blätter) — nicht alle
+> 52: **in Befunden belegt eine Nummer legitim einen Stand**"*
+
+### Meine beiden „Funde" sind Belege — am Objekt nachgesehen
+
+```
+A-19:92   steht in einem ```text-Block unter '## 4 · Der zweite Teil — der Fehler ist meiner',
+          direkt gefolgt von 'Gemessen am 12.08., beide Fassungen gegen dieselbe Datei'
+          -> dokumentiert einen VERGANGENEN Stand.                              BELEG
+B7:215    steht unter dem Schluessel  beleg:  innerhalb von 'B7-5: GRUEN'
+          -> traegt das Wort im Schluesselnamen.                                BELEG
+```
+
+**Zwei von zwei. Kein Fund bleibt übrig.**
+
+### Und W-06 war es auch nicht — es meldet den Rest sogar selbst
+
+Bei der Gegenprobe an W-06 (dem zweiten Fall meines §84-Schlusses) steht im Blatt, Z.324:
+
+> *„Zweitens, **aus demselben Grund ohne Befund**: Abschnitt 6 dieses Blattes (Scope, Z.142) nennt
+> weiterhin `FORMELSAMMLUNG.md:218` … **A-34s eigener Scope sagt ausdrücklich ‚Nur Kriterien —
+> nicht Befund- und Belegtexte'**, und ein Scope-Abschnitt ist keines von beiden. **Auch das gehört
+> gemeldet und nicht still entschieden.**"*
+
+**Der Rest ist dort nicht übersehen, sondern geöffnet, eingeordnet, gemeldet und mit Grund
+stehengelassen.** *Beide Fälle, aus denen ich ein Muster gemacht habe, sind das Gegenteil eines
+Musters: zwei sauber begrenzte Behebungen.*
+
+### Die Fehlerklasse ist neu — und sie ist die unangenehmste bisher
+
+```
+Fehler 26   Fall (1) gemessen, Fall (2) behauptet     falsch gemessen -> falsche Aussage
+Fehler 27   gar nicht gemessen, richtig geraten       nicht gemessen  -> zufaellig richtig
+Fehler 28   richtig gemessen, nicht gleichzeitig      Block unstimmig -> jede Zeile wahr
+Fehler 29   richtig gemessen, FALSCH EINGEORDNET      Zahlen stimmen  -> Schluss falsch
+```
+
+**Bei 26 bis 28 war die Messung angreifbar. Hier ist jede Zahl richtig, und der Fehler sitzt allein
+im Satz darüber.** *Eine Zahl kann man gegenprüfen; eine Einordnung nur, indem man die Regel sucht,
+die sie regelt — und die stand bereit, in A-34, in W-06s eigener Meldung, im Commit-Betreff, und in
+meinem eigenen §68.* **Vier Gelegenheiten, sie zu lesen. Ich habe stattdessen gezählt.**
+
+### Was von §84 STEHENBLEIBT
+
+```
+:145 · :509 · :693     treffen                                       GILT
+:812                   historischer Beleg, kein Fund                 GILT
+:103 -> :125           die Berichtigung haelt, :125 traegt den Befehl GILT
+Fund 1 · Fund 2        ZURUECKGEZOGEN
+Schluss 'halbe Behebung'  ZURUECKGEZOGEN
+```
+
+**Und der vierte „Baustein zur Regelkollision" aus §84 fällt mit.** *§77 (Kollision benannt), §79
+(Platzierungsregel wirkt), §81 (A/B in einer Zeile) bleiben — sie sind an Messungen belegt, nicht
+an einer Einordnung.*
+
+**Ball beim Planner ZURÜCKGEZOGEN**, soweit er aus §84 kam. *Was ich ihm geschickt hätte, wäre die
+Aufforderung gewesen, Belege zu zerstören, die A-34 ausdrücklich schützt.* **Kein Zustandsfeld
+angefasst, kein Bau.**
