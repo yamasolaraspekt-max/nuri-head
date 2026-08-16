@@ -25818,3 +25818,53 @@ reihenfolge_bestaetigt: |
   offen. Diese Vorarbeit gilt weiter, sie wandert mit dem Kriterium.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "REGISTER"
+titel: "Yamas Messung geliefert — der Bauvorrat ist 30 und nicht 37, und LEER traegt VIER Bedeutungen statt zwei"
+rolle: plan-pruefer
+zeit: "2026-08-16 20:32 CEST"
+mess_stand: "REGISTER.md aus rolle/planner · Reifegrad aus der dritten Tabellenspalte gelesen, Summe gegen die Zeilenzahl geeicht"
+was_erbeten_war: |
+  Yama: "von den 37 beschriebenen Zeilen — welche erfuellen heute alle drei Bedingungen?
+  Eine Liste, keine Prosa. Das ist der Bauvorrat, und niemand weiss heute, wie gross er ist."
+  Die erste Bedingung ist "Registerzeile auf BESCHRIEBEN". Ich habe sie gemessen, bevor ich
+  weitergehe — und dort endet die Frage schon.
+die_zahl_stimmt_nicht: |
+  Yamas Verteilung: BESCHRIEBEN 37 · ENTWORFEN 2 · GEBAUT 1 · LEER 3 = 43.
+  GEMESSEN aus der dritten Spalte, Summe gegen 43 Registerzeilen geeicht:
+  BESCHRIEBEN 30 · LEER 10 · ENTWORFEN 2 · GEBAUT 1 = 43.
+  Sieben Zeilen mehr auf LEER, als die Liste kennt.
+  MEIN ERSTER VERSUCH WAR AUCH FALSCH und ich sage es dazu: ich hatte zeilenweise nach den
+  Woertern gesucht und 30+2+3+19 = 54 bei 43 Zeilen bekommen — Zeilen wie "~~LEER~~ ->
+  BESCHRIEBEN" zaehlten doppelt. Erst die Spalte gibt die Zahl.
+die_zehn_LEER_zeilen_und_sie_meinen_vier_verschiedene_dinge: |
+  ENTSCHIEDEN, nichts zu bauen (Yamas drei):
+    W-19 Sonne und Verschattung .... "ZUSTAENDIGKEIT ENTSCHIEDEN vom planner 13.08."
+    W-24 Fundament und Bodenplatte . "Praemisse traegt nicht"
+    W-32 Giebelwand-Bindung ........ "ENTSCHIEDEN vom planner 13.08.: ABLEITUNG"
+  UNGEPRUEFT, Modul fehlt:
+    W-25 Pfetten und Kehlbalken .... "ungeprueft — dachformVorlagen, holzBauteile"
+    W-26 Dachschichten ............. "ungeprueft — KEIN Modul"
+  UNGEPRUEFT, Modul ist da:
+    W-28 Dachentwaesserung ......... "ungeprueft — linienBauteile fuehrt 'dachrinne'"
+    W-29 Dachdurchdringungen ....... "ungeprueft — STARK GEBAUT: dachOeffnung, ..."
+    W-30 Flachdach-Aufbau .......... "ungeprueft — dachformVorlagen (attika, svgFlach)"
+  FERTIG, Register nicht nachgezogen:
+    W-17 Export und Speichern ...... Vermerk "—", ABER: W-17/1 traegt CODE_FERTIG,
+                                     Ball beim Evaluator, heute von mir mitgeprueft.
+    W-43 Abbund-Zeichnung .......... "Darstellungslogik liegt in M-02"
+was_das_fuer_den_baumassstab_heisst: |
+  Yamas Befund war "LEER kann 'erledigt, weil es nichts zu bauen gibt' nicht ausdruecken —
+  H-9 auf der Registerebene". Das trifft, und es ist groesser: LEER traegt heute VIER
+  Bedeutungen, nicht zwei. Ein Wort fuer "entschieden", "ungemessen", "gemessen aber nicht
+  beschrieben" und "fertig, nur nicht eingetragen".
+  DER BAUVORRAT NACH BEDINGUNG 1 IST 30, NICHT 37. Und er ist an einer Stelle zu klein
+  gemessen: W-29 traegt LEER und im selben Feld "stark gebaut" — ein Kandidat, den die
+  Zahl verschweigt.
+  Bedingung 2 (Bedienweg existiert) und 3 (Rechenweg nachgerechnet) habe ich NICHT
+  gemessen. Beide brauchen eine Festlegung, was als Beleg gilt — bei 3 steht sie mit der
+  Sachverstaendigen-Regel schon da, bei 2 nicht. Ohne diese Festlegung waere jede Liste,
+  die ich liefere, eine Vermutung mit Zahlen.
+ballbesitz: yama
+```
