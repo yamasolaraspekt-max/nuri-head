@@ -1396,18 +1396,67 @@ IM DoR-SCHRITT, mechanisch pruefbar:
 **Damit kostet die Regel keine Fachkompetenz, sondern einen `grep`** — und sie kann nicht vergessen
 werden, weil sie an derselben Stelle sitzt wie die Innenprüfungen aus A-39.
 
-### ⚠ OFFEN — die Grenze nach außen liegt bei Yama
+### Die Grenze nach außen — ENTSCHIEDEN von Yama am 16.08. als TEST, nicht als Eigenschaftswort
 
-**Der Bruch in der bestehenden Schutzgrenze ist benannt: eine falsche Formel ist keine
-Entscheidung — sie sieht aus wie ein Fakt.** Der vorgeschlagene Zusatz, **noch nicht entschieden**:
+**Ein Adjektiv hätte zwei Lesarten und verlöre seinen Geltungsbereich beim ersten Weitertragen** —
+wie „keine Modulkopie ins Repo". **Deshalb drei Fragen, jede in Sekunden am Blatt beantwortbar und
+keine verlangt Fachwissen:**
 
-> **Eine Fachaussage, die nach außen wirkt** — Bemessung nach Norm, Nachweis, alles mit Haftung —
-> **wird durch Nachrechnen allein nicht grün.** Sie braucht eine **Primärquelle** oder bleibt gelb.
-> **Nachrechnen trennt „stimmt rechnerisch" von „darf man behaupten" — und nur das Zweite ist Yamas
-> Entscheidung.**
+```
+EINE FACHAUSSAGE WIRKT NACH AUSSEN, wenn EINE der drei Fragen JA ist:
 
-**Solange dieser Absatz nicht entschieden ist, gilt er nicht.** Er steht hier als Vorlage, nicht als
-Regel — und `A-40` bleibt ungeschnitten, bis das Wort da ist. *(Erster Anwendungsfall wäre W-28,
+  1  NORMBEZUG   Wird das Ergebnis mit einer Normkennung verbunden
+                 (DIN, EN, VDI, DIN EN …) oder als normkonform bezeichnet?
+
+  2  DRITTER     Verlaesst das Ergebnis das Haus — Angebot, Nachweis, Plan,
+                 Bericht, Ausdruck, alles was ein Kunde oder Amt bekommt?
+
+  3  BEMESSUNG   Legt das Ergebnis eine GEBAUTE Groesse fest — Querschnitt,
+                 Tragfaehigkeit, Entwaesserung, Abstand, Lastannahme?
+
+  Dreimal NEIN -> NACHGERECHNET reicht fuer gruen.
+  Einmal JA    -> gruen NUR mit Primaerquelle (GEGENGEPRUEFT).
+                  Ohne sie bleibt der Eintrag GELB — nicht rot, nicht
+                  gesperrt: GELB.
+```
+
+**Der Plan-Prüfer prüft damit nicht, ob die Aussage stimmt — er prüft, ob sie eine Primärquelle
+braucht.** Derselbe Zuschnitt wie oben: **eine Frage und ein `grep`, keine Fachfrage.**
+
+**Gelb ist ein Zustand, keine Sperre — und trägt ein Pflichtfeld:**
+
+```yaml
+geltungsbereich: "Nachgerechnet, nicht gegen die Norm gehalten.
+                  Verwendbar fuer <…>. NICHT verwendbar als Nachweis,
+                  nicht in Unterlagen fuer Dritte, nicht als
+                  Bemessungsgrundlage."
+```
+
+**Das ist N-003 wörtlich, an einer zweiten Stelle angewandt.** Der Eintrag trägt seit dem 12.08.
+`🟡 FACH-GATE`, einen von Yama festgelegten **Geltungsbereich** und die **DAUERGELB**-Kennzeichnung.
+**Die Bauform existiert und hat sich bewährt — sie bekommt ein zweites Bauteil, keine neue
+Erfindung.**
+
+**`GEGENGEPRUEFT` darf niemand aus eigener Beurteilung setzen.** Der Zustand entsteht nur mit einer
+Fundstelle:
+
+```yaml
+gegengeprueft_an: "Norm/Quelle mit Ausgabe und Jahr · Abschnitt oder
+                   Beispielnummer · das dort genannte Ergebnis"
+```
+
+**Damit ist auch das kein Urteil, sondern eine Belegprüfung — von jeder Rolle verweigerbar, von
+keiner erfindbar.** Wer eine Norm nicht in der Hand hat, kann den Zustand nicht setzen, und das
+ist der Punkt.
+
+**Die drei offenen Fälle, damit die Regel sofort trägt:**
+
+| | drei Fragen | Folge |
+|---|---|---|
+| **W-28** Rinnenbemessung DIN 1986-100 | **1 ja · 2 ja · 3 ja** | bleibt **gelb**, bis die Norm vorliegt. **„Vertagen" ist damit eine Ableitung, keine Meinung.** |
+| **F-004** Schnittpunkt zweier Geraden | nein · nein · nein | **nachgerechnet reicht für grün** — sobald der Fall im Eintrag steht |
+| **S-007…S-009** Sonnenbahn, Azimut | nein · nein · nein | nachgerechnet reicht. **Die Rechnung ist längst gemacht** (51°N, 21.06./21.12., selbst gerechnet) — **es fehlt nur der Ort, an dem sie stehen bleibt.** |
+
 Rinnenbemessung nach DIN 1986-100: dann ist „vertagen" eine Ableitung statt eines Bauchgefühls.)*
 
 **Und die Auslösung ist die Benutzung, nicht die Inventur.** Wer alle Einträge auf einmal
