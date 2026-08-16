@@ -483,3 +483,66 @@ blatt: docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md
 
 **Das ist eine Abweichung von A-20 und wird als solche gemeldet, nicht stillschweigend gemacht.**
 Sie ist auf den Umzug befristet und endet mit `P2H-06`.
+
+## SCHRITT I — unabhängige Prüfung der Sperrfälle (Evaluator, 16.08.)
+
+```yaml
+ergebnis: BESTANDEN
+gemessen_am: 97f1dd00
+grundlage: "Yamas Entscheidung 'dann bitte weg 1 machen', zugestellt vom Release-Pruefer (7d1cba86).
+  Er hat mir ausdruecklich NUR den Umfang genannt und NICHT sein Ergebnis — deshalb ist dies eine
+  unabhaengige Messung und keine Nachpruefung seiner Zahlen."
+
+VORBEDINGUNG SELBST GEMESSEN, nicht aus dem Blatt uebernommen: |
+  Commits mit Rollenmarke 'integrator': 3   (die Zuendbedingung)
+  Tor liegt in 6 von 6 Zweigen              (A-37-18 erfuellt)
+  -> die Sperre ist SCHARF. Ohne diese zwei Zahlen misst Schritt I nichts.
+
+EIGENER MESSFEHLER, vor der Meldung gefunden: |
+  Meine ersten elf Laeufe liefen im PRUEFSTAND-Worktree. Dort greift bei jeder Rolle K3
+  ('hat noch keinen eigenen Baum'), weil das Verzeichnis keiner Rolle entspricht — die
+  NEGATIVEN Faelle waren damit wertlos, sie zeigten die Baum-Kante statt der Pfad-Sperre.
+  Neu gefahren in den ECHTEN Baeumen je Rolle. Die positiven Faelle trugen auch vorher,
+  aber ein halb richtiger Aufbau ist kein Beleg.
+```
+
+### Positiv — die fünf Rollen an `docs/STATUS.md`, **jede in ihrem eigenen Baum**
+
+| Rolle | Baum | exit | Meldung |
+|---|---|---|---|
+| planner | `ticket-rolle-planner` | **1** | `VERSTOSS … aendert docs/STATUS.md ausserhalb des Integrations-Checkouts` |
+| plan-pruefer | `ticket-rolle-plan-pruefer` | **1** | dito |
+| generator | `ticket-rolle-generator` | **1** | dito |
+| evaluator | `ticket-rolle-evaluator` | **1** | dito |
+| release-pruefer | `ticket-release-pruefung` | **1** | dito |
+
+**Fünf von fünf gesperrt.** Die Meldung nennt beide Werte (erwartet/gefunden) und den Grund: *„Die Statuswahrheit hat EINEN Schreiber: den Integrator."*
+
+### Negativ — muss durchlassen
+
+| Fall | exit | Ergebnis |
+|---|---|---|
+| **Integrator** an `docs/STATUS.md`, im Integrations-Checkout | **0** | durchgelassen, nur Modulstand-Hinweis |
+| planner · plan-pruefer · generator · evaluator · release-pruefer bei **anderen** Dateien, je im eigenen Baum | **0** | alle fünf durchgelassen |
+
+**Sechs von sechs durchgelassen.** Die Sperre trennt also nach dem **Pfad**, nicht nach der Rolle allein.
+
+### Die sechs Kanten — je einzeln gefahren, nicht am Buchstaben gezählt
+
+| | Probe | Ergebnis |
+|---|---|---|
+| **K1** | `TICKET_ROLLE=plan-pruefer-2` im Plan-Prüfer-Baum | exit **0**, kein Verstoß — Instanzsuffix korrekt auf den Rollenstamm zurückgeführt |
+| **K2** | Release-Prüfer in `ticket-release-pruefung`, Tabelle nennt `ticket-rolle-release` | exit **0** mit eigener Meldung: *„auf ihrem Zweig, aber in einem anderen Verzeichnis … Durchgelassen: der Zweig ist eindeutig"* — die Namensfalle ist **benannt**, nicht übersehen |
+| **K3** | `planner` im Prüfstand ohne eigenen Baum | exit **0**, *„hat noch keinen eigenen Baum — durchgelassen"* |
+| **K4** | Tor in einem Verzeichnis **ohne** Git-Repo | exit **2**, *„kein Git-Repository … (K4)"* — eigene Ursache, **kein** Rollenfehler, eigener Rückgabewert |
+| **K5** | `integrator` im gemeinsamen Checkout | exit **0**, kein Verstoß — das ist sein Baum |
+| **K6** | `evaluator` im gemeinsamen Checkout, eigener Baum steht | exit **0** mit Hinweis auf den wartenden Baum |
+
+**Sechs von sechs behandelt**, jede mit eigener Meldung und eigenem Rückgabewert. K4 ist die einzige mit `2` — kein Wert trägt zwei Bedeutungen.
+
+### Zwei Fallen, die der Release-Prüfer genannt hat — beide geprüft
+
+- **Ein Zustands-Commit trägt genau EINE Kennung:** das Muster in `status-erzeugen.sh` erlaubt genau eine `<kennung>`-Gruppe je Betreff; zwei Kennungen erzeugen keinen zweiten Treffer.
+- **Das Ballfeld verlangt eine Rolle, keinen Gedankenstrich:** in meinen eigenen zwei Voten heute (`A-41`, `W-17/1`) steht `ballbesitz: release-pruefer`, kein `—`.
+
+**Schritt I ist bestanden.** Damit ist die Bedingung für `SCHREIBEND` aus meiner Sicht erfüllt; die Erteilung selbst gehört nicht mir.
