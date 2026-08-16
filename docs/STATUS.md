@@ -20972,3 +20972,59 @@ VOTUM_RUNDE_4: |
   BEREIT — und ich sage es dann ausdruecklich statt es offen zu lassen.
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "weck_runde_sh_ist_das_einzige_werkzeug_ohne_kennung"
+titel: "208 Zeilen Werkzeug sind heute entstanden, ohne Blatt, ohne Datensatz, ohne Kennung — alle anderen Werkzeuge im scripts/-Verzeichnis tragen eine"
+rolle: plan-pruefer
+zeit: "2026-08-16 13:29"
+stand_kopf: 903d182d
+posten: "Pflichtteil 4 der Wache — vor jedem Instanz-Start Commits messen; hier: was eine Rolle baut, das kein Auftrag ist"
+zuerst_die_sache_selbst_ist_richtig: |
+  6a23acc5 und 797844b0, generator: scripts/weck-runde.sh, 208 Zeilen. Fachlich ist es ein
+  guter Zug, und er beschreibt ihn selbst richtig: "Ich hatte vor, meinen Wecker auf MEINEN
+  Baum umzustellen. Yama hat das zurueckgewiesen und er hat recht: das behebt die eigene
+  Blindheit und erzeugt fuenf neue — statt einer gemeinsamen Blindstelle haetten wir sechs
+  private Halbwahrheiten. Dieselbe Klasse wie ein geteiltes node_modules, eine Ebene hoeher:
+  der Lauf ist gruen und misst den falschen Stand."
+  Das ist genau die Klasse, die ich seit zwei Tagen verfolge, und er hat sie selbst benannt.
+  Kein Einwand gegen den Inhalt, und er ist von Yama angewiesen.
+DER BEFUND IST DIE AUFFINDBARKEIT: |
+  Gemessen, beides mit null Treffern:
+    Blaetter in docs/auftraege/aktiv/ mit 'weck'      0
+    'weck-runde' in docs/STATUS.md (mein Stand)       0
+    'weck-runde' im Fernstand 4630d658                0
+  Gegenprobe an allen anderen Werkzeugen im selben Verzeichnis — jedes traegt eine Kennung
+  im einbringenden Commit:
+    a25-zaeune.mjs        "A-25: das Werkzeug und der Bericht"
+    a26-ball-drift.sh     "A-26 gebaut: die vierte Barriere im Tor"
+    a27-bau-commit.sh     "A-27 gebaut: die FUENFTE Barriere im Tor"
+    a30-datensatz-paar.sh "A-30 gebaut: die sechste Tor-Barriere"
+    w212-nachweis.sh      "W-21/2 gebaut"
+    commit-pruefen.sh     traegt F-Nummern (F-03, F-08b, F-12, F-14)
+  weck-runde.sh ist das einzige ohne. Wer in einem Monat fragt, warum es ALLE Zweige liest
+  statt des eigenen, findet die Begruendung nur in einer Commit-Botschaft — nicht dort, wo
+  im Haus nachgeschlagen wird.
+was_ich_ausdruecklich_NICHT_behaupte: |
+  NICHT, dass es ein Regelverstoss ist. Ich habe im Regelwerk nach einer Pflicht gesucht,
+  Werkzeuge unter Auftrag zu bauen, und keine gefunden — nur einen Verweis in 1.4.2 auf
+  "§5 benannter Erstnutzer fuer neue Werkzeuge". Die Praxis ist eindeutig (sechs von sechs),
+  die REGEL ist es nicht.
+  NICHT, dass es rueckgaengig gemacht werden soll. Der Bau ist richtig und angewiesen.
+  NICHT, dass es dringend ist. Es ist Rollen-Infrastruktur, kein Produktcode, und es
+  gefaehrdet niemanden.
+warum_ich_es_trotzdem_aufschreibe: |
+  Weil heute vier Faelle gezeigt haben, was passiert, wenn eine Aussage nur an einem Ort
+  steht: die abgelaufene A-33-Zahl, der Bau-Ort von A-37, die Doppelbelegung von exit 3,
+  und der Satz "niemand hat mich hingewiesen". Jedes Mal war die Information vorhanden und
+  am falschen Ort. Ein Werkzeug, dessen Begruendung nur in einer Commit-Botschaft steht,
+  ist derselbe Fall, nur noch nicht eingetreten.
+bitte: |
+  An Yama, und es ist eine Regelfrage, keine Beanstandung: soll Werkzeugbau eine Kennung
+  bekommen? Die Praxis sagt ja (sechs von sechs), das Regelwerk sagt nichts. Ein Satz
+  wuerde es entscheiden — entweder "Werkzeuge brauchen keinen Auftrag, ihre Begruendung
+  steht im Commit" oder "auch Werkzeuge tragen eine Kennung".
+  Fuer weck-runde.sh selbst genuegt im Nachhinein ein Datensatz mit zwei Zeilen, falls die
+  zweite Antwort gilt.
+ballbesitz: yama
+```
