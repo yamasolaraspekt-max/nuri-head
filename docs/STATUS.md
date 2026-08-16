@@ -27108,3 +27108,48 @@ zwei_eigene_fehlverdachte_gefangen: |
 urteil: "Die vier offenen Kriterien tragen. A-39 steht damit deutlich besser da als A-40, wo vier Kriterien Befunde tragen."
 ballbesitz: planner
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "BERICHTIGUNG meines K4-Befundes von 19:02 — W-28 existiert seit 16:47 mit sieben Blaettern, und K4 ist mustergueltig belegt"
+rolle: plan-pruefer
+zeit: "16.08. 19:14"
+mess_stand: a564b07070063ca65ff2295685ceebea4bf4dfd4
+baum: "sauber (0 Eintraege)"
+art: "SELBSTBERICHTIGUNG — mein Befund war falsch, das Kriterium traegt"
+was_ich_gemeldet_habe: |
+  Um 19:02 in 2bae4c17: 'K4 stuetzt sich auf ein Werkzeug, das es nicht gibt. W-28 kommt
+  nirgends als Aussage vor: Werkbank-Verzeichnis 0 am Basis-Stand und 0 heute.'
+  Das 'heute 0' war falsch.
+was_stimmt: |
+  W-28 traegt SIEBEN Blaetter — 1-ZWECK bis 7-GRENZEN — in origin/rolle/generator,
+  origin/rolle/evaluator, origin/rolle/release-pruefer und auto/hausplaner-integration.
+  Gebaut hat sie der Generator um 16:47 mit 04e57045 'W-28 Dachentwaesserung abgelesen'.
+  Das ist zwei Stunden VOR meiner Meldung.
+  NUR origin/rolle/planner und mein eigener Baum fuehren 0 Dateien.
+mein_fehler: |
+  Ich habe 'heute' gegen origin/rolle/planner gemessen. Dieser Zweig ist bei den
+  Werkbank-Dateien alt. Es ist derselbe Fehler wie bei A-33 um 18:37, den ich in P-05
+  selbst beschrieben habe — ich habe die Lehre auf ZUSTAENDE angewandt und nicht auf
+  DATEIEN. Ein Zweig, der bei einer Datei zurueckliegt, liegt bei anderen genauso zurueck.
+K4_ist_belegt: |
+  Die Sache trifft sogar mustergueltig. K4 lautet 'Eine Aussage ist normabhaengig, aber
+  die Norm liegt nicht vor (W-28)'. Gemessen in W-28-dachentwaesserung/3-FORMELN.md:
+    Z.10  'Die klassische Rechnung der Dachentwaesserung (DIN 1986-100 / EN 12056-3,
+           hier nur als ...)'
+    Z.36  'DIN 1986-100 vereinfacht — Mindestgefaelle und Fallstrang-Distanz. Kein ...'
+  Sechs der sieben Blaetter nennen Normen, zehn Treffer insgesamt. Genau der Fall,
+  den K4 beschreibt.
+folge_fuer_A_40_3: |
+  A-40-3s historischer Beleg 'W-28 (dreimal JA) muss anschlagen' ist damit ebenfalls
+  nicht mehr leer. Ob der Drei-Fragen-Test dort wirklich dreimal JA ergibt, habe ich
+  noch nicht gemessen — das ist der naechste Schritt, und diesmal gegen den
+  generator-Zweig.
+was_von_meinem_befund_bleibt: |
+  Die Messung am BASIS-STAND 99add90f haelt: dort gab es W-28 nicht. Zum Zeitpunkt des
+  A-40-Schnitts um 14:23 war der Beleg also tatsaechlich leer, und das Register fuehrte
+  W-28 damals richtig als LEER. Der Generator hat die Luecke um 16:47 geschlossen.
+  Aus 'das Kriterium ist unerfuellbar' wird damit 'das Kriterium war beim Schnitt leer
+  und ist seit 16:47 belegt'. Das ist ein anderer Satz, und nur der zweite stimmt.
+ballbesitz: plan-pruefer
+```
