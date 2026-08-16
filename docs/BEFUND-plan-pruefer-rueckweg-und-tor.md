@@ -5478,3 +5478,95 @@ Runde tue, und sie kostet nichts.*
 **Kein Ball, kein Fund.** **Sechstes Blatt ohne Abweichung: W-08/1 · W-11/1 · W-27/1 · W-34 ·
 W-23 · W-39** — *wobei W-39 seine eigene Nicht-Erfüllung trägt und gerade deshalb hält.*
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 81 — Posten (c) an N-003: die Rechnung hält auf elf Werte genau — und die Belegstelle daneben zeigt ins Leere
+
+**Stand:** HEAD `deccf4b5`, getrackt 0, `?? scripts/__pycache__/` liegt weiter. **Messstand in
+Variable, Gegenprobe: unbewegt.**
+
+**Nach der Methode aus §80 — erst gerechnet, dann das Blatt geöffnet.** Die Gegenstände habe ich
+aus dem **REGISTER** geholt, nicht aus dem Blatt:
+
+```
+VORGERECHNET, Blatt ungeoeffnet
+  app/EngineFlaeche.tsx           199 Z.   Register sagt 199 (berichtigt von 196)   TRIFFT
+  Werkbank W-37 rekursiv          7 Dateien · 512 Z.   Register sagt 512            TRIFFT
+```
+
+### Die Rechnung — von Hand und am echten Modul, unabhängig
+
+Fall: Gebäudebreite 10 m · Neigung 40° · Sparrenabstand 0,7 m · 80×200 mm · C24 ·
+Schneezone 2 · Geländehöhe 300 m · Eigenlast 0,9 kN/m².
+
+```
+                        VON HAND        MODUL (esbuild, echt gefahren)
+Sparrenlaenge            6.527 m         6.527 m
+Bodenschneelast sk        0.89            0.89
+Schneelast s              0.47            0.47
+wPerp                     0.944           0.944
+Moment M                  5.03 kNm        5.03 kNm
+sigma_m,d                 9.43            9.43
+f_m,d                    16.62           16.62
+Ausnutzung Biegung        0.57            0.57
+Durchbiegung             27.3 mm         27.3 mm
+Grenze L/300             21.8 mm         21.8 mm
+Ausnutzung Durchbiegung   1.25            1.25
+bestanden                FALSE           false
+```
+
+**Elf Werte, zwei unabhängige Wege, keine Abweichung.** *Ich habe die Formelsammlung gelesen und
+selbst gerechnet, bevor ich das Modul übersetzt habe — die Zahlen des Codes konnten meine nicht
+färben.*
+
+**Der Fall ist lehrreich, und deshalb habe ich ihn gewählt:** die **Biegung besteht** (0,57), die
+**Durchbiegung fällt** (1,25). `bestanden: false` kommt allein aus dem zweiten Nachweis. *Ein
+Werkzeug, das nur die Biegung prüfte, hätte hier „hält" gesagt — und N-003s eigener Text nennt für
+genau diesen Ausgang das Wort Personenschaden.* **Beide Nachweise sind da und beide wirken.**
+
+**Die A-14-Auflage („keine stille Zahl") ebenfalls geprüft:** jedes Ergebnis trägt
+`vorbehalt: "Vorbemessung, ersetzt keine prüffähige Statik"` — unbedingt im Rückgabeobjekt, nicht
+an eine Bedingung geknüpft.
+
+### Und der Fund: die Belegstelle derselben Formel zeigt ins Leere
+
+Die FORMELSAMMLUNG schreibt zu N-003:
+
+> **Belegstelle:** `geometry/sparrenBerechnung.ts:86`, `berechneSparren(e)`
+
+```
+:86 heute                     ' *'   (leere Kommentarzeile)
+berechneSparren liegt auf     :105                        Versatz +19
+```
+
+**Der Zeiger war beim Schreiben RICHTIG — und wurde zwei Stunden später ungültig:**
+
+```
+717eb11c  12.08 00:30  planner: Gruppe N angelegt, Belegstelle :86 geschrieben
+e0722979  12.08 02:46  generator: A-14 Bau — 131 -> 151 Zeilen, Funktion :86 -> :105
+```
+
+**Es ist A-14s Bau, der ihn verschoben hat — der Auftrag, dessen Zweck es war, den
+N-003-VORBEHALT in die Ausgabe einzubauen.** *Die Arbeit, die die Formel sicherer macht,
+entwertet den Verweis auf ihre Belegstelle. Sechster Fall dieser Klasse heute Nacht, und der mit
+dem höchsten Einsatz: N-003 ist das Fach-Gate, das bei Yama liegt.*
+
+### Und hier steht der A/B-Versuch zu §79 in EINER Zeile
+
+**Dieselbe Belegstelle nennt BEIDE Formen nebeneinander:**
+
+```
+sparrenBerechnung.ts:86     die ZAHL      -> zeigt heute auf eine leere Kommentarzeile
+berechneSparren(e)          die KENNUNG   -> loest heute exakt auf, Zeile 105
+```
+
+**Ein Leser, der dem Namen folgt, landet richtig; wer der Zahl folgt, landet im Nichts — in
+derselben Zeile, geschrieben in derselben Minute.** *§79 hat gezeigt, dass „wachse, wo niemand
+hinzeigt" trägt. Das hier ist der andere Beleg: wo beide Formen nebeneinanderstehen, überlebt die
+Kennung und die Zahl nicht. Man muss sich nicht zwischen ihnen entscheiden — es genügt, die Zahl
+wegzulassen, denn der Name steht schon da.*
+
+**Ball beim Planner** (FORMELSAMMLUNG, N-003-Belegstelle · gehört zum §77/§79-Ball).
+*Für Yama ändert sich am Fach-Gate nichts: die Rechnung ist geprüft und hält, der Vorbehalt wird
+unbedingt ausgegeben.* **Kein Zustandsfeld angefasst, kein Bau.**
