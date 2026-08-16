@@ -128,7 +128,15 @@ for z in zweige:
     zur  = lauf("git", "rev-list", "--count", f"{z}..{basis}").strip() or "0"
     lage.append((z, stand[z]["sha"], int(vor), int(zur), stand[z]["ts"]))
 
+voraus_je_zweig = {z: v for z, _, v, _, _ in lage}
+
 # --- Regel 4: Widersprueche sammeln, NICHT aufloesen -------------------------------------------
+#
+# ABER: ein Zweig, der 0 voraus ist, WIDERSPRICHT nicht — er ist nur nicht nachgezogen. Sein
+# Zustand ist vollstaendig im Integrationszweig enthalten, er sagt also nichts Eigenes, sondern
+# etwas Aelteres. Beides als "Widerspruch" zu melden macht die Meldung unbrauchbar: heute waeren
+# es NEUN, davon sieben allein aus zwei stehengebliebenen Zweigen. Nach A-03 wird eine Meldung,
+# die zu oft kommt, weggeklickt — und dann faellt der echte Widerspruch mit weg.
 alle_kennungen = sorted({k for z in stand for k in stand[z]["auftraege"]})
 offen = ("BEREIT", "IN_ARBEIT", "NACHBESSERN", "CODE_FERTIG", "SPEC_BLOCKED", "ENV_BLOCKED")
 widerspruch, meins, para3 = [], [], 0
@@ -148,7 +156,10 @@ for k in alle_kennungen:
                 if ts > best_ts: best_ts, best_z, best_sha = ts, z, sha
             eintrag.append((zust, best_z, best_sha, best_ts, len(zs)))
         eintrag.sort(key=lambda e: -e[3])
-        widerspruch.append((k, eintrag))
+        # ECHT ist der Widerspruch nur, wenn mindestens ZWEI Zustaende von Zweigen kommen,
+        # die eigene Commits tragen. Sonst ist es Rueckstand, kein Streit.
+        eigenstaendig = [e for e in eintrag if any(voraus_je_zweig.get(z, 0) > 0 for z in sicht[e[0]])]
+        widerspruch.append((k, eintrag, len(eigenstaendig) > 1))
         zust_gilt, z_gilt = eintrag[0][0], eintrag[0][1]
     else:
         zust_gilt = next(iter(sicht))
@@ -170,7 +181,9 @@ for k in alle_kennungen:
         if (a["k"] or "").startswith(ROLLE): meins.append((k, zust_gilt, z_gilt))
 
 if FORM == "kurz":
-    w = " · ".join(f"{k}:{'/'.join(e[0] for e in ev)}" for k, ev in widerspruch) or "keiner"
+    ew = [x for x in widerspruch if x[2]]
+    w = " · ".join(f"{k}:{'/'.join(e[0] for e in ev)}" for k, ev, _ in ew) or "keiner"
+    w = f"{w} (+{len(widerspruch)-len(ew)} nur Rueckstand)" if len(widerspruch) > len(ew) else w
     m = ", ".join(f"{k}({z})" for k, z, _ in meins) or "keine"
     rueck = " · ".join(f"{z.split('/')[-1]}+{v}-{r}" for z, _, v, r, _ in lage if v or r) or "alle gleich"
     print(f"WECK-RUNDE | Paragraf3={para3} | fuer {ROLLE or '—'}: {m} | WIDERSPRUCH: {w} | Zweige: {rueck}")
@@ -184,14 +197,18 @@ for z, sha, vor, zur, ts in sorted(lage, key=lambda x: -x[4]):
 print(f"\n  Paragraf 3 (IN_ARBEIT, ueber alle Zweige): {para3}")
 
 if widerspruch:
+    echte = [w for w in widerspruch if w[2]]
     print(f"\n  WIDERSPRUCH — {len(widerspruch)} Auftrag/Auftraege, die Zweige sagen Verschiedenes.")
+    print(f"  Davon ECHT (mindestens zwei Zweige mit eigenen Commits): {len(echte)}.")
+    print(f"  Die uebrigen {len(widerspruch)-len(echte)} kommen aus Zweigen, die 0 voraus sind —")
+    print("  die widersprechen nicht, sie sind nur nicht nachgezogen.")
     print("  NICHT aufgeloest: angezeigt wird JEDER Zustand mit Zweig, SHA und Zeit (Regel 4).")
     print("  Sortiert nach der juengsten Schreibung, die die Kennung beruehrt (git log -G).")
     print("  ACHTUNG, die Grenze der Methode: -G trifft auch einen TRANSPORT, der einen aelteren")
     print("  Zustand mitbringt. Die oberste Zeile ist die juengste SCHREIBUNG, nicht zwingend der")
     print("  juengste ZUSTAND — deshalb steht hier keine Aufloesung, sondern die ganze Liste.")
-    for k, ev in widerspruch:
-        print(f"    {k}")
+    for k, ev, echt in widerspruch:
+        print(f"    {k}   {'ECHT' if echt else '(nur Rueckstand)'}")
         for i, (zust, z, sha, ts, n) in enumerate(ev):
             marke = "juengste Schreibung ->" if i == 0 else "                     "
             weitere = f"  (+{n-1} weitere Zweige)" if n > 1 else ""
