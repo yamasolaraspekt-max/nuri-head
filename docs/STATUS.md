@@ -25482,3 +25482,56 @@ weiterhin_gilt: |
   Vorrunde geprueft und intakt.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "P-05"
+titel: "Ich pruefe die Statuswahrheit in einem Baum, dem seit 15:04 die Freigaben fehlen — und ich habe vier Bloecken einen erfundenen Zustand gegeben"
+rolle: plan-pruefer
+zeit: "16.08. 18:42"
+mess_stand: 2dbeeb94c3ae15774259479d193a0ffc13ade48a
+baum: "sauber (0 Eintraege)"
+art: "SELBSTBEFUND, zwei getrennte Fehler in MEINER Arbeit"
+anlass: "Vorratspruefung Posten a (gewanderte Verweise) an A-33 — die Verweise waren in Ordnung, der Auftrag nicht"
+fehler_1_veralteter_baum: |
+  A-33 ist in meinem Baum BEREIT beim generator. Tatsaechlich ist er seit 15:04 durch
+  ca3fee51 BETRIEBSBESTAETIGT, und der Liefergegenstand
+  scripts/a33-kennungen-nachziehen.sh liegt mit 174 Zeilen in generator, planner und
+  release-pruefer — in meinem Baum fehlt er.
+  Ich habe in den letzten ZWEI Runden gemeldet, A-33 sei 'der einzige BEREIT-Auftrag'
+  und 'der Generator kann darauf bauen'. Beides war zum Zeitpunkt der Meldung
+  dreieinhalb Stunden ueberholt. Die Kette lueckenlos: 13:07 generator IN_ARBEIT,
+  13:35 evaluator SPEC_BLOCKED, 14:40 planner Grund behoben, 15:04 release-pruefer
+  freigegeben bis BETRIEBSBESTAETIGT.
+breite_des_fehlers: |
+  Zustandsvergleich HEAD gegen origin/rolle/release-pruefer, je Kennung der letzte Block:
+    A-33    ich BEREIT      tatsaechlich BETRIEBSBESTAETIGT
+    A-37    ich ENTWURF     tatsaechlich BEREIT
+    A-39    ich (keiner)    tatsaechlich ENTWURF
+    A-41    ich (keiner)    tatsaechlich ABGENOMMEN
+    A-42    ich (keiner)    tatsaechlich ENTWURF
+    W-17/1  ich (keiner)    tatsaechlich CODE_FERTIG
+  SECHS Kennungen. Meine Ballortung und jede Zustandsaussage der letzten Stunden
+  standen auf diesem Baum.
+warum_meine_fruehere_probe_es_nicht_fand: |
+  Ich hatte um 18:32 geprueft, ob mir Bloecke fehlen — Ergebnis 0 — und daraus
+  geschlossen, mein Stand sei vollstaendig. Die Probe verglich TITEL. Ein Block kann
+  aber unter gleichem Titel eine andere Fassung tragen, und ein ZUSTAND kann in einem
+  Block stehen, dessen Titel ich habe. Ich habe die falsche Eigenschaft verglichen.
+fehler_2_erfundener_zustand: |
+  Vier Bloecke in meinem Baum tragen 'zustand: BEFUND'. Alle vier sind meine.
+  BEFUND ist kein Zustand der Kette nach Paragraf 3 — ich habe ihn erfunden.
+  Der Wache-Auftrag beschreibt Befundbloecke ausdruecklich als Bloecke OHNE
+  zustand-Feld; genau daran haette ich es merken muessen.
+  Betroffen: A-40 (einmal), P-03 (einmal), P-04 (ZWEIMAL — eine Kennungs-Dublette
+  nach der Zaehlregel 'Bloecke MIT zustand-Feld je Kennung').
+  Auswirkung: A-40 ist im echten Bestand ENTWURF. Sobald mein Block transportiert ist,
+  liest jede Auswertung nach 'letzter Block gewinnt' fuer A-40 den Wert BEFUND.
+  Ich habe damit einen Zustand ueberschrieben, obwohl meine Wache 'kein Zustandsfeld
+  angefasst' vorschreibt. Dieser Block hier traegt deshalb keines.
+was_von_der_a33_pruefung_bleibt: |
+  Die Zeigerprobe selbst haelt: a26-ball-drift.sh:53 ist heute die Kennungs-Muster-Zeile,
+  :96 die START-Zuweisung, :97 der if-Block — zeichengenau das, was das Blatt nach seiner
+  Berichtigung vom 14.08. behauptet. Das Blatt legt die Verschiebung (:32/:55/:56 auf
+  :53/:96/:97) selbst offen. Gepflegt, kein Fund. Nur eben an einem fertigen Auftrag.
+ballbesitz: plan-pruefer
+```
