@@ -26349,3 +26349,43 @@ stand_der_A_40_dor: |
   Kanten. Dazu mein Befund zu A-40-9, dem die Invarianten-Klausel fehlt.
 ballbesitz: plan-pruefer
 ```
+
+```yaml
+auftrag: "A-40"
+titel: "K1 und K3 sind zahlengenau belegt — drei Definitionsstellen fuer N-003, siebzehn S-Verweise ohne eigene"
+rolle: plan-pruefer
+zeit: "2026-08-16 18:16:41 CEST"
+mess_stand: "FORMELSAMMLUNG.md aus rolle/planner, 1151 Zeilen · Kreuzprobe ueber alle sechs Kanten"
+k1_stimmt_auf_die_stelle: |
+  Die Kante sagt: "Eine Kennung hat mehrere Definitionsstellen (N-003 hat drei: Formel,
+  Geltungsbereich, Auflage)."
+  NACHGEZAEHLT, Ueberschriften in der Formelsammlung:
+  Z.754  ### N-003 · Sparren-Vorbemessung (Biegung + Durchbiegung) · FACH-GATE
+  Z.784  ### N-003 · Geltungsbereich — von Yama festgelegt 12.08., DAUERGELB
+  Z.814  ### N-003 · AUFLAGE an die Ausgabe — keine stille Zahl
+  Drei Stellen, und zwar genau die drei genannten. Die Kante ist nicht behauptet, sie ist
+  am Bestand nachweisbar — und N-003 ist zugleich einer der Posten, die bei Yama offen
+  liegen. Die drei Stellen zeigen, warum: die Formel allein traegt die Einschraenkung
+  nicht, sie steht in zwei weiteren Abschnitten.
+k3_stimmt_ebenfalls: |
+  Die Kante sagt: "Die Kennung wird nur genannt, nicht definiert (die 17 S-Verweise in der
+  FORMELSAMMLUNG)."
+  GEMESSEN: S-Nummern eindeutig 17 · davon mit eigener Definitionsstelle 0.
+  Siebzehn genannt, keine definiert. Die Zahl im Blatt stimmt auf den Punkt.
+  Das deckt sich mit meiner Messung von 16:32, wo ich beim Nachzaehlen der Ampeln 18
+  vermeintliche Luecken fand und beim Oeffnen sah, dass die S-Reihe nur in Spannen genannt
+  wird ("S-001…S-006 Sonnenstand"). Damals war es mein Fehltreffer, hier ist es die
+  bewusst benannte Kante — dieselbe Beobachtung, einmal als Irrtum und einmal als Regel.
+kreuzprobe_wie_bei_den_anderen: |
+  K1 und K6 werden von A-40-6 und A-40-7 genannt, K2 bis K5 von keinem Einzelkriterium.
+  A-40-7 ist das Sammelkriterium ("alle sechs Kanten behandelt und je einzeln belegt") —
+  dieselbe Bauart wie A-37-17 und A-38-7. Kein Mangel.
+  Damit haben alle vier Auftraege in meiner Bahn dieselbe Struktur, und A-39 als einziger
+  die feinere: dort nennt jede Kante ihre Pruefung.
+stand: |
+  A-40 geprueft und haltend: -1, -3, -5, Kanten K1 und K3.
+  Vorsorge, heute nicht ausloesbar: -4.
+  Offen: -2 (Groessenordnung 116 gemessen), -6, -8, -9 und die Kanten K2, K4, K5, K6.
+  Kein Votum. Der Ball bleibt bei mir.
+ballbesitz: plan-pruefer
+```
