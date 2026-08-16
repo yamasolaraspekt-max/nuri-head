@@ -31,6 +31,29 @@ immer zum Ueberspringen, nie zum Merge.
 import subprocess
 import sys
 
+# GEMESSENE WIRKUNG AUF FREMDE BAEUME — die Groessenangabe zu Fehler 28 des Plan-Pruefers,
+# 17.08. 00:3x. Er hat beobachtet, dass dieser Rueckweg seinen HEAD mitten in einer Messrunde
+# vorgezogen hat: drei Befehle EINES Blocks lieferten drei verschiedene Zustaende, und die
+# dritte Zeile war mit der ersten unvereinbar. Seine Einordnung ist richtig und ich uebernehme
+# sie: beide Seiten arbeiteten korrekt, seine Arbeit war unversehrt (reiner Fast-forward,
+# is-ancestor 0), und die Abhilfe liegt bei ihm (Messstand in eine Variable, Gegenprobe am
+# Ende). Was ihm fehlte, war die GROESSE — die liefere ich hier nach.
+#
+#   Baum                       Fast-forwards   eigene Commits
+#   plan-pruefer                    18              238
+#   planner                         43              117
+#   generator                       44               52
+#   evaluator                       49               12   <- 4x haeufiger fremd als eigen
+#
+#   Abstand Fast-forward zum vorigen EIGENEN Commit:
+#   plan-pruefer   10 Paare · Median  100 s · unter 30 s: 3
+#   generator      30 Paare · Median 1719 s · unter 30 s: 1
+#   evaluator      34 Paare · Median 1587 s · unter 30 s: 0
+#
+# KEIN RUHEFENSTER EINGEBAUT, und das ist eine Entscheidung mit Grund: es fienge 4 von 74
+# Paaren und verzoegerte dafuer jeden Befundtransport um seine Fensterlaenge. Der Rueckweg ist
+# heute mehrfach nachweislich der Weg gewesen, auf dem ein Befund die andere Rolle erreicht
+# hat. Wer das Fenster doch will, hat hier die Zahlen dafuer — und muss den Preis mitnennen.
 BAEUME = [
     'ticket',
     'ticket-rolle-planner',
