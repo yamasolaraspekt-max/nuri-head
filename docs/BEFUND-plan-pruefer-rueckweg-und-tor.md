@@ -7384,3 +7384,80 @@ scripts/__pycache__ im Baum   vorhanden
 
 **Ball beim Generator (dritte Meldung) und beim Release-Prüfer (`.gitignore`).**
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 104 — Posten (a), zweite Werkbank-Scheibe: fünf weitere gewanderte Zeiger — und einer, der nie stimmte
+
+**Stand:** HEAD `721b75aa`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**§102 ließ 855 Zeiger ungemessen. Diese Runde nimmt die Scheibe, bei der der Einschub BEKANNT ist.**
+
+### `sparrenBerechnung.ts` — Einschub bei Z.80-82, +19
+
+```
+oberhalb, halten:   :16 Schneezone · :30 DURCHBIEGUNG_GRENZE=300 · :33 bodenschneelast
+                    :45 formbeiwertSchnee · :63 Kommentar staendige Last
+unterhalb:          :86 (2x) · :90 · :100 (4x) · :105
+```
+
+**Und die unterhalb einzeln geöffnet — nicht pauschal beurteilt (Lehre aus §93):**
+
+```
+:100 (4x)  N003_VORBEHALT   TRIFFT  — nach dem Einschub geschrieben
+:105       berechneSparren  TRIFFT  — dito
+:86  (2x)  heute ' *'       W-21/3-FORMELN nennt es 2x als N-003-Belegstelle
+:90        heute '}'        W-21/3-FORMELN: 'benutzt Math.cos fuer die senkrechte
+                            Lastkomponente'
+```
+
+**Am Stand vor dem Einschub nachgeschlagen — beide waren richtig:**
+
+```
+e0722979~1  :86  export function berechneSparren(...)      86 + 19 = 105  heute dort
+e0722979~1  :90  const cosA = Math.cos(a);                 90 + 19 = 109  heute dort
+```
+
+### `StartView.tsx` — A-23s Einschub, dieselbe Geschichte
+
+```
+W-33/7-GRENZEN :18   zitiert 'Gefuellt wird sie in Teil B (Route + Controller, bei Yama)'
+W-33/7-GRENZEN :205  zitiert 'Die echte Liste braucht eine Route und ist Teil B'
+vor 3ad920b1: beide Saetze stehen exakt dort                        RICHTIG gewesen
+heute:        :18 ' *' · :205 '<div className="hp-start-wrap">'      GEWANDERT
+```
+
+**Und das ist der bittere Teil:** *die zwei Sätze, die die Werkbank zitiert, sind genau die, die
+A-23 als **ÜBERHOLT** gekennzeichnet hat.* **Ein Commit hat beides bewirkt — den Inhalt überholt
+gemacht und den Zeiger darauf verschoben.**
+
+### Einer ist keine Drift, sondern war nie richtig
+
+```
+W-21/7-GRENZEN nennt sparrenBerechnung.ts:10-12 fuer das Zitat '… Tragwerksplaner.'
+'Tragwerksplaner' steht auf Zeile 13 — bei e0722979~1, bei e0722979 und heute
+die Werkbank-Zeile wurde 12.08. 00:21 geschrieben (992d5d76)
+```
+
+**Die Zeile liegt OBERHALB des Einschubs; dort kann nichts gewandert sein.** *Der Bereich endet
+eine Zeile vor dem Zitat, das er trägt — und tat das von Anfang an.*
+
+### Der laufende Stand aus zwei bekannten Einschüben
+
+```
+§77    Auftrags-Blaetter                    4 Zeiger
+§102   Werkbank, studioDaten.ts            29 Zeiger
+§104   Werkbank, sparrenBerechnung + StartView   5 Zeiger  (+1 von Anfang an falsch)
+                                          ------
+                                            38 aus ZWEI Commits
+```
+
+**Zwei Einfügungen — `e0722979` (+20) und `3ad920b1` (+24 über zwei Dateien) — haben 38
+nachgewiesene Zeiger entwertet.** *Und beide waren korrekte, sorgfältige Arbeit: die eine baute
+N-003s Vorbehalt ein, die andere berichtigte überholte Begleittexte nach der Hausregel.*
+
+**Weiterhin ungemessen: rund 850 Zeiger.** *Ich rechne nicht hoch — ich habe zwei Scheiben mit
+BEKANNTEM Einschub genommen, und die sind kein Zufallsschnitt (B6).*
+
+**Ball beim Planner**, zum Zeiger-Bündel. *Die Abhilfe bleibt dieselbe und ist an diesen fünf
+Fällen wieder ablesbar: `berechneSparren`, `Math.cos`, `N003_VORBEHALT` — jeder Name hätte
+überlebt.* **Kein Zustandsfeld angefasst, kein Bau.**
