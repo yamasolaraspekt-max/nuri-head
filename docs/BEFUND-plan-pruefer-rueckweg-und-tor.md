@@ -7157,3 +7157,82 @@ W-08/1 · W-11/1 · W-27/1 · W-34 · W-23 · W-39 · W-41 · W-21/2
 Material, mit dem man es widerlegen könnte — hier sogar den eigenen Messfehler samt Diagnose.**
 
 **Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 101 — Posten (c) an W-10/1: F-011 hält an fünf Flächen und vier Zusagen — und ich hätte fast einen Faktor 1.000.000 gemeldet
+
+**Stand:** HEAD `6a8d0af5`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**Gegenstände aus dem REGISTER, gemessen vor dem Öffnen des Blattes.**
+
+### Die Registerzusagen, alle am Objekt
+
+```
+polygonFlaeche.ts:44   summe += a.x * b.y - b.x * a.y;          zeichengenau
+polygonFlaeche.ts:46   const flaeche = Math.abs(summe) / 2;     zeichengenau
+F-030 'zur HAELFTE'    applyCommand.ts:128  const nx = -dy/len, ny = dx/len
+                                            -> Normale n = (−r_y, r_x)        TRIFFT
+                       :131-136  vier Grundpunkte start/end ± n·h, h = laufbreite/2
+                       eine z-Extrusion gibt es NICHT — das Polygon ist 2D     TRIFFT
+```
+
+### Und dann hätte ich beinahe einen Riesenfund gemeldet
+
+**Erster Lauf, Eingabe in Millimetern:**
+
+```
+Quadrat 1000 x 1000   von Hand 1,000 m²      Modul 1000000      ABWEICHUNG
+```
+
+*Ein Faktor 1.000.000 an einer Funktion, die `polygonFlaecheM2` heißt — das sah nach dem größten
+Fund der Nacht aus.* **Statt zu melden, den Vertrag gelesen:**
+
+> *„Eingabe sind die 2D-Punkte der Dachfläche in der (geneigten) Flächenebene, **in Metern** (so
+> liegt `surf.polygon` vor: lokale u/v-Koordinaten). Damit ist das Ergebnis die echte geneigte
+> Dachfläche in m²."*
+
+**Ich hatte Millimeter in einen Meter-Vertrag gefüttert. Der Fehler war meine Eingabe, nicht das
+Modul.**
+
+### Neu gerechnet, in Metern — drei Wege, fünf Flächen
+
+```
+FALL                        SOLL      HAND     MODUL
+Quadrat 1 m x 1 m           1,00    1,0000    1,0000
+dasselbe im UHRZEIGERSINN   1,00    1,0000    1,0000
+Dreieck 4 m x 3 m           6,00    6,0000    6,0000
+L-Form 10x10 minus 4x4     84,00   84,0000   84,0000
+Dachflaeche 8,5 x 4,2      35,70   35,7000   35,7000
+```
+
+**Und die vier Zusagen des Dateikopfs einzeln geprüft:**
+
+```
+< 3 Punkte -> 0        zwei Punkte · leer · null    ->  0 · 0 · 0
+NaN -> 0                                            ->  0
+Infinity -> 0                                       ->  0
+niemals NaN/Infinity   selbst mit 1e308-Koordinaten ->  endlich
+```
+
+**Fünf Flächen, drei Wege, vier Zusagen — keine Abweichung.**
+
+### Die Fehlerklasse ist neu und sie ist die verführerischste
+
+```
+Fehler 26  falsch gemessen                    -> falsche Aussage
+Fehler 27  nicht gemessen, richtig geraten    -> Antwort stimmt zufaellig
+Fehler 28  nicht gleichzeitig gemessen        -> Block unstimmig
+Fehler 29  richtig gemessen, falsch eingeordnet -> Zahlen stimmen, Schluss nicht
+NEU        richtig gemessen, FALSCH GEFUETTERT -> die Abweichung ist meine Eingabe
+```
+
+**Bei 26 bis 29 lag der Fehler in meiner Auswertung. Hier lag er in meinem Prüfstand — und der
+Prüfstand meldet keine Warnung, er rechnet einfach.** *Ein Faktor 1.000.000 sieht aus wie ein
+Befund, gerade weil er so groß ist: niemand vermutet hinter einer so großen Zahl den eigenen
+Tippfehler in der Einheit.*
+
+**Die Regel daraus, und sie ist billig:** *bevor eine Abweichung gemeldet wird, wird der
+EINHEITEN- und EINGABEVERTRAG gelesen — er stand hier im Dateikopf, sechs Zeilen über der Formel.*
+
+**Kein Ball, kein Fund. Neuntes Blatt-Umfeld ohne Abweichung.**
+**Kein Zustandsfeld angefasst, kein Bau.**
