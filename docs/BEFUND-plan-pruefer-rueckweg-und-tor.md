@@ -7760,3 +7760,68 @@ Zeiger-Klasse, die ich anderen melde, und sie ist meine. Ich schreibe die 38 Üb
 rückwirkend um — das wäre Datei-Chirurgie an einer Datei, die andere Rollen zitieren, und es bräche
 jeden Zeilenverweis darauf. Stattdessen steht die Konvention ab hier fest: `## §NNN`, und wer ältere
 sucht, sucht ohne `§`.
+
+## §109 — Posten (a) an W-36: eine Zusage, die 45 Minuten lang stimmte
+
+Stand 964d6529. W-36 ist mit 83 Zeigern (57 verschiedene) die dichteste Werkbank-Scheibe. Geprüft
+habe ich die Achsen-Tabelle, weil sie eine ausdrückliche Zusage trägt: *„**Alle vier Fundstellen
+einzeln geöffnet.**"*
+
+Vorweg eine Musterprobe, die fehlschlug: `datei.ts:zeile` traf in W-01 nicht, weil W-01 die Zeile in
+einer eigenen Tabellenspalte führt (`**192**`). Erst an W-36 verifiziert, dann gezählt.
+
+### Was hält — und das ist das meiste
+
+| Zeiger | heute | |
+|---|---|---|
+| `geometry/configuratorPackage.ts:26` | Werteliste von `ConfiguratorStatus` | trifft |
+| `geometry/configuratorPackage.ts:72` | `status: ConfiguratorStatus;` | trifft genau |
+| `tools/faehigkeiten.ts:25` | `export type FaehigkeitZustand = …` | trifft genau |
+| `tools/werkzeugZustand.ts:30` | `export type WerkzeugAnzeige = …` | trifft genau |
+
+Und alle vier Wertelisten nachgezählt, gegen das, was das Blatt aufzählt:
+
+```
+  SchrittStatus       4 / 4    ok · prog · warn · open
+  ConfiguratorStatus  7 / 7    draft · incomplete · generated · checked · approved · integrated · outdated
+  FaehigkeitZustand   4 / 4    verfuegbar · voraussetzung · nur_ergebnis · in_entwicklung
+  WerkzeugAnzeige     6 / 6    system · aktiv · gesperrt · angeheftet · empfohlen · weitere
+```
+
+Auch die ausdrückliche Zahl stimmt — das Blatt schreibt *„Die vierte trägt SECHS Werte"*, und es sind
+sechs. Sieben Werte bei `ConfiguratorStatus` sind vollständig aufgezählt, nichts abgekürzt.
+
+### Der eine, der gewandert ist
+
+`SchrittStatus` steht im Blatt auf `app/studioDaten.ts:163`. Heute steht der Typ auf **Z.173**.
+Zeile 163 ist nicht leer und zeigt nicht ins Nichts — sie trägt heute einen Kommentar über eine
+ganz andere Sache:
+
+```
+   * `web.php:5016/5018/5020` → `objekt.blade.php:144` → `main.tsx:89` → …
+```
+
+Also die (a)-Klasse in Reinform: **zeigt auf etwas anderes.** Und der Zeiger steht zweimal in der
+Scheibe — `1-ZWECK.md:62` und `2-FUNKTION.md:10`, dieselbe Tabellenzeile in zwei Dateien, beide
+gleich falsch.
+
+### Warum das keine Nachlässigkeit ist
+
+| | |
+|---|---|
+| `1-ZWECK.md` angelegt, Zeigerzeile seither unberührt | `f1c412f9` **12.08. 23:23** |
+| `studioDaten.ts` verschoben | `3ad920b1` **13.08. 00:08** |
+
+**45 Minuten.** Die Zusage „alle vier einzeln geöffnet" war wahr, als sie geschrieben wurde. Sie
+wurde dreiviertel Stunden später ungültig — durch einen Commit, dessen eigene Botschaft lautet:
+*„A-23 gebaut: sieben überholte Begleittexte berichtigt."* Er hat sieben berichtigt und dabei diesen
+erzeugt.
+
+`3ad920b1` ist derselbe Commit, den ich in §77 als einen der beiden Verschieber gemessen habe
+(`e0722979` +20, `3ad920b1` +24, 38 gewanderte Zeiger über vier Träger). W-36 ist der fünfte Träger,
+und er zeigt den Mechanismus in seiner reinsten Form: **die Sorgfalt war da, sie hatte nur eine
+Dreiviertelstunde Haltbarkeit.** Das ist genau die Zeitachse aus §93 — nicht wo gewachsen wird,
+sondern wann gezeigt wird.
+
+Zwei Zeiger auf `:173`, oder auf die Form ohne Zahl (§81/§96). **Ball beim Planner**, zum Bündel aus
+§77/§93/§102/§104.
