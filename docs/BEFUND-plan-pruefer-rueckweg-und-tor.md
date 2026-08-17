@@ -7594,3 +7594,90 @@ ist nicht mein Schreibbereich.
 
 F-040/F-041 sind **nicht** gerechnet — der Fund kam vor der Rechnung. Sie bleiben Posten (c) der
 nächsten Runde, zusammen mit F-001/F-003 aus derselben Zeile.
+
+## §107 — Posten (c) an W-01: F-040s Grenzfall steht auf JA und rechnet Nein
+
+Stand 5fc84c17 (LIVE trägt ihn, §106 ist über den Rückweg gesichert). Zwei tragende Formeln der
+W-01-Zeile gerechnet, nicht angesehen: F-040 Rasterfang und F-041 Fangkandidat wählen.
+
+### F-041 hält — und das Blatt hat es selbst gemeldet
+
+`3-FORMELN.md:10` setzt die Grenzfall-Spalte auf **„JA, und ABWEICHEND"** und trägt ab `:41` die
+Auflösung: der Code kennt keinen `schnittpunkt`, kennt dafür `ortho`, und stellt `mittelpunkt` vor
+`achse`. Ich habe die Rangfolge unabhängig am Kern gemessen (`fangKern.ts:15`:
+`endpunkt > mittelpunkt > achse > verlaengerung > ortho > raster > keiner`) — die drei Unterschiede
+stimmen genau. `:50` zieht den Schluss selbst: *„Der Code ist die gebaute Wahrheit; F-041 beschreibt
+eine andere Auswahl."* Kein Fund. Das Blatt liefert wieder das Material, mit dem man es widerlegen
+könnte — das zehnte dieser Art.
+
+### F-040 hält nicht
+
+`3-FORMELN.md:9` führt F-040 auf **Zeile 192** und setzt die Grenzfall-Spalte auf
+**„JA — kaufmännisch runden, sonst ist das Raster links der Null verschoben"**.
+
+Zeile 192 lautet `{ x: Math.round(p.x / r) * r, y: Math.round(p.y / r) * r }`.
+
+Gerechnet am kompilierten Kern (esbuild-Bündel, `fange(p, [], { raster: 100 })`), Rasterweite 100 mm:
+
+| x | Code | kaufmännisch | |
+|---|---|---|---|
+| 150 | 200 | 200 | gleich |
+| 50 | 100 | 100 | gleich |
+| −50 | **0** | −100 | **abweichend** |
+| −150 | **−100** | −200 | **abweichend** |
+| −250 | **−200** | −300 | **abweichend** |
+| −120 | −100 | −100 | gleich |
+
+`Math.round` rundet Gleichstände nach **+∞**, kaufmännisch rundet sie **vom Null weg**. Rechts der
+Null fällt das zusammen, links nicht.
+
+**Genau gesagt, ohne Übertreibung:** Das Verbot des Grenzfalls („nicht abschneiden") ist eingehalten —
+`Math.round` ist keine Abschneidung, und die vorhergesagte Verschiebung des *ganzen* Rasters tritt
+nicht ein. Verletzt ist die *Forderung*: kaufmännisch wird nicht gerundet. Die Abweichung sitzt
+ausschließlich auf den Gleichständen, also den exakten Halbzellen.
+
+### Dass das kein Randfall ist, liegt an der Achse
+
+`HausplanerApp.tsx:773` — `let y = -((zeiger.y - stage.y()) / zoom);` — **die y-Achse ist negiert**
+(`:771`: „Welt hat Nord=+y (oben), Konva wächst nach unten ⇒ spiegeln"). Bei Bühnenursprung 0 ist
+`zeiger.y >= 0`, also ist **y für jede Zeigerposition der Fläche negativ**. `raster` wird immer
+übergeben (`:810` `raster: scene.settings.gridSize || 100`).
+
+Gegenprobe über das echte Pixelraster, zoom 1, Zeilen 0…399:
+
+```
+  Pixelzeile  50: Welt -50  -> Code    0, kaufmaennisch -100
+  Pixelzeile 150: Welt -150 -> Code -100, kaufmaennisch -200
+  Pixelzeile 250: Welt -250 -> Code -200, kaufmaennisch -300
+  Pixelzeile 350: Welt -350 -> Code -300, kaufmaennisch -400
+  abweichende Pixelzeilen in 0..399: 4
+```
+
+Alle 100 Pixel eine Zeile, regelmäßig und wiederholbar — nicht verschwindend selten.
+
+Die spürbare Folge ist keine Ungenauigkeit (bei einem Gleichstand sind beide Ziele 50 mm entfernt),
+sondern **Asymmetrie auf derselben Fläche**: x ist rechts der Null positiv und bricht Gleichstände
+nach außen (150→200), y ist überall negativ und bricht sie nach innen (−150→−100). Dieselbe Geste
+verhält sich waagerecht anders als senkrecht. Das ist die milde Form dessen, wovor der Grenzfall
+warnt.
+
+### Und kein Test hält die Stelle
+
+Die vier Raster-Zusagen in `__tests__/fangKern.test.ts` rechnen sämtlich mit positiven Koordinaten
+(`:21` 1200 · `:49` 1234/5678 · `:61` 1010 · `:43` 12/12). **Keine negative Koordinate im ganzen
+Raster-Bereich.** Der Grenzfall, den das Blatt als erfüllt führt, ist der einzige, den niemand misst.
+
+### Einordnung
+
+Nicht die Formel ist falsch und nicht der Zeiger — `:192` ist die richtige Zeile. Falsch ist die
+**Grenzfall-Spalte**: sie sagt JA zu einer Eigenschaft, die die genannte Zeile nicht hat. Das ist
+schwerer zu finden als ein toter Zeiger, weil alles daneben stimmt. Bemerkenswert ist, dass dasselbe
+Blatt eine Zeile tiefer bei F-041 vorbildlich „JA, und ABWEICHEND" schreibt: die Ehrlichkeit war da,
+sie hat nur diese eine Zeile nicht erreicht.
+
+Zwei Wege, beide klein, beide nicht meine: `runde` im Rasterschritt auf kaufmännisch umstellen und
+den negativen Fall in die Zusagen aufnehmen — oder die Grenzfall-Spalte auf „NEIN, Gleichstände
+runden nach +∞" berichtigen. Welcher gilt, ist eine Fachentscheidung. **Ball beim Planner.**
+
+Nebenbei: die Registerzeile führt F-041 als schlichtes „✓", wo das Blatt „JA, und ABWEICHEND" sagt —
+eine Verdichtung, kein Fehler, sie verweist auf das Blatt.
