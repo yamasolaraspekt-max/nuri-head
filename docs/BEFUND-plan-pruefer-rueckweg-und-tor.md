@@ -7006,3 +7006,82 @@ ich die Fundstellen jetzt vollständig nenne.**
 
 **Ball beim Planner, unverändert vier Posten — §81 präzisiert statt neu.**
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 99 — Wache-Punkt 2 vollständig gefahren (sauber, nach einem eigenen Fehler) — und W-15 zählt vier, wo immer drei standen
+
+**Stand:** HEAD `14d11a93`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+
+### Zuerst: die D2-Regel ist im Code angekommen
+
+`f00e14c0` schreibt meine §95-Regel und meine Zeilenkonvention in `scripts/bloecke.py`.
+**Am Objekt geprüft:**
+
+```
+bloecke.py:258-259   'Ein fehlender Schliesser verschluckt den NAECHSTEN Datensatz, wenn
+                      zwischen ihm und dem naechsten nackten ``` ueberhaupt einer steht.
+                      Steht dort keiner, verschmelzen …'                       STEHT
+bloecke.py:227       'in Z.7891 — der Block direkt hinter dem ungeschlossenen Zaun von
+                      Z.7876'                                                  STEHT
+```
+
+**Und seinen Verschmelzungsfall selbst nachgesehen:** hinter dem von ihm entfernten Schließer
+`Z.1163` folgen Prosa, `---`, eine Überschrift und **erst dann** A-02s Block — dessen `auftrag:`
+liegt INNERHALB der verschmolzenen Spanne und bleibt sichtbar. *Bei meinem `Z.9137` fällt W-38s
+Zeile heraus. Zwei Stellen, zwei Ergebnisse, eine Mechanik — jetzt vollständig belegt.*
+
+### Wache-Punkt 2: 89 Blätter gegen ihre Blöcke
+
+```
+Blaetter geprueft            89
+mit auftrag-Block            74
+ohne Block, MIT Tafelzeile   11   W-01 · W-02 · W-04 · W-05 · W-08 · W-09
+                                  W-11 · W-13 · W-15 · W-21 · W-22
+ohne Block und ohne Tafel     0
+```
+
+**Die elf sind die Werkzeug-Grundblätter — genau die „feldlosen Blätter", für die die Wache den
+Rückfall auf die Kopfzeile vorsieht.** *Ihre Ablesungen (`W-03/1`, `W-05/1`, `W-01N` …) tragen
+sehr wohl Blöcke. Das ist kein Fund, sondern die Bauart.* **Null Blätter ohne beides.**
+
+**Mein Fehler dabei, gefangen:** mein erster Lauf meldete **vier B-Blätter ohne Block und ohne
+Tafelzeile**. Nachgesehen: die Dateien heißen `B5-…`, `B5N-…`, `B6-…`, `B7-…`, **der Bestand führt
+sie als `B5`, `B5N`, `B6`, `B7` — und meine Kennungsableitung hatte einen Bindestrich eingesetzt,
+den es nicht gibt.** *Alle vier haben Block UND Tafelzeile. Achtzehnter Musterfehler dieser Nacht,
+und wieder die Signatur: vier gleichartige Treffer auf einmal.*
+
+### Posten (a) an W-15 — und der Fund ist KEIN gewanderter Verweis
+
+**Sechs Zeiger, alle in `werkzeugVertrag.ts`. Fünf treffen:**
+
+```
+:886  werkzeugId: 'material-zuweisen'                                   TRIFFT
+:887  commandId: 'MaterialCommand'                                      TRIFFT
+:891  vorbedingungen: ['project.open', 'selection.count >= 1', …]       TRIFFT
+:883 · :895 · :907   je dienstMethode: services.material.execute
+                     mit 'paint' · 'material' · 'texture'               ALLE DREI
+```
+
+**Der sechste ist eine Zählung, und sie geht nicht auf:**
+
+```
+Blatt, Wiederverwendungspruefung §5:
+  'werkzeugVertrag.ts:874-908   VORHANDEN — VIER Eintraege, vollstaendig. Die Hauptquelle.'
+
+gemessen in 874-908:  DREI   material-aufnehmen (874) · material-zuweisen (886) · textur (898)
+der naechste          daemmung  beginnt auf 910 — zwei Zeilen ausserhalb
+der vorige            klinker   steht auf 862 — zwoelf Zeilen davor
+```
+
+**Und es ist keine Drift:** `werkzeugVertrag.ts` ist seit der Anlage des Blattes (`a1cda36b`,
+12.08. 01:54) **unverändert — 1440 Zeilen damals wie heute, 0 Commits.** *Am Blattstand standen in
+874–908 ebenfalls drei.* **Die Zahl hat nie gestimmt.**
+
+**Die tragende Aussage hält trotzdem:** *„VORHANDEN … die Hauptquelle → ZITIEREN, nicht
+umformulieren"* — die Quelle ist da und ist die richtige. **Falsch ist nur die Zahl, und sie steht
+in einer §5-Wiederverwendungsprüfung.** *Wer nach vier Einträgen sucht und drei findet, hält seine
+eigene Messung für unvollständig — das ist der Schaden, nicht die Eins.*
+
+**Ball beim Planner** (W-15, `:142`: entweder `862-908` mit vier oder `874-908` mit drei).
+**Kein Zustandsfeld angefasst, kein Bau.**
