@@ -7538,3 +7538,59 @@ im eigenen Text.* **Wer das liest, braucht mich nicht, um es zu wissen — er br
 nachgerechnet zu bekommen.**
 
 **Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
+
+## §106 — Posten (b/c) an W-01: das Register führt einen Aufrufer, den es nicht gibt
+
+Stand 82c80a51. Ziel war Posten (c), F-040/F-041 durchrechnen. Vor dem Blatt habe ich die
+Registerzeile W-01 (`02-WERKZEUGE/REGISTER.md:35`) gemessen — sie trägt fünf prüfbare Zusagen.
+Vier halten, die fünfte nicht. Nach der Stopp-Regel geht der Fund vor der Rechnung.
+
+### Was hält
+
+| Zusage der Zeile | Messung | |
+|---|---|---|
+| „KEIN Werkzeug in der Registry" | `toolRegistry.ts`: 1 Treffer auf `fang\|raster` — und der ist `:159 'Lauflinie **Anfang**→Ende'`, ein Substring-Fehltreffer. Kein Fang-Eintrag. | TRIFFT |
+| Zeiger `W-01-raster-und-fang/7-GRENZEN.md:17` | Datei 24 Z., Zeile 17 trägt das Zitat wörtlich, inkl. „der Fang liegt unter anderen Werkzeugen, er ist keines" | TRIFFT |
+| `geometry/fangKern.ts:1-6` | 276 Z. / 11 Exporte; :2 „reine Funktion ohne Konva/three", :6 „Eine Wahrheit": genau EINE Fang-Entscheidung, :4-5 Rangfolge Endpunkt > Ortho > Raster | TRIFFT |
+| Aufrufer `app/HausplanerApp.tsx` | `:25 import { fange, toleranzAusZoom, FANG_TEXT, type FangArt }`; Wirkung: `fange` 4× · `toleranzAusZoom` 4× · `FANG_TEXT` 2× · `wandFangpunkte` 1× | TRIFFT |
+
+### Der Fund
+
+Die Zeile schreibt: **„Aufrufer: `app/HausplanerApp.tsx` und `app/tools/werkzeugEnde.ts`."**
+
+`app/tools/werkzeugEnde.ts` ist kein Aufrufer:
+
+- **0 Import-Zeilen insgesamt** (nicht nur keine auf `fangKern` — die Datei importiert nichts).
+  135 Z., 10 Exporte, 34 Code-Zeilen, erste Codezeile `:51 export interface StartPunkt`.
+- **0 Treffer auf jeden echten fangKern-Namen**: `fange` · `toleranzAusZoom` · `FANG_TEXT` ·
+  `FANG_PX` · `wandFangpunkte`. Vier dieser fünf Muster habe ich am bekannten Treffer
+  (`HausplanerApp.tsx`) verifiziert, sie liefern dort 1–4.
+- Das einzige Vorkommen des Wortes `fangKern` in der Datei steht in einem Kommentar und sagt das
+  **Gegenteil** — `werkzeugEnde.ts:46`: *„**Und kein Anschluss an `fangKern`** — das ist Z-02 und
+  hängt an dieser Scheibe, weil der Fangzustand erst gelöscht werden kann, wenn es einen Ort gibt,
+  der löscht."*
+- **Z-02 ist ein real geführter Auftrag**, wörtlich benannt:
+  `docs/auftraege/generator-auftrag-z02-fangkern-anschliessen.md` (183 Z.), in 10 Dateien genannt.
+  Der Anschluss ist offene Arbeit, nicht erledigte.
+
+Klasse: **P7 (Ort ≠ Wirkung) plus B7 (Vorkommen ist kein Beleg)** — in der schärfsten Form, die mir
+bisher untergekommen ist. Gemessen wurde die *Nennung* des Wortes, nicht der Aufruf; und die eine
+Nennung behauptet genau das Umgekehrte. Ein Vorkommen wurde zum Aufrufer gelesen, obwohl es die
+Abwesenheit protokolliert.
+
+Warum das nicht kosmetisch ist: Die Zeile sagt selbst, wozu sie existiert — *„Der Satz steht hier,
+weil die Spalte sonst ‚BESCHRIEBEN, 0 GEBAUT' heißt und jemand ein Fang-Werkzeug baut, das es nicht
+geben darf."* Sie soll also einen Bau verhindern. Mit dem zweiten Aufrufer verhindert sie einen
+zweiten dazu: Wer die Zeile liest, sieht den Fang am Werkzeug-Ende angeschlossen und hält Z-02 für
+erledigt oder überflüssig. Tatsächlich ist genau die Lücke offen, die `werkzeugEnde.ts:46`
+beschreibt — der Fangzustand wird nirgends gelöscht. Die Zeile schützt vor Doppelbau und lädt
+gleichzeitig zum Nicht-Bauen des einen Stücks ein, das fehlt.
+
+Der Weg zurück ist klein: Aufrufer auf `app/HausplanerApp.tsx` verkürzen und `werkzeugEnde.ts` als
+das führen, was es ist — die Scheibe mit dem offenen Anschluss Z-02. Ball beim Planner; das Register
+ist nicht mein Schreibbereich.
+
+### Was offen bleibt
+
+F-040/F-041 sind **nicht** gerechnet — der Fund kam vor der Rechnung. Sie bleiben Posten (c) der
+nächsten Runde, zusammen mit F-001/F-003 aus derselben Zeile.
