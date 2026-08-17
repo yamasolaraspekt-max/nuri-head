@@ -7236,3 +7236,78 @@ EINHEITEN- und EINGABEVERTRAG gelesen — er stand hier im Dateikopf, sechs Zeil
 
 **Kein Ball, kein Fund. Neuntes Blatt-Umfeld ohne Abweichung.**
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 102 — Posten (d) an der WERKBANK: 889 Zeilenzeiger, und der Einschub aus §77 trifft dort 29 statt vier
+
+**Stand:** HEAD `35c97528`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**Ein Träger, den ich in dieser Nacht nie gemessen habe:** §77 prüfte die Auftrags-Blätter, §79 die
+Dokumentzeiger der aktiven Blätter — **die Werkbank stand nie auf dem Tisch.**
+
+### Der Umfang
+
+```
+Werkzeugordner                42
+Blattdateien                 295
+Zeilen gesamt             21.308
+Zeilenzeiger auf Code        889     (aktive Blaetter zum Vergleich: 121, §79)
+Werkzeuge, die Code nennen    39
+```
+
+**Codedrift roh gemessen: 23 von 41 Ordnern nennen eine Datei, die sich seit dem letzten Schreiben
+des Ordners geändert hat.** *Das ist KEIN Fund — es sind fast durchweg die großen geteilten Dateien
+(`HausplanerApp.tsx` 48 Zeiger, `toolRegistry.ts` 28, `studioDaten.ts` 34), die sich ständig ändern.
+Ein Blatt, das sie nennt, wird davon nicht falsch.* **Die prüfbare Frage ist der Zeilenzeiger.**
+
+### `studioDaten.ts`: der Einschub aus §77, jetzt in der Werkbank gemessen
+
+```
+34 Zeiger auf studioDaten.ts
+   5 oberhalb der Einfuegestelle :154   ->  HALTEN   (:97 3x · :136 · :137)
+  29 unterhalb                          ->  Versatz +10
+     davon :163  DREIZEHNMAL
+```
+
+**Am Objekt:**
+
+```
+:163 heute   ' * `web.php:5016/5018/5020` → `objekt.blade.php:144` → …'   Prosa
+:173 heute   export type SchrittStatus = 'ok' | 'prog' | 'warn' | 'open';  das Ziel
+:97  heute   export type StudioModus = 'start' | 'guided' | 'expert';      haelt
+```
+
+**Und alle 29 waren beim Schreiben richtig:** die neun Werkbank-Blätter, die `:163` nennen, wurden
+am **12.08.** geschrieben (15:02 · 22:09 · 23:23), **A-23s Einschub kam am 13.08. 00:08.**
+
+*Auch hier hätte ich fast danebengegriffen: `REGISTER.md` trägt `:163` und wurde zuletzt am
+**16.08. 21:34** geändert — das sah nach „nach dem Einschub geschrieben, also von Anfang an falsch"
+aus. **`git log -S` sagt: die Zeilen kamen am 12.08. 15:02 und 22:09.** Der Zeitstempel einer DATEI
+sagt nichts über den Zeitpunkt einer ZEILE.*
+
+### Was das für §77 bedeutet
+
+§77 meldete **vier** betroffene Blätter aus diesem einen Einschub (W-38, W-33, W-36, W-40).
+**Gemessen sind es in der Werkbank 29 weitere Zeiger derselben Ursache.**
+
+```
+§77   Auftrags-Blaetter   4 Zeiger betroffen
+§102  Werkbank           29 Zeiger betroffen, aus demselben Einschub
+```
+
+**Dieselbe Lehre wie §98, an einer anderen Stelle:** *ein Befund, der einen Träger nennt, lässt den
+Empfänger glauben, er sei fertig, wenn er diesen Träger behebt.* **§77 war richtig und um den
+Faktor sieben zu klein.**
+
+### Was ich ausdrücklich NICHT gemessen habe
+
+**855 der 889 Zeiger sind ungeprüft.** *Ich habe `studioDaten.ts` genommen, weil dort ein Einschub
+BEKANNT war. Ob die übrigen halten, weiß ich nicht und rechne es nicht hoch — vier von fünf wären
+achtzig Prozent, und diese Quote auf 889 zu übertragen wäre eine Summe ohne Erhebung (B6).*
+**Die Aussage lautet: wer in der Werkbank eine Zeilennummer liest, muss damit rechnen, dass sie
+nicht stimmt. Wie viele genau, misst wer sie braucht.**
+
+**Ball beim Planner** — zum §77/§79/§81/§93-Bündel, jetzt mit der Werkbank als viertem und größtem
+Träger. *Die Abhilfe ist dieselbe: die Kennung (`SchrittStatus`) überlebt jeden Einschub, die Zahl
+nicht.*
+**Kein Zustandsfeld angefasst, kein Bau.**
