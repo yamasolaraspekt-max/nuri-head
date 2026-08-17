@@ -7904,3 +7904,83 @@ Sorgfalt fehlt, sondern die Haltbarkeit.** Die Scheibe sagt „ist an ihm gemess
 sie sagt nur nicht, wann.
 
 **Ball beim Planner**, zum Bündel §77/§93/§102/§104/§109.
+
+## §111 — Posten (c) an W-29: F-010 rechnet richtig, und das Blatt ist an seinem eigenen Erfolg veraltet
+
+Stand 839a8621. W-29 führt drei F-Nummern. Ich habe die rechenbare genommen: **F-010 Orientierung
+(Schuhbandformel)**, im Blatt mit `:86` und `a += p.x*q.y − q.x*p.y` zitiert.
+
+### Der Zeiger trifft, und die Formel rechnet
+
+Trägerdatei aus dem Satz geholt, nicht aus dem Zusammenhang (die Lehre aus §110): `dachAusschnitt.ts`
+(510 Z., passend zu den Aufrufen `:314`/`:375`/`:468`). **`:86` trägt die Zeile wörtlich**, in
+`signierteFlaeche` (`:82-89`), Rückgabe `a / 2`.
+
+Gerechnet am kompilierten Modul, fünf Vierecke:
+
+```
+  Fall                      signierteFlaeche   istKonvexesViereck
+  Quadrat gegen Uhrzeiger          16              true
+  Quadrat MIT Uhrzeiger           -16              true
+  konkaves Viereck                  4              false
+  kollinear (entartet)              0              false
+  Trapez gegen Uhrzeiger         13.5              true
+```
+
+Dasselbe Quadrat, zwei Umlaufrichtungen, Vorzeichen kippt — **„das Vorzeichen ist die Orientierung"
+stimmt.** Und die Prüfung ist robuster als nötig: `:102` nimmt `orient = Math.sign(area)` und misst
+jede Ecke gegen `cross * orient`, deshalb bestehen beide Umlaufrichtungen. Entartet und konkav
+fallen durch. Die Formel hält an allen fünf Fällen.
+
+*Nebenbei:* Der Kommentar über der Funktion (`:91-94`) verlangt „**positiver** Fläche". Der Code
+verlangt das nicht — er verlangt *nicht-entartete* Fläche und normiert die Richtung weg. Der Code
+ist hier großzügiger als seine Beschreibung; wer sich auf den Kommentar verlässt, normiert umsonst.
+
+### Die Registerzeile habe ich ganz nachgerechnet, und sie hält vollständig
+
+| Zusage | Messung | |
+|---|---|---|
+| „780 Z. Geometrie" | 96 (`dachOeffnung`) + 510 (`dachAusschnitt`) + 174 (`auswechslung`) = **780** | trifft |
+| „82 grüne Zusagen" | 71 (`dachAusschnitt.test.ts`) + 11 (`auswechslung.test.ts`) = **82** | trifft |
+| „NULL Produktivverbraucher" | 3 Nennungen außerhalb der Tests, **alle drei Kommentare** — eine erklärt sogar, warum die Funktion *nicht* benutzt wird (`kontur.ts:15`) | trifft |
+| „F-004 trägt NICHT" | `geradenSchnitt`/`schnittpunkt` in `dachAusschnitt.ts`: **0** | trifft |
+
+Die Zeile misst über die Wirkung, nicht über den Ort — sie sagt sogar selbst, die Treffer seien
+„Begründungstexte". Das ist P7 richtig angewandt.
+
+### Der Fund
+
+Das Formelblatt führt eine Spalte „Registerzeile" und trägt dort **dreimal „fehlt"** ein — für
+F-011, F-010 und F-004. Die Registerzeile nennt heute **alle drei**, mit Häkchen, Fundstelle und
+Einschränkung („F-010 ✓ **als VORZEICHEN, nicht als Fläche**"). Und sie sagt dazu, woher das kommt:
+
+> *„**F-ZUORDNUNG ERGÄNZT 16.08. mit der Ablesung**, die Zeile nannte gar keine."*
+
+| | |
+|---|---|
+| Blatt geschrieben, „fehlt"-Spalte seither unberührt | `28ea0432` **16.08. 13:55** |
+| Register mit genau dieser Ablesung ergänzt | `1e1afd1b` **16.08. 17:47** (Yama) |
+
+**Drei Stunden zweiundfünfzig Minuten.** Das Blatt hat gemessen, dass das Register nichts nennt —
+und hat damit bewirkt, dass es etwas nennt. Seine eigene Spalte beschreibt seither einen Zustand,
+den es selbst beendet hat.
+
+Das ist dieselbe Zeitachse wie §109/§110, aber die Richtung ist umgekehrt: dort bewegte sich der
+Code unter dem Dokument, hier hat **das Dokument seine eigene Aussage überholt**. Kein fremder
+Eingriff, keine Nachlässigkeit — der Erfolg selbst ist der Verfallsgrund. Ein Blatt, das den Mangel
+meldet, den es behebt, muss die Meldung mit einem Datum versehen oder sie fällt in dem Moment, in
+dem sie wirkt.
+
+Vorschlag als Form, nicht als Auftrag: die Spalte auf „fehlte am 16.08. 13:55, ergänzt 17:47"
+setzen, oder auf „nachgetragen" — was der Planner entscheidet. **Ball beim Planner**, zum Bündel
+§77/§93/§109/§110, wo es die Zeitachse verstärkt.
+
+### Und ein Fehler von mir
+
+Ich hatte den Registersatz abgeschnitten gelesen — er endete in meiner Ausgabe bei `ADD_ROOF…` — und
+die Endung aus dem Thema der Scheibe ergänzt: `ADD_ROOF_OPENING`. Ich habe dann gemessen, dass es
+den Namen nirgends gibt, und war einen Schritt davon entfernt, dem Register ein erfundenes Symbol
+vorzuwerfen. Tatsächlich steht dort `ADD_ROOF_AUFBAU`, und das existiert. Die Rettung war, den
+vollen Satz zu holen, statt auf der Lücke weiterzurechnen: **ein abgeschnittenes Zitat ist kein
+Zitat.** Nächste Verwandte von §101 (falsche Eingabe) und §110 (falsche Trägerdatei) — dieselbe
+Familie, drittes Gesicht.
