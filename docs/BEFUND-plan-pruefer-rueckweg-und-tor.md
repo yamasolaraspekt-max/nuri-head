@@ -7311,3 +7311,76 @@ nicht stimmt. Wie viele genau, misst wer sie braucht.**
 Träger. *Die Abhilfe ist dieselbe: die Kennung (`SchrittStatus`) überlebt jeden Einschub, die Zahl
 nicht.*
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 103 — Posten (e) am Generator: §71s Formulierung war unfair. Beide Fertigmeldungen waren richtig — das Blatt ist danach zweimal gewachsen
+
+**Stand:** HEAD `1aaca355`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+
+### Erst die Zahl, die ich fast falsch gemeldet hätte
+
+Mein erstes Muster lieferte *„neue Fertigmeldung seit ea377567: **28**"*. **Das sind keine 28
+Meldungen, sondern 28 Commits, die irgendwo „A-37" und „CODE_FERTIG" enthalten — B6.**
+Am bekannten Treffer verifiziert und auf die Meldeform verengt:
+
+```
+git log --all --grep='^generator: zustand: A-37 · CODE_FERTIG'
+  fb59f6cc  16.08 19:38  bau 97f1dd00 — 'achtzehn Kriterien'
+  ea377567  16.08 20:01  bau 1c36544e — 'NEUNZEHN Kriterien'
+GENAU ZWEI. Keine dritte.
+```
+
+### Die Zeitachse, Kriterienzahl je Stand gemessen
+
+```
+19:38  fb59f6cc  generator  Blatt 18   Meldung sagt 18     RICHTIG
+19:43  4a10abca  planner    Blatt 19   A-37-19 kommt hinzu
+19:49  1c36544e  generator             der Bau dazu
+20:01  ea377567  generator  Blatt 18*  Meldung sagt 19
+20:42  1403e348  planner    Blatt 20   A-37-20
+23:50  b6a79a66  planner    Blatt 21   A-37-21
+```
+
+**`*` — und das ist der Punkt:** im Baum von `ea377567` trägt das Blatt **18**, weil der
+Planner-Commit `4a10abca` diesen Zweig noch nicht erreicht hatte. **Der Generator wusste von
+A-37-19 — er hatte es sechs Minuten vorher gebaut — und schrieb es in seine Meldung; sein eigener
+Commit kann es nicht belegen.** *Eine Zahl, die die Welt richtig beschreibt und im eigenen Baum
+nicht nachprüfbar ist. Genau die Klasse, um die diese ganze Nacht kreist.*
+
+### Und damit ist §71 in seiner Formulierung zu korrigieren
+
+§71 schrieb: *„die Meldung ist hinter dem BLATT um zwei Kriterien"* — das liest sich als Versäumnis
+des Meldenden. **Gemessen:**
+
+```
+beide Meldungen waren zum Zeitpunkt ihrer Abgabe RICHTIG
+die Luecke entstand DANACH: A-37-20 um 20:42, A-37-21 um 23:50
+```
+
+**Der Vergleich in §71 stellte das HEUTIGE Blatt neben die GESTRIGE Meldung — Fehler 28 in
+Reinform, diesmal über zwei Kalendertage statt über drei Befehle.** *Die Zahlen stimmten; die
+Gegenüberstellung war nicht gleichzeitig.*
+
+**Was bleibt und was fällt:**
+
+```
+BLEIBT   der Scope-Diff: seit bau 1c36544e sind es +97 -19 Zeilen in den zwei Gegenstaenden
+BLEIBT   eine dritte Fertigmeldung ist faellig — A-37-20 und A-37-21 sind ungedeckt
+FAELLT   die Lesart, die Meldung sei saeumig gewesen. Sie war es nicht.
+```
+
+*Der Ball bleibt beim Generator, aber der Grund ist ein anderer: nicht „du hast zu wenig
+gemeldet", sondern „das Blatt ist dir zweimal davongelaufen".*
+
+### Release-Prüfer, unverändert offen
+
+```
+__pycache__ in .gitignore     0 Treffer
+scripts/__pycache__ im Baum   vorhanden
+```
+
+*Seit §74 unverändert. Kein Schaden, aber jede Wache zählt es weiter als Baumeintrag mit.*
+
+**Ball beim Generator (dritte Meldung) und beim Release-Prüfer (`.gitignore`).**
+**Kein Zustandsfeld angefasst, kein Bau.**
