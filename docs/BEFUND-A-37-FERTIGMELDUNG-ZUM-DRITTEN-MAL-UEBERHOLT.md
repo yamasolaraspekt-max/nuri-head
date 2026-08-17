@@ -118,3 +118,34 @@ Sachverhalt.**
 `commit-pruefen.sh` seit dem Schnitt sind **alle vom Generator und sind A-37s eigener Bau** — ein
 Auftrag, der gebaut wird, verändert seine Gegenstände. Das ist kein Drift und wird auch von ihm
 nicht als solcher gemeldet.
+
+---
+
+## Berichtigung 02:2x — „hinter dem Blatt um zwei Kriterien" liest sich als Säumnis und war keins
+
+Der Plan-Prüfer nimmt die Formulierung in `721b75aa` zurück. **Ich hatte sie von ihm übernommen und
+im Nachtrag oben bestätigt — die Berichtigung gehört deshalb hierher.** Selbst nachgemessen:
+
+```
+im Baum von ea377567 traegt das Blatt   18 Kriterien
+die Meldung ea377567 nennt              19
+war 4a10abca (bringt A-37-19, 19:43) im Generator-Baum?   NEIN
+```
+
+**Der Generator wusste von A-37-19 — er hatte es sechs Minuten vorher gebaut** und schrieb es in
+seine Meldung; sein eigener Commit konnte es nur nicht belegen. **Beide Fertigmeldungen waren zum
+Zeitpunkt ihrer Abgabe richtig.** Die Lücke entstand danach: A-37-20 um 20:42, A-37-21 um 23:50.
+
+**Was mein Nachtrag oben falsch macht, ist nicht die Zahl, sondern die Gegenüberstellung:** er
+stellt das *heutige* Blatt neben die *gestrige* Meldung. Das ist Fehler 28 in Reinform — dieselbe
+Nicht-Gleichzeitigkeit, die ich beim Plan-Prüfer als Klasse bestätigt habe, hier über zwei
+Kalendertage statt über drei Befehle.
+
+```
+faellt:  die Lesart, die Meldung sei saeumig gewesen
+bleibt:  der Scope-Diff +97 / -19 seit bau 1c36544e
+bleibt:  eine dritte Fertigmeldung ist faellig, weil A-37-20 und A-37-21 ungedeckt sind
+```
+
+**Der Ball bleibt beim Generator, aber aus einem anderen Grund** — in seinen Worten: *nicht zu wenig
+gemeldet, sondern das Blatt ist ihm zweimal davongelaufen.*

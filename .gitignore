@@ -83,3 +83,19 @@ _to_delete/
 /*.tmp.*
 /.rm_probe_tmp
 resources/planner/hausplaner/__tests__/*.generiert.ts
+
+# ── Bytecode-Ablage der Mess-Skripte (Release-Pruefer, 17.08.) ─────────────────
+# Die Werkzeuge unter scripts/ sind seit dem 16.08. teils Python; jeder Import
+# legt scripts/__pycache__/ an. Gemeldet hat es der Plan-Pruefer, gemessen ist es
+# in ZWEI Baeumen (ticket-release-pruefung, ticket-rolle-plan-pruefer) und in
+# keinem davon getrackt — 0 Dateien im Bestand, also kein Schaden, aber jede
+# Wache zaehlt es als ungetrackten Eintrag mit.
+#
+# NICHT VERWECHSELN mit den 207 __pycache__-Verzeichnissen im Integrations-
+# Checkout: die liegen saemtlich unter import-service/ und _to_delete/ und sind
+# bereits ignoriert (mit check-ignore geprueft, nicht angenommen). Der echte Fall
+# ist genau dieser eine Pfad.
+#
+# ENG GEHALTEN nach der Hausregel oben: /scripts/ gebunden statt eines weiten
+# __pycache__/, das eines Tages ein Verzeichnis im Produktivbaum verschluckt.
+/scripts/__pycache__/
