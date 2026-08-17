@@ -7085,3 +7085,75 @@ eigene Messung für unvollständig — das ist der Schaden, nicht die Eins.*
 
 **Ball beim Planner** (W-15, `:142`: entweder `862-908` mit vier oder `874-908` mit drei).
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 100 — Posten (b) an W-21/2: jede Zahl trifft, die eine „falsche" ist als ersetzt gekennzeichnet — und das Blatt trägt MEINEN Fehler von §99, eine Runde früher
+
+**Stand:** HEAD `039b871f`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**W-21/2 `BETRIEBSBESTAETIGT`, Basis `9ea1c3db`.**
+
+### Vier Zahlen nachgerechnet
+
+```
+auswechslung.ts        174 Zeilen · 5 Exporte      Blatt: 174 / 5      TRIFFT
+                       seit der Basis byte-identisch
+W-21/1 'VERGEBEN'      18 Treffer in docs/STATUS.md
+                       an der Basis 9ea1c3db: 18                       TRIFFT
+                       heute: 28 — die Datei waechst, die Aussage
+                       ('vergeben') ist ein Ja/Nein und altert nicht
+fuenf Module von W-21   holzBauteile 82 · holzMengen 64 · schifterListe 152
+                        sparrenBerechnung 151 · sparrenTrennung 67  = 516
+```
+
+### Die 496 — und sie ist kein Fund, sondern ein Beleg
+
+Das Blatt nennt **496 Zeilen** und sagt im selben Atemzug, wofür:
+
+> *„es sind Zählangaben („Fünf Module", „496 Zeilen"), die **durch die neuen ersetzt** wurden"*
+
+**Und die Rechnung geht auf:**
+
+```
+496  + 20  = 516
+      ^^^^  sparrenBerechnung.ts 131 -> 151, e0722979 (A-14s Bau, 12.08. 02:46)
+heute gemessen: 516
+```
+
+**Derselbe Einschub, der in §81 und §98 die N-003-Belegstelle um 19 Zeilen verschoben hat, erklärt
+hier eine ersetzte Zählangabe — und W-21/2 hat ihn richtig behandelt:** *die Zahl neu erhoben, die
+alte als überholt danebengelassen.* **Ein Auftrag, der dieselbe Ursache traf und sie überlebt hat.**
+
+### Und das Blatt trägt meinen §99-Fehler, eine Runde vor mir
+
+W-21/2 bekennt einen eigenen Messfehler:
+
+> *„Für W-21-2-7 suchte ich die Kriterien mit `^W-21-[0-9]+` und bekam **0 an beiden Ständen** —
+> daraus las mein Skript ‚zeichengleich: **True**'. Das ist eine Zusage, die **LEERE** vergleicht:
+> W-21s Kriterien heißen `W-21/1-1` mit **Schrägstrich**."*
+
+**Selbst nachgemessen:**
+
+```
+Muster ^W-21-[0-9]+          0 Treffer
+Muster W-21/1-              29 Treffer   (W-21/1-1 … W-21/1-12 …)
+```
+
+**Das ist zeichengenau mein Fehler aus §99** — dort hieß es `B-5` statt `B5`, hier `W-21-1` statt
+`W-21/1`. *Beide Male eine Kennungsform, die das Muster nicht treffen kann; beide Male ein
+ERGEBNIS aus Leere — bei ihm ein grünes „zeichengleich", bei mir vier „fehlende Datensätze".*
+
+**Der Unterschied ist nur die Richtung:** *seine Leere sagte fälschlich JA, meine sagte fälschlich
+NEIN.* **Dieselbe Ursache kann beides — und deshalb ist „null Treffer" nie ein Ergebnis, sondern
+immer erst eine Frage an das Muster.**
+
+### Achtes Blatt ohne Abweichung
+
+```
+W-08/1 · W-11/1 · W-27/1 · W-34 · W-23 · W-39 · W-41 · W-21/2
+```
+
+**W-21/2 gehört dazu, und zwar mit derselben Eigenschaft wie die anderen sieben: es liefert das
+Material, mit dem man es widerlegen könnte — hier sogar den eigenen Messfehler samt Diagnose.**
+
+**Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
