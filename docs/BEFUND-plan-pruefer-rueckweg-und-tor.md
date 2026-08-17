@@ -6923,3 +6923,86 @@ Zustand eingetreten ist, den die Geschichte dieser Datei nicht kennt.**
 **Ball unverändert:** **Integrator** (vier Datensätze, §92) · **Planner** (die zwei Übergänge).
 *Ich trage nichts ein — die Grenze aus §92 gilt weiter.*
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 98 — Posten (e) am Planner-Stapel: vier Befunde unverändert offen — und §81 war UNTERMESSEN
+
+**Stand:** HEAD `a0a0a85c`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+
+### Die vier, einzeln nachgemessen
+
+```
+§81  N-003-Belegstelle sparrenBerechnung.ts:86   steht unveraendert   OFFEN
+§96  F-001 Grenzfall Ganzzahligkeit              0 Treffer            OFFEN
+§91  A-42 siebte Kante                           6 Kanten, keine 7.   OFFEN
+§90  A-40 R2/R3                                  Blatt zuletzt 16.08 22:11,
+                                                 meine DoR 17.08 01:35  OFFEN
+```
+
+### Und beim Nachmessen fiel auf, dass §81 zu klein war
+
+**Die FORMELSAMMLUNG trägt nicht EINEN Zeiger in `sparrenBerechnung.ts`, sondern DREI — plus eine
+dreigliedrige Kette. Ich hatte einen gemessen.**
+
+```
+:718   sparrenBerechnung.ts:33   bodenschneelast(zone, gelaendehoeheM)   liegt auf 33   HAELT
+:740   sparrenBerechnung.ts:45   formbeiwertSchnee(neigungGrad)          liegt auf 45   HAELT
+:757   sparrenBerechnung.ts:86   berechneSparren(e)                      liegt auf 105  +19
+:824   sparrenBerechnung.ts:86   dieselbe Zahl, ZWEITE Stelle            liegt auf 105  +19
+```
+
+**Und die Einfügestelle erklärt beides — am Diff gemessen, nicht vermutet:**
+
+```
+e0722979  @@ -80,0 +81,9 @@   neun Zeilen nach Z.80
+          @@ -82,0 +92,10 @@  zehn Zeilen nach Z.82
+          @@ -129,0 +149 @@   eine Zeile nach Z.129
+-> die Einschuebe liegen bei Z.80-82: UNTERHALB von :33 und :45, OBERHALB von :86
+```
+
+**Zwei Zeiger über der Einfügestelle halten, einer darunter wandert — dieselbe Datei, derselbe
+Autor, derselbe Augenblick.** *Zusammen mit A-18s `:100` aus §93, der nach dem Einschub geschrieben
+wurde und hält, ist die Regel jetzt an vier Punkten belegt:*
+
+```
+oberhalb der Einfuegestelle              :33 · :45      haelt
+unterhalb, VOR dem Einschub geschrieben  :86 (2x)       wandert +19
+unterhalb, NACH dem Einschub geschrieben :100 (A-18)    haelt
+```
+
+### Die Kette bei `:824` — zwei von drei
+
+```
+DIE ZAHL ENTSTEHT      sparrenBerechnung.ts:86    -> liegt auf 105          GEWANDERT
+SIE WIRD GERUFEN VON   enginePanels.ts:210        -> Aufruf liegt auf 227   GEWANDERT
+SIE WIRD ANGEZEIGT IN  EngineFlaeche.tsx:56-58    -> 'Die Rechengrundlage
+                       steht sichtbar …' + hp-ef-grundlage + Grundlage:    TRIFFT
+```
+
+**Und die Sachaussage daneben trifft, obwohl ihr Zeiger wandert:** *„die EINZIGE Aufrufstelle
+außerhalb der Tests"*.
+
+```
+Nennungen ausserhalb Definition und Tests   4   (Faehigkeitseintrag · import · Aufruf · Kommentar)
+echte AUFRUFE mit Klammer                   1   enginePanels.ts:227
+```
+
+*Mein erster Zähler lieferte 4 und hätte einen Fund gemeldet — die Zusage spricht von AUFRUFEN,
+nicht von Nennungen. Wieder das Wort gegen die Sache, diesmal bei mir.*
+
+### Was §81 dadurch wird
+
+**§81 hatte recht und war zu klein: ich meldete EINEN gewanderten Zeiger, gemessen sind es ZWEI
+(dieselbe Zahl an zwei Stellen) plus einer in der Kette — und drei weitere, die HALTEN.**
+
+```
+sechs Zeiger in diesem Umfeld    vier halten · zwei wandern (drei Nennungen)
+```
+
+*Ein Befund, der eine Stelle nennt, wo sechs zu prüfen waren, ist kein falscher Befund — aber er
+lässt den Empfänger glauben, er sei fertig, wenn er die eine behebt.* **Das ist der Grund, warum
+ich die Fundstellen jetzt vollständig nenne.**
+
+**Ball beim Planner, unverändert vier Posten — §81 präzisiert statt neu.**
+**Kein Zustandsfeld angefasst, kein Bau.**
