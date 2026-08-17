@@ -7825,3 +7825,82 @@ sondern wann gezeigt wird.
 
 Zwei Zeiger auf `:173`, oder auf die Form ohne Zahl (§81/§96). **Ball beim Planner**, zum Bündel aus
 §77/§93/§102/§104.
+
+## §110 — Posten (b) an W-38: die Zahl hält, die Ablesung nicht
+
+Stand 71ec8776. W-38 eröffnet mit einer ungewöhnlich starken Zusage:
+
+> *„**Dies ist eine ABLESUNG, keine Vorgabe.** Der Code existiert:
+> `resources/planner/hausplaner/app/studioDaten.ts`, **257 Zeilen**. Jede Aussage in diesen sieben
+> Blättern ist an ihm gemessen und trägt ihre Fundstelle."*
+
+Die Scheibe stellt sich also ausdrücklich darauf, an einem gemessenen Gegenstand zu hängen. Genau
+das habe ich geprüft.
+
+### Die gezählte Zahl hält
+
+`STEPS_STILLGELEGT` — das Blatt sagt **„elf Schritte"**. Gezählt mit zwei Verfahren, weil das erste
+sich widersprach: eine Klammerzählung ergab 11, eine Zählung über `titel:` aber 23. Der Widerspruch
+löst sich an der Struktur — `titel:` steht auch in `aufgaben` und `empfehlung`, `status:` auch in
+`checks`, alle verschachtelt und inline. Auf der Schritt-Ebene gemessen:
+
+```
+  Zeilen "^  {"      im Array Z.196-253:  11
+  Zeilen "^    titel:" im selben Bereich:  11
+```
+
+Zwei Verfahren, dasselbe Ergebnis. **Elf ist richtig.**
+
+### Die abgelesene Zahl hält nicht
+
+```
+  studioDaten.ts heute:  267 Zeilen
+  Blatt:                 257 Zeilen
+```
+
+Zehn Zeilen, und es sind dieselben zehn wie überall in diesem Bündel.
+
+### Die Zeiger trennen sich sauber nach Datei
+
+| Zeiger | Ziel | heute | |
+|---|---|---|---|
+| `GuidedView.tsx:18` | `badgeFarbe` | Z.18 | trifft |
+| `GuidedView.tsx:71` | Text aus `STATUS_LABEL` | Z.71 | trifft |
+| `studioDaten.ts:157` | `ZULETZT_STILLGELEGT` | **Z.167** | +10 |
+| `studioDaten.ts:163` | `SchrittStatus` | **Z.173** | +10 |
+| `studioDaten.ts:186` | `STEPS_STILLGELEGT` | **Z.196** | +10 |
+| `studioDaten.ts:255` | `STATUS_LABEL` | **Z.265** | +10 |
+
+**Jeder Zeiger in die eine Datei trifft, jeder Zeiger in die andere ist um zehn daneben.** Kein
+Streuungsbild, ein Schnitt. Und was heute auf den alten Nummern steht, ist nicht leer: `:157` trägt
+einen Kommentarsatz über „Teil B und liegt bei Yama", `:186` ein `/**`. Wieder die (a)-Klasse —
+zeigt auf etwas anderes.
+
+`studioDaten.ts:163` ist derselbe Zeiger, den §109 in W-36 zweimal gefunden hat. Er existiert damit
+an **drei** Stellen, alle drei falsch.
+
+### Ein Fehlfund, den ich knapp vermieden habe
+
+Ich hatte `:18` und `:71` gegen `studioDaten.ts` gemessen und wäre auf zwei weitere Abweichungen
+gekommen. Sie gehören aber zu `app/GuidedView.tsx` — `4-BEDIENUNG.md:53` sagt das ausdrücklich
+(*„Gezeichnet wird das in `app/GuidedView.tsx` (W-34)"*), ich hatte nur die nackten `:NN` aus der
+Sammelsuche genommen. Richtige Messung, falsche Eingabe — dieselbe Klasse wie §101. Bei nackten
+Zeilenzeigern muss die Trägerdatei aus dem Satz geholt werden, nicht aus dem Zusammenhang.
+
+### Zeitachse
+
+| | |
+|---|---|
+| W-38 geschrieben, „257 Zeilen" seither unberührt | `fa83a2dc` **12.08. 15:02** |
+| `studioDaten.ts` verschoben | `3ad920b1` **13.08. 00:08** |
+| Commits an `studioDaten.ts` seither | **1** |
+
+**Neun Stunden sechs Minuten**, und genau ein Commit. Derselbe, der W-36 nach 45 Minuten überholt
+hat. Ein einziger Bau hat in dieser Scheibe fünf Zahlen ungültig gemacht — vier Zeiger und die
+Ablesung — und in W-36 zwei weitere. W-38 ist der sechste Träger.
+
+Das ist der Kern, den §77/§93 benennen und der sich hier zum sechsten Mal zeigt: **nicht die
+Sorgfalt fehlt, sondern die Haltbarkeit.** Die Scheibe sagt „ist an ihm gemessen" und hat recht —
+sie sagt nur nicht, wann.
+
+**Ball beim Planner**, zum Bündel §77/§93/§102/§104/§109.
