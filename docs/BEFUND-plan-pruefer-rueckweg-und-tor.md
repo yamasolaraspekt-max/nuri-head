@@ -7681,3 +7681,82 @@ runden nach +∞" berichtigen. Welcher gilt, ist eine Fachentscheidung. **Ball b
 
 Nebenbei: die Registerzeile führt F-041 als schlichtes „✓", wo das Blatt „JA, und ABWEICHEND" sagt —
 eine Verdichtung, kein Fehler, sie verweist auf das Blatt.
+
+## §108 — Posten (e): meine vier DoR-Ergebnisse stehen in keinem Feld, und A-38s Datensatz existiert dreifach
+
+Stand 3a2bfd6f. Posten (d) hat bei `BEREIT 0` und `IN_ARBEIT 0` kein Subjekt — ich sage das, statt
+es zu überspringen. Also (e): liegen meine offenen Befunde noch bei ihrem Halter?
+
+### Der Rahmen, frisch gemessen
+
+Die Statuswahrheit steht seit `0f969d5e` (16.08. 20:39, von Yama) — **5 h 56 min**, nicht ein Tag;
+mein Eindruck „lange unberührt" war falsch, es ist eine Nacht. In dieser Nacht sind **309 Commits**
+auf den Zweig gelaufen:
+
+```
+  107 plan-pruefer · 90 integrator · 47 (ohne Praefix) · 36 release-pruefer
+   19 planner · 6 generator · 4 evaluator
+```
+
+Die 90 Integrator-Commits sind **ausnahmslos Transport** (61× „Rueckweg — rolle/plan-pruefer", 11×
+planner, 6× release-pruefer, 5× generator, 3× evaluator). Die einzige Rolle, die `docs/STATUS.md`
+schreiben darf (`rollen-tor.sh:344`), war hochaktiv und hat kein einziges Feld gesetzt. Das ist kein
+Vorwurf — Transport ist Transport. Es erklärt aber, warum das Folgende liegen bleibt.
+
+### Meine vier DoR-Voten gegen die Felder
+
+Geliefert (Abschnitte 88–91, alle committet, Baum leer):
+
+| | mein Votum | Block in STATUS.md | Blatt in aktiv/ |
+|---|---|---|---|
+| A-38 | **ERTEILT** (Runde 2) | `dor_beleg: "BEREIT — 2. Runde 15.08."` | `"NICHT ERTEILT — 3. Runde … Restpunkte 16.08. behoben."` |
+| A-39 | **ERTEILT** | `"steht aus"` | `"steht aus — plan-pruefer."` |
+| A-40 | **NICHT ERTEILT**, zwei Restpunkte | `"steht aus"` | `"steht aus — plan-pruefer."` |
+| A-42 | **NICHT ERTEILT**, ein Restpunkt | `"steht aus"` | `"steht aus — plan-pruefer."` |
+
+Alle vier Blöcke: genau **ein** Block mit `zustand` je Kennung — keine Kennungs-Dubletten, sauber
+(gezählt über die Blöcke mit Zustandsfeld, nicht über die `auftrag:`-Zeilen; A-40 hat 17 solcher
+Zeilen und trotzdem nur einen Datensatz). Alle vier `zustand: ENTWURF`, alle vier
+`ballbesitz: plan-pruefer`.
+
+Das ist der Stillstand: **Die Tafel sagt, ich schulde vier DoRs. Ich habe sie geliefert. Kein Feld
+weiß davon.** Bei A-40 und A-42 ist „steht aus" nicht einmal ungefähr richtig — ein *NICHT ERTEILT*
+mit benannten Restpunkten ist ein Ergebnis, kein Ausstand; wer „steht aus" liest, wartet auf eine
+Prüfung, die längst gelaufen ist und zwei Punkte benannt hat.
+
+Auflösen kann ich das nicht: `dor_beleg` liegt in `STATUS.md` (integrator-gesperrt) und in den
+Blättern (nicht mein Schreibbereich). Was ich tun kann, ist es so genau zu benennen, dass ein
+einziger Durchgang reicht — das war §92 und gilt unverändert weiter.
+
+### A-38: derselbe Datensatz an drei Orten mit drei Werten
+
+Das Blatt zitiert den Statusdatensatz wörtlich (`Z.325` ` ```text `, `Z.326` „Datensatz:"). Ich habe
+zuerst auf Doppelschlüssel getippt und es geprüft, bevor ich es so nannte — es ist ein **Beleg**,
+kein zweiter Schlüssel, also die von A-34 geschützte Bauform. Genau deshalb muss er stimmen:
+
+```
+  Zitat im Blatt  (Z.331)  dor_beleg: "steht aus"
+  Original        (Z.18709) dor_beleg: "BEREIT — 2. Runde 15.08., siehe dor_votum_runde_2"
+  Kopf desselben Blattes (Z.18)  dor_beleg: "NICHT ERTEILT — 3. Runde … Restpunkte 16.08. behoben."
+```
+
+Drei Orte, drei Werte, ein Feld. Das Zitat ist der älteste Stand — es wurde vor dem 15.08.
+eingefroren und nicht mitgezogen; `auftrag`, `zustand`, `basis_sha` und `blatt` stimmen darin noch,
+`ballbesitz` hat im Original inzwischen einen erklärenden Zusatz, den das Zitat nicht kennt. Das ist
+die (a)-Klasse in Reinform: **nicht ins Leere zeigend, sondern auf etwas anderes.**
+
+Der Kopfeintrag `Z.18` widerspricht sich zusätzlich selbst — er sagt NICHT ERTEILT und im selben
+Satz, die Restpunkte seien am 16.08. behoben. Genau das habe ich in §88 nachgemessen und deshalb
+ERTEILT geschrieben. Die Zeile trägt ihren eigenen Widerruf und behält trotzdem das Urteil.
+
+**Ball beim Integrator** für die vier Felder (§92 liefert die Werte), **beim Planner** für den
+Kopfeintrag `A-38:18` und das eingefrorene Zitat `A-38:326-332`.
+
+### Und ein Fehler in eigener Sache
+
+Meine Abschnitte heißen 38× `## NNN —` und erst seit §106 3× `## §NNN —`. Wer in dieser Datei nach
+`§102` sucht, findet die Überschrift nicht, nur Verweise im Fließtext. Das ist dieselbe
+Zeiger-Klasse, die ich anderen melde, und sie ist meine. Ich schreibe die 38 Überschriften **nicht**
+rückwirkend um — das wäre Datei-Chirurgie an einer Datei, die andere Rollen zitieren, und es bräche
+jeden Zeilenverweis darauf. Stattdessen steht die Konvention ab hier fest: `## §NNN`, und wer ältere
+sucht, sucht ohne `§`.
