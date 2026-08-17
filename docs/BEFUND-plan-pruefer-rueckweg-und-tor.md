@@ -7461,3 +7461,80 @@ BEKANNTEM Einschub genommen, und die sind kein Zufallsschnitt (B6).*
 **Ball beim Planner**, zum Zeiger-Bündel. *Die Abhilfe bleibt dieselbe und ist an diesen fünf
 Fällen wieder ablesbar: `berechneSparren`, `Math.cos`, `N003_VORBEHALT` — jeder Name hätte
 überlebt.* **Kein Zustandsfeld angefasst, kein Bau.**
+
+---
+
+## 105 — Posten (b) an W-13: neun Zahlen, neun Treffer — und meine „Entdeckung" stand längst im Blatt
+
+**Stand:** HEAD `9431ebc5`, getrackt 0. **Messstand in Variable, Gegenprobe: unbewegt.**
+**Gegenstände aus der Tafelzeile geholt und gemessen, bevor ich das Blatt geöffnet habe.**
+
+### Die vier Module, je Zeilen und Exporte
+
+```
+MODUL                    gemessen        Blatt
+auswahlModus.ts          98 Z / 7 E      98 / 7    TRIFFT
+auswahlDarstellung.ts    71 Z / 3 E      71 / 3    TRIFFT
+auswahlUebersicht.ts     77 Z / 4 E      77 / 4    TRIFFT
+trefferSuche.ts          75 Z / 4 E      75 / 4    TRIFFT
+SUMME                   321 Z / 18 E    321 / 18   TRIFFT
+```
+
+*Mein erster Vergleich meldete **viermal ABWEICHUNG**, obwohl die Spalten sichtbar gleich waren:
+`wc -l` liefert führende Leerzeichen, und `[ "      98" = "98" ]` ist falsch. **Derselbe Fehler wie
+in §71 — diesmal in einer Sekunde erkannt, weil die Zahlen nebeneinander standen.** Das ist der
+Nutzen einer Ausgabe, die beide Werte zeigt statt nur das Urteil.*
+
+### Die drei Sachzusagen der Tafelzeile
+
+```
+'waehlbar !== false, nicht === true'
+  trefferSuche.ts:58   .filter((k) => k.waehlbar !== false)                zeichengenau
+
+'oben schlaegt nah (Zeichenreihenfolge vor Distanz)'
+  trefferSuche.ts:9    '… dann nach Distanz sortiert. Was oben liegt, gewinnt'
+  trefferSuche.ts:61-63  .sort((a,b) => ( … b.zeichenreihenfolge - a.zeichenreihenfolge
+                       -> absteigend nach Zeichenreihenfolge ZUERST         TRIFFT
+
+'0 dedizierte Zusagen bei 321 Z'
+  Testdatei gleichen Namens fuer die vier Module:  NEIN · NEIN · NEIN · NEIN
+  das Blatt sagt praezise 'fuer die keine Testdatei ZUSTAENDIG ist'         TRIFFT
+```
+
+### Und der Punkt, an dem ich fast einen eigenen Fund gemeldet hätte
+
+**Beim Messen der Aufrufer fiel auf:**
+
+```
+auswahlDarstellung.ts   0 Aufrufer ausserhalb der Tests
+trefferSuche.ts         0 Aufrufer ausserhalb der Tests
+```
+
+*Zwei von vier Modulen laufen produktiv nirgends — das sah nach einem Fund aus.* **Es steht seit
+der Abnahme im Blatt, wörtlich:**
+
+> *„Von 18 Ausfuhren sind nur vier produktiv verdrahtet; `auswahlDarstellung.ts` und
+> `trefferSuche.ts` haben außerhalb von `markieren.test.ts` **keinen Aufrufer**."*
+
+**Dieselben zwei Module, dieselbe Aussage — vom Release-Prüfer, und korrekt eingeordnet:**
+
+> *„Warum beides den Release nicht hält: **keines der zehn Kriterien verlangt es.** Der Auftrag war,
+> den vorhandenen Code zu BESCHREIBEN, nicht ihn zu bewerten — und ein Release-Prüfer, der gegen
+> eine ungestellte Anforderung misst, verschiebt die Ziellinie nach der Abnahme."*
+
+**Meine Messung bestätigt sie unabhängig, mehr nicht.** *Und die Einordnung ist die schwerere
+Hälfte: einen echten Mangel finden und trotzdem sagen, dass er den Release nicht hält, weil kein
+Kriterium ihn verlangt.*
+
+### Neuntes Blatt ohne Abweichung
+
+```
+W-08/1 · W-11/1 · W-27/1 · W-34 · W-23 · W-39 · W-41 · W-21/2 · W-13
+```
+
+**W-13 gehört dazu mit derselben Eigenschaft:** *es beziffert seine dünne Grundlage selbst
+(„0 dedizierte Zusagen bei 321 Z" steht in der eigenen Tafelzeile) und trägt den Verdrahtungsbefund
+im eigenen Text.* **Wer das liest, braucht mich nicht, um es zu wissen — er braucht mich nur, um es
+nachgerechnet zu bekommen.**
+
+**Kein Ball, kein Fund.** **Kein Zustandsfeld angefasst, kein Bau.**
