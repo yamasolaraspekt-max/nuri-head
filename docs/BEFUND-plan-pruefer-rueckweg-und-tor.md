@@ -8536,3 +8536,123 @@ Kein Zustandsfeld angefasst. **Ball zurück an den Planner** mit R1 und R2. Die 
 eine Spur bekommt (etwa ein Hinweis des Tores, wenn zwischen genanntem Messstand und HEAD Commits
 liegen), ist eine Fachentscheidung und ausdrücklich **nicht** meine — ich melde nur, dass er ohne Spur
 heute nicht getragen hat.
+
+## §114 — Posten (a) an W-14/1: acht Zeiger gewandert, alle in einer Datei — und diesmal ist die überholte Aussage eine ABNAHME
+
+**Stand:** HEAD `736481fe`, getrackt 0, **nicht gepusht**. Gemessen 19.08. 16:2x.
+**Gegenstand: W-14/1 „Kopieren, Spiegeln, Drehen"** (362 Z., Basis `78c09e1b`) — eine Scheibe, die
+ich nie angefasst habe; die zwei Nennungen in meinem Blatt sind Fremdzitate aus anderen Listen.
+**35 Zeiger einzeln geöffnet.**
+
+### Die zählbaren Zusagen: drei von drei, exakt
+
+| Zusage | Messung | |
+|---|---|---|
+| `editierGeometrie.ts` „75 Z." | **75** | trifft |
+| „**NEUN** Exporte" | **9** — `Punkt Achse versetzePunkt versetzteWand spiegelePunkt spiegelteWand Bbox bbox achsenMitte` | trifft |
+| `editierGeometrie.test.ts` „52 Z." | **52** | trifft |
+
+Die Exportzahl mit zwei Verfahren (`grep -c '^export '` und Namensliste), beide neun.
+
+### 27 Zeiger treffen, 8 wandern — und die 8 stehen alle in derselben Datei
+
+| Datei | Zeiger | Ergebnis |
+|---|---|---|
+| `toolRegistry.ts` | :249 :273 | **2/2** |
+| `werkzeugLandkarte.ts` | :96 :102 :105 :133 | **4/4** — samt Marken `deckt`/`fehlt` wörtlich |
+| `sammelBefehle.ts` | :39 :68 :82 :103 :111 | **5/5** |
+| `Kopfrahmen.tsx` | :30 :91 :100 :315 :316 | **5/5** |
+| `applyCommand.ts` | :143 :162 :176 :203 | **4/4** |
+| `Buehne.tsx` | :40 :207 :208 | **3/3** |
+| `EigenschaftenPanel.tsx` :120 · `scene.types.ts` :193 · `REGISTER.md` :67 | | **3/3** |
+| **`HausplanerApp.tsx`** | :110 | **trifft** |
+| **`HausplanerApp.tsx`** | :626 :627 :671 :676 :677 :695 :696 :1343 | **0/8** |
+
+`REGISTER.md` hat seit der Basis **21 Commits** und der Zeiger trifft trotzdem; `HausplanerApp.tsx`
+hat **zwei** und acht Zeiger fallen. Nicht die Menge der Bewegung entscheidet, sondern wo sie sitzt.
+
+### Die acht, jeder am Anker gemessen — und der Versatz ist nicht einer, sondern drei
+
+| Anker aus dem Blattsatz | Blatt | heute | Versatz |
+|---|---|---|---|
+| `function loescheAuswahl()` | 626 | **632** | **+6** |
+| `executeCommands(befehleLoeschen(…))` | 627 | **633** | **+6** |
+| Aufruf `tool.id === 'duplizieren'` | 671 | **705** | **+34** |
+| `function dupliziere()` | 676 | **711** | **+35** |
+| `executeCommands(befehleDuplizieren(…))` | 677 | **712** | **+35** |
+| `function spiegeleGrundriss(achse)` | 695 | **730** | **+35** |
+| `executeCommands(befehleSpiegeln(…))` | 696 | **731** | **+35** |
+| `spiegeleGrundriss={spiegeleGrundriss}` „durchgereicht" | 1343 | **1378** | **+35** |
+
+**+6, +34, +35 — drei Gruppen.** In §110 war es ein einziger sauberer Schnitt (+10 an allen vier);
+hier hat der Bau an drei Stellen eingefügt, und zwischen `:671` und `:676` liegt eine Zeile
+Unterschied. Wer aus einem Versatz auf die anderen schließt, liegt daneben.
+
+### Die Zeitachse — und sie trifft eine Abnahme
+
+| | |
+|---|---|
+| Blatt geschnitten, Basis | `78c09e1b` (vor A-31) |
+| A-31 zieht die Geometrie nach `sammelBefehle.ts` | `606e83b4` **13.08. 10:36** |
+| **Blatt berichtigt** — *„drei BEREIT-Blätter berichtigt, der plan-prüfer meldete sechs Zeiger"* | `f8154e2a` **14.08. 04:55** |
+| **W-14/1 ABGENOMMEN** — *„neun von neun Kriterien, **jede Fundstelle selbst geöffnet**"* | `8bace111` **14.08. 23:36** |
+| **A-35 gebaut** | `ec12e9b3` **15.08. 11:05** |
+
+**Gegenprobe am Stand unmittelbar vor A-35 (`ec12e9b3^`): die Blattzahlen treffen dort exakt** —
+`function dupliziere` 676, `function loescheAuswahl` 626, `function spiegeleGrundriss` 695, der
+Aufruf 671, und `spiegeleGrundriss={…}` 1343. **Fünf von fünf.** Die Berichtigung vom 14.08. war
+richtig, und sie war es noch, als abgenommen wurde.
+
+**Elf Stunden neunundzwanzig Minuten nach der Abnahme hat A-35 acht ihrer Fundstellen verschoben.**
+Seither sind **vier Tage und zwei Stunden** vergangen.
+
+**Das ist das Neue an dieser Scheibe.** In §109/§110/§111 alterte je eine *Beschreibung*. Hier
+altert eine **Abnahme** — ein Satz, der nicht beschreibt, sondern bezeugt: *„jede Fundstelle selbst
+geöffnet."* Das war wahr. Es ist der stärkste Satz, den eine Prüfrolle schreiben kann, und er hat
+elf Stunden gehalten. Ein Zeugnis über einen Stand, das den Stand nicht nennt, wird durch den
+nächsten Bau zu einer Aussage über nichts.
+
+### Und das Blatt gehört ausdrücklich nicht auf die Anklagebank
+
+Es ist das sorgfältigste, das ich bisher gemessen habe:
+
+- **jeder verschobene Zeiger trägt seinen Vorgänger** — `:676 function dupliziere() [war :671]`,
+  `:626 [war :621]`, `:695 [war :703]`, `:1343 [war :1356]`. Alle vier `[war]`-Werte an der Basis
+  nachgemessen: **richtig.**
+- **die Berichtigung ist als solche markiert**, mit Grund und Datum: *„BERICHTIGT 14.08.: A-31 hat
+  versetzteWand/spiegelteWand/bbox/achsenMitte samt Befehlslisten nach `app/sammelBefehle.ts`
+  gezogen."*
+- **sie ging auf eine Meldung von mir zurück** (`f8154e2a`, „der plan-prüfer meldete sechs Zeiger")
+  — Posten (e) im Rückblick: die Zustellung hat gewirkt, vollständig und in sieben Stunden.
+
+**Der Befund ist deshalb kein Vorwurf an die Sorgfalt, sondern die Messung ihrer Haltbarkeit:
+21 Stunden zwischen Berichtigung und nächstem Bruch.** §93 hat 45 Minuten gemessen, §110 neun
+Stunden, hier sind es einundzwanzig — die Größenordnung ändert sich, das Muster nicht.
+
+### Zwei eigene Fehlfunde, beide vor der Meldung gefangen
+
+1. **`:110` „zeigt auf einen Kommentar statt auf den Import".** Ich hatte das als Fund notiert —
+   es steht **wörtlich im Blatt**: *„HausplanerApp.tsx:110 trägt heute den A-31-Kommentar, der
+   wörtlich sagt, dass…"*. Der Zeiger trifft genau das, was er treffen soll. Dieselbe Klasse wie
+   §106 und §111: als Entdeckung melden, was der Gemessene selbst sagt.
+2. **`:1343` gegen den falschen Anker.** Ich hatte `panelId={BEREICH_ID}` genommen (basis 1343 →
+   heute 1365) und daraus einen vierten Versatz gebaut. Der Blattsatz nennt aber „durchgereicht",
+   und das ist `spiegeleGrundriss={spiegeleGrundriss}`: an der Basis 1356, vor A-35 1343, heute
+   1378. **Das Blatt hat recht, mein Anker war falsch** — dieselbe Klasse wie §110. Gerettet
+   dadurch, dass ich den Blattkörper im Wortlaut gelesen habe, statt aus der `grundlage`-Zeile zu
+   raten.
+
+*Beide Male war die Auflösung ein Satz, den ich schon vor mir hatte. Das ist in vier Runden der
+fünfte Fall — der Griff, den ich am Gemessenen kritisiere, ist mein eigener häufigster.*
+
+### Ball
+
+**Beim Planner** — acht Zeiger in `HausplanerApp.tsx`, Versätze +6/+34/+35, Anker im Befund
+benannt. Zum Bündel §77/§93/§102/§104/§109/§110/§111; W-14/1 ist der siebte Träger.
+
+**Zusätzlich, und das ist der eigentliche Punkt dieser Runde:** die Abnahme `8bace111` behauptet
+seit vier Tagen etwas, das seit vier Tagen nicht mehr stimmt. Ob eine Abnahme den Stand nennen
+muss, gegen den sie geprüft hat — `abgenommen_an_sha` neben `abgenommen` — ist eine Regelfrage und
+gehört **zu Yama**, nicht in meine Messung.
+
+**Kein Zustandsfeld angefasst, kein Bau.**
