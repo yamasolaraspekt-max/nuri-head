@@ -8218,7 +8218,7 @@ Rückdatierung — die neun Einträge bleiben dort, wo sie geschrieben wurden, u
 
 **Kein Zustandsfeld angefasst, kein Bau.**
 
-## §113 — P-03 nachgemessen: kein verdeckter Rückstand, aber 36 Blätter, von denen keines stimmt
+## §115 — P-03 nachgemessen: kein verdeckter Rückstand, aber 36 Blätter, von denen keines stimmt
 
 Stand cba422dd. P-03 ist mein eigener Selbstbefund vom 16.08. 18:27: meine Ballortung liest nur
 `docs/STATUS.md`, während die Auftragsblätter eigene Ballfelder tragen. Er schließt mit einer Zusage:
@@ -8434,7 +8434,7 @@ unverändert die A-37-Tafelzeile (§112 Fund 2). Beide sind von dieser Rücknahm
 
 **Kein Zustandsfeld angefasst, kein Bau.**
 
-## §114 — P-02 geprüft: vier von fünf Punkten hätten den heutigen Fall nicht verhindert
+## §116 — P-02 geprüft: vier von fünf Punkten hätten den heutigen Fall nicht verhindert
 
 Messstand 7f93f197 (16:48). P-02 liegt als `VORLAGE` mit Ball bei mir, vorgelegt vom **Planner**
 (`c2de1eec`, 07.08. 09:35). Der Auftrag verlangt die P-01-Linsen — Widerspruchsfreiheit, Prüfbarkeit,
@@ -8656,3 +8656,36 @@ muss, gegen den sie geprüft hat — `abgenommen_an_sha` neben `abgenommen` — 
 gehört **zu Yama**, nicht in meine Messung.
 
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## Nachtrag ohne eigene Nummer — die Zählung selbst ist der dritte Realfall zu P-02
+
+*(Bewusst ohne Abschnittsnummer: eine neue Nummer würde denselben Fehler ein viertes Mal riskieren.)*
+
+Der Release-Prüfer hat gemeldet, dass zwei Abschnitte `§113` tragen (`151e6d5a`,
+`docs/BEFUND-ZWEI-ABSCHNITTE-113.md`), und den Ball richtig bei mir gelassen — er hat den
+Merge-Konflikt verlustfrei aufgelöst und **nicht umbenannt**, mit der Begründung, ein Transporteur,
+der Nummern korrigiert, ändere unsichtbar Inhalt. Dem stimme ich zu.
+
+Beim Aufräumen kam eine **dritte** Kollision zum Vorschein, die er noch nicht sehen konnte:
+
+```
+  15:46:00  8ffda0fd  P-03            (ich)      -> war §112, dann §113, jetzt §115
+  15:48:19  736481fe  Fehler 30       (Instanz 2) -> §113
+  16:51:06  a7e5623b  P-02 geprueft   (ich)      -> war §114, jetzt §116
+  19:27:08  3adac326  W-14/1          (Instanz 2) -> §114
+```
+
+**Beide Male war meiner der frühere** — 45 Sekunden, dann zweieinhalb Stunden. Trotzdem weicht meiner,
+weil die stärkere Regel „nur eigenen Text anfassen" heißt und nicht „wer zuerst kam, bleibt". Der
+Preis steht im Blatt: die Nummern laufen jetzt 112 · 115 · 113 · 116 · 114. Eindeutig, aber nicht
+aufsteigend.
+
+**Das ist Beleg für R1 aus §116.** Die P-02-Vorlage regelt Blätter, Entscheidungen, Tafel und fremde
+Befunde — nicht die anhängenden Rollendateien. Hier ist der Mechanismus jetzt benannt und dreimal
+gemessen: **zwei Instanzen teilen einen fortlaufenden Nummernraum in einer Datei, an die kein Claim
+binden kann** (0 von 129 Claim-Feldern binden an eine Datei). Wer eine Nummer vergibt, vergibt sie
+gegen den Stand, den er kennt — und sieht den anderen nicht.
+
+Nicht meine Entscheidung, sondern eine Konvention: ob die Nummern chronologisch nachgezogen werden
+(dann müsste jemand fremde Abschnitte anfassen) oder ob Eindeutigkeit ohne Ordnung genügt. **Ball beim
+Planner**, zusammen mit R1/R2 aus §116. Bis dahin gilt: eindeutig ja, aufsteigend nein.
