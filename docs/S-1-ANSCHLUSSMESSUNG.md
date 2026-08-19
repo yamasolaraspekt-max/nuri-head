@@ -132,3 +132,101 @@ Messung und sie wird hier genannt, nicht verschwiegen.
 - **Keine Erreichbarkeitsprüfung bis zur Oberfläche.** Gemessen ist die Importkette, nicht der
   Klick. Der W-08-Nachsatz zeigt, warum das ein Unterschied ist. **Für die sechs Kandidaten ist es
   egal — null Aufrufer heißt null Kette.** Für die einunddreißig ist es eine offene Verschärfung.
+
+---
+
+# S-1/2 — die Verschärfung: erreichbar statt „hat Aufrufer"
+
+*Nachgereicht 19.08. gegen `4699f0e6`. Der Nachsatz zu W-08 oben verlangte sie, hier ist sie.*
+
+## Das Verfahren, und warum es dem Zählen überlegen ist
+
+Nicht Aufrufer gezählt, sondern **die Importkette vom Bündel-Einstieg aus gezogen** — transitiv,
+mit Auflösung endungsloser Pfade (`.ts`/`.tsx`/`index.*`). Der Einstieg ist belegt, nicht vermutet:
+
+```
+vite.hausplaner.config.ts:21   input: resolve(__dirname, "resources/planner/hausplaner/main.tsx")
+```
+
+**Methodenprobe vorweg**, damit die Kette nicht Leeres prüft: `wallGeometry`, `szene`,
+`faehigkeiten`, `toolRegistry`, `HausplanerApp` müssen erreichbar sein — **fünf von fünf sind es.**
+Handprobe an einem, der es nicht sein darf: `dachTopologie` hat null Nennungen außerhalb der Tests,
+unabhängig von der Kette und deckungsgleich mit ihr **und** mit dem, was die Registerzeile W-27
+selbst sagt.
+
+```
+Module ohne Tests            165
+davon von main.tsx erreichbar 137
+NICHT erreichbar               25   (plus 5 DOM-Testdateien, hier nicht gezählt)
+
+Zeilen unerreichbar         3.105   von 29.361  =  10,6 %
+```
+
+## Der Befund: die Importzählung hat die Lage beschönigt
+
+Sechs Module fand die erste Runde. **Es sind fünfundzwanzig.** Der Grund ist genau der W-08-Fall,
+jetzt für alle aufgelöst: `dachOeffnung` hat einen Aufrufer und `dachAusschnitt` zwei — **und beide
+Aufrufer sind selbst unerreichbar.** Eine Aufruferzahl misst Nachbarschaft, keine Erreichbarkeit.
+
+## Und zuerst das, was HÄLT — dreizehn von dreizehn
+
+**Jede Engine, die `verfuegbar` heißt, ist erreichbar. Jede, die `in_entwicklung` heißt, ist es
+nicht. Ausnahmslos.**
+
+| `zustand` | Engines | Modul erreichbar |
+|---|---|---|
+| `verfuegbar` | fbh · heizkoerper · abwasser · kueche · pv · fensterprodukt · sparren · treppe | **8 von 8 ja** |
+| `in_entwicklung` | heizkreis · uwert · holzmengen · holzbauteile · schifter | **5 von 5 nein** |
+
+**Das Feld ist keine Dekoration — es sagt die Erreichbarkeit exakt voraus.** Die Lehre aus AUF-28
+(*„anklickbare Zeilen ohne Handler sind falsche Versprechen"*) ist eingehalten: **die Navi
+verspricht nichts, was sie nicht hat.** Das gehört genannt, bevor die 25 gezählt werden.
+
+## Die 25, klassifiziert statt zusammengezählt
+
+**Eine Summe ohne Klassen wäre wieder eine Zahl ohne Erhebung.** Jede Datei einzeln geöffnet:
+
+| Klasse | Zahl | Module |
+|---|---|---|
+| **Ehrlich erklärt** — als `in_entwicklung` markiert | **5** | `heizkreisVerteiler` · `wandaufbau` · `holzMengen` · `holzBauteile` · `schifterListe` |
+| **Ausdrücklich stillgelegt**, nicht gelöscht | **1** | `toolCatalogStillgelegt.ts` — *„nicht gelöscht, sondern stillgelegt"* (I2/AUF-21) |
+| **Reine Daten ohne Verhalten**, so gebaut | **1** | `werkzeugLandkarte.ts` — *„kein Verhalten, kein Dispatcher"*; Verbraucher sind die Tests |
+| **Doppelter Weg gebaut, erster liegen geblieben** | **1** | `deckenMesh.ts` — `szene.ts:451-478` rendert inline über `bodenPunkteThree` |
+| **Vorbau** — reine, getestete Geometrie ohne Anschluss | **17** | s. u. |
+
+**Sieben der 25 sind damit kein Befund**, sondern gewollt und im Code begründet. **Der eigentliche
+Rest ist siebzehn**, und er trägt ein einziges Muster: *reine, testbare Logik, gebaut und nicht
+angeschlossen* — genau das, was die Registerzeile W-27 an `dachTopologie` selbst benennt: **„kein
+Fehlbau, sondern ein Vorbau."**
+
+Die größten davon: `dachAusschnitt` (510 Z.) · `wandFlaeche` (238) · `dachTopologie` (183) ·
+`auswechslung` (174) · `treppenTypen` (153) · `treppeSvg` (142) · `integrationAbgleich` (135) ·
+`grundriss` (133).
+
+## Der Fund, der die Baureihenfolge betrifft
+
+**Der L-Kontur-Verbund liegt zur Hälfte fertig da:**
+
+| Modul | Lage | Zeilen |
+|---|---|---|
+| `geometry/grundriss.ts` — *„zusammengesetzte Grundrisse (L-, T-, U-Form)"* | **unerreichbar** | 133 |
+| `geometry/dachTopologie.ts` — Ecken-/Kantenerkennung | **unerreichbar** | 183 |
+| `geometry/dachVerschneidung.ts` | erreichbar | 205 |
+| `geometry/dachUForm.ts` | erreichbar | 126 |
+| `geometry/dachGeometrie.ts` — trägt die Rechteck-Sperre `:88-92` | erreichbar | 153 |
+
+**Die L-Kontur ist kein Neubau.** 316 Zeilen geprüfter Geometrie für zusammengesetzte Grundrisse
+und Kantenerkennung liegen gebaut und unangeschlossen; die drei erreichbaren Nachbarn laufen. Was
+fehlt, ist der Anschluss — und die Rechteck-Sperre in `dachGeometrie.ts:88-92`, die jede
+nicht-rechteckige Kontur abweist.
+
+**Das ändert die Einschätzung aus meiner Dauer-Rechnung:** ich hatte die L-Kontur als schwersten
+Einstieg genannt. Gemessen ist sie ein **Anschluss** nach A-35-Muster, kein Bau — mit dem
+Unterschied, dass sie zusätzlich eine Sperre öffnen muss, und **das** ist der Punkt, an dem Yamas
+Punkt 8 hängt.
+
+## Was auch diese Runde NICHT beantwortet
+
+Erreichbar heißt: **im Bündel**. Es heißt nicht, dass ein Nutzer hinkommt — ein Modul kann
+importiert und trotzdem hinter einem nie gesetzten Zustand liegen. Diese Stufe misst die
+Importkette; die Bedienkette ist die nächste Verschärfung und wird hier **nicht** behauptet.
