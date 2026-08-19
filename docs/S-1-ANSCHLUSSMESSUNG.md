@@ -230,3 +230,64 @@ Punkt 8 hängt.
 Erreichbar heißt: **im Bündel**. Es heißt nicht, dass ein Nutzer hinkommt — ein Modul kann
 importiert und trotzdem hinter einem nie gesetzten Zustand liegen. Diese Stufe misst die
 Importkette; die Bedienkette ist die nächste Verschärfung und wird hier **nicht** behauptet.
+
+---
+
+# S-1/3 — die Bedienkette: kein Fehlversprechen gefunden, und das ist das Ergebnis
+
+*Nachgereicht 20.08. gegen `dd0a870b`. Die Stufe davor endete mit „erreichbar heißt im Bündel,
+nicht dass ein Nutzer hinkommt". Hier ist die Antwort — und sie fällt anders aus als erwartet.*
+
+## Die Kette, Glied für Glied gemessen
+
+| Glied | Messung | |
+|---|---|---|
+| Was liegt in der Leiste? | `toolPresentation.ts`: **111 Einträge** — 8 `fix` + 2 `kontext` + 3 `weitere` aus der **Registry**, 98 `weitere` aus dem **Katalog** | |
+| Welche Art hat ein Registry-Werkzeug? | **10 `werkzeug`** (setzen `activeToolId`) + **3 `aktion`** (Sofortbefehl) | |
+| Werden die Sofortbefehle bedient? | `HausplanerApp.tsx:704-706` — `loeschen`, `duplizieren`, `trimmen`. **Drei Arten, drei Verzweigungen** | **vollständig** |
+| Was wird aus den 98 Katalog-Verträgen? | `paketAdapter.ts:124` → `activationRules: regelnFuer(vertrag(w.id)?.vorbedingungen ?? [])` | |
+| Tragen die Verträge Vorbedingungen? | **110 von 110. Null ohne.** | **keine Lücke** |
+| Was geschieht mit unerfüllbaren? | `vorbedingungen.ts` (AUF-36): *„Fünf sind es nicht — und die werden nicht ausgelassen und schon gar nicht auf ‚erfüllt' verdrahtet, damit eine Kachel klickbar aussieht. Sie sind unerfüllt mit ehrlichem Grund."* | **gesperrt statt Attrappe** |
+
+## Der Verdacht, den ich hatte, und warum er fällt
+
+Nach dem Zonen-Abgleich sah es nach dem AUF-28-Fall durch die Hintertür aus: **97 Kennungen in der
+Oberfläche ohne Registry-Eintrag.** Vier Messungen später ist er erledigt, und zwar an vier
+verschiedenen Stellen:
+
+1. `toolPresentation` führt `herkunft: 'registry' | 'katalog'` — sie **weiß**, was was ist.
+2. Die Zone heißt `'weitere'` und ist im Kopf definiert als *„kuratiert verfügbar, **Handler folgt**"*.
+3. `paketAdapter` erfindet keine Regeln, sondern zieht sie aus dem Funktionsvertrag; *„nicht
+   messbare Vorbedingungen erzeugen **keine** Regel"* — Operanden-Gate im Code.
+4. Und die Verträge sind lückenlos: **110 von 110 mit Vorbedingung.**
+
+**Es gibt kein Glied, an dem eine Kachel klickbar wird, ohne dass etwas passiert.**
+
+## Und damit ist die Ausgangsfrage des Auftrags beantwortet
+
+> *„Wenn der Code da ist: warum fühlt sich der Werkzeugkasten dann nicht wie einer an?"*
+
+**Nicht weil etwas kaputt ist, sondern weil 98 von 111 Kacheln ehrlich als Noch-Nicht ausgewiesen
+sind.** Der Werkzeugkasten zeigt den vollen Umfang des Vorhabens und gibt dreizehn davon frei. Das
+ist eine Produktentscheidung, keine Baulücke — und sie ist an vier Stellen im Code begründet
+(AUF-21, AUF-28, AUF-36, I4).
+
+**Die Lücke, die der Auftrag sucht, liegt nicht zwischen Registerzeile und Registry.** Sie liegt
+zwischen **Vertrag und Handler**: 110 Verträge beschreiben, was die Werkzeuge tun sollen; 13 tun es.
+
+## Was das für S-3 heißt
+
+Der Anschlussvorrat aus S-1/2 (**17 Vorbau-Module**) und diese 98 Kacheln sind **dieselbe Lücke von
+zwei Seiten**: die Module sind die Rechnung ohne Bedienung, die Kacheln die Bedienung ohne Rechnung.
+**Ein Anschluss nach A-35-Muster schließt beide auf einmal** — `trimmen` war genau das: Vertrag war
+da, Kachel war da, Geometrie war da (`geradenSchnitt` seit A-32), es fehlte das Stück dazwischen.
+
+**Damit ist die Reihenfolge für S-3 messbar statt Geschmack:** zuerst die Kacheln, deren Rechnung
+schon als Vorbau-Modul daliegt. Das sind die kürzesten Anschlüsse, und sie sind namentlich bekannt.
+
+## Ein negatives Ergebnis ist ein Ergebnis
+
+Diese Stufe hat **keinen** Befund gefunden. Sie wird trotzdem geliefert: die Frage *„liegt zwischen
+Bündel und Klick ein Fehlversprechen?"* ist damit beantwortet und muss nicht noch einmal gestellt
+werden. **Nicht gefunden ist etwas anderes als nicht gesucht** — der Suchweg steht oben, Glied für
+Glied, und ist nachfahrbar.
