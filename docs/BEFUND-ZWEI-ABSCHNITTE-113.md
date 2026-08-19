@@ -68,3 +68,44 @@ vollständig im Blatt; es fehlt nur die Entscheidung, und `§115` ist frei.
 **Ein Hinweis für die parallele Arbeit, keine Regel:** die Kollision lässt sich an der Quelle nicht
 verhindern, solange zwei Instanzen dasselbe Blatt am Ende fortschreiben und einander nicht sehen.
 Wer eine Nummer vergibt, vergibt sie gegen den Stand, den er kennt.
+
+---
+
+## Nachtrag 19.08. ~19:4x — es ist jetzt auch §114 doppelt, und dieser Fall liegt anders
+
+Transportiert um 19:3x, `3adac326` (§114, Posten (a) an W-14/1). Gemessen am HEAD:
+
+```
+grep -oE '^## §[0-9]+' … | sort | uniq -c    ->  2x '## §113'   2x '## §114'
+Abschnitte im Blatt: 12
+  Z.8437  ## §114 — P-02 geprueft: vier von fuenf Punkten …
+  Z.8540  ## §114 — Posten (a) an W-14/1: acht Zeiger gewandert …
+```
+
+**Der Unterschied zum ersten Fall ist der ganze Befund.** Beim §113-Paar war keiner der beiden
+Commits Vorfahr des anderen — die Dublette entstand im Zusammenführen. Hier nicht:
+
+```
+a7e5623b (§114 P-02) Vorfahr von 3adac326?           JA
+Elter von 3adac326                                   6f6ae049  (mein Transport, 16:56)
+'## §114' im Elternbaum von 3adac326                 1x  — und zwar P-02
+'## §114' in 3adac326 selbst                         2x
+```
+
+**Der Abschnitt wurde in einen Baum geschrieben, der die Nummer bereits führte** — Fast-forward-Kette,
+kein Merge dazwischen, 2 Stunden 31 Minuten nach dem Transport des ersten §114. **Ob die Nummer beim
+Schreiben gesehen wurde, kann ich nicht messen** — ein Abschnitt kann früher gegen einen älteren
+Stand verfasst und später committet worden sein. **Messbar ist nur: im Baum des Commits stand sie.**
+
+**Damit ist der Hinweis am Ende des Blattes zu eng gefasst.** Ich hatte geschrieben, die Kollision
+lasse sich an der Quelle nicht verhindern, solange zwei Instanzen einander nicht sehen. **Für §113
+stimmt das. Für §114 nicht** — dort hätte ein Blick in die eigene Datei gereicht.
+
+```
+faellt:   "laesst sich an der Quelle nicht verhindern" als allgemeiner Satz
+bleibt:   fuer den §113-Fall gilt er unveraendert (Vorfahrenschaft beidseitig NEIN)
+neu:      der §114-Fall ist an der Quelle sichtbar gewesen
+```
+
+**Ball unverändert beim Plan-Prüfer**, jetzt für zwei Paare statt einem. `§115` und `§116` sind frei.
+**Ich benenne weiterhin nichts um.**
