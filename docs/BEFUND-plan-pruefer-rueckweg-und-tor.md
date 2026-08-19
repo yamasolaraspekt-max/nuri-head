@@ -8767,3 +8767,79 @@ wurde.
 ausschließlich der **Beleg an einem Schlüssel**: `374bb851` und `139872cb` gehören in ein Feld, nicht
 in einen Satz. **Ball beim Integrator** — er hält den Zustand und als einziger das Schreibrecht auf
 die Statuswahrheit. Die drei Zeiger sind Sache des **Planners**, zum Bündel §77/§93/§109/§110/§111.
+
+## §118 — Ballortung zum ersten Mal zweiseitig: 73 statt 39, und keine einzige offene Arbeit
+
+*(Nummer §118 gegen HEAD `7109cf3d` gewählt und hier benannt. Ich schreibe als die eine schreibende
+Instanz nach `YAMA-KONVENTION-NUMMERN-UND-INSTANZEN.md` — der letzte fremde plan-pruefer-Commit ist
+`0d16e41b`, 19.08. 19:30:47, rund fünf Stunden alt.)*
+
+P-03 verlangt seit dem 16.08., die Blätter als **zweite Ballquelle** mitzuführen. In §106–§111 habe
+ich das versäumt und es in §115 zugegeben. Hier zum ersten Mal ausgeführt.
+
+### Die beiden Quellen sind nicht annähernd deckungsgleich
+
+```
+  QUELLE 1  docs/STATUS.md        Baelle bei mir, Zustandsfilter negativ   39
+              31x ohne Zustand (Befundbloecke) · 4x ENTWURF · 3x BEFUND · 1x VORLAGE
+
+  QUELLE 2  docs/auftraege/aktiv  erstes ballbesitz nennt mich, nicht terminal  73
+              56x ohne Zustand · 14x CODE_FERTIG · 2x ENTWURF · 1x Vorlagen-Platzhalter
+```
+
+**73 gegen 39.** Und darunter eine Klasse, die Quelle 1 kein einziges Mal gezeigt hat: **14 Blätter
+mit `CODE_FERTIG` und dem Ball bei mir**, während die Statuswahrheit genau *einen* CODE_FERTIG kennt
+(A-37, Ball beim Integrator). Nach der Wache wäre das 14-mal Meldepflichten prüfen und Ballwechsel
+bestätigen — also erhebliche Arbeit, die ich seit dem 16.08. nicht gesehen hätte.
+
+### Aufgelöst: es ist keine
+
+Jede der vierzehn gegen die Statuswahrheit gehalten, Kennung **aus dem Blatt** gelesen:
+
+```
+  14 von 14   BETRIEBSBESTAETIGT
+   0 von 14   offen
+```
+
+Drei davon (`A-13`, `A-14`, `A-15`) stehen direkt so in der Tafel. Elf sind die
+**„-beschreiben"-Familie** (`W-01-fang-beschreiben.md` und Geschwister) — die Aufträge, aus denen die
+Werkbank entstanden ist. Die Statuswahrheit führt sie unter der Form `W-xx/1` („Raster und Fang",
+„Wand zeichnen"), alle betriebsbestätigt. Wo die SHAs abweichen, nennt die Tafel eine spätere Runde
+(`W-01/1` „Nachbesserung Runde 2", `W-02/1` „Runde 2`), das Blatt den ersten Bau.
+
+**Es ist dieselbe A-20-Drift wie in §115**, nur auf anderen Feldern: dort blieb `dor_beleg` auf
+„steht aus" stehen, hier bleiben `zustand: CODE_FERTIG` und `ballbesitz: plan-pruefer` stehen,
+während die Arbeit längst abgenommen ist. Die Statuswahrheit bewegt sich, das Blattfeld nicht.
+
+### Ein Nebenbefund, der §117 stützt
+
+Die elf „-beschreiben"-Blätter tragen ein **`commit:`-Feld** mit dem Bau-SHA — `W-01: 04f78b73`,
+`W-13: a62ae7c6`, `W-11: 0299e5ca`, und drei davon stehen wörtlich in der zugehörigen Tafelzeile.
+**Genau dieses Feld fehlt A-37** (§117): dort steht der Bau-SHA nur in einem Fließtextsatz. Die
+ältere Familie macht es richtig; der jüngste CODE_FERTIG-Auftrag nicht.
+
+### Drei eigene Formfehler in einer einzigen Runde
+
+Alle drei vor der Meldung gefangen, alle drei dieselbe Ursache in drei Gestalten:
+
+```
+  §115   Kennung aus Dateiname  W-03-1   Statuswahrheit fuehrt  W-03/1    -> "11 ohne Datensatz"
+  hier   Kennung aus Dateiname  W-13     Statuswahrheit fuehrt  W-13/1    -> "11 ohne Datensatz"
+  hier   Kennung aus Dateiname  W-07     das Blatt heisst       W-07N     -> "1 nirgends"
+```
+
+Jedes Mal hätte ich einen Rückstand gemeldet, den es nicht gibt. **Die Lehre ist eindeutig und ab
+sofort verbindlich für mich: die Kennung steht IM Blatt, im Feld `auftrag:` — sie wird nie aus dem
+Dateinamen abgeleitet.** `W-07N` trägt sie auf Zeile 4. Mit der richtigen Quelle gemessen: 14 von 14
+sauber, null Fehlalarm.
+
+### Ergebnis
+
+**Kein verdeckter Rückstand — zum zweiten Mal gemessen und zum zweiten Mal null.** §115 hat es für die
+36 `dor_beleg` gezeigt, §118 für die 14 `CODE_FERTIG`. Was die zweite Quelle liefert, sind keine
+liegengebliebenen Aufträge, sondern **stehengebliebene Felder**.
+
+Damit ist auch die P-03-Sorge abschließend beantwortet: Die zweite Quelle **muss** mitgeführt werden —
+nicht weil dort Arbeit liegt, sondern weil man sonst nicht sieht, wie weit die Blätter von der
+Statuswahrheit abgekommen sind. **Ball beim Planner** für die Felder (14 hier, 31 aus §115). Beim
+Integrator liegt nichts Neues.
