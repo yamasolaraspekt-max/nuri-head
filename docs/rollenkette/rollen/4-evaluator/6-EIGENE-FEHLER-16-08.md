@@ -396,3 +396,104 @@ verlangt hat.
 | A-41-Messtischzeilen geprüft | **12** — 10 trugen eine gefahrene Messung, 2 nicht |
 | A-41-Kanten K1–K7, jetzt je mit Probe belegt | **7 von 7** |
 | Konstruktionsfehler in den Nachhol-Proben, offengelegt | **3** (leeres `sed`-Argument · `revert -q` · erfundene Kennungen) |
+
+---
+
+# NACHTRAG 18.08. — die A-33- und W-17/1-Messtische durchgefahren
+
+Nach E9/E10 lag die Frage offen, ob „es steht da statt es wirkt" auch meine beiden anderen
+Abnahmen betrifft. **Beide gefahren: A-33 hält 7/7, W-17/1 hält 8/8.** Der Ertrag liegt woanders —
+in einem **stillen Werkzeugfehler**, den die Prüfung selbst zutage gefördert hat.
+
+## E11 · Die Shell frisst den Pfad, und git meldet keinen Fehler — BEHOBEN
+
+Beim Messen der A-33-Fangprobe fragte ich das Skript an einem Ref ab:
+
+```text
+git show "$R:scripts/a33-kennungen-nachziehen.sh"
+```
+
+**Die Shell ist zsh, und dort ist `:s` ein History-Modifier (Substitute).** `$R:scripts/…` wird
+deshalb **nicht** als git-Pfad gelesen — nur `$R` kommt durch, und git zeigt gehorsam **das
+Commit**. Kein Fehler, kein leerer Output: ein Commit-Diff, der aussieht wie Dateiinhalt.
+
+**Der Beleg, beide Formen nebeneinander:**
+
+```text
+git cat-file -t "$R:scripts/…"     →  commit
+git cat-file -t "${R}:scripts/…"   →  blob
+```
+
+**Wirkung, um ein Haar:** meine erste Zählung meldete *„W-21 → 4 Nennungen im Skript"* — das waren
+**Diff-Zeilen aus dem Commit** (`+| W-21L | DECISION_BLOCKED | …`), und `P-02`/`M-02` standen bei
+**0**, was nach einer unvollständigen Fangprobe ausgesehen hätte. **Ich war einen Schritt davon
+entfernt, einen Fehler zu melden, den es nicht gibt.** Aufgefallen ist es nur, weil der Lauf danach
+mit `line 1: commit: command not found` abbrach — der Aufbau hat sich selbst verraten.
+
+**Warum es nie vorher auffiel:** `$R:docs/…` funktioniert, weil `:d` **kein** zsh-Modifier ist.
+Nur `:s` (scripts) trifft. Alle bisherigen Messungen liefen über `docs/` oder über einen
+**literalen** SHA (`f19557c8:scripts/…`) — dort greift die Expansion gar nicht erst.
+
+**Behebung:** `${R}:pfad` mit Klammern, ausnahmslos. Der Doppelpunkt steht dann außerhalb der
+Expansion und ist gewöhnlicher Text.
+
+## A-33 nachgeprüft — 7/7, und ein Verdacht gegen mich selbst WIDERLEGT
+
+| Kriterium | verlangt | mein Beleg misst das? |
+|---|---|---|
+| A-33-1 | Fangprobe deckt **drei benannte Fälle** ab | **ja** — Z.91–93 tragen sie wörtlich, `M-02` mit `false` und Begründung |
+| A-33-2 | vier Kennungen im Diff nicht vorkommend | **ja** — 0 Treffer, Präfixfilter deckt `/1`-Formen mit ab |
+| A-33-3 | Statusfeld je Zeile zeichengleich | **ja** — elfmal einzeln |
+| A-33-4 | Klartext wortgleich | **ja, strenger als verlangt** — zeichengenau **mit Längen**, 313/313 … alle elf |
+| A-33-5 | a26 vorher **und** nachher, der Unterschied ist der Nachweis | **ja** — nach Korrektur |
+| A-33-6 | Zeilenzahl vorher = nachher | **ja** — 19521 → 19521, 0 gelöscht |
+| A-33-7 | vier Verzeichnis-Zähler, genau eine Datei unter `scripts/` | **ja** — 0·0·0·1 |
+
+**Der Verdacht, mit dem ich hineinging, war A-33-5:** dort steht in Runde 1 als Beleg
+*„a26 am COMMIT: 0 Zeilen, exit 0"* — und genau dieses `exit 0` habe ich gestern (E10) als
+beweislos entlarvt, weil a26 seine Kennungen aus dem **Diff** zieht und bei sauberem Baum gar
+nichts prüft.
+
+**Widerlegt — und zwar von mir selbst, damals.** Der Messtisch trägt die Korrektur im Wortlaut:
+
+> *„Ich hatte A-33-5 als 'a26 läuft ohne neue Meldung' gemessen und mit 0 Zeilen/exit 0 grün
+> gegeben. **Das misst die STILLE, nicht die WIRKUNG.**"*
+
+Nachgeholt wurde sie mit einer echten Wirkungsmessung — **paarbar vorher 0 von 11, nachher 11 von
+11**, je Kennung einzeln, plus dem Beleg, dass a26 danach wirklich *vergleicht*: die erstmals
+erzeugte Meldung `W-01/1 BALL: Tafel *–* <-> Datensatz *—*` (U+2013 gegen U+2014, je Zeichen
+gemessen). **Ich hätte fast einen bereits behobenen Fehler ein zweites Mal gemeldet.**
+
+## W-17/1 nachgeprüft — 8/8, eine Zeile belegte mit Zitat statt Zählung
+
+Sieben der acht tragen eigene Messungen (rekursiv gezählt, Dateien selbst geöffnet mit
+Zeilenabgleich 68/68 · 73/73, `255 Zeilen` und `12 public function test` nachgezählt, beide Stände
+aus git geholt, fünf Verzeichnis-Zähler, Suite 1763/0 und `tsc exit 0`).
+
+**W-17-1-6 nicht.** Der Beleg lautete: *„`3-FORMELN` **sagt es ausdrücklich** und belegt es mit
+`Math./Trigonometrie 0` je Datei."* Das ist **das geprüfte Blatt als Zeuge für sich selbst** —
+dieselbe Klasse wie A-41-7.
+
+**Jetzt selbst gezählt, am Bau-Stand, über die vollen Pfade:**
+
+```text
+app/Domain/Hausplaner/Actions/SpeichereHausplanerDokument.php     Math./Trig 0   (72 Z.)
+app/Domain/Hausplaner/Actions/StelleSnapshotWieder.php            Math./Trig 0   (82 Z.)
+resources/planner/hausplaner/app/dashboard/speicherAnzeige.ts     Math./Trig 0   (67 Z.)
+```
+
+**Rot-Probe, damit die drei Nullen eine Messung sind und kein blindes Muster** — dasselbe Muster
+auf Dateien, die rechnen: `dachAusschnitt.test.ts` **17**, `dachAufbauten.test.ts` **1**.
+
+**Ergebnis unverändert grün, Beleg jetzt gemessen statt zitiert.**
+
+## Zählung nach diesem Nachtrag
+
+| | |
+|---|---|
+| Abnahmen vollständig nachgeprüft | **3** (A-41 12/12 · A-33 7/7 · W-17/1 8/8) |
+| Kriterien, deren Beleg zitierte statt maß | **4** (A-41-7, A-41-8, A-41-9, W-17-1-6) — alle nachgemessen, alle grün geblieben |
+| eigene Fehler insgesamt behoben | **7** (E1–E4, E7, E8, E11) |
+| durch Messung widerlegt | **2** (E5 · A-33-5-Verdacht — letzterer war bereits selbst korrigiert) |
+| gemeldet, nicht in meiner Rolle behebbar | **2** (§6-Test-DB · Ball-Drift im Bestand ohne Prüfer) |
+| Fehler im Ergebnis meiner Voten | **0** von 71 |
