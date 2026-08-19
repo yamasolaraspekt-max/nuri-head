@@ -8108,6 +8108,12 @@ Figur aus §109 (`3ad920b1` berichtigte sieben überholte Texte und erzeugte den
 
 ### Fund 3 — in eigener Sache: mein erklärter Messstand trug keine einzige der sechs Zahlen
 
+> **ZURÜCKGENOMMEN 40 Minuten später — siehe §113.** Der Anker `32b8bcee` ist der **Elter** des
+> Schreib-Commits und formal einwandfrei; die Runde zählte über **alle Zweige**, ich habe sie mit
+> `basis..HEAD` nachgerechnet. `git rev-list --count --all --until='16.08. 21:05:59' ^basis`
+> reproduziert **alle sechs Zahlen exakt**. Der Abschnitt bleibt stehen, weil er zitiert ist —
+> gültig ist §113. **Die Zahlen der alten Runde sind richtig.**
+
 Die gleichmäßige **+244** über sechs verschiedene Basis-SHAs sagt, dass beide Messungen an je
 einem festen Stand genommen wurden und diese Stände 244 Commits auseinanderliegen. Die letzte
 Alterungsrunde erklärt ihren Stand ausdrücklich: *„geschrieben 21:08, Messstand `32b8bcee`"*.
@@ -8209,5 +8215,125 @@ Vorwurf aus Fund 1, angewandt auf mich selbst — der Unterschied ist nur, dass 
 
 *Nachgetragen in `docs/BILANZ-plan-pruefer-eigene-fehler.md` (Bestandsaufnahme, keine
 Rückdatierung — die neun Einträge bleiben dort, wo sie geschrieben wurden, und werden benannt).*
+
+**Kein Zustandsfeld angefasst, kein Bau.**
+
+## §113 — Posten (e) an meinem eigenen jüngsten Befund: Fehler 30 ist zurückgenommen. Der Anker war richtig, die Zählweise war eine andere — und der Beweis stand 19 Runden lang bereit
+
+**Stand:** HEAD `8ad16cfa`, getrackt 0, **nicht gepusht**. Gemessen 19.08. 14:0x.
+**Gegenstand: mein eigener Befund aus §112, 40 Minuten alt.** Posten (e) verlangt, den eigenen
+zugestellten Punkten nachzugehen; der jüngste ist Fehler 30, und er hat die Nachprüfung nicht
+überstanden.
+
+### Die Sweep-Frage: ist Fehler 30 ein Einzelfall oder eine Klasse?
+
+Ein falscher Messstand wäre schlimm, wenn er die Regel wäre. Also alle Erklärungen im Blatt
+gesammelt und einzeln geprüft — **19 verschiedene Stände in 20 Nennungen** — mit dem strengen Test:
+*ist der erklärte Stand Vorfahr des Commits, der die Erklärung schrieb?*
+
+```
+für jeden Stand M:  C = git log -S"Messstand M" -- <blatt> | tail -1
+                    git merge-base --is-ancestor M C
+```
+
+| Ergebnis | |
+|---|---|
+| Stände geprüft | **19** |
+| Vorfahr des eigenen Schreib-Commits | **19 von 19** |
+| Abstand Stand → Schreibung | durchweg **2–5 Minuten** |
+| Kette | jeder Stand ist die Schreibung der Vorrunde (`001abb9e`→`83635ca7`→`339bc8d3`→…) |
+
+**Keine Klasse. Die Ankerführung ist über 19 Runden lückenlos.** Und der angeblich schuldige Stand
+ist der sauberste von allen:
+
+```
+git log -1 --format='%h %cd Elter: %p' dc6abbd1
+  -> dc6abbd1  16.08. 21:08  Elter: 32b8bcee
+```
+
+**`32b8bcee` ist nicht irgendein Stand — es ist der Elter des Schreib-Commits.** Die Runde erklärt
+„geschrieben 21:08", und `dc6abbd1` trägt als Commit-Zeit exakt 21:08. Genauer geht ein Anker nicht.
+
+### Dann musste die andere Seite falsch sein
+
+Wenn der Anker stimmt und die Zahlen nicht dazu passen, ist entweder die Datei später geändert
+worden oder **meine Nachrechnung benutzt ein anderes Verfahren**. Beides ist prüfbar.
+
+**Datei später geändert? Nein.** Die Tabelle in `dc6abbd1` ist Zeichen für Zeichen dieselbe wie
+heute — 777 stand schon um 21:08 darin, und der Abschnitt wurde bis zu meinem §112 nie wieder
+angefasst (`git log -S'2812'` findet genau zwei Commits: `dc6abbd1` und `8ad16cfa`).
+
+**Und damit fällt meine eigene Erklärung aus §112.** Ich hatte behauptet, die Zahlen seien an
+`bea33236` (21:29) gemessen. Von den 36 Commits zwischen den beiden Ständen sind **21 nach 21:08
+autorisiert** — sie existierten zur Schreibzeit in keinem Baum der Welt. Meine Erklärung war
+nicht nur unbelegt, sie war **unmöglich**, und ich habe sie geschrieben, ohne diese eine
+Zeitprüfung zu machen.
+
+### Die Auflösung: Zählweite, nicht Anker
+
+| Verfahren am Stand 21:05 | A-37 | A-38 | A-39 | A-40 | A-42 | W-21L |
+|---|---|---|---|---|---|---|
+| `basis..HEAD` *(mein §112)* | 741 | 703 | 601 | 601 | 529 | 1837 |
+| `--all ^basis` *(alle Zweige)* | **777** | **739** | **637** | **637** | **565** | **1873** |
+| **veröffentlicht** | 777 | 739 | 637 | 637 | 565 | 1873 |
+
+```
+git rev-list --count --all --until='2026-08-16 21:05:59' ^<basis>
+```
+
+**Sechs von sechs, exakt, an der Sekunde des erklärten Standes.** Die alte Runde zählte, was in
+**allen** Rollenzweigen seit dem Schnitt entstanden ist; ich habe nachgerechnet, was auf dem
+Integrationszweig angekommen ist. Beides ist eine sinnvolle Frage — es sind zwei verschiedene.
+Die Differenz von 36 ist nichts anderes als der Rückstau des Integrators: Arbeit, die getan, aber
+noch nicht zurückgeführt war.
+
+### Was das für §112 heißt
+
+- **Fund 3 ist zurückgenommen.** Der Abschnitt bleibt mit Rücknahme-Marke stehen (Hausregel: nicht
+  löschen, danebenstellen), gültig ist dieser hier. **Die sechs Zahlen der alten Runde sind
+  richtig.**
+- **Fund 4 bleibt unberührt** — dass die Bilanz seit `32b8bcee` stillsteht und die Fehler 21–29
+  außerhalb von ihr verzeichnet sind, ist unabhängig gemessen und wird von dieser Rücknahme nicht
+  berührt.
+- **Fund 1 und Fund 2 bleiben unberührt** — Statuswahrheit und A-37-Tafelzeile sind an anderen
+  Größen gemessen.
+- Die einzige echte Restaussage aus Fund 3: **die alte Runde nennt ihre Zählweite nicht.** Wer sie
+  nachrechnet, greift zur naheliegenden Form und bekommt 741 statt 777. Das ist ein Mangel an der
+  Angabe, kein Fehler an der Messung — und die Abhilfe ist ein Wort, nicht eine Berichtigung:
+  **der Befehl gehört neben die Zahl.** Genau das verlangt B5 („Belegbefehl"), und genau das habe
+  ich in §112 selbst nicht getan, sonst wäre der Unterschied sofort sichtbar gewesen.
+
+### Fehler 30, richtig benannt
+
+**Nicht** „falscher Anker" — sondern: **ein Fehlbefund gegen die eigene frühere Runde, aus einer
+Zählweite, die ich nicht mit ihr abgeglichen habe.** Die Kette meines Irrtums, Schritt für Schritt:
+
+1. Zwei Gleichmaße widersprachen sich (+244 überall gegen 280 auf HEAD). **Richtig beobachtet.**
+2. Ich suchte den Stand, der 244 erklärt, fand `bea33236` und hielt die Übereinstimmung 6/6 für
+   einen Beweis. **Sie war einer — nur nicht für die Behauptung, die ich daraus machte.**
+3. Ich habe **nicht** geprüft, ob dieser Stand zur Schreibzeit existieren konnte. Eine einzige
+   Zeitabfrage hätte den Befund sofort erledigt.
+4. Ich habe **nicht** geprüft, ob mein eigener Zählbefehl derselbe ist wie ihrer. Er stand nicht
+   dabei — und statt das als Lücke zu melden, habe ich meinen eingesetzt und das Ergebnis als
+   ihres behandelt.
+
+**Das ist derselbe Griff, den ich in §110 und §111 an anderen gemessen habe:** die richtige Messung
+an der falschen Eingabe. Dritter Fall in vier Runden, diesmal ohne fremde Vorlage — die falsche
+Eingabe war meine eigene Annahme darüber, wie die Vorrunde gezählt hat.
+
+**Gefangen durch Posten (e) selbst.** Der Sweep über 19 Stände sollte die Klasse belegen und hat
+sie widerlegt; die 19 sauberen Anker waren das Argument, das mich zwang, die andere Seite zu
+prüfen. Ein Befund, der nur *einen* Fall trifft und dessen 18 Geschwister sauber sind, ist zuerst
+ein Verdacht gegen die Messung — das ist die Lehre aus Fehler 19, und sie hat hier zum zweiten Mal
+getragen.
+
+**Gefangen vor dem Push.** `8ad16cfa` liegt lokal, `fork` kennt ihn nicht. Der Fehlbefund hat das
+Gerät nicht verlassen.
+
+### Ball
+
+**Bei mir, erledigt** — Rücknahme steht in §112 und in der Bilanz.
+**Bei Yama unverändert** die 64 Stunden Statuswahrheit (§112 Fund 1), **beim Integrator**
+unverändert die A-37-Tafelzeile (§112 Fund 2). Beide sind von dieser Rücknahme nicht berührt.
 
 **Kein Zustandsfeld angefasst, kein Bau.**

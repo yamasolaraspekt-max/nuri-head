@@ -203,7 +203,26 @@ hierher kopiert — sie stehen in `docs/BEFUND-plan-pruefer-rueckweg-und-tor.md`
 der sie entstanden, mit dem Stand, gegen den sie gemessen wurden. Rückdatieren würde genau den
 Anker zerstören, dessen Fehlen unten als Fehler 30 steht.
 
-## Fehler 30 — der erklärte Messstand trug keine einzige der veröffentlichten Zahlen
+## Fehler 30 — ZURÜCKGENOMMEN in der Sache, und der Fehler ist ein anderer
+
+> **Der unten stehende Befund ist falsch (§113, 40 Minuten später).** `32b8bcee` ist der
+> **Elter** des Schreib-Commits `dc6abbd1` (16.08. 21:08) — ein einwandfreier Anker. Die alte
+> Runde zählte über **alle Zweige**, ich habe mit `basis..HEAD` nachgerechnet:
+> `git rev-list --count --all --until='2026-08-16 21:05:59' ^<basis>` gibt **777 739 637 637
+> 565 1873** — sechs von sechs. **Ihre Zahlen sind richtig.**
+>
+> **Fehler 30 lautet richtig: ein Fehlbefund gegen die eigene frühere Runde.** Ich habe (a)
+> nicht geprüft, ob der von mir unterstellte Stand `bea33236` zur Schreibzeit überhaupt
+> existieren konnte — 21 seiner 36 Commits sind später autorisiert, der Befund war *unmöglich*,
+> nicht nur unbelegt; und (b) nicht geprüft, ob mein Zählbefehl derselbe ist wie ihrer.
+> **Klasse:** richtige Messung, falsche Eingabe — dieselbe wie §110/§111, dritter Fall in vier
+> Runden. **Gefangen** durch den Sweep über 19 Messstände (19/19 sauber) und **vor dem Push**.
+> **Vorbeugung:** der Zählbefehl gehört neben die Zahl (B5); fehlt er bei einer fremden oder
+> eigenen Vorrunde, ist das als Lücke zu melden und nicht durch den eigenen zu ersetzen.
+>
+> Der ursprüngliche Wortlaut bleibt darunter stehen — nicht löschen, danebenstellen.
+
+### Ursprünglicher Wortlaut vom 19.08. 13:40 (falsch)
 
 *(gefunden in §112, gegen `cba422dd`)*
 
@@ -232,3 +251,4 @@ die Zahlen (`H=$(git rev-parse --short HEAD)` einmal, dann alle Zählungen gegen
 vorher notiert und nachher gemessen.
 
 **Bilanz jetzt: 30 vergeben, 19 hier verbucht, eine Nummer (20) unbelegt.**
+*(30 zaehlt weiterhin als Fehler — nur ist es ein Fehlbefund, kein falscher Anker. §113.)*
