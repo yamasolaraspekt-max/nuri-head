@@ -117,8 +117,10 @@ test('ERGEBNIS der Stufe: die Zahlen stehen fest und sind hier festgehalten', ()
   // ist gewollt: die Zahl ist das Produkt der Stufe, sie darf sich nicht unbemerkt verschieben.
   // Wer eine Marke bewusst ändert, zieht diese Zahl mit und sagt es im Commit.
   assert.deepEqual(markenZaehlung(), {
-    deckt: 41,
-    fehlt: 21,
+    // A-35 (`ec12e9b3`, 15.08.) hat `trimmen` mit `MOVE_NODE` gebaut — kein eigener
+    // Modellbefehl nötig, Marke `fehlt` -> `deckt`. deckt 41 -> 42, fehlt 21 -> 20.
+    deckt: 42,
+    fehlt: 20,
     // Z-05-N1: `kontur` liefert Punkte und schreibt nichts — ohne-modell 42 -> 43.
     'ohne-modell': 43,
     stillgelegt: 6,

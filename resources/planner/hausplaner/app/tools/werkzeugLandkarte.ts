@@ -106,7 +106,14 @@ export const WERKZEUG_LANDKARTE: readonly LandkartenEintrag[] = [
   { werkzeugId: 'verteilen', marke: 'fehlt', begruendung: 'Braucht gleichmäßige Verteilung mehrerer Knoten entlang einer Achse — dieselbe Lücke wie `ausrichten`: die Zielposition je Knoten ist zu rechnen, nicht zu übergeben.' },
   { werkzeugId: 'vertikal-spiegeln', marke: 'deckt', begruendung: 'UPDATE_NODE' },
   { werkzeugId: 'teilen', marke: 'fehlt', begruendung: 'Eine Wand an einem Punkt in zwei zu teilen heißt: einen Knoten ändern UND einen anlegen, in EINEM umkehrbaren Schritt. Zwei getrennte Befehle wären zwei Undo-Schritte.' },
-  { werkzeugId: 'trimmen', marke: 'fehlt', begruendung: 'Braucht Schnittpunktrechnung zweier Wände und ein Kürzen auf den Schnittpunkt — `UPDATE_NODE` könnte das Ergebnis setzen, aber der Befehl, der es rechnet, fehlt.' },
+  // **NACHGEZOGEN 19.08. — die Marke war `fehlt` und ist durch den Bau widerlegt.**
+  // A-35 (`ec12e9b3`, 15.08. 11:05) hat `trimmen` gebaut, und `app/tools/trimmen.ts:221` gibt
+  // `MOVE_NODE` zurück — einen VORHANDENEN Befehl. Die Schnittrechnung lag seit A-32 in
+  // `geradenSchnitt` (F-004); ein eigener Modellbefehl war nie nötig. Die alte Begründung
+  // tippte auf `UPDATE_NODE` — auch das ist widerlegt. *Die Begründung trägt hier NUR den
+  // Befehlsnamen, weil K-03 sie gegen `VORHANDENE_BEFEHLE` prüft; die Herleitung gehört in
+  // diesen Kommentar, nicht in das Feld.*
+  { werkzeugId: 'trimmen', marke: 'deckt', begruendung: 'MOVE_NODE' },
   { werkzeugId: 'verbinden', marke: 'fehlt', begruendung: 'Zwei Wände zu einer zu verschmelzen heißt: einen ändern, einen entfernen, in EINEM Schritt. Dieselbe Klasse wie `teilen`.' },
   { werkzeugId: 'verlaengern', marke: 'fehlt', begruendung: 'Wie `trimmen`, andere Richtung — Schnittpunkt rechnen und den Endpunkt dorthin ziehen.' },
   // A-29 (13.08.2026) — BERICHTIGT. Der alte Wortlaut bleibt hier lesbar und wird NICHT gelöscht:
