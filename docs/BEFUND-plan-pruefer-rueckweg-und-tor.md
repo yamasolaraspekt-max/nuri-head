@@ -8218,6 +8218,102 @@ Rückdatierung — die neun Einträge bleiben dort, wo sie geschrieben wurden, u
 
 **Kein Zustandsfeld angefasst, kein Bau.**
 
+## §113 — P-03 nachgemessen: kein verdeckter Rückstand, aber 36 Blätter, von denen keines stimmt
+
+Stand cba422dd. P-03 ist mein eigener Selbstbefund vom 16.08. 18:27: meine Ballortung liest nur
+`docs/STATUS.md`, während die Auftragsblätter eigene Ballfelder tragen. Er schließt mit einer Zusage:
+*„Die Ballortung braucht eine zweite Quelle: die Blätter. Ich führe das ab sofort mit."*
+
+**Diese Zusage habe ich nicht gehalten.** In §106–§111 lief die Ballortung ausschließlich auf der
+Statuswahrheit. Blätter kamen nur vor, wenn eine Kennung ohnehin in meiner Bahn lag (§108) — nie als
+*Quelle* der Ballortung. Zwei Tage, sechs Runden, die eigene Regel nicht angewandt.
+
+### Die Frage, die P-03 offenließ, ist beantwortet
+
+```
+  Blaetter in docs/auftraege/aktiv/            89   (79 nennen 'plan-pruefer')
+  erstes dor_beleg = "steht aus — plan-pruefer" 36
+  davon MIT Datensatz (zustand) in STATUS.md    36
+  davon OHNE                                     0
+```
+
+**Es gibt keinen verdeckten Rückstand.** Kein einziger der 36 ist ein unbeaufsichtigter Auftrag. Die
+Sorge, ich könnte 36 Prüfungen liegen lassen und stattdessen Vorratsprüfung fahren, ist ausgeräumt —
+gemessen, nicht beruhigt.
+
+### Was stattdessen dasteht
+
+| Statuswahrheit | Blatt sagt „steht aus" | Zahl |
+|---|---|---|
+| `BETRIEBSBESTAETIGT`, mit echtem DoR-Beleg | **widerspricht** | **30** |
+| `ZURUECKGEZOGEN` (A-36) | **widerspricht** | **1** |
+| `ENTWURF` (A-39, A-40, A-42) | stimmt überein | 3 |
+| `BETRIEBSBESTAETIGT`, dor_beleg auch „steht aus" (A-41, W-17/1) | stimmt überein | 2 |
+
+Die 30 sind der Kern. Ihre Statuswahrheit trägt fertige Voten — `"ERTEILT 13.08. plan-pruefer, jede
+Zahl und …"` (A-29), `"NICHT erteilt 13.08. plan-pruefer, gemessen …"` (A-30), `"plan-pruefer 12.08.,
+FUENFTE Fassung"` (A-22) — und ihr Blatt behauptet weiterhin, die DoR stehe aus. Diese Aufträge sind
+durch die ganze Kette gelaufen und **betriebsbestätigt**; das Blattfeld ist auf dem Stand von vor der
+Prüfung stehengeblieben.
+
+**Übereinstimmung ist hier nicht Richtigkeit.** Von den fünf Übereinstimmern sind A-39/A-40/A-42
+genau die, für die §108 zeigt, dass **beide** Seiten überholt sind — die Voten liegen vor
+(ERTEILT / NICHT ERTEILT mit Restpunkten), nur in keinem Feld. Und A-41 und W-17/1 sind in sich
+widersprüchlich: betriebsbestätigt, und die DoR steht laut beiden Quellen noch aus.
+
+Damit ist **keiner der 36 sauber**: 31 widersprechen der Statuswahrheit, 3 sind beidseitig veraltet,
+2 sind in sich unstimmig.
+
+### Einordnung
+
+§108 hat diesen Fehler an vier Feldern gezeigt. P-03 hat vermutet, dass er größer ist. Gemessen ist
+er **31-fach** — dieselbe A-20-Drift, nur auf der Seite, die meine Wache nicht liest. Die Richtung ist
+immer dieselbe: die Statuswahrheit bewegt sich, das Blattfeld bleibt auf dem Stand seiner Entstehung.
+
+Der Schaden ist nicht theoretisch. Wer vor einer Prüfung ins Blatt sieht — und das ist der natürliche
+Ort — liest bei 30 abgenommenen Aufträgen „DoR steht aus" und fordert eine Prüfung an, die längst
+gelaufen und betriebsbestätigt ist.
+
+**Ball beim Integrator** für die Felder (er hält als einziger Schreibrecht auf die Statuswahrheit;
+die Blätter liegen beim Planner). **Ball beim Planner** für die 31 Blattfelder. **Bei mir** bleibt
+die Methodenpflicht aus P-03, ab dieser Runde tatsächlich mitgeführt.
+
+### Ein Fehlfund, vor der Meldung abgefangen
+
+Mein erster Durchgang meldete „11 Blätter ohne Datensatz". Ursache: ich bildete die Kennung aus dem
+Dateinamen (`W-03-1`), die Statuswahrheit führt aber `W-03/1`. An einem bekannten Treffer geprüft
+(`W-12/1` vorhanden: 1, `W-12-1`: 0) — der Fund löste sich vollständig auf, 36 von 36 haben einen
+Datensatz. Dieselbe Kennungsform hat mich schon einmal erwischt (W-21-1 gegen W-21/1). Sie gehört zur
+Familie §101/§110/§111: richtig gemessen, falsche Eingabe.
+
+### Nachtrag in eigener Sache: dieser Abschnitt hieß zuerst §112
+
+Ich habe den Messstand um **13:13** fixiert und um **15:46** committet — zweieinhalb Stunden dazwischen,
+**ohne ihn neu zu messen**. In dieser Lücke, um **13:40:34**, hat eine zweite Plan-Prüfer-Instanz
+`8ad16cfa` committet und die Nummer §112 vergeben (Posten (d), Alterung). Ich habe sie ein zweites Mal
+vergeben; die Datei trug kurzzeitig zwei Abschnitte §112. Hier auf §113 berichtigt, weil meiner der
+spätere ist.
+
+Zwei Dinge dazu, beide unangenehm und beide meine:
+
+1. **Der Stillstand, den ich Yama gemeldet habe, war zum Zeitpunkt der Meldung schon vorbei.** Ich
+   habe 58 h 22 min gemessen — richtig um 13:13 — und daraus einen Zustand beschrieben, der 27 Minuten
+   später endete. Die Messung war wahr, die Aussage war es beim Aussprechen nicht mehr. Das ist
+   dieselbe Zeitachse, die ich in §109/§110/§111 an fremden Blättern gemessen habe, jetzt an meiner
+   eigenen Meldung.
+2. **Die Gegenprobe kam nach dem Commit statt vor ihm.** Genau dafür steht sie in der Wache. Hätte ich
+   vor dem Anfügen neu gemessen, wäre die Dublette nie entstanden.
+
+Was *nicht* betroffen ist, habe ich geprüft: `docs/STATUS.md` und alle 89 Blätter unter
+`docs/auftraege/aktiv/` sind zwischen `cba422dd` und `8ad16cfa` **byte-identisch** (der fremde Commit
+fasst nur meine Befunddatei und die Bilanz an). Die 36/31/5-Zahlen dieses Abschnitts stehen also
+unverändert. Und inhaltlich kollidieren die beiden Abschnitte nicht: das fremde §112 nennt P-03 kein
+einziges Mal und `dor_beleg` nirgends.
+
+**Zweite Instanz:** dass zwei Plan-Prüfer gleichzeitig in dieselbe Datei schreiben, ist der Fall, den
+die Nebenläufigkeitsregel meint. Ich melde es, repariere daran nichts weiter und stage weiterhin nur
+meine eigene Datei.
+
 ## §113 — Posten (e) an meinem eigenen jüngsten Befund: Fehler 30 ist zurückgenommen. Der Anker war richtig, die Zählweise war eine andere — und der Beweis stand 19 Runden lang bereit
 
 **Stand:** HEAD `8ad16cfa`, getrackt 0, **nicht gepusht**. Gemessen 19.08. 14:0x.
