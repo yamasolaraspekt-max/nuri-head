@@ -8433,3 +8433,106 @@ Gerät nicht verlassen.
 unverändert die A-37-Tafelzeile (§112 Fund 2). Beide sind von dieser Rücknahme nicht berührt.
 
 **Kein Zustandsfeld angefasst, kein Bau.**
+
+## §114 — P-02 geprüft: vier von fünf Punkten hätten den heutigen Fall nicht verhindert
+
+Messstand 7f93f197 (16:48). P-02 liegt als `VORLAGE` mit Ball bei mir, vorgelegt vom **Planner**
+(`c2de1eec`, 07.08. 09:35). Der Auftrag verlangt die P-01-Linsen — Widerspruchsfreiheit, Prüfbarkeit,
+Kausalität, Plausibilität — **und ausdrücklich die Machtfrage zu Punkt 2**.
+
+Ich habe etwas, das keine frühere Prüfung hatte: **einen Realfall von heute in meiner eigenen Rolle**,
+vier Stunden alt und in §113 vermessen. Damit ist Kausalität messbar statt begründbar.
+
+### Der Prüffall
+
+```
+  8ad16cfa  19.08 13:40:34  zweite plan-pruefer-Instanz  ->  "## §112" in die Befunddatei
+  8ffda0fd  19.08 15:46:00  ich                          ->  "## §112" in dieselbe Datei
+```
+
+Zwei Abschnitte gleicher Nummer, verschiedener Inhalt, eine Datei. Schaden gemessen, in §113 behoben.
+
+### Deckungsprobe: welcher der fünf Punkte hätte das verhindert?
+
+| | Punkt | greift heute? |
+|---|---|---|
+| 1 | CLAIM GILT | **nein** — Claims binden an Aufträge, nicht an Dateien |
+| 2 | TRENNUNG (Entscheidungen · Widerspruchsprüfung · Tafel) | **nein** — die Kollision war keins von dreien |
+| 3 | OPERAND STATT UMSCHNITT | **nein** — keine Entscheidung im Spiel |
+| 4 | VERLINKEN STATT NACHBAUEN | **nein** — kein fremder Befund nachgebaut |
+| 5 | FRISCH MESSEN | **ja** — exakt der gebrochene Punkt |
+
+Der Claim-Befund ist gemessen, nicht angenommen: **129 `claim*`-Felder in der Statuswahrheit, davon
+0, die an eine Datei binden** (`claim`, `claim_abnahme` 71, `claim_bau`, `claim_dor`, `claim_release`,
+`claim_messlauf`, `claim_spec`, `claim_umschnitt` — alle an Kennungen). Ein Claim *kann* eine Datei
+heute nicht schützen.
+
+**R1 — Deckungslücke.** Die Vorlage regelt Blätter, Entscheidungen, Tafel und fremde Befunde. Sie
+regelt **nicht die anhängenden Rollendateien**, in die beide Instanzen derselben Rolle gleichzeitig
+schreiben — und genau dort ist der zweite Realfall gelandet. Der erste (15.08., Release-Prüfer,
+Phantom-Ball, `8a417fe0`) lag noch im geregelten Bereich; dieser nicht mehr.
+
+### Prüfbarkeit: der einzige tragende Punkt ist der einzige ohne Spur
+
+| Punkt | beobachtbarer Auslöser |
+|---|---|
+| 1 | ja — Claim-Feld vorhanden oder nicht |
+| 2 | **halb** — Tafel technisch gesperrt (`rollen-tor.sh:344`), „Entscheidungen" und „Widerspruchsprüfungen" haben keinen Träger, an dem man sie messen könnte |
+| 3 | ja — Ablageort ist Statuswahrheit oder Blatt |
+| 4 | ja — Zitat und Verweis stehen da oder nicht |
+| 5 | **nein** — „vor jedem Schreiben neu messen" hinterlässt keine Spur |
+
+Das ist die unangenehmste Beobachtung dieser Prüfung: **Punkt 5 ist der einzige, der den heutigen
+Fall verhindert hätte, und der einzige, den niemand von außen nachprüfen kann.** Ich habe ihn heute
+gebrochen, obwohl ich ihn als Prüfer vertrete — Messstand 13:13, Commit 15:46, dazwischen nicht neu
+gemessen. Reine Selbstdisziplin ohne Spur trägt nicht; das ist jetzt belegt, nicht vermutet.
+
+### Die Machtfrage — der Verdacht ist begründet, die Ursache ist Mehrdeutigkeit
+
+Punkt 2 bündelt drei Dinge. Heute liegen sie an **drei verschiedenen Stellen**:
+
+```
+  Auftragstafel          integrator   — technisch gesperrt, rollen-tor.sh:344
+  Entscheidungen         Yama / Fach  — CLAUDE.md: nicht still automatisieren
+  Widerspruchspruefung   ohne Traeger — ARBEITSREGELN:24 nennt eine Rangfolge, keine Rolle
+```
+
+Damit hängt alles am Wort „EINE Instanz":
+
+- **Enge Lesart** („je Rolle eine Instanz") — beschreibt den Ist-Zustand, widerspricht nichts, schiebt
+  niemandem etwas zu.
+- **Weite Lesart** („eine Instanz für alle drei") — verschöbe die Tafel weg vom Integrator und die
+  Entscheidung weg von Yama. Das wäre kein Nebenläufigkeitspunkt mehr, sondern ein Eingriff in die
+  A-37-Sperre und in die Fach-Gates.
+
+**Der Machtverdacht des Planners ist also nicht unbegründet — aber er trifft die Formulierung, nicht
+die Absicht.** Drei Wörter lösen ihn auf: *„je Rolle eine Instanz"*. Das ist **R2**.
+
+### Die übrigen Linsen
+
+**Widerspruchsfreiheit:** In der engen Lesart widerspricht kein Punkt dem geltenden Text. In der
+weiten Lesart widerspricht Punkt 2 der Tor-Sperre. Punkte 1, 3, 4, 5 sind widerspruchsfrei.
+
+**Kausalität für die *eigenen* Vorfälle:** Die Vorlage nennt zu jedem Punkt den Vorfall, aus dem er
+stammt — das ist die stärkste Bauform, die ich hier bisher gesehen habe. Für die fünf genannten Fälle
+tragen die Punkte. Der Bruch liegt nicht dort, sondern beim **sechsten** Fall, den es bei der
+Niederschrift noch nicht gab.
+
+**Plausibilität:** 1–4 sind lebbar, weil sie an Feldern hängen, die es gibt. 5 ist lebbar nur, solange
+niemand müde ist. Ich war heute nicht müde, sondern zweieinhalb Stunden beschäftigt — das reicht.
+
+### Votum
+
+**Die Vorlage trägt, mit zwei Restpunkten.** Sie ist aus Vorfällen gebaut statt aus Überlegung, sie
+benennt ausdrücklich, was sie *nicht* vorschlägt, und sie stellt die Machtfrage selbst — das ist der
+Grund, warum die Prüfung sie schärfen statt zurückweisen kann.
+
+- **R1** Deckung auf die anhängenden Rollendateien erweitern, oder ausdrücklich als nicht geregelt
+  benennen. Beleg: 0 von 129 Claim-Feldern binden an eine Datei; der zweite Realfall lag genau dort.
+- **R2** „EINE Instanz" in Punkt 2 auf *„je Rolle eine Instanz"* verengen. Sonst greift der Punkt in
+  `rollen-tor.sh:344` und in die Fach-Gates ein — was er erklärtermaßen nicht will.
+
+Kein Zustandsfeld angefasst. **Ball zurück an den Planner** mit R1 und R2. Die Entscheidung, ob Punkt 5
+eine Spur bekommt (etwa ein Hinweis des Tores, wenn zwischen genanntem Messstand und HEAD Commits
+liegen), ist eine Fachentscheidung und ausdrücklich **nicht** meine — ich melde nur, dass er ohne Spur
+heute nicht getragen hat.
