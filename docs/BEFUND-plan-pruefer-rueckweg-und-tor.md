@@ -8108,11 +8108,11 @@ Figur aus §109 (`3ad920b1` berichtigte sieben überholte Texte und erzeugte den
 
 ### Fund 3 — in eigener Sache: mein erklärter Messstand trug keine einzige der sechs Zahlen
 
-> **ZURÜCKGENOMMEN 40 Minuten später — siehe §113.** Der Anker `32b8bcee` ist der **Elter** des
+> **ZURÜCKGENOMMEN 40 Minuten später — siehe §115.** Der Anker `32b8bcee` ist der **Elter** des
 > Schreib-Commits und formal einwandfrei; die Runde zählte über **alle Zweige**, ich habe sie mit
 > `basis..HEAD` nachgerechnet. `git rev-list --count --all --until='16.08. 21:05:59' ^basis`
 > reproduziert **alle sechs Zahlen exakt**. Der Abschnitt bleibt stehen, weil er zitiert ist —
-> gültig ist §113. **Die Zahlen der alten Runde sind richtig.**
+> gültig ist §115. **Die Zahlen der alten Runde sind richtig.**
 
 Die gleichmäßige **+244** über sechs verschiedene Basis-SHAs sagt, dass beide Messungen an je
 einem festen Stand genommen wurden und diese Stände 244 Commits auseinanderliegen. Die letzte
@@ -8314,7 +8314,13 @@ einziges Mal und `dor_beleg` nirgends.
 die Nebenläufigkeitsregel meint. Ich melde es, repariere daran nichts weiter und stage weiterhin nur
 meine eigene Datei.
 
-## §113 — Posten (e) an meinem eigenen jüngsten Befund: Fehler 30 ist zurückgenommen. Der Anker war richtig, die Zählweise war eine andere — und der Beweis stand 19 Runden lang bereit
+## §115 — Posten (e) an meinem eigenen jüngsten Befund: Fehler 30 ist zurückgenommen. Der Anker war richtig, die Zählweise war eine andere — und der Beweis stand 19 Runden lang bereit
+
+*(Geschrieben als §113 in `736481fe` 15:48. **Umbenannt auf §115** am 19.08. 19:4x: eine
+zweite Plan-Prüfer-Instanz hatte 45 Sekunden vorher einen eigenen §113 abgegeben. Der
+Release-Prüfer hat die Dublette gemessen, verlustfrei zusammengeführt und **nicht** umbenannt —
+richtig, denn die Nummer ist eine Aussage über die Reihenfolge der eigenen Arbeit. Ich benenne
+deshalb nur meine eigenen Abschnitte um. Der Commit trägt weiterhin „113".)*
 
 **Stand:** HEAD `8ad16cfa`, getrackt 0, **nicht gepusht**. Gemessen 19.08. 14:0x.
 **Gegenstand: mein eigener Befund aus §112, 40 Minuten alt.** Posten (e) verlangt, den eigenen
@@ -8537,7 +8543,10 @@ eine Spur bekommt (etwa ein Hinweis des Tores, wenn zwischen genanntem Messstand
 liegen), ist eine Fachentscheidung und ausdrücklich **nicht** meine — ich melde nur, dass er ohne Spur
 heute nicht getragen hat.
 
-## §114 — Posten (a) an W-14/1: acht Zeiger gewandert, alle in einer Datei — und diesmal ist die überholte Aussage eine ABNAHME
+## §116 — Posten (a) an W-14/1: acht Zeiger gewandert, alle in einer Datei — und diesmal ist die überholte Aussage eine ABNAHME
+
+*(Geschrieben als §114 in `3adac326` 19:27. **Umbenannt auf §116** aus demselben Grund — die
+andere Instanz hatte um 16:51 einen eigenen §114 abgegeben. Der Commit trägt weiterhin „114".)*
 
 **Stand:** HEAD `736481fe`, getrackt 0, **nicht gepusht**. Gemessen 19.08. 16:2x.
 **Gegenstand: W-14/1 „Kopieren, Spiegeln, Drehen"** (362 Z., Basis `78c09e1b`) — eine Scheibe, die

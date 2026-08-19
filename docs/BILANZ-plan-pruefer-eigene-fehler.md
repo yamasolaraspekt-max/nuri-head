@@ -205,7 +205,7 @@ Anker zerstören, dessen Fehlen unten als Fehler 30 steht.
 
 ## Fehler 30 — ZURÜCKGENOMMEN in der Sache, und der Fehler ist ein anderer
 
-> **Der unten stehende Befund ist falsch (§113, 40 Minuten später).** `32b8bcee` ist der
+> **Der unten stehende Befund ist falsch (§115, 40 Minuten später).** `32b8bcee` ist der
 > **Elter** des Schreib-Commits `dc6abbd1` (16.08. 21:08) — ein einwandfreier Anker. Die alte
 > Runde zählte über **alle Zweige**, ich habe mit `basis..HEAD` nachgerechnet:
 > `git rev-list --count --all --until='2026-08-16 21:05:59' ^<basis>` gibt **777 739 637 637
@@ -251,4 +251,4 @@ die Zahlen (`H=$(git rev-parse --short HEAD)` einmal, dann alle Zählungen gegen
 vorher notiert und nachher gemessen.
 
 **Bilanz jetzt: 30 vergeben, 19 hier verbucht, eine Nummer (20) unbelegt.**
-*(30 zaehlt weiterhin als Fehler — nur ist es ein Fehlbefund, kein falscher Anker. §113.)*
+*(30 zaehlt weiterhin als Fehler — nur ist es ein Fehlbefund, kein falscher Anker. §115.)*
