@@ -8212,7 +8212,7 @@ Rückdatierung — die neun Einträge bleiben dort, wo sie geschrieben wurden, u
 
 **Kein Zustandsfeld angefasst, kein Bau.**
 
-## §112 — P-03 nachgemessen: kein verdeckter Rückstand, aber 36 Blätter, von denen keines stimmt
+## §113 — P-03 nachgemessen: kein verdeckter Rückstand, aber 36 Blätter, von denen keines stimmt
 
 Stand cba422dd. P-03 ist mein eigener Selbstbefund vom 16.08. 18:27: meine Ballortung liest nur
 `docs/STATUS.md`, während die Auftragsblätter eigene Ballfelder tragen. Er schließt mit einer Zusage:
@@ -8279,3 +8279,31 @@ Dateinamen (`W-03-1`), die Statuswahrheit führt aber `W-03/1`. An einem bekannt
 (`W-12/1` vorhanden: 1, `W-12-1`: 0) — der Fund löste sich vollständig auf, 36 von 36 haben einen
 Datensatz. Dieselbe Kennungsform hat mich schon einmal erwischt (W-21-1 gegen W-21/1). Sie gehört zur
 Familie §101/§110/§111: richtig gemessen, falsche Eingabe.
+
+### Nachtrag in eigener Sache: dieser Abschnitt hieß zuerst §112
+
+Ich habe den Messstand um **13:13** fixiert und um **15:46** committet — zweieinhalb Stunden dazwischen,
+**ohne ihn neu zu messen**. In dieser Lücke, um **13:40:34**, hat eine zweite Plan-Prüfer-Instanz
+`8ad16cfa` committet und die Nummer §112 vergeben (Posten (d), Alterung). Ich habe sie ein zweites Mal
+vergeben; die Datei trug kurzzeitig zwei Abschnitte §112. Hier auf §113 berichtigt, weil meiner der
+spätere ist.
+
+Zwei Dinge dazu, beide unangenehm und beide meine:
+
+1. **Der Stillstand, den ich Yama gemeldet habe, war zum Zeitpunkt der Meldung schon vorbei.** Ich
+   habe 58 h 22 min gemessen — richtig um 13:13 — und daraus einen Zustand beschrieben, der 27 Minuten
+   später endete. Die Messung war wahr, die Aussage war es beim Aussprechen nicht mehr. Das ist
+   dieselbe Zeitachse, die ich in §109/§110/§111 an fremden Blättern gemessen habe, jetzt an meiner
+   eigenen Meldung.
+2. **Die Gegenprobe kam nach dem Commit statt vor ihm.** Genau dafür steht sie in der Wache. Hätte ich
+   vor dem Anfügen neu gemessen, wäre die Dublette nie entstanden.
+
+Was *nicht* betroffen ist, habe ich geprüft: `docs/STATUS.md` und alle 89 Blätter unter
+`docs/auftraege/aktiv/` sind zwischen `cba422dd` und `8ad16cfa` **byte-identisch** (der fremde Commit
+fasst nur meine Befunddatei und die Bilanz an). Die 36/31/5-Zahlen dieses Abschnitts stehen also
+unverändert. Und inhaltlich kollidieren die beiden Abschnitte nicht: das fremde §112 nennt P-03 kein
+einziges Mal und `dor_beleg` nirgends.
+
+**Zweite Instanz:** dass zwei Plan-Prüfer gleichzeitig in dieselbe Datei schreiben, ist der Fall, den
+die Nebenläufigkeitsregel meint. Ich melde es, repariere daran nichts weiter und stage weiterhin nur
+meine eigene Datei.
