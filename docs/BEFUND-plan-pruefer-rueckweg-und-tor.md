@@ -7984,3 +7984,230 @@ vorzuwerfen. Tatsächlich steht dort `ADD_ROOF_AUFBAU`, und das existiert. Die R
 vollen Satz zu holen, statt auf der Lücke weiterzurechnen: **ein abgeschnittenes Zitat ist kein
 Zitat.** Nächste Verwandte von §101 (falsche Eingabe) und §110 (falsche Trägerdatei) — dieselbe
 Familie, drittes Gesicht.
+
+## §112 — Posten (d) Alterung: die Statuswahrheit schweigt so lange wie nie, eine Tafelzeile wurde bei laufender Überholung neu geschrieben, und mein eigener Messstand aus §-der-letzten-Alterung trug seine Zahlen nicht
+
+**Stand:** HEAD `cba422dd`, getrackt **0**, mit `fork` **0/0**. Gemessen **19.08. 13:1x**.
+**Seit HEAD sind 58 h 21 min vergangen — 0 Commits von irgendeiner Rolle.**
+
+### Die Erhebung: sechs Aufträge, heute gegen die letzte Alterungsrunde
+
+```
+git log -1 --format=%ct <basis> · git rev-list --count <basis>..HEAD · git merge-base --is-ancestor
+```
+
+| Auftrag | Zustand | basis_sha | Alter damals | Alter heute | Commits damals | heute |
+|---|---|---|---|---|---|---|
+| A-37 | `CODE_FERTIG` | `bc2125d9` | 2812 min | **6658 min (110 h)** | 777 | **1021** |
+| A-38 | `ENTWURF` | `0f05f8bf` | 2775 min | **6621 min (110 h)** | 739 | **983** |
+| A-39 | `ENTWURF` | `99add90f` | 441 min | **4287 min (71 h)** | 637 | **881** |
+| A-40 | `ENTWURF` | `99add90f` | 441 min | **4287 min (71 h)** | 637 | **881** |
+| A-42 | `ENTWURF` | `e802c1f8` | 222 min | **4068 min (67 h)** | 565 | **809** |
+| W-21L | `DECISION_BLOCKED` | `4f0d4584` | 7006 min | **10852 min (180 h)** | 1873 | **2117** |
+
+Alle sechs Basis-SHAs sind Vorfahr von HEAD (`--is-ancestor` → ja, 6/6). **Das Alter wuchs bei
+allen sechs um exakt 3846 Minuten, die Commit-Zahl bei allen sechs um exakt 244.** Zwei
+Gleichmaße — das erste ist die Uhr, das zweite wird unten zum dritten Fund.
+
+**64 Stunden Alterung, und 58 davon ohne einen einzigen Commit.** Die zweite Spalte der
+Alterungsmessung ist immer der Stellvertreter dafür gewesen, *wieviel sich unter dem Blatt bewegt
+hat*. In dieser Runde entkoppeln sich die beiden Spalten vollständig: 91 % der neuen Alterung
+tragen null Bewegung.
+
+### Fund 1 — die Statuswahrheit schweigt länger als je zuvor, und diesmal ist es keine Pause
+
+```
+git log -1 --format='%h %cd' -- docs/STATUS.md        -> 0f969d5e  16.08. 20:39
+git rev-list --count 0f969d5e..HEAD                   -> 313
+git rev-list --count 0f969d5e..HEAD -- docs/STATUS.md -> 0
+```
+
+**`docs/STATUS.md` wurde zuletzt am 16.08. um 20:39 geschrieben. Das sind 3874 Minuten —
+64 Stunden 34.** Gegenprobe über alle Zweige: es gibt keine jüngere Schreibung, auch nicht in
+`rolle/*`.
+
+Die drei größten Lücken der Projektgeschichte, aus 1339 Schreibungen, mit der Bewegung *während*
+der Lücke:
+
+| Lücke | Zeitraum | Commits **in** der Lücke | Charakter |
+|---|---|---|---|
+| 2675 min | 08.08. 21:44 → 10.08. 18:20 | **48** | Pause (1,1/h) |
+| 1684 min | 07.08. 09:53 → 08.08. 13:58 | **1** | Pause |
+| **3874 min** | **16.08. 20:39 → offen** | **313** | **keine Pause** |
+
+Die bisherige Rekordlücke war eine Pause: 48 Commits über 44 Stunden. Die heutige ist **die
+längste und zugleich die vollste** — 313 Commits, davon **312 in den ersten 6 h 11**, das sind
+50 Commits pro Stunde. Danach 58 Stunden Stille. Die Rollenverteilung dieser 313: 111 plan-pruefer,
+90 integrator, 36 release-pruefer, 19 planner, 6 generator, 4 evaluator, Rest Merges.
+
+Und der Ort, an dem sie abriss, ist nicht beliebig. Das dichteste Sechs-Stunden-Fenster der
+**gesamten** Projektgeschichte liegt am **16.08. 16:13–22:13 mit 505 Commits** (Maximumssuche über
+alle Commit-Zeiten). Die letzte Statusschreibung fällt **mitten hinein**: 372 dieser 505 liegen
+davor, **133 danach**. Die Statuswahrheit ist im Spitzenfenster verstummt, 94 Minuten vor dessen
+Ende, und nie wieder angesprungen.
+
+**Das ist die Umkehrung von §97.** Dort war der Befund: lange Lücken gab es oft, aber es waren
+Pausen — diese ist die erste unter Volllast. Heute ist die Lücke *beides nacheinander*: erst die
+dichteste Arbeit des Projekts ohne jede Statusführung, dann der längste Stillstand. Für Posten (d)
+heißt das: **das Alter der sechs Aufträge ist seit 64 Stunden nirgends abgebildet**, weil das eine
+Feld, das es abbilden würde, seit 64 Stunden nicht angefasst wurde.
+
+### Fund 2 — die A-37-Tafelzeile wurde neu geschrieben, während sie bereits überholt war
+
+Die Zeile in `docs/STATUS.md` sagt heute wörtlich:
+
+> **Elf Kriterien**, A-37-2 und A-37-7 sind die **Positivfaelle**. Gebaut wird im
+> Generator-Worktree. **DoR steht aus.**
+
+Gezählt im Blatt, zwei Verfahren, beide 21: Zeilenanfänge `- **A-37-N**` → **21**;
+`grep -oE 'A-37-[0-9]+' | sort -u` → **21**.
+
+Die Wachstumskurve des Blattes und die drei Schreibungen der Tafelzeile nebeneinander:
+
+| Blatt | Kriterien | | Tafelzeile geschrieben | Zustand | sagt |
+|---|---|---|---|---|---|
+| `7ef8f046` 14.08. 22:35 | 11 | | `53a0947e` 15.08. 11:58 | `ENTWURF` | „Elf" ✓ |
+| `3719937f` 16.08. **12:48** | **14** | | `4ed51b8f` 16.08. **12:39** | `BEREIT` | „Elf" ✓ *(9 min davor)* |
+| `78841603` 16.08. 16:20 | 18 | | | | |
+| `4a10abca` 16.08. 19:43 | 19 | | `15e11078` 16.08. **20:16** | `CODE_FERTIG` | **„Elf" — das Blatt hat 19** |
+| `b6a79a66` 16.08. 23:50 | 21 | | *(keine Schreibung mehr)* | | **„Elf" — das Blatt hat 21** |
+
+An den Ständen der drei Schreibungen nachgemessen (`git show <sha>:<blatt> | grep -c`): 11, 11,
+**19**. Die ersten beiden Schreibungen waren richtig. **Die dritte war es nicht mehr, und sie hat
+die Zahl trotzdem mitgenommen.**
+
+Das ist eine andere Klasse als §109/§110/§111. Dort war die Aussage wahr, als sie geschrieben
+wurde, und ist unter dem Dokument gealtert. **Hier wurde die Zelle angefasst — Zustandswechsel
+`BEREIT` → `CODE_FERTIG` — und der acht Kriterien alte Wert wurde durch die Bearbeitung
+hindurchgetragen.** Nicht Alterung, sondern Transport eines toten Werts durch einen lebenden Griff.
+
+Dieselbe Zelle trägt zwei weitere Aussagen, beide zum selben Zeitpunkt bereits falsch:
+
+- **„A-37-2 und A-37-7 sind die Positivfälle"** — das ist eine erschöpfende Aussage. `A-37-14`
+  („**Positivfall:** Marke stimmt → Lauf geht durch") kam am **16.08. 12:48** ins Blatt, also
+  **7 h 28 min vor** der Schreibung um 20:16. Es sind drei, nicht zwei. *(A-37-7 selbst hält —
+  Wortlaut „der Positivfall zur Sperre"; ich hatte zuerst nur auf das Wort „Positivfall" gefiltert
+  und A-37-7 fälschlich als weggefallen gelesen. Erst der volle Satz hat es gerettet — dieselbe
+  Lehre wie §111.)*
+- **„DoR steht aus"** — es liegen Voten vor: `a400368f` 16.08. 13:01 *„DoR Runde 3 für A-37 und
+  A-38 — NICHT ERTEILT, fünf Restpunkte"*, fortgesetzt `679f849a` 16:00. Ein `ERTEILT` für A-37
+  existiert auf keinem Zweig. **Das ist der A-37-Zwilling zu §108:** ein `NICHT ERTEILT` mit
+  benannten Restpunkten ist ein Ergebnis, kein Ausstand. *Kein neuer Befund ist die Lage
+  dahinter — dass A-37s `BEREIT` auf einem zurückgenommenen Votum ruht, steht seit `b5dc8a03`
+  (16.08. 17:00) und wird hier nur wiedergefunden.*
+
+**Und der Commit, der die tote Zahl weitergetragen hat, heißt:**
+
+> `15e11078` — *„integrator: zwei eigene Fehler behoben — **die Statuswahrheit stand still**, und
+> meine 81 Merges waren unsichtbar."*
+
+Ein Commit, der den Stillstand der Statuswahrheit behebt, schreibt dabei eine acht Kriterien alte
+Zahl fort — und 23 Minuten später steht die Statuswahrheit für 64 Stunden still. Das ist die
+Figur aus §109 (`3ad920b1` berichtigte sieben überholte Texte und erzeugte den achten) und §111
+(das Blatt meldet den Mangel, den es behebt), zum dritten Mal, an der dritten Rolle.
+
+### Fund 3 — in eigener Sache: mein erklärter Messstand trug keine einzige der sechs Zahlen
+
+Die gleichmäßige **+244** über sechs verschiedene Basis-SHAs sagt, dass beide Messungen an je
+einem festen Stand genommen wurden und diese Stände 244 Commits auseinanderliegen. Die letzte
+Alterungsrunde erklärt ihren Stand ausdrücklich: *„geschrieben 21:08, Messstand `32b8bcee`"*.
+
+```
+git rev-list --count 32b8bcee..HEAD   -> 280      (nicht 244)
+git rev-list HEAD | sed -n '245p'     -> bea33236  16.08. 21:29
+git rev-list --count 32b8bcee..bea33236 -> 36
+```
+
+Beide Kandidaten direkt gegen die sechs veröffentlichten Zahlen gerechnet:
+
+| Auftrag | `@32b8bcee` | `@bea33236` | im Blatt | trifft |
+|---|---|---|---|---|
+| A-37 | 741 | **777** | 777 | `bea33236` |
+| A-38 | 703 | **739** | 739 | `bea33236` |
+| A-39 | 601 | **637** | 637 | `bea33236` |
+| A-40 | 601 | **637** | 637 | `bea33236` |
+| A-42 | 529 | **565** | 565 | `bea33236` |
+| W-21L | 1837 | **1873** | 1873 | `bea33236` |
+
+**Sechs von sechs treffen `bea33236`, null von sechs treffen den erklärten Stand.** 36 Commits
+und 24 Minuten Abstand.
+
+**Die Zahlen waren richtig — der Anker war es nie.** Das ist das Spiegelbild der drei letzten
+Runden: dort ein richtiger Anker mit alternder Zahl, hier eine richtige Zahl an falschem Anker.
+Wer die Runde nachrechnen wollte, hätte 741 statt 777 gefunden und meine Messung für falsch
+gehalten — die Angabe, die den Beweis führbar machen soll, macht ihn hier unführbar. Genau das
+werfe ich seit §77 den Blättern vor. **Geht in die Bilanz.**
+
+*Ein Zählfehler ist mir dabei unterlaufen und wurde vor dem Schreiben gefangen: mein erster
+Zuordnungslauf las ein `bash`-Array mit `${a[0]}` unter **zsh**, wo Arrays bei 1 beginnen — die
+Blatt-Spalte war um eine Zeile verschoben und meldete „KEINER" für fünf von sechs. Die Rohzahlen
+waren beide Male dieselben; falsch war nur die Paarung. Wiederholt mit expliziter Paarung, dann
+6/6. §-Lehre unverändert: zweimal messen, einmal schreiben.*
+
+### Zweiter Teil von Posten (d): nennen die Blätter Dateien, die sich seither bewegt haben?
+
+Gemessen nicht gegen `basis_sha` (das hat die letzte Runde getan, Ergebnis „kein Befund, der
+Löwenanteil ist `STATUS.md`"), sondern gegen **das Verstummen der Statuswahrheit** — welche von den
+Blättern genannten Code-Dateien haben sich bewegt, seit der Status sie nicht mehr abbilden konnte?
+
+| Auftrag | Datei | Commits seit `0f969d5e` |
+|---|---|---|
+| A-37 | `scripts/rollen-tor.sh` | 1 |
+| A-37 / A-38 / A-39 | `scripts/commit-pruefen.sh` | 2 |
+| A-42 | `scripts/status-erzeugen.sh` | 2 |
+| A-42 | `scripts/yama-posten.py` | 2 |
+| A-40, W-21L | — | 0 |
+
+**Kein eigener Befund**, und der Grund gehört genannt: es sind je das Werkzeug, das der Auftrag
+baut (A-37), oder sein ausdrückliches Nicht-Ziel (A-42). Beides ist erwartbare Bewegung. Der
+Posten läuft hier sauber durch und findet nichts Drittes — das ist die Antwort auf die Frage, nicht
+ihr Ausbleiben. *(`scripts/blatt-pruefen.sh` aus A-39 existiert nicht; das ist A-39s Rot-Lage,
+kein gewanderter Zeiger.)*
+
+### Ball
+
+**Beim Integrator** — die A-37-Tafelzeile: drei Aussagen in einer Zelle, alle drei bei der letzten
+Schreibung bereits falsch. Er ist die einzige Rolle mit Schreibrecht auf `docs/STATUS.md`, und
+`15e11078` ist seine Schreibung.
+
+**Bei Yama** — die 64 Stunden. Ob die Statuswahrheit nachgeführt wird oder ob der Stand vom
+16.08. 20:39 als gültiger Schnitt erklärt wird, ist keine Messfrage. **Sie steht auf einem Stand,
+der 313 Commits alt ist**, und jede Zustandsangabe darin ist an diesem Stand zu lesen, nicht am
+heutigen.
+
+**Bei mir** — Fund 3 in die Bilanz, und beim Eintragen ist ein vierter aufgefallen:
+
+### Fund 4 — die Bilanz meiner eigenen Fehler steht seit demselben Commit still
+
+```
+hoechste Nummer in docs/BILANZ-plan-pruefer-eigene-fehler.md   -> 19
+letzte Schreibung der Bilanz                                   -> 32b8bcee  16.08. 21:05
+```
+
+| Fehler | Commit | in der BILANZ | im BEFUND-Blatt |
+|---|---|---|---|
+| 21 | `d771e71d` 22:48 | **0** | 2 |
+| 22 | `94c98ad0` 21:46 | **0** | 1 |
+| 23 / 24 | `761b7e96` 22:21 | **0** | 5 / 1 |
+| 25 | `1bfdbd0f` 23:53 | **0** | 5 |
+| 26 | `1d386676` 00:32 | **0** | 7 |
+| 27 | `cdd80e81` 02:02 | **0** | 8 |
+| 28 | `4f6b65b1` 02:23 | **0** | 7 |
+| 29 | `23cd7fdc` 01:16 | **0** | 2 |
+
+**Neun eigene Fehler sind vergeben, benannt und committet — und keiner einzige steht in dem
+Dokument, das Yama ausdrücklich dafür angeordnet hat** (*„kannst du auch im Bezug auf dich alle
+Fehler erst mal suchen, wieviel sie sind, dann alle nacheinander beheben"*). Die Bilanz sagt
+**19**; gezählt sind es mindestens **28**. *Nummer 20 findet sich in keinem Commit — eine Lücke in
+meiner eigenen Nummernvergabe, die ich hier nicht auflöse, sondern melde.*
+
+Und der Commit, der die Bilanz zuletzt schrieb, ist `32b8bcee` — **derselbe, der in Fund 3 als
+Messstand erklärt wird und die Zahlen nicht trägt.** Beide Male dieselbe Stunde, beide Male
+dieselbe Ursache: ab 21:05 lief die Arbeit schneller, als sie verbucht wurde. Das ist genau der
+Vorwurf aus Fund 1, angewandt auf mich selbst — der Unterschied ist nur, dass die Statuswahrheit
+34 Minuten später verstummte und meine Bilanz sofort.
+
+*Nachgetragen in `docs/BILANZ-plan-pruefer-eigene-fehler.md` (Bestandsaufnahme, keine
+Rückdatierung — die neun Einträge bleiben dort, wo sie geschrieben wurden, und werden benannt).*
+
+**Kein Zustandsfeld angefasst, kein Bau.**

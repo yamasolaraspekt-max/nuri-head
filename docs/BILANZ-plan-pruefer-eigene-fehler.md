@@ -171,3 +171,64 @@ Auflösung im Text, den ich schon vor mir hatte.** Seine eigene Lehre trifft es 
 
 **Bilanz jetzt: 19 eigene Fehler.** Sechzehn behoben, drei (17, 18, 19) vor der Meldung
 gefangen, drei aus dem Abschnitt oben weiterhin offen.
+
+---
+
+## Nachtrag 19.08. — diese Bilanz stand 64 Stunden still, und neun Fehler stehen außerhalb von ihr
+
+*(erhoben 19.08. 13:2x · Messstand `cba422dd` · Anlass: §112, Posten (d) Alterung)*
+
+**Diese Datei wurde zuletzt von `32b8bcee` (16.08. 21:05) geschrieben und endet bei Fehler 19.**
+Seither sind neun weitere eigene Fehler vergeben, benannt und committet — **keiner davon steht
+hier:**
+
+| Fehler | Commit | Zeit | verzeichnet in |
+|---|---|---|---|
+| 21 | `d771e71d` | 16.08. 22:48 | Befund-Blatt |
+| 22 | `94c98ad0` | 16.08. 21:46 | Befund-Blatt |
+| 23 | `761b7e96` | 16.08. 22:21 | Befund-Blatt |
+| 24 | `761b7e96` | 16.08. 22:21 | Befund-Blatt |
+| 25 | `1bfdbd0f` | 16.08. 23:53 | Befund-Blatt |
+| 26 | `1d386676` | 17.08. 00:32 | Befund-Blatt |
+| 27 | `cdd80e81` | 17.08. 02:02 | Befund-Blatt |
+| 28 | `4f6b65b1` | 17.08. 02:23 | Befund-Blatt |
+| 29 | `23cd7fdc` | 17.08. 01:16 | Befund-Blatt |
+
+**Nummer 20 findet sich in keinem Commit und in keinem Blatt** — eine Lücke in meiner eigenen
+Nummernvergabe. Sie wird hier gemeldet, nicht aufgefüllt; eine Nummer nachträglich zu vergeben
+hieße, einen Fehler zu erfinden oder einen echten zu verstecken.
+
+**Zahl heute: 19 verbucht, mindestens 28 tatsächlich.** Die neun Einträge werden **nicht**
+hierher kopiert — sie stehen in `docs/BEFUND-plan-pruefer-rueckweg-und-tor.md` an der Stelle, an
+der sie entstanden, mit dem Stand, gegen den sie gemessen wurden. Rückdatieren würde genau den
+Anker zerstören, dessen Fehlen unten als Fehler 30 steht.
+
+## Fehler 30 — der erklärte Messstand trug keine einzige der veröffentlichten Zahlen
+
+*(gefunden in §112, gegen `cba422dd`)*
+
+Die Alterungsrunde vom 16.08. erklärt: *„geschrieben 21:08, Messstand `32b8bcee`"* und
+veröffentlicht sechs Commit-Zahlen. **Keine davon ist an `32b8bcee` gemessen.** Alle sechs treffen
+`bea33236` (16.08. 21:29), 36 Commits und 24 Minuten weiter:
+
+```
+A-37 741/777·777   A-38 703/739·739   A-39 601/637·637
+A-40 601/637·637   A-42 529/565·565   W-21L 1837/1873·1873
+                   (@32b8bcee / @bea33236 · veroeffentlicht)
+```
+
+**Klasse:** richtige Zahl, falscher Anker — das Spiegelbild der Befunde §109–§111, wo der Anker
+stimmte und die Zahl alterte. **Wirkung:** wer die Runde nachrechnet, findet 741 statt 777 und
+hält meine Messung für falsch. Die Angabe, die den Beweis führbar machen soll, macht ihn
+unführbar. **Genau das werfe ich seit §77 den Blättern vor.**
+
+**Gefangen durch:** die gleichmäßige Differenz. Alle sechs Zahlen wuchsen um exakt 244, während
+`32b8bcee..HEAD` 280 ergibt — zwei Gleichmaße, die sich widersprechen, und der Widerspruch war
+der Zeiger auf den wahren Stand.
+
+**Behoben:** nein, und nicht behebbar — die Runde ist geschrieben und zitiert. **Berichtigt:** hier
+und in §112. **Vorbeugung ab sofort:** der Messstand wird aus derselben Ausführung genommen wie
+die Zahlen (`H=$(git rev-parse --short HEAD)` einmal, dann alle Zählungen gegen `$H`), nicht
+vorher notiert und nachher gemessen.
+
+**Bilanz jetzt: 30 vergeben, 19 hier verbucht, eine Nummer (20) unbelegt.**
