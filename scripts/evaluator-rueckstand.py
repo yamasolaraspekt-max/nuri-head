@@ -69,6 +69,15 @@ BEFUND_FELDER = {"rolle", "zeit"}
 # Zustaende, in denen die Abnahme hinter dem Auftrag liegt.
 ABGESCHLOSSEN = {"ABGENOMMEN", "FREIGEGEBEN", "BETRIEBSBESTAETIGT", "ERLEDIGT", "ABGESCHLOSSEN"}
 
+# Zustaende, nach denen laut Kette (ARBEITSREGELN.md:55-70) der EVALUATOR an der Reihe ist.
+# NICHT geraten: `CODE_FERTIG -> ABNAHME -> ABGENOMMEN oder NACHBESSERN`. Und §12.3 sagt
+# ausdruecklich "kein eigener Zustand fuer Nachbesserungen" — die Aufgabe geht auf CODE_FERTIG
+# zurueck. Meine erste Handmessung am 17.08. nahm {CODE_FERTIG, WIEDERVORLAGE, NACHGEBESSERT};
+# die letzten beiden kommen im Regelwerk 0x und im Bestand 0x vor. Das Ergebnis stimmte damals
+# nur zufaellig, weil A-37 auf CODE_FERTIG steht. `--fangprobe` haelt die Liste seitdem gegen
+# das Regelwerk, damit eine erfundene Kennung nicht wieder unbemerkt mitlaeuft.
+RUFT_MICH = {"CODE_FERTIG", "ABNAHME"}
+
 ZAUN = ("```", "```yaml")
 
 
@@ -235,6 +244,17 @@ def messen(refs, rolle):
         for k in drift_b:
             print(f"  {'':34s}   BALL-DRIFT {k}: Tafel '{taf[k][2]}' <-> Datensatz "
                   f"'{ds[abb[k]][1].get('ballbesitz')}'")
+        # "Ball bei mir" und "Zustand ruft mich" sind ZWEI Fragen. A-37 steht seit dem 16.08.
+        # auf CODE_FERTIG, waehrend der Ball beim Integrator liegt — das Ballfeld allein meldet
+        # dort "keiner" und verschweigt die Lage. Bis heute habe ich diese zweite Frage in jedem
+        # Takt VON HAND gestellt; von Hand heisst: irgendwann vergessen.
+        ruft = sorted(k for k, (_, f) in ds.items()
+                      if f.get("zustand") in RUFT_MICH
+                      and rolle not in normalisiere_rolle(f.get("ballbesitz")))
+        for k in ruft:
+            print(f"  {'':34s}   ZUSTAND RUFT {rolle.upper()}: {k} steht auf "
+                  f"{ds[k][1].get('zustand')}, Ball liegt bei "
+                  f"'{ds[k][1].get('ballbesitz')}' — nicht bei mir")
     return fehler
 
 
@@ -359,15 +379,29 @@ def fangprobe():
     abb_fp = paare(ds, taf)
     ungepaart = sorted(set(taf) - set(abb_fp))
     ohne = len(set(ds) & set(taf))
-    # Das Kriterium ist NICHT "alle 87 vergleichbar" — das war meine erste Erwartung und sie
-    # war falsch. W-05 und W-21 haben ZWEI Kandidaten (/1 und /2); die enge Regel paart dort
-    # zu Recht nicht. Geprueft wird deshalb: die Paarung wirkt (mehr als ohne sie), und jede
-    # ungepaarte Kennung hat einen NACHWEISBAREN Grund — nicht einen, den ich ihr zuschreibe.
-    grundlos = [k for k in ungepaart if len([x for x in ds if x.startswith(k + "/")]) == 1]
-    print(f"  E8 Altbestandspaare: {ohne} vergleichbar ohne Paarung · {len(abb_fp)} mit · "
-          f"ungepaart={ungepaart} (Kandidaten: "
-          f"{ {k: [x for x in sorted(ds) if x.startswith(k + '/')] for k in ungepaart} })")
-    if len(abb_fp) <= ohne or grundlos:
+    # DIE PROBE WAR EINE MOMENTAUFNAHME UND IST AM 19.08. ZU RECHT ROT GEWORDEN — ohne dass
+    # etwas kaputt war. Sie verlangte "die Paarung muss WIRKEN, also mehr liefern als ohne sie".
+    # Das galt, solange elf Tafelzeilen eine alte Kennung trugen. Der Integrator hat A-33
+    # ausgefuehrt (`7ea7ec48`, 19.08. 15:47) und sie auf die Kennung ihres Datensatzes gezogen;
+    # seither sind 87 von 87 schon ohne Paarung vergleichbar, und "mehr als ohne" ist unerfuellbar.
+    # DAS IST DIE LEHRE AUS A-33 SELBST, die ich zwei Stunden vorher gelesen hatte: "Eine Zahl im
+    # Kriterium misst den Bestand ZUM ZEITPUNKT DES SCHNITTS ... Eine INVARIANTE laeuft nicht ab."
+    # Eine Probe, die bei PLANMAESSIGER Arbeit rot wird, ist ein Fehlalarm — und Fehlalarme
+    # werden nach A-03 weggeklickt. Geprueft wird deshalb jetzt die Invariante:
+    # jede Tafelzeile ist vergleichbar ODER hat einen nachweisbaren Grund (mehrere Kandidaten).
+    grundlos = [k for k in ungepaart if len([x for x in ds if x.startswith(k + "/")]) <= 1]
+    print(f"  E8 Vergleichbarkeit: {len(abb_fp)} von {len(taf)} Tafelzeilen · "
+          f"ohne Paarung waeren es {ohne} · ungepaart={ungepaart if ungepaart else 'keine'} "
+          f"· davon ohne nachweisbaren Grund={grundlos if grundlos else 'keine'}")
+    if grundlos:
+        rot += 1
+    # ROT-Richtung: eine Tafelzeile OHNE jeden Datensatz muss als grundlos ungepaart auffallen.
+    taf_rot = dict(taf); taf_rot["X-99"] = (0, "BEREIT", "—")
+    a_rot = paare(ds, taf_rot)
+    off = [k for k in sorted(set(taf_rot) - set(a_rot))
+           if len([x for x in ds if x.startswith(k + "/")]) <= 1]
+    print(f"  ROT Vergleichbarkeit  Tafelzeile X-99 ohne Datensatz · als grundlos erkannt={off}")
+    if off != ["X-99"]:
         rot += 1
     # GEGENPROBE zur Paarung: eine Tafelkennung mit ZWEI Kandidaten darf NICHT geraten werden.
     ds_test = dict(ds)
@@ -416,6 +450,25 @@ def fangprobe():
     print(f"  GEG Schreibweise    A-37    Backticks statt Sternchen · zusaetzliche Meldungen="
           f"{nur_schreibweise if nur_schreibweise else 'keine'}")
     if nur_schreibweise:
+        rot += 1
+
+    # E12 — die Zustandsliste, nach der ich gerufen werde, muss AUS DEM REGELWERK stammen.
+    # Meine erste Handmessung nahm WIEDERVORLAGE und NACHGEBESSERT; beide kommen dort 0x vor.
+    # Diese Probe faellt rot, sobald jemand (auch ich) eine erfundene Kennung eintraegt.
+    try:
+        regeln = open("docs/ARBEITSREGELN.md", encoding="utf-8").read()
+    except OSError:
+        regeln = ""
+    ungedeckt = sorted(z for z in RUFT_MICH if z not in regeln)
+    print(f"  E12 RUFT_MICH gegen das Regelwerk: {sorted(RUFT_MICH)} · "
+          f"ungedeckt={ungedeckt if ungedeckt else 'keiner'}")
+    if ungedeckt or not regeln:
+        rot += 1
+    # ROT-Richtung: zwei erfundene Kennungen muessen als ungedeckt auffallen.
+    erfunden = sorted(z for z in {"WIEDERVORLAGE", "NACHGEBESSERT"} if z not in regeln)
+    print(f"  ROT RUFT_MICH      die zwei erfundenen Kennungen · als ungedeckt erkannt="
+          f"{erfunden}")
+    if len(erfunden) != 2:
         rot += 1
 
     print(f"  ---- Fangproben rot: {rot}")

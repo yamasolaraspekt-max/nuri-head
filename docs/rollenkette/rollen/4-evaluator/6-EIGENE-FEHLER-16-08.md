@@ -497,3 +497,99 @@ auf Dateien, die rechnen: `dachAusschnitt.test.ts` **17**, `dachAufbauten.test.t
 | durch Messung widerlegt | **2** (E5 · A-33-5-Verdacht — letzterer war bereits selbst korrigiert) |
 | gemeldet, nicht in meiner Rolle behebbar | **2** (§6-Test-DB · Ball-Drift im Bestand ohne Prüfer) |
 | Fehler im Ergebnis meiner Voten | **0** von 71 |
+
+---
+
+# NACHTRAG 19.08. — das Takt-Werkzeug beantwortete die falsche von zwei Fragen
+
+## E12 · „Ball bei mir" ist nicht „Zustand ruft mich" — BEHOBEN
+
+Mein Werkzeug meldet jeden Takt `Ball[evaluator] keiner`. Das ist wahr und **verschweigt die
+Lage**: `A-37` steht seit dem 16.08. auf `CODE_FERTIG` — dem Zustand, nach dem laut Kette **ich**
+an der Reihe bin —, während der Ball beim Integrator liegt. Beide Sätze zugleich richtig, und nur
+der erste stand in der Ausgabe.
+
+**Gemessen, dass die Frage fehlte:** `grep -nE 'AN_MICH|CODE_FERTIG|WIEDERVORLAGE'` über das
+Werkzeug → **keine Zeile**. Seit dem 17.08. stelle ich sie in jedem Takt **von Hand**. Von Hand
+heißt: irgendwann vergessen.
+
+### Beim Einbauen fiel meine eigene Zustandsliste durch
+
+Meine Handmessung vom 17.08. nahm `{CODE_FERTIG, WIEDERVORLAGE, NACHGEBESSERT}`. **Am Regelwerk
+gemessen statt aus dem Gedächtnis übernommen:**
+
+```text
+CODE_FERTIG     ARBEITSREGELN 7 Nennungen · als zustand: im Bestand 1
+ABNAHME         ARBEITSREGELN 3 Nennungen · als zustand: im Bestand 0
+WIEDERVORLAGE   ARBEITSREGELN 0            · im Bestand 0     ← existiert nicht
+NACHGEBESSERT   ARBEITSREGELN 0            · im Bestand 0     ← existiert nicht
+```
+
+Die Kette lautet `CODE_FERTIG → ABNAHME → ABGENOMMEN oder NACHBESSERN` (`:55-70`), und §12.3 sagt
+ausdrücklich **„kein eigener Zustand für Nachbesserungen"**. **Zwei Drittel meiner Liste waren
+erfunden.** Das Ergebnis stimmte damals nur zufällig, weil A-37 auf `CODE_FERTIG` steht.
+
+**Behebung:** `RUFT_MICH = {"CODE_FERTIG", "ABNAHME"}`, und `--fangprobe` hält die Konstante
+**gegen das Regelwerk** — mit Rot-Richtung:
+
+```text
+E12 RUFT_MICH gegen das Regelwerk: ['ABNAHME','CODE_FERTIG'] · ungedeckt=keiner
+ROT RUFT_MICH  die zwei erfundenen Kennungen · als ungedeckt erkannt=['NACHGEBESSERT','WIEDERVORLAGE']
+```
+
+Die Ausgabe im Takt lautet jetzt: `ZUSTAND RUFT EVALUATOR: A-37 steht auf CODE_FERTIG, Ball liegt
+bei 'integrator' — nicht bei mir.`
+
+## E13 · Meine E8-Probe war eine Momentaufnahme und wurde rot, ohne dass etwas kaputt war
+
+Beim ersten Lauf nach dem Umbau meldete `--fangprobe` **rot**. Ursache gemessen, nicht vermutet:
+
+**Der Integrator hat A-33 ausgeführt** — `7ea7ec48`, 19.08. 15:47, *„elf Tafelzeilen auf die
+Kennung ihres Datensatzes gezogen"*. Beleg am Bestand:
+
+```text
+am Bau-Stand 3e22e61b:   | **W-01** Raster und Fang | …
+heute:                   | **W-01/1** Raster und Fang | …
+```
+
+Damit sind **87 von 87** Tafelzeilen schon **ohne** Paarung vergleichbar — und meine Probe
+verlangte, die Paarung müsse *„mehr liefern als ohne sie"*. Unerfüllbar, sobald der Altbestand
+bereinigt ist.
+
+**Das ist die Lehre aus A-33 selbst, die ich zwei Stunden vorher gelesen hatte:**
+
+> *„Eine Zahl im Kriterium misst den Bestand ZUM ZEITPUNKT DES SCHNITTS. Jede spätere Arbeit an
+> demselben Bestand lässt sie ablaufen — und der Schneidende erfährt es nicht. **Eine INVARIANTE
+> läuft nicht ab.**"*
+
+**Eine Probe, die bei planmäßiger Arbeit rot wird, ist ein Fehlalarm — und Fehlalarme werden nach
+A-03 weggeklickt.** Umgestellt auf die Invariante: *jede Tafelzeile ist vergleichbar **oder** hat
+einen nachweisbaren Grund (mehrere Kandidaten).* Sie gilt heute (87/87, 0 ungepaart) und galt
+gestern (85 vergleichbar, 2 mit Grund). Rot-Richtung ergänzt: eine Tafelzeile ohne jeden Datensatz
+(`X-99`) muss als **grundlos** auffallen — tut sie.
+
+## Zwei eigene Schludrigkeiten in diesem Nachtrag, beide vor dem Commit behoben
+
+1. **`$?` nach einer Pipe** — `python3 … | tail -8; echo $?` maß den Exit von `tail`, nicht von
+   python. Die Ausgabe sagte gleichzeitig `Fangproben rot: 1` und `exit=0`. Ohne Pipe neu
+   gemessen: **echter exit=1**. Derselbe stille Typ wie E11.
+2. **Tote Zuweisung** — `grundlos` zweimal gesetzt, die erste Zeile sofort überschrieben.
+   Entfernt; `grep -c 'grundlos = '` steht jetzt bei **1**, `py_compile` sauber.
+
+## Positivbefund, der nicht mir gehört
+
+**A-33 wirkt.** Das Skript, das ich am 16.08. abgenommen habe, ist gefahren worden, und die elf
+Tafelzeilen tragen seither die Kennung ihres Datensatzes. Von den vier Zählern, die ich damals
+grün gab, ist damit der wichtigste nachträglich **im Betrieb** belegt — nicht nur am Probelauf.
+
+## Zählung nach diesem Nachtrag
+
+| | |
+|---|---|
+| eigene Fehler insgesamt behoben | **9** (E1–E4, E7, E8, E11, E12, E13) |
+| davon **still** — kein Fehler, keine leere Ausgabe, nur ein falsches Ergebnis | **2** (E11 zsh-Modifier · `$?` nach Pipe) |
+| davon **Momentaufnahme statt Invariante** | **1** (E13) |
+| erfundene Werte in eigenen Konstanten, am Regelwerk widerlegt | **2** (`WIEDERVORLAGE`, `NACHGEBESSERT`) |
+| durch Messung widerlegt | **2** (E5 · A-33-5-Verdacht) |
+| gemeldet, nicht in meiner Rolle behebbar | **2** (§6-Test-DB · Ball-Drift im Bestand ohne Prüfer) |
+| Fehler im Ergebnis meiner Voten | **0** von 71 |
