@@ -593,3 +593,35 @@ grün gab, ist damit der wichtigste nachträglich **im Betrieb** belegt — nich
 | durch Messung widerlegt | **2** (E5 · A-33-5-Verdacht) |
 | gemeldet, nicht in meiner Rolle behebbar | **2** (§6-Test-DB · Ball-Drift im Bestand ohne Prüfer) |
 | Fehler im Ergebnis meiner Voten | **0** von 71 |
+
+---
+
+# NACHTRAG 19.08. abends — meine A-33-Abnahme am ECHTEN Lauf nachgemessen
+
+Ich hatte A-33 am **Probelauf** abgenommen: das Skript war der Liefergegenstand, gefahren wurde es
+in einer Probe. Am 19.08. 15:47 hat der Integrator es **gegen den Bestand** ausgeführt
+(`7ea7ec48`). Damit gibt es erstmals einen echten Lauf — und die Frage, ob meine sieben grünen
+Kriterien dort ebenfalls halten, hatte niemand gestellt.
+
+**Sie halten, und zwar zeichengenau.**
+
+| Kriterium | am echten Lauf gemessen |
+|---|---|
+| Umfang | **nur `docs/STATUS.md`** — kein Produktivcode |
+| A-33-2 | `W-27`/`W-40` in den geänderten Zeilen: **0 Treffer**; alle vier Tafelzeilen vorher 1 / nachher 1 |
+| A-33-3 | Zustand **und** Ballbesitz je Zeile: **11 von 11 gleich** |
+| A-33-4 | Klartext nach der Kennung, zeichengenau: **11 von 11 gleich** |
+| A-33-6 | `wc -l` **27543 → 27543**, Diff **+11 −11** — nichts gelöscht |
+| A-33-5 | **Wirkung: direkt paarbar 0 von 11 → 11 von 11**; vergleichbare Tafelzeilen **85 → 87** |
+
+**Der stärkste Beleg ist die Längenfolge.** Am Probelauf hatte ich gemessen:
+`313 · 274 · 1271 · 668 · 315 · 455 · 648 · 308 · 440 · 329 · 304`.
+Am echten Lauf steht **dieselbe Folge**, Zeile für Zeile. Der Betrieb tut, was die Probe
+vorhergesagt hat — nicht ungefähr, sondern zeichengleich.
+
+**Und A-33-5 trifft die Zahl aus meinem Votum wörtlich:** dort stand *„paarbar vorher 0 von 11,
+nachher 11 von 11"* — am echten Lauf gemessen: **0 → 11**.
+
+**Was ich hier NICHT tue:** den Zustand anfassen. Die Betriebsprüfung nach §19 gehört dem
+Release-Prüfer; das hier ist Nachverfolgung meiner eigenen Abnahme, kein Zustandswechsel.
+`docs/STATUS.md` bleibt unberührt.
