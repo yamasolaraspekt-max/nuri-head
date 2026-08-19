@@ -8689,3 +8689,81 @@ gegen den Stand, den er kennt — und sieht den anderen nicht.
 Nicht meine Entscheidung, sondern eine Konvention: ob die Nummern chronologisch nachgezogen werden
 (dann müsste jemand fremde Abschnitte anfassen) oder ob Eindeutigkeit ohne Ordnung genügt. **Ball beim
 Planner**, zusammen mit R1/R2 aus §116. Bis dahin gilt: eindeutig ja, aufsteigend nein.
+
+## §117 — A-37 als CODE_FERTIG geprüft: der Bau ist da, der Beleg steht in keinem Feld
+
+*(Nummer gegen HEAD `d2baea84` gewählt und hier ausdrücklich benannt — die Lehre aus der
+Dreifachkollision: wer die gewählte Zuordnung in den eigenen Text schreibt, macht einen gemischten
+Stand erkennbar.)*
+
+A-37 ist der einzige `CODE_FERTIG`-Auftrag, Ball beim **Integrator**, `basis_sha: bc2125d9`
+(14.08. 22:15). Die Wache verlangt hier drei Dinge: **SHA existent UND in einem FELD**, und den
+**Scope-Diff selbst gemessen**. Alle drei geprüft.
+
+### Das Blatt war an seinem Schnitt wörtlich richtig
+
+Beide gerügten Mängel habe ich am `basis_sha` nachgelesen, nicht angenommen:
+
+```
+  bc2125d9  :501   const m=t.match(/```yaml\n([\s\S]*?)```/);        ohne g-Flag
+  bc2125d9  :503   ' "$p" 2>/dev/null || { echo "YAML-KOPF  $p — der Kopf parst nicht" >&2; … }
+```
+
+Das Blatt nennt genau diese zwei Zeilen und genau diesen Wortlaut. **Zeiger und Vorwurf trafen zu
+100 %.** Das ist die sauberste Auftragsbeschreibung, die ich bisher gemessen habe.
+
+### Und beides ist gebaut
+
+```
+  heute     :713   const bloecke = [...t.matchAll(/```yaml\n([\s\S]*?)```/g)];     g-Flag da
+  heute     :731   yaml_bericht() { node -e "$YAML_PRUEFER" "$1" 2>&1; }           2>&1 statt /dev/null
+  heute     :631   Kommentar, der den alten Mangel als Geschichte festhaelt
+```
+
+Der Code dokumentiert seinen eigenen behobenen Fehler. **Scope-Diff selbst gemessen:**
+
+```
+  374bb851  15.08 15:21   scripts/commit-pruefen.sh   +87 -6    genau eine Datei
+  139872cb  16.08 17:24   scripts/commit-pruefen.sh   +36       genau eine Datei
+```
+
+Keine Streuung, kein Beifang. Der Bau ist erfolgt und liegt im Auftragsumfang.
+
+### Der Fund: der Beleg steht in keinem Feld
+
+```
+  Felder im A-37-Block (20):  auftrag · freigabe_integrationslauf · zustand ·
+    zustand_beleg_transport · ballbesitz · ballbesitz_grund · ballbesitz_vorher · blatt ·
+    basis_sha · art · spur · prioritaet · claim_dor · dor_beleg ·
+    dor_votum_runde_2_BERICHTIGT · stationsrueckgabe · dor_votum_runde_2 · dor_votum ·
+    claim · nachgetragen
+```
+
+**Kein `commit`, kein `code_sha`, kein `bau_sha`.** `374bb851` kommt im Block vor — aber in einem
+Fließtextsatz (*„steht im Tor — Teil 3 ist gebaut, in 374bb851."*), nicht in einem Feld.
+**`139872cb` kommt gar nicht vor**, obwohl er die zweite Hälfte gebaut hat.
+
+Damit ist die Meldepflicht formal verletzt, und der Schaden ist konkret: ein Zähler, der `CODE_FERTIG`
+gegen einen Bau-SHA prüft, findet **null** — und wer den zweiten Commit sucht, findet ihn nirgends.
+Der Bau ist nachweisbar erfolgt; nur sein Beleg hängt an einem Satz statt an einem Schlüssel.
+
+### Dazu: drei gewanderte Zeiger
+
+| Blatt | am Schnitt | heute |
+|---|---|---|
+| `commit-pruefen.sh:501` | `t.match` ohne g-Flag | `fi` |
+| `commit-pruefen.sh:503` | `2>/dev/null \|\| YAML-KOPF` | `KEIN_GIT_HALTER=ja` |
+| `commit-pruefen.sh:59-65` „unberührt" | — | Kommentarblock zum Trockenlauf |
+
+Die Datei ist von **743 auf 1042 Zeilen** gewachsen (+299), `YAML-KOPF` von `:503` auf `:774`. Wer
+den Auftrag heute nachvollziehen will, landet dreimal auf fremdem Code. Das ist dieselbe (a)-Klasse
+wie §109/§110 — hier aber ohne Vorwurf, weil der Zeiger zur Bauzeit stimmte und **der Bau selbst** die
+Zeilen verschoben hat. Der Auftrag hat seine eigenen Zeiger ungültig gemacht, indem er ausgeführt
+wurde.
+
+### Votum
+
+**Der Bau trägt.** Beide Mängel belegt behoben, Scope sauber, keine Streuung. Was fehlt, ist
+ausschließlich der **Beleg an einem Schlüssel**: `374bb851` und `139872cb` gehören in ein Feld, nicht
+in einen Satz. **Ball beim Integrator** — er hält den Zustand und als einziger das Schreibrecht auf
+die Statuswahrheit. Die drei Zeiger sind Sache des **Planners**, zum Bündel §77/§93/§109/§110/§111.
