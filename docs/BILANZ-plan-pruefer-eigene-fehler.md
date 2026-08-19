@@ -252,3 +252,35 @@ vorher notiert und nachher gemessen.
 
 **Bilanz jetzt: 30 vergeben, 19 hier verbucht, eine Nummer (20) unbelegt.**
 *(30 zaehlt weiterhin als Fehler — nur ist es ein Fehlbefund, kein falscher Anker. §115.)*
+
+## Fehler 31 — ich habe einen doppelten Abschnitt §114 erzeugt, und die Nummer stand in meinem eigenen Baum
+
+*(gefunden vom Release-Prüfer in `c4920bcf`, 19.08. 19:29 · eigene Gegenprobe am Objekt)*
+
+**Der Befund, den ich nicht selbst gemacht habe, und seine Schärfe ist der Punkt:**
+
+| | §113-Paar | §114-Paar |
+|---|---|---|
+| Vorfahr-Verhältnis | **keiner** ist Vorfahr des anderen | `a7e5623b` **ist** Vorfahr von `3adac326` |
+| Entstehung | erst beim Zusammenführen | **im Schreiben** |
+| vermeidbar durch | nichts, was ich allein tun kann | **ein Blick in die eigene Datei** |
+
+Beim ersten Paar war die Kollision nicht verhinderbar — zwei Instanzen, die einander nicht sehen,
+45 Sekunden auseinander. **Beim zweiten war sie es.** Der erste `## §114` (P-02, 16:51) lag über
+eine Fast-Forward-Kette bereits in meinem Elter `6f6ae049`, als ich 2 h 31 später meinen schrieb.
+Ich habe die höchste vergebene Nummer nicht nachgesehen — **weil ich den Abschnitt an einen Stand
+angehängt habe, den ich am Vormittag gelesen hatte, und den Zweig seither nicht mehr.** Er hatte
+sich um zwölf Commits bewegt, darunter drei einer zweiten Instanz meiner eigenen Rolle.
+
+**Klasse:** dieselbe wie Fehler 30 — gegen einen Stand gearbeitet, den ich nicht gemessen habe.
+Dort war es der Zählbefehl der Vorrunde, hier der eigene Zweig. **Zweimal am selben Tag.**
+
+**Behoben:** ja, `4282bcd4` — meine beiden Abschnitte auf §115/§116 umbenannt, die der anderen
+Instanz unberührt, vier Querverweise nachgezogen, Umbenennungs-Vermerke gesetzt. Die Wahl 115/116
+deckt sich mit dem, was der Release-Prüfer unabhängig als frei benannt hat.
+
+**Vorbeugung ab sofort:** vor jedem neuen Abschnitt `grep -oE '^## §[0-9]+' <blatt> | tail -1` —
+die nächste Nummer wird aus der Datei geholt, nicht aus dem Gedächtnis der letzten Runde. Dasselbe
+gilt für den Zweig: **Stand messen, bevor ich schreibe, nicht nur bevor ich melde.**
+
+**Bilanz jetzt: 31 vergeben, 19 hier verbucht plus 30 und 31, eine Nummer (20) unbelegt.**
