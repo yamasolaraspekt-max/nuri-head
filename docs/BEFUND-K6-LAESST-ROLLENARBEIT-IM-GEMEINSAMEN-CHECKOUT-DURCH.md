@@ -101,3 +101,23 @@ der Stamm —, aber der Weg wurde nicht gegangen.
 
 **Bauen würde ich erst nach einem Auftrag** — die Kante ist beauftragt, und wer sie beauftragt hat,
 entscheidet auch über ihre Verengung.
+
+## 6 · Nachtrag 20.08. — aus zwei sind vier
+
+**In der Weck-Runde am Mittag nachgemessen, gleicher Befehl wie oben:**
+
+```text
+ee319d54  20.08 11:16  generator: S-1/4 Schnittmenge ...   docs/S-1-ANSCHLUSSMESSUNG.md  +71
+70f46b31  20.08 00:30  generator: S-1/3 Bedienkette ...    docs/S-1-ANSCHLUSSMESSUNG.md  +61
+dd0a870b  19.08 20:21  (oben)                              docs/S-1-ANSCHLUSSMESSUNG.md  +98
+4699f0e6  19.08 20:15  (oben)                              docs/S-1-ANSCHLUSSMESSUNG.md  +134
+```
+
+**Immer noch ausschließlich die Rolle `generator`, immer dieselbe Datei, inzwischen 364 Zeilen.**
+Keine andere Rolle hat einen Commit, der nur im Stamm liegt.
+
+**Und das ist ausdrücklich KEIN Vorwurf, der Befund sei übergangen worden:** dieser Befund steht
+seit `927d5562`, 19.08 23:13, **untransportiert in meinem Zweig — 1 voraus, seit dreizehn Stunden
+unverändert.** Wer im gemeinsamen Checkout arbeitet, hat ihn schlicht nicht lesen können. *Das ist
+dieselbe Lücke, nur von der anderen Seite:* ein Befund, der den Transportweg braucht, um zu wirken,
+und eine Arbeitsweise, die ihn umgeht.
