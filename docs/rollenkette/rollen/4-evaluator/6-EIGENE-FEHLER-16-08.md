@@ -625,3 +625,59 @@ nachher 11 von 11"* — am echten Lauf gemessen: **0 → 11**.
 **Was ich hier NICHT tue:** den Zustand anfassen. Die Betriebsprüfung nach §19 gehört dem
 Release-Prüfer; das hier ist Nachverfolgung meiner eigenen Abnahme, kein Zustandswechsel.
 `docs/STATUS.md` bleibt unberührt.
+
+---
+
+# NACHTRAG 20.08. — E7 ist zu Ende gemessen: der Fall ist geschlossen, und er belegt meinen offenen Posten
+
+Seit dem 16.08. habe ich in jedem Takt dieselbe Zeile gemeldet: A-37 trägt in der Tafel einen
+anderen Ball als im Datensatz. **Heute meldet mein Werkzeug `Ball-Drift keine`.** Ein Befund, der
+verschwindet, ist kein Befund mehr — aber er ist auch nicht automatisch *richtig* verschwunden.
+Also habe ich beide Schreibvorgänge einzeln datiert.
+
+## Die Behebung ist richtig herum
+
+Die Konfliktregel lautet: bei Abweichung gewinnt der **neuere** Schreibvorgang. Beide Seiten
+datiert, jede am Stand des jeweiligen Commits geöffnet:
+
+| Ort | Wert | gesetzt von | wann |
+|---|---|---|---|
+| Tafelzeile, Ball-Spalte | `**Plan-Prüfer**` | `514d1a60` | 16.08. **16:56** |
+| Datensatz, `ballbesitz:` | `integrator` | `5d53c011` | 16.08. **19:18** |
+
+Der Datensatz ist **2 h 22 min neuer**. „Neuer gewinnt" ergibt also `integrator` — und `87a987e1`
+(19.08. 19:53) hat die Tafel genau dorthin gezogen. **Die Behebung folgt der Regel.** Der Commit
+ist auch im Umfang sauber: eine geänderte Tafelzeile, ein neues Messfeld, `17 +` / `1 −`, und die
+eine Löschung *ist* die alte Tafelzeile. Standzeit des Widerspruchs: **3 Tage 35 Minuten.**
+
+## Der zweite Fund: ein Commit hatte beide Orte offen und zog nur das Feld nach, das „zustand" heißt
+
+Zwischen Entstehung und Behebung liegt `15e11078` (16.08. **20:16**, integrator). Dieser Commit
+fasste **beide Statusorte in derselben Änderung** an:
+
+| Ort | was 15e11078 tat |
+|---|---|
+| Tafelzeile A-37 | Zustand `` `BEREIT` `` → `` **`CODE_FERTIG`** `` · **Ball unverändert `**Plan-Prüfer**`** |
+| Datensatz A-37 | `zustand: BEREIT` → `zustand: CODE_FERTIG` · **`ballbesitz:` nicht angefasst** |
+
+Gegengeprüft: im gesamten Diff dieses Commits steht **keine einzige** geänderte `ballbesitz:`-Zeile.
+Der Zustand wurde zweiseitig nachgezogen, der Ball an keinem der beiden Orte — obwohl der
+Widerspruch da bereits **58 Minuten** alt war und beide Zeilen in derselben Änderung offen lagen.
+
+**Das ist die Stelle, an der es hätte auffallen müssen.** Ein Commit, der beide Statusorte
+gleichzeitig editiert, ist die letzte Gelegenheit, einen Widerspruch zwischen ihnen zu bemerken.
+Danach lag er drei Tage.
+
+## Warum ich das aufschreibe, statt es abzuhaken
+
+Mein Posten beim Planner — *„es fehlt ein Bestandsprüfer für Ball-Drift"* — war bisher aus einem
+eigenen Fehler abgeleitet (E7: ich selbst hatte den Ball nie verglichen). **Jetzt hat er einen
+Fall.** `a26-ball-drift.sh` bildet seine Kennungen aus dem *Diff*; `15e11078` ändert die
+`ballbesitz:`-Zeile nicht — es gibt also nichts zu diffen, und ein Prüfer, der nur den Diff liest,
+schweigt hier zu Recht und trotzdem falsch. Was gefehlt hat, ist ein Prüfer, der **den Bestand**
+vergleicht: für jede Kennung Tafel-Ball gegen Datensatz-Ball, unabhängig davon, ob jemand die
+Zeile angefasst hat. Genau das misst mein Takt-Werkzeug seit E7 — aber nur für mich, nur wenn ich
+laufe, und ohne jede Wirkung auf einen fremden Commit.
+
+**Was ich hier NICHT tue:** den Prüfer bauen. Der Posten liegt beim Planner, und er bleibt dort.
+Ich liefere ihm nur den Beleg, den er vorher nicht hatte. `docs/STATUS.md` bleibt unberührt.
