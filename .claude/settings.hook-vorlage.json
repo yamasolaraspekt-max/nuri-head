@@ -1,0 +1,16 @@
+{
+  "_hinweis": "Vorlage (ARBEITSREGELN Fassung 1.7, N2). Inhalt in die lokale, git-ignorierte .claude/settings.json des jeweiligen Arbeitsbaums uebernehmen — je Baum einzeln (gemessen 20.08.2026: 13 Baeume neben dem Hauptcheckout).",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/hooks/veroeffentlichungs-tor.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

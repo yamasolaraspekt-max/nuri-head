@@ -24,7 +24,7 @@ Uhrzeit; und eine Automatik, die regelmäßig ins Leere läuft, gewöhnt ans Weg
 
 | Zone | Umriss |
 |---|---|
-| Z1 Hausplaner-Insel | `resources/js/hausplaner/` — Engines, Szene, Werkzeuge, Panels |
+| Z1 Hausplaner-Insel | `resources/planner/hausplaner/` (gemessen 20.08.: 338 TS-Dateien) — Engines, Szene, Werkzeuge, Panels |
 | Z2 CRM-Routen & Rechte | `routes/web.php` je Präfix + Controller + `permission:`-Bindung |
 | Z3 Belegkette | Angebot → Auftrag → Rechnung: Models, Hooks, PDF, abgeleitete Werte |
 | Z4 DB & Migrationen | additiv? Bestandsdaten-Risiko? Seeds gegen Testdatenbanken? |

@@ -1,9 +1,10 @@
 # Verbindliche Arbeitsregeln
 
-**Version:** 1.4.2
-**Gültig seit:** 04.08.2026 · **Fassung 1.4 seit:** 05.08.2026 · **1.4.2 seit:** 05.08.2026
-(vereint die veröffentlichte 1.3-Linie mit den lokalen Fassungen 1.1–1.2.2; Herkunft je Regel im
-Änderungsverzeichnis §19)
+**Version:** 1.7
+**Gültig seit:** 04.08.2026 · **Fassung 1.7 seit:** 20.08.2026
+(Kopf und §19 waren seit dem 12.08. dokumentiert uneinheitlich — Kopf 1.4.2 bei §19-Einträgen
+1.5/1.6; begradigt mit 1.7 auf Yamas Übernahme-Mandat vom 20.08., der Kopf folgt fortan der
+höchsten §19-Nummer. Herkunft je Regel im Änderungsverzeichnis §19)
 **Autorität:** Yama
 **Geltung:** gesamtes Repository, alle Menschen, Agenten, Rollen, Worktrees und Arbeitszweige
 
@@ -65,8 +66,14 @@ ENTWURF
 → RELEASE_PRUEFUNG
 → RELEASE_FREI
 → VEROEFFENTLICHT
+→ INTEGRATION_GEPRUEFT
 → BETRIEBSBESTAETIGT
 ```
+
+`INTEGRATION_GEPRUEFT` ist mit **Fassung 1.7** verankert (Volltext im Nachtrag „Fassung 1.7" am
+Dateiende): der integrierte Stand ist nach dem Merge von einer frischen, am Vorgang unbeteiligten
+Evaluator-Instanz als Ganzes geprüft. **Belegt eine `IN_ARBEIT`-Stelle: NEIN** — die Prüfung ist
+kein laufender Bau; der Bau des Auftrags liegt zu diesem Zeitpunkt längst hinter `CODE_FERTIG`.
 
 Zusätzliche Blockzustände:
 
@@ -183,14 +190,16 @@ Scope stillschweigend. Einen unerfüllbaren Auftrag gibt er als `SPEC_BLOCKED` z
 
 Der Evaluator prüft einen exakten Commit unabhängig. Er liest zuerst Auftrag, Diff und Code und
 führt eigene Gegenproben aus. Den Generatorbericht liest er erst danach zum Abgleich. Generator und
-Evaluator dürfen nicht dieselbe Instanz sein.
+Evaluator dürfen nicht dieselbe Instanz sein. Seit **Fassung 1.7** trägt die Rolle zusätzlich das
+Mandat **Integrations-Abnahme** — eine frische, am Vorgang unbeteiligte Instanz prüft den
+integrierten Stand nach dem Merge (Nachtrag „Fassung 1.7" am Dateiende).
 
 ### Release-Prüfer
 
 Der Release-Prüfer prüft, dass exakt der abgenommene Commit veröffentlicht werden soll, alle
 Artefakte reproduzierbar sind, Migration und Rückweg tragen und keine fremden Änderungen in den
 Release geraten. Er veröffentlicht nicht selbst und darf beim selben Auftrag weder Generator noch
-Evaluator gewesen sein. **Er darf für denselben Vorgang auch nicht Integrator sein** — zur sechsten Rolle siehe den **Nachtrag „Integrator" am Dateiende** (Entscheidung B-2 vom 14.08.2026; der Abschnitt steht am Ende, damit kein Zeilenverweis wandert).
+Evaluator gewesen sein. **Er darf für denselben Vorgang auch nicht Integrator sein** — zur sechsten Rolle siehe den **Nachtrag „Integrator" am Dateiende** (Entscheidung B-2 vom 14.08.2026; der Abschnitt steht am Ende, damit kein Zeilenverweis wandert). Seit **Fassung 1.7** setzt er `BETRIEBSBESTAETIGT` erst, wenn `INTEGRATION_GEPRUEFT` vorliegt (Nachtrag „Fassung 1.7").
 
 ### Yama / Veröffentlichung
 
@@ -268,6 +277,11 @@ Ein Auftrag darf nur `BEREIT` werden, wenn der Plan-Prüfer alle folgenden Punkt
   belegt an A-04-6,*
 - jede Anforderung ist entweder ein **Kriterium** oder ein ausdrückliches **Nicht-Ziel**; einen
   dritten Zustand gibt es nicht,
+- **jedes Abnahmekriterium steht in einer Zeile der Nachvollzugs-Matrix**
+  `Kriterium → Arbeitspaket → (nach Umsetzung) Commit-SHA → Testbeleg`; ein Kriterium ohne
+  Matrixzeile macht den Auftrag nicht `BEREIT`-fähig. Der Plan-Prüfer prüft die Matrix **vor** dem
+  Bau auf Vollständigkeit, der Evaluator prüft **gegen** sie *(Fassung 1.7; eine rückwirkend
+  gefüllte Matrix beweist nichts)*,
 - Rückweg bei riskanten Änderungen ist beschrieben.
 
 Fehlt ein Punkt, bleibt der Auftrag `ENTWURF` oder wird `SPEC_BLOCKED`.
@@ -564,6 +578,7 @@ Weg": wer, wie, wann zurück, welche Kriterien):**
 | `UMGEBUNG` | Rolle, deren Umgebung es ist | `ENV_BLOCKED` | erzeugt **kein** fachliches Rot |
 | `BEWEIS` | Generator | `NACHBESSERN` | der Code darf unverändert bleiben; geschuldet ist der Nachweis |
 | `REGRESSION` | Generator | `NACHBESSERN` | immer P0 |
+| `INTEGRATION` | **Integrator** | `RELEASE_BLOCKED` | *Fassung 1.7:* falsche Konfliktlösung oder falsche Basis beim Zusammenführen — kann nur auf der Integrationslinie behoben werden. Die übrigen Klassen gelten auf dem Integrationsstand unverändert (CODE→Generator, SPEC→Planner, …) |
 
 **Ein Befund mit CODE- und SPEC-Anteil wird geteilt, nicht gemittelt.** Beide Teile bekommen eine
 eigene Klasse und einen eigenen Ball. **Der SPEC-Teil wird zuerst behoben** — sonst arbeitet der
@@ -706,7 +721,8 @@ seiner laufenden Zehnergruppe.
   ausdrückliche Freigabe.
 - Authentifizierung, Rechte, Mandanten- und Portalgrenzen werden serverseitig geprüft.
 - Bei Geld-, Datenschutz-, Auth-, Portal- oder Datenbankwirkung ist der vollständige
-  Planner-Plan-Prüfer-Generator-Evaluator-Release-Prüfer-Prozess Pflicht.
+  Planner-Plan-Prüfer-Generator-Evaluator-Release-Prüfer-Prozess Pflicht — bei Integration
+  fremder Arbeit einschließlich Integrator und Integrations-Abnahme *(Fassung 1.7)*.
 - Geheimnisse, Zugangsdaten und personenbezogene Daten werden nicht in Berichte oder Git geschrieben.
 
 ## 16. Statusführung
@@ -841,7 +857,8 @@ Erlaubte Übergänge und Eigentümer:
 | `ABGENOMMEN` | `RELEASE_PRUEFUNG` | Release-Prüfer |
 | `RELEASE_PRUEFUNG` | `RELEASE_FREI`, `RELEASE_BLOCKED`, `ENV_BLOCKED` oder `DECISION_BLOCKED` | Release-Prüfer |
 | `RELEASE_FREI` | `VEROEFFENTLICHT` oder `RELEASE_BLOCKED` | Yama beziehungsweise ausdrücklich beauftragte Veröffentlichungsrolle |
-| `VEROEFFENTLICHT` | `BETRIEBSBESTAETIGT` oder `RELEASE_BLOCKED` | Release-Prüfer als unabhängige Betriebsprüfung |
+| `VEROEFFENTLICHT` | `INTEGRATION_GEPRUEFT` oder `RELEASE_BLOCKED` | frische, am Vorgang unbeteiligte Evaluator-Instanz (Integrations-Abnahme, Fassung 1.7); geschrieben wie jeder Zustand über den Integrator |
+| `INTEGRATION_GEPRUEFT` | `BETRIEBSBESTAETIGT` oder `RELEASE_BLOCKED` | Release-Prüfer als unabhängige Betriebsprüfung — **ausgewiesene Änderung Fassung 1.7:** Startpunkt dieses Übergangs war zuvor `VEROEFFENTLICHT` |
 | `ENV_BLOCKED` | gespeicherter `fortsetzung_zustand` | dieselbe prüfende Rolle wie vor der Blockade |
 | `DECISION_BLOCKED` | gespeicherter `fortsetzung_zustand` | dieselbe prüfende Rolle nach Yamas dokumentierter Entscheidung |
 | `RELEASE_BLOCKED` | `RELEASE_PRUEFUNG` | Release-Prüfer, nur ohne Inhaltsänderung und mit behobenem Release-Blocker |
@@ -1110,6 +1127,29 @@ Fließtext.*
 ---
 
 ## 19. Änderungsverzeichnis
+
+### Fassung 1.7 — 20.08.2026, vier Orchestra-Übernahmen (Planner, auf Yamas Übernahme-Mandat)
+
+**Herkunft:** Konzeptblatt `docs/konzept/arbeitsregeln-1-5-orchestra-nachtrag.md`, drei
+Prüfrunden (REVISE R1–R10 → REVISE R11a/R11b → PASS), eingearbeitet auf Yamas ausdrückliches
+Mandat „die Regelwerk sollst du übernehmen" vom 20.08. **Änderungen:**
+
+- **N1 Integrations-Abnahme:** neuer Zustand `INTEGRATION_GEPRUEFT` (§3-Kette, belegt keine
+  `IN_ARBEIT`-Stelle) zwischen `VEROEFFENTLICHT` und `BETRIEBSBESTAETIGT`; Mandat der
+  Evaluator-Rolle (§4); neue §12.1-Klasse `INTEGRATION`→Integrator; §15-Pflichtprozess ergänzt;
+  §16-Tabelle: neue Zeile + **ausgewiesene Änderung** am Übergang zu `BETRIEBSBESTAETIGT`
+  (Startpunkt war `VEROEFFENTLICHT`). Die §16-Exklusivregel des Merge-Folgecommits blieb wörtlich
+  unangetastet. *Abweichung vom Konzeptblatt, dokumentiert statt verschwiegen: das Blatt
+  deklarierte „belegt einen §3-Platz: ja" — eingearbeitet ist NEIN, weil die Angabe nach §3 die
+  `IN_ARBEIT`-Schranke misst und eine Integrations-Abnahme kein laufender Bau ist; ein JA hätte
+  jeden neuen Bau grundlos blockiert.*
+- **N2 Veröffentlichungs-Hook:** Nachtrag am Dateiende; Vorlage
+  `.claude/settings.hook-vorlage.json` + `scripts/hooks/veroeffentlichungs-tor.sh`. Drei-Wege-
+  Markensemantik; §4-Vertretung des Release-Prüfers unangetastet.
+- **N3 Nachvollzugs-Matrix:** neue Pflichtzeile der `BEREIT`-Liste (§5).
+- **N4 Dirigent:** `.claude/agents/dirigent.md`, orchestriert ohne Bauwerkzeuge.
+- **Kopf begradigt:** Version 1.4.2 → 1.7; die seit 12.08. dokumentierte Uneinheitlichkeit
+  (Kopf 1.4.2 bei §19-Einträgen 1.5/1.6) endet — der Kopf folgt fortan der höchsten §19-Nummer.
 
 ### Fassung 1.6 — 12.08.2026, Barriere B6 verankert (Generator, Auftrag B6)
 
@@ -1822,4 +1862,64 @@ Schadens; beides gehört zusammen genannt.*
 
 **Messbar, ohne die Sache zu kennen:** `git rev-list --count HEAD..auto/hausplaner-integration`
 **vor** der ersten Handlung. **Ist die Zahl größer als null, wird zuerst nachgezogen.**
+
+---
+
+## NACHTRAG · Fassung 1.7 — vier Orchestra-Übernahmen *(20.08.2026, Yamas Übernahme-Mandat)*
+
+*Der Abschnitt steht am Dateiende, damit kein Zeilenverweis wandert (Muster des
+Integrator-Nachtrags). Herkunft und Prüfkette: `docs/konzept/arbeitsregeln-1-5-orchestra-nachtrag.md`.*
+
+### N1 · Integrations-Abnahme
+
+**Nach jedem Integrations-Merge prüft eine frische Evaluator-Instanz den entstandenen Stand als
+Ganzes** — Zusammenspiel der Pakete, Testsuite auf dem Integrationsstand, Regressionen, gemeinsame
+Datenflüsse, Rechtegrenzen. Frisch heißt: **an keinem Paket des Vorgangs als Generator, Evaluator,
+Release-Prüfer oder Integrator beteiligt** — und das steht als Erklärung samt Instanz-Kennung in
+ihrem Bericht; ohne diese Zeile ist das Urteil ungültig.
+
+Die Kette: `… RELEASE_FREI → Merge (Kind-Commit dokumentiert RELEASE_FREI → VEROEFFENTLICHT,
+Exklusivregel §16 unverändert) → Integrations-Abnahme → INTEGRATION_GEPRUEFT →
+BETRIEBSBESTAETIGT`. Der Grund für die Station: §15 zählte den Pflichtprozess ohne Integrator auf —
+nach dem Merge prüfte bislang niemand den entstandenen Stand.
+
+Ein `FAIL` wird nach §12.1 klassifiziert, einschließlich der neuen Klasse
+`INTEGRATION` → Integrator (`RELEASE_BLOCKED`). **Die Integrations-Abnahme führt keinen Ball in
+eigener Sache** — Ballführung läuft ausschließlich über den Integrator in `docs/STATUS.md`
+(Schutz gegen das Phantom-Ball-Muster zweier Instanzen derselben Rolle).
+
+### N2 · Veröffentlichungs-Tor (Hook)
+
+**Ein `PreToolUse`-Hook blockiert Veröffentlichungswege maschinell:** Push nach `main`, Push auf
+`upstream`, Tags, jede `--force`-Variante. **Transport-Pushes auf `fork`/`backup-private` bleiben
+frei** — Push ist Transport, nicht Veröffentlichung.
+
+**Marke** ist die ungetrackte Datei `.claude/freigabe-veroeffentlichung`, entstehend auf genau
+zwei Wegen: **(1)** Yamas Freigabe im Gespräch je Vorgang; **(2)** der Release-Prüfer setzt sie
+**selbst** für einen `RELEASE_FREI`-Stand und trägt dessen SHA hinein — Dokumentation seiner
+bestehenden §4-Vollmacht („ohne Einzelrückfrage"), keine neue Rückfrage. Der Hook prüft dann nur
+die SHA-Deckung. Nach dem Push wird die Marke entfernt.
+
+**Reichweite, ehrlich:** das Tor greift bei Werkzeug-Aufrufen der Agenten-Sitzungen, nicht bei
+einem von Hand getippten Terminal-Push. Es ist ein Gate für Instanzen, kein Systemschutz. Beim
+Commit-Wächter gilt das AUF-75-Prinzip (melden statt blockieren); für Veröffentlichung fällt die
+Abwägung anders aus — der Schaden eines falschen `main`-Pushes ist irreversibel öffentlich, die
+Blockade eines legitimen kostet Minuten. Jede Fehlblockade wird als Befund erfasst.
+
+**Verteilung:** committete Vorlage `.claude/settings.hook-vorlage.json` +
+`scripts/hooks/veroeffentlichungs-tor.sh`; Einrichtung je Arbeitsbaum (die lokale
+`.claude/settings.json` ist git-ignoriert; gemessen 20.08.2026: 13 Arbeitsbäume neben dem
+Hauptcheckout).
+
+### N3 · Nachvollzugs-Matrix
+
+Pflichtzeile der `BEREIT`-Liste in §5: jedes Abnahmekriterium hat eine Matrixzeile
+`Kriterium → Arbeitspaket → Commit-SHA → Testbeleg`. Vor dem Bau geprüft (Plan-Prüfer), nach dem
+Bau befüllt, in der Abnahme dagegen gemessen (Evaluator). Rückwirkendes Befüllen beweist nichts.
+
+### N4 · Dirigent
+
+`.claude/agents/dirigent.md`: orchestriert (Intake, Agentenauswahl nach dem Roster in
+`docs/regelwerk/AGENTEN-UND-SKILLS.md`, Übergaben, Gate-Verwaltung), **führt keine Edit/Write-
+Werkzeuge**, gibt keine eigenen Ergebnisse frei. Freigaben bleiben ausnahmslos bei Yama.
 

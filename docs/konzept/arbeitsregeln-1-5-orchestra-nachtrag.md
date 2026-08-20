@@ -41,7 +41,10 @@ Integrations-Abnahme sitzt deshalb **nach** dem Integrator als neuer, letzter Pr
 ```
 
 **Zustand und seine Lage** *(R5, R11b)*: neuer Zustand `INTEGRATION_GEPRUEFT`, Eigentümerin ist die
-prüfende Evaluator-Instanz; **belegt einen §3-Platz: ja**. Er sitzt **zwischen `VEROEFFENTLICHT`
+prüfende Evaluator-Instanz; **belegt eine `IN_ARBEIT`-Stelle: NEIN** *(berichtigt bei der
+Einarbeitung, 20.08.: Fassung 3 sagte hier „ja" — die §3-Angabe misst aber die `IN_ARBEIT`-Schranke,
+und eine Integrations-Abnahme ist kein laufender Bau; ein JA hätte jeden neuen Bau grundlos
+blockiert. Von keiner der drei Prüfrunden bemerkt, gefunden beim Lesen von §3 vor dem Schnitt)*. Er sitzt **zwischen `VEROEFFENTLICHT`
 und `BETRIEBSBESTAETIGT`**: der Merge-Folgecommit dokumentiert weiterhin als einzigen Übergang
 `RELEASE_FREI → VEROEFFENTLICHT` (§16 :830-834 bleibt wörtlich unangetastet). **Ausgewiesene
 Änderung an §16 :844:** der Übergang des Release-Prüfers lautet künftig
