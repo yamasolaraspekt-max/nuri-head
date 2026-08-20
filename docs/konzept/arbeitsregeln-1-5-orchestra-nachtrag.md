@@ -193,9 +193,19 @@ Hooks melden sich selbst als Blockade und werden als Befund erfasst.
 4. `grep -n "Fassung 1.7" docs/ARBEITSREGELN.md` ≥ 1 Treffer **in §19** (Trefferzeile zitiert;
    Abgrenzung: die Alt-Treffer „Fassung 1.5"/„1.6" gehören zu B5/B6 und zählen nicht);
    `.claude/agents/dirigent.md` existiert und `grep -c "Edit\|Write" <tools-Zeile>` = 0.
-5. `git log --oneline <SHA-Start>..<SHA-Ende> -- docs/STATUS.md` ist leer, wobei Start = letzter
-   Commit vor Beginn der Einarbeitung und Ende = Abnahme-Commit — beide SHAs im Beleg benannt.
-   Spätere Integrator-Erzeugungen außerhalb dieses Bereichs zählen nicht als Verstoß.
+5. **Kein Commit DIESES Vorgangs ändert `docs/STATUS.md`:** für jeden Einarbeitungs-Commit ist
+   `git show <sha> --stat -- docs/STATUS.md` leer — die Commits im Beleg benannt. Fremde Commits
+   im selben Zeitraum zählen **nicht**: der Zweig ist geteilt, und parallele Integrator-Arbeit an
+   STATUS.md ist dessen legitimes Mandat.
+   *(SPEC-Berichtigung nach Evaluator-Rot vom 20.08.: die Erstfassung verlangte einen leeren
+   `git log`-Bereich — auf einem geteilten Zweig misst das fremde, legitime Arbeit mit. Der
+   Rot-Befund traf die Messvorschrift, nicht den Bau; Klasse SPEC → Planner nach §12.1.)*
+   **Wer den Vorgangsumfang festlegt:** nicht der Einarbeitende durch Aufzählen — der Evaluator
+   leitet die Vorgangs-Commits **selbst** aus der Branch-Historie ab (`git log` im Zeitraum,
+   gefiltert auf Commits, deren Botschaft die Einarbeitung nennt oder deren Diff die
+   Nahtstellen-Dateien berührt) und gleicht sie gegen die benannte Liste ab; eine Abweichung ist
+   ein Befund. *(Nachtrag auf den zweiten Evaluator-Hinweis vom 20.08. — sonst wäre das Kriterium
+   durch Nicht-Nennen umgehbar.)*
 
 ## 7. Heimat-App
 
