@@ -21,6 +21,27 @@
  *   Tiefe   = Aufbauhöhe des Körpers (steht über der Fläche) — NICHT die Öffnungshöhe.
  *
  * Rein (keine THREE-/React-Abhängigkeit). KEINE Dacheindeckung, KEINE Statik, KEINE Produktwahl.
+ 
+ *
+ * ---
+ *
+ * **HERKUNFTSVERMERK, nachgetragen 20.08. — dieser Kopf nennt einen Wirt, den es hier nicht gibt.**
+ *
+ * Die oben genannte „Engine" ist `class RoofEngine`, und sie steht **ausschliesslich** in
+ * `docs/planner/pv-belegung-referenz/DachplanerProPage.tsx:369` — einer Referenzdatei unter `docs/`,
+ * nicht im Produktivbaum. Gemessen: `buildFlat`, `ObstacleData` und `RoofEngine` haben in
+ * `resources/` und `app/` **null Definitionen**, nur Kommentar-Nennungen.
+ *
+ * **Folge:** dieses Modul hat heute keinen Produktivverbraucher, und der Aufrufer, gegen den es
+ * geschrieben ist, wurde nie mitgebracht. Es ist nicht „gebaut und noch nicht angeschlossen",
+ * sondern **gegen ein anderes Haus gebaut**.
+ *
+ * **Dazu die Einheiten:** dieses Modul rechnet in **Metern** (80 Feldnamen auf `…M`/`…M2`, null auf
+ * `…Mm`); die Domaene dieser Insel fuehrt **ganze Millimeter** (`domain/scene.types.ts:270`). Ein
+ * Anschluss ist damit keine Verdrahtung, sondern eine Umrechnung mit Rundungsentscheidung.
+ *
+ * **Wer es anschliessen will, muss zuerst diesen Vermerk entkraeften** — sonst wird aus einem
+ * fremden Vertrag stillschweigend ein eigener.
  */
 
 import { polygonFlaecheM2, type Punkt2D } from './polygonFlaeche';

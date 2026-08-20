@@ -18,6 +18,23 @@
  * Robust: ungültige/negative Längen werden zu 0; niemals NaN/Infinity/negativ.
  * Rein (keine React-/THREE-Abhängigkeit), vollständig prüfbar. Ändert NICHTS an
  * Reparatur 1-6 (insb. die Polygonfläche aus Reparatur 6 bleibt die Flächenquelle).
+ 
+ *
+ * ---
+ *
+ * **HERKUNFTSVERMERK, nachgetragen 20.08. — dieser Kopf nennt einen Wirt, den es hier nicht gibt.**
+ *
+ * Die oben genannte „Engine" ist `class RoofEngine`, und sie steht **ausschliesslich** in
+ * `docs/planner/pv-belegung-referenz/DachplanerProPage.tsx:369` — einer Referenzdatei unter `docs/`,
+ * nicht im Produktivbaum. Gemessen: `buildFlat`, `ObstacleData` und `RoofEngine` haben in
+ * `resources/` und `app/` **null Definitionen**, nur Kommentar-Nennungen.
+ *
+ * **Folge:** dieses Modul hat heute keinen Produktivverbraucher, und der Aufrufer, gegen den es
+ * geschrieben ist, wurde nie mitgebracht. Es ist nicht „gebaut und noch nicht angeschlossen",
+ * sondern **gegen ein anderes Haus gebaut**.
+ *
+ * **Wer es anschliessen will, muss zuerst diesen Vermerk entkraeften** — sonst wird aus einem
+ * fremden Vertrag stillschweigend ein eigener.
  */
 
 export interface HolzStueck {
