@@ -558,3 +558,91 @@ nicht fragen, ob noch mehr davon im Bestand liegt — es liegt nichts.
 (dann ist die Marke falsch und ein Modellbefehl fehlt), oder er tut es nicht (dann sind `familie`
 und `ergebnisse` beider Verträge falsch). **Ball beim Planner**, unverändert seit S-1/5 — jetzt mit
 der Zusatzinformation, dass es bei zweien bleibt.
+
+---
+
+# S-1/8 — mein Erreichbarkeitsmaß zählte `import type` als Kante. Es ist doppelt so viel tot.
+
+*20.08. gegen `e1674e4c`. Gefunden nicht durch Nachdenken über die Methode, sondern beim Verfolgen
+einer einzelnen Kette: `dachOeffnung` → `aufbauPlatzierung` → `dachformVorlagen` → wer ruft das?*
+
+## Der Messfehler
+
+In S-1/2 habe ich die Importkette ab `main.tsx` gezogen und **jede** `import … from`-Zeile als Kante
+genommen. **`import type` gehört nicht dazu** — TypeScript löscht sie beim Übersetzen restlos, sie
+erzeugt keinen Laufzeitcode. Ein Modul, das nur über eine Typ-Kante erreicht wird, steht **nicht**
+im Bündel.
+
+Neu gezogen, nur über Wert-Kanten (Typ-Importe und `{ type X, type Y }`-Klammern ausgenommen):
+
+```
+                              alt (S-1/2)      neu
+Module ohne Tests                     165      160
+erreichbar                            137      127
+NICHT erreichbar                       25       33
+```
+
+**Drei der acht neuen sind kein Befund:** `domain/scene.types.ts`, `app/tools/toolTypes.ts` und
+`app/tools/werkzeugArten.ts` sind **reine Typdateien** — bei ihnen ist die Typ-Kante die richtige,
+und sie haben keinen Laufzeitcode, der fehlen könnte. Das gehört genannt, bevor die Zahl steigt.
+
+**Fünf sind einer.**
+
+## Der Fund: die Dachvorlagen-Bibliothek hängt an einer gelöschten Kante
+
+```
+geometry/dachformVorlagen.ts    2.402 Zeilen · 51 Laufzeit-Exporte
+  einziger Produktivimport:
+    renderers/three-d/dachMesh.ts:13   import type { EngineRoofShape } from '…/dachformVorlagen';
+```
+
+**Ein einziger Import, und es ist ein `import type`.** Er verschwindet beim Übersetzen. Damit hat
+die gesamte Bibliothek — über 130 Vorlagen, `rdnGrad`, `mindestneigungGrad`, die Neigungswarnungen,
+`applyVorlage`, `platziereAufbauten` — **null Laufzeitverbraucher.**
+
+Und vier weitere Module sind **tot als Folge**, weil ihre Verbraucher es sind:
+
+| Modul | Z. | wer es importiert |
+|---|---|---|
+| `geometry/aufbauPlatzierung.ts` | 219 | `dachformVorlagen` · `linienBauteile` · `dachOeffnung` — **alle drei tot** |
+| `geometry/linienBauteile.ts` | 167 | `dachAusschnitt` · `dachformVorlagen` — **beide tot** |
+| `geometry/polygonFlaeche.ts` | 48 | `deckenMesh` · `dachAusschnitt` · `dachformVorlagen` · `grundriss` — **alle vier tot** |
+| `geometry/dachWerte.ts` | 103 | **niemand** — siehe Dublette unten |
+
+**Zusammen 2.939 Zeilen zusätzlich.** Mit den 3.105 aus S-1/2 sind es **6.044 von 29.361 — 20,6 %.**
+
+*Der W-08-Nachsatz aus S-1/1 (`polygonFlaeche` hat vier Aufrufer, und der erste ist selbst tot) war
+also kein Einzelfall, sondern die Spitze: **alle vier** seiner Aufrufer sind tot.*
+
+## Nebenfund: `dachWerte.ts` existiert zweimal, zeichengleich
+
+```
+resources/planner/utils/dachWerte.ts                103 Z.   md5 b5738234…   ← lebt
+resources/planner/hausplaner/geometry/dachWerte.ts  103 Z.   md5 b5738234…   ← tot
+```
+`dachGeometrie.ts:13` importiert `sichererCos` aus `../../utils/dachWerte` — **außerhalb** des
+Hausplaner-Verzeichnisses. Die Kopie darin wird von niemandem gezogen. Gleiche Prüfsumme: eine
+wörtliche Dublette, keine Variante.
+
+## Was das an früheren Aussagen ändert — auch an fremden
+
+**Die Fachprüfung Dach vergleicht `dachVorlage.ts` (34 Z., unerreichbar) mit `dachformVorlagen.ts`
+als „der erreichbaren Bibliothek".** Diese Prämisse trägt nicht: **beide Vorlagenbibliotheken sind
+tot.** Der lebende Pfad hat gar keine Vorlage — er schreibt `roofType: 'sattel', neigungGrad: 35`
+hart an `HausplanerApp.tsx:1006`.
+
+Damit wird der Befund aus §4 dieser Datei schärfer, nicht schwächer: es fehlt nicht die *Verdrahtung
+der richtigen* Tabelle, es fehlt **jede** Tabelle im laufenden Code. Und die 51 Laufzeit-Exporte mit
+Regeldachneigung, Mindestneigung und sechs Warncodes, die die Fachprüfung als vorbildlich benennt,
+erreichen heute keinen Nutzer.
+
+## Was ich daraus für die Methode ziehe
+
+**Eine Erreichbarkeitsmessung, die `import type` mitzählt, misst die Übersetzungseinheit, nicht das
+Bündel.** Der Unterschied wird erst dort sichtbar, wo eine große Datei an genau einer Typ-Kante
+hängt — und genau dann ist er am teuersten. Der Zählbefehl steht oben; er unterscheidet jetzt
+`import type` und `{ type X }`-Klammern.
+
+**Und die Grenze bleibt, die der Architektur-Bericht benannt hat:** dieses Maß misst **Dateien**.
+Eine tote Funktion in einer lebenden Datei findet es nicht. **Die 33 sind weiterhin eine
+Untergrenze.**
