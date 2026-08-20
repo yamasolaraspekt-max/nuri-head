@@ -330,6 +330,10 @@ gemeldet — **nicht** als Bauauftrag, sondern als Frage, welcher der beiden Weg
 
 ## Die Bauliste
 
+> **BERICHTIGT 20.08. durch S-1/5 — vier der fünf Paarungen halten nicht.** Die Tabelle bleibt
+> stehen, weil sie zitiert ist; **gültig ist S-1/5 am Dateiende.** Es bleibt **eine** Paarung:
+> `dachfenster`.
+
 **Sortiert nach Anschlusslänge: was am wenigsten braucht, steht oben.**
 
 | # | Kachel | Marke | Rechnung liegt in | Z. | fehlt |
@@ -362,3 +366,75 @@ gemeldet — **nicht** als Bauauftrag, sondern als Frage, welcher der beiden Weg
 - **Sie prüft die Paarungen nicht fachlich.** Dass `wandFlaeche.wandMengen` das ist, was
   `volumen-messen` meint, ist aus Namen und Vertragsfamilie (`measurement`) geschlossen, **nicht am
   Vertragstext belegt**. Vor dem Zuschnitt gehört jede Paarung einmal gegen ihren Vertrag gehalten.
+
+---
+
+# S-1/5 — die Paarungen gegen ihre Verträge gehalten: vier von fünf fallen
+
+*20.08. gegen `ee319d54`. S-1/4 endete mit dem Satz, die Paarungen seien „aus Namen und
+Vertragsfamilie geschlossen, **nicht am Vertragstext belegt**". Das war eine Lücke in meiner eigenen
+Lieferung. Hier ist sie geschlossen — und sie kippt vier Fünftel der Liste.*
+
+## Verfahren
+
+Je Kandidat **den Vertrag** (`werkzeugVertrag.ts`: `commandId`, `familie`, `eingaben`, `ergebnisse`)
+gegen **die Signatur des Moduls** gehalten, dazu die Begründung der Landkarte im vollen Wortlaut.
+Nicht Namen verglichen — Ein- und Ausgänge.
+
+## Ergebnis
+
+| # | Paarung | Vertrag verlangt | Modul liefert | |
+|---|---|---|---|---|
+| 1 | `suche` ↔ `trefferSuche` | `SearchCommand` · workflow · `subjectIds, workflowParameters` → `workflowResult` | `besterTreffer(kandidaten, toleranz)` — **Hit-Test**: *„Welches Objekt hat der Nutzer getroffen, wenn mehrere übereinanderliegen?"* | **fällt** |
+| 2 | `volumen-messen` ↔ `wandFlaeche` | `MeasureVolumeCommand` · measurement · `points, measurementOptions` → `measurementResult` | `wandMengen(wand: WallNode, oeffnungen, bezug)` — Mengen **einer Wand** | **fällt** |
+| 3 | `grundriss-erkennen` ↔ `grundriss` | `RecognizeCommand` · import · `referenceId, region, categories, recognitionProfile` → `detectionBatchId` | `grundrissPolygon(form, length, width, …)` — **konstruiert** ein L/T/U-Polygon aus Maßen | **fällt** |
+| 4 | `schnitt` · `aufriss` ↔ Projektionen | `SectionCommand`/`ElevationCommand` · **create** · → `createdObjectIds` | `projiziereDach(scene) → DachFlaecheProjektion[]` — erzeugt **nichts** | **fällt** |
+| 5 | `dachfenster` ↔ `dachOeffnung` | `RoofWindowCommand` · create · `roofFaceId, positionUV, width, height, productId` → `roofWindowId, roofOpeningId` | `oeffnungRechteck(o: OeffnungEingabe, f: DachflaecheInfo, sicherheitsrand)` → Rechteck auf der Dachfläche; Befehl `ADD_ROOF_AUFBAU` existiert | **hält** |
+
+**Eine von fünf.**
+
+## Warum ich danebenlag — vier verschiedene Gründe, nicht einer
+
+1. **Eine Begründung als Umsetzungsbeleg gelesen.** Die Landkarte schreibt bei `suche`: *„Findet
+   Knoten, ändert keine (`trefferSuche.ts`)."* Das begründet die Marke `ohne-modell` — es behauptet
+   **nicht**, dass `trefferSuche` das Werkzeug `suche` implementiert. Der Modulkopf sagt selbst, was
+   es ist: **der Hit-Test** für überlappende Objekte. Ich habe eine Klammer als Zuordnung gelesen.
+2. **Namensähnlichkeit für Fachgleichheit genommen.** `wandFlaeche` ↔ `volumen-messen`: Fläche ist
+   nicht Volumen, eine Wand ist keine Punktfolge. Die Landkarte nennt dort **gar kein Modul**
+   (*„Temporäre Messung."*) — ich habe eins dazuerfunden.
+3. **Konstruktion mit Erkennung verwechselt.** `grundriss.ts` **baut** ein Polygon aus Form und
+   Maßen; `grundriss-erkennen` **liest** eines aus einer Unterlage. Die Landkarte sagt es sogar
+   ausdrücklich: *„Die Erkennung selbst liefert Kandidaten (`kandidat_geometrie` am Upload)."* Die
+   Auflösung stand im Text, den ich zitiert hatte.
+4. **Die Familie nicht gegen die Marke gehalten.** Bei `schnitt`/`aufriss` verlangt der Vertrag
+   `familie: 'create'` mit `createdObjectIds`, die Landkarte sagt `ohne-modell` — *„eine Darstellung,
+   kein Knoten"*. **Das ist ein Widerspruch zwischen Vertrag und Landkarte, kein Anschlussfall**, und
+   er gehört als eigener Befund gemeldet (unten).
+
+**Dreimal von vier stand die Auflösung in einem Text, den ich schon zitiert hatte.** Das ist
+dieselbe Klasse wie §106/§111 und wie Fehler 30 — und der Grund, warum diese Prüfung nicht optional
+war.
+
+## Nebenbefund: Vertrag und Landkarte widersprechen sich bei `schnitt` und `aufriss`
+
+| Quelle | Aussage |
+|---|---|
+| `werkzeugVertrag.ts` | `familie: 'create'`, `ergebnisse: ['createdObjectIds']` — **es entstehen Objekte** |
+| `werkzeugLandkarte.ts` | `marke: 'ohne-modell'` — *„Eine Schnittansicht ist eine Darstellung, kein Knoten."* |
+
+**Beides kann nicht stimmen.** Entweder erzeugt ein Schnitt einen Knoten (dann ist die Marke falsch
+und es fehlt ein Modellbefehl), oder er tut es nicht (dann sind `familie` und `ergebnisse` des
+Vertrags falsch). Das betrifft **zwei** Verträge und ist keine Messfrage, sondern eine
+Fachentscheidung. **Ball beim Planner.**
+
+## Die berichtigte Bauliste
+
+| # | Kachel | Marke | Rechnung liegt in | Z. | Beleg |
+|---|---|---|---|---|---|
+| 1 | `dachfenster` | `deckt` (`ADD_ROOF_AUFBAU`) | `dachOeffnung` (96) · `dachAusschnitt` (510) · `auswechslung` (174) · `sparrenTrennung` (67) · `aufbautenStatus` (52) | **899** | Ein- und Ausgänge gegen den Vertrag gehalten |
+
+**Ein Anschluss statt fünf. 899 Zeilen statt 1.628.**
+
+Die vier gefallenen Module sind damit **nicht** wertlos — sie sind nur nicht das, wofür ich sie
+gehalten habe. Welche Kachel sie tragen (falls eine), ist **nicht gemessen** und wird hier **nicht
+geraten**. Das ist der Unterschied zu S-1/4.
