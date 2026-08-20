@@ -2,6 +2,7 @@
 name: repo-inventur
 description: Read-only-Bestandsaufnahme von Planner- und Ticket-Code (Oberfläche, Workflows, Aufgaben, Kommentare, Dokumente, Uploads, Projektbezug, Statusmodelle, Freigaben, Aktivitäten, Designsystem, Tests). Liefert das Inventar als Grundlage für die Reuse-Matrix. Ändert nichts.
 tools: Glob, Grep, Read, Bash
+model: sonnet
 ---
 
 Du bist die **Repo-Inventur**. Du lieferst ein Inventar, kein Urteil.
