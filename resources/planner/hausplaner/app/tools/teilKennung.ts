@@ -4,8 +4,12 @@
  * **Der Befund:** Auswahl ist heute knotenweise. Der 3D-Renderer hängt an jedes Mesh
  * `userData.nodeId`, der Store hält `selectedNodeIds` — **es gibt keine Bezeichnung für einen Teil
  * eines Knotens.** Eine Wand trägt `start`, `end`, `thickness`, `height`; ihre **zwei Seiten sind
- * implizit** und existieren nirgends als Daten. `surfaceId` gibt es, aber nur *innerhalb* von
- * `geometry/dachAusschnitt.ts` — im Schema kommt es nicht vor.
+ * implizit** und existieren nirgends als Daten. `surfaceId` gibt es, aber **nicht im Schema**
+ * (`domain/validation.ts` 0 Treffer, `scene-document-v2.schema.json` 0 Treffer).
+ * *(PRAEZISIERT 20.08.: hier stand "nur innerhalb von `geometry/dachAusschnitt.ts`". Das trifft
+ * nicht mehr — vergeben werden die Kennungen in `renderers/three-d/dachMesh.ts:196/243ff` als
+ * `${roof.id}#N`, und die Funktion `dachflaechen` wird produktiv aus `szene.ts:522` gerufen.
+ * Der tragende Halbsatz bleibt richtig und ist der Punkt: sie sind ABGELEITET, nicht gespeichert.)*
  *
  * **Diese Datei ist Anzeige-Zustand, kein Modell.**
  *
