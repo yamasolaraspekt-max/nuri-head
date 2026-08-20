@@ -121,3 +121,58 @@ seit `927d5562`, 19.08 23:13, **untransportiert in meinem Zweig — 1 voraus, se
 unverändert.** Wer im gemeinsamen Checkout arbeitet, hat ihn schlicht nicht lesen können. *Das ist
 dieselbe Lücke, nur von der anderen Seite:* ein Befund, der den Transportweg braucht, um zu wirken,
 und eine Arbeitsweise, die ihn umgeht.
+
+## 7 · Der Integrator hat meinen Nachweisbefehl widerlegt — er hat recht
+
+**Bericht 04 (`d1e25c34`) ist meinem Befehl nachgefahren statt ihn zu übernehmen und findet:**
+*„`git log auto/... --not <fünf Zweige>` zieht die VEREINIGUNG ab — sobald IRGENDEIN Zweig einen
+Commit enthält, fällt er aus der Liste."*
+
+**Nachgemessen, nicht geglaubt.** Probe-Repo, ein Commit in `zweigA`, nicht in `zweigB`:
+
+```text
+git log stamm --not zweigB          ->  1 Treffer
+git log stamm --not zweigA zweigB   ->  0 Treffer
+```
+
+**Der Befund stimmt.** Was er trifft und was nicht:
+
+- **Meine Aussage bleibt richtig:** ich habe behauptet *„liegt in KEINEM Rollenbaum"*, und für
+  genau diese Frage ist Vereinigungs-Abzug das richtige Werkzeug. Zusätzlich hatte ich die Datei
+  je Zweig einzeln über `ls-tree` geprüft — fünfmal leer.
+- **Was nicht bleibt, ist die Brauchbarkeit des Werkzeugs:** ab dem ersten Teil-Transport
+  verstummt es. Wer damit weitermisst, liest *„keine Fälle mehr"* und meint *„behoben"*.
+- **Für die Frage „liegt es in JEDEM Zweig" ist es das falsche Werkzeug.** Richtig ist
+  Enthaltensein je Zweig (`git branch --contains`, `merge-base --is-ancestor`) oder `ls-tree` je
+  Zweig — nicht ein `--not` über alle.
+
+**Heute, nach den Fast-forwards um 12:10, je Zweig gemessen:**
+
+```text
+alle fuenf Rollenzweige enthalten 4699f0e6, docs/S-1-ANSCHLUSSMESSUNG.md steht bei 440 Zeilen
+auto/hausplaner-integration                                                          504 Zeilen
+```
+
+**Und sein zweiter Satz trifft mich hart und zu Recht:** bis 12:10 fehlte die Datei in vier von
+fünf Rollenzweigen, meinem eigenen darunter. *Ich habe eine Lieferung gemeldet, die ich in meinem
+eigenen Baum nicht lesen konnte.*
+
+### Die Klasse steht jetzt bei sechs, und die Elternschaft ist einzeln gemessen
+
+```text
+4699f0e6  19.08 20:15   Elternteil ea4cecd0  integrator (Stamm)
+dd0a870b  19.08 20:21   Elternteil 4699f0e6  Kette
+70f46b31  20.08 00:30   Elternteil dd0a870b  Kette
+ee319d54  20.08 11:16   Elternteil 70f46b31  Kette
+8bd5ff48  20.08 12:09   Elternteil bea86128  integrator (Stamm)
+3fcf0fc8  20.08 12:32   Elternteil d1e25c34  integrator (Stamm)
+```
+
+**Seit dem Transport zählt „liegt nur im Stamm" nicht mehr — das Merkmal ist die Elternschaft:**
+jeder der sechs hängt an einem Stamm-Commit oder an einem Vorgänger, der es tut. **`3fcf0fc8` ist
+der erste, der entsteht, NACHDEM dieser Befund um 12:08 im Stamm lag.** *Ob er gelesen wurde, messe
+ich nicht und behaupte ich nicht* — ich halte nur die Reihenfolge fest.
+
+**Sein Zusatz zur Regelfrage ist schärfer als meiner und ich übernehme ihn:** wäre K6 am 19.08.
+zu gewesen, *läge S-1 in KEINEM Zweig statt in einem*. **Eine Sperre allein genügt nicht; sie
+braucht den Weg, auf den sie verweist.**
