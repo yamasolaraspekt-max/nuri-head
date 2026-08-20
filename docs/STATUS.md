@@ -18548,6 +18548,29 @@ a37_18_messung_integrator: "ERFUELLT — gemessen 19.08.2026 19:50 CEST vom inte
   nicht der Messende."
 blatt: "docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md"
 basis_sha: bc2125d9
+ballbesitz_beleg_berichtigt: "20.08. 12:4x, integrator — BELEGBERICHTIGUNG, kein Wertwechsel.
+  Der Wert ballbesitz: integrator bleibt unveraendert; berichtigt wird, WER ihn gesetzt hat.
+  Drei Commits waren im Umlauf, keiner davon durch Ablesen der Zeile gewonnen:
+    ich, in 87a987e1      514d1a60 (16:56:59)  -> falsch: fasst die Tafelzeile an, aendert dort
+                                                  aber NUR den Zustand eine Stufe hoch und laesst die
+                                                  Ball-Spalte stehen. Der Betreff kuendigt den
+                                                  Ball an, der Diff setzt ihn nicht.
+    evaluator, Nachtrag   5d53c011 (19:18:09)  -> falsch: seine ballbesitz-Aenderung gehoert zu
+                                                  W-17/A-41; seine Hunks liegen bei Z.89, 18856,
+                                                  23373 ff., der A-37-Block bei 18493-18560.
+    gemessen              63906bbd (16:44:46)  -> RICHTIG. Diff woertlich: -ballbesitz: generator
+                                                  +ballbesitz: integrator. Bestaetigt ueber die
+                                                  Zeilenhistorie: git log -L 18526,18526:docs/STATUS.md
+  Die Gegenseite ebenso gemessen: **plan-pruefer** in der Tafel kam von f37317a1 (16.08. 12:57:07,
+  'Ball zurueck an den Plan-Pruefer'), nicht von 514d1a60.
+  FOLGE FUER DIE KONFLIKTREGEL 'der neuere Schreibvorgang gewinnt': Tafel 12:57:07 gegen Datensatz
+  16:44:46 — der Datensatz ist 3 Std 47 Min 39 Sek neuer, nicht 2 Std 22 Min. Die Regel ergibt
+  integrator, und 87a987e1 hat die Tafel dorthin gezogen. DIE BEHEBUNG BLEIBT RICHTIG, der Abstand
+  ist groesser als beide Belege sagten.
+  DIE LEHRE, und sie ist der Grund fuer dieses Feld: EIN COMMIT-BETREFF, DER EINEN WERT ANKUENDIGT,
+  IST KEIN BELEG DAFUER, DASS DER COMMIT IHN GESCHRIEBEN HAT. Beide Seiten haben aus Betreffen
+  geschlossen; die Zeilenhistorie hat beide widerlegt. Gemessen wird die Zeile, nicht die Botschaft.
+  Nicht gesetzt: kein zustand, kein ballbesitz, keine Abnahme."
 bau_sha: 374bb851
 bau_sha_zweiter: 139872cb   # DER BAU SIND ZWEI COMMITS, beide vom generator, beide genau EINE Datei:
   # 374bb851 15.08. 15:21  scripts/commit-pruefen.sh  +87 -6   g-Flag: das Tor liest die GANZE Datei

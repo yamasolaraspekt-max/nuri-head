@@ -502,3 +502,59 @@ Module stillgelegt wie `toolCatalogStillgelegt.ts` — **nicht gelöscht**, mit 
 **Nicht geraten:** `wandFlaeche.ts` (238 Z.) gehört zu keiner Kachel und zu keiner Engine. Wofür es
 gebaut wurde, steht in keiner Quelle, die ich gemessen habe. Das bleibt offen und wird **nicht**
 mit einer plausiblen Zuordnung gefüllt.
+
+---
+
+# S-1/7 — der Vertrag-gegen-Marke-Rundlauf über alle 111: es sind genau zwei
+
+*20.08. In S-1/5 fiel bei `schnitt`/`aufriss` ein Widerspruch zwischen Vertrag und Landkarte auf.
+Ein Einzelfall ist eine Beobachtung, erst der Rundlauf sagt, ob es eine Klasse ist.*
+
+## Verfahren
+
+Alle Verträge aus `werkzeugVertrag.ts` gegen ihre Marke in `werkzeugLandkarte.ts` gehalten.
+**Regel:** `ohne-modell` heißt laut Landkarten-Kopf *„das Werkzeug ändert das Gebäudemodell
+überhaupt nicht"*. Ein Vertrag, dessen `ergebnisse` eine Modelländerung nennen, widerspricht dem.
+Beide Richtungen geprüft.
+
+**Mengenabgleich vorweg**, damit der Rundlauf nicht auf halber Menge läuft:
+
+```
+Kennungen im Vertrag        111
+Kennungen in der Landkarte  111
+in Landkarte, nicht im Vertrag   0
+im Vertrag, nicht in Landkarte   0
+```
+
+*(Ein Vertrag — `kontur` — fiel durch mein Blockmuster und wurde einzeln geöffnet.)*
+
+## Ergebnis: zwei harte Widersprüche, alles andere erklärt sich selbst
+
+| Kennung | Vertrag | Marke | |
+|---|---|---|---|
+| **`schnitt`** | `familie: 'create'` · `ergebnisse: ['createdObjectIds']` | `ohne-modell` — *„eine Darstellung, kein Knoten"* | **Widerspruch** |
+| **`aufriss`** | `familie: 'create'` · `ergebnisse: ['createdObjectIds']` | `ohne-modell` — *„dieselbe Klasse wie `schnitt`"* | **Widerspruch** |
+
+**Die drei Verdächtigen, die keine sind** — je an ihrer eigenen Begründung geprüft:
+
+- `grundriss-erkennen` (`detectionBatchId`, `ohne-modell`): die Landkarte sagt selbst, die Erkennung
+  liefere **Kandidaten** am Upload, erst `erkennung-bestaetigen` ändere das Modell. Trägt.
+- `kontur` (`familie: 'create'`, `contourPoints`, `ohne-modell`): liefert Punkte, schreibt nichts —
+  im Landkarten-Kopf ausdrücklich vermerkt (*„Z-05-N1 … ohne-modell 42 → 43"*). Trägt.
+- `fang` (`viewportState`, `deckt` via `UPDATE_SETTINGS`): der Fang ist eine Einstellung, und
+  Einstellungen sind Teil des Dokuments. Trägt.
+
+Dazu vier weitere aus der Gegenrichtung (`ausblenden`, `einblenden`, `bemassen`,
+`nordrichtung-setzen`, `kommentar`, `einstellungen`), die nur deshalb auffielen, weil ihre
+`ergebnisse` keine Kennung nennen — jede trägt ihre Marke mit eigener Begründung.
+
+## Was das wert ist
+
+**Der Rundlauf hat nichts Neues gefunden, und genau das ist die Aussage:** die Landkarte ist über
+111 Einträge konsistent mit den Verträgen, mit **zwei** benannten Ausnahmen. Der Planner muss sich
+nicht fragen, ob noch mehr davon im Bestand liegt — es liegt nichts.
+
+**Die zwei bleiben eine Fachfrage, keine Messfrage.** Entweder erzeugt ein Schnitt einen Knoten
+(dann ist die Marke falsch und ein Modellbefehl fehlt), oder er tut es nicht (dann sind `familie`
+und `ergebnisse` beider Verträge falsch). **Ball beim Planner**, unverändert seit S-1/5 — jetzt mit
+der Zusatzinformation, dass es bei zweien bleibt.
