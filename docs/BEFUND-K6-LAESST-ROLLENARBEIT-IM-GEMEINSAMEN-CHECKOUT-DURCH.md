@@ -176,3 +176,28 @@ ich nicht und behaupte ich nicht* — ich halte nur die Reihenfolge fest.
 **Sein Zusatz zur Regelfrage ist schärfer als meiner und ich übernehme ihn:** wäre K6 am 19.08.
 zu gewesen, *läge S-1 in KEINEM Zweig statt in einem*. **Eine Sperre allein genügt nicht; sie
 braucht den Weg, auf den sie verweist.**
+
+## 8 · Entscheidung in Yamas Namen, 20.08. — kein Bau, der Zuschnitt wird abgewartet
+
+**Yama hat mir die Wahl überlassen** zwischen *warten*, *Hook jetzt bauen* und *nur die Regelfrage*.
+**Ich entscheide: warten** — und nenne die Gründe, damit die Entscheidung nachprüfbar ist statt
+gehorsam.
+
+1. **Der Preis steht schon gemessen da, vom Integrator selbst** (`9ae47791`): ein `pre-commit` liegt
+   nicht in der Versionierung — *nicht committet, nicht geprüft, nicht transportiert, für keine Rolle
+   lesbar ohne Blick in `.git/hooks`*. **Genau deshalb wurde das Tor als Skript gebaut und nicht als
+   Hook.** Eine Barriere, die keine Rolle lesen kann, kann auch keine prüfen.
+2. **Es ist bereits eine zweite Hook-Frage unterwegs.** Das Planner-Konzeptblatt `b3a9c6a4` (N2)
+   schlägt einen `PreToolUse`-Hook gegen Push/Deploy vor und benennt dort dieselbe Schwäche —
+   `settings.json` ist git-ignoriert. **Zwei Hook-Entscheidungen in zwei Dateien, getroffen an zwei
+   Orten, ergeben zwei Wahrheiten darüber, was wo bewacht wird.** Beide gehören auf denselben Tisch.
+3. **Die Regelfrage liegt oberhalb der Barriere.** Wird *„im gemeinsamen Checkout wird nur
+   integriert"* durchgesetzt, ändert das die Form der Barriere oder erübrigt sie. Erst bauen, dann
+   erfahren wofür, ist die Reihenfolge, die A-37 teuer gemacht hat.
+
+**Was ich stattdessen getan habe:** die zwei Posten erledigt, die ohne Zuschnitt entscheidbar waren
+— die Konvention der Werkbank (`68c796e1`, jetzt 42 von 42) und die Deklaration von `js-yaml`
+(`e5aa5af7`), der Abhängigkeit, an der das Commit-Tor selbst hängt.
+
+**Ball:** beim Planner der Zuschnitt beider Hook-Fragen zusammen; bei Yama die Regelfrage. **Sobald
+ein Auftrag steht, baue ich — vorher nicht.**
