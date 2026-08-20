@@ -8843,3 +8843,77 @@ Damit ist auch die P-03-Sorge abschließend beantwortet: Die zweite Quelle **mus
 nicht weil dort Arbeit liegt, sondern weil man sonst nicht sieht, wie weit die Blätter von der
 Statuswahrheit abgekommen sind. **Ball beim Planner** für die Felder (14 hier, 31 aus §115). Beim
 Integrator liegt nichts Neues.
+
+## §119 — F-011 ist aus der laufenden Anwendung nicht erreichbar: alle vier Aufrufer sind tot
+
+*(Nummer §119 gegen HEAD `f06dd124` gewählt und hier benannt.)*
+
+Der Generator hat mit `S-1-ANSCHLUSSMESSUNG.md` (`4699f0e6`) sechs Module ohne Produktivaufrufer
+gemeldet und bei W-08 einen Nachsatz gesetzt: *„`polygonFlaeche` hat vier Aufrufer, und der
+erstgenannte ist selbst tot."* Ich habe die Kette selbst zu Ende gemessen. **Es ist nicht einer von
+vieren, es sind alle vier.**
+
+### Die Messung
+
+```
+  polygonFlaeche.ts  — Importeure ausserhalb der Tests: 4
+     renderers/three-d/deckenMesh.ts        Produktivverbraucher  0
+     geometry/dachAusschnitt.ts             Produktivverbraucher  0
+     geometry/dachformVorlagen.ts           Produktivverbraucher  0   (51 Laufzeit-Exporte, alle 0)
+     geometry/grundriss.ts                  Produktivverbraucher  0
+```
+
+**Über Exportnamen gemessen, nicht über Dateinamen** — die Lehre aus §106 und §118. Bei `grundriss`
+war das entscheidend: der Dateiname liefert zehn Treffer im Baum, aber „Grundriss" ist ein
+gewöhnliches Wort; über die sechs Laufzeit-Exporte (`grundrissPolygon`, `eckenAnalyse`,
+`grundrissFlaecheM2` …) gemessen sind es **null**. Bei `dachformVorlagen` habe ich nicht bei acht
+aufgehört, sondern alle **51** Laufzeit-Exporte einzeln gezählt: **null mit Verbraucher.**
+
+Der einzige Verweis auf `dachformVorlagen` außerhalb von Tests ist in `dachMesh.ts:13`:
+
+```
+  import type { EngineRoofShape } from '../../geometry/dachformVorlagen';
+```
+
+Ein **`import type`** — er verschwindet beim Übersetzen und erzeugt keine Laufzeitkante. Ort ≠ Wirkung,
+P7, hier in seiner reinsten Form: die einzige Nennung sieht aus wie ein Anschluss und ist keiner.
+
+### Der andere Weg ist auch zu
+
+Module können statt über Importe über ein Register verdrahtet sein — der Bestand hat eines, mit **13
+Kennungen** (`engine-abwasser`, `engine-pv`, `engine-sparren` …). Gemessen:
+
+```
+  dachformVorlagen · grundriss · deckenMesh · dachAusschnitt · polygonFlaeche
+     in Registrierungszeilen:  0      dynamischer Import:  0
+```
+
+Keine der 13 Kennungen gehört zu einem der fünf Module. Es gibt keinen zweiten Weg.
+
+### Was das bedeutet
+
+**F-011 „Fläche eines Polygons" läuft in der Anwendung nicht.** Die Formel ist gebaut, mit Tests
+belegt, in §101 von mir an fünf Flächen durchgerechnet und für richtig befunden — und keine Zeile
+davon wird beim Betrieb des Planers ausgeführt. Dasselbe gilt für alles, was auf ihr aufsetzt:
+`dachflaecheAusPolygonM2`, `geneigteFlaecheAusGrundrissM2`, die ganze Vorlagen-Rechnung.
+
+Das ordnet auch meine eigenen früheren Befunde neu ein:
+
+| | |
+|---|---|
+| §101 | F-011 rechnet richtig — an einer Formel, die nicht läuft |
+| §111 | W-29: „NULL Produktivverbraucher" — jetzt ist die Ursache gemessen, nicht nur die Zahl |
+| §105 | `trefferSuche` 0 Verbraucher — vom Generator unabhängig bestätigt |
+| §106 | `fangKern` hat EINEN Aufrufer — vom Generator unabhängig bestätigt (Register nennt zwei) |
+
+### Grenze der Aussage
+
+Gemessen sind **statische Importe, Registrierung und dynamischer Import**. Was ich nicht messen kann:
+ob ein Bündler die Module über einen Pfad einzieht, den keine dieser drei Formen zeigt. Für einen
+solchen Weg gibt es hier keinen Hinweis, aber die Aussage gilt für das, was gemessen wurde — nicht
+darüber hinaus.
+
+**Kein Bau, kein Zustandsfeld angefasst.** Ob eine gebaute, geprüfte und unerreichbare Formelkette
+angeschlossen, stillgelegt oder so belassen wird, ist eine Fachentscheidung mit Rechenwirkung.
+**Ball beim Planner**, mit ausdrücklichem Hinweis an **Yama**: hier liegen vier Module und 51
+Exporte, die niemand aufruft — das ist eine Größenordnung, die eine Entscheidung verdient.
