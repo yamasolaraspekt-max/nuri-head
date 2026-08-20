@@ -438,3 +438,67 @@ Fachentscheidung. **Ball beim Planner.**
 Die vier gefallenen Module sind damit **nicht** wertlos — sie sind nur nicht das, wofür ich sie
 gehalten habe. Welche Kachel sie tragen (falls eine), ist **nicht gemessen** und wird hier **nicht
 geraten**. Das ist der Unterschied zu S-1/4.
+
+---
+
+# S-1/6 — die vier gefallenen Module: wem gehören sie wirklich?
+
+*20.08. gegen `8bd5ff48`. S-1/5 ließ ausdrücklich offen, welche Kachel die vier tragen. Offen
+gelassene Fragen der eigenen Lieferung sind Arbeit, keine Vorlage — hier ist die Antwort.*
+
+| Modul | gehört zu | Lage heute |
+|---|---|---|
+| `trefferSuche.ts` (75 Z.) | **`auswahl`** — Vertrag `pointerPosition, selectionMode → selectionIds`, und das ist genau der Hit-Test | **umgangen.** `auswahl` ist erreichbar und funktioniert; die 3D-Auflösung geschieht mit einem eigenen `THREE.Raycaster` in `szene.ts:690` |
+| `wandFlaeche.ts` (238 Z.) | **keiner** | **Waise.** Alle fünf `measurement`-Verträge haben identische Ein-/Ausgänge (`points, measurementOptions → measurementResult`); `wandMengen(wand: WallNode, oeffnungen, bezug)` passt zu keinem. Auch keine Engine-Registrierung |
+| `grundriss.ts` (133 Z.) | **`dach`** — dessen Vertrag nimmt `footprint`, und `grundrissPolygon` erzeugt genau einen (L/T/U) | **gesperrt.** `dach` ist erreichbar, akzeptiert aber nur Rechtecke (`dachGeometrie.ts:88-92`). Derselbe Riegel wie bei `dachTopologie` — **Punkt 8** |
+| `raumProjektion.ts` (98) · `dachProjektion.ts` (43) | **keiner Kachel** — sie sind der Vertrag zur Heizlast (`raum_geometrien`) | **überholt.** PHP hat eine **eigene** Umsetzung, und die ist verdrahtet |
+
+## Der Fund: die Projektion existiert zweimal, und die andere läuft
+
+```
+TypeScript   projection/raumProjektion.ts        unerreichbar, kein Verbraucher
+PHP          Services/Geometrie/SzeneProjektionService.php
+             -> Actions/UebernehmeSzeneInAuslegung.php
+             -> Http/Controllers/Hausplaner/HausplanerController.php:228   ← verdrahtet
+             + tests/Feature/Hausplaner/UebernehmeSzeneInAuslegungTest.php
+```
+
+Der PHP-Kopf sagt die Herkunft selbst: *„eingefrorener Vertrag (nur als Referenz gelesen, kein Code
+kopiert)"*. **Das ist kein Versehen — es ist eine bewusste Zweitumsetzung, weil die Heizlast
+serverseitig rechnet.** Was fehlt, ist der Schlussstrich: die TS-Seite steht weiter da, als wäre sie
+der Weg.
+
+## Und damit ist das Muster vollständig — es sind vier Fälle, nicht einer
+
+**Ein reines, getestetes Modul wird als „die eine Regel" gebaut. Die Sache wird danach woanders
+gelöst. Das Modul bleibt stehen.**
+
+| Fall | Modul | wo die Sache stattdessen gelöst wurde |
+|---|---|---|
+| 1 | `deckenMesh.ts` | inline in `szene.ts:451-478` über `bodenPunkteThree` |
+| 2 | `auswahlDarstellung.ts` | inline in `EigenschaftenPanel.tsx:234/238` |
+| 3 | `trefferSuche.ts` | eigener `Raycaster` in `szene.ts:690` |
+| 4 | `raumProjektion` · `dachProjektion` | eigenständig in PHP, verdrahtet bis zum Controller |
+
+**Viermal dieselbe Bewegung, an vier verschiedenen Stellen, von vier verschiedenen Bauten.** Das ist
+kein Liegenlassen aus Nachlässigkeit, sondern ein Umgehen der Modulschicht — und es steht gegen die
+Grundregel 3 des Hausplaner-Skills: *„EINE Wahrheit je Sachverhalt, kein zweiter SSOT-Anker."*
+
+**Wirkung, gemessen:** 544 Zeilen geprüfter Code (75 + 71 + 98 + 43 + 257 für `deckenMesh`-Umfeld
+nicht mitgerechnet), die aussehen wie der Weg und keiner sind. Wer sie liest, um zu verstehen, wie
+die Auswahl trifft oder wie eine Decke entsteht, liest die falsche Datei — **und der Test daneben
+ist grün.**
+
+## Ball
+
+**Beim Planner, als eine Entscheidung für alle vier:** bleibt die Modulschicht der Weg (dann werden
+die vier angeschlossen und die Inline-Lösungen weichen), oder ist sie aufgegeben (dann werden die
+Module stillgelegt wie `toolCatalogStillgelegt.ts` — **nicht gelöscht**, mit Grund im Kopf).
+**Einzeln zu entscheiden wäre der Fehler**, weil es viermal dieselbe Frage ist.
+
+**Bei Yama** unverändert Punkt 8 — und `grundriss.ts` ist jetzt der dritte Posten, der daran hängt
+(nach `dachTopologie.ts` und der Sperre selbst).
+
+**Nicht geraten:** `wandFlaeche.ts` (238 Z.) gehört zu keiner Kachel und zu keiner Engine. Wofür es
+gebaut wurde, steht in keiner Quelle, die ich gemessen habe. Das bleibt offen und wird **nicht**
+mit einer plausiblen Zuordnung gefüllt.
