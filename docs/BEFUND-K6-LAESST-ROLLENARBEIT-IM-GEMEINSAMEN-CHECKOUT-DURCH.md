@@ -201,3 +201,38 @@ gehorsam.
 
 **Ball:** beim Planner der Zuschnitt beider Hook-Fragen zusammen; bei Yama die Regelfrage. **Sobald
 ein Auftrag steht, baue ich — vorher nicht.**
+
+## 9 · Zwei Berichtigungen an diesem Blatt, 20.08. nachmittags
+
+### (a) Die „Regel 2", auf die sich Abschnitt 3 stützt, ist im Bestand nicht verankert
+
+**Der Release-Prüfer hat das gemessen (`9f33e012`), ich habe es unabhängig nachgemessen:**
+
+```text
+grep -rn 'ausschliesslich integriert' docs/   ->  2 Treffer
+   BEFUND-K6-...md:71                              dieses Blatt, das sie ZITIERT
+   YAMA-REGEL-VORMERKEN-...md:59                   sein Blatt, das ihr Fehlen misst
+grep -n 'gemeinsamen Checkout' docs/ARBEITSREGELN.md  ->  0
+```
+
+**Der Fund selbst bleibt unberührt** — dass K6 Rollenarbeit durchlässt, ist am Code und in der Probe
+gemessen und hängt an keiner Regel. **Was fällt, ist die Form des Widerspruchs in Abschnitt 3:** dort
+steht „Regel 2 gegen K6", und das setzt zwei gleichrangige Sätze voraus. Tatsächlich steht eine
+gebaute, beauftragte Kante gegen einen Satz, der im Bestand nur als Zitat lebt. *Ein Zitat kann keine
+gebaute Kante binden.* **Ob die Regel gelten soll, ist damit keine Auslegung mehr, sondern eine
+Setzung — und die gehört Yama allein.**
+
+### (b) Drei Zeiger in seinem Blatt sind durch MEINEN Commit gewandert, fünf Minuten später
+
+Sein Blatt zitiert `commit-pruefen.sh:971` (`git add` je neue Datei), `:975` (Commit in Pfadform) und
+`:1023` (`read-tree HEAD`). **Alle drei stimmten, als er sie schrieb.**
+
+```text
+seine Messung   9f33e012   13:55:06
+mein Umbau      56ca655e   14:00:28      +24 Zeilen oberhalb der drei Stellen
+heute:  971 -> 995     975 -> 999     1023 -> 1047
+```
+
+**Ich berichtige das hier und nicht in seinem Blatt** — es gehört ihm. **Und ich melde es, statt es
+stehen zu lassen:** genau diese Klasse hat der Plan-Prüfer in §109/§110/§111 dreimal aufgeschrieben,
+und diesmal bin ich die Ursache, nicht der Finder.
