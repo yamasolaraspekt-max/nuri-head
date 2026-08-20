@@ -3,7 +3,7 @@
 namespace App\Services\Geometrie;
 
 /**
- * SzeneProjektionService (P2-1b) — REINE, UNVERDRAHTETE Projektion Hausplaner-Szene → gebaeude_geometrie.
+ * SzeneProjektionService — Projektion Hausplaner-Szene → gebaeude_geometrie. **VERDRAHTET seit P2-2.**
  *
  * Grundlage: docs/planner-spec-szene-projektion.md; eingefrorener Vertrag (nur als Referenz gelesen,
  * kein Code kopiert) playground src/hausplaner/geometry/roomDetection.ts + geometry/wallGeometry.ts.
@@ -17,8 +17,21 @@ namespace App\Services\Geometrie;
  * P2-1b: planare Raumerkennung (Wandachsen-Graph, T-Punkt-Teilung, Halbkanten-Umläufe, Innenflächen =
  * positive Shoelace). MEHRRAUM. innen/aussen: eine Kante, deren BEIDE Halbkanten in Innenräumen liegen,
  * ist 'innen' (kein Azimut); sonst 'aussen' (Azimut aus rechter Normale, Nord=+y). decke/boden ehrlich null.
- * Verdrahtung/Schreiben nach gebaeude_geometrie = P2-2 (Yama-Go). Diese Klasse schreibt NICHTS und wird
- * von KEINEM Produktivpfad aufgerufen.
+ * Verdrahtung/Schreiben nach gebaeude_geometrie war P2-2 (Yama-Go) — **sie ist erfolgt.**
+ *
+ * **BERICHTIGT 20.08.: hier stand bis heute "schreibt NICHTS und wird von KEINEM Produktivpfad
+ * aufgerufen". Beide Sätze sind seit der P2-2-Verdrahtung falsch.** Die Kette, Glied für Glied
+ * nachgemessen:
+ *
+ *   routes/web.php:4999                     POST /objekt/{objekt}/uebernehmen
+ *     -> HausplanerController::uebernehmen   (:228  app(UebernehmeSzeneInAuslegung::class))
+ *       -> UebernehmeSzeneInAuslegung        (:43  Konstruktor-Injektion, :61  ->projiziere())
+ *         -> DIESE Klasse
+ *   Feature-Tests: tests/Feature/Hausplaner/UebernehmeSzeneInAuslegungTest.php · UebernahmeKnopfTest.php
+ *
+ * Richtig bleibt: **diese Klasse selbst schreibt nichts** — sie projiziert, das Schreiben besorgt
+ * UebernehmeSzeneInAuslegung über den Versionspfad. Ein Kopf, der seinen eigenen Zustand falsch
+ * angibt, ist gefährlicher als gar keiner: er lädt dazu ein, hier ohne Rücksicht zu ändern.
  */
 class SzeneProjektionService
 {
