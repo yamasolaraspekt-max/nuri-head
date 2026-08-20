@@ -21,6 +21,13 @@
 
 ---
 
+## Quellen außerhalb des Repos
+
+**Lesen ist auf dem ganzen Rechner frei, schreiben nur in der Heimat-App** (Mehr-App-Regel;
+Yamas Anweisung vom 20.08.). Wo die Fundgruben liegen — Wissensregister, planner-handover,
+Playground, Grafik-/Fachordner — und welche vier Grenzen dabei gelten (Zugangsdaten tabu,
+Kundendaten bleiben wo sie sind), steht in [`docs/regelwerk/QUELLEN.md`](regelwerk/QUELLEN.md).
+
 ## Der eine Ort, der ausdrücklich NICHT hierher wandert
 
 **`docs/STATUS.md` bleibt der Statusträger.** ARBEITSREGELN §16 benennt ihn namentlich, §  „Yamas
