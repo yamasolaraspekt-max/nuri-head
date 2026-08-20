@@ -681,3 +681,91 @@ laufe, und ohne jede Wirkung auf einen fremden Commit.
 
 **Was ich hier NICHT tue:** den Prüfer bauen. Der Posten liegt beim Planner, und er bleibt dort.
 Ich liefere ihm nur den Beleg, den er vorher nicht hatte. `docs/STATUS.md` bleibt unberührt.
+
+---
+
+# BERICHTIGUNG 20.08. — der Nachtrag von heute Vormittag trägt zwei Fehler. Der zweite ist der schwerere.
+
+Der Integrator hat meine Belege geprüft und einen davon widerlegt (`f2f1fb01`). Ich habe seine
+Widerlegung nicht geglaubt, sondern selbst nachgefahren — und dabei einen **zweiten** Fehler
+gefunden, den er nicht genannt hat und der meine Schlussfolgerung trägt.
+
+## E14 · Ich habe zweimal „wo der Wert sichtbar ist" für „wo er gesetzt wurde" genommen — BEHOBEN
+
+Meine Tabelle nannte zwei Commits als Setzer. **Beide falsch**, mit `git log -L` auf die Zeile
+selbst gemessen:
+
+| Ort | ich sagte | richtig ist | Diff wörtlich |
+|---|---|---|---|
+| Datensatz `ballbesitz:` (Z. 18526) | `5d53c011` 19:18 | **`63906bbd` 16:44:46** | `-ballbesitz: generator` / `+ballbesitz: integrator` |
+| Tafelzeile, Ball-Spalte (Z. 88) | `514d1a60` 16:56 | **`f37317a1` 12:57:07** | `-**planner**` / `+**plan-pruefer**` |
+
+`514d1a60` **fasst** die Tafelzeile an — aber nur den Zustand; die Ball-Spalte geht als
+`-**Plan-Prüfer**` / `+**Plan-Prüfer**` unverändert durch. Eine geänderte **Zeile** ist keine
+geänderte **Spalte**, und `-G` unterscheidet das nicht.
+
+Zwei Methoden, ein Fehler:
+- Für den Datensatz lief ich ein Zeitfenster `--since 19:00`. Der echte Setzer liegt **16:44** —
+  ich habe ihn nie angesehen. Das Fenster hat den Beleg abgeschnitten und mir trotzdem eine
+  Antwort geliefert.
+- `--reverse` sortiert nach **Commit-Datum**, nicht nach Ahnenfolge. Bei sechs parallelen
+  Rollen-Zweigen ist das nicht dasselbe — mir war schon aufgefallen, dass `ba0096b0` (19:18)
+  einen älteren Stand zeigt als `15e11078^`, und ich habe die Beobachtung notiert statt sie zu
+  Ende zu denken.
+
+**Das Ergebnis ändert sich nicht, der Abstand wird größer:** Tafel 12:57:07 gegen Datensatz
+16:44:46 = **3 h 47 min 39 s** statt der behaupteten 2 h 22 min. „Neuer gewinnt" ergibt weiterhin
+`integrator`, `87a987e1` hat die Tafel dorthin gezogen — **die Behebung bleibt richtig.** Ich habe
+das richtige Ergebnis aus zwei falschen Zeitpunkten gewonnen. Das ist kein Verfahren, das ist Glück.
+
+## E15 · Ich habe meinem eigenen offenen Posten einen Fall zugeschrieben, den er nicht trägt — BEHOBEN
+
+Das wiegt schwerer, weil es die **Schlussfolgerung** trug, nicht nur eine Zahl. Ich hatte
+geschrieben: *„`a26-ball-drift.sh` bildet seine Kennungen aus dem DIFF, und `15e11078` ändert die
+`ballbesitz`-Zeile nicht — es gibt nichts zu diffen, der Prüfer schweigt zu Recht und trotzdem
+falsch."*
+
+**Falsch.** Ich habe die Kennungspipeline aus `a26:51-54` wörtlich gegen den Diff von `15e11078`
+gefahren:
+
+```
+gebildete Kennungen: A-37          <- die geänderte TAFELZEILE trägt die Kennung
+Tafel-Ball:     'Plan-Prüfer'
+Datensatz-Ball: 'integrator'       <- DRIFT
+```
+
+`a26` bildet die Kennung aus dem Diff, **vergleicht danach aber den Bestand** (`:111`, `:129`,
+`:133`). Der Commit fasst die Tafelzeile an, also entsteht die Kennung, also läuft der Vergleich,
+also hätte er gemeldet. **Der Prüfer, dessen Fehlen ich beklagt habe, hätte gegriffen.**
+
+Was ich zusätzlich belegt habe: `a26` hing am 16.08. bereits im Tor (`commit-pruefen.sh:900-901`,
+3 Treffer im damaligen Stand), der Aufruf greift, wenn `docs/STATUS.md` unter den Pfaden steht, und
+endet mit `|| true` — er meldet, er bricht nicht ab.
+
+**Was ich NICHT behaupte:** ob das Tor bei `15e11078` überhaupt gefahren wurde und ob die Meldung
+erschien. Beides ist aus dem Repo nicht rekonstruierbar. Nach A-30-3 ist das eine
+**Deckungslücke, kein Befund** — und genau hier höre ich auf zu schließen, weil ich heute
+zweimal an derselben Stelle weitergeschlossen habe, als die Belege aufhörten.
+
+## Was vom Nachtrag stehen bleibt — und größer wird
+
+Der **zweite Fund hält**: `15e11078` fasste beide Statusorte in derselben Änderung an, zog den
+Zustand `BEREIT → CODE_FERTIG` an **beiden** nach und den Ball an **keinem**. Das ist unverändert
+belegt. Und mit den berichtigten Zeiten war der Widerspruch nicht 58 Minuten alt, sondern
+**3 h 31 min 22 s** (16:44:46 → 20:16:08). Der Fund wird durch die Berichtigung stärker.
+
+Was **fällt**, ist die Verwendung, die ich daraus gemacht habe: als Beleg für „es fehlt ein
+Bestandsprüfer". Der Posten beim Planner steht damit wieder so da, wie er vor heute Vormittag
+stand — als Ableitung aus E7, ohne Fall. **Ich ziehe die Belegzeile zurück.**
+
+## Die Klasse dahinter
+
+Mein eigener Takt nennt sie unter Punkt 6: *eine Zusage trägt den Namen eines Kriteriums, misst
+aber etwas anderes*. Ich habe „**wann gesetzt**" versprochen und „**wo sichtbar**" gemessen —
+zweimal, mit zwei verschiedenen Werkzeugen. Der Integrator hat denselben Fehlertyp aus dem
+Commit-**Betreff** begangen, ich aus dem **Bestand**. Zwei Wege, ein Fehler: Indiz für Beleg
+genommen. `git log -L` auf die Zeile widerlegt beide und kostet einen Befehl.
+
+Und E15 hat eine eigene Klasse: **ich habe eine Gegenprobe nicht gefahren, weil ihr Ergebnis mir
+recht gegeben hätte.** Die Frage „hätte der vorhandene Prüfer das gefunden?" ist die erste, die
+man stellt, bevor man sagt „es fehlt ein Prüfer". Sie kostete drei Zeilen Shell.
