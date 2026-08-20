@@ -10,6 +10,22 @@ Alle älteren Prozess-, Rollen-, Übergabe-, Status- und Freigaberegeln sind auf
 Aufträge, Abnahmen, Ledgers und Statusseiten dürfen als fachliche Belege gelesen werden, besitzen
 aber keine Prozessautorität. Widersprüchliche Altverweise werden ignoriert.
 
+## Wo was liegt — die fünf Ablagen
+
+Landkarte: **[`docs/REGISTER.md`](docs/REGISTER.md)**. Wer etwas sucht, greift dorthin statt zu raten.
+
+| Fach | Ort | Inhalt |
+|---|---|---|
+| Agenten | [`.claude/agents/`](.claude/agents/) | 15 Agenten-Definitionen; Roster in [`docs/regelwerk/AGENTEN-UND-SKILLS.md`](docs/regelwerk/AGENTEN-UND-SKILLS.md) |
+| Regelwerk | [`docs/regelwerk/`](docs/regelwerk/REGISTER.md) | was gilt |
+| Backlog | [`docs/backlog/`](docs/backlog/REGISTER.md) | was offen ist / Nachbesserung |
+| Konzept | [`docs/konzept/`](docs/konzept/REGISTER.md) | was gedacht, aber nicht gebaut ist |
+| Fortschritt | [`docs/fortschritt/`](docs/fortschritt/REGISTER.md) | was erreicht ist (Belege, **kein** Zustand) |
+
+**`docs/STATUS.md` bleibt der einzige Statusträger** (ARBEITSREGELN §16) — erzeugt, nicht von Hand
+bearbeitet, alleiniger Schreiber ist der Integrator. Die fünf Fächer bauen daneben keine zweite
+Wahrheit auf.
+
 ## Fachliche Schutzgrenzen
 
 Diese fachlichen Grenzen bleiben unabhängig vom ersetzten Prozess bestehen:
