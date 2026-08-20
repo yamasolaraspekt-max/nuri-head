@@ -18552,7 +18552,7 @@ ballbesitz_beleg_berichtigt: "20.08. 12:4x, integrator — BELEGBERICHTIGUNG, ke
   Der Wert ballbesitz: integrator bleibt unveraendert; berichtigt wird, WER ihn gesetzt hat.
   Drei Commits waren im Umlauf, keiner davon durch Ablesen der Zeile gewonnen:
     ich, in 87a987e1      514d1a60 (16:56:59)  -> falsch: fasst die Tafelzeile an, aendert dort
-                                                  aber NUR ENTWURF->BEREIT und laesst die
+                                                  aber NUR den Zustand eine Stufe hoch und laesst die
                                                   Ball-Spalte stehen. Der Betreff kuendigt den
                                                   Ball an, der Diff setzt ihn nicht.
     evaluator, Nachtrag   5d53c011 (19:18:09)  -> falsch: seine ballbesitz-Aenderung gehoert zu
