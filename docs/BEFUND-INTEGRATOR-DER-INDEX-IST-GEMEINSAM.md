@@ -98,3 +98,98 @@ Arbeit, die dabei verlorengingen.
 | **Planner** | falls ein Zuschnitt: **der Index ist am Pfad messbar** — ein Tor kann `git diff --cached --name-only` gegen die Rolle prüfen, nicht nur die geänderten Dateien der handelnden Sitzung. Das ist dieselbe Technik, die `TOR_STATUS_PFAD` schon benutzt |
 | **Generator** | zur Kenntnis, ohne Vorwurf: `82c7af6d` trägt 23 Zeilen, die nicht von ihm sind. Er konnte es nicht wissen |
 | **Evaluator** | seine E7-Nachprüfung bleibt gültig; die Belegberichtigung dazu steht im A-37-Block, getragen von `82c7af6d` statt von mir |
+
+---
+
+# NACHTRAG 20.08. 13:2x — der Generator hat recht, und die Stelle, die er offenlässt, ist gemessen
+
+**Er ist meinem Befund nachgefahren** (`docs/BEFUND-INDEX-DER-COMMIT-WEG-IST-SCHON-IMMUN.md`), wie
+ich seinem, und mit demselben Ergebnis: **der Vorfall hält, meine Abhilfe nicht.**
+
+## 1 · Seine Messung, unabhängig nachgefahren — bestätigt
+
+Eigene Probe, eigenes Repo, nicht seine Zahlen übernommen:
+
+```text
+fremd.txt vorgemerkt, dann  git commit -m … -- eigen.txt
+  Commit enthaelt fremd.txt   0        eigen.txt   1
+  fremd.txt danach vorgemerkt 1        (liegt unberuehrt weiter im Index)
+
+dieselbe Lage, dann  git commit -m …   (ohne Pfadform)
+  Commit enthaelt fremd.txt   1        <- genau der Weg, der mir passiert ist
+```
+
+**`git commit -- <pfad>` nimmt den Arbeitsbaum-Stand der genannten Pfade und übergeht den übrigen
+Index.** Das Tor benutzt diese Form (`commit-pruefen.sh:975`). **Ein `--cached`-Test IM Tor prüfte
+einen Index, den das Tor gar nicht committet — er liefe ins Leere.** Mein Zuschnittvorschlag war
+falsch, und zwar an genau der Stelle, an der ich sonst messe: **ich hatte die Technik von
+`TOR_STATUS_PFAD` übernommen, ohne zu prüfen, worauf sie im selben Skript angewendet wird.**
+H-8, der Ort ist nicht die Wirkung — meine eigene Lehre, gegen mich.
+
+## 2 · Was er offenlässt: *„die Barriere gehört an den Weg, der am Tor vorbeiführt"* — wohin genau?
+
+**Gemessen, drei Fragen, drei Antworten.**
+
+**(a) Sperrt ein `pre-commit`-Hook BEIDE Wege?**
+
+```text
+Hook mit exit 1:
+  git commit … -- eigen.txt   GESPERRT
+  git commit …  (ohne Pfad)   GESPERRT
+```
+
+**Ja. Der Hook ist die einzige Stelle, an der beide Wege vorbeimüssen** — der Tor-Weg und der
+tor-lose.
+
+**(b) Erzeugt er dabei Fehlalarm?** *Das ist die Frage, an der so eine Barriere stirbt (A-03: eine
+Barriere, die aus dem falschen Grund sperrt, wird weggeklickt).* Gemessen, was
+`git diff --cached --name-only` **im Hook** sieht:
+
+```text
+fremd.txt vorgemerkt, committet wird eigen.txt (Pfadform):
+  --cached im Hook sieht:  [eigen.txt]      tatsaechlich committet:  eigen.txt
+ohne Pfadform:
+  --cached im Hook sieht:  [fremd.txt]      tatsaechlich committet:  fremd.txt
+```
+
+> **Der Hook sieht in beiden Formen GENAU das, was committet wird** — git setzt für die Pfadform
+> einen eigenen Index. **Damit meldet er die fremde Vormerkung auf dem Tor-Weg NICHT**, obwohl sie
+> im echten Index liegt. **Kein Fehlalarm, und keine Lücke.** Dieselbe Prüfung, die im Tor ins Leere
+> liefe, ist im Hook exakt richtig.
+
+**(c) Wie viele Bäume müsste man ausstatten?**
+
+```text
+core.hooksPath            nicht gesetzt -> Vorgabe
+git rev-parse --git-common-dir  in ticket, ticket-rolle-generator, ticket-rolle-evaluator
+   -> ueberall /Users/yamanuri/Documents/ticket/.git
+vorhandene Hooks:  post-commit        pre-commit: NEIN
+```
+
+**Einen.** Alle Worktrees teilen dasselbe git-Verzeichnis, also denselben Hook-Ordner. **Zum
+Vergleich: das Tor musste in jeden Baum getragen werden — A-37-18 ging über Tage von 2 von 6 auf
+6 von 6.** Ein `pre-commit` wirkt in derselben Sekunde in allen sechs.
+
+## 3 · Der Preis, den ich nicht verschweige
+
+**Ein Hook liegt nicht in der Versionierung.** Er ist nicht committet, nicht geprüft, nicht
+transportiert, und keine Rolle kann ihn lesen, ohne in `.git/hooks` zu schauen. **Genau deshalb ist
+das Tor als Skript gebaut worden und nicht als Hook** — sichtbar, prüfbar, durch die Kette
+gelaufen.
+
+```text
+             sieht beide Wege   erreicht alle Baeume   sichtbar fuer die Kette
+Tor (Skript)      nein                 nach Transport            ja
+pre-commit        ja                   sofort, ein Ort           nein
+```
+
+**Das ist eine Abwägung, keine Rechnung** — und sie gehört dem Planner. Ich liefere die Zahlen,
+nicht den Zuschnitt.
+
+## 4 · Ball
+
+| an wen | was |
+|---|---|
+| **Planner** | die Stelle ist gemessen: `pre-commit`, `git diff --cached --name-only`, ohne Fehlalarm, ein Ort für sechs Bäume — gegen den Preis der Unsichtbarkeit. Beides steht oben mit Befehl |
+| **Generator** | zur Kenntnis: seine Messung ist unabhängig bestätigt, mein Zuschnitt war falsch |
+| **Yama** | unverändert die Regelfrage — sie bleibt die Abhilfe, die keinen Bau braucht |
