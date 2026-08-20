@@ -291,3 +291,74 @@ Diese Stufe hat **keinen** Befund gefunden. Sie wird trotzdem geliefert: die Fra
 Bündel und Klick ein Fehlversprechen?"* ist damit beantwortet und muss nicht noch einmal gestellt
 werden. **Nicht gefunden ist etwas anderes als nicht gesucht** — der Suchweg steht oben, Glied für
 Glied, und ist nachfahrbar.
+
+---
+
+# S-1/4 — die Schnittmenge: die Bauliste, nach Anschlusslänge geordnet
+
+*Nachgereicht 20.08. gegen `70f46b31`. S-1/2 fand 17 Vorbau-Module, S-1/3 fand 98 wartende Kacheln.
+**Hier werden sie gepaart.***
+
+## Das Ordnungskriterium, aus den drei Stufen abgeleitet
+
+Ein Anschluss ist **kurz**, wenn drei Stücke schon liegen und nur das Bindeglied fehlt — genau das
+Muster von A-35 (`trimmen`: Vertrag da, Kachel da, `geradenSchnitt` seit A-32 da).
+
+```
+1  RECHNUNG   ein Vorbau-Modul liegt, geprueft und unerreichbar        (S-1/2)
+2  KACHEL     eine Kachel liegt in der Leiste, Zone 'weitere'          (S-1/3)
+3  BEFEHL     Marke 'deckt' (Befehl existiert) ODER 'ohne-modell'      (Landkarte)
+              -> in beiden Faellen ist KEIN neuer Modellbefehl noetig
+```
+
+**Marke `fehlt` schliesst einen kurzen Anschluss aus** — dort ist zusaetzlich ein Modellbefehl zu
+bauen. Von den 20 `fehlt`-Marken taucht in dieser Liste deshalb keine auf.
+
+## Und eine Unterscheidung, ohne die die Liste falsch wäre
+
+**Nicht jedes unerreichbare Modul bedeutet eine fehlende Fähigkeit.** Geprüft je Kandidat: *gibt es
+das Können heute irgendwo, auch ohne die Kachel?*
+
+| Kandidat | Fähigkeit heute erreichbar? | |
+|---|---|---|
+| `ausblenden` · `einblenden` · `sperren` · `entsperren` | **ja** — `EigenschaftenPanel.tsx:234/238` setzt `SET_NODES_SICHTBAR` / `SET_NODES_GESPERRT` ab | **zweite Oberfläche**, keine neue Fähigkeit |
+| alle übrigen unten | **nein** — kein Verbraucher außerhalb des Moduls | echter Anschluss |
+
+`auswahlDarstellung.ts` (71 Z.) ist damit der **zweite `deckenMesh`-Fall**: reines Modul gebaut, die
+Sache danach inline in der Komponente gelöst. Zwei Fälle sind ein Muster und gehören dem Planner
+gemeldet — **nicht** als Bauauftrag, sondern als Frage, welcher der beiden Wege bleiben soll.
+
+## Die Bauliste
+
+**Sortiert nach Anschlusslänge: was am wenigsten braucht, steht oben.**
+
+| # | Kachel | Marke | Rechnung liegt in | Z. | fehlt |
+|---|---|---|---|---|---|
+| 1 | `suche` | `ohne-modell` | `trefferSuche.ts` — `besterTreffer`, `toleranzInWelt` | 75 | nur der Bedienweg; **kein Verbraucher außerhalb der Datei** nachgemessen |
+| 2 | `volumen-messen` | `ohne-modell` | `wandFlaeche.ts` — `wandMengen` | 238 | nur der Bedienweg |
+| 3 | `grundriss-erkennen` | `ohne-modell` | `grundriss.ts` — `grundrissPolygon`, `eckenAnalyse` | 133 | nur der Bedienweg |
+| 4 | `schnitt` · `aufriss` | `ohne-modell` | `raumProjektion.ts` (98) · `dachProjektion.ts` (43) · `treppeSvg.ts` (142) | 283 | Bedienweg + Entscheidung, welche Projektion welche Kachel bedient |
+| 5 | `dachfenster` | `deckt` | `dachOeffnung` (96) · `dachAusschnitt` (510) · `auswechslung` (174) · `sparrenTrennung` (67) · `aufbautenStatus` (52) | **899** | Bedienweg; Befehl existiert |
+| — | `ausblenden` · `einblenden` · `sperren` · `entsperren` | `deckt` | `auswahlDarstellung.ts` | 71 | **kein Anschluss** — zweite Oberfläche, siehe oben |
+
+**Fünf Anschlüsse, 1.628 Zeilen geprüfte Rechnung, die heute niemand erreicht.**
+
+## Drei Module bleiben ohne Paarung — und das ist eine Aussage
+
+| Modul | Z. | warum keine Kachel |
+|---|---|---|
+| `dachTopologie.ts` | 183 | gehört zur L-Kontur, nicht zu einer Kachel — hängt an der Sperre `dachGeometrie.ts:88-92` und damit an Yamas Punkt 8 |
+| `integrationAbgleich.ts` | 135 | setzt *„Yamas Abschnitt 14 (Import- und Abgleichslogik)"* um; welche Kachel das tragen soll, ist **nicht** gemessen und wird nicht geraten |
+| `werkzeugRegistry.ts` | 68 | Plattform-Kern, kein Werkzeug — hat richtigerweise keine Kachel |
+| `dachVorlage.ts` · `treppenTypen.ts` | 34 · 153 | Datenvorlagen hinter `dach` bzw. `treppe`; beide Werkzeuge sind erreichbar, die Vorlagen werden nur nicht benutzt |
+
+## Was diese Stufe NICHT tut
+
+- **Sie schneidet keinen Auftrag.** Reihenfolge und Zuschnitt sind Planner-Sache; hier steht das
+  Material, nach einem benannten Kriterium sortiert.
+- **Sie behauptet keine Aufwände.** Der einzige gemessene Maßstab ist A-35: 12 Dateien, 894 Zeilen,
+  291 davon Test. Ob Nummer 1 kleiner ist als A-35, ist nicht gemessen — nur, dass ihre Rechnung
+  bereits liegt.
+- **Sie prüft die Paarungen nicht fachlich.** Dass `wandFlaeche.wandMengen` das ist, was
+  `volumen-messen` meint, ist aus Namen und Vertragsfamilie (`measurement`) geschlossen, **nicht am
+  Vertragstext belegt**. Vor dem Zuschnitt gehört jede Paarung einmal gegen ihren Vertrag gehalten.
