@@ -189,8 +189,8 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
       {
         schluessel: 'schneezone', label: 'Schneelastzone', pflicht: true,
         auswahl: [
-          { wert: '1', label: 'Zone 1' }, { wert: '1a', label: 'Zone 1a' },
-          { wert: '2', label: 'Zone 2' }, { wert: '2a', label: 'Zone 2a' },
+          { wert: '1', label: 'Zone 1' },
+          { wert: '2', label: 'Zone 2' },
           { wert: '3', label: 'Zone 3' },
         ],
         hinweis: 'Zone nach Schneelastkarte. Sie bestimmt die Bodenschneelast am Standort.',
@@ -411,6 +411,20 @@ export const ENGINE_PANELS: readonly EnginePanel[] = [
  * **Hier wird nichts gerechnet.** Keine Umrechnung, kein Grenzwert, keine Rundung — nur gelesen,
  * was im Feld steht, und weitergereicht. Jede Zahl entsteht in `berechneSparren`.
  */
+/**
+ * Schneelastzone aus dem Auswahlfeld in den Engine-Typ. **Die einzige Umrechnung in dieser
+ * Datei** — und sie ist keine Rechnung, sondern die Wandlung, die der Cast vorher vorgetaeuscht
+ * hat. Unbekanntes faellt auf 3, den ungünstigsten Fall: eine unklare Zone darf nicht
+ * stillschweigend die leichteste werden.
+ *
+ * **1a und 2a fehlen hier mit Absicht.** Ihr Zuschlag nach DIN EN 1991-1-3/NA ist ein Normwert,
+ * den ich nicht setze (Operanden-Gate). Sie sind deshalb aus dem Auswahlfeld genommen, statt
+ * eine Kachel anzubieten, die etwas anderes rechnet, als sie anzeigt.
+ */
+function schneezoneAusText(roh: string | undefined): SparrenEingabe['schneezone'] {
+  return roh === '1' ? 1 : roh === '2' ? 2 : 3;
+}
+
 export function alsSparrenEingabe(werte: Record<string, string>): SparrenEingabe {
   const zahl = (k: string): number | undefined => {
     const roh = (werte[k] ?? '').trim();
@@ -424,7 +438,13 @@ export function alsSparrenEingabe(werte: Record<string, string>): SparrenEingabe
     sparrenabstandM: zahl('sparrenabstandM') ?? 0,
     breiteMm: zahl('breiteMm') ?? 0,
     hoeheMm: zahl('hoeheMm') ?? 0,
-    schneezone: (werte.schneezone ?? '2') as unknown as SparrenEingabe['schneezone'],
+    // **BERICHTIGT 20.08.** Hier stand ein Doppel-Cast `as unknown as`, und er hat genau die
+    // Pruefung abgeschaltet, die den Fehler haette finden muessen: das Auswahlfeld liefert
+    // Zeichenketten, `Schneezone` ist `1|2|3`, und `sparrenBerechnung.ts:36` vergleicht mit
+    // `===`. Damit traf KEINE Auswahl je zu — alles fiel in den letzten Zweig, Zone 3.
+    // Gemessen: jede Auswahl ergab s_k = 1,285 kN/m2; richtig sind 0,650 / 0,890 / 1,285.
+    // Faktor 1,98 bei Zone 1, und die Flaeche zeigte dabei 'Zone 1' an.
+    schneezone: schneezoneAusText(werte.schneezone),
     gelaendehoeheM: zahl('gelaendehoeheM') ?? 0,
     ...(zahl('eigenlastKnM2') !== undefined ? { eigenlastKnM2: zahl('eigenlastKnM2') } : {}),
     ...(werte.holzklasse ? { holzklasse: werte.holzklasse as SparrenEingabe['holzklasse'] } : {}),
