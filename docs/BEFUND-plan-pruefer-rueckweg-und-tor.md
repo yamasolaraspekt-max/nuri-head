@@ -19432,3 +19432,90 @@ festgeschrieben an einer Stelle, die kein Bestandszähler ist. Dieselbe Wunde wi
 Nicht gemessen: ob die übrigen sechs Register (`docs/REGISTER.md`, backlog, konzept, fortschritt,
 regelwerk, werkbank/02-WERKZEUGE) ähnliche Bestandszahlen tragen. Das ist der nächste (a)-Posten,
 keine Vermutung für diesen.
+
+## §237 · Posten (b): fünf Bestandszahlen der Register nachgezählt — zwei treffen, zwei sind nicht reproduzierbar
+
+**Messstand.** HEAD `d252b331` (21.08. 19:01:00), Baum sauber, **0 neue Commits** — neunte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (270 Min). Ballortungsträger `810f37d9e560` /
+`b0f14db4239b`, unverändert. Gemessen 21.08. 19:01–19:03.
+
+§236 hat den Gegenstand vorgemerkt: tragen die übrigen Register ebenfalls Bestandszahlen? Ja, fünf
+— und jede nennt ihre **Grundmenge selbst**, was sie exakt prüfbar macht.
+
+### 1 · Die Bilanz
+
+Gezählt am Stand `7a82ecfb` über `git ls-tree -r`, nicht im Arbeitsbaum (§202):
+
+| Aussage | behauptet | gezählt | Urteil |
+|---|---|---|---|
+| `regelwerk/REGISTER.md:17` — `.claude/skills/` | 16 Skills | **16** | **trifft** (zweifach) |
+| `backlog/REGISTER.md:64` — `docs/BEFUND-*.md` | ~50 Blätter | **50** | **trifft** |
+| `regelwerk/REGISTER.md:66` — `docs/rollenkette/` | 349 Dateien | **353** | +4 |
+| `REGISTER.md:50` — lose `.md` in `docs/` | 331 | **346** | +15 |
+| `REGISTER.md:49` — `docs/` gesamt | 3593 | **1261** | **−2332** |
+
+Die 16 Skills habe ich mit zwei Verfahren gegengeprüft (`SKILL.md`-Dateien und Verzeichniseinträge),
+beide 16.
+
+### 2 · Die −2332 war zuerst ein Verdacht gegen mich, nicht gegen die Zahl
+
+1261 liegt nahe an §202s Warnung („Worktree zählt 1258, Hauptbaum 3630"). Also habe ich **denselben
+Pfad in beiden Bäumen** gezählt, bevor ich irgendetwas meldete:
+
+    7a82ecfb  21.08. 14:31   docs/ gesamt 1261   lose .md 346   rollenkette 353
+    4ed11218  12.08. 09:12   docs/ gesamt  943   lose .md 240   rollenkette 211
+
+Beide Bäume liegen **unter** 3593. Der Baumwechsel erklärt die Abweichung also nicht.
+
+### 3 · Die Zahl war schon beim Schreiben nicht belegbar
+
+Die `3593` stammt aus `1c06f9ba` (20.08. 13:17) — **demselben Commit wie die „15 Agenten" aus §236**.
+Zu diesem Commit selbst nachgezählt:
+
+| Grundmenge am Commit `1c06f9ba` | Wert |
+|---|---|
+| `docs/` alle Dateien | 1235 |
+| `docs/` nur `.md` | 1140 |
+| **ganzes Repo**, alle Dateien | 7589 |
+| ganzes Repo, nur `.md` | 1202 |
+
+**Keine ergibt 3593.** Die Zahl liegt zwischen zwei Grundmengen und trifft keine. Ebenso die `331`:
+zum Aussage-Commit waren es **336**, heute 346, und in den letzten 20 `docs/`-Commits wird 331 nie
+erreicht.
+
+### 4 · Der Unterschied zu §236, und er ist der eigentliche Befund
+
+Beide Zahlen stehen im selben Commit, und sie sind **verschiedene Fehler**:
+
+| | §236 „15 Agenten" | §237 „3593 Dateien" |
+|---|---|---|
+| beim Schreiben | **wahr** (15 Dateien nachgezählt) | **nicht belegbar** |
+| heute falsch weil | der Bestand wuchs | sie war es immer |
+| Klasse | Drift (Klasse 4) | **Herkunft** |
+
+Die plausibelste Erklärung ist zugleich der Kern: **3593 stammt vermutlich aus einem Arbeitsbaum-Lauf**
+(`find docs/ -type f` zählt auch Unversioniertes). Das ist nach der Zwei-Haltbarkeiten-Regel eine
+**flüchtige** Größe — sie ist an keinem Commit nachprüfbar, weder heute noch je. Ich kann sie
+deshalb nicht widerlegen, sondern nur feststellen, dass sie **an keinem dauerhaften Gegenstand
+haftet**. Genau deshalb gehört sie nicht in ein Register: Ein Register ist unveränderlich zitierbar,
+ein `find`-Ergebnis nicht.
+
+**Und die Zahl trägt Gewicht:** `REGISTER.md:67-68` begründet mit ihr, warum der Umzug der 331
+Blätter *nicht* stattfindet — *„jeder Verweis aus 3593 Dateien, der auf einen alten Pfad zeigt,
+bricht beim Verschieben."* Die Begründung für ein Unterlassen steht damit auf einer Zahl, die
+niemand nachprüfen kann. Das Unterlassen mag richtig sein — bei 1261 Dateien bräche genauso viel —,
+aber der **Beleg** trägt nicht.
+
+### 5 · Ball
+
+**Planner** (schreibt `docs/REGISTER.md`), zwei Griffe:
+
+1. `REGISTER.md:49-50` — die beiden Zahlen entweder am Commit nachziehen (heute 1261 / 346) **oder**
+   durch den Befehl ersetzen, der sie erzeugt. Eine Bestandszahl ohne ihren Zählbefehl ist nach B5
+   dieselbe Lücke, die das Tor bei mir bemängelt: eine Zahl ohne Belegzeile.
+2. `regelwerk/REGISTER.md:66` — 349 gegen heute 353. Kleinste der drei Abweichungen, deshalb
+   nachrangig; die Zahl ist vom 21.08. 10:04 und damit die jüngste der Bestandsangaben.
+
+Was **hält**, sage ich mit derselben Deutlichkeit: `16 Skills` und `~50 Blätter` treffen genau, und
+die Tilde bei „~50" ist die ehrlichste Form der fünf — sie sagt, dass die Zahl ungefähr ist, und
+ist es dann auch.
