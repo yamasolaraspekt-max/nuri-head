@@ -1,46 +1,26 @@
-auftrag_id: A-42
-generation: 4            # NEU 23:42 — dein Votum 3f7f61d6 (NACHBESSERN, A-42-1) ist angenommen; jetzt: Nachpruefung von A-42-1, sobald der Integrator sie meldet
-aktion_jetzt: warten_auf_A-42-1_dann_nachpruefen
-A-42-1_nachpruefung:
-  ausloeser: "ereignisse/A-42/integrator-A-42-1-CODE_FERTIG.yaml (Integrator setzt unter jede der drei verwaisten Ueberschriften EINE Verweiszeile auf docs/BEFUNDNOTIZEN.md; Form 'Verweis' ist Entscheidung des Dirigenten unter Vollmacht — nichts wird entfernt)"
-  pruefen: "Punkt 8 erneut: drei Ueberschriften tragen je eine Verweiszeile mit Anker; Punkte 1-7 unveraendert (289 + 172 Bloecke byte-identisch, Zaunbilanz gerade, 104 Datensaetze, Ballbesitz, Idempotenz); KEIN weiterer Inhalt geaendert (git show --stat zeigt nur docs/STATUS.md, Diff = genau drei Zeilen)."
-  ergebnis: "ereignisse/A-42/evaluator-ABGENOMMEN.yaml (oder erneut NACHBESSERN) + Votum-Nachtrag im eigenen Worktree; Lease leases/A-42/ fuer die Nachpruefung erneut ziehen (Token 2)."
-anerkennung: "Zehn von elf, sieben zeichengenau, Idempotenz als staerkster Beleg, Bau-Identitaet selbst geprueft, Praezisierung zu e9e6ee5b (beide SHAs) — genau so. Befunde (a) und (b) sind an den Planner weitergereicht (A-37-24 und Waechter-Vorratsposten)."
-danach_weiter: "Nach ABGENOMMEN: Scratchpad-Worktree 'ticket-rolle-generator' (detached f374c73a) mit git worktree remove aufraeumen (Planner-Befund: Namensdoppelgaenger); dann W0-5-Vergleich NUR nach neuer generation."
-steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
-warnung_bau_sha: "Die CODE_FERTIG-Meldung e9e6ee5b ist leer, nennt ZWEI Kennungen (A-38 · A-42) und als Bau 0f731c22 — das ist der A-38-Bau (zwei Hook-Dateien). Der A-42-Bau ist 26c46f31 (BEFUNDNOTIZEN.md +9470, STATUS.md -9241, scripts/a42-befundnotizen-umzug.py +407). Abnehmen NUR auf 26c46f31; der Meldung nicht folgen."
+auftrag_id: EVAL-bereitschaft-A-37
+generation: 5            # 22.08. 00:30 — A-42 abgeschlossen (dein b1c0c2d4, 11/11, eingetragen 3b2e5334). Neue Kennung: Bereitschaft fuer die A-37-Abnahme + zwei kleine, lesende Aufgaben.
 rolle: evaluator
-sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3   # PID 87750
+sitzung_erwartet: 303cefb6-35fd-4c36-9aca-ed10515f59b3   # Sitzungs-ID ist die Identitaet; pid/prozess_start gelten je Lauf (README 2)
 worktree: /Users/yamanuri/Documents/ticket-rolle-evaluator
 branch: rolle/evaluator
-basis_sha: c10c25a7
-prioritaet: P0
-aktion: unabhaengig_abnehmen
-gegenstand: "A-42 Befundnotizen ziehen um — Bau 26c46f31 (Generator); Blatt docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md"
-pruefumfang_yama:
-  - "461 = 289 + 172 am damaligen Ausgangsstand"
-  - "alle 172 Bloecke byte-identisch"
-  - "keine Inhaltszeile verloren oder hinzugefuegt"
-  - "gerade Zaunbilanz in beiden Dateien"
-  - "104 echte Auftragsdatensaetze unveraendert"
-  - "Ballbesitz je Rolle vorher = beide Dateien nachher"
-  - "zweiter Lauf veraendert keine Datei (idempotent, leerer Diff)"
-  - "die zwei zurueckgebliebenen Ueberschriften bewusst bewertet"
-  - "scripts/yama-posten.py und alle Wacheanweisungen durchsuchen anschliessend beide Dateien"
-  - "Zieldateischutz: docs/BEFUNDNOTIZEN.md traegt heute NICHT dieselbe Schreibbarriere wie docs/STATUS.md — als Befund melden (kein Abzug, wenn A-42 das nicht verlangte)"
-  - "Votum mit Befehl, Rohausgabe und SHA; Generatorbericht erst NACH eigener Pruefung lesen"
-voraussetzungen: []
+basis_sha: b1c0c2d4
+prioritaet: P1
+aktion: aufraeumen_vergleichen_dann_bereit
+aufgabe_1_aufraeumen: "Den Scratchpad-Worktree-Klon /private/tmp/claude-501/-Users-yamanuri-Documents-ticket/303cefb6-.../scratchpad/ticket-rolle-generator (detached f374c73a; Planner-Befund 'doppelter Generatorbaum') mit git worktree remove entfernen, damit kein Namensdoppelgaenger in der Worktree-Liste bleibt; Ergebnis: git worktree list --porcelain zaehlt 'ticket-rolle-generator' genau 1x. Ereignis: ereignisse/EVAL-bereitschaft-A-37/evaluator-aufgeraeumt.yaml."
+aufgabe_2_w0_5_vergleich: "W0-5-Doppelbau FACHLICH VERGLEICHEN, read-only, KEIN Votum auf einen der beiden, nichts ueberschreiben: 28ca0834 (app/Support/Planner, im gemeinsamen Checkout entstanden) vs ef7a8c89 (app/Traits/PlannerZustaendigkeit, rolle/generator). Vergleichen: Kriterium A drei Faelle (fremd 403 / eigen 200 / Vorgesetzter 200), Vorgesetztenkette (employees.supervisor mit Zyklen-/Tiefenschutz vs hasPermission), Testdatei-Pfade und Konfliktlage beim Transport, Wortlaut-Abweichungen zum Blatt. Bericht als ereignisse/EVAL-bereitschaft-A-37/evaluator-w0-5-vergleich.yaml mit Empfehlung, Entscheidung folgt vom Dirigenten/Planner. Keine DB-Laeufe (Verbot bis Z0-I1)."
+aufgabe_3_bereitschaft: "Danach bereit fuer die A-37-Abnahme: sobald der Generator (aa0cddd3, eigener Worktree) A-37 nach DoR gebaut und ereignisse/<A-37-Auftrag>/generator-CODE_FERTIG.yaml gemeldet hat, kommt eine neue generation dieser Datei mit aktion: abnehmen (21 alte + 6 neue Kriterien A-37-22..27; ALLE Positiv- UND Negativproben selbst ausloesen: falscher Worktree, fehlende Rolle, falscher Zweig, abgelaufene Generation, doppelte Lease, unerlaubter Pfad, nacktes git commit, Merge; --no-verify als dokumentierte Grenze). Bis dahin lesende Vorbereitung: docs/auftraege/aktiv/A-37-rollen-tor-und-drei-fehlerursachen.md @ rolle/planner 3dde19ea."
+lease: "Fuer Aufgabe 1 und 2 keine Lease noetig (kein Repo-Commit); falls du Berichte im Worktree committest: Lease leases/EVAL-bereitschaft-A-37/ nach README."
 erlaubte_pfade:
-  - docs/auftraege/aktiv/A-42-befundnotizen-ziehen-um.md
-  - "eigenes Votums-/Befundblatt des Evaluators im Worktree (Dokument, kein Produktcode)"
+  - "eigenes Votums-/Befundblatt im Worktree (Dokument, kein Produktcode)"
 verboten:
   - Produktcode aendern
-  - docs/STATUS.md oder docs/BEFUNDNOTIZEN.md schreiben (Integrator)
-  - A-38, A-39, Z1-W1-*, Z2-W0-* pruefen oder voten
+  - Voten zu W0-5 (nur Vergleich)
+  - docs/STATUS.md / docs/BEFUNDNOTIZEN.md schreiben
   - Datenbanklaeufe (bis Z0-I1)
-  - Commit ausserhalb des eigenen Worktrees
-nach_abschluss: "Votum committen (Tor, TICKET_ROLLE=evaluator) → ereignisse/A-42/evaluator-CODE_FERTIG.yaml bzw. -ABGENOMMEN.yaml schreiben → Integrator setzt echten Zustandscommit"
+  - Commit ohne Lease; Commit ausserhalb des eigenen Worktrees
+steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/A-42/evaluator-ack.yaml
-tafel: "docs/auftraege/DIRIGENT-TAFEL.md @ rolle/dirigent 08284aa4 (Hintergrund); dieser Auftrag hat Vorrang"
-erstellt: "2026-08-21T23:1x Dirigent"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/EVAL-bereitschaft-A-37/evaluator-ack.yaml
+anerkennung: "A-42: drei Voten, zwei eigene Berichtigungen, 11/11 — Massstab."
+erstellt: "2026-08-22T00:30 Dirigent (atomar veroeffentlicht)"

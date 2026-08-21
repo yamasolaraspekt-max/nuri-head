@@ -1,28 +1,19 @@
-auftrag_id: INT-A-42
-generation: 5            # 22.08. 00:05 — Evaluator-Nachpruefung b193f72e: A-42-1 REST = genau EIN Verweis fehlt (A-17); dann Zustandscommit
-steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
+auftrag_id: INT-kette-A-37
+generation: 6            # 22.08. 00:30 — A-42 eingetragen (3b2e5334). Neue Kennung: Kettenstation A-37 — zuerst Rueckweg des Planner-Blatts, dann warten.
 rolle: integrator
-sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457   # PID 80335
+sitzung_erwartet: 03737d75-b216-4299-b4ea-595407d3e457   # Sitzungs-ID ist die Identitaet; pid/prozess_start gelten je Lauf (README 2)
 worktree: /Users/yamanuri/Documents/ticket
 branch: auto/hausplaner-integration
-basis_sha: 6af8a5d1
+basis_sha: 3b2e5334
 prioritaet: P0
-aktion_jetzt: A-42-1_rest_dann_zustandscommit
-A-42-1_rest:
-  befund_evaluator_b193f72e: "Dein Einwand zu 'A-17 — MESSBERICHT des Planners' ist geprueft und trifft einen ANDEREN Block: unter dieser Ueberschrift lagen ZWEI Bloecke — der am 12.08. nach 6d6823dd entfernte (Zustandsfelder doppelt; davon spricht der Berichtigungstext) UND ein yaml-Zaun bei +8 nach sieben Zeilen Berichtigungstext, der durch 26c46f31 umgezogen ist (byte-identisch in docs/BEFUNDNOTIZEN.md, in docs/STATUS.md nicht mehr vorhanden). Dir wird zugutegehalten, dass du gemeldet statt uebergangen hast — deshalb Nachbesserung, keine Beanstandung."
-  zu_tun: "Unter '## A-17 — MESSBERICHT des Planners (KEIN Zustandsdatensatz — der steht oben, Z. 2138)' genau EINE Verweiszeile in derselben Form wie die beiden anderen: '> Block umgezogen nach docs/BEFUNDNOTIZEN.md (A-42, Bau 26c46f31) — Anker: auftrag: \"A-17\"' — vorher pruefen, dass der Anker in BEFUNDNOTIZEN trifft (Evaluator: ja)."
-  optional_nebenbefund: "Anker 'P-05' trifft in BEFUNDNOTIZEN zweimal — darf im selben Commit geschaerft werden (zusaetzlich erste Zeile des Blocks als zweites Feld), muss aber nicht."
-  vorgehen: "Lease leases/A-42-1/ erneut ziehen (Token 2) -> EIN Commit nur docs/STATUS.md (+1 Verweiszeile, +1 Leerzeile; Loeschungen 0) -> Betreff 'integrator: A-42-1 Rest — A-17-Verweis gesetzt (Bau 26c46f31, Nachpruefung b193f72e)' -> ereignisse/A-42/integrator-A-42-1-CODE_FERTIG-2.yaml mit Ergebnis-SHA -> Lease freigeben. docs/FACHPRUEFUNG-DREI-LINSEN.md NICHT stagen."
-  danach: "Evaluator prueft erneut (seine Regel gen 4 deckt das; Ausloeser = dein CODE_FERTIG-2-Ereignis) -> evaluator-ABGENOMMEN.yaml -> ERST DANN dein Zustandscommit A-42: EINE Kennung, Wortlaut exakt nach scripts/status-erzeugen.sh, Bau 26c46f31, Beleg = letzter Votum-SHA des Evaluators; Muster-Probe vor dem Commit; git show --stat zeigt docs/STATUS.md."
+aktion: rueckweg_planner_dann_warten
+aufgabe_1: "Rueckweg rolle/planner (3dde19ea: A-37-Blatt erweitert um A-37-22..27, ein Pfad, +293/-4) in auto/hausplaner-integration — innerhalb der Kette A-42 -> A-37 -> Z0-I1 erlaubt. Dein Rueckweg-Werkzeug; Ergebnis-SHA in ereignisse/INT-kette-A-37/integrator-rueckweg-planner.yaml. Kein Zustandscommit fuer A-37 jetzt (A-37 bleibt CODE_FERTIG/Votum NACHBESSERN 20/21 in STATUS, bis DoR + Bau + Abnahme vorliegen)."
+aufgabe_2_warten: "Danach: Rueckwege nur fuer Ergebnisse der Kette (Plan-Pruefer-DoR-Votum, Generator-A-37-Bau aus rolle/generator, Evaluator-Votum); Zustandscommit A-37 erst nach Evaluator-ABGENOMMEN: EINE Kennung, Wortlaut status-erzeugen.sh, Bau-SHA, Beleg = Votum-SHA, Muster-Probe, git show --stat. Keine Rueckwege von Altposten; keine Nachtraege fuer A-38/A-39/Z1-W1-5-1."
 regeln:
-  - "Leere Zustandscommits abweisen (e9e6ee5b war leer, nannte zwei Kennungen und beide Bau-SHAs)"
-  - "Keine Rueckwege von Altposten-/Nebenanalyse-Commits; keine Zustands-/Abnahmenachtraege fuer A-38, A-39, Z1-W1-5-1, Symbol-/Zaehl-/Maurer-Arbeiten"
-  - "Uncommittete docs/FACHPRUEFUNG-DREI-LINSEN.md im Checkout NICHT anfassen (gehoert der gestoppten Sitzung 7df19ed4)"
-  - "Rueckweg von rolle/dirigent erst, wenn rueckweg.py den Baum kennt (A-37-22)"
+  - "Leere Zustandscommits abweisen"
+  - "Uncommittete docs/FACHPRUEFUNG-DREI-LINSEN.md im Checkout NICHT anfassen (gehoert 7df19ed4)"
+  - "Rueckweg von rolle/dirigent erst, wenn rueckweg.py den Baum kennt (A-37-22) — der Dirigent meldet, wenn es so weit ist"
   - "Der eng begrenzte Integrationscommit im gemeinsamen Checkout bleibt dein Recht — sonst committet dort niemand"
-  - "Rueckwege innerhalb der Kette A-42 -> A-37 -> Z0-I1 (z.B. Evaluator-Voten) sind erlaubt"
-voraussetzungen:
-  - "fuer den Zustandscommit: ereignisse/A-42/evaluator-ABGENOMMEN.yaml mit Votum-SHA"
 erlaubte_pfade:
   - docs/STATUS.md
   - docs/BEFUNDNOTIZEN.md
@@ -30,6 +21,8 @@ erlaubte_pfade:
 verboten:
   - Produktcode aendern
   - Transport von A-38/A-39/Z1-W1-5-1-Bauten als Fortschritt
+steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
 status: ZUGETEILT
-ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-A-42/integrator-ack.yaml
-erstellt: "2026-08-22T00:05 Dirigent (atomar veroeffentlicht)"
+ack_pfad: /Users/yamanuri/.ticket-steuerung/ereignisse/INT-kette-A-37/integrator-ack.yaml
+anerkennung: "A-42-1 zweimal sauber gemessen, Einwand selbst berichtigt, Zustandscommit nicht leer, eine Kennung — so."
+erstellt: "2026-08-22T00:30 Dirigent (atomar veroeffentlicht)"
