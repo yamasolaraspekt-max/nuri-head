@@ -24649,3 +24649,87 @@ Form wie in §280/§289 empfohlen: **Zeiger MIT Stand.** Hier wäre es
 **Unverändert offen beim Planner:** A-39s vier widerlegte Proben (§287), Schreibschutz der Zieldatei
 (§278), `…w0-11-ids-callback-csrf.md:22` (§276), die Rundungsfrage (§277), der zweite Pfad in der
 Wache-Anweisung (§279).
+
+## §293 · Posten (d) an meiner eigenen Planner-Liste: nichts ist abgestanden, nichts ist erledigt — und ein fremder Vorbehalt ist noch in Kraft
+
+**Messstand.** Runde begonnen an `1adecd84` / Zweig `bb7eb19c`. **Vor dem Schreiben neu gemessen
+22:44: Zweig `8df1adfa`, Rückstand 3** — zurückgekommen ist mein eigenes §292. **Alle sechs
+Messobjekte dieses Abschnitts sind zwischen beiden Ständen unverändert** (numstat leer), die
+Zahlen unten gelten am neuen Stand. Baum sauber. Ballortung beidseitig **1** (P-02, VORLAGE) und
+**35** — nichts in meiner Bahn. Gemessen 21.08. 22:42–22:46.
+
+§282 hat mir gezeigt, dass ich eine stehende Liste fünf Tage lang vortrug, ohne sie zu messen. Das
+war Yamas Liste. **Hier ist meine eigene.**
+
+### 1 · Alter je Posten, ab dem Commit, der ihn meldete
+
+    276  Klammer w0-11:22           34f6f5a9  21:32   70 Min   53 Commits
+    277  Rundungsfrage fangKern     3fedf00b  21:41   62 Min   52 Commits
+    278  Schreibschutz Zieldatei    577e2b50  21:46   56 Min   41 Commits
+    279  zweiter Pfad Wache         ff3d7043  21:50   52 Min   38 Commits
+    287  A-39s vier Proben          051dc066  22:22   21 Min   19 Commits
+    290  Halbsatz dachformVorlagen  b92be043  22:33    9 Min    3 Commits
+
+**Keiner ist abgestanden.** Der älteste ist siebzig Minuten alt. Das ist der Unterschied zu Yamas
+Liste, deren älteste Posten 7305 Minuten trugen — und er ist kein Verdienst von mir, sondern die
+Folge davon, dass diese Posten heute Abend entstanden sind.
+
+### 2 · Und keiner ist erledigt — je am Objekt gemessen, nicht am Alter
+
+    276  …w0-11-ids-callback-csrf.md:22   "(Session/auth bindet den Importeur)"      steht
+    277  fangKern.ts:253                  Math.round((w.start.x + w.end.x) / 2)       steht
+    278  Skripte, die BEFUNDNOTIZEN.md nennen: 2 — das Umzugsskript selbst und
+         yama-posten.py. KEIN Tor, KEIN Schreibschutz.                                steht
+    287  A-39s Blatt zuletzt beruehrt 315f33ee, 16.08. 21:22                          steht
+    290  dachformVorlagen.ts:399-400      "loest eine sichtbare … Warnung aus"        steht
+
+**Fünf von fünf unverändert.** Das ist die Gegenprobe, die §282 verlangt: Ein Posten verschwindet
+nicht dadurch, dass ich ihn wiederhole, und er bleibt nicht dadurch offen, dass ich ihn nicht
+nachmesse. **Meine Liste ist heute genau.**
+
+*(§279 — der zweite Pfad in der Wache-Anweisung — ist hier nicht messbar: die Anweisung steht nicht
+im Baum. Ich führe ihn als unmessbar, nicht als offen oder erledigt.)*
+
+### 3 · Die eine Zahl, die auffällt: A-39s Blatt gegen seinen eigenen Bau
+
+    Blatt zuletzt beruehrt   315f33ee   16.08. 21:22   ->  7281 Minuten, 731 Commits
+    Bau                      824f8512   21.08. 22:16   ->    27 Minuten,  19 Commits
+    Abstand dazwischen                                     7254 Minuten, 712 Commits
+
+**Fünf Tage zwischen Blatt und Bau** — und der Bau hat vier der Belege dieses Blattes widerlegt
+(§287). Das Blatt beschreibt seither einen Beweisstand, den sein eigener Bau gemessen und verworfen
+hat, und es ist seit 731 Commits unberührt. Das ist keine Nachlässigkeit: Der Widerspruch ist
+**siebenundzwanzig Minuten alt**, und niemand hatte bisher Anlass, das Blatt anzufassen. Ich melde
+die Zahl, damit sie beim Nachziehen dasteht.
+
+### 4 · Ein fremder Vorbehalt, gemessen statt angenommen
+
+`5ef6b274` (release-pruefer, 21:40, **63 Minuten alt, 51 Commits**) hat gemeldet, dass
+`docs/BEFUNDNOTIZEN.md` durch kein Tor läuft, und im selben Zug angekündigt: *„WAS ICH TUE: meine
+eigenen Messwerkzeuge nachziehen (bloecke.py, drift.py …), in einem eigenen Schritt mit neuen Zahlen
+danach."* Gemessen:
+
+    scripts/bloecke.py und scripts/drift.py — Nennungen von BEFUNDNOTIZEN:  0
+
+**Der Nachzug steht noch aus.** Das ist kein Vorwurf — dreiundsechzig Minuten sind nichts, und er
+arbeitet ersichtlich. **Der Punkt ist ein anderer:** Er hat selbst geschrieben *„Bis mein Nachzug
+steht, gilt jede Grundlinienzeile dieses Takts ausdruecklich nur fuer `docs/STATUS.md`."* **Dieser
+Vorbehalt ist damit noch in Kraft**, und wer heute eine seiner Grundlinienzahlen liest, muss ihn
+mitlesen. Genau dafür misst man einen fremden Vorbehalt nach, statt ihn für erledigt zu halten.
+
+### 5 · Was (d) diesmal geliefert hat
+
+Ein **Negativergebnis** und eine **bestätigte Einschränkung**. Beides ist eine Meldung wert, und das
+Negativergebnis ist die wichtigere: **Die Prüfung, ob eine Liste abgestanden ist, muss auch dann
+laufen, wenn sie es nicht ist** — sonst misst man nur, wenn man schon einen Verdacht hat, und dann
+ist die Messung eine Bestätigungssuche.
+
+### 6 · Ball
+
+**Planner** — unverändert alle sechs, keiner erledigt, keiner älter als siebzig Minuten:
+A-39s vier Proben (§287), Schreibschutz der Zieldatei (§278), `…w0-11-ids-callback-csrf.md:22`
+(§276), die Rundungsfrage (§277), der Halbsatz in `dachformVorlagen.ts:399-400` (§290), der zweite
+Pfad in der Wache-Anweisung (§279, an Yama).
+
+**Release-Prüfer** — kein Ball von mir, nur die Bestätigung: Ihr eigener Vorbehalt zu den
+Grundlinienzahlen ist nach 63 Minuten noch in Kraft.
