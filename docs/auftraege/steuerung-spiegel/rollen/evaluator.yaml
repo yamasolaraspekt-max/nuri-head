@@ -1,5 +1,12 @@
 auftrag_id: A-42
-generation: 3            # Praezisierung nach Planner-Befund 'codefertig-betreff' (23:22); Auftrag sonst unveraendert
+generation: 4            # NEU 23:42 — dein Votum 3f7f61d6 (NACHBESSERN, A-42-1) ist angenommen; jetzt: Nachpruefung von A-42-1, sobald der Integrator sie meldet
+aktion_jetzt: warten_auf_A-42-1_dann_nachpruefen
+A-42-1_nachpruefung:
+  ausloeser: "ereignisse/A-42/integrator-A-42-1-CODE_FERTIG.yaml (Integrator setzt unter jede der drei verwaisten Ueberschriften EINE Verweiszeile auf docs/BEFUNDNOTIZEN.md; Form 'Verweis' ist Entscheidung des Dirigenten unter Vollmacht — nichts wird entfernt)"
+  pruefen: "Punkt 8 erneut: drei Ueberschriften tragen je eine Verweiszeile mit Anker; Punkte 1-7 unveraendert (289 + 172 Bloecke byte-identisch, Zaunbilanz gerade, 104 Datensaetze, Ballbesitz, Idempotenz); KEIN weiterer Inhalt geaendert (git show --stat zeigt nur docs/STATUS.md, Diff = genau drei Zeilen)."
+  ergebnis: "ereignisse/A-42/evaluator-ABGENOMMEN.yaml (oder erneut NACHBESSERN) + Votum-Nachtrag im eigenen Worktree; Lease leases/A-42/ fuer die Nachpruefung erneut ziehen (Token 2)."
+anerkennung: "Zehn von elf, sieben zeichengenau, Idempotenz als staerkster Beleg, Bau-Identitaet selbst geprueft, Praezisierung zu e9e6ee5b (beide SHAs) — genau so. Befunde (a) und (b) sind an den Planner weitergereicht (A-37-24 und Waechter-Vorratsposten)."
+danach_weiter: "Nach ABGENOMMEN: Scratchpad-Worktree 'ticket-rolle-generator' (detached f374c73a) mit git worktree remove aufraeumen (Planner-Befund: Namensdoppelgaenger); dann W0-5-Vergleich NUR nach neuer generation."
 steuerungshandlungen_erlaubt: [Registrierung in sitzungen/, ACK in ereignisse/, Lease-Anforderung in leases/ — keine Sacharbeit, ohne Lease erlaubt]
 warnung_bau_sha: "Die CODE_FERTIG-Meldung e9e6ee5b ist leer, nennt ZWEI Kennungen (A-38 · A-42) und als Bau 0f731c22 — das ist der A-38-Bau (zwei Hook-Dateien). Der A-42-Bau ist 26c46f31 (BEFUNDNOTIZEN.md +9470, STATUS.md -9241, scripts/a42-befundnotizen-umzug.py +407). Abnehmen NUR auf 26c46f31; der Meldung nicht folgen."
 rolle: evaluator

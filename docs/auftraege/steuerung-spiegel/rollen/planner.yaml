@@ -1,5 +1,13 @@
 auftrag_id: WARTEN-planner-A-37
-generation: 3            # Praezisierung auf deinen Befund 'wartebedingung' hin — Auftrag sonst unveraendert
+generation: 4            # NEU 23:42 — SITZUNGSWECHSEL auf Yamas Anweisung ('ich moechte dass du planner bist', an Sitzung 79285cf2); Auftrag sachlich unveraendert
+sitzungswechsel:
+  neue_planner_sitzung: 79285cf2-4231-4f71-8dfc-3306e3371109   # PID 70499, VS Code, frisch 23:16 — registriert sich in sitzungen/planner.yaml (ueberschreiben erlaubt) und quittiert gen 4
+  abgeloeste_sitzung: 20c9c319-f0f8-4f15-8c01-d54f85ceb5fa      # PID 68609/Takt-Kinder — AB SOFORT: keine ACKs, keine Befunde, keine Registrierung mehr; eigenen Planner-Takt (0c29417b) LOESCHEN (CronDelete) und untaetig bleiben. Dank fuer vier belegte Befunde; sie bleiben in ereignisse/ und gelten.
+  regel: "Eine Rolle = eine Sitzung. Zwei Planner-Sitzungen gleichzeitig sind nicht zulaessig (Lease-/ACK-Konflikt)."
+  uebergabe_an_die_neue_sitzung: "Lies zuerst ereignisse/WARTEN-planner-A-37/*.yaml (Befunde + Dirigent-Antworten) — dort steht die gesamte lesende Vorbereitung der Vorgaengerin: Weckerkonflikt, Wartebedingung (A-42 ist gebaut, 26c46f31), CODE_FERTIG-Betreff (e9e6ee5b leer, zwei Kennungen, zwei Bauten), doppelter ticket-rolle-generator-Baum (A-37-22: Baumauswahl ueber Pfad+Zweig)."
+neu_aus_evaluator_votum_3f7f61d6_fuer_A-37:
+  - "Befund (a): docs/BEFUNDNOTIZEN.md in rollen-tor.sh und commit-pruefen.sh 0x — jede Rolle kann sie aus jedem Baum schreiben → A-37-24 (bereits Vorgabe), jetzt mit Messbeleg"
+  - "Befund (b) Vorratsposten: a26-ball-drift, a30-datensatz-paar, a33-kennungen-nachziehen, status-erzeugen kennen BEFUNDNOTIZEN 0x — heute wirkungslos (104 = 104), wirkt erst wenn dort zustand/ballbesitz landet"
 antwort_des_dirigenten: ereignisse/WARTEN-planner-A-37/dirigent-antwort-wartebedingung.yaml
 wartebedingung_praezisiert: "A-42 IST gebaut (26c46f31). Es fehlt EIN Uebergang: das unabhaengige Evaluator-Votum auf 26c46f31, danach der echte Zustandscommit des Integrators (INT-A-42) und ereignisse/A-42/evaluator-ABGENOMMEN.yaml. docs/STATUS.md zeigt BEREIT nur, weil e9e6ee5b leer war."
 nachziehen_regel: "Nachziehen des Worktrees nur als Fast-Forward (git merge --ff-only auto/hausplaner-integration). Ein Merge-Commit ist ein Commit und ohne aktive Lease nicht erlaubt; bei Nicht-FF: melden, nicht mergen."
