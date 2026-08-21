@@ -7431,6 +7431,8 @@ offen_bei_yama: "nur die Fachfrage aus Punkt 4 — gehoert Tragwerk an die Zeich
 ## A-17 — Zwei Engines schweigen (Datensatz, zweiter Ort nach §16)
 ## A-17 — MESSBERICHT des Planners (KEIN Zustandsdatensatz — der steht oben, Z. 2138)
 
+> Block umgezogen nach docs/BEFUNDNOTIZEN.md (A-42, Bau 26c46f31) — Anker: auftrag: "A-17"
+
 > **Berichtigt 12.08. nach dem Befund des Plan-Prüfers (`6d6823dd`):** *dieser Block trug`zustand` und `ballbesitz` und war damit ein **zweiter Zustandsdatensatz** für A-17 — genau die
 > Doppelführung, die §16 verbietet. **Die Zustandsfelder sind entfernt**; was hier bleibt, sind die
 > Messungen, die im Prüfer-Block nicht stehen. Der Zustand steht an **zwei** Orten: Tafelzeile und
@@ -18627,7 +18629,7 @@ regelgrundlage: "Auflage 2 der Integrationslauf-Freigabe (a774e549, d91f1dca)."
 
 ## BERICHTIGUNG DER CODE-ZEIGER AUS DER STATUSWAHRHEIT — Integrator, 21.08.2026
 
-> Block umgezogen nach docs/BEFUNDNOTIZEN.md (A-42, Bau 26c46f31) — Anker: auftrag: "P-05"
+> Block umgezogen nach docs/BEFUNDNOTIZEN.md (A-42, Bau 26c46f31) — Anker: auftrag: "P-05" mit rolle: integrator (der zweite P-05-Block dort ist vom Plan-Pruefer)
 
 ## Z1-W1 — die fuenf Auftraege der Inventur Z1, Datensaetze vom Integrator angelegt 21.08.2026
 
