@@ -12097,3 +12097,129 @@ Flaeche.**
 **Ball beim Planner:** F-027s Breiten-Absage fehlt auf einem erreichbaren Pfad — entweder sie wird
 gebaut, oder die Formel streicht sie. Dazu die zwei kleineren Abweichungen: `rise = d·tan φ` ist im
 Code eine Obergrenze mit Mindestwinkel-Term, und der 15°-Vorgabewert existiert nicht.
+
+## §166 — Posten (d): A-38s „FESTE ERHEBUNG" ist an einem Ende offen, und das Zumachen hilft nicht
+
+**Messstand** `bf4d67fc` · Baum sauber (0 Einträge) · 0 neue Commits seit §165 · Zweigprobe live:
+`origin/rolle/plan-pruefer b43d26a7`, `origin/auto/hausplaner-integration 85be41e4`, `origin/main 4ed11218`.
+Erhebung im Integrations-Checkout `/Users/yamanuri/Documents/ticket` (Zweig `auto/hausplaner-integration`,
+HEAD `85be41e4`), wie das Blatt es ausdrücklich vorschreibt.
+
+### Die Alterung der neun Aufträge in meiner Bahn
+
+| Auftrag | Basis | Schnitt | Commits seit Schnitt | Alter |
+|---|---|---|---|---|
+| A-38 | `0f05f8bf` | 14.08. 22:51 | **1156** | 6 T 14 h 26 min |
+| A-39 | `99add90f` | 16.08. 13:45 | 1054 | 4 T 23 h 32 min |
+| A-40 | `99add90f` | 16.08. 13:45 | 1054 | 4 T 23 h 32 min |
+| A-42 | `e802c1f8` | 16.08. 17:24 | 982 | 4 T 19 h 53 min |
+| Z1-W1-1…5 | `11f7c4c3` | 21.08. 09:54 | 63 | 0 T 3 h 23 min |
+
+Alter allein ist kein Befund — §129 hat den Unterschied festgelegt: es zählt nicht, wie alt ein Satz
+ist, sondern **ob sein Gegenstand sich bewegt hat**. Also gemessen, welche der genannten Pfade sich
+zwischen Basis und HEAD bewegt haben:
+
+- **A-38**: 5 Pfade genannt, 4 am Basis vorhanden, **2 bewegt** — `docs/STATUS.md` 17857 → 27619 Z.
+  (313 Commits), `scripts/commit-pruefen.sh` 743 → 1066 Z. (12 Commits, **+43 %**).
+- **A-39**: 3 genannt, 2 vorhanden, 2 bewegt (dieselben zwei Dateien).
+- **A-40**: 1 genannt, 1 bewegt (`docs/STATUS.md` 21353 → 27619).
+- **A-42**: 6 genannt, 3 vorhanden, 1 bewegt (`docs/STATUS.md` 21764 → 27619).
+
+A-38 ist damit der scharfe Fall: **der Auftrag handelt vom Tor, und das Tor ist seit dem Schnitt um
+323 Zeilen gewachsen.**
+
+### Die eigentliche Messung: was die „feste Erhebung" heute liefert
+
+`A-38-merges-laufen-am-tor-vorbei.md:80-87` ersetzt einen wandernden Messbefehl durch eine, so das
+Blatt wörtlich, **„FESTE ERHEBUNG — ein benannter Tag statt eines wandernden Fensters"**, und
+notiert das Ergebnis: *„gemessen 16.08. abends: 472 Commits, 188 Merges, Anteil 40 Prozent."*
+Der Befehl unverändert nachgefahren:
+
+```
+FESTE ERHEBUNG heute (--since='2026-08-16 00:00', --all):
+   Commits 1085 · Merges 437 · Anteil 40 Prozent
+Blattzahl 16.08. abends:
+   Commits  472 · Merges 188 · Anteil 40 Prozent
+```
+
+**Faktor 2,3 in fünf Tagen.** Der Grund steht in der Fassung des Befehls: der Anfang ist benannt,
+das **Ende ist offen**. Ein Fenster mit festem Anfang und offenem Ende ist kein festes Fenster,
+es ist ein *wachsendes*. Das Blatt hat den wandernden Rand durch einen wachsenden ersetzt und
+den neuen Zustand „fest" genannt.
+
+### Und jetzt das Unangenehme: das Ende zumachen genügt nicht
+
+Naheliegender Vorschlag wäre `--until='2026-08-17 00:00'`. Gemessen:
+
+```
+Fenster MIT Ende (16.08. 00:00 bis 17.08. 00:00, --all):
+   Commits 815 · Merges 359
+```
+
+Auch das trifft die 472/188 nicht — **+73 % bei den Commits, +91 % bei den Merges**, obwohl das
+Fenster nun an beiden Enden benannt ist und in der Vergangenheit liegt. Gegenprobe, ob der Filter
+schuld ist: `--since/--until` filtert das **Commit-Datum**, und die unabhängige Auszählung über
+`%cd` ergibt für den 2026-08-16 ebenfalls **815** — die beiden Verfahren stimmen überein, der Filter
+arbeitet richtig. Die Ursache ist eine andere und steht im Blatt selbst
+(`A-38-merges-laufen-am-tor-vorbei.md:105-107`): *„die Zahl wächst rückwirkend, sobald Zweige
+zusammengeführt werden."* `--all` ist keine feste Menge, sondern die **heutige** Menge der Refs.
+Ein vergangenes Datumsfenster über eine wachsende Refmenge friert nichts ein.
+
+**Folge, und das ist der Posten:** Die im Blatt angebotene Abhilfe — *benannter Tag statt wanderndes
+Fenster* — erreicht ihr Ziel nicht, auch nicht in der verbesserten Fassung mit Ende. Der einzige
+Anker, der in diesem Baum wirklich festhält, ist der, den `docs/ARBEITSREGELN.md` unter
+**„Zwei Haltbarkeiten"** ohnehin benennt: **der SHA**. Ein Datum ist kein SHA. Wer die Zahl
+reproduzierbar haben will, muss `--all` durch einen benannten Stand ersetzen.
+
+### Was NICHT gealtert ist — und darauf ruht der Auftrag
+
+Der Kern von A-38 hat sich in 1156 Commits **nicht um ein Zeichen bewegt**:
+
+| Blattaussage (Stand 14.08.) | heute gemessen |
+|---|---|
+| `'merge' in scripts/commit-pruefen.sh (-i)` — 4 Treffer, keine Prüfung | **4 Treffer**, wortgleich |
+| `.githooks` nicht vorhanden | **NEIN** — nicht vorhanden |
+| `core.hooksPath` nicht gesetzt | **leer** — nicht gesetzt |
+| — | `commit-msg`-Hook: nicht vorhanden |
+
+Die vier Treffer sind am Basis `0f05f8bf` die Zeilen 696, 702, 703, 705 und heute die Zeilen
+`scripts/commit-pruefen.sh:1019`, `:1025`, `:1026`, `:1028` — **derselbe Wortlaut, um genau 323
+Zeilen verschoben**, also exakt um den Zuwachs der Datei. Alle vier handeln von *unaufgelösten
+Merge-Einträgen im Index*, keiner von der **Botschaft** eines Merge-Commits. Zusätzlich gemessen:
+`MERGE_HEAD` 0 Treffer, `HEAD^2` 0 Treffer, `no-ff` 0 Treffer, `git merge` 0 Treffer — bei
+7 Treffern für `TICKET_ROLLE`. **Das Tor prüft die Rollenmarke und sieht Merges nicht.**
+
+Das Blatt hat sich gegen genau diese Prüfung selbst gewappnet
+(`A-38-merges-laufen-am-tor-vorbei.md:107-109`): *„Der Bau prüft die Aussage, nicht die Zahl."*
+Diese Vorsorge trägt. Und die Verhältniszahl, auf die es sich stützt, ist ebenfalls stabil:
+188/472 = 39,8 %, heute 437/1085 = 40,3 %. **Der Auftrag ist gealtert, ohne zu verfallen** —
+zwölf Commits sind in seinen Gegenstand geflossen, und keiner davon in die Lücke, die er beschreibt.
+
+Das ist die umgekehrte Richtung zu §110: dort machte **ein** Bau fünf Zahlen eines Blattes ungültig.
+Hier haben 1156 Commits die Zahlen verdoppelt und die Aussage unberührt gelassen. Der Unterschied
+liegt nicht am Alter, sondern daran, woran ein Satz hängt: an einer Auszählung des Baums oder an
+einer Eigenschaft einer Datei.
+
+### Eigener Fehler — zweimal dieselbe Falle in einer Runde
+
+Zwei Messungen dieser Runde sind **ausgefallen und wurden nicht gemeldet**:
+
+1. `for e in "A-38 0f05f8bf" …; do set -- $e; …` — Ergebnis: **alle fünf Basis-SHAs „UNBEKANNT IN
+   DIESEM BAUM"**. Fangprobe an einem bekannten Treffer: `git cat-file -t 11f7c4c3` → `commit`.
+   Alle vier existieren.
+2. `paths=$(grep …); for p in $paths` — Ergebnis: **jedes Blatt „1 Pfad genannt"**. Nach der
+   Korrektur: 5, 3, 1, 6.
+
+Ursache beide Male dieselbe: **zsh teilt eine unquotierte Variable nicht an Whitespace auf.** Das
+steht als meine eigene Lehre in `docs/STATUS.md` im Block `P-08` (Z.27311, *„Suchräume nie über
+eine Variable in eine Schleife geben"*) — und ich habe sie **eine halbe Stunde nach dem Lesen
+zweimal gebrochen**. Beide Male sah der Ausfall aus wie ein Ergebnis: einmal ein einheitliches
+„unbekannt", einmal eine einheitliche 1. Genau die Form, die die Wache mit *„eine ausgefallene
+Messung ist KEIN Ergebnis"* meint. Ersetzt durch `while IFS= read -r` aus einer Datei; eine
+Lehre in einem Block ist keine Gewohnheit.
+
+**Ball beim Planner:** `A-38-merges-laufen-am-tor-vorbei.md:80-87` trägt die Überschrift „FESTE
+ERHEBUNG" über einem Fenster mit offenem Ende; die Zahl darunter ist heute 1085/437 statt 472/188,
+und ein `--until` bringt sie nur auf 815/359. Entweder die Erhebung wird an einen SHA gebunden oder
+die Überschrift sagt, dass die Zahl wächst. **Der Auftrag selbst bleibt unberührt** — sein Befund
+ist an vier Stellen unverändert belegt, und die DoR-Erteilung aus §156 wird davon nicht angetastet.
