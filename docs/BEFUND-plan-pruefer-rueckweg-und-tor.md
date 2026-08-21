@@ -15245,3 +15245,98 @@ gegen das Dateisystem, dann gezählt.
 `docs/regelwerk/REGISTER.md`, `inventur-2026-08-20.md` in `docs/fortschritt/REGISTER.md`. **Die
 Landkarte oben ist in Ordnung** — die Lücken sitzen ausschließlich auf der untersten Ebene, und die
 ist die, an der jemand tatsächlich sucht.
+
+## §198 — Posten (c): F-013 hält, der Code kann mehr als die Formel, und ihr Grenzfall ist um mehr als eine Größenordnung zu vorsichtig
+
+**Messstand** `0a00e4c8` · Baum sauber · 0 neue Commits; Integrationszweig unverändert, letzter
+Commit vor **66 Minuten**.
+
+Gegenstand: **F-013 · Selbstschnitt-Prüfung**
+(`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:208-214`), die fünfzehnte der 27
+Formeln. Sie ist die **Vorprüfung vor jeder Flächen- oder Dachberechnung** — also eine, an der viel
+hängt.
+
+### Die Formel im Code
+
+```
+F-013: „Jedes Kantenpaar, das nicht benachbart ist, auf Streckenschnitt prüfen"
+
+geometry/kontur.ts:124  schneidetSichSelbst(punkte)
+  :126  n < 4  -> false          „Ein Dreieck kann sich nicht selbst schneiden."
+  :133  benachbart = j === i+1 || (i === 0 && j === n-1)      <- inklusive Umlauf
+  :137  streckenSchneiden(a1, a2, punkte[j], punkte[(j+1)%n])
+```
+
+Die Nachbarschaft ist **einschließlich des Umlaufs** definiert, und der Kommentar sagt warum:
+*„Die letzte Kante ist Nachbar der ersten: die Kontur ist geschlossen, auch wenn man das beim
+Zählen leicht vergisst."* Jedes ungeordnete Paar wird genau einmal geprüft.
+
+### Sechs Fälle gerechnet, sechs richtig
+
+Den Kern wörtlich aus der Datei entnommen und gefahren:
+
+```
+Quadrat (kein Schnitt)                       false   ✓
+Schleife/Bowtie                              true    ✓
+Dreieck (n<4, Kurzschluss)                   false   ✓
+L-Form, 6 Punkte                             false   ✓
+Kontur läuft auf sich zurück (kollinear)     true    ✓
+nicht benachbarte Kanten berühren sich       true    ✓
+```
+
+### Der Code kann mehr als die Formel
+
+`kontur.ts:96-98` trägt einen Zweig, den F-013 **nicht verlangt**, mit eigener Begründung:
+
+> *„**Der kollineare Fall ist ausdrücklich mit drin.** Zwei Kanten, die aufeinander LIEGEN, kreuzen
+> sich nicht im Sinne der Vorzeichen — sie sind trotzdem ein Selbstschnitt. Ohne diesen Zweig käme
+> eine Kontur durch, die auf sich selbst zurückläuft."*
+
+Die Formel sagt nur „auf **Streckenschnitt** prüfen"; die reine Vorzeichenprüfung
+(`:106`) würde den Rücklauf **durchlassen**. Die vier Zusatzzeilen `:109-112` fangen ihn.
+**Das ist die zweite Formel in Folge — nach F-030 in §193 —, bei der der Bau vollständiger ist als
+die Vorschrift.**
+
+### Und der Grenzfall trifft nicht
+
+F-013 sagt: *„Aufwand wächst quadratisch mit der Punktzahl. Bis ~200 Punkte unproblematisch;
+darüber Rasterbeschleunigung nötig."* Gemessen, an konvexen Kreis-Polygonen (kein Schnitt, also
+**voller** quadratischer Durchlauf, der ungünstigste Fall):
+
+```
+     n      Paare        Zeit
+    50       1 225      0,4 ms
+   200      19 900      0,8 ms     <- die Warnschwelle der Formel
+   500     124 750      0,9 ms
+  1000     499 500      2,8 ms
+  2000   1 999 000      8,6 ms
+  5000  12 497 500     48,9 ms
+```
+
+**Bei 5000 Punkten sind es 49 ms** — das Fünfundzwanzigfache der Warnschwelle kostet noch immer
+weniger als drei Bildwechsel. Die Zahl „~200" ist **um mehr als eine Größenordnung zu vorsichtig**,
+und eine Rasterbeschleunigung ist für jede realistische Kontur unnötig.
+
+Dazu kommt die Aufrufhäufigkeit, und die entlastet zusätzlich: `HausplanerApp.tsx:866`
+`schliesseKontur` ruft `pruefeKontur` **einmal beim Schließen**, nicht je Klick und nicht je Bild —
+der Kommentar `:862-864` begründet das ausdrücklich (*„Wer früher bremst, macht die Form
+unzeichenbar"*). **Ein einmaliger Aufwand von 49 ms bei 5000 Punkten ist kein Grenzfall.**
+
+### Keine Obergrenze — und das ist hier kein Mangel
+
+```
+kontur.ts:70          KONTUR_MIN_PUNKTE = 3
+domain/validation.ts  polygon: z.array(punkt2).min(3)   — viermal, KEIN .max()
+```
+
+Es gibt **keine** obere Punktzahl. Nach §172 und §195 hätte ich das als offene Flanke gemeldet;
+hier ist es **durch die Messung gedeckt** — der Aufwand wird in keinem erreichbaren Bereich
+spürbar. *Eine fehlende Grenze ist nur dann ein Befund, wenn hinter ihr etwas passiert.*
+
+**Ball beim Planner:** F-013s Grenzfall nennt eine Schwelle, die um mehr als das Zehnfache zu
+niedrig liegt — entweder auf die gemessene Größenordnung heben oder die Aussage auf „einmalig beim
+Schließen, quadratisch, in der Praxis unkritisch" umstellen. Und: der **kollineare Zweig** gehört in
+die Formel, denn er ist der Teil, der den Rücklauf fängt, und ohne ihn wäre eine Umsetzung nach
+Vorschrift lückenhaft. **Kein Ball beim Generator.**
+
+Damit sind **15 von 27** Formeln durchgerechnet.
