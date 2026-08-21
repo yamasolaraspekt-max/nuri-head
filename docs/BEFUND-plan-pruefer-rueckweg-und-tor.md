@@ -14023,3 +14023,38 @@ Ordner heißt anders. Solange beides nicht stimmt, sucht jede Rolle am falschen 
 Dazu: 78 abgeschlossene Blätter in einem Ordner für Offenes.
 **Ball bei Yama:** `W-21L` ist seit **8 T 23 h** `DECISION_BLOCKED` — mit Zahl, wie verlangt.
 **Ball beim Integrator:** A-08 trägt seinen Zustand nur in der Tafelzeile.
+
+### Nachtrag zu §184 — B5 zum dritten Mal, und diesmal habe ich gemessen, WANN es mir passiert
+
+`1c5ed9fc` lief erneut mit **B5-WARNUNG** durch. Botschaft 3437 Zeichen, `Herkunft` 1, und **alle
+fünf** Alternativen des Musters (`scripts/commit-pruefen.sh:850`) null Treffer:
+`datei.ext:zeile` · `:N:` · `Trefferzeile` · `Z.N` · `Zeile N`. *(„Tafelzeile 30" zählt nicht — das
+Muster verlangt `Zeile` mit großem Z als eigenes Wort.)*
+
+Zwei Nachträge zu demselben Punkt sind zwei zu viele, also habe ich diesmal **den eigenen Bestand
+gemessen** statt einen dritten Vorsatz zu schreiben:
+
+```
+83 von 189 Abschnitten dieser Datei tragen KEINE volle datei.ext:zeile   (44 %)
+```
+
+Und in den letzten zwanzig Abschnitten liegt das Muster offen:
+
+```
+viele Belegzeilen   §173 (13) · §177 (11) · §170 (10) · §172 (10) · §181 (10) · §169 (9) · §183 (9)
+gar keine / dünn    §184 (0) · §175 (0) · §178 (1) · §182 (2)
+```
+
+**Die drei Runden, in denen B5 gefeuert hat — §178, §182, §184 — sind genau die drei, deren
+Gegenstand keine Zeilen hat:** eine Zustandskette, die Zahlen eines Dokuments, eine Ablage mit
+Altersangaben. Wo ich Code an bestimmten Stellen messe, stehen neun bis dreizehn Belegzeilen im
+Abschnitt, ganz von selbst. Wo ich **Mengen, Ordner und Zustände** messe, entsteht keine einzige —
+und dann fehlt sie auch in der Botschaft.
+
+**Das ist kein Vergessen, sondern eine Lücke im Gegenstand.** Deshalb die Regel in der Form, die
+hier wirklich hilft: *hat der Gegenstand keine Zeile, dann belege die **Vorschrift oder den
+Datensatz**, an dem die Aussage hängt.* Für §184 wäre das `docs/STATUS.md:30` gewesen — die
+A-08-Tafelzeile, deren Zustand ich dort gegen fünf zustandsfreie Blöcke gestellt habe.
+
+*(Der Befund aus §184 bleibt unberührt: B5 prüft die Form der Botschaft, nicht die Messung. Die 89
+Blätter, ihr Alter, die neun offenen und die A-08-Lage sind gezählt und stehen.)*
