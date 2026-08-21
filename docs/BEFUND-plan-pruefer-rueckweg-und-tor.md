@@ -10728,3 +10728,66 @@ Kreuzprodukte mitnimmt und drei Fassungen uebersieht.
 
 **Ball beim Planner** fuer A und D. **Eintragen** beim **Integrator** (`docs/STATUS.md`: weder
 Tafelzeile noch Datensatz, §138). Naechste Runde: DoR fuer `Z1-W1-4`.
+
+## §146 — DoR Z1-W1-4 (dachWerte stilllegen): ERTEILT. Die Byte-Gleichheit ist am Blob bewiesen, nicht am diff
+
+*(Messstand 4ea7867c, 21.08. 11:57. Nummer gegen den frischen HEAD gewaehlt: 83 Abschnitte, hoechste
+145 — 146 war frei. Vierte der fuenf DoR aus §142. Kennung aus der Kopfzeile.)*
+
+**Blatt:** `docs/auftraege/generator-auftrag-z1-w1-4-dachwerte-eine-quelle.md` (41 Z.),
+`zustand: ENTWURF`, `basis_sha: 11f7c4c3`.
+
+### Die tragende Behauptung, staerker belegt als das Blatt sie belegt
+
+Das Blatt sagt *"`diff` beider Dateien leer"*. Ich habe es nicht diffiert, sondern die **Blob-Namen**
+verglichen — dasselbe Ergebnis, nur beweiskraeftiger, weil git denselben Inhalt zwingend gleich
+benennt:
+
+```
+resources/planner/hausplaner/geometry/dachWerte.ts    blob e5e5c93b   4188 B
+resources/planner/utils/dachWerte.ts                  blob e5e5c93b   4188 B
+```
+
+**Derselbe Blob. Byte-identisch, ohne Spielraum.** Die Byte-Zahl **4188** im Blatt ist exakt.
+
+### Was ich sonst nachgemessen habe — alles am Basis-Stand
+
+| Zusage | gemessen |
+|---|---|
+| Aufrufer 1: `dachGeometrie.ts:13` → `../../utils/dachWerte` | `import { sichererCos } from '../../utils/dachWerte';` ✓ |
+| Aufrufer 2: `dachformVorlagen.ts:34` → `./dachWerte` | `import { sichererCos, cmZuMFloor, DACH_FLOOR_CM } from './dachWerte';` ✓ |
+| Der einzige Test deckt nur die geometry-Kopie | `__tests__/dachWerte.test.ts:12` → `} from "../geometry/dachWerte";` ✓ — die utils-Kopie ist ungetestet |
+| Entstehung `00bfed2b` (18.07.) | existiert, 18.07., *"Hausplaner-Heimat nach ticket"* ✓ |
+| Entstehung `588283df` (23.07.) | existiert, 23.07., *"W-1: Dach-Werte + Verschneidung"* ✓ |
+| **P1-A wirksam rot: heute 1 produktiver Treffer** | **genau 1** — `dachGeometrie.ts:13` ✓ |
+| Konfliktpruefung | **0 Commits** auf alle drei beteiligten Dateien seit der Basis ✓ |
+
+**Kriterium A ist nach dem Bau erreichbar:** ausserhalb dieser einen Zeile referenziert **nichts** in
+`resources/` die utils-Kopie.
+
+### Drei Anmerkungen, keine Restpunkte
+
+1. **„104 Z." ist um eins zu hoch.** Zwei Verfahren geben **103** (`wc -l` und `grep -c ''`), und die
+   Datei endet mit einem Zeilenumbruch — die Zahl ist also unter jeder Zaehlweise 103. Unabhaengig
+   bestaetigt: `docs/S-1-ANSCHLUSSMESSUNG.md:620` fuehrt dieselbe Datei mit **103 Z.** (fremde
+   Messung, zitiert, nicht nachgebaut). Die Byte-Zahl daneben ist exakt — ohne Folge fuer den Bau.
+2. **Kriterium C verlangt eine md5 — die es schon gibt, besser.** Der Blob-Name `e5e5c93b` ist genau
+   der Anker, den C sucht: er steht dauerhaft in der Historie und ist das, woran git selbst
+   Gleichheit misst. Eine md5 schadet nicht; den Blob-Namen mitzuschreiben kostet nichts und ist von
+   jedem spaeter nachpruefbar.
+3. **Ein Aufrufer ausserhalb von `resources/`, und er ist richtig ausgeklammert.**
+   `docs/planner/pv-belegung-referenz/DachplanerProPage.tsx:25` importiert aus derselben Quelle — es
+   ist die 269-KB-Referenzdatei unter `docs/` (dieselbe wie in §135), nicht der Produktivbaum. Das
+   Kriterium ist bewusst auf `resources/` geschnitten und damit richtig; gehoert nur benannt, damit
+   es spaeter niemand als uebersehenen Aufrufer meldet.
+
+### Votum
+
+**ERTEILT.** Alle §5-Punkte sind vollstaendig: Basis-SHA, Ziel, Ist-Beleg (jede Einzelangabe am
+Basis-Stand geprueft), kleinster Scope, ausdrueckliche Nicht-Ziele, Konfliktpruefung selbst gemessen,
+Rot-Lage echt und mit **einer** Zahl belegt, Rueckweg trivial (**keine Loeschung**, Y-2). Die
+Entscheidung Y-2 steht im Blatt und wird eingehalten — Stilllegungsvermerk statt Loeschung ist
+genau die Rueckfall-Regel.
+
+**Ball beim Generator** fuer den Bau, **Eintragen** beim **Integrator** (`docs/STATUS.md`: weder
+Tafelzeile noch Datensatz, §138). Naechste Runde: DoR fuer `Z1-W1-5` — die letzte der fuenf.
