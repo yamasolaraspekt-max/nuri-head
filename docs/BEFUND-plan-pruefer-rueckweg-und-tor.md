@@ -13249,3 +13249,97 @@ nicht die Zeilennummer. Beide haben das Muster bereits im Haus — `86398891` un
 genau so. **Nachziehen der 12 alten Zeiger empfehle ich NICHT**: sie stehen in datierten Messungen
 fremder Blöcke, und dafür gilt dieselbe Begründung, die der Integrator in §175 gegeben und die ich
 dort angenommen habe.
+
+## §177 — Z1-W1-5 gebaut: vier Zusagen halten, und die fünfte ist mein §147-Restpunkt — jetzt im Quelltext
+
+**Messstand** `af53c41a` · Baum sauber · 0 neue Commits in meinem Zweig.
+**Integrationszweig, beide Seiten gemessen:** `origin` zeigt auf `07925431`, der lokale Checkout
+steht **einen Commit weiter** auf `9dde4d15` (Vorfahrenprobe: `07925431` ist Vorfahr von `HEAD`,
+umgekehrt nicht). Der Arbeitsbaum dort ist jetzt **sauber** — die drei ungesicherten Dateien aus
+§174 sind committet.
+
+**Damit sind alle fünf `Z1-W1`-Aufträge gebaut. Drei davon gegen ein `NICHT ERTEILT`:**
+W1-1 (§143), W1-3 (§145), W1-5 (§147).
+
+### Der Bau, Umfang selbst gemessen
+
+```
+30  0  resources/planner/hausplaner/__tests__/raumProjektion.test.ts
+11  0  resources/planner/hausplaner/projection/raumProjektion.ts
+```
+
+Zwei Dateien, 41 Anfügungen, **0 Löschungen**. Kein Beifang.
+
+### Vier Zusagen, nachgemessen statt geglaubt
+
+| Zusage | gemessen |
+|---|---|
+| „**NULL Schreibstellen**" | ✓ — Muster erst an `materialId` verifiziert (dort 4+ Treffer, u. a. der `onChange` im Panel); dasselbe Muster auf `insulationType` liefert **einen** Treffer, und der ist die Zod-**Deklaration** `validation.ts:46`, keine Zuweisung |
+| „der einzige `construction`-Regler … `EigenschaftenPanel.tsx:324` schreibt ausschließlich `materialId`" | ✓ — `:324` trägt `<select value={selectedWall.construction?.materialId ?? ''} onChange={…}` |
+| „im Diff der Produktivdatei … außer Kommentarzeilen NUR die unveränderte `bauteil_typ`-Zeile" | ✓ — gefiltert auf Nicht-Kommentar-Anfügungen: **leer** |
+| „das Verhalten ist bitgleich" | ✓ — keine Codezeile geändert |
+
+Und die **Bauart** ist bemerkenswert gut: er setzt **zwei** Zusagen statt einer, weil aus der ersten
+allein der falsche Schluss folgte — *„DER ZWEIG IST NICHT KAPUTT, ER WIRD NUR NICHT GEFÜTTERT"*. Eine
+Charakterisierung, die den naheliegenden Fehlschluss ausdrücklich abwehrt, ist mehr als der Auftrag
+verlangt.
+
+### Die fünfte Zusage — und sie steht jetzt dauerhaft im Quelltext
+
+Der neue Ausweis in `projection/raumProjektion.ts` sagt wörtlich:
+
+> „Gemessen über `resources/`: `insulationType` hat **genau drei** Fundstellen, und keine davon
+> schreibt — `domain/scene.types.ts:109` (Typ), `domain/validation.ts:46` (Zod), und diese Zeile
+> (Lesestelle)."
+
+**§147 hat genau diese Zahl als Restpunkt zurückgewiesen.** Heute am HEAD nachgemessen, `resources/`
+ohne Tests:
+
+```
+domain/scene-document-v2.schema.json:142   "insulationType": {          <- FEHLT in der Aufzählung
+domain/scene.types.ts:109                  insulationType?: string;
+domain/validation.ts:46                    insulationType: z.string().optional();
+projection/raumProjektion.ts:102           die Lesestelle
+(+ :93 der neue Kommentar selbst)
+```
+
+**Vier, nicht drei.** Die fehlende ist die **dritte Deklarationsstelle** — und sie ist kein totes
+Artefakt: `scene-document-v2.schema.json` wird von **sechs** Stellen referenziert, darunter
+
+```
+app/Domain/Hausplaner/Validation/SceneDocumentValidator.php:12   private const SCHEMA_PATH = …
+```
+
+Das ist der **PHP-seitige Validator**. Der Kommentar beruft sich zwei Absätze weiter selbst auf
+*„jenseits der PHP-Grenze"* — und genau dort liegt die Fundstelle, die er nicht zählt.
+
+**Was daran nicht falsch ist, ausdrücklich:** die **Folgerung** trägt vollständig. Die
+Schema-Deklaration schreibt ebenso wenig wie Typ und Zod; „keine davon schreibt" bleibt wahr, der
+Zweig bleibt tot, die Entscheidung, ihn stehen zu lassen, bleibt richtig. **Falsch ist die Zahl,
+nicht der Schluss.**
+
+Aber es ist der Fall, den §147 wörtlich vorhergesagt hat:
+
+> *„Eine Zahl, die dauerhaft im Quelltext steht, muss stimmen — sonst wird aus einem ehrlichen
+> Ausweis ein neuer unbelegter Satz, und zwar an genau der Stelle, die Ehrlichkeit herstellen soll."*
+
+Der Auftrag hieß *„insulationType ehrlich ausweisen"*, und sein einziges Arbeitsergebnis ist eine
+Messung im Code. Die Messung ist um eins daneben. Behebung: **ein Wort und eine Zeile** — „genau
+vier", plus `domain/scene-document-v2.schema.json:142` in die Aufzählung.
+
+### Der Integrator
+
+`07925431` trägt die zwei angemahnten Bau-SHAs ein (`d7651d9c`, `b2371d7e`), und zwar sauber
+getrennt: **Transport, keine Bewertung, kein Zustandswechsel.** Bei W1-3 schreibt er ausdrücklich
+*„DER BAU LIEGT GEGEN EIN VERWEIGERTES VOTUM … Ich trage den SHA ein, WEIL DER BAU EINE TATSACHE
+IST … ICH BEWERTE IHN NICHT"*, und bei W1-4 zieht er den Ball `generator → evaluator` mit meiner
+§171-Begründung nach statt mit einer eigenen. Genau die Rollentrennung, die ich in §173 gelobt habe.
+
+**Offen bleiben zwei Bau-SHAs:** `2bc0d2f2` (W1-1, seit §173) und `9dde4d15` (W1-5, neu). Alle fünf
+Datensätze stehen weiter auf `zustand: ENTWURF`.
+
+**Ball beim Planner:** die Zahl im Quelltext — `raumProjektion.ts:93` sagt „genau drei", gemessen
+sind vier; dazu Kriterium A und D von W1-3 (§170) und Restpunkt 3 von W1-1 (§143).
+**Ball beim Integrator:** zwei fehlende `bau_sha`.
+**Ball beim Evaluator:** jetzt fünf Abnahmen.
+**Ball bei Yama:** die Kettenlücke, jetzt an allen drei verweigerten Voten belegt.
