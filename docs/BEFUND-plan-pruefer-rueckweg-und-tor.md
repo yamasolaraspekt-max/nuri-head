@@ -21738,3 +21738,172 @@ Einstellung ist die ausdrückliche, nicht die stillschweigende.
 widerspruch aus §259.
 
 **Nicht geprüft:** W0-8, W0-9.
+
+## §262 · DoR Z2-W0-8 — ERTEILT. Ein eigener Leak-Verdacht gemessen und verworfen
+
+**Messstand.** Mein HEAD `294c5345`, Baum sauber. Integrationszweig `f465d8a6` (21.08. 20:28),
+4 neue Commits. Basis-Stand der Prüfung: **`114b98f6`**. Gemessen 21.08. 20:28–20:33.
+
+### 1 · §260 ist behoben, und die Lage hat sich wieder verschoben
+
+`a4f76fa0`: *„W0-6 nachgezogen und drei weitere Aufträge eingetragen — die Welle Z2 ist damit
+vollständig."* Blöcke **6 → 9**, meine Ballortung **41 → 43**.
+
+    W0-1 · W0-3 · W0-5   generator
+    W0-2 · W0-4 · W0-6   planner   (die drei Restpunkte aus §256, §258, §260)
+    W0-7 · W0-8 · W0-9   plan-pruefer
+
+**Aber es sind inzwischen elf Blätter**, und zwei davon haben wieder keinen Block:
+`Z2-W0-10` (Master-Set-API-Härtung) und `Z2-W0-11` (IDS-Callback-CSRF). Das Muster aus §169, §255
+und §260 wiederholt sich zum **vierten Mal** — nicht als Versäumnis, sondern weil die Blätter
+schneller entstehen, als sie eingetragen werden.
+
+Dazu neu: `14dc15f3` *„GESAMTAUFTRAG Teststand (Yama 21.08., nahezu 1:1) als Klammer — Phasen 1-4"*.
+**Nicht geprüft**, nur zur Kenntnis genommen.
+
+### 2 · DoR Z2-W0-8 — die Belege
+
+| Beleg | frisch gemessen am Stand `114b98f6` | |
+|---|---|---|
+| `routes/web.php:1447` Gruppe `['web','auth']` | `Route::group(['middleware' => ['web', 'auth']], …)` | **trifft** |
+| `:1463-1464` `secure.image` | `Route::get('/secure-image/id/{id}', …)->name('secure.image')` | **trifft** |
+| `ImageController:753-767` — `findOrFail` **vor** `auth()->check()` | `:755` `$image = Image::findOrFail($id);` · `:757` `if (!auth()->check()) { abort(403); }` | **trifft** |
+| `images.customer_id` vorhanden, ungenutzt / 7 Erzeuger | siehe Abschnitt 4 | **teils ungeklärt** |
+
+### 3 · Der Leak-Verdacht — gemessen und verworfen
+
+Die Reihenfolge `findOrFail` → `auth()->check()` legt nahe, dass ein **nicht angemeldeter** Nutzer
+den Unterschied zwischen 403 (ID existiert) und 404 (existiert nicht) sehen kann — ein
+Existenz-Leak. **Der Satz war halb geschrieben.**
+
+Gemessen, wo die Route registriert ist:
+
+    routes/web.php:1473   Route::get('/image/secure/{id}', [ImageController::class, 'secureDownloadScreenshot'])
+    umgebende Gruppe      Z.1447  Route::group(['middleware' => ['web', 'auth']], …)
+
+**Alle drei Routen liegen in der `auth`-Gruppe.** Die Middleware fängt vorher ab; der Controller wird
+für Nicht-Angemeldete nie erreicht. **Kein Leak.** Die Reihenfolge-Korrektur bleibt richtig — aber
+als Härtung in der Tiefe, nicht als Behebung einer offenen Lücke.
+
+**Das Blatt sagt das selbst**, und zwar im Kopf: *„welle: 0 (strukturell; unter der
+Rechte-Entscheidung vom 21.08. heute ohne interne Wirkung — gebaut für den Tag, an dem der Schalter
+zurückgestellt wird)."* Ein Auftrag, der seine eigene heutige Wirkungslosigkeit benennt, statt sie zu
+verschweigen.
+
+### 4 · Eine Zahl, die ich nicht bestätigen kann
+
+Kriterium D verlangt *„7 Erzeuger unverändert (grep-Zählung gleich)"*. Meine Zählung über
+`secure.image|secure-image|image/secure` in `app`, `resources`, `routes` ergibt **11 Dateien**, davon
+eine die Routendefinition → **10 Kandidaten**.
+
+**Ich melde das nicht als Fehler.** Meine Grundmenge ist erkennbar breiter: `ImageController.php`
+ist der **Empfänger**, nicht Erzeuger, und unter den Treffern ist
+`resources/views/admin/new_leads/layouts/profile.blade copy.php` — eine Datei mit **„copy" im Namen
+im Produktivbaum**, die ein Erzeuger sein kann oder eine Leiche. Welche zehn das Blatt auf sieben
+eingegrenzt hat, steht nicht dabei.
+
+**Restpunkt-Kandidat, den ich bewusst nicht als Restpunkt führe:** Kriterium D ist eine
+Zählprobe — sie funktioniert nur, wenn beide Seiten dieselbe Menge zählen. Da das Blatt sein
+Zählverfahren nicht nennt, kann der Evaluator die Zahl nicht nachvollziehen. **Das ist genau die
+B5-Lücke, die das Tor bei meinen eigenen Botschaften bemängelt** — eine Zahl ohne ihren Zählbefehl.
+
+### 5 · Votum
+
+**DoR Z2-W0-8 — ERTEILT. Restpunkte: keine; ein Hinweis.**
+
+Ziel mit ausdrücklichem Nicht-Ziel (*„Objektbindung auf Lead-Ebene ist ausdrücklich Nicht-Ziel — kein
+Lead-Ownership-Modell im Repo"*), Basis-SHA, Ist-Beleg, Scope, vier Kriterien A–D, rotes
+P1-Kriterium, Rückweg. Die drei geprüften Codebelege treffen zeichengenau.
+
+**Hinweis (kein Restpunkt):** Kriterium D sollte den Zählbefehl mitführen, sonst ist es für den
+Evaluator nicht prüfbar.
+
+### 6 · Ball
+
+**Generator**: W0-8 ist von meiner Seite frei.
+**Integrator**: W0-10 und W0-11 ohne Block — viertes Vorkommen.
+**Planner/Dirigent**: Kriterium D um seinen Zählbefehl ergänzen; die Restpunkte aus §256, §258, §260
+und der Widerspruch aus §259 stehen weiter.
+
+**Nicht geprüft:** W0-9, W0-10, W0-11, Gesamtauftrag Teststand.
+
+## §263 · DoR Z2-W0-9 — ERTEILT. Der wirkungslose Abmelde-Knopf ist vollständig belegt
+
+**Messstand.** Mein HEAD `7a79fe6d`, Baum sauber. Integrationszweig `4ec245de` (21.08. 20:29),
+1 neuer Commit: *„Z2-W0-7 nachgezogen — DoR erteilt ohne Restpunkte, und der Auftrag mit Vorrang ist
+frei"* (§261 gewirkt). Ballortung **43 → 42**. Blätter **11**, Blöcke **9** — W0-10/11 weiterhin ohne
+Eintrag. Basis-Stand der Prüfung: **`114b98f6`**. Gemessen 21.08. 20:31–20:36.
+
+### 1 · Sechs Code-Belege, alle geprüft
+
+| Beleg | frisch gemessen | |
+|---|---|---|
+| `LogUserLogin.php:26` setzt `is_active = 1` | `$user->update(['is_active' => 1]); // Set the user as active` | **trifft** |
+| `LogUserLogout.php:16` setzt `is_active = 0` | `$user->update(['is_active' => 0]);` | **trifft** |
+| geprüft **nur** in `MobileAuthController:68-73` | `:68` `if (Schema::hasColumn('users','is_active') && isset($user->is_active) && !$user->is_active)` → 403 | **trifft** |
+| `logOffUser` (`UserController:449-455`) — falscher Session-Schlüssel | `:451` `$sessionId = session('user_session_' . $userId);` | **trifft** |
+| keine `sessions`-Tabelle | **0** Migrationen mit `session` im Namen | **trifft** |
+| `PlannerApiAuthController:50-59` ohne Statusprüfung | (in §260/§261 bereits gelesen: `:50-80` vergibt Token, keine Statusabfrage) | **trifft** |
+
+**Die Zeilenangabe `:449-455` ist dabei präzise**: Die Signatur steht bei `:437`, aber `:449-455`
+sind genau die **Wirkzeilen** — dieselbe Sorgfalt wie bei W0-2 (§256).
+
+### 2 · Warum der Knopf nichts tut — beide Ursachen belegt
+
+    :449  $user->update(['is_active' => 0]);              // nur das Online-Flag
+    :451  $sessionId = session('user_session_' . $userId);
+    :453  if ($sessionId) {
+    :454      DB::table('sessions')->where('id', $sessionId)->delete();
+    :455  }
+    :457  return redirect()->back()->with('success', 'User has been logged off.');
+
+**Erstens** liest `:451` die Session **des aufrufenden Admins** — `session()` greift immer auf die
+eigene. Ein Schlüssel `user_session_<X>` steht dort nie, also ist `$sessionId` null.
+**Zweitens** ist die Tabelle, die `:454` leeren würde, nicht vorhanden (0 Migrationen).
+
+Selbst wenn der Schlüssel stimmte, liefe das Löschen ins Leere. **Und `:457` meldet Erfolg.** Der
+Admin sieht *„User has been logged off"*, der Nutzer bleibt angemeldet.
+
+### 3 · Der Kern, den ich bestätigen kann
+
+`is_active` wird bei **jedem Login auf 1** gesetzt (`LogUserLogin:26`). Ein Admin, der einen Nutzer
+deaktiviert, setzt dasselbe Feld auf 0 — und der nächste Login des Nutzers setzt es **selbst wieder
+auf 1**, weil kein Anmeldeweg es prüft. Nur `MobileAuthController:68` prüft es, und zwar auf der
+falschen Seite: Es sperrt den Mobil-Login **nach einem Web-Logout**.
+
+**Die Einordnung des Blattes ist damit belegt:** `is_active` ist ein **Online-Flag**, kein
+Kontostatus — und die Oberfläche beschriftet es als „Deactivated".
+
+Der Kopf zieht daraus die richtige Folgerung: *„`is_active` bleibt unangetastet als Online-Flag
+(kein Bestandsverhalten kippt)"*, und der neue Status kommt **additiv** als `users.disabled_at`.
+Das ist die Schutzgrenze aus `CLAUDE.md` (keine Nebenwirkung auf Bestandsdaten) im Auftrag selbst.
+
+### 4 · Was ich nicht prüfen konnte
+
+*„DB: alle 52 Nutzer `is_active=1`"* — eine **Datenbankaussage**. Hier steht keine Datenbank zur
+Verfügung, und nach `CLAUDE.md` dürfte ich ohnehin nur gegen `ticket_testing` messen. Die Zahl 52
+deckt sich mit der aus `114b98f6` (*„Radius jeder der **52** Accounts"*), aber das ist eine
+Übereinstimmung zweier Berichte, **keine eigene Messung** — und nach H-8 kein Beleg.
+
+### 5 · Votum
+
+**DoR Z2-W0-9 — ERTEILT. Restpunkte: keine.**
+
+Ziel, Basis-SHA, sechs geprüfte Ist-Belege, Reproduktion, additives Schema, Scope mit Trait-Muster
+und Middleware in **beiden** Gruppen (`web` und `auth:sanctum`) liegen vor. Der Kopf trägt
+`welle: 0 … **gilt UNABHÄNGIG von der Rechte-Entscheidung vom 21.08.**` — die richtige Einordnung:
+Dies ist **Authentifizierung**, nicht Autorisierung, und fällt damit nicht unter „alle Rechte für
+alle". `ae7cee9d` sagt dasselbe (*„Authentifizierung bleibt unberührt"*).
+
+**Damit sind alle drei Nachzügler-DoR gefahren**: W0-7 (§261), W0-8 (§262), W0-9 (§263) — zusammen
+mit der Welle-0-Reihe aus §255–§260 **neun Voten**.
+
+### 6 · Ball
+
+**Generator**: W0-9 ist von meiner Seite frei.
+**Integrator**: W0-10 und W0-11 ohne Block — fünftes Vorkommen.
+**Yama**: unverändert; A-7 ist der Fall, der **unabhängig** von der Rechte-Entscheidung wirkt — ein
+entlassener Mitarbeiter bleibt heute angemeldet, und das ist keine Rechte-, sondern eine
+Zugangsfrage.
+
+**Nicht geprüft:** W0-10, W0-11, Gesamtauftrag Teststand.
