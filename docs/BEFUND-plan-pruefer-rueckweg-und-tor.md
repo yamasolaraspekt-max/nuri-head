@@ -20147,3 +20147,91 @@ deshalb „kein gemessener Aufrufer", nicht „kein Aufrufer".
    Vorlagen ist. **Das ist eine eigene Frage**, die ich hier nur aufwerfe und nicht beantworte: Ist
    der Vorlagenweg gebaut, aber nicht angeschlossen? Das gehört zum §119/§120-Komplex und ist der
    nächste (e)-Posten.
+
+## §244 · Posten (a): die 23 Agenten-Definitionen sind sauber — und genau deshalb fällt auf, woran sie hängen
+
+**Messstand.** HEAD `17148745` (21.08. 19:26:15), Baum sauber, **0 neue Commits** — sechzehnte Runde
+ohne Ankunft. Integrationszweig `7a82ecfb` (295 Min), STATUS-Blob `810f37d9e560`. Gemessen
+21.08. 19:26–19:30.
+
+### 1 · Ein Negativergebnis, und es ist das erste dieser Art
+
+Die 23 Agenten-Definitionen sind Anweisungstexte: Ein Agent liest sie und handelt danach. Ein
+falscher Zeiger wirkt dort unmittelbar, ohne Zwischenschritt. Gemessen:
+
+    Zeiger der Form datei.ext:zeile in .claude/agents/   ->  0  in 0 von 23 Dateien
+
+**Null.** Sie verweisen ausschließlich über **Dateipfade** — `docs/STATUS.md` 16-mal, die vier
+Fach-Register je 11-mal, `docs/regelwerk/INVENTUR-VERFAHREN.md` 8-mal. Das ist genau die Ankerform,
+die A-34 entschieden hat und die §228 an einer einzigen Codestelle gebaut fand.
+
+Nach §231 (9 von 11 falsch), §232 (9 von 9 falsch), §236 (drei Zahlen, drei Werte) und §242
+(zwei gewanderte Regelzeiger) ist dies **der erste geprüfte Träger ohne einen einzigen driftbaren
+Verweis** — nicht weil er gepflegt wurde, sondern weil er die Form gar nicht erst benutzt.
+
+Alle 25 genannten Pfade gegen den Baum geprüft: **alle vorhanden.**
+
+### 2 · Ein eigener Fehlfund, unterwegs gefangen
+
+Zwei Pfade meldeten sich zunächst als „existiert nicht":
+`.claude/skills/qualitaetsraster/SKILL.md` und `.claude/skills/ux-design/SKILL.md`. **Beide sind
+falsch gemeldet** — mein Suchmuster begann bei `.claude/` und schnitt damit ein führendes `~/` ab.
+Im Text steht `~/.claude/skills/…`, also ausdrücklich das **Benutzerverzeichnis**, und dort
+existieren beide.
+
+Fünfter Fall zu breiter oder falsch angesetzter Grundmenge in dieser Session (§232, §233, §235,
+§236, jetzt hier). Die Definitionen unterscheiden sauber: `frontend-entwickler.md:9` nennt
+nebeneinander `` `.claude/skills/frontend-entwickler/SKILL.md` `` (Repo, ohne Tilde) und
+`` `~/.claude/skills/ux-design/SKILL.md` `` (Benutzer, mit Tilde). **Die Präzision liegt bei ihnen,
+der Fehler lag bei mir.**
+
+### 3 · Was dabei sichtbar wird — und das ist der eigentliche Befund
+
+    14 von 23 Agenten laden einen Skill, den das Repo NICHT führt
+       qualitaetsraster   13 Nennungen
+       ux-design           2 Nennungen
+
+    im Repo gesichert: keiner von beiden
+
+`qualitaets-pruefer.md:10` sagt es wörtlich: *„**Zuerst laden:** `~/.claude/skills/qualitaetsraster/SKILL.md`
+— die sechs Linsen und die Befund[form]"*. Dreizehn Agenten beziehen daraus ihre **Meldeform**
+(*„je Befund vier Felder"*), zwei den **Design-Rahmen**.
+
+Das ist kein gewanderter Verweis, sondern ein Verweis, der **aus der versionierten Wahrheit
+hinauszeigt**. Die Folge ist nicht theoretisch:
+
+- **Kein Rückweg.** Die stehende Regel verlangt für Änderungen an Live-Daten oder Schema einen
+  Rückweg außerhalb der Maschine. `~/.claude/skills/` liegt auf der Maschine und **nur** dort —
+  geht es verloren, verlieren 13 der 23 Agenten ihre Befundform, und kein Commit bringt sie zurück.
+- **Kein zweiter Rechner.** Eine Instanz, die das Repo klont, bekommt 16 Skills und findet zwei
+  Verweise, die bei ihr ins Leere zeigen. Auf meiner Maschine ist die Prüfung grün, auf einer
+  anderen wäre sie rot — und beide Ergebnisse wären richtig gemessen.
+- **Die Registerzahl stimmt und täuscht zugleich.** §237 hat `regelwerk/REGISTER.md:17` mit
+  *„16 Skills"* bestätigt — richtig **für das Repo**. Der Betrieb braucht mindestens **18**.
+
+### 4 · Warum ich das unter (a) führe und nicht unter Vollständigkeit
+
+Der Posten (a) fragt nach Verweisen, die auf **etwas anderes** zeigen als das Gemeinte. Diese hier
+zeigen auf das Gemeinte — aber auf ein Exemplar, das **außerhalb dessen liegt, was das Repo
+garantieren kann**. Das ist dieselbe Klasse wie F-026 aus §233/§238 (Verweis auf
+`~/Desktop/Gemini-Code-Ideen-…`), nur mit 14 statt einem Träger und mit einer Regel statt einer
+Formel am Ende.
+
+### 5 · Ball
+
+**Planner** — eine Frage, kein Bauauftrag, weil die Antwort eine Ablage-Entscheidung ist:
+
+> **Gehören `qualitaetsraster` und `ux-design` ins Repo, oder bleiben sie bewusst
+> benutzerspezifisch?**
+
+| Antwort | Folge |
+|---|---|
+| **ins Repo** | zwei Skills nach `.claude/skills/` übernehmen, die 14 Verweise verlieren ihre Tilde, `regelwerk/REGISTER.md:17` wird 18 |
+| **bewusst außerhalb** | ein Satz in `AGENTEN-UND-SKILLS.md`, dass 14 Agenten eine Voraussetzung außerhalb des Repos haben — damit eine fremde Instanz weiß, was ihr fehlt, statt es zu suchen |
+
+**Wirkung hoch** (14 von 23 Agenten), **Aufwand gering** in beiden Richtungen. Ich empfehle nichts,
+weil die Ablage von Skills eine Werkzeugentscheidung ist und nicht meine.
+
+Nicht gemessen: ob `governance-zyklus` — der dritte Benutzer-Skill, den ich beim Prüfen sah — von
+einer Agenten-Definition verlangt wird. In den 23 Dateien kommt er **nicht** vor; ob ihn etwas
+anderes lädt, habe ich nicht erhoben.
