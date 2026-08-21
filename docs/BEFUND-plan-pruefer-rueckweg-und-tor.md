@@ -21364,3 +21364,90 @@ stützt sie vollständig; ausgeführt ist sie nicht, und ich sage es.
 Permission-Item `Planner` entschieden ist, kann das Routen-Gate für 61 Routen nicht gebaut werden.
 
 **Nicht geprüft:** W0-4, W0-5, W0-6.
+
+## §258 · DoR Z2-W0-4 — ERTEILT mit einem Restpunkt: Kriterium C zählt drei Routen, es sind sechs
+
+**Messstand.** Mein HEAD `383210f0`, Baum sauber. Integrationszweig `7c262955` (21.08. 20:14),
+3 neue Commits. Basis-Stand der Prüfung: **`7a82ecfb`**. Gemessen 21.08. 20:16–20:17.
+
+### 1 · §256 hat gewirkt
+
+`7c262955`: *„Z2-W0-2 nachgezogen — DoR erteilt mit Restpunkt, und der Ball wandert vom Prüfer zum
+Planner."* Ballortung **45 → 44**; `Z2-W0-2` trägt jetzt `ballbesitz: planner`. Der Restpunkt aus
+§256 (`vorschau` fehlt im Scope) ist damit **beim richtigen Halter** — das ist eine
+Planner-Entscheidung, keine Messfrage.
+
+Stand der Welle: W0-1 → generator (§255), W0-2 → planner (§256), W0-3/4/5/6 → plan-pruefer.
+
+### 2 · DoR Z2-W0-4 — die Belege
+
+W0-4 ist kein Lücken-, sondern ein **Wächter**-Auftrag: Er friert die heutige Menge ungegateter
+`auth`-Routen als Baseline ein und schlägt fehl, sobald eine **neue** dazukommt. Ziel im Blatt:
+*„Genau das hätte S-5 am 16.07. beim Anlegen gefangen."*
+
+| Beleg | frisch gemessen | |
+|---|---|---|
+| `UngatedWriteRoutesAuthTest.php` prüft nur `auth` gegen eine **handgepflegte 4-URI-Liste** | existiert, 49 Z.; `:23-26` listen **genau vier** URIs (`/emp_address_delete/1`, `/skill_delete/1`, `/emergency_delete/1`, `/employee_image_get/1/x`) | **trifft** |
+| `scripts/waechter.sh` ist Gate-Runner, **kein Scanner** | existiert, 240 Z., **0** Treffer für `getRoutes\|Route::` | **trifft** |
+| Nebenbefund: `permission:hausplaner` **1× klein** gegen **16× `Hausplaner`** | 1 / 16 | **punktgenau** |
+
+Das ist die **zweite punktgenaue fremde Zahl in Folge** (nach den 16403 Zeilen in §257).
+
+### 3 · Die Routen-Zahlen kann ich nicht bestätigen — und sage warum
+
+Das Blatt misst über `Route::getRoutes()`: *„web-Routen 2365 · mit auth 2296 · mit permission 371 ·
+auth ohne permission 1925"*. **Dieses Verfahren kann ich hier nicht ausführen** (kein laufender
+Anwendungskontext). Meine Quelltext-Näherung zählt etwas anderes:
+
+    Route-Verben in routes/     2430   (Blatt: 2365 registrierte web-Routen)
+    'permission:' in routes/      18   (Blatt: 371 Routen mit permission)
+
+Die erste Zahl liegt in derselben Größenordnung und leicht darüber — plausibel, weil nicht jede
+Deklaration eine registrierte `web`-Route ergibt. Die zweite weicht **stark** ab, und der Grund ist
+strukturell, nicht widersprüchlich: **eine `permission:`-Middleware an einer Gruppe deckt viele
+Routen ab.** Der Quelltext zählt Deklarationen, `Route::getRoutes()` zählt Betroffene.
+
+**Ich bestätige die vier Zahlen also nicht und widerlege sie nicht.** Sie sind mit dem im Blatt
+genannten Verfahren erhoben, und dieses Verfahren ist benannt — das genügt für den DoR. Was nicht
+genügt, wäre eine Zahl ohne Verfahren.
+
+### 4 · Der Restpunkt: Kriterium C zählt zu wenig
+
+    C: Baseline enthält die drei W0-1/W0-2-Routen NICHT mehr | Reihenfolge | grep in Baseline
+
+Gezählt, was W0-1 und W0-2 tatsächlich absichern:
+
+    W0-1   objekte.index · objekte.akte · objekte.auslegung                      3 Routen
+    W0-2   energie.grundriss · …editor · …speichern                              3 Routen
+    -------------------------------------------------------------------------------------
+    zusammen                                                                     6 Routen
+
+**„Die drei" trifft nur eine der beiden Wellen.** Wird die Baseline nach W0-1/W0-2 erzeugt und
+Kriterium C gegen drei Einträge geprüft, kann es grün werden, während drei weitere Routen
+fälschlich als „ungegatet" in der Baseline verewigt bleiben — genau das, was Zeile `:31-32` des
+Blattes verhindern will (*„damit die drei Gates nicht als Ausnahme verewigt werden"*).
+
+**Und der Restpunkt hängt mit dem aus §256 zusammen:** Wenn `vorschau` doch mitgegatet wird, sind es
+**sieben**. Die Zahl in Kriterium C ist also erst nach der Planner-Entscheidung zu W0-2 endgültig.
+
+### 5 · Votum
+
+**DoR Z2-W0-4 — ERTEILT, mit einem Restpunkt.**
+
+Ziel, Basis-SHA, Ist-Beleg, Scope mit Nicht-Zielen, Kanten (Schlüsselstabilität, Reihenfolge,
+dokumentierte Baseline-Erzeugung), **fünf** Kriterien A–E, rotes P1-Kriterium und Rückweg liegen
+vor. Besonders gelungen: **Kriterium C macht die Reihenfolge-Abhängigkeit zu W0-1/W0-2 prüfbar**,
+statt sie nur zu erwähnen, und Kriterium E schiebt den Nebenbefund nicht weg, sondern verlangt seine
+Messung.
+
+**Restpunkt 1:** Kriterium C nennt **drei** Routen; es sind **sechs** (bzw. sieben, falls `vorschau`
+hinzukommt). Die Zahl ist vor dem Bau festzulegen — sie ist der Prüfschlüssel des Kriteriums.
+
+### 6 · Ball
+
+**Planner/Dirigent**: Restpunkt 1 (Zahl in Kriterium C) — und er ist an den §256-Restpunkt gebunden,
+also in einem Zug entscheidbar.
+**Generator**: W0-1 und W0-3 sind frei.
+**Yama**: Y-6 blockiert weiterhin W0-5.
+
+**Nicht geprüft:** W0-5, W0-6.
