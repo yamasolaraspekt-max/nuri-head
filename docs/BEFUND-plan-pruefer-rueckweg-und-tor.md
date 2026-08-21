@@ -21179,3 +21179,104 @@ Z1-W1-Aufträge betraf.
 **Yama**: unverändert die drei bestätigten Lücken; dazu neu aus `a7851958` **Y-6** (kein
 Permission-Item `Planner` — Rechte-Entscheidung), **Y-7**, **Y-8** und fünf Erstfunde an der
 Nuriva-API (`A-1`…`A-5`), die ich **nicht** geprüft habe.
+
+## §256 · DoR Z2-W0-2 — ERTEILT mit einem Restpunkt: die vierte Route fehlt im Scope
+
+**Messstand.** Mein HEAD `2899f20d`, Baum sauber. Integrationszweig `0d45d732` (21.08. 20:09),
+4 neue Commits. Ballortung **40, unverändert**; **„Z2-W0" in `docs/STATUS.md`: weiterhin 0 Treffer** —
+mein §255-Befund steht unverändert. Basis-Stand der Prüfung: **`7a82ecfb`**, wie im Blatt genannt.
+
+### 1 · Alle genannten Zeiger treffen — und sie sind präziser als die des Vorbefunds
+
+W0-2 nennt **Wirkzeilen**, nicht Signaturen. Einzeln geprüft:
+
+    :44   public function __construct(                                          trifft
+    :87   $projekte = HeizlastProjekt::query()                                  trifft
+    :114  $p = HeizlastProjekt::with([…])->find($projekt);                       trifft
+    :261  $objekt = LeadAlternativeAdd::find($alternativeId);                    trifft
+
+Das ist bemerkenswert im Vergleich zu S-2, das dieselben Stellen als Spannen (`:106-114`, `:244-264`)
+angab: **W0-2 zeigt auf die Zeile, die die Sache tut.** Nach §231, §232, §242, §250 ist das die
+Ausnahme, nicht die Regel.
+
+### 2 · Die tragende Behauptung hält — und §252 hatte sie nicht
+
+W0-2 sagt, `speichern()` schreibe über `schreibeGeometrieVersion()` (`:317-332`) eine **neue aktive
+Anforderungsprofil-Version an ein Fremdobjekt** — *„append-only, aber die aktive Version kippt"*.
+Nachgemessen:
+
+    :317  private function schreibeGeometrieVersion(LeadAlternativeAdd $objekt, array $geometrie)
+    :325  ? $this->profilService->neueVersion($aktiv, [], auth()->id())
+    :326  : $this->profilService->anlegen($objekt, 'Grundriss-Geometrie', [], auth()->id());
+    :328  $neu->gebaeude_geometrie = $geometrie;
+    :329  $neu->save();
+    :331  return $this->profilService->aktivieren($neu)->fresh();
+
+**Beide Hälften belegt:** `:325-326` legt an statt zu überschreiben (append-only), `:331`
+**aktiviert** die neue Version — die aktive kippt. Damit ist S-2 nicht nur eine Offenlegungs-, sondern
+eine **Integritätslücke**.
+
+**Das hat mein eigener §252 nicht gefunden**, und der Grund ist meine Messgrenze: Ich hatte
+`speichern()` im Bereich `244-300` auf Prüfungen abgesucht — `schreibeGeometrieVersion()` beginnt bei
+`:317`. Ich habe den Rumpf gemessen und nicht den Aufrufweg. **Wer nur den Bereich einer Funktion
+absucht, sieht nicht, was sie ruft.**
+
+### 3 · Zwei weitere Belege, beide bestätigt
+
+- **Die Zahl „×4"**: `PlanUploadController` trägt **5** `abort_unless`; **vier davon** lauten
+  `$planUpload->user_id === auth()->id()` (`:115`, `:134`, `:141`, `:160`), der fünfte (`:167`) ist
+  ein Storage-Check. **Die Zahl im Blatt ist exakt richtig**, wenn man den Ownership-Check meint —
+  und genau den meint sie.
+- **Der „vorhandene, unerwähnte Schutz" `:170-172`**: `PlanUpload::query()->where('user_id',
+  auth()->id())->find($uploadId)` — bestätigt. W0-2 ordnet ihn als *„deckt ein anderes Objekt"* ein;
+  das deckt sich mit meiner Einordnung in §252 (*„schützt den PlanUpload, nicht das Projekt"*).
+- **Rot-Lage**: `routes/web.php:5658-5664` trägt **0** `permission`-Treffer. Das Kriterium kann heute
+  nicht grün sein.
+
+### 4 · Der Restpunkt: der Block hat **vier** Routen, der Scope nennt drei
+
+Im Bereich `:5658-5664` stehen:
+
+    GET   /admin/energie/grundriss                 index
+    GET   /admin/energie/grundriss/editor/{projekt?}  editor
+    POST  /admin/energie/grundriss/vorschau        vorschau     <-- im Scope nicht genannt
+    POST  /admin/energie/grundriss/speichern       speichern
+
+W0-2s Scope belegt `index`/`editor` mit `Hausplaner,read` und `speichern` mit `Hausplaner,update`.
+**`vorschau` kommt nicht vor** — weder im Scope noch in den Kriterien A–D.
+
+Gemessen, was sie tut: `vorschau()` (`:198`) validiert, ruft `:207` das Topologie-Gate und öffnet
+`:208` eine **`DB::transaction`**, in der `:209` `baueProjekt($data, null)` und `:210`
+`$this->ableitung->schreibeInProjekt($projekt)` laufen. Mein Schreibmuster
+(`->save(|::create(|->update(`) findet in ihrem Rumpf **0** Treffer.
+
+**Ich melde das als Restpunkt, nicht als Lücke** — aus einem Grund, den ich benenne: Das `null` in
+`baueProjekt($data, null)` und der Z2-Vorbefund zu `/admin/energie/*` (*„transiente Projekte, keine
+Kundendaten erreichbar"*) sprechen dafür, dass hier nichts Fremdes berührt wird. **Nachgewiesen habe
+ich das nicht**, weil ich `baueProjekt` und `schreibeInProjekt` nicht verfolgt habe — und nach der
+Lehre aus Abschnitt 2 dieser Runde wäre genau das nötig.
+
+### 5 · Votum
+
+**DoR Z2-W0-2 — ERTEILT, mit einem Restpunkt.**
+
+Ziel, Basis-SHA, Ist-Beleg mit Reproduktion, Scope mit Nicht-Zielen, Kanten, Kriterien und Rückweg
+liegen vor; alle geprüften Behauptungen halten; die Rot-Lage ist bestätigt. **Restpunkt 1:** Der
+Scope nennt drei von vier Routen des Blocks. Vor dem Bau ist zu entscheiden, ob `vorschau`
+mitgegatet wird (naheliegend `Hausplaner,read`, weil sie rechnet) **oder** ausdrücklich als
+ungeschützt begründet wird. Beides ist vertretbar — **nicht vertretbar ist, sie unerwähnt zu
+lassen**, weil Kriterium D (`git diff --numstat` zeigt nur `routes/web.php` + Testdatei) sonst grün
+wird, während eine Route des Blocks ungeprüft bleibt.
+
+Das ist derselbe Befundtyp wie §251 bei S-1 (fünf statt acht Controller): **die Grundmenge des
+Auftrags ist um eins zu klein**, und der Auftrag würde als erfüllt gelten, ohne es zu sein.
+
+### 6 · Ball
+
+**Planner/Dirigent**: Restpunkt 1 — `vorschau` in den Scope aufnehmen oder ausdrücklich ausschließen.
+**Integrator**: unverändert aus §255 — die sechs Blätter haben weiterhin **0 Treffer** in
+`docs/STATUS.md`.
+**Generator**: W0-2 ist nach Klärung des Restpunkts frei; W0-1 ist es bereits (§255).
+
+**Nicht geprüft:** W0-3 bis W0-6; die Nuriva-Erstfunde A-1…A-5, die `114b98f6` inzwischen als
+bestätigt meldet (*„Radius jeder der 52 Accounts auch per Browser-Cookie"*).
