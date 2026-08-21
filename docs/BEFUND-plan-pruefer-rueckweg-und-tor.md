@@ -17491,3 +17491,110 @@ Reihe, dessen eigenes Prüfverfahren heute noch trägt.
 
 **Beim Integrator:** unverändert der Rückweg (40 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
 und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
+
+---
+
+## §218 — Posten (c): F-053 rechnet vollständig richtig, alle elf Zahlen bestätigt. Und sie ist die dritte Dachdecker-Formel in Folge ohne Verbraucher — weil es die Engine nicht gibt
+
+**Messstand 3279d642, Baum sauber, 0 neue Commits. Integrationszweig lokal 7a82ecfb (14:31, Alter
+180 Min). Rückstand: ich 40 · planner 104. `docs/STATUS.md` und die 89 Blätter unbewegt, kein Ball in
+meiner Bahn. Erhebung 21.08. 17:31–17:34.**
+
+Gegenstand: **F-053 · Lattmaß-Teilung**, `FORMELSAMMLUNG.md:984-1030`, Ampel **🟡**. Grundlage ist eine
+Fachaussage Yamas vom 12.08., die das Blatt wörtlich zitiert: *„die eindecklattung ist abhängig von
+dach neigung und dach maße und zulässig überlappung der ziegel"*.
+
+### 1. Der Grenzfall — nachgerechnet, und er ist der Kern der Formel
+
+    Harzer Pfanne 7, Lattmassbereich 372-405 mm, Sparrenlaenge L = 1000 mm
+
+    n_min = ceil(1000/405) = 3        n_max = floor(1000/372) = 2
+    n_min > n_max  ->  KEINE gleichmaessige Teilung          (Blatt: keine Teilung)
+    n = 2  ->  500 mm   ueber dem Bereich (max 405)          (Blatt: 500, zu gross)
+    n = 3  ->  333 mm   unter dem Bereich (min 372)          (Blatt: 333, zu klein)
+
+Vier Angaben, vier Treffer. Der Fall ist **kein Rechenfehler, sondern ein echter Zustand**: zwischen
+zwei aufeinanderfolgenden Reihenzahlen liegt eine Lücke, in der kein gleichmäßiges Lattmaß existiert.
+Dass die Formel dort **keinen Wert** liefert, ist die richtige Antwort — und die Begründung im Blatt
+ist ehrlich: *„wie ausgeglichen wird, ist Handwerkspraxis und steht in keiner verfügbaren Quelle"*.
+
+### 2. Die verworfene Fassung — sieben Zahlen, alle bestätigt
+
+Das Blatt führt seine eigene verworfene Fassung mit Messung vor:
+
+    Modell            Faelle ausserhalb   nachgerechnet
+    Rubin 9V              146/801            18,2 %
+    Harzer Pfanne 7       136/801            17,0 %
+    Achat 12V             100/801            12,5 %
+    Rubin 13V             100/801            12,5 %
+    Granat 11V             63/801             7,9 %
+    Topas 13V              55/801             6,9 %
+    Topas 11V              21/801             2,6 %
+    ------------------------------------------------
+    Grundmenge  7 x 801 = 5607     (Blatt: 5.607)          STIMMT
+    Spanne      2,6 % bis 18,2 %   (Blatt: 2,6 % bis 18,2 %) STIMMT
+
+**Elf Zahlen insgesamt, elf Treffer.** Bemerkenswert ist der Satz daneben: *„Sie war mein eigener
+Vorschlag in W-23 und ist verworfen — vier grüne Stichproben (28 von 28) hatten wie ein Beleg
+ausgesehen."* Das ist dieselbe Lehre, die ich in §210 an mir selbst gemacht habe: **eine Stichprobe,
+die grün ist, belegt nichts über die Fälle, die sie nicht enthält.** 28 von 28 gegen 621 von 5607.
+
+### 3. Der Befund: kein Verbraucher, und diesmal fehlt der ganze Gegenstand
+
+Über Bezeichner gesucht:
+
+    lattmass/Lattmass/lattMass   2 Dateien · lattung/Lattung 5 · regeldachneigung 2
+    reihenzahl/Reihenzahl        0 Dateien
+    Zeilen mit (ceil|floor) UND latt in dachformVorlagen.ts:  0
+
+Der Code trägt **Kennzeichen statt Rechnung**:
+
+    dachformVorlagen.ts:117   regeldachneigungAbhaengigVonMaterial: boolean
+    dachformVorlagen.ts:118   lattmassAbhaengigVonProdukt: boolean
+    dachformVorlagen.ts:119   rdnGrad: number   // Regeldachneigung als allgemeiner RICHTWERT
+    dachformVorlagen.ts:122   konterlattungMm: [number, number]
+
+Die **Schranke** aus F-053 existiert — aber als Hinweis, nicht als Absage:
+
+    dachformVorlagen.ts:431   export function neigungBrauchtZusatzmassnahme(pitchGrad, mindestneigungGrad, rdnGrad)
+    dachformVorlagen.ts:437   if (Number.isFinite(pitchGrad) && pitchGrad < rdnGrad)
+    dachformVorlagen.ts:440       schwere: 'warnung'
+    dachformVorlagen.ts:441       'Dachneigung … liegt unter der Regeldachneigung … Zusatzmaßnahme erforderlich'
+
+F-053 verlangt bei `neigung < rdn`: *„Ziegel nicht zulässig, KEINE Rechnung"*. Der Code warnt und
+rechnet weiter. **Das ist hier trotzdem kein Befund**, und der Unterschied ist wichtig: es gibt keine
+Lattmaß-Rechnung, die verweigert werden könnte. Was der Code baut, ist der fachlich richtige Hinweis
+(unter der Regeldachneigung braucht es Zusatzmaßnahmen), nicht die Schranke einer Rechnung. **Ich
+melde es ausdrücklich nicht als zehnte Fundstelle meiner Klasse** — dafür müsste ein Wert entstehen,
+und es entsteht keiner.
+
+### 4. Drei Formeln in Folge, drei Mal kein Verbraucher — und der Grund ist derselbe
+
+    §208  F-051  Zeitwerte je Gewerk        🔴 GESPERRT      kein Verbraucher
+    §213  F-050  Materialkennwerte          🟡 nur Näherung  kein Verbraucher
+    §218  F-053  Lattmaß-Teilung            🟡 eingeschränkt kein Verbraucher
+
+Die elf Engines der Insel, über das Feld `bestanden:` erhoben: `abwassergefaelle`, `fbhAuslegung`,
+`heizkreisVerteiler`, `kuecheArbeitsdreieck`, `sparrenBerechnung`, `treppe2D`, `treppe3D`,
+`treppenBerechnung`, `treppenTypen`, `wandaufbau`, `configuratorPackage`. **Vier Treppen, drei
+Heizung, eine Sparren, eine Wandaufbau, eine Küche, ein Konfigurator — und keine Dachdeckung.**
+
+Die drei Ampeln werden also eingehalten, **aber nicht durch Disziplin, sondern weil der Gegenstand
+fehlt.** Das ist ein Unterschied, der genannt gehört: ein Verbot, das nicht gebrochen werden *kann*,
+ist kein Beleg dafür, dass es beachtet wird. Sollte je eine Dachdeckungs-Engine entstehen, treffen
+alle drei Vorbehalte auf einen Schlag — die gesperrten Zeitwerte, die modellabhängigen
+Materialkennwerte (§213) und der nicht erfasste Restausgleich aus F-053.
+
+### Ball
+
+**Kein Befund gegen F-053.** Elf von elf Zahlen bestätigt, der Grenzfall ist fachlich richtig
+begründet, die verworfene Fassung ist mit eigener Messung dokumentiert und wird im Code nicht
+verwendet. Zusammen mit §217 (A-20) ist das die vierte Prüfung in Folge, die im Kern *hält*.
+
+**Zur Kenntnis an den Planner**, ohne Forderung: die drei Dachdecker-Formeln F-050, F-051 und F-053
+sind vollständig geprüft und alle drei ohne Verbraucher. Wenn die Dachdeckung als Engine geplant ist,
+liegen ihre drei Vorbehalte bereits geschrieben vor — und der Fach-Operand aus §213 (kg/m² ist ebenso
+modellabhängig wie Stück/m²) gehört dann dazu.
+
+**Beim Integrator:** unverändert der Rückweg (40 Abschnitte), die zwei Zäune in `docs/STATUS.md:3220`
+und `:7881`, der Restpunkt an A-22-1 (§209) und der unzuordenbare Block ab `:2397` (§210).
