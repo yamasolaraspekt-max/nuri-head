@@ -14804,3 +14804,106 @@ Zahl ist überholt — und sie steht als **Messpunkt** in der Prozessquelle, als
 der eine überholte Zahl weitergereicht wird. **Ball bei mir:** dreizehn meiner eigenen Verweise
 tragen keinen Anker; ich ziehe sie nicht nach (B6, zitierte Datei), aber ab hier gilt die Regel
 ohne Ausnahme.
+
+## §193 — Posten (c): F-030 ist exakt gebaut, und ihr Grenzfall sagt das Gegenteil vom Code — diesmal hat der Code recht
+
+**Messstand** `42ebc620` · Baum sauber · 0 neue Commits; Integrationszweig unverändert, letzter
+Commit vor **48 Minuten**.
+
+Gegenstand: **F-030 · Wand aus Achse extrudieren**
+(`docs/rollenkette/werkbank/01-MATHEMATIK/FORMELSAMMLUNG.md:285-296`), die vierzehnte der 27
+Formeln. Gewählt, weil Wände überall stehen und ich diesen Bereich noch nie angefasst habe.
+
+### Die Formel selbst: zeichengenau umgesetzt
+
+```
+F-030                              Code (renderers/three-d/platzierung.ts)
+r = (B−A)/|B−A|                    :34  const dirx = dx / laenge, diry = dy / laenge;
+n = (−r_y, r_x)                    :35  const ulx = -diry, uly = dirx;
+A ± (d/2)·n , B ± (d/2)·n          :36  const h = wand.thickness / 2;
+                                   :41  x: wand.start.x + dirx * offset + seite * ulx * h,
+                                   :42  y: wand.start.y + diry * offset + seite * uly * h,
+```
+
+**Vier Zeilen, vier Entsprechungen, keine Abweichung.** Die Normale ist die Links-Normale, das
+Vorzeichen `seite` liefert beide Seiten, `offset` schneidet das Segment aus der Wand.
+
+### Grenzfall „d ≤ 0 oder h ≤ 0" — erfüllt, aber woanders und strenger
+
+Die Geometrie prüft nichts; der **Zod-Vertrag** tut es:
+
+```
+domain/validation.ts:16   const mmPos = z.number().int().positive();
+domain/validation.ts:41   thickness: mmPos          (und :194  hoeheMm: mmPos)
+domain/validation.ts:63   laenge <= 0        -> „Wand hat Länge 0."
+domain/validation.ts:65   laenge < thickness -> „Wand kürzer als ihre Dicke."
+```
+
+**Das ist mehr, als F-030 verlangt**: die Formel nennt nur `d ≤ 0` und `h ≤ 0`, der Vertrag fängt
+zusätzlich die Länge 0 und den Fall „kürzer als dick" ab. **Der Grenzfall ist erfüllt, und zwar
+schärfer.**
+
+*Eine Randnotiz, gemessen und nicht dramatisiert:* `platzierung.ts:33` schreibt
+`const laenge = Math.hypot(dx, dy) || 1;` — der `|| 1`-Ersatzwert aus §141. Er ist hier **kein
+Loch**, weil `validation.ts:63` die Länge 0 vorher abweist; er ist ein zweiter Gurt. Ob das Schema
+auf jedem Weg greift, habe ich für Wände nicht verfolgt und behaupte es nicht — dieselbe offene
+Frage wie in §172, dort für die Dachneigung.
+
+### Grenzfall „< 15°" — zwei Abweichungen, und die zweite ist eine Umkehrung
+
+F-030 sagt: *„Bei sehr spitzen Wandwinkeln (< 15°) überlappen sich die Ecken — dann **verschneiden**
+(F-004), **nicht stumpf stoßen**."*
+
+Der Code hat ein **Miter-Limit** (`geometry/wallGeometry.ts:129-131`):
+
+```ts
+const len = h / sinHalb;
+if (len > h * 8) {
+  return null;   // Miter-Limit: bei sehr spitzem Winkel keine überlange Spitze.
+}
+```
+
+**Erstens die Zahl.** `len > h·8` heißt `sinHalb < 1/8`, also halber Öffnungswinkel < 7,1808°,
+**voller Öffnungswinkel < 14,3615°**. F-030 nennt **15°**. Differenz **0,64°** — nah, aber nicht
+dieselbe Zahl, und keine der beiden nennt die andere.
+
+**Zweitens die Richtung, und das ist der eigentliche Befund.** Was tut der Code unterhalb der
+Grenze? `wallGeometry.ts:231-232`:
+
+```ts
+if (!miter) {
+  continue;   // Entartet → stumpf.
+}
+```
+
+**Die Formel verbietet den stumpfen Stoß bei spitzen Winkeln. Der Code wählt ihn genau dort.**
+
+### Und diesmal hat der Code recht
+
+Die Spitzenlänge ist `len = h / sin(halber Winkel)`. Bei einer 24er Wand (`h` = 120 mm):
+
+```
+Öffnungswinkel    len/h        Spitze bei h=120 mm
+        90°        1.41              170 mm
+        30°        3.86              464 mm
+        15°        7.66              919 mm
+    14.36°        8.00              960 mm   <- Grenze des Codes
+        10°       11.47             1377 mm
+         5°       22.93             2751 mm
+         1°      114.59            13751 mm
+```
+
+**Bei 1° Öffnungswinkel wäre die Gehrungsspitze 13,75 Meter lang** — bei einer 24 cm dicken Wand.
+Genau das verhindert ein Miter-Limit, und genau deshalb kennt es jede Grafikbibliothek. **F-030 hat
+den Fall nicht zu Ende gedacht**, nicht der Code: „verschneiden statt stumpf stoßen" ist richtig,
+solange die Spitze endlich bleibt, und wird unbrauchbar, sobald sie es nicht tut.
+
+*Das ist die Umkehrung des Musters aus §172 und §185: dort verlangte die Formel eine Absage, die der
+Code nicht hatte. Hier hat der Code eine Absage, die die Formel verbietet — und sie ist richtig.*
+
+**Ball beim Planner:** F-030s Grenzfall braucht den zweiten Halbsatz — *„… verschneiden, bis zu
+einem Miter-Limit; darüber stumpf abschließen"* — und die Zahl sollte die des Codes sein (`len ≤ 8·h`,
+also 14,36°) oder der Code die der Formel. **Zwei Zahlen für dieselbe Grenze sind eine zu viel.**
+**Kein Ball beim Generator** — der Bau ist an dieser Stelle vollständiger als die Vorschrift.
+
+Damit sind **14 von 27** Formeln durchgerechnet.
