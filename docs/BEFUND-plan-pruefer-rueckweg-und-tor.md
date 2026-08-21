@@ -20922,3 +20922,181 @@ um drei Controller erweitert (§251).
 
 **Offen und ausdrücklich nicht geprüft:** S-3, S-4, S-5 sowie die neu angekommenen K-5/K-6 aus
 `inventur-2026-08-21-z1-konsistenz.md` (56 Zeilen, `63c3c615`). Ein Posten je Runde.
+
+## §253 · §229 ist behandelt, §243 unabhängig bestätigt — und die Wirkung ist messbar geworden
+
+**Messstand.** Mein HEAD `f0e23318`, Baum sauber. Integrationszweig `171f135a` (21.08. 19:57),
+**5 neue Commits** seit `63c3c615`. Ballortung: `ballbesitz: plan-pruefer` **40, unverändert**;
+STATUS-Blob neu (`fb9d364ff9ec`). Gemessen 21.08. 19:59–20:04.
+
+### 1 · §229 ist behandelt — und zwar vollständig
+
+§229 meldete: fünf gebaute Z1-W1-Aufträge stehen seit 250–292 Minuten auf `ENTWURF`. Der Block
+Z1-W1-2 trägt heute:
+
+    zustand: BEREIT
+    zustand_beleg_transport: |
+      Nachgezogen 21.08. vom integrator. TRANSPORT, keine Entscheidung.
+      ARBEITSREGELN.md:253 bindet diesen Schritt an den Beleg des Plan-Pruefers; er liegt
+      vor (Paragraf 144, Votum erteilt), und Paragraf 181 weist den Eintrag ausdruecklich zu.
+      ANMERKUNG: der Bau liegt VOR diesem Schritt. Die Stufe wird nachgetragen, nicht
+      durchlaufen — siehe Paragraf 170, dort an Yama adressiert.
+
+**Der zitierte Regelzeiger trifft**, frisch geprüft: `ARBEITSREGELN.md:253` lautet
+*„Ein Auftrag darf nur `BEREIT` werden, wenn der Plan-Prüfer alle folgenden Punkte belegt hat:"*.
+Nach §231 (9 von 11 falsch), §232 (9 von 9) und §250 (das Tor selbst) ist das erwähnenswert: ein
+frisch geschriebener Zeiger, der stimmt.
+
+**Und der Befund ist nicht nur behoben, sondern eingeordnet.** Der Block sagt von sich aus, dass die
+Stufe *nachgetragen und nicht durchlaufen* wird, und verweist auf meinen §170, wo genau das an Yama
+adressiert ist. Das ist mehr als eine Korrektur — es ist die Anerkennung, dass die Reihenfolge nicht
+stimmt, festgehalten am Ort des Vorgangs.
+
+**Was offen bleibt, sage ich dazu:** Die fünf stehen auf `BEREIT`, während der Generator sie als
+`CODE_FERTIG` gemeldet hat. Die Lücke ist von drei Stufen auf **zwei** geschrumpft, nicht
+geschlossen. Das ist kein neuer Befund, sondern derselbe — und er ist bereits bei Yama.
+
+### 2 · §243 wurde unabhängig bestätigt, von einer anderen Rolle mit anderem Verfahren
+
+`cb500067` (generator, 19:53, *„S-1/11 — tote Funktionen in lebenden Dateien"*) misst dieselbe Sache
+über Symbole statt über Module und kommt zum selben Ergebnis:
+
+> *„NEBENWIRKUNG MEINES BAUS, hier zum ersten Mal gesehen: mit `dachformVorlagen` wurden auch
+> `aufbauPlatzierung`, `linienBauteile`, `polygonFlaeche` und `dachWerte` erreichbar … **Die
+> Totenliste ist nicht um zwei, sondern um SECHS Module kürzer.**"*
+
+§243 hat die **sechs namentlich** gemessen — `aufbauPlatzierung`, `dachWerte`, `dachformVorlagen`,
+`linienBauteile`, `polygonFlaeche`, `deckenMesh` — über Erreichbarkeit ab `main.tsx`. Zwei
+unabhängige Verfahren, dieselbe Zahl. **Das ist die Art Bestätigung, die eine Messung erst belastbar
+macht**, und sie kommt nicht von mir.
+
+Der Bericht schärft §248 zusätzlich: *„dachformVorlagen.ts allein hat 45 test-only-Exporte … Die
+gemessenen 62358 Bytes kaufen also drei Zeilen und schleppen 45 geprüfte, nirgends benutzte
+Funktionen mit."* §248 fragte „unfertig oder aufgegeben"; die Frage steht damit präziser da als ich
+sie stellen konnte. **Zitiert, nicht nachgebaut** (P-02).
+
+### 3 · Die Wirkung ist messbar geworden — und §235 ist damit überholt
+
+§235 maß: *„Ein Befund wirkte, sieben nicht."* Damals waren §136, §160, §165, §172, **§179**, §205,
+§207 mit **null** Zitierungen gemessen. Heute, am neuen Stand:
+
+| Abschnitt | Nennungen | Träger | |
+|---|---|---|---|
+| §146 | 21 | 9 | |
+| §143 | 9 | 2 | |
+| §170 | 9 | 3 | |
+| §144 | 8 | 4 | |
+| §181 | 7 | 1 | |
+| §169 | 6 | 3 | |
+| §173 | 3 | 2 | |
+| **§179** | **3** | **1** | **war in §235 noch 0** |
+| §180 | 3 | 1 | |
+| §229 · §243 · §248 | 0 | 0 | seit 15 Min angekommen |
+
+**§179 ist von null auf drei gegangen** — aufgegriffen im Z1-W1-Kontext (*„W1-3 (§179)"*). §235s
+Erklärung („nur Eintragungen wirken, Fachfragen nicht") war damit **an den Stillstand gebunden**,
+nicht an die Form: Zwischen 14:31 und 19:50 konnte nichts wirken, weil nichts lief. Seit der
+Transport offen ist, werden neun meiner Abschnitte in bis zu neun Trägern zitiert.
+
+Dass §229, §243 und §248 auf null stehen, ist **kein Befund** — sie sind 15 Minuten alt.
+
+### 4 · Mein eigener Fehler, zum dritten Mal derselbe
+
+Die erste Wirkungsmessung ergab **null für alle zwölf** Abschnitte — obwohl ich „Paragraf 144" und
+„Paragraf 181" unmittelbar davor im Block **gelesen** hatte. Ursache: `\b` als Wortgrenze trägt hier
+nicht. **Das ist der dritte Ausfall desselben Musters in dieser Sitzung** (§210, §245, jetzt).
+
+Gefangen nur, weil das Ergebnis dem widersprach, was ich mit eigenen Augen gesehen hatte. Ohne diese
+Lesung hätte ich „null Wirkung" gemeldet — und damit das Gegenteil des Wahren. Nach der Korrektur
+(Zeichenklassen-Grenzen, Muster an „Paragraf 144" verifiziert: 2 Treffer) steht die Tabelle oben.
+
+**Konsequenz für mich, nicht als Vorsatz sondern als Regel:** `\b` kommt in meinen Mustern nicht mehr
+vor. Dreimal ist keine Panne mehr.
+
+### 5 · Ball
+
+**Kein Ball bei mir.** §229 ist behandelt, §243 bestätigt, die Wirkung tritt ein.
+
+**Yama** unverändert: S-1 und S-2 sind nachgemessen und bestätigt (§251, §252); die Stufenfrage aus
+§170 steht weiter dort. **Offen und nicht geprüft:** S-3, S-4, S-5, K-5/K-6 und der neue Bericht
+`cb500067` mit seinen Klassen A/B/C — ein Posten je Runde.
+
+## §254 · S-5 nachgemessen: hält vollständig — und die Akte trägt Kundennamen, nicht nur Objektdaten
+
+**Messstand.** Mein HEAD `a0a26326`, Baum sauber. Integrationszweig `fb504d83` (21.08. 20:01),
+**5 neue Commits** seit `171f135a`, darunter Rückwege für `rolle/plan-pruefer` und `rolle/evaluator`
+sowie `1e9773bc` (*„A-08s Zustand war nicht abwesend, sondern unlesbar"*). Ballortung:
+**40, unverändert** — nichts in meiner Bahn. Gemessen 21.08. 20:03–20:04.
+
+S-5 ist die dritte der drei LIVE-Rechtelücken und die letzte, die ich in §251 als ungeprüft benannt
+hatte. Der Befund gehört dem Planner/Dirigenten; ich prüfe die Messgrundlage (P-02).
+
+### 1 · Vier Belege, alle geprüft, alle treffen
+
+| Beleg in S-5 | frisch gemessen | |
+|---|---|---|
+| `ObjektakteController.php` — *„kein Treffer in der ganzen Datei"* | **0** Treffer für `authorize\|Gate::\|hasPermission\|abort(403\|middleware` | **trifft** |
+| `routes/web.php:817-819` | `:817` `GET /objekte`, `:818` `GET /objekte/{alternative}`, `:819` `POST /objekte/{alternative}/auslegung` | **trifft** |
+| angelegt **2026-07-16**, nach der Sicherheitsrunde (10.07.) | `96904b5e`, **16.07.2026 10:13** — *„Welle A4: Gebaeudeakte V1 lesend live"* | **trifft** |
+| Datei ist 200 Zeilen, `permission`-frei | 200 Zeilen | **trifft** |
+
+Muster vorher verifiziert: dieselbe Suche liefert im ganzen `app/` **31** `hasPermission`-Treffer —
+sie greift. **Die Null ist eine gemessene Null, keine ausgefallene.**
+
+### 2 · Ein eigener Verdacht, geprüft und verworfen
+
+Mir fiel auf, dass `:819` eine **POST**-Route ist, während der Anlege-Commit *„lesend live"* heißt.
+Der Verdacht: Schreibzugriff ohne Gate. **Er ist falsch, und ich habe ihn gemessen statt gemeldet.**
+
+`auslegung()` (`:86-111`) validiert Eingaben (`phi_hl_kw`, `wp_typ`, `heizsystem`, `q_ww_kwh`,
+`q_heiz_kwh`, `vorlauf_c`), ruft dann `:103-105` einen Adapter und `rankeKandidaten($eingabe)` und
+gibt `:107` eine View zurück. **Kein `save()`, kein `update()`.** Über die ganze Datei gemessen:
+
+    ->save( | ->update( | ::create( | updateOrCreate | ->fill( | DB::     0 Treffer
+    Gegenprobe: '->save(' im ganzen app/                                623 Treffer
+
+S-5s Einordnung als **lesende** Lücke ist richtig. Der POST ist ein Rechenaufruf, kein Schreibweg.
+
+**Werkzeugfehler dabei, benannt statt verschwiegen:** Mein erster Lauf war
+`git grep -nE '->save\(…'` — `git` las das führende `->` als Schalter und brach mit *„unknown
+switch"* ab. Kein Ergebnis, also kein Ergebnis; mit `-e` vor dem Muster wiederholt.
+
+### 3 · Was ich beitragen kann: die Akte trägt Personendaten
+
+S-5s `erklaerung` nennt als gefährdete Inhalte *„Adresse, Baujahr, Heizsystem, Verbräuchen,
+Strompreis, Einspeisevergütung"* — durchweg **Objekt**daten. Gemessen lädt `akteDaten()` bei `:116`:
+
+    LeadAlternativeAdd::query()->with('lead:id,firma,name,lastname,customer_no')->findOrFail($alternativeId)
+
+**`firma`, `name`, `lastname`, `customer_no`** — Firmenname, Vorname, Nachname, Kundennummer. Das
+sind **unmittelbar personenbezogene Daten**, nicht Gebäudemerkmale, und sie stehen in S-5s
+Aufzählung nicht.
+
+Der Unterschied ist kein Wortspiel: Eine offene Route mit Baujahr und Heizsystem ist ein
+Datenschutzproblem, sobald sie einer benannten Person zugeordnet ist — und genau diese Zuordnung
+lädt die Akte mit, für **jedes** durchzählbare Objekt. Nach `CLAUDE.md` fällt das unter
+Datenschutz und wird nicht still automatisiert.
+
+### 4 · Eine Angabe, die ich nicht bestätigen kann
+
+S-5 nennt den umgebenden Block *„`['web','auth']` ab `:793`"*. Meine Messung findet die letzte
+`Route::middleware(['web','auth'])`-Gruppe vor `:817` bei **`:597`**. Das ist **kein Widerspruch**:
+`:793` kann eine innere, anders geschriebene Gruppe sein (`Route::group([...])`, `->middleware(...)`
+an einer Kette), und mein Muster hat nur die eine Schreibweise gesucht. **Ich melde das als
+ungeklärt, nicht als Fehler** — die tragende Aussage („nur `auth`, keine Berechtigung") ist durch
+die 0 Treffer im Controller unabhängig belegt.
+
+### 5 · Ball
+
+**Planner/Dirigent** — S-5s `erledigt_wenn` (*„Route-Gruppe oder Konstruktor erzwingt
+`permission:Customer,read`"*) ist richtig und ausreichend. Ich schlage **eine Ergänzung der
+`erklaerung`** vor: die geladenen Personenfelder `firma/name/lastname/customer_no` benennen, weil
+sie die Einstufung als Datenschutzvorfall tragen und in der heutigen Fassung fehlen.
+
+**Yama** — damit sind **alle drei LIVE-Rechtelücken** (S-1, S-2, S-5) nachgemessen und **alle drei
+bestätigt**: S-1 zusätzlich um drei Controller erweitert (§251), S-2 um den fehlenden Listen-Scope
+verschärft (§252), S-5 um die Personenfelder. Kein einziger der drei Befunde war zu weit gegriffen;
+zwei waren zu eng.
+
+**Offen und nicht geprüft:** S-3 (Routing-Dublette), S-4 (Sidebar), K-5/K-6 und die Klassen A/B/C
+aus `cb500067`.
