@@ -678,19 +678,62 @@ ausnahmslos eine **ausgelöste** Negativprobe mit Rohausgabe und `echo $?`, nich
   *(Die überholte Fassung bleibt als Beleg stehen — A-20-4:)*
 
   > ~~Sitzungsidentität — Befund `79285cf2`, in ein Kriterium überführt: wo der Hook eine Sitzung
-  > identifiziert, besteht die Kennung aus **Sitzungs-ID + PID des Sitzungsprozesses +
-  > Prozess-Startkennung**, nie aus der Shell-PID einer Werkzeugrunde.~~
+  > identifiziert, besteht die Kennung aus **Sitzungs-ID + PID des Sitzungsprozesses + Prozess-
+  > Startkennung**, **nie** aus der Shell-PID einer Werkzeugrunde. **Gemessen:** von vier `pid`-Feldern
+  > im Steuerungssystem trugen **drei** eine Zahl, zu der kein Prozess mehr existierte; die Shell-PID
+  > einer einzigen Sitzung wechselte in vier aufeinanderfolgenden Aufrufen `76231 → 80694 → 80830`,
+  > während der Sitzungsprozess konstant blieb. *Ein Tor, das Lebendigkeit über die Shell-PID prüft,
+  > prüft bei drei von vier Rollen eine tote Zahl.*~~
+  >
+  > **⚠ BERICHTIGUNG AM ZITAT SELBST (22.08., Anmerkung 2 des DoR-Votums `a248eaaf`):** meine erste
+  > Fassung dieses Blocks brach das Zitat nach *„Werkzeugrunde"* ab — **drei von sieben Zeilen**,
+  > während drei Zusagen im selben Commit *„null Löschungen"* und *„die überholte Fassung bleibt
+  > vollständig stehen"* behaupteten. **Verschwunden waren genau die Messwerte**, die den Befund
+  > tragen (`76231 → 80694 → 80830`, *„von vier `pid`-Feldern … trugen drei"*, *„bei drei von vier
+  > Rollen eine tote Zahl"*) — der Satz *„der Befund bleibt richtig"* stand damit zwei Zeilen weiter
+  > **ohne seinen Nachweis**. Oben vollständig wiederhergestellt. *Ein gekürzter Beleg ist die
+  > stillste Art, eine Aussage unbelegt zu machen — und die Kürzung stand ausgerechnet unter der
+  > Zusage, nichts zu löschen.*
+  >
   > **Der Satz wehrt die Shell-PID ab — das war der Befund aus Sitzung `79285cf2…`, und er bleibt
-  > richtig.** *(Die durchgestrichene Zeile darüber zitiert die alte Schreibweise wörtlich und bleibt
-  > deshalb unverändert — sie ist der Beleg, nicht die Aussage.)* Er macht
-  > dabei aber **PID und Startkennung zu Bestandteilen der Identität**, und genau daraus folgt der
-  > Schaden: `agentenarchitektur-v2.md` §8 (`0d897b0e:154-158`) entfernt eine Sperre automatisch,
-  > *„wenn PID + Startkennung nicht mehr übereinstimmen"*. **Wörtlich umgesetzt hätte das Tor der
-  > arbeitenden Planner-Sitzung die Lease entzogen — mitten im Schreiben dieses Blattes.** Die dort
-  > genannte Alternative `flock` (`:159-161`) deckt den Fall **nicht** ab: sie gibt die Sperre beim
-  > Prozessende frei, bei einem `--resume` also ebenfalls, nur automatisch.
+  > richtig.** *(Das durchgestrichene Zitat behält die alte Schreibweise wörtlich — es ist der Beleg,
+  > nicht die Aussage.)* **Falsch ist, dass er PID und Startkennung zu Bestandteilen der IDENTITÄT
+  > macht.** Bei einer per `--resume` getakteten Sitzung gehört die eingetragene PID **per
+  > Konstruktion** einem beendeten Lauf; die Kennung ist damit nicht stabil, obwohl die Sitzung
+  > durchgehend arbeitet.
   > *Der Begründungssatz „während der Sitzungsprozess konstant blieb" traf auf die messende Sitzung
-  > zu und auf die Planner-Sitzung nicht.*
+  > `79285cf2…` zu und auf die Planner-Sitzung nicht.*
+
+  **⚠ ZWEITE BERICHTIGUNG — WAS `agentenarchitektur-v2.md` §8 WIRKLICH SAGT.** *(Selbst gemessen,
+  nachdem meine erste Fassung eine fremde Folgerung ungeprüft übernommen hatte; Auflage aus
+  `plan-pruefer-berichtigung-paragraph8.yaml`, dessen Gegenmessung ich nachgefahren habe.)*
+
+  **§8 trennt zwei Sperren, und die Trennung ist bereits richtig:**
+
+  | Gegenstand | Regel in §8 | gebunden an |
+  |---|---|---|
+  | **Lease** (`active/`) | `:162` — darf **nur** entfernt werden, wenn `heartbeat_bis` verstrichen ist | die **Sitzung** |
+  | **Vergabesperre** (`counter.lock/owner.yaml`) | `:154-156` — Entfernung nur, wenn die Prozessidentität nachweislich nicht mehr existiert | den **Lauf** |
+
+  **Messbefehl:** `grep -n 'PID'` über §8 → **genau zwei Treffer**, `:154` und `:156`, **beide** unter
+  der Absatzüberschrift *„Recovery der Sperre selbst"*. **Die Lease-Übernahme bei `:162` nennt keine
+  PID.** *§8 entzieht eine Lease also nicht über die PID — für die Lease trägt es Punkt 4 und 6 der
+  Zielregel bereits.*
+
+  **Und die Bindung der Vergabesperre an den Lauf ist richtig, nicht falsch:** `counter.lock` soll
+  laut `:126`/`:137`/`:148` nur den **kurzen Vergabevorgang** überdauern. **Für einen Lauf ist die
+  Prozessidentität die zutreffende Kennung.** *Was für die Lease falsch wäre, ist für die
+  Vergabesperre richtig.* **Auch `fail closed` (`:157-159`) greift hier nicht:** es gilt, wenn die
+  Lebendigkeit *„nicht eindeutig messbar"* ist, und §8 nennt dafür zwei Fälle — **fremder Host,
+  fehlende Startkennung**. Bei einer lokal zurückgebliebenen Sperre mit eingetragener Kennung
+  antwortet `ps` eindeutig (**exit 1** = nachweislich nicht mehr existent, an vier beendeten Läufen
+  dieser Sitzung geprüft, Verfahren an beiden Enden verifiziert) — **das ist genau die Bedingung, unter
+  der `:155-156` die Entfernung erlaubt.** Kein Entzug und kein Stillstand.
+
+  **Was hier bleibt, ist deshalb kein Mangel an §8, sondern eine Ergänzung:** **Yamas Zielregel fügt
+  für die Lease hinzu, was §8 dort schon trägt, und macht es zur Abnahmebedingung** — mit dem
+  ausdrücklichen Verbot (Punkt 6), aus einer alten PID auf „verwaist" zu schließen. *Genau dieser
+  Schluss war der Fehler meiner ersten Fassung — nicht der von §8.*
 
   **DIE ZIELREGEL — Yamas Wortlaut vom 22.08., sechs Punkte, einzeln abzunehmen:**
 
