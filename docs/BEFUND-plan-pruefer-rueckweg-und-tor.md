@@ -9109,3 +9109,81 @@ umschreibt, ist keiner. **Ball beim Evaluator**, mit dem Hinweis und den drei Za
 Der Generator ist ausdrücklich **nicht** betroffen: er hatte den Mangel selbst gemessen, dokumentiert
 und bewusst nicht behoben (package.json ist gemeinsamer versionierter Code) — und dann hat ihn
 jemand doch deklariert. Auch das gehört zur Lage und nicht zur Schuld.
+
+## §122 — Die Formel läuft doch, nur aus der ungeschützten Kopie: sieben Umsetzungen, eine geschützt, und die ist tot
+
+*(Nummer §122 gegen HEAD `c72b2acf` gewählt und hier benannt.)*
+
+**Herkunft, zitiert statt nachgebaut** (P-02 Punkt 4, gestern gebrochen, heute eingehalten): Der
+Planner hat mit `f350befc` fünf Welle-1-Aufträge geschnitten, darunter
+`docs/auftraege/generator-auftrag-z1-w1-3-shoelace-eine-stelle.md` — *„Z1-W1-3 · Eine Formel, eine
+Stelle"*, Herkunft *„Befund R-1, `docs/backlog/inventur-2026-08-20-z1.md`"*. Der Auftrag nennt die
+private Kopie, die Live-Kette und die Einheiten-Falle. **Der Befund gehört der Inventur.** Was folgt,
+ist meine Nachmessung und was sie zusätzlich zeigt.
+
+### Mein §119 muss qualifiziert werden
+
+§119 schrieb: *„F-011 läuft in der Anwendung nicht."* Über das **Modul** ist das richtig und bleibt
+es. Über die **Formel** ist es irreführend:
+
+```
+  geometry/dachGeometrie.ts   erreichbar JA    :39 private Kopie 'polygonM2'
+  renderers/three-d/szene.ts  erreichbar JA
+  renderers/three-d/dachMesh.ts erreichbar JA
+  geometry/polygonFlaeche.ts  erreichbar NEIN  <- das geprueft-und-getestete Modul
+```
+
+**Die Schuhbandformel läuft sehr wohl — aus einer Kopie, die niemand geprüft hat.** Das ist die
+schlechtere Lage als „läuft nicht", und §119 hat sie nicht gesehen, weil ich Module gezählt habe und
+nicht die Formel.
+
+### Sieben Umsetzungen, über den Term gemessen
+
+Nicht über Namen (`polygonM2`, `signierteFlaeche`, `polygonFlaecheM2` heißen alle anders), sondern
+über den Schuhband-Term selbst:
+
+```
+  renderers/three-d/dachMesh.ts:104     erreichbar JA
+  geometry/dachGeometrie.ts:44          erreichbar JA
+  geometry/roomDetection.ts:75          erreichbar JA
+  geometry/dachAusschnitt.ts:107        erreichbar NEIN
+  geometry/polygonFlaeche.ts:44         erreichbar NEIN
+  geometry/dachTopologie.ts:109         erreichbar NEIN
+  geometry/grundriss.ts:98              erreichbar NEIN
+                                        ---- lebendig 3 · tot 4
+```
+
+### Genau eine ist geschützt — und genau die läuft nicht
+
+`polygonFlaeche.ts` prüft jeden Punkt (`:39-40` `!Number.isFinite(a.x) || …`), fängt das Ergebnis ab
+(`:47` `return Number.isFinite(flaeche) ? flaeche : 0;`) und gibt im Kopf eine Zusage: `:29`
+*„Niemals NaN oder Infinity."* **Die anderen sechs haben am Ort der Formel keinen Schutz.**
+
+*Eigene Korrektur mitten in der Messung:* Mein erster Test suchte `isFinite` **dateiweit** und meldete
+drei geschützte. Am Ort der Formel nachgesehen sind es **eine** — bei `grundriss.ts` und
+`dachAusschnitt.ts` steht das `isFinite` anderswo in der Datei, ihr `signierteFlaeche` ist blank
+(`return a / 2;`). Dateiweit messen hätte hier einen dreifachen Schutz behauptet, den es nicht gibt.
+
+### Und die Zusage im Code ist messbar falsch
+
+`kontur.ts:21-23`: *„**Wiederverwendet wird dagegen `signierteFlaeche`** … die Flächenformel steht
+damit weiterhin an genau einer Stelle."*
+
+Sie steht an **sieben**. Der Satz war vermutlich wahr für seinen Anlass — er beschreibt eine
+vermiedene achte Kopie — aber als Aussage über den Bestand ist er falsch, und er steht ohne Datum da.
+
+### Einheiten
+
+`polygonM2` rechnet `Math.abs(s) / 2 / 1_000_000` — sie nimmt **mm**. `polygonFlaecheM2` ist im Kopf
+auf **Meter** verpflichtet. Dieselbe Falle, in die ich in §101 selbst getappt bin, hier zwischen zwei
+Umsetzungen derselben Formel im selben Baum.
+
+### Ball
+
+**Beim Planner**, wo er schon liegt — mit einem Hinweis: `Z1-W1-3` führt **eine** der Kopien zusammen
+(`dachGeometrie.ts`). Nach dieser Messung sind es sechs neben dem geprüften Modul, davon zwei weitere
+lebendig (`dachMesh.ts:104`, `roomDetection.ts:75`). Ob der Auftrag den Umfang bewusst so schneidet
+oder ob die Zahl sieben neu ist, kann ich nicht messen — das ist seine Auskunft.
+
+**An Yama:** der Fall ändert die Lage aus §119/§120. Dort ging es um Code, der nicht läuft. Hier läuft
+er — nur die ungeschützte Fassung.
