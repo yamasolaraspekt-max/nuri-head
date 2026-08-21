@@ -24064,3 +24064,40 @@ Zahl** (9: 27 statt 33).
 
 **Planner** — unverändert: Schreibschutz der Zieldatei (§278), `…w0-11-ids-callback-csrf.md:22`
 (§276), die Rundungsfrage (§277), der zweite Pfad in der Wache-Anweisung (§279).
+
+## §286 · Nachtrag zu §285: B5 hat gewarnt — und die Ursache ist meine eigene Empfehlung aus §280
+
+**Messstand.** HEAD `07ee0a38` (der Commit aus §285), Baum sauber. Gemessen 21.08. 22:18.
+
+Der §285-Commit lief ohne `tail` und mit Filter nach Inhalt (die Abhilfe aus §281). Deshalb habe ich
+gesehen, was sonst durchgerutscht wäre:
+
+    B5-WARNUNG  Zaehlwort in der Botschaft, aber keine Belegzeile (datei.ext:zeile).
+
+**Gegengeprüft am Muster des Tors, nicht geraten:** `B5_BELEGZEILE` verlangt eine von fünf Formen —
+`datei.ext:zeile`, `:N:`, `Trefferzeile`, `Z.N`, `Zeile N`. Meine Botschaft trifft **null** davon.
+
+**Die Ursache ist die Schreibweise, die ich mir in §280 selbst empfohlen habe.** Dort steht:
+
+    statt  docs/STATUS.md:18787
+    besser docs/STATUS.md · Block auftrag: "A-38" · Feld zustand   (A-34-Ankerform)
+
+Genau so habe ich in §285 geschrieben — *„`docs/ARBEITSREGELN.md` wuchs von 1825 auf 1925 Zeilen,
+Seite A von `:409` auf `:423`"*. **Datei und Zeile stehen da, aber getrennt.** B5 sucht die
+zusammenhängende Form und findet sie nicht.
+
+**Das ist eine zweite Regelkollision — und diesmal zwischen meiner eigenen Empfehlung und einer
+Torregel.** Sie ist mild: B5 akzeptiert auch `Z.423` und `Zeile 423`, beides mit der Ankerform
+verträglich. Aber sie ist echt, und sie ist am selben Tag entstanden, an dem ich die Empfehlung
+ausgesprochen habe. **Wer eine Form empfiehlt, muss prüfen, ob die Tore sie kennen** — genau das
+habe ich in §280 nicht getan.
+
+**Abhilfe, ab sofort:** Jede Botschaft trägt mindestens **eine** zusammenhängende Belegzeile in der
+Form `datei.ext:zeile`, auch wenn der Abschnitt daneben mit Ankern arbeitet. Die beiden Formen
+schließen einander nicht aus: der Anker sagt, *woran* gemessen wurde, die Belegzeile, *wo* es am
+Messstand stand. §280s Vorschlag „Zeiger MIT Stand" (`docs/STATUS.md:18787 am Stand 34f6f5a9`)
+erfüllt beides in einem und ist damit die bessere der drei dort genannten Formen.
+
+**Planner** — falls die Ankerform Hausregel werden soll (§280), gehört diese Verträglichkeit mit
+B5 in denselben Beschluss. **Kein Ball sonst;** §285s Zahlen sind unberührt, die Warnung betrifft
+die Botschaft.
