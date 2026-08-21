@@ -15067,3 +15067,96 @@ Engine. Zusätzlich: `fbhAuslegung.ts:83` und `sparrenBerechnung.ts:148` prüfen
 wo ein **Bereich** gemeint ist; `kuecheArbeitsdreieck.ts:41` zeigt im selben Haus, wie es aussieht.
 **Ball bei Yama, zusammen mit §185:** die Bereiche selbst sind Fachfestlegungen.
 **Kein Ball beim Generator.**
+
+## §196 — Posten (a): 66 Zeiger im Produktivcode — 53 ungefährdet, 7 daneben, und ein sechster Klassenfall
+
+**Messstand** `ae19bb57` · Baum sauber · 0 neue Commits; Integrationszweig unverändert, letzter
+Commit vor **58 Minuten**.
+
+Neuer Bestand, in dieser Reihe nie geprüft: **Zeiger in den Kommentaren des Produktivcodes** selbst.
+
+```
+Nennungen datei.ext:zeile in .ts/.tsx (ohne __tests__)   66
+Trägerdateien                                            31
+verschiedene Ziele                                       50
+```
+
+### Erst die Bewegung messen, dann urteilen
+
+Nach §167 und §191 ist die entscheidende Frage nicht „trifft der Zeiger?", sondern **„hat sich sein
+Ziel seit dem Stand des Trägers überhaupt bewegt?"** Für jedes Paar den letzten Commit der
+Trägerdatei genommen und gezählt, wie viele Commits seither das **Ziel** berührt haben:
+
+```
+Ziel unbewegt (0 Commits)   53 von 60 Paaren   -> nicht gefährdet, nicht einzeln geprüft
+Ziel bewegt  (>0)            7
+```
+
+**Aus 66 Urteilen werden sieben.** Das ist der ganze Wert der Methode.
+
+### Die sieben, einzeln geöffnet — alle sieben treffen nicht
+
+```
+buehnenBreite.ts:4        -> HausplanerApp.tsx:369     26 Commits   Sonderfall, siehe unten
+SchienenSchalter.tsx:32   -> stilschicht.test.ts:399    3           „:hover" steht heute auf :429
+speicherAnzeige.ts:5      -> studio.blade.php:56        2           „speichern" steht auf :60-62
+befunde.ts:5              -> hausplanerStore.ts:34      2           „Meldung" steht auf :8 und :57
+trimmen.ts:102            -> HausplanerApp.tsx:815      1           Ziel: `aktiv: scene.settings.snapEnabled,`
+teilKennung.ts:11         -> szene.ts:522               1           `dachflaechen(` steht auf :523
+aufbautenStatus.ts:28     -> szene.ts:522               1           dieselbe Zeile, zweiter Träger
+```
+
+**Der kleinste Versatz der ganzen Reihe: +1.** `dachflaechen(` steht auf `:523`, zwei Kommentare
+nennen `:522`. **Eine einzige eingefügte Zeile**, und zwei Zeiger aus zwei Dateien sind daneben —
+dieselbe Grenzregel wie §168, nur am unteren Ende der Skala.
+
+### Der sechste Klassenfall: der historische Zeiger
+
+`app/dashboard/buehnenBreite.ts:4` lautet:
+
+> *„**Der Befund:** `HausplanerApp.tsx:369` **rechnete** `window.innerWidth − 220 − 268`."*
+
+**Perfekt, nicht Präsens.** Der Kommentar beschreibt einen **behobenen** Zustand — und die Datei
+`buehnenBreite.ts` ist die Behebung: ein einziger Commit, `97a2e2a4` vom 29.07.,
+*„AUF-83-T1a: die Breite lernt, was die Höhe schon kann"*.
+
+Nachgemessen **an genau diesem Commit**:
+
+```
+HausplanerApp.tsx damals            2308 Zeilen
+'window.innerWidth' damals          0 Treffer     <- schon beim Schreiben nicht mehr da
+'window.innerWidth' heute           :168          <- ein ANDERES Vorkommen
+SHA im Kommentar                    0
+```
+
+**Der Zeiger ist nicht falsch — er ist ein Beleg über die Vergangenheit, korrekt im Perfekt
+formuliert.** Nur: er nennt **keinen Stand**. Damit ist die Zahl `369` an keinem Stand auflösbar,
+den ein Leser kennt, und heute steht `window.innerWidth` auf `:168` — **ein Leser, der sucht, findet
+eine andere Stelle und hält sie womöglich für die gemeinte.**
+
+Das ist eine eigene Klasse neben den fünf bisherigen (fremde Drift §109/§166, selbstverschuldete
+Drift §174, Aussage repariert §168, nie richtig gewesen §190, vervielfachtes Ziel §191):
+**historischer Zeiger ohne Stand.** Er ist wahr und trotzdem nicht nachprüfbar — und die Abhilfe ist
+klein: **der SHA daneben**, genau das, was ich mir im Nachtrag zu §178 selbst auferlegt habe.
+
+### Und das Gesamtbild ist gut
+
+```
+0 von 66 zeigen ins Leere oder auf eine fehlende Datei
+53 von 60 Paaren sind unbewegt
+ 7 daneben, davon 1 historisch korrekt
+```
+
+**Der Produktivcode ist in deutlich besserem Zustand als die Dokumente.** §186 hat gemessen: Zeiger
+auf Skripte treffen zu 82 %, auf Dokumente zu 17 %. Hier zeigt sich der Grund von der anderen Seite —
+**Code wird geändert, aber selten eingefügt; Dokumente wachsen.**
+
+*Eigener Messfehler, gefangen:* meine erste Auflösung meldete fünf Ziele als „Datei nicht gefunden"
+und eines als „leer". Beides war mein Suchpfad — `objekt.blade.php`, `studio.blade.php` und
+`routes/web.php` liegen außerhalb der Insel. Mit `resources/views` und `routes` im Suchraum tragen
+**alle vier Inhalt**. *Eine Datei, die man nicht sucht, fehlt nicht.*
+
+**Ball beim Planner:** sechs Zeiger im Produktivcode zeigen auf etwas anderes — darunter zweimal
+`szene.ts:522` aus zwei Dateien, um genau eine Zeile. **Ball beim Planner auch für den
+historischen Fall:** `buehnenBreite.ts:4` braucht den SHA, nicht die Streichung — der Befund ist
+richtig und soll lesbar bleiben.
