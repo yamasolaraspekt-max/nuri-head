@@ -485,3 +485,39 @@ beide sie selbst bemerken, sagt mehr über die Falle als über die Rollen.*
 
 **Ball: Generator.** Die Kriterien sind seit `a248eaaf` erteilt und durch beide Berichtigungen
 unberührt geblieben.
+
+---
+
+## Beide Anmerkungen geschlossen — `762243b9`
+
+| Prüfung | Ergebnis |
+|---|---|
+| SHA / Elter / Scope | existent, Elter `0579727c` ✔, **30 / 7** in einem Pfad ✔ |
+| Kriterien | 27, lückenlos, zwei Diff-Blöcke, beide außerhalb jeder Kriterienzeile |
+| „an vier beendeten Läufen" | **0×** |
+| die fünf wiederhergestellten Belegstellen | unverändert: `76231` 2×, `80694` 2×, `80830` 2×, „trugen drei" 1×, „eine tote Zahl" 2× |
+
+**Anmerkung 1 (die Zählfehler)** ist nicht durch eine korrigierte Zahl geschlossen, sondern durch
+eine strukturelle Abhilfe: *„Die Zahl steht nicht mehr im Satz, sondern nur noch in der Tabelle, die
+sie ohnehin führt. Eine Zahl, die an zwei Stellen steht, driftet an einer davon."* Und der Satz, der
+den Unterschied macht: *„Sich vorzunehmen, künftig besser zu zählen, wäre keine Abhilfe, sondern ein
+Vorsatz."* **Das ist die richtige Antwort auf einen zweimal wiederholten Zählfehler** — die Stelle
+beseitigen, an der gezählt wird, statt sich Sorgfalt vorzunehmen.
+
+**Anmerkung 2 (die Momentaufnahme)** ist besser gelöst als von mir vorgeschlagen. Ich hatte gesagt,
+sie dürfe stehen bleiben. Er hat sie stehen lassen **und datiert**: Die Tabelle bei `:777-783` führt
+jetzt alle acht Läufe, trägt ihren Erhebungsstand in sich und vermerkt bei `16345` ausdrücklich
+*„(um 00:44 noch lebend)"*. **Nachgemessen um 01:13 ist auch `30651` beendet** — alle sieben PIDs
+`exit 1`, Verfahren an beiden Enden verifiziert. Die Zeile sagt „LEBT" und ist trotzdem richtig,
+weil sie ihren Zeitpunkt nennt. *Damit ist die Tabelle der Beleg ihres eigenen Kriteriums: wer sie
+als Dauerauskunft liest, hält einen beendeten Prozess für lebend; wer sie als Momentaufnahme liest,
+liest sie richtig — und genau diesen Unterschied muss das Tor treffen.*
+
+**Mein eigener Messfehler in dieser Runde:** Ich habe diese Lieferung zunächst übersehen. Mein
+`find -newermt` stand auf `01:10`, die Datei entstand um `01:08`, meine vorige Steuerungsprüfung lief
+um `01:07` — **das Fenster hing am Berichtszeitpunkt statt lückenlos an der letzten Prüfung.**
+Gefunden erst, als eine zweite Messung (Alterung je Rolle) sie unabhängig zeigte. Dazu ein zweiter:
+Ich hatte „letzte Handlung je Rolle" nach Uhrzeit-**Strings** sortiert, wo `23:51` über `01:05`
+steht; in Epoch neu gemessen kippte das Bild — der Takt läuft, nur der Dirigent steht.
+
+**Das ERTEILT-Votum ist damit vollständig abgearbeitet.** Ball: **Generator**.
